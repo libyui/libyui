@@ -40,9 +40,9 @@ NCFileInfo::NCFileInfo( string 	fileName,
     _mtime  = statInfo->st_mtime;
     
     if ( S_ISLNK(_mode) )
-	_tag = " @ ";
+	_tag = " @";
     else
-	_tag = "   ";
+	_tag = "  ";
     
 }
 
@@ -74,7 +74,7 @@ NCFileInfo::NCFileInfo( )
 //	DESCRIPTION :
 //
 NCFileTableTag::NCFileTableTag( const NCFileInfo & info )
-   : NCTableCol( NCstring( "    " ), SEPARATOR )
+   : NCTableCol( NCstring( "  " ), SEPARATOR )
    , fileInfo( info )
 {
 
@@ -97,7 +97,6 @@ void NCFileTableTag::DrawAt( NCursesWindow & w, const wrect at,
 
     w.addch( at.Pos.L, at.Pos.C, fileInfo._tag.c_str()[0] );
     w.addch( at.Pos.L, at.Pos.C +1, fileInfo._tag.c_str()[1] );
-    w.addch( at.Pos.L, at.Pos.C +2, fileInfo._tag.c_str()[2] );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -114,6 +113,15 @@ NCFileTable::NCFileTable( NCWidget * parent,
     : NCTable( parent, opt, vector<string> () )
       , tableType( type )
 {
+    vector<string> header;
+    header.reserve(2);
+
+    header.push_back( "L" + string("   ") );
+    header.push_back( "L" + string("Name") );
+
+    SetSepChar( ' ' );
+    setHeader( header ); 
+
     WIDDBG << endl;
 }
 
@@ -209,24 +217,6 @@ void NCFileTable::fillHeader( )
     setHeader( header );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFileTable::CreatePad
-//	METHOD TYPE : NCPad *
-//
-//	DESCRIPTION :
-//
-NCPad * NCFileTable::CreatePad()
-{
-  wsze psze( defPadSze() );
-  NCTablePad * npad = new NCTablePad( psze.H, psze.W, *this );
-  npad->bkgd( listStyle().item.plain );
-  npad->SetSepChar( ' ' );
-
-  NCMIL << "CREATE NCFileTable" << endl;
-  return npad;
-}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -293,7 +283,7 @@ NCFileInfo NCFileTable::getFileInfo( int index )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCFileTable::wHandleInput
+//	METHOD NAME : NCFileTableTag::getTag
 //	METHOD TYPE : NCursesEvent
 //
 //	DESCRIPTION :
@@ -322,7 +312,7 @@ NCFileTableTag * NCFileTable::getTag( const int & index )
 NCursesEvent NCFileTable::wHandleInput( wint_t key )
 {
     NCursesEvent ret = NCursesEvent::none;
-    
+
     // call handleInput of NCPad
     handleInput( key );
     
