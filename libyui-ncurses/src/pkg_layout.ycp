@@ -15,7 +15,7 @@
     return `VBox( `VSpacing(0.3),
 		  `HBox( `HSpacing(0.3),
 			 // label of the Filter menu ( ( keep it short ) - filters out a set of packages
-			 `Left(`MenuButton( _("&Filter"),
+			 `Left(`MenuButton( `opt(`key_F4), _("&Filter"),
 					    // menu items of the filter menu
 					    [`item( `id(`groups), 	_("&RPM groups") ),
 					     `item( `id(`selections), 	_("Se&lections") ),
@@ -23,7 +23,7 @@
 					     `item( `id(`updatelist),	_("&Update list") ) ]
 					    )),
 			 // label Actions menu ( keep it short ) - actions to change status of a package
-			 `Left(`MenuButton( _("&Actions"),
+			 `Left(`MenuButton( `opt(`key_F5), _("&Actions"),
 					     // toggle the status, e.g. change from installed to delete
 					    [`item( `id(`toggle), 	_( "&Toggle     [RET]") ),
 					     // select the package for installation
@@ -47,7 +47,7 @@
 					     ]
 					     )),
 			 // label Information menu ( keep it short! )
-			 `Left(`MenuButton( _("&Information"),
+			 `Left(`MenuButton( `opt(`key_F6), _("&Information"),
 					    // menu items of the info menu
 					    [`item( `id(`pkginfo), 	_("&Package info" ) ),
 					     `item( `id(`longdescr), 	_("&Long description") ),
@@ -56,7 +56,7 @@
 					     `item( `id(`relations), 	_("Package &relations") ) ]
 					    )),
 			 // label Etc. menu ( keep it short! )
-			 `Left(`ReplacePoint(`id(`replacemenu),`MenuButton( _("&Etc."),
+			 `Left(`ReplacePoint(`id(`replacemenu), `opt(`key_F7) ,`MenuButton( _("&Etc."),
 									    // menu item of the Etc. menu
 									    [`menu( "&Dependencies",
 										    // menu items of the Etc./Dependencies submenu
@@ -113,14 +113,14 @@
 						 `HWeight(1, `PushButton(`id(`search), `opt(`key_F2), _("&Search") ) ),
 						 `HStretch(),
 						  // button label
-						 `HWeight(1, `PushButton(`id(`diskinfo), _("&Disk usage") ) ),
+						 `HWeight(1, `PushButton(`id(`diskinfo), `opt(`key_F3), _("&Disk usage") ) ),
 					 	 `HStretch()
 						 ),
 					   `HSpacing(5.0),
 					   // button label
-					   `HBox( `Right( `PushButton(`id(`cancel), _("&Cancel") ) ),
+					   `HBox( `Right( `PushButton(`id(`cancel), `opt(`key_F12) ,_("&Cancel") ) ),
 						  // button label  
-						  `Right( `PushButton(`id(`ok), _("&OK") ) )
+						  `Right( `PushButton(`id(`ok), `opt(`key_F10), _("&OK") ) )
 						  )
 					   )
 				  )
