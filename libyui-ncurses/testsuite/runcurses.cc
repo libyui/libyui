@@ -28,10 +28,10 @@ int main (int argc, char *argv[])
 */
 #include <stdio.h>
 
-#include "Y2NCursesUIComponent.h"
+#include "YNCursesUI.h"
 
 #include <ycp/Parser.h>
-#include "../src/Y2NCursesUIComponent.h"
+#include "../src/YNCursesUI.h"
 #include <ycp/y2log.h>
 
 extern int yydebug;
@@ -75,9 +75,9 @@ main (int argc, char *argv[])
 	return 1;
     }
 
-    Y2NCursesUIComponent* interpreter = new Y2NCursesUIComponent(true, 0, 0, 0 );
+    YNCursesUI * ncurses_ui = new YNCursesUI(true, 0, 0, 0 );
 
-    if (! interpreter)
+    if (! ncurses_ui)
     {
 	fprintf (stderr, "Failed to create Y2NCursesUI\n");
 	delete parser;
@@ -114,7 +114,7 @@ main (int argc, char *argv[])
 	printf ("(%s)\n", value->toString().c_str());
     }
 
-    delete interpreter;
+    delete ncurses_ui;
     delete parser;
 
     if (infile != stdin)
