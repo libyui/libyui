@@ -23,7 +23,7 @@
 
 //////////////////////////////////////////////////////////////////
 
-string       NCstring::termEncoding( "" );
+string       NCstring::termEncoding( "UTF-8" );
 
 ///////////////////////////////////////////////////////////////////
 
@@ -439,10 +439,9 @@ void NCstring::getHotkey( ) const
 //
 bool NCstring::setTerminalEncoding( const string & encoding )
 {
-    // set terminal encoding only once - cannot change
-    if ( termEncoding == "" )
+    if ( termEncoding != encoding )
     {
-	NCMIL << "TERMINAL encoding: " << encoding << endl;
+	NCMIL << "Terminal encoding SET to: " << encoding << endl;
 	termEncoding = encoding;
 	return true;
     }
