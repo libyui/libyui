@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Feb 26 14:48:55 CET 2003 - sh@suse.de
+
+- Fixed bug #24274: Wrong disk initial usage display
+
+-------------------------------------------------------------------
 Tue Feb 25 17:32:45 CET 2003 - sh@suse.de
 
 - Workaround for bug #24088: Leftover busy cursor in root window

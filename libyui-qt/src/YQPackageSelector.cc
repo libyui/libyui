@@ -202,6 +202,9 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     }
 #endif
 
+    if ( _diskUsageList )
+	_diskUsageList->updateDiskUsage();
+
     y2milestone( "PackageSelector init done" );
 }
 
