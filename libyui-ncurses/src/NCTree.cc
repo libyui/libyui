@@ -387,7 +387,7 @@ void NCTree::DrawPad()
 //
 NCursesEvent NCTree::wHandleInput( wint_t key )
 {
-  NCursesEvent ret;
+  NCursesEvent ret = NCursesEvent::none;
   const YTreeItem * oldCurrentItem = getCurrentItem();
 
   if ( ! handleInput( key ) )
@@ -403,7 +403,7 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
   
   if ( getNotify() && oldCurrentItem != getCurrentItem() )
       ret = NCursesEvent::SelectionChanged;
-  
+
   return ret;
 }
 
