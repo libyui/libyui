@@ -797,8 +797,8 @@ YCPValue Y2NCursesUI::setConsoleFont( const YCPString & console_magic,
   }
 
   // set terminal encoding for console
-  // FIXME: setConsoleFont() in Console.ycp sets the encoding for the last argument
-  //        but this encoding does not fit (now hacked Console.ycp to pass the language)
+  // FIXME: setConsoleFont() in Console.ycp has passed the encoding as last argument
+  //        but this encoding was not correct (now Console.ycp passes the language)
 
   // if the encoding is NOT UTF-8 set the console encoding according to the language
   if ( NCstring::terminalEncoding() != "UTF-8" )
