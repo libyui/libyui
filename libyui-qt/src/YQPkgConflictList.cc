@@ -44,6 +44,8 @@
 #define LIGHT_BLUE		QColor( 0xE0, 0xE0, 0xF8 )
 #define LIGHT_GREY		QColor( 0xE0, 0xE0, 0xE0 )
 #define MAGENTA			Qt::magenta
+#define DEEP_ORANGE		QColor( 0xFF, 0x80, 0x20 )
+#define LIGHT_ORANGE		QColor( 0xFF, 0xC0, 0x50 )
 
 
 YQPkgConflictList::YQPkgConflictList( QWidget * parent )
@@ -345,8 +347,8 @@ YQPkgConflict::dumpList( QListViewItem * 	parent,
 
 	    if ( sublist )
 	    {
-		if ( more < 20 )	sublist->setTextColor( BLUE );
-		else			sublist->setTextColor( MAGENTA );
+		if ( more < 20 )	sublist->setBackgroundColor( LIGHT_ORANGE );
+		else			sublist->setBackgroundColor( DEEP_ORANGE  );
 		parent = sublist;
 	    }
 	}
@@ -508,8 +510,8 @@ YQPkgConflict::dumpDeleteList( QListViewItem * parent )
 
 	    if ( sublist )
 	    {
-		if ( more < 20 )	sublist->setTextColor( BLUE );
-		else			sublist->setTextColor( MAGENTA );
+		if ( more < 20 )	sublist->setBackgroundColor( LIGHT_ORANGE );
+		else			sublist->setBackgroundColor( DEEP_ORANGE  );
 		parent = sublist;
 	    }
 	}
@@ -527,7 +529,9 @@ YQPkgConflict::dumpDeleteList( QListViewItem * parent )
 		text = ( _( "Do not install %1" ) ).arg( name.c_str() );
 
 
-	    new QY2ListViewItem( parent, text, true );
+	    QY2ListViewItem * item = new QY2ListViewItem( parent, text, true );
+	    CHECK_PTR( item );
+	    item->setTextColor( BLUE );
 	}
 
 	++it;
