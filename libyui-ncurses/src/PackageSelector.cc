@@ -1627,17 +1627,13 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
     {
 	// the file list is available only for installed packages
 	PMPackagePtr package = pkgPtr->getSelectable()->installedObj();
-	string text;
+	string text = PkgNames::ListOfFiles().str();
 
 	if ( package )
 	{
 	    // get the file list from the package manager/show the list
 	    list<string> fileList = package->filenames();
-	    text = createText( fileList, false ) ;
-	}
-	else
-	{
-	    text = "";
+	    text += createText( fileList, false ) ;
 	}
 	
 	// get the widget id 
