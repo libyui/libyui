@@ -19,6 +19,7 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 #include <qtabwidget.h>
+#include <qregexp.h>
 
 #include "YQPkgGenericDetailsView.h"
 #include "YQi18n.h"
@@ -77,7 +78,7 @@ YQPkgGenericDetailsView::showPkgDetailsIfVisible( PMPackagePtr pkg )
 QString
 YQPkgGenericDetailsView::htmlHeading( PMPackagePtr pkg )
 {
-    QString summary = fromUTF8( _pkg->summary() );
+    QString summary = fromUTF8( pkg->summary() );
     
     QString html =
 	"<table bgcolor=#E0E0F8><tr><td><b>"
@@ -92,6 +93,18 @@ YQPkgGenericDetailsView::htmlHeading( PMPackagePtr pkg )
     return html;
 }
 
+
+QString
+YQPkgGenericDetailsView::htmlEscape( const QString & plainText )
+{
+    QString html = plainText;
+
+    html.replace( QRegExp( "<" ), "&lt;"  );
+    html.replace( QRegExp( ">" ), "&gt;"  );
+    html.replace( QRegExp( "&" ), "&amp;" );
+    
+    return html;
+}
 
 
 #include "YQPkgGenericDetailsView.moc.cc"

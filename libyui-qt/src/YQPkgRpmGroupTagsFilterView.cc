@@ -44,6 +44,8 @@ YQPkgRpmGroupTagsFilterView::YQPkgRpmGroupTagsFilterView( YUIQt *yuiqt, QWidget 
 
     connect( this, SIGNAL( selectionChanged( QListViewItem * ) ),
 	     this, SLOT  ( filter()                            ) );
+
+    selectSomething();
 }
 
 
@@ -73,6 +75,18 @@ YQPkgRpmGroupTagsFilterView::cloneTree( YStringTreeItem * 	parentRpmGroup,
 
 	cloneTree( child, clone );
 	child = child->next();
+    }
+}
+
+
+void
+YQPkgRpmGroupTagsFilterView::selectSomething()
+{
+    QListViewItem * item = firstChild();
+    
+    if ( item )
+    {
+	setSelected( item, true );
     }
 }
 

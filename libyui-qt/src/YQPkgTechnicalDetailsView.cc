@@ -23,7 +23,6 @@
 #include <y2pm/PMManager.h>
 
 #include <qdatetime.h>
-#include <qregexp.h>
 #include "YQPkgTechnicalDetailsView.h"
 #include "YQi18n.h"
 #include "utf8.h"
@@ -99,8 +98,7 @@ YQPkgTechnicalDetailsView::row( const QString & contents ) const
 QString
 YQPkgTechnicalDetailsView::cell( QString contents ) const
 {
-    contents.replace( QRegExp( "<" ), "&lt;" );
-    contents.replace( QRegExp( ">" ), "&gt;" );
+    contents = htmlEscape( contents );
     return "<td align=top>" + contents + "</td>";
 }
 
@@ -147,8 +145,7 @@ YQPkgTechnicalDetailsView::authorsListCell( PMPackagePtr pkg ) const
     while ( it != authors.end() )
     {
 	line = fromUTF8(*it);
-	line.replace( QRegExp( "<" ), "&lt;" );
-	line.replace( QRegExp( ">" ), "&gt;" );
+	line = htmlEscape( line );
 	html += line + "<br>";
 	++it;
     }

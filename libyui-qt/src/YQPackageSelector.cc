@@ -18,7 +18,7 @@
 
 
 #define ALPHA_WARNING	1
-#define FAKE_INST_SRC	1
+#define FAKE_INST_SRC	0
 
 #include <qcombobox.h>
 #include <qframe.h>
@@ -80,18 +80,24 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
 
 #if FAKE_INST_SRC
     {
-	Y2PM y2pm;
-	InstSrcManager& MGR = y2pm.instSrcManager();
+	y2warning( "Enabling fake inst sources" );
+	
+	// Y2Logging::setLogfileName("-");
+
+	InstSrcManager & MGR( Y2PM::instSrcManager() );
 
 	Url url( "dir:///8.0" );
-
 	InstSrcManager::ISrcIdList nids;
 	PMError err = MGR.scanMedia( nids, url );
 
 	if ( nids.size() )
 	{
+	    y2milestone( "Enabling fake inst source" );
 	    err = MGR.enableSource( *nids.begin() );
+	    y2milestone( "Enabling fake inst source done" );
 	}
+
+	y2milestone( "Fake inst sources enabled" );
     }
 #endif
 
@@ -279,13 +285,18 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 	     _pkgTechnicalDetailsView,	SLOT  ( showPkgDetailsIfVisible( PMPackagePtr ) ) );
 
 
+
+    QLabel * dummy;
+    dummy = new QLabel( "Versions of this package\non all the different installation media\n\nstill missing",
+			_detailsViews );
+    _detailsViews->addTab( dummy, _( "V&ersions" ) );
+
 #if 0
     // DEBUG
     // DEBUG
     // DEBUG
 
 
-    QLabel * dummy;
     dummy = new QLabel( "File List", _detailsViews );
     _detailsViews->addTab( dummy, _( "File &List" ) );
 
@@ -294,10 +305,6 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
     dummy = new QLabel( "Packages required by this package", _detailsViews );
     _detailsViews->addTab( dummy, _( "Required &by" ) );
-
-    dummy = new QLabel( "Versions of this package\non all the different installation media", _detailsViews );
-    _detailsViews->addTab( dummy, _( "V&ersions" ) );
-
     // DEBUG
     // DEBUG
     // DEBUG
@@ -375,6 +382,9 @@ YQPackageSelector::makeConnections()
     connect( _rpmGroupTagsFilterView, 	SIGNAL( filterMatch( PMPackagePtr ) ),
 	     _pkgList, 			SLOT  ( addPkg     ( PMPackagePtr ) ) );
 
+    connect( _rpmGroupTagsFilterView, 	SIGNAL( filterFinished()  ),
+	     _pkgList, 			SLOT  ( selectSomething() ) );
+
 
 
     CHECK_PTR( _selList );
@@ -384,6 +394,9 @@ YQPackageSelector::makeConnections()
 
     connect( _selList,			SIGNAL( filterMatch( PMPackagePtr ) ),
 	     _pkgList, 			SLOT  ( addPkg     ( PMPackagePtr ) ) );
+    
+    connect( _selList, 			SIGNAL( filterFinished()  ),
+	     _pkgList, 			SLOT  ( selectSomething() ) );
 }
 
 

@@ -64,12 +64,13 @@ public:
 
     // Column numbers
 
-    int statusCol()	const	{ return _statusCol;	}
-    int nameCol()	const	{ return _nameCol;	}
-    int summaryCol()	const	{ return _summaryCol;	}
-    int sizeCol()	const	{ return _sizeCol;	}
-    int versionCol()	const	{ return _versionCol;	}
-    int srpmStatusCol() const	{ return _srpmStatusCol; }
+    int statusCol()		const	{ return _statusCol;		}
+    int nameCol()		const	{ return _nameCol;		}
+    int summaryCol()		const	{ return _summaryCol;		}
+    int sizeCol()		const	{ return _sizeCol;		}
+    int versionCol()		const	{ return _versionCol;		}
+    int instVersionCol()	const	{ return _instVersionCol;	}
+    int srpmStatusCol() 	const	{ return _srpmStatusCol; 	}
 
 
 public slots:
@@ -87,6 +88,13 @@ public slots:
     void slotPkgClicked( int		button,
 			 YQPkg *	pkg,
 			 int		col );
+
+    /**
+     * Select a list entry (if there is any).
+     * Usually this will be the first list entry, but don't rely on that - this
+     * might change without notice. Emits signal selectionChanged().
+     **/
+    void selectSomething();
     
     /**
      * Reimplemented from QListView / QWidget:
@@ -100,6 +108,7 @@ public slots:
      * Adjust header sizes after clearing contents.
      **/
     virtual void clear();
+
     
 signals:
 
@@ -186,6 +195,7 @@ private:
     int _summaryCol;
     int _sizeCol;
     int _versionCol;
+    int _instVersionCol;
     int _srpmStatusCol;
 
     std::vector<int> _savedColumnWidth;
@@ -282,12 +292,13 @@ public:
 
     // Columns
 
-    int statusCol()	const	{ return _pkgList->statusCol();		}
-    int nameCol()	const	{ return _pkgList->nameCol();		}
-    int summaryCol()	const	{ return _pkgList->summaryCol();	}
-    int sizeCol()	const	{ return _pkgList->sizeCol();		}
-    int versionCol()	const	{ return _pkgList->versionCol();	}
-    int srpmStatusCol() const	{ return _pkgList->srpmStatusCol();	}
+    int statusCol()		const	{ return _pkgList->statusCol();		}
+    int nameCol()		const	{ return _pkgList->nameCol();		}
+    int summaryCol()		const	{ return _pkgList->summaryCol();	}
+    int sizeCol()		const	{ return _pkgList->sizeCol();		}
+    int versionCol()		const	{ return _pkgList->versionCol();	}
+    int instVersionCol()	const	{ return _pkgList->instVersionCol();	}
+    int srpmStatusCol() 	const	{ return _pkgList->srpmStatusCol();	}
 
 
 protected:

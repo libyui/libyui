@@ -21,6 +21,9 @@
 #include <qpixmap.h>
 #include <qheader.h>
 
+#include <Y2PM.h>
+#include <y2pm/InstTarget.h>
+
 #include "YQPkgList.h"
 #include "YUIQt.h"
 #include "YQi18n.h"
@@ -34,16 +37,25 @@ YQPkgList::YQPkgList( YUIQt *yuiqt, QWidget *parent )
     , mousePressedCol( -1 )
     , mousePressedButton( NoButton )
 {
-
-    setFont( yuiqt->currentFont() );
+    int inst_pkgs = Y2PM::instTarget().numPackages();
 
     int numCol = 0;
     addColumn( ""		);	_statusCol	= numCol++;
     // _statusCol = numCol;
     addColumn( _( "Name"	) );	_nameCol	= numCol++;
+
+    if ( inst_pkgs > 0 )
+    {
+	addColumn( _( "Avail. Ver." ) ); _versionCol	= numCol++;
+	addColumn( _( "Inst. Ver."  ) ); _instVersionCol = numCol++;
+    }
+    else
+    {
+	addColumn( _( "Version"	) );	_versionCol	= numCol++;
+	_instVersionCol = -1;
+    }
     addColumn( _( "Summary"	) );	_summaryCol	= numCol++;
     addColumn( _( "Size"	) );	_sizeCol	= numCol++;
-    addColumn( _( "Version"	) );	_versionCol	= numCol++;
     addColumn( _( "Source"	) );	_srpmStatusCol	= numCol++;
     setAllColumnsShowFocus( true );
     setSorting( nameCol() );
@@ -95,6 +107,18 @@ YQPkgList::slotPkgClicked( int button, YQPkg * pkg, int col )
 		pkg->cycleStatus();
 	    }
 	}
+    }
+}
+
+
+void
+YQPkgList::selectSomething()
+{
+    QListViewItem * item = firstChild();
+    
+    if ( item )
+    {
+	setSelected( item, true );
     }
 }
 
@@ -176,7 +200,7 @@ YQPkgList::contentsMouseDoubleClickEvent( QMouseEvent * ev )
 void
 YQPkgList::selectionChangedInternal( QListViewItem * new_sel )
 {
-    YQPkg * sel = (YQPkg *) new_sel;
+    YQPkg * sel = dynamic_cast<YQPkg *> (new_sel);
 
     emit selectionChanged( sel ? sel->pkg() : PMPackagePtr() );
 }
@@ -223,6 +247,7 @@ YQPkgList::columnWidthChanged( int, int, int )
 void
 YQPkgList::clear()
 {
+    emit selectionChanged( PMPackagePtr() );
     QListView::clear();
     restoreColumnWidths();
 }
@@ -245,13 +270,25 @@ YQPkg::YQPkg( YQPkgList * pkgList, PMPackagePtr pkg )
     , _pkg( pkg )
 {
     pkg->startRetrieval();	// Just a hint to speed things up a bit
+    _isInstalled = pkg->hasInstalledObj();
     
     setText( nameCol(),		pkg->name()		  );
     setText( summaryCol(),	pkg->summary()		  );
     setText( sizeCol(),		pkg->size().form() + "  " );
-    setText( versionCol(),	pkg->version() 		  );
+
+    if ( instVersionCol() >= 0 )
+    {
+	if ( pkg->hasInstalledObj() )
+	     setText( instVersionCol(), pkg->getInstalledObj()->version() );
+
+	if ( pkg->hasCandidateObj() )
+	    setText( versionCol(), pkg->getCandidateObj()->version() );
+    }
+    else
+    {
+	setText( versionCol(),	pkg->version() 		  );
+    }
     
-    _isInstalled = pkg->hasInstalledObj();
     _haveSrpm	 = true;	// FIXME - get this from the package!
     
     setStatus( _isInstalled ? YQPkgKeepInstalled : YQPkgNoInst );

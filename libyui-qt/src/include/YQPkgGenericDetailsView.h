@@ -49,9 +49,19 @@ public:
      * Returns a uniform heading in HTML format for the specified package:
      * Package name and summary
      **/
-    QString YQPkgGenericDetailsView::htmlHeading( PMPackagePtr pkg );
+    static QString htmlHeading( PMPackagePtr pkg );
 
+    /**
+     * Escapes characters special to HTML in a (plain text) string, such as:
+     * '<'   ->   '&lt;'
+     * '>'   ->   '&gt;'
+     * '&'   ->   '&amp;'
+     *
+     * Returns the escaped string.
+     **/
+    static QString htmlEscape( const QString & plainText );
 
+    
 public slots:
 
     /**

@@ -59,6 +59,7 @@ YQPkgSelList::YQPkgSelList( YUIQt *yuiqt, QWidget *parent )
 	     this, 	SLOT  ( filter()                                    ) );
 
     fillList();
+    selectSomething();
 
     y2debug( "Creating selection list done" );
 }
@@ -94,6 +95,18 @@ YQPkgSelList::fillList()
     }
     
     y2milestone( "Selection list filled" );
+}
+
+
+void
+YQPkgSelList::selectSomething()
+{
+    QListViewItem * item = firstChild();
+    
+    if ( item )
+    {
+	setSelected( item, true );
+    }
 }
 
 
