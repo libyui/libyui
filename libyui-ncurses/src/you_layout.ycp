@@ -33,10 +33,20 @@
 			 // label of the Online Update 'Actions' menu (keep it short)
 			 `Left(`MenuButton( `opt(`key_F5), _( "&Actions" ),
 					    // menu items
+					    // please note: use unique hotkeys 
 					    [`item( `id("toggle"),  _( "&Toggle   [SPACE]" ) ),
 					     `item( `id("select"),  _( "&Select     [+]" ) ),
 					     `item( `id("delete"),  _( "Dese&lect   [-]" ) ),
-					     `item( `id("update"),  _( "&Update     [>]" ) )
+					     `item( `id("update"),  _( "&Update     [>]" ) ),
+					      `menu( _( "All Listed &Packages" ),
+						    [
+						     // begin: submenu items actions concerning all patches
+						     `item(`id("selall"),   _( "&Install All" )  ),
+						     `item(`id("deselall"), _( "Do &Not Install Any" ) ),
+						     `item(`id("updall"),   _( "&Update All" )   ),
+						      // end: submenu items: actions concerning all patches
+						     `item(`id("dontupd"),  _( "Do Not Update and &Keep Installed" ) )
+						     ])
 					     ]
 					    )),
 			 // label of the Online Update 'Information' menu (keep it short)
