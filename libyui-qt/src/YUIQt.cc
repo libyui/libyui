@@ -34,6 +34,7 @@
 #include "YUIQt.h"
 #include "YEvent.h"
 #include "YUISymbols.h"
+#include "utf8.h"
 
 #include "YQDialog.h"
 #include "QXEmbed.h"
@@ -531,6 +532,12 @@ void YUIQt::closeDialog( YDialog * dialog )
 	else
 	    y2error( "Popup dialog stack corrupted!" );
     }
+}
+
+
+QString YUIQt::productName() const
+{
+    return fromUTF8( YUIInterpreter::productName() );
 }
 
 

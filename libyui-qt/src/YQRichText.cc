@@ -99,16 +99,19 @@ void YQRichText::setSize( long newWidth, long newHeight )
 }
 
 
-void YQRichText::setText( const YCPString & text )
+void YQRichText::setText( const YCPString & ytext )
 {
     if ( _textBrowser->horizontalScrollBar() )
 	_textBrowser->horizontalScrollBar()->setValue(0);
 
     if ( ! autoScrollDown && _textBrowser->verticalScrollBar() )
 	_textBrowser->verticalScrollBar()->setValue(0);
+
+    QString text = fromUTF8( ytext->value() );
+    text.replace( "&product;", YUIQt::ui()->productName() );
     
-    _textBrowser->setText( fromUTF8( text->value() ) );
-    YRichText::setText( text );
+    YRichText::setText( ytext );
+    _textBrowser->setText( text );
     
     if ( autoScrollDown && _textBrowser->verticalScrollBar() )
 	_textBrowser->verticalScrollBar()->setValue( _textBrowser->verticalScrollBar()->maxValue() );

@@ -210,6 +210,13 @@ public:
     virtual bool eventsBlocked() const
 	{ return _event_handler.eventsBlocked(); }
 
+    /**
+     * Returns the current product name
+     * ("SuSE Linux", "SuSE Linux Enterprise Server", "United Linux", etc.)
+     * as QString. 
+     **/
+    QString YUIQt::productName() const;
+
 
 public slots:
 
