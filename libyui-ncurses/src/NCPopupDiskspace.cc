@@ -48,8 +48,6 @@ NCPopupDiskspace::NCPopupDiskspace( const wpos at )
     : NCPopup( at, false )
       , partitions( 0 )
       , okButton( 0 )
-      , hDim( 55 )
-      , vDim( 15 )
 {
     createLayout( YCPString(PkgNames::DiskspaceLabel()) );
 }
@@ -229,7 +227,13 @@ void NCPopupDiskspace::showInfoPopup( )
 
 long NCPopupDiskspace::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? hDim : vDim );
+    long vdim;
+    if ( NCurses::lines() > 15 )
+	vdim = 15;
+    else
+	vdim = NCurses::lines()-4;
+	
+    return ( dim == YD_HORIZ ? NCurses::cols()*2/3 : vdim );
 }
 
 ///////////////////////////////////////////////////////////////////

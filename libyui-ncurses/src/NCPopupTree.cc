@@ -148,7 +148,13 @@ NCursesEvent NCPopupTree::showFilterPopup( )
 
 long NCPopupTree::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? 40 : 20 );
+    long vdim;
+    if ( NCurses::lines() > 20 )
+	vdim = 20;
+    else
+	vdim = NCurses::lines()-4;
+	
+    return ( dim == YD_HORIZ ? NCurses::cols()/2 : vdim );
 }
 
 ///////////////////////////////////////////////////////////////////

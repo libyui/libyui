@@ -45,8 +45,6 @@ private:
 
     NCTable * partitions;
     NCPushButton * okButton;
-    int hDim;
-    int vDim;
 
     string usedPercent( FSize used, FSize total );
     
@@ -72,7 +70,6 @@ public:
 
     void showInfoPopup( );
 
-    void setNiceSize( int horiz, int vert ) { hDim = horiz; vDim = vert; }
 };
 
 ///////////////////////////////////////////////////////////////////
