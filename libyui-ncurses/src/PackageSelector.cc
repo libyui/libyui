@@ -1751,6 +1751,10 @@ string PackageSelector::createText( list<string> info, bool oneline )
     return text;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+// showDiskSpace()
+//
 void PackageSelector::showDiskSpace()
 {
     const PkgDuMaster & duMaster =  Y2PM::packageManager().updateDu();
@@ -1769,8 +1773,23 @@ void PackageSelector::showDiskSpace()
     {
 	static_cast<NCLabel *>(diskSpace)->setLabel( label );
     }
-}  
+}
 
+///////////////////////////////////////////////////////////////////
+//
+// showDownloadSize()
+//
+void PackageSelector::showDownloadSize()
+{
+   YCPString label( Y2PM::youPatchManager().totalDownloadSize().asString() );
+
+   // show the download size
+    YWidget * diskSpace = y2ui->widgetWithId( PkgNames::Diskspace(), true );
+    if ( diskSpace )
+    {
+	static_cast<NCLabel *>(diskSpace)->setLabel( label );
+    }
+}
 
 ///////////////////////////////////////////////////////////////////
 //

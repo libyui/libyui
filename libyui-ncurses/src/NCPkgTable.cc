@@ -246,14 +246,20 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
 	{
 	    // check/show dependencies of packages
 	    packager->showPackageDependencies( false );	// only check if automatic check is ON
+	    // show the required diskspace
+	    packager->showDiskSpace();
 	}
         else if ( tableType == T_Selections )
 	{
 	    // check/show dependencies of selections 
 	    packager->showSelectionDependencies();
 	}
-	
-	// update this list to show the status changes
+	else if ( tableType == T_Patches )
+	{
+	    packager->showDownloadSize();
+	}
+
+        // update this list to show the status changes
 	updateTable();
 	
 	if ( tableType == T_Availables
@@ -263,9 +269,6 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
 	    // additionally update the package list
 	    packager->updatePackageList();
 	}
-
-	// show the required diskspace
-	packager->showDiskSpace();
     }
 
     return ok;

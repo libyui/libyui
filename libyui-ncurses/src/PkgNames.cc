@@ -1118,9 +1118,8 @@ const NCstring PkgNames::PkgStatus()
 const NCstring PkgNames::YouHelp1()
 {
     // help text online udpate
-    // (text see  textdomain online-update - only some changes were necessary)
-    // Do not translate 'recommended' and 'security'! because the patch kind is always shown as english text. 
-    static const NCstring value =  _("<p>Mode \"recommended\" means you should install the patch.\"security\" is a security patch and it is highly recommended to install it. \"YaST2\" patches will be always installed first. The other patches must be installed on a second run.</p>");
+    // Do NOT translate 'recommended' and 'security'! because the patch kind is always shown as english text. 
+    static const NCstring value =  _("<p>Mode \"recommended\" means you should install the patch. \"security\" is a security patch and it is highly recommended to install it. \"YaST2\" patches will be always installed first. The other patches must be installed on a second run.</p>");
     return value;
 }						  
 

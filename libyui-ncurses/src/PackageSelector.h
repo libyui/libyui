@@ -370,6 +370,11 @@ class PackageSelector
      * Calls the package mananager (updateDu()) and shows the required disk space
      */ 
     void showDiskSpace();
+
+    /**
+     * Shows the total download size
+     */ 
+    void showDownloadSize();
 };
 
 ///////////////////////////////////////////////////////////////////
