@@ -590,6 +590,8 @@ YQPackageSelector::resolveDependencies()
 void
 YQPackageSelector::updateDiskUsage()
 {
+    YUIQt::yuiqt()->busyCursor();
+    
     const PkgDuMaster & du = Y2PM::packageManager().updateDu();
     _diskSpace->setProgress( du.pkg_u_percent() );
 
@@ -602,6 +604,8 @@ YQPackageSelector::updateDiskUsage()
 	FSize used = du.pkg_used();
 	y2milestone( "Used disk space: %s", used.asString().c_str() );
     }
+    
+    YUIQt::yuiqt()->normalCursor();
 }
 
 
