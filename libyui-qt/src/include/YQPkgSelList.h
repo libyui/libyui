@@ -144,15 +144,11 @@ public:
     const PMSelectionPtr constPmSel() const { return _pmSel; }
 
     /**
-     * Returns the (binary RPM) package status.
-     **/
-    PMSelectable::UI_Status status() const;
-
-    /**
      * Set the selection status.
      *
      * Reimplemented from YQPkgObjListItem:
-     * Activate selections for each change.
+     * Activate selections and emit updatePackages signal for each
+     * status change. 
      **/
     virtual void setStatus( PMSelectable::UI_Status newStatus );
 
