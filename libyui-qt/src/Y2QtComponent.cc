@@ -61,7 +61,7 @@ YCPValue Y2QtComponent::evaluate(const YCPValue &command)
 	    return YCPNull();
     }
 
-    return interpreter->evaluate(command);
+    return interpreter->evaluateUI (command);
 }
 
 
