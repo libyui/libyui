@@ -232,8 +232,11 @@ void NCProgressBar::tUpdate()
   twin->clear();
 
   if ( cp <= twin->maxx() ) {
-    twin->bkgdset( style.nonbar.chattr );
-    twin->printw( 0, cp, "%*s", twin->width()-cp, "" );
+    twin->bkgdset( NCattribute::getNonChar( style.nonbar.chattr ) );
+    twin->move( 0, cp );
+    for ( int i = 0; i < twin->width()-cp; ++i ) {
+      twin->addch( NCattribute::getChar( style.nonbar.chattr ) );
+    }
   }
 
   if ( twin->maxx() >= 6 ) {
