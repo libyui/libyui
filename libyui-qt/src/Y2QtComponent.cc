@@ -23,6 +23,25 @@
 #include "YUIInterpreter.h"
 #include "YUIQt.h"
 
+
+static void
+myqmsg (QtMsgType type, const char* msg)
+{
+    switch (type)
+    {
+	case QtDebugMsg:
+	    y2debug ("qt-debug: %s\n", msg);
+	    break;
+	case QtWarningMsg:
+	    y2warning ("qt-warning: %s\n", msg);
+	    break;
+	case QtFatalMsg:
+	    y2internal ("qt-fatal: %s\n", msg);
+	    exit (1);		// qt does the same
+    }
+}
+
+
 Y2QtComponent::Y2QtComponent()
     : argc(0)
     , argv(0)
@@ -56,6 +75,11 @@ YCPValue Y2QtComponent::evaluate(const YCPValue &command)
 		y2milestone("Running Qt UI without threads.");
 	    }
 	}
+
+	// the handler must be installed before calling the
+	// constructor of QApplication
+	qInstallMsgHandler (myqmsg);
+
 	interpreter = new YUIQt(argc, argv, with_threads, getCallback());
 	if (!interpreter)
 	    return YCPNull();

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Sat Aug 03 15:17:56 CEST 2002 - arvin@suse.de
+
+- write qt warnings to y2log (bug #17161)
+
+-------------------------------------------------------------------
 Mon Jul 15 18:21:50 CEST 2002 - arvin@suse.de
 
 - workaround for timing problem
