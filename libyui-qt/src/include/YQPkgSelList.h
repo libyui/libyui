@@ -100,6 +100,12 @@ public slots:
 			    YQPkgSel *	sel,
 			    int		col );
 
+    /**
+     * Returns the currently selected item or 0 if there is none.
+     **/
+    YQPkgSel * selection() const;
+
+
 signals:
 
     /**
@@ -141,11 +147,6 @@ signals:
 
 
 protected slots:
-
-    /**
-     * Dispatcher slot for selection change - internal only
-     **/
-    void selectionChangedInternal( QListViewItem * sel );
 
     /**
      * Fill the selection list.

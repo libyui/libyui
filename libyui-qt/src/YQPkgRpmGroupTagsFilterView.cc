@@ -181,6 +181,7 @@ YQPkgRpmGroupTagsFilterView::selection() const
 
 
 
+
 YQPkgRpmGroupTag::YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView * 	parentFilterView,
 				    YStringTreeItem *			rpmGroup	)
     : QListViewItem( parentFilterView )

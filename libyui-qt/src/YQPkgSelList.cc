@@ -53,10 +53,10 @@ YQPkgSelList::YQPkgSelList( YUIQt *yuiqt, QWidget *parent )
 	     this, 	SLOT  ( slotPkgSelClicked	( int, YQPkgSel *, int ) ) );
 
     connect( this, 	SIGNAL( pkgSelDoubleClicked	( int, YQPkgSel *, int ) ),
-	     this, 	SLOT   ( slotPkgSelClicked	( int, YQPkgSel *, int ) ) );
+	     this, 	SLOT  ( slotPkgSelClicked	( int, YQPkgSel *, int ) ) );
 
     connect( this, 	SIGNAL( selectionChanged        ( QListViewItem * ) ),
-	     this, 	SLOT  ( selectionChangedInternal( QListViewItem * ) ) );
+	     this, 	SLOT  ( filter()                                    ) );
 
     fillList();
 
@@ -108,18 +108,51 @@ YQPkgSelList::filterIfVisible()
 void
 YQPkgSelList::filter()
 {
-    // TODO
-    // TODO
-    // TODO
+    emit filterStart();
 
-    // Do something with _selection->sel->inspacks_ptrs()
-    // std::list<PMPackagePtr>
+    if ( selection() )
+    {
+	PMSelectionPtr sel = selection()->pkgSel();
+
+	if ( sel )
+	{
+	    std::list<PMPackagePtr> pkgList = sel->inspacks_ptrs();
+	    std::list<PMPackagePtr>::const_iterator it = pkgList.begin();
+
+	    while ( it != pkgList.end() )
+	    {
+#if 0
+		// DEBUG
+		std::string name = (*it)->name();
+		y2debug( "Found match for pkg '%s'", name.c_str() );
+		// DEBUG
+#endif
+		emit filterMatch( *it );
+		++it;
+	    }
+	}
+    }
+
+    emit filterFinished();
 }
-    
+
+
 void
 YQPkgSelList::addPkgSel( PMSelectionPtr sel )
 {
     new YQPkgSel( this, sel);
+}
+
+
+YQPkgSel *
+YQPkgSelList::selection() const
+{
+    QListViewItem * item = selectedItem();
+
+    if ( ! item )
+	return 0;
+    
+    return dynamic_cast<YQPkgSel *> ( selectedItem() );
 }
 
 
@@ -211,15 +244,6 @@ YQPkgSelList::contentsMouseDoubleClickEvent( QMouseEvent * ev )
 
     // Call base class method
     QListView::contentsMouseDoubleClickEvent( ev );
-}
-
-
-void
-YQPkgSelList::selectionChangedInternal( QListViewItem * newQListSelection )
-{
-    YQPkgSel * sel = (YQPkgSel *) newQListSelection;
-
-    emit selectionChanged( sel ? sel->pkgSel() : PMSelectionPtr() );
 }
 
 

@@ -107,6 +107,8 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     // dialog is visible and all set up so the user at least sees an empty
     // dialog rather than nothing.
     QTimer::singleShot( 100, this, SIGNAL( loadData() ) );
+    
+    y2milestone( "PackageSelector init done" );
 }
 
 
