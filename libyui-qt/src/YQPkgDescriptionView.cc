@@ -75,7 +75,7 @@ YQPkgDescriptionView::showDetails( PMObjectPtr pmObj )
 	    if ( line.length() == 0 )	// Empty lines mean new paragraph
 		html_text += "</p><p>";
 	    else
-		html_text += line;
+		html_text += " " + line;
 	}
 	else
 	{
