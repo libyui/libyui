@@ -109,13 +109,34 @@ void NCFileTableTag::DrawAt( NCursesWindow & w, const wrect at,
 //
 NCFileTable::NCFileTable( NCWidget * parent,
 			  YWidgetOpt & opt,
-			  NCFileTableType type )
+			  NCFileTableType type,
+			  const YCPString & iniDir )
     : NCTable( parent, opt, vector<string> () )
       , tableType( type )
+      , startDir( iniDir->value() )
+      , currentDir( iniDir->value() )
 {
     fillHeader();
     SetSepChar( ' ' );
 
+    if ( iniDir->value().empty() )
+    {
+	size_t bufSize	= 5120 * sizeof(char);	
+	char wDir[bufSize+1];
+    
+	// start with working directory
+	if ( getcwd( wDir, bufSize ) )
+	{
+	    startDir = wDir;
+	    currentDir = wDir; 
+	}
+	else
+	{
+	    startDir = "/";
+	    currentDir = "/";
+	}
+    }
+    
     WIDDBG << endl;
 }
 
@@ -133,7 +154,63 @@ NCFileTable::~NCFileTable()
     WIDDBG << endl;
 }
 
+//////////////////////////////////////////////////////////////////
+//
+// getCurrentLine()
+//
+// returns the currently selected line 
+//
+string  NCFileTable::getCurrentLine( )
+{
+    int index = getCurrentItem();
+    
+    if ( index != -1 )
+    {
+	NCFileInfo info = getFileInfo( index );
+	return info._name;
+    }
+    else
+    {
+	return "";
+    }
+}
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCFileTable::setCurrentDir
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCFileTable::setCurrentDir()
+{
+    string selected = getCurrentLine();
+
+    if ( selected != ".." )
+    {
+	if ( startDir != "/" )
+	{
+	    currentDir = startDir + "/" + selected;
+	}
+	else
+	{
+	    currentDir = startDir + selected;
+	}
+    }
+    else
+    {
+	size_t pos;
+	if ( ( pos = currentDir.find_last_of("/") ) != 0 )
+	{
+	    currentDir = currentDir.substr( 0, pos );
+	}
+	else
+	{
+	    currentDir = "/";
+	}
+    }
+}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -298,6 +375,82 @@ NCFileTableTag * NCFileTable::getTag( const int & index )
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : NCFileTable:fillDirectoryList
+//	METHOD TYPE : bool
+//
+//	DESCRIPTION :
+//
+bool NCFileTable::fillDirectoryList ( )
+{
+    struct stat 	statInfo;
+    struct stat		linkInfo;
+    struct dirent *	entry;
+    list<string>	tmpList;
+    list<string>::iterator   it;
+
+    fillHeader();	// create the column headers
+	
+    DIR * diskDir = opendir( currentDir.c_str() );
+    
+    if ( ( diskDir = opendir( currentDir.c_str() ) ) )
+    {
+	itemsCleared();
+	while ( ( entry = readdir( diskDir ) ) )
+	{
+	    string entryName = entry->d_name;
+	    if ( entryName != "." )
+	    {
+		tmpList.push_back( entryName );
+	    }
+	}
+	
+	// sort the list and fill the table widget with directory entries
+	tmpList.sort( );
+	it = tmpList.begin();
+	while ( it != tmpList.end() )
+	{
+	    string fullName = currentDir + "/" + (*it);
+	    if ( lstat( fullName.c_str(), &statInfo ) == 0 )
+	    {
+		if ( S_ISDIR( statInfo.st_mode ) )
+		{
+		    if ( ( (*it) == ".." && currentDir != "/" )
+			 || (*it) != ".." )
+		    {
+			createListEntry( NCFileInfo( (*it), &statInfo ) );
+		    }
+		}
+		else if ( S_ISLNK( statInfo.st_mode ) )	
+
+		{
+		    if ( stat( fullName.c_str(), &linkInfo ) == 0 )
+		    {
+			if ( S_ISDIR( linkInfo.st_mode ) )
+			{
+			    createListEntry( NCFileInfo( (*it), &statInfo ) );
+			}
+		    }
+		}
+	    }	
+	    ++it;
+	}
+	drawList();		// draw the list
+	startDir = currentDir;	// set start directory
+    }
+    else
+    {
+	NCERR << "ERROR opening directory: " << currentDir << " errno: "
+	      << strerror( errno ) << endl;
+	return false;
+    }
+    closedir( diskDir );
+    
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //     METHOD NAME : NCFileTable::wHandleInput
 //     METHOD TYPE : NCursesEvent
 //
@@ -307,9 +460,44 @@ NCursesEvent NCFileTable::wHandleInput( wint_t key )
 {
     NCursesEvent ret = NCursesEvent::none;
 
+    unsigned int old_pos = getCurrentItem();
+
     // call handleInput of NCPad
     handleInput( key );
-    
+
+    switch ( key )
+    {
+	case KEY_UP:
+	case KEY_PPAGE:
+	case KEY_HOME: 	{
+	    if ( old_pos != 0 )
+	    {
+		setCurrentDir();
+		ret = NCursesEvent::SelectionChanged;
+		ret.result = YCPString( currentDir );
+	    }
+	    break;
+	}
+	case KEY_DOWN:
+	case KEY_NPAGE:
+	case KEY_END: {
+	    	setCurrentDir();
+		ret = NCursesEvent::SelectionChanged;
+		ret.result = YCPString( currentDir );
+		break;
+	}
+	case KEY_RETURN:
+	case KEY_SPACE: {
+	    setCurrentDir();
+	    ret = NCursesEvent::Activated;
+	    ret.result = YCPString( currentDir );
+	    break;
+	}
+	default:
+	    ret = NCursesEvent::none;
+    }
+
+    NCMIL << "CURRENT: " << currentDir << " START DIR: " << startDir << endl;
     return ret;
 }
 

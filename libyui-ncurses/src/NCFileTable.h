@@ -115,6 +115,13 @@ private:
     // returns the first column of line with 'index' (the tag)
     NCFileTableTag * getTag ( const int & index );
 
+    string startDir;
+    string currentDir;
+
+    void setCurrentDir();
+
+    string getCurrentLine( );
+    
 protected:
 
 public:
@@ -122,7 +129,10 @@ public:
    /**
     * Constructor
     */
-    NCFileTable( NCWidget * parent, YWidgetOpt & opt, NCFileTableType type );
+    NCFileTable( NCWidget * parent,
+		 YWidgetOpt & opt,
+		 NCFileTableType type,
+		 const YCPString & iniDir );
 
     virtual ~NCFileTable();
 
@@ -186,7 +196,23 @@ public:
      */
     virtual NCursesEvent wHandleInput( wint_t key );
 
- 
+    /**
+     * Get the current directory
+     * @return string The currently selected directory
+     */ 
+    string getCurrentDir() { return currentDir; }
+
+    /**
+     * Fill the directory list
+     * @return bool List successfully filled
+     */  
+    bool fillDirectoryList ( );
+
+    void setStartDir( const YCPString & start ) {
+	currentDir = start->value();
+	startDir = start->value();
+    }
+	
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -50,9 +50,6 @@ private:
     NCComboBox * dirName;
     NCFileTable *dirList;		// directory list
     NCCheckBox *detailed;
-    
-    string currentDir;			// currently selected directory
-    string startDir;
 
     bool getCheckBoxValue( NCCheckBox * detailed );
     
@@ -71,18 +68,23 @@ public:
 			       const YCPString & headline );
     virtual ~NCAskForExistingDirectory();
 
+    /**
+     * Set the default size
+     */
     virtual long nicesize(YUIDimension dim);
-
     
     /**
-     * Create layout of file selection popup
-     * @return bool
+     * Create layout of file directory selection popup
+     * @param YCPString The initial start directory
+     * @param YCPString The headline of the popup
+     * @return void
      */
-    void createLayout( const YCPString & headline );
+    void createLayout( const YCPString & iniDir,
+		       const YCPString & headline );
 
     /**
      * Fills the list with the directories
-     * @return bool
+     * @return bool Returns true on success
      */
     bool fillDirectoryList ( );
 
