@@ -833,7 +833,9 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 
   if ( token == T_UNKNOWN ) {
     IDBG << "T_UNKNOWN :" << value << ":" << args << ":" << endl;
-    return false;
+// see bug #67319
+//  return false;
+    return true;
   }
 
   if ( token == T_IGNORE )
