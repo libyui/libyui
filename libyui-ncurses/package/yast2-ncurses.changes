@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Tue Sep  3 14:46:43 CEST 2002 - gs@suse.de
+
+- V 2.6.9
+- old behaviour of SelectionBox (notify only on return, space) 
+- package installation: status change respects previous status,
+  toggle status enabled
+- online udpate: new layout, correct status change  
+
+-------------------------------------------------------------------
 Wed Aug 28 16:24:09 CEST 2002 - gs@suse.de
 
 - V 2.6.8
