@@ -394,7 +394,7 @@ NCursesEvent NCTree::wHandleInput( int key )
   switch ( key ) {
   case KEY_SPACE:
   case KEY_RETURN:
-    if ( getNotify() )
+    if ( getNotify() && getCurrentItem() )
       ret = NCursesEvent::button;
     break;
   }

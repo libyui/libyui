@@ -33,6 +33,7 @@ NCSelectionBox::NCSelectionBox( NCWidget * parent, YWidgetOpt & opt,
     , NCPadWidget( parent )
     , pad( (NCTablePad *&)NCPadWidget::pad )
     , biglist( false )
+    , immediate( opt.immediateMode.value() )
 {
   WIDDBG << endl;
   InitPad();
@@ -181,17 +182,22 @@ void NCSelectionBox::wRecoded()
 NCursesEvent NCSelectionBox::wHandleInput( int key )
 {
   NCursesEvent ret;
+  int citem = getCurrentItem();
 
-  if ( handleInput( key ) )
-    return ret;
-
-  switch ( key ) {
-  case KEY_SPACE:
-  case KEY_RETURN:
-    if ( getNotify() )
-      ret = NCursesEvent::button;
-    break;
+  if ( ! handleInput( key ) ) {
+    switch ( key ) {
+    case KEY_SPACE:
+    case KEY_RETURN:
+      if ( getNotify() && citem != -1 )
+	ret = NCursesEvent::button;
+      break;
+    }
   }
+
+  if ( getNotify() && immediate && citem != getCurrentItem() ) {
+    ret = NCursesEvent::button;
+  }
+
   return ret;
 }
 

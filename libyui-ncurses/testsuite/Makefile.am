@@ -26,7 +26,7 @@ y2ncurses_SOURCES = y2ncurses.cc
 y2ncurses_LDADD = -lncurses -lpanel -lpthread -ly2 -lyui -lycp \
 	-lutil -ly2pm
 
-y2ncurses_LDFLAGS = -L$(libdir)	\
+y2ncurses_LDFLAGS = -static -L$(libdir)	\
 	-Xlinker --whole-archive		\
 	$(plugindir)/libpy2stdio.la		\
 	$(plugindir)/libpy2script.la		\

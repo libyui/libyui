@@ -113,7 +113,7 @@ void NCTable::setLabel( const YCPString & nlabel )
 //
 //	DESCRIPTION :
 //
-void NCTable::setHeader( const vector<string> & head ) 
+void NCTable::setHeader( const vector<string> & head )
 {
     vector<NCstring> headline( head.size() );
     for ( unsigned i = 0; i < head.size(); ++i ) {
@@ -255,7 +255,7 @@ NCursesEvent NCTable::wHandleInput( int key )
     switch ( key ) {
     case KEY_SPACE:
     case KEY_RETURN:
-      if ( getNotify() )
+      if ( getNotify() && citem != -1 )
 	ret = NCursesEvent::button;
       break;
     }
