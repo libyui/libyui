@@ -1446,7 +1446,7 @@ const NCstring PkgNames::SaveErr1Text()
 const NCstring PkgNames::SaveErr2Text()
 {
     // text for an Error popup
-    static const NCstring value =  _( "<p>Could not write to file.<br>Check that the path name is correct and the directory is accessable.</p>" );
+    static const NCstring value =  _( "<p>Could not write to file.<br>Check that the path name is correct and the directory is accessible.</p>" );
     return value;
 }
 
