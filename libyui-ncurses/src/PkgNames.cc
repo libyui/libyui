@@ -1513,7 +1513,7 @@ const NCstring PkgNames::LoadErr1Text()
 const NCstring PkgNames::LoadErr2Text()
 {
     // text for an Error popup
-    static const NCstring value =  _( "<p>Could not load the settings.<br>Check that the path name is correct and the floppy disk, if required, is inserted correctly./p>" );
+    static const NCstring value =  _( "<p>Could not load the settings.<br>Check that the path name is correct and the floppy disk, if required, is inserted correctly.</p>" );
     return value;
 }
 
