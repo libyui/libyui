@@ -334,8 +334,8 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
 //
 bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr sel )
 {
-    list<PMPackagePtr> pkgList;
-    list<PMPackagePtr>::iterator listIt;
+    list<PMSelectablePtr> slcList;
+    list<PMSelectablePtr>::iterator listIt;
     unsigned int i;
     
     if ( !packageList )
@@ -349,12 +349,12 @@ bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr 
     
     if ( sel )
     {
-	pkgList = sel->inspacks_ptrs ( );
+	slcList = sel->inspacks_ptrs ( );
     }
 
-    for ( i = 0, listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt, i++ )    
+    for ( i = 0, listIt = slcList.begin(); listIt != slcList.end();  ++listIt, i++ )    
     {
-	createListEntry( packageList, (*listIt), i );
+	createListEntry( packageList, (*listIt)->theObject(), i );
     }
       
     if ( !label.isNull() )
