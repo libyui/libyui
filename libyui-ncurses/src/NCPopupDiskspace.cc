@@ -123,6 +123,8 @@ void NCPopupDiskspace::fillPartitionTable()
     const PkgDuMaster & duMaster =  Y2PM::packageManager().updateDu();        
 
     std::set<PkgDuMaster::MountPoint>::iterator it = duMaster.mountpoints().begin();
+
+    partitions->itemsCleared();		// clear table
     
     while ( it != duMaster.mountpoints().end() )
     {
