@@ -612,8 +612,8 @@ NCWidget & NCDialog::GetNormal( NCWidget & startwith, SeekDir Direction )
 {
   NCWidget * c = (startwith.*Direction)( true )->Value();
 
-  while ( c != &startwith && c->GetState() != NC::WSnormal ) {
-    if ( c->GetState() == NC::WSactive ) {
+  while ( c != &startwith && (c->GetState() != NC::WSnormal || !c->winExist())) {
+    if ( c->GetState() == NC::WSactive) {
       NCINT << "multiple active widgets in dialog? "
 	<< startwith << " <-> " << c << endl;
       c->SetState( NC::WSnormal ); // what else can we do?

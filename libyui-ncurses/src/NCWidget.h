@@ -133,6 +133,7 @@ class NCWidget : public tnode<NCWidget*>, protected NCursesError {
     virtual ~NCWidget();
 
     bool isValid() const 	{ return magic == YWIDGET_MAGIC; }
+    bool winExist() const	{ return win != (NCursesWindow *)0; }
 
     virtual const NCstyle::Style & wStyle() const {
       if ( Parent() )

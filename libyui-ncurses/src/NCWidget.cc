@@ -232,10 +232,10 @@ void NCWidget::wRelocate( const wrect & newrect )
       wDelete();
     }
     wCreate( newrect );
-    if ( win )
+//    if ( win )
       SetState( wstate, true );
-    else
-      SetState( NC::WSdumb, true );
+//    else
+//      SetState( NC::WSdumb, true );
   }
   catch ( NCursesError & err ) {
     NCINT << *this << endl;

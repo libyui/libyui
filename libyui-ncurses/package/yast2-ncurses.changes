@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Sep  7 11:50:39 CEST 2004 - mlazar@suse.cz
+
+- fixed Bugzilla Bug 44561 - ncurses: weird menu behavior
+
+-------------------------------------------------------------------
 Tue Sep  7 09:31:20 CEST 2004 - mlazar@suse.cz
 
 - fixed bug created during fixing previous bug
