@@ -61,7 +61,21 @@ public:
      **/
     void setSize( long newWidth, long newHeight );
 
+    /**
+     * Event filter - inherited from QWidget
+     **/
+    bool eventFilter( QObject * obj, QEvent * ev );
 
+    
+public slots:
+
+    /**
+     * Adapt the size of the client area (the ReplacePoint(`id(`contents)) to
+     * fit in its current space. 
+     **/
+    void resizeClientArea();
+
+    
 protected slots:
 
     /**

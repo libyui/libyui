@@ -29,6 +29,7 @@
 #include "YQUI.h"
 #include "YQReplacePoint.h"
 #include "YQEmpty.h"
+#include "YQLabel.h"
 #include "QY2LayoutUtils.h"
 #include "YEvent.h"
 
@@ -53,15 +54,15 @@ YQWizard::YQWizard( QWidget *		parent,
 {
     setWidgetRep( this );
 
-    // Official SuSE CD colors
-    // They all look horrible on-screen.
+    // Official SuSE corporate design colors
+    // - they all look horrible on-screen. 
 
     QColor suseColorLinux ( (int) (.45*255), (int) (.75*255), (int) (.10*255) );
     QColor suseColorOcean ( (int) (0),       (int) (.30*255), (int) (.25*255) );
     QColor suseColorJungle( (int) (.10*255), (int) (.60*255), (int) (.20*255) );
     QColor suseColorOlive ( (int) (.20*255), (int) (.35*255), (int) (.10*255) );
     
-    QColor bg( suseColorOlive );
+    QColor bg( suseColorJungle );
 
     //
     // Top decoration
@@ -88,7 +89,7 @@ YQWizard::YQWizard( QWidget *		parent,
     left_pane->setPaletteBackgroundColor( bg );
     left_pane->setFont( QFont( "Helvetica", 12 ) );
     left_pane->setMargin( 30 );
-    left_pane->setMinimumWidth( 200 );
+    left_pane->setMinimumWidth( 150 );
     left_pane->setAlignment( Qt::AlignLeft | Qt::AlignTop );
     left_pane->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred ) ); // hor/vert
 
@@ -116,15 +117,25 @@ YQWizard::YQWizard( QWidget *		parent,
     
     _contentsReplacePoint->setId( YCPSymbol( YWizardContentsReplacePointID ) ); // `id(`contents)
     addChild( _contentsReplacePoint );
+    _contentsReplacePoint->installEventFilter( this );
 
     
     //
     // Initial YEmpty widget contents of replace point
     //
 
+#if 1
     YQEmpty * empty =new YQEmpty( _contentsReplacePoint, widgetOpt );
     empty->setParent( _contentsReplacePoint );
     _contentsReplacePoint->addChild( empty );
+#else
+    YQLabel * label =new YQLabel( _contentsReplacePoint, widgetOpt,
+				  YCPString( "Initial placeholder\nfor the wizard replace point")  );
+    label->setParent( _contentsReplacePoint );
+    _contentsReplacePoint->addChild( label );
+
+    label->setPaletteBackgroundColor( white );
+#endif
 
 
     //
@@ -218,7 +229,6 @@ void YQWizard::addChild( YWidget * ychild )
 }
 
 
-
 void YQWizard::backClicked()
 {
     sendEvent( _backButtonId );
@@ -262,6 +272,27 @@ long YQWizard::nicesize( YUIDimension dim )
 void YQWizard::setSize( long newWidth, long newHeight )
 {
     resize( newWidth, newHeight );
+    resizeClientArea();
+}
+
+
+void YQWizard::resizeClientArea()
+{
+    // y2debug( "resizing client area" );
+    QSize contentsSize = _clientArea->size();
+    _contentsReplacePoint->setSize( contentsSize.width(), contentsSize.height() );
+}
+
+
+bool YQWizard::eventFilter( QObject * obj, QEvent * ev )
+{
+    if ( ev->type() == QEvent::Resize && obj == _contentsReplacePoint )
+    {
+	resizeClientArea();
+	return true;		// Event handled
+    }
+
+    return QWidget::eventFilter( obj, ev );
 }
 
 
