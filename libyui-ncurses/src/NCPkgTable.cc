@@ -532,7 +532,7 @@ bool NCPkgTable::setNewStatus( const NCPkgStatus & newStatus  )
 	    break;
 	}
 	case PkgToInstall: {
-	    if ( newStatus == PkgNoInstall )
+	    if ( newStatus == PkgNoInstall || newStatus == PkgTaboo )
 	    {
 		valid = true;
 	    }
@@ -565,7 +565,7 @@ bool NCPkgTable::setNewStatus( const NCPkgStatus & newStatus  )
 	    break;  
 	}
 	case PkgNoInstall:
-	    if ( newStatus == PkgToInstall )
+	    if ( newStatus == PkgToInstall || newStatus == PkgTaboo )
 	    {
 		valid = true;
 	    }

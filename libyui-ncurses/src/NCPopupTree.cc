@@ -255,3 +255,10 @@ void NCPopupTree::cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClo
 	child = child->next();
     }
 }
+
+YTreeItem *  NCPopupTree::getDefaultGroup( )
+{
+    YTree * tree = dynamic_cast<YTree *>(filterTree);
+
+    return 0;
+}

@@ -337,7 +337,12 @@ bool NCPopupSelection::getSelections( )
 	{
 	    selPtr = (*it)->theObject(); 
 	}
-	 // show the available add-ons
+	if ( selPtr )
+	{
+	    NCMIL << "Selection found: " << selPtr->name() << endl;
+	}
+	
+	// show the available add-ons
 	if ( selPtr && selPtr->visible() && !selPtr->isBase() )
 	{
 	    NCMIL << "Add-on " <<  selPtr->name() << ", selected: " << selected << endl; 

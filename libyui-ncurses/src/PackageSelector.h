@@ -75,13 +75,17 @@ class PackageSelector
     
     NCPopupSelection * selectionPopup; 	// the selections popup
 
+    bool packages;
+    bool online_update;
+    
     // internal helper functions (format list of string) 
     string createRelLine( list<PkgRelation> info );
     string createDescrText( list<string> info );
     string createText( list<string> info, bool oneline );
 
     // add a line to the package list
-    bool   createListEntry ( NCPkgTable *table, PMPackagePtr pkgPtr, unsigned int index );
+    bool createListEntry ( NCPkgTable *table, PMPackagePtr pkgPtr, unsigned int index );
+    bool createPatchEntry ( NCPkgTable *pkgTable, PMObjectPtr patchPtr, unsigned int index );
     
     // internal use (copies tree items got from YPkgRpmGroupTagsFilterView)
     void cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone );

@@ -46,6 +46,8 @@
 
 using namespace std;
 
+#define FAKE_INST_SRC 0
+#define ONLINE_UPDATE 0	
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -103,18 +105,51 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui )
     eventHandlerMap[ PkgNames::InstSourceHelp()->toString() ] = &PackageSelector::HelpHandler;
     // FIXME: add handler for all `id s
 
-    // create the filter popup
-    filterPopup = new NCPopupTree( wpos( 1, 1 ),	// position
-				   this );	 
+    
+#if ONLINE_UPDATE
+    online_update = true;
+    packages = false;
+#else
+    online_update = false;
+    packages = true;
+#endif
 
-    // create the selections popup
-    selectionPopup = new NCPopupSelection( wpos( 1, 1 ),
-					   this );
+    if ( packages )
+    {
+	// create the filter popup
+	filterPopup = new NCPopupTree( wpos( 1, 1 ),	// position
+				       this );	 
 
+#if FAKE_INST_SRC
+	{
+	    Y2PM y2pm;
+	    InstSrcManager& MGR = y2pm.instSrcManager();
+
+	    Url url( "dir:///space/instTest" );
+
+	    InstSrcManager::ISrcIdList nids;
+	    PMError err = MGR.scanMedia( nids, url );
+
+	    if ( nids.size() )
+	    {
+		err = MGR.enableSource( *nids.begin() );
+		NCMIL << "Source enabled: " << err << endl;
+	    }
+	}
+#endif
+    
+	// create the selections popup
+	selectionPopup = new NCPopupSelection( wpos( 1, 1 ),
+					       this );
+    }
+    
     NCstring text( "This is a development version of the NCurses single package selection, included in this Beta as a kind of demo.<br>Some things work, some don't, some work but are still really slow. You can view some package data, but setting a package status does not have any effect yet. As of now, all bug reports for this thing will be routed to /dev/null.<br>We are working heavily on it, so if you want to contribute, the easiest thing you can do right now is not swamp us with bugzilla reports, but let us work in the remaining time.<br> Thank you.<br> -gs" );
     NCPopupInfo info( wpos( 5, 5 ), YCPString( "Warning" ), text.YCPstr() );
     info.setNiceSize( 50, 20 );
     info.showInfoPopup( );
+
+
+    
 }
 
 
@@ -294,8 +329,6 @@ bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr 
     // clear the package table
     packageList->itemsCleared ();
     
-    NCMIL << "  Label: " << label->toString() << endl;
-
     if ( sel )
     {
 	pkgList = sel->inspacks_ptrs ( );
@@ -308,7 +341,9 @@ bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr 
       
     if ( !label.isNull() && label->compare( YCPString("default") ) != YO_EQUAL )
     {
-	// show the selected filter label
+	NCMIL << "  Label: " << label->toString() << endl;
+
+        // show the selected filter label
 	YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
 	if ( filterLabel )
 	{
@@ -447,6 +482,36 @@ bool PackageSelector::createListEntry ( NCPkgTable *pkgTable,
 		       pkgLine,
 		       index,		// the index
 		       pkgPtr );	// the corresponding package pointer
+
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// createPatchEntry
+//
+//
+bool PackageSelector::createPatchEntry ( NCPkgTable *pkgTable,
+					 PMObjectPtr patchPtr,
+					 unsigned int index )
+{
+    vector<string> pkgLine (5);
+
+    if ( !patchPtr )
+    {
+	NCERR << "No valid patch available" << endl;
+	return false;
+    }
+
+    pkgLine[0] = patchPtr->name();	// name
+    pkgLine[1] = patchPtr->summary();  	// short description
+    FSize size = patchPtr->size();     	// installed size
+    pkgLine[2] = size.asString();
+
+    pkgTable->addLine( patchPtr->getSelectable()->status(), //  get the status
+		       pkgLine,
+		       index,		// the index
+		       patchPtr );	// the corresponding pointer
 
     return true;
 }

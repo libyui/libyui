@@ -81,6 +81,8 @@ public:
 			 bool  			open );
 
     NCursesEvent showFilterPopup( );
+
+    YTreeItem * getDefaultGroup( );
     
 };
 
