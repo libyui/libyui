@@ -274,17 +274,6 @@ YQPkgObjListItem::compare( QListViewItem *	otherListViewItem,
 	if ( this->constPMObj()->size() > other->constPMObj()->size() ) return 1;
 	return 0;
     }
-    else if ( col == versionCol() )
-    {
-	// Sorting different packages by version number doesn't make any sense.
-	// Even sorting instances of the same package by version is critical:
-	// The version numbers may or may not be numerically ascending. There
-	// may be CVS snapshots that use entirely different naming schemes -
-	// how should we compare "3.01-p4" against "20020814" ?
-	// Let's simply forget it. No sort by version.
-
-	return 0;	// FIXME
-    }
     else if ( col == statusCol() )
     {
 	// Sorting by status depends on the numeric value of the
