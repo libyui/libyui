@@ -42,6 +42,7 @@
 #include "QY2LayoutUtils.h"
 #include "YEvent.h"
 
+#define PIXMAP_DIR THEMEDIR "/wizard/"
 
 #define WORK_AREA_BOTTOM_MARGIN		10
 #define WORK_AREA_RIGHT_MARGIN		10
@@ -72,12 +73,12 @@ YQWizard::YQWizard( QWidget *		parent,
     QColor webGreenBG( 0x9c, 0xce, 0x9c );
     QColor webGreenFG( 0x31, 0x65, 0x00 );
 
-    QColor lightGrey( 0xf8, 0xf8, 0xf8 );
-    QColor darkGrey( 0xde, 0xde, 0xde );
-    QColor darkGreen( 0x66, 0x99, 0x00 );
-    // QColor lightGreen();
-    QColor clientAreaBG( 0xee, 0xee, 0xee );
-    QColor greyText( 0x66, 0x66, 0x66 );
+    QColor lightGrey	( 0xf8, 0xf8, 0xf8 );
+    QColor darkGrey	( 0xde, 0xde, 0xde );
+    QColor darkGreen	( 0x66, 0x99, 0x00 );
+    QColor lightGreen	( 0x8c, 0xbc, 0x07 );
+    QColor clientAreaBG	( 0xee, 0xee, 0xee );
+    QColor greyText	( 0x66, 0x66, 0x66 );
 
     _bg		= QColor( 0xE6, 0xE6, 0xE6 );
     _stepsBg	= lightGrey;
@@ -262,7 +263,7 @@ void YQWizard::layoutStepsPanel()
     QLabel * bottomGradient= new QLabel( _stepsPanel );
     CHECK_PTR( bottomGradient );
 
-    QPixmap pixmap( THEMEDIR "/wizard-steps-bottom-gradient.png" );
+    QPixmap pixmap( PIXMAP_DIR "bottom-gradient.png" );
 
     if ( ! pixmap.isNull() )
     {
@@ -303,7 +304,7 @@ void YQWizard::layoutStepsPanel()
     _helpButton = new QPushButton( _( "&Help" ), bottomGradient );
     CHECK_PTR( _helpButton );
 
-    pixmap = QPixmap( THEMEDIR "/wizard-help-button.png" );
+    pixmap = QPixmap( PIXMAP_DIR "help-button.png" );
 
     if ( ! pixmap.isNull() )
 	_helpButton->setPixmap( pixmap );
@@ -341,7 +342,7 @@ void YQWizard::layoutHelpPanel()
     _helpBrowser->setTextFormat( Qt::RichText );
     _helpBrowser->setMargin( 4 );
 
-    QPixmap bgPixmap( THEMEDIR "/wizard-help-background.png" );
+    QPixmap bgPixmap( PIXMAP_DIR "help-background.png" );
 
     if ( ! bgPixmap.isNull() )
 	_helpBrowser->setPaletteBackgroundPixmap( bgPixmap );
@@ -366,7 +367,7 @@ void YQWizard::layoutHelpPanel()
     _stepsButton = new QPushButton( _( "Steps" ), hbox );
     CHECK_PTR( _stepsButton );
 
-    QPixmap pixmap( THEMEDIR "/wizard-steps-button.png" );
+    QPixmap pixmap( PIXMAP_DIR "steps-button.png" );
 
     if ( ! pixmap.isNull() )
 	_stepsButton->setPixmap( pixmap );
