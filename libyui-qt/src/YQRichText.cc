@@ -99,6 +99,7 @@ void YQRichText::setText(const YCPString &text)
 	verticalScrollBar()->setValue(0);
     
     QTextBrowser::setText( fromUTF8( text->value() ) );
+    YRichText::setText( text );
     
     if ( autoScrollDown && verticalScrollBar() )
 	verticalScrollBar()->setValue( verticalScrollBar()->maxValue() );
