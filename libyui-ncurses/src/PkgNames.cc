@@ -631,6 +631,20 @@ const NCstring PkgNames::Authors()
     return value;
 }
 
+const NCstring PkgNames::License()
+{
+    // part of the package description
+    static const NCstring value = _("<b>License: </b>");
+    return value;
+}
+
+const NCstring PkgNames::MediaNo()
+{
+    // part of the package description
+    static const NCstring value = _("<b>Media No.: </b>");
+    return value;
+}
+
 const NCstring PkgNames::Size()
 {
     // part of the package description

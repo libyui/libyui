@@ -1501,11 +1501,17 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	if ( pkgPtr->hasInstalledObj() && pkgPtr->hasCandidateObj() )
 	{
 	    instVersion = pkgPtr->getInstalledObj()->version();
+	    instVersion += "-";
+	    instVersion += pkgPtr->getInstalledObj()->release();
 	    version = pkgPtr->getCandidateObj()->version();
+	    version += "-";
+	    version += pkgPtr->getCandidateObj()->release();
 	}
 	else
 	{
 	    version = pkgPtr->version();
+	    version += "-";
+	    version += pkgPtr->release(); 
 	}
 
 	text += PkgNames::Version().str();
@@ -1525,6 +1531,20 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	
 	text += "<br>";
 
+	// show the license and medianr
+	PMPackagePtr package = pkgPtr;
+	if ( package )
+	{
+	    text += PkgNames::License().str();
+	    text += package->license();
+	    text += "  ";
+	    text += PkgNames::MediaNo().str();
+	    char num[5];
+	    sprintf( num, "%d", package->medianr() );
+	    text += num;
+	    text += "<br>";
+	}
+
 	// show Provides:
 	text += PkgNames::Provides().str();
 	list<PkgRelation> provides = pkgPtr->provides();	// PMSolvable
@@ -1532,16 +1552,16 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	text += "<br>";
 
 	// show the authors
-	text += PkgNames::Authors().str();
-	PMPackagePtr package = pkgPtr;
 	if ( package )
 	{
+	    text += PkgNames::Authors().str();
 	    list<string> authors = package->authors(); // PMPackage	
 	    text += createText( authors, true );
 	}
+	
         // show the description	
 	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
-	
+
 	if ( descrInfo )
 	{
 	    static_cast<NCRichText *>(descrInfo)->setText( YCPString(text) );

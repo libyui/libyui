@@ -416,10 +416,20 @@ public:
     static const NCstring Version();
 
     /**
-     * bold text Installes version: (richtext) 
+     * bold text Installed version: (richtext) 
      */
     static const NCstring InstVersion();
 
+    /**
+     * bold text License: (richtext) 
+     */
+    static const NCstring License();
+
+    /**
+     * bold text Media No.: (richtext) 
+     */
+    static const NCstring MediaNo();
+    
     /**
      * bold text Size: (richtext) 
      */
