@@ -189,7 +189,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
     pixmap.fill( _busyPopup->paletteBackgroundColor() );
 
     // Render the text - aligned top and left because otherwise it will of
-    // course be centered inside the pixmap with is usually much larger than
+    // course be centered inside the pixmap which is usually much larger than
     // the popup, thus the text would be cut off.
     QPainter painter( &pixmap );
     painter.drawText( pixmap.rect(), AlignLeft | AlignTop, _busyPopup->text() );
