@@ -23,6 +23,7 @@
 
 
 #include "QY2FloppyMountDialog.h"
+#include "QY2LayoutUtils.h"
 #include "YQi18n.h"
 
 #ifndef NO_YAST2_ENVIRONMENT
@@ -414,36 +415,6 @@ void
 QY2FloppyMountDialog::error( const QString & msg )
 {
     QMessageBox::critical( this, "", msg, QMessageBox::Ok, QMessageBox::NoButton );
-}
-
-
-void QY2FloppyMountDialog::addVStretch( QWidget * parent )
-{
-    QWidget * spacer = new QWidget( parent );
-    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) ); // hor/vert
-}
-
-
-void QY2FloppyMountDialog::addHStretch( QWidget * parent )
-{
-    QWidget * spacer = new QWidget( parent );
-    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
-}
-
-
-void QY2FloppyMountDialog::addVSpacing( QWidget * parent, int height )
-{
-    QWidget * spacer = new QWidget( parent );
-    CHECK_PTR( spacer );
-    spacer->setFixedHeight( height );
-}
-
-
-void QY2FloppyMountDialog::addHSpacing( QWidget * parent, int width )
-{
-    QWidget * spacer = new QWidget( parent );
-    CHECK_PTR( spacer );
-    spacer->setFixedWidth( width );
 }
 
 

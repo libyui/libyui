@@ -130,31 +130,6 @@ protected slots:
     void enableWidgets();
 
     
-public:
-
-    /**
-     * Add vertical stretchable space.
-     **/
-    static void addVStretch( QWidget * parent );
-    
-    /**
-     * Add horizontal stretchable space.
-     **/
-    static void addHStretch( QWidget * parent );
-    
-    
-    /**
-     * Add a fixed height vertical space
-     **/
-    static void addVSpacing( QWidget * parent, int height = 8 );
-    
-    
-    /**
-     * Add a fixed height horizontal space
-     **/
-    static void addHSpacing( QWidget * parent, int width = 8 );
-
-    
 protected:
 
     /**
