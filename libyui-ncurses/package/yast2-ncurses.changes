@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Mar  3 16:01:49 CET 2004 - gs@suse.de
+
+- V 2.9.11
+- messages from proofread merged back
+- show text cursor correctly (bug #35055) 
+
+-------------------------------------------------------------------
 Mon Mar  1 14:26:00 CET 2004 - gs@suse.de
 
 - V 2.9.10
