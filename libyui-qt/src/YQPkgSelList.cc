@@ -178,10 +178,10 @@ YQPkgSelListItem::~YQPkgSelListItem()
 
 
 void
-YQPkgSelListItem::cycleStatus()
+YQPkgSelListItem::setStatus( PMSelectable::UI_Status newStatus )
 {
-    YQPkgObjListItem::cycleStatus();
     Y2PM::selectionManager().activate( Y2PM::packageManager() );
+    YQPkgObjListItem::setStatus( newStatus );
     _pkgSelList->sendUpdatePackages();
 }
 

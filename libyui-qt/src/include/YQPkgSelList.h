@@ -149,10 +149,13 @@ public:
     PMSelectable::UI_Status status() const;
 
     /**
-     * Cycle the package status to the next valid value.
-     * Reimplemented from YQPkgObjList.
+     * Set the selection status.
+     *
+     * Reimplemented from YQPkgObjListItem:
+     * Activate selections for each change.
      **/
-    virtual void cycleStatus();
+    virtual void setStatus( PMSelectable::UI_Status newStatus );
+
     
     /**
      * Comparison function used for sorting the list.
