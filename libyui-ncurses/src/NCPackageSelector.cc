@@ -45,8 +45,7 @@ NCPackageSelector::NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
 				      string floppyDevice )
     : NCSplit( parent, opt, dimension )
       , widgetRoot( 0 )
-      , floppy( floppyDevice )
-      , packager( ui, opt )
+      , packager( 0 )
       , youMode ( false )
       , updateMode ( false )
 {
@@ -76,6 +75,10 @@ NCPackageSelector::NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
 	widgetRoot = (YContainerWidget *)ui->createWidgetTree( dynamic_cast<YWidget *>(parent),
 							       opt, 0, pkgLayout );
     }
+
+    // create the PackageSelector (creation with 'new' is required because initialization
+    // in the list of member variables causes problems with untranslated messages)
+    packager = new PackageSelector( ui, opt, floppyDevice );
 
     if ( widgetRoot )
     {
@@ -109,7 +112,7 @@ NCPackageSelector::NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
 	    }
 
             // set the pointer to the packager object
-	    pkgList->setPackager( &packager );
+	    pkgList->setPackager( packager );
 
 	    // fill the table header
 	    pkgList->fillHeader( );
@@ -135,7 +138,10 @@ NCPackageSelector::NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
 //
 NCPackageSelector::~NCPackageSelector()
 {
-    WIDDBG << endl;
+    if ( packager )
+    {
+	delete packager;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -171,34 +177,22 @@ void NCPackageSelector::showDefaultList()
 
 	pkgList->setKeyboardFocus();
 
-	if ( !youMode )
+	if ( !youMode && packager )
 	{
+	    // do an initial dependency solving in 'normal' and 'update' mode
+	    packager->showPackageDependencies( true );
 	    // show the required diskspace
-	    packager.showDiskSpace();
-	    // do an initial dependency solving
-	    packager.showPackageDependencies( true );
+	    packager->showDiskSpace();	    
 	}
-	if ( youMode )
+	if ( youMode && packager )
 	{
-	    packager.showDownloadSize();
+	    packager->showDownloadSize();
 	}
     }
     else
     {
 	NCERR << "Package table does not exist" << endl;
     }
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//      METHOD NAME : NCPackageSelector::initPopups
-//      METHOD TYPE : void
-//
-//      DESCRIPTION : create all popup dialogs
-//
-void NCPackageSelector::initPopups( )
-{
-    packager.initPopups( floppy );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -211,7 +205,10 @@ void NCPackageSelector::initPopups( )
 //
 bool NCPackageSelector::handleEvent ( const NCursesEvent & event )
 {
-    return packager.handleEvent( event );
+    if ( !packager )
+	return false;
+    
+    return packager->handleEvent( event );
 }
 
 

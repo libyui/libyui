@@ -83,7 +83,7 @@ bool ic_compare ( char c1, char c2 )
 //
 // Constructor
 //
-PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
+PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt, string floppyDevice )
     : y2ui( ui )
       , visibleInfo( YCPNull() )
       , filterPopup( 0 )
@@ -200,24 +200,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     if ( !youMode )
     {
 	Y2PM::selectionManager().SaveState();
-    }
-    else
-    {
-	Y2PM::youPatchManager().SaveState();
-    }
-}
 
-///////////////////////////////////////////////////////////////////
-//
-// initPopups
-// (creating popups in constructor of the PackageSelector causes
-// problems with translations therefore provide a method which
-// is called in Y2NCursesUI)
-//
-void PackageSelector::initPopups( string floppyDevice )
-{
-    if ( !youMode )
-    {
 	// create the selections popup
 	selectionPopup = new NCPopupSelection( wpos( 1, 1 ), this );
 
@@ -236,6 +219,10 @@ void PackageSelector::initPopups( string floppyDevice )
 
 	// the file popup
 	filePopup = new NCPopupFile( wpos( 1, 1), floppyDevice, this );
+    }
+    else
+    {
+	Y2PM::youPatchManager().SaveState();
     }
 }
 

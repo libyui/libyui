@@ -115,18 +115,13 @@ class PackageSelector
      * @param opt The widget options
      * @param floppyDevice The floppy device
      */
-    PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt );
+    PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt, string floppyDevice );
 
     /**
      * Destructor
      */ 
     virtual ~PackageSelector();
     
-  /**
-    * Create all popup dialogs 
-    */
-    void initPopups( string floppy );
-
    /**
     * Fills the package table
     * @param label The selected RPM group (the label)
