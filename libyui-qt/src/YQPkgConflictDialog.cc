@@ -207,6 +207,18 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
     painter.end();
 
     _busyPopup->setPaletteBackgroundPixmap( pixmap );
+
+    // If the application manages to render the true contents of the label we
+    // just misused so badly, the real label will interfere with the background
+    // pixmap with (maybe) a few pixels offset (bug #25647). Fast or
+    // multiprocessor machines tend to have this problem.
+    // So let's get rid of the label text and solely rely on the background
+    // pixmap. 
+    _busyPopup->setText( "" );
+
+    // Make sure the newly emptied text doesn't cause the busy dialog to be
+    // resized to nil (or a window manager dependent minimum size).
+    _busyPopup->setFixedSize( _busyPopup->size() );
 }
 
 
