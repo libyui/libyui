@@ -88,7 +88,8 @@ liby2ncurses_la_SOURCES =				\
 	NCPopupPkgTable.cc NCPopupPkgTable.h		\
 	PkgNames.cc PkgNames.h				\
 	ObjectStatStrategy.cc ObjectStatStrategy.h	\
-	NCstyle.mono.h NCstyle.linux.h NCstyle.xterm.h
+	NCsytle.braille.h NCstyle.mono.h 		\
+	NCstyle.linux.h NCstyle.xterm.h
 
 
 libpy2ncurses_la_SOURCES = $(liby2ncurses_la_SOURCES)	\
