@@ -20,6 +20,7 @@
 #include "NCPkgTable.h"
 #include "NCTable.h"
 #include "NCPopupInfo.h"
+#include "NCi18n.h"
 
 #include "PackageSelector.h"
 #include <y2pm/PMSelectable.h>
@@ -206,9 +207,10 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
 	return false;
 
     list<string> notify;
+    list<string> license;
     YCPString header( "" );
     
-    bool ok = false;
+    bool ok = true;
 
     if ( newstatus == PMSelectable::S_Del
 	 || newstatus == PMSelectable::S_NoInst
@@ -228,20 +230,43 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
 	    header = YCPString(PkgNames::NotifyLabel());
 	}
     }
-    
+    if ( newstatus == PMSelectable::S_Install
+	|| newstatus == PMSelectable::S_AutoInstall )
+    {
+	if ( objPtr->hasSelectable() )
+	{
+	    PMPackagePtr pkgPtr = objPtr->getSelectable()->theObject();
+	    license = pkgPtr->licenseToConfirm();
+	}
+    }
+
+    string pkgName = objPtr->getSelectable()->name();
     if ( !notify.empty() )
     {
-	string pkgName = objPtr->getSelectable()->name();
 	NCPopupInfo info( wpos( 1, 1),
 			  header,
 			  YCPString( "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( notify ) ) );
 	info.showInfoPopup( );
     }
-    
-    // inform the package manager
-    ok = statusStrategy->setObjectStatus( newstatus,
-					   objPtr );
+    if ( !license.empty() )
+    {
+	NCPopupInfo info( wpos( 1, 1),
+			  YCPString(_("End User License Agreement") ),
+			  YCPString( "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( license )
+				     + "<br><br>" + _("Installing the package means accepting the license.")
+				     + "<br>" + _("<b>Install the package now?</b>") ),
+			  PkgNames::OKLabel(),
+			  PkgNames::CancelLabel() );
+	if ( info.showInfoPopup( ) == NCursesEvent::cancel )
+	    ok = false;
+    }
 
+    if ( ok )
+    {
+	// inform the package manager
+	ok = statusStrategy->setObjectStatus( newstatus, objPtr );
+    }
+    
     if ( ok && singleChange )
     {
 	if ( tableType == T_Packages
