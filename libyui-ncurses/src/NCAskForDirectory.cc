@@ -119,7 +119,7 @@ void NCAskForExistingDirectory::createLayout( const YCPString & iniDir,
     // add the checkBox detailed
     NCSplit * hSplit = new NCSplit( split, opt, YD_HORIZ );
     split->addChild( hSplit );
-    detailed = new NCCheckBox( hSplit, opt, YCPString( "Details view" ), false );
+    detailed = new NCCheckBox( hSplit, opt, YCPString( "&Details view" ), false );
     detailed->setId( PkgNames::Details() );
     hSplit->addChild( new NCSpacing( hSplit, opt, 0.1, true, false ) );
     hSplit->addChild( detailed );
@@ -228,7 +228,6 @@ bool NCAskForExistingDirectory::postAgain( )
     postevent.detail = NCursesEvent::NODETAIL;
 
     YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
-    NCMIL << "Current ID: " << currentId->toString() << endl;
 
     if ( !currentId.isNull() )
     {

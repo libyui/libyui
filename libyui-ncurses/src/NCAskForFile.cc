@@ -120,7 +120,7 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
     // add the checkBox detailed
     NCSplit * hSplit = new NCSplit( split, opt, YD_HORIZ );
     split->addChild( hSplit );
-    detailed = new NCCheckBox( hSplit, opt, YCPString( "Details view" ), false );
+    detailed = new NCCheckBox( hSplit, opt, YCPString( "&Details view" ), false );
     detailed->setId( PkgNames::Details() );
     hSplit->addChild( new NCSpacing( hSplit, opt, 0.1, true, false ) );
     hSplit->addChild( detailed );
@@ -146,7 +146,7 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
     // add the text entry for the file name
     opt.isEditable.setValue( edit );
     fileName = new NCTextEntry( hSplit2, opt,
-			       YCPString( "File name:" ),
+			       YCPString( "&File name:" ),
 			       YCPString( "" ),
 			       100, 50 );
     hSplit2->addChild( fileName );
