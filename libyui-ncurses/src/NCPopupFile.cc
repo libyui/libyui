@@ -45,7 +45,7 @@ NCPopupFile::NCPopupFile( const wpos at )
     , fileName( 0 )
     , comboBox( 0 )
     , hDim( 50 )
-    , vDim( 15 )
+    , vDim( 13 )
 {
     createLayout( );
 }
@@ -93,17 +93,16 @@ void NCPopupFile::createLayout( )
     textLabel = new NCRichText( split, opt, YCPString(PkgNames::SaveSelText().str()) );
     split->addChild( textLabel );
 
-
     // add a frame 
     opt.isVStretchable.setValue( true );
-    NCFrame * frame = new NCFrame( split, opt, YCPString("" ) );
+    NCFrame * frame = new NCFrame( split, opt, YCPString("") );
     NCSplit * vSplit2 = new NCSplit( frame, opt, YD_VERT );
 
     // the combo box for selecting the medium
     opt.isHStretchable.setValue( true );
-    comboBox = new NCComboBox( vSplit2, opt, YCPString( "Medium" ) );
-    comboBox->itemAdded( YCPString( "Hard disk " ), 0, false );
-    comboBox->itemAdded( YCPString( "Floppy " ), 0, true );
+    comboBox = new NCComboBox( vSplit2, opt, YCPString(PkgNames::MediumLabel().str()) );
+    comboBox->itemAdded( YCPString(PkgNames::Harddisk().str()), 0, false );
+    comboBox->itemAdded( YCPString(PkgNames::Floppy().str()), 0, true );
     vSplit2->addChild( comboBox );
   
     // the text entry field for the file name
@@ -118,8 +117,6 @@ void NCPopupFile::createLayout( )
     NCSpacing * sp2 = new NCSpacing( split, opt, 0.4, false, true );
     split->addChild( sp2 );
 
-    opt.isVStretchable.setValue( false );
-    
     // HBox for the buttons
     NCSplit * hSplit = new NCSplit( split, opt, YD_HORIZ );
     split->addChild( hSplit );
