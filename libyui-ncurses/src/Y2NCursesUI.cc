@@ -583,10 +583,13 @@ YWidget * Y2NCursesUI::createIntField( YWidget * parent, YWidgetOpt & opt,
 //	DESCRIPTION : Reads the layout term of the package selection dialog
 // 		      and creates the widget tree.
 //
-YWidget * Y2NCursesUI::createPackageSelector( YWidget * parent, YWidgetOpt & opt )
+YWidget * Y2NCursesUI::createPackageSelector( YWidget * parent,
+					      YWidgetOpt & opt,
+					      const YCPString & floppyDevice )
 {
     ONCREATE;
-    return new NCPackageSelector ( this, dynamic_cast<NCWidget *>(parent), opt, YD_HORIZ );
+    return new NCPackageSelector ( this, dynamic_cast<NCWidget *>(parent), opt,
+				   YD_HORIZ, floppyDevice->value() );
 }
 
 ///////////////////////////////////////////////////////////////////

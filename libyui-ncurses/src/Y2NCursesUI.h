@@ -285,7 +285,9 @@ class Y2NCursesUI : public NCurses, public YUIInterpreter {
     /**
      * Creates the PackageSelector widget (i.e. a widget tree).
      */
-    virtual YWidget * createPackageSelector( YWidget *parent, YWidgetOpt &opt );
+    virtual YWidget * createPackageSelector( YWidget *parent,
+					     YWidgetOpt &opt,
+					     const YCPString & floppyDevice );
 
     /**
      * Fills the PackageSelector widget.
@@ -295,7 +297,9 @@ class Y2NCursesUI : public NCurses, public YUIInterpreter {
     /**
      * Creates a special subwidget used for Package Selection (which doesn't exist in QT-UI).
      */
-    virtual YWidget * createPkgSpecial( YWidget *parent, YWidgetOpt &opt, const YCPString &subwidget );
+    virtual YWidget * createPkgSpecial( YWidget *parent,
+					YWidgetOpt &opt,
+					const YCPString &subwidget );
     
     /**
      * UI-specific setLanguage() function.
