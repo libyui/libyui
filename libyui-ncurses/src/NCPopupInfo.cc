@@ -213,15 +213,13 @@ bool NCPopupInfo::postAgain()
     {
 	YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
 
-	if ( currentId->compare( PkgNames::Cancel() ) == YO_EQUAL )
+	if ( !currentId.isNull()
+	     && currentId->compare( PkgNames::Cancel() ) == YO_EQUAL )
 	{
 	    // close the dialog 
 	    postevent = NCursesEvent::cancel;
 	}
-	else if  ( currentId->compare( PkgNames::OkButton() ) == YO_EQUAL )
-	{
-	    postevent = NCursesEvent::button;
-	}	
+	// else - nothing to do (postevent is already set)
     }
     
     if ( postevent == NCursesEvent::button || postevent == NCursesEvent::cancel )

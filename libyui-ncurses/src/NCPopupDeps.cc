@@ -674,6 +674,9 @@ bool NCPopupDeps::postAgain()
 
     YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
 
+    if ( currentId.isNull() )
+	return false;
+    
     if ( currentId->compare( PkgNames::Cancel () ) == YO_EQUAL )
     {
 	// close the dialog 
