@@ -10,14 +10,14 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPopupPkgTable.h
+   File:       NCPopupPkgDescr.h
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#ifndef NCPopupPkgTable_h
-#define NCPopupPkgTable_h
+#ifndef NCPopupPkgDescr_h
+#define NCPopupPkgDescr_h
 
 #include <iosfwd>
 
@@ -28,25 +28,27 @@
 
 class NCPkgTable;
 class NCPushButton;
+class NCRichText;
 class PackageSelector;
 
 
 ///////////////////////////////////////////////////////////////////
 //
-//	CLASS NAME : NCPopupPkgTable
+//	CLASS NAME : NCPopupPkgDescr
 //
 //	DESCRIPTION :
 //
-class NCPopupPkgTable : public NCPopup {
+class NCPopupPkgDescr : public NCPopup {
 
-    NCPopupPkgTable & operator=( const NCPopupPkgTable & );
-    NCPopupPkgTable            ( const NCPopupPkgTable & );
+    NCPopupPkgDescr & operator=( const NCPopupPkgDescr & );
+    NCPopupPkgDescr            ( const NCPopupPkgDescr & );
 
 private:
 
     NCPkgTable * pkgTable;
     NCPushButton * okButton;
     NCPushButton * cancelButton;
+    NCRichText *descrText;
     PackageSelector * packager;
 
     int hDim;
@@ -60,17 +62,17 @@ protected:
     
 public:
     
-    NCPopupPkgTable( const wpos at, PackageSelector * pkger );
+    NCPopupPkgDescr( const wpos at, PackageSelector * pkger );
     
-    virtual ~NCPopupPkgTable();
+    virtual ~NCPopupPkgDescr();
 
     virtual long nicesize(YUIDimension dim);
 
-    bool fillAutoChanges( NCPkgTable * pkgTable );
+    bool fillData( PMPackagePtr & pkgPtr );
 
     void createLayout( );
 
-    NCursesEvent showInfoPopup( );
+    NCursesEvent showInfoPopup( PMPackagePtr & pkgPtr );
 
     void setNiceSize( int horiz, int vert ) { hDim = horiz; vDim = vert; }
 };
@@ -78,4 +80,4 @@ public:
 ///////////////////////////////////////////////////////////////////
 
 
-#endif // NCPopupPkgTable_h
+#endif // NCPopupPkgDescr_h

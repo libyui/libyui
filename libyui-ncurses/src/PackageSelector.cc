@@ -33,6 +33,7 @@
 #include "NCPopupSelDeps.h"
 #include "NCPopupDiskspace.h"
 #include "NCPopupPkgTable.h"
+#include "NCPopupPkgDescr.h"
 #include "NCPopupFile.h"
 #include "PackageSelector.h"
 #include "YSelectionBox.h"
@@ -157,7 +158,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt, string flo
     eventHandlerMap[ PkgNames::UpdateHelp()->toString() ] = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::SearchHelp()->toString() ] = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::PatchHelp()->toString() ]  = &PackageSelector::YouHelpHandler;
-   
+
     if ( opt.youMode.value() )
 	youMode = true;
 
@@ -290,6 +291,13 @@ bool PackageSelector::handleEvent ( const NCursesEvent&   event )
     if ( ! currentId.isNull() )
     {
 	UIMIL <<  "Selected widget id: " << currentId->toString() << endl;
+	// hyperlink 
+        if ( currentId->isString()
+	     && currentId->asString()->value().substr(0, 4) == "pkg:" )
+	{
+	    LinkHandler( currentId->asString()->value() );
+	    return true;
+	}
 	
 	tHandlerMap::iterator it = eventHandlerMap.find ( currentId->toString() );
     
@@ -1239,6 +1247,48 @@ bool PackageSelector::DiskinfoHandler( const NCursesEvent&  event )
     }
     
     return true;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// LinkHandler
+//
+// Handles hyperlinks in package description.
+//
+bool PackageSelector::LinkHandler ( string link )
+{
+    bool found = false;
+    
+    PMManager::PMSelectableVec::const_iterator listIt = Y2PM::packageManager().begin();
+
+    // fill the package table
+    PMPackagePtr pkgPtr;
+    
+    if ( link.substr(0, 4) == "pkg:" )
+    {
+	// search for the package
+	while ( listIt != Y2PM::packageManager().end() )
+	{
+	    pkgPtr = (*listIt)->theObject();
+	    if ( pkgPtr->name().asString() == link.substr(4) )
+	    {
+		NCMIL << "Package " << link.substr(4) << " found" << endl;
+		// open popup with package info
+		NCPopupPkgDescr popupDescr( wpos(1,1), this );
+		popupDescr.showInfoPopup( pkgPtr );
+		found = true;
+	    }
+	    ++listIt;
+	}
+    }
+
+    if ( !found )
+    {
+	NCERR << "Package " << link.substr(4) << " NOT found" << endl;
+	// open error popup
+    }
+    
+    return found;
 }
 
 ///////////////////////////////////////////////////////////////////

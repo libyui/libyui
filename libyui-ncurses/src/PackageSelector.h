@@ -281,6 +281,13 @@ class PackageSelector
     * @return bool
     */
     bool YouHelpHandler( const NCursesEvent&  event );
+
+   /**
+     * Handles hyperlinks in package description
+     * @param link The link
+     * @return bool
+     */
+    bool LinkHandler ( string link );
     
    /**
     * Gets the required package info from package manager and shows it
