@@ -641,7 +641,7 @@ const NCstring PkgNames::SearchIn()
 const NCstring PkgNames::CheckDescr()
 {
     // label of a combo box  (search popup)
-    static const NCstring value = _( "&Description (time-consuming!)" );
+    static const NCstring value = _( "&Description (time-consuming)" );
     return value;
 }
 
@@ -1087,7 +1087,7 @@ const NCstring PkgNames::HelpPkgInst2()
 const NCstring PkgNames::HelpPkgInst3()
 {
     // part3 of help text package installation 
-    static const NCstring value =  _( "<p><b>Actions:</b> provides the possibilities to change the status of the selected package (or all packages in the list), for example, to delete a package or select an additional package for installation. The status change can also be done directly by pressing the key specified in the menu item (for detailed information about the package status, see 'Help/Help on package status').</p>" );
+    static const NCstring value =  _( "<p><b>Actions:</b> provides the possibilities to change the status of the selected package (or all packages in the list), for example, to delete a package or select an additional package for installation. The status change can also be done directly by pressing the key specified in the menu item (for detailed information about the package status, see 'Help on package status').</p>" );
     return value;
 }
 
@@ -1101,14 +1101,14 @@ const NCstring PkgNames::HelpPkgInst4()
 const NCstring PkgNames::HelpPkgInst5()
 {
     // part5 of help text package installation
-    static const NCstring value =  _( "<p><b>Etc.:</b> The menu item 'Dependencies' offers different settings for the dependency checking. Automatic dependency check means check, after every change of the package status, whether all requirements are fulfilled or whether conflicts occurred.</p>" );
+    static const NCstring value =  _( "<p><b>Etc.:</b> The menu item 'Dependencies' offers different settings for the dependency checking. Automatic dependency check means check after every change of the package status whether all requirements are fulfilled or whether conflicts occurred.</p>" );
     return value;
 }
 
 const NCstring PkgNames::HelpPkgInst6()
 {
     // part6 of help text package installation
-    static const NCstring value =  _( "<p>If you want to save or load a package selections chose menu item 'Selections'.</p>" );
+    static const NCstring value =  _( "<p>To save or load a package selection, choose 'Selections'.</p>" );
     return value;
 }
 
@@ -1136,7 +1136,7 @@ const NCstring PkgNames::HelpOnStatus2()
 const NCstring PkgNames::HelpOnStatus3()
 {
     // part 2 of help text package status
-    static const NCstring value = _( "<p>You can also use <b>RET</b> or <b>SPACE</b> to toggle between the package status." );
+    static const NCstring value = _( "<p>You can also use <b>RET</b> or <b>SPACE</b> to toggle the package status." );
     return value;
 }
 
@@ -1164,14 +1164,14 @@ const NCstring PkgNames::HelpOnStatus6()
 const NCstring PkgNames::HelpOnStatus7()
 {
     // help text package status
-    static const NCstring value =  _( "<p>The <i>Actions</i> menu also provides the possibilty to change the status for all packages in the list (select menu item 'All list packages').</p>" );
+    static const NCstring value =  _( "<p>The <i>Actions</i> menu also provides the possibility to change the status for all packages in the list (select 'All Listed Packages').</p>" );
     return value;
 }
 
 const NCstring PkgNames::HelpOnUpdate()
 {
     // help text package status
-    static const NCstring value = _( "<b>Update Problem List</b><br><p>The packages in the list cannot be updated automatically.</p><p>Possible reasons:</p><p>They are obsoleted by other packages.</p><p>There is no newer version to update to on any installation media.</p><p>They are third-party packages</p><p>Please choose manually what to do with them.The safest course of action is to delete them.</p>" );
+    static const NCstring value = _( "<b>Update Problem List</b><br><p>The packages in the list cannot be updated automatically.</p><p>Possible reasons:</p><p>They are obsoleted by other packages.</p><p>There is no newer version to which to update on any installation media.</p><p>They are third-party packages</p><p>Manually select what to do with them. The safest course of action is to delete them.</p>" );
     return value;
 }
 
@@ -1242,14 +1242,14 @@ const NCstring PkgNames::PatchKind()
 const NCstring PkgNames::DepsKind()
 {
     // column header kind of the package dependency, e.g. conflict (keep it short!)
-    static const NCstring value = _( "Kind of dependency" );
+    static const NCstring value = _( "Kind of Dependency" );
     return value;
 }
 
 const NCstring PkgNames::Comment()
 {
     // column header comment (keep it short!)
-    static const NCstring value = _( "Additional information" );
+    static const NCstring value = _( "Additional Information" );
     return value;
 }
 
@@ -1313,7 +1313,7 @@ const NCstring PkgNames::YouHelp3()
 const NCstring PkgNames::TextmodeHelp()
 {
     // headline of the text mode help
-    static const NCstring value =  _( "Text mode navigation" );
+    static const NCstring value =  _( "Text Mode Navigation" );
     return value;
 }
 
@@ -1341,14 +1341,14 @@ const NCstring PkgNames::TextmodeHelp3()
 const NCstring PkgNames::TextmodeHelp4()
 {
     // part of help for text mode navigation
-    static const NCstring value =  _( "<p>Special keys:<br>Function keys provide a quick access to the main functions (frequently used buttons) of this dialog. See listing below to get the bindings.</p>" );
+    static const NCstring value =  _( "<p>Special keys:<br>Function keys provide a quick access to the main functions (frequently used buttons) of this dialog. See the listing below to get the bindings.</p>" );
     return value;
 }
 
 const NCstring PkgNames::TextmodeHelp5()
 {
     // part of help for text mode navigation
-    static const NCstring value =  _( "<p>Shortcuts allow to do the desired action by pressing the <b>Alt</b> key followed by the key which is marked at the corresponding pushbutton, checkbox, radiobutton and so on.</p>If the <b>Alt</b> key combinations are set by the X server use <b>ESC</b> instead." );
+    static const NCstring value =  _( "<p>Shortcuts are used to perform the desired action by pressing the <b>Alt</b> key followed by the key marked in the corresponding button, check box, radio button, or other item.</p>If the <b>Alt</b> key combinations are captured by the X server, use <b>ESC</b> instead." );
     return value;
 }
 
@@ -1362,20 +1362,20 @@ const NCstring PkgNames::TextmodeHelp6()
 const NCstring PkgNames::TextmodeHelp7()
 {
     // part of help for text mode navigation
-    static const NCstring value =  _( "<p>Movement inside a dialog is done with <b>Tab</b> to go forward and <b>Alt</b> or <b>Shift</b> <b>Tab</b> to go back.<br> If the <b>Alt</b> and <b>Shift</b> key combinations are occupied by the windowmanager or the terminal, <b>Ctrl</b> <b>f</b> (forward) and <b>Ctrl</b> <b>b</b> (back) can be used instead.</p>." );
+    static const NCstring value =  _( "<p>Movement inside a dialog is done with <b>Tab</b> to go forward and <b>Alt</b> or <b>Shift</b> <b>Tab</b> to go back.<br> If the <b>Alt</b> and <b>Shift</b> key combinations are occupied by the windo wmanager or the terminal, <b>Ctrl</b> <b>F</b> (forward) and <b>Ctrl</b> <b>B</b> (back) can be used instead.</p>." );
     return value;
 }
 const NCstring PkgNames::TextmodeHelp8()
 {
     // part of help for text mode navigation
-    static const NCstring value =  _( "<p>The command specified on an activated button (e.g. go Next, Add someting) is executed if the <b>Enter</b> key is pressed.</p> <p>Radio buttons or check boxes are switched on or off with <b>Enter</b> or <b>Space</b> key. " );
+    static const NCstring value =  _( "<p>The command specified on an activated button (e.g., Next, Add) is executed if the <b>Enter</b> key is pressed.</p> <p>Radio buttons or check boxes are switched on or off with <b>Enter</b> or <b>Space</b>. " );
 
    return value;
 }
 const NCstring PkgNames::TextmodeHelp9()
 {
     // part of help for text mode navigation
-    static const NCstring value =  _( "<p>Scrolling in lists or text (e.g. the help text) is done with the <b>Arrow</b> keys.</p>" );
+    static const NCstring value =  _( "<p>Scroll in lists or text (e.g., the help text) with the <b>arrow</b> keys.</p>" );
     return value;
 }
 

@@ -36,19 +36,19 @@
 					     // update the package
 					     `item( `id(`update), 	_( "&Update      [>]" ) ),
 					     // set package status to 'Taboo', i.e. never install this package
-					     `item( `id(`tabooOn), 	_( "Taboo &yes   [!]" ) ),
+					     `item( `id(`tabooOn), 	_( "Taboo &Yes   [!]" ) ),
 					     // reset the status 'Taboo' 
-					     `item( `id(`tabooOff), 	_( "Taboo &no    [-]" ) ),
+					     `item( `id(`tabooOff), 	_( "Taboo &No    [-]" ) ),
 					     // title of a submenu: actions concerning all packages of the list
-					     `menu( _( "&All List Packages" ),
+					     `menu( _( "&All Listed Packages" ),
 						    [
 						     // menu items: actions concerning all packages
-						     `item(`id(`selall),   _( "Install all" )  ),
-						     `item(`id(`deselall), _( "Don't install any" ) ),
-						     `item(`id(`delall),   _( "De&lete all" ) ),
-						     `item(`id(`dontdel),  _( "Do&n't delete any" ) ),
+						     `item(`id(`selall),   _( "Install All" )  ),
+						     `item(`id(`deselall), _( "Do Not Install Any" ) ),
+						     `item(`id(`delall),   _( "De&lete All" ) ),
+						     `item(`id(`dontdel),  _( "Do &Not Delete Any" ) ),
 						     `item(`id(`updall),   _( "U&pdate all" )   ),
-						     `item(`id(`dontupd),  _( "Don't update/keep installed" ) )
+						     `item(`id(`dontupd),  _( "Do Not Update and Keep Installed" ) )
 						     ]
 						    )
 					     ]
@@ -58,7 +58,7 @@
 					    // menu items of the info menu
 					    [`item( `id(`pkginfo), 	_( "&Package Info" ) ),
 					     `item( `id(`longdescr), 	_( "&Long Description" ) ),
-					     `item( `id(`versions), 	_( "&Version(s)" ) ),
+					     `item( `id(`versions), 	_( "&Versions" ) ),
 					     `item( `id(`files), 	_( "&File List" ) ),
 					     `item( `id(`relations), 	_( "Package &Relations" ) ) ]
 					    )),
@@ -96,7 +96,7 @@
 					   )
 				  ),
 			 // label text - keep it short (use abbreviation if necessary)
-			 `HWeight(1, `HBox(`Label( _( "Required Diskspace: " ) ),
+			 `HWeight(1, `HBox(`Label( _( "Required Disk Space: " ) ),
 					   `Label( `id(`diskspace), "         " ),
 					   `HSpacing( 0.1 )
 					   )
