@@ -593,7 +593,7 @@ const YCPString PkgNames::LabelConflict2()
 const YCPString PkgNames::LabelRequBy1()
 {
     // text part 1 describing package does not work (it's a label - keep it short)
-    static const YCPString value = toYCPString( _( "The packages below do not work without" ) );
+    static const YCPString value = toYCPString( _( "The packages below will not work without" ) );
     return value;
 }
 
@@ -710,6 +710,12 @@ const NCstring PkgNames::ConflictText()
     static const NCstring value = _("conflicts with ...");
     return value;
 }
+const NCstring PkgNames::NoConflictText()
+{
+     // text is shown in a line of a package list
+    static const NCstring value = _("No conflicts or unresolved dependencies");
+    return value;
+}
 
 const NCstring PkgNames::Conflicts()
 {
@@ -722,6 +728,25 @@ const NCstring PkgNames::ShortDescr()
 {
     // part of the package description
     static const NCstring value = _("<b>Description: </b>");
+    return value;
+}
+
+const NCstring PkgNames::MenuCheckDeps()
+{
+    // menu entry
+    static const NCstring value = _("    &Check dependencies now");
+    return value;
+}
+
+const NCstring PkgNames::MenuNoAutoDeps()
+{
+    static const NCstring value = _("[ ] &Automatic dependency check");
+    return value;
+}
+
+const NCstring PkgNames::MenuAutoDeps()
+{
+    static const NCstring value = _("[X] &Automatic dependency check");
     return value;
 }
 

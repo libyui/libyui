@@ -904,13 +904,16 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
     }
     else if ( event.selection->compare( PkgNames::AutoDeps() ) == YO_EQUAL )
     {
-	char * autoYes = "`ReplacePoint( `id(`replacemenu), `MenuButton( \"&Etc.\", [`item( `id(`showdeps), \"    &Check dependencies now\" ), `item( `id(`autodeps), \"[X] &Automatic dependency check\" ) ] ) ) ";
-	
-	char * autoNo  = "`ReplacePoint( `id(`replacemenu),`MenuButton( \"&Etc.\", [`item( `id(`showdeps), \"    &Check dependencies now\" ), `item( `id(`autodeps), \"[ ] &Automatic dependency check\" ) ] ) ) ";
-	
+	char menu[300];
+
 	if ( autoCheck )
 	{
-	    YCPParser parser( autoNo );
+	    sprintf ( menu,
+		      "`ReplacePoint( `id(`replacemenu), `MenuButton( \"&Etc.\", [`item( `id(`showdeps), \"%s\" ), `item( `id(`autodeps), \"%s\" ) ] ) )",
+		      PkgNames::MenuCheckDeps().str().c_str(),
+		      PkgNames::MenuNoAutoDeps().str().c_str() ); 
+
+	    YCPParser parser( menu );
 	    YCPValue layout = parser.parse();
 	
 	    y2ui->evaluateReplaceWidget( layout->asTerm() );
@@ -918,7 +921,12 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 	}
 	else
 	{
-	    YCPParser parser( autoYes );
+	    sprintf ( menu,
+		      "`ReplacePoint( `id(`replacemenu), `MenuButton( \"&Etc.\", [`item( `id(`showdeps), \"%s\" ), `item( `id(`autodeps), \"%s\" ) ] ) )",
+		      PkgNames::MenuCheckDeps().str().c_str(),
+		      PkgNames::MenuAutoDeps().str().c_str() );  
+
+	    YCPParser parser( menu );
 	    YCPValue layout = parser.parse();
 	
 	    y2ui->evaluateReplaceWidget( layout->asTerm() );	
@@ -1342,31 +1350,31 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	    version = pkgPtr->version();
 	}
 
-	text += "<b>Version: </b>";
+	text += PkgNames::Version().str();
 	text +=  version;
 	if ( instVersion != "" )
 	{
 	    text += "  ";
-	    text += "<b>Installed: </b>" ;
+	    text += PkgNames::InstVersion().str();
 	    text += instVersion;
 	}
 
 	text +=  "  ";
 	
 	// show the size
-	text += "<b>Size:</b> ";
+	text += PkgNames::Size().str();
 	text += pkgPtr->size().asString();
 	
 	text += "<br>";
 
 	// show Provides:
-	text += "<b>Provides: </b>";
+	text += PkgNames::Provides().str();
 	list<PkgRelation> provides = pkgPtr->provides();	// PMSolvable
 	text += createRelLine(provides);
 	text += "<br>";
 
 	// show the authors
-	text +="<b>Authors: </b>";
+	text += PkgNames::Authors().str();
 	PMPackagePtr package = pkgPtr;
 	if ( package )
 	{
