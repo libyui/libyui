@@ -76,16 +76,16 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
 	    if      ( opt == QString( "-no-wm"	 	) )	_have_wm 			= false;
 	    else if ( opt == QString( "-fullscreen"	) )	_fullscreen 			= true;
 	    else if ( opt == QString( "-noborder" 	) )	_decorate_toplevel_window	= false;
-	    else if ( opt == QString( "-_kcontrol_id"	) )
+	    else if ( opt == QString( "-kcontrol_id"	) )
 	    {
 		if ( i+1 >= argc )
 		{
-		    y2error( "Missing arg for '--_kcontrol_id'" );
+		    y2error( "Missing arg for '--kcontrol_id'" );
 		}
 		else
 		{
 		    _kcontrol_id = argv[++i];
-		    y2milestone( "Starting with _kcontrol_id='%s'",
+		    y2milestone( "Starting with kcontrol_id='%s'",
 				 (const char *) _kcontrol_id );
 		}
 	    }
