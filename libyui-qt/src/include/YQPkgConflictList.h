@@ -145,6 +145,21 @@ protected:
 		   const QString &		itemPrefix = QString::null,
 		   const QString & 		header	   = QString::null );
 
+    /**
+     * Paint method. Reimplemented from @ref QListViewItem a different
+     * font can be used.
+     *
+     * Reimplemented from QY2ListViewItem.
+     **/
+    virtual void paintCell( QPainter *		painter,
+			    const QColorGroup &	colorGroup,
+			    int			column,
+			    int			width,
+			    int			alignment );
+
+
+    // Data members
+    
     PMObjectPtr			_pmObj;
     QString			_shortName;	// Only pkg name (no version)
     QString			_fullName;	// Name + edition

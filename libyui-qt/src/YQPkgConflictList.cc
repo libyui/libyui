@@ -17,6 +17,8 @@
 /-*/
 
 
+#include <qpainter.h>
+
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 #include <Y2PM.h>
@@ -25,6 +27,7 @@
 
 #include "YQPkgConflictList.h"
 
+#include "YUIQt.h"
 #include "YQi18n.h"
 #include "utf8.h"
 
@@ -269,6 +272,17 @@ YQPkgConflict::dumpList( QListViewItem * 	parent,
 
 	++it;
     }
+}
+
+void
+YQPkgConflict::paintCell( QPainter *		painter,
+			  const QColorGroup &	colorGroup,
+			  int			column,
+			  int			width,
+			  int			alignment )
+{
+    painter->setFont( YUIQt::yuiqt()->headingFont() );
+    QY2ListViewItem::paintCell( painter, colorGroup, column, width, alignment );
 }
 
 
