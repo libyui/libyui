@@ -708,6 +708,7 @@ bool YNCursesUI::setLanguage( string lang )
     language.erase( pos );
   }
 
+  Refresh();
   NCDBG << "Language: " << language << " Encoding: " << ((encoding!="")?encoding:"NOT SET") << endl;
   
   return true;

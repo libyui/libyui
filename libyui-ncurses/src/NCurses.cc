@@ -452,6 +452,8 @@ void NCurses::SetTitle( const string & str )
     ::wbkgd( myself->title_w, myself->style()(NCstyle::AppTitle) );
     ::wclear( myself->title_w );
 
+    NCMIL << "Draw title called" << endl;
+    
     setTextdomain( "packages" );
     // part of title (headline) of the textmode yast
     NCstring helpF1 ( _( "Press F1 for Help" ) );
