@@ -105,7 +105,7 @@ class PackageSelector
     * @param filter The complete path od the RPM group (the filter criteria)
     * @return bool
     */
-    bool fillPackageList( NCPkgTable *table, const YCPString & label, string filter );
+    bool fillPackageList( const YCPString & label, string filter );
 
    /**
     * Fills the list of available packages

@@ -132,12 +132,14 @@ void NCPackageSelector::showDefaultList()
     // fill the package table with packages belonging to the default filter
     if ( pkgList )
     {
-	// FIXME: use enum (or whatever) for the default filter
-	packager.fillPackageList( pkgList, YCPString("default"), "" );
-	 
-	// set member variables of the packager 
-	packager.setVisibleInfo ( PkgNames::PkgInfo() );
+	// FIRST, set the package list widget
 	packager.setPackageList( pkgList );
+
+	// second, fill the list with packages 
+	packager.fillPackageList( YCPString("default"), "" );
+	
+        // set the visible info to package description 
+	packager.setVisibleInfo ( PkgNames::PkgInfo() );
 	
 	// show the package description of the current item
 	packager.showPackageInformation( pkgList->getDataPointer( pkgList->getCurrentItem() ) );

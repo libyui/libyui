@@ -25,6 +25,7 @@
 #include "NCSplit.h"
 #include "PkgNames.h"
 #include "YPkgTreeFilterView.h"
+#include "PackageSelector.h"
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -34,13 +35,13 @@
 //
 //	DESCRIPTION :
 //
-NCPopupTree::NCPopupTree( const wpos at, bool hasDescription )
+NCPopupTree::NCPopupTree( const wpos at, PackageSelector * pkg )
     : NCPopup( at, false )
     , filterTree( 0 )
-    , description ( 0 )
+    , packager ( pkg )
 {
     // create the layout (the NCTree)
-    createLayout( PkgNames::RpmTreeLabel(), hasDescription );
+    createLayout( PkgNames::RpmTreeLabel() );
 
     // get the group tags
     groups = new YPkgRpmGroupTagsFilterView();
@@ -74,7 +75,7 @@ NCPopupTree::~NCPopupTree()
 //
 //	DESCRIPTION :
 //
-void NCPopupTree::createLayout( const YCPString & label, bool hasDescription )
+void NCPopupTree::createLayout( const YCPString & label )
 {
 
   YWidgetOpt opt;
@@ -89,16 +90,6 @@ void NCPopupTree::createLayout( const YCPString & label, bool hasDescription )
   filterTree = new NCTree( split, opt, label );
   split->addChild( filterTree );
 
-  if ( hasDescription )
-  {
-      opt.notifyMode.setValue( false );
-      opt.vWeight.setValue( 30 );
-  
-      // add the description section
-      description = new NCRichText( split, opt, YCPString ("") );
- 
-      split->addChild( description );
-  }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -112,28 +103,42 @@ void NCPopupTree::createLayout( const YCPString & label, bool hasDescription )
 NCursesEvent NCPopupTree::showFilterPopup( )
 {
     postevent = NCursesEvent();
+
+    // event loop
     do {
 	popupDialog();
     } while ( postAgain() );
     
     popdownDialog();
 
+    if ( !packager || !filterTree || !groups )
+	return postevent;
+
+    // get the currently selected rpm group and show the package list
+    if ( postevent.detail == NCursesEvent::USERDEF )
+    {
+	const YTreeItem * item = filterTree->getCurrentItem();
+    
+	// get the data pointer
+	YPkgStringTreeItem * origItem = (YPkgStringTreeItem *) (item->data());
+
+	if ( origItem )
+	{
+	    string label =  origItem->value().translation();
+	    string completePath = groups->completePath( origItem,  '/', false );
+
+	    // fill the package list 
+	    packager->fillPackageList( YCPString( label ), completePath ); 
+
+	    NCMIL << "Selected RPM group: " << label << ", " << completePath << endl;
+	}
+	else
+	{
+	    NCERR << "Orig item not set" << endl;	
+	}
+    }
+    
     return postevent;
-}
-
-//
-//	DESCRIPTION :
-//
-string  NCPopupTree::getCurrentItem() const
-{
-  if ( !filterTree )
-    return 0;
-
-  const YTreeItem * citem = filterTree->getCurrentItem();
-
-  DDBG << "Selected item: " << citem->getText()->value() << endl;
-  
-  return ( citem?citem->getText()->value():"noitem" );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -199,20 +204,7 @@ NCursesEvent NCPopupTree::wHandleInput( int ch )
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;
 
-    NCursesEvent event = NCDialog::wHandleInput( ch );
-
-    switch ( ch ) {
-	case KEY_UP:
-	case KEY_DOWN: {
-	    if ( description )
-	    {
-		YCPValue item = filterTree->getCurrentItem()->getText();
-		description->setText( item->asString() );
-	    }
-	}
-    }
-    
-    return event;
+    return NCDialog::wHandleInput( ch );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -225,34 +217,11 @@ NCursesEvent NCPopupTree::wHandleInput( int ch )
 //
 bool NCPopupTree::postAgain()
 {
-    if ( !filterTree || !groups )
-	return false;
-
-    postevent.item = YCPNull();
+    postevent.detail = NCursesEvent::NODETAIL;
 
     if (  postevent == NCursesEvent::button )
     {
-	// get the currently selected item
-	const YTreeItem * item = filterTree->getCurrentItem();
-	// get the data pointer
-	YPkgStringTreeItem * origItem = (YPkgStringTreeItem *) (item->data());
-
-	if ( origItem )
-	{
-	    postevent.item =  origItem->value().translation();
-	
-	    NCDBG << "Orig item: " << (postevent.item)->toString() << endl;
-
-	    // get the complete rpm tags path
-	    string completePath = groups->completePath( origItem,  '/', false );
-	    postevent.itemList.push_back( completePath );
-
-	    NCMIL << "Selected RPM group: " << completePath << endl;
-	}
-	else
-	{
-	    NCERR << "Orig item not set" << endl;	
-	}
+	postevent.detail = NCursesEvent::USERDEF ;
 
         // return false means: close the popup
 	return false;

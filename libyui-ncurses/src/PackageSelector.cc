@@ -105,10 +105,11 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui )
 
     // create the filter popup
     filterPopup = new NCPopupTree( wpos( 1, 1 ),	// position
-				   false );		// without a description 
+				   this );	 
 
     // create the selections popup
-    selectionPopup = new NCPopupSelection( wpos( 1, 1 ), this );
+    selectionPopup = new NCPopupSelection( wpos( 1, 1 ),
+					   this );
 
     NCstring text( "This is a development version of the NCurses single package selection, included in this Beta as a kind of demo.<br>Some things work, some don't, some work but are still really slow. You can view some package data, but setting a package status does not have any effect yet. As of now, all bug reports for this thing will be routed to /dev/null.<br>We are working heavily on it, so if you want to contribute, the easiest thing you can do right now is not swamp us with bugzilla reports, but let us work in the remaining time.<br> Thank you.<br> -gs" );
     NCPopupInfo info( wpos( 5, 5 ), YCPString( "Warning" ), text.YCPstr() );
@@ -237,11 +238,13 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
 
     if ( !pkgTable )
     {
+	NCERR << "No table widget for availbale packages existing" << endl;
 	return false;
     }
 
     if ( !pkgPtr->hasSelectable() )
     {
+	NCERR << "Package pointer not valid" << endl;
 	return false;
     }
     
@@ -274,8 +277,7 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
 //
 // showSelPackages
 //
-// Fills the package table with the list of packages matching
-// the selected filter
+// Fills the package table with the list of packages of the given selection
 //
 bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr sel )
 {
@@ -325,11 +327,11 @@ bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr 
 // Fills the package table with the list of packages matching
 // the selected filter
 //
-bool PackageSelector::fillPackageList( NCPkgTable *pkgTable, const YCPString & label, string filter )
+bool PackageSelector::fillPackageList( const YCPString & label, string filter )
 {
-    if ( !pkgTable )
+    if ( !packageList )
     {
-	UIERR << "Widget is not a valid NCPkgTable widget" << endl;
+	UIERR << "No valid NCPkgTable widget" << endl;
     	return false;
     }
     
@@ -337,8 +339,8 @@ bool PackageSelector::fillPackageList( NCPkgTable *pkgTable, const YCPString & l
 
     string::size_type len = filter.length();
 
-      // clear the package table
-    pkgTable->itemsCleared ();
+    // clear the package table
+    packageList->itemsCleared ();
 
     // get the package list and sort it
     list<PMSelectablePtr> pkgList( Y2PM::packageManager().begin(), Y2PM::packageManager().end() );
@@ -371,7 +373,7 @@ bool PackageSelector::fillPackageList( NCPkgTable *pkgTable, const YCPString & l
 	// filter the packages
 	if ( pkgPtr && pkgPtr->group().compare( 0, len, filter ) == 0 )
 	{
-	     createListEntry( pkgTable, pkgPtr, i );
+	     createListEntry( packageList, pkgPtr, i );
 	}
     }
   
@@ -442,7 +444,7 @@ bool PackageSelector::SearchHandler( const NCursesEvent& event)
 	NCMIL << "Searching for: " <<  search->toString() << endl;
 
 	// FIXME: use enum (or whatever) for the filter
-	fillPackageList ( packageList, YCPString ( "Search" ), "" );
+	fillPackageList ( YCPString ( "Search" ), "" );
 
 	showPackageInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );
     }
@@ -522,38 +524,21 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 //
 bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 {
-    YCPString item = YCPNull();
-    string filter = "";
-
     if ( !packageList || event.selection.isNull() )
     {
 	return false;
     }
 
-    
     if ( event.selection->compare( PkgNames::RpmGroups() ) == YO_EQUAL )
     {
-	// the filter popup returns the selected item 
+	// show the filter popup (fills the package list) 
 	NCursesEvent event = filterPopup->showFilterPopup( );
 	
-	// get the currently selected RPM group (the label)
-	item = event.item;
-
-	// get the complete path of the RPM group
-	vector<string> itemList = event.itemList;
-	if ( !itemList.empty() && !item.isNull() )
-	{
-	    filter = itemList[0];
-	    NCMIL << "RPM group in PackageSelector: " << filter << endl;
-	    // fill the package list with packages belonging to the filter
-	    fillPackageList( packageList, item, filter );
-	}
     }
     else if ( event.selection->compare( PkgNames::Selections() ) == YO_EQUAL )
     {
-	// the selection popup returns the NCursesEvent 
+	// show the selection popup
 	NCursesEvent event = selectionPopup->showSelectionPopup( );
-
     }
 
     showPackageInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );

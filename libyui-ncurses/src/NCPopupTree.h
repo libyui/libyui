@@ -32,6 +32,8 @@
 
 class NCTree;
 class YCPValue;
+class PackageSelector;
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -46,17 +48,18 @@ class NCPopupTree : public NCPopup {
 
 private:
 
-    NCTree * filterTree;
-    NCRichText * description;
+    NCTree * filterTree;		// the YTree
+    
     YPkgRpmGroupTagsFilterView * groups; // the RPM groups    
 
+    PackageSelector * packager;		// connection to the PackageSelector
+    
     // internal use (copies tree items got from YPkgRpmGroupTagsFilterView)
     void cloneTree( YPkgStringTreeItem * parentOrig, YTreeItem * parentClone );
 
 protected:
 
     void setCurrentItem( int index );
-    string getCurrentItem() const;
 
     virtual NCursesEvent wHandleHotkey( int ch );
 
@@ -66,12 +69,12 @@ protected:
     
 public:
     
-    NCPopupTree( const wpos at, bool hasDescr );
+    NCPopupTree( const wpos at, PackageSelector * packager );
     virtual ~NCPopupTree();
 
     virtual long nicesize(YUIDimension dim);
 
-    void createLayout( const YCPString & label, bool hasDescr );
+    void createLayout( const YCPString & label );
 
     YTreeItem * addItem( YTreeItem * 		parentItem,
 			 const YCPString & 	text,
