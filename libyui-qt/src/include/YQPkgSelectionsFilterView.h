@@ -51,43 +51,6 @@ public:
      **/
     YQPkgSelList * selList() const { return _selList; }
 
-#if 0
-// public slots:
-
-    /**
-     * Filter according to the view's rules and current selection.
-     * Emits those signals:
-     *    filterStart()
-     *    filterMatch() for each pkg that matches the filter
-     *    filterFinished()
-     **/
-    void filter();
-
-    /**
-     * Same as filter(), but only if this widget is currently visible.
-     **/
-    void filterIfVisible();
-
-    
-// signals:
-
-    /**
-     * Emitted when the filtering starts. Use this to clear package lists
-     * etc. prior to adding new entries.
-     **/
-    void filterStart();
-
-    /**
-     * Emitted during filtering for each pkg that matches the filter.
-     **/
-    void filterMatch( PMPackagePtr pkg );
-
-    /**
-     * Emitted when filtering is finished.
-     **/
-    void filterFinished();
-#endif
-    
 
 protected:
 
