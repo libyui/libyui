@@ -85,11 +85,13 @@ void NCPopupInfo::createLayout( const YCPString & headline,
   split->addChild( head );
   
   // add the rich text widget 
+  opt.key_Fxx.setValue( 1 );
   helpText = new NCRichText( split, opt, text );
   split->addChild( helpText );
 
   if ( showOkButton )
   {
+      opt.key_Fxx.setValue( 10 );
       // add the ok button
       okButton = new NCPushButton( split, opt, YCPString(PkgNames::OKLabel().str()) );
       okButton->setId( PkgNames::OkButton () );
@@ -131,21 +133,6 @@ long NCPopupInfo::nicesize(YUIDimension dim)
     return ( dim == YD_HORIZ ? hDim : vDim );
 }
 
-			   
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupInfo::wHandleHotkey
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
-NCursesEvent NCPopupInfo::wHandleHotkey( int key )
-{
-
-    return NCursesEvent::none;
-}
-
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -161,7 +148,7 @@ NCursesEvent NCPopupInfo::wHandleInput( int ch )
 
     if ( ch == KEY_RETURN )
 	return NCursesEvent::button;
-    
+
     return NCDialog::wHandleInput( ch );
 }
 
@@ -177,10 +164,10 @@ bool NCPopupInfo::postAgain()
 {
     if ( ! postevent.widget )
 	return false;
-    
+
     if ( postevent == NCursesEvent::button || postevent == NCursesEvent::cancel )
     {
-	// return false means: close the popup dialog
+        // return false means: close the popup dialog
 	return false;
     }
     return true;
