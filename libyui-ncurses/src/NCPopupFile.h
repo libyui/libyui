@@ -55,10 +55,17 @@ private:
     NCPushButton * cancelButton;
     NCTextEntry * fileName;
     NCComboBox * comboBox;
+
+    string pathName;
+    bool mountFloppy;
+    string floppyDevice;
     
     int hDim;
     int vDim;
 
+    void setDefaultPath();
+    bool mountDevice();
+    
 protected:
 
     virtual bool postAgain();
@@ -67,7 +74,7 @@ protected:
     
 public:
     
-    NCPopupFile( const wpos at );
+    NCPopupFile( const wpos at, string device );
     
     virtual ~NCPopupFile();
 
