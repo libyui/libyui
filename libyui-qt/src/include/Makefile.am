@@ -41,6 +41,7 @@ pkginclude_HEADERS =				\
 	YQPkgList.h				\
 	YQPkgRpmGroupTagsFilterView.h		\
 	YQPkgSelectionsFilterView.h		\
+	YQPkgUpdateProblemFilterView.h		\
 	YQPkgSelList.h				\
 	YQPkgYouPatchFilterView.h		\
 	YQPkgYouPatchList.h			\

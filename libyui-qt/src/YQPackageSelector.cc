@@ -49,6 +49,7 @@
 #include "YQPkgSelList.h"
 #include "YQPkgSelectionsFilterView.h"
 #include "YQPkgTechnicalDetailsView.h"
+#include "YQPkgUpdateProblemFilterView.h"
 #include "YQPkgYouPatchFilterView.h"
 #include "YQPkgYouPatchList.h"
 
@@ -89,21 +90,23 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     _rpmGroupTagsFilterView	= 0;
     _selectionsFilterView	= 0;
     _selList			= 0;
+    _updateProblemFilterView	= 0;
     _youPatchFilterView		= 0;
     _youPatchList		= 0;
-    
-    
+
+
     _youMode	= opt.youMode.value();
     _updateMode	= opt.updateMode.value();
     _testMode	= opt.testMode.value();
 
-    if ( _testMode )
-	fakeData();
+    if ( _testMode )	fakeData();
+    if ( _youMode )	y2milestone( "YOU mode" );
+    if ( _updateMode )	y2milestone( "Update mode" );
 
     setFont( _yuiqt->currentFont() );
     _conflictDialog = new YQPkgConflictDialog( this );
     CHECK_PTR( _conflictDialog );
-    
+
     basicLayout();
     makeConnections();
 
@@ -125,13 +128,22 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     }
     else
     {
-	if ( _filters && _selectionsFilterView && _selList )
+	if ( _filters )
 	{
-	    _filters->showPage( _selectionsFilterView );
-	    _selList->filter();
+	    if ( _updateProblemFilterView )
+	    {
+		_filters->showPage( _updateProblemFilterView );
+		_updateProblemFilterView->filter();
+
+	    }
+	    else if ( _selectionsFilterView && _selList )
+	    {
+		_filters->showPage( _selectionsFilterView );
+		_selList->filter();
+	    }
 	}
     }
-    
+
     y2milestone( "PackageSelector init done" );
 }
 
@@ -173,6 +185,21 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
 
     //
+    // Update problem view
+    //
+
+    if ( _updateMode )
+    {
+	_updateProblemFilterView = new YQPkgUpdateProblemFilterView( parent );
+	CHECK_PTR( _updateProblemFilterView );
+	_filters->addPage( _( "Update Problems" ), _updateProblemFilterView );
+
+	connect( _filters,			SIGNAL( currentChanged( QWidget * ) ),
+		 _updateProblemFilterView,	SLOT  ( filterIfVisible()           ) );
+    }
+
+
+    //
     // YOU patches view
     //
 
@@ -184,12 +211,12 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
 	_youPatchList = _youPatchFilterView->youPatchList();
 	CHECK_PTR( _youPatchList );
-	
+
 	connect( _filters,	SIGNAL( currentChanged( QWidget * ) ),
 		 _youPatchList,	SLOT  ( filterIfVisible()           ) );
     }
 
-    
+
     //
     // Selections view
     //
@@ -235,7 +262,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	_filters->addPage( _("Search"     ), new QLabel( "Search filter\n\nstill missing\n(Known bug)", 0 ) );
     }
 
-    
+
 #if 0
     // DEBUG
 
@@ -265,7 +292,7 @@ YQPackageSelector::layoutDiskSpaceSummary( QWidget * parent )
 
     details_button->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) ); // hor/vert
 #endif
-    
+
     // TO DO: connect()
 
 #if 1
@@ -402,14 +429,14 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 	CHECK_PTR( _autoDependenciesCheckBox );
 	_autoDependenciesCheckBox->setChecked( true );
     }
-    
+
 
     QWidget * spacer = new QWidget( button_box );
     CHECK_PTR( spacer );
     spacer->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
 
 
-    
+
     QPushButton * cancel_button = new QPushButton( _( "&Cancel" ), button_box );
     CHECK_PTR( cancel_button );
     cancel_button->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
@@ -417,7 +444,7 @@ YQPackageSelector::layoutButtons( QWidget * parent )
     connect( cancel_button, SIGNAL( clicked() ),
 	     this,          SLOT  ( reject()   ) );
 
-    
+
     QPushButton * accept_button = new QPushButton( _( "&Accept" ), button_box );
     CHECK_PTR( accept_button );
     accept_button->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
@@ -453,64 +480,38 @@ YQPackageSelector::layoutMenuBar( QWidget * parent )
 
 
 void
+YQPackageSelector::connectFilter( QWidget * filter,
+				  QWidget * pkgList,
+				  bool hasUpdateSignal )
+{
+    if ( ! filter  )	return;
+    if ( ! pkgList )	return;
+
+    connect( filter,	SIGNAL( filterStart() 	),
+	     pkgList, 	SLOT  ( clear() 	) );
+
+    connect( filter,	SIGNAL( filterMatch( PMPackagePtr ) ),
+	     pkgList, 	SLOT  ( addPkgItem ( PMPackagePtr ) ) );
+
+    connect( filter, 	SIGNAL( filterFinished()  ),
+	     pkgList, 	SLOT  ( selectSomething() ) );
+
+
+    if ( hasUpdateSignal )
+    {
+	connect( filter, 	SIGNAL( updatePackages()           ),
+		 pkgList,	SLOT  ( updateToplevelItemStates() ) );
+    }
+}
+
+
+void
 YQPackageSelector::makeConnections()
 {
-    //
-    // Connect RPM group tag view
-    //
-
-    if ( _rpmGroupTagsFilterView && _pkgList )
-    {
-	connect( _rpmGroupTagsFilterView, 	SIGNAL( filterStart() 	),
-		 _pkgList, 			SLOT  ( clear() 	) );
-
-	connect( _rpmGroupTagsFilterView, 	SIGNAL( filterMatch( PMPackagePtr ) ),
-		 _pkgList, 			SLOT  ( addPkgItem ( PMPackagePtr ) ) );
-
-	connect( _rpmGroupTagsFilterView, 	SIGNAL( filterFinished()  ),
-		 _pkgList, 			SLOT  ( selectSomething() ) );
-    }
-
-
-    //
-    // Connect selections view
-    //
-    
-    if ( _selList && _pkgList )
-    {
-	connect( _selList,	SIGNAL( filterStart() 	),
-		 _pkgList, 	SLOT  ( clear() 	) );
-
-	connect( _selList,	SIGNAL( filterMatch( PMPackagePtr ) ),
-		 _pkgList, 	SLOT  ( addPkgItem ( PMPackagePtr ) ) );
-
-	connect( _selList, 	SIGNAL( filterFinished()  ),
-		 _pkgList, 	SLOT  ( selectSomething() ) );
-
-	connect( _selList, 	SIGNAL( updatePackages()      ),
-		 _pkgList, 	SLOT  ( updateToplevelItemStates() ) );
-    }
-
-
-    //
-    // Connect YOU patches view
-    //
-    
-    if ( _youPatchList && _pkgList )
-    {
-	connect( _youPatchList,	SIGNAL( filterStart() 	),
-		 _pkgList, 	SLOT  ( clear() 	) );
-
-	connect( _youPatchList,	SIGNAL( filterMatch( PMPackagePtr ) ),
-		 _pkgList, 	SLOT  ( addPkgItem ( PMPackagePtr ) ) );
-
-	connect( _youPatchList,	SIGNAL( filterFinished()  ),
-		 _pkgList, 	SLOT  ( selectSomething() ) );
-
-	connect( _youPatchList,	SIGNAL( updatePackages()      ),
-		 _pkgList, 	SLOT  ( updateToplevelItemStates() ) );
-    }
-
+    connectFilter( _updateProblemFilterView, _pkgList );
+    connectFilter( _rpmGroupTagsFilterView, _pkgList, false );
+    connectFilter( _selList, _pkgList );
+    connectFilter( _youPatchList, _pkgList );
 
     //
     // Connect conflict dialog
@@ -520,7 +521,6 @@ YQPackageSelector::makeConnections()
     {
 	connect( _conflictDialog,	SIGNAL( updatePackages()      ),
 		 _pkgList, 		SLOT  ( updateToplevelItemStates() ) );
-	
     }
 }
 
@@ -530,7 +530,7 @@ YQPackageSelector::autoResolveDependencies()
 {
     if ( _autoDependenciesCheckBox && ! _autoDependenciesCheckBox->isChecked() )
 	return;
-	
+
     resolveDependencies();
 }
 
@@ -552,7 +552,7 @@ void
 YQPackageSelector::fakeData()
 {
     y2warning( "*** Using fake data ***" );
-    
+
     if ( _youMode )
     {
 	Url url( "dir:///8.1-patches" );
@@ -573,7 +573,7 @@ YQPackageSelector::fakeData()
 	{
 	    err = MGR.enableSource( *nids.begin() );
 	}
-	
+
 	y2milestone( "Fake installation sources initialized" );
     }
 }

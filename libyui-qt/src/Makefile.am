@@ -62,6 +62,7 @@ liby2qt_la_SOURCES = 				\
 	YQPkgRpmGroupTagsFilterView.cc		\
 	YQPkgSelectionsFilterView.cc		\
 	YQPkgSelList.cc				\
+	YQPkgUpdateProblemFilterView.cc		\
 	YQPkgYouPatchFilterView.cc		\
 	YQPkgYouPatchList.cc			\
 	YQPushButton.cc				\
@@ -137,6 +138,7 @@ BUILT_SOURCES =					\
 	YQPkgRpmGroupTagsFilterView.moc.cc	\
 	YQPkgSelectionsFilterView.moc.cc	\
 	YQPkgSelList.moc.cc			\
+	YQPkgUpdateProblemFilterView.moc.cc	\
 	YQPkgYouPatchFilterView.moc.cc		\
 	YQPkgYouPatchList.moc.cc		\
 	YQPushButton.moc.cc			\
@@ -191,6 +193,7 @@ YQPkgObjList.o YQPkgObjList.lo:					YQPkgObjList.moc.cc
 YQPkgRpmGroupTagsFilterView.o YQPkgRpmGroupTagsFilterView.lo:	YQPkgRpmGroupTagsFilterView.moc.cc
 YQPkgSelectionsFilterView.o YQPkgSelectionsFilterView.lo:	YQPkgSelectionsFilterView.moc.cc
 YQPkgSelList.o YQPkgSelList.lo:					YQPkgSelList.moc.cc
+YQPkgUpdateProblemFilterView.o YQPkgUpdateProblemFilterView.lo:	YQPkgUpdateProblemFilterView.moc.cc
 YQPkgYouPatchFilterView.o YQPkgYouPatchFilterView.lo:		YQPkgYouPatchFilterView.moc.cc
 YQPkgYouPatchList.o YQPkgYouPatchList.lo:			YQPkgYouPatchList.moc.cc
 YQPushButton.o YQPushButton.lo:					YQPushButton.moc.cc
@@ -246,6 +249,7 @@ YQPkgDescriptionView.moc.cc:		include/YQPkgDescriptionView.h
 YQPkgRpmGroupTagsFilterView.moc.cc:	include/YQPkgRpmGroupTagsFilterView.h
 YQPkgSelectionsFilterView.moc.cc:	include/YQPkgSelectionsFilterView.h
 YQPkgSelList.moc.cc:			include/YQPkgSelList.h
+YQPkgUpdateProblemFilterView.moc.cc:	include/YQPkgUpdateProblemFilterView.h
 YQPkgYouPatchFilterView.moc.cc:		include/YQPkgYouPatchFilterView.h
 YQPkgYouPatchList.moc.cc:		include/YQPkgYouPatchList.h
 YQPushButton.moc.cc:			include/YQPushButton.h

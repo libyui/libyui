@@ -44,6 +44,7 @@ class YQPkgRpmGroupTagsFilterView;
 class YQPkgSelList;
 class YQPkgSelectionsFilterView;
 class YQPkgTechnicalDetailsView;
+class YQPkgUpdateProblemFilterView;
 class YQPkgYouPatchFilterView;
 class YQPkgYouPatchList;
 
@@ -114,7 +115,7 @@ public slots:
     // FIXME
     void preAlphaWarning();
 
-    
+
 signals:
 
     /**
@@ -124,7 +125,7 @@ signals:
      **/
     void loadData();
 
-    
+
 protected:
 
     // Layout methods - create and layout widgets
@@ -141,8 +142,24 @@ protected:
     void layoutMenuBar		( QWidget * parent );
 
     void makeConnections();
+
+    /**
+     * Provide some fake data for testing
+     **/
     void fakeData();
-    
+
+    /**
+     * Connect a filter view that provides the usual signals with a package
+     * list. By convention, filter views provide the following signals:
+     *    filterStart()
+     *    filterMatch()
+     *    filterFinished()
+     *    updatePackages()  (optional)
+     **/
+    void connectFilter( QWidget * 	filter,
+			QWidget * 	pkgList,
+			bool 		hasUpdateSignal = true );
+
 
     // Data members
 
@@ -162,6 +179,7 @@ protected:
     YQPkgRpmGroupTagsFilterView *	_rpmGroupTagsFilterView;
     YQPkgSelectionsFilterView *		_selectionsFilterView;
     YQPkgSelList *			_selList;
+    YQPkgUpdateProblemFilterView *	_updateProblemFilterView;
     YQPkgYouPatchFilterView *		_youPatchFilterView;
     YQPkgYouPatchList *			_youPatchList;
     YQPkgConflictDialog *		_conflictDialog;
