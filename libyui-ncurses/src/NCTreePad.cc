@@ -449,7 +449,7 @@ bool NCTreePad::handleInput( wint_t key )
   case KEY_IC:
   case KEY_DC:
   case KEY_SPACE:
-  case KEY_RETURN:
+//  case KEY_RETURN: - see bug 67350
     if ( visItems[citem.L]->handleInput( key ) ) {
       UpdateFormat();
       setpos( wpos( citem.L, srect.Pos.C ) );

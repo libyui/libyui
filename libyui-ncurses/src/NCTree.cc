@@ -112,7 +112,7 @@ class NCTreeLine : public NCTableLine {
 	  return 0;
 	break;
       case KEY_SPACE:
-      case KEY_RETURN:
+//      case KEY_RETURN: - see bug 67350
       case '+':
       case '-':
 	break;
