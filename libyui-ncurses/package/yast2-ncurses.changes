@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Feb 21 12:04:18 CET 2003 - gs@suse.de
+
+- package installation: display a list containing all packages which
+  will be installed automatically (bug #23770) 
+
+-------------------------------------------------------------------
 Thu Feb 20 16:37:13 CET 2003 - gs@suse.de
 
 -- display correct formatted text in notify popups (bug #23868) 
