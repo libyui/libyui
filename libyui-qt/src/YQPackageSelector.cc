@@ -17,8 +17,8 @@
 /-*/
 
 
-#define ALPHA_WARNING	0
-#define FAKE_INST_SRC	1
+#define ALPHA_WARNING	1
+#define FAKE_INST_SRC	0
 
 #include <qcombobox.h>
 #include <qframe.h>

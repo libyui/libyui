@@ -106,19 +106,9 @@ YQPkgRpmGroupTagsFilterView::filter()
 	
 	y2debug( "Searching packages that match '%s'", selectedRpmGroup.c_str() );
 	
-	int i;
-	PMManager::PMSelectableVec::const_iterator it;
+	PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
-	for ( it = Y2PM::packageManager().begin()	, i = 0;
-	      it != Y2PM::packageManager().end()
-		  // DEBUG
-		  // DEBUG
-		  // DEBUG
-		  && i < 100;
-		  // DEBUG
-		  // DEBUG
-		  // DEBUG
-	      ++it					, i++ )
+	while ( it != Y2PM::packageManager().end() )
 	{
 	    PMSelectablePtr selectable = *it;
 	    
@@ -141,6 +131,8 @@ YQPkgRpmGroupTagsFilterView::filter()
 		 ! selectable->installedObj()	&&
 		 ! selectable->candidateObj()     )
 		check( selectable->theObject(), selectedRpmGroup );
+
+	    ++it;
 	}
 
 	y2debug( "Search for '%s' finished", selectedRpmGroup.c_str() );
