@@ -821,7 +821,7 @@ const NCstring PkgNames::RequText()
 const NCstring PkgNames::RequByText()
 {
     // text is shown in a column of a package list entry
-    static const NCstring value = _("required by ...");
+    static const NCstring value = _("is required by ...");
     return value;
 }
 const NCstring PkgNames::UnresText()
@@ -963,7 +963,7 @@ const NCstring PkgNames::HelpPkgInst2()
 const NCstring PkgNames::HelpPkgInst3()
 {
     // part3 of help text package installation 
-    static const NCstring value =  _("<p><b>Actions:</b> provides the possibilities to change the status of the selected package, for example, to delete a package or select an additional package for installation. The status change can also be done directly by pressing the key specified in the menu item (for detailed information about the package status, see 'Help/Help on package status').</p>");
+    static const NCstring value =  _("<p><b>Actions:</b> provides the possibilities to change the status of the selected package (or all packages in the list), for example, to delete a package or select an additional package for installation. The status change can also be done directly by pressing the key specified in the menu item (for detailed information about the package status, see 'Help/Help on package status').</p>");
     return value;
 }
 
@@ -977,7 +977,14 @@ const NCstring PkgNames::HelpPkgInst4()
 const NCstring PkgNames::HelpPkgInst5()
 {
     // part5 of help text package installation
-    static const NCstring value =  _("<p><b>Etc.:</b> offers different settings for the dependency checking. Automatic dependency check means check, after every change of the package status, whether all requirements are fulfilled or whether conflicts occurred.</p>");
+    static const NCstring value =  _("<p><b>Etc.:</b> The menu item 'Dependencies' offers different settings for the dependency checking. Automatic dependency check means check, after every change of the package status, whether all requirements are fulfilled or whether conflicts occurred.</p>");
+    return value;
+}
+
+const NCstring PkgNames::HelpPkgInst6()
+{
+    // part6 of help text package installation
+    static const NCstring value =  _("<p>If you want to save or load a package selections chose menu item 'Selections'.</p>");
     return value;
 }
 
@@ -998,7 +1005,7 @@ const NCstring PkgNames::HelpOnStatus1()
 const NCstring PkgNames::HelpOnStatus2()
 {
     // part 2 of help text package status
-    static const NCstring value = _("<p>There is also the possibility to use <b>RET</b> to toggle between the package status.");
+    static const NCstring value = _("<p>You can also use <b>RET</b> or <b>SPACE</b> to toggle between the package status.");
     return value;
 }
 
@@ -1009,10 +1016,17 @@ const NCstring PkgNames::HelpOnStatus3()
     return value;
 }
 
-const NCstring PkgNames::HelpOnStatus()
+const NCstring PkgNames::HelpOnStatus4()
 {
     // help text package status
     static const NCstring value =  _("<p><b> + </b> : this package is selected for installation</p><p><b>a+ </b> : automatically selected for installation</p><p><b> > </b> : update this package</p><p><b>a> </b> : automatic update</p><p><b> i </b> : this package is installed</p><p><b> - </b> : the package will be deleted</p><p><b>---</b> : never install this package</p>");
+    return value;
+}
+
+const NCstring PkgNames::HelpOnStatus5()
+{
+    // help text package status
+    static const NCstring value =  _("<p>The <i>Actions</i> menu also provides the possibilty to change the status for all packages in the list (select menu item 'All list packages').</p>");
     return value;
 }
 

@@ -467,8 +467,9 @@ public:
     static const NCstring HelpOnStatus1();
     static const NCstring HelpOnStatus2();
     static const NCstring HelpOnStatus3(); 
-    static const NCstring HelpOnStatus();
-
+    static const NCstring HelpOnStatus4();
+    static const NCstring HelpOnStatus5();
+    
     static const NCstring YouHelp1();
     static const NCstring YouHelp2();
     static const NCstring YouHelp3();
@@ -507,6 +508,11 @@ public:
      */
     static const NCstring HelpPkgInst5();
 
+   /**
+     * Part 6 of help text package installation
+     */
+    static const NCstring HelpPkgInst6();
+    
     static const NCstring HelpOnUpdate();
 
     /**

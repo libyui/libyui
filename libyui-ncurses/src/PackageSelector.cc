@@ -1245,14 +1245,16 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
 	text += PkgNames::HelpPkgInst2().str();
 	text += PkgNames::HelpPkgInst3().str();
 	text += PkgNames::HelpPkgInst4().str();
-	text += PkgNames::HelpPkgInst5().str();		
+	text += PkgNames::HelpPkgInst5().str();
+	text += PkgNames::HelpPkgInst6().str();
     }
     else if ( event.selection->compare( PkgNames::StatusHelp() ) == YO_EQUAL )
     {
 	text += PkgNames::HelpOnStatus1().str();
 	text += PkgNames::HelpOnStatus2().str();
 	text += PkgNames::HelpOnStatus3().str();
-	text += PkgNames::HelpOnStatus().str();
+	text += PkgNames::HelpOnStatus4().str();
+	text += PkgNames::HelpOnStatus5().str();
     }
     else if ( event.selection->compare( PkgNames::UpdateHelp() ) == YO_EQUAL )
     {
