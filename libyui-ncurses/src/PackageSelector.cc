@@ -178,8 +178,9 @@ PackageSelector::PackageSelector( YNCursesUI * ui, YWidgetOpt & opt, string flop
 	{
 	    PMYouServer server( "dir:///8.1-patches" );
             InstYou &you = Y2PM::youPatchManager().instYou();
-            you.paths()->setPatchServer( server );
-	    you.retrievePatchInfo( false );
+            you.settings()->setPatchServer( server );
+	    you.settings()->setReloadPatches( false );
+            you.retrievePatchInfo();
 	    you.selectPatches( PMYouPatch::kind_recommended |
 			       PMYouPatch::kind_security     );
 	    NCMIL <<  "Fake YOU patches initialized" << endl;	
