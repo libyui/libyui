@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Mar 22 18:54:04 CET 2005 - sh@suse.de
+
+- Reverting back to old (SL 9.2) auto font sizes for bug #66498
+  (Qt inst-sys default font is reverted to 9.2 font, too)
+- V 2.11.13 
+
+-------------------------------------------------------------------
 Mon Mar 21 16:24:09 CET 2005 - sh@suse.de
 
 - One more fix for bug #72799: Help/Steps buttons not translated
