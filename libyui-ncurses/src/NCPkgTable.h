@@ -213,12 +213,14 @@ public:
      */ 
     NCPkgStatus getStatus( int index );
 
-    /**
+   /**
      * Gets the data pointer of a certain package.
      * @param index The index in package table (the line)
      * @return PMObjectPtr
      */ 
     PMObjectPtr getDataPointer( int index );
+
+    friend std::ostream & operator<<( std::ostream & str, NCPkgStatus obj );    
 };
 
 ///////////////////////////////////////////////////////////////////
