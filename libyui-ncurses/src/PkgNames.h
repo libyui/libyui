@@ -577,8 +577,13 @@ public:
      * bold text Size: (richtext) 
      */
     static const NCstring Size();
+    
+   /**
+     * bold text Package Group: (richtext) 
+     */
+    static const NCstring RpmGroup();
 
-    /**
+   /**
      * bold text Authors: (richtext) 
      */
     static const NCstring Authors();

@@ -825,6 +825,13 @@ const NCstring PkgNames::Size()
     return value;
 }
 
+const NCstring PkgNames::RpmGroup()
+{
+    // part of the package description
+    static const NCstring value = _("<b>Package Group: </b>");
+    return value;
+}
+
 const NCstring PkgNames::Provides()
 {
     // part of the package description

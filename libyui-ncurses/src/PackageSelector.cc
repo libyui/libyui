@@ -631,7 +631,7 @@ bool PackageSelector::fillChangesList(  )
     list<PMSelectablePtr>::iterator listIt;
     PMPackagePtr pkgPtr;
     
-    // do the dependency in case the dependency check is off ????
+    // FIXME: do the dependency in case the dependency check is off ????
     if ( !autoCheck )
     {
 	// showPackageDependencies( true );
@@ -799,6 +799,11 @@ bool PackageSelector::checkPackage( PMPackagePtr pkg,
     }
 }
 
+///////////////////////////////////////////////////////////////////
+//
+// checkPatch
+//
+//
 bool PackageSelector::checkPatch( PMYouPatchPtr patchPtr,
 				  string filter )
 {
@@ -1332,8 +1337,11 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	    {
 		// disk space error warning returned `cancel
 		exit = false;
-		// FIXME ...
-		// packageList->setKeyboardFocus();
+		NCPkgTable * packageList = getPackageList();
+		if ( packageList )
+		{
+		    packageList->setKeyboardFocus();
+		}
 	    }
 	}
     }
@@ -1545,7 +1553,7 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	    version += "-";
 	    version += pkgPtr->release(); 
 	}
-
+	
 	text += PkgNames::Version().str();
 	text +=  version;
 	if ( instVersion != "" )
@@ -1554,29 +1562,36 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	    text += PkgNames::InstVersion().str();
 	    text += instVersion;
 	}
-
 	text +=  "  ";
 	
 	// show the size
 	text += PkgNames::Size().str();
 	text += pkgPtr->size().asString();
+	text +=  "  ";
 	
-	text += "<br>";
-
-	// show the license and medianr
 	PMPackagePtr package = pkgPtr;
 	if ( package )
 	{
-	    text += PkgNames::License().str();
-	    text += package->license();
-	    text += "  ";
+	    // add the media nr
 	    text += PkgNames::MediaNo().str();
 	    char num[5];
 	    sprintf( num, "%d", package->medianr() );
 	    text += num;
+	    text += "<br>";	    
+
+	    // the license
+	    text += PkgNames::License().str();
+	    text += package->license();
+	    text += "  ";
+	    text += "<br>";
+
+	    // the rpm group
+	    text += PkgNames::RpmGroup().str();
+	    string group = Y2PM::packageManager().translatedRpmGroup( package->group_ptr() );
+	    text += group;
 	    text += "<br>";
 	}
-
+	
 	// show Provides:
 	text += PkgNames::Provides().str();
 	list<PkgRelation> provides = pkgPtr->provides();	// PMSolvable
@@ -1660,42 +1675,75 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 //
 // createDescrText
 //
+#define DOCTYPETAG "<!-- DT:Rich -->"
+
 string PackageSelector::createDescrText( list<string> value )
 {
     string html_text = "";
     
-    bool auto_format = true;
+    bool author_format = false;
+    bool htmlFormat = false;     /* Is the description coming in html? */
+    /* By default, this is false and the text is plain text. But if the
+     * description contains DOCTYPETAG in the first line, it is considered
+     * to be formatted in html. The yast (this method here) needs not to
+     * do further formatting for the text part.
+     */
+    
     list<string>::const_iterator it = value.begin();
 
-    while ( it != value.end() )
+    string line;
+
+    /* Check if the first line is the html tag */
+    if( it != value.end() )
     {
-	string line = (*it);
+	line = (*it);
+	const string htmlIdent(DOCTYPETAG);
 
-	if ( line.substr( 0, 7 ) ==  "Authors" )
+	if ( line.length() >= htmlIdent.length() &&  /* Avoid exception if stringlen < len of tag */
+	     line.substr( 0,  htmlIdent.length() ) ==  htmlIdent ) /* first line == DOCTYPETAG ? */
 	{
-	    line = "<b>" + line + "</b>";
-	    auto_format = false;
-	}
-
-	if ( auto_format )
-	{
-	    if ( line.length() == 0 )	// Empty lines mean new paragraph
-		html_text += "</p><p>";
-	    else
-	    {
-		html_text += line;
-		html_text += " ";
-	    }
+	    htmlFormat = true;  /* indicate that the text is already html formatted */
 	}
 	else
 	{
-	    html_text += line + "<br>";
-	}	
-	
+	    html_text += line + " ";
+	}
 	++it;
     }
 
-    html_text += "</p>";
+    /** Loop over the remaining text. **/
+    const string authors("Authors:");
+    while ( it != value.end() )
+    {
+	line = (*it);
+
+	/* Check if authors-line starts */
+	if ( line.length() >= authors.length() &&  /* Avoid exception if stringlen < len of Authors */
+	     line.substr( 0, authors.length() ) ==  authors )
+	{
+	    line = "<br><b>" + line + "</b>";
+	    author_format = true;
+	}
+	if ( author_format )
+	{
+	    /* every author in his own line */
+	    html_text += line + "<br>";
+	}
+	else
+	{
+	    html_text += " " + line;
+	    if( (! htmlFormat) && (line.length() == 0) )
+	    {
+		html_text += "<br>";
+	    }
+	    else
+	    {
+		html_text += " ";
+	    }	
+	}
+	
+	++it;
+    }
 
     return html_text;
 }
