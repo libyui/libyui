@@ -385,18 +385,22 @@ YQPackageSelector::layoutButtons( QWidget * parent )
     QPushButton *help_button = new QPushButton( _( "&Help" ), button_box );
     CHECK_PTR( help_button );
 #endif
+
+    if ( ! _youMode )
+    {
+	QPushButton * solve_button = new QPushButton( _( "Check &Dependencies" ), button_box );
+	CHECK_PTR( solve_button );
+	solve_button->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
+
+	connect( solve_button, SIGNAL( clicked() ),
+		 this,         SLOT  ( resolveDependencies() ) );
+
+
+	_autoDependenciesCheckBox = new QCheckBox( _( "&Automatic dependency checking" ), button_box );
+	CHECK_PTR( _autoDependenciesCheckBox );
+	_autoDependenciesCheckBox->setChecked( true );
+    }
     
-    QPushButton * solve_button = new QPushButton( _( "Check &Dependencies" ), button_box );
-    CHECK_PTR( solve_button );
-    solve_button->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
-
-    connect( solve_button, SIGNAL( clicked() ),
-	     this,         SLOT  ( resolveDependencies() ) );
-
-
-    _autoDependenciesCheckBox = new QCheckBox( _( "&Automatic dependency checking" ), button_box );
-    CHECK_PTR( _autoDependenciesCheckBox );
-    _autoDependenciesCheckBox->setChecked( true );
 
     QWidget * spacer = new QWidget( button_box );
     CHECK_PTR( spacer );
