@@ -350,7 +350,7 @@ bool NCPopupSelection::getSelections( )
 	    PMSelectable::UI_Status status = selPtr->getSelectable()->status();
 	    NCMIL << "Selection found: " << selPtr->name() << " status: " << status << endl;
 	    
-	    if ( status == PMSelectable::S_Install )
+	    if ( status == PMSelectable::S_Install || status == PMSelectable::S_AutoInstall )
 		selected = true;
 	}
 	
