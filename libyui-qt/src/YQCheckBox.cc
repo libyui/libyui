@@ -28,71 +28,71 @@
 #include "YQCheckBox.h"
 
 
-// +----+----------------------------------+----+
-// |	|[X] Checkboxlabel		   |	|
-// +----+----------------------------------+----+
-// <----> SPACING			   <---->
-
 #define SPACING 8
 
 
-YQCheckBox::YQCheckBox( QWidget *parent, YWidgetOpt &opt,
-		       const YCPString& label, bool checked)
-    : QGroupBox(parent)
-    , YCheckBox(opt, label)
-    , dont_care(false)
+YQCheckBox::YQCheckBox( QWidget *		parent,
+			YWidgetOpt &		opt,
+			const YCPString & 	label,
+			bool 			initiallyChecked)
+    : QGroupBox( parent )
+    , YCheckBox( opt, label )
+    , _dont_care( false )
 {
     setWidgetRep( this );
-    setFrameStyle(NoFrame);
+    setFrameStyle( NoFrame );
 
-    QBoxLayout *layout = new QBoxLayout(this, QBoxLayout::LeftToRight);
+    QBoxLayout *layout = new QBoxLayout( this, QBoxLayout::LeftToRight );
 
-    qt_checkbox = new QCheckBox( fromUTF8(label->value()), this);
-    layout->addSpacing(SPACING);
-    layout->addWidget(qt_checkbox);
-    layout->addSpacing(SPACING);
-    qt_checkbox->setFont(YUIQt::ui()->currentFont());
-    qt_checkbox->setChecked(checked);
+    _qt_checkbox = new QCheckBox( fromUTF8(label->value() ), this );
+    layout->addSpacing( SPACING );
+    layout->addWidget( _qt_checkbox );
+    layout->addSpacing( SPACING );
+    _qt_checkbox->setFont( YUIQt::ui()->currentFont() );
+    _qt_checkbox->setChecked( initiallyChecked );
 
-    connect ( qt_checkbox, SIGNAL ( toggled ( bool ) ),
-	      this, SLOT ( changed ( bool ) ) );
+    connect( _qt_checkbox, 	SIGNAL( toggled( bool ) ),
+	     this, 		SLOT  ( changed( bool ) ) );
 }
 
 
-long YQCheckBox::nicesize(YUIDimension dim)
+long
+YQCheckBox::nicesize( YUIDimension dim )
 {
-    if (dim == YD_HORIZ) return 2 * SPACING + qt_checkbox->sizeHint().width();
-    else return qt_checkbox->sizeHint().height();
+    if (dim == YD_HORIZ)	return 2*SPACING + _qt_checkbox->sizeHint().width();
+    else 			return _qt_checkbox->sizeHint().height();
 }
 
 
-void YQCheckBox::setSize(long newWidth, long newHeight)
+void YQCheckBox::setSize( long newWidth, long newHeight )
 {
-    qt_checkbox->resize(newWidth - 2*SPACING, newHeight);
-    resize(newWidth, newHeight);
+    _qt_checkbox->resize( newWidth - 2*SPACING, newHeight );
+    resize( newWidth, newHeight );
 }
 
 
-YCPValue YQCheckBox::getValue()
+YCPValue
+YQCheckBox::getValue()
 {
-    switch ( qt_checkbox->state() )
+    switch ( _qt_checkbox->state() )
     {
 	case QButton::On:	return YCPBoolean( true  );
 	case QButton::Off:	return YCPBoolean( false );
 	case QButton::NoChange:	return YCPVoid();	// nil
     }
     
-    y2error( "Unknown QCheckBox state: %d", (int) qt_checkbox->state() );
+    y2error( "Unknown QCheckBox state: %d", (int) _qt_checkbox->state() );
     return YCPVoid();
 }
 
 
-void YQCheckBox::setValue(const YCPValue & val)
+void
+YQCheckBox::setValue( const YCPValue & val )
 {
     if ( val->isBoolean() )
     {
 	setTristate(false);
-	qt_checkbox->setChecked(val->asBoolean()->value());
+	_qt_checkbox->setChecked(val->asBoolean()->value());
     }
     else	// "Nil" -> set TriState: neither on nor off
     {
@@ -101,48 +101,50 @@ void YQCheckBox::setValue(const YCPValue & val)
 }
 
 
-bool YQCheckBox::isTristate()
+bool
+YQCheckBox::isTristate()
 {
-    return dont_care;
+    return _dont_care;
 }
 
-void YQCheckBox::setTristate(bool tristate)
+
+void
+YQCheckBox::setTristate( bool tristate )
 {
-    dont_care = tristate;
-    qt_checkbox->setTristate(tristate);
+    _dont_care = tristate;
+    _qt_checkbox->setTristate( tristate );
 
     if ( tristate )
-	qt_checkbox->setNoChange();
-}
-
-void YQCheckBox::setLabel(const YCPString &label)
-{
-    qt_checkbox->setText(fromUTF8(label->value()));
-    YCheckBox::setLabel(label);
+	_qt_checkbox->setNoChange();
 }
 
 
-void YQCheckBox::setEnabling(bool enabled)
+void YQCheckBox::setLabel( const YCPString & label )
 {
-    qt_checkbox->setEnabled(enabled);
+    _qt_checkbox->setText( fromUTF8( label->value() ) );
+    YCheckBox::setLabel( label );
+}
+
+
+void YQCheckBox::setEnabling( bool enabled )
+{
+    _qt_checkbox->setEnabled( enabled );
 }
 
 
 bool YQCheckBox::setKeyboardFocus()
 {
-    qt_checkbox->setFocus();
+    _qt_checkbox->setFocus();
 
     return true;
 }
 
 
 
-// slots
-
 void YQCheckBox::changed( bool newState )
 {
-    if (getNotify())
-	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
+    if ( getNotify() )
+	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }
 
 

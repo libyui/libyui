@@ -19,6 +19,7 @@
 
 // -*- c++ -*-
 
+
 #ifndef YQCheckBox_h
 #define YQCheckBox_h
 
@@ -34,47 +35,37 @@ class YQCheckBox : public QGroupBox, public YCheckBox
 {
     Q_OBJECT
 
-    /**
-     * Pointer to the qt widget representing the text entry
-     */
-    QCheckBox *qt_checkbox;
-
-    /**
-     * Flag that indicates tristate condition: neither on nor off
-     */
-    bool dont_care;
-
-
 public:
     /**
      * Constructor.
      */
-    YQCheckBox( QWidget *parent, YWidgetOpt &opt,
-	       const YCPString& label, bool checked);
+    YQCheckBox( QWidget *		parent,
+		YWidgetOpt & 		opt,
+		const YCPString & 	label,
+		bool 			initiallyChecked );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
      * widget. All new widgets are enabled per definition. Only
      * enabled widgets can take user input.
      */
-    void setEnabling(bool enabled);
+    void setEnabling( bool enabled );
 
     /**
      * Minimum size the widget should have to make it look and feel
      * nice.
-     * @dim Dimension, either YD_HORIZ or YD_VERT
      */
-    long nicesize(YUIDimension dim);
+    long nicesize( YUIDimension dim );
 
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newWidth, long newHeight);
+    void setSize( long newWidth, long newHeight );
 
     /**
      * Sets the checked-state of the checkbox
      */
-    void setValue(const YCPValue& checked);
+    void setValue( const YCPValue & checked );
 
     /**
      * Returns whether the checkbox is checked.
@@ -85,7 +76,7 @@ public:
     /**
      * Changes the label of the text entry.
      */
-    void setLabel(const YCPString& label);
+    void setLabel( const YCPString & label );
 
     /**
      * Accept the keyboard focus.
@@ -100,8 +91,9 @@ public:
     /**
      * Set tristate condition
      */
-    void setTristate(bool tristate);
+    void setTristate( bool tristate );
 
+    
 private slots:
 
     /**
@@ -109,6 +101,20 @@ private slots:
      * This _may_ be of interest to the module.
      */
     void changed ( bool newState );
+
+    
+private:
+    
+    /**
+     * Pointer to the qt widget that actually does the job
+     */
+    QCheckBox * _qt_checkbox;
+
+    /**
+     * Flag that indicates tristate condition: neither on nor off
+     */
+    bool _dont_care;
+
 };
 
 #endif // YQCheckBox_h
