@@ -245,14 +245,13 @@ void YQUI::toggleVisionImpairedPalette()
 {
     if ( _usingVisionImpairedPalette )
     {
-	qApp->setPalette( _normalPalette,
+	qApp->setPalette( normalPalette(),
 			  true );  // informWidgets
 
 	_usingVisionImpairedPalette = false;
     }
     else
     {
-	_normalPalette = qApp->palette();
 	qApp->setPalette( visionImpairedPalette(),
 			  true );  // informWidgets
 	

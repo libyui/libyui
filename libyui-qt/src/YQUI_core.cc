@@ -76,7 +76,6 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     _debug_embedding		= false;
     _running_embedded		= false;
     _usingVisionImpairedPalette	= false;
-    _normalPalette		= qApp->palette();
     screenShotNameTemplate 	= "";
 
     qInstallMsgHandler( qMessageHandler );
@@ -90,6 +89,8 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 #endif
 	new QApplication( argc, argv );
 
+    _normalPalette = qApp->palette();
+    
     // Qt keeps track to a global QApplication in qApp.
     CHECK_PTR( qApp );
 

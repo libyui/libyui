@@ -614,11 +614,13 @@ YQPkgListItem::paintCell( QPainter *		painter,
     {
 	QColorGroup cg = colorGroup;
 
-
-	if ( column == instVersionCol() )
-	    cg.setColor( QColorGroup::Base, QColor( 0xFF, 0x30, 0x30 ) );	// Background
-	else
-	    cg.setColor( QColorGroup::Text, QColor( 0xFF, 0, 0 ) );		// Foreground
+	if ( ! YQUI::ui()->usingVisionImpairedPalette() )
+	{
+	    if ( column == instVersionCol() )
+		cg.setColor( QColorGroup::Base, QColor( 0xFF, 0x30, 0x30 ) );	// Background
+	    else
+		cg.setColor( QColorGroup::Text, QColor( 0xFF, 0, 0 ) );		// Foreground
+	}
 
 	QListViewItem::paintCell( painter, cg, column, width, alignment );
     }
@@ -626,10 +628,13 @@ YQPkgListItem::paintCell( QPainter *		painter,
     {
 	QColorGroup cg = colorGroup;
 
-	cg.setColor( QColorGroup::Text, QColor( 0, 0, 0xC0 ) );			// Foreground
+	if ( ! YQUI::ui()->usingVisionImpairedPalette() )
+	{
+	    cg.setColor( QColorGroup::Text, QColor( 0, 0, 0xC0 ) );		// Foreground
 
-	if ( column == versionCol() )
-	    cg.setColor( QColorGroup::Base, QColor( 0xF0, 0xF0, 0xF0 ) );	// Background
+	    if ( column == versionCol() )
+		cg.setColor( QColorGroup::Base, QColor( 0xF0, 0xF0, 0xF0 ) );	// Background
+	}
 
 	QListViewItem::paintCell( painter, cg, column, width, alignment );
     }

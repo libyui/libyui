@@ -24,6 +24,7 @@
 
 #include "YQPkgGenericDetailsView.h"
 #include "YQi18n.h"
+#include "YQUI.h"
 #include "utf8.h"
 
 using std::string;
@@ -90,8 +91,12 @@ YQPkgGenericDetailsView::htmlHeading( PMObjectPtr pmObj )
 {
     QString summary = fromUTF8( pmObj->summary() );
 
-    QString html =
-	"<table bgcolor=#E0E0F8><tr><td><b>"
+    QString html = "<table";
+
+    if ( ! YQUI::ui()->usingVisionImpairedPalette() )
+	html += " bgcolor=#E0E0F8";
+
+    html += "><tr><td><b>"
 	+ fromUTF8( pmObj->name() )
 	+ "</b>";
 
@@ -121,7 +126,13 @@ YQPkgGenericDetailsView::htmlEscape( const QString & plainText )
 QString
 YQPkgGenericDetailsView::table( const QString & contents )
 {
-    return "<table border=1 bgcolor=#F0F0F0>" + contents + "</table>";
+    QString html = "<table border=1";
+
+    if ( ! YQUI::ui()->usingVisionImpairedPalette() )
+	html += " bgcolor=#F0F0F0";
+    html += ">" + contents + "</table>";
+
+    return html;
 }
 
 
@@ -167,7 +178,14 @@ YQPkgGenericDetailsView::cell( const string & contents )
 QString
 YQPkgGenericDetailsView::hcell( QString contents )
 {
-    return "<td align=top bgcolor=#D0D0D0>" + contents + "</td>";
+    QString html = "<td align=top";
+    
+    if ( ! YQUI::ui()->usingVisionImpairedPalette() )
+	html += " bgcolor=#D0D0D0";
+    
+    html += ">" + contents + "</td>";
+
+    return html;
 }
 
 

@@ -1024,8 +1024,8 @@ YQPkgObjListItem::compare( QListViewItem *	otherListViewItem,
 	{
 	    // Sorting by version numbers doesn't make too much sense, so let's
 	    // sort by package relation:
-	    // - Installed newer than candidate ( red )
-	    // - Candidate newer than installed ( blue ) - worthwhile updating
+	    // - Installed newer than candidate (red)
+	    // - Candidate newer than installed (blue) - worthwhile updating
 	    // - Installed
 	    // - Not installed, but candidate available
 	    //
