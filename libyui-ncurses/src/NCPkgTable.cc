@@ -229,10 +229,6 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
 	    notify = objPtr->getCandidateObj()->insnotify();
 	    header = YCPString(PkgNames::NotifyLabel());
 	}
-    }
-    if ( newstatus == PMSelectable::S_Install
-	|| newstatus == PMSelectable::S_AutoInstall )
-    {
 	if ( objPtr->hasSelectable() )
 	{
 	    PMPackagePtr pkgPtr = objPtr->getSelectable()->theObject();
