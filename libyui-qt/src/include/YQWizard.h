@@ -115,9 +115,10 @@ protected slots:
 
 protected:
 
-    /**
-     * Create buttons in the button box.
-     **/
+    // Layout functions
+    
+    void layoutStepsPanel();
+    void layoutHelpPanel();
     void layoutButtonBox();
 
     /**
@@ -135,11 +136,14 @@ protected:
      **/
     void sendEvent( YCPValue id );
 
+    
     // Data members
 
-    YCPString _backButtonLabel;
-    YCPString _abortButtonLabel;
-    YCPString _nextButtonLabel;
+    YCPString	_backButtonLabel;
+    YCPString	_abortButtonLabel;
+    YCPString	_nextButtonLabel;
+
+    QColor	_bg;
 
     QWidgetStack *	_sideBar;
     QVBox *		    _stepsPanel;
