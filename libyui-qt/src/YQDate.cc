@@ -12,8 +12,7 @@
 
   File:	      YQDate.cc
 
-  Author:     Mathias Kettner <kettner@suse.de>
-  Maintainer: Stefan Hundhammer <sh@suse.de>
+  Author:     Anas Nashif <nashif@suse.de>
 
 /-*/
 
@@ -38,7 +37,6 @@ YQDate::YQDate( QWidget * 		parent,
     setSpacing( YQWidgetSpacing );
     setMargin( YQWidgetMargin );
 
-    y2debug("here");
     _qt_label = new QLabel( fromUTF8(label->value()), this );
     _qt_label->setTextFormat( QLabel::PlainText );
     _qt_label->setFont( YQUI::ui()->currentFont() );

@@ -12,8 +12,7 @@
 
   File:	      YQTime.h
 
-  Author:     Mathias Kettner <kettner@suse.de>
-  Maintainer: Stefan Hundhammer <sh@suse.de>
+  Author:     Anas Nashif <nashif@suse.de>
 
 /-*/
 

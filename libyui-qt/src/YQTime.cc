@@ -12,8 +12,7 @@
 
   File:	      YQTime.cc
 
-  Author:     Mathias Kettner <kettner@suse.de>
-  Maintainer: Stefan Hundhammer <sh@suse.de>
+  Author:     Anas Nashif <nashif@suse.de>
 
 /-*/
 
@@ -34,7 +33,6 @@ YQTime::YQTime( QWidget * 		parent,
     : QVBox( parent )
     , YTime( opt, label )
 {
-    y2debug("YQTime");
     setWidgetRep( this );
     setSpacing( YQWidgetSpacing );
     setMargin( YQWidgetMargin );
