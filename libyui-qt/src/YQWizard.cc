@@ -21,14 +21,15 @@
 #define y2log_component "qt-wizard"
 #include <ycp/y2log.h>
 
-#include <qlabel.h>
 #include <qhbox.h>
+#include <qlabel.h>
+#include <qobjectlist.h>
+#include <qpixmap.h>
 #include <qpushbutton.h>
 #include <qtabwidget.h>
 #include <qtextbrowser.h>
-#include <qobjectlist.h>
+#include <qtoolbutton.h>
 #include <qwidgetstack.h>
-#include <qpixmap.h>
 
 #include "utf8.h"
 #include "YQi18n.h"
@@ -36,6 +37,7 @@
 #include "YQReplacePoint.h"
 #include "YQEmpty.h"
 #include "YQLabel.h"
+#include "YQIconPool.h"
 #include "QY2LayoutUtils.h"
 #include "YEvent.h"
 
@@ -65,6 +67,7 @@ YQWizard::YQWizard( QWidget *		parent,
     , _nextButton( 0 )
 {
     QHBox * hbox = 0;
+    QPixmap pixmap;
     
     setWidgetRep( this );
 
@@ -163,8 +166,15 @@ YQWizard::YQWizard( QWidget *		parent,
 
     addHStretch( hbox );
 
-    _helpButton = new QPushButton( _( "Help" ), hbox );
+    
+    // Help button
+    _helpButton = new QPushButton( _( "&Help" ), hbox );
     CHECK_PTR( _helpButton );
+
+    pixmap = QPixmap( ICONDIR "/help.png" );
+
+    if ( ! pixmap.isNull() )
+	_helpButton->setPixmap( pixmap );
 
     connect( _helpButton, SIGNAL( clicked()  ),
 	     this,        SLOT  ( showHelp() ) );
@@ -172,6 +182,7 @@ YQWizard::YQWizard( QWidget *		parent,
     addHStretch( hbox );
     addVSpacing( _stepsPanel );
 
+    
     //
     // Help
     //
@@ -212,18 +223,24 @@ YQWizard::YQWizard( QWidget *		parent,
     CHECK_PTR( spacer );
 
 
-    // "Steps" button
 
 
     hbox = new QHBox( _helpPanel );
     CHECK_PTR( hbox );
     
     addHStretch( hbox );
+
     
+    // "Steps" button - intentionally without keyboard shortcut
     _stepsButton = new QPushButton( _( "Steps" ), hbox );
     CHECK_PTR( _stepsButton );
 
-    
+    pixmap = QPixmap( ICONDIR "/steps.png" );
+
+    if ( ! pixmap.isNull() )
+	_stepsButton->setPixmap( pixmap );
+
+
     connect( _stepsButton, SIGNAL( clicked()   ),
 	     this,         SLOT  ( showSteps() ) );
 

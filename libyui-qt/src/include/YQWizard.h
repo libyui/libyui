@@ -29,6 +29,7 @@ class QPushButton;
 class QTabWidget;
 class QTextBrowser;
 class QWidgetStack;
+class QToolButton;
 
 class YQReplacePoint;
 
