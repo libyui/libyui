@@ -140,9 +140,10 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     }
     
     NCstring text( "This is a development version of the NCurses single package selection, included in this Beta as a kind of demo.<br>Some things work, some don't, some work but are still really slow. You can view some package data, but setting a package status does not have any effect yet. As of now, all bug reports for this thing will be routed to /dev/null.<br>We are working heavily on it, so if you want to contribute, the easiest thing you can do right now is not swamp us with bugzilla reports, but let us work in the remaining time.<br> Thank you.<br> -gs" );
-    NCPopupInfo info( wpos( 5, 5 ), YCPString( "Warning" ), text.YCPstr() );
-    info.setNiceSize( 50, 20 );
-    info.showInfoPopup( );
+
+    //NCPopupInfo info( wpos( 5, 5 ), YCPString( "Warning" ), text.YCPstr() );
+    //info.setNiceSize( 50, 20 );
+    //info.showInfoPopup( );
 
 }
 
@@ -237,14 +238,13 @@ void PackageSelector::setVisibleInfo( const YCPValue & info )
 //
 void PackageSelector::fillHeader( NCPkgTable *pkgTable )
 {
-    vector<NCstring> header;
-    header.reserve(5);
-    
-    header.push_back( PkgNames::PkgStatus() );
-    header.push_back( PkgNames::PkgName() );
-    header.push_back( PkgNames::PkgVersion() );
-    header.push_back( PkgNames::PkgSummary() );
-    header.push_back( PkgNames::PkgSize() );
+    vector<NCstring> header(10);
+
+    header[0] = PkgNames::PkgStatus();
+    header[1] = PkgNames::PkgName();
+    header[2] = PkgNames::PkgVersion();
+    header[3] = PkgNames::PkgSummary();
+    header[4] = PkgNames::PkgSize();
 
     if ( pkgTable )
     {
@@ -264,6 +264,7 @@ void PackageSelector::fillHeader( NCPkgTable *pkgTable )
 //
 bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgPtr )
 {
+    vector<string> pkgLine (5);
     unsigned int i = 0;
 
     if ( !pkgTable )
@@ -288,21 +289,20 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
     std::list<PMObjectPtr>::const_iterator it = selectable->av_begin();
 
     // show all availables
-    for ( i = 0, it = selectable->av_begin(); it != selectable->av_end();  ++it, i++ )
+    while ( it != selectable->av_end() )
     {
-	vector<string> pkgLine;
-	pkgLine.reserve(5);	
-
-	pkgLine.push_back( selectable->name() );	// package name
-	pkgLine.push_back( (*it)->version() );		// the version
-	pkgLine.push_back( (*it)->summary() );  	// short description
+	pkgLine[0] = selectable->name();	// package name
+	pkgLine[1] = (*it)->version();		// the version
+	pkgLine[2] = (*it)->summary();  	// short description
 	FSize size = (*it)->size();     	// installed size
-	pkgLine.push_back( size.asString() );
-	
+	pkgLine[3] = size.asString();
+
 	pkgTable->addLine( selectable->status(), // get the package status
 			   pkgLine,
 			   i,		 // the index
 			   (*it) );	 // the corresponding package pointer
+	i++;
+	++it;
     }
 
     if ( pkgTable->getNumLines() > 0 )
@@ -580,20 +580,19 @@ bool PackageSelector::createListEntry ( NCPkgTable *pkgTable,
 					PMPackagePtr pkgPtr,
 					unsigned int index )
 {
-    vector<string> pkgLine;
-    pkgLine.reserve(5);
-    
+    vector<string> pkgLine (4);
+
     if ( !pkgPtr || !pkgTable )
     {
 	NCERR << "No valid package available" << endl;
 	return false;
     }
 
-    pkgLine.push_back( pkgPtr->getSelectable()->name() );	// package name
-    pkgLine.push_back( pkgPtr->version() );	// version
-    pkgLine.push_back( pkgPtr->summary() );  	// short description
+    pkgLine[0] = pkgPtr->getSelectable()->name();	// package name
+    pkgLine[1] = pkgPtr->version();	// version
+    pkgLine[2] = pkgPtr->summary();  	// short description
     FSize size = pkgPtr->size();     	// installed size
-    pkgLine.push_back( size.asString() );
+    pkgLine[3] = size.asString();
 
     pkgTable->addLine( pkgPtr->getSelectable()->status(), //  get the package status
 		       pkgLine,
@@ -612,21 +611,19 @@ bool PackageSelector::createPatchEntry ( NCPkgTable *pkgTable,
 					 PMYouPatchPtr patchPtr,
 					 unsigned int index )
 {
-    vector<string> pkgLine;
-    pkgLine.reserve(5);
-    
+    vector<string> pkgLine (5);
+
     if ( !patchPtr || !pkgTable )
     {
 	NCERR << "No valid patch available" << endl;
 	return false;
     }
 
-    // FIXME: get more patch attributes/use summary()
-    pkgLine.push_back( patchPtr->getSelectable()->name() );	// name
-    pkgLine.push_back( patchPtr->shortDescription() );  	// short description
+    pkgLine[0] = patchPtr->getSelectable()->name();	// name
+    pkgLine[1] = patchPtr->shortDescription();  	// short description
     //FSize size = patchPtr->size();     	// installed size
     //pkgLine[2] = size.asString();
-    pkgLine.push_back( "950 kB" );
+    pkgLine[2] =  "95 kB";
     
     pkgTable->addLine( patchPtr->getSelectable()->status(), //  get the status
 		       pkgLine,
@@ -982,7 +979,6 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	
 	return true;
     }
-    NCMIL << "INFO " << visibleInfo->toString() << endl;
     
     if ( visibleInfo->compare( PkgNames::LongDescr() ) == YO_EQUAL )
     {
@@ -1009,14 +1005,6 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	{
 	    NCMIL <<  "Size of the file list: " << fileList.size() << endl;
 	    static_cast<NCRichText *>(descrInfo)->setText( YCPString(createText(fileList, false)) );
-	}
-    }
-    else if (  visibleInfo->compare( PkgNames::Versions() ) == YO_EQUAL )
-    {
-	NCPkgTable * pkgAvail = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::AvailPkgs(), true));
-	if ( pkgAvail )
-	{
-	    fillAvailableList( pkgAvail, pkgPtr );
 	}
     }
     else if ( visibleInfo->compare( PkgNames::PkgInfo() ) == YO_EQUAL )
@@ -1080,7 +1068,7 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	    static_cast<NCRichText *>(descrInfo)->setText( text.YCPstr() );
 	}
     }
-
+    
     NCDBG <<  "Showing package information: " << visibleInfo->toString() << endl;
     
     return true;
