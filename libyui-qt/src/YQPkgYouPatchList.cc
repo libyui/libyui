@@ -200,9 +200,10 @@ YQPkgYouPatchListItem::~YQPkgYouPatchListItem()
 void
 YQPkgYouPatchListItem::setStatus( PMSelectable::UI_Status newStatus )
 {
-    // TODO: activate patch (?)
-
     YQPkgObjListItem::setStatus( newStatus );
+    
+#warning TODO: Activate patch
+    
     _youPatchList->sendUpdatePackages();
 }
 

@@ -180,8 +180,8 @@ YQPkgSelListItem::~YQPkgSelListItem()
 void
 YQPkgSelListItem::setStatus( PMSelectable::UI_Status newStatus )
 {
-    Y2PM::selectionManager().activate( Y2PM::packageManager() );
     YQPkgObjListItem::setStatus( newStatus );
+    Y2PM::selectionManager().activate( Y2PM::packageManager() );
     _pkgSelList->sendUpdatePackages();
 }
 
