@@ -617,7 +617,7 @@ bool NCPopupDeps::postAgain()
 	    deps->itemsCleared();
 	    vector<string> line;
 	    line.reserve(2);
-	    line.push_back( "No conflicts or unresolved dependencies" );
+	    line.push_back( PkgNames::NoConflictText().str() );
 	    pkgs->addLine( PMSelectable::S_NoInst,
 			   line,
 			   0,
