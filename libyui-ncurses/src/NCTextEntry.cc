@@ -458,7 +458,7 @@ NCursesEvent NCTextEntry::wHandleInput( int key )
 
   case KEY_RETURN:
     if ( getNotify() || returnOnReturn_b )
-      ret = NCursesEvent::button;
+      ret = NCursesEvent::Activated;
     break;
 
   case KEY_HOTKEY:
@@ -541,7 +541,7 @@ NCursesEvent NCTextEntry::wHandleInput( int key )
   if ( update ) {
     tUpdate();
     if ( getNotify() )
-      ret = NCursesEvent::button;
+      ret = NCursesEvent::ValueChanged;
   }
 
   if ( beep )

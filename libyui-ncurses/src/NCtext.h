@@ -163,7 +163,7 @@ class NClabel : protected NCtext {
     //
 
 
-    bool          hasHotkey() const { return hotline != string::npos; }
+    bool          hasHotkey() const { return hotline != (unsigned) string::npos; }
     unsigned char hotkey() const { return hasHotkey() ? operator[]( hotline ).hotkey() : '\0'; }
     unsigned      hotpos() const { return hasHotkey() ? operator[]( hotline ).hotpos() : string::npos; }
 };

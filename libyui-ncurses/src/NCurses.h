@@ -26,6 +26,7 @@
 using namespace std;
 
 #include <YCP.h>
+#include "YEvent.h"
 
 #include "ncursesw.h"
 #include "ncursesp.h"
@@ -69,6 +70,7 @@ class NCursesEvent {
       handled = -1,
       none    = 0,
       cancel,
+      timeout,
       button,
       menu
     };
@@ -86,13 +88,16 @@ class NCursesEvent {
     YCPValue  	result;		// added by gs
 
     int        detail;
+    
+    YEvent::EventReason reason;
 
-    NCursesEvent( Type t = none )
+    NCursesEvent( Type t = none, YEvent::EventReason r = YEvent::UnknownReason )
       : type     ( t )
       , widget   ( 0 )
       , selection( YCPNull() )
-      , result ( YCPNull() )
+      , result   ( YCPNull() )
       , detail   ( NODETAIL )
+      , reason   ( r )
     {}
     virtual ~NCursesEvent() {}
 
@@ -104,6 +109,13 @@ class NCursesEvent {
 
     bool isReturnEvent()   const { return type > none; }
     bool isInternalEvent() const { return type < none; }
+
+    
+    // Some predefined events that can be used as return values
+    
+    static const NCursesEvent Activated;
+    static const NCursesEvent SelectionChanged;
+    static const NCursesEvent ValueChanged;
 };
 
 extern std::ostream & operator<<( std::ostream & STREAM, const NCursesEvent & OBJ );

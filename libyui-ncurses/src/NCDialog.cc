@@ -814,7 +814,7 @@ int NCDialog::getch( int timeout_millisec )
 	timeout_millisec = 0;
       }
       got = ::getch();
-    } while( got == -1 && timeout_millisec );
+    } while( got == -1 && timeout_millisec > 0 );
     ::cbreak(); // stop halfdelay
   } else {
     // no wait
@@ -899,7 +899,7 @@ NCursesEvent NCDialog::pollInput()
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCDialog::userInput( int timeout )
+NCursesEvent NCDialog::userInput( int timeout_millisec )
 {
   IODBG << "user+ " << this << endl;
   ::flushinp();
@@ -909,7 +909,7 @@ NCursesEvent NCDialog::userInput( int timeout )
     return NCursesEvent::cancel;
   }
 
-  processInput( timeout );
+  processInput( timeout_millisec );
 
   NCursesEvent returnEvent = pendingEvent;
   pendingEvent = NCursesEvent::none;
@@ -926,12 +926,12 @@ NCursesEvent NCDialog::userInput( int timeout )
 //
 //	DESCRIPTION : timeout -1 -> wait for input
 //                    timeout  0 -> immediate return
-//                    else max wait timout seconds
+//                    else max wait timeout milliseconds
 //
-void NCDialog::processInput( int timeout )
+void NCDialog::processInput( int timeout_millisec )
 {
   IODBG << "process+ " << this << " active " << wActive
-    << " timeout " << timeout << endl;
+    << " timeout_millisec " << timeout_millisec << endl;
 
   if ( pendingEvent ) {
     IODBG << this << "(return pending event)" << endl;
@@ -949,7 +949,7 @@ void NCDialog::processInput( int timeout )
   if ( wActive->GetState() != NC::WSactive ) {
     IODBG << "still noactive item!" << endl;
 
-    if ( timeout == -1 ) {
+    if ( timeout_millisec == -1 ) {
       pendingEvent = NCursesEvent::cancel;
       NCINT << DLOC << this << "(set ET_CANCEL since noactive item on pollInput)" << endl;
       getch( -1 );
@@ -968,15 +968,17 @@ void NCDialog::processInput( int timeout )
   noUpdates = true;
   while ( !pendingEvent.isReturnEvent() && ch != -1 ) {
 
-    switch ( (ch = getch( timeout )) ) {
+    switch ( (ch = getch( timeout_millisec )) ) {
 
       // case KEY_RESIZE: is directly handled in NCDialog::getch.
 
     case -1:
-      if ( timeout == -1 )
+      if ( timeout_millisec == -1 )
 	pendingEvent = NCursesEvent::cancel;
-     break;
-
+      else if ( timeout_millisec > 0 )
+        pendingEvent = NCursesEvent::timeout;
+      break;
+      
     case CTRL('D'):
       hch = getch( -1 );
       ::flushinp();
@@ -1091,6 +1093,7 @@ void NCDialog::processInput( int timeout )
   case NCursesEvent::handled:
   case NCursesEvent::none:
   case NCursesEvent::cancel:
+  case NCursesEvent::timeout:
     pendingEvent.widget = 0;
     break;
   case NCursesEvent::button:

@@ -97,7 +97,7 @@ NCursesEvent NCPushButton::wHandleInput( int key )
   switch ( key ) {
   case KEY_HOTKEY:
   case KEY_RETURN:
-    ret = NCursesEvent::button;
+    ret = NCursesEvent::Activated;
     break;
   }
   return ret;

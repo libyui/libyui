@@ -155,7 +155,7 @@ NCursesEvent NCMultiLineEdit::wHandleInput( int key )
   NCursesEvent ret;
   handleInput( key );
   if ( getNotify() )
-    ret = NCursesEvent::button;
+    ret = NCursesEvent::ValueChanged;
   return ret;
 }
 

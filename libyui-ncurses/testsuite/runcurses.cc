@@ -10,7 +10,7 @@
 |                                                        (C) SuSE GmbH |  
 \----------------------------------------------------------------------/ 
 
-   File:       runqt.cc
+   File:       runcurses.cc
 
    Author:     Klaus Kaempf (kkaempf@suse.de)
    Maintainer: Klaus Kaempf (kkaempf@suse.de)
@@ -67,7 +67,7 @@ main (int argc, char *argv[])
     }
 
     YUIInterpreter *interpreter;
-    interpreter = new Y2NCursesUI (true, NULL );
+    interpreter = new Y2NCursesUI(true, 0, 0 );
 
     if (!interpreter)
     {

@@ -22,11 +22,13 @@
 
 #include "Y2Log.h"
 #include "Y2NCursesUI.h"
+#include <YEvent.h>
 
 #include <ycp/YCPString.h>
 #include <ycp/YCPVoid.h>
 #include <ycp/YCPParser.h>
 #include <ycp/YCPBlock.h>
+#include <ycp/YCPMap.h>
 
 #include "NCDialog.h"
 #include "NCAlignment.h"
@@ -104,7 +106,9 @@ int Recode( const string & str, const string & from,
 //
 //	DESCRIPTION :
 //
-Y2NCursesUI::Y2NCursesUI( bool with_threads, Y2Component *callback )
+Y2NCursesUI::Y2NCursesUI( bool with_threads,
+			  const char * macro_file,
+			  Y2Component *callback )
     : YUIInterpreter(with_threads, callback)
 {
   try {
@@ -121,6 +125,9 @@ Y2NCursesUI::Y2NCursesUI( bool with_threads, Y2Component *callback )
   }
 
   topmostConstructorHasFinished();
+  
+  if ( macro_file )
+    playMacro( macro_file );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -177,28 +184,6 @@ void Y2NCursesUI::idleLoop( int fd_ycp )
 
 struct NCtoY2Event : public NCursesEvent {
 
-  static YUIInterpreter::EventType typeOf( Type t ) {
-    switch ( t ) {
-    case button:
-      return YUIInterpreter::ET_WIDGET;
-      break;
-    case menu:
-      return YUIInterpreter::ET_MENU;
-      break;
-    case cancel:
-      return YUIInterpreter::ET_CANCEL;
-      break;
-    case none:
-      return YUIInterpreter::ET_NONE;
-      break;
-
-    default:
-      UIINT << "Can't propagate NCursesEvent::" << t << endl;
-      break;
-    }
-    return YUIInterpreter::ET_NONE;
-  }
-
   friend ostream & operator<<( std::ostream & STREAM, const NCtoY2Event & OBJ ) {
     STREAM << static_cast<const NCursesEvent &>(OBJ);
     if ( OBJ.selection.isNull() ) {
@@ -220,46 +205,55 @@ struct NCtoY2Event : public NCursesEvent {
     return *this;
   }
 
-  YWidget * propagate( Y2NCursesUI & yui, YUIInterpreter::EventType * event ) {
-    if ( type == menu ) {
-      yui.setMenuSelection( selection );
-    }
-    if ( event ) {
-      *event = typeOf( type );
-    } else {
+  YEvent * propagate()
+  {
+      switch ( type )
+      {
+	  // Note: libyui assumes ownership of YEvents, so they need to be
+	  // created on the heap with 'new'. libyui takes care of deleting them.
+	  
+	  case button:
+	      return new YWidgetEvent( dynamic_cast<YWidget *> (widget), reason );
+	    
+	  case menu:
+	      return new YMenuEvent( selection );
+	    
+	  case cancel:
+	      return new YCancelEvent();
+	      
+	  case timeout:
+	      return new YTimeoutEvent();
+	    
+	  case none:
+	  case handled:
+	      return 0;
+
+	  // Intentionally omitting 'default' branch so the compiler can
+	  // detect unhandled enums 
+      }
+
+      // If we get this far, there must be an error.
+    
       UIINT << "Can't propagate through (EventType*)0" << endl;
-    }
-    UIDBG << *this << endl;
-    return dynamic_cast<YWidget*>( widget );
+      UIDBG << *this << endl;
+      return 0;
   }
 };
+
 
 ///////////////////////////////////////////////////////////////////
 //
 //
 //	METHOD NAME : Y2NCursesUI::userInput
-//	METHOD TYPE : YWidget *
+//	METHOD TYPE : YEvent *
 //
 //	DESCRIPTION :
 //
-YWidget * Y2NCursesUI::userInput( YDialog * dialog, EventType * event )
+YEvent * Y2NCursesUI::userInput( unsigned long timeout_millisec )
 {
-  return timeoutUserInput( dialog, event, 0 );
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : Y2NCursesUI::timeoutUserInput
-//	METHOD TYPE : YWidget *
-//
-//	DESCRIPTION :
-//
-YWidget * Y2NCursesUI::timeoutUserInput( YDialog * dialog, EventType * event, unsigned timeout_millisec )
-{
-  NCDialog * ncd = static_cast<NCDialog *>( dialog );
+  NCDialog * ncd = static_cast<NCDialog *>( currentDialog() );
   if ( !ncd ) {
-    UIERR << "No NCDialog " << dialog << endl;
+    UIERR << "No current NCDialog " << endl;
     return 0;
   }
 
@@ -268,9 +262,10 @@ YWidget * Y2NCursesUI::timeoutUserInput( YDialog * dialog, EventType * event, un
   cevent = ncd->userInput( timeout_millisec ? (long)timeout_millisec : -1 );
   ncd->activate ( false );
 
-  YWidget * ret = cevent.propagate( *this, event );
-  UIDBG << (event?*event:-1) << " for " << ret << endl;
-  return ret;
+  YEvent * yevent = cevent.propagate();
+  UIDBG << "Returning event: " << ( yevent ? yevent->ycpEvent()->toString().c_str() : "(nil)" ) << endl;
+  
+  return yevent;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -281,20 +276,23 @@ YWidget * Y2NCursesUI::timeoutUserInput( YDialog * dialog, EventType * event, un
 //
 //	DESCRIPTION :
 //
-YWidget * Y2NCursesUI::pollInput( YDialog *dialog, EventType *event )
+YEvent * Y2NCursesUI::pollInput()
 {
-  NCDialog * ncd = static_cast<NCDialog *>( dialog );
+  NCDialog * ncd = static_cast<NCDialog *>( currentDialog() );
   if ( !ncd ) {
-    UIERR << "No NCDialog " << dialog << endl;
+    UIERR << "No current NCDialog " << endl;
     return 0;
   }
 
   // no activation here, done in pollInput, if..
   NCtoY2Event cevent = ncd->pollInput();
 
-  YWidget * ret = cevent.propagate( *this, event );
-  UIDBG << (event?*event:-1) << " for " << ret << endl;
-  return ret;
+  YEvent * yevent = cevent.propagate();
+
+  if ( yevent )
+      UIDBG << "Returning event: " << yevent->ycpEvent()->toString() << endl;
+
+  return yevent;
 }
 
 ///////////////////////////////////////////////////////////////////

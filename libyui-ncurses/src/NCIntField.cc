@@ -373,7 +373,7 @@ NCursesEvent NCIntField::wHandleInput( int key )
     ::beep();
 
   if ( getNotify() && ovlue != cvalue )
-    ret = NCursesEvent::button;
+    ret = NCursesEvent::ValueChanged;
 
   return ret;
 }

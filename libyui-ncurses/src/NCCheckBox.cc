@@ -191,7 +191,7 @@ NCursesEvent NCCheckBox::wHandleInput( int key )
     }
     Redraw();
     if ( getNotify() )
-      ret = NCursesEvent::button;
+      ret = NCursesEvent::ValueChanged;
     break;
   }
   return ret;

@@ -525,7 +525,7 @@ NCursesEvent NCComboBox::wHandleInput( int key )
     ::beep();
 
   if ( getNotify() && oval != buffer )
-    ret = NCursesEvent::button;
+    ret = NCursesEvent::ValueChanged;
 
   return ret;
 

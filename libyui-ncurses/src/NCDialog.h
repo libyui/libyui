@@ -107,7 +107,7 @@ class NCDialog : public YDialog, public NCWidget {
 
   protected:
 
-    int getch( int timeout = -1 );
+    int getch( int timeout_millisec = -1 );
 
     virtual NCursesEvent wHandleInput( int ch );
     virtual NCursesEvent wHandleHotkey( int key );
@@ -128,7 +128,7 @@ class NCDialog : public YDialog, public NCWidget {
 
     void idleInput();
 
-    NCursesEvent userInput( int timeout = -1 );
+    NCursesEvent userInput( int timeout_millisec = -1 );
     NCursesEvent pollInput();
 
     virtual long nicesize( YUIDimension dim );

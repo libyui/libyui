@@ -697,10 +697,6 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 	}
     }
 
-    // FIXME: copied from NCTable - needed here ???
-    if ( getNotify() && isImmediate() && citem != getCurrentItem() )
-	ret = NCursesEvent::button;
-
     return ret;
 }
 

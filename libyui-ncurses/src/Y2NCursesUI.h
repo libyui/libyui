@@ -39,7 +39,7 @@ class Y2NCursesUI : public NCurses, public YUIInterpreter {
 
   public:
 
-    Y2NCursesUI( bool with_threads, Y2Component *callback );
+    Y2NCursesUI( bool with_threads, const char * macro_file, Y2Component *callback );
     virtual ~Y2NCursesUI();
 
     /**
@@ -48,23 +48,19 @@ class Y2NCursesUI : public NCurses, public YUIInterpreter {
     virtual void idleLoop( int fd_ycp );
 
     /**
-     * Event loop and return as soon as the user has pressed some widget that
-     * passes control back to the module. Currently this are push buttons and
-     * the window-close button.
-    */
-    virtual YWidget * userInput( YDialog * dialog, EventType * event );
+     * Go into event loop until user input is available or until the specified
+     * timeout (in milliseconds) has elapsed. 
+     *
+     * Reimplemented from YUIInterpreter.
+     */
+    virtual YEvent * userInput( unsigned long timeout_millisec );
 
     /**
-     * like userInput, but return 0(ET_NONE) after timeout_millisec milliseconds of inactivity
-    */
-    virtual YWidget * timeoutUserInput( YDialog * dialog, EventType * event, unsigned timeout_millisec );
-
-    /**
-     * This virtual method is called, when the YCPUIInterpreter evaluates
-     * the YCP command <tt>PollInput()</tt>. You should <i>not</i> go into
-     * your event loop but just look whether there is pending user input.
-    */
-    virtual YWidget * pollInput( YDialog * dialog, EventType * event );
+     * Check the event queue for user input. Don't wait.
+     *
+     * Reimplemented from YUIInterpreter.
+     */
+    virtual YEvent * pollInput();
 
     /**
      * Inherited from YUIInterpreter. Creates a dialog.

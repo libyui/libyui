@@ -256,13 +256,13 @@ NCursesEvent NCTable::wHandleInput( int key )
     case KEY_SPACE:
     case KEY_RETURN:
       if ( getNotify() && citem != -1 )
-	ret = NCursesEvent::button;
+	return NCursesEvent::Activated;
       break;
     }
   }
 
   if ( getNotify() && immediate && citem != getCurrentItem() )
-    ret = NCursesEvent::button;
+    ret = NCursesEvent::SelectionChanged;
 
   return ret;
 }

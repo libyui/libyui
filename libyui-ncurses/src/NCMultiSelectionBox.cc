@@ -301,36 +301,41 @@ void NCMultiSelectionBox::wRecoded()
 NCursesEvent NCMultiSelectionBox::wHandleInput( int key )
 {
   NCursesEvent ret;
+  bool valueChanged = false;
+  int oldCurrentItem = getCurrentItem();
 
-  if ( handleInput( key ) )
-    return ret;
-
-  bool selectionChanged = false;
-
-  switch ( key ) {
-  case KEY_SPACE:
-  case KEY_RETURN:
-    toggleCurrentItem();
-    selectionChanged = true;
-    break;
-  case '+':
-    if ( !itemIsSelected( getCurrentItem() ) ) {
-      setItemSelected( getCurrentItem(), true, false );
-      selectionChanged = true;
+  if ( ! handleInput( key ) )
+  {
+    switch ( key ) {
+    case KEY_SPACE:
+    case KEY_RETURN:
+      toggleCurrentItem();
+      valueChanged = true;
+      break;
+    case '+':
+      if ( !itemIsSelected( getCurrentItem() ) ) {
+        setItemSelected( getCurrentItem(), true, false );
+        valueChanged = true;
+      }
+      pad->ScrlDown();
+      break;
+    case '-':
+      if ( itemIsSelected( getCurrentItem() ) ) {
+        setItemSelected( getCurrentItem(), false, false );
+        valueChanged = true;
+      }
+      pad->ScrlDown();
+      break;
     }
-    pad->ScrlDown();
-    break;
-  case '-':
-    if ( itemIsSelected( getCurrentItem() ) ) {
-      setItemSelected( getCurrentItem(), false, false );
-      selectionChanged = true;
-    }
-    pad->ScrlDown();
-    break;
   }
 
-  if ( getNotify() && selectionChanged )
-    ret = NCursesEvent::button;
+  if ( getNotify() )
+  {
+    if ( valueChanged )
+      ret = NCursesEvent::ValueChanged;
+    else if ( oldCurrentItem != getCurrentItem() )
+      ret = NCursesEvent::SelectionChanged;
+  }
 
   return ret;
 }

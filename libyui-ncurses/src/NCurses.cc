@@ -33,6 +33,10 @@ using namespace std;
 
 NCurses * NCurses::myself = 0;
 set<NCDialog*> NCurses::_knownDlgs;
+const NCursesEvent NCursesEvent::Activated        ( NCursesEvent::button, YEvent::Activated        );
+const NCursesEvent NCursesEvent::SelectionChanged ( NCursesEvent::button, YEvent::SelectionChanged );
+const NCursesEvent NCursesEvent::ValueChanged     ( NCursesEvent::button, YEvent::ValueChanged     );
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -110,6 +114,7 @@ ostream & operator<<( ostream & STREAM, const NCursesEvent & OBJ )
   ENUM_OUT( cancel );
   ENUM_OUT( button );
   ENUM_OUT( menu );
+  ENUM_OUT( timeout );
   }
 #undef ENUM_OUT
   return STREAM << "Ev::unknown";

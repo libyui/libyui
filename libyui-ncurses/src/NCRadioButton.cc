@@ -179,13 +179,15 @@ void NCRadioButton::wRedraw()
 NCursesEvent NCRadioButton::wHandleInput( int key )
 {
   NCursesEvent ret;
+  bool oldChecked = checked;
+  
   switch ( key ) {
   case KEY_HOTKEY:
   case KEY_SPACE:
   case KEY_RETURN:
     setValue( true );
-    if ( getNotify() )
-      ret = NCursesEvent::button;
+    if ( getNotify() && oldChecked != checked )
+      ret = NCursesEvent::ValueChanged;
     break;
   }
   return ret;

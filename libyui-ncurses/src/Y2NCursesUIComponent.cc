@@ -21,6 +21,7 @@
 #include <yui/YUIInterpreter.h>
 #include "Y2NCursesUI.h"
 #include <ycp/y2log.h>
+#include <string>
 
 Y2NCursesUIComponent::Y2NCursesUIComponent()
     : argc(0)
@@ -49,18 +50,36 @@ string Y2NCursesUIComponent::name() const
 
 YCPValue Y2NCursesUIComponent::evaluate(const YCPValue &command)
 {
+    const char * macro_file = 0;
+    
     if (!interpreter)
     {
 	y2milestone ("Launch Y2NCursesUI...");
+	
 	for (int i=1; i<argc; i++)
 	{
-	    if (!strcmp(argv[i], "--nothreads"))
+	    if ( strcmp( argv[i], "--nothreads" ) == 0 )
 	    {
 		with_threads = false;
 		y2milestone ("Running Y2NCursesUI without threads");
 	    }
+	    else if ( strcmp( argv[i], "--macro" ) == 0 )
+	    {
+		if ( i+1 >= argc )
+		{
+		    y2error( "Missing arg for '--macro'" );
+		    fprintf( stderr, "y2base ncurses: Missing argument for --macro\n" );
+		    exit( 1 );
+		}
+		else
+		{
+		    macro_file = argv[++i];
+		    y2milestone( "Playing macro '%s' from command line",
+				 macro_file ? macro_file : "<NULL>" );
+		}
+	    }
 	}
-	interpreter = new Y2NCursesUI (with_threads, getCallback());
+	interpreter = new Y2NCursesUI (with_threads, macro_file, getCallback());
 	if (!interpreter)
 	{
 	    y2internal("Launch Y2NCursesUI failed");

@@ -111,6 +111,7 @@ class NCTreeLine : public NCTableLine {
 	if ( !fchild->isVisible() )
 	  return 0;
 	break;
+      case KEY_SPACE:
       case '+':
       case '-':
 	break;
@@ -387,17 +388,22 @@ void NCTree::DrawPad()
 NCursesEvent NCTree::wHandleInput( int key )
 {
   NCursesEvent ret;
+  const YTreeItem * oldCurrentItem = getCurrentItem();
 
-  if ( handleInput( key ) )
-    return ret;
-
-  switch ( key ) {
-  case KEY_SPACE:
-  case KEY_RETURN:
-    if ( getNotify() && getCurrentItem() )
-      ret = NCursesEvent::button;
-    break;
+  if ( ! handleInput( key ) )
+  {
+    switch ( key ) {
+      case KEY_SPACE:
+      case KEY_RETURN:
+        if ( getNotify() )
+	  return NCursesEvent::Activated;
+      break;
+    }
   }
-   return ret;
+  
+  if ( getNotify() && oldCurrentItem != getCurrentItem() )
+      ret = NCursesEvent::SelectionChanged;
+  
+  return ret;
 }
 
