@@ -175,7 +175,13 @@ public:
     /**
      * Check if dialogs are to be activated automatically
      **/
-    bool autoActivateDialogs() { return auto_activate_dialogs; }
+    bool autoActivateDialogs() const { return auto_activate_dialogs; }
+
+    /**
+     * Are we running embedded into another application, e.g., inside the KDE
+     * control center? 
+     **/
+    bool runningEmbedded() const { return running_embedded; }
 
 
 signals:
@@ -530,9 +536,16 @@ private:
     bool wm_close_blocked;
 
     /**
-     *
+     * Force new dialogs to the foreground and grab the keyboard focus?
+     * (Only if running without a window manager)
      **/
     bool auto_activate_dialogs;
+
+    /**
+     * Are we running embedded into another application, e.g., inside the KDE
+     * control center? 
+     **/
+    bool running_embedded;
 
     /**
      * Window ID for KDE control center

@@ -96,6 +96,7 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
     , loaded_heading_font(false)
     , wm_close_blocked(false)
     , auto_activate_dialogs(true)
+    , running_embedded(false)
 {
     _yuiqt 			= this;
     _fatal_error		= false;
@@ -231,7 +232,6 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
     if ( _fullscreen || ! _have_wm )
 	main_win->move( 0, 0 );
 
-    main_win->hide();	// visible only upon showDialog()
     busy_cursor = new QCursor( WaitCursor );
 
 
@@ -256,11 +256,33 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
 	main_win->setCaption( title );
 	kcontrol_id = title;
     }
-    else
+    else // --kcontrol_id in command line
     {
+	running_embedded = true;
 	main_win->setCaption( kcontrol_id );
     }
 
+
+    // Hide the main window unless we are running embedded. The first call to
+    // UI::OpenDialog() on an `opt(`defaultSize) dialog will trigger a
+    // showDialog() call that shows the main window - there is nothing to
+    // display yet.
+    //
+    // In embedded mode, keep the main window open so the embedding application
+    // (kcontrol) catches the main window as YaST2's first window and not some
+    // popup window that may appear before this. An empty grey area for the
+    // main window (that will appear for a while) is a lot better than a
+    // "please wait" popup zoomed to near full screen that may be embedded -
+    // with a large main window that opens somewhere else on the screen.
+
+    if ( ! running_embedded )
+	main_win->hide();
+    else
+    {
+	main_win->show();
+	y2milestone( "Running in embedded mode - leaving main window open" );
+    }
+    
 
     //  Init other stuff
 
@@ -279,7 +301,7 @@ YUIQt::~YUIQt()
     y2debug("Closing down Qt UI.");
 
     normalCursor();
-    
+
     if ( busy_cursor )
 	delete busy_cursor;
 }
@@ -426,12 +448,11 @@ void YUIQt::showDialog( YDialog *dialog )
 
 	if ( ! main_win->isVisible() )
 	{
+	    // y2milestone( "Showing main window" );
 	    main_win->resize( default_size );
 
 	    if ( ! _have_wm )
-	    {
 		main_win->move( 0, 0 );
-	    }
 
 	    main_win->show();
 	    qw->setFocus();
@@ -464,7 +485,16 @@ void YUIQt::closeDialog( YDialog *dialog )
 
 	if ( --main_dialog_id < 1 )	// nothing left on the stack
 	{
-	    main_win->hide();
+	    if ( ! running_embedded )
+	    {
+		// y2milestone( "Hiding main window" );
+		main_win->hide();
+	    }
+	    else
+	    {
+		y2milestone( "Running embedded - keeping (empty) main window open" );
+	    }
+	    
 	    main_dialog_id = 0;	// this should not be necessary - but better be safe than sorry
 	}
 	else
@@ -1062,12 +1092,10 @@ bool YUIQt::showEventFilter( QObject * obj, QEvent * ev )
 	// Make sure newly opened windows get the keyboard focus even without a
 	// window manager. Otherwise the app might be unusable without a mouse.
 
-	QWidget * wid = dynamic_cast<QWidget *> (obj);
+	QWidget * widget = dynamic_cast<QWidget *> (obj);
 
-	if ( wid )
-	{
-	    wid->setActiveWindow();
-	}
+	if ( widget )
+	    widget->setActiveWindow();
     }
 
     return false;	// Don't stop event processing
