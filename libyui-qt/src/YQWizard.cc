@@ -103,6 +103,19 @@ YQWizard::YQWizard( QWidget *		parent,
 
     layoutSideBar( hBox );
     layoutWorkArea( hBox );
+
+
+
+
+#if 1
+
+    setDialogIcon( "/usr/share/YaST2/images/samba-server.png" );
+    setDialogHeading( "Welcome to the YaST2 installation" );
+    setHelpText( "<p>This is a help text.</p>"
+		 "<p>It should be helpful.</p>"
+		 "<p>If it isn't helpful, it should rather not be called a "
+		 "<i>help text</i>.</p>" );
+#endif
 }
 
 
@@ -343,15 +356,6 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
     setBottomCroppedGradient( bottomSpacer, _bottomGradientPixmap, WORK_AREA_BOTTOM_MARGIN );
 
     addGradientColumn( parentHBox, WORK_AREA_RIGHT_MARGIN );
-
-
-
-#if 1
-
-    setDialogIcon( "/usr/share/YaST2/images/user_add.png" );
-    setDialogHeading( "Welcome to the YaST2 installation" );
-
-#endif
 }
 
 
@@ -372,6 +376,8 @@ void YQWizard::layoutClientArea( QWidget * parent )
 
     _dialogIcon = new QLabel( headingHBox );
     CHECK_PTR( _dialogIcon );
+    
+    addHSpacing( headingHBox );
 
     _dialogHeading = new QLabel( headingHBox );
     CHECK_PTR( _dialogHeading );
@@ -385,11 +391,11 @@ void YQWizard::layoutClientArea( QWidget * parent )
     QHBox * hbox = new QHBox( _clientArea );
 
     addHSpacing( hbox, SEPARATOR_MARGIN );
-    
+
     QFrame * separator = new QFrame( hbox );
     CHECK_PTR( separator );
     separator->setFrameStyle( QFrame::HLine | QFrame::Sunken );
-    
+
     addHSpacing( hbox, SEPARATOR_MARGIN );
     addVSpacing( _clientArea );
 #endif
@@ -636,7 +642,7 @@ void YQWizard::setDialogIcon( const char * iconName )
 }
 
 
-void YQWizard::setDialogHeading( const char * headingText )
+void YQWizard::setDialogHeading( const QString & headingText )
 {
     if ( _dialogHeading )
     {
@@ -644,6 +650,18 @@ void YQWizard::setDialogHeading( const char * headingText )
 	    _dialogHeading->setText( headingText );
 	else
 	    _dialogHeading->clear();
+    }
+}
+
+
+void YQWizard::setHelpText( const QString & helpText )
+{
+    if ( _helpBrowser )
+    {
+	if ( helpText )
+	    _helpBrowser->setText( helpText );
+	else
+	    _helpBrowser->clear();
     }
 }
 
