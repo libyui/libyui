@@ -90,6 +90,8 @@ string NCPkgTableTag::statusToStr( PMSelectable::UI_Status stat ) const
 	    return " a> ";    
 	case PMSelectable::S_Taboo:	// Never install this 
 	    return " ---";
+	case PMSelectable::S_Protected:	// always keep installed version 
+	    return " -i-";
 	default:
 	    return "####";
     }

@@ -125,6 +125,10 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 	    {
 		retStat = PMSelectable::S_NoInst;
 	    }
+	    else if (  oldStatus == PMSelectable::S_Protected )
+	    {
+		retStat = PMSelectable::S_KeepInstalled;
+	    }
 	    else
 	    {
 		valid = false;
@@ -171,6 +175,10 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 	    if ( oldStatus == PMSelectable::S_NoInst || oldStatus == PMSelectable::S_AutoInstall )
 	    {
 		retStat = PMSelectable::S_Taboo;
+	    }
+	    else if  ( oldStatus == PMSelectable::S_KeepInstalled )
+	    {
+		retStat = PMSelectable::S_Protected;
 	    }
 	    else
 	    {
