@@ -822,7 +822,8 @@ wint_t NCDialog::getinput()
 
 	if ( gotch != -1 )
 	{
-	    if ( isalnum( gotch ) )	// recode alphamumeric chars
+	    NCDBG << "isprint( " << gotch << " ) " << (isprint(gotch)?"true":"false") << endl;
+	    if ( isprint( gotch ) )	// recode printable chars
 	    {
 		string str;
 		str += static_cast<char>(gotch);
