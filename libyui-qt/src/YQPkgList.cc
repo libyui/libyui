@@ -81,7 +81,6 @@ YQPkgList::addPkgItem( PMPackagePtr pmPkg )
 }
 
 
-
 void
 YQPkgList::pkgObjClicked( int button, QListViewItem * listViewItem, int col )
 {
@@ -126,6 +125,18 @@ YQPkgListItem::YQPkgListItem( YQPkgList * pkgList, PMPackagePtr pmPkg )
 
     setStatusIcon();
     setInstallSourceRpm( false ); // No other chance - RPM won't tell if a SRPM is installed
+    _candidateIsNewer = false;
+    _installedIsNewer = false;
+
+    PMObjectPtr candidate = _pmPkg->getCandidateObj();
+    PMObjectPtr installed = _pmPkg->getInstalledObj();
+
+    if ( candidate && installed )
+    {
+	_candidateIsNewer = candidate->edition() > installed->edition();
+	_installedIsNewer = candidate->edition() < installed->edition();
+	// Cache this information, it's expensive to obtain!
+    }
 }
 
 
@@ -194,21 +205,28 @@ YQPkgListItem::paintCell( QPainter *		painter,
 			  int			width,
 			  int			alignment )
 {
-    if ( ! pmObj()->getCandidateObj() )
+    if ( _installedIsNewer )
     {
 	QColorGroup cg = colorGroup;
 
-	// dark blue foreground
-	cg.setColor( QColorGroup::Text, QColor( 0, 0, 0xC0 ) );
-	cg.setColor( QColorGroup::Base, QColor( 0xF0, 0xF0, 0xF0 ) );
 
-#if 0
 	if ( column == instVersionCol() )
 	{
-	    // set background
-	    cg.setColor( QColorGroup::Base, QColor( 0xF0, 0xF0, 0xFF ) );
+	    cg.setColor( QColorGroup::Base, QColor( 0xFF, 0x30, 0x30 ) );	// Background
 	}
-#endif
+	else
+	{
+	    cg.setColor( QColorGroup::Text, QColor( 0xFF, 0, 0 ) );		// Foreground
+	}
+
+	QListViewItem::paintCell( painter, cg, column, width, alignment );
+    }
+    else if ( _candidateIsNewer )
+    {
+	QColorGroup cg = colorGroup;
+
+	cg.setColor( QColorGroup::Base, QColor( 0xF0, 0xF0, 0xF0 ) );	// Background
+	cg.setColor( QColorGroup::Text, QColor( 0, 0, 0xC0 ) );		// Foreground
 
 	QListViewItem::paintCell( painter, cg, column, width, alignment );
     }

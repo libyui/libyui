@@ -174,6 +174,8 @@ protected:
 
     YQPkgList *		_pkgList;
     PMPackagePtr	_pmPkg;
+    bool		_candidateIsNewer;
+    bool		_installedIsNewer;
 
 
     // FIXME
