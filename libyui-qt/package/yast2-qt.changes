@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Nov 11 17:58:23 CET 2002 - sh@suse.de
+
+- Support for buttons with icons and text
+
+-------------------------------------------------------------------
 Fri Nov  8 16:18:33 CET 2002 - sh@suse.de
 
 - Fixed bug #20326: [Cancel] doesn't abandon changes in package mgr

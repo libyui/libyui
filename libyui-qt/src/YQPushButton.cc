@@ -42,7 +42,7 @@ YQPushButton::YQPushButton(YUIQt *yuiqt,
     , yuiqt(yuiqt)
 {
     setWidgetRep((QWidget *)this);
-    qt_pushbutton = new QPushButton(fromUTF8(label->value()), this);
+    qt_pushbutton = new QPushButton( fromUTF8(label->value()), this);
     qt_pushbutton->setFont(yuiqt->currentFont());
     qt_pushbutton->setMinimumSize(2,2);
     qt_pushbutton->setAutoDefault( true );
@@ -58,6 +58,26 @@ YQPushButton::YQPushButton(YUIQt *yuiqt,
 void YQPushButton::setEnabling(bool enabled)
 {
     qt_pushbutton->setEnabled(enabled);
+}
+
+
+void YQPushButton::setIcon( const YCPString & y_icon_name )
+{
+    QString icon_name = fromUTF8( y_icon_name->value() );
+
+    if ( icon_name.isEmpty() )
+    {
+	qt_pushbutton->setIconSet( QIconSet() );
+	return;
+    }
+
+    icon_name = QString( ICONDIR ) + "/" + icon_name;
+    QPixmap icon( icon_name );
+
+    if ( icon.isNull() )
+	y2warning( "Can't load icon '%s'", (const char *) icon_name );
+    else
+	qt_pushbutton->setIconSet( icon );
 }
 
 
@@ -124,7 +144,7 @@ bool YQPushButton::eventFilter( QObject *obj, QEvent *event )
 	return false;	// event processed?
     }
 #endif
-    return QWidget::eventFilter( obj, event );   
+    return QWidget::eventFilter( obj, event );
 }
 
 

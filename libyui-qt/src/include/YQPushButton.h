@@ -91,6 +91,13 @@ public:
      */
     virtual bool setKeyboardFocus();
 
+    /**
+     * Set this button's icon.
+     * Inherited from YPushButton.
+     **/
+    virtual void setIcon( const YCPString & icon_name );
+
+    
 protected:
 
     /**
