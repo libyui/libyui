@@ -243,14 +243,14 @@ void YQUI::askSaveLogs()
 	    }
 	    else
 	    {
-		y2milestone( "y2logs saved to %s", (const char *) fileName, result );
+		y2milestone( "y2logs saved to %s", (const char *) fileName );
 	    }
 	}
 	else
 	{
 	    y2error( "Error saving y2logs: Command %s not found",
 		     saveLogsCommand.ascii() );
-	    
+
 	    QMessageBox::warning( 0,						// parent
 				  "Error",					// caption
 				  QString( "Couldn't save y2logs to %1:\n"
