@@ -31,8 +31,6 @@
 #include "YQi18n.h"
 
 
-#warning TODO: Make sure all files are included in POTFILES!
-
 void
 YQPackageSelector::help()
 {
