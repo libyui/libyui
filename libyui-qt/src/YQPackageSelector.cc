@@ -516,11 +516,12 @@ YQPackageSelector::layoutMenuBar( QWidget * parent )
     _menuBar = new QMenuBar( parent );
     CHECK_PTR( _menuBar );
 
-    _fileMenu	= 0;
-    _viewMenu	= 0;
-    _pkgMenu 	= 0;
-    _extrasMenu	= 0;
-    _helpMenu 	= 0;
+    _fileMenu		= 0;
+    _viewMenu		= 0;
+    _pkgMenu 		= 0;
+    _youPatchMenu 	= 0;
+    _extrasMenu		= 0;
+    _helpMenu 		= 0;
 
 }
 
@@ -548,7 +549,7 @@ YQPackageSelector::addMenus()
     _fileMenu->insertItem( _( "&Quit - Save Changes"    ), this, SLOT( accept() ) );
 
 
-    if ( _pkgList )
+    if ( _pkgList && ! _youMode )
     {
 	//
 	// Package menu
@@ -577,6 +578,27 @@ YQPackageSelector::addMenus()
 	submenu->insertSeparator();
 	_pkgList->actionInstallListSourceRpms->addTo( submenu );
 	_pkgList->actionDontInstallListSourceRpms->addTo( submenu );
+    }
+
+
+    if ( _youMode && _youPatchList )
+    {
+	//
+	// YOU Patch menu
+	//
+
+	_youPatchMenu = new QPopupMenu( _menuBar );
+	CHECK_PTR( _youPatchMenu );
+	_menuBar->insertItem( _( "&YOU Patch" ), _youPatchMenu );
+
+	_youPatchList->actionSetCurrentInstall->addTo( _youPatchMenu );
+	_youPatchList->actionSetCurrentDontInstall->addTo( _youPatchMenu );
+	_youPatchList->actionSetCurrentKeepInstalled->addTo( _youPatchMenu );
+	_youPatchList->actionSetCurrentUpdate->addTo( _youPatchMenu );
+	_youPatchList->actionSetCurrentTaboo->addTo( _youPatchMenu );
+
+	_youPatchMenu->insertSeparator();
+        _youPatchList->addAllInListSubMenu( _youPatchMenu );
     }
 
 
@@ -692,13 +714,19 @@ YQPackageSelector::makeConnections()
 
 
     //
-    // Update pkg actions just before opening the pkg menu
+    // Update actions just before opening menus
     //
 
     if ( _pkgMenu && _pkgList )
     {
-	connect( _pkgMenu, SIGNAL( aboutToShow()   ),
-		 _pkgList, SLOT  ( updateActions() ) );
+	connect( _pkgMenu, 	SIGNAL( aboutToShow()   ),
+		 _pkgList, 	SLOT  ( updateActions() ) );
+    }
+
+    if ( _youPatchMenu && _youPatchList )
+    {
+	connect( _youPatchMenu,	SIGNAL( aboutToShow()   ),
+		 _youPatchList, SLOT  ( updateActions() ) );
     }
 
 

@@ -293,6 +293,7 @@ protected:
     QPopupMenu *			_fileMenu;
     QPopupMenu *			_viewMenu;
     QPopupMenu *			_pkgMenu;
+    QPopupMenu *			_youPatchMenu;
     QPopupMenu *			_extrasMenu;
     QPopupMenu *			_helpMenu;
 };

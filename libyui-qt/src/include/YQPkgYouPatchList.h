@@ -106,6 +106,14 @@ public:
      **/
     void setShowInstalledPatches( bool show ) { _showInstalledPatches = show; }
 
+    /**
+     * Add a submenu "All in this list..." to 'menu'.
+     * Returns the newly created submenu.
+     *
+     * Reimplemented from YQPkgObjList.
+     **/
+    virtual QPopupMenu * addAllInListSubMenu( QPopupMenu * menu );
+
 
 signals:
 
@@ -147,14 +155,6 @@ protected:
      * Reimplemented from YQPkgObjList.
      **/
     virtual void createInstalledContextMenu();
-
-    /**
-     * Add a submenu "All in this list..." to 'menu'.
-     * Returns the newly created submenu.
-     *
-     * Reimplemented from YQPkgObjList.
-     **/
-    virtual QPopupMenu * addAllInListSubMenu( QPopupMenu * menu );
 
     /**
      * Event handler for keyboard input.
