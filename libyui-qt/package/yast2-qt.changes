@@ -1,8 +1,13 @@
 -------------------------------------------------------------------
+Tue Feb 10 20:36:34 CET 2004 - arvin@suse.de
+
+- include YQWizard.h in tar-ball
+
+-------------------------------------------------------------------
 Tue Feb 10 18:45:36 CET 2004 - sh@suse.de
 
 - V 2.9.3
-- Merged wizard-widget-branch to HEAD with NI 
+- Merged wizard-widget-branch to HEAD with NI
 - Misc small fixes
 
 -------------------------------------------------------------------
@@ -14,7 +19,7 @@ Wed Feb  4 17:42:03 CET 2004 - sh@suse.de
 -------------------------------------------------------------------
 Thu Jan 29 19:49:03 CET 2004 - sh@suse.de
 
-- Fixed Y2Component handling 
+- Fixed Y2Component handling
 
 -------------------------------------------------------------------
 Tue Jan 27 18:05:43 CET 2004 - sh@suse.de
@@ -22,7 +27,7 @@ Tue Jan 27 18:05:43 CET 2004 - sh@suse.de
 - V 2.9.1
 - Adapted to new interpreter (visnov@suse.cz)
 - Adapted to new libyui naming scheme
-- Consistent naming scheme 
+- Consistent naming scheme
 
 -------------------------------------------------------------------
 Fri Nov 14 11:30:35 CET 2003 - mvidner@suse.cz
@@ -32,7 +37,7 @@ Fri Nov 14 11:30:35 CET 2003 - mvidner@suse.cz
 -------------------------------------------------------------------
 Tue Oct 21 16:03:20 CEST 2003 - sh@suse.de
 
-- Fixed bug #32510: Excess initial SelBox SelectionChanged event 
+- Fixed bug #32510: Excess initial SelBox SelectionChanged event
 
 -------------------------------------------------------------------
 Fri Oct 10 12:24:00 CEST 2003 - sh@suse.de
@@ -40,7 +45,7 @@ Fri Oct 10 12:24:00 CEST 2003 - sh@suse.de
 - V 2.9.0
 
 - Applied cschum's fix for bug #31965:
-  Wrong encoding in YOU "display raw package info" dialog 
+  Wrong encoding in YOU "display raw package info" dialog
 
 -------------------------------------------------------------------
 Fri Sep 19 17:19:13 CEST 2003 - sh@suse.de
@@ -49,8 +54,8 @@ Fri Sep 19 17:19:13 CEST 2003 - sh@suse.de
 
 - Applied visnov's patch to fix bug #5547: IntField value
 
-- Fixed bug #31015 thanks to llunak: "Solving dependencies" 
-  popup without WM decoreations 
+- Fixed bug #31015 thanks to llunak: "Solving dependencies"
+  popup without WM decoreations
 
 -------------------------------------------------------------------
 Wed Sep 17 17:59:15 CEST 2003 - sh@suse.de
@@ -60,7 +65,7 @@ Wed Sep 17 17:59:15 CEST 2003 - sh@suse.de
 -------------------------------------------------------------------
 Wed Sep 17 15:31:22 CEST 2003 - sh@suse.de
 
-- Fixed bug #30236: Bad fullscreen geometry for some window managers 
+- Fixed bug #30236: Bad fullscreen geometry for some window managers
 
 -------------------------------------------------------------------
 Wed Sep 17 14:55:35 CEST 2003 - sh@suse.de
@@ -81,13 +86,13 @@ Wed Sep 17 12:37:02 CEST 2003 - sh@suse.de
 Mon Sep 15 16:15:20 CEST 2003 - sh@suse.de
 
 - V 2.8.13
-- Better fix for bug #30500 by jw@suse.de 
+- Better fix for bug #30500 by jw@suse.de
 
 -------------------------------------------------------------------
 Fri Sep 12 16:51:37 CEST 2003 - sh@suse.de
 
 - V 2.8.12
-- Interim fix for bug #30500 
+- Interim fix for bug #30500
 
 -------------------------------------------------------------------
 Mon Sep  8 15:43:54 CEST 2003 - sh@suse.de
@@ -101,7 +106,7 @@ Fri Sep  5 17:01:14 CEST 2003 - sh@suse.de
 
 - V 2.8.10
 - Fixed bug #30151: Enable starting pkg mgr in search mode
-  by default in installed system 
+  by default in installed system
 
 -------------------------------------------------------------------
 Thu Sep  4 17:14:49 CEST 2003 - sh@suse.de
@@ -118,14 +123,14 @@ Tue Sep  2 13:39:42 CEST 2003 - sh@suse.de
 -------------------------------------------------------------------
 Mon Sep  1 18:15:45 CEST 2003 - sh@suse.de
 
-- Fixed bug #27336: Combo box for YOU patch selection 
+- Fixed bug #27336: Combo box for YOU patch selection
 - Fixed bug #27437: Display YOU pre/post scripts / extra files
 
 -------------------------------------------------------------------
 Mon Sep  1 16:34:42 CEST 2003 - sh@suse.de
 
 - V 2.8.8
-- Fixed bug #29529: Package links 
+- Fixed bug #29529: Package links
 
 -------------------------------------------------------------------
 Fri Aug 29 13:12:22 CEST 2003 - sh@suse.de
@@ -138,13 +143,13 @@ Wed Aug 27 12:20:32 CEST 2003 - sh@suse.de
 
 - V 2.8.6
 - Removed qApp->unlock() at end of YUIQt constructor:
-  No more QMutex warning in log 
+  No more QMutex warning in log
 
 -------------------------------------------------------------------
 Tue Aug 12 15:02:25 CEST 2003 - gs@suse.de
 
 - V 2.8.5
-- merge texts from proofread 
+- merge texts from proofread
 
 -------------------------------------------------------------------
 Tue Jul 15 17:24:50 CEST 2003 - sh@suse.de
@@ -153,20 +158,20 @@ Tue Jul 15 17:24:50 CEST 2003 - sh@suse.de
 - Lots of internal reworking
 - Completely reworked event handling
 - No more self-generated events during widget creation / ChangeWidget
-- Basic support for right-to-left languages like Arabic / Hebrew 
+- Basic support for right-to-left languages like Arabic / Hebrew
   (not perfect yet)
 
 -------------------------------------------------------------------
 Tue Jun 10 15:30:13 CEST 2003 - sh@suse.de
 
 - V 2.8.3
-- Don't build obsolete standalone server component "qt" any more 
+- Don't build obsolete standalone server component "qt" any more
 - Don't install header files: they are not packaged anyway
 
 -------------------------------------------------------------------
 Wed Jun  4 11:25:52 CEST 2003 - sh@suse.de
 
-- V 2.8.2 
+- V 2.8.2
 - Fixed yet another ambituous overload due to changed Qt lib
 
 -------------------------------------------------------------------
@@ -183,7 +188,7 @@ Thu Apr 10 15:29:01 CEST 2003 - sh@suse.de
 -------------------------------------------------------------------
 Tue Apr  8 13:39:02 CEST 2003 - sh@suse.de
 
-- Fixed bug #26155: Hiding YOU patches marked for update 
+- Fixed bug #26155: Hiding YOU patches marked for update
 
 -------------------------------------------------------------------
 Wed Mar 12 18:39:26 CET 2003 - sh@suse.de
@@ -219,7 +224,7 @@ Thu Mar  6 17:49:30 CET 2003 - sh@suse.de
 -------------------------------------------------------------------
 Wed Mar  5 21:47:35 CET 2003 - sh@suse.de
 
-- Fixed bug #24707: QListView tooltips only on right scroll bar 
+- Fixed bug #24707: QListView tooltips only on right scroll bar
 
 -------------------------------------------------------------------
 Fri Feb 28 17:23:38 CET 2003 - sh@suse.de
@@ -244,7 +249,7 @@ Fri Feb 28 12:34:31 CET 2003 - sh@suse.de
 -------------------------------------------------------------------
 Thu Feb 27 18:03:03 CET 2003 - sh@suse.de
 
-- Fixed bug #24445: Missing status update when importing pkg list 
+- Fixed bug #24445: Missing status update when importing pkg list
 
 -------------------------------------------------------------------
 Thu Feb 27 17:29:29 CET 2003 - sh@suse.de
@@ -269,18 +274,18 @@ Tue Feb 25 17:32:45 CET 2003 - sh@suse.de
 -------------------------------------------------------------------
 Tue Feb 25 16:28:13 CET 2003 - sh@suse.de
 
-- Fixed bug #24255: Multiple search in yast2-qt package 
+- Fixed bug #24255: Multiple search in yast2-qt package
 
 -------------------------------------------------------------------
 Tue Feb 25 14:50:18 CET 2003 - sh@suse.de
 
 - Fixed wrong tool tip "this version is installed in your system"
-  (for all versions) in package manager "versions" view 
+  (for all versions) in package manager "versions" view
 
 -------------------------------------------------------------------
 Tue Feb 25 14:35:11 CET 2003 - sh@suse.de
 
-- Fixed bug #23855: Asking for loading Modules does not have focus 
+- Fixed bug #23855: Asking for loading Modules does not have focus
 
 -------------------------------------------------------------------
 Mon Feb 24 17:35:40 CET 2003 - sh@suse.de
@@ -291,7 +296,7 @@ Mon Feb 24 17:35:40 CET 2003 - sh@suse.de
 -------------------------------------------------------------------
 Thu Feb 20 17:58:39 CET 2003 - sh@suse.de
 
-- Fixed bug #23868: Handle preformatted notify texts 
+- Fixed bug #23868: Handle preformatted notify texts
 
 -------------------------------------------------------------------
 Thu Feb 20 17:14:07 CET 2003 - sh@suse.de
@@ -303,7 +308,7 @@ Thu Feb 20 17:14:07 CET 2003 - sh@suse.de
 Thu Feb 20 16:38:11 CET 2003 - sh@suse.de
 
 - Fixed bug #23914: Package manager crashes when opening "package"
-  menu and package list is empty (e.g., empty search result) 
+  menu and package list is empty (e.g., empty search result)
 
 -------------------------------------------------------------------
 Wed Feb 19 16:18:06 CET 2003 - sh@suse.de
@@ -313,7 +318,7 @@ Wed Feb 19 16:18:06 CET 2003 - sh@suse.de
 -------------------------------------------------------------------
 Wed Feb 19 14:58:39 CET 2003 - sh@suse.de
 
-- Fixed bug #23654: Window partially invisible 
+- Fixed bug #23654: Window partially invisible
 
 -------------------------------------------------------------------
 Wed Feb 19 11:52:39 CET 2003 - sh@suse.de
@@ -363,7 +368,7 @@ Thu Feb 13 13:18:23 CET 2003 - sh@suse.de
 Mon Feb 10 17:23:28 CET 2003 - sh@suse.de
 
 - V 2.7.10
-- New package status "protected" 
+- New package status "protected"
 
 -------------------------------------------------------------------
 Mon Feb 10 15:30:27 CET 2003 - sh@suse.de
@@ -371,7 +376,7 @@ Mon Feb 10 15:30:27 CET 2003 - sh@suse.de
 - V 2.7.9
 - Don't force Unicode font
 - Show different icons in package manager for autoinstall etc. by
-  selection and autoinstall etc. by dependencies 
+  selection and autoinstall etc. by dependencies
 
 -------------------------------------------------------------------
 Fri Jan 31 18:11:03 CET 2003 - sh@suse.de
@@ -384,20 +389,20 @@ Wed Jan 29 17:11:07 CET 2003 - sh@suse.de
 
 - V 2.7.7
 - User messages back from proofreading
-- Show auto-packages on demand in package manager 
+- Show auto-packages on demand in package manager
 
 -------------------------------------------------------------------
 Mon Jan 27 17:10:32 CET 2003 - sh@suse.de
 
 - V 2.7.6
 - Added "rpm-devel" to "neededforbuild"
-- Support enabling/disabling for container widgets as well 
+- Support enabling/disabling for container widgets as well
 - Show "auto changes" popup in package manager
 
 - YOU mode package manager changes:
   - Show total download size
   - Dropped "Packages" menu (pkgs are read-only there)
-  - Added "YOU Patches" menu instead 
+  - Added "YOU Patches" menu instead
   - Addes "Show raw patch info" dialog
 
 -------------------------------------------------------------------
@@ -405,7 +410,7 @@ Tue Jan 21 18:06:15 CET 2003 - sh@suse.de
 
 - V 2.7.5
 - Use textdomain "qt-packages" for all texts to avoid textdomain
-  name clashes 
+  name clashes
 - New command line options --fullscreen, --noborder
 - Fixed busy cursors
 
@@ -416,7 +421,7 @@ Mon Jan 20 20:00:44 CET 2003 - sh@suse.de
   - Enhanced feedback while checking dependencies
   - Changed default to "off" for auto dependency check
   - Save/load ignored dependency conflicts to/from
-    /var/adm/YaST/ignored-conflicts 
+    /var/adm/YaST/ignored-conflicts
 - Bumped version to 2.7.4
 
 -------------------------------------------------------------------
@@ -424,7 +429,7 @@ Tue Jan 14 19:05:09 CET 2003 - sh@suse.de
 
 - Package manager enhancements:
   - Added menu bar
-  - Added bubble help for all kinds of lists 
+  - Added bubble help for all kinds of lists
   - Rearranged pkg list columns (moved summary left)
   - Re-enabled source RPM handling
   - Added currently installed version to "versions" view

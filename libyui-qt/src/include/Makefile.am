@@ -7,7 +7,7 @@ SUBDIRS = icons
 pkgincludedir = $(includedir)/y2qt
 
 pkginclude_HEADERS =				\
-	YQUI.h					
+	YQUI.h
 
 noinst_HEADERS =				\
 	utf8.h					\
@@ -71,6 +71,7 @@ noinst_HEADERS =				\
 	YQTable.h				\
 	YQTextEntry.h				\
 	YQTree.h				\
+	YQWizard.h				\
 						\
 	YFrameBuffer.h				\
 	QY2BarGraph.h				\
