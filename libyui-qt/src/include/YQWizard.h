@@ -125,6 +125,11 @@ protected:
     void destroyButtons();
 
     /**
+     * Add a (left or right) margin common to the help panel.
+     **/
+    void addHelpMarginColumn( QWidget * parent );
+    
+    /**
      * Send a wizard event with the specified ID.
      **/
     void sendEvent( YCPValue id );
@@ -142,12 +147,13 @@ protected:
     QTextBrowser *		_helpBrowser;
     QPushButton *		_stepsButton;
 
-    QVBox *		_clientArea;
-    YQReplacePoint *	    _contentsReplacePoint;
-    QHBox *		_buttonBox;
-    QPushButton *	    _backButton;
-    QPushButton *	    _abortButton;
-    QPushButton *	    _nextButton;
+    QVBox *		_workArea;
+    QVBox *		    _clientArea;
+    YQReplacePoint *	        _contentsReplacePoint;
+    QHBox *		    _buttonBox;
+    QPushButton *	        _abortButton;
+    QPushButton *	        _backButton;
+    QPushButton *	        _nextButton;
 };
 
 #endif // YQWizard_h

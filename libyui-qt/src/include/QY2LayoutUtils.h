@@ -29,22 +29,22 @@ class QWidget;
 /**
  * Add vertical stretchable space.
  **/
-void addVStretch( QWidget * parent );
+QWidget * addVStretch( QWidget * parent );
 
 /**
  * Add horizontal stretchable space.
  **/
-void addHStretch( QWidget * parent );
+QWidget * addHStretch( QWidget * parent );
 
 /**
  * Add a fixed height vertical space
  **/
-void addVSpacing( QWidget * parent, int height = 8 );
+QWidget * addVSpacing( QWidget * parent, int height = 8 );
 
 /**
  * Add a fixed height horizontal space
  **/
-void addHSpacing( QWidget * parent, int width = 8 );
+QWidget * addHSpacing( QWidget * parent, int width = 8 );
 
 
 #endif // ifndef QY2LayoutUtils_h

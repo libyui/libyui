@@ -23,32 +23,40 @@
 #include "QY2LayoutUtils.h"
 
 
-void addVStretch( QWidget * parent )
+QWidget * addVStretch( QWidget * parent )
 {
     QWidget * spacer = new QWidget( parent );
     spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) ); // hor/vert
+
+    return spacer;
 }
 
 
-void addHStretch( QWidget * parent )
+QWidget * addHStretch( QWidget * parent )
 {
     QWidget * spacer = new QWidget( parent );
     spacer->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
+
+    return spacer;
 }
 
 
-void addVSpacing( QWidget * parent, int height )
+QWidget * addVSpacing( QWidget * parent, int height )
 {
     QWidget * spacer = new QWidget( parent );
     CHECK_PTR( spacer );
     spacer->setFixedHeight( height );
+
+    return spacer;
 }
 
 
-void addHSpacing( QWidget * parent, int width )
+QWidget * addHSpacing( QWidget * parent, int width )
 {
     QWidget * spacer = new QWidget( parent );
     CHECK_PTR( spacer );
     spacer->setFixedWidth( width );
+
+    return spacer;
 }
 

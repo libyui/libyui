@@ -57,15 +57,16 @@ YQWizard::YQWizard( QWidget *		parent,
     , _backButtonLabel ( backButtonLabel  )
     , _abortButtonLabel( abortButtonLabel )
     , _nextButtonLabel ( nextButtonLabel  )
-    , _backButton( 0 )
+    , _sideBar( 0 )
+    , _stepsPanel( 0 )
+    , _helpPanel( 0 )
     , _abortButton( 0 )
+    , _backButton( 0 )
     , _nextButton( 0 )
 {
+    QHBox * hbox = 0;
+    
     setWidgetRep( this );
-
-    _sideBar	= 0;
-    _stepsPanel	= 0;
-    _helpPanel	= 0;
 
     // The SuSE web site version of the corporate design colors
     QColor webGreenBG( 0x9c, 0xce, 0x9c );
@@ -96,21 +97,23 @@ YQWizard::YQWizard( QWidget *		parent,
     // Center part - side bar and work area
     //
 
-    QHBox * hbox = new QHBox( this );
-    CHECK_PTR( hbox );
+    QHBox * outerHBox = new QHBox( this );
+    CHECK_PTR( outerHBox );
 
 
     //
     // Side Bar
     //
 
-    _sideBar = new QWidgetStack( hbox );
+    _sideBar = new QWidgetStack( outerHBox );
     CHECK_PTR( _sideBar );
 
     _sideBar->setMinimumWidth( YQUI::ui()->defaultSize( YD_HORIZ ) / 5 );
     _sideBar->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred ) ); // hor/vert
     _sideBar->setPaletteBackgroundColor( bg );
-    _sideBar->setMargin( 8 );
+
+    
+    _sideBar->setMargin( 0 );
 
 
     //
@@ -147,19 +150,27 @@ YQWizard::YQWizard( QWidget *		parent,
     steps->setPaletteBackgroundColor( bg );
     steps->setFont( QFont( "Helvetica", 10 ) );
 
-    // steps->setPaletteForegroundColor( webGreenFG );
     steps->setFont( QFont( "Helvetica", 12 ) );
     steps->setMargin( 10 );
 
     steps->setAlignment( Qt::AlignLeft | Qt::AlignTop );
     steps->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred ) ); // hor/vert
 
-    _helpButton = new QPushButton( _( "Help" ), _stepsPanel );
+    addVStretch( _stepsPanel );
+    
+    hbox = new QHBox( _stepsPanel );
+    CHECK_PTR( hbox );
+
+    addHStretch( hbox );
+
+    _helpButton = new QPushButton( _( "Help" ), hbox );
     CHECK_PTR( _helpButton );
 
     connect( _helpButton, SIGNAL( clicked()  ),
 	     this,        SLOT  ( showHelp() ) );
 
+    addHStretch( hbox );
+    addVSpacing( _stepsPanel );
 
     //
     // Help
@@ -171,7 +182,15 @@ YQWizard::YQWizard( QWidget *		parent,
     _sideBar->addWidget( _helpPanel );
 
 
-    _helpBrowser = new QTextBrowser( _helpPanel );
+    hbox = new QHBox( _helpPanel );
+    CHECK_PTR( hbox );
+    
+    addHelpMarginColumn( hbox );
+
+
+    // Help browser
+    
+    _helpBrowser = new QTextBrowser( hbox );
     CHECK_PTR( _helpBrowser );
 
     _helpBrowser->setMimeSourceFactory( 0 );
@@ -187,29 +206,55 @@ YQWizard::YQWizard( QWidget *		parent,
 
     _helpBrowser->setText( "<p>This is a help text.</p><p>It should be helpful.</p>" );
 
-    _stepsButton = new QPushButton( _( "Steps" ), _helpPanel );
+    addHelpMarginColumn( hbox );
+    
+    QWidget * spacer = addVSpacing( _helpPanel );
+    CHECK_PTR( spacer );
+
+
+    // "Steps" button
+
+
+    hbox = new QHBox( _helpPanel );
+    CHECK_PTR( hbox );
+    
+    addHStretch( hbox );
+    
+    _stepsButton = new QPushButton( _( "Steps" ), hbox );
     CHECK_PTR( _stepsButton );
 
+    
     connect( _stepsButton, SIGNAL( clicked()   ),
 	     this,         SLOT  ( showSteps() ) );
+
+    addHStretch( hbox );
+    addVSpacing( _helpPanel );
 
 
     //
     // Work area (contains client area and button box)
     //
 
-    QVBox * workArea = new QVBox( hbox );
-    CHECK_PTR( workArea );
+    QVBox * workAreaVBox = new QVBox( outerHBox );
+    CHECK_PTR( workAreaVBox );
+    
+    _workArea = new QVBox( workAreaVBox );
+    CHECK_PTR( _workArea );
+
+    // _workArea->setFrameStyle( QFrame::TabWidgetPanel | QFrame::Sunken );
+    _workArea->setFrameStyle( QFrame::Box | QFrame::Sunken );
+    _workArea->setMargin( 4 );
+    
 
     //
     // Client area
     //
 
-    _clientArea = new QVBox( workArea );
+    _clientArea = new QVBox( _workArea );
     CHECK_PTR( _clientArea );
-    // _clientArea->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     _clientArea->setMargin( 4 );
 
+    
     //
     // Replace point for wizard contents
     //
@@ -245,11 +290,27 @@ YQWizard::YQWizard( QWidget *		parent,
     // Button box
     //
 
-    _buttonBox = new QHBox( workArea );
+    _buttonBox = new QHBox( _workArea );
     CHECK_PTR( _buttonBox );
     _buttonBox->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
     _buttonBox->setMargin( 5 );
     layoutButtonBox();
+
+    
+    //
+    // Spacers (purely decorative) at the bottom and right of the client area
+    //
+
+    QWidget * bottomSpacer = addVSpacing( workAreaVBox, 10 );
+    CHECK_PTR( bottomSpacer );
+    bottomSpacer->setPaletteBackgroundColor( bg );
+
+    
+    QWidget * rightSpacer = addHSpacing( outerHBox, 10 );
+    CHECK_PTR( rightSpacer );
+    rightSpacer->setPaletteBackgroundColor( bg );
+
+    
 
     showSteps();
 }
@@ -259,18 +320,9 @@ void YQWizard::layoutButtonBox()
 {
     destroyButtons();
 
-    //
-    // "Back" button
-    //
 
-    _backButton  = new QPushButton( fromUTF8( _backButtonLabel->value()  ), _buttonBox );
-    CHECK_PTR( _backButton );
-    connect( _backButton,	SIGNAL( clicked()      	),
-	     this,	  	SLOT  ( backClicked()	) );
-
-    addHStretch( _buttonBox );
-
-
+    addHSpacing( _buttonBox, 4 );
+    
     //
     // "Abort" button
     //
@@ -282,7 +334,19 @@ void YQWizard::layoutButtonBox()
 
     addHStretch( _buttonBox );
 
+    
+    //
+    // "Back" button
+    //
 
+    _backButton  = new QPushButton( fromUTF8( _backButtonLabel->value()  ), _buttonBox );
+    CHECK_PTR( _backButton );
+    connect( _backButton,	SIGNAL( clicked()      	),
+	     this,	  	SLOT  ( backClicked()	) );
+
+    addHSpacing( _buttonBox );
+
+    
     //
     // "Next" button
     //
@@ -291,7 +355,30 @@ void YQWizard::layoutButtonBox()
     CHECK_PTR( _nextButton );
     connect( _nextButton,	SIGNAL( clicked()	),
 	     this,	  	SLOT  ( nextClicked()	) );
+
+    
+    addHSpacing( _buttonBox, 4 );
 }
+
+
+void YQWizard::addHelpMarginColumn( QWidget * parent )
+{
+    if ( ! parent )
+	return;
+    
+    QVBox * vbox = new QVBox( parent );
+    CHECK_PTR( vbox );
+
+
+
+    // TO DO: upper (flexible) and lower (gradient) margin
+    
+    QWidget * spacer = addHSpacing( vbox );
+    CHECK_PTR( spacer );
+
+    spacer->setPaletteBackgroundColor( parent->paletteBackgroundColor() );
+}
+
 
 
 void YQWizard::destroyButtons()
