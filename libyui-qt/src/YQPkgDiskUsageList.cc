@@ -79,8 +79,6 @@ YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget *parent, int thresholdPercent )
 void
 YQPkgDiskUsageList::updateDiskUsage()
 {
-    YUIQt::yuiqt()->busyCursor();
-
     runningOutWarning.clear();
     overflowWarning.clear();
 
@@ -99,7 +97,6 @@ YQPkgDiskUsageList::updateDiskUsage()
 	++it;
     }
 
-    YUIQt::yuiqt()->normalCursor();
     postPendingWarnings();
 }
 

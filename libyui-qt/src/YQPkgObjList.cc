@@ -33,6 +33,7 @@
 #include "YQPkgTextDialog.h"
 #include "YQi18n.h"
 #include "YQIconPool.h"
+#include "YUIQt.h"
 
 using std::list;
 using std::string;
@@ -261,6 +262,7 @@ YQPkgObjList::setAllItemStatus( PMSelectable::UI_Status newStatus, bool force )
     if ( ! _editable )
 	return;
 
+    YUIQt::yuiqt()->busyCursor();
     QListViewItem * listViewItem = firstChild();
 
     while ( listViewItem )
@@ -283,6 +285,7 @@ YQPkgObjList::setAllItemStatus( PMSelectable::UI_Status newStatus, bool force )
 	listViewItem = listViewItem->nextSibling();
     }
 
+    YUIQt::yuiqt()->normalCursor();
     emit statusChanged();
 }
 
