@@ -207,6 +207,8 @@ class NCRichText : public YRichText, public NCPadWidget {
 
     virtual void setText( const YCPString & ntext );
 
+    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+
     virtual bool setKeyboardFocus() {
       if ( !grabFocus() )
         return YWidget::setKeyboardFocus();
