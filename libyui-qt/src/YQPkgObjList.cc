@@ -429,28 +429,28 @@ YQPkgObjListItem::compare( QListViewItem *	otherListViewItem,
 {
     YQPkgObjListItem * other = dynamic_cast<YQPkgObjListItem *> (otherListViewItem);
 
-    if ( ! other )
-	return QY2ListViewItem::compare( otherListViewItem, col, ascending );
-
-    if ( col == sizeCol() )
+    if ( other )
     {
-	// Numeric sort by size
+	if ( col == sizeCol() )
+	{
+	    // Numeric sort by size
 
-	if ( this->constPMObj()->size() < other->constPMObj()->size() ) return -1;
-	if ( this->constPMObj()->size() > other->constPMObj()->size() ) return 1;
-	return 0;
-    }
-    else if ( col == statusCol() )
-    {
-	// Sorting by status depends on the numeric value of the
-	// PMSelectable::UI_Status enum, thus it is important to insert new
-	// package states there where they make most sense. We want to show
-	// dangerous or noteworthy states first - e.g., "taboo" which should
-	// seldeom occur, but when it does, it is important.
+	    if ( this->constPMObj()->size() < other->constPMObj()->size() ) return -1;
+	    if ( this->constPMObj()->size() > other->constPMObj()->size() ) return 1;
+	    return 0;
+	}
+	else if ( col == statusCol() )
+	{
+	    // Sorting by status depends on the numeric value of the
+	    // PMSelectable::UI_Status enum, thus it is important to insert new
+	    // package states there where they make most sense. We want to show
+	    // dangerous or noteworthy states first - e.g., "taboo" which should
+	    // seldeom occur, but when it does, it is important.
 
-	if ( this->status() < other->status() ) return -1;
-	if ( this->status() > other->status() ) return 1;
-	return 0;
+	    if ( this->status() < other->status() ) return -1;
+	    if ( this->status() > other->status() ) return 1;
+	    return 0;
+	}
     }
 
     // Fallback: Use parent class method

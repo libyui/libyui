@@ -82,7 +82,12 @@ public:
      **/
     YQPkgYouPatchListItem * selection() const;
 
+    /**
+     * Returns the column for the patch kind
+     **/
+    int kindCol() const { return _kindCol; }
 
+    
 signals:
 
     /**
@@ -129,6 +134,11 @@ protected:
      * Reimplemented from YQPkgObjList.
      **/
     virtual void createInstalledContextMenu();
+
+
+    // Data members
+
+    int	_kindCol;
 };
 
 
@@ -156,7 +166,7 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    const PMYouPatchPtr constPmYouPatch() const { return _pmYouPatch; }
+    const PMYouPatchPtr constPMYouPatch() const { return _pmYouPatch; }
 
     /**
      * Set the patch status.
@@ -183,9 +193,22 @@ public:
 
     int statusCol()	const	{ return _youPatchList->statusCol();	}
     int summaryCol()	const	{ return _youPatchList->summaryCol();	}
+    int kindCol()	const	{ return _youPatchList->kindCol();	}
 
 
 protected:
+    
+    /**
+     * Paint method. Reimplemented from @ref QListViewItem so different
+     * colors can be used.
+     *
+     * Reimplemented from QListViewItem.
+     **/
+    virtual void paintCell( QPainter *		painter,
+			    const QColorGroup &	colorGroup,
+			    int			column,
+			    int			width,
+			    int			alignment );
 
     // Data members
 

@@ -40,14 +40,15 @@ YQPkgYouPatchList::YQPkgYouPatchList( QWidget *parent )
 
     int numCol = 0;
     addColumn( "" );					_statusCol	= numCol++;
-    addColumn( _( "Yast Online Update Patch" ) );	_summaryCol	= numCol++;
+    addColumn( _( "Yast Online Update Patch" 	) );	_summaryCol	= numCol++;
+    addColumn( _( "Kind" 			) );	_kindCol	= numCol++;
     setAllColumnsShowFocus( true );
 
     connect( this, 	SIGNAL( selectionChanged        ( QListViewItem * ) ),
 	     this, 	SLOT  ( filter()                                    ) );
 
     fillList();
-    setSorting( statusCol() );
+    setSorting( kindCol() );
     selectSomething();
 
     y2debug( "Creating YOU patch list done" );
@@ -185,13 +186,9 @@ YQPkgYouPatchListItem::YQPkgYouPatchListItem( YQPkgYouPatchList * youPatchList, 
     , _youPatchList( youPatchList )
     , _pmYouPatch( youPatch )
 {
-    // TODO: patch kind
-    // TODO: patch kind
-    // TODO: patch kind
-    
+    setText( kindCol(), _pmYouPatch->kindLabel() );
     setStatusIcon();
 }
-
 
 
 YQPkgYouPatchListItem::~YQPkgYouPatchListItem()
@@ -204,9 +201,9 @@ void
 YQPkgYouPatchListItem::setStatus( PMSelectable::UI_Status newStatus )
 {
     // Y2PM::selectionManager().activate( Y2PM::packageManager() );
-    
+
     // TODO: activate patch (?)
-    
+
     YQPkgObjListItem::setStatus( newStatus );
     _youPatchList->sendUpdatePackages();
 }
@@ -224,15 +221,48 @@ YQPkgYouPatchListItem::compare( QListViewItem *	otherListViewItem,
 				int		col,
 				bool		ascending ) const
 {
-    // TODO
-    // TODO
-    // TODO
+    YQPkgYouPatchListItem * other = dynamic_cast<YQPkgYouPatchListItem *> (otherListViewItem);
+
+    if ( other )
+    {
+	if ( col == kindCol() )
+	{
+	    if ( this->constPMYouPatch()->kind() < other->constPMYouPatch()->kind() ) return -1;
+	    if ( this->constPMYouPatch()->kind() > other->constPMYouPatch()->kind() ) return 1;
+	    return 0;
+	}
+    }
     return YQPkgObjListItem::compare( otherListViewItem, col, ascending );
-    // TODO
-    // TODO
-    // TODO
 }
 
+
+void
+YQPkgYouPatchListItem::paintCell( QPainter *		painter,
+				  const QColorGroup &	colorGroup,
+				  int			column,
+				  int			width,
+				  int			alignment )
+{
+    QColorGroup cg = colorGroup;
+    QColor bg = cg.color( QColorGroup::Base );
+    QColor fg = cg.color( QColorGroup::Text );
+
+    switch ( _pmYouPatch->kind() )
+    {
+	case PMYouPatch::kind_yast:		fg = QColor( 0, 0, 0xC0 );	break;	// medium blue
+	case PMYouPatch::kind_security:		fg = Qt::red;			break;
+	case PMYouPatch::kind_recommended:	fg = QColor( 0, 0, 0xC0 );	break;	// medium blue
+	case PMYouPatch::kind_optional:		break;
+	case PMYouPatch::kind_document:		break;
+	default:				break;
+
+    }
+
+    cg.setColor( QColorGroup::Base, bg );
+    cg.setColor( QColorGroup::Text, fg );
+
+    QListViewItem::paintCell( painter, cg, column, width, alignment );
+}
 
 
 #include "YQPkgYouPatchList.moc.cc"
