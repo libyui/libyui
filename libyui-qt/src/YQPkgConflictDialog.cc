@@ -17,6 +17,8 @@
 /-*/
 
 
+#define IGNORE_WARNING_THRESHOLD	5
+
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
@@ -24,6 +26,7 @@
 #include <y2pm/PMManager.h>
 
 #include <qpushbutton.h>
+#include <qmessagebox.h>
 #include <qlayout.h>
 #include <qhbox.h>
 
@@ -70,29 +73,38 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     buttonBox->setSpacing( SPACING );
     buttonBox->setMargin ( MARGIN  );
     layout->addWidget( buttonBox );
+
+
+    // "OK" button
+
+    QPushButton * button = new QPushButton( _( "&OK - Try Again" ), buttonBox );
+    CHECK_PTR( button );
+    button->setDefault( true );
+
+    connect( button, SIGNAL( clicked() ),
+	     this,   SLOT  ( solveAndShowConflicts() ) );
+
     addHStretch( buttonBox );
 
 
-    // OK button
-
-    _okButton = new QPushButton( _( "&OK - Try Again" ), buttonBox );
-    CHECK_PTR( _okButton );
-    _okButton->setDefault( true );
-
-    connect( _okButton, SIGNAL( clicked() ),
-	     this,      SLOT  ( solveAndShowConflicts() ) );
-
-    addHStretch( buttonBox );
-
-    // Cancel button
-
-    _cancelButton = new QPushButton( _( "&Cancel" ), buttonBox );
-    CHECK_PTR( _cancelButton );
-
-    connect( _cancelButton, SIGNAL( clicked() ),
-	     this,          SLOT  ( reject()  ) );
+    // "Ignore all" button
     
+    button = new QPushButton( _( "&Ignore All" ), buttonBox );
+    CHECK_PTR( button );
+
+    connect( button,  SIGNAL( clicked() ),
+	     this,    SLOT  ( ignoreAll() ) );
+
     addHStretch( buttonBox );
+
+    
+    // "Cancel" button
+
+    button = new QPushButton( _( "&Cancel" ), buttonBox );
+    CHECK_PTR( button );
+
+    connect( button, SIGNAL( clicked() ),
+	     this,   SLOT  ( reject()  ) );
 }
 
 
@@ -153,6 +165,32 @@ YQPkgConflictDialog::solveAndShowConflicts()
 		exec();
 	}
     }
+}
+
+
+void
+YQPkgConflictDialog::ignoreAll()
+{
+    CHECK_PTR( _conflictList );
+
+    if ( _conflictList->count() >= IGNORE_WARNING_THRESHOLD )
+    {
+	if ( QMessageBox::warning( this, "",
+			       _( "\
+Ignoring that many dependency problems\n\
+may result in a really inconsistent system.\n\
+\n\
+Do this only if you know exactly what you are doing!\
+" ),
+			       _( "&Ignore Anyway" ), _( "&Cancel" ), "",
+			       1, // defaultButtonNumber (from 0)
+			       1 ) // escapeButtonNumber
+	     == 1 )	// Proceed upon button #0 (OK)
+	    return;
+    }
+    
+    _conflictList->ignoreAll();
+    solveAndShowConflicts();
 }
 
 

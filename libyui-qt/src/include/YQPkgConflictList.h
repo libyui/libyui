@@ -81,7 +81,7 @@ public:
     /**
      * Returns the number of conflicts in the list.
      **/
-    int conflictCount() const { return childCount(); }
+    int count() const { return childCount(); }
 
 
 public slots:
@@ -90,6 +90,11 @@ public slots:
      * Apply the choices the user made.
      **/
     void applyResolutions();
+
+    /**
+     * Ignore all conflicts.
+     **/
+    void ignoreAll();
 
     /**
      * Reset all ignored conflicts as if the user had never selected any

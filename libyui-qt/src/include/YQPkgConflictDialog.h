@@ -31,7 +31,7 @@ class QPushButton;
 
 /**
  * @short Dialog that takes care of dependency checking and resolving
- * conflicts. 
+ * conflicts.
  **/
 class YQPkgConflictDialog: public QDialog
 {
@@ -56,7 +56,7 @@ public:
      **/
     virtual QSize sizeHint() const;
 
-    
+
 public slots:
 
     /**
@@ -66,7 +66,12 @@ public slots:
      **/
     void solveAndShowConflicts();
 
-    
+    /**
+     * Ignore all conflicts.
+     **/
+    void ignoreAll();
+
+
 signals:
 
     /**
@@ -74,12 +79,10 @@ signals:
      **/
     void updatePackages();
 
-    
+
 protected:
 
     YQPkgConflictList *	_conflictList;
-    QPushButton *	_okButton;
-    QPushButton * 	_cancelButton;
 };
 
 

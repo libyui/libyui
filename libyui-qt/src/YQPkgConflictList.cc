@@ -110,6 +110,25 @@ YQPkgConflictList::applyResolutions()
 
 
 void
+YQPkgConflictList::ignoreAll()
+{
+    QListViewItem * child = firstChild();
+
+    while ( child )
+    {
+	YQPkgConflict * conflict = dynamic_cast<YQPkgConflict *> (child);
+
+	if ( conflict )
+	    conflict->ignore();
+
+	child = child->nextSibling();
+    }
+
+    clear();
+}
+
+
+void
 YQPkgConflictList::resetIgnoredConflicts()
 {
     YQPkgConflict::resetIgnoredConflicts();
