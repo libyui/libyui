@@ -96,7 +96,6 @@ class PackageSelector
     
     // internal helper functions (format list of string) 
     string createRelLine( list<PkgRelation> info );
-    string createDescrText( list<string> info );
 
     // internal use (copies tree items got from YPkgRpmGroupTagsFilterView)
     void cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone );
@@ -366,6 +365,12 @@ class PackageSelector
      * @return string	The text
      */
     string createText( list<string> info, bool oneline );
+
+   /**
+     * Creates a text from a list of strings which may contain HTML tags
+     * @return string	The text
+     */
+    string createDescrText( list<string> info );
 
     /**
      * Used for package search
