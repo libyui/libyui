@@ -41,6 +41,8 @@
 					     `item( `id(`tabooOn), 	_( "Taboo &Yes   [!]" ) ),
 					     // reset the status 'Taboo' 
 					     `item( `id(`tabooOff), 	_( "Taboo &No    [-]" ) ),
+					     // toggle installation of sources (SPM)
+					     `item( `id(`toggleSrc), 	_( "&Install source Yes/No" ) ),
 					     // end: Actions menu, set status of all packages (title of a submenu)
 					     `menu( _( "All Listed &Packages" ),
 						    [

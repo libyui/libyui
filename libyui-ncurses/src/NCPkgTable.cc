@@ -410,8 +410,7 @@ void NCPkgTable::fillHeader( )
     switch ( tableType )
     {
 	case T_Packages:
-	case T_Update:
-	case T_PatchPkgs:    {
+	case T_Update: {
 	    int installedPkgs = Y2PM::instTarget().numPackages();
 	    if ( installedPkgs > 0 )
 	    {
@@ -422,6 +421,7 @@ void NCPkgTable::fillHeader( )
 		header.push_back( "L" + PkgNames::PkgVersionInst().str() );
 		header.push_back( "L" + PkgNames::PkgSummary().str() );
 		header.push_back( "L" + PkgNames::PkgSize().str() );
+		header.push_back( "LSPM" );	
 	    }
 	    else
 	    {
@@ -430,8 +430,19 @@ void NCPkgTable::fillHeader( )
 		header.push_back( "L" + PkgNames::PkgName().str() );
 		header.push_back( "L" + PkgNames::PkgVersion().str() );
 		header.push_back( "L" + PkgNames::PkgSummary().str() );
-		header.push_back( "L" + PkgNames::PkgSize().str() );	
+		header.push_back( "L" + PkgNames::PkgSize().str() );
+		header.push_back( "LSPM" );
 	    }
+	    break;
+	}
+	case T_PatchPkgs: {
+	    header.reserve(7);
+	    header.push_back( "L" + PkgNames::PkgStatus().str() );
+	    header.push_back( "L" + PkgNames::PkgName().str() );
+	    header.push_back( "L" + PkgNames::PkgVersionNew().str() );
+	    header.push_back( "L" + PkgNames::PkgVersionInst().str() );
+	    header.push_back( "L" + PkgNames::PkgSummary().str() );
+	    header.push_back( "L" + PkgNames::PkgSize().str() );
 	    break;
 	}
 	case T_Patches: {
@@ -554,13 +565,14 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr )
 		pkgLine.push_back( instVersion );	// installed version
 	    }
 	    pkgLine.push_back( pkgPtr->summary() );  	// short description
-
+	    
 	    status =  status = pkgPtr->getSelectable()->status(); // the package status
 	}
     }
 
     FSize size = pkgPtr->size();     	// installed size
     pkgLine.push_back( size.form( 8 ) );  // format size	
+    pkgLine.push_back( "    " );	// empty column for source install
     
     addLine( status,	// get the package status
 	     pkgLine, 	// the package data
@@ -716,6 +728,7 @@ NCPkgTableTag * NCPkgTable::getTag( const int & index )
 
     return cc;
 }
+
 ///////////////////////////////////////////////////////////////////
 //
 // NCPkgTable::toggleSourceStatus()
@@ -723,7 +736,40 @@ NCPkgTableTag * NCPkgTable::getTag( const int & index )
 //
 bool NCPkgTable::toggleSourceStatus( )
 {
-    PMObjectPtr objPtr = getDataPointer( getCurrentItem() );
+    int index =  getCurrentItem();
+    PMObjectPtr objPtr = getDataPointer( index );
+    bool ok;
+    
+    if ( !objPtr )
+    {
+	NCERR << "Invalid Pointer" << endl;
+	return false;
+    }
+    PMSelectablePtr selPtr = objPtr->getSelectable();
+
+    if ( !selPtr )
+    {
+	NCERR << "Invalid Selectable" << endl;
+	return false;
+    }
+    NCTableLine * currentLine = pad->ModifyLine( index );
+    NCTableCol * currentCol = currentLine->GetCol( currentLine->Cols() );    
+
+    if ( selPtr->providesSources()
+	 && !selPtr->source_install() )
+    {
+	ok = selPtr->set_source_install( true );
+	NCMIL << "Set source install returns: " << (ok?"true":"false") << endl;
+	currentCol->SetLabel( NClabel( " x " ) );
+    }
+    else if ( selPtr->source_install() )
+    {
+	ok = selPtr->set_source_install( false );
+	NCMIL << "ReSet source install returns: " << (ok?"true":"false") << endl;
+	currentCol->SetLabel( NClabel( "   " ) );
+    }
+    NCMIL << "NO Source" << endl;
+	
     return true;
 }
 			       
