@@ -223,20 +223,12 @@ void NCPopupDeps::evaluateErrorResult( PkgDep::ErrorResultList errorlist )
     
     while ( it != errorlist.end() )
     {
-	if ( (*it).solvable || !(*it).alternatives.empty() )
-	{
-	    // save this error ( (*it) has type ErrorResult )
-	    dependencies.push_back( *it );
-	}
-	else 
-	{
-	    NCDBG << "No PMSolvablePtr for " << (*it) << endl;
-	}
-	
+	// save all ErrorResults
+	dependencies.push_back( *it );	
+
 	++it;
 	i++;
     }
-
 }
 
 
