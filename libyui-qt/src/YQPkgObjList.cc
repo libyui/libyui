@@ -296,8 +296,15 @@ YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList * pkgObjList, PMObjectPtr pm_ob
 	if ( pmObj()->hasInstalledObj() )
 	     setText( instVersionCol(), pmObj()->getInstalledObj()->edition() );
 
-	if ( pmObj()->hasCandidateObj() )
+	if ( ! pmObj()->isInstalledObj() &&
+	     ! pmObj()->isCandidateObj()   )
+	{
+	    setText( versionCol(), pmObj()->edition() );
+	}
+	else if ( pmObj()->hasCandidateObj() )
+	{
 	    setText( versionCol(), pmObj()->getCandidateObj()->edition() );
+	}
     }
     else
     {
