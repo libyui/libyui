@@ -1378,6 +1378,7 @@ string YQWizard::debugLabel()
     if ( _dialogHeading )
     {
 	QString label = _dialogHeading->text();
+	label.simplifyWhiteSpace(); // Replace any embedded newline with a single blank
 
 	if ( ! label.isEmpty() )
 	{
