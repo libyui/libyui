@@ -325,6 +325,9 @@ void YQWizard::addStepHeading( const QString & text )
 
 void YQWizard::updateSteps()
 {
+    if ( ! _stepsBox )
+	return;
+    
     //
     // Delete any previous step widgets
     //
