@@ -1,6 +1,6 @@
 @HEADER-COMMENT@
 
-# neededforbuild  curl curl-devel gpp libgpp libxcrypt libxcrypt-devel liby2util liby2util-devel openssl openssl-devel qt3-devel-packages rpm-devel yast2-devel-packages yast2-packagemanager yast2-packagemanager-devel
+# neededforbuild  curl curl-devel gpp libgpp libxcrypt libxcrypt-devel liby2util liby2util-devel openssl openssl-devel qt3-devel-packages rpm-devel yast2-core-devel-packages yast2-packagemanager yast2-packagemanager-devel
 
 @HEADER@
 

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Sep 22 16:35:06 CEST 2004 - sh@suse.de
+
+- Changed yast2-devel-packages to yast2-core-devel-packages 
+  in neededforbuild
+
+-------------------------------------------------------------------
 Wed Sep 15 17:23:25 CEST 2004 - sh@suse.de
 
 - V 2.10.7
