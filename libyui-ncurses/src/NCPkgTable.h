@@ -174,12 +174,6 @@ public:
     void setPackager( PackageSelector * pkg ) { packager = pkg; }
 
     /**
-     * Toggles the package status (e.g. from installed to delete)
-     * @return bool
-     */
-    bool toggleStatus( PMObjectPtr pkgPtr );
-
-    /**
      * Informs the package manager about the status change of
      * the currently selected package and updates the states
      * of all packages in the list
@@ -187,7 +181,12 @@ public:
      * @return bool
      */
     bool changeStatus( PMSelectable::UI_Status newstat);
+
     
+    bool changeObjStatus( int key );
+
+    bool toggleObjStatus( );
+
    /**
      * Set the status information if status has changed 
      * @return bool

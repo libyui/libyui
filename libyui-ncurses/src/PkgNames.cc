@@ -145,10 +145,17 @@ const YCPValue& PkgNames::Update ()
     return value;
 }
 
-// the menu entry Action/Taboo
-const YCPValue& PkgNames::Taboo ()
+// the menu entry Action/Taboo On
+const YCPValue& PkgNames::TabooOn ()
 {
-    static const YCPValue value = createIdValue ( "taboo" );
+    static const YCPValue value = createIdValue ( "tabooOn" );
+    return value;
+}
+
+// the menu entry Action/Taboo Off
+const YCPValue& PkgNames::TabooOff ()
+{
+    static const YCPValue value = createIdValue ( "tabooOff" );
     return value;
 }
 
@@ -384,6 +391,13 @@ const YCPString PkgNames::SelectionLabel()
 {
    // the label of the selections
     static const YCPString value = toYCPString ( _("Package categories") );
+    return value;  
+}
+
+const YCPString PkgNames::YOUPatches()
+{
+   // the label Filter: YOU Patches
+    static const YCPString value = toYCPString ( _("YOU Patches") );
     return value;  
 }
 

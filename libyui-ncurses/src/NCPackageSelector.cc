@@ -162,6 +162,7 @@ void NCPackageSelector::showDefaultList()
 	// fill the list with packages (or patches)
 	pkgList->fillDefaultList( );
 
+	pkgList->setKeyboardFocus();
     }
     else
     {

@@ -86,7 +86,7 @@ bool ObjectStatStrategy::setPackageStatus( PMSelectable::UI_Status newstatus, PM
 
 ///////////////////////////////////////////////////////////////////
 //
-// PackageStatStrategy::keyToStatus()
+// ObjectStatStrategy::keyToStatus()
 //
 // Returns the corresponding status
 //
@@ -108,7 +108,8 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 		// FIXME: show delete notify
 		retStat = PMSelectable:: S_Del;
 	    }
-	    else if ( oldStatus == PMSelectable::S_AutoUpdate )
+	    else if ( oldStatus == PMSelectable::S_AutoUpdate
+		      ||  oldStatus == PMSelectable::S_Update )
 	    {
 		retStat =  PMSelectable::S_KeepInstalled;
 	    }
@@ -189,6 +190,66 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
     return valid;
 }
 
+
+///////////////////////////////////////////////////////////////////
+//
+// ObjectStatStrategy::toggleStatus()
+//
+// Returns the new status
+//
+bool ObjectStatStrategy::toggleStatus( PMObjectPtr objPtr,
+				       PMSelectable::UI_Status & newStat )
+{
+    bool ok = true;
+    
+    PMSelectable::UI_Status oldStatus = getPackageStatus( objPtr ); 
+    PMSelectable::UI_Status newStatus = oldStatus;
+
+    switch ( oldStatus )
+    {
+	case PMSelectable:: S_Del:
+	    newStatus = PMSelectable::S_KeepInstalled;
+	    break;
+	case PMSelectable::S_Install:
+	    newStatus =PMSelectable::S_NoInst ;
+	    break;
+	case PMSelectable::S_Update:
+	    newStatus = PMSelectable:: S_Del;
+	    break;
+	case PMSelectable:: S_KeepInstalled:
+	    if ( objPtr->hasCandidateObj() )
+	    {
+		newStatus = PMSelectable::S_Update;
+	    }
+	    else
+	    {
+		newStatus = PMSelectable:: S_Del;
+	    }
+	    break;
+	case PMSelectable::S_NoInst:
+	    newStatus = PMSelectable::S_Install ;
+	    break;
+	case PMSelectable::S_AutoInstall:
+	    // FIXME show a warning !!!!
+	    newStatus = PMSelectable::S_NoInst;
+	    break;
+	case PMSelectable::S_AutoDel:
+	    newStatus = PMSelectable:: S_KeepInstalled;
+	    break;
+	case PMSelectable::S_AutoUpdate:
+	    newStatus = PMSelectable:: S_KeepInstalled;
+	    break;
+	case PMSelectable::S_Taboo:
+	    newStatus = PMSelectable::S_Taboo;
+	    break;
+    }
+
+    newStat = newStatus;
+
+    return ok;
+}
+
+
 //------------------------------------------------------------
 // Class for strategies to get status for packages
 //------------------------------------------------------------
@@ -213,6 +274,115 @@ PackageStatStrategy::PackageStatStrategy()
 PatchStatStrategy::PatchStatStrategy()
     : ObjectStatStrategy()
 {
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// PatchStatStrategy::keyToStatus()
+//
+// Returns the corresponding status
+//
+bool PatchStatStrategy::keyToStatus( const int & key,
+				      PMObjectPtr objPtr,
+				      PMSelectable::UI_Status & newStat )
+{
+    bool valid = true;
+    PMSelectable::UI_Status retStat = PMSelectable::S_NoInst;
+    PMSelectable::UI_Status oldStatus = getPackageStatus( objPtr );
+    
+    // get the new status
+    switch ( key )
+    {
+	case '-':
+	    if ( oldStatus == PMSelectable:: S_Install
+		 || oldStatus == PMSelectable:: S_AutoInstall )
+	    {
+		retStat = PMSelectable::S_NoInst;	
+	    }
+	    else if (  oldStatus == PMSelectable:: S_Update )
+	    {
+		retStat = PMSelectable::S_KeepInstalled;
+	    }
+	    else
+	    {
+		valid = false;
+	    }
+	    break;
+	case '+':
+	    if ( oldStatus == PMSelectable::S_NoInst
+		 || oldStatus == PMSelectable::S_AutoInstall )
+	    {
+		retStat = PMSelectable::S_Install;
+	    }
+	    else
+	    {
+		valid = false;
+	    }
+	    
+	    break;
+	case '>':
+	    if ( oldStatus == PMSelectable::S_KeepInstalled )
+	    {
+		if ( objPtr->hasCandidateObj() )
+		{
+		    retStat = PMSelectable::S_Update;
+		}
+	    }
+	    else
+	    {
+		valid = false;
+	    }
+	    break;
+	default:
+	    NCDBG <<  "Key not valid" << endl;
+	    valid = false;
+    }
+
+    if ( valid )
+	newStat = retStat;
+    
+    return valid;
+}
+
+
+///////////////////////////////////////////////////////////////////
+//
+// PatchStatStrategy::toggleStatus()
+//
+// Returns the new status
+//
+bool PatchStatStrategy::toggleStatus( PMObjectPtr objPtr,
+				      PMSelectable::UI_Status & newStat )
+{
+    bool ok = true;
+    
+    PMSelectable::UI_Status oldStatus = getPackageStatus( objPtr ); 
+    PMSelectable::UI_Status newStatus = oldStatus;
+
+    switch ( oldStatus )
+    {
+	case PMSelectable::S_Install:
+	    newStatus =PMSelectable::S_NoInst ;
+	    break;
+	case PMSelectable::S_Update:
+	    newStatus = PMSelectable:: S_KeepInstalled;
+	    break;
+	case PMSelectable::S_KeepInstalled:
+	    if ( objPtr->hasCandidateObj() )
+	    {
+		newStatus = PMSelectable::S_Update;
+	    }
+	    break;
+	case PMSelectable::S_NoInst:
+	    newStatus = PMSelectable::S_Install ;
+	    break;
+	default:
+	    newStatus = oldStatus;
+    }
+
+    newStat = newStatus;
+    
+    return ok;
 }
 
 //------------------------------------------------------------

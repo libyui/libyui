@@ -106,12 +106,10 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     // Action menu
     eventHandlerMap[ PkgNames::Toggle()->toString() ] 	= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::Select()->toString() ] 	= &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::Deselect()->toString() ] = &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::Delete()->toString() ] 	= &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::Replace()->toString() ] 	= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::Update()->toString() ] 	= &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::Installed()->toString() ]= &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::Taboo()->toString() ]	= &PackageSelector::StatusHandler;
+    eventHandlerMap[ PkgNames::TabooOn()->toString() ]	= &PackageSelector::StatusHandler;
+    eventHandlerMap[ PkgNames::TabooOff()->toString() ]	= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::ToggleSource()->toString() ] = &PackageSelector::StatusHandler;
     // Etc. menu
     eventHandlerMap[ PkgNames::ShowDeps()->toString() ] = &PackageSelector::DependencyHandler;
@@ -470,7 +468,7 @@ bool PackageSelector::fillPatchList( string filter )
     YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
     if ( filterLabel )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString( "Patches" ) );
+	static_cast<NCLabel *>(filterLabel)->setLabel( PkgNames::YOUPatches() );
     }
 
     return true;
@@ -488,7 +486,9 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, PMObjectPtr obj
 
     if ( !pkgTable || !patchPtr )
 	return false;
-    
+
+    pkgTable->itemsCleared ();
+     
     list<PMPackagePtr> packages = patchPtr->packages();
     list<PMPackagePtr>::const_iterator listIt;
     NCMIL << "Number of patch packages: " << packages.size() << endl;
@@ -962,32 +962,28 @@ bool PackageSelector::StatusHandler( const NCursesEvent&  event )
     // call the corresponding method of NCPkgTable
     if ( event.selection->compare( PkgNames::Toggle() ) == YO_EQUAL )
     {
-	packageList->toggleStatus( packageList->getDataPointer( packageList->getCurrentItem() ));
+	packageList->toggleObjStatus( );
     }
     else if ( event.selection->compare( PkgNames::Select() ) == YO_EQUAL )
     {
-	packageList->changeStatus( PMSelectable::S_Install );
-    }
-    else if ( event.selection->compare( PkgNames::Deselect() ) == YO_EQUAL )
-    {
-	packageList->changeStatus( PMSelectable::S_NoInst );
+	packageList->changeObjStatus( '+' );
     }
     else if ( event.selection->compare( PkgNames::Delete() ) == YO_EQUAL )
     {
-	packageList->changeStatus( PMSelectable:: S_Del);
+	packageList->changeObjStatus( '-' );
     }
     else if ( event.selection->compare( PkgNames::Update() ) == YO_EQUAL )
     {
-	packageList->changeStatus( PMSelectable::S_Update );
+	packageList->changeObjStatus( '>' );
     }
-    else if ( event.selection->compare( PkgNames::Installed() ) == YO_EQUAL )
+    else if ( event.selection->compare( PkgNames::TabooOn() ) == YO_EQUAL )
     {
-	packageList->changeStatus( PMSelectable:: S_KeepInstalled );	
+	packageList->changeObjStatus( KEY_F(4) );	
     }
-    else if ( event.selection->compare( PkgNames::Taboo() ) == YO_EQUAL )
+    else if ( event.selection->compare( PkgNames::TabooOff() ) == YO_EQUAL )
     {
-	packageList->changeStatus( PMSelectable::S_Taboo );	
-    }
+	packageList->changeObjStatus( KEY_F(5) );	
+    } 
     else if ( event.selection->compare( PkgNames::ToggleSource() ) == YO_EQUAL )
     {
 	packageList->toggleSourceStatus( );	

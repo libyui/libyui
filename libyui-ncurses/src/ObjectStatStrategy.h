@@ -55,10 +55,25 @@ public:
     virtual bool setPackageStatus ( PMSelectable::UI_Status newstatus,
 				    PMObjectPtr objPtr
 				    );
-    
+   /**
+     * Returns the new status to the given key (respecting the old
+     * status of th eobject).
+     * @param key The userinput (the key which is pressed)
+     * @param objPtr  The object pointer (e.g. a package pointer)
+     * @param newStatus The new package status
+     * @return bool
+     */  
     virtual bool keyToStatus( const int & key,
 			      PMObjectPtr objPtr,
 			      PMSelectable::UI_Status & newStat );
+    
+    /**
+     * Toggles the package status (e.g. from installed to delete)
+     * @param The object pointer
+     * @return bool
+     */
+    virtual bool toggleStatus( PMObjectPtr objPtr,
+			        PMSelectable::UI_Status & newStat );
 };
 
 //------------------------------------------------------------
@@ -131,6 +146,25 @@ public:
     
     virtual ~PatchStatStrategy() {}
 
+     /**
+     * Returns the new status to the given key (respecting the old
+     * status of the patch).
+     * @param key The userinput (the key which is pressed)
+     * @param objPtr  The object pointer (the patch pointer)
+     * @param newStatus The new package status
+     * @return bool
+     */  
+    virtual bool keyToStatus( const int & key,
+			      PMObjectPtr objPtr,
+			      PMSelectable::UI_Status & newStat );
+    
+    /**
+     * Toggles the patch status (e.g. from selected to unselected)
+     * @param The object pointer
+     * @return bool
+     */
+    virtual bool toggleStatus( PMObjectPtr objPtr,
+			        PMSelectable::UI_Status & newStat );
 };
 
 

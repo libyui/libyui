@@ -1,11 +1,11 @@
 /**
- * File:        pkg_layout.ycp
+ * File:        you_layout.ycp
  * Package:     
  * Authors:     Gabriele Strattner <gs@suse.de>
  *
  * Purpose:
  *
- * ncurses layout for package selection
+ * ncurses layout for YOU
  *
  * $Id$
  */
@@ -18,10 +18,10 @@
 					     `item( `id(`allpatches), "&All patches" )
 				 ]
 				 )),
-	      `Left(`MenuButton( "&Actions", [`item( `id(`toggle), 	"&Toggle   [F4]"),
-					      `item( `id(`select), 	"&Select    [s]"),
-					      `item( `id(`deselect), 	"Dese&lect  [l]"),
-					      `item( `id(`update), 	"&Update    [u]")
+	      `Left(`MenuButton( "&Actions", [`item( `id(`toggle), 	"&Toggle    [F3]"),
+					      `item( `id(`select), 	"&Select     [+]"),
+					      `item( `id(`deselect), 	"Dese&lect   [-]"),
+					      `item( `id(`update), 	"&Update     [>]")
 				 ]
 				 )),
 	      `Left(`MenuButton( "&Information", [`item( `id(`patchdescr), "&Long description" ),

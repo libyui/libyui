@@ -437,18 +437,21 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 	}
 	case KEY_F(3): {
 	    // set the new status
-	    toggleStatus( getDataPointer(citem) );
+	    toggleObjStatus( );
 
 	    ret = NCursesEvent::handled;
 	    break;	
 	}
 	default: {
 	    // set the new status
+	    changeObjStatus( key );
+#if 0
 	    bool ok = statusStrategy->keyToStatus( key, getDataPointer(citem), newStat );
 	    if ( ok )
 	    {
 		changeStatus( newStat );
 	    }
+#endif
 	    ret = NCursesEvent::handled;
 	    break;
 	}
@@ -510,64 +513,44 @@ bool NCPkgTable::toggleSourceStatus( )
     return true;
 }
 			       
+///////////////////////////////////////////////////////////////////
+//
+// NCPkgTable::toggleObjStatus()
+//
+//
+bool NCPkgTable::toggleObjStatus( )
+{
+    PMObjectPtr objPtr = getDataPointer( getCurrentItem() );
+    PMSelectable::UI_Status newStatus;
+    
+    bool ok = statusStrategy->toggleStatus( objPtr, newStatus );
+
+    if ( ok )
+    {
+	changeStatus( newStatus );	
+    }
+    
+    return true;
+}
 
 ///////////////////////////////////////////////////////////////////
 //
-// NCPkgTable::toggleStatus()
+// NCPkgTable::changeObjStatus()
 //
-// Returns the new status
 //
-bool NCPkgTable::toggleStatus( PMObjectPtr objPtr )
+bool NCPkgTable::changeObjStatus( int key )
 {
-    bool ok = false;
+    PMObjectPtr objPtr = getDataPointer( getCurrentItem() );
+    PMSelectable::UI_Status newStatus;
+    bool ok = statusStrategy->keyToStatus( key, objPtr, newStatus );
     
-    PMSelectable::UI_Status newStatus = PMSelectable::S_NoInst;;
-    PMSelectable::UI_Status oldStatus = statusStrategy->getPackageStatus( objPtr ); 
-
-    switch ( oldStatus )
+    if ( ok )
     {
-	case PMSelectable:: S_Del:
-	    newStatus = PMSelectable::S_KeepInstalled;
-	    break;
-	case PMSelectable::S_Install:
-	    newStatus =PMSelectable::S_NoInst ;
-	    break;
-	case PMSelectable::S_Update:
-	    newStatus = PMSelectable:: S_Del;
-	    break;
-	case PMSelectable:: S_KeepInstalled:
-	    if ( objPtr->hasCandidateObj() )
-	    {
-		newStatus = PMSelectable::S_Update;
-	    }
-	    else
-	    {
-		newStatus = PMSelectable:: S_Del;
-	    }
-	    break;
-	case PMSelectable::S_NoInst:
-	    newStatus = PMSelectable::S_Install ;
-	    break;
-	case PMSelectable::S_AutoInstall:
-	    // FIXME show a warning !!!!
-	    newStatus = PMSelectable::S_NoInst;
-	    break;
-	case PMSelectable::S_AutoDel:
-	    newStatus = PMSelectable:: S_KeepInstalled;
-	    break;
-	case PMSelectable::S_AutoUpdate:
-	    newStatus = PMSelectable:: S_KeepInstalled;
-	    break;
-	case PMSelectable::S_Taboo:
-	    newStatus = PMSelectable::S_Taboo;
-	    break;
+	changeStatus( newStatus );
     }
-
-    // show the new status and inform the packagemanager
-    ok = changeStatus( newStatus );
-
-    return ok;
+    return true;
 }
+
 
 
 

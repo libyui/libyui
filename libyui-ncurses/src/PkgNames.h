@@ -85,10 +85,15 @@ public:
     static const YCPValue& Delete ();
 
     /**
-     * Widget id of the menu selection Action/Taboo
+     * Widget id of the menu selection Action/Taboo On
      */
-    static const YCPValue& Taboo ();
+    static const YCPValue& TabooOn ();
 
+   /**
+     * Widget id of the menu selection Action/Taboo =ff 
+     */
+    static const YCPValue& TabooOff ();
+    
    /**
      * Widget id of the menu selection Action/SPM yes/no
      */
@@ -258,6 +263,11 @@ public:
      */
     static const YCPString SelectionLabel();
 
+   /**
+     *  The label Filter: YOU Patches
+     */
+    static const YCPString YOUPatches();
+    
     /**
      *  The label for Filter: Search results
      */
