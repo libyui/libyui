@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Nov 14 11:30:35 CET 2003 - mvidner@suse.cz
+
+- adapted to doxygen
+
+-------------------------------------------------------------------
 Tue Oct 21 16:03:20 CEST 2003 - sh@suse.de
 
 - Fixed bug #32510: Excess initial SelBox SelectionChanged event 
