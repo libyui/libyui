@@ -1032,11 +1032,13 @@ YQPackageSelector::fakeData()
 
     if ( _youMode )
     {
+#if 0
 	Url url( "dir:///8.1-patches" );
 	Y2PM::youPatchManager().instYou().retrievePatchInfo( url, false );
 	Y2PM::youPatchManager().instYou().selectPatches( PMYouPatch::kind_recommended |
 							 PMYouPatch::kind_security     );
 	y2milestone( "Fake YOU patches initialized" );
+#endif
     }
     else
     {
