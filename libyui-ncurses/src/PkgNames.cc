@@ -972,6 +972,20 @@ const string PkgNames::Requires()
     return value;
 }
 
+const string PkgNames::Patch()
+{
+    // part of the patch description
+    static const string value = _( "<b>Patch: </b>" );
+    return value;
+}
+
+const string PkgNames::UpToDate()
+{
+    // info line is shown if YOU patch list is empty
+    static const string value = _( "The system is up to date" );
+    return value;
+}
+
 const string PkgNames::PreRequires()
 {
     // part of the package description

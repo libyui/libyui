@@ -662,6 +662,16 @@ public:
      * bold text Size: (richtext) 
      */
     static const string Size();
+     
+    /**
+     * bold text Patch: (richtext) 
+     */
+    static const string Patch();
+
+    /**
+     * Info line in empty patch list
+     */
+    static const string UpToDate();
     
    /**
      * bold text Package Group: (richtext) 
