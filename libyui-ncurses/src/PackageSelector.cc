@@ -315,11 +315,14 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
 	++it;
     }
 
+    // show the package list
+    pkgTable->drawList();
+    
     if ( pkgTable->getNumLines() > 0 )
     {
 	pkgTable->setCurrentItem( 0 );
     }
-    
+
     return true;
 }
 
@@ -355,7 +358,10 @@ bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr 
     {
 	createListEntry( packageList, (*listIt)->theObject(), i );
     }
-      
+
+    // show the package table
+    packageList->drawList();
+    
     if ( !label.isNull() )
     {
 	NCMIL << "  Label: " << label->toString() << endl;
@@ -409,6 +415,9 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
 	i++;
     }
 
+    // show the package list
+    packageList->drawList();
+    
     // set filter label to 'Search'
     YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
     if ( filterLabel )
@@ -461,6 +470,9 @@ bool PackageSelector::fillPatchList( string filter )
 			  
     }
 
+    // show the patches
+    packageList->drawList();
+    
     // show the selected filter label
     YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
     if ( filterLabel )
@@ -502,7 +514,10 @@ bool PackageSelector::fillUpdateList( )
 	++it;
 	i++;
     }
-   
+
+    // show the list
+    packageList->drawList();
+    
     // show the selected filter label
     YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
     if ( filterLabel )
@@ -537,6 +552,8 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, PMObjectPtr obj
 	createListEntry( pkgTable, (*listIt), i );
     }
 
+    pkgTable->drawList();
+    
     return true;
 }
 
@@ -596,6 +613,9 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
 
     }
 
+    // show the package list
+    packageList->drawList();
+    
     if ( !label.isNull() )
     {
 	NCMIL <<  "Label: " <<  label->toString() << endl;

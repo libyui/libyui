@@ -138,6 +138,11 @@ public:
 			  PMObjectPtr objPtr );
 
    /**
+     * Draws the package list (has to be called after the loop with addLine() calls)
+     */ 
+   void drawList( ) { return DrawPad(); }
+    
+   /**
     * Clears the package list
     */
     virtual void itemsCleared();
@@ -257,6 +262,7 @@ public:
      * @return void
      */  
     void fillHeader( );
+    
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -286,6 +286,8 @@ bool NCPopupDeps::fillDepsPackageList( NCPkgTable * table )
 	i++;
     }
 
+    table->drawList();
+    
     return true;
 }
 
@@ -488,6 +490,9 @@ bool NCPopupDeps::concretelyDependency( int index )
 	errorLabel1->setLabel( PkgNames::LabelRequBy1() );
 	errorLabel2->setLabel( PkgNames::LabelRequBy2() );	
     }
+
+    // show the list
+    deps->drawList();
     
     return true;
 }
@@ -609,17 +614,19 @@ bool NCPopupDeps::postAgain()
 
 	    concretelyDependency( pkgs->getCurrentItem() );
 	}
-	else
+	else	// everything ok
 	{
 	    pkgs->itemsCleared();
 	    deps->itemsCleared();
 	    vector<string> line;
 	    line.reserve(2);
+	    // show a line with text: no conflicts ...
 	    line.push_back( PkgNames::NoConflictText().str() );
 	    pkgs->addLine( PMSelectable::S_NoInst,
 			   line,
 			   0,
 			   PMObjectPtr() );
+	    pkgs->drawList();
 	}
     }
 
