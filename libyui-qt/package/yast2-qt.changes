@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Tue Jan 21 18:06:15 CET 2003 - sh@suse.de
+
+- V 2.7.5
+- Use textdomain "qt-packages" for all texts to avoid textdomain
+  name clashes 
+- New command line options --fullscreen, --noborder
+- Fixed busy cursors
+
+-------------------------------------------------------------------
 Mon Jan 20 20:00:44 CET 2003 - sh@suse.de
 
 - Package manager enhancements:
