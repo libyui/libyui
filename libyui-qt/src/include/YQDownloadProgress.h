@@ -43,25 +43,25 @@ public:
 			YWidgetOpt &	opt,
 			const YCPString & label,
 			const YCPString & filename,
-			int 		expectedSize);
+			int 		expectedSize );
 
     /**
      * Sets the widget's enabled state.
      * Inherited from YWidget.
      */
-    void setEnabling(bool enabled);
+    void setEnabling(bool enabled );
 
     /**
      * Preferred size.
      * Inherited from YWidget.
      */
-    long nicesize(YUIDimension dim);
+    long nicesize(YUIDimension dim );
 
     /**
      * Set the new size of the widget.
      * Inherited from YWidget.
      */
-    void setSize(long newWidth, long newHeight);
+    void setSize(long newWidth, long newHeight );
 
     /**
      * Change the label.

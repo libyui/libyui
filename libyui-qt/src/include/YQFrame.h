@@ -44,7 +44,7 @@ public:
      * widget. All new widgets are enabled per definition. Only
      * enabled widgets can take user input.
      */
-    void setEnabling(bool enabled);
+    void setEnabling(bool enabled );
 
     /**
      * Set the size.
@@ -54,7 +54,7 @@ public:
     /**
      * Change the Frame label.
      */
-    void setLabel(const YCPString & newLabel);
+    void setLabel(const YCPString & newLabel );
 
     /**
      * Minimum size the widget should have to make it look and feel
@@ -71,7 +71,7 @@ protected:
      * widget that a child has been added. The default implementation
      * does nothing.
      */
-    void childAdded(YWidget * child);
+    void childAdded(YWidget * child );
 };
 
 

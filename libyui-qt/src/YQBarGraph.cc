@@ -57,7 +57,7 @@ void YQBarGraph::doUpdate()
 
 void YQBarGraph::setEnabling( bool enabled )
 {
-    _barGraph->setEnabled(enabled);
+    _barGraph->setEnabled(enabled );
 }
 
 

@@ -210,7 +210,7 @@ public:
      * specified file system.
      **/
     YQPkgDiskUsageListItem( YQPkgDiskUsageList * 	parent,
-			    YQPkgDuData			duData);
+			    YQPkgDuData			duData );
 
     /**
      * Destructor.

@@ -40,7 +40,7 @@ YQFrame::YQFrame( QWidget * parent, YWidgetOpt & opt,
 
 void YQFrame::setEnabling( bool enabled)
 {
-    QFrame::setEnabled( enabled);
+    QFrame::setEnabled( enabled );
 }
 
 
@@ -53,7 +53,7 @@ YQFrame::setSize( long newWidth, long newHeight )
     long newChildHeight = max ( 0L, newHeight - frameWidth() - fontMetrics().height() - 1 );
 
     if ( numChildren() > 0 )
-	YContainerWidget::child(0)->setSize( newChildWidth, newChildHeight);
+	YContainerWidget::child(0)->setSize( newChildWidth, newChildHeight );
 
 }
 

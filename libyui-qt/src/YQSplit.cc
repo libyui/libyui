@@ -36,21 +36,21 @@ YQSplit::YQSplit( QWidget * parent, YWidgetOpt & opt, YUIDimension dimension)
 
 void YQSplit::setEnabling( bool enabled)
 {
-    QWidget::setEnabled( enabled);
+    QWidget::setEnabled( enabled );
 }
 
 
 void YQSplit::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight);
-    YSplit::setSize( newWidth, newHeight);
+    resize(newWidth, newHeight );
+    YSplit::setSize( newWidth, newHeight );
 }
 
 
 void YQSplit::moveChild( YWidget * child, long newX, long newY)
 {
     QWidget * qw = (QWidget *)(child->widgetRep() );
-    qw->move(newX, newY);
+    qw->move(newX, newY );
 }
 
 #include "YQSplit.moc.cc"

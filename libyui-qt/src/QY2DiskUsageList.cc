@@ -169,7 +169,7 @@ QY2DiskUsageListItem::compare( QListViewItem *	otherListViewItem,
 			       int		col,
 			       bool		ascending ) const
 {
-    QY2DiskUsageListItem * other = dynamic_cast<QY2DiskUsageListItem *> (otherListViewItem);
+    QY2DiskUsageListItem * other = dynamic_cast<QY2DiskUsageListItem *> (otherListViewItem );
 
     if ( other )
     {
@@ -275,7 +275,7 @@ QY2DiskUsageListItem::paintPercentageBar( float			percent,
 	pen.setWidth( 0 );
 	painter->setPen( pen );
 	painter->setBrush( NoBrush );
-	fillWidth = (int) ( ( w - 2 * penWidth ) * percent / 100.0);
+	fillWidth = (int) ( ( w - 2 * penWidth ) * percent / 100.0 );
 
 
 	// Fill bar background.

@@ -50,25 +50,25 @@ public:
     /**
      * Makes this dialog	 active or inactive
      */
-    void activate(bool active);
+    void activate(bool active );
 
     /**
      * Interited from QDialog: The window was closed via the window
      * manager close button.
      */
-    void closeEvent( QCloseEvent * ev);
+    void closeEvent( QCloseEvent * ev );
 
     /**
      * Returns the nice size of this dialog (may depend on -geometry)
      */
-    long nicesize(YUIDimension dim);
+    long nicesize(YUIDimension dim );
 
     /**
      * Returns the size of (artificial) window manager decorations in
      * the requested dimension (YD_HORIZ or YD_VERT), depending on the
      * value of YDialog::isDecorated().
      */
-    long decorationWidth(YUIDimension dim);
+    long decorationWidth(YUIDimension dim );
 
     /**
      * Return this dialog's (first) default button or 0 if none
@@ -80,12 +80,12 @@ public:
      * widget. All new widgets are enabled per definition. Only
      * enabled widgets can take user input.
      */
-    void setEnabling(bool enabled);
+    void setEnabling(bool enabled );
 
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newWidth, long newHeight);
+    void setSize(long newWidth, long newHeight );
 
     /**
      * Returns whether or not the user has resized this dialog.
@@ -155,7 +155,7 @@ protected:
      * Callback function that reports to the ui specific
      * widget that a child has been added.
      */
-    void childAdded(YWidget * child);
+    void childAdded(YWidget * child );
 
     /**
      * Event handler for keyboard input.
@@ -171,7 +171,7 @@ protected:
      *
      * Inherited from QWidget.
      **/
-    void focusInEvent( QFocusEvent * event);
+    void focusInEvent( QFocusEvent * event );
 
     /**
      * Event handler for window resize.

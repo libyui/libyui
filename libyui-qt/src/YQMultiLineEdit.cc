@@ -79,7 +79,7 @@ long YQMultiLineEdit::nicesize( YUIDimension dim )
 
 void YQMultiLineEdit::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight);
+    resize(newWidth, newHeight );
 }
 
 
@@ -98,7 +98,7 @@ YCPString YQMultiLineEdit::text()
 void YQMultiLineEdit::setLabel( const YCPString & label)
 {
     _qt_label->setText( fromUTF8( label->value() ) );
-    YMultiLineEdit::setLabel( label);
+    YMultiLineEdit::setLabel( label );
 }
 
 
@@ -115,7 +115,7 @@ bool YQMultiLineEdit::setKeyboardFocus()
 void YQMultiLineEdit::changed()
 {
     if (getNotify() )
-	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this);
+	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }
 
 

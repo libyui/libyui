@@ -75,7 +75,7 @@ public:
      * Set the edited text.
      * Inherited from YMultiLineEdit.
      */
-    void setText( const YCPString & text);
+    void setText( const YCPString & text );
 
     /**
      * Get the edited text.

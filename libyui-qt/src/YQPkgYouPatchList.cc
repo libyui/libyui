@@ -145,7 +145,7 @@ YQPkgYouPatchList::addYouPatchItem( PMYouPatchPtr pmYouPatch )
 	return;
     }
 
-    new YQPkgYouPatchListItem( this, pmYouPatch);
+    new YQPkgYouPatchListItem( this, pmYouPatch );
 }
 
 
@@ -157,7 +157,7 @@ YQPkgYouPatchList::selection() const
     if ( ! item )
 	return 0;
 
-    return dynamic_cast<YQPkgYouPatchListItem *> (item);
+    return dynamic_cast<YQPkgYouPatchListItem *> (item );
 }
 
 
@@ -229,7 +229,7 @@ YQPkgYouPatchList::keyPressEvent( QKeyEvent * event )
 
 	    if ( selectedListViewItem )
 	    {
-		YQPkgYouPatchListItem * item = dynamic_cast<YQPkgYouPatchListItem *> (selectedListViewItem);
+		YQPkgYouPatchListItem * item = dynamic_cast<YQPkgYouPatchListItem *> (selectedListViewItem );
 
 		if ( item && item->pmObj()->hasInstalledObj() )
 		{
@@ -332,7 +332,7 @@ YQPkgYouPatchListItem::compare( QListViewItem * otherListViewItem,
 				int		col,
 				bool		ascending ) const
 {
-    YQPkgYouPatchListItem * other = dynamic_cast<YQPkgYouPatchListItem *> (otherListViewItem);
+    YQPkgYouPatchListItem * other = dynamic_cast<YQPkgYouPatchListItem *> (otherListViewItem );
 
     if ( other )
     {

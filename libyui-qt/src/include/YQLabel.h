@@ -37,31 +37,31 @@ public:
     /**
      * Constructor.
      */
-    YQLabel( QWidget * parent, YWidgetOpt & opt, YCPString text);
+    YQLabel( QWidget * parent, YWidgetOpt & opt, YCPString text );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
      * widget. All new widgets are enabled per definition. Only
      * enabled widgets can take user input.
      */
-    void setEnabling(bool enabled);
+    void setEnabling(bool enabled );
 
     /**
      * Minimum size the widget should have to make it look and feel
      * nice.
      * @dim Dimension, either YD_HORIZ or YD_VERT
      */
-    long nicesize(YUIDimension dim);
+    long nicesize(YUIDimension dim );
 
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newWidth, long newHeight);
+    void setSize(long newWidth, long newHeight );
 
     /**
      * Change the label text.
      */
-    void setLabel(const YCPString & label);
+    void setLabel(const YCPString & label );
 };
 
 #endif // YQLabel_h

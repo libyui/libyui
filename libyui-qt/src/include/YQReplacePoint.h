@@ -37,25 +37,25 @@ public:
     /**
      * Constructor.
      */
-    YQReplacePoint( QWidget * parent, YWidgetOpt & opt);
+    YQReplacePoint( QWidget * parent, YWidgetOpt & opt );
 
     /**
      * Inherited from YContainerWidget. Called when a child
      * has been added. We call show() for the new widget.
      */
-    void childAdded(YWidget * child);
+    void childAdded(YWidget * child );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
      * widget. All new widgets are enabled per definition. Only
      * enabled widgets can take user input.
      */
-    void setEnabling(bool enabled);
+    void setEnabling(bool enabled );
 
     /**
      * Sets the size
      */
-    void setSize(long newWidth, long newHeight);
+    void setSize(long newWidth, long newHeight );
 };
 
 

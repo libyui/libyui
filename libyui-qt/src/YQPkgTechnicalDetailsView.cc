@@ -96,7 +96,7 @@ YQPkgTechnicalDetailsView::authorsListCell( PMPackagePtr pkg ) const
 
     while ( it != authors.end() )
     {
-	line = fromUTF8(*it);
+	line = fromUTF8(*it );
 	line = htmlEscape( line );
 	html += line + "<br>";
 	++it;

@@ -72,7 +72,7 @@ public:
     /**
      * Set the log text.
      */
-    void setLogText( const YCPString & text);
+    void setLogText( const YCPString & text );
 
 
 protected:

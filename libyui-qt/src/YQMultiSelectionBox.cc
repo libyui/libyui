@@ -49,8 +49,8 @@ YQMultiSelectionBox::YQMultiSelectionBox( QWidget *		parent,
     setSpacing( SPACING );
     setMargin( MARGIN );
 
-    _qt_label = new QLabel(fromUTF8(label->value() ), this);
-    _qt_label->setTextFormat(QLabel::PlainText);
+    _qt_label = new QLabel(fromUTF8(label->value() ), this );
+    _qt_label->setTextFormat(QLabel::PlainText );
     _qt_label->setFont( YUIQt::ui()->currentFont() );
 
     _qt_listview = new QListView( this );
@@ -58,7 +58,7 @@ YQMultiSelectionBox::YQMultiSelectionBox( QWidget *		parent,
     _qt_listview->addColumn( "" );	// we need at least one column - yes, QListView is too dumb to do without that. :-(
     _qt_listview->setSorting( 0, false );
     _qt_listview->header()->hide();
-    _qt_label->setBuddy(_qt_listview);
+    _qt_label->setBuddy(_qt_listview );
 
     // Very small default size if specified
     shrinkable = opt.isShrinkable.value();
@@ -72,7 +72,7 @@ void
 YQMultiSelectionBox::setLabel( const YCPString & label )
 {
     _qt_label->setText(fromUTF8(label->value() ) );
-    YMultiSelectionBox::setLabel( label);
+    YMultiSelectionBox::setLabel( label );
 }
 
 
@@ -100,15 +100,15 @@ YQMultiSelectionBox::nicesize( YUIDimension dim )
 void
 YQMultiSelectionBox::setSize( long newWidth, long newHeight )
 {
-    resize(newWidth, newHeight);
+    resize(newWidth, newHeight );
 }
 
 
 void
 YQMultiSelectionBox::setEnabling( bool enabled )
 {
-    _qt_label->setEnabled(enabled);
-    _qt_listview->setEnabled(enabled);
+    _qt_label->setEnabled(enabled );
+    _qt_listview->setEnabled(enabled );
     _qt_listview->triggerUpdate();
 }
 
@@ -244,7 +244,7 @@ YQMultiSelectionBox::deselectAllItems()
 void YQMultiSelectionBox::slotSelected()
 {
     if ( getNotify() )
-	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this);
+	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }
 
 

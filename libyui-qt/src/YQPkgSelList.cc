@@ -127,7 +127,7 @@ YQPkgSelList::addPkgSelItem( PMSelectionPtr pmSel )
 	return;
     }
 
-    new YQPkgSelListItem( this, pmSel);
+    new YQPkgSelListItem( this, pmSel );
 }
 
 
@@ -139,7 +139,7 @@ YQPkgSelList::selection() const
     if ( ! item )
 	return 0;
 
-    return dynamic_cast<YQPkgSelListItem *> (item);
+    return dynamic_cast<YQPkgSelListItem *> (item );
 }
 
 

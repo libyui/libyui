@@ -32,14 +32,14 @@ YQSquash::YQSquash( QWidget * parent, YWidgetOpt & opt,
 
 void YQSquash::setEnabling( bool enabled)
 {
-    QWidget::setEnabled( enabled);
+    QWidget::setEnabled( enabled );
 }
 
 
 void YQSquash::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight);
-    YSquash::setSize( newWidth, newHeight);
+    resize(newWidth, newHeight );
+    YSquash::setSize( newWidth, newHeight );
 }
 
 #include "YQSquash.moc.cc"

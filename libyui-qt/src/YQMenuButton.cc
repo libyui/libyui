@@ -45,13 +45,13 @@ YQMenuButton::YQMenuButton( QWidget * parent,
     _qt_pushbutton->setMinimumSize( 2,2 );
     _qt_pushbutton->installEventFilter( this );
     _qt_pushbutton->move( BORDER, BORDER );
-    setMinimumSize(_qt_pushbutton->minimumSize() + 2 * BORDERSIZE);
+    setMinimumSize(_qt_pushbutton->minimumSize() + 2 * BORDERSIZE );
 }
 
 void
 YQMenuButton::setEnabling( bool enabled)
 {
-    _qt_pushbutton->setEnabled(enabled);
+    _qt_pushbutton->setEnabled(enabled );
 }
 
 
@@ -67,8 +67,8 @@ YQMenuButton::nicesize( YUIDimension dim)
 void
 YQMenuButton::setSize( long newWidth, long newHeight)
 {
-    _qt_pushbutton->resize(newWidth - 2 * BORDER, newHeight - 2 * BORDER);
-    resize(newWidth, newHeight);
+    _qt_pushbutton->resize(newWidth - 2 * BORDER, newHeight - 2 * BORDER );
+    resize(newWidth, newHeight );
 }
 
 

@@ -69,7 +69,7 @@ YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
     // BarGraph
 
     barGraph = new QY2BarGraph( vbox );
-    barGraph->setSegments(3);
+    barGraph->setSegments(3 );
     barGraph->setLabel( 0, fromUTF8( usedLabel()->value()    ) );
     barGraph->setLabel( 1, fromUTF8( freeLabel()->value()    ) );
     barGraph->setLabel( 2, fromUTF8( newPartLabel()->value() ) );
@@ -176,7 +176,7 @@ void YQPartitionSplitter::setSize( long newWidth, long newHeight )
 
 void YQPartitionSplitter::setValue( int new_newPartSize )
 {
-    YPartitionSplitter::setValue( new_newPartSize);
+    YPartitionSplitter::setValue( new_newPartSize );
 
     if ( ! barGraph )
 	return;

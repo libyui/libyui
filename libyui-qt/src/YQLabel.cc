@@ -33,7 +33,7 @@ YQLabel::YQLabel( QWidget * parent, YWidgetOpt & opt,
 {
     setWidgetRep( this );
 
-    setTextFormat(QLabel::PlainText);
+    setTextFormat(QLabel::PlainText );
     setText(fromUTF8(text->value() ) );
     setIndent( 0 );
 
@@ -46,14 +46,14 @@ YQLabel::YQLabel( QWidget * parent, YWidgetOpt & opt,
 	setMidLineWidth( 2 );
     }
 
-    setMargin(AlignRight);
-    setAlignment(AlignLeft | AlignTop);
+    setMargin(AlignRight );
+    setAlignment(AlignLeft | AlignTop );
 }
 
 
 void YQLabel::setEnabling( bool enabled)
 {
-    QLabel::setEnabled( enabled);
+    QLabel::setEnabled( enabled );
 }
 
 
@@ -65,14 +65,14 @@ long YQLabel::nicesize( YUIDimension dim)
 
 void YQLabel::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight);
+    resize(newWidth, newHeight );
 }
 
 
 void YQLabel::setLabel( const YCPString & text)
 {
     setText(fromUTF8(text->value() ) );
-    YLabel::setLabel( text);
+    YLabel::setLabel( text );
 }
 
 

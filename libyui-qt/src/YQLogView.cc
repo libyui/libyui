@@ -78,7 +78,7 @@ long YQLogView::nicesize( YUIDimension dim )
 
 void YQLogView::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight);
+    resize(newWidth, newHeight );
 }
 
 
@@ -92,7 +92,7 @@ void YQLogView::setLogText( const YCPString & text)
 void YQLogView::setLabel( const YCPString & label)
 {
     _qt_label->setText( fromUTF8( label->value() ) );
-    YLogView::setLabel( label);
+    YLogView::setLabel( label );
 }
 
 

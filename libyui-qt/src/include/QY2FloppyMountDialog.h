@@ -152,7 +152,7 @@ public:
     /**
      * Add a fixed height horizontal space
      **/
-    static void addHSpacing( QWidget * parent, int width = 8);
+    static void addHSpacing( QWidget * parent, int width = 8 );
 
     
 protected:

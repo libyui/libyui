@@ -52,14 +52,14 @@ YQTextEntry::YQTextEntry( QWidget * parent, YWidgetOpt & opt,
     if ( label->value() == "" )
 	_qt_label->hide();
 
-    _qt_lineedit = new QLineEdit(this);
+    _qt_lineedit = new QLineEdit(this );
     _qt_lineedit->setFont(YUIQt::ui()->currentFont() );
     _qt_lineedit->setText(fromUTF8(text->value() ) );
 
-    _qt_label->setBuddy(_qt_lineedit);
+    _qt_label->setBuddy(_qt_lineedit );
 
     if (opt.passwordMode.value() )
-	_qt_lineedit->setEchoMode(QLineEdit::Password);
+	_qt_lineedit->setEchoMode(QLineEdit::Password );
 
     shrinkable = opt.isShrinkable.value();
 
@@ -69,7 +69,7 @@ YQTextEntry::YQTextEntry( QWidget * parent, YWidgetOpt & opt,
 
 void YQTextEntry::setEnabling( bool enabled)
 {
-    _qt_lineedit->setEnabled(enabled);
+    _qt_lineedit->setEnabled(enabled );
 }
 
 
@@ -94,7 +94,7 @@ long YQTextEntry::nicesize( YUIDimension dim)
 
 void YQTextEntry::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight);
+    resize(newWidth, newHeight );
 }
 
 void YQTextEntry::setText( const YCPString & text)
@@ -112,7 +112,7 @@ YCPString YQTextEntry::getText()
 void YQTextEntry::setLabel( const YCPString & label)
 {
     _qt_label->setText(fromUTF8(label->value() ) );
-    YTextEntry::setLabel( label);
+    YTextEntry::setLabel( label );
 }
 
 
@@ -149,7 +149,7 @@ bool YQTextEntry::setKeyboardFocus()
 void YQTextEntry::changed( const QString &)
 {
     if (getNotify() )
-	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this);
+	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }
 
 

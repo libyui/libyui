@@ -45,7 +45,7 @@ YQRadioButtonGroup::~YQRadioButtonGroup()
 
 void YQRadioButtonGroup::addRadioButton( YRadioButton * button)
 {
-    YRadioButtonGroup::addRadioButton( button);
+    YRadioButtonGroup::addRadioButton( button );
 
     if ( button->getValue()->value() )	// if this new button is active
     {
@@ -61,19 +61,19 @@ void YQRadioButtonGroup::addRadioButton( YRadioButton * button)
 
 void YQRadioButtonGroup::removeRadioButton( YRadioButton * button)
 {
-    YRadioButtonGroup::removeRadioButton( button);
+    YRadioButtonGroup::removeRadioButton( button );
 }
 
 
 void YQRadioButtonGroup::setEnabling( bool enabled)
 {
-    QWidget::setEnabled( enabled);
+    QWidget::setEnabled( enabled );
 }
 
 void YQRadioButtonGroup::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight);
-    YRadioButtonGroup::setSize( newWidth, newHeight);
+    resize(newWidth, newHeight );
+    YRadioButtonGroup::setSize( newWidth, newHeight );
 }
 
 

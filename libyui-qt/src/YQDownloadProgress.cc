@@ -73,7 +73,7 @@ long YQDownloadProgress::nicesize( YUIDimension dim )
 
 void YQDownloadProgress::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight);
+    resize(newWidth, newHeight );
 }
 
 

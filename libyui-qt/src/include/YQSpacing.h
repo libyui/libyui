@@ -41,7 +41,7 @@ public:
      * Return size in pixels. Assume one basic unit to be equivalent to
      * 80*25 characters at dialog default size (640*480).
      */
-    long absoluteSize(YUIDimension dim, float relativeSize);
+    long absoluteSize(YUIDimension dim, float relativeSize );
 };
 
 #endif // YQSpacing_h

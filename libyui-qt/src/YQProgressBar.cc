@@ -45,26 +45,26 @@ YQProgressBar::YQProgressBar( QWidget * parent, YWidgetOpt & opt,
     setSpacing( SPACING );
     setMargin( MARGIN );
 
-    _qt_label = new QLabel(fromUTF8(label->value() ), this);
-    _qt_label->setTextFormat(QLabel::PlainText);
+    _qt_label = new QLabel(fromUTF8(label->value() ), this );
+    _qt_label->setTextFormat(QLabel::PlainText );
     _qt_label->setFont(YUIQt::ui()->currentFont() );
     
     if ( label->value() == "" )
 	_qt_label->hide();
 
-    _qt_progressbar = new QProgressBar(this);
+    _qt_progressbar = new QProgressBar(this );
     _qt_progressbar->setFont(YUIQt::ui()->currentFont() );
     _qt_progressbar->setTotalSteps(maxProgress->value() );
-    _qt_label->setBuddy(_qt_progressbar);
+    _qt_label->setBuddy(_qt_progressbar );
 
-    setProgress(progress);
+    setProgress(progress );
 }
 
 
 void YQProgressBar::setEnabling( bool enabled)
 {
-    _qt_label->setEnabled(enabled);
-    _qt_progressbar->setEnabled(enabled);
+    _qt_label->setEnabled(enabled );
+    _qt_progressbar->setEnabled(enabled );
 }
 
 
@@ -89,7 +89,7 @@ long YQProgressBar::nicesize( YUIDimension dim)
 
 void YQProgressBar::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight);
+    resize(newWidth, newHeight );
 }
 
 void YQProgressBar::setLabel( const YCPString & text)

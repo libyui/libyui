@@ -116,7 +116,7 @@ YQPkgConflictList::applyResolutions()
 
     while ( child )
     {
-	YQPkgConflict * conflict = dynamic_cast<YQPkgConflict *> (child);
+	YQPkgConflict * conflict = dynamic_cast<YQPkgConflict *> (child );
 
 	if ( conflict )
 	    conflict->applyResolution();
@@ -135,7 +135,7 @@ YQPkgConflictList::ignoreAll()
 
     while ( child )
     {
-	YQPkgConflict * conflict = dynamic_cast<YQPkgConflict *> (child);
+	YQPkgConflict * conflict = dynamic_cast<YQPkgConflict *> (child );
 
 	if ( conflict )
 	    conflict->ignore();
@@ -187,7 +187,7 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
     // Write header
 
     QString header = "#### YaST2 conflicts list - generated ";
-    header += QDateTime::currentDateTime().toString( "yyyy-MM-dd hh:mm:ss");
+    header += QDateTime::currentDateTime().toString( "yyyy-MM-dd hh:mm:ss" );
     header += " ####\n\n";
 
     fputs( (const char *) header, file );
@@ -231,7 +231,7 @@ YQPkgConflictList::saveItemToFile( FILE * 			file,
 
     // Write item
 
-    const QCheckListItem * checkListItem = dynamic_cast<const QCheckListItem *> (item);
+    const QCheckListItem * checkListItem = dynamic_cast<const QCheckListItem *> (item );
 
     if ( checkListItem )
     {
@@ -680,7 +680,7 @@ YQPkgConflict::dumpDeleteList( QListViewItem * parent )
 	    }
 	}
 
-	PMObjectPtr pkg = (*it);
+	PMObjectPtr pkg = (*it );
 
 	if ( pkg )
 	{
@@ -889,7 +889,7 @@ YQPkgConflict::applyResolution()
 
     while ( item )
     {
-	YQPkgConflictResolution * res = dynamic_cast<YQPkgConflictResolution *> (item);
+	YQPkgConflictResolution * res = dynamic_cast<YQPkgConflictResolution *> (item );
 
 	if ( ! res )
 	    y2error( "Non-resolution item in resolution list!" );
@@ -942,7 +942,7 @@ YQPkgConflict::bruteForceDelete()
 
     while ( it != _conflict.remove_to_solve_conflict.end() )
     {
-	PMObjectPtr pkg = (*it);
+	PMObjectPtr pkg = (*it );
 
 	if ( pkg && pkg->getSelectable() )
 	{

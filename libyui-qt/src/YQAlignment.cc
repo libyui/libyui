@@ -49,8 +49,8 @@ void YQAlignment::moveChild( YWidget * child, long newX, long newY )
 
 void YQAlignment::setSize( long newWidth, long newHeight )
 {
-    resize(newWidth, newHeight);
-    YAlignment::setSize( newWidth, newHeight);
+    resize(newWidth, newHeight );
+    YAlignment::setSize( newWidth, newHeight );
 }
 
 

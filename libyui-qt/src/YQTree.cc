@@ -55,9 +55,9 @@ YQTree::YQTree( QWidget * parent, YWidgetOpt & opt, const YCPString & label )
 
     _qt_label->setBuddy ( _listView );
     
-    QGridLayout * grid = new QGridLayout( this, 2,1, YQWIDGET_BORDER);
-    grid->addWidget( _qt_label, 0,0);
-    grid->addWidget( _listView, 1,0);
+    QGridLayout * grid = new QGridLayout( this, 2,1, YQWIDGET_BORDER );
+    grid->addWidget( _qt_label, 0,0 );
+    grid->addWidget( _listView, 1,0 );
 
     connect( _listView,	SIGNAL( selectionChanged ( void ) ),
 	     this, 	SLOT  ( slotSelected     ( void ) ) );
@@ -137,7 +137,7 @@ YQTree::setCurrentItem( YTreeItem * yit )
     {
 	// Select this item
 
-	_listView->setSelected( it, true);
+	_listView->setSelected( it, true );
 
 
 	// Open all parent items so the selected item isn't obscured
@@ -176,7 +176,7 @@ YQTree::findYQTreeItem( const YTreeItem * orig ) const
 void YQTree::slotSelected( void )
 {
     if (getNotify() )
-	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this);
+	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }
 
 

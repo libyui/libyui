@@ -38,29 +38,29 @@ public:
      * Constructor.
      * images.
      */
-    YQImage( QWidget * parent, YWidgetOpt & opt, YUIInterpreter::ImageType img);
+    YQImage( QWidget * parent, YWidgetOpt & opt, YUIInterpreter::ImageType img );
 
     /**
      * Constructor.
      */
-    YQImage( QWidget * parent, YWidgetOpt & opt, const YCPByteblock & byteblock);
+    YQImage( QWidget * parent, YWidgetOpt & opt, const YCPByteblock & byteblock );
 
     /**
      * Constructor.
      */
-    YQImage( QWidget * parent, YWidgetOpt & opt, const YCPString & file_name);
+    YQImage( QWidget * parent, YWidgetOpt & opt, const YCPString & file_name );
 
     /**
      * Minimum size the widget should have to make it look and feel
      * nice.
      * @dim Dimension, either YD_HORIZ or YD_VERT
      */
-    long nicesize(YUIDimension dim);
+    long nicesize(YUIDimension dim );
 
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newWidth, long newHeight);
+    void setSize(long newWidth, long newHeight );
 
 private:
 

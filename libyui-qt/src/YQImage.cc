@@ -72,7 +72,7 @@ YQImage::YQImage( QWidget * parent, YWidgetOpt & opt,
 	    break;
 
 	default:
-	    y2internal("Internal error: Unknown image type %d", img);
+	    y2internal("Internal error: Unknown image type %d", img );
 	    return; // Should not occur
     }
 

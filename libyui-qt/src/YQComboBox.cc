@@ -41,14 +41,14 @@ YQComboBox::YQComboBox( QWidget * parent, YWidgetOpt & opt,
     setSpacing( SPACING );
     setMargin( YQWIDGET_BORDER );
 
-    _qt_label = new QLabel(fromUTF8(label->value() ), this);
-    _qt_label->setTextFormat(QLabel::PlainText);
+    _qt_label = new QLabel(fromUTF8(label->value() ), this );
+    _qt_label->setTextFormat(QLabel::PlainText );
     _qt_label->setFont(YUIQt::ui()->currentFont() );
 
-    _qt_combo_box = new QComboBox(opt.isEditable.value(), this);
+    _qt_combo_box = new QComboBox(opt.isEditable.value(), this );
     _qt_combo_box->setFont(YUIQt::ui()->currentFont() );
 
-    _qt_label->setBuddy(_qt_combo_box);
+    _qt_label->setBuddy(_qt_combo_box );
 
     connect( _qt_combo_box, SIGNAL( highlighted( int) ), this, SLOT( slotSelected(int) ) );
     connect( _qt_combo_box, SIGNAL( activated( const QString & ) ), this, SLOT(textChanged(const QString & ) ) );
@@ -58,7 +58,7 @@ YQComboBox::YQComboBox( QWidget * parent, YWidgetOpt & opt,
 void YQComboBox::setLabel( const YCPString & label)
 {
     _qt_label->setText(fromUTF8(label->value() ) );
-    YComboBox::setLabel( label);
+    YComboBox::setLabel( label );
 }
 
 
@@ -90,14 +90,14 @@ long YQComboBox::nicesize( YUIDimension dim)
 
 void YQComboBox::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight);
+    resize(newWidth, newHeight );
 }
 
 
 void YQComboBox::setEnabling( bool enabled)
 {
-    _qt_label->setEnabled(enabled);
-    _qt_combo_box->setEnabled(enabled);
+    _qt_label->setEnabled(enabled );
+    _qt_combo_box->setEnabled(enabled );
 }
 
 
@@ -106,7 +106,7 @@ void YQComboBox::itemAdded( const YCPString & string, int index, bool selected)
     _qt_combo_box->insertItem(fromUTF8(string->value() ) );
 
     if (selected)
-	setValue(string);
+	setValue(string );
 }
 
 
@@ -124,7 +124,7 @@ void YQComboBox::setValue( const YCPString & new_value)
 
 void YQComboBox::setCurrentItem( int index)
 {
-    _qt_combo_box->setCurrentItem(index);
+    _qt_combo_box->setCurrentItem(index );
 }
 
 
@@ -141,14 +141,14 @@ bool YQComboBox::setKeyboardFocus()
 void YQComboBox::slotSelected( int i)
 {
     if (getNotify() )
-	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this);
+	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }
 
 
 void YQComboBox::textChanged( const QString &new_text)
 {
     if (getNotify() )
-	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this);
+	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }
 
 

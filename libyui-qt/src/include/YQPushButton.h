@@ -66,7 +66,7 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newWidth, long newHeight);
+    void setSize(long newWidth, long newHeight );
 
     /**
      * Changes the label of the button

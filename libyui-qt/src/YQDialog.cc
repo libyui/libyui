@@ -43,7 +43,7 @@ YQDialog::YQDialog( YWidgetOpt &	opt,
 
 
     setWidgetRep( this );
-    setCaption( hasDefaultSize() ? "YaST2" : "");
+    setCaption( hasDefaultSize() ? "YaST2" : "" );
     setFocusPolicy( QWidget::StrongFocus );
 
     if ( hasWarnColor() || hasInfoColor() )
@@ -54,15 +54,15 @@ YQDialog::YQDialog( YWidgetOpt &	opt,
 
 	if ( hasInfoColor() )
 	{
-	    normalBackground = QColor (238, 232, 170); // PaleGoldenrod
+	    normalBackground = QColor (238, 232, 170 ); // PaleGoldenrod
 	}
 
 	QPalette warnPalette( normalBackground );
 	QColorGroup normalColors = warnPalette.normal();
 	normalColors.setColor(QColorGroup::Text, text );
 	normalColors.setColor(QColorGroup::Base, inputFieldBackground );
-	warnPalette.setNormal(normalColors);
-	setPalette(warnPalette);
+	warnPalette.setNormal(normalColors );
+	setPalette(warnPalette );
     }
 
     _qFrame = new QFrame ( this );
@@ -97,12 +97,12 @@ long YQDialog::nicesize( YUIDimension dim)
 	}
 	else
 	{
-	    nice = YUIQt::ui()->defaultSize( dim);
+	    nice = YUIQt::ui()->defaultSize( dim );
 	}
     }
     else
     {
-	nice = YDialog::nicesize(dim) + 2 * decorationWidth( dim);
+	nice = YDialog::nicesize(dim) + 2 * decorationWidth( dim );
     }
 
     long screenSize = dim == YD_HORIZ ? qApp->desktop()->width() : qApp->desktop()->height();
@@ -128,7 +128,7 @@ long YQDialog::decorationWidth( YUIDimension dim)
 
 void YQDialog::setEnabling( bool enabled)
 {
-    QWidget::setEnabled( enabled);
+    QWidget::setEnabled( enabled );
 }
 
 
@@ -392,7 +392,7 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    }
 	    else if ( event->key() == Qt::Key_D )
 	    {
-		YUIQt::ui()->returnNow( YUIInterpreter::ET_DEBUG, 0);
+		YUIQt::ui()->returnNow( YUIInterpreter::ET_DEBUG, 0 );
 		return;
 	    }
 	}
@@ -408,9 +408,9 @@ void YQDialog::closeEvent( QCloseEvent * event)
     // handled just like the user had clicked on the `id`(`cancel) button in
     // that dialog. It's up to the YCP application to handle this (if desired).
 
-    y2debug("Ignoring window manager close button.");
+    y2debug("Ignoring window manager close button." );
     event->ignore();
-    YUIQt::ui()->returnNow( YUIInterpreter::ET_CANCEL, 0);
+    YUIQt::ui()->returnNow( YUIInterpreter::ET_CANCEL, 0 );
 }
 
 

@@ -34,7 +34,7 @@ YQRichText::YQRichText( QWidget * parent, YWidgetOpt & opt,
 {
     setWidgetRep( this );
     setFont( YUIQt::ui()->currentFont() );
-    setMargin(AlignRight);
+    setMargin(AlignRight );
     
     if ( opt.plainTextMode.value() )
     {
@@ -56,9 +56,9 @@ YQRichText::YQRichText( QWidget * parent, YWidgetOpt & opt,
 
     QPalette pal(palette() );
     QColorGroup normalColors(pal.normal() );
-    normalColors.setColor(QColorGroup::Text, black);
-    pal.setNormal(normalColors);
-    setPalette(pal);
+    normalColors.setColor(QColorGroup::Text, black );
+    pal.setNormal(normalColors );
+    setPalette(pal );
 
     // Set the text background to a light grey
 
@@ -72,7 +72,7 @@ YQRichText::YQRichText( QWidget * parent, YWidgetOpt & opt,
 
 void YQRichText::setEnabling( bool enabled)
 {
-    setEnabled(enabled);
+    setEnabled(enabled );
 }
 
 
@@ -85,17 +85,17 @@ long YQRichText::nicesize( YUIDimension dim)
 
 void YQRichText::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight);
+    resize(newWidth, newHeight );
 }
 
 
 void YQRichText::setText( const YCPString & text)
 {
     if ( horizontalScrollBar() )
-	horizontalScrollBar()->setValue(0);
+	horizontalScrollBar()->setValue(0 );
 
     if ( ! autoScrollDown && verticalScrollBar() )
-	verticalScrollBar()->setValue(0);
+	verticalScrollBar()->setValue(0 );
     
     QTextBrowser::setText( fromUTF8( text->value() ) );
     YRichText::setText( text );

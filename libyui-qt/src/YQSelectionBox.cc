@@ -50,16 +50,16 @@ YQSelectionBox::YQSelectionBox( QWidget * parent, YWidgetOpt & opt,
     setSpacing( SPACING );
     setMargin( MARGIN );
 
-    _qt_label = new QLabel(fromUTF8(label->value() ), this);
-    _qt_label->setTextFormat(QLabel::PlainText);
+    _qt_label = new QLabel(fromUTF8(label->value() ), this );
+    _qt_label->setTextFormat(QLabel::PlainText );
     _qt_label->setFont(YUIQt::ui()->currentFont() );
 
-    _qt_listbox = new QListBox(this);
+    _qt_listbox = new QListBox(this );
     _qt_listbox->installEventFilter( this );
-    _qt_listbox->setVariableHeight(false);
+    _qt_listbox->setVariableHeight(false );
     _qt_listbox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
-    _qt_listbox->setTopItem(0);
-    _qt_label->setBuddy(_qt_listbox);
+    _qt_listbox->setTopItem(0 );
+    _qt_label->setBuddy(_qt_listbox );
 
     shrinkable 		= opt.isShrinkable.value();
     immediateMode	= opt.immediateMode.value();
@@ -78,7 +78,7 @@ YQSelectionBox::YQSelectionBox( QWidget * parent, YWidgetOpt & opt,
 void YQSelectionBox::setLabel( const YCPString & label)
 {
     _qt_label->setText(fromUTF8(label->value() ) );
-    YSelectionBox::setLabel( label);
+    YSelectionBox::setLabel( label );
 }
 
 
@@ -104,22 +104,22 @@ long YQSelectionBox::nicesize( YUIDimension dim)
 
 void YQSelectionBox::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight);
+    resize(newWidth, newHeight );
 }
 
 
 void YQSelectionBox::setEnabling( bool enabled)
 {
-    _qt_label->setEnabled(enabled);
-    _qt_listbox->setEnabled(enabled);
-    _qt_listbox->triggerUpdate(true);
+    _qt_label->setEnabled(enabled );
+    _qt_listbox->setEnabled(enabled );
+    _qt_listbox->triggerUpdate(true );
 }
 
 
 void YQSelectionBox::itemAdded( const YCPString & string, int index, bool selected)
 {
     _qt_listbox->insertItem(fromUTF8(string->value() ) );
-    if (selected) _qt_listbox->setCurrentItem(index);
+    if (selected) _qt_listbox->setCurrentItem(index );
 }
 
 
@@ -131,7 +131,7 @@ int YQSelectionBox::getCurrentItem()
 
 void YQSelectionBox::setCurrentItem( int index)
 {
-    _qt_listbox->setCurrentItem(index);
+    _qt_listbox->setCurrentItem(index );
 }
 
 
@@ -162,7 +162,7 @@ bool YQSelectionBox::eventFilter( QObject * obj, QEvent * ev )
 	}
     }
 
-    return QWidget::eventFilter( obj, ev);
+    return QWidget::eventFilter( obj, ev );
 }
 
 

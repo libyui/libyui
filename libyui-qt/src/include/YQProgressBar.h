@@ -54,37 +54,37 @@ public:
 		   YWidgetOpt &		opt,
 		   const YCPString  & 	label,
 		   const YCPInteger & 	maxProgress,
-		   const YCPInteger & 	initialProgress);
+		   const YCPInteger & 	initialProgress );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
      * widget. Disabling a progress bar makes it grey
      */
-    void setEnabling(bool enabled);
+    void setEnabling(bool enabled );
 
     /**
      * Minimum size the widget should have to make it look and feel
      * nice.
      * @dim Dimension, either YD_HORIZ or YD_VERT
      */
-    long nicesize(YUIDimension dim);
+    long nicesize(YUIDimension dim );
 
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newWidth, long newHeight);
+    void setSize(long newWidth, long newHeight );
 
     /**
      * Change the ProgressBar label. Calls
      * YProgressBar::setLabel at the end.
      */
-    void setLabel(const YCPString & label);
+    void setLabel(const YCPString & label );
 
     /**
      * Change the progress. Calls
      * YProgressBar::setProgress at the end.
      */
-    void setProgress(const YCPInteger & progress);
+    void setProgress(const YCPInteger & progress );
 
     /**
      * Accept the keyboard focus.

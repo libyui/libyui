@@ -41,14 +41,14 @@ void YQReplacePoint::childAdded( YWidget * child)
 
 void YQReplacePoint::setEnabling( bool enabled)
 {
-    QWidget::setEnabled( enabled);
+    QWidget::setEnabled( enabled );
 }
 
 
 void YQReplacePoint::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight);
-    YReplacePoint::setSize( newWidth, newHeight);
+    resize(newWidth, newHeight );
+    YReplacePoint::setSize( newWidth, newHeight );
 }
 
 #include "YQReplacePoint.moc.cc"

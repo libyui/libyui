@@ -43,17 +43,17 @@ public:
      * widget. All new widgets are enabled per definition. Only
      * enabled widgets can take user input.
      */
-    void setEnabling(bool enabled);
+    void setEnabling(bool enabled );
 
     /**
      * Inherited from YWidget. Sets the new size of the widget.
      */
-    void setSize(long newWidth, long newHeight);
+    void setSize(long newWidth, long newHeight );
 
     /**
      * Inherited from YSplit. Moves a child to a new position
      */
-    void moveChild(YWidget * child, long newX, long newY);
+    void moveChild(YWidget * child, long newX, long newY );
 };
 
 

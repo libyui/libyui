@@ -70,19 +70,19 @@ public:
      * widget. All new widgets are enabled per definition. Only
      * enabled widgets can take user input.
      **/
-    void setEnabling(bool enabled);
+    void setEnabling(bool enabled );
 
     /**
      * Minimum size the widget should have to make it look and feel
      * nice.
      * @dim Dimension, either YD_HORIZ or YD_VERT
      **/
-    long nicesize(YUIDimension dim);
+    long nicesize(YUIDimension dim );
 
     /**
      * Sets the new size of the widget.
      **/
-    void setSize(long newWidth, long newHeight);
+    void setSize(long newWidth, long newHeight );
 
     /**
      * Accept the keyboard focus.
@@ -339,7 +339,7 @@ void addVSpacing( QWidget * parent, int height = 8 );
 /**
  * Add a fixed height horizontal space
  **/
-void addHSpacing( QWidget * parent, int width = 8);
+void addHSpacing( QWidget * parent, int width = 8 );
 
 
 #endif // YQPackageSelector_h

@@ -105,7 +105,7 @@ YQPkgList::pkgObjClicked( int			button,
 {
     if ( col == srpmStatusCol() )
     {
-	YQPkgListItem * item = dynamic_cast<YQPkgListItem *> (listViewItem);
+	YQPkgListItem * item = dynamic_cast<YQPkgListItem *> (listViewItem );
 
 	if ( item )
 	{
@@ -167,7 +167,7 @@ YQPkgList::setInstallCurrentSourceRpm( bool installSourceRpm,
     if ( ! listViewItem )
 	return;
 
-    YQPkgListItem * item = dynamic_cast<YQPkgListItem *> (listViewItem);
+    YQPkgListItem * item = dynamic_cast<YQPkgListItem *> (listViewItem );
 
     if ( item )
     {
@@ -192,7 +192,7 @@ YQPkgList::setInstallListSourceRpms( bool installSourceRpm )
 
     while ( listViewItem )
     {
-	YQPkgListItem * item = dynamic_cast<YQPkgListItem *> (listViewItem);
+	YQPkgListItem * item = dynamic_cast<YQPkgListItem *> (listViewItem );
 
 	if ( item && item->editable() )
 	{
@@ -592,7 +592,7 @@ YQPkgListItem::compare( QListViewItem *		otherListViewItem,
 {
     if ( col == srpmStatusCol() )
     {
-	YQPkgListItem * other = dynamic_cast<YQPkgListItem *> (otherListViewItem);
+	YQPkgListItem * other = dynamic_cast<YQPkgListItem *> (otherListViewItem );
 
 	if ( other )
 	{
