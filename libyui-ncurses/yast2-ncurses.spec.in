@@ -15,6 +15,7 @@ Provides:	yast2-ui-ncurses-devel
 Obsoletes:	yast2-ui-ncurses-devel
 Provides:	y2curses
 Obsoletes:	y2curses
+Requires:	glibc-locale
 
 %description
 -
