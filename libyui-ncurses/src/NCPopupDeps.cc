@@ -87,7 +87,7 @@ void NCPopupDeps::createLayout( const YCPString & headline )
 
   opt.notifyMode.setValue( true );
 
-  NCSpacing * sp0 = new NCSpacing( vSplit, opt, 0.2, false, true );
+  NCSpacing * sp0 = new NCSpacing( vSplit, opt, 0.4, false, true );
   vSplit->addChild( sp0 );
 
   // add the headline
@@ -116,7 +116,9 @@ void NCPopupDeps::createLayout( const YCPString & headline )
 
   NCSpacing * sp1 = new NCSpacing( vSplit, opt, 0.8, false, true );
   vSplit->addChild( sp1 );
-  
+
+  opt.isHStretchable.setValue( true );
+ 
   errorLabel = new NCLabel(  vSplit, opt, YCPString("") );
   vSplit->addChild( errorLabel );
   
@@ -287,22 +289,15 @@ string NCPopupDeps::getDependencyKind(  PkgDep::ErrorResult error )
     
     if ( !error.unresolvable.empty() )
     {
-	NCMIL << "UNRESOLVABLE " << error.unresolvable << endl;
-	ret = "UNRESOLVABLE ";
+	ret = "unresolvable dependency";
     }
     if ( !error.alternatives.empty() )
     {
-	NCMIL << "ALTERNATIVES " << error.alternatives << endl;
-	ret = "ALTERNATIVES";
-	if ( !error.solvable )
-	{
-	    ret = "ALTERNATIVES see below";
-	}
+	ret = "needs libs or packages";
     }
     if ( !error.conflicts_with.empty() )
     {
-	NCMIL << "CONFLICTS: " << error.conflicts_with << endl;
-	ret = "CONFLICT ";
+	ret = "conflicts with packages ";
 	if ( !error.remove_to_solve_conflict.empty() )
 	{
 	    NCMIL << "REMOVE to solve not empty" << endl;
@@ -315,17 +310,45 @@ string NCPopupDeps::getDependencyKind(  PkgDep::ErrorResult error )
 bool NCPopupDeps::concretelyDependency( int index )
 {
     unsigned int size = dependencies.size();
-
+    unsigned int i = 0;
+    
     deps->itemsCleared();
 
     if ( index < 0 || (unsigned int)index >= size )
 	return false;
-    
+
+    // get the ErrorResult
     PkgDep::ErrorResult error = dependencies[index];
 	
     NCMIL << "Showing: " << error << endl;	
 
-    
+    if ( !error.unresolvable.empty() )
+    {
+	NCMIL << "Unresolvable: " << error.unresolvable << endl;
+	errorLabel->setLabel( YCPString("Solve the conflict by selecting or deselecting packages.") );	
+    }
+    if ( !error.alternatives.empty() )
+    {
+	list<PkgDep::Alternative>::iterator it = error.alternatives.begin();
+	while ( it != error.alternatives.end() )
+	{
+	    NCMIL << "Alternative: " << (*it).kind << endl;
+	    ++it;
+	    i++;
+	}
+	errorLabel->setLabel( YCPString("Select one of the alternatives below.") );
+    }
+    if ( !error.conflicts_with.empty() )
+    {
+	list<PkgDep::RelInfo>::iterator it = error.conflicts_with.begin();
+	while ( it != error.conflicts_with.end() )
+	{
+	    NCMIL << "Conflict: " << (*it).name << endl;
+	    ++it;
+	    i++;
+	}
+	errorLabel->setLabel( YCPString("Solve the conflict by deleting the unwanted package(s)") ); 
+    }
     
     return true;
 }
