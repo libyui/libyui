@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Nov 13 12:35:21 CET 2002 - gs@suse.de
+
+- V 2.6.22
+- package installation: package categories which will be installed
+  are selected in Filter/Selections menu (bug #21700) 
+
+-------------------------------------------------------------------
 Thu Nov  7 13:30:02 CET 2002 - sh@suse.de
 
 - Fixed bug #19389: Frame widget shows keyboard shortcuts, but
@@ -9,7 +16,7 @@ Mon Oct 21 14:49:17 CEST 2002 - gs@suse.de
 
 - V 2.6.21
 - package installation: show correct package dependencies in case of
-  package conflicts (bug #21045/#21061)
+  package conflicts (bug #21045/#21061), show the license
 
 -------------------------------------------------------------------
 Wed Oct  9 15:15:49 CEST 2002 - gs@suse.de
