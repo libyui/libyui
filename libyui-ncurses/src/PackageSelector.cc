@@ -121,7 +121,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     eventHandlerMap[ PkgNames::Versions()->toString() ] = &PackageSelector::InformationHandler;
     eventHandlerMap[ PkgNames::Relations()->toString() ] = &PackageSelector::InformationHandler;
 
-    // YOU inforamtion 
+    // YOU information 
     eventHandlerMap[ PkgNames::PatchDescr()->toString() ] = &PackageSelector::InformationHandler;
     eventHandlerMap[ PkgNames::PatchPackages()->toString() ] = &PackageSelector::InformationHandler;
     
@@ -143,7 +143,8 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     // Etc. menu
     eventHandlerMap[ PkgNames::ShowDeps()->toString() ] = &PackageSelector::DependencyHandler;
     eventHandlerMap[ PkgNames::AutoDeps()->toString() ] = &PackageSelector::DependencyHandler;
-    // help menu
+
+    // Help menu
     eventHandlerMap[ PkgNames::GeneralHelp()->toString() ] = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::StatusHelp()->toString() ]  = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::FilterHelp()->toString() ]  = &PackageSelector::HelpHandler;
@@ -948,8 +949,9 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	    // set status strategy
 	    ObjectStatStrategy * strategy = new PatchPkgStatStrategy();
 	    patchPkgs->setTableType( NCPkgTable::T_PatchPkgs, strategy );
-	    // fill the header
-	    patchPkgs->fillHeader( );
+
+	    // FIXME: filling the header overwrites first line of the package list 
+	    // patchPkgs->fillHeader( );
 	    fillPatchPackages( patchPkgs, packageList->getDataPointer( packageList->getCurrentItem() ) );
 	}	
     }
@@ -1753,8 +1755,11 @@ void PackageSelector::showDiskSpace()
 {
     const PkgDuMaster & duMaster =  Y2PM::packageManager().updateDu();
 
-    FSize totalSize = duMaster.pkg_used();
-    //  totalSize = duMaster.pkg_diff();
+    // FSize totalSize = duMaster.pkg_used();
+    
+    // show pkg_diff instead of pkg_used because pkg_used contains the used disk space
+    // of all partitions, i.e. all mounted partitions, too.
+    FSize totalSize = duMaster.pkg_diff();
     
     YCPString label( totalSize.asString() );
     
