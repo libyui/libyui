@@ -27,6 +27,8 @@
 #include <qvbox.h>
 #include <qwidgetstack.h>
 
+#include "qxembed.h"
+
 #include <ycp/YCPTerm.h>
 #include <ycp/YCPCode.h>
 
@@ -213,6 +215,7 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     //  Init other stuff
 
     qApp->setFont( currentFont() );
+    QXEmbed::initialize();
     busyCursor();
 
     connect( & _user_input_timer,	SIGNAL( timeout()          ),

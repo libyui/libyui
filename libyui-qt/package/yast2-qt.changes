@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Sun Apr  4 22:19:57 CEST 2004 - adrian@suse.de
+
+- the old (bad) qxembed solution is back .. :/
+
+-------------------------------------------------------------------
 Wed Mar 17 15:07:36 CET 2004 - sh@suse.de
 
 - Fixed bug #35645: Wizard layout looks strange

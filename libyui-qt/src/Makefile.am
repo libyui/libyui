@@ -108,7 +108,8 @@ liby2qt_la_SOURCES = 				\
 	QY2FloppyMountDialog.cc			\
 	QY2CharValidator.cc			\
 	QY2ListView.cc				\
-	QY2LayoutUtils.cc
+	QY2LayoutUtils.cc			\
+	qxembed.cc
 
 # Note: QY2LayoutUtils doesn't need any .moc file: No QObject, just functions.
 
@@ -186,7 +187,8 @@ BUILT_SOURCES =					\
 	QY2DiskUsageList.moc			\
 	QY2FloppyMountDialog.moc		\
 	QY2CharValidator.moc			\
-	QY2ListView.moc
+	QY2ListView.moc				\
+	qxembed.moc
 
 
 YQUI_core.o YQUI_core.lo:					YQUI.moc
@@ -258,6 +260,7 @@ QY2DiskUsageList.o QY2DiskUsageList.lo:				QY2DiskUsageList.cc
 QY2FloppyMountDialog.o QY2FloppyMountDialog.lo:			QY2FloppyMountDialog.cc
 QY2CharValidator.o QY2CharValidator.lo:				QY2CharValidator.moc
 QY2ListView.o QY2ListView.lo:					QY2ListView.moc
+qxembed.o qxembed.lo:						qxembed.moc
 
 
 
