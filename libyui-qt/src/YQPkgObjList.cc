@@ -154,19 +154,19 @@ YQPkgObjList::statusIcon( PMSelectable::UI_Status status, bool enabled, bool byS
 	    case PMSelectable::S_Protected:	icon = YQIconPool::pkgProtected();	break;
 	    case PMSelectable::S_Taboo:		icon = YQIconPool::pkgTaboo();		break;
 	    case PMSelectable::S_Update:	icon = YQIconPool::pkgUpdate();		break;
-		
+
 	    case PMSelectable::S_AutoDel:	icon = bySelection ?
 						    YQIconPool::pkgSelAutoDel() :
 						    YQIconPool::pkgAutoDel();		break;
-	    
+
 	    case PMSelectable::S_AutoInstall:	icon = bySelection ?
 						    YQIconPool::pkgSelAutoInstall() :
 						    YQIconPool::pkgAutoInstall();	break;
-	    
+
 	    case PMSelectable::S_AutoUpdate:	icon = bySelection ?
 						    YQIconPool::pkgSelAutoUpdate() :
 						    YQIconPool::pkgAutoUpdate();	break;
-		
+
 
 		// Intentionally omitting 'default' branch so the compiler can
 		// catch unhandled enum states
@@ -183,15 +183,15 @@ YQPkgObjList::statusIcon( PMSelectable::UI_Status status, bool enabled, bool byS
 	    case PMSelectable::S_Protected:	icon = YQIconPool::disabledPkgProtected();	break;
 	    case PMSelectable::S_Taboo:		icon = YQIconPool::disabledPkgTaboo();		break;
 	    case PMSelectable::S_Update:	icon = YQIconPool::disabledPkgUpdate();		break;
-		
+
 	    case PMSelectable::S_AutoDel:	icon = bySelection ?
 						    YQIconPool::disabledPkgSelAutoDel() :
 						    YQIconPool::disabledPkgAutoDel();		break;
-	    
+
 	    case PMSelectable::S_AutoInstall:	icon = bySelection ?
 						    YQIconPool::disabledPkgSelAutoInstall() :
 						    YQIconPool::disabledPkgAutoInstall();	break;
-	    
+
 	    case PMSelectable::S_AutoUpdate:	icon = bySelection ?
 						    YQIconPool::disabledPkgSelAutoUpdate() :
 						    YQIconPool::disabledPkgAutoUpdate();	break;
@@ -468,27 +468,38 @@ YQPkgObjList::updateActions()
 void
 YQPkgObjList::updateActions( YQPkgObjListItem * item )
 {
-    if ( !item ) return;
+    if ( item )
+    {
+	PMObjectPtr pmObj = item->pmObj();
 
-    PMObjectPtr pmObj = item->pmObj();
+	if ( pmObj->hasInstalledObj() )
+	{
+	    actionSetCurrentInstall->setEnabled( false );
+	    actionSetCurrentDontInstall->setEnabled( false );
+	    actionSetCurrentTaboo->setEnabled( false);
 
-    if ( pmObj->hasInstalledObj() )
+	    actionSetCurrentKeepInstalled->setEnabled( true );
+	    actionSetCurrentDelete->setEnabled( true );
+	    actionSetCurrentUpdate->setEnabled( pmObj->hasCandidateObj() );
+	}
+	else
+	{
+	    actionSetCurrentInstall->setEnabled( pmObj->hasCandidateObj() );
+	    actionSetCurrentDontInstall->setEnabled( true );
+	    actionSetCurrentTaboo->setEnabled( true );
+
+	    actionSetCurrentKeepInstalled->setEnabled( false);
+	    actionSetCurrentDelete->setEnabled( false );
+	    actionSetCurrentUpdate->setEnabled( false );
+	}
+    }
+    else	// ! item
     {
 	actionSetCurrentInstall->setEnabled( false );
 	actionSetCurrentDontInstall->setEnabled( false );
 	actionSetCurrentTaboo->setEnabled( false);
 
-	actionSetCurrentKeepInstalled->setEnabled( true );
-	actionSetCurrentDelete->setEnabled( true );
-	actionSetCurrentUpdate->setEnabled( pmObj->hasCandidateObj() );
-    }
-    else
-    {
-	actionSetCurrentInstall->setEnabled( pmObj->hasCandidateObj() );
-	actionSetCurrentDontInstall->setEnabled( true );
-	actionSetCurrentTaboo->setEnabled( true );
-
-	actionSetCurrentKeepInstalled->setEnabled( false);
+	actionSetCurrentKeepInstalled->setEnabled( false );
 	actionSetCurrentDelete->setEnabled( false );
 	actionSetCurrentUpdate->setEnabled( false );
     }
@@ -851,7 +862,7 @@ YQPkgObjListItem::toolTip( int col )
 		    tip += "\n" + _( "(by a software selection)" );
 		else
 		    tip += "\n" + _( "(by dependencies)" );
-		
+
 		break;
 
 	    default:

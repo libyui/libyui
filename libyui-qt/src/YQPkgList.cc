@@ -217,7 +217,7 @@ YQPkgList::createNotInstalledContextMenu()
 
     addAllInListSubMenu( _notInstalledContextMenu );
 
-    
+
     _notInstalledContextMenu->insertSeparator();
     _notInstalledContextMenu->insertItem( _( "Export this List to &Text File..." ),
 					  this, SLOT( askExportList() ) );
@@ -236,7 +236,7 @@ YQPkgList::createInstalledContextMenu()
     actionSetCurrentProtected->addTo( _installedContextMenu );
 
     addAllInListSubMenu( _installedContextMenu );
-    
+
     _installedContextMenu->insertSeparator();
     _installedContextMenu->insertItem( _( "Export this List to &Text File..." ),
 				       this, SLOT( askExportList() ) );
@@ -269,7 +269,7 @@ YQPkgList::createActions()
 {
     actionSetCurrentProtected		= createAction( PMSelectable::S_Protected, "[*]" );
     actionSetListProtected		= createAction( PMSelectable::S_Protected, "", true );
-    
+
     actionInstallSourceRpm		= createAction( _( "&Install Source" ),
 							statusIcon( PMSelectable::S_Install, true ),
 							statusIcon( PMSelectable::S_Install, false ) );
@@ -292,7 +292,7 @@ YQPkgList::createActions()
 
     connect( actionSetCurrentProtected,	     	SIGNAL( activated() ), this, SLOT( setCurrentProtected()	    ) );
     connect( actionSetListProtected,	     	SIGNAL( activated() ), this, SLOT( setListProtected()	            ) );
-    
+
     connect( actionInstallSourceRpm,		SIGNAL( activated() ), this, SLOT( setInstallCurrentSourceRpm()	    ) );
     connect( actionDontInstallSourceRpm,	SIGNAL( activated() ), this, SLOT( setDontInstallCurrentSourceRpm() ) );
 
@@ -312,9 +312,14 @@ YQPkgList::updateActions( YQPkgObjListItem * pkgObjListItem )
     {
 	actionInstallSourceRpm->setEnabled( item->hasSourceRpm() );
 	actionDontInstallSourceRpm->setEnabled( item->hasSourceRpm() );
+	actionSetCurrentProtected->setEnabled( item->pmObj()->hasInstalledObj() );
     }
-    
-    actionSetCurrentProtected->setEnabled( item->pmObj()->hasInstalledObj() );
+    else
+    {
+	actionInstallSourceRpm->setEnabled( false );
+	actionDontInstallSourceRpm->setEnabled( false );
+	actionSetCurrentProtected->setEnabled( false );
+    }
 }
 
 
