@@ -105,6 +105,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     if ( _updateMode )	y2milestone( "Update mode" );
 
     setFont( _yuiqt->currentFont() );
+    yuiqt->blockWmClose(); // Automatically undone after UI::RunPkgSelection()
     _conflictDialog = new YQPkgConflictDialog( this );
     CHECK_PTR( _conflictDialog );
 

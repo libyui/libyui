@@ -135,6 +135,16 @@ public:
      */
     void normalCursor();
 
+    /**
+     * Block WM_CLOSE events for the main window.
+     **/
+    void blockWmClose()		{ wm_close_blocked = true;  }
+    
+    /**
+     * Unblock WM_CLOSE events for the main window.
+     **/
+    void unblockWmClose()	{ wm_close_blocked = false; }
+
 protected:
     
     // Implement virtual functions inherited from YUIInterpreter
@@ -394,6 +404,12 @@ private:
     QFont heading_font;
     bool loaded_heading_font;
 
+    
+    /**
+     * Window manager close events blocked?
+     **/
+    bool wm_close_blocked;
+    
     /**
      * Window ID for KDE control center
      **/

@@ -88,6 +88,7 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
     , do_exit_loop(false)
     , loaded_current_font(false)
     , loaded_heading_font(false)
+    , wm_close_blocked(false)
 {
     suseheaderID = -1;
     _yuiqt = this;
@@ -293,7 +294,9 @@ YWidget *YUIQt::pollInput(YDialog *dialog, EventType *event)
 YCPValue YUIQt::runPkgSelection( YWidget * packageSelector )
 {
     y2milestone( "Running package selection..." );
-    YCPValue input = evaluateUserInput( YCPTerm( YCPSymbol( "", false ) ), false );
+    wm_close_blocked	= true;
+    YCPValue input 	= evaluateUserInput( YCPTerm( YCPSymbol( "", false ) ), false );
+    wm_close_blocked 	= false;
     y2milestone( "Package selection done - returning %s", input->toString().c_str() );
 
     return input;
@@ -893,12 +896,16 @@ bool YUIQt::eventFilter( QObject * obj, QEvent * ev )
     
     if ( ev->type() == QEvent::Close )
     {
-	// Don't simply close the application window, return from UserInput()
-	// with `id(`cancel) and let the YCP application decide how to handle
-	// that (e.g., ask for confirmation).
+	if ( ! wm_close_blocked )
+	{
+	    // Don't simply close the application window, return from UserInput()
+	    // with `id(`cancel) and let the YCP application decide how to handle
+	    // that (e.g., ask for confirmation).
 
-	y2milestone( "Caught window close event for main window" );
-	returnNow(YUIInterpreter::ET_CANCEL, 0);
+	    y2milestone( "Caught window close event for main window" );
+	    returnNow(YUIInterpreter::ET_CANCEL, 0);
+	}
+	
 	return true;	// Event processed
     }
     else if ( ev->type() == QEvent::Show )
