@@ -468,10 +468,31 @@ const YCPValue& PkgNames::PatchDescr ()
     return value;
 }
 
-/// id information patch descr
+// id information patch descr
 const YCPValue& PkgNames::PatchPackages ()
 {
     static const YCPValue value = createIdValue ( "patchpackages" );
+    return value;
+}
+
+// id information directory list
+const YCPValue& PkgNames::DirList ()
+{
+    static const YCPValue value = createIdValue ( "dirlist" );
+    return value;
+}
+
+// id information directory name
+const YCPValue& PkgNames::DirName ()
+{
+    static const YCPValue value = createIdValue ( "dirname" );
+    return value;
+}
+
+// id information details view
+const YCPValue& PkgNames::Details ()
+{
+    static const YCPValue value = createIdValue ( "details" );
     return value;
 }
 

@@ -336,6 +336,21 @@ public:
     static const YCPValue& PatchPackages ();
 
     /**
+     *  Widget id information directory list
+     */
+    static const YCPValue& DirList ();
+
+    /**
+     *  Widget id information diretcory name
+     */
+    static const YCPValue& DirName ();
+
+    /**
+     *  Widget id information details view
+     */
+    static const YCPValue& Details ();
+    
+    /**
      *  Internal use (id for the tree items)
      */
     static const YCPValue& Treeitem();
