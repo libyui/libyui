@@ -69,10 +69,12 @@ NCFileInfo::NCFileInfo( string 	fileName,
 
     // get user and group name
     struct passwd * pwdInfo  = getpwuid( statInfo->st_uid );
-    _user = pwdInfo->pw_name;
+    if ( pwdInfo )
+	_user = pwdInfo->pw_name;
 
     struct group * groupInfo = getgrgid( statInfo->st_gid );
-    _group = groupInfo->gr_name;
+    if ( groupInfo )
+	_group = groupInfo->gr_name;
     
     if ( _mode & S_IRUSR )
 	_perm += "r";
