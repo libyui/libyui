@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Nov  7 13:31:42 CET 2002 - sh@suse.de
+
+- Fixed bug #19389: Frame widget shows keyboard shortcuts, but
+  can't handle any
+
+-------------------------------------------------------------------
 Fri Sep 20 16:23:32 CEST 2002 - msvec@suse.cz
 
 - added missing textdomain

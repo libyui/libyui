@@ -33,7 +33,7 @@ YQFrame::YQFrame( YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
     : QGroupBox( parent )
     , YFrame( opt, newLabel )
 {
-    QGroupBox::setTitle ( fromUTF8 ( newLabel->value() ) );
+    QGroupBox::setTitle ( fromUTF8 ( getLabel()->value() ) );
     setFont( yuiqt->currentFont() );
     setWidgetRep ( (QWidget *) this );
 }
@@ -60,8 +60,8 @@ YQFrame::setSize ( long newwidth, long newheight )
 void
 YQFrame::setLabel ( const YCPString & newLabel )
 {
-    QGroupBox::setTitle ( fromUTF8 ( newLabel->value() ) );
     YFrame::setLabel ( newLabel );
+    QGroupBox::setTitle ( fromUTF8 ( getLabel()->value() ) );
 }
 
 
