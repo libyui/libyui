@@ -39,7 +39,7 @@ NCstring::NCstring( const YCPString & ystr )
     : hotk     ( 0 )
     , hotp     ( wstring::npos )
 {
-    bool ok = RecodeToWchar( ystr->value(), "UTF-8", &mstr );
+    bool ok = RecodeToWchar( ystr->value(), "UTF-8", &wstr );
 
     if ( !ok )
     {
@@ -58,7 +58,7 @@ NCstring::NCstring( const YCPString & ystr )
 NCstring:: NCstring()
     : hotk     ( 0 )
     , hotp     ( wstring::npos )
-    , mstr     ( L"" )
+    , wstr     ( L"" )
 
 {
 }
@@ -74,7 +74,7 @@ NCstring:: NCstring()
 NCstring::NCstring( const NCstring & nstr )
     : hotk     ( nstr.hotk )
     , hotp     ( nstr.hotp )
-    , mstr     ( nstr.mstr )
+    , wstr     ( nstr.wstr )
 {
 }
 
@@ -86,10 +86,10 @@ NCstring::NCstring( const NCstring & nstr )
 //
 //	DESCRIPTION :
 //
-NCstring::NCstring( const wstring & wstr )
+NCstring::NCstring( const wstring & widestr )
     : hotk     ( 0 )
     , hotp     ( wstring::npos )
-    , mstr     ( wstr )
+    , wstr     ( widestr )
 {
 }
     
@@ -105,7 +105,7 @@ NCstring::NCstring( const string & str )
     : hotk     ( 0 )
     , hotp     ( wstring::npos )
 {
-    bool ok = RecodeToWchar( str, "UTF-8", &mstr );
+    bool ok = RecodeToWchar( str, "UTF-8", &wstr );
 
     if ( !ok )
     {
@@ -125,7 +125,7 @@ NCstring::NCstring( const char * cstr )
     : hotk     ( 0 )
     , hotp     ( wstring::npos )
 {
-    bool ok = RecodeToWchar( cstr, "UTF-8", &mstr );
+    bool ok = RecodeToWchar( cstr, "UTF-8", &wstr );
 
     if ( !ok )
     {
@@ -147,7 +147,7 @@ NCstring & NCstring::operator=( const YCPString & ystr )
   hotk      = 0;
   hotp      = wstring::npos;
 
-  bool ok =  RecodeToWchar( ystr->value(), "UTF-8", &mstr );
+  bool ok =  RecodeToWchar( ystr->value(), "UTF-8", &wstr );
 
   if ( !ok )
   {
@@ -182,7 +182,7 @@ NCstring & NCstring::operator=( const NCstring & nstr )
     if ( &nstr != this ) {
 	hotk      = nstr.hotk;
 	hotp      = nstr.hotp;
-	mstr      = nstr.mstr;
+	wstr      = nstr.wstr;
     }
     return *this;
 }
@@ -197,7 +197,7 @@ NCstring & NCstring::operator=( const NCstring & nstr )
 //
 NCstring & NCstring::operator+=( const NCstring & nstr )
 {
-    mstr = this->mstr + nstr.mstr;
+    wstr = this->wstr + nstr.wstr;
 
     return *this;
 }
@@ -386,7 +386,7 @@ bool NCstring::RecodeToWchar (const string& in, const string &from_encoding, wst
 YCPString NCstring::YCPstr() const
 {
     string utf8str;
-    RecodeFromWchar ( mstr, "UTF-8", &utf8str );
+    RecodeFromWchar ( wstr, "UTF-8", &utf8str );
     
     return utf8str;
 }
@@ -402,7 +402,7 @@ YCPString NCstring::YCPstr() const
 string NCstring::Str() const
 {
     string utf8str;
-    RecodeFromWchar ( mstr, "UTF-8", &utf8str );
+    RecodeFromWchar ( wstr, "UTF-8", &utf8str );
     
     return utf8str;
 }
@@ -419,12 +419,12 @@ void NCstring::getHotkey( ) const
 {
 
     hotp = wstring::npos;
-    // strip hotkey from mstr
-    wstring::size_type tpos = mstr.find_first_of( L'&' );
-    if ( tpos != wstring::npos && tpos != mstr.size()-1 )
+    // strip hotkey from wstr
+    wstring::size_type tpos = wstr.find_first_of( L'&' );
+    if ( tpos != wstring::npos && tpos != wstr.size()-1 )
     {
-	mstr.erase( tpos, 1 );
-	hotk = mstr[tpos];
+	wstr.erase( tpos, 1 );
+	hotk = wstr[tpos];
 	hotp = tpos;
     }
 }
