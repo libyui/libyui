@@ -85,6 +85,16 @@ class NCPkgTableTag : public NCTableCol {
  **/
 class NCPkgTable : public NCTable {
 
+public:
+    enum NCPkgTableType {
+	T_Packages,
+	T_Availables,
+	T_Patches,
+	T_Dependency,
+	T_Update,
+	T_Unknown
+    };
+
 private:
 
     NCPkgTable & operator=( const NCPkgTable & );
@@ -93,6 +103,8 @@ private:
     PackageSelector * packager;		// connection to the PackageSelector,
 
     ObjectStatStrategy * statusStrategy; 	// particular methods to get the status
+
+    NCPkgTableType tableType;	// the type (e.g. table of packages, patches)
     
     // returns the corresponding package status to the given key
     bool keyToStatus( const int & key,  PMSelectable::UI_Status & status );
@@ -205,13 +217,14 @@ public:
     bool toggleSourceStatus( );
     
     /**
-     * Sets the status strategy. which means call particular methods to set/get the
-     * status for different PMObject s (PNYouPatch, PMPackage or available PMPackage s)
+     * Sets the type of the table and the status strategy (which means call particular methods
+     * to set/get the status for different PMObjects (PMYouPatch, PMPackage or available PMPackage)
      */
-    void setStatusStrategy( ObjectStatStrategy * strategy ) {
-	delete statusStrategy;
-	statusStrategy = strategy;
-    }
+    void setTableType( NCPkgTableType type, ObjectStatStrategy * strategy ) {
+	    delete statusStrategy;
+	    statusStrategy = strategy;
+	    tableType = type;
+	}
 
     /**
      * Gets the data pointer of a certain package.

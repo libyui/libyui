@@ -32,7 +32,6 @@
 //
 ObjectStatStrategy::ObjectStatStrategy()
 {
-    type = T_Object;
 }
 
 //
@@ -94,7 +93,6 @@ bool ObjectStatStrategy::setPackageStatus( PMSelectable::UI_Status newstatus, PM
 PackageStatStrategy::PackageStatStrategy()
     : ObjectStatStrategy()
 {
-    type = T_Package;
 }
 
 
@@ -110,7 +108,6 @@ PackageStatStrategy::PackageStatStrategy()
 PatchStatStrategy::PatchStatStrategy()
     : ObjectStatStrategy()
 {
-    type = T_Patch;
 }
 
 //------------------------------------------------------------
@@ -123,7 +120,6 @@ PatchStatStrategy::PatchStatStrategy()
 DependencyStatStrategy::DependencyStatStrategy()
     : ObjectStatStrategy()
 {
-    type = T_Dependency;
 }
 
 //------------------------------------------------------------
@@ -136,7 +132,18 @@ DependencyStatStrategy::DependencyStatStrategy()
 AvailableStatStrategy::AvailableStatStrategy()
     : ObjectStatStrategy()
 {
-    type = T_Avail;
+}
+
+//------------------------------------------------------------
+// Class for strategies to get status for available packages
+//------------------------------------------------------------
+
+//
+// Constructor
+//
+UpdateStatStrategy::UpdateStatStrategy()
+    : ObjectStatStrategy()
+{
 }
 
 ///////////////////////////////////////////////////////////////////

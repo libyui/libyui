@@ -101,9 +101,8 @@ void NCPopupDeps::createLayout( const YCPString & headline )
   pkgs = new NCPkgTable( vSplit, opt );
   pkgs->setPackager( packager );
   // set status strategy
-  ObjectStatStrategy * strategy =
-      new DependencyStatStrategy();
-  pkgs->setStatusStrategy( strategy );
+  ObjectStatStrategy * strategy =  new DependencyStatStrategy();
+  pkgs->setTableType( NCPkgTable::T_Dependency, strategy );
   vSplit->addChild( pkgs );
 
   depsMenu = new NCMenuButton( vSplit, opt, YCPString( "Dependencies" ) );
@@ -121,7 +120,7 @@ void NCPopupDeps::createLayout( const YCPString & headline )
   deps->setPackager( packager );
   // set status strategy
   strategy = new AvailableStatStrategy();
-  deps->setStatusStrategy( strategy );
+  deps->setTableType( NCPkgTable::T_Availables, strategy );
   vSplit->addChild( deps );
 
   NCSplit * hSplit = new NCSplit( vSplit, opt, YD_HORIZ );

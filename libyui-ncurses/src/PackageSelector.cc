@@ -70,7 +70,6 @@ bool sortByName( PMSelectablePtr ptr1, PMSelectablePtr ptr2 )
 //
 PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     : y2ui( ui )
-      , packageList( 0 )
       , visibleInfo( YCPNull() )
       , filterPopup( 0 )
       , depsPopup( 0 )
@@ -337,6 +336,8 @@ bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr 
     list<PMSelectablePtr> slcList;
     list<PMSelectablePtr>::iterator listIt;
     unsigned int i;
+
+    NCPkgTable * packageList = getPackageList();
     
     if ( !packageList )
     {
@@ -381,6 +382,8 @@ bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr 
 //
 bool PackageSelector::fillSearchList( const YCPString & expr )
 {
+    NCPkgTable * packageList = getPackageList();
+    
     if ( !packageList )
     {
 	return false;
@@ -407,10 +410,11 @@ bool PackageSelector::fillSearchList( const YCPString & expr )
 //
 bool PackageSelector::fillDefaultList( NCPkgTable * pkgTable )
 {
+    NCPkgTable * packageList = getPackageList();
+     
     if ( !packageList )
     {    
-	// set the package list widget
-	packageList = pkgTable;
+	return false;
     }
 
     if ( !youMode )
@@ -443,6 +447,8 @@ bool PackageSelector::fillDefaultList( NCPkgTable * pkgTable )
 //
 bool PackageSelector::fillPatchList( )
 {
+    NCPkgTable * packageList = getPackageList();
+     
     if ( !packageList )
     {
 	UIERR << "No valid NCPkgTable widget" << endl;
@@ -494,6 +500,8 @@ bool PackageSelector::fillPatchList( )
 //
 bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem * rpmGroup )
 {
+     NCPkgTable * packageList = getPackageList();
+     
     if ( !packageList )
     {
 	UIERR << "No valid NCPkgTable widget" << endl;
@@ -566,6 +574,14 @@ bool PackageSelector::check( PMPackagePtr pkg,
     if ( ! pkg || ! rpmGroup )
 	return false;
 
+    NCPkgTable * packageList = getPackageList();
+    
+    if ( !packageList )
+    {
+	UIERR << "Widget is not a valid NCPkgTable widget" << endl;
+    	return false;
+    }
+    
     if ( pkg->group_ptr() == 0 )
     {
 	NCERR <<  "NULL pointer in group_ptr()!" << endl;
@@ -655,6 +671,8 @@ bool PackageSelector::createPatchEntry ( NCPkgTable *pkgTable,
 //
 bool PackageSelector::SearchHandler( const NCursesEvent& event)
 {
+     NCPkgTable * packageList = getPackageList();
+    
     if ( !packageList )
     {
 	return false;
@@ -696,6 +714,8 @@ bool PackageSelector::SearchHandler( const NCursesEvent& event)
 //
 bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 {
+     NCPkgTable * packageList = getPackageList();
+     
     if ( !packageList )
     {
 	return false;
@@ -728,7 +748,7 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	    pkgAvail->setPackager( this );
 	    // set status strategy
 	    ObjectStatStrategy * strategy = new AvailableStatStrategy();
-	    pkgAvail->setStatusStrategy( strategy );
+	    pkgAvail->setTableType( NCPkgTable::T_Availables, strategy );
 	    fillAvailableList( pkgAvail, packageList->getDataPointer( packageList->getCurrentItem() ) );
 	}
     }
@@ -775,7 +795,8 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 {
     NCursesEvent retEvent;
-
+    NCPkgTable * packageList = getPackageList();
+ 
     if ( !packageList || event.selection.isNull() )
     {
 	return false;
@@ -820,6 +841,8 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 //
 bool PackageSelector::StatusHandler( const NCursesEvent&  event )
 {
+    NCPkgTable * packageList = getPackageList();
+     
     if ( !packageList )
     {
 	return false;
@@ -1146,11 +1169,13 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	NCPkgTable * pkgAvail = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::AvailPkgs(), true));
 	if ( pkgAvail )
 	{
+#if 0
 	    // set the connection to the PackageSelector !!!!
 	    pkgAvail->setPackager( this );
 	    // set status strategy
 	    ObjectStatStrategy * strategy = new AvailableStatStrategy();
 	    pkgAvail->setStatusStrategy( strategy );
+#endif
 	    fillAvailableList( pkgAvail, pkgPtr );
 	}
     }
@@ -1243,9 +1268,18 @@ string PackageSelector::createDescrText( list<string> value )
     return html_text;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+// updatePackageList
+//
 void PackageSelector::updatePackageList()
 {
-    packageList->updateTable();
+    NCPkgTable * packageList = getPackageList();
+
+    if ( packageList )
+    {
+	packageList->updateTable();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -1288,7 +1322,7 @@ string PackageSelector::createText( list<string> info, bool oneline )
 	{
 	    if ( oneline )
 	    {
-	    text = text + ", ";
+		text = text + ", ";
 	    }
 	    else
 	    {
@@ -1298,4 +1332,15 @@ string PackageSelector::createText( list<string> info, bool oneline )
     }
 
     return text;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// getPackageList()
+//
+NCPkgTable * PackageSelector::getPackageList()
+{
+	YWidget * packages = y2ui->widgetWithId( PkgNames::Packages(), true );
+	
+	return ( dynamic_cast<NCPkgTable *>(packages) );
 }

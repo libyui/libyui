@@ -102,7 +102,8 @@ string NCPkgTableTag::statusToStr( PMSelectable::UI_Status stat ) const
 NCPkgTable::NCPkgTable( NCWidget * parent, YWidgetOpt & opt )
     : NCTable( parent, opt, vector<string> () )
       , packager ( 0 )
-      , statusStrategy( new PackageStatStrategy )	// default strategy
+      , statusStrategy( new PackageStatStrategy )	// default strategy: packages
+      , tableType ( T_Packages )			// default type: packages
 {
     WIDDBG << endl;
 }
@@ -121,6 +122,7 @@ NCPkgTable::~NCPkgTable()
     delete statusStrategy;
     WIDDBG << endl;
 }
+
 
 
 ///////////////////////////////////////////////////////////////////
@@ -201,7 +203,7 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
 	// update this list to show the status changes
 	updateTable();
 	
-	if ( statusStrategy->getType() == T_Avail )
+	if ( tableType == T_Availables )
 	{
 	    // additionally update the package list
 	    packager->updatePackageList();
@@ -304,13 +306,13 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 	    if ( !objPtr || !packager )
 		break;
 	    
-	    switch ( statusStrategy->getType() )
+	    switch ( tableType )
 	    {
-		case T_Package:
+		case T_Packages:
 		    // show the required package info
 		    packager->showPackageInformation( objPtr );   
 		    break;
-		case T_Patch:
+		case T_Patches:
 		    // show the patch info
 		    packager->showPatchInformation( objPtr );
 		    break;

@@ -43,12 +43,28 @@ NCPackageSelector::NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
     : NCSplit( parent, opt, dimension )
       , widgetRoot( 0 )
       , packager( ui, opt )
+      , youMode ( false )
+      , updateMode ( false )
 {
-    // FIXME: get mode ONLINE/UPDATE/INSTALL (and pass it to the packager)
+    // get the mode (the mode is also available in PackageSelector via YWidgetOpt & opt)
+    if ( opt.youMode.value() )
+	youMode = true;
+
+    if ( opt.updateMode.value() )
+	updateMode = true;
     
     // Read the layout file and create the widget tree
-    YCPTerm   pkgLayout = readLayoutFile( "/usr/share/YaST2/data/pkg_layout.ycp" );
-
+    YCPTerm pkgLayout = YCPNull();
+    if ( youMode )
+    {
+	// FIXME: use you_layout.ycp
+	pkgLayout = readLayoutFile( "/usr/share/YaST2/data/pkg_layout.ycp" );
+    }
+    else
+    { 
+	pkgLayout = readLayoutFile( "/usr/share/YaST2/data/pkg_layout.ycp" );	     
+    }
+    
     if ( ! pkgLayout.isNull() )
     {
 	widgetRoot = (YContainerWidget *)ui->createWidgetTree( dynamic_cast<YWidget *>(parent),
@@ -68,13 +84,29 @@ NCPackageSelector::NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
 
 	if ( pkgList )
 	{
+	    // set the type of the table
+	    ObjectStatStrategy * strategy;
+	    if ( youMode )
+	    {
+		strategy = new PatchStatStrategy();
+		pkgList->setTableType( NCPkgTable::T_Patches, strategy );
+	    }
+	    else if ( updateMode )
+	    {
+		strategy = new UpdateStatStrategy();
+		pkgList->setTableType( NCPkgTable::T_Update, strategy );
+	    }
+	    else
+	    {
+		strategy = new PackageStatStrategy();
+		pkgList->setTableType( NCPkgTable::T_Packages, strategy );
+	    }
+
+            // set the pointer to the packager object
+	    pkgList->setPackager( &packager );
+
 	    // fill table header
 	    packager.fillHeader( pkgList );
-	    // set the pointer to the packager object
-	    pkgList->setPackager( &packager );
-	    // set the status strategy
-	    ObjectStatStrategy * strategy = new PackageStatStrategy();
-	    pkgList->setStatusStrategy( strategy );
 	}
     }
     else
@@ -128,10 +160,7 @@ void NCPackageSelector::showDefaultList()
     // fill the package table with packages belonging to the default filter
     if ( pkgList )
     {
-	// FIRST, set the package list widget
-	packager.setPackageList( pkgList );
-
-	// second, fill the list with packages 
+	// fill the list with packages 
 	packager.fillDefaultList( pkgList );
 	
         // set the visible info to package description 

@@ -51,6 +51,8 @@ class NCPackageSelector : public NCSplit
     
     PackageSelector packager; 		// packager object contains the data and handles events
 
+    bool youMode;
+    bool updateMode;
     
   protected:
 

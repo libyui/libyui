@@ -26,22 +26,11 @@
 class PMObjectPtr;
 
 
-enum NCStrategyType
-    {
-	T_Avail,
-	T_Package,
-	T_Patch,
-	T_Dependency,
-	T_Object
-    };
-
 //------------------------------------------------------------
 // Abstract base class for strategies to get status for packages or patches 
 //------------------------------------------------------------
 class ObjectStatStrategy
 {
-protected:
-    NCStrategyType type;
 
 public:
     
@@ -66,18 +55,6 @@ public:
     virtual bool setPackageStatus ( PMSelectable::UI_Status newstatus,
 				    PMObjectPtr objPtr
 				    );
-
-    /**
-     * Returns the type of the object
-     * @return  NCStrategyType
-     */
-    NCStrategyType getType() { return type; }
-    
-   /**
-     * Sets the type of the object
-     * @param  NCStrategyType
-     */
-    void setType( NCStrategyType strategy ) { type = strategy; }
 
 };
 
@@ -104,6 +81,19 @@ public:
     DependencyStatStrategy( );
     
     virtual ~DependencyStatStrategy() {}
+    
+};
+
+//------------------------------------------------------------
+// Class for strategies of update
+//------------------------------------------------------------
+class UpdateStatStrategy : public ObjectStatStrategy
+{
+public:
+
+    UpdateStatStrategy( );
+    
+    virtual ~UpdateStatStrategy() {}
     
 };
 

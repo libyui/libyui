@@ -70,8 +70,6 @@ class PackageSelector
     
     Y2NCursesUI * y2ui;			// the UI
 
-    NCPkgTable * packageList;		// the package list
-    
     YCPValue visibleInfo;		// visible package info (description, file list, ...)
 
     NCPopupTree * filterPopup;		// the rpm group tags popup
@@ -94,6 +92,9 @@ class PackageSelector
     
     // internal use (copies tree items got from YPkgRpmGroupTagsFilterView)
     void cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone );
+
+    // the package (patch) list 
+    NCPkgTable * getPackageList();
     
   protected:
  
@@ -268,12 +269,6 @@ class PackageSelector
     * @param info
     */
     void setVisibleInfo( const YCPValue & info );
-
-   /**
-    * Sets the member variable package list
-    * @param info
-    */
-    void setPackageList( NCPkgTable * pkgList ) { packageList = pkgList; }
 
    /**
     * Fills the package table
