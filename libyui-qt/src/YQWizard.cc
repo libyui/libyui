@@ -107,8 +107,9 @@ YQWizard::YQWizard( QWidget *		parent,
     _abortButton		= 0;
     _backButton			= 0;
     _nextButton			= 0;
-    
+
     _verboseCommands		= false;
+    _stepsList.setAutoDelete( true );
 
 
     //
@@ -133,10 +134,18 @@ YQWizard::YQWizard( QWidget *		parent,
 
     y2debug( "Constructor finished." );
 
-
+#if 0
     addStep( "Step 1", "1" );
     addStep( "Step 2", "2" );
     addStep( "Step 3", "3" );
+#endif
+}
+
+
+
+YQWizard::~YQWizard()
+{
+    _stepsList.clear();
 }
 
 
@@ -201,7 +210,7 @@ void YQWizard::layoutSideBar( QWidget * parent )
 
 
     layoutHelpPanel();
-    
+
     if ( _stepsEnabled )
     {
 	layoutStepsPanel();
@@ -232,9 +241,7 @@ void YQWizard::layoutStepsPanel()
     CHECK_PTR( _stepsBox );
     _stepsBox->setPaletteBackgroundColor( _gradientCenterColor );
     _stepsBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred ) ); // hor/vert
-    
-    _stepsBox->setPaletteBackgroundColor( green );
-    
+
 #if 0
     QLabel * steps = new QLabel(
 				"<font size=3 color=#669900>"
@@ -298,78 +305,120 @@ void YQWizard::layoutStepsPanel()
 
 void YQWizard::addStep( const QString & text, const QString & id )
 {
-    int row = 0;
-    
-    if ( ! _stepsGrid )
-	createStepsGrid();
-    else
-	row = _stepsGrid->numRows();
-
-    y2debug( "Adding step '%s' with ID '%s' in row %d", (const char *) text, (const char *) id, row );
-    
-    QLabel * step = new QLabel( text, _stepsGrid->mainWidget() );
-    CHECK_PTR( step );
-    step->setAlignment( Qt::AlignLeft | Qt::AlignTop );
-    step->setFont( QFont( STEPS_FONT_FAMILY, STEPS_FONT_SIZE ) );
-    
-    _stepsGrid->addWidget( step, row, 2 );
-
-
-#if 1
-    QLabel * stepStatus = new QLabel( "-", _stepsGrid->mainWidget() );
-    CHECK_PTR( stepStatus );
-    _stepsGrid->addWidget( stepStatus, row, 1 );
-#endif
+    _stepsList.append( new YQWizard::Step( text, id ) );
 }
 
 
 
 void YQWizard::addStepHeading( const QString & text )
 {
-    int row = 0;
-    
-    if ( ! _stepsGrid )
-	createStepsGrid();
-    else
-	row = _stepsGrid->numRows();
-
-    QLabel * heading = new QLabel( text, _stepsGrid->mainWidget() );
-    CHECK_PTR( heading );
-    heading->setAlignment( Qt::AlignLeft | Qt::AlignTop );
-    heading->setFont( QFont( STEPS_FONT_FAMILY, STEPS_HEADING_FONT_SIZE ) );
-
-    _stepsGrid->addMultiCellWidget( heading,
-				    row, row,	// from_row, to_row
-				    1, 2 );	// from_col, to_col
+    _stepsList.append( new YQWizard::StepHeading( text ) );
 }
 
 
 
-void YQWizard::createStepsGrid()
+void YQWizard::updateSteps()
 {
-    QWidget * w = new QWidget( _stepsBox );
-    CHECK_PTR( w );
-    w->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) ); // hor/vert
-    w->setPaletteBackgroundColor( _gradientCenterColor );
+    //
+    // Delete any previous step widgets
+    //
 
-    _stepsGrid = new QGridLayout( w, 1, 4, STEPS_MARGIN ); // parent, rows, cols, margin
-    CHECK_PTR( _stepsGrid );
-    
-    _stepsGrid->setColStretch( 0, 99 );
-    _stepsGrid->setColStretch( 1, 0  );
-    _stepsGrid->setColStretch( 2, 0  );
-    _stepsGrid->setColStretch( 3, 99  );
-}
-
-
-
-void YQWizard::deleteSteps()
-{
     if ( _stepsGrid )
     {
 	delete _stepsGrid->mainWidget();
 	_stepsGrid = 0;
     }
+
+
+    //
+    // Create a new parent widget for the steps
+    //
+
+    QWidget * stepsParent = new QWidget( _stepsBox );
+    CHECK_PTR( stepsParent );
+    stepsParent->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) ); // hor/vert
+    stepsParent->setPaletteBackgroundColor( _gradientCenterColor );
+
+    // Create a grid layout for the steps
+
+    _stepsGrid = new QGridLayout( stepsParent, _stepsList.count(), 4, STEPS_MARGIN ); // parent, rows, cols, margin
+    CHECK_PTR( _stepsGrid );
+
+    const int statusCol = 1;
+    const int nameCol	= 2;
+
+    _stepsGrid->setColStretch( 0, 99 );		// Left margin column - stretch
+    _stepsGrid->setColStretch( statusCol, 0 );	// Status column - don't stretch
+    _stepsGrid->setColStretch( nameCol,   0 );	// Name column - don't stretch
+    _stepsGrid->setColStretch( 3, 99  );	// Left margin column - stretch
+
+    // Work around Qt bug: Grid layout only works right if the parent widget isn't visible (yet?)
+    stepsParent->hide();
+
+
+    //
+    // Create widgets for all steps and step headings in the internal list
+    //
+
+    int row = 0;
+    YQWizard::Step * step = _stepsList.first();
+
+    while ( step )
+    {
+	if ( step->isHeading() )
+	{
+	    //
+	    // Heading
+	    //
+
+	    QLabel * label = new QLabel( step->name(), stepsParent );
+	    CHECK_PTR( label );
+	    label->setAlignment( Qt::AlignLeft | Qt::AlignTop );
+	    label->setFont( QFont( STEPS_FONT_FAMILY, STEPS_HEADING_FONT_SIZE ) );
+
+	    step->setNameLabel( label );
+	    _stepsGrid->addMultiCellWidget( label,
+					    row, row,			// from_row, to_row
+					    statusCol, nameCol );	// from_col, to_col
+	}
+	else	// No heading - ordinary step
+	{
+	    //
+	    // Step status
+	    //
+
+	    QLabel * statusLabel = new QLabel( "-", stepsParent );
+	    CHECK_PTR( statusLabel );
+
+	    step->setStatusLabel( statusLabel );
+	    _stepsGrid->addWidget( statusLabel, row, statusCol );
+
+
+	    //
+	    // Step name
+	    //
+
+	    QLabel * nameLabel = new QLabel( step->name(), stepsParent );
+	    CHECK_PTR( nameLabel );
+	    nameLabel->setAlignment( Qt::AlignLeft | Qt::AlignTop );
+	    nameLabel->setFont( QFont( STEPS_FONT_FAMILY, STEPS_FONT_SIZE ) );
+
+	    step->setNameLabel( nameLabel );
+	    _stepsGrid->addWidget( nameLabel, row, nameCol );
+	}
+
+	step = _stepsList.next();
+	row++;
+    }
+
+    _stepsGrid->activate();
+    stepsParent->show();
+}
+
+
+void YQWizard::deleteSteps()
+{
+    _stepsList.clear();
 }
 
 
@@ -808,6 +857,9 @@ void YQWizard::addChild( YWidget * ychild )
 
 void YQWizard::backClicked()
 {
+#if 0
+    addStep( "Back clicked", "back" );
+#endif
     sendEvent( _backButtonId );
 }
 
@@ -832,8 +884,9 @@ void YQWizard::showHelp()
     if ( _sideBar && _helpPanel )
     {
 	_sideBar->raiseWidget( _helpPanel );
-#warning FIXME
+#if 0
 	addStep( "Einer geht noch", "42" );
+#endif
     }
 }
 
@@ -970,7 +1023,7 @@ bool YQWizard::isCommand( QString declaration, const YCPTerm & term )
     if ( ok && _verboseCommands )
     {
 	// Intentionally logging as milestone because a YCP app just explicitly
-	// requested this log level 
+	// requested this log level
 	y2milestone( "Recognized wizard command %s : %s",
 		     (const char *) declaration, term->toString().c_str() );
     }
@@ -981,7 +1034,10 @@ bool YQWizard::isCommand( QString declaration, const YCPTerm & term )
 
 QString YQWizard::qStringArg( const YCPTerm & term, int argNo )
 {
-    return fromUTF8( stringArg( term, argNo ).c_str() );
+    QString ret = fromUTF8( stringArg( term, argNo ).c_str() );
+    y2debug( "arg #%d of '%s': '%s'", argNo, term->toString().c_str(), (const char *) ret );
+
+    return ret;
 }
 
 
@@ -1042,6 +1098,7 @@ YCPValue YQWizard::command( const YCPTerm & cmd )
     if ( isCommand( "AddStep ( string, string )"     , cmd ) )	{ addStep( qStringArg( cmd, 0 ), qStringArg( cmd, 1 ));	return OK; }
     if ( isCommand( "AddStepHeading       ( string )", cmd ) )  { addStepHeading( qStringArg( cmd, 0 ) );		return OK; }
     if ( isCommand( "DeleteSteps()"		     , cmd ) )	{ deleteSteps();					return OK; }
+    if ( isCommand( "UpdateSteps()"		     , cmd ) )	{ updateSteps();					return OK; }
 
     if ( isCommand( "SetAbortButtonLabel  ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "SetBackButtonLabel   ( string )", cmd ) )	{ setButtonLabel( _backButton,  qStringArg( cmd, 0 ) );	return OK; }
@@ -1049,7 +1106,7 @@ YCPValue YQWizard::command( const YCPTerm & cmd )
     if ( isCommand( "SetCancelButtonLabel ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "SetAcceptButtonLabel ( string )", cmd ) )	{ setButtonLabel( _nextButton,  qStringArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "SetVerboseCommands	  ( bool   )", cmd ) )	{ setVerboseCommands( boolArg( cmd, 0 ) );		return OK; }
-    
+
     y2error( "Undefined wizard command: %s", cmd->toString().c_str() );
     return YCPBoolean( false );
 

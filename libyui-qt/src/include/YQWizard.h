@@ -22,8 +22,9 @@
 #define YQWizard_h
 
 #include "YWizard.h"
-#include "qvbox.h"
-#include "qpixmap.h"
+#include <qvbox.h>
+#include <qpixmap.h>
+#include <qptrlist.h>
 
 #include <string>
 
@@ -51,6 +52,11 @@ public:
 	      const YCPValue & 	backButtonId,	const YCPString & backButtonLabel,
 	      const YCPValue & 	abortButtonId,	const YCPString & abortButtonLabel,
 	      const YCPValue & 	nextButtonId,	const YCPString & nextButtonLabel  );
+
+    /**
+     * Destructor
+     **/
+    virtual ~YQWizard();
 
     /**
      * Generic direct access to implementation-specific functions.
@@ -102,19 +108,31 @@ public:
     bool stepsEnabled() const { return _stepsEnabled; }
 
     /**
-     * Add a step to the steps panel on the side bar.
+     * Add a step for the steps panel on the side bar.
+     * This only adds the step to the internal list of steps.
+     * The display is only updated upon calling updateSteps().
      **/
     void addStep( const QString & text, const QString & id );
-    
+
     /**
-     * Add a step heading to the steps panel on the side bar.
+     * Add a step heading for the steps panel on the side bar.
+     * This only adds the heading to the internal list of steps.
+     * The display is only updated upon calling updateSteps().
      **/
     void addStepHeading( const QString & text );
 
     /**
-     * Delete all steps and step headings from the steps panel.
+     * Delete all steps and step headings from the internal lists.
+     * The display is only updated upon calling updateSteps().
      **/
     void deleteSteps();
+
+    /**
+     * Update the steps display: Reflect the internal steps and heading lists
+     * in the layout.
+     **/
+    void updateSteps();
+
 
 public slots:
 
@@ -201,7 +219,7 @@ protected:
     void layoutWorkArea	( QHBox * parentHBox );
     void layoutClientArea( QWidget * parent );
     void layoutButtonBox();
-    void createStepsGrid();
+
 
     /**
      * Load gradient pixmaps
@@ -315,6 +333,73 @@ protected:
 
 
     bool	_verboseCommands;
+
+    
+protected:
+
+    /**
+     * Helper class to represent a wizard step internally
+     **/
+    class Step
+    {
+    public:
+
+	Step( const QString & name = "", const QString & id = "" )
+	    : _name( name )
+	    , _id( id )
+	    , _statusLabel( 0 )
+	    , _nameLabel(0)
+	    , _enabled( true )
+	    {}
+
+	/**
+	 * Destructor. Intentionally not deleting the widgets.
+	 **/
+	virtual ~Step() {}
+
+	virtual bool isHeading() const { return false; }
+
+	QString  name()		const { return _name;		}
+	QString  id()		const { return _id;		}
+	QLabel * statusLabel()	const { return _statusLabel;	}
+	QLabel * nameLabel()	const { return _nameLabel;	}
+	bool	 isEnabled() 	const { return _enabled;	}
+
+	void setStatusLabel( QLabel * label )	{ _statusLabel = label; }
+	void setNameLabel  ( QLabel * label )	{ _nameLabel   = label; }
+	void setEnabled( bool enabled )		{ _enabled = enabled; }
+
+    protected:
+
+	QString		_name;
+	QString		_id;
+	QLabel * 	_statusLabel;
+	QLabel *	_nameLabel;
+	bool		_enabled;
+    };
+
+
+    /**
+     * Helper class to represent a wizard step heading internally
+     **/
+    class StepHeading: public Step
+    {
+    public:
+
+	StepHeading( const QString & name = "" )
+	    : Step( name, "" )
+	    {}
+
+	virtual ~StepHeading() {}
+	virtual bool isHeading() const { return true; }
+    };
+
+
+    typedef QPtrList<YQWizard::Step> StepList;
+    StepList	_stepsList;
+
 };
+
+
 
 #endif // YQWizard_h
