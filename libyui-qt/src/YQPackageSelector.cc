@@ -50,8 +50,10 @@
 
 #include "YQPackageSelector.h"
 #include "YQPkgConflictDialog.h"
-#include "YQPkgDescriptionView.h"
 #include "YQPkgDependenciesView.h"
+#include "YQPkgDescriptionView.h"
+#include "YQPkgDiskUsageList.h"
+#include "YQPkgDiskUsageWarningDialog.h"
 #include "YQPkgList.h"
 #include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQPkgSearchFilterView.h"
@@ -63,7 +65,6 @@
 #include "YQPkgVersionsView.h"
 #include "YQPkgYouPatchFilterView.h"
 #include "YQPkgYouPatchList.h"
-#include "YQPkgDiskUsageList.h"
 
 #include "QY2ComboTabWidget.h"
 #include "YQDialog.h"
@@ -678,6 +679,35 @@ YQPackageSelector::resolveDependencies()
 }
 
 
+int
+YQPackageSelector::checkDiskUsage()
+{
+    if ( ! _diskUsageList )
+    {
+	y2warning( "No disk usage list existing, assuming disk usage is OK" );
+	return QDialog::Accepted;
+    }
+
+    if ( ! _diskUsageList->overflowWarning.inRange() )
+	return QDialog::Accepted;
+
+    QString msg =
+	// Translators: RichText (HTML-like) format
+	"<p><b>" + _("Error: Out of disk space!") + "</b></p>" + _("\
+<p>\
+You can choose to install anyway if you know very well what you are doing, \
+but you risk getting a corrupted system that requires manual repairs. \
+If you are not absolutely sure how to handle such a case, better \
+press <b>Cancel</b> now and deselect some packages.\
+</p>\
+");
+    
+    return YQPkgDiskUsageWarningDialog::diskUsageWarning( msg, 
+							  100, _("&Continue anyway"), _("&Cancel") );
+
+}
+
+
 void
 YQPackageSelector::fakeData()
 {
@@ -734,7 +764,8 @@ YQPackageSelector::reject()
 void
 YQPackageSelector::accept()
 {
-    if ( resolveDependencies() != QDialog::Rejected )
+    if ( resolveDependencies() != QDialog::Rejected &&
+	 checkDiskUsage() != QDialog::Rejected )
     {
 	Y2PM::packageManager().ClearSaveState();
 	Y2PM::selectionManager().ClearSaveState();

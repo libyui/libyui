@@ -100,6 +100,7 @@ public slots:
 
     /**
      * Resolve package dependencies (unconditionally).
+     *
      * Returns QDialog::Accepted or QDialog::Rejected.
      **/
      int resolveDependencies();
@@ -109,6 +110,15 @@ public slots:
      * (if the "auto check" checkbox is on).
      **/
     void autoResolveDependencies();
+
+    /**
+     * Check for disk overflow and post a warning dialog if necessary.
+     * The user can choose to override this warning.
+     *
+     * Returns QDialog::Accepted if no warning is necessary or if the user
+     * wishes to override the warning, QDialog::Rejected otherwise.
+     **/
+    int checkDiskUsage();
 
     /**
      * Close processing and abandon changes
@@ -125,7 +135,7 @@ public slots:
      **/
     void help();
 
-    
+
 signals:
 
     /**
@@ -152,9 +162,9 @@ protected:
 
     /**
      * Establish Qt signal / slot connections.
-     * 
+     *
      * This really needs to be a separate method to make sure all affected
-     * wigets are created at this point. 
+     * wigets are created at this point.
      **/
     void makeConnections();
 
@@ -162,7 +172,7 @@ protected:
      * Add pulldown menus to the menu bar.
      *
      * This really needs to be a separate method to make sure all affected
-     * wigets are created at this point. 
+     * wigets are created at this point.
      **/
     void addMenus();
 
