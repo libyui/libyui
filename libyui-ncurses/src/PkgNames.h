@@ -158,6 +158,11 @@ public:
      */
     static const YCPValue& RpmGroups ();
 
+   /**
+     *  Widget id of the menu selection What if ...
+     */
+    static const YCPValue& Whatif ();
+    
     /**
      *  Widget id of the menu selection Selections
      */

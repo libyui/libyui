@@ -208,6 +208,13 @@ const YCPValue& PkgNames::Selections ()
     return value;
 }
 
+// menu selection What if ...
+const YCPValue& PkgNames::Whatif ()
+{
+    static const YCPValue value = createIdValue ( "whatif" );
+    return value;
+}
+
 // menu selection update list
 const YCPValue& PkgNames::UpdateList ()
 {

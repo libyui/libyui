@@ -20,6 +20,7 @@
 					    [`item( `id(`groups), 	_("&RPM groups") ),
 					     `item( `id(`selections), 	_("Se&lections") ),
 					     `item( `id(`search), 	_("&Search") ),
+					     `item( `id(`whatif), 	_("&What if ...") ),
 					     `item( `id(`updatelist),	_("&Update list") ) ]
 					    )),
 			 // label Actions menu ( keep it short ) - actions to change status of a package
@@ -56,7 +57,7 @@
 					     `item( `id(`relations), 	_("Package &relations") ) ]
 					    )),
 			 // label Etc. menu ( keep it short! )
-			 `Left(`ReplacePoint(`id(`replacemenu), `opt(`key_F7) ,`MenuButton( _("&Etc."),
+			 `Left(`ReplacePoint(`id(`replacemenu), `MenuButton( `opt(`key_F7), _("&Etc."),
 									    // menu item of the Etc. menu
 									    [`menu( "&Dependencies",
 										    // menu items of the Etc./Dependencies submenu
@@ -118,7 +119,7 @@
 						 ),
 					   `HSpacing(5.0),
 					   // button label
-					   `HBox( `Right( `PushButton(`id(`cancel), `opt(`key_F12) ,_("&Cancel") ) ),
+					   `HBox( `Right( `PushButton(`id(`cancel), `opt(`key_F9) ,_("&Cancel") ) ),
 						  // button label  
 						  `Right( `PushButton(`id(`ok), `opt(`key_F10), _("&OK") ) )
 						  )
