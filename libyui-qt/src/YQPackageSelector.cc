@@ -94,7 +94,6 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     _detailsViews		= 0;
     _diskSpace			= 0;
     _filters			= 0;
-    _leftPane			= 0;
     _pkgDescriptionView		= 0;
     _pkgDependenciesView	= 0;
     _pkgList			= 0;
@@ -193,14 +192,15 @@ YQPackageSelector::basicLayout()
 void
 YQPackageSelector::layoutLeftPane( QWidget * parent )
 {
-    QVBox *left_vbox = new QVBox( parent );
-    CHECK_PTR( left_vbox );
-    left_vbox->setSpacing( SPACING );
-    left_vbox->setMargin( MARGIN );
+    QSplitter * splitter = new QSplitter( QSplitter::Vertical, parent );
+    CHECK_PTR( splitter );
+    splitter->setMargin( MARGIN );
 
-    layoutFilters( left_vbox );
-    layoutDiskSpaceSummary( left_vbox );
-    _leftPane = left_vbox;
+    QVBox * vbox = new QVBox( splitter );
+    layoutFilters( vbox );
+    addVSpacing( vbox, MARGIN );
+    
+    layoutDiskSpaceSummary( splitter );
 }
 
 
@@ -354,12 +354,15 @@ YQPackageSelector::layoutDiskSpaceSummary( QWidget * parent )
 void
 YQPackageSelector::layoutRightPane( QWidget * parent )
 {
-    QSplitter *right_splitter = new QSplitter( QSplitter::Vertical, parent );
-    CHECK_PTR( right_splitter );
-    right_splitter->setMargin( MARGIN );
+    QSplitter * splitter = new QSplitter( QSplitter::Vertical, parent );
+    CHECK_PTR( splitter );
+    splitter->setMargin( MARGIN );
 
-    layoutPkgList( right_splitter );
-    layoutDetailsViews( right_splitter );
+    QVBox * vbox = new QVBox( splitter );
+    layoutPkgList( vbox );
+    addVSpacing( vbox, MARGIN );
+    
+    layoutDetailsViews( splitter );
 }
 
 

@@ -199,7 +199,6 @@ protected:
     QCheckBox *				_autoDependenciesCheckBox;
     QProgressBar *			_diskSpace;
     QTabWidget *			_detailsViews;
-    QWidget *				_leftPane;
     QY2ComboTabWidget *			_filters;
     YQPkgConflictDialog *		_conflictDialog;
     YQPkgDescriptionView *		_pkgDescriptionView;
