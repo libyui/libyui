@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Jul  8 16:54:24 CEST 2002 - mvidner@suse.cz
+
+- Provides/Obsoletes also the devel subpackage
+
+-------------------------------------------------------------------
 Wed Jul 03 12:26:33 CEST 2002 - msvec@suse.cz
 
 - devel sub-package not neeeded

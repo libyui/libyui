@@ -9,8 +9,8 @@ Provides:	yast2_ui
 Provides:	y2base:/var/lib/YaST2/servers/qt
 Provides:	y2base:/usr/lib/YaST2/servers/qt
 Provides:	y2base:/usr/lib/YaST2/plugin/libpy2qt.so.2
-Provides:	yast2-ui-qt
-Obsoletes:	yast2-ui-qt
+Provides:	yast2-ui-qt yast2-ui-qt-devel
+Obsoletes:	yast2-ui-qt yast2-ui-qt-devel
 Provides:	y2qt
 Obsoletes:	y2qt
 
