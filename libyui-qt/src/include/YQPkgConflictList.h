@@ -134,9 +134,13 @@ public:
      **/
     bool hasOpenRequirements() { return ! _conflict.unresolvable.empty(); }
 
+    /**
+     * Apply the choices the user made.
+     **/
+    void applyResolution();
+
 
 protected:
-
 
     /**
      * Format the text line for this item.
@@ -192,7 +196,11 @@ protected:
      * Dump the 'remove_to_solve_conflict' list into the conflict list.
      **/
     void dumpDeleteList( QListViewItem * parent );
-    
+
+    /**
+     * Remove everything in the remove list.
+     **/
+    void bruteForceDelete();
 
     /**
      * Paint method. Reimplemented from @ref QListViewItem a different
@@ -214,11 +222,9 @@ protected:
     QString			_fullName;	// Name + edition
     PMSelectable::UI_Status	_status;
     PMSelectable::UI_Status	_undo_status;
-
     bool			_collision;
 
-    YQPkgConflictResolution *	_firstResolution;
-
+    QListViewItem *		_resolutionsHeader;
     PkgDep::ErrorResult		_conflict;
     YQPkgConflictList *		_parentList;
 };
@@ -243,15 +249,20 @@ public:
 			     PMObjectPtr	pmObj );
 
     /**
-     * Returns the type of this resolution.
-     **/
-    YQPkgConflictResolutionType type() const { return _type; }
-
-    /**
      * Returns the corresponding PMObject.
      **/
     PMObjectPtr pmObj() const { return _pmObj; }
 
+    /**
+     * Returns the type of this resolution.
+     **/
+    YQPkgConflictResolutionType type() const { return _type; }
+
+
+    /**
+     * Returns the resolution type as string.
+     **/
+    const char * typeString() const;
     
 protected:
 

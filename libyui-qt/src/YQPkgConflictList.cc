@@ -84,9 +84,19 @@ YQPkgConflictList::choicesComplete()
 void
 YQPkgConflictList::applyResolutions()
 {
-    // TODO
-    // TODO
-    // TODO
+    QListViewItem * child = firstChild();
+
+    while ( child )
+    {
+	YQPkgConflict * conflict = dynamic_cast<YQPkgConflict *> (child);
+
+	if ( conflict )
+	    conflict->applyResolution();
+
+	child = child->nextSibling();
+    }
+
+    emit updatePackages();
 }
 
 
@@ -103,7 +113,7 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
     std::string name;
     PkgEdition edition;
 
-    _firstResolution	= 0;
+    _resolutionsHeader	= 0;
     _status		= PMSelectable::S_NoInst;
     _undo_status	= PMSelectable::S_NoInst;
     _pmObj		= _conflict.solvable;
@@ -143,7 +153,7 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
 	for ( int i=0; i < 30; i++ )
 	    _conflict.remove_to_solve_conflict.push_back( _pmObj );
     }
-    
+
     // DEBUG
     // DEBUG
 #endif
@@ -325,7 +335,7 @@ YQPkgConflict::addResolutionSuggestions()
     addDeleteResolution( header );
     addIgnoreResolution( header );
 
-    _firstResolution = dynamic_cast<YQPkgConflictResolution *> ( header->firstChild() );
+    _resolutionsHeader = header;
 }
 
 
@@ -385,7 +395,7 @@ YQPkgConflict::addAlternativesList( QY2CheckListItem * parent )
 
 	if ( pkg )
 	    new YQPkgConflictResolution( parent, pkg );
-	
+
 	++it;
     }
 }
@@ -501,6 +511,82 @@ YQPkgConflict::isResolved()
 }
 
 
+void
+YQPkgConflict::applyResolution()
+{
+    QListViewItem * item = _resolutionsHeader->firstChild();
+
+    while ( item )
+    {
+	YQPkgConflictResolution * res = dynamic_cast<YQPkgConflictResolution *> (item);
+
+	if ( ! res )
+	    y2error( "Non-resolution item in resolution list!" );
+
+	if ( res && res->isOn() )
+	{
+	    y2milestone( "Resolution %s selected for %s", res->typeString(), (const char *) _shortName );
+
+	    switch ( res->type() )
+	    {
+		case YQPkgConflictUndo:
+		    if ( _pmObj && _pmObj->getSelectable() )
+			_pmObj->getSelectable()->set_status( _undo_status );
+		    return;
+
+		case YQPkgConflictIgnore:
+#warning TODO: Store info about ignored conflict!
+		    return;
+
+		case YQPkgConflictBruteForceDelete:
+		    bruteForceDelete();
+		    return;
+
+		case YQPkgConflictAlternative:
+		    if ( res->pmObj() && res->pmObj()->getSelectable() )
+		    {
+			if ( res->pmObj()->hasInstalledObj() )
+			    res->pmObj()->getSelectable()->set_status( PMSelectable::S_Update );
+			else
+			    res->pmObj()->getSelectable()->set_status( PMSelectable::S_Install );
+		    }
+		    return;
+	    }
+	}
+
+	item = item->nextSibling();
+    }
+
+    y2milestone( "Conflict %s unresolved", (const char *) _shortName );
+}
+
+
+void
+YQPkgConflict::bruteForceDelete()
+{
+    if ( _conflict.remove_to_solve_conflict.empty() )
+	return;
+
+    std::list<PMSolvablePtr>::const_iterator it = _conflict.remove_to_solve_conflict.begin();
+
+    while ( it != _conflict.remove_to_solve_conflict.end() )
+    {
+	PMObjectPtr pkg = (*it);
+
+	if ( pkg && pkg->getSelectable() )
+	{
+	    pkg->getSelectable()->set_status( pkg->hasInstalledObj() ?
+					      PMSelectable::S_Del : PMSelectable::S_NoInst );
+	}
+
+	++it;
+    }
+}
+
+
+
+
+
 
 YQPkgConflictResolution::YQPkgConflictResolution( QY2CheckListItem * 			parent,
 						  const QString & 			text,
@@ -521,6 +607,22 @@ YQPkgConflictResolution::YQPkgConflictResolution( QY2CheckListItem *	parent,
     setText( 0, ( _( "Install %1" ) ).arg( name.c_str() ) );
 }
 
+
+const char *
+YQPkgConflictResolution::typeString() const
+{
+    const char * text = "<unknown>";
+
+    switch ( _type )
+    {
+	case YQPkgConflictUndo:			text = "Undo";			break;
+	case YQPkgConflictIgnore:		text = "Ignore";		break;
+	case YQPkgConflictBruteForceDelete:	text = "BruteForceDelete";	break;
+	case YQPkgConflictAlternative:		text = "Alternative";		break;
+    };
+
+    return text;
+}
 
 
 #include "YQPkgConflictList.moc.cc"

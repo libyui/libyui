@@ -126,13 +126,14 @@ YQPkgConflictDialog::solveAndShowConflicts()
     PkgDep::ResultList		goodList;
     PkgDep::ErrorResultList	badList;
 
-    y2milestone( "Solving..." );
+    // y2milestone( "Solving..." );
     QApplication::setOverrideCursor( Qt::WaitCursor );
 
     bool success = Y2PM::packageManager().solveInstall( goodList, badList );
 
     QApplication::restoreOverrideCursor();
-    y2milestone( "Solving done" );
+    // y2milestone( "Solving done" );
+    emit updatePackages();
 
     if ( success )
     {
@@ -141,7 +142,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
     }
     else
     {
-	y2milestone( "Dependency conflict!" );
+	// y2milestone( "Dependency conflict!" );
 	_conflictList->fill( badList );
 
 	if ( ! isVisible() )
