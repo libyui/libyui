@@ -30,20 +30,6 @@
 class YQPkgSel;	// shorter name than "YQPkgSelListItem"
 class YUIQt;
 
-enum YQPkgSelStatus
-{
-   // Keep this order, it's used for sorting package lists!
-    // Dangerous / noteworthy states are sorted first.
-
-    YQPkgSelTaboo,		// Never install this
-    YQPkgSelDel,		// Will be deleted
-    YQPkgSelUpdate,		// Will be updated
-    YQPkgSelInstall,		// Is or will be installed
-    YQPkgSelAuto,		// Will be automatically installed
-    YQPkgSelKeepInstalled,	// Is installed - keep this version
-    YQPkgSelNoInst		// Is not installed and will not be installed
-};
-
 
 class YQPkgSelList : public QListView
 {
@@ -65,7 +51,6 @@ public:
     // Column numbers
 
     int statusCol()	const	{ return _statusCol;	}
-    int nameCol()	const	{ return _nameCol;	}
     int summaryCol()	const	{ return _summaryCol;	}
 
 
@@ -85,7 +70,7 @@ public slots:
      **/
     void filterIfVisible();
 
-    
+
     /**
      * Add a selection to the list. Connect a filter's filterMatch() signal to
      * this slot. Remember to connect filterStart() to clear() (inherited from
@@ -99,17 +84,28 @@ public slots:
     void slotPkgSelClicked( int		button,
 			    YQPkgSel *	sel,
 			    int		col );
-    
+
     /**
      * Select a list entry (if there is any).
      * Usually this will be the first list entry, but don't rely on that - this
      * might change without notice. Emits signal selectionChanged().
      **/
     void selectSomething();
+
+    /**
+     * Update the status display of all list entries.
+     * This is an expensive operation.
+     **/
+    void updateAllItemStates();
     
 
+    /**
+     * Emit an updatePackages() signal.
+     **/
+    void sendUpdatePackages() { emit updatePackages(); }
+
 public:
-    
+
     /**
      * Returns the currently selected item or 0 if there is none.
      **/
@@ -117,6 +113,12 @@ public:
 
 
 signals:
+
+    /**
+     * Emitted when it's time to update displayed package information,
+     * e.g., package states
+     **/
+    void updatePackages();
 
     /**
      * Emitted when the filtering starts. Use this to clear package lists
@@ -133,7 +135,6 @@ signals:
      * Emitted when filtering is finished.
      **/
     void filterFinished();
-
     /**
      * Emitted for mouse clicks on a selection.
      **/
@@ -162,7 +163,7 @@ protected slots:
      * Fill the selection list.
      **/
     void fillList();
-    
+
 
 protected:
 
@@ -196,7 +197,6 @@ protected:
 private:
 
     int _statusCol;
-    int _nameCol;
     int _summaryCol;
     int _sizeCol;
     int _versionCol;
@@ -242,16 +242,20 @@ public:
      **/
     const PMSelectionPtr constPkgSel() const { return _pkgSel; }
 
-
     /**
      * Returns the (binary RPM) package status
      **/
-    YQPkgSelStatus status() const { return _status; }
+    PMSelectable::UI_Status status() const;
 
     /**
      * Set the (binary RPM) package status
      **/
-    void setStatus( YQPkgSelStatus newStatus );
+    void setStatus( PMSelectable::UI_Status newStatus );
+
+    /**
+     * Set a status icon according to the package's status
+     **/
+    void setStatusIcon();
 
     /**
      * Cycle the package status to the next valid value
@@ -259,14 +263,8 @@ public:
     void cycleStatus();
 
     /**
-     * Set a column text via STL string
-     * (QListViewItem::setText() expects a QString)
-     **/
-    void setText( int column, const std::string text );
-
-    /**
-     * Return wheter or not this selection is already installed, i.e. if it can be
-     * updated or deleted.
+     * Return wheter or not this selection is already installed, i.e. if it can
+     * be updated or deleted.
      **/
     bool isInstalled() const { return _isInstalled; }
 
@@ -286,21 +284,15 @@ public:
     // Columns
 
     int statusCol()	const	{ return _pkgSelList->statusCol();	}
-    int nameCol()	const	{ return _pkgSelList->nameCol();	}
     int summaryCol()	const	{ return _pkgSelList->summaryCol();	}
 
-    
+
 protected:
 
     // Data members
 
     YQPkgSelList	*	_pkgSelList;
     PMSelectionPtr		_pkgSel;
-
-
-    // FIXME
-    // Preliminary - those are PMObject attributes!
-    YQPkgSelStatus		_status;
 
     bool			_isInstalled;
 };

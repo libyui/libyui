@@ -17,11 +17,10 @@
 /-*/
 
 
-#define SHOW_SUMMARY	0
-
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 #include <qheader.h>
+#include <qregexp.h>
 
 #include <Y2PM.h>
 #include <y2pm/PMManager.h>
@@ -30,6 +29,7 @@
 #include "YUIQt.h"
 #include "YQi18n.h"
 #include "YQIconPool.h"
+#include "utf8.h"
 
 
 
@@ -44,12 +44,7 @@ YQPkgSelList::YQPkgSelList( YUIQt *yuiqt, QWidget *parent )
 
     int numCol = 0;
     addColumn( ""		);	_statusCol	= numCol++;
-    addColumn( _( "Selection"	) );	_nameCol	= numCol++;
-#if SHOW_SUMMARY
-    addColumn( _( "Summary"	) );	_summaryCol	= numCol++;
-#else
-    _summaryCol = -1;
-#endif
+    addColumn( _( "Selection"	) );	_summaryCol	= numCol++;
     setAllColumnsShowFocus( true );
 
 
@@ -94,10 +89,10 @@ YQPkgSelList::fillList()
 		new YQPkgSel( this, sel );
 	    }
 	}
-	
+
 	++it;
     }
-    
+
     y2milestone( "Selection list filled" );
 }
 
@@ -106,10 +101,32 @@ void
 YQPkgSelList::selectSomething()
 {
     QListViewItem * item = firstChild();
-    
+
     if ( item )
     {
 	setSelected( item, true );
+    }
+}
+
+
+void
+YQPkgSelList::updateAllItemStates()
+{
+    QListViewItem * item = firstChild();
+
+    while ( item )
+    {
+	YQPkgSel * sel = dynamic_cast<YQPkgSel *> ( item );
+	
+	if ( sel )
+	{
+	    // Maybe in some future version this list will contain other types
+	    // of items, too - so always use a dynamic cast and check for Null.
+	    
+	    sel->setStatusIcon();
+	}
+	
+	item = item->nextSibling();
     }
 }
 
@@ -168,7 +185,7 @@ YQPkgSelList::selection() const
 
     if ( ! item )
 	return 0;
-    
+
     return dynamic_cast<YQPkgSel *> ( selectedItem() );
 }
 
@@ -181,7 +198,7 @@ YQPkgSelList::slotPkgSelClicked( int button, YQPkgSel * sel, int col )
 	if ( button == Qt::LeftButton )
 	{
 	    if ( col == statusCol() )
-		      // || col == nameCol() )
+		      // || col == summaryCol() )
 	    {
 		sel->cycleStatus();
 	    }
@@ -273,26 +290,12 @@ YQPkgSel::YQPkgSel( YQPkgSelList * pkgSelList, PMSelectionPtr pkgSel )
     , _pkgSelList( pkgSelList )
     , _pkgSel( pkgSel )
 {
-    y2debug( "New YQPkgSel" );
-    
-    _pkgSel->startRetrieval();	// Just a hint to speed things up a bit
-    
-    setText( nameCol(),		_pkgSel->name()		  );
+    QString text = fromUTF8( _pkgSel->summary( "" ) );
+    text.replace( QRegExp( "Graphical Basis System" ), "Graphical Base System" );
+    setText( summaryCol(), text );
 
-#if SHOW_SUMMARY
-    setText( summaryCol(),	_pkgSel->summary("")	  );
-#endif
-    
-
-#if 0
     _isInstalled = pkgSel->hasInstalledObj();
-#else
-    _isInstalled = false;
-#endif
-    
-    setStatus( _isInstalled ? YQPkgSelKeepInstalled : YQPkgSelNoInst );
-    
-    pkgSel->stopRetrieval();
+    setStatusIcon();
 }
 
 
@@ -303,39 +306,46 @@ YQPkgSel::~YQPkgSel()
 }
 
 
-void
-YQPkgSel::setText( int column, const std::string text )
+PMSelectable::UI_Status
+YQPkgSel::status() const
 {
-    QListViewItem::setText( column, QString::fromUtf8( text.c_str() ) );
+    if ( ! _pkgSel )
+    {
+	y2error( "NULL package" );
+	return isInstalled() ? PMSelectable::S_KeepInstalled : PMSelectable::S_NoInst;
+    }
+
+    return _pkgSel->getSelectable()->status();
 }
 
 
 void
-YQPkgSel::setStatus( YQPkgSelStatus newStatus )
+YQPkgSel::setStatus( PMSelectable::UI_Status newStatus )
 {
-    _status = newStatus;
+    _pkgSel->getSelectable()->set_status( newStatus );
+    setStatusIcon();
+}
+
+
+void
+YQPkgSel::setStatusIcon()
+{
     QPixmap icon = YQIconPool::pkgNoInst();
-    const char *badStatus = 0;
 
     switch ( status() )
     {
-        case YQPkgSelTaboo:		icon = YQIconPool::pkgTaboo();		break;
-        case YQPkgSelDel:		icon = YQIconPool::pkgDel();		break;
-        case YQPkgSelUpdate:		icon = YQIconPool::pkgUpdate();		break;
-        case YQPkgSelInstall:		icon = YQIconPool::pkgInstall();	break;
-        case YQPkgSelAuto:		icon = YQIconPool::pkgAuto();		break;
-        case YQPkgSelKeepInstalled:	icon = YQIconPool::pkgKeepInstalled();	break;
-        case YQPkgSelNoInst:		icon = YQIconPool::pkgNoInst();		break;
+        case PMSelectable::S_Taboo:		icon = YQIconPool::pkgTaboo();		break;
+        case PMSelectable::S_Del:		icon = YQIconPool::pkgDel();		break;
+        case PMSelectable::S_Update:		icon = YQIconPool::pkgUpdate();		break;
+        case PMSelectable::S_Install:		icon = YQIconPool::pkgInstall();	break;
+        case PMSelectable::S_AutoDel:		icon = YQIconPool::pkgAutoDel();	break;
+        case PMSelectable::S_AutoInstall:	icon = YQIconPool::pkgAuto();		break;
+        case PMSelectable::S_AutoUpdate:	icon = YQIconPool::pkgAuto();		break;
+        case PMSelectable::S_KeepInstalled:	icon = YQIconPool::pkgKeepInstalled();	break;
+        case PMSelectable::S_NoInst:		icon = YQIconPool::pkgNoInst();		break;
 
 	    // Intentionally omitting 'default' branch so the compiler can
 	    // catch unhandled enum states
-    }
-
-    if ( badStatus )
-    {
-	_status = YQPkgSelNoInst;
-	icon = YQIconPool::pkgNoInst();
-	y2error( "Ignoring invalid package selection status %s", badStatus );
     }
 
     setPixmap( statusCol(), icon );
@@ -345,33 +355,41 @@ YQPkgSel::setStatus( YQPkgSelStatus newStatus )
 void
 YQPkgSel::cycleStatus()
 {
-    YQPkgSelStatus newStatus = status();
+    PMSelectable::UI_Status oldStatus = status();
+    PMSelectable::UI_Status newStatus = oldStatus;
 
     if ( isInstalled() )
     {
-	switch ( status() )
+	switch ( oldStatus )
 	{
-	    case YQPkgSelKeepInstalled:	newStatus = YQPkgSelUpdate;		break;
-	    case YQPkgSelUpdate:	newStatus = YQPkgSelDel;		break;
-	    case YQPkgSelDel:		newStatus = YQPkgSelKeepInstalled;	break;
-	    default:			newStatus = YQPkgSelKeepInstalled;	break;
+	    case PMSelectable::S_KeepInstalled:	newStatus = _pkgSel->hasCandidateObj() ?
+						    PMSelectable::S_Update : PMSelectable::S_Del;
+						break;
+	    case PMSelectable::S_Update:	newStatus = PMSelectable::S_Del;		break;
+	    case PMSelectable::S_Del:		newStatus = PMSelectable::S_KeepInstalled;	break;
+	    default:				newStatus = PMSelectable::S_KeepInstalled;	break;
 	}
     }
-    else	// pkgSel not installed
+    else	// pkg not installed
     {
-	switch ( status() )
+	switch ( oldStatus )
 	{
-	    case YQPkgSelNoInst:	newStatus = YQPkgSelInstall;		break;
-	    case YQPkgSelInstall:	newStatus = YQPkgSelNoInst;		break;
-	    case YQPkgSelAuto:		newStatus = YQPkgSelNoInst;		break;
-	    default:			newStatus = YQPkgSelNoInst;		break;
+	    case PMSelectable::S_NoInst:	newStatus = PMSelectable::S_Install;	break;
+	    default:				newStatus = PMSelectable::S_NoInst;	break;
 
-		// Intentionally NOT cycling through YQPkgSelTaboo:
+		// Intentionally NOT cycling through YQPkgTaboo:
 		// This status is not common enough for that.
 	}
     }
 
     setStatus( newStatus );
+
+    if ( newStatus == PMSelectable::S_Install ||
+	 newStatus == PMSelectable::S_Update    )
+    {
+	Y2PM::selectionManager().activate( Y2PM::packageManager() );
+	_pkgSelList->sendUpdatePackages();
+    }
 }
 
 

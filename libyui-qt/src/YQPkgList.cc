@@ -125,6 +125,28 @@ YQPkgList::selectSomething()
 
 
 void
+YQPkgList::updateAllItemStates()
+{
+    QListViewItem * item = firstChild();
+
+    while ( item )
+    {
+	YQPkg * pkg = dynamic_cast<YQPkg *> ( item );
+	
+	if ( pkg )
+	{
+	    // Maybe in some future version this list will contain other types
+	    // of items, too - so always use a dynamic cast and check for Null.
+	    
+	    pkg->setStatusIcon();
+	}
+	
+	item = item->nextSibling();
+    }
+}
+
+
+void
 YQPkgList::contentsMousePressEvent( QMouseEvent * ev )
 {
     QListViewItem * item = itemAt( contentsToViewport( ev->pos() ) );
@@ -270,7 +292,6 @@ YQPkg::YQPkg( YQPkgList * pkgList, PMPackagePtr pkg )
     , _pkgList( pkgList )
     , _pkg( pkg )
 {
-    pkg->startRetrieval();	// Just a hint to speed things up a bit
     _isInstalled = pkg->hasInstalledObj();
 
     setText( nameCol(),		pkg->name()		  );
@@ -294,8 +315,6 @@ YQPkg::YQPkg( YQPkgList * pkgList, PMPackagePtr pkg )
 
     setStatusIcon();
     setInstallSourceRpm( false ); // No other chance - RPM won't tell if a SRPM is installed
-
-    pkg->stopRetrieval();
 }
 
 
@@ -357,7 +376,8 @@ YQPkg::setStatusIcon()
         case PMSelectable::S_Update:		icon = YQIconPool::pkgUpdate();		break;
         case PMSelectable::S_Install:		icon = YQIconPool::pkgInstall();	break;
         case PMSelectable::S_AutoDel:		icon = YQIconPool::pkgAutoDel();	break;
-        case PMSelectable::S_Auto:		icon = YQIconPool::pkgAuto();		break;
+        case PMSelectable::S_AutoInstall:	icon = YQIconPool::pkgAuto();		break;
+        case PMSelectable::S_AutoUpdate:	icon = YQIconPool::pkgAuto();		break;
         case PMSelectable::S_KeepInstalled:	icon = YQIconPool::pkgKeepInstalled();	break;
         case PMSelectable::S_NoInst:		icon = YQIconPool::pkgNoInst();		break;
 
@@ -405,8 +425,6 @@ YQPkg::cycleStatus()
 	switch ( oldStatus )
 	{
 	    case PMSelectable::S_NoInst:	newStatus = PMSelectable::S_Install;	break;
-	    case PMSelectable::S_Install:	newStatus = PMSelectable::S_NoInst;	break;
-	    case PMSelectable::S_Auto:		newStatus = PMSelectable::S_NoInst;	break;
 	    default:				newStatus = PMSelectable::S_NoInst;	break;
 
 		// Intentionally NOT cycling through YQPkgTaboo:
@@ -468,8 +486,8 @@ YQPkg::compare( QListViewItem *		otherListViewItem,
 	// Sorting by status depends on the numeric value of the
 	// PMSelectable::UI_Status enum, thus it is important to insert new
 	// package states there where they make most sense. We want to show
-	// dangerous or noteworthy states first (e.g., "taboo" which should
-	// seldeom occur, but when it does, it is important).
+	// dangerous or noteworthy states first - e.g., "taboo" which should
+	// seldeom occur, but when it does, it is important.
 	
 	if ( this->status() < other->status() ) return -1;
 	if ( this->status() > other->status() ) return 1;

@@ -18,7 +18,7 @@
 
 
 #define ALPHA_WARNING	1
-#define FAKE_INST_SRC	0
+#define FAKE_INST_SRC	1
 
 #include <qcombobox.h>
 #include <qframe.h>
@@ -147,21 +147,6 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     QY2ComboTabWidget * filters = new QY2ComboTabWidget( _( "F&ilter:" ), parent );
     CHECK_PTR( filters );
 
-
-    //
-    // RPM group tags view
-    //
-
-    _rpmGroupTagsFilterView = new YQPkgRpmGroupTagsFilterView( yuiqt, parent );
-    CHECK_PTR( _rpmGroupTagsFilterView );
-    filters->addPage( _( "Package Groups" ), _rpmGroupTagsFilterView );
-
-    connect( this,    			SIGNAL( loadData() ),
-	     _rpmGroupTagsFilterView,	SLOT  ( filter()   ) );
-
-    connect( filters, 			SIGNAL( currentChanged( QWidget * ) ),
-	     _rpmGroupTagsFilterView,	SLOT  ( filterIfVisible()           ) );
-
     
     //
     // Selections view
@@ -178,13 +163,29 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	     _selList,	SLOT  ( filterIfVisible()           ) );
 
 
-#if 1
+    //
+    // RPM group tags view
+    //
+
+    _rpmGroupTagsFilterView = new YQPkgRpmGroupTagsFilterView( yuiqt, parent );
+    CHECK_PTR( _rpmGroupTagsFilterView );
+    filters->addPage( _( "Package Groups" ), _rpmGroupTagsFilterView );
+
+    connect( this,    			SIGNAL( loadData() ),
+	     _rpmGroupTagsFilterView,	SLOT  ( filter()   ) );
+
+    connect( filters, 			SIGNAL( currentChanged( QWidget * ) ),
+	     _rpmGroupTagsFilterView,	SLOT  ( filterIfVisible()           ) );
+
+
+#if 0
     // DEBUG
 
     filters->addPage( _("Keywords"   ), new QLabel( "Keywords\nfilter\n\nfor future use", 0 ) );
     filters->addPage( _("MIME Types" ), new QLabel( "MIME Types\nfilter\n\nfor future use" , 0 ) );
-    filters->addPage( _("Search"     ), new QLabel( "Search\nfilter\n\nmissing", 0 ) );
 #endif
+    
+    filters->addPage( _("Search"     ), new QLabel( "Search\nfilter\n\nmissing", 0 ) );
 
 
 }
@@ -385,14 +386,17 @@ YQPackageSelector::makeConnections()
 
     CHECK_PTR( _selList );
 
-    connect( _selList,			SIGNAL( filterStart() 	),
-	     _pkgList, 			SLOT  ( clear() 	) );
+    connect( _selList,	SIGNAL( filterStart() 	),
+	     _pkgList, 	SLOT  ( clear() 	) );
 
-    connect( _selList,			SIGNAL( filterMatch( PMPackagePtr ) ),
-	     _pkgList, 			SLOT  ( addPkg     ( PMPackagePtr ) ) );
+    connect( _selList,	SIGNAL( filterMatch( PMPackagePtr ) ),
+	     _pkgList, 	SLOT  ( addPkg     ( PMPackagePtr ) ) );
     
-    connect( _selList, 			SIGNAL( filterFinished()  ),
-	     _pkgList, 			SLOT  ( selectSomething() ) );
+    connect( _selList, 	SIGNAL( filterFinished()  ),
+	     _pkgList, 	SLOT  ( selectSomething() ) );
+    
+    connect( _selList, 	SIGNAL( updatePackages()      ),
+	     _pkgList, 	SLOT  ( updateAllItemStates() ) );
 }
 
 

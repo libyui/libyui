@@ -81,10 +81,16 @@ public slots:
      * might change without notice. Emits signal selectionChanged().
      **/
     void selectSomething();
+
+    /**
+     * Update the status display of all list entries.
+     * This is an expensive operation.
+     **/
+    void updateAllItemStates();
     
     /**
      * Reimplemented from QListView / QWidget:
-     * Reserve as much horizontal space as possible
+     * Reserve a reasonable amount of space.
      **/
     virtual QSize sizeHint() const;
 
@@ -97,7 +103,7 @@ public slots:
 
     
 signals:
-
+    
     /**
      * Emitted for mouse clicks on a package
      **/
@@ -219,18 +225,10 @@ public:
      **/
     const PMPackagePtr constPkg() const { return _pkg; }
 
-
     /**
      * Returns the (binary RPM) package status
      **/
     PMSelectable::UI_Status status() const;
-
-    /**
-     * Returns the source RPM package status:
-     * Should the source RPM be installed?
-     **/
-    bool installSourceRpm() const { return _installSourceRpm; }
-
 
     /**
      * Set the (binary RPM) package status
@@ -241,16 +239,22 @@ public:
      * Set a status icon according to the package's status
      **/
     void setStatusIcon();
-    
-    /**
-     * Set the source RPM status
-     **/
-    void setInstallSourceRpm( bool installSourceRpm );
 
     /**
      * Cycle the package status to the next valid value
      **/
     void cycleStatus();
+
+    /**
+     * Returns the source RPM package status:
+     * Should the source RPM be installed?
+     **/
+    bool installSourceRpm() const { return _installSourceRpm; }
+
+    /**
+     * Set the source RPM status
+     **/
+    void setInstallSourceRpm( bool installSourceRpm );
 
     /**
      * Cycle the source package status to the next valid value
