@@ -699,6 +699,13 @@ public:
     static const NCstring MoreText();
     static const NCstring MoreSpaceText();
 
+    /**
+     * save/load selections
+     */ 
+    static const NCstring SaveSelText();
+    static const NCstring LoadSel1Text();
+    static const NCstring LoadSel2Text();
+    
 private:
     
     // Need no object of this class: hide default constructor

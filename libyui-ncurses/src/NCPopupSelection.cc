@@ -140,6 +140,7 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
     {
 	pkgLine.clear();
 	pkgLine.push_back( (*it)->summary(Y2PM::getPreferredLocale()) );
+	//pkgLine.push_back( packager->createText((*it)->description(Y2PM::getPreferredLocale()), false ) );
 	
 	sel->addLine( (*it)->getSelectable()->status(),	// the status 
 		      pkgLine,

@@ -1337,6 +1337,26 @@ const NCstring PkgNames::TextmodeHelp9()
     return value;
 }
 
+const NCstring PkgNames::SaveSelText()
+{
+    // text for popup "Save Package Selection"
+    static const NCstring value =  _("<p>The current package selection will be saved on a floppy disk. Please insert a formatted floppy.<br>Write data to the floppy disk now?</p>");
+    return value;
+}
+
+const NCstring PkgNames::LoadSel1Text()
+{
+    // text1 for popup "Load Package Selection"
+    static const NCstring value =  _("<p>Do you really want to reset your settings?</p>");
+    return value;
+}
+
+const NCstring PkgNames::LoadSel2Text()
+{
+    // text2 for popup "Load Package Selection"
+    static const NCstring value =  _("<p>The current package selection will be loaded from a floppy disk. Please insert the floppy.<br>Read data from the floppy disk now?</p>");
+    return value;
+}
 
 ///////////////////////////////////////////////////////////////////
 
