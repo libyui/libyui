@@ -465,14 +465,13 @@ QY2ListViewToolTip::maybeTip( const QPoint & pos )
     if ( ! listView )
 	return;
 
-    QHeader *       header   = listView->header();
-    QPoint          item_pos = QPoint( pos.x(), pos.y() - header->height() );
-    QListViewItem * item     = listView->itemAt( item_pos );
+    QHeader *       header        = listView->header();
+    int		    header_height = header->isVisible() ? header->height() : 0;
+    QPoint          item_pos 	  = QPoint( pos.x(), pos.y() - header_height );
+    QListViewItem * item          = listView->itemAt( item_pos );
 
     if ( ! item )
-    {
 	return;
-    }
 
     int x      = listView->viewportToContents( pos ).x();
     int column = header->mapToSection( header->sectionAt( x ) );
@@ -480,7 +479,7 @@ QY2ListViewToolTip::maybeTip( const QPoint & pos )
 
     if ( column == 0 )
     {
-	indent = item->depth() + ( listView->rootIsDecorated() ? 1 : 0 );
+	indent  =  item->depth() + ( listView->rootIsDecorated() ? 1 : 0 );
 	indent *=  listView->treeStepSize();
 	
 	if ( x < indent )
@@ -501,7 +500,7 @@ QY2ListViewToolTip::maybeTip( const QPoint & pos )
 	
 	QRect itemRect = listView->itemRect( item );
 	QRect rect( x,
-		    itemRect.y() + header->height(),
+		    itemRect.y() + header_height,
 		    column < 0 ? indent : header->sectionSize( column ),
 		    itemRect.height() );
 
