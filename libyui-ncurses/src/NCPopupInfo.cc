@@ -35,14 +35,17 @@
 //
 //	DESCRIPTION :
 //
-NCPopupInfo::NCPopupInfo( const wpos at, const YCPString & headline, const YCPString & text )
+NCPopupInfo::NCPopupInfo( const wpos at,
+			  const YCPString & headline,
+			  const YCPString & text,
+			  bool showOkButton )
     : NCPopup( at, false )
       , helpText( 0 )
       , okButton( 0 )
       , hDim( 50 )
       , vDim( 20 )
 {
-    createLayout( headline, text );
+    createLayout( headline, text, showOkButton );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -65,7 +68,9 @@ NCPopupInfo::~NCPopupInfo()
 //
 //	DESCRIPTION :
 //
-void NCPopupInfo::createLayout( const YCPString & headline, const YCPString & text )
+void NCPopupInfo::createLayout( const YCPString & headline,
+				const YCPString & text,
+				bool showOkButton )
 {
 
   YWidgetOpt opt;
@@ -83,12 +88,14 @@ void NCPopupInfo::createLayout( const YCPString & headline, const YCPString & te
   helpText = new NCRichText( split, opt, text );
   split->addChild( helpText );
 
-  // add the ok button
-  okButton = new NCPushButton( split, opt, PkgNames::OKLabel() );
-  okButton->setId( PkgNames::OkButton () );
+  if ( showOkButton )
+  {
+      // add the ok button
+      okButton = new NCPushButton( split, opt, PkgNames::OKLabel() );
+      okButton->setId( PkgNames::OkButton () );
   
-  split->addChild( okButton );
-  
+      split->addChild( okButton );
+  }
 }
 
 ///////////////////////////////////////////////////////////////////

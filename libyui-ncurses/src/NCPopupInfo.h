@@ -62,15 +62,32 @@ protected:
     
 public:
     
-    NCPopupInfo( const wpos at, const YCPString & headline, const YCPString & text );
+    NCPopupInfo( const wpos at,
+		 const YCPString & headline,
+		 const YCPString & text,
+		 bool showOkButton = true );
+    
     virtual ~NCPopupInfo();
 
     virtual long nicesize(YUIDimension dim);
 
-    void createLayout( const YCPString & headline, const YCPString & text );
+    void createLayout( const YCPString & headline,
+		       const YCPString & text,
+		       bool showOkButton );
 
     void showInfoPopup( );
 
+    void popup( ) {
+	initDialog();
+	showDialog();
+	activate ( true );
+    }
+
+    void popdown( ) {
+	activate ( false );
+	closeDialog();
+    }
+    
     void setNiceSize( int horiz, int vert ) { hDim = horiz; vDim = vert; }
 };
 
