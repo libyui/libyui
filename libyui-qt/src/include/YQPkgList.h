@@ -157,6 +157,18 @@ public:
 
 
 protected:
+    
+    /**
+     * Paint method. Reimplemented from @ref QListViewItem so different
+     * colors can be used.
+     *
+     * Reimplemented from QListViewItem.
+     **/
+    virtual void paintCell( QPainter *		painter,
+			    const QColorGroup &	colorGroup,
+			    int			column,
+			    int			width,
+			    int			alignment );
 
     // Data members
 

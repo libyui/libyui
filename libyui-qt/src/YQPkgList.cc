@@ -19,6 +19,7 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 #include <qpixmap.h>
+#include <qpainter.h>
 
 #include <Y2PM.h>
 #include <y2pm/InstTarget.h>
@@ -183,6 +184,38 @@ YQPkgListItem::compare( QListViewItem *		otherListViewItem,
 
     // Fallback: Use parent class method
     return YQPkgObjListItem::compare( otherListViewItem, col, ascending );
+}
+
+
+void
+YQPkgListItem::paintCell( QPainter *		painter,
+			  const QColorGroup &	colorGroup,
+			  int			column,
+			  int			width,
+			  int			alignment )
+{
+    if ( ! pmObj()->getCandidateObj() )
+    {
+	QColorGroup cg = colorGroup;
+
+	// dark blue foreground
+	cg.setColor( QColorGroup::Text, QColor( 0, 0, 0xC0 ) );
+	cg.setColor( QColorGroup::Base, QColor( 0xF0, 0xF0, 0xF0 ) );
+
+#if 0
+	if ( column == instVersionCol() )
+	{
+	    // set background
+	    cg.setColor( QColorGroup::Base, QColor( 0xF0, 0xF0, 0xFF ) );
+	}
+#endif
+
+	QListViewItem::paintCell( painter, cg, column, width, alignment );
+    }
+    else
+    {
+	QListViewItem::paintCell( painter, colorGroup, column, width, alignment );
+    }
 }
 
 
