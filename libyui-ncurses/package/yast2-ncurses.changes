@@ -2,7 +2,8 @@
 Tue Aug 27 18:02:46 CEST 2002 - gs@suse.de
 
 - V 2.6.7
-- package installation: show more package information 
+- package installation: show more package information,
+  select/deselect selections 
 
 -------------------------------------------------------------------
 Mon Aug 26 17:06:08 CEST 2002 - gs@suse.de
