@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Aug 12 16:14:18 CEST 2003 - gs@suse.de
+
+- V 2.8.12
+- bugfix in constructor of NCPopup...-classes (don't add child 
+  widgets twice) 
+
+-------------------------------------------------------------------
 Mon Aug 11 13:26:07 CEST 2003 - gs@suse.de
 
 - V 2.8.11
