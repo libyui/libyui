@@ -376,12 +376,20 @@ bool NCPopupDeps::addDepsLine( NCPkgTable * table,
 	{
 	    pkgLine.push_back( getReferersList( error) );
 	}
-	if ( kind == PkgNames::RequByText().str()
-	     && !objPtr )
+	if ( kind == PkgNames::RequByText().str() )
 	{
-	    string notAvail = "(" + pkgName + " "
-		               + PkgNames::NotAvailableText().str() + ")";
-	    pkgLine.push_back( notAvail );
+	    if ( !objPtr )
+	    {
+		string notAvail = "(" + pkgName + " "
+		    + PkgNames::NotAvailableText().str() + ")";
+		pkgLine.push_back( notAvail );
+	    }
+	    else if( pkgStatus == PMSelectable::S_Taboo )
+	    {
+		string taboo = "(" + pkgName + " "
+		    + "is set to \"Taboo\" status" + ")";
+		pkgLine.push_back( taboo );	
+	    }
 	}
 	
 	table->addLine( pkgStatus, //  the package status
