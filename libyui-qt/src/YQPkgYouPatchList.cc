@@ -32,6 +32,7 @@
 #include "utf8.h"
 
 #include "YQPkgYouPatchList.h"
+#include "YQPkgTextDialog.h"
 
 
 
@@ -55,6 +56,12 @@ YQPkgYouPatchList::YQPkgYouPatchList( QWidget *parent )
     fillList();
     setSorting( kindCol() );
     selectSomething();
+
+    QString label = _( "Show &Raw Patch Info" );
+    actionShowRawPatchInfo = new QAction( label,		// text
+					  label + "\tr",	// menu text
+					  0,			// accel
+					  0 );			// parent
 
     y2debug( "Creating YOU patch list done" );
 }
@@ -159,7 +166,7 @@ YQPkgYouPatchList::createNotInstalledContextMenu()
     actionSetCurrentInstall->addTo( _notInstalledContextMenu );
     actionSetCurrentDontInstall->addTo( _notInstalledContextMenu );
     actionSetCurrentTaboo->addTo( _notInstalledContextMenu );
-    
+
     addAllInListSubMenu( _notInstalledContextMenu );
 }
 
@@ -172,7 +179,7 @@ YQPkgYouPatchList::createInstalledContextMenu()
 
     actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
     actionSetCurrentUpdate->addTo( _installedContextMenu );
-    
+
     addAllInListSubMenu( _installedContextMenu );
 }
 
@@ -197,21 +204,39 @@ YQPkgYouPatchList::addAllInListSubMenu( QPopupMenu * menu )
 
 
 void
+YQPkgYouPatchList::showRawPatchInfo()
+{
+    if ( selection() )
+    {
+	PMYouPatchPtr patch = selection()->pmYouPatch();
+	YQPkgTextDialog::showText( this, patch, Y2PM::youPatchManager().rawPatchInfo( patch ) );
+    }
+}
+
+
+void
 YQPkgYouPatchList::keyPressEvent( QKeyEvent *event )
 {
-    if ( event && event->ascii() == '-' )
+    if ( event )
     {
-	QListViewItem * selectedListViewItem = selectedItem();
-
-	if ( selectedListViewItem )
+	if ( event->ascii() == '-' )
 	{
-	    YQPkgYouPatchListItem * item = dynamic_cast<YQPkgYouPatchListItem *> (selectedListViewItem);
+	    QListViewItem * selectedListViewItem = selectedItem();
 
-	    if ( item && item->pmObj()->hasInstalledObj() )
+	    if ( selectedListViewItem )
 	    {
-		y2warning( "Deleting patches is not supported" );
-		return;
+		YQPkgYouPatchListItem * item = dynamic_cast<YQPkgYouPatchListItem *> (selectedListViewItem);
+
+		if ( item && item->pmObj()->hasInstalledObj() )
+		{
+		    y2warning( "Deleting patches is not supported" );
+		    return;
+		}
 	    }
+	}
+	else if ( event->ascii() == 'r' )
+	{
+	    showRawPatchInfo();
 	}
     }
 

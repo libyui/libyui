@@ -21,7 +21,7 @@
 
 #define CHECK_DEPENDENCIES_ON_STARTUP	1
 #define DEPENDENCY_FEEDBACK_IF_OK	1
-#define SHOW_CHANGES_DIALOG		0
+#define SHOW_CHANGES_DIALOG		1
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT	false
 
 #include <qaction.h>
@@ -616,10 +616,11 @@ YQPackageSelector::addMenus()
 	_extrasMenu->insertSeparator();
     }
 
-    if ( _pkgConflictDialog && ! _youMode )
-    {
+    if ( ! _youMode && _pkgConflictDialog )
 	YQPkgConflict::actionResetIgnoredConflicts( _pkgConflictDialog )->addTo( _extrasMenu );
-    }
+
+    if ( _youMode && _youPatchList )
+	_youPatchList->actionShowRawPatchInfo->addTo( _extrasMenu );
 
 
     //

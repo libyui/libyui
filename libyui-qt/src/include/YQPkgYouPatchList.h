@@ -26,6 +26,7 @@
 #include <y2pm/PMYouPatch.h>
 
 
+class QAction;
 class YQPkgYouPatchListItem;
 
 /**
@@ -81,6 +82,11 @@ public slots:
      **/
     void fillList();
 
+    /**
+     * Show the raw patch info for the currently selected patch in a popup dialog.
+     **/
+    void showRawPatchInfo();
+
 
 public:
 
@@ -114,7 +120,13 @@ public:
      **/
     virtual QPopupMenu * addAllInListSubMenu( QPopupMenu * menu );
 
+    /**
+     * Action that shows the raw patch info for the currently selected patch in
+     * a popup dialog. 
+     **/
+    QAction * actionShowRawPatchInfo;
 
+    
 signals:
 
     /**
