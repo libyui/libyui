@@ -214,12 +214,16 @@ YCPString  NCPopupSearch::getSearchExpression() const
 //
 //	DESCRIPTION :
 //
-
 long NCPopupSearch::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? NCurses::cols()-25 : NCurses::lines()-5 );
+    long vdim;
+    if ( NCurses::lines() > 20 )
+	vdim = 20;
+    else
+	vdim = NCurses::lines()-4;
+	
+    return ( dim == YD_HORIZ ? NCurses::cols()/2 : vdim );
 }
-
 ///////////////////////////////////////////////////////////////////
 //
 //
