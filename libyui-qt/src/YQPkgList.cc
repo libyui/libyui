@@ -330,7 +330,6 @@ YQPkgListItem::updateData()
 }
 
 
-
 bool
 YQPkgListItem::hasSourceRpm() const
 {

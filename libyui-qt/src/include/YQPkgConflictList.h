@@ -292,6 +292,7 @@ protected:
     // Data members
 
     PMObjectPtr			_pmObj;
+    bool			_isPkg;
     QString			_shortName;	// Only pkg name (no version)
     QString			_fullName;	// Name + edition
     PMSelectable::UI_Status	_status;

@@ -280,9 +280,13 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
     _status		= PMSelectable::S_NoInst;
     _undo_status	= PMSelectable::S_NoInst;
     _pmObj		= _conflict.solvable;
+    _isPkg		= true;
 
     if ( _pmObj )
     {
+	if ( ! PMPackagePtr( _pmObj ) )
+	    _isPkg	= false;
+
 	name		= _pmObj->name();
 	edition		= _pmObj->edition();
 
@@ -375,15 +379,23 @@ YQPkgConflict::formatHeading()
 	    switch ( _status )
 	    {
 		case PMSelectable::S_Taboo:
-		    // Package %1 is set to taboo, yet other packages require it
-		    text = ( _( "Taboo package %1 is required by other packages" ) ).arg( _shortName );
+		    
+		    if ( _isPkg )
+			// Package %1 is set to taboo, yet other packages require it
+			text = ( _( "Taboo package %1 is required by other packages" ) ).arg( _shortName );
+		    else
+			text = ( _( "Taboo selection %1 is required by other selections" ) ).arg( _shortName );
+			
 		    icon = YQIconPool::tabooPkgConflict();
 		    break;
 
                 case PMSelectable::S_AutoDel:
                 case PMSelectable::S_Del:
-		    // Package %1 is marked for deletion, yet other packages require it
-		    text = ( _( "Deleting %1 breaks other packages" ) ).arg( _shortName );
+		    if ( _isPkg )
+			// Package %1 is marked for deletion, yet other packages require it
+			text = ( _( "Deleting %1 breaks other packages" ) ).arg( _shortName );
+		    else
+			text = ( _( "Deleting %1 breaks other selections" ) ).arg( _shortName );
 		    icon = YQIconPool::deletePkgConflict();
 		    break;
 
@@ -589,9 +601,19 @@ YQPkgConflict::addDeleteResolution( QY2CheckListItem * parent )
     QString text;
 
     if ( _conflict.remove_to_solve_conflict.size() == 1 )
-	text = _( "Remove the conflicting package" );
+    {
+	if ( _isPkg )
+	    text = _( "Remove the conflicting package" );
+	else
+	    text = _( "Remove the conflicting selection" );
+    }
     else
-	text = ( _( "Remove all %1 conflicting packages" ) ).arg( _conflict.remove_to_solve_conflict.size() );
+    {
+	if ( _isPkg )
+	    text = ( _( "Remove all %1 conflicting packages" ) ).arg( _conflict.remove_to_solve_conflict.size() );
+	else
+	    text = ( _( "Remove all %1 conflicting selections" ) ).arg( _conflict.remove_to_solve_conflict.size() );
+    }
 
     YQPkgConflictResolution * res =
 	new YQPkgConflictResolution( parent, text, YQPkgConflictBruteForceDelete );
