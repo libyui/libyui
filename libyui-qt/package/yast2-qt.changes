@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Feb 20 17:58:39 CET 2003 - sh@suse.de
+
+- Fixed bug #23868: Handle preformatted notify texts 
+
+-------------------------------------------------------------------
 Thu Feb 20 17:14:07 CET 2003 - sh@suse.de
 
 - "Obsolete" dependency conflicts cannot be ignored
