@@ -396,7 +396,7 @@ QY2FloppyMountDialog::unmount( bool verbose )
 	if ( result == 0 )
 	{
 	    if ( verbose )
-		QMessageBox::information( this, "", _( "Floppy unmounted successfully -\n"
+		QMessageBox::information( this, "", _( "Floppy unmounted successfully --\n"
 						       "safe to remove floppy from drive." ) );
 	}
 	else

@@ -48,8 +48,8 @@ YQPackageSelector::help()
 
 	html += para( _( "In this dialog, select YOU (YaST Online Update) patches to download and install." ) );
 	html += para( _( "The list on the left side contains available patches"
-			 " along with the respective patch kind ( security, recommended, or optional )"
-			 " and the ( estimated ) download size." ) );
+			 " along with the respective patch kind (security, recommended, or optional)"
+			 " and the (estimated) download size." ) );
 	html += para( _( "This list normally contains only those patches that are not installed on your system yet."
 			 " You can change that with the <b>Include Installed Patches</b> check box below the list." ) );
 	html += para( _( "The <b>Patch Description</b> field contains a longer explanation of the currently"
@@ -82,15 +82,15 @@ YQPackageSelector::help()
 	html += para( _( "When you leave this dialog with <b>Accept</b>, this check will automatically be performed." ) );
 
 	// Translators: Please keep the reference to "filter views" to distinguish between "filter views" that
-	// affect the amount of visible packages in the package list and "details views" ( below the package list )
-	// that show details about the ( one ) currently selected package in the package list.
+	// affect the amount of visible packages in the package list and "details views" (below the package list)
+	// that show details about the (one) currently selected package in the package list.
 
 	html += para( _( "Select one of the available filter views with the <b>Filter</b> combo-box"
 			 " at the upper left:" ) );
 	html += "<ul>";
 
 	html += listItem( para( _( "<b>Selections</b> shows some predefined sets of packages that logically belong together." ) ) +
-			  para( _( "Use the checkbox next to the selection to select it as a whole."
+			  para( _( "Use the check box next to the selection to select it as a whole."
 				   " You can also select or deselect individual packages in the package list at the right." ) ) );
 
     }
@@ -162,7 +162,7 @@ YQPackageSelector::symbolHelp()
 		     _( "Update" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is already installed. Update it or reinstall it"
-			" ( if the versions are the same )." ) );
+			" (if the versions are the same)." ) );
 
     html += symHelp( "del.xpm",
 		     // Translators: Package status short ( ! ) description
