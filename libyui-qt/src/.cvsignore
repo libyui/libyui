@@ -3,7 +3,6 @@ Makefile.in
 *.lo
 .deps
 *.moc
-*.moc
 .libs
 y2qt.kdoc
 *.la
