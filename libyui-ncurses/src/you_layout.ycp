@@ -28,7 +28,7 @@
 			 // menu label (keep it short)
 			 `Left(`MenuButton( `opt(`key_F5), _( "&Actions" ),
 					    // menu items
-					    [`item( `id(`toggle),  _( "&Toggle    [RET]" ) ),
+					    [`item( `id(`toggle),  _( "&Toggle   [SPACE]" ) ),
 					     `item( `id(`select),  _( "&Select     [+]" ) ),
 					     `item( `id(`delete),  _( "Dese&lect   [-]" ) ),
 					     `item( `id(`update),  _( "&Update     [>]" ) )
