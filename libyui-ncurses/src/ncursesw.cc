@@ -272,6 +272,11 @@ NCursesWindow::NCursesWindow(int lines, int cols, int begin_y, int begin_x)
     if ( cols <= 0 )
       cols = 1;
 
+    if ( lines + begin_y > NCursesWindow::lines() ) 
+	lines = NCursesWindow::lines() - begin_y;
+    if ( cols + begin_x > NCursesWindow::cols() ) 
+	cols = NCursesWindow::cols() - begin_x;
+    
     w = ::newwin(lines, cols, begin_y, begin_x);
     if (w == 0) {
 	err_handler("Cannot construct window");
@@ -311,6 +316,11 @@ NCursesWindow::NCursesWindow(NCursesWindow& win, int l, int c,
 	begin_y -= win.begy();
 	begin_x -= win.begx();
     }
+
+    if ( l + begin_y > win.height() ) 
+	l = win.height() - begin_y;
+    if ( c + begin_x > win.width() ) 
+	c = win.width() - begin_x;
 
     // Even though we treat subwindows as a tree, the standard curses
     // library needs the `subwin' call to link to the parent in
