@@ -247,9 +247,19 @@ protected:
     std::string stringArg( const YCPTerm & term, int argNo );
 
     /**
+     * Return argument number 'argNo' from 'term' as bool.
+     **/
+    bool boolArg( const YCPTerm & term, int argNo );
+
+    /**
      * Set a button's label.
      **/
     void setButtonLabel( QPushButton * button, const QString & newLabel );
+
+    /**
+     * Set wizard command verbosity
+     **/
+    void setVerboseCommands( bool verbose ) { _verboseCommands = verbose; }
 
 
     //
@@ -282,6 +292,9 @@ protected:
     QPushButton *	    _abortButton;
     QPushButton *	    _backButton;
     QPushButton *	    _nextButton;
+
+
+    bool	_verboseCommands;
 };
 
 #endif // YQWizard_h

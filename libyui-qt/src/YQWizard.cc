@@ -102,6 +102,8 @@ YQWizard::YQWizard( QWidget *		parent,
     _abortButton		= 0;
     _backButton			= 0;
     _nextButton			= 0;
+    
+    _verboseCommands		= false;
 
 
     //
@@ -818,6 +820,7 @@ YCPValue YQWizard::command( const YCPTerm & cmd )
     if ( isCommand( "SetNextButtonLabel	  ( string )", cmd ) )	{ setButtonLabel( _nextButton,  qStringArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "SetCancelButtonLabel ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "SetAcceptButtonLabel ( string )", cmd ) )	{ setButtonLabel( _nextButton,  qStringArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "SetVerboseCommands	  ( bool   )", cmd ) )	{ setVerboseCommands( boolArg( cmd, 0 ) );		return OK; }
 
     y2error( "Undefined wizard command: %s", cmd->toString().c_str() );
     return YCPBoolean( false );
@@ -891,13 +894,13 @@ bool YQWizard::isCommand( QString declaration, const YCPTerm & term )
 		 (const char *) declaration, term->toString().c_str() );
     }
 
-#if 1
-    if ( ok )
+    if ( ok && _verboseCommands )
     {
-	y2debug( "Recognized wizard command %s : %s",
-		 (const char *) declaration, term->toString().c_str() );
+	// Intentionally logging as milestone because a YCP app just explicitly
+	// requested this log level 
+	y2milestone( "Recognized wizard command %s : %s",
+		     (const char *) declaration, term->toString().c_str() );
     }
-#endif
 
     return ok;
 }
@@ -924,7 +927,22 @@ string YQWizard::stringArg( const YCPTerm & term, int argNo )
 }
 
 
-void setButtonLabel( QPushButton * button, const QString & newLabel )
+bool YQWizard::boolArg( const YCPTerm & term, int argNo )
+{
+    if ( term->size() > argNo )
+    {
+	YCPValue arg( term->value( argNo ) );
+
+	if ( arg->isBoolean() )
+	    return arg->asBoolean()->value();
+    }
+
+    y2error( "Couldn't convert arg #%d of '%s' to bool", argNo, term->toString().c_str() );
+    return false;
+}
+
+
+void YQWizard::setButtonLabel( QPushButton * button, const QString & newLabel )
 {
     if ( button )
     {
