@@ -872,9 +872,9 @@ bool PackageSelector::SearchHandler( const NCursesEvent& event)
     // open the search popup
     NCursesEvent retEvent = searchPopup->showSearchPopup();
 
-    if ( !retEvent.result.isNull() )
+    if ( retEvent == NCursesEvent::button )
     {
-	NCMIL << "Searching for: " <<  retEvent.result->toString() << endl;
+	NCMIL << "Searching for: " <<  (!retEvent.result.isNull()?retEvent.result->toString():"") << endl;
 	showPackageInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );
     }
     else

@@ -268,10 +268,9 @@ bool NCPopupSearch::postAgain()
     if ( !currentId.isNull() &&
 	 currentId->compare( PkgNames::Cancel () ) == YO_EQUAL )
     {
-	// set postevent.result to Null (checked in PackageSelector.cc)
-	postevent.result = YCPNull();
+	postevent = NCursesEvent::cancel;
     }
-    else 
+    else if ( postevent == NCursesEvent::button )
     {
 	YCPString filter( "" );
 
