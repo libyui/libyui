@@ -854,6 +854,20 @@ const NCstring PkgNames::RequText()
     return value;
 }
 
+const NCstring PkgNames::RequConflictText()
+{
+    // text is shown in a column of a package list entry
+    static const NCstring value = _("has unresolved requirements ...");
+    return value;
+}
+
+const NCstring PkgNames::ObsoleteText()
+{
+    // text is shown in a column of a package list entry
+    static const NCstring value = _("obsoletes ...");
+    return value;
+}
+
 const NCstring PkgNames::RequByText()
 {
     // text is shown in a column of a package list entry
@@ -882,12 +896,6 @@ const NCstring PkgNames::MoreSpaceText()
     return value;
 }
 
-const NCstring PkgNames::UnresText()
-{
-     // text is shown in a  column of a package list entry
-    static const NCstring value = _("unresolvable ...");
-    return value;
-}
 
 const NCstring PkgNames::NoAvailText()
 {

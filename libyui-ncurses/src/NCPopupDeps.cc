@@ -242,24 +242,64 @@ bool NCPopupDeps::evaluateErrorResult( NCPkgTable * table,
     list<PkgDep::ErrorResult>::const_iterator it = errorlist.begin();
 
     // fill the dependencies vector and create the list of "bad" packages
+    // (comments from file ../packagemanager/src/libPkgDep/include/y2pm/PkgDep.h)
     while ( it != errorlist.end() )
     {
+	/**
+	 * This lists the requirements of the package that
+	 * could not be resolved. The RelInfos can never be
+	 * conflicts. For each missing package, there s a
+	 * separate entry in the error result list with
+	 * not_available set.
+	 * */
 	if ( !(*it).unresolvable.empty() )
 	{
 	    if ( addDepsLine( table, (*it), PkgNames::RequText().str() ) )
 		dependencies.push_back( make_pair( (*it), PkgNames::RequText().str() ) );
 	}
-
+	/**
+	 * If this list is not empty, it means that the
+	 * package is a virtual package and there is more
+	 * than one real package that provides it, and that
+	 * the alternative has not been solved
+	 * automatically. The Alternatives give the name of
+	 * each possible alternative and its kind (simple,
+	 * requires more, generates a conflict).
+	 * */
 	if ( !(*it).alternatives.empty() )
 	{
 	    if ( addDepsLine( table, (*it), PkgNames::NeedsText().str() ) )
 		dependencies.push_back( make_pair( (*it), PkgNames::NeedsText().str() ) );
 	}
 
+	/**
+	 * This field lists all kinds of conflicts of the
+	 * package with installed packages or other packages
+	 * to be installed. The RelInfos can be requirements
+	 * conflicts or obsoletions. ...
+	 * */
 	if ( !(*it).conflicts_with.empty() )
 	{
-	    if ( addDepsLine( table, (*it), PkgNames::ConflictText().str() ) )
-		dependencies.push_back( make_pair( (*it), PkgNames::ConflictText().str() ) );
+	    string text = "";
+	    switch ( (*it).conflicts_with.front().kind )
+	    {
+		case PkgDep::RelInfo::REQUIREMENT:
+		    // "somepackage requires otherpackage"
+		    text = PkgNames::RequConflictText().str() ;
+		    break;
+		
+		case PkgDep::RelInfo::CONFLICT:
+		    // "somepackage conflicts with otherpackage"
+		    text =  PkgNames::ConflictText().str();
+		    break;
+			
+		case PkgDep::RelInfo::OBSOLETION:
+		    // "somepackage obsoletes otherpackage"
+		    text = PkgNames::ObsoleteText().str();
+		    break;
+	    }
+	    if ( addDepsLine( table, (*it), text ) )
+		dependencies.push_back( make_pair((*it), text) );
 	}
 
 	if ( !(*it).referers.empty()
@@ -445,7 +485,12 @@ bool NCPopupDeps::concretelyDependency( int index )
     {
 	PMObjectPtr lastPtr;
 	string causeName = "";
-	
+
+        /**
+	 * This is an auxiliary field to conflicts_with. The
+	 * conflicts disappear if all the packages listed
+	 * would be removed. ...
+	 * */
 	list<PMSolvablePtr>::iterator it = error.remove_to_solve_conflict.begin();
 
 	// show the list of packages which have to be removed

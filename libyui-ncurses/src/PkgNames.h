@@ -677,9 +677,11 @@ public:
      * dependency popup text
      */ 
     static const NCstring RequText();
+    static const NCstring RequConflictText();
+    static const NCstring ObsoleteText();
+    
     static const NCstring RequByText();
     static const NCstring RequiredByText();
-    static const NCstring UnresText();
     static const NCstring NoAvailText();
     static const NCstring NeedsText();
     static const NCstring ConflictText();
