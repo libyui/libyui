@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Feb 10 15:20:46 CET 2003 - gs@suse.de
+
+- V 2.7.7
+- package installation: allow status "Taboo" for installed packages,
+  provide the save/load settings popup (not yet finished) 
+
+-------------------------------------------------------------------
 Fri Jan 31 15:42:54 CET 2003 - gs@suse.de
 
 - V 2.7.6
