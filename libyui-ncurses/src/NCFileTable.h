@@ -117,8 +117,6 @@ private:
 
 protected:
 
-    virtual NCPad * CreatePad();
-    
 public:
 
    /**
