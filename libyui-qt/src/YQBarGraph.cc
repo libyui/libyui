@@ -24,9 +24,6 @@
 #include "YUIQt.h"
 #include "YQBarGraph.h"
 
-#define HORIZONTAL_MARGIN	4
-#define VERTICAL_MARGIN		4
-
 
 YQBarGraph::YQBarGraph( QWidget * parent, YWidgetOpt & opt )
     : QWidget( parent )
@@ -35,7 +32,7 @@ YQBarGraph::YQBarGraph( QWidget * parent, YWidgetOpt & opt )
     setWidgetRep( this );
     _barGraph = new QY2BarGraph( this );
     _barGraph->setFont( YUIQt::ui()->currentFont() );
-    _barGraph->move( HORIZONTAL_MARGIN, VERTICAL_MARGIN );
+    _barGraph->move( YQWidgetMargin, YQWidgetMargin );
 }
 
 
@@ -63,16 +60,16 @@ void YQBarGraph::setEnabling( bool enabled )
 
 long YQBarGraph::nicesize( YUIDimension dim )
 {
-    if ( dim == YD_HORIZ )	return _barGraph->sizeHint().width()  + 2*HORIZONTAL_MARGIN;
-    else 			return _barGraph->sizeHint().height() + 2*VERTICAL_MARGIN;
+    if ( dim == YD_HORIZ )	return _barGraph->sizeHint().width()  + 2*YQWidgetMargin;
+    else 			return _barGraph->sizeHint().height() + 2*YQWidgetMargin;
 }
 
 
 void YQBarGraph::setSize( long newWidth, long newHeight )
 {
-    _barGraph->move( HORIZONTAL_MARGIN, VERTICAL_MARGIN );
-    _barGraph->resize( newWidth  - 2*HORIZONTAL_MARGIN,
-		       newHeight - 2*VERTICAL_MARGIN );
+    _barGraph->move( YQWidgetMargin, YQWidgetMargin );
+    _barGraph->resize( newWidth  - 2*YQWidgetMargin,
+		       newHeight - 2*YQWidgetMargin );
     resize( newWidth, newHeight );
 }
 

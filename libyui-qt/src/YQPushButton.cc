@@ -26,12 +26,11 @@
 
 #include "utf8.h"
 #include "YUIQt.h"
+#include "YEvent.h"
 #include "YQPushButton.h"
 #include "YQDialog.h"
 
 
-#define BORDER 3
-#define BORDERSIZE QSize( BORDER, BORDER )
 #define FOCUS_CHANGES_DEFAULT_BUTTON 0
 
 YQPushButton::YQPushButton( QWidget *		parent,
@@ -48,11 +47,12 @@ YQPushButton::YQPushButton( QWidget *		parent,
     _qPushButton->setMinimumSize( 2, 2 );
     _qPushButton->setAutoDefault( true );
     _qPushButton->installEventFilter( this );
-    _qPushButton->move( BORDER, BORDER );
-    setMinimumSize( _qPushButton->minimumSize() + 2 * BORDERSIZE );
+    _qPushButton->move( YQButtonBorder, YQButtonBorder );
+    setMinimumSize( _qPushButton->minimumSize()
+		    + 2 * QSize( YQButtonBorder, YQButtonBorder ) );
     
     connect( _qPushButton, SIGNAL( clicked() ),
-	     this,          SLOT  ( hit()     ) );
+	     this,         SLOT  ( hit()     ) );
 
     _isDefault = opt.isDefaultButton.value();
 
@@ -102,15 +102,16 @@ void YQPushButton::setIcon( const YCPString & y_icon_name )
 
 long YQPushButton::nicesize( YUIDimension dim )
 {
-    return 2 * BORDER + ( dim == YD_HORIZ
-			  ? _qPushButton->sizeHint().width()
-			  : _qPushButton->sizeHint().height() );
+    return 2 * YQButtonBorder + ( dim == YD_HORIZ
+				  ? _qPushButton->sizeHint().width()
+				  : _qPushButton->sizeHint().height() );
 }
 
 
 void YQPushButton::setSize( long newWidth, long newHeight )
 {
-    _qPushButton->resize( newWidth - 2 * BORDER, newHeight - 2 * BORDER );
+    _qPushButton->resize( newWidth  - 2 * YQButtonBorder,
+			  newHeight - 2 * YQButtonBorder );
     resize( newWidth, newHeight );
 }
 
@@ -150,7 +151,7 @@ void YQPushButton::activate()
 
 void YQPushButton::hit()
 {
-    YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
+    YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
 }
 
 

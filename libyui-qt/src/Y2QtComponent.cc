@@ -46,7 +46,7 @@ Y2QtComponent::Y2QtComponent()
     : _argc(0)
     , _argv(0)
     , _interpreter(0)
-    , _with_threads(true)
+    , _with_threads( true )
 {
 }
 

@@ -25,6 +25,7 @@
 
 #include "utf8.h"
 #include "YUIQt.h"
+#include "YEvent.h"
 #include "YQTable.h"
 
 
@@ -32,7 +33,7 @@
 class YQListViewItem : public QListViewItem
 {
 public:
-    
+
     int index;
 
     /**
@@ -86,7 +87,7 @@ YQTable::YQTable( QWidget * parent, YWidgetOpt & opt, vector<string> header )
     _sort_by_insertion_order = true;
     _enable_user_sort = ! opt.keepSorting.value();
     setWidgetRep( this );
-    setMargin( YQWIDGET_BORDER );
+    setMargin( YQWidgetMargin );
 
     _qt_listview = new QListView( this );
 
@@ -128,13 +129,18 @@ YQTable::YQTable( QWidget * parent, YWidgetOpt & opt, vector<string> header )
     _qt_listview->setFont( YUIQt::ui()->currentFont() );
     _qt_listview->setAllColumnsShowFocus( true );
 
-    if ( opt.immediateMode.value() )
-	connect( _qt_listview, SIGNAL( selectionChanged ( QListViewItem * ) ), this, SLOT( slotSelected(QListViewItem * ) ) );
-    else
-	connect( _qt_listview, SIGNAL( doubleClicked ( QListViewItem * ) ), this, SLOT( slotSelected(QListViewItem * ) ) );
-
     if ( opt.notifyMode.value() )
-	connect( _qt_listview, SIGNAL( spacePressed ( QListViewItem * ) ), this, SLOT( slotSelected(QListViewItem * ) ) );
+    {
+	connect( _qt_listview, SIGNAL( doubleClicked    ( QListViewItem * ) ), this, SLOT( slotActivated( QListViewItem * ) ) );
+	connect( _qt_listview, SIGNAL( spacePressed     ( QListViewItem * ) ), this, SLOT( slotActivated( QListViewItem * ) ) );
+
+	if ( opt.immediateMode.value() )
+	{
+	    connect( _qt_listview, 	SIGNAL( selectionChanged ( QListViewItem * ) ),
+		     this, 		SLOT  ( slotSelected     ( QListViewItem * ) ) );
+	}
+
+    }
 }
 
 
@@ -180,7 +186,7 @@ void YQTable::itemAdded( vector<string> elements, int index )
 	item = new YQListViewItem( this, _qt_listview, index );
 
     _last_item = item;
-    
+
     for ( unsigned int i=0; i < elements.size(); i++ )
 	item->setText( i, fromUTF8( elements[i] ) );
 
@@ -244,7 +250,23 @@ bool YQTable::setKeyboardFocus()
 
 void YQTable::slotSelected( QListViewItem * )
 {
-    if ( getNotify() ) YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
+    if ( getNotify() )
+    {
+	if ( ! YUIQt::ui()->eventPendingFor( this ) )
+	{
+	    // Avoid overwriting a (more important) Activated event with a SelectionChanged event
+
+	    YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
+	}
+    }
 }
+
+
+void YQTable::slotActivated( QListViewItem * )
+{
+    if ( getNotify() )
+	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
+}
+
 
 #include "YQTable.moc.cc"

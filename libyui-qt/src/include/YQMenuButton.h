@@ -102,7 +102,8 @@ protected:
     // Data members
     //
     
-    QPushButton * _qt_pushbutton;
+    QPushButton *	_qt_pushbutton;
+    int			_selected_item_index;
 };
 
 #endif // YQMenuButton_h

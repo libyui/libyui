@@ -31,6 +31,7 @@
 #include <ycp/y2log.h>
 
 #include "YUIQt.h"
+#include "YEvent.h"
 #include "YQDialog.h"
 
 
@@ -122,6 +123,9 @@ YUIQt::normalCursor( void )
 {
 #if USE_QT_CURSORS
 
+    if ( _busy_cursor_timer.isActive() )
+	_busy_cursor_timer.stop();
+	
     while ( overrideCursor() )
 	restoreOverrideCursor();
 #else
@@ -208,7 +212,7 @@ const QFont &YUIQt::headingFont()
 
 bool YUIQt::close()
 {
-    returnNow(ET_CANCEL, 0);
+    sendEvent( new YCancelEvent() );
     return true;
 }
 
@@ -227,7 +231,7 @@ bool YUIQt::eventFilter( QObject * obj, QEvent * ev )
 	    // that (e.g., ask for confirmation).
 
 	    y2debug( "Caught window close event - returning with `cancel" );
-	    returnNow(YUIInterpreter::ET_CANCEL, 0);
+	    sendEvent( new YCancelEvent() );
 	}
 
 	return true;	// Event processed

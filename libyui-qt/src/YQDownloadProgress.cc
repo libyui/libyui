@@ -37,7 +37,7 @@ YQDownloadProgress::YQDownloadProgress( QWidget *		parent,
     , YDownloadProgress( opt, label, filename, expectedSize )
 {
     setWidgetRep( this );
-    setMargin( YQWIDGET_BORDER );
+    setMargin( YQWidgetMargin );
 
     _qt_label = new QLabel( fromUTF8( label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );

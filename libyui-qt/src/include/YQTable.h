@@ -103,10 +103,16 @@ public:
 protected slots:
 
     /**
-     * Tells the ui that an item has been selected. This is only
-     * interesting, if the `notify option is set.
+     * Notification that an item is selected.
+     * Only relevant if `opt(`notify, `immediate) is set.
      */
     void slotSelected( QListViewItem * );
+
+    /**
+     * Notification that an item is activated.
+     * Only relevant if `opt(`notify) is set.
+     */
+    void slotActivated( QListViewItem * );
 
 
     /**

@@ -28,14 +28,13 @@ using std::max;
 
 #include "utf8.h"
 #include "YUIQt.h"
+#include "YEvent.h"
 #include "YQMultiSelectionBox.h"
 
 #define DEFAULT_VISIBLE_LINES		5
 #define SHRINKABLE_VISIBLE_LINES	2
 #define MIN_WIDTH			80
 #define MIN_HEIGHT			80
-#define SPACING				4	// between subwidgets
-#define MARGIN				4	// around the widget
 
 
 YQMultiSelectionBox::YQMultiSelectionBox( QWidget *		parent,
@@ -46,8 +45,8 @@ YQMultiSelectionBox::YQMultiSelectionBox( QWidget *		parent,
 {
     setWidgetRep( this );
 
-    setSpacing( SPACING );
-    setMargin( MARGIN );
+    setSpacing( YQWidgetSpacing );
+    setMargin( YQWidgetMargin );
 
     _qt_label = new QLabel( fromUTF8(label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
@@ -55,7 +54,7 @@ YQMultiSelectionBox::YQMultiSelectionBox( QWidget *		parent,
 
     _qt_listview = new QListView( this );
     _qt_listview->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
-    _qt_listview->addColumn( "" );	// we need at least one column - yes, QListView is too dumb to do without that. :-(
+    _qt_listview->addColumn( "" );	// QListView doesn't have one single column by default!
     _qt_listview->setSorting( 0, false );
     _qt_listview->header()->hide();
     _qt_label->setBuddy( _qt_listview );
@@ -63,8 +62,11 @@ YQMultiSelectionBox::YQMultiSelectionBox( QWidget *		parent,
     // Very small default size if specified
     _shrinkable = opt.isShrinkable.value();
 
-    connect( _qt_listview, SIGNAL( selectionChanged() ),
-	     this, 	  SLOT  ( slotSelected() ) );
+    connect( _qt_listview,	SIGNAL( selectionChanged() 	),
+	     this, 	  	SLOT  ( slotSelected() 		) );
+    
+    connect( this,		SIGNAL( valueChanged()		),
+	     this,		SLOT  ( slotValueChanged()	) );
 }
 
 
@@ -116,7 +118,7 @@ YQMultiSelectionBox::setEnabling( bool enabled )
 void
 YQMultiSelectionBox::itemAdded( const YCPString & label, bool selected )
 {
-    YQMultiSelectionBoxItem * item = new YQMultiSelectionBoxItem( _qt_listview, fromUTF8( label->value() ) );
+    YQMultiSelectionBoxItem * item = new YQMultiSelectionBoxItem( this, _qt_listview, fromUTF8( label->value() ) );
     
     if ( item && selected )
     {
@@ -241,23 +243,56 @@ YQMultiSelectionBox::deselectAllItems()
 }
 
 
-void YQMultiSelectionBox::slotSelected()
+void
+YQMultiSelectionBox::slotSelected()
 {
     if ( getNotify() )
-	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
+    {
+	if ( ! YUIQt::ui()->eventPendingFor( this ) )
+	{
+	    // Avoid overwriting a (more important) ValueChanged event with a SelectionChanged event
+	    
+	    YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
+	}
+    }
 }
 
+
+void
+YQMultiSelectionBox::slotValueChanged()
+{
+    if ( getNotify() )
+	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+}
+
+
+void
+YQMultiSelectionBox::sendValueChanged()
+{
+    emit valueChanged();
+}
 
 
 
 int YQMultiSelectionBoxItem::_item_count = 0;
 
 
-YQMultiSelectionBoxItem::YQMultiSelectionBoxItem( QListView * 		parent,
+
+YQMultiSelectionBoxItem::YQMultiSelectionBoxItem( YQMultiSelectionBox *	parent,
+						  QListView * 		listView,
 						  const QString &	text )
-    : QCheckListItem( parent, text, QCheckListItem::CheckBox )
+    : QCheckListItem( listView, text, QCheckListItem::CheckBox )
+    , _multiSelectionBox( parent )
 {
     _serial = _item_count++;
+}
+
+
+void
+YQMultiSelectionBoxItem::stateChange( bool newState )
+{
+    _multiSelectionBox->sendValueChanged();
+    QCheckListItem::stateChange( newState );
 }
 
 

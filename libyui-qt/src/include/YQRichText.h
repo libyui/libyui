@@ -22,13 +22,16 @@
 #ifndef YQRichText_h
 #define YQRichText_h
 
+#include <qvbox.h>
 #include <qtextbrowser.h>
 #include <ycp/YCPString.h>
 
 #include "YRichText.h"
 
 
-class YQRichText : public QTextBrowser, public YRichText
+class YQTextBrowser;
+
+class YQRichText : public QVBox, public YRichText
 {
     Q_OBJECT
 
@@ -68,20 +71,57 @@ public:
      */
     virtual bool setKeyboardFocus();
 
-    
-protected:
-    
+
+protected slots:
+
     /**
-     * Inherited from QTextBrowser: Set the current document to 'name'.
+     * Notification that a hyperlink is clicked.
      **/
-    void setSource( const QString & name );
-    
+    void linkClicked( const QString & url );
+
+
+protected:
 
     //
     // Data members
     //
-    
-    bool _shrinkable;
+
+    YQTextBrowser *	_textBrowser;
+    bool 		_shrinkable;
+};
+
+
+/**
+ * Helper class - needed to have the benefits of both QVBox as the base class
+ * for YQRichText so uniform margins can be implemented (outside, not inside
+ * the scroll window as QTextBrowser normally does it) and QTextBrowser's
+ * featurs (enable hyperlinks) without removing the text each time the user
+ * clicks.
+ *
+ * This class is required only to overwrite setSource().
+ **/
+class YQTextBrowser: public QTextBrowser
+{
+    Q_OBJECT
+
+
+public:
+
+    /**
+     * Constructor
+     **/
+    YQTextBrowser( QWidget * parent = 0 ):
+	QTextBrowser( parent ) {}
+
+public slots:
+
+    /**
+     * Get the document pointed to by a hyperlink.
+     *
+     * Reimplemented from QTextBrowser to avoid having an empty text each time
+     * the user clicks on a hyperlink.
+     **/
+    virtual void setSource( const QString & name ) {}
 };
 
 

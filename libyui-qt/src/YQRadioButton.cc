@@ -25,6 +25,7 @@
 
 #include "utf8.h"
 #include "YUIQt.h"
+#include "YEvent.h"
 #include "YQRadioButton.h"
 
 #define SPACING 8
@@ -119,7 +120,7 @@ bool YQRadioButton::setKeyboardFocus()
 void YQRadioButton::changed( bool newState )
 {
     if ( getNotify() && newState )
-	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
+	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 

@@ -25,15 +25,20 @@
 #include <qapplication.h>
 #include <qmap.h>
 #include <qfont.h>
+#include <qtimer.h>
 #include <vector>
 
+#include "YSimpleEventHandler.h"
 #include "YUIInterpreter.h"
 
-#define YQWIDGET_BORDER 3
+#define YQWidgetMargin	4
+#define YQWidgetSpacing	4
+#define YQButtonBorder	3
 
 class QVBox;
 class QWidgetStack;
 class QCursor;
+class YEvent;
 using std::string;
 using std::vector;
 
@@ -71,14 +76,29 @@ public:
      **/
     const QFont & headingFont();
 
+    /**
+     * Widget event handlers (slots) call this when an event occured that
+     * should be the answer to a UserInput() / PollInput() (etc.) call.
+     *
+     * The UI assumes ownership of the event object that 'event' points to.
+     * In particular, it takes care to delete that object.
+     *
+     * It is an error to pass 0 for 'event'.
+     **/
+    void sendEvent( YEvent * event );
 
     /**
-     * Called within the event loop from some event handler in
-     * case an event happend that should be the answer of some PollInput
-     * or UserInput call. Sets the type and the widget of the event, if
-     * no other event is already pending. Exits the event loop.
-     */
-    void returnNow(EventType et, YWidget * wid);
+     * Returns 'true' if there is any event pending for the specified widget.
+     **/
+    bool eventPendingFor( YWidget * widget ) const
+	{ return _event_handler.eventPendingFor( widget ); }
+
+    /**
+     * Returns the last event that isn't processed yet or 0 if there is none.
+     *
+     * The Qt UI keeps track of only one single (the last one) event.
+     **/
+    YEvent * pendingEvent() const { return _event_handler.pendingEvent(); }
 
     /**
      * Returns 'false" if the "--no-wm" was specified on the command line, i.e.
@@ -94,7 +114,7 @@ public:
     /**
      * Returns 'false' if toplevel (defaultsize) windows should not get window
      * manager decorations, i.e. "--noborder" was specified on the command
-     * line. 
+     * line.
      **/
     bool decorateToplevelWindow() const { return _decorate_toplevel_window; }
 
@@ -151,19 +171,6 @@ public:
      */
     void internalError( const char * msg );
 
-    /**
-     * Show hourglass cursor.
-     *
-     * Reimplemented from YUIInterpreter.
-     */
-    void busyCursor();
-
-    /**
-     * Show pointer cursor.
-     *
-     * Reimplemented from YUIInterpreter.
-     */
-    void normalCursor();
 
     /**
      * Block WM_CLOSE events for the main window.
@@ -185,6 +192,23 @@ public:
      * control center?
      **/
     bool runningEmbedded() const { return _running_embedded; }
+
+
+public slots:
+
+    /**
+     * Show hourglass cursor.
+     *
+     * Reimplemented from YUIInterpreter.
+     */
+    void busyCursor();
+
+    /**
+     * Show pointer cursor.
+     *
+     * Reimplemented from YUIInterpreter.
+     */
+    void normalCursor();
 
 
 signals:
@@ -214,22 +238,18 @@ protected:
     YCPString glyph( const YCPSymbol & glyphSymbol );
 
     /**
-     * Go into event loop until next user input is received that is to be
-     * notified to the client component.
-     *
-     * 'dialog' is the dialog that should receive user input - the topmost
-     * dialog.  
+     * Go into event loop until next user input is available.
      *
      * Reimplemented from YUIInterpreter.
      */
-    YWidget * userInput( YDialog * dialog, EventType *event );
+    YEvent * userInput( unsigned long timeout_millisec = 0 );
 
     /**
      * Check the event queue for user input. Don't wait.
      *
      * Reimplemented from YUIInterpreter.
      */
-    YWidget * pollInput( YDialog * dialog, EventType *event );
+    YEvent * pollInput();
 
     /**
      * Create a dialog.
@@ -408,7 +428,8 @@ public:
 				  const YCPString & headline );
 
     /**
-     * Lower-level version that works with QStrings and does not change the mouse cursor.
+     * Lower-level version that works with QStrings and does not change
+     * the mouse cursor.
      **/
     QString askForSaveFileName( const QString & startWith,
 				const QString & filter,
@@ -485,22 +506,6 @@ private:
     int _main_dialog_id;
 
     /**
-     * Is set by some widget during #userInput or #pollInput
-     * Holds a pointer to the widget that caused the last relevant event.
-     * It may be 0 in which case some implicite event
-     * happend (such as closeWindow)
-     */
-    YWidget * _event_widget;
-
-    /**
-     * Is set by some widget during #userInput or #pollInput.
-     * Holds the type of the event that happened. userInput uses
-     * it to determine whether it should return or further wait
-     * for an input.
-     */
-    EventType _event_type;
-
-    /**
      * Size for `opt(`defaultsize) dialogs.
      */
     QSize _default_size;
@@ -570,15 +575,38 @@ private:
      **/
     bool _fatal_error;
 
+    /**
+     * Timer for TimeoutUserInput() / WaitForEvent().
+     **/
+    QTimer _user_input_timer;
 
-private slots:
+    /**
+     * Timer for delayed busy cursor
+     **/
+    QTimer _busy_cursor_timer;
 
+    /**
+     * The handler for the single pending event this UI keeps track of
+     **/
+    YSimpleEventHandler _event_handler;
+
+
+protected slots:
+
+    /**
+     * Application shutdown
+     **/
     bool close();
+
+    /**
+     * Timeout during TimeoutUserInput() / WaitForEvent()
+     **/
+    void userInputTimeout();
 
     /**
      * Sets @ref #leave_idle_loop to true.
      */
-    void leaveIdleLoop(int);
+    void leaveIdleLoop( int );
 
 };
 

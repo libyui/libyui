@@ -27,11 +27,9 @@ using std::max;
 
 #include "utf8.h"
 #include "YUIQt.h"
+#include "YEvent.h"
 #include "QY2CharValidator.h"
 #include "YQTextEntry.h"
-
-#define SPACING			4	// between subwidgets
-#define MARGIN			4	// around the widget
 
 
 YQTextEntry::YQTextEntry( QWidget * 		parent,
@@ -44,8 +42,8 @@ YQTextEntry::YQTextEntry( QWidget * 		parent,
 {
     setWidgetRep( this );
 
-    setSpacing( SPACING );
-    setMargin( MARGIN );
+    setSpacing( YQWidgetSpacing );
+    setMargin( YQWidgetMargin );
 
     _qt_label = new QLabel( fromUTF8( label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
@@ -65,7 +63,8 @@ YQTextEntry::YQTextEntry( QWidget * 		parent,
 
     _shrinkable = opt.isShrinkable.value();
 
-    connect( _qt_lineedit, SIGNAL( textChanged(const QString & ) ), this, SLOT( changed(const QString & ) ) );
+    connect( _qt_lineedit, SIGNAL( textChanged( const QString & ) ),
+	     this,         SLOT  ( changed    ( const QString & ) ) );
 }
 
 
@@ -149,7 +148,7 @@ bool YQTextEntry::setKeyboardFocus()
 void YQTextEntry::changed( const QString & )
 {
     if ( getNotify() )
-	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
+	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 

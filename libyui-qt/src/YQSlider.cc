@@ -22,12 +22,8 @@
 
 #include "utf8.h"
 #include "YUIQt.h"
+#include "YEvent.h"
 #include "YQSlider.h"
-
-
-#define VSPACING 2
-#define	HSPACING 2
-#define MARGIN   2
 
 
 YQSlider::YQSlider( QWidget *		parent,
@@ -37,21 +33,20 @@ YQSlider::YQSlider( QWidget *		parent,
 		    int 		maxValue,
 		    int 		initialValue )
 
-    : QWidget( parent )
+    : QVBox( parent )
     , YSlider( opt, label, minValue, maxValue, initialValue )
 {
     setWidgetRep( this );
 
-    _vbox = new QVBox( this );
-    _vbox->setSpacing( VSPACING );
-    _vbox->setMargin( MARGIN );
-    _qt_label = new QLabel( fromUTF8( label->value() ), _vbox );
+    setSpacing( YQWidgetSpacing );
+    setMargin( YQWidgetMargin );
+    _qt_label = new QLabel( fromUTF8( label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
     _qt_label->setFont( YUIQt::ui()->currentFont() );
     _qt_label->setAlignment( Qt::AlignRight );
 
-    _hbox = new QHBox( _vbox );
-    _hbox->setSpacing( HSPACING );
+    _hbox = new QHBox( this );
+    _hbox->setSpacing( YQWidgetSpacing );
 
     _qt_slider = new QSlider( minValue, maxValue,
 			      1, // pageStep
@@ -91,15 +86,15 @@ void YQSlider::setEnabling( bool enabled )
 long YQSlider::nicesize( YUIDimension dim )
 {
     if ( dim == YD_HORIZ ) return 200;
-    else return _vbox->sizeHint().height();
+    else return sizeHint().height();
 }
 
 
 void YQSlider::setSize( long newWidth, long newHeight )
 {
-    _vbox->resize( newWidth, newHeight );
     resize( newWidth, newHeight );
 }
+
 
 void YQSlider::setLabel( const YCPString & newLabel )
 {
@@ -121,7 +116,7 @@ void YQSlider::setValueSlot( int newValue )
     setValue( newValue );
 
     if ( getNotify() )
-	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
+	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 

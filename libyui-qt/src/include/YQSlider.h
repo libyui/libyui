@@ -35,7 +35,7 @@ class QString;
 class QLabel;
 class QSlider;
 
-class YQSlider : public QWidget, public YSlider
+class YQSlider : public QVBox, public YSlider
 {
     Q_OBJECT
 
@@ -88,6 +88,7 @@ public:
      */
     void setValue( int newValue );
 
+    
 public slots:
     /**
      * Slot for setting the value.
@@ -102,7 +103,6 @@ protected:
     QLabel *	_qt_label;
     QSlider *	_qt_slider;
     QSpinBox *	_qt_spinbox;
-    QVBox *	_vbox;
     QHBox *	_hbox;
 };
 

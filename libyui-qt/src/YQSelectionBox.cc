@@ -28,16 +28,16 @@
 using std::max;
 
 #include "utf8.h"
+#include "YEvent.h"
 #include "YUIQt.h"
 #include "YQSelectionBox.h"
 #include "YQDialog.h"
+
 
 #define DEFAULT_VISIBLE_LINES		5
 #define SHRINKABLE_VISIBLE_LINES	2
 #define MIN_WIDTH			80
 #define MIN_HEIGHT			80
-#define SPACING				4	// between subwidgets
-#define MARGIN				4	// around the widget
 
 
 YQSelectionBox::YQSelectionBox( QWidget *		parent,
@@ -48,8 +48,8 @@ YQSelectionBox::YQSelectionBox( QWidget *		parent,
 {
     setWidgetRep( this );
 
-    setSpacing( SPACING );
-    setMargin( MARGIN );
+    setSpacing( YQWidgetSpacing );
+    setMargin( YQWidgetMargin );
 
     _qt_label = new QLabel( fromUTF8(label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
@@ -65,13 +65,16 @@ YQSelectionBox::YQSelectionBox( QWidget *		parent,
     _shrinkable 	= opt.isShrinkable.value();
     _immediateMode	= opt.immediateMode.value();
 
-    connect( _qt_listbox, SIGNAL( highlighted (int) ),
-	     this, 	 SLOT  ( slotSelected(int) ) );
-
     if ( getNotify() )
     {
-	connect( &_timer, SIGNAL( timeout()           ),
-		 this,	  SLOT  ( returnImmediately() ) );
+	connect( _qt_listbox,	SIGNAL( highlighted ( int ) ),
+		 this,		SLOT  ( slotSelected( int ) ) );
+
+	connect( _qt_listbox,	SIGNAL( doubleClicked( QListBoxItem * ) ),
+		 this,		SLOT  ( slotActivated( QListBoxItem * ) ) );
+
+	connect( &_timer,	SIGNAL( timeout()           ),
+		 this,		SLOT  ( returnImmediately() ) );
     }
 }
 
@@ -169,17 +172,25 @@ bool YQSelectionBox::eventFilter( QObject * obj, QEvent * ev )
 
 void YQSelectionBox::slotSelected( int index )
 {
-    if ( getNotify() )
-    {
-	if ( _immediateMode )	returnImmediately();
-	else			returnDelayed();
-    }
+    if ( _immediateMode )	returnImmediately();
+    else			returnDelayed();
+}
+
+
+void YQSelectionBox::slotActivated( QListBoxItem * )
+{
+    YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
 }
 
 
 void YQSelectionBox::returnImmediately()
 {
-    YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
+    if ( ! YUIQt::ui()->eventPendingFor( this ) )
+    {
+	// Avoid overwriting a (more important) Activated event with a SelectionChanged event
+	    
+	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
+    }
 }
 
 

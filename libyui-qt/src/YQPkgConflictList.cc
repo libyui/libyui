@@ -241,7 +241,7 @@ YQPkgConflictList::saveItemToFile( FILE * 			file,
 		fprintf( file, "[%c] ", checkListItem->isOn() ? 'x' : ' ' );
 		break;
 	    case QCheckListItem::RadioButton:
-		fprintf( file, "( %c ) ", checkListItem->isOn() ? 'x' : ' ' );
+		fprintf( file, "(%c) ", checkListItem->isOn() ? 'x' : ' ' );
 		break;
 	    default:
 		break;

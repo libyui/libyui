@@ -22,12 +22,8 @@
 
 #include "utf8.h"
 #include "YUIQt.h"
+#include "YEvent.h"
 #include "YQPartitionSplitter.h"
-
-
-#define VSPACING 4
-#define	HSPACING 2
-#define MARGIN	 4
 
 
 YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
@@ -42,7 +38,7 @@ YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
 					  const YCPString &	arg_newPartLabel,
 					  const YCPString &	arg_freeFieldLabel,
 					  const YCPString &	arg_newPartFieldLabel )
-    : QWidget( parent )
+    : QVBox( parent )
     , YPartitionSplitter( opt,
 			  arg_usedSize,
 			  arg_totalFreeSize,
@@ -59,16 +55,13 @@ YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
 
     _countShowDelta = opt.countShowDelta.value();
 
-    // Outer VBox
-
-    _vbox = new QVBox( this );
-    _vbox->setSpacing( VSPACING );
-    _vbox->setMargin( MARGIN );
+    setSpacing( YQWidgetSpacing );
+    setMargin( YQWidgetMargin );
 
 
     // BarGraph
 
-    _barGraph = new QY2BarGraph( _vbox );
+    _barGraph = new QY2BarGraph( this );
     _barGraph->setSegments(3);
     _barGraph->setLabel( 0, fromUTF8( usedLabel()->value()    ) );
     _barGraph->setLabel( 1, fromUTF8( freeLabel()->value()    ) );
@@ -77,8 +70,8 @@ YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
 
     // upper inner HBox for the labels
 
-    _labels_hbox = new QHBox( _vbox );
-    _labels_hbox->setSpacing( HSPACING );
+    _labels_hbox = new QHBox( this );
+    _labels_hbox->setSpacing( YQWidgetMargin );
 
 
     // Label for the free size
@@ -101,8 +94,8 @@ YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
 
     // lower inner HBox for the fields and the slider
 
-    _fields_hbox = new QHBox( _vbox );
-    _fields_hbox->setSpacing( HSPACING );
+    _fields_hbox = new QHBox( this );
+    _fields_hbox->setSpacing( YQWidgetMargin );
 
 
     // SpinBox for the free size
@@ -162,14 +155,13 @@ void YQPartitionSplitter::setEnabling( bool enabled )
 
 long YQPartitionSplitter::nicesize( YUIDimension dim )
 {
-    if ( dim == YD_HORIZ )	return _vbox->sizeHint().width();
-    else			return _vbox->sizeHint().height();
+    if ( dim == YD_HORIZ )	return sizeHint().width();
+    else			return sizeHint().height();
 }
 
 
 void YQPartitionSplitter::setSize( long newWidth, long newHeight )
 {
-    _vbox->resize( newWidth, newHeight );
     resize( newWidth, newHeight );
 }
 
@@ -200,7 +192,7 @@ void YQPartitionSplitter::setFreeSizeSlot( int newFreeSize )
     setValue( newPartSize );
 
     if ( getNotify() )
-	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
+	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 
@@ -213,7 +205,7 @@ void YQPartitionSplitter::setNewPartSizeSlot( int newPartSize )
 	setValue( newPartSize );
 	
     if ( getNotify() )
-	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
+	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 

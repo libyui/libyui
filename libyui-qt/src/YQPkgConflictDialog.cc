@@ -53,8 +53,8 @@
 #define MARGIN			4	// around the widget
 
 
-// The busy dialog ( "Checking Dependencies" ) will only be shown if solving
-// ( on average ) takes longer than this many seconds. The first one will be
+// The busy dialog ("Checking Dependencies") will only be shown if solving
+// (on average) takes longer than this many seconds. The first one will be
 // shown in any case.
 
 #define SUPPRESS_BUSY_DIALOG_SECONDS	1.5

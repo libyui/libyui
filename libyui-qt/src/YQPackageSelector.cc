@@ -83,6 +83,7 @@
 #include "YQDialog.h"
 #include "utf8.h"
 #include "YUIQt.h"
+#include "YEvent.h"
 #include "YQi18n.h"
 
 
@@ -1081,8 +1082,7 @@ YQPackageSelector::reject()
 	else
 	    Y2PM::selectionManager().RestoreState();
 
-	YUIQt::ui()->setMenuSelection( YCPSymbol( "cancel", true ) );
-	YUIQt::ui()->returnNow( YUIInterpreter::ET_MENU, this );
+	YUIQt::ui()->sendEvent( new YCancelEvent() );
     }
 }
 
@@ -1132,8 +1132,7 @@ YQPackageSelector::accept()
     else
 	Y2PM::selectionManager().ClearSaveState();
 
-    YUIQt::ui()->setMenuSelection( YCPSymbol( "accept", true ) );
-    YUIQt::ui()->returnNow( YUIInterpreter::ET_MENU, this );
+    YUIQt::ui()->sendEvent( new YMenuEvent( YCPSymbol( "accept", true ) ) );
 }
 
 

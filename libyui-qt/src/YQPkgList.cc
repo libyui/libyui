@@ -560,7 +560,7 @@ YQPkgListItem::toolTip( int col )
 		if ( _installedIsNewer )	relation = _( "older" );
 
 		// Translators: %1 is the version, %2 is one of "newer", "older", "same"
-		text += _( "Available Version: %1 ( %2 )" ).arg( candidate ).arg( relation );
+		text += _( "Available Version: %1 (%2)" ).arg( candidate ).arg( relation );
 	    }
 	    else
 	    {

@@ -27,6 +27,7 @@
 #include <X11/Xlib.h>
 
 #include "YUIQt.h"
+#include "YEvent.h"
 #include "YQDialog.h"
 #include "YQPushButton.h"
 
@@ -111,7 +112,7 @@ long YQDialog::nicesize( YUIDimension dim )
 
     if ( nice > screenSize )
     {
-	y2warning( "Limiting dialog size to screen size ( %ld ) instead of %ld - check the layout!",
+	y2warning( "Limiting dialog size to screen size (%ld) instead of %ld - check the layout!",
 		   screenSize, nice );
     }
 
@@ -138,7 +139,7 @@ void YQDialog::setSize( long newWidth, long newHeight )
 {
     if ( newWidth > qApp->desktop()->width() )
     {
-	y2warning( "Limiting dialog width to screen width ( %d ) instead of %ld - check the layout!",
+	y2warning( "Limiting dialog width to screen width (%d) instead of %ld - check the layout!",
 		   qApp->desktop()->width(), newWidth );
 
 	newWidth = qApp->desktop()->width();
@@ -146,7 +147,7 @@ void YQDialog::setSize( long newWidth, long newHeight )
 
     if ( newHeight > qApp->desktop()->height() )
     {
-	y2warning( "Limiting dialog height to screen height ( %d ) instead of %ld - check the layout!",
+	y2warning( "Limiting dialog height to screen height (%d) instead of %ld - check the layout!",
 		   qApp->desktop()->height(), newHeight );
 
 	newHeight = qApp->desktop()->height();
@@ -394,7 +395,7 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    }
 	    else if ( event->key() == Qt::Key_D )
 	    {
-		YUIQt::ui()->returnNow( YUIInterpreter::ET_DEBUG, 0 );
+		YUIQt::ui()->sendEvent( new YDebugEvent() );
 		return;
 	    }
 	}
@@ -412,7 +413,7 @@ void YQDialog::closeEvent( QCloseEvent * event )
 
     y2debug( "Ignoring window manager close button." );
     event->ignore();
-    YUIQt::ui()->returnNow( YUIInterpreter::ET_CANCEL, 0 );
+    YUIQt::ui()->sendEvent( new YCancelEvent() );
 }
 
 

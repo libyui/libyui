@@ -22,12 +22,8 @@
 
 #include "utf8.h"
 #include "YUIQt.h"
+#include "YEvent.h"
 #include "YQIntField.h"
-
-
-#define VSPACING 2
-#define	HSPACING 2
-#define MARGIN   2
 
 
 YQIntField::YQIntField( QWidget *		parent,
@@ -37,22 +33,21 @@ YQIntField::YQIntField( QWidget *		parent,
 			int 			maxValue,
 			int 			initialValue )
 
-    : QWidget( parent )
+    : QVBox( parent )
     , YIntField( opt, label, minValue, maxValue, initialValue )
 {
     setWidgetRep( this );
 
-    _vbox = new QVBox( this );
-    _vbox->setSpacing( VSPACING );
-    _vbox->setMargin( MARGIN );
-    _qt_label = new QLabel( fromUTF8( label->value() ), _vbox );
+    setSpacing( YQWidgetSpacing );
+    setMargin( YQWidgetMargin );
+    _qt_label = new QLabel( fromUTF8( label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
     _qt_label->setFont( YUIQt::ui()->currentFont() );
-    _qt_label->setAlignment( Qt::AlignRight );
+    _qt_label->setAlignment( Qt::AlignLeft );
 
     _qt_spinbox = new QSpinBox( minValue, maxValue,
 				1, // step
-				_vbox );
+				this );
     _qt_spinbox->setValue( initialValue );
     _qt_spinbox->setFont( YUIQt::ui()->currentFont() );
 
@@ -61,7 +56,7 @@ YQIntField::YQIntField( QWidget *		parent,
     setValue( initialValue );
 
     connect( _qt_spinbox, SIGNAL( valueChanged(int) ),
-	     this,  	SLOT  ( setValueSlot(int) ) );
+	     this,  	  SLOT  ( setValueSlot(int) ) );
 }
 
 
@@ -74,14 +69,13 @@ void YQIntField::setEnabling( bool enabled )
 
 long YQIntField::nicesize( YUIDimension dim )
 {
-    if ( dim == YD_HORIZ )	return _vbox->sizeHint().width();
-    else			return _vbox->sizeHint().height();
+    if ( dim == YD_HORIZ )	return sizeHint().width();
+    else			return sizeHint().height();
 }
 
 
 void YQIntField::setSize( long newWidth, long newHeight )
 {
-    _vbox->resize( newWidth, newHeight );
     resize( newWidth, newHeight );
 }
 
@@ -105,7 +99,7 @@ void YQIntField::setValueSlot( int newValue )
     setValue( newValue );
 
     if ( getNotify() )
-	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
+	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 

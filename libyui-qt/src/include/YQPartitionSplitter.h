@@ -32,7 +32,7 @@
 #include "YPartitionSplitter.h"
 
 
-class YQPartitionSplitter : public QWidget, public YPartitionSplitter
+class YQPartitionSplitter : public QVBox, public YPartitionSplitter
 {
     Q_OBJECT
 
@@ -105,15 +105,14 @@ protected:
      * Indentation indicates widget hierarchy
      */
 
-    QVBox *		_vbox;
-    QY2BarGraph *		_barGraph;
-    QHBox *			_labels_hbox;
-    QLabel *				_qt_freeFieldLabel;
-    QLabel *				_qt_newPartFieldLabel;
-    QHBox *			_fields_hbox;
-    QSpinBox *				_qt_freeSizeField;
-    QSlider *				_qt_freeSizeSlider;
-    QSpinBox *				_qt_newPartSizeField;
+    QY2BarGraph *	_barGraph;
+    QHBox *		_labels_hbox;
+    QLabel *			_qt_freeFieldLabel;
+    QLabel *			_qt_newPartFieldLabel;
+    QHBox *		_fields_hbox;
+    QSpinBox *			_qt_freeSizeField;
+    QSlider *			_qt_freeSizeSlider;
+    QSpinBox *			_qt_newPartSizeField;
 
     bool _countShowDelta;
 };

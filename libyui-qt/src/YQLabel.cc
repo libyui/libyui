@@ -47,7 +47,7 @@ YQLabel::YQLabel( QWidget * 	parent,
 	setMidLineWidth(2);
     }
 
-    setMargin( AlignRight );
+    setMargin( YQWidgetMargin );
     setAlignment( AlignLeft | AlignTop );
 }
 

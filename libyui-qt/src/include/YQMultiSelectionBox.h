@@ -100,7 +100,20 @@ public:
      */
     virtual void deleteAllItems();
 
+    /**
+     * Sends a ValueChanged signal.
+     **/
+    void sendValueChanged();
 
+
+signals:
+
+    /**
+     * Emitted upon when an item changes its state.
+     **/
+    void valueChanged();
+    
+    
 protected:
 
     /**
@@ -126,13 +139,17 @@ protected:
 
 
 
-private slots:
+protected slots:
 
     /**
-     * Tells the ui that an item has been selected.
-     * This is only relevant if the `notify option is set.
-     */
+     * Send SelectionChanged event if `opt(`notify) is set.
+     **/
     void slotSelected();
+    
+    /**
+     * Send ValueChanged event if `opt(`notify) is set.
+     **/
+    void slotValueChanged();
 
     
 protected:
@@ -151,7 +168,9 @@ public:
     /**
      * Constructor.
      **/
-    YQMultiSelectionBoxItem( QListView * parent, const QString &text );
+    YQMultiSelectionBoxItem( YQMultiSelectionBox * 	parent,
+			     QListView * 		listView,
+			     const QString &		text );
 
     /**
      * Destructor.
@@ -160,7 +179,15 @@ public:
 
     
 protected:
-    
+
+    /**
+     * Called when the on/off state changes.
+     * Triggers a 'valueChanged' event in the associated YQMultiSelectionBox.
+     *
+     * Reimplemented from QChecklistItem.
+     **/
+    void stateChange( bool newState );
+
     /**
      * Returns the sort key for any column.
      * Reimplemented from @ref QListViewItem.
@@ -172,10 +199,12 @@ protected:
     virtual QString key ( int	column,
 			  bool	ascending ) const;
 
-    /**
-     * This item's serial number - just for sorting purposes.
-     **/
-    int _serial;
+
+    // Data members
+    
+    int 			_serial;
+    YQMultiSelectionBox * 	_multiSelectionBox;
+    
 
     /**
      * The next serial number to use

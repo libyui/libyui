@@ -12,8 +12,7 @@
 
   File:	      YQRichText.cc
 
-  Author:     Mathias Kettner <kettner@suse.de>
-  Maintainer: Stefan Hundhammer <sh@suse.de>
+  Author:     Stefan Hundhammer <sh@suse.de>
 
 /-*/
 
@@ -21,30 +20,34 @@
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
-#include "YDialog.h"	// ???
 #include "utf8.h"
 #include "YUIQt.h"
+#include "YEvent.h"
 #include "YQRichText.h"
 
 
 YQRichText::YQRichText( QWidget * 		parent,
 			YWidgetOpt & 		opt,
 			const YCPString &	text )
-    : QTextBrowser( parent )
+    : QVBox( parent )
     , YRichText( opt, text )
 {
     setWidgetRep( this );
-    setFont( YUIQt::ui()->currentFont() );
-    setMargin( AlignRight );
+    
+    setMargin( YQWidgetMargin );
+
+    _textBrowser = new YQTextBrowser( this );
+    _textBrowser->setMimeSourceFactory( 0 );
+    _textBrowser->setFont( YUIQt::ui()->currentFont() );
     
     if ( opt.plainTextMode.value() )
     {
-	setTextFormat( Qt::PlainText );
-	setWordWrap( QTextEdit::NoWrap );
+	_textBrowser->setTextFormat( Qt::PlainText );
+	_textBrowser->setWordWrap( QTextEdit::NoWrap );
     }
     else
     {
-	setTextFormat( Qt::RichText );
+	_textBrowser->setTextFormat( Qt::RichText );
     }
 
     setText( text );
@@ -55,25 +58,31 @@ YQRichText::YQRichText( QWidget * 		parent,
     // warnColor dialog - which we cannot find right now out since our
     // parent is not set yet :-(
 
-    QPalette pal( palette() );
+    QPalette pal( _textBrowser->palette() );
     QColorGroup normalColors( pal.normal() );
     normalColors.setColor( QColorGroup::Text, black );
     pal.setNormal( normalColors );
-    setPalette( pal );
+    _textBrowser->setPalette( pal );
 
     // Set the text background to a light grey
 
-    setPaper( QColor( 234, 234, 234 ) );
+    _textBrowser->setPaper( QColor( 234, 234, 234 ) );
 
     // Very small default size if specified
 
     _shrinkable = opt.isShrinkable.value();
+
+
+    // Propagate clicks on hyperlinks
+    
+    connect( _textBrowser, SIGNAL( linkClicked( const QString & ) ),
+	     this,	   SLOT  ( linkClicked( const QString & ) ) );
 }
 
 
 void YQRichText::setEnabling( bool enabled )
 {
-    setEnabled( enabled );
+    _textBrowser->setEnabled( enabled );
 }
 
 
@@ -92,33 +101,32 @@ void YQRichText::setSize( long newWidth, long newHeight )
 
 void YQRichText::setText( const YCPString & text )
 {
-    if ( horizontalScrollBar() )
-	horizontalScrollBar()->setValue(0);
+    if ( _textBrowser->horizontalScrollBar() )
+	_textBrowser->horizontalScrollBar()->setValue(0);
 
-    if ( ! autoScrollDown && verticalScrollBar() )
-	verticalScrollBar()->setValue(0);
+    if ( ! autoScrollDown && _textBrowser->verticalScrollBar() )
+	_textBrowser->verticalScrollBar()->setValue(0);
     
-    QTextBrowser::setText( fromUTF8( text->value() ) );
+    _textBrowser->setText( fromUTF8( text->value() ) );
     YRichText::setText( text );
     
-    if ( autoScrollDown && verticalScrollBar() )
-	verticalScrollBar()->setValue( verticalScrollBar()->maxValue() );
+    if ( autoScrollDown && _textBrowser->verticalScrollBar() )
+	_textBrowser->verticalScrollBar()->setValue( _textBrowser->verticalScrollBar()->maxValue() );
 }
 
 
 bool YQRichText::setKeyboardFocus()
 {
-    QTextBrowser::setFocus();
+    _textBrowser->setFocus();
 
     return true;
 }
 
 
-void YQRichText::setSource( const QString & name )
+void YQRichText::linkClicked( const QString & url )
 {
-    y2debug( "Selected hyperlink \"%s\"", (const char *) name );
-    YUIQt::ui()->setMenuSelection( YCPString( (const char *) name ) );
-    YUIQt::ui()->returnNow( YUIInterpreter::ET_MENU, this );
+    // y2debug( "Selected hyperlink \"%s\"", (const char *) url );
+    YUIQt::ui()->sendEvent( new YMenuEvent( YCPString( (const char *) url ) ) );
 }
 
 

@@ -25,7 +25,6 @@
 #include <qspinbox.h>
 #include <qlabel.h>
 #include <qvbox.h>
-#include <qhbox.h>
 #include <ycp/YCPString.h>
 
 #include "YIntField.h"
@@ -35,7 +34,7 @@ class QString;
 class QLabel;
 class QIntField;
 
-class YQIntField : public QWidget, public YIntField
+class YQIntField : public QVBox, public YIntField
 {
     Q_OBJECT
 
@@ -101,7 +100,6 @@ protected:
 
     QLabel *	_qt_label;
     QSpinBox *	_qt_spinbox;
-    QVBox *	_vbox;
 };
 
 

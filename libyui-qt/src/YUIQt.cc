@@ -32,11 +32,14 @@
 #include <ycp/y2log.h>
 
 #include "YUIQt.h"
+#include "YEvent.h"
 #include "YUISymbols.h"
 
 #include "YQDialog.h"
 #include "QXEmbed.h"
 
+
+#define BUSY_CURSOR_TIMEOUT	200	// milliseconds
 
 YUIQt * YUIQt::_ui = 0;
 
@@ -45,14 +48,12 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
     : QApplication(argc, argv)
     , YUIInterpreter(with_threads, callback)
     , _main_dialog_id(0)
-    , _event_widget(0)
-    , _event_type(ET_NONE)
-    , _do_exit_loop(false)
-    , _loaded_current_font(false)
-    , _loaded_heading_font(false)
-    , _wm_close_blocked(false)
-    , _auto_activate_dialogs(true)
-    , _running_embedded(false)
+    , _do_exit_loop( false )
+    , _loaded_current_font( false )
+    , _loaded_heading_font( false )
+    , _wm_close_blocked( false )
+    , _auto_activate_dialogs( true )
+    , _running_embedded( false )
 {
     _ui				= this;
     _fatal_error		= false;
@@ -253,13 +254,20 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
 	_main_win->show();
 	y2milestone( "Running in embedded mode - leaving main window open" );
     }
-    
+
 
     //  Init other stuff
 
     setFont( currentFont() );
     QXEmbed::initialize();
     busyCursor();
+
+    connect( & _user_input_timer,	SIGNAL( timeout()          ),
+	     this,		  	SLOT  ( userInputTimeout() ) );
+    
+    connect( & _busy_cursor_timer,	SIGNAL( timeout()	),
+	     this,			SLOT  ( busyCursor()	) );
+    
     topmostConstructorHasFinished();
 #if defined(QT_THREAD_SUPPORT)
     qApp->unlock ();
@@ -302,12 +310,12 @@ void YUIQt::idleLoop( int fd_ycp )
     _leave_idle_loop = false;
 
     // process Qt events until fd_ycp is readable.
-    QSocketNotifier * notifier = new QSocketNotifier(fd_ycp, QSocketNotifier::Read);
-    QObject::connect(notifier, SIGNAL(activated(int) ), this, SLOT(leaveIdleLoop(int) ) );
-    notifier->setEnabled(true);
+    QSocketNotifier * notifier = new QSocketNotifier( fd_ycp, QSocketNotifier::Read );
+    QObject::connect(notifier, SIGNAL( activated( int ) ), this, SLOT( leaveIdleLoop( int ) ) );
+    notifier->setEnabled( true );
 
-    while (!_leave_idle_loop)
-	processOneEvent ();
+    while ( !_leave_idle_loop )
+	processOneEvent();
 
     delete notifier;
 }
@@ -319,102 +327,93 @@ void YUIQt::leaveIdleLoop( int )
 }
 
 
-void YUIQt::returnNow( EventType et, YWidget * wid )
+void YUIQt::sendEvent( YEvent * event )
 {
-
-    if ( wid && ! wid->isValid() )
+    if ( event )
     {
-	y2error("Widget has become invalid - ignoring.");
-	return;
-    }
-
-    if ( wid && ! wid->yParent() )
-    {
-	/*
-	 * This is a common situation, so let's not complain about it in the log
-	 * file: The widget doesn't have a parent yet (since this is set from
-	 * outside after the constructor has finished), yet it already sends
-	 * signals. Most widgets with `opt(`notify) do this. Just silently ignore
-	 * this situation.
-	 */
-	return;
-    }
-
-    if ( et != ET_CANCEL && wid &&
-	 wid->yDialog() != currentDialog() )
-    {
-	/*
-	 * Silently discard events from all but the current (topmost) dialog.
-	 */
-
-	y2warning( "Ignoring event from foreign dialog" );
-	return;
-    }
-
-    if ( _event_type == ET_NONE || _event_type == ET_MENU )
-    {
-	_event_type   = et;
-	_event_widget = wid;
-    }
-
-    if ( _do_exit_loop )
-    {
-	exit_loop();
+	_event_handler.sendEvent( event );
+    
+	if ( _do_exit_loop )
+	    exit_loop();
     }
 }
 
 
-YWidget * YUIQt::userInput( YDialog * dialog, EventType *event )
+YEvent * YUIQt::userInput( unsigned long timeout_millisec )
 {
-    if (_event_type == ET_NONE)
+    YEvent * 	event  = 0;
+    YQDialog *	dialog = dynamic_cast<YQDialog *> ( currentDialog() );
+
+    if ( _user_input_timer.isActive() )
+	_user_input_timer.stop();
+
+    if ( dialog )
     {
-	YQDialog * qd = (YQDialog *)dialog;
-	qd->activate(true);
+	if ( timeout_millisec > 0 )
+	    _user_input_timer.start( timeout_millisec, true ); // single shot
+	    
+	dialog->activate( true );
 
 	if ( qApp->focusWidget() )
-	{
 	    qApp->focusWidget()->setFocus();
-	}
-	normalCursor();
-	_do_exit_loop = true; // in returnNow exit_loop() should be called.
 
-	while (_event_type == ET_NONE)
+	normalCursor();
+	_do_exit_loop = true; // should exit_loop() be called in sendEvent()?
+
+	while ( ! pendingEvent() )
 	{
 	    enter_loop();
 	}
 
 	_do_exit_loop = false;
-	busyCursor();
-	qd->activate(false);
+	event = _event_handler.consumePendingEvent();
+	dialog->activate( false );
+
+	// Display a busy cursor, but only if there is no other activity within
+	// BUSY_CURSOR_TIMEOUT milliseconds (avoid cursor flicker)
+	
+	_busy_cursor_timer.start( BUSY_CURSOR_TIMEOUT, true ); // single shot
     }
-    
-    *event = _event_type;
-    YWidget * ret = _event_widget;
-    
-    // Clear for next time
-    _event_type	 = ET_NONE;
-    _event_widget = 0;
-    
-    return ret;
+
+    if ( _user_input_timer.isActive() )
+	_user_input_timer.stop();
+
+    return event;
 }
 
 
-YWidget * YUIQt::pollInput( YDialog * dialog, EventType *event )
+YEvent * YUIQt::pollInput()
 {
-    if (_event_type == ET_NONE)
+    YEvent * event = 0;
+    
+    if ( _user_input_timer.isActive() )
+	_user_input_timer.stop();
+
+    if ( ! pendingEvent() )
     {
-	// if ( focusWidget() ) focusWidget()->repaint();
-	YQDialog * qd = (YQDialog *)dialog;
-	qd->activate(true);
-	processEvents();
-	qd->activate(false);
+	YQDialog * dialog = dynamic_cast<YQDialog *> ( currentDialog() );
+
+	if ( dialog )
+	{
+	    dialog->activate( true );
+	    processEvents();
+	    event = _event_handler.consumePendingEvent();
+	    dialog->activate( false );
+	}
     }
-    *event = _event_type;
-    _event_type = ET_NONE; // Clear for next time
-    return _event_widget;
+
+    if ( pendingEvent() )
+	event = _event_handler.consumePendingEvent();
+
+    return event;
 }
 
 
+void YUIQt::userInputTimeout()
+{
+    if ( ! pendingEvent() )
+	sendEvent( new YTimeoutEvent() );
+}
 
 
 YDialog * YUIQt::createDialog( YWidgetOpt & opt )
@@ -508,7 +507,7 @@ void YUIQt::closeDialog( YDialog * dialog )
 	    {
 		y2milestone( "Running embedded - keeping (empty) main window open" );
 	    }
-	    
+
 	    _main_dialog_id = 0;	// this should not be necessary - but better be safe than sorry
 	}
 	else

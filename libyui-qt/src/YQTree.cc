@@ -20,7 +20,7 @@
 
 #include <qheader.h>
 #include <qlabel.h>
-#include <qlayout.h>
+#include <qvbox.h>
 #include <qlistview.h>
 #include <qstring.h>
 #define y2log_component "qt-ui"
@@ -30,16 +30,19 @@ using std::min;
 using std::max;
 
 #include "YUIQt.h"
+#include "YEvent.h"
 #include "utf8.h"
 #include "YQTree.h"
 
-#define YQWIDGET_BORDER 3
 
 YQTree::YQTree( QWidget * parent, YWidgetOpt & opt, const YCPString & label )
-    : QWidget	( parent )
+    : QVBox( parent )
     , YTree	( opt, label )
 {
     setWidgetRep( this );
+
+    setSpacing( YQWidgetSpacing );
+    setMargin( YQWidgetMargin );
 
     _nextSerialNo = 0;
 
@@ -55,12 +58,14 @@ YQTree::YQTree( QWidget * parent, YWidgetOpt & opt, const YCPString & label )
 
     _qt_label->setBuddy ( _listView );
     
-    QGridLayout * grid = new QGridLayout( this, 2,1, YQWIDGET_BORDER );
-    grid->addWidget( _qt_label, 0,0 );
-    grid->addWidget( _listView, 1,0 );
-
     connect( _listView,	SIGNAL( selectionChanged ( void ) ),
 	     this, 	SLOT  ( slotSelected     ( void ) ) );
+    
+    connect( _listView,	SIGNAL( spacePressed	 ( QListViewItem *	) ),
+	     this, 	SLOT  ( slotActivated	 ( void 		) ) );
+    
+    connect( _listView,	SIGNAL( doubleClicked	 ( QListViewItem * 	) ),
+	     this, 	SLOT  ( slotActivated	 ( void 		) ) );
 }
 
 
@@ -83,9 +88,6 @@ YQTree::nicesize( YUIDimension dim )
 void
 YQTree::setSize( long newWidth, long newHeight )
 {
-    _qt_label->resize( min ( newWidth,  (long) ( _qt_label->sizeHint().width()  ) ),
-		       min ( newHeight, (long) ( _qt_label->sizeHint().height() ) ) );
-    _listView->resize( newWidth, newHeight - _qt_label->height() );
     resize( newWidth, newHeight );
 }
 
@@ -171,12 +173,16 @@ YQTree::findYQTreeItem( const YTreeItem * orig ) const
 }
 
 
-// slots
-
 void YQTree::slotSelected( void )
 {
+    if ( getNotify() && ! YUIQt::ui()->eventPendingFor( this ) )
+	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
+}
+
+void YQTree::slotActivated( void )
+{
     if ( getNotify() )
-	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
+	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
 }
 
 

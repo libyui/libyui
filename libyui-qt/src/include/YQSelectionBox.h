@@ -31,6 +31,7 @@
 
 class QLabel;
 class QListBox;
+class QListBoxItem;
 
 class YQSelectionBox : public QVBox, public YSelectionBox
 {
@@ -96,10 +97,15 @@ public:
 protected slots:
 
     /**
-     * Tells the ui that an item has been selected.
-     * This is only relevant if `opt( `notify ) is set.
+     * Notification that an item has been selected.
+     * This is only relevant if `opt(`notify ) is set.
      */
     void slotSelected( int index );
+
+    /**
+     * Notification that an item has been activated (double clicked).
+     */
+    void slotActivated( QListBoxItem * item );
 
     /**
      * Return after some millseconds delay - collect multiple events.

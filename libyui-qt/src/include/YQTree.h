@@ -22,7 +22,7 @@
 #ifndef YQTree_h
 #define YQTree_h
 
-#include <qwidget.h>
+#include <qvbox.h>
 #include <qlistview.h>
 #include <qptrdict.h>
 #include <ycp/YCPString.h>
@@ -34,7 +34,7 @@ class QLabel;
 class YQTreeItem;
 
 
-class YQTree : public QWidget, public YTree
+class YQTree : public QVBox, public YTree
 {
     Q_OBJECT
 
@@ -43,31 +43,31 @@ public:
     /**
      * Constructor.
      **/
-    YQTree ( QWidget * parent, YWidgetOpt & opt, const YCPString & label );
+    YQTree( QWidget * parent, YWidgetOpt & opt, const YCPString & label );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
      * widget. All new widgets are enabled per definition. Only
      * enabled widgets can take user input.
      */
-    void setEnabling ( bool enabled );
+    void setEnabling( bool enabled );
 
     /**
      * Minimum size the widget should have to make it look and feel
      * nice.
      * @dim Dimension, either YD_HORIZ or YD_VERT
      */
-    long nicesize ( YUIDimension dim );
+    long nicesize( YUIDimension dim );
 
     /**
      * Sets the new size of the widget.
      */
-    void setSize ( long newWidth, long newHeight );
+    void setSize( long newWidth, long newHeight );
 
     /**
      * Change the label text.
      */
-    void setLabel ( const YCPString & label );
+    void setLabel( const YCPString & label );
 
     /**
      * Inherited fro YTree. Called once after items have been added.
@@ -83,7 +83,7 @@ public:
     /**
      * Inherited from YTree. Selects an item.
      */
-    virtual void setCurrentItem ( YTreeItem * it );
+    virtual void setCurrentItem( YTreeItem * it );
 
     /**
      * Accept the keyboard focus.
@@ -95,24 +95,28 @@ public:
      * Register a newly created item.
      * Calling this method is mandatory for all items.
      */
-    void registerItem ( const YTreeItem *	orig,
-			const YQTreeItem *	clone );
+    void registerItem( const YTreeItem *	orig,
+		       const YQTreeItem *	clone );
 
 
     /**
      * Find the corresponding YQTreeItem for a given YTreeItem.
      * Returns 0 if not found.
      */
-    YQTreeItem * findYQTreeItem ( const YTreeItem * orig ) const;
+    YQTreeItem * findYQTreeItem( const YTreeItem * orig ) const;
 
 
 protected slots:
 
     /**
-     * Tells the ui that an item has been selected. This is only
-     * important if the `notify option is set.
-     */
-    void slotSelected ( void );
+     * Triggers a SelectionChanged event if `opt(`notify) is set.
+     **/
+    void slotSelected();
+
+    /**
+     * Triggers an Activated event if `opt(`notify) is set.
+     **/
+    void slotActivated();
 
 
 protected:
@@ -151,24 +155,24 @@ public:
     /**
      * Constructor for a top level item.
      **/
-    YQTreeItem ( YQTree	*		tree,
-		 QListView *		parent,
-		 const YTreeItem *	origItem,
-		 int			serial	);
+    YQTreeItem( YQTree	*		tree,
+		QListView *		parent,
+		const YTreeItem *	origItem,
+		int			serial	);
 
 
     /**
      * Constructor for a non-top level item.
      **/
-    YQTreeItem ( YQTree	*		tree,
-		 YQTreeItem *		parent,
-		 const YTreeItem *	origItem,
-		 int			serial	);
+    YQTreeItem( YQTree	*		tree,
+		YQTreeItem *		parent,
+		const YTreeItem *	origItem,
+		int			serial	);
 
     /**
      * Recursively build the subtree corresponding to 'items'.
      **/
-    void buildSubTree ( YTreeItemList & items, int & nextSerialNo );
+    void buildSubTree( YTreeItemList & items, int & nextSerialNo );
 
     /**
      * Returns the original YTreeItem of which this item is a clone.
@@ -181,9 +185,9 @@ private:
     /**
      * Init function. All constructors end up here.
      */
-    void init ( YQTree *		tree,
-		const YTreeItem *	yTreeItem,
-		int			serial );
+    void init( YQTree *			tree,
+	       const YTreeItem *	yTreeItem,
+	       int			serial );
 
 
 protected:
@@ -207,7 +211,7 @@ protected:
     /**
      * Sort key of this item. Inherited by QListViewItem.
      */
-    QString key ( int column, bool ascending ) const;
+    QString key( int column, bool ascending ) const;
 
 };
 

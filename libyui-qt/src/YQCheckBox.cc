@@ -25,6 +25,7 @@
 
 #include "utf8.h"
 #include "YUIQt.h"
+#include "YEvent.h"
 #include "YQCheckBox.h"
 
 
@@ -144,7 +145,7 @@ bool YQCheckBox::setKeyboardFocus()
 void YQCheckBox::changed( bool newState )
 {
     if ( getNotify() )
-	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
+	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 

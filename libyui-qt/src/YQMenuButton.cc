@@ -27,25 +27,25 @@
 
 #include "utf8.h"
 #include "YUIQt.h"
+#include "YEvent.h"
 #include "YQMenuButton.h"
 
-
-#define BORDER 3
-#define BORDERSIZE QSize( BORDER, BORDER )
 
 YQMenuButton::YQMenuButton( QWidget * 		parent,
 			    YWidgetOpt & 	opt,
 			    YCPString 		label )
     : QWidget( parent )
     , YMenuButton( opt, label )
+    , _selected_item_index( -1 )
 {
     setWidgetRep( this );
     _qt_pushbutton = new QPushButton( fromUTF8( label->value() ), this );
     _qt_pushbutton->setFont( YUIQt::ui()->currentFont() );
     _qt_pushbutton->setMinimumSize( 2,2 );
     _qt_pushbutton->installEventFilter( this );
-    _qt_pushbutton->move( BORDER, BORDER );
-    setMinimumSize( _qt_pushbutton->minimumSize() + 2 * BORDERSIZE );
+    _qt_pushbutton->move( YQButtonBorder, YQButtonBorder );
+    setMinimumSize( _qt_pushbutton->minimumSize() 
+		    + 2 * QSize( YQButtonBorder, YQButtonBorder ) );
 }
 
 void
@@ -58,16 +58,17 @@ YQMenuButton::setEnabling( bool enabled )
 long
 YQMenuButton::nicesize( YUIDimension dim )
 {
-    return 2 * BORDER + ( dim == YD_HORIZ
-			  ? _qt_pushbutton->sizeHint().width()
-			  : _qt_pushbutton->sizeHint().height() );
+    return 2 * YQButtonBorder + ( dim == YD_HORIZ
+				  ? _qt_pushbutton->sizeHint().width()
+				  : _qt_pushbutton->sizeHint().height() );
 }
 
 
 void
 YQMenuButton::setSize( long newWidth, long newHeight )
 {
-    _qt_pushbutton->resize( newWidth - 2 * BORDER, newHeight - 2 * BORDER );
+    _qt_pushbutton->resize( newWidth  - 2 * YQButtonBorder,
+			    newHeight - 2 * YQButtonBorder );
     resize( newWidth, newHeight );
 }
 
@@ -92,7 +93,7 @@ void
 YQMenuButton::menuEntryActivated( int menu_item_index )
 {
     // y2debug( "Selected menu entry #%d", menu_item_index );
-    YUIQt::ui()->setMenuSelection( indexToId( menu_item_index ) );
+    _selected_item_index = menu_item_index;
 
     /*
      * Defer the real returnNow() until all popup related events have been
@@ -114,7 +115,7 @@ YQMenuButton::menuEntryActivated( int menu_item_index )
 void
 YQMenuButton::returnNow()
 {
-    YUIQt::ui()->returnNow( YUIInterpreter::ET_MENU, this );
+    YUIQt::ui()->sendEvent( new YMenuEvent( indexToId( _selected_item_index ) ) );
 }
 
 

@@ -17,6 +17,8 @@
 /-*/
 
 
+#define SEND_SELECTION_CHANGED_EVENT 0
+
 #include <qstring.h>
 #include <qlabel.h>
 #include <qcombobox.h>
@@ -25,10 +27,10 @@
 
 #include "utf8.h"
 #include "YUIQt.h"
+#include "YEvent.h"
 #include "QY2CharValidator.h"
 #include "YQComboBox.h"
 
-#define SPACING			4	// between subwidgets
 
 
 YQComboBox::YQComboBox( QWidget * 		parent,
@@ -39,8 +41,8 @@ YQComboBox::YQComboBox( QWidget * 		parent,
     , _validator(0)
 {
     setWidgetRep( this );
-    setSpacing( SPACING );
-    setMargin( YQWIDGET_BORDER );
+    setSpacing( YQWidgetSpacing );
+    setMargin( YQWidgetMargin );
 
     _qt_label = new QLabel( fromUTF8(label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
@@ -51,9 +53,11 @@ YQComboBox::YQComboBox( QWidget * 		parent,
 
     _qt_label->setBuddy( _qt_combo_box );
 
+#if SEND_SELECTION_CHANGED_EVENT
     connect( _qt_combo_box,	SIGNAL( highlighted (int) ),
 	     this,		SLOT  ( slotSelected(int) ) );
-    
+#endif
+
     connect( _qt_combo_box,	SIGNAL( activated  ( const QString & ) ),
 	     this,		SLOT  ( textChanged( const QString & ) ) );
 }
@@ -145,14 +149,21 @@ bool YQComboBox::setKeyboardFocus()
 void YQComboBox::slotSelected( int i )
 {
     if ( getNotify() )
-	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
+    {
+	if ( ! YUIQt::ui()->eventPendingFor( this ) )
+	{
+	    // Avoid overwriting a (more important) ValueChanged event with a SelectionChanged event
+
+	    YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
+	}
+    }
 }
 
 
-void YQComboBox::textChanged( const QString &new_text )
+void YQComboBox::textChanged( const QString & new_text )
 {
     if ( getNotify() )
-	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
+	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 
