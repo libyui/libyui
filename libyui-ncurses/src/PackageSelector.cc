@@ -1012,6 +1012,9 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
     {
 	// show the dependency popup
 	showPackageDependencies( true ); 	// do the check
+	// update the package list and the disk space info
+	updatePackageList();
+	showDiskSpace();	
     }
     else if ( event.selection->compare( PkgNames::AutoDeps() ) == YO_EQUAL )
     {
