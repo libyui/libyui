@@ -74,7 +74,6 @@ liby2ncurses_la_SOURCES =				\
 	NCPopupList.h NCPopupList.cc			\
 	NCPopupMenu.h NCPopupMenu.cc			\
 	NCPopupTextEntry.h NCPopupTextEntry.cc		\
-	NCNew.h NCNew.cc				\
 	NCPackageSelector.cc NCPackageSelector.h	\
 	NCPkgTable.cc NCPkgTable.h			\
 	NCPopupTree.cc NCPopupTree.h			\
