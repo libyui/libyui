@@ -560,7 +560,7 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr )
     }
 
     FSize size = pkgPtr->size();     	// installed size
-    pkgLine.push_back( size.asString() );	
+    pkgLine.push_back( size.form( 8 ) );	
     
     addLine( status,	// get the package status
 	     pkgLine, 	// the package data
