@@ -1,5 +1,12 @@
 -------------------------------------------------------------------
-Thu Feb 17 16:25:49 CET 2005 - gizo@suse.de
+Mon Mar  7 17:15:18 CET 2005 - mlazar@suse.cz
+
+- 2.11.4
+- fixed bug 67350 - Can't change RPM group in NCurses package manager
+  (reverted patch from Tue Nov 23 16:28:41 CET 2004; see also bug 46154)
+
+-------------------------------------------------------------------
+Thu Feb 17 16:25:49 CET 2005 - mlazar@suse.cz
 
 - 2.11.3
 - redirected stderr and stdout do log (see bug 42155)
