@@ -299,7 +299,6 @@ bool NCAskForFile::postAgain( )
 
     if ( !currentId.isNull() )
     {
-	NCMIL << "ID: " << currentId->toString() << endl;
 	if ( currentId->compare( PkgNames::OkButton () ) == YO_EQUAL )
 	{
 	    postevent.result = YCPString( dirList->getCurrentDir() + "/"
