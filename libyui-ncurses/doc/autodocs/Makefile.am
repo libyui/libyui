@@ -1,13 +1,11 @@
 #
-# Makefile.am for ncurses/doc/autodocs
+# Makefile.am for .../agent-XXpkgXX/doc/autodocs
 #
 
 htmldir = $(docdir)/autodocs
 
-html_DATA = index.html $(wildcard *.html)
+html_DATA = index.html $(wildcard *.html *.png) doxygen.css @RPMNAME@.tag
+CLEANFILES = $(html_DATA) doxygen.log doxygen.conf installdox
 
-CLEANFILES = $(html_DATA)
-
-index.html: $(srcdir)/../../src/*.h
-	cd $(srcdir)/../../src && @ybindir@/ydoc ncurses *.h
-	mv -f $(srcdir)/../../src/*.html .
+index.html: $(srcdir)/../../src/include/*.h
+	@ybindir@/ydoxygen PROJECT_NAME=@RPMNAME@
