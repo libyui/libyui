@@ -27,7 +27,7 @@
 //
 //	DESCRIPTION :
 //
-NCLogView::NCLogView( NCWidget * parent, YWidgetOpt & opt,
+NCLogView::NCLogView( NCWidget * parent, const YWidgetOpt & opt,
 		      const YCPString & nlabel,
 		      int visibleLines,
 		      int maxLines )

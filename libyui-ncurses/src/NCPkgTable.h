@@ -135,7 +135,7 @@ public:
    /**
     * Constructor
     */
-    NCPkgTable( NCWidget * parent, YWidgetOpt & opt );
+    NCPkgTable( NCWidget * parent, const YWidgetOpt & opt );
 
     virtual ~NCPkgTable();
 

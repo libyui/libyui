@@ -180,7 +180,7 @@ class NCTreeLine : public NCTableLine {
 //
 //	DESCRIPTION :
 //
-NCTree::NCTree( NCWidget * parent, YWidgetOpt & opt,
+NCTree::NCTree( NCWidget * parent, const YWidgetOpt & opt,
 		const YCPString & nlabel )
     : YTree( opt, nlabel )
     , NCPadWidget( parent )

@@ -49,7 +49,7 @@ class NCSpacing : public YSpacing, public NCWidget {
 
   public:
 
-    NCSpacing( NCWidget * parent, YWidgetOpt & opt,
+    NCSpacing( NCWidget * parent, const YWidgetOpt & opt,
                float size, bool horizontal, bool vertical );
     virtual ~NCSpacing();
 

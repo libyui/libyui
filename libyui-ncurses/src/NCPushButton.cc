@@ -28,7 +28,7 @@
 //
 //	DESCRIPTION :
 //
-NCPushButton::NCPushButton( NCWidget * parent, YWidgetOpt & opt,
+NCPushButton::NCPushButton( NCWidget * parent, const YWidgetOpt & opt,
 			    YCPString nlabel )
     : YPushButton( opt, nlabel )
     , NCWidget( parent )

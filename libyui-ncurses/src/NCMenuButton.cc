@@ -29,7 +29,7 @@
 //
 //	DESCRIPTION :
 //
-NCMenuButton::NCMenuButton( NCWidget * parent, YWidgetOpt & opt,
+NCMenuButton::NCMenuButton( NCWidget * parent, const YWidgetOpt & opt,
 			    YCPString nlabel )
     : YMenuButton( opt, nlabel )
     , NCWidget( parent )

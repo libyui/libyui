@@ -28,7 +28,7 @@
 //
 //	DESCRIPTION :
 //
-NCAlignment::NCAlignment( NCWidget * parent, YWidgetOpt & opt,
+NCAlignment::NCAlignment( NCWidget * parent, const YWidgetOpt & opt,
 			  YAlignmentType halign,
 			  YAlignmentType valign )
     : YAlignment( opt, halign, valign )

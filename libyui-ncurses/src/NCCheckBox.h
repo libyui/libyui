@@ -63,7 +63,7 @@ class NCCheckBox : public YCheckBox, public NCWidget {
 
   public:
 
-    NCCheckBox( NCWidget * parent, YWidgetOpt & opt,
+    NCCheckBox( NCWidget * parent, const YWidgetOpt & opt,
 		const YCPString & label,
 		bool checked );
     virtual ~NCCheckBox();

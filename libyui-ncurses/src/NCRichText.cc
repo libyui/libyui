@@ -103,7 +103,7 @@ void NCRichText::Anchor::draw( NCPad & pad, const chtype attr, int color )
 //
 //	DESCRIPTION :
 //
-NCRichText::NCRichText( NCWidget * parent, YWidgetOpt & opt,
+NCRichText::NCRichText( NCWidget * parent, const YWidgetOpt & opt,
 			const YCPString & ntext )
     : YRichText( opt, ntext )
     , NCPadWidget( parent )

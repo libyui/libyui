@@ -36,7 +36,7 @@ const unsigned NCIntField::taglen = 2; // "^v"
 //
 //	DESCRIPTION :
 //
-NCIntField::NCIntField( NCWidget * parent, YWidgetOpt & opt,
+NCIntField::NCIntField( NCWidget * parent, const YWidgetOpt & opt,
 			const YCPString & nlabel,
 			int minV, int maxV,
 			int initialV )

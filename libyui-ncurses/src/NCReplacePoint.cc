@@ -28,7 +28,7 @@
 //
 //	DESCRIPTION :
 //
-NCReplacePoint::NCReplacePoint( NCWidget * parent, YWidgetOpt & opt )
+NCReplacePoint::NCReplacePoint( NCWidget * parent, const YWidgetOpt & opt )
     : YReplacePoint( opt )
     , NCWidget( parent )
 {

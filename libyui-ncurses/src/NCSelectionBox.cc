@@ -27,7 +27,7 @@
 //
 //	DESCRIPTION :
 //
-NCSelectionBox::NCSelectionBox( NCWidget * parent, YWidgetOpt & opt,
+NCSelectionBox::NCSelectionBox( NCWidget * parent, const YWidgetOpt & opt,
 				const YCPString & nlabel )
     : YSelectionBox( opt, nlabel )
     , NCPadWidget( parent )

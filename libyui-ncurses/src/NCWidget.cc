@@ -538,7 +538,7 @@ int NCWidget::GetFunctionHotkey() const
 //
 //	DESCRIPTION :
 //
-void NCWidget::setFunctionHotkey( YWidgetOpt & opt )
+void NCWidget::setFunctionHotkey( const YWidgetOpt & opt )
 {
     if ( opt.key_Fxx.value() > 0 )
     {

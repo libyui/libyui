@@ -70,7 +70,7 @@ class NCIntField : public YIntField, public NCWidget {
 
   public:
 
-    NCIntField( NCWidget * parent, YWidgetOpt & opt,
+    NCIntField( NCWidget * parent, const YWidgetOpt & opt,
 		const YCPString & label,
 		int minValue, int maxValue,
 		int initialValue );

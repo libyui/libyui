@@ -49,7 +49,7 @@ class NCRadioButtonGroup : public YRadioButtonGroup, public NCWidget {
 
   public:
 
-    NCRadioButtonGroup( NCWidget * parent, YWidgetOpt & opt );
+    NCRadioButtonGroup( NCWidget * parent, const YWidgetOpt & opt );
     virtual ~NCRadioButtonGroup();
 
     virtual long nicesize( YUIDimension dim ) { return YRadioButtonGroup::nicesize( dim ); }

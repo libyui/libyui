@@ -31,7 +31,7 @@
 //
 //	DESCRIPTION :
 //
-NCComboBox::NCComboBox( NCWidget * parent, YWidgetOpt & opt,
+NCComboBox::NCComboBox( NCWidget * parent, const YWidgetOpt & opt,
 			const YCPString & nlabel )
     : YComboBox( opt, nlabel )
     , NCWidget( parent )

@@ -49,7 +49,7 @@ class NCDialog : public YDialog, public NCWidget {
     NCWidget & GetNormal( NCWidget & startwith, SeekDir Direction );
     void       Activate( SeekDir Direction );
 
-    void _init( YWidgetOpt & opt );
+    void _init( const YWidgetOpt & opt );
 
     void _init_size();
 
@@ -119,7 +119,7 @@ class NCDialog : public YDialog, public NCWidget {
 
   public:
 
-    NCDialog( YWidgetOpt & opt );
+    NCDialog( const YWidgetOpt & opt );
     virtual ~NCDialog();
 
     void showDialog();
@@ -151,7 +151,7 @@ class NCDialog : public YDialog, public NCWidget {
     bool       hshaddow;
     bool       vshaddow;
 
-    NCDialog( YWidgetOpt & opt, const wpos at, const bool boxed = true );
+    NCDialog( const YWidgetOpt & opt, const wpos at, const bool boxed = true );
 
     bool isPopup() const { return  (ncdopts & POPUP); }
     bool isBoxed() const { return !(ncdopts & NOBOX); }

@@ -35,7 +35,7 @@ unsigned char NCCheckBox::statetag[3] = { '?', ' ', 'x' };
 //
 //	DESCRIPTION :
 //
-NCCheckBox::NCCheckBox( NCWidget * parent, YWidgetOpt & opt,
+NCCheckBox::NCCheckBox( NCWidget * parent, const YWidgetOpt & opt,
 			const YCPString & nlabel,
 			bool check )
     : YCheckBox( opt, nlabel )

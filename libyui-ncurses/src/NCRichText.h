@@ -194,7 +194,7 @@ class NCRichText : public YRichText, public NCPadWidget {
 
   public:
 
-    NCRichText( NCWidget * parent, YWidgetOpt & opt,
+    NCRichText( NCWidget * parent, const YWidgetOpt & opt,
 		const YCPString & text );
     virtual ~NCRichText();
 

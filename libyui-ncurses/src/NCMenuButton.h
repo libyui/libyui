@@ -54,7 +54,7 @@ class NCMenuButton : public YMenuButton, public NCWidget {
 
   public:
 
-    NCMenuButton( NCWidget * parent, YWidgetOpt & opt,
+    NCMenuButton( NCWidget * parent, const YWidgetOpt & opt,
 		  YCPString label );
     virtual ~NCMenuButton();
 

@@ -27,7 +27,7 @@
 //
 //	DESCRIPTION :
 //
-NCMultiLineEdit::NCMultiLineEdit( NCWidget * parent, YWidgetOpt & opt,
+NCMultiLineEdit::NCMultiLineEdit( NCWidget * parent, const YWidgetOpt & opt,
 				  const YCPString & nlabel,
 				  const YCPString & initialText )
     : YMultiLineEdit( opt, nlabel )

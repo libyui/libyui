@@ -28,7 +28,7 @@
 //
 //	DESCRIPTION :
 //
-NCSplit::NCSplit( NCWidget * parent, YWidgetOpt & opt,
+NCSplit::NCSplit( NCWidget * parent, const YWidgetOpt & opt,
 		  YUIDimension dimension )
     : YSplit( opt, dimension )
     , NCWidget( parent )

@@ -64,7 +64,7 @@ class NCTable : public YTable, public NCPadWidget {
 
   public:
 
-    NCTable( NCWidget * parent, YWidgetOpt & opt,
+    NCTable( NCWidget * parent, const YWidgetOpt & opt,
 	     vector<string> header );
     virtual ~NCTable();
 

@@ -80,7 +80,7 @@ class NCComboBox : public YComboBox, public NCWidget {
 
   public:
 
-    NCComboBox( NCWidget * parent, YWidgetOpt & opt,
+    NCComboBox( NCWidget * parent, const YWidgetOpt & opt,
 		const YCPString & label );
     virtual ~NCComboBox();
 

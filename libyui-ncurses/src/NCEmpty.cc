@@ -28,7 +28,7 @@
 //
 //	DESCRIPTION :
 //
-NCEmpty::NCEmpty( NCWidget * parent, YWidgetOpt & opt )
+NCEmpty::NCEmpty( NCWidget * parent, const YWidgetOpt & opt )
     : YEmpty( opt )
     , NCWidget( parent )
 {

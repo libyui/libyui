@@ -49,7 +49,7 @@ class NCImage : public YImage, public NCWidget {
 
   public:
 
-    NCImage( NCWidget * parent, YWidgetOpt & opt, YCPString defaulttext );
+    NCImage( NCWidget * parent, const YWidgetOpt & opt, YCPString defaulttext );
     virtual ~NCImage();
 
     virtual long nicesize( YUIDimension dim );

@@ -54,7 +54,7 @@ class NCRadioButton : public YRadioButton, public NCWidget {
 
   public:
 
-    NCRadioButton( NCWidget * parent, YWidgetOpt & opt,
+    NCRadioButton( NCWidget * parent, const YWidgetOpt & opt,
 		   YRadioButtonGroup * rbg,
 		   const YCPString & label,
 		   bool checked );

@@ -47,7 +47,7 @@ class NCSquash : public YSquash, public NCWidget {
 
   public:
 
-    NCSquash( NCWidget * parent, YWidgetOpt & opt,
+    NCSquash( NCWidget * parent, const YWidgetOpt & opt,
 	      bool hsquash, bool vsquash );
     virtual ~NCSquash();
 

@@ -28,7 +28,7 @@
 //
 //	DESCRIPTION :
 //
-NCProgressBar::NCProgressBar( NCWidget * parent, YWidgetOpt & opt,
+NCProgressBar::NCProgressBar( NCWidget * parent, const YWidgetOpt & opt,
 			      const YCPString & nlabel,
 			      const YCPInteger & maxprogress,
 			      const YCPInteger & progress )

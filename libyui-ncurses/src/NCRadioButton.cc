@@ -31,7 +31,7 @@
 //
 //	DESCRIPTION :
 //
-NCRadioButton::NCRadioButton( NCWidget * parent, YWidgetOpt & opt,
+NCRadioButton::NCRadioButton( NCWidget * parent, const YWidgetOpt & opt,
 			      YRadioButtonGroup * rbg,
 			      const YCPString & nlabel,
 			      bool check )

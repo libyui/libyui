@@ -180,7 +180,7 @@ void NCFileSelectionTag::DrawAt( NCursesWindow & w, const wrect at,
 //	DESCRIPTION :
 //
 NCFileSelection::NCFileSelection( NCWidget * parent,
-				  YWidgetOpt & opt,
+				  const YWidgetOpt & opt,
 				  NCFileSelectionType type,
 				  const YCPString & iniDir )
     : NCTable( parent, opt, vector<string> () )
@@ -449,7 +449,7 @@ NCFileSelectionTag * NCFileSelection::getTag( const int & index )
 //	DESCRIPTION :
 //
 NCFileTable::NCFileTable( NCWidget * parent,
-			  YWidgetOpt & opt,
+			  const YWidgetOpt & opt,
 			  NCFileSelectionType type,
 			  const YCPString & filter,
 			  const YCPString & iniDir )
@@ -709,7 +709,7 @@ bool NCFileTable::fillList ( )
 //	DESCRIPTION :
 //
 NCDirectoryTable::NCDirectoryTable( NCWidget * parent,
-				    YWidgetOpt & opt,
+				    const YWidgetOpt & opt,
 				    NCFileSelectionType type,
 				    const YCPString & iniDir )
     : NCFileSelection( parent, opt, type, iniDir )

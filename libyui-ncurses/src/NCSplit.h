@@ -49,7 +49,7 @@ class NCSplit : public YSplit, public NCWidget {
 
   public:
 
-    NCSplit( NCWidget * parent, YWidgetOpt & opt,
+    NCSplit( NCWidget * parent, const YWidgetOpt & opt,
 	     YUIDimension dimension );
     virtual ~NCSplit();
 

@@ -28,7 +28,7 @@
 //
 //	DESCRIPTION :
 //
-NCFrame::NCFrame( NCWidget * parent, YWidgetOpt & opt,
+NCFrame::NCFrame( NCWidget * parent, const YWidgetOpt & opt,
 		  const YCPString & nlabel )
     : YFrame( opt, nlabel )
     , NCWidget( parent )

@@ -61,7 +61,7 @@ class NCProgressBar : public YProgressBar, public NCWidget {
 
   public:
 
-    NCProgressBar( NCWidget * parent, YWidgetOpt & opt,
+    NCProgressBar( NCWidget * parent, const YWidgetOpt & opt,
 		   const YCPString & label,
 		   const YCPInteger & maxprogress,
 		   const YCPInteger & progress );

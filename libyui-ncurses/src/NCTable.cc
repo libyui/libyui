@@ -32,7 +32,7 @@
 //
 //	DESCRIPTION :
 //
-NCTable::NCTable( NCWidget * parent, YWidgetOpt & opt,
+NCTable::NCTable( NCWidget * parent, const YWidgetOpt & opt,
 		  vector<string> head )
     : YTable( opt, head.size() )
     , NCPadWidget( parent )

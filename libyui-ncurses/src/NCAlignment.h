@@ -47,7 +47,7 @@ class NCAlignment : public YAlignment, public NCWidget {
 
   public:
 
-    NCAlignment( NCWidget * parent, YWidgetOpt & opt,
+    NCAlignment( NCWidget * parent, const YWidgetOpt & opt,
 		 YAlignmentType halign, YAlignmentType valign );
     virtual ~NCAlignment();
 

@@ -28,7 +28,7 @@
 //
 //	DESCRIPTION :
 //
-NCRadioButtonGroup::NCRadioButtonGroup( NCWidget * parent, YWidgetOpt & opt )
+NCRadioButtonGroup::NCRadioButtonGroup( NCWidget * parent, const YWidgetOpt & opt )
     : YRadioButtonGroup( opt )
     , NCWidget( parent )
     , focusId( 0 )

@@ -28,7 +28,7 @@
 //
 //	DESCRIPTION :
 //
-NCSpacing::NCSpacing( NCWidget * parent, YWidgetOpt & opt,
+NCSpacing::NCSpacing( NCWidget * parent, const YWidgetOpt & opt,
 		      float size, bool horizontal, bool vertical )
     : YSpacing( opt, size, horizontal, vertical )
     , NCWidget( parent )

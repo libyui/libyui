@@ -37,7 +37,7 @@
 //
 //	DESCRIPTION :
 //
-NCTextEntry::NCTextEntry( NCWidget * parent, YWidgetOpt & opt,
+NCTextEntry::NCTextEntry( NCWidget * parent, const YWidgetOpt & opt,
 			  const YCPString & nlabel,
 			  const YCPString & ntext,
 			  unsigned maxInput,

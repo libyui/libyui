@@ -52,7 +52,7 @@ class NCLabel : public YLabel, public NCWidget {
 
   public:
 
-    NCLabel( NCWidget * parent, YWidgetOpt & opt,
+    NCLabel( NCWidget * parent, const YWidgetOpt & opt,
 	     const YCPString & text );
     virtual ~NCLabel();
 

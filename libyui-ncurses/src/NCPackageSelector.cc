@@ -42,7 +42,7 @@
 //
 NCPackageSelector::NCPackageSelector( YNCursesUI *ui,
 				      NCWidget * parent,
-				      YWidgetOpt & opt, YUIDimension dimension,
+				      const YWidgetOpt & opt, YUIDimension dimension,
 				      string floppyDevice )
     : NCSplit( parent, opt, dimension )
       , widgetRoot( 0 )
@@ -53,7 +53,7 @@ NCPackageSelector::NCPackageSelector( YNCursesUI *ui,
     // set the textdomain
     setTextdomain( "packages" );
     
-    // get the mode (the mode is also available in PackageSelector via YWidgetOpt & opt)
+    // get the mode (the mode is also available in PackageSelector via const YWidgetOpt & opt)
     if ( opt.youMode.value() )
 	youMode = true;
 
@@ -73,8 +73,9 @@ NCPackageSelector::NCPackageSelector( YNCursesUI *ui,
 
     if ( ! pkgLayout.isNull() )
     {
+	YWidgetOpt childrenOpt( opt );
 	widgetRoot = (YContainerWidget *)ui->createWidgetTree( dynamic_cast<YWidget *>(parent),
-							       opt, 0, pkgLayout );
+							       childrenOpt, 0, pkgLayout );
     }
 
     // create the PackageSelector (creation with 'new' is required because initialization

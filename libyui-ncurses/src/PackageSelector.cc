@@ -85,7 +85,7 @@ bool ic_compare ( char c1, char c2 )
 //
 // Constructor
 //
-PackageSelector::PackageSelector( YNCursesUI * ui, YWidgetOpt & opt, string floppyDevice )
+PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, string floppyDevice )
     : y2ui( ui )
       , visibleInfo( YCPNull() )
       , filterPopup( 0 )

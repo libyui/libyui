@@ -47,7 +47,7 @@ class NCEmpty : public YEmpty, public NCWidget {
 
   public:
 
-    NCEmpty( NCWidget * parent, YWidgetOpt & opt );
+    NCEmpty( NCWidget * parent, const YWidgetOpt & opt );
     virtual ~NCEmpty();
 
     virtual long nicesize( YUIDimension dim ){ return YEmpty::nicesize( dim ); }

@@ -47,7 +47,7 @@ class NCReplacePoint : public YReplacePoint, public NCWidget {
 
   public:
 
-    NCReplacePoint( NCWidget * parent, YWidgetOpt & opt );
+    NCReplacePoint( NCWidget * parent, const YWidgetOpt & opt );
     virtual ~NCReplacePoint();
 
     virtual long nicesize( YUIDimension dim ) { return YReplacePoint::nicesize( dim ); }

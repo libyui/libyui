@@ -132,7 +132,7 @@ public:
     * Constructor
     */
     NCFileSelection( NCWidget * parent,
-		     YWidgetOpt & opt,
+		     const YWidgetOpt & opt,
 		     NCFileSelectionType type,
 		     const YCPString & iniDir );
 
@@ -225,7 +225,7 @@ public:
     * Constructor
     */
     NCFileTable( NCWidget * parent,
-		 YWidgetOpt & opt,
+		 const YWidgetOpt & opt,
 		 NCFileSelectionType type,
 		 const YCPString & filter,
 		 const YCPString & iniDir );
@@ -261,7 +261,7 @@ public:
     * Constructor
     */
     NCDirectoryTable( NCWidget * parent,
-		      YWidgetOpt & opt,
+		      const YWidgetOpt & opt,
 		      NCFileSelectionType type,
 		      const YCPString & iniDir );
 

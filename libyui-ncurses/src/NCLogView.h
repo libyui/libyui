@@ -55,7 +55,7 @@ class NCLogView : public YLogView, public NCPadWidget {
 
   public:
 
-    NCLogView( NCWidget * parent, YWidgetOpt & opt,
+    NCLogView( NCWidget * parent, const YWidgetOpt & opt,
 	       const YCPString & label,
 	       int visibleLines,
 	       int maxLines );

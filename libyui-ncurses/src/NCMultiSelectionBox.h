@@ -116,7 +116,7 @@ class NCMultiSelectionBox : public YMultiSelectionBox, public NCPadWidget {
 
   public:
 
-    NCMultiSelectionBox( NCWidget * parent, YWidgetOpt & opt,
+    NCMultiSelectionBox( NCWidget * parent, const YWidgetOpt & opt,
 			 const YCPString & label );
     virtual ~NCMultiSelectionBox();
 

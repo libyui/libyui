@@ -87,7 +87,7 @@ class NCTextEntry : public YTextEntry, public NCWidget {
 
   public:
 
-    NCTextEntry( NCWidget * parent, YWidgetOpt & opt,
+    NCTextEntry( NCWidget * parent, const YWidgetOpt & opt,
 		 const YCPString & label,
 		 const YCPString & text,
 		 unsigned maxInput = 0,

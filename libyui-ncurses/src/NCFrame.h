@@ -53,7 +53,7 @@ class NCFrame : public YFrame, public NCWidget {
 
   public:
 
-    NCFrame( NCWidget * parent, YWidgetOpt & opt,
+    NCFrame( NCWidget * parent, const YWidgetOpt & opt,
 	     const YCPString & label );
     virtual ~NCFrame();
 

@@ -51,7 +51,7 @@ class NCPushButton : public YPushButton, public NCWidget {
 
   public:
 
-    NCPushButton( NCWidget * parent, YWidgetOpt & opt,
+    NCPushButton( NCWidget * parent, const YWidgetOpt & opt,
 		  YCPString label );
     virtual ~NCPushButton();
 

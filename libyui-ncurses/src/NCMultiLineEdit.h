@@ -59,7 +59,7 @@ class NCMultiLineEdit : public YMultiLineEdit, public NCPadWidget {
 
   public:
 
-    NCMultiLineEdit( NCWidget * parent, YWidgetOpt & opt,
+    NCMultiLineEdit( NCWidget * parent, const YWidgetOpt & opt,
 		     const YCPString & label,
 		     const YCPString & initialText );
     virtual ~NCMultiLineEdit();

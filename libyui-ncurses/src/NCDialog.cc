@@ -58,7 +58,7 @@ static bool hiddenMenu()
 //
 //	DESCRIPTION :
 //
-NCDialog::NCDialog( YWidgetOpt & opt )
+NCDialog::NCDialog( const YWidgetOpt & opt )
     : YDialog    ( opt )
     , pan        ( 0 )
     , dlgstyle   ( 0 )
@@ -79,7 +79,7 @@ NCDialog::NCDialog( YWidgetOpt & opt )
 //
 //	DESCRIPTION :
 //
-NCDialog::NCDialog( YWidgetOpt & opt, const wpos at, const bool boxed )
+NCDialog::NCDialog( const YWidgetOpt & opt, const wpos at, const bool boxed )
     : YDialog    ( opt )
     , pan        ( 0 )
     , dlgstyle   ( 0 )
@@ -100,7 +100,7 @@ NCDialog::NCDialog( YWidgetOpt & opt, const wpos at, const bool boxed )
 //
 //	DESCRIPTION : Constructor helper
 //
-void NCDialog::_init( YWidgetOpt & opt )
+void NCDialog::_init( const YWidgetOpt & opt )
 {
   NCurses::RememberDlg( this );
 

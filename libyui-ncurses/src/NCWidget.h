@@ -111,7 +111,7 @@ class NCWidget : public tnode<NCWidget*>, protected NCursesError {
     NClabel * hotlabel;
     int hotfkey;
 
-    virtual void setFunctionHotkey( YWidgetOpt & opt );
+    virtual void setFunctionHotkey( const YWidgetOpt & opt );
 
   public:
 

@@ -112,7 +112,7 @@ class PackageSelector
      * @param opt The widget options
      * @param floppyDevice The floppy device
      */
-    PackageSelector( YNCursesUI * ui, YWidgetOpt & opt, string floppyDevice );
+    PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, string floppyDevice );
 
     /**
      * Destructor

@@ -28,7 +28,7 @@
 //
 //	DESCRIPTION :
 //
-NCImage::NCImage( NCWidget * parent, YWidgetOpt & opt,
+NCImage::NCImage( NCWidget * parent, const YWidgetOpt & opt,
 		  YCPString defaulttext )
     : YImage( opt )
     , NCWidget( parent )

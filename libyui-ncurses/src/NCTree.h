@@ -61,7 +61,7 @@ class NCTree : public YTree, public NCPadWidget {
 
   public:
 
-    NCTree( NCWidget * parent, YWidgetOpt & opt,
+    NCTree( NCWidget * parent, const YWidgetOpt & opt,
 	    const YCPString & label );
     virtual ~NCTree();
 

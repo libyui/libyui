@@ -28,7 +28,7 @@
 //
 //	DESCRIPTION :
 //
-NCSquash::NCSquash( NCWidget * parent, YWidgetOpt & opt,
+NCSquash::NCSquash( NCWidget * parent, const YWidgetOpt & opt,
 		    bool hsquash, bool vsquash )
     : YSquash( opt, hsquash, vsquash )
     , NCWidget( parent )

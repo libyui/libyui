@@ -55,7 +55,7 @@ class NCSelectionBox : public YSelectionBox, public NCPadWidget {
 
   public:
 
-    NCSelectionBox( NCWidget * parent, YWidgetOpt & opt,
+    NCSelectionBox( NCWidget * parent, const YWidgetOpt & opt,
 		    const YCPString & label );
     virtual ~NCSelectionBox();
 

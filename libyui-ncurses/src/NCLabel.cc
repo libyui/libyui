@@ -28,7 +28,7 @@
 //
 //	DESCRIPTION :
 //
-NCLabel::NCLabel( NCWidget * parent, YWidgetOpt & opt,
+NCLabel::NCLabel( NCWidget * parent, const YWidgetOpt & opt,
 		  const YCPString & nlabel )
     : YLabel( opt, nlabel )
     , NCWidget( parent )
