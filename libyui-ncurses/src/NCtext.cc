@@ -36,7 +36,6 @@ const NCstring NCtext::emptyStr;
 //	DESCRIPTION :
 //
 NCtext::NCtext( const NCstring & nstr )
-    : sawnl( false )
 {
   lset( nstr );
 }
@@ -62,33 +61,37 @@ NCtext::~NCtext()
 //
 void NCtext::lset( const NCstring & ntext )
 {
-  mtext.clear();
-  mtext.push_back( "" );
-  sawnl = false;
+    // FIXME: rewrite this function so one understands it
 
-  if ( ntext.str().empty() )
-    return;
+    mtext.clear();
+    mtext.push_back( "" );
 
-  const wstring & text( ntext.str() );
-  wstring::size_type spos = 0;
-  wstring::size_type cpos = wstring::npos;
+    if ( ntext.str().empty() )
+	return;
 
-  while ( (cpos = text.find( L'\n', spos )) != wstring::npos )
-  {
-    if ( sawnl )
-      mtext.push_back( "" );
+    const wstring & text( ntext.str() );
+    wstring::size_type spos = 0;
+    wstring::size_type cpos = wstring::npos;
 
-    mtext.back() = NCstring( mtext.back().str() + text.substr(spos, cpos-spos) );
-    sawnl = true;
-    spos = cpos + 1;
-  }
+    bool sawnl = false;		// saw new line
 
-  if ( spos < text.size() ) {
-    if ( sawnl )
-      mtext.push_back( "" );
+    while ( (cpos = text.find( L'\n', spos )) != wstring::npos )
+    {
+	if ( sawnl )
+	    mtext.push_back( "" );
 
-    mtext.back() = NCstring( mtext.back().str() + text.substr( spos ) );
-  }
+	mtext.back() = NCstring( mtext.back().str() + text.substr(spos, cpos-spos) );
+	sawnl = true;
+	spos = cpos + 1;
+    }
+
+    if ( spos < text.size() )
+    {
+	if ( sawnl )
+	    mtext.push_back( "" );
+
+	mtext.back() = NCstring( mtext.back().str() + text.substr( spos ) );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -116,7 +119,7 @@ size_t NCtext::Columns() const
 {
   size_t llen = 0;		// longest line
   size_t tmp_len = 0;		// width of current line
-  
+
   const_iterator line;		// iterator for list <NCstring> mtext
   std::wstring::const_iterator wstr_it;	// iterator for wstring
 
@@ -256,8 +259,8 @@ void NClabel::drawAt( NCursesWindow & w, chtype style, chtype hotstyle,
 	  }
 	  else
 	  {
-	      // FIXME: add formatting if needed 
-	      // w.printw( "%-*.*ls", len, (int)len, (*line).str().c_str() );   
+	      // FIXME: add formatting if needed
+	      // w.printw( "%-*.*ls", len, (int)len, (*line).str().c_str() );
 	      w.printw( "%ls", (*line).str().c_str() );
 	  }
       }
@@ -271,7 +274,7 @@ void NClabel::drawAt( NCursesWindow & w, chtype style, chtype hotstyle,
 	  w.bkgdset( hotstyle );
 
 	  w.add_attr_char( l, area.Pos.C + pre + hotpos() );
-	  
+
 	  w.bkgdset( style );
       }
 
