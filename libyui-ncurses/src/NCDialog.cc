@@ -1098,6 +1098,14 @@ void NCDialog::processInput( int timeout_millisec )
       NCurses::Refresh();
       break;
 
+    case CTRL('A'):
+      pendingEvent = getInputEvent( KEY_SLEFT );
+      break;
+
+    case CTRL('E'):
+      pendingEvent = getInputEvent( KEY_SRIGHT );
+      break;
+	
     case KEY_ESC:
     case CTRL('X'):
       hch = getch( 0 );
