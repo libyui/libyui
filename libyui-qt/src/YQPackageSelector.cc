@@ -16,6 +16,7 @@
 
 /-*/
 
+#define CHECK_DEPENDENCIES_ON_STARTUP	1
 
 #include <qapplication.h>
 #include <qcheckbox.h>
@@ -137,6 +138,12 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
 		_selList->filter();
 	    }
 	}
+
+#if CHECK_DEPENDENCIES_ON_STARTUP
+	// Fire up the first dependency check in the main loop.
+	// Don't do this right away - wait until all initializations are finished.
+	QTimer::singleShot( 0, this, SLOT( autoResolveDependencies() ) );
+#endif
     }
 
     y2milestone( "PackageSelector init done" );
