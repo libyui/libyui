@@ -334,14 +334,28 @@ void NCPkgTable::fillHeader( )
     switch ( tableType )
     {
 	case T_Packages:
-	case T_Availables: {
-	    header.reserve(6);
-	    header.push_back( PkgNames::PkgStatus() );
-	    header.push_back( PkgNames::PkgName() );
-	    header.push_back( PkgNames::PkgVersion() );
-	    header.push_back( PkgNames::PkgSummary() );
-	    header.push_back( PkgNames::PkgSize() );
-	    header.push_back( YCPString( "SPM" ) );
+	case T_Availables:
+	case T_Update:	       {
+	    int installedPkgs = Y2PM::instTarget().numPackages();
+	    if ( installedPkgs > 0 )
+	    {
+		header.reserve(7);
+		header.push_back( PkgNames::PkgStatus() );
+		header.push_back( PkgNames::PkgName() );
+		header.push_back( PkgNames::PkgVersionNew() );
+		header.push_back( PkgNames::PkgVersionInst() );
+		header.push_back( PkgNames::PkgSummary() );
+		header.push_back( PkgNames::PkgSize() );
+	    }
+	    else
+	    {
+		header.reserve(6);
+		header.push_back( PkgNames::PkgStatus() );
+		header.push_back( PkgNames::PkgName() );
+		header.push_back( PkgNames::PkgVersion() );
+		header.push_back( PkgNames::PkgSummary() );
+		header.push_back( PkgNames::PkgSize() );	
+	    }
 	    break;
 	}
 	case T_Patches: {
@@ -421,7 +435,7 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 	    ret = NCursesEvent::handled;
 	    break;
 	}
-	case KEY_F(4): {
+	case KEY_F(3): {
 	    // set the new status
 	    toggleStatus( getDataPointer(citem) );
 
@@ -430,7 +444,7 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 	}
 	default: {
 	    // set the new status
-	    bool ok = keyToStatus( key, newStat );
+	    bool ok = statusStrategy->keyToStatus( key, getDataPointer(citem), newStat );
 	    if ( ok )
 	    {
 		changeStatus( newStat );
@@ -555,54 +569,7 @@ bool NCPkgTable::toggleStatus( PMObjectPtr objPtr )
     return ok;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// NCPkgTable::keyToStatus()
-//
-// Returns the corresponding status
-//
-bool NCPkgTable::keyToStatus( const int & key, PMSelectable::UI_Status & newStat )
-{
-    bool valid = true;
-    PMSelectable::UI_Status retStat = PMSelectable::S_NoInst;
-    
-    // get the new status
-    switch ( key )
-    {
-	case '-':
-	case 'd':
-	case KEY_F(5):
-	    retStat = PMSelectable:: S_Del;
-	    break;
-	case 's':
-	case '+':
-	case KEY_F(3):
-	    retStat = PMSelectable::S_Install;
-	    break;
-	case 'u':
-	case '>':
-	    retStat = PMSelectable::S_Update;
-	    break;
-	case 'i':
-	    retStat = PMSelectable:: S_KeepInstalled;
-	    break;
-	case 'l':
-	    retStat = PMSelectable::S_NoInst;
-	    break;
-	case 't':
-	case '!': 
-	    retStat = PMSelectable::S_Taboo;
-	    break;
-	default:
-	    NCDBG <<  "Key not valid" << endl;
-	    valid = false;
-    }
 
-    if ( valid )
-	newStat = retStat;
-    
-    return valid;
-}
 
 
 

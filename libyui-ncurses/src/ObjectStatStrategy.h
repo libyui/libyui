@@ -55,7 +55,10 @@ public:
     virtual bool setPackageStatus ( PMSelectable::UI_Status newstatus,
 				    PMObjectPtr objPtr
 				    );
-
+    
+    virtual bool keyToStatus( const int & key,
+			      PMObjectPtr objPtr,
+			      PMSelectable::UI_Status & newStat );
 };
 
 //------------------------------------------------------------

@@ -19,6 +19,8 @@
 #include "Y2Log.h"
 #include "ObjectStatStrategy.h"
 
+#include "NCTable.h"
+
 #include <y2pm/PMSelectable.h>
 #include <y2pm/PMObject.h>
 
@@ -82,6 +84,110 @@ bool ObjectStatStrategy::setPackageStatus( PMSelectable::UI_Status newstatus, PM
     return ok;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+// PackageStatStrategy::keyToStatus()
+//
+// Returns the corresponding status
+//
+bool ObjectStatStrategy::keyToStatus( const int & key,
+				      PMObjectPtr objPtr,
+				      PMSelectable::UI_Status & newStat )
+{
+    bool valid = true;
+    PMSelectable::UI_Status retStat = PMSelectable::S_NoInst;
+    PMSelectable::UI_Status oldStatus = getPackageStatus( objPtr );
+    
+    // get the new status
+    switch ( key )
+    {
+	case '-':
+	    if ( oldStatus == PMSelectable::S_KeepInstalled 
+		 || oldStatus == PMSelectable::S_AutoDel   )
+	    {
+		// FIXME: show delete notify
+		retStat = PMSelectable:: S_Del;
+	    }
+	    else if ( oldStatus == PMSelectable::S_AutoUpdate )
+	    {
+		retStat =  PMSelectable::S_KeepInstalled;
+	    }
+	    else if ( oldStatus == PMSelectable:: S_Install
+		      || oldStatus == PMSelectable:: S_AutoInstall )
+	    {
+		retStat = PMSelectable::S_NoInst;	
+	    }
+	    else
+	    {
+		valid = false;
+	    }
+	    break;
+	case '+':
+	    if ( oldStatus == PMSelectable::S_NoInst
+		 || oldStatus == PMSelectable::S_AutoInstall )
+	    {
+		// FIXME: show notify
+		retStat = PMSelectable::S_Install;
+	    }
+	    else if ( oldStatus ==  PMSelectable::S_Del
+		      || oldStatus == PMSelectable::S_AutoDel)
+	    {
+		retStat = PMSelectable::S_KeepInstalled;
+	    }
+	    else if ( oldStatus == PMSelectable::S_AutoUpdate )
+	    {
+		retStat = PMSelectable::S_Update;
+	    }
+	    else
+	    {
+		valid = false;
+	    }
+	    
+	    break;
+	case '>':
+	    if ( oldStatus == PMSelectable::S_KeepInstalled
+		 ||  oldStatus == PMSelectable::S_Del
+		 ||  oldStatus == PMSelectable::S_AutoDel )
+	    {
+		if ( objPtr->hasCandidateObj() )
+		{
+		    retStat = PMSelectable::S_Update;
+		}
+	    }
+	    else
+	    {
+		valid = false;
+	    }
+	    break;
+	case KEY_F(4):
+	    if ( oldStatus == PMSelectable::S_NoInst )
+	    {
+		retStat = PMSelectable::S_Taboo;
+	    }
+	    else
+	    {
+		valid = false;
+	    }
+	    break;
+	case KEY_F(5):
+	    if (  oldStatus == PMSelectable::S_Taboo )
+	    {
+		retStat = PMSelectable::S_NoInst;
+	    }
+	    else
+	    {
+		valid = false;
+	    }
+	default:
+	    NCDBG <<  "Key not valid" << endl;
+	    valid = false;
+    }
+
+    if ( valid )
+	newStat = retStat;
+    
+    return valid;
+}
 
 //------------------------------------------------------------
 // Class for strategies to get status for packages
@@ -94,7 +200,6 @@ PackageStatStrategy::PackageStatStrategy()
     : ObjectStatStrategy()
 {
 }
-
 
 
 

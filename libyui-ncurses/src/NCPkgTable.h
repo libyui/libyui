@@ -107,9 +107,6 @@ private:
 
     NCPkgTableType tableType;	// the type (e.g. table of packages, patches)
     
-    // returns the corresponding package status to the given key
-    bool keyToStatus( const int & key,  PMSelectable::UI_Status & status );
-
     // returns the first column of line with 'index' (the tag)
     NCPkgTableTag * getTag ( const int & index );
 

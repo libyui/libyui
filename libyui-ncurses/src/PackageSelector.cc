@@ -119,7 +119,6 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     eventHandlerMap[ PkgNames::GeneralHelp()->toString() ] = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::StatusHelp()->toString() ]  = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::FilterHelp()->toString() ]  = &PackageSelector::HelpHandler;
-    // FIXME: add handler for all `id s
 
     if ( opt.youMode.value() )
 	youMode = true;
@@ -127,7 +126,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     if ( opt.updateMode.value() )
 	updateMode = true;
 
-    NCMIL << "Number of packages: " << Y2PM::packageManager().size() << endl;
+    // NCMIL << "Number of packages: " << Y2PM::packageManager().size() << endl;
 
     // read test source information
     if ( opt.testMode.value() )
@@ -491,7 +490,7 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, PMObjectPtr obj
 	return false;
     
     list<PMPackagePtr> packages = patchPtr->packages();
-    list<PMPackagePtr>::iterator listIt;
+    list<PMPackagePtr>::const_iterator listIt;
     NCMIL << "Number of patch packages: " << packages.size() << endl;
 	
     unsigned int i;
@@ -649,20 +648,50 @@ bool PackageSelector::createListEntry ( NCPkgTable *pkgTable,
 					unsigned int index )
 {
     vector<string> pkgLine;
-    pkgLine.reserve(4);
+    pkgLine.reserve(5);
 
     if ( !pkgPtr || !pkgTable )
     {
 	NCERR << "No valid package available" << endl;
 	return false;
     }
+    int installedPkgs = Y2PM::instTarget().numPackages();
+    if ( installedPkgs > 0 )
+    {
+	string instVersion = "";
+	string version = "";
 
-    pkgLine.push_back( pkgPtr->getSelectable()->name() );	// package name
-    pkgLine.push_back( pkgPtr->version() );	// version
-    pkgLine.push_back( pkgPtr->summary() );  	// short description
-    FSize size = pkgPtr->size();     	// installed size
-    pkgLine.push_back( size.asString() );
+	pkgLine.push_back( pkgPtr->getSelectable()->name() );	// package name
 
+	if ( pkgPtr->hasInstalledObj() )
+	{
+	    instVersion = pkgPtr->getInstalledObj()->version();
+
+	    if ( pkgPtr->hasCandidateObj() )
+	    {
+		version = pkgPtr->getCandidateObj()->version();
+	    }
+	}
+	else
+	{
+	    version = pkgPtr->version();
+	}
+
+	pkgLine.push_back( version );		// available version
+	pkgLine.push_back( instVersion );	// installed version
+
+	pkgLine.push_back( pkgPtr->summary() );  // short description
+	FSize size = pkgPtr->size();     	// installed size
+	pkgLine.push_back( size.asString() );
+    }
+    else
+    {
+	pkgLine.push_back( pkgPtr->getSelectable()->name() );	// package name
+	pkgLine.push_back( pkgPtr->version() );	// version
+	pkgLine.push_back( pkgPtr->summary() );  	// short description
+	FSize size = pkgPtr->size();     	// installed size
+	pkgLine.push_back( size.asString() );	
+    }
     pkgTable->addLine( pkgPtr->getSelectable()->status(), //  get the package status
 		       pkgLine,
 		       index,		// the index
