@@ -121,10 +121,12 @@ protected:
 
     string startDir;
     string currentDir;
-    NCFileSelectionType tableType;	// the type
+    NCFileSelectionType tableType;	// T_Overview or T_Detailed 
 
     void 	setCurrentDir( );
     string 	getCurrentLine( );
+
+    NCursesEvent handleKeyEvents( wint_t key );
     
 public:
 

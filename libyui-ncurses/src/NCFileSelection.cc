@@ -545,6 +545,35 @@ bool NCFileTable::filterMatch( const string & fileEntry )
 ///////////////////////////////////////////////////////////////////
 //
 //
+//     METHOD NAME : NCFileSelection::handleKeyEvents
+//     METHOD TYPE : NCursesEvent
+//
+//     DESCRIPTION :
+//
+NCursesEvent NCFileSelection::handleKeyEvents( wint_t key )
+{
+    NCursesEvent ret = NCursesEvent::none; 
+
+    if ( sendKeyEvents() &&
+	 (key == KEY_LEFT || key == KEY_RIGHT) )
+    {
+	ret = NCursesEvent::key;
+	switch ( key ) {
+	    case KEY_LEFT:
+		ret.keySymbol = "CursorLeft";
+		break;
+	    case KEY_RIGHT:
+		ret.keySymbol = "CursorRight";
+		break;
+	}
+    }
+    return ret;
+}
+
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //     METHOD NAME : NCFileTable::wHandleInput
 //     METHOD TYPE : NCursesEvent
 //
@@ -552,8 +581,12 @@ bool NCFileTable::filterMatch( const string & fileEntry )
 //
 NCursesEvent NCFileTable::wHandleInput( wint_t key )
 {
-    NCursesEvent ret = NCursesEvent::none;
+    NCursesEvent ret = handleKeyEvents( key );
 
+    // return key event
+    if ( ret == NCursesEvent::key )
+	return ret;
+  
     // call handleInput of NCPad
     handleInput( key );
 
@@ -567,9 +600,9 @@ NCursesEvent NCFileTable::wHandleInput( wint_t key )
 	case KEY_DOWN:
 	case KEY_NPAGE:
 	case KEY_END: {
-		ret = NCursesEvent::SelectionChanged;
-		ret.result = YCPString( currentFile );
-		break;
+	    ret = NCursesEvent::SelectionChanged;
+	    ret.result = YCPString( currentFile );
+	    break;
 	}
 	default:
 	    ret = NCursesEvent::none;
@@ -810,8 +843,12 @@ bool NCDirectoryTable::fillList ( )
 //
 NCursesEvent NCDirectoryTable::wHandleInput( wint_t key )
 {
-    NCursesEvent ret = NCursesEvent::none;
+    NCursesEvent ret = handleKeyEvents( key );
 
+    // return key event
+    if ( ret == NCursesEvent::key )
+	return ret;
+    
     unsigned int old_pos = getCurrentItem();
 
     // call handleInput of NCPad
