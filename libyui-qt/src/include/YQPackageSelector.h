@@ -192,6 +192,13 @@ signals:
      **/
     void loadData();
 
+    /**
+     * Emitted when the internal data base might have changed and a refresh of
+     * all displayed data might be necessary - e.g., when saved (exported) pkgs
+     * states are reimported.
+     **/
+    void refresh();
+
 
 protected:
 

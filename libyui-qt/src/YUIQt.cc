@@ -1284,14 +1284,14 @@ QString YUIQt::askForSaveFileName( const QString & startWith,
 
     do
     {
-	normalCursor();
+	// Leave the mouse cursor alone - this function might be called from
+	// some other widget, not only from UI::AskForSaveFileName().
 	
 	file_name = QFileDialog::getSaveFileName( startWith,
 						  filter,
 						  main_win, 		// parent
 						  "file_selector",	// name
 						  headline );		// caption
-	busyCursor();
 
 	if ( file_name.isEmpty() )	// this includes file_name.isNull()
 	    return QString::null;
@@ -1312,14 +1312,12 @@ QString YUIQt::askForSaveFileName( const QString & startWith,
 		msg = ( _( "%1 exists and is write-protected!\nReally overwrite?" ) ).arg( file_name );
 	    }
 
-	    normalCursor();
 	    int button_no = QMessageBox::information( main_win,
 						      // Window title for confirmation dialog
 						      _( "Confirm"   ),
 						      msg,
 						      _( "C&ontinue" ),
 						      _( "&Cancel"   ) );
-	    busyCursor();
 	    try_again = ( button_no != 0 );
 	}
 

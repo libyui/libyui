@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb 24 17:35:40 CET 2003 - sh@suse.de
+
+- V 2.7.13
+- Fixed bug #23923: Can't save package selection
+
+-------------------------------------------------------------------
 Thu Feb 20 17:58:39 CET 2003 - sh@suse.de
 
 - Fixed bug #23868: Handle preformatted notify texts 

@@ -388,7 +388,7 @@ public:
 				  const YCPString & headline );
 
     /**
-     * Overloaded version to work with QStrings
+     * Lower-level version that works with QStrings and does not change the mouse cursor.
      **/
     QString askForSaveFileName( const QString & startWith,
 				const QString & filter,

@@ -45,12 +45,13 @@
 #include <qvbox.h>
 
 #include <Y2PM.h>
+#include <y2pm/InstTarget.h>
+#include <y2pm/InstYou.h>
 #include <y2pm/PMManager.h>
+#include <y2pm/PMPackageImEx.h>
 #include <y2pm/PMPackageManager.h>
 #include <y2pm/PMSelectionManager.h>
 #include <y2pm/PMYouPatchManager.h>
-#include <y2pm/InstYou.h>
-#include <y2pm/InstTarget.h>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
@@ -255,9 +256,6 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	    _updateProblemFilterView = new YQPkgUpdateProblemFilterView( parent );
 	    CHECK_PTR( _updateProblemFilterView );
 	    _filters->addPage( _( "Update Problems" ), _updateProblemFilterView );
-
-	    connect( _filters,			SIGNAL( currentChanged( QWidget * ) ),
-		     _updateProblemFilterView,	SLOT  ( filterIfVisible()            ) );
 	}
     }
 
@@ -274,9 +272,6 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
 	_youPatchList = _youPatchFilterView->youPatchList();
 	CHECK_PTR( _youPatchList );
-
-	connect( _filters,	SIGNAL( currentChanged( QWidget * ) ),
-		 _youPatchList,	SLOT  ( filterIfVisible()           ) );
     }
 
 
@@ -295,9 +290,6 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
 	_selConflictDialog = new YQPkgConflictDialog( &( Y2PM::selectionManager() ), this );
 	CHECK_PTR( _selConflictDialog );
-
-	connect( _filters, 		SIGNAL( currentChanged( QWidget * ) 	),
-		 _selList,		SLOT  ( filterIfVisible()           	) );
 
 	connect( _selList, 		SIGNAL( statusChanged()	               	),
 		 this,			SLOT  ( resolveSelectionDependencies()	) );
@@ -319,9 +311,6 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
 	connect( this,    			SIGNAL( loadData() ),
 		 _rpmGroupTagsFilterView,	SLOT  ( filter()   ) );
-
-	connect( _filters, 			SIGNAL( currentChanged( QWidget * ) ),
-		 _rpmGroupTagsFilterView,	SLOT  ( filterIfVisible()           ) );
     }
 
 
@@ -334,9 +323,6 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	_searchFilterView = new YQPkgSearchFilterView( parent );
 	CHECK_PTR( _searchFilterView );
 	_filters->addPage( _( "Search" ), _searchFilterView );
-
-	connect( _filters, 		SIGNAL( currentChanged( QWidget * ) ),
-		 _searchFilterView,	SLOT  ( filterIfVisible()           ) );
     }
 
 
@@ -349,9 +335,6 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	_statusFilterView = new YQPkgStatusFilterView( parent );
 	CHECK_PTR( _statusFilterView );
 	_filters->addPage( _( "Installation Summary" ), _statusFilterView );
-
-	connect( _filters, 		SIGNAL( currentChanged( QWidget * ) ),
-		 _statusFilterView,	SLOT  ( filterIfVisible()           ) );
     }
 
 
@@ -653,6 +636,15 @@ YQPackageSelector::connectFilter( QWidget * filter,
     if ( ! filter  )	return;
     if ( ! pkgList )	return;
 
+    if ( _filters )
+    {
+	connect( _filters,	SIGNAL( currentChanged( QWidget * ) ),
+		 filter,	SLOT  ( filterIfVisible()            ) );
+    }
+
+    connect( this,	SIGNAL( refresh()	  ),
+	     filter,	SLOT  ( filterIfVisible() ) );
+
     connect( filter,	SIGNAL( filterStart() 	),
 	     pkgList, 	SLOT  ( clear() 	) );
 
@@ -860,13 +852,37 @@ YQPackageSelector::checkDiskUsage()
 void
 YQPackageSelector::pkgExport()
 {
-    QString filename = YUIQt::yuiqt()->askForSaveFileName( "user.sel",		// startsWith
-							   "*.sel",		// filter
+    QString filename = YUIQt::yuiqt()->askForSaveFileName( QString( "user.sel" ),	// startsWith
+							   QString( "*.sel" ),		// filter
 							   _( "Save Package List" ) );
     if ( ! filename.isEmpty() )
     {
-	notImplemented();
-#warning NOT IMPLEMENTED YET: Save status (waiting for package manager function)
+	y2milestone( "Exporting package list to %s", (const char *) filename );
+	PMPackageImEx exporter;
+	exporter.getPMState();
+
+	if ( exporter.doExport( Pathname( (const char *) filename ) ) )
+	{
+	    // Success
+	    
+	    autoResolveDependencies();
+	}
+	else	// Error
+	{
+	    y2warning( "Error writing package list to %s", (const char *) filename );
+
+	    // PMPackageImEx::doExport() might have left over a partially written file.
+	    // Try to delete that. Don't care if it doesn't exist and unlink() fails.
+	    (void) unlink( (const char *) filename );
+
+	    // Post error popup
+	    QMessageBox::warning( this,						// parent
+				  _( "Error" ),					// caption
+				  _( "Error writing package list to %1" ).arg( filename ),
+				  QMessageBox::Ok | QMessageBox::Default,	// button0
+				  QMessageBox::NoButton,			// button1
+				  QMessageBox::NoButton );			// button2
+	}
     }
 }
 
@@ -881,8 +897,29 @@ YQPackageSelector::pkgImport()
 						      _( "Load Package List" ) );	// caption
     if ( ! filename.isEmpty() )
     {
-	notImplemented();
-#warning NOT IMPLEMENTED YET: Load status (waiting for package manager function)
+	y2milestone( "Importing package list from %s", (const char *) filename );
+	PMPackageImEx importer;
+	importer.getPMState();
+
+	if ( importer.doImport( Pathname( (const char *) filename ) ) )
+	{
+	    // Success
+
+	    importer.setPMState();
+	    emit refresh();
+	}
+	else // Error
+	{
+	    y2warning( "Error reading package list from %s", (const char *) filename );
+
+	    // Post error popup
+	    QMessageBox::warning( this,						// parent
+				  _( "Error" ),					// caption
+				  _( "Error loading package list from %1" ).arg( filename ),
+				  QMessageBox::Ok | QMessageBox::Default,	// button0
+				  QMessageBox::NoButton,			// button1
+				  QMessageBox::NoButton );			// button2
+	}
     }
 }
 
