@@ -657,13 +657,9 @@ bool PackageSelector::fillChangesList(  )
     for ( listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt )
     {
 	PMSelectablePtr selectable = *listIt;
-	if ( selectable->status() == PMSelectable::S_Install
-	     || selectable->status() == PMSelectable::S_Del
-	     || selectable->status() == PMSelectable::S_AutoInstall
-	     || selectable->status() == PMSelectable::S_AutoDel
-	     || selectable->status() == PMSelectable::S_Taboo
-	     || selectable->status() == PMSelectable::S_Update
-	     || selectable->status() == PMSelectable::S_AutoUpdate)
+	// show all packages with status change
+	if ( selectable->status() != PMSelectable::S_NoInst
+	     && selectable->status() != PMSelectable::S_KeepInstalled )  
 	{
 	    packageList->createListEntry( (*listIt)->theObject() );
 	}
