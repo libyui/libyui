@@ -308,11 +308,11 @@ string NCPopupDeps::getDependencyKind(  PkgDep::ErrorResult error )
 	    ret = PkgNames::UnresText().str();
 	}
     }
-    else if ( !error.alternatives.empty() )
+    if ( !error.alternatives.empty() )
     {
 	ret = PkgNames::NeedsText().str();
     }
-    else if ( !error.conflicts_with.empty() )
+    if ( !error.conflicts_with.empty() )
     {
 	ret = PkgNames::ConflictText().str();
 	if ( !error.remove_to_solve_conflict.empty() )
@@ -320,7 +320,7 @@ string NCPopupDeps::getDependencyKind(  PkgDep::ErrorResult error )
 	    NCDBG << "REMOVE to solve not empty" << endl;
 	}
     }
-    else if ( !error.referers.empty() )
+    if ( !error.referers.empty() )
     {
 	ret = PkgNames::RequByText().str();
     }
@@ -392,7 +392,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    errorLabel2->setLabel(  YCPString( "" ) );
 	}
     }
-    else if ( !error.alternatives.empty() )
+    if ( !error.alternatives.empty() )
     {
 	list<PkgDep::Alternative>::iterator it = error.alternatives.begin();
 	while ( it != error.alternatives.end() )
@@ -417,7 +417,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 	errorLabel1->setLabel( PkgNames::LabelAlternative() );
 	errorLabel2->setLabel( YCPString( "" ) );
     }
-    else if ( !error.conflicts_with.empty() )
+    if ( !error.conflicts_with.empty() )
     {
 	list<PkgDep::RelInfo>::iterator it = error.conflicts_with.begin();
 	while ( it != error.conflicts_with.end() )
@@ -456,7 +456,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 	errorLabel1->setLabel( PkgNames::LabelConflict1() );
 	errorLabel2->setLabel( PkgNames::LabelConflict2() );
     }
-    else if ( !error.referers.empty() )
+    if ( !error.referers.empty() )
     {
 	list<PkgDep::RelInfo>::iterator it = error.referers.begin();
 	while ( it != error.referers.end() )
