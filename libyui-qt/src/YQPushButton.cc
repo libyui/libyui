@@ -58,6 +58,7 @@ YQPushButton::YQPushButton(YUIQt *yuiqt,
 void YQPushButton::setEnabling(bool enabled)
 {
     qt_pushbutton->setEnabled(enabled);
+    YWidget::setEnabling( enabled );
 }
 
 
@@ -110,7 +111,7 @@ void YQPushButton::makeDefaultButton()
 
     if ( yParent() && ( dia = (YQDialog *) yDialog() ) )
     {
-	dia->makeDefaultButton( qt_pushbutton );
+	dia->makeDefaultButton( this );
     }
     else	// the yDialog parent may not be set yet!
     {

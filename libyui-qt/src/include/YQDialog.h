@@ -27,7 +27,7 @@
 #include "YDialog.h"
 
 class YUIQt;
-class QPushButton;
+class YQPushButton;
 
 class YQDialog : public QWidget, public YDialog
 {
@@ -101,7 +101,7 @@ public:
     /**
      * Return this dialog's (first) default button or 0 if none
      **/
-    QPushButton *findDefaultButton();
+    YQPushButton *findDefaultButton();
 
 
     /**
@@ -113,7 +113,7 @@ public:
     /**
      * Make the specified button the default button
      **/
-    void makeDefaultButton( QPushButton *new_default_button );
+    void makeDefaultButton( YQPushButton *new_default_button );
 
     
     /**

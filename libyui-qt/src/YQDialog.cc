@@ -195,23 +195,18 @@ YQDialog::resizeEvent ( QResizeEvent *event )
 }
 
 
-QPushButton *
+YQPushButton *
 YQDialog::findDefaultButton()
 {
-    QObjectList *list = queryList( "QPushButton" );
-    QObjectListIt it( *list );
-    QPushButton *button = 0;
-
-    while ( ( button = (QPushButton *) it.current() ) )
+    YWidgetList widgetList   = YDialog::widgets();
+    
+    for ( YWidgetListIterator it = widgetList.begin(); it != widgetList.end(); ++it )
     {
-	if ( button->isDefault() && button->isVisible() )
-	{
-	    delete list;
+	YQPushButton * button = dynamic_cast<YQPushButton *> ( *it );
+
+	if ( button && button->qPushButton()->isDefault() )
 	    return button;
-	}
-	++it;
     }
-    delete list;
 
     return 0;
 }
@@ -243,29 +238,28 @@ YQDialog::ensureOnlyOneDefaultButton()
 
 
 void
-YQDialog::makeDefaultButton( QPushButton *new_default_button )
+YQDialog::makeDefaultButton( YQPushButton * new_default_button )
 {
-    QObjectList *list = queryList( "QPushButton" );
-    QObjectListIt it( *list );
-    QPushButton *button = 0;
-
-    while ( ( button = (QPushButton *) it.current() ) )
+    YWidgetList widgetList   = YDialog::widgets();
+    
+    for ( YWidgetListIterator it = widgetList.begin(); it != widgetList.end(); ++it )
     {
-	button->setDefault( button == new_default_button );
-	++it;
+	YQPushButton * button = dynamic_cast<YQPushButton *> ( *it );
+
+	if ( button )
+	    button->qPushButton()->setDefault( button == new_default_button );
     }
-    delete list;
 }
 
 
 bool
 YQDialog::activateDefaultButton( bool warn )
 {
-    QPushButton * default_button = findDefaultButton();
+    YQPushButton * default_button = findDefaultButton();
 
-    if ( default_button && default_button->isEnabled() )
+    if ( default_button && default_button->qPushButton()->isEnabled() )
     {
-	default_button->animateClick();
+	default_button->qPushButton()->animateClick();
 	return true;
     }
     else
@@ -355,11 +349,11 @@ void YQDialog::focusInEvent( QFocusEvent *event)
     }
     else
     {
-	QPushButton *default_button = findDefaultButton();
+	YQPushButton *default_button = findDefaultButton();
 
 	if ( default_button )
 	{
-	    default_button->setFocus();
+	    default_button->qPushButton()->setFocus();
 	}
 	else
 	{
