@@ -51,7 +51,7 @@ public:
 
 
 protected:
- 
+
     /**
      * Show details for the specified PMObject:
      * In this case technical data, very much like "rpm -qi".
@@ -78,7 +78,7 @@ protected:
      * Make a HTML table cell from a PkgRelList.
      **/
     static QString cell( const PMSolvable::PkgRelList_type & list );
-    
+
     /**
      * Returns a string containing a HTML table cell with 'contents'.
      **/

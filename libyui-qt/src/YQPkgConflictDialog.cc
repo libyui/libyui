@@ -105,12 +105,12 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
     button = new QPushButton( _( "&Expert" ), buttonBox );
     CHECK_PTR( button );
-    
+
     addHStretch( buttonBox );
 
 
     // "Expert" menu
-    
+
     _expertMenu = new QPopupMenu( button );
     CHECK_PTR( _expertMenu );
     button->setPopup( _expertMenu );

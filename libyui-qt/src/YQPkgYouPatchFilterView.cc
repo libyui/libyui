@@ -45,12 +45,12 @@ YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
     : QVBox( parent )
 {
     QVBox * vbox;
-    
+
     _splitter			= new QSplitter( QSplitter::Vertical, this );	CHECK_PTR( _splitter 		);
-    
+
     vbox			= new QVBox( _splitter );			CHECK_PTR( vbox		);
     _youPatchList		= new YQPkgYouPatchList( vbox );		CHECK_PTR( _youPatchList 	);
-    
+
     addVSpacing( vbox, 4 );
     _showInstalledPatches	= new QCheckBox( _( "Include &Installed Patches" ), vbox );
     CHECK_PTR( _showInstalledPatches );
@@ -58,15 +58,15 @@ YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
     connect( _showInstalledPatches, SIGNAL( clicked() ), this, SLOT( fillPatchList() ) );
     _youPatchList->setShowInstalledPatches( _showInstalledPatches->isChecked() );
     addVSpacing( vbox, 4 );
-    
+
     vbox			= new QVBox( _splitter );			CHECK_PTR( vbox		);
     addVSpacing( vbox, 8 );
-    
+
     _detailsViews		= new QTabWidget( vbox );			CHECK_PTR( _detailsViews	);
     _detailsViews->setMargin( MARGIN );
-    
+
     _descriptionView		= new YQPkgDescriptionView( _detailsViews );	CHECK_PTR( _descriptionView	);
-    
+
     _descriptionView->setMinimumSize( 0, 0 );
     _detailsViews->addTab( _descriptionView, _( "Patch Description" ) );
 

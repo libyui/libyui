@@ -57,7 +57,7 @@ protected:
      * one (default) or two buttons.
      *
      * Not meant for public use. Applications should use the static
-     * 'diskUsageWarning' method instead. 
+     * 'diskUsageWarning' method instead.
      **/
     YQPkgDiskUsageWarningDialog( QWidget *		parent,
 				 const QString & 	message,

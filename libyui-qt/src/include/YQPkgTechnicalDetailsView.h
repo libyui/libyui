@@ -51,7 +51,7 @@ public:
 
 
 protected:
- 
+
     /**
      * Show details for the specified PMObject:
      * In this case technical data, very much like "rpm -qi".

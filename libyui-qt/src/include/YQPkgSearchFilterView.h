@@ -93,7 +93,7 @@ signals:
      * Emitted when filtering is finished.
      **/
     void filterFinished();
-    
+
     /**
      * Send a short message about unsuccessful searches.
      **/

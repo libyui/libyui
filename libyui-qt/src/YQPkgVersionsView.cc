@@ -133,7 +133,7 @@ YQPkgVersionsView::showDetails( PMObjectPtr pmObj )
 	if ( pmObj->getInstalledObj() &&
 	     pmObj->getInstalledObj()->edition() == (*it)->edition() )
 	    installedIsAvailable = true;
-	     
+
 #if 0
 	// DEBUG
 	new YQPkgVersion( this, root, *it, _userCanSwitch );
@@ -165,7 +165,7 @@ YQPkgVersionsView::checkForChangedCandidate()
 	if ( versionItem && versionItem->isOn() )
 	{
 	    PMObjectPtr newCandidate = versionItem->pmObj();
-	    
+
 	    if ( newCandidate != _pmObj->getCandidateObj() )
 	    {
 		PMSelectablePtr sel = newCandidate->getSelectable();
@@ -234,7 +234,7 @@ QString
 YQPkgVersion::toolTip( int )
 {
     QString tip;
-    
+
     if ( _pmObj->hasInstalledObj() )
     {
 	tip = _( "This version is installed in your system." );

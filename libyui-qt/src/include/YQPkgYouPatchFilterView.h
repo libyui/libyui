@@ -65,7 +65,7 @@ public:
      **/
     virtual QSize sizeHint() const;
 
-    
+
 protected slots:
 
     /**
@@ -77,7 +77,7 @@ protected slots:
 
 protected:
 
-    
+
     // Data members
 
     QSplitter *			_splitter;

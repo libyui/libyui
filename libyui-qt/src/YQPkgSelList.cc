@@ -45,7 +45,7 @@ YQPkgSelList::YQPkgSelList( QWidget *parent )
 
     connect( this, 	SIGNAL( selectionChanged        ( QListViewItem * ) ),
 	     this, 	SLOT  ( filter()                                    ) );
-    
+
     fillList();
     selectSomething();
 
@@ -128,7 +128,7 @@ YQPkgSelList::addPkgSelItem( PMSelectionPtr pmSel )
 	y2error( "NULL PMSelection!" );
 	return;
     }
-    
+
     new YQPkgSelListItem( this, pmSel);
 }
 

@@ -110,27 +110,27 @@ public slots:
      **/
     void askSaveToFile() const;
 
-    
+
 public:
-    
+
     /**
      * Save the conflict list in its current state to a file. Retains the
      * current 'expanded' state, i.e. writes only those entries that are
      * currently open (not collapsed) in the tree.
      *
      * Posts error popups if 'interactive' is 'true' (only log entries
-     * otherwise). 
+     * otherwise).
      **/
     void saveToFile( const QString filename, bool interactive ) const;
 
-    
+
 protected:
 
     /**
      * (Recursively) save one item to file.
      **/
     void saveItemToFile( FILE * file, const QListViewItem * item ) const;
-    
+
 
 signals:
 
@@ -185,7 +185,7 @@ public:
      **/
     void applyResolution();
 
-    
+
     /**
      * Check if this conflict with header should be ignored.
      **/
@@ -207,7 +207,7 @@ public:
      * 'conflictHeader'.
      **/
     static void ignore( const QString & conflictHeader );
-	
+
     /**
      * Reset all ignored conflicts as if the user had never selected any
      * conflict to ignore.
@@ -302,7 +302,7 @@ protected:
     PkgDep::ErrorResult		_conflict;
     YQPkgConflictList *		_parentList;
 
-    
+
     /**
      * Conflicts that are to be ignored.
      **/

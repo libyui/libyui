@@ -33,7 +33,7 @@ class YQPkgRpmGroupTag;
 /**
  * @short RPM group tags filter view: Display the RPM group tags tree and emit
  * signals if any group tag is selected so a package list can be filled or
- * updated. 
+ * updated.
  **/
 class YQPkgRpmGroupTagsFilterView : public QListView
 {
@@ -56,7 +56,7 @@ public:
      **/
     YQPkgRpmGroupTag * selection() const;
 
-    
+
 public slots:
 
     /**
@@ -79,8 +79,8 @@ public slots:
      * might change without notice. Emits signal selectionChanged().
      **/
     void selectSomething();
-    
-    
+
+
 signals:
 
     /**
@@ -99,7 +99,7 @@ signals:
      **/
     void filterFinished();
 
-    
+
 protected:
 
     /**
@@ -144,7 +144,7 @@ public:
     YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView * 	parentFilterView,
 		      const QString &			rpmGroupName,
 		      YStringTreeItem *			rpmGroup	);
-    
+
     /**
      * Destructor
      **/
@@ -161,7 +161,7 @@ public:
      **/
     const YStringTreeItem * rpmGroup() const { return _rpmGroup; }
 
-    
+
 private:
 
     // Data members

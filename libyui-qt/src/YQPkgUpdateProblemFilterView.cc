@@ -84,7 +84,7 @@ YQPkgUpdateProblemFilterView::filter()
     {
 	PMSelectablePtr selectable = *it;
 	emit filterMatch( (*it)->theObject() );
-	    
+
 	++it;
     }
 

@@ -188,7 +188,7 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
     QString header = "#### YaST2 conflicts list - generated ";
     header += QDateTime::currentDateTime().toString( "yyyy-MM-dd hh:mm:ss");
     header += " ####\n\n";
-    
+
     fputs( (const char *) header, file );
 
 
@@ -227,7 +227,7 @@ YQPkgConflictList::saveItemToFile( FILE * 			file,
     for ( int level = 0; level < item->depth(); level++ )
 	fprintf( file, "    " );
 
-    
+
     // Write item
 
     const QCheckListItem * checkListItem = dynamic_cast<const QCheckListItem *> (item);

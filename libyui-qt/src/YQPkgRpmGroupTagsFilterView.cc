@@ -149,7 +149,7 @@ YQPkgRpmGroupTagsFilterView::check( PMPackagePtr pkg )
 	return true;
     }
 
-    
+
     if ( pkg->group_ptr() == 0 )
     {
 	y2error( "NULL pointer in group_ptr() for package %s", pkg->name().asString().c_str() );

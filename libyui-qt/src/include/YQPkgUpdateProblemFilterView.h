@@ -45,7 +45,7 @@ public:
      **/
     virtual ~YQPkgUpdateProblemFilterView();
 
-    
+
 public slots:
 
     /**
@@ -62,7 +62,7 @@ public slots:
      **/
     void filterIfVisible();
 
-    
+
 signals:
 
     /**

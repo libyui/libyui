@@ -57,7 +57,7 @@ public:
      * Save the pkg list to a file.
      *
      * Posts error popups if 'interactive' is 'true' (only log entries
-     * otherwise). 
+     * otherwise).
      **/
     void exportList( const QString filename, bool interactive ) const;
 
@@ -108,7 +108,7 @@ public slots:
     // and dynamic_cast to PMPackagePtr if required.
     // This saves duplicating a lot of code.
 
-    
+
 protected:
 
     /**
@@ -127,15 +127,15 @@ protected:
      **/
     void setInstallListSourceRpms( bool inst );
 
-    
+
     // Data members
 
     int			_srpmStatusCol;
     QPopupMenu *	_sourceRpmContextMenu;
 
-    
+
 public:
-    
+
     QAction *		actionInstallSourceRpm;
     QAction *		actionDontInstallSourceRpm;
     QAction *		actionInstallListSourceRpms;
@@ -217,7 +217,7 @@ public:
      * Reimplemented from YQPkgObjList.
      **/
     virtual void updateData();
-    
+
     /**
      * Returns a tool tip text for a specific column of this item.
      * 'column' is -1 if the mouse pointer is in the tree indentation area.

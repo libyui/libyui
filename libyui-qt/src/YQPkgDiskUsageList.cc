@@ -209,10 +209,10 @@ YQPkgDiskUsageList::keyPressEvent( QKeyEvent *event )
 		    if ( percent != item->usedPercent() )
 		    {
 			du._used = du.total() * percent / 100;
-			
+
 			runningOutWarning.clear();
 			overflowWarning.clear();
-			
+
 			item->updateDuData( du );
 			postPendingWarnings();
 		    }

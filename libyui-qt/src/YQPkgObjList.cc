@@ -291,19 +291,19 @@ YQPkgObjList::createActions()
     actionSetListDontInstall		= createAction( PMSelectable::S_NoInst,		"", true );
     actionSetListKeepInstalled		= createAction( PMSelectable::S_KeepInstalled,	"", true );
     actionSetListDelete			= createAction( PMSelectable::S_Del,		"", true );
-    
+
     actionSetListUpdate			= createAction( _( "Update if newer version available" ),
 							statusIcon( PMSelectable::S_Update, true ),
 							statusIcon( PMSelectable::S_Update, false ),
 							"",
 							true );
-    
+
     actionSetListUpdateForce		= createAction( _( "Update unconditionally" ),
 							statusIcon( PMSelectable::S_Update, true ),
 							statusIcon( PMSelectable::S_Update, false ),
 							"",
 							true );
-    
+
     actionSetListTaboo			= createAction( PMSelectable::S_Taboo,		"", true );
 
     connect( actionSetCurrentInstall,	     SIGNAL( activated() ), this, SLOT( setCurrentInstall()	  ) );
@@ -840,7 +840,7 @@ YQPkgObjListItem::compare( QListViewItem *	otherListViewItem,
 	    //
 	    // Within these categories, sort versions by ASCII - OK, it's
 	    // pretty random, but predictable.
-	    
+
 	    int thisPoints  = this->versionPoints();
 	    int otherPoints = other->versionPoints();
 

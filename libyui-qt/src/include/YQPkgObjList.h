@@ -88,7 +88,7 @@ public:
      * Only one single statusChanged() signal is emitted.
      *
      * 'force' overrides sensible defaults like setting only PMObjects to
-     * 'update' that really come with a newer version. 
+     * 'update' that really come with a newer version.
      **/
     void setAllItemStatus( PMSelectable::UI_Status newStatus, bool force = false );
 

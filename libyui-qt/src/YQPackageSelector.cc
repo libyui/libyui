@@ -174,7 +174,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
 	}
 #endif
     }
-    
+
     if ( _testMode && _diskUsageList )
     {
 	y2milestone( "Using fake disk usage data" );
@@ -628,7 +628,7 @@ YQPackageSelector::makeConnections()
 	connect( _pkgList,		SIGNAL( statusChanged()   ),
 		 _diskUsageList,	SLOT  ( updateDiskUsage() ) );
     }
-    
+
     //
     // Connect conflict dialog
     //
@@ -701,8 +701,8 @@ If you are not absolutely sure how to handle such a case, better \
 press <b>Cancel</b> now and deselect some packages.\
 </p>\
 ");
-    
-    return YQPkgDiskUsageWarningDialog::diskUsageWarning( msg, 
+
+    return YQPkgDiskUsageWarningDialog::diskUsageWarning( msg,
 							  100, _("&Continue anyway"), _("&Cancel") );
 
 }

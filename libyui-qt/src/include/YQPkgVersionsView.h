@@ -176,7 +176,7 @@ public:
      **/
     virtual QString toolTip( int column );
 
-    
+
     // Columns
 
     int versionCol()		const	{ return _pkgVersionList->versionCol();	}

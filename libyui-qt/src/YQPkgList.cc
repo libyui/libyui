@@ -287,7 +287,7 @@ YQPkgList::exportList(  const QString filename, bool interactive ) const
 		     (const char *) pkg->text( sizeCol()    )
 		     );
 	}
-	
+
 	item = item->nextSibling();
     }
 

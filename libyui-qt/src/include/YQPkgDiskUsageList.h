@@ -109,7 +109,7 @@ public:
      * been posted.
      **/
     void clearHistory();
-    
+
 
 protected:
 
@@ -167,7 +167,7 @@ public:
      **/
     YQPkgWarningRangeNotifier overflowWarning;
 
-    
+
 public slots:
 
     /**
@@ -177,7 +177,7 @@ public slots:
 
     /**
      * Post all pending disk space warnings based on the warning range
-     * notifiers. 
+     * notifiers.
      **/
     void postPendingWarnings();
 
@@ -262,7 +262,7 @@ public:
      **/
     void checkRemainingDiskSpace();
 
-    
+
 protected:
 
     // Data members

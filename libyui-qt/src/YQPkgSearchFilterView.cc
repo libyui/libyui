@@ -179,7 +179,7 @@ YQPkgSearchFilterView::filter()
     {
 	// Create a progress dialog that is only displayed if the search takes
 	// longer than a couple of seconds (default: 4).
-	
+
 	QProgressDialog progress( _( "Searching..." ),
 				  _( "Cancel" ),
 				  Y2PM::packageManager().size() );
@@ -192,7 +192,7 @@ YQPkgSearchFilterView::filter()
 
 	int count = 0;
 	timer.start();
-	
+
 	PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
 	while ( it != Y2PM::packageManager().end() && ! progress.wasCancelled() )
@@ -211,20 +211,20 @@ YQPkgSearchFilterView::filter()
 		 ! selectable->installedObj()   )
 		check( selectable->theObject(), regexp );
 
-	    
+
 	    progress.setProgress( count++ );
-	    
+
 	    if ( timer.elapsed() > 300 ) // milisec
 	    {
 		// Process events only every 300 milliseconds - this is very
 		// expensive since both the progress dialog and the package
 		// list change all the time, thus display updates are necessary
 		// each time.
-		
+
 		qApp->processEvents();
 		timer.restart();
 	    }
-	    
+
 	    ++it;
 	}
 

@@ -75,7 +75,7 @@ public slots:
      * Emit an updatePackages() signal.
      **/
     void sendUpdatePackages() { emit updatePackages(); }
-    
+
     /**
      * Fill the selection list.
      **/
@@ -106,7 +106,7 @@ public:
      **/
     void setShowInstalledPatches( bool show ) { _showInstalledPatches = show; }
 
-    
+
 signals:
 
     /**
@@ -131,9 +131,9 @@ signals:
      **/
     void filterFinished();
 
-    
+
 protected:
-    
+
     /**
      * Create the context menu for items that are not installed.
      * Reimplemented from YQPkgObjList.

@@ -151,11 +151,11 @@ public:
      *
      * Reimplemented from YQPkgObjListItem:
      * Activate selections and emit updatePackages signal for each
-     * status change. 
+     * status change.
      **/
     virtual void setStatus( PMSelectable::UI_Status newStatus );
 
-    
+
     /**
      * Comparison function used for sorting the list.
      * Returns:

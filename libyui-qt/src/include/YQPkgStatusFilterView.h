@@ -108,7 +108,7 @@ protected:
 				   const QString & 	label,
 				   const QPixmap &	icon,
 				   bool 		initiallyChecked );
-    
+
     // Data members
 
     QCheckBox *		_showAutoDel;
@@ -120,7 +120,7 @@ protected:
     QCheckBox *		_showNoInst;
     QCheckBox *		_showTaboo;
     QCheckBox *		_showUpdate;
-    
+
     QPushButton *	_refreshButton;
 };
 

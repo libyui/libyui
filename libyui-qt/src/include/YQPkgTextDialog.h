@@ -72,10 +72,10 @@ public:
 
     /**
      * Convert a string list into its HTML paragraphs (empty lines delimit
-     * paragraphs). 
+     * paragraphs).
      **/
     static QString htmlParagraphs( const std::list<std::string> & text );
-    
+
     /**
      * Returns a uniform heading in HTML format for the specified package:
      * Package name and summary
@@ -92,7 +92,7 @@ public:
      **/
     static QString htmlEscape( const QString & plainText );
 
-    
+
 public slots:
 
     /**
@@ -107,7 +107,7 @@ public slots:
      **/
     void setText( PMObjectPtr pmObj,
 		  const std::list<std::string> & text );
-    
+
 protected:
 
     /**
@@ -116,9 +116,9 @@ protected:
      **/
     bool eventFilter( QObject *obj, QEvent *ev );
 
-    
+
     // Data members
-    
+
     QPushButton *	_okButton;
     QTextBrowser *	_textBrowser;
 };
