@@ -42,8 +42,8 @@
 					     `item( `id(`tabooOn), 	_( "Taboo &Yes   [!]" ) ),
 					     // reset the status 'Taboo' 
 					     `item( `id(`tabooOff), 	_( "Taboo &No    [-]" ) ),
-					     // toggle installation of sources (SRPMs)
-					     `item( `id(`toggleSrc), 	_( "&Install Sources Yes/No" ) ),
+					     // toggle installation of sources (SRPMs) - keep it short, it's a menu entry
+					     `item( `id(`toggleSrc), 	_( "Toggle &Installation of Sources" ) ),
 					     // end: Actions menu, set status of all packages (title of a submenu)
 					     `menu( _( "All Listed &Packages" ),
 						    [
@@ -80,7 +80,7 @@
 										     `item( `id(`autodeps), _( "[X] &Automatic Dependency Check" ) ) ]
 										    ),
 									      // menu item of the Etc. menu
-									     `menu( _( "&Selections"),
+									     `menu( _( "&Selections" ),
 										    // menu item of the Etc./Selections submenu
 										    [`item( `id(`save), _( "S&ave Selection" ) ),
 										     `item( `id(`load), _( "&Load Selection" ) ) ]
