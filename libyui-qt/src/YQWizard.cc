@@ -734,6 +734,9 @@ void YQWizard::layoutButtonBox()
 
     addHSpacing( _buttonBox );
 
+    if ( _backButton->text().isEmpty() )
+	_backButton->hide();
+
 
     //
     // "Next" button
