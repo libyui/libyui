@@ -154,8 +154,12 @@ void YQDialog::setSize(long newWidth, long newHeight)
     }
 
 
-    YContainerWidget::child(0)->setSize (newWidth  - 2 * decorationWidth( YD_HORIZ ),
-					 newHeight - 2 * decorationWidth( YD_VERT  ) );
+    if ( numChildren() > 0 )
+    {
+	YContainerWidget::child(0)->setSize (newWidth  - 2 * decorationWidth( YD_HORIZ ),
+					     newHeight - 2 * decorationWidth( YD_VERT  ) );
+    }
+    
     if ( _qFrame )
 	_qFrame->resize( newWidth, newHeight );
 

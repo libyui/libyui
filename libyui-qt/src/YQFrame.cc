@@ -52,7 +52,8 @@ YQFrame::setSize ( long newwidth, long newheight )
     long newChildWidth  = max ( 0L, newwidth  - 2 * frameWidth() );
     long newChildHeight = max ( 0L, newheight - frameWidth() - fontMetrics().height() );
 
-    YContainerWidget::child(0)->setSize (newChildWidth, newChildHeight);
+    if ( numChildren() > 0 )
+	YContainerWidget::child(0)->setSize (newChildWidth, newChildHeight);
 
 }
 
@@ -68,7 +69,7 @@ YQFrame::setLabel ( const YCPString & newLabel )
 long YQFrame::nicesize ( YUIDimension dim )
 {
     long niceSize;
-    long childNiceSize = YContainerWidget::child(0)->nicesize ( dim );
+    long childNiceSize = numChildren() > 0 ? YContainerWidget::child(0)->nicesize ( dim ) : 0;
 
     if ( dim == YD_HORIZ )
     {
