@@ -81,7 +81,7 @@ long YQTextEntry::nicesize( YUIDimension dim )
 	long minSize	= _shrinkable ? 15 : 200;
 	long hintWidth	= _qt_label->sizeHint().width() + margin();
 
-	if ( ! _qt_label->isVisible() )
+	if ( _qt_label->text().isEmpty() )
 	    hintWidth = 0;
 
 	return max( minSize, hintWidth );

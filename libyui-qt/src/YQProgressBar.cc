@@ -73,7 +73,7 @@ long YQProgressBar::nicesize( YUIDimension dim )
 	long minSize = 200;
 	long hintWidth = _qt_label->sizeHint().width() + margin();
 
-	if ( ! _qt_label->isVisible() )
+	if ( _qt_label->text().isEmpty() )
 	    hintWidth = 0;
 
 	return max( minSize, hintWidth );
