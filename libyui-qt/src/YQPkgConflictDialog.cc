@@ -91,7 +91,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
     // Cancel button
 
-    _cancelButton = new QPushButton( _( "&Cancel - Ignore All" ), buttonBox );
+    _cancelButton = new QPushButton( _( "&Cancel" ), buttonBox );
     CHECK_PTR( _cancelButton );
 
     connect( _cancelButton, SIGNAL( clicked() ),
