@@ -26,10 +26,6 @@
 #include "PkgNames.h"
 #include "NCFrame.h"
 
-#include <Y2PM.h>
-#include <y2pm/RpmDb.h>
-#include <y2pm/PMSelectionManager.h>
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -57,7 +53,7 @@ NCAskForExistingDirectory::NCAskForExistingDirectory( const wpos at,
 {
     createLayout( iniDir, headline );
 
-    dirList->fillDirectoryList( );
+    dirList->fillList( );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -129,7 +125,7 @@ void NCAskForExistingDirectory::createLayout( const YCPString & iniDir,
     hSplit->addChild( detailed );
     
     // add the list of directories
-    dirList = new NCFileTable( split, opt, NCFileTable::T_Overview, iniDir );
+    dirList = new NCDirectoryTable( split, opt, NCFileTable::T_Overview, iniDir );
     dirList->setId( PkgNames::DirList() );
     split->addChild( dirList );
 
@@ -213,9 +209,7 @@ NCursesEvent NCAskForExistingDirectory::wHandleInput( wint_t ch )
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;
 
-    NCursesEvent retEvent = NCDialog::wHandleInput( ch );
-
-    return retEvent;
+    return NCDialog::wHandleInput( ch );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -255,7 +249,6 @@ bool NCAskForExistingDirectory::postAgain( )
 	    if ( postevent.reason == YEvent::Activated )
 	    {
 		bool details = getCheckBoxValue( detailed );
-		NCMIL << "Details: " << (details?"true":"false") << endl;
 		if ( details )
 		{
 		    dirList->setTableType( NCFileTable::T_Detailed );
@@ -265,18 +258,17 @@ bool NCAskForExistingDirectory::postAgain( )
 		    dirList->setTableType( NCFileTable::T_Overview );
 		}
 		// fill directory list
-		dirList->fillDirectoryList();
+		dirList->fillList();
 	    }
 	}
 	else if ( currentId->compare( PkgNames::DirName() ) == YO_EQUAL )
 	{
 	    dirList->setStartDir( dirName->getValue() );
-	    dirList->fillDirectoryList();
+	    dirList->fillList();
 	}
 	else if ( currentId->compare( PkgNames::Details() ) == YO_EQUAL )
 	{
 	    bool details = getCheckBoxValue( detailed );
-	    NCMIL << "Details: " << (details?"true":"false") << endl;
 	    if ( details )
 	    {
 		dirList->setTableType( NCFileTable::T_Detailed );
@@ -286,7 +278,7 @@ bool NCAskForExistingDirectory::postAgain( )
 		dirList->setTableType( NCFileTable::T_Overview );
 	    }
 	    // fill directory list
-	    dirList->fillDirectoryList(); 
+	    dirList->fillList(); 
 	}
 	else
 	{

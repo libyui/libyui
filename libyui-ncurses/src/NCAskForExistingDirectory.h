@@ -26,7 +26,7 @@
 
 #include "NCPopup.h"
 #include "NCLabel.h"
-#include "NCFileTable.h"
+#include "NCFileSelection.h"
 #include "NCPushButton.h"
 #include "NCComboBox.h"
 #include "NCCheckBox.h"
@@ -48,14 +48,12 @@ private:
     NCPushButton * okButton;
     NCPushButton * cancelButton;
     NCComboBox * dirName;
-    NCFileTable *dirList;		// directory list
+    NCDirectoryTable *dirList;		// directory list
     NCCheckBox *detailed;
 
     bool getCheckBoxValue( NCCheckBox * detailed );
     
 protected:
-
-    std::string getCurrentLine();
 
     virtual bool postAgain();
 
@@ -66,6 +64,7 @@ public:
     NCAskForExistingDirectory( const wpos at,
 			       const YCPString & startDir,
 			       const YCPString & headline );
+
     virtual ~NCAskForExistingDirectory();
 
     /**
@@ -81,12 +80,6 @@ public:
      */
     void createLayout( const YCPString & iniDir,
 		       const YCPString & headline );
-
-    /**
-     * Fills the list with the directories
-     * @return bool Returns true on success
-     */
-    bool fillDirectoryList ( );
 
     /**
      * Shows the popup with the list of directories.
