@@ -112,7 +112,7 @@ protected:
      * Check if 'pkg' matches 'selectedRpmGroup'.
      * Returns true if there is a match, false otherwise or if 'pkg' is 0.
      **/
-    bool check( PMPackagePtr pkg, const std::string & selectedRpmGroup );
+    bool check( PMPackagePtr pkg );
 
     
     // Data members

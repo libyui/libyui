@@ -100,8 +100,8 @@ YQPkgRpmGroupTagsFilterView::filter()
 
     if ( _selection )
     {
-	std::string selectedRpmGroup = Y2PM::packageManager().rpmGroup( _selection->rpmGroup() );
-	y2debug( "Searching packages that match '%s'", selectedRpmGroup.c_str() );
+	std::string selectedRpmGroupPath = Y2PM::packageManager().rpmGroup( _selection->rpmGroup() );
+	y2debug( "Searching packages that match '%s'", selectedRpmGroupPath.c_str() );
 	
 	PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
@@ -118,8 +118,8 @@ YQPkgRpmGroupTagsFilterView::filter()
 	    // entries for the same package!
 	    
 	    bool match =
-		check( selectable->installedObj(), selectedRpmGroup ) ||
-		check( selectable->candidateObj(), selectedRpmGroup );
+		check( selectable->installedObj() ) || 
+		check( selectable->candidateObj() );  
 
 	    // If there is neither an installed nor a candidate package, check
 	    // any other instance.  
@@ -127,12 +127,12 @@ YQPkgRpmGroupTagsFilterView::filter()
 	    if ( ! match			&&
 		 ! selectable->installedObj()	&&
 		 ! selectable->candidateObj()     )
-		check( selectable->theObject(), selectedRpmGroup );
+		check( selectable->theObject() );
 
 	    ++it;
 	}
 
-	y2debug( "Search for '%s' finished", selectedRpmGroup.c_str() );
+	y2debug( "Search for '%s' finished", selectedRpmGroupPath.c_str() );
     }
 
     emit filterFinished();
@@ -140,13 +140,12 @@ YQPkgRpmGroupTagsFilterView::filter()
 
 
 bool
-YQPkgRpmGroupTagsFilterView::check( PMPackagePtr pkg, const std::string & selectedRpmGroup )
+YQPkgRpmGroupTagsFilterView::check( PMPackagePtr pkg )
 {
-    if ( ! pkg )
+    if ( ! pkg || ! _selection )
 	return false;
 
-
-    if ( pkg->group().compare( 0, selectedRpmGroup.length(), selectedRpmGroup ) == 0 )
+    if ( _selection->rpmGroup() == pkg->group_ptr() )
     {
 #if 1
 	// DEBUG
@@ -154,12 +153,14 @@ YQPkgRpmGroupTagsFilterView::check( PMPackagePtr pkg, const std::string & select
 	y2debug( "Found match for pkg '%s'", name.c_str() );
 	// DEBUG
 #endif
-	emit filterMatch( pkg );
 	
+	emit filterMatch( pkg );
 	return true;
     }
-
-    return false;
+    else
+    {
+	return false;
+    }
 }
 
 
