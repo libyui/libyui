@@ -118,15 +118,15 @@ YQPkgRpmGroupTagsFilterView::filter()
 	    // entries for the same package!
 
 	    bool match =
-		check( selectable->installedObj() ) ||
-		check( selectable->candidateObj() );
+		check( selectable->candidateObj() ) ||
+		check( selectable->installedObj() );
 
 	    // If there is neither an installed nor a candidate package, check
 	    // any other instance.
 
 	    if ( ! match			&&
-		 ! selectable->installedObj()	&&
-		 ! selectable->candidateObj()     )
+		 ! selectable->candidateObj()   &&
+		 ! selectable->installedObj()	  )
 		check( selectable->theObject() );
 
 	    ++it;

@@ -185,15 +185,15 @@ YQPkgSearchFilterView::filter()
 	    PMSelectablePtr selectable = *it;
 
 	    bool match =
-		check( selectable->installedObj(), regexp ) ||
-		check( selectable->candidateObj(), regexp );
+		check( selectable->candidateObj(), regexp ) ||
+		check( selectable->installedObj(), regexp );
 
 	    // If there is neither an installed nor a candidate package, check
 	    // any other instance.
 
 	    if ( ! match                      &&
-		 ! selectable->installedObj() &&
-		 ! selectable->candidateObj()     )
+		 ! selectable->candidateObj() &&
+		 ! selectable->installedObj()   )
 		check( selectable->theObject(), regexp );
 
 	    ++it;
