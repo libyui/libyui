@@ -140,6 +140,16 @@ public:
      **/
     bool activateDefaultButton( bool warn = true );
 
+
+    /**
+     * Center a dialog relative to 'parent'.
+     *
+     * If 'parent' is 0, the dialog is centered relative to the application's
+     * main widget. If 'dialog' is the main widget and 'parent' is 0, the
+     * dialog is centered relative to the desktop.
+     **/
+    static void center( QWidget * dialog, QWidget * parent = 0 );
+
     
 protected:
 

@@ -439,20 +439,39 @@ void YQDialog::focusInEvent( QFocusEvent *event)
 }
 
 
-void YQDialog::show()
+void
+YQDialog::show()
 {
-    if ( ! hasDefaultSize() )
+    if ( ! hasDefaultSize()
+	 && qApp->mainWidget()->isVisible() )
     {
-	// Center popup widgets relative to the main window
-
-	QWidget *main_win = qApp->mainWidget();
-	QPoint dia_pos( ( main_win->width()  - width()  ) / 2,
-			( main_win->height() - height() ) / 2 );
-	dia_pos += main_win->pos();
-	dia_pos = mapToParent( mapFromGlobal( dia_pos ) );
-	move( dia_pos );
+	center( this, qApp->mainWidget() );
     }
+    
     QWidget::show();
+}
+
+
+void
+YQDialog::center( QWidget * dialog, QWidget * parent )
+{
+    if ( ! dialog )
+	return;
+    
+    if ( ! parent )
+    {
+	if ( dialog == qApp->mainWidget() )
+	    parent = qApp->desktop();
+	else
+	    parent = qApp->mainWidget();
+    }
+
+    QPoint pos( ( parent->width()  - dialog->width()  ) / 2,
+		( parent->height() - dialog->height() ) / 2 );
+
+    pos += parent->mapToGlobal( QPoint( 0, 0 ) );
+    pos = dialog->mapToParent( dialog->mapFromGlobal( pos ) );
+    dialog->move( pos );
 }
 
 

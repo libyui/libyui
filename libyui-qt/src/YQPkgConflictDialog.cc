@@ -42,6 +42,7 @@
 #include "YQPkgConflictDialog.h"
 #include "YQPkgConflictList.h"
 #include "YQPackageSelector.h"
+#include "YQDialog.h"
 
 #include "YUIQt.h"
 #include "YQi18n.h"
@@ -160,6 +161,8 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
 			     WStyle_Customize | WStyle_Dialog | WType_Dialog );
     CHECK_PTR( _busyPopup );
     _busyPopup->setCaption( "" );
+    _busyPopup->resize( _busyPopup->sizeHint() );
+    YQDialog::center( _busyPopup, parent );
 
 
     // Here comes a real nasty hack.
@@ -245,6 +248,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
 
     if ( _solveCount++ == 0 || averageSolveTime() > 0.0 )
     {
+	YQDialog::center( _busyPopup, parentWidget() );
 	_busyPopup->show();
 	
 	// No _busyPopup->repaint() - that doesn't help anyway (Qt doesn't do

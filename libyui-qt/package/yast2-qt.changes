@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Mar  6 17:49:30 CET 2003 - sh@suse.de
+
+- Fixed bug #24615: "checking dependencies" popup not centered
+
+-------------------------------------------------------------------
 Wed Mar  5 21:47:35 CET 2003 - sh@suse.de
 
 - Fixed bug #24707: QListView tooltips only on right scroll bar 
