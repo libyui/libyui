@@ -454,11 +454,20 @@ void NCurses::SetTitle( const string & str )
 
     setTextdomain( "packages" );
     // part of title (headline) of the textmode yast
-    string helpF1 = _( "Press F1 for Help" );
+    NCstring helpF1 ( _( "Press F1 for Help" ) );
+    wstring help = helpF1.str();
+    int s = myself->title_w->_maxx - help.length();
     
-    int s = myself->title_w->_maxx - helpF1.length();
-    ::mvwaddstr( myself->title_w, 0, s, helpF1.c_str() );
-
+    if ( NCstring::terminalEncoding() != "UTF-8" )
+    {
+	string out;
+	NCstring::RecodeFromWchar( help, NCstring::terminalEncoding(), &out );
+	::mvwaddstr( myself->title_w, 0, s, out.c_str() );
+    }
+    else
+    {
+	::mvwaddwstr( myself->title_w, 0, s, (wchar_t *)help.c_str() );
+    }
     ::mvwaddstr( myself->title_w, 0, 1, myself->title_t.c_str() );
     ::wnoutrefresh( myself->title_w );
   }

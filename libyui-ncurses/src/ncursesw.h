@@ -455,6 +455,13 @@ inline int UNDEF(waddwstr)(WINDOW *win, wchar_t *str) { return waddwstr(win, str
 #define waddwstr UNDEF(waddwstr)
 #endif
 
+#ifdef mvwaddwstr
+inline int UNDEF(mvwaddwstr)(WINDOW *win, int y, int x, wchar_t *str)
+{ return mvwaddwstr(win, y, x, str); }
+#undef mvwaddwstr
+#define mvwaddwstr UNDEF(mvwaddwstr)
+#endif
+
 #ifdef waddchstr
 inline int UNDEF(waddchstr)(WINDOW *win, chtype *at) { return waddchstr(win, at); }
 #undef waddchstr
