@@ -44,7 +44,8 @@ typedef enum YQPkgConflictResolutionType
 {
     YQPkgConflictUndo,
     YQPkgConflictIgnore,
-    YQPkgConflictBruteForceDelete,
+    YQPkgConflictDeleteConflictors,
+    YQPkgConflictDeleteReferers,
     YQPkgConflictAlternative
 };
 
@@ -283,24 +284,30 @@ protected:
     void addAlternativesList( QY2CheckListItem * parent );
 
     /**
+     * Add resolution suggestion: Delete all conflicting packages.
+     **/
+    void addDeleteConflictsResolution( QY2CheckListItem * parent );
+
+    /**
      * Add brute force resolution suggestion: Delete all dependent packages.
      **/
-    void addDeleteResolution( QY2CheckListItem * parent );
-
+    void addDeleteReferersResolution( QY2CheckListItem * parent );
+ 
     /**
      * Add resolution suggestion: Ignore conflict, risk inconsistent system
      **/
     void addIgnoreResolution( QY2CheckListItem * parent );
 
     /**
-     * Dump the 'remove_to_solve_conflict' list into the conflict list.
+     * Dump the specified list (remove_to_solve_conflict/remove_referers) into
+     * the conflict list.
      **/
-    void dumpDeleteList( QListViewItem * parent );
+    void dumpDeleteList( QListViewItem * parent, PkgDep::SolvableList& solvablelist );
 
     /**
      * Remove everything in the remove list.
      **/
-    void bruteForceDelete();
+    void bruteForceDelete(PkgDep::SolvableList& solvablelist);
 
     /**
      * Paint method. Reimplemented from @ref QListViewItem a different

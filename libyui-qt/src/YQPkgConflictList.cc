@@ -537,7 +537,8 @@ YQPkgConflict::addResolutionSuggestions()
 
     addUndoResolution  ( header );
     addAlternativesList( header );
-    addDeleteResolution( header );
+    addDeleteConflictsResolution( header );
+    addDeleteReferersResolution( header );
 
     if ( _canIgnore )
 	addIgnoreResolution( header );
@@ -586,7 +587,18 @@ YQPkgConflict::addUndoResolution( QY2CheckListItem * parent )
 	    _undo_status = PMSelectable::S_NoInst;
 	    break;
 
-	case PMSelectable::S_KeepInstalled:	return;	// shouldn't happen
+	case PMSelectable::S_KeepInstalled:
+	    if(!_conflict.is_downgrade_from.is_unspecified())
+	    {
+		// %1 package name, %2 version
+		text = ( _( "Downgrade %1 to version %2" ) ).arg(
+		    _shortName+"-"+_conflict.is_downgrade_from.asString().c_str() ).arg(
+			_conflict.edition.asString().c_str());
+		_undo_status = PMSelectable::S_Update;
+		break;
+	    }
+	    else
+		return;	// shouldn't happen
 	case PMSelectable::S_NoInst:		return;	// shouldn't happen
     }
 
@@ -615,7 +627,7 @@ YQPkgConflict::addAlternativesList( QY2CheckListItem * parent )
 
 
 void
-YQPkgConflict::addDeleteResolution( QY2CheckListItem * parent )
+YQPkgConflict::addDeleteConflictsResolution( QY2CheckListItem * parent )
 {
     if ( _conflict.remove_to_solve_conflict.empty() )
 	return;
@@ -638,17 +650,50 @@ YQPkgConflict::addDeleteResolution( QY2CheckListItem * parent )
     }
 
     YQPkgConflictResolution * res =
-	new YQPkgConflictResolution( parent, text, YQPkgConflictBruteForceDelete );
+	new YQPkgConflictResolution( parent, text, YQPkgConflictDeleteConflictors );
 
     CHECK_PTR( res );
     res->setOpen( true );
 
-    dumpDeleteList( res );
+    dumpDeleteList( res, _conflict.remove_to_solve_conflict );
 }
 
 
 void
-YQPkgConflict::dumpDeleteList( QListViewItem * parent )
+YQPkgConflict::addDeleteReferersResolution( QY2CheckListItem * parent )
+{
+    if ( _conflict.remove_referers.empty() )
+	return;
+
+    QString text;
+
+    if ( _conflict.remove_referers.size() == 1 )
+    {
+	if ( _isPkg )
+	    text = _( "Remove the Referring Package" );
+	else
+	    text = _( "Remove the Referring Selection" );
+    }
+    else
+    {
+	if ( _isPkg )
+	    text = ( _( "Remove All %1 Referring Packages" ) ).arg( _conflict.remove_referers.size() );
+	else
+	    text = ( _( "Remove All %1 Referring Selections" ) ).arg( _conflict.remove_referers.size() );
+    }
+
+    YQPkgConflictResolution * res =
+	new YQPkgConflictResolution( parent, text, YQPkgConflictDeleteReferers );
+
+    CHECK_PTR( res );
+    res->setOpen( true );
+
+    dumpDeleteList( res, _conflict.remove_referers );
+}
+
+
+void
+YQPkgConflict::dumpDeleteList( QListViewItem * parent, PkgDep::SolvableList& solvablelist )
 {
     if ( ! parent )
     {
@@ -657,18 +702,18 @@ YQPkgConflict::dumpDeleteList( QListViewItem * parent )
     }
 
     int	 splitThreshold = LIST_SPLIT_THRESHOLD;
-    bool doSplit	= _conflict.remove_to_solve_conflict.size() > (unsigned) splitThreshold + 3;
+    bool doSplit	= solvablelist.size() > (unsigned) splitThreshold + 3;
     bool didSplit	= false;
     int  count		= 0;
-    list<PMSolvablePtr>::const_iterator it = _conflict.remove_to_solve_conflict.begin();
+    list<PMSolvablePtr>::const_iterator it = solvablelist.begin();
 
-    while ( it != _conflict.remove_to_solve_conflict.end() )
+    while ( it != solvablelist.end() )
     {
 	if ( doSplit && ! didSplit && ++count > splitThreshold )
 	{
 	    // Split list
 
-	    int more = _conflict.remove_to_solve_conflict.size() - count + 1;
+	    int more = solvablelist.size() - count + 1;
 	    QString text = ( _( "%1 more..." ) ).arg( more );
 	    QY2ListViewItem * sublist = new QY2ListViewItem( parent, text, true );
 	    didSplit = true;
@@ -910,8 +955,12 @@ YQPkgConflict::applyResolution()
 		    ignore();
 		    return;
 
-		case YQPkgConflictBruteForceDelete:
-		    bruteForceDelete();
+		case YQPkgConflictDeleteConflictors:
+		    bruteForceDelete(_conflict.remove_to_solve_conflict);
+		    return;
+
+		case YQPkgConflictDeleteReferers:
+		    bruteForceDelete(_conflict.remove_referers);
 		    return;
 
 		case YQPkgConflictAlternative:
@@ -934,14 +983,14 @@ YQPkgConflict::applyResolution()
 
 
 void
-YQPkgConflict::bruteForceDelete()
+YQPkgConflict::bruteForceDelete(PkgDep::SolvableList& solvablelist)
 {
-    if ( _conflict.remove_to_solve_conflict.empty() )
+    if ( solvablelist.empty() )
 	return;
 
-    list<PMSolvablePtr>::const_iterator it = _conflict.remove_to_solve_conflict.begin();
+    list<PMSolvablePtr>::const_iterator it = solvablelist.begin();
 
-    while ( it != _conflict.remove_to_solve_conflict.end() )
+    while ( it != solvablelist.end() )
     {
 	PMObjectPtr pkg = ( *it );
 
@@ -988,7 +1037,8 @@ YQPkgConflictResolution::typeString() const
     {
 	case YQPkgConflictUndo:			text = "Undo";			break;
 	case YQPkgConflictIgnore:		text = "Ignore";		break;
-	case YQPkgConflictBruteForceDelete:	text = "BruteForceDelete";	break;
+	case YQPkgConflictDeleteConflictors:	text = "DeleteConflictors";	break;
+	case YQPkgConflictDeleteReferers:	text = "DeleteReferers";	break;
 	case YQPkgConflictAlternative:		text = "Alternative";		break;
     };
 
