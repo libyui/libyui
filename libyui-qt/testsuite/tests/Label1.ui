@@ -1,0 +1,11 @@
+{
+    OpenDialog(
+	       `VBox( 
+		     `Label("Hello, World!"),
+		     `PushButton("&OK")
+		     )
+	       );
+    UserInput();
+    CloseDialog();
+    return 0;
+}

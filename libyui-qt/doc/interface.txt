@@ -1,0 +1,101 @@
+
+This is a description of the user interface, how to control it and how
+the interface can be used.
+
+-----------------
+
+First an interface has the task to collect information. Second, the
+interfaces may be related and are defining a flow -- therefore there
+must be an indicator that tells that the information is selected. 
+This indicator closes one dialog and passes control to the flow.
+
+# Closing a dialog #
+
+A dialog can be closed, using the attributes of the window ( -> close).
+A dialog can als be closed by pressing the keyboard key ESC.
+Normally a dialog is closed after confirming or cancelling the
+dialog using (radio) buttons.
+Alternatively a dialog can be closed by an timer, if only information
+is displayed.
+
+Normally for closing a dialog, methods of the keyboard (short keys,
+tab-order selection) and the mouse (positioning and selection) are
+valid.
+ 
+# Collecting information #
+
+To collect information the user 
+    - can enter the information within a testfield, 
+    - can select between alternatives (radio buttons)
+    - can select predfined alternatives (buttons, lists)
+
+Normally for collecting informations, methods of the keyboard (short keys,
+tab-order selection) and the mouse (positioning and selection) are
+valid.
+ 
+-----------------
+
+# Mouse #
+
+Positioning with the mouse is easy -- the current location of the mouse 
+is known by its pointer.
+Selection is done by pressing a button, the most left mouse button.
+This holds also for selection in text fields. Within text fields also
+cut´n´paste is possible.
+
+# tab-order selection #
+
+Tab-order selection means that the (changeable) components of an user 
+interface may be grouped and these groups are ordered. Now pressing 
+TAB, the focus changes from one group to the next group within the order.
+If several components are grouped within one group the component can
+be selected with 'arrow up'/'arrow down' or the SPC bar. Maybe there
+are special attributes to a group which controls selection/deselection
+of componenets (ie. radio buttons).
+
+# keyboard #
+
+If short keys are defined, components or groups of componenets can
+be selected. Normally a short key is a character abbreviation of the
+component name, displayed by an underlined character. The group
+can be selected using alt, followed by the abbreviation character.
+
+Within text fields short keys can also used to simplify editing:
+ctrl-k:     delete from position to rest of line
+ctrl-e:     goto end of input line
+ctrl-a:     goto beginning of input line
+ctrl-d:     delete next charater, holding the position
+ctrl-h:     delete previous character, moving one character left
+ctrl-f:     moving one character right (forwards)
+ctrl-b:     moving one character left (backwards)
+
+shift-home: selection of text from position to line beginning 
+shift-end:  selection of text from position to line end
+
+ctrl-x:     delete selected text
+ctrl-c:     copy selected text
+ctrl-v:     paste copied text
+
+Within keyboard input the normal keys are supported, also 'backspace'
+and 'delete'.
+
+-----------------------
+
+# Remarks on implementation #
+
+blinking cursor in focussed text field
+    For an user interface a tab-order is defined. The order normally starts
+    with the upper left component. If this component is a text field,
+    the focus is not visible, because the cursor is hidden. If the
+    complete window of the UI is moved, the cursor becomes visible.
+
+    If the focus changes from a text field to another textfield using
+    short keys the position is the former position (if existing) but
+    not the end of the input line.
+
+    If the focus changes from a text field to another component but not
+    a text field, the cursor is visible or hidden:
+           tab-order:    hidden
+           short keys:   visible
+           mouse:        visible
+

@@ -1,0 +1,16 @@
+## general configure.in.in
+
+## initialize
+@YAST2-INIT-COMMON@
+@YAST2-INIT-PROGRAM@
+
+## some common checks
+@YAST2-CHECKS-COMMON@
+@YAST2-CHECKS-PROGRAM@
+@YAST2-CHECKS-QT@
+
+## special stuff
+AC_MIN_QT_VERSION(301,3.01)
+
+## and generate the output
+@YAST2-OUTPUT@

@@ -1,0 +1,570 @@
+-------------------------------------------------------------------
+Thu Jun 06 14:55:22 CEST 2002 - arvin@suse.de
+
+- don't link -lstdc++ explicitly
+
+-------------------------------------------------------------------
+Fri May 24 17:24:23 CEST 2002 - arvin@suse.de
+
+- fixed locking so we can use multi threaded version of qt
+
+-------------------------------------------------------------------
+Mon Apr 08 17:19:43 CEST 2002 - arvin@suse.de
+
+- fixes for gcc 3.1
+
+-------------------------------------------------------------------
+Fri Mar 22 17:11:40 CET 2002 - kkaempf@suse.de
+
+- pass callback information from component stub to interpreter
+  (#15311).
+
+-------------------------------------------------------------------
+Mon Feb 25 18:18:36 CET 2002 - sh@suse.de
+
+- V 2.5.16
+- Applied Michal Svec's security patch
+
+-------------------------------------------------------------------
+Mon Feb 25 16:28:54 CET 2002 - sh@suse.de
+
+- V 2.5.15
+- Fixed wish #13876: Host name in window title bar
+
+-------------------------------------------------------------------
+Wed Feb 20 13:47:27 CET 2002 - sh@suse.de
+
+- V 2.5.14
+- Fixed bug #13604: Change fallback title image to new design
+
+-------------------------------------------------------------------
+Mon Feb 18 18:22:55 CET 2002 - sh@suse.de
+
+- V 2.5.13
+- Fixed bug #13131: SetFocus on a TextEntry should select its contents
+
+-------------------------------------------------------------------
+Thu Feb 14 12:19:19 CET 2002 - sh@suse.de
+
+- V 2.5.12
+- Fixed changed Qt-3 behaviour: Correct handling for tristate
+  checkbox
+
+-------------------------------------------------------------------
+Wed Feb 13 17:56:05 CET 2002 - sh@suse.de
+
+- V 2.5.11
+- Fixed ColoredLabel alignment: Left and vertically centered
+
+-------------------------------------------------------------------
+Fri Feb  8 17:06:46 CET 2002 - sh@suse.de
+
+- V 2.5.10
+- New YQImage constructor: Load images locally from within the UI
+- Support YQImage `opt(`tiled, `scaleToFit)
+- Load images in background pixmap
+
+-------------------------------------------------------------------
+Thu Feb  7 17:18:10 CET 2002 - sh@suse.de
+
+- V 2.5.9
+- Better check for YaST2 special keys (Ctrl-Shift-Alt)
+
+-------------------------------------------------------------------
+Fri Jan 25 17:48:15 CET 2002 - sh@suse.de
+
+- V 2.5.8
+- Added MNG support for Image widget
+
+-------------------------------------------------------------------
+Thu Jan 24 21:29:48 CET 2002 - sh@suse.de
+
+- V 2.5.6
+- New optional widget: ColoredLabel
+
+-------------------------------------------------------------------
+Tue Jan 22 18:33:52 CET 2002 - sh@suse.de
+
+- V 2.5.6
+- Support new `opt(`keepSorting) for YTable widget
+
+-------------------------------------------------------------------
+Tue Jan 22 17:39:10 CET 2002 - sh@suse.de
+
+- Show initial selection (first item)
+
+-------------------------------------------------------------------
+Tue Jan 22 16:42:26 CET 2002 - sh@suse.de
+
+- Fixed bug #12833: Arbitrary table sorting with Qt3
+
+-------------------------------------------------------------------
+Tue Jan  8 15:58:58 CET 2002 - sh@suse.de
+
+- V 2.5.5
+- Added qt3-non-mt to neededforbuild
+
+-------------------------------------------------------------------
+Fri Dec 14 15:12:52 CET 2001 - sh@suse.de
+
+- V 2.5.4
+- Ported to Qt 3.x
+
+-------------------------------------------------------------------
+Tue Dec 11 14:59:32 CET 2001 - sh@suse.de
+
+- V 2.5.3
+- Added hyperlink support to RichText widget
+
+-------------------------------------------------------------------
+Thu Nov 15 13:30:47 CET 2001 - sh@suse.de
+
+- V 2.5.2
+- added proper #include for tolower()
+
+-------------------------------------------------------------------
+Fri Nov  9 01:41:55 CET 2001 - ro@suse.de
+
+- use qt-devel-packages in neededforbuild
+
+-------------------------------------------------------------------
+Tue Nov  6 18:22:15 CET 2001 - sh@suse.de
+
+- V 2.5.1
+- Fixed YQPushButton for automatic shortcut check / resolving
+
+-------------------------------------------------------------------
+Thu Sep 27 17:38:26 CEST 2001 - sh@suse.de
+
+- Fixed bug #11350: WM close button closes win, but keeps app alive
+
+-------------------------------------------------------------------
+Mon Sep 24 17:42:42 CEST 2001 - sh@suse.de
+
+- Don't set root window cursor to busy cursor
+- V 2.4.17
+
+-------------------------------------------------------------------
+Fri Sep 21 18:16:34 CEST 2001 - sh@suse.de
+
+- Fixed bug #11073: busy cursor unreliable
+  The Qt UI now makes its own busy cursors rather than Qt's.
+- V 2.4.16
+
+-------------------------------------------------------------------
+Tue Sep 18 14:11:41 CEST 2001 - sh@suse.de
+
+- Fixed bug #8534: Spurious <b> </b> in SuSEconfig protocoll
+- V 2.4.15
+
+-------------------------------------------------------------------
+Mon Sep 17 18:33:09 CEST 2001 - sh@suse.de
+
+- Fixed bug #10754: Large popup windows partially invisible
+- V 2.4.14
+
+-------------------------------------------------------------------
+Fri Sep 14 15:28:34 CEST 2001 - sh@suse.de
+
+- Fixed bug #10614: Ikea mode triggered on Alt-W
+- Consistent default button handling even in selbox
+- V 2.4.13
+
+-------------------------------------------------------------------
+Wed Sep 12 16:42:19 CEST 2001 - sh@suse.de
+
+- Only one window for all `opt(`defaultsize) dialogs
+- Fixed bug #9915: Default button keyboard focus unreliable
+- V 2.4.12
+
+-------------------------------------------------------------------
+Thu Sep  6 18:22:38 CEST 2001 - sh@suse.de
+
+- V 2.4.11
+  Implemented new UI builtin: GetDisplayInfo()
+
+-------------------------------------------------------------------
+Wed Sep  5 11:50:12 CEST 2001 - sh@suse.de
+
+- V 2.4.10
+  All headers "ydoc" compliant - fixed build problems
+
+-------------------------------------------------------------------
+Tue Sep  4 18:29:18 CEST 2001 - sh@suse.de
+
+- V 2.4.9
+  improved focus handling - (possible) fix for bug #9915
+
+-------------------------------------------------------------------
+Wed Jul 11 15:31:05 CEST 2001 - sh@suse.de
+
+- V 2.4.8
+  added glyph support (for new UI builtin Glyph() )
+
+-------------------------------------------------------------------
+Sat Jul 07 16:48:47 CEST 2001 - arvin@suse.de
+
+- neededforbuild += freetype2
+
+-------------------------------------------------------------------
+Thu Jul  5 11:07:33 CEST 2001 - kkaempf@suse.de
+
+- drop yast2-core-translator from neededforbuild
+
+-------------------------------------------------------------------
+Wed Jun 27 18:06:42 CEST 2001 - sh@suse.de
+
+- V 2.4.5
+  New widget: MultiSelectionBox
+
+-------------------------------------------------------------------
+Tue Jun 26 19:25:39 CEST 2001 - sh@suse.de
+
+- V 2.4.4
+  New widget: MenuButton
+
+-------------------------------------------------------------------
+Tue Jun 19 16:17:33 CEST 2001 - sh@suse.de
+
+- Implemented wish #8357: Restrict input characters
+  new widget property `ValidChars for TextEntry, ComboBox
+
+-------------------------------------------------------------------
+Tue Jun 19 14:58:31 CEST 2001 - kkaempf@suse.de
+
+- implemented callback mechanism
+
+-------------------------------------------------------------------
+Tue Jun 12 14:50:45 CEST 2001 - sh@suse.de
+
+- V 2.4.2
+  Changed BarGraph variable substitution from "%d" to "%1"
+  to become sformat() compatible
+
+-------------------------------------------------------------------
+Fri Jun  8 15:58:39 CEST 2001 - sh@suse.de
+
+- V 2.4.1
+- Implemented wish #7259: Automatically set `opt(`decorated)
+  for non-defaultsize dialogs
+- Implemented wish #8363: UserInput() returns special ID
+  'debugHotkey when Ctrl-Alt-Shift-D is pressed
+
+-------------------------------------------------------------------
+Fri Jun  8 14:47:22 CEST 2001 - sh@suse.de
+
+- V 2.4.0
+  Macro recorder
+
+-------------------------------------------------------------------
+Mon May 14 17:21:21 CEST 2001 - sh@suse.de
+
+- V 2.3.14: Fixed bug #8254, 2nd part: Bad czech charset in resizer
+  Work around QString::sprintf() limitations (Latin1 compatible
+  only), use QString::arg() instead
+
+-------------------------------------------------------------------
+Mon May 14 14:20:44 CEST 2001 - sh@suse.de
+
+- V 2.3.13: Fixed bug #8254: Bad czech charset in resizer
+  Added fromUTF8() call for explicit string conversion
+
+-------------------------------------------------------------------
+Tue May  8 12:10:05 CEST 2001 - kkaempf@suse.de
+
+- provide split-alias entries for older versions
+
+-------------------------------------------------------------------
+Mon Apr 30 16:17:05 CEST 2001 - kkaempf@suse.de
+
+- provide "YaST2-UI"
+
+-------------------------------------------------------------------
+Mon Apr 30 15:21:03 CEST 2001 - sh@suse.de
+
+- V 2.3.10
+  (partial) fix for bug #7004:
+  Top-left align image in YImage widgets
+
+-------------------------------------------------------------------
+Thu Apr 19 19:14:02 CEST 2001 - sh@suse.de
+
+- V 2.3.9
+  Fixed bugs in RadioBox behaviour:
+  - second click on the same button will no longer deactivate it
+  - accept only one active RadioButton on RadioBox creation
+    (all but the last will be deactivated)
+
+-------------------------------------------------------------------
+Thu Apr 12 13:03:47 CEST 2001 - sh@suse.de
+
+- V 2.3.8
+  Improved RadioBox keyboard navigation:
+  No longer rely on QButtonGroup, own implementation of RadioBox
+  behaviour -> no longer strange key mappings (cursor keys rather
+  than tab as everybody expects)
+
+-------------------------------------------------------------------
+Thu Apr  5 19:52:11 CEST 2001 - sh@suse.de
+
+- new options zeroWidth, zeroHeight for image widget
+  to avoid complaints about title graphics not getting their
+  "nice size" of 2000 pixels wide
+- V 2.3.7
+
+-------------------------------------------------------------------
+Thu Mar 29 09:25:54 CEST 2001 - kkaempf@suse.de
+
+- dont install lib, only plugin is needed
+
+-------------------------------------------------------------------
+Thu Mar 29 14:33:53 CEST 2001 - sh@suse.de
+
+- moved shared libs from /usr/lib/YaST2/lib to /usr/lib
+- V 2.3.5
+
+-------------------------------------------------------------------
+Tue Mar 27 15:56:27 CEST 2001 - kkaempf@suse.de
+
+- minimize file list for yast2-ui-qt package
+
+-------------------------------------------------------------------
+Fri Mar 23 12:44:29 CET 2001 - arvin@suse.de
+
+- moved documentation to packages/yast2-ui-qt
+
+-------------------------------------------------------------------
+Sun Mar 18 23:24:19 CET 2001 - ro@suse.de
+
+- fixed neededforbuild
+
+-------------------------------------------------------------------
+Mon Mar 12 13:15:05 CET 2001 - arvin@suse.de
+
+- Strip plugin in package.
+
+-------------------------------------------------------------------
+Thu Mar  8 18:11:07 CET 2001 - arvin@suse.de
+
+- Added unicode fonts (previously in y2base).
+
+-------------------------------------------------------------------
+Sat Jan 27 21:19:35 CET 2001 - arvin@suse.de
+
+- package split y2qt / y2qt-devel
+
+-------------------------------------------------------------------
+Tue Jan 23 11:12:09 CET 2001 - sh@suse.de
+
+- prevent crash upon window manager close
+
+-------------------------------------------------------------------
+Mon Jan 22 13:31:18 CET 2001 - sh@suse.de
+
+- V2.2.10
+- New default title graphics from <wimer@suse.de> that are
+  no longer cut off at the right at 640x480
+- Renamed suseheader.xpm to yast2.xpm
+- Use yast2.xpm for both `Image(`suseheader) and `Image(`yast2)
+- Removed obsolete XPM images that were never used anyway
+
+-------------------------------------------------------------------
+Tue Jan 16 11:54:04 CET 2001 - sh@suse.de
+
+- V2.2.9
+- New default image for Image(`suseheader): 2000 pixels wide
+
+-------------------------------------------------------------------
+Fri Jan 12 21:57:42 CET 2001 - sh@suse.de
+
+- V2.2.8
+- Added module QXEmbed from Qt/KDE2 (TrollTech / LGPL)
+  to enable reliable KDE2 control center integration:
+  keyboard focus now works when running embedded in kcmshell
+  (fix for bug #5475)
+
+-------------------------------------------------------------------
+Thu Jan 11 16:10:28 CET 2001 - sh@suse.de
+
+- V2.2.7
+- Hide YQTextEntry label if empty label specified
+  -> no empty space above TextEntry widgets without label
+
+-------------------------------------------------------------------
+Tue Dec 19 14:58:33 CET 2000 - ma@suse.de
+
+- V2.2.6
+- pass YCPstrings to ui specific widgets
+
+-------------------------------------------------------------------
+Mon Dec 18 19:35:30 CET 2000 - sh@suse.de
+
+- New optional widget: DownloadProgress
+- V2.2.5
+
+-------------------------------------------------------------------
+Fri Dec  8 15:54:12 CET 2000 - sh@suse.de
+
+- More reliable nicesize() and setSize() behaviour for
+  SelectionBox and TextEntry
+  -> no more cut-off pixel lines at the bottom
+- V2.2.4
+
+-------------------------------------------------------------------
+Tue Dec  5 16:51:05 CET 2000 - sh@suse.de
+
+- New widget: MultiLineEdit
+- Dialogs can no longer exceed screen dimensions
+- V2.2.3
+
+-------------------------------------------------------------------
+Tue Nov 28 17:23:30 CET 2000 - arvin@suse.de
+
+- Fixed ComboBox layout errors on resize.
+
+-------------------------------------------------------------------
+Tue Nov 28 15:43:07 CET 2000 - kkaempf@suse.de
+
+- add libmng-devel to neededforbuild
+
+-------------------------------------------------------------------
+Thu Nov 16 17:18:52 CET 2000 - kkaempf@suse.de
+
+- split library and plugin
+
+-------------------------------------------------------------------
+Mon Nov 13 11:21:34 CET 2000 - sh@suse.de
+
+- Removed glx, glx-devel, mesa from .spec.in - Qt no longer needs it
+- V2.1.8
+
+-------------------------------------------------------------------
+Thu Nov  9 12:46:05 CET 2000 - kkaempf@suse.de
+
+- static plugin only
+
+-------------------------------------------------------------------
+Tue Nov  7 18:43:30 CET 2000 - sh@suse.de
+
+- re-enabled static libs
+  new widgets: LogView, IntField
+  moved completely to new logging
+  version 2.1.6
+
+-------------------------------------------------------------------
+Fri Nov  3 08:54:17 CET 2000 - kkaempf@suse.de
+
+- adapt neededforbuild for new qt
+
+-------------------------------------------------------------------
+Thu Nov  2 11:43:34 CET 2000 - kkaempf@suse.de
+
+- fix runqt include file
+
+-------------------------------------------------------------------
+Tue Oct 31 14:33:38 CET 2000 - sh@suse.de
+
+- Increased gcc warning level
+  resolved minor warnings
+  disabled static libs (speed up compilation)
+  version 2.1.4
+
+-------------------------------------------------------------------
+Fri Oct 27 12:47:55 CEST 2000 - kkaempf@suse.de
+
+- provide correct library
+
+-------------------------------------------------------------------
+Wed Oct 25 18:33:58 CEST 2000 - kkaempf@suse.de
+
+- Group provided
+
+-------------------------------------------------------------------
+Wed Oct 25 13:58:34 CEST 2000 - sh@suse.de
+
+- New widgets: BarGraph, Slider, PartitionSplitter
+  version 2.1.2
+
+-------------------------------------------------------------------
+Thu Aug 31 13:34:27 CEST 2000 - sh@suse.de
+
+- Added mesa and mesasoft to spec file
+  (Qt 2.2+ now requires OpenGL)
+  version 2.1.1
+
+-------------------------------------------------------------------
+Thu Jul 13 18:58:23 CEST 2000 - sh@suse.de
+
+- Resize behaviour
+  version 2.0.11
+
+-------------------------------------------------------------------
+Fri Jul  7 16:41:06 CEST 2000 - sh@suse.de
+
+- Change table widget sorting for the umpteenth time:
+  Maintain insertion order but allow for user sort-by-click
+  version 2.0.10
+
+-------------------------------------------------------------------
+Thu Jul  6 15:48:28 CEST 2000 - sh@suse.de
+
+- proper window close button handling (-> `cancel)
+  version 2.0.9
+
+-------------------------------------------------------------------
+Tue Jul  4 14:11:43 CEST 2000 - kkaempf@suse.de
+
+- check argument in returnNow
+  version 2.0.8
+
+-------------------------------------------------------------------
+Mon Jun 26 16:03:32 CEST 2000 - sh@suse.de
+
+- Changed default title image for SuSE 7.0
+- increased version number to 2.0.7
+
+-------------------------------------------------------------------
+Mon Jun 19 17:41:54 CEST 2000 - kkaempf@suse.de
+
+- use xmset from new saxtools package
+  version 2.0.6
+
+-------------------------------------------------------------------
+Mon Jun 19 16:51:27 CEST 2000 - schwab@suse.de
+
+- Add %suse_update_config.
+- Lower opt level on ia64.
+
+-------------------------------------------------------------------
+Mon Jun 19 10:24:39 CEST 2000 - kkaempf@suse.de
+
+- add xmset from SaX2
+  version 2.0.5
+
+-------------------------------------------------------------------
+Thu Jun  8 11:22:40 CEST 2000 - sh@suse.de
+
+- Disabled X Input Method hack - this doesn't seem to work with
+  XFree86 4.0
+
+-------------------------------------------------------------------
+Mon Jun  5 18:46:25 CEST 2000 - sh@suse.de
+
+- Added correct QTDIR and dependencies to qtlib2 to spec file
+
+-------------------------------------------------------------------
+Thu May 18 13:11:54 CEST 2000 - kkaempf@suse.de
+
+- pass includes to dist
+  add tools to specfile
+
+-------------------------------------------------------------------
+Mon May 15 16:07:09 CEST 2000 - sh@suse.de
+
+- New widget: ComboBox
+
+-------------------------------------------------------------------
+Wed Apr 26 16:25:39 CEST 2000 - kkaempf@suse.de
+
+- Initial version based on yast2 from SuSE 6.4
+

@@ -1,0 +1,50 @@
+@HEADER-COMMENT@
+
+# neededforbuild  gpp libgpp libxcrypt libxcrypt-devel liby2 liby2-devel libycp libycp-devel libyui libyui-devel qt3-devel-packages xf86 yast2-core-wfm yast2-core-wfm-devel yast2-devtools ydoc
+
+@HEADER@
+Summary:	-
+Provides:	YaST2-UI
+Provides:	y2base:/var/lib/YaST2/servers/qt
+Provides:	y2base:/usr/lib/YaST2/servers/qt
+Provides:	y2base:/usr/lib/YaST2/plugin/libpy2qt.so.2
+
+%description
+-
+
+@HEADER-DEVEL@
+Summary:	-
+Provides:	y2qt
+Obsoletes:	y2qt
+
+%description devel
+-
+
+@PREP@
+
+@BUILD-QT-PROGRAM@
+
+@INSTALL-PROGRAM@
+
+@CLEAN@
+
+%files
+%defattr (-, root, root)
+%dir @plugindir@
+@plugindir@/libpy2qt.so.*
+%dir /usr/X11R6/lib/X11/fonts/uni
+/usr/X11R6/lib/X11/fonts/uni/fonts.dir
+/usr/X11R6/lib/X11/fonts/uni/newunifont.pcf.gz
+/usr/X11R6/lib/X11/fonts/uni/newunifontB.pcf.gz
+/usr/X11R6/lib/X11/fonts/uni/newunifontB18.pcf.gz
+/usr/X11R6/lib/X11/fonts/uni/newunifontBI.pcf.gz
+/usr/X11R6/lib/X11/fonts/uni/newunifontI.pcf.gz
+/usr/X11R6/lib/X11/fonts/uni/unifont.pcf.gz
+
+%files devel
+%defattr (-, root, root)
+%dir @ybindir@
+@ybindir@/y2qt
+@plugindir@/libpy2qt.so
+@plugindir@/libpy2qt.la
+%doc @docdir@

@@ -1,0 +1,29 @@
+How to get YaST2 screen shots from a test system
+================================================
+
+From April 2000 on, you can simply hit the <PrtScr> key. 
+
+You will get PNG image files /tmp/scr00001.png, /tmp/scr00002.png
+etc. - each invocation of the Qt UI will begin counting from 1. Any
+existing screen shots will be overwritten without warning - i.e. move
+them away and/or give them some more explanative name
+(e.g. ~/yast2-screens/inst_lang.png).
+
+
+If for any reason this should not work, there is still the old way:
+
+ 1. Add the xhost program to suse/inst-sys/usr/X11R6/bin. You'll need a
+    special version that doesn't need all the dynamic libs the default one
+    uses; ~snwint/Export/xhost.semistatic does the trick. (Don't forget to
+    rename it to xhost.)
+
+ 2. Boot the test system and add the 'mem=46m' kernel option (at the 'boot:'
+    prompt, enter 'linux mem=46m'). This way YaST2 ist started from
+    suse/inst-sys (otherwise it starts from suse/images/yast2).
+
+ 3. When YaST2 is running, go to console 2 and enter the command
+    'DISPLAY=:0 /usr/X11/bin/xhost +'.
+
+ 4. From some other system, get a screenshot by running
+    'xgrabsc -d <host_where_YaST2_runs>:0 -root -ppm -o screenshot.ppm'.
+

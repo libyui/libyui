@@ -1,0 +1,13 @@
+Makefile
+Makefile.in
+*.lo
+.deps
+*.moc.cc
+*.moc.h
+.libs
+y2qt
+*.kdoc
+.inslog2
+bugs.dat*
+*.la
+qt

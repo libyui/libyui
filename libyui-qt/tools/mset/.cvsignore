@@ -1,0 +1,6 @@
+Makefile
+Makefile.in
+mset
+xmset
+.deps
+.libs

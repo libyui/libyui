@@ -1,0 +1,5 @@
+load_lib "y2qt_init.exp"
+
+proc y2qt_exit {} {}
+proc y2qt_version {} {}
+
