@@ -202,7 +202,7 @@ YQPkgTechnicalDetailsView::simpleTable( PMPackagePtr pkg )
 	       row( hcell( _( "OS:"		) ) + cell( pkg->os()				  ) ) +
 	       row( hcell( _( "Build Host:"	) ) + cell( pkg->buildhost()			  ) ) +
 	       row( hcell( _( "URL:"		) ) + cell( pkg->url()				  ) ) +
-	       row( hcell( _( "Source RPM:"	) ) + cell( pkg->sourcerpm()			  ) ) +
+	       row( hcell( _( "Source RPM:"	) ) + cell( pkg->sourceloc()			  ) ) +
 	       row( hcell( _( "Location:"	) ) + cell( pkg->location()			  ) ) +
 	       row( hcell( _( "Media No.:"	) ) + cell( pkg->medianr()			  ) ) +
 	       row( hcell( _( "Authors:"	) ) + authorsListCell( pkg			  ) )
@@ -239,7 +239,7 @@ YQPkgTechnicalDetailsView::complexTable( PMPackagePtr installed, PMPackagePtr ca
 	       row( hcell( _( "OS:"		) ) + cell( p1->os()				) + cell( p2->os()			      ) ) +
 	       row( hcell( _( "Build Host:"	) ) + cell( p1->buildhost()			) + cell( p2->buildhost()		      ) ) +
 	       row( hcell( _( "URL:"		) ) + cell( p1->url()				) + cell( p2->url()			      ) ) +
-	       row( hcell( _( "Source RPM:"	) ) + cell( p1->sourcerpm()			) + cell( p2->sourcerpm()		      ) ) +
+	       row( hcell( _( "Source RPM:"	) ) + cell( p1->sourceloc()			) + cell( p2->sourceloc()		      ) ) +
 	       row( hcell( _( "Location:"	) ) + cell( p1->location()			) + cell( p2->location()		      ) ) +
 	       row( hcell( _( "Media No.:"	) ) + cell( p1->medianr()			) + cell( p2->medianr()			      ) ) +
 	       row( hcell( _( "Authors:"	) ) + authorsListCell( p1			) + authorsListCell( p2			      ) )
