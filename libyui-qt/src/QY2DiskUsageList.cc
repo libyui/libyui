@@ -14,7 +14,10 @@
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
+  Textdomain "general"
+
   This is a pure Qt widget - it can be used independently of YaST2.
+
 
 /-*/
 
@@ -229,13 +232,13 @@ QY2DiskUsageListItem::paintCell( QPainter *		painter,
     else
     {
 	QColorGroup cg( colorGroup );
-	
+
 	if ( usedSize() > totalSize() )
 	    cg.setColor( QColorGroup::Text, Qt::red );		// Set red text foreground
 
 	// Intentionally bypassing the direct parent class method, use the grandparent's:
 	// Don't let QY2ListViewItem::_textColor / _backgroundColor interfere with our colors.
-	
+
 	QListViewItem::paintCell( painter, cg, column, width, alignment );
     }
 }
@@ -404,7 +407,7 @@ QY2DiskUsageListItem::interpolate( int from,
 	if ( x < maxTo )	x = maxTo;
 	if ( x > minTo )	x = minTo;
     }
-    
+
     return (int) x;
 }
 

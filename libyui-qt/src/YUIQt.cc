@@ -15,6 +15,8 @@
   Author:     Mathias Kettner <kettner@suse.de>
   Maintainer: Stefan Hundhammer <sh@suse.de>
 
+  Textdomain "general"
+
 /-*/
 
 
@@ -1008,7 +1010,7 @@ void YUIQt::makeScreenShot( std::string stl_filename )
 	    QString home = QDir::homeDirPath();
 	    char *ssdir = getenv("Y2SCREENSHOTS");
 	    QString dir  = ssdir ? ssdir : "yast2-screen-shots";
-	    
+
 	    if ( home == "/" )
 	    {
 		// Special case: $HOME is not set. This is normal in the inst-sys.
@@ -1045,15 +1047,15 @@ void YUIQt::makeScreenShot( std::string stl_filename )
 	if ( ! baseName ) baseName = "scr";
 	int no = screenShotNo[ baseName ];
 	fileName.sprintf( screenShotNameTemplate, baseName, no );
-	y2debug("screenshot: %s", (const char *) fileName);
-	fileName = askForSaveFileName( fileName, QString( "*.png" ) , _("Save screen shot to...") );
+	y2debug( "screenshot: %s", (const char *) fileName );
+	fileName = askForSaveFileName( fileName, QString( "*.png" ) , "Save screen shot to..." );
 
 	if ( fileName.isEmpty() )
 	{
-	    y2milestone("Save screen shot canceled by user" );
+	    y2milestone( "Save screen shot canceled by user" );
 	    return;
 	}
-	
+
 	screenShotNo.insert( baseName, ++no );
     } // if fileName.isEmpty()
 
