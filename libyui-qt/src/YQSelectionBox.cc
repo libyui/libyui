@@ -145,9 +145,8 @@ bool YQSelectionBox::eventFilter( QObject *obj, QEvent *ev )
     {
 	QKeyEvent *event = (QKeyEvent *) ev;
 
-	if ( ( event->key() == Qt::Key_Return ||
-	       event->key() == Qt::Key_Enter    ) &&
-	     event->state() == 0 )			// no shift / ctrl / alt etc.
+	if ( ( event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter ) &&
+	     ( event->state() == 0 || event->state() == Qt::Keypad ) )
 	{
 	    YQDialog *dia = (YQDialog *) yDialog();
 
