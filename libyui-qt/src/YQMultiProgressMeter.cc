@@ -25,8 +25,6 @@
 #include "YQUI.h"
 #include "YQMultiProgressMeter.h"
 
-#define TRIANGLE_SHAPE	0
-
 
 YQMultiProgressMeter::YQMultiProgressMeter( QWidget *		parent,
 					    const YWidgetOpt & 	opt,
@@ -35,16 +33,21 @@ YQMultiProgressMeter::YQMultiProgressMeter( QWidget *		parent,
     : QWidget( parent )
     , YMultiProgressMeter( opt, horizontal, maxValues )
 {
+    _triangularShaped	= false;
     _margin 		= 2;
-    _spacing		= 2;
     _segmentMinLength 	= 12;
     _triSpacing		= 1;
-    setTriThickness( 4 );
 
-#if TRIANGLE_SHAPE
-    _spacing		= 0;
-    setTriThickness( -1 );
-#endif
+    if ( triangularShaped() )
+    {
+	_spacing	= 0;
+	setTriThickness( -1 );
+    }
+    else
+    {
+	_spacing	= 2;
+	setTriThickness( 4 );
+    }
 
     setWidgetRep( this );
 }
@@ -142,11 +145,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 
     // Calculate indentation
 
-#if TRIANGLE_SHAPE
-    int indent = (int) ( thickness * 0.37 );
-#else
-    int indent = 0;
-#endif
+    int indent = triangularShaped() ? (int) ( thickness * 0.37 ) : 0;
 
 
     // Set up painter
@@ -172,10 +171,26 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 
 	drawSegment( i, painter, offset, length, thickness, indent );
 
-	if ( i > 0 )
+	if ( i > 0 && ! triangularShaped() )
 	    drawMarkers( painter, offset, thickness );
 
 	offset += length + spacing();
+    }
+}
+
+
+void YQMultiProgressMeter::mouseDoubleClickEvent ( QMouseEvent * event )
+{
+    if ( event && event->button() == Qt::RightButton )
+    {
+	// Easter egg: Switch between rectangular and triangular shape
+
+	y2milestone( "Switching shape" );
+	setTriangularShaped( ! triangularShaped() );
+	setSize( vertical()   ? nicesize( YD_HORIZ ) : width(),
+		 horizontal() ? nicesize( YD_VERT )  : height() );
+	YQUI::ui()->evaluateRecalcLayout();
+	QWidget::update();
     }
 }
 
@@ -189,6 +204,10 @@ void YQMultiProgressMeter::drawSegment( int segment,
 {
     //
     // Fill segment
+    //
+    // Vertical MultiProgressMeters will be filled thermometer-like from bottom
+    // to top, horizontal ones like normal progress bars from left to right,
+    // i.e. just the opposite way.
     //
 
     int fillStart  = 0;
@@ -213,18 +232,39 @@ void YQMultiProgressMeter::drawSegment( int segment,
 
     thickness--; // We always deal with tickness-1 anyway, so let's cut this short
 
-    if ( fillStart < length )
+    if ( vertical() )	// fill thermometer-like from bottom to top
     {
-	QPointArray points( 4 );
-	int p=0;
-	points.setPoint( p++, offset + fillStart,	border + fillHeight );
-	points.setPoint( p++, offset + fillStart, 	border + thickness - fillHeight );
-	points.setPoint( p++, offset + length, 		border + thickness - indent );
-	points.setPoint( p++, offset + length, 		border + indent );
+	if ( fillStart < length )
+	{
+	    QPointArray points( 4 );
+	    int p=0;
+    
+	    points.setPoint( p++, offset + fillStart,	border + fillHeight );
+	    points.setPoint( p++, offset + fillStart, 	border + thickness - fillHeight );
+	    points.setPoint( p++, offset + length, 	border + thickness - indent );
+	    points.setPoint( p++, offset + length, 	border + indent );
 
-	painter.setBrush( palette().active().highlight() );
-	painter.setPen( NoPen );
-	painter.drawConvexPolygon( points );
+	    painter.setBrush( palette().active().highlight() );
+	    painter.setPen( NoPen );
+	    painter.drawConvexPolygon( points );
+	}
+    }
+    else	// horizontal - fill from left to right like a normal progress bar
+    {
+	if ( fillStart > 0 )
+	{
+	    QPointArray points( 4 );
+	    int p=0;
+    
+	    points.setPoint( p++, offset, 		border + thickness );
+	    points.setPoint( p++, offset, 		border );
+	    points.setPoint( p++, offset + fillStart,	border + fillHeight );
+	    points.setPoint( p++, offset + fillStart, 	border + thickness - fillHeight );
+
+	    painter.setBrush( palette().active().highlight() );
+	    painter.setPen( NoPen );
+	    painter.drawConvexPolygon( points );
+	}
     }
 
 
@@ -313,11 +353,7 @@ long YQMultiProgressMeter::nicesize( YUIDimension dim )
 {
     int length = 70 * segments() + 2 * margin();
 
-#if TRIANGLE_SHAPE
-    int thickness = 35;
-#else
-    int thickness = 23;
-#endif
+    int thickness = triangularShaped() ? 35 : 23;
     thickness += 2 * margin();
 
     if ( triThickness() > 0 )

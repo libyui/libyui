@@ -28,6 +28,7 @@
 
 
 class QPaintEvent;
+class QMouseEvent;
 
 
 class YQMultiProgressMeter : public QWidget, public YMultiProgressMeter
@@ -127,6 +128,17 @@ public:
      **/
     void setTriSpacing( int value ) { _triSpacing = value; }
 
+    /**
+     * Returns "true" if the segments of this widget are triangular shaped.
+     **/
+    bool triangularShaped() const { return _triangularShaped; }
+
+    /**
+     * Set triangular shape (true) or normal rectangular shape.
+     * This call does not trigger a screen update.
+     **/
+    void setTriangularShaped( bool triangular = true )
+	{ _triangularShaped = triangular; }
 
 protected:
 
@@ -142,6 +154,13 @@ protected:
      **/
     virtual void paintEvent ( QPaintEvent * );
 
+    /**
+     * Mouse double click -
+     *
+     * reimplemented from QWidget.
+     **/
+    virtual void mouseDoubleClickEvent ( QMouseEvent * e );
+    
     /**
      * Draw segment number 'segment' with pixel length 'length' from pixel
      * coordinate 'offset' on and fill it according to that segment's current
@@ -163,11 +182,12 @@ protected:
 
 private:
 
-    int	_margin;
-    int _spacing;
-    int _segmentMinLength;
-    int _triThickness;
-    int _triSpacing;
+    bool	_triangularShaped;
+    int		_margin;
+    int 	_spacing;
+    int 	_segmentMinLength;
+    int 	_triThickness;
+    int		_triSpacing;
 };
 
 
