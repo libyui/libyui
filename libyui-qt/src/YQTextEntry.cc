@@ -79,7 +79,7 @@ long YQTextEntry::nicesize( YUIDimension dim )
     if ( dim == YD_HORIZ )
     {
 	long minSize	= _shrinkable ? 15 : 200;
-	long hintWidth	= _qt_label->sizeHint().width() + margin();
+	long hintWidth	= sizeHint().width();
 
 	if ( _qt_label->text().isEmpty() )
 	    hintWidth = 0;

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Jun 28 18:02:48 CEST 2004 - sh@suse.de
+
+- Fixed bug #10524: Textentry label overflow 
+
+-------------------------------------------------------------------
 Mon Jun 28 17:29:44 CEST 2004 - sh@suse.de
 
 - Fixed bug #40259: package selection hides search widgets 
