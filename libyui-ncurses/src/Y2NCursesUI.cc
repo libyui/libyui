@@ -822,7 +822,6 @@ YCPValue Y2NCursesUI::setConsoleFont( const YCPString & console_magic,
     
       if ( NCstring::setTerminalEncoding( code ) )
       {
-	  setlocale( LC_CTYPE, code.c_str() ); 
 	  Redraw();
       }
       else
