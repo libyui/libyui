@@ -17,7 +17,7 @@
 /-*/
 
 
-#define SHOW_SUMMARY	1
+#define SHOW_SUMMARY	0
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
@@ -51,7 +51,6 @@ YQPkgSelList::YQPkgSelList( YUIQt *yuiqt, QWidget *parent )
     _summaryCol = -1;
 #endif
     setAllColumnsShowFocus( true );
-    // header()->hide();
 
 
     connect( this, 	SIGNAL( pkgSelClicked		( int, YQPkgSel *, int ) ),
