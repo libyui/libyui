@@ -195,11 +195,11 @@ void NCLogView::DrawPad()
 	pad->move( cl++, 0 );
 	wstring cline = (*line).str();
 
-	if ( cl >= lines-1 )
+	if ( cl > lines )
 	{
-	    lines += 50;
+	    lines += 10;
 	    AdjustPad( wsze( lines, columns ) );
-	    pad->move( lines, 0 );
+	    pad->move( cl-1, 0 );
 	}
 
 	if ( cline.size() <= columns )
@@ -214,7 +214,16 @@ void NCLogView::DrawPad()
 	    while ( start < cline.size() )
 	    {
 		pad->move( cl++, 0 );
-		pad->addch( '~' );
+		if ( cl > lines )
+		{
+		    lines += 10;
+		    AdjustPad( wsze( lines, columns ) );
+		    pad->move( cl-1, 0 );
+		}
+		chtype cch = 0;
+		NCattribute::setChar(cch,'~');
+		pad->addch( cch );
+
 		pad->addwstr( cline.substr( start, columns-1).c_str() );
 		start += columns-1;
 	    }
