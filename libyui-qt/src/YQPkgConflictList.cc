@@ -282,6 +282,7 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
     _undo_status	= PMSelectable::S_NoInst;
     _pmObj		= _conflict.solvable;
     _isPkg		= true;
+    _canIgnore		= true;
 
     if ( _pmObj )
     {
@@ -507,6 +508,10 @@ YQPkgConflict::dumpList( QListViewItem * 	parent,
 	    case PkgDep::RelInfo::OBSOLETION:
 		// "somepackage obsoletes otherpackage"
 		text = ( _( "%1 obsoletes %2" ) ).arg( pkg1.c_str() ).arg( pkg2.c_str() );
+
+		// RPM will always do nasty things if one package obsoletes another.
+		// This kind of conflict cannot be ignored.
+		_canIgnore = false;
 		break;
 	}
 
@@ -533,8 +538,8 @@ YQPkgConflict::addResolutionSuggestions()
     addAlternativesList( header );
     addDeleteResolution( header );
 
-#warning TODO: No ignore resolution for obsoleted pkgs (RPM cannot handle that)
-    addIgnoreResolution( header );
+    if ( _canIgnore )
+	addIgnoreResolution( header );
 
     _resolutionsHeader = header;
 }

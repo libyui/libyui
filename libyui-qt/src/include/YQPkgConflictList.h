@@ -323,7 +323,7 @@ protected:
     QString			_fullName;	// Name + edition
     PMSelectable::UI_Status	_status;
     PMSelectable::UI_Status	_undo_status;
-    bool			_collision;
+    bool			_canIgnore;
 
     QListViewItem *		_resolutionsHeader;
     PkgDep::ErrorResult		_conflict;
