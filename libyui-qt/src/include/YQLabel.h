@@ -37,7 +37,7 @@ public:
     /**
      * Constructor.
      */
-    YQLabel( QWidget *parent, YWidgetOpt &opt, YCPString text);
+    YQLabel( QWidget *parent, YWidgetOpt & opt, YCPString text);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the

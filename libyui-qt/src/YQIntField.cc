@@ -85,7 +85,7 @@ void YQIntField::setSize( long newWidth, long newHeight )
     resize( newWidth, newHeight );
 }
 
-void YQIntField::setLabel( const YCPString &newLabel )
+void YQIntField::setLabel( const YCPString & newLabel )
 {
     qt_label->setText( fromUTF8( newLabel->value() ) ) ;
 

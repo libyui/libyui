@@ -21,7 +21,7 @@
 #include "YQSpacing.h"
 
 
-YQSpacing::YQSpacing( QWidget *parent, YWidgetOpt &opt,
+YQSpacing::YQSpacing( QWidget *parent, YWidgetOpt & opt,
 		     float size, bool horizontal, bool vertical )
     : QWidget(parent)
     , YSpacing(opt, size, horizontal, vertical)

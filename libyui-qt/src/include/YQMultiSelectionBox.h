@@ -36,7 +36,7 @@ class YQMultiSelectionBox : public QVBox, public YMultiSelectionBox
 
 public:
 
-    YQMultiSelectionBox( QWidget *parent, YWidgetOpt &opt, const YCPString & label);
+    YQMultiSelectionBox( QWidget *parent, YWidgetOpt & opt, const YCPString & label);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the

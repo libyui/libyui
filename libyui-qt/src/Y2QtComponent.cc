@@ -63,7 +63,7 @@ string Y2QtComponent::name() const
 }
 
 
-YCPValue Y2QtComponent::evaluate(const YCPValue &command)
+YCPValue Y2QtComponent::evaluate(const YCPValue & command)
 {
     if (!interpreter)
     {

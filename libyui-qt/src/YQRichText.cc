@@ -27,7 +27,7 @@
 #include "YQRichText.h"
 
 
-YQRichText::YQRichText( QWidget *parent, YWidgetOpt &opt,
+YQRichText::YQRichText( QWidget *parent, YWidgetOpt & opt,
 		       const YCPString & text)
     : QTextBrowser(parent)
     , YRichText(opt, text)
@@ -89,7 +89,7 @@ void YQRichText::setSize(long newWidth, long newHeight)
 }
 
 
-void YQRichText::setText(const YCPString &text)
+void YQRichText::setText(const YCPString & text)
 {
     if ( horizontalScrollBar() )
 	horizontalScrollBar()->setValue(0);

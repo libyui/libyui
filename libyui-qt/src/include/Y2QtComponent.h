@@ -79,13 +79,13 @@ public:
      * in the constructor, because in the meantime the server options
      * may have been set.
      */
-    YCPValue evaluate(const YCPValue &command);
+    YCPValue evaluate(const YCPValue & command);
 
     /**
      * Is called by the genericfrontend, when the session is finished.
      * Close the user interace here.
      */
-    void result(const YCPValue &result);
+    void result(const YCPValue & result);
 
     /**
      * Is called by the genericfrontend after it parsed the commandline.

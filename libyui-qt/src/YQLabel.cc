@@ -26,7 +26,7 @@
 #include "YQLabel.h"
 
 
-YQLabel::YQLabel( QWidget *parent, YWidgetOpt &opt,
+YQLabel::YQLabel( QWidget *parent, YWidgetOpt & opt,
 		 YCPString text)
     : QLabel(parent)
     , YLabel(opt, text)
@@ -69,7 +69,7 @@ void YQLabel::setSize(long newWidth, long newHeight)
 }
 
 
-void YQLabel::setLabel(const YCPString &text)
+void YQLabel::setLabel(const YCPString & text)
 {
     setText(fromUTF8(text->value()));
     YLabel::setLabel(text);

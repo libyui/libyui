@@ -85,7 +85,7 @@ public:
      *
      * Reimplemented from @ref YTextEntry.
      */
-    void setValidChars(const YCPString &validChars);
+    void setValidChars(const YCPString & validChars);
 
     /**
      * Accept the keyboard focus.

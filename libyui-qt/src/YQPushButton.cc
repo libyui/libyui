@@ -36,7 +36,7 @@
 
 YQPushButton::YQPushButton( 			    QWidget *	parent,
 			    YQDialog *	dialog,
-			    YWidgetOpt &opt,
+			    YWidgetOpt & opt,
 			    YCPString 	label )
     : QWidget( parent )
     , YPushButton( opt, label )

@@ -33,7 +33,7 @@ public:
     /**
      * Constructor.
      */
-    YQRadioButtonGroup( QWidget *parent, YWidgetOpt &opt);
+    YQRadioButtonGroup( QWidget *parent, YWidgetOpt & opt);
 
     /**
      * Cleans up

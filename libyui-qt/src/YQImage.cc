@@ -34,7 +34,7 @@
 #define DEFAULT_OEM_LOGO	"/usr/share/YaST2/images/oem_logo.png"
 
 
-YQImage::YQImage( QWidget *parent, YWidgetOpt &opt,
+YQImage::YQImage( QWidget *parent, YWidgetOpt & opt,
 		 YUIInterpreter::ImageType img)
     : QLabel(parent)
     , YImage(opt)
@@ -80,7 +80,7 @@ YQImage::YQImage( QWidget *parent, YWidgetOpt &opt,
 }
 
 
-YQImage::YQImage( QWidget *parent, YWidgetOpt &opt,
+YQImage::YQImage( QWidget *parent, YWidgetOpt & opt,
 		 const YCPByteblock & byteblock)
     : QLabel(parent)
     , YImage(opt)
@@ -102,7 +102,7 @@ YQImage::YQImage( QWidget *parent, YWidgetOpt &opt,
 }
 
 
-YQImage::YQImage( QWidget *parent, YWidgetOpt &opt, const YCPString & ycp_file_name )
+YQImage::YQImage( QWidget *parent, YWidgetOpt & opt, const YCPString & ycp_file_name )
     : QLabel( parent )
     , YImage( opt)
 {
@@ -140,7 +140,7 @@ YQImage::YQImage( QWidget *parent, YWidgetOpt &opt, const YCPString & ycp_file_n
 
 
 void
-YQImage::init( QWidget *parent, YWidgetOpt &opt )
+YQImage::init( QWidget *parent, YWidgetOpt & opt )
 {
     setWidgetRep( this );
     setAlignment( Qt::AlignLeft | Qt::AlignTop );

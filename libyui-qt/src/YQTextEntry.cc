@@ -34,8 +34,8 @@ using std::max;
 #define MARGIN			4	// around the widget
 
 
-YQTextEntry::YQTextEntry( QWidget *parent, YWidgetOpt &opt,
-			 const YCPString &label, const YCPString &text)
+YQTextEntry::YQTextEntry( QWidget *parent, YWidgetOpt & opt,
+			 const YCPString & label, const YCPString & text)
     : QVBox(parent)
     , YTextEntry(opt, label)
     , _validator( 0 )
@@ -97,7 +97,7 @@ void YQTextEntry::setSize(long newWidth, long newHeight)
     resize(newWidth, newHeight);
 }
 
-void YQTextEntry::setText(const YCPString &text)
+void YQTextEntry::setText(const YCPString & text)
 {
     qt_lineedit->setText(fromUTF8(text->value()));
 }
@@ -109,14 +109,14 @@ YCPString YQTextEntry::getText()
 }
 
 
-void YQTextEntry::setLabel(const YCPString &label)
+void YQTextEntry::setLabel(const YCPString & label)
 {
     qt_label->setText(fromUTF8(label->value()));
     YTextEntry::setLabel(label);
 }
 
 
-void YQTextEntry::setValidChars( const YCPString &newValidChars )
+void YQTextEntry::setValidChars( const YCPString & newValidChars )
 {
     if ( _validator )
     {

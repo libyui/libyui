@@ -20,7 +20,7 @@
 
 #include "YQEmpty.h"
 
-YQEmpty::YQEmpty( QWidget *parent, YWidgetOpt &opt)
+YQEmpty::YQEmpty( QWidget *parent, YWidgetOpt & opt)
     : QWidget(parent)
     , YEmpty(opt)
 {

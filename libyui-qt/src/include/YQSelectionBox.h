@@ -48,7 +48,7 @@ class YQSelectionBox : public QVBox, public YSelectionBox
 
 public:
 
-    YQSelectionBox( QWidget *parent, YWidgetOpt &opt, const YCPString & label);
+    YQSelectionBox( QWidget *parent, YWidgetOpt & opt, const YCPString & label);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the

@@ -37,7 +37,7 @@
 
 
 YQRadioButton::YQRadioButton( 			     QWidget *parent,
-			     YWidgetOpt &opt,
+			     YWidgetOpt & opt,
 			     YRadioButtonGroup *rbg,
 			     const YCPString & label, bool checked)
     : QGroupBox(parent)
@@ -80,13 +80,13 @@ YCPBoolean YQRadioButton::getValue()
 }
 
 
-void YQRadioButton::setValue(const YCPBoolean &c)
+void YQRadioButton::setValue(const YCPBoolean & c)
 {
     qt_radiobutton->setChecked(c->value());
 }
 
 
-void YQRadioButton::setLabel(const YCPString &label)
+void YQRadioButton::setLabel(const YCPString & label)
 {
     qt_radiobutton->setText(fromUTF8(label->value()));
     YRadioButton::setLabel(label);

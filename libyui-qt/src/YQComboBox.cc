@@ -31,7 +31,7 @@
 #define SPACING			4	// between subwidgets
 
 
-YQComboBox::YQComboBox( QWidget *parent, YWidgetOpt &opt,
+YQComboBox::YQComboBox( QWidget *parent, YWidgetOpt & opt,
 		       const YCPString & label)
     : QVBox(parent)
     , YComboBox(opt, label)
@@ -55,14 +55,14 @@ YQComboBox::YQComboBox( QWidget *parent, YWidgetOpt &opt,
 }
 
 
-void YQComboBox::setLabel(const YCPString &label)
+void YQComboBox::setLabel(const YCPString & label)
 {
     qt_label->setText(fromUTF8(label->value()));
     YComboBox::setLabel(label);
 }
 
 
-void YQComboBox::setValidChars( const YCPString &newValidChars )
+void YQComboBox::setValidChars( const YCPString & newValidChars )
 {
     if ( _validator )
     {
@@ -116,7 +116,7 @@ YCPString YQComboBox::getValue() const
 }
 
 
-void YQComboBox::setValue(const YCPString &new_value)
+void YQComboBox::setValue(const YCPString & new_value)
 {
     qt_combo_box->setEditText( fromUTF8( new_value->value() ) );
 }

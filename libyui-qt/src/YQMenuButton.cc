@@ -34,7 +34,7 @@
 #define BORDERSIZE QSize(BORDER, BORDER)
 
 YQMenuButton::YQMenuButton( 			   QWidget *parent,
-			   YWidgetOpt &opt,
+			   YWidgetOpt & opt,
 			   YCPString label)
     : QWidget(parent)
     , YMenuButton(opt, label)

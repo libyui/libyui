@@ -30,7 +30,7 @@ using std::max;
 #include "YQLogView.h"
 
 
-YQLogView::YQLogView( QWidget *parent, YWidgetOpt &opt,
+YQLogView::YQLogView( QWidget *parent, YWidgetOpt & opt,
 		     const YCPString & label, int visLines, int maxLines )
     : QVBox( parent )
     , YLogView( opt, label, visLines, maxLines )
@@ -89,7 +89,7 @@ void YQLogView::setLogText( const YCPString & text)
 }
 
 
-void YQLogView::setLabel(const YCPString &label)
+void YQLogView::setLabel(const YCPString & label)
 {
     qt_label->setText( fromUTF8( label->value() ) );
     YLogView::setLabel(label);

@@ -25,9 +25,9 @@
 #include "YQColoredLabel.h"
 
 
-YQColoredLabel::YQColoredLabel( QWidget *parent, YWidgetOpt &opt,
+YQColoredLabel::YQColoredLabel( QWidget *parent, YWidgetOpt & opt,
 				YCPString text,
-				YColor &fg, YColor &bg,
+				YColor & fg, YColor & bg,
 				int margin )
     : QLabel(parent)
     , YLabel(opt, text)
@@ -65,7 +65,7 @@ void YQColoredLabel::setSize(long newWidth, long newHeight)
 }
 
 
-void YQColoredLabel::setLabel(const YCPString &text)
+void YQColoredLabel::setLabel(const YCPString & text)
 {
     setText(fromUTF8(text->value()));
     YLabel::setLabel(text);

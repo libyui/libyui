@@ -44,7 +44,7 @@ public:
     /**
      * Constructor.
      */
-    YQMenuButton( QWidget *parent, YWidgetOpt &opt, YCPString label);
+    YQMenuButton( QWidget *parent, YWidgetOpt & opt, YCPString label);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the

@@ -55,7 +55,7 @@ protected:
 
 public:
 
-    YQComboBox( QWidget *parent, YWidgetOpt &opt, const YCPString & label);
+    YQComboBox( QWidget *parent, YWidgetOpt & opt, const YCPString & label);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -86,7 +86,7 @@ public:
      *
      * Reimplemented from @ref YComboBox
      */
-    void setValidChars(const YCPString &validChars);
+    void setValidChars(const YCPString & validChars);
 
     /**
      * Notification that a new item has been added.
@@ -106,7 +106,7 @@ public:
      * Sets the ComboBox value to a random value that is not already in
      * the item list. Will be called for editable ComboBox widgets only.
      */
-    void setValue(const YCPString &new_value);
+    void setValue(const YCPString & new_value);
 
     /**
      * Inherited from YComboBox:

@@ -38,17 +38,17 @@ public:
      * Constructor.
      * images.
      */
-    YQImage( QWidget *parent, YWidgetOpt &opt, YUIInterpreter::ImageType img);
+    YQImage( QWidget *parent, YWidgetOpt & opt, YUIInterpreter::ImageType img);
 
     /**
      * Constructor.
      */
-    YQImage( QWidget *parent, YWidgetOpt &opt, const YCPByteblock & byteblock);
+    YQImage( QWidget *parent, YWidgetOpt & opt, const YCPByteblock & byteblock);
 
     /**
      * Constructor.
      */
-    YQImage( QWidget *parent, YWidgetOpt &opt, const YCPString & file_name);
+    YQImage( QWidget *parent, YWidgetOpt & opt, const YCPString & file_name);
 
     /**
      * Minimum size the widget should have to make it look and feel
@@ -67,7 +67,7 @@ private:
     /**
      * Common init method for all constructors
      **/
-    void init( QWidget *parent, YWidgetOpt &opt );
+    void init( QWidget *parent, YWidgetOpt & opt );
 
     /**
      * Set the pixmap contents. That weird name is to prevent overwriting a

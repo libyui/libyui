@@ -420,7 +420,7 @@ protected:
      * Sets the X input method according to the locale.
      * [Reimplemented from YUIInterpreter]
      */
-    YCPValue setLanguage( const YCPTerm &term );
+    YCPValue setLanguage( const YCPTerm & term );
 
 
     /**

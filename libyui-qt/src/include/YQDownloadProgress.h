@@ -41,8 +41,8 @@ public:
      */
     YQDownloadProgress( 			QWidget *	parent,
 			YWidgetOpt &	opt,
-			const YCPString &label,
-			const YCPString &filename,
+			const YCPString & label,
+			const YCPString & filename,
 			int 		expectedSize);
 
     /**

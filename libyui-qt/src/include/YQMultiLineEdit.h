@@ -39,7 +39,7 @@ public:
     /**
      * Constructor
      */
-    YQMultiLineEdit( QWidget *parent, YWidgetOpt &opt,
+    YQMultiLineEdit( QWidget *parent, YWidgetOpt & opt,
 		    const YCPString & label, const YCPString & initialText );
 
     /**

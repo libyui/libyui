@@ -69,7 +69,7 @@ YQMultiSelectionBox::YQMultiSelectionBox( 					  QWidget *		parent,
 
 
 void
-YQMultiSelectionBox::setLabel( const YCPString &label )
+YQMultiSelectionBox::setLabel( const YCPString & label )
 {
     qt_label->setText(fromUTF8(label->value()));
     YMultiSelectionBox::setLabel(label);

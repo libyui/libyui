@@ -39,7 +39,7 @@ public:
     /**
      * Constructor.
      */
-    YQTable( QWidget *parent, YWidgetOpt &opt, vector<string> header);
+    YQTable( QWidget *parent, YWidgetOpt & opt, vector<string> header);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the

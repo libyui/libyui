@@ -30,8 +30,8 @@
 
 YQDownloadProgress::YQDownloadProgress( 					QWidget *	parent,
 					YWidgetOpt &	opt,
-					const YCPString &label,
-					const YCPString &filename,
+					const YCPString & label,
+					const YCPString & filename,
 					int 		expectedSize)
     : QVBox( parent )
     , YDownloadProgress( opt, label, filename, expectedSize )
@@ -77,7 +77,7 @@ void YQDownloadProgress::setSize(long newWidth, long newHeight)
 }
 
 
-void YQDownloadProgress::setLabel(const YCPString &label)
+void YQDownloadProgress::setLabel(const YCPString & label)
 {
     qt_label->setText( fromUTF8( label->value() ));
     YDownloadProgress::setLabel( label );

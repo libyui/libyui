@@ -101,7 +101,7 @@ void YQSlider::setSize( long newWidth, long newHeight )
     resize( newWidth, newHeight );
 }
 
-void YQSlider::setLabel( const YCPString &newLabel )
+void YQSlider::setLabel( const YCPString & newLabel )
 {
     qt_label->setText( fromUTF8( newLabel->value() ) ) ;
 
