@@ -26,6 +26,7 @@
 					      `item( `id(`update), 	"&Update    [u]"),
 					      `item( `id(`installed), 	"&Installed [i]"),
 					      `item( `id(`taboo), 	"&Taboo     [t]"),
+					      `item( `id(`dummy), 	"--------------"),
 					      `item( `id(`toggleSrc), 	"SP&M yes/no" )	 ]
 				 )),
 	      `Left(`MenuButton( "&Information", [`item( `id(`pkginfo), "Package info" ),
