@@ -35,6 +35,12 @@ public:
      * Constructor
      */
     YQEmpty( QWidget * parent, const YWidgetOpt & opt );
+    
+    /**
+     * Sets the new size of the widget.
+     * Reimplemented from YWidget.
+     */
+    void setSize( long newWidth, long newHeight );
 };
 
 #endif // YQEmpty_h

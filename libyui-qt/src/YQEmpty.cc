@@ -29,4 +29,10 @@ YQEmpty::YQEmpty( QWidget * parent, const YWidgetOpt &	opt )
 }
 
 
+void YQEmpty::setSize( long newWidth, long newHeight )
+{
+    resize( newWidth, newHeight );
+}
+
+
 #include "YQEmpty.moc"
