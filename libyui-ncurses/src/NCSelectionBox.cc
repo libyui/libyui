@@ -34,7 +34,6 @@ NCSelectionBox::NCSelectionBox( NCWidget * parent, YWidgetOpt & opt,
     , pad( (NCTablePad *&)NCPadWidget::pad )
     , biglist( false )
     , immediate( opt.immediateMode.value() )
-    , keyevent ( opt.keyEvents.value() )
 {
   WIDDBG << endl;
   InitPad();
@@ -218,7 +217,7 @@ NCursesEvent NCSelectionBox::wHandleInput( wint_t key )
   int citem = getCurrentItem();
 
   // handle key event first
-  if ( keyevent &&
+  if ( sendKeyEvents() &&
        (key == KEY_LEFT || key == KEY_RIGHT))
   {
       ret = NCursesEvent::key;
