@@ -95,7 +95,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     // Filter menu
     eventHandlerMap[ PkgNames::RpmGroups()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::Selections()->toString() ] = &PackageSelector::FilterHandler;
-
+    eventHandlerMap[ PkgNames::UpdateList()->toString() ] = &PackageSelector::FilterHandler;
     // YOU filter
     eventHandlerMap[ PkgNames::Recommended()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::Security()->toString() ] = &PackageSelector::FilterHandler;
@@ -430,7 +430,7 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
     YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
     if ( filterLabel )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( PkgNames::SearchResults() );
+	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::SearchResults().str()) );
     }
 
     return true;
@@ -485,7 +485,7 @@ bool PackageSelector::fillPatchList( string filter )
     YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
     if ( filterLabel )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( PkgNames::YOUPatches() );
+	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::YOUPatches().str()) );
     }
 
     return true;
@@ -530,7 +530,7 @@ bool PackageSelector::fillUpdateList( )
     YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
     if ( filterLabel )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( PkgNames::UpdateProblem() );
+	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::UpdateProblem().str()) );
     }
     
     return true;
@@ -1143,6 +1143,10 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
     {
 	fillPatchList( "installed" );
     }
+    else if (  event.selection->compare( PkgNames::UpdateList() ) ==  YO_EQUAL )
+    {
+	fillUpdateList();
+    }
 
     showPackageInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );
     packageList->setKeyboardFocus();	
@@ -1279,7 +1283,7 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
 	text += PkgNames::HelpOnUpdate().str();
     }
     // open the popup with the help text
-    NCPopupInfo pkgHelp( wpos( 1, 1 ), PkgNames::PackageHelp(), YCPString( text ) );
+    NCPopupInfo pkgHelp( wpos( 1, 1 ), YCPString(PkgNames::PackageHelp().str()), YCPString( text ) );
     pkgHelp.showInfoPopup( );
     
     return true;
@@ -1293,14 +1297,14 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
 //
 bool PackageSelector::YouHelpHandler( const NCursesEvent&  event )
 {
-    NCstring text ( "" );
+    string text  = "";
 
-    text += PkgNames::YouHelp1();
-    text += PkgNames::YouHelp2();
-    text += PkgNames::YouHelp3();
+    text += PkgNames::YouHelp1().str();
+    text += PkgNames::YouHelp2().str();
+    text += PkgNames::YouHelp3().str();
 
     // open the popup with the help text
-    NCPopupInfo youHelp( wpos( 1, 1 ), PkgNames::YouHelp(), text.YCPstr() );
+    NCPopupInfo youHelp( wpos( 1, 1 ), YCPString(PkgNames::YouHelp().str()), YCPString(text) );
     youHelp.showInfoPopup( );
     
     return true;
@@ -1333,9 +1337,11 @@ bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 // 
 bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 {
-    // FIXME - do a final dependency check
     // FIXME - check diskspace
 
+    // show the dependency popup
+    showDependencies( true ); 	// do the check
+	
     NCMIL <<  "OK button pressed - leaving package selection, starting installation" << endl;
 
     const_cast<NCursesEvent &>(event).result = YCPSymbol("accept", true); 
