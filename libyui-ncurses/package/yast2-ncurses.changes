@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Jan 31 15:42:54 CET 2003 - gs@suse.de
+
+- V 2.7.6
+- package installation: dependency popup improved (it is possible to
+  ignore dependencies); show used/free/total disk space; 
+  show error popup if disk space is exhausted  
+
+-------------------------------------------------------------------
 Thu Jan 30 15:24:25 CET 2003 - ma@suse.de
 
 - Widgets beeping on illegal keyboard input (NCIntField|NCTextEntry|NCTextPad)
