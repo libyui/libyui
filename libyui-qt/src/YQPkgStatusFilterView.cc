@@ -61,28 +61,21 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     // Packages with what status to show
     //
 
-    QVGroupBox * gbox = new QVGroupBox( _( "Show status" ), this );
+    QVGroupBox * gbox = new QVGroupBox( _( "Show packages with status" ), this );
     CHECK_PTR( gbox );
 
+    _showDel		= addStatusCheckBox( gbox, _( "Delete"		), true );
+    _showInstall	= addStatusCheckBox( gbox, _( "Install"		), true );
+    _showUpdate		= addStatusCheckBox( gbox, _( "Update"		), true );
+    _showAutoDel	= addStatusCheckBox( gbox, _( "Auto-delete"	), true );
+    _showAutoInstall	= addStatusCheckBox( gbox, _( "Auto-install"	), true );
+    _showAutoUpdate	= addStatusCheckBox( gbox, _( "Auto-update"	), true );
+    _showTaboo		= addStatusCheckBox( gbox, _( "Taboo"		), true );
 
-    _showDel		= new QCheckBox( _( "Delete"	    ), gbox ); CHECK_PTR( _showDel	     );
-    _showInstall	= new QCheckBox( _( "Install"	    ), gbox ); CHECK_PTR( _showInstall	     );
-    _showUpdate		= new QCheckBox( _( "Update"	    ), gbox ); CHECK_PTR( _showUpdate	     );
-    _showAutoDel	= new QCheckBox( _( "Auto-delete"   ), gbox ); CHECK_PTR( _showAutoDel	     );
-    _showAutoInstall	= new QCheckBox( _( "Auto-install"  ), gbox ); CHECK_PTR( _showAutoInstall   );
-    _showAutoUpdate	= new QCheckBox( _( "Auto-update"   ), gbox ); CHECK_PTR( _showAutoUpdate    );
-    _showTaboo		= new QCheckBox( _( "Taboo"	    ), gbox ); CHECK_PTR( _showTaboo	     );
-    addVStretch( gbox );
-    _showKeepInstalled	= new QCheckBox( _( "Keep"	    ), gbox ); CHECK_PTR( _showKeepInstalled );
-    _showNoInst		= new QCheckBox( _( "Don't install" ), gbox ); CHECK_PTR( _showNoInst	     );
+    addVSpacing( gbox, 8 );
 
-    _showDel->setChecked( true );
-    _showInstall->setChecked( true );
-    _showUpdate->setChecked( true );
-    _showAutoDel->setChecked( true );
-    _showAutoInstall->setChecked( true );
-    _showAutoUpdate->setChecked( true );
-    _showTaboo->setChecked( true );
+    _showKeepInstalled	= addStatusCheckBox( gbox, _( "Keep"		), false );
+    _showNoInst		= addStatusCheckBox( gbox, _( "Don't install"	), false );
 
     addVStretch( this );
 
@@ -94,26 +87,38 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     addHStretch( hbox );
 
     // Refresh button
-    _refreshButton = new QPushButton( _( "&Refresh" ), hbox );
+    _refreshButton = new QPushButton( _( "&Refresh List" ), hbox );
     CHECK_PTR( _refreshButton );
     addHStretch( hbox );
 
-    connect( _refreshButton, SIGNAL( clicked() ),
-	     this,	    SLOT  ( filter()  ) );
+    connect( _refreshButton,	SIGNAL( clicked() ),
+	     this,	    	SLOT  ( filter()  ) );
 
-    addVStretch( this );
-
-
-#if 0
     for ( int i=0; i < 6; i++ )
 	addVStretch( this );
-#endif
 }
 
 
 YQPkgStatusFilterView::~YQPkgStatusFilterView()
 {
     // NOP
+}
+
+
+
+QCheckBox *
+YQPkgStatusFilterView::addStatusCheckBox( QWidget *		parent,
+					  const QString &	label,
+					  bool			initiallyChecked )
+{
+    QCheckBox * checkBox = new QCheckBox( label, parent );
+    CHECK_PTR( checkBox );
+    checkBox->setChecked( initiallyChecked );
+
+    connect( checkBox,	SIGNAL( clicked() ),
+	     this,	SLOT  ( filter()  ) );
+
+    return checkBox;
 }
 
 
@@ -165,8 +170,8 @@ YQPkgStatusFilterView::filter()
 bool
 YQPkgStatusFilterView::check( PMPackagePtr pkg )
 {
-    bool match;
-    
+    bool match = false;
+
     if ( ! pkg )
 	return false;
 

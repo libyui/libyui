@@ -303,12 +303,10 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     {
 	_statusFilterView = new YQPkgStatusFilterView( parent );
 	CHECK_PTR( _statusFilterView );
-#warning FIXME: Better title for this view!
-	_filters->addPage( _( "Changes (\"What if...\")" ), _statusFilterView );
+	_filters->addPage( _( "Installation Summary" ), _statusFilterView );
 	
-
-	connect( _filters, 	SIGNAL( currentChanged( QWidget * ) ),
-		 _selList,	SLOT  ( filterIfVisible()           ) );
+	connect( _filters, 		SIGNAL( currentChanged( QWidget * ) ),
+		 _statusFilterView,	SLOT  ( filterIfVisible()           ) );
     }
 
 
@@ -387,9 +385,7 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     CHECK_PTR( details_vbox );
     details_vbox->setMinimumSize( 0, 0 );
 
-    QWidget *spacer = new QWidget( details_vbox );
-    CHECK_PTR( spacer );
-    spacer->setFixedHeight( 8 );
+    addVSpacing( details_vbox, 8 );
 
     _detailsViews = new QTabWidget( details_vbox );
     CHECK_PTR( _detailsViews );
@@ -783,6 +779,22 @@ void addHStretch( QWidget * parent )
 {
     QWidget * spacer = new QWidget( parent );
     spacer->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum) ); // hor/vert
+}
+
+
+void addVSpacing( QWidget * parent, int height )
+{
+    QWidget * spacer = new QWidget( parent );
+    CHECK_PTR( spacer );
+    spacer->setFixedHeight( height );
+}
+
+
+void addHSpacing( QWidget * parent, int width )
+{
+    QWidget * spacer = new QWidget( parent );
+    CHECK_PTR( spacer );
+    spacer->setFixedWidth( width );
 }
 
 

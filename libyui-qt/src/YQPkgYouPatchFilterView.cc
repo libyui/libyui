@@ -32,6 +32,7 @@
 #include "YQPkgYouPatchList.h"
 #include "YQPkgDescriptionView.h"
 #include "YQPkgSelList.h"
+#include "YQPackageSelector.h"
 #include "YQi18n.h"
 
 
@@ -42,15 +43,13 @@
 YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
     : QVBox( parent )
 {
-    QVBox *	details_vbox;
-    QWidget *	spacer;
+    QVBox * details_vbox;
     
     _splitter		= new QSplitter( QSplitter::Vertical, this );	CHECK_PTR( _splitter 		);
     _youPatchList	= new YQPkgYouPatchList( _splitter );		CHECK_PTR( _youPatchList 	);
     
     details_vbox	= new QVBox( _splitter );			CHECK_PTR( details_vbox		);
-    spacer		= new QWidget   ( details_vbox );		CHECK_PTR( spacer		);
-    spacer->setFixedHeight( 8 );
+    addVSpacing( details_vbox, 8 );
     
     _detailsViews	= new QTabWidget( details_vbox );		CHECK_PTR( _detailsViews	);
     _detailsViews->setMargin( MARGIN );

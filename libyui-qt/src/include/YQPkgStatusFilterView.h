@@ -101,6 +101,12 @@ protected:
      **/
     bool check( PMPackagePtr pkg );
 
+    /**
+     *
+     **/
+    QCheckBox * addStatusCheckBox( QWidget * 		parent,
+				   const QString & 	label,
+				   bool 		initiallyChecked );
     
     // Data members
 
