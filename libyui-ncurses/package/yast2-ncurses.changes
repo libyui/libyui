@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Aug 11 13:26:07 CEST 2003 - gs@suse.de
+
+- V 2.8.11
+- texts from proofread patched back
+- SelectionBox returns ValueChanged event
+- show patch/package description on KEY_PPAGE/KEY_NPAGE
+
+-------------------------------------------------------------------
 Tue Aug  5 13:17:42 CEST 2003 - gs@suse.de
 
 - V 2.8.10
