@@ -69,6 +69,9 @@ class NCRichText : public YRichText, public NCPadWidget {
     unsigned cindent;
     bool     atbol;
 
+    bool     skipWS;		// skip white spaces (set to false
+                                // if <pre> tag is found)
+    
     unsigned Tattr;
 
     static const unsigned Tfontmask = 0xff00;
@@ -79,6 +82,7 @@ class NCRichText : public YRichText, public NCPadWidget {
       T_PAR     = 0x0004,
       T_LEVEL   = 0x0008,
       T_LI      = 0x0010,
+      T_PLAIN	= 0x0012,
       // font
       T_BOLD    = 0x0100,
       T_IT      = 0x0200,
@@ -167,7 +171,7 @@ class NCRichText : public YRichText, public NCPadWidget {
 
     void PadNL();
     void PadBOL();
-    void PadWS( const bool tab = false );
+    void PadWS( const wchar_t * ws = L" ", const bool tab = false );
     void PadTXT( const wchar_t * sch, const unsigned len );
     bool PadTOKEN( const wchar_t * sch, const wchar_t *& ech );
 

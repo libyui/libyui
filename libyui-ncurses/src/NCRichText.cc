@@ -109,6 +109,7 @@ NCRichText::NCRichText( NCWidget * parent, YWidgetOpt & opt,
     , NCPadWidget( parent )
     , text( ntext )
     , plainText( opt.plainTextMode.value() )
+    , skipWS( true )
     , Tattr( 0 )
 {
   WIDDBG << endl;
@@ -376,7 +377,7 @@ void NCRichText::DrawHTMLPad()
 
   const wchar_t * wch = (wchar_t *)text.str().data(); 
   const wchar_t * swch = 0;
-
+  
   while ( *wch )
   {
       switch ( *wch ) {
@@ -385,8 +386,16 @@ void NCRichText::DrawHTMLPad()
 	  case L'\n':
 	  case L'\v':
 	  case L'\r':
-	      SkipWS( wch );
-	      PadWS();
+	      if ( skipWS )
+	      {
+		  SkipWS( wch );
+		  PadWS();
+	      }
+	      else
+	      {
+		  PadWS( wch );
+		  ++wch;
+	      }
 	      break;
 
 	  case L'<':
@@ -457,19 +466,34 @@ inline void NCRichText::PadBOL()
 //
 //	DESCRIPTION :
 //
-inline void NCRichText::PadWS( const bool tab )
+inline void NCRichText::PadWS( const wchar_t * ws, const bool tab )
 {
-  if ( atbol )
+  if ( skipWS && atbol )
       return; // no WS at beginning of line
 
-  if ( cc == textwidth )
+  if ( skipWS )
   {
-      PadNL();
+      if ( cc == textwidth )
+      {
+	  PadNL();
+      }
+      else
+      {
+	  pad->addwstr( L" " );
+	  ++cc;
+      }
   }
   else
   {
-      pad->addwstr( L" " );
-      ++cc;
+      if ( *ws == L'\n' )
+      {
+	  PadNL();
+      }
+      else
+      {
+	  pad->addwstr( ws, 1 );	// write one wide char
+	  ++cc;  
+      }
   }
 }
 
@@ -726,7 +750,7 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
     break;
   case 3:
     if (      value == L"big" )		token = T_IGNORE;
-    else if ( value == L"pre" )		token = T_IGNORE;
+    else if ( value == L"pre" )		token = T_PLAIN;
     break;
   case 4:
     if (      value == L"bold" )	token = T_BOLD;
@@ -812,6 +836,17 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
     }
     break;
 
+  case T_PLAIN:
+      if ( !endtag )
+      {
+	  skipWS = false; 	// don't skip white spaces
+      }
+      else
+      {
+	  skipWS = true;
+      }
+      break;
+      
   case T_ANC:
     if ( endtag )
     {
