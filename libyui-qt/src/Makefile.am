@@ -4,7 +4,7 @@
 
 SUBDIRS = include
 
-AM_CXXFLAGS = -DY2LOG=\"ui-qt\" -DQT_THREAD_SUPPORT
+AM_CXXFLAGS = -DY2LOG=\"ui-qt\" -DQT_THREAD_SUPPORT -DLOCALEDIR=\"${localedir}\"
 
 MOC = $(QTDIR)/bin/moc
 
