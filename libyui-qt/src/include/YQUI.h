@@ -413,6 +413,12 @@ protected:
     YWidget *	createDumbTab		( YWidget *		parent,
 					  YWidgetOpt & 		opt );
 
+    bool	hasMultiProgressMeter();
+    YWidget *	createMultiProgressMeter( YWidget *		parent,
+					  YWidgetOpt & 		opt,
+					  bool 			horizontal,
+					  const YCPList & 	maxValues );
+
     bool 	hasSlider();
     YWidget *	createSlider		( YWidget *		parent,
 					  YWidgetOpt & 		opt,

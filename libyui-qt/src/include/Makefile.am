@@ -34,6 +34,7 @@ noinst_HEADERS =				\
 	YQLogView.h				\
 	YQMenuButton.h				\
 	YQMultiLineEdit.h			\
+	YQMultiProgressMeter.h			\
 	YQMultiSelectionBox.h			\
 	YQPackageSelector.h			\
 	YQPartitionSplitter.h			\

@@ -40,6 +40,7 @@
 #include "YQLogView.h"
 #include "YQMenuButton.h"
 #include "YQMultiLineEdit.h"
+#include "YQMultiProgressMeter.h"
 #include "YQMultiSelectionBox.h"
 #include "YQPartitionSplitter.h"
 #include "YQProgressBar.h"
@@ -255,7 +256,7 @@ YWidget * YQUI::createImage		( YWidget *		parent,
 					  YCPString 		default_text )
 {
     return new YQImage( (QWidget *) ( parent->widgetRep() ), opt, imagedata );
-} 
+}
 
 YWidget * YQUI::createImage		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
@@ -358,6 +359,24 @@ YWidget * YQUI::createDumbTab		( YWidget *		parent,
 					  YWidgetOpt & 		opt )
 {
     return new YQDumbTab( (QWidget *) ( parent->widgetRep() ), opt );
+}
+
+
+bool YQUI::hasMultiProgressMeter()
+{
+    return true;
+}
+
+
+YWidget * YQUI::createMultiProgressMeter( YWidget *		parent,
+					  YWidgetOpt & 		opt,
+					  bool 			horizontal,
+					  const YCPList & 	maxValues )
+{
+    return new YQMultiProgressMeter( (QWidget *) ( parent->widgetRep() ),
+				     opt,
+				     horizontal,
+				     maxValues );
 }
 
 
