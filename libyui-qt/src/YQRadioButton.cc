@@ -27,6 +27,7 @@
 #include "YQUI.h"
 #include "YEvent.h"
 #include "YQRadioButton.h"
+#include "YRadioButtonGroup.h"
 
 #define SPACING 8
 
@@ -86,6 +87,10 @@ void YQRadioButton::setValue( const YCPBoolean & c )
 {
     _qt_radiobutton->blockSignals( true );
     _qt_radiobutton->setChecked( c->value() );
+
+    if ( c->value() )
+	buttonGroup()->uncheckOtherButtons( this );
+    
     _qt_radiobutton->blockSignals( false );
 }
 
