@@ -49,12 +49,20 @@
 				      `HSpacing(0.3)
 				      )
 			    ),
-		  `HBox( `HSpacing(0.4),
-			 // label text
-			 `Left( `Label( _("Filter: ")) ),
-			 `Left( `Label( `id(`filter), "........................." ) ), 
-			 `HStretch( )
-			 ),
+		  `HBox(
+			// label text - keep it short
+			`HWeight(1, `HBox(`Label( _("Filter: ") ),
+					  `Label( `id(`filter), "........................." ),
+					  `HSpacing( 0.1 )
+					  )
+				 ),
+			// label text - keep it short (use abbreviation if necessary)
+			`HWeight(1, `HBox(`Label( _("Total download Size: ") ),
+					  `Label( `id(`diskspace), "         " ),
+					  `HSpacing( 0.1 )
+					  )
+				 )
+			),
 		  `VBox(`VWeight( 40, `ReplacePoint( `id(`replaceinfo),
 						     `RichText( `id(`description)," ")
 						     )
