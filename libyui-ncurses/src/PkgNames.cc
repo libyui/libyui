@@ -382,19 +382,22 @@ const YCPValue& PkgNames::Treeitem ()
 //
 const YCPString PkgNames::WarningLabel()
 {
+    // label for a warning popup
     static const YCPString value = toYCPString ( _("Warning") );
     return value;
 }
 
 const YCPString PkgNames::ErrorLabel()
 {
+     // label for an error popup
     static const YCPString value = toYCPString ( _("Error") );
     return value;
 }
 
 const YCPString PkgNames::NotifyLabel()
 {
-        static const YCPString value = toYCPString ( _("Notify") );
+    // label for a notify popup 
+    static const YCPString value = toYCPString ( _("Notify") );
     return value;
 }
 
@@ -470,6 +473,7 @@ const YCPString PkgNames::PackageSearch()
 
 const YCPString PkgNames::DepsHelpLine()
 {
+    // a help line for the dependency popup
     static const YCPString value = toYCPString ( _( " [+] Select    [-] Delete    [>] Update " ) );
     return value;
 }
@@ -481,6 +485,13 @@ const YCPString PkgNames::PackageDeps()
     return value;
 }
 
+const YCPString PkgNames::Solving()
+{
+    // a label for a popup which is shown during package dependency checking
+    static const YCPString value = toYCPString ( _("Solving ...") );
+    return value;
+}    
+	
 const YCPString PkgNames::SearchPhrase()
 {
     // text for search popup 

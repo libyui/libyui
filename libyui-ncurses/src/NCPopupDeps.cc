@@ -28,6 +28,7 @@
 #include "NCPkgTable.h"
 #include "NCMenuButton.h"
 #include "NCPushButton.h"
+#include "NCPopupInfo.h"
 #include "ObjectStatStrategy.h"
 
 using namespace std;
@@ -184,8 +185,14 @@ void NCPopupDeps::showDependencies( )
        
     NCDBG << "Solving..." << endl ;
 
+    NCPopupInfo info( wpos(10, 10),  YCPString( "" ), PkgNames::Solving(), false );
+    info.setNiceSize( 18, 4 );
+    info.popup();
+    
     // call the Y2PM::packageManager() to get the "badlist"
     bool success = Y2PM::packageManager().solveInstall( goodList, badList );
+
+    info.popdown();
 
     if ( !success )
     {

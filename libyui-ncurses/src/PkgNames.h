@@ -296,6 +296,7 @@ public:
     static const YCPString ErrorLabel();
     static const YCPString NotifyLabel();
     static const YCPString DepsHelpLine();
+    static const YCPString Solving();
     
    /**
      * text used in search popup
