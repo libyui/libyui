@@ -34,6 +34,7 @@ liby2qt_la_LIBADD = $(libpy2qt_la_LIBADD)
 
 liby2qt_la_SOURCES = 				\
 	YUIQt.cc				\
+	YUIQt_widgets.cc			\
 	YQIconPool.cc				\
 						\
 	YQAlignment.cc				\
@@ -180,13 +181,14 @@ BUILT_SOURCES =					\
 	QY2BarGraph.moc.cc			\
 	QY2ComboTabWidget.moc.cc		\
 	QY2DiskUsageList.moc.cc			\
-	QY2FloppyMountDialog.moc.cc			\
+	QY2FloppyMountDialog.moc.cc		\
 	QY2CharValidator.moc.cc			\
 	QY2ListView.moc.cc			\
 	QXEmbed.moc.cc
 
 
-YUIQt.o YUIQt.lo:					YUIQt.moc.cc
+YUIQt.o YUIQt.lo:						YUIQt.moc.cc
+YUIQt_widgets.o YUIQt_widgets.lo:				YUIQt.moc.cc
 
 YQAlignment.o YQAlignment.lo:   				YQAlignment.moc.cc
 YQBarGraph.o YQBarGraph.lo:   					YQBarGraph.moc.cc
