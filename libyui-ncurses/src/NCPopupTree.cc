@@ -97,7 +97,7 @@ void NCPopupTree::createLayout( const YCPString & label )
 NCursesEvent NCPopupTree::showFilterPopup( )
 {
     postevent = NCursesEvent();
-
+    
     // event loop
     do {
 	popupDialog();
@@ -215,7 +215,8 @@ bool NCPopupTree::postAgain()
 {
     postevent.detail = NCursesEvent::NODETAIL;
 
-    if (  postevent == NCursesEvent::button )
+    if (  postevent == NCursesEvent::button
+	  && postevent.reason == YEvent::Activated )
     {
 	postevent.detail = NCursesEvent::USERDEF ;
 
