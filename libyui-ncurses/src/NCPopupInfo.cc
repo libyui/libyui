@@ -209,12 +209,10 @@ bool NCPopupInfo::postAgain()
 	{
 	    // close the dialog 
 	    postevent = NCursesEvent::cancel;
-	    postevent.result = PkgNames::Cancel();
 	}
 	else if  ( currentId->compare( PkgNames::OkButton() ) == YO_EQUAL )
 	{
 	    postevent = NCursesEvent::button;
-	    postevent.result = PkgNames::OkButton();
 	}	
     }
     
