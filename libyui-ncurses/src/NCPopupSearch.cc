@@ -25,7 +25,7 @@
 #include "NCSplit.h"
 #include "NCSpacing.h"
 #include "PkgNames.h"
-
+#include "PackageSelector.h"
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -35,13 +35,14 @@
 //
 //	DESCRIPTION :
 //
-NCPopupSearch::NCPopupSearch( const wpos at )
+NCPopupSearch::NCPopupSearch( const wpos at, PackageSelector * pkger )
     : NCPopup( at, false )
       , searchExpr( 0 )
       , helpText( 0 )
       , ignoreCase( 0 )
       , checkDescr( 0 )
       , cancelButton( 0 )
+      , packager( pkger )
 {
     createLayout( YCPString(PkgNames::PackageSearch().str()) );
 }
@@ -222,30 +223,43 @@ bool NCPopupSearch::postAgain()
     
     if ( currentId->compare( PkgNames::Cancel () ) == YO_EQUAL )
     {
-	// do not start the package search if cancel button is pressed
-	// (result is checked in PackageSelector::SearchHandler)
+	// set postevent.result to Null (checked in PackageSelector.cc)
 	postevent.result = YCPNull();
     }
     else if ( currentId->compare( PkgNames::OkButton () ) == YO_EQUAL )
     {
-	// get the search expression and store it in NCursesEvent.result
+	YCPValue value = YCPNull();
+	bool ignore = true;
+	bool descr = false;
+	
+	// get the search expression
 	postevent.result =  getSearchExpression();
 
 	if ( ignoreCase )
 	{
-	    // ignore case true or false
-	    postevent.selection = ignoreCase->getValue();
+	    value = ignoreCase->getValue();
+
+	    // ignore case is not selected
+	    if ( !value.isNull() && value->asBoolean()->toString() == "false" )
+	    {
+		ignore = false;
+	    }
 	}
 	if ( checkDescr )
 	{
-	    YCPValue value = checkDescr->getValue();
-	    
-	    // check description is selected 
-	    if ( value->asBoolean()->toString() == "true" )
+	    value = checkDescr->getValue();
+
+            // check description is selected 
+	    if ( !value.isNull() && value->asBoolean()->toString() == "true" )
 	    {
-		postevent.detail = NCursesEvent::USERDEF;
+		descr = true;
 	    }
 	}
+
+	// fill the package list with packages matching the search expression	
+	packager->fillSearchList( postevent.result->asString(),
+				  ignore,
+				  descr  );
     }
     
     if ( postevent == NCursesEvent::button || postevent == NCursesEvent::cancel )

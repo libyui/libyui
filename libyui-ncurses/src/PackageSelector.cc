@@ -669,13 +669,6 @@ bool PackageSelector::searchPackage( PMPackagePtr pkg,
     
     string name = pkg->name().asString();
 
-#if 0
-    if ( name.find( searchExpr ) == std::string::npos )
-    {
-	return false;
-    }
-#endif
-
     if ( match( name, searchExpr, ignoreCase ) )
     {
 	// search sucessful
@@ -895,40 +888,13 @@ bool PackageSelector::SearchHandler( const NCursesEvent& event)
     }
     
     // open the search poup and get the search expression
-    NCPopupSearch pkgSearch( wpos( 1, 1 ) );
+    NCPopupSearch pkgSearch( wpos( 1, 1 ), this );
 
     NCursesEvent retEvent = pkgSearch.showSearchPopup();
 
-	
     if ( !retEvent.result.isNull() )
     {
-	bool ignoreCase = true;
-	bool checkDescr = false;
-	
-	YCPString searchExpr = retEvent.result->asString();
-
-	if ( !retEvent.selection.isNull() )
-	{
-	    YCPBoolean ignore = retEvent.selection->asBoolean();
-	    if ( !ignore.isNull()  && (ignore->toString() == "false") )
-	    {
-		ignoreCase = false;
-	    }
-	}
-	if ( retEvent.detail == NCursesEvent::USERDEF )
-	{
-	    checkDescr = true;
-	}
-
-	NCMIL << "Searching for: " <<  searchExpr->toString() << endl;
-	NCMIL << "Ignore Case: " << (ignoreCase?"true":"false") << endl;
-	NCMIL << "Check description: " << (checkDescr?"true":"false") << endl;
-
-	// fill the package list with packages matching the search expression
-	fillSearchList ( searchExpr,
-			 ignoreCase,
-			 checkDescr );
-	
+	NCMIL << "Searching for: " <<  retEvent.result->toString() << endl;
 	showPackageInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );
     }
     else

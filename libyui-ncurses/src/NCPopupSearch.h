@@ -33,6 +33,7 @@ using namespace std;
 #include "NCPushButton.h"
 
 class YCPValue;
+class PackageSelector;
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -53,7 +54,9 @@ private:
     NCCheckBox * checkDescr;
     NCPushButton * cancelButton;
     NCPushButton * okButton;
-    
+
+    PackageSelector * packager;		// connection to the package selector
+
 protected:
 
     YCPString getSearchExpression() const;
@@ -64,7 +67,7 @@ protected:
     
 public:
     
-    NCPopupSearch( const wpos at );
+    NCPopupSearch( const wpos at, PackageSelector *pkger );
     virtual ~NCPopupSearch();
 
     virtual long nicesize(YUIDimension dim);
