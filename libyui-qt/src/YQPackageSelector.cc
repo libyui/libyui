@@ -20,7 +20,7 @@
 /-*/
 
 #define CHECK_DEPENDENCIES_ON_STARTUP	1
-#define DEPENDENCY_FEEDBACK_IF_OK	1
+#define DEPENDENCY_FEEDBACK_IF_OK	0
 #define SHOW_CHANGES_DIALOG		0
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT	false
 
@@ -690,9 +690,7 @@ YQPackageSelector::autoResolveDependencies()
     if ( _autoDependenciesCheckBox && ! _autoDependenciesCheckBox->isChecked() )
 	return;
 
-    YUIQt::yuiqt()->busyCursor();
     resolvePackageDependencies();
-    YUIQt::yuiqt()->normalCursor();
 }
 
 
@@ -705,7 +703,11 @@ YQPackageSelector::manualResolvePackageDependencies()
 	return QDialog::Accepted;
     }
 
+    YUIQt::yuiqt()->busyCursor();
+    
     int result = _pkgConflictDialog->solveAndShowConflicts();
+    
+    YUIQt::yuiqt()->normalCursor();
 
 #if DEPENDENCY_FEEDBACK_IF_OK
 
@@ -730,7 +732,26 @@ YQPackageSelector::resolvePackageDependencies()
 	return QDialog::Accepted;
     }
 
-    return _pkgConflictDialog->solveAndShowConflicts();
+
+    YUIQt::yuiqt()->busyCursor();
+
+    QColor oldBackground;
+    
+    if ( _checkDependenciesButton )
+    {
+	oldBackground = _checkDependenciesButton->paletteBackgroundColor();
+	_checkDependenciesButton->setPaletteBackgroundColor( QColor( 0xE0, 0xE0, 0xF8 ) );
+	_checkDependenciesButton->repaint();
+    }
+
+    int result = _pkgConflictDialog->solveAndShowConflicts();
+    
+    if ( _checkDependenciesButton )
+	_checkDependenciesButton->setPaletteBackgroundColor( oldBackground );
+
+    YUIQt::yuiqt()->normalCursor();
+    
+    return result;
 }
 
 
