@@ -41,6 +41,8 @@
 #include "update.xpm"
 #include "update_disabled.xpm"
 
+#include "normal_conflict.xpm"
+
 #include "checklist_off.xpm"
 #include "checklist_on.xpm"
 
@@ -71,6 +73,12 @@ QPixmap YQIconPool::disabledPkgNoInst()		{ return iconPool()->cachedIcon( noinst
 QPixmap YQIconPool::checkMarkOn()		{ return iconPool()->cachedIcon( checklist_on_xpm );		}
 QPixmap YQIconPool::checkMarkOff()		{ return iconPool()->cachedIcon( checklist_off_xpm );		}
 
+QPixmap YQIconPool::normalPkgConflict()		{ return iconPool()->cachedIcon( normal_conflict_xpm );		}
+QPixmap YQIconPool::severePkgConflict()		{ return iconPool()->cachedIcon( normal_conflict_xpm );		}
+QPixmap YQIconPool::unresolvablePkgConflict()	{ return iconPool()->cachedIcon( normal_conflict_xpm );		}
+QPixmap YQIconPool::deletePkgConflict()		{ return iconPool()->cachedIcon( normal_conflict_xpm );		}
+QPixmap YQIconPool::tabooPkgConflict()		{ return iconPool()->cachedIcon( normal_conflict_xpm );		}
+QPixmap YQIconPool::selectPkgConflict()		{ return iconPool()->cachedIcon( normal_conflict_xpm );		}
 
 
 YQIconPool * YQIconPool::iconPool()

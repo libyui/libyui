@@ -81,6 +81,7 @@ pkginclude_HEADERS =				\
 	keepinstalled_disabled.xpm		\
 	noinst.xpm				\
 	noinst_disabled.xpm			\
+	normal_conflict.xpm			\
 	stop.xpm				\
 	taboo.xpm				\
 	taboo_disabled.xpm			\

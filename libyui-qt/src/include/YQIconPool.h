@@ -51,6 +51,13 @@ public:
 
     static QPixmap checkMarkOn();
     static QPixmap checkMarkOff();
+    
+    static QPixmap normalPkgConflict();
+    static QPixmap severePkgConflict();
+    static QPixmap unresolvablePkgConflict();
+    static QPixmap deletePkgConflict();
+    static QPixmap tabooPkgConflict();
+    static QPixmap selectPkgConflict();
 
 
 protected:
