@@ -525,30 +525,44 @@ const NCstring PkgNames::OKLabel()
     return value;
 }
 
+const NCstring PkgNames::SaveLabel()
+{
+    // the label of the Save button
+    static const NCstring value = _( "&Save" );
+    return value;
+}
+
+const NCstring PkgNames::LoadLabel()
+{
+    // the label of the Load button
+    static const NCstring value = _( "&Load" );
+    return value;
+}
+
 const NCstring PkgNames::CancelLabel()
 {
-    // the label of a Cancel button
+    // the label of the Cancel button
     static const NCstring value = _( "&Cancel" );
     return value;
 }
 
 const NCstring PkgNames::CancelIgnore()
 {
-    // the label of a Cancel button
+    // the label of the Cancel/Ignore button
     static const NCstring value = _( "&Cancel or Ignore" );
     return value;
 }
 
 const NCstring PkgNames::IgnAllLabel()
 {
-    // the label of a Ingnire all button
+    // the label of the Ingnore all button
     static const NCstring value = _( "Ignore &All" );
     return value;
 }
 
 const NCstring PkgNames::SolveLabel()
 {
-    // the label of a Cancel button
+    // the label of the Solve button
     static const NCstring value = _( "&Solve" );
     return value;
 }
@@ -1108,14 +1122,14 @@ const NCstring PkgNames::HelpOnSearch()
 const NCstring PkgNames::HelpOnStatus1()
 {
     // part 1 of help text package status
-    static const NCstring value = _( "<p>The package status can be changed using the <i>Actions</i> menu or the keys specified in the menu items. By default, the package dependencies are checked with every status change.</p>" );
+    static const NCstring value = _( "<p>The package status can be changed using the <i>Actions</i> menu or the keys specified in the menu items. For example, use '+' to install an additional package. The \"Taboo\" status means the package should not be installed or the installed version should always be kept.</p>" );
     return value;
 }
 
 const NCstring PkgNames::HelpOnStatus2()
 {
     // part 1 of help text package status
-    static const NCstring value = _( "<p>You will be informed about package conflicts and additionally required packages will be selected (the menu item <i>Etc.</i>/<i>Dependencies</i> offers different settings).</p>" );
+    static const NCstring value = _( "<p>By default, the package dependencies are checked with every status change. You will be informed about package conflicts and additionally required packages will be selected (the menu item <i>Etc.</i>/<i>Dependencies</i> offers different settings).</p>" );
     return value;
 }
 
@@ -1141,6 +1155,13 @@ const NCstring PkgNames::HelpOnStatus5()
 }
 
 const NCstring PkgNames::HelpOnStatus6()
+{
+    // help text package status
+    static const NCstring value =  _( "<p><b>-i-</b> : the package is \"protected\" -- keep the installed version and never update or delete it.</p>" );
+    return value;
+}
+
+const NCstring PkgNames::HelpOnStatus7()
 {
     // help text package status
     static const NCstring value =  _( "<p>The <i>Actions</i> menu also provides the possibilty to change the status for all packages in the list (select menu item 'All list packages').</p>" );
@@ -1358,26 +1379,62 @@ const NCstring PkgNames::TextmodeHelp9()
     return value;
 }
 
+const NCstring PkgNames::SaveSelHeadline()
+{
+    // headline for the popup
+    static const NCstring value =  _( "Save Package List" );
+    return value;
+}
+
 const NCstring PkgNames::SaveSelText()
 {
-    // text for popup "Save Package Selection"
-    static const NCstring value =  _( "<p>The current package selection will be saved on a floppy disk. Please insert a formatted floppy.<br>Write data to the floppy disk now?</p>" );
+    // text for thepopup "Save Package List"
+    static const NCstring value =  _( "<p>The current package selection can be saved on a floppy (insert a formatted floppy) or on the hard disk.<br>Select the medium and specify the file name in the input field below.</p>" );
     return value;
+}
+
+const NCstring PkgNames::SaveErr1Text()
+{
+    // text for an Error popup
+    static const NCstring value =  _( "<p>Could not find a formatted floppy. Check that a formatted and verified floppy is inserted in the drive.</p>" );
+    return value;
+}
+
+const NCstring PkgNames::SaveErr2Text()
+{
+    // text for an Error popup
+    static const NCstring value =  _( "<p>Could not write to file.<br>Check that the path name is correct and the directory is accessable.</p>" );
+    return value;
+}
+
+const NCstring PkgNames::LoadSelHeadline()
+{
+    // headline for the popup
+    static const NCstring value =  _( "Load Package List" );
+    return value;  
 }
 
 const NCstring PkgNames::LoadSel1Text()
 {
-    // text1 for popup "Load Package Selection"
-    static const NCstring value =  _( "<p>Do you really want to reset your settings?</p>" );
+    // text for a Notify popup
+    static const NCstring value =  _( "<p>Really overwrite your package selection?</p>" );
     return value;
 }
 
 const NCstring PkgNames::LoadSel2Text()
 {
-    // text2 for popup "Load Package Selection"
-    static const NCstring value =  _( "<p>The current package selection will be loaded from a floppy disk. Please insert the floppy.<br>Read data from the floppy disk now?</p>" );
+    // text for popup "Load Package List"
+    static const NCstring value =  _( "<p>Specify the medium and the name of the file containing the user-defined package selection to install.<br>If required, insert the floppy.</p>" );
     return value;
 }
+
+const NCstring PkgNames::LoadErr1Text()
+{
+    // text for an Error popup
+    static const NCstring value =  _( "<p>Could not load the settings.<br>Check that the path name is correct and the floppy disk, if required, is inserted correctly./p>" );
+    return value;
+}
+
 
 ///////////////////////////////////////////////////////////////////
 

@@ -482,6 +482,16 @@ public:
      *  The label of the Solve button
      */
     static const NCstring SolveLabel();
+
+   /**
+     *  The label of the Save button
+     */
+    static const NCstring SaveLabel();
+
+    /**
+     *  The label of the Load button
+     */
+    static const NCstring LoadLabel();
     
     /**
      * The label of text input field 
@@ -512,7 +522,8 @@ public:
     static const NCstring HelpOnStatus4();
     static const NCstring HelpOnStatus5();
     static const NCstring HelpOnStatus6();
-    
+    static const NCstring HelpOnStatus7();
+
     static const NCstring YouHelp1();
     static const NCstring YouHelp2();
     static const NCstring YouHelp3();
@@ -716,10 +727,15 @@ public:
 
     /**
      * save/load selections
-     */ 
+     */
+    static const NCstring SaveErr1Text();
+    static const NCstring SaveErr2Text();
+    static const NCstring SaveSelHeadline();
     static const NCstring SaveSelText();
+    static const NCstring LoadSelHeadline();
     static const NCstring LoadSel1Text();
     static const NCstring LoadSel2Text();
+    static const NCstring LoadErr1Text();
     
 private:
     
