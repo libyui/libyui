@@ -97,6 +97,11 @@ public:
      **/
     virtual void setIcon( const YCPString & icon_name );
 
+    /**
+     * Returns the internal Qt PushButton.
+     **/
+    QPushButton * qPushButton() const { return qt_pushbutton; }
+
     
 protected:
 

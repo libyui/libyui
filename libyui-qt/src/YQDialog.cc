@@ -26,6 +26,7 @@
 
 #include "YUIQt.h"
 #include "YQDialog.h"
+#include "YQPushButton.h"
 
 
 YQDialog::YQDialog( YUIQt *		yuiqt,
@@ -219,27 +220,25 @@ YQDialog::findDefaultButton()
 void
 YQDialog::ensureOnlyOneDefaultButton()
 {
-    QObjectList *list = queryList( "QPushButton" );
-    QObjectListIt it( *list );
-    QPushButton *button = 0;
     bool have_default_button = false;
-
-    while ( ( button = (QPushButton *) it.current() ) )
+    YWidgetList widgetList   = YDialog::widgets();
+    
+    for ( YWidgetListIterator it = widgetList.begin(); it != widgetList.end(); ++it )
     {
-	if ( button->isDefault() )
+	YQPushButton * button = dynamic_cast<YQPushButton *> ( *it );
+
+	if ( button && button->qPushButton()->isDefault() )
 	{
 	    if ( have_default_button )
 	    {
 		y2error( "Too many `opt(`default) PushButtons: \"%s\"",
-			 (const char *) button->text() );
+			 (const char *) button->qPushButton()->text() );
 	    }
 
-	    button->setDefault( ! have_default_button );
+	    button->qPushButton()->setDefault( ! have_default_button );
 	    have_default_button = true;
 	}
-	++it;
     }
-    delete list;
 }
 
 
