@@ -18,6 +18,7 @@
 /-*/
 #include "Y2Log.h"
 #include "NCDialog.h"
+#include "NCPopupInfo.h"
 
 #if 0
 #undef  DBG_CLASS
@@ -108,6 +109,8 @@ void NCDialog::_init( YWidgetOpt & opt )
   }
   dlgstyle = &NCurses::style()[mystyleset];
 
+  helpPopup = 0;
+  
   WIDDBG << "+++ " << this << endl;
 }
 
@@ -131,6 +134,11 @@ NCDialog::~NCDialog()
   delete pan;
   pan = 0;
   WIDDBG << "---destroyed " << this << endl;
+
+  if ( helpPopup )
+  {
+      delete helpPopup;
+  }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -940,7 +948,14 @@ void NCDialog::processInput( int timeout )
       ::flushinp();
       switch ( hch ) {
       case -1: // no 2nd char, handle ch
-	pendingEvent = wHandleInput( ch );
+	if ( helpPopup )
+	{
+	    helpPopup->popdown();
+	}
+	else
+	{
+	  pendingEvent = wHandleInput( ch );
+	}
 	break;
       case KEY_ESC:
       case CTRL('X'):
@@ -952,8 +967,29 @@ void NCDialog::processInput( int timeout )
       }
       break;
 
+     case KEY_F(1):
+	 if ( !helpPopup )
+	 {
+	     helpPopup = new NCPopupInfo( wpos(1,1), YCPString( "Text mode navigation" ),
+					  YCPString( "Press F1 again to get help" ),
+					  false );
+	 }
+	 if ( helpPopup )
+	 {
+	     if ( !helpPopup->isVisible() )
+	     {
+		 helpPopup->popup();
+	     }
+	     else
+	     {
+		 helpPopup->popdown();
+		 pendingEvent = wHandleHotkey( ch ); 
+	     }
+	 }
+	 break;
+	    
     default:
-	if ( ch >= KEY_F(1) && ch <= KEY_F(24) )
+	if ( ch >= KEY_F(2) && ch <= KEY_F(24) )
 	{
 	    pendingEvent = wHandleHotkey( ch );
 	}
