@@ -31,7 +31,8 @@ Obsoletes:	y2qt
 @plugindir@/libpy2qt.so
 @plugindir@/libpy2qt.la
 @imagedir@/*.xpm
-# @ybindir@/y2qt
+%dir @includedir@/y2qt
+@includedir@/y2qt/*.h
 %dir /usr/X11R6/lib/X11/fonts/uni
 %verify(not md5 size mtime) /usr/X11R6/lib/X11/fonts/uni/fonts.dir
 /usr/X11R6/lib/X11/fonts/uni/newunifont.pcf.gz

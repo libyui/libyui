@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Feb  4 17:42:03 CET 2004 - sh@suse.de
+
+- V 2.9.2
+- New embedding: No more QXEmbed, now via KPart (external program)
+
+-------------------------------------------------------------------
 Thu Jan 29 19:49:03 CET 2004 - sh@suse.de
 
 - Fixed Y2Component handling 
