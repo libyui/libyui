@@ -246,6 +246,8 @@ NCursesEvent NCPopupSelection::wHandleInput( int ch )
     
     if ( ch == KEY_SPACE )
     {
+	// FIXME: inform the instsource manager
+	
 	int index = selectionBox->getCurrentItem();
 	PMSelectionPtr selPtr = selections[index].first;
 	if ( selectionBox && (unsigned)index < selections.size() )

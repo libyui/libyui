@@ -24,8 +24,6 @@
 #include <vector>
 #include <string>
 
-using namespace std;
-
 #include "NCPopup.h"
 #include "NCTree.h"
 #include "NCLabel.h"
@@ -61,14 +59,14 @@ private:
 
     PackageSelector * packager;		// connection to the PackageSelector,
 
-    vector< pair<PMSelectionPtr, bool> > selections; 	// the available selections
+    std::vector< std::pair<PMSelectionPtr, bool> > selections; 	// the available selections
 
     // Get selections from the instsource manager
     bool getSelections( );
     
 protected:
 
-    string getCurrentLine();
+    std::string getCurrentLine();
 
     virtual bool postAgain();
 
@@ -83,7 +81,7 @@ public:
 
     void createLayout( const YCPString & label );
 
-    bool getSelectedItems( vector<int> & list );
+    bool getSelectedItems( std::vector<int> & list );
 
     /**
      * Shows the poup with the add ons (package categories).
