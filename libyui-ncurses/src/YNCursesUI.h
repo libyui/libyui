@@ -37,66 +37,17 @@ class NCDialog;
  */
 class YNCursesUI : public NCurses, public YUI
 {
-   /**
-    * Used to store the server options until the server is launched
-    */
-   int argc;
-
-   /**
-     * Used to store the server options until the server is launched
-     */
-   char **argv;
-
-    /**
-     * since we're defining our own setCallback/getCallback function
-     * we must save the callback pointer ourselfs. See Y2Component.
-     */
-    Y2Component *m_callback;
-
-    /**
-     * This is false, if not threads should be used.
-     */
-    bool with_threads;
-
 public:
    /**
     * Initialize data.
      */
-   YNCursesUI(int argc, char **argv, bool with_threads, Y2Component *callback);
+   YNCursesUI( int argc, char ** argv, bool with_threads, const char * macro_file );
 
    /**
      * Cleans up.
      */
    ~YNCursesUI();
 
-   /**
-     * The name of this component
-     */
-   string name() const;
-
-   /**
-     * Is called by the genericfrontend, when the session is finished.
-     * Close the user interace here.
-     */
-   void result(const YCPValue &result);
-
-   /**
-     * Is called by the genericfrontend after it parsed the commandline.
-     * gives the QT UI its commandline options. We store it here and
-     * wait until we create the interpreter in @ref #evaluate.
-     */
-   void setServerOptions(int argc, char **argv);
-
-#if 0
-    /**
-     * Functions to pass callback information
-     * The callback is a pointer to a Y2Component with
-     * a valid evaluate() function.
-     */
-
-    Y2Component *getCallback (void) const;
-    void setCallback (Y2Component *callback);
-#endif
 
   protected:
 

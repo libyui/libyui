@@ -66,15 +66,13 @@
 
 extern string language2encoding( string lang );
 
-YNCursesUI::YNCursesUI(int argc, char **argv, bool with_threads, Y2Component *callback)
-    : YUI (with_threads, callback)
-    , argc(argc)
-    , argv(argv)
-    , m_callback(0)
-    , with_threads(true)
+YNCursesUI::YNCursesUI( int argc, char **argv, bool with_threads, const char * macro_file )
+    : YUI( with_threads )
 {
     y2milestone ("Start YNCursesUI");
     _ui = this;
+
+#warning TO DO: Play macro if macro_file != 0
     
     if ( getenv( "LANG" ) != NULL )
     {
@@ -119,68 +117,6 @@ YNCursesUI::~YNCursesUI()
     y2milestone ("Stop YNCursesUI");
 }
 
-string YNCursesUI::name() const
-{
-    return "ncurses";
-}
-
-void YNCursesUI::result(const YCPValue &result)
-{
-/*    if (interpreter)
-    {
-	y2milestone ("Shutdown Y2NCursesUI...");
-	delete interpreter;
-	y2milestone ("Y2NCursesUI down");
-    }
-    interpreter = 0;*/
-}
-
-void YNCursesUI::setServerOptions(int argc, char **argv)
-{
-    this->argc = argc;
-    this->argv = argv;
-}
-
-#if 0
-
-Y2Component *
-YNCursesUI::getCallback (void) const
-{
-    Y2Component *callback;
-    if (interpreter)
-    {
-	callback = interpreter->getCallback ();
-    }
-    else
-    {
-	callback = m_callback;
-    }
-    y2debug ("YNCursesUI[%p]::getCallback[i %p]() = %p", this, interpreter, callback);
-    return callback;
-}
-
-
-void
-YNCursesUI::setCallback (Y2Component *callback)
-{
-    y2debug ("YNCursesUI[%p]::setCallback[i %p](%p)", this, interpreter, callback);
-    if (interpreter)
-    {
-	// interpreter allready running, pass callback directly
-	// to where it belongs
-	return interpreter->setCallback (callback);
-    }
-    else
-    {
-	// interpreter not yet running, save the callback information
-	// until first evaluate() call which starts the interpreter
-	// and passes this information to it.
-	m_callback = callback;
-    }
-    return;
-}
-
-#endif
 
 YNCursesUI * YNCursesUI::_ui = 0;
 

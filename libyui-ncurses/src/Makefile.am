@@ -22,6 +22,7 @@ liby2ncurses_la_SOURCES =				\
 	NCi18n.h					\
 	Y2Log.h Y2Log.cc				\
 	tnode.h	position.h position.cc			\
+	YNCursesUI.cc YNCursesUI.h			\
 	NCtext.h NCtext.cc				\
 	NCstring.h NCstring.cc				\
 	stringutil.h stringutil.cc			\
@@ -97,7 +98,7 @@ liby2ncurses_la_SOURCES =				\
 
 libpy2ncurses_la_SOURCES = $(liby2ncurses_la_SOURCES)	\
 	Y2CCNCursesUI.cc Y2CCNCursesUI.h	\
-	YNCursesUI.cc YNCursesUI.h
+	YNCursesComponent.h
 
 INCLUDES = -I$(includedir) -I$(includedir)/yui -I$(includedir)/y2util/qt
 
