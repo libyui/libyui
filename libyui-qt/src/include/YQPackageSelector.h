@@ -225,7 +225,16 @@ protected:
 		     const QString & summary,
 		     const QString & explanation	);
 
+    /**
+     * Basic HTML formatting: Embed text into <p> ... </p>
+     **/
+    static QString para( const QString & text );
     
+    /**
+     * Basic HTML formatting: Embed text into <li> ... </li>
+     **/
+    static QString listItem( const QString & text );
+
 
     // Data members
 
