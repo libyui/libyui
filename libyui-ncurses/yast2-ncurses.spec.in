@@ -34,5 +34,4 @@ Obsoletes:	y2curses
 @plugindir@/libpy2ncurses.la
 @ydatadir@/pkg_layout.ycp
 @ydatadir@/you_layout.ycp
-# @ybindir@/y2ncurses
 %doc @docdir@
