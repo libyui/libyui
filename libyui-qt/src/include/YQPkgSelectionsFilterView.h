@@ -26,7 +26,6 @@
 #include <y2pm/PMSelection.h>
 
 
-class YUIQt;
 class YQPkgSelList;
 
 
@@ -39,7 +38,7 @@ public:
     /**
      * Constructor
      **/
-    YQPkgSelectionsFilterView( YUIQt *yuiqt, QWidget *parent );
+    YQPkgSelectionsFilterView( QWidget *parent );
 
     /**
      * Destructor
@@ -95,7 +94,6 @@ protected:
     
     // Data members
 
-    YUIQt		* yuiqt;
     YQPkgSelList	* _selList;
 };
 

@@ -25,14 +25,12 @@
 
 #include "YQPkgSelectionsFilterView.h"
 #include "YQPkgSelList.h"
-#include "YUIQt.h"
 #include "YQi18n.h"
 
 
 
-YQPkgSelectionsFilterView::YQPkgSelectionsFilterView( YUIQt *yuiqt, QWidget *parent )
+YQPkgSelectionsFilterView::YQPkgSelectionsFilterView( QWidget *parent )
     : QVBox( parent )
-    , yuiqt( yuiqt )
 {
     _selList = new YQPkgSelList( this );
 }
