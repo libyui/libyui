@@ -112,7 +112,7 @@ int main (int argc, char *argv[])
 
     bindtextdomain( TEXTDOMAIN, LOCALEDIR);
 
-    // codeset of the terminal (so long as not yet changed by a start script or
+    // codeset of the terminal (as long as not yet changed by a start script or
     // a setenv( LANG ) call)
     char *codeset;
 
@@ -166,8 +166,12 @@ int main (int argc, char *argv[])
     // TEST cases:
     // (all testfiles are UTF-8 encoded)
     // - utf8test `cat testfile.cs` in cs_CZ.UTF-8 locale -> OK
-    // - utf8test öööäää            in de_DE@euro  locale  -> RecodeToWchar Not OK (input not UTF-8)
     // - utf8test `cat testfile.cs` in de_DE@euro locale -> RecodeFromWchar Not OK (terminal cannot show czech)
+    // - utf8test `cat testfile.cs` in cs_CZ locale -> OK 
+    // - utf8test `cat testfile.de` in de_DE@euro locale -> OK
+    //
+    // - utf8test öööäää            in de_DE@euro  locale  -> RecodeToWchar Not OK (input not UTF-8)
+    //
     ok = NCstring_test::RecodeToWchar( text, "UTF-8", &wtext ); // INPUT is always UTF-8
     fprintf( stderr, "RecodeToWchar(): %ls\n", wtext.c_str());
 
