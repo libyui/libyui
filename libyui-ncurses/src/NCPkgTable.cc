@@ -232,7 +232,6 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
 		
 		PMPackagePtr pkgPtr = objPtr->getCandidateObj();
 		license = pkgPtr->licenseToConfirm();
-		license.push_back("This is the license text" );
 	    }
 	    break;
 
