@@ -632,7 +632,7 @@ YQPackageSelector::addMenus()
 
     if ( ! _youMode )
 	// Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
-	_extrasMenu->insertItem( _( "Install all Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
+	_extrasMenu->insertItem( _( "Install All Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
 
     //
     // Help menu
@@ -1135,7 +1135,7 @@ YQPackageSelector::installDevelPkgs()
     }
     
     // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
-    YQPkgChangesDialog::showChangesDialog( _( "Added -devel packages:" ),
+    YQPkgChangesDialog::showChangesDialog( _( "Added -devel Packages:" ),
 					   QRegExp( ".*-devel$" ),
 					   _( "&OK" ),
 					   QString::null,	// rejectButtonLabel
