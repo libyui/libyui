@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Sep 27 16:14:49 CEST 2004 - sh@suse.de
+
+- V 2.10.10
+- (abauer) fixed bug #44926: Xinerama full screen handling
+- (mfabian) fixed unicode fonts
+
+-------------------------------------------------------------------
 Fri Sep 24 17:10:48 CEST 2004 - sh@suse.de
 
 - V 2.10.9

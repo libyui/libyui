@@ -54,7 +54,6 @@ QWidget *	YQUI::_embeddingParent	= 0;
 
 static void qMessageHandler( QtMsgType type, const char * msg );
 
-
 YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     : QObject()
     , YUI( with_threads )
@@ -97,9 +96,22 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 
     if ( _fullscreen )
     {
-	_default_size.setWidth ( qApp->desktop()->width()  );
-	_default_size.setHeight( qApp->desktop()->height() );
-	y2milestone( "-fullscreen: using %dx%d for `opt(`defaultsize)",
+        QDesktopWidget* desktopWidget = qApp->desktop();
+
+        if( desktopWidget->isVirtualDesktop() )
+        {
+            // Multihead, set to size of primary screen
+            y2milestone( "assuming multihead environment" );
+            QRect primaryScreenGeometry = desktopWidget->screenGeometry( desktopWidget->primaryScreen() );
+            _default_size.setWidth( primaryScreenGeometry.width() );
+            _default_size.setHeight( primaryScreenGeometry.height() );
+        }
+        else
+        {
+            _default_size.setWidth ( qApp->desktop()->width()  );
+            _default_size.setHeight( qApp->desktop()->height() );
+        }
+        y2milestone( "-fullscreen: using %dx%d for `opt(`defaultsize)",
 		     _default_size.width(), _default_size.height() );
     }
     else if ( _have_wm )
