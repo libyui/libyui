@@ -35,81 +35,85 @@ using std::max;
 
 #define YQWIDGET_BORDER 3
 
-YQTree::YQTree ( QWidget *parent, YWidgetOpt &opt, const YCPString & label )
+YQTree::YQTree( QWidget *parent, YWidgetOpt & opt, const YCPString & label )
     : QWidget	( parent )
     , YTree	( opt, label )
 {
     setWidgetRep( this );
 
-    nextSerialNo = 0;
+    _nextSerialNo = 0;
 
-    qt_label = new QLabel( fromUTF8( label->value() ), this );
-    qt_label->setTextFormat( QLabel::PlainText );
-    qt_label->setFont( YUIQt::ui()->currentFont() );
+    _qt_label = new QLabel( fromUTF8( label->value() ), this );
+    _qt_label->setTextFormat( QLabel::PlainText );
+    _qt_label->setFont( YUIQt::ui()->currentFont() );
 
-    listView = new QListView( this );
-    listView->setFont( YUIQt::ui()->currentFont() );
-    listView->addColumn( "" );
-    listView->header()->hide();
-    listView->setRootIsDecorated ( true );
+    _listView = new QListView( this );
+    _listView->setFont( YUIQt::ui()->currentFont() );
+    _listView->addColumn( "" );
+    _listView->header()->hide();
+    _listView->setRootIsDecorated ( true );
 
-    qt_label->setBuddy ( listView );
+    _qt_label->setBuddy ( _listView );
     
     QGridLayout *grid = new QGridLayout( this, 2,1, YQWIDGET_BORDER);
-    grid->addWidget( qt_label, 0,0);
-    grid->addWidget( listView, 1,0);
+    grid->addWidget( _qt_label, 0,0);
+    grid->addWidget( _listView, 1,0);
 
-    connect( listView,	SIGNAL( selectionChanged ( void ) ),
+    connect( _listView,	SIGNAL( selectionChanged ( void ) ),
 	     this, 	SLOT  ( slotSelected     ( void ) ) );
 }
 
 
-void YQTree::setLabel ( const YCPString &label )
+void
+YQTree::setLabel( const YCPString & label )
 {
-    qt_label->setText( fromUTF8( label->value() ) );
+    _qt_label->setText( fromUTF8( label->value() ) );
     YTree::setLabel( label );
 }
 
 
-long YQTree::nicesize ( YUIDimension dim )
+long
+YQTree::nicesize( YUIDimension dim )
 {
-    if  ( dim == YD_HORIZ )  return max( 200, qt_label->sizeHint().width() );
-    else return 300 + qt_label->sizeHint().height();
+    if  ( dim == YD_HORIZ )  return max( 200, _qt_label->sizeHint().width() );
+    else return 300 + _qt_label->sizeHint().height();
 }
 
 
-void YQTree::setSize ( long newWidth, long newHeight )
+void
+YQTree::setSize( long newWidth, long newHeight )
 {
-    qt_label->resize( min ( newWidth,  (long) ( qt_label->sizeHint().width() ) ),
-		      min ( newHeight, (long) ( qt_label->sizeHint().height() )	 ) );
-    listView->resize( newWidth, newHeight - qt_label->height() );
+    _qt_label->resize( min ( newWidth,  (long) ( _qt_label->sizeHint().width() ) ),
+		      min ( newHeight, (long) ( _qt_label->sizeHint().height() )	 ) );
+    _listView->resize( newWidth, newHeight - _qt_label->height() );
     resize( newWidth, newHeight );
 }
 
 
-void YQTree::setEnabling ( bool enabled )
+void
+YQTree::setEnabling( bool enabled )
 {
-    qt_label->setEnabled( enabled );
-    listView->setEnabled( enabled );
+    _qt_label->setEnabled( enabled );
+    _listView->setEnabled( enabled );
 }
 
 
 void
 YQTree::rebuildTree()
 {
-    listView->clear();
+    _listView->clear();
 
     for ( YTreeItemListIterator it = items.begin(); it < items.end(); ++it )
     {
 	YQTreeItem *item = new YQTreeItem( this,
-					   listView,
+					   _listView,
 					   *it,
-					   nextSerialNo++ );
+					   _nextSerialNo++ );
 	YTreeItemList itemList = (*it)->itemList();
 
 	if ( itemList.size() > 0 )
 	{
-	    item->buildSubTree( itemList, nextSerialNo );
+	    item->buildSubTree( itemList, _nextSerialNo );
 	}
     }
 }
@@ -118,9 +122,9 @@ YQTree::rebuildTree()
 const YTreeItem *
 YQTree::getCurrentItem() const
 {
-    YQTreeItem *it = (YQTreeItem *) listView->selectedItem();
+    YQTreeItem *it = (YQTreeItem *) _listView->selectedItem();
 
-    return it ? it->getOrigItem() : 0;
+    return it ? it->origItem() : 0;
 }
 
 
@@ -133,7 +137,7 @@ YQTree::setCurrentItem( YTreeItem * yit )
     {
 	// Select this item
 
-	listView->setSelected( it, true);
+	_listView->setSelected( it, true);
 
 
 	// Open all parent items so the selected item isn't obscured
@@ -145,10 +149,10 @@ YQTree::setCurrentItem( YTreeItem * yit )
 		it->setOpen( true );
 	}
 
-	listView->ensureItemVisible( it );
+	_listView->ensureItemVisible( it );
     }
     else
-	listView->clearSelection();
+	_listView->clearSelection();
 }
 
 
@@ -156,14 +160,14 @@ void
 YQTree::registerItem( const YTreeItem *		orig,
 		      const YQTreeItem *	clone )
 {
-    yTreeItemToYQTreeItem.insert( (void *) orig, clone );
+    _yTreeItemToYQTreeItem.insert( (void *) orig, clone );
 }
 
 
 YQTreeItem *
 YQTree::findYQTreeItem( const YTreeItem * orig ) const
 {
-    return yTreeItemToYQTreeItem[ (void *) orig ];
+    return _yTreeItemToYQTreeItem[ (void *) orig ];
 }
 
 
@@ -179,7 +183,7 @@ void YQTree::slotSelected( void )
 bool
 YQTree::setKeyboardFocus()
 {
-    listView->setFocus();
+    _listView->setFocus();
 
     return true;
 }
@@ -210,25 +214,25 @@ YQTreeItem::YQTreeItem( YQTree	*		tree,
 
 
 void
-YQTreeItem::init( YQTree *		yqtree,
+YQTreeItem::init( YQTree *		tree,
 		  const YTreeItem *	yTreeItem,
 		  int			serial )
 {
-    tree = yqtree;
-    tree->registerItem ( yTreeItem, this );
-    origItem = yTreeItem;
-    serialNo = serial;
-    setText ( 0, fromUTF8 ( origItem->getText()->value() ) );
-    setOpen ( origItem->isOpenByDefault() );
+    _tree = tree;
+    _tree->registerItem ( yTreeItem, this );
+    _origItem = yTreeItem;
+    _serialNo = serial;
+    setText ( 0, fromUTF8 ( _origItem->getText()->value() ) );
+    setOpen ( _origItem->isOpenByDefault() );
 }
 
 
 void
-YQTreeItem::buildSubTree( YTreeItemList &items, int &nextSerialNo )
+YQTreeItem::buildSubTree( YTreeItemList & items, int & nextSerialNo )
 {
     for ( YTreeItemListIterator it = items.begin(); it < items.end(); ++it )
     {
-	YQTreeItem *item = new YQTreeItem ( tree,
+	YQTreeItem *item = new YQTreeItem ( _tree,
 					    this,
 					    *it,
 					    nextSerialNo++ );
@@ -255,7 +259,7 @@ YQTreeItem::key( int column, bool ascending ) const
     */
 
     QString strKey;
-    strKey.sprintf( "%08d", serialNo );
+    strKey.sprintf( "%08d", _serialNo );
 
     return strKey;
 }

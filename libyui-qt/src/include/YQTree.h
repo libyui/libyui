@@ -40,6 +40,9 @@ class YQTree : public QWidget, public YTree
 
 public:
 
+    /**
+     * Constructor.
+     **/
     YQTree ( QWidget *parent, YWidgetOpt &opt, const YCPString & label );
 
     /**
@@ -117,17 +120,17 @@ protected:
     /**
      * Title label of the box.
      */
-    QLabel *qt_label;
+    QLabel * _qt_label;
 
     /**
      * The real tree: The QListView widget.
      */
-    QListView *listView;
+    QListView * _listView;
 
     /**
      * The next item serial number.
      */
-    int nextSerialNo;
+    int _nextSerialNo;
 
     /**
      * Map from YTreeItem to the corresponding (cloned) YQTreeItem.
@@ -137,7 +140,7 @@ protected:
      *
      * registerItem() adds a pair to this map.
      */
-    QPtrDict <YQTreeItem> yTreeItemToYQTreeItem;
+    QPtrDict <YQTreeItem> _yTreeItemToYQTreeItem;
 };
 
 
@@ -165,12 +168,12 @@ public:
     /**
      * Recursively build the subtree corresponding to 'items'.
      **/
-    void buildSubTree ( YTreeItemList &items, int &nextSerialNo );
+    void buildSubTree ( YTreeItemList & items, int & nextSerialNo );
 
     /**
      * Returns the original YTreeItem of which this item is a clone.
      */
-    const YTreeItem * getOrigItem() { return origItem; }
+    const YTreeItem * origItem() { return _origItem; }
 
 
 private:
@@ -178,7 +181,7 @@ private:
     /**
      * Init function. All constructors end up here.
      */
-    void init ( YQTree *			tree,
+    void init ( YQTree *		tree,
 		const YTreeItem *	yTreeItem,
 		int			serial );
 
@@ -188,18 +191,18 @@ protected:
     /**
      * The YQTree parent this item belongs to.
      */
-    YQTree *tree;
+    YQTree * _tree;
 
     /**
      * The original YTreeItem of which this item is a clone.
      */
-    const YTreeItem *origItem;
+    const YTreeItem * _origItem;
 
     /**
      * The serial number of this item so the insertion sort order can
      * be maintained at all times.
      */
-    int serialNo;
+    int _serialNo;
 
     /**
      * Sort key of this item. Inherited by QListViewItem.
