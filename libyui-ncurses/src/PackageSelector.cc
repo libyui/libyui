@@ -266,34 +266,6 @@ void PackageSelector::setVisibleInfo( const YCPValue & info )
 
 ///////////////////////////////////////////////////////////////////
 //
-// fillHeader
-//
-// Fillup the column headers of the package table 
-//
-void PackageSelector::fillHeader( NCPkgTable *pkgTable )
-{
-    vector<NCstring> header;
-    header.reserve(6);
-
-    header.push_back( PkgNames::PkgStatus() );
-    header.push_back( PkgNames::PkgName() );
-    header.push_back( PkgNames::PkgVersion() );
-    header.push_back( PkgNames::PkgSummary() );
-    header.push_back( PkgNames::PkgSize() );
-    header.push_back( YCPString( "SPM" ) );
-
-    if ( pkgTable )
-    {
-	pkgTable->setHeader( header );
-    }
-    else
-    {
-	UIERR << "Widget is not a valid NCPkgTable widget" << endl;
-    }
-}
-
-///////////////////////////////////////////////////////////////////
-//
 // fillAvailableList
 //
 // Fills the package table (on bottom ) with the list of available packages 
@@ -884,11 +856,8 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 
     if ( event.selection->compare( PkgNames::ShowDeps() ) == YO_EQUAL )
     {
-	// show dependency popup
-	if ( depsPopup )
-	{
-	    depsPopup->showDependencyPopup( true );
-	}
+	// show the dependency popup
+	checkDependencies( true );
     }
     else if ( event.selection->compare( PkgNames::AutoDeps() ) == YO_EQUAL )
     {
@@ -1196,10 +1165,26 @@ bool PackageSelector::showConcretelyDependency ( PMObjectPtr pkgPtr )
 {
     if ( depsPopup )
     {
+	NCMIL << "GET dependeny" << endl;
 	depsPopup->concretelyDependency( pkgPtr );
     }
 
     return true;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// checkDependencies
+//
+// Checks and shows the dependencies
+//
+void PackageSelector::checkDependencies ( bool doit )
+{
+    // check dependencies
+    if ( doit || autoCheck )
+    {
+	depsPopup->checkDependencies();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -1280,31 +1265,31 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	    version = pkgPtr->version();
 	}
 
-	text += NCstring( PkgNames::Version() );
+	text += PkgNames::Version();
 	text += NCstring( version );
 	if ( instVersion != "" )
 	{
 	    text += NCstring( "  " );
-	    text += NCstring( PkgNames::InstVersion() );
+	    text += PkgNames::InstVersion();
 	    text += NCstring( instVersion );
 	}
 
 	text += NCstring( "  " );
 	
 	// show the size
-	text += NCstring( PkgNames::Size() );
+	text += PkgNames::Size();
 	text += NCstring( pkgPtr->size().asString() );
 	
 	text += NCstring( "<br>" );
 
 	// show Provides:
-	text += NCstring( PkgNames::Provides() );
+	text += PkgNames::Provides();
 	list<PkgRelation> provides = pkgPtr->provides();	// PMSolvable
 	text += NCstring( createRelLine(provides) );
 	text += NCstring( "<br>" );
 
 	// show the authors
-	text += NCstring( PkgNames::Authors() );
+	text += PkgNames::Authors();
 	PMPackagePtr package = pkgPtr;
 	if ( package )
 	{
@@ -1342,21 +1327,21 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	text += NCstring( "<br>" );
 
         // show Requires:
-	text += NCstring( PkgNames::Requires() );
+	text += PkgNames::Requires();
 	relations = pkgPtr->requires();
 
 	text += NCstring( createRelLine(relations) );
 	text += NCstring( "<br>" );
 
 	// show Required by:
-	text += NCstring( PkgNames::PreRequires() );
+	text += PkgNames::PreRequires();
 	relations = pkgPtr->prerequires();
 
 	text += NCstring( createRelLine(relations) );
 	text += NCstring( "<br>" );
 
 	// show Conflicts:
-	text += NCstring( PkgNames::Conflicts() );
+	text += PkgNames::Conflicts();
 	relations = pkgPtr->conflicts();
 
 	text += NCstring( createRelLine(relations) );
@@ -1402,7 +1387,10 @@ string PackageSelector::createDescrText( list<string> value )
 	    if ( line.length() == 0 )	// Empty lines mean new paragraph
 		html_text += "</p><p>";
 	    else
+	    {
 		html_text += line;
+		html_text += " ";
+	    }
 	}
 	else
 	{

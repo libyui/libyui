@@ -124,7 +124,8 @@ class PackageSelector
     bool fillPackageList( const YCPString & label, YStringTreeItem * group );
 
   /**
-    * Fills the package table with available YOU patches
+    * Fills the package table with YOU patches matching the filter
+    * @param filter
     * @return bool
     */
     bool fillPatchList( string filter );
@@ -138,7 +139,7 @@ class PackageSelector
     bool fillAvailableList( NCPkgTable *table, PMObjectPtr pkgPtr );    
 
    /**
-    * Fills the list of available packages
+    * Fills the list of packages belonging to the youPatch
     * @param pkgTable  The table widget
     * @param youPatch Show all packages belonging to the patch 
     * @return bool
@@ -147,17 +148,10 @@ class PackageSelector
     
    /**
     * Fills the package table with packages matching the search expression
-    * @param expr The search expressionqc
+    * @param expr The search expression
     * @return bool
     */
     bool fillSearchList( const YCPString & expr );
-    
-   /**
-    * Fills the header of the package table
-    * @param table The table widget
-    * @return void
-    */
-    void fillHeader( NCPkgTable *table );
 
    /**
     * Gets default RPM group (the first group)
@@ -266,6 +260,12 @@ class PackageSelector
     */
     bool showConcretelyDependency ( PMObjectPtr pkgPtr );
 
+  /**
+    * Checks and shows the dependencies
+    * @param doit true: do the check, false: only check if auto check is on
+    */
+    void checkDependencies ( bool doit );
+    
    /**
     * Gets the required patch info from you patch manager and shows it
     * @param pkgPtr the data pointer
@@ -295,15 +295,22 @@ class PackageSelector
     /**
      * Check if 'pkg' matches 'selectedRpmGroup'.
      * Returns true if there is a match, false otherwise or if 'pkg' is 0.
+     * @return bool 
      **/
     bool checkPackage( PMPackagePtr pkg, YStringTreeItem * rpmGroup, unsigned int index );
 
     /**
-     * Check if 'patch' matches teh sekected filter.
+     * Check if 'patch' matches the selected filter.
      * Returns true if there is a match, false otherwise or if 'patch' is 0.
+     * @return bool
      **/ 
     bool checkPatch(  PMYouPatchPtr patch, string filter, unsigned int index );
 
+   /**
+    * Returns whether automatic dependency is on or off
+    * @return bool   
+    */ 
+    bool autoChecking() { return autoCheck; }
 };
 
 ///////////////////////////////////////////////////////////////////
