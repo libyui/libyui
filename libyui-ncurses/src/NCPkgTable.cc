@@ -90,6 +90,8 @@ string NCPkgTableTag::statusToStr( PMSelectable::UI_Status stat ) const
 	    return " a> ";    
 	case PMSelectable::S_Taboo:	// Never install this 
 	    return " ---";
+	default:
+	    return "####";
     }
 
     return "    ";
@@ -244,9 +246,11 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
 	{
 	    // only check/show deps if is't not the dependency table itself
 	    // or the list of YOU patches
-	    packager->showDependencies( false );	// only check if automatic check is ON
+	    packager->showPackageDependencies( false );	// only check if automatic check is ON
 	}
-
+        // if ( tableType == T_Selections )
+	// 	packager->showSelectionDependencies();
+	
 	// update this list to show the status changes
 	updateTable();
 	
@@ -728,8 +732,9 @@ bool NCPkgTable::changeObjStatus( int key )
     PMObjectPtr objPtr = getDataPointer( getCurrentItem() );
 
     if ( !objPtr )
+    {
 	return false; 
-
+    }
     PMSelectable::UI_Status newStatus;
 
     bool ok = statusStrategy->keyToStatus( key, objPtr, newStatus );
@@ -812,7 +817,7 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 
     // do the updates now
     updateTable();
-    packager->showDependencies( false );
+    packager->showPackageDependencies( false );
     packager->showDiskSpace();
 
     return true;
