@@ -232,7 +232,7 @@ bool NCstring::RecodeFromWchar( const wstring & in, const string & to_encoding, 
 	}
 
 	fromwchar_cd = iconv_open ( to_encoding.c_str(), "WCHAR_T" );
-	NCMIL << "iconv_open( " << to_encoding.c_str() << ", \"WCHAR_T\" )" << endl;
+	NCDBG << "iconv_open( " << to_encoding.c_str() << ", \"WCHAR_T\" )" << endl;
 
 	if ( fromwchar_cd == (iconv_t)(-1) )
 	{
@@ -321,7 +321,7 @@ bool NCstring::RecodeToWchar (const string& in, const string &from_encoding, wst
 	}
 
 	towchar_cd = iconv_open( "WCHAR_T", from_encoding.c_str() );
-	NCMIL << "iconv_open( \"WCHAR_T\", " << from_encoding.c_str() << " )" << endl;
+	NCDBG << "iconv_open( \"WCHAR_T\", " << from_encoding.c_str() << " )" << endl;
 
 	if ( towchar_cd == (iconv_t)(-1))
 	{
