@@ -58,8 +58,8 @@ NCFileInfo::NCFileInfo( )
 {
     _name   = "";
     _tag    = "";
-    //_mode   = ;
-    //_device = ;
+    _mode   = (mode_t)0;
+    _device = (dev_t)0;
     _links  = (nlink_t)0;
     _size   = (off_t)0;
     _mtime  = (time_t)0;
@@ -151,7 +151,7 @@ void NCFileTable::addLine( const vector<string> & elements,
 
     for ( unsigned i = 1; i < elements.size()+1; ++i ) {
 	// use YCPString to enforce recoding from 'utf8'
-	Items[i] = new NCTableCol( YCPString( elements[i-1] ) );
+	Items[i] = new NCTableCol( YCPString( elements[i-1] ), NCTableCol::PLAIN );
     }
     pad->Append( Items );
     
@@ -211,6 +211,25 @@ void NCFileTable::fillHeader( )
 
 ///////////////////////////////////////////////////////////////////
 //
+//
+//	METHOD NAME : NCFileTable::CreatePad
+//	METHOD TYPE : NCPad *
+//
+//	DESCRIPTION :
+//
+NCPad * NCFileTable::CreatePad()
+{
+  wsze psze( defPadSze() );
+  NCTablePad * npad = new NCTablePad( psze.H, psze.W, *this );
+  npad->bkgd( listStyle().item.plain );
+  npad->SetSepChar( ' ' );
+
+  NCMIL << "CREATE NCFileTable" << endl;
+  return npad;
+}
+
+///////////////////////////////////////////////////////////////////
+//
 // createListEntry
 //
 //
@@ -228,14 +247,16 @@ bool NCFileTable::createListEntry ( NCFileInfo fileInfo )
 	case T_Detailed: {
 	    data.reserve(5);
 	    data.push_back( fileInfo._name );
-	    data.push_back( "0000000" );
+	    char size_buf[50];
+	    sprintf( size_buf, "%d", fileInfo._size);
+	    data.push_back( size_buf );
 	    if ( fileInfo.isDir() )
 		data.push_back( "directory" );
 	    else if ( fileInfo.isLink() )
 		data.push_back( "link" );
 	    else
 		data.push_back( "file" );
-	    data.push_back( "read only" );
+	    data.push_back( "read only" );	//FIXME
 	    break;
 	}
 	default: {
@@ -249,27 +270,6 @@ bool NCFileTable::createListEntry ( NCFileInfo fileInfo )
     addLine( data, fileInfo );
 
     return true;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFileTable::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
-NCursesEvent NCFileTable::wHandleInput( wint_t key )
-{
-    NCursesEvent ret = NCursesEvent::none;
-    
-    // call handleInput of NCPad
-    handleInput( key );
-    
-    // get current item AFTER handleInput because it may have changed (ScrlUp/Down) 
-    int citem  = getCurrentItem();
-
-    return ret;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -311,6 +311,24 @@ NCFileTableTag * NCFileTable::getTag( const int & index )
     return cc;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//     METHOD NAME : NCFileTable::wHandleInput
+//     METHOD TYPE : NCursesEvent
+//
+//     DESCRIPTION :
+//
+NCursesEvent NCFileTable::wHandleInput( wint_t key )
+{
+    NCursesEvent ret = NCursesEvent::none;
+    
+    // call handleInput of NCPad
+    handleInput( key );
+    
+    NCMIL << "HANDLE ***" << endl;
+    return ret;
+}
 
 
 

@@ -75,7 +75,8 @@ class NCFileTableTag : public NCTableCol {
 
     NCFileInfo	 fileInfo;
 
-public:
+
+  public:
 
     NCFileTableTag( const NCFileInfo	& info);
 
@@ -116,7 +117,8 @@ private:
 
 protected:
 
-
+    virtual NCPad * CreatePad();
+    
 public:
 
    /**
@@ -133,6 +135,12 @@ public:
      */
     NCFileInfo  getFileInfo( int index );
 
+    /**
+     * Set the type of the table widget
+     * @param type Possible values: NCFileTable::T_Overview, NCFileTable::T_Detailed
+     */
+    void setTableType( NCFileTableType type ) { tableType = type; };
+    
    /**
     * This method is called to add a line to the file list.
     * @param status The file type (first column of the table)
@@ -142,6 +150,11 @@ public:
     */
     virtual void addLine( const vector<string> & elements,
 			  NCFileInfo & fileInfo );
+
+    /**
+     * Get number of lines ( list entries )
+     */ 
+    unsigned int getNumLines( ) { return pad->Lines(); }
 
    /**
      * Draws the file list (has to be called after the loop with
@@ -155,20 +168,6 @@ public:
     virtual void itemsCleared();
 
     /**
-     * Handles the events concerning the list (e.g. scroll the list,
-     * get the current list entry ...)
-     * @param key The key which is pressed
-     * @return NCursesEvent
-     */
-    virtual NCursesEvent wHandleInput( wint_t key );
-
-   /**
-     * Returns the number of lines in the table (the table size)
-     * @return unsigned int
-     */ 
-    unsigned int getNumLines( ) { return pad->Lines(); }
-
-    /**
      * Fills the header of the table
      * @return void
      */  
@@ -180,6 +179,14 @@ public:
      * @return bool
      */  
    bool createListEntry ( NCFileInfo fileInfo );
+
+   /**
+     * Handles the events concerning the list (e.g. scroll the list,
+     * get the current list entry ...)
+     * @param key The key which is pressed
+     * @return NCursesEvent
+     */
+    virtual NCursesEvent wHandleInput( wint_t key );
 
  
 };
