@@ -1,0 +1,55 @@
+/**
+ * File:        pkg_layout.ycp
+ * Package:     
+ * Authors:     Gabriele Strattner <gs@suse.de>
+ *
+ * Purpose:
+ *
+ * ncurses layout for package selection
+ *
+ * $Id$
+ */
+
+`VBox( `VSpacing(0.3),
+       `HBox( `HSpacing(0.3),
+	      `Left(`MenuButton( "&Filter", [`item( `id(`recommended), "&Recommended"),
+					     `item( `id(`security), "&Security" ),
+					     `item( `id(`installed), "&Installed" )
+				 ]
+				 )),
+	      `Left(`MenuButton( "&Actions", [`item( `id(`toggle), 	"&Toggle   [F4]"),
+					      `item( `id(`select), 	"&Select    [s]"),
+					      `item( `id(`deselect), 	"Dese&lect  [l]"),
+					      `item( `id(`update), 	"&Update    [u]")
+				 ]
+				 )),
+	      `Left(`MenuButton( "&Information", [`item( `id(`patchdescr), "&Long description" ),
+						  `item( `id(`patchpkgs), "&Package list" )
+				 ]
+				 )),
+	      `HSpacing(0.3)
+	      ),
+       `VSpacing(0.3),
+       `VWeight( 50, `HBox(`HSpacing(0.3),
+			   `PkgSpecial( `id(`packages), `opt(`notify), "pkgTable" ), 
+			   `HSpacing(0.3)
+			   )
+		 ),
+       `HBox( `Label( "Filter: "),
+	      `Label( `id(`filter), "........................." ),
+	      `HSpacing( 0.1 )
+	      ),
+       `VBox(`VWeight( 40, `ReplacePoint( `id(`replaceinfo),
+					  `RichText( `id(`description)," ")
+					  )
+		       ),
+	     `VWeight( 5, `HBox(`Left(`PushButton(`id(`youhelp), "&Help") ), 
+				`HSpacing(5.0),
+				`Right( `PushButton(`id(`cancel), "&Cancel")),
+				`Right( `PushButton(`id(`ok), "&OK"))
+				)
+		       )
+	     )
+       )
+
+
