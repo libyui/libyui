@@ -210,6 +210,8 @@ YQPkgObjList::createNotInstalledContextMenu()
     _actionSetCurrentInstall->addTo( _notInstalledContextMenu );
     _actionSetCurrentDontInstall->addTo( _notInstalledContextMenu );
     _actionSetCurrentTaboo->addTo( _notInstalledContextMenu );
+    
+    _notInstalledContextMenu->insertSeparator();
     _actionSetCurrentAutoInstall->addTo( _notInstalledContextMenu );
 }
 
@@ -223,6 +225,8 @@ YQPkgObjList::createInstalledContextMenu()
     _actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
     _actionSetCurrentDelete->addTo( _installedContextMenu );
     _actionSetCurrentUpdate->addTo( _installedContextMenu );
+    
+    _installedContextMenu->insertSeparator();
     _actionSetCurrentAutoUpdate->addTo( _installedContextMenu );
     _actionSetCurrentAutoDelete->addTo( _installedContextMenu );
 }
