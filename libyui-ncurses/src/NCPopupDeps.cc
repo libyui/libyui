@@ -119,8 +119,8 @@ void NCPopupDeps::createLayout( const YCPString & headline )
   deps = new NCPkgTable( vSplit, opt );
   deps->setPackager( packager );
   // set status strategy
-  strategy = new AvailableStatStrategy();
-  deps->setTableType( NCPkgTable::T_Availables, strategy );
+  strategy = new DependencyStatStrategy();
+  deps->setTableType( NCPkgTable::T_Dependency, strategy );
   vSplit->addChild( deps );
 
   NCSplit * hSplit = new NCSplit( vSplit, opt, YD_HORIZ );
@@ -150,73 +150,92 @@ void NCPopupDeps::createLayout( const YCPString & headline )
 //
 void NCPopupDeps::checkDependencies( )
 {
+
+    // 	typedef std::list<Result> ResultList;
+    PkgDep::ResultList		goodList;
     
-    // FIXME: call something like Y2PM::packageManager().solve();
-
-    // get some test pointer
-    list<PMSelectablePtr> pkgList( Y2PM::packageManager().begin(), Y2PM::packageManager().end() );
-
-    list<PMSelectablePtr>::iterator listIt = pkgList.begin();
-
-    unsigned int i;
-    PMObjectPtr pkgPtr;
-    PMObjectPtr conflPtr;
-    list<PMObjectPtr> conflList;
-
-    NCMIL << "SOLVING" << endl;
+    //	typedef std::list<ErrorResult> ErrorResultList;
+    //
+    //  struct ErrorResult {
+    // 	    RelInfoList unresolvable;
+    //	    	
+    //  }
+    //	typedef std::list<RelInfo> RelInfoList;
+    // 	struct RelInfo {
+    //      // name of package causing the relation:
+    //      PkgName name;
+    //  }
+    //
     
-    conflicts.clear();
-    
-    // TEST 
-    for ( i = 0; listIt != pkgList.end(), i < 20;   ++listIt, i++ )
+    PkgDep::ErrorResultList	badList;
+    list<PMObjectPtr> badPkgs;
+   
+    NCMIL << "Solving..." << endl ;
+
+    // call the Y2PM::packageManager()
+    bool success = Y2PM::packageManager().solveInstall( goodList, badList );
+
+    if ( !success )
     {
-	if ( (*listIt)->installedObj() )
-	{
-	    pkgPtr = (*listIt)->installedObj();
-	}
-	else if ( (*listIt)->candidateObj() )
-	{
-	    pkgPtr =  (*listIt)->candidateObj();
-	}
-	++listIt;
-	if ( (*listIt)->installedObj() )
-	{
-	    conflPtr = (*listIt)->installedObj();
-	}
-	else if ( (*listIt)->candidateObj() )
-	{
-	    conflPtr =  (*listIt)->candidateObj();
-	}
-	conflList.push_back( conflPtr );
-	++listIt;
-	if ( (*listIt)->installedObj() )
-	{
-	    conflPtr = (*listIt)->installedObj();
-	}
-	else if ( (*listIt)->candidateObj() )
-	{
-	    conflPtr =  (*listIt)->candidateObj();
-	}
-	
-	conflList.push_back( conflPtr );
-	
-	conflicts[pkgPtr] = conflList; 
-
+	// evaluate the ErrorResultList
+	badPkgs = evaluateErrorResult( badList );
     }
 
-    // create the list of packages which have unresolved deps
-    map<PMObjectPtr, list<PMObjectPtr> >::iterator it = conflicts.begin();
-    list<PMObjectPtr> badPkgs; 
-    
-    while ( it != conflicts.end() )
+    if ( !badPkgs.empty() )
     {
-	badPkgs.push_back( (*it).first );
+	// clear the lists
+	deps->itemsCleared();
+	pkgs->itemsCleared();
+	
+	// fill the list with packages  which have unresolved deps
+	fillDepsPackageList( pkgs, badPkgs );
+
+	showDependencyPopup();    // show the dependencies
+    }
+    
+}
+
+
+list<PMObjectPtr> NCPopupDeps::evaluateErrorResult( PkgDep::ErrorResultList errorlist )
+{
+    list<PMObjectPtr> retList;
+    
+    PkgDep::ErrorResultList::iterator it = errorlist.begin();
+    
+    while ( it != errorlist.end() )
+    {
+	if ( (*it).solvable )
+	{
+	    retList.push_back( (*it).solvable );
+	    if ( !(*it).unresolvable.empty() )
+	    {
+		NCMIL << "UNRESOLVABLE " << (*it).unresolvable << endl;
+		// map 
+	    }
+	    if ( !(*it).alternatives.empty() )
+	    {
+		NCMIL << "ALTERNATIVES " << (*it).alternatives << endl;
+	    }
+	    if ( !(*it).conflicts_with.empty() )
+	    {
+		NCMIL << "CONFLICTS: " << (*it).conflicts_with << endl;	
+		if ( !(*it).remove_to_solve_conflict.empty() )
+		{
+		    NCMIL << "REMOVE to solve not empty" << endl;
+		}
+	    }
+	    
+	}
+	else
+	{
+	    NCMIL << "No PMSolvablePtr for " << (*it) << endl;
+	}
 	++it;
     }
 
-    fillDepsPackageList( pkgs, badPkgs );
-
+    return retList; 
 }
+
 
 bool NCPopupDeps::fillDepsPackageList( NCPkgTable * table, list<PMObjectPtr> badPkgs )
 {
@@ -255,6 +274,7 @@ bool NCPopupDeps::fillDepsPackageList( NCPkgTable * table, list<PMObjectPtr> bad
 void NCPopupDeps::concretelyDependency( PMObjectPtr pkgPtr )
 {
     list<PMObjectPtr> conflList;
+
     
     // search for package in conflicts map
      map<PMObjectPtr, list<PMObjectPtr> >::iterator it = conflicts.find( pkgPtr );
@@ -264,13 +284,76 @@ void NCPopupDeps::concretelyDependency( PMObjectPtr pkgPtr )
 	 conflList = (*it).second; 
      }
 
-     // fill dependency table
+     // fill the dependency table
 
      if ( !conflList.empty() )
      {
 	 fillDepsPackageList( deps, conflList );
      }
     
+}
+
+void NCPopupDeps::fillTestData()
+{
+    // TEST data
+	
+    // get some test pointer
+    list<PMSelectablePtr> pkgList( Y2PM::packageManager().begin(), Y2PM::packageManager().end() );
+
+    list<PMSelectablePtr>::iterator listIt = pkgList.begin();
+
+    unsigned int i;
+    PMObjectPtr pkgPtr;
+    PMObjectPtr conflPtr;
+    list<PMObjectPtr> conflList;
+
+    conflicts.clear();
+    
+    for ( i = 0; listIt != pkgList.end(), i < 20;   ++listIt, i++ )
+    {
+	if ( (*listIt)->installedObj() )
+	{
+	    pkgPtr = (*listIt)->installedObj();
+	}
+	else if ( (*listIt)->candidateObj() )
+	{
+	    pkgPtr =  (*listIt)->candidateObj();
+	}
+	++listIt;
+	if ( (*listIt)->installedObj() )
+	{
+	    conflPtr = (*listIt)->installedObj();
+	}
+	else if ( (*listIt)->candidateObj() )
+	{
+	    conflPtr =  (*listIt)->candidateObj();
+	}
+	conflList.push_back( conflPtr );
+	++listIt;
+	if ( (*listIt)->installedObj() )
+	{
+	    conflPtr = (*listIt)->installedObj();
+	}
+	else if ( (*listIt)->candidateObj() )
+	{
+	    conflPtr =  (*listIt)->candidateObj();
+	}
+	
+	conflList.push_back( conflPtr );
+	
+	conflicts[pkgPtr] = conflList; 
+
+    }
+    
+   // create the list of packages which have unresolved deps
+    map<PMObjectPtr, list<PMObjectPtr> >::iterator it = conflicts.begin();
+    list<PMObjectPtr> badPkgs; 
+    
+    while ( it != conflicts.end() )
+    {
+	badPkgs.push_back( (*it).first );
+	++it;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -281,13 +364,8 @@ void NCPopupDeps::concretelyDependency( PMObjectPtr pkgPtr )
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupDeps::showDependencyPopup( bool solve )
+NCursesEvent NCPopupDeps::showDependencyPopup( )
 {
-    if ( solve )
-    {
-	checkDependencies();
-    }
-    
     postevent = NCursesEvent();
 
     do {

@@ -55,14 +55,14 @@ private:
     
     NCPushButton * cancelButton;
     NCPushButton * okButton;
-    NCPushButton * solveButton;
+    NCPushButton * solveButton;		
 
-    NCPkgTable * pkgs;
-    NCPkgTable * deps;
+    NCPkgTable * pkgs;			// the list of packages with unresolved deps
+    NCPkgTable * deps;			// the conflict/alternative packages
 
-    NCMenuButton * depsMenu;
+    NCMenuButton * depsMenu;		// the menu button
 
-    PackageSelector * packager;
+    PackageSelector * packager;		// connection to the package selector
 
 protected:
 
@@ -79,14 +79,18 @@ public:
 
     void createLayout( const YCPString & headline );
 
-    NCursesEvent showDependencyPopup( bool solve );
+    NCursesEvent showDependencyPopup( );
 
     void checkDependencies( );
     
-    bool fillDepsPackageList( NCPkgTable * table, list<PMObjectPtr> badPkgs );
+    bool fillDepsPackageList( NCPkgTable * table, list<PMObjectPtr> pkgs );
 
-    void concretelyDependency( PMObjectPtr pkgPtr );
-
+    list<PMObjectPtr> evaluateErrorResult(  PkgDep::ErrorResultList errorlist );
+    
+    void concretelyDependency( PMObjectPtr objPtr );
+    
+    void fillTestData();
+    
 };
 
 ///////////////////////////////////////////////////////////////////
