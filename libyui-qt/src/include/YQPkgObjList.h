@@ -378,7 +378,15 @@ public:
      **/
     virtual void updateData();
 
+    /**
+     * Returns a tool tip text for a specific column of this item.
+     * 'column' is -1 if the mouse pointer is in the tree indentation area.
+     *
+     * Reimplemented from QY2ListViewItem.
+     **/
+    virtual QString toolTip( int column );
 
+    
     // Columns
 
     int statusCol()		const	{ return _pkgObjList->statusCol();	}

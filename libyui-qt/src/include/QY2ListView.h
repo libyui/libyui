@@ -15,7 +15,7 @@
   Author:     Stefan Hundhammer <sh@suse.de>
 
   This is a pure Qt widget - it can be used independently of YaST2.
-  
+
 /-*/
 
 // -*- c++ -*-
@@ -25,12 +25,14 @@
 #define QY2ListView_h
 
 #include <qlistview.h>
+#include <qtooltip.h>
 #include <qpoint.h>
 #include <qcolor.h>
 #include <vector>
 
 
-class QY2ListViewItem;	// shorter name than "QY2ListViewItem"
+class QY2ListViewItem;
+class QY2ListViewToolTip;
 
 
 /**
@@ -89,13 +91,13 @@ public slots:
 
     /**
      * Restore the column widths to what was saved previously with
-     * saveColumnWidths().   
+     * saveColumnWidths().
      **/
     void restoreColumnWidths();
 
-    
+
 signals:
-    
+
     /**
      * Emitted for mouse clicks on a package
      **/
@@ -115,19 +117,32 @@ signals:
 public:
 
     /**
+     * Returns a tool tip text for a specific column of a list item.
+     * 'column' is -1 if the mouse pointer is in the tree indentation area.
+     *
+     * This default implementation tries to call
+     * QY2ListViewItem::toolTip( column ) or 
+     * QY2CheckListItem::toolTip( column ), respectively
+     * if 'item' is a subclass of either.
+     *
+     * Derived classes may handle this differently.
+     **/
+    virtual QString toolTip( QListViewItem * item, int column );
+
+    /**
      * Returns the next free serial number for items that want to be ordered in
-     * insertion sequence. 
+     * insertion sequence.
      **/
     int nextSerial() { return _nextSerial++; }
 
-    
+
     /**
      * Returns the minimum size required for this widget.
      * Inherited from QWidget.
      **/
     virtual QSize minimumSizeHint() const;
 
-    
+
 protected slots:
 
     /**
@@ -158,15 +173,17 @@ protected:
     virtual void contentsMouseDoubleClickEvent( QMouseEvent* );
 
 
-    
+
     // Data members
 
-    QListViewItem *	_mousePressedItem;
-    int			_mousePressedCol;
-    int			_mousePressedButton;
-    
-    std::vector<int> 	_savedColumnWidth;
-    int			_nextSerial;
+    QListViewItem *		_mousePressedItem;
+    int				_mousePressedCol;
+    int				_mousePressedButton;
+
+    std::vector<int> 		_savedColumnWidth;
+    int				_nextSerial;
+
+    QY2ListViewToolTip *	_toolTip;
 };
 
 
@@ -259,7 +276,7 @@ public:
      **/
     void setTextColor( const QColor & col )
 	{ _textColor = col; }
-    
+
     /**
      * Set the text background color for all columns.
      * For more specific purposes reimiplement paintCell().
@@ -267,7 +284,15 @@ public:
     void setBackgroundColor( const QColor & col )
 	{ _backgroundColor = col; }
 
-    
+    /**
+     * Returns a tool tip text for a specific column of this item.
+     * 'column' is -1 if the mouse pointer is in the tree indentation area.
+     *
+     * This default implementation does nothing.
+     **/
+    virtual QString toolTip( int column ) { return QString(); }
+
+
 protected:
 
     /**
@@ -283,10 +308,10 @@ protected:
 			    int			alignment );
 
     // Data members
-    
+
     int		_serial;
     bool	_sortByInsertionSequence;
-    
+
     QColor	_textColor;
     QColor	_backgroundColor;
 };
@@ -396,15 +421,23 @@ public:
      **/
     void setTextColor( const QColor & col )
 	{ _textColor = col; }
-    
+
     /**
      * Set the text background color for all columns.
      * For more specific purposes reimiplement paintCell().
      **/
     void setBackgroundColor( const QColor & col )
 	{ _backgroundColor = col; }
-    
-    
+
+    /**
+     * Returns a tool tip text for a specific column of this item.
+     * 'column' is -1 if the mouse pointer is in the tree indentation area.
+     *
+     * This default implementation does nothing.
+     **/
+    virtual QString toolTip( int column ) { return QString(); }
+
+
 protected:
 
     /**
@@ -423,10 +456,35 @@ protected:
 
     int		_serial;
     bool	_sortByInsertionSequence;
-    
+
     QColor	_textColor;
     QColor	_backgroundColor;
 };
 
+
+/**
+ * Tool tip for a QY2ListView widget: Enables individual tool tips specific to
+ * each list item and each column. Overwrite QY2ListViewItem::toolTip() to use
+ * this.
+ **/
+class QY2ListViewToolTip : public QToolTip
+{
+public:
+
+    /**
+     * Constructor.
+     **/
+    QY2ListViewToolTip::QY2ListViewToolTip( QWidget * parent )
+	: QToolTip( parent ) {}
+
+protected:
+
+    /**
+     * Decide if there is a tool tip text at 'p' and display it if there is one.
+     *
+     * Reimplemented from QToolTip.
+     **/
+    virtual void maybeTip( const QPoint & p );
+};
 
 #endif // ifndef QY2ListView_h

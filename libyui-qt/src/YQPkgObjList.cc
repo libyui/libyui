@@ -697,6 +697,31 @@ YQPkgObjListItem::showNotifyTexts( PMSelectable::UI_Status status )
 }
 
 
+QString
+YQPkgObjListItem::toolTip( int col )
+{
+    QString text;
+    
+    if ( col == statusCol() )
+    {
+	switch ( status() )
+	{
+	    case PMSelectable::S_Taboo:		return _( "Taboo - never install" 	);
+	    case PMSelectable::S_Del:		return _( "Delete" 			);
+	    case PMSelectable::S_Update:	return _( "Update" 			);
+	    case PMSelectable::S_Install:	return _( "Install" 			);
+	    case PMSelectable::S_AutoDel:	return _( "Auto-delete" 		);
+	    case PMSelectable::S_AutoInstall:	return _( "Auto-install" 		);
+	    case PMSelectable::S_AutoUpdate:	return _( "Auto-update" 		);
+	    case PMSelectable::S_KeepInstalled:	return _( "Keep" 			);
+	    case PMSelectable::S_NoInst:	return _( "Don't install" 		);
+	}
+    }
+
+    return QString();
+}
+
+
 /**
  * Comparison function used for sorting the list.
  * Returns:

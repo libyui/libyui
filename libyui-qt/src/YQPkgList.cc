@@ -291,6 +291,85 @@ YQPkgListItem::toggleSourceRpmStatus()
 }
 
 
+QString
+YQPkgListItem::toolTip( int col )
+{
+    QString text;
+    QString name = _pmObj->name().asString().c_str();
+    
+    if ( col == statusCol() )
+    {
+	text = YQPkgObjListItem::toolTip( col );
+    }
+    else if ( col == srpmStatusCol() )
+    {
+	if ( hasSourceRpm() )
+	{
+	    text = installSourceRpm() ?
+		_( "Install sources" ) :
+		_( "Don't install sources" );
+	}
+	else
+	{
+	    text = _( "No sources available" );
+	}
+    }
+    else if ( col == nameCol()    ||
+	      col == versionCol() ||
+	      col == instVersionCol() )
+    {
+	if ( col != nameCol() )
+	    text = name + "\n\n";
+	    
+	QString installed;
+	QString candidate;
+
+	if ( _pmObj->hasInstalledObj() )
+	{
+	    installed = _pmObj->getInstalledObj()->edition().asString().c_str();
+	    installed = _( "Installed version: %1" ).arg( installed );
+	}
+	
+	if (  _pmObj->hasCandidateObj() )
+	{
+	    candidate = _pmObj->getCandidateObj()->edition().asString().c_str();
+	}
+	
+	if ( _pmObj->hasInstalledObj() )
+	{
+	    text += installed + "\n";
+	    
+	    if ( _pmObj->hasCandidateObj() )
+	    {
+		// Translators: This is the relation between two versions of one package
+		// if both versions are the same, e.g., both "1.2.3-42", "1.2.3-42"
+		QString relation = _( "same" );
+
+		if ( _candidateIsNewer )	relation = _( "newer" );
+		if ( _installedIsNewer )	relation = _( "older" );
+
+		// Translators: %1 is the version, %2 is one of "newer", "older", "same"
+		text += _( "Available version: %1 (%2)" ).arg( candidate ).arg( relation );
+	    }
+	    else
+	    {
+		text += _( "No longer available for installation" );
+	    }
+	}
+	else // not installed
+	{
+	    text += candidate;
+	}
+    }
+    else
+    {
+	text = name;
+    }
+	
+    return text;
+}
+
+
 
 /**
  * Comparison function used for sorting the list.
