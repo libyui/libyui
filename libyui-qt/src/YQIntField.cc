@@ -45,30 +45,30 @@ YQIntField::YQIntField( 			QWidget *		parent,
     vbox = new QVBox( this );
     vbox->setSpacing( VSPACING );
     vbox->setMargin( MARGIN );
-    qt_label = new QLabel( fromUTF8(label->value() ), vbox );
-    qt_label->setTextFormat( QLabel::PlainText );
-    qt_label->setFont(YUIQt::ui()->currentFont() );
-    qt_label->setAlignment( Qt::AlignRight );
+    _qt_label = new QLabel( fromUTF8(label->value() ), vbox );
+    _qt_label->setTextFormat( QLabel::PlainText );
+    _qt_label->setFont(YUIQt::ui()->currentFont() );
+    _qt_label->setAlignment( Qt::AlignRight );
 
-    qt_spinbox = new QSpinBox( minValue, maxValue,
+    _qt_spinbox = new QSpinBox( minValue, maxValue,
 			       1, // step
 			       vbox );
-    qt_spinbox->setValue( initialValue );
-    qt_spinbox->setFont( YUIQt::ui()->currentFont() );
+    _qt_spinbox->setValue( initialValue );
+    _qt_spinbox->setFont( YUIQt::ui()->currentFont() );
 
-    qt_label->setBuddy( qt_spinbox );
+    _qt_label->setBuddy( _qt_spinbox );
 
     setValue( initialValue );
 
-    connect( qt_spinbox, SIGNAL( valueChanged(int) ),
+    connect( _qt_spinbox, SIGNAL( valueChanged(int) ),
 	     this,  	SLOT  ( setValueSlot(int) ) );
 }
 
 
 void YQIntField::setEnabling( bool enabled )
 {
-    qt_label->setEnabled  ( enabled );
-    qt_spinbox->setEnabled( enabled );
+    _qt_label->setEnabled  ( enabled );
+    _qt_spinbox->setEnabled( enabled );
 }
 
 
@@ -87,7 +87,7 @@ void YQIntField::setSize( long newWidth, long newHeight )
 
 void YQIntField::setLabel( const YCPString & newLabel )
 {
-    qt_label->setText( fromUTF8( newLabel->value() ) ) ;
+    _qt_label->setText( fromUTF8( newLabel->value() ) ) ;
 
     YIntField::setLabel( newLabel );
 }
@@ -95,7 +95,7 @@ void YQIntField::setLabel( const YCPString & newLabel )
 
 void YQIntField::setValue( int newValue )
 {
-    qt_spinbox->setValue( newValue );
+    _qt_spinbox->setValue( newValue );
     YIntField::setValue( newValue );
 }
 
@@ -111,7 +111,7 @@ void YQIntField::setValueSlot( int newValue )
 
 bool YQIntField::setKeyboardFocus()
 {
-    qt_spinbox->setFocus();
+    _qt_spinbox->setFocus();
 
     return true;
 }

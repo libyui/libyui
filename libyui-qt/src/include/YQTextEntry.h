@@ -106,12 +106,12 @@ protected:
     /**
      * Pointer to the qt widget representing the label
      */
-    QLabel * qt_label;
+    QLabel * _qt_label;
 
     /**
      * Pointer to the qt widget representing the text entry
      */
-    QLineEdit * qt_lineedit;
+    QLineEdit * _qt_lineedit;
 
     /**
      * Pointer to the validator object

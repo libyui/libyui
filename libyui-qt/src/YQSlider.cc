@@ -45,46 +45,46 @@ YQSlider::YQSlider( 		    QWidget *		parent,
     vbox = new QVBox( this );
     vbox->setSpacing( VSPACING );
     vbox->setMargin( MARGIN );
-    qt_label = new QLabel( fromUTF8(label->value() ), vbox );
-    qt_label->setTextFormat( QLabel::PlainText );
-    qt_label->setFont(YUIQt::ui()->currentFont() );
-    qt_label->setAlignment( Qt::AlignRight );
+    _qt_label = new QLabel( fromUTF8(label->value() ), vbox );
+    _qt_label->setTextFormat( QLabel::PlainText );
+    _qt_label->setFont(YUIQt::ui()->currentFont() );
+    _qt_label->setAlignment( Qt::AlignRight );
 
     hbox = new QHBox( vbox );
     hbox->setSpacing( HSPACING );
 
-    qt_slider = new QSlider( minValue, maxValue,
+    _qt_slider = new QSlider( minValue, maxValue,
 			     1, // pageStep
 			     initialValue,
 			     QSlider::Horizontal, hbox );
-    qt_slider->setFont( YUIQt::ui()->currentFont() );
+    _qt_slider->setFont( YUIQt::ui()->currentFont() );
 
-    qt_spinbox = new QSpinBox( minValue, maxValue,
+    _qt_spinbox = new QSpinBox( minValue, maxValue,
 			       1, // step
 			       hbox );
-    qt_spinbox->setValue( initialValue );
-    qt_spinbox->setFont( YUIQt::ui()->currentFont() );
+    _qt_spinbox->setValue( initialValue );
+    _qt_spinbox->setFont( YUIQt::ui()->currentFont() );
 
-    qt_label->setBuddy( qt_spinbox );
+    _qt_label->setBuddy( _qt_spinbox );
 
     setValue( initialValue );
 
-    connect( qt_spinbox, SIGNAL( valueChanged(int) ),
-	     qt_slider,  SLOT  ( setValue    (int) ) );
+    connect( _qt_spinbox, SIGNAL( valueChanged(int) ),
+	     _qt_slider,  SLOT  ( setValue    (int) ) );
 
-    connect( qt_slider, 	SIGNAL( valueChanged(int) ),
-	     qt_spinbox, SLOT  ( setValue    (int) ) );
+    connect( _qt_slider, 	SIGNAL( valueChanged(int) ),
+	     _qt_spinbox, SLOT  ( setValue    (int) ) );
 
-    connect( qt_spinbox, SIGNAL( valueChanged(int) ),
+    connect( _qt_spinbox, SIGNAL( valueChanged(int) ),
 	     this,  	SLOT  ( setValueSlot(int) ) );
 }
 
 
 void YQSlider::setEnabling( bool enabled )
 {
-    qt_label->setEnabled  ( enabled );
-    qt_slider->setEnabled ( enabled );
-    qt_spinbox->setEnabled( enabled );
+    _qt_label->setEnabled  ( enabled );
+    _qt_slider->setEnabled ( enabled );
+    _qt_spinbox->setEnabled( enabled );
 }
 
 
@@ -103,7 +103,7 @@ void YQSlider::setSize( long newWidth, long newHeight )
 
 void YQSlider::setLabel( const YCPString & newLabel )
 {
-    qt_label->setText( fromUTF8( newLabel->value() ) ) ;
+    _qt_label->setText( fromUTF8( newLabel->value() ) ) ;
 
     YSlider::setLabel( newLabel );
 }
@@ -111,7 +111,7 @@ void YQSlider::setLabel( const YCPString & newLabel )
 
 void YQSlider::setValue( int newValue )
 {
-    qt_slider->setValue( newValue );
+    _qt_slider->setValue( newValue );
     YSlider::setValue( newValue );
 }
 
@@ -127,7 +127,7 @@ void YQSlider::setValueSlot( int newValue )
 
 bool YQSlider::setKeyboardFocus()
 {
-    qt_spinbox->setFocus();
+    _qt_spinbox->setFocus();
 
     return true;
 }

@@ -50,21 +50,21 @@ YQSelectionBox::YQSelectionBox( QWidget * parent, YWidgetOpt & opt,
     setSpacing( SPACING );
     setMargin( MARGIN );
 
-    qt_label = new QLabel(fromUTF8(label->value() ), this);
-    qt_label->setTextFormat(QLabel::PlainText);
-    qt_label->setFont(YUIQt::ui()->currentFont() );
+    _qt_label = new QLabel(fromUTF8(label->value() ), this);
+    _qt_label->setTextFormat(QLabel::PlainText);
+    _qt_label->setFont(YUIQt::ui()->currentFont() );
 
-    qt_listbox = new QListBox(this);
-    qt_listbox->installEventFilter( this );
-    qt_listbox->setVariableHeight(false);
-    qt_listbox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
-    qt_listbox->setTopItem(0);
-    qt_label->setBuddy(qt_listbox);
+    _qt_listbox = new QListBox(this);
+    _qt_listbox->installEventFilter( this );
+    _qt_listbox->setVariableHeight(false);
+    _qt_listbox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
+    _qt_listbox->setTopItem(0);
+    _qt_label->setBuddy(_qt_listbox);
 
     shrinkable 		= opt.isShrinkable.value();
     immediateMode	= opt.immediateMode.value();
 
-    connect( qt_listbox, SIGNAL( highlighted ( int) ),
+    connect( _qt_listbox, SIGNAL( highlighted ( int) ),
 	     this, 	 SLOT  ( slotSelected( int ) ) );
 
     if ( getNotify() )
@@ -77,7 +77,7 @@ YQSelectionBox::YQSelectionBox( QWidget * parent, YWidgetOpt & opt,
 
 void YQSelectionBox::setLabel(const YCPString & label)
 {
-    qt_label->setText(fromUTF8(label->value() ) );
+    _qt_label->setText(fromUTF8(label->value() ) );
     YSelectionBox::setLabel(label);
 }
 
@@ -86,16 +86,16 @@ long YQSelectionBox::nicesize(YUIDimension dim)
 {
     if (dim == YD_HORIZ)
     {
-	int hintWidth = qt_label->sizeHint().width() + frameWidth();
+	int hintWidth = _qt_label->sizeHint().width() + frameWidth();
 
 	return max( MIN_WIDTH, hintWidth );
     }
     else
     {
-	int hintHeight	 = qt_label->sizeHint().height();
+	int hintHeight	 = _qt_label->sizeHint().height();
 	int visibleLines	 = shrinkable ? SHRINKABLE_VISIBLE_LINES : DEFAULT_VISIBLE_LINES;
-	hintHeight 	+= visibleLines * qt_listbox->fontMetrics().lineSpacing();
-	hintHeight	+= qt_listbox->frameWidth() * 2;
+	hintHeight 	+= visibleLines * _qt_listbox->fontMetrics().lineSpacing();
+	hintHeight	+= _qt_listbox->frameWidth() * 2;
 
 	return max( MIN_HEIGHT, hintHeight );
     }
@@ -110,34 +110,34 @@ void YQSelectionBox::setSize(long newWidth, long newHeight)
 
 void YQSelectionBox::setEnabling(bool enabled)
 {
-    qt_label->setEnabled(enabled);
-    qt_listbox->setEnabled(enabled);
-    qt_listbox->triggerUpdate(true);
+    _qt_label->setEnabled(enabled);
+    _qt_listbox->setEnabled(enabled);
+    _qt_listbox->triggerUpdate(true);
 }
 
 
 void YQSelectionBox::itemAdded(const YCPString & string, int index, bool selected)
 {
-    qt_listbox->insertItem(fromUTF8(string->value() ) );
-    if (selected) qt_listbox->setCurrentItem(index);
+    _qt_listbox->insertItem(fromUTF8(string->value() ) );
+    if (selected) _qt_listbox->setCurrentItem(index);
 }
 
 
 int YQSelectionBox::getCurrentItem()
 {
-    return qt_listbox->currentItem();
+    return _qt_listbox->currentItem();
 }
 
 
 void YQSelectionBox::setCurrentItem(int index)
 {
-    qt_listbox->setCurrentItem(index);
+    _qt_listbox->setCurrentItem(index);
 }
 
 
 bool YQSelectionBox::setKeyboardFocus()
 {
-    qt_listbox->setFocus();
+    _qt_listbox->setFocus();
 
     return true;
 }

@@ -41,23 +41,23 @@ YQComboBox::YQComboBox( QWidget * parent, YWidgetOpt & opt,
     setSpacing( SPACING );
     setMargin( YQWIDGET_BORDER );
 
-    qt_label = new QLabel(fromUTF8(label->value() ), this);
-    qt_label->setTextFormat(QLabel::PlainText);
-    qt_label->setFont(YUIQt::ui()->currentFont() );
+    _qt_label = new QLabel(fromUTF8(label->value() ), this);
+    _qt_label->setTextFormat(QLabel::PlainText);
+    _qt_label->setFont(YUIQt::ui()->currentFont() );
 
-    qt_combo_box = new QComboBox(opt.isEditable.value(), this);
-    qt_combo_box->setFont(YUIQt::ui()->currentFont() );
+    _qt_combo_box = new QComboBox(opt.isEditable.value(), this);
+    _qt_combo_box->setFont(YUIQt::ui()->currentFont() );
 
-    qt_label->setBuddy(qt_combo_box);
+    _qt_label->setBuddy(_qt_combo_box);
 
-    connect( qt_combo_box, SIGNAL( highlighted( int) ), this, SLOT( slotSelected(int) ) );
-    connect( qt_combo_box, SIGNAL( activated( const QString & ) ), this, SLOT(textChanged(const QString & ) ) );
+    connect( _qt_combo_box, SIGNAL( highlighted( int) ), this, SLOT( slotSelected(int) ) );
+    connect( _qt_combo_box, SIGNAL( activated( const QString & ) ), this, SLOT(textChanged(const QString & ) ) );
 }
 
 
 void YQComboBox::setLabel(const YCPString & label)
 {
-    qt_label->setText(fromUTF8(label->value() ) );
+    _qt_label->setText(fromUTF8(label->value() ) );
     YComboBox::setLabel(label);
 }
 
@@ -71,7 +71,7 @@ void YQComboBox::setValidChars( const YCPString & newValidChars )
     else
     {
 	_validator = new QY2CharValidator( fromUTF8( newValidChars->value() ), this );
-	qt_combo_box->setValidator( _validator );
+	_qt_combo_box->setValidator( _validator );
 
 	// No need to delete the validator in the destructor - Qt will take
 	// care of that since it's a QObject with a parent!
@@ -96,14 +96,14 @@ void YQComboBox::setSize(long newWidth, long newHeight)
 
 void YQComboBox::setEnabling(bool enabled)
 {
-    qt_label->setEnabled(enabled);
-    qt_combo_box->setEnabled(enabled);
+    _qt_label->setEnabled(enabled);
+    _qt_combo_box->setEnabled(enabled);
 }
 
 
 void YQComboBox::itemAdded(const YCPString & string, int index, bool selected)
 {
-    qt_combo_box->insertItem(fromUTF8(string->value() ) );
+    _qt_combo_box->insertItem(fromUTF8(string->value() ) );
 
     if (selected)
 	setValue(string);
@@ -112,25 +112,25 @@ void YQComboBox::itemAdded(const YCPString & string, int index, bool selected)
 
 YCPString YQComboBox::getValue() const
 {
-    return YCPString( toUTF8( qt_combo_box->currentText() ) );
+    return YCPString( toUTF8( _qt_combo_box->currentText() ) );
 }
 
 
 void YQComboBox::setValue(const YCPString & new_value)
 {
-    qt_combo_box->setEditText( fromUTF8( new_value->value() ) );
+    _qt_combo_box->setEditText( fromUTF8( new_value->value() ) );
 }
 
 
 void YQComboBox::setCurrentItem(int index)
 {
-    qt_combo_box->setCurrentItem(index);
+    _qt_combo_box->setCurrentItem(index);
 }
 
 
 bool YQComboBox::setKeyboardFocus()
 {
-    qt_combo_box->setFocus();
+    _qt_combo_box->setFocus();
 
     return true;
 }

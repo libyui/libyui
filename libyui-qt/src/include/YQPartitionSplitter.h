@@ -108,12 +108,12 @@ protected:
     QVBox *	vbox;
     QY2BarGraph *	barGraph;
     QHBox *		labels_hbox;
-    QLabel *			qt_freeFieldLabel;
-    QLabel *			qt_newPartFieldLabel;
+    QLabel *			_qt_freeFieldLabel;
+    QLabel *			_qt_newPartFieldLabel;
     QHBox *		fields_hbox;
-    QSpinBox *			qt_freeSizeField;
-    QSlider *			qt_freeSizeSlider;
-    QSpinBox *			qt_newPartSizeField;
+    QSpinBox *			_qt_freeSizeField;
+    QSlider *			_qt_freeSizeSlider;
+    QSpinBox *			_qt_newPartSizeField;
 
     bool             countShowDelta;
 };

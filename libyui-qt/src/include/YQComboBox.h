@@ -41,12 +41,12 @@ protected:
     /**
      * Title label of the box
      */
-    QLabel * qt_label;
+    QLabel * _qt_label;
 
     /**
      * The actual Qt list box
      */
-    QComboBox * qt_combo_box;
+    QComboBox * _qt_combo_box;
 
     /**
      * Pointer to the validator object

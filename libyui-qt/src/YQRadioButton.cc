@@ -48,66 +48,66 @@ YQRadioButton::YQRadioButton( 			     QWidget * parent,
 
     QBoxLayout * layout = new QBoxLayout(this, QBoxLayout::LeftToRight);
 
-    qt_radiobutton = new QRadioButton( fromUTF8(label->value() ), this);
+    _qt_radiobutton = new QRadioButton( fromUTF8(label->value() ), this);
     layout->addSpacing(SPACING);
-    layout->addWidget(qt_radiobutton);
+    layout->addWidget(_qt_radiobutton);
     layout->addSpacing(SPACING);
-    qt_radiobutton->setFont(YUIQt::ui()->currentFont() );
-    qt_radiobutton->setChecked(checked);
+    _qt_radiobutton->setFont(YUIQt::ui()->currentFont() );
+    _qt_radiobutton->setChecked(checked);
 
-    connect ( qt_radiobutton, SIGNAL ( toggled ( bool ) ),
+    connect ( _qt_radiobutton, SIGNAL ( toggled ( bool ) ),
 	      this, SLOT ( changed ( bool ) ) );
 }
 
 
 long YQRadioButton::nicesize(YUIDimension dim)
 {
-    if (dim == YD_HORIZ) return 2 * SPACING + qt_radiobutton->sizeHint().width();
-    else return qt_radiobutton->sizeHint().height();
+    if (dim == YD_HORIZ) return 2 * SPACING + _qt_radiobutton->sizeHint().width();
+    else return _qt_radiobutton->sizeHint().height();
 }
 
 
 void YQRadioButton::setSize(long newWidth, long newHeight)
 {
-    qt_radiobutton->resize(newWidth - 2*SPACING, newHeight);
+    _qt_radiobutton->resize(newWidth - 2*SPACING, newHeight);
     resize(newWidth, newHeight);
 }
 
 
 YCPBoolean YQRadioButton::getValue()
 {
-    return YCPBoolean(qt_radiobutton->isChecked() );
+    return YCPBoolean(_qt_radiobutton->isChecked() );
 }
 
 
 void YQRadioButton::setValue(const YCPBoolean & c)
 {
-    qt_radiobutton->setChecked(c->value() );
+    _qt_radiobutton->setChecked(c->value() );
 }
 
 
 void YQRadioButton::setLabel(const YCPString & label)
 {
-    qt_radiobutton->setText(fromUTF8(label->value() ) );
+    _qt_radiobutton->setText(fromUTF8(label->value() ) );
     YRadioButton::setLabel(label);
 }
 
 
 void YQRadioButton::setEnabling(bool enabled)
 {
-    qt_radiobutton->setEnabled(enabled);
+    _qt_radiobutton->setEnabled(enabled);
 }
 
 
 QRadioButton * YQRadioButton::getQtButton()
 {
-    return qt_radiobutton;
+    return _qt_radiobutton;
 }
 
 
 bool YQRadioButton::setKeyboardFocus()
 {
-    qt_radiobutton->setFocus();
+    _qt_radiobutton->setFocus();
 
     return true;
 }

@@ -99,8 +99,8 @@ public slots:
 
 protected:
 
-    QLabel *	qt_label;
-    QSpinBox *	qt_spinbox;
+    QLabel *	_qt_label;
+    QSpinBox *	_qt_spinbox;
     QVBox *	vbox;
     QHBox *	hbox;
 };

@@ -49,21 +49,21 @@ YQMultiSelectionBox::YQMultiSelectionBox( 					  QWidget *		parent,
     setSpacing( SPACING );
     setMargin( MARGIN );
 
-    qt_label = new QLabel(fromUTF8(label->value() ), this);
-    qt_label->setTextFormat(QLabel::PlainText);
-    qt_label->setFont( YUIQt::ui()->currentFont() );
+    _qt_label = new QLabel(fromUTF8(label->value() ), this);
+    _qt_label->setTextFormat(QLabel::PlainText);
+    _qt_label->setFont( YUIQt::ui()->currentFont() );
 
-    qt_listview = new QListView( this );
-    qt_listview->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
-    qt_listview->addColumn( "" );	// we need at least one column - yes, QListView is too dumb to do without that. :-(
-    qt_listview->setSorting( 0, false );
-    qt_listview->header()->hide();
-    qt_label->setBuddy(qt_listview);
+    _qt_listview = new QListView( this );
+    _qt_listview->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
+    _qt_listview->addColumn( "" );	// we need at least one column - yes, QListView is too dumb to do without that. :-(
+    _qt_listview->setSorting( 0, false );
+    _qt_listview->header()->hide();
+    _qt_label->setBuddy(_qt_listview);
 
     // Very small default size if specified
     shrinkable = opt.isShrinkable.value();
 
-    connect( qt_listview, SIGNAL( selectionChanged() ),
+    connect( _qt_listview, SIGNAL( selectionChanged() ),
 	     this, 	  SLOT  ( slotSelected() ) );
 }
 
@@ -71,7 +71,7 @@ YQMultiSelectionBox::YQMultiSelectionBox( 					  QWidget *		parent,
 void
 YQMultiSelectionBox::setLabel( const YCPString & label )
 {
-    qt_label->setText(fromUTF8(label->value() ) );
+    _qt_label->setText(fromUTF8(label->value() ) );
     YMultiSelectionBox::setLabel(label);
 }
 
@@ -81,16 +81,16 @@ YQMultiSelectionBox::nicesize( YUIDimension dim )
 {
     if (dim == YD_HORIZ)
     {
-	int hintWidth = qt_label->sizeHint().width() + frameWidth();
+	int hintWidth = _qt_label->sizeHint().width() + frameWidth();
 
 	return max( MIN_WIDTH, hintWidth );
     }
     else
     {
-	int hintHeight	 	 = qt_label->sizeHint().height();
+	int hintHeight	 	 = _qt_label->sizeHint().height();
 	int visibleLines	 = shrinkable ? SHRINKABLE_VISIBLE_LINES : DEFAULT_VISIBLE_LINES;
-	hintHeight 		+= visibleLines * qt_listview->fontMetrics().lineSpacing();
-	hintHeight		+= qt_listview->frameWidth() * 2;
+	hintHeight 		+= visibleLines * _qt_listview->fontMetrics().lineSpacing();
+	hintHeight		+= _qt_listview->frameWidth() * 2;
 
 	return max( MIN_HEIGHT, hintHeight );
     }
@@ -107,16 +107,16 @@ YQMultiSelectionBox::setSize( long newWidth, long newHeight )
 void
 YQMultiSelectionBox::setEnabling( bool enabled )
 {
-    qt_label->setEnabled(enabled);
-    qt_listview->setEnabled(enabled);
-    qt_listview->triggerUpdate();
+    _qt_label->setEnabled(enabled);
+    _qt_listview->setEnabled(enabled);
+    _qt_listview->triggerUpdate();
 }
 
 
 void
 YQMultiSelectionBox::itemAdded( const YCPString & label, bool selected )
 {
-    YQMultiSelectionBoxItem * item = new YQMultiSelectionBoxItem( qt_listview, fromUTF8( label->value() ) );
+    YQMultiSelectionBoxItem * item = new YQMultiSelectionBoxItem( _qt_listview, fromUTF8( label->value() ) );
     
     if ( item && selected )
     {
@@ -129,7 +129,7 @@ int
 YQMultiSelectionBox::getCurrentItem()
 {
     int index = 0;
-    QListViewItem * child = qt_listview->firstChild();
+    QListViewItem * child = _qt_listview->firstChild();
 
     while ( child )
     {
@@ -148,8 +148,8 @@ YQMultiSelectionBox::getCurrentItem()
 void
 YQMultiSelectionBox::setCurrentItem( int index )
 {
-    qt_listview->clearSelection();
-    QListViewItem * child = qt_listview->firstChild();
+    _qt_listview->clearSelection();
+    QListViewItem * child = _qt_listview->firstChild();
 
     for ( int i = 0; i < index; i++ )
     {
@@ -169,7 +169,7 @@ YQMultiSelectionBox::setCurrentItem( int index )
 bool
 YQMultiSelectionBox::setKeyboardFocus()
 {
-    qt_listview->setFocus();
+    _qt_listview->setFocus();
 
     return true;
 }
@@ -178,7 +178,7 @@ YQMultiSelectionBox::setKeyboardFocus()
 void
 YQMultiSelectionBox::deleteAllItems()
 {
-    qt_listview->clear();
+    _qt_listview->clear();
     YMultiSelectionBox::deleteAllItems();
 }
 
@@ -186,7 +186,7 @@ YQMultiSelectionBox::deleteAllItems()
 bool
 YQMultiSelectionBox::itemIsSelected( int index )
 {
-    QListViewItem * child = qt_listview->firstChild();
+    QListViewItem * child = _qt_listview->firstChild();
 
     for ( int i = 0; i < index; i++ )
     {
@@ -208,7 +208,7 @@ YQMultiSelectionBox::itemIsSelected( int index )
 void
 YQMultiSelectionBox::selectItem( int index )
 {
-    QListViewItem * child = qt_listview->firstChild();
+    QListViewItem * child = _qt_listview->firstChild();
 
     for ( int i = 0; i < index; i++ )
     {
@@ -230,7 +230,7 @@ YQMultiSelectionBox::selectItem( int index )
 void
 YQMultiSelectionBox::deselectAllItems()
 {
-    QListViewItem * child = qt_listview->firstChild();
+    QListViewItem * child = _qt_listview->firstChild();
 
     while ( child )
     {

@@ -135,12 +135,12 @@ protected:
     /**
      * Title label of the box
      */
-    QLabel * qt_label;
+    QLabel * _qt_label;
 
     /**
      * The actual Qt list view
      */
-    QListView * qt_listview;
+    QListView * _qt_listview;
 
     bool shrinkable;
 };

@@ -99,9 +99,9 @@ public slots:
 
 protected:
 
-    QLabel *	qt_label;
-    QSlider *	qt_slider;
-    QSpinBox *	qt_spinbox;
+    QLabel *	_qt_label;
+    QSlider *	_qt_slider;
+    QSpinBox *	_qt_spinbox;
     QVBox *	vbox;
     QHBox *	hbox;
 };

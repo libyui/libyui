@@ -39,12 +39,12 @@ class YQSelectionBox : public QVBox, public YSelectionBox
     /**
      * Title label of the box
      */
-    QLabel * qt_label;
+    QLabel * _qt_label;
 
     /**
      * The actual Qt list box
      */
-    QListBox * qt_listbox;
+    QListBox * _qt_listbox;
 
 public:
 

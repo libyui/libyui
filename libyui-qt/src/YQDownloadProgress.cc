@@ -39,16 +39,16 @@ YQDownloadProgress::YQDownloadProgress( 					QWidget *	parent,
     setWidgetRep( this );
     setMargin( YQWIDGET_BORDER );
 
-    qt_label = new QLabel( fromUTF8(label->value() ), this );
-    qt_label->setTextFormat( QLabel::PlainText );
-    qt_label->setFont( YUIQt::ui()->currentFont() );
+    _qt_label = new QLabel( fromUTF8(label->value() ), this );
+    _qt_label->setTextFormat( QLabel::PlainText );
+    _qt_label->setFont( YUIQt::ui()->currentFont() );
 
-    qt_progress = new QProgressBar( this );
-    qt_progress->setFont( YUIQt::ui()->currentFont() );
-    qt_progress->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed) );
+    _qt_progress = new QProgressBar( this );
+    _qt_progress->setFont( YUIQt::ui()->currentFont() );
+    _qt_progress->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed) );
 
-    qt_progress->setTotalSteps( expectedSize );
-    qt_progress->setProgress( currentFileSize() );
+    _qt_progress->setTotalSteps( expectedSize );
+    _qt_progress->setProgress( currentFileSize() );
 
     timer = new QTimer( this );
     connect( timer, SIGNAL( timeout() ), this, SLOT( pollFileSize() ) );
@@ -60,7 +60,7 @@ YQDownloadProgress::YQDownloadProgress( 					QWidget *	parent,
 
 void YQDownloadProgress::setEnabling(bool enabled)
 {
-    qt_progress->setEnabled( enabled );
+    _qt_progress->setEnabled( enabled );
 }
 
 
@@ -79,15 +79,15 @@ void YQDownloadProgress::setSize(long newWidth, long newHeight)
 
 void YQDownloadProgress::setLabel(const YCPString & label)
 {
-    qt_label->setText( fromUTF8( label->value() ) );
+    _qt_label->setText( fromUTF8( label->value() ) );
     YDownloadProgress::setLabel( label );
 }
 
 
 void YQDownloadProgress::setExpectedSize( int expectedSize )
 {
-    qt_progress->setTotalSteps( expectedSize );
-    qt_progress->setProgress( currentFileSize() );
+    _qt_progress->setTotalSteps( expectedSize );
+    _qt_progress->setProgress( currentFileSize() );
     YDownloadProgress::setExpectedSize( expectedSize );
 }
 
@@ -98,7 +98,7 @@ void YQDownloadProgress::pollFileSize()
 
     if ( size > (long) expectedSize() )
 	size = (long) expectedSize();
-    qt_progress->setProgress( size );
+    _qt_progress->setProgress( size );
 }
 
 

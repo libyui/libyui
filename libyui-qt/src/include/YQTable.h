@@ -124,7 +124,7 @@ protected:
     /**
      * The Qt widget representing the table
      */
-    QListView * qt_listview;
+    QListView * _qt_listview;
 
     
     /**

@@ -45,31 +45,31 @@ YQTextEntry::YQTextEntry( QWidget * parent, YWidgetOpt & opt,
     setSpacing( SPACING );
     setMargin( MARGIN );
 
-    qt_label = new QLabel( fromUTF8( label->value() ), this );
-    qt_label->setTextFormat( QLabel::PlainText );
-    qt_label->setFont( YUIQt::ui()->currentFont() );
+    _qt_label = new QLabel( fromUTF8( label->value() ), this );
+    _qt_label->setTextFormat( QLabel::PlainText );
+    _qt_label->setFont( YUIQt::ui()->currentFont() );
 
     if ( label->value() == "" )
-	qt_label->hide();
+	_qt_label->hide();
 
-    qt_lineedit = new QLineEdit(this);
-    qt_lineedit->setFont(YUIQt::ui()->currentFont() );
-    qt_lineedit->setText(fromUTF8(text->value() ) );
+    _qt_lineedit = new QLineEdit(this);
+    _qt_lineedit->setFont(YUIQt::ui()->currentFont() );
+    _qt_lineedit->setText(fromUTF8(text->value() ) );
 
-    qt_label->setBuddy(qt_lineedit);
+    _qt_label->setBuddy(_qt_lineedit);
 
     if (opt.passwordMode.value() )
-	qt_lineedit->setEchoMode(QLineEdit::Password);
+	_qt_lineedit->setEchoMode(QLineEdit::Password);
 
     shrinkable = opt.isShrinkable.value();
 
-    connect(qt_lineedit, SIGNAL(textChanged(const QString &) ), this, SLOT(changed(const QString &) ) );
+    connect(_qt_lineedit, SIGNAL(textChanged(const QString &) ), this, SLOT(changed(const QString &) ) );
 }
 
 
 void YQTextEntry::setEnabling(bool enabled)
 {
-    qt_lineedit->setEnabled(enabled);
+    _qt_lineedit->setEnabled(enabled);
 }
 
 
@@ -78,9 +78,9 @@ long YQTextEntry::nicesize(YUIDimension dim)
     if (dim == YD_HORIZ)
     {
 	long minSize = shrinkable ? 15 : 200;
-	long hintWidth = qt_label->sizeHint().width() + margin();
+	long hintWidth = _qt_label->sizeHint().width() + margin();
 
-	if ( ! qt_label->isVisible() )
+	if ( ! _qt_label->isVisible() )
 	    hintWidth = 0;
 
 	return max( minSize, hintWidth );
@@ -99,19 +99,19 @@ void YQTextEntry::setSize(long newWidth, long newHeight)
 
 void YQTextEntry::setText(const YCPString & text)
 {
-    qt_lineedit->setText(fromUTF8(text->value() ) );
+    _qt_lineedit->setText(fromUTF8(text->value() ) );
 }
 
 
 YCPString YQTextEntry::getText()
 {
-    return YCPString(toUTF8(qt_lineedit->text() ) );
+    return YCPString(toUTF8(_qt_lineedit->text() ) );
 }
 
 
 void YQTextEntry::setLabel(const YCPString & label)
 {
-    qt_label->setText(fromUTF8(label->value() ) );
+    _qt_label->setText(fromUTF8(label->value() ) );
     YTextEntry::setLabel(label);
 }
 
@@ -125,7 +125,7 @@ void YQTextEntry::setValidChars( const YCPString & newValidChars )
     else
     {
 	_validator = new QY2CharValidator( fromUTF8( newValidChars->value() ), this );
-	qt_lineedit->setValidator( _validator );
+	_qt_lineedit->setValidator( _validator );
 
 	// No need to delete the validator in the destructor - Qt will take
 	// care of that since it's a QObject with a parent!
@@ -137,8 +137,8 @@ void YQTextEntry::setValidChars( const YCPString & newValidChars )
 
 bool YQTextEntry::setKeyboardFocus()
 {
-    qt_lineedit->setFocus();
-    qt_lineedit->selectAll();
+    _qt_lineedit->setFocus();
+    _qt_lineedit->selectAll();
 
     return true;
 }

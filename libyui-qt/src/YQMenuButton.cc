@@ -40,18 +40,18 @@ YQMenuButton::YQMenuButton( 			   QWidget * parent,
     , YMenuButton(opt, label)
 {
     setWidgetRep( this );
-    qt_pushbutton = new QPushButton( fromUTF8(label->value() ), this );
-    qt_pushbutton->setFont( YUIQt::ui()->currentFont() );
-    qt_pushbutton->setMinimumSize( 2,2 );
-    qt_pushbutton->installEventFilter( this );
-    qt_pushbutton->move( BORDER, BORDER );
-    setMinimumSize(qt_pushbutton->minimumSize() + 2 * BORDERSIZE);
+    _qt_pushbutton = new QPushButton( fromUTF8(label->value() ), this );
+    _qt_pushbutton->setFont( YUIQt::ui()->currentFont() );
+    _qt_pushbutton->setMinimumSize( 2,2 );
+    _qt_pushbutton->installEventFilter( this );
+    _qt_pushbutton->move( BORDER, BORDER );
+    setMinimumSize(_qt_pushbutton->minimumSize() + 2 * BORDERSIZE);
 }
 
 void
 YQMenuButton::setEnabling(bool enabled)
 {
-    qt_pushbutton->setEnabled(enabled);
+    _qt_pushbutton->setEnabled(enabled);
 }
 
 
@@ -59,15 +59,15 @@ long
 YQMenuButton::nicesize(YUIDimension dim)
 {
     return 2 * BORDER + (dim == YD_HORIZ
-			 ? qt_pushbutton->sizeHint().width()
-			 : qt_pushbutton->sizeHint().height() );
+			 ? _qt_pushbutton->sizeHint().width()
+			 : _qt_pushbutton->sizeHint().height() );
 }
 
 
 void
 YQMenuButton::setSize(long newWidth, long newHeight)
 {
-    qt_pushbutton->resize(newWidth - 2 * BORDER, newHeight - 2 * BORDER);
+    _qt_pushbutton->resize(newWidth - 2 * BORDER, newHeight - 2 * BORDER);
     resize(newWidth, newHeight);
 }
 
@@ -75,14 +75,14 @@ YQMenuButton::setSize(long newWidth, long newHeight)
 void
 YQMenuButton::setLabel(const YCPString & label)
 {
-    qt_pushbutton->setText( fromUTF8( label->value() ) );
+    _qt_pushbutton->setText( fromUTF8( label->value() ) );
 }
 
 
 bool
 YQMenuButton::setKeyboardFocus()
 {
-    qt_pushbutton->setFocus();
+    _qt_pushbutton->setFocus();
 
     return true;
 }
@@ -121,8 +121,8 @@ YQMenuButton::returnNow()
 void
 YQMenuButton::createMenu()
 {
-    QPopupMenu * popup = new QPopupMenu( qt_pushbutton );
-    qt_pushbutton->setPopup( popup );
+    QPopupMenu * popup = new QPopupMenu( _qt_pushbutton );
+    _qt_pushbutton->setPopup( popup );
     connect( popup,	SIGNAL( activated( int ) ),
 	     this,	SLOT  ( menuEntryActivated( int ) ) );
 

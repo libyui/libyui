@@ -29,7 +29,7 @@
 #include "YQPushButton.h"
 
 
-YQDialog::YQDialog( 		    YWidgetOpt &	opt,
+YQDialog::YQDialog( YWidgetOpt &	opt,
 		    QWidget *		qt_parent,
 		    bool		default_size )
     : QWidget( qt_parent,

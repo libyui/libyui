@@ -99,8 +99,8 @@ protected slots:
 
 protected:
 
-    QLabel		* qt_label;
-    QMultiLineEdit	* qt_multiLineEdit;
+    QLabel		* _qt_label;
+    QMultiLineEdit	* _qt_multiLineEdit;
 };
 
 

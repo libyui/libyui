@@ -36,23 +36,23 @@ YQMultiLineEdit::YQMultiLineEdit( QWidget * parent, YWidgetOpt & opt,
 {
     setWidgetRep( this );
 
-    qt_label = new QLabel( fromUTF8(label->value() ), this );
-    qt_label->setTextFormat( QLabel::PlainText );
-    qt_label->setFont( YUIQt::ui()->currentFont() );
+    _qt_label = new QLabel( fromUTF8(label->value() ), this );
+    _qt_label->setTextFormat( QLabel::PlainText );
+    _qt_label->setFont( YUIQt::ui()->currentFont() );
 
-    qt_multiLineEdit = new QMultiLineEdit( this );
-    qt_multiLineEdit->setFont( YUIQt::ui()->currentFont() );
-    qt_multiLineEdit->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
-    qt_multiLineEdit->setText( fromUTF8( initialText->value() ) );
-    qt_label->setBuddy( qt_multiLineEdit );
+    _qt_multiLineEdit = new QMultiLineEdit( this );
+    _qt_multiLineEdit->setFont( YUIQt::ui()->currentFont() );
+    _qt_multiLineEdit->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
+    _qt_multiLineEdit->setText( fromUTF8( initialText->value() ) );
+    _qt_label->setBuddy( _qt_multiLineEdit );
 
-    connect(qt_multiLineEdit, SIGNAL( textChanged( void ) ), this, SLOT( changed ( void ) ) );
+    connect(_qt_multiLineEdit, SIGNAL( textChanged( void ) ), this, SLOT( changed ( void ) ) );
 }
 
 
 void YQMultiLineEdit::setEnabling(bool enabled)
 {
-    qt_multiLineEdit->setEnabled( enabled );
+    _qt_multiLineEdit->setEnabled( enabled );
 }
 
 
@@ -68,9 +68,9 @@ long YQMultiLineEdit::nicesize( YUIDimension dim )
     else
     {
 	long minSize    	 = 10;
-	long hintHeight	 = qt_label->sizeHint().height();
-	hintHeight 	+= visibleLines() * qt_multiLineEdit->fontMetrics().lineSpacing();
-	hintHeight	+= qt_multiLineEdit->frameWidth() * 2;
+	long hintHeight	 = _qt_label->sizeHint().height();
+	hintHeight 	+= visibleLines() * _qt_multiLineEdit->fontMetrics().lineSpacing();
+	hintHeight	+= _qt_multiLineEdit->frameWidth() * 2;
 
 	return max( minSize, hintHeight );
     }
@@ -85,26 +85,26 @@ void YQMultiLineEdit::setSize(long newWidth, long newHeight)
 
 void YQMultiLineEdit::setText( const YCPString & text)
 {
-    qt_multiLineEdit->setText( fromUTF8( text->value() ) );
+    _qt_multiLineEdit->setText( fromUTF8( text->value() ) );
 }
 
 
 YCPString YQMultiLineEdit::text()
 {
-    return YCPString( toUTF8( qt_multiLineEdit->text() ) );
+    return YCPString( toUTF8( _qt_multiLineEdit->text() ) );
 }
 
 
 void YQMultiLineEdit::setLabel(const YCPString & label)
 {
-    qt_label->setText( fromUTF8( label->value() ) );
+    _qt_label->setText( fromUTF8( label->value() ) );
     YMultiLineEdit::setLabel(label);
 }
 
 
 bool YQMultiLineEdit::setKeyboardFocus()
 {
-    qt_multiLineEdit->setFocus();
+    _qt_multiLineEdit->setFocus();
 
     return true;
 }

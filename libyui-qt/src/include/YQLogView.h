@@ -77,8 +77,8 @@ public:
 
 protected:
 
-    QLabel		* qt_label;
-    QMultiLineEdit	* qt_text;
+    QLabel		* _qt_label;
+    QMultiLineEdit	* _qt_text;
 };
 
 #endif // YQLogView_h

@@ -90,19 +90,19 @@ YQTable::YQTable( QWidget * parent, YWidgetOpt & opt, vector<string> header )
     setWidgetRep( this );
     setMargin( YQWIDGET_BORDER );
 
-    qt_listview = new QListView(this);
+    _qt_listview = new QListView(this);
 
 
     if ( ! enable_user_sort )
     {
 	y2debug( "User sorting disabled" );
-	qt_listview->setSorting( -1, true );	// disable sorting by click
+	_qt_listview->setSorting( -1, true );	// disable sorting by click
     }
     else
     {
-	connect( qt_listview->header(), SIGNAL( clicked ( int ) ),
+	connect( _qt_listview->header(), SIGNAL( clicked ( int ) ),
 		 this,			SLOT  ( userSort( int ) ) );
-	qt_listview->setSorting( 65530, true ); // leave initial sorting
+	_qt_listview->setSorting( 65530, true ); // leave initial sorting
     }
 
     // The header is a vector of strings, each defining one
@@ -111,32 +111,32 @@ YQTable::YQTable( QWidget * parent, YWidgetOpt & opt, vector<string> header )
 
     for (unsigned c=0; c < header.size(); c++)
     {
-	qt_listview->addColumn(fromUTF8(header[c].substr(1) ) );
+	_qt_listview->addColumn(fromUTF8(header[c].substr(1) ) );
 	switch (header[c][0])
 	{
 	    case 'R':
-		qt_listview->setColumnAlignment(c, AlignRight);
+		_qt_listview->setColumnAlignment(c, AlignRight);
 		break;
 	    case 'C':
-		qt_listview->setColumnAlignment(c, AlignCenter);
+		_qt_listview->setColumnAlignment(c, AlignCenter);
 		break;
 	    case 'L':
 	    default:
-		qt_listview->setColumnAlignment(c, AlignLeft);
+		_qt_listview->setColumnAlignment(c, AlignLeft);
 		break;
 	}
     }
 
-    qt_listview->setFont(YUIQt::ui()->currentFont() );
-    qt_listview->setAllColumnsShowFocus(true);
+    _qt_listview->setFont(YUIQt::ui()->currentFont() );
+    _qt_listview->setAllColumnsShowFocus(true);
 
     if (opt.immediateMode.value() )
-	connect( qt_listview, SIGNAL(selectionChanged ( QListViewItem *) ), this, SLOT(slotSelected(QListViewItem *) ) );
+	connect( _qt_listview, SIGNAL(selectionChanged ( QListViewItem *) ), this, SLOT(slotSelected(QListViewItem *) ) );
     else
-	connect( qt_listview, SIGNAL(doubleClicked ( QListViewItem *) ), this, SLOT(slotSelected(QListViewItem *) ) );
+	connect( _qt_listview, SIGNAL(doubleClicked ( QListViewItem *) ), this, SLOT(slotSelected(QListViewItem *) ) );
 
     if (opt.notifyMode.value() )
-	connect( qt_listview, SIGNAL(spacePressed ( QListViewItem *) ), this, SLOT(slotSelected(QListViewItem *) ) );
+	connect( _qt_listview, SIGNAL(spacePressed ( QListViewItem *) ), this, SLOT(slotSelected(QListViewItem *) ) );
 }
 
 
@@ -167,8 +167,8 @@ void YQTable::setSize(long newWidth, long newHeight)
 
 void YQTable::setEnabling(bool enabled)
 {
-    qt_listview->setEnabled(enabled);
-    qt_listview->triggerUpdate();
+    _qt_listview->setEnabled(enabled);
+    _qt_listview->triggerUpdate();
 }
 
 
@@ -177,22 +177,22 @@ void YQTable::itemAdded(vector<string> elements, int index)
     YQListViewItem * item;
 
     if ( sort_by_insertion_order && last_item )
-	item = new YQListViewItem( this, qt_listview, last_item, index );
+	item = new YQListViewItem( this, _qt_listview, last_item, index );
     else
-	item = new YQListViewItem( this, qt_listview, index );
+	item = new YQListViewItem( this, _qt_listview, index );
 
     last_item = item;
     
     for ( unsigned int i=0; i < elements.size(); i++ )
 	item->setText( i, fromUTF8( elements[i] ) );
 
-    if ( ! qt_listview->selectedItem() )
+    if ( ! _qt_listview->selectedItem() )
 	item->setSelected( true );
 }
 
 void YQTable::itemsCleared()
 {
-    qt_listview->clear();
+    _qt_listview->clear();
 }
 
 
@@ -205,7 +205,7 @@ void YQTable::cellChanged(int index, int colnum, const YCPString & newtext)
 
 int YQTable::getCurrentItem()
 {
-    YQListViewItem * ci = (YQListViewItem *)(qt_listview->currentItem() );
+    YQListViewItem * ci = (YQListViewItem *)( _qt_listview->currentItem() );
     if (ci) return ci->index;
     else	   return -1;
 }
@@ -216,8 +216,8 @@ void YQTable::setCurrentItem(int index)
     QListViewItem * item = findItem(index);
     if (item)  // should be always true
     {
-	qt_listview->setCurrentItem(item);
-	qt_listview->ensureItemVisible(item);
+	_qt_listview->setCurrentItem(item);
+	_qt_listview->ensureItemVisible(item);
     }
 }
 
@@ -225,7 +225,7 @@ void YQTable::setCurrentItem(int index)
 QListViewItem * YQTable::findItem(int index)
 {
     // Scan all items and look for the one with the right index.
-    QListViewItem * item = qt_listview->firstChild();
+    QListViewItem * item = _qt_listview->firstChild();
     while (item)
     {
 	if ( ( (YQListViewItem *)item)->index == index)
@@ -238,7 +238,7 @@ QListViewItem * YQTable::findItem(int index)
 
 bool YQTable::setKeyboardFocus()
 {
-    qt_listview->setFocus();
+    _qt_listview->setFocus();
 
     return true;
 }

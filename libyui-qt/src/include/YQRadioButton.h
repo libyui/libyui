@@ -36,7 +36,7 @@ class YQRadioButton : public QGroupBox, public YRadioButton
     /**
      * Pointer to the qt widget representing the text entry
      */
-    QRadioButton * qt_radiobutton;
+    QRadioButton * _qt_radiobutton;
 
 public:
     /**

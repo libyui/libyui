@@ -88,8 +88,8 @@ public slots:
 
 protected:
 
-    QLabel *		qt_label;
-    QProgressBar *	qt_progress;
+    QLabel *		_qt_label;
+    QProgressBar *	_qt_progress;
     QTimer *		timer;
 };
 

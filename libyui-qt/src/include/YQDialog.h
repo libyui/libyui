@@ -39,7 +39,7 @@ public:
      * Constructor: Constructor.
      */
     YQDialog( YWidgetOpt &	opt,
-	      QWidget *		qt_parent	= 0,
+	      QWidget *		_qt_parent	= 0,
 	      bool		default_size	= false );
 
     /**

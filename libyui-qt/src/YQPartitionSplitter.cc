@@ -83,20 +83,20 @@ YQPartitionSplitter::YQPartitionSplitter( 					  QWidget *		parent,
 
     // Label for the free size
 
-    qt_freeFieldLabel = new QLabel( fromUTF8( freeFieldLabel()->value() ),
+    _qt_freeFieldLabel = new QLabel( fromUTF8( freeFieldLabel()->value() ),
 				    labels_hbox );
-    qt_freeFieldLabel->setTextFormat( QLabel::PlainText );
-    qt_freeFieldLabel->setFont( YUIQt::ui()->currentFont() );
-    qt_freeFieldLabel->setAlignment( Qt::AlignLeft );
+    _qt_freeFieldLabel->setTextFormat( QLabel::PlainText );
+    _qt_freeFieldLabel->setFont( YUIQt::ui()->currentFont() );
+    _qt_freeFieldLabel->setAlignment( Qt::AlignLeft );
 
 
     // Label for the new partition size
 
-    qt_newPartFieldLabel = new QLabel( fromUTF8( newPartFieldLabel()->value() ),
+    _qt_newPartFieldLabel = new QLabel( fromUTF8( newPartFieldLabel()->value() ),
 				       labels_hbox );
-    qt_newPartFieldLabel->setTextFormat( QLabel::PlainText );
-    qt_newPartFieldLabel->setFont( YUIQt::ui()->currentFont() );
-    qt_newPartFieldLabel->setAlignment( Qt::AlignRight );
+    _qt_newPartFieldLabel->setTextFormat( QLabel::PlainText );
+    _qt_newPartFieldLabel->setFont( YUIQt::ui()->currentFont() );
+    _qt_newPartFieldLabel->setAlignment( Qt::AlignRight );
 
 
     // lower inner HBox for the fields and the slider
@@ -107,29 +107,29 @@ YQPartitionSplitter::YQPartitionSplitter( 					  QWidget *		parent,
 
     // SpinBox for the free size
 
-    qt_freeSizeField = new QSpinBox( minFreeSize(), maxFreeSize(),
+    _qt_freeSizeField = new QSpinBox( minFreeSize(), maxFreeSize(),
 				     1, // step
 				     fields_hbox );
-    qt_freeSizeField->setFont( YUIQt::ui()->currentFont() );
-    qt_freeFieldLabel->setBuddy( qt_freeSizeField );
+    _qt_freeSizeField->setFont( YUIQt::ui()->currentFont() );
+    _qt_freeFieldLabel->setBuddy( _qt_freeSizeField );
 
 
     // Slider for the free size
 
-    qt_freeSizeSlider = new QSlider( minFreeSize(), maxFreeSize(),
+    _qt_freeSizeSlider = new QSlider( minFreeSize(), maxFreeSize(),
 				     1, // pageStep
 				     remainingFreeSize(),	// initial value
 				     QSlider::Horizontal, fields_hbox );
-    qt_freeSizeSlider->setFont( YUIQt::ui()->currentFont() );
+    _qt_freeSizeSlider->setFont( YUIQt::ui()->currentFont() );
 
 
     // SpinBox for the new partition size
 
-    qt_newPartSizeField = new QSpinBox( minNewPartSize(), maxNewPartSize(),
+    _qt_newPartSizeField = new QSpinBox( minNewPartSize(), maxNewPartSize(),
 					1, // step
 					fields_hbox );
-    qt_newPartSizeField->setFont( YUIQt::ui()->currentFont() );
-    qt_newPartFieldLabel->setBuddy( qt_newPartSizeField );
+    _qt_newPartSizeField->setFont( YUIQt::ui()->currentFont() );
+    _qt_newPartFieldLabel->setBuddy( _qt_newPartSizeField );
 
     // Initialize all fields and the bar graph
 
@@ -138,25 +138,25 @@ YQPartitionSplitter::YQPartitionSplitter( 					  QWidget *		parent,
 
     // Connect signals
 
-    connect( qt_freeSizeSlider,	SIGNAL( valueChanged   (int) ),
+    connect( _qt_freeSizeSlider,	SIGNAL( valueChanged   (int) ),
 	     this,		SLOT  ( setFreeSizeSlot(int) ) );
 
-    connect( qt_freeSizeField,	SIGNAL( valueChanged   (int) ),
+    connect( _qt_freeSizeField,	SIGNAL( valueChanged   (int) ),
 	     this,		SLOT  ( setFreeSizeSlot(int) ) );
 
-    connect( qt_newPartSizeField,SIGNAL( valueChanged	  (int) ),
+    connect( _qt_newPartSizeField,SIGNAL( valueChanged	  (int) ),
 	     this,		SLOT  ( setNewPartSizeSlot(int) ) );
 }
 
 
 void YQPartitionSplitter::setEnabling( bool enabled )
 {
-    qt_freeFieldLabel->setEnabled	( enabled );
-    qt_newPartFieldLabel->setEnabled	( enabled );
-    qt_freeSizeSlider->setEnabled	( enabled );
-    qt_freeSizeField->setEnabled		( enabled );
-    qt_freeSizeField->setEnabled		( enabled );
-    qt_newPartSizeField->setEnabled	( enabled );
+    _qt_freeFieldLabel->setEnabled	( enabled );
+    _qt_newPartFieldLabel->setEnabled	( enabled );
+    _qt_freeSizeSlider->setEnabled	( enabled );
+    _qt_freeSizeField->setEnabled		( enabled );
+    _qt_freeSizeField->setEnabled		( enabled );
+    _qt_newPartSizeField->setEnabled	( enabled );
 }
 
 
@@ -185,9 +185,9 @@ void YQPartitionSplitter::setValue( int new_newPartSize )
     barGraph->setValue( 1, remainingFreeSize() );
     barGraph->setValue( 2, newPartSize() );
     barGraph->update();
-    qt_freeSizeField->setValue ( remainingFreeSize() );
-    qt_freeSizeSlider->setValue( remainingFreeSize() );
-    qt_newPartSizeField->setValue  ( newPartSize() );
+    _qt_freeSizeField->setValue ( remainingFreeSize() );
+    _qt_freeSizeSlider->setValue( remainingFreeSize() );
+    _qt_newPartSizeField->setValue  ( newPartSize() );
 }
 
 
@@ -223,7 +223,7 @@ void YQPartitionSplitter::setNewPartSizeSlot( int newPartSize )
 
 bool YQPartitionSplitter::setKeyboardFocus()
 {
-    qt_newPartSizeField->setFocus();
+    _qt_newPartSizeField->setFocus();
 
     return true;
 }

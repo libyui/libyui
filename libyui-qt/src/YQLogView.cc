@@ -37,20 +37,20 @@ YQLogView::YQLogView( QWidget * parent, YWidgetOpt & opt,
 {
     setWidgetRep( this );
 
-    qt_label = new QLabel( fromUTF8(label->value() ), this );
-    qt_label->setTextFormat( QLabel::PlainText );
-    qt_label->setFont( YUIQt::ui()->currentFont() );
+    _qt_label = new QLabel( fromUTF8(label->value() ), this );
+    _qt_label->setTextFormat( QLabel::PlainText );
+    _qt_label->setFont( YUIQt::ui()->currentFont() );
 
-    qt_text = new QMultiLineEdit( this );
-    qt_text->setFont( YUIQt::ui()->currentFont() );
-    qt_text->setReadOnly( true );
-    qt_text->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
+    _qt_text = new QMultiLineEdit( this );
+    _qt_text->setFont( YUIQt::ui()->currentFont() );
+    _qt_text->setReadOnly( true );
+    _qt_text->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
 }
 
 
 void YQLogView::setEnabling(bool enabled)
 {
-    qt_text->setEnabled( enabled );
+    _qt_text->setEnabled( enabled );
 }
 
 
@@ -66,10 +66,10 @@ long YQLogView::nicesize( YUIDimension dim )
     else
     {
 	long minSize     = 10;
-	long hintHeight	 = qt_label->sizeHint().height();
-	hintHeight 	+= visibleLines() * qt_text->fontMetrics().lineSpacing();
-	hintHeight	+= qt_text->style().scrollBarExtent().height();
-	hintHeight	+= qt_text->frameWidth() * 2;
+	long hintHeight	 = _qt_label->sizeHint().height();
+	hintHeight 	+= visibleLines() * _qt_text->fontMetrics().lineSpacing();
+	hintHeight	+= _qt_text->style().scrollBarExtent().height();
+	hintHeight	+= _qt_text->frameWidth() * 2;
 
 	return max( minSize, hintHeight );
     }
@@ -84,21 +84,21 @@ void YQLogView::setSize(long newWidth, long newHeight)
 
 void YQLogView::setLogText( const YCPString & text)
 {
-    qt_text->setText( fromUTF8( text->value() ) );
-    qt_text->scrollToBottom();
+    _qt_text->setText( fromUTF8( text->value() ) );
+    _qt_text->scrollToBottom();
 }
 
 
 void YQLogView::setLabel(const YCPString & label)
 {
-    qt_label->setText( fromUTF8( label->value() ) );
+    _qt_label->setText( fromUTF8( label->value() ) );
     YLogView::setLabel(label);
 }
 
 
 bool YQLogView::setKeyboardFocus()
 {
-    qt_text->setFocus();
+    _qt_text->setFocus();
 
     return true;
 }

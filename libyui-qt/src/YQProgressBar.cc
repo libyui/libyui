@@ -45,17 +45,17 @@ YQProgressBar::YQProgressBar( QWidget * parent, YWidgetOpt & opt,
     setSpacing( SPACING );
     setMargin( MARGIN );
 
-    qt_label = new QLabel(fromUTF8(label->value() ), this);
-    qt_label->setTextFormat(QLabel::PlainText);
-    qt_label->setFont(YUIQt::ui()->currentFont() );
+    _qt_label = new QLabel(fromUTF8(label->value() ), this);
+    _qt_label->setTextFormat(QLabel::PlainText);
+    _qt_label->setFont(YUIQt::ui()->currentFont() );
     
     if ( label->value() == "" )
-	qt_label->hide();
+	_qt_label->hide();
 
-    qt_progressbar = new QProgressBar(this);
-    qt_progressbar->setFont(YUIQt::ui()->currentFont() );
-    qt_progressbar->setTotalSteps(maxProgress->value() );
-    qt_label->setBuddy(qt_progressbar);
+    _qt_progressbar = new QProgressBar(this);
+    _qt_progressbar->setFont(YUIQt::ui()->currentFont() );
+    _qt_progressbar->setTotalSteps(maxProgress->value() );
+    _qt_label->setBuddy(_qt_progressbar);
 
     setProgress(progress);
 }
@@ -63,8 +63,8 @@ YQProgressBar::YQProgressBar( QWidget * parent, YWidgetOpt & opt,
 
 void YQProgressBar::setEnabling(bool enabled)
 {
-    qt_label->setEnabled(enabled);
-    qt_progressbar->setEnabled(enabled);
+    _qt_label->setEnabled(enabled);
+    _qt_progressbar->setEnabled(enabled);
 }
 
 
@@ -73,9 +73,9 @@ long YQProgressBar::nicesize(YUIDimension dim)
     if (dim == YD_HORIZ)
     {
 	long minSize = 200;
-	long hintWidth = qt_label->sizeHint().width() + margin();
+	long hintWidth = _qt_label->sizeHint().width() + margin();
 
-	if ( ! qt_label->isVisible() )
+	if ( ! _qt_label->isVisible() )
 	    hintWidth = 0;
 
 	return max( minSize, hintWidth );
@@ -94,13 +94,13 @@ void YQProgressBar::setSize(long newWidth, long newHeight)
 
 void YQProgressBar::setLabel(const YCPString & text)
 {
-    qt_label->setText(fromUTF8(text->value() ) );
+    _qt_label->setText(fromUTF8(text->value() ) );
 }
 
 
 void YQProgressBar::setProgress(const YCPInteger & progress)
 {
-    if ( progress->value() < qt_progressbar->progress() )
+    if ( progress->value() < _qt_progressbar->progress() )
     {
 	/*
 	 * Qt bug workaround: Decreased progress bar values are not
@@ -108,16 +108,16 @@ void YQProgressBar::setProgress(const YCPInteger & progress)
 	 * to setting the new value.
 	 */
 
-	qt_progressbar->reset();
+	_qt_progressbar->reset();
     }
 
-    qt_progressbar->setProgress(progress->value() );
+    _qt_progressbar->setProgress(progress->value() );
 }
 
 
 bool YQProgressBar::setKeyboardFocus()
 {
-    qt_progressbar->setFocus();
+    _qt_progressbar->setFocus();
 
     return true;
 }

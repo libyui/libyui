@@ -38,7 +38,7 @@ protected:
     /**
      * The actual push button
      */
-    QPushButton * qt_pushbutton;
+    QPushButton * _qt_pushbutton;
 
 public:
     /**
@@ -85,7 +85,7 @@ public:
     /**
      * Recursively create the menu structure.
      */
-    void createMenu( YMenuItem * ymenu, QPopupMenu * qt_menu );
+    void createMenu( YMenuItem * ymenu, QPopupMenu * _qt_menu );
     
 protected slots:
 
