@@ -707,9 +707,14 @@ bool Y2NCursesUI::setLanguage( string lang )
   UIMIL << form( "Encoding for '%s' ", lang.c_str() );
 
   string::size_type pos = lang.find( '.' );
-  if ( pos != string::npos ) {
+  if ( pos != string::npos )
+  {
     encoding = lang.substr( pos+1 );
-  } else {
+    lang.erase( pos );
+  }
+  if ( encoding == ""
+       || encoding == "UTF-8" )
+  {
     pos = lang.find( '_' );
     if ( pos != string::npos ) {
       lang.erase( pos );
