@@ -85,6 +85,17 @@ public:
 public slots:
 
     /**
+     * Resolve package dependencies (unconditionally).
+     **/
+    void resolveDependencies();
+
+    /**
+     * Automatically resolve package dependencies if desired
+     * (if the "auto check" checkbox is on).
+     **/
+    void autoResolveDependencies();
+
+    /**
      * Close processing - return back to UserInput()
      **/
     void close();

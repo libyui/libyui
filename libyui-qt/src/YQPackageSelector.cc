@@ -35,6 +35,7 @@
 #include <qtimer.h>
 
 #include <Y2PM.h>
+#include <y2pm/PMManager.h>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
@@ -290,6 +291,9 @@ YQPackageSelector::layoutPkgList( QWidget * parent )
     {
 	_pkgList->setEditable( false );
     }
+
+    connect( _pkgList, 	SIGNAL( statusChanged( PMObjectPtr )	),
+	     this,	SLOT  ( autoResolveDependencies()	) );
 }
 
 
@@ -376,6 +380,14 @@ YQPackageSelector::layoutButtons( QWidget * parent )
     QPushButton *help_button = new QPushButton( _( "&Help" ), button_box );
     CHECK_PTR( help_button );
 #endif
+    
+    QPushButton * solve_button = new QPushButton( _( "Check &Dependencies" ), button_box );
+    CHECK_PTR( solve_button );
+    solve_button->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
+
+    connect( solve_button, SIGNAL( clicked() ),
+	     this,         SLOT  ( resolveDependencies() ) );
+
 
     _autoDependenciesCheckBox = new QCheckBox( _( "&Automatic dependency checking" ), button_box );
     CHECK_PTR( _autoDependenciesCheckBox );
@@ -385,7 +397,8 @@ YQPackageSelector::layoutButtons( QWidget * parent )
     CHECK_PTR( spacer );
     spacer->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
 
-    QPushButton *close_button = new QPushButton( _( "&Close" ), button_box );
+    
+    QPushButton * close_button = new QPushButton( _( "&Close" ), button_box );
     CHECK_PTR( close_button );
     close_button->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
 
@@ -476,6 +489,39 @@ YQPackageSelector::makeConnections()
 
 	connect( _youPatchList,	SIGNAL( updatePackages()      ),
 		 _pkgList, 	SLOT  ( updateToplevelItemStates() ) );
+    }
+}
+
+
+void
+YQPackageSelector::autoResolveDependencies()
+{
+    if ( _autoDependenciesCheckBox && ! _autoDependenciesCheckBox->isChecked() )
+	return;
+	
+    resolveDependencies();
+}
+
+
+void
+YQPackageSelector::resolveDependencies()
+{
+    if ( _autoDependenciesCheckBox && ! _autoDependenciesCheckBox->isChecked() )
+	return;
+	
+    PkgDep::ResultList		goodList;
+    PkgDep::ErrorResultList	badList;
+
+    y2milestone( "Solving..." );
+    bool success = Y2PM::packageManager().solveInstall( goodList, badList );
+    y2milestone( "Solving done" );
+
+    if ( ! success )
+    {
+	y2error( "Dependency conflict!" );
+	QMessageBox::warning( this, _( "Conflict" ),
+			      "Dependency conflict!",
+			      QMessageBox::Ok, QMessageBox::NoButton );
     }
 }
 

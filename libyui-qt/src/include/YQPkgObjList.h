@@ -115,6 +115,11 @@ public slots:
      **/
     virtual void updateActions( YQPkgObjListItem * item );
 
+    /**
+     * Emit a statusChanged() signal for the specified PMObject.
+     **/
+    void sendStatusChanged( PMObjectPtr pmObj ) { emit statusChanged( pmObj ); }
+
 
     // Direct access to some states for menu actions
 
@@ -142,6 +147,11 @@ signals:
      * May be called with a null poiner if no PMObject is selected.
      **/
     void selectionChanged( PMObjectPtr pmObj );
+
+    /**
+     * Emitted when the status of a PMObject is changed.
+     **/
+    void statusChanged( PMObjectPtr pmObj );
 
 
 protected:

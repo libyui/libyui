@@ -148,7 +148,11 @@ YQPkgObjList::setCurrentStatus( PMSelectable::UI_Status	newStatus,
 
     if ( item )
     {
-	item->setStatus( newStatus );
+	if ( newStatus != item->status() )
+	{
+	    item->setStatus( newStatus );
+	    emit statusChanged( item->pmObj() );
+	}
 
 	if ( selectNextItem && item->nextSibling() )
 	{
@@ -418,7 +422,11 @@ YQPkgObjListItem::cycleStatus()
 	}
     }
 
-    setStatus( newStatus );
+    if ( oldStatus != newStatus )
+    {
+	setStatus( newStatus );
+	_pkgObjList->sendStatusChanged( pmObj() );
+    }
 }
 
 
