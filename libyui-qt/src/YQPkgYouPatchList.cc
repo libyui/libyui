@@ -87,7 +87,7 @@ YQPkgYouPatchList::fillList()
     while ( it != Y2PM::youPatchManager().end() )
     {
 	PMYouPatchPtr		patch  = (*it)->theObject();
-	PMSelectable::UI_Status	status = (*it)->status();
+	PMSelectable::UI_Status	status =(*it)->status();
 
 	if ( patch )
 	{

@@ -1081,7 +1081,7 @@ YQPackageSelector::reject()
 	else
 	    Y2PM::selectionManager().RestoreState();
 
-	YUIQt::ui()->setMenuSelection( YCPSymbol("cancel", true) );
+	YUIQt::ui()->setMenuSelection( YCPSymbol( "cancel", true) );
 	YUIQt::ui()->returnNow( YUIInterpreter::ET_MENU, this );
     }
 }
@@ -1132,7 +1132,7 @@ YQPackageSelector::accept()
     else
 	Y2PM::selectionManager().ClearSaveState();
 
-    YUIQt::ui()->setMenuSelection( YCPSymbol("accept", true) );
+    YUIQt::ui()->setMenuSelection( YCPSymbol( "accept", true) );
     YUIQt::ui()->returnNow( YUIInterpreter::ET_MENU, this );
 }
 

@@ -30,7 +30,7 @@
 #define MARGIN   2
 
 
-YQSlider::YQSlider( 		    QWidget *		parent,
+YQSlider::YQSlider( QWidget *		parent,
 		    YWidgetOpt &	opt,
 		    const YCPString &	label,
 		    int 		minValue,

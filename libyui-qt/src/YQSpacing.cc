@@ -30,7 +30,7 @@ YQSpacing::YQSpacing( QWidget * parent, YWidgetOpt & opt,
 }
 
 
-long YQSpacing::absoluteSize(YUIDimension dim, float relativeSize)
+long YQSpacing::absoluteSize( YUIDimension dim, float relativeSize)
 {
     /*
      * Rather than using actual font metrics, we try to get as close to

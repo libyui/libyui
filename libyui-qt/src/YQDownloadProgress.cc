@@ -28,7 +28,7 @@
 #include "YQDownloadProgress.h"
 
 
-YQDownloadProgress::YQDownloadProgress( 					QWidget *	parent,
+YQDownloadProgress::YQDownloadProgress( QWidget *	parent,
 					YWidgetOpt &	opt,
 					const YCPString & label,
 					const YCPString & filename,
@@ -58,7 +58,7 @@ YQDownloadProgress::YQDownloadProgress( 					QWidget *	parent,
 }
 
 
-void YQDownloadProgress::setEnabling(bool enabled)
+void YQDownloadProgress::setEnabling( bool enabled)
 {
     _qt_progress->setEnabled( enabled );
 }
@@ -71,13 +71,13 @@ long YQDownloadProgress::nicesize( YUIDimension dim )
 }
 
 
-void YQDownloadProgress::setSize(long newWidth, long newHeight)
+void YQDownloadProgress::setSize( long newWidth, long newHeight)
 {
     resize(newWidth, newHeight);
 }
 
 
-void YQDownloadProgress::setLabel(const YCPString & label)
+void YQDownloadProgress::setLabel( const YCPString & label)
 {
     _qt_label->setText( fromUTF8( label->value() ) );
     YDownloadProgress::setLabel( label );

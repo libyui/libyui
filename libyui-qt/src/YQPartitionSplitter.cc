@@ -30,7 +30,7 @@
 #define MARGIN	 4
 
 
-YQPartitionSplitter::YQPartitionSplitter( 					  QWidget *		parent,
+YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
 					  YWidgetOpt &		opt,
 					  int			arg_usedSize,
 					  int			arg_totalFreeSize,

@@ -36,7 +36,7 @@
 #define SPACING 8
 
 
-YQRadioButton::YQRadioButton( 			     QWidget * parent,
+YQRadioButton::YQRadioButton( QWidget * parent,
 			     YWidgetOpt & opt,
 			     YRadioButtonGroup * rbg,
 			     const YCPString & label, bool checked)
@@ -60,14 +60,14 @@ YQRadioButton::YQRadioButton( 			     QWidget * parent,
 }
 
 
-long YQRadioButton::nicesize(YUIDimension dim)
+long YQRadioButton::nicesize( YUIDimension dim)
 {
     if (dim == YD_HORIZ) return 2 * SPACING + _qt_radiobutton->sizeHint().width();
     else return _qt_radiobutton->sizeHint().height();
 }
 
 
-void YQRadioButton::setSize(long newWidth, long newHeight)
+void YQRadioButton::setSize( long newWidth, long newHeight)
 {
     _qt_radiobutton->resize(newWidth - 2*SPACING, newHeight);
     resize(newWidth, newHeight);
@@ -80,20 +80,20 @@ YCPBoolean YQRadioButton::getValue()
 }
 
 
-void YQRadioButton::setValue(const YCPBoolean & c)
+void YQRadioButton::setValue( const YCPBoolean & c)
 {
     _qt_radiobutton->setChecked(c->value() );
 }
 
 
-void YQRadioButton::setLabel(const YCPString & label)
+void YQRadioButton::setLabel( const YCPString & label)
 {
     _qt_radiobutton->setText(fromUTF8(label->value() ) );
-    YRadioButton::setLabel(label);
+    YRadioButton::setLabel( label);
 }
 
 
-void YQRadioButton::setEnabling(bool enabled)
+void YQRadioButton::setEnabling( bool enabled)
 {
     _qt_radiobutton->setEnabled(enabled);
 }
@@ -118,7 +118,7 @@ bool YQRadioButton::setKeyboardFocus()
 void YQRadioButton::changed( bool newState )
 {
     if (getNotify() && newState)
-	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
+	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this);
 }
 
 

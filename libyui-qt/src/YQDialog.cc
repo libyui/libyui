@@ -85,7 +85,7 @@ YQDialog::~YQDialog()
 }
 
 
-long YQDialog::nicesize(YUIDimension dim)
+long YQDialog::nicesize( YUIDimension dim)
 {
     long nice;
 
@@ -97,12 +97,12 @@ long YQDialog::nicesize(YUIDimension dim)
 	}
 	else
 	{
-	    nice = YUIQt::ui()->defaultSize(dim);
+	    nice = YUIQt::ui()->defaultSize( dim);
 	}
     }
     else
     {
-	nice = YDialog::nicesize(dim) + 2 * decorationWidth(dim);
+	nice = YDialog::nicesize(dim) + 2 * decorationWidth( dim);
     }
 
     long screenSize = dim == YD_HORIZ ? qApp->desktop()->width() : qApp->desktop()->height();
@@ -117,7 +117,7 @@ long YQDialog::nicesize(YUIDimension dim)
 }
 
 
-long YQDialog::decorationWidth(YUIDimension dim)
+long YQDialog::decorationWidth( YUIDimension dim)
 {
     if ( ! hasDefaultSize() && _qFrame )
 	return _qFrame->frameWidth();
@@ -126,13 +126,13 @@ long YQDialog::decorationWidth(YUIDimension dim)
 }
 
 
-void YQDialog::setEnabling(bool enabled)
+void YQDialog::setEnabling( bool enabled)
 {
-    QWidget::setEnabled(enabled);
+    QWidget::setEnabled( enabled);
 }
 
 
-void YQDialog::setSize(long newWidth, long newHeight)
+void YQDialog::setSize( long newWidth, long newHeight)
 {
     if ( newWidth > qApp->desktop()->width() )
     {
@@ -153,7 +153,7 @@ void YQDialog::setSize(long newWidth, long newHeight)
 
     if ( numChildren() > 0 )
     {
-	YContainerWidget::child(0)->setSize (newWidth  - 2 * decorationWidth( YD_HORIZ ),
+	YContainerWidget::child(0)->setSize(newWidth  - 2 * decorationWidth( YD_HORIZ ),
 					     newHeight - 2 * decorationWidth( YD_VERT  ) );
     }
     
@@ -165,7 +165,7 @@ void YQDialog::setSize(long newWidth, long newHeight)
 
 
 
-void YQDialog::activate(bool active)
+void YQDialog::activate( bool active)
 {
     if (active)
     {
@@ -392,7 +392,7 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    }
 	    else if ( event->key() == Qt::Key_D )
 	    {
-		YUIQt::ui()->returnNow(YUIInterpreter::ET_DEBUG, 0);
+		YUIQt::ui()->returnNow( YUIInterpreter::ET_DEBUG, 0);
 		return;
 	    }
 	}
@@ -402,7 +402,7 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 }
 
 
-void YQDialog::closeEvent(QCloseEvent * event)
+void YQDialog::closeEvent( QCloseEvent * event)
 {
     // The window manager "close window" button (and menu, e.g. Alt-F4) will be
     // handled just like the user had clicked on the `id`(`cancel) button in
@@ -410,7 +410,7 @@ void YQDialog::closeEvent(QCloseEvent * event)
 
     y2debug("Ignoring window manager close button.");
     event->ignore();
-    YUIQt::ui()->returnNow(YUIInterpreter::ET_CANCEL, 0);
+    YUIQt::ui()->returnNow( YUIInterpreter::ET_CANCEL, 0);
 }
 
 

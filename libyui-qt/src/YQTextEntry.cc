@@ -67,13 +67,13 @@ YQTextEntry::YQTextEntry( QWidget * parent, YWidgetOpt & opt,
 }
 
 
-void YQTextEntry::setEnabling(bool enabled)
+void YQTextEntry::setEnabling( bool enabled)
 {
     _qt_lineedit->setEnabled(enabled);
 }
 
 
-long YQTextEntry::nicesize(YUIDimension dim)
+long YQTextEntry::nicesize( YUIDimension dim)
 {
     if (dim == YD_HORIZ)
     {
@@ -92,12 +92,12 @@ long YQTextEntry::nicesize(YUIDimension dim)
 }
 
 
-void YQTextEntry::setSize(long newWidth, long newHeight)
+void YQTextEntry::setSize( long newWidth, long newHeight)
 {
     resize(newWidth, newHeight);
 }
 
-void YQTextEntry::setText(const YCPString & text)
+void YQTextEntry::setText( const YCPString & text)
 {
     _qt_lineedit->setText(fromUTF8(text->value() ) );
 }
@@ -109,10 +109,10 @@ YCPString YQTextEntry::getText()
 }
 
 
-void YQTextEntry::setLabel(const YCPString & label)
+void YQTextEntry::setLabel( const YCPString & label)
 {
     _qt_label->setText(fromUTF8(label->value() ) );
-    YTextEntry::setLabel(label);
+    YTextEntry::setLabel( label);
 }
 
 
@@ -146,10 +146,10 @@ bool YQTextEntry::setKeyboardFocus()
 
 // slots
 
-void YQTextEntry::changed(const QString &)
+void YQTextEntry::changed( const QString &)
 {
     if (getNotify() )
-	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
+	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this);
 }
 
 

@@ -335,7 +335,7 @@ YQPkgList::askExportList() const
 
 
 void
-YQPkgList::exportList(  const QString filename, bool interactive ) const
+YQPkgList::exportList( const QString filename, bool interactive ) const
 {
     // Open file
 

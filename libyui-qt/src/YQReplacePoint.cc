@@ -33,22 +33,22 @@ YQReplacePoint::YQReplacePoint( QWidget * parent, YWidgetOpt & opt)
 }
 
 
-void YQReplacePoint::childAdded(YWidget * child)
+void YQReplacePoint::childAdded( YWidget * child)
 {
     ( (QWidget *)(child->widgetRep() ) )->show();
 }
 
 
-void YQReplacePoint::setEnabling(bool enabled)
+void YQReplacePoint::setEnabling( bool enabled)
 {
-    QWidget::setEnabled(enabled);
+    QWidget::setEnabled( enabled);
 }
 
 
-void YQReplacePoint::setSize(long newWidth, long newHeight)
+void YQReplacePoint::setSize( long newWidth, long newHeight)
 {
     resize(newWidth, newHeight);
-    YReplacePoint::setSize(newWidth, newHeight);
+    YReplacePoint::setSize( newWidth, newHeight);
 }
 
 #include "YQReplacePoint.moc.cc"

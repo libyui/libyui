@@ -33,14 +33,14 @@ YQFrame::YQFrame( QWidget * parent, YWidgetOpt & opt,
     : QGroupBox( parent )
     , YFrame( opt, newLabel )
 {
-    QGroupBox::setTitle( fromUTF8 ( getLabel()->value() ) );
+    QGroupBox::setTitle( fromUTF8( getLabel()->value() ) );
     setFont( YUIQt::ui()->currentFont() );
     setWidgetRep ( this );
 }
 
-void YQFrame::setEnabling(bool enabled)
+void YQFrame::setEnabling( bool enabled)
 {
-    QFrame::setEnabled(enabled);
+    QFrame::setEnabled( enabled);
 }
 
 
@@ -53,7 +53,7 @@ YQFrame::setSize( long newWidth, long newHeight )
     long newChildHeight = max ( 0L, newHeight - frameWidth() - fontMetrics().height() - 1 );
 
     if ( numChildren() > 0 )
-	YContainerWidget::child(0)->setSize (newChildWidth, newChildHeight);
+	YContainerWidget::child(0)->setSize( newChildWidth, newChildHeight);
 
 }
 
@@ -62,14 +62,14 @@ void
 YQFrame::setLabel( const YCPString & newLabel )
 {
     YFrame::setLabel( newLabel );
-    QGroupBox::setTitle( fromUTF8 ( getLabel()->value() ) );
+    QGroupBox::setTitle( fromUTF8( getLabel()->value() ) );
 }
 
 
 long YQFrame::nicesize( YUIDimension dim )
 {
     long niceSize;
-    long childNiceSize = numChildren() > 0 ? YContainerWidget::child(0)->nicesize ( dim ) : 0;
+    long childNiceSize = numChildren() > 0 ? YContainerWidget::child(0)->nicesize( dim ) : 0;
 
     if ( dim == YD_HORIZ )
     {

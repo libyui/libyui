@@ -55,10 +55,10 @@ YQComboBox::YQComboBox( QWidget * parent, YWidgetOpt & opt,
 }
 
 
-void YQComboBox::setLabel(const YCPString & label)
+void YQComboBox::setLabel( const YCPString & label)
 {
     _qt_label->setText(fromUTF8(label->value() ) );
-    YComboBox::setLabel(label);
+    YComboBox::setLabel( label);
 }
 
 
@@ -81,27 +81,27 @@ void YQComboBox::setValidChars( const YCPString & newValidChars )
 }
 
 
-long YQComboBox::nicesize(YUIDimension dim)
+long YQComboBox::nicesize( YUIDimension dim)
 {
     if (dim == YD_HORIZ) return sizeHint().width();
     else			return sizeHint().height();
 }
 
 
-void YQComboBox::setSize(long newWidth, long newHeight)
+void YQComboBox::setSize( long newWidth, long newHeight)
 {
     resize(newWidth, newHeight);
 }
 
 
-void YQComboBox::setEnabling(bool enabled)
+void YQComboBox::setEnabling( bool enabled)
 {
     _qt_label->setEnabled(enabled);
     _qt_combo_box->setEnabled(enabled);
 }
 
 
-void YQComboBox::itemAdded(const YCPString & string, int index, bool selected)
+void YQComboBox::itemAdded( const YCPString & string, int index, bool selected)
 {
     _qt_combo_box->insertItem(fromUTF8(string->value() ) );
 
@@ -116,13 +116,13 @@ YCPString YQComboBox::getValue() const
 }
 
 
-void YQComboBox::setValue(const YCPString & new_value)
+void YQComboBox::setValue( const YCPString & new_value)
 {
     _qt_combo_box->setEditText( fromUTF8( new_value->value() ) );
 }
 
 
-void YQComboBox::setCurrentItem(int index)
+void YQComboBox::setCurrentItem( int index)
 {
     _qt_combo_box->setCurrentItem(index);
 }
@@ -138,17 +138,17 @@ bool YQComboBox::setKeyboardFocus()
 
 // slots
 
-void YQComboBox::slotSelected(int i)
+void YQComboBox::slotSelected( int i)
 {
     if (getNotify() )
-	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
+	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this);
 }
 
 
-void YQComboBox::textChanged(const QString &new_text)
+void YQComboBox::textChanged( const QString &new_text)
 {
     if (getNotify() )
-	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
+	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this);
 }
 
 

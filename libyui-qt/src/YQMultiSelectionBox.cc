@@ -38,7 +38,7 @@ using std::max;
 #define MARGIN				4	// around the widget
 
 
-YQMultiSelectionBox::YQMultiSelectionBox( 					  QWidget *		parent,
+YQMultiSelectionBox::YQMultiSelectionBox( QWidget *		parent,
 					  YWidgetOpt &		opt,
 					  const YCPString &	label )
     : QVBox(parent)
@@ -72,7 +72,7 @@ void
 YQMultiSelectionBox::setLabel( const YCPString & label )
 {
     _qt_label->setText(fromUTF8(label->value() ) );
-    YMultiSelectionBox::setLabel(label);
+    YMultiSelectionBox::setLabel( label);
 }
 
 
@@ -244,7 +244,7 @@ YQMultiSelectionBox::deselectAllItems()
 void YQMultiSelectionBox::slotSelected()
 {
     if ( getNotify() )
-	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
+	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this);
 }
 
 

@@ -75,14 +75,14 @@ YQSelectionBox::YQSelectionBox( QWidget * parent, YWidgetOpt & opt,
 }
 
 
-void YQSelectionBox::setLabel(const YCPString & label)
+void YQSelectionBox::setLabel( const YCPString & label)
 {
     _qt_label->setText(fromUTF8(label->value() ) );
-    YSelectionBox::setLabel(label);
+    YSelectionBox::setLabel( label);
 }
 
 
-long YQSelectionBox::nicesize(YUIDimension dim)
+long YQSelectionBox::nicesize( YUIDimension dim)
 {
     if (dim == YD_HORIZ)
     {
@@ -102,13 +102,13 @@ long YQSelectionBox::nicesize(YUIDimension dim)
 }
 
 
-void YQSelectionBox::setSize(long newWidth, long newHeight)
+void YQSelectionBox::setSize( long newWidth, long newHeight)
 {
     resize(newWidth, newHeight);
 }
 
 
-void YQSelectionBox::setEnabling(bool enabled)
+void YQSelectionBox::setEnabling( bool enabled)
 {
     _qt_label->setEnabled(enabled);
     _qt_listbox->setEnabled(enabled);
@@ -116,7 +116,7 @@ void YQSelectionBox::setEnabling(bool enabled)
 }
 
 
-void YQSelectionBox::itemAdded(const YCPString & string, int index, bool selected)
+void YQSelectionBox::itemAdded( const YCPString & string, int index, bool selected)
 {
     _qt_listbox->insertItem(fromUTF8(string->value() ) );
     if (selected) _qt_listbox->setCurrentItem(index);
@@ -129,7 +129,7 @@ int YQSelectionBox::getCurrentItem()
 }
 
 
-void YQSelectionBox::setCurrentItem(int index)
+void YQSelectionBox::setCurrentItem( int index)
 {
     _qt_listbox->setCurrentItem(index);
 }

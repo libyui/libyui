@@ -47,28 +47,28 @@ YQColoredLabel::YQColoredLabel( QWidget * parent, YWidgetOpt & opt,
 }
 
 
-void YQColoredLabel::setEnabling(bool enabled)
+void YQColoredLabel::setEnabling( bool enabled)
 {
-    QLabel::setEnabled(enabled);
+    QLabel::setEnabled( enabled);
 }
 
 
-long YQColoredLabel::nicesize(YUIDimension dim)
+long YQColoredLabel::nicesize( YUIDimension dim)
 {
     return dim == YD_HORIZ ? sizeHint().width() : sizeHint().height();
 }
 
 
-void YQColoredLabel::setSize(long newWidth, long newHeight)
+void YQColoredLabel::setSize( long newWidth, long newHeight)
 {
     resize(newWidth, newHeight);
 }
 
 
-void YQColoredLabel::setLabel(const YCPString & text)
+void YQColoredLabel::setLabel( const YCPString & text)
 {
     setText(fromUTF8(text->value() ) );
-    YLabel::setLabel(text);
+    YLabel::setLabel( text);
 }
 
 

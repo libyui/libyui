@@ -30,7 +30,7 @@
 #define MARGIN   2
 
 
-YQIntField::YQIntField( 			QWidget *		parent,
+YQIntField::YQIntField( QWidget *		parent,
 			YWidgetOpt &		opt,
 			const YCPString &	label,
 			int 			minValue,

@@ -149,7 +149,7 @@ void YQTable::userSort( int column )	// column
 }
 
 
-long YQTable::nicesize(YUIDimension dim)
+long YQTable::nicesize( YUIDimension dim)
 {
     // This value is for debugging only.
     // Use spacings to determine the size of this widget;
@@ -159,20 +159,20 @@ long YQTable::nicesize(YUIDimension dim)
 }
 
 
-void YQTable::setSize(long newWidth, long newHeight)
+void YQTable::setSize( long newWidth, long newHeight)
 {
     resize(newWidth, newHeight);
 }
 
 
-void YQTable::setEnabling(bool enabled)
+void YQTable::setEnabling( bool enabled)
 {
     _qt_listview->setEnabled(enabled);
     _qt_listview->triggerUpdate();
 }
 
 
-void YQTable::itemAdded(vector<string> elements, int index)
+void YQTable::itemAdded( vector<string> elements, int index)
 {
     YQListViewItem * item;
 
@@ -196,7 +196,7 @@ void YQTable::itemsCleared()
 }
 
 
-void YQTable::cellChanged(int index, int colnum, const YCPString & newtext)
+void YQTable::cellChanged( int index, int colnum, const YCPString & newtext)
 {
     QListViewItem * item = findItem(index);
     if (item) item->setText(colnum, fromUTF8(newtext->value() ) );
@@ -211,7 +211,7 @@ int YQTable::getCurrentItem()
 }
 
 
-void YQTable::setCurrentItem(int index)
+void YQTable::setCurrentItem( int index)
 {
     QListViewItem * item = findItem(index);
     if (item)  // should be always true
@@ -222,7 +222,7 @@ void YQTable::setCurrentItem(int index)
 }
 
 
-QListViewItem * YQTable::findItem(int index)
+QListViewItem * YQTable::findItem( int index)
 {
     // Scan all items and look for the one with the right index.
     QListViewItem * item = _qt_listview->firstChild();
@@ -244,9 +244,9 @@ bool YQTable::setKeyboardFocus()
 }
 
 
-void YQTable::slotSelected(QListViewItem *)
+void YQTable::slotSelected( QListViewItem *)
 {
-    if (getNotify() ) YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
+    if (getNotify() ) YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this);
 }
 
 #include "YQTable.moc.cc"
