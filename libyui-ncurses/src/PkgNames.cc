@@ -674,26 +674,6 @@ const NCstring PkgNames::HelpOnStatus()
     return value;
 }
 
-const NCstring PkgNames::YouHelp1()
-{
-    // help text online udpate
-    static const YCPString value = toYCPString( _("<p>Mode \"recommended\" means you should install the patch.\"security\" is a security patch and it is highly recommended to install it.\"YaST2\" patches will be always installed first. The other patches must be installed on a second run.</p>") );
-    return value;
-}						  
-
-const NCstring PkgNames::YouHelp2()
-{
-    // help text online udpate
-    static const YCPString value = toYCPString( _("<p>Meaning of the status flags:</p><p><b>+</b>: Patches concerning your installation are preselected. They will be downloaded and installed on your system.If you do not want a certain patch, deselect it with '-'.</p>") );
-    return value;
-}
-
-const NCstring PkgNames::YouHelp3()
-{
-    // help text online udpate
-    static const YCPString value = toYCPString( _("<p><b>i</b>: This patch is already installed.</p><p><b>></b>: The patch will be reinstalled.</p>") );
-    return value;
-}
 
 const NCstring PkgNames::PkgName()
 {
@@ -749,6 +729,30 @@ const NCstring PkgNames::PkgStatus()
 {
     // column header status
     static const NCstring value =  NCstring("     ");
+    return value;
+}
+
+/*
+  Textdomain "online-update"
+*/
+const NCstring PkgNames::YouHelp1()
+{
+    // help text online udpate
+    static const YCPString value = toYCPString( _("<p>Mode \"recommended\" means you should install the patch.\"security\" is a security patch and it is highly recommended to install it.\"YaST2\" patches will be always installed first. The other patches must be installed on a second run.</p>") );
+    return value;
+}						  
+
+const NCstring PkgNames::YouHelp2()
+{
+    // help text online udpate
+    static const YCPString value = toYCPString( _("<p>Meaning of the status flags:</p><p><b>+</b>: Patches concerning your installation are preselected. They will be downloaded and installed on your system.If you do not want a certain patch, deselect it with '-'.</p>") );
+    return value;
+}
+
+const NCstring PkgNames::YouHelp3()
+{
+    // help text online udpate
+    static const YCPString value = toYCPString( _("<p><b>i</b>: This patch is already installed.</p><p><b>></b>: The patch will be reinstalled.</p>") );
     return value;
 }
 
