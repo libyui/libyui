@@ -145,6 +145,41 @@ NCursesPanel::centertext(int row,const char *label) {
   }
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCursesPanel::transparent
+//	METHOD TYPE : int
+//
+int NCursesPanel::transparent( int y, int x )
+{
+  if ( hidden()
+       || y < 0 || maxy() < y
+       || x < 0 || maxx() < x ) {
+    return ERR;
+  }
+
+  int ay = begy() + y;
+  int ax = begx() + x;
+
+  for ( PANEL * sp = ::panel_below( p ); 1; sp = ::panel_below( sp ) ) {
+    WINDOW * sw = ( sp ? ::panel_window( sp ) : ::stdscr );
+    if ( sw ) {
+      int dy = ay - sw->_begy;
+      if ( 0 <= dy && dy <= sw->_maxy ) {
+	int dx = ax - sw->_begx;
+	if ( 0 <= dx && dx <= sw->_maxx ) {
+	  return addch( y, x, ::mvwinch( sw, dy, dx ) );
+	}
+      }
+    }
+    if ( !sp )
+      break;
+  }
+
+  return ERR;
+}
+
 /******************************************************************
 **
 **

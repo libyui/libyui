@@ -201,6 +201,16 @@ public:
     return *dummy;
   }
 
+  inline PANEL * PANEL_above() const {
+    return( p ? ::panel_above( p ) : 0 );
+  }
+
+  inline PANEL * PANEL_below() const {
+    return( p ? ::panel_below( p ) : 0 );
+  }
+
+  int transparent( int y, int x );
+
   // Those two are rewrites of the corresponding virtual members of
   // NCursesWindow
   /**

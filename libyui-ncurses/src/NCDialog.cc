@@ -209,7 +209,7 @@ void NCDialog::showDialog()
 {
   IODBG << "sd+ " << this << endl;
   if ( pan && pan->hidden() ) {
-    pan->show();
+    getVisible();
     doUpdate();
     DumpOn( NCDBG, " " );
   }
@@ -250,7 +250,7 @@ void NCDialog::activate( const bool newactive )
   if ( active != newactive ) {
     active = newactive;
     if ( pan ) {
-      pan->show();
+      pan->show(); // not getVisible() because wRedraw() follows.
       wRedraw();
       if ( active ) {
 	Activate();
@@ -382,9 +382,11 @@ void NCDialog::wRedraw()
     pan->bkgdset( A_NORMAL );
     if ( hshaddow ) {
       pan->hline( pan->maxy(), 0, pan->width(), ' ' );
+      pan->transparent( pan->maxy(), 0 );
     }
     if ( vshaddow ) {
       pan->vline( 0, pan->maxx(), pan->height(), ' ' );
+      pan->transparent( 0, pan->maxx() );
     }
   }
 }
@@ -1216,7 +1218,7 @@ bool NCDialog::getInvisible()
     return false; // no change in visibility
 
   // just do it.
-  // class NCurses is responsible for screen update.
+  // caller is responsible for screen update.
   pan->hide();
   return true;
 }
@@ -1233,8 +1235,14 @@ bool NCDialog::getVisible()
     return false; // no change in visibility
 
   // just do it.
-  // class NCurses is responsible for screen update.
+  // caller is responsible for screen update.
   pan->show();
+  if ( hshaddow ) {
+    pan->transparent( pan->maxy(), 0 );
+  }
+  if ( vshaddow ) {
+    pan->transparent( 0, pan->maxx() );
+  }
   return true;
 }
 
