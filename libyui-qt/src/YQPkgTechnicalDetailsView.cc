@@ -14,6 +14,8 @@
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
+  Textdomain "packages-qt"
+
 /-*/
 
 #define y2log_component "qt-pkg"

@@ -14,6 +14,8 @@
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
+  Textdomain "packages-qt"
+
 /-*/
 
 #include <qcheckbox.h>

@@ -1,0 +1,13 @@
+./src/YQPackageSelector.cc
+./src/YQPkgConflictDialog.cc
+./src/YQPkgConflictList.cc
+./src/YQPkgList.cc
+./src/YQPkgObjList.cc
+./src/YQPkgRpmGroupTagsFilterView.cc
+./src/YQPkgSearchFilterView.cc
+./src/YQPkgSelList.cc
+./src/YQPkgTechnicalDetailsView.cc
+./src/YQPkgTextDialog.cc
+./src/YQPkgUpdateProblemFilterView.cc
+./src/YQPkgYouPatchFilterView.cc
+./src/YQPkgYouPatchList.cc
