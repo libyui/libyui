@@ -64,7 +64,7 @@ public:
     static void showText( QWidget * parent, const std::list<std::string> & text );
 
     /**
-     * Show a text with a healine identifying a PMObject (name+summary).
+     * Show a text with a headline identifying a PMObject (name+summary).
      **/
     static void showText( QWidget * parent,
 			  PMObjectPtr pmObj,
