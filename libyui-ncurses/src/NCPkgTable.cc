@@ -113,6 +113,8 @@ NCPkgTable::NCPkgTable( NCWidget * parent, YWidgetOpt & opt )
       , statusStrategy( new PackageStatStrategy )	// default strategy: packages
       , tableType ( T_Packages )			// default type: packages
 {
+    fillHeader();
+    
     WIDDBG << endl;
 }
 
