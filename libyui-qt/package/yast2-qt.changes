@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Nov  5 17:41:40 CET 2004 - sh@suse.de
+
+- Changed save_y2logs key from plain F8 to Shift-F8 
+
+-------------------------------------------------------------------
 Thu Nov  4 19:13:47 CET 2004 - sh@suse.de
 
 - Added F8 hotkey to save y2logs 

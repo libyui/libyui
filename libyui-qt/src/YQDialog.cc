@@ -452,8 +452,6 @@ void YQDialog::gettingFocus( YQGenericButton * button )
 void
 YQDialog::keyPressEvent( QKeyEvent * event )
 {
-    unsigned yast2_special_combo = ( Qt::ControlButton | Qt::ShiftButton | Qt::AltButton );
-
     if ( event )
     {
 	if ( event->key() == Qt::Key_Print )
@@ -461,17 +459,18 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    YQUI::ui()->makeScreenShot( "" );
 	    return;
 	}
-	else if ( event->key() == Qt::Key_F5 )	// No matter if Ctrl/Alt/Shift pressed
+	else if ( event->key() == Qt::Key_F5 )		// No matter if Ctrl/Alt/Shift pressed
 	{
 	    YQUI::ui()->easterEgg();
 	    return;
 	}
-	else if ( event->key() == Qt::Key_F8 )	// No matter if Ctrl/Alt/Shift pressed
+	else if ( event->key()   == Qt::Key_F8 &&	// Shift-F8
+		  event->state() == Qt::ShiftButton )
 	{
 	    YQUI::ui()->askSaveLogs();
 	    return;
 	}
-	else if ( event->state() == 0 )	// No Ctrl / Alt / Shift etc. pressed
+	else if ( event->state() == 0 )			// No Ctrl / Alt / Shift etc. pressed
 	{
 	    if ( event->key() == Qt::Key_Return ||
 		 event->key() == Qt::Key_Enter    )
@@ -480,7 +479,7 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 		return;
 	    }
 	}
-	else if ( ( event->state() & yast2_special_combo ) == yast2_special_combo )
+	else if ( event->state() == ( Qt::ControlButton | Qt::ShiftButton | Qt::AltButton ) )
 	{
 	    // Qt-UI special keys - all with Ctrl-Shift-Alt
 
