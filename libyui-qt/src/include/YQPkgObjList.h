@@ -27,6 +27,8 @@
 
 
 class YQPkgObjListItem;
+class QAction;
+class QPopupMenu;
 
 
 /**
@@ -73,7 +75,13 @@ public:
      **/
     void setEditable( bool editable = true ) { _editable = editable; }
 
-    
+    /**
+     * Sets the currently selected item's status.
+     * Automatically selects the next item if 'selectNextItem' is 'true'.
+     **/
+    void setCurrentStatus( PMSelectable::UI_Status	newStatus,
+			   bool				selectNextItem = false );
+
 public slots:
 
     /**
@@ -93,13 +101,24 @@ public slots:
      **/
     virtual void pkgObjClicked( int		button,
 				QListViewItem *	item,
-				int		col    );
+				int		col,
+				const QPoint &	pos );
 
     /**
      * Reimplemented from QY2ListView:
      * Emit selectionChanged() signal after clearing the list.
      **/
     virtual void clear();
+
+
+    // Direct access to some states for menu actions
+
+    void setCurrentInstall()	   { setCurrentStatus( PMSelectable::S_Install	     ); }
+    void setCurrentDontInstall()   { setCurrentStatus( PMSelectable::S_NoInst	     ); }
+    void setCurrentKeepInstalled() { setCurrentStatus( PMSelectable::S_KeepInstalled ); }
+    void setCurrentDelete()	   { setCurrentStatus( PMSelectable::S_Del	     ); }
+    void setCurrentUpdate()	   { setCurrentStatus( PMSelectable::S_Update	     ); }
+    void setCurrentTaboo()	   { setCurrentStatus( PMSelectable::S_Taboo	     ); }
 
 
 protected slots:
@@ -122,6 +141,40 @@ signals:
 
 protected:
 
+    /**
+     * Returns the context menu for items that are not installed.
+     * Creates the menu upon the first call.
+     **/
+    virtual QPopupMenu * installedContextMenu();
+    
+    /**
+     * Returns the context menu for items that are installed.
+     * Creates the menu upon the first call.
+     **/
+    virtual QPopupMenu * notInstalledContextMenu();
+
+    /**
+     * Create the context menu for items that are not installed.
+     **/
+    virtual void createNotInstalledContextMenu();
+
+    /**
+     * Create the context menu for installed items.
+     **/
+    virtual void createInstalledContextMenu();
+
+    /**
+     * Create the actions for the context menus.
+     **/
+    void createActions();
+
+    /**
+     * Create one action
+     **/
+    QAction * createAction( const QPixmap &	icon,
+			    const QString &	text,
+			    bool		enabled = true );
+
 
     // Data members
 
@@ -132,6 +185,20 @@ protected:
     int 	_versionCol;
     int 	_instVersionCol;
     bool	_editable;
+
+    QAction *		_actionSetCurrentInstall;
+    QAction *		_actionSetCurrentDontInstall;
+    QAction *		_actionSetCurrentKeepInstalled;
+    QAction *		_actionSetCurrentDelete;
+    QAction *		_actionSetCurrentUpdate;
+    QAction *		_actionSetCurrentTaboo;
+
+    QAction *		_actionSetCurrentAutoInstall;
+    QAction *		_actionSetCurrentAutoUpdate;
+    QAction *		_actionSetCurrentAutoDelete;
+
+    QPopupMenu * 	_installedContextMenu;
+    QPopupMenu *	_notInstalledContextMenu;
 };
 
 
@@ -249,6 +316,7 @@ protected:
     PMObjectPtr		_pmObj;
     bool		_editable;
 };
+
 
 
 #endif // ifndef YQPkgObjList_h

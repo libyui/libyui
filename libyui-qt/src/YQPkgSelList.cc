@@ -149,7 +149,7 @@ YQPkgSelList::selection() const
     if ( ! item )
 	return 0;
 
-    return dynamic_cast<YQPkgSelListItem *> ( selectedItem() );
+    return dynamic_cast<YQPkgSelListItem *> (item);
 }
 
 

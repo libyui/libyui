@@ -158,7 +158,7 @@ QY2ListView::contentsMouseReleaseEvent( QMouseEvent * ev )
 	     col  == _mousePressedCol	&&
 	     ev->button() == _mousePressedButton )
 	{
-	    emit( columnClicked( ev->button(), item, col ) );
+	    emit( columnClicked( ev->button(), item, col, ev->globalPos() ) );
 	}
 
     }
@@ -182,7 +182,7 @@ QY2ListView::contentsMouseDoubleClickEvent( QMouseEvent * ev )
     if ( item && item->isEnabled() )
     {
 	int col = header()->sectionAt( ev->pos().x() );
-	emit( columnDoubleClicked( ev->button(), (QY2ListViewItem *) item, col ) );
+	emit( columnDoubleClicked( ev->button(), (QY2ListViewItem *) item, col, ev->globalPos() ) );
     }
 
     // invalidate last click data

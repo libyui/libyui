@@ -82,7 +82,10 @@ YQPkgList::addPkgItem( PMPackagePtr pmPkg )
 
 
 void
-YQPkgList::pkgObjClicked( int button, QListViewItem * listViewItem, int col )
+YQPkgList::pkgObjClicked( int 			button,
+			  QListViewItem *	listViewItem,
+			  int 			col,
+			  const QPoint & 	pos )
 {
     if ( button == Qt::LeftButton )
     {
@@ -99,7 +102,7 @@ YQPkgList::pkgObjClicked( int button, QListViewItem * listViewItem, int col )
 	}
     }
 
-    YQPkgObjList::pkgObjClicked( button, listViewItem, col );
+    YQPkgObjList::pkgObjClicked( button, listViewItem, col, pos );
 }
 
 

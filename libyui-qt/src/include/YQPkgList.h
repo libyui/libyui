@@ -68,7 +68,8 @@ public slots:
      **/
     virtual void pkgObjClicked( int		button,
 				QListViewItem *	item,
-				int		col    );
+				int		col,
+				const QPoint &	pos );
 
     /**
      * Reimplemented from QListView / QWidget:

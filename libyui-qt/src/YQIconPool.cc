@@ -47,7 +47,8 @@ QPixmap YQIconPool::pkgTaboo()		{ return iconPool()->cachedIcon( taboo_xpm );		}
 QPixmap YQIconPool::pkgDel()		{ return iconPool()->cachedIcon( trashcan_xpm );	}
 QPixmap YQIconPool::pkgUpdate()		{ return iconPool()->cachedIcon( recycle_xpm );		}
 QPixmap YQIconPool::pkgInstall()	{ return iconPool()->cachedIcon( checklist_on_xpm );	}
-QPixmap YQIconPool::pkgAuto()		{ return iconPool()->cachedIcon( dep_xpm );		}
+QPixmap YQIconPool::pkgAutoInstall()	{ return iconPool()->cachedIcon( dep_xpm );		}
+QPixmap YQIconPool::pkgAutoUpdate()	{ return iconPool()->cachedIcon( dep_xpm );		}
 QPixmap YQIconPool::pkgAutoDel()	{ return iconPool()->cachedIcon( trashcan_xpm );	}
 QPixmap YQIconPool::pkgKeepInstalled()	{ return iconPool()->cachedIcon( checklist_on_xpm );	}
 QPixmap YQIconPool::pkgNoInst()		{ return iconPool()->cachedIcon( checklist_off_xpm );	}

@@ -25,6 +25,7 @@
 #define QY2ListView_h
 
 #include <qlistview.h>
+#include <qpoint.h>
 #include <vector>
 
 
@@ -99,14 +100,16 @@ signals:
      **/
     void columnClicked		( int			button,
 				  QListViewItem *	item,
-				  int			col );
+				  int			col,
+				  const QPoint &	pos );
 
     /**
      * Emitted for mouse double clicks on a package
      **/
     void columnDoubleClicked	( int			button,
 				  QListViewItem *	item,
-				  int			col );
+				  int			col,
+				  const QPoint &	pos );
 
 public:
 

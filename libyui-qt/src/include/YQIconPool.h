@@ -33,7 +33,8 @@ public:
     static QPixmap pkgDel();
     static QPixmap pkgUpdate();
     static QPixmap pkgInstall();
-    static QPixmap pkgAuto();
+    static QPixmap pkgAutoInstall();
+    static QPixmap pkgAutoUpdate();
     static QPixmap pkgAutoDel();
     static QPixmap pkgKeepInstalled();
     static QPixmap pkgNoInst();

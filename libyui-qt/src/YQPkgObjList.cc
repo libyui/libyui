@@ -20,6 +20,8 @@
 #include <ycp/y2log.h>
 #include <qpixmap.h>
 #include <qheader.h>
+#include <qpopupmenu.h>
+#include <qaction.h>
 
 #include <Y2PM.h>
 #include <y2pm/InstTarget.h>
@@ -33,26 +35,30 @@
 YQPkgObjList::YQPkgObjList( QWidget *parent )
     : QY2ListView( parent )
     , _editable( true )
+    , _installedContextMenu( 0 )
+    , _notInstalledContextMenu( 0 )
 {
     // This class does not add any columns. This is the main reason why this is
     // an abstract base class: It doesn't know which columns are desired and in
     // what order.
-    
+
     _statusCol		= -42;
     _nameCol		= -42;
     _versionCol		= -42;
-    _instVersionCol 	= -42;
+    _instVersionCol	= -42;
     _summaryCol		= -42;
     _sizeCol		= -42;
 
-    connect( this, 	SIGNAL( columnClicked		( int, QListViewItem *, int ) ),
-	     this, 	SLOT  ( pkgObjClicked		( int, QListViewItem *, int ) ) );
+    createActions();
 
-    connect( this, 	SIGNAL( columnDoubleClicked	( int, QListViewItem *, int ) ),
-	     this, 	SLOT  ( pkgObjClicked		( int, QListViewItem *, int ) ) );
+    connect( this,	SIGNAL( columnClicked		( int, QListViewItem *, int, const QPoint & ) ),
+	     this,	SLOT  ( pkgObjClicked		( int, QListViewItem *, int, const QPoint & ) ) );
 
-    connect( this, 	SIGNAL( selectionChanged        ( QListViewItem * ) ),
-	     this, 	SLOT  ( selectionChangedInternal( QListViewItem * ) ) );
+    connect( this,	SIGNAL( columnDoubleClicked	( int, QListViewItem *, int, const QPoint & ) ),
+	     this,	SLOT  ( pkgObjClicked		( int, QListViewItem *, int, const QPoint & ) ) );
+
+    connect( this,	SIGNAL( selectionChanged	( QListViewItem * ) ),
+	     this,	SLOT  ( selectionChangedInternal( QListViewItem * ) ) );
 }
 
 
@@ -70,16 +76,19 @@ YQPkgObjList::addPkgObjItem( PMObjectPtr pmObj )
 	y2error( "Null PMObject!" );
 	return;
     }
-    
+
     new YQPkgObjListItem( this, pmObj );
 }
 
 
 void
-YQPkgObjList::pkgObjClicked( int button, QListViewItem * listViewItem, int col )
+YQPkgObjList::pkgObjClicked( int		button,
+			     QListViewItem *	listViewItem,
+			     int		col,
+			     const QPoint &	pos )
 {
     YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (listViewItem);
-	
+
     if ( item )
     {
 	if ( button == Qt::LeftButton )
@@ -89,6 +98,20 @@ YQPkgObjList::pkgObjClicked( int button, QListViewItem * listViewItem, int col )
 	    {
 		if ( editable() && item->editable() )
 		    item->cycleStatus();
+	    }
+	}
+	else if ( button == Qt::RightButton )
+	{
+	    if ( editable() && item->editable() )
+	    {
+		// updateActions( item );	// TODO?
+
+		QPopupMenu * contextMenu =
+		    item->pmObj()->hasInstalledObj() ?
+		    installedContextMenu() : notInstalledContextMenu();
+
+		if ( contextMenu )
+		    contextMenu->popup( pos );
 	    }
 	}
     }
@@ -112,6 +135,116 @@ YQPkgObjList::clear()
 }
 
 
+void
+YQPkgObjList::setCurrentStatus( PMSelectable::UI_Status	newStatus,
+				bool			selectNextItem )
+{
+    QListViewItem * listViewItem = selectedItem();
+
+    if ( ! listViewItem )
+	return;
+
+    YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (listViewItem);
+
+    if ( item )
+    {
+	item->setStatus( newStatus );
+
+	if ( selectNextItem && item->nextSibling() )
+	{
+	    item->setSelected( false );			// doesn't emit signals
+	    setSelected( item->nextSibling(), true );	// emits signals
+	}
+    }
+}
+
+
+void
+YQPkgObjList::createActions()
+{
+    _actionSetCurrentInstall	   = createAction( YQIconPool::pkgInstall(),	   _( "&Install"	       ) );
+    _actionSetCurrentDontInstall   = createAction( YQIconPool::pkgNoInst(),	   _( "Do&n't install"	       ) );
+    _actionSetCurrentKeepInstalled = createAction( YQIconPool::pkgKeepInstalled(), _( "&Keep"		       ) );
+    _actionSetCurrentDelete	   = createAction( YQIconPool::pkgDel(),	   _( "&Delete"		       ) );
+    _actionSetCurrentUpdate	   = createAction( YQIconPool::pkgUpdate(),	   _( "&Update"		       ) );
+    _actionSetCurrentTaboo	   = createAction( YQIconPool::pkgTaboo(),	   _( "&Taboo - never install" ) );
+
+    _actionSetCurrentAutoInstall   = createAction( YQIconPool::pkgAutoInstall(),   _( "Auto-install" ), false );
+    _actionSetCurrentAutoUpdate	   = createAction( YQIconPool::pkgAutoUpdate(),	   _( "Auto-update"  ), false );
+    _actionSetCurrentAutoDelete	   = createAction( YQIconPool::pkgAutoDel(),	   _( "Auto-delete"  ), false );
+
+    connect( _actionSetCurrentInstall,	     SIGNAL( activated() ), this, SLOT( setCurrentInstall()	  ) );
+    connect( _actionSetCurrentDontInstall,   SIGNAL( activated() ), this, SLOT( setCurrentDontInstall()	  ) );
+    connect( _actionSetCurrentKeepInstalled, SIGNAL( activated() ), this, SLOT( setCurrentKeepInstalled() ) );
+    connect( _actionSetCurrentDelete,	     SIGNAL( activated() ), this, SLOT( setCurrentDelete()	  ) );
+    connect( _actionSetCurrentUpdate,	     SIGNAL( activated() ), this, SLOT( setCurrentUpdate()	  ) );
+    connect( _actionSetCurrentTaboo,	     SIGNAL( activated() ), this, SLOT( setCurrentTaboo()	  ) );
+}
+
+
+QAction *
+YQPkgObjList::createAction( const QPixmap & icon, const QString & text, bool enabled )
+{
+    QAction * action = new QAction( text,		// text
+				    QIconSet( icon ),	// icon set
+				    text,		// menu text
+				    0,			// accel key
+				    this );		// parent
+    CHECK_PTR( action );
+    action->setEnabled( enabled );
+
+    return action;
+}
+
+
+void
+YQPkgObjList::createNotInstalledContextMenu()
+{
+    _notInstalledContextMenu = new QPopupMenu( this );
+    CHECK_PTR( _notInstalledContextMenu );
+
+    _actionSetCurrentInstall->addTo( _notInstalledContextMenu );
+    _actionSetCurrentDontInstall->addTo( _notInstalledContextMenu );
+    _actionSetCurrentTaboo->addTo( _notInstalledContextMenu );
+    _actionSetCurrentAutoInstall->addTo( _notInstalledContextMenu );
+}
+
+
+void
+YQPkgObjList::createInstalledContextMenu()
+{
+    _installedContextMenu = new QPopupMenu( this );
+    CHECK_PTR( _installedContextMenu );
+
+    _actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
+    _actionSetCurrentDelete->addTo( _installedContextMenu );
+    _actionSetCurrentUpdate->addTo( _installedContextMenu );
+    _actionSetCurrentTaboo->addTo( _installedContextMenu );
+    _actionSetCurrentAutoUpdate->addTo( _installedContextMenu );
+    _actionSetCurrentAutoDelete->addTo( _installedContextMenu );
+}
+
+
+QPopupMenu *
+YQPkgObjList::notInstalledContextMenu()
+{
+    if ( ! _notInstalledContextMenu )
+	createNotInstalledContextMenu();
+
+    return _notInstalledContextMenu;
+}
+
+
+QPopupMenu *
+YQPkgObjList::installedContextMenu()
+{
+    if ( ! _installedContextMenu )
+	createInstalledContextMenu();
+
+    return _installedContextMenu;
+}
+
+
 
 
 
@@ -122,7 +255,7 @@ YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList * pkgObjList, PMObjectPtr pm_ob
     , _pmObj( pm_obj )
     , _editable( true )
 {
-    if ( nameCol()    >= 0 ) 	setText( nameCol(),	pmObj()->name()		);
+    if ( nameCol()    >= 0 )	setText( nameCol(),	pmObj()->name()		);
     if ( summaryCol() >= 0 )	setText( summaryCol(),	pmObj()->summary()	);
     if ( sizeCol()    >= 0 )	setText( sizeCol(),	pmObj()->size().form() + "  " );
 
@@ -195,20 +328,20 @@ YQPkgObjListItem::setStatusIcon()
 {
     if ( statusCol() < 0 )
 	return;
-    
+
     QPixmap icon = YQIconPool::pkgNoInst();
 
     switch ( status() )
     {
-        case PMSelectable::S_Taboo:		icon = YQIconPool::pkgTaboo();		break;
-        case PMSelectable::S_Del:		icon = YQIconPool::pkgDel();		break;
-        case PMSelectable::S_Update:		icon = YQIconPool::pkgUpdate();		break;
-        case PMSelectable::S_Install:		icon = YQIconPool::pkgInstall();	break;
-        case PMSelectable::S_AutoDel:		icon = YQIconPool::pkgAutoDel();	break;
-        case PMSelectable::S_AutoInstall:	icon = YQIconPool::pkgAuto();		break;
-        case PMSelectable::S_AutoUpdate:	icon = YQIconPool::pkgAuto();		break;
-        case PMSelectable::S_KeepInstalled:	icon = YQIconPool::pkgKeepInstalled();	break;
-        case PMSelectable::S_NoInst:		icon = YQIconPool::pkgNoInst();		break;
+	case PMSelectable::S_Taboo:		icon = YQIconPool::pkgTaboo();		break;
+	case PMSelectable::S_Del:		icon = YQIconPool::pkgDel();		break;
+	case PMSelectable::S_Update:		icon = YQIconPool::pkgUpdate();		break;
+	case PMSelectable::S_Install:		icon = YQIconPool::pkgInstall();	break;
+	case PMSelectable::S_AutoDel:		icon = YQIconPool::pkgAutoDel();	break;
+	case PMSelectable::S_AutoInstall:	icon = YQIconPool::pkgAutoInstall();	break;
+	case PMSelectable::S_AutoUpdate:	icon = YQIconPool::pkgAutoUpdate();	break;
+	case PMSelectable::S_KeepInstalled:	icon = YQIconPool::pkgKeepInstalled();	break;
+	case PMSelectable::S_NoInst:		icon = YQIconPool::pkgNoInst();		break;
 
 	    // Intentionally omitting 'default' branch so the compiler can
 	    // catch unhandled enum states
@@ -284,7 +417,7 @@ YQPkgObjListItem::compare( QListViewItem *	otherListViewItem,
 	// package states there where they make most sense. We want to show
 	// dangerous or noteworthy states first - e.g., "taboo" which should
 	// seldeom occur, but when it does, it is important.
-	
+
 	if ( this->status() < other->status() ) return -1;
 	if ( this->status() > other->status() ) return 1;
 	return 0;
@@ -293,6 +426,7 @@ YQPkgObjListItem::compare( QListViewItem *	otherListViewItem,
     // Fallback: Use parent class method
     return QY2ListViewItem::compare( otherListViewItem, col, ascending );
 }
+
 
 
 
