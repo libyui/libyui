@@ -54,6 +54,12 @@ public:
      **/
     YQPkgYouPatchList * youPatchList() const { return _youPatchList; }
 
+    /**
+     * Reimplemented from QWidget:
+     * Reserve a reasonable amount of space.
+     **/
+    virtual QSize sizeHint() const;
+
 
 protected:
 

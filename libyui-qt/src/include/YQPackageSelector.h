@@ -27,21 +27,26 @@
 #include "YPackageSelector.h"
 
 
-class YUIQt;
-class QLabel;
-class QComboBox;
-class QSplitter;
-class QListView;
-class QTabWidget;
-class QProgressBar;
 class QCheckBox;
+class QComboBox;
+class QLabel;
+class QListView;
+class QProgressBar;
+class QSplitter;
+class QTabWidget;
+
 class QY2ComboTabWidget;
+
+class YQPkgDescriptionView;
 class YQPkgList;
 class YQPkgRpmGroupTagsFilterView;
-class YQPkgDescriptionView;
-class YQPkgTechnicalDetailsView;
-class YQPkgSelectionsFilterView;
 class YQPkgSelList;
+class YQPkgSelectionsFilterView;
+class YQPkgTechnicalDetailsView;
+class YQPkgYouPatchFilterView;
+class YQPkgYouPatchList;
+
+class YUIQt;
 
 
 class YQPackageSelector : public QVBox, public YPackageSelector
@@ -139,6 +144,8 @@ protected:
     YQPkgRpmGroupTagsFilterView *	_rpmGroupTagsFilterView;
     YQPkgSelectionsFilterView *		_selectionsFilterView;
     YQPkgSelList *			_selList;
+    YQPkgYouPatchFilterView *		_youPatchFilterView;
+    YQPkgYouPatchList *			_youPatchList;
 };
 
 #endif // YQPackageSelector_h

@@ -392,6 +392,7 @@ YQPkgObjListItem::cycleStatus()
 						break;
 	    case PMSelectable::S_Update:	newStatus = PMSelectable::S_Del;		break;
 	    case PMSelectable::S_Del:		newStatus = PMSelectable::S_KeepInstalled;	break;
+#warning TODO: Show DELNOTIFY
 	    default:				newStatus = PMSelectable::S_KeepInstalled;	break;
 	}
     }
@@ -401,6 +402,7 @@ YQPkgObjListItem::cycleStatus()
 	{
 	    case PMSelectable::S_NoInst:	newStatus = pmObj()->hasCandidateObj() ?
 						    PMSelectable::S_Install : PMSelectable::S_NoInst;
+#warning TODO: Show INSNOTIFY
 						break;
 	    default:				newStatus = PMSelectable::S_NoInst;	break;
 

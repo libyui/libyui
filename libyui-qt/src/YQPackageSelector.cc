@@ -19,22 +19,17 @@
 
 #define ALPHA_WARNING	1
 
-#include <qcombobox.h>
-#include <qframe.h>
 #include <qhbox.h>
 #include <qhgroupbox.h>
 #include <qlabel.h>
-#include <qlistview.h>
 #include <qmenubar.h>
 #include <qmessagebox.h>
-#include <qnamespace.h>
+// #include <qnamespace.h>
 #include <qprogressbar.h>
 #include <qpushbutton.h>
 #include <qsplitter.h>
-#include <qstring.h>
 #include <qstylefactory.h>
 #include <qtabwidget.h>
-#include <qtextbrowser.h>
 #include <qvbox.h>
 #include <qcheckbox.h>
 #include <qtimer.h>
@@ -44,10 +39,16 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include "YQPkgDescriptionView.h"
-#include "YQPkgTechnicalDetailsView.h"
 #include "YQPackageSelector.h"
+#include "YQPkgDescriptionView.h"
 #include "YQPkgList.h"
+#include "YQPkgRpmGroupTagsFilterView.h"
+#include "YQPkgSelList.h"
+#include "YQPkgSelectionsFilterView.h"
+#include "YQPkgTechnicalDetailsView.h"
+#include "YQPkgYouPatchFilterView.h"
+#include "YQPkgYouPatchList.h"
+
 #include "QY2ComboTabWidget.h"
 #include "YQDialog.h"
 #include "utf8.h"
@@ -55,9 +56,6 @@
 #include "YQi18n.h"
 #include "layoututils.h"
 
-#include "YQPkgRpmGroupTagsFilterView.h"
-#include "YQPkgSelectionsFilterView.h"
-#include "YQPkgSelList.h"
 
 
 using std::max;
@@ -88,6 +86,9 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     _rpmGroupTagsFilterView	= 0;
     _selectionsFilterView	= 0;
     _selList			= 0;
+    _youPatchFilterView		= 0;
+    _youPatchList		= 0;
+    
     
     _youMode	= opt.youMode.value();
     _updateMode	= opt.updateMode.value();
@@ -178,8 +179,15 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     if ( _youMode )
     {
-	_filters->addPage( _("YOU Patches"   ),
-			   new QLabel( "YOU Patches - this will require this side to grow much wider\n\nfor future use", 0 ) );
+	_youPatchFilterView = new YQPkgYouPatchFilterView( parent );
+	CHECK_PTR( _youPatchFilterView );
+	_filters->addPage( _( "YOU Patches" ), _youPatchFilterView );
+
+	_youPatchList = _youPatchFilterView->youPatchList();
+	CHECK_PTR( _youPatchList );
+	
+	connect( _filters,	SIGNAL( currentChanged( QWidget * ) ),
+		 _youPatchList,	SLOT  ( filterIfVisible()           ) );
     }
 
     
@@ -416,7 +424,9 @@ YQPackageSelector::layoutMenuBar( QWidget * parent )
 void
 YQPackageSelector::makeConnections()
 {
+    //
     // Connect RPM group tag view
+    //
 
     if ( _rpmGroupTagsFilterView && _pkgList )
     {
@@ -431,6 +441,10 @@ YQPackageSelector::makeConnections()
     }
 
 
+    //
+    // Connect selections view
+    //
+    
     if ( _selList && _pkgList )
     {
 	connect( _selList,	SIGNAL( filterStart() 	),
@@ -443,6 +457,26 @@ YQPackageSelector::makeConnections()
 		 _pkgList, 	SLOT  ( selectSomething() ) );
 
 	connect( _selList, 	SIGNAL( updatePackages()      ),
+		 _pkgList, 	SLOT  ( updateToplevelItemStates() ) );
+    }
+
+
+    //
+    // Connect YOU patches view
+    //
+    
+    if ( _youPatchList && _pkgList )
+    {
+	connect( _youPatchList,	SIGNAL( filterStart() 	),
+		 _pkgList, 	SLOT  ( clear() 	) );
+
+	connect( _youPatchList,	SIGNAL( filterMatch( PMPackagePtr ) ),
+		 _pkgList, 	SLOT  ( addPkgItem ( PMPackagePtr ) ) );
+
+	connect( _youPatchList,	SIGNAL( filterFinished()  ),
+		 _pkgList, 	SLOT  ( selectSomething() ) );
+
+	connect( _youPatchList,	SIGNAL( updatePackages()      ),
 		 _pkgList, 	SLOT  ( updateToplevelItemStates() ) );
     }
 }
