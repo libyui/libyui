@@ -43,6 +43,9 @@ YQLogView::YQLogView( QWidget * 		parent,
     _qt_label = new QLabel( fromUTF8( label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
     _qt_label->setFont( YQUI::ui()->currentFont() );
+    
+    if ( label->value() == "" )
+	_qt_label->hide();
 
     _qt_text = new QMultiLineEdit( this );
     _qt_text->setFont( YQUI::ui()->currentFont() );
