@@ -326,13 +326,17 @@ YQPkgListItem::toolTip( int col )
 
 	if ( _pmObj->hasInstalledObj() )
 	{
-	    installed = _pmObj->getInstalledObj()->edition().asString().c_str();
-	    installed = _( "Installed version: %1" ).arg( installed );
+	    installed  = _pmObj->getInstalledObj()->edition().asString().c_str();
+	    installed += "-";
+	    installed +=  _pmObj->getInstalledObj()->arch().asString().c_str();
+	    installed  = _( "Installed version: %1" ).arg( installed );
 	}
 	
 	if (  _pmObj->hasCandidateObj() )
 	{
-	    candidate = _pmObj->getCandidateObj()->edition().asString().c_str();
+	    candidate  = _pmObj->getCandidateObj()->edition().asString().c_str();
+	    candidate += "-";
+	    candidate +=  _pmObj->getCandidateObj()->arch().asString().c_str();
 	}
 	
 	if ( _pmObj->hasInstalledObj() )
