@@ -11,7 +11,7 @@ dnl
 dnl AC_MIN_QT_VERSION(numeric-qt-version, text_qt_version)
 dnl Checks for Qt version as specified or higher
 dnl
-AC_DEFUN(AC_MIN_QT_VERSION,
+AC_DEFUN([AC_MIN_QT_VERSION],
 [
 AC_MSG_CHECKING([for Qt $2 or higher])
 save_CFLAGS="$CFLAGS"
