@@ -264,6 +264,7 @@ YQUI::~YQUI()
 }
 
 
+
 void YQUI::calcDefaultSize()
 {
     QSize primaryScreenSize 	= qApp->desktop()->screenGeometry( qApp->desktop()->primaryScreen() ).size();
