@@ -130,7 +130,8 @@ YQPkgVersionsView::showDetails( PMObjectPtr pmObj )
     {
 	new YQPkgVersion( this, root, *it, _userCanSwitch );
 
-	if ( *it == pmObj->getInstalledObj() )
+	if ( pmObj->getInstalledObj() &&
+	     pmObj->getInstalledObj()->edition() == (*it)->edition() )
 	    installedIsAvailable = true;
 	     
 #if 0

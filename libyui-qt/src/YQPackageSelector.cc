@@ -199,7 +199,7 @@ YQPackageSelector::layoutLeftPane( QWidget * parent )
     QVBox * vbox = new QVBox( splitter );
     layoutFilters( vbox );
     addVSpacing( vbox, MARGIN );
-    
+
     layoutDiskSpaceSummary( splitter );
 }
 
@@ -361,7 +361,7 @@ YQPackageSelector::layoutRightPane( QWidget * parent )
     QVBox * vbox = new QVBox( splitter );
     layoutPkgList( vbox );
     addVSpacing( vbox, MARGIN );
-    
+
     layoutDetailsViews( splitter );
 }
 
@@ -528,7 +528,7 @@ void
 YQPackageSelector::addMenus()
 {
     //
-    // File
+    // File menu
     //
 
     _fileMenu = new QPopupMenu( _menuBar );
@@ -540,7 +540,7 @@ YQPackageSelector::addMenus()
 	_fileMenu->insertItem( _( "Export &Package List" ), _pkgList, SLOT( askExportList() ) );
 	_fileMenu->insertSeparator();
     }
-    
+
     _fileMenu->insertItem( _( "E&xit - Discard Changes" ), this, SLOT( reject() ) );
     _fileMenu->insertItem( _( "&Quit - Save Changes"    ), this, SLOT( accept() ) );
 
@@ -548,7 +548,7 @@ YQPackageSelector::addMenus()
     if ( _pkgList )
     {
 	//
-	// Package
+	// Package menu
 	//
 
 	_pkgMenu = new QPopupMenu( _menuBar );
@@ -561,12 +561,12 @@ YQPackageSelector::addMenus()
 	_pkgList->actionSetCurrentDelete->addTo( _pkgMenu );
 	_pkgList->actionSetCurrentUpdate->addTo( _pkgMenu );
 	_pkgList->actionSetCurrentTaboo->addTo( _pkgMenu );
-	
+
 	_pkgMenu->insertSeparator();
-	
+
 	_pkgList->actionInstallSourceRpm->addTo( _pkgMenu );
 	_pkgList->actionDontInstallSourceRpm->addTo( _pkgMenu );
-	
+
 	_pkgMenu->insertSeparator();
         QPopupMenu * submenu = _pkgList->addAllInListSubMenu( _pkgMenu );
 	CHECK_PTR( submenu );
@@ -578,7 +578,7 @@ YQPackageSelector::addMenus()
 
 
     //
-    // Help
+    // Help menu
     //
 
     _helpMenu = new QPopupMenu( _menuBar );
@@ -587,8 +587,8 @@ YQPackageSelector::addMenus()
     _menuBar->insertItem( _( "&Help" ), _helpMenu );
 
     _helpMenu->insertItem( _( "&Overview" 	), this, SLOT( help() ), Key_F1 );
-    _helpMenu->insertItem( _( "&Symbols" 	),  this, SLOT( help() ) );	// TODO
-    _helpMenu->insertItem( _( "&Keys" 		),  this, SLOT( help() ) );	// TODO
+    _helpMenu->insertItem( _( "&Symbols" 	), this, SLOT( help() ) );	// TODO
+    _helpMenu->insertItem( _( "&Keys" 		), this, SLOT( help() ) );	// TODO
 }
 
 
