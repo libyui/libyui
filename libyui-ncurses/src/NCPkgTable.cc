@@ -416,55 +416,55 @@ void NCPkgTable::fillHeader( )
 	    if ( installedPkgs > 0 )
 	    {
 		header.reserve(7);
-		header.push_back( PkgNames::PkgStatus().str() );
-		header.push_back( PkgNames::PkgName().str() );
-		header.push_back( PkgNames::PkgVersionNew().str() );
-		header.push_back( PkgNames::PkgVersionInst().str() );
-		header.push_back( PkgNames::PkgSummary().str() );
-		header.push_back( PkgNames::PkgSize().str() );
+		header.push_back( "L" + PkgNames::PkgStatus().str() );
+		header.push_back( "L" + PkgNames::PkgName().str() );
+		header.push_back( "L" + PkgNames::PkgVersionNew().str() );
+		header.push_back( "L" + PkgNames::PkgVersionInst().str() );
+		header.push_back( "L" + PkgNames::PkgSummary().str() );
+		header.push_back( "L" + PkgNames::PkgSize().str() );
 	    }
 	    else
 	    {
 		header.reserve(6);
-		header.push_back( PkgNames::PkgStatus().str() );
-		header.push_back( PkgNames::PkgName().str() );
-		header.push_back( PkgNames::PkgVersion().str() );
-		header.push_back( PkgNames::PkgSummary().str() );
-		header.push_back( PkgNames::PkgSize().str() );	
+		header.push_back( "L" + PkgNames::PkgStatus().str() );
+		header.push_back( "L" + PkgNames::PkgName().str() );
+		header.push_back( "L" + PkgNames::PkgVersion().str() );
+		header.push_back( "L" + PkgNames::PkgSummary().str() );
+		header.push_back( "L" + PkgNames::PkgSize().str() );	
 	    }
 	    break;
 	}
 	case T_Patches: {
 	    header.reserve(6);
-	    header.push_back( PkgNames::PkgStatus().str() );
-	    header.push_back( PkgNames::PkgName().str() );
-	    header.push_back( PkgNames::PatchKind().str() );
-	    header.push_back( PkgNames::PkgSummary().str() );
-	    header.push_back( PkgNames::PkgSize().str() );
+	    header.push_back( "L" + PkgNames::PkgStatus().str() );
+	    header.push_back( "L" + PkgNames::PkgName().str() );
+	    header.push_back( "L" + PkgNames::PatchKind().str() );
+	    header.push_back( "L" + PkgNames::PkgSummary().str() );
+	    header.push_back( "L" + PkgNames::PkgSize().str() );
 	    break;
 	}
 	case T_Dependency: {
 	    header.reserve(6);
-	    header.push_back( PkgNames::PkgStatus().str() );
-	    header.push_back( PkgNames::PackageName().str() );
-	    header.push_back( PkgNames::DepsKind().str() );
-	    header.push_back( PkgNames::Comment().str() );
+	    header.push_back( "L" + PkgNames::PkgStatus().str() );
+	    header.push_back( "L" + PkgNames::PackageName().str() );
+	    header.push_back( "L" + PkgNames::DepsKind().str() );
+	    header.push_back( "L" + PkgNames::Comment().str() );
 	    break;
 	}
 	case T_SelDependency: {
 	    header.reserve(6);
-	    header.push_back( PkgNames::PkgStatus().str() );
-	    header.push_back( PkgNames::SelectionName().str() );
-	    header.push_back( PkgNames::DepsKind().str() );	
+	    header.push_back( "L" + PkgNames::PkgStatus().str() );
+	    header.push_back( "L" + PkgNames::SelectionName().str() );
+	    header.push_back( "L" + PkgNames::DepsKind().str() );	
 	    break;
 	}    
 	default: {
 	    header.reserve(5);
-	    header.push_back( PkgNames::PkgStatus().str() );
-	    header.push_back( PkgNames::PkgName().str() );
-	    header.push_back( PkgNames::PkgVersion().str() );
-	    header.push_back( PkgNames::PkgSummary().str() );
-	    header.push_back( PkgNames::PkgSize().str() );
+	    header.push_back( "L" + PkgNames::PkgStatus().str() );
+	    header.push_back( "L" + PkgNames::PkgName().str() );
+	    header.push_back( "L" + PkgNames::PkgVersion().str() );
+	    header.push_back( "L" + PkgNames::PkgSummary().str() );
+	    header.push_back( "L" + PkgNames::PkgSize().str() );
 	    break;
 	}
     }

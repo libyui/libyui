@@ -90,10 +90,10 @@ void NCPopupDiskspace::createLayout( const YCPString & headline )
 
     vector<string> header;
     header.reserve(5);
-    header.push_back( PkgNames::Partition().str() );
-    header.push_back( PkgNames::UsedSpace().str() );
-    header.push_back( PkgNames::FreeSpace().str() );
-    header.push_back( PkgNames::TotalSpace().str() );
+    header.push_back( "L" + PkgNames::Partition().str() );
+    header.push_back( "L" +  PkgNames::UsedSpace().str() );
+    header.push_back( "L" + PkgNames::FreeSpace().str() );
+    header.push_back( "L" + PkgNames::TotalSpace().str() );
     header.push_back( "%   ");
     
     // add the partition table 
