@@ -21,6 +21,8 @@
 #include "NCTable.h"
 
 #include "PackageSelector.h"
+#include <y2pm/PMSelectable.h>
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -63,28 +65,60 @@ string NCPkgTableTag::statusToStr( NCPkgStatus stat ) const
      // convert NCPkgStatus to string
     switch ( stat )
     {
-	case PkgNoInstall:	// PkgNoInst Is not installed and will not be installed
+	case PkgNoInstall:	// Is not installed and will not be installed
 	    return " ";
-	case PkgInstalled: 	// PkgKeepInstalled Is installed - keep this version
+	case PkgInstalled: 	// Is installed - keep this version
 	    return "i";
-	case PkgToInstall:	// PkgInstall ??Is?? or will be installed
+	case PkgToInstall:	// ??Is?? or will be installed
 	    return "X";
-	case PkgToDelete:	// PkgDel    Will be deleted
+	case PkgToDelete:	// Will be deleted
 	    return "d";
-	case PkgToUpdate:	// PkgUpdate Will be updated
+	case PkgToUpdate:	// Will be updated
 	    return "u";
 	case PkgToReplace:	// ?????????
 	    return "X";
-	case PkgAutoInstall:	// PkgAuto   Will be automatically installed
+	case PkgAutoInstall:	// Will be automatically installed
 	    return "a";
-	case PkgAutoDelete:	// -------------
-	    return "-";
-	case PkgTaboo:		// PkgTaboo  Never install this 
+	case PkgTaboo:		// Never install this 
 	    return "#";
     }
 
     return " ";
 }
+
+// convert NCPkgStatus to UI_Status
+PMSelectable::UI_Status NCPkgTable::statusToUIStat( NCPkgStatus stat )
+{
+
+    map<NCPkgStatus, PMSelectable::UI_Status>::iterator it = statusMap.find( stat );
+
+    if ( it != statusMap.end() )
+    {
+	return (*it).second;
+    }
+
+    return PMSelectable::S_NoInst;
+}
+
+// convert UI_Status to NCPkgStatus
+NCPkgStatus NCPkgTable::statusToPkgStat( PMSelectable::UI_Status stat )
+{
+    NCPkgStatus pkgStat = PkgNoInstall;
+    
+    map<NCPkgStatus, PMSelectable::UI_Status>::iterator it = statusMap.begin();
+
+    while ( it != statusMap.end() )
+    {
+	if ( (*it).second == stat )
+	{
+	    pkgStat = (*it).first;
+	}
+	++it;
+    }
+
+    return pkgStat;
+}
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -98,7 +132,15 @@ NCPkgTable::NCPkgTable( NCWidget * parent, YWidgetOpt & opt )
     : NCTable( parent, opt, vector<string> () )
       , packager ( 0 )
 {
-  WIDDBG << endl;
+    statusMap[PkgNoInstall] = PMSelectable::S_NoInst;
+    statusMap[PkgInstalled] = PMSelectable:: S_KeepInstalled;
+    statusMap[PkgToInstall] = PMSelectable::S_Install;
+    statusMap[PkgToDelete] = PMSelectable:: S_Del;
+    statusMap[PkgToUpdate] = PMSelectable::S_Update;
+    statusMap[PkgToReplace] = PMSelectable::S_Install;
+    statusMap[PkgTaboo] = PMSelectable::F_Taboo;
+    
+    WIDDBG << endl;
 }
 
 
@@ -180,25 +222,51 @@ bool NCPkgTable::changeStatus( int index, NCPkgStatus newstatus )
 {
     bool ok = false;
 
-    // get the table line 
-    NCTableLine * cl = pad->ModifyLine( index );
-    if ( !cl )
-	return false;
-    
-    // get first column (the column containing the status info)
-    NCPkgTableTag * cc = static_cast<NCPkgTableTag *>( cl->GetCol( 0 ) );
-    
-    // set new status
-    cc->setStatus( newstatus );
-    // redraw the table
-    DrawPad();
-
     // inform the package manager
-    ok = packager->setPackageStatus( index, newstatus );
+    ok = setPackageStatus( getDataPointer(index), statusToUIStat( newstatus ) );
+
+    if ( ok )
+    {
+	// get the table line 
+	NCTableLine * cl = pad->ModifyLine( index );
+	if ( !cl )
+	    return false;
+    
+	// get first column (the column containing the status info)
+	NCPkgTableTag * cc = static_cast<NCPkgTableTag *>( cl->GetCol( 0 ) );
+    
+	// set new status
+	cc->setStatus( newstatus );
+	// redraw the table
+	DrawPad();
+
+    }
 
     return ok;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPkgTable::setPackageStatus
+//	METHOD TYPE : bool
+//
+//	DESCRIPTION : informs the package manager
+//
+bool NCPkgTable::setPackageStatus( PMObjectPtr pkgPtr, PMSelectable::UI_Status newstatus )
+{
+    bool ok = false;
+
+    if ( !pkgPtr || !pkgPtr->hasSelectable() )
+    {
+	return false;
+    }
+
+    ok = pkgPtr->getSelectable()->set_status( newstatus );
+    NCMIL << "Set status to: " << newstatus << " returns: " << (ok?"true":"false") << endl;
+    
+    return ok;
+}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -373,10 +441,8 @@ bool NCPkgTable::toggleStatus( PMPackagePtr pkgPtr )
 	    newStatus = PkgToInstall;
 	    break;
 	case PkgAutoInstall:
+	    // FIXME show a warning !!!!
 	    newStatus = PkgNoInstall;
-	    break;
-	case PkgAutoDelete:
-	    newStatus = PkgInstalled;
 	    break;
 	case PkgTaboo:
 	    newStatus = PkgTaboo;
@@ -488,13 +554,8 @@ bool NCPkgTable::setNewStatus( const NCPkgStatus & newStatus  )
 	    }
 	    break;
  	case PkgAutoInstall:
+	    // FIXME show a warning !!!!!
 	    if ( newStatus == PkgNoInstall )
-	    {
-		valid = true;
-	    }
-	    break;
-	case PkgAutoDelete:
-	    if ( newStatus == PkgInstalled )
 	    {
 		valid = true;
 	    }

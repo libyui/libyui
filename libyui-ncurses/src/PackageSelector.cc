@@ -853,19 +853,6 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 
 ///////////////////////////////////////////////////////////////////
 //
-// setPackageStatus
-//
-// Informs the package manager about status change
-//
-bool PackageSelector::setPackageStatus ( int index, int key )
-{
-
-    // FIXME: get the package handle and inform the package manager
-    return true;
-}
-
-///////////////////////////////////////////////////////////////////
-//
 // createDescrText
 //
 string PackageSelector::createDescrText( list<string> value )

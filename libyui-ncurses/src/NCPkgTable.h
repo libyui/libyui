@@ -33,21 +33,20 @@
 #include <Y2PM.h>
 #include <y2pm/RpmDb.h>
 #include <y2pm/PMManager.h>
+#include <y2pm/PMSelectable.h>
 
 class PackageSelector;
 
-
 enum NCPkgStatus
 {
-    PkgNoInstall,
-    PkgInstalled,
-    PkgToInstall,
-    PkgToDelete,
-    PkgToUpdate,
-    PkgToReplace,
-    PkgAutoInstall,
-    PkgAutoDelete,
-    PkgTaboo
+    PkgToDelete,	// S_Del: delete installedObj
+    PkgToInstall,	// S_Install: install candidateObj ( have no installedObj )
+    PkgToUpdate,	// S_Update: install candidateObj ( have installedObj )
+    PkgNoInstall,	// S_NoInst: is not/will not installed - no modification ( have no installedObj )
+    PkgInstalled,	// S_KeepInstalled: keep this version - no modification ( have installedObj )
+    PkgAutoInstall,	// S_Auto: automatically installed - like S_Install, but not requested by user
+    PkgTaboo,		// F_Taboo: Never install this
+    PkgToReplace	// 
 };
 
 /**
@@ -87,9 +86,8 @@ class NCPkgTableTag : public NCTableCol {
 /**
  * The package table class. Provides methods to fill the table,
  * set the status info and so on.
- * Has a connection to the PackageSelector which is used to
- * inform the package manager about status changes, to get
- * data from the manager ...
+ * Has a connection to the PackageSelector which is used to do
+ * changes which affect other widgets.
  *
  **/
 class NCPkgTable : public NCTable {
@@ -104,6 +102,8 @@ private:
 
     // returns the first column of line with 'index' (the tag)
     NCPkgTableTag * getTag ( const int & index );
+
+    std::map<NCPkgStatus, PMSelectable::UI_Status> statusMap;
     
 protected:
 
@@ -186,6 +186,28 @@ public:
      */ 
     bool setNewStatus( const NCPkgStatus & pkgStat );
 
+   /**
+     * Informs the package manager.
+     * @param pkgPtr  The package pointer
+     * @param newStatus The new package status
+     * @return bool
+     */ 
+    bool setPackageStatus( PMObjectPtr pkgPtr, PMSelectable::UI_Status newstatus );
+
+   /**
+     * Returns the UI status to given internal package status.
+     * @param stat The NCPkgStatus
+     * @return UI_Status
+     */ 
+    PMSelectable::UI_Status statusToUIStat( NCPkgStatus stat );
+
+   /**
+     * Returns the internal used status to given UI status.
+     * @param stat The UI status
+     * @return NCPkgStatus
+     */ 
+    NCPkgStatus statusToPkgStat( PMSelectable::UI_Status stat );
+    
     /**
      * Gets the package status of a certain package.
      * @param index The index in package table (the line)

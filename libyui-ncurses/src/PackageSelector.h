@@ -224,15 +224,6 @@ class PackageSelector
     */
     bool showPackageInformation ( PMObjectPtr pkgPtr );
 
-    /**
-    * Informs the package manager about the status change of the selected package
-    * (	called from NCPkgTable )
-    * @param index Index (position) of the package in the package table
-    * @param status The new status of the package
-    * @return bool
-    */
-    bool setPackageStatus( int index, int status );
-
    /**
     * Sets the member variable to the currently visible information
     * @param info
