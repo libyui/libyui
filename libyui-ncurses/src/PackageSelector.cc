@@ -28,6 +28,7 @@
 #include "NCSelectionBox.h"
 #include "NCPopupTree.h"
 #include "NCPopupSelection.h"
+#include "NCPopupDeps.h"
 #include "PackageSelector.h"
 #include "YSelectionBox.h"
 
@@ -47,7 +48,7 @@
 
 using namespace std;
 
-#define FAKE_INST_SRC 1
+#define FAKE_INST_SRC 0
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -72,8 +73,10 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
       , packageList( 0 )
       , visibleInfo( YCPNull() )
       , filterPopup( 0 )
+      , depsPopup( 0 )
       , selectionPopup( 0 )
       , youMode( false )
+      , updateMode( false )
 {
     // Fill the handler map
     eventHandlerMap[ PkgNames::Packages()->toString() ]	= &PackageSelector::PackageListHandler;
@@ -81,7 +84,6 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     eventHandlerMap[ PkgNames::OkButton()->toString() ]	= &PackageSelector::OkButtonHandler;
     eventHandlerMap[ PkgNames::Search()->toString() ] 	= &PackageSelector::SearchHandler;
     eventHandlerMap[ PkgNames::Diskspace()->toString() ] = &PackageSelector::DiskspaceHandler;
-    eventHandlerMap[ PkgNames::Diskinfo()->toString() ]	= &PackageSelector::DiskinfoHandler;
     // Filter menu
     eventHandlerMap[ PkgNames::RpmGroups()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::Selections()->toString() ] = &PackageSelector::FilterHandler;
@@ -90,7 +92,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     eventHandlerMap[ PkgNames::PkgInfo()->toString() ] 	= &PackageSelector::InformationHandler;
     eventHandlerMap[ PkgNames::LongDescr()->toString() ]= &PackageSelector::InformationHandler;
     eventHandlerMap[ PkgNames::Versions()->toString() ] = &PackageSelector::InformationHandler;
-    eventHandlerMap[ PkgNames::RequRel()->toString() ] = &PackageSelector::InformationHandler;
+    eventHandlerMap[ PkgNames::Relations()->toString() ] = &PackageSelector::InformationHandler;
     // Action menu
     eventHandlerMap[ PkgNames::Toggle()->toString() ] 	= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::Select()->toString() ] 	= &PackageSelector::StatusHandler;
@@ -101,14 +103,19 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     eventHandlerMap[ PkgNames::Installed()->toString() ]= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::Taboo()->toString() ]	= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::ToggleSource()->toString() ] = &PackageSelector::StatusHandler;
+    // Etc. menu
+    eventHandlerMap[ PkgNames::ShowDeps()->toString() ] = &PackageSelector::DependencyHandler;
     // help menu
     eventHandlerMap[ PkgNames::GeneralHelp()->toString() ] = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::StatusHelp()->toString() ]  = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::FilterHelp()->toString() ]  = &PackageSelector::HelpHandler;
     // FIXME: add handler for all `id s
 
-    if ( opt.notifyMode.defined() )
+    if ( opt.youMode.value() )
 	youMode = true;
+
+    if ( opt.updateMode.value() )
+	updateMode = true;
     
     if ( !youMode )
     {
@@ -139,10 +146,8 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
 					       this );
     }
 
-
+    depsPopup = new NCPopupDeps( wpos( 1, 1 ) );
     
-    NCstring text( "This is a development version of the NCurses single package selection, included in this Beta as a kind of demo.<br>Some things work, some don't, some work but are still really slow. You can view some package data, but setting a package status does not have any effect yet. As of now, all bug reports for this thing will be routed to /dev/null.<br>We are working heavily on it, so if you want to contribute, the easiest thing you can do right now is not swamp us with bugzilla reports, but let us work in the remaining time.<br> Thank you.<br> -gs" );
-
     //NCPopupInfo info( wpos( 5, 5 ), YCPString( "Warning" ), text.YCPstr() );
     //info.setNiceSize( 50, 20 );
     //info.showInfoPopup( );
@@ -164,6 +169,10 @@ PackageSelector::~PackageSelector()
     if ( selectionPopup )
     {
 	delete selectionPopup;
+    }
+    if ( depsPopup )
+    {
+	delete depsPopup;	
     }
 }
 
@@ -559,7 +568,7 @@ bool PackageSelector::check( PMPackagePtr pkg,
 
     if ( pkg->group_ptr() == 0 )
     {
-	y2error( "NULL pointer in group_ptr()!" );
+	NCERR <<  "NULL pointer in group_ptr()!" << endl;
 	return false;
     }
 
@@ -738,6 +747,21 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
     packageList->setKeyboardFocus();
     
     UIMIL << "Change package info to: " << visibleInfo->toString() << endl;
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// Dependency Handler
+//
+//
+bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
+{
+    if ( depsPopup )
+    {
+	depsPopup->showDependencyPopup();
+    }
+
     return true;
 }
 
@@ -1002,15 +1026,19 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
     }
     else if (  visibleInfo->compare( PkgNames::Files() ) == YO_EQUAL )
     {
-	// get the file list from the package manager/show the list
-	list<string> fileList = ((PMPackagePtr)pkgPtr)->filenames();
-	
-	// get the widget id 
-	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );  
-	if ( descrInfo  )
+	PMPackagePtr package = pkgPtr;
+	if ( package )
 	{
-	    NCMIL <<  "Size of the file list: " << fileList.size() << endl;
-	    static_cast<NCRichText *>(descrInfo)->setText( YCPString(createText(fileList, false)) );
+	    // get the file list from the package manager/show the list
+	    list<string> fileList = package->filenames();
+	
+	    // get the widget id 
+	    YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );  
+	    if ( descrInfo  )
+	    {
+		NCMIL <<  "Size of the file list: " << fileList.size() << endl;
+		static_cast<NCRichText *>(descrInfo)->setText( YCPString(createText(fileList, false)) );
+	    }
 	}
     }
     else if ( visibleInfo->compare( PkgNames::PkgInfo() ) == YO_EQUAL )
@@ -1063,9 +1091,12 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 
 	// show the authors
 	text += NCstring( PkgNames::Authors() );
-	list<string> authors = ((PMPackagePtr)pkgPtr)->authors(); // PMPackage	
-	text += NCstring( createText( authors, true ) );
-	
+	PMPackagePtr package = pkgPtr;
+	if ( package )
+	{
+	    list<string> authors = package->authors(); // PMPackage	
+	    text += NCstring( createText( authors, true ) );
+	}
         // show the description	
 	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
 	
@@ -1087,7 +1118,7 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	    fillAvailableList( pkgAvail, pkgPtr );
 	}
     }
-    else if (  visibleInfo->compare( PkgNames::RequRel() ) == YO_EQUAL )
+    else if (  visibleInfo->compare( PkgNames::Relations() ) == YO_EQUAL )
     {
 	NCstring text ( "" );
 	list<PkgRelation> relations;

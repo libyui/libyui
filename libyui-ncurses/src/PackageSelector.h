@@ -41,6 +41,8 @@ class PMSelectionPtr;
 class PMPackagePtr;
 class PMYouPatchPtr;
 class LangCode;
+class NCPopupDeps;
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -73,10 +75,13 @@ class PackageSelector
     YCPValue visibleInfo;		// visible package info (description, file list, ...)
 
     NCPopupTree * filterPopup;		// the rpm group tags popup
+
+    NCPopupDeps * depsPopup;		// the dependeny popup
     
     NCPopupSelection * selectionPopup; 	// the selections popup
 
     bool youMode;			// YOU
+    bool updateMode;			// Update
     
     // internal helper functions (format list of string) 
     string createRelLine( list<PkgRelation> info );
@@ -165,6 +170,13 @@ class PackageSelector
     */
     bool SearchHandler ( const NCursesEvent& event );
 
+    /**
+    * Handler function for menu selection "Etc./Check dependencies"
+    * @param event The Ncurses event
+    * @return bool
+    */
+    bool DependencyHandler( const NCursesEvent&  event );
+    
     /**
      * Handler function for the "Information" menu
      * @param event The Ncurses event
