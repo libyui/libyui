@@ -170,7 +170,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt, string flo
     if ( opt.updateMode.value() )
 	updateMode = true;
 
-    // NCMIL << "Number of packages: " << Y2PM::packageManager().size() << endl;
+    NCDBG << "Number of packages: " << Y2PM::packageManager().size() << endl;
 
     // read test source information
     if ( opt.testMode.value() )
@@ -366,7 +366,7 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
     
     // get the selectable
     PMSelectablePtr selectable = pkgPtr->getSelectable();
-    NCMIL << "Number of available packages: " << selectable->availableObjs() << endl;
+    NCDBG << "Number of available packages: " << selectable->availableObjs() << endl;
     
     std::list<PMObjectPtr>::const_iterator it = selectable->av_begin();
 
@@ -425,7 +425,7 @@ bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr 
     
     if ( !label.isNull() )
     {
-	NCMIL << "Filter: " << label->toString() << endl;
+	NCDBG << "Filter: " << label->toString() << endl;
 
         // show the selected filter label
 	YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
@@ -555,7 +555,8 @@ bool PackageSelector::fillPatchList( string filter )
 	checkPatch( patchPtr, filter );
     }
 
-    if ( packageList->getNumLines() == 0 )
+    if ( filter == "installable"
+	 && packageList->getNumLines() == 0 )
     {
 	packageList->createInfoEntry( PkgNames::UpToDate() );	
     }
@@ -580,7 +581,6 @@ bool PackageSelector::fillPatchList( string filter )
 	    static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::Patches()) );  
 	}
     }
-    showPatchInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );
     
     return true;
 }
@@ -648,7 +648,7 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, PMObjectPtr obj
     list<PMPackagePtr>::const_iterator listIt;
     list<PMYouFile>::const_iterator fileIt;
     
-    NCMIL << "Number of patch packages: " << packages.size() << endl;
+    NCDBG << "Number of patch packages: " << packages.size() << endl;
 	
     for ( listIt = packages.begin(); listIt != packages.end();  ++listIt )    
     {
@@ -842,8 +842,6 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
     
     if ( !label.isNull() )
     {
-	NCMIL <<  "Label: " <<  label->toString() << endl;
-
 	// show the selected filter label
 	YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
 	if ( filterLabel )
@@ -973,7 +971,7 @@ bool PackageSelector::SearchHandler( const NCursesEvent& event)
     if ( retEvent == NCursesEvent::button )
     {
 	NCMIL << "Searching for: " <<  (!retEvent.result.isNull()?retEvent.result->toString():"") << endl;
-	showPackageInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );
+	packageList->showInformation( );
     }
     else
     {
@@ -1071,7 +1069,7 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	
 	y2ui->evaluateReplaceWidget( layout->asTerm() );
     
-	showPackageInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );
+	packageList->showInformation( );
     }
 
     packageList->setKeyboardFocus();
@@ -1232,7 +1230,7 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 	fillSummaryList( NCPkgTable::L_Installed );
     }
     
-    showPackageInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );
+    packageList->showInformation();
     packageList->setKeyboardFocus();	
     
     // return true means: don't leave the event loop in runPkgSelection 
@@ -1378,7 +1376,7 @@ bool PackageSelector::LinkHandler ( string link )
 	pkgPtr = (*listIt)->theObject();
 	if ( pkgPtr->name().asString() == pkgName )
 	{
-	    NCMIL << "Package " << pkgName << " found" << endl;
+	    NCERR << "Package " << pkgName << " found" << endl;
 	    // open popup with package info
 	    NCPopupPkgDescr popupDescr( wpos(1,1), this );
 	    popupDescr.showInfoPopup( pkgPtr );
@@ -1773,7 +1771,7 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	NCERR << "Package not valid" << endl;
 	return false;
     }
-
+    
     if ( visibleInfo.isNull() )
     {
 	NCERR <<  "Visible package information NOT set" << endl;
@@ -1957,7 +1955,6 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	}
     }
  
-    
     NCDBG <<  "Showing package information: " << visibleInfo->toString() << endl;
     
     return true;

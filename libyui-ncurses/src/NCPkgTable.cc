@@ -465,12 +465,18 @@ void NCPkgTable::fillHeader( )
 	    break;
 	}
 	case T_SelDependency: {
-	    header.reserve(6);
+	    header.reserve(4);
 	    header.push_back( "L" + PkgNames::PkgStatus() );
 	    header.push_back( "L" + PkgNames::SelectionName() );
 	    header.push_back( "L" + PkgNames::DepsKind() );	
 	    break;
-	}    
+	}
+	case T_Selections:{
+	    header.reserve(3);
+	    header.push_back( "L" + PkgNames::PkgStatus() );
+	    header.push_back( "L" + PkgNames::SelectionName() );
+	    break;
+	}
 	default: {
 	    header.reserve(5);
 	    header.push_back( "L" + PkgNames::PkgStatus() );
@@ -646,6 +652,46 @@ bool NCPkgTable::createPatchEntry ( PMYouPatchPtr patchPtr )
 
 ///////////////////////////////////////////////////////////////////
 //
+// showInformation
+//
+//
+bool NCPkgTable::showInformation ( )
+{
+    PMObjectPtr objPtr = getDataPointer( getCurrentItem() );
+
+    if ( !packager )
+	return false;
+	    
+    switch ( tableType )
+    {
+	case T_Packages:
+	case T_Update:
+	    // show the required package info
+	    packager->showPackageInformation( objPtr );   
+	    break;
+	case T_Patches:
+	    // show the patch info
+	    packager->showPatchInformation( objPtr );
+	    break;
+	case T_Dependency:
+	    // show the dependencies of this package
+	    NCDBG << "GET current item line: " <<  getCurrentItem() << endl;
+	    packager->showConcretelyPkgDependency( getCurrentItem() );
+	    break;
+	case T_SelDependency:
+	    // show the dependencies of this selection
+	    NCDBG << "GET current item line: " <<  getCurrentItem() << endl;
+	    packager->showConcretelySelDependency( getCurrentItem() );
+	    break; 
+	default:
+	    break;
+    }
+    
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////
+//
 //
 //	METHOD NAME : NCPkgTable::wHandleInput
 //	METHOD TYPE : NCursesEvent
@@ -659,46 +705,16 @@ NCursesEvent NCPkgTable::wHandleInput( wint_t key )
     // call handleInput of NCPad
     handleInput( key );
     
-    // get current item AFTER handleInput because it may have changed (ScrlUp/Down) 
-    int citem  = getCurrentItem();
-
     switch ( key )
     {
 	case KEY_UP:
 	case KEY_DOWN:
 	case KEY_NPAGE:
-	case KEY_PPAGE:  {
-	    
-	    PMObjectPtr objPtr = getDataPointer(citem);
-
-	    if ( !packager )
-		break;
-	    
-	    switch ( tableType )
-	    {
-		case T_Packages:
-		case T_Update:
-		    // show the required package info
-		    packager->showPackageInformation( objPtr );   
-		    break;
-		case T_Patches:
-		    // show the patch info
-		    packager->showPatchInformation( objPtr );
-		    break;
-		case T_Dependency:
-		    // show the dependencies of this package
-		    NCDBG << "GET current item line: " <<  getCurrentItem() << endl;
-		    packager->showConcretelyPkgDependency( getCurrentItem() );
-		    break;
-		case T_SelDependency:
-		    // show the dependencies of this selection
-		    NCDBG << "GET current item line: " <<  getCurrentItem() << endl;
-		    packager->showConcretelySelDependency( getCurrentItem() );
-		    break; 
-		default:
-		    break;
-	    }
-	    
+	case KEY_PPAGE:
+	case KEY_END:
+	case KEY_HOME: {
+	    // show the corresponding information
+	    showInformation( );
 	    ret = NCursesEvent::handled;
 	    break;
 	}

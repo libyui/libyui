@@ -304,6 +304,12 @@ public:
     * @return bool
     */   
    bool createInfoEntry ( string text );
+
+   /**
+    * Show the corresponding information (e.g. the package description).
+    * @return bool
+    */     
+   bool showInformation ( );
 };
 
 ///////////////////////////////////////////////////////////////////
