@@ -1377,7 +1377,7 @@ bool PackageSelector::CancelHandler( const NCursesEvent&  event )
     }
     else
     {
-	// restore manager states
+	// restore the package/patch/selection states
 	Y2PM::packageManager().RestoreState();
 	if ( youMode )
 	    Y2PM::youPatchManager().RestoreState();
@@ -1448,6 +1448,13 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 
     if ( closeDialog )
     {
+	// clear the saved states
+	Y2PM::packageManager().ClearSaveState();
+	if ( youMode )
+	    Y2PM::youPatchManager().ClearSaveState();
+	else
+	    Y2PM::selectionManager().ClearSaveState();
+
 	const_cast<NCursesEvent &>(event).result = YCPSymbol("accept", true); 
 	NCMIL <<  "OK button pressed - leaving package selection, starting installation" << endl;
 
