@@ -164,7 +164,7 @@ string NCPopupDiskspace::formatSpace( string space )
     //                  0123456789
     string diskSpace = "          ";
 
-    diskSpace.replace( 10-space.length(), 9, space );
+    diskSpace.replace( diskSpace.size()-space.length(), diskSpace.size()-1, space );
 
     return diskSpace;
 }

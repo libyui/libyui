@@ -1745,9 +1745,11 @@ void PackageSelector::showDiskSpace()
     
     // show pkg_diff instead of pkg_used because pkg_used contains the used disk space
     // of all partitions, i.e. all mounted partitions, too.
-    FSize totalSize = duMaster.pkg_diff();
+    //                  0123456789
+    string totalSize = "          ";
+    string diff = duMaster.pkg_diff().asString();
     
-    YCPString label( totalSize.asString() );
+    YCPString label( totalSize.replace( totalSize.size()-diff.length(), totalSize.size()-1, diff ) );
     
     // show the required diskspace
     YWidget * diskSpace = y2ui->widgetWithId( PkgNames::Diskspace(), true );
