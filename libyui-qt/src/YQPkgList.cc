@@ -290,8 +290,8 @@ YQPkgList::createActions()
 							QString::null,		// key
 							true );			// enabled
 
-    connect( actionSetCurrentProtected,	     	SIGNAL( activated() ), this, SLOT( setCurrentProtected()	  ) );
-    connect( actionSetListProtected,	     	SIGNAL( activated() ), this, SLOT( setListProtected()	  ) );
+    connect( actionSetCurrentProtected,	     	SIGNAL( activated() ), this, SLOT( setCurrentProtected()	    ) );
+    connect( actionSetListProtected,	     	SIGNAL( activated() ), this, SLOT( setListProtected()	            ) );
     
     connect( actionInstallSourceRpm,		SIGNAL( activated() ), this, SLOT( setInstallCurrentSourceRpm()	    ) );
     connect( actionDontInstallSourceRpm,	SIGNAL( activated() ), this, SLOT( setDontInstallCurrentSourceRpm() ) );

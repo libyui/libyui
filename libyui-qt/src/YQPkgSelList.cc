@@ -156,6 +156,7 @@ YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList * pkgSelList, PMSelectionPtr pk
 {
     QString text = fromUTF8( _pmSel->summary( Y2PM::getPreferredLocale() ) );
     text.replace( QRegExp( "Graphical Basis System" ), "Graphical Base System" );
+    text.replace( QRegExp( "Gnome" ), "GNOME" );
     setText( summaryCol(), text );
 
     setStatusIcon();

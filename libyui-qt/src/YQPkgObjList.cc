@@ -216,9 +216,9 @@ YQPkgObjList::statusText( PMSelectable::UI_Status status ) const
 	case PMSelectable::S_Del:		return _( "Delete"			);
 	case PMSelectable::S_Install:		return _( "Install"			);
 	case PMSelectable::S_KeepInstalled:	return _( "Keep"			);
-	case PMSelectable::S_NoInst:		return _( "Do not install"		);
-	case PMSelectable::S_Protected:		return _( "Protected -- do not modify"	);
-	case PMSelectable::S_Taboo:		return _( "Taboo -- never install"	);
+	case PMSelectable::S_NoInst:		return _( "Do Not Install"		);
+	case PMSelectable::S_Protected:		return _( "Protected -- Do Not Modify"	);
+	case PMSelectable::S_Taboo:		return _( "Taboo -- Never Install"	);
 	case PMSelectable::S_Update:		return _( "Update"			);
     }
 
