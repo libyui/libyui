@@ -22,21 +22,21 @@
 #include "YQSquash.h"
 
 YQSquash::YQSquash( QWidget * parent, YWidgetOpt & opt,
-		   bool hsquash, bool vsquash)
-    : QWidget( parent)
-    , YSquash( opt, hsquash, vsquash)
+		   bool hsquash, bool vsquash )
+    : QWidget( parent )
+    , YSquash( opt, hsquash, vsquash )
 {
     setWidgetRep( this );
 }
 
 
-void YQSquash::setEnabling( bool enabled)
+void YQSquash::setEnabling( bool enabled )
 {
     QWidget::setEnabled( enabled );
 }
 
 
-void YQSquash::setSize( long newWidth, long newHeight)
+void YQSquash::setSize( long newWidth, long newHeight )
 {
     resize( newWidth, newHeight );
     YSquash::setSize( newWidth, newHeight );

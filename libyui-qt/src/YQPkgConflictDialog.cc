@@ -53,8 +53,8 @@
 #define MARGIN			4	// around the widget
 
 
-// The busy dialog ( "Checking Dependencies") will only be shown if solving
-// ( on average) takes longer than this many seconds. The first one will be
+// The busy dialog ( "Checking Dependencies" ) will only be shown if solving
+// ( on average ) takes longer than this many seconds. The first one will be
 // shown in any case.
 
 #define SUPPRESS_BUSY_DIALOG_SECONDS	1.5
@@ -78,7 +78,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
     // "Dependency conflict" is already used as the conflict list header just
     // some pixels below that, so don't use this twice. This dialog title may
     // or may not be visible, depending on whether or not there is a window
-    // manager running ( and configured to show any dialog titles).
+    // manager running ( and configured to show any dialog titles ).
 
     setCaption( _( "Warning" ) );
 
@@ -86,7 +86,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
     setSizeGripEnabled( true );
 
 
-    // Layout for the dialog ( can't simply insert a QVbox)
+    // Layout for the dialog ( can't simply insert a QVbox )
 
     QVBoxLayout * layout = new QVBoxLayout( this, MARGIN, SPACING );
     CHECK_PTR( layout );
@@ -176,9 +176,9 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
     // Here comes a real nasty hack.
     //
     // The busy popup is needed to indicate that the application is ( you
-    // guessed right) busy. But as long as it is busy, it doesn't process X
+    // guessed right ) busy. But as long as it is busy, it doesn't process X
     // events, either, and I didn't manage to convince Qt to please paint this
-    // popup before the solver's calculations ( which take quite a while) start
+    // popup before the solver's calculations ( which take quite a while ) start
     // - all combinations of show(), repaint(), XSync(), XFlush(),
     // processEvents() etc. failed.
     //
@@ -189,9 +189,9 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
     // various events.
 
     // Create a pixmap. Make it large enough so it isn't replicated ( i.e. the
-    // text is displayed several times) if some window manager chooses not to
+    // text is displayed several times ) if some window manager chooses not to
     // honor the size hints ( KDM for example uses double the height we
-    // request).
+    // request ).
     
     QSize size = _busyPopup->sizeHint();
     QPixmap pixmap( 3 * size.width(), 3 * size.height() );
@@ -210,14 +210,14 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
 
     // If the application manages to render the true contents of the label we
     // just misused so badly, the real label will interfere with the background
-    // pixmap with ( maybe) a few pixels offset ( bug #25647). Fast or
+    // pixmap with ( maybe ) a few pixels offset ( bug #25647 ). Fast or
     // multiprocessor machines tend to have this problem.
     // So let's get rid of the label text and solely rely on the background
     // pixmap. 
     _busyPopup->setText( "" );
 
     // Make sure the newly emptied text doesn't cause the busy dialog to be
-    // resized to nil ( or a window manager dependent minimum size).
+    // resized to nil ( or a window manager dependent minimum size ).
     _busyPopup->setFixedSize( _busyPopup->size() );
 }
 
@@ -272,11 +272,11 @@ YQPkgConflictDialog::solveAndShowConflicts()
 	_busyPopup->show();
 	
 	// No _busyPopup->repaint() - that doesn't help anyway ( Qt doesn't do
-	// any actual painting until the window is mapped). We just rely on the
+	// any actual painting until the window is mapped ). We just rely on the
 	// background pixmap we provided in the constructor.
 	
         // Make sure show() gets processed - usually, a window manager catches
-        // the show() ( XMap) events, positions and maybe resizes the window and
+        // the show() ( XMap ) events, positions and maybe resizes the window and
         // only then sends off an event that makes the window appear. This
         // event needs to be processed.
 	qApp->processEvents();	
@@ -361,9 +361,9 @@ YQPkgConflictDialog::ignoreAll()
 				  "Only do this if you know exactly what you are doing!"
 				  ),
 			       _( "&Ignore Anyway" ), _( "&Cancel" ), "",
-			       1, // defaultButtonNumber ( from 0)
+			       1, // defaultButtonNumber ( from 0 )
 			       1 ) // escapeButtonNumber
-	     == 1 )	// Proceed upon button #0 ( OK)
+	     == 1 )	// Proceed upon button #0 ( OK )
 	    return;
     }
 

@@ -52,7 +52,7 @@ YQPkgTextDialog::YQPkgTextDialog( const QString & text, QWidget * parent )
     // Dialog title
     setCaption( _( "YaST2" ) );
 
-    // Layout for the dialog ( can't simply insert a QVBox)
+    // Layout for the dialog ( can't simply insert a QVBox )
 
     QVBoxLayout * layout = new QVBoxLayout( this, MARGIN, SPACING );
     CHECK_PTR( layout );
@@ -231,7 +231,7 @@ QString
 YQPkgTextDialog::htmlEscape( const QString & plainText )
 {
     QString html = plainText;
-    // y2debug( "Escaping '%s'", ( const char *) plainText );
+    // y2debug( "Escaping '%s'", ( const char * ) plainText );
 
     html.replace( QRegExp( "&" ), "&amp;" );
     html.replace( QRegExp( "<" ), "&lt;"  );

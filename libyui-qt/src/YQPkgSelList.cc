@@ -197,7 +197,7 @@ YQPkgSelListItem::compare( QListViewItem *	otherListViewItem,
 			   int			col,
 			   bool			ascending ) const
 {
-    YQPkgSelListItem * other = ( YQPkgSelListItem *) otherListViewItem;
+    YQPkgSelListItem * other = ( YQPkgSelListItem * ) otherListViewItem;
 
     if ( ! _pmSel || ! other || ! other->pmSel() )
 	return 0;

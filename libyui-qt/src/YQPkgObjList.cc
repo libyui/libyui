@@ -866,9 +866,9 @@ YQPkgObjListItem::toolTip( int col )
 
 		if ( bySelection() )
 		    // Translators: Additional hint what caused an auto-status
-		    tip += "\n" + _( "( by a software selection)" );
+		    tip += "\n" + _( "( by a software selection )" );
 		else
-		    tip += "\n" + _( "( by dependencies)" );
+		    tip += "\n" + _( "( by dependencies )" );
 
 		break;
 
@@ -924,8 +924,8 @@ YQPkgObjListItem::compare( QListViewItem *	otherListViewItem,
 	{
 	    // Sorting by version numbers doesn't make too much sense, so let's
 	    // sort by package relation:
-	    // - Installed newer than candidate ( red)
-	    // - Candidate newer than installed ( blue) - worthwhile updating
+	    // - Installed newer than candidate ( red )
+	    // - Candidate newer than installed ( blue ) - worthwhile updating
 	    // - Installed
 	    // - Not installed, but candidate available
 	    //

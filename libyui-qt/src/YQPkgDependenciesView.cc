@@ -90,9 +90,9 @@ YQPkgDependenciesView::simpleTable( PMPackagePtr pkg )
 	table(
 	       row( hcell( _( "Version:"	) )	+ cell( pkg->version() + "-" + pkg->release() ) ) +
 	       row( hcell( _( "Provides:"	) )	+ cell( pkg->provides()		) ) +
-	       row( hcell( _( "Requires:<br>( at run time)" ) )
+	       row( hcell( _( "Requires:<br>( at run time )" ) )
 							+ cell( pkg->requires()		) ) +
-	       row( hcell( _( "Prerequires:<br>( at installation time)"	) )
+	       row( hcell( _( "Prerequires:<br>( at installation time )"	) )
 							+ cell( pkg->prerequires()	) ) +
 	       row( hcell( _( "Obsoletes:"	) )	+ cell( pkg->obsoletes()	) ) +
 	       row( hcell( _( "Conflicts:"	) )	+ cell( pkg->conflicts()	) )
@@ -113,7 +113,7 @@ YQPkgDependenciesView::complexTable( PMPackagePtr installed, PMPackagePtr candid
 
     QString html = "<br>" +
 	table(
-	       row( hcell( QString( "") )	    + hcell( "<b>" + p1_header + "</b>"	    ) + hcell( "<b>" + p2_header + "</b>"     ) ) +
+	       row( hcell( QString( "" ) )	    + hcell( "<b>" + p1_header + "</b>"	    ) + hcell( "<b>" + p2_header + "</b>"     ) ) +
 
 	       row( hcell( _( "Version:"	) ) + cell( p1->version() + "-" + p1->release() ) + cell( p2->version() + "-" + p2->release() ) ) +
 	       row( hcell( _( "Provides:"	) ) + cell( p1->provides()			) + cell( p2->provides()		      ) ) +

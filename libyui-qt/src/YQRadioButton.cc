@@ -29,7 +29,7 @@
 
 
 // +----+----------------------------------+----+
-// |	|( o) RadioButtonlabel		   |	|
+// |	|( o ) RadioButtonlabel		   |	|
 // +----+----------------------------------+----+
 // <----> SPACING			   <---->
 
@@ -39,9 +39,9 @@
 YQRadioButton::YQRadioButton( QWidget * parent,
 			     YWidgetOpt & opt,
 			     YRadioButtonGroup * rbg,
-			     const YCPString & label, bool checked)
-    : QGroupBox( parent)
-    , YRadioButton( opt, label, rbg)
+			     const YCPString & label, bool checked )
+    : QGroupBox( parent )
+    , YRadioButton( opt, label, rbg )
 {
     setWidgetRep( this );
     setFrameStyle( NoFrame );
@@ -60,14 +60,14 @@ YQRadioButton::YQRadioButton( QWidget * parent,
 }
 
 
-long YQRadioButton::nicesize( YUIDimension dim)
+long YQRadioButton::nicesize( YUIDimension dim )
 {
-    if ( dim == YD_HORIZ) return 2 * SPACING + _qt_radiobutton->sizeHint().width();
+    if ( dim == YD_HORIZ ) return 2 * SPACING + _qt_radiobutton->sizeHint().width();
     else return _qt_radiobutton->sizeHint().height();
 }
 
 
-void YQRadioButton::setSize( long newWidth, long newHeight)
+void YQRadioButton::setSize( long newWidth, long newHeight )
 {
     _qt_radiobutton->resize( newWidth - 2*SPACING, newHeight );
     resize( newWidth, newHeight );
@@ -80,20 +80,20 @@ YCPBoolean YQRadioButton::getValue()
 }
 
 
-void YQRadioButton::setValue( const YCPBoolean & c)
+void YQRadioButton::setValue( const YCPBoolean & c )
 {
     _qt_radiobutton->setChecked( c->value() );
 }
 
 
-void YQRadioButton::setLabel( const YCPString & label)
+void YQRadioButton::setLabel( const YCPString & label )
 {
     _qt_radiobutton->setText( fromUTF8(label->value() ) );
     YRadioButton::setLabel( label );
 }
 
 
-void YQRadioButton::setEnabling( bool enabled)
+void YQRadioButton::setEnabling( bool enabled )
 {
     _qt_radiobutton->setEnabled( enabled );
 }
@@ -117,7 +117,7 @@ bool YQRadioButton::setKeyboardFocus()
 
 void YQRadioButton::changed( bool newState )
 {
-    if ( getNotify() && newState)
+    if ( getNotify() && newState )
 	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }
 

@@ -59,19 +59,19 @@ public:
     void closeEvent( QCloseEvent * ev );
 
     /**
-     * Returns the nice size of this dialog ( may depend on -geometry)
+     * Returns the nice size of this dialog ( may depend on -geometry )
      */
     long nicesize( YUIDimension dim );
 
     /**
-     * Returns the size of ( artificial) window manager decorations in
-     * the requested dimension ( YD_HORIZ or YD_VERT), depending on the
+     * Returns the size of ( artificial ) window manager decorations in
+     * the requested dimension ( YD_HORIZ or YD_VERT ), depending on the
      * value of YDialog::isDecorated().
      */
     long decorationWidth( YUIDimension dim );
 
     /**
-     * Return this dialog's ( first) default button or 0 if none
+     * Return this dialog's ( first ) default button or 0 if none
      **/
     YQPushButton * findDefaultButton();
 
@@ -133,7 +133,7 @@ public:
     void ensureOnlyOneDefaultButton();
     
     /**
-     * Activate ( i.e. click) this dialog's default button, if there is any.
+     * Activate ( i.e. click ) this dialog's default button, if there is any.
      * Issue a warning to the log file if 'warn' is true.
      **/
     bool activateDefaultButton( bool warn = true );

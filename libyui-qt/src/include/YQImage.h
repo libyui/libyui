@@ -78,7 +78,7 @@ private:
     
     bool zeroWidth;	// override nice width  with 0
     bool zeroHeight;	// override nice height with 0
-    bool tiled;		// tile image ( repeat endlessly)
+    bool tiled;		// tile image ( repeat endlessly )
     bool animated;	// animation, no static image
 
     int pixmapWidth;	// pixmap or movie width

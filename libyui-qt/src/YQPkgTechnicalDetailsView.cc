@@ -129,7 +129,7 @@ YQPkgTechnicalDetailsView::simpleTable( PMPackagePtr pkg )
 	       row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( pkg )		  ) ) +
 	       row( hcell( _( "License:"	) ) + cell( pkg->license()			  ) ) +
 	       row( hcell( _( "Installed Size:" ) ) + cell( pkg->size().form()			  ) ) +
-	       row( hcell( _youMode ? _( "Download Size:") : _( "Archive Size:" ) )
+	       row( hcell( _youMode ? _( "Download Size:" ) : _( "Archive Size:" ) )
 		                                    + cell( pkg->archivesize().form()	  	  ) ) +
 	       row( hcell( _( "Distribution:"	) ) + cell( pkg->distribution()			  ) ) +
 	       row( hcell( _( "Vendor:"		) ) + cell( pkg->vendor()			  ) ) +
@@ -159,7 +159,7 @@ YQPkgTechnicalDetailsView::complexTable( PMPackagePtr installed, PMPackagePtr ca
 
     QString html = "<br>" +
 	table(
-	       row( hcell( QString( "") )	    + hcell( "<b>" + p1_header + "</b>"	    ) + hcell( "<b>" + p2_header + "</b>"     ) ) +
+	       row( hcell( QString( "" ) )	    + hcell( "<b>" + p1_header + "</b>"	    ) + hcell( "<b>" + p2_header + "</b>"     ) ) +
 
 	       row( hcell( _( "Version:"	) ) + cell( p1->version() + "-" + p1->release() ) + cell( p2->version() + "-" + p2->release() ) ) +
 	       row( hcell( _( "Build Time:"	) ) + cell( p1->buildtime()			) + cell( p2->buildtime()		      ) ) +

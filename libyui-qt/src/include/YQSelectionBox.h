@@ -107,19 +107,19 @@ protected slots:
 
     /**
      * Tells the ui that an item has been selected.
-     * This is only relevant if `opt( `notify) is set.
+     * This is only relevant if `opt( `notify ) is set.
      */
     void slotSelected( int index );
 
     /**
      * Return after some millseconds delay - collect multiple events.
-     * This is only relevant if `opt( `notify) is set.
+     * This is only relevant if `opt( `notify ) is set.
      **/
     void returnDelayed();
     
     /**
      * Return immediately.
-     * This is only relevant if `opt( `notify) is set.
+     * This is only relevant if `opt( `notify ) is set.
      **/
     void returnImmediately();
 

@@ -32,7 +32,7 @@ YQDownloadProgress::YQDownloadProgress( QWidget *	parent,
 					YWidgetOpt &	opt,
 					const YCPString & label,
 					const YCPString & filename,
-					int 		expectedSize)
+					int 		expectedSize )
     : QVBox( parent )
     , YDownloadProgress( opt, label, filename, expectedSize )
 {
@@ -45,7 +45,7 @@ YQDownloadProgress::YQDownloadProgress( QWidget *	parent,
 
     _qt_progress = new QProgressBar( this );
     _qt_progress->setFont( YUIQt::ui()->currentFont() );
-    _qt_progress->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed) );
+    _qt_progress->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) );
 
     _qt_progress->setTotalSteps( expectedSize );
     _qt_progress->setProgress( currentFileSize() );
@@ -58,7 +58,7 @@ YQDownloadProgress::YQDownloadProgress( QWidget *	parent,
 }
 
 
-void YQDownloadProgress::setEnabling( bool enabled)
+void YQDownloadProgress::setEnabling( bool enabled )
 {
     _qt_progress->setEnabled( enabled );
 }
@@ -66,18 +66,18 @@ void YQDownloadProgress::setEnabling( bool enabled)
 
 long YQDownloadProgress::nicesize( YUIDimension dim )
 {
-    if ( dim == YD_HORIZ) return sizeHint().width();
+    if ( dim == YD_HORIZ ) return sizeHint().width();
     else			return sizeHint().height();
 }
 
 
-void YQDownloadProgress::setSize( long newWidth, long newHeight)
+void YQDownloadProgress::setSize( long newWidth, long newHeight )
 {
     resize( newWidth, newHeight );
 }
 
 
-void YQDownloadProgress::setLabel( const YCPString & label)
+void YQDownloadProgress::setLabel( const YCPString & label )
 {
     _qt_label->setText( fromUTF8( label->value() ) );
     YDownloadProgress::setLabel( label );
@@ -96,8 +96,8 @@ void YQDownloadProgress::pollFileSize()
 {
     long size = currentFileSize();
 
-    if ( size > ( long) expectedSize() )
-	size = ( long) expectedSize();
+    if ( size > ( long ) expectedSize() )
+	size = ( long ) expectedSize();
     _qt_progress->setProgress( size );
 }
 

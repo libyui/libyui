@@ -35,9 +35,9 @@
 
 
 YQImage::YQImage( QWidget * parent, YWidgetOpt & opt,
-		 YUIInterpreter::ImageType img)
-    : QLabel( parent)
-    , YImage( opt)
+		 YUIInterpreter::ImageType img )
+    : QLabel( parent )
+    , YImage( opt )
 {
     init( parent, opt );
     animated = false;
@@ -45,7 +45,7 @@ YQImage::YQImage( QWidget * parent, YWidgetOpt & opt,
     QPixmap pixmap;
     char * oem_logo;
     
-    switch ( img)
+    switch ( img )
     {
 	case YUIInterpreter::IT_SUSEHEADER:
 
@@ -63,12 +63,12 @@ YQImage::YQImage( QWidget * parent, YWidgetOpt & opt,
 	    
 	    if ( pixmap.isNull() )
 	    {	 
-		pixmap = QPixmap( ( const char **) yast2_xpm );	// use XPM data
+		pixmap = QPixmap( ( const char ** ) yast2_xpm );	// use XPM data
 	    }
 	    break;
 
 	case YUIInterpreter::IT_YAST2:
-	    pixmap = QPixmap( ( const char **) yast2_xpm );	// use XPM data
+	    pixmap = QPixmap( ( const char ** ) yast2_xpm );	// use XPM data
 	    break;
 
 	default:
@@ -81,9 +81,9 @@ YQImage::YQImage( QWidget * parent, YWidgetOpt & opt,
 
 
 YQImage::YQImage( QWidget * parent, YWidgetOpt & opt,
-		 const YCPByteblock & byteblock)
-    : QLabel( parent)
-    , YImage( opt)
+		 const YCPByteblock & byteblock )
+    : QLabel( parent )
+    , YImage( opt )
 {
     init( parent, opt );
 
@@ -104,11 +104,11 @@ YQImage::YQImage( QWidget * parent, YWidgetOpt & opt,
 
 YQImage::YQImage( QWidget * parent, YWidgetOpt & opt, const YCPString & ycp_file_name )
     : QLabel( parent )
-    , YImage( opt)
+    , YImage( opt )
 {
     init( parent, opt );
     QString file_name = fromUTF8( ycp_file_name->value() );
-    y2debug( "Loading image from %s", ( const char *) file_name );
+    y2debug( "Loading image from %s", ( const char * ) file_name );
 
     if ( animated )
     {
@@ -116,7 +116,7 @@ YQImage::YQImage( QWidget * parent, YWidgetOpt & opt, const YCPString & ycp_file
 	
 	if ( movie .isNull() )
 	{
-	    y2error( "Couldn't load animation from %s", ( const char *) file_name );
+	    y2error( "Couldn't load animation from %s", ( const char * ) file_name );
 	}
 	else
 	{
@@ -129,7 +129,7 @@ YQImage::YQImage( QWidget * parent, YWidgetOpt & opt, const YCPString & ycp_file
 
 	if ( pixmap.isNull() )
 	{
-	    y2error( "Couldn't load pixmap from %s", ( const char *) file_name );
+	    y2error( "Couldn't load pixmap from %s", ( const char * ) file_name );
 	}
 	else
 	{
@@ -188,16 +188,16 @@ long YQImage::nicesize( YUIDimension dim )
     {
 	// a QMovie doesn't have a size() method, thus use sizeHint() instead.
 	
-	if ( dim == YD_HORIZ)	return zeroWidth  ? 0L : sizeHint().width();
+	if ( dim == YD_HORIZ )	return zeroWidth  ? 0L : sizeHint().width();
 	else			return zeroHeight ? 0L : sizeHint().height();
     }
     else
     {
 	// for non-animated images, the background pixmap is used, thus
-	// sizeHint() will always return ( 0,0) - thus, use the internally
+	// sizeHint() will always return ( 0,0 ) - thus, use the internally
 	// stored sizes instead.
 	
-	if ( dim == YD_HORIZ)	return zeroWidth  ? 0L : pixmapWidth;
+	if ( dim == YD_HORIZ )	return zeroWidth  ? 0L : pixmapWidth;
 	else			return zeroHeight ? 0L : pixmapHeight;
     }
 }

@@ -63,7 +63,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     CHECK_PTR( label );
     label->setFont( YUIQt::ui()->headingFont() );
 
-    // Input field ( combo box) for search text
+    // Input field ( combo box ) for search text
     _searchText = new QComboBox( this );
     CHECK_PTR( _searchText );
     _searchText->setEditable( true );
@@ -181,7 +181,7 @@ YQPkgSearchFilterView::filter()
     if ( ! _searchText->currentText().isEmpty() )
     {
 	// Create a progress dialog that is only displayed if the search takes
-	// longer than a couple of seconds ( default: 4).
+	// longer than a couple of seconds ( default: 4 ).
 
 	QProgressDialog progress( _( "Searching..." ),			// text
 				  _( "&Cancel" ),			// cancelButtonLabel

@@ -109,10 +109,10 @@ YQTable::YQTable( QWidget * parent, YWidgetOpt & opt, vector<string> header )
     // column. The first string is one of the characters L, R or C
     // denoting left, right or center justification, resp.
 
-    for ( unsigned c=0; c < header.size(); c++)
+    for ( unsigned c=0; c < header.size(); c++ )
     {
-	_qt_listview->addColumn( fromUTF8(header[c].substr(1) ) );
-	switch ( header[c][0])
+	_qt_listview->addColumn( fromUTF8(header[c].substr(1 ) ) );
+	switch ( header[c][0] )
 	{
 	    case 'R':
 		_qt_listview->setColumnAlignment( c, AlignRight );
@@ -131,12 +131,12 @@ YQTable::YQTable( QWidget * parent, YWidgetOpt & opt, vector<string> header )
     _qt_listview->setAllColumnsShowFocus( true );
 
     if ( opt.immediateMode.value() )
-	connect( _qt_listview, SIGNAL( selectionChanged ( QListViewItem *) ), this, SLOT( slotSelected(QListViewItem *) ) );
+	connect( _qt_listview, SIGNAL( selectionChanged ( QListViewItem * ) ), this, SLOT( slotSelected(QListViewItem * ) ) );
     else
-	connect( _qt_listview, SIGNAL( doubleClicked ( QListViewItem *) ), this, SLOT( slotSelected(QListViewItem *) ) );
+	connect( _qt_listview, SIGNAL( doubleClicked ( QListViewItem * ) ), this, SLOT( slotSelected(QListViewItem * ) ) );
 
     if ( opt.notifyMode.value() )
-	connect( _qt_listview, SIGNAL( spacePressed ( QListViewItem *) ), this, SLOT( slotSelected(QListViewItem *) ) );
+	connect( _qt_listview, SIGNAL( spacePressed ( QListViewItem * ) ), this, SLOT( slotSelected(QListViewItem * ) ) );
 }
 
 
@@ -149,7 +149,7 @@ void YQTable::userSort( int column )	// column
 }
 
 
-long YQTable::nicesize( YUIDimension dim)
+long YQTable::nicesize( YUIDimension dim )
 {
     // This value is for debugging only.
     // Use spacings to determine the size of this widget;
@@ -159,20 +159,20 @@ long YQTable::nicesize( YUIDimension dim)
 }
 
 
-void YQTable::setSize( long newWidth, long newHeight)
+void YQTable::setSize( long newWidth, long newHeight )
 {
     resize( newWidth, newHeight );
 }
 
 
-void YQTable::setEnabling( bool enabled)
+void YQTable::setEnabling( bool enabled )
 {
     _qt_listview->setEnabled( enabled );
     _qt_listview->triggerUpdate();
 }
 
 
-void YQTable::itemAdded( vector<string> elements, int index)
+void YQTable::itemAdded( vector<string> elements, int index )
 {
     YQListViewItem * item;
 
@@ -196,25 +196,25 @@ void YQTable::itemsCleared()
 }
 
 
-void YQTable::cellChanged( int index, int colnum, const YCPString & newtext)
+void YQTable::cellChanged( int index, int colnum, const YCPString & newtext )
 {
     QListViewItem * item = findItem( index );
-    if ( item) item->setText( colnum, fromUTF8( newtext->value() ) );
+    if ( item ) item->setText( colnum, fromUTF8( newtext->value() ) );
 }
 
 
 int YQTable::getCurrentItem()
 {
-    YQListViewItem * ci = ( YQListViewItem *)( _qt_listview->currentItem() );
-    if ( ci) return ci->index;
+    YQListViewItem * ci = ( YQListViewItem * )( _qt_listview->currentItem() );
+    if ( ci ) return ci->index;
     else	   return -1;
 }
 
 
-void YQTable::setCurrentItem( int index)
+void YQTable::setCurrentItem( int index )
 {
     QListViewItem * item = findItem( index );
-    if ( item)  // should be always true
+    if ( item )  // should be always true
     {
 	_qt_listview->setCurrentItem( item );
 	_qt_listview->ensureItemVisible( item );
@@ -222,13 +222,13 @@ void YQTable::setCurrentItem( int index)
 }
 
 
-QListViewItem * YQTable::findItem( int index)
+QListViewItem * YQTable::findItem( int index )
 {
     // Scan all items and look for the one with the right index.
     QListViewItem * item = _qt_listview->firstChild();
-    while ( item)
+    while ( item )
     {
-	if ( ( ( YQListViewItem *)item)->index == index)
+	if ( ( ( YQListViewItem *)item )->index == index )
 	    return item;
 	item = item->nextSibling();
     }
@@ -244,7 +244,7 @@ bool YQTable::setKeyboardFocus()
 }
 
 
-void YQTable::slotSelected( QListViewItem *)
+void YQTable::slotSelected( QListViewItem * )
 {
     if ( getNotify() ) YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }

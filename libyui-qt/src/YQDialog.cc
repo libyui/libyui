@@ -85,7 +85,7 @@ YQDialog::~YQDialog()
 }
 
 
-long YQDialog::nicesize( YUIDimension dim)
+long YQDialog::nicesize( YUIDimension dim )
 {
     long nice;
 
@@ -102,14 +102,14 @@ long YQDialog::nicesize( YUIDimension dim)
     }
     else
     {
-	nice = YDialog::nicesize( dim) + 2 * decorationWidth( dim );
+	nice = YDialog::nicesize( dim ) + 2 * decorationWidth( dim );
     }
 
     long screenSize = dim == YD_HORIZ ? qApp->desktop()->width() : qApp->desktop()->height();
 
     if ( nice > screenSize )
     {
-	y2warning( "Limiting dialog size to screen size ( %ld) instead of %ld - check the layout!",
+	y2warning( "Limiting dialog size to screen size ( %ld ) instead of %ld - check the layout!",
 		   screenSize, nice );
     }
 
@@ -117,7 +117,7 @@ long YQDialog::nicesize( YUIDimension dim)
 }
 
 
-long YQDialog::decorationWidth( YUIDimension dim)
+long YQDialog::decorationWidth( YUIDimension dim )
 {
     if ( ! hasDefaultSize() && _qFrame )
 	return _qFrame->frameWidth();
@@ -126,17 +126,17 @@ long YQDialog::decorationWidth( YUIDimension dim)
 }
 
 
-void YQDialog::setEnabling( bool enabled)
+void YQDialog::setEnabling( bool enabled )
 {
     QWidget::setEnabled( enabled );
 }
 
 
-void YQDialog::setSize( long newWidth, long newHeight)
+void YQDialog::setSize( long newWidth, long newHeight )
 {
     if ( newWidth > qApp->desktop()->width() )
     {
-	y2warning( "Limiting dialog width to screen width ( %d) instead of %ld - check the layout!",
+	y2warning( "Limiting dialog width to screen width ( %d ) instead of %ld - check the layout!",
 		   qApp->desktop()->width(), newWidth );
 
 	newWidth = qApp->desktop()->width();
@@ -144,7 +144,7 @@ void YQDialog::setSize( long newWidth, long newHeight)
 
     if ( newHeight > qApp->desktop()->height() )
     {
-	y2warning( "Limiting dialog height to screen height ( %d) instead of %ld - check the layout!",
+	y2warning( "Limiting dialog height to screen height ( %d ) instead of %ld - check the layout!",
 		   qApp->desktop()->height(), newHeight );
 
 	newHeight = qApp->desktop()->height();
@@ -153,7 +153,7 @@ void YQDialog::setSize( long newWidth, long newHeight)
 
     if ( numChildren() > 0 )
     {
-	YContainerWidget::child( 0)->setSize(newWidth  - 2 * decorationWidth( YD_HORIZ ),
+	YContainerWidget::child( 0 )->setSize(newWidth  - 2 * decorationWidth( YD_HORIZ ),
 					     newHeight - 2 * decorationWidth( YD_VERT  ) );
     }
     
@@ -165,9 +165,9 @@ void YQDialog::setSize( long newWidth, long newHeight)
 
 
 
-void YQDialog::activate( bool active)
+void YQDialog::activate( bool active )
 {
-    if ( active)
+    if ( active )
     {
 	if ( ! YUIQt::ui()->haveWM() )
 	{
@@ -236,10 +236,10 @@ YQDialog::ensureOnlyOneDefaultButton()
 	    {
 		if ( _defaultButton && button != _defaultButton )
 		{
-		    y2error( "Too many `opt( `default) PushButtons: [%s]",
-			     ( const char *) button->text() );
+		    y2error( "Too many `opt( `default ) PushButtons: [%s]",
+			     ( const char * ) button->text() );
 		    y2error( "Using old default button: [%s]",
-			     ( const char *) _defaultButton->text() );
+			     ( const char * ) _defaultButton->text() );
 		}
 		else
 		{
@@ -266,7 +266,7 @@ YQDialog::setDefaultButton( YQPushButton * newDefaultButton )
 	 newDefaultButton &&
 	 newDefaultButton != _defaultButton )
     {
-	y2error( "Too many `opt( `default) PushButtons: [%s]", ( const char *) newDefaultButton->text() );
+	y2error( "Too many `opt( `default ) PushButtons: [%s]", ( const char * ) newDefaultButton->text() );
 	newDefaultButton->setDefault( false );
 	return;
     }
@@ -276,7 +276,7 @@ YQDialog::setDefaultButton( YQPushButton * newDefaultButton )
     if ( _defaultButton )
     {
 	_defaultButton->setDefault( true );
-	y2debug( "New default button: [%s]", ( const char *) _defaultButton->text() );
+	y2debug( "New default button: [%s]", ( const char * ) _defaultButton->text() );
 	
 	if ( _defaultButton && ! _focusButton )
 	    _defaultButton->showAsDefault( true );
@@ -293,7 +293,7 @@ YQDialog::activateDefaultButton( bool warn )
 	 _focusButton->isEnabled() &&
 	 _focusButton->isShownAsDefault() )
     {
-	y2debug( "Activating focus button: [%s]", ( const char *) _focusButton->text() );
+	y2debug( "Activating focus button: [%s]", ( const char * ) _focusButton->text() );
 	_focusButton->activate();
 	return true;
     }
@@ -307,7 +307,7 @@ YQDialog::activateDefaultButton( bool warn )
 	 _defaultButton->isEnabled() 	&&
 	 _defaultButton->isShownAsDefault() )
     {
-	y2debug( "Activating default button: [%s]", ( const char *) _defaultButton->text() );
+	y2debug( "Activating default button: [%s]", ( const char * ) _defaultButton->text() );
 	_defaultButton->activate();
 	return true;
     }
@@ -370,7 +370,7 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    if ( event->key() == Qt::Key_Return ||
 		 event->key() == Qt::Key_Enter    )
 	    {
-		( void) activateDefaultButton();
+		( void ) activateDefaultButton();
 		return;
 	    }
 	}
@@ -402,11 +402,11 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 }
 
 
-void YQDialog::closeEvent( QCloseEvent * event)
+void YQDialog::closeEvent( QCloseEvent * event )
 {
-    // The window manager "close window" button ( and menu, e.g. Alt-F4) will be
-    // handled just like the user had clicked on the `id`( `cancel) button in
-    // that dialog. It's up to the YCP application to handle this ( if desired).
+    // The window manager "close window" button ( and menu, e.g. Alt-F4 ) will be
+    // handled just like the user had clicked on the `id`( `cancel ) button in
+    // that dialog. It's up to the YCP application to handle this ( if desired ).
 
     y2debug( "Ignoring window manager close button." );
     event->ignore();
@@ -414,11 +414,11 @@ void YQDialog::closeEvent( QCloseEvent * event)
 }
 
 
-void YQDialog::focusInEvent( QFocusEvent * event)
+void YQDialog::focusInEvent( QFocusEvent * event )
 {
 
     // The dialog itself doesn't need or want the keyboard focus, but obviously
-    // ( since Qt 2.3?) it needs QFocusPolicy::StrongFocus for the default
+    // ( since Qt 2.3? ) it needs QFocusPolicy::StrongFocus for the default
     // button mechanism to work. So let's accept the focus and give it to some
     // child widget.
 
@@ -476,7 +476,7 @@ void
 YQDialog::childAdded( YWidget * child )
 {
 
-    ( ( QWidget *) child->widgetRep() )->move ( decorationWidth( YD_HORIZ ),
+    ( ( QWidget * ) child->widgetRep() )->move ( decorationWidth( YD_HORIZ ),
 					       decorationWidth( YD_VERT  ) );
 }
 

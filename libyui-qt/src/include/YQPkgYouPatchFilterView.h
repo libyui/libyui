@@ -35,7 +35,7 @@ class QTabWidget;
 
 
 /**
- * @short Display a list of PMYouPatch objects and ( below) details about the
+ * @short Display a list of PMYouPatch objects and ( below ) details about the
  * currently selected YOU patch.
  **/
 class YQPkgYouPatchFilterView : public QVBox

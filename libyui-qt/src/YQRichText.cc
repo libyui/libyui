@@ -28,9 +28,9 @@
 
 
 YQRichText::YQRichText( QWidget * parent, YWidgetOpt & opt,
-		       const YCPString & text)
-    : QTextBrowser( parent)
-    , YRichText( opt, text)
+		       const YCPString & text )
+    : QTextBrowser( parent )
+    , YRichText( opt, text )
 {
     setWidgetRep( this );
     setFont( YUIQt::ui()->currentFont() );
@@ -70,26 +70,26 @@ YQRichText::YQRichText( QWidget * parent, YWidgetOpt & opt,
 }
 
 
-void YQRichText::setEnabling( bool enabled)
+void YQRichText::setEnabling( bool enabled )
 {
     setEnabled( enabled );
 }
 
 
-long YQRichText::nicesize( YUIDimension dim)
+long YQRichText::nicesize( YUIDimension dim )
 {
-    if ( dim == YD_HORIZ) return shrinkable ? 10 : 100;
+    if ( dim == YD_HORIZ ) return shrinkable ? 10 : 100;
     else 		return shrinkable ? 10 :100;
 }
 
 
-void YQRichText::setSize( long newWidth, long newHeight)
+void YQRichText::setSize( long newWidth, long newHeight )
 {
     resize( newWidth, newHeight );
 }
 
 
-void YQRichText::setText( const YCPString & text)
+void YQRichText::setText( const YCPString & text )
 {
     if ( horizontalScrollBar() )
 	horizontalScrollBar()->setValue(0 );
@@ -115,8 +115,8 @@ bool YQRichText::setKeyboardFocus()
 
 void YQRichText::setSource( const QString & name )
 {
-    y2debug( "Selected hyperlink \"%s\"", ( const char *) name );
-    YUIQt::ui()->setMenuSelection( YCPString( ( const char *) name ) );
+    y2debug( "Selected hyperlink \"%s\"", ( const char * ) name );
+    YUIQt::ui()->setMenuSelection( YCPString( ( const char * ) name ) );
     YUIQt::ui()->returnNow( YUIInterpreter::ET_MENU, this );
 }
 

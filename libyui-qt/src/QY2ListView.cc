@@ -107,7 +107,7 @@ QY2ListView::toolTip( QListViewItem * listViewItem, int column )
     QString text;
 
 #if 0
-    text.sprintf( "Column %d:\n%s", column, ( const char *) listViewItem->text( column ) );
+    text.sprintf( "Column %d:\n%s", column, ( const char * ) listViewItem->text( column ) );
 #endif
 
     // Try known item classes
@@ -142,7 +142,7 @@ QY2ListView::saveColumnWidths()
 void
 QY2ListView::restoreColumnWidths()
 {
-    if ( _savedColumnWidth.size() != ( unsigned) columns() )
+    if ( _savedColumnWidth.size() != ( unsigned ) columns() )
     {
 	return;
     }
@@ -214,7 +214,7 @@ QY2ListView::contentsMouseDoubleClickEvent( QMouseEvent * ev )
     if ( item && item->isEnabled() )
     {
 	int col = header()->sectionAt( ev->pos().x() );
-	emit( columnDoubleClicked( ev->button(), ( QY2ListViewItem *) item, col, ev->globalPos() ) );
+	emit( columnDoubleClicked( ev->button(), ( QY2ListViewItem * ) item, col, ev->globalPos() ) );
     }
 
     // invalidate last click data

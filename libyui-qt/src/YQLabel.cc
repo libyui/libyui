@@ -27,9 +27,9 @@
 
 
 YQLabel::YQLabel( QWidget * parent, YWidgetOpt & opt,
-		 YCPString text)
-    : QLabel( parent)
-    , YLabel( opt, text)
+		 YCPString text )
+    : QLabel( parent )
+    , YLabel( opt, text )
 {
     setWidgetRep( this );
 
@@ -51,25 +51,25 @@ YQLabel::YQLabel( QWidget * parent, YWidgetOpt & opt,
 }
 
 
-void YQLabel::setEnabling( bool enabled)
+void YQLabel::setEnabling( bool enabled )
 {
     QLabel::setEnabled( enabled );
 }
 
 
-long YQLabel::nicesize( YUIDimension dim)
+long YQLabel::nicesize( YUIDimension dim )
 {
     return dim == YD_HORIZ ? sizeHint().width() : sizeHint().height();
 }
 
 
-void YQLabel::setSize( long newWidth, long newHeight)
+void YQLabel::setSize( long newWidth, long newHeight )
 {
     resize( newWidth, newHeight );
 }
 
 
-void YQLabel::setLabel( const YCPString & text)
+void YQLabel::setLabel( const YCPString & text )
 {
     setText( fromUTF8(text->value() ) );
     YLabel::setLabel( text );

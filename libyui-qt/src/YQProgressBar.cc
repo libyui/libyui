@@ -36,9 +36,9 @@ using std::max;
 
 YQProgressBar::YQProgressBar( QWidget * parent, YWidgetOpt & opt,
 			     const YCPString & label,
-			     const YCPInteger & maxProgress, const YCPInteger & progress)
-    : QVBox( parent)
-    , YProgressBar( opt, label, maxProgress, progress)
+			     const YCPInteger & maxProgress, const YCPInteger & progress )
+    : QVBox( parent )
+    , YProgressBar( opt, label, maxProgress, progress )
 {
     setWidgetRep( this );
 
@@ -61,16 +61,16 @@ YQProgressBar::YQProgressBar( QWidget * parent, YWidgetOpt & opt,
 }
 
 
-void YQProgressBar::setEnabling( bool enabled)
+void YQProgressBar::setEnabling( bool enabled )
 {
     _qt_label->setEnabled( enabled );
     _qt_progressbar->setEnabled( enabled );
 }
 
 
-long YQProgressBar::nicesize( YUIDimension dim)
+long YQProgressBar::nicesize( YUIDimension dim )
 {
-    if ( dim == YD_HORIZ)
+    if ( dim == YD_HORIZ )
     {
 	long minSize = 200;
 	long hintWidth = _qt_label->sizeHint().width() + margin();
@@ -87,18 +87,18 @@ long YQProgressBar::nicesize( YUIDimension dim)
 }
 
 
-void YQProgressBar::setSize( long newWidth, long newHeight)
+void YQProgressBar::setSize( long newWidth, long newHeight )
 {
     resize( newWidth, newHeight );
 }
 
-void YQProgressBar::setLabel( const YCPString & text)
+void YQProgressBar::setLabel( const YCPString & text )
 {
     _qt_label->setText( fromUTF8(text->value() ) );
 }
 
 
-void YQProgressBar::setProgress( const YCPInteger & progress)
+void YQProgressBar::setProgress( const YCPInteger & progress )
 {
     if ( progress->value() < _qt_progressbar->progress() )
     {

@@ -41,8 +41,8 @@ using std::max;
 YQMultiSelectionBox::YQMultiSelectionBox( QWidget *		parent,
 					  YWidgetOpt &		opt,
 					  const YCPString &	label )
-    : QVBox( parent)
-    , YMultiSelectionBox( opt, label)
+    : QVBox( parent )
+    , YMultiSelectionBox( opt, label )
 {
     setWidgetRep( this );
 
@@ -79,7 +79,7 @@ YQMultiSelectionBox::setLabel( const YCPString & label )
 long
 YQMultiSelectionBox::nicesize( YUIDimension dim )
 {
-    if ( dim == YD_HORIZ)
+    if ( dim == YD_HORIZ )
     {
 	int hintWidth = _qt_label->sizeHint().width() + frameWidth();
 
@@ -199,7 +199,7 @@ YQMultiSelectionBox::itemIsSelected( int index )
 	}
     }
 
-    QCheckListItem * item = ( QCheckListItem *) child;
+    QCheckListItem * item = ( QCheckListItem * ) child;
 
     return item->isOn();
 }
@@ -221,7 +221,7 @@ YQMultiSelectionBox::selectItem( int index )
 	}
     }
 
-    QCheckListItem * item = ( QCheckListItem *) child;
+    QCheckListItem * item = ( QCheckListItem * ) child;
 
     item->setOn( true );
 }
@@ -234,7 +234,7 @@ YQMultiSelectionBox::deselectAllItems()
 
     while ( child )
     {
-	QCheckListItem * item = ( QCheckListItem *) child;
+	QCheckListItem * item = ( QCheckListItem * ) child;
 	item->setOn( false );
 	child = child->nextSibling();
     }
@@ -264,7 +264,7 @@ QString
 YQMultiSelectionBoxItem::key( int, bool ) const
 {
     /*
-     * Return a sort key that depends on creation ( i.e. insertion) order.
+     * Return a sort key that depends on creation ( i.e. insertion ) order.
      */
     
     static QString sortKey;

@@ -97,7 +97,7 @@ using std::max;
 
 
 YQPackageSelector::YQPackageSelector( QWidget * parent, YWidgetOpt & opt, const YCPString & floppyDevice )
-    : QVBox( parent)
+    : QVBox( parent )
     , YPackageSelector( opt )
     , _floppyDevice( floppyDevice->value().c_str() )
 {
@@ -195,7 +195,7 @@ YQPackageSelector::YQPackageSelector( QWidget * parent, YWidgetOpt & opt, const 
     if ( _diskUsageList )
 	_diskUsageList->updateDiskUsage();
 
-    y2debug( "Floppy device: %s", ( const char *) _floppyDevice );
+    y2debug( "Floppy device: %s", ( const char * ) _floppyDevice );
     y2milestone( "PackageSelector init done" );
 
 
@@ -633,7 +633,7 @@ YQPackageSelector::addMenus()
     // Menu entry for help overview
     _helpMenu->insertItem( _( "&Overview" ), this, SLOT( help() 	), Key_F1         );
 
-    // Menu entry for help about used symbols ( icons)
+    // Menu entry for help about used symbols ( icons )
     _helpMenu->insertItem( _( "&Symbols"  ), this, SLOT( symbolHelp() 	), SHIFT + Key_F1 );
 
     // Menu entry for keyboard help
@@ -878,7 +878,7 @@ YQPackageSelector::checkDiskUsage()
 	return QDialog::Accepted;
 
     QString msg =
-	// Translators: RichText ( HTML-like) format
+	// Translators: RichText ( HTML-like ) format
 	"<p><b>" + _( "Error: Out of disk space!" ) + "</b></p>"
 	+ _( "<p>"
 	     "You can choose to install anyway if you know what you are doing, "
@@ -916,11 +916,11 @@ YQPackageSelector::pkgExport()
 
     if ( ! filename.isEmpty() )
     {
-	y2milestone( "Exporting package list to %s", ( const char *) filename );
+	y2milestone( "Exporting package list to %s", ( const char * ) filename );
 	PMPackageImEx exporter;
 	exporter.getPMState();
 
-	if ( exporter.doExport( Pathname( ( const char *) filename ) ) )
+	if ( exporter.doExport( Pathname( ( const char * ) filename ) ) )
 	{
 	    // Success
 
@@ -928,11 +928,11 @@ YQPackageSelector::pkgExport()
 	}
 	else	// Error
 	{
-	    y2warning( "Error writing package list to %s", ( const char *) filename );
+	    y2warning( "Error writing package list to %s", ( const char * ) filename );
 
 	    // PMPackageImEx::doExport() might have left over a partially written file.
 	    // Try to delete that. Don't care if it doesn't exist and unlink() fails.
-	    ( void) unlink( ( const char *) filename );
+	    ( void ) unlink( ( const char * ) filename );
 
 	    // Post error popup
 	    QMessageBox::warning( this,						// parent
@@ -971,11 +971,11 @@ YQPackageSelector::pkgImport()
 
     if ( ! filename.isEmpty() )
     {
-	y2milestone( "Importing package list from %s", ( const char *) filename );
+	y2milestone( "Importing package list from %s", ( const char * ) filename );
 	PMPackageImEx importer;
 	importer.getPMState();
 
-	if ( importer.doImport( Pathname( ( const char *) filename ) ) )
+	if ( importer.doImport( Pathname( ( const char * ) filename ) ) )
 	{
 	    // Success
 
@@ -984,7 +984,7 @@ YQPackageSelector::pkgImport()
 	}
 	else // Error
 	{
-	    y2warning( "Error reading package list from %s", ( const char *) filename );
+	    y2warning( "Error reading package list from %s", ( const char * ) filename );
 
 	    // Post error popup
 	    QMessageBox::warning( this,						// parent
@@ -1011,7 +1011,7 @@ YQPackageSelector::showAutoPkgList()
 	// Dialog header
 	+ _( "Automatic Changes" )
 	+ "</b></p>"
-	// Detailed explanation ( automatic word wrap!)
+	// Detailed explanation ( automatic word wrap! )
 	+ "<p>"
 	+ _( "In addition to your manual selections, the following packages"
 	     " have been changed to resolve dependencies:" )
@@ -1069,9 +1069,9 @@ YQPackageSelector::reject()
 	 ( QMessageBox::warning( this, "",
 				 _( "Abandon all changes?" ),
 				 _( "&OK" ), _( "&Cancel" ), "",
-				 1, // defaultButtonNumber ( from 0)
+				 1, // defaultButtonNumber ( from 0 )
 				 1 ) // escapeButtonNumber
-	   == 0 )	// Proceed upon button #0 ( OK)
+	   == 0 )	// Proceed upon button #0 ( OK )
 	 )
     {
 	Y2PM::packageManager().RestoreState();
@@ -1081,7 +1081,7 @@ YQPackageSelector::reject()
 	else
 	    Y2PM::selectionManager().RestoreState();
 
-	YUIQt::ui()->setMenuSelection( YCPSymbol( "cancel", true) );
+	YUIQt::ui()->setMenuSelection( YCPSymbol( "cancel", true ) );
 	YUIQt::ui()->returnNow( YUIInterpreter::ET_MENU, this );
     }
 }
@@ -1107,7 +1107,7 @@ YQPackageSelector::accept()
 	    // Dialog header
 	    + _( "Automatic Changes" )
 	    + "</b></p>"
-	    // Detailed explanation ( automatic word wrap!)
+	    // Detailed explanation ( automatic word wrap! )
 	    + "<p>"
 	    + _( "In addition to your manual selections, the following packages"
 		 " have been changed to resolve dependencies:" )
@@ -1132,7 +1132,7 @@ YQPackageSelector::accept()
     else
 	Y2PM::selectionManager().ClearSaveState();
 
-    YUIQt::ui()->setMenuSelection( YCPSymbol( "accept", true) );
+    YUIQt::ui()->setMenuSelection( YCPSymbol( "accept", true ) );
     YUIQt::ui()->returnNow( YUIInterpreter::ET_MENU, this );
 }
 
@@ -1171,7 +1171,7 @@ YQPackageSelector::keyPressEvent( QKeyEvent * event )
 long
 YQPackageSelector::nicesize( YUIDimension dim )
 {
-    if ( dim == YD_HORIZ)
+    if ( dim == YD_HORIZ )
     {
 	int hintWidth = sizeHint().width();
 
@@ -1234,7 +1234,7 @@ void addVStretch( QWidget * parent )
 void addHStretch( QWidget * parent )
 {
     QWidget * spacer = new QWidget( parent );
-    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum) ); // hor/vert
+    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
 }
 
 

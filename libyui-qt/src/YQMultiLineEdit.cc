@@ -50,7 +50,7 @@ YQMultiLineEdit::YQMultiLineEdit( QWidget * parent, YWidgetOpt & opt,
 }
 
 
-void YQMultiLineEdit::setEnabling( bool enabled)
+void YQMultiLineEdit::setEnabling( bool enabled )
 {
     _qt_multiLineEdit->setEnabled( enabled );
 }
@@ -58,7 +58,7 @@ void YQMultiLineEdit::setEnabling( bool enabled)
 
 long YQMultiLineEdit::nicesize( YUIDimension dim )
 {
-    if ( dim == YD_HORIZ)
+    if ( dim == YD_HORIZ )
     {
 	long minSize   	 = 30;
 	long hintWidth 	 = sizeHint().width();
@@ -77,13 +77,13 @@ long YQMultiLineEdit::nicesize( YUIDimension dim )
 }
 
 
-void YQMultiLineEdit::setSize( long newWidth, long newHeight)
+void YQMultiLineEdit::setSize( long newWidth, long newHeight )
 {
     resize( newWidth, newHeight );
 }
 
 
-void YQMultiLineEdit::setText( const YCPString & text)
+void YQMultiLineEdit::setText( const YCPString & text )
 {
     _qt_multiLineEdit->setText( fromUTF8( text->value() ) );
 }
@@ -95,7 +95,7 @@ YCPString YQMultiLineEdit::text()
 }
 
 
-void YQMultiLineEdit::setLabel( const YCPString & label)
+void YQMultiLineEdit::setLabel( const YCPString & label )
 {
     _qt_label->setText( fromUTF8( label->value() ) );
     YMultiLineEdit::setLabel( label );

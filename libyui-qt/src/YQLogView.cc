@@ -48,7 +48,7 @@ YQLogView::YQLogView( QWidget * parent, YWidgetOpt & opt,
 }
 
 
-void YQLogView::setEnabling( bool enabled)
+void YQLogView::setEnabling( bool enabled )
 {
     _qt_text->setEnabled( enabled );
 }
@@ -56,7 +56,7 @@ void YQLogView::setEnabling( bool enabled)
 
 long YQLogView::nicesize( YUIDimension dim )
 {
-    if ( dim == YD_HORIZ)
+    if ( dim == YD_HORIZ )
     {
 	long minSize   	 = 50;
 	long hintWidth 	 = sizeHint().width();
@@ -76,20 +76,20 @@ long YQLogView::nicesize( YUIDimension dim )
 }
 
 
-void YQLogView::setSize( long newWidth, long newHeight)
+void YQLogView::setSize( long newWidth, long newHeight )
 {
     resize( newWidth, newHeight );
 }
 
 
-void YQLogView::setLogText( const YCPString & text)
+void YQLogView::setLogText( const YCPString & text )
 {
     _qt_text->setText( fromUTF8( text->value() ) );
     _qt_text->scrollToBottom();
 }
 
 
-void YQLogView::setLabel( const YCPString & label)
+void YQLogView::setLabel( const YCPString & label )
 {
     _qt_label->setText( fromUTF8( label->value() ) );
     YLogView::setLabel( label );

@@ -33,7 +33,7 @@ using std::string;
 
 
 /**
- * @short Dialog that shows a scrolled ( HTML) text.
+ * @short Dialog that shows a scrolled ( HTML ) text.
  **/
 class YQPkgTextDialog: public QDialog
 {
@@ -43,7 +43,7 @@ public:
 
     /**
      * Constructor. Does not pop up a dialog yet.
-     * Use 'exec()' ( inherited from QDialog).
+     * Use 'exec()' ( inherited from QDialog ).
      * Or, better yet, use the static showText() method.
      **/
     YQPkgTextDialog( const QString & text, QWidget * parent );
@@ -67,7 +67,7 @@ public:
     static void showText( QWidget * parent, const list<string> & text );
 
     /**
-     * Show a text with a headline identifying a PMObject ( name+summary).
+     * Show a text with a headline identifying a PMObject ( name+summary ).
      **/
     static void showText( QWidget * parent,
 			  PMObjectPtr pmObj,
@@ -78,7 +78,7 @@ public:
 
     /**
      * Convert a string list into its HTML paragraphs ( empty lines delimit
-     * paragraphs).
+     * paragraphs ).
      **/
     static QString htmlParagraphs( const list<string> & text );
 
@@ -94,7 +94,7 @@ public:
     static QString htmlHeading( PMObjectPtr pmObj );
 
     /**
-     * Escapes characters special to HTML in a ( plain text) string, such as:
+     * Escapes characters special to HTML in a ( plain text ) string, such as:
      * '<'   ->   '&lt;'
      * '>'   ->   '&gt;'
      * '&'   ->   '&amp;'
@@ -114,7 +114,7 @@ public slots:
     void setText( const list<string> & text );
 
     /**
-     * Show a text with a headline identifying a PMObject ( name+summary).
+     * Show a text with a headline identifying a PMObject ( name+summary ).
      **/
     void setText( PMObjectPtr pmObj,
 		  const list<string> & text );

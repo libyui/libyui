@@ -34,7 +34,7 @@
 YQCheckBox::YQCheckBox( QWidget *		parent,
 			YWidgetOpt &		opt,
 			const YCPString & 	label,
-			bool 			initiallyChecked)
+			bool 			initiallyChecked )
     : QGroupBox( parent )
     , YCheckBox( opt, label )
     , _dont_care( false )
@@ -59,7 +59,7 @@ YQCheckBox::YQCheckBox( QWidget *		parent,
 long
 YQCheckBox::nicesize( YUIDimension dim )
 {
-    if ( dim == YD_HORIZ)	return 2*SPACING + _qt_checkbox->sizeHint().width();
+    if ( dim == YD_HORIZ )	return 2*SPACING + _qt_checkbox->sizeHint().width();
     else 			return _qt_checkbox->sizeHint().height();
 }
 
@@ -81,7 +81,7 @@ YQCheckBox::getValue()
 	case QButton::NoChange:	return YCPVoid();	// nil
     }
     
-    y2error( "Unknown QCheckBox state: %d", ( int) _qt_checkbox->state() );
+    y2error( "Unknown QCheckBox state: %d", ( int ) _qt_checkbox->state() );
     return YCPVoid();
 }
 

@@ -131,7 +131,7 @@ protected slots:
 
     /**
      * Tells the ui that the user has edited the text ( if the
-     * 'editable' option is set).
+     * 'editable' option is set ).
      * This is only interesting if the `notify option is set.
      */
     void textChanged( const QString &new_text );

@@ -52,7 +52,7 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *		parent,
     // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );
 
-    // Layout for the dialog ( can't simply insert a QVBox)
+    // Layout for the dialog ( can't simply insert a QVBox )
 
     QVBoxLayout * layout = new QVBoxLayout( this, MARGIN, SPACING );
     CHECK_PTR( layout );
@@ -70,15 +70,15 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *		parent,
     addHSpacing( hbox );
     QLabel * iconLabel = new QLabel( hbox );
     CHECK_PTR( iconLabel );
-    iconLabel->setPixmap( QApplication::style().stylePixmap( QStyle::SP_MessageBoxWarning) );
-    iconLabel->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum) ); // hor/vert
+    iconLabel->setPixmap( QApplication::style().stylePixmap( QStyle::SP_MessageBoxWarning ) );
+    iconLabel->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) ); // hor/vert
     addHSpacing( hbox );
 
     // Label for the message
 
     QLabel * label = new QLabel( message, hbox );
     CHECK_PTR( label );
-    label->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum) ); // hor/vert
+    label->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
 
 
     // Disk usage list
@@ -114,7 +114,7 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *		parent,
 
     if ( ! rejectButtonLabel.isEmpty() )
     {
-	// Reject button ( if desired) - usually "Cancel"
+	// Reject button ( if desired ) - usually "Cancel"
 
 	button = new QPushButton( rejectButtonLabel, hbox );
 	CHECK_PTR( button );
@@ -126,7 +126,7 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *		parent,
     }
 
     // If there is only one button, it's safe to make that one ( the accept
-    // button) the default. If there are two, better be safe than sorry and
+    // button ) the default. If there are two, better be safe than sorry and
     // make the reject button the default.
 
     button->setDefault( true );

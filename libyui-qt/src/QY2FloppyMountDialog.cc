@@ -81,7 +81,7 @@ QY2FloppyMountDialog::QY2FloppyMountDialog( QWidget * 		parent,
     // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );
 
-    // Layout for the dialog ( can't simply insert a QVBox)
+    // Layout for the dialog ( can't simply insert a QVBox )
 
     QVBoxLayout * layout = new QVBoxLayout( this,	// parent
 					    8,		// margin
@@ -96,7 +96,7 @@ QY2FloppyMountDialog::QY2FloppyMountDialog( QWidget * 		parent,
     layout->addWidget( label );
 
 
-    // Radio box for device ( hard disk / floppy)
+    // Radio box for device ( hard disk / floppy )
 
     QVButtonGroup * bgroup = new QVButtonGroup( _( "Device" ), this );
     CHECK_PTR( bgroup );
@@ -129,7 +129,7 @@ QY2FloppyMountDialog::QY2FloppyMountDialog( QWidget * 		parent,
 					  SPACING );		// spacing
     CHECK_PTR( grid );
     grid->setColStretch( 0, 0 );	// label column - dont' stretch
-    grid->setColStretch( 1, 1 );	// input field ( combo box) column may stretch as desired
+    grid->setColStretch( 1, 1 );	// input field ( combo box ) column may stretch as desired
 
 
     // Input field + caption for "Floppy Device"
@@ -189,7 +189,7 @@ QY2FloppyMountDialog::QY2FloppyMountDialog( QWidget * 		parent,
     label->setBuddy( _pathField );
 
 
-    // "Browse..." button ( open regular file selection box)
+    // "Browse..." button ( open regular file selection box )
 
     addHSpacing( hbox );
     button = new QPushButton( _( "Bro&wse..." ), hbox );
@@ -352,17 +352,17 @@ QY2FloppyMountDialog::mount()
     }
 
     QString command = "/bin/mount " + device + " " + mountPoint;
-    y2milestone( "Mounting floppy: %s", ( const char *) command );
+    y2milestone( "Mounting floppy: %s", ( const char * ) command );
 
     while ( true )
     {
 	qApp->setOverrideCursor( waitCursor );
-	int result = system( ( const char *) command );
+	int result = system( ( const char * ) command );
 	qApp->restoreOverrideCursor();
 
 	if ( result != 0 )
 	{
-	    y2warning( "\"%s\" returned %d", ( const char *) command, result );
+	    y2warning( "\"%s\" returned %d", ( const char * ) command, result );
 
 	    int button = QMessageBox::critical( this, "",
 						_( "Cannot mount floppy" ),
@@ -390,19 +390,19 @@ QY2FloppyMountDialog::unmount( bool verbose )
     if ( _floppyMounted )
     {
 	QString command = "/bin/umount " + _floppyDeviceField->currentText();
-	y2milestone( "Unmounting floppy: %s", ( const char *) command );
-	int result = system( ( const char *) command );
+	y2milestone( "Unmounting floppy: %s", ( const char * ) command );
+	int result = system( ( const char * ) command );
 
 	if ( result == 0 )
 	{
 	    if ( verbose )
 		QMessageBox::information( this, "", _( "Floppy unmounted successfully -\n"
-						       "safe to remove floppy from drive.") );
+						       "safe to remove floppy from drive." ) );
 	}
 	else
 	{
-	    y2warning( "\"%s\" returned %d", ( const char *) command, result );
-	    error( _( "Cannot unmount floppy") );
+	    y2warning( "\"%s\" returned %d", ( const char * ) command, result );
+	    error( _( "Cannot unmount floppy" ) );
 	}
 
 	_floppyMounted = false;
@@ -427,7 +427,7 @@ void QY2FloppyMountDialog::addVStretch( QWidget * parent )
 void QY2FloppyMountDialog::addHStretch( QWidget * parent )
 {
     QWidget * spacer = new QWidget( parent );
-    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum) ); // hor/vert
+    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
 }
 
 

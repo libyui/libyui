@@ -60,8 +60,8 @@ YQIntField::YQIntField( QWidget *		parent,
 
     setValue( initialValue );
 
-    connect( _qt_spinbox, SIGNAL( valueChanged( int) ),
-	     this,  	SLOT  ( setValueSlot( int) ) );
+    connect( _qt_spinbox, SIGNAL( valueChanged( int ) ),
+	     this,  	SLOT  ( setValueSlot( int ) ) );
 }
 
 
@@ -74,7 +74,7 @@ void YQIntField::setEnabling( bool enabled )
 
 long YQIntField::nicesize( YUIDimension dim )
 {
-    if ( dim == YD_HORIZ)	return vbox->sizeHint().width();
+    if ( dim == YD_HORIZ )	return vbox->sizeHint().width();
     else			return vbox->sizeHint().height();
 }
 

@@ -31,13 +31,13 @@
 
 
 #define BORDER 3
-#define BORDERSIZE QSize( BORDER, BORDER)
+#define BORDERSIZE QSize( BORDER, BORDER )
 
 YQMenuButton::YQMenuButton( QWidget * parent,
 			   YWidgetOpt & opt,
-			   YCPString label)
-    : QWidget( parent)
-    , YMenuButton( opt, label)
+			   YCPString label )
+    : QWidget( parent )
+    , YMenuButton( opt, label )
 {
     setWidgetRep( this );
     _qt_pushbutton = new QPushButton( fromUTF8( label->value() ), this );
@@ -49,14 +49,14 @@ YQMenuButton::YQMenuButton( QWidget * parent,
 }
 
 void
-YQMenuButton::setEnabling( bool enabled)
+YQMenuButton::setEnabling( bool enabled )
 {
     _qt_pushbutton->setEnabled( enabled );
 }
 
 
 long
-YQMenuButton::nicesize( YUIDimension dim)
+YQMenuButton::nicesize( YUIDimension dim )
 {
     return 2 * BORDER + ( dim == YD_HORIZ
 			 ? _qt_pushbutton->sizeHint().width()
@@ -65,7 +65,7 @@ YQMenuButton::nicesize( YUIDimension dim)
 
 
 void
-YQMenuButton::setSize( long newWidth, long newHeight)
+YQMenuButton::setSize( long newWidth, long newHeight )
 {
     _qt_pushbutton->resize( newWidth - 2 * BORDER, newHeight - 2 * BORDER );
     resize( newWidth, newHeight );
@@ -73,7 +73,7 @@ YQMenuButton::setSize( long newWidth, long newHeight)
 
 
 void
-YQMenuButton::setLabel( const YCPString & label)
+YQMenuButton::setLabel( const YCPString & label )
 {
     _qt_pushbutton->setText( fromUTF8( label->value() ) );
 }

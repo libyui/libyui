@@ -34,7 +34,7 @@ using std::string;
 /**
  * @short Abstract base class for details views. Handles generic stuff like
  * HTML formatting, Qt slots and display only if this view is visible at all
- * ( it may be hidden if it's part of a QTabWidget).
+ * ( it may be hidden if it's part of a QTabWidget ).
  **/
 class YQPkgGenericDetailsView : public QTextBrowser
 {
@@ -67,7 +67,7 @@ public:
     static QString htmlHeading( PMObjectPtr pmObj );
 
     /**
-     * Escapes characters special to HTML in a ( plain text) string, such as:
+     * Escapes characters special to HTML in a ( plain text ) string, such as:
      * '<'   ->   '&lt;'
      * '>'   ->   '&gt;'
      * '&'   ->   '&amp;'
@@ -110,7 +110,7 @@ public slots:
 
     /**
      * Show details for the specified package.
-     * Delayed ( optimized) display if this is embedded into a QTabWidget
+     * Delayed ( optimized ) display if this is embedded into a QTabWidget
      * parent: In this case, wait until this page becomes visible.
      **/
     void showDetailsIfVisible( PMObjectPtr pmObj );

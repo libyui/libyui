@@ -97,7 +97,7 @@ protected slots:
     /**
      * Triggered via menuEntryActivated() by zero timer to get back in sync
      * with the Qt event loop. You don't really need to understand this, it's
-     * kind of black magic. ;-) 
+     * kind of black magic. ;- ) 
      */
     void returnNow();
 };

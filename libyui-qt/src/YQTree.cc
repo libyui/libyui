@@ -83,8 +83,8 @@ YQTree::nicesize( YUIDimension dim )
 void
 YQTree::setSize( long newWidth, long newHeight )
 {
-    _qt_label->resize( min ( newWidth,  ( long) ( _qt_label->sizeHint().width() ) ),
-		      min ( newHeight, ( long) ( _qt_label->sizeHint().height() )	 ) );
+    _qt_label->resize( min ( newWidth,  ( long ) ( _qt_label->sizeHint().width() ) ),
+		      min ( newHeight, ( long ) ( _qt_label->sizeHint().height() )	 ) );
     _listView->resize( newWidth, newHeight - _qt_label->height() );
     resize( newWidth, newHeight );
 }
@@ -122,7 +122,7 @@ YQTree::rebuildTree()
 const YTreeItem *
 YQTree::getCurrentItem() const
 {
-    YQTreeItem * it = ( YQTreeItem *) _listView->selectedItem();
+    YQTreeItem * it = ( YQTreeItem * ) _listView->selectedItem();
 
     return it ? it->origItem() : 0;
 }
@@ -143,7 +143,7 @@ YQTree::setCurrentItem( YTreeItem * yit )
 	// Open all parent items so the selected item isn't obscured
 	// somewhere deep within the tree
 
-	while ( ( it = ( YQTreeItem *) it->parent() ) )
+	while ( ( it = ( YQTreeItem * ) it->parent() ) )
 	{
 	    if ( ! it->isOpen() )
 		it->setOpen( true );
@@ -160,14 +160,14 @@ void
 YQTree::registerItem( const YTreeItem *		orig,
 		      const YQTreeItem *	clone )
 {
-    _yTreeItemToYQTreeItem.insert( ( void *) orig, clone );
+    _yTreeItemToYQTreeItem.insert( ( void * ) orig, clone );
 }
 
 
 YQTreeItem *
 YQTree::findYQTreeItem( const YTreeItem * orig ) const
 {
-    return _yTreeItemToYQTreeItem[ ( void *) orig ];
+    return _yTreeItemToYQTreeItem[ ( void * ) orig ];
 }
 
 
@@ -254,7 +254,7 @@ YQTreeItem::key( int column, bool ascending ) const
     *
     * Always sort tree items by insertion order. The tree widget
     * cannot maintain a meaningful sorting order of its own: All it
-    * could do is sort by names ( ASCII sort). Better let the ( YCP)
+    * could do is sort by names ( ASCII sort ). Better let the ( YCP )
     * application handle this.
     */
 

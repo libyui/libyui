@@ -30,7 +30,7 @@ class YQPkgList;
 
 /**
  * Changes dialog: Show a dialog with a list of packages that are changed.
- * By default, only packages with an "auto" status ( not set via selections)
+ * By default, only packages with an "auto" status ( not set via selections )
  * are displayed.
  **/
 class YQPkgChangesDialog : public QDialog
@@ -42,14 +42,14 @@ public:
     /**
      * Static convenience method: Post a changes dialog with text
      * 'message', a list of partitions that are at least 'thresholdPercent'
-     * full and one ( default) or two buttons.
+     * full and one ( default ) or two buttons.
      *
-     * Returns 'true' if the user accepted ( i.e. clicked the 'accept' button)
+     * Returns 'true' if the user accepted ( i.e. clicked the 'accept' button )
      * and 'false' if the user rejected ( i.e. clicked the 'reject' button or
-     * the window manager close button).
+     * the window manager close button ).
      *
      * If the list is empty ( i.e., there are no packages with an "auto"
-     * status), the dialog is not shown at all ( and returns 'true') - unless
+     * status ), the dialog is not shown at all ( and returns 'true' ) - unless
      *'showIfListEmpty' is 'true'.
      **/
     static bool showChangesDialog( const QString & 	message,
@@ -62,7 +62,7 @@ protected:
     /**
      * Constructor: Creates a changes dialog with text 'message' on
      * top, a list packages with an "auto" status that is not set via selections
-     * and one ( default) or two buttons.
+     * and one ( default ) or two buttons.
      *
      * Not meant for public use. Applications should use the static
      * 'showChangesDialog' method instead.
@@ -77,8 +77,8 @@ protected:
 
     /**
      * Apply the filter criteria: Fill the pkg list with pkgs that have a
-     * "modify" status ( install, update, delete) set by automatic ( i.e. via the
-     * dependency solver), by application ( i.e. via software selections) or
+     * "modify" status ( install, update, delete ) set by automatic ( i.e. via the
+     * dependency solver ), by application ( i.e. via software selections ) or
      * manually by the user.
      **/
     void filter( bool byAuto	= true,

@@ -41,9 +41,9 @@ using std::max;
 
 
 YQSelectionBox::YQSelectionBox( QWidget * parent, YWidgetOpt & opt,
-			       const YCPString & label)
-    : QVBox( parent)
-    , YSelectionBox( opt, label)
+			       const YCPString & label )
+    : QVBox( parent )
+    , YSelectionBox( opt, label )
 {
     setWidgetRep( this );
 
@@ -64,7 +64,7 @@ YQSelectionBox::YQSelectionBox( QWidget * parent, YWidgetOpt & opt,
     shrinkable 		= opt.isShrinkable.value();
     immediateMode	= opt.immediateMode.value();
 
-    connect( _qt_listbox, SIGNAL( highlighted ( int) ),
+    connect( _qt_listbox, SIGNAL( highlighted ( int ) ),
 	     this, 	 SLOT  ( slotSelected( int ) ) );
 
     if ( getNotify() )
@@ -75,16 +75,16 @@ YQSelectionBox::YQSelectionBox( QWidget * parent, YWidgetOpt & opt,
 }
 
 
-void YQSelectionBox::setLabel( const YCPString & label)
+void YQSelectionBox::setLabel( const YCPString & label )
 {
     _qt_label->setText( fromUTF8(label->value() ) );
     YSelectionBox::setLabel( label );
 }
 
 
-long YQSelectionBox::nicesize( YUIDimension dim)
+long YQSelectionBox::nicesize( YUIDimension dim )
 {
-    if ( dim == YD_HORIZ)
+    if ( dim == YD_HORIZ )
     {
 	int hintWidth = _qt_label->sizeHint().width() + frameWidth();
 
@@ -102,13 +102,13 @@ long YQSelectionBox::nicesize( YUIDimension dim)
 }
 
 
-void YQSelectionBox::setSize( long newWidth, long newHeight)
+void YQSelectionBox::setSize( long newWidth, long newHeight )
 {
     resize( newWidth, newHeight );
 }
 
 
-void YQSelectionBox::setEnabling( bool enabled)
+void YQSelectionBox::setEnabling( bool enabled )
 {
     _qt_label->setEnabled( enabled );
     _qt_listbox->setEnabled( enabled );
@@ -116,10 +116,10 @@ void YQSelectionBox::setEnabling( bool enabled)
 }
 
 
-void YQSelectionBox::itemAdded( const YCPString & string, int index, bool selected)
+void YQSelectionBox::itemAdded( const YCPString & string, int index, bool selected )
 {
     _qt_listbox->insertItem( fromUTF8(string->value() ) );
-    if ( selected) _qt_listbox->setCurrentItem( index );
+    if ( selected ) _qt_listbox->setCurrentItem( index );
 }
 
 
@@ -129,7 +129,7 @@ int YQSelectionBox::getCurrentItem()
 }
 
 
-void YQSelectionBox::setCurrentItem( int index)
+void YQSelectionBox::setCurrentItem( int index )
 {
     _qt_listbox->setCurrentItem( index );
 }
@@ -147,16 +147,16 @@ bool YQSelectionBox::eventFilter( QObject * obj, QEvent * ev )
 {
     if ( ev->type() == QEvent::KeyPress )
     {
-	QKeyEvent * event = ( QKeyEvent *) ev;
+	QKeyEvent * event = ( QKeyEvent * ) ev;
 
 	if ( ( event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter ) &&
 	     ( event->state() == 0 || event->state() == Qt::Keypad ) )
 	{
-	    YQDialog * dia = ( YQDialog *) yDialog();
+	    YQDialog * dia = ( YQDialog * ) yDialog();
 
 	    if ( dia )
 	    {
-		( void) dia->activateDefaultButton();
+		( void ) dia->activateDefaultButton();
 		return true;
 	    }
 	}

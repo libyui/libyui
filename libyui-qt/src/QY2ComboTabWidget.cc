@@ -101,7 +101,7 @@ QY2ComboTabWidget::showPage( const QString & page_label )
     }
     else
     {
-	qWarning( "QY2ComboTabWidget: Page \"%s\" not found", ( const char *) page_label );
+	qWarning( "QY2ComboTabWidget: Page \"%s\" not found", ( const char * ) page_label );
 	return;
     }
 }
