@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Oct 28 15:42:46 CEST 2004 - sh@suse.de
+
+- Fixed bug #43389: Tristate checkbox doesn't send events properly 
+
+-------------------------------------------------------------------
 Thu Oct 28 13:48:21 CEST 2004 - sh@suse.de
 
 - Fixed bug #43410: Timer signals close screen shot file selector 

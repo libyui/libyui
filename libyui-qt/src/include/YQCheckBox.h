@@ -98,10 +98,9 @@ public:
 private slots:
 
     /**
-     * Triggered when the RadioButton is toggled.
-     * This _may_ be of interest to the module.
+     * Triggered when the on/off status is changed
      */
-    void changed ( bool newState );
+    void stateChanged ( int newState );
 
     
 protected:

@@ -52,8 +52,8 @@ YQCheckBox::YQCheckBox( QWidget *		parent,
     _qt_checkbox->setFont( YQUI::ui()->currentFont() );
     _qt_checkbox->setChecked( initiallyChecked );
 
-    connect( _qt_checkbox, 	SIGNAL( toggled( bool ) ),
-	     this, 		SLOT  ( changed( bool ) ) );
+    connect( _qt_checkbox, 	SIGNAL( stateChanged( int ) ),
+	     this, 		SLOT  ( stateChanged( int ) ) );
 }
 
 
@@ -142,8 +142,12 @@ bool YQCheckBox::setKeyboardFocus()
 
 
 
-void YQCheckBox::changed( bool newState )
+void YQCheckBox::stateChanged( int newState )
 {
+    int oldState = _qt_checkbox->state();
+
+    y2milestone( "old: %d; new: %d", oldState, newState );
+    
     if ( getNotify() )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
