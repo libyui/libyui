@@ -658,6 +658,15 @@ void YQWizard::layoutTreePanel()
     _tree->header()->hide();
     _tree->setRootIsDecorated( true );
 
+    connect( _tree,	SIGNAL( selectionChanged     ( void ) ),
+	     this, 	SLOT  ( treeSelectionChanged ( void ) ) );
+
+    connect( _tree,	SIGNAL( spacePressed  ( QListViewItem *	) ),
+	     this, 	SLOT  ( sendTreeEvent ( QListViewItem *	) ) );
+
+    connect( _tree,	SIGNAL( doubleClicked ( QListViewItem * ) ),
+	     this, 	SLOT  ( sendTreeEvent ( QListViewItem *	) ) );
+
 
     // Bottom gradient
 
@@ -737,6 +746,25 @@ YQWizard::TreeItem * YQWizard::findTreeItem( const QString & id )
 	return 0;
 
     return _treeIDs[ id ];
+}
+
+
+void YQWizard::sendTreeEvent( QListViewItem * listViewItem )
+{
+    if ( listViewItem )
+    {
+	YQWizard::TreeItem * item = dynamic_cast<YQWizard::TreeItem *> ( listViewItem );
+
+	if ( item && ! item->id().isEmpty() )
+	    sendEvent( YCPString( (const char *) item->id() ) );
+    }
+}
+
+
+void YQWizard::treeSelectionChanged()
+{
+    if ( _tree )
+	sendTreeEvent( _tree->selectedItem() );
 }
 
 

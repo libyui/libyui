@@ -258,6 +258,21 @@ protected slots:
      **/
     void nextClicked();
 
+    /**
+     * Internal notification that [Space] or [Return] has been pressed on a
+     * tree item.
+     * If the item has an ID, that ID will be returned to UI::UserInput().
+     **/
+    void sendTreeEvent( QListViewItem * item );
+    
+    /**
+     * Internal notification that the tree selection has changed.
+     *
+     * If the currently selected item has an ID, that ID will be returned to
+     * UI::UserInput().
+     **/
+    void treeSelectionChanged();
+
 
 protected:
 
@@ -400,10 +415,10 @@ protected:
     YQWizard::Step * findStep( const QString & id );
 
     /**
-     * Add a tree item. If "parentID" is an empty string, it will be a root item.
-     * 'text' is the text that will be displayed in the tree, 'id' the ID with which
-     * this newly created item can be referenced - and that will be returned when the user
-     * clicks on a tree item.
+     * Add a tree item. If "parentID" is an empty string, it will be a root
+     * item. 'text' is the text that will be displayed in the tree, 'id' the ID
+     * with which this newly created item can be referenced - and that will be
+     * returned when the user clicks on a tree item.
      **/
     void addTreeItem( const QString & parentID, const QString & text, const QString & id );
 
@@ -413,7 +428,8 @@ protected:
     void deleteTreeItems();
 
     /**
-     * Find a tree item with the specified ID. Tree items without IDs cannot be found at all.
+     * Find a tree item with the specified ID. Tree items without IDs cannot be
+     * found at all. 
      * Returns the item or 0 if no such item found.
      **/
     YQWizard::TreeItem * findTreeItem( const QString & id );
@@ -555,7 +571,7 @@ protected:
 	    {}
 
 	QString text() const { return QListViewItem::text(0); }
-	QString id()   const { return _id.isEmpty() ? text() : _id; }
+	QString id()   const { return _id; }
 
     private:
 	QString _id;
