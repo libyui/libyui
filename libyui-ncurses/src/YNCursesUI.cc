@@ -72,8 +72,6 @@ YNCursesUI::YNCursesUI( int argc, char **argv, bool with_threads, const char * m
     y2milestone ("Start YNCursesUI");
     _ui = this;
 
-#warning TO DO: Play macro if macro_file != 0
-    
     if ( getenv( "LANG" ) != NULL )
     {
 	string language = getenv( "LANG" );
@@ -104,12 +102,11 @@ YNCursesUI::YNCursesUI( int argc, char **argv, bool with_threads, const char * m
 	::endwin();
 	abort();
     }
+
+    if ( macro_file )
+	playMacro( macro_file );
     
     topmostConstructorHasFinished();
-
-// FIXME NI don't know what to do with it
-//    if ( macro_file )
-//	playMacro( macro_file );
 }
 
 YNCursesUI::~YNCursesUI()
