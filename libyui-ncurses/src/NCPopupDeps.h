@@ -63,7 +63,7 @@ private:
     NCMenuButton * depsMenu;
 
     PackageSelector * packager;
-    
+
 protected:
 
     virtual bool postAgain();

@@ -248,6 +248,7 @@ bool NCPopupDeps::fillDepsPackageList( NCPkgTable * table, list<PMObjectPtr> bad
 	
     }
 
+
     return true;
 }
 
@@ -289,8 +290,10 @@ NCursesEvent NCPopupDeps::showDependencyPopup( bool solve )
     }
     
     postevent = NCursesEvent();
+
     do {
 	popupDialog();
+	
     } while ( postAgain() );
 
     popdownDialog();
@@ -349,7 +352,32 @@ bool NCPopupDeps::postAgain()
     }
     else if  ( currentId->compare( PkgNames::Solve () ) == YO_EQUAL )
     {
+	// get currently selected package
+	PMObjectPtr currentPtr = pkgs->getDataPointer( pkgs->getCurrentItem() );
+
+	// solve the dependencies and create new list of "bad" packages
 	checkDependencies();
+	
+	// set current item ( if the package is still there )
+	if ( currentPtr )
+	{
+	    unsigned int size = pkgs->getNumLines();
+	    unsigned int index = 0;
+	    PMObjectPtr pkgPtr;
+	    while ( index < size )
+	    {
+		pkgPtr = pkgs->getDataPointer( index );
+		if ( pkgPtr == currentPtr )
+		{
+		    NCMIL << "Setting current package line: " << index << endl;
+		    pkgs->setCurrentItem( index );
+		    break;
+		}
+		index ++;
+	    }
+	}
+
+	pkgs->setKeyboardFocus();
     }
     else if  ( currentId->compare( PkgNames::OkButton () ) == YO_EQUAL )
     {
