@@ -618,11 +618,22 @@ const NCstring PkgNames::SelectionDeps()
 
 const NCstring PkgNames::Solving()
 {
-    // a label for a popup which is shown during package dependency checking
+    // a text for a small popup which is shown during package dependency checking
     static const NCstring value = _( "Solving..." );
     return value;
 }    
-	
+const NCstring PkgNames::Saving()
+{
+    // a text for a small popup which is shown during writing package selection to a file
+    static const NCstring value = _( "Saving..." );
+    return value;
+} 
+const NCstring PkgNames::Loading()
+{
+    // a text for a samll popup which is shown during loading package selections from a file
+    static const NCstring value = _( "Loading..." );
+    return value;
+} 
 const NCstring PkgNames::SearchPhrase()
 {
     // begin: text/labels for search popups (use unique hotkeys until the end:)

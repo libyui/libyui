@@ -395,6 +395,8 @@ public:
     static const NCstring NotifyLabel();
     static const NCstring DepsHelpLine();
     static const NCstring Solving();
+    static const NCstring Saving();
+    static const NCstring Loading();
     static const NCstring ContinueRequ();
     static const NCstring ContinueSelRequ();
     
