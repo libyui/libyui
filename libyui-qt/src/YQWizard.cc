@@ -82,29 +82,18 @@ YQWizard::YQWizard( QWidget *		parent,
     QColor greyText	( 0x66, 0x66, 0x66 );
 
     _bg		= QColor( 0xE6, 0xE6, 0xE6 );
-    _gradientCenterColor	= lightGrey;
-
 
     loadGradientPixmaps();
+    _gradientCenterColor = pixelColor( _bottomGradientPixmap, 0, 0 );
 
 
     //
-    // Top decoration
+    // Title Bar
     //
+    
+    layoutTitleBar();
 
-    QLabel * top = new QLabel( "SUSE Linux", this );
-    CHECK_PTR( top );
-    top->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-    top->setFont( QFont( "Helvetica", 14, QFont::Bold ) );
-    top->setMargin( 15 );
-    top->setMinimumHeight( 80 );
-    top->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
-    top->setPaletteForegroundColor( webGreenFG );
-
-
-    setGradient( top, _titleBarCenterGradientPixmap );
-
-
+    
     //
     // Center part - side bar and work area
     //
@@ -211,6 +200,77 @@ YQWizard::YQWizard( QWidget *		parent,
     setBottomCroppedGradient( bottomSpacer, _bottomGradientPixmap, WORK_AREA_BOTTOM_MARGIN );
 
     addGradientColumn( outerHBox, WORK_AREA_RIGHT_MARGIN );
+}
+
+
+void YQWizard::layoutTitleBar()
+{
+    QHBox * titleBar = new QHBox( this );
+    CHECK_PTR( titleBar );
+    setGradient( titleBar, _titleBarGradientPixmap );
+    titleBar->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
+
+    //
+    // Left logo
+    //
+    
+    QLabel * left = new QLabel( "YaST", titleBar );
+    left->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
+    
+    QPixmap leftLogo( PIXMAP_DIR "title-bar-left.png" );
+    
+    if ( leftLogo.isNull() )
+    {
+	QColor webGreenFG( 0x31, 0x65, 0x00 );
+
+	left->setText( "YaST" );
+	left->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
+	left->setFont( QFont( "Helvetica", 14, QFont::Bold ) );
+	left->setMargin( 15 );
+	left->setMinimumHeight( 80 );
+	left->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
+	left->setPaletteForegroundColor( webGreenFG );
+    }
+    else
+    {
+	left->setPixmap( leftLogo );
+	left->setFixedSize( leftLogo.size() );
+    }
+
+
+    //
+    // Center stretch space
+    //
+    
+    addHStretch( titleBar );
+
+
+    //
+    // Right logo
+    //
+    
+    QLabel * right = new QLabel( titleBar );
+    CHECK_PTR( right );
+
+    QPixmap rightLogo( PIXMAP_DIR "title-bar-right.png" );
+
+    if ( rightLogo.isNull() )
+    {
+	QColor webGreenFG( 0x31, 0x65, 0x00 );
+
+	right->setText( "SUSE Linux" );
+	right->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
+	right->setFont( QFont( "Helvetica", 14, QFont::Bold ) );
+	right->setMargin( 15 );
+	right->setMinimumHeight( 80 );
+	right->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
+	right->setPaletteForegroundColor( webGreenFG );
+    }
+    else
+    {
+	right->setPixmap( rightLogo );
+	right->setFixedSize( rightLogo.size() );
+    }
 }
 
 
@@ -396,9 +456,9 @@ void YQWizard::layoutButtonBox()
 
 void YQWizard::loadGradientPixmaps()
 {
-    _topGradientPixmap		  = QPixmap( PIXMAP_DIR "top-gradient.png"		);
-    _bottomGradientPixmap	  = QPixmap( PIXMAP_DIR "bottom-gradient.png"		);
-    _titleBarCenterGradientPixmap = QPixmap( PIXMAP_DIR "title-bar-center-gradient.png"	);
+    _topGradientPixmap		= QPixmap( PIXMAP_DIR "top-gradient.png"	);
+    _bottomGradientPixmap	= QPixmap( PIXMAP_DIR "bottom-gradient.png"	);
+    _titleBarGradientPixmap	= QPixmap( PIXMAP_DIR "title-bar-gradient.png"	);
 }
 
 
@@ -424,11 +484,11 @@ QPixmap YQWizard::bottomCropPixmap( const QPixmap & full, int croppedHeight )
 
     if ( full.height() > croppedHeight )
     {
-	QImage cropped = full.convertToImage();
-	cropped = cropped.copy( 0,  full.height() - croppedHeight - 1, // x, y
-				full.width(), croppedHeight );
-
-	pixmap = QPixmap( cropped );	      
+	pixmap = QPixmap( full.width(), croppedHeight );
+	
+	bitBlt( &pixmap, 0, 0,					// dest, dest_x, dest_y
+		&full,   0, full.height() - croppedHeight - 1,	// src, src_x, src_y
+		full.width(), croppedHeight );			// src_width, src_height
     }
     else
     {
@@ -436,6 +496,29 @@ QPixmap YQWizard::bottomCropPixmap( const QPixmap & full, int croppedHeight )
     }
     
     return pixmap;
+}
+
+
+QColor YQWizard::pixelColor( const QPixmap & pixmap, int x, int y )
+{
+    // QPixmap doesn't allow direct access to pixel values (which makes some
+    // sense since this requires a round-trip to the X server - pixmaps are X
+    // server resources), so we need to convert the QPixmap to a QImage to get
+    // that information. But since this conversion is expensive, we might save
+    // some performance if we only convert the part we really need - so let's
+    // cut out a tiny portion of the original pixmap and convert only that tiny
+    // portion.
+    
+    QPixmap tiny( 1, 1 );
+
+    bitBlt( &tiny, 0, 0,	// dest, dest_x, dest_y
+	    &pixmap, x, y,	// src, src_x, src_y
+	    1, 1 );		// src_width, src_height
+
+    QImage image = tiny.convertToImage();
+
+    
+    return QColor( image.pixel( 0, 0 ) );
 }
 
 

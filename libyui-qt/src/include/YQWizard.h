@@ -117,6 +117,12 @@ public slots:
      **/
     static QPixmap bottomCropPixmap( const QPixmap & pixmap, int croppedHeight );
 
+    /**
+     * Return the color of pixel( x, y ) of a pixmap.
+     * This is a _very_ expensive operation!
+     **/
+    static QColor pixelColor( const QPixmap & pixmap, int x, int y );
+    
     
 protected slots:
 
@@ -140,6 +146,7 @@ protected:
 
     // Layout functions
 
+    void layoutTitleBar();
     void layoutStepsPanel();
     void layoutHelpPanel();
     void layoutButtonBox();
@@ -188,7 +195,7 @@ protected:
 
     QColor	_bg;
 
-    QPixmap	_titleBarCenterGradientPixmap;
+    QPixmap	_titleBarGradientPixmap;
     QPixmap	_topGradientPixmap;
     QColor	_gradientCenterColor;
     QPixmap	_bottomGradientPixmap;
