@@ -980,7 +980,7 @@ void NCDialog::processInput( int timeout )
 						     PkgNames::TextmodeHelp3().str() +
 						     helpText
 						     ),
-					  false );
+					  "" );
 	 }
 	 if ( helpPopup )
 	 {
