@@ -231,7 +231,7 @@ YQPkgVersion::~YQPkgVersion()
 
 
 QString
-YQPkgVersion::toolTip( int )
+YQPkgVersion::toolTip(int)
 {
     QString tip;
 

@@ -463,7 +463,7 @@ YQPkgConflict::dumpList( QListViewItem * 	parent,
 	parent->setOpen( true );
     }
 
-    bool doSplit	= splitThreshold > 1 && list.size() > ( unsigned ) splitThreshold + 3;
+    bool doSplit	= splitThreshold > 1 && list.size() > (unsigned) splitThreshold + 3;
     bool didSplit	= false;
     int  count		= 0;
     PkgDep::RelInfoList_const_iterator it = list.begin();
@@ -656,7 +656,7 @@ YQPkgConflict::dumpDeleteList( QListViewItem * parent )
     }
 
     int	 splitThreshold = LIST_SPLIT_THRESHOLD;
-    bool doSplit	= _conflict.remove_to_solve_conflict.size() > ( unsigned ) splitThreshold + 3;
+    bool doSplit	= _conflict.remove_to_solve_conflict.size() > (unsigned) splitThreshold + 3;
     bool didSplit	= false;
     int  count		= 0;
     list<PMSolvablePtr>::const_iterator it = _conflict.remove_to_solve_conflict.begin();

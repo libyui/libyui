@@ -73,7 +73,7 @@ long YQFrame::nicesize( YUIDimension dim )
 
     if ( dim == YD_HORIZ )
     {
-	niceSize = max( childNiceSize, ( long )(10 + fontMetrics().width(title() ) ) ) + 2 * frameWidth() + 1;
+	niceSize = max( childNiceSize, (long)(10 + fontMetrics().width(title() ) ) ) + 2 * frameWidth() + 1;
     }
     else
     {

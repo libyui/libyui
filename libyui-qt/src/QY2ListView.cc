@@ -142,7 +142,7 @@ QY2ListView::saveColumnWidths()
 void
 QY2ListView::restoreColumnWidths()
 {
-    if ( _savedColumnWidth.size() != ( unsigned ) columns() )
+    if ( _savedColumnWidth.size() != (unsigned) columns() )
     {
 	return;
     }

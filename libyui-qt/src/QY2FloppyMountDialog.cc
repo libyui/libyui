@@ -165,7 +165,7 @@ QY2FloppyMountDialog::QY2FloppyMountDialog( QWidget * 		parent,
     addHStretch( hbox );
 
     enableWidgets();
-    connect( _useFloppy, SIGNAL( stateChanged( int ) ),
+    connect( _useFloppy, SIGNAL( stateChanged(int) ),
 	     this, 	 SLOT  ( enableWidgets()     ) );
 
 
