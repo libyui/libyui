@@ -23,6 +23,7 @@
 #define YQPkgSearchFilterView_h
 
 #include <qvbox.h>
+#include <qregexp.h>
 #include <y2pm/PMPackage.h>
 
 
@@ -91,8 +92,18 @@ protected:
     /**
      * Check if pkg matches the search criteria.
      **/
-    bool check( PMPackagePtr pkg );
+    bool check( PMPackagePtr pkg, const QRegExp & regexp );
 
+    /**
+     * Check if a single pkg attribute matches the search criteria.
+     **/
+    bool check( const std::string & attribute, const QRegExp & regexp );
+
+    /**
+     * Check multi-line attribute
+     **/
+    bool check( const std::list<std::string> & strList, const QRegExp & regexp );
+    
     /**
      * Add vertical stretchable space.
      **/

@@ -22,7 +22,6 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
-#include <qregexp.h>
 #include <qvbuttongroup.h>
 #include <qvgroupbox.h>
 
@@ -139,8 +138,9 @@ YQPkgSearchFilterView::filter()
 
     if ( ! _searchText->currentText().isEmpty() )
     {
-	QRegExp pattern = _searchText->currentText();
-	
+	QRegExp regexp = _searchText->currentText();
+	regexp.setCaseSensitive( _caseSensitive->isChecked() );
+	regexp.setWildcard( _useWildcards->isChecked() );
 	
 	
 	PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
@@ -150,8 +150,8 @@ YQPkgSearchFilterView::filter()
 	    PMSelectablePtr selectable = *it;
 
 	    bool match =
-		check( selectable->installedObj() ) ||
-		check( selectable->candidateObj() );
+		check( selectable->installedObj(), regexp ) ||
+		check( selectable->candidateObj(), regexp );
 
 	    // If there is neither an installed nor a candidate package, check
 	    // any other instance.
@@ -159,7 +159,7 @@ YQPkgSearchFilterView::filter()
 	    if ( ! match                      &&
 		 ! selectable->installedObj() &&
 		 ! selectable->candidateObj()     )
-		check( selectable->theObject() );
+		check( selectable->theObject(), regexp );
 
 	    ++it;
 	}
@@ -170,14 +170,57 @@ YQPkgSearchFilterView::filter()
 
 
 bool
-YQPkgSearchFilterView::check( PMPackagePtr pkg )
+YQPkgSearchFilterView::check( PMPackagePtr pkg, const QRegExp & regexp )
 {
     if ( ! pkg )
 	return false;
 
-    emit filterMatch( pkg );
+    bool match =
+	( _searchInName->isChecked()        && check( pkg->name(),        regexp ) ) ||
+	( _searchInSummary->isChecked()     && check( pkg->summary(),     regexp ) ) ||
+	( _searchInDescription->isChecked() && check( pkg->description(), regexp ) );
 
-    return true;
+    if ( match )
+	emit filterMatch( pkg );
+
+    return match;
+}
+
+
+bool
+YQPkgSearchFilterView::check( const std::string & attribute, const QRegExp & regexp )
+{
+    QString att = attribute.c_str();
+
+    if ( _contains->isChecked() )
+    {
+	return att.contains( _searchText->currentText(), _caseSensitive->isChecked() );
+    }
+
+    if ( _beginsWith->isChecked() )
+    {
+	return att.startsWith( _searchText->currentText() );	// only case sensitive
+    }
+
+    return att.contains( regexp );
+}
+
+
+bool
+YQPkgSearchFilterView::check( const std::list<std::string> & strList, const QRegExp & regexp )
+{
+    std::string text;
+    
+    std::list<std::string>::const_iterator it = strList.begin();
+    
+    while ( it != strList.end() )
+    {
+	text += (*it);
+	text += "\n";
+	++it;
+    }
+
+    return check( text, regexp );
 }
 
 
