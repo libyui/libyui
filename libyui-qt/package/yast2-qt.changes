@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Feb 13 15:48:21 CET 2003 - sh@suse.de
+
+- Suppress "YaST2@linux" window title (bug #23584)
+
+-------------------------------------------------------------------
 Thu Feb 13 13:18:23 CET 2003 - sh@suse.de
 
 - Improved default button behaviour
