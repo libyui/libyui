@@ -52,6 +52,8 @@
 
 YCPValue YUIQt::setLanguage( const YCPTerm & term)
 {
+    loadPredefinedQtTranslations();
+    
     return YCPVoid();   // OK (YCPNull() would mean error)
 }
 

@@ -24,6 +24,7 @@
 #include <qwidgetstack.h>
 #include <qvbox.h>
 #include <qwidgetlist.h>
+#include <qtextcodec.h>
 
 #include <X11/Xlib.h>
 
@@ -125,7 +126,7 @@ YUIQt::normalCursor( void )
 
     if ( _busy_cursor_timer.isActive() )
 	_busy_cursor_timer.stop();
-	
+
     while ( overrideCursor() )
 	restoreOverrideCursor();
 #else
@@ -274,6 +275,30 @@ bool YUIQt::showEventFilter( QObject * obj, QEvent * ev )
     }
 
     return false;	// Don't stop event processing
+}
+
+
+void YUIQt::loadPredefinedQtTranslations()
+{
+    QString language = QTextCodec::locale();
+    QString path = QT_LOCALEDIR;
+
+    if ( path.isEmpty() )
+    {
+	y2warning( "Qt locale directory not set - "
+		   "no translations for predefined Qt dialogs" );
+	return;
+    }
+
+    _qtTranslations.load( QString( "qt_" ) + language, path );
+
+    if ( _qtTranslations.isEmpty() )
+    {
+	y2warning( "Loading translations for predefined Qt dialogs failed" );
+	return;
+    }
+
+    qApp->installTranslator( & _qtTranslations );
 }
 
 

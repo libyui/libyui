@@ -56,6 +56,7 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
     , _wm_close_blocked( false )
     , _auto_activate_dialogs( true )
     , _running_embedded( false )
+    , _qtTranslations( 0 )
 {
     _ui				= this;
     _fatal_error		= false;
@@ -265,6 +266,7 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
 
     setFont( currentFont() );
     QXEmbed::initialize();
+    loadPredefinedQtTranslations();
     busyCursor();
 
     connect( & _user_input_timer,	SIGNAL( timeout()          ),

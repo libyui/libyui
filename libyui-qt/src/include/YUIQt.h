@@ -26,6 +26,7 @@
 #include <qmap.h>
 #include <qfont.h>
 #include <qtimer.h>
+#include <qtranslator.h>
 #include <vector>
 
 #include "YSimpleEventHandler.h"
@@ -316,6 +317,12 @@ protected:
      **/
     bool showEventFilter( QObject * obj, QEvent * ev );
 
+    /**
+     * Load translations for Qt's predefined dialogs like file selection box
+     * etc.
+     **/
+    void YUIQt::loadPredefinedQtTranslations();
+
 
     /*** Widget creation methods, all reimplemented from YUIInterpreter ***/
 
@@ -496,6 +503,24 @@ protected:
     QString		screenShotNameTemplate;
 
 
+protected slots:
+
+    /**
+     * Application shutdown
+     **/
+    bool close();
+
+    /**
+     * Timeout during TimeoutUserInput() / WaitForEvent()
+     **/
+    void userInputTimeout();
+
+    /**
+     * Sets @ref #leave_idle_loop to true.
+     */
+    void leaveIdleLoop( int );
+
+
 private:
     /**
      * Assume presence of a window manager
@@ -619,24 +644,10 @@ private:
      **/
     YSimpleEventHandler _event_handler;
 
-
-protected slots:
-
     /**
-     * Application shutdown
+     * Translator for the predefined Qt dialogs
      **/
-    bool close();
-
-    /**
-     * Timeout during TimeoutUserInput() / WaitForEvent()
-     **/
-    void userInputTimeout();
-
-    /**
-     * Sets @ref #leave_idle_loop to true.
-     */
-    void leaveIdleLoop( int );
-
+    QTranslator _qtTranslations;
 };
 
 
