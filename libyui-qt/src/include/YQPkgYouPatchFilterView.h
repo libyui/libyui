@@ -28,9 +28,10 @@
 
 class YQPkgYouPatchList;
 class YQPkgDescriptionView;
+class QCheckBox;
+class QLabel;
 class QSplitter;
 class QTabWidget;
-class QCheckBox;
 
 
 /**
@@ -65,7 +66,15 @@ public:
      **/
     virtual QSize sizeHint() const;
 
+    
+public slots:
 
+    /**
+     * Update the "total download size" field.
+     **/
+    void updateTotalDownloadSize();
+
+    
 protected slots:
 
     /**
@@ -85,6 +94,7 @@ protected:
     QCheckBox *			_showInstalledPatches;
     QTabWidget *		_detailsViews;
     YQPkgDescriptionView *	_descriptionView;
+    QLabel *			_totalDownloadSize;
 };
 
 

@@ -22,12 +22,15 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
+#include <qcheckbox.h>
+#include <qlabel.h>
 #include <qsplitter.h>
 #include <qtabwidget.h>
-#include <qcheckbox.h>
 
 #include <Y2PM.h>
 #include <y2pm/PMManager.h>
+#include <y2pm/PMYouPatchManager.h>
+#include <y2util/FSize.h>
 
 #include "YQPkgYouPatchFilterView.h"
 #include "YQPkgYouPatchList.h"
@@ -48,7 +51,7 @@ YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
 
     _splitter			= new QSplitter( QSplitter::Vertical, this );	CHECK_PTR( _splitter 		);
 
-    vbox			= new QVBox( _splitter );			CHECK_PTR( vbox		);
+    vbox			= new QVBox( _splitter );			CHECK_PTR( vbox			);
     _youPatchList		= new YQPkgYouPatchList( vbox );		CHECK_PTR( _youPatchList 	);
 
     addVSpacing( vbox, 4 );
@@ -59,7 +62,7 @@ YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
     _youPatchList->setShowInstalledPatches( _showInstalledPatches->isChecked() );
     addVSpacing( vbox, 4 );
 
-    vbox			= new QVBox( _splitter );			CHECK_PTR( vbox		);
+    vbox			= new QVBox( _splitter );			CHECK_PTR( vbox			);
     addVSpacing( vbox, 8 );
 
     _detailsViews		= new QTabWidget( vbox );			CHECK_PTR( _detailsViews	);
@@ -70,18 +73,46 @@ YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
     _descriptionView->setMinimumSize( 0, 0 );
     _detailsViews->addTab( _descriptionView, _( "Patch Description" ) );
 
-#if 0
-    _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
-#endif
+    //
+    // HBox for total download size
+    //
+
+    addVSpacing( vbox, 4 );
+    QHBox * hbox 		= new QHBox( vbox ); CHECK_PTR( hbox );
+    addHStretch( hbox );
+    
+    new QLabel( _( "Total Download Size:" ) + " ", hbox );
+    _totalDownloadSize		= new QLabel( FSize( 0 ).asString().c_str(), hbox );
+    CHECK_PTR( _totalDownloadSize );
+
+    
+    // Give the total download size a 3D look
+    
+    _totalDownloadSize->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    _totalDownloadSize->setLineWidth( 1 );
+    _totalDownloadSize->setMidLineWidth( 2 );
+    
 
     connect( _youPatchList,	SIGNAL( selectionChanged    ( PMObjectPtr ) ),
 	     _descriptionView,	SLOT  ( showDetailsIfVisible( PMObjectPtr ) ) );
+
+    connect( _youPatchList,	SIGNAL( statusChanged() 		),
+	     this,		SLOT  ( updateTotalDownloadSize() 	) );
+
+    updateTotalDownloadSize();
 }
 
 
 YQPkgYouPatchFilterView::~YQPkgYouPatchFilterView()
 {
     // NOP
+}
+
+
+void
+YQPkgYouPatchFilterView::updateTotalDownloadSize()
+{
+    _totalDownloadSize->setText( Y2PM::youPatchManager().totalDownloadSize().asString().c_str() );
 }
 
 
@@ -99,9 +130,6 @@ YQPkgYouPatchFilterView::sizeHint() const
 {
     return QSize( 600, 350 );
 }
-
-
-
 
 
 #include "YQPkgYouPatchFilterView.moc.cc"

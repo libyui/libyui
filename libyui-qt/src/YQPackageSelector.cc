@@ -20,7 +20,7 @@
 /-*/
 
 #define CHECK_DEPENDENCIES_ON_STARTUP	1
-#define DEPENDENCY_FEEDBACK_IF_OK	0
+#define DEPENDENCY_FEEDBACK_IF_OK	1
 #define SHOW_CHANGES_DIALOG		0
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT	false
 
@@ -146,7 +146,6 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
 
     YQPkgConflict::loadIgnoredConflicts();
     Y2PM::packageManager().SaveState();
-    Y2PM::selectionManager().SaveState();
 
     if ( _youMode )
     {
@@ -162,6 +161,8 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     }
     else
     {
+	Y2PM::selectionManager().SaveState();
+	
 	if ( _filters )
 	{
 	    if ( _updateProblemFilterView )
@@ -895,10 +896,11 @@ YQPackageSelector::reject()
 	 == 0 )	// Proceed upon button #0 (OK)
     {
 	Y2PM::packageManager().RestoreState();
-	Y2PM::selectionManager().RestoreState();
 
 	if ( _youMode )
 	    Y2PM::youPatchManager().RestoreState();
+	else
+	    Y2PM::selectionManager().RestoreState();
 
 	_yuiqt->setMenuSelection( YCPSymbol("cancel", true) );
 	_yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
@@ -937,14 +939,16 @@ YQPackageSelector::accept()
 
 
     Y2PM::packageManager().ClearSaveState();
-    Y2PM::selectionManager().ClearSaveState();
     YQPkgConflict::saveIgnoredConflicts();
 
-    if ( _youMode )
+    if ( _youMode )	
 	Y2PM::youPatchManager().ClearSaveState();
-
+    else
+    {
+	Y2PM::selectionManager().ClearSaveState();
 #warning NOT IMPLEMENTED YET: Save current selections state (waiting for package manager function)
-#warning NOT IMPLEMENTED YET: Save taboo packages / selections (waiting for package manager function)
+    }
+    
 
     _yuiqt->setMenuSelection( YCPSymbol("accept", true) );
     _yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
