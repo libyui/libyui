@@ -685,15 +685,16 @@ YQPackageSelector::autoResolveDependencies()
     if ( _autoDependenciesCheckBox && ! _autoDependenciesCheckBox->isChecked() )
 	return;
 
+    YUIQt::yuiqt()->busyCursor();
+
 #if ! DEPENDENCY_FEEDBACK_IF_OK
+
     if ( _checkDependenciesButton )
 	_checkDependenciesButton->animateClick();
+    else
+	resolvePackageDependencies();
 #endif
-    
-    YUIQt::yuiqt()->busyCursor();
-    
-    resolvePackageDependencies();
-    
+
     YUIQt::yuiqt()->normalCursor();
 }
 
