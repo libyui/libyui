@@ -146,7 +146,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
 					       this );
     }
 
-    depsPopup = new NCPopupDeps( wpos( 1, 1 ) );
+    depsPopup = new NCPopupDeps( wpos( 1, 1 ), this );
     
     //NCPopupInfo info( wpos( 5, 5 ), YCPString( "Warning" ), text.YCPstr() );
     //info.setNiceSize( 50, 20 );
@@ -759,7 +759,7 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 {
     if ( depsPopup )
     {
-	depsPopup->showDependencyPopup();
+	depsPopup->showDependencyPopup( true );
     }
 
     return true;
@@ -977,6 +977,57 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 
 ///////////////////////////////////////////////////////////////////
 //
+// showPatchInformation
+//
+// Shows the patch information
+//
+bool PackageSelector::showPatchInformation ( PMObjectPtr pkgPtr )
+{
+    PMYouPatchPtr patchPtr = pkgPtr;
+
+    if ( !patchPtr )
+    {
+	NCERR << "Package not valid" << endl;
+	return false;
+    }
+
+    if ( visibleInfo.isNull() )
+    {
+	NCERR <<  "Visible package information NOT set" << endl;
+	return false;	
+    }    
+    
+    NCstring text ( patchPtr->shortDescription() );
+	
+    // show the description	
+    YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
+	
+    if ( descrInfo )
+    {
+	static_cast<NCRichText *>(descrInfo)->setText( text.YCPstr() );
+    }
+	
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// showConcretelyDependency
+//
+// Shows the dependency of this package
+//
+bool PackageSelector::showConcretelyDependency ( PMObjectPtr pkgPtr )
+{
+    if ( depsPopup )
+    {
+	depsPopup->concretelyDependency( pkgPtr );
+    }
+
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////
+//
 // showPackageInformation
 //
 // Shows the package information
@@ -993,21 +1044,6 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
     {
 	NCERR <<  "Visible package information NOT set" << endl;
 	return false;	
-    }
-    
-    if ( youMode )
-    {
-	NCstring text ( ((PMYouPatchPtr)pkgPtr)->shortDescription() );
-	
-	// show the description	
-	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
-	
-	if ( descrInfo )
-	{
-	    static_cast<NCRichText *>(descrInfo)->setText( text.YCPstr() );
-	}
-	
-	return true;
     }
     
     if ( visibleInfo->compare( PkgNames::LongDescr() ) == YO_EQUAL )

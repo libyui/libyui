@@ -249,6 +249,20 @@ class PackageSelector
     */
     bool showPackageInformation ( PMObjectPtr pkgPtr );
 
+  /**
+    * Shows the dependency of this package 
+    * @param pkgPtr the data pointer
+    * @return bool
+    */
+    bool showConcretelyDependency ( PMObjectPtr pkgPtr );
+
+   /**
+    * Gets the required patch info from you patch manager and shows it
+    * @param pkgPtr the data pointer
+    * @return bool
+    */
+    bool showPatchInformation ( PMObjectPtr pkgPtr );
+    
    /**
     * Sets the member variable to the currently visible information
     * @param info
