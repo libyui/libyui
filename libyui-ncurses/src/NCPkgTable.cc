@@ -421,7 +421,7 @@ void NCPkgTable::fillHeader( )
 		header.push_back( "L" + PkgNames::PkgVersionInst().str() );
 		header.push_back( "L" + PkgNames::PkgSummary().str() );
 		header.push_back( "L" + PkgNames::PkgSize().str() );
-		header.push_back( "LSPM" );	
+		header.push_back( "L" + PkgNames::PkgSource().str() );	
 	    }
 	    else
 	    {
@@ -431,7 +431,7 @@ void NCPkgTable::fillHeader( )
 		header.push_back( "L" + PkgNames::PkgVersion().str() );
 		header.push_back( "L" + PkgNames::PkgSummary().str() );
 		header.push_back( "L" + PkgNames::PkgSize().str() );
-		header.push_back( "LSPM" );
+		header.push_back( "L" + PkgNames::PkgSource().str() );
 	    }
 	    break;
 	}

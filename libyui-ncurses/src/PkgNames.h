@@ -698,6 +698,11 @@ public:
      */
     static const NCstring PkgSize();
 
+   /**
+     *  Column header package source
+     */
+    static const NCstring PkgSource();
+    
      /**
      *  Column header patch kind
      */

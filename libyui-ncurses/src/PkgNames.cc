@@ -1293,6 +1293,13 @@ const NCstring PkgNames::PkgSize()
     return value;
 }
 
+const NCstring PkgNames::PkgSource()
+{
+    // column header source RPM installation (keep it short!)
+    static const NCstring value = _( "Source" );
+    return value;
+}
+
 const NCstring PkgNames::PatchKind()
 {
     // column header patch kind (keep it short!)
