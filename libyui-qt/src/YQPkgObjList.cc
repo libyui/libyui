@@ -231,7 +231,7 @@ YQPkgObjList::setCurrentStatus( PMSelectable::UI_Status newStatus,
 
 
 void
-YQPkgObjList::setAllItemStatus( PMSelectable::UI_Status newStatus )
+YQPkgObjList::setAllItemStatus( PMSelectable::UI_Status newStatus, bool force )
 {
     if ( ! _editable )
 	return;
@@ -244,7 +244,15 @@ YQPkgObjList::setAllItemStatus( PMSelectable::UI_Status newStatus )
 
 	if ( item && item->editable() && newStatus != item->status() )
 	{
-	    item->setStatus( newStatus );
+	    if ( newStatus == PMSelectable::S_Update )
+	    {
+		if ( item->candidateIsNewer() || force )
+		    item->setStatus( newStatus );
+	    }
+	    else
+	    {
+		item->setStatus( newStatus );
+	    }
 	}
 
 	listViewItem = listViewItem->nextSibling();
@@ -283,9 +291,20 @@ YQPkgObjList::createActions()
     actionSetListDontInstall		= createAction( PMSelectable::S_NoInst,		"", true );
     actionSetListKeepInstalled		= createAction( PMSelectable::S_KeepInstalled,	"", true );
     actionSetListDelete			= createAction( PMSelectable::S_Del,		"", true );
-    actionSetListUpdate			= createAction( PMSelectable::S_Update,		"", true );
+    
+    actionSetListUpdate			= createAction( _( "Update if newer version available" ),
+							statusIcon( PMSelectable::S_Update, true ),
+							statusIcon( PMSelectable::S_Update, false ),
+							"",
+							true );
+    
+    actionSetListUpdateForce		= createAction( _( "Update unconditionally" ),
+							statusIcon( PMSelectable::S_Update, true ),
+							statusIcon( PMSelectable::S_Update, false ),
+							"",
+							true );
+    
     actionSetListTaboo			= createAction( PMSelectable::S_Taboo,		"", true );
-
 
     connect( actionSetCurrentInstall,	     SIGNAL( activated() ), this, SLOT( setCurrentInstall()	  ) );
     connect( actionSetCurrentDontInstall,    SIGNAL( activated() ), this, SLOT( setCurrentDontInstall()	  ) );
@@ -299,6 +318,7 @@ YQPkgObjList::createActions()
     connect( actionSetListKeepInstalled,     SIGNAL( activated() ), this, SLOT( setListKeepInstalled()	  ) );
     connect( actionSetListDelete,	     SIGNAL( activated() ), this, SLOT( setListDelete()		  ) );
     connect( actionSetListUpdate,	     SIGNAL( activated() ), this, SLOT( setListUpdate()		  ) );
+    connect( actionSetListUpdateForce,	     SIGNAL( activated() ), this, SLOT( setListUpdateForce()	  ) );
     connect( actionSetListTaboo,	     SIGNAL( activated() ), this, SLOT( setListTaboo()		  ) );
 }
 
@@ -388,6 +408,7 @@ YQPkgObjList::addAllInListSubMenu( QPopupMenu * menu )
     actionSetListKeepInstalled->addTo( submenu );
     actionSetListDelete->addTo( submenu );
     actionSetListUpdate->addTo( submenu );
+    actionSetListUpdateForce->addTo( submenu );
     actionSetListTaboo->addTo( submenu );
 
     menu->insertItem( _( "&All in this list" ), submenu );

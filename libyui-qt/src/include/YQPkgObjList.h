@@ -86,8 +86,11 @@ public:
     /**
      * Sets the status of all (toplevel) list items to 'newStatus', if possible.
      * Only one single statusChanged() signal is emitted.
+     *
+     * 'force' overrides sensible defaults like setting only PMObjects to
+     * 'update' that really come with a newer version. 
      **/
-    void setAllItemStatus( PMSelectable::UI_Status newStatus );
+    void setAllItemStatus( PMSelectable::UI_Status newStatus, bool force = false );
 
     /**
      * Add a submenu "All in this list..." to 'menu'.
@@ -172,6 +175,7 @@ public slots:
     void setListKeepInstalled()	   { setAllItemStatus( PMSelectable::S_KeepInstalled ); }
     void setListDelete()	   { setAllItemStatus( PMSelectable::S_Del	     ); }
     void setListUpdate()	   { setAllItemStatus( PMSelectable::S_Update	     ); }
+    void setListUpdateForce()	   { setAllItemStatus( PMSelectable::S_Update, true  ); }
     void setListTaboo()		   { setAllItemStatus( PMSelectable::S_Taboo	     ); }
 
 
@@ -284,6 +288,7 @@ public:
     QAction *		actionSetListKeepInstalled;
     QAction *		actionSetListDelete;
     QAction *		actionSetListUpdate;
+    QAction *		actionSetListUpdateForce;
     QAction *		actionSetListTaboo;
 };
 
