@@ -943,11 +943,15 @@ void YQWizard::setDialogIcon( const char * iconName )
 	    if ( icon.isNull() )
 		y2warning( "Couldn't load dialog icon \"%s\"", iconName );
 	    else
+	    {
 		_dialogIcon->setPixmap( icon );
+		topLevelWidget()->setIcon( icon );
+	    }
 	}
 	else
 	{
 	    _dialogIcon->clear();
+	    topLevelWidget()->setIcon( QPixmap() );
 	}
     }
 }
