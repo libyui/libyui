@@ -418,10 +418,20 @@ public:
     void setText( int column, const PkgEdition & edition );
 
     /**
-     * Display this item's notify text ( if there is any ) that corresponds to
-     * the specified status ( S_Install, S_Del ) in a pop-up window.
+     * Display this item's notify text (if there is any) that corresponds to
+     * the specified status (S_Install, S_Del) in a pop-up window.
      **/
     void showNotifyTexts( PMSelectable::UI_Status status );
+
+    /**
+     * Display this item's license agreement (if there is any) that corresponds to
+     * the specified status (S_Install, S_Update) in a pop-up window.
+     *
+     * Returns 'true' if the user agreed to that license , 'false' otherwise.
+     * The item's status may have changed to S_Taboo, S_Proteced or S_Del if
+     * the user disagreed with the license.
+     **/
+    bool showLicenseAgreement( PMSelectable::UI_Status status );
 
     /**
      * Comparison function used for sorting the list.

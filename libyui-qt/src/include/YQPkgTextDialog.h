@@ -33,7 +33,7 @@ using std::string;
 
 
 /**
- * @short Dialog that shows a scrolled ( HTML ) text.
+ * @short Dialog that shows a scrolled (HTML) text.
  **/
 class YQPkgTextDialog: public QDialog
 {
@@ -42,8 +42,24 @@ class YQPkgTextDialog: public QDialog
 public:
 
     /**
-     * Constructor. Does not pop up a dialog yet.
-     * Use 'exec()' ( inherited from QDialog ).
+     * Constructor.
+     *
+     * Creates a dialog with a text browser and two buttons.
+     * This does not pop up a dialog yet.
+     * Use 'exec()' (inherited from QDialog).
+     * Or, better yet, use the static confirmText() method.
+     * 
+     **/
+    YQPkgTextDialog( const QString & 	text,
+		     QWidget * 		parent,
+		     const QString & 	acceptButtonLabel,
+		     const QString & 	rejectButtonLabel );
+    /**
+     * Constructor.
+     *
+     * Creates a dialog with a text browser and an "OK" button.
+     * This does not pop up a dialog yet.
+     * Use 'exec()' (inherited from QDialog).
      * Or, better yet, use the static showText() method.
      **/
     YQPkgTextDialog( const QString & text, QWidget * parent );
@@ -67,7 +83,7 @@ public:
     static void showText( QWidget * parent, const list<string> & text );
 
     /**
-     * Show a text with a headline identifying a PMObject ( name+summary ).
+     * Show a text with a headline identifying a PMObject (name+summary).
      **/
     static void showText( QWidget * parent,
 			  PMObjectPtr pmObj,
@@ -76,6 +92,34 @@ public:
 			  PMObjectPtr pmObj,
 			  const string & text );
 
+    /**
+     * Let the user confirm a text. Returns "true" if the user clicked the
+     * accept button, false if he clicked the reject button.
+     **/ 
+    static bool confirmText( QWidget * 	parent,
+			     const QString & 	text,
+			     const QString & 	acceptButtonLabel,
+			     const QString & 	rejectButtonLabel );
+
+    /**
+     * Let the use confirm a text with buttons "Accept" and "Cancel".
+     * Returns "true" if the user clicked "Accept", "false" on "Cancel".
+     **/
+    static bool confirmText( QWidget * parent, const QString & text );
+
+    /**
+     * Let the use confirm a text with a headline identifying a PMObject
+     * (name+summary) with buttons "Accept" and "Cancel".
+     * Returns "true" if the user clicked "Accept", "false" on "Cancel".
+     **/
+    static bool confirmText( QWidget * parent,
+			     PMObjectPtr pmObj,
+			     const list<string> & text );
+    
+    static bool confirmText( QWidget * parent,
+			     PMObjectPtr pmObj,
+			     const string & text );
+    
     /**
      * Convert a string list into its HTML paragraphs ( empty lines delimit
      * paragraphs ).
@@ -122,6 +166,13 @@ public slots:
 protected:
 
     /**
+     * Create the dialog. Called from all constructors.
+     **/
+    void buildDialog( const QString & 	text,
+		      QWidget * 	parent,
+		      const QString & 	acceptButtonLabel,
+		      const QString & 	rejectButtonLabel = "" );
+    /**
      * Grab [Return] press events and close dialog.
      * Inherited from QObject.
      **/
@@ -130,7 +181,8 @@ protected:
 
     // Data members
 
-    QPushButton *	_okButton;
+    QPushButton *	_acceptButton;
+    QPushButton * 	_rejectButton;
     QTextBrowser *	_textBrowser;
 };
 

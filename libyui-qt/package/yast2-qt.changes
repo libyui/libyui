@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Mar 16 18:05:46 CET 2004 - sh@suse.de
+
+- Minimal approach fix for bug #33584: Show license agreements
+- V 2.9.12 
+
+-------------------------------------------------------------------
 Fri Mar 12 23:25:48 CET 2004 - sh@suse.de
 
 - Enabled shortcut checking for wizard buttons

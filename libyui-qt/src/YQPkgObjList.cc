@@ -27,6 +27,7 @@
 
 #include <Y2PM.h>
 #include <y2pm/InstTarget.h>
+#include <y2pm/PMPackage.h>
 #include "utf8.h"
 
 #include "YQPkgObjList.h"
@@ -266,8 +267,12 @@ YQPkgObjList::setCurrentStatus( PMSelectable::UI_Status newStatus,
     {
 	if ( newStatus != item->status() )
 	{
-	    item->setStatus( newStatus );
-	    item->showNotifyTexts( newStatus );
+	    if ( item->showLicenseAgreement( newStatus ) )
+	    {
+		item->showNotifyTexts( newStatus );
+		item->setStatus( newStatus );
+	    }
+	    
 	    emit statusChanged();
 	}
     }
@@ -842,8 +847,12 @@ YQPkgObjListItem::cycleStatus()
 
     if ( oldStatus != newStatus )
     {
-	setStatus( newStatus );
-	showNotifyTexts( newStatus );
+	if ( showLicenseAgreement( newStatus ) )
+	{
+	    showNotifyTexts( newStatus );
+	    setStatus( newStatus );
+	}
+	
 	_pkgObjList->sendStatusChanged();
     }
 }
@@ -876,6 +885,57 @@ YQPkgObjListItem::showNotifyTexts( PMSelectable::UI_Status status )
 	y2debug( "Showing notify text" );
 	YQPkgTextDialog::showText( _pkgObjList, _pmObj, text );
     }
+}
+
+
+bool
+YQPkgObjListItem::showLicenseAgreement( PMSelectable::UI_Status status )
+{
+    bool confirmed = true;
+    list<string> text;
+
+    switch ( status )
+    {
+	case PMSelectable::S_Install:
+	case PMSelectable::S_Update:
+	    if ( _pmObj->hasCandidateObj() )
+	    {
+		PMPackagePtr pkg =  _pmObj->getCandidateObj();
+
+		if ( pkg )
+		    text = pkg->licenseToConfirm();
+	    }
+	    break;
+
+	default: return true;
+    }
+
+    if ( ! text.empty() )
+    {
+	y2debug( "Showing license agreement" );
+	confirmed = YQPkgTextDialog::confirmText( _pkgObjList, _pmObj, text );
+
+	if ( ! confirmed )
+	{
+	    // The user rejected the license agreement -
+	    // make sure the package gets unselected.
+	    
+	    switch ( status )
+	    {
+		case PMSelectable::S_Install:
+		    setStatus( PMSelectable::S_Taboo );
+		    break;
+		    
+		case PMSelectable::S_Protected:
+		    setStatus( PMSelectable::S_Del );
+		    break;
+
+		default: break;
+	    }
+	}
+    }
+
+    return confirmed;
 }
 
 

@@ -46,6 +46,31 @@ using std::string;
 YQPkgTextDialog::YQPkgTextDialog( const QString & text, QWidget * parent )
     : QDialog( parent )
 {
+    buildDialog( text, parent, _( "&OK" ) );
+}
+
+
+YQPkgTextDialog::YQPkgTextDialog( const QString & 	text,
+				  QWidget * 		parent,
+				  const QString & 	acceptButtonLabel,
+				  const QString & 	rejectButtonLabel )
+    : QDialog( parent )
+{
+    buildDialog( text, parent, acceptButtonLabel, rejectButtonLabel );
+}
+
+
+YQPkgTextDialog::~YQPkgTextDialog()
+{
+    // NOP
+}
+
+
+void YQPkgTextDialog::buildDialog( const QString & 	text,
+				   QWidget * 		parent,
+				   const QString & 	acceptButtonLabel,
+				   const QString & 	rejectButtonLabel )
+{
     // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );
 
@@ -79,22 +104,34 @@ YQPkgTextDialog::YQPkgTextDialog( const QString & text, QWidget * parent )
 
     addHStretch( buttonBox );
 
-    // OK button
+    // Accept (OK) button
 
-    _okButton = new QPushButton( _( "&OK" ), buttonBox );
-    CHECK_PTR( _okButton );
-    _okButton->setDefault( true );
+    _acceptButton = new QPushButton( acceptButtonLabel, buttonBox );
+    CHECK_PTR( _acceptButton );
+    _acceptButton->setDefault( true );
 
-    connect( _okButton, SIGNAL( clicked() ),
-	     this,      SLOT  ( accept()  ) );
+    connect( _acceptButton,	SIGNAL( clicked() ),
+	     this,      	SLOT  ( accept()  ) );
 
     addHStretch( buttonBox );
-}
 
+    if ( ! rejectButtonLabel.isEmpty() )
+    {
+	// Reject (Cancel) button
 
-YQPkgTextDialog::~YQPkgTextDialog()
-{
-    // NOP
+	_rejectButton = new QPushButton( rejectButtonLabel, buttonBox );
+	CHECK_PTR( _rejectButton );
+	_rejectButton->setDefault( true );
+
+	connect( _rejectButton,	SIGNAL( clicked() ),
+		 this,      	SLOT  ( reject()  ) );
+
+	addHStretch( buttonBox );
+    }
+    else
+    {
+	_rejectButton = 0;
+    }
 }
 
 
@@ -112,12 +149,22 @@ YQPkgTextDialog::eventFilter( QObject * obj, QEvent * ev )
     {
 	QKeyEvent * keyEvent = dynamic_cast<QKeyEvent *> (ev);
 
-	if ( keyEvent &&
-	     ( keyEvent->key() == Key_Return ||
-	       keyEvent->key() == Key_Enter    ) )
+	if ( keyEvent )
 	{
-	    _okButton->animateClick();
-	    return true; // Stop event processing
+	    if ( keyEvent->key() == Key_Return ||
+		 keyEvent->key() == Key_Enter    )
+	    {
+		_acceptButton->animateClick();
+		return true; // Stop event processing
+	    }
+	    else if ( keyEvent->key() == Key_Escape )
+	    {
+		if ( _rejectButton )
+		{
+		    _rejectButton->animateClick();
+		    return true; // Stop event processing
+		}
+	    }
 	}
     }
 
@@ -184,6 +231,46 @@ void YQPkgTextDialog::showText( QWidget * parent,
 {
     showText( parent, htmlHeading( pmObj ) + QString::fromUtf8( text.c_str() ) );
 }
+
+
+bool YQPkgTextDialog::confirmText( QWidget * 		parent,
+				   const QString & 	text,
+				   const QString & 	acceptButtonLabel,
+				   const QString & 	rejectButtonLabel )
+{
+    YQPkgTextDialog * dia = new YQPkgTextDialog( text,
+						 parent,
+						 acceptButtonLabel,
+						 rejectButtonLabel );
+    CHECK_PTR( dia );
+    bool confirmed = ( dia->exec() == QDialog::Accepted );
+    delete dia;
+
+    return confirmed;
+}
+
+
+bool YQPkgTextDialog::confirmText( QWidget * parent, const QString & text )
+{
+    return confirmText( parent, text, _( "&Accept" ), _( "&Cancel" ) );
+}
+
+
+bool YQPkgTextDialog::confirmText( QWidget * parent,
+				   PMObjectPtr pmObj,
+				   const list<string> & text )
+{
+    return confirmText( parent, htmlHeading( pmObj ) + htmlParagraphs( text ) );
+}
+
+
+bool YQPkgTextDialog::confirmText( QWidget * parent,
+				   PMObjectPtr pmObj,
+				   const string & text )
+{
+    return confirmText( parent, htmlHeading( pmObj ) + QString::fromUtf8( text.c_str() ) );
+}
+
 
 
 QString
