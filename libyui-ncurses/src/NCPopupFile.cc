@@ -360,7 +360,7 @@ void NCPopupFile::loadFromFile()
 //	METHOD TYPE : void
 //
 //
-const string YAST2PATH = "/usr/lib/YaST2/";
+const string YAST2PATH = "/var/lib/YaST2/";
 const string USERFILE = "user.sel";
 
 void NCPopupFile::setDefaultPath()
