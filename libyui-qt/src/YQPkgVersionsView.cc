@@ -33,11 +33,12 @@
 #include "utf8.h"
 
 
-YQPkgVersionsView::YQPkgVersionsView( QWidget * parent )
+YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
     : QY2ListView( parent )
 {
-    _pmObj	= 0;
-    _parentTab	= dynamic_cast<QTabWidget *> (parent);
+    _pmObj		= 0;
+    _parentTab		= dynamic_cast<QTabWidget *> (parent);
+    _userCanSwitch 	= userCanSwitch;
 
 
     int numCol = 0;
@@ -122,26 +123,29 @@ YQPkgVersionsView::showDetails( PMObjectPtr pmObj )
 	return;
     }
 
+    bool installedIsAvailable = false;
     PMSelectable::PMObjectList::const_iterator it = pmObj->getSelectable()->av_begin();
 
     while ( it != pmObj->getSelectable()->av_end() )
     {
-	new YQPkgVersion( this, root, *it );
+	new YQPkgVersion( this, root, *it, _userCanSwitch );
+
+	if ( *it == pmObj->getInstalledObj() )
+	    installedIsAvailable = true;
+	     
 #if 0
 	// DEBUG
-	new YQPkgVersion( this, root, *it );
-	new YQPkgVersion( this, root, *it );
-	new YQPkgVersion( this, root, *it );
+	new YQPkgVersion( this, root, *it, _userCanSwitch );
+	new YQPkgVersion( this, root, *it, _userCanSwitch );
+	new YQPkgVersion( this, root, *it, _userCanSwitch );
 	// DEBUG
 #endif
 	++it;
     }
 
 
-#if 0
-    if ( pmObj->hasInstalledObj() )
-	new YQPkgVersion( this, root, pmObj->getInstalledObj() );
-#endif
+    if ( pmObj->hasInstalledObj() && ! installedIsAvailable )
+	new YQPkgVersion( this, root, pmObj->getInstalledObj(), false );
 }
 
 
@@ -193,8 +197,12 @@ YQPkgVersionsView::minimumSizeHint() const
 
 YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
 			    QY2CheckListItem * 	parent,
-			    PMObjectPtr 	pmObj )
-    : QY2CheckListItem( parent, "", QCheckListItem::RadioButton )
+			    PMObjectPtr 	pmObj,
+			    bool		enabled )
+    : QY2CheckListItem( parent, "",
+			enabled ?
+			QCheckListItem::RadioButton :
+			QCheckListItem::Controller )	// cheap way to make it read-only
     , _pkgVersionList( pkgVersionList )
     , _pmObj( pmObj )
 {

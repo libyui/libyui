@@ -42,8 +42,11 @@ public:
 
     /**
      * Constructor.
+     *
+     * 'userCanSwitchVersions' specifies whether or not the user is allowed to
+     * switch between package versions - e.g. in YOU mode, he can't.
      **/
-    YQPkgVersionsView( QWidget * parent );
+    YQPkgVersionsView( QWidget * parent, bool userCanSwitchVersions );
 
     /**
      * Destructor
@@ -112,6 +115,7 @@ protected:
 
     QTabWidget	* 	_parentTab;
     PMObjectPtr		_pmObj;
+    bool		_userCanSwitch;
 
     int 		_versionCol;
     int			_instSrcCol;
@@ -131,7 +135,8 @@ public:
      **/
     YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
 		  QY2CheckListItem * 	parent,
-		  PMObjectPtr 		pmObj );
+		  PMObjectPtr 		pmObj,
+		  bool			enabled = true );
 
     /**
      * Destructor

@@ -438,9 +438,10 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     // Versions
     //
     
-    if ( ! _youMode )
+    // if ( ! _youMode )
     {
-	_pkgVersionsView = new YQPkgVersionsView( _detailsViews );
+	_pkgVersionsView = new YQPkgVersionsView( _detailsViews,
+						  ! _youMode );	// userCanSwitchVersions
 	CHECK_PTR( _pkgVersionsView );
     
 	_detailsViews->addTab( _pkgVersionsView, _( "&Versions" ) );
