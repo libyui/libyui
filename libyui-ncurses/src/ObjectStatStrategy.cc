@@ -44,11 +44,11 @@ ObjectStatStrategy::~ObjectStatStrategy()
 
 ///////////////////////////////////////////////////////////////////
 //
-// ObjectStatStrategy::getStatus()
+// ObjectStatStrategy::getPackageStatus()
 //
 // Gets status from package manager
 //
-PMSelectable::UI_Status ObjectStatStrategy::getStatus( PMObjectPtr objPtr )
+PMSelectable::UI_Status ObjectStatStrategy::getPackageStatus( PMObjectPtr objPtr )
 {
     return objPtr->getSelectable()->status();
 }
@@ -75,102 +75,6 @@ bool ObjectStatStrategy::setPackageStatus( PMSelectable::UI_Status newstatus, PM
     return ok;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// ObjectStatStrategy::validateNewStatus()
-//
-// Checks whether the new status is valid
-//
-bool ObjectStatStrategy::validateNewStatus( const NCPkgStatus & oldStatus,
-					    const NCPkgStatus & newStatus,
-					    const  PMObjectPtr & objPtr  )
-{
-    bool valid = false;
-    
-    // check whether the status change is possible
-    switch ( oldStatus )
-    {
-	case PkgToDelete: {
-	    if ( ( newStatus == PkgInstalled )	||
-		 ( objPtr->hasCandidateObj() &&
-		   ( newStatus == PkgToUpdate
-		     || newStatus == PkgToReplace ) ) )
-	    {
-		valid = true;
-	    }
-	    break;
-	}
-	case PkgToInstall: {
-	    if ( newStatus == PkgNoInstall || newStatus == PkgTaboo )
-	    {
-		valid = true;
-	    }
-	    break;
-	}
-	case PkgToUpdate: {
-	    if ( newStatus == PkgToDelete ||  newStatus == PkgInstalled ||
-		 newStatus == PkgToReplace )
-	    {
-		valid = true;
-	    }
-	    break;
-	}
-	case PkgInstalled: {
-	    if ( ( newStatus == PkgToDelete ) 	||
-		 ( objPtr->hasCandidateObj() &&
-		   ( newStatus == PkgToUpdate
-		     || newStatus == PkgToReplace
-		     || newStatus == PkgToDelete ) ) )
-	    {
-		valid = true;
-	    }
-	    break;
-	}
-	case PkgToReplace: {
-	    if ( newStatus == PkgToDelete || newStatus == PkgInstalled )
-	    {
-		valid = true;
-	    }
-	    break;  
-	}
-	case PkgNoInstall:
-	    if ( newStatus == PkgToInstall || newStatus == PkgTaboo )
-	    {
-		valid = true;
-	    }
-	    break;
- 	case PkgAutoInstall:
-	    // FIXME show a warning !!!!!
-	    if ( newStatus == PkgNoInstall )
-	    {
-		valid = true;
-	    }
-	    break;
-	case PkgAutoDelete:
-	    if ( newStatus == PkgInstalled || newStatus == PkgToUpdate )
-	    {
-		valid = true;
-	    }
-	    break;
-	case PkgAutoUpdate:
-	    if ( newStatus == PkgInstalled || newStatus == PkgToDelete )
-	    {
-		valid = true;
-	    }
-	    break;
-	case PkgTaboo:
-	    if ( newStatus == PkgNoInstall )
-	    {
-		valid = true;
-	    }
-	    break;
-    }
-
-    NCMIL << "Change from: " << oldStatus << " to "
-	  << newStatus << ": " << (valid?"true":"false") << endl;
-
-    return valid;
-}
 
 //------------------------------------------------------------
 // Class for strategies to get status for packages
@@ -199,51 +103,6 @@ PatchStatStrategy::PatchStatStrategy()
     : ObjectStatStrategy()
 {
     type = T_Patch;
-}
-
-
-///////////////////////////////////////////////////////////////////
-//
-// PatchStatStrategy::validateNewStatus()
-//
-// Checks whether the new status is valid
-//
-bool PatchStatStrategy::validateNewStatus( const NCPkgStatus & oldStatus,
-					   const NCPkgStatus & newStatus,
-					   const  PMObjectPtr & objPtr  )
-{
-    bool valid = false;
-    
-    // check whether the status change is possible
-    switch ( oldStatus )
-    {
-	case PkgToInstall: {
-	    if ( newStatus == PkgNoInstall || newStatus == PkgTaboo )
-	    {
-		valid = true;
-	    }
-	    break;
-	}
-	case PkgNoInstall:
-	    if ( newStatus == PkgToInstall )
-	    {
-		valid = true;
-	    }
-	    break;
-	case PkgTaboo:
-	    if ( newStatus == PkgNoInstall )
-	    {
-		valid = true;
-	    }
-	    break;
-	default:
-	    valid = false;
-    }
-
-    NCMIL << "Change from: " << oldStatus << " to "
-	  << newStatus << ": " << (valid?"true":"false") << endl;
-
-    return valid;
 }
 
 
@@ -294,12 +153,12 @@ bool AvailableStatStrategy::setPackageStatus( PMSelectable::UI_Status newstatus,
 //
 // Returns the status of the certain package
 //
-PMSelectable::UI_Status AvailableStatStrategy::getStatus( PMObjectPtr objPtr )
+PMSelectable::UI_Status AvailableStatStrategy::getPackageStatus( PMObjectPtr objPtr )
 {
     PMSelectable::UI_Status selStatus = objPtr->getSelectable()->status();
     PMSelectable::UI_Status retStatus = PMSelectable::S_NoInst;
 
-    // set status for installed package or the candidate ( not for all availables )
+    // return status for installed package or the candidate ( not for all availables )
     if ( objPtr->isInstalledObj()
 	 || objPtr->isCandidateObj() )
     {
@@ -309,25 +168,3 @@ PMSelectable::UI_Status AvailableStatStrategy::getStatus( PMObjectPtr objPtr )
     return retStatus;
 }
 
-
-ostream & operator<<( ostream & str, NCPkgStatus obj )
-{
-  switch ( obj ) {
-#define ENUM_OUT(V) case V: return str << #V; break
-
-    ENUM_OUT( PkgToDelete );
-    ENUM_OUT( PkgToInstall );
-    ENUM_OUT( PkgToUpdate );
-    ENUM_OUT( PkgNoInstall );
-    ENUM_OUT( PkgInstalled );
-    ENUM_OUT( PkgAutoInstall );
-    ENUM_OUT( PkgTaboo );
-    ENUM_OUT( PkgToReplace );
-    ENUM_OUT( PkgAutoDelete );
-    ENUM_OUT( PkgAutoUpdate );
-
-#undef ENUM_OUT
-  }
-
-  return str << "NCPkgStatus(UNKNOWN)";
-}

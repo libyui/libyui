@@ -51,15 +51,16 @@ class NCPkgTableTag : public NCTableCol {
 
   private:
 
-    NCPkgStatus status;
+    PMSelectable::UI_Status status;
     PMObjectPtr dataPointer;
     
     // returns the corresponding string value to given package status
-    string statusToStr( NCPkgStatus stat ) const;
+    string statusToStr( PMSelectable::UI_Status stat ) const;
     
   public:
 
-    NCPkgTableTag( PMObjectPtr pkgPtr, NCPkgStatus stat = PkgNoInstall );
+    NCPkgTableTag( PMObjectPtr pkgPtr,
+		   PMSelectable::UI_Status stat = PMSelectable::S_NoInst );
 
     virtual ~NCPkgTableTag() {}
 
@@ -70,8 +71,8 @@ class NCPkgTableTag : public NCTableCol {
 			 NCTableLine::STATE linestate,
 			 unsigned colidx ) const; 
 
-    void setStatus( NCPkgStatus & stat ) 	{ status = stat; }
-    NCPkgStatus getStatus() const              	{ return status; }
+    void setStatus( PMSelectable::UI_Status & stat ) 	{ status = stat; }
+    PMSelectable::UI_Status getStatus() const   { return status; }
     PMObjectPtr getDataPointer() const		{ return dataPointer; }
 };
 
@@ -91,21 +92,13 @@ private:
     ObjectStatStrategy * statusStrategy; 	// particular methods to get the status
     
     // returns the corresponding package status to the given key
-    NCPkgStatus keyToStatus( const int & key );
+    PMSelectable::UI_Status keyToStatus( const int & key );
 
     // returns the first column of line with 'index' (the tag)
     NCPkgTableTag * getTag ( const int & index );
 
 protected:
 
-    /**
-     * Sets the new status in first column of the package table
-     * and informs the package manager about the status change.
-     * @param index The index in package list
-     * @param newstat The new status
-     * @return bool
-     */
-    bool changeStatus( int index, NCPkgStatus newstat);
 
 public:
 
@@ -174,45 +167,31 @@ public:
     bool toggleStatus( PMPackagePtr pkgPtr );
 
     /**
-     * Sets the new package status (if the status change is possible) and
-     * informs the package manager.
-     * @param pkgStat The new package status
+     * Informs the package manager about the status change of
+     * the currently selected package and updates the states
+     * of all packages in the list
+     * @param newstat The new status
      * @return bool
-     */ 
-    bool setNewStatus( const NCPkgStatus & pkgStat );
-
-
+     */
+    bool changeStatus( PMSelectable::UI_Status newstat);
+    
    /**
      * Set the status information if status has changed 
      * @return bool
      */  
     bool updateTable();
 
-   /**
-     * Returns the UI status to given internal package status.
-     * @param stat The NCPkgStatus
-     * @return UI_Status
-     */ 
-    PMSelectable::UI_Status statusToUIStat( NCPkgStatus stat );
-
-   /**
-     * Returns the internal used status to given UI status.
-     * @param stat The UI status
-     * @return NCPkgStatus
-     */ 
-    NCPkgStatus statusToPkgStat( PMSelectable::UI_Status stat );
-    
     /**
      * Gets the currently displayed package status.
      * @param index The index in package table (the line)
-     * @return NCPkgStatus
+     * @return PMSelectable::UI_Status
      */ 
-    NCPkgStatus getStatus( int index );
+    PMSelectable::UI_Status getStatus( int index );
 
     /**
      * Gets the package status of an available  package.
      * @param objPtr The certain package 
-     * @return NCPkgStatus
+     * @return PMSelectable::UI_Status
      */ 
     PMSelectable::UI_Status getAvailableStatus( PMObjectPtr objPtr );
     

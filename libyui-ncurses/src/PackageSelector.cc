@@ -814,31 +814,27 @@ bool PackageSelector::StatusHandler( const NCursesEvent&  event )
     }
     else if ( event.selection->compare( PkgNames::Select() ) == YO_EQUAL )
     {
-	packageList->setNewStatus( PkgToInstall );
+	packageList->changeStatus( PMSelectable::S_Install );
     }
     else if ( event.selection->compare( PkgNames::Deselect() ) == YO_EQUAL )
     {
-	packageList->setNewStatus( PkgNoInstall );
+	packageList->changeStatus( PMSelectable::S_NoInst );
     }
     else if ( event.selection->compare( PkgNames::Delete() ) == YO_EQUAL )
     {
-	packageList->setNewStatus( PkgToDelete );
-    }
-    else if ( event.selection->compare( PkgNames::Replace() ) == YO_EQUAL )
-    {
-	packageList->setNewStatus( PkgToReplace );
+	packageList->changeStatus( PMSelectable:: S_Del);
     }
     else if ( event.selection->compare( PkgNames::Update() ) == YO_EQUAL )
     {
-	packageList->setNewStatus( PkgToUpdate );
+	packageList->changeStatus( PMSelectable::S_Update );
     }
     else if ( event.selection->compare( PkgNames::Installed() ) == YO_EQUAL )
     {
-	packageList->setNewStatus( PkgInstalled );	
+	packageList->changeStatus( PMSelectable:: S_KeepInstalled );	
     }
     else if ( event.selection->compare( PkgNames::Taboo() ) == YO_EQUAL )
     {
-	packageList->setNewStatus( PkgTaboo );	
+	packageList->changeStatus( PMSelectable::S_Taboo );	
     }
     else if ( event.selection->compare( PkgNames::ToggleSource() ) == YO_EQUAL )
     {

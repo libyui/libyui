@@ -27,26 +27,12 @@ class PMObjectPtr;
 
 
 enum NCStrategyType
-{
-    T_Avail,
-    T_Package,
-    T_Patch,
-    T_Object
-};
-
-enum NCPkgStatus
-{
-    PkgToDelete,	// S_Del: delete installedObj
-    PkgToInstall,	// S_Install: install candidateObj ( have no installedObj )
-    PkgToUpdate,	// S_Update: install candidateObj ( have installedObj )
-    PkgNoInstall,	// S_NoInst: is not/will not installed - no modification ( have no installedObj )
-    PkgInstalled,	// S_KeepInstalled: keep this version - no modification ( have installedObj )
-    PkgAutoInstall,	// S_Auto: automatically installed - like S_Install, but not requested by user
-    PkgAutoDelete,	// S_AutoDel: automatically deleted - unmaintained packages (update)
-    PkgAutoUpdate,	// S_AutoUpdate: automatic update
-    PkgTaboo,		// F_Taboo: Never install this
-    PkgToReplace	// Replace
-};
+    {
+	T_Avail,
+	T_Package,
+	T_Patch,
+	T_Object
+    };
 
 //------------------------------------------------------------
 // Abstract base class for strategies to get status for packages or patches 
@@ -57,20 +43,18 @@ protected:
     NCStrategyType type;
 
 public:
-
+    
     ObjectStatStrategy( );
     
     virtual ~ObjectStatStrategy() = 0; 
 
-    friend std::ostream & operator<<( std::ostream & str, NCPkgStatus obj );
-    
     /**
      * Gets the status information from the package manager.
      * @param objPtr The package whose status to calculate.
      * @return UI_Status The new status of the given package
      *
      **/
-    virtual PMSelectable::UI_Status getStatus ( PMObjectPtr objPtr );
+    virtual PMSelectable::UI_Status getPackageStatus ( PMObjectPtr objPtr );
 
     /**
      * Informs the package manager about the new status.
@@ -81,17 +65,6 @@ public:
     virtual bool setPackageStatus ( PMSelectable::UI_Status newstatus,
 				    PMObjectPtr objPtr
 				    );
-
-    /**
-     * Checks whether the new status is valid.
-     * @param oldStatus	The old status
-     * @param newStatus	The new status
-     * @param objPtr	The object pointer 
-     * @return bool
-     */
-    virtual bool validateNewStatus( const NCPkgStatus & oldStatus,
-				    const NCPkgStatus & newStatus,
-				    const PMObjectPtr & objPtr  );
 
     /**
      * Returns the type of the object
@@ -125,17 +98,6 @@ public:
     
     virtual ~PatchStatStrategy() {}
 
-    /**
-     * Checks whether the new status is valid (there are only few status 
-     * changes possible for patches).
-     * @param oldStatus	The old status
-     * @param newStatus	The new status
-     * @param objPtr	The object pointer 
-     * @return bool
-     */
-    virtual bool validateNewStatus( const NCPkgStatus & oldStatus,
-				    const NCPkgStatus & newStatus,
-				    const PMObjectPtr & objPtr  );   
 };
 
 
@@ -157,7 +119,7 @@ public:
      * @return UI_Status The new status of the given package
      *
      **/
-    virtual PMSelectable::UI_Status getStatus ( PMObjectPtr  objPtr );
+    virtual PMSelectable::UI_Status getPackageStatus ( PMObjectPtr  objPtr );
 
     /**
      * Informs the package manager about the new status and

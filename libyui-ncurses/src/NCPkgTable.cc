@@ -32,7 +32,7 @@
 //
 //	DESCRIPTION :
 //
-NCPkgTableTag::NCPkgTableTag( PMObjectPtr objPtr, NCPkgStatus stat )
+NCPkgTableTag::NCPkgTableTag( PMObjectPtr objPtr, PMSelectable::UI_Status stat )
       : NCTableCol( NCstring( "    " ), SEPARATOR )
 	, status ( stat )
 	, dataPointer( objPtr )
@@ -63,96 +63,33 @@ void NCPkgTableTag::DrawAt( NCursesWindow & w, const wrect at,
 }
 
 
-string NCPkgTableTag::statusToStr( NCPkgStatus stat ) const
+string NCPkgTableTag::statusToStr( PMSelectable::UI_Status stat ) const
 {
-     // convert NCPkgStatus to string
+     // convert PMSelectable::UI_Status to string
     switch ( stat )
     {
-	case PkgNoInstall:	// Is not installed and will not be installed
+	case PMSelectable::S_NoInst:	// Is not installed and will not be installed
 	    return "    ";
-	case PkgInstalled: 	// Is installed - keep this version
+	case PMSelectable:: S_KeepInstalled: 	// Is installed - keep this version
 	    return "  i ";
-	case PkgToInstall:	// Will be installed
+	case PMSelectable::S_Install:	// Will be installed
 	    return "  + ";
-	case PkgToDelete:	// Will be deleted
+	case PMSelectable:: S_Del:	// Will be deleted
 	    return "  - ";
-	case PkgToUpdate:	// Will be updated
+	case PMSelectable::S_Update:	// Will be updated
 	    return "  > ";
-	case PkgToReplace:	// Replace
-	    return "  = ";
-	case PkgAutoInstall:	// Will be automatically installed
+	case PMSelectable::S_AutoInstall: // Will be automatically installed
 	    return " a+ ";
-	case PkgAutoDelete:	// Will be automatically deleted
+	case PMSelectable::S_AutoDel:	// Will be automatically deleted
 	    return " a- ";
-	case PkgAutoUpdate:	// Will be automatically updated
+	case PMSelectable::S_AutoUpdate: // Will be automatically updated
 	    return " a> ";    
-	case PkgTaboo:		// Never install this 
+	case PMSelectable::S_Taboo:	// Never install this 
 	    return "  ! ";
     }
 
     return " ";
 }
-
-// convert UI_Status to NCPkgStatus
-NCPkgStatus NCPkgTable::statusToPkgStat( PMSelectable::UI_Status stat )
-{
-    // convert NCPkgStatus to string
-    switch ( stat )
-    {
-	case PMSelectable::S_NoInst:
-	    return PkgNoInstall;
-	case PMSelectable:: S_KeepInstalled: 	
-	    return PkgInstalled;
-	case PMSelectable::S_Install:
-	    return PkgToInstall;		// includes PkgToReplace 
-	case PMSelectable:: S_Del:	
-	    return PkgToDelete;
-	case PMSelectable::S_Update:
-	    return PkgToUpdate;
-	case PMSelectable::S_AutoInstall:
-	    return PkgAutoInstall;
-    	case PMSelectable::S_AutoDel:
-	    return PkgAutoDelete;
-	case PMSelectable::S_AutoUpdate:
-	    return PkgAutoUpdate;
-	case PMSelectable::S_Taboo:
-	    return  PkgTaboo;
-    }
-
-    return PkgNoInstall;
-}
-
-// convert NCPkgStatus to UI_Status
-PMSelectable::UI_Status NCPkgTable::statusToUIStat( NCPkgStatus stat )
-{
-    // convert NCPkgStatus to string
-    switch ( stat )
-    {
-	case PkgNoInstall:	// Is not installed and will not be installed
-	    return PMSelectable::S_NoInst;
-	case PkgInstalled: 	// Is installed - keep this version
-	    return PMSelectable:: S_KeepInstalled;
-	case PkgToInstall:	// Will be installed
-	    return PMSelectable::S_Install;
-	case PkgToDelete:	// Will be deleted
-	    return PMSelectable:: S_Del;
-	case PkgToUpdate:	// Will be updated
-	    return PMSelectable::S_Update;
-	case PkgToReplace:	// Replace
-	    return PMSelectable::S_Install;
-	case PkgAutoInstall:	// Will be automatically installed
-	    return PMSelectable::S_AutoInstall;
-	case PkgAutoDelete:	// Will be automaticall deleted
-	    return PMSelectable::S_AutoDel;
-	case PkgAutoUpdate:	// Automatic update
-	    return PMSelectable::S_AutoUpdate;
-	case PkgTaboo:		// Never install this 
-	    return PMSelectable::S_Taboo;
-    }
-
-    return PMSelectable::S_NoInst;
-}
-
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -200,10 +137,9 @@ void NCPkgTable::addLine( PMSelectable::UI_Status stat,
 			  PMObjectPtr objPtr )
 {
     vector<NCTableCol*> Items( elements.size()+1, 0 );
-    NCPkgStatus status = statusToPkgStat( stat );
     
     // fill first column (containing the status information and the package pointer)
-    Items[0] = new NCPkgTableTag( objPtr, status );
+    Items[0] = new NCPkgTableTag( objPtr, stat );
 
     for ( unsigned i = 1; i < elements.size()+1; ++i ) {
 	// use YCPString to enforce recoding from 'utf8'
@@ -250,12 +186,14 @@ void NCPkgTable::cellChanged( int index, int colnum, const YCPString & newtext )
 //	DESCRIPTION : sets the new status in first column of the package table
 //		      and informs the package manager
 //
-bool NCPkgTable::changeStatus( int index, NCPkgStatus newstatus )
+bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
 {
     bool ok = false;
 
+    int index  = getCurrentItem();
+    
     // inform the package manager
-    ok = statusStrategy->setPackageStatus( statusToUIStat( newstatus ),
+    ok = statusStrategy->setPackageStatus( newstatus,
 					   getDataPointer(index) );
 
     if ( ok )
@@ -309,7 +247,7 @@ bool NCPkgTable::updateTable()
 	}
 
 	// set the new status (if status has changed) - use particular strategy
-	NCPkgStatus newstatus = statusToPkgStat( statusStrategy->getStatus( objPtr) );
+	PMSelectable::UI_Status newstatus = statusStrategy->getPackageStatus( objPtr);
 	if ( getStatus(index) != newstatus )
 	{
 	    cc->setStatus( newstatus );
@@ -322,45 +260,15 @@ bool NCPkgTable::updateTable()
     return ret;
 }
 
-
-PMSelectable::UI_Status NCPkgTable::getAvailableStatus ( PMObjectPtr objPtr )
-{
-    return ( statusStrategy->getStatus( objPtr) );
-};
-
-
 ///////////////////////////////////////////////////////////////////
 //
+// get status of a certain package in list of available packages
 //
-//	METHOD NAME : NCPkgTable::getCellContents
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : returns the NClabel of the specified column
-//
-NClabel NCPkgTable::getCellContents( int index, int colnum )
+PMSelectable::UI_Status NCPkgTable::getAvailableStatus ( PMObjectPtr objPtr )
 {
-    NClabel ret ( "" );
-    
-    const NCTableLine * cl = pad->GetLine( index );
-    if ( !cl )
-    {
-	NCINT << "No such line: " << wpos( index, colnum ) << endl;
-    }
-    else
-    {
-	const NCTableCol * cc = cl->GetCol( colnum );
-	if ( !cc )
-	{
-	    NCINT << "No such colnum: " << wpos( index, colnum ) << endl;
-	}
-	else
-	{
-	    ret = cc->Label();
-	}
-    }
+    return ( statusStrategy->getPackageStatus( objPtr) );
+};
 
-    return ret;
-}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -410,7 +318,7 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 	}
 	default: {
 	    // set the new status
-	    setNewStatus( keyToStatus(key) );
+	    changeStatus( keyToStatus(key) );
 	    
 	    ret = NCursesEvent::handled;
 	    break;
@@ -430,12 +338,12 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 //
 // Gets the status of the package of selected line
 //
-NCPkgStatus NCPkgTable::getStatus( int index )
+PMSelectable::UI_Status NCPkgTable::getStatus( int index )
 {
     // get the tag 
     NCPkgTableTag * cc = getTag( index);
     if ( !cc )
-	return PkgNoInstall;
+	return PMSelectable::S_NoInst;
 
     return cc->getStatus();
 }
@@ -484,53 +392,50 @@ bool NCPkgTable::toggleStatus( PMPackagePtr objPtr )
 {
     bool ok = false;
     
-    int citem = getCurrentItem();
-    NCPkgStatus newStatus = getStatus( citem ); 
+    PMSelectable::UI_Status newStatus = PMSelectable::S_NoInst;;
+    PMSelectable::UI_Status oldStatus = statusStrategy->getPackageStatus( objPtr ); 
 
-    switch ( getStatus( citem ) )
+    switch ( oldStatus )
     {
-	case PkgToDelete:
-	    newStatus = PkgInstalled;
+	case PMSelectable:: S_Del:
+	    newStatus = PMSelectable::S_KeepInstalled;
 	    break;
-	case PkgToInstall:
-	    newStatus = PkgNoInstall;
+	case PMSelectable::S_Install:
+	    newStatus =PMSelectable::S_NoInst ;
 	    break;
-	case PkgToUpdate:
-	    newStatus = PkgToDelete;
+	case PMSelectable::S_Update:
+	    newStatus = PMSelectable:: S_Del;
 	    break;
-	case PkgInstalled:
+	case PMSelectable:: S_KeepInstalled:
 	    if ( objPtr->hasCandidateObj() )
 	    {
-		newStatus = PkgToUpdate;
+		newStatus = PMSelectable::S_Update;
 	    }
 	    else
 	    {
-		newStatus = PkgToDelete;
+		newStatus = PMSelectable:: S_Del;
 	    }
 	    break;
-	case PkgToReplace: 
-	    newStatus = PkgToDelete;
+	case PMSelectable::S_NoInst:
+	    newStatus = PMSelectable::S_Install ;
 	    break;
-	case PkgNoInstall:
-	    newStatus = PkgToInstall;
-	    break;
-	case PkgAutoInstall:
+	case PMSelectable::S_AutoInstall:
 	    // FIXME show a warning !!!!
-	    newStatus = PkgNoInstall;
+	    newStatus = PMSelectable::S_NoInst;
 	    break;
-	case PkgAutoDelete:
-	    newStatus = PkgInstalled;
+	case PMSelectable::S_AutoDel:
+	    newStatus = PMSelectable:: S_KeepInstalled;
 	    break;
-	case PkgAutoUpdate:
-	    newStatus = PkgInstalled;
+	case PMSelectable::S_AutoUpdate:
+	    newStatus = PMSelectable:: S_KeepInstalled;
 	    break;
-	case PkgTaboo:
-	    newStatus = PkgTaboo;
+	case PMSelectable::S_Taboo:
+	    newStatus = PMSelectable::S_Taboo;
 	    break;
     }
 
     // show the new status and inform the packagemanager
-    ok = changeStatus( citem, newStatus );
+    ok = changeStatus( newStatus );
 
     return ok;
 }
@@ -541,7 +446,7 @@ bool NCPkgTable::toggleStatus( PMPackagePtr objPtr )
 //
 // Returns the corresponding status
 //
-NCPkgStatus NCPkgTable::keyToStatus( const int & key )
+PMSelectable::UI_Status NCPkgTable::keyToStatus( const int & key )
 {
     // get the new status
     switch ( key )
@@ -549,55 +454,27 @@ NCPkgStatus NCPkgTable::keyToStatus( const int & key )
 	case '-':
 	case 'd':
 	case KEY_F(5):
-	    return PkgToDelete;
+	    return PMSelectable:: S_Del;
 	case 's':
 	case '+':
-	case 'x':
 	case KEY_F(3):
-	    return PkgToInstall;
+	    return PMSelectable::S_Install;
 	case 'u':
-	    return PkgToUpdate;
+	case '>':
+	    return PMSelectable::S_Update;
 	case 'i':
-	    return PkgInstalled;
-	case 'r':
-	    return PkgToReplace;
+	    return PMSelectable:: S_KeepInstalled;
 	case 'l':
-	    return PkgNoInstall;
+	    return PMSelectable::S_NoInst;
 	case 't':
-	    return PkgTaboo;
+	case '!': 
+	    return PMSelectable::S_Taboo;
 	default:
-	    y2warning( "Key not valid - returning current status" );
+	    NCDBG <<  "Key not valid - returning current status" << endl;
 	    return getStatus( getCurrentItem() );
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// NCPkgTable::setNewStatus()
-//
-// Checks whether the new status is valid and - if yes - sets the status 
-//
-bool NCPkgTable::setNewStatus( const NCPkgStatus & newStatus  )
-{
-    bool ok = false;
-    bool valid = false;
-    
-    int citem = getCurrentItem();
 
-    // must be a PMObjectPtr !!! to handle PMYouPatchPtr and PMPackagePtr   
-    PMObjectPtr objPtr = getDataPointer( getCurrentItem() );
-
-    valid = statusStrategy->validateNewStatus( getStatus( citem ),	// old status
-					       newStatus,		// new status
-					       objPtr );			
-
-    if ( valid )
-    {
-	// show the new status and inform the package manager
-	ok = changeStatus( citem, newStatus );
-    }
-    
-    return ok;
-}
 
 
