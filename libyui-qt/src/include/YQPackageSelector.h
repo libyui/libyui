@@ -304,6 +304,7 @@ protected:
     bool				_testMode;
     bool				_updateMode;
     bool				_youMode;
+    bool				_summaryMode;
     int					_installedPkgs;
     QString				_floppyDevice;
 
