@@ -248,9 +248,16 @@ public slots:
     void normalCursor();
 
     /**
-     * Open file selection box and let the user Save y2logs to that location
+     * Open file selection box and let the user Save y2logs to that location.
+     * (Shift-F8)
      **/
     void askSaveLogs();
+    
+    /**
+     * Open dialog to configure logging.
+     * (Shift-F7)
+     **/
+    void askConfigureLogging();
     
     /**
      * Fun stuff (release dependent)

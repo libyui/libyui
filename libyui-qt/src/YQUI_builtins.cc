@@ -29,6 +29,7 @@
 #include <qfiledialog.h>
 #include <qmessagebox.h>
 #include <qpixmap.h>
+#include <qinputdialog.h>
 #include <qvbox.h>
 
 #include <ycp/YCPTerm.h>
@@ -259,6 +260,30 @@ void YQUI::askSaveLogs()
 				  QMessageBox::NoButton,			// button1
 				  QMessageBox::NoButton );			// button2
 	}
+    }
+}
+
+
+void YQUI::askConfigureLogging()
+{
+    bool okButtonPressed = false;
+    QStringList items;
+    items << "Debug logging off"
+	  << "Debug logging on";
+
+    QString result = QInputDialog::getItem( "YaST2 Logging",		// caption
+					    "Configure YaST2 Logging:",	// label
+					    items,
+					    get_log_debug() ? 0 : 1,
+					    false,			// editable
+					    &okButtonPressed,
+					    _main_win );		// parent
+
+    if ( okButtonPressed )
+    {
+	set_log_debug( result.endsWith( "on" ) );
+	y2milestone( "Changing logging: %s - %s", (const char *) result,
+		     get_log_debug() ? "y2debug on" : "y2debug off" );
     }
 }
 

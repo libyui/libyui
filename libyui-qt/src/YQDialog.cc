@@ -464,6 +464,12 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    YQUI::ui()->easterEgg();
 	    return;
 	}
+	else if ( event->key()   == Qt::Key_F7 &&	// Shift-F7
+		  event->state() == Qt::ShiftButton )
+	{
+	    YQUI::ui()->askConfigureLogging();
+	    return;
+	}
 	else if ( event->key()   == Qt::Key_F8 &&	// Shift-F8
 		  event->state() == Qt::ShiftButton )
 	{
