@@ -261,7 +261,7 @@ YQMultiSelectionBoxItem::YQMultiSelectionBoxItem( QListView * parent, const QStr
 
 
 QString
-YQMultiSelectionBoxItem::key ( int, bool ) const
+YQMultiSelectionBoxItem::key( int, bool ) const
 {
     /*
      * Return a sort key that depends on creation (i.e. insertion) order.

@@ -183,7 +183,7 @@ void YQDialog::activate(bool active)
 
 
 void
-YQDialog::resizeEvent ( QResizeEvent * event )
+YQDialog::resizeEvent( QResizeEvent * event )
 {
     if ( event )
     {
@@ -473,7 +473,7 @@ YQDialog::center( QWidget * dialog, QWidget * parent )
 
 
 void
-YQDialog::childAdded ( YWidget * child )
+YQDialog::childAdded( YWidget * child )
 {
 
     ( (QWidget *) child->widgetRep() )->move ( decorationWidth( YD_HORIZ ),

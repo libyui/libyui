@@ -80,7 +80,7 @@ long YUIQt::defaultSize(YUIDimension dim) const
 
 
 void
-YUIQt::busyCursor ( void )
+YUIQt::busyCursor( void )
 {
 #if USE_QT_CURSORS
 
@@ -118,7 +118,7 @@ YUIQt::busyCursor ( void )
 
 
 void
-YUIQt::normalCursor ( void )
+YUIQt::normalCursor( void )
 {
 #if USE_QT_CURSORS
 

@@ -114,7 +114,7 @@ void Y2QtComponent::setServerOptions(int argc, char **argv)
 
 
 Y2Component *
-Y2QtComponent::getCallback (void) const
+Y2QtComponent::getCallback(void) const
 {
     if (interpreter)
 	return interpreter->getCallback ();
@@ -122,7 +122,7 @@ Y2QtComponent::getCallback (void) const
 }
 
 void
-Y2QtComponent::setCallback (Y2Component *callback)
+Y2QtComponent::setCallback(Y2Component *callback)
 {
     if (interpreter)
     {
