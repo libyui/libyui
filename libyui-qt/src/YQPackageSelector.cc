@@ -1175,6 +1175,11 @@ YQPackageSelector::keyPressEvent( QKeyEvent * event )
 		return;
 	    }
 	}
+	else if ( event->key() == Qt::Key_F5 )	// No matter if Ctrl/Alt/Shift pressed
+	{
+	    YUIQt::ui()->easterEgg();
+	    return;
+	}
     }
 
     QWidget::keyPressEvent( event );

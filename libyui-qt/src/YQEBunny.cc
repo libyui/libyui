@@ -66,10 +66,45 @@ YQEasterBunny::draw()
 
 	    p1 = fb.pixel( x, y );
 	    p2 = fb.pixel( width-1 - x, height-1 - y );
+
+	    p1 ^= 0xAA55AA55;
+	    p2 ^= 0xAA55AA55;
+	    
 	    fb.setPixel( x, y, p2 );
 	    fb.setPixel( width-1 - x, height-1 - y, p1 );
 	}
     }
 
+#if 0
+
+    // Crossed lines
+    
+    int x_offset = ( width-height ) / 2;
+    
+    for ( int m = 0; m < height; m++ )
+    {
+	int x = m + x_offset;
+	
+	for ( int i = -5; i < 5; i++ )
+	{
+	    int y = m;
+	    YFrameBuffer::FBPixel px = fb.pixel( x+i, y );
+	    fb.setPixel( x+i, y, px ^ 0xAA55AA55 );
+	}
+    }
+    
+    for ( int m = 0; m < height; m++ )
+    {
+	int x = width-1 - ( m + x_offset );
+	
+	for ( int i = -5; i < 5; i++ )
+	{
+	    int y = m;
+	    YFrameBuffer::FBPixel px = fb.pixel( x+i, y );
+	    fb.setPixel( x+i, y, px ^ 0xAA55AA55 );
+	}
+    }
+#endif
+    
     sleep( 7 );
 }
