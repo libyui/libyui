@@ -133,12 +133,6 @@ YQWizard::YQWizard( QWidget *		parent,
     layoutWorkArea( hBox );
 
     y2debug( "Constructor finished." );
-
-#if 0
-    addStep( "Step 1", "1" );
-    addStep( "Step 2", "2" );
-    addStep( "Step 3", "3" );
-#endif
 }
 
 
@@ -242,39 +236,6 @@ void YQWizard::layoutStepsPanel()
     _stepsBox->setPaletteBackgroundColor( _gradientCenterColor );
     _stepsBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred ) ); // hor/vert
 
-#if 0
-    QLabel * steps = new QLabel(
-				"<font size=3 color=#669900>"
-				"<b>Test</b><br>"
-				"<b>Base Installation</b>"
-				"<ul>"
-				"<li>Language<br>"
-				"<li>Installation Settings<br>"
-				"<li>Perform Installation<br>"
-				"</ul>"
-				"<b>Configuration</b>"
-				"<ul>"
-				"<li>Root Password"
-				"<li>Network"
-				"<li>Online Update"
-				"<li>Users"
-				"<li>Clean Up"
-				"<li>Release Notes"
-				"<li>Device Configuration"
-				"</ul>"
-				"</font>",
-				_stepsBox );
-    CHECK_PTR( steps );
-
-    steps->setPaletteBackgroundColor( _gradientCenterColor );
-    steps->setFont( YQUI::ui()->currentFont() );
-
-    steps->setMargin( 10 );
-
-    steps->setAlignment( Qt::AlignLeft | Qt::AlignTop );
-    steps->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) ); // hor/vert
-#endif
-
     QWidget * stretch = addVStretch( _stepsPanel );
     CHECK_PTR( stretch );
     stretch->setPaletteBackgroundColor( _gradientCenterColor );
@@ -374,7 +335,9 @@ void YQWizard::updateSteps()
 	    QLabel * label = new QLabel( step->name(), stepsParent );
 	    CHECK_PTR( label );
 	    label->setAlignment( Qt::AlignLeft | Qt::AlignTop );
-	    label->setFont( QFont( STEPS_FONT_FAMILY, STEPS_HEADING_FONT_SIZE ) );
+	    QFont font( STEPS_FONT_FAMILY, STEPS_HEADING_FONT_SIZE );
+	    font.setWeight( QFont::Bold );
+	    label->setFont( font );
 
 	    step->setNameLabel( label );
 	    _stepsGrid->addMultiCellWidget( label,
@@ -857,9 +820,6 @@ void YQWizard::addChild( YWidget * ychild )
 
 void YQWizard::backClicked()
 {
-#if 0
-    addStep( "Back clicked", "back" );
-#endif
     sendEvent( _backButtonId );
 }
 
@@ -884,9 +844,6 @@ void YQWizard::showHelp()
     if ( _sideBar && _helpPanel )
     {
 	_sideBar->raiseWidget( _helpPanel );
-#if 0
-	addStep( "Einer geht noch", "42" );
-#endif
     }
 }
 
@@ -1034,10 +991,7 @@ bool YQWizard::isCommand( QString declaration, const YCPTerm & term )
 
 QString YQWizard::qStringArg( const YCPTerm & term, int argNo )
 {
-    QString ret = fromUTF8( stringArg( term, argNo ).c_str() );
-    y2debug( "arg #%d of '%s': '%s'", argNo, term->toString().c_str(), (const char *) ret );
-
-    return ret;
+    return fromUTF8( stringArg( term, argNo ).c_str() );
 }
 
 
