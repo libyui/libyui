@@ -1048,7 +1048,7 @@ YQPackageSelector::showAutoPkgList()
 void
 YQPackageSelector::installDevelPkgs()
 {
-    // Find all -devel packages and put them into a QDict
+    // Find all -devel packages and put them into a QMap
 
     QMap<QString, PMSelectablePtr> develPkgs;
 
@@ -1067,7 +1067,7 @@ YQPackageSelector::installDevelPkgs()
     }
 
 
-    // Now go through all packages and look if there is a corresponding -devel package in the QDict
+    // Now go through all packages and look if there is a corresponding -devel package in the QMap
 
     for ( PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
 	  it != Y2PM::packageManager().end();
