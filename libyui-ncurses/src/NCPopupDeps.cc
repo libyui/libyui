@@ -273,17 +273,12 @@ string NCPopupDeps::getDependencyKind(  const PkgDep::ErrorResult & error )
     string ret = "";
 
     // Get the type of the dependency 
+    // FIXME: better classification of dependencies
+    // (use alsoKind kind from struct RelInfo, file PkgDep.h)
 
     if ( !error.unresolvable.empty() )
     {
-	if ( !error.unresolvable.front().is_conflict )
-	{
-	    ret = PkgNames::RequText().str();
-	}
-	else
-	{
-	    ret = PkgNames::UnresText().str();
-	}
+	ret = PkgNames::RequText().str();
     }
     else if ( !error.alternatives.empty() )
     {
@@ -327,8 +322,6 @@ bool NCPopupDeps::concretelyDependency( int index )
     
     if ( !error.unresolvable.empty() )
     {
-	bool require = false;
-
 	list<PkgDep::RelInfo>::iterator it = error.unresolvable.begin();
 	while ( it != error.unresolvable.end() )
 	{
@@ -341,26 +334,13 @@ bool NCPopupDeps::concretelyDependency( int index )
 			   i,		// the index
 			   PMObjectPtr() );	// null pointer
 		
-	    if ( !(*it).is_conflict )	// it is a requires dependency
-	    {
-		require = true;
-	    }
 	    ++it;
 	    i++;
 	}
-	if ( require )
-	{
 	    
-	    errorLabel1->setLabel( YCPString(getLabelRequire1())  );
-	    errorLabel2->setLabel( YCPString(PkgNames::LabelRequire2().str()) );
-	    labelSet = true;
-	}
-	else
-	{	
-	    errorLabel1->setLabel( YCPString(PkgNames::LabelUnresolvable().str()) );
-	    errorLabel2->setLabel(  YCPString( "" ) );
-	    labelSet = true;
-	}
+	errorLabel1->setLabel( YCPString(getLabelRequire1())  );
+	errorLabel2->setLabel( YCPString(PkgNames::LabelRequire2().str()) );
+	labelSet = true;
     }
     if ( !error.alternatives.empty() )
     {
