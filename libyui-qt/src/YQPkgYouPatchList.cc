@@ -201,17 +201,15 @@ YQPkgYouPatchListItem::~YQPkgYouPatchListItem()
 
 
 void
-YQPkgYouPatchListItem::cycleStatus()
+YQPkgYouPatchListItem::setStatus( PMSelectable::UI_Status newStatus )
 {
-    YQPkgObjListItem::cycleStatus();
-
-    // TODO?
-    // TODO?
-    // TODO?
+    // Y2PM::selectionManager().activate( Y2PM::packageManager() );
     
+    // TODO: activate patch (?)
+    
+    YQPkgObjListItem::setStatus( newStatus );
     _youPatchList->sendUpdatePackages();
 }
-
 
 
 /**

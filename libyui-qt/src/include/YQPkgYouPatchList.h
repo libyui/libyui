@@ -159,16 +159,13 @@ public:
     const PMYouPatchPtr constPmYouPatch() const { return _pmYouPatch; }
 
     /**
-     * Returns the (binary RPM) package status.
+     * Set the patch status.
+     *
+     * Reimplemented from YQPkgObjListItem:
+     * Emit updatePackages signals after changing status.
      **/
-    PMSelectable::UI_Status status() const;
+    virtual void setStatus( PMSelectable::UI_Status newStatus );
 
-    /**
-     * Cycle the package status to the next valid value.
-     * Reimplemented from YQPkgObjList.
-     **/
-    virtual void cycleStatus();
-    
     /**
      * Comparison function used for sorting the list.
      * Returns:
