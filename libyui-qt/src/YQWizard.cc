@@ -1377,8 +1377,8 @@ void YQWizard::deleteMenus()
 {
     if ( _menuBar )
     {
+	_menuBarBox->hide();
 	_menuBar->clear();
-	_menuBar->hide();
 	_menuIDs.clear();
 	_menuEntryIDs.clear();
     }
