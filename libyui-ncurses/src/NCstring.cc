@@ -25,7 +25,8 @@
 
 // The correct encoding of the terminal is set in constructor
 // of Y2NCursesUI. In case of a "real" console this may be changed
-// in setConsoleFont().
+// in setConsoleFont() (has to be changed only for other than UTF-8
+// encodings).
 string	NCstring::termEncoding( "UTF-8" );
 
 
