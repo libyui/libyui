@@ -62,6 +62,7 @@ liby2qt_la_SOURCES = 				\
 	YQPkgSelList.cc				\
 	YQPkgSelectionsFilterView.cc		\
 	YQPkgTechnicalDetailsView.cc		\
+	YQPkgTextDialog.cc			\
 	YQPkgUpdateProblemFilterView.cc		\
 	YQPkgYouPatchFilterView.cc		\
 	YQPkgYouPatchList.cc			\
@@ -139,6 +140,7 @@ BUILT_SOURCES =					\
 	YQPkgSelList.moc.cc			\
 	YQPkgSelectionsFilterView.moc.cc	\
 	YQPkgTechnicalDetailsView.moc.cc	\
+	YQPkgTextDialog.moc.cc			\
 	YQPkgUpdateProblemFilterView.moc.cc	\
 	YQPkgYouPatchFilterView.moc.cc		\
 	YQPkgYouPatchList.moc.cc		\
@@ -195,6 +197,7 @@ YQPkgSearchFilterView.o YQPkgSearchFilterView.lo:		YQPkgSearchFilterView.moc.cc
 YQPkgSelList.o YQPkgSelList.lo:					YQPkgSelList.moc.cc
 YQPkgSelectionsFilterView.o YQPkgSelectionsFilterView.lo:	YQPkgSelectionsFilterView.moc.cc
 YQPkgTechnicalDetailsView.o YQPkgTechnicalDetailsView.lo:	YQPkgTechnicalDetailsView.moc.cc
+YQPkgTextDialog.o YQPkgTextDialog.lo:				YQPkgTextDialog.moc.cc
 YQPkgUpdateProblemFilterView.o YQPkgUpdateProblemFilterView.lo:	YQPkgUpdateProblemFilterView.moc.cc
 YQPkgYouPatchFilterView.o YQPkgYouPatchFilterView.lo:		YQPkgYouPatchFilterView.moc.cc
 YQPkgYouPatchList.o YQPkgYouPatchList.lo:			YQPkgYouPatchList.moc.cc
@@ -252,6 +255,7 @@ YQPkgSearchFilterView.moc.cc:		include/YQPkgSearchFilterView.h
 YQPkgSelList.moc.cc:			include/YQPkgSelList.h
 YQPkgSelectionsFilterView.moc.cc:	include/YQPkgSelectionsFilterView.h
 YQPkgTechnicalDetailsView.moc.cc:	include/YQPkgTechnicalDetailsView.h
+YQPkgTextDialog.moc.cc:			include/YQPkgTextDialog.h
 YQPkgUpdateProblemFilterView.moc.cc:	include/YQPkgUpdateProblemFilterView.h
 YQPkgYouPatchFilterView.moc.cc:		include/YQPkgYouPatchFilterView.h
 YQPkgYouPatchList.moc.cc:		include/YQPkgYouPatchList.h

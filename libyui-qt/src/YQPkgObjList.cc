@@ -28,6 +28,7 @@
 #include "utf8.h"
 
 #include "YQPkgObjList.h"
+#include "YQPkgTextDialog.h"
 #include "YQi18n.h"
 #include "YQIconPool.h"
 
@@ -151,6 +152,7 @@ YQPkgObjList::setCurrentStatus( PMSelectable::UI_Status	newStatus,
 	if ( newStatus != item->status() )
 	{
 	    item->setStatus( newStatus );
+	    item->showNotifyTexts( newStatus );
 	    emit statusChanged( item->pmObj() );
 	}
 
@@ -590,11 +592,29 @@ YQPkgObjListItem::cycleStatus()
 
     if ( oldStatus != newStatus )
     {
-#warning TODO: Show INSNOTIFY
-#warning TODO: Show DELNOTIFY
-	
+	showNotifyTexts( newStatus );
 	setStatus( newStatus );
 	_pkgObjList->sendStatusChanged( pmObj() );
+    }
+}
+
+
+void
+YQPkgObjListItem::showNotifyTexts( PMSelectable::UI_Status status )
+{
+    std::list<std::string> text;
+
+    switch ( status )
+    {
+	case PMSelectable::S_Install:	text = _pmObj->insnotify();	break;
+	case PMSelectable::S_Del:	text = _pmObj->delnotify();	break;
+	default: break;
+    }
+
+    if ( ! text.empty() )
+    {
+	// y2milestone( "Showing notify text" );
+	YQPkgTextDialog::showText( _pkgObjList, _pmObj, text );
     }
 }
 

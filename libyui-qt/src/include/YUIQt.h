@@ -123,7 +123,20 @@ public:
      */
     int suseheaderID;
 
+    /**
+     * Inherited from YUIInterpreter:
+     * Show hourglass cursor
+     */
+    void busyCursor();
+
+    /**
+     * Inherited from YUIInterpreter:
+     * Show pointer cursor
+     */
+    void normalCursor();
+
 protected:
+    
     // Implement virtual functions inherited from YUIInterpreter
 
     /**
@@ -276,18 +289,6 @@ protected:
      * Sets the X input method according to the locale.
      */
     YCPValue setLanguage( const YCPTerm &term );
-
-    /**
-     * Inherited from YUIInterpreter:
-     * Show hourglass cursor
-     */
-    void busyCursor();
-
-    /**
-     * Inherited from YUIInterpreter:
-     * Show pointer cursor
-     */
-    void normalCursor();
 
 
     /**

@@ -117,10 +117,10 @@ public slots:
 
     /**
      * Select the next item, i.e. move the selection one item further down the
-     * list. 
+     * list.
      **/
     void selectNextItem();
-    
+
     /**
      * Emit a statusChanged() signal for the specified PMObject.
      **/
@@ -169,13 +169,13 @@ protected:
      * Reimplemented from QListView / QWidget.
      */
     void keyPressEvent( QKeyEvent * ev );
-    
+
     /**
      * Returns the context menu for items that are not installed.
      * Creates the menu upon the first call.
      **/
     virtual QPopupMenu * installedContextMenu();
-    
+
     /**
      * Returns the context menu for items that are installed.
      * Creates the menu upon the first call.
@@ -323,6 +323,12 @@ public:
      * Set a column text via PkgEdition.
      **/
     void setText( int column, const PkgEdition & edition );
+
+    /**
+     * Display this item's notify text (if there is any) that corresponds to
+     * the specified status (S_Install, S_Del) in a pop-up window.
+     **/
+    void showNotifyTexts( PMSelectable::UI_Status status );
 
     /**
      * Comparison function used for sorting the list.
