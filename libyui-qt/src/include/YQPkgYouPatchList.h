@@ -156,6 +156,14 @@ signals:
     void filterMatch( PMPackagePtr pkg );
 
     /**
+     * Emitted during filtering for non-pkg items:
+     * pre-script, post-script, files
+     **/
+    void filterMatch( const QString & 	name,
+		      const QString & 	summary,
+		      FSize 		size );
+
+    /**
      * Emitted when filtering is finished.
      **/
     void filterFinished();

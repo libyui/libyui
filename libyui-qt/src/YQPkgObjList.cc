@@ -89,6 +89,27 @@ YQPkgObjList::addPkgObjItem( PMObjectPtr pmObj )
 
 
 void
+YQPkgObjList::addPassiveItem( const QString & 	name,
+			      const QString & 	summary,
+			      FSize		size )
+{
+    QY2ListViewItem * item = new QY2ListViewItem( this, QString::null, true );
+
+    if ( item )
+    {
+	if ( nameCol()    >= 0 && ! name.isEmpty()    )	item->setText( nameCol(),	name    );
+	if ( summaryCol() >= 0 && ! summary.isEmpty() )	item->setText( summaryCol(),	summary );
+	if ( sizeCol()    >= 0 && size > 0L	      )
+	{
+	    QString sizeStr = size.form().c_str();
+	    sizeStr += "  ";
+	    item->setText( sizeCol(), sizeStr );
+	}
+    }
+}
+
+
+void
 YQPkgObjList::pkgObjClicked( int		button,
 			     QListViewItem *	listViewItem,
 			     int		col,

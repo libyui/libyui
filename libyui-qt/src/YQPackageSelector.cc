@@ -705,6 +705,12 @@ YQPackageSelector::makeConnections()
 	connect( _pkgList,		SIGNAL( statusChanged()   ),
 		 _diskUsageList,	SLOT  ( updateDiskUsage() ) );
     }
+    
+    if ( _pkgList && _youPatchList )
+    {
+	connect( _youPatchList, SIGNAL( filterMatch   ( const QString &, const QString &, long ) ),
+		 _pkgList,	SIGNAL( addPassiveItem( const QString &, const QString &, long ) ) );
+    }
 
     //
     // Connect package conflict dialog

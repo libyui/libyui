@@ -97,7 +97,7 @@ YQPkgYouPatchList::fillList()
 		    if ( patch->installable() && status != PMSelectable::S_KeepInstalled )
 			addYouPatchItem( patch );
 		    break;
-		    
+
 		case InstallableAndInstalledPatches:
 		    if ( patch->installable() )
 			addYouPatchItem( patch );
@@ -134,6 +134,22 @@ YQPkgYouPatchList::filter()
 
 	if ( patch )
 	{
+	    //
+	    // Check for a pre-script
+	    //
+
+	    if ( ! patch->preScript().empty() )
+	    {
+		// Translators: (Fixed) name for a script that is executed
+		// at the start of installation of a YOU patch
+		emit filterMatch( _( "[Pre-Script]" ), fromUTF8( patch->preScript() ), -1 );
+	    }
+
+
+	    //
+	    // Add all packages
+	    //
+
 	    list<PMPackagePtr> pkgList = patch->packages();
 	    list<PMPackagePtr>::const_iterator it = pkgList.begin();
 
@@ -141,6 +157,32 @@ YQPkgYouPatchList::filter()
 	    {
 		emit filterMatch( ( *it ) );
 		++it;
+	    }
+
+
+	    //
+	    // Check for extra files outside packages
+	    //
+
+	    list<PMYouFile> files;
+
+	    for ( list<PMYouFile>::iterator it = files.begin(); it != files.end(); ++it )
+	    {
+		// Translators: (Fixed) name for an extra file (outside packages)
+                // that comes with a YOU patch
+		emit filterMatch( _( "[File]" ), fromUTF8( (*it).name() ), (*it).size() );
+	    }
+
+
+	    //
+	    // Check for a post-script
+	    //
+
+	    if ( ! patch->postScript().empty() )
+	    {
+		// Translators: (Fixed) name for a script that is executed
+                // at the end of installation of a YOU patch
+		emit filterMatch( _( "[Post-Script]" ), fromUTF8( patch->postScript() ), -1 );
 	    }
 	}
     }

@@ -26,6 +26,7 @@
 #include <QY2ListView.h>
 #include <y2pm/PMObject.h>
 #include <y2pm/PMSelectable.h>
+#include <y2util/FSize.h>
 
 class YQPkgObjListItem;
 class QAction;
@@ -128,7 +129,14 @@ public slots:
      **/
     void addPkgObjItem( PMObjectPtr pmObj );
 
-
+    /**
+     * Add a purely passive list item that has a name and optional summary and
+     * size.  
+     **/
+    void addPassiveItem( const QString & name,
+			 const QString & summary = QString::null,
+			 FSize 		 size    = -1 );
+    
     /**
      * Dispatcher slot for mouse click: cycle status depending on column.
      **/
