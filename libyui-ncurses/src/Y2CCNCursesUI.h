@@ -57,7 +57,7 @@ public:
     */
     Y2Component *create(const char * name) const
     {
-        y2internal( "Creating %s component", name );
+        y2milestone( "Creating %s component", name );
         if (!strcmp(name, "ncurses") ) {
             Y2Component* r = new YNCursesComponent();
             return r;
