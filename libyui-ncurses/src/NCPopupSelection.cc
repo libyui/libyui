@@ -117,8 +117,7 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
     // fill the selection box
     for ( i = 0, it = selections.begin(); it != selections.end(); ++it, i++ )
     {
-	// FIXME: get the (translated) description
-	selectionBox->addItem( YCPString( (*it).first->name() ),	// description
+	selectionBox->addItem( YCPString( (*it).first->summary(Y2PM::getPreferredLocale()) ),	// description
 			       PkgNames::Treeitem(),	// `id
 			       (*it).second );		// selected
     }
@@ -146,7 +145,7 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
 	    Y2PM::selectionManager().activate( Y2PM::packageManager() );
 	    // show the package list
 	    packager->showSelPackages( getCurrentLine(), selPtr );
-	 
+	    packager->showDiskSpace();
 	}
     }
     
@@ -212,7 +211,7 @@ string  NCPopupSelection::getCurrentLine( )
     
     int index = selectionBox->getCurrentItem();
 
-    return ( selections[index].first->name() );
+    return ( selections[index].first->summary(Y2PM::getPreferredLocale()) );
 }
 
 ///////////////////////////////////////////////////////////////////

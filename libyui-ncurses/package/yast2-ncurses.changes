@@ -1,3 +1,20 @@
+Wed Oct  9 15:15:49 CEST 2002 - gs@suse.de
+
+- V 2.6.20
+- package installation: show the source of installation in the list
+  of available packages (bug #20734) 
+
+-------------------------------------------------------------------
+Wed Sep 18 15:23:08 CEST 2002 - gs@suse.de
+
+- V 2.6.19
+- package installation: update the required disk space info 
+  if selections are selected/deselected (bug #19770), 
+  show translated summary of installed packages and
+  the selections, toggle the package status with space key,
+  layout of search popup changed (headline was truncated)
+  (bug #19725) 
+
 -------------------------------------------------------------------
 Thu Sep 12 13:40:20 CEST 2002 - gs@suse.de
 

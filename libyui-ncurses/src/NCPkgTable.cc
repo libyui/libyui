@@ -464,7 +464,6 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 
     switch ( key )
     {
-	case KEY_SPACE:
 	case KEY_RETURN:
 	    // if ( getNotify() )
 	    // ret = NCursesEvent::button;
@@ -500,7 +499,8 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 	    ret = NCursesEvent::handled;
 	    break;
 	}
-	case KEY_F(3): {
+	case KEY_F(3):
+	case KEY_SPACE:	{
 	    // toggle status
 	    toggleObjStatus( );
 

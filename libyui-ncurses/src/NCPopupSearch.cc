@@ -75,12 +75,12 @@ void NCPopupSearch::createLayout( const YCPString & headline )
   NCSplit * hSplit = new NCSplit( this, opt, YD_HORIZ );
   addChild( hSplit );
 
-  opt.hWeight.setValue( 40 );
+  opt.hWeight.setValue( 30 );
 
   // the help text is the first child of the horizontal split
   helpText = new NCRichText( hSplit, opt, YCPString(PkgNames::HelpOnSearch().str()) );
   
-  opt.hWeight.setValue( 60 );
+  opt.hWeight.setValue( 80 );
   opt.notifyMode.setValue( false );
   
   // second child is a vertical split

@@ -311,7 +311,7 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
     {
 	pkgLine[0] = selectable->name();	// package name
 	pkgLine[1] = (*it)->version();		// the version
-	pkgLine[2] = (*it)->summary();  	// short description
+	pkgLine[2] = (*it)->instSrcLabel();  	// show the installation source (instead of the summary)
 	FSize size = (*it)->size();     	// installed size
 	pkgLine[3] = size.asString();
 
@@ -609,8 +609,8 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
 	// entries for the same package!
 	    
 	bool match =
-	    checkPackage( selectable->installedObj(), rpmGroup, i ) || 
-	    checkPackage( selectable->candidateObj(), rpmGroup, i );  
+	    checkPackage( selectable->candidateObj(), rpmGroup, i ) ||  
+	    checkPackage( selectable->installedObj(), rpmGroup, i ); 
 
 	// If there is neither an installed nor a candidate package, check
 	// any other instance.  
