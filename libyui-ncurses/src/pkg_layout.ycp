@@ -25,7 +25,7 @@
 			 // label Actions menu ( keep it short ) - actions to change status of a package
 			 `Left(`MenuButton( _("&Actions"),
 					     // toggle the status, e.g. change from installed to delete
-					    [`item( `id(`toggle), 	_( "&Toggle     [F3]") ),
+					    [`item( `id(`toggle), 	_( "&Toggle     [RET]") ),
 					     // select the package for installation
 					     `item( `id(`select), 	_( "&Select      [+]") ),
 					     // delete the package
@@ -33,9 +33,9 @@
 					     // update the package
 					     `item( `id(`update), 	_( "&Update      [>]") ),
 					     // set package status to 'Taboo', i.e. never install this package
-					     `item( `id(`tabooOn), 	_( "Taboo &yes  [F4]") ),
+					     `item( `id(`tabooOn), 	_( "Taboo &yes   [!]") ),
 					     // reset the status 'Taboo' 
-					     `item( `id(`tabooOff), 	_( "Taboo &no   [F5]") ),
+					     `item( `id(`tabooOff), 	_( "Taboo &no    [-]") ),
 					     // title of a submenu: actions concerning all packages of the list
 					     `menu( "&All list packages",
 						    [
@@ -57,12 +57,15 @@
 					    )),
 			 // label Etc. menu ( keep it short! )
 			 `Left(`ReplacePoint(`id(`replacemenu),`MenuButton( _("&Etc."),
+									    // menu item of the Etc. menu
 									    [`menu( "&Dependencies",
-										    // menu items of the Etc. menu
+										    // menu items of the Etc./Dependencies submenu
 										    [`item( `id(`showdeps), _("    &Check dependencies now") ),
 										     `item( `id(`autodeps), _("[X] &Automatic dependency check") ) ]
 										    ),
+									      // menu item of the Etc. menu
 									     `menu( "&Selections",
+										    // menu item of the Etc./Selections submenu
 										    [`item( `id(`save), _("Save selection") ),
 										     `item( `id(`load), _("Load selection") ) ]
 										    )
@@ -98,7 +101,7 @@
 				  ),
 			`VWeight( 5, `HBox(
 					   // label help menu 
-					   `HBox(`HWeight(1, `MenuButton( _("&Help"),
+					   `HBox(`HWeight(1, `MenuButton(`opt(`key_F1), _("&Help"),
 									  // menu items of the help menu
 									  [`item( `id(`help_general), _("&General help") ),
 									   `item( `id(`help_status),  _("Help on &package status") ),
@@ -107,7 +110,7 @@
 									  )),
 						 `HStretch(),
 						 // button label
-						 `HWeight(1, `PushButton(`id(`search), _("&Search") ) ),
+						 `HWeight(1, `PushButton(`id(`search), `opt(`key_F2), _("&Search") ) ),
 						 `HStretch(),
 						  // button label
 						 `HWeight(1, `PushButton(`id(`diskinfo), _("&Disk usage") ) ),

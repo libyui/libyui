@@ -105,7 +105,7 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 	    if ( oldStatus == PMSelectable::S_KeepInstalled 
 		 || oldStatus == PMSelectable::S_AutoDel   )
 	    {
-		// FIXME: show delete notify
+		// if required, NCPkgTable::changeStatus() shows the delete notify
 		retStat = PMSelectable:: S_Del;
 	    }
 	    else if ( oldStatus == PMSelectable::S_AutoUpdate
@@ -118,6 +118,10 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 	    {
 		retStat = PMSelectable::S_NoInst;	
 	    }
+	    else if (  oldStatus == PMSelectable::S_Taboo )
+	    {
+		retStat = PMSelectable::S_NoInst;
+	    }
 	    else
 	    {
 		valid = false;
@@ -127,7 +131,7 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 	    if ( oldStatus == PMSelectable::S_NoInst
 		 || oldStatus == PMSelectable::S_AutoInstall )
 	    {
-		// FIXME: show notify
+		// if required, NCPkgTable::changeStatus() shows the notify message
 		retStat = PMSelectable::S_Install;
 	    }
 	    else if ( oldStatus ==  PMSelectable::S_Del
@@ -160,20 +164,10 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 		valid = false;
 	    }
 	    break;
-	case KEY_F(4):
+	case '!':
 	    if ( oldStatus == PMSelectable::S_NoInst || oldStatus == PMSelectable::S_AutoInstall )
 	    {
 		retStat = PMSelectable::S_Taboo;
-	    }
-	    else
-	    {
-		valid = false;
-	    }
-	    break;
-	case KEY_F(5):
-	    if (  oldStatus == PMSelectable::S_Taboo )
-	    {
-		retStat = PMSelectable::S_NoInst;
 	    }
 	    else
 	    {

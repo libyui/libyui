@@ -1150,11 +1150,11 @@ bool PackageSelector::StatusHandler( const NCursesEvent&  event )
     }
     else if ( event.selection->compare( PkgNames::TabooOn() ) == YO_EQUAL )
     {
-	packageList->changeObjStatus( KEY_F(4) );	
+	packageList->changeObjStatus( '!' );	
     }
     else if ( event.selection->compare( PkgNames::TabooOff() ) == YO_EQUAL )
     {
-	packageList->changeObjStatus( KEY_F(5) );	
+	packageList->changeObjStatus( '-' );	
     } 
     else if ( event.selection->compare( PkgNames::ToggleSource() ) == YO_EQUAL )
     {
