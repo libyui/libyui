@@ -82,7 +82,7 @@
 									  // menu items of the help menu
 									  [`item( `id(`help_general), _("&General Help") ),
 									   `item( `id(`help_status),  _("&Help on package status") ),
-									   `item( `id(`help_update), _("&Help on Update") ) ]
+									   `item( `id(`help_update), _("H&elp on Update") ) ]
 									  )),
 						 `HStretch(),
 						 // button label
