@@ -299,16 +299,11 @@ PMSelectable::UI_Status AvailableStatStrategy::getStatus( PMObjectPtr objPtr )
     PMSelectable::UI_Status selStatus = objPtr->getSelectable()->status();
     PMSelectable::UI_Status retStatus = PMSelectable::S_NoInst;
 
-    if ( objPtr->isInstalledObj() )
+    // set status for installed package or the candidate ( not for all availables )
+    if ( objPtr->isInstalledObj()
+	 || objPtr->isCandidateObj() )
     {
 	retStatus = selStatus;
-    }
-    else if (objPtr->isCandidateObj())
-    {
-	if ((selStatus == PMSelectable::S_Install) || (selStatus == PMSelectable::S_Update))
-	{
-	    retStatus = selStatus;
-	}
     }
 
     return retStatus;

@@ -47,7 +47,7 @@
 
 using namespace std;
 
-#define FAKE_INST_SRC 0
+#define FAKE_INST_SRC 1
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -301,7 +301,7 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
 	FSize size = (*it)->size();     	// installed size
 	pkgLine[3] = size.asString();
 
-	pkgTable->addLine( selectable->status(), // get the package status
+	pkgTable->addLine( pkgTable->getAvailableStatus(*it), // get the package status
 			   pkgLine,
 			   i,		 // the index
 			   (*it) );	 // the corresponding package pointer

@@ -203,12 +203,19 @@ public:
     NCPkgStatus statusToPkgStat( PMSelectable::UI_Status stat );
     
     /**
-     * Gets the package status of a certain package.
+     * Gets the currently displayed package status.
      * @param index The index in package table (the line)
      * @return NCPkgStatus
      */ 
     NCPkgStatus getStatus( int index );
 
+    /**
+     * Gets the package status of an available  package.
+     * @param objPtr The certain package 
+     * @return NCPkgStatus
+     */ 
+    PMSelectable::UI_Status getAvailableStatus( PMObjectPtr objPtr );
+    
     /**
      * Toggles the installation of the source package.
      * @return bool

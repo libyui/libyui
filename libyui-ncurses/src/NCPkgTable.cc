@@ -33,7 +33,7 @@
 //	DESCRIPTION :
 //
 NCPkgTableTag::NCPkgTableTag( PMObjectPtr objPtr, NCPkgStatus stat )
-      : NCTableCol( NCstring( "     " ), SEPARATOR )
+      : NCTableCol( NCstring( "    " ), SEPARATOR )
 	, status ( stat )
 	, dataPointer( objPtr )
 {
@@ -60,7 +60,6 @@ void NCPkgTableTag::DrawAt( NCursesWindow & w, const wrect at,
     w.addch( at.Pos.L, at.Pos.C +1, statusStr.c_str()[1] );
     w.addch( at.Pos.L, at.Pos.C +2, statusStr.c_str()[2] );
     w.addch( at.Pos.L, at.Pos.C +3, statusStr.c_str()[3] );
-    w.addch( at.Pos.L, at.Pos.C +4, statusStr.c_str()[4] );
 }
 
 
@@ -70,25 +69,25 @@ string NCPkgTableTag::statusToStr( NCPkgStatus stat ) const
     switch ( stat )
     {
 	case PkgNoInstall:	// Is not installed and will not be installed
-	    return " [ ] ";
+	    return "    ";
 	case PkgInstalled: 	// Is installed - keep this version
-	    return " [x] ";
-	case PkgToInstall:	// ??Is?? or will be installed
-	    return " [+] ";
+	    return "  i ";
+	case PkgToInstall:	// Will be installed
+	    return "  + ";
 	case PkgToDelete:	// Will be deleted
-	    return " [-] ";
+	    return "  - ";
 	case PkgToUpdate:	// Will be updated
-	    return " [>] ";
+	    return "  > ";
 	case PkgToReplace:	// Replace
-	    return " [+] ";
+	    return "  = ";
 	case PkgAutoInstall:	// Will be automatically installed
-	    return "a[+] ";
+	    return " a+ ";
 	case PkgAutoDelete:	// Will be automatically deleted
-	    return "a[-] ";
+	    return " a- ";
 	case PkgAutoUpdate:	// Will be automatically updated
-	    return "a[>] ";    
+	    return " a> ";    
 	case PkgTaboo:		// Never install this 
-	    return " [t] ";
+	    return "  ! ";
     }
 
     return " ";
@@ -323,6 +322,11 @@ bool NCPkgTable::updateTable()
     return ret;
 }
 
+
+PMSelectable::UI_Status NCPkgTable::getAvailableStatus ( PMObjectPtr objPtr )
+{
+    return ( statusStrategy->getStatus( objPtr) );
+};
 
 
 ///////////////////////////////////////////////////////////////////
