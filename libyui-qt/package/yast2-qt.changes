@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Dec 03 16:37:31 CET 2002 - arvin@suse.de
+
+- added curl-devel and openssl-devel to neededforbuild
+
+-------------------------------------------------------------------
 Mon Nov 11 17:58:23 CET 2002 - sh@suse.de
 
 - Support for buttons with icons and text
@@ -16,7 +21,7 @@ Thu Nov  7 20:04:33 CET 2002 - sh@suse.de
 -------------------------------------------------------------------
 Thu Nov  7 19:46:18 CET 2002 - sh@suse.de
 
-- Fixed bug #20539: Screen shot function causes unnecessary exits 
+- Fixed bug #20539: Screen shot function causes unnecessary exits
 - Fixed bug #8362:  File selection box for screen shots
 - Fixed possible security hole: Screen shots in /tmp by default
 
@@ -37,7 +42,7 @@ Fri Sep 20 16:23:32 CEST 2002 - msvec@suse.cz
 Fri Sep 13 14:56:41 CEST 2002 - sh@suse.de
 
 - V 2.6.22
-- Disabled selecting source RPMs until it works further down 
+- Disabled selecting source RPMs until it works further down
 
 -------------------------------------------------------------------
 Thu Sep 12 14:24:47 CEST 2002 - sh@suse.de
@@ -49,7 +54,7 @@ Thu Sep 12 14:24:47 CEST 2002 - sh@suse.de
 -------------------------------------------------------------------
 Wed Sep 11 17:48:32 CEST 2002 - sh@suse.de
 
-- Fixed bug #19419: Y2Pkg hangs on middle mouse click 
+- Fixed bug #19419: Y2Pkg hangs on middle mouse click
   This is really a Qt bug. Introduced workaround for that.
 
 -------------------------------------------------------------------
@@ -60,25 +65,25 @@ Wed Sep 11 14:07:50 CEST 2002 - sh@suse.de
 -------------------------------------------------------------------
 Tue Sep 10 22:21:48 CEST 2002 - sh@suse.de
 
-- V 2.6.19 
+- V 2.6.19
 
 -------------------------------------------------------------------
 Tue Sep 10 21:31:55 CEST 2002 - sh@suse.de
 
-- Fixed sort by source RPM status in pkg list 
+- Fixed sort by source RPM status in pkg list
 
 -------------------------------------------------------------------
 Tue Sep 10 21:01:37 CEST 2002 - sh@suse.de
 
 - Change packager priorities: Prefer candidateObj over installedObj
   so the user gets to see his native language more often in pkg
-  descriptions (RPM DB is English only) 
+  descriptions (RPM DB is English only)
 
 -------------------------------------------------------------------
 Tue Sep 10 20:06:11 CEST 2002 - sh@suse.de
 
 - V 2.6.18
-- New details view: Dependencies 
+- New details view: Dependencies
 - Bugfix: No initial dependency check in YOU mode
 - Show patch sizes in YOU mode
 
@@ -87,14 +92,14 @@ Tue Sep 10 18:55:25 CEST 2002 - sh@suse.de
 
 - V 2.6.17
 - Fixed 'Accept doesn't leave pkg selection' bug
-- New view for selecting different versions to install 
+- New view for selecting different versions to install
 
 -------------------------------------------------------------------
 Mon Sep  9 20:01:22 CEST 2002 - sh@suse.de
 
 - V 2.6.16
 - Prepared disk usage display (still disabled for internal reasons)
-- Lots of small fixes 
+- Lots of small fixes
 
 -------------------------------------------------------------------
 Mon Sep  9 18:46:35 CEST 2002 - sh@suse.de
@@ -118,7 +123,7 @@ Package manager changes:
 - Search immediately upon [Return]
 - Show pkgs without any RPM group in "zzz All"
 - Ignore WM_CLOSE for package selection
-- Prepared translation stuff  
+- Prepared translation stuff
 
 -------------------------------------------------------------------
 Fri Sep  6 17:13:10 CEST 2002 - sh@suse.de
@@ -126,13 +131,13 @@ Fri Sep  6 17:13:10 CEST 2002 - sh@suse.de
 - V 2.6.14
 - Search view
 - Update problem list view
-- Misc minor stuff 
+- Misc minor stuff
 
 -------------------------------------------------------------------
 Thu Sep  5 21:04:18 CEST 2002 - sh@suse.de
 
 - V 2.6.13
-- Dependency resolving works - including conflicts 
+- Dependency resolving works - including conflicts
 
 -------------------------------------------------------------------
 Mon Sep  2 19:58:07 CEST 2002 - sh@suse.de
@@ -150,7 +155,7 @@ Mon Sep  2 18:55:01 CEST 2002 - sh@suse.de
 Mon Sep  2 18:15:01 CEST 2002 - sh@suse.de
 
 - V 2.6.10
-- Generalized internal pkg classes 
+- Generalized internal pkg classes
 - YOU UI now usable
 - colorized lists
 - context menus
@@ -178,7 +183,7 @@ Mon Aug 19 19:03:14 CEST 2002 - sh@suse.de
 Fri Aug  9 18:51:05 CEST 2002 - sh@suse.de
 
 - V 2.6.6
-- Fixed table sorting with `opt(`keepSorting) 
+- Fixed table sorting with `opt(`keepSorting)
 
 -------------------------------------------------------------------
 Sat Aug 03 15:17:56 CEST 2002 - arvin@suse.de
