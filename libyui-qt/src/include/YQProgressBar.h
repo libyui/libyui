@@ -39,12 +39,12 @@ class YQProgressBar : public QVBox, public YProgressBar
     /**
      * Pointer to the qt widget representing the label
      */
-    QLabel *qt_label;
+    QLabel * qt_label;
 
     /**
      * Pointer to the qt widget representing the progress bar
      */
-    QProgressBar *qt_progressbar;
+    QProgressBar * qt_progressbar;
 
 public:
     /**

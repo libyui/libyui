@@ -33,7 +33,7 @@ public:
     /**
      * Constructor
      */
-    YQSpacing( QWidget *parent, YWidgetOpt & opt,
+    YQSpacing( QWidget * parent, YWidgetOpt & opt,
 	      float size, bool horizontal, bool vertical );
 
     /**

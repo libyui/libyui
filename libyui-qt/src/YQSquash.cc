@@ -21,7 +21,7 @@
 #include "YUIQt.h"
 #include "YQSquash.h"
 
-YQSquash::YQSquash( QWidget *parent, YWidgetOpt & opt,
+YQSquash::YQSquash( QWidget * parent, YWidgetOpt & opt,
 		   bool hsquash, bool vsquash)
     : QWidget(parent)
     , YSquash(opt, hsquash, vsquash)

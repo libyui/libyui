@@ -44,7 +44,7 @@ public:
     /**
      * Constructor
      **/
-    YQPkgStatusFilterView( QWidget *parent );
+    YQPkgStatusFilterView( QWidget * parent );
 
     /**
      * Destructor

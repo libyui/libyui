@@ -29,7 +29,7 @@
 
 
 
-YQPkgSelectionsFilterView::YQPkgSelectionsFilterView( QWidget *parent )
+YQPkgSelectionsFilterView::YQPkgSelectionsFilterView( QWidget * parent )
     : QVBox( parent )
 {
     _selList = new YQPkgSelList( this );

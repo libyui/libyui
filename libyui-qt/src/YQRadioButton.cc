@@ -36,7 +36,7 @@
 #define SPACING 8
 
 
-YQRadioButton::YQRadioButton( 			     QWidget *parent,
+YQRadioButton::YQRadioButton( 			     QWidget * parent,
 			     YWidgetOpt & opt,
 			     YRadioButtonGroup * rbg,
 			     const YCPString & label, bool checked)
@@ -46,7 +46,7 @@ YQRadioButton::YQRadioButton( 			     QWidget *parent,
     setWidgetRep( this );
     setFrameStyle(NoFrame);
 
-    QBoxLayout *layout = new QBoxLayout(this, QBoxLayout::LeftToRight);
+    QBoxLayout * layout = new QBoxLayout(this, QBoxLayout::LeftToRight);
 
     qt_radiobutton = new QRadioButton( fromUTF8(label->value()), this);
     layout->addSpacing(SPACING);
@@ -99,7 +99,7 @@ void YQRadioButton::setEnabling(bool enabled)
 }
 
 
-QRadioButton *YQRadioButton::getQtButton()
+QRadioButton * YQRadioButton::getQtButton()
 {
     return qt_radiobutton;
 }

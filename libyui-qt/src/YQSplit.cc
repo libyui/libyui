@@ -26,7 +26,7 @@
 #include "YQSplit.h"
 
 
-YQSplit::YQSplit(QWidget *parent, YWidgetOpt & opt, YUIDimension dimension)
+YQSplit::YQSplit(QWidget * parent, YWidgetOpt & opt, YUIDimension dimension)
     : QWidget(parent)
     , YSplit(opt, dimension)
 {
@@ -49,7 +49,7 @@ void YQSplit::setSize(long newWidth, long newHeight)
 
 void YQSplit::moveChild(YWidget * child, long newX, long newY)
 {
-    QWidget *qw = (QWidget *)(child->widgetRep());
+    QWidget * qw = (QWidget *)(child->widgetRep());
     qw->move(newX, newY);
 }
 

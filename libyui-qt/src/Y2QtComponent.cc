@@ -25,7 +25,7 @@
 
 
 static void
-myqmsg (QtMsgType type, const char* msg)
+myqmsg (QtMsgType type, const char * msg)
 {
     switch (type)
     {

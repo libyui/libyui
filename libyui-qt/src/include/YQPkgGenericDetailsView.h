@@ -123,7 +123,7 @@ protected slots:
     /**
      * Show data for the last package.
      **/
-    void reload( QWidget *newCurrent );
+    void reload( QWidget * newCurrent );
 
 
 protected:

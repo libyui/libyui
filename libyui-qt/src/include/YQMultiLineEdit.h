@@ -39,7 +39,7 @@ public:
     /**
      * Constructor
      */
-    YQMultiLineEdit( QWidget *parent, YWidgetOpt & opt,
+    YQMultiLineEdit( QWidget * parent, YWidgetOpt & opt,
 		    const YCPString & label, const YCPString & initialText );
 
     /**
@@ -99,8 +99,8 @@ protected slots:
 
 protected:
 
-    QLabel		*qt_label;
-    QMultiLineEdit	*qt_multiLineEdit;
+    QLabel		* qt_label;
+    QMultiLineEdit	* qt_multiLineEdit;
 };
 
 

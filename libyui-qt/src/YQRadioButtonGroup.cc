@@ -28,7 +28,7 @@
 #include "YQRadioButton.h"
 
 
-YQRadioButtonGroup::YQRadioButtonGroup( QWidget *parent, YWidgetOpt & opt )
+YQRadioButtonGroup::YQRadioButtonGroup( QWidget * parent, YWidgetOpt & opt )
     : QWidget(parent)
     , YRadioButtonGroup(opt)
 {
@@ -52,7 +52,7 @@ void YQRadioButtonGroup::addRadioButton(YRadioButton * button)
 	uncheckOtherButtons( button );	// make it the only active
     }
 
-    QRadioButton *radio_button = ( (YQRadioButton *) button )->getQtButton();
+    QRadioButton * radio_button = ( (YQRadioButton *) button )->getQtButton();
 
     connect ( radio_button,	SIGNAL ( toggled           ( bool ) ),
 	      this, 		SLOT   ( radioButtonClicked( bool ) ) );
@@ -87,7 +87,7 @@ void YQRadioButtonGroup::radioButtonClicked( bool newState )
 
     recursionCounter++;
 
-    QRadioButton *sender_button = (QRadioButton *) sender();
+    QRadioButton * sender_button = (QRadioButton *) sender();
 
     // Implement radio box behaviour: Uncheck all other radio buttons
 

@@ -40,7 +40,7 @@ using std::max;
 #define MARGIN				4	// around the widget
 
 
-YQSelectionBox::YQSelectionBox( QWidget *parent, YWidgetOpt & opt,
+YQSelectionBox::YQSelectionBox( QWidget * parent, YWidgetOpt & opt,
 			       const YCPString & label)
     : QVBox(parent)
     , YSelectionBox(opt, label)
@@ -143,11 +143,11 @@ bool YQSelectionBox::setKeyboardFocus()
 }
 
 
-bool YQSelectionBox::eventFilter( QObject *obj, QEvent *ev )
+bool YQSelectionBox::eventFilter( QObject * obj, QEvent * ev )
 {
     if ( ev->type() == QEvent::KeyPress )
     {
-	QKeyEvent *event = (QKeyEvent *) ev;
+	QKeyEvent * event = (QKeyEvent *) ev;
 
 	if ( ( event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter ) &&
 	     ( event->state() == 0 || event->state() == Qt::Keypad ) )

@@ -41,7 +41,7 @@ public:
     /**
      * Constructor
      **/
-    YQPkgList( QWidget *parent );
+    YQPkgList( QWidget * parent );
 
     /**
      * Destructor

@@ -24,7 +24,7 @@
 #include "QY2ListView.h"
 
 
-QY2ListView::QY2ListView( QWidget *parent )
+QY2ListView::QY2ListView( QWidget * parent )
     : QListView( parent )
     , _mousePressedItem( 0 )
     , _mousePressedCol( -1 )

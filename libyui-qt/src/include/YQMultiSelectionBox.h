@@ -36,7 +36,7 @@ class YQMultiSelectionBox : public QVBox, public YMultiSelectionBox
 
 public:
 
-    YQMultiSelectionBox( QWidget *parent, YWidgetOpt & opt, const YCPString & label);
+    YQMultiSelectionBox( QWidget * parent, YWidgetOpt & opt, const YCPString & label);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -135,12 +135,12 @@ protected:
     /**
      * Title label of the box
      */
-    QLabel *qt_label;
+    QLabel * qt_label;
 
     /**
      * The actual Qt list view
      */
-    QListView *qt_listview;
+    QListView * qt_listview;
 
     bool shrinkable;
 };
@@ -153,7 +153,7 @@ public:
     /**
      * Constructor.
      **/
-    YQMultiSelectionBoxItem( QListView *parent, const QString &text );
+    YQMultiSelectionBoxItem( QListView * parent, const QString &text );
 
     /**
      * Destructor.

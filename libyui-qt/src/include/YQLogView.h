@@ -37,7 +37,7 @@ public:
     /**
      * Constructor
      */
-    YQLogView( QWidget *parent, YWidgetOpt & opt,
+    YQLogView( QWidget * parent, YWidgetOpt & opt,
 	      const YCPString & label, int visibleLines, int maxLines );
 
     /**
@@ -77,8 +77,8 @@ public:
 
 protected:
 
-    QLabel		*qt_label;
-    QMultiLineEdit	*qt_text;
+    QLabel		* qt_label;
+    QMultiLineEdit	* qt_text;
 };
 
 #endif // YQLogView_h

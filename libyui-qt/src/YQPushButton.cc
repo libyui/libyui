@@ -154,7 +154,7 @@ void YQPushButton::hit()
 }
 
 
-bool YQPushButton::eventFilter( QObject *obj, QEvent *event )
+bool YQPushButton::eventFilter( QObject * obj, QEvent * event )
 {
     if ( event->type() == QEvent::FocusIn )
     {

@@ -37,7 +37,7 @@ public:
     /**
      * Constructor.
      */
-    YQFrame ( QWidget *parent, YWidgetOpt & opt, const YCPString & label );
+    YQFrame ( QWidget * parent, YWidgetOpt & opt, const YCPString & label );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the

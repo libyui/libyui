@@ -41,7 +41,7 @@ public:
     /**
      * Constructor
      **/
-    YQPkgTechnicalDetailsView( QWidget *parent, bool youMode = false );
+    YQPkgTechnicalDetailsView( QWidget * parent, bool youMode = false );
 
 
     /**

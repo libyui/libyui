@@ -29,7 +29,7 @@ using std::max;
 #include "YQMultiLineEdit.h"
 
 
-YQMultiLineEdit::YQMultiLineEdit( QWidget *parent, YWidgetOpt & opt,
+YQMultiLineEdit::YQMultiLineEdit( QWidget * parent, YWidgetOpt & opt,
 				  const YCPString & label, const YCPString & initialText )
     : QVBox( parent )
     , YMultiLineEdit( opt, label )

@@ -25,7 +25,7 @@
 #include "YQColoredLabel.h"
 
 
-YQColoredLabel::YQColoredLabel( QWidget *parent, YWidgetOpt & opt,
+YQColoredLabel::YQColoredLabel( QWidget * parent, YWidgetOpt & opt,
 				YCPString text,
 				YColor & fg, YColor & bg,
 				int margin )

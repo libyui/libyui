@@ -96,7 +96,7 @@ using std::max;
 
 
 
-YQPackageSelector::YQPackageSelector( QWidget *parent, YWidgetOpt & opt, const YCPString & floppyDevice )
+YQPackageSelector::YQPackageSelector( QWidget * parent, YWidgetOpt & opt, const YCPString & floppyDevice )
     : QVBox(parent)
     , YPackageSelector( opt )
     , _floppyDevice( floppyDevice->value().c_str() )
@@ -216,7 +216,7 @@ YQPackageSelector::basicLayout()
 {
     layoutMenuBar( this );
 
-    QSplitter *outer_splitter = new QSplitter( QSplitter::Horizontal, this );
+    QSplitter * outer_splitter = new QSplitter( QSplitter::Horizontal, this );
     CHECK_PTR( outer_splitter );
 
     layoutLeftPane ( outer_splitter );
@@ -390,7 +390,7 @@ YQPackageSelector::layoutPkgList( QWidget * parent )
 void
 YQPackageSelector::layoutDetailsViews( QWidget * parent )
 {
-    QVBox *details_vbox = new QVBox( parent );
+    QVBox * details_vbox = new QVBox( parent );
     CHECK_PTR( details_vbox );
     details_vbox->setMinimumSize( 0, 0 );
 
@@ -1147,7 +1147,7 @@ YQPackageSelector::notImplemented()
 
 
 void
-YQPackageSelector::keyPressEvent( QKeyEvent *event )
+YQPackageSelector::keyPressEvent( QKeyEvent * event )
 {
     if ( event )
     {

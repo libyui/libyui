@@ -34,7 +34,7 @@ using std::max;
 #define MARGIN			4	// around the widget
 
 
-YQTextEntry::YQTextEntry( QWidget *parent, YWidgetOpt & opt,
+YQTextEntry::YQTextEntry( QWidget * parent, YWidgetOpt & opt,
 			 const YCPString & label, const YCPString & text)
     : QVBox(parent)
     , YTextEntry(opt, label)

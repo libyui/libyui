@@ -56,7 +56,7 @@ public:
      * Interited from QDialog: The window was closed via the window
      * manager close button.
      */
-    void closeEvent( QCloseEvent *ev);
+    void closeEvent( QCloseEvent * ev);
 
     /**
      * Returns the nice size of this dialog (may depend on -geometry)
@@ -163,7 +163,7 @@ protected:
      *
      * Inherited from QWidget.
      */
-    void keyPressEvent( QKeyEvent *e );
+    void keyPressEvent( QKeyEvent * e );
 
 
     /**
@@ -171,14 +171,14 @@ protected:
      *
      * Inherited from QWidget.
      **/
-    void focusInEvent( QFocusEvent *event);
+    void focusInEvent( QFocusEvent * event);
 
     /**
      * Event handler for window resize.
      *
      * Inherited from QWidget.
      */
-    void resizeEvent ( QResizeEvent *ev );
+    void resizeEvent ( QResizeEvent * ev );
 
 
     /**

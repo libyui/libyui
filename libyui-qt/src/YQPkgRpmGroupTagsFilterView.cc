@@ -31,7 +31,7 @@
 
 
 
-YQPkgRpmGroupTagsFilterView::YQPkgRpmGroupTagsFilterView( QWidget *parent )
+YQPkgRpmGroupTagsFilterView::YQPkgRpmGroupTagsFilterView( QWidget * parent )
     : QListView( parent )
 {
     addColumn( _( "Package Groups" ) );

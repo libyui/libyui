@@ -102,7 +102,7 @@ void YUIQt::makeScreenShot( std::string stl_filename )
     // Grab the pixels off the screen
     //
 
-    QWidget *dialog = (QWidget *) currentDialog()->widgetRep();
+    QWidget * dialog = (QWidget *) currentDialog()->widgetRep();
     QPixmap screenShot = QPixmap::grabWindow( dialog->winId() );
     QString fileName ( stl_filename.c_str() );
 

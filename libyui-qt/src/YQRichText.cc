@@ -27,7 +27,7 @@
 #include "YQRichText.h"
 
 
-YQRichText::YQRichText( QWidget *parent, YWidgetOpt & opt,
+YQRichText::YQRichText( QWidget * parent, YWidgetOpt & opt,
 		       const YCPString & text)
     : QTextBrowser(parent)
     , YRichText(opt, text)

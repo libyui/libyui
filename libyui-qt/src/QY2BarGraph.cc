@@ -39,7 +39,7 @@ using std::max;
 #define INDEX_INVALID(I) index_invalid(i, __FUNCTION__)
 
 
-QY2BarGraph::QY2BarGraph( QWidget *parent, const char *name )
+QY2BarGraph::QY2BarGraph( QWidget * parent, const char *name )
     : QFrame(parent, name)
 {
     setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
@@ -120,7 +120,7 @@ int QY2BarGraph::sumValues() const
 }
 
 
-void QY2BarGraph::drawContents( QPainter *p )
+void QY2BarGraph::drawContents( QPainter * p )
 {
     int totalWidth = contentsRect().width();
     int segHeight  = contentsRect().height();

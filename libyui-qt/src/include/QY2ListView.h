@@ -47,7 +47,7 @@ public:
     /**
      * Constructor
      **/
-    QY2ListView( QWidget *parent );
+    QY2ListView( QWidget * parent );
 
     /**
      * Destructor

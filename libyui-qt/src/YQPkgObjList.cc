@@ -39,7 +39,7 @@ using std::list;
 using std::string;
 
 
-YQPkgObjList::YQPkgObjList( QWidget *parent )
+YQPkgObjList::YQPkgObjList( QWidget * parent )
     : QY2ListView( parent )
     , _editable( true )
     , _installedContextMenu( 0 )
@@ -513,7 +513,7 @@ YQPkgObjList::updateActions( YQPkgObjListItem * item )
 
 
 void
-YQPkgObjList::keyPressEvent( QKeyEvent *event )
+YQPkgObjList::keyPressEvent( QKeyEvent * event )
 {
     if ( event )
     {

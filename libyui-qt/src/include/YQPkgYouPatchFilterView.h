@@ -47,7 +47,7 @@ public:
     /**
      * Constructor
      **/
-    YQPkgYouPatchFilterView( QWidget *parent );
+    YQPkgYouPatchFilterView( QWidget * parent );
 
     /**
      * Destructor

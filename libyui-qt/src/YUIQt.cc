@@ -139,7 +139,7 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
     {
 	// Get _default_size via -geometry command line option
 
-	QWidget *dummy = new QWidget();
+	QWidget * dummy = new QWidget();
 	dummy->hide();
 	setMainWidget(dummy);
 	_default_size = dummy->size();
@@ -302,7 +302,7 @@ void YUIQt::idleLoop( int fd_ycp )
     _leave_idle_loop = false;
 
     // process Qt events until fd_ycp is readable.
-    QSocketNotifier *notifier = new QSocketNotifier(fd_ycp, QSocketNotifier::Read);
+    QSocketNotifier * notifier = new QSocketNotifier(fd_ycp, QSocketNotifier::Read);
     QObject::connect(notifier, SIGNAL(activated(int)), this, SLOT(leaveIdleLoop(int)));
     notifier->setEnabled(true);
 
@@ -420,7 +420,7 @@ YWidget * YUIQt::pollInput( YDialog * dialog, EventType *event )
 YDialog * YUIQt::createDialog( YWidgetOpt & opt )
 {
     bool has_defaultsize = opt.hasDefaultSize.value();
-    QWidget *qt_parent = _main_win;
+    QWidget * qt_parent = _main_win;
 
 
     // Popup dialogs get the topmost other popup dialog as their parent since
@@ -447,7 +447,7 @@ YDialog * YUIQt::createDialog( YWidgetOpt & opt )
 
 void YUIQt::showDialog( YDialog * dialog )
 {
-    QWidget *qw = (QWidget *) dialog->widgetRep();
+    QWidget * qw = (QWidget *) dialog->widgetRep();
 
     if ( ! qw )
     {
@@ -485,7 +485,7 @@ void YUIQt::showDialog( YDialog * dialog )
 
 void YUIQt::closeDialog( YDialog * dialog )
 {
-    QWidget *qw = (QWidget *) dialog->widgetRep();
+    QWidget * qw = (QWidget *) dialog->widgetRep();
 
     if ( ! qw )
     {

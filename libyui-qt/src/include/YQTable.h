@@ -39,7 +39,7 @@ public:
     /**
      * Constructor.
      */
-    YQTable( QWidget *parent, YWidgetOpt & opt, vector<string> header);
+    YQTable( QWidget * parent, YWidgetOpt & opt, vector<string> header);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -119,12 +119,12 @@ protected:
     /**
      * Helper function. Find item with given id.
      */
-    QListViewItem *findItem(int index);
+    QListViewItem * findItem(int index);
 
     /**
      * The Qt widget representing the table
      */
-    QListView *qt_listview;
+    QListView * qt_listview;
 
     
     /**

@@ -80,7 +80,7 @@ YQListViewItem::YQListViewItem( YQTable *	 table,
 }
 
 
-YQTable::YQTable( QWidget *parent, YWidgetOpt & opt, vector<string> header )
+YQTable::YQTable( QWidget * parent, YWidgetOpt & opt, vector<string> header )
     : QVBox( parent )
     , YTable( opt, header.size() )
     , last_item( 0 )
@@ -198,7 +198,7 @@ void YQTable::itemsCleared()
 
 void YQTable::cellChanged(int index, int colnum, const YCPString & newtext)
 {
-    QListViewItem *item = findItem(index);
+    QListViewItem * item = findItem(index);
     if (item) item->setText(colnum, fromUTF8(newtext->value()));
 }
 
@@ -213,7 +213,7 @@ int YQTable::getCurrentItem()
 
 void YQTable::setCurrentItem(int index)
 {
-    QListViewItem *item = findItem(index);
+    QListViewItem * item = findItem(index);
     if (item)  // should be always true
     {
 	qt_listview->setCurrentItem(item);
@@ -222,10 +222,10 @@ void YQTable::setCurrentItem(int index)
 }
 
 
-QListViewItem *YQTable::findItem(int index)
+QListViewItem * YQTable::findItem(int index)
 {
     // Scan all items and look for the one with the right index.
-    QListViewItem *item = qt_listview->firstChild();
+    QListViewItem * item = qt_listview->firstChild();
     while (item)
     {
 	if (((YQListViewItem *)item)->index == index)

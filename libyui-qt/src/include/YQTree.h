@@ -43,7 +43,7 @@ public:
     /**
      * Constructor.
      **/
-    YQTree ( QWidget *parent, YWidgetOpt & opt, const YCPString & label );
+    YQTree ( QWidget * parent, YWidgetOpt & opt, const YCPString & label );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the

@@ -41,12 +41,12 @@ protected:
     /**
      * Title label of the box
      */
-    QLabel *qt_label;
+    QLabel * qt_label;
 
     /**
      * The actual Qt list box
      */
-    QComboBox *qt_combo_box;
+    QComboBox * qt_combo_box;
 
     /**
      * Pointer to the validator object
@@ -55,7 +55,7 @@ protected:
 
 public:
 
-    YQComboBox( QWidget *parent, YWidgetOpt & opt, const YCPString & label);
+    YQComboBox( QWidget * parent, YWidgetOpt & opt, const YCPString & label);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the

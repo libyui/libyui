@@ -138,7 +138,7 @@ public:
      * this many percent used disk space in the list. This is useful for
      * warning dialogs (only?).
      **/
-    YQPkgDiskUsageList( QWidget *parent, int thresholdPercent = 0 );
+    YQPkgDiskUsageList( QWidget * parent, int thresholdPercent = 0 );
 
     /**
      * Destructor.

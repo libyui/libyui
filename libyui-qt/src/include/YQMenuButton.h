@@ -38,13 +38,13 @@ protected:
     /**
      * The actual push button
      */
-    QPushButton *qt_pushbutton;
+    QPushButton * qt_pushbutton;
 
 public:
     /**
      * Constructor.
      */
-    YQMenuButton( QWidget *parent, YWidgetOpt & opt, YCPString label);
+    YQMenuButton( QWidget * parent, YWidgetOpt & opt, YCPString label);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -85,7 +85,7 @@ public:
     /**
      * Recursively create the menu structure.
      */
-    void createMenu( YMenuItem * ymenu, QPopupMenu *qt_menu );
+    void createMenu( YMenuItem * ymenu, QPopupMenu * qt_menu );
     
 protected slots:
 

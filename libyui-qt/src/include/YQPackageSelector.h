@@ -63,7 +63,7 @@ class YQPackageSelector : public QVBox, public YPackageSelector
 
 public:
 
-    YQPackageSelector( QWidget *parent, YWidgetOpt & opt, const YCPString & floppyDevice );
+    YQPackageSelector( QWidget * parent, YWidgetOpt & opt, const YCPString & floppyDevice );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the

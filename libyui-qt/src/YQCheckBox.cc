@@ -42,7 +42,7 @@ YQCheckBox::YQCheckBox( QWidget *		parent,
     setWidgetRep( this );
     setFrameStyle( NoFrame );
 
-    QBoxLayout *layout = new QBoxLayout( this, QBoxLayout::LeftToRight );
+    QBoxLayout * layout = new QBoxLayout( this, QBoxLayout::LeftToRight );
 
     _qt_checkbox = new QCheckBox( fromUTF8(label->value() ), this );
     layout->addSpacing( SPACING );

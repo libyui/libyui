@@ -99,7 +99,7 @@ YUIQt::busyCursor ( void )
      * created thus far.
      **/
 
-    QWidgetList *widget_list = allWidgets();
+    QWidgetList * widget_list = allWidgets();
     QWidgetListIt it( *widget_list );
 
     while ( *it )
@@ -133,7 +133,7 @@ YUIQt::normalCursor ( void )
      * arrow cursor - e.g., input fields (QLineEdit) have the "I-beam" cursor.
      **/
 
-    QWidgetList *widget_list = allWidgets();
+    QWidgetList * widget_list = allWidgets();
     QWidgetListIt it( *widget_list );
 
     while ( *it )

@@ -48,7 +48,7 @@ public:
     /**
      * Constructor
      **/
-    YQPkgSearchFilterView( QWidget *parent );
+    YQPkgSearchFilterView( QWidget * parent );
 
     /**
      * Destructor

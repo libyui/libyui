@@ -38,7 +38,7 @@ public:
     /**
      * Constructor
      **/
-    YQPkgSelectionsFilterView( QWidget *parent );
+    YQPkgSelectionsFilterView( QWidget * parent );
 
     /**
      * Destructor

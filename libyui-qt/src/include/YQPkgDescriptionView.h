@@ -38,7 +38,7 @@ public:
     /**
      * Constructor
      **/
-    YQPkgDescriptionView( QWidget *parent );
+    YQPkgDescriptionView( QWidget * parent );
 
 
     /**

@@ -42,7 +42,7 @@ public:
     /**
      * Constructor
      **/
-    YQPkgDependenciesView( QWidget *parent );
+    YQPkgDependenciesView( QWidget * parent );
 
 
     /**

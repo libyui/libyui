@@ -45,7 +45,7 @@ protected:
     /**
      * Constructor. Does not add any QListView columns!
      **/
-    YQPkgObjList( QWidget *parent );
+    YQPkgObjList( QWidget * parent );
 
     /**
      * Destructor

@@ -31,7 +31,7 @@
 #define SPACING			4	// between subwidgets
 
 
-YQComboBox::YQComboBox( QWidget *parent, YWidgetOpt & opt,
+YQComboBox::YQComboBox( QWidget * parent, YWidgetOpt & opt,
 		       const YCPString & label)
     : QVBox(parent)
     , YComboBox(opt, label)

@@ -31,7 +31,7 @@
 
 
 
-YQPkgUpdateProblemFilterView::YQPkgUpdateProblemFilterView( QWidget *parent )
+YQPkgUpdateProblemFilterView::YQPkgUpdateProblemFilterView( QWidget * parent )
     : QTextBrowser( parent )
 {
     QString html = _( "\

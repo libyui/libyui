@@ -44,7 +44,7 @@ public:
     /**
      * Constructor
      **/
-    YQPkgRpmGroupTagsFilterView( QWidget *parent );
+    YQPkgRpmGroupTagsFilterView( QWidget * parent );
 
     /**
      * Destructor

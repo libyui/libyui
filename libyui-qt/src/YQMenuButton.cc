@@ -33,7 +33,7 @@
 #define BORDER 3
 #define BORDERSIZE QSize(BORDER, BORDER)
 
-YQMenuButton::YQMenuButton( 			   QWidget *parent,
+YQMenuButton::YQMenuButton( 			   QWidget * parent,
 			   YWidgetOpt & opt,
 			   YCPString label)
     : QWidget(parent)
@@ -131,7 +131,7 @@ YQMenuButton::createMenu()
 
 
 void
-YQMenuButton::createMenu( YMenuItem * ymenu, QPopupMenu *qt_menu )
+YQMenuButton::createMenu( YMenuItem * ymenu, QPopupMenu * qt_menu )
 {
     YMenuItemListIterator it = ymenu->itemList().begin();
 

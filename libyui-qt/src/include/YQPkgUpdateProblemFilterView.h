@@ -38,7 +38,7 @@ public:
     /**
      * Constructor
      **/
-    YQPkgUpdateProblemFilterView( QWidget *parent );
+    YQPkgUpdateProblemFilterView( QWidget * parent );
 
     /**
      * Destructor

@@ -52,7 +52,7 @@ using std::set;
 
 
 
-YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget *parent, int thresholdPercent )
+YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget * parent, int thresholdPercent )
     : QY2DiskUsageList( parent, true )
 {
     _debug 	= false;
@@ -148,7 +148,7 @@ YQPkgDiskUsageList::fakeData()
 
 
 void
-YQPkgDiskUsageList::keyPressEvent( QKeyEvent *event )
+YQPkgDiskUsageList::keyPressEvent( QKeyEvent * event )
 {
 
     if ( event )

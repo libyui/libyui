@@ -183,7 +183,7 @@ void YQDialog::activate(bool active)
 
 
 void
-YQDialog::resizeEvent ( QResizeEvent *event )
+YQDialog::resizeEvent ( QResizeEvent * event )
 {
     if ( event )
     {
@@ -354,7 +354,7 @@ void YQDialog::gettingFocus( YQPushButton * button )
 
 
 void
-YQDialog::keyPressEvent( QKeyEvent *event )
+YQDialog::keyPressEvent( QKeyEvent * event )
 {
     unsigned yast2_special_combo = ( Qt::ControlButton | Qt::ShiftButton | Qt::AltButton );
 
@@ -402,7 +402,7 @@ YQDialog::keyPressEvent( QKeyEvent *event )
 }
 
 
-void YQDialog::closeEvent(QCloseEvent *event)
+void YQDialog::closeEvent(QCloseEvent * event)
 {
     // The window manager "close window" button (and menu, e.g. Alt-F4) will be
     // handled just like the user had clicked on the `id`(`cancel) button in
@@ -414,7 +414,7 @@ void YQDialog::closeEvent(QCloseEvent *event)
 }
 
 
-void YQDialog::focusInEvent( QFocusEvent *event)
+void YQDialog::focusInEvent( QFocusEvent * event)
 {
 
     // The dialog itself doesn't need or want the keyboard focus, but obviously

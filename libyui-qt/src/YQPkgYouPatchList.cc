@@ -37,7 +37,7 @@
 using std::list;
 
 
-YQPkgYouPatchList::YQPkgYouPatchList( QWidget *parent )
+YQPkgYouPatchList::YQPkgYouPatchList( QWidget * parent )
     : YQPkgObjList( parent )
     , _showInstalledPatches( false )
 {
@@ -219,7 +219,7 @@ YQPkgYouPatchList::showRawPatchInfo()
 
 
 void
-YQPkgYouPatchList::keyPressEvent( QKeyEvent *event )
+YQPkgYouPatchList::keyPressEvent( QKeyEvent * event )
 {
     if ( event )
     {

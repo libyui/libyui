@@ -34,7 +34,7 @@ public:
     /**
      * Constructor
      */
-    YQEmpty( QWidget *parent, YWidgetOpt & opt);
+    YQEmpty( QWidget * parent, YWidgetOpt & opt);
 };
 
 #endif // YQEmpty_h

@@ -31,7 +31,7 @@
 using std::set;
 
 
-YQPkgSelList::YQPkgSelList( QWidget *parent )
+YQPkgSelList::YQPkgSelList( QWidget * parent )
     : YQPkgObjList( parent )
 {
     y2debug( "Creating selection list" );

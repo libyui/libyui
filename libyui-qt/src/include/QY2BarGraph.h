@@ -37,7 +37,7 @@ class QY2BarGraph : public QFrame
 
 public:
 
-    QY2BarGraph( QWidget *parent=0, const char *name=0 );
+    QY2BarGraph( QWidget * parent=0, const char *name=0 );
 
     /**
      * Add one segment to the bar graph.

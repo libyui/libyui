@@ -34,7 +34,7 @@ using std::max;
 #define MARGIN			4	// around the widget
 
 
-YQProgressBar::YQProgressBar( QWidget *parent, YWidgetOpt & opt,
+YQProgressBar::YQProgressBar( QWidget * parent, YWidgetOpt & opt,
 			     const YCPString & label,
 			     const YCPInteger & maxProgress, const YCPInteger & progress)
     : QVBox(parent)

@@ -37,7 +37,7 @@ public:
     /**
      * Constructor.
      */
-    YQReplacePoint( QWidget *parent, YWidgetOpt & opt);
+    YQReplacePoint( QWidget * parent, YWidgetOpt & opt);
 
     /**
      * Inherited from YContainerWidget. Called when a child

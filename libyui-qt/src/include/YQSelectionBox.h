@@ -39,16 +39,16 @@ class YQSelectionBox : public QVBox, public YSelectionBox
     /**
      * Title label of the box
      */
-    QLabel *qt_label;
+    QLabel * qt_label;
 
     /**
      * The actual Qt list box
      */
-    QListBox *qt_listbox;
+    QListBox * qt_listbox;
 
 public:
 
-    YQSelectionBox( QWidget *parent, YWidgetOpt & opt, const YCPString & label);
+    YQSelectionBox( QWidget * parent, YWidgetOpt & opt, const YCPString & label);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -101,7 +101,7 @@ public:
     /**
      * Event filter - inherited from QWidget
      **/
-    bool eventFilter( QObject *obj, QEvent *ev );
+    bool eventFilter( QObject * obj, QEvent * ev );
 
 protected slots:
 

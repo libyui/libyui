@@ -129,7 +129,7 @@ int
 YQMultiSelectionBox::getCurrentItem()
 {
     int index = 0;
-    QListViewItem *child = qt_listview->firstChild();
+    QListViewItem * child = qt_listview->firstChild();
 
     while ( child )
     {
@@ -149,7 +149,7 @@ void
 YQMultiSelectionBox::setCurrentItem( int index )
 {
     qt_listview->clearSelection();
-    QListViewItem *child = qt_listview->firstChild();
+    QListViewItem * child = qt_listview->firstChild();
 
     for ( int i = 0; i < index; i++ )
     {
@@ -186,7 +186,7 @@ YQMultiSelectionBox::deleteAllItems()
 bool
 YQMultiSelectionBox::itemIsSelected( int index )
 {
-    QListViewItem *child = qt_listview->firstChild();
+    QListViewItem * child = qt_listview->firstChild();
 
     for ( int i = 0; i < index; i++ )
     {
@@ -208,7 +208,7 @@ YQMultiSelectionBox::itemIsSelected( int index )
 void
 YQMultiSelectionBox::selectItem( int index )
 {
-    QListViewItem *child = qt_listview->firstChild();
+    QListViewItem * child = qt_listview->firstChild();
 
     for ( int i = 0; i < index; i++ )
     {
@@ -230,7 +230,7 @@ YQMultiSelectionBox::selectItem( int index )
 void
 YQMultiSelectionBox::deselectAllItems()
 {
-    QListViewItem *child = qt_listview->firstChild();
+    QListViewItem * child = qt_listview->firstChild();
 
     while ( child )
     {
@@ -253,7 +253,7 @@ void YQMultiSelectionBox::slotSelected()
 int YQMultiSelectionBoxItem::item_count = 0;
 
 
-YQMultiSelectionBoxItem::YQMultiSelectionBoxItem( QListView *parent, const QString &text )
+YQMultiSelectionBoxItem::YQMultiSelectionBoxItem( QListView * parent, const QString &text )
     : QCheckListItem( parent, text, QCheckListItem::CheckBox )
 {
     serial = item_count++;

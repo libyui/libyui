@@ -47,7 +47,7 @@ QY2ComboTabWidget::QY2ComboTabWidget( const QString &	label,
     setMargin ( MARGIN  );
 
     
-    QHBox *hbox = new QHBox( this );
+    QHBox * hbox = new QHBox( this );
     CHECK_PTR( hbox );
     hbox->setSpacing( SPACING );
     hbox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert

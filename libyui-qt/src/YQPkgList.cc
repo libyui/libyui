@@ -37,7 +37,7 @@
 #include "YQIconPool.h"
 
 
-YQPkgList::YQPkgList( QWidget *parent )
+YQPkgList::YQPkgList( QWidget * parent )
     : YQPkgObjList( parent )
 {
     _srpmStatusCol	= -42;
