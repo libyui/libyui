@@ -137,10 +137,15 @@ public:
      * Set triangular shape (true) or normal rectangular shape.
      * This call does not trigger a screen update.
      **/
-    void setTriangularShaped( bool triangular = true )
-	{ _triangularShaped = triangular; }
+    void setTriangularShaped( bool triangular = true );
 
+    
 protected:
+
+    /**
+     * Common initialization
+     **/
+    void init();
 
     /**
      * Perform a visual update on the screen.

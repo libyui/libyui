@@ -33,7 +33,14 @@ YQMultiProgressMeter::YQMultiProgressMeter( QWidget *		parent,
     : QWidget( parent )
     , YMultiProgressMeter( opt, horizontal, maxValues )
 {
-    _triangularShaped	= false;
+    _triangularShaped = false;
+    init();
+    setWidgetRep( this );
+}
+
+
+void YQMultiProgressMeter::init()
+{
     _margin 		= 2;
     _segmentMinLength 	= 12;
     _triSpacing		= 1;
@@ -48,8 +55,13 @@ YQMultiProgressMeter::YQMultiProgressMeter( QWidget *		parent,
 	_spacing	= 2;
 	setTriThickness( 4 );
     }
+}
 
-    setWidgetRep( this );
+
+void YQMultiProgressMeter::setTriangularShaped( bool triangular )
+{
+    _triangularShaped = triangular;
+    init();
 }
 
 
@@ -171,7 +183,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 
 	drawSegment( i, painter, offset, length, thickness, indent );
 
-	if ( i > 0 && ! triangularShaped() )
+	if ( i > 0 )
 	    drawMarkers( painter, offset, thickness );
 
 	offset += length + spacing();
