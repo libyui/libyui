@@ -743,10 +743,10 @@ NCPkgTableTag * NCPkgTable::getTag( const int & index )
 
 ///////////////////////////////////////////////////////////////////
 //
-// NCPkgTable::toggleSourceStatus()
+// NCPkgTable::SourceInstall()
 //
 //
-bool NCPkgTable::toggleSourceStatus( )
+bool NCPkgTable::SourceInstall( bool install )
 {
     int index =  getCurrentItem();
     PMObjectPtr objPtr = getDataPointer( index );
@@ -768,15 +768,14 @@ bool NCPkgTable::toggleSourceStatus( )
 
     NCTableCol * currentCol = currentLine->GetCol( currentLine->Cols()-1 );    
 
-    if ( selPtr->providesSources()
-	 && !selPtr->source_install() )
+    if ( install && selPtr->providesSources() )
     {
 	ok = selPtr->set_source_install( true );
 	NCMIL << "Set source install returns: " << (ok?"true":"false") << endl;
 	if ( currentCol )
 	    currentCol->SetLabel( NClabel( " x " ) );
     }
-    else if ( selPtr->source_install() )
+    else if ( !install && selPtr->source_install() )
     {
 	ok = selPtr->set_source_install( false );
 	NCMIL << "ReSet source install returns: " << (ok?"true":"false") << endl;

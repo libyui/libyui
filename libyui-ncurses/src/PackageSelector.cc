@@ -141,7 +141,8 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt, string flo
     eventHandlerMap[ PkgNames::Update()->toString() ] 	= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::TabooOn()->toString() ]	= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::TabooOff()->toString() ]	= &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::ToggleSource()->toString() ] = &PackageSelector::StatusHandler;
+    eventHandlerMap[ PkgNames::SourceYes()->toString() ] = &PackageSelector::StatusHandler;
+    eventHandlerMap[ PkgNames::SourceNo()->toString() ] = &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::InstallAll()->toString() ] = &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::DontInstall()->toString() ] = &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::DeleteAll()->toString() ] = &PackageSelector::StatusHandler;
@@ -1282,10 +1283,14 @@ bool PackageSelector::StatusHandler( const NCursesEvent&  event )
     {
 	packageList->changeObjStatus( '-' );	
     } 
-    else if ( event.selection->compare( PkgNames::ToggleSource() ) == YO_EQUAL )
+    else if ( event.selection->compare( PkgNames::SourceYes() ) == YO_EQUAL )
     {
-	packageList->toggleSourceStatus( );	
+	packageList->SourceInstall( true );	
     }
+    else if ( event.selection->compare( PkgNames::SourceNo() ) == YO_EQUAL )
+    {
+	packageList->SourceInstall( false );	
+    }	
     else if ( event.selection->compare( PkgNames::InstallAll() ) == YO_EQUAL )
     {
 	packageList->changeListObjStatus( NCPkgTable::A_Install );

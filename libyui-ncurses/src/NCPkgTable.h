@@ -235,9 +235,10 @@ public:
     
     /**
      * Toggles the installation of the source package.
+     * @param install 
      * @return bool
      */ 
-    bool toggleSourceStatus( );
+    bool SourceInstall( bool install );
     
     /**
      * Sets the type of the table and the status strategy (which means call particular methods
