@@ -90,8 +90,7 @@ void NCPopupDeps::createLayout( )
 
   opt.notifyMode.setValue( true );
 
-  NCSpacing * sp0 = new NCSpacing( vSplit, opt, 0.8, false, true );
-  vSplit->addChild( sp0 );
+  vSplit->addChild( new NCSpacing( vSplit, opt, 0.8, false, true ) );
 
   // add the headline
   opt.isHeading.setValue( true );
@@ -99,17 +98,14 @@ void NCPopupDeps::createLayout( )
   head = new NCLabel( vSplit, opt, YCPString("") );
   vSplit->addChild( head );
 
-  NCSpacing * sp = new NCSpacing( vSplit, opt, 0.4, false, true );
-  vSplit->addChild( sp );
+  vSplit->addChild( new NCSpacing( vSplit, opt, 0.4, false, true ) );
 
   // add the list containing packages with unresolved depemdencies
   pkgs = new NCPkgTable( vSplit, opt );
   pkgs->setPackager( packager );
- 
   vSplit->addChild( pkgs );
 
-  NCSpacing * sp1 = new NCSpacing( vSplit, opt, 0.2, false, true );
-  vSplit->addChild( sp1 );
+  vSplit->addChild( new NCSpacing( vSplit, opt, 0.2, false, true ) );
 
   opt.isHStretchable.setValue( true );
   opt.isHeading.setValue( false );
@@ -117,8 +113,7 @@ void NCPopupDeps::createLayout( )
   errorLabel = new NCLabel(  vSplit, opt, YCPString("") );
   vSplit->addChild( errorLabel );
 
-  NCSpacing * sp2 = new NCSpacing( vSplit, opt, 0.2, false, true );
-  vSplit->addChild( sp2 );
+  vSplit->addChild( new NCSpacing( vSplit, opt, 0.2, false, true ) );
 
   // add the package list containing the dependencies
   deps = new NCPkgTable( vSplit, opt );
@@ -133,8 +128,7 @@ void NCPopupDeps::createLayout( )
   NCLabel * helplb = new NCLabel( vSplit, opt, YCPString(PkgNames::DepsHelpLine()) );
   vSplit->addChild( helplb );
   
-  NCSpacing * sp3 = new NCSpacing( vSplit, opt, 0.6, false, true );
-  vSplit->addChild( sp3 );
+  vSplit->addChild( new NCSpacing( vSplit, opt, 0.6, false, true ) );
   
   NCSplit * hSplit = new NCSplit( vSplit, opt, YD_HORIZ );
   vSplit->addChild( hSplit );
@@ -147,24 +141,23 @@ void NCPopupDeps::createLayout( )
   solveButton->setId( PkgNames::Solve () );
   hSplit->addChild( solveButton );
 
-  NCSpacing * sp4 = new NCSpacing( hSplit, opt, 0.2, true, false );
-  hSplit->addChild( sp4 );
+  hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
 
+  // add the ignore all button
   opt.key_Fxx.setValue( 5 );
   ignoreAllButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::IgnAllLabel()) );
   ignoreAllButton->setId( PkgNames::IgnoreAll() );
   hSplit->addChild( ignoreAllButton );
 
-  NCSpacing * sp5 = new NCSpacing( hSplit, opt, 0.2, true, false );
-  hSplit->addChild( sp5 );
+  hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
 
+  // add the ignore button
   opt.key_Fxx.setValue( 4 );
   ignoreButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::IgnLabel()) );
   ignoreButton->setId( PkgNames::Ignore() );
   hSplit->addChild( ignoreButton );
 
-  NCSpacing * sp6 = new NCSpacing( hSplit, opt, 0.2, true, false );
-  hSplit->addChild( sp6 );
+  hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
   
   // add the cancel button
   opt.key_Fxx.setValue( 9 );

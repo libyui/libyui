@@ -101,8 +101,7 @@ void NCPopupSelection::createLayout( const YCPString & label )
   NCLabel * help = new NCLabel( split, opt, YCPString(PkgNames::DepsHelpLine()) );
   split->addChild( help );
 
-  NCSpacing * sp1 = new NCSpacing( split, opt, 0.4, false, true );
-  split->addChild( sp1 );
+  split->addChild( new NCSpacing( split, opt, 0.4, false, true ) );
 
   // add an OK button
   opt.key_Fxx.setValue( 10 );
@@ -111,8 +110,7 @@ void NCPopupSelection::createLayout( const YCPString & label )
 
   split->addChild( okButton );
 
-  NCSpacing * sp2 = new NCSpacing( split, opt, 0.4, false, true );
-  split->addChild( sp2 );
+  split->addChild( new NCSpacing( split, opt, 0.4, false, true ) );
 }
 
 ///////////////////////////////////////////////////////////////////

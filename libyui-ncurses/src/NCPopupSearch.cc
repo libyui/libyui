@@ -108,9 +108,8 @@ void NCPopupSearch::createLayout( const YCPString & headline )
     // add the checkBox ignore case
     NCSplit * hSplit2 = new NCSplit( vSplit, opt, YD_HORIZ );
     vSplit->addChild( hSplit2 );
-    NCSpacing * hSp1 = new NCSpacing( hSplit2, opt, 0.1, true, false );
     ignoreCase = new NCCheckBox( hSplit2, opt, YCPString(PkgNames::IgnoreCase()), true );
-    hSplit2->addChild( hSp1 );
+    hSplit2->addChild( new NCSpacing( hSplit2, opt, 0.1, true, false ) );
     hSplit2->addChild( ignoreCase );
 
     vSplit->addChild( new NCSpacing( vSplit, opt, 0.6, false, true ) );	// VSpacing

@@ -97,8 +97,7 @@ void NCPopupInfo::createLayout( const YCPString & headline,
   if ( okButtonLabel != "" && cancelButtonLabel != "" )
   {
       opt.isHStretchable.setValue( true );
-      NCSpacing * sp1 = new NCSpacing( hSplit, opt, 0.4, true, false );
-      hSplit->addChild( sp1 ); 
+      hSplit->addChild( new NCSpacing( hSplit, opt, 0.4, true, false ) ); 
   }
 
   if ( okButtonLabel != "" )
@@ -113,8 +112,7 @@ void NCPopupInfo::createLayout( const YCPString & headline,
   
   if ( cancelButtonLabel != "" )
   {
-      NCSpacing * sp2 = new NCSpacing( hSplit, opt, 0.4, true, false );
-      hSplit->addChild( sp2 );
+      hSplit->addChild( new NCSpacing( hSplit, opt, 0.4, true, false ) );
       
       opt.key_Fxx.setValue( 9 );
       // add the Cancel button
@@ -122,8 +120,7 @@ void NCPopupInfo::createLayout( const YCPString & headline,
       cancelButton->setId( PkgNames::Cancel() );
       hSplit->addChild( cancelButton );
       
-      NCSpacing * sp3 = new NCSpacing( hSplit, opt, 0.4, true, false );
-      hSplit->addChild( sp3 ); 
+      hSplit->addChild( new NCSpacing( hSplit, opt, 0.4, true, false ) ); 
   }
   
 }
