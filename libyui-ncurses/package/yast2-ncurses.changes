@@ -1,13 +1,15 @@
 -------------------------------------------------------------------
 Fri Mar 19 15:45:59 CET 2004 - sh@suse.de
 
+- V 2.9.16
 - Graceful handling for duplicate entries in combo box
 
 -------------------------------------------------------------------
 Tue Mar 16 14:09:57 CET 2004 - gs@suse.de
 
 - package installation: improve license popup (bug #33584),
-  			check size of popups (bug #35873)
+  			check size of popups (bug #35873),
+			bugfix package selections (bug #36541)
 
 -------------------------------------------------------------------
 Mon Mar 15 17:59:48 CET 2004 - gs@suse.de
