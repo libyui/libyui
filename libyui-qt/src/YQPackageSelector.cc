@@ -57,6 +57,7 @@
 #include <ycp/y2log.h>
 
 #include "QY2FloppyMountDialog.h"
+#include "QY2LayoutUtils.h"
 
 #include "YQPackageSelector.h"
 #include "YQPkgChangesDialog.h"
@@ -1240,38 +1241,6 @@ YQPackageSelector::setTextdomain( const char * domain )
 	++_nl_msg_cat_cntr;
     }
 }
-
-
-void addVStretch( QWidget * parent )
-{
-    QWidget * spacer = new QWidget( parent );
-    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) ); // hor/vert
-}
-
-
-void addHStretch( QWidget * parent )
-{
-    QWidget * spacer = new QWidget( parent );
-    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
-}
-
-
-void addVSpacing( QWidget * parent, int height )
-{
-    QWidget * spacer = new QWidget( parent );
-    CHECK_PTR( spacer );
-    spacer->setFixedHeight( height );
-}
-
-
-void addHSpacing( QWidget * parent, int width )
-{
-    QWidget * spacer = new QWidget( parent );
-    CHECK_PTR( spacer );
-    spacer->setFixedWidth( width );
-}
-
-
 
 
 #include "YQPackageSelector.moc"

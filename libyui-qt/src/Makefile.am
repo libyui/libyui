@@ -96,6 +96,7 @@ liby2qt_la_SOURCES = 				\
 	YQTable.cc				\
 	YQTextEntry.cc				\
 	YQTree.cc				\
+	YQWizard.cc				\
 						\
 	YFrameBuffer.cc				\
 	QY2BarGraph.cc				\
@@ -103,7 +104,11 @@ liby2qt_la_SOURCES = 				\
 	QY2DiskUsageList.cc			\
 	QY2FloppyMountDialog.cc			\
 	QY2CharValidator.cc			\
-	QY2ListView.cc
+	QY2ListView.cc				\
+	QY2LayoutUtils.cc
+
+# Note: QY2LayoutUtils doesn't need any .moc file: No QObject, just functions.
+
 
 # the plugin adds the liby2 component interface
 
@@ -169,6 +174,7 @@ BUILT_SOURCES =					\
 	YQTable.moc				\
 	YQTextEntry.moc				\
 	YQTree.moc				\
+	YQWizard.moc				\
 						\
 	QY2BarGraph.moc				\
 	QY2ComboTabWidget.moc			\
@@ -237,6 +243,7 @@ YQSquash.o YQSquash.lo:						YQSquash.moc
 YQTable.o YQTable.lo:						YQTable.moc
 YQTextEntry.o YQTextEntry.lo:					YQTextEntry.moc
 YQTree.o YQTree.lo:						YQTree.moc
+YQWizard.o YQWizard.lo:						YQWizard.moc
 
 QY2BarGraph.o QY2BarGraph.lo:					QY2BarGraph.moc
 QY2ComboTabWidget.o QY2ComboTabWidget.lo:			QY2ComboTabWidget.cc
@@ -303,6 +310,7 @@ YQSquash.moc:				include/YQSquash.h
 YQTable.moc:				include/YQTable.h
 YQTextEntry.moc:			include/YQTextEntry.h
 YQTree.moc:				include/YQTree.h
+YQWizard.moc:				include/YQWizard.h
 
 QY2BarGraph.moc:			include/QY2BarGraph.h
 QY2ComboTabWidget.cc:			include/QY2ComboTabWidget.h

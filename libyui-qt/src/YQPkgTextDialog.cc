@@ -30,8 +30,8 @@
 #include <qhbox.h>
 
 #include "YQPkgTextDialog.h"
-#include "YQPackageSelector.h"
 
+#include "QY2LayoutUtils.h"
 #include "YQi18n.h"
 #include "utf8.h"
 

@@ -31,7 +31,7 @@
 
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQPkgDiskUsageList.h"
-#include "YQPackageSelector.h"
+#include "QY2LayoutUtils.h"
 #include "YQUI.h"
 #include "YQi18n.h"
 

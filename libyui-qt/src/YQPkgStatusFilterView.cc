@@ -31,9 +31,9 @@
 #include <y2pm/PMPackageManager.h>
 
 #include "YQPkgStatusFilterView.h"
-#include "YQPackageSelector.h"
 #include "YQIconPool.h"
 #include "YQi18n.h"
+#include "QY2LayoutUtils.h"
 #include "utf8.h"
 #include "YQUI.h"
 

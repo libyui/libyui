@@ -33,7 +33,7 @@
 #include <y2pm/PMPackageManager.h>
 #include "YQPkgChangesDialog.h"
 #include "YQPkgList.h"
-#include "YQPackageSelector.h"
+#include "QY2LayoutUtils.h"
 #include "YQi18n.h"
 #include "YQUI.h"
 

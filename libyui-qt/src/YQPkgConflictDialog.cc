@@ -41,9 +41,9 @@
 
 #include "YQPkgConflictDialog.h"
 #include "YQPkgConflictList.h"
-#include "YQPackageSelector.h"
 #include "YQDialog.h"
 
+#include "QY2LayoutUtils.h"
 #include "YQUI.h"
 #include "YQi18n.h"
 #include "utf8.h"

@@ -319,28 +319,4 @@ protected:
 };
 
 
-
-/**
- * Add vertical stretchable space.
- **/
-void addVStretch( QWidget * parent );
-
-/**
- * Add horizontal stretchable space.
- **/
-void addHStretch( QWidget * parent );
-
-
-/**
- * Add a fixed height vertical space
- **/
-void addVSpacing( QWidget * parent, int height = 8 );
-
-
-/**
- * Add a fixed height horizontal space
- **/
-void addHSpacing( QWidget * parent, int width = 8 );
-
-
 #endif // YQPackageSelector_h
