@@ -45,6 +45,7 @@
 
 
 #define BUSY_CURSOR_TIMEOUT	200	// milliseconds
+#define KYAST_EMBEDDING		0
 
 
 YQUI *		YQUI::_ui		= 0;
@@ -71,11 +72,18 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     _fullscreen			= false;
     _decorate_toplevel_window	= true;
     _debug_embedding		= false;
+    _running_embedded		= false;
     screenShotNameTemplate 	= "";
 
     qInstallMsgHandler( qMessageHandler );
     
+#if ! KYAST_EMBEDDING
+    _running_embedded = ( getenv( "KCMYAST2_CALL" ) != 0 );
+#endif
+
+#if KYAST_EMBEDDING
     if ( ! runningEmbedded() )
+#endif
 	new QApplication( argc, argv );
     
     // Qt keeps track to a global QApplication in qApp.
@@ -172,7 +180,9 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 
     // Set window title
 
+#if 0
     if ( ! runningEmbedded() )
+#endif
     {
 	QString title( "YaST2" );
 	char hostname[ MAXHOSTNAMELEN+1 ];
@@ -568,6 +578,16 @@ QString YQUI::productName() const
 void YQUI::setEmbeddingParent( QWidget * p )
 {
     _embeddingParent = p;
+}
+
+
+bool YQUI::runningEmbedded() const
+{
+#if KYAST_EMBEDDING
+    return _embeddingParent != 0;
+#else
+    return _running_embedded;
+#endif
 }
 
 

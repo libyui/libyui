@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Apr  5 18:41:36 CEST 2004 - sh@suse.de
+
+- Honor environment variable KCMYAST2_CALL for KControl embedding
+  (no wizard decorations, suppress wizard help) 
+
+-------------------------------------------------------------------
 Fri Apr  2 16:24:00 CEST 2004 - sh@suse.de
 
 - License change to GPL

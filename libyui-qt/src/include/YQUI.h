@@ -198,7 +198,7 @@ public:
      * Are we running embedded into another application, e.g., inside the KDE
      * control center?
      **/
-    bool runningEmbedded() const { return _embeddingParent != 0; }
+    bool runningEmbedded() const;
 
     /**
      * Returns true if debugging embedding mode is on, i.e., when cmd line arg
@@ -684,6 +684,11 @@ protected:
      * Parent widget for embedding in a KPart or KCMShell
      **/
     static QWidget * _embeddingParent;
+
+    /**
+     * Flag that indicates if we are running embedded
+     **/
+    bool _running_embedded;
 };
 
 
