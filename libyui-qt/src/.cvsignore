@@ -5,9 +5,6 @@ Makefile.in
 *.moc.cc
 *.moc.h
 .libs
-y2qt
 y2qt.kdoc
-.inslog2
-bugs.dat*
 *.la
 qt
