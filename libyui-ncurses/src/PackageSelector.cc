@@ -32,6 +32,7 @@
 #include "NCPopupPkgDeps.h"
 #include "NCPopupSelDeps.h"
 #include "NCPopupDiskspace.h"
+#include "NCPopupPkgTable.h"
 #include "NCPopupFile.h"
 #include "PackageSelector.h"
 #include "YSelectionBox.h"
@@ -272,18 +273,17 @@ bool PackageSelector::handleEvent ( const NCursesEvent&   event )
     if ( event == NCursesEvent::button )
     {
 	currentId =  dynamic_cast<YWidget *>(event.widget)->id();
-	UIMIL <<  "Selected widget id: " << currentId->toString() << endl;
-
     }
     else if ( event == NCursesEvent::menu )
     {
 	currentId =  event.selection;
-	UIMIL <<  "Selected menu item: " << currentId->toString() << endl;
     }
     
     // Find the handler-function for the given widget-nameId
     if ( ! currentId.isNull() )
     {
+	UIMIL <<  "Selected widget id: " << currentId->toString() << endl;
+	
 	tHandlerMap::iterator it = eventHandlerMap.find ( currentId->toString() );
     
 	if (it != eventHandlerMap.end())    // if currentId found in map
@@ -1377,6 +1377,15 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	{
 	    // don't leave the package installation if the user has clicked on Cancel
 	    // in dependency popup because maybe he wants to change his choices
+	    closeDialog = false;
+	}
+	// show the automatic changes list
+	NCPopupPkgTable autoChangePopup( wpos( 1, 1), this );
+	NCursesEvent input = autoChangePopup.showInfoPopup();
+
+	if ( input == NCursesEvent::cancel )
+	{
+	    // user clicked on Cancel
 	    closeDialog = false;
 	}
     }
