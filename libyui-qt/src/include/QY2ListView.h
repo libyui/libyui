@@ -121,7 +121,7 @@ public:
      * 'column' is -1 if the mouse pointer is in the tree indentation area.
      *
      * This default implementation tries to call
-     * QY2ListViewItem::toolTip( column ) or 
+     * QY2ListViewItem::toolTip( column ) or
      * QY2CheckListItem::toolTip( column ), respectively
      * if 'item' is a subclass of either.
      *
@@ -135,12 +135,16 @@ public:
      **/
     int nextSerial() { return _nextSerial++; }
 
-
     /**
      * Returns the minimum size required for this widget.
      * Inherited from QWidget.
      **/
     virtual QSize minimumSizeHint() const;
+
+    /**
+     * Event filter - inherited from QWidget
+     **/
+    virtual bool eventFilter( QObject * obj, QEvent * event );
 
 
 protected slots:
@@ -184,6 +188,8 @@ protected:
     int				_nextSerial;
 
     QY2ListViewToolTip *	_toolTip;
+    bool			_mouseButton1PressedInHeader;
+    bool			_finalSizeChangeExpected;
 };
 
 
@@ -477,6 +483,7 @@ public:
     QY2ListViewToolTip::QY2ListViewToolTip( QY2ListView * parent )
 	: QToolTip( parent->viewport() ), _listView( parent )  {}
 
+
 protected:
 
     /**
@@ -486,6 +493,9 @@ protected:
      **/
     virtual void maybeTip( const QPoint & p );
 
+    
+    // Data members
+    
     QY2ListView * _listView;
 };
 

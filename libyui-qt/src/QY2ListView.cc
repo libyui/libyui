@@ -31,9 +31,14 @@ QY2ListView::QY2ListView( QWidget * parent )
     , _mousePressedCol( -1 )
     , _mousePressedButton( NoButton )
     , _nextSerial(0)
+    , _mouseButton1PressedInHeader( false )
+    , _finalSizeChangeExpected( false )
 {
     QListView::setShowToolTips( false );
     _toolTip = new QY2ListViewToolTip( this );
+
+    if ( header() )
+	header()->installEventFilter( this );
 
     connect( header(),	SIGNAL( sizeChange        ( int, int, int ) ),
 	     this,	SLOT  ( columnWidthChanged( int, int, int ) ) );
@@ -143,14 +148,17 @@ QY2ListView::saveColumnWidths()
 void
 QY2ListView::restoreColumnWidths()
 {
-    if ( _savedColumnWidth.size() != (unsigned) columns() )
+    if ( _savedColumnWidth.size() != (unsigned) columns() ) 	// never manually resized
     {
-	return;
+	for ( int i = 0; i < columns(); i++ )		// use optimized column width
+	    adjustColumn( i );
     }
-
-    for ( int i = 0; i < columns(); i++ )
+    else						// stored settings after manual resizing
     {
-	setColumnWidth( i, _savedColumnWidth[ i ] );
+	for ( int i = 0; i < columns(); i++ )
+	{
+	    setColumnWidth( i, _savedColumnWidth[ i ] ); // restore saved column width
+	}
     }
 }
 
@@ -232,7 +240,56 @@ QY2ListView::contentsMouseDoubleClickEvent( QMouseEvent * ev )
 void
 QY2ListView::columnWidthChanged( int, int, int )
 {
-    saveColumnWidths();
+    // Workaround for Qt bug:
+    //
+    // QHeader sends a sizeChange() signal for every size change, not only (as
+    // documented) when the user resizes a header column manually. But we only
+    // want to record the column widths if the user explicitly did that, so
+    // ignore those signals if the mouse isn't pressed. There is also one final
+    // sizeChange() signal immediately after the user releases the mouse button.
+
+    if ( _mouseButton1PressedInHeader || _finalSizeChangeExpected )
+    {
+	saveColumnWidths();
+
+	// Consume that one sizeChange() signal that is sent immediately after
+	// the mouse button is released, but make sure to reset that flag only
+	// when appropriate.
+
+	if ( ! _mouseButton1PressedInHeader )
+	    _finalSizeChangeExpected = false;
+    }
+}
+
+
+bool
+QY2ListView::eventFilter( QObject * obj, QEvent * event )
+{
+    if ( event && obj && obj == header() )
+    {
+	if ( event->type() == QEvent::MouseButtonPress )
+	{
+	    QMouseEvent * mouseEvent = (QMouseEvent *) event;
+
+	    if ( mouseEvent->button() == 1 )
+	    {
+		_mouseButton1PressedInHeader = true;
+		_finalSizeChangeExpected     = false;
+	    }
+	}
+	else if ( event->type() == QEvent::MouseButtonRelease )
+	{
+	    QMouseEvent * mouseEvent = (QMouseEvent *) event;
+
+	    if ( mouseEvent->button() == 1 )
+	    {
+		_finalSizeChangeExpected     = true;
+		_mouseButton1PressedInHeader = false;
+	    }
+	}
+    }
+
+    return QListView::eventFilter( obj, event );
 }
 
 
