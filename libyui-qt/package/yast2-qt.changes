@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Dec  8 17:04:21 CET 2004 - sh@suse.de
+
+- Added hotkey to switch to a special high-contrast color
+  palette for vision impaired users: Shift-F4 
+
+-------------------------------------------------------------------
 Wed Nov 17 13:53:29 CET 2004 - sh@suse.de
 
 - Improved YQWizard debugLabel() readability 
