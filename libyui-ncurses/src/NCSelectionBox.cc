@@ -183,12 +183,8 @@ NCursesEvent NCSelectionBox::wHandleInput( int key )
   NCursesEvent ret;
 
   if ( handleInput( key ) )
-  {
-      if ( getNotify() )
-	  ret = NCursesEvent::button;
-      return ret;
-  }
-  
+    return ret;
+
   switch ( key ) {
   case KEY_SPACE:
   case KEY_RETURN:
