@@ -969,8 +969,9 @@ bool PackageSelector::getSelections( )
 {
     InstSrcPtr nsrc;
     unsigned int i;
-    
-    // FIXME: remove this part (is done before in YCP or ...)
+
+#if 0
+    // TEST only (remove this part)
     string media_url = "dir:///";
     string product_dir = "/develop/yast2/source/packagemanager/testsuite/media/";
 
@@ -989,7 +990,7 @@ bool PackageSelector::getSelections( )
 	NCERR << "Failed to enableSource: "<< err << endl;
 	return false;
     }
-    
+
     err = nsrc->enableSource();
 
     if ( err != InstSrcError::E_ok )
@@ -997,8 +998,14 @@ bool PackageSelector::getSelections( )
 	NCERR << "Failed to enableSource" << endl;
 	return false;
     }
-    // end FIXME: remove this part
+    // end remove this part
+#endif    
 
+    if ( !nsrc )
+    {
+	NCERR << "No instsource manager" << endl;
+	return false;
+    }
     
     // get selections
     const list<PMSelectionPtr> sels = nsrc->getSelections ();
