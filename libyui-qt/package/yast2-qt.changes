@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Sep 17 17:59:15 CEST 2003 - sh@suse.de
+
+- V 2.4.14
+
+-------------------------------------------------------------------
 Wed Sep 17 15:31:22 CEST 2003 - sh@suse.de
 
 - Fixed bug #30236: Bad fullscreen geometry for some window managers 
