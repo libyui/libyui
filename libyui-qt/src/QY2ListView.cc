@@ -31,8 +31,9 @@ QY2ListView::QY2ListView( QWidget *parent )
     , _mousePressedButton( NoButton )
     , _nextSerial( 0 )
 {
+    QListView::setShowToolTips( false );
     _toolTip = new QY2ListViewToolTip( this );
-    
+
     connect( header(),	SIGNAL( sizeChange		( int, int, int ) ),
 	     this,	SLOT  ( columnWidthChanged	( int, int, int ) ) );
 }
@@ -110,17 +111,17 @@ QY2ListView::toolTip( QListViewItem * listViewItem, int column )
 #endif
 
     // Try known item classes
-    
+
     QY2ListViewItem * item = dynamic_cast<QY2ListViewItem *> (listViewItem);
 
     if ( item )
 	return item->toolTip( column );
-    
+
     QY2CheckListItem * checkListItem = dynamic_cast<QY2CheckListItem *> (listViewItem);
 
     if ( checkListItem )
 	return checkListItem->toolTip( column );
-    
+
     return QString::null;
 }
 
@@ -460,49 +461,43 @@ QY2CheckListItem::paintCell( QPainter *			painter,
 void
 QY2ListViewToolTip::maybeTip( const QPoint & pos )
 {
-    QY2ListView * listView = dynamic_cast<QY2ListView *> ( parentWidget() );
-
-    if ( ! listView )
-	return;
-
-    QHeader *       header        = listView->header();
-    int		    header_height = header->isVisible() ? header->height() : 0;
-    QPoint          item_pos 	  = QPoint( pos.x(), pos.y() - header_height );
-    QListViewItem * item          = listView->itemAt( item_pos );
+    QHeader *       header        = _listView->header();
+    QListViewItem * item          = _listView->itemAt( pos );
 
     if ( ! item )
 	return;
 
-    int x      = listView->viewportToContents( pos ).x();
-    int column = header->mapToSection( header->sectionAt( x ) );
+    int x      = _listView->viewportToContents( pos ).x();
+    int column = header->sectionAt( x );
     int indent = 0;
 
     if ( column == 0 )
     {
-	indent  =  item->depth() + ( listView->rootIsDecorated() ? 1 : 0 );
-	indent *=  listView->treeStepSize();
-	
-	if ( x < indent )
+	indent  =  item->depth() + ( _listView->rootIsDecorated() ? 1 : 0 );
+	indent *=  _listView->treeStepSize();
+
+	if ( pos.x() < indent )
 	    column = -1;
     }
-    
-    QString text = listView->toolTip( item, column );
+
+    QString text = _listView->toolTip( item, column );
 
     if ( ! text.isEmpty() )
     {
+	QRect rect( _listView->itemRect( item ) );
+
 	if ( column < 0 )
-	    x = 0;
+	{
+	    rect.setX( 0 );
+	    rect.setWidth( indent );
+	}
 	else
 	{
-	    QPoint p( header->sectionPos( column ), 0 );
-	    x = listView->contentsToViewport( p ).x();
+	    QPoint topLeft( header->sectionPos( column ), 0 );
+	    topLeft = _listView->contentsToViewport( topLeft );
+ 	    rect.setX( topLeft.x() );
+	    rect.setWidth( header->sectionSize( column ) );
 	}
-	
-	QRect itemRect = listView->itemRect( item );
-	QRect rect( x,
-		    itemRect.y() + header_height,
-		    column < 0 ? indent : header->sectionSize( column ),
-		    itemRect.height() );
 
 	tip( rect, text );
     }

@@ -474,8 +474,8 @@ public:
     /**
      * Constructor.
      **/
-    QY2ListViewToolTip::QY2ListViewToolTip( QWidget * parent )
-	: QToolTip( parent ) {}
+    QY2ListViewToolTip::QY2ListViewToolTip( QY2ListView * parent )
+	: QToolTip( parent->viewport() ), _listView( parent )  {}
 
 protected:
 
@@ -485,6 +485,8 @@ protected:
      * Reimplemented from QToolTip.
      **/
     virtual void maybeTip( const QPoint & p );
+
+    QY2ListView * _listView;
 };
 
 #endif // ifndef QY2ListView_h
