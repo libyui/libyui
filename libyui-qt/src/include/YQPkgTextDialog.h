@@ -116,6 +116,7 @@ protected:
      **/
     bool eventFilter( QObject *obj, QEvent *ev );
 
+    
     // Data members
     
     QPushButton *	_okButton;
