@@ -883,6 +883,13 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 	}
     }
 
+    NCPkgTable * packageList = getPackageList();
+    
+    if ( packageList )
+    {
+	packageList->setKeyboardFocus();
+    }
+
     return true;
 }
 
