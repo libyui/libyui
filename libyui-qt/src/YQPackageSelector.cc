@@ -23,6 +23,7 @@
 #include <qapplication.h>
 #include <qcheckbox.h>
 #include <qcursor.h>
+#include <qdialog.h>
 #include <qhbox.h>
 #include <qhgroupbox.h>
 #include <qlabel.h>
@@ -538,16 +539,16 @@ YQPackageSelector::autoResolveDependencies()
 }
 
 
-void
+int
 YQPackageSelector::resolveDependencies()
 {
     if ( ! _conflictDialog )
     {
 	y2error( "No conflict dialog existing" );
-	return;
+	return true;
     }
 
-    _conflictDialog->solveAndShowConflicts();
+    return _conflictDialog->solveAndShowConflicts();
 }
 
 
@@ -602,8 +603,11 @@ YQPackageSelector::reject()
 void
 YQPackageSelector::accept()
 {
-    _yuiqt->setMenuSelection( YCPSymbol("accept", true) );
-    _yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
+    if ( resolveDependencies() == QDialog::Accepted )
+    {
+	_yuiqt->setMenuSelection( YCPSymbol("accept", true) );
+	_yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
+    }
 }
 
 

@@ -123,7 +123,7 @@ YQPkgConflictDialog::sizeHint() const
 }
 
 
-void
+int
 YQPkgConflictDialog::solveAndShowConflicts()
 {
     CHECK_PTR( _conflictList );
@@ -167,6 +167,8 @@ YQPkgConflictDialog::solveAndShowConflicts()
 		exec();
 	}
     }
+
+    return result();
 }
 
 

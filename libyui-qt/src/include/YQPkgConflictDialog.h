@@ -63,8 +63,10 @@ public slots:
      * Run the package dependency solver for the current package set and open
      * the conflict dialog if there are any conflicts.
      * Returns only when the conflict dialog is closed.
+     *
+     * Returns QDialog::Accepted or QDialog::Rejected.
      **/
-    void solveAndShowConflicts();
+    int solveAndShowConflicts();
 
     /**
      * Ignore all conflicts.
