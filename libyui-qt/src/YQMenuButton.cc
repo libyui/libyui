@@ -42,7 +42,6 @@ YQMenuButton::YQMenuButton( QWidget * 		parent,
     _qt_pushbutton = new QPushButton( fromUTF8( label->value() ), this );
     _qt_pushbutton->setFont( YUIQt::ui()->currentFont() );
     _qt_pushbutton->setMinimumSize( 2,2 );
-    _qt_pushbutton->installEventFilter( this );
     _qt_pushbutton->move( YQButtonBorder, YQButtonBorder );
     setMinimumSize( _qt_pushbutton->minimumSize() 
 		    + 2 * QSize( YQButtonBorder, YQButtonBorder ) );
