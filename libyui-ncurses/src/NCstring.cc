@@ -341,7 +341,7 @@ bool NCstring::RecodeToWchar (const string& in, const string &from_encoding, wst
     char* in_ptr = const_cast <char*> (in.c_str ());
 
     size_t tmp_size = in_len * sizeof (wchar_t);	// buffer size: at most in_len wide characters
-    char tmp[tmp_size + sizeof (wchar_t)];		// + L'\0'
+    char* tmp = (char*) malloc (tmp_size + sizeof (wchar_t));		// + L'\0'
 
     *out = L"";
 
@@ -354,7 +354,7 @@ bool NCstring::RecodeToWchar (const string& in, const string &from_encoding, wst
 
 	*((wchar_t*) tmp_ptr) = L'\0';
 
-	*out += wstring ((wchar_t*) &tmp);
+	*out += wstring ((wchar_t*) tmp);
 
 	if (iconv_ret == (size_t)(-1))
         {
@@ -375,6 +375,8 @@ bool NCstring::RecodeToWchar (const string& in, const string &from_encoding, wst
 	}
 
     } while (in_len != 0);
+
+    free (tmp);
 
     return true;
 }
