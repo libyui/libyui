@@ -20,11 +20,10 @@
 #define USE_QT_CURSORS		1
 #define FORCE_UNICODE_FONT	0
 
-#include <unistd.h>
-
 #include <qcursor.h>
 #include <qwidgetstack.h>
 #include <qvbox.h>
+#include <qwidgetlist.h>
 
 #include <X11/Xlib.h>
 
@@ -32,8 +31,6 @@
 #include <ycp/y2log.h>
 
 #include "YUIQt.h"
-#include "YUISymbols.h"
-
 #include "YQDialog.h"
 
 
@@ -276,3 +273,4 @@ bool YUIQt::showEventFilter( QObject * obj, QEvent * ev )
 }
 
 
+// EOF

@@ -30,7 +30,6 @@
 #include <qmessagebox.h>
 #include <qpixmap.h>
 #include <qvbox.h>
-#include <qwidgetlist.h>
 
 #include <ycp/YCPTerm.h>
 #define y2log_component "qt-ui"
@@ -358,3 +357,4 @@ QString YUIQt::askForSaveFileName( const QString & startWith,
 }
 
 
+// EOF
