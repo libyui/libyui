@@ -68,7 +68,7 @@ class Y2Loglinebuf : public streambuf {
 	for ( int i = 0; i < n; ++i, ++c ) {
 	  if ( *c == '\n' ) {
 	    buffer += string( s, c-s );
-	    Y2Logging::y2_logger( (loglevel_t)level, name.c_str(),
+	    y2_logger( (loglevel_t)level, name.c_str(),
 		       file, line, func,
 		       "%s", buffer.c_str() );
 	    buffer = "";
@@ -113,7 +113,7 @@ class Y2Loglinestream {
   public:
 
     Y2Loglinestream( const string & name, int level, bool dolog )
-      : mybuf( name, level, dolog && shouldBeLogged( level, name ) )
+      : mybuf( name, level, dolog && should_be_logged( level, name ) )
       , mystream( &mybuf )
     {}
     ~Y2Loglinestream() { mystream.flush(); }
