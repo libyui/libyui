@@ -547,6 +547,7 @@ protected:
     bool hasAnimationSupport()		{ return true; 	}
     bool hasIconSupport()		{ return false; }	// not yet
     bool hasFullUtf8Support()		{ return true; 	}
+    bool richTextSupportsTable()	{ return true; }
 
 
     QMap<QString, int>	screenShotNo;
