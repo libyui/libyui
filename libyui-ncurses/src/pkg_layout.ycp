@@ -30,7 +30,7 @@
 					    // Please note: add an appropriate number of whitespace to get a well
 					    // formated menu (the [ ]s should be in one column) and use unique hotkeys until end:
 					    // begin: Actions menu, toggle the status, e.g. change from installed to delete
-					    [`item( `id(`toggle), 	_( "&Toggle     [RET]" ) ),
+					    [`item( `id(`toggle), 	_( "&Toggle    [SPACE]" ) ),
 					     // select the package for installation
 					     `item( `id(`select), 	_( "&Select      [+]" ) ),
 					     // delete the package

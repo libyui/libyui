@@ -688,6 +688,7 @@ const NCstring PkgNames::DiskspaceLabel()
     return value;
 }
 
+
 const NCstring PkgNames::MediumLabel()
 {
     // label of a combo box (medium means floppy or hard disk)
@@ -1077,6 +1078,27 @@ const NCstring PkgNames::DiskSpaceWarning()
     return value;
 }
 
+const NCstring PkgNames::AutoChangeLabel()
+{
+    // the headline of the popup containing a list with packages with status changes
+    static const NCstring value = _( "Automatic Changes" );
+    return value;
+}
+
+const NCstring PkgNames::AutoChangeText1()
+{
+    // text part1 of popup with automatic changes
+    static const NCstring value = _( "In addition to your manual selections, the following" );
+    return value;
+}
+
+const NCstring PkgNames::AutoChangeText2()
+{
+    // text part2 of popup with automatic changes
+    static const NCstring value = _( "packages have been changed to resolve dependencies:" );
+    return value;
+}
+
 const NCstring PkgNames::HelpPkgInst1()
 {
     // part1 of help text package installation 
@@ -1157,7 +1179,7 @@ const NCstring PkgNames::HelpOnStatus2()
 const NCstring PkgNames::HelpOnStatus3()
 {
     // part 2 of help text package status
-    static const NCstring value = _( "<p>You can also use <b>RET</b> or <b>SPACE</b> to toggle the package status." );
+    static const NCstring value = _( "<p>You can also use <b>SPACE</b> to toggle the package status." );
     return value;
 }
 

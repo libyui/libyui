@@ -553,7 +553,14 @@ public:
     static const NCstring TextmodeHelp8();
     static const NCstring TextmodeHelp9();
     static const NCstring TextmodeHelp();
-    
+
+   /**
+     *  text used for automatic changes popup
+     */
+    static const NCstring AutoChangeLabel();
+    static const NCstring AutoChangeText1();
+    static const NCstring AutoChangeText2();
+
     /**
      * Part of help text used in installed system
      */
