@@ -131,10 +131,23 @@ const YCPValue& PkgNames::UpdateAll ()
     return value;
 }
 
+// the menu entry Action/update all
+const YCPValue& PkgNames::DontUpdate ()
+{
+    static const YCPValue value = createIdValue ( "dontupd" );
+    return value;
+}
+
 // the menu entry Action/select all
-const YCPValue& PkgNames::SelectAll ()
+const YCPValue& PkgNames::InstallAll ()
 {
     static const YCPValue value = createIdValue ( "selall" );
+    return value;
+}
+// the menu entry Action/deselect all
+const YCPValue& PkgNames::DontInstall  ()
+{
+    static const YCPValue value = createIdValue ( "deselall" );
     return value;
 }
 
@@ -145,6 +158,12 @@ const YCPValue& PkgNames::DeleteAll ()
     return value;
 }
 
+// the menu entry Action/delete all
+const YCPValue& PkgNames::DontDelete ()
+{
+    static const YCPValue value = createIdValue ( "dontdel" );
+    return value;
+}
 // the menu entry Action/Taboo On
 const YCPValue& PkgNames::TabooOn ()
 {

@@ -745,7 +745,7 @@ bool NCPkgTable::changeObjStatus( int key )
 // NCPkgTable::changeListObjStatus()
 //
 //
-bool NCPkgTable::changeListObjStatus( int key )
+bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 {
     PMSelectable::UI_Status newStatus;
     PMObjectPtr objPtr;
@@ -756,11 +756,48 @@ bool NCPkgTable::changeListObjStatus( int key )
     {
 	// get the object pointer
 	objPtr = getDataPointer( index );
-
+	bool ok = false;
+	
 	if ( objPtr )
 	{
-	    bool ok = statusStrategy->keyToStatus( key, objPtr, newStatus );
-    
+	    switch ( type ) {
+		case A_Install: {
+		    if ( objPtr->getSelectable()->status() == PMSelectable::S_NoInst ) 
+			ok = statusStrategy->keyToStatus( '+', objPtr, newStatus );
+		    break;
+		}
+		case A_DontInstall: {
+		    if ( objPtr->getSelectable()->status() == PMSelectable::S_Install
+			 ||  objPtr->getSelectable()->status() == PMSelectable::S_AutoInstall )
+			ok = statusStrategy->keyToStatus( '-', objPtr, newStatus );
+		    break;
+		}
+		case A_Delete: {
+		    if ( objPtr->getSelectable()->status() == PMSelectable::S_KeepInstalled )
+			ok = statusStrategy->keyToStatus( '-', objPtr, newStatus );
+		    break;
+		}
+		case A_DontDelete: {
+		    if ( objPtr->getSelectable()->status() == PMSelectable::S_Del
+			 || objPtr->getSelectable()->status() == PMSelectable::S_AutoDel )
+			ok = statusStrategy->keyToStatus( '+', objPtr, newStatus );
+		    break;
+		}
+		case A_Update: {
+		    if ( objPtr->getSelectable()->status() == PMSelectable::S_KeepInstalled )
+			ok = statusStrategy->keyToStatus( '>', objPtr, newStatus );
+		    break;
+		}
+		case A_DontUpdate: {
+		    if ( objPtr->getSelectable()->status() == PMSelectable::S_Update
+			 || objPtr->getSelectable()->status() == PMSelectable::S_AutoUpdate )
+			ok = statusStrategy->keyToStatus( '-', objPtr, newStatus );
+		    break;
+		}
+		default:
+		    NCERR << "Unknown list action" << endl;
+	    }
+
 	    if ( ok )
 	    {
 		changeStatus( newStatus,

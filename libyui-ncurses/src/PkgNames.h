@@ -75,11 +75,6 @@ public:
     static const YCPValue& Select ();
 
     /**
-     * Widget id of the menu selection Action/All packages/Select all
-     */
-    static const YCPValue& SelectAll ();
-
-    /**
      * Widget id of the menu selection Action/Delete
      */
     static const YCPValue& Delete ();
@@ -104,10 +99,31 @@ public:
      */
     static const YCPValue& DeleteAll ();
 
+   /**
+     * Widget id of the menu selection Action/All packages/Delete all
+     */
+    static const YCPValue& DontDelete ();
+    
+    /**
+     * Widget id of the menu selection Action/All packages/Select all
+     */
+    static const YCPValue& InstallAll ();
+
+    /**
+     * Widget id of the menu selection Action/All packages/Select all
+     */
+    static const YCPValue& DontInstall ();
+    
     /**
      * Widget id of the menu selection Action/All packages/Update all
      */
     static const YCPValue& UpdateAll();
+
+    /**
+     * Widget id of the menu selection Action/All packages/Update all
+     */
+    static const YCPValue& DontUpdate();
+    
     /**
      * Widget id of the menu selection Action/Update
      */

@@ -129,9 +129,12 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     eventHandlerMap[ PkgNames::TabooOn()->toString() ]	= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::TabooOff()->toString() ]	= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::ToggleSource()->toString() ] = &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::SelectAll()->toString() ] = &PackageSelector::StatusHandler;
+    eventHandlerMap[ PkgNames::InstallAll()->toString() ] = &PackageSelector::StatusHandler;
+    eventHandlerMap[ PkgNames::DontInstall()->toString() ] = &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::DeleteAll()->toString() ] = &PackageSelector::StatusHandler;
+    eventHandlerMap[ PkgNames::DontDelete()->toString() ] = &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::UpdateAll()->toString() ] = &PackageSelector::StatusHandler;
+    eventHandlerMap[ PkgNames::DontUpdate()->toString() ] = &PackageSelector::StatusHandler;
     
     // Etc. menu
     eventHandlerMap[ PkgNames::ShowDeps()->toString() ] = &PackageSelector::DependencyHandler;
@@ -630,10 +633,10 @@ bool PackageSelector::fillChangesList(  )
     unsigned int i;
     PMPackagePtr pkgPtr;
     
-    // do the dependency in case the dependency check is off
+    // do the dependency in case the dependency check is off ????
     if ( !autoCheck )
     {
-	showDependencies( true );
+	// showDependencies( true );
     }
     
     for ( i = 0, listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt, i++ )
@@ -1152,17 +1155,29 @@ bool PackageSelector::StatusHandler( const NCursesEvent&  event )
     {
 	packageList->toggleSourceStatus( );	
     }
-    else if ( event.selection->compare( PkgNames::SelectAll() ) == YO_EQUAL )
+    else if ( event.selection->compare( PkgNames::InstallAll() ) == YO_EQUAL )
     {
-	packageList->changeListObjStatus( '+' );
+	packageList->changeListObjStatus( NCPkgTable::A_Install );
     }
-    else if ( event.selection->compare( PkgNames::DeleteAll() ) == YO_EQUAL )
+    else if ( event.selection->compare( PkgNames::DontInstall() ) == YO_EQUAL )
     {
-	packageList->changeListObjStatus( '-' );
+	packageList->changeListObjStatus( NCPkgTable::A_DontInstall );
+    }
+        else if ( event.selection->compare( PkgNames::DeleteAll() ) == YO_EQUAL )
+    {
+	packageList->changeListObjStatus( NCPkgTable::A_Delete );
+    }
+    else if ( event.selection->compare( PkgNames::DontDelete() ) == YO_EQUAL )
+    {
+	packageList->changeListObjStatus( NCPkgTable::A_DontDelete );
     }
     else if ( event.selection->compare( PkgNames::UpdateAll() ) == YO_EQUAL )
     {
-	packageList->changeListObjStatus( '>' );
+	packageList->changeListObjStatus( NCPkgTable::A_Update );
+    }
+    else if ( event.selection->compare( PkgNames::DontUpdate() ) == YO_EQUAL )
+    {
+	packageList->changeListObjStatus( NCPkgTable::A_DontUpdate );
     }
     
     packageList->setKeyboardFocus();

@@ -97,6 +97,16 @@ public:
 	T_Unknown
     };
 
+    enum NCPkgTableListAction {
+	A_Install,
+	A_DontInstall,
+	A_Delete,
+	A_DontDelete,
+	A_Update,
+	A_DontUpdate,
+	A_Unknown
+    };
+    
 private:
 
     NCPkgTable & operator=( const NCPkgTable & );
@@ -193,7 +203,7 @@ public:
     
     bool changeObjStatus( int key );
 
-    bool changeListObjStatus( int key );
+    bool changeListObjStatus( NCPkgTableListAction key );
 
     bool toggleObjStatus( );
 

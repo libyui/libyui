@@ -26,23 +26,26 @@
 			 // label Actions menu ( keep it short ) - actions to change status of a package
 			 `Left(`MenuButton( `opt(`key_F5), _("&Actions"),
 					     // toggle the status, e.g. change from installed to delete
-					    [`item( `id(`toggle), 	_( "&Toggle     [RET]") ),
+					    [`item( `id(`toggle), 	_("&Toggle     [RET]") ),
 					     // select the package for installation
-					     `item( `id(`select), 	_( "&Select      [+]") ),
+					     `item( `id(`select), 	_("&Select      [+]") ),
 					     // delete the package
-					     `item( `id(`delete), 	_( "&Delete      [-]") ),
+					     `item( `id(`delete), 	_("&Delete      [-]") ),
 					     // update the package
-					     `item( `id(`update), 	_( "&Update      [>]") ),
+					     `item( `id(`update), 	_("&Update      [>]") ),
 					     // set package status to 'Taboo', i.e. never install this package
-					     `item( `id(`tabooOn), 	_( "Taboo &yes   [!]") ),
+					     `item( `id(`tabooOn), 	_("Taboo &yes   [!]") ),
 					     // reset the status 'Taboo' 
-					     `item( `id(`tabooOff), 	_( "Taboo &no    [-]") ),
+					     `item( `id(`tabooOff), 	_("Taboo &no    [-]") ),
 					     // title of a submenu: actions concerning all packages of the list
 					     `menu( "&All list packages",
 						    [
-						     `item(`id(`selall),  "S&elect all"   ),
-						     `item(`id(`delall),  "De&lete all"   ),
-						     `item(`id(`updall),  "U&pdate all"   )
+						     `item(`id(`selall),   "Install all"   ),
+						     `item(`id(`deselall), "Don't install any" ),
+						     `item(`id(`delall),   "De&lete all"   ),
+						     `item(`id(`dontdel),  "Do&n't delete any" ),
+						     `item(`id(`updall),   "U&pdate all"   ),
+						     `item(`id(`dontupd),  "Don't update/keep installed" )
 						     ]
 						    )
 					     ]
