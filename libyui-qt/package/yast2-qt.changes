@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Mar  4 12:57:32 CET 2005 - sh@suse.de
+
+- Increased calculated font sizes in inst-sys to compensate
+  for new (much smaller) default font
+- Fixed bug #6649: Japanese, Chinese, Korean chars clipped
+- V 2.11.8 
+
+-------------------------------------------------------------------
 Wed Feb 23 14:59:49 CET 2005 - sh@suse.de
 
 - Fallback rule for reverse layout for Arabic and Hebrew

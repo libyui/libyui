@@ -194,13 +194,13 @@ void YQUI::pickAutoFonts()
     int x = _default_size.width();
     int y = _default_size.height();
 
-    int normal  = 10;
-    int heading	= 12;
+    int normal  = 12;
+    int heading	= 14;
 
     if ( x >= 800 && y >= 600 )
     {
-	normal	= 12;
-	heading	= 14;
+	normal	= 14;
+	heading	= 18;
     }
 
     if ( x >= 1024 && y >= 768 )
@@ -211,8 +211,8 @@ void YQUI::pickAutoFonts()
 
     if ( x >= 1280 && y >= 1024 )
     {
-	normal	= 14;
-	heading	= 18;
+	normal	= 16;
+	heading	= 20;
     }
 
     if ( x >= 1400 )
