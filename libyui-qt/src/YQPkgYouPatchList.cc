@@ -177,9 +177,18 @@ YQPkgYouPatchList::keyPressEvent( QKeyEvent *event )
 {
     if ( event && event->ascii() == '-' )
     {
-	// Ignore attempts to delete a YOU patch -
-	// deleting patches is not supported (yet?). 
-	return;
+	QListViewItem * selectedListViewItem = selectedItem();
+
+	if ( selectedListViewItem )
+	{
+	    YQPkgYouPatchListItem * item = dynamic_cast<YQPkgYouPatchListItem *> (selectedListViewItem);
+
+	    if ( item && item->pmObj()->hasInstalledObj() )
+	    {
+		y2warning( "Deleting patches is not supported" );
+		return;
+	    }
+	}
     }
 
     YQPkgObjList::keyPressEvent( event );
