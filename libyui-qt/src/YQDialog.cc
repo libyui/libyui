@@ -368,6 +368,11 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    YUIQt::ui()->makeScreenShot( "" );
 	    return;
 	}
+	else if ( event->key() == Qt::Key_F5 )	// No matter if Ctrl/Alt/Shift pressed
+	{
+	    YUIQt::ui()->easterEgg();
+	    return;
+	}
 	else if ( event->state() == 0 )	// No Ctrl / Alt / Shift etc. pressed
 	{
 	    if ( event->key() == Qt::Key_Return ||

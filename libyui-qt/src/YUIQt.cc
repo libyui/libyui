@@ -268,10 +268,10 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
 
     connect( & _user_input_timer,	SIGNAL( timeout()          ),
 	     this,		  	SLOT  ( userInputTimeout() ) );
-    
+
     connect( & _busy_cursor_timer,	SIGNAL( timeout()	),
 	     this,			SLOT  ( busyCursor()	) );
-    
+
     topmostConstructorHasFinished();
 }
 
@@ -333,7 +333,7 @@ void YUIQt::sendEvent( YEvent * event )
     if ( event )
     {
 	_event_handler.sendEvent( event );
-    
+
 	if ( _do_exit_loop )
 	    exit_loop();
     }
@@ -352,7 +352,7 @@ YEvent * YUIQt::userInput( unsigned long timeout_millisec )
     {
 	if ( timeout_millisec > 0 )
 	    _user_input_timer.start( timeout_millisec, true ); // single shot
-	    
+
 	dialog->activate( true );
 
 	if ( qApp->focusWidget() )
@@ -372,7 +372,7 @@ YEvent * YUIQt::userInput( unsigned long timeout_millisec )
 
 	// Display a busy cursor, but only if there is no other activity within
 	// BUSY_CURSOR_TIMEOUT milliseconds (avoid cursor flicker)
-	
+
 	_busy_cursor_timer.start( BUSY_CURSOR_TIMEOUT, true ); // single shot
     }
 
@@ -386,7 +386,7 @@ YEvent * YUIQt::userInput( unsigned long timeout_millisec )
 YEvent * YUIQt::pollInput()
 {
     YEvent * event = 0;
-    
+
     if ( _user_input_timer.isActive() )
 	_user_input_timer.stop();
 
@@ -529,6 +529,60 @@ void YUIQt::closeDialog( YDialog * dialog )
 	else
 	    y2error( "Popup dialog stack corrupted!" );
     }
+}
+
+
+void YUIQt::easterEgg()
+{
+    int bytes_per_pixel;
+
+    switch ( desktop()->x11AppDepth() )
+    {
+	case 15:
+	case 16: bytes_per_pixel = 2;
+	    break;
+
+	case 24:
+	case 32: bytes_per_pixel = 4;
+	    break;
+
+	default:
+	    y2warning( "Pixel depth %d not supported - no easter egg",
+		       desktop()->x11AppDepth() );
+	    return;
+    }
+
+    const char * display = getenv( "DISPLAY" );
+
+    if ( ! display )
+    {
+	y2warning( "$DISPLAY not set - no easter egg" );
+	return;
+    }
+
+    if ( strcmp( display, ":0"   ) != 0 &&
+	 strcmp( display, ":0.0" ) != 0   )
+    {
+	y2warning( "Not on system console - no easter egg" );
+	return;
+    }
+
+    y2milestone( "Starting easter egg..." );
+#if 0
+    drawStuff( (unsigned long) desktop()->width(),
+	       (unsigned long) desktop()->height,
+	       (unsigned long) bytes_per_pixel );
+#endif
+
+#if 1
+    system( "sudo dd if=/dev/urandom bs=1024 count=1024 of=/dev/fb0" );
+    sleep( 2 );
+#endif
+    
+    y2milestone( "Done." );
+
+    // desktop()->repaint() has no effect - we need to do it the hard way.
+    system( "/usr/X11R6/bin/xrefresh" );
 }
 
 

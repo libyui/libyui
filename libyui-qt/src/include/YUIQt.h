@@ -234,6 +234,11 @@ public slots:
      */
     void normalCursor();
 
+    /**
+     * Fun stuff (release dependent)
+     **/
+    void easterEgg();
+
 
 signals:
     /**
