@@ -30,6 +30,7 @@ class YQPkgYouPatchList;
 class YQPkgDescriptionView;
 class QSplitter;
 class QTabWidget;
+class QCheckBox;
 
 
 /**
@@ -64,6 +65,15 @@ public:
      **/
     virtual QSize sizeHint() const;
 
+    
+protected slots:
+
+    /**
+     * Fill the YOU patch list with regard to the _showInstalledPatches
+     * check box.
+     **/
+    void fillPatchList();
+
 
 protected:
 
@@ -72,6 +82,7 @@ protected:
 
     QSplitter *			_splitter;
     YQPkgYouPatchList *		_youPatchList;
+    QCheckBox *			_showInstalledPatches;
     QTabWidget *		_detailsViews;
     YQPkgDescriptionView *	_descriptionView;
 };

@@ -64,7 +64,6 @@ public slots:
      **/
     void filterIfVisible();
 
-
     /**
      * Add a selection to the list. Connect a filter's filterMatch() signal to
      * this slot. Remember to connect filterStart() to clear() (inherited from
@@ -77,6 +76,11 @@ public slots:
      **/
     void sendUpdatePackages() { emit updatePackages(); }
     
+    /**
+     * Fill the selection list.
+     **/
+    void fillList();
+
 
 public:
 
@@ -89,6 +93,18 @@ public:
      * Returns the column for the patch kind
      **/
     int kindCol() const { return _kindCol; }
+
+    /**
+     * Returns whether or not the list should include patches that are installed.
+     **/
+    bool showInstalledPatches() const { return _showInstalledPatches; }
+
+    /**
+     * Switch display of installed patches on or off.
+     * This does NOT trigger redisplaying the list - use fillList() for that.
+     * Default is off.
+     **/
+    void setShowInstalledPatches( bool show ) { _showInstalledPatches = show; }
 
     
 signals:
@@ -114,14 +130,6 @@ signals:
      * Emitted when filtering is finished.
      **/
     void filterFinished();
-
-
-protected slots:
-
-    /**
-     * Fill the selection list.
-     **/
-    void fillList();
 
     
 protected:
@@ -149,7 +157,8 @@ protected:
 
     // Data members
 
-    int	_kindCol;
+    int		_kindCol;
+    bool	_showInstalledPatches;
 };
 
 

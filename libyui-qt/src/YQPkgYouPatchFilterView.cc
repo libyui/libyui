@@ -24,6 +24,7 @@
 
 #include <qsplitter.h>
 #include <qtabwidget.h>
+#include <qcheckbox.h>
 
 #include <Y2PM.h>
 #include <y2pm/PMManager.h>
@@ -43,18 +44,28 @@
 YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
     : QVBox( parent )
 {
-    QVBox * details_vbox;
+    QVBox * vbox;
     
-    _splitter		= new QSplitter( QSplitter::Vertical, this );	CHECK_PTR( _splitter 		);
-    _youPatchList	= new YQPkgYouPatchList( _splitter );		CHECK_PTR( _youPatchList 	);
+    _splitter			= new QSplitter( QSplitter::Vertical, this );	CHECK_PTR( _splitter 		);
     
-    details_vbox	= new QVBox( _splitter );			CHECK_PTR( details_vbox		);
-    addVSpacing( details_vbox, 8 );
+    vbox			= new QVBox( _splitter );			CHECK_PTR( vbox		);
+    _youPatchList		= new YQPkgYouPatchList( vbox );		CHECK_PTR( _youPatchList 	);
     
-    _detailsViews	= new QTabWidget( details_vbox );		CHECK_PTR( _detailsViews	);
+    addVSpacing( vbox, 4 );
+    _showInstalledPatches	= new QCheckBox( _( "Include &Installed Patches" ), vbox );
+    CHECK_PTR( _showInstalledPatches );
+    _showInstalledPatches->setChecked( false );
+    connect( _showInstalledPatches, SIGNAL( clicked() ), this, SLOT( fillPatchList() ) );
+    _youPatchList->setShowInstalledPatches( _showInstalledPatches->isChecked() );
+    addVSpacing( vbox, 4 );
+    
+    vbox			= new QVBox( _splitter );			CHECK_PTR( vbox		);
+    addVSpacing( vbox, 8 );
+    
+    _detailsViews		= new QTabWidget( vbox );			CHECK_PTR( _detailsViews	);
     _detailsViews->setMargin( MARGIN );
     
-    _descriptionView	= new YQPkgDescriptionView( _detailsViews );	CHECK_PTR( _descriptionView	);
+    _descriptionView		= new YQPkgDescriptionView( _detailsViews );	CHECK_PTR( _descriptionView	);
     
     _descriptionView->setMinimumSize( 0, 0 );
     _detailsViews->addTab( _descriptionView, _( "Patch Description" ) );
@@ -71,6 +82,15 @@ YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
 YQPkgYouPatchFilterView::~YQPkgYouPatchFilterView()
 {
     // NOP
+}
+
+
+void
+YQPkgYouPatchFilterView::fillPatchList()
+{
+    _youPatchList->setShowInstalledPatches( _showInstalledPatches->isChecked() );
+    _youPatchList->fillList();
+    _youPatchList->selectSomething();
 }
 
 

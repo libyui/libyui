@@ -37,6 +37,7 @@
 
 YQPkgYouPatchList::YQPkgYouPatchList( QWidget *parent )
     : YQPkgObjList( parent )
+    , _showInstalledPatches( false )
 {
     y2debug( "Creating YOU patch list" );
 
@@ -79,7 +80,8 @@ YQPkgYouPatchList::fillList()
 
 	if ( patch )
 	{
-	    addYouPatchItem( patch );
+	    if ( _showInstalledPatches || ! patch->hasInstalledObj() )
+		addYouPatchItem( patch );
 	}
 
 	++it;
