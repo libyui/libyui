@@ -20,6 +20,7 @@
 
 #define CHECK_DEPENDENCIES_ON_STARTUP	1
 
+#include <qaction.h>
 #include <qapplication.h>
 #include <qcheckbox.h>
 #include <qcursor.h>
@@ -126,6 +127,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
 
     basicLayout();
     makeConnections();
+    addMenus();		// Only after all widgets are created!
     emit loadData();
 
     Y2PM::packageManager().SaveState();
@@ -178,9 +180,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
 void
 YQPackageSelector::basicLayout()
 {
-#if 1
     layoutMenuBar( this );
-#endif
 
     QSplitter *outer_splitter = new QSplitter( QSplitter::Horizontal, this );
     CHECK_PTR( outer_splitter );
@@ -510,25 +510,75 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 void
 YQPackageSelector::layoutMenuBar( QWidget * parent )
 {
-    QMenuBar *menu_bar = new QMenuBar( parent );
-    CHECK_PTR( menu_bar );
+    _menuBar = new QMenuBar( parent );
+    CHECK_PTR( _menuBar );
 
-    QPopupMenu * menu = new QPopupMenu( parent );
-    CHECK_PTR( menu );
-    menu_bar->insertItem( _( "&File" ), menu );
+    _fileMenu	= 0;
+    _viewMenu	= 0;
+    _pkgMenu 	= 0;
+    _helpMenu 	= 0;
 
-    menu->insertItem( _( "&Close" ), this, SLOT( close() ), ALT+Key_F4 );
+}
+
+
+void
+YQPackageSelector::addMenus()
+{
+    //
+    // File
+    //
+
+    _fileMenu = new QPopupMenu( _menuBar );
+    CHECK_PTR( _fileMenu );
+    _menuBar->insertItem( _( "&File" ), _fileMenu );
+
+    _fileMenu->insertItem( _( "&Quit - Save Changes)"   ), this, SLOT( accept() ) );
+    _fileMenu->insertItem( _( "E&xit - Discard Changes" ), this, SLOT( reject() ) );
 
 
 
-#if 0
-    menu = new QPopupMenu( parent );
-    CHECK_PTR( menu );
-    menu_bar->insertSeparator();
-    menu_bar->insertItem( _( "&Help" ), menu );
+    if ( _pkgList )
+    {
+	//
+	// Package
+	//
 
-    menu->insertItem( _( "&Overview" ), this, SLOT( help() ), Key_F1 );
-#endif
+	_pkgMenu = new QPopupMenu( _menuBar );
+	CHECK_PTR( _pkgMenu );
+	_menuBar->insertItem( _( "&Package" ), _pkgMenu );
+
+	_pkgList->actionSetCurrentInstall->addTo( _pkgMenu );
+	_pkgList->actionSetCurrentDontInstall->addTo( _pkgMenu );
+	_pkgList->actionSetCurrentKeepInstalled->addTo( _pkgMenu );
+	_pkgList->actionSetCurrentDelete->addTo( _pkgMenu );
+	_pkgList->actionSetCurrentUpdate->addTo( _pkgMenu );
+	_pkgList->actionSetCurrentTaboo->addTo( _pkgMenu );
+	
+	_pkgMenu->insertSeparator();
+	
+        QPopupMenu * submenu = _pkgList->addAllInListSubMenu( _pkgMenu );
+	
+	_pkgMenu->insertSeparator();
+
+	_pkgList->actionInstallSourceRpm->addTo( _pkgMenu );
+	_pkgList->actionDontInstallSourceRpm->addTo( _pkgMenu );
+
+#warning TODO: Install / dont install all source RPMs
+    }
+
+
+    //
+    // Help
+    //
+
+    _helpMenu = new QPopupMenu( _menuBar );
+    CHECK_PTR( _helpMenu );
+    _menuBar->insertSeparator();
+    _menuBar->insertItem( _( "&Help" ), _helpMenu );
+
+    _helpMenu->insertItem( _( "&Overview" 	), this, SLOT( help() ), Key_F1 );
+    _helpMenu->insertItem( _( "&Symbols" 	),  this, SLOT( help() ) );	// TODO
+    _helpMenu->insertItem( _( "&Keys" 		),  this, SLOT( help() ) );	// TODO
 }
 
 
@@ -598,7 +648,7 @@ YQPackageSelector::makeConnections()
     //
     // Handle WM_CLOSE like "Cancel"
     //
-    
+
     connect( _yuiqt, SIGNAL( wmClose() ),
 	     this,   SLOT  ( reject()   ) );
 }

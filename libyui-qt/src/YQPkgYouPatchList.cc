@@ -156,10 +156,10 @@ YQPkgYouPatchList::createNotInstalledContextMenu()
     _notInstalledContextMenu = new QPopupMenu( this );
     CHECK_PTR( _notInstalledContextMenu );
 
-    _actionSetCurrentInstall->addTo( _notInstalledContextMenu );
-    _actionSetCurrentDontInstall->addTo( _notInstalledContextMenu );
-    _actionSetCurrentTaboo->addTo( _notInstalledContextMenu );
-    _actionSetCurrentAutoInstall->addTo( _notInstalledContextMenu );
+    actionSetCurrentInstall->addTo( _notInstalledContextMenu );
+    actionSetCurrentDontInstall->addTo( _notInstalledContextMenu );
+    actionSetCurrentTaboo->addTo( _notInstalledContextMenu );
+    actionSetCurrentAutoInstall->addTo( _notInstalledContextMenu );
 }
 
 
@@ -169,9 +169,9 @@ YQPkgYouPatchList::createInstalledContextMenu()
     _installedContextMenu = new QPopupMenu( this );
     CHECK_PTR( _installedContextMenu );
 
-    _actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
-    _actionSetCurrentUpdate->addTo( _installedContextMenu );
-    _actionSetCurrentAutoUpdate->addTo( _installedContextMenu );
+    actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
+    actionSetCurrentUpdate->addTo( _installedContextMenu );
+    actionSetCurrentAutoUpdate->addTo( _installedContextMenu );
 }
 
 

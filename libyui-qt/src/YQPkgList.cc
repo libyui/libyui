@@ -117,8 +117,8 @@ YQPkgList::pkgObjClicked( int 			button,
 	    {
 		if ( editable() && item->editable() )
 		{
-		    _actionInstallSourceRpm->setEnabled( item->hasSourceRpm() );
-		    _actionDontInstallSourceRpm->setEnabled( item->hasSourceRpm() );
+		    actionInstallSourceRpm->setEnabled( item->hasSourceRpm() );
+		    actionDontInstallSourceRpm->setEnabled( item->hasSourceRpm() );
 
 		    if ( _sourceRpmContextMenu )
 			_sourceRpmContextMenu->popup( pos );
@@ -143,16 +143,16 @@ YQPkgList::sizeHint() const
 void
 YQPkgList::createSourceRpmContextMenu()
 {
-    _actionInstallSourceRpm	= createAction( YQIconPool::pkgInstall(),  _( "&Install Source"	      ) );
-    _actionDontInstallSourceRpm = createAction( YQIconPool::pkgNoInst(),   _( "Do&n't Install Source" ) );
+    actionInstallSourceRpm	= createAction( YQIconPool::pkgInstall(),  _( "&Install Source"	      ) );
+    actionDontInstallSourceRpm	= createAction( YQIconPool::pkgNoInst(),   _( "Do&n't Install Source" ) );
 
-    connect( _actionInstallSourceRpm,	  SIGNAL( activated() ), this, SLOT( setInstallCurrentSourceRpm()     ) );
-    connect( _actionDontInstallSourceRpm, SIGNAL( activated() ), this, SLOT( setDontInstallCurrentSourceRpm() ) );
+    connect( actionInstallSourceRpm,	 SIGNAL( activated() ), this, SLOT( setInstallCurrentSourceRpm()     ) );
+    connect( actionDontInstallSourceRpm, SIGNAL( activated() ), this, SLOT( setDontInstallCurrentSourceRpm() ) );
 
     _sourceRpmContextMenu = new QPopupMenu( this );
 
-    _actionInstallSourceRpm->addTo( _sourceRpmContextMenu );
-    _actionDontInstallSourceRpm->addTo( _sourceRpmContextMenu );
+    actionInstallSourceRpm->addTo( _sourceRpmContextMenu );
+    actionDontInstallSourceRpm->addTo( _sourceRpmContextMenu );
 }
 
 
@@ -303,23 +303,21 @@ YQPkgListItem::toolTip( int col )
     }
     else if ( col == srpmStatusCol() )
     {
+	text = name + "\n\n";
+	
 	if ( hasSourceRpm() )
 	{
-	    text = installSourceRpm() ?
+	    text += installSourceRpm() ?
 		_( "Install sources" ) :
 		_( "Don't install sources" );
 	}
 	else
 	{
-	    text = _( "No sources available" );
+	    text += _( "No sources available" );
 	}
     }
     else
     {
-#if 0
-	if ( col != nameCol() )
-	    ;
-#endif
 	text = name + "\n\n";
 	    
 	QString installed;

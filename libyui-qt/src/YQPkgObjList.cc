@@ -205,39 +205,39 @@ YQPkgObjList::selectNextItem()
 void
 YQPkgObjList::createActions()
 {
-    _actionSetCurrentInstall	   = createAction( YQIconPool::pkgInstall(),	   _( "&Install"	       ) + " [+]" );
-    _actionSetCurrentDontInstall   = createAction( YQIconPool::pkgNoInst(),	   _( "Do&n't install"	       ) + " [-]" );
-    _actionSetCurrentKeepInstalled = createAction( YQIconPool::pkgKeepInstalled(), _( "&Keep"		       ) + " [<], [-]");
-    _actionSetCurrentDelete	   = createAction( YQIconPool::pkgDel(),	   _( "&Delete"		       ) + " [-]" );
-    _actionSetCurrentUpdate	   = createAction( YQIconPool::pkgUpdate(),	   _( "&Update"		       ) + " [>], [+]");
-    _actionSetCurrentTaboo	   = createAction( YQIconPool::pkgTaboo(),	   _( "&Taboo - never install" ) + " [!]");
+    actionSetCurrentInstall	   = createAction( YQIconPool::pkgInstall(),	   _( "&Install"	       ) + "\t[+]" );
+    actionSetCurrentDontInstall    = createAction( YQIconPool::pkgNoInst(),	   _( "Do&n't install"	       ) + "\t[-]" );
+    actionSetCurrentKeepInstalled  = createAction( YQIconPool::pkgKeepInstalled(), _( "&Keep"		       ) + "\t[<], [-]");
+    actionSetCurrentDelete	   = createAction( YQIconPool::pkgDel(),	   _( "&Delete"		       ) + "\t[-]" );
+    actionSetCurrentUpdate	   = createAction( YQIconPool::pkgUpdate(),	   _( "&Update"		       ) + "\t[>], [+]");
+    actionSetCurrentTaboo	   = createAction( YQIconPool::pkgTaboo(),	   _( "&Taboo - never install" ) + "\t[!]");
 
-    _actionSetCurrentAutoInstall   = createAction( YQIconPool::pkgAutoInstall(),   _( "(Auto-install)" ) );
-    _actionSetCurrentAutoUpdate	   = createAction( YQIconPool::pkgAutoUpdate(),	   _( "(Auto-update)"  ) );
-    _actionSetCurrentAutoDelete	   = createAction( YQIconPool::pkgAutoDel(),	   _( "(Auto-delete)"  ) );
-
-
-    _actionSetListInstall          = createAction( YQIconPool::pkgInstall(),       _( "&Install"               ) + " [Ctrl][+]" );
-    _actionSetListDontInstall      = createAction( YQIconPool::pkgNoInst(),        _( "Do&n't install"         ) + " [Ctrl][-]" );
-    _actionSetListKeepInstalled    = createAction( YQIconPool::pkgKeepInstalled(), _( "&Keep"                  ) + " [Ctrl][<], [Ctrl][-]");
-    _actionSetListDelete           = createAction( YQIconPool::pkgDel(),           _( "&Delete"                ) + " [Ctrl][-]" );
-    _actionSetListUpdate           = createAction( YQIconPool::pkgUpdate(),        _( "&Update"                ) + " [Ctrl][>]");
-    _actionSetListTaboo            = createAction( YQIconPool::pkgTaboo(),         _( "&Taboo - never install" ) + " [Ctrl][!]");
+    actionSetCurrentAutoInstall    = createAction( YQIconPool::pkgAutoInstall(),   _( "(Auto-install)" ) );
+    actionSetCurrentAutoUpdate	   = createAction( YQIconPool::pkgAutoUpdate(),	   _( "(Auto-update)"  ) );
+    actionSetCurrentAutoDelete	   = createAction( YQIconPool::pkgAutoDel(),	   _( "(Auto-delete)"  ) );
 
 
-    connect( _actionSetCurrentInstall,	     SIGNAL( activated() ), this, SLOT( setCurrentInstall()	  ) );
-    connect( _actionSetCurrentDontInstall,   SIGNAL( activated() ), this, SLOT( setCurrentDontInstall()	  ) );
-    connect( _actionSetCurrentKeepInstalled, SIGNAL( activated() ), this, SLOT( setCurrentKeepInstalled() ) );
-    connect( _actionSetCurrentDelete,	     SIGNAL( activated() ), this, SLOT( setCurrentDelete()	  ) );
-    connect( _actionSetCurrentUpdate,	     SIGNAL( activated() ), this, SLOT( setCurrentUpdate()	  ) );
-    connect( _actionSetCurrentTaboo,	     SIGNAL( activated() ), this, SLOT( setCurrentTaboo()	  ) );
+    actionSetListInstall          = createAction( YQIconPool::pkgInstall(),       _( "&Install"               ), true );
+    actionSetListDontInstall      = createAction( YQIconPool::pkgNoInst(),        _( "Do&n't install"         ), true );
+    actionSetListKeepInstalled    = createAction( YQIconPool::pkgKeepInstalled(), _( "&Keep"                  ), true );
+    actionSetListDelete           = createAction( YQIconPool::pkgDel(),           _( "&Delete"                ), true );
+    actionSetListUpdate           = createAction( YQIconPool::pkgUpdate(),        _( "&Update"                ), true );
+    actionSetListTaboo            = createAction( YQIconPool::pkgTaboo(),         _( "&Taboo - never install" ), true );
 
-    connect( _actionSetListInstall,	     SIGNAL( activated() ), this, SLOT( setListInstall()	  ) );
-    connect( _actionSetListDontInstall,      SIGNAL( activated() ), this, SLOT( setListDontInstall()	  ) );
-    connect( _actionSetListKeepInstalled,    SIGNAL( activated() ), this, SLOT( setListKeepInstalled() 	  ) );
-    connect( _actionSetListDelete,	     SIGNAL( activated() ), this, SLOT( setListDelete()	          ) );
-    connect( _actionSetListUpdate,	     SIGNAL( activated() ), this, SLOT( setListUpdate()	          ) );
-    connect( _actionSetListTaboo,	     SIGNAL( activated() ), this, SLOT( setListTaboo()	          ) );
+
+    connect( actionSetCurrentInstall,	     SIGNAL( activated() ), this, SLOT( setCurrentInstall()	  ) );
+    connect( actionSetCurrentDontInstall,    SIGNAL( activated() ), this, SLOT( setCurrentDontInstall()	  ) );
+    connect( actionSetCurrentKeepInstalled,  SIGNAL( activated() ), this, SLOT( setCurrentKeepInstalled() ) );
+    connect( actionSetCurrentDelete,	     SIGNAL( activated() ), this, SLOT( setCurrentDelete()	  ) );
+    connect( actionSetCurrentUpdate,	     SIGNAL( activated() ), this, SLOT( setCurrentUpdate()	  ) );
+    connect( actionSetCurrentTaboo,	     SIGNAL( activated() ), this, SLOT( setCurrentTaboo()	  ) );
+
+    connect( actionSetListInstall,	     SIGNAL( activated() ), this, SLOT( setListInstall()	  ) );
+    connect( actionSetListDontInstall,       SIGNAL( activated() ), this, SLOT( setListDontInstall()	  ) );
+    connect( actionSetListKeepInstalled,     SIGNAL( activated() ), this, SLOT( setListKeepInstalled() 	  ) );
+    connect( actionSetListDelete,	     SIGNAL( activated() ), this, SLOT( setListDelete()	          ) );
+    connect( actionSetListUpdate,	     SIGNAL( activated() ), this, SLOT( setListUpdate()	          ) );
+    connect( actionSetListTaboo,	     SIGNAL( activated() ), this, SLOT( setListTaboo()	          ) );
 }
 
 
@@ -262,12 +262,9 @@ YQPkgObjList::createNotInstalledContextMenu()
     _notInstalledContextMenu = new QPopupMenu( this );
     CHECK_PTR( _notInstalledContextMenu );
 
-    _actionSetCurrentInstall->addTo( _notInstalledContextMenu );
-    _actionSetCurrentDontInstall->addTo( _notInstalledContextMenu );
-    _actionSetCurrentTaboo->addTo( _notInstalledContextMenu );
-
-    _notInstalledContextMenu->insertSeparator();
-    _actionSetCurrentAutoInstall->addTo( _notInstalledContextMenu );
+    actionSetCurrentInstall->addTo( _notInstalledContextMenu );
+    actionSetCurrentDontInstall->addTo( _notInstalledContextMenu );
+    actionSetCurrentTaboo->addTo( _notInstalledContextMenu );
 
     addAllInListSubMenu( _notInstalledContextMenu );
 }
@@ -279,31 +276,29 @@ YQPkgObjList::createInstalledContextMenu()
     _installedContextMenu = new QPopupMenu( this );
     CHECK_PTR( _installedContextMenu );
 
-    _actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
-    _actionSetCurrentDelete->addTo( _installedContextMenu );
-    _actionSetCurrentUpdate->addTo( _installedContextMenu );
-
-    _installedContextMenu->insertSeparator();
-    _actionSetCurrentAutoUpdate->addTo( _installedContextMenu );
-    _actionSetCurrentAutoDelete->addTo( _installedContextMenu );
+    actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
+    actionSetCurrentDelete->addTo( _installedContextMenu );
+    actionSetCurrentUpdate->addTo( _installedContextMenu );
 
     addAllInListSubMenu( _installedContextMenu );
 }
 
 
-void
+QPopupMenu *
 YQPkgObjList::addAllInListSubMenu( QPopupMenu * menu )
 {
     QPopupMenu * submenu = new QPopupMenu( menu );
 
-    _actionSetListInstall->addTo( submenu );
-    _actionSetListDontInstall->addTo( submenu );
-    _actionSetListKeepInstalled->addTo( submenu );
-    _actionSetListDelete->addTo( submenu );
-    _actionSetListUpdate->addTo( submenu );
-    _actionSetListTaboo->addTo( submenu );
+    actionSetListInstall->addTo( submenu );
+    actionSetListDontInstall->addTo( submenu );
+    actionSetListKeepInstalled->addTo( submenu );
+    actionSetListDelete->addTo( submenu );
+    actionSetListUpdate->addTo( submenu );
+    actionSetListTaboo->addTo( submenu );
     
     menu->insertItem( _( "&All in this list" ), submenu );
+
+    return menu;
 }
 
 
@@ -336,23 +331,23 @@ YQPkgObjList::updateActions( YQPkgObjListItem * item )
 
     if ( pmObj->hasInstalledObj() )
     {
-	_actionSetCurrentInstall->setEnabled( false );
-	_actionSetCurrentDontInstall->setEnabled( false );
-	_actionSetCurrentTaboo->setEnabled( false);
+	actionSetCurrentInstall->setEnabled( false );
+	actionSetCurrentDontInstall->setEnabled( false );
+	actionSetCurrentTaboo->setEnabled( false);
 
-	_actionSetCurrentKeepInstalled->setEnabled( true );
-	_actionSetCurrentDelete->setEnabled( true );
-	_actionSetCurrentUpdate->setEnabled( pmObj->hasCandidateObj() );
+	actionSetCurrentKeepInstalled->setEnabled( true );
+	actionSetCurrentDelete->setEnabled( true );
+	actionSetCurrentUpdate->setEnabled( pmObj->hasCandidateObj() );
     }
     else
     {
-	_actionSetCurrentInstall->setEnabled( pmObj->hasCandidateObj() );
-	_actionSetCurrentDontInstall->setEnabled( true );
-	_actionSetCurrentTaboo->setEnabled( true );
+	actionSetCurrentInstall->setEnabled( pmObj->hasCandidateObj() );
+	actionSetCurrentDontInstall->setEnabled( true );
+	actionSetCurrentTaboo->setEnabled( true );
 
-	_actionSetCurrentKeepInstalled->setEnabled( false);
-	_actionSetCurrentDelete->setEnabled( false );
-	_actionSetCurrentUpdate->setEnabled( false );
+	actionSetCurrentKeepInstalled->setEnabled( false);
+	actionSetCurrentDelete->setEnabled( false );
+	actionSetCurrentUpdate->setEnabled( false );
     }
 }
 
