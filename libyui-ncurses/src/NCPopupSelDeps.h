@@ -49,8 +49,13 @@ private:
     // method to solve the dependencies
     bool solveInstall( PkgDep::ResultList & goodList, PkgDep::ErrorResultList & badList );
 
+    string getLabelRequire1();
+
+    string getHeadline();    
+
 protected:
 
+    void setDepsTableType();
     
 public:
        

@@ -75,3 +75,19 @@ bool NCPopupPkgDeps::solveInstall( PkgDep::ResultList & goodList, PkgDep::ErrorR
     return Y2PM::packageManager().solveInstall( goodList, badList );
 }
 
+string NCPopupPkgDeps::getLabelRequire1()
+{
+    return PkgNames::LabelRequire1().str();
+}
+
+string NCPopupPkgDeps::getHeadline()
+{
+    return PkgNames::PackageDeps().str();
+}
+
+void NCPopupPkgDeps::setDepsTableType()
+{
+    // set status strategy
+    ObjectStatStrategy * strategy =  new DependencyStatStrategy();
+    pkgs->setTableType( NCPkgTable::T_Dependency, strategy );
+}

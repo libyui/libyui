@@ -55,8 +55,6 @@ NCPopupSelDeps::NCPopupSelDeps( const wpos at, PackageSelector * pkger )
 //	METHOD NAME : NCPopupSelDeps::~NCPopupSelDeps
 //	METHOD TYPE : Destructor
 //
-//	DESCRIPTION :
-//
 NCPopupSelDeps::~NCPopupSelDeps()
 {
 
@@ -68,10 +66,42 @@ NCPopupSelDeps::~NCPopupSelDeps()
 //	METHOD NAME : NCPopupSelDeps::solveInstall
 //	METHOD TYPE : bool
 //
-//	DESCRIPTION :
-//
 bool NCPopupSelDeps::solveInstall( PkgDep::ResultList & goodList, PkgDep::ErrorResultList & badList )
 {
     return Y2PM::selectionManager().solveInstall( goodList, badList );
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPopupSelDeps::getLabelRequire1
+//	METHOD TYPE : bool
+//
+string NCPopupSelDeps::getLabelRequire1()
+{
+    return PkgNames::LabelSelRequire1().str();
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPopupSelDeps::getHeadline
+//	METHOD TYPE : bool
+//
+string NCPopupSelDeps::getHeadline()
+{
+    return PkgNames::SelectionDeps().str();
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPopupSelDeps::solveInstall
+//	METHOD TYPE : bool
+//
+void NCPopupSelDeps::setDepsTableType()
+{
+    // set status strategy
+    ObjectStatStrategy * strategy =  new DependencyStatStrategy();
+    pkgs->setTableType( NCPkgTable::T_SelDependency, strategy );
+}
