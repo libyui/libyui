@@ -481,6 +481,12 @@ public:
 				const QString & filter,
 				const QString & headline );
 
+
+    /**
+     * main widget
+     */
+    QWidget* mainWidget();
+
 protected:
 
     /**

@@ -79,6 +79,10 @@ long YQUI::defaultSize(YUIDimension dim) const
 	return dim == YD_HORIZ ? qApp->desktop()->width() : qApp->desktop()->height();
 }
 
+QWidget* YQUI::mainWidget()
+{
+    return _main_win;
+};
 
 void
 YQUI::busyCursor( void )
