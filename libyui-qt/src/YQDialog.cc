@@ -65,7 +65,7 @@ YQDialog::YQDialog( YUIQt *		yuiqt,
 
     qt_frame = new QFrame ( this );
 
-    if ( ! hasDefaultSize() && ! yuiqt->hasWM() )
+    if ( ! hasDefaultSize() && ! yuiqt->haveWM() )
     {
 	qt_frame->setFrameStyle ( QFrame::Box | QFrame::Raised );
 	qt_frame->setLineWidth( 2 );
@@ -163,7 +163,7 @@ void YQDialog::activate(bool active)
 {
     if (active)
     {
-	if ( ! yuiqt->hasWM() )
+	if ( ! yuiqt->haveWM() )
 	{
 	    if ( yuiqt->autoActivateDialogs() )
 		setActiveWindow();

@@ -69,7 +69,8 @@ YCPValue Y2QtComponent::evaluate(const YCPValue &command)
     {
 	for (int i=1; i<argc; i++)
 	{
-	    if (!strcmp(argv[i], "--nothreads"))
+	    if ( strcmp(argv[i], "--nothreads") == 0 ||
+		 strcmp(argv[i], "-nothreads" ) == 0   )
 	    {
 		with_threads = false;
 		y2milestone("Running Qt UI without threads.");
@@ -81,11 +82,17 @@ YCPValue Y2QtComponent::evaluate(const YCPValue &command)
 	qInstallMsgHandler (myqmsg);
 
 	interpreter = new YUIQt(argc, argv, with_threads, getCallback());
-	if (!interpreter)
+	
+	if ( !interpreter || interpreter->fatalError() )
 	    return YCPNull();
     }
 
-    return interpreter->evaluate(command);
+    YCPValue val = interpreter->evaluate(command);
+
+    if ( interpreter->fatalError() )
+	return YCPNull();
+    
+    return val;
 }
 
 

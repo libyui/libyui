@@ -19,6 +19,7 @@
 
 /-*/
 
+#define USE_QT_CURSORS	1
 
 #include <rpc/types.h>		// MAXHOSTNAMELEN
 #include <unistd.h>		// gethostname()
@@ -86,7 +87,6 @@ YUIQt * YUIQt::_yuiqt = 0;
 YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
     : QApplication(argc, argv)
     , YUIInterpreter(with_threads, callback)
-    , has_windowmanager(true)
     , main_dialog_id(0)
     , event_widget(0)
     , event_type(ET_NONE)
@@ -96,21 +96,29 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
     , wm_close_blocked(false)
     , auto_activate_dialogs(true)
 {
-    suseheaderID = -1;
-    screenShotNameTemplate = "";
-    _yuiqt = this;
+    _yuiqt 			= this;
+    _fatal_error		= false;
+    _have_wm			= true;
+    _fullscreen			= false;
+    _decorate_toplevel_window	= true;
+    suseheaderID 		= -1;
+    screenShotNameTemplate 	= "";
 
-    if (argv)
+    if ( argv )
     {
-	for(int i=0; i < argc; i++)
+	for( int i=0; i < argc; i++ )
 	{
-	    if (argv[i] == QString( "-no-wm" ) )
-	    {
-		y2milestone( "Assuming the UI runs without window manager" );
-		has_windowmanager = false;
-	    }
+	    QString opt = argv[i];
 
-	    if ( argv[i] == QString( "-kcontrol_id" ) )
+	    // Normalize command line option - accept "--xy" as well as "-xy"
+
+	    if ( opt.startsWith( "--" ) )
+		opt.remove(0, 1);
+
+	    if      ( argv[i] == QString( "-no-wm"	 ) )	_have_wm 			= false;
+	    else if ( argv[i] == QString( "-fullscreen"  ) )	_fullscreen 			= true;
+	    else if ( argv[i] == QString( "-noborder" 	 ) )	_decorate_toplevel_window	= false;
+	    else if ( argv[i] == QString( "-kcontrol_id" ) )
 	    {
 		if ( i >= argc )
 		{
@@ -123,11 +131,39 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
 				 (const char *) kcontrol_id );
 		}
 	    }
+	    else if ( argv[i] == QString( "-help"  ) ||
+		      argv[i] == QString( "--help" )   )
+	    {
+		fprintf( stderr,
+			 "Command line options for the YaST2 Qt UI:\n"
+			 "\n"
+			 "--nothreads   run without additional UI threads\n"
+			 "--no-wm       assume no window manager is running\n"
+			 "--fullscreen  use full screen for `opt(`defaultsize) dialogs\n"
+			 "--noborder    no window manager border for `opt(`defaultsize) dialogs\n"
+			 "--help        this help text\n"
+			 "\n"
+			 "--kcontrol_id <ID-String>   set KDE control center identification\n"
+			 "\n"
+			 "-no-wm, -noborder etc. are accepted as well as --no-wm, --noborder\n"
+			 "to maintain backward compatibility.\n"
+			 "\n"
+			 );
+		
+		raiseFatalError();
+	    }
 	}
     }
 
 
-    if ( has_windowmanager )
+    if ( _fullscreen )
+    {
+	default_size.setWidth ( desktop()->width()  );
+	default_size.setHeight( desktop()->height() );
+	y2milestone( "-fullscreen: using %dx%d for `opt(`defaultsize)",
+		     default_size.width(), default_size.height() );
+    }
+    else if ( _have_wm )
     {
 	// Get default_size via -geometry command line option
 
@@ -160,16 +196,31 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
 			 default_size.width(), default_size.height() );
 	}
     }
-    else	// ! has_windowmanager
+    else	// ! _have_wm
     {
-	default_size.setWidth ( qApp->desktop()->width()  );
-	default_size.setHeight( qApp->desktop()->height() );
+	default_size.setWidth ( desktop()->width()  );
+	default_size.setHeight( desktop()->height() );
     }
+
+
+    // Create main window for `opt(`defaultsize) dialogs.
+    //
+    // We have to use something else than QWidgetStack since QWidgetStack
+    // doesn't accept a WFlags arg which we badly need here.
+
+    WFlags wflags = WType_TopLevel;
+
+    if ( ! _decorate_toplevel_window )
+    {
+	y2milestone( "Suppressing WM decorations for toplevel window" );
+	wflags |= WStyle_Customize | WStyle_NoBorder;
+    }
+
+    main_win = new QVBox( 0, 0, wflags ); // parent, name, wflags
 
 
     // Create widget stack for `opt(`defaultsize) dialogs
 
-    main_win	 = new QVBox( 0, 0, WType_TopLevel );	// QWidgetStack doesn't accept a WFlags arg
     widget_stack = new QWidgetStack( main_win );
     widget_stack->setFocusPolicy( QWidget::StrongFocus );
     setMainWidget( main_win );
@@ -189,8 +240,12 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
 	if ( gethostname( hostname, sizeof( hostname )-1 ) == 0 )
 	{
 	    hostname[ sizeof( hostname ) -1 ] = '\0'; // make sure it's terminated
-	    title += "@";
-	    title += hostname;
+
+	    if ( strlen( hostname ) > 0 )
+	    {
+		title += "@";
+		title += hostname;
+	    }
 	}
 	main_win->setCaption( title );
 	kcontrol_id = title;
@@ -232,7 +287,8 @@ void YUIQt::internalError( const char *msg )
 
     if ( button == QMessageBox::Abort )
     {
-	abort();
+	raiseFatalError();
+	// abort();
 	// exit(1);	// exit() leaves a process running (WFM?).
     }
 }
@@ -344,7 +400,7 @@ void YUIQt::showDialog( YDialog *dialog )
 	{
 	    main_win->resize( default_size );
 
-	    if ( ! has_windowmanager )
+	    if ( ! _have_wm )
 	    {
 		main_win->move( 0, 0 );
 	    }
@@ -680,11 +736,17 @@ YCPValue YUIQt::setLanguage(const YCPTerm &term)
 void
 YUIQt::busyCursor ( void )
 {
+#if USE_QT_CURSORS
+
+    setOverrideCursor( waitCursor );
+
+#else
     /**
-     * Simply using QApplication::setOverrideCursor( waitCursor ) doesn't work
-     * any more: We _need_ the WType_Modal flag for non-defaultsize dialogs
-     * (i.e. for popups), but Qt unfortunately doesn't let such dialogs have a
-     * clock cursor.   :-(
+     * There were versions of Qt where simply using
+     * QApplication::setOverrideCursor( waitCursor ) didn't work any more:
+     * We _need_ the WType_Modal flag for non-defaultsize dialogs (i.e. for
+     * popups), but Qt unfortunately didn't let such dialogs have a clock
+     * cursor.  :-(
      *
      * They might have their good reasons for this (whatever they are), so
      * let's simply make our own busy cursors and set them to all widgets
@@ -705,12 +767,18 @@ YUIQt::busyCursor ( void )
 
     if ( widget_list )
 	delete widget_list;
+#endif
 }
 
 
 void
 YUIQt::normalCursor ( void )
 {
+#if USE_QT_CURSORS
+
+    while ( overrideCursor() )
+	restoreOverrideCursor();
+#else
     /**
      * Restore the normal cursor for all widgets (undo busyCursor() ).
      *
@@ -733,6 +801,7 @@ YUIQt::normalCursor ( void )
 
     if ( widget_list )
 	delete widget_list;
+#endif
 }
 
 
@@ -797,13 +866,6 @@ int YUIQt::getDefaultHeight()
 
 
 // ----------------------------------------------------------------------
-// private helper functions
-
-
-bool YUIQt::hasWM() const
-{
-    return has_windowmanager;
-}
 
 
 void YUIQt::returnNow(EventType et, YWidget *wid)
@@ -949,7 +1011,7 @@ bool YUIQt::eventFilter( QObject * obj, QEvent * ev )
 
 bool YUIQt::showEventFilter( QObject * obj, QEvent * ev )
 {
-    if ( ! hasWM() )
+    if ( ! haveWM() )
     {
 	// Make sure newly opened windows get the keyboard focus even without a
 	// window manager. Otherwise the app might be unusable without a mouse.
@@ -974,7 +1036,7 @@ void YUIQt::leaveIdleLoop(int)
 
 long YUIQt::defaultSize(YUIDimension dim) const
 {
-    if ( hasWM() )
+    if ( haveWM() )
     {
 	return dim == YD_HORIZ ? default_size.width() : default_size.height();
     }

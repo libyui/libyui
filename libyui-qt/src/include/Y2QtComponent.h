@@ -23,7 +23,7 @@
 
 #include "Y2.h"
 
-class YUIInterpreter;
+class YUIQt;
 
 /**
  * @short YaST2 Component: Qt user interface
@@ -45,7 +45,7 @@ class Y2QtComponent : public Y2Component
     /**
      * Does the actual work.
      */
-    YUIInterpreter *interpreter;
+    YUIQt *interpreter;
 
     /**
      * since we're defining our own setCallback/getCallback function

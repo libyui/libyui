@@ -75,9 +75,33 @@ public:
     void returnNow(EventType et, YWidget *wid);
 
     /**
-     * Returns whether a window manager (WM) is running.
+     * Return 'true' if a window manager is running, 'false' otherwise.
      */
-    bool hasWM() const;
+    bool haveWM() const { return _have_wm; }
+
+    /**
+     * Return 'true' if defaultsize windows should use the full screen
+     **/
+    bool fullscreen() const { return _fullscreen; }
+
+    /**
+     * Return 'true' if toplevel (defaultsize) windows should get window
+     * manager decorations
+     **/
+    bool decorateToplevelWindow() const { return _decorate_toplevel_window; }
+
+    /**
+     * Returns 'true' if the UI had a fatal error that requires the application
+     * to abort.
+     **/
+    bool fatalError() const { return _fatal_error; }
+
+    /**
+     * Raise a fatal UI error. It will be delivered when it is safe to do so.
+     * The caller should make sure it can continue for some time until the
+     * error is delivered.
+     **/
+    void raiseFatalError() { _fatal_error = true; }
 
     /**
      * Returns the default size in one dimension
@@ -308,7 +332,7 @@ protected:
 
 
 public:
-    
+
     /**
      *
      * Open a directory selection box and prompt the user for an existing directory.
@@ -320,22 +344,22 @@ public:
      * Graphical UIs may omit that if no window manager is running.
      *
      * Returns the selected directory name
-     * or 'nil' (YCPVoid()) if the user canceled the operation. 
+     * or 'nil' (YCPVoid()) if the user canceled the operation.
      **/
     YCPValue askForExistingDirectory ( const YCPString & startDir,
 				       const YCPString & headline );
-    
+
     /**
      * Open a file selection box and prompt the user for an existing file.
      * [Inherited from YUIInterpreter]
-     * 
+     *
      * 'startWith' is the initial directory or file.
-     * 
+     *
      * 'filter' is one or more blank-separated file patterns, e.g. "*.png *.jpg"
-     * 
+     *
      * 'headline' is an explanatory text for the file selection box.
      * Graphical UIs may omit that if no window manager is running.
-     * 
+     *
      * Returns the selected file name
      * or 'nil' (YCPVoid()) if the user canceled the operation.
      **/
@@ -347,14 +371,14 @@ public:
      * Open a file selection box and prompt the user for a file to save data to.
      * Automatically asks for confirmation if the user selects an existing file.
      * [Inherited from YUIInterpreter]
-     * 
+     *
      * 'startWith' is the initial directory or file.
-     * 
+     *
      * 'filter' is one or more blank-separated file patterns, e.g. "*.png *.jpg"
-     * 
+     *
      * 'headline' is an explanatory text for the file selection box.
      * Graphical UIs may omit that if no window manager is running.
-     * 
+     *
      * Returns the selected file name
      * or 'nil' (YCPVoid()) if the user canceled the operation.
      **/
@@ -368,7 +392,7 @@ public:
     QString askForSaveFileName( const QString & startWith,
 				const QString & filter,
 				const QString & headline );
-    
+
 protected:
 
     /**
@@ -403,22 +427,31 @@ protected:
 
 private:
     /**
-     * Is set to true, if the Qt interface should run with the
-     * assumption that now windowmanager is being used.
+     * Assume presence of a window manager
      */
-    bool has_windowmanager;
+    bool _have_wm;
+
+    /**
+     * Use the entire available screen
+     **/
+    bool _fullscreen;
+
+    /**
+     * Decorate the toplevel window
+     **/
+    bool _decorate_toplevel_window;
 
     /**
      * Container for the widget stack. QWidgetStack cannot handle a WFlags
      * argument, so this needs to be embedded into something else - and a QVBox
      * at least handles all the sizeHint and resize stuff.
      **/
-    QVBox *main_win;
+    QVBox * main_win;
 
     /**
      * Stack for the Qt widgets. This will become the main window, too.
      **/
-    QWidgetStack *widget_stack;
+    QWidgetStack * widget_stack;
 
     /**
      * Numeric ID for defaultsize dialogs for the widget stack
@@ -431,7 +464,7 @@ private:
      * It may be 0 in which case some implicite event
      * happend (such as closeWindow)
      */
-    YWidget *event_widget;
+    YWidget * event_widget;
 
     /**
      * Is set by some widget during #userInput or #pollInput.
@@ -502,6 +535,11 @@ private:
      * Global reference to the UI
      **/
     static YUIQt * _yuiqt;
+
+    /**
+     * Indicate a fatal error that requires the UI to terminate
+     **/
+    bool _fatal_error;
 
 
 private slots:
