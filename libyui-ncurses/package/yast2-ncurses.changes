@@ -1,8 +1,9 @@
 -------------------------------------------------------------------
 Tue Aug  5 13:17:42 CEST 2003 - gs@suse.de
 
+- V 2.8.10
 - get correct encoding in setConsoleFont(),
-  setKeyboard() added 
+- setKeyboard() added 
 
 -------------------------------------------------------------------
 Mon Jul 28 11:49:50 CEST 2003 - gs@suse.de
