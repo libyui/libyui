@@ -25,7 +25,7 @@
 				 ]
 				 )),
 	      `Left(`MenuButton( "&Information", [`item( `id(`patchdescr), "&Long description" ),
-						  `item( `id(`patchpkgs), "&Package list" )
+						  `item( `id(`patchpackages), "&Package list" )
 				 ]
 				 )),
 	      `HStretch()

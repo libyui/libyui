@@ -67,6 +67,13 @@ const YCPValue& PkgNames::AvailPkgs ()
     static const YCPValue value = createIdValue ( "availpkgs" );
     return value;
 }
+// the list of patch packages
+const YCPValue& PkgNames::PatchPkgs ()
+{
+    static const YCPValue value = createIdValue ( "patchpkgs" );
+    return value;
+}
+
 
 // the description section ( shown on bottom of the selection dialog )
 const YCPValue& PkgNames::Description ()
@@ -346,9 +353,9 @@ const YCPValue& PkgNames::PatchDescr ()
 }
 
 /// id information patch descr
-const YCPValue& PkgNames::PatchPkgs ()
+const YCPValue& PkgNames::PatchPackages ()
 {
-    static const YCPValue value = createIdValue ( "patchpkgs" );
+    static const YCPValue value = createIdValue ( "patchpackages" );
     return value;
 }
 

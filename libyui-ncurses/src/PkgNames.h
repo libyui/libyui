@@ -43,7 +43,12 @@ public:
      *  Widget id of the list of available packages
      */
     static const YCPValue& AvailPkgs ();
-    
+
+    /**
+     *  Widget id of the list of patch packages
+     */
+    static const YCPValue& PatchPkgs ();
+
     /**
      *	Widget id of the description section ( shown on bottom of the selection dialog )
      */
@@ -236,7 +241,7 @@ public:
     /**
      *  Widget id information patch packages
      */
-    static const YCPValue& PatchPkgs ();
+    static const YCPValue& PatchPackages ();
 
     /**
      *  Internal use (id for the tree items)

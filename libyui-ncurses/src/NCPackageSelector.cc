@@ -104,7 +104,7 @@ NCPackageSelector::NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
             // set the pointer to the packager object
 	    pkgList->setPackager( &packager );
 
-	    // fill table header
+	    // fill the table header
 	    pkgList->fillHeader( );
 	}
     }
@@ -159,7 +159,7 @@ void NCPackageSelector::showDefaultList()
     // fill the package table with packages belonging to the default filter
     if ( pkgList )
     {
-	// fill the list with packages 
+	// fill the list with packages (or patches)
 	pkgList->fillDefaultList( );
 
     }

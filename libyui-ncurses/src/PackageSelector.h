@@ -136,6 +136,14 @@ class PackageSelector
     bool fillAvailableList( NCPkgTable *table, PMObjectPtr pkgPtr );    
 
    /**
+    * Fills the list of available packages
+    * @param pkgTable  The table widget
+    * @param youPatch Show all packages belonging to the patch 
+    * @return bool
+    */ 
+    bool fillPatchPackages ( NCPkgTable * pkgTable, PMObjectPtr youPatch );
+    
+   /**
     * Fills the package table with packages matching the search expression
     * @param expr The search expressionqc
     * @return bool

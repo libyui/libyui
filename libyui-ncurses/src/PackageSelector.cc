@@ -48,7 +48,6 @@
 
 using namespace std;
 
-#define FAKE_INST_SRC 0
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -102,7 +101,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
 
     // YOU inforamtion 
     eventHandlerMap[ PkgNames::PatchDescr()->toString() ] = &PackageSelector::InformationHandler;
-    eventHandlerMap[ PkgNames::PatchPkgs()->toString() ] = &PackageSelector::InformationHandler;
+    eventHandlerMap[ PkgNames::PatchPackages()->toString() ] = &PackageSelector::InformationHandler;
     
     // Action menu
     eventHandlerMap[ PkgNames::Toggle()->toString() ] 	= &PackageSelector::StatusHandler;
@@ -127,14 +126,21 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
 
     if ( opt.updateMode.value() )
 	updateMode = true;
-    
-    if ( !youMode )
-    {
-	// create the filter popup
-	filterPopup = new NCPopupTree( wpos( 1, 1 ),	// position
-				       this );	 
 
-#if FAKE_INST_SRC
+    NCMIL << "Number of packages: " << Y2PM::packageManager().size() << endl;
+
+    // read test source information
+    if ( opt.testMode.value() )
+    {
+	if ( youMode )
+	{
+	    Url url( "dir:///8.1-patches" );
+	    Y2PM::youPatchManager().instYou().retrievePatchInfo( url, false );
+	    Y2PM::youPatchManager().instYou().selectPatches( PMYouPatch::kind_recommended |
+							     PMYouPatch::kind_security     );
+	    NCMIL <<  "Fake YOU patches initialized" << endl;	
+	}
+	else
 	{
 	    Y2PM y2pm;
 	    InstSrcManager& MGR = y2pm.instSrcManager();
@@ -147,16 +153,22 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
 	    if ( nids.size() )
 	    {
 		err = MGR.enableSource( *nids.begin() );
-		NCMIL << "Source enabled: " << err << endl;
+		NCMIL << "Fake source enabled: " << err << endl;
 	    }
 	}
-#endif
-    
+    }    
+
+    if ( !youMode )
+    {
 	// create the selections popup
 	selectionPopup = new NCPopupSelection( wpos( 1, 1 ),
 					       this );
-    }
+	// create the filter popup
+	filterPopup = new NCPopupTree( wpos( 1, 1 ),	// position
+				       this );	 
 
+    }
+    
     depsPopup = new NCPopupDeps( wpos( 1, 1 ), this );
     
     //NCPopupInfo info( wpos( 5, 5 ), YCPString( "Warning" ), text.YCPstr() );
@@ -465,6 +477,32 @@ bool PackageSelector::fillPatchList( string filter )
     return true;
 }
 
+
+///////////////////////////////////////////////////////////////////
+//
+// fillPatchPackages
+//
+//
+bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, PMObjectPtr objPtr )
+{
+    PMYouPatchPtr patchPtr = objPtr;
+
+    if ( !pkgTable || !patchPtr )
+	return false;
+    
+    list<PMPackagePtr> packages = patchPtr->packages();
+    list<PMPackagePtr>::iterator listIt;
+    NCMIL << "Number of patch packages: " << packages.size() << endl;
+	
+    unsigned int i;
+    for ( i = 0, listIt = packages.begin(); listIt != packages.end();  ++listIt, i++ )    
+    {
+	createListEntry( pkgTable, (*listIt), i );
+    }
+
+    return true;
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 // fillPackageList
@@ -705,6 +743,9 @@ bool PackageSelector::SearchHandler( const NCursesEvent& event)
     return true;
 }
 
+
+
+
 ///////////////////////////////////////////////////////////////////
 //
 // InformationHandler
@@ -744,14 +785,39 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 
 	if ( pkgAvail )
 	{
-	    // fillHeader( pkgAvail );  
+	    
 	    // set the connection to the PackageSelector !!!!
 	    pkgAvail->setPackager( this );
 	    // set status strategy
 	    ObjectStatStrategy * strategy = new AvailableStatStrategy();
 	    pkgAvail->setTableType( NCPkgTable::T_Availables, strategy );
+	    // fill the header
+	    // pkgAvail->fillHeader( );
 	    fillAvailableList( pkgAvail, packageList->getDataPointer( packageList->getCurrentItem() ) );
 	}
+    }
+    else if ( visibleInfo->compare( PkgNames::PatchPackages() ) == YO_EQUAL )
+    {
+        // show the package table
+	const char * tableLayout = "`ReplacePoint( `id(`replaceinfo), `PkgSpecial( `id(`patchpkgs), `opt(`notify), \"pkgTable\" ) )"; 
+	YCPParser parser( tableLayout );
+	YCPValue layout = parser.parse();
+	
+	y2ui->evaluateReplaceWidget( layout->asTerm() );
+
+	NCPkgTable * patchPkgs = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::PatchPkgs(), true));
+
+	if ( patchPkgs )
+	{
+	    // set the connection to the PackageSelector !!!!
+	    patchPkgs->setPackager( this );
+	    // set status strategy
+	    ObjectStatStrategy * strategy = new PatchPkgStatStrategy();
+	    patchPkgs->setTableType( NCPkgTable::T_PatchPkgs, strategy );
+	    // fill the header
+	    //patchPkgs->fillHeader( );
+	    fillPatchPackages( patchPkgs, packageList->getDataPointer( packageList->getCurrentItem() ) );
+	}	
     }
     else
     {
@@ -1043,9 +1109,13 @@ bool PackageSelector::showPatchInformation ( PMObjectPtr objPtr )
 	    static_cast<NCRichText *>(descrInfo)->setText( text.YCPstr() );
 	}	
     }
-    else if (  visibleInfo->compare( PkgNames::PatchPkgs() ) == YO_EQUAL )
+    else if (  visibleInfo->compare( PkgNames::PatchPackages() ) == YO_EQUAL )
     {
-	//std::list<PMPackagePtr> packages() const { return _packages; }
+	NCPkgTable *patchPkgList  = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::PatchPkgs(), true));
+	if ( patchPkgList )
+	{
+	    fillPatchPackages ( patchPkgList, objPtr);
+	}
     }
 
     return true;

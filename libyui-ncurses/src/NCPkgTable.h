@@ -92,6 +92,7 @@ public:
 	T_Patches,
 	T_Dependency,
 	T_Update,
+	T_PatchPkgs,
 	T_Unknown
     };
 

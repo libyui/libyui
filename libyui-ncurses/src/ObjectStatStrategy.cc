@@ -134,17 +134,7 @@ AvailableStatStrategy::AvailableStatStrategy()
 {
 }
 
-//------------------------------------------------------------
-// Class for strategies to get status for available packages
-//------------------------------------------------------------
 
-//
-// Constructor
-//
-UpdateStatStrategy::UpdateStatStrategy()
-    : ObjectStatStrategy()
-{
-}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -195,3 +185,34 @@ PMSelectable::UI_Status AvailableStatStrategy::getPackageStatus( PMObjectPtr obj
     return retStatus;
 }
 
+//------------------------------------------------------------
+// Class for strategies to get status for available packages
+//------------------------------------------------------------
+
+//
+// Constructor
+//
+UpdateStatStrategy::UpdateStatStrategy()
+    : ObjectStatStrategy()
+{
+}
+
+
+//------------------------------------------------------------
+// Class for strategies to get status for patch packages
+//------------------------------------------------------------
+
+//
+// Constructor
+//
+PatchPkgStatStrategy::PatchPkgStatStrategy()
+    : ObjectStatStrategy()
+{
+}
+
+bool PatchPkgStatStrategy::setPackageStatus( PMSelectable::UI_Status newstatus,
+					     PMObjectPtr objPtr )
+{
+    // it is not possible to set the status of the packages belonging to a certain patch
+    return false;
+}

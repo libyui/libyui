@@ -98,6 +98,26 @@ public:
 };
 
 //------------------------------------------------------------
+// Class for strategies to handle status of packages belonging to a patch
+//------------------------------------------------------------
+class PatchPkgStatStrategy : public ObjectStatStrategy
+{
+public:
+
+    PatchPkgStatStrategy( );
+    
+    virtual ~PatchPkgStatStrategy() {}
+
+    /**
+     * It is not possible to set the package status for packages belonging to a patch,
+     * i.e. returns always false.
+     */
+    virtual bool setPackageStatus( PMSelectable::UI_Status newstatus, PMObjectPtr objPtr );
+
+};
+
+    
+//------------------------------------------------------------
 // Class for strategies to handle status of patches
 //------------------------------------------------------------
 class PatchStatStrategy : public ObjectStatStrategy
