@@ -38,7 +38,9 @@
 //#include <kqeventutil.h>
 #include <config.h>
 
+#if 0
 #define HAVE_UNISTD_H
+#endif
 #define HAVE_USLEEP
 
 #ifdef HAVE_UNISTD_H

@@ -75,6 +75,8 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     _decorate_toplevel_window	= true;
     _debug_embedding		= false;
     _running_embedded		= false;
+    _usingVisionImpairedPalette	= false;
+    _normalPalette		= qApp->palette();
     screenShotNameTemplate 	= "";
 
     qInstallMsgHandler( qMessageHandler );

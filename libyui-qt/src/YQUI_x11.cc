@@ -241,6 +241,64 @@ void YQUI::pickAutoFonts()
 }
 
 
+void YQUI::toggleVisionImpairedPalette()
+{
+    if ( _usingVisionImpairedPalette )
+    {
+	qApp->setPalette( _normalPalette,
+			  true );  // informWidgets
+
+	_usingVisionImpairedPalette = false;
+    }
+    else
+    {
+	_normalPalette = qApp->palette();
+	qApp->setPalette( visionImpairedPalette(),
+			  true );  // informWidgets
+	
+	_usingVisionImpairedPalette = true;
+    }
+}
+
+
+QPalette YQUI::visionImpairedPalette()
+{
+    const QColor dark  ( 0x20, 0x20, 0x20 );
+	    
+    QColorGroup activeCg;	// for the active window (the one with the keyboard focus)
+	    
+    activeCg.setColor( QColorGroup::Background,		Qt::black 	);
+    activeCg.setColor( QColorGroup::Foreground,		Qt::cyan	);
+    activeCg.setColor( QColorGroup::Text,		Qt::cyan	);
+    activeCg.setColor( QColorGroup::Base,		dark		);
+    activeCg.setColor( QColorGroup::Button,		dark		);
+    activeCg.setColor( QColorGroup::ButtonText,		Qt::green	);
+    activeCg.setColor( QColorGroup::Highlight,		Qt::yellow	);
+    activeCg.setColor( QColorGroup::HighlightedText,	Qt::black	);
+
+    QColorGroup inactiveCg;	// for other windows (those that don't have the keyboard focus)
+	    
+    inactiveCg.setColor( QColorGroup::Background,	Qt::black 	);
+    inactiveCg.setColor( QColorGroup::Foreground,	Qt::cyan	);
+    inactiveCg.setColor( QColorGroup::Text,		Qt::cyan	);
+    inactiveCg.setColor( QColorGroup::Base,		dark		);
+    inactiveCg.setColor( QColorGroup::Button,		dark		);
+    inactiveCg.setColor( QColorGroup::ButtonText,	Qt::green	);
+
+    QColorGroup disabledCg;	// for disabled widgets
+	    
+    disabledCg.setColor( QColorGroup::Background,	Qt::black 	);
+    disabledCg.setColor( QColorGroup::Foreground,	Qt::gray	);
+    disabledCg.setColor( QColorGroup::Text,		Qt::gray	);
+    disabledCg.setColor( QColorGroup::Base,		dark		);
+    disabledCg.setColor( QColorGroup::Button,		dark		);
+    disabledCg.setColor( QColorGroup::ButtonText,	Qt::gray	);
+
+    QPalette pal( activeCg, disabledCg, inactiveCg );
+
+    return pal;
+}
+
 
 bool YQUI::close()
 {

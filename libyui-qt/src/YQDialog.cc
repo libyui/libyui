@@ -469,51 +469,19 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	else if ( event->key()   == Qt::Key_F4 &&	// Shift-F4: toggle colors for vision impaired users
 		  event->state() == Qt::ShiftButton )
 	{
-#warning move this out to a builtin!
+	    YQUI::ui()->toggleVisionImpairedPalette();
 
-	    const QColor dark  ( 0x20, 0x20, 0x20 );
-	    
-	    QColorGroup activeCg;	// for the active window (the one with the keyboard focus)
-	    
-	    activeCg.setColor( QColorGroup::Background,		Qt::black 	);
-	    activeCg.setColor( QColorGroup::Foreground,		Qt::cyan	);
-	    activeCg.setColor( QColorGroup::Text,		Qt::cyan	);
-	    activeCg.setColor( QColorGroup::Base,		dark		);
-	    activeCg.setColor( QColorGroup::Button,		dark		);
-	    activeCg.setColor( QColorGroup::ButtonText,		Qt::green	);
-	    activeCg.setColor( QColorGroup::Highlight,		Qt::yellow	);
-	    activeCg.setColor( QColorGroup::HighlightedText,	Qt::black	);
-
-	    QColorGroup inactiveCg;	// for other windows (those that don't have the keyboard focus)
-	    
-	    inactiveCg.setColor( QColorGroup::Background,	Qt::black 	);
-	    inactiveCg.setColor( QColorGroup::Foreground,	Qt::cyan	);
-	    inactiveCg.setColor( QColorGroup::Text,		Qt::cyan	);
-	    inactiveCg.setColor( QColorGroup::Base,		dark		);
-	    inactiveCg.setColor( QColorGroup::Button,		dark		);
-	    inactiveCg.setColor( QColorGroup::ButtonText,	Qt::green	);
-
-	    QColorGroup disabledCg;	// for disabled widgets
-	    
-	    disabledCg.setColor( QColorGroup::Background,	Qt::black 	);
-	    disabledCg.setColor( QColorGroup::Foreground,	Qt::gray	);
-	    disabledCg.setColor( QColorGroup::Text,		Qt::gray	);
-	    disabledCg.setColor( QColorGroup::Base,		dark		);
-	    disabledCg.setColor( QColorGroup::Button,		dark		);
-	    disabledCg.setColor( QColorGroup::ButtonText,	Qt::gray	);
-
-	    QPalette visionImpairedPalette( activeCg, disabledCg, inactiveCg );
-	    QPalette normalPalette( qApp->palette() );
-	    qApp->setPalette( visionImpairedPalette, true );  // informWidgets
-	    
-	    QMessageBox::information( 0,                                            // parent
-				      _("Color switching"),  	                    // caption
-				      _( "Switching to color palette for vision impaired users -\n"
-					 "press Shift-F4 again to switch back to normal colors."   ), // text
-				      QMessageBox::Ok | QMessageBox::Default,       // button0
-				      QMessageBox::NoButton,                        // button1
-				      QMessageBox::NoButton );                      // button2
-		
+	    if ( YQUI::ui()->usingVisionImpairedPalette() )
+	    {
+		y2milestone( "Switched to vision impaired palette" );
+		QMessageBox::information( 0,                                            // parent
+					  _("Color switching"),  	                // caption
+					  _( "Switching to color palette for vision impaired users -\n"
+					     "press Shift-F4 again to switch back to normal colors."   ), // text
+					  QMessageBox::Ok | QMessageBox::Default,       // button0
+					  QMessageBox::NoButton,                        // button1
+					  QMessageBox::NoButton );                      // button2
+	    }
 	    return;
 	}
 	else if ( event->key()   == Qt::Key_F7 &&	// Shift-F7: toggle y2debug logging

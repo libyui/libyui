@@ -274,7 +274,6 @@ signals:
 
 protected:
 
-
     /**
      * Idle around until fd_ycp is readable and handle repaints.
      * This is only used when a separate ui thread is running.
@@ -538,12 +537,33 @@ public:
 				const QString & filter,
 				const QString & headline );
 
-
     /**
      * main widget
      */
     QWidget* mainWidget();
 
+    /**
+     * Returns a high-contrast color palette suitable for vision impaired users.
+     **/
+    static QPalette YQUI::visionImpairedPalette();
+
+    /**
+     * Returns the normal color palette
+     **/
+    QPalette normalPalette() const { return _normalPalette; }
+
+    /**
+     * Toggle between the vision impaired and the normal color palette.
+     **/
+    void toggleVisionImpairedPalette();
+    
+    /**
+     * Returns 'true' if high-contrast colors for vision impaired users is in use.
+     * This should be queried at other places before using custom colors.
+     **/
+    bool usingVisionImpairedPalette() const { return _usingVisionImpairedPalette; }
+
+    
 protected:
 
     /**
@@ -739,6 +759,16 @@ protected:
      * Flag that indicates if we are running embedded
      **/
     bool _running_embedded;
+
+    /**
+     * Saved normal palette
+     **/
+    QPalette _normalPalette;
+
+    /**
+     * Flag: currently using special palette for vision impaired users?
+     **/
+    bool _usingVisionImpairedPalette;
 };
 
 
