@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Tue Jul 15 17:24:50 CEST 2003 - sh@suse.de
+
+- V 2.8.4
+- Lots of internal reworking
+- Completely reworked event handling
+- No more self-generated events during widget creation / ChangeWidget
+- Basic support for right-to-left languages like Arabic / Hebrew 
+  (not perfect yet)
+
+-------------------------------------------------------------------
 Tue Jun 10 15:30:13 CEST 2003 - sh@suse.de
 
 - V 2.8.3
