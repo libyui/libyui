@@ -167,7 +167,6 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     // read test source information
     if ( opt.testMode.value() )
     {
-#if 0
 	if ( youMode )
 	{
 	    Url url( "dir:///8.1-patches" );
@@ -192,7 +191,6 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
 		NCMIL << "Fake source enabled: " << err << endl;
 	    }
 	}
-#endif
     }    
 
     if ( !youMode )
@@ -513,12 +511,16 @@ bool PackageSelector::fillPatchList( string filter )
     // clear the package table
     packageList->itemsCleared ();
 
-    PMManager::PMSelectableVec::const_iterator it = Y2PM::youPatchManager().begin();
+    // get the patch list and sort it
+    list<PMSelectablePtr> patchList( Y2PM::youPatchManager().begin(), Y2PM::youPatchManager().end() );
+    patchList.sort( sortByName );
+    
+    list<PMSelectablePtr>::const_iterator it;
 
     // fill the package table
     PMYouPatchPtr patchPtr;    
 
-    for ( it = Y2PM::youPatchManager().begin(); it != Y2PM::youPatchManager().end(); ++it )
+    for ( it = patchList.begin(); it != patchList.end(); ++it )
     {
 	PMSelectablePtr selectable = *it;
 
@@ -617,10 +619,9 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, PMObjectPtr obj
 
 ///////////////////////////////////////////////////////////////////
 //
-// fillPackageList
+// fillChangesList
 //
-// Fills the package table with the list of packages matching
-// the selected filter
+// Shows the installation summary.
 //
 bool PackageSelector::fillChangesList(  )
 {
@@ -1871,12 +1872,9 @@ void PackageSelector::showDiskSpace()
     const PkgDuMaster & duMaster =  Y2PM::packageManager().updateDu();
 
     // show pkg_diff, i.e. total difference of disk space (can be negative in installed system
-    // if packages are deleted) 
-    //                  0123456789
-    string totalSize = "          ";
+    // if packages are deleted)
     string diff = duMaster.pkg_diff().asString();
-    
-    YCPString label( totalSize.replace( totalSize.size()-diff.length(), totalSize.size()-1, diff ) );
+    YCPString label( diff );
     
     // show the required diskspace
     YWidget * diskSpace = y2ui->widgetWithId( PkgNames::Diskspace(), true );
@@ -1892,9 +1890,9 @@ void PackageSelector::showDiskSpace()
 //
 void PackageSelector::showDownloadSize()
 {
-   YCPString label( Y2PM::youPatchManager().totalDownloadSize().asString() );
+    YCPString label( Y2PM::youPatchManager().totalDownloadSize().asString() );
 
-   // show the download size
+    // show the download size
     YWidget * diskSpace = y2ui->widgetWithId( PkgNames::Diskspace(), true );
     if ( diskSpace )
     {
