@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Feb 17 17:45:11 CET 2003 - sh@suse.de
+
+- V 2.7.12
+- Fixed broken "protected" actions
+- Fixed preliminary "protected" icons
+
+-------------------------------------------------------------------
 Fri Feb 14 15:40:11 CET 2003 - sh@suse.de
 
 - V 2.7.11
