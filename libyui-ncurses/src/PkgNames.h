@@ -258,6 +258,11 @@ public:
     static const NCstring RpmTreeLabel();
 
     /**
+     *  The headline of the disk space popup
+     */ 
+    static const NCstring PkgNames::DiskspaceLabel();
+
+   /**
      *  The label of the package selections popup
      */
     static const NCstring SelectionLabel();

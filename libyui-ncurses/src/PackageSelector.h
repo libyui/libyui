@@ -42,7 +42,7 @@ class PMPackagePtr;
 class PMYouPatchPtr;
 class LangCode;
 class NCPopupDeps;
-
+class NCPopupDiskspace;
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -78,6 +78,8 @@ class PackageSelector
     
     NCPopupSelection * selectionPopup; 	// the selections popup
 
+    NCPopupDiskspace * diskspacePopup;	// the popup showing the disk usage
+    
     bool youMode;			// YOU
     bool updateMode;			// Update
 
@@ -208,13 +210,6 @@ class PackageSelector
     * @return bool
     */
     bool CancelHandler ( const NCursesEvent& event );
-
-   /**
-    * Handler function for disk space information (shows the required space)
-    * @param event The Ncurses event
-    * @return bool
-    */
-    bool DiskspaceHandler ( const NCursesEvent& event );
 
     /**
     * Handler function for "Diskspace button pressed"

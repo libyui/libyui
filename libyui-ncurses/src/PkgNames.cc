@@ -509,7 +509,7 @@ const NCstring PkgNames::SearchPhrase()
 const NCstring PkgNames::CheckDescr()
 {
     // text for search popup 
-    static const NCstring value = _("&Check description");
+    static const NCstring value = _("C&heck description");
     return value;
 }
 
@@ -520,6 +520,12 @@ const NCstring PkgNames::IgnoreCase()
     return value;
 }
 
+const NCstring PkgNames::DiskspaceLabel()
+{
+    // the headline of the disk space popup
+    static const NCstring value = _("&Disk usage overview");
+    return value;
+}
 
 const NCstring PkgNames::PackageHelp()
 {

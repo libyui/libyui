@@ -30,6 +30,7 @@
 #include "NCMenuButton.h"
 #include "NCPopupSelection.h"
 #include "NCPopupDeps.h"
+#include "NCPopupDiskspace.h"
 #include "PackageSelector.h"
 #include "YSelectionBox.h"
 
@@ -82,6 +83,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
       , filterPopup( 0 )
       , depsPopup( 0 )
       , selectionPopup( 0 )
+      , diskspacePopup( 0 )
       , youMode( false )
       , updateMode( false )
       , autoCheck( true )
@@ -91,7 +93,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     eventHandlerMap[ PkgNames::Cancel()->toString() ] 	= &PackageSelector::CancelHandler;
     eventHandlerMap[ PkgNames::OkButton()->toString() ]	= &PackageSelector::OkButtonHandler;
     eventHandlerMap[ PkgNames::Search()->toString() ] 	= &PackageSelector::SearchHandler;
-    eventHandlerMap[ PkgNames::Diskspace()->toString() ] = &PackageSelector::DiskspaceHandler;
+    eventHandlerMap[ PkgNames::Diskinfo()->toString() ] = &PackageSelector::DiskinfoHandler;
     // Filter menu
     eventHandlerMap[ PkgNames::RpmGroups()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::Selections()->toString() ] = &PackageSelector::FilterHandler;
@@ -181,10 +183,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     
     depsPopup = new NCPopupDeps( wpos( 1, 1 ), this );
     
-    //NCPopupInfo info( wpos( 5, 5 ), YCPString( "Warning" ), text.YCPstr() );
-    //info.setNiceSize( 50, 20 );
-    //info.showInfoPopup( );
-
+    diskspacePopup = new NCPopupDiskspace( wpos( 1, 1 ) );
 }
 
 
@@ -206,6 +205,10 @@ PackageSelector::~PackageSelector()
     if ( depsPopup )
     {
 	delete depsPopup;	
+    }
+    if ( diskspacePopup )
+    {
+	delete diskspacePopup;
     }
 }
 
@@ -1230,17 +1233,7 @@ bool PackageSelector::PackageListHandler( const NCursesEvent&  event )
 // 
 bool PackageSelector::DiskinfoHandler( const NCursesEvent&  event )
 {
-    return true;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-// DiskspaceHandler
-// 
-// Show the required disk space
-//
-bool PackageSelector::DiskspaceHandler( const NCursesEvent&  event )
-{
+    diskspacePopup->showInfoPopup();
     return true;
 }
 

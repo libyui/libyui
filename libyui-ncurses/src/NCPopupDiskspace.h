@@ -10,14 +10,14 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPopupInfo.h
+   File:       NCPopupDiskspace.h
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#ifndef NCPopupInfo_h
-#define NCPopupInfo_h
+#ifndef NCPopupDiskspace_h
+#define NCPopupDiskspace_h
 
 #include <iosfwd>
 
@@ -25,28 +25,25 @@
 #include <string>
 
 #include "NCPopup.h"
-#include "NCComboBox.h"
-#include "NCLabel.h"
-#include "NCRichText.h"
-#include "NCCheckBox.h"
-#include "NCPushButton.h"
 
-class YCPValue;
+class NCTable;
+class NCPushButton;
+
 
 ///////////////////////////////////////////////////////////////////
 //
-//	CLASS NAME : NCPopupInfo
+//	CLASS NAME : NCPopupDiskspace
 //
 //	DESCRIPTION :
 //
-class NCPopupInfo : public NCPopup {
+class NCPopupDiskspace : public NCPopup {
 
-    NCPopupInfo & operator=( const NCPopupInfo & );
-    NCPopupInfo            ( const NCPopupInfo & );
+    NCPopupDiskspace & operator=( const NCPopupDiskspace & );
+    NCPopupDiskspace            ( const NCPopupDiskspace & );
 
 private:
 
-    NCRichText * helpText;
+    NCTable * partitions;
     NCPushButton * okButton;
     int hDim;
     int vDim;
@@ -61,36 +58,22 @@ protected:
     
 public:
     
-    NCPopupInfo( const wpos at,
-		 const YCPString & headline,
-		 const YCPString & text,
-		 bool showOkButton = true );
+    NCPopupDiskspace( const wpos at);
     
-    virtual ~NCPopupInfo();
+    virtual ~NCPopupDiskspace();
 
     virtual long nicesize(YUIDimension dim);
 
-    void createLayout( const YCPString & headline,
-		       const YCPString & text,
-		       bool showOkButton );
+    void fillPartitionTable();
+    
+    void createLayout( const YCPString & headline );
 
     void showInfoPopup( );
 
-    void popup( ) {
-	initDialog();
-	showDialog();
-	activate ( true );
-    }
-
-    void popdown( ) {
-	activate ( false );
-	closeDialog();
-    }
-    
     void setNiceSize( int horiz, int vert ) { hDim = horiz; vDim = vert; }
 };
 
 ///////////////////////////////////////////////////////////////////
 
 
-#endif // NCPopupInfo_h
+#endif // NCPopupDiskspace_h

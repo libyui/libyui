@@ -88,6 +88,9 @@
 						 `HStretch(),
 						 // button label
 						 `HWeight(1, `PushButton(`id(`search), _("&Search") ) ),
+						 `HStretch(),
+						  // button label
+						 `HWeight(1, `PushButton(`id(`diskinfo), _("&Disk usage") ) ),
 					 	 `HStretch()
 						 ),
 					   `HSpacing(5.0),

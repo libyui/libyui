@@ -55,7 +55,6 @@ class NCTable : public YTable, public NCPadWidget {
 
     virtual NCPad * CreatePad();
 
-    virtual void itemAdded( vector<string> elements, int index );
     virtual void itemsCleared();
     virtual void cellChanged( int index, int colnum, const YCPString & newtext );
     
@@ -74,11 +73,13 @@ class NCTable : public YTable, public NCPadWidget {
     
     bool isImmediate() const { return immediate; }	// addey by gs
     void setHeader( const vector<string> & head ); 	// added by gs
-
+    
     void setBigList( const bool big ) { biglist = big; }
     void SetSepChar( const chtype colSepchar )  { pad->SetSepChar( colSepchar ); }
     void SetSepWidht( const unsigned sepwidth ) { pad->SetSepWidht( sepwidth ); }
     void SetHotCol( const int hcol )            { pad->SetHotCol( hcol ); }
+
+    virtual void itemAdded( vector<string> elements, int index );
 
     virtual long nicesize( YUIDimension dim );
     virtual void setSize( long newwidth, long newheight );
