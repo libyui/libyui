@@ -17,25 +17,13 @@
 
 /-*/
 
+
 #include "Y2CCNCursesUI.h"
-#include "Y2NCursesUIComponent.h"
 
-Y2CCNCursesUI::Y2CCNCursesUI()
-    : Y2ComponentCreator(Y2ComponentBroker::BUILTIN)
-{
-}
+// This is very important: We create one global variable of
+// Y2CCQt. Its constructor will register it automatically to
+// the Y2ComponentBroker, so that will be able to find it.
+// This all happens before main() is called!
 
-bool Y2CCNCursesUI::isServerCreator() const
-{
-  return true;
-}
+Y2CCNcursesUI g_y2ccncurses;
 
-Y2Component *Y2CCNCursesUI::create(const char *name) const
-{
-  if (!strcmp(name, "ncurses"))
-    return new Y2NCursesUIComponent();
-  else
-    return 0;
-}
-
-Y2CCNCursesUI g_y2ccncurses;

@@ -29,8 +29,7 @@
 
 #include <ycp/YCPString.h>
 #include <ycp/YCPVoid.h>
-#include <ycp/YCPParser.h>
-#include <ycp/YCPBlock.h>
+#include <ycp/Parser.h>
 
 
 ///////////////////////////////////////////////////////////////////
@@ -41,7 +40,8 @@
 //
 //	DESCRIPTION :
 //
-NCPackageSelector::NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
+NCPackageSelector::NCPackageSelector( Y2NCursesUIComponent *ui,
+				      NCWidget * parent,
 				      YWidgetOpt & opt, YUIDimension dimension,
 				      string floppyDevice )
     : NCSplit( parent, opt, dimension )
@@ -219,7 +219,8 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent & event )
 // 
 // Read a layout file (containing a YCPTerm)
 //
-YCPTerm NCPackageSelector::readLayoutFile( Y2NCursesUI *ui, const char * layoutFilename )
+YCPTerm NCPackageSelector::readLayoutFile( Y2NCursesUIComponent *ui,
+					   const char * layoutFilename )
 {
     YCPTerm   pkgLayout = YCPNull();
     
@@ -233,8 +234,11 @@ YCPTerm NCPackageSelector::readLayoutFile( Y2NCursesUI *ui, const char * layoutF
     {
 	NCMIL <<  "Loading layout file " << layoutFilename << endl;
     
-	YCPParser parser( layoutFile, layoutFilename );
-	YCPValue layout = parser.parse();
+	Parser parser( layoutFile, layoutFilename );
+	YCode *parsed_code = parser.parse ();
+	YCPValue layout = YCPNull ();
+	if (parsed_code != NULL)
+	    layout = parsed_code->evaluate (true);
 
 	if ( layout.isNull() )
 	{

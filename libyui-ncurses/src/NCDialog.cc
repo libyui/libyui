@@ -1312,7 +1312,7 @@ bool NCDialog::describeFunctionKeys( string & helpText )
 	    {
 		// Retrieve the widget's "shortcut property" that describes
 		// whatever it is - regardless of widget type (PushButton, ...)
-		YCPSymbol propertyName( w->shortcutProperty(), true );
+		YCPSymbol propertyName( w->shortcutProperty() );
 		YCPValue  propertyValue = w->queryWidget( propertyName );
 
 		// Get rid of unwanted '&' shortcut markers

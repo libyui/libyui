@@ -20,7 +20,6 @@ liby2ncurses_la_LIBADD = $(libpy2ncurses_la_LIBADD)
 liby2ncurses_la_SOURCES =				\
 	stdutil.h					\
 	NCi18n.h					\
-	Y2NCursesUI.h Y2NCursesUI.cc			\
 	Y2Log.h Y2Log.cc				\
 	tnode.h	position.h position.cc			\
 	NCtext.h NCtext.cc				\

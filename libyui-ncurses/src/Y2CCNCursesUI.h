@@ -21,9 +21,11 @@
 #ifndef _Y2CCNCursesUI_h
 #define _Y2CCNCursesUI_h
 
+
+#include "Y2NCursesUIComponent.h"
 #include <iosfwd>
 
-#include <y2/Y2ComponentCreator.h>
+#include "ycp/y2log.h"
 
 /**
  * @short Y2ComponentCreator that can create ncursesui user interfaces
@@ -32,19 +34,19 @@
  * such a component - returns a newly created component of this
  * type. The Y2CCNCursesUI can create components with the name "ncursesui".
  */
-class Y2CCNCursesUI : public Y2ComponentCreator
+class Y2CCNcursesUI : public Y2ComponentCreator
 {
 public:
    /**
     * Creates a NCursesUI component creator
     */
-   Y2CCNCursesUI();
+    Y2CCNcursesUI() : Y2ComponentCreator(Y2ComponentBroker::BUILTIN) { };
 
    /**
     * Returns true, since the NCursesUI component is a
     * YaST2 server.
     */
-   bool isServerCreator() const;
+    bool isServerCreator() const { return true; };
 
    /**
     * Creates a new NCursesUI Userinterface component, if it
@@ -53,7 +55,15 @@ public:
     * if this is "NCursesUI", the NCursesUI component will be created.
     * Otherwise 0 is returned.
     */
-   Y2Component *create(const char *name) const;
+    Y2Component *create(const char * name) const
+    {
+        y2internal( "Creating %s component", name );
+        if (!strcmp(name, "ncurses") ) {
+            Y2Component* r = new Y2NCursesUIComponent(0, 0, false, 0);
+            return r;
+        }
+        else return 0;
+    }
 };
 
 #endif // Y2CCNCursesUI_h

@@ -37,8 +37,8 @@
 //
 YCPValue PkgNames::createIdValue ( const std::string &name )
 {
-    YCPTerm id( name, true);
-    return id->symbol(); 
+    YCPTerm id( name );
+    return YCPString (id->name()); 
 }
 
 //

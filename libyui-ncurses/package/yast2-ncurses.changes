@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Jan 16 15:59:46 CET 2004 - jsrain@suse.de
+
+- merged the new interpreter branch
+
+-------------------------------------------------------------------
 Fri Dec 12 20:46:22 CET 2003 - msvec@suse.cz
 
 - adapted for the logging changes in liby2util

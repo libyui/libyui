@@ -52,8 +52,7 @@
 
 #include <ycp/YCPString.h>
 #include <ycp/YCPVoid.h>
-#include <ycp/YCPParser.h>
-#include <ycp/YCPBlock.h>
+#include <ycp/Parser.h>
 
 using namespace std;
 using std::string;
@@ -85,7 +84,7 @@ bool ic_compare ( char c1, char c2 )
 //
 // Constructor
 //
-PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt, string floppyDevice )
+PackageSelector::PackageSelector( Y2NCursesUIComponent * ui, YWidgetOpt & opt, string floppyDevice )
     : y2ui( ui )
       , visibleInfo( YCPNull() )
       , filterPopup( 0 )
@@ -1008,11 +1007,14 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
     if ( visibleInfo->compare( PkgNames::Versions() ) == YO_EQUAL )
     {
 	// show the package table
-	const char * tableLayout = "`ReplacePoint( `id(`replaceinfo), `PkgSpecial( `id(`availpkgs), `opt(`notify), \"pkgTable\" ) )"; 
-	YCPParser parser( tableLayout );
-	YCPValue layout = parser.parse();
-	
-	y2ui->evaluateReplaceWidget( layout->asTerm() );
+	const char * tableLayout = "`PkgSpecial( `id(`availpkgs), `opt(`notify), \"pkgTable\" )"; 
+	Parser parser( tableLayout );
+	YCode *parsed_code = parser.parse ();
+	YCPValue layout = YCPNull ();
+	if (parsed_code != NULL)
+	    layout = parsed_code->evaluate (true);
+
+	y2ui->evaluateReplaceWidget( YCPSymbol ("replaceinfo"), layout->asTerm() );
 
 	NCPkgTable * pkgAvail = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::AvailPkgs(), true));
 
@@ -1031,11 +1033,14 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
     else if ( visibleInfo->compare( PkgNames::PatchPackages() ) == YO_EQUAL )
     {
         // show the package table
-	const char * tableLayout = "`ReplacePoint( `id(`replaceinfo), `PkgSpecial( `id(`patchpkgs), `opt(`notify), \"pkgTable\" ) )"; 
-	YCPParser parser( tableLayout );
-	YCPValue layout = parser.parse();
-	
-	y2ui->evaluateReplaceWidget( layout->asTerm() );
+	const char * tableLayout = "`PkgSpecial( `id(`patchpkgs), `opt(`notify), \"pkgTable\" )"; 
+	Parser parser( tableLayout );
+	YCode *parsed_code = parser.parse ();
+	YCPValue layout = YCPNull ();
+	if (parsed_code != NULL)
+	    layout = parsed_code->evaluate (true);
+
+	y2ui->evaluateReplaceWidget( YCPSymbol ("replaceinfo"), layout->asTerm() );
 
 	NCPkgTable * patchPkgs = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::PatchPkgs(), true));
 
@@ -1054,11 +1059,14 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
     else
     {
 	// show the rich text widget
-	const char * textLayout = "`ReplacePoint( `id(`replaceinfo), `RichText( `id(`description), \" \") )"; 
-	YCPParser parser( textLayout );
-	YCPValue layout = parser.parse();
-	
-	y2ui->evaluateReplaceWidget( layout->asTerm() );
+	const char * textLayout = "`RichText( `id(`description), \" \")"; 
+	Parser parser( textLayout );
+	YCode *parsed_code = parser.parse ();
+	YCPValue layout = YCPNull ();
+	if (parsed_code != NULL)
+	    layout = parsed_code->evaluate (true);
+
+	y2ui->evaluateReplaceWidget( YCPSymbol ("replaceinfo"), layout->asTerm() );
     
 	packageList->showInformation( );
     }
@@ -1096,7 +1104,7 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 	if ( autoCheck )
 	{
 	    sprintf ( menu,
-		      "`ReplacePoint( `id(`replacemenu),`MenuButton( \"%s\", [`menu( \"%s\", [`item( `id(`showdeps), \"%s\" ), `item( `id(`autodeps), \"%s\" ) ] ), `menu( \"%s\", [`item( `id(`save), \"%s\" ), `item( `id(`load), \"%s\" ) ] ) ] ) )",
+		      "MenuButton( \"%s\", [`menu( \"%s\", [`item( `id(`showdeps), \"%s\" ), `item( `id(`autodeps), \"%s\" ) ] ), `menu( \"%s\", [`item( `id(`save), \"%s\" ), `item( `id(`load), \"%s\" ) ] ) ] )",
 		      PkgNames::MenuEtc().c_str(),
 		      PkgNames::MenuDeps().c_str(),
 		      PkgNames::MenuCheckDeps().c_str(),
@@ -1106,16 +1114,19 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 		      PkgNames::MenuLoadSel().c_str()  ); 
 
 
-	    YCPParser parser( menu );
-	    YCPValue layout = parser.parse();
+	    Parser parser( menu );
+	    YCode *parsed_code = parser.parse ();
+	    YCPValue layout = YCPNull ();
+	    if (parsed_code != NULL)
+		layout = parsed_code->evaluate (true);
 	
-	    y2ui->evaluateReplaceWidget( layout->asTerm() );
+	    y2ui->evaluateReplaceWidget( YCPSymbol ("replacemenu"), layout->asTerm() );
 	    autoCheck = false;
 	}
 	else
 	{
 	    sprintf ( menu,
-		      "`ReplacePoint( `id(`replacemenu),`MenuButton( \"%s\", [`menu( \"%s\", [`item( `id(`showdeps), \"%s\" ), `item( `id(`autodeps), \"%s\" ) ] ), `menu( \"%s\", [`item( `id(`save), \"%s\" ), `item( `id(`load), \"%s\" ) ] ) ] ) )",
+		      "`MenuButton( \"%s\", [`menu( \"%s\", [`item( `id(`showdeps), \"%s\" ), `item( `id(`autodeps), \"%s\" ) ] ), `menu( \"%s\", [`item( `id(`save), \"%s\" ), `item( `id(`load), \"%s\" ) ] ) ] )",
 		      PkgNames::MenuEtc().c_str(),
 		      PkgNames::MenuDeps().c_str(),
 		      PkgNames::MenuCheckDeps().c_str(),
@@ -1124,10 +1135,14 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 		      PkgNames::MenuSaveSel().c_str(),
 		      PkgNames::MenuLoadSel().c_str()  ); 
 
-	    YCPParser parser( menu );
-	    YCPValue layout = parser.parse();
+
+	    Parser parser( menu );
+	    YCode *parsed_code = parser.parse ();
+	    YCPValue layout = YCPNull ();
+	    if (parsed_code != NULL)
+		layout = parsed_code->evaluate (true);
 	
-	    y2ui->evaluateReplaceWidget( layout->asTerm() );	
+	    y2ui->evaluateReplaceWidget( YCPSymbol ("replacemenu"), layout->asTerm() );	
 	    autoCheck = true;	
 	}
     }
@@ -1539,7 +1554,7 @@ bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 	    Y2PM::selectionManager().RestoreState();
 
 	NCMIL <<  "Cancel button pressed - leaving package selection" << endl;
-	const_cast<NCursesEvent &>(event).result = YCPSymbol("cancel", true);
+	const_cast<NCursesEvent &>(event).result = YCPSymbol("cancel");
     
 	// return false, which means stop the event loop (see runPkgSelection)
 	return false;
@@ -1609,7 +1624,7 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	else
 	    Y2PM::selectionManager().ClearSaveState();
 
-	const_cast<NCursesEvent &>(event).result = YCPSymbol("accept", true); 
+	const_cast<NCursesEvent &>(event).result = YCPSymbol("accept"); 
 	NCMIL <<  "OK button pressed - leaving package selection, starting installation" << endl;
 
         // return false, leave the package selection	
