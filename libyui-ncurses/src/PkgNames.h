@@ -343,15 +343,20 @@ public:
      * The headline of the dependency popup
      */
     static const NCstring PackageDeps();
+    static const NCstring SelectionDeps();
 
     static const NCstring LabelUnres1();
     static const NCstring LabelUnres2();
     static const NCstring LabelAlternative();
     static const NCstring LabelConflict1();
     static const NCstring LabelConflict2();
+    static const NCstring LabelSelConflict2();
     static const NCstring LabelRequBy1();
+    static const NCstring LabelSelRequBy1();
     static const NCstring LabelRequBy2();
+    static const NCstring LabelSelRequBy2();
     static const NCstring LabelRequire1();
+    static const NCstring LabelSelRequire1();
     static const NCstring LabelRequire2();
     static const NCstring LabelUnresolvable();
     static const NCstring WarningLabel();

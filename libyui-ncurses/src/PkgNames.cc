@@ -546,6 +546,13 @@ const NCstring PkgNames::PackageDeps()
     return value;
 }
 
+const NCstring PkgNames::SelectionDeps()
+{
+    // the headline of the popup showing dependencies between selections of packages 
+    static const NCstring value = _("Selection dependencies");
+    return value;
+}
+
 const NCstring PkgNames::Solving()
 {
     // a label for a popup which is shown during package dependency checking
@@ -680,10 +687,24 @@ const NCstring PkgNames::LabelConflict2()
     return value;
 }
 
+const NCstring PkgNames::LabelSelConflict2()
+{
+      // text part 2 describing package conflict (it's a label - keep it short)
+    static const NCstring value = _( "deselecting) the unwanted selection(s)." );
+    return value;
+}
+
 const NCstring PkgNames::LabelRequBy1()
 {
     // text part 1 describing package does not work (it's a label - keep it short)
     static const NCstring value = _( "The packages below will not work without" );
+    return value;
+}
+
+const NCstring PkgNames::LabelSelRequBy1()
+{
+    // text part 1 describing package does not work (it's a label - keep it short)
+    static const NCstring value = _( "The selection(s) below will not work without" );
     return value;
 }
 
@@ -694,10 +715,23 @@ const NCstring PkgNames::LabelRequBy2()
     return value;
 }
 
+const NCstring PkgNames::LabelSelRequBy2()
+{
+    // text part 2 describing packages does not work (it's a label - keep it short)
+    static const NCstring value = _( "the selection you want to delete." );
+    return value;
+}
+
 const NCstring PkgNames::LabelRequire1()
 {
     // text part 1 describing packages are not available (it's a label - keep it short)
     static const NCstring value = _( "The required libraries or packages" );
+    return value;
+}
+const NCstring PkgNames::LabelSelRequire1()
+{
+    // text part 1 describing selections are not available (it's a label - keep it short)
+    static const NCstring value = _( "The required selections" );
     return value;
 }
 
