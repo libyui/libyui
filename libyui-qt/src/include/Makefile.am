@@ -82,7 +82,9 @@ noinst_HEADERS =				\
 	QY2DiskUsageList.h			\
 	QY2FloppyMountDialog.h			\
 	QY2ListView.h				\
-	QY2LayoutUtils.h
+	QY2LayoutUtils.h			\
+						\
+	qxembed.h
 
 
 CLEANFILES = y2qt.kdoc
