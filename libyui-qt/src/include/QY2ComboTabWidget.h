@@ -68,7 +68,7 @@ signals:
 
     /**
      * Emitted when the current page changes.
-     * NOT emitted initially for the very first page is shown.
+     * NOT emitted initially for the very first page that is shown.
      **/
     void currentChanged( QWidget * newCurrentPage );
 
