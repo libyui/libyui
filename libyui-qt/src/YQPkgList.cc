@@ -72,7 +72,7 @@ YQPkgList::YQPkgList( YUIQt *yuiqt, QWidget *parent )
 
     connect( this, 	SIGNAL( selectionChanged        ( QListViewItem * ) ),
 	     this, 	SLOT  ( selectionChangedInternal( QListViewItem * ) ) );
-    
+
     connect( header(),	SIGNAL( sizeChange		( int, int, int ) ),
 	     this,	SLOT  ( columnWidthChanged	( int, int, int ) ) );
 }
@@ -100,7 +100,7 @@ YQPkgList::slotPkgClicked( int button, YQPkg * pkg, int col )
 	{
 	    if ( col == srpmStatusCol() )
 	    {
-		pkg->cycleSrpmStatus();
+		pkg->toggleSourceRpmStatus();
 	    }
 	    else if ( col == statusCol() )
 		      // || col == nameCol() )
@@ -116,7 +116,7 @@ void
 YQPkgList::selectSomething()
 {
     QListViewItem * item = firstChild();
-    
+
     if ( item )
     {
 	setSelected( item, true );
@@ -212,7 +212,7 @@ YQPkgList::saveColumnWidths()
 {
     _savedColumnWidth.clear();
     _savedColumnWidth.reserve( columns() );
-    
+
     for ( int i = 0; i < columns(); i++ )
     {
 	_savedColumnWidth.push_back( columnWidth( i ) );
@@ -230,7 +230,7 @@ YQPkgList::restoreColumnWidths()
 		 _savedColumnWidth.size(), columns() );
 	return;
     }
-    
+
     for ( int i = 0; i < columns(); i++ )
     {
 	setColumnWidth( i, _savedColumnWidth[ i ] );
@@ -272,7 +272,7 @@ YQPkg::YQPkg( YQPkgList * pkgList, PMPackagePtr pkg )
 {
     pkg->startRetrieval();	// Just a hint to speed things up a bit
     _isInstalled = pkg->hasInstalledObj();
-    
+
     setText( nameCol(),		pkg->name()		  );
     setText( summaryCol(),	pkg->summary()		  );
     setText( sizeCol(),		pkg->size().form() + "  " );
@@ -289,12 +289,12 @@ YQPkg::YQPkg( YQPkgList * pkgList, PMPackagePtr pkg )
     {
 	setText( versionCol(),	pkg->edition() );
     }
-    
-    _haveSrpm	 = true;	// FIXME - get this from the package!
-    
-    setStatus( _isInstalled ? YQPkgKeepInstalled : YQPkgNoInst );
-    setSrpmStatus( YQPkgNoInst ); // No other chance - RPM won't tell if a SRPM is installed
-    
+
+    _haveSourceRpm	 = true;	// FIXME - get this from the package!
+
+    setStatusIcon();
+    setInstallSourceRpm( false ); // No other chance - RPM won't tell if a SRPM is installed
+
     pkg->stopRetrieval();
 }
 
@@ -324,32 +324,45 @@ YQPkg::setText( int column, const PkgEdition & edition )
 }
 
 
-void
-YQPkg::setStatus( YQPkgStatus newStatus )
+PMSelectable::UI_Status
+YQPkg::status() const
 {
-    _status = newStatus;
+    if ( ! _pkg )
+    {
+	y2error( "NULL package" );
+	return isInstalled() ? PMSelectable::S_KeepInstalled : PMSelectable::S_NoInst;
+    }
+
+    return _pkg->getSelectable()->status();
+}
+
+
+void
+YQPkg::setStatus( PMSelectable::UI_Status newStatus )
+{
+    _pkg->getSelectable()->set_status( newStatus );
+    setStatusIcon();
+}
+
+
+void
+YQPkg::setStatusIcon()
+{
     QPixmap icon = YQIconPool::pkgNoInst();
-    const char *badStatus = 0;
 
     switch ( status() )
     {
-        case YQPkgTaboo:		icon = YQIconPool::pkgTaboo();		break;
-        case YQPkgDel:			icon = YQIconPool::pkgDel();		break;
-        case YQPkgUpdate:		icon = YQIconPool::pkgUpdate();		break;
-        case YQPkgInstall:		icon = YQIconPool::pkgInstall();	break;
-        case YQPkgAuto:			icon = YQIconPool::pkgAuto();		break;
-        case YQPkgKeepInstalled:	icon = YQIconPool::pkgKeepInstalled();	break;
-        case YQPkgNoInst:		icon = YQIconPool::pkgNoInst();		break;
+        case PMSelectable::S_Taboo:		icon = YQIconPool::pkgTaboo();		break;
+        case PMSelectable::S_Del:		icon = YQIconPool::pkgDel();		break;
+        case PMSelectable::S_Update:		icon = YQIconPool::pkgUpdate();		break;
+        case PMSelectable::S_Install:		icon = YQIconPool::pkgInstall();	break;
+        case PMSelectable::S_AutoDel:		icon = YQIconPool::pkgAutoDel();	break;
+        case PMSelectable::S_Auto:		icon = YQIconPool::pkgAuto();		break;
+        case PMSelectable::S_KeepInstalled:	icon = YQIconPool::pkgKeepInstalled();	break;
+        case PMSelectable::S_NoInst:		icon = YQIconPool::pkgNoInst();		break;
 
 	    // Intentionally omitting 'default' branch so the compiler can
 	    // catch unhandled enum states
-    }
-
-    if ( badStatus )
-    {
-	_status = YQPkgNoInst;
-	icon = YQIconPool::pkgNoInst();
-	y2error( "Ignoring invalid package status %s", badStatus );
     }
 
     setPixmap( statusCol(), icon );
@@ -357,69 +370,44 @@ YQPkg::setStatus( YQPkgStatus newStatus )
 
 
 void
-YQPkg::setSrpmStatus( YQPkgStatus newSrpmStatus )
+YQPkg::setInstallSourceRpm( bool installSourceRpm )
 {
-    _srpmStatus = newSrpmStatus;
-    QPixmap icon;
-    const char *badStatus = 0;
+    _installSourceRpm = installSourceRpm;
 
-    if ( _haveSrpm )
+    if ( _haveSourceRpm )
     {
-	switch ( srpmStatus() )
-	{
-	    case YQPkgInstall:		icon = YQIconPool::pkgInstall();	break;
-	    case YQPkgNoInst:		icon = YQIconPool::pkgNoInst();		break;
-	    
-	    case YQPkgTaboo:		badStatus = "YQPkgTaboo";		break;	
-	    case YQPkgDel:		badStatus = "YQPkgDel";			break;	
-	    case YQPkgUpdate:		badStatus = "YQPkgUpdate";		break;	
-	    case YQPkgAuto:		badStatus = "YQPkgAuto";		break;	
-	    case YQPkgKeepInstalled:	badStatus = "YQPkgKeepInstalled";	break;	
-	    
-		// Intentionally omitting 'default' branch so the compiler can
-		// catch unhandled enum states
-	}
-
-	if ( badStatus )
-	{
-	    _srpmStatus = YQPkgNoInst;
-	    icon = YQIconPool::checkMarkOff();
-	    y2error( "Ignoring invalid SRPM status %s", badStatus );
-	}
+	setPixmap( srpmStatusCol(),
+		   _installSourceRpm ? YQIconPool::pkgInstall() : YQIconPool::pkgNoInst() );
     }
-    else
-    {
-	icon = QPixmap();
-    }
-
-
-    setPixmap( srpmStatusCol(), icon );
 }
 
 
 void
 YQPkg::cycleStatus()
 {
-    YQPkgStatus newStatus = status();
+    PMSelectable::UI_Status oldStatus = status();
+    PMSelectable::UI_Status newStatus = oldStatus;
 
     if ( isInstalled() )
     {
-	switch ( status() )
+	switch ( oldStatus )
 	{
-	    case YQPkgKeepInstalled:	newStatus = YQPkgUpdate;	break;
-	    case YQPkgUpdate:		newStatus = YQPkgDel;		break;
-	    case YQPkgDel:		newStatus = YQPkgKeepInstalled;	break;
-	    default:			newStatus = YQPkgKeepInstalled;	break;
+	    case PMSelectable::S_KeepInstalled:	newStatus = _pkg->hasCandidateObj() ?
+						    PMSelectable::S_Update : PMSelectable::S_Del;
+						break;
+	    case PMSelectable::S_Update:	newStatus = PMSelectable::S_Del;		break;
+	    case PMSelectable::S_Del:		newStatus = PMSelectable::S_KeepInstalled;	break;
+	    default:				newStatus = PMSelectable::S_KeepInstalled;	break;
 	}
     }
     else	// pkg not installed
     {
-	switch ( status() )
+	switch ( oldStatus )
 	{
-	    case YQPkgNoInst:	newStatus = YQPkgInstall;	break;
-	    case YQPkgInstall:	newStatus = YQPkgNoInst;	break;
-	    case YQPkgAuto:	newStatus = YQPkgNoInst;	break;
-	    default:		newStatus = YQPkgNoInst;	break;
+	    case PMSelectable::S_NoInst:	newStatus = PMSelectable::S_Install;	break;
+	    case PMSelectable::S_Install:	newStatus = PMSelectable::S_NoInst;	break;
+	    case PMSelectable::S_Auto:		newStatus = PMSelectable::S_NoInst;	break;
+	    default:				newStatus = PMSelectable::S_NoInst;	break;
 
 		// Intentionally NOT cycling through YQPkgTaboo:
 		// This status is not common enough for that.
@@ -431,10 +419,10 @@ YQPkg::cycleStatus()
 
 
 void
-YQPkg::cycleSrpmStatus()
+YQPkg::toggleSourceRpmStatus()
 {
-    if ( _haveSrpm )
-	setSrpmStatus( srpmStatus() == YQPkgNoInst ? YQPkgInstall : YQPkgNoInst );
+    if ( _haveSourceRpm )
+	setInstallSourceRpm( ! _installSourceRpm );
 }
 
 
@@ -478,19 +466,19 @@ YQPkg::compare( QListViewItem *		otherListViewItem,
     else if ( col == statusCol() )
     {
 	// Sorting by status depends on the numeric value of the
-	// YQPkgStatus enum, thus it is important to insert new package states
-	// there where they make most sense. We want to show dangerous or
-	// noteworthy states first (e.g., "taboo" which should seldeom occur, but
-	// when it does, it is important).
-
+	// PMSelectable::UI_Status enum, thus it is important to insert new
+	// package states there where they make most sense. We want to show
+	// dangerous or noteworthy states first (e.g., "taboo" which should
+	// seldeom occur, but when it does, it is important).
+	
 	if ( this->status() < other->status() ) return -1;
 	if ( this->status() > other->status() ) return 1;
 	return 0;
     }
     else if ( col == srpmStatusCol() )
     {
-	if ( this->srpmStatus() < other->srpmStatus() ) return -1;
-	if ( this->srpmStatus() > other->srpmStatus() ) return 1;
+	if (   this->installSourceRpm() && ! other->installSourceRpm() ) return -1;
+	if ( ! this->installSourceRpm() &&   other->installSourceRpm() ) return 1;
 	return 0;
     }
     else

@@ -30,20 +30,6 @@
 class YQPkg;	// shorter name than "YQPkgListItem"
 class YUIQt;
 
-enum YQPkgStatus
-{
-    // Keep this order, it's used for sorting package lists!
-    // Dangerous / noteworthy states are sorted first.
-
-    YQPkgTaboo,		// Never install this
-    YQPkgDel,		// Will be deleted
-    YQPkgUpdate,	// Will be updated
-    YQPkgInstall,	// Will be installed upon explicit user request
-    YQPkgAuto,		// Will be automatically installed
-    YQPkgKeepInstalled,	// Is installed - keep this version
-    YQPkgNoInst		// Is not installed and will not be installed
-};
-
 
 class YQPkgList : public QListView
 {
@@ -237,23 +223,29 @@ public:
     /**
      * Returns the (binary RPM) package status
      **/
-    YQPkgStatus status() const { return _status; }
+    PMSelectable::UI_Status status() const;
 
     /**
-     * Returns the source RPM package status
+     * Returns the source RPM package status:
+     * Should the source RPM be installed?
      **/
-    YQPkgStatus srpmStatus() const { return _srpmStatus; }
+    bool installSourceRpm() const { return _installSourceRpm; }
 
 
     /**
      * Set the (binary RPM) package status
      **/
-    void setStatus( YQPkgStatus newStatus );
+    void setStatus( PMSelectable::UI_Status newStatus );
 
+    /**
+     * Set a status icon according to the package's status
+     **/
+    void setStatusIcon();
+    
     /**
      * Set the source RPM status
      **/
-    void setSrpmStatus( YQPkgStatus newSrpmStatus );
+    void setInstallSourceRpm( bool installSourceRpm );
 
     /**
      * Cycle the package status to the next valid value
@@ -263,7 +255,7 @@ public:
     /**
      * Cycle the source package status to the next valid value
      **/
-    void cycleSrpmStatus();
+    void toggleSourceRpmStatus();
 
     /**
      * Set a column text via STL string
@@ -319,9 +311,8 @@ protected:
 
     // FIXME
     // Preliminary - those are PMObject attributes!
-    YQPkgStatus		_status;
-    YQPkgStatus		_srpmStatus;
-    bool		_haveSrpm;
+    bool		_installSourceRpm;
+    bool		_haveSourceRpm;
 };
 
 
