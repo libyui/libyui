@@ -229,6 +229,20 @@ YQPkgVersion::~YQPkgVersion()
 }
 
 
+QString
+YQPkgVersion::toolTip( int )
+{
+    QString tip;
+    
+    if ( _pmObj->hasInstalledObj() )
+    {
+	tip = _( "This version is installed in your system." );
+    }
+
+    return tip;
+}
+
+
 /**
  * Comparison function used for sorting the list.
  * Returns:

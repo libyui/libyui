@@ -168,6 +168,15 @@ public:
 			 int			col,
 			 bool			ascending ) const;
 
+    /**
+     * Returns a tool tip text for a specific column of this item.
+     * 'column' is -1 if the mouse pointer is in the tree indentation area.
+     *
+     * Reimplemented from QY2CheckListItem.
+     **/
+    virtual QString toolTip( int column );
+
+    
     // Columns
 
     int versionCol()		const	{ return _pkgVersionList->versionCol();	}

@@ -99,7 +99,7 @@ public slots:
 signals:
 
     /**
-     * Emitted for mouse clicks on a package
+     * Emitted for mouse clicks on an item
      **/
     void columnClicked		( int			button,
 				  QListViewItem *	item,
@@ -107,7 +107,7 @@ signals:
 				  const QPoint &	pos );
 
     /**
-     * Emitted for mouse double clicks on a package
+     * Emitted for mouse double clicks on an item
      **/
     void columnDoubleClicked	( int			button,
 				  QListViewItem *	item,

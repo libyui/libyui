@@ -1222,15 +1222,5 @@ QString YUIQt::askForSaveFileName( const QString & startWith,
 }
 
 
-QString YUIQt::askForSaveFileName( const char * startWith,
-				   const char * filter,
-				   const char * headline )
-{
-    return askForSaveFileName( QString( startWith ),
-			       QString( filter ),
-			       QString( headline ) );
-}
-
-
 
 #include "YUIQt.moc.cc"

@@ -22,6 +22,8 @@
 #ifndef YQPkgConflictList_h
 #define YQPkgConflictList_h
 
+
+#include <stdio.h>
 #include <qmap.h>
 #include <y2pm/PkgDep.h>
 #include <y2pm/PMSelectable.h>
@@ -102,6 +104,40 @@ public slots:
      * conflict to ignore.
      **/
     void resetIgnoredConflicts();
+
+    /**
+     * Ask for a file name and save the current conflict list to file.
+     **/
+    void askSaveToFile() const;
+
+    
+public:
+    
+    /**
+     * Save the conflict list in its current state to a file. Retains the
+     * current 'expanded' state, i.e. writes only those entries that are
+     * currently open (not collapsed) in the tree.
+     *
+     * Posts error popups if 'interactive' is 'true' (only log entries
+     * otherwise). 
+     **/
+    void saveToFile( const QString filename, bool interactive ) const;
+
+    
+protected:
+
+    /**
+     * (Recursively) save one item to file.
+     **/
+    void saveItemToFile( FILE * file, const QListViewItem * item ) const;
+    
+    /**
+     * Event handler for keyboard input.
+     * Only very special keys are processed here.
+     *
+     * Reimplemented from QListView / QWidget.
+     */
+    virtual void keyPressEvent( QKeyEvent * ev );
 
 
 signals:

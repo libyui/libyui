@@ -21,6 +21,8 @@
 
 #include <qpainter.h>
 #include <qpixmap.h>
+#include <qdatetime.h>
+#include <qmessagebox.h>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
@@ -139,11 +141,151 @@ YQPkgConflictList::resetIgnoredConflicts()
 }
 
 
+void
+YQPkgConflictList::askSaveToFile() const
+{
+    QString filename = YUIQt::yuiqt()->askForSaveFileName( "conflicts.txt",	// startsWith
+							   "*.txt",		// filter
+							   _( "Save conflicts list" ) );
+    if ( ! filename.isEmpty() )
+	saveToFile( filename, true );
+}
+
+
+void
+YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
+{
+    // Open file
+
+    FILE * file = fopen( (const char *) filename, "w" );
+
+    if ( ! file )
+    {
+	y2error( "Can't open file %s", (const char *) filename );
+
+	if ( interactive )
+	{
+	    // Post error popup.
+
+	    QMessageBox::warning( 0,						// parent
+				  _( "Error" ),					// caption
+				  _( "Can't open file %1" ).arg( filename ),
+				  QMessageBox::Ok | QMessageBox::Default,	// button0
+				  QMessageBox::NoButton,			// button1
+				  QMessageBox::NoButton );			// button2
+	}
+	return;
+    }
+
+
+    // Write header
+
+    QString header = "#### YaST2 conflicts list - generated ";
+    header += QDateTime::currentDateTime().toString( "yyyy-MM-dd hh:mm:ss");
+    header += " ####\n\n";
+    
+    fputs( (const char *) header, file );
+
+
+    // Recursively write all items
+
+    const QListViewItem * item = firstChild();
+
+    while ( item )
+    {
+	saveItemToFile( file, item );
+	item = item->nextSibling();
+    }
+
+
+    // Write footer
+
+    fprintf( file, "\n#### YaST2 conflicts list END ###\n" );
+
+
+    // Clean up
+
+    if ( file )
+	fclose( file );
+}
+
+
+void
+YQPkgConflictList::saveItemToFile( FILE * 			file,
+				   const QListViewItem * 	item ) const
+{
+    if ( ! item || ! file )
+	return;
+
+    // Write indentation
+
+    for ( int level = 0; level < item->depth(); level++ )
+	fprintf( file, "    " );
+
+    
+    // Write item
+
+    const QCheckListItem * checkListItem = dynamic_cast<const QCheckListItem *> (item);
+
+    if ( checkListItem )
+    {
+	switch ( checkListItem->type() )
+	{
+	    case QCheckListItem::CheckBox:
+		fprintf( file, "[%c] ", checkListItem->isOn() ? 'x' : ' ' );
+		break;
+	    case QCheckListItem::RadioButton:
+		fprintf( file, "(%c) ", checkListItem->isOn() ? 'x' : ' ' );
+		break;
+	    default:
+		break;
+	}
+    }
+
+    fprintf( file, "%s\n", (const char *) item->text( 0 ) );
+
+
+    if ( item->isOpen() )
+    {
+	// Recursively write children
+
+	const QListViewItem * child = item->firstChild();
+
+	while ( child )
+	{
+	    saveItemToFile( file, child );
+	    child = child->nextSibling();
+	}
+    }
+}
+
+
+void
+YQPkgConflictList::keyPressEvent( QKeyEvent *event )
+{
+    unsigned yast2_special_combo = ( Qt::ControlButton | Qt::ShiftButton | Qt::AltButton );
+
+    if ( ( event->state() & yast2_special_combo ) == yast2_special_combo )
+    {
+	// Qt-UI special keys - all with Ctrl-Shift-Alt
+
+	y2milestone( "Caught YaST2 magic key combination" );
+
+	if ( event->key() == Qt::Key_S )
+	{
+	    askSaveToFile();
+	    return;
+	}
+    }
+
+    QWidget::keyPressEvent( event );
+}
 
 
 
-
+// The conflict ignore list
 QMap<QString, bool> YQPkgConflict::_ignore;
+
 
 
 YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,

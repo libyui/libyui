@@ -307,6 +307,8 @@ protected:
     /*** END widget creation methods ***/
 
 
+public:
+    
     /**
      *
      * Open a directory selection box and prompt the user for an existing directory.
@@ -366,14 +368,9 @@ protected:
     QString askForSaveFileName( const QString & startWith,
 				const QString & filter,
 				const QString & headline );
-
-    /**
-     * Overloaded version to work const char *
-     **/
-    QString askForSaveFileName( const char * startWith,
-				const char * filter,
-				const char * headline );
     
+protected:
+
     /**
      * Sets the X input method according to the locale.
      * [Inherited from YUIInterpreter]
