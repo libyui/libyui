@@ -118,8 +118,7 @@ YQPkgList::pkgObjClicked( int			button,
 	    {
 		if ( editable() && item->editable() )
 		{
-		    actionInstallSourceRpm->setEnabled( item->hasSourceRpm() );
-		    actionDontInstallSourceRpm->setEnabled( item->hasSourceRpm() );
+		    updateActions( item );
 
 		    if ( _sourceRpmContextMenu )
 			_sourceRpmContextMenu->popup( pos );
@@ -230,6 +229,20 @@ YQPkgList::setInstallListSourceRpms( bool installSourceRpm )
     }
 }
 
+
+void
+YQPkgList::updateActions( YQPkgObjListItem * pkgObjListItem )
+{
+    YQPkgObjList::updateActions( pkgObjListItem );
+
+    YQPkgListItem * item = dynamic_cast<YQPkgListItem *> ( pkgObjListItem );
+
+    if ( item )
+    {
+	actionInstallSourceRpm->setEnabled( item->hasSourceRpm() );
+	actionDontInstallSourceRpm->setEnabled( item->hasSourceRpm() );
+    }
+}
 
 
 void

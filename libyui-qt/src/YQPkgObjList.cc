@@ -438,6 +438,13 @@ YQPkgObjList::installedContextMenu()
 
 
 void
+YQPkgObjList::updateActions()
+{
+    updateActions( dynamic_cast<YQPkgObjListItem *> ( selectedItem() ) );
+}
+
+
+void
 YQPkgObjList::updateActions( YQPkgObjListItem * item )
 {
     if ( !item ) return;

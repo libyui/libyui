@@ -83,6 +83,13 @@ public slots:
 				const QPoint &	pos );
 
     /**
+     * Update the internal actions: What actions are available for 'item'?
+     *
+     * Reimplemented from YQPkgObjList
+     **/
+    virtual void updateActions( YQPkgObjListItem * item );
+
+    /**
      * Reimplemented from QListView / QWidget:
      * Reserve a reasonable amount of space.
      **/

@@ -145,6 +145,14 @@ public slots:
     virtual void updateActions( YQPkgObjListItem * item );
 
     /**
+     * Update the internal actions for the currently selected item (if any).
+     * This only calls updateActions( YQPkgObjListItem * ) with the currently
+     * selected item as argument, so there is normally no need to reimplement
+     * this method, too, if the other one is reimplemented.
+     **/
+    virtual void updateActions();
+
+    /**
      * Select the next item, i.e. move the selection one item further down the
      * list.
      **/

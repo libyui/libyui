@@ -132,8 +132,8 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     CHECK_PTR( _pkgConflictDialog );
 
     basicLayout();
-    makeConnections();
     addMenus();		// Only after all widgets are created!
+    makeConnections();
     emit loadData();
 
     Y2PM::packageManager().SaveState();
@@ -578,7 +578,7 @@ YQPackageSelector::addMenus()
 
     // Note: The help functions and their texts are moved out
     // to a separate source file YQPackageSelectorHelp.cc
-    
+
     _helpMenu->insertItem( _( "&Overview" 	), this, SLOT( help() 		), Key_F1 );
     _helpMenu->insertItem( _( "&Symbols" 	), this, SLOT( symbolHelp() 	), SHIFT + Key_F1 );
     _helpMenu->insertItem( _( "&Keys" 		), this, SLOT( keyboardHelp() 	) );
@@ -655,6 +655,17 @@ YQPackageSelector::makeConnections()
     {
 	connect( _pkgVersionsView, 	SIGNAL( candidateChanged( PMObjectPtr ) ),
 		 _pkgList,		SLOT  ( updateToplevelItemData() ) );
+    }
+
+
+    //
+    // Update pkg actions just before opening the pkg menu
+    //
+
+    if ( _pkgMenu && _pkgList )
+    {
+	connect( _pkgMenu, SIGNAL( aboutToShow()   ),
+		 _pkgList, SLOT  ( updateActions() ) );
     }
 
 

@@ -41,7 +41,7 @@ YQPackageSelector::help()
     QString html = YQPkgTextDialog::htmlHeading( _( "The YaST2 Package Manager" ) );
 
     // Translators: Automatic word-wrapping.
-    html += para( _( "<b>Note:</b> This is an just a short  overview."
+    html += para( _( "<b>Note:</b> This is a just a short  overview."
 		     " Please refer to the manual for details." ) );
 
     if ( _youMode )
@@ -139,7 +139,7 @@ YQPackageSelector::symbolHelp()
 		     // Translators: Package status short (!) description
 		     _( "Don't install" ),
 		     // Translators: Automatic word-wrapping.
-		     _( "This package is not installed, and it will not be installed." ) );
+		     _( "This package is not installed and it will not be installed." ) );
 
     html += symHelp( "install.xpm",
 		     // Translators: Package status short (!) description
@@ -151,7 +151,7 @@ YQPackageSelector::symbolHelp()
 		     // Translators: Package status short (!) description
 		     _( "Keep" ),
 		     // Translators: Automatic word-wrapping.
-		     _( "This package is already installed. Keep it untouched." ) );
+		     _( "This package is already installed. Leave it untouched." ) );
 
     html += symHelp( "update.xpm",
 		     // Translators: Package status short (!) description
@@ -170,11 +170,11 @@ YQPackageSelector::symbolHelp()
 		     // Translators: Package status short (!) description
 		     _( "Taboo" ),
 		     // Translators: Automatic word-wrapping.
-		     _( "This package is not installed, and I don't want it under any circumstances -"
+		     _( "This package is not installed, and I do not want it under any circumstances -"
 			" in particular not because of unresolved dependencies that other packages"
 			" might have or get." )
 		     + " "
-		     + _( "Packages set to \"taboo\" are treated as if they didn't exist on any installation media." ) );
+		     + _( "Packages set to \"taboo\" are treated as if they did not exist on any installation media." ) );
 
 
     html += symHelp( "autoinstall.xpm",
@@ -241,7 +241,7 @@ YQPackageSelector::keyboardHelp()
 		     // Translators: Keyboard action short (!) description
 		     _( "Add" ),
 		     // Translators: Automatic word-wrapping.
-		     _( "Get this package. Install it if it isn't installed yet,"
+		     _( "Get this package. Install it if it is not installed yet,"
 			" update it to the latest version if it is installed "
 			" and there is a newer version." )
 		     + goto_next );
@@ -250,8 +250,8 @@ YQPackageSelector::keyboardHelp()
 		     // Translators: Keyboard action short (!) description
 		     _( "Remove" ),
 		     // Translators: Automatic word-wrapping.
-		     _( "Get rid of this package. Mark it as \"don't install\" "
-			"if it isn't installed yet, delete it if it is installed." )
+		     _( "Get rid of this package. Mark it as \"do not install\" "
+			"if it is not installed yet. Delete it if it is installed." )
 		     + goto_next );
 
     html += keyHelp( "&gt;",
@@ -275,11 +275,11 @@ YQPackageSelector::keyboardHelp()
 		     // Translators: Keyboard action short (!) description
 		     _( "Taboo" ),
 		     // Translators: Automatic word-wrapping.
-		     _( "Set this package to \"taboo\" if it isn't installed:"
-			" Make sure this package doesn't get installed, in particular not"
+		     _( "Set this package to \"taboo\" if it is not installed:"
+			" Make sure this package does not get installed, in particular not"
 			" because of unresolved dependencies that other packages might have or get. " )
 		     + " "
-		     + _( "Packages set to \"taboo\" are treated as if they didn't exist on any installation media." )
+		     + _( "Packages set to \"taboo\" are treated as if they did not exist on any installation media." )
 		     + "<br>"
 		     + goto_next );
 
