@@ -64,6 +64,7 @@ liby2qt_la_SOURCES = 				\
 	YQPkgTechnicalDetailsView.cc		\
 	YQPkgTextDialog.cc			\
 	YQPkgUpdateProblemFilterView.cc		\
+	YQPkgVersionsView.cc			\
 	YQPkgYouPatchFilterView.cc		\
 	YQPkgYouPatchList.cc			\
 	YQProgressBar.cc			\
@@ -142,6 +143,7 @@ BUILT_SOURCES =					\
 	YQPkgTechnicalDetailsView.moc.cc	\
 	YQPkgTextDialog.moc.cc			\
 	YQPkgUpdateProblemFilterView.moc.cc	\
+	YQPkgVersionsView.moc.cc		\
 	YQPkgYouPatchFilterView.moc.cc		\
 	YQPkgYouPatchList.moc.cc		\
 	YQProgressBar.moc.cc			\
@@ -199,6 +201,7 @@ YQPkgSelectionsFilterView.o YQPkgSelectionsFilterView.lo:	YQPkgSelectionsFilterV
 YQPkgTechnicalDetailsView.o YQPkgTechnicalDetailsView.lo:	YQPkgTechnicalDetailsView.moc.cc
 YQPkgTextDialog.o YQPkgTextDialog.lo:				YQPkgTextDialog.moc.cc
 YQPkgUpdateProblemFilterView.o YQPkgUpdateProblemFilterView.lo:	YQPkgUpdateProblemFilterView.moc.cc
+YQPkgVersionsView.o YQPkgVersionsView.lo:			YQPkgVersionsView.moc.cc
 YQPkgYouPatchFilterView.o YQPkgYouPatchFilterView.lo:		YQPkgYouPatchFilterView.moc.cc
 YQPkgYouPatchList.o YQPkgYouPatchList.lo:			YQPkgYouPatchList.moc.cc
 YQProgressBar.o YQProgressBar.lo:				YQProgressBar.moc.cc
@@ -257,6 +260,7 @@ YQPkgSelectionsFilterView.moc.cc:	include/YQPkgSelectionsFilterView.h
 YQPkgTechnicalDetailsView.moc.cc:	include/YQPkgTechnicalDetailsView.h
 YQPkgTextDialog.moc.cc:			include/YQPkgTextDialog.h
 YQPkgUpdateProblemFilterView.moc.cc:	include/YQPkgUpdateProblemFilterView.h
+YQPkgVersionsView.moc.cc:		include/YQPkgVersionsView.h
 YQPkgYouPatchFilterView.moc.cc:		include/YQPkgYouPatchFilterView.h
 YQPkgYouPatchList.moc.cc:		include/YQPkgYouPatchList.h
 YQProgressBar.moc.cc:			include/YQProgressBar.h

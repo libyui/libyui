@@ -184,7 +184,6 @@ YQPkgListItem::YQPkgListItem( YQPkgList * pkgList, PMPackagePtr pmPkg )
     CHECK_PTR( pmPkg );
     CHECK_PTR( pkgList );
 
-    setStatusIcon();
     setSourceRpmIcon();
 }
 
@@ -193,6 +192,14 @@ YQPkgListItem::YQPkgListItem( YQPkgList * pkgList, PMPackagePtr pmPkg )
 YQPkgListItem::~YQPkgListItem()
 {
     // NOP
+}
+
+
+void
+YQPkgListItem::updateData()
+{
+    YQPkgObjListItem::updateData();
+    setSourceRpmIcon();
 }
 
 

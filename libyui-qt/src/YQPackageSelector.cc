@@ -53,6 +53,7 @@
 #include "YQPkgSelectionsFilterView.h"
 #include "YQPkgTechnicalDetailsView.h"
 #include "YQPkgUpdateProblemFilterView.h"
+#include "YQPkgVersionsView.h"
 #include "YQPkgYouPatchFilterView.h"
 #include "YQPkgYouPatchList.h"
 
@@ -90,6 +91,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     _pkgDescriptionView		= 0;
     _pkgList			= 0;
     _pkgTechnicalDetailsView	= 0;
+    _pkgVersionsView		= 0;
     _rpmGroupTagsFilterView	= 0;
     _searchFilterView		= 0;
     _selList			= 0;
@@ -365,12 +367,13 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
     // _detailsViews->setTabPosition( QTabWidget::Bottom );
 
-
+    
+    //
     // Description
+    //
 
     _pkgDescriptionView = new YQPkgDescriptionView( _detailsViews );
     CHECK_PTR( _pkgDescriptionView );
-    _pkgDescriptionView->setMinimumSize( 0, 0 );
 
     _detailsViews->addTab( _pkgDescriptionView, _( "D&escription" ) );
     _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
@@ -378,12 +381,12 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     connect( _pkgList,			SIGNAL( selectionChanged    ( PMObjectPtr ) ),
 	     _pkgDescriptionView,	SLOT  ( showDetailsIfVisible( PMObjectPtr ) ) );
 
-
+    //
     // Technical details
+    //
 
     _pkgTechnicalDetailsView = new YQPkgTechnicalDetailsView( _detailsViews );
     CHECK_PTR( _pkgTechnicalDetailsView );
-    _pkgTechnicalDetailsView->setMinimumSize( 0, 0 );
 
     _detailsViews->addTab( _pkgTechnicalDetailsView, _( "&Technical Data" ) );
 
@@ -391,14 +394,20 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 	     _pkgTechnicalDetailsView,	SLOT  ( showDetailsIfVisible( PMObjectPtr ) ) );
 
 
-#warning TODO: Versions details view (select some other candidate)
-
-#if 0
-    QLabel * dummy;
-    dummy = new QLabel( "Versions of this package\non all the different installation media\n\nstill missing\n(Known bug)",
-			_detailsViews );
-    _detailsViews->addTab( dummy, _( "&Versions" ) );
-#endif
+    //
+    // Versions
+    //
+    
+    if ( ! _youMode )
+    {
+	_pkgVersionsView = new YQPkgVersionsView( _detailsViews );
+	CHECK_PTR( _pkgVersionsView );
+    
+	_detailsViews->addTab( _pkgVersionsView, _( "&Versions" ) );
+    
+	connect( _pkgList,		SIGNAL( selectionChanged    ( PMObjectPtr ) ),
+		 _pkgVersionsView,	SLOT  ( showDetailsIfVisible( PMObjectPtr ) ) );
+    }
 
 
     layoutButtons( details_vbox );
@@ -525,6 +534,13 @@ YQPackageSelector::makeConnections()
 	connect( _conflictDialog,	SIGNAL( updatePackages()      ),
 		 _pkgList, 		SLOT  ( updateToplevelItemStates() ) );
     }
+
+
+    if ( _pkgVersionsView && _pkgList )
+    {
+	connect( _pkgVersionsView, 	SIGNAL( candidateChanged( PMObjectPtr ) ),
+		 _pkgList,		SLOT  ( updateToplevelItemData() ) );
+    }
 }
 
 
@@ -620,7 +636,7 @@ YQPackageSelector::reject()
 void
 YQPackageSelector::accept()
 {
-    if ( resolveDependencies() == QDialog::Accepted )
+    if ( resolveDependencies() != QDialog::Rejected )
     {
 	_yuiqt->setMenuSelection( YCPSymbol("accept", true) );
 	_yuiqt->returnNow( YUIInterpreter::ET_MENU, this );

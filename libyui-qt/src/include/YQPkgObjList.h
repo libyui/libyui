@@ -343,6 +343,15 @@ public:
 			 int			col,
 			 bool			ascending ) const;
 
+    /**
+     * Update this item's data completely.
+     * Triggered by QY2ListView::updateAllItemData().
+     *
+     * Reimplemented from QY2ListViewItem.
+     **/
+    virtual void updateData();
+
+
     // Columns
 
     int statusCol()		const	{ return _pkgObjList->statusCol();	}
@@ -354,6 +363,12 @@ public:
 
 
 protected:
+
+    /**
+     * Initialize internal data and set fields accordingly.
+     **/
+    void init();
+
 
     // Data members
 

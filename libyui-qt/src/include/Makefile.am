@@ -45,6 +45,7 @@ pkginclude_HEADERS =				\
 	YQPkgTechnicalDetailsView.h		\
 	YQPkgTextDialog.h			\
 	YQPkgUpdateProblemFilterView.h		\
+	YQPkgVersionsView.h			\
 	YQPkgYouPatchFilterView.h		\
 	YQPkgYouPatchList.h			\
 	YQProgressBar.h				\

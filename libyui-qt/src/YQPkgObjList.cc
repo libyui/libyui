@@ -387,6 +387,19 @@ YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList * pkgObjList, PMObjectPtr pm_ob
     , _pmObj( pm_obj )
     , _editable( true )
 {
+    init();
+}
+
+
+YQPkgObjListItem::~YQPkgObjListItem()
+{
+    // NOP
+}
+
+
+void
+YQPkgObjListItem::init()
+{
     _candidateIsNewer = false;
     _installedIsNewer = false;
 
@@ -429,10 +442,10 @@ YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList * pkgObjList, PMObjectPtr pm_ob
 }
 
 
-
-YQPkgObjListItem::~YQPkgObjListItem()
+void
+YQPkgObjListItem::updateData()
 {
-    // NOP
+    init();
 }
 
 
@@ -446,11 +459,7 @@ YQPkgObjListItem::setText( int column, const std::string text )
 void
 YQPkgObjListItem::setText( int column, const PkgEdition & edition )
 {
-    QListViewItem::setText( column,
-			    fromUTF8( edition.version() )
-			    + "-" +
-			    fromUTF8( edition.release() )
-			    );
+    setText( column, PkgEdition::toString( edition ) );
 }
 
 

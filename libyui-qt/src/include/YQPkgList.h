@@ -181,6 +181,15 @@ public:
 			 int			col,
 			 bool			ascending ) const;
 
+
+    /**
+     * Update this item's data completely.
+     * Triggered by QY2ListView::updateAllItemData().
+     *
+     * Reimplemented from YQPkgObjList.
+     **/
+    virtual void updateData();
+
     // Columns
 
     int srpmStatusCol() const { return _pkgList->srpmStatusCol(); }

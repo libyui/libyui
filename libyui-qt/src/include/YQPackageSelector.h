@@ -46,6 +46,7 @@ class YQPkgSelList;
 class YQPkgSelectionsFilterView;
 class YQPkgTechnicalDetailsView;
 class YQPkgUpdateProblemFilterView;
+class YQPkgVersionsView;
 class YQPkgYouPatchFilterView;
 class YQPkgYouPatchList;
 
@@ -190,6 +191,7 @@ protected:
     YQPkgSelList *			_selList;
     YQPkgSelectionsFilterView *		_selectionsFilterView;
     YQPkgTechnicalDetailsView *		_pkgTechnicalDetailsView;
+    YQPkgVersionsView *			_pkgVersionsView;
     YQPkgUpdateProblemFilterView *	_updateProblemFilterView;
     YQPkgYouPatchFilterView *		_youPatchFilterView;
     YQPkgYouPatchList *			_youPatchList;

@@ -1,0 +1,180 @@
+/*---------------------------------------------------------------------\
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
+\----------------------------------------------------------------------/
+
+  File:	      YQPkgVersionsView.h
+
+  Author:     Stefan Hundhammer <sh@suse.de>
+
+/-*/
+
+// -*- c++ -*-
+
+
+#ifndef YQPkgVersionsView_h
+#define YQPkgVersionsView_h
+
+#include "QY2ListView.h"
+#include <y2pm/PMObject.h>
+
+
+class QTabWidget;
+
+
+/**
+ * @short Package version selector: Display a list of available versions from
+ * all the different installation sources and let the user change the candidate
+ * version for installation / update.
+ **/
+class YQPkgVersionsView : public QY2ListView
+{
+    Q_OBJECT
+
+public:
+
+    /**
+     * Constructor.
+     **/
+    YQPkgVersionsView( QWidget * parent );
+
+    /**
+     * Destructor
+     **/
+    virtual ~YQPkgVersionsView();
+
+    /**
+     * Returns the minimum size required for this widget.
+     * Inherited from QWidget.
+     **/
+    virtual QSize minimumSizeHint() const;
+
+
+    // Column numbers
+
+    int versionCol()	const	{ return _versionCol;	}
+    int instSrcCol()	const	{ return _instSrcCol;	}
+    int nameCol()	const 	{ return _nameCol; 	}
+    int summaryCol()	const 	{ return _summaryCol; 	}
+    int statusCol()	const 	{ return _statusCol; 	}
+
+
+public slots:
+
+    /**
+     * Show details for the specified package.
+     * Delayed (optimized) display if this is embedded into a QTabWidget
+     * parent: In this case, wait until this page becomes visible.
+     **/
+    void showDetailsIfVisible( PMObjectPtr pmObj );
+
+    // slot clear() inherited from QListView
+
+
+    /**
+     * Show data for the last package.
+     **/
+    void reload( QWidget *newCurrent );
+
+
+signals:
+
+    /**
+     * Emitted when the user changes the
+     **/
+    void candidateChanged( PMObjectPtr newCandidate );
+
+
+protected slots:
+
+    /**
+     * Check for changed candidates
+     **/
+    void checkForChangedCandidate();
+
+
+protected:
+
+    /**
+     * Show details for the specified package.
+     **/
+    void showDetails( PMObjectPtr pmObj );
+
+
+    // Data members
+
+    QTabWidget	* 	_parentTab;
+    PMObjectPtr		_pmObj;
+
+    int 		_versionCol;
+    int			_instSrcCol;
+    int			_nameCol;
+    int			_summaryCol;
+    int			_statusCol;
+};
+
+
+class YQPkgVersion: public QY2CheckListItem
+{
+public:
+
+    /**
+     * Constructor. Creates a YQPkgVersion item that corresponds to the package
+     * manager object that 'pkg' refers to.
+     **/
+    YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
+		  QY2CheckListItem * 	parent,
+		  PMObjectPtr 		pmObj );
+
+    /**
+     * Destructor
+     **/
+    virtual ~YQPkgVersion();
+
+    /**
+     * Returns the original object within the package manager backend.
+     **/
+    PMObjectPtr pmObj() { return _pmObj; }
+
+    /**
+     * Returns the original object within the package manager backend.
+     **/
+    const PMObjectPtr constPMObj() const { return _pmObj; }
+
+    /**
+     * Comparison function used for sorting the list.
+     * Returns:
+     * -1 if this <  other
+     *	0 if this == other
+     * +1 if this >  other
+     *
+     * Reimplemented from QListViewItem
+     **/
+    virtual int compare( QListViewItem *	other,
+			 int			col,
+			 bool			ascending ) const;
+
+    // Columns
+
+    int versionCol()		const	{ return _pkgVersionList->versionCol();	}
+    int instSrcCol()		const	{ return _pkgVersionList->instSrcCol();	}
+    int statusCol()		const	{ return _pkgVersionList->statusCol();	}
+
+
+protected:
+
+    // Data members
+
+    YQPkgVersionsView *	_pkgVersionList;
+    PMObjectPtr		_pmObj;
+};
+
+
+#endif // ifndef YQPkgVersionsView_h
