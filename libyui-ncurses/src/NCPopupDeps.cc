@@ -182,8 +182,10 @@ void NCPopupDeps::createLayout( )
 //  showDependencies
 // 
 //
-void NCPopupDeps::showDependencies( )
+bool NCPopupDeps::showDependencies( )
 {
+    bool cancel = false;
+    
     // set headline and table type
     head->setLabel( YCPString(getHeadline()) );
     setDepsTableType();
@@ -221,12 +223,17 @@ void NCPopupDeps::showDependencies( )
 	    // show first dependency
 	    concretelyDependency( pkgs->getCurrentItem() );
 	
-	    showDependencyPopup();    // show the dependencies
+	    NCursesEvent input = showDependencyPopup();    // show the dependencies
 
+	    if ( input == NCursesEvent::cancel )
+	    {
+		cancel = true;
+	    }
 	    pkgs->setKeyboardFocus();
 	}
     }
-    
+
+    return cancel;
 }
 
 
@@ -704,6 +711,7 @@ bool NCPopupDeps::postAgain()
 	
 	    ignoreDependencies[ignoreStr] = true;
 	}
+
 	// close the dialog
 	postevent = NCursesEvent::cancel;
     }
@@ -753,7 +761,7 @@ bool NCPopupDeps::postAgain()
 	    else
 	    {
 		// close the dialog
-		postevent = NCursesEvent::cancel;	
+		postevent = NCursesEvent::cancel;
 	    }
 	}
 	else	// everything ok

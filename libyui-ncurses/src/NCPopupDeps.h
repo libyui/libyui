@@ -106,7 +106,7 @@ public:
 
     NCursesEvent showDependencyPopup( );
 
-    void showDependencies( );
+    bool showDependencies( );
     
     bool evaluateErrorResult( NCPkgTable * table,
 			     const PkgDep::ErrorResultList & errorlist );
