@@ -48,6 +48,8 @@ YQLogView::YQLogView( QWidget * 	parent,
     _qt_text->setFont( YUIQt::ui()->currentFont() );
     _qt_text->setReadOnly( true );
     _qt_text->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
+
+    _qt_label->setBuddy( _qt_text );
 }
 
 
