@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Mar 14 16:18:28 CET 2005 - mlazar@suse.cz
+
+- fixed Bug 71815 - yast: unnecessary warning in packager (ncurses)
+
+-------------------------------------------------------------------
 Mon Mar 14 15:43:40 CET 2005 - mlazar@suse.cz
 
 - 2.11.5
