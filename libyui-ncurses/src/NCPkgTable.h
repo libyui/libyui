@@ -266,7 +266,15 @@ public:
      * @return void
      */  
     void fillHeader( );
-    
+
+    /**
+     * Creates a line in the package table.
+     * @param pkgPtr The package pointer 
+     * @param index  The index (line) 
+     * @return bool
+     */  
+   bool createListEntry ( PMPackagePtr pkgPtr,
+			  unsigned int index ); 
 };
 
 ///////////////////////////////////////////////////////////////////

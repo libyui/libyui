@@ -397,7 +397,8 @@ void NCPkgTable::fillHeader( )
     switch ( tableType )
     {
 	case T_Packages:
-	case T_Update:	       {
+	case T_Update:
+	case T_PatchPkgs:    {
 	    int installedPkgs = Y2PM::instTarget().numPackages();
 	    if ( installedPkgs > 0 )
 	    {
@@ -440,6 +441,74 @@ void NCPkgTable::fillHeader( )
 	}
     }
     setHeader( header );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// createListEntry
+//
+//
+bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr,
+				   unsigned int index )
+{
+    vector<string> pkgLine;
+    pkgLine.reserve(5);
+
+    if ( !pkgPtr )
+    {
+	NCERR << "No valid package available" << endl;
+	return false;
+    }
+
+    // add the package name
+    pkgLine.push_back( pkgPtr->getSelectable()->name() );
+
+    string instVersion = "";
+    string version = "";
+	    
+    switch( tableType )
+    {
+	case T_PatchPkgs: {
+	    if ( pkgPtr->hasInstalledObj() )
+	    {
+		instVersion = pkgPtr->getInstalledObj()->edition().asString();
+	    }
+	    // in case of YOU patches: always show the version of the package
+	    // which is contained in the patch
+	    version = pkgPtr->edition().asString();
+   	    pkgLine.push_back( version ); 
+	}
+	default: {   
+	    // if the package is installed, get the installed version 
+	    if ( pkgPtr->hasInstalledObj() )
+	    {
+		instVersion = pkgPtr->getInstalledObj()->version();
+
+		if ( pkgPtr->hasCandidateObj() )
+		{
+		    // if a candidate is available, get the candidate version
+		    version = pkgPtr->getCandidateObj()->version();
+		}
+	    }
+	    else
+	    {
+		version = pkgPtr->version();
+	    }
+
+	    pkgLine.push_back( version );	// available version
+	    pkgLine.push_back( instVersion );	// installed version
+	}
+    }
+    pkgLine.push_back( pkgPtr->summary() );  	// short description
+    FSize size = pkgPtr->size();     	// installed size
+    pkgLine.push_back( size.asString() );	
+    
+    addLine( pkgPtr->getSelectable()->status(), //  get the package status
+	     pkgLine,
+	     index,		// the index
+	     pkgPtr );	// the corresponding package pointer
+
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////

@@ -375,7 +375,7 @@ bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr 
 
     for ( i = 0, listIt = slcList.begin(); listIt != slcList.end();  ++listIt, i++ )    
     {
-	createListEntry( packageList, (*listIt)->theObject(), i );
+	packageList->createListEntry( (*listIt)->theObject(), i );
     }
 
     // show the package table
@@ -458,7 +458,7 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
 	     )
 	{
 	    // search sucessful
-	    createListEntry( packageList, pkg, i );
+	    packageList->createListEntry( pkg, i );
 	}
 	
 	++listIt;
@@ -557,9 +557,7 @@ bool PackageSelector::fillUpdateList( )
     while ( it != Y2PM::packageManager().updateEnd() )
     {
 	PMSelectablePtr selectable = *it;
-	createListEntry( packageList,
-			(*it)->theObject(),
-			i );
+	packageList->createListEntry( (*it)->theObject(), i );
 	    
 	++it;
 	i++;
@@ -599,7 +597,7 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, PMObjectPtr obj
     unsigned int i;
     for ( i = 0, listIt = packages.begin(); listIt != packages.end();  ++listIt, i++ )    
     {
-	createListEntry( pkgTable, (*listIt), i );
+	pkgTable->createListEntry( (*listIt), i );
     }
 
     // show the list
@@ -734,7 +732,7 @@ bool PackageSelector::checkPackage( PMPackagePtr pkg,
 
     if ( pkg->group_ptr()->isChildOf( rpmGroup ) )
     {
-	createListEntry( packageList, pkg, index );
+	packageList->createListEntry( pkg, index );
 	
 	return true;
     }
@@ -769,68 +767,6 @@ bool PackageSelector::checkPatch( PMYouPatchPtr patchPtr,
     {
 	return false;
     }
-}
-
-///////////////////////////////////////////////////////////////////
-//
-// createListEntry
-//
-//
-bool PackageSelector::createListEntry ( NCPkgTable *pkgTable,
-					PMPackagePtr pkgPtr,
-					unsigned int index )
-{
-    vector<string> pkgLine;
-    pkgLine.reserve(5);
-
-    if ( !pkgPtr || !pkgTable )
-    {
-	NCERR << "No valid package available" << endl;
-	return false;
-    }
-    int installedPkgs = Y2PM::instTarget().numPackages();
-    if ( installedPkgs > 0 )
-    {
-	string instVersion = "";
-	string version = "";
-
-	pkgLine.push_back( pkgPtr->getSelectable()->name() );	// package name
-
-	if ( pkgPtr->hasInstalledObj() )
-	{
-	    instVersion = pkgPtr->getInstalledObj()->version();
-
-	    if ( pkgPtr->hasCandidateObj() )
-	    {
-		version = pkgPtr->getCandidateObj()->version();
-	    }
-	}
-	else
-	{
-	    version = pkgPtr->version();
-	}
-
-	pkgLine.push_back( version );		// available version
-	pkgLine.push_back( instVersion );	// installed version
-
-	pkgLine.push_back( pkgPtr->summary() );  // short description
-	FSize size = pkgPtr->size();     	// installed size
-	pkgLine.push_back( size.asString() );
-    }
-    else
-    {
-	pkgLine.push_back( pkgPtr->getSelectable()->name() );	// package name
-	pkgLine.push_back( pkgPtr->version() );	// version
-	pkgLine.push_back( pkgPtr->summary() );  	// short description
-	FSize size = pkgPtr->size();     	// installed size
-	pkgLine.push_back( size.asString() );	
-    }
-    pkgTable->addLine( pkgPtr->getSelectable()->status(), //  get the package status
-		       pkgLine,
-		       index,		// the index
-		       pkgPtr );	// the corresponding package pointer
-
-    return true;
 }
 
 ///////////////////////////////////////////////////////////////////
