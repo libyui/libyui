@@ -188,6 +188,7 @@ YQPkgSearchFilterView::filter()
 				  Y2PM::packageManager().size(),	// totalSteps
 				  this, 0,				// parent, name
 				  true );				// modal
+	progress.setCaption( "" );
 	progress.setMinimumDuration( 2000 ); // millisec
 	QTime timer;
 
