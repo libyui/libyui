@@ -1150,14 +1150,14 @@ const NCstring PkgNames::HelpOnStatus4()
 const NCstring PkgNames::HelpOnStatus5()
 {
     // help text package status
-    static const NCstring value =  _( "<p><b> + </b> : this package is selected for installation</p><p><b>a+ </b> : automatically selected for installation</p><p><b> > </b> : update this package</p><p><b>a> </b> : automatic update</p><p><b> i </b> : this package is installed</p><p><b> - </b> : the package will be deleted</p><p><b>---</b> : never install this package</p>" );
+    static const NCstring value =  _( "<p><b> + </b>: this package is selected for installation</p><p><b>a+ </b>: automatically selected for installation</p><p><b> > </b>: update this package</p><p><b>a> </b>: automatic update</p><p><b> i </b>: this package is installed</p><p><b> - </b>: the package will be deleted</p><p><b>---</b>: never install this package</p>" );
     return value;
 }
 
 const NCstring PkgNames::HelpOnStatus6()
 {
     // help text package status
-    static const NCstring value =  _( "<p><b>-i-</b> : the package is \"protected\" -- keep the installed version and never update or delete it.</p>" );
+    static const NCstring value =  _( "<p><b>-i-</b>: the package is \"protected\" -- keep the installed version and never update or delete it.</p>" );
     return value;
 }
 
