@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Sep  8 15:43:54 CEST 2003 - sh@suse.de
+
+- V 2.8.11
+- Fixed bug #26494: Keyboard focus when embedded into KControl:
+  Reimported the latest version of QXEmbed
+
+-------------------------------------------------------------------
 Fri Sep  5 17:01:14 CEST 2003 - sh@suse.de
 
 - V 2.8.10
