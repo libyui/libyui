@@ -893,6 +893,7 @@ YQPkgObjListItem::showLicenseAgreement( PMSelectable::UI_Status status )
 {
     bool confirmed = true;
     list<string> text;
+    PMPackagePtr pkg = NULL;
 
     switch ( status )
     {
@@ -900,10 +901,13 @@ YQPkgObjListItem::showLicenseAgreement( PMSelectable::UI_Status status )
 	case PMSelectable::S_Update:
 	    if ( _pmObj->hasCandidateObj() )
 	    {
-		PMPackagePtr pkg =  _pmObj->getCandidateObj();
+		pkg =  _pmObj->getCandidateObj();
 
 		if ( pkg )
+		{
 		    text = pkg->licenseToConfirm();
+		    confirmed = ! pkg->hasLicenseToConfirm ();
+		}
 	    }
 	    break;
 
@@ -913,7 +917,8 @@ YQPkgObjListItem::showLicenseAgreement( PMSelectable::UI_Status status )
     if ( ! text.empty() )
     {
 	y2debug( "Showing license agreement" );
-	confirmed = YQPkgTextDialog::confirmText( _pkgObjList, _pmObj, text );
+	confirmed = confirmed
+	    || YQPkgTextDialog::confirmText( _pkgObjList, _pmObj, text );
 
 	if ( ! confirmed )
 	{
@@ -931,6 +936,13 @@ YQPkgObjListItem::showLicenseAgreement( PMSelectable::UI_Status status )
 		    break;
 
 		default: break;
+	    }
+	}
+	else
+	{
+	    if (pkg)
+	    {
+		pkg->markLicenseConfirmed ();
 	    }
 	}
     }
