@@ -360,6 +360,12 @@ public:
     static const NCstring PackageDeps();
     static const NCstring SelectionDeps();
 
+   /**
+     * The headline of the disk space popup
+     */
+    static const NCstring DiskSpaceError();
+    static const NCstring DiskSpaceWarning();
+    
     static const NCstring LabelUnres1();
     static const NCstring LabelUnres2();
     static const NCstring LabelAlternative();
@@ -495,6 +501,7 @@ public:
     static const NCstring HelpOnStatus3(); 
     static const NCstring HelpOnStatus4();
     static const NCstring HelpOnStatus5();
+    static const NCstring HelpOnStatus6();
     
     static const NCstring YouHelp1();
     static const NCstring YouHelp2();

@@ -983,6 +983,20 @@ const NCstring PkgNames::MenuLoadSel()
     return value;
 }
 
+const NCstring PkgNames::DiskSpaceError()
+{
+    // 
+    static const NCstring value = _("<b>Error:</b> Out of disk space!");
+    return value;
+}
+
+const NCstring PkgNames::DiskSpaceWarning()
+{
+    // 
+    static const NCstring value = _("<b>Warning:</b> Disk space is running out!");
+    return value;
+}
+
 const NCstring PkgNames::HelpPkgInst1()
 {
     // part1 of help text package installation 
@@ -1049,32 +1063,39 @@ const NCstring PkgNames::HelpOnSearch()
 const NCstring PkgNames::HelpOnStatus1()
 {
     // part 1 of help text package status
-    static const NCstring value = _("<p>The package status can be changed using the <i>Actions</i> menu or the keys specified in the menu items. By default, the package dependencies are checked with every status change. You will be informed about package conflicts and additionally required packages will be selected (<i>Etc.</i> offers different settings).</p>");
+    static const NCstring value = _("<p>The package status can be changed using the <i>Actions</i> menu or the keys specified in the menu items. By default, the package dependencies are checked with every status change.</p>");
     return value;
 }
 
 const NCstring PkgNames::HelpOnStatus2()
+{
+    // part 1 of help text package status
+    static const NCstring value = _("<p>You will be informed about package conflicts and additionally required packages will be selected (the menu item <i>Etc.</i>/<i>Dependencies</i> offers different settings).</p>");
+    return value;
+}
+
+const NCstring PkgNames::HelpOnStatus3()
 {
     // part 2 of help text package status
     static const NCstring value = _("<p>You can also use <b>RET</b> or <b>SPACE</b> to toggle between the package status.");
     return value;
 }
 
-const NCstring PkgNames::HelpOnStatus3()
+const NCstring PkgNames::HelpOnStatus4()
 {
     // part 3 of help text package status
     static const NCstring value = _("<br>The meaning of the status flags:");
     return value;
 }
 
-const NCstring PkgNames::HelpOnStatus4()
+const NCstring PkgNames::HelpOnStatus5()
 {
     // help text package status
     static const NCstring value =  _("<p><b> + </b> : this package is selected for installation</p><p><b>a+ </b> : automatically selected for installation</p><p><b> > </b> : update this package</p><p><b>a> </b> : automatic update</p><p><b> i </b> : this package is installed</p><p><b> - </b> : the package will be deleted</p><p><b>---</b> : never install this package</p>");
     return value;
 }
 
-const NCstring PkgNames::HelpOnStatus5()
+const NCstring PkgNames::HelpOnStatus6()
 {
     // help text package status
     static const NCstring value =  _("<p>The <i>Actions</i> menu also provides the possibilty to change the status for all packages in the list (select menu item 'All list packages').</p>");
@@ -1084,7 +1105,7 @@ const NCstring PkgNames::HelpOnStatus5()
 const NCstring PkgNames::HelpOnUpdate()
 {
     // help text package status
-    static const NCstring value = _("<b>Update Problem list</b><br><p>The packages in the list cannot be updated automatically.</p><p>Possible reasons:</p><p>They are obsoleted by other packages.</p><p>There is no newer version to update to on any installation media.</p><p>They are third-party packages</p><p>Please choose manually what to do with them.The safest course of action is to delete them.</p>");
+    static const NCstring value = _("<b>Update Problem List</b><br><p>The packages in the list cannot be updated automatically.</p><p>Possible reasons:</p><p>They are obsoleted by other packages.</p><p>There is no newer version to update to on any installation media.</p><p>They are third-party packages</p><p>Please choose manually what to do with them.The safest course of action is to delete them.</p>");
     return value;
 }
 
@@ -1226,7 +1247,7 @@ const NCstring PkgNames::YouHelp3()
 const NCstring PkgNames::TextmodeHelp()
 {
     // headline of the text mode help
-    static const NCstring value =  _("Text mode navigation"); 
+    static const NCstring value =  _("Text mode navigation");
     return value;
 }
 

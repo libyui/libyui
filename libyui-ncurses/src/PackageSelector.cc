@@ -1238,6 +1238,7 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
 	text += PkgNames::HelpOnStatus3().str();
 	text += PkgNames::HelpOnStatus4().str();
 	text += PkgNames::HelpOnStatus5().str();
+	text += PkgNames::HelpOnStatus6().str();
     }
     else if ( event.selection->compare( PkgNames::UpdateHelp() ) == YO_EQUAL )
     {
