@@ -28,7 +28,7 @@
 					    )),
 			 // label Actions menu ( keep it short ) - actions to change status of a package
 			 `Left(`MenuButton( `opt(`key_F5), _( "A&ctions" ),
-					    // Please note: add an appropriate number of whitespace to get a well
+					    // Please note: add an appropriate number of whitespaces to get a well
 					    // formated menu (the [ ]s should be in one column) and use unique hotkeys until end:
 					    // begin: Actions menu, toggle the status, e.g. change from installed to delete
 					    [`item( `id(`toggle), 	_( "&Toggle    [SPACE]" ) ),
@@ -42,7 +42,7 @@
 					     `item( `id(`tabooOn), 	_( "Taboo &Yes   [!]" ) ),
 					     // reset the status 'Taboo' 
 					     `item( `id(`tabooOff), 	_( "Taboo &No    [-]" ) ),
-					     // toggle installation of sources (SPM)
+					     // toggle installation of sources (SRPMs)
 					     `item( `id(`toggleSrc), 	_( "&Install Sources Yes/No" ) ),
 					     // end: Actions menu, set status of all packages (title of a submenu)
 					     `menu( _( "All Listed &Packages" ),
