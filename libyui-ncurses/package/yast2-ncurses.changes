@@ -1,31 +1,36 @@
 -------------------------------------------------------------------
+Fri Sep 05 17:12:48 CEST 2003 - arvin@suse.de
+
+- don't allocate tmp buffer on stack (can be too huge) (bug #29716)
+
+-------------------------------------------------------------------
 Thu Aug 28 13:54:17 CEST 2003 - gs@suse.de
 
 - V 2.8.15
 - bugfix for wide character support in RichText widget
-  (get correct width of text) 
-- online update: default is list of installable patches 
+  (get correct width of text)
+- online update: default is list of installable patches
 
 -------------------------------------------------------------------
 Thu Aug 25 15:38:31 CEST 2003 - gs@suse.de
 
 - V 2.8.14
 - package installation: support a link to a related package
-  in the package description, bugfix two line messages 
-- Y2NCursesUI: set environment variable LC_CTYPE 
+  in the package description, bugfix two line messages
+- Y2NCursesUI: set environment variable LC_CTYPE
 
 -------------------------------------------------------------------
 Fri Aug 18 16:15:52 CEST 2003 - gs@suse.de
 
 - V 2.8.13
-- RichText: support <pre> tag 
+- RichText: support <pre> tag
 
 -------------------------------------------------------------------
 Tue Aug 12 16:14:18 CEST 2003 - gs@suse.de
 
 - V 2.8.12
-- bugfix in constructor of NCPopup...-classes (don't add child 
-  widgets twice) 
+- bugfix in constructor of NCPopup...-classes (don't add child
+  widgets twice)
 
 -------------------------------------------------------------------
 Mon Aug 11 13:26:07 CEST 2003 - gs@suse.de
@@ -40,13 +45,13 @@ Tue Aug  5 13:17:42 CEST 2003 - gs@suse.de
 
 - V 2.8.10
 - get correct encoding in setConsoleFont(),
-- setKeyboard() added 
+- setKeyboard() added
 
 -------------------------------------------------------------------
 Mon Jul 28 11:49:50 CEST 2003 - gs@suse.de
 
 - V 2.8.9
-- support &product; in RichText (automatically replace the product info) 
+- support &product; in RichText (automatically replace the product info)
 
 -------------------------------------------------------------------
 Fri Jul 25 15:30:53 CEST 2003 - gs@suse.de
@@ -65,14 +70,14 @@ Wed Jul 16 14:47:27 CEST 2003 - gs@suse.de
 Wed Jul 16 13:28:56 CEST 2003 - gs@suse.de
 
 - V 2.8.6
-- remove obsolete enum from Y2NCursesUI.h 
+- remove obsolete enum from Y2NCursesUI.h
 
 -------------------------------------------------------------------
 Wed Jul  9 14:59:34 CEST 2003 - gs@suse.de
 
 - V 2.8.5
 - adapt ncurses-UI to UTF-8 support
-- use advanced event handling 
+- use advanced event handling
 
 -------------------------------------------------------------------
 Wed May 28 14:13:53 CEST 2003 - ma@suse.de

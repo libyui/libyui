@@ -258,11 +258,12 @@ bool NCstring::RecodeFromWchar( const wstring & in, const string & to_encoding, 
     // tmp buffer size: in_len bytes * 2, that means 1 wide charatcer (4 Byte) can be transformed
     // into an encoding which needs at most 8 Byte for one character (should be enough)
 
-    char tmp[tmp_size + sizeof (char)];
+    char* tmp = (char*) malloc (tmp_size + sizeof (char));
 
     *out = "";
 
     do {
+
 	char *tmp_ptr = tmp;
 	size_t tmp_len = tmp_size;
 	*((char*) tmp_ptr) = '\0';
@@ -270,7 +271,7 @@ bool NCstring::RecodeFromWchar( const wstring & in, const string & to_encoding, 
 	size_t iconv_ret = iconv (cd, &in_ptr, &in_len, &tmp_ptr, &tmp_len);
 
 	*((char*) tmp_ptr) = '\0';
-	*out += string ((char *)&tmp);
+	*out += string (tmp);
 
 	if (iconv_ret == (size_t)(-1))
         {
@@ -288,6 +289,8 @@ bool NCstring::RecodeFromWchar( const wstring & in, const string & to_encoding, 
 	}
 
     } while (in_len != 0 );
+
+    free (tmp);
 
     return true;
 }
