@@ -77,7 +77,7 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
 	    else if ( opt == QString( "-noborder" 	) )	_decorate_toplevel_window	= false;
 	    else if ( opt == QString( "-kcontrol_id"	) )
 	    {
-		if ( i >= argc )
+		if ( i+1 >= argc )
 		{
 		    y2error( "Missing arg for '--kcontrol_id'" );
 		}
@@ -86,6 +86,21 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
 		    kcontrol_id = argv[++i];
 		    y2milestone( "Starting with kcontrol_id='%s'",
 				 (const char *) kcontrol_id );
+		}
+	    }
+	    else if ( opt == QString( "-macro"		) )
+	    {
+		if ( i+1 >= argc )
+		{
+		    y2error( "Missing arg for '--macro'" );
+		    fprintf( stderr, "y2base qt: Missing argument for --macro\n" );
+		    raiseFatalError();
+		}
+		else
+		{
+		    const char * macro_file = argv[++i];
+		    y2milestone( "Playing macro '%s' from command line", macro_file );
+		    playMacro( macro_file );
 		}
 	    }
 	    else if ( opt == QString( "-help"  ) )
@@ -99,6 +114,7 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
 			 "--noborder    no window manager border for `opt(`defaultsize) dialogs\n"
 			 "--help        this help text\n"
 			 "\n"
+			 "--macro <macro-file>        play a macro right on startup\n"
 			 "--kcontrol_id <ID-String>   set KDE control center identification\n"
 			 "\n"
 			 "-no-wm, -noborder etc. are accepted as well as --no-wm, --noborder\n"
