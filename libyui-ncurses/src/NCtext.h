@@ -95,9 +95,9 @@ class NClabel : protected NCtext {
 
   public:
 
-    NClabel( const NCstring & nstr = "", bool strip = true )
+    NClabel( const NCstring & nstr = "" )
       : NCtext( nstr )
-    { if ( strip ) stripHotkey(); }
+    { stripHotkey(); }
 
     virtual ~NClabel() {}
 

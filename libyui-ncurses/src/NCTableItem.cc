@@ -34,7 +34,7 @@
 //	DESCRIPTION :
 //
 NCTableCol::NCTableCol( const NCstring & l, const STYLE & st )
-    : label( l, false )
+    : label( l )
     , style( st )
 {
 }
