@@ -232,7 +232,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     // if ( ! _youMode )
     {
-	_filters->addPage( _("Search"     ), new QLabel( "Search\nfilter\n\nmissing", 0 ) );
+	_filters->addPage( _("Search"     ), new QLabel( "Search filter\n\nstill missing\n(Known bug)", 0 ) );
     }
 
     
@@ -347,7 +347,7 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
 
     QLabel * dummy;
-    dummy = new QLabel( "Versions of this package\non all the different installation media\n\nstill missing",
+    dummy = new QLabel( "Versions of this package\non all the different installation media\n\nstill missing\n(Known bug)",
 			_detailsViews );
     _detailsViews->addTab( dummy, _( "V&ersions" ) );
 
@@ -572,21 +572,12 @@ void
 YQPackageSelector::preAlphaWarning()
 {
     QMessageBox::information( this, "Alpha version", "\
-This is a development version of the Qt single package selection.\n\
+Things are improving, but it's still incomplete.\n\
+We are still working heavily on it.\n\
 \n\
-Many things work now, but it's still far from complete.\n\
-Selections and packages can now be selected and deselected\n\
-and that status is really propagated to the backend package manager\n\
-(i.e. you'll really get those packages installed), but there is no\n\
-dependency checking or solving yet.\n\
-\n\
-It doesn't make sense yet to file any bug reports -\n\
-we know there is still a lot of work to do.\n\
-\n\
-We are working heavily on it, so if you want to contribute,\n\
-the easiest thing you can do right now is not swamp us with\n\
-Bugzilla reports, but let us work in the remaining time.\n\
-Thank you.\n\
+The things that are there should work.\n\
+In particular, there shouldn't be any crashes.\n\
+If there are any, please report.\n\
 \n\
 -sh",
 			  QMessageBox::Ok );
