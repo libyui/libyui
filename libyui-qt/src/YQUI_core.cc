@@ -220,6 +220,9 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     
     connect( & _busy_cursor_timer,	SIGNAL( timeout()	),
 	     this,			SLOT  ( busyCursor()	) );
+
+    if ( macro_file )
+	playMacro( macro_file );
     
     topmostConstructorHasFinished();
 }
@@ -243,21 +246,7 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 	    if      ( opt == QString( "-no-wm"	 	) )	_have_wm 			= false;
 	    else if ( opt == QString( "-fullscreen"	) )	_fullscreen 			= true;
 	    else if ( opt == QString( "-noborder" 	) )	_decorate_toplevel_window	= false;
-	    else if ( opt == QString( "-macro"		) )
-	    {
-		if ( i+1 >= argc )
-		{
-		    y2error( "Missing arg for '--macro'" );
-		    fprintf( stderr, "y2base qt: Missing argument for --macro\n" );
-		    raiseFatalError();
-		}
-		else
-		{
-		    const char * macro_file = argv[++i];
-		    y2milestone( "Playing macro '%s' from command line", macro_file );
-		    playMacro( macro_file );
-		}
-	    }
+	    // --macro is handled by YUI_component 
 	    else if ( opt == QString( "-help"  ) )
 	    {
 		fprintf( stderr,
