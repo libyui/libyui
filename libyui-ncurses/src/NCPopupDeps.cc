@@ -54,7 +54,7 @@ NCPopupDeps::NCPopupDeps( const wpos at, PackageSelector * pkger )
       , errorLabel2( 0 )
       , packager( pkger )
 {
-    createLayout( YCPString(PkgNames::PackageDeps().str()) );
+    createLayout();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -72,12 +72,12 @@ NCPopupDeps::~NCPopupDeps()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupDeps::createLayout
+//	METHOD NAME : NCPopupSelDeps::createLayout
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCPopupDeps::createLayout( const YCPString & headline )
+void NCPopupDeps::createLayout( )
 {
 
   YWidgetOpt opt;
@@ -95,7 +95,7 @@ void NCPopupDeps::createLayout( const YCPString & headline )
 
   // add the headline
   opt.isHeading.setValue( true );
-  NCLabel * head = new NCLabel( vSplit, opt, headline );
+  NCLabel * head = new NCLabel( vSplit, opt, YCPString(PkgNames::PackageDeps().str()) );
   vSplit->addChild( head );
 
   NCSpacing * sp = new NCSpacing( vSplit, opt, 0.4, false, true );
@@ -170,18 +170,6 @@ void NCPopupDeps::showDependencies( )
     // 	typedef std::list<Result> ResultList;
     PkgDep::ResultList		goodList;
     
-    //
-    //  struct ErrorResult {
-    // 	    RelInfoList unresolvable;
-    //	    	
-    //  }
-    //	typedef std::list<RelInfo> RelInfoList;
-    // 	struct RelInfo {
-    //      // name of package causing the relation:
-    //      PkgName name;
-    //  }
-    //
-
     //	typedef std::list<ErrorResult> ErrorResultList;
     PkgDep::ErrorResultList	badList;
        
@@ -191,8 +179,8 @@ void NCPopupDeps::showDependencies( )
     info.setNiceSize( 18, 4 );
     info.popup();
     
-    // call the Y2PM::packageManager() to get the "badlist"
-    bool success = Y2PM::packageManager().solveInstall( goodList, badList );
+    // call Y2PM::packageManager() or Y2PM::selectionManager() to get the "badlist"
+    bool success = solveInstall( goodList, badList );
 
     info.popdown();
 
@@ -596,8 +584,8 @@ bool NCPopupDeps::postAgain()
    
 	NCDBG << "Solving..." << endl ;
 
-	// call the Y2PM::packageManager() to get the "badlist"
-	bool success = Y2PM::packageManager().solveInstall( goodList, badList );
+	// call Y2PM::packageManager() or Y2PM::selectionManager() to get the "badlist"
+	bool success = solveInstall( goodList, badList );
 
 	if ( !success )
 	{

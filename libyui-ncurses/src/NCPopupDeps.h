@@ -63,10 +63,16 @@ private:
 
     NCLabel * errorLabel1; 		// the error message
     NCLabel * errorLabel2;
-    
-    PackageSelector * packager;		// connection to the package selector
 
+    PackageSelector * packager;		// connection to the package selector
+    
     string getDependencyKind( const PkgDep::ErrorResult & error );
+
+    // method to solve the dependencies
+    virtual bool solveInstall( PkgDep::ResultList & goodList, PkgDep::ErrorResultList & badList ) = 0;
+
+    // method to create the layout
+    virtual void createLayout(  );
     
 protected:
 
@@ -80,8 +86,6 @@ public:
     virtual ~NCPopupDeps();
 
     virtual long nicesize(YUIDimension dim);
-
-    void createLayout( const YCPString & headline );
 
     NCursesEvent showDependencyPopup( );
 
