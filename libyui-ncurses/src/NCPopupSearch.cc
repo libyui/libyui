@@ -103,6 +103,9 @@ void NCPopupSearch::createLayout( const YCPString & headline )
   searchExpr = new NCComboBox( frame0, opt, YCPString(PkgNames::SearchPhrase().str()) );
   frame0->addChild( searchExpr );
   searchExpr->setId( PkgNames::SearchBox() );
+  searchExpr->itemAdded( YCPString( "" ), 	// set initial value
+			 0,		// index
+			 false );	// not selected
   vSplit2->addChild( vSp1 );
   vSplit->addChild( frame0 );
 
