@@ -46,8 +46,8 @@ YQRichText::YQRichText(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
     {
 	setTextFormat( Qt::RichText );
     }
-    
-    QTextBrowser::setText( fromUTF8(text->value()) );
+
+    setText( text );
 
 
     // Set the text foreground color to black, regardless of its current
@@ -92,9 +92,16 @@ void YQRichText::setSize(long newwidth, long newheight)
 
 void YQRichText::setText(const YCPString &text)
 {
-    if (verticalScrollBar())   verticalScrollBar()->setValue(0);
-    if (horizontalScrollBar()) horizontalScrollBar()->setValue(0);
-    QTextBrowser::setText(fromUTF8(text->value()));
+    if ( horizontalScrollBar() )
+	horizontalScrollBar()->setValue(0);
+
+    if ( ! autoScrollDown && verticalScrollBar() )
+	verticalScrollBar()->setValue(0);
+    
+    QTextBrowser::setText( fromUTF8( text->value() ) );
+    
+    if ( autoScrollDown && verticalScrollBar() )
+	verticalScrollBar()->setValue( verticalScrollBar()->maxValue() );
 }
 
 
