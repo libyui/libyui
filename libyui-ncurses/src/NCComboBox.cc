@@ -371,37 +371,39 @@ void NCComboBox::tUpdate()
   twin->bkgd( widgetStyle( true ).plain );
   twin->move( 0, 0 );
 
-  unsigned i      = 0;
-  unsigned end    = fldlength;
-  const char * cp = str.c_str() + fldstart;
+  if ( fldlength ) {
+    unsigned i      = 0;
+    unsigned end    = fldlength;
+    const char * cp = str.c_str() + fldstart;
 
-  // draw left scrollhint if
-  if ( *cp && fldstart ) {
-    twin->bkgdset( style.scrl );
-    twin->addch( ACS_LARROW );
-    ++i;
-    ++cp;
-  }
+    // draw left scrollhint if
+    if ( *cp && fldstart ) {
+      twin->bkgdset( style.scrl );
+      twin->addch( ACS_LARROW );
+      ++i;
+      ++cp;
+    }
 
-  // check for right scrollhint
-  if ( fldstart + fldlength <= str.length() ) {
-    --end;
-  }
+    // check for right scrollhint
+    if ( fldstart + fldlength <= str.length() ) {
+      --end;
+    }
 
-  // draw field
-  twin->bkgdset( style.data );
-  for ( /*adjusted i*/; *cp && i < end; ++i ) {
+    // draw field
+    twin->bkgdset( style.data );
+    for ( /*adjusted i*/; *cp && i < end; ++i ) {
       twin->addch( *cp++ );
-  }
-  twin->bkgdset( style.plain );
-  for ( /*adjusted i*/; i < end; ++i ) {
-    twin->addch( ACS_CKBOARD );
-  }
+    }
+    twin->bkgdset( style.plain );
+    for ( /*adjusted i*/; i < end; ++i ) {
+      twin->addch( ACS_CKBOARD );
+    }
 
-  // draw right scrollhints
-  twin->bkgdset( style.scrl );
-  if ( end < fldlength ) {
-    twin->addch( ACS_RARROW );
+    // draw right scrollhints
+    twin->bkgdset( style.scrl );
+    if ( end < fldlength ) {
+      twin->addch( ACS_RARROW );
+    }
   }
   twin->addch( 0, twin->maxx(), ACS_DARROW );
 

@@ -339,40 +339,41 @@ void NCTextEntry::tUpdate()
   twin->bkgd( widgetStyle( true ).plain );
   twin->move( 0, 0 );
 
-  unsigned i      = 0;
-  unsigned end    = fldlength;
-  const char * cp = buffer.c_str() + fldstart;
+  if ( fldlength ) {
+    unsigned i      = 0;
+    unsigned end    = fldlength;
+    const char * cp = buffer.c_str() + fldstart;
 
-  // draw left scrollhint if
-  if ( *cp && fldstart ) {
-    twin->bkgdset( style.scrl );
-    twin->addch( ACS_LARROW );
-    ++i;
-    ++cp;
-  }
+    // draw left scrollhint if
+    if ( *cp && fldstart ) {
+      twin->bkgdset( style.scrl );
+      twin->addch( ACS_LARROW );
+      ++i;
+      ++cp;
+    }
 
-  // check for right scrollhint
-  if ( fldstart + fldlength <= maxc ) {
-    --end;
-  }
+    // check for right scrollhint
+    if ( fldstart + fldlength <= maxc ) {
+      --end;
+    }
 
-  // draw field
-  twin->bkgdset( style.data );
-  for ( /*adjusted i*/; *cp && i < end; ++i ) {
-    twin->addch( passwd ? '*' : *cp );
-    ++cp;
-  }
-  twin->bkgdset( style.plain );
-  for ( /*adjusted i*/; i < end; ++i ) {
-    twin->addch( ACS_CKBOARD );
-  }
+    // draw field
+    twin->bkgdset( style.data );
+    for ( /*adjusted i*/; *cp && i < end; ++i ) {
+      twin->addch( passwd ? '*' : *cp );
+      ++cp;
+    }
+    twin->bkgdset( style.plain );
+    for ( /*adjusted i*/; i < end; ++i ) {
+      twin->addch( ACS_CKBOARD );
+    }
 
-  // draw right scrollhint if
-  if ( end < fldlength ) {
-    twin->bkgdset( style.scrl );
-    twin->addch( ACS_RARROW );
+    // draw right scrollhint if
+    if ( end < fldlength ) {
+      twin->bkgdset( style.scrl );
+      twin->addch( ACS_RARROW );
+    }
   }
-
   // reverse curpos
   if ( GetState() == NC::WSactive ) {
     twin->move( 0, curpos - fldstart );

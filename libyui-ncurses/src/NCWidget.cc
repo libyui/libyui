@@ -44,6 +44,7 @@ NCWidget::NCWidget( NCWidget * myparent )
     , framedim( 0, 0 )
     , inparent( -1, -1 )
     , noUpdates( false )
+    , skipNoDimWin( false )
     , wstate( NC::WSnormal )
     , hotlabel( 0 )
     , hotfkey( 0 )
@@ -285,7 +286,7 @@ void NCWidget::wCreate( const wrect & newrect )
 
   inparent = newrect;
 
-  if ( inparent.Sze == wsze(0,0) ) {
+  if ( skipNoDimWin && inparent.Sze == wsze(0,0) ) {
     WIDDBG << "Skip nodim widget: " << this << ' ' << inparent << " par " << Parent()->Value() << endl;
     return;
   }
@@ -301,11 +302,27 @@ void NCWidget::wCreate( const wrect & newrect )
   WIDDBG << "cw+ " << this << ' ' << inparent << " par " << Parent()->Value() << endl;
 
   if ( parw ) {
-    win = new NCursesWindow( *parw,
-			     inparent.Sze.H, inparent.Sze.W,
-			     inparent.Pos.L + Parent()->Value()->framedim.Pos.L,
-			     inparent.Pos.C + Parent()->Value()->framedim.Pos.C,
-			     'r' );
+    try {
+      win = new NCursesWindow( *parw,
+			       inparent.Sze.H, inparent.Sze.W,
+			       inparent.Pos.L + Parent()->Value()->framedim.Pos.L,
+			       inparent.Pos.C + Parent()->Value()->framedim.Pos.C,
+			       'r' );
+    }
+    catch ( ... ) {
+      try {
+	win = new NCursesWindow( *parw,
+				 inparent.Sze.H, inparent.Sze.W,
+				 inparent.Pos.L,
+				 inparent.Pos.C,
+				 'r' );
+      }
+      catch ( ... ) {
+	inparent.Sze = wsze(1,1);
+	inparent.Pos = wpos(0,0);
+	win = new NCursesWindow( *parw, 1, 1, 0, 0, 'r' );
+      }
+    }
   }
   else
     win = new NCursesWindow( inparent.Sze.H, inparent.Sze.W,

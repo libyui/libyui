@@ -84,6 +84,7 @@ class NCWidget : public tnode<NCWidget*>, protected NCursesError {
     wrect           framedim;
     wrect           inparent;
     bool            noUpdates;
+    bool            skipNoDimWin;
 
     void wMoveChildTo( NCWidget & child, const wpos & newpos );
     void wRelocate( const wrect & newrect );

@@ -51,6 +51,8 @@ class NCDialog : public YDialog, public NCWidget {
 
     void _init( YWidgetOpt & opt );
 
+    void _init_size();
+
   protected:
 
     virtual const char * location() const { return "NCDialog"; }

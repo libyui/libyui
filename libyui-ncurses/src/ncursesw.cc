@@ -41,6 +41,7 @@
 */
 
 #include <iostream>
+#include "Y2Log.h"
 using namespace std;
 
 #include "ncursesw.h"
@@ -201,6 +202,15 @@ NCursesWindow::NCursesWindow(WINDOW* &window)
 NCursesWindow::NCursesWindow(NCursesWindow& win, int l, int c,
 			     int begin_y, int begin_x, char absrel)
 {
+    if ( l <= 0 )
+      l = 1;
+    if ( c <= 0 )
+      c = 1;
+    if ( begin_y < 0 )
+      begin_y = 0;
+    if ( begin_x < 0 )
+      begin_x = 0;
+
     if (absrel == 'a') { // absolute origin
 	begin_y -= win.begy();
 	begin_x -= win.begx();
@@ -210,15 +220,12 @@ NCursesWindow::NCursesWindow(NCursesWindow& win, int l, int c,
     // library needs the `subwin' call to link to the parent in
     // order to correctly perform refreshes, etc.
     // Friendly enough, this also works for pads.
-    if ( l <= 0 )
-      l = 1;
-    if ( c <= 0 )
-      c = 1;
-
     w = ::derwin(win.w, l, c, begin_y, begin_x);
     if (w == 0) {
-	err_handler("Cannot construct subwindow");
+      //WIDERR << "Throw " << wpos(begin_y, begin_x) << wsze(l, c) << endl;
+      err_handler("Cannot construct subwindow");
     }
+    //WIDMIL << "created " << wpos(begin_y, begin_x) << wsze(l, c) << endl;
 
     par = &win;
     sib = win.subwins;

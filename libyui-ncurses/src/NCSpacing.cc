@@ -47,6 +47,7 @@ NCSpacing::NCSpacing( NCWidget * parent, YWidgetOpt & opt,
     l = "NC(N)Spacing";
   }
   wstate = NC::WSdumb;
+  skipNoDimWin = true;
 }
 
 ///////////////////////////////////////////////////////////////////

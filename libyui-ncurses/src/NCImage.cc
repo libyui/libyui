@@ -37,6 +37,7 @@ NCImage::NCImage( NCWidget * parent, YWidgetOpt & opt,
   WIDDBG << endl;
   defsze = 0;
   wstate = NC::WSdumb;
+  skipNoDimWin = true;
 }
 
 ///////////////////////////////////////////////////////////////////

@@ -95,14 +95,9 @@ void NCDialog::_init( YWidgetOpt & opt )
 {
   NCurses::RememberDlg( this );
 
-  defsze.H = NCurses::lines();
-  defsze.W = NCurses::cols();
-  hshaddow = vshaddow = false;
+  _init_size();
 
-  if ( isBoxed() )
-    defsze -= 2;
   wstate = NC::WSdumb;
-
   if ( opt.hasWarnColor.value() ) {
     mystyleset = NCstyle::WarnStyle;
   } else if ( opt.hasInfoColor.value() ) {
@@ -117,6 +112,40 @@ void NCDialog::_init( YWidgetOpt & opt )
   helpPopup = 0;
 
   WIDDBG << "+++ " << this << endl;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCDialog::_init_size
+//	METHOD TYPE : void
+//
+void NCDialog::_init_size()
+{
+  defsze.H = NCurses::lines();
+  defsze.W = NCurses::cols();
+  hshaddow = vshaddow = false;
+
+  if ( isBoxed() ) {
+    switch ( defsze.H ) {
+    case 1:
+    case 2:
+      defsze.H = 1;
+      break;
+    default:
+      defsze.H -= 2;
+      break;
+    }
+    switch ( defsze.W ) {
+    case 1:
+    case 2:
+      defsze.W = 1;
+      break;
+    default:
+      defsze.W -= 2;
+      break;
+    }
+  }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -158,13 +187,15 @@ NCDialog::~NCDialog()
 //
 long NCDialog::nicesize( YUIDimension dim )
 {
-  if ( hasDefaultSize() || !numChildren() )
+  if ( hasDefaultSize() || !numChildren() ) {
     return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
+  }
 
   wsze csze( child( 0 )->nicesize( YD_VERT ),
 	     child( 0 )->nicesize( YD_HORIZ ) );
   csze = wsze::min( wGetDefsze(),
 		    wsze::max( csze, wsze( 1 ) ) );
+
   return dim == YD_HORIZ ? csze.W : csze.H;
 }
 
@@ -290,8 +321,34 @@ void NCDialog::wCreate( const wrect & newrect )
     throw NCError( "wCreate: already have win" );
 
   wrect panrect( newrect );
-  if ( isBoxed() )
-    panrect.Sze += 2;
+  inparent = newrect;
+
+  if ( isBoxed() ) {
+    switch ( NCurses::lines() - panrect.Sze.H ) {
+    case 0:
+      break;
+    case 1:
+      panrect.Sze.H += 1;
+      inparent.Pos.L += 1;
+      break;
+    default:
+      panrect.Sze.H += 2;
+      inparent.Pos.L += 1;
+      break;
+    }
+    switch ( NCurses::cols() - panrect.Sze.W ) {
+    case 0:
+      break;
+    case 1:
+      panrect.Sze.W += 1;
+      inparent.Pos.C += 1;
+      break;
+    default:
+      panrect.Sze.W += 2;
+      inparent.Pos.C += 1;
+      break;
+    }
+  }
 
   if ( popedpos.L >= 0 ) {
     if ( popedpos.L + panrect.Sze.H <= NCurses::lines() )
@@ -310,10 +367,6 @@ void NCDialog::wCreate( const wrect & newrect )
   } else {
     panrect.Pos.C = (NCurses::cols() - panrect.Sze.W) / 2;
   }
-
-  inparent = newrect;
-  if ( isBoxed() )
-    inparent.Pos += 1;
 
   if ( panrect.Pos.L + panrect.Sze.H < NCurses::lines() ) {
     ++panrect.Sze.H;
@@ -1254,13 +1307,7 @@ bool NCDialog::getVisible()
 //
 void NCDialog::resizeEvent()
 {
-  defsze.H = NCurses::lines();
-  defsze.W = NCurses::cols();
-  hshaddow = vshaddow = false;
-
-  if ( isBoxed() )
-    defsze -= 2;
-
+  _init_size();
   if ( pan ) {
     setInitialSize();
   }

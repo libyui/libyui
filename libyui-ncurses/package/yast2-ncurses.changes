@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed May 28 14:13:53 CEST 2003 - ma@suse.de
+
+- V 2.8.4
+- Fixes for creating and drawing dialogs on verry small terminals.
+
+-------------------------------------------------------------------
 Tue May 27 18:14:32 CEST 2003 - ma@suse.de
 
 - V 2.8.3
