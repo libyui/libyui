@@ -201,10 +201,13 @@ void NCPopupDeps::showDependencies( )
 
 	// fill the list with packages  which have unresolved deps
 	fillDepsPackageList( pkgs );
-
+	// show first dependency
+	concretelyDependency( pkgs->getCurrentItem() );
+	
 	showDependencyPopup();    // show the dependencies
 
 	pkgs->setKeyboardFocus();
+
     }
     
 }
@@ -291,6 +294,9 @@ string NCPopupDeps::getDependencyKind(  PkgDep::ErrorResult error )
 {
     string ret = "";
 
+    // Get the type of the dependency - check all possibilities, last wins 
+    // TO DO: better classification of dependency
+
     if ( !error.unresolvable.empty() )
     {
 	if ( !error.unresolvable.front().is_conflict )
@@ -339,6 +345,11 @@ bool NCPopupDeps::concretelyDependency( int index )
 	
     NCDBG << "*** Showing: " << error << endl;	
 
+    // Go through all variables which may contain information about package
+    // dependencies. Add all info to the list of dependency packages.
+    // The error label is set to the last match - like above in getDependencyKind().
+    // TO DO: better classification of dependency
+
     if ( !error.unresolvable.empty() )
     {
 	bool require = false;
@@ -348,7 +359,6 @@ bool NCPopupDeps::concretelyDependency( int index )
 	{
 	    pkgLine.clear();
 	    PMObjectPtr objPtr = (*it).solvable;	// not needed here 
-	    pkgLine.clear();
 
 	    if ( !(*it).is_conflict )	// it is a requires dependency
 	    {
@@ -388,9 +398,8 @@ bool NCPopupDeps::concretelyDependency( int index )
 	while ( it != error.alternatives.end() )
 	{
 	    pkgLine.clear();
-
 	    PMObjectPtr objPtr = (*it).solvable; 
-	    pkgLine.clear();
+
 	    if ( objPtr )
 	    {
 		pkgLine.push_back( objPtr->getSelectable()->name() );	// package name
@@ -414,23 +423,27 @@ bool NCPopupDeps::concretelyDependency( int index )
 	while ( it != error.conflicts_with.end() )
 	{
 	    pkgLine.clear();
-
+	    PMObjectPtr causePtr = error.solvable;
+	    
 	    PMObjectPtr objPtr = (*it).solvable; 
-	    pkgLine.clear();
+
 	    if ( objPtr )
 	    {
-		pkgLine.push_back( objPtr->getSelectable()->name() );	// package name
-		pkgLine.push_back( objPtr->summary() );
+		// do not show the dependency if the causing pointer == object pointer
+		if ( causePtr != objPtr )
+		{
+		    pkgLine.push_back( objPtr->getSelectable()->name() );	// package name
+		    pkgLine.push_back( objPtr->summary() );
 	    
-		deps->addLine( objPtr->getSelectable()->status(), //  get the package status
-			       pkgLine,
-			       i,		// the index
-			       objPtr );	// the corresponding package
+		    deps->addLine( objPtr->getSelectable()->status(), //  get the package status
+				   pkgLine,
+				   i,		// the index
+				   objPtr );	// the corresponding package
+		}
 	    }
 	    else
 	    {
 		pkgLine.push_back( (*it).name );
-	    	pkgLine.push_back( PkgNames::NoAvailText().str() );
 		deps->addLine( PMSelectable::S_NoInst, // use status NOInst
 			       pkgLine,
 			       i,		// the index
@@ -449,9 +462,8 @@ bool NCPopupDeps::concretelyDependency( int index )
 	while ( it != error.referers.end() )
 	{
 	    pkgLine.clear();
-
 	    PMObjectPtr objPtr = (*it).solvable; 
-	    pkgLine.clear();
+
 	    if ( objPtr )
 	    {
 		pkgLine.push_back( objPtr->getSelectable()->name() );	// package name
@@ -596,6 +608,8 @@ bool NCPopupDeps::postAgain()
 		}
 	    }
 	    pkgs->setKeyboardFocus();
+
+	    concretelyDependency( pkgs->getCurrentItem() );
 	}
 	else
 	{

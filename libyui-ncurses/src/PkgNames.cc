@@ -579,21 +579,21 @@ const YCPString PkgNames::LabelAlternative()
 const YCPString PkgNames::LabelConflict1()
 {
      // text part 1 describing package conflict (it's a label - keep it short)
-    static const YCPString value = toYCPString( _( "Solve the conflict by deleting") );
+    static const YCPString value = toYCPString( _( "Solve the conflict by deleting (or") );
     return value;
 }
 
 const YCPString PkgNames::LabelConflict2()
 {
       // text part 2 describing package conflict (it's a label - keep it short)
-    static const YCPString value = toYCPString( _( "the unwanted package(s)." ) );
+    static const YCPString value = toYCPString( _( "deselecting) the unwanted package(s)." ) );
     return value;
 }
 
 const YCPString PkgNames::LabelRequBy1()
 {
     // text part 1 describing package does not work (it's a label - keep it short)
-    static const YCPString value = toYCPString( _( "The packages below does not work without" ) );
+    static const YCPString value = toYCPString( _( "The packages below do not work without" ) );
     return value;
 }
 
