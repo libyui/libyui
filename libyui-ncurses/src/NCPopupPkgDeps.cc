@@ -80,6 +80,26 @@ string NCPopupPkgDeps::getLabelRequire1()
     return PkgNames::LabelRequire1().str();
 }
 
+string NCPopupPkgDeps::getLabelRequBy1()
+{
+    return PkgNames::LabelRequBy1().str();
+}
+
+string NCPopupPkgDeps::getLabelRequBy2()
+{
+    return PkgNames::LabelRequBy2().str();
+}
+
+string NCPopupPkgDeps::getLabelConflict2()
+{
+    return PkgNames::LabelConflict2().str();
+}
+
+string NCPopupPkgDeps::getLabelContinueRequ()
+{
+    return PkgNames::ContinueRequ().str();
+}
+
 string NCPopupPkgDeps::getHeadline()
 {
     return PkgNames::PackageDeps().str();

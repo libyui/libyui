@@ -423,7 +423,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 	if ( !labelSet )
 	{
 	    errorLabel1->setLabel( YCPString(PkgNames::LabelConflict1().str()) );
-	    errorLabel2->setLabel( YCPString(PkgNames::LabelConflict2().str()) );
+	    errorLabel2->setLabel( YCPString(getLabelConflict2()) );
 	    labelSet = true;
 	}
     }
@@ -477,12 +477,12 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    if ( causePtr
 		 && (causePtr->getSelectable()->status() == PMSelectable::S_Del) )
 	    {
-		errorLabel1->setLabel( YCPString(PkgNames::LabelRequBy1().str()) );
-		errorLabel2->setLabel( YCPString(PkgNames::LabelRequBy2().str()) );
+		errorLabel1->setLabel( YCPString(getLabelRequBy1()) );
+		errorLabel2->setLabel( YCPString(getLabelRequBy2()) );
 	    }
 	    else
 	    {
-		errorLabel1->setLabel( YCPString(PkgNames::ContinueRequ().str()) );
+		errorLabel1->setLabel( YCPString(getLabelContinueRequ()) );
 		errorLabel2->setLabel( YCPString( "" ) );
 	    }
 	    labelSet = true;

@@ -75,18 +75,41 @@ bool NCPopupSelDeps::solveInstall( PkgDep::ResultList & goodList, PkgDep::ErrorR
 //
 //
 //	METHOD NAME : NCPopupSelDeps::getLabelRequire1
-//	METHOD TYPE : bool
+//	METHOD TYPE : string
 //
 string NCPopupSelDeps::getLabelRequire1()
 {
     return PkgNames::LabelSelRequire1().str();
 }
 
+string NCPopupSelDeps::getLabelRequBy1()
+{
+    return PkgNames::LabelSelRequBy1().str();
+}
+
+string NCPopupSelDeps::getLabelRequBy2()
+{
+    return PkgNames::LabelSelRequBy2().str();
+}
+
+string NCPopupSelDeps::getLabelConflict2()
+{
+    return PkgNames::LabelSelConflict2().str();
+}
+
+string NCPopupSelDeps::getLabelContinueRequ()
+{
+    return PkgNames::ContinueSelRequ().str();
+}
+
+
+
+
 ///////////////////////////////////////////////////////////////////
 //
 //
 //	METHOD NAME : NCPopupSelDeps::getHeadline
-//	METHOD TYPE : bool
+//	METHOD TYPE : string
 //
 string NCPopupSelDeps::getHeadline()
 {
@@ -97,7 +120,7 @@ string NCPopupSelDeps::getHeadline()
 //
 //
 //	METHOD NAME : NCPopupSelDeps::solveInstall
-//	METHOD TYPE : bool
+//	METHOD TYPE : void
 //
 void NCPopupSelDeps::setDepsTableType()
 {

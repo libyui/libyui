@@ -70,13 +70,16 @@ private:
     // method to solve the dependencies
     virtual bool solveInstall( PkgDep::ResultList & goodList, PkgDep::ErrorResultList & badList ) = 0;
 
+    // methods to create different text for package/selection popup
+    virtual string getHeadline() = 0;
     virtual string getLabelRequire1() = 0;
-
+    virtual string getLabelRequBy1() = 0;
+    virtual string getLabelRequBy2() = 0; 
+    virtual string getLabelConflict2() = 0;
+    virtual string getLabelContinueRequ() = 0;
+    
     void createLayout();
-
-    // method to create different layout for package/selection popup
-    virtual string getHeadline() { return ""; }
-
+    
     virtual void setDepsTableType() { // NOOP
 	                              ; }
     

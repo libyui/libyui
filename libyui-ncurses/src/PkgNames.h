@@ -370,6 +370,7 @@ public:
     static const NCstring DepsHelpLine();
     static const NCstring Solving();
     static const NCstring ContinueRequ();
+    static const NCstring ContinueSelRequ();
     
    /**
      * text used in search popup

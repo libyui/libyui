@@ -876,6 +876,13 @@ const NCstring PkgNames::ContinueRequ()
     return value;   
 }
 
+const NCstring PkgNames::ContinueSelRequ()
+{
+     // label continues the part required by ...
+    static const NCstring value = _("... the selection(s) below");
+    return value;   
+}
+
 const NCstring PkgNames::Conflicts()
 {
     // part of the package description
