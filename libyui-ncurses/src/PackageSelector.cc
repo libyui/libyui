@@ -84,6 +84,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
       , depsPopup( 0 )
       , selectionPopup( 0 )
       , diskspacePopup( 0 )
+      , searchPopup( 0 )
       , youMode( false )
       , updateMode( false )
       , autoCheck( true )
@@ -173,13 +174,15 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     if ( !youMode )
     {
 	// create the selections popup
-	selectionPopup = new NCPopupSelection( wpos( 1, 1 ),
+	selectionPopup = new NCPopupSelection( wpos( 1, 1 ),	// position
 					       this );
 	// create the filter popup
 	filterPopup = new NCPopupTree( wpos( 1, 1 ),	// position
 				       this );	 
-
     }
+
+    // create the search popup
+    searchPopup = new NCPopupSearch( wpos( 1, 1 ), this );
     
     depsPopup = new NCPopupDeps( wpos( 1, 1 ), this );
     
@@ -850,15 +853,13 @@ bool PackageSelector::SearchHandler( const NCursesEvent& event)
 {
      NCPkgTable * packageList = getPackageList();
     
-    if ( !packageList )
+    if ( !packageList || !searchPopup )
     {
 	return false;
     }
     
-    // open the search poup and get the search expression
-    NCPopupSearch pkgSearch( wpos( 1, 1 ), this );
-
-    NCursesEvent retEvent = pkgSearch.showSearchPopup();
+    // open the search popup
+    NCursesEvent retEvent = searchPopup->showSearchPopup();
 
     if ( !retEvent.result.isNull() )
     {

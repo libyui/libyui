@@ -474,7 +474,7 @@ const NCstring PkgNames::SearchResults()
 const NCstring PkgNames::PackageSearch()
 {
     // the headline of the search popup 
-    static const NCstring value = _("Package blabsdsjadjs search");
+    static const NCstring value = _("Package search");
     return value;
 }
 

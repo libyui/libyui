@@ -43,6 +43,8 @@ class PMYouPatchPtr;
 class LangCode;
 class NCPopupDeps;
 class NCPopupDiskspace;
+class NCPopupSearch;
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -79,11 +81,13 @@ class PackageSelector
     NCPopupSelection * selectionPopup; 	// the selections popup
 
     NCPopupDiskspace * diskspacePopup;	// the popup showing the disk usage
+
+    NCPopupSearch * searchPopup; 	// the package search popup
     
     bool youMode;			// YOU
     bool updateMode;			// Update
 
-    bool autoCheck;			// flag for autoamtic dependency check on/off
+    bool autoCheck;			// flag for automatic dependency check on/off
     
     // internal helper functions (format list of string) 
     string createRelLine( list<PkgRelation> info );
@@ -160,7 +164,7 @@ class PackageSelector
     * @param checkName Search in package name (true or false)
     * @param checkSummary Check the summary (true or false)
     * @param checkDescr Check the long description (true or false)
-    * @return bool Returns true if the expression matches.
+    * @return bool
     */ 
     bool fillSearchList( const YCPString & expr,
 			 bool ignoreCase,

@@ -101,12 +101,11 @@ void NCPopupSearch::createLayout( const YCPString & headline )
   
   opt.isEditable.setValue( true );
   searchExpr = new NCComboBox( frame0, opt, YCPString(PkgNames::SearchPhrase().str()) );
-  searchExpr->setKeyboardFocus();
   frame0->addChild( searchExpr );
  
   vSplit2->addChild( vSp1 );
   vSplit->addChild( frame0 );
-  
+
   // add the checkBox ignore case
   NCSplit * hSplit2 = new NCSplit( vSplit, opt, YD_HORIZ );
   vSplit->addChild( hSplit2 );
@@ -117,7 +116,7 @@ void NCPopupSearch::createLayout( const YCPString & headline )
   
   vSplit->addChild( vSp1 );	// VSpacing
 
-  // add a frame contianing the check boxes
+  // add a frame containing the other check boxes
   opt.isHStretchable.setValue( true );
   opt.isVStretchable.setValue( true );
   NCFrame * frame = new NCFrame( vSplit, opt, YCPString(PkgNames::SearchIn().str()) );
@@ -176,6 +175,10 @@ NCursesEvent & NCPopupSearch::showSearchPopup( )
     postevent = NCursesEvent();
     do {
 	popupDialog();
+	if ( searchExpr )
+	{
+	    searchExpr->setKeyboardFocus();
+	}
     } while ( postAgain() );
     
     popdownDialog();
@@ -189,7 +192,20 @@ NCursesEvent & NCPopupSearch::showSearchPopup( )
 //
 YCPString  NCPopupSearch::getSearchExpression() const
 {
-    return searchExpr->getValue();
+    YCPString value = YCPNull();
+    unsigned int i = 0;
+    
+    if ( searchExpr )
+    {
+	value = searchExpr->getValue();
+	i = searchExpr->getListSize();
+	
+	searchExpr->itemAdded( value,	// the search expression
+			       i,	// index
+			       true );	// selected
+    }
+
+    return value;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -277,7 +293,7 @@ bool NCPopupSearch::getCheckBoxValue( NCCheckBox * checkBox )
     {
 	value = checkBox->getValue();
 
-	// check description is selected 
+	// return whether the option is selected or not 
 	if ( !value.isNull() )
 	{
 	    return ( value->asBoolean()->toString() == "true" ? true : false );
