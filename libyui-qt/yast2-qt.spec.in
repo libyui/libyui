@@ -4,7 +4,6 @@
 
 @HEADER@
 
-Source1:        YaST.desktop
 Summary:	-
 Provides:	yast2_ui
 Provides:	y2base:/var/lib/YaST2/servers/qt
@@ -23,7 +22,6 @@ Obsoletes:	y2qt
 @BUILD-QT@
 
 @INSTALL@
-%suse_update_desktop_file -i YaST SystemSetup Core-System
 
 @CLEAN@
 
@@ -36,7 +34,6 @@ Obsoletes:	y2qt
 # @ybindir@/y2qt
 %dir /usr/X11R6/lib/X11/fonts/uni
 %verify(not md5 size mtime) /usr/X11R6/lib/X11/fonts/uni/fonts.dir
-/usr/share/applications/YaST.desktop
 /usr/X11R6/lib/X11/fonts/uni/newunifont.pcf.gz
 /usr/X11R6/lib/X11/fonts/uni/newunifontB.pcf.gz
 /usr/X11R6/lib/X11/fonts/uni/newunifontB18.pcf.gz
