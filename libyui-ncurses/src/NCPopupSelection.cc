@@ -75,8 +75,6 @@ void NCPopupSelection::createLayout( const YCPString & label )
 
   YWidgetOpt opt;
 
-  vector< pair<PMSelectionPtr, bool> >::iterator it;
-
   // the vertical split is the (only) child of the dialog
   NCSplit * split = new NCSplit( this, opt, YD_VERT );
   addChild( split );
@@ -86,15 +84,6 @@ void NCPopupSelection::createLayout( const YCPString & label )
   // the multi selection widget
   selectionBox = new NCMultiSelectionBox( split, opt, label );
   split->addChild( selectionBox );
-  int i;
-  
-  for ( i = 0, it = selections.begin(); it != selections.end(); ++it, i++ )
-  {
-      // FIXME: get the (translated) description
-      selectionBox->addItem( YCPString( (*it).first->name() ),	// description
-			     PkgNames::Treeitem(),	// `id
-			     (*it).second );		// selected
-  }
 
   opt.notifyMode.setValue( true );
   
@@ -115,20 +104,39 @@ void NCPopupSelection::createLayout( const YCPString & label )
 //
 NCursesEvent & NCPopupSelection::showSelectionPopup( )
 {
+    int i;
+    vector< pair<PMSelectionPtr, bool> >::iterator it;    
+
     postevent = NCursesEvent();
+
+    if ( !selectionBox )
+	return postevent;
+    
+    selectionBox->clearItems();
+
+    // fill the selection box
+    for ( i = 0, it = selections.begin(); it != selections.end(); ++it, i++ )
+    {
+	// FIXME: get the (translated) description
+	selectionBox->addItem( YCPString( (*it).first->name() ),	// description
+			       PkgNames::Treeitem(),	// `id
+			       (*it).second );		// selected
+    }
+
+    // event loop
     do {
 	popupDialog();
     } while ( postAgain() );
     
     popdownDialog();
 
-    if ( !packager || !selectionBox )
+    if ( !packager )
 	return postevent;
     
     // if OK is clicked get the current item and show the package list
     if ( postevent.detail == NCursesEvent::USERDEF )
     {
-	if ( selectionBox && !selections.empty() )
+	if ( !selections.empty() )
 	{
 	    int index = selectionBox->getCurrentItem();
 	    PMSelectionPtr selPtr = selections[index].first;
@@ -138,6 +146,7 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
 	    packager->showSelPackages( getCurrentLine(), selPtr );
 	}
     }
+    
     return postevent;
 }
 
@@ -145,6 +154,7 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
 //
 // bool getSelectedItems ( vector<int> & list )
 //
+// ------- UNUSED ---------
 //
 bool  NCPopupSelection::getSelectedItems ( vector<int> & selItems )
 {
@@ -238,7 +248,7 @@ NCursesEvent NCPopupSelection::wHandleInput( int ch )
     {
 	int index = selectionBox->getCurrentItem();
 	PMSelectionPtr selPtr = selections[index].first;
-	if ( selectionBox && index < selections.size() )
+	if ( selectionBox && (unsigned)index < selections.size() )
 	{
 	    if ( selections[index].second )
 	    {

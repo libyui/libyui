@@ -141,7 +141,7 @@ class NCMultiSelectionBox : public YMultiSelectionBox, public NCPadWidget {
     // added by gs
     unsigned int getNumLines( ) { return pad->Lines(); }
     const NCTableLine * getLine( const int & index ) { return pad->GetLine(index); }
-    
+    void clearItems() { return pad->ClearTable(); }
 };
 
 ///////////////////////////////////////////////////////////////////
