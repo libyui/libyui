@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Mar 21 16:24:09 CET 2005 - sh@suse.de
+
+- One more fix for bug #72799: Help/Steps buttons not translated
+- V 2.11.12
+
+-------------------------------------------------------------------
 Wed Mar 16 18:30:09 CET 2005 - sh@suse.de
 
 - Fixed bug #72799: Help/Steps buttons not translated
