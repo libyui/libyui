@@ -108,8 +108,7 @@ YQPkgVersionsView::showDetails( PMObjectPtr pmObj )
     if ( ! pmObj )
 	return;
 
-    std::string name = pmObj->name();
-    QY2CheckListItem * root = new QY2CheckListItem( this, name.c_str(),
+    QY2CheckListItem * root = new QY2CheckListItem( this, pmObj->name().asString().c_str(),
 						    QCheckListItem::Controller, true );
     CHECK_PTR( root );
     root->setOpen( true );
@@ -120,7 +119,7 @@ YQPkgVersionsView::showDetails( PMObjectPtr pmObj )
 
     if ( ! pmObj->getSelectable() )
     {
-	y2error( "%s doesn't have a PMSelectable parent!", name.c_str() );
+	y2error( "%s doesn't have a PMSelectable parent!", pmObj->name().asString().c_str() );
 	return;
     }
 
@@ -207,10 +206,8 @@ YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
     , _pkgVersionList( pkgVersionList )
     , _pmObj( pmObj )
 {
-    std::string arch = pmObj->arch();
-    
     setText( versionCol(), pmObj->edition().asString().c_str() );
-    setText( archCol(),    arch.c_str() );
+    setText( archCol(),    pmObj->arch().asString().c_str() );
     setText( instSrcCol(), pmObj->instSrcLabel().c_str() );
     setOn( pmObj->isCandidateObj() );
 

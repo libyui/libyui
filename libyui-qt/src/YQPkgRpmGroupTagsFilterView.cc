@@ -152,8 +152,7 @@ YQPkgRpmGroupTagsFilterView::check( PMPackagePtr pkg )
     
     if ( pkg->group_ptr() == 0 )
     {
-	std::string name = pkg->name();
-	y2error( "NULL pointer in group_ptr() for package %s", name.c_str() );
+	y2error( "NULL pointer in group_ptr() for package %s", pkg->name().asString().c_str() );
 	return false;
     }
 

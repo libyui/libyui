@@ -253,7 +253,6 @@ bool
 YQPkgSearchFilterView::check( const std::list<std::string> & strList, const QRegExp & regexp )
 {
     std::string text;
-    
     std::list<std::string>::const_iterator it = strList.begin();
     
     while ( it != strList.end() )

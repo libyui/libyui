@@ -520,13 +520,13 @@ YQPkgConflict::dumpDeleteList( QListViewItem * parent )
 
 	if ( pkg )
 	{
-	    std::string name = pkg->name();
+	    QString name = pkg->name().asString().c_str();
 	    QString text;
 
 	    if ( pkg->hasInstalledObj() )
-		text = ( _( "Delete %1" ) ).arg( name.c_str() );
+		text = ( _( "Delete %1" ) ).arg( name );
 	    else
-		text = ( _( "Do not install %1" ) ).arg( name.c_str() );
+		text = ( _( "Do not install %1" ) ).arg( name );
 
 
 	    QY2ListViewItem * item = new QY2ListViewItem( parent, text, true );
@@ -689,8 +689,7 @@ YQPkgConflictResolution::YQPkgConflictResolution( QY2CheckListItem *	parent,
     , _type( YQPkgConflictAlternative )
     , _pmObj( pmObj )
 {
-    std::string name = _pmObj->name();
-    setText( 0, ( _( "Install %1" ) ).arg( name.c_str() ) );
+    setText( 0, ( _( "Install %1" ) ).arg( _pmObj->name().asString().c_str() ) );
 }
 
 
