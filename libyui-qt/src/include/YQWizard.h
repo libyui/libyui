@@ -144,6 +144,7 @@ protected:
     YCPString	_nextButtonLabel;
 
     QColor	_bg;
+    QColor	_stepsBg;
 
     QWidgetStack *	_sideBar;
     QVBox *		    _stepsPanel;

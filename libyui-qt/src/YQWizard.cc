@@ -72,7 +72,15 @@ YQWizard::YQWizard( QWidget *		parent,
     QColor webGreenBG( 0x9c, 0xce, 0x9c );
     QColor webGreenFG( 0x31, 0x65, 0x00 );
 
-    _bg = QColor( 0xE6, 0xE6, 0xE6 );
+    QColor lightGrey( 0xf8, 0xf8, 0xf8 );
+    QColor darkGrey( 0xde, 0xde, 0xde );
+    QColor darkGreen( 0x66, 0x99, 0x00 );
+    // QColor lightGreen();
+    QColor clientAreaBG( 0xee, 0xee, 0xee );
+    QColor greyText( 0x66, 0x66, 0x66 );
+
+    _bg		= QColor( 0xE6, 0xE6, 0xE6 );
+    _stepsBg	= lightGrey;
 
 
     //
@@ -132,7 +140,8 @@ YQWizard::YQWizard( QWidget *		parent,
     CHECK_PTR( _workArea );
 
     // _workArea->setFrameStyle( QFrame::TabWidgetPanel | QFrame::Sunken );
-    _workArea->setFrameStyle( QFrame::Box | QFrame::Sunken );
+    // _workArea->setFrameStyle( QFrame::Box | QFrame::Sunken );
+    _workArea->setFrameStyle( QFrame::Box | QFrame::Plain );
     _workArea->setMargin( 4 );
 
 
@@ -207,10 +216,12 @@ void YQWizard::layoutStepsPanel()
     _stepsPanel = new QVBox( _sideBar );
     CHECK_PTR( _stepsPanel );
 
+    _stepsPanel->setPaletteBackgroundColor( _bg );
+
     _sideBar->addWidget( _stepsPanel );
 
     QLabel * steps = new QLabel(
-				"<font size=3 color=#629900>"
+				"<font size=3 color=#669900>"
 				"<b>Base Installation</b>"
 				"<ul>"
 				"<li>Language<br>"
@@ -231,7 +242,7 @@ void YQWizard::layoutStepsPanel()
 				_stepsPanel );
     CHECK_PTR( steps );
 
-    steps->setPaletteBackgroundColor( QColor( 0xFF, 0xFA, 0xFF ) );
+    steps->setPaletteBackgroundColor( _stepsBg );
     steps->setFont( QFont( "Helvetica", 10 ) );
 
     steps->setFont( QFont( "Helvetica", 12 ) );
@@ -240,14 +251,24 @@ void YQWizard::layoutStepsPanel()
     steps->setAlignment( Qt::AlignLeft | Qt::AlignTop );
     steps->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
 
+    QWidget * stretch = addVStretch( _stepsPanel );
+    CHECK_PTR( stretch );
+
+    stretch->setPaletteBackgroundColor( _stepsBg );
+
 
     // Bottom gradient
 
     QLabel * bottomGradient= new QLabel( _stepsPanel );
     CHECK_PTR( bottomGradient );
 
-    bottomGradient->setPixmap( QPixmap( THEMEDIR "/wizard-steps-bottom-gradient.png" ) );
-    bottomGradient->setScaledContents( true );
+    QPixmap pixmap( THEMEDIR "/wizard-steps-bottom-gradient.png" );
+
+    if ( ! pixmap.isNull() )
+    {
+	bottomGradient->setFixedHeight( pixmap.height() );
+	bottomGradient->setPaletteBackgroundPixmap( pixmap );
+    }
 
 
     // Since we want the gradient pixmap to "flow around" the "Help" button, we
@@ -282,7 +303,7 @@ void YQWizard::layoutStepsPanel()
     _helpButton = new QPushButton( _( "&Help" ), bottomGradient );
     CHECK_PTR( _helpButton );
 
-    QPixmap pixmap( THEMEDIR "/wizard-help-button.png" );
+    pixmap = QPixmap( THEMEDIR "/wizard-help-button.png" );
 
     if ( ! pixmap.isNull() )
 	_helpButton->setPixmap( pixmap );
