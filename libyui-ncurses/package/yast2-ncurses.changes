@@ -2,8 +2,7 @@
 Fri Mar 26 15:45:38 CET 2004 - gs@suse.de
 
 - V 2.9.18
-- YOU mode: add actions for all listed patches,
-	    bugfix filter for patch kind   
+- YOU mode: bugfix filter for patch kind   
 - possibility to disable/enable RichText widget 
 
 -------------------------------------------------------------------
