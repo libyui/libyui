@@ -82,7 +82,7 @@
 #include "QY2ComboTabWidget.h"
 #include "YQDialog.h"
 #include "utf8.h"
-#include "Y2QtComponent.h"
+#include "YQUI.h"
 #include "YEvent.h"
 #include "YQi18n.h"
 
@@ -136,8 +136,8 @@ YQPackageSelector::YQPackageSelector( QWidget * parent, YWidgetOpt & opt, const 
 
 
     setTextdomain( "packages-qt" );
-    setFont( Y2QtComponent::ui()->currentFont() );
-    Y2QtComponent::ui()->blockWmClose(); // Automatically undone after UI::RunPkgSelection()
+    setFont( YQUI::ui()->currentFont() );
+    YQUI::ui()->blockWmClose(); // Automatically undone after UI::RunPkgSelection()
     _installedPkgs = Y2PM::instTarget().numPackages();
 
     _pkgConflictDialog = new YQPkgConflictDialog( &( Y2PM::packageManager() ), this );
@@ -790,7 +790,7 @@ YQPackageSelector::makeConnections()
     // Handle WM_CLOSE like "Cancel"
     //
 
-    connect( Y2QtComponent::ui(),	SIGNAL( wmClose() ),
+    connect( YQUI::ui(),	SIGNAL( wmClose() ),
 	     this,		SLOT  ( reject()   ) );
 }
 
@@ -814,11 +814,11 @@ YQPackageSelector::manualResolvePackageDependencies()
 	return QDialog::Accepted;
     }
 
-    Y2QtComponent::ui()->busyCursor();
+    YQUI::ui()->busyCursor();
 
     int result = _pkgConflictDialog->solveAndShowConflicts();
 
-    Y2QtComponent::ui()->normalCursor();
+    YQUI::ui()->normalCursor();
 
 #if DEPENDENCY_FEEDBACK_IF_OK
 
@@ -844,7 +844,7 @@ YQPackageSelector::resolvePackageDependencies()
     }
 
 
-    Y2QtComponent::ui()->busyCursor();
+    YQUI::ui()->busyCursor();
 
     QColor oldBackground;
 
@@ -860,7 +860,7 @@ YQPackageSelector::resolvePackageDependencies()
     if ( _checkDependenciesButton )
 	_checkDependenciesButton->setPaletteBackgroundColor( oldBackground );
 
-    Y2QtComponent::ui()->normalCursor();
+    YQUI::ui()->normalCursor();
 
     return result;
 }
@@ -921,7 +921,7 @@ YQPackageSelector::pkgExport()
     QString filename = fileDialog.askForSaveFileName();
 
 #if 0
-    QString filename = Y2QtComponent::ui()->askForSaveFileName( QString( "user.sel" ),	// startsWith
+    QString filename = YQUI::ui()->askForSaveFileName( QString( "user.sel" ),	// startsWith
 							   QString( "*.sel;;*" ),	// filter
 							   _( "Save Package List" ) );
 #endif
@@ -1096,7 +1096,7 @@ YQPackageSelector::reject()
 	else
 	    Y2PM::selectionManager().RestoreState();
 
-	Y2QtComponent::ui()->sendEvent( new YCancelEvent() );
+	YQUI::ui()->sendEvent( new YCancelEvent() );
     }
 }
 
@@ -1146,7 +1146,7 @@ YQPackageSelector::accept()
     else
 	Y2PM::selectionManager().ClearSaveState();
 
-    Y2QtComponent::ui()->sendEvent( new YMenuEvent( YCPSymbol( "accept" ) ) );
+    YQUI::ui()->sendEvent( new YMenuEvent( YCPSymbol( "accept" ) ) );
 }
 
 
@@ -1177,7 +1177,7 @@ YQPackageSelector::keyPressEvent( QKeyEvent * event )
 	}
 	else if ( event->key() == Qt::Key_F5 )	// No matter if Ctrl/Alt/Shift pressed
 	{
-	    Y2QtComponent::ui()->easterEgg();
+	    YQUI::ui()->easterEgg();
 	    return;
 	}
     }

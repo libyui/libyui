@@ -26,7 +26,7 @@
 #include <ycp/y2log.h>
 
 #include "utf8.h"
-#include "Y2QtComponent.h"
+#include "YQUI.h"
 #include "YEvent.h"
 #include "QY2CharValidator.h"
 #include "YQComboBox.h"
@@ -46,10 +46,10 @@ YQComboBox::YQComboBox( QWidget * 		parent,
 
     _qt_label = new QLabel( fromUTF8(label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
-    _qt_label->setFont( Y2QtComponent::ui()->currentFont() );
+    _qt_label->setFont( YQUI::ui()->currentFont() );
 
     _qt_combo_box = new QComboBox( opt.isEditable.value(), this );
-    _qt_combo_box->setFont( Y2QtComponent::ui()->currentFont() );
+    _qt_combo_box->setFont( YQUI::ui()->currentFont() );
 
     _qt_label->setBuddy( _qt_combo_box );
 
@@ -152,11 +152,11 @@ void YQComboBox::slotSelected( int i )
 {
     if ( getNotify() )
     {
-	if ( ! Y2QtComponent::ui()->eventPendingFor( this ) )
+	if ( ! YQUI::ui()->eventPendingFor( this ) )
 	{
 	    // Avoid overwriting a (more important) ValueChanged event with a SelectionChanged event
 
-	    Y2QtComponent::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
+	    YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
 	}
     }
 }
@@ -165,7 +165,7 @@ void YQComboBox::slotSelected( int i )
 void YQComboBox::textChanged( const QString & new_text )
 {
     if ( getNotify() )
-	Y2QtComponent::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 

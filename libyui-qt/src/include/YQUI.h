@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:		YUIQt.h
+  File:		YQUI.h
 
   Authors:	Mathias Kettner   <kettner@suse.de>,
 		Stefan Hundhammer <sh@suse.de>
@@ -19,8 +19,8 @@
 
 /-*/
 
-#ifndef YUIQt_h
-#define YUIQt_h
+#ifndef YQUI_h
+#define YQUI_h
 
 #include <qapplication.h>
 #include <qmap.h>
@@ -30,7 +30,7 @@
 #include <vector>
 
 #include "YSimpleEventHandler.h"
-#include "YUIInterpreter.h"
+#include <YUI.h>
 
 #define YQWidgetMargin	4
 #define YQWidgetSpacing	4
@@ -44,7 +44,7 @@ using std::string;
 using std::vector;
 
 
-class YUIQt :  public QApplication, public YUIInterpreter
+class YQUI :  public QApplication, public YUI
 {
     Q_OBJECT
 public:
@@ -52,7 +52,7 @@ public:
     /**
      * Constructor.
      */
-    YUIQt( int 			argc,
+    YQUI( int 			argc,
 	   char **		argv,
 	   bool 		with_threads,
 	   Y2Component *	callback );
@@ -60,12 +60,12 @@ public:
     /**
      * Destructor.
      */
-    ~YUIQt();
+    ~YQUI();
 
     /**
      * Access the global Qt-UI.
      **/
-    static YUIQt * ui() { return _ui; }
+    static YQUI * ui() { return _ui; }
 
     /**
      * Returns the UI's default font.
@@ -147,7 +147,7 @@ public:
      * UI-specific runPkgSeleciton method: Start the package selection.
      * This implementation does the same as UserInput().
      *
-     * Reimplemented from YUIInterpreter.
+     * Reimplemented from YUI.
      **/
     YCPValue runPkgSelection( YWidget * packageSelector );
 
@@ -168,7 +168,7 @@ public:
     /**
      * Issue an internal error: Open popup with that message and wait.
      *
-     * Reimplemented from YUIInterpreter.
+     * Reimplemented from YUI.
      */
     void internalError( const char * msg );
 
@@ -198,7 +198,7 @@ public:
      * Block (or unblock) events. If events are blocked, any event sent
      * should be ignored until events are unblocked again.
      *
-     * Reimplemented from YUIInterpreter.
+     * Reimplemented from YUI.
      **/
     virtual void blockEvents( bool block = true )
 	{ _event_handler.blockEvents( block ); }
@@ -206,7 +206,7 @@ public:
     /**
      * Returns 'true' if events are currently blocked.
      *
-     * Reimplemented from YUIInterpreter.
+     * Reimplemented from YUI.
      **/
     virtual bool eventsBlocked() const
 	{ return _event_handler.eventsBlocked(); }
@@ -216,7 +216,7 @@ public:
      * ("SuSE Linux", "SuSE Linux Enterprise Server", "United Linux", etc.)
      * as QString. 
      **/
-    QString YUIQt::productName() const;
+    QString YQUI::productName() const;
 
 
 public slots:
@@ -224,14 +224,14 @@ public slots:
     /**
      * Show hourglass cursor.
      *
-     * Reimplemented from YUIInterpreter.
+     * Reimplemented from YUI.
      */
     void busyCursor();
 
     /**
      * Show pointer cursor.
      *
-     * Reimplemented from YUIInterpreter.
+     * Reimplemented from YUI.
      */
     void normalCursor();
 
@@ -255,7 +255,7 @@ protected:
      * Idle around until fd_ycp is readable and handle repaints.
      * This is only used when a separate ui thread is running.
      *
-     * Reimplemented from YUIInterpreter.
+     * Reimplemented from YUI.
      */
     void idleLoop( int fd_ycp );
 
@@ -263,42 +263,42 @@ protected:
      * Return a representation for the glyph symbol specified in UTF-8 encoding
      * or an empty string to get a default textual representation.
      *
-     * Reimplemented from YUIInterpreter.
+     * Reimplemented from YUI.
      */
     YCPString glyph( const YCPSymbol & glyphSymbol );
 
     /**
      * Go into event loop until next user input is available.
      *
-     * Reimplemented from YUIInterpreter.
+     * Reimplemented from YUI.
      */
     YEvent * userInput( unsigned long timeout_millisec = 0 );
 
     /**
      * Check the event queue for user input. Don't wait.
      *
-     * Reimplemented from YUIInterpreter.
+     * Reimplemented from YUI.
      */
     YEvent * pollInput();
 
     /**
      * Create a dialog.
      *
-     * Reimplemented from YUIInterpreter.
+     * Reimplemented from YUI.
      */
     YDialog * createDialog( YWidgetOpt & opt );
 
     /**
      * Show and activate a dialog.
      *
-     * Reimplemented from YUIInterpreter.
+     * Reimplemented from YUI.
      */
     void showDialog( YDialog * dialog );
 
     /**
      * Decativate and close a dialog. This does not delete the dialog yet.
      *
-     * Reimplemented from YUIInterpreter.
+     * Reimplemented from YUI.
      */
     void closeDialog( YDialog * dialog );
 
@@ -321,10 +321,10 @@ protected:
      * Load translations for Qt's predefined dialogs like file selection box
      * etc.
      **/
-    void YUIQt::loadPredefinedQtTranslations();
+    void YQUI::loadPredefinedQtTranslations();
 
 
-    /*** Widget creation methods, all reimplemented from YUIInterpreter ***/
+    /*** Widget creation methods, all reimplemented from YUI ***/
 
     YContainerWidget * createAlignment		( YWidget * parent, YWidgetOpt & opt, YAlignmentType horAlign, YAlignmentType vertAlign );
     YContainerWidget * createFrame		( YWidget * parent, YWidgetOpt & opt, const YCPString & label );
@@ -359,7 +359,7 @@ protected:
     YWidget * createPkgSpecial		( YWidget * parent, YWidgetOpt & opt, const YCPString & subwidget );
 
 
-    /*** Widget creation methods for optional widgets, all reimplemented from YUIInterpreter ***/
+    /*** Widget creation methods for optional widgets, all reimplemented from YUI ***/
 
     bool 	hasBarGraph();
     YWidget *	createBarGraph		( YWidget * parent, YWidgetOpt & opt);
@@ -413,7 +413,7 @@ public:
     /**
      *
      * Open a directory selection box and prompt the user for an existing directory.
-     * [Reimplemented from YUIInterpreter]
+     * [Reimplemented from YUI]
      *
      * 'startDir' is the initial directory that is displayed.
      *
@@ -428,7 +428,7 @@ public:
 
     /**
      * Open a file selection box and prompt the user for an existing file.
-     * [Reimplemented from YUIInterpreter]
+     * [Reimplemented from YUI]
      *
      * 'startWith' is the initial directory or file.
      *
@@ -447,7 +447,7 @@ public:
     /**
      * Open a file selection box and prompt the user for a file to save data to.
      * Automatically asks for confirmation if the user selects an existing file.
-     * [Reimplemented from YUIInterpreter]
+     * [Reimplemented from YUI]
      *
      * 'startWith' is the initial directory or file.
      *
@@ -475,14 +475,14 @@ protected:
 
     /**
      * Sets the X input method according to the locale.
-     * [Reimplemented from YUIInterpreter]
+     * [Reimplemented from YUI]
      */
     YCPValue setLanguage( const YCPTerm & term );
 
 
     /**
      * Display capabilities.
-     * [Reimplemented from YUIInterpreter]
+     * [Reimplemented from YUI]
      * See UI builtin GetDisplayInfo() doc for details.
      **/
     int  getDisplayWidth();
@@ -522,6 +522,9 @@ protected slots:
 
 
 private:
+
+    void init ();
+    
     /**
      * Assume presence of a window manager
      */
@@ -622,7 +625,7 @@ private:
     /**
      * Global reference to the UI
      **/
-    static YUIQt * _ui;
+    static YQUI * _ui;
 
     /**
      * Indicate a fatal error that requires the UI to terminate
@@ -648,7 +651,51 @@ private:
      * Translator for the predefined Qt dialogs
      **/
     QTranslator _qtTranslations;
+
+
+public:
+
+    /**
+     * The name of this component is qt.
+     */
+    string name() const { return "qt"; }
+
+    /**
+     * Implements the server. The interpreter is created here and not
+     * in the constructor, because in the meantime the server options
+     * may have been set.
+     */
+    YCPValue evaluate( const YCPValue & command );
+
+    /**
+     * Is called by the genericfrontend, when the session is finished.
+     * Close the user interace here.
+     */
+    void result( const YCPValue & result );
+
+    /**
+     * Is called by the genericfrontend after it parsed the commandline.
+     * gives the QT UI its commandline options. We store it here and
+     * wait until we create the interpreter in @ref #evaluate.
+     */
+    void setServerOptions( int argc, char **argv );
+
+    /**
+     * Functions to pass callback information
+     * The callback is a pointer to a Y2Component with
+     * a valid evaluate() function.
+     */
+    Y2Component * getCallback (void) const;
+    void setCallback(Y2Component * callback );
+
+
+protected:
+    int			_argc;
+    char **		_argv;
+    Y2Component *	_callback;
+    bool 		_with_threads;
+
 };
 
 
-#endif // YUIQt_h
+#endif // YQUI_h

@@ -24,7 +24,7 @@
 #include <ycp/y2log.h>
 
 #include "utf8.h"
-#include "Y2QtComponent.h"
+#include "YQUI.h"
 #include "YEvent.h"
 #include "YQRadioButton.h"
 
@@ -54,7 +54,7 @@ YQRadioButton::YQRadioButton( QWidget * 		parent,
     layout->addSpacing( SPACING );
     layout->addWidget( _qt_radiobutton );
     layout->addSpacing( SPACING );
-    _qt_radiobutton->setFont( Y2QtComponent::ui()->currentFont() );
+    _qt_radiobutton->setFont( YQUI::ui()->currentFont() );
     _qt_radiobutton->setChecked( checked );
 
     connect ( _qt_radiobutton, SIGNAL ( toggled ( bool ) ),
@@ -122,7 +122,7 @@ bool YQRadioButton::setKeyboardFocus()
 void YQRadioButton::changed( bool newState )
 {
     if ( getNotify() && newState )
-	Y2QtComponent::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 

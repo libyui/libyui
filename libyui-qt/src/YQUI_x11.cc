@@ -31,48 +31,48 @@
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
-#include "Y2QtComponent.h"
+#include "YQUI.h"
 #include "YEvent.h"
 #include "YQDialog.h"
 
 
-int Y2QtComponent::getDisplayWidth()
+int YQUI::getDisplayWidth()
 {
     return desktop()->width();
 }
 
 
-int Y2QtComponent::getDisplayHeight()
+int YQUI::getDisplayHeight()
 {
     return desktop()->height();
 }
 
 
-int Y2QtComponent::getDisplayDepth()
+int YQUI::getDisplayDepth()
 {
     return QColor::numBitPlanes();
 }
 
 
-long Y2QtComponent::getDisplayColors()
+long YQUI::getDisplayColors()
 {
     return 1L << QColor::numBitPlanes();
 }
 
 
-int Y2QtComponent::getDefaultWidth()
+int YQUI::getDefaultWidth()
 {
     return _default_size.width();
 }
 
 
-int Y2QtComponent::getDefaultHeight()
+int YQUI::getDefaultHeight()
 {
     return _default_size.height();
 }
 
 
-long Y2QtComponent::defaultSize(YUIDimension dim) const
+long YQUI::defaultSize(YUIDimension dim) const
 {
     if ( haveWM() )
 	return dim == YD_HORIZ ? _default_size.width() : _default_size.height();
@@ -82,7 +82,7 @@ long Y2QtComponent::defaultSize(YUIDimension dim) const
 
 
 void
-Y2QtComponent::busyCursor( void )
+YQUI::busyCursor( void )
 {
 #if USE_QT_CURSORS
 
@@ -120,7 +120,7 @@ Y2QtComponent::busyCursor( void )
 
 
 void
-Y2QtComponent::normalCursor( void )
+YQUI::normalCursor( void )
 {
 #if USE_QT_CURSORS
 
@@ -156,7 +156,7 @@ Y2QtComponent::normalCursor( void )
 }
 
 
-const QFont &Y2QtComponent::currentFont()
+const QFont &YQUI::currentFont()
 {
     /**
      * Brute force approach to make sure we'll really get a complete Unicode font:
@@ -187,7 +187,7 @@ const QFont &Y2QtComponent::currentFont()
 }
 
 
-const QFont &Y2QtComponent::headingFont()
+const QFont &YQUI::headingFont()
 {
     /**
      * Brute force load the heading font - see currentFont() above for more.
@@ -211,14 +211,14 @@ const QFont &Y2QtComponent::headingFont()
 
 
 
-bool Y2QtComponent::close()
+bool YQUI::close()
 {
     sendEvent( new YCancelEvent() );
     return true;
 }
 
 
-bool Y2QtComponent::eventFilter( QObject * obj, QEvent * ev )
+bool YQUI::eventFilter( QObject * obj, QEvent * ev )
 {
 
     if ( ev->type() == QEvent::Close )
@@ -261,7 +261,7 @@ bool Y2QtComponent::eventFilter( QObject * obj, QEvent * ev )
 }
 
 
-bool Y2QtComponent::showEventFilter( QObject * obj, QEvent * ev )
+bool YQUI::showEventFilter( QObject * obj, QEvent * ev )
 {
     if ( ! haveWM() )
     {
@@ -278,7 +278,7 @@ bool Y2QtComponent::showEventFilter( QObject * obj, QEvent * ev )
 }
 
 
-void Y2QtComponent::loadPredefinedQtTranslations()
+void YQUI::loadPredefinedQtTranslations()
 {
     QString language = QTextCodec::locale();
     QString path = QT_LOCALEDIR;

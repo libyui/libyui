@@ -33,7 +33,7 @@
 #include "YQPkgTextDialog.h"
 #include "YQi18n.h"
 #include "YQIconPool.h"
-#include "Y2QtComponent.h"
+#include "YQUI.h"
 
 using std::list;
 using std::string;
@@ -283,7 +283,7 @@ YQPkgObjList::setAllItemStatus( PMSelectable::UI_Status newStatus, bool force )
     if ( ! _editable )
 	return;
 
-    Y2QtComponent::ui()->busyCursor();
+    YQUI::ui()->busyCursor();
     QListViewItem * listViewItem = firstChild();
 
     while ( listViewItem )
@@ -306,7 +306,7 @@ YQPkgObjList::setAllItemStatus( PMSelectable::UI_Status newStatus, bool force )
 	listViewItem = listViewItem->nextSibling();
     }
 
-    Y2QtComponent::ui()->normalCursor();
+    YQUI::ui()->normalCursor();
     emit statusChanged();
 }
 

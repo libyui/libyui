@@ -24,7 +24,7 @@
 #include <ycp/y2log.h>
 
 #include "utf8.h"
-#include "Y2QtComponent.h"
+#include "YQUI.h"
 #include "YEvent.h"
 #include "YQCheckBox.h"
 
@@ -49,7 +49,7 @@ YQCheckBox::YQCheckBox( QWidget *		parent,
     layout->addSpacing( SPACING );
     layout->addWidget( _qt_checkbox );
     layout->addSpacing( SPACING );
-    _qt_checkbox->setFont( Y2QtComponent::ui()->currentFont() );
+    _qt_checkbox->setFont( YQUI::ui()->currentFont() );
     _qt_checkbox->setChecked( initiallyChecked );
 
     connect( _qt_checkbox, 	SIGNAL( toggled( bool ) ),
@@ -145,7 +145,7 @@ bool YQCheckBox::setKeyboardFocus()
 void YQCheckBox::changed( bool newState )
 {
     if ( getNotify() )
-	Y2QtComponent::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 

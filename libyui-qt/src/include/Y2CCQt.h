@@ -37,7 +37,7 @@
 #ifndef _Y2CCQt_h
 #define _Y2CCQt_h
 
-#include "Y2QtComponent.h"
+#include "YQUI.h"
 
 /**
  * @short Y2ComponentCreator that can create Qt user interfaces
@@ -65,7 +65,7 @@ public:
      */
     Y2Component *create(const char * name) const
     {
-	if (!strcmp(name, "qt") ) return new Y2QtComponent(0, 0, false, 0);
+	if (!strcmp(name, "qt") ) return new YQUI(0, 0, false, 0);
 	else return 0;
     }
 };

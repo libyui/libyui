@@ -32,7 +32,7 @@
 #include "utf8.h"
 
 #include "YQPkgList.h"
-#include "Y2QtComponent.h"
+#include "YQUI.h"
 #include "YQi18n.h"
 #include "YQIconPool.h"
 
@@ -326,7 +326,7 @@ YQPkgList::updateActions( YQPkgObjListItem * pkgObjListItem )
 void
 YQPkgList::askExportList() const
 {
-    QString filename = Y2QtComponent::ui()->askForSaveFileName( "pkglist.txt",	// startsWith
+    QString filename = YQUI::ui()->askForSaveFileName( "pkglist.txt",	// startsWith
 							   "*.txt",		// filter
 							   _( "Export Package List" ) );
     if ( ! filename.isEmpty() )

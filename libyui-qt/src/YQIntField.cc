@@ -21,7 +21,7 @@
 #include <ycp/y2log.h>
 
 #include "utf8.h"
-#include "Y2QtComponent.h"
+#include "YQUI.h"
 #include "YEvent.h"
 #include "YQIntField.h"
 
@@ -42,14 +42,14 @@ YQIntField::YQIntField( QWidget *		parent,
     setMargin( YQWidgetMargin );
     _qt_label = new QLabel( fromUTF8( label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
-    _qt_label->setFont( Y2QtComponent::ui()->currentFont() );
+    _qt_label->setFont( YQUI::ui()->currentFont() );
     _qt_label->setAlignment( Qt::AlignLeft );
 
     _qt_spinbox = new QSpinBox( minValue, maxValue,
 				1, // step
 				this );
     _qt_spinbox->setValue( initialValue );
-    _qt_spinbox->setFont( Y2QtComponent::ui()->currentFont() );
+    _qt_spinbox->setFont( YQUI::ui()->currentFont() );
 
     _qt_label->setBuddy( _qt_spinbox );
 
@@ -107,7 +107,7 @@ void YQIntField::setValueSlot( int newValue )
     setValue( newValue );
 
     if ( getNotify() )
-	Y2QtComponent::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 

@@ -35,7 +35,7 @@
 #include "YQIconPool.h"
 #include "YQi18n.h"
 #include "utf8.h"
-#include "Y2QtComponent.h"
+#include "YQUI.h"
 
 
 #define SPACING			6	// between subwidgets
@@ -54,7 +54,7 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     // Headline
     QLabel * label = new QLabel( _( "Changes Overview" ), this );
     CHECK_PTR( label );
-    label->setFont( Y2QtComponent::ui()->headingFont() );
+    label->setFont( YQUI::ui()->headingFont() );
 #endif
 
 

@@ -22,7 +22,7 @@
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
-#include "Y2QtComponent.h"
+#include "YQUI.h"
 
 #include "YQAlignment.h"
 #include "YQBarGraph.h"
@@ -59,19 +59,19 @@
 
 
 
-YContainerWidget * Y2QtComponent::createReplacePoint( YWidget *		parent,
+YContainerWidget * YQUI::createReplacePoint( YWidget *		parent,
 					      YWidgetOpt & 	opt )
 {
     return new YQReplacePoint( ( (QWidget *)parent->widgetRep() ), opt );
 }
 
-YWidget * Y2QtComponent::createEmpty		( YWidget *		parent,
+YWidget * YQUI::createEmpty		( YWidget *		parent,
 					  YWidgetOpt & 		opt )
 {
     return new YQEmpty( (QWidget *) parent->widgetRep(), opt );
 }
 
-YWidget * Y2QtComponent::createSpacing		( YWidget *		parent,
+YWidget * YQUI::createSpacing		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  float 		size,
 					  bool 			horizontal,
@@ -80,21 +80,21 @@ YWidget * Y2QtComponent::createSpacing		( YWidget *		parent,
     return new YQSpacing( (QWidget *) parent->widgetRep(), opt, size, horizontal, vertical);
 }
 
-YContainerWidget * Y2QtComponent::createFrame	( YWidget *		parent,
+YContainerWidget * YQUI::createFrame	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label )
 {
     return new YQFrame ( ( (QWidget *) parent->widgetRep() ), opt, label );
 }
 
-YContainerWidget * Y2QtComponent::createSplit	( YWidget *		parent,
+YContainerWidget * YQUI::createSplit	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  YUIDimension 		dimension )
 {
     return new YQSplit( ( (QWidget *)parent->widgetRep() ), opt, dimension);
 }
 
-YContainerWidget * Y2QtComponent::createAlignment( YWidget *		parent,
+YContainerWidget * YQUI::createAlignment( YWidget *		parent,
 					   YWidgetOpt & 	opt,
 					   YAlignmentType 	halign,
 					   YAlignmentType 	valign )
@@ -102,7 +102,7 @@ YContainerWidget * Y2QtComponent::createAlignment( YWidget *		parent,
     return new YQAlignment( ( (QWidget *)parent->widgetRep() ), opt, halign, valign);
 }
 
-YContainerWidget * Y2QtComponent::createSquash	( YWidget *		parent,
+YContainerWidget * YQUI::createSquash	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  bool 			hsquash,
 					  bool 			vsquash )
@@ -110,14 +110,14 @@ YContainerWidget * Y2QtComponent::createSquash	( YWidget *		parent,
     return new YQSquash( ( (QWidget *)parent->widgetRep() ), opt, hsquash, vsquash);
 }
 
-YWidget * Y2QtComponent::createLabel		( YWidget *		parent,
+YWidget * YQUI::createLabel		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	text )
 {
     return new YQLabel( (QWidget *) ( parent->widgetRep() ), opt, text);
 }
 
-YWidget * Y2QtComponent::createLogView		( YWidget *		parent,
+YWidget * YQUI::createLogView		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString &	label,
 					  int 			visibleLines,
@@ -126,14 +126,14 @@ YWidget * Y2QtComponent::createLogView		( YWidget *		parent,
     return new YQLogView( (QWidget *) ( parent->widgetRep() ), opt, label, visibleLines, maxLines);
 }
 
-YWidget * Y2QtComponent::createRichText		( YWidget *		parent,
+YWidget * YQUI::createRichText		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	text )
 {
     return new YQRichText( (QWidget *) ( parent->widgetRep() ), opt, text);
 }
 
-YWidget * Y2QtComponent::createPackageSelector	( YWidget *		parent,
+YWidget * YQUI::createPackageSelector	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	floppyDevice )
 {
@@ -141,7 +141,7 @@ YWidget * Y2QtComponent::createPackageSelector	( YWidget *		parent,
     return new YQPackageSelector( (QWidget *) ( parent->widgetRep() ), opt, floppyDevice );
 }
 
-YWidget * Y2QtComponent::createPkgSpecial	( YWidget *		parent,
+YWidget * YQUI::createPkgSpecial	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	subwidget )
 {
@@ -149,7 +149,7 @@ YWidget * Y2QtComponent::createPkgSpecial	( YWidget *		parent,
     return 0;
 }
 
-YWidget * Y2QtComponent::createPushButton	( YWidget *		parent,
+YWidget * YQUI::createPushButton	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label )
 {
@@ -157,14 +157,14 @@ YWidget * Y2QtComponent::createPushButton	( YWidget *		parent,
     return new YQPushButton( (QWidget *) ( parent->widgetRep() ), dialog, opt, label);
 }
 
-YWidget * Y2QtComponent::createMenuButton	( YWidget *		parent,
+YWidget * YQUI::createMenuButton	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label )
 {
     return new YQMenuButton( (QWidget *) ( parent->widgetRep() ), opt, label);
 }
 
-YWidget * Y2QtComponent::createCheckBox		( YWidget *		parent,
+YWidget * YQUI::createCheckBox		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label,
 					  bool 			checked )
@@ -172,7 +172,7 @@ YWidget * Y2QtComponent::createCheckBox		( YWidget *		parent,
     return new YQCheckBox( (QWidget *) ( parent->widgetRep() ), opt, label, checked);
 }
 
-YWidget * Y2QtComponent::createRadioButton	( YWidget *		parent,
+YWidget * YQUI::createRadioButton	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  YRadioButtonGroup *	rbg,
 					  const YCPString & 	label,
@@ -181,13 +181,13 @@ YWidget * Y2QtComponent::createRadioButton	( YWidget *		parent,
     return new YQRadioButton( (QWidget *) ( parent->widgetRep() ), opt, rbg, label, checked);
 }
 
-YContainerWidget * Y2QtComponent::createRadioButtonGroup( YWidget *	parent,
+YContainerWidget * YQUI::createRadioButtonGroup( YWidget *	parent,
 						  YWidgetOpt & 	opt )
 {
     return new YQRadioButtonGroup( (QWidget *) ( parent->widgetRep() ), opt );
 }
 
-YWidget * Y2QtComponent::createTextEntry	( YWidget *		parent,
+YWidget * YQUI::createTextEntry	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label,
 					  const YCPString & 	text )
@@ -195,7 +195,7 @@ YWidget * Y2QtComponent::createTextEntry	( YWidget *		parent,
     return new YQTextEntry( (QWidget *) ( parent->widgetRep() ), opt, label, text);
 }
 
-YWidget * Y2QtComponent::createMultiLineEdit	( YWidget *		parent,
+YWidget * YQUI::createMultiLineEdit	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label,
 					  const YCPString & 	initialText )
@@ -203,42 +203,42 @@ YWidget * Y2QtComponent::createMultiLineEdit	( YWidget *		parent,
     return new YQMultiLineEdit( (QWidget *) ( parent->widgetRep() ), opt, label, initialText);
 }
 
-YWidget * Y2QtComponent::createSelectionBox	( YWidget *		parent,
+YWidget * YQUI::createSelectionBox	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label )
 {
     return new YQSelectionBox( (QWidget *) ( parent->widgetRep() ), opt, label);
 }
 
-YWidget * Y2QtComponent::createMultiSelectionBox( YWidget *		parent,
+YWidget * YQUI::createMultiSelectionBox( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString &	label )
 {
     return new YQMultiSelectionBox( (QWidget *) ( parent->widgetRep() ), opt, label);
 }
 
-YWidget * Y2QtComponent::createComboBox		( YWidget *		parent,
+YWidget * YQUI::createComboBox		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label )
 {
     return new YQComboBox( (QWidget *) ( parent->widgetRep() ), opt, label);
 }
 
-YWidget * Y2QtComponent::createTree		( YWidget *		parent,
+YWidget * YQUI::createTree		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label )
 {
     return new YQTree( (QWidget *) ( parent->widgetRep() ), opt, label);
 }
 
-YWidget * Y2QtComponent::createTable		( YWidget *		parent,
+YWidget * YQUI::createTable		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  vector<string> 	header	)
 {
     return new YQTable( (QWidget *) ( parent->widgetRep() ), opt, header);
 }
 
-YWidget * Y2QtComponent::createProgressBar	( YWidget *		parent,
+YWidget * YQUI::createProgressBar	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label,
 					  const YCPInteger & 	maxProgress,
@@ -247,7 +247,7 @@ YWidget * Y2QtComponent::createProgressBar	( YWidget *		parent,
     return new YQProgressBar( (QWidget *) ( parent->widgetRep() ), opt, label, maxProgress, progress );
 }
 
-YWidget * Y2QtComponent::createImage		( YWidget *		parent,
+YWidget * YQUI::createImage		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  YCPByteblock 		imagedata,
 					  YCPString 		default_text )
@@ -255,7 +255,7 @@ YWidget * Y2QtComponent::createImage		( YWidget *		parent,
     return new YQImage( (QWidget *) ( parent->widgetRep() ), opt, imagedata );
 } 
 
-YWidget * Y2QtComponent::createImage		( YWidget *		parent,
+YWidget * YQUI::createImage		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  YCPString 		file_name,
 					  YCPString 		default_text )
@@ -263,7 +263,7 @@ YWidget * Y2QtComponent::createImage		( YWidget *		parent,
     return new YQImage( (QWidget *) ( parent->widgetRep() ), opt, file_name );
 }
 
-YWidget * Y2QtComponent::createImage		( YWidget *		parent,
+YWidget * YQUI::createImage		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  ImageType 		img,
 					  YCPString 		default_text )
@@ -271,7 +271,7 @@ YWidget * Y2QtComponent::createImage		( YWidget *		parent,
     return new YQImage( (QWidget *) ( parent->widgetRep() ), opt, img );
 }
 
-YWidget * Y2QtComponent::createIntField		( YWidget *		parent,
+YWidget * YQUI::createIntField		( YWidget *		parent,
 					  YWidgetOpt &		opt,
 					  const YCPString &	label,
 					  int 			minValue,
@@ -292,23 +292,23 @@ YWidget * Y2QtComponent::createIntField		( YWidget *		parent,
 //========= Optional widgets ========================================================
 
 
-bool Y2QtComponent::hasBarGraph()
+bool YQUI::hasBarGraph()
 {
     return true;
 }
 
-YWidget * Y2QtComponent::createBarGraph( YWidget * parent, YWidgetOpt & opt)
+YWidget * YQUI::createBarGraph( YWidget * parent, YWidgetOpt & opt)
 {
     return new YQBarGraph( (QWidget *) ( parent->widgetRep() ), opt );
 }
 
 
-bool Y2QtComponent::hasColoredLabel()
+bool YQUI::hasColoredLabel()
 {
     return QColor::numBitPlanes() >= 15;
 }
 
-YWidget * Y2QtComponent::createColoredLabel	( YWidget *	parent,
+YWidget * YQUI::createColoredLabel	( YWidget *	parent,
 					  YWidgetOpt & 	opt,
 					  YCPString 	label,
 					  YColor 	foreground,
@@ -329,12 +329,12 @@ YWidget * Y2QtComponent::createColoredLabel	( YWidget *	parent,
 }
 
 
-bool Y2QtComponent::hasDownloadProgress()
+bool YQUI::hasDownloadProgress()
 {
     return true;
 }
 
-YWidget * Y2QtComponent::createDownloadProgress	( YWidget *		parent,
+YWidget * YQUI::createDownloadProgress	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label,
 					  const YCPString & 	filename,
@@ -348,13 +348,13 @@ YWidget * Y2QtComponent::createDownloadProgress	( YWidget *		parent,
 }
 
 
-bool Y2QtComponent::hasSlider()
+bool YQUI::hasSlider()
 {
     return true;
 }
 
 
-YWidget * Y2QtComponent::createSlider( YWidget *		parent,
+YWidget * YQUI::createSlider( YWidget *		parent,
 			       YWidgetOpt &		opt,
 			       const YCPString &	label,
 			       int 			minValue,
@@ -370,12 +370,12 @@ YWidget * Y2QtComponent::createSlider( YWidget *		parent,
 }
 
 
-bool Y2QtComponent::hasPartitionSplitter()
+bool YQUI::hasPartitionSplitter()
 {
     return true;
 }
 
-YWidget * Y2QtComponent::createPartitionSplitter( YWidget *		parent,
+YWidget * YQUI::createPartitionSplitter( YWidget *		parent,
 					  YWidgetOpt &		opt,
 					  int 			usedSize,
 					  int 			totalFreeSize,

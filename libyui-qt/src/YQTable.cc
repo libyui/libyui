@@ -24,7 +24,7 @@
 #include <ycp/y2log.h>
 
 #include "utf8.h"
-#include "Y2QtComponent.h"
+#include "YQUI.h"
 #include "YEvent.h"
 #include "YQTable.h"
 
@@ -126,7 +126,7 @@ YQTable::YQTable( QWidget * parent, YWidgetOpt & opt, vector<string> header )
 	}
     }
 
-    _qt_listview->setFont( Y2QtComponent::ui()->currentFont() );
+    _qt_listview->setFont( YQUI::ui()->currentFont() );
     _qt_listview->setAllColumnsShowFocus( true );
 
     if ( opt.notifyMode.value() )
@@ -261,11 +261,11 @@ void YQTable::slotSelected( QListViewItem * )
 {
     if ( getNotify() )
     {
-	if ( ! Y2QtComponent::ui()->eventPendingFor( this ) )
+	if ( ! YQUI::ui()->eventPendingFor( this ) )
 	{
 	    // Avoid overwriting a (more important) Activated event with a SelectionChanged event
 
-	    Y2QtComponent::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
+	    YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
 	}
     }
 }
@@ -274,7 +274,7 @@ void YQTable::slotSelected( QListViewItem * )
 void YQTable::slotActivated( QListViewItem * )
 {
     if ( getNotify() )
-	Y2QtComponent::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
+	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
 }
 
 

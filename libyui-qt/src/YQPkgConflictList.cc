@@ -35,7 +35,7 @@
 #include "YQPkgConflictDialog.h"
 #include "YQIconPool.h"
 
-#include "Y2QtComponent.h"
+#include "YQUI.h"
 #include "YQi18n.h"
 #include "utf8.h"
 
@@ -150,7 +150,7 @@ YQPkgConflictList::ignoreAll()
 void
 YQPkgConflictList::askSaveToFile() const
 {
-    QString filename = Y2QtComponent::ui()->askForSaveFileName( "conflicts.txt",	// startsWith
+    QString filename = YQUI::ui()->askForSaveFileName( "conflicts.txt",	// startsWith
 							   "*.txt",		// filter
 							   _( "Save Conflicts List" ) );
     if ( ! filename.isEmpty() )
@@ -877,7 +877,7 @@ YQPkgConflict::paintCell( QPainter *		painter,
 			  int			width,
 			  int			alignment )
 {
-    painter->setFont( Y2QtComponent::ui()->headingFont() );
+    painter->setFont( YQUI::ui()->headingFont() );
     QY2ListViewItem::paintCell( painter, colorGroup, column, width, alignment );
 }
 

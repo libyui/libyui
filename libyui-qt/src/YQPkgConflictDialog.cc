@@ -44,7 +44,7 @@
 #include "YQPackageSelector.h"
 #include "YQDialog.h"
 
-#include "Y2QtComponent.h"
+#include "YQUI.h"
 #include "YQi18n.h"
 #include "utf8.h"
 
@@ -250,7 +250,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
 	return result;
     }
 
-    Y2QtComponent::ui()->busyCursor();
+    YQUI::ui()->busyCursor();
 
     if ( isVisible() )
     {
@@ -305,7 +305,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
     // autoInstall or autoUpdate. Make those changes known.
     emit updatePackages();
 
-    Y2QtComponent::ui()->normalCursor();
+    YQUI::ui()->normalCursor();
 
     if ( success )	// Solving went without any complaints?
     {
@@ -317,14 +317,14 @@ YQPkgConflictDialog::solveAndShowConflicts()
     else		// There were solving problems.
     {
 	y2debug( "Dependency conflict!" );
-	Y2QtComponent::ui()->busyCursor();
+	YQUI::ui()->busyCursor();
 
 	// Make the bad list human readable and fill the conflictList
 	// widget. During that process, filter out any conflicts the user
 	// previously chose to ignore.
 
 	_conflictList->fill( badList );
-	Y2QtComponent::ui()->normalCursor();
+	YQUI::ui()->normalCursor();
 
 	if ( _conflictList->isEmpty() ) // No conflicts?
 	{

@@ -27,7 +27,7 @@
 using std::max;
 
 #include "utf8.h"
-#include "Y2QtComponent.h"
+#include "YQUI.h"
 #include "YEvent.h"
 #include "YQMultiSelectionBox.h"
 
@@ -50,7 +50,7 @@ YQMultiSelectionBox::YQMultiSelectionBox( QWidget *		parent,
 
     _qt_label = new QLabel( fromUTF8(label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
-    _qt_label->setFont( Y2QtComponent::ui()->currentFont() );
+    _qt_label->setFont( YQUI::ui()->currentFont() );
 
     _qt_listview = new QListView( this );
     _qt_listview->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
@@ -262,11 +262,11 @@ YQMultiSelectionBox::slotSelected()
 {
     if ( getNotify() )
     {
-	if ( ! Y2QtComponent::ui()->eventPendingFor( this ) )
+	if ( ! YQUI::ui()->eventPendingFor( this ) )
 	{
 	    // Avoid overwriting a (more important) ValueChanged event with a SelectionChanged event
 	    
-	    Y2QtComponent::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
+	    YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
 	}
     }
 }
@@ -276,7 +276,7 @@ void
 YQMultiSelectionBox::slotValueChanged()
 {
     if ( getNotify() )
-	Y2QtComponent::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 

@@ -33,10 +33,10 @@ liby2qt_la_LIBADD = $(libpy2qt_la_LIBADD)
 # the basic library has the pure y2qt sources
 
 liby2qt_la_SOURCES = 				\
-	YUIQt.cc				\
-	YUIQt_widgets.cc			\
-	YUIQt_builtins.cc			\
-	YUIQt_x11.cc				\
+	YQUI_core.cc				\
+	YQUI_widgets.cc				\
+	YQUI_builtins.cc			\
+	YQUI_x11.cc				\
 						\
 	YQIconPool.cc				\
 						\
@@ -110,12 +110,11 @@ liby2qt_la_SOURCES = 				\
 
 libpy2qt_la_SOURCES =				\
 	$(liby2qt_la_SOURCES)			\
-	Y2CCQt.cc				\
-	Y2QtComponent.cc
+	Y2CCQt.cc
 
 
 BUILT_SOURCES =					\
-	Y2QtComponent.moc			\
+	YQUI.moc				\
 						\
 	YQAlignment.moc				\
 	YQBarGraph.moc				\
@@ -181,10 +180,10 @@ BUILT_SOURCES =					\
 	QXEmbed.moc
 
 
-Y2QtComponent.o Y2QtComponent.lo:				Y2QtComponent.moc
-YUIQt_widgets.o YUIQt_widgets.lo:				Y2QtComponent.moc
-YUIQt_builtins.o YUIQt_builtins.lo:				Y2QtComponent.moc
-YUIQt_x11.o YUIQt_x11.lo:					Y2QtComponent.moc
+YQUI_core.o YQUI_core.lo:					YQUI.moc
+YQUI_widgets.o YQUI_widgets.lo:					YQUI.moc
+YQUI_builtins.o YQUI_builtins.lo:				YQUI.moc
+YQUI_x11.o YQUI_x11.lo:						YQUI.moc
 
 YQAlignment.o YQAlignment.lo:   				YQAlignment.moc
 YQBarGraph.o YQBarGraph.lo:   					YQBarGraph.moc
@@ -251,7 +250,7 @@ QXEmbed.o QXEmbed.lo:						QXEmbed.moc
 
 
 
-Y2QtComponent.moc.moc:			include/Y2QtComponent.h
+YQUI.moc:				include/YQUI.h
 
 YQAlignment.moc:			include/YQAlignment.h
 YQBarGraph.moc:				include/YQBarGraph.h

@@ -10,18 +10,16 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      Y2QtComponent.cc
+  File:	      	YQUI_core.cc
 
-  Author:     Mathias Kettner <kettner@suse.de>
-  Maintainer: Stefan Hundhammer <sh@suse.de>
+  Authors:	Mathias Kettner <kettner@suse.de>
+		Stefan Hundhammer <sh@suse.de>
+		
+  Maintainer:	Stefan Hundhammer <sh@suse.de>
 
 /-*/
 
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
-#include "Y2QtComponent.h"
-
-#include <rpc/types.h>          // MAXHOSTNAMELEN
+#include <rpc/types.h>		// MAXHOSTNAMELEN
 
 #include <qcursor.h>
 #include <qmessagebox.h>
@@ -29,30 +27,32 @@
 #include <qvbox.h>
 #include <qwidgetstack.h>
 
+#include <ycp/YCPTerm.h>
+
+#define y2log_component "qt-ui"
+#include <ycp/y2log.h>
+
+#include "YQUI.h"
+#include "YEvent.h"
+#include "YUISymbols.h"
+#include "YQEBunny.h"
+#include "utf8.h"
+
+#include "YQDialog.h"
 #include "QXEmbed.h"
 
-static void
-qMessageHandler( QtMsgType type, const char * msg )
-{
-    switch (type)
-    {
-	case QtDebugMsg:
-	    y2debug ("qt-debug: %s\n", msg);
-	    break;
-	case QtWarningMsg:
-	    y2warning ("qt-warning: %s\n", msg);
-	    break;
-	case QtFatalMsg:
-	    y2internal ("qt-fatal: %s\n", msg);
-	    exit (1);		// qt does the same
-    }
-}
+
+#define BUSY_CURSOR_TIMEOUT	200	// milliseconds
+
+YQUI * YQUI::_ui = 0;
+
+static void qMessageHandler( QtMsgType type, const char * msg );
 
 
-Y2QtComponent::Y2QtComponent( int argc, char **argv, bool with_threads, Y2Component *callback )
-    : QApplication(argc, argv)
-    , YUI(with_threads, callback)
-    , _main_win (NULL)
+YQUI::YQUI( int argc, char **argv, bool with_threads, Y2Component *callback )
+    : QApplication( argc, argv )
+    , YUI( with_threads, callback )
+    , _main_win( NULL )
     , _main_dialog_id(0)
     , _do_exit_loop( false )
     , _loaded_current_font( false )
@@ -60,8 +60,8 @@ Y2QtComponent::Y2QtComponent( int argc, char **argv, bool with_threads, Y2Compon
     , _wm_close_blocked( false )
     , _auto_activate_dialogs( true )
     , _running_embedded( false )
-    , _argc(argc)
-    , _argv(argv)
+    , _argc( argc )
+    , _argv( argv )
     , _with_threads( with_threads )
 
 {
@@ -74,10 +74,11 @@ Y2QtComponent::Y2QtComponent( int argc, char **argv, bool with_threads, Y2Compon
 
     qApp->installEventFilter( this );
 
-    init ();
+    init();
 }
 
-void Y2QtComponent::init ()
+
+void YQUI::init()
 {
     for ( int i=1; i < _argc; i++ )
         {
@@ -311,14 +312,296 @@ void Y2QtComponent::init ()
     
     topmostConstructorHasFinished();
 #if defined(QT_THREAD_SUPPORT)
-    qApp->unlock ();
+    qApp->unlock();
 #endif
 }
 
 
-YCPValue Y2QtComponent::evaluate( const YCPValue & command )
+
+YQUI::~YQUI()
 {
-    if( command->isCode () ) {
+    y2debug("Closing down Qt UI.");
+
+    normalCursor();
+
+    if ( _busy_cursor )
+	delete _busy_cursor;
+}
+
+
+void YQUI::internalError( const char * msg )
+{
+    normalCursor();
+    int button = QMessageBox::critical( 0, "YaST2 Internal Error", msg,
+					QMessageBox::Abort | QMessageBox::Default,
+					0 ); // button1
+    busyCursor();
+
+    if ( button == QMessageBox::Abort )
+    {
+	raiseFatalError();
+	abort();
+
+	// exit() leaves a process running (WFM?), so this really seems to be
+	// the only way to make sure we are really going down.
+    }
+}
+
+
+void YQUI::idleLoop( int fd_ycp )
+{
+    _leave_idle_loop = false;
+
+    // process Qt events until fd_ycp is readable.
+    QSocketNotifier * notifier = new QSocketNotifier( fd_ycp, QSocketNotifier::Read );
+    QObject::connect(notifier, SIGNAL( activated( int ) ), this, SLOT( leaveIdleLoop( int ) ) );
+    notifier->setEnabled( true );
+
+    while ( !_leave_idle_loop )
+	processOneEvent();
+
+    delete notifier;
+}
+
+
+void YQUI::leaveIdleLoop( int )
+{
+    _leave_idle_loop = true;
+}
+
+
+void YQUI::sendEvent( YEvent * event )
+{
+    if ( event )
+    {
+	_event_handler.sendEvent( event );
+
+	if ( _do_exit_loop )
+	    exit_loop();
+    }
+}
+
+
+YEvent * YQUI::userInput( unsigned long timeout_millisec )
+{
+    YEvent * 	event  = 0;
+    YQDialog *	dialog = dynamic_cast<YQDialog *> ( currentDialog() );
+
+    if ( _user_input_timer.isActive() )
+	_user_input_timer.stop();
+
+    if ( dialog )
+    {
+	if ( timeout_millisec > 0 )
+	    _user_input_timer.start( timeout_millisec, true ); // single shot
+
+	dialog->activate( true );
+
+	if ( qApp->focusWidget() )
+	    qApp->focusWidget()->setFocus();
+
+	normalCursor();
+	_do_exit_loop = true; // should exit_loop() be called in sendEvent()?
+
+	while ( ! pendingEvent() )
+	{
+	    enter_loop();
+	}
+
+	_do_exit_loop = false;
+	event = _event_handler.consumePendingEvent();
+	dialog->activate( false );
+
+	// Display a busy cursor, but only if there is no other activity within
+	// BUSY_CURSOR_TIMEOUT milliseconds (avoid cursor flicker)
+
+	_busy_cursor_timer.start( BUSY_CURSOR_TIMEOUT, true ); // single shot
+    }
+
+    if ( _user_input_timer.isActive() )
+	_user_input_timer.stop();
+
+    return event;
+}
+
+
+YEvent * YQUI::pollInput()
+{
+    YEvent * event = 0;
+
+    if ( _user_input_timer.isActive() )
+	_user_input_timer.stop();
+
+    if ( ! pendingEvent() )
+    {
+	YQDialog * dialog = dynamic_cast<YQDialog *> ( currentDialog() );
+
+	if ( dialog )
+	{
+	    dialog->activate( true );
+	    processEvents();
+	    event = _event_handler.consumePendingEvent();
+	    dialog->activate( false );
+	}
+    }
+
+    if ( pendingEvent() )
+	event = _event_handler.consumePendingEvent();
+
+    return event;
+}
+
+
+void YQUI::userInputTimeout()
+{
+    if ( ! pendingEvent() )
+	sendEvent( new YTimeoutEvent() );
+}
+
+
+YDialog * YQUI::createDialog( YWidgetOpt & opt )
+{
+    bool has_defaultsize = opt.hasDefaultSize.value();
+    QWidget * qt_parent = _main_win;
+
+
+    // Popup dialogs get the topmost other popup dialog as their parent since
+    // some window managers (e.g., fvwm2 as used in the inst-sys) otherwise
+    // tend to confuse the stacking order of popup dialogs.
+    //
+    // This _popup_stack handling would be better placed in showDialog(), but we
+    // need the parent here for QWidget creation. libyui guarantees that each
+    // createDialog() will be followed by showDialog() for the same dialog
+    // without any chance for other dialogs to get in between.
+
+    if ( ! has_defaultsize && ! _popup_stack.empty() )
+	qt_parent = _popup_stack.back();
+
+    YQDialog * dialog = new YQDialog( opt, qt_parent, has_defaultsize );
+    CHECK_PTR( dialog );
+
+    if ( ! has_defaultsize )
+	_popup_stack.push_back( (QWidget *) dialog->widgetRep() );
+
+    return dialog;
+}
+
+
+void YQUI::showDialog( YDialog * dialog )
+{
+    QWidget * qw = (QWidget *) dialog->widgetRep();
+
+    if ( ! qw )
+    {
+	y2error( "No widgetRep() for dialog" );
+	return;
+    }
+
+    if ( dialog->hasDefaultSize() )
+    {
+	_widget_stack->addWidget  ( qw, ++_main_dialog_id );
+	_widget_stack->raiseWidget( qw ); // maybe this is not necessary (?)
+
+	if ( ! _main_win->isVisible() )
+	{
+	    // y2milestone( "Showing main window" );
+	    _main_win->resize( _default_size );
+
+	    if ( ! _have_wm )
+		_main_win->move( 0, 0 );
+
+	    _main_win->show();
+	    qw->setFocus();
+	}
+    }
+    else	// non-defaultsize dialog
+    {
+	qw->setCaption( _kcontrol_id );
+	qw->show();
+    }
+
+    ( (YQDialog *) dialog)->ensureOnlyOneDefaultButton();
+    processEvents();
+}
+
+
+void YQUI::closeDialog( YDialog * dialog )
+{
+    QWidget * qw = (QWidget *) dialog->widgetRep();
+
+    if ( ! qw )
+    {
+	y2error( "No widgetRep() for dialog" );
+	return;
+    }
+
+    if ( dialog->hasDefaultSize() )
+    {
+	_widget_stack->removeWidget( qw );
+
+	if ( --_main_dialog_id < 1 )	// nothing left on the stack
+	{
+	    if ( ! _running_embedded )
+	    {
+		// y2milestone( "Hiding main window" );
+		_main_win->hide();
+	    }
+	    else
+	    {
+		y2milestone( "Running embedded - keeping (empty) main window open" );
+	    }
+
+	    _main_dialog_id = 0;	// this should not be necessary - but better be safe than sorry
+	}
+	else
+	{
+	    _widget_stack->raiseWidget( _main_dialog_id );
+	}
+    }
+    else	// non-defaultsize dialog
+    {
+	qw->hide();
+
+	// Clean up the popup stack. libyui guarantees that a dialog will be
+	// deleted after closeDialog() so it is safe to pop that dialog from
+	// the popup stack here.
+
+	if ( ! _popup_stack.empty() && _popup_stack.back() == qw )
+	    _popup_stack.pop_back();
+	else
+	    y2error( "Popup dialog stack corrupted!" );
+    }
+}
+
+
+void YQUI::easterEgg()
+{
+    y2milestone( "Starting easter egg..." );
+    
+
+#if 0
+    system( "sudo dd if=/dev/urandom bs=1024 count=1024 of=/dev/fb0" );
+    sleep( 2 );
+#endif
+
+    YQEasterBunny::layEgg();
+    y2milestone( "Done." );
+
+    // desktop()->repaint() has no effect - we need to do it the hard way.
+    system( "/usr/X11R6/bin/xrefresh" );
+}
+
+
+QString YQUI::productName() const
+{
+    return fromUTF8( YUI::productName() );
+}
+
+
+YCPValue YQUI::evaluate( const YCPValue & command )
+{
+    if( command->isCode() )
+    {
 	return command->asCode()->evaluate();
     }
     
@@ -328,12 +611,12 @@ YCPValue Y2QtComponent::evaluate( const YCPValue & command )
 }
 
 
-void Y2QtComponent::result( const YCPValue & )
+void YQUI::result( const YCPValue & )
 {
 }
 
 
-void Y2QtComponent::setServerOptions( int argc, char **argv )
+void YQUI::setServerOptions( int argc, char **argv )
 {
     y2milestone ("SetServerOptions, num: %d", argc);
     
@@ -345,18 +628,19 @@ void Y2QtComponent::setServerOptions( int argc, char **argv )
     
     
     // do a new initialization with the arguments
-    init ();
+    init();
 }
 
 
 Y2Component *
-Y2QtComponent::getCallback( void ) const
+YQUI::getCallback( void ) const
 {
     return _callback;
 }
 
+
 void
-Y2QtComponent::setCallback( Y2Component * callback )
+YQUI::setCallback( Y2Component * callback )
 {
     // interpreter not yet running, save the callback information
     // until first evaluate() call which starts the interpreter
@@ -367,3 +651,23 @@ Y2QtComponent::setCallback( Y2Component * callback )
 }
 
 
+static void
+qMessageHandler( QtMsgType type, const char * msg )
+{
+    switch (type)
+    {
+	case QtDebugMsg:
+	    y2debug ("qt-debug: %s\n", msg);
+	    break;
+	case QtWarningMsg:
+	    y2warning ("qt-warning: %s\n", msg);
+	    break;
+	case QtFatalMsg:
+	    y2internal ("qt-fatal: %s\n", msg);
+	    exit (1);		// qt does the same
+    }
+}
+
+
+
+#include "YQUI.moc"

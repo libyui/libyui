@@ -25,7 +25,7 @@
 using std::max;
 
 #include "utf8.h"
-#include "Y2QtComponent.h"
+#include "YQUI.h"
 #include "YEvent.h"
 #include "YQMultiLineEdit.h"
 
@@ -45,14 +45,14 @@ YQMultiLineEdit::YQMultiLineEdit( QWidget * parent, YWidgetOpt & opt,
     {
 	_qt_label = new QLabel( fromUTF8( label->value() ), this );
 	_qt_label->setTextFormat( QLabel::PlainText );
-	_qt_label->setFont( Y2QtComponent::ui()->currentFont() );
+	_qt_label->setFont( YQUI::ui()->currentFont() );
     }
     else
 	_qt_label = 0;
 
     _qt_textedit = new QTextEdit( this );
     _qt_textedit->setTextFormat( Qt::PlainText );
-    _qt_textedit->setFont( Y2QtComponent::ui()->currentFont() );
+    _qt_textedit->setFont( YQUI::ui()->currentFont() );
     _qt_textedit->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
     _qt_textedit->setText( fromUTF8( initialText->value() ) );
 
@@ -131,7 +131,7 @@ bool YQMultiLineEdit::setKeyboardFocus()
 void YQMultiLineEdit::changed()
 {
     if ( getNotify() )
-	Y2QtComponent::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 

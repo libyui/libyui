@@ -26,7 +26,7 @@
 using std::max;
 
 #include "utf8.h"
-#include "Y2QtComponent.h"
+#include "YQUI.h"
 #include "YQLogView.h"
 
 
@@ -42,10 +42,10 @@ YQLogView::YQLogView( QWidget * 	parent,
 
     _qt_label = new QLabel( fromUTF8( label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
-    _qt_label->setFont( Y2QtComponent::ui()->currentFont() );
+    _qt_label->setFont( YQUI::ui()->currentFont() );
 
     _qt_text = new QMultiLineEdit( this );
-    _qt_text->setFont( Y2QtComponent::ui()->currentFont() );
+    _qt_text->setFont( YQUI::ui()->currentFont() );
     _qt_text->setReadOnly( true );
     _qt_text->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
 
