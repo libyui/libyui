@@ -53,6 +53,7 @@ class YQWizard : public QVBox, public YWizard
 {
     Q_OBJECT
 
+protected:
     class Step;
     class TreeItem;
 
