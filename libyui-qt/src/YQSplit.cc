@@ -33,6 +33,13 @@ YQSplit::YQSplit(QWidget *parent, YWidgetOpt &opt, YUIDimension dimension)
     setWidgetRep(this);
 }
 
+
+void YQSplit::setEnabling(bool enabled)
+{
+    QWidget::setEnabled(enabled);
+}
+
+
 void YQSplit::setSize(long newwidth, long newheight)
 {
     resize(newwidth, newheight);

@@ -58,6 +58,13 @@ public:
     void removeRadioButton(YRadioButton *button);
 
     /**
+     * Inherited from YWidget: Sets the enabled state of the
+     * widget. All new widgets are enabled per definition. Only
+     * enabled widgets can take user input.
+     */
+    void setEnabling(bool enabled);
+
+    /**
      * Resize this widget
      */
     void setSize(long newwidth, long newheight);

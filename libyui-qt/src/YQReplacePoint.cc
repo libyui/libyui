@@ -39,6 +39,12 @@ void YQReplacePoint::childAdded(YWidget *child)
 }
 
 
+void YQReplacePoint::setEnabling(bool enabled)
+{
+    QWidget::setEnabled(enabled);
+}
+
+
 void YQReplacePoint::setSize(long newwidth, long newheight)
 {
     resize(newwidth, newheight);

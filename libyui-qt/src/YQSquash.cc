@@ -29,6 +29,13 @@ YQSquash::YQSquash(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
     setWidgetRep((QWidget *)this);
 }
 
+
+void YQSquash::setEnabling(bool enabled)
+{
+    QWidget::setEnabled(enabled);
+}
+
+
 void YQSquash::setSize(long newwidth, long newheight)
 {
     resize(newwidth, newheight);

@@ -65,6 +65,11 @@ void YQRadioButtonGroup::removeRadioButton(YRadioButton *button)
 }
 
 
+void YQRadioButtonGroup::setEnabling(bool enabled)
+{
+    QWidget::setEnabled(enabled);
+}
+
 void YQRadioButtonGroup::setSize(long newwidth, long newheight)
 {
     resize(newwidth, newheight);

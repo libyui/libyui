@@ -32,6 +32,12 @@ YQAlignment::YQAlignment(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
 }
 
 
+void YQAlignment::setEnabling(bool enabled)
+{
+    QWidget::setEnabled(enabled);
+}
+
+
 void YQAlignment::moveChild(YWidget *child, long newx, long newy)
 {
     QWidget *qw = (QWidget *)(child->widgetRep());

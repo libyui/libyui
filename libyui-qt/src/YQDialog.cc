@@ -128,6 +128,12 @@ long YQDialog::decorationWidth(YUIDimension dim)
 }
 
 
+void YQDialog::setEnabling(bool enabled)
+{
+    QWidget::setEnabled(enabled);
+}
+
+
 void YQDialog::setSize(long newWidth, long newHeight)
 {
     y2debug("Resizing dialog to %ld %ld", newWidth, newHeight);

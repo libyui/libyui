@@ -40,6 +40,13 @@ public:
     YQSplit(QWidget *parent, YWidgetOpt &opt, YUIDimension dimension);
 
     /**
+     * Inherited from YWidget: Sets the enabled state of the
+     * widget. All new widgets are enabled per definition. Only
+     * enabled widgets can take user input.
+     */
+    void setEnabling(bool enabled);
+
+    /**
      * Inherited from YWidget. Sets the new size of the widget.
      */
     void setSize(long newwidth, long newheight);

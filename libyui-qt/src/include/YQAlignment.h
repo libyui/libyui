@@ -46,6 +46,13 @@ public:
     void moveChild(YWidget *child, long newx, long newy);
 
     /**
+     * Inherited from YWidget: Sets the enabled state of the
+     * widget. All new widgets are enabled per definition. Only
+     * enabled widgets can take user input.
+     */
+    void setEnabling(bool enabled);
+
+    /**
      * Sets the size
      */
     void setSize(long newwidth, long newheight);
