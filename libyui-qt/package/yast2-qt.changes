@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jun  4 11:25:52 CEST 2003 - sh@suse.de
+
+- V 2.8.2 
+- Fixed yet another ambituous overload due to changed Qt lib
+
+-------------------------------------------------------------------
 Fri May 23 11:59:39 CEST 2003 - sh@suse.de
 
 - Fixed build problems due to new Qt lib (ambiguous overload)

@@ -61,8 +61,8 @@ YQPkgYouPatchList::YQPkgYouPatchList( QWidget *parent )
     QString label = _( "Show &Raw Patch Info" );
     actionShowRawPatchInfo = new QAction( label,		// text
 					  label + "\tr",	// menu text
-					  0,			// accel
-					  0 );			// parent
+					  (QKeySequence) 0,	// accel
+					  (QObject *) 0 );	// parent
 
     connect( actionShowRawPatchInfo, SIGNAL( activated() ), SLOT( showRawPatchInfo() ) );
 

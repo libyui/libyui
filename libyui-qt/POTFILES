@@ -20,4 +20,4 @@
 ./src/YQPkgVersionsView.cc
 ./src/YQPkgYouPatchFilterView.cc
 ./src/YQPkgYouPatchList.cc
-./src/YUIQt.cc
+./src/YUIQt_builtins.cc
