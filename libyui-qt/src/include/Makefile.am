@@ -34,6 +34,7 @@ pkginclude_HEADERS =				\
 	YQPartitionSplitter.h			\
 	YQPkgConflictDialog.h			\
 	YQPkgConflictList.h			\
+	YQPkgDependenciesView.h			\
 	YQPkgDescriptionView.h			\
 	YQPkgGenericDetailsView.h		\
 	YQPkgList.h				\

@@ -39,6 +39,7 @@ class QY2ComboTabWidget;
 
 class YQPkgConflictDialog;
 class YQPkgDescriptionView;
+class YQPkgDependenciesView;
 class YQPkgList;
 class YQPkgRpmGroupTagsFilterView;
 class YQPkgSearchFilterView;
@@ -185,6 +186,7 @@ protected:
     QY2ComboTabWidget *			_filters;
     YQPkgConflictDialog *		_conflictDialog;
     YQPkgDescriptionView *		_pkgDescriptionView;
+    YQPkgDependenciesView *		_pkgDependenciesView;
     YQPkgList *				_pkgList;
     YQPkgRpmGroupTagsFilterView *	_rpmGroupTagsFilterView;
     YQPkgSearchFilterView *		_searchFilterView;

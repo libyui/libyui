@@ -46,6 +46,7 @@
 #include "YQPackageSelector.h"
 #include "YQPkgConflictDialog.h"
 #include "YQPkgDescriptionView.h"
+#include "YQPkgDependenciesView.h"
 #include "YQPkgList.h"
 #include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQPkgSearchFilterView.h"
@@ -89,6 +90,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     _filters			= 0;
     _leftPane			= 0;
     _pkgDescriptionView		= 0;
+    _pkgDependenciesView	= 0;
     _pkgList			= 0;
     _pkgTechnicalDetailsView	= 0;
     _pkgVersionsView		= 0;
@@ -392,6 +394,20 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
     connect( _pkgList,			SIGNAL( selectionChanged    ( PMObjectPtr ) ),
 	     _pkgTechnicalDetailsView,	SLOT  ( showDetailsIfVisible( PMObjectPtr ) ) );
+
+    
+    //
+    // Dependencies
+    //
+
+    _pkgDependenciesView = new YQPkgDependenciesView( _detailsViews );
+    CHECK_PTR( _pkgDependenciesView );
+
+    _detailsViews->addTab( _pkgDependenciesView, _( "Dependencies" ) );
+    _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
+
+    connect( _pkgList,			SIGNAL( selectionChanged    ( PMObjectPtr ) ),
+	     _pkgDependenciesView,	SLOT  ( showDetailsIfVisible( PMObjectPtr ) ) );
 
 
     //
