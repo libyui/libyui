@@ -6,6 +6,7 @@
 ./src/YQPkgConflictDialog.cc
 ./src/YQPkgConflictList.cc
 ./src/YQPkgDependenciesView.cc
+./src/YQPkgDescriptionDialog.cc
 ./src/YQPkgDiskUsageList.cc
 ./src/YQPkgDiskUsageWarningDialog.cc
 ./src/YQPkgList.cc
@@ -20,4 +21,4 @@
 ./src/YQPkgVersionsView.cc
 ./src/YQPkgYouPatchFilterView.cc
 ./src/YQPkgYouPatchList.cc
-./src/YUIQt_builtins.cc
+./src/YQUI_builtins.cc
