@@ -298,8 +298,12 @@ YQPkgListItem::compare( QListViewItem *		otherListViewItem,
 
 	if ( other )
 	{
-	    if (   this->installSourceRpm() && ! other->installSourceRpm() ) return -1;
-	    if ( ! this->installSourceRpm() &&   other->installSourceRpm() ) return 1;
+	    int thisPoints  = ( this->hasSourceRpm()  ? 1 : 0 ) + ( this->installSourceRpm()  ? 1 : 0 );
+	    int otherPoints = ( other->hasSourceRpm() ? 1 : 0 ) + ( other->installSourceRpm() ? 1 : 0 );
+
+	    // Intentionally inverting order: Pkgs with source RPMs are more interesting than without.
+	    if ( thisPoints > otherPoints ) return -1;
+	    if ( thisPoints < otherPoints ) return  1;
 	    return 0;
 	}
     }
