@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jul 25 15:30:53 CEST 2003 - gs@suse.de
+
+- V 2.8.8
+- set terminal encoding in constructor Y2NCursesUI::Y2NCursesUI;
+
+-------------------------------------------------------------------
 Wed Jul 16 14:47:27 CEST 2003 - gs@suse.de
 
 - V 2.8.7
