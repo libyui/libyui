@@ -40,6 +40,8 @@ pkginclude_HEADERS =				\
 	YQPkgRpmGroupTagsFilterView.h		\
 	YQPkgSelectionsFilterView.h		\
 	YQPkgSelList.h				\
+	YQPkgYouPatchFilterView.h		\
+	YQPkgYouPatchList.h			\
 	YQProgressBar.h				\
 	YQPushButton.h				\
 	YQRadioButton.h				\

@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQPkgSelList.h
+  File:	      YQPkgYouPatchList.h
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
@@ -19,17 +19,17 @@
 // -*- c++ -*-
 
 
-#ifndef YQPkgSelList_h
-#define YQPkgSelList_h
+#ifndef YQPkgYouPatchList_h
+#define YQPkgYouPatchList_h
 
 #include <YQPkgObjList.h>
-#include <y2pm/PMSelection.h>
+#include <y2pm/PMYouPatch.h>
 
 
-class YQPkgSelListItem;
+class YQPkgYouPatchListItem;
 
 
-class YQPkgSelList : public YQPkgObjList
+class YQPkgYouPatchList : public YQPkgObjList
 {
     Q_OBJECT
 
@@ -38,12 +38,12 @@ public:
     /**
      * Constructor
      **/
-    YQPkgSelList( QWidget *parent );
+    YQPkgYouPatchList( QWidget *parent );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgSelList();
+    virtual ~YQPkgYouPatchList();
 
 
 public slots:
@@ -68,7 +68,7 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addPkgSelItem( PMSelectionPtr sel );
+    void addYouPatchItem( PMYouPatchPtr sel );
 
     /**
      * Emit an updatePackages() signal.
@@ -80,7 +80,7 @@ public:
     /**
      * Returns the currently selected item or 0 if there is none.
      **/
-    YQPkgSelListItem * selection() const;
+    YQPkgYouPatchListItem * selection() const;
 
 
 signals:
@@ -118,30 +118,30 @@ protected slots:
 
 
 
-class YQPkgSelListItem: public YQPkgObjListItem
+class YQPkgYouPatchListItem: public YQPkgObjListItem
 {
 public:
 
     /**
-     * Constructor. Creates a YQPkgSelList item that corresponds to the package
+     * Constructor. Creates a YQPkgYouPatchList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgSelListItem( YQPkgSelList * pkgSelList, PMSelectionPtr sel );
+    YQPkgYouPatchListItem( YQPkgYouPatchList * youPatchList, PMYouPatchPtr youPatch );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgSelListItem();
+    virtual ~YQPkgYouPatchListItem();
 
     /**
      * Returns the original object within the package manager backend.
      **/
-    PMSelectionPtr pmSel() { return _pmSel; }
+    PMYouPatchPtr pmYouPatch() { return _pmYouPatch; }
 
     /**
      * Returns the original object within the package manager backend.
      **/
-    const PMSelectionPtr constPmSel() const { return _pmSel; }
+    const PMYouPatchPtr constPmYouPatch() const { return _pmYouPatch; }
 
     /**
      * Returns the (binary RPM) package status.
@@ -161,8 +161,7 @@ public:
      *	0 if this == other
      * +1 if this >  other
      *
-     * Reimplemented from QListViewItem:
-     * Sort by PMSelection::order() only.
+     * Reimplemented from QListViewItem.
      **/
     virtual int compare( QListViewItem *	other,
 			 int			col,
@@ -170,17 +169,17 @@ public:
 
     // Columns
 
-    int statusCol()	const	{ return _pkgSelList->statusCol();	}
-    int summaryCol()	const	{ return _pkgSelList->summaryCol();	}
+    int statusCol()	const	{ return _youPatchList->statusCol();	}
+    int summaryCol()	const	{ return _youPatchList->summaryCol();	}
 
 
 protected:
 
     // Data members
 
-    YQPkgSelList	*	_pkgSelList;
-    PMSelectionPtr		_pmSel;
+    YQPkgYouPatchList	*	_youPatchList;
+    PMYouPatchPtr		_pmYouPatch;
 };
 
 
-#endif // ifndef YQPkgSelList_h
+#endif // ifndef YQPkgYouPatchList_h
