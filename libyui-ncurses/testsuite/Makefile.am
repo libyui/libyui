@@ -28,7 +28,7 @@ utf8test_SOURCES = utf8test.cc			\
 utf8test_LDADD = ../src/liby2ncurses.la -lncursesw -lpanelw -lpthread \
 	-ly2 -lyui -lycp -lutil -ly2pm
 
-ybin_PROGRAMS = y2ncurses
+noinst_PROGRAMS = y2ncurses
 y2ncurses_SOURCES = y2ncurses.cc
 y2ncurses_LDADD = -lncurses -lpanel -lpthread -ly2 -lyui -lycp \
 	-lutil -ly2pm
