@@ -40,12 +40,12 @@ YQPkgYouPatchList::YQPkgYouPatchList( QWidget *parent )
 
     int numCol = 0;
     addColumn( "" );					_statusCol	= numCol++;
-    addColumn( _( "Yast Online Update Patch" 	) );	_summaryCol	= numCol++;
-    addColumn( _( "Kind" 			) );	_kindCol	= numCol++;
+    addColumn( _( "Yast Online Update Patch"	) );	_summaryCol	= numCol++;
+    addColumn( _( "Kind"			) );	_kindCol	= numCol++;
     setAllColumnsShowFocus( true );
 
-    connect( this, 	SIGNAL( selectionChanged        ( QListViewItem * ) ),
-	     this, 	SLOT  ( filter()                                    ) );
+    connect( this,	SIGNAL( selectionChanged	( QListViewItem * ) ),
+	     this,	SLOT  ( filter()				    ) );
 
     fillList();
     setSorting( kindCol() );
@@ -75,13 +75,13 @@ YQPkgYouPatchList::fillList()
 
 	if ( patch )
 	{
-#if 1
-		// DEBUG
+#if 0
+	    // DEBUG
 	    {
 		std::string name = patch->name();
 		y2milestone( "Found patch '%s'", name.c_str() );
 	    }
-		// DEBUG
+	    // DEBUG
 #endif
 	    addYouPatchItem( patch );
 	}
@@ -200,8 +200,6 @@ YQPkgYouPatchListItem::~YQPkgYouPatchListItem()
 void
 YQPkgYouPatchListItem::setStatus( PMSelectable::UI_Status newStatus )
 {
-    // Y2PM::selectionManager().activate( Y2PM::packageManager() );
-
     // TODO: activate patch (?)
 
     YQPkgObjListItem::setStatus( newStatus );
@@ -217,7 +215,7 @@ YQPkgYouPatchListItem::setStatus( PMSelectable::UI_Status newStatus )
  * +1 if this >	 other
  **/
 int
-YQPkgYouPatchListItem::compare( QListViewItem *	otherListViewItem,
+YQPkgYouPatchListItem::compare( QListViewItem * otherListViewItem,
 				int		col,
 				bool		ascending ) const
 {
