@@ -37,6 +37,7 @@
 #define LIST_SPLIT_THRESHOLD	8
 
 #define RED			QColor( 0xC0, 0, 0 )
+#define BRIGHT_RED		QColor( 0xFF, 0, 0 )
 #define BLUE			QColor( 0, 0, 0xC0 )
 #define LIGHT_BLUE		QColor( 0xE0, 0xE0, 0xF8 )
 #define LIGHT_GREY		QColor( 0xE0, 0xE0, 0xE0 )
@@ -189,7 +190,7 @@ YQPkgConflict::formatLine()
 	    // (Pseudo) package / functionality %1 missing, e.g.,
 	    // "libfoo.so.1.0 not available"
 	    text = ( _( "%1 not available" ) ).arg( _fullName );
-	    setTextColor( RED );
+	    setTextColor( BRIGHT_RED );
 	    icon = YQIconPool::unresolvablePkgConflict();
 	}
     }
@@ -203,7 +204,7 @@ YQPkgConflict::formatLine()
 	    // This means that the user has set this package to "remove" or "taboo",
 	    // yet other packages still need it.
 
-	    setTextColor( RED );
+	    setTextColor( BRIGHT_RED );
 
 	    switch ( _status )
 	    {
@@ -499,15 +500,6 @@ YQPkgConflict::paintCell( QPainter *		painter,
 {
     painter->setFont( YUIQt::yuiqt()->headingFont() );
     QY2ListViewItem::paintCell( painter, colorGroup, column, width, alignment );
-}
-
-
-bool
-YQPkgConflict::isResolved()
-{
-#warning TODO: isResolved()
-
-    return true;
 }
 
 

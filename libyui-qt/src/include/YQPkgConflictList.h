@@ -109,12 +109,6 @@ public:
     virtual ~YQPkgConflict() {}
 
     /**
-     * Check if this conflict is resolved, i.e. the user made a choice how to
-     * deal with this conflict.
-     **/
-    bool isResolved();
-
-    /**
      * Access the internal ErrorResult.
      **/
     PkgDep::ErrorResult & errorResult() { return _conflict; }
