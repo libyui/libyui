@@ -39,6 +39,7 @@ class NCPopupTree;
 class NCPopupSelection;
 class PMSelectionPtr;
 class PMPackagePtr;
+class PMYouPatchPtr;
 
 
 ///////////////////////////////////////////////////////////////////
@@ -84,7 +85,7 @@ class PackageSelector
 
     // add a line to the package list
     bool createListEntry ( NCPkgTable *table, PMPackagePtr pkgPtr, unsigned int index );
-    bool createPatchEntry ( NCPkgTable *pkgTable, PMObjectPtr patchPtr, unsigned int index );
+    bool createPatchEntry ( NCPkgTable *table, PMYouPatchPtr patchPtr, unsigned int index );
     
     // internal use (copies tree items got from YPkgRpmGroupTagsFilterView)
     void cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone );
@@ -106,7 +107,7 @@ class PackageSelector
      */ 
     virtual ~PackageSelector();
 
-    /**
+   /**
     * Fills the package table
     * @param label The selected RPM group (the label)
     * @param group The rpm group
@@ -114,6 +115,12 @@ class PackageSelector
     */
     bool fillPackageList( const YCPString & label, YStringTreeItem * group );
 
+  /**
+    * Fills the package table with available YOU patches
+    * @return bool
+    */
+    bool fillPatchList( );
+    
    /**
     * Fills the package table with default list
     * @param pkgTable The package list widget
@@ -129,6 +136,13 @@ class PackageSelector
     */
     bool fillAvailableList( NCPkgTable *table, PMObjectPtr pkgPtr );    
 
+   /**
+    * Fills the package table with packages matching the search expression
+    * @param expr The search expressionqc
+    * @return bool
+    */
+    bool fillSearchList( const YCPString & expr );
+    
    /**
     * Fills the header of the package table
     * @param table The table widget

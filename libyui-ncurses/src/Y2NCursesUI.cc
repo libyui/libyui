@@ -632,6 +632,7 @@ void Y2NCursesUI::runPkgSelection(  YWidget * selector )
 	{
 	    event = ncd->userInput();
 	    result = ncSelector->handleEvent( event );
+	    NCMIL << "Result: " << (result?"true":"false") << endl;
 	}
 	while ( event != NCursesEvent::cancel && result == true );
     }

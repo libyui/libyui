@@ -38,6 +38,7 @@
 #include <Y2PM.h>
 #include <y2pm/RpmDb.h>
 #include <y2pm/PMManager.h>
+#include <y2pm/PMYouPatchManager.h>
 
 #include <ycp/YCPString.h>
 #include <ycp/YCPVoid.h>
@@ -70,6 +71,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui )
     : y2ui( ui )
       , visibleInfo( YCPNull() )
       , filterPopup( 0 )
+      , selectionPopup( 0 )
       , youMode( false )
 {
     // Fill the handler map
@@ -208,7 +210,7 @@ bool PackageSelector::handleEvent ( const NCursesEvent&   event )
     {
 	UIERR << "Unknown event or id not valid" << endl;
     }
-	
+
     return retVal;
 }
 
@@ -328,7 +330,7 @@ bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr 
 	createListEntry( packageList, (*listIt), i );
     }
       
-    if ( !label.isNull() && label->compare( YCPString("default") ) != YO_EQUAL )
+    if ( !label.isNull() )
     {
 	NCMIL << "  Label: " << label->toString() << endl;
 
@@ -346,6 +348,31 @@ bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr 
 
 ///////////////////////////////////////////////////////////////////
 //
+// fillSearchList
+//
+// Fills the package table
+//
+bool PackageSelector::fillSearchList( const YCPString & expr )
+{
+    if ( !packageList )
+    {
+	return false;
+    }
+
+    // FIXME: get packages from package manager
+    
+    // set filter label to 'Search'
+    YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
+    if ( filterLabel )
+    {
+	static_cast<NCLabel *>(filterLabel)->setLabel( PkgNames::SearchResults() );
+    }
+
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////
+//
 // fillDefaultList
 //
 // Fills the package table with the list of default rpm group
@@ -358,21 +385,77 @@ bool PackageSelector::fillDefaultList( NCPkgTable * pkgTable )
 	packageList = pkgTable;
     }
 
-    YStringTreeItem * defaultGroup =  filterPopup->getDefaultGroup();
-
-    if ( defaultGroup )
+    if ( !youMode )
     {
-	fillPackageList ( YCPString( defaultGroup->value().translation()),
-			  defaultGroup );
+	YStringTreeItem * defaultGroup =  filterPopup->getDefaultGroup();
+
+	if ( defaultGroup )
+	{
+	    fillPackageList ( YCPString( defaultGroup->value().translation()),
+			      defaultGroup );
+	}
+	else
+	{
+	    NCERR << "No default RPM group availbale" << endl;
+	}
     }
     else
     {
-	NCERR << "No default RPM group availbale" << endl;
+	fillPatchList();
     }
     
     return true;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+// fillPatchList
+//
+// Fills the package table with the list of YOU patches
+//
+bool PackageSelector::fillPatchList( )
+{
+    if ( !packageList )
+    {
+	UIERR << "No valid NCPkgTable widget" << endl;
+    	return false;
+    }
+    
+    // clear the package table
+    packageList->itemsCleared ();
+
+    PMManager::PMSelectableVec::const_iterator it = Y2PM::youPatchManager().begin();
+
+    // fill the package table
+    unsigned int i;
+    PMYouPatchPtr patchPtr;    
+
+    for ( i = 0, it = Y2PM::youPatchManager().begin() ;
+	  it != Y2PM::youPatchManager().end();
+	  ++it, i++ )
+    {
+	PMSelectablePtr selectable = *it;
+
+	if ( selectable->installedObj() )
+	    patchPtr = selectable->installedObj();
+	else if ( selectable->candidateObj() )
+	    patchPtr = selectable->candidateObj();
+	else
+	    patchPtr = selectable->theObject();
+
+	createPatchEntry( packageList, patchPtr, i );
+			  
+    }
+
+    // show the selected filter label
+    YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
+    if ( filterLabel )
+    {
+	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString( "Patches" ) );
+    }
+
+    return true;
+}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -389,8 +472,6 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
     	return false;
     }
     
-    NCMIL <<  "Label: " <<  label->toString() << endl;
-
     // clear the package table
     packageList->itemsCleared ();
 
@@ -430,8 +511,10 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
 
     }
 
-    if ( !label.isNull() && label->compare( YCPString("default") ) != YO_EQUAL )
+    if ( !label.isNull() )
     {
+	NCMIL <<  "Label: " <<  label->toString() << endl;
+
 	// show the selected filter label
 	YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
 	if ( filterLabel )
@@ -443,7 +526,11 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
     return true;
 }
 
-
+///////////////////////////////////////////////////////////////////
+//
+// check
+//
+//
 bool PackageSelector::check( PMPackagePtr pkg,
 			     YStringTreeItem * rpmGroup,
 			     int index )
@@ -459,12 +546,6 @@ bool PackageSelector::check( PMPackagePtr pkg,
 
     if ( pkg->group_ptr()->isChildOf( rpmGroup ) )
     {
-#if 1
-	// DEBUG
-	std::string name = pkg->name();
-	y2debug( "Found match for pkg '%s'", name.c_str() );
-	// DEBUG
-#endif
 	createListEntry( packageList, pkg, index );
 	
 	return true;
@@ -486,7 +567,7 @@ bool PackageSelector::createListEntry ( NCPkgTable *pkgTable,
 {
     vector<string> pkgLine (4);
 
-    if ( !pkgPtr )
+    if ( !pkgPtr || !pkgTable )
     {
 	NCERR << "No valid package available" << endl;
 	return false;
@@ -511,18 +592,18 @@ bool PackageSelector::createListEntry ( NCPkgTable *pkgTable,
 //
 //
 bool PackageSelector::createPatchEntry ( NCPkgTable *pkgTable,
-					 PMObjectPtr patchPtr,
+					 PMYouPatchPtr patchPtr,
 					 unsigned int index )
 {
     vector<string> pkgLine (5);
 
-    if ( !patchPtr )
+    if ( !patchPtr || !pkgTable )
     {
 	NCERR << "No valid patch available" << endl;
 	return false;
     }
 
-    pkgLine[0] = patchPtr->name();	// name
+    pkgLine[0] = patchPtr->getSelectable()->name();	// name
     pkgLine[1] = patchPtr->summary();  	// short description
     FSize size = patchPtr->size();     	// installed size
     pkgLine[2] = size.asString();
@@ -551,21 +632,24 @@ bool PackageSelector::SearchHandler( const NCursesEvent& event)
     // open the search poup and get the search expression
     NCPopupSearch pkgSearch( wpos( 1, 1 ) );
 
-    YCPString search = pkgSearch.showSearchPopup();
+    NCursesEvent retEvent = pkgSearch.showSearchPopup();
 
-    if ( !search.isNull() )
-    {
-	// FIXME: get the package list from package manager
-	NCMIL << "Searching for: " <<  search->toString() << endl;
+    if ( !retEvent.result.isNull() )
+    {	
+	YCPString searchExpr = retEvent.result->asString();
+    
+	NCMIL << "Searching for: " <<  searchExpr->toString() << endl;
 
-	// FIXME: use enum (or whatever) for the filter
-	fillPackageList ( YCPString ( "Search" ), 0 );
-
-	showPackageInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );
+	if ( !youMode )
+	{
+	    // fill the package list with packages matching the search expression
+	    fillSearchList ( searchExpr );
+	    showPackageInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );
+	}
     }
     else
     {
-	NCDBG << "Search is canceled"  << endl;
+	NCMIL << "Search is canceled"  << endl;
     }
     
     return true;
@@ -646,6 +730,12 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 	return false;
     }
 
+    if ( youMode )
+    {
+	// up to now: nothing to do
+	return true;
+    }
+    
     if ( event.selection->compare( PkgNames::RpmGroups() ) == YO_EQUAL )
     {
 	if ( filterPopup )
@@ -683,7 +773,13 @@ bool PackageSelector::StatusHandler( const NCursesEvent&  event )
     {
 	return false;
     }
-
+    
+    if (  packageList->getNumLines() == 0 )
+    {
+	// nothing to do
+	return true;
+    }
+    
     // call the corresponding method of NCPkgTable
     if ( event.selection->compare( PkgNames::Toggle() ) == YO_EQUAL )
     {
@@ -802,9 +898,10 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
 bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 {
     // FIXME - show a popup and ask the user
+    // FIXME - restore state
 
     NCMIL <<  "Cancel button pressed - leaving package selection" << endl;
-    
+
     // return false, which means stop the event loop (see runPkgSelection)
     return false;
 }
@@ -818,15 +915,13 @@ bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 {
     // FIXME - do a final dependency check
-    //	     - check diskspace
-    // 	     - inform packagemanager (or installation manager)
+    // FIXME - check diskspace
 
     NCMIL <<  "OK button pressed - leaving package selection, starting installation" << endl;
-    
+
     // return false, leave the package selection
     return false;
 }
-
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -1034,5 +1129,3 @@ string PackageSelector::createText( list<string> info, bool oneline )
 
     return text;
 }
-
-

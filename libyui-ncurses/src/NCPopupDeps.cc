@@ -162,7 +162,7 @@ YCPString NCPopupDeps::showDependencyPopup( )
     
     popdownDialog();
 
-    return YCPString(postevent.item);
+    return postevent.result->asString();
 }
 
 ///////////////////////////////////////////////////////////////////

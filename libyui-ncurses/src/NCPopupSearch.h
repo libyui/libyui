@@ -56,7 +56,7 @@ private:
     
 protected:
 
-    string getSearchExpression() const;
+    YCPString getSearchExpression() const;
 
     virtual bool postAgain();
 
@@ -71,7 +71,7 @@ public:
 
     void createLayout( const YCPString & headline );
 
-    YCPString showSearchPopup( );
+    NCursesEvent & showSearchPopup( );
     
 };
 

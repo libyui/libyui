@@ -222,7 +222,9 @@ public:
      */ 
     PMObjectPtr getDataPointer( int index );
 
-    friend std::ostream & operator<<( std::ostream & str, NCPkgStatus obj );    
+    friend std::ostream & operator<<( std::ostream & str, NCPkgStatus obj );
+
+    unsigned int getNumLines( ) { return pad->Lines(); }
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -149,7 +149,7 @@ void NCPopupSearch::createLayout( const YCPString & headline )
 //
 //	DESCRIPTION :
 //
-YCPString NCPopupSearch::showSearchPopup( )
+NCursesEvent & NCPopupSearch::showSearchPopup( )
 {
     postevent = NCursesEvent();
     do {
@@ -158,15 +158,15 @@ YCPString NCPopupSearch::showSearchPopup( )
     
     popdownDialog();
 
-    return postevent.item;
+    return postevent;
 }
 
 //
 //	DESCRIPTION :
 //
-string  NCPopupSearch::getSearchExpression() const
+YCPString  NCPopupSearch::getSearchExpression() const
 {
-    return searchExpr->getValue()->toString();
+    return searchExpr->getValue();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -215,7 +215,7 @@ bool NCPopupSearch::postAgain()
     if ( ! postevent.widget )
 	return false;
 
-    postevent.item = YCPNull();
+    postevent.result = YCPNull();
 	
     YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
     
@@ -223,12 +223,12 @@ bool NCPopupSearch::postAgain()
     {
 	// do not start the package search if cancel button is pressed
 	// (item is checked in PackageSelector::SearchHandler)
-	postevent.item = YCPNull();
+	postevent.result = YCPNull();
     }
     else if ( currentId->compare( PkgNames::OkButton () ) == YO_EQUAL )
     {
 	// get the search expression and store it in NCursesEvent.item
-	postevent.item =  getSearchExpression();
+	postevent.result =  getSearchExpression();
     }
     
     if ( postevent == NCursesEvent::button || postevent == NCursesEvent::cancel )
