@@ -51,7 +51,7 @@ YQPkgTextDialog::YQPkgTextDialog( const QString & text, QWidget * parent )
 
     // Dialog title
     setCaption( _( "YaST2" ) );
-    
+
     // Layout for the dialog (can't simply insert a QVBox)
 
     QVBoxLayout * layout = new QVBoxLayout( this, MARGIN, SPACING );
@@ -189,22 +189,39 @@ void YQPkgTextDialog::showText( QWidget * parent,
 QString
 YQPkgTextDialog::htmlParagraphs( const list<string> & text )
 {
-    QString html = "<p>";
+    bool preformatted = false;
     list<string>::const_iterator it = text.begin();
+    
+    if ( it != text.end()
+	 && *it == "<!-- DT:Rich -->" )	// Special doctype for preformatted HTML
+    {
+	preformatted = true;
+	++it;					// Discard doctype line
+    }
+
+    QString html = preformatted ? "" : "<p>";
 
     while ( it != text.end() )
     {
 	QString line = fromUTF8( *it );
-	line = htmlEscape( line );
 
-	if ( line.length() == 0 )	// Empty lines mean new paragraph
-	    html += "</p><p>";
+	if ( preformatted )
+	    html += line + "\n";
 	else
-	    html += " " + line;
+	{
+	    line = htmlEscape( line );
+
+	    if ( line.length() == 0 )	// Empty lines mean new paragraph
+		html += "</p><p>";
+	    else
+		html += " " + line;
+	}
+
 	++it;
     }
 
-    html += "</p>";
+    if ( ! preformatted )
+	html += "</p>";
 
     return html;
 }

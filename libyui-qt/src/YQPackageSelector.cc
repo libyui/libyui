@@ -928,7 +928,7 @@ YQPackageSelector::fakeData()
     {
 	InstSrcManager & MGR( Y2PM::instSrcManager() );
 
-	Url url( "dir:///8.1" );
+	Url url( "dir:///8.2" );
 	InstSrcManager::ISrcIdList nids;
 	PMError err = MGR.scanMedia( nids, url );
 
