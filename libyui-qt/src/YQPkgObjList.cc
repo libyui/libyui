@@ -247,6 +247,8 @@ YQPkgObjList::installedContextMenu()
 void
 YQPkgObjList::updateActions( YQPkgObjListItem * item )
 {
+    if ( !item ) return;
+
     PMObjectPtr pmObj = item->pmObj();
     
     if ( pmObj->hasInstalledObj() )
@@ -330,7 +332,9 @@ YQPkgObjListItem::setText( int column, const PkgEdition & edition )
 PMSelectable::UI_Status
 YQPkgObjListItem::status() const
 {
-    return constPMObj()->getSelectable()->status();
+    PMSelectablePtr selectable = constPMObj()->getSelectable();
+    if ( !selectable ) return PMSelectable::S_NoInst;
+    else return selectable->status();
 }
 
 
