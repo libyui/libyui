@@ -530,6 +530,9 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr )
    	    pkgLine.push_back( pkgPtr->summary() );  	// short description
 	    
 	    status = pkgPtr->getSelectable()->status(); // the package status
+	    
+	    FSize size = pkgPtr->size();     	// installed size
+	    pkgLine.push_back( size.form( 8 ) );  // format size
 
 	    break;
 	}
@@ -538,8 +541,11 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr )
 	    pkgLine.push_back( version );
 	    pkgLine.push_back( pkgPtr->instSrcLabel() ); // show the installation source
 
-	    status = getAvailableStatus( pkgPtr ); // the status of this certain
-	                                           // available package
+	    status = getAvailableStatus( pkgPtr ); // the status of this certain package
+	    
+	    FSize size = pkgPtr->size();     	// installed size
+	    pkgLine.push_back( size.form( 8 ) );  // format size
+
 	    break;
 	}
 	default: {   
@@ -566,13 +572,21 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr )
 	    }
 	    pkgLine.push_back( pkgPtr->summary() );  	// short description
 	    
-	    status =  status = pkgPtr->getSelectable()->status(); // the package status
+	    status = pkgPtr->getSelectable()->status(); // the package status
+
+	    FSize size = pkgPtr->size();     		// installed size
+	    pkgLine.push_back( size.form( 8 ) );  	// format size
+
+	    if ( pkgPtr->getSelectable()->source_install() )
+	    {
+		pkgLine.push_back( " x " );	
+	    }
+	    else
+	    {
+		pkgLine.push_back( "   " );	
+	    }
 	}
     }
-
-    FSize size = pkgPtr->size();     	// installed size
-    pkgLine.push_back( size.form( 8 ) );  // format size	
-    pkgLine.push_back( "    " );	// empty column for source install
     
     addLine( status,	// get the package status
 	     pkgLine, 	// the package data
