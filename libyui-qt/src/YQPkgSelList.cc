@@ -17,6 +17,8 @@
 /-*/
 
 
+#define SHOW_SUMMARY	1
+
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 #include <qheader.h>
@@ -43,9 +45,12 @@ YQPkgSelList::YQPkgSelList( YUIQt *yuiqt, QWidget *parent )
     int numCol = 0;
     addColumn( ""		);	_statusCol	= numCol++;
     addColumn( _( "Selection"	) );	_nameCol	= numCol++;
-    // addColumn( _( "Summary"	) );	_summaryCol	= numCol++;
+#if SHOW_SUMMARY
+    addColumn( _( "Summary"	) );	_summaryCol	= numCol++;
+#else
+    _summaryCol = -1;
+#endif
     setAllColumnsShowFocus( true );
-    setSorting( nameCol() );
     // header()->hide();
 
 
@@ -85,11 +90,17 @@ YQPkgSelList::fillList()
 
 	if ( sel )
 	{
+	    y2milestone( "Found selection" );
+	    
 	    if ( sel->visible() && ! sel->isBase() )
 	    {
 		new YQPkgSel( this, sel );
 	    }
+	    else
+		y2milestone( "Selection invisible or base selection" );
 	}
+	else
+	    y2error( "NULL pointer selection" );
 	
 	++it;
     }
@@ -274,7 +285,10 @@ YQPkgSel::YQPkgSel( YQPkgSelList * pkgSelList, PMSelectionPtr pkgSel )
     _pkgSel->startRetrieval();	// Just a hint to speed things up a bit
     
     setText( nameCol(),		_pkgSel->name()		  );
-    // setText( summaryCol(),	_pkgSel->summary()	  );
+
+#if SHOW_SUMMARY
+    setText( summaryCol(),	_pkgSel->summary("")	  );
+#endif
     
 
 #if 0
