@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Feb 19 16:18:06 CET 2003 - sh@suse.de
+
+- Fixed bug #23755: Busy cursor in file selection dialogs
+
+-------------------------------------------------------------------
 Wed Feb 19 14:58:39 CET 2003 - sh@suse.de
 
 - Fixed bug #23654: Window partially invisible 
