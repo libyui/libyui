@@ -272,7 +272,7 @@ YQPkgObjList::setCurrentStatus( PMSelectable::UI_Status newStatus,
 		item->showNotifyTexts( newStatus );
 		item->setStatus( newStatus );
 	    }
-	    
+
 	    emit statusChanged();
 	}
     }
@@ -774,7 +774,7 @@ YQPkgObjListItem::setStatusIcon()
 {
     if ( statusCol() >= 0 )
     {
-	bool enabled     = editable() && _pkgObjList->editable();
+	bool enabled = editable() && _pkgObjList->editable();
 	setPixmap( statusCol(), _pkgObjList->statusIcon( status(), enabled, bySelection() ) );
     }
 }
@@ -852,7 +852,7 @@ YQPkgObjListItem::cycleStatus()
 	    showNotifyTexts( newStatus );
 	    setStatus( newStatus );
 	}
-	
+
 	_pkgObjList->sendStatusChanged();
     }
 }
@@ -919,13 +919,13 @@ YQPkgObjListItem::showLicenseAgreement( PMSelectable::UI_Status status )
 	{
 	    // The user rejected the license agreement -
 	    // make sure the package gets unselected.
-	    
+
 	    switch ( status )
 	    {
 		case PMSelectable::S_Install:
 		    setStatus( PMSelectable::S_Taboo );
 		    break;
-		    
+
 		case PMSelectable::S_Protected:
 		    setStatus( PMSelectable::S_Del );
 		    break;

@@ -26,6 +26,7 @@
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT	false
 
 #include <qaction.h>
+#include <qmap.h>
 #include <qapplication.h>
 #include <qcheckbox.h>
 #include <qcursor.h>
@@ -89,6 +90,7 @@
 
 
 using std::max;
+using std::string;
 
 #define MIN_WIDTH			800
 #define MIN_HEIGHT			600
@@ -628,6 +630,9 @@ YQPackageSelector::addMenus()
     if ( _youMode && _youPatchList )
 	_youPatchList->actionShowRawPatchInfo->addTo( _extrasMenu );
 
+    if ( ! _youMode )
+	// Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
+	_extrasMenu->insertItem( _( "Install all Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
 
     //
     // Help menu
@@ -715,7 +720,7 @@ YQPackageSelector::makeConnections()
 	connect( _pkgList,		SIGNAL( statusChanged()   ),
 		 _diskUsageList,	SLOT  ( updateDiskUsage() ) );
     }
-    
+
     if ( _pkgList && _youPatchList )
     {
 	connect( _youPatchList, SIGNAL( filterMatch   ( const QString &, const QString &, FSize ) ),
@@ -1035,9 +1040,108 @@ YQPackageSelector::showAutoPkgList()
 
     YQPkgChangesDialog::showChangesDialog( msg,
 					   _( "&OK" ),
-					   QString::null,	// rejectButtonLable
+					   QString::null,	// rejectButtonLabel
 					   true );		// showIfEmpty
 }
+
+
+void
+YQPackageSelector::installDevelPkgs()
+{
+    // Find all -devel packages and put them into a QDict
+
+    QMap<QString, PMSelectablePtr> develPkgs;
+
+    for ( PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
+	  it != Y2PM::packageManager().end();
+	  ++it )
+    {
+	QString name = (*it)->name().asString().c_str();
+
+	if ( name.endsWith( "-devel" ) )
+	{
+	    develPkgs[ name ] = *it;
+
+	    y2debug( "Found -devel package: %s", (const char *) name );
+	}
+    }
+
+
+    // Now go through all packages and look if there is a corresponding -devel package in the QDict
+
+    for ( PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
+	  it != Y2PM::packageManager().end();
+	  ++it )
+    {
+	QString name = (*it)->name().asString().c_str();
+
+	if ( develPkgs.contains( name + "-devel" ) )
+	{
+	    PMSelectablePtr devel = develPkgs[ name + "-devel" ];
+
+	    switch ( (*it)->status() )
+	    {
+		case PMSelectable::S_AutoDel:
+		case PMSelectable::S_NoInst:
+		case PMSelectable::S_Protected:
+		case PMSelectable::S_Taboo:
+		case PMSelectable::S_Del:
+		    // Don't install the -devel package
+		    y2milestone( "Ignoring unwanted -devel package %s-devel", (const char *) name );
+		    break;
+
+		case PMSelectable::S_AutoInstall:
+		case PMSelectable::S_Install:
+		case PMSelectable::S_KeepInstalled:
+
+		    // Install the -devel package, but don't try to update it
+
+		    if ( ! devel->installedObj() )
+		    {
+			devel->set_status( PMSelectable::S_Install );
+			y2milestone( "Installing -devel package %s-devel", (const char *) name );
+		    }
+		    break;
+
+
+		case PMSelectable::S_Update:
+		case PMSelectable::S_AutoUpdate:
+
+		    // Install or update the -devel package
+
+		    if ( ! devel->installedObj() )
+		    {
+			devel->set_status( PMSelectable::S_Install );
+			y2milestone( "Installing -devel package %s-devel", (const char *) name );
+		    }
+		    else
+		    {
+			devel->set_status( PMSelectable::S_Update );
+			y2milestone( "Updating -devel package %s-devel", (const char *) name );
+		    }
+		    break;
+
+		    // Intentionally omitting 'default' branch so the compiler can
+		    // catch unhandled enum states
+	    }
+	}
+    }
+
+
+    if ( _filters && _statusFilterView )
+    {
+	_filters->showPage( _statusFilterView );
+	_statusFilterView->filter();
+    }
+    
+    // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
+    YQPkgChangesDialog::showChangesDialog( _( "Added -devel packages:" ),
+					   QRegExp( ".*-devel$" ),
+					   _( "&OK" ),
+					   QString::null,	// rejectButtonLabel
+					   true );		// showIfEmpty
+}
+
 
 
 void
@@ -1085,7 +1189,7 @@ YQPackageSelector::reject()
 	changes |= Y2PM::youPatchManager().DiffState();
     else
 	changes |= Y2PM::selectionManager().DiffState();
-	
+
     if ( ! changes ||
 	 ( QMessageBox::warning( this, "",
 				 _( "Abandon all changes?" ),

@@ -146,9 +146,15 @@ public slots:
 
     /**
      * Display a list of automatically selected packages
-     * ( excluding packages contained in any selections that are to be installed )
+     * (excluding packages contained in any selections that are to be installed)
      **/
     void showAutoPkgList();
+
+    /**
+     * Install any -devel package for packages that are installed or marked for
+     * installation 
+     **/
+    void installDevelPkgs();
 
     /**
      * Close processing and abandon changes
@@ -317,6 +323,7 @@ protected:
     QPopupMenu *			_extrasMenu;
     QPopupMenu *			_helpMenu;
 };
+
 
 
 #endif // YQPackageSelector_h

@@ -164,6 +164,36 @@ YQPkgChangesDialog::filter( bool byAuto, bool byApp, bool byUser )
 }
 
 
+void
+YQPkgChangesDialog::filter( const QRegExp & regexp, bool byAuto, bool byApp, bool byUser )
+{
+    YQUI::ui()->busyCursor();
+    _pkgList->clear();
+
+    PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
+
+    while ( it != Y2PM::packageManager().end() )
+    {
+	PMSelectablePtr selectable = *it;
+
+	if ( selectable->to_modify() )
+	{
+	    if ( selectable->by_auto() && byAuto ||
+		 selectable->by_appl() && byApp  ||
+		 selectable->by_user() && byUser   )
+	    {
+		if ( regexp.match( selectable->name().asString().c_str() ) >= 0 )
+		    _pkgList->addPkgItem( selectable->theObject() );
+	    }
+	}
+
+	++it;
+    }
+
+    YQUI::ui()->normalCursor();
+}
+
+
 bool
 YQPkgChangesDialog::isEmpty() const
 {
@@ -193,6 +223,28 @@ YQPkgChangesDialog::showChangesDialog( const QString & 	message,
 			       acceptButtonLabel,
 			       rejectButtonLabel );
     dialog.filter();
+
+    if ( dialog.isEmpty() && ! showIfListEmpty )
+	return true;
+
+    dialog.exec();
+
+    return dialog.result() == QDialog::Accepted;
+}
+
+
+bool
+YQPkgChangesDialog::showChangesDialog( const QString & 	message,
+				       const QRegExp &  regexp,
+				       const QString &	acceptButtonLabel,
+				       const QString &	rejectButtonLabel,
+				       bool		showIfListEmpty	  )
+{
+    YQPkgChangesDialog dialog( 0,
+			       message,
+			       acceptButtonLabel,
+			       rejectButtonLabel );
+    dialog.filter( regexp, true, true, true );
 
     if ( dialog.isEmpty() && ! showIfListEmpty )
 	return true;

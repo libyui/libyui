@@ -23,6 +23,7 @@
 #define YQPkgChangesDialog_h
 
 #include <qdialog.h>
+#include <qregexp.h>
 
 
 class YQPkgList;
@@ -41,8 +42,7 @@ public:
 
     /**
      * Static convenience method: Post a changes dialog with text
-     * 'message', a list of partitions that are at least 'thresholdPercent'
-     * full and one ( default ) or two buttons.
+     * 'message', a list of changed packages and one ( default ) or two buttons.
      *
      * Returns 'true' if the user accepted ( i.e. clicked the 'accept' button )
      * and 'false' if the user rejected ( i.e. clicked the 'reject' button or
@@ -53,6 +53,26 @@ public:
      *'showIfListEmpty' is 'true'.
      **/
     static bool showChangesDialog( const QString & 	message,
+				   const QString &	acceptButtonLabel,
+				   const QString &	rejectButtonLabel = QString::null,
+				   bool			showIfListEmpty   = false	);
+
+
+    /**
+     * Static convenience method: Post a changes dialog with text 'message', a
+     * list of changed packages whose names match the specified regular
+     * expression 'regexp' and one ( default ) or two buttons.
+     *
+     * Returns 'true' if the user accepted ( i.e. clicked the 'accept' button )
+     * and 'false' if the user rejected ( i.e. clicked the 'reject' button or
+     * the window manager close button ).
+     *
+     * If the list is empty ( i.e., there are no packages with an "auto"
+     * status ), the dialog is not shown at all ( and returns 'true' ) - unless
+     *'showIfListEmpty' is 'true'.
+     **/
+    static bool showChangesDialog( const QString & 	message,
+				   const QRegExp & 	regexp,
 				   const QString &	acceptButtonLabel,
 				   const QString &	rejectButtonLabel = QString::null,
 				   bool			showIfListEmpty   = false	);
@@ -89,6 +109,17 @@ protected:
      * manually by the user.
      **/
     void filter( bool byAuto	= true,
+		 bool byApp	= false,
+		 bool byUser	= false );
+
+    /**
+     * Apply the filter criteria: Fill the pkg list with pkgs that have a
+     * "modify" status ( install, update, delete ) set by automatic ( i.e. via the
+     * dependency solver ), by application ( i.e. via software selections ) or
+     * manually by the user and whose name matches 'regexp'.
+     **/
+    void filter( const QRegExp & regexp,
+		 bool byAuto	= true,
 		 bool byApp	= false,
 		 bool byUser	= false );
 

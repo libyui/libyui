@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jul  6 16:44:00 CEST 2004 - sh@suse.de
+
+- Added "Install all matching -devel packages" to pkg selection
+  (mmj's idea) 
+
+-------------------------------------------------------------------
 Tue Jun 29 13:22:58 CEST 2004 - sh@suse.de
 
 - Fixed bug #39227: Over-long pkg status column after pkg search
