@@ -174,7 +174,7 @@ void NCPackageSelector::showDefaultList()
 	    // show the required diskspace
 	    packager.showDiskSpace();
 	    // do an initial dependency solving
-	    packager.showDependencies( true );
+	    packager.showPackageDependencies( true );
 	}
     }
     else

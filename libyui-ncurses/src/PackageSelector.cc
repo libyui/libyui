@@ -29,7 +29,8 @@
 #include "NCPopupTree.h"
 #include "NCMenuButton.h"
 #include "NCPopupSelection.h"
-#include "NCPopupDeps.h"
+#include "NCPopupPkgDeps.h"
+#include "NCPopupSelDeps.h"
 #include "NCPopupDiskspace.h"
 #include "PackageSelector.h"
 #include "YSelectionBox.h"
@@ -83,7 +84,8 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     : y2ui( ui )
       , visibleInfo( YCPNull() )
       , filterPopup( 0 )
-      , depsPopup( 0 )
+      , pkgDepsPopup( 0 )
+      , selDepsPopup( 0 )
       , selectionPopup( 0 )
       , diskspacePopup( 0 )
       , searchPopup( 0 )
@@ -198,9 +200,12 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
 
     // create the search popup
     searchPopup = new NCPopupSearch( wpos( 1, 1 ), this );
-    
-    depsPopup = new NCPopupDeps( wpos( 1, 1 ), this );
-    
+
+    // the dependency popups
+    pkgDepsPopup = new NCPopupPkgDeps( wpos( 1, 1 ), this );
+    selDepsPopup = new NCPopupSelDeps( wpos( 1, 1 ), this );
+
+    // the disk space popup
     diskspacePopup = new NCPopupDiskspace( wpos( 1, 1 ) );
 }
 
@@ -220,9 +225,13 @@ PackageSelector::~PackageSelector()
     {
 	delete selectionPopup;
     }
-    if ( depsPopup )
+    if ( pkgDepsPopup )
     {
-	delete depsPopup;	
+	delete pkgDepsPopup;	
+    }
+    if ( selDepsPopup )
+    {
+	delete selDepsPopup;	
     }
     if ( diskspacePopup )
     {
@@ -638,7 +647,7 @@ bool PackageSelector::fillChangesList(  )
     // do the dependency in case the dependency check is off ????
     if ( !autoCheck )
     {
-	// showDependencies( true );
+	// showPackageDependencies( true );
     }
     
     for ( i = 0, listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt, i++ )
@@ -977,7 +986,7 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
     if ( event.selection->compare( PkgNames::ShowDeps() ) == YO_EQUAL )
     {
 	// show the dependency popup
-	showDependencies( true ); 	// do the check
+	showPackageDependencies( true ); 	// do the check
     }
     else if ( event.selection->compare( PkgNames::AutoDeps() ) == YO_EQUAL )
     {
@@ -1064,6 +1073,7 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 	{
 	    // show the selection popup
 	    retEvent = selectionPopup->showSelectionPopup( );
+	    showSelectionDependencies( );
 	}
     }
     else if ( event.selection->compare( PkgNames::Recommended() ) ==  YO_EQUAL )
@@ -1314,7 +1324,7 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
     if ( !youMode )
     {
 	// show the dependency popup
-	showDependencies( true ); 	// do the check
+	showPackageDependencies( true ); 	// do the check
     }
     
     NCMIL <<  "OK button pressed - leaving package selection, starting installation" << endl;
@@ -1381,9 +1391,9 @@ bool PackageSelector::showPatchInformation ( PMObjectPtr objPtr )
 //
 bool PackageSelector::showConcretelyDependency ( int index )
 {
-    if ( depsPopup )
+    if ( pkgDepsPopup )
     {
-	depsPopup->concretelyDependency( index );
+	pkgDepsPopup->concretelyDependency( index );
     }
 
     return true;
@@ -1395,13 +1405,26 @@ bool PackageSelector::showConcretelyDependency ( int index )
 //
 // Checks and shows the dependencies
 //
-void PackageSelector::showDependencies ( bool doit )
+void PackageSelector::showPackageDependencies ( bool doit )
 {
-    // check dependencies
-    if ( depsPopup
+    if ( pkgDepsPopup
 	 && (doit || autoCheck) )
     {
-	depsPopup->showDependencies();
+	pkgDepsPopup->showDependencies( );
+    }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// showDependencies
+//
+// Checks and shows the dependencies
+//
+void PackageSelector::showSelectionDependencies ( )
+{
+    if ( selDepsPopup )
+    {
+	selDepsPopup->showDependencies( );
     }
 }
 
