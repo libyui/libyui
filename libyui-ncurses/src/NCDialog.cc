@@ -887,7 +887,13 @@ wint_t NCDialog::getch( int timeout_millisec )
 
   if ( got == KEY_RESIZE ) {
     NCurses::ResizeEvent();
-    return NCDialog::getch( timeout_millisec );
+    int i = 100;
+    // after resize sometimes WEOF is returned -> skip this in no timeout mode 
+    do {
+	got =  NCDialog::getch( timeout_millisec );
+    } while ( timeout_millisec < 0 && got == WEOF && --i );
+    
+    return got;
   }
 
   return got;
