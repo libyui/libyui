@@ -827,7 +827,7 @@ wint_t NCDialog::getinput()
 		NCstring::RecodeToWchar( str, NCstring::terminalEncoding(), &to ); 
 		got = to[0];
 
-		NCMIL << "Recode: " << str << " (encoding: " << NCstring::terminalEncoding() << ") "
+		NCDBG << "Recode: " << str << " (encoding: " << NCstring::terminalEncoding() << ") "
 		      << "to wint_t: " << got << endl; 
 	    }
 	    else
