@@ -41,6 +41,7 @@ class YQPkgConflictDialog;
 class YQPkgDescriptionView;
 class YQPkgList;
 class YQPkgRpmGroupTagsFilterView;
+class YQPkgSearchFilterView;
 class YQPkgSelList;
 class YQPkgSelectionsFilterView;
 class YQPkgTechnicalDetailsView;
@@ -112,9 +113,6 @@ public slots:
      **/
     void help();
 
-    // FIXME
-    void preAlphaWarning();
-
 
 signals:
 
@@ -134,7 +132,7 @@ protected:
 
     void layoutLeftPane		( QWidget * parent );
     void layoutFilters		( QWidget * parent );
-    void layoutDiskSpaceSummary	( QWidget * parent );
+    void layoutDiskSpaceSummary ( QWidget * parent );
     void layoutRightPane	( QWidget * parent );
     void layoutPkgList		( QWidget * parent );
     void layoutDetailsViews	( QWidget * parent );
@@ -151,14 +149,14 @@ protected:
     /**
      * Connect a filter view that provides the usual signals with a package
      * list. By convention, filter views provide the following signals:
-     *    filterStart()
-     *    filterMatch()
-     *    filterFinished()
-     *    updatePackages()  (optional)
+     *	  filterStart()
+     *	  filterMatch()
+     *	  filterFinished()
+     *	  updatePackages()  (optional)
      **/
-    void connectFilter( QWidget * 	filter,
-			QWidget * 	pkgList,
-			bool 		hasUpdateSignal = true );
+    void connectFilter( QWidget *	filter,
+			QWidget *	pkgList,
+			bool		hasUpdateSignal = true );
 
 
     // Data members
@@ -168,21 +166,22 @@ protected:
     bool				_updateMode;
     bool				_testMode;
 
-    QWidget *				_leftPane;
-    QY2ComboTabWidget * 		_filters;
+    QCheckBox *				_autoDependenciesCheckBox;
     QProgressBar *			_diskSpace;
-    YQPkgList *			 	_pkgList;
     QTabWidget *			_detailsViews;
+    QWidget *				_leftPane;
+    QY2ComboTabWidget *			_filters;
+    YQPkgConflictDialog *		_conflictDialog;
     YQPkgDescriptionView *		_pkgDescriptionView;
-    YQPkgTechnicalDetailsView *		_pkgTechnicalDetailsView;
-    QCheckBox *			 	_autoDependenciesCheckBox;
+    YQPkgList *				_pkgList;
     YQPkgRpmGroupTagsFilterView *	_rpmGroupTagsFilterView;
-    YQPkgSelectionsFilterView *		_selectionsFilterView;
+    YQPkgSearchFilterView *		_searchFilterView;
     YQPkgSelList *			_selList;
+    YQPkgSelectionsFilterView *		_selectionsFilterView;
+    YQPkgTechnicalDetailsView *		_pkgTechnicalDetailsView;
     YQPkgUpdateProblemFilterView *	_updateProblemFilterView;
     YQPkgYouPatchFilterView *		_youPatchFilterView;
     YQPkgYouPatchList *			_youPatchList;
-    YQPkgConflictDialog *		_conflictDialog;
 };
 
 #endif // YQPackageSelector_h

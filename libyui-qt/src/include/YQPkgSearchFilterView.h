@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQPkgUpdateProblemFilterView.h
+  File:	      YQPkgSearchFilterView.h
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
@@ -19,17 +19,22 @@
 // -*- c++ -*-
 
 
-#ifndef YQPkgUpdateProblemFilterView_h
-#define YQPkgUpdateProblemFilterView_h
+#ifndef YQPkgSearchFilterView_h
+#define YQPkgSearchFilterView_h
 
-#include <qtextbrowser.h>
+#include <qvbox.h>
 #include <y2pm/PMPackage.h>
+
+
+class QComboBox;
+class QCheckBox;
+class QRadioButton;
 
 
 /**
  * @short Filter view for packages that made problems during update
  **/
-class YQPkgUpdateProblemFilterView : public QTextBrowser
+class YQPkgSearchFilterView : public QVBox
 {
     Q_OBJECT
 
@@ -38,22 +43,22 @@ public:
     /**
      * Constructor
      **/
-    YQPkgUpdateProblemFilterView( QWidget *parent );
+    YQPkgSearchFilterView( QWidget *parent );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgUpdateProblemFilterView();
+    virtual ~YQPkgSearchFilterView();
 
-    
+
 public slots:
 
     /**
      * Filter according to the view's rules and current selection.
      * Emits those signals:
-     *    filterStart()
-     *    filterMatch() for each pkg that matches the filter
-     *    filterFinished()
+     *	  filterStart()
+     *	  filterMatch() for each pkg that matches the filter
+     *	  filterFinished()
      **/
     void filter();
 
@@ -62,7 +67,7 @@ public slots:
      **/
     void filterIfVisible();
 
-    
+
 signals:
 
     /**
@@ -81,8 +86,41 @@ signals:
      **/
     void filterFinished();
 
+protected:
+
+    /**
+     * Check if pkg matches the search criteria.
+     **/
+    bool check( PMPackagePtr pkg );
+
+    /**
+     * Add vertical stretchable space.
+     **/
+    void addVStretch( QWidget * parent );
+
+    /**
+     * Add horizontal stretchable space.
+     **/
+    void addHStretch( QWidget * parent );
+
+    
+    // Data members
+
+    QComboBox *		_searchText;
+
+    QCheckBox *		_searchInName;
+    QCheckBox *		_searchInSummary;
+    QCheckBox *		_searchInDescription;
+
+    QCheckBox *		_caseSensitive;
+
+    QRadioButton *	_contains;
+    QRadioButton *	_beginsWith;
+    QRadioButton *	_exactMatch;
+    QRadioButton *	_useWildcards;
+    QRadioButton *	_useRegexp;
 };
 
 
 
-#endif // ifndef YQPkgUpdateProblemFilterView_h
+#endif // ifndef YQPkgSearchFilterView_h

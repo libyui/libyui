@@ -17,8 +17,6 @@
 /-*/
 
 
-#define ALPHA_WARNING	1
-
 #include <qapplication.h>
 #include <qcheckbox.h>
 #include <qcursor.h>
@@ -46,6 +44,7 @@
 #include "YQPkgDescriptionView.h"
 #include "YQPkgList.h"
 #include "YQPkgRpmGroupTagsFilterView.h"
+#include "YQPkgSearchFilterView.h"
 #include "YQPkgSelList.h"
 #include "YQPkgSelectionsFilterView.h"
 #include "YQPkgTechnicalDetailsView.h"
@@ -79,17 +78,18 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
 {
     setWidgetRep(this);
 
-    _leftPane			= 0;
-    _filters			= 0;
-    _diskSpace			= 0;
-    _pkgList			= 0;
-    _detailsViews		= 0;
-    _pkgDescriptionView		= 0;
-    _pkgTechnicalDetailsView	= 0;
     _autoDependenciesCheckBox	= 0;
+    _detailsViews		= 0;
+    _diskSpace			= 0;
+    _filters			= 0;
+    _leftPane			= 0;
+    _pkgDescriptionView		= 0;
+    _pkgList			= 0;
+    _pkgTechnicalDetailsView	= 0;
     _rpmGroupTagsFilterView	= 0;
-    _selectionsFilterView	= 0;
+    _searchFilterView		= 0;
     _selList			= 0;
+    _selectionsFilterView	= 0;
     _updateProblemFilterView	= 0;
     _youPatchFilterView		= 0;
     _youPatchList		= 0;
@@ -109,11 +109,6 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
 
     basicLayout();
     makeConnections();
-
-#if ALPHA_WARNING
-    QTimer::singleShot( 2500, this, SLOT( preAlphaWarning() ) );
-#endif
-
     emit loadData();
 
     if ( _youMode )
@@ -263,9 +258,14 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     // if ( ! _youMode )
     {
-	_filters->addPage( _("Search"     ), new QLabel( "Search filter\n\nstill missing\n(Known bug)", 0 ) );
-    }
+	_searchFilterView = new YQPkgSearchFilterView( parent );
+	CHECK_PTR( _searchFilterView );
+	_filters->addPage( _( "Search" ), _searchFilterView );
 
+	connect( _filters, 			SIGNAL( currentChanged( QWidget * ) ),
+		 _searchFilterView,	SLOT  ( filterIfVisible()           ) );
+    }
+    
 
 #if 0
     // DEBUG
@@ -379,10 +379,12 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
 
 
+#if 0
     QLabel * dummy;
     dummy = new QLabel( "Versions of this package\non all the different installation media\n\nstill missing\n(Known bug)",
 			_detailsViews );
     _detailsViews->addTab( dummy, _( "&Versions" ) );
+#endif
 
 #if 0
     // DEBUG
@@ -512,10 +514,11 @@ YQPackageSelector::connectFilter( QWidget * filter,
 void
 YQPackageSelector::makeConnections()
 {
-    connectFilter( _updateProblemFilterView, _pkgList );
-    connectFilter( _rpmGroupTagsFilterView, _pkgList, false );
-    connectFilter( _selList, _pkgList );
-    connectFilter( _youPatchList, _pkgList );
+    connectFilter( _updateProblemFilterView,	_pkgList, false );
+    connectFilter( _youPatchList, 		_pkgList );
+    connectFilter( _selList, 			_pkgList );
+    connectFilter( _rpmGroupTagsFilterView, 	_pkgList, false );
+    connectFilter( _searchFilterView, 		_pkgList, false );
 
     //
     // Connect conflict dialog
@@ -614,22 +617,6 @@ YQPackageSelector::help()
     QMessageBox::information( this, _( "Help" ),
 			      "No online help available yet.\nSorry.",
 			      QMessageBox::Ok );
-}
-
-
-void
-YQPackageSelector::preAlphaWarning()
-{
-    QMessageBox::information( this, "Alpha version", "\
-Things are improving, but it's still incomplete.\n\
-We are still working heavily on it.\n\
-\n\
-The things that are there should work.\n\
-In particular, there shouldn't be any crashes.\n\
-If there are any, please report.\n\
-\n\
--sh",
-			  QMessageBox::Ok );
 }
 
 

@@ -30,19 +30,20 @@ pkginclude_HEADERS =				\
 	YQMenuButton.h				\
 	YQMultiLineEdit.h			\
 	YQMultiSelectionBox.h			\
-	YQPartitionSplitter.h			\
 	YQPackageSelector.h			\
+	YQPartitionSplitter.h			\
 	YQPkgConflictDialog.h			\
 	YQPkgConflictList.h			\
-	YQPkgGenericDetailsView.h		\
 	YQPkgDescriptionView.h			\
-	YQPkgTechnicalDetailsView.h		\
-	YQPkgObjList.h				\
+	YQPkgGenericDetailsView.h		\
 	YQPkgList.h				\
+	YQPkgObjList.h				\
 	YQPkgRpmGroupTagsFilterView.h		\
-	YQPkgSelectionsFilterView.h		\
-	YQPkgUpdateProblemFilterView.h		\
+	YQPkgSearchFilterView.h			\
 	YQPkgSelList.h				\
+	YQPkgSelectionsFilterView.h		\
+	YQPkgTechnicalDetailsView.h		\
+	YQPkgUpdateProblemFilterView.h		\
 	YQPkgYouPatchFilterView.h		\
 	YQPkgYouPatchList.h			\
 	YQProgressBar.h				\

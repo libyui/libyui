@@ -49,22 +49,23 @@ liby2qt_la_SOURCES = 				\
 	YQMenuButton.cc				\
 	YQMultiLineEdit.cc			\
 	YQMultiSelectionBox.cc			\
-	YQPartitionSplitter.cc			\
-	YQProgressBar.cc			\
 	YQPackageSelector.cc			\
+	YQPartitionSplitter.cc			\
 	YQPkgConflictDialog.cc			\
 	YQPkgConflictList.cc			\
-	YQPkgGenericDetailsView.cc		\
-	YQPkgTechnicalDetailsView.cc		\
 	YQPkgDescriptionView.cc			\
+	YQPkgGenericDetailsView.cc		\
 	YQPkgList.cc				\
 	YQPkgObjList.cc				\
 	YQPkgRpmGroupTagsFilterView.cc		\
-	YQPkgSelectionsFilterView.cc		\
+	YQPkgSearchFilterView.cc		\
 	YQPkgSelList.cc				\
+	YQPkgSelectionsFilterView.cc		\
+	YQPkgTechnicalDetailsView.cc		\
 	YQPkgUpdateProblemFilterView.cc		\
 	YQPkgYouPatchFilterView.cc		\
 	YQPkgYouPatchList.cc			\
+	YQProgressBar.cc			\
 	YQPushButton.cc				\
 	YQRadioButton.cc			\
 	YQRadioButtonGroup.cc			\
@@ -125,22 +126,23 @@ BUILT_SOURCES =					\
 	YQMenuButton.moc.cc			\
 	YQMultiLineEdit.moc.cc			\
 	YQMultiSelectionBox.moc.cc		\
-	YQPartitionSplitter.moc.cc		\
-	YQProgressBar.moc.cc			\
 	YQPackageSelector.moc.cc		\
+	YQPartitionSplitter.moc.cc		\
 	YQPkgConflictDialog.moc.cc		\
 	YQPkgConflictList.moc.cc		\
-	YQPkgGenericDetailsView.moc.cc		\
-	YQPkgTechnicalDetailsView.moc.cc	\
 	YQPkgDescriptionView.moc.cc		\
+	YQPkgGenericDetailsView.moc.cc		\
 	YQPkgList.moc.cc			\
 	YQPkgObjList.moc.cc			\
 	YQPkgRpmGroupTagsFilterView.moc.cc	\
-	YQPkgSelectionsFilterView.moc.cc	\
+	YQPkgSearchFilterView.moc.cc		\
 	YQPkgSelList.moc.cc			\
+	YQPkgSelectionsFilterView.moc.cc	\
+	YQPkgTechnicalDetailsView.moc.cc	\
 	YQPkgUpdateProblemFilterView.moc.cc	\
 	YQPkgYouPatchFilterView.moc.cc		\
 	YQPkgYouPatchList.moc.cc		\
+	YQProgressBar.moc.cc			\
 	YQPushButton.moc.cc			\
 	YQRadioButton.moc.cc			\
 	YQRadioButtonGroup.moc.cc		\
@@ -180,22 +182,23 @@ YQLogView.o YQLogView.lo:					YQLogView.moc.cc
 YQMenuButton.o YQMenuButton.lo:					YQMenuButton.moc.cc
 YQMultiLineEdit.o YQMultiLineEdit.lo:				YQMultiLineEdit.moc.cc
 YQMultiSelectionBox.o YQMultiSelectionBox.lo:			YQMultiSelectionBox.moc.cc
-YQPartitionSplitter.o YQPartitionSplitter.lo:			YQPartitionSplitter.moc.cc
-YQProgressBar.o YQProgressBar.lo:				YQProgressBar.moc.cc
 YQPackageSelector.o YQPackageSelector.lo:			YQPackageSelector.moc.cc
+YQPartitionSplitter.o YQPartitionSplitter.lo:			YQPartitionSplitter.moc.cc
 YQPkgConflictDialog.o YQPkgConflictDialog.lo:			YQPkgConflictDialog.moc.cc
 YQPkgConflictList.o YQPkgConflictList.lo:			YQPkgConflictList.moc.cc
-YQPkgGenericDetailsView.o YQPkgGenericDetailsView.lo:		YQPkgGenericDetailsView.moc.cc
-YQPkgTechnicalDetailsView.o YQPkgTechnicalDetailsView.lo:	YQPkgTechnicalDetailsView.moc.cc
 YQPkgDescriptionView.o YQPkgDescriptionView.lo:			YQPkgDescriptionView.moc.cc
+YQPkgGenericDetailsView.o YQPkgGenericDetailsView.lo:		YQPkgGenericDetailsView.moc.cc
 YQPkgList.o YQPkgList.lo:					YQPkgList.moc.cc
 YQPkgObjList.o YQPkgObjList.lo:					YQPkgObjList.moc.cc
 YQPkgRpmGroupTagsFilterView.o YQPkgRpmGroupTagsFilterView.lo:	YQPkgRpmGroupTagsFilterView.moc.cc
-YQPkgSelectionsFilterView.o YQPkgSelectionsFilterView.lo:	YQPkgSelectionsFilterView.moc.cc
+YQPkgSearchFilterView.o YQPkgSearchFilterView.lo:		YQPkgSearchFilterView.moc.cc
 YQPkgSelList.o YQPkgSelList.lo:					YQPkgSelList.moc.cc
+YQPkgSelectionsFilterView.o YQPkgSelectionsFilterView.lo:	YQPkgSelectionsFilterView.moc.cc
+YQPkgTechnicalDetailsView.o YQPkgTechnicalDetailsView.lo:	YQPkgTechnicalDetailsView.moc.cc
 YQPkgUpdateProblemFilterView.o YQPkgUpdateProblemFilterView.lo:	YQPkgUpdateProblemFilterView.moc.cc
 YQPkgYouPatchFilterView.o YQPkgYouPatchFilterView.lo:		YQPkgYouPatchFilterView.moc.cc
 YQPkgYouPatchList.o YQPkgYouPatchList.lo:			YQPkgYouPatchList.moc.cc
+YQProgressBar.o YQProgressBar.lo:				YQProgressBar.moc.cc
 YQPushButton.o YQPushButton.lo:					YQPushButton.moc.cc
 YQRadioButton.o YQRadioButton.lo:				YQRadioButton.moc.cc
 YQRadioButtonGroup.o YQRadioButtonGroup.lo:			YQRadioButtonGroup.moc.cc
@@ -236,22 +239,23 @@ YQLogView.moc.cc:			include/YQLogView.h
 YQMenuButton.moc.cc:			include/YQMenuButton.h
 YQMultiLineEdit.moc.cc:			include/YQMultiLineEdit.h
 YQMultiSelectionBox.moc.cc:		include/YQMultiSelectionBox.h
-YQPartitionSplitter.moc.cc:		include/YQPartitionSplitter.h
-YQProgressBar.moc.cc:			include/YQProgressBar.h
 YQPackageSelector.moc.cc:		include/YQPackageSelector.h
-YQPkgList.moc.cc:			include/YQPkgList.h
-YQPkgObjList.moc.cc:			include/YQPkgObjList.h
+YQPartitionSplitter.moc.cc:		include/YQPartitionSplitter.h
 YQPkgConflictDialog.moc.cc:		include/YQPkgConflictDialog.h
 YQPkgConflictList.moc.cc:		include/YQPkgConflictList.h
-YQPkgGenericDetailsView.moc.cc:		include/YQPkgGenericDetailsView.h
-YQPkgTechnicalDetailsView.moc.cc:	include/YQPkgTechnicalDetailsView.h
 YQPkgDescriptionView.moc.cc:		include/YQPkgDescriptionView.h
+YQPkgGenericDetailsView.moc.cc:		include/YQPkgGenericDetailsView.h
+YQPkgList.moc.cc:			include/YQPkgList.h
+YQPkgObjList.moc.cc:			include/YQPkgObjList.h
 YQPkgRpmGroupTagsFilterView.moc.cc:	include/YQPkgRpmGroupTagsFilterView.h
-YQPkgSelectionsFilterView.moc.cc:	include/YQPkgSelectionsFilterView.h
+YQPkgSearchFilterView.moc.cc:		include/YQPkgSearchFilterView.h
 YQPkgSelList.moc.cc:			include/YQPkgSelList.h
+YQPkgSelectionsFilterView.moc.cc:	include/YQPkgSelectionsFilterView.h
+YQPkgTechnicalDetailsView.moc.cc:	include/YQPkgTechnicalDetailsView.h
 YQPkgUpdateProblemFilterView.moc.cc:	include/YQPkgUpdateProblemFilterView.h
 YQPkgYouPatchFilterView.moc.cc:		include/YQPkgYouPatchFilterView.h
 YQPkgYouPatchList.moc.cc:		include/YQPkgYouPatchList.h
+YQProgressBar.moc.cc:			include/YQProgressBar.h
 YQPushButton.moc.cc:			include/YQPushButton.h
 YQRadioButton.moc.cc:			include/YQRadioButton.h
 YQRadioButtonGroup.moc.cc:      	include/YQRadioButtonGroup.h
