@@ -115,11 +115,6 @@ void NCRichText::setSize( long newwidth, long newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
   YRichText::setSize( newwidth, newheight );
-
-  if ( autoScrollDown && pad ) {
-    pad->ScrlDown( pad->maxy() );
-    pad->update();
-  }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -165,9 +160,15 @@ void NCRichText::wRedraw()
   if ( !win )
     return;
 
+  bool initial = ( !pad || !pad->Destwin() );
+
   if ( !( plainText || anchors.empty() ) )
     arm( armed );
   NCPadWidget::wRedraw();
+
+  if ( initial && autoScrollDown ) {
+    pad->ScrlTo( wpos( pad->maxy(), 0 ) );
+  }
   return;
 }
 
@@ -252,11 +253,6 @@ void NCRichText::DrawPad()
   else
     DrawHTMLPad();
 
-  if ( autoScrollDown ) {
-    pad->ScrlDown( pad->maxy() );
-    pad->update();
-  }
-  
   MDBG << "Done" << endl;
 }
 
