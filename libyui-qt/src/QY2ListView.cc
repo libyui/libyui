@@ -262,7 +262,7 @@ QY2ListViewItem::QY2ListViewItem( QY2ListView * 	parentListView,
 
 QY2ListViewItem::QY2ListViewItem( QListViewItem * 	parentItem,
 				  const QString &	text,
-				  bool 		sortByInsertionSequence )
+				  bool 			sortByInsertionSequence )
     : QListViewItem( parentItem, text )
     , _sortByInsertionSequence( sortByInsertionSequence )
 {
