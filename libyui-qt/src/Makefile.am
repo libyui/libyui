@@ -19,7 +19,6 @@ liby2qt_la_LDFLAGS = -version-info 2:0
 
 libpy2qt_la_LIBADD =			\
 	-L$(QTLIBDIR) -lqt-mt		\
-	-ljpeg -lmng			\
 	-lX11 -lXext -lSM -lICE
 liby2qt_la_LIBADD = $(libpy2qt_la_LIBADD)
 
