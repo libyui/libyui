@@ -106,7 +106,8 @@ class NClabel : protected NCtext {
     size_t   width()  const { return Columns(); }
     unsigned height() const { return Lines(); }
     wsze     size()   const { return wsze( Lines(), Columns() ); }
-
+    const list<NCstring> & getText() const { return Text(); }
+    
     void drawAt( NCursesWindow & w, chtype style, chtype hotstyle,
 		 const wrect & dim,
 		 const NC::ADJUST adjust = NC::TOPLEFT,
