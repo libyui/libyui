@@ -37,14 +37,14 @@ YQPkgList::YQPkgList( YUIQt *yuiqt, QWidget *parent )
     , mousePressedCol( -1 )
     , mousePressedButton( NoButton )
 {
-    int inst_pkgs = Y2PM::instTarget().numPackages();
+    int installedPkgs = Y2PM::instTarget().numPackages();
 
     int numCol = 0;
     addColumn( ""		);	_statusCol	= numCol++;
     // _statusCol = numCol;
     addColumn( _( "Name"	) );	_nameCol	= numCol++;
 
-    if ( inst_pkgs > 0 )
+    if ( installedPkgs > 0 )
     {
 	addColumn( _( "Avail. Ver." ) ); _versionCol	= numCol++;
 	addColumn( _( "Inst. Ver."  ) ); _instVersionCol = numCol++;
