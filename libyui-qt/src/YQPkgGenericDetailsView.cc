@@ -108,4 +108,12 @@ YQPkgGenericDetailsView::htmlEscape( const QString & plainText )
 }
 
 
+QSize
+YQPkgGenericDetailsView::minimumSizeHint() const
+{
+    return QSize( 0, 0 );
+}
+
+
+
 #include "YQPkgGenericDetailsView.moc.cc"

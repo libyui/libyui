@@ -66,6 +66,12 @@ public:
      **/
     static QString htmlEscape( const QString & plainText );
 
+    /**
+     * Returns the minimum size required for this widget.
+     * Inherited from QWidget.
+     **/
+    virtual QSize minimumSizeHint() const;
+
     
 public slots:
 

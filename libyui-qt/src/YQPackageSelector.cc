@@ -293,7 +293,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 void
 YQPackageSelector::layoutDiskSpaceSummary( QWidget * parent )
 {
-    QHGroupBox *gbox = new QHGroupBox( _( "Disk space" ), parent );
+    QHGroupBox * gbox = new QHGroupBox( _( "Disk space" ), parent );
     CHECK_PTR( gbox );
     gbox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
 
@@ -302,6 +302,8 @@ YQPackageSelector::layoutDiskSpaceSummary( QWidget * parent )
 
     _diskSpace->setStyle( QStyleFactory::create( "motif" ) ); // consumes less space than platinum
 
+#warning TODO: Disk space
+    
 #if 0
     QPushButton *details_button = new QPushButton( _( "D&etails..." ), gbox );
     CHECK_PTR( details_button );
@@ -316,6 +318,8 @@ YQPackageSelector::layoutDiskSpaceSummary( QWidget * parent )
     _diskSpace->setTotalSteps( 100 );
     _diskSpace->setProgress( 42 );
 #endif
+
+    gbox->setMinimumHeight( gbox->sizeHint().height() );
 }
 
 
@@ -407,12 +411,12 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 void
 YQPackageSelector::layoutButtons( QWidget * parent )
 {
-    QHBox *button_box = new QHBox( parent );
+    QHBox * button_box = new QHBox( parent );
     CHECK_PTR( button_box );
     button_box->setSpacing( SPACING );
 
 #if 0
-    QPushButton *help_button = new QPushButton( _( "&Help" ), button_box );
+    QPushButton * help_button = new QPushButton( _( "&Help" ), button_box );
     CHECK_PTR( help_button );
 #endif
 
@@ -447,6 +451,8 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 
     connect( accept_button, SIGNAL( clicked() ),
 	     this,          SLOT  ( accept()   ) );
+
+    button_box->setMinimumHeight( button_box->sizeHint().height() );
 }
 
 

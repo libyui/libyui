@@ -121,6 +121,13 @@ public:
     int nextSerial() { return _nextSerial++; }
 
     
+    /**
+     * Returns the minimum size required for this widget.
+     * Inherited from QWidget.
+     **/
+    virtual QSize minimumSizeHint() const;
+
+    
 protected slots:
 
     /**

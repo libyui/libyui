@@ -203,6 +203,13 @@ QY2ListView::columnWidthChanged( int, int, int )
 }
 
 
+QSize
+QY2ListView::minimumSizeHint() const
+{
+    return QSize( 0, 0 );
+}
+
+
 
 
 

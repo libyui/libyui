@@ -151,6 +151,13 @@ YQPkgSearchFilterView::keyPressEvent( QKeyEvent * event )
 }
 
 
+QSize
+YQPkgSearchFilterView::minimumSizeHint() const
+{
+    return QSize( 0, 0 );
+}
+
+
 void
 YQPkgSearchFilterView::filterIfVisible()
 {
