@@ -1,8 +1,11 @@
 #
-# Makefile.cvs for libycp
+# Makefile.cvs
 #
+
+LIB = $(shell y2tool get-lib)
+
 configure: all
-	./configure
+	./configure --libdir=/usr/$(LIB)
 
 all:
 	y2tool y2autoconf
