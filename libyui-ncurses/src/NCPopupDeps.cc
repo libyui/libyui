@@ -366,7 +366,7 @@ bool NCPopupDeps::addDepsLine( NCPkgTable * table,
 	pkgStatus = PMSelectable::S_NoInst; // use status not installed
     }
 
-    // this dependencies is not ignored
+    // this dependency is not ignored
     if ( ignoreDependencies.find( pkgName+kind ) == ignoreDependencies.end() )
     {
 	pkgLine.push_back( pkgName );	// package name
@@ -376,7 +376,13 @@ bool NCPopupDeps::addDepsLine( NCPkgTable * table,
 	{
 	    pkgLine.push_back( getReferersList( error) );
 	}
-
+	if ( kind == PkgNames::RequByText().str()
+	     && !objPtr )
+	{
+	    string notAvail = "(" + pkgName + " is not available)";
+	    pkgLine.push_back( notAvail );
+	}
+	
 	table->addLine( pkgStatus, //  the package status
 			pkgLine,
 			pkgPtr );  // the corresponding package pointer
