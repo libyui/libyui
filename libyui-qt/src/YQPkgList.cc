@@ -215,8 +215,21 @@ YQPkgListItem::setInstallSourceRpm( bool installSourceRpm )
 
     if ( _hasSourceRpm )
     {
-	setPixmap( srpmStatusCol(),
-		   _installSourceRpm ? YQIconPool::pkgInstall() : YQIconPool::pkgNoInst() );
+	QPixmap icon;
+
+	if ( editable() && _pkgObjList->editable() )
+	{
+	    icon = _installSourceRpm ?
+		YQIconPool::pkgInstall() :
+		YQIconPool::pkgNoInst();
+	}
+	else
+	{
+	    icon = _installSourceRpm ?
+		YQIconPool::disabledPkgInstall() :
+		YQIconPool::disabledPkgNoInst();
+	}
+	setPixmap( srpmStatusCol(), icon );
     }
 }
 

@@ -375,20 +375,41 @@ YQPkgObjListItem::setStatusIcon()
 
     QPixmap icon = YQIconPool::pkgNoInst();
 
-    switch ( status() )
+    if ( editable() && _pkgObjList->editable() )
     {
-	case PMSelectable::S_Taboo:		icon = YQIconPool::pkgTaboo();		break;
-	case PMSelectable::S_Del:		icon = YQIconPool::pkgDel();		break;
-	case PMSelectable::S_Update:		icon = YQIconPool::pkgUpdate();		break;
-	case PMSelectable::S_Install:		icon = YQIconPool::pkgInstall();	break;
-	case PMSelectable::S_AutoDel:		icon = YQIconPool::pkgAutoDel();	break;
-	case PMSelectable::S_AutoInstall:	icon = YQIconPool::pkgAutoInstall();	break;
-	case PMSelectable::S_AutoUpdate:	icon = YQIconPool::pkgAutoUpdate();	break;
-	case PMSelectable::S_KeepInstalled:	icon = YQIconPool::pkgKeepInstalled();	break;
-	case PMSelectable::S_NoInst:		icon = YQIconPool::pkgNoInst();		break;
+	switch ( status() )
+	{
+	    case PMSelectable::S_Taboo:		icon = YQIconPool::pkgTaboo();		break;
+	    case PMSelectable::S_Del:		icon = YQIconPool::pkgDel();		break;
+	    case PMSelectable::S_Update:	icon = YQIconPool::pkgUpdate();		break;
+	    case PMSelectable::S_Install:	icon = YQIconPool::pkgInstall();	break;
+	    case PMSelectable::S_AutoDel:	icon = YQIconPool::pkgAutoDel();	break;
+	    case PMSelectable::S_AutoInstall:	icon = YQIconPool::pkgAutoInstall();	break;
+	    case PMSelectable::S_AutoUpdate:	icon = YQIconPool::pkgAutoUpdate();	break;
+	    case PMSelectable::S_KeepInstalled:	icon = YQIconPool::pkgKeepInstalled();	break;
+	    case PMSelectable::S_NoInst:	icon = YQIconPool::pkgNoInst();		break;
 
-	    // Intentionally omitting 'default' branch so the compiler can
-	    // catch unhandled enum states
+		// Intentionally omitting 'default' branch so the compiler can
+		// catch unhandled enum states
+	}
+    }
+    else
+    {
+	switch ( status() )
+	{
+	    case PMSelectable::S_Taboo:		icon = YQIconPool::disabledPkgTaboo();		break;
+	    case PMSelectable::S_Del:		icon = YQIconPool::disabledPkgDel();		break;
+	    case PMSelectable::S_Update:	icon = YQIconPool::disabledPkgUpdate();		break;
+	    case PMSelectable::S_Install:	icon = YQIconPool::disabledPkgInstall();	break;
+	    case PMSelectable::S_AutoDel:	icon = YQIconPool::disabledPkgAutoDel();	break;
+	    case PMSelectable::S_AutoInstall:	icon = YQIconPool::disabledPkgAutoInstall();	break;
+	    case PMSelectable::S_AutoUpdate:	icon = YQIconPool::disabledPkgAutoUpdate();	break;
+	    case PMSelectable::S_KeepInstalled:	icon = YQIconPool::disabledPkgKeepInstalled();	break;
+	    case PMSelectable::S_NoInst:	icon = YQIconPool::disabledPkgNoInst();		break;
+
+		// Intentionally omitting 'default' branch so the compiler can
+		// catch unhandled enum states
+	}
     }
 
     setPixmap( statusCol(), icon );
