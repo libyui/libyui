@@ -88,7 +88,7 @@ liby2ncurses_la_SOURCES =				\
 	NCPopupPkgTable.cc NCPopupPkgTable.h		\
 	PkgNames.cc PkgNames.h				\
 	ObjectStatStrategy.cc ObjectStatStrategy.h	\
-	NCsytle.braille.h NCstyle.mono.h 		\
+	NCstyle.braille.h NCstyle.mono.h 		\
 	NCstyle.linux.h NCstyle.xterm.h
 
 
