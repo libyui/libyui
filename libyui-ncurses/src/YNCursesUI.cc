@@ -751,8 +751,7 @@ YCPValue YNCursesUI::setConsoleFont( const YCPString & console_magic,
 				      const YCPString & lang )
 {
   string cmd( "setfont" );
-  // option '-c' isn't valid any longer (9.1) 
-  // cmd += " -c " + myTerm;
+  cmd += " -C " + myTerm;
   cmd += " " + font->value();
   if ( !screen_map->value().empty() )
     cmd += " -m " + screen_map->value();
