@@ -272,6 +272,12 @@ public:
     void setText( int column, const std::string text );
 
     /**
+     * Set a column text via PkgEdition
+     * (QListViewItem::setText() expects a QString)
+     **/
+    void setText( int column, const PkgEdition & edition );
+
+    /**
      * Return wheter or not this pkg is already installed, i.e. if it can be
      * updated or deleted.
      **/

@@ -23,6 +23,7 @@
 
 #include <Y2PM.h>
 #include <y2pm/InstTarget.h>
+#include "utf8.h"
 
 #include "YQPkgList.h"
 #include "YUIQt.h"
@@ -279,14 +280,14 @@ YQPkg::YQPkg( YQPkgList * pkgList, PMPackagePtr pkg )
     if ( instVersionCol() >= 0 )
     {
 	if ( pkg->hasInstalledObj() )
-	     setText( instVersionCol(), pkg->getInstalledObj()->version() );
+	     setText( instVersionCol(), pkg->getInstalledObj()->edition() );
 
 	if ( pkg->hasCandidateObj() )
-	    setText( versionCol(), pkg->getCandidateObj()->version() );
+	    setText( versionCol(), pkg->getCandidateObj()->edition() );
     }
     else
     {
-	setText( versionCol(),	pkg->version() 		  );
+	setText( versionCol(),	pkg->edition() );
     }
     
     _haveSrpm	 = true;	// FIXME - get this from the package!
@@ -308,7 +309,18 @@ YQPkg::~YQPkg()
 void
 YQPkg::setText( int column, const std::string text )
 {
-    QListViewItem::setText( column, QString::fromUtf8( text.c_str() ) );
+    QListViewItem::setText( column, fromUTF8( text.c_str() ) );
+}
+
+
+void
+YQPkg::setText( int column, const PkgEdition & edition )
+{
+    QListViewItem::setText( column,
+			    fromUTF8( edition.version() )
+			    + "-" +
+			    fromUTF8( edition.release() )
+			    );
 }
 
 
