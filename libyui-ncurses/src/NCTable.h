@@ -56,7 +56,7 @@ class NCTable : public YTable, public NCPadWidget {
     virtual NCPad * CreatePad();
 
     virtual void cellChanged( int index, int colnum, const YCPString & newtext );
-    
+
   protected:
 
     virtual void startMultipleChanges() { startMultidraw(); }
@@ -69,11 +69,11 @@ class NCTable : public YTable, public NCPadWidget {
     virtual ~NCTable();
 
     bool bigList() const { return biglist; }
-    
+
     bool isImmediate() const { return immediate; }	// addey by gs
     void setHeader( const vector<string> & head ); 	// added by gs
     virtual void itemsCleared();
-    
+
     void setBigList( const bool big ) { biglist = big; }
     void SetSepChar( const chtype colSepchar )  { pad->SetSepChar( colSepchar ); }
     void SetSepWidht( const unsigned sepwidth ) { pad->SetSepWidht( sepwidth ); }
@@ -93,7 +93,7 @@ class NCTable : public YTable, public NCPadWidget {
 
     virtual NCursesEvent wHandleInput( int key );
 
-    virtual void setEnabling( bool enabled ) { Enable( enabled ); }
+    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
 
     virtual bool setKeyboardFocus() {
       if ( !grabFocus() )

@@ -55,6 +55,7 @@ class NCAlignment : public YAlignment, public NCWidget {
     virtual void setSize( long newwidth, long newheight );
 
     virtual void moveChild( YWidget * child, long newx, long newy );
+    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
 };
 
 ///////////////////////////////////////////////////////////////////

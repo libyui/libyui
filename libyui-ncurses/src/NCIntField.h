@@ -90,6 +90,7 @@ class NCIntField : public YIntField, public NCWidget {
         return YWidget::setKeyboardFocus();
       return true;
     }
+    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
 };
 
 ///////////////////////////////////////////////////////////////////

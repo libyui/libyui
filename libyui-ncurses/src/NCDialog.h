@@ -67,7 +67,7 @@ class NCDialog : public YDialog, public NCWidget {
     NCursesEvent pendingEvent;
 
     NCPopupInfo *helpPopup;
-    
+
   private:
 
     void grabActive( NCWidget * nactive );
@@ -96,7 +96,7 @@ class NCDialog : public YDialog, public NCWidget {
     void processInput( int timeout );
 
     bool describeFunctionKeys( string & helpText );
-    
+
   protected:
 
     void _init( YWidgetOpt & opt );
@@ -154,6 +154,7 @@ class NCDialog : public YDialog, public NCWidget {
       return dlgstyle ? *dlgstyle : NCurses::style()[NCstyle::DefaultStyle];
     }
 
+    virtual void setEnabling( bool do_bv ) { /*NOP*/ }
 };
 
 ///////////////////////////////////////////////////////////////////

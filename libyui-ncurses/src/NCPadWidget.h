@@ -102,6 +102,8 @@ class NCPadWidget : public NCWidget, protected NCSchrollCB {
     virtual ~NCPadWidget();
 
     void setLabel( const NClabel & nlabel );
+
+    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( do_bv ); }
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -64,7 +64,7 @@ class NCMenuButton : public YMenuButton, public NCWidget {
     virtual NCursesEvent wHandleInput( int key );
 
     virtual void setLabel( const YCPString & nlabel );
-    virtual void setEnabling( bool enabled ) { Enable( enabled ); }
+    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
 
     virtual bool setKeyboardFocus() {
       if ( !grabFocus() )

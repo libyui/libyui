@@ -111,7 +111,7 @@ class NCWidget : public tnode<NCWidget*>, protected NCursesError {
     int hotfkey;
 
     virtual void setFunctionHotkey( YWidgetOpt & opt );
-    
+
   public:
 
     NCWidget( NCWidget * myparent = 0 );
@@ -134,12 +134,21 @@ class NCWidget : public tnode<NCWidget*>, protected NCursesError {
 
     NC::WState GetState() const { return wstate; }
     void       SetState( const NC::WState newstate, const bool force = false );
-    bool       Enable( const bool do_bv );
+
+    /**
+     * Pure virtual to make shure every widget implements it. Necessary to make
+     * shure that UI requests via YWidget::setEnabling perform, and behave the
+     * same way as direct calls to NCWidget::setEnabling.
+     *
+     * Defaut implementation is provided, and for most derived widgets it's ok
+     * to simply use it.
+     **/
+    virtual void setEnabling( bool do_bv ) = 0;
 
     virtual bool HasHotkey( int key ) const;
     virtual bool HasFunctionHotkey( int key ) const;
     virtual int  GetFunctionHotkey() const;
-    
+
     virtual NCursesEvent wHandleHotkey( int key );
     virtual NCursesEvent wHandleInput( int key );
 

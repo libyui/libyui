@@ -61,6 +61,9 @@ class NCFrame : public YFrame, public NCWidget {
     virtual void setSize( long newwidth, long newheight );
 
     virtual void setLabel( const YCPString & nlabel );
+
+    virtual void setEnabling( bool do_bv );
+
 };
 
 ///////////////////////////////////////////////////////////////////

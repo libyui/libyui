@@ -53,6 +53,8 @@ class NCWeight : public YWeight, public NCWidget {
     virtual long minsize(YUIDimension dim)    { return YWeight::minsize( dim ); }
     virtual long nicesize( YUIDimension dim ) { return YWeight::nicesize( dim ); }
     virtual void setSize( long newwidth, long newheight );
+
+    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -163,7 +163,7 @@ void NCMenuButton::wRedraw()
 void NCMenuButton::createMenu()
 {
   YMenu * toplevel = getToplevelMenu();
-  Enable( toplevel && toplevel->hasChildren() );
+  setEnabling( toplevel && toplevel->hasChildren() );
 }
 
 ///////////////////////////////////////////////////////////////////

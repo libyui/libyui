@@ -107,6 +107,25 @@ void NCFrame::setLabel( const YCPString & nlabel )
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : NCFrame::setEnabling
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCFrame::setEnabling( bool do_bv )
+{
+  enabled = do_bv; // in YWidget
+  for ( tnode<NCWidget*> * c = this->Next();
+	c && c->IsDescendantOf( this );
+	c = c->Next() ) {
+    if ( c->Value()->GetState() != NC::WSdumb )
+      c->Value()->setEnabling( enabled );
+  }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : NCFrame::gotBuddy
 //	METHOD TYPE : bool
 //

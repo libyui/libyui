@@ -73,6 +73,8 @@ class NCProgressBar : public YProgressBar, public NCWidget {
     virtual void setLabel( const YCPString & nlabel );
 
     virtual void setProgress( const YCPInteger & nval );
+
+    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -374,17 +374,17 @@ void NCWidget::SetState( const NC::WState newstate, const bool force )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCWidget::Enable
-//	METHOD TYPE : bool
+//	METHOD NAME : NCWidget::setEnabling
+//	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-bool NCWidget::Enable( const bool do_bv )
+void NCWidget::setEnabling( bool do_bv )
 {
   WIDDBG << DLOC << this << ' ' << do_bv << ' ' << wstate << endl;
 
   if ( wstate == NC::WSdumb )
-    return false;
+    return;
 
   if ( do_bv && wstate == NC::WSdisabeled ) {
     SetState( NC::WSnormal );
@@ -394,8 +394,6 @@ bool NCWidget::Enable( const bool do_bv )
       grabRelease( 0 );
     SetState( NC::WSdisabeled );
   }
-
-  return true;
 }
 
 ///////////////////////////////////////////////////////////////////

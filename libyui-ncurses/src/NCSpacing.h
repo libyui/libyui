@@ -54,6 +54,8 @@ class NCSpacing : public YSpacing, public NCWidget {
     virtual ~NCSpacing();
 
     virtual void setSize( long newwidth, long newheight );
+
+    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
 };
 
 ///////////////////////////////////////////////////////////////////

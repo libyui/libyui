@@ -67,13 +67,13 @@ class NCSelectionBox : public YSelectionBox, public NCPadWidget {
     virtual void setSize( long newwidth, long newheight );
 
     virtual void setLabel( const YCPString & nlabel );
-    
+
     virtual int getCurrentItem();
     virtual void setCurrentItem( int index );
 
     virtual NCursesEvent wHandleInput( int key );
 
-    virtual void setEnabling( bool enabled ) { Enable( enabled ); }
+    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
 
     virtual bool setKeyboardFocus() {
       if ( !grabFocus() )

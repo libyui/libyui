@@ -56,6 +56,7 @@ class NCRadioButtonGroup : public YRadioButtonGroup, public NCWidget {
     virtual void addRadioButton(YRadioButton *button);
     virtual void removeRadioButton(YRadioButton *button);
 
+    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
 };
 
 ///////////////////////////////////////////////////////////////////
