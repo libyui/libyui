@@ -42,7 +42,7 @@ YQPkgYouPatchList::YQPkgYouPatchList( QWidget *parent )
 
     int numCol = 0;
     addColumn( "" );					_statusCol	= numCol++;
-    addColumn( _( "Yast Online Update Patch"	) );	_summaryCol	= numCol++;
+    addColumn( _( "YaST Online Update Patch"	) );	_summaryCol	= numCol++;
     addColumn( _( "Kind"			) );	_kindCol	= numCol++;
     setAllColumnsShowFocus( true );
 
