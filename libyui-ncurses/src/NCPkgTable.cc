@@ -242,7 +242,8 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
     {
 	if ( tableType != T_Dependency
 	     && tableType != T_DepsPackages
-	     && tableType != T_Patches )
+	     && tableType != T_Patches
+	     && tableType != T_SelDependency )
 	{
 	    // only check/show deps if is't not the dependency table itself
 	    // or the list of YOU patches
@@ -464,9 +465,9 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr,
 	NCERR << "No valid package available" << endl;
 	return false;
     }
-
+    
     // add the package name
-    pkgLine.push_back( pkgPtr->getSelectable()->name() );
+    pkgLine.push_back( pkgPtr->getSelectable()->name() );	    
 
     string instVersion = "";
     string version = "";
@@ -616,8 +617,13 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 		case T_Dependency:
 		    // show the dependencies of this package
 		    NCDBG << "GET current item line: " <<  getCurrentItem() << endl;
-		    packager->showConcretelyDependency( getCurrentItem() );
+		    packager->showConcretelyPkgDependency( getCurrentItem() );
 		    break;
+		case T_SelDependency:
+		    // show the dependencies of this selection
+		    NCDBG << "GET current item line: " <<  getCurrentItem() << endl;
+		    packager->showConcretelySelDependency( getCurrentItem() );
+		    break; 
 		default:
 		    break;
 	    }

@@ -91,6 +91,7 @@ public:
 	T_Availables,
 	T_Patches,
 	T_Dependency,
+	T_SelDependency,
 	T_Update,
 	T_PatchPkgs,
 	T_DepsPackages,
