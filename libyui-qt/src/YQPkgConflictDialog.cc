@@ -135,7 +135,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
 
     YQPkgConflict::actionResetIgnoredConflicts()->addTo( _expertMenu );
 
-    
+
     // "Cancel" button
 
     button = new QPushButton( _( "&Cancel" ), buttonBox );
@@ -278,7 +278,7 @@ YQPkgConflictDialog::resetIgnoredConflicts()
     YQPkgConflict::resetIgnoredConflicts();
 
     QMessageBox::information( this, "",
-			      _( "Dependency solver is now reset to original state -\n"
+			      _( "Dependency solver is now reset to original state --\n"
 				 "no conflicts ignored." ),
 			      QMessageBox::Ok );
 }

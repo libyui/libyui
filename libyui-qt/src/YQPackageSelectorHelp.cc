@@ -40,7 +40,7 @@ YQPackageSelector::help()
 
     // Translators: Automatic word-wrapping.
     html += para( _( "<b>Note:</b> This is a just a short  overview."
-		     " Please refer to the manual for details." ) );
+		     " Refer to the manual for details." ) );
 
     if ( _youMode )
     {
@@ -52,8 +52,8 @@ YQPackageSelector::help()
 			 " and the (estimated) download size." ) );
 	html += para( _( "This list normally contains only those patches that are not installed on your system yet."
 			 " You can change that with the <b>Include Installed Patches</b> check box below the list." ) );
-	html += para( _( "The <b>Patch Description</b> field contains a longer explanation what the currently"
-			 " selected patch is all about. Click on a patch in the list to view its description here." ) );
+	html += para( _( "The <b>Patch Description</b> field contains a longer explanation of the currently"
+			 " selected patch. Click a patch in the list to view its description here." ) );
 	html += para( _( "The package list on the right side shows the contents of the currently selected patch, i.e.,"
 			 " the packages it contains. You cannot install or delete individual packages from a patch,"
 			 " only the patch as a whole. This is intentional to avoid system inconsistencies." ) );
@@ -63,59 +63,59 @@ YQPackageSelector::help()
 	// that show details about the (one) currently selected package in the package list.
 
 	html += para( _( "In addition to \"YOU-patches\", you can also select one of the other filter views"
-			 " from the <b>Filter</b> combo-box at the top left:" ) );
+			 " from the <b>Filter</b> combo-box at the upper left:" ) );
     }
     else // ! _youMode
     {
 	// Help specific to normal (non-YOU) mode
 
-	html += para( _( "In this dialog you can select which packages to install, update or delete."
+	html += para( _( "In this dialog, select which packages to install, update, or delete."
 			 " You can select individual packages or entire package \"selections\"." ) );
-	html += para( _( "Click on a package's or selection's status icon to change the status"
+	html += para( _( "Click the status icon for a package or selection to change the status"
 			 " or right-click it to open a context menu." ) );
-	html += para( _( "Use the <b>Check Dependencies</b> button to resolve package dependencies:"
-			 " Some packages require other packages to be installed,"
-			 " some packages can only be installed if certain other packages are not installed, too."
-			 " This check will automatically mark required packages for installation,"
+	html += para( _( "Use the <b>Check Dependencies</b> button to resolve package dependencies."
+			 " Some packages require other packages to be installed."
+			 " Some packages can only be installed if certain other packages are not installed, too."
+			 " This check will automatically mark required packages for installation"
 			 " and it will warn you if there are dependency conflicts." ) );
 	html += para( _( "When you leave this dialog with <b>Accept</b>, this check will automatically be performed." ) );
-	
+
 	// Translators: Please keep the reference to "filter views" to distinguish between "filter views" that
 	// affect the amount of visible packages in the package list and "details views" (below the package list)
 	// that show details about the (one) currently selected package in the package list.
 
 	html += para( _( "In addition to \"Selections\", you can also switch to one of the other filter views"
-			 " with the <b>Filter</b> combo-box at the top left:" ) );
+			 " with the <b>Filter</b> combo-box at the upper left:" ) );
     }
 
     // Help common to all modes: Description of the various filter views
-    
+
     html += "<ul>";
 
     html += listItem( para( _( "<b>Package Groups</b> shows packages by category. You can expand and collapse tree items"
-			       " to refine or generalize categories. Click on any category to display the packages"
+			       " to refine or generalize categories. Click any category to display the packages"
 			       " in that category in the package list on the right side." ) ) +
 		      para( _( " <b>Hint:</b> There is a \"zzz All\" entry at the very end of the list that will show"
 			       " all packages. This may take a few seconds on slow machines." ) ) );
-    
-    html += listItem( para( _( "<b>Search</b> allows you to search packages that meet various criteria."
+
+    html += listItem( para( _( "<b>Search</b> allows you to search for packages that meet various criteria."
 			       " This is usually the easiest way to find a package if you know its name." ) )+
-		      para( _( "<b>Hint:</b> You can also use this to find out what package contains a certain library: "
+		      para( _( "<b>Hint:</b> You can also use this to find out what package contains a certain library. "
 			       " Search in the <b>Provides</b> RPM field." ) ) );
-    
-    html += listItem( para( _( "<b>Installation Summary</b> by default shows the changes to your system - what packages"
+
+    html += listItem( para( _( "<b>Installation Summary</b> by default shows the changes to your system -- what packages"
 			       " will be installed, deleted, or updated." ) ) +
-		      para( _( "It is generally a good idea to use <b>Check Dependencies</b> and then switch to"
-			       " <b>Installation Summary</b> before clicking <b>Accept</b> - this way you can see"
-			       " all changes to your system that will be performed." ) ) +
-		      para( _( "You can also explicitly select what packages with what status you wish to see here;"
+		      para( _( "It is generally a good idea to use <b>Check Dependencies</b> then switch to"
+			       " <b>Installation Summary</b> before clicking <b>Accept</b>. This way you can see"
+			       " all changes that will be made to your system." ) ) +
+		      para( _( "You can also explicitly select what packages with what status to see here;"
 			       " use the check boxes at the left side." ) ) +
-		      para( _( "<b>Hint:</b> You can also reverse the effect of this filter:"
+		      para( _( "<b>Hint:</b> You can also reverse the effect of this filter."
 			       " You can see what packages remain the same on your system. Simply check <b>Keep</b>"
 			       " and uncheck everything else." ) ) );
-    
+
     html += "</ul>";
-    
+
 
     YQPkgTextDialog::showText( this, html );
 }
@@ -168,8 +168,8 @@ YQPackageSelector::symbolHelp()
 		     // Translators: Package status short (!) description
 		     _( "Taboo" ),
 		     // Translators: Automatic word-wrapping.
-		     _( "This package is not installed, and I do not want it under any circumstances -"
-			" in particular not because of unresolved dependencies that other packages"
+		     _( "This package is not installed and should not be installed under any circumstances, "
+			" especially not because of unresolved dependencies that other packages"
 			" might have or get." )
 		     + " "
 		     + _( "Packages set to \"taboo\" are treated as if they did not exist on any installation media." ) );
@@ -181,7 +181,7 @@ YQPackageSelector::symbolHelp()
 		     // Translators: Automatic word-wrapping.
 		     _( "This package will be installed automatically because some other package needs it"
 			" or because it is contained in a predefined software selection"
-			" (e.g., \"Multimedia\", \"Development\" )." )
+			" (e.g., \"Multimedia\", \"Development\")." )
 		     + " "
 		     + _( "<b>Hint:</b> You may have to use \"taboo\" to get rid of such a package." ) );
 
@@ -197,7 +197,7 @@ YQPackageSelector::symbolHelp()
 		     _( "Autodelete" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is already installed, but some predefined software selection"
-			"(e.g., \"Multimedia\", \"Development\" ) requires that it is deleted." ) );
+			" (e.g., \"Multimedia\", \"Development\") requires that it is deleted." ) );
 
     html += "/<table>";
 
@@ -239,8 +239,8 @@ YQPackageSelector::keyboardHelp()
 		     // Translators: Keyboard action short (!) description
 		     _( "Add" ),
 		     // Translators: Automatic word-wrapping.
-		     _( "Get this package. Install it if it is not installed yet,"
-			" update it to the latest version if it is installed "
+		     _( "Get this package. Install it if it is not installed yet."
+			" Update it to the latest version if it is installed "
 			" and there is a newer version." )
 		     + goto_next );
 
@@ -274,7 +274,7 @@ YQPackageSelector::keyboardHelp()
 		     _( "Taboo" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "Set this package to \"taboo\" if it is not installed:"
-			" Make sure this package does not get installed, in particular not"
+			" make sure this package does not get installed, especially not"
 			" because of unresolved dependencies that other packages might have or get. " )
 		     + " "
 		     + _( "Packages set to \"taboo\" are treated as if they did not exist on any installation media." )

@@ -843,7 +843,7 @@ YQPackageSelector::checkDiskUsage()
 	// Translators: RichText (HTML-like) format
 	"<p><b>" + _( "Error: Out of disk space!" ) + "</b></p>"
 	+ _( "<p>"
-	     "You can choose to install anyway if you know very well what you are doing, "
+	     "You can choose to install anyway if you know what you are doing, "
 	     "but you risk getting a corrupted system that requires manual repairs. "
 	     "If you are not absolutely sure how to handle such a case, better "
 	     "press <b>Cancel</b> now and deselect some packages."
@@ -900,7 +900,7 @@ YQPackageSelector::showAutoPkgList()
 	// Detailed explanation (automatic word wrap!)
 	+ "<p>"
 	+ _( "In addition to your manual selections, the following packages"
-	     " have been changed due to dependency resolving:" )
+	     " have been changed to resolve dependencies:" )
 	+ "<p>";
 
     YQPkgChangesDialog::showChangesDialog( msg,
