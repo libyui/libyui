@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Jan 27 18:05:43 CET 2004 - sh@suse.de
+
+- V 2.9.1
+- Adapted to new interpreter (visnov@suse.cz)
+- Adapted to new libyui naming scheme
+- Consistent naming scheme 
+
+-------------------------------------------------------------------
 Fri Nov 14 11:30:35 CET 2003 - mvidner@suse.cz
 
 - adapted to doxygen
