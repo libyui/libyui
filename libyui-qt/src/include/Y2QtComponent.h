@@ -30,7 +30,7 @@
 #include <vector>
 
 #include "YSimpleEventHandler.h"
-#include <Y2UIComponent.h>
+#include <YUI.h>
 
 #define YQWidgetMargin	4
 #define YQWidgetSpacing	4
@@ -44,7 +44,7 @@ using std::string;
 using std::vector;
 
 
-class Y2QtComponent :  public QApplication, public Y2UIComponent
+class Y2QtComponent :  public QApplication, public YUI
 {
     Q_OBJECT
 public:
@@ -147,7 +147,7 @@ public:
      * UI-specific runPkgSeleciton method: Start the package selection.
      * This implementation does the same as UserInput().
      *
-     * Reimplemented from Y2UIComponent.
+     * Reimplemented from YUI.
      **/
     YCPValue runPkgSelection( YWidget * packageSelector );
 
@@ -168,7 +168,7 @@ public:
     /**
      * Issue an internal error: Open popup with that message and wait.
      *
-     * Reimplemented from Y2UIComponent.
+     * Reimplemented from YUI.
      */
     void internalError( const char * msg );
 
@@ -198,7 +198,7 @@ public:
      * Block (or unblock) events. If events are blocked, any event sent
      * should be ignored until events are unblocked again.
      *
-     * Reimplemented from Y2UIComponent.
+     * Reimplemented from YUI.
      **/
     virtual void blockEvents( bool block = true )
 	{ _event_handler.blockEvents( block ); }
@@ -206,7 +206,7 @@ public:
     /**
      * Returns 'true' if events are currently blocked.
      *
-     * Reimplemented from Y2UIComponent.
+     * Reimplemented from YUI.
      **/
     virtual bool eventsBlocked() const
 	{ return _event_handler.eventsBlocked(); }
@@ -224,14 +224,14 @@ public slots:
     /**
      * Show hourglass cursor.
      *
-     * Reimplemented from Y2UIComponent.
+     * Reimplemented from YUI.
      */
     void busyCursor();
 
     /**
      * Show pointer cursor.
      *
-     * Reimplemented from Y2UIComponent.
+     * Reimplemented from YUI.
      */
     void normalCursor();
 
@@ -255,7 +255,7 @@ protected:
      * Idle around until fd_ycp is readable and handle repaints.
      * This is only used when a separate ui thread is running.
      *
-     * Reimplemented from Y2UIComponent.
+     * Reimplemented from YUI.
      */
     void idleLoop( int fd_ycp );
 
@@ -263,42 +263,42 @@ protected:
      * Return a representation for the glyph symbol specified in UTF-8 encoding
      * or an empty string to get a default textual representation.
      *
-     * Reimplemented from Y2UIComponent.
+     * Reimplemented from YUI.
      */
     YCPString glyph( const YCPSymbol & glyphSymbol );
 
     /**
      * Go into event loop until next user input is available.
      *
-     * Reimplemented from Y2UIComponent.
+     * Reimplemented from YUI.
      */
     YEvent * userInput( unsigned long timeout_millisec = 0 );
 
     /**
      * Check the event queue for user input. Don't wait.
      *
-     * Reimplemented from Y2UIComponent.
+     * Reimplemented from YUI.
      */
     YEvent * pollInput();
 
     /**
      * Create a dialog.
      *
-     * Reimplemented from Y2UIComponent.
+     * Reimplemented from YUI.
      */
     YDialog * createDialog( YWidgetOpt & opt );
 
     /**
      * Show and activate a dialog.
      *
-     * Reimplemented from Y2UIComponent.
+     * Reimplemented from YUI.
      */
     void showDialog( YDialog * dialog );
 
     /**
      * Decativate and close a dialog. This does not delete the dialog yet.
      *
-     * Reimplemented from Y2UIComponent.
+     * Reimplemented from YUI.
      */
     void closeDialog( YDialog * dialog );
 
@@ -324,7 +324,7 @@ protected:
     void Y2QtComponent::loadPredefinedQtTranslations();
 
 
-    /*** Widget creation methods, all reimplemented from Y2UIComponent ***/
+    /*** Widget creation methods, all reimplemented from YUI ***/
 
     YContainerWidget * createAlignment		( YWidget * parent, YWidgetOpt & opt, YAlignmentType horAlign, YAlignmentType vertAlign );
     YContainerWidget * createFrame		( YWidget * parent, YWidgetOpt & opt, const YCPString & label );
@@ -359,7 +359,7 @@ protected:
     YWidget * createPkgSpecial		( YWidget * parent, YWidgetOpt & opt, const YCPString & subwidget );
 
 
-    /*** Widget creation methods for optional widgets, all reimplemented from Y2UIComponent ***/
+    /*** Widget creation methods for optional widgets, all reimplemented from YUI ***/
 
     bool 	hasBarGraph();
     YWidget *	createBarGraph		( YWidget * parent, YWidgetOpt & opt);
@@ -413,7 +413,7 @@ public:
     /**
      *
      * Open a directory selection box and prompt the user for an existing directory.
-     * [Reimplemented from Y2UIComponent]
+     * [Reimplemented from YUI]
      *
      * 'startDir' is the initial directory that is displayed.
      *
@@ -428,7 +428,7 @@ public:
 
     /**
      * Open a file selection box and prompt the user for an existing file.
-     * [Reimplemented from Y2UIComponent]
+     * [Reimplemented from YUI]
      *
      * 'startWith' is the initial directory or file.
      *
@@ -447,7 +447,7 @@ public:
     /**
      * Open a file selection box and prompt the user for a file to save data to.
      * Automatically asks for confirmation if the user selects an existing file.
-     * [Reimplemented from Y2UIComponent]
+     * [Reimplemented from YUI]
      *
      * 'startWith' is the initial directory or file.
      *
@@ -475,14 +475,14 @@ protected:
 
     /**
      * Sets the X input method according to the locale.
-     * [Reimplemented from Y2UIComponent]
+     * [Reimplemented from YUI]
      */
     YCPValue setLanguage( const YCPTerm & term );
 
 
     /**
      * Display capabilities.
-     * [Reimplemented from Y2UIComponent]
+     * [Reimplemented from YUI]
      * See UI builtin GetDisplayInfo() doc for details.
      **/
     int  getDisplayWidth();

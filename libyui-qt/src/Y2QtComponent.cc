@@ -51,7 +51,7 @@ qMessageHandler( QtMsgType type, const char * msg )
 
 Y2QtComponent::Y2QtComponent( int argc, char **argv, bool with_threads, Y2Component *callback )
     : QApplication(argc, argv)
-    , Y2UIComponent(with_threads, callback)
+    , YUI(with_threads, callback)
     , _main_win (NULL)
     , _main_dialog_id(0)
     , _do_exit_loop( false )
@@ -162,7 +162,7 @@ void Y2QtComponent::init ()
     }
 
     // Qt handles command line option "-reverse" for Arabic / Hebrew
-    Y2UIComponent::_reverseLayout = QApplication::reverseLayout();
+    YUI::_reverseLayout = QApplication::reverseLayout();
 
 
     if ( _fullscreen )

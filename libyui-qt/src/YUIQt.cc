@@ -322,7 +322,7 @@ void Y2QtComponent::easterEgg()
 
 QString Y2QtComponent::productName() const
 {
-    return fromUTF8( Y2UIComponent::productName() );
+    return fromUTF8( YUI::productName() );
 }
 
 
