@@ -19,6 +19,7 @@
 /-*/
 
 #define CHECK_DEPENDENCIES_ON_STARTUP	1
+#define AUTO_CHECK_DEPENDENCIES_DEFAULT	false
 
 #include <qaction.h>
 #include <qapplication.h>
@@ -478,7 +479,7 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 
 	_autoDependenciesCheckBox = new QCheckBox( _( "A&uto check" ), button_box );
 	CHECK_PTR( _autoDependenciesCheckBox );
-	_autoDependenciesCheckBox->setChecked( true );
+	_autoDependenciesCheckBox->setChecked( AUTO_CHECK_DEPENDENCIES_DEFAULT );
     }
 
     addHStretch( button_box );
