@@ -599,6 +599,24 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr )
 
 ///////////////////////////////////////////////////////////////////
 //
+// createInfoEntry
+//
+//
+bool NCPkgTable::createInfoEntry ( string text )
+{
+    vector<string> pkgLine;
+    pkgLine.reserve(2);
+
+    pkgLine.push_back( text );
+    addLine( PMSelectable::S_NoInst,	// use status NoInst
+	     pkgLine,
+	     PMObjectPtr() );	// null pointer
+    
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////
+//
 // createPatchEntry
 //
 //
@@ -607,7 +625,7 @@ bool NCPkgTable::createPatchEntry ( PMYouPatchPtr patchPtr )
     vector<string> pkgLine;
     pkgLine.reserve(5);
     
-    if ( !patchPtr )
+    if ( !patchPtr || !patchPtr->hasSelectable() )
     {
 	NCERR << "No valid patch available" << endl;
 	return false;

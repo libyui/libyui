@@ -297,7 +297,13 @@ public:
      * @return bool
      */  
    bool createPatchEntry ( PMYouPatchPtr pkgPtr );
- 
+
+   /**
+    * Creates a line in the table shwing an info text.
+    * @param text The information
+    * @return bool
+    */   
+   bool createInfoEntry ( string text );
 };
 
 ///////////////////////////////////////////////////////////////////
