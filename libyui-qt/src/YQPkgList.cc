@@ -184,18 +184,6 @@ YQPkgListItem::YQPkgListItem( YQPkgList * pkgList, PMPackagePtr pmPkg )
 
     setStatusIcon();
     setSourceRpmIcon();
-    _candidateIsNewer = false;
-    _installedIsNewer = false;
-
-    PMObjectPtr candidate = _pmPkg->getCandidateObj();
-    PMObjectPtr installed = _pmPkg->getInstalledObj();
-
-    if ( candidate && installed )
-    {
-	_candidateIsNewer = candidate->edition() > installed->edition();
-	_installedIsNewer = candidate->edition() < installed->edition();
-	// Cache this information, it's expensive to obtain!
-    }
 }
 
 
@@ -319,7 +307,7 @@ YQPkgListItem::paintCell( QPainter *		painter,
 			  int			width,
 			  int			alignment )
 {
-    if ( _installedIsNewer )
+    if ( installedIsNewer() )
     {
 	QColorGroup cg = colorGroup;
 
@@ -331,7 +319,7 @@ YQPkgListItem::paintCell( QPainter *		painter,
 
 	QListViewItem::paintCell( painter, cg, column, width, alignment );
     }
-    else if ( _candidateIsNewer )
+    else if ( candidateIsNewer() )
     {
 	QColorGroup cg = colorGroup;
 

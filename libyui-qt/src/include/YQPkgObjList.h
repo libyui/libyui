@@ -283,6 +283,16 @@ public:
     virtual void cycleStatus();
 
     /**
+     * Check if the candidate is newer than the installed version.
+     **/
+    bool candidateIsNewer() const { return _candidateIsNewer; }
+
+    /**
+     * Check if the installed version is newer than the candidate.
+     **/
+    bool installedIsNewer() const { return _installedIsNewer; }
+
+    /**
      * Set a column text via STL string.
      * (QListViewItem::setText() expects a QString!)
      **/
@@ -330,6 +340,8 @@ protected:
     YQPkgObjList *	_pkgObjList;
     PMObjectPtr		_pmObj;
     bool		_editable;
+    bool		_candidateIsNewer;
+    bool		_installedIsNewer;
 };
 
 

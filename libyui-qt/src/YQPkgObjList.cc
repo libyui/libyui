@@ -291,6 +291,20 @@ YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList * pkgObjList, PMObjectPtr pm_ob
     , _pmObj( pm_obj )
     , _editable( true )
 {
+    _candidateIsNewer = false;
+    _installedIsNewer = false;
+
+    PMObjectPtr candidate = _pmObj->getCandidateObj();
+    PMObjectPtr installed = _pmObj->getInstalledObj();
+
+    if ( candidate && installed )
+    {
+	_candidateIsNewer = candidate->edition() > installed->edition();
+	_installedIsNewer = candidate->edition() < installed->edition();
+	// Cache this information, it's expensive to obtain!
+    }
+
+    
     if ( nameCol()    >= 0 )	setText( nameCol(),	pmObj()->name()		);
     if ( summaryCol() >= 0 )	setText( summaryCol(),	pmObj()->summary()	);
     if ( sizeCol()    >= 0 )	setText( sizeCol(),	pmObj()->size().form() + "  " );
@@ -430,7 +444,7 @@ YQPkgObjListItem::cycleStatus()
     {
 	switch ( oldStatus )
 	{
-	    case PMSelectable::S_KeepInstalled:	newStatus = pmObj()->hasCandidateObj() ?
+	    case PMSelectable::S_KeepInstalled:	newStatus = pmObj()->hasCandidateObj() && candidateIsNewer() ?
 						    PMSelectable::S_Update : PMSelectable::S_Del;
 						break;
 	    case PMSelectable::S_Update:	newStatus = PMSelectable::S_Del;		break;
