@@ -310,11 +310,21 @@ YQPkgConflict::dumpList( QListViewItem * 	parent,
 
 	std::string pkg1 = (*it).name;
 	std::string pkg2 = PkgRelation::toString( (*it).rel );
-	new QY2ListViewItem( parent,
-			     // "somepackage requires libfoo.so > 1.2"
-			     // "somepackage requires otherpackage"
-			     ( _( "%1 requires %2" ) ).arg( pkg1.c_str() ).arg( pkg2.c_str() ),
-			     true );
+	QString text;
+
+	if ( (*it).is_conflict )
+	{
+	    // "somepackage conflicts with otherpackage"
+	    text = ( _( "%1 conflicts with %2" ) ).arg( pkg1.c_str() ).arg( pkg2.c_str() );
+	}
+	else
+	{
+	    // "somepackage requires libfoo.so > 1.2"
+	    // "somepackage requires otherpackage"
+	    text =( _( "%1 requires %2" ) ).arg( pkg1.c_str() ).arg( pkg2.c_str() );
+	}
+	
+	new QY2ListViewItem( parent, text, true );
 	++it;
     }
 }
