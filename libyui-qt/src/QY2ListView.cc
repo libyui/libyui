@@ -13,7 +13,7 @@
   File:	      QY2ListView.cc
 
   Author:     Stefan Hundhammer <sh@suse.de>
-  
+
   This is a pure Qt widget - it can be used independently of YaST2.
 
 /-*/
@@ -68,10 +68,10 @@ QY2ListView::updateToplevelItemStates()
     while ( item )
     {
 	QY2ListViewItem * qy2_item = dynamic_cast<QY2ListViewItem *> ( item );
-	
+
 	if ( qy2_item )
 	    qy2_item->updateStatus();
-	
+
 	item = item->nextSibling();
     }
 }
@@ -85,10 +85,10 @@ QY2ListView::updateToplevelItemData()
     while ( item )
     {
 	QY2ListViewItem * qy2_item = dynamic_cast<QY2ListViewItem *> ( item );
-	
+
 	if ( qy2_item )
 	    qy2_item->updateData();
-	
+
 	item = item->nextSibling();
     }
 }
@@ -213,7 +213,7 @@ QY2ListViewItem::QY2ListViewItem( QY2ListView * parentListView,
     , _sortByInsertionSequence( sortByInsertionSequence )
 {
     _serial = 0;
-    
+
     if ( _sortByInsertionSequence )
 	_serial = parentListView->nextSerial();
 }
@@ -225,7 +225,7 @@ QY2ListViewItem::QY2ListViewItem(  QListViewItem * parentItem,
     , _sortByInsertionSequence( sortByInsertionSequence )
 {
     _serial = 0;
-    
+
     if ( _sortByInsertionSequence )
     {
 	QY2ListView * parentListView = dynamic_cast<QY2ListView *> ( listView() );
@@ -254,19 +254,115 @@ QY2ListViewItem::compare( QListViewItem *	otherListViewItem,
 			  int			col,
 			  bool			ascending ) const
 {
-    QY2ListViewItem * other = dynamic_cast<QY2ListViewItem *> (otherListViewItem);
-
-    if ( ! other )
-	return 1;
-
     if ( sortByInsertionSequence() )
     {
-	if ( this->serial() < other->serial() ) return -1;
-	if ( this->serial() > other->serial() ) return  1;
-	return 0;
+	QY2ListViewItem * other = dynamic_cast<QY2ListViewItem *> (otherListViewItem);
+
+	if ( other )
+	{
+	    if ( this->serial() < other->serial() ) return -1;
+	    if ( this->serial() > other->serial() ) return  1;
+	    return 0;
+	}
+
+	// Still here? Try the other version: QY2CheckListItem.
+
+	QY2CheckListItem * otherCheckListItem = dynamic_cast<QY2CheckListItem *> (otherListViewItem);
+
+	if ( otherCheckListItem )
+	{
+	    if ( this->serial() < otherCheckListItem->serial() ) return -1;
+	    if ( this->serial() > otherCheckListItem->serial() ) return  1;
+	    return 0;
+	}
+
     }
 
-    return QListViewItem::compare( other, col, ascending );
+    return QListViewItem::compare( otherListViewItem, col, ascending );
+}
+
+
+
+
+
+
+QY2CheckListItem::QY2CheckListItem( QY2ListView * 		parentListView,
+				    const QString &		text,
+				    QCheckListItem::Type	type,
+				    bool 			sortByInsertionSequence )
+    : QCheckListItem( parentListView, text, type )
+    , _sortByInsertionSequence( sortByInsertionSequence )
+{
+    _serial = 0;
+
+    if ( _sortByInsertionSequence )
+	_serial = parentListView->nextSerial();
+}
+
+
+QY2CheckListItem::QY2CheckListItem( QListViewItem * 		parentItem,
+				    const QString &		text,
+				    QCheckListItem::Type	type,
+				    bool 			sortByInsertionSequence )
+    : QCheckListItem( parentItem, text, type )
+    , _sortByInsertionSequence( sortByInsertionSequence )
+{
+    _serial = 0;
+
+    if ( _sortByInsertionSequence )
+    {
+	QY2ListView * parentListView = dynamic_cast<QY2ListView *> ( listView() );
+
+	if ( parentListView )
+	    _serial = parentListView->nextSerial();
+    }
+}
+
+
+QY2CheckListItem::~QY2CheckListItem()
+{
+    // NOP
+}
+
+
+/**
+ * Comparison function used for sorting the list.
+ * Returns:
+ * -1 if this <	 other
+ *  0 if this == other
+ * +1 if this >	 other
+ **/
+int
+QY2CheckListItem::compare( QListViewItem *	otherListViewItem,
+			   int			col,
+			   bool			ascending ) const
+{
+    if ( sortByInsertionSequence() )
+    {
+	QY2CheckListItem * other = dynamic_cast<QY2CheckListItem *> (otherListViewItem);
+
+	if ( other )
+	{
+	    if ( this->serial() < other->serial() ) return -1;
+	    if ( this->serial() > other->serial() ) return  1;
+	    return 0;
+	}
+
+
+	// Still here? Try the other version: QY2ListViewItem.
+
+	QY2ListViewItem * otherCheckListItem = dynamic_cast<QY2ListViewItem *> (otherListViewItem);
+
+	if ( otherCheckListItem )
+	{
+	    if ( this->serial() < otherCheckListItem->serial() ) return -1;
+	    if ( this->serial() > otherCheckListItem->serial() ) return  1;
+	    return 0;
+	}
+
+    }
+
+    return QListViewItem::compare( otherListViewItem, col, ascending );
 }
 
 

@@ -47,33 +47,13 @@ void
 YQPkgConflictList::fill( PkgDep::ErrorResultList & badList )
 {
     clear();
-    QY2ListViewItem * item;
     std::string text;
     
     std::list<PkgDep::ErrorResult>::iterator it = badList.begin();
 
     while ( it != badList.end() )
     {
-	PMSolvablePtr solvable = (*it).solvable;
-	PMObjectPtr pmObj = solvable;
-	    
-	item = new QY2ListViewItem( this );
-
-	if ( solvable )
-	{
-	    if ( ! pmObj )
-		item->setText( 0, "<Unspecified - no PMObject>" );
-	    else
-	    {
-		text = pmObj->name();
-		item->setText( 0, fromUTF8( text ) );
-	    }
-	}
-	else
-	{
-	    item->setText( 0, "<Unspecified>" );
-	}
-	
+	new YQPkgConflict( this, *it );
 	++it;
     }
 }
@@ -93,6 +73,128 @@ YQPkgConflictList::activateUserChoices()
     // TODO
     // TODO
     // TODO
+}
+
+
+
+
+
+
+YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
+			      const PkgDep::ErrorResult &	errorResult )
+    : QY2ListViewItem( parentList )
+    , _conflict( errorResult )
+    , _parentList( parentList )
+{
+    std::string name;
+    PkgEdition edition;
+    
+    _firstAlternative	= 0;
+    _firstResolution	= 0;
+    _status		= PMSelectable::S_NoInst;
+    _pmObj		= _conflict.solvable;
+
+    if ( _pmObj )
+    {
+	name		= _pmObj->name();
+	edition		= _pmObj->edition();
+	
+	if ( _pmObj->getSelectable() )
+	    _status	= _pmObj->getSelectable()->status();
+    }
+    else
+    {
+	name 		= _conflict.name;
+	edition		= _conflict.edition;
+    }
+
+    _shortName		= name.c_str();
+    _fullName 		= _shortName;
+
+    if ( ! edition.is_unspecified() )
+    {
+	_fullName += " ";
+	_fullName += ( PkgEdition::toString( edition ) ).c_str();
+    }
+
+    _needAlternative	= ! _conflict.alternatives.empty();
+    _collision		= ! _conflict.conflicts_with.empty();
+
+    formatLine();
+}
+
+
+void
+YQPkgConflict::formatLine()
+{
+    QString text;
+    
+    // Generic conflict with package %1
+    // text = ( _( "%1 conflict" ) ).arg( _shortName );
+    text = ( _( "%1 conflict" ) ).arg( _fullName );
+
+    if ( ! _pmObj )
+    {
+	if ( _needAlternative )
+	{
+	    // Select one from a number of functionalities (Window manager etc.)
+	    text = ( _( "Select %1" ) ).arg( _shortName );
+	}
+	else
+	{
+	    // (Pseudo) package / functionality %1 missing, e.g.,
+	    // "libfoo.so.1.0 not available", "Window manager not available"
+	    text = ( _( "%1 not available" ) ).arg( _fullName );
+	}
+    }
+    else
+    {
+	if ( _conflict.state_change_not_possible )
+	{
+	    // The solver would have liked to change this package's status,
+	    // i.e. to add it automatically, but it couldn't.
+	    // 
+	    // This means that the user has set this package to "remove" or "taboo",
+	    // yet other packages still need it.
+
+	    QString pkgStatus;
+	    
+	    switch ( _status )
+	    {
+		case PMSelectable::S_Taboo:
+		    // Package %1 is set to taboo, yet other packages require it
+		    text = ( _( "Taboo package %1 is required by other packages" ) ).arg( _shortName );
+		    break;
+		    
+                case PMSelectable::S_AutoDel:
+                case PMSelectable::S_Del:
+		    // Package %1 is marked for deletion, yet other packages require it
+		    text = ( _( "Deleting %1 breaks other packages" ) ).arg( _shortName );
+		    break;
+		    
+		default: // leave generic text
+		    break;
+	    }
+	}
+	else
+	{
+	    // Conflict while installing or updating package
+
+	    // leave generic text
+	}
+	
+    }
+
+    setText( 0, text );
+}
+
+
+bool
+YQPkgConflict::isResolved()
+{
+#warning TODO: isResolved()
+
+    return true;
 }
 
 

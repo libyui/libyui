@@ -71,7 +71,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
     // OK button
     
-    _okButton = new QPushButton( _( "&Ok - Try Again" ), buttonBox );
+    _okButton = new QPushButton( _( "&OK - Try Again" ), buttonBox );
     CHECK_PTR( _okButton );
     _okButton->setDefault( true );
     

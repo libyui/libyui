@@ -33,7 +33,7 @@ class QY2ListViewItem;	// shorter name than "QY2ListViewItem"
 
 
 /**
- * @short QListView with slightly more commonly used functions
+ * @short Enhanced QListView
  **/
 class QY2ListView : public QListView
 {
@@ -164,7 +164,7 @@ protected:
 
 
 /**
- * 
+ * Enhanced QListViewItem
  **/
 class QY2ListViewItem: public QListViewItem
 {
@@ -195,6 +195,98 @@ public:
      * Destructor
      **/
     virtual ~QY2ListViewItem();
+
+    /**
+     * Update this item's status.
+     * Triggered by QY2ListView::updateAllItemStates().
+     * Derived classes should overwrite this.
+     * This default implementation does nothing.
+     **/
+    virtual void updateStatus() {}
+
+    /**
+     * Update this item's data completely.
+     * Triggered by QY2ListView::updateAllItemData().
+     * Derived classes should overwrite this.
+     * This default implementation does nothing.
+     **/
+    virtual void updateData() {}
+
+    /**
+     * Comparison function used for sorting the list.
+     * Returns:
+     * -1 if this <  other
+     *	0 if this == other
+     * +1 if this >  other
+     *
+     * Reimplemented from QListViewItem
+     **/
+    virtual int compare( QListViewItem *	other,
+			 int			col,
+			 bool			ascending ) const;
+
+    /**
+     * Return this item's serial number.
+     * Useful for comparison functions that order by insertion sequence.
+     **/
+    int serial() const { return _serial; }
+
+    /**
+     * Returns true if this item sorts itself by insertion sequence.
+     **/
+    bool sortByInsertionSequence() const { return _sortByInsertionSequence; }
+
+    /**
+     * Set sort policy: 'true' to sort by insertion sequence, 'false' for user
+     * sort-by-click on column headers.
+     **/
+    void setSortByInsertionSequence( bool doit )
+	{ _sortByInsertionSequence = doit; }
+    
+protected:
+
+    int		_serial;
+    bool	_sortByInsertionSequence;
+};
+
+
+
+/**
+ * Enhanced QCheckListItem
+ **/
+class QY2CheckListItem: public QCheckListItem
+{
+public:
+
+    /**
+     * Constructor for toplevel items.
+     *
+     * 'sortByInsertionSequence' indicates if this item keeps the insertion
+     * order (true) or leaves sorting to the user (false - sort-by-click on
+     * column headers).
+     **/
+    QY2CheckListItem( QY2ListView * 		parentListView,
+		      const QString &		text,
+		      QCheckListItem::Type	type,
+		      bool 			sortByInsertionSequence = false );
+
+
+    /**
+     * Constructor for deeper level items.
+     *
+     * 'sortByInsertionSequence' indicates if this item keeps the insertion
+     * order (true) or leaves sorting to the user (false - sort-by-click on
+     * column headers).
+     **/
+    QY2CheckListItem( QListViewItem * 		parentItem,
+		      const QString &		text,
+		      QCheckListItem::Type	type,
+		      bool 			sortByInsertionSequence = false );
+
+    /**
+     * Destructor
+     **/
+    virtual ~QY2CheckListItem();
 
     /**
      * Update this item's status.
