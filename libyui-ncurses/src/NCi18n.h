@@ -23,8 +23,6 @@
 
 #include <libintl.h>
 
-#include "NCstring.h"
-
 
 /**
  *  define _(...) for gettext
@@ -32,7 +30,7 @@
  *  @return NCstring
  */
 
-static string _(const char * msgid)
+inline string _(const char * msgid)
 {
     return gettext(msgid);
 }
@@ -44,12 +42,12 @@ static string _(const char * msgid)
  * @param n 	choose singular/plural form based on this value
  * @return NCstring
  */
-static string _(const char * msgid1, const char * msgid2, unsigned long int n)
+inline string _(const char * msgid1, const char * msgid2, unsigned long int n)
 {
     return ngettext(msgid1, msgid2, n);
 }
 
-static void setTextdomain( const char * domain )
+inline void setTextdomain( const char * domain )
 {
     bindtextdomain( domain, LOCALEDIR );
     bind_textdomain_codeset( domain, "utf8" );
