@@ -133,6 +133,11 @@ public slots:
      **/
     void sendStatusChanged() { emit statusChanged(); }
 
+    /**
+     * Display a one-line message in the list.
+     **/
+    void message( const QString & text );
+
 
     // Direct access to some states for menu actions
 

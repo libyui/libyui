@@ -438,6 +438,17 @@ YQPkgObjList::keyPressEvent( QKeyEvent *event )
 }
 
 
+void
+YQPkgObjList::message( const QString & text )
+{
+    QY2ListViewItem * item = new QY2ListViewItem( this );
+    CHECK_PTR( item );
+
+    item->setText( 0, text );
+    item->setBackgroundColor( QColor( 0xE0, 0xE0, 0xF8 ) );
+}
+
+
 
 
 YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList * pkgObjList, PMObjectPtr pm_obj )

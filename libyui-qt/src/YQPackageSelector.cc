@@ -564,8 +564,14 @@ YQPackageSelector::makeConnections()
     connectFilter( _youPatchList, 		_pkgList );
     connectFilter( _selList, 			_pkgList );
     connectFilter( _rpmGroupTagsFilterView, 	_pkgList, false );
-    connectFilter( _searchFilterView, 		_pkgList, false );
     connectFilter( _statusFilterView, 		_pkgList, false );
+    connectFilter( _searchFilterView, 		_pkgList, false );
+
+    if ( _searchFilterView && _pkgList )
+    {
+	connect( _searchFilterView, 	SIGNAL( message( const QString & ) ),
+		 _pkgList,		SLOT  ( message( const QString & ) ) );
+    }
 
     //
     // Connect conflict dialog

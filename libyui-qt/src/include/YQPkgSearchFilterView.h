@@ -93,6 +93,12 @@ signals:
      * Emitted when filtering is finished.
      **/
     void filterFinished();
+    
+    /**
+     * Send a short message about unsuccessful searches.
+     **/
+    void message( const QString & text );
+
 
 protected:
 
@@ -141,6 +147,8 @@ protected:
     QRadioButton *	_exactMatch;
     QRadioButton *	_useWildcards;
     QRadioButton *	_useRegexp;
+
+    int			_matchCount;
 };
 
 

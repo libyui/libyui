@@ -47,6 +47,7 @@
 YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     : QVBox( parent )
 {
+    _matchCount = 0;
     setMargin( MARGIN );
     setSpacing( SPACING );
 
@@ -170,6 +171,7 @@ void
 YQPkgSearchFilterView::filter()
 {
     emit filterStart();
+    _matchCount = 0;
 
     if ( ! _searchText->currentText().isEmpty() )
     {
@@ -201,6 +203,9 @@ YQPkgSearchFilterView::filter()
     }
 
     emit filterFinished();
+
+    if ( _matchCount == 0 )
+	emit message( _( "No results." ) );
 }
 
 
@@ -218,7 +223,10 @@ YQPkgSearchFilterView::check( PMPackagePtr pkg, const QRegExp & regexp )
 	( _searchInRequires->isChecked()    && check( pkg->requires(),    regexp ) );
 
     if ( match )
+    {
+	_matchCount++;
 	emit filterMatch( pkg );
+    }
 
     return match;
 }
