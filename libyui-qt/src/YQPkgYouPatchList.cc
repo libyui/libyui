@@ -63,6 +63,8 @@ YQPkgYouPatchList::YQPkgYouPatchList( QWidget *parent )
 					  0,			// accel
 					  0 );			// parent
 
+    connect( actionShowRawPatchInfo, SIGNAL( activated() ), SLOT( showRawPatchInfo() ) );
+
     y2debug( "Creating YOU patch list done" );
 }
 
