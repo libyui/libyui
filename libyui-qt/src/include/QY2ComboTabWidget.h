@@ -26,7 +26,7 @@
 
 #include <qvbox.h>
 #include <qstring.h>
-#include <qdict.h>
+#include <qintdict.h>
 
 class QComboBox;
 class QLabel;
@@ -80,7 +80,6 @@ public slots:
      * This is an expensive operation: All combo box items are searched for the
      * item that corresponds to this page.
      **/
-
     void showPage( QWidget * page );
 
 
@@ -88,10 +87,10 @@ public slots:
 protected slots:
 
     /**
-     * Show a page identified by its label. Does NOT update the combo box
+     * Show a page identified by its index. Does NOT update the combo box
      * contents.
      **/
-    void showPage( const QString & page_label );
+    void showPage( int index );
 
 
 protected:
@@ -101,7 +100,7 @@ protected:
     QComboBox		* combo_box;
     QLabel		* combo_label;
     QWidgetStack 	* widget_stack;
-    QDict<QWidget>	  pages;
+    QIntDict<QWidget>	  pages;
 };
 
 #endif // QY2ComboTabWidget_h

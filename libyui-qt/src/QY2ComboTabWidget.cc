@@ -61,8 +61,8 @@ QY2ComboTabWidget::QY2ComboTabWidget( const QString &	label,
     
     combo_label->setBuddy( combo_box );
     combo_box->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
-    connect( combo_box, SIGNAL( activated( const QString & ) ),
-	     this,	SLOT  ( showPage ( const QString & ) ) );
+    connect( combo_box, SIGNAL( activated( int ) ),
+	     this,	SLOT  ( showPage ( int ) ) );
     
     widget_stack = new QWidgetStack( this );
     CHECK_PTR( widget_stack );
@@ -79,7 +79,7 @@ QY2ComboTabWidget::~QY2ComboTabWidget()
 void
 QY2ComboTabWidget::addPage( const QString & page_label, QWidget * new_page )
 {
-    pages.insert( page_label, new_page );
+    pages.insert( combo_box->count(), new_page );
     combo_box->insertItem( page_label );
     widget_stack->addWidget( new_page );
 
@@ -89,9 +89,9 @@ QY2ComboTabWidget::addPage( const QString & page_label, QWidget * new_page )
 
 
 void
-QY2ComboTabWidget::showPage( const QString & page_label )
+QY2ComboTabWidget::showPage( int index )
 {
-    QWidget * page = pages[ page_label ];
+    QWidget * page = pages[ index ];
 
     if ( page )
     {
@@ -101,7 +101,7 @@ QY2ComboTabWidget::showPage( const QString & page_label )
     }
     else
     {
-	qWarning( "QY2ComboTabWidget: Page \"%s\" not found", (const char *) page_label );
+	qWarning( "QY2ComboTabWidget: Page #%d not found", index );
 	return;
     }
 }
@@ -112,7 +112,7 @@ QY2ComboTabWidget::showPage( QWidget * page )
 {
     widget_stack->raiseWidget( page );
 
-    if ( page == pages[ combo_box->currentText() ] )
+    if ( page == pages[ combo_box->currentItem() ] )
     {
 	// Shortcut: If the requested page is the one that belongs to the item
 	// currently selected in the combo box, don't bother searching the
@@ -123,13 +123,13 @@ QY2ComboTabWidget::showPage( QWidget * page )
     
     // Search the dict for this page
     
-    QDictIterator<QWidget> it( pages );
+    QIntDictIterator<QWidget> it( pages );
 
     while ( it.current() )
     {
 	if ( page == it.current() )
 	{
-	    combo_box->setCurrentText( it.currentKey() );
+	    combo_box->setCurrentItem( it.currentKey() );
 	    return;
 	}
 
