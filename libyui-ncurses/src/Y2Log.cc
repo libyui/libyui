@@ -151,7 +151,7 @@ struct Y2Loglinestreamset {
     bool   dolog = true;
     switch ( num ) {
     case C_Y2UI:
-      name = "yast2-ui-ncurses";
+      name = "ui-ncurses";
       break;
     case C_NC:
       name = "ncurses";
