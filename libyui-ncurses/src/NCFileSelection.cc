@@ -20,6 +20,8 @@
 #include "NCFileSelection.h"
 #include "NCTable.h"
 
+#include <fnmatch.h>
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -43,7 +45,7 @@ NCFileInfo::NCFileInfo( string 	fileName,
 	_tag = " @";	// links
     else if ( S_ISREG(_mode)
 	      && (_mode & S_IXUSR) )
-	_tag = " *";	// user exectubale files
+	_tag = " *";	// user executable files
     else
 	_tag = "  ";
     
@@ -343,10 +345,28 @@ NCFileSelectionTag * NCFileSelection::getTag( const int & index )
 NCFileTable::NCFileTable( NCWidget * parent,
 			  YWidgetOpt & opt,
 			  NCFileSelectionType type,
+			  const YCPString & filter,
 			  const YCPString & iniDir )
     : NCFileSelection( parent, opt, type, iniDir )
 {
     fillHeader();
+
+    string filterStr = filter->value();
+    const string delims( " \t" );
+    string::size_type begin, end;
+
+    begin = filterStr.find_first_not_of( delims );
+    
+    while ( begin != string::npos )
+    {
+	end = filterStr.find_first_of( delims, begin );
+	if ( end == string::npos )
+	{
+	    end = filterStr.length();
+	}
+	pattern.push_back( filterStr.substr( begin, end-begin ) );
+	begin = filterStr.find_first_not_of( delims, end );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -388,6 +408,30 @@ void NCFileTable::fillHeader( )
 ///////////////////////////////////////////////////////////////////
 //
 //
+//     METHOD NAME : NCFileTable::filterMatch
+//     METHOD TYPE : bool
+//
+//     DESCRIPTION :
+//
+bool NCFileTable::filterMatch( const string & fileEntry )
+{
+    if ( pattern.empty() )
+	return true;
+	
+    bool match = false;
+    list<string>::iterator it = pattern.begin();
+    while ( it != pattern.end() )
+    {
+	if ( fnmatch ( (*it).c_str(), fileEntry.c_str(), FNM_PATHNAME ) == 0 )
+	    match = true;
+	++it;
+    }
+    return match;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //     METHOD NAME : NCFileTable::wHandleInput
 //     METHOD TYPE : NCursesEvent
 //
@@ -418,7 +462,7 @@ NCursesEvent NCFileTable::wHandleInput( wint_t key )
 	    ret = NCursesEvent::none;
     }
 
-    NCMIL << "CURRENT_FILE: " << currentFile << endl;
+    NCDBG << "CURRENT_FILE: " << currentFile << endl;
     return ret;
 }
 
@@ -448,7 +492,8 @@ bool NCFileTable::fillList ( )
 	while ( ( entry = readdir( diskDir ) ) )
 	{
 	    string entryName = entry->d_name;
-	    if ( entryName != "." )
+	    if ( entryName != "."
+		 && filterMatch( entryName ) )
 	    {
 		tmpList.push_back( entryName );
 	    }
@@ -688,7 +733,7 @@ NCursesEvent NCDirectoryTable::wHandleInput( wint_t key )
 	    ret = NCursesEvent::none;
     }
 
-    NCMIL << "CURRENT: " << currentDir << " START DIR: " << startDir << endl;
+    NCDBG << "CURRENT: " << currentDir << " START DIR: " << startDir << endl;
     return ret;
 }
 

@@ -212,8 +212,9 @@ class NCFileTable : public NCFileSelection {
 
 private:
 
-    string currentFile;
-    
+    list<string> pattern;	// files must match this pattern
+    string currentFile;		// currently selected file
+
 public:
 
   /**
@@ -222,6 +223,7 @@ public:
     NCFileTable( NCWidget * parent,
 		 YWidgetOpt & opt,
 		 NCFileSelectionType type,
+		 const YCPString & filter,
 		 const YCPString & iniDir );
 
     virtual ~NCFileTable(){}
@@ -230,6 +232,8 @@ public:
 	currentFile = file->value();
     }
 
+    bool filterMatch( const string & fileName );
+    
     string getCurrentFile() { return currentFile; }
     
     virtual void fillHeader();

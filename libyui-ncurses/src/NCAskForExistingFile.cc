@@ -43,6 +43,7 @@
 //
 NCAskForExistingFile::NCAskForExistingFile( const wpos at,
 					    const YCPString & iniDir,
+					    const YCPString & filter,
 					    const YCPString & headline )
     : NCPopup( at, true )
     , okButton( 0 )
@@ -52,7 +53,7 @@ NCAskForExistingFile::NCAskForExistingFile( const wpos at,
     , fileList( 0 )
     , detailed ( 0 )
 {
-    createLayout( iniDir, headline );
+    createLayout( iniDir, filter, headline );
 
     dirList->fillList();
     fileList->fillList();
@@ -80,7 +81,8 @@ NCAskForExistingFile::~NCAskForExistingFile()
 //	DESCRIPTION :
 //
 void NCAskForExistingFile::createLayout( const YCPString & iniDir,
-					      const YCPString & headline )
+					 const YCPString & filter,
+					 const YCPString & headline )
 {
 
     YWidgetOpt opt;
@@ -134,7 +136,7 @@ void NCAskForExistingFile::createLayout( const YCPString & iniDir,
     hSplit1->addChild( dirList );
     
     // add the list of files
-    fileList = new NCFileTable( hSplit1, opt, NCFileSelection::T_Overview, iniDir );
+    fileList = new NCFileTable( hSplit1, opt, NCFileSelection::T_Overview, filter, iniDir );
     fileList->setId( PkgNames::FileList() );
     hSplit1->addChild( fileList );
     
@@ -150,9 +152,9 @@ void NCAskForExistingFile::createLayout( const YCPString & iniDir,
 			       YCPString( "" ),
 			       100, 50 );
     hSplit2->addChild( fileName );
-    NCComboBox * extension = new NCComboBox( hSplit2, opt, YCPString("Extension:") );
+    NCComboBox * extension = new NCComboBox( hSplit2, opt, YCPString("Filter:") );
     hSplit2->addChild( extension );
-    extension->itemAdded( YCPString( "*" ),
+    extension->itemAdded( filter,
 			  0,		 // index
 			  true );	 // selected
     split->addChild( hSplit2 );

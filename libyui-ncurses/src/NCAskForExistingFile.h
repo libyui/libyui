@@ -67,6 +67,7 @@ public:
     
     NCAskForExistingFile( const wpos at,
 			  const YCPString & startDir,
+			  const YCPString & filter,
 			  const YCPString & headline );
 
     virtual ~NCAskForExistingFile();
@@ -83,6 +84,7 @@ public:
      * @return void
      */
     void createLayout( const YCPString & iniDir,
+		       const YCPString & filter,
 		       const YCPString & headline );
 
     /**

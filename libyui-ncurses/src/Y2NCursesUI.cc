@@ -921,7 +921,7 @@ YCPValue Y2NCursesUI::askForExistingFile( const YCPString & startDir,
 					  const YCPString & filter,
 					  const YCPString & headline )
 {
-    NCAskForExistingFile filePopup( wpos( 1, 1 ), startDir, headline );
+    NCAskForExistingFile filePopup( wpos( 1, 1 ), startDir, filter, headline );
     
     NCursesEvent retEvent = filePopup.showDirPopup( );
 
