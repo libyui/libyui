@@ -86,6 +86,16 @@ YQPkgSelList::fillList()
 	{
 	    if ( sel->visible() && ! sel->isBase() )
 	    {
+#if 1
+		// DEBUG
+		std::string key = sel->order();
+		if ( key.empty() )
+		{
+		    std::string name = sel->name();
+		    y2warning( "Empty sort key for selection %s", name.c_str() );
+		}
+		// DEBUG
+#endif
 		new YQPkgSel( this, sel );
 	    }
 	}
@@ -155,12 +165,6 @@ YQPkgSelList::filter()
 
 	    while ( it != pkgList.end() )
 	    {
-#if 0
-		// DEBUG
-		std::string name = (*it)->name();
-		y2debug( "Found match for pkg '%s'", name.c_str() );
-		// DEBUG
-#endif
 		emit filterMatch( *it );
 		++it;
 	    }
