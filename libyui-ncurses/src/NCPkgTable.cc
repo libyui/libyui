@@ -476,7 +476,9 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr,
 	    // in case of YOU patches: always show the version of the package
 	    // which is contained in the patch
 	    version = pkgPtr->edition().asString();
-   	    pkgLine.push_back( version ); 
+   	    pkgLine.push_back( version );
+	    pkgLine.push_back( instVersion );
+	    break;
 	}
 	default: {   
 	    // if the package is installed, get the installed version 

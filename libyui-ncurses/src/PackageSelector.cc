@@ -906,7 +906,7 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	    ObjectStatStrategy * strategy = new PatchPkgStatStrategy();
 	    patchPkgs->setTableType( NCPkgTable::T_PatchPkgs, strategy );
 	    // fill the header
-	    //patchPkgs->fillHeader( );
+	    patchPkgs->fillHeader( );
 	    fillPatchPackages( patchPkgs, packageList->getDataPointer( packageList->getCurrentItem() ) );
 	}	
     }
