@@ -31,7 +31,7 @@
 
 
 #define BORDER 3
-#define BORDERSIZE QSize(BORDER, BORDER)
+#define BORDERSIZE QSize( BORDER, BORDER)
 #define FOCUS_CHANGES_DEFAULT_BUTTON 0
 
 YQPushButton::YQPushButton( QWidget *	parent,
@@ -43,12 +43,12 @@ YQPushButton::YQPushButton( QWidget *	parent,
     , _dialog( dialog )
 {
     setWidgetRep( this );
-    _qPushButton = new QPushButton( fromUTF8(label->value() ), this );
+    _qPushButton = new QPushButton( fromUTF8( label->value() ), this );
     _qPushButton->setFont( YUIQt::ui()->currentFont() );
     _qPushButton->setMinimumSize( 2, 2 );
     _qPushButton->setAutoDefault( true );
     _qPushButton->installEventFilter( this );
-    _qPushButton->move(BORDER, BORDER );
+    _qPushButton->move( BORDER, BORDER );
     setMinimumSize( _qPushButton->minimumSize() + 2 * BORDERSIZE );
     
     connect( _qPushButton, SIGNAL( clicked() ),
@@ -75,7 +75,7 @@ YQPushButton::~YQPushButton()
 
 void YQPushButton::setEnabling( bool enabled )
 {
-    _qPushButton->setEnabled(enabled );
+    _qPushButton->setEnabled( enabled );
     YWidget::setEnabling( enabled );
 }
 
@@ -94,7 +94,7 @@ void YQPushButton::setIcon( const YCPString & y_icon_name )
     QPixmap icon( icon_name );
 
     if ( icon.isNull() )
-	y2warning( "Can't load icon '%s'", (const char *) icon_name );
+	y2warning( "Can't load icon '%s'", ( const char *) icon_name );
     else
 	_qPushButton->setIconSet( icon );
 }
@@ -102,7 +102,7 @@ void YQPushButton::setIcon( const YCPString & y_icon_name )
 
 long YQPushButton::nicesize( YUIDimension dim)
 {
-    return 2 * BORDER + (dim == YD_HORIZ
+    return 2 * BORDER + ( dim == YD_HORIZ
 			 ? _qPushButton->sizeHint().width()
 			 : _qPushButton->sizeHint().height() );
 }
@@ -110,14 +110,14 @@ long YQPushButton::nicesize( YUIDimension dim)
 
 void YQPushButton::setSize( long newWidth, long newHeight )
 {
-    _qPushButton->resize(newWidth - 2 * BORDER, newHeight - 2 * BORDER );
-    resize(newWidth, newHeight );
+    _qPushButton->resize( newWidth - 2 * BORDER, newHeight - 2 * BORDER );
+    resize( newWidth, newHeight );
 }
 
 
 void YQPushButton::setLabel( const YCPString & label )
 {
-    _qPushButton->setText(fromUTF8(label->value() ) );
+    _qPushButton->setText( fromUTF8(label->value() ) );
     YPushButton::setLabel( label );
 }
 

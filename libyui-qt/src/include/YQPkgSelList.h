@@ -68,7 +68,7 @@ public slots:
 
     /**
      * Add a selection to the list. Connect a filter's filterMatch() signal to
-     * this slot. Remember to connect filterStart() to clear() (inherited from
+     * this slot. Remember to connect filterStart() to clear() ( inherited from
      * QListView).
      **/
     void addPkgSelItem( PMSelectionPtr sel );

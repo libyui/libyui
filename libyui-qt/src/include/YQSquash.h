@@ -44,12 +44,12 @@ public:
      * widget. All new widgets are enabled per definition. Only
      * enabled widgets can take user input.
      */
-    void setEnabling(bool enabled );
+    void setEnabling( bool enabled );
 
     /**
      * Sets the size
      */
-    void setSize(long newWidth, long newHeight );
+    void setSize( long newWidth, long newHeight );
 };
 
 

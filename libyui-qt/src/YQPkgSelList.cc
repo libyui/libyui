@@ -67,7 +67,7 @@ YQPkgSelList::fillList()
 
     while ( it != Y2PM::selectionManager().end() )
     {
-	PMSelectionPtr sel = (*it)->theObject();
+	PMSelectionPtr sel = ( *it)->theObject();
 
 	if ( sel )
 	{
@@ -108,7 +108,7 @@ YQPkgSelList::filter()
 
 	    while ( it != slcList.end() )
 	    {
-		emit filterMatch( (*it)->theObject() );
+		emit filterMatch( ( *it)->theObject() );
 		++it;
 	    }
 	}
@@ -139,7 +139,7 @@ YQPkgSelList::selection() const
     if ( ! item )
 	return 0;
 
-    return dynamic_cast<YQPkgSelListItem *> (item );
+    return dynamic_cast<YQPkgSelListItem *> ( item );
 }
 
 
@@ -197,7 +197,7 @@ YQPkgSelListItem::compare( QListViewItem *	otherListViewItem,
 			   int			col,
 			   bool			ascending ) const
 {
-    YQPkgSelListItem * other = (YQPkgSelListItem *) otherListViewItem;
+    YQPkgSelListItem * other = ( YQPkgSelListItem *) otherListViewItem;
 
     if ( ! _pmSel || ! other || ! other->pmSel() )
 	return 0;

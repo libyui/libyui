@@ -42,14 +42,14 @@ void YQAlignment::setEnabling( bool enabled )
 
 void YQAlignment::moveChild( YWidget * child, long newX, long newY )
 {
-    QWidget * qw = (QWidget *) ( child->widgetRep() );
+    QWidget * qw = ( QWidget *) ( child->widgetRep() );
     qw->move( newX, newY );
 }
 
 
 void YQAlignment::setSize( long newWidth, long newHeight )
 {
-    resize(newWidth, newHeight );
+    resize( newWidth, newHeight );
     YAlignment::setSize( newWidth, newHeight );
 }
 

@@ -34,7 +34,7 @@ class QFrame;
 
 
 /**
- * Extended file selection box that allows floppy access (mount/unmount floppy)
+ * Extended file selection box that allows floppy access ( mount/unmount floppy)
  * as well as simply opening a standard file selection box.
  **/
 class QY2FloppyMountDialog : public QDialog
@@ -48,7 +48,7 @@ public:
      * access.
      * 
      * If the user selects a file on floppy, this dialog takes care of mounting
-     * and unmounting (the floppy remains mounted as long as the dialog exists).
+     * and unmounting ( the floppy remains mounted as long as the dialog exists).
      *
      * Parameters:
      *
@@ -61,9 +61,9 @@ public:
      * 'headline' is an explanatory text for the file selection box.
      * Graphical UIs may omit that if no window manager is running.
      *
-     * 'floppyDevice' (default: "/dev/fd0") is the device name for the floppy.
+     * 'floppyDevice' ( default: "/dev/fd0") is the device name for the floppy.
      *
-     * 'floppyMountPoint' (default: "/media/floppy") is the mount point for the floppy.
+     * 'floppyMountPoint' ( default: "/media/floppy") is the mount point for the floppy.
      *
      * 'startWithFloppy' indicates if the default should be the floppy or the hard disk.
      **/
@@ -119,7 +119,7 @@ public slots:
 protected slots:
 
     /**
-     * Open a (normal) file selection box upon pressing the "Browse..." button.
+     * Open a ( normal) file selection box upon pressing the "Browse..." button.
      * Selects an existing or a new file depending on _wantExistingFile.
      **/
     void browse();

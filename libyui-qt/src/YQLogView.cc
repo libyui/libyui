@@ -37,7 +37,7 @@ YQLogView::YQLogView( QWidget * parent, YWidgetOpt & opt,
 {
     setWidgetRep( this );
 
-    _qt_label = new QLabel( fromUTF8(label->value() ), this );
+    _qt_label = new QLabel( fromUTF8( label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
     _qt_label->setFont( YUIQt::ui()->currentFont() );
 
@@ -56,7 +56,7 @@ void YQLogView::setEnabling( bool enabled)
 
 long YQLogView::nicesize( YUIDimension dim )
 {
-    if (dim == YD_HORIZ)
+    if ( dim == YD_HORIZ)
     {
 	long minSize   	 = 50;
 	long hintWidth 	 = sizeHint().width();
@@ -78,7 +78,7 @@ long YQLogView::nicesize( YUIDimension dim )
 
 void YQLogView::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight );
+    resize( newWidth, newHeight );
 }
 
 

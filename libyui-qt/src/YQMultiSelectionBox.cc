@@ -41,16 +41,16 @@ using std::max;
 YQMultiSelectionBox::YQMultiSelectionBox( QWidget *		parent,
 					  YWidgetOpt &		opt,
 					  const YCPString &	label )
-    : QVBox(parent)
-    , YMultiSelectionBox(opt, label)
+    : QVBox( parent)
+    , YMultiSelectionBox( opt, label)
 {
     setWidgetRep( this );
 
     setSpacing( SPACING );
     setMargin( MARGIN );
 
-    _qt_label = new QLabel(fromUTF8(label->value() ), this );
-    _qt_label->setTextFormat(QLabel::PlainText );
+    _qt_label = new QLabel( fromUTF8(label->value() ), this );
+    _qt_label->setTextFormat( QLabel::PlainText );
     _qt_label->setFont( YUIQt::ui()->currentFont() );
 
     _qt_listview = new QListView( this );
@@ -58,7 +58,7 @@ YQMultiSelectionBox::YQMultiSelectionBox( QWidget *		parent,
     _qt_listview->addColumn( "" );	// we need at least one column - yes, QListView is too dumb to do without that. :-(
     _qt_listview->setSorting( 0, false );
     _qt_listview->header()->hide();
-    _qt_label->setBuddy(_qt_listview );
+    _qt_label->setBuddy( _qt_listview );
 
     // Very small default size if specified
     shrinkable = opt.isShrinkable.value();
@@ -71,7 +71,7 @@ YQMultiSelectionBox::YQMultiSelectionBox( QWidget *		parent,
 void
 YQMultiSelectionBox::setLabel( const YCPString & label )
 {
-    _qt_label->setText(fromUTF8(label->value() ) );
+    _qt_label->setText( fromUTF8(label->value() ) );
     YMultiSelectionBox::setLabel( label );
 }
 
@@ -79,7 +79,7 @@ YQMultiSelectionBox::setLabel( const YCPString & label )
 long
 YQMultiSelectionBox::nicesize( YUIDimension dim )
 {
-    if (dim == YD_HORIZ)
+    if ( dim == YD_HORIZ)
     {
 	int hintWidth = _qt_label->sizeHint().width() + frameWidth();
 
@@ -100,15 +100,15 @@ YQMultiSelectionBox::nicesize( YUIDimension dim )
 void
 YQMultiSelectionBox::setSize( long newWidth, long newHeight )
 {
-    resize(newWidth, newHeight );
+    resize( newWidth, newHeight );
 }
 
 
 void
 YQMultiSelectionBox::setEnabling( bool enabled )
 {
-    _qt_label->setEnabled(enabled );
-    _qt_listview->setEnabled(enabled );
+    _qt_label->setEnabled( enabled );
+    _qt_listview->setEnabled( enabled );
     _qt_listview->triggerUpdate();
 }
 
@@ -199,7 +199,7 @@ YQMultiSelectionBox::itemIsSelected( int index )
 	}
     }
 
-    QCheckListItem * item = (QCheckListItem *) child;
+    QCheckListItem * item = ( QCheckListItem *) child;
 
     return item->isOn();
 }
@@ -221,7 +221,7 @@ YQMultiSelectionBox::selectItem( int index )
 	}
     }
 
-    QCheckListItem * item = (QCheckListItem *) child;
+    QCheckListItem * item = ( QCheckListItem *) child;
 
     item->setOn( true );
 }
@@ -234,7 +234,7 @@ YQMultiSelectionBox::deselectAllItems()
 
     while ( child )
     {
-	QCheckListItem * item = (QCheckListItem *) child;
+	QCheckListItem * item = ( QCheckListItem *) child;
 	item->setOn( false );
 	child = child->nextSibling();
     }
@@ -264,7 +264,7 @@ QString
 YQMultiSelectionBoxItem::key( int, bool ) const
 {
     /*
-     * Return a sort key that depends on creation (i.e. insertion) order.
+     * Return a sort key that depends on creation ( i.e. insertion) order.
      */
     
     static QString sortKey;

@@ -56,7 +56,7 @@ public:
     /**
      * Save the pkg list to a file.
      *
-     * Posts error popups if 'interactive' is 'true' (only log entries
+     * Posts error popups if 'interactive' is 'true' ( only log entries
      * otherwise).
      **/
     void exportList( const QString filename, bool interactive ) const;
@@ -74,7 +74,7 @@ public slots:
 
     /**
      * Add a pkg to the list. Connect a filter's filterMatch() signal to this
-     * slot. Remember to connect filterStart() to clear() (inherited from
+     * slot. Remember to connect filterStart() to clear() ( inherited from
      * QListView).
      **/
     void addPkgItem( PMPackagePtr pmPkg );
@@ -129,7 +129,7 @@ public slots:
 protected:
 
     /**
-     * Create (additional) actions for the context menus.
+     * Create ( additional) actions for the context menus.
      **/
     void createActions();
     

@@ -53,24 +53,24 @@ public:
      * widget. All new widgets are enabled per definition. Only
      * enabled widgets can take user input.
      */
-    void setEnabling(bool enabled );
+    void setEnabling( bool enabled );
 
     /**
      * Minimum size the widget should have to make it look and feel
      * nice.
      * @dim Dimension, either YD_HORIZ or YD_VERT
      */
-    long nicesize(YUIDimension dim );
+    long nicesize( YUIDimension dim );
 
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newWidth, long newHeight );
+    void setSize( long newWidth, long newHeight );
 
     /**
      * Sets the checked-state of the RadioButton
      */
-    void setValue(const YCPBoolean & checked );
+    void setValue( const YCPBoolean & checked );
 
     /**
      * Returns, whether the RadioButton is checked.
@@ -80,7 +80,7 @@ public:
     /**
      * Changes the label of the text entry.
      */
-    void setLabel(const YCPString & label );
+    void setLabel( const YCPString & label );
 
     /**
      * Accept the keyboard focus.

@@ -92,7 +92,7 @@ YQPkgConflictList::fill( PkgDep::ErrorResultList & badList )
 
 	if ( conflict->isIgnored() )
 	{
-	    // y2debug( "Ignoring conflict: %s", (const char *) conflict->text(0) );
+	    // y2debug( "Ignoring conflict: %s", ( const char *) conflict->text( 0) );
 	    delete conflict;	// Yes, this is stupid. The solver should handle that.
 	}
 
@@ -116,7 +116,7 @@ YQPkgConflictList::applyResolutions()
 
     while ( child )
     {
-	YQPkgConflict * conflict = dynamic_cast<YQPkgConflict *> (child );
+	YQPkgConflict * conflict = dynamic_cast<YQPkgConflict *> ( child );
 
 	if ( conflict )
 	    conflict->applyResolution();
@@ -135,7 +135,7 @@ YQPkgConflictList::ignoreAll()
 
     while ( child )
     {
-	YQPkgConflict * conflict = dynamic_cast<YQPkgConflict *> (child );
+	YQPkgConflict * conflict = dynamic_cast<YQPkgConflict *> ( child );
 
 	if ( conflict )
 	    conflict->ignore();
@@ -163,11 +163,11 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 {
     // Open file
 
-    FILE * file = fopen( (const char *) filename, "w" );
+    FILE * file = fopen( ( const char *) filename, "w" );
 
     if ( ! file )
     {
-	y2error( "Can't open file %s", (const char *) filename );
+	y2error( "Can't open file %s", ( const char *) filename );
 
 	if ( interactive )
 	{
@@ -190,7 +190,7 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
     header += QDateTime::currentDateTime().toString( "yyyy-MM-dd hh:mm:ss" );
     header += " ####\n\n";
 
-    fputs( (const char *) header, file );
+    fputs( ( const char *) header, file );
 
 
     // Recursively write all items
@@ -231,7 +231,7 @@ YQPkgConflictList::saveItemToFile( FILE * 			file,
 
     // Write item
 
-    const QCheckListItem * checkListItem = dynamic_cast<const QCheckListItem *> (item );
+    const QCheckListItem * checkListItem = dynamic_cast<const QCheckListItem *> ( item );
 
     if ( checkListItem )
     {
@@ -241,14 +241,14 @@ YQPkgConflictList::saveItemToFile( FILE * 			file,
 		fprintf( file, "[%c] ", checkListItem->isOn() ? 'x' : ' ' );
 		break;
 	    case QCheckListItem::RadioButton:
-		fprintf( file, "(%c) ", checkListItem->isOn() ? 'x' : ' ' );
+		fprintf( file, "( %c) ", checkListItem->isOn() ? 'x' : ' ' );
 		break;
 	    default:
 		break;
 	}
     }
 
-    fprintf( file, "%s\n", (const char *) item->text( 0 ) );
+    fprintf( file, "%s\n", ( const char *) item->text( 0 ) );
 
 
     if ( item->isOpen() )
@@ -351,7 +351,7 @@ YQPkgConflict::formatHeading()
     {
 	if ( needAlternative() )
 	{
-	    // Select one from a number of functionalities (Window manager etc.)
+	    // Select one from a number of functionalities ( Window manager etc.)
 	    // e.g., "Select window manager"
 	    text = ( _( "Select %1" ) ).arg( _shortName );
 	    setTextColor( BLUE );
@@ -359,7 +359,7 @@ YQPkgConflict::formatHeading()
 	}
 	else
 	{
-	    // (Pseudo) package / functionality %1 missing, e.g.,
+	    // ( Pseudo) package / functionality %1 missing, e.g.,
 	    // "libfoo.so.1.0 not available"
 	    text = ( _( "%1 not available" ) ).arg( _fullName );
 	    setTextColor( BRIGHT_RED );
@@ -463,7 +463,7 @@ YQPkgConflict::dumpList( QListViewItem * 	parent,
 	parent->setOpen( true );
     }
 
-    bool doSplit	= splitThreshold > 1 && list.size() > (unsigned) splitThreshold + 3;
+    bool doSplit	= splitThreshold > 1 && list.size() > ( unsigned) splitThreshold + 3;
     bool didSplit	= false;
     int  count		= 0;
     PkgDep::RelInfoList_const_iterator it = list.begin();
@@ -488,11 +488,11 @@ YQPkgConflict::dumpList( QListViewItem * 	parent,
 	    }
 	}
 
-	string pkg1 = (*it).name;
-	string pkg2 = (*it).rel.asString();
+	string pkg1 = ( *it).name;
+	string pkg2 = ( *it).rel.asString();
 	QString text;
 
-	switch ( (*it).kind )
+	switch ( ( *it).kind )
 	{
 	    case PkgDep::RelInfo::REQUIREMENT:
 		// "somepackage requires libfoo.so > 1.2"
@@ -603,7 +603,7 @@ YQPkgConflict::addAlternativesList( QY2CheckListItem * parent )
 
     while ( it != _conflict.alternatives.end() )
     {
-	PMObjectPtr pkg = (*it).solvable;
+	PMObjectPtr pkg = ( *it).solvable;
 
 	if ( pkg )
 	    new YQPkgConflictResolution( parent, pkg );
@@ -656,7 +656,7 @@ YQPkgConflict::dumpDeleteList( QListViewItem * parent )
     }
 
     int	 splitThreshold = LIST_SPLIT_THRESHOLD;
-    bool doSplit	= _conflict.remove_to_solve_conflict.size() > (unsigned) splitThreshold + 3;
+    bool doSplit	= _conflict.remove_to_solve_conflict.size() > ( unsigned) splitThreshold + 3;
     bool didSplit	= false;
     int  count		= 0;
     list<PMSolvablePtr>::const_iterator it = _conflict.remove_to_solve_conflict.begin();
@@ -680,7 +680,7 @@ YQPkgConflict::dumpDeleteList( QListViewItem * parent )
 	    }
 	}
 
-	PMObjectPtr pkg = (*it );
+	PMObjectPtr pkg = ( *it );
 
 	if ( pkg )
 	{
@@ -715,14 +715,14 @@ YQPkgConflict::addIgnoreResolution( QY2CheckListItem * parent )
 bool
 YQPkgConflict::isIgnored()
 {
-    return isIgnored( text(0) );
+    return isIgnored( text( 0) );
 }
 
 
 void
 YQPkgConflict::ignore()
 {
-    ignore( text(0) );
+    ignore( text( 0) );
     updateActions();
 }
 
@@ -737,7 +737,7 @@ YQPkgConflict::isIgnored( const QString & conflictHeader )
 void
 YQPkgConflict::ignore( const QString & conflictHeader )
 {
-    y2milestone( "Ignoring dependency conflict: %s", (const char *) conflictHeader );
+    y2milestone( "Ignoring dependency conflict: %s", ( const char *) conflictHeader );
     _ignore.insert( conflictHeader, true );
 }
 
@@ -775,7 +775,7 @@ YQPkgConflict::loadIgnoredConflicts()
 
 	if ( len > 0 )
 	{
-	    // Chop off trailing newline (left over by fgets() )
+	    // Chop off trailing newline ( left over by fgets() )
 
 	    if ( buffer[ len-1 ] == '\n' )
 		buffer[ len-1 ] = '\0';
@@ -821,7 +821,7 @@ YQPkgConflict::saveIgnoredConflicts()
 
     while ( it != _ignore.end() )
     {
-	fprintf( file, "%s\n", (const char *) it.key() );
+	fprintf( file, "%s\n", ( const char *) it.key() );
 	++it;
     }
 
@@ -844,8 +844,8 @@ YQPkgConflict::actionResetIgnoredConflicts( YQPkgConflictDialog * dialog )
 	QString label = _( "Reset &Ignored Dependency Conflicts" );
 	_actionResetIgnoredConflicts = new QAction( label,		// text
 						    label,		// menu text
-						    (QKeySequence) 0,	// accel
-						    (QObject *) 0 ); 	// parent
+						    ( QKeySequence) 0,	// accel
+						    ( QObject *) 0 ); 	// parent
 	
 	_actionResetIgnoredConflicts->setEnabled( ! _ignore.empty() );
     }
@@ -889,14 +889,14 @@ YQPkgConflict::applyResolution()
 
     while ( item )
     {
-	YQPkgConflictResolution * res = dynamic_cast<YQPkgConflictResolution *> (item );
+	YQPkgConflictResolution * res = dynamic_cast<YQPkgConflictResolution *> ( item );
 
 	if ( ! res )
 	    y2error( "Non-resolution item in resolution list!" );
 
 	if ( res && res->isOn() )
 	{
-	    y2milestone( "Resolution %s selected for %s", res->typeString(), (const char *) _shortName );
+	    y2milestone( "Resolution %s selected for %s", res->typeString(), ( const char *) _shortName );
 
 	    switch ( res->type() )
 	    {
@@ -928,7 +928,7 @@ YQPkgConflict::applyResolution()
 	item = item->nextSibling();
     }
 
-    y2milestone( "Conflict %s unresolved", (const char *) _shortName );
+    y2milestone( "Conflict %s unresolved", ( const char *) _shortName );
 }
 
 
@@ -942,7 +942,7 @@ YQPkgConflict::bruteForceDelete()
 
     while ( it != _conflict.remove_to_solve_conflict.end() )
     {
-	PMObjectPtr pkg = (*it );
+	PMObjectPtr pkg = ( *it );
 
 	if ( pkg && pkg->getSelectable() )
 	{

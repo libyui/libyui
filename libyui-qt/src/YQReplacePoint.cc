@@ -26,8 +26,8 @@
 
 
 YQReplacePoint::YQReplacePoint( QWidget * parent, YWidgetOpt & opt)
-    : QWidget(parent)
-    , YReplacePoint(opt)
+    : QWidget( parent)
+    , YReplacePoint( opt)
 {
     setWidgetRep( this );
 }
@@ -35,7 +35,7 @@ YQReplacePoint::YQReplacePoint( QWidget * parent, YWidgetOpt & opt)
 
 void YQReplacePoint::childAdded( YWidget * child)
 {
-    ( (QWidget *)(child->widgetRep() ) )->show();
+    ( ( QWidget *)( child->widgetRep() ) )->show();
 }
 
 
@@ -47,7 +47,7 @@ void YQReplacePoint::setEnabling( bool enabled)
 
 void YQReplacePoint::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight );
+    resize( newWidth, newHeight );
     YReplacePoint::setSize( newWidth, newHeight );
 }
 

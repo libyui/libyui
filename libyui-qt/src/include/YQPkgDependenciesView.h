@@ -29,8 +29,8 @@ using std::string;
 
 
 /**
- * @short Display technical details (very much like 'rpm -qi') for a PMPackage
- * object - the installed instance, the candidate instance or both (in two
+ * @short Display technical details ( very much like 'rpm -qi') for a PMPackage
+ * object - the installed instance, the candidate instance or both ( in two
  * columns) if both exist. All other available instances are ignored.
  **/
 class YQPkgDependenciesView : public YQPkgGenericDetailsView
@@ -70,7 +70,7 @@ protected:
     /**
      * Returns a string containing a HTML table for technical details for two
      * package instances: The installed instance and an alternate instance.
-     * (usually the candidate instance).
+     * ( usually the candidate instance).
      **/
     QString complexTable( PMPackagePtr installedPkg,
 			  PMPackagePtr candidatePkg );

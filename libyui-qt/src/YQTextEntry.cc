@@ -36,8 +36,8 @@ using std::max;
 
 YQTextEntry::YQTextEntry( QWidget * parent, YWidgetOpt & opt,
 			 const YCPString & label, const YCPString & text)
-    : QVBox(parent)
-    , YTextEntry(opt, label)
+    : QVBox( parent)
+    , YTextEntry( opt, label)
     , _validator( 0 )
 {
     setWidgetRep( this );
@@ -52,30 +52,30 @@ YQTextEntry::YQTextEntry( QWidget * parent, YWidgetOpt & opt,
     if ( label->value() == "" )
 	_qt_label->hide();
 
-    _qt_lineedit = new QLineEdit(this );
-    _qt_lineedit->setFont(YUIQt::ui()->currentFont() );
-    _qt_lineedit->setText(fromUTF8(text->value() ) );
+    _qt_lineedit = new QLineEdit( this );
+    _qt_lineedit->setFont( YUIQt::ui()->currentFont() );
+    _qt_lineedit->setText( fromUTF8(text->value() ) );
 
-    _qt_label->setBuddy(_qt_lineedit );
+    _qt_label->setBuddy( _qt_lineedit );
 
-    if (opt.passwordMode.value() )
-	_qt_lineedit->setEchoMode(QLineEdit::Password );
+    if ( opt.passwordMode.value() )
+	_qt_lineedit->setEchoMode( QLineEdit::Password );
 
     shrinkable = opt.isShrinkable.value();
 
-    connect(_qt_lineedit, SIGNAL(textChanged(const QString &) ), this, SLOT(changed(const QString &) ) );
+    connect( _qt_lineedit, SIGNAL( textChanged(const QString &) ), this, SLOT( changed(const QString &) ) );
 }
 
 
 void YQTextEntry::setEnabling( bool enabled)
 {
-    _qt_lineedit->setEnabled(enabled );
+    _qt_lineedit->setEnabled( enabled );
 }
 
 
 long YQTextEntry::nicesize( YUIDimension dim)
 {
-    if (dim == YD_HORIZ)
+    if ( dim == YD_HORIZ)
     {
 	long minSize = shrinkable ? 15 : 200;
 	long hintWidth = _qt_label->sizeHint().width() + margin();
@@ -94,24 +94,24 @@ long YQTextEntry::nicesize( YUIDimension dim)
 
 void YQTextEntry::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight );
+    resize( newWidth, newHeight );
 }
 
 void YQTextEntry::setText( const YCPString & text)
 {
-    _qt_lineedit->setText(fromUTF8(text->value() ) );
+    _qt_lineedit->setText( fromUTF8(text->value() ) );
 }
 
 
 YCPString YQTextEntry::getText()
 {
-    return YCPString(toUTF8(_qt_lineedit->text() ) );
+    return YCPString( toUTF8(_qt_lineedit->text() ) );
 }
 
 
 void YQTextEntry::setLabel( const YCPString & label)
 {
-    _qt_label->setText(fromUTF8(label->value() ) );
+    _qt_label->setText( fromUTF8(label->value() ) );
     YTextEntry::setLabel( label );
 }
 
@@ -148,7 +148,7 @@ bool YQTextEntry::setKeyboardFocus()
 
 void YQTextEntry::changed( const QString &)
 {
-    if (getNotify() )
+    if ( getNotify() )
 	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }
 

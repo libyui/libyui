@@ -44,7 +44,7 @@ YQCheckBox::YQCheckBox( QWidget *		parent,
 
     QBoxLayout * layout = new QBoxLayout( this, QBoxLayout::LeftToRight );
 
-    _qt_checkbox = new QCheckBox( fromUTF8(label->value() ), this );
+    _qt_checkbox = new QCheckBox( fromUTF8( label->value() ), this );
     layout->addSpacing( SPACING );
     layout->addWidget( _qt_checkbox );
     layout->addSpacing( SPACING );
@@ -59,7 +59,7 @@ YQCheckBox::YQCheckBox( QWidget *		parent,
 long
 YQCheckBox::nicesize( YUIDimension dim )
 {
-    if (dim == YD_HORIZ)	return 2*SPACING + _qt_checkbox->sizeHint().width();
+    if ( dim == YD_HORIZ)	return 2*SPACING + _qt_checkbox->sizeHint().width();
     else 			return _qt_checkbox->sizeHint().height();
 }
 
@@ -81,7 +81,7 @@ YQCheckBox::getValue()
 	case QButton::NoChange:	return YCPVoid();	// nil
     }
     
-    y2error( "Unknown QCheckBox state: %d", (int) _qt_checkbox->state() );
+    y2error( "Unknown QCheckBox state: %d", ( int) _qt_checkbox->state() );
     return YCPVoid();
 }
 
@@ -91,12 +91,12 @@ YQCheckBox::setValue( const YCPValue & val )
 {
     if ( val->isBoolean() )
     {
-	setTristate(false );
-	_qt_checkbox->setChecked(val->asBoolean()->value() );
+	setTristate( false );
+	_qt_checkbox->setChecked( val->asBoolean()->value() );
     }
     else	// "Nil" -> set TriState: neither on nor off
     {
-	setTristate(true );
+	setTristate( true );
     }
 }
 

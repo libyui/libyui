@@ -36,7 +36,7 @@ YQMultiLineEdit::YQMultiLineEdit( QWidget * parent, YWidgetOpt & opt,
 {
     setWidgetRep( this );
 
-    _qt_label = new QLabel( fromUTF8(label->value() ), this );
+    _qt_label = new QLabel( fromUTF8( label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
     _qt_label->setFont( YUIQt::ui()->currentFont() );
 
@@ -46,7 +46,7 @@ YQMultiLineEdit::YQMultiLineEdit( QWidget * parent, YWidgetOpt & opt,
     _qt_multiLineEdit->setText( fromUTF8( initialText->value() ) );
     _qt_label->setBuddy( _qt_multiLineEdit );
 
-    connect(_qt_multiLineEdit, SIGNAL( textChanged( void ) ), this, SLOT( changed ( void ) ) );
+    connect( _qt_multiLineEdit, SIGNAL( textChanged( void ) ), this, SLOT( changed ( void ) ) );
 }
 
 
@@ -58,7 +58,7 @@ void YQMultiLineEdit::setEnabling( bool enabled)
 
 long YQMultiLineEdit::nicesize( YUIDimension dim )
 {
-    if (dim == YD_HORIZ)
+    if ( dim == YD_HORIZ)
     {
 	long minSize   	 = 30;
 	long hintWidth 	 = sizeHint().width();
@@ -79,7 +79,7 @@ long YQMultiLineEdit::nicesize( YUIDimension dim )
 
 void YQMultiLineEdit::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight );
+    resize( newWidth, newHeight );
 }
 
 
@@ -114,7 +114,7 @@ bool YQMultiLineEdit::setKeyboardFocus()
 
 void YQMultiLineEdit::changed()
 {
-    if (getNotify() )
+    if ( getNotify() )
 	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }
 

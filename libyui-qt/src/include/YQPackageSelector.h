@@ -70,19 +70,19 @@ public:
      * widget. All new widgets are enabled per definition. Only
      * enabled widgets can take user input.
      **/
-    void setEnabling(bool enabled );
+    void setEnabling( bool enabled );
 
     /**
      * Minimum size the widget should have to make it look and feel
      * nice.
      * @dim Dimension, either YD_HORIZ or YD_VERT
      **/
-    long nicesize(YUIDimension dim );
+    long nicesize( YUIDimension dim );
 
     /**
      * Sets the new size of the widget.
      **/
-    void setSize(long newWidth, long newHeight );
+    void setSize( long newWidth, long newHeight );
 
     /**
      * Accept the keyboard focus.
@@ -98,7 +98,7 @@ public:
 public slots:
 
     /**
-     * Resolve package dependencies (unconditionally).
+     * Resolve package dependencies ( unconditionally).
      *
      * Returns QDialog::Accepted or QDialog::Rejected.
      **/
@@ -112,7 +112,7 @@ public slots:
      int manualResolvePackageDependencies();
 
     /**
-     * Resolve selection dependencies (unconditionally).
+     * Resolve selection dependencies ( unconditionally).
      * Can safely be called even if there is no selection conflict dialog.
      *
      * Returns QDialog::Accepted or QDialog::Rejected.
@@ -121,7 +121,7 @@ public slots:
 
     /**
      * Automatically resolve package dependencies if desired
-     * (if the "auto check" checkbox is on).
+     * ( if the "auto check" checkbox is on).
      **/
     void autoResolveDependencies();
 
@@ -146,7 +146,7 @@ public slots:
 
     /**
      * Display a list of automatically selected packages
-     * (excluding packages contained in any selections that are to be installed)
+     * ( excluding packages contained in any selections that are to be installed)
      **/
     void showAutoPkgList();
 
@@ -161,12 +161,12 @@ public slots:
     void accept();
 
     /**
-     * Display (generic) online help.
+     * Display ( generic) online help.
      **/
     void help();
 
     /**
-     * Display online help about symbols (package status icons).
+     * Display online help about symbols ( package status icons).
      **/
     void symbolHelp();
 
@@ -184,7 +184,7 @@ public slots:
 signals:
 
     /**
-     * Emitted once (!) when the dialog is about to be shown, when all widgets
+     * Emitted once ( !) when the dialog is about to be shown, when all widgets
      * are created and all signal/slot connections are set up - when it makes
      * sense to load data.
      **/
@@ -192,7 +192,7 @@ signals:
 
     /**
      * Emitted when the internal data base might have changed and a refresh of
-     * all displayed data might be necessary - e.g., when saved (exported) pkgs
+     * all displayed data might be necessary - e.g., when saved ( exported) pkgs
      * states are reimported.
      **/
     void refresh();
@@ -239,7 +239,7 @@ protected:
      *	  filterStart()
      *	  filterMatch()
      *	  filterFinished()
-     *	  updatePackages()  (optional)
+     *	  updatePackages()  ( optional)
      **/
     void connectFilter( QWidget *	filter,
 			QWidget *	pkgList,
@@ -253,7 +253,7 @@ protected:
     virtual void keyPressEvent( QKeyEvent * ev );
 
     /**
-     * Return HTML code describing a symbol (an icon).
+     * Return HTML code describing a symbol ( an icon).
      **/
     QString symHelp( const QString & imgFileName,
 		     const QString & summary,

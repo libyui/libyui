@@ -52,7 +52,7 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *		parent,
     // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );
 
-    // Layout for the dialog (can't simply insert a QVBox)
+    // Layout for the dialog ( can't simply insert a QVBox)
 
     QVBoxLayout * layout = new QVBoxLayout( this, MARGIN, SPACING );
     CHECK_PTR( layout );
@@ -114,7 +114,7 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *		parent,
 
     if ( ! rejectButtonLabel.isEmpty() )
     {
-	// Reject button (if desired) - usually "Cancel"
+	// Reject button ( if desired) - usually "Cancel"
 
 	button = new QPushButton( rejectButtonLabel, hbox );
 	CHECK_PTR( button );
@@ -125,7 +125,7 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *		parent,
 	addHStretch( hbox );
     }
 
-    // If there is only one button, it's safe to make that one (the accept
+    // If there is only one button, it's safe to make that one ( the accept
     // button) the default. If there are two, better be safe than sorry and
     // make the reject button the default.
 

@@ -82,7 +82,7 @@ protected:
 
 
 /**
- * Abstract base class for one partition (mount point) to display in a
+ * Abstract base class for one partition ( mount point) to display in a
  * QY2DiskUsageList.
  *
  * This class contains pure virtuals, so it cannot be used directly.
@@ -134,7 +134,7 @@ public:
     virtual FSize freeSize() const;
 
     /**
-     * The currently used percentage (0..100) of this partition.
+     * The currently used percentage ( 0..100) of this partition.
      *
      * Derived classes can choose reimpmenent this if it is less expensive than
      * calculating this value each time from usedSize() and totalSize() which
@@ -144,7 +144,7 @@ public:
 
     /**
      * The name to display for this partition.
-     * It makes most sense to use the mount point here (but this is not a
+     * It makes most sense to use the mount point here ( but this is not a
      * requirement). This is what will be displayed in the "Name" column.
      *
      * Derived classes need to implement this method.
@@ -161,7 +161,7 @@ public:
 
 
     /**
-     * Update this item's status (here: the numeric fields).
+     * Update this item's status ( here: the numeric fields).
      * Triggered by QY2ListView::updateAllItemStates().
      *
      * Reimplemented from QY2ListViewItem.
@@ -215,8 +215,8 @@ public:
 protected:
 
     /**
-     * (Re-) initialize fields - all displayed fields (if 'allFields' is
-     * 'true') or only the varying fields (used, free, percentage).
+     * ( Re-) initialize fields - all displayed fields ( if 'allFields' is
+     * 'true') or only the varying fields ( used, free, percentage).
      **/
     void init( bool allFields );
 
@@ -254,7 +254,7 @@ protected:
 			      const QColor &	contrastColor );
 
     /**
-     * Interpolate (in the HSV color space) a color between 'minColor' and
+     * Interpolate ( in the HSV color space) a color between 'minColor' and
      * 'maxColor' for a current value 'val' so that 'minVal' corresponds to
      * 'minColor' and 'maxVal' to 'maxColor'.
      *
@@ -267,7 +267,7 @@ protected:
 				     const QColor & 	maxColor );
 
     /**
-     * Interpolate (translate) a value 'from' in the range between 'minFrom'
+     * Interpolate ( translate) a value 'from' in the range between 'minFrom'
      * and 'maxFrom'  to a range between 'minTo' and 'maxTo'.
      **/
     int interpolate( int from,

@@ -23,8 +23,8 @@
 
 YQSquash::YQSquash( QWidget * parent, YWidgetOpt & opt,
 		   bool hsquash, bool vsquash)
-    : QWidget(parent)
-    , YSquash(opt, hsquash, vsquash)
+    : QWidget( parent)
+    , YSquash( opt, hsquash, vsquash)
 {
     setWidgetRep( this );
 }
@@ -38,7 +38,7 @@ void YQSquash::setEnabling( bool enabled)
 
 void YQSquash::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight );
+    resize( newWidth, newHeight );
     YSquash::setSize( newWidth, newHeight );
 }
 

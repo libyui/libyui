@@ -53,7 +53,7 @@ YQFrame::setSize( long newWidth, long newHeight )
     long newChildHeight = max ( 0L, newHeight - frameWidth() - fontMetrics().height() - 1 );
 
     if ( numChildren() > 0 )
-	YContainerWidget::child(0)->setSize( newChildWidth, newChildHeight );
+	YContainerWidget::child( 0)->setSize( newChildWidth, newChildHeight );
 
 }
 
@@ -69,11 +69,11 @@ YQFrame::setLabel( const YCPString & newLabel )
 long YQFrame::nicesize( YUIDimension dim )
 {
     long niceSize;
-    long childNiceSize = numChildren() > 0 ? YContainerWidget::child(0)->nicesize( dim ) : 0;
+    long childNiceSize = numChildren() > 0 ? YContainerWidget::child( 0)->nicesize( dim ) : 0;
 
     if ( dim == YD_HORIZ )
     {
-	niceSize = max(childNiceSize, (long)(10 + fontMetrics().width(title() ) ) ) + 2 * frameWidth() + 1;
+	niceSize = max( childNiceSize, ( long)(10 + fontMetrics().width(title() ) ) ) + 2 * frameWidth() + 1;
     }
     else
     {
@@ -87,7 +87,7 @@ long YQFrame::nicesize( YUIDimension dim )
 void
 YQFrame::childAdded( YWidget * child )
 {
-    ( (QWidget *) child->widgetRep() )->move ( frameWidth(), fontMetrics().height() );
+    ( ( QWidget *) child->widgetRep() )->move ( frameWidth(), fontMetrics().height() );
 }
 
 

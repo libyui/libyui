@@ -76,7 +76,7 @@ protected:
     static YQIconPool * iconPool();
 
     /**
-     * Return the cached icon for 'xpm_data' (an included XPM file).
+     * Return the cached icon for 'xpm_data' ( an included XPM file).
      * If the icon isn't in the cache yet, create it and store it in the
      * cache.
      **/
@@ -85,7 +85,7 @@ protected:
 private:
 
     /**
-     * (Private!) Constructor
+     * ( Private!) Constructor
      * Singleton object - use the static methods only!
      **/
     YQIconPool();

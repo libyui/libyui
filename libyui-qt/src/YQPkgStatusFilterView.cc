@@ -75,7 +75,7 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     _showProtected	= addStatusCheckBox( gbox, _( "Protected"	), YQIconPool::disabledPkgProtected(),	   true );
 
     addVSpacing( gbox, 8 );
-    addHStretch( gbox ); // For the other columns of the QGroupBox (prevent wraparound)
+    addHStretch( gbox ); // For the other columns of the QGroupBox ( prevent wraparound)
     addHStretch( gbox );
 
     _showKeepInstalled	= addStatusCheckBox( gbox, _( "Keep"		), YQIconPool::disabledPkgKeepInstalled(), false );

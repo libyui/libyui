@@ -52,7 +52,7 @@ YQPkgTextDialog::YQPkgTextDialog( const QString & text, QWidget * parent )
     // Dialog title
     setCaption( _( "YaST2" ) );
 
-    // Layout for the dialog (can't simply insert a QVBox)
+    // Layout for the dialog ( can't simply insert a QVBox)
 
     QVBoxLayout * layout = new QVBoxLayout( this, MARGIN, SPACING );
     CHECK_PTR( layout );
@@ -110,7 +110,7 @@ YQPkgTextDialog::eventFilter( QObject * obj, QEvent * ev )
 {
     if ( ev && ev->type() == QEvent::KeyPress )
     {
-	QKeyEvent * keyEvent = dynamic_cast<QKeyEvent *> (ev );
+	QKeyEvent * keyEvent = dynamic_cast<QKeyEvent *> ( ev );
 
 	if ( keyEvent &&
 	     ( keyEvent->key() == Key_Return ||
@@ -231,7 +231,7 @@ QString
 YQPkgTextDialog::htmlEscape( const QString & plainText )
 {
     QString html = plainText;
-    // y2debug( "Escaping '%s'", (const char *) plainText );
+    // y2debug( "Escaping '%s'", ( const char *) plainText );
 
     html.replace( QRegExp( "&" ), "&amp;" );
     html.replace( QRegExp( "<" ), "&lt;"  );

@@ -39,7 +39,7 @@ YQDownloadProgress::YQDownloadProgress( QWidget *	parent,
     setWidgetRep( this );
     setMargin( YQWIDGET_BORDER );
 
-    _qt_label = new QLabel( fromUTF8(label->value() ), this );
+    _qt_label = new QLabel( fromUTF8( label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
     _qt_label->setFont( YUIQt::ui()->currentFont() );
 
@@ -66,14 +66,14 @@ void YQDownloadProgress::setEnabling( bool enabled)
 
 long YQDownloadProgress::nicesize( YUIDimension dim )
 {
-    if (dim == YD_HORIZ) return sizeHint().width();
+    if ( dim == YD_HORIZ) return sizeHint().width();
     else			return sizeHint().height();
 }
 
 
 void YQDownloadProgress::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight );
+    resize( newWidth, newHeight );
 }
 
 
@@ -96,8 +96,8 @@ void YQDownloadProgress::pollFileSize()
 {
     long size = currentFileSize();
 
-    if ( size > (long) expectedSize() )
-	size = (long) expectedSize();
+    if ( size > ( long) expectedSize() )
+	size = ( long) expectedSize();
     _qt_progress->setProgress( size );
 }
 

@@ -51,13 +51,13 @@ public:
     void setSegments( int segmentCount );
 
     /**
-     * Set the value of segment no. segmentNo (beginning with 0)
+     * Set the value of segment no. segmentNo ( beginning with 0)
      * to value newValue.
      */
     void setValue( int segmentNo, int newValue );
 
     /**
-     * Set the label of segment no. segmentNo (beginning with 0)
+     * Set the label of segment no. segmentNo ( beginning with 0)
      * to newLabel. May contain newlines or %d for a reference to the current
      * value.
      */
@@ -96,7 +96,7 @@ public:
     /**
      * Choose a foreground color suitable for segment no. segmentNo.  that
      * results in good contrast to the corresponding background color
-     * (see abore)
+     * ( see abore)
      */
     const QColor segmentForegroundColor( int segmentNo );
 

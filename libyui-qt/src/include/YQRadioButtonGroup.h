@@ -46,7 +46,7 @@ public:
      * Calls YRadioButtonGroup::addRadioButton()
      * as well.
      */
-    void addRadioButton(YRadioButton * button );
+    void addRadioButton( YRadioButton * button );
 
     /**
      * Inherited from YRadioButtonGroup
@@ -54,19 +54,19 @@ public:
      * Calls YRadioButtonGroup::removeRadioButton()
      * as well.
      */
-    void removeRadioButton(YRadioButton * button );
+    void removeRadioButton( YRadioButton * button );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
      * widget. All new widgets are enabled per definition. Only
      * enabled widgets can take user input.
      */
-    void setEnabling(bool enabled );
+    void setEnabling( bool enabled );
 
     /**
      * Resize this widget
      */
-    void setSize(long newWidth, long newHeight );
+    void setSize( long newWidth, long newHeight );
 
 
 private slots:

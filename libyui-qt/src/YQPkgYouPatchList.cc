@@ -61,8 +61,8 @@ YQPkgYouPatchList::YQPkgYouPatchList( QWidget * parent )
     QString label = _( "Show &Raw Patch Info" );
     actionShowRawPatchInfo = new QAction( label,		// text
 					  label + "\tr",	// menu text
-					  (QKeySequence) 0,	// accel
-					  (QObject *) 0 );	// parent
+					  ( QKeySequence) 0,	// accel
+					  ( QObject *) 0 );	// parent
 
     connect( actionShowRawPatchInfo, SIGNAL( activated() ), SLOT( showRawPatchInfo() ) );
 
@@ -86,8 +86,8 @@ YQPkgYouPatchList::fillList()
 
     while ( it != Y2PM::youPatchManager().end() )
     {
-	PMYouPatchPtr		patch  = (*it)->theObject();
-	PMSelectable::UI_Status	status =(*it)->status();
+	PMYouPatchPtr		patch  = ( *it)->theObject();
+	PMSelectable::UI_Status	status =( *it)->status();
 
 	if ( patch )
 	{
@@ -126,7 +126,7 @@ YQPkgYouPatchList::filter()
 
 	    while ( it != pkgList.end() )
 	    {
-		emit filterMatch( (*it) );
+		emit filterMatch( ( *it) );
 		++it;
 	    }
 	}
@@ -157,7 +157,7 @@ YQPkgYouPatchList::selection() const
     if ( ! item )
 	return 0;
 
-    return dynamic_cast<YQPkgYouPatchListItem *> (item );
+    return dynamic_cast<YQPkgYouPatchListItem *> ( item );
 }
 
 
@@ -229,7 +229,7 @@ YQPkgYouPatchList::keyPressEvent( QKeyEvent * event )
 
 	    if ( selectedListViewItem )
 	    {
-		YQPkgYouPatchListItem * item = dynamic_cast<YQPkgYouPatchListItem *> (selectedListViewItem );
+		YQPkgYouPatchListItem * item = dynamic_cast<YQPkgYouPatchListItem *> ( selectedListViewItem );
 
 		if ( item && item->pmObj()->hasInstalledObj() )
 		{
@@ -332,7 +332,7 @@ YQPkgYouPatchListItem::compare( QListViewItem * otherListViewItem,
 				int		col,
 				bool		ascending ) const
 {
-    YQPkgYouPatchListItem * other = dynamic_cast<YQPkgYouPatchListItem *> (otherListViewItem );
+    YQPkgYouPatchListItem * other = dynamic_cast<YQPkgYouPatchListItem *> ( otherListViewItem );
 
     if ( other )
     {

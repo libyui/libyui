@@ -80,7 +80,7 @@ public:
     double totalSolveTime() const { return _totalSolveTime; }
     
     /**
-     * Returns the times solving has taken place (with this dialog).
+     * Returns the times solving has taken place ( with this dialog).
      **/ 
     int solveCount() const { return _solveCount; }
     

@@ -35,7 +35,7 @@ using std::set;
 
 
 // Warning ranges for "disk space is running out" or "disk space overflow".
-// The WARN value triggers a warning popup once (!). The warning will not be
+// The WARN value triggers a warning popup once ( !). The warning will not be
 // displayed again until the value sinks below the PROXIMITY value and then
 // increases again to the WARN value.
 //
@@ -110,7 +110,7 @@ YQPkgDiskUsageList::postPendingWarnings()
 						       100, _( "&OK" ) );
 
 	overflowWarning.warningPostedNotify();
-	runningOutWarning.warningPostedNotify(); // Suppress this (now redundant) other warning
+	runningOutWarning.warningPostedNotify(); // Suppress this ( now redundant) other warning
     }
 
     if ( runningOutWarning.needWarning() )

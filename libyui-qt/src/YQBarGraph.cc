@@ -47,8 +47,8 @@ void YQBarGraph::doUpdate()
 
     for ( int i=0; i < segments(); i++ )
     {
-	_barGraph->setValue( i, value(i) );
-	_barGraph->setLabel( i, fromUTF8( label(i) ) );
+	_barGraph->setValue( i, value( i) );
+	_barGraph->setLabel( i, fromUTF8( label( i) ) );
     }
 
     _barGraph->update();
@@ -57,13 +57,13 @@ void YQBarGraph::doUpdate()
 
 void YQBarGraph::setEnabling( bool enabled )
 {
-    _barGraph->setEnabled(enabled );
+    _barGraph->setEnabled( enabled );
 }
 
 
 long YQBarGraph::nicesize( YUIDimension dim )
 {
-    if (dim == YD_HORIZ)	return _barGraph->sizeHint().width()  + 2*HORIZONTAL_MARGIN;
+    if ( dim == YD_HORIZ)	return _barGraph->sizeHint().width()  + 2*HORIZONTAL_MARGIN;
     else 			return _barGraph->sizeHint().height() + 2*VERTICAL_MARGIN;
 }
 

@@ -50,7 +50,7 @@ public:
     /**
      * Makes this dialog	 active or inactive
      */
-    void activate(bool active );
+    void activate( bool active );
 
     /**
      * Interited from QDialog: The window was closed via the window
@@ -59,19 +59,19 @@ public:
     void closeEvent( QCloseEvent * ev );
 
     /**
-     * Returns the nice size of this dialog (may depend on -geometry)
+     * Returns the nice size of this dialog ( may depend on -geometry)
      */
-    long nicesize(YUIDimension dim );
+    long nicesize( YUIDimension dim );
 
     /**
-     * Returns the size of (artificial) window manager decorations in
-     * the requested dimension (YD_HORIZ or YD_VERT), depending on the
+     * Returns the size of ( artificial) window manager decorations in
+     * the requested dimension ( YD_HORIZ or YD_VERT), depending on the
      * value of YDialog::isDecorated().
      */
-    long decorationWidth(YUIDimension dim );
+    long decorationWidth( YUIDimension dim );
 
     /**
-     * Return this dialog's (first) default button or 0 if none
+     * Return this dialog's ( first) default button or 0 if none
      **/
     YQPushButton * findDefaultButton();
 
@@ -80,12 +80,12 @@ public:
      * widget. All new widgets are enabled per definition. Only
      * enabled widgets can take user input.
      */
-    void setEnabling(bool enabled );
+    void setEnabling( bool enabled );
 
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newWidth, long newHeight );
+    void setSize( long newWidth, long newHeight );
 
     /**
      * Returns whether or not the user has resized this dialog.
@@ -133,7 +133,7 @@ public:
     void ensureOnlyOneDefaultButton();
     
     /**
-     * Activate (i.e. click) this dialog's default button, if there is any.
+     * Activate ( i.e. click) this dialog's default button, if there is any.
      * Issue a warning to the log file if 'warn' is true.
      **/
     bool activateDefaultButton( bool warn = true );
@@ -155,7 +155,7 @@ protected:
      * Callback function that reports to the ui specific
      * widget that a child has been added.
      */
-    void childAdded(YWidget * child );
+    void childAdded( YWidget * child );
 
     /**
      * Event handler for keyboard input.

@@ -121,7 +121,7 @@ protected:
     bool check( const list<string> & strList, const QRegExp & regexp );
 
     /**
-     * Check PkgRelList attribute (PMSolvable::provides(), PMSolvable::requires(), ...)
+     * Check PkgRelList attribute ( PMSolvable::provides(), PMSolvable::requires(), ...)
      **/
     bool check( const PMSolvable::PkgRelList_type & relList, const QRegExp & regexp );
 

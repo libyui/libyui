@@ -29,8 +29,8 @@
 
 
 YQRadioButtonGroup::YQRadioButtonGroup( QWidget * parent, YWidgetOpt & opt )
-    : QWidget(parent)
-    , YRadioButtonGroup(opt)
+    : QWidget( parent)
+    , YRadioButtonGroup( opt)
 {
     setWidgetRep( this );
     recursionCounter = 0;
@@ -52,7 +52,7 @@ void YQRadioButtonGroup::addRadioButton( YRadioButton * button)
 	uncheckOtherButtons( button );	// make it the only active
     }
 
-    QRadioButton * radio_button = ( (YQRadioButton *) button )->getQtButton();
+    QRadioButton * radio_button = ( ( YQRadioButton *) button )->getQtButton();
 
     connect ( radio_button,	SIGNAL ( toggled           ( bool ) ),
 	      this, 		SLOT   ( radioButtonClicked( bool ) ) );
@@ -72,7 +72,7 @@ void YQRadioButtonGroup::setEnabling( bool enabled)
 
 void YQRadioButtonGroup::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight );
+    resize( newWidth, newHeight );
     YRadioButtonGroup::setSize( newWidth, newHeight );
 }
 
@@ -87,13 +87,13 @@ void YQRadioButtonGroup::radioButtonClicked( bool newState )
 
     recursionCounter++;
 
-    QRadioButton * sender_button = (QRadioButton *) sender();
+    QRadioButton * sender_button = ( QRadioButton *) sender();
 
     // Implement radio box behaviour: Uncheck all other radio buttons
 
     for ( unsigned i=0; i < buttonlist.size(); i++ )
     {
-	YQRadioButton * current_button = (YQRadioButton *) buttonlist[i];
+	YQRadioButton * current_button = ( YQRadioButton *) buttonlist[i];
 
 	if ( current_button->getQtButton() == sender_button )
 	{

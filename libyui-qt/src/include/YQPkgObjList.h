@@ -85,7 +85,7 @@ public:
 			   bool				selectNextItem = false );
 
     /**
-     * Sets the status of all (toplevel) list items to 'newStatus', if possible.
+     * Sets the status of all ( toplevel) list items to 'newStatus', if possible.
      * Only one single statusChanged() signal is emitted.
      *
      * 'force' overrides sensible defaults like setting only PMObjects to
@@ -110,7 +110,7 @@ public:
 				bool			bySelection = false );
 
     /**
-     * Returns a short (one line) descriptive text for a PMObject status.
+     * Returns a short ( one line) descriptive text for a PMObject status.
      **/
     virtual QString statusText( PMSelectable::UI_Status status ) const;
 
@@ -119,7 +119,7 @@ public slots:
 
     /**
      * Add a PMObject to the list. Connect a filter's filterMatch() signal to
-     * this slot. Remember to connect filterStart() to clear() (inherited from
+     * this slot. Remember to connect filterStart() to clear() ( inherited from
      * QListView).
      *
      * Intentionally NOT named addItem() so the calling class cannot confuse
@@ -149,7 +149,7 @@ public slots:
     virtual void updateActions( YQPkgObjListItem * item );
 
     /**
-     * Update the internal actions for the currently selected item (if any).
+     * Update the internal actions for the currently selected item ( if any).
      * This only calls updateActions( YQPkgObjListItem * ) with the currently
      * selected item as argument, so there is normally no need to reimplement
      * this method, too, if the other one is reimplemented.
@@ -254,7 +254,7 @@ protected:
 
     /**
      * Create an action based on a PMObject status - automatically retrieve the
-     * corresponding status icons (both sensitive and insensitive) and text.
+     * corresponding status icons ( both sensitive and insensitive) and text.
      * 'key' is only a descriptive text, no true accelerator.
      **/
     QAction * createAction( PMSelectable::UI_Status 	status,
@@ -345,18 +345,18 @@ public:
     void setEditable( bool editable = true ) { _editable = editable; }
 
     /**
-     * Returns the (binary RPM) package status
+     * Returns the ( binary RPM) package status
      **/
     PMSelectable::UI_Status status() const;
 
     /**
      * Returns 'true' if this selectable's status is set by a selection
-     * (rather than by the user or by the dependency solver).  
+     * ( rather than by the user or by the dependency solver).  
      **/
     bool bySelection() const;
     
     /**
-     * Set the (binary RPM) package status
+     * Set the ( binary RPM) package status
      **/
     virtual void setStatus( PMSelectable::UI_Status newStatus );
 
@@ -389,7 +389,7 @@ public:
 
     /**
      * Set a column text via STL string.
-     * (QListViewItem::setText() expects a QString!)
+     * ( QListViewItem::setText() expects a QString!)
      **/
     void setText( int column, const string text );
 
@@ -406,8 +406,8 @@ public:
     void setText( int column, const PkgEdition & edition );
 
     /**
-     * Display this item's notify text (if there is any) that corresponds to
-     * the specified status (S_Install, S_Del) in a pop-up window.
+     * Display this item's notify text ( if there is any) that corresponds to
+     * the specified status ( S_Install, S_Del) in a pop-up window.
      **/
     void showNotifyTexts( PMSelectable::UI_Status status );
 
@@ -426,8 +426,8 @@ public:
 
     /**
      * Calculate a numerical value to compare versions, based on version relations:
-     * - Installed newer than candidate (red)
-     * - Candidate newer than installed (blue) - worthwhile updating
+     * - Installed newer than candidate ( red)
+     * - Candidate newer than installed ( blue) - worthwhile updating
      * - Installed
      * - Not installed, but candidate available
      **/

@@ -58,7 +58,7 @@ public:
 public slots:
 
     /**
-     * Select a list entry (if there is any).
+     * Select a list entry ( if there is any).
      * Usually this will be the first list entry, but don't rely on that - this
      * might change without notice. Emits signal selectionChanged().
      **/
@@ -199,7 +199,7 @@ public:
      * Constructor for toplevel items.
      *
      * 'sortByInsertionSequence' indicates if this item keeps the insertion
-     * order (true) or leaves sorting to the user (false - sort-by-click on
+     * order ( true) or leaves sorting to the user ( false - sort-by-click on
      * column headers).
      **/
     QY2ListViewItem( QY2ListView * 		parentListView,
@@ -211,7 +211,7 @@ public:
      * Constructor for deeper level items.
      *
      * 'sortByInsertionSequence' indicates if this item keeps the insertion
-     * order (true) or leaves sorting to the user (false - sort-by-click on
+     * order ( true) or leaves sorting to the user ( false - sort-by-click on
      * column headers).
      **/
     QY2ListViewItem( QListViewItem * 		parentItem,
@@ -329,7 +329,7 @@ public:
      * Constructor for toplevel items.
      *
      * 'sortByInsertionSequence' indicates if this item keeps the insertion
-     * order (true) or leaves sorting to the user (false - sort-by-click on
+     * order ( true) or leaves sorting to the user ( false - sort-by-click on
      * column headers).
      **/
     QY2CheckListItem( QY2ListView * 		parentListView,
@@ -342,7 +342,7 @@ public:
      * Constructor for deeper level items.
      *
      * 'sortByInsertionSequence' indicates if this item keeps the insertion
-     * order (true) or leaves sorting to the user (false - sort-by-click on
+     * order ( true) or leaves sorting to the user ( false - sort-by-click on
      * column headers).
      **/
     QY2CheckListItem( QListViewItem * 		parentItem,
@@ -355,7 +355,7 @@ public:
      * Constructor for deeper level items for QCheckListItem parents.
      *
      * 'sortByInsertionSequence' indicates if this item keeps the insertion
-     * order (true) or leaves sorting to the user (false - sort-by-click on
+     * order ( true) or leaves sorting to the user ( false - sort-by-click on
      * column headers).
      **/
     QY2CheckListItem( QCheckListItem * 		parentItem,

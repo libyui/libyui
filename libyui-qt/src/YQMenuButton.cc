@@ -31,34 +31,34 @@
 
 
 #define BORDER 3
-#define BORDERSIZE QSize(BORDER, BORDER)
+#define BORDERSIZE QSize( BORDER, BORDER)
 
 YQMenuButton::YQMenuButton( QWidget * parent,
 			   YWidgetOpt & opt,
 			   YCPString label)
-    : QWidget(parent)
-    , YMenuButton(opt, label)
+    : QWidget( parent)
+    , YMenuButton( opt, label)
 {
     setWidgetRep( this );
-    _qt_pushbutton = new QPushButton( fromUTF8(label->value() ), this );
+    _qt_pushbutton = new QPushButton( fromUTF8( label->value() ), this );
     _qt_pushbutton->setFont( YUIQt::ui()->currentFont() );
     _qt_pushbutton->setMinimumSize( 2,2 );
     _qt_pushbutton->installEventFilter( this );
     _qt_pushbutton->move( BORDER, BORDER );
-    setMinimumSize(_qt_pushbutton->minimumSize() + 2 * BORDERSIZE );
+    setMinimumSize( _qt_pushbutton->minimumSize() + 2 * BORDERSIZE );
 }
 
 void
 YQMenuButton::setEnabling( bool enabled)
 {
-    _qt_pushbutton->setEnabled(enabled );
+    _qt_pushbutton->setEnabled( enabled );
 }
 
 
 long
 YQMenuButton::nicesize( YUIDimension dim)
 {
-    return 2 * BORDER + (dim == YD_HORIZ
+    return 2 * BORDER + ( dim == YD_HORIZ
 			 ? _qt_pushbutton->sizeHint().width()
 			 : _qt_pushbutton->sizeHint().height() );
 }
@@ -67,8 +67,8 @@ YQMenuButton::nicesize( YUIDimension dim)
 void
 YQMenuButton::setSize( long newWidth, long newHeight)
 {
-    _qt_pushbutton->resize(newWidth - 2 * BORDER, newHeight - 2 * BORDER );
-    resize(newWidth, newHeight );
+    _qt_pushbutton->resize( newWidth - 2 * BORDER, newHeight - 2 * BORDER );
+    resize( newWidth, newHeight );
 }
 
 

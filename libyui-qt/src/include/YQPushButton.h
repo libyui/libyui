@@ -66,7 +66,7 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newWidth, long newHeight );
+    void setSize( long newWidth, long newHeight );
 
     /**
      * Changes the label of the button
@@ -82,7 +82,7 @@ public:
     /**
      * Returns 'true' if this button is shown as a default button - which may
      * mean that this really is the dialogs's default button or it is the
-     * dialog's focus button (a button that currently has the keyboard focus).
+     * dialog's focus button ( a button that currently has the keyboard focus).
      *
      * Don't confuse this with isDefault()!
      **/
@@ -112,7 +112,7 @@ public:
     virtual void setIcon( const YCPString & icon_name );
 
     /**
-     * Returns the button's text (label) - useful for log messages etc.
+     * Returns the button's text ( label) - useful for log messages etc.
      **/
     QString text() const;
     
@@ -125,13 +125,13 @@ public:
 public slots:
 
     /**
-     * Triggered when the button is activated (clicked or via keyboard). Informs
+     * Triggered when the button is activated ( clicked or via keyboard). Informs
      * the ui about this.
      */
     void hit();
 
     /**
-     * Activate (animated) this button.
+     * Activate ( animated) this button.
      **/
     void activate();
 

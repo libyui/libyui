@@ -90,7 +90,7 @@ YQTable::YQTable( QWidget * parent, YWidgetOpt & opt, vector<string> header )
     setWidgetRep( this );
     setMargin( YQWIDGET_BORDER );
 
-    _qt_listview = new QListView(this );
+    _qt_listview = new QListView( this );
 
 
     if ( ! enable_user_sort )
@@ -109,34 +109,34 @@ YQTable::YQTable( QWidget * parent, YWidgetOpt & opt, vector<string> header )
     // column. The first string is one of the characters L, R or C
     // denoting left, right or center justification, resp.
 
-    for (unsigned c=0; c < header.size(); c++)
+    for ( unsigned c=0; c < header.size(); c++)
     {
-	_qt_listview->addColumn(fromUTF8(header[c].substr(1) ) );
-	switch (header[c][0])
+	_qt_listview->addColumn( fromUTF8(header[c].substr(1) ) );
+	switch ( header[c][0])
 	{
 	    case 'R':
-		_qt_listview->setColumnAlignment(c, AlignRight );
+		_qt_listview->setColumnAlignment( c, AlignRight );
 		break;
 	    case 'C':
-		_qt_listview->setColumnAlignment(c, AlignCenter );
+		_qt_listview->setColumnAlignment( c, AlignCenter );
 		break;
 	    case 'L':
 	    default:
-		_qt_listview->setColumnAlignment(c, AlignLeft );
+		_qt_listview->setColumnAlignment( c, AlignLeft );
 		break;
 	}
     }
 
-    _qt_listview->setFont(YUIQt::ui()->currentFont() );
-    _qt_listview->setAllColumnsShowFocus(true );
+    _qt_listview->setFont( YUIQt::ui()->currentFont() );
+    _qt_listview->setAllColumnsShowFocus( true );
 
-    if (opt.immediateMode.value() )
-	connect( _qt_listview, SIGNAL(selectionChanged ( QListViewItem *) ), this, SLOT(slotSelected(QListViewItem *) ) );
+    if ( opt.immediateMode.value() )
+	connect( _qt_listview, SIGNAL( selectionChanged ( QListViewItem *) ), this, SLOT( slotSelected(QListViewItem *) ) );
     else
-	connect( _qt_listview, SIGNAL(doubleClicked ( QListViewItem *) ), this, SLOT(slotSelected(QListViewItem *) ) );
+	connect( _qt_listview, SIGNAL( doubleClicked ( QListViewItem *) ), this, SLOT( slotSelected(QListViewItem *) ) );
 
-    if (opt.notifyMode.value() )
-	connect( _qt_listview, SIGNAL(spacePressed ( QListViewItem *) ), this, SLOT(slotSelected(QListViewItem *) ) );
+    if ( opt.notifyMode.value() )
+	connect( _qt_listview, SIGNAL( spacePressed ( QListViewItem *) ), this, SLOT( slotSelected(QListViewItem *) ) );
 }
 
 
@@ -161,13 +161,13 @@ long YQTable::nicesize( YUIDimension dim)
 
 void YQTable::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight );
+    resize( newWidth, newHeight );
 }
 
 
 void YQTable::setEnabling( bool enabled)
 {
-    _qt_listview->setEnabled(enabled );
+    _qt_listview->setEnabled( enabled );
     _qt_listview->triggerUpdate();
 }
 
@@ -198,26 +198,26 @@ void YQTable::itemsCleared()
 
 void YQTable::cellChanged( int index, int colnum, const YCPString & newtext)
 {
-    QListViewItem * item = findItem(index );
-    if (item) item->setText(colnum, fromUTF8(newtext->value() ) );
+    QListViewItem * item = findItem( index );
+    if ( item) item->setText( colnum, fromUTF8( newtext->value() ) );
 }
 
 
 int YQTable::getCurrentItem()
 {
-    YQListViewItem * ci = (YQListViewItem *)( _qt_listview->currentItem() );
-    if (ci) return ci->index;
+    YQListViewItem * ci = ( YQListViewItem *)( _qt_listview->currentItem() );
+    if ( ci) return ci->index;
     else	   return -1;
 }
 
 
 void YQTable::setCurrentItem( int index)
 {
-    QListViewItem * item = findItem(index );
-    if (item)  // should be always true
+    QListViewItem * item = findItem( index );
+    if ( item)  // should be always true
     {
-	_qt_listview->setCurrentItem(item );
-	_qt_listview->ensureItemVisible(item );
+	_qt_listview->setCurrentItem( item );
+	_qt_listview->ensureItemVisible( item );
     }
 }
 
@@ -226,9 +226,9 @@ QListViewItem * YQTable::findItem( int index)
 {
     // Scan all items and look for the one with the right index.
     QListViewItem * item = _qt_listview->firstChild();
-    while (item)
+    while ( item)
     {
-	if ( ( (YQListViewItem *)item)->index == index)
+	if ( ( ( YQListViewItem *)item)->index == index)
 	    return item;
 	item = item->nextSibling();
     }
@@ -246,7 +246,7 @@ bool YQTable::setKeyboardFocus()
 
 void YQTable::slotSelected( QListViewItem *)
 {
-    if (getNotify() ) YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
+    if ( getNotify() ) YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }
 
 #include "YQTable.moc.cc"

@@ -112,9 +112,9 @@ public:
     /**
      * Save the conflict list in its current state to a file. Retains the
      * current 'expanded' state, i.e. writes only those entries that are
-     * currently open (not collapsed) in the tree.
+     * currently open ( not collapsed) in the tree.
      *
-     * Posts error popups if 'interactive' is 'true' (only log entries
+     * Posts error popups if 'interactive' is 'true' ( only log entries
      * otherwise).
      **/
     void saveToFile( const QString filename, bool interactive ) const;
@@ -123,7 +123,7 @@ public:
 protected:
 
     /**
-     * (Recursively) save one item to file.
+     * ( Recursively) save one item to file.
      **/
     void saveItemToFile( FILE * file, const QListViewItem * item ) const;
 
@@ -172,7 +172,7 @@ public:
     bool hasCollisions() { return ! _conflict.conflicts_with.empty(); }
 
     /**
-     * Returns if this package has open (unresolved) requirements.
+     * Returns if this package has open ( unresolved) requirements.
      **/
     bool hasOpenRequirements() { return ! _conflict.unresolvable.empty(); }
 
@@ -193,13 +193,13 @@ public:
     void ignore();
 
     /**
-     * Check if a conflict with header (first text line in list)
+     * Check if a conflict with header ( first text line in list)
      * 'conflictHeader is ignored.
      **/
     static bool isIgnored( const QString & conflictHeader );
 
     /**
-     * Ignore a conflict with header (first text line in list)
+     * Ignore a conflict with header ( first text line in list)
      * 'conflictHeader'.
      **/
     static void ignore( const QString & conflictHeader );
@@ -211,12 +211,12 @@ public:
     static void resetIgnoredConflicts();
     
     /**
-     * Save all ignored conflicts to (predefined) file.
+     * Save all ignored conflicts to ( predefined) file.
      **/
     static void saveIgnoredConflicts();
 
     /**
-     * Load ignored conflicts from (predefined) file.
+     * Load ignored conflicts from ( predefined) file.
      **/
     static void loadIgnoredConflicts();
 
@@ -234,7 +234,7 @@ public:
     static QAction * actionResetIgnoredConflicts( YQPkgConflictDialog * dialog = 0 );
 
     /**
-     * Update the enabled / disabled state of all internal QActions (that are
+     * Update the enabled / disabled state of all internal QActions ( that are
      * created yet - this method will not create any if they don't exist yet).
      **/
     static void updateActions();
@@ -258,7 +258,7 @@ protected:
      * Create a new list entry for each list entry.
      * If 'header' is non-null, create a bracketing list item with text
      * 'header' and insert the list items below that new item.
-     * Splits into a sublist at (about) 'splitThreshold' if this is > 1.
+     * Splits into a sublist at ( about) 'splitThreshold' if this is > 1.
      * Does nothing if the list is empty.
      **/
     void dumpList( QListViewItem * 		parent,
@@ -273,7 +273,7 @@ protected:
 
     /**
      * Add resolution suggestion: Undo what caused this conflict
-     * (i.e. don't remove, don't install, ...).
+     * ( i.e. don't remove, don't install, ...).
      **/
     void addUndoResolution( QY2CheckListItem * parent );
 
@@ -319,7 +319,7 @@ protected:
 
     PMObjectPtr			_pmObj;
     bool			_isPkg;
-    QString			_shortName;	// Only pkg name (no version)
+    QString			_shortName;	// Only pkg name ( no version)
     QString			_fullName;	// Name + edition
     PMSelectable::UI_Status	_status;
     PMSelectable::UI_Status	_undo_status;
@@ -345,7 +345,7 @@ class YQPkgConflictResolution: public QY2CheckListItem
 public:
 
     /**
-     * Constructor for generic resolutions (not alternatives)
+     * Constructor for generic resolutions ( not alternatives)
      **/
     YQPkgConflictResolution( QY2CheckListItem *			parent,
 			     const QString & 			text,

@@ -46,19 +46,19 @@ public:
      * widget. All new widgets are enabled per definition. Only
      * enabled widgets can take user input.
      */
-    void setEnabling(bool enabled );
+    void setEnabling( bool enabled );
 
     /**
      * Minimum size the widget should have to make it look and feel
      * nice.
      * @dim Dimension, either YD_HORIZ or YD_VERT
      */
-    long nicesize(YUIDimension dim );
+    long nicesize( YUIDimension dim );
 
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newWidth, long newHeight );
+    void setSize( long newWidth, long newHeight );
 
     /**
      * Notification that new items have been added.
@@ -75,7 +75,7 @@ public:
     /**
      * Inherited from YTable. is called, when the text of a cell has changed.
      */
-    void cellChanged(int index, int colnum, const YCPString & newtext );
+    void cellChanged( int index, int colnum, const YCPString & newtext );
 
     /**
      * Inherited from YTable. Returns the index of the currently
@@ -86,7 +86,7 @@ public:
     /**
      * Inherited from YTable. Makes another item selected.
      */
-    void setCurrentItem(int index );
+    void setCurrentItem( int index );
 
     /**
      * Accept the keyboard focus.
@@ -106,7 +106,7 @@ protected slots:
      * Tells the ui that an item has been selected. This is only
      * interesting, if the `notify option is set.
      */
-    void slotSelected(QListViewItem * );
+    void slotSelected( QListViewItem * );
 
 
     /**
@@ -119,7 +119,7 @@ protected:
     /**
      * Helper function. Find item with given id.
      */
-    QListViewItem * findItem(int index );
+    QListViewItem * findItem( int index );
 
     /**
      * The Qt widget representing the table

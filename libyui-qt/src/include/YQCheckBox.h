@@ -84,7 +84,7 @@ public:
     virtual bool setKeyboardFocus();
 
     /**
-     * Returns whether tristate condition is set (i.e. neither on nor off)
+     * Returns whether tristate condition is set ( i.e. neither on nor off)
      */
     bool isTristate();
 

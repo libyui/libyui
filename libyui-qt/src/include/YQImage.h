@@ -55,12 +55,12 @@ public:
      * nice.
      * @dim Dimension, either YD_HORIZ or YD_VERT
      */
-    long nicesize(YUIDimension dim );
+    long nicesize( YUIDimension dim );
 
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newWidth, long newHeight );
+    void setSize( long newWidth, long newHeight );
 
 private:
 
@@ -78,7 +78,7 @@ private:
     
     bool zeroWidth;	// override nice width  with 0
     bool zeroHeight;	// override nice height with 0
-    bool tiled;		// tile image (repeat endlessly)
+    bool tiled;		// tile image ( repeat endlessly)
     bool animated;	// animation, no static image
 
     int pixmapWidth;	// pixmap or movie width

@@ -96,7 +96,7 @@ YQPkgTechnicalDetailsView::authorsListCell( PMPackagePtr pkg ) const
 
     while ( it != authors.end() )
     {
-	line = fromUTF8(*it );
+	line = fromUTF8( *it );
 	line = htmlEscape( line );
 	html += line + "<br>";
 	++it;
@@ -159,7 +159,7 @@ YQPkgTechnicalDetailsView::complexTable( PMPackagePtr installed, PMPackagePtr ca
 
     QString html = "<br>" +
 	table(
-	       row( hcell( QString("") )	    + hcell( "<b>" + p1_header + "</b>"	    ) + hcell( "<b>" + p2_header + "</b>"     ) ) +
+	       row( hcell( QString( "") )	    + hcell( "<b>" + p1_header + "</b>"	    ) + hcell( "<b>" + p2_header + "</b>"     ) ) +
 
 	       row( hcell( _( "Version:"	) ) + cell( p1->version() + "-" + p1->release() ) + cell( p2->version() + "-" + p2->release() ) ) +
 	       row( hcell( _( "Build Time:"	) ) + cell( p1->buildtime()			) + cell( p2->buildtime()		      ) ) +

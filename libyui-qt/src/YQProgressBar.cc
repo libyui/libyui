@@ -37,40 +37,40 @@ using std::max;
 YQProgressBar::YQProgressBar( QWidget * parent, YWidgetOpt & opt,
 			     const YCPString & label,
 			     const YCPInteger & maxProgress, const YCPInteger & progress)
-    : QVBox(parent)
-    , YProgressBar(opt, label, maxProgress, progress)
+    : QVBox( parent)
+    , YProgressBar( opt, label, maxProgress, progress)
 {
     setWidgetRep( this );
 
     setSpacing( SPACING );
     setMargin( MARGIN );
 
-    _qt_label = new QLabel(fromUTF8(label->value() ), this );
-    _qt_label->setTextFormat(QLabel::PlainText );
-    _qt_label->setFont(YUIQt::ui()->currentFont() );
+    _qt_label = new QLabel( fromUTF8(label->value() ), this );
+    _qt_label->setTextFormat( QLabel::PlainText );
+    _qt_label->setFont( YUIQt::ui()->currentFont() );
     
     if ( label->value() == "" )
 	_qt_label->hide();
 
-    _qt_progressbar = new QProgressBar(this );
-    _qt_progressbar->setFont(YUIQt::ui()->currentFont() );
-    _qt_progressbar->setTotalSteps(maxProgress->value() );
-    _qt_label->setBuddy(_qt_progressbar );
+    _qt_progressbar = new QProgressBar( this );
+    _qt_progressbar->setFont( YUIQt::ui()->currentFont() );
+    _qt_progressbar->setTotalSteps( maxProgress->value() );
+    _qt_label->setBuddy( _qt_progressbar );
 
-    setProgress(progress );
+    setProgress( progress );
 }
 
 
 void YQProgressBar::setEnabling( bool enabled)
 {
-    _qt_label->setEnabled(enabled );
-    _qt_progressbar->setEnabled(enabled );
+    _qt_label->setEnabled( enabled );
+    _qt_progressbar->setEnabled( enabled );
 }
 
 
 long YQProgressBar::nicesize( YUIDimension dim)
 {
-    if (dim == YD_HORIZ)
+    if ( dim == YD_HORIZ)
     {
 	long minSize = 200;
 	long hintWidth = _qt_label->sizeHint().width() + margin();
@@ -89,12 +89,12 @@ long YQProgressBar::nicesize( YUIDimension dim)
 
 void YQProgressBar::setSize( long newWidth, long newHeight)
 {
-    resize(newWidth, newHeight );
+    resize( newWidth, newHeight );
 }
 
 void YQProgressBar::setLabel( const YCPString & text)
 {
-    _qt_label->setText(fromUTF8(text->value() ) );
+    _qt_label->setText( fromUTF8(text->value() ) );
 }
 
 
@@ -111,7 +111,7 @@ void YQProgressBar::setProgress( const YCPInteger & progress)
 	_qt_progressbar->reset();
     }
 
-    _qt_progressbar->setProgress(progress->value() );
+    _qt_progressbar->setProgress( progress->value() );
 }
 
 

@@ -169,7 +169,7 @@ QY2DiskUsageListItem::compare( QListViewItem *	otherListViewItem,
 			       int		col,
 			       bool		ascending ) const
 {
-    QY2DiskUsageListItem * other = dynamic_cast<QY2DiskUsageListItem *> (otherListViewItem );
+    QY2DiskUsageListItem * other = dynamic_cast<QY2DiskUsageListItem *> ( otherListViewItem );
 
     if ( other )
     {
@@ -275,7 +275,7 @@ QY2DiskUsageListItem::paintPercentageBar( float			percent,
 	pen.setWidth( 0 );
 	painter->setPen( pen );
 	painter->setBrush( NoBrush );
-	fillWidth = (int) ( ( w - 2 * penWidth ) * percent / 100.0 );
+	fillWidth = ( int) ( ( w - 2 * penWidth ) * percent / 100.0 );
 
 
 	// Fill bar background.
@@ -288,7 +288,7 @@ QY2DiskUsageListItem::paintPercentageBar( float			percent,
 	 * pixel less than specified. Altough this is very likely just a
 	 * plain old bug, it is documented that way. Obviously, Qt just
 	 * maps the fillRect() call directly to XDrawRectangle() so they
-	 * inherited that bug (although the Qt doc stays silent about
+	 * inherited that bug ( although the Qt doc stays silent about
 	 * it). So it is really necessary to compensate for that missing
 	 * pixel in each dimension.
 	 *
@@ -408,7 +408,7 @@ QY2DiskUsageListItem::interpolate( int from,
 	if ( x > minTo )	x = minTo;
     }
 
-    return (int) x;
+    return ( int) x;
 }
 
 

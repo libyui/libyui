@@ -107,17 +107,17 @@ QY2ListView::toolTip( QListViewItem * listViewItem, int column )
     QString text;
 
 #if 0
-    text.sprintf( "Column %d:\n%s", column, (const char *) listViewItem->text( column ) );
+    text.sprintf( "Column %d:\n%s", column, ( const char *) listViewItem->text( column ) );
 #endif
 
     // Try known item classes
 
-    QY2ListViewItem * item = dynamic_cast<QY2ListViewItem *> (listViewItem );
+    QY2ListViewItem * item = dynamic_cast<QY2ListViewItem *> ( listViewItem );
 
     if ( item )
 	return item->toolTip( column );
 
-    QY2CheckListItem * checkListItem = dynamic_cast<QY2CheckListItem *> (listViewItem );
+    QY2CheckListItem * checkListItem = dynamic_cast<QY2CheckListItem *> ( listViewItem );
 
     if ( checkListItem )
 	return checkListItem->toolTip( column );
@@ -142,7 +142,7 @@ QY2ListView::saveColumnWidths()
 void
 QY2ListView::restoreColumnWidths()
 {
-    if ( _savedColumnWidth.size() != (unsigned) columns() )
+    if ( _savedColumnWidth.size() != ( unsigned) columns() )
     {
 	return;
     }
@@ -214,7 +214,7 @@ QY2ListView::contentsMouseDoubleClickEvent( QMouseEvent * ev )
     if ( item && item->isEnabled() )
     {
 	int col = header()->sectionAt( ev->pos().x() );
-	emit( columnDoubleClicked( ev->button(), (QY2ListViewItem *) item, col, ev->globalPos() ) );
+	emit( columnDoubleClicked( ev->button(), ( QY2ListViewItem *) item, col, ev->globalPos() ) );
     }
 
     // invalidate last click data
@@ -297,7 +297,7 @@ QY2ListViewItem::compare( QListViewItem *	otherListViewItem,
 {
     if ( sortByInsertionSequence() )
     {
-	QY2ListViewItem * other = dynamic_cast<QY2ListViewItem *> (otherListViewItem );
+	QY2ListViewItem * other = dynamic_cast<QY2ListViewItem *> ( otherListViewItem );
 
 	if ( other )
 	{
@@ -308,7 +308,7 @@ QY2ListViewItem::compare( QListViewItem *	otherListViewItem,
 
 	// Still here? Try the other version: QY2CheckListItem.
 
-	QY2CheckListItem * otherCheckListItem = dynamic_cast<QY2CheckListItem *> (otherListViewItem );
+	QY2CheckListItem * otherCheckListItem = dynamic_cast<QY2CheckListItem *> ( otherListViewItem );
 
 	if ( otherCheckListItem )
 	{
@@ -415,7 +415,7 @@ QY2CheckListItem::compare( QListViewItem *	otherListViewItem,
 {
     if ( sortByInsertionSequence() )
     {
-	QY2CheckListItem * other = dynamic_cast<QY2CheckListItem *> (otherListViewItem );
+	QY2CheckListItem * other = dynamic_cast<QY2CheckListItem *> ( otherListViewItem );
 
 	if ( other )
 	{
@@ -427,7 +427,7 @@ QY2CheckListItem::compare( QListViewItem *	otherListViewItem,
 
 	// Still here? Try the other version: QY2ListViewItem.
 
-	QY2ListViewItem * otherCheckListItem = dynamic_cast<QY2ListViewItem *> (otherListViewItem );
+	QY2ListViewItem * otherCheckListItem = dynamic_cast<QY2ListViewItem *> ( otherListViewItem );
 
 	if ( otherCheckListItem )
 	{

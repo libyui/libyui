@@ -45,9 +45,9 @@ YQSlider::YQSlider( QWidget *		parent,
     vbox = new QVBox( this );
     vbox->setSpacing( VSPACING );
     vbox->setMargin( MARGIN );
-    _qt_label = new QLabel( fromUTF8(label->value() ), vbox );
+    _qt_label = new QLabel( fromUTF8( label->value() ), vbox );
     _qt_label->setTextFormat( QLabel::PlainText );
-    _qt_label->setFont(YUIQt::ui()->currentFont() );
+    _qt_label->setFont( YUIQt::ui()->currentFont() );
     _qt_label->setAlignment( Qt::AlignRight );
 
     hbox = new QHBox( vbox );
@@ -69,14 +69,14 @@ YQSlider::YQSlider( QWidget *		parent,
 
     setValue( initialValue );
 
-    connect( _qt_spinbox, SIGNAL( valueChanged(int) ),
-	     _qt_slider,  SLOT  ( setValue    (int) ) );
+    connect( _qt_spinbox, SIGNAL( valueChanged( int) ),
+	     _qt_slider,  SLOT  ( setValue    ( int) ) );
 
-    connect( _qt_slider, 	SIGNAL( valueChanged(int) ),
-	     _qt_spinbox, SLOT  ( setValue    (int) ) );
+    connect( _qt_slider, 	SIGNAL( valueChanged( int) ),
+	     _qt_spinbox, SLOT  ( setValue    ( int) ) );
 
-    connect( _qt_spinbox, SIGNAL( valueChanged(int) ),
-	     this,  	SLOT  ( setValueSlot(int) ) );
+    connect( _qt_spinbox, SIGNAL( valueChanged( int) ),
+	     this,  	SLOT  ( setValueSlot( int) ) );
 }
 
 
@@ -90,7 +90,7 @@ void YQSlider::setEnabling( bool enabled )
 
 long YQSlider::nicesize( YUIDimension dim )
 {
-    if (dim == YD_HORIZ) return 200;
+    if ( dim == YD_HORIZ) return 200;
     else return vbox->sizeHint().height();
 }
 

@@ -133,7 +133,7 @@ protected:
     int _nextSerialNo;
 
     /**
-     * Map from YTreeItem to the corresponding (cloned) YQTreeItem.
+     * Map from YTreeItem to the corresponding ( cloned) YQTreeItem.
      * A Qt collection class is used here rather than an STL class
      * because the STL map requires an operator< to be defined which is
      * not very natural for pointers to objects.

@@ -33,7 +33,7 @@ YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
     : QTextBrowser( parent )
 {
     _pmObj = 0;
-    _parentTab = dynamic_cast<QTabWidget *> (parent );
+    _parentTab = dynamic_cast<QTabWidget *> ( parent );
 
     // Workaround for Bugzilla bug #19419: Y2Pkg hangs on middle mouse click
     viewport()->setMouseTracking( false );
@@ -111,7 +111,7 @@ QString
 YQPkgGenericDetailsView::htmlEscape( const QString & plainText )
 {
     QString html = plainText;
-    // y2debug( "Escaping '%s'", (const char *) plainText );
+    // y2debug( "Escaping '%s'", ( const char *) plainText );
 
     html.replace( QRegExp( "&" ), "&amp;" );
     html.replace( QRegExp( "<" ), "&lt;"  );

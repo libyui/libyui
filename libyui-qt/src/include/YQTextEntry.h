@@ -51,24 +51,24 @@ public:
      * widget. All new widgets are enabled per definition. Only
      * enabled widgets can take user input.
      */
-    void setEnabling(bool enabled );
+    void setEnabling( bool enabled );
 
     /**
      * Minimum size the widget should have to make it look and feel
      * nice.
      * @dim Dimension, either YD_HORIZ or YD_VERT
      */
-    long nicesize(YUIDimension dim );
+    long nicesize( YUIDimension dim );
 
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newWidth, long newHeight );
+    void setSize( long newWidth, long newHeight );
 
     /**
      * Set the text in the entry to a new value
      */
-    void setText(const YCPString & text );
+    void setText( const YCPString & text );
 
     /**
      * Gets the text currently entered in the text entry
@@ -78,14 +78,14 @@ public:
     /**
      * Changes the label of the text entry.
      */
-    void setLabel(const YCPString & label );
+    void setLabel( const YCPString & label );
 
     /**
      * Change the valid input characters.
      *
      * Reimplemented from @ref YTextEntry.
      */
-    void setValidChars(const YCPString & validChars );
+    void setValidChars( const YCPString & validChars );
 
     /**
      * Accept the keyboard focus.
@@ -98,7 +98,7 @@ protected slots:
      * Triggered when the text in the TextEntry changes.
      * This _may_ be of interest to the module.
      */
-    void changed(const QString & );
+    void changed( const QString & );
 
 
 protected:

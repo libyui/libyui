@@ -36,11 +36,11 @@ using std::max;
 
 
 
-#define INDEX_INVALID(I) index_invalid(i, __FUNCTION__)
+#define INDEX_INVALID( I) index_invalid( i, __FUNCTION__)
 
 
 QY2BarGraph::QY2BarGraph( QWidget * parent, const char * name )
-    : QFrame(parent, name)
+    : QFrame( parent, name)
 {
     setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
     setFrameStyle( QFrame::Panel | QFrame::Sunken );
@@ -81,28 +81,28 @@ void QY2BarGraph::setSegments( int segmentCount )
 
 void QY2BarGraph::setValue( int i, int newValue )
 {
-    if ( INDEX_INVALID(i) ) return;
+    if ( INDEX_INVALID( i) ) return;
     _values[i] = newValue;
 }
 
 
 void QY2BarGraph::setLabel( int i, const QString &newLabel )
 {
-    if ( INDEX_INVALID(i) ) return;
+    if ( INDEX_INVALID( i) ) return;
     _labels[i] = newLabel;
 }
 
 
 int QY2BarGraph::value( int i ) const
 {
-    if ( INDEX_INVALID(i) ) return -1;
+    if ( INDEX_INVALID( i) ) return -1;
     return _values[i];
 }
 
 
 const QString QY2BarGraph::label( int i ) const
 {
-    if ( INDEX_INVALID(i) ) return QString::null;
+    if ( INDEX_INVALID( i) ) return QString::null;
     return _labels[i];
 }
 
@@ -133,7 +133,7 @@ void QY2BarGraph::drawContents( QPainter * p )
 
     for ( int i=0; i < segments(); i++ )
     {
-	int segWidth = ( (long) totalWidth * _values[i] ) / sum;
+	int segWidth = ( ( long) totalWidth * _values[i] ) / sum;
 
 	if ( i == segments()-1 )
 	{
@@ -145,7 +145,7 @@ void QY2BarGraph::drawContents( QPainter * p )
 
 	// Fill the segment
 
-	p->setBrush( segmentBackgroundColor(i) );
+	p->setBrush( segmentBackgroundColor( i) );
 	p->setPen( NoPen );
 	p->drawRect( x_off, y_off, segWidth+2, segHeight+2 );
 
@@ -159,11 +159,11 @@ void QY2BarGraph::drawContents( QPainter * p )
 	{
 	    p->setPen( SolidLine );
 
-	    p->setPen( segmentBackgroundColor(i).light().light() );
+	    p->setPen( segmentBackgroundColor( i).light().light() );
 	    p->drawLine( x_off + segWidth-2, y_off,
 			 x_off + segWidth-2, y_off + segHeight+1 );
 
-	    p->setPen( segmentBackgroundColor(i+1).dark().dark() );
+	    p->setPen( segmentBackgroundColor( i+1).dark().dark() );
 	    p->drawLine( x_off+1 + segWidth-2, y_off,
 			 x_off+1 + segWidth-2, y_off + segHeight+2 );
 	}
@@ -173,7 +173,7 @@ void QY2BarGraph::drawContents( QPainter * p )
 	// Draw the label
 
 	p->setPen( SolidLine );
-	p->setPen( segmentForegroundColor(i) );
+	p->setPen( segmentForegroundColor( i) );
 	QString txt = _labels[i];
 
 	if ( txt.contains( "%1" ) )

@@ -69,7 +69,7 @@ YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
     // BarGraph
 
     barGraph = new QY2BarGraph( vbox );
-    barGraph->setSegments(3 );
+    barGraph->setSegments( 3 );
     barGraph->setLabel( 0, fromUTF8( usedLabel()->value()    ) );
     barGraph->setLabel( 1, fromUTF8( freeLabel()->value()    ) );
     barGraph->setLabel( 2, fromUTF8( newPartLabel()->value() ) );
@@ -138,14 +138,14 @@ YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
 
     // Connect signals
 
-    connect( _qt_freeSizeSlider,	SIGNAL( valueChanged   (int) ),
-	     this,		SLOT  ( setFreeSizeSlot(int) ) );
+    connect( _qt_freeSizeSlider,	SIGNAL( valueChanged   ( int) ),
+	     this,		SLOT  ( setFreeSizeSlot( int) ) );
 
-    connect( _qt_freeSizeField,	SIGNAL( valueChanged   (int) ),
-	     this,		SLOT  ( setFreeSizeSlot(int) ) );
+    connect( _qt_freeSizeField,	SIGNAL( valueChanged   ( int) ),
+	     this,		SLOT  ( setFreeSizeSlot( int) ) );
 
-    connect( _qt_newPartSizeField,SIGNAL( valueChanged	  (int) ),
-	     this,		SLOT  ( setNewPartSizeSlot(int) ) );
+    connect( _qt_newPartSizeField,SIGNAL( valueChanged	  ( int) ),
+	     this,		SLOT  ( setNewPartSizeSlot( int) ) );
 }
 
 
@@ -162,7 +162,7 @@ void YQPartitionSplitter::setEnabling( bool enabled )
 
 long YQPartitionSplitter::nicesize( YUIDimension dim )
 {
-    if (dim == YD_HORIZ) return vbox->sizeHint().width();
+    if ( dim == YD_HORIZ) return vbox->sizeHint().width();
     else			return vbox->sizeHint().height();
 }
 

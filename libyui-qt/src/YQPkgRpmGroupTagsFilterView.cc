@@ -110,7 +110,7 @@ YQPkgRpmGroupTagsFilterView::filter()
 	    PMSelectablePtr selectable = *it;
 
 	    // Multiple instances of this package may or may not be in the same
-	    // RPM group, so let's check both the installed version (if there
+	    // RPM group, so let's check both the installed version ( if there
 	    // is any) and the candidate version.
 	    //
 	    // Make sure we emit only one filterMatch() signal if both exist

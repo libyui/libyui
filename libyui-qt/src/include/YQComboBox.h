@@ -62,38 +62,38 @@ public:
      * widget. All new widgets are enabled per definition. Only
      * enabled widgets can take user input.
      */
-    void setEnabling(bool enabled );
+    void setEnabling( bool enabled );
 
     /**
      * Minimum size the widget should have to make it look and feel
      * nice.
      * @dim Dimension, either YD_HORIZ or YD_VERT
      */
-    long nicesize(YUIDimension dim );
+    long nicesize( YUIDimension dim );
 
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newWidth, long newHeight );
+    void setSize( long newWidth, long newHeight );
 
     /**
      * Change the label text.
      */
-    void setLabel(const YCPString & label );
+    void setLabel( const YCPString & label );
 
     /**
      * Change the valid input characters.
      *
      * Reimplemented from @ref YComboBox
      */
-    void setValidChars(const YCPString & validChars );
+    void setValidChars( const YCPString & validChars );
 
     /**
      * Notification that a new item has been added.
      *
      * Reimplemented from YComboBox.
      */
-    void itemAdded(const YCPString & itemText, int itemIndex, bool selected );
+    void itemAdded( const YCPString & itemText, int itemIndex, bool selected );
 
     /**
      * Inherited from YComboBox:
@@ -106,14 +106,14 @@ public:
      * Sets the ComboBox value to a random value that is not already in
      * the item list. Will be called for editable ComboBox widgets only.
      */
-    void setValue(const YCPString & new_value );
+    void setValue( const YCPString & new_value );
 
     /**
      * Inherited from YComboBox:
      * Selects an item from the list. Notice there intentionally is no
      * corresponding getCurrentItem() method - use getValue() instead.
      */
-    void setCurrentItem(int index );
+    void setCurrentItem( int index );
 
     /**
      * Accept the keyboard focus.
@@ -127,14 +127,14 @@ protected slots:
      * Tells the ui that an item has been selected. This is only
      * interesting if the `notify option is set.
      */
-    void slotSelected(int i );
+    void slotSelected( int i );
 
     /**
-     * Tells the ui that the user has edited the text (if the
+     * Tells the ui that the user has edited the text ( if the
      * 'editable' option is set).
      * This is only interesting if the `notify option is set.
      */
-    void textChanged(const QString &new_text );
+    void textChanged( const QString &new_text );
 };
 
 
