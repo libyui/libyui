@@ -298,13 +298,59 @@ const YCPValue& PkgNames::FilterHelp ()
     return value;
 }
 
-//  id help on installation source
-const YCPValue& PkgNames::InstSourceHelp ()
+
+//
+// id's used in you_layout.ycp
+//
+
+//  id help in YOU mode
+const YCPValue& PkgNames::PatchHelp ()
 {
-    static const YCPValue value = createIdValue ( "help_instsrc" );
+    static const YCPValue value = createIdValue ( "help_patch" );
     return value;
 }
 
+// id filter/recommended
+const YCPValue& PkgNames::Recommended ()
+{
+    static const YCPValue value = createIdValue ( "recommended" );
+    return value;
+}
+
+// id filter/security
+const YCPValue& PkgNames::Security ()
+{
+    static const YCPValue value = createIdValue ( "security" );
+    return value;
+}
+
+// id filter installed
+const YCPValue& PkgNames::InstalledPatches ()
+{
+    static const YCPValue value = createIdValue ( "instpatches" );
+    return value;
+}
+
+// id filter all patches
+const YCPValue& PkgNames::AllPatches ()
+{
+    static const YCPValue value = createIdValue ( "allpatches" );
+    return value;
+}
+
+// id information patch descr
+const YCPValue& PkgNames::PatchDescr ()
+{
+    static const YCPValue value = createIdValue ( "patchdescr" );
+    return value;
+}
+
+/// id information patch descr
+const YCPValue& PkgNames::PatchPkgs ()
+{
+    static const YCPValue value = createIdValue ( "patchpkgs" );
+    return value;
+}
 
 //
 // internal use
@@ -619,6 +665,13 @@ const NCstring PkgNames::PkgSize()
 {
     // column header package size (keep it short!)
     static const NCstring value = _("Size");
+    return value;
+}
+
+const NCstring PkgNames::PatchKind()
+{
+    // column header patch kind (keep it short!)
+    static const NCstring value = _("Kind");
     return value;
 }
 

@@ -134,7 +134,7 @@ NCPkgTable::~NCPkgTable()
 //	DESCRIPTION :
 //
 void NCPkgTable::addLine( PMSelectable::UI_Status stat,
-			  vector<string> elements,
+			  const vector<string> & elements,
 			  int index,
 			  PMObjectPtr objPtr )
 {
@@ -190,6 +190,9 @@ void NCPkgTable::cellChanged( int index, int colnum, const YCPString & newtext )
 //
 bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
 {
+    if ( !packager )
+	return false;
+    
     bool ok = false;
 
     int index  = getCurrentItem();
@@ -279,15 +282,8 @@ PMSelectable::UI_Status NCPkgTable::getAvailableStatus ( PMObjectPtr objPtr )
 // Fills the package table with the list of default rpm group
 // or show the complete patch list in YOU mode
 //
-bool NCPkgTable::fillDefaultList( NCPkgTable * pkgTable )
+bool NCPkgTable::fillDefaultList( )
 {
-    if ( !pkgTable )
-    {    
-	// set the package list widget
-	NCERR << "Package list not valid" << endl;
-	return false;
-    }
-
     switch ( tableType )
     {
 	case T_Packages:
@@ -298,6 +294,11 @@ bool NCPkgTable::fillDefaultList( NCPkgTable * pkgTable )
 	    {
 		packager->fillPackageList ( YCPString( defaultGroup->value().translation()),
 					    defaultGroup );
+		
+		// set the visible info to package description 
+		packager->setVisibleInfo ( PkgNames::PkgInfo() );
+		// show the package description of the current item
+		packager->showPackageInformation( getDataPointer( getCurrentItem() ) );
 	    }
 	    else
 	    {
@@ -306,7 +307,12 @@ bool NCPkgTable::fillDefaultList( NCPkgTable * pkgTable )
 	    break;
 	}
 	case T_Patches: {
-	    packager->fillPatchList();
+	    packager->fillPatchList( "all" );	// default: all patches
+
+	    // set the visible info to long description 
+	    packager->setVisibleInfo ( PkgNames::PatchDescr() );
+	    // show the package description of the current item
+	    packager->showPatchInformation( getDataPointer( getCurrentItem() ) );
 	    break;
 	}
 	default:
@@ -315,6 +321,50 @@ bool NCPkgTable::fillDefaultList( NCPkgTable * pkgTable )
     return true;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+// fillHeader
+//
+// Fillup the column headers of the package table 
+//
+void NCPkgTable::fillHeader( )
+{
+    vector<NCstring> header;
+
+    switch ( tableType )
+    {
+	case T_Packages:
+	case T_Availables: {
+	    header.reserve(6);
+	    header.push_back( PkgNames::PkgStatus() );
+	    header.push_back( PkgNames::PkgName() );
+	    header.push_back( PkgNames::PkgVersion() );
+	    header.push_back( PkgNames::PkgSummary() );
+	    header.push_back( PkgNames::PkgSize() );
+	    header.push_back( YCPString( "SPM" ) );
+	    break;
+	}
+	case T_Patches: {
+	    header.reserve(6);
+	    header.push_back( PkgNames::PkgStatus() );
+	    header.push_back( PkgNames::PkgName() );
+	    header.push_back( PkgNames::PatchKind() );
+	    header.push_back( PkgNames::PkgSummary() );
+	    header.push_back( PkgNames::PkgSize() );
+	    break;
+	}
+	default: {
+	    header.reserve(5);
+	    header.push_back( PkgNames::PkgStatus() );
+	    header.push_back( PkgNames::PkgName() );
+	    header.push_back( PkgNames::PkgVersion() );
+	    header.push_back( PkgNames::PkgSummary() );
+	    header.push_back( PkgNames::PkgSize() );
+	    break;
+	}
+    }
+    setHeader( header );
+}
 
 ///////////////////////////////////////////////////////////////////
 //

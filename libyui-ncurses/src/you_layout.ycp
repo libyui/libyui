@@ -11,10 +11,11 @@
  */
 
 `VBox( `VSpacing(0.3),
-       `HBox( `HSpacing(0.3),
+       `HBox( `HSpacing(0.4),
 	      `Left(`MenuButton( "&Filter", [`item( `id(`recommended), "&Recommended"),
 					     `item( `id(`security), "&Security" ),
-					     `item( `id(`installed), "&Installed" )
+					     `item( `id(`instpatches), "&Installed" ),
+					     `item( `id(`allpatches), "&All patches" )
 				 ]
 				 )),
 	      `Left(`MenuButton( "&Actions", [`item( `id(`toggle), 	"&Toggle   [F4]"),
@@ -27,7 +28,7 @@
 						  `item( `id(`patchpkgs), "&Package list" )
 				 ]
 				 )),
-	      `HSpacing(0.3)
+	      `HStretch()
 	      ),
        `VSpacing(0.3),
        `VWeight( 50, `HBox(`HSpacing(0.3),
@@ -35,9 +36,10 @@
 			   `HSpacing(0.3)
 			   )
 		 ),
-       `HBox( `Label( "Filter: "),
-	      `Label( `id(`filter), "........................." ),
-	      `HSpacing( 0.1 )
+       `HBox( `HSpacing(0.4),
+	     `Left( `Label( "Filter: ") ),
+	      `Left( `Label( `id(`filter), "........................." ) ), 
+	      `HStretch( )
 	      ),
        `VBox(`VWeight( 40, `ReplacePoint( `id(`replaceinfo),
 					  `RichText( `id(`description)," ")

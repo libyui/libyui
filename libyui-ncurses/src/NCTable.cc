@@ -113,7 +113,7 @@ void NCTable::setLabel( const YCPString & nlabel )
 //
 //	DESCRIPTION :
 //
-void NCTable::setHeader( vector<NCstring> headline ) 
+void NCTable::setHeader( const vector<NCstring> & headline ) 
 {
   hasHeadline = pad->SetHeadline( headline );
 }

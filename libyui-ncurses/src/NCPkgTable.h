@@ -71,7 +71,7 @@ class NCPkgTableTag : public NCTableCol {
 			 NCTableLine::STATE linestate,
 			 unsigned colidx ) const; 
 
-    void setStatus( PMSelectable::UI_Status & stat ) 	{ status = stat; }
+    void setStatus( PMSelectable::UI_Status  stat ) 	{ status = stat; }
     PMSelectable::UI_Status getStatus() const   { return status; }
     PMObjectPtr getDataPointer() const		{ return dataPointer; }
 };
@@ -134,7 +134,7 @@ public:
     * @eturn void
     */
     virtual void addLine( PMSelectable::UI_Status status,
-			  vector<string> elements,
+			  const vector<string> & elements,
 			  int index,
 			  PMObjectPtr objPtr );
 
@@ -219,12 +219,21 @@ public:
     /**
      * Sets the type of the table and the status strategy (which means call particular methods
      * to set/get the status for different PMObjects (PMYouPatch, PMPackage or available PMPackage)
+     * @param type	The type (see enum NCPkgTableType)
+     * @param strategy  The certain strategy (available strategies see ObjectStatStrategy.h).
+     * 			Has to be allocated with new - is deleted by NCPkgTable.
+     * @return bool
      */
-    void setTableType( NCPkgTableType type, ObjectStatStrategy * strategy ) {
-	    delete statusStrategy;
-	    statusStrategy = strategy;
-	    tableType = type;
-	}
+    bool setTableType( NCPkgTableType type, ObjectStatStrategy * strategy ) {
+	if ( !strategy )
+	    return false;
+	
+	delete statusStrategy;
+	statusStrategy = strategy;
+	tableType = type;
+
+	return true;
+    }
 
     /**
      * Gets the data pointer of a certain package.
@@ -239,8 +248,17 @@ public:
      */ 
     unsigned int getNumLines( ) { return pad->Lines(); }
 
-    
-    bool fillDefaultList( NCPkgTable * pkgTable );
+    /**
+     * Shows default list (packages of default RPM group or patch list)
+     * @return bool
+     */  
+    bool fillDefaultList( );
+
+    /**
+     * Fills the header of the table
+     * @return void
+     */  
+    void fillHeader( );
 };
 
 ///////////////////////////////////////////////////////////////////

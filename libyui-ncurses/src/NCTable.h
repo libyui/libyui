@@ -73,7 +73,7 @@ class NCTable : public YTable, public NCPadWidget {
     bool bigList() const { return biglist; }
     
     bool isImmediate() const { return immediate; }	// addey by gs
-    void setHeader( vector<NCstring> head ); 		// added by gs
+    void setHeader( const vector<NCstring> & head ); 	// added by gs
 
     void setBigList( const bool big ) { biglist = big; }
     void SetSepChar( const chtype colSepchar )  { pad->SetSepChar( colSepchar ); }

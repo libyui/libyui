@@ -125,7 +125,7 @@ class PackageSelector
     * Fills the package table with available YOU patches
     * @return bool
     */
-    bool fillPatchList( );
+    bool fillPatchList( string filter );
     
    /**
     * Fills the list of available packages
@@ -286,7 +286,13 @@ class PackageSelector
      * Check if 'pkg' matches 'selectedRpmGroup'.
      * Returns true if there is a match, false otherwise or if 'pkg' is 0.
      **/
-    bool check( PMPackagePtr pkg, YStringTreeItem * rpmGroup, int index );
+    bool checkPackage( PMPackagePtr pkg, YStringTreeItem * rpmGroup, unsigned int index );
+
+    /**
+     * Check if 'patch' matches teh sekected filter.
+     * Returns true if there is a match, false otherwise or if 'patch' is 0.
+     **/ 
+    bool checkPatch(  PMYouPatchPtr patch, string filter, unsigned int index );
 
 };
 

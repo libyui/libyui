@@ -86,12 +86,24 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     // Filter menu
     eventHandlerMap[ PkgNames::RpmGroups()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::Selections()->toString() ] = &PackageSelector::FilterHandler;
+
+    // YOU filter
+    eventHandlerMap[ PkgNames::Recommended()->toString() ] = &PackageSelector::FilterHandler;
+    eventHandlerMap[ PkgNames::Security()->toString() ] = &PackageSelector::FilterHandler;
+    eventHandlerMap[ PkgNames::InstalledPatches()->toString() ] = &PackageSelector::FilterHandler;
+    eventHandlerMap[ PkgNames::AllPatches()->toString() ] = &PackageSelector::FilterHandler;
+
     // Information menu
     eventHandlerMap[ PkgNames::Files()->toString() ]   	= &PackageSelector::InformationHandler;
     eventHandlerMap[ PkgNames::PkgInfo()->toString() ] 	= &PackageSelector::InformationHandler;
     eventHandlerMap[ PkgNames::LongDescr()->toString() ]= &PackageSelector::InformationHandler;
     eventHandlerMap[ PkgNames::Versions()->toString() ] = &PackageSelector::InformationHandler;
     eventHandlerMap[ PkgNames::Relations()->toString() ] = &PackageSelector::InformationHandler;
+
+    // YOU inforamtion 
+    eventHandlerMap[ PkgNames::PatchDescr()->toString() ] = &PackageSelector::InformationHandler;
+    eventHandlerMap[ PkgNames::PatchPkgs()->toString() ] = &PackageSelector::InformationHandler;
+    
     // Action menu
     eventHandlerMap[ PkgNames::Toggle()->toString() ] 	= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::Select()->toString() ] 	= &PackageSelector::StatusHandler;
@@ -407,7 +419,7 @@ bool PackageSelector::fillSearchList( const YCPString & expr )
 //
 // Fills the package table with the list of YOU patches
 //
-bool PackageSelector::fillPatchList( )
+bool PackageSelector::fillPatchList( string filter )
 {
     NCPkgTable * packageList = getPackageList();
      
@@ -439,7 +451,7 @@ bool PackageSelector::fillPatchList( )
 	else
 	    patchPtr = selectable->theObject();
 
-	createPatchEntry( packageList, patchPtr, i );
+	checkPatch( patchPtr, filter, i );
 			  
     }
 
@@ -496,8 +508,8 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
 	// entries for the same package!
 	    
 	bool match =
-	    check( selectable->installedObj(), rpmGroup, i ) || 
-	    check( selectable->candidateObj(), rpmGroup, i );  
+	    checkPackage( selectable->installedObj(), rpmGroup, i ) || 
+	    checkPackage( selectable->candidateObj(), rpmGroup, i );  
 
 	// If there is neither an installed nor a candidate package, check
 	// any other instance.  
@@ -505,7 +517,7 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
 	if ( ! match			&&
 	     ! selectable->installedObj()	&&
 	     ! selectable->candidateObj()     )
-	    check( selectable->theObject(), rpmGroup, i );
+	    checkPackage( selectable->theObject(), rpmGroup, i );
 
     }
 
@@ -529,9 +541,9 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
 // check
 //
 //
-bool PackageSelector::check( PMPackagePtr pkg,
-			     YStringTreeItem * rpmGroup,
-			     int index )
+bool PackageSelector::checkPackage( PMPackagePtr pkg,
+				    YStringTreeItem * rpmGroup,
+				    unsigned int index )
 {
     if ( ! pkg || ! rpmGroup )
 	return false;
@@ -554,6 +566,33 @@ bool PackageSelector::check( PMPackagePtr pkg,
     {
 	createListEntry( packageList, pkg, index );
 	
+	return true;
+    }
+    else
+    {
+	return false;
+    }
+}
+
+bool PackageSelector::checkPatch( PMYouPatchPtr patchPtr,
+				  string filter,
+				  unsigned int index )
+{
+
+    NCPkgTable * packageList = getPackageList();
+    
+    if ( !packageList || !patchPtr )
+    {
+	UIERR << "Widget is not a valid NCPkgTable widget" << endl;
+    	return false;
+    }
+
+    if ( filter == "all"
+	 || filter == patchPtr->kindLabel( patchPtr->kind() )
+	 || ( filter == "installed" && patchPtr->getSelectable()->status() == PMSelectable::S_KeepInstalled ) 
+	 )
+    {
+	createPatchEntry( packageList, patchPtr, index );
 	return true;
     }
     else
@@ -611,11 +650,11 @@ bool PackageSelector::createPatchEntry ( NCPkgTable *pkgTable,
 	return false;
     }
 
-    pkgLine[0] = patchPtr->getSelectable()->name();	// name
-    pkgLine[1] = patchPtr->shortDescription();  	// short description
-    //FSize size = patchPtr->size();     	// installed size
-    //pkgLine[2] = size.asString();
-    pkgLine[2] =  "95 kB";
+    pkgLine[0] = patchPtr->getSelectable()->name();	  // name
+    pkgLine[1] = patchPtr->kindLabel( patchPtr->kind() ); // patch kind
+    pkgLine[2] = patchPtr->summary();  	// short description
+    FSize size = patchPtr->size();     	// installed size
+    pkgLine[3] = size.asString();
     
     pkgTable->addLine( patchPtr->getSelectable()->status(), //  get the status
 		       pkgLine,
@@ -764,12 +803,6 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 	return false;
     }
 
-    if ( youMode )
-    {
-	// up to now: nothing to do
-	return true;
-    }
-    
     if ( event.selection->compare( PkgNames::RpmGroups() ) == YO_EQUAL )
     {
 	if ( filterPopup )
@@ -777,7 +810,6 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 	    // show the filter popup (fills the package list) 
 	    retEvent = filterPopup->showFilterPopup( );
 	}
-	
     }
     else if ( event.selection->compare( PkgNames::Selections() ) == YO_EQUAL )
     {
@@ -786,6 +818,22 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 	    // show the selection popup
 	    retEvent = selectionPopup->showSelectionPopup( );
 	}
+    }
+    else if ( event.selection->compare( PkgNames::Recommended() ) ==  YO_EQUAL )
+    {
+	fillPatchList( "Recommended" );
+    }
+    else if ( event.selection->compare( PkgNames::Security() )  ==  YO_EQUAL )
+    {
+	fillPatchList( "Security" );
+    }
+    else if ( event.selection->compare( PkgNames::AllPatches() )  ==  YO_EQUAL )
+    {
+	fillPatchList( "all" );
+    }
+    else if (  event.selection->compare( PkgNames::InstalledPatches() ) ==  YO_EQUAL )
+    {
+	fillPatchList( "installed" );
     }
 
     showPackageInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );
@@ -966,9 +1014,9 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 //
 // Shows the patch information
 //
-bool PackageSelector::showPatchInformation ( PMObjectPtr pkgPtr )
+bool PackageSelector::showPatchInformation ( PMObjectPtr objPtr )
 {
-    PMYouPatchPtr patchPtr = pkgPtr;
+    PMYouPatchPtr patchPtr = objPtr;
 
     if ( !patchPtr )
     {
@@ -981,17 +1029,25 @@ bool PackageSelector::showPatchInformation ( PMObjectPtr pkgPtr )
 	NCERR <<  "Visible package information NOT set" << endl;
 	return false;	
     }    
-    
-    NCstring text ( patchPtr->shortDescription() );
-	
-    // show the description	
-    YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
-	
-    if ( descrInfo )
+
+    if (  visibleInfo->compare( PkgNames::PatchDescr() ) == YO_EQUAL )
     {
-	static_cast<NCRichText *>(descrInfo)->setText( text.YCPstr() );
-    }
+	//  NCstring text ( patchPtr->shortDescription() );
+	NCstring text ( patchPtr->longDescription() );
 	
+	// show the description	
+	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
+	
+	if ( descrInfo )
+	{
+	    static_cast<NCRichText *>(descrInfo)->setText( text.YCPstr() );
+	}	
+    }
+    else if (  visibleInfo->compare( PkgNames::PatchPkgs() ) == YO_EQUAL )
+    {
+	//std::list<PMPackagePtr> packages() const { return _packages; }
+    }
+
     return true;
 }
 
@@ -1131,13 +1187,6 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	NCPkgTable * pkgAvail = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::AvailPkgs(), true));
 	if ( pkgAvail )
 	{
-#if 0
-	    // set the connection to the PackageSelector !!!!
-	    pkgAvail->setPackager( this );
-	    // set status strategy
-	    ObjectStatStrategy * strategy = new AvailableStatStrategy();
-	    pkgAvail->setStatusStrategy( strategy );
-#endif
 	    fillAvailableList( pkgAvail, pkgPtr );
 	}
     }
@@ -1183,6 +1232,7 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	    static_cast<NCRichText *>(descrInfo)->setText( text.YCPstr() );
 	}
     }
+ 
     
     NCDBG <<  "Showing package information: " << visibleInfo->toString() << endl;
     

@@ -204,10 +204,40 @@ public:
     static const YCPValue& FilterHelp ();
 
     /**
-     *  Widget id of inst source help menu item
+     *  Widget id of  help  YOU
      */
-    static const YCPValue& InstSourceHelp ();
+    static const YCPValue& PatchHelp ();
     
+    /**
+     *  Widget id of Filter/recommended
+     */
+    static const YCPValue& Recommended ();
+
+   /**
+     *  Widget id of Filter/security
+     */
+    static const YCPValue& Security ();
+
+    /**
+     *  Widget id of Filter/installed
+     */
+    static const YCPValue& InstalledPatches ();
+
+    /**
+     *  Widget id of Filter/all patches
+     */
+    static const YCPValue& AllPatches ();
+
+   /**
+     *  Widget id information patch descr
+     */
+    static const YCPValue& PatchDescr ();
+
+    /**
+     *  Widget id information patch packages
+     */
+    static const YCPValue& PatchPkgs ();
+
     /**
      *  Internal use (id for the tree items)
      */
@@ -415,6 +445,11 @@ public:
      */
     static const NCstring PkgSize();
 
+     /**
+     *  Column header patch kind
+     */
+    static const NCstring PatchKind();
+    
     /**
      *  Column header package status
      */

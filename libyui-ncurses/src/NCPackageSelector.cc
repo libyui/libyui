@@ -66,12 +66,9 @@ NCPackageSelector::NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
 
     if ( ! pkgLayout.isNull() )
     {
-	NCMIL << "Creating widget tree" << endl;
 	widgetRoot = (YContainerWidget *)ui->createWidgetTree( dynamic_cast<YWidget *>(parent),
 							       opt, 0, pkgLayout );
     }
-    else
-	NCERR << "Layout is NULL" << endl;
 
     if ( widgetRoot )
     {
@@ -108,7 +105,7 @@ NCPackageSelector::NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
 	    pkgList->setPackager( &packager );
 
 	    // fill table header
-	    packager.fillHeader( pkgList );
+	    pkgList->fillHeader( );
 	}
     }
     else
@@ -163,13 +160,7 @@ void NCPackageSelector::showDefaultList()
     if ( pkgList )
     {
 	// fill the list with packages 
-	pkgList->fillDefaultList( pkgList );
-	
-        // set the visible info to package description 
-	packager.setVisibleInfo ( PkgNames::PkgInfo() );
-	
-	// show the package description of the current item
-	packager.showPackageInformation( pkgList->getDataPointer( pkgList->getCurrentItem() ) );
+	pkgList->fillDefaultList( );
 
     }
     else
