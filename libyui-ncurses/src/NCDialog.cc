@@ -23,6 +23,7 @@
 #include "NCMenuButton.h"
 #include "YShortcut.h"
 #include "PkgNames.h"
+#include "NCi18n.h"
 
 #include "ncursesw.h"
 
@@ -30,6 +31,11 @@
 #undef  DBG_CLASS
 #define DBG_CLASS "_NCDialog_"
 #endif
+
+/*
+  Textdomain "packages"
+*/
+
 
 /******************************************************************
 **
@@ -83,7 +89,7 @@ NCDialog::NCDialog( YWidgetOpt & opt, const wpos at, const bool boxed )
     , ncdopts    ( boxed ? POPUP : POPUP|NOBOX )
     , popedpos   ( at )
 {
-  _init( opt );
+    _init( opt );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -98,6 +104,8 @@ void NCDialog::_init( YWidgetOpt & opt )
 {
   NCurses::RememberDlg( this );
 
+  setTextdomain( "packages" );
+  
   _init_size();
 
   wstate = NC::WSdumb;
