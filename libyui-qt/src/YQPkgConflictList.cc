@@ -29,6 +29,8 @@
 #include "utf8.h"
 
 
+#define LIST_SPLIT_THRESHOLD	8
+
 
 YQPkgConflictList::YQPkgConflictList( QWidget * parent )
     : QY2ListView( parent )
@@ -197,14 +199,14 @@ YQPkgConflict::dumpLists()
 {
     if ( _conflict.state_change_not_possible )
     {
-	dumpList( this, _conflict.referers, "",
+	dumpList( this, _conflict.referers, LIST_SPLIT_THRESHOLD, "",
 		  _( "Required by:" ) );
     }
 
-    dumpList( this, _conflict.unresolvable, "", 
+    dumpList( this, _conflict.unresolvable, LIST_SPLIT_THRESHOLD, "", 
 	      _( "Unresolved Reqirements:" ) );
 
-    dumpList( this, _conflict.conflicts_with, "",
+    dumpList( this, _conflict.conflicts_with, LIST_SPLIT_THRESHOLD, "",
 	      _( "Conflicts with:" ) );
 }
 
@@ -212,6 +214,7 @@ YQPkgConflict::dumpLists()
 void
 YQPkgConflict::dumpList( QListViewItem * 	parent,
 			 PkgDep::RelInfoList &	list,
+			 int			splitThreshold,
 			 const QString &	itemPrefix,
 			 const QString & 	header )
 {
@@ -233,17 +236,36 @@ YQPkgConflict::dumpList( QListViewItem * 	parent,
 	parent->setOpen( true );
     }
 
+    bool doSplit	= splitThreshold > 1 && list.size() > (unsigned) splitThreshold + 3;
+    bool didSplit	= false;
+    int count		= 0;
     PkgDep::RelInfoList_const_iterator it = list.begin();
+
 
     while ( it != list.end() )
     {
+	if ( doSplit && ! didSplit && ++count > splitThreshold )
+	{
+	    // Split list
+	    
+	    QString text = ( _( "%1 more..." ) ).arg( list.size() - count );
+	    QY2ListViewItem * sublist = new QY2ListViewItem( parent, text, true );
+	    didSplit = true;
+
+	    if ( sublist )
+	    {
+		sublist->setBackgroundColor( QColor( 0xE0, 0xE0, 0xE0 ) );
+		parent = sublist;
+	    }
+	}
+	    
 	QString contents = itemPrefix;
 	std::string rel = (*it).name;
 	rel += " " + _( "requires" ) + " ";
 	rel += PkgRelation::toString( (*it).rel );
 	
 	contents += rel.c_str();
-	new QY2ListViewItem( parent, contents );
+	new QY2ListViewItem( parent, contents, true );
 
 	++it;
     }

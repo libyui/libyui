@@ -136,10 +136,12 @@ protected:
      * If 'header' is non-null, create a bracketing list item with text
      * 'header' and insert the list items below that new item.
      * If 'itemPrefix' is non-null, prefix each list entry's text with it.
+     * Splits into a sublist at (about) 'splitThreshold' if this is > 1.
      * Does nothing if the list is empty.
      **/
     void dumpList( QListViewItem * 		parent,
 		   PkgDep::RelInfoList & 	list,
+		   int				splitThreshold = -1,
 		   const QString &		itemPrefix = QString::null,
 		   const QString & 		header	   = QString::null );
 
