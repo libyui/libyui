@@ -28,7 +28,7 @@
 					    // menu items
 					    [`item( `id(`toggle),  _("&Toggle    [F3]") ),
 					     `item( `id(`select),  _("&Select     [+]") ),
-					     `item( `id(`deselect), _("Dese&lect   [-]") ),
+					     `item( `id(`delete), _("Dese&lect   [-]") ),
 					     `item( `id(`update),  _("&Update     [>]") )
 					     ]
 					    )),
