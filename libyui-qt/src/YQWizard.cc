@@ -196,14 +196,17 @@ YQWizard::YQWizard( QWidget *		parent,
     // Work area (contains client area and button box)
     //
 
-    QVBox * work_area = new QVBox( hbox );
+    QVBox * workArea = new QVBox( hbox );
+    CHECK_PTR( workArea );
 
     //
     // Client area
     //
 
-    _clientArea = new QVBox( work_area );
+    _clientArea = new QVBox( workArea );
     CHECK_PTR( _clientArea );
+    // _clientArea->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+    _clientArea->setMargin( 4 );
 
     //
     // Replace point for wizard contents
@@ -223,7 +226,7 @@ YQWizard::YQWizard( QWidget *		parent,
     //
 
 #if 1
-    YQEmpty * empty =new YQEmpty( _contentsReplacePoint, widgetOpt );
+    YQEmpty * empty = new YQEmpty( _contentsReplacePoint, widgetOpt );
     empty->setParent( _contentsReplacePoint );
     _contentsReplacePoint->addChild( empty );
 #else
@@ -240,7 +243,7 @@ YQWizard::YQWizard( QWidget *		parent,
     // Button box
     //
 
-    _buttonBox = new QHBox( work_area );
+    _buttonBox = new QHBox( workArea );
     CHECK_PTR( _buttonBox );
     _buttonBox->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
     _buttonBox->setMargin( 5 );
@@ -401,8 +404,8 @@ void YQWizard::setSize( long newWidth, long newHeight )
 void YQWizard::resizeClientArea()
 {
     // y2debug( "resizing client area" );
-    QSize contentsSize = _clientArea->size();
-    _contentsReplacePoint->setSize( contentsSize.width(), contentsSize.height() );
+    QRect contentsRect = _clientArea->contentsRect();
+    _contentsReplacePoint->setSize( contentsRect.width(), contentsRect.height() );
 }
 
 
