@@ -33,12 +33,11 @@
 						  `item( `id(`longdescr), "&Long description" ),
 						  `item( `id(`versions), "&Version(s)" ),
 						  `item( `id(`files), "&File list" ),
-						  `item( `id(`requires), "&Package relations" ) ]
+						  `item( `id(`relations), "&Package relations" ) ]
 				 )),
 	      `Left(`MenuButton( "&Etc.", [`item( `id(`showdeps), "&Check dependencies now" ),
 					  `item( `id(`check), "&Automatic dependency check" ),
-					  `item( `id(`nocheck), "Do&n't check dependencies" ),
-					  `item( `id(`diskinfo), "&Diskspace information" ) ]
+					  `item( `id(`nocheck), "Do&n't check dependencies" ) ]
 				 )),
 	      `HSpacing(0.3)
 					   
