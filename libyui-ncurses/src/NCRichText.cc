@@ -19,6 +19,7 @@
 
 #include "Y2Log.h"
 #include "NCRichText.h"
+#include "Y2NCursesUI.h"
 
 #if 0
 #undef  DBG_CLASS
@@ -34,7 +35,7 @@ const bool NCRichText::showLinkTarget = false;
 
 ///////////////////////////////////////////////////////////////////
 
-std::map<std::wstring,const wchar_t *> NCRichText::_charentity;
+std::map<std::wstring, std::wstring> NCRichText::_charentity;
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -44,21 +45,25 @@ std::map<std::wstring,const wchar_t *> NCRichText::_charentity;
 //
 //	DESCRIPTION :
 //
-const wchar_t * NCRichText::entityLookup( const std::wstring & val_r )
+const wstring NCRichText::entityLookup( const std::wstring & val_r )
 {
   if ( _charentity.empty() ) {
     // initialize replacement for character entities. A value of NULL
-    // menas do not replace.
+    // means do not replace.
+    wstring product;
+    NCstring::RecodeToWchar( Y2NCursesUI::ui()->productName(), "UTF-8", &product);
+    
 #define REP(l,r) _charentity[l] = r
     REP(L"amp",	L"&");
     REP(L"gt",	L">");
     REP(L"lt",	L"<");
     REP(L"nbsp", L" ");
     REP(L"quot", L"\"");
+    REP(L"product", product);
 #undef REP
   }
 
-  std::map<std::wstring,const wchar_t *>::const_iterator it = _charentity.find( val_r );
+  std::map<std::wstring, std::wstring>::const_iterator it = _charentity.find( val_r );
   if ( it != _charentity.end() ) {
     return it->second;
   }
@@ -490,8 +495,8 @@ inline void NCRichText::PadTXT( const wchar_t * osch, const unsigned olen )
     if ( colon == wstring::npos )
       break;  // no ';'  -> no need to continue
 
-   const wchar_t * repl = entityLookup( txt.substr( special+1, colon-special-1 ) );
-    if ( repl )
+    const wstring repl = entityLookup( txt.substr( special+1, colon-special-1 ) );
+    if ( !repl.empty() )
     {
 	txt.replace( special, colon-special+1, repl );
     }
@@ -704,6 +709,7 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
     else if ( value[0] == 'i' )		token = T_IT;
     else if ( value[0] == 'p' )		token = T_PAR;
     else if ( value[0] == 'a' )		token = T_ANC;
+    else if ( value[0] == 'u' )		token = T_BOLD;
     break;
   case 2:
     if (      value == L"br" )		token = T_BR;

@@ -47,7 +47,7 @@ class NCRichText : public YRichText, public NCPadWidget {
      * Lookup map for character entities (e.g. '&gt;'). Initialized
      * and used by @ref entityLookup.
      **/
-    static std::map<std::wstring,const wchar_t *> _charentity;
+    static std::map<std::wstring, std::wstring> _charentity;
 
     /**
      * Lookup and return replacement for a character entity. Expects
@@ -55,7 +55,7 @@ class NCRichText : public YRichText, public NCPadWidget {
      * be stripped from <code>val_r</code>. Returns <code>NULL</code>,
      * if the character entity should not be replaced.
      **/
-    static const wchar_t * entityLookup( const std::wstring & val_r );
+    static const wstring entityLookup( const std::wstring & val_r );
 
   private:
 
