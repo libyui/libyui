@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Mar 11 18:11:03 CET 2005 - sh@suse.de
+
+- V 2.11.10
+- Fixed bug #72174: Installation font too small in 800x600 and 1024x768 
+
+-------------------------------------------------------------------
 Fri Mar 11 13:22:52 CET 2005 - sh@suse.de
 
 - Fixed bug #72158: File selection box on screen shots
