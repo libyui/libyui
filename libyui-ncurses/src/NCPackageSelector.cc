@@ -45,7 +45,8 @@ NCPackageSelector::NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
 				      string floppyDevice )
     : NCSplit( parent, opt, dimension )
       , widgetRoot( 0 )
-      , packager( ui, opt, floppyDevice )
+      , floppy( floppyDevice )
+      , packager( ui, opt )
       , youMode ( false )
       , updateMode ( false )
 {
@@ -186,6 +187,18 @@ void NCPackageSelector::showDefaultList()
     {
 	NCERR << "Package table does not exist" << endl;
     }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//      METHOD NAME : NCPackageSelector::initPopups
+//      METHOD TYPE : void
+//
+//      DESCRIPTION : create all popup dialogs
+//
+void NCPackageSelector::initPopups( )
+{
+    packager.initPopups( floppy );
 }
 
 ///////////////////////////////////////////////////////////////////

@@ -627,7 +627,7 @@ YCPValue Y2NCursesUI::runPkgSelection(  YWidget * selector )
     if ( ncSelector )
     {
 	ncSelector->showDefaultList();
-
+	ncSelector->initPopups();
 	NCDialog * ncd = static_cast<NCDialog *>( dialog );
 
 	do

@@ -47,6 +47,8 @@ class NCPackageSelector : public NCSplit
   private:
    
     YContainerWidget * widgetRoot; 	// root of the widget tree of the package selection dialog
+    string	floppy;			// the floppy device
+    
     NCPkgTable * pkgList;		// the package table widget
     
     PackageSelector packager; 		// packager object contains the data and handles events
@@ -84,6 +86,11 @@ class NCPackageSelector : public NCSplit
      * package selection).
      **/
     void showDefaultList();
+
+    /**
+     * Init all popup dialogs
+     */
+    void initPopups();
     
     /**
      * Pass the event to the handleEvent method of the member variable
