@@ -272,7 +272,7 @@ QY2DiskUsageListItem::paintPercentageBar( float			percent,
     if ( w > 0 )
     {
 	QPen pen( painter->pen() );
-	pen.setWidth( 0 );
+	pen.setWidth(0);
 	painter->setPen( pen );
 	painter->setBrush( NoBrush );
 	fillWidth = ( int ) ( ( w - 2 * penWidth ) * percent / 100.0 );

@@ -83,7 +83,7 @@ YQListViewItem::YQListViewItem( YQTable *	 table,
 YQTable::YQTable( QWidget * parent, YWidgetOpt & opt, vector<string> header )
     : QVBox( parent )
     , YTable( opt, header.size() )
-    , last_item( 0 )
+    , last_item(0)
 {
     sort_by_insertion_order = true;
     enable_user_sort = ! opt.keepSorting.value();

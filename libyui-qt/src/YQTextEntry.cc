@@ -38,7 +38,7 @@ YQTextEntry::YQTextEntry( QWidget * parent, YWidgetOpt & opt,
 			 const YCPString & label, const YCPString & text )
     : QVBox( parent )
     , YTextEntry( opt, label )
-    , _validator( 0 )
+    , _validator(0)
 {
     setWidgetRep( this );
 

@@ -26,10 +26,10 @@
 
 QY2ListView::QY2ListView( QWidget * parent )
     : QListView( parent )
-    , _mousePressedItem( 0 )
+    , _mousePressedItem(0)
     , _mousePressedCol( -1 )
     , _mousePressedButton( NoButton )
-    , _nextSerial( 0 )
+    , _nextSerial(0)
 {
     QListView::setShowToolTips( false );
     _toolTip = new QY2ListViewToolTip( this );
@@ -134,7 +134,7 @@ QY2ListView::saveColumnWidths()
 
     for ( int i = 0; i < columns(); i++ )
     {
-	_savedColumnWidth.push_back( columnWidth( i ) );
+	_savedColumnWidth.push_back( columnWidth(i) );
     }
 }
 
@@ -468,7 +468,7 @@ QY2ListViewToolTip::maybeTip( const QPoint & pos )
 	return;
 
     int x      = _listView->viewportToContents( pos ).x();
-    int column = header->sectionAt( x );
+    int column = header->sectionAt(x);
     int indent = 0;
 
     if ( column == 0 )
@@ -488,7 +488,7 @@ QY2ListViewToolTip::maybeTip( const QPoint & pos )
 
 	if ( column < 0 )
 	{
-	    rect.setX( 0 );
+	    rect.setX(0);
 	    rect.setWidth( indent );
 	}
 	else

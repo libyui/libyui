@@ -69,7 +69,7 @@ YQPushButton::~YQPushButton()
 	_dialog->losingFocus( this );
 		
     if ( _dialog->defaultButton() == this )
-	_dialog->setDefaultButton( 0 );
+	_dialog->setDefaultButton(0);
 }
 
 

@@ -41,8 +41,8 @@ QY2ComboTabWidget::QY2ComboTabWidget( const QString &	label,
     : QVBox( parent, name )
 {
     setFrameStyle( QFrame::Panel | QFrame::Raised );
-    setLineWidth( 2 );
-    setMidLineWidth( 2 );
+    setLineWidth(2);
+    setMidLineWidth(2);
     setSpacing( SPACING );
     setMargin ( MARGIN  );
 

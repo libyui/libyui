@@ -96,7 +96,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
     _conflictList = new YQPkgConflictList( this );
     CHECK_PTR( _conflictList );
     layout->addWidget( _conflictList );
-    layout->addSpacing( 8 );
+    layout->addSpacing(8);
 
     connect( _conflictList, SIGNAL( updatePackages() ),
 	     this,	    SIGNAL( updatePackages() ) );

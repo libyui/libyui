@@ -47,8 +47,8 @@ void YQBarGraph::doUpdate()
 
     for ( int i=0; i < segments(); i++ )
     {
-	_barGraph->setValue( i, value( i ) );
-	_barGraph->setLabel( i, fromUTF8( label( i ) ) );
+	_barGraph->setValue( i, value(i) );
+	_barGraph->setLabel( i, fromUTF8( label(i) ) );
     }
 
     _barGraph->update();

@@ -70,8 +70,8 @@ YQDialog::YQDialog( YWidgetOpt &	opt,
     if ( ! hasDefaultSize() && ! YUIQt::ui()->haveWM() )
     {
 	_qFrame->setFrameStyle ( QFrame::Box | QFrame::Raised );
-	_qFrame->setLineWidth( 2 );
-	_qFrame->setMidLineWidth( 3 );
+	_qFrame->setLineWidth(2);
+	_qFrame->setMidLineWidth(3);
     }
     else
     {
@@ -153,7 +153,7 @@ void YQDialog::setSize( long newWidth, long newHeight )
 
     if ( numChildren() > 0 )
     {
-	YContainerWidget::child( 0 )->setSize(newWidth  - 2 * decorationWidth( YD_HORIZ ),
+	YContainerWidget::child(0)->setSize(newWidth  - 2 * decorationWidth( YD_HORIZ ),
 					     newHeight - 2 * decorationWidth( YD_VERT  ) );
     }
     

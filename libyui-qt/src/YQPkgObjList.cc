@@ -42,8 +42,8 @@ using std::string;
 YQPkgObjList::YQPkgObjList( QWidget * parent )
     : QY2ListView( parent )
     , _editable( true )
-    , _installedContextMenu( 0 )
-    , _notInstalledContextMenu( 0 )
+    , _installedContextMenu(0)
+    , _notInstalledContextMenu(0)
 {
     // This class does not add any columns. This is the main reason why this is
     // an abstract base class: It doesn't know which columns are desired and in

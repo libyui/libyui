@@ -63,7 +63,7 @@ YQPkgTextDialog::YQPkgTextDialog( const QString & text, QWidget * parent )
     _textBrowser = new QTextBrowser( this );
     CHECK_PTR( _textBrowser );
     layout->addWidget( _textBrowser );
-    layout->addSpacing( 8 );
+    layout->addSpacing(8);
     _textBrowser->setText( text );
     _textBrowser->setTextFormat( Qt::RichText );
     _textBrowser->installEventFilter( this );

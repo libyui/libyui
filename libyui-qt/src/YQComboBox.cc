@@ -35,7 +35,7 @@ YQComboBox::YQComboBox( QWidget * parent, YWidgetOpt & opt,
 		       const YCPString & label )
     : QVBox( parent )
     , YComboBox( opt, label )
-    , _validator( 0 )
+    , _validator(0)
 {
     setWidgetRep( this );
     setSpacing( SPACING );

@@ -58,7 +58,7 @@ YQSelectionBox::YQSelectionBox( QWidget * parent, YWidgetOpt & opt,
     _qt_listbox->installEventFilter( this );
     _qt_listbox->setVariableHeight( false );
     _qt_listbox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
-    _qt_listbox->setTopItem( 0 );
+    _qt_listbox->setTopItem(0);
     _qt_label->setBuddy( _qt_listbox );
 
     shrinkable 		= opt.isShrinkable.value();

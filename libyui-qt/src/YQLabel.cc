@@ -35,15 +35,15 @@ YQLabel::YQLabel( QWidget * parent, YWidgetOpt & opt,
 
     setTextFormat( QLabel::PlainText );
     setText( fromUTF8(text->value() ) );
-    setIndent( 0 );
+    setIndent(0);
 
     setFont( opt.isHeading.value() ? YUIQt::ui()->headingFont() : YUIQt::ui()->currentFont() );
 
     if ( opt.isOutputField.value() )
     {
 	setFrameStyle ( QFrame::Panel | QFrame::Sunken );
-	setLineWidth( 2 );
-	setMidLineWidth( 2 );
+	setLineWidth(2);
+	setMidLineWidth(2);
     }
 
     setMargin( AlignRight );

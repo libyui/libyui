@@ -92,7 +92,7 @@ YQPkgConflictList::fill( PkgDep::ErrorResultList & badList )
 
 	if ( conflict->isIgnored() )
 	{
-	    // y2debug( "Ignoring conflict: %s", ( const char * ) conflict->text( 0 ) );
+	    // y2debug( "Ignoring conflict: %s", ( const char * ) conflict->text(0) );
 	    delete conflict;	// Yes, this is stupid. The solver should handle that.
 	}
 
@@ -248,7 +248,7 @@ YQPkgConflictList::saveItemToFile( FILE * 			file,
 	}
     }
 
-    fprintf( file, "%s\n", ( const char * ) item->text( 0 ) );
+    fprintf( file, "%s\n", ( const char * ) item->text(0) );
 
 
     if ( item->isOpen() )
@@ -715,14 +715,14 @@ YQPkgConflict::addIgnoreResolution( QY2CheckListItem * parent )
 bool
 YQPkgConflict::isIgnored()
 {
-    return isIgnored( text( 0 ) );
+    return isIgnored( text(0) );
 }
 
 
 void
 YQPkgConflict::ignore()
 {
-    ignore( text( 0 ) );
+    ignore( text(0) );
     updateActions();
 }
 

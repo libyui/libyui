@@ -82,15 +82,15 @@ YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
     addHStretch( hbox );
     
     new QLabel( _( "Total Download Size:" ) + " ", hbox );
-    _totalDownloadSize		= new QLabel( FSize( 0 ).asString().c_str(), hbox );
+    _totalDownloadSize		= new QLabel( FSize(0).asString().c_str(), hbox );
     CHECK_PTR( _totalDownloadSize );
 
     
     // Give the total download size a 3D look
     
     _totalDownloadSize->setFrameStyle( QFrame::Panel | QFrame::Sunken );
-    _totalDownloadSize->setLineWidth( 1 );
-    _totalDownloadSize->setMidLineWidth( 2 );
+    _totalDownloadSize->setLineWidth(1);
+    _totalDownloadSize->setMidLineWidth(2);
     
 
     connect( _youPatchList,	SIGNAL( selectionChanged    ( PMObjectPtr ) ),

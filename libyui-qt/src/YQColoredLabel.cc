@@ -36,7 +36,7 @@ YQColoredLabel::YQColoredLabel( QWidget * parent, YWidgetOpt & opt,
 
     setTextFormat( QLabel::PlainText );
     setText( fromUTF8(text->value() ) );
-    setIndent( 0 );
+    setIndent(0);
     setPaletteForegroundColor( QColor( fg.red, fg.green, fg.blue ) );
     setPaletteBackgroundColor( QColor( bg.red, bg.green, bg.blue ) );
     setMargin( margin );
