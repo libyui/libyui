@@ -360,7 +360,7 @@ YQDialog::setDefaultButton( YQGenericButton * newDefaultButton )
 	}
 	else
 	{
-	    y2error( "Too many `opt( `default ) PushButtons: [%s]",
+	    y2error( "Too many `opt(`default) PushButtons: [%s]",
 		     (const char *) newDefaultButton->text() );
 	    newDefaultButton->setDefault( false );
 	    return;
@@ -464,6 +464,11 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	else if ( event->key() == Qt::Key_F5 )	// No matter if Ctrl/Alt/Shift pressed
 	{
 	    YQUI::ui()->easterEgg();
+	    return;
+	}
+	else if ( event->key() == Qt::Key_F8 )	// No matter if Ctrl/Alt/Shift pressed
+	{
+	    YQUI::ui()->askSaveLogs();
 	    return;
 	}
 	else if ( event->state() == 0 )	// No Ctrl / Alt / Shift etc. pressed

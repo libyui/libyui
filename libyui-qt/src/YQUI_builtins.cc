@@ -213,6 +213,36 @@ void YQUI::makeScreenShot( std::string stl_filename )
 }
 
 
+void YQUI::askSaveLogs()
+{
+    QString fileName = askForSaveFileName( "/tmp/y2logs.tgz",			// startWith
+					   "*.tgz *.tar.gz *.tar.bz2",		// filter
+					   "Save y2logs to..." );		// headline
+
+    if ( ! fileName.isEmpty() )
+    {
+	QString saveLogsCommand = "/sbin/save_y2logs";
+
+	if ( access( saveLogsCommand.ascii(), X_OK ) )
+	{
+	    saveLogsCommand += " '" + fileName + "'";
+	    y2milestone( "Saving y2logs: %s", saveLogsCommand.ascii() );
+	    system( saveLogsCommand.ascii() );
+	}
+	else
+	{
+	    QMessageBox::warning( 0,						// parent
+				  "Error",					// caption
+				  QString( "Couldn't save y2logs\nto %1:\n"
+					   "Command %2 not found" ).arg( fileName ).arg( saveLogsCommand ),
+				  QMessageBox::Ok | QMessageBox::Default,	// button0
+				  QMessageBox::NoButton,			// button1
+				  QMessageBox::NoButton );			// button2
+	}
+    }
+}
+
+
 void YQUI::toggleRecordMacro()
 {
     if ( recordingMacro() )
@@ -297,8 +327,8 @@ YCPValue YQUI::askForExistingDirectory( const YCPString & startDir,
 
 
 YCPValue YQUI::askForExistingFile( const YCPString & startWith,
-                                    const YCPString & filter,
-                                    const YCPString & headline )
+				   const YCPString & filter,
+				   const YCPString & headline )
 {
     normalCursor();
 
@@ -318,8 +348,8 @@ YCPValue YQUI::askForExistingFile( const YCPString & startWith,
 
 
 YCPValue YQUI::askForSaveFileName( const YCPString & startWith,
-                                    const YCPString & filter,
-                                    const YCPString & headline )
+				   const YCPString & filter,
+				   const YCPString & headline )
 {
     normalCursor();
 
@@ -337,8 +367,8 @@ YCPValue YQUI::askForSaveFileName( const YCPString & startWith,
 
 
 QString YQUI::askForSaveFileName( const QString & startWith,
-                                   const QString & filter,
-                                   const QString & headline )
+				  const QString & filter,
+				  const QString & headline )
 {
     QString file_name;
     bool try_again = false;
