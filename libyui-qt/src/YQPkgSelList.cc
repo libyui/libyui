@@ -86,7 +86,7 @@ YQPkgSelList::fillList()
 	{
 	    if ( sel->visible() && ! sel->isBase() )
 	    {
-#if 1
+#if 0
 		// DEBUG
 		std::string key = sel->order();
 		if ( key.empty() )

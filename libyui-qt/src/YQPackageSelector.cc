@@ -18,7 +18,7 @@
 
 
 #define ALPHA_WARNING	1
-#define FAKE_INST_SRC	0
+#define FAKE_INST_SRC	1
 
 #include <qcombobox.h>
 #include <qframe.h>
@@ -81,7 +81,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
 #if FAKE_INST_SRC
     {
 	y2warning( "Enabling fake inst sources" );
-	
+
 	// Y2Logging::setLogfileName("-");
 
 	InstSrcManager & MGR( Y2PM::instSrcManager() );
@@ -109,7 +109,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     // dialog is visible and all set up so the user at least sees an empty
     // dialog rather than nothing.
     QTimer::singleShot( 100, this, SIGNAL( loadData() ) );
-    
+
     y2milestone( "PackageSelector init done" );
 }
 
@@ -147,7 +147,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     QY2ComboTabWidget * filters = new QY2ComboTabWidget( _( "F&ilter:" ), parent );
     CHECK_PTR( filters );
 
-    
+
     //
     // Selections view
     //
@@ -179,12 +179,14 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
 
 #if 0
+    filters->addPage( _("YOU Patches"   ), new QLabel( "YOU Patches - this will require this side to grow much wider\nfor future use", 0 ) );
+    
     // DEBUG
 
     filters->addPage( _("Keywords"   ), new QLabel( "Keywords\nfilter\n\nfor future use", 0 ) );
     filters->addPage( _("MIME Types" ), new QLabel( "MIME Types\nfilter\n\nfor future use" , 0 ) );
 #endif
-    
+
     filters->addPage( _("Search"     ), new QLabel( "Search\nfilter\n\nmissing", 0 ) );
 
 
@@ -391,10 +393,10 @@ YQPackageSelector::makeConnections()
 
     connect( _selList,	SIGNAL( filterMatch( PMPackagePtr ) ),
 	     _pkgList, 	SLOT  ( addPkg     ( PMPackagePtr ) ) );
-    
+
     connect( _selList, 	SIGNAL( filterFinished()  ),
 	     _pkgList, 	SLOT  ( selectSomething() ) );
-    
+
     connect( _selList, 	SIGNAL( updatePackages()      ),
 	     _pkgList, 	SLOT  ( updateAllItemStates() ) );
 }
