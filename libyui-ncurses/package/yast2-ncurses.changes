@@ -2,7 +2,8 @@
 Fri Mar  7 13:02:04 CET 2003 - gs@suse.de
 
 - V 2.7.12
-- package installation: bugfix for not translated messages (#24834) 
+- package installation: bugfix for not translated messages (#24834),
+  update required diskspace after dependency solving 
 
 -------------------------------------------------------------------
 Tue Mar  4 10:22:04 CET 2003 - gs@suse.de
