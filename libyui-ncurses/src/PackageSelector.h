@@ -40,7 +40,7 @@ class NCPopupSelection;
 class PMSelectionPtr;
 class PMPackagePtr;
 class PMYouPatchPtr;
-
+class LangCode;
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -262,6 +262,7 @@ class PackageSelector
      * Returns true if there is a match, false otherwise or if 'pkg' is 0.
      **/
     bool check( PMPackagePtr pkg, YStringTreeItem * rpmGroup, int index );
+
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -79,6 +79,8 @@ string NCPkgTableTag::statusToStr( NCPkgStatus stat ) const
 	    return "X";
 	case PkgAutoInstall:	// Will be automatically installed
 	    return "a";
+	case PkgAutoDelete:
+	    return "-";
 	case PkgTaboo:		// Never install this 
 	    return "#";
     }
@@ -104,6 +106,8 @@ NCPkgStatus NCPkgTable::statusToPkgStat( PMSelectable::UI_Status stat )
 	    return PkgToUpdate;
 	case PMSelectable::S_Auto:
 	    return PkgAutoInstall;
+    	case PMSelectable::S_AutoDel:
+	    return PkgAutoDelete;
 	case PMSelectable::S_Taboo:
 	    return  PkgTaboo;
     }
@@ -131,6 +135,8 @@ PMSelectable::UI_Status NCPkgTable::statusToUIStat( NCPkgStatus stat )
 	    return PMSelectable::S_Install;
 	case PkgAutoInstall:	// Will be automatically installed
 	    return PMSelectable::S_Auto;
+	case PkgAutoDelete:	// Will be automaticall deleted
+	    return PMSelectable::S_AutoDel;
 	case PkgTaboo:		// Never install this 
 	    return PMSelectable::S_Taboo;
     }
@@ -240,7 +246,8 @@ bool NCPkgTable::changeStatus( int index, NCPkgStatus newstatus )
     bool ok = false;
 
     // inform the package manager
-    ok = statusStrategy->setPackageStatus( getDataPointer(index), statusToUIStat( newstatus ) );
+    ok = statusStrategy->setPackageStatus( statusToUIStat( newstatus ),
+					   getDataPointer(index) );
 
     if ( ok )
     {
@@ -361,14 +368,15 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 	    break;
 	case KEY_UP:
 	case KEY_DOWN: {
+	    
+	    PMObjectPtr objPtr = getDataPointer(citem);
+	    
 	    // debug only
-	    NClabel packageName = getCellContents( citem, 1 );
-	    UIDBG << "Package Name: " << packageName << endl;
-
-	    if ( packager )
+	    if ( objPtr && packager && (statusStrategy->getType() != T_Avail) )
 	    {
+		NCMIL << "Showing package information" << endl; 
 		// show the required package info
-		packager->showPackageInformation( getDataPointer(citem) );
+		packager->showPackageInformation( objPtr );
 	    }
 	    ret = NCursesEvent::handled;
 	    break;
@@ -395,7 +403,6 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 
     return ret;
 }
-
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -479,6 +486,9 @@ bool NCPkgTable::toggleStatus( PMPackagePtr objPtr )
 	case PkgAutoInstall:
 	    // FIXME show a warning !!!!
 	    newStatus = PkgNoInstall;
+	    break;
+	case PkgAutoDelete:
+	    newStatus = PkgInstalled;
 	    break;
 	case PkgTaboo:
 	    newStatus = PkgTaboo;

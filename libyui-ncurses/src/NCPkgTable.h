@@ -217,8 +217,8 @@ public:
 	delete statusStrategy;
 	statusStrategy = strategy;
     }
-	
-   /**
+
+    /**
      * Gets the data pointer of a certain package.
      * @param index The index in package table (the line)
      * @return PMObjectPtr

@@ -69,6 +69,7 @@ bool sortByName( PMSelectablePtr ptr1, PMSelectablePtr ptr2 )
 //
 PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     : y2ui( ui )
+      , packageList( 0 )
       , visibleInfo( YCPNull() )
       , filterPopup( 0 )
       , selectionPopup( 0 )
@@ -138,6 +139,8 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
 	selectionPopup = new NCPopupSelection( wpos( 1, 1 ),
 					       this );
     }
+
+
     
     NCstring text( "This is a development version of the NCurses single package selection, included in this Beta as a kind of demo.<br>Some things work, some don't, some work but are still really slow. You can view some package data, but setting a package status does not have any effect yet. As of now, all bug reports for this thing will be routed to /dev/null.<br>We are working heavily on it, so if you want to contribute, the easiest thing you can do right now is not swamp us with bugzilla reports, but let us work in the remaining time.<br> Thank you.<br> -gs" );
 
@@ -1068,6 +1071,19 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	if ( descrInfo )
 	{
 	    static_cast<NCRichText *>(descrInfo)->setText( text.YCPstr() );
+	}
+    }
+    else if (  visibleInfo->compare( PkgNames::Versions() ) == YO_EQUAL )
+    {
+	NCPkgTable * pkgAvail = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::AvailPkgs(), true));
+	if ( pkgAvail )
+	{
+	    // set the connection to the PackageSelector !!!!
+	    pkgAvail->setPackager( this );
+	    // set status strategy
+	    ObjectStatStrategy * strategy = new AvailableStatStrategy();
+	    pkgAvail->setStatusStrategy( strategy );
+	    fillAvailableList( pkgAvail, pkgPtr );
 	}
     }
     

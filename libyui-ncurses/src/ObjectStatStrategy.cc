@@ -22,18 +22,44 @@
 #include <y2pm/PMSelectable.h>
 #include <y2pm/PMObject.h>
 
+
 //------------------------------------------------------------
 // Base class for strategies to handle status
 //------------------------------------------------------------
 
+//
+// Constructor
+//
+ObjectStatStrategy::ObjectStatStrategy()
+{
+    type = T_Object;
+}
+
+//
+// Destructor - must be defined here (because it is pure virtual)
+//
+ObjectStatStrategy::~ObjectStatStrategy()
+{
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// ObjectStatStrategy::getStatus()
+//
+// Gets status from package manager
+//
+PMSelectable::UI_Status ObjectStatStrategy::getStatus( PMObjectPtr objPtr )
+{
+    return objPtr->getSelectable()->status();
+}
 
 /////////////////////////////////////////////////////////////////
 //
-//	ObjectStatStrategy::setPackageStatus()	
+// ObjectStatStrategy::setPackageStatus()	
 //
-//	Informs the package manager
+// Informs the package manager
 //
-bool ObjectStatStrategy::setPackageStatus( PMObjectPtr objPtr, PMSelectable::UI_Status newstatus )
+bool ObjectStatStrategy::setPackageStatus( PMSelectable::UI_Status newstatus, PMObjectPtr objPtr )
 {
     bool ok = false;
 
@@ -120,6 +146,12 @@ bool ObjectStatStrategy::validateNewStatus( const NCPkgStatus & oldStatus,
 		valid = true;
 	    }
 	    break;
+	case PkgAutoDelete:
+	    if ( newStatus == PkgInstalled || newStatus == PkgToUpdate )
+	    {
+		valid = true;
+	    }
+	    break;
 	case PkgTaboo:
 	    if ( newStatus == PkgNoInstall )
 	    {
@@ -138,30 +170,29 @@ bool ObjectStatStrategy::validateNewStatus( const NCPkgStatus & oldStatus,
 // Class for strategies to get status for packages
 //------------------------------------------------------------
 
+//
+// Constructor
+//
 PackageStatStrategy::PackageStatStrategy()
     : ObjectStatStrategy()
 {
-    
+    type = T_Package;
 }
 
-PMSelectable::UI_Status PackageStatStrategy::getStatus( PMObjectPtr objPtr )
-{
-    return objPtr->getSelectable()->status();
-}
+
+
 
 //------------------------------------------------------------
 // Class for strategies to get status for patches
 //------------------------------------------------------------
 
+//
+// Constructor
+//
 PatchStatStrategy::PatchStatStrategy()
     : ObjectStatStrategy()
 {
-    
-}
-
-PMSelectable::UI_Status PatchStatStrategy::getStatus( PMObjectPtr objPtr )
-{
-    return objPtr->getSelectable()->status();
+    type = T_Patch;
 }
 
 
@@ -214,22 +245,22 @@ bool PatchStatStrategy::validateNewStatus( const NCPkgStatus & oldStatus,
 // Class for strategies to get status for available packages
 //------------------------------------------------------------
 
+//
+// Constructor
+//
 AvailableStatStrategy::AvailableStatStrategy()
     : ObjectStatStrategy()
 {
-    
+    type = T_Avail;
 }
-
 
 ///////////////////////////////////////////////////////////////////
 //
+// AvailableStatStrategy::setPackageStatus
 //
-//	METHOD NAME : AvailableStatStrategy::setPackageStatus
-//	METHOD TYPE : bool
+// Informs the package manager about the new status (sets the candidate)
 //
-//	DESCRIPTION : informs the package manager
-//
-bool AvailableStatStrategy::setPackageStatus( PMObjectPtr objPtr, PMSelectable::UI_Status newstatus )
+bool AvailableStatStrategy::setPackageStatus( PMSelectable::UI_Status newstatus,  PMObjectPtr objPtr )
 {
     bool ok = false;
 
@@ -250,6 +281,13 @@ bool AvailableStatStrategy::setPackageStatus( PMObjectPtr objPtr, PMSelectable::
     return ok;
 }
 
+
+///////////////////////////////////////////////////////////////////
+//
+// AvailableStatStrategy::getStatus
+//
+// Returns the status of the certain package
+//
 PMSelectable::UI_Status AvailableStatStrategy::getStatus( PMObjectPtr objPtr )
 {
     PMSelectable::UI_Status selStatus = objPtr->getSelectable()->status();
@@ -284,7 +322,8 @@ ostream & operator<<( ostream & str, NCPkgStatus obj )
     ENUM_OUT( PkgAutoInstall );
     ENUM_OUT( PkgTaboo );
     ENUM_OUT( PkgToReplace );
-
+    ENUM_OUT( PkgAutoDelete );
+    
 #undef ENUM_OUT
   }
 
