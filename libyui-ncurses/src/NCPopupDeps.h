@@ -66,7 +66,7 @@ private:
     
     PackageSelector * packager;		// connection to the package selector
 
-    string getDependencyKind(  PkgDep::ErrorResult error );
+    string getDependencyKind( const PkgDep::ErrorResult & error );
     
 protected:
 
@@ -89,7 +89,7 @@ public:
     
     bool fillDepsPackageList( NCPkgTable * table );
 
-    void evaluateErrorResult(  PkgDep::ErrorResultList errorlist );
+    void evaluateErrorResult(  const PkgDep::ErrorResultList & errorlist );
     
     bool concretelyDependency( int index );
     
