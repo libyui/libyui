@@ -51,8 +51,6 @@ YQWizard::YQWizard( QWidget *		parent,
     , _abortButton( 0 )
     , _nextButton( 0 )
 {
-    y2milestone( "Wizard" );
-    
     setWidgetRep( this );
     QColor bg( 0x9c, 0xcf, 0x9c );
 
@@ -109,8 +107,6 @@ YQWizard::YQWizard( QWidget *		parent,
     _buttonBox->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
     _buttonBox->setMargin( 5 );
     layoutButtonBox();
-
-    y2milestone( "Wizard created" );
 }
 
 
