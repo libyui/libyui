@@ -227,6 +227,10 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
     qApp->installEventFilter( this );
     main_win->installEventFilter( this );
     main_win->resize( default_size );
+
+    if ( _fullscreen || ! _have_wm )
+	main_win->move( 0, 0 );
+    
     main_win->hide();	// visible only upon showDialog()
     busy_cursor = new QCursor( WaitCursor );
 
