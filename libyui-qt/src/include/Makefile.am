@@ -63,8 +63,8 @@ pkginclude_HEADERS =				\
 	recycle.xpm				\
 	taboo.xpm				\
 	autoinst.xpm				\
-	trashcan.xpm
-
+	trashcan.xpm				\
+	dep.xpm
 
 
 CLEANFILES = y2qt.kdoc
