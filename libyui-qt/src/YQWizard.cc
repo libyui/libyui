@@ -116,6 +116,9 @@ YQWizard::YQWizard( QWidget *		parent,
     _direction 		= YQWizard::Forward;
     _runningEmbedded	= YQUI::ui()->runningEmbedded() || YQUI::ui()->debugEmbedding();
 
+    if ( _treeEnabled )
+	_runningEmbedded = false;
+
     _sideBar		= 0;
     _stepsPanel		= 0;
     _stepsBox		= 0;
