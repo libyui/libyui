@@ -37,6 +37,7 @@
 
 #include "YQUI.h"
 #include "YEvent.h"
+#include "YMacroRecorder.h"
 #include "YUISymbols.h"
 #include "YQDialog.h"
 
@@ -179,6 +180,15 @@ void YQUI::makeScreenShot( std::string stl_filename )
 
     y2debug( "Saving screen shot to %s", (const char *) fileName );
     screenShot.save( fileName, "PNG" );
+    
+    if ( recordingMacro() )
+    {
+	macroRecorder->beginBlock();
+	currentDialog()->saveUserInput( macroRecorder );
+	macroRecorder->recordMakeScreenShot( true, (const char *) fileName );
+	macroRecorder->recordUserInput( YCPVoid() );
+	macroRecorder->endBlock();
+    }
 }
 
 
