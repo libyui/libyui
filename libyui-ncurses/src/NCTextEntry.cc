@@ -221,8 +221,6 @@ YCPString NCTextEntry::getText()
     
 {
   NCstring text( buffer );
-  
-  NCMIL << "YCPString: " << text.YCPstr() << endl;
 
   return text.YCPstr();
 }
