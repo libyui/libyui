@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Jul 03 12:26:33 CEST 2002 - msvec@suse.cz
+
+- devel sub-package not neeeded
+
+-------------------------------------------------------------------
 Mon Jun 24 13:41:03 CEST 2002 - arvin@suse.de
 
 - renamed from yast2-ui-ncurses to yast2-ncurses
