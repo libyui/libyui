@@ -165,11 +165,10 @@ NCFileSelection::NCFileSelection( NCWidget * parent,
 
     if ( iniDir->value().empty() )
     {
-	size_t bufSize	= 5120 * sizeof(char);	
-	char wDir[bufSize+1];
+	char wDir[PATH_MAX+1];		// <limits.h>
     
 	// start with working directory
-	if ( getcwd( wDir, bufSize ) )
+	if ( getcwd( wDir, PATH_MAX ) )
 	{
 	    startDir = wDir;
 	    currentDir = wDir; 

@@ -110,9 +110,7 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
     frame->addChild( dirName );
 
     dirName->setId( PkgNames::DirName() );
-    dirName->itemAdded( YCPString( iniDir ), // set initial value
-			0,		 // index
-			true );		 // selected
+
     vSplit->addChild( new NCSpacing( vSplit, opt, 0.6, false, true ) );
 
     split->addChild( frame );
@@ -193,14 +191,17 @@ NCursesEvent & NCAskForFile::showDirPopup( )
 {
     postevent = NCursesEvent();
 
-    if ( !dirList || !fileList )
+    if ( !dirList || !fileList || !dirName )
 	return postevent;
 
     dirList->fillList();
     fileList->fillList();
-    
     dirList->setKeyboardFocus();
 
+    dirName->itemAdded( YCPString( dirList->getCurrentDir() ), 
+			0,		 // index
+			true );		 // selected
+    
     // event loop
     do {
 	popupDialog();

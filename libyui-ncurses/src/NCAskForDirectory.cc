@@ -52,8 +52,6 @@ NCAskForExistingDirectory::NCAskForExistingDirectory( const wpos at,
     , detailed ( 0 )
 {
     createLayout( iniDir, headline );
-
-    dirList->fillList( );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -109,9 +107,6 @@ void NCAskForExistingDirectory::createLayout( const YCPString & iniDir,
 
     dirName->setId( PkgNames::DirName() );
 
-    dirName->itemAdded( YCPString( iniDir ), // set initial value
-			0,		 // index
-			true );		 // selected
     vSplit->addChild( new NCSpacing( vSplit, opt, 0.6, false, true ) );
 
     split->addChild( frame );
@@ -165,11 +160,16 @@ NCursesEvent & NCAskForExistingDirectory::showDirPopup( )
 {
     postevent = NCursesEvent();
 
-    if ( !dirList )
+    if ( !dirList || !dirName )
 	return postevent;
 
+    dirList->fillList( );
     dirList->setKeyboardFocus();
 
+    dirName->itemAdded( YCPString( dirList->getCurrentDir() ),
+			0,		// index
+			true );		// selected
+    
     // event loop
     do {
 	popupDialog();
