@@ -227,9 +227,6 @@ void YQUI::init()
 	     this,			SLOT  ( busyCursor()	) );
     
     topmostConstructorHasFinished();
-#if defined(QT_THREAD_SUPPORT)
-    qApp->unlock();
-#endif
 }
 
 
@@ -633,7 +630,9 @@ void YQUI::setServerOptions( int argc, char **argv )
     
     
     // do a new initialization with the arguments
+#if 0
     init();
+#endif
 }
 
 
