@@ -569,7 +569,7 @@ YWidget * Y2NCursesUI::createIntField( YWidget * parent, YWidgetOpt & opt,
 
 ///////////////////////////////////////////////////////////////////
 //
-// package selection 
+// package selection
 //
 ///////////////////////////////////////////////////////////////////
 
@@ -601,7 +601,7 @@ YWidget * Y2NCursesUI::createPackageSelector( YWidget * parent, YWidgetOpt & opt
 YCPValue Y2NCursesUI::runPkgSelection(  YWidget * selector )
 {
     NCPackageSelector * ncSelector = 0;
-    
+
     YDialog *dialog = currentDialog();
 
     if (!dialog)
@@ -617,14 +617,14 @@ YCPValue Y2NCursesUI::runPkgSelection(  YWidget * selector )
     }
 
     bool result = true;
-    
+
     // start event loop
     NCursesEvent event = NCursesEvent::cancel;
 
     if ( ncSelector )
     {
 	ncSelector->showDefaultList();
-	
+
 	NCDialog * ncd = static_cast<NCDialog *>( dialog );
 
 	do
@@ -663,7 +663,7 @@ YWidget * Y2NCursesUI::createPkgSpecial( YWidget *parent, YWidgetOpt &opt, const
     ONCREATE;
 
     YCPString pkgTable( "pkgTable" );
-    
+
     if ( subwidget->compare( pkgTable ) == YO_EQUAL )
     {
 	NCDBG << "Creating a NCPkgTable" << endl;
@@ -815,5 +815,10 @@ bool Y2NCursesUI::want_colors()
   }
   return true;
 }
+
+
+#warning TODO: Implement askForExistingDirectory
+#warning TODO: Implement askForExistingFile
+#warning TODO: Implement askForSaveFileName
 
 

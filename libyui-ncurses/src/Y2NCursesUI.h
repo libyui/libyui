@@ -330,7 +330,6 @@ class Y2NCursesUI : public NCurses, public YUIInterpreter {
      **/
     virtual YCPValue askForExistingDirectory ( const YCPString & startDir,
 					       const YCPString & headline )
-#warning TODO: Implement askForExistingDirectory
 	{ return YCPVoid(); }
     
     /**
@@ -350,7 +349,6 @@ class Y2NCursesUI : public NCurses, public YUIInterpreter {
     virtual YCPValue askForExistingFile	( const YCPString & startWith,
 					  const YCPString & filter,
 					  const YCPString & headline )
-#warning TODO: Implement askForExistingFile  
 	{ return YCPVoid(); }
 	
 
@@ -372,7 +370,6 @@ class Y2NCursesUI : public NCurses, public YUIInterpreter {
     virtual YCPValue askForSaveFileName	( const YCPString & startWith,
 					  const YCPString & filter,
 					  const YCPString & headline )
-#warning TODO: Implement askForSaveFileName
 		{ return YCPVoid(); }
 
     

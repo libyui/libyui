@@ -516,53 +516,9 @@ bool NCWidget::HasFunctionHotkey( int key ) const
 //
 void NCWidget::setFunctionHotkey( YWidgetOpt & opt )
 {
-    if ( opt.key_F1.value() )
+    if ( opt.key_Fxx.value() > 0 )
     {
-	hotfkey = KEY_F(1);
-    }
-    else if ( opt.key_F2.value() )
-    {
-	hotfkey = KEY_F(2);	
-    }
-    else if ( opt.key_F3.value() )
-    {
-	hotfkey = KEY_F(3);
-    }
-    else if ( opt.key_F4.value() )
-    {
-	hotfkey = KEY_F(4);	
-    }
-    else if ( opt.key_F5.value() )
-    {
-	hotfkey = KEY_F(5);
-    }
-    else if ( opt.key_F6.value() )
-    {
-	hotfkey = KEY_F(6);	
-    }
-    else if ( opt.key_F7.value() )
-    {
-	hotfkey = KEY_F(7);
-    }
-    else if ( opt.key_F8.value() )
-    {
-	hotfkey = KEY_F(8);	
-    }
-    else if ( opt.key_F9.value() )
-    {
-	hotfkey = KEY_F(9);	
-    }
-    else if ( opt.key_F10.value() )
-    {
-	hotfkey = KEY_F(10);
-    }
-    else if ( opt.key_F11.value() )
-    {
-	hotfkey = KEY_F(11);	
-    }
-    else if ( opt.key_F12.value() )
-    {
-	hotfkey = KEY_F(12);
+	hotfkey = KEY_F( (int) opt.key_Fxx.value() );
     }
 }
 

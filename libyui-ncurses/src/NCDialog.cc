@@ -952,23 +952,15 @@ void NCDialog::processInput( int timeout )
       }
       break;
 
-   case KEY_F(1):
-   case KEY_F(2):
-   case KEY_F(3):
-   case KEY_F(4):
-   case KEY_F(5):
-   case KEY_F(6):
-   case KEY_F(7):
-   case KEY_F(8):
-   case KEY_F(9):
-   case KEY_F(10):
-   case KEY_F(11):
-   case KEY_F(12):
-  	pendingEvent = wHandleHotkey( ch );
-	break;  
-		
     default:
-      pendingEvent = wHandleInput( ch );
+	if ( ch >= KEY_F(1) && ch <= KEY_F(24) )
+	{
+	    pendingEvent = wHandleHotkey( ch );
+	}
+	else
+	{
+	    pendingEvent = wHandleInput( ch );
+	}
       break;
     }
     doUpdate();
