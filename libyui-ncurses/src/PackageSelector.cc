@@ -90,6 +90,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
       , selectionPopup( 0 )
       , diskspacePopup( 0 )
       , searchPopup( 0 )
+      , filePopup( 0 )
       , youMode( false )
       , updateMode( false )
       , autoCheck( true )
@@ -166,6 +167,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     // read test source information
     if ( opt.testMode.value() )
     {
+#if 0
 	if ( youMode )
 	{
 	    Url url( "dir:///8.1-patches" );
@@ -190,27 +192,30 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
 		NCMIL << "Fake source enabled: " << err << endl;
 	    }
 	}
+#endif
     }    
 
     if ( !youMode )
     {
 	// create the selections popup
-	selectionPopup = new NCPopupSelection( wpos( 1, 1 ),	// position
-					       this );
+	selectionPopup = new NCPopupSelection( wpos( 1, 1 ), this );
+
 	// create the filter popup
-	filterPopup = new NCPopupTree( wpos( 1, 1 ),	// position
-				       this );	 
+	filterPopup = new NCPopupTree( wpos( 1, 1 ),  this );	 
+
+	// create the search popup
+	searchPopup = new NCPopupSearch( wpos( 1, 1 ), this );
+
+	// the dependency popups
+	pkgDepsPopup = new NCPopupPkgDeps( wpos( 1, 1 ), this );
+	selDepsPopup = new NCPopupSelDeps( wpos( 1, 1 ), this );
+
+	// the disk space popup
+	diskspacePopup = new NCPopupDiskspace( wpos( 1, 1 ) );
+
+	// the file popup
+	filePopup = new NCPopupFile( wpos( 1, 1) );
     }
-
-    // create the search popup
-    searchPopup = new NCPopupSearch( wpos( 1, 1 ), this );
-
-    // the dependency popups
-    pkgDepsPopup = new NCPopupPkgDeps( wpos( 1, 1 ), this );
-    selDepsPopup = new NCPopupSelDeps( wpos( 1, 1 ), this );
-
-    // the disk space popup
-    diskspacePopup = new NCPopupDiskspace( wpos( 1, 1 ) );
 }
 
 
@@ -240,6 +245,10 @@ PackageSelector::~PackageSelector()
     if ( diskspacePopup )
     {
 	delete diskspacePopup;
+    }
+    if ( filePopup )
+    {
+	delete filePopup;
     }
 }
 
@@ -1246,6 +1255,7 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
 	text += PkgNames::HelpOnStatus4().str();
 	text += PkgNames::HelpOnStatus5().str();
 	text += PkgNames::HelpOnStatus6().str();
+	text += PkgNames::HelpOnStatus7().str();
     }
     else if ( event.selection->compare( PkgNames::UpdateHelp() ) == YO_EQUAL )
     {
@@ -1293,24 +1303,21 @@ bool PackageSelector::YouHelpHandler( const NCursesEvent&  event )
 //
 bool PackageSelector::SelectionHandler( const NCursesEvent&  event )
 {
-    if ( event.selection.isNull() )
+    if ( event.selection.isNull()
+	 || !filePopup )
     {
 	return false;
     }
     
     if ( event.selection->compare( PkgNames::SaveSel() ) == YO_EQUAL )
     {
-	NCPopupFile saveSel( wpos( 2, 2),
-			     YCPString(PkgNames::MenuSaveSel().str()),
-			     YCPString(PkgNames::SaveSelText().str()) );
-	saveSel.setNiceSize( 50, 15 );
-	saveSel.showInfoPopup();
+	filePopup->saveToFile();
     }
     else if ( event.selection->compare( PkgNames::LoadSel() ) == YO_EQUAL )
     {
-
+	filePopup->loadFromFile();
     }
-
+    
     return true;
 }
 

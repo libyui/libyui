@@ -20,7 +20,8 @@
 #include "NCPopupFile.h"
 
 #include "NCTree.h"
-#include "YMenuButton.h"
+#include "NCFrame.h"
+#include "NCPopupInfo.h"
 #include "YDialog.h"
 #include "NCSplit.h"
 #include "NCSpacing.h"
@@ -35,19 +36,18 @@
 //
 //	DESCRIPTION :
 //
-NCPopupFile::NCPopupFile( const wpos at,
-			  const YCPString & headline,
-			  const YCPString & text )
+NCPopupFile::NCPopupFile( const wpos at )
     : NCPopup( at, false )
-      , textLabel( 0 )
-      , okButton( 0 )
-      , cancelButton( 0 )
-      , fileName( 0 )
-      , hDim( 50 )
-      , vDim( 20 )
-      , visible ( false )
+    , headline ( 0 )
+    , textLabel( 0 )
+    , okButton( 0 )
+    , cancelButton( 0 )
+    , fileName( 0 )
+    , comboBox( 0 )
+    , hDim( 50 )
+    , vDim( 15 )
 {
-    createLayout( headline, text );
+    createLayout( );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -70,8 +70,7 @@ NCPopupFile::~NCPopupFile()
 //
 //	DESCRIPTION :
 //
-void NCPopupFile::createLayout( const YCPString & headline,
-				const YCPString & text )
+void NCPopupFile::createLayout( )
 {
 
     YWidgetOpt opt;
@@ -82,51 +81,70 @@ void NCPopupFile::createLayout( const YCPString & headline,
   
     // add the headline
     opt.isHeading.setValue( true );
-    NCLabel * head = new NCLabel( split, opt, headline );
-    split->addChild( head );
+    headline = new NCLabel( split, opt, YCPString("") );
+    split->addChild( headline );
 
-    NCSpacing * sp1 = new NCSpacing( split, opt, 0.8, false, true );
+    NCSpacing * sp1 = new NCSpacing( split, opt, 0.4, false, true );
     split->addChild( sp1 );
     
     // add the text 
     opt.isHeading.setValue( false );
-    textLabel = new NCLabel( split, opt, text );
+    opt.isVStretchable.setValue( true );
+    textLabel = new NCRichText( split, opt, YCPString(PkgNames::SaveSelText().str()) );
     split->addChild( textLabel );
 
-    split->addChild( sp1 );
-    
-    fileName = new NCTextEntry( split, opt,
+
+    // add a frame 
+    opt.isVStretchable.setValue( true );
+    NCFrame * frame = new NCFrame( split, opt, YCPString("" ) );
+    NCSplit * vSplit2 = new NCSplit( frame, opt, YD_VERT );
+
+    // the combo box for selecting the medium
+    opt.isHStretchable.setValue( true );
+    comboBox = new NCComboBox( vSplit2, opt, YCPString( "Medium" ) );
+    comboBox->itemAdded( YCPString( "Hard disk " ), 0, false );
+    comboBox->itemAdded( YCPString( "Floppy " ), 0, true );
+    vSplit2->addChild( comboBox );
+  
+    // the text entry field for the file name
+    fileName = new NCTextEntry( vSplit2, opt,
 				YCPString(PkgNames::FileName().str()),
 				YCPString( "" ),
 				100, 100 );
-    split->addChild( fileName );
+    vSplit2->addChild( fileName );
+    frame->addChild( vSplit2 );
+    split->addChild( frame );
 
-    NCSpacing * sp2 = new NCSpacing( split, opt, 0.8, false, true );
+    NCSpacing * sp2 = new NCSpacing( split, opt, 0.4, false, true );
     split->addChild( sp2 );
 
+    opt.isVStretchable.setValue( false );
+    
+    // HBox for the buttons
     NCSplit * hSplit = new NCSplit( split, opt, YD_HORIZ );
     split->addChild( hSplit );
 
     opt.isHStretchable.setValue( true );
-    
-    opt.key_Fxx.setValue( 10 );
+    NCSpacing * sp3 = new NCSpacing( hSplit, opt, 0.2, true, false );
+    hSplit->addChild( sp3 );
+
     // add the OK button
-    okButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::OKLabel().str()) );
+    opt.key_Fxx.setValue( 10 );
+    okButton = new NCPushButton( hSplit, opt, YCPString( "" ) );
     okButton->setId( PkgNames::OkButton() );
   
     hSplit->addChild( okButton );
 
-    NCSpacing * sp3 = new NCSpacing( hSplit, opt, 0.4, true, false );
-    hSplit->addChild( sp3 );
-      
-    opt.key_Fxx.setValue( 9 );
+    NCSpacing * sp4 = new NCSpacing( hSplit, opt, 0.4, true, false );
+    hSplit->addChild( sp4 );
+
     // add the Cancel button
+    opt.key_Fxx.setValue( 9 );
     cancelButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::CancelLabel().str()) );
     cancelButton->setId( PkgNames::Cancel() );
   
     hSplit->addChild( cancelButton );
-    NCSpacing * sp4 = new NCSpacing( hSplit, opt, 0.4, true, false );
-    hSplit->addChild( sp4 ); 
+    hSplit->addChild( sp3 );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -185,6 +203,57 @@ NCursesEvent NCPopupFile::wHandleInput( int ch )
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : NCPopupFile::saveSelection
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCPopupFile::saveToFile()
+{
+    if ( headline && textLabel && okButton )
+    {
+	headline->setLabel( YCPString( PkgNames::SaveSelHeadline().str() ) );
+	textLabel->setText( YCPString( PkgNames::SaveSelText().str() ) );
+	okButton->setLabel( YCPString( PkgNames::SaveLabel().str() ) );
+    }
+    NCursesEvent event = showInfoPopup();
+    
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPopupFile::loadSelection
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCPopupFile::loadFromFile()
+{
+    if ( headline && textLabel && okButton )
+    {
+	headline->setLabel( YCPString(PkgNames::LoadSelHeadline().str()) );
+	string text = PkgNames::LoadSel2Text().str();
+	textLabel->setText( YCPString(text) );
+	okButton->setLabel( YCPString( PkgNames::LoadLabel().str() ) ); 
+    }
+    NCursesEvent event = showInfoPopup();
+
+    if ( event == NCursesEvent::button )
+    {
+	NCPopupInfo info( wpos(2, 2),
+			  YCPString( PkgNames::NotifyLabel().str() ),
+			  YCPString( PkgNames::LoadSel1Text().str() ),
+			  PkgNames::OKLabel().str(),
+			  PkgNames::CancelLabel().str() );
+	info.setNiceSize( 30, 10 );
+	info.showInfoPopup();
+    }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : NCPopupFile::postAgain
 //	METHOD TYPE : bool
 //
@@ -195,20 +264,17 @@ bool NCPopupFile::postAgain()
     if ( ! postevent.widget )
 	return false;
 
-    if ( okButton && cancelButton )
-    {
-	YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
+    YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
 
-	if ( currentId->compare( PkgNames::Cancel() ) == YO_EQUAL )
-	{
-	    // close the dialog 
-	    postevent = NCursesEvent::cancel;
-	}
-	else if  ( currentId->compare( PkgNames::OkButton() ) == YO_EQUAL )
-	{
-	    postevent = NCursesEvent::button;
-	}	
+    if ( currentId->compare( PkgNames::Cancel() ) == YO_EQUAL )
+    {
+	// close the dialog 
+	postevent = NCursesEvent::cancel;
     }
+    else if  ( currentId->compare( PkgNames::OkButton() ) == YO_EQUAL )
+    {
+	postevent = NCursesEvent::button;
+    }	
     
     if ( postevent == NCursesEvent::button || postevent == NCursesEvent::cancel )
     {

@@ -26,8 +26,12 @@
 
 #include "NCPopup.h"
 #include "NCLabel.h"
+#include "NCRichText.h"
 #include "NCTextEntry.h"
 #include "NCPushButton.h"
+#include "NCComboBox.h"
+#include "PackageSelector.h"
+
 #include "PkgNames.h"
 
 class YCPValue;
@@ -45,15 +49,16 @@ class NCPopupFile : public NCPopup {
 
 private:
 
-    NCLabel * textLabel;
+    NCLabel * headline;
+    NCRichText * textLabel;
     NCPushButton * okButton;
     NCPushButton * cancelButton;
     NCTextEntry * fileName;
+    NCComboBox * comboBox;
     
     int hDim;
     int vDim;
-    bool visible;
-    
+
 protected:
 
     virtual bool postAgain();
@@ -62,20 +67,18 @@ protected:
     
 public:
     
-    NCPopupFile( const wpos at,
-		 const YCPString & headline,
-		 const YCPString & text );
+    NCPopupFile( const wpos at );
     
     virtual ~NCPopupFile();
 
     virtual long nicesize(YUIDimension dim);
 
-    void createLayout( const YCPString & headline,
-		       const YCPString & text );
+    void createLayout( );
 
     NCursesEvent & showInfoPopup( );
 
-    bool isVisible( ) { return visible; }
+    void saveToFile();
+    void loadFromFile();
     
     void setNiceSize( int horiz, int vert ) { hDim = horiz; vDim = vert; }
 };

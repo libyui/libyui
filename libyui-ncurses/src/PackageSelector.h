@@ -45,7 +45,7 @@ class NCPopupPkgDeps;
 class NCPopupSelDeps;
 class NCPopupDiskspace;
 class NCPopupSearch;
-
+class NCPopupFile;
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -86,6 +86,8 @@ class PackageSelector
     NCPopupDiskspace * diskspacePopup;	// the popup showing the disk usage
 
     NCPopupSearch * searchPopup; 	// the package search popup
+
+    NCPopupFile * filePopup; 		// the save/load selection popup
     
     bool youMode;			// YOU
     bool updateMode;			// Update
