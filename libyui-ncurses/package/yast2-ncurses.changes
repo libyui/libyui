@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Nov 21 14:03:01 CET 2003 - gs@suse.de
+
+- V 2.9.2
+- don't draw the outer frame in full screen mode
+- package installation: show column headers for all package lists 
+
+-------------------------------------------------------------------
 Wed Nov 12 16:03:51 CET 2003 - gs@suse.de
 
 - V 2.9.1
