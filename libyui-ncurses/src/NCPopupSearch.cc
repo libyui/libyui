@@ -270,11 +270,17 @@ bool NCPopupSearch::postAgain()
     }
     else 
     {
+	YCPString filter( "" );
+
 	// get the search expression
 	postevent.result =  getSearchExpression();
+	if ( !postevent.result.isNull() )
+	{
+	    filter =  postevent.result->asString();
+	}
 
 	// fill the package list with packages matching the search expression	
-	packager->fillSearchList( postevent.result->asString(),
+	packager->fillSearchList( filter,
 				  getCheckBoxValue( ignoreCase ),
 				  getCheckBoxValue( checkName ),
 				  getCheckBoxValue( checkSummary ),
