@@ -384,12 +384,8 @@ YQPkgSel::cycleStatus()
 
     setStatus( newStatus );
 
-    if ( newStatus == PMSelectable::S_Install ||
-	 newStatus == PMSelectable::S_Update    )
-    {
-	Y2PM::selectionManager().activate( Y2PM::packageManager() );
-	_pkgSelList->sendUpdatePackages();
-    }
+    Y2PM::selectionManager().activate( Y2PM::packageManager() );
+    _pkgSelList->sendUpdatePackages();
 }
 
 
