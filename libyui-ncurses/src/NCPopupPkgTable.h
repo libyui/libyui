@@ -53,8 +53,6 @@ private:
     
 protected:
 
-    virtual NCursesEvent wHandleHotkey( int ch );
-
     virtual bool postAgain();
 
     virtual NCursesEvent wHandleInput( int ch );
@@ -71,7 +69,7 @@ public:
 
     void createLayout( );
 
-    NCursesEvent & showInfoPopup( );
+    NCursesEvent showInfoPopup( );
 
     void setNiceSize( int horiz, int vert ) { hDim = horiz; vDim = vert; }
 };

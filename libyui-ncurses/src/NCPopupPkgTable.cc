@@ -93,7 +93,7 @@ void NCPopupPkgTable::createLayout( )
     NCLabel * head = new NCLabel( split, opt, YCPString(PkgNames::AutoChangeLabel().str()) );
     split->addChild( head );
 
-    NCSpacing * sp1 = new NCSpacing( split, opt, 0.8, false, true );
+    NCSpacing * sp1 = new NCSpacing( split, opt, 0.6, false, true );
     split->addChild( sp1 );
 
     NCLabel * lb1 = new NCLabel( split, opt, YCPString(PkgNames::AutoChangeText1().str()) );
@@ -101,8 +101,6 @@ void NCPopupPkgTable::createLayout( )
     NCLabel * lb2 = new NCLabel( split, opt, YCPString(PkgNames::AutoChangeText2().str()) );
     split->addChild( lb2 );
     
-    split->addChild( sp1 );
-
     // add the package table (use default type T_Packages) 
     pkgTable = new NCPkgTable( split, opt );
     pkgTable->setPackager( packager );
@@ -116,6 +114,8 @@ void NCPopupPkgTable::createLayout( )
 
     opt.isHStretchable.setValue( true );
     NCSpacing * sp3 = new NCSpacing( hSplit, opt, 0.2, true, false );
+    NCSpacing * sp4 = new NCSpacing( hSplit, opt, 0.4, true, false );
+
     hSplit->addChild( sp3 );
 
     // add the OK button
@@ -124,8 +124,6 @@ void NCPopupPkgTable::createLayout( )
     okButton->setId( PkgNames::OkButton() );
   
     hSplit->addChild( okButton );
-
-    NCSpacing * sp4 = new NCSpacing( hSplit, opt, 0.4, true, false );
     hSplit->addChild( sp4 );
 
     // add the Cancel button
@@ -136,6 +134,7 @@ void NCPopupPkgTable::createLayout( )
     hSplit->addChild( cancelButton );
     hSplit->addChild( sp3 );
 
+    split->addChild( sp1 );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -185,11 +184,11 @@ bool NCPopupPkgTable::fillAutoChanges( NCPkgTable * pkgTable )
 //
 //
 //	METHOD NAME : NCPopupPkgTable::showInfoPopup
-//	METHOD TYPE : NCursesEvent & event
+//	METHOD TYPE : NCursesEvent event
 //
 //	DESCRIPTION :
 //
-NCursesEvent & NCPopupPkgTable::showInfoPopup( )
+NCursesEvent NCPopupPkgTable::showInfoPopup( )
 {
     postevent = NCursesEvent();
 
@@ -209,7 +208,6 @@ NCursesEvent & NCPopupPkgTable::showInfoPopup( )
     return postevent;
 }
 
-
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -222,21 +220,6 @@ NCursesEvent & NCPopupPkgTable::showInfoPopup( )
 long NCPopupPkgTable::nicesize(YUIDimension dim)
 {
     return ( dim == YD_HORIZ ? NCurses::cols()-15 : NCurses::lines()-5 );
-}
-
-			   
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupPkgTable::wHandleHotkey
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
-NCursesEvent NCPopupPkgTable::wHandleHotkey( int key )
-{
-
-    return NCursesEvent::none;
 }
 
 ///////////////////////////////////////////////////////////////////

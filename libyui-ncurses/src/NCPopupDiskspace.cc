@@ -232,21 +232,6 @@ long NCPopupDiskspace::nicesize(YUIDimension dim)
     return ( dim == YD_HORIZ ? hDim : vDim );
 }
 
-			   
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupDiskspace::wHandleHotkey
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
-NCursesEvent NCPopupDiskspace::wHandleHotkey( int key )
-{
-
-    return NCursesEvent::none;
-}
-
 ///////////////////////////////////////////////////////////////////
 //
 //
