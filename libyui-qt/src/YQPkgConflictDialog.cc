@@ -23,8 +23,6 @@
 #include <Y2PM.h>
 #include <y2pm/PMManager.h>
 
-#include <qapplication.h>
-#include <qcursor.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qhbox.h>
@@ -32,6 +30,7 @@
 #include "YQPkgConflictDialog.h"
 #include "YQPkgConflictList.h"
 
+#include "YUIQt.h"
 #include "YQi18n.h"
 #include "utf8.h"
 
@@ -127,11 +126,11 @@ YQPkgConflictDialog::solveAndShowConflicts()
     PkgDep::ErrorResultList	badList;
 
     // y2milestone( "Solving..." );
-    QApplication::setOverrideCursor( Qt::WaitCursor );
+    YUIQt::yuiqt()->busyCursor();
 
     bool success = Y2PM::packageManager().solveInstall( goodList, badList );
 
-    QApplication::restoreOverrideCursor();
+    YUIQt::yuiqt()->normalCursor();
     // y2milestone( "Solving done" );
     emit updatePackages();
 
