@@ -554,25 +554,6 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 	// the selection popup returns the NCursesEvent 
 	NCursesEvent event = selectionPopup->showSelectionPopup( );
 
-	// get the currently selected list entry
-	item = event.item;
-	// get all selected categories
-	vector<string> itemList = event.itemList;
-
-	NCMIL << "selection INDEX: " << event.detail << endl;
-	
-	if ( !itemList.empty() ) 
-	{
-	    NCMIL << "First selected: " << itemList[0] << endl;
-
-	    // FIXME: inform the packagemanager about the selected categories
-	}
-
-	if ( !item.isNull() )
-	{
-	    // show packages belonging to selected list entry
-	    // showSelectionPackages( packageList, item, event.detail );
-	}
     }
 
     showPackageInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );

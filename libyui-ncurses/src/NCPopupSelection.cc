@@ -143,7 +143,7 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
 
 ///////////////////////////////////////////////////////////////////
 //
-// bool getSelectedItems ( vector<string> & list )
+// bool getSelectedItems ( vector<int> & list )
 //
 //
 bool  NCPopupSelection::getSelectedItems ( vector<int> & selItems )
@@ -231,8 +231,29 @@ NCursesEvent NCPopupSelection::wHandleInput( int ch )
 
     if ( ch == KEY_RETURN )
 	return NCursesEvent::button;
+
+    NCursesEvent event = NCDialog::wHandleInput( ch );
     
-    return NCDialog::wHandleInput( ch );
+    if ( ch == KEY_SPACE )
+    {
+	int index = selectionBox->getCurrentItem();
+	PMSelectionPtr selPtr = selections[index].first;
+	if ( selectionBox && index < selections.size() )
+	{
+	    if ( selections[index].second )
+	    {
+		selections[index] = make_pair( selPtr, false );
+		NCMIL << "Selection: " << selPtr->name() << " is DEselected" << endl;	
+	    }
+	    else
+	    {
+		selections[index] = make_pair( selPtr, true );	
+		NCMIL << "Selection: " << selPtr->name() << " is selected" << endl;	
+	    }
+	}
+    }
+    
+    return event;
 }
 
 ///////////////////////////////////////////////////////////////////
