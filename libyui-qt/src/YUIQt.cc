@@ -240,7 +240,7 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
 	{
 	    hostname[ sizeof( hostname ) -1 ] = '\0'; // make sure it's terminated
 
-	    if ( strlen( hostname ) > 0 )
+	    if ( strlen( hostname ) > 0 && strcmp( hostname, "(none)" ) != 0 )
 	    {
 		title += "@";
 		title += hostname;
