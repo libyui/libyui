@@ -53,8 +53,6 @@ class NCSelectionBox : public YSelectionBox, public NCPadWidget {
     virtual NCPad * CreatePad();
     virtual void    wRecoded();
 
-    virtual void itemAdded( const YCPString& string, int index, bool selected );
-
   public:
 
     NCSelectionBox( NCWidget * parent, YWidgetOpt & opt,
@@ -64,6 +62,7 @@ class NCSelectionBox : public YSelectionBox, public NCPadWidget {
     bool bigList() const { return biglist; }
     void setBigList( const bool big ) { biglist = big; }
 
+    virtual void itemAdded( const YCPString& string, int index, bool selected );
     virtual long nicesize( YUIDimension dim );
     virtual void setSize( long newwidth, long newheight );
 
@@ -82,6 +81,8 @@ class NCSelectionBox : public YSelectionBox, public NCPadWidget {
       return true;
     }
 
+    string getLine(const int & index );
+    void clearTable( ) { pad->ClearTable(); };
 };
 
 ///////////////////////////////////////////////////////////////////

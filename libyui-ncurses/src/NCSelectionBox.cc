@@ -99,6 +99,37 @@ int NCSelectionBox::getCurrentItem()
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : NCSelectionBox::getLine
+//	METHOD TYPE : string
+//
+//	DESCRIPTION :
+//
+string NCSelectionBox::getLine( const int & index )
+{
+    NCTableLine * line = const_cast<NCTableLine*>(pad->GetLine(index));
+    NCTableCol * value;
+    string val;
+    
+    if ( line->Cols() == 1 )
+    {
+	value = line->GetItems()[0];
+	const NClabel label = value->Label();
+	const list<NCstring> text = label.getText();
+	list<NCstring>::const_iterator it = text.begin();
+
+	while ( it != text.end() )
+	{
+	    val += (*it).Str();
+	    ++it;
+	}
+    }
+
+    return val;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : NCSelectionBox::setCurrentItem
 //	METHOD TYPE : void
 //
