@@ -346,8 +346,10 @@ string NCPopupDeps::getReferersList( const PkgDep::ErrorResult & error )
     {
 	refList += error.name;
     }
+    refList += " ";
     refList += PkgNames::RequiredByText().str();
-
+    refList += " ";
+    
     while ( it != error.referers.end() )
     {
 	PMObjectPtr objPtr = (*it).solvable; 
