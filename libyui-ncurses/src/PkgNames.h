@@ -65,67 +65,67 @@ public:
     static const YCPValue& ReplPoint();
     
     /**
-     * Widget id of the menu selection Action/Toggle
+     * Widget id of the menu item Action/Toggle
      */
     static const YCPValue& Toggle ();
 
     /**
-     * Widget id of the menu selection Action/Select
+     * Widget id of the menu item Action/Select
      */
     static const YCPValue& Select ();
 
     /**
-     * Widget id of the menu selection Action/Delete
+     * Widget id of the menu item Action/Delete
      */
     static const YCPValue& Delete ();
 
     /**
-     * Widget id of the menu selection Action/Taboo On
+     * Widget id of the menu item Action/Taboo On
      */
     static const YCPValue& TabooOn ();
 
    /**
-     * Widget id of the menu selection Action/Taboo Off 
+     * Widget id of the menu item Action/Taboo Off 
      */
     static const YCPValue& TabooOff ();
     
    /**
-     * Widget id of the menu selection Action/SPM yes/no
+     * Widget id of the menu item Action/SPM yes/no
      */
     static const YCPValue& ToggleSource ();
     
     /**
-     * Widget id of the menu selection Action/All packages/Delete all
+     * Widget id of the menu item Action/All packages/Delete all
      */
     static const YCPValue& DeleteAll ();
 
    /**
-     * Widget id of the menu selection Action/All packages/Delete all
+     * Widget id of the menu item Action/All packages/Delete all
      */
     static const YCPValue& DontDelete ();
     
     /**
-     * Widget id of the menu selection Action/All packages/Select all
+     * Widget id of the menu item Action/All packages/Select all
      */
     static const YCPValue& InstallAll ();
 
     /**
-     * Widget id of the menu selection Action/All packages/Select all
+     * Widget id of the menu item Action/All packages/Select all
      */
     static const YCPValue& DontInstall ();
     
     /**
-     * Widget id of the menu selection Action/All packages/Update all
+     * Widget id of the menu item Action/All packages/Update all
      */
     static const YCPValue& UpdateAll();
 
     /**
-     * Widget id of the menu selection Action/All packages/Update all
+     * Widget id of the menu item Action/All packages/Update all
      */
     static const YCPValue& DontUpdate();
     
     /**
-     * Widget id of the menu selection Action/Update
+     * Widget id of the menu item Action/Update
      */
     static const YCPValue& Update ();
     
@@ -135,57 +135,62 @@ public:
     static const YCPValue& Search ();
 
     /**
-     *  Widget id of the menu selection Information/Long description
+     *  Widget id of the menu item Information/Long description
      */
     static const YCPValue& LongDescr ();
 
     /**
-     *  Widget id of the menu selection Information/Versions
+     *  Widget id of the menu item Information/Versions
      */
     static const YCPValue& Versions ();
     
     /**
-     *  Widget id of the menu selection Information/Package info
+     *  Widget id of the menu item Information/Package info
      */
     static const YCPValue& PkgInfo ();
 
     /**
-     *  Widget id of the menu selection Information/File list
+     *  Widget id of the menu item Information/File list
      */
     static const YCPValue& Files ();
 
    /**
-     *  Widget id of the menu selection Help/Udpate
+     *  Widget id of the menu item Help/Udpate
      */
     static const YCPValue& UpdateHelp ();  
 
     /**
-     *  Widget id of the menu selection Help/Search
+     *  Widget id of the menu item Help/Search
      */
     static const YCPValue& SearchHelp ();
     
     /**
-     *  Widget id of the menu selection Information/Relations
+     *  Widget id of the menu item Information/Relations
      */
     static const YCPValue& Relations ();
     
     /**
-     *  Widget id of the menu selection RPM groups
+     *  Widget id of the menu item RPM groups
      */
     static const YCPValue& RpmGroups ();
 
    /**
-     *  Widget id of the menu selection What if ...
+     *  Widget id of the menu item What if ...
      */
     static const YCPValue& Whatif ();
+
+   /**
+    * Widget id of the menu item Installed Packages
+    */
+    static const YCPValue& Installed ();
     
     /**
-     *  Widget id of the menu selection Selections
+     *  Widget id of the menu item Selections
      */
     static const YCPValue& Selections ();
 
     /**
-     *  Widget id of the menu selection update list
+     *  Widget id of the menu item update list
      */
     static const YCPValue& UpdateList ();
 

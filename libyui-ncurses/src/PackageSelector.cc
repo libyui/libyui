@@ -108,6 +108,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt, string flo
     eventHandlerMap[ PkgNames::RpmGroups()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::Selections()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::UpdateList()->toString() ] = &PackageSelector::FilterHandler;
+    eventHandlerMap[ PkgNames::Installed()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::Whatif()->toString() ] = &PackageSelector::FilterHandler;
 
     // YOU filter
@@ -638,11 +639,11 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, PMObjectPtr obj
 
 ///////////////////////////////////////////////////////////////////
 //
-// fillChangesList
+// fillSummaryList
 //
-// Shows the installation summary.
+// Shows the installation summary or lists all installed packages.
 //
-bool PackageSelector::fillChangesList(  )
+bool PackageSelector::fillSummaryList( NCPkgTable::NCPkgTableListType type )
 {
     NCPkgTable * packageList = getPackageList();
      
@@ -675,11 +676,26 @@ bool PackageSelector::fillChangesList(  )
     for ( listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt )
     {
 	PMSelectablePtr selectable = *listIt;
-	// show all packages with status change
-	if ( selectable->status() != PMSelectable::S_NoInst
-	     && selectable->status() != PMSelectable::S_KeepInstalled )  
+	// show all matching packages 
+	switch ( type )
 	{
-	    packageList->createListEntry( (*listIt)->theObject() );
+	    case NCPkgTable::L_Changes: {
+		if ( selectable->status() != PMSelectable::S_NoInst
+		     && selectable->status() != PMSelectable::S_KeepInstalled )  
+		{
+		    packageList->createListEntry( (*listIt)->theObject() );
+		}
+		break;
+	    }
+	    case NCPkgTable::L_Installed: {
+		if ( selectable->status() == PMSelectable::S_KeepInstalled ) 
+		{
+		    packageList->createListEntry( (*listIt)->theObject() ); 
+		}
+		break;
+	    }
+	    default:
+		break;
 	}
     }
 
@@ -1128,7 +1144,11 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
     }
     else if (  event.selection->compare( PkgNames::Whatif() ) ==  YO_EQUAL )
     {
-	fillChangesList();
+	fillSummaryList( NCPkgTable::L_Changes );
+    }
+    else if (  event.selection->compare( PkgNames::Installed() ) ==  YO_EQUAL )
+    {
+	fillSummaryList( NCPkgTable::L_Installed );
     }
     
     showPackageInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );

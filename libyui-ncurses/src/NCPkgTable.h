@@ -108,6 +108,12 @@ public:
 	A_DontUpdate,
 	A_Unknown
     };
+
+    enum NCPkgTableListType {
+	L_Changes,
+	L_Installed,
+	L_Unknown
+    };
     
 private:
 

@@ -21,6 +21,7 @@
 					    [`item( `id(`groups), 	_( "&RPM Groups" ) ),
 					     `item( `id(`selections), 	_( "Se&lections" ) ),
 					     `item( `id(`search), 	_( "&Search" ) ),
+					     `item( `id(`installed),	_( "Installed &Packages" ) ),
 					     `item( `id(`whatif), 	_( "&Installation Summary" ) ),
 					     // end: menu items of the filter menu
 					     `item( `id(`updatelist),	_( "&Update List" ) ) ]
@@ -134,7 +135,7 @@
 					   `HSpacing(5.0),
 					   // button label - keep it short
 					   `HBox( `Right( `PushButton(`id(`cancel), `opt(`key_F9) ,_( "&Cancel" ) ) ),
-						  // button label  
+						  // button label - keep it short
 						  `Right( `PushButton(`id(`ok), `opt(`key_F10), _( "&OK" ) ) )
 						  )
 					   )

@@ -241,10 +241,17 @@ const YCPValue& PkgNames::Selections ()
     return value;
 }
 
-// menu selection What if ...
+// menu selection Installation Summary
 const YCPValue& PkgNames::Whatif ()
 {
     static const YCPValue value = createIdValue ( "whatif" );
+    return value;
+}
+
+// menu selection Installed Packages
+const YCPValue& PkgNames::Installed ()
+{
+    static const YCPValue value = createIdValue ( "installed" );
     return value;
 }
 

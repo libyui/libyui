@@ -34,8 +34,8 @@
 #include <y2pm/PMSelectable.h>
 
 #include "NCPopupTree.h"
+#include "NCPkgTable.h"
 
-class NCPkgTable;
 class NCPopupSelection;
 class PMSelectionPtr;
 class PMPackagePtr;
@@ -138,16 +138,16 @@ class PackageSelector
     bool fillPatchList( string filter );
 
    /**
-    * Fills the package table with packages .... update ...
+    * Fills the package table with packages with update problems
     * @return bool
     */
     bool fillUpdateList( );
 
   /**
-    * Fills the package table with packages 
+    * Fills the package table with a summary packages 
     * @return bool
     */
-    bool fillChangesList( );
+    bool fillSummaryList( NCPkgTable::NCPkgTableListType type );
     
    /**
     * Fills the list of available packages
