@@ -546,7 +546,7 @@ YQPkgObjListItem::cycleStatus()
 	switch ( oldStatus )
 	{
 	    case PMSelectable::S_KeepInstalled:
-		newStatus = pmObj()->hasCandidateObj() && candidateIsNewer() ?
+		newStatus = pmObj()->hasCandidateObj() ?
 		    PMSelectable::S_Update : PMSelectable::S_Del;
 		break;
 		

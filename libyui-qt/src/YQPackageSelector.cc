@@ -564,7 +564,7 @@ YQPackageSelector::updateDiskUsage()
 	// log file. 
 	
 	FSize used = du.pkg_used();
-	y2milestone( "Used disk space: %s - %d%%", du.pkg_u_percent() );
+	y2milestone( "Used disk space: %s", used.asString().c_str() );
     }
 }
 
