@@ -48,7 +48,7 @@ public:
      * access.
      * 
      * If the user selects a file on floppy, this dialog takes care of mounting
-     * and unmounting ( the floppy remains mounted as long as the dialog exists ).
+     * and unmounting (the floppy remains mounted as long as the dialog exists).
      *
      * Parameters:
      *
