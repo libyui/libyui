@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Mar 10 01:45:27 CET 2004 - sh@suse.de
+
+- New wizard 
+- V 2.9.9
+
+-------------------------------------------------------------------
 Thu Mar  4 19:10:51 CET 2004 - sh@suse.de
 
 - Fixed bug #34909: Pkg Mgr "auto-changed pkgs" too large for screen 
