@@ -199,6 +199,20 @@ const YCPValue& PkgNames::AutoDeps ()
     return value;
 }
 
+// the menu entry Etc./Save selection
+const YCPValue& PkgNames::SaveSel  ()
+{
+    static const YCPValue value = createIdValue ( "save" );
+    return value;
+}
+
+// the menu entry Etc./Load
+const YCPValue& PkgNames::LoadSel ()
+{
+    static const YCPValue value = createIdValue ( "load" );
+    return value;
+}
+
 // internal use
 const YCPValue& PkgNames::ReplaceMenu ()
 {
@@ -711,49 +725,49 @@ const NCstring PkgNames::LabelAlternative()
 const NCstring PkgNames::LabelConflict1()
 {
      // text part 1 describing package conflict (it's a label - keep it short)
-    static const NCstring value = _( "Solve the conflict by deleting (or" );
+    static const NCstring value = _( "Solve the conflict by deleting (or deselecting)" );
     return value;
 }
 
 const NCstring PkgNames::LabelConflict2()
 {
       // text part 2 describing package conflict (it's a label - keep it short)
-    static const NCstring value = _( "deselecting) the unwanted packages." );
+    static const NCstring value = _( "the unwanted package or packages." );
     return value;
 }
 
 const NCstring PkgNames::LabelSelConflict2()
 {
       // text part 2 describing package conflict (it's a label - keep it short)
-    static const NCstring value = _( "deselecting) the unwanted selections." );
+    static const NCstring value = _( "the unwanted selection or selections." );
     return value;
 }
 
 const NCstring PkgNames::LabelRequBy1()
 {
     // text part 1 describing package does not work (it's a label - keep it short)
-    static const NCstring value = _( "The packages below will not work without" );
+    static const NCstring value = _( "The package or packages below will not work" );
     return value;
 }
 
 const NCstring PkgNames::LabelSelRequBy1()
 {
-    // text part 1 describing package does not work (it's a label - keep it short)
-    static const NCstring value = _( "The selections below will not work without" );
+    // text part 1 describing selection does not work (it's a label - keep it short)
+    static const NCstring value = _( "The selection or selections below will not work" );
     return value;
 }
 
 const NCstring PkgNames::LabelRequBy2()
 {
-    // text part 2 describing packages does not work (it's a label - keep it short)
-    static const NCstring value = _( "the package to delete." );
+    // text part 2 describing package does not work (it's a label - keep it short)
+    static const NCstring value = _( "without the package to delete." );
     return value;
 }
 
 const NCstring PkgNames::LabelSelRequBy2()
 {
-    // text part 2 describing packages does not work (it's a label - keep it short)
-    static const NCstring value = _( "the selection to delete." );
+    // text part 2 describing selection does not work (it's a label - keep it short)
+    static const NCstring value = _( "without the selection to delete." );
     return value;
 }
 
@@ -772,7 +786,7 @@ const NCstring PkgNames::LabelSelRequire1()
 
 const NCstring PkgNames::LabelRequire2()
 {
-    // text part 2 describing packages are not available (it's a label - keep it short)
+    // text part 2 describing packages or elections are not available (it's a label - keep it short)
     static const NCstring value =  _( "are not installed." );
     return value;
 }
@@ -932,14 +946,14 @@ const NCstring PkgNames::NoConflictText()
 const NCstring PkgNames::ContinueRequ()
 {
      // label continues the part required by ...
-    static const NCstring value = _( "...the packages below" );
+    static const NCstring value = _( "...the package or packages below" );
     return value;   
 }
 
 const NCstring PkgNames::ContinueSelRequ()
 {
      // label continues the part required by ...
-    static const NCstring value = _( "...the selections below" );
+    static const NCstring value = _( "...the selection or selections below" );
     return value;   
 }
 

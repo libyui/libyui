@@ -210,6 +210,16 @@ public:
     static const YCPValue& AutoDeps ();
 
     /**
+     *  Widget id of the Etc./Selections menu item
+     */
+    static const YCPValue& SaveSel ();
+
+   /**
+     *  Widget id of the Etc./Selections check menu item
+     */
+    static const YCPValue& LoadSel ();
+
+    /**
      *  Widget id for internal use
      */
     static const YCPValue& ReplaceMenu ();

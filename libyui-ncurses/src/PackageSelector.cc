@@ -32,6 +32,7 @@
 #include "NCPopupPkgDeps.h"
 #include "NCPopupSelDeps.h"
 #include "NCPopupDiskspace.h"
+#include "NCPopupFile.h"
 #include "PackageSelector.h"
 #include "YSelectionBox.h"
 
@@ -143,7 +144,9 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     // Etc. menu
     eventHandlerMap[ PkgNames::ShowDeps()->toString() ] = &PackageSelector::DependencyHandler;
     eventHandlerMap[ PkgNames::AutoDeps()->toString() ] = &PackageSelector::DependencyHandler;
-
+    eventHandlerMap[ PkgNames::SaveSel()->toString() ] = &PackageSelector::SelectionHandler;
+    eventHandlerMap[ PkgNames::LoadSel()->toString() ] = &PackageSelector::SelectionHandler;
+    
     // Help menu
     eventHandlerMap[ PkgNames::GeneralHelp()->toString() ] = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::StatusHelp()->toString() ]  = &PackageSelector::HelpHandler;
@@ -389,7 +392,7 @@ bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr 
     
     if ( !label.isNull() )
     {
-	NCMIL << "  Label: " << label->toString() << endl;
+	NCMIL << "Filter: " << label->toString() << endl;
 
         // show the selected filter label
 	YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
@@ -816,7 +819,7 @@ bool PackageSelector::checkPatch( PMYouPatchPtr patchPtr,
     }
 
     if ( filter == "all"
-	 || filter == patchPtr->kindLabel( patchPtr->kind() )
+	 || ( filter == patchPtr->kindLabel(patchPtr->kind()) )
 	 || ( filter == "installed" && patchPtr->getSelectable()->status() == PMSelectable::S_KeepInstalled )
 	 || ( filter == "new" && ( patchPtr->getSelectable()->status() == PMSelectable::S_Install ||
 				   patchPtr->getSelectable()->status() == PMSelectable::S_NoInst ) )
@@ -1216,7 +1219,6 @@ bool PackageSelector::DiskinfoHandler( const NCursesEvent&  event )
 //
 bool PackageSelector::HelpHandler( const NCursesEvent&  event )
 {
-    //NCstring text ( "" );
     string text = "";
     YCPString headline = YCPString(PkgNames::PackageHelp().str());
     
@@ -1266,7 +1268,7 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
 //
 // YOUHelpHandler
 // 
-// Show the required disk space
+// Show the Online Update Help
 //
 bool PackageSelector::YouHelpHandler( const NCursesEvent&  event )
 {
@@ -1280,6 +1282,35 @@ bool PackageSelector::YouHelpHandler( const NCursesEvent&  event )
     NCPopupInfo youHelp( wpos( 1, 1 ), YCPString(PkgNames::YouHelp().str()), YCPString(text) );
     youHelp.showInfoPopup( );
     
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// SelectionHandler
+// 
+// Save/Load selections
+//
+bool PackageSelector::SelectionHandler( const NCursesEvent&  event )
+{
+    if ( event.selection.isNull() )
+    {
+	return false;
+    }
+    
+    if ( event.selection->compare( PkgNames::SaveSel() ) == YO_EQUAL )
+    {
+	NCPopupFile saveSel( wpos( 2, 2),
+			     YCPString(PkgNames::MenuSaveSel().str()),
+			     YCPString(PkgNames::SaveSelText().str()) );
+	saveSel.setNiceSize( 50, 15 );
+	saveSel.showInfoPopup();
+    }
+    else if ( event.selection->compare( PkgNames::LoadSel() ) == YO_EQUAL )
+    {
+
+    }
+
     return true;
 }
 

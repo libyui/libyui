@@ -207,6 +207,13 @@ class PackageSelector
     * @return bool
     */
     bool DependencyHandler( const NCursesEvent&  event );
+
+   /**
+    * Handler function for menu selection "Etc./Selections"
+    * @param event The Ncurses event
+    * @return bool
+    */
+    bool SelectionHandler( const NCursesEvent&  event );
     
     /**
      * Handler function for the "Information" menu
