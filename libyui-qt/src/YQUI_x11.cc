@@ -147,7 +147,7 @@ const QFont &YQUI::headingFont()
 	_heading_font.setRawName( "-gnu-unifont-bold-r-normal--18-180-75-75-p-80-iso10646-1" );
 	y2debug( "Loading heading font: %s", (const char *) _heading_font.rawName() );
 #else
-	_heading_font = QFont( "Helvetica", 14, QFont::Bold );
+	_heading_font = QFont( "Sans Serif", 14, QFont::Bold );
 #endif
 	_loaded_heading_font = true;
     }
