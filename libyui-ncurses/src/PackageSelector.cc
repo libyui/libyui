@@ -27,6 +27,7 @@
 #include "NCPopupInfo.h"
 #include "NCSelectionBox.h"
 #include "NCPopupTree.h"
+#include "NCMenuButton.h"
 #include "NCPopupSelection.h"
 #include "NCPopupDeps.h"
 #include "PackageSelector.h"
@@ -75,6 +76,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
       , selectionPopup( 0 )
       , youMode( false )
       , updateMode( false )
+      , autoCheck( true )
 {
     // Fill the handler map
     eventHandlerMap[ PkgNames::Packages()->toString() ]	= &PackageSelector::PackageListHandler;
@@ -113,6 +115,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     eventHandlerMap[ PkgNames::ToggleSource()->toString() ] = &PackageSelector::StatusHandler;
     // Etc. menu
     eventHandlerMap[ PkgNames::ShowDeps()->toString() ] = &PackageSelector::DependencyHandler;
+    eventHandlerMap[ PkgNames::AutoDeps()->toString() ] = &PackageSelector::DependencyHandler;
     // help menu
     eventHandlerMap[ PkgNames::GeneralHelp()->toString() ] = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::StatusHelp()->toString() ]  = &PackageSelector::HelpHandler;
@@ -787,7 +790,9 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 {
      NCPkgTable * packageList = getPackageList();
      
-    if ( !packageList )
+    if ( !packageList
+	 || event.selection.isNull()
+	 || visibleInfo.isNull() )
     {
 	return false;
     }
@@ -814,7 +819,6 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 
 	if ( pkgAvail )
 	{
-	    
 	    // set the connection to the PackageSelector !!!!
 	    pkgAvail->setPackager( this );
 	    // set status strategy
@@ -873,12 +877,41 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 //
 bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 {
-    // deactivate this part for beta3
-    return true;
-    
-    if ( depsPopup )
+    if ( event.selection.isNull() )
     {
-	depsPopup->showDependencyPopup( true );
+	return false;
+    }
+
+    if ( event.selection->compare( PkgNames::ShowDeps() ) == YO_EQUAL )
+    {
+	// show dependency popup
+	if ( depsPopup )
+	{
+	    depsPopup->showDependencyPopup( true );
+	}
+    }
+    else if ( event.selection->compare( PkgNames::AutoDeps() ) == YO_EQUAL )
+    {
+	char * autoYes = "`ReplacePoint( `id(`replacemenu), `MenuButton( \"&Etc.\", [`item( `id(`showdeps), \"    &Check dependencies now\" ), `item( `id(`autodeps), \"[X] &Automatic dependency check\" ) ] ) ) ";
+	
+	char * autoNo  = "`ReplacePoint( `id(`replacemenu),`MenuButton( \"&Etc.\", [`item( `id(`showdeps), \"    &Check dependencies now\" ), `item( `id(`autodeps), \"[ ] &Automatic dependency check\" ) ] ) ) ";
+	
+	if ( autoCheck )
+	{
+	    YCPParser parser( autoNo );
+	    YCPValue layout = parser.parse();
+	
+	    y2ui->evaluateReplaceWidget( layout->asTerm() );
+	    autoCheck = false;
+	}
+	else
+	{
+	    YCPParser parser( autoYes );
+	    YCPValue layout = parser.parse();
+	
+	    y2ui->evaluateReplaceWidget( layout->asTerm() );	
+	    autoCheck = true;	
+	}
     }
 
     return true;
@@ -896,7 +929,8 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
     NCursesEvent retEvent;
     NCPkgTable * packageList = getPackageList();
  
-    if ( !packageList || event.selection.isNull() )
+    if ( !packageList
+	 || event.selection.isNull() )
     {
 	return false;
     }
@@ -951,7 +985,8 @@ bool PackageSelector::StatusHandler( const NCursesEvent&  event )
 {
     NCPkgTable * packageList = getPackageList();
      
-    if ( !packageList )
+    if ( !packageList
+	 || event.selection.isNull() )
     {
 	return false;
     }
@@ -1039,6 +1074,11 @@ bool PackageSelector::DiskspaceHandler( const NCursesEvent&  event )
 bool PackageSelector::HelpHandler( const NCursesEvent&  event )
 {
     NCstring text ( "" );
+
+    if ( event.selection.isNull() )
+    {
+	return false;
+    }
     
     if ( event.selection->compare( PkgNames::GeneralHelp() ) == YO_EQUAL )
     {
@@ -1055,10 +1095,7 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
 	text += PkgNames::HelpOnStatus1();
 	text += PkgNames::HelpOnStatus2();
 	text += PkgNames::HelpOnStatus3();
-	// FIXME: text depends on flag isNew/isPostInstallation 
-
-	// text += PkgNames::HelpOnStatusNew();
-	text += PkgNames::HelpOnStatusPost();
+	text += PkgNames::HelpOnStatus();
     }
     
     // open the popup with the help text
@@ -1227,8 +1264,10 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	    text += NCstring( pkgPtr->getSelectable()->name() );
 	    text += NCstring( " - " );
 	}
-
-	text += NCstring( pkgPtr->summary() );		// the summary
+	
+	// the summary is UTF8 encoded -> use a YCPString as argument for NCstring  
+	YCPString summary( pkgPtr->summary() );
+	text += NCstring( summary );	
 	text += NCstring( "<br>" );
 
 	if ( pkgPtr->hasInstalledObj() && pkgPtr->hasCandidateObj() )

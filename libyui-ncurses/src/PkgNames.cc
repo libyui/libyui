@@ -166,10 +166,24 @@ const YCPValue& PkgNames::ToggleSource ()
     return value;
 }
 
-// the menu entry Action/SPM yes/no
+// the menu entry Etc./check dep
 const YCPValue& PkgNames::ShowDeps ()
 {
     static const YCPValue value = createIdValue ( "showdeps" );
+    return value;
+}
+
+// the menu entry Etc./auto check dep
+const YCPValue& PkgNames::AutoDeps ()
+{
+    static const YCPValue value = createIdValue ( "autodeps" );
+    return value;
+}
+
+// the menu Etc.
+const YCPValue& PkgNames::ReplaceMenu ()
+{
+    static const YCPValue value = createIdValue ( "replacemenu" );
     return value;
 }
 
@@ -628,28 +642,21 @@ const NCstring PkgNames::HelpOnStatus1()
 const NCstring PkgNames::HelpOnStatus2()
 {
     // part 2 of help text package status
-    static const YCPString value = toYCPString( _("<p>There is also the possibility to use <b>F4</b> to toggle between the package status, <b>F3</b> to select or <b>F5</b> to delete a package.</p>") );
+    static const YCPString value = toYCPString( _("<p>There is also the possibility to use <b>F3</b> to toggle between the package status.") );
     return value;
 }
 
 const NCstring PkgNames::HelpOnStatus3()
 {
     // part 3 of help text package status
-    static const YCPString value = toYCPString( _("<p>The meaning of the status flags:</p>") );
+    static const YCPString value = toYCPString( _("<br>The meaning of the status flags:") );
     return value;
 }
 
-const NCstring PkgNames::HelpOnStatusNew()
+const NCstring PkgNames::HelpOnStatus()
 {
     // help text package status (new installation)
-    static const YCPString value = toYCPString( _("<p><b>X</b> : this package is selected for installation</p><p><b>_</b> : the package will not be installed</p><p><b>a</b> : automatically selected package (another selected package depends on it)</p>") );
-    return value;
-}
-
-const NCstring PkgNames::HelpOnStatusPost()
-{
-    // help text package status (post installation)
-    static const YCPString value = toYCPString( _("<p><b>i</b> : the package is installed<p><b>X</b> : the package is selected for installation</p><p><b>d</b> : the package will be deleted</p><p><b>a</b> : automatically selected for installation</p><p><b>u</b> : update this package</p>" ) );
+    static const YCPString value = toYCPString( _("<p><b> + </b> : this package is selected for installation</p><p><b>a+ </b> : automatically selected for installation</p><p><b> > </b> : update this package</p><p><b>a> </b> : automatic update</p><p><b> i </b> : this package is installed</p><p><b> - </b> : the package will be deleted</p><p><b>---</b> : never install this package</p>") );
     return value;
 }
 

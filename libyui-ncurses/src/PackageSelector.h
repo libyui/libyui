@@ -80,6 +80,8 @@ class PackageSelector
 
     bool youMode;			// YOU
     bool updateMode;			// Update
+
+    bool autoCheck;			// flag for autoamtic dependency check on/off
     
     // internal helper functions (format list of string) 
     string createRelLine( list<PkgRelation> info );

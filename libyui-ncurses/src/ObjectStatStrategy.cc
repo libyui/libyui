@@ -179,6 +179,7 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 	    {
 		valid = false;
 	    }
+	    break;
 	default:
 	    NCDBG <<  "Key not valid" << endl;
 	    valid = false;

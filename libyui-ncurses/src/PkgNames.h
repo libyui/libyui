@@ -177,7 +177,11 @@ public:
      *  Widget id of the label for disk space information
      */
     static const YCPValue& Diskspace ();
+
     static const YCPValue& ShowDeps ();
+    static const YCPValue& AutoDeps ();
+    static const YCPValue& ReplaceMenu ();
+
     /**
      *  Widget id of the button disk space
      */
@@ -359,8 +363,7 @@ public:
     static const NCstring HelpOnStatus1();
     static const NCstring HelpOnStatus2();
     static const NCstring HelpOnStatus3(); 
-    static const NCstring HelpOnStatusNew();
-    static const NCstring HelpOnStatusPost();
+    static const NCstring HelpOnStatus();
     
     /**
      * Part of help text used in installed system

@@ -33,10 +33,11 @@
 						  `item( `id(`files), "&File list" ),
 						  `item( `id(`relations), "&Package relations" ) ]
 				 )),
-	      `Left(`MenuButton( "&Etc.", [`item( `id(`showdeps), "&Check dependencies now" ),
-					  `item( `id(`check), "&Automatic dependency check" ),
-					  `item( `id(`nocheck), "Do&n't check dependencies" ) ]
-				 )),
+	      `Left(`ReplacePoint(`id(`replacemenu),`MenuButton(  "&Etc.", [`item( `id(`showdeps), "    &Check dependencies now" ),
+									    `item( `id(`autodeps), "[X] &Automatic dependency check" ) ]
+								  )
+				  )
+		    ),
 	      `HSpacing(0.3)
 					   
 	      ),

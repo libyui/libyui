@@ -85,7 +85,7 @@ string NCPkgTableTag::statusToStr( PMSelectable::UI_Status stat ) const
 	case PMSelectable::S_AutoUpdate: // Will be automatically updated
 	    return " a> ";    
 	case PMSelectable::S_Taboo:	// Never install this 
-	    return "----";
+	    return " ---";
     }
 
     return "    ";
@@ -391,7 +391,6 @@ void NCPkgTable::fillHeader( )
 NCursesEvent NCPkgTable::wHandleInput( int key )
 {
     NCursesEvent ret = NCursesEvent::none;
-    PMSelectable::UI_Status newStat = PMSelectable::S_NoInst;
     
     // call handleInput of NCPad
     handleInput( key );
@@ -436,7 +435,7 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 	    break;
 	}
 	case KEY_F(3): {
-	    // set the new status
+	    // toggle status
 	    toggleObjStatus( );
 
 	    ret = NCursesEvent::handled;
@@ -542,6 +541,7 @@ bool NCPkgTable::changeObjStatus( int key )
 {
     PMObjectPtr objPtr = getDataPointer( getCurrentItem() );
     PMSelectable::UI_Status newStatus;
+
     bool ok = statusStrategy->keyToStatus( key, objPtr, newStatus );
     
     if ( ok )
