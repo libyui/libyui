@@ -598,7 +598,7 @@ YWidget * Y2NCursesUI::createPackageSelector( YWidget * parent, YWidgetOpt & opt
 //	DESCRIPTION : Implementation of UI builtin RunPkgSelection() which
 //		      has to be called after OpenDialog( `PackageSelector() ).
 //
-void Y2NCursesUI::runPkgSelection(  YWidget * selector )
+YCPValue Y2NCursesUI::runPkgSelection(  YWidget * selector )
 {
     NCPackageSelector * ncSelector = 0;
     
@@ -619,6 +619,7 @@ void Y2NCursesUI::runPkgSelection(  YWidget * selector )
     bool result = true;
     
     // start event loop
+    NCursesEvent event = NCursesEvent::cancel;
 
     if ( ncSelector )
     {
@@ -626,7 +627,6 @@ void Y2NCursesUI::runPkgSelection(  YWidget * selector )
 	
 	NCDialog * ncd = static_cast<NCDialog *>( dialog );
 
-	NCursesEvent event = NCursesEvent::cancel;
 	do
 	{
 	    event = ncd->userInput();
@@ -639,6 +639,10 @@ void Y2NCursesUI::runPkgSelection(  YWidget * selector )
     {
 	UIERR << "No NCPackageSelector existing" << endl;
     }
+
+    UIMIL << "Return value: " << event.result->toString() << endl;
+
+    return event.result;
 }
 
 ///////////////////////////////////////////////////////////////////

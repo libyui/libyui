@@ -290,7 +290,7 @@ class Y2NCursesUI : public NCurses, public YUIInterpreter {
     /**
      * Fills the PackageSelector widget.
      */
-    virtual void runPkgSelection( YWidget * packageSelector );
+    virtual YCPValue runPkgSelection( YWidget * packageSelector );
     
     /**
      * Creates a special subwidget used for Package Selection (which doesn't exist in QT-UI).

@@ -1094,6 +1094,8 @@ bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 
     NCMIL <<  "Cancel button pressed - leaving package selection" << endl;
 
+    const_cast<NCursesEvent &>(event).result = YCPSymbol("cancel", true);
+    
     // return false, which means stop the event loop (see runPkgSelection)
     return false;
 }
@@ -1110,6 +1112,8 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
     // FIXME - check diskspace
 
     NCMIL <<  "OK button pressed - leaving package selection, starting installation" << endl;
+
+    const_cast<NCursesEvent &>(event).result = YCPSymbol("accept", true); 
 
     // return false, leave the package selection
     return false;
