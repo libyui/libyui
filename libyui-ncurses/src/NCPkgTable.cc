@@ -187,7 +187,7 @@ void NCPkgTable::addLine( PMSelectable::UI_Status stat,
     
     // fill first column (containing the status information and the package pointer)
     Items[0] = new NCPkgTableTag( pkgPtr, status );
-    
+
     for ( unsigned i = 1; i < elements.size()+1; ++i ) {
 	// use YCPString to enforce recoding from 'utf8'
 	Items[i] = new NCTableCol( YCPString( elements[i-1] ) );
@@ -518,7 +518,9 @@ bool NCPkgTable::setNewStatus( const NCPkgStatus & newStatus  )
     bool valid = false;
     
     int citem = getCurrentItem();
-    PMPackagePtr pkgPtr = getDataPointer( getCurrentItem() );
+
+    // must be a PMObjectPtr !!! to handle PMYouPatchPtr and PMPackagePtr   
+    PMObjectPtr pkgPtr = getDataPointer( getCurrentItem() );
     
     // check whether the status change is possible
     switch ( getStatus( citem ) )
