@@ -952,11 +952,15 @@ YQPackageSelector::accept()
     if ( _installedPkgs > 0 && ! _youMode )
     {
 	// Show which packages are installed/deleted automatically
-	//
-	// Translators: Automatic word wrap
-	QString msg = "<p>" +
-	    _( "In addition to your manual selections, the following packages"
-	       " have been changed due to dependency resolving:" )
+	QString msg =
+	    "<p><b>"
+	    // Dialog header
+	    + _( "Automatic Changes" )
+	    + "</b></p>"
+	    // Detailed explanation (automatic word wrap!)
+	    + "<p>"
+	    + _( "In addition to your manual selections, the following packages"
+		 " have been changed due to dependency resolving:" )
 	    + "<p>";
 
 	if ( YQPkgChangesDialog::showChangesDialog( msg, _( "&Install" ), _( "&Back" ) )
