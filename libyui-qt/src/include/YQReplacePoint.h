@@ -56,16 +56,6 @@ public:
      * Sets the size
      */
     void setSize( long newWidth, long newHeight );
-
-    
-protected:
-    
-    /**
-     * Event handler for window resize.
-     *
-     * Inherited from QWidget.
-     */
-    virtual void resizeEvent ( QResizeEvent * ev );
 };
 
 
