@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Aug 27 19:15:23 CEST 2002 - sh@suse.de
+
+- V 2.6.9
+- Pkg selection now usable (no dependency checking/solving yet)
+
+-------------------------------------------------------------------
 Wed Aug 21 17:51:27 CEST 2002 - kkaempf@suse.de
 
 - fix "make dist"
