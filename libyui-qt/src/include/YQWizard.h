@@ -28,6 +28,7 @@ class QHBox;
 class QPushButton;
 class QTabWidget;
 class QTextBrowser;
+class QWidgetStack;
 
 class YQReplacePoint;
 
@@ -110,6 +111,16 @@ protected:
     void destroyButtons();
 
     /**
+     * Find a QTabWidget's QWidgetStack child to disable 3D frame effects.
+     *
+     * Queries the tab widget's children list to find the first QWidgetStack
+     * child and change its frame parameters.  This is only needed due to an
+     * oversight of the QTabWidget designer: There is no access to a
+     * QTabWidget's 3D properties.
+     **/
+    QWidgetStack * findWidgetStack( QTabWidget * tab );
+
+    /**
      * Send a wizard event with the specified ID.
      **/
     void sendEvent( YCPValue id );
@@ -121,7 +132,8 @@ protected:
     YCPString _nextButtonLabel;
 
     QTabWidget *	_sideBar;
-    QTextBrowser *	   _helpBrowser;
+    QWidgetStack * 	    _widgetStack;
+    QTextBrowser *	    _helpBrowser;
 
     QVBox *		_clientArea;
     YQReplacePoint *	    _contentsReplacePoint;
