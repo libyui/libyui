@@ -415,7 +415,7 @@ QY2CheckListItem::paintCell( QPainter *			painter,
     if ( _textColor.isValid() )		cg.setColor( QColorGroup::Text, _textColor );
     if ( _backgroundColor.isValid() )	cg.setColor( QColorGroup::Base, _backgroundColor );
 
-    QListViewItem::paintCell( painter, cg, column, width, alignment );
+    QCheckListItem::paintCell( painter, cg, column, width, alignment );
 }
 
 
