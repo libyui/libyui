@@ -36,6 +36,9 @@ public:
     static QPixmap pkgAutoInstall();
     static QPixmap pkgAutoUpdate();
     static QPixmap pkgAutoDel();
+    static QPixmap pkgSelAutoInstall();
+    static QPixmap pkgSelAutoUpdate();
+    static QPixmap pkgSelAutoDel();
     static QPixmap pkgKeepInstalled();
     static QPixmap pkgNoInst();
 
@@ -46,6 +49,9 @@ public:
     static QPixmap disabledPkgAutoInstall();
     static QPixmap disabledPkgAutoUpdate();
     static QPixmap disabledPkgAutoDel();
+    static QPixmap disabledPkgSelAutoInstall();
+    static QPixmap disabledPkgSelAutoUpdate();
+    static QPixmap disabledPkgSelAutoDel();
     static QPixmap disabledPkgKeepInstalled();
     static QPixmap disabledPkgNoInst();
 

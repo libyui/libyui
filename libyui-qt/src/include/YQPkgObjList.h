@@ -101,9 +101,12 @@ public:
     /**
      * Returns the suitable icon for a PMObject status - the regular icon if
      * 'enabled' is 'true' or the insensitive icon if 'enabled' is 'false.
+     * 'bySelection' is relevant only for auto-states: This uses the icon for
+     * 'auto-by-selection" rather than the default auto-icon.
      **/
     virtual QPixmap statusIcon( PMSelectable::UI_Status status,
-				bool 			enabled = true );
+				bool 			enabled     = true,
+				bool			bySelection = false );
 
     /**
      * Returns a short (one line) descriptive text for a PMObject status.
@@ -344,6 +347,12 @@ public:
      **/
     PMSelectable::UI_Status status() const;
 
+    /**
+     * Returns 'true' if this selectable's status is set by a selection
+     * (rather than by the user or by the dependency solver).  
+     **/
+    bool bySelection() const;
+    
     /**
      * Set the (binary RPM) package status
      **/

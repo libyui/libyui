@@ -139,7 +139,7 @@ YQPkgObjList::clear()
 
 
 QPixmap
-YQPkgObjList::statusIcon( PMSelectable::UI_Status status, bool enabled )
+YQPkgObjList::statusIcon( PMSelectable::UI_Status status, bool enabled, bool bySelection )
 {
     QPixmap icon = YQIconPool::pkgNoInst();
 
@@ -151,11 +151,21 @@ YQPkgObjList::statusIcon( PMSelectable::UI_Status status, bool enabled )
 	    case PMSelectable::S_Del:		icon = YQIconPool::pkgDel();		break;
 	    case PMSelectable::S_Update:	icon = YQIconPool::pkgUpdate();		break;
 	    case PMSelectable::S_Install:	icon = YQIconPool::pkgInstall();	break;
-	    case PMSelectable::S_AutoDel:	icon = YQIconPool::pkgAutoDel();	break;
-	    case PMSelectable::S_AutoInstall:	icon = YQIconPool::pkgAutoInstall();	break;
-	    case PMSelectable::S_AutoUpdate:	icon = YQIconPool::pkgAutoUpdate();	break;
 	    case PMSelectable::S_KeepInstalled: icon = YQIconPool::pkgKeepInstalled();	break;
 	    case PMSelectable::S_NoInst:	icon = YQIconPool::pkgNoInst();		break;
+		
+	    case PMSelectable::S_AutoDel:	icon = bySelection ?
+						    YQIconPool::pkgSelAutoDel() :
+						    YQIconPool::pkgAutoDel();		break;
+	    
+	    case PMSelectable::S_AutoInstall:	icon = bySelection ?
+						    YQIconPool::pkgSelAutoInstall() :
+						    YQIconPool::pkgAutoInstall();	break;
+	    
+	    case PMSelectable::S_AutoUpdate:	icon = bySelection ?
+						    YQIconPool::pkgSelAutoUpdate() :
+						    YQIconPool::pkgAutoUpdate();	break;
+		
 
 		// Intentionally omitting 'default' branch so the compiler can
 		// catch unhandled enum states
@@ -169,11 +179,20 @@ YQPkgObjList::statusIcon( PMSelectable::UI_Status status, bool enabled )
 	    case PMSelectable::S_Del:		icon = YQIconPool::disabledPkgDel();		break;
 	    case PMSelectable::S_Update:	icon = YQIconPool::disabledPkgUpdate();		break;
 	    case PMSelectable::S_Install:	icon = YQIconPool::disabledPkgInstall();	break;
-	    case PMSelectable::S_AutoDel:	icon = YQIconPool::disabledPkgAutoDel();	break;
-	    case PMSelectable::S_AutoInstall:	icon = YQIconPool::disabledPkgAutoInstall();	break;
-	    case PMSelectable::S_AutoUpdate:	icon = YQIconPool::disabledPkgAutoUpdate();	break;
 	    case PMSelectable::S_KeepInstalled: icon = YQIconPool::disabledPkgKeepInstalled();	break;
 	    case PMSelectable::S_NoInst:	icon = YQIconPool::disabledPkgNoInst();		break;
+		
+	    case PMSelectable::S_AutoDel:	icon = bySelection ?
+						    YQIconPool::disabledPkgSelAutoDel() :
+						    YQIconPool::disabledPkgAutoDel();		break;
+	    
+	    case PMSelectable::S_AutoInstall:	icon = bySelection ?
+						    YQIconPool::disabledPkgSelAutoInstall() :
+						    YQIconPool::disabledPkgAutoInstall();	break;
+	    
+	    case PMSelectable::S_AutoUpdate:	icon = bySelection ?
+						    YQIconPool::disabledPkgSelAutoUpdate() :
+						    YQIconPool::disabledPkgAutoUpdate();	break;
 
 		// Intentionally omitting 'default' branch so the compiler can
 		// catch unhandled enum states
@@ -662,6 +681,18 @@ YQPkgObjListItem::status() const
 }
 
 
+bool
+YQPkgObjListItem::bySelection() const
+{
+    bool bySel = false;
+
+    if ( _pmObj->getSelectable() && _pmObj->getSelectable()->by_appl() )
+	bySel = true;
+
+    return bySel;
+}
+
+
 void
 YQPkgObjListItem::setStatus( PMSelectable::UI_Status newStatus )
 {
@@ -682,8 +713,8 @@ YQPkgObjListItem::setStatusIcon()
 {
     if ( statusCol() >= 0 )
     {
-	bool enabled = editable() && _pkgObjList->editable();
-	setPixmap( statusCol(), _pkgObjList->statusIcon( status(), enabled ) );
+	bool enabled     = editable() && _pkgObjList->editable();
+	setPixmap( statusCol(), _pkgObjList->statusIcon( status(), enabled, bySelection() ) );
     }
 }
 
@@ -792,7 +823,27 @@ YQPkgObjListItem::toolTip( int col )
 {
     if ( col == statusCol() )
     {
-	return _pkgObjList->statusText( status() );
+	QString tip = _pkgObjList->statusText( status() );
+
+	switch ( status() )
+	{
+	    case PMSelectable::S_AutoDel:
+	    case PMSelectable::S_AutoInstall:
+	    case PMSelectable::S_AutoUpdate:
+
+		if ( bySelection() )
+		    // Translators: Additional hint what caused an auto-status
+		    tip += "\n" + _( "(by a software selection)" );
+		else
+		    tip += "\n" + _( "(by dependencies)" );
+		
+		break;
+
+	    default:
+		break;
+	}
+
+	return tip;
     }
 
     return QString::null;
