@@ -1188,6 +1188,17 @@ bool YQWizard::boolArg( const YCPTerm & term, int argNo )
 }
 
 
+YCPValue YQWizard::anyArg( const YCPTerm & term, int argNo )
+{
+    if ( term->size() > argNo )
+    {
+	return term->value( argNo );
+    }
+
+    return YCPVoid();
+}
+
+
 void YQWizard::setButtonLabel( QPushButton * button, const QString & newLabel )
 {
     if ( button )
@@ -1238,12 +1249,16 @@ YCPValue YQWizard::command( const YCPTerm & cmd )
     if ( isCommand( "SetCancelButtonLabel ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "SetAcceptButtonLabel ( string )", cmd ) )	{ setButtonLabel( _nextButton,  qStringArg( cmd, 0 ) );	return OK; }
     
+    if ( isCommand( "SetAbortButtonID     ( any )"   , cmd ) )	{ _abortButtonId = anyArg( cmd, 0 );			return OK; }
+    if ( isCommand( "SetBackButtonID	  ( any )"   , cmd ) )	{ _backButtonId  = anyArg( cmd, 0 );			return OK; }
+    if ( isCommand( "SetNextButtonID	  ( any )"   , cmd ) )	{ _nextButtonId  = anyArg( cmd, 0 );			return OK; }
+    
     if ( isCommand( "EnableBackButton 	  ( bool )"  , cmd ) )	{ enableWidget( _backButton,  boolArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "EnableNextButton     ( bool )"  , cmd ) )	{ enableWidget( _nextButton,  boolArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "EnableAbortButton    ( bool )"  , cmd ) )	{ enableWidget( _abortButton, boolArg( cmd, 0 ) );	return OK; }
     
-    if ( isCommand( "SetFocusToNextButton ()"  , cmd ) )	{ setFocus( _nextButton );				return OK; }
-    if ( isCommand( "SetFocusToBackButton ()"  , cmd ) )	{ setFocus( _backButton );				return OK; }
+    if ( isCommand( "SetFocusToNextButton ()"        , cmd ) )	{ setFocus( _nextButton );				return OK; }
+    if ( isCommand( "SetFocusToBackButton ()"        , cmd ) )	{ setFocus( _backButton );				return OK; }
     
     if ( isCommand( "SetVerboseCommands	  ( bool )"  , cmd ) )	{ setVerboseCommands( boolArg( cmd, 0 ) );		return OK; }
 

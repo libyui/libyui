@@ -310,6 +310,11 @@ protected:
     bool boolArg( const YCPTerm & term, int argNo );
 
     /**
+     * Return argument as type 'any' (plain YCPValue)
+     **/
+    YCPValue YQWizard::anyArg( const YCPTerm & term, int argNo );
+
+    /**
      * Set a button's label.
      **/
     void setButtonLabel( QPushButton * button, const QString & newLabel );
