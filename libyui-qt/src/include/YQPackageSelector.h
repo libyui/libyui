@@ -91,11 +91,6 @@ public:
      **/
     virtual bool setKeyboardFocus();
 
-    /**
-     * Set the text domain.
-     **/
-    void setTextdomain( const char * domain );
-
 
 public slots:
 

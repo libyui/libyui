@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Mar 16 18:30:09 CET 2005 - sh@suse.de
+
+- Fixed bug #72799: Help/Steps buttons not translated
+  Added setTextdomain() call to YQWizard
+- V 2.11.11 
+
+-------------------------------------------------------------------
 Fri Mar 11 18:11:03 CET 2005 - sh@suse.de
 
 - V 2.11.10

@@ -144,7 +144,7 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     if ( _updateMode )	y2milestone( "Update mode" );
 
 
-    setTextdomain( "packages-qt" );
+    YQUI::setTextdomain( "packages-qt" );
     setFont( YQUI::ui()->currentFont() );
     YQUI::ui()->blockWmClose(); // Automatically undone after UI::RunPkgSelection()
     _installedPkgs = Y2PM::instTarget().numPackages();
@@ -1398,21 +1398,6 @@ YQPackageSelector::setKeyboardFocus()
     setFocus();
 
     return true;
-}
-
-
-void
-YQPackageSelector::setTextdomain( const char * domain )
-{
-    bindtextdomain( domain, LOCALEDIR );
-    bind_textdomain_codeset( domain, "utf8" );
-    textdomain( domain );
-
-    // Make change known.
-    {
-	extern int _nl_msg_cat_cntr;
-	++_nl_msg_cat_cntr;
-    }
 }
 
 

@@ -150,6 +150,7 @@ YQWizard::YQWizard( QWidget *		parent,
     _stepsIDs.setAutoDelete( false );	// Only for one of both!
 
     setFont( YQUI::ui()->currentFont() );	// Make sure qApp->font() is initialized
+    YQUI::setTextdomain( "packages-qt" );
 
 
     //

@@ -543,6 +543,11 @@ public:
     QWidget* mainWidget();
 
     /**
+     * Initialize and set a textdomain for gettext()
+     **/
+    static void setTextdomain( const char * domain );
+    
+    /**
      * Returns a high-contrast color palette suitable for vision impaired users.
      **/
     static QPalette YQUI::visionImpairedPalette();
