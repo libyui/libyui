@@ -1290,15 +1290,13 @@ string YQWizard::debugLabel()
 {
     if ( _dialogHeading )
     {
-	string text = toUTF8( _dialogHeading->text() );
-	text = string( "Wizard Dialog \"" ) + text + "\"";
+	string label = toUTF8( _dialogHeading->text() );
 
-	return text;
+	if ( ! label.empty() )
+	    return label;
     }
-    else
-    {
-	return "Wizard Dialog";
-    }
+
+    return "<untitled>";
 }
 
 void YQWizard::setHelpText( QString helpText )
