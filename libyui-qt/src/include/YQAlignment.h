@@ -37,24 +37,27 @@ public:
     /**
      * Constructor.
      */
-    YQAlignment( QWidget *parent, YWidgetOpt &opt, YAlignmentType halign, YAlignmentType valign);
+    YQAlignment( QWidget *	parent,
+		 YWidgetOpt & 	opt,
+		 YAlignmentType horAlign,
+		 YAlignmentType vertAlign );
 
     /**
      * Moves a child widget to a new position.
      */
-    void moveChild(YWidget *child, long newX, long newY);
+    void moveChild( YWidget * child, long newX, long newY );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
      * widget. All new widgets are enabled per definition. Only
      * enabled widgets can take user input.
      */
-    void setEnabling(bool enabled);
+    void setEnabling( bool enabled );
 
     /**
      * Sets the size
      */
-    void setSize(long newWidth, long newHeight);
+    void setSize( long newWidth, long newHeight );
 };
 
 

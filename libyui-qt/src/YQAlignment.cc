@@ -23,10 +23,12 @@
 #include "YQAlignment.h"
 
 
-YQAlignment::YQAlignment( QWidget *parent, YWidgetOpt &opt,
-			 YAlignmentType halign, YAlignmentType valign)
-    : QWidget(parent)
-    , YAlignment(opt, halign, valign)
+YQAlignment::YQAlignment( QWidget *parent,
+			  YWidgetOpt &opt,
+			  YAlignmentType horAlign,
+			  YAlignmentType vertAlign )
+    : QWidget( parent )
+    , YAlignment( opt, horAlign, vertAlign )
 {
     setWidgetRep( this );
 }
@@ -34,14 +36,14 @@ YQAlignment::YQAlignment( QWidget *parent, YWidgetOpt &opt,
 
 void YQAlignment::setEnabling( bool enabled )
 {
-    QWidget::setEnabled(enabled);
+    QWidget::setEnabled( enabled );
 }
 
 
 void YQAlignment::moveChild( YWidget *child, long newX, long newY )
 {
-    QWidget *qw = (QWidget *)(child->widgetRep());
-    qw->move(newX, newY);
+    QWidget *qw = (QWidget *) ( child->widgetRep() );
+    qw->move( newX, newY );
 }
 
 
@@ -50,5 +52,6 @@ void YQAlignment::setSize( long newWidth, long newHeight )
     resize(newWidth, newHeight);
     YAlignment::setSize(newWidth, newHeight);
 }
+
 
 #include "YQAlignment.moc.cc"
