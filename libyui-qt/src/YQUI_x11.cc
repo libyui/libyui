@@ -87,7 +87,7 @@ QWidget* YQUI::mainWidget()
 void
 YQUI::busyCursor( void )
 {
-    qApp->setOverrideCursor( waitCursor );
+    qApp->setOverrideCursor( Qt::busyCursor );
 }
 
 
