@@ -940,9 +940,12 @@ YQPackageSelector::reject()
 void
 YQPackageSelector::accept()
 {
-    // Force final dependency resolving
-    if ( resolvePackageDependencies() == QDialog::Rejected )
-	return;
+    if ( ! _youMode )
+    {
+	// Force final dependency resolving
+	if ( resolvePackageDependencies() == QDialog::Rejected )
+	    return;
+    }
 
 #if SHOW_CHANGES_DIALOG
 
