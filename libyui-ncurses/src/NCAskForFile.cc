@@ -131,8 +131,9 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
 
     // HBox for the lists
     NCSplit * hSplit1 = new NCSplit( split, opt, YD_HORIZ );
-    
+
     // add the list of directories
+    opt.keyEvents.setValue( true );
     dirList = new NCDirectoryTable( hSplit1, opt, NCFileSelection::T_Overview, iniDir );
     dirList->setId( PkgNames::DirList() );
     hSplit1->addChild( dirList );
@@ -141,9 +142,10 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
     fileList = new NCFileTable( hSplit1, opt, NCFileSelection::T_Overview, filter, iniDir );
     fileList->setId( PkgNames::FileList() );
     hSplit1->addChild( fileList );
-    
+
     split->addChild( hSplit1 );
     opt.notifyMode.setValue( false );
+    opt.keyEvents.setValue( false );
 
     NCSplit * hSplit2 = new NCSplit( split, opt, YD_HORIZ );
     
@@ -282,10 +284,22 @@ bool NCAskForFile::postAgain( )
 
     postevent.detail = NCursesEvent::NODETAIL;
 
+    if ( postevent.keySymbol == "CursorLeft" )
+    {
+	dirList->setKeyboardFocus(); 
+	return true;
+    }
+    else if ( postevent.keySymbol == "CursorRight" )
+    {
+	fileList->setKeyboardFocus();
+	return true;
+    }
+
     YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
 
     if ( !currentId.isNull() )
     {
+	NCMIL << "ID: " << currentId->toString() << endl;
 	if ( currentId->compare( PkgNames::OkButton () ) == YO_EQUAL )
 	{
 	    postevent.result = YCPString( dirList->getCurrentDir() + "/"
@@ -334,7 +348,10 @@ bool NCAskForFile::postAgain( )
 	}
 	else if ( currentId->compare( PkgNames::FileList() ) == YO_EQUAL )
 	{
-	    fileName->setText( postevent.result->asString() );
+	    if ( !postevent.result.isNull() )
+	    {
+		fileName->setText( postevent.result->asString() );
+	    }
 	}
 	else
 	{
