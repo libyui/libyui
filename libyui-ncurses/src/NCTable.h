@@ -55,7 +55,6 @@ class NCTable : public YTable, public NCPadWidget {
 
     virtual NCPad * CreatePad();
 
-    virtual void itemsCleared();
     virtual void cellChanged( int index, int colnum, const YCPString & newtext );
     
   protected:
@@ -73,6 +72,7 @@ class NCTable : public YTable, public NCPadWidget {
     
     bool isImmediate() const { return immediate; }	// addey by gs
     void setHeader( const vector<string> & head ); 	// added by gs
+    virtual void itemsCleared();
     
     void setBigList( const bool big ) { biglist = big; }
     void SetSepChar( const chtype colSepchar )  { pad->SetSepChar( colSepchar ); }
