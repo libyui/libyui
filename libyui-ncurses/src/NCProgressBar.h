@@ -42,8 +42,8 @@ class NCProgressBar : public YProgressBar, public NCWidget {
   private:
 
     NClabel  label;
-    int      maxval;
-    int      cval;
+    Value_t  maxval;
+    Value_t  cval;
     NCursesWindow * lwin;
     NCursesWindow * twin;
 

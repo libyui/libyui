@@ -240,12 +240,12 @@ void NCProgressBar::tUpdate()
   }
 
   if ( twin->maxx() >= 6 ) {
-    int pc  = 100 * cval / maxval;
-    int off = twin->maxx() / 2 - ( pc == 100 ? 2
-					     : pc >= 10 ? 1
-							: 0 );
+    Value_t pc  = 100 * cval / maxval;
+    Value_t off = twin->maxx() / 2 - ( pc == 100 ? 2
+		 			         : pc >= 10 ? 1
+							    : 0 );
     char buf[5];
-    sprintf( buf, "%d%%", pc );
+    sprintf( buf, "%lld%%", pc );
     twin->move( 0, off );
     for ( char * ch = buf; *ch; ++ch ) {
       chtype a = twin->inch();
