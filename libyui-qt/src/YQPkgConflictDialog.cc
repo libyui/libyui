@@ -90,7 +90,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
 
     // "Ignore all" button
-    
+
     button = new QPushButton( _( "&Ignore All" ), buttonBox );
     CHECK_PTR( button );
 
@@ -99,7 +99,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
     addHStretch( buttonBox );
 
-    
+
     // "Cancel" button
 
     button = new QPushButton( _( "&Cancel" ), buttonBox );
@@ -130,47 +130,76 @@ YQPkgConflictDialog::solveAndShowConflicts()
 
     if ( isVisible() )
     {
+	// This is not only the starting point for all the dependency solving
+	// magic, it is also used internally when clicking the "OK - Try again"
+	// button. Thus, before doing anything else, check if the conflict list
+	// still contains anything, and if so, apply any conflict resolutions
+	// the user selected - but only if this dialog is already visible.
+
 	_conflictList->applyResolutions();
     }
 
+
+    // Initialize for next round of solving.
     _conflictList->clear();
     PkgDep::ResultList		goodList;
     PkgDep::ErrorResultList	badList;
 
-    y2debug( "Solving..." );
     YUIQt::yuiqt()->busyCursor();
+    y2debug( "Solving..." );
 
+    // Solve.
     bool success = Y2PM::packageManager().solveInstall( goodList, badList );
 
-    YUIQt::yuiqt()->normalCursor();
     y2debug( "Solving done" );
+
+
+    // Package states may have changed: The solver may have set packages to
+    // autoInstall or autoUpdate. Make those changes known.
     emit updatePackages();
 
-    if ( success )
+    YUIQt::yuiqt()->normalCursor();
+
+    if ( success )	// Solving went without any complaints?
     {
 	setResult( QDialog::Accepted );
-	
+
 	if ( isVisible() )
-	    accept();
+	    accept();	// Pop down the dialog.
     }
-    else
+    else		// There were solving problems.
     {
 	y2debug( "Dependency conflict!" );
-	_conflictList->fill( badList );
+	YUIQt::yuiqt()->busyCursor();
 
-	if ( _conflictList->isEmpty() ) // Maybe all conflicts are ignored
+	// Make the bad list human readable and fill the conflictList
+	// widget. During that process, filter out any conflicts the user
+	// previously chose to ignore.
+
+	_conflictList->fill( badList );
+	YUIQt::yuiqt()->normalCursor();
+
+	if ( _conflictList->isEmpty() ) // No conflicts?
 	{
+	    // Yes, this _can_ happen: The solver reported 'no success', yet
+	    // the conflict list is empty. The badList still contains all
+	    // ignored conflicts; the conflictList widget filters out the
+	    // ignored ones.
+
 	    if ( isVisible() )
-		accept();
+		accept();	// Pop down the dialog.
 	}
 	else // There are conflicts
 	{
 	    if ( ! isVisible() )
+	    {
+		// Pop up the dialog and run a local event loop.
 		exec();
+	    }
 	}
     }
 
-    return result();
+    return result();	// QDialog::Accepted or QDialog::Rejected
 }
 
 
@@ -194,7 +223,7 @@ Do this only if you know exactly what you are doing!\
 	     == 1 )	// Proceed upon button #0 (OK)
 	    return;
     }
-    
+
     _conflictList->ignoreAll();
     solveAndShowConflicts();
 }
