@@ -1,6 +1,8 @@
 #
-# Makefile.am for y2ncurses/testsuite
+# Makefile.am for ncurses/testsuite
 #
+
+AM_CXXFLAGS = -DY2LOG=\"ui-ncurses\"
 
 AUTOMAKE_OPTIONS = dejagnu
 

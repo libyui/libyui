@@ -1,8 +1,9 @@
 #
-# Makefile.am for y2ncurses/src
+# Makefile.am for ncurses/src
 #
 
-# plugin, libtool forces 'lib' prefix
+AM_CXXFLAGS = -DY2LOG=\"ui-ncurses\"
+
 plugin_LTLIBRARIES = libpy2ncurses.la
 noinst_LTLIBRARIES = liby2ncurses.la
 
