@@ -170,7 +170,7 @@ YQPkgTextDialog::htmlParagraphs( const std::list<std::string> & text )
 	if ( line.length() == 0 )	// Empty lines mean new paragraph
 	    html += "</p><p>";
 	else
-	    html += line;
+	    html += " " + line;
 	++it;
     }
 
