@@ -120,13 +120,22 @@ int main (int argc, char *argv[])
     cout << "Initial codeset: " << codeset << endl;
     
     // Explicitly set LC_CTYPE to this codeset because the terminal runs with this codeset
-    // and must not be changed by setting LANG variable.
-    // export LANG= ... or setenv( LANG ) changes all LC_...variables accordingly except those
+    // and must not be changed by setting the LANG variable.
+    // export LANG= ... or setenv( LANG ) changes all LC_... variables accordingly except those
     // explicitly set before.
     // Functions which are respecting the locale e.g. wcwidth() are looking for the LC_CTYPE.
+    // The LC_CTYPE must be set to the language e.g.: de_DE, de_DE@euro, de_DE.UTF-8 and NOT
+    // to the codeset got from nl_langinfo( CODESET )!
 
-    // setenv ( "LC_CTYPE", codeset, 1 );
-    setlocale( LC_CTYPE, codeset );
+    if ( getenv( "LANG" ) != NULL )
+    {
+	language = getenv( "LANG" );
+    }
+
+    if ( setlocale( LC_CTYPE, language.c_str() ) == NULL )
+    {
+	fprintf(stderr, "error: setlocale %s\n", language.c_str() );	
+    }
     
     if ( strcmp( codeset, "UTF-8") == 0 )
     {
@@ -139,13 +148,14 @@ int main (int argc, char *argv[])
     textdomain ( TEXTDOMAIN );
 
     //
-    // TEST: LC_CTYPE is not changed by the setenv () if explicitly set
+    // TEST: LC_CTYPE is not changed by setenv () if explicitly set
     //
-    setenv ( "LANG", "de_DE.UTF-8", 1 );
+    setenv ( "LANG", "cs_CZ", 1 );
     cout << "LANG is changed to: " <<  getenv( "LANG" ) << " - but codeset remains: "
 	 << nl_langinfo( CODESET ) << endl;
 
-    // - BUT another setlocale( LC_ALL, langugae ) call would change all LC_... variables including the  LC_CTYPE! 
+    // BUT another setlocale( LC_ALL, language ) call would change all LC_... variables
+    // including the LC_CTYPE! 
 
     //
     // TEST: RecodeToWchar() / RecodeFromWchar()
