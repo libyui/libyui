@@ -345,7 +345,8 @@ void NCRichText::PadPlainTXT( const wchar_t * osch, const unsigned olen )
     while ( *sch )
     {
 	pad->addwstr( sch, 1 );	// add one wide chararacter
-	++cc;
+	cc += wcwidth(*sch);
+	
 	if ( *sch == L'\n' )
 	{
 	    PadNL();	// add a new line
@@ -561,8 +562,8 @@ inline void NCRichText::PadTXT( const wchar_t * osch, const unsigned olen )
 	txt.replace( special, colon-special+1, repl );
     }
   }
+  size_t	len = textWidth( txt );
 
-  unsigned     len = txt.length();
   if ( !atbol && cc + len > textwidth )
     PadNL();
 
@@ -572,13 +573,34 @@ inline void NCRichText::PadTXT( const wchar_t * osch, const unsigned olen )
   while ( *sch )
   {
       pad->addwstr( sch, 1 );	// add one wide chararacter
+      cc += wcwidth(*sch);
       atbol = false;	// at begin of line = false
-      if ( ++cc >= textwidth )
+      if ( cc >= textwidth )
       {
 	  PadNL();	// add a new line
       }
       sch++;
   }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCRichText::textWidth
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+size_t NCRichText::textWidth( wstring wstr )
+{
+    size_t len = 0;
+    std::wstring::const_iterator wstr_it;	// iterator for wstring
+      
+    for ( wstr_it = wstr.begin(); wstr_it != wstr.end() ; ++wstr_it )
+    {
+	len += wcwidth( *wstr_it );
+    }
+    return len;
 }
 
 ///////////////////////////////////////////////////////////////////

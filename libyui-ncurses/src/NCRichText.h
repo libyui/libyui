@@ -100,6 +100,7 @@ class NCRichText : public YRichText, public NCPadWidget {
 
     void PadChangeLevel( bool down, int tag );
     void PadSetLevel();
+    size_t textWidth( wstring wstr );
 
   private:
 
