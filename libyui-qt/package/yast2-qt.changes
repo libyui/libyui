@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jun 29 13:22:58 CEST 2004 - sh@suse.de
+
+- Fixed bug #39227: Over-long pkg status column after pkg search
+  with no results
+
+-------------------------------------------------------------------
 Mon Jun 28 18:02:48 CEST 2004 - sh@suse.de
 
 - Fixed bug #10524: Textentry label overflow 
