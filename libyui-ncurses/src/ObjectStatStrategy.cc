@@ -21,6 +21,9 @@
 
 #include "NCTable.h"
 
+#include <Y2PM.h>
+#include <y2pm/PMYouPatchManager.h>
+
 #include <y2pm/PMSelectable.h>
 #include <y2pm/PMObject.h>
 
@@ -64,11 +67,11 @@ PMSelectable::UI_Status ObjectStatStrategy::getPackageStatus( PMObjectPtr objPtr
 
 /////////////////////////////////////////////////////////////////
 //
-// ObjectStatStrategy::setPackageStatus()	
+// ObjectStatStrategy::setObjectStatus()	
 //
-// Informs the package manager
+// Informs the package manager about the status change
 //
-bool ObjectStatStrategy::setPackageStatus( PMSelectable::UI_Status newstatus, PMObjectPtr objPtr )
+bool ObjectStatStrategy::setObjectStatus( PMSelectable::UI_Status newstatus, PMObjectPtr objPtr )
 {
     bool ok = false;
 
@@ -380,6 +383,33 @@ bool PatchStatStrategy::toggleStatus( PMObjectPtr objPtr,
     return ok;
 }
 
+/////////////////////////////////////////////////////////////////
+//
+// PatchStatStrategy::setObjectStatus()	
+//
+// Inform the package manager about the status change
+// of the patch
+//
+bool PatchStatStrategy::setObjectStatus( PMSelectable::UI_Status newstatus, PMObjectPtr objPtr )
+{
+    bool ok = false;
+
+    if ( !objPtr || !objPtr->hasSelectable() )
+    {
+	NCERR << "Invalid patch object" << endl;
+	return false;
+    }
+
+    ok = objPtr->getSelectable()->set_status( newstatus );
+    NCMIL << "Set status to: " << newstatus << " returns: " << (ok?"true":"false") << endl;
+
+    // additionally inform the YOU patch manager about the status change
+    // (which sets the right status of the patch packages)
+    Y2PM::youPatchManager().updatePackageStates();
+    
+    return ok;
+}
+
 //------------------------------------------------------------
 // Class for strategies for depndencies
 //------------------------------------------------------------
@@ -412,7 +442,7 @@ AvailableStatStrategy::AvailableStatStrategy()
 //
 // Informs the package manager about the new status (sets the candidate)
 //
-bool AvailableStatStrategy::setPackageStatus( PMSelectable::UI_Status newstatus,  PMObjectPtr objPtr )
+bool AvailableStatStrategy::setObjectStatus( PMSelectable::UI_Status newstatus,  PMObjectPtr objPtr )
 {
     bool ok = false;
 
@@ -495,7 +525,7 @@ PatchPkgStatStrategy::PatchPkgStatStrategy()
 {
 }
 
-bool PatchPkgStatStrategy::setPackageStatus( PMSelectable::UI_Status newstatus,
+bool PatchPkgStatStrategy::setObjectStatus( PMSelectable::UI_Status newstatus,
 					     PMObjectPtr objPtr )
 {
     // it is not possible to set the status of the packages belonging to a certain patch

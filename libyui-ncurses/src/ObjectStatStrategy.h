@@ -52,7 +52,7 @@ public:
      * @param objPtr  The object pointer (e.g. a package pointer)
      * @return bool
      */ 
-    virtual bool setPackageStatus ( PMSelectable::UI_Status newstatus,
+    virtual bool setObjectStatus ( PMSelectable::UI_Status newstatus,
 				    PMObjectPtr objPtr
 				    );
    /**
@@ -130,7 +130,7 @@ public:
      * It is not possible to set the package status for packages belonging to a patch,
      * i.e. returns always false.
      */
-    virtual bool setPackageStatus( PMSelectable::UI_Status newstatus, PMObjectPtr objPtr );
+    virtual bool setObjectStatus( PMSelectable::UI_Status newstatus, PMObjectPtr objPtr );
 
 };
 
@@ -165,6 +165,14 @@ public:
      */
     virtual bool toggleStatus( PMObjectPtr objPtr,
 			        PMSelectable::UI_Status & newStat );
+
+    /**
+     * Sets the status of the patch AND the status of the patch packages
+     * @param newStatus The new package status
+     * @param objPtr  The object pointer (e.g. a package pointer)
+     * @return bool
+     */
+    virtual bool setObjectStatus( PMSelectable::UI_Status newstatus, PMObjectPtr objPtr );
 };
 
 
@@ -195,7 +203,7 @@ public:
      * @param objPtr  The package pointer
      * @return bool
      */ 
-    virtual bool setPackageStatus( PMSelectable::UI_Status newstatus,
+    virtual bool setObjectStatus( PMSelectable::UI_Status newstatus,
 				   PMObjectPtr objPtr );
 };
 

@@ -235,7 +235,7 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
     }
     
     // inform the package manager
-    ok = statusStrategy->setPackageStatus( newstatus,
+    ok = statusStrategy->setObjectStatus( newstatus,
 					   objPtr );
 
     if ( ok && singleChange )
