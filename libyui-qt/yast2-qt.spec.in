@@ -33,7 +33,7 @@ Obsoletes:	y2qt
 @imagedir@/*.xpm
 # @ybindir@/y2qt
 %dir /usr/X11R6/lib/X11/fonts/uni
-/usr/X11R6/lib/X11/fonts/uni/fonts.dir
+%verify(not md5 size mtime) /usr/X11R6/lib/X11/fonts/uni/fonts.dir
 /usr/X11R6/lib/X11/fonts/uni/newunifont.pcf.gz
 /usr/X11R6/lib/X11/fonts/uni/newunifontB.pcf.gz
 /usr/X11R6/lib/X11/fonts/uni/newunifontB18.pcf.gz
