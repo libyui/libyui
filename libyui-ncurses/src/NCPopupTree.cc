@@ -24,8 +24,10 @@
 #include "YDialog.h"
 #include "NCSplit.h"
 #include "PkgNames.h"
-#include "YPkgTreeFilterView.h"
 #include "PackageSelector.h"
+
+#include <Y2PM.h>
+#include <y2pm/PMManager.h>
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -43,12 +45,8 @@ NCPopupTree::NCPopupTree( const wpos at, PackageSelector * pkg )
     // create the layout (the NCTree)
     createLayout( PkgNames::RpmTreeLabel() );
 
-    // get the group tags
-    groups = new YPkgRpmGroupTagsFilterView();
-    YPkgStringTreeItem * root = groups->root();
     // clone the tree (fill the NCTree)
-    cloneTree( root, 0 );
-    
+    cloneTree( Y2PM::packageManager().rpmGroupsTree()->root(), 0 ); 
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -61,10 +59,6 @@ NCPopupTree::NCPopupTree( const wpos at, PackageSelector * pkg )
 //
 NCPopupTree::~NCPopupTree()
 {
-    if ( groups )
-    {
-	delete groups;
-    }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -111,7 +105,7 @@ NCursesEvent NCPopupTree::showFilterPopup( )
     
     popdownDialog();
 
-    if ( !packager || !filterTree || !groups )
+    if ( !packager || !filterTree )
 	return postevent;
 
     // get the currently selected rpm group and show the package list
@@ -120,17 +114,16 @@ NCursesEvent NCPopupTree::showFilterPopup( )
 	const YTreeItem * item = filterTree->getCurrentItem();
     
 	// get the data pointer
-	YPkgStringTreeItem * origItem = (YPkgStringTreeItem *) (item->data());
+	YStringTreeItem * origItem = (YStringTreeItem *) (item->data());
 
 	if ( origItem )
 	{
 	    string label =  origItem->value().translation();
-	    string completePath = groups->completePath( origItem,  '/', false );
 
 	    // fill the package list 
-	    packager->fillPackageList( YCPString( label ), completePath ); 
+	    packager->fillPackageList( YCPString( label ), origItem ); 
 
-	    NCMIL << "Selected RPM group: " << label << ", " << completePath << endl;
+	    NCMIL << "Selected RPM group: " << label << endl;
 	}
 	else
 	{
@@ -240,10 +233,10 @@ bool NCPopupTree::postAgain()
 // Adds all tree items got from YPkgRpmGroupTagsFilterView to
 // the filter popup tree
 //
-void NCPopupTree::cloneTree( YPkgStringTreeItem * parentOrig, YTreeItem * parentClone )
+void NCPopupTree::cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone )
 {
-    // 	methods of YPkgStringTreeItem see ../libyui/src/include/TreeItem.h:  SortedTreeItem
-    YPkgStringTreeItem * child = parentOrig->firstChild();
+    // 	methods of YStringTreeItem see ../libyui/src/include/TreeItem.h:  SortedTreeItem
+    YStringTreeItem * child = parentOrig->firstChild();
     YTreeItem *	clone;
 
     while ( child )

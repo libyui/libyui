@@ -28,7 +28,7 @@
 #include <string>
 #include <utility>      // for STL pair
 
-
+#include <y2util/YRpmGroupsTree.h>
 
 #include <y2pm/PMObject.h>
 #include <y2pm/PMSelectable.h>
@@ -39,6 +39,7 @@ class NCPopupTree;
 class NCPopupSelection;
 class PMSelectionPtr;
 class PMPackagePtr;
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -100,12 +101,11 @@ class PackageSelector
 
     /**
     * Fills the package table
-    * @param table  The table widget
     * @param label The selected RPM group (the label)
-    * @param filter The complete path od the RPM group (the filter criteria)
+    * @param group The rpm group
     * @return bool
     */
-    bool fillPackageList( const YCPString & label, string filter );
+    bool fillPackageList( const YCPString & label, YStringTreeItem * group );
 
    /**
     * Fills the list of available packages
@@ -228,6 +228,12 @@ class PackageSelector
     * @return bool
     */
     bool showSelPackages( const YCPString & label, PMSelectionPtr selPtr );
+
+    /**
+     * Check if 'pkg' matches 'selectedRpmGroup'.
+     * Returns true if there is a match, false otherwise or if 'pkg' is 0.
+     **/
+    bool check( PMPackagePtr pkg, YStringTreeItem * rpmGroup, int index );
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -28,7 +28,8 @@
 #include "NCTree.h"
 #include "NCLabel.h"
 #include "NCRichText.h"
-#include "YPkgRpmGroupTagsFilterView.h"
+
+#include <y2util/YRpmGroupsTree.h>
 
 class NCTree;
 class YCPValue;
@@ -50,12 +51,10 @@ private:
 
     NCTree * filterTree;		// the YTree
     
-    YPkgRpmGroupTagsFilterView * groups; // the RPM groups    
-
     PackageSelector * packager;		// connection to the PackageSelector
     
     // internal use (copies tree items got from YPkgRpmGroupTagsFilterView)
-    void cloneTree( YPkgStringTreeItem * parentOrig, YTreeItem * parentClone );
+    void cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone );
 
 protected:
 

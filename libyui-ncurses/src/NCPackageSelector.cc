@@ -136,7 +136,7 @@ void NCPackageSelector::showDefaultList()
 	packager.setPackageList( pkgList );
 
 	// second, fill the list with packages 
-	packager.fillPackageList( YCPString("default"), "" );
+	packager.fillPackageList( YCPString("default"), 0 );
 	
         // set the visible info to package description 
 	packager.setVisibleInfo ( PkgNames::PkgInfo() );

@@ -327,7 +327,7 @@ bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr 
 // Fills the package table with the list of packages matching
 // the selected filter
 //
-bool PackageSelector::fillPackageList( const YCPString & label, string filter )
+bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem * rpmGroup )
 {
     if ( !packageList )
     {
@@ -335,9 +335,7 @@ bool PackageSelector::fillPackageList( const YCPString & label, string filter )
     	return false;
     }
     
-    NCMIL <<  "Label: " <<  label->toString() << " Filter: " << filter << endl;
-
-    string::size_type len = filter.length();
+    NCMIL <<  "Label: " <<  label->toString() << endl;
 
     // clear the package table
     packageList->itemsCleared ();
@@ -351,32 +349,33 @@ bool PackageSelector::fillPackageList( const YCPString & label, string filter )
     unsigned int i;
     PMPackagePtr pkgPtr;
 
-    // for ( i = 0, listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt, i++ )
-    for ( i = 0, listIt = pkgList.begin(); i < 100;  ++listIt, i++ )  
+
+    for ( i = 0, listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt, i++ )
     {
-	PMPackagePtr instPtr = (*listIt)->installedObj();
-	PMPackagePtr candPtr = (*listIt)->candidateObj();
+	PMSelectablePtr selectable = *listIt;
+	    
+	// Multiple instances of this package may or may not be in the same
+	// RPM group, so let's check both the installed version (if there
+	// is any) and the candidate version.
+	//
+	// Make sure we emit only one filterMatch() signal if both exist
+	// and both are in the same RPM group. We don't want multiple list
+	// entries for the same package!
+	    
+	bool match =
+	    check( selectable->installedObj(), rpmGroup, i ) || 
+	    check( selectable->candidateObj(), rpmGroup, i );  
 
-	if ( candPtr )
-	{
-	    pkgPtr = candPtr;		// if exists: show the candidate
-	}
-	else if ( instPtr )
-	{
-	    pkgPtr = instPtr; 		// else if exists: the installed package
-	}
-	else
-	{
-	    pkgPtr = (*listIt)->theObject();	// else: any package 
-	}
+	// If there is neither an installed nor a candidate package, check
+	// any other instance.  
+	    
+	if ( ! match			&&
+	     ! selectable->installedObj()	&&
+	     ! selectable->candidateObj()     )
+	    check( selectable->theObject(), rpmGroup, i );
 
-	// filter the packages
-	if ( pkgPtr && pkgPtr->group().compare( 0, len, filter ) == 0 )
-	{
-	     createListEntry( packageList, pkgPtr, i );
-	}
     }
-  
+
     if ( !label.isNull() && label->compare( YCPString("default") ) != YO_EQUAL )
     {
 	// show the selected filter label
@@ -388,6 +387,38 @@ bool PackageSelector::fillPackageList( const YCPString & label, string filter )
     }
 
     return true;
+}
+
+
+bool PackageSelector::check( PMPackagePtr pkg,
+			     YStringTreeItem * rpmGroup,
+			     int index )
+{
+    if ( ! pkg || ! rpmGroup )
+	return false;
+
+    if ( pkg->group_ptr() == 0 )
+    {
+	y2error( "NULL pointer in group_ptr()!" );
+	return false;
+    }
+
+    if ( pkg->group_ptr()->isChildOf( rpmGroup ) )
+    {
+#if 1
+	// DEBUG
+	std::string name = pkg->name();
+	y2debug( "Found match for pkg '%s'", name.c_str() );
+	// DEBUG
+#endif
+	createListEntry( packageList, pkg, index );
+	
+	return true;
+    }
+    else
+    {
+	return false;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -444,7 +475,7 @@ bool PackageSelector::SearchHandler( const NCursesEvent& event)
 	NCMIL << "Searching for: " <<  search->toString() << endl;
 
 	// FIXME: use enum (or whatever) for the filter
-	fillPackageList ( YCPString ( "Search" ), "" );
+	fillPackageList ( YCPString ( "Search" ), 0 );
 
 	showPackageInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );
     }
