@@ -22,7 +22,7 @@
 #include <ycp/y2log.h>
 
 #include "utf8.h"
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 #include "YQLabel.h"
 
 
@@ -38,7 +38,7 @@ YQLabel::YQLabel( QWidget * 	parent,
     setText( fromUTF8(text->value() ) );
     setIndent(0);
 
-    setFont( opt.isHeading.value() ? YUIQt::ui()->headingFont() : YUIQt::ui()->currentFont() );
+    setFont( opt.isHeading.value() ? Y2QtComponent::ui()->headingFont() : Y2QtComponent::ui()->currentFont() );
 
     if ( opt.isOutputField.value() )
     {

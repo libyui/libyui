@@ -26,7 +26,6 @@
 #include <y2pm/PMPackageManager.h>
 #include "utf8.h"
 
-#include "YUIQt.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQi18n.h"

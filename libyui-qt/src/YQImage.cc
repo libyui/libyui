@@ -36,7 +36,7 @@
 
 YQImage::YQImage( QWidget * 			parent,
 		  YWidgetOpt & 			opt,
-		  YUIInterpreter::ImageType	img )
+		  Y2UIComponent::ImageType	img )
     : QLabel( parent )
     , YImage( opt )
 {
@@ -48,7 +48,7 @@ YQImage::YQImage( QWidget * 			parent,
     
     switch ( img )
     {
-	case YUIInterpreter::IT_SUSEHEADER:
+	case Y2UIComponent::IT_SUSEHEADER:
 
 	    oem_logo = getenv( "YAST2_OEM_LOGO" );
 	    
@@ -68,7 +68,7 @@ YQImage::YQImage( QWidget * 			parent,
 	    }
 	    break;
 
-	case YUIInterpreter::IT_YAST2:
+	case Y2UIComponent::IT_YAST2:
 	    pixmap = QPixmap( ( const char ** ) yast2_xpm );	// use XPM data
 	    break;
 

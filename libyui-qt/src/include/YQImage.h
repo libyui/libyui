@@ -26,7 +26,7 @@
 #include <ycp/YCPString.h>
 
 #include "YImage.h"
-#include "YUIInterpreter.h"
+#include "Y2UIComponent.h"
 
 
 class YQImage : public QLabel, public YImage
@@ -37,7 +37,7 @@ public:
     /**
      * Constructors
      */
-    YQImage( QWidget * parent, YWidgetOpt & opt, YUIInterpreter::ImageType img );
+    YQImage( QWidget * parent, YWidgetOpt & opt, Y2UIComponent::ImageType img );
     YQImage( QWidget * parent, YWidgetOpt & opt, const YCPByteblock & byteblock );
     YQImage( QWidget * parent, YWidgetOpt & opt, const YCPString & file_name );
 

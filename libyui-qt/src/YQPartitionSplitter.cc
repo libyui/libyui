@@ -21,7 +21,7 @@
 #include <ycp/y2log.h>
 
 #include "utf8.h"
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 #include "YEvent.h"
 #include "YQPartitionSplitter.h"
 
@@ -79,7 +79,7 @@ YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
     _qt_freeFieldLabel = new QLabel( fromUTF8( freeFieldLabel()->value() ),
 				    _labels_hbox );
     _qt_freeFieldLabel->setTextFormat( QLabel::PlainText );
-    _qt_freeFieldLabel->setFont( YUIQt::ui()->currentFont() );
+    _qt_freeFieldLabel->setFont( Y2QtComponent::ui()->currentFont() );
     _qt_freeFieldLabel->setAlignment( Qt::AlignLeft );
 
 
@@ -88,7 +88,7 @@ YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
     _qt_newPartFieldLabel = new QLabel( fromUTF8( newPartFieldLabel()->value() ),
 				       _labels_hbox );
     _qt_newPartFieldLabel->setTextFormat( QLabel::PlainText );
-    _qt_newPartFieldLabel->setFont( YUIQt::ui()->currentFont() );
+    _qt_newPartFieldLabel->setFont( Y2QtComponent::ui()->currentFont() );
     _qt_newPartFieldLabel->setAlignment( Qt::AlignRight );
 
 
@@ -103,7 +103,7 @@ YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
     _qt_freeSizeField = new QSpinBox( minFreeSize(), maxFreeSize(),
 				     1, // step
 				     _fields_hbox );
-    _qt_freeSizeField->setFont( YUIQt::ui()->currentFont() );
+    _qt_freeSizeField->setFont( Y2QtComponent::ui()->currentFont() );
     _qt_freeFieldLabel->setBuddy( _qt_freeSizeField );
 
 
@@ -113,7 +113,7 @@ YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
 				     1, // pageStep
 				     remainingFreeSize(),	// initial value
 				     QSlider::Horizontal, _fields_hbox );
-    _qt_freeSizeSlider->setFont( YUIQt::ui()->currentFont() );
+    _qt_freeSizeSlider->setFont( Y2QtComponent::ui()->currentFont() );
 
 
     // SpinBox for the new partition size
@@ -121,7 +121,7 @@ YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
     _qt_newPartSizeField = new QSpinBox( minNewPartSize(), maxNewPartSize(),
 					1, // step
 					_fields_hbox );
-    _qt_newPartSizeField->setFont( YUIQt::ui()->currentFont() );
+    _qt_newPartSizeField->setFont( Y2QtComponent::ui()->currentFont() );
     _qt_newPartFieldLabel->setBuddy( _qt_newPartSizeField );
 
     // Initialize all fields and the bar graph
@@ -203,7 +203,7 @@ void YQPartitionSplitter::setFreeSizeSlot( int newFreeSize )
     setValue( newPartSize );
 
     if ( getNotify() )
-	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+	Y2QtComponent::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 
@@ -216,7 +216,7 @@ void YQPartitionSplitter::setNewPartSizeSlot( int newPartSize )
 	setValue( newPartSize );
 	
     if ( getNotify() )
-	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+	Y2QtComponent::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 

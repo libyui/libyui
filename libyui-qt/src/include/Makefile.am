@@ -9,7 +9,6 @@ SUBDIRS = icons
 noinst_HEADERS =				\
 	utf8.h					\
 	YQi18n.h				\
-	YUIQt.h					\
 	Y2CCQt.h				\
 	Y2QtComponent.h				\
 	YQIconPool.h				\

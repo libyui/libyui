@@ -39,7 +39,7 @@
 #include "YQPackageSelector.h"
 #include "YQi18n.h"
 #include "utf8.h"
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 
 using std::list;
 using std::string;
@@ -61,7 +61,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     // Headline
     QLabel * label = new QLabel( _( "Searc&h:" ), this );
     CHECK_PTR( label );
-    label->setFont( YUIQt::ui()->headingFont() );
+    label->setFont( Y2QtComponent::ui()->headingFont() );
 
     // Input field ( combo box ) for search text
     _searchText = new QComboBox( this );

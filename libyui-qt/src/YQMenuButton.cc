@@ -26,7 +26,7 @@
 #include <ycp/y2log.h>
 
 #include "utf8.h"
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 #include "YEvent.h"
 #include "YQMenuButton.h"
 
@@ -40,7 +40,7 @@ YQMenuButton::YQMenuButton( QWidget * 		parent,
 {
     setWidgetRep( this );
     _qt_pushbutton = new QPushButton( fromUTF8( label->value() ), this );
-    _qt_pushbutton->setFont( YUIQt::ui()->currentFont() );
+    _qt_pushbutton->setFont( Y2QtComponent::ui()->currentFont() );
     _qt_pushbutton->setMinimumSize( 2,2 );
     _qt_pushbutton->move( YQButtonBorder, YQButtonBorder );
     setMinimumSize( _qt_pushbutton->minimumSize() 
@@ -106,15 +106,15 @@ YQMenuButton::menuEntryActivated( int menu_item_index )
      */
     QTimer::singleShot( 100, this, SLOT( returnNow() ) );
 
-    // YUIQt::ui()->wakeUpGuiThread();
-    // YUIQt::ui()->processEvents();
+    // Y2QtComponent::ui()->wakeUpGuiThread();
+    // Y2QtComponent::ui()->processEvents();
 }
 
 
 void
 YQMenuButton::returnNow()
 {
-    YUIQt::ui()->sendEvent( new YMenuEvent( indexToId( _selected_item_index ) ) );
+    Y2QtComponent::ui()->sendEvent( new YMenuEvent( indexToId( _selected_item_index ) ) );
 }
 
 

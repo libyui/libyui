@@ -115,7 +115,7 @@ libpy2qt_la_SOURCES =				\
 
 
 BUILT_SOURCES =					\
-	YUIQt.moc.cc				\
+	Y2QtComponent.moc.cc			\
 						\
 	YQAlignment.moc.cc			\
 	YQBarGraph.moc.cc			\
@@ -181,10 +181,10 @@ BUILT_SOURCES =					\
 	QXEmbed.moc.cc
 
 
-YUIQt.o YUIQt.lo:						YUIQt.moc.cc
-YUIQt_widgets.o YUIQt_widgets.lo:				YUIQt.moc.cc
-YUIQt_builtins.o YUIQt_builtins.lo:				YUIQt.moc.cc
-YUIQt_x11.o YUIQt_x11.lo:					YUIQt.moc.cc
+Y2QtComponent.o Y2QtComponent.lo:				Y2QtComponent.moc.cc
+YUIQt_widgets.o YUIQt_widgets.lo:				Y2QtComponent.moc.cc
+YUIQt_builtins.o YUIQt_builtins.lo:				Y2QtComponent.moc.cc
+YUIQt_x11.o YUIQt_x11.lo:					Y2QtComponent.moc.cc
 
 YQAlignment.o YQAlignment.lo:   				YQAlignment.moc.cc
 YQBarGraph.o YQBarGraph.lo:   					YQBarGraph.moc.cc
@@ -251,7 +251,7 @@ QXEmbed.o QXEmbed.lo:						QXEmbed.moc.cc
 
 
 
-YUIQt.moc.cc:				include/YUIQt.h
+Y2QtComponent.moc.cc.moc.cc:				include/Y2QtComponent.h
 
 YQAlignment.moc.cc:			include/YQAlignment.h
 YQBarGraph.moc.cc:			include/YQBarGraph.h

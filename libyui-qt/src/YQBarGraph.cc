@@ -21,7 +21,7 @@
 #include <ycp/y2log.h>
 
 #include "utf8.h"
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 #include "YQBarGraph.h"
 
 
@@ -31,7 +31,7 @@ YQBarGraph::YQBarGraph( QWidget * parent, YWidgetOpt & opt )
 {
     setWidgetRep( this );
     _barGraph = new QY2BarGraph( this );
-    _barGraph->setFont( YUIQt::ui()->currentFont() );
+    _barGraph->setFont( Y2QtComponent::ui()->currentFont() );
     _barGraph->move( YQWidgetMargin, YQWidgetMargin );
 }
 

@@ -24,7 +24,7 @@
 #include <ycp/y2log.h>
 
 #include "utf8.h"
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 #include "YQDownloadProgress.h"
 
 
@@ -41,10 +41,10 @@ YQDownloadProgress::YQDownloadProgress( QWidget *		parent,
 
     _qt_label = new QLabel( fromUTF8( label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
-    _qt_label->setFont( YUIQt::ui()->currentFont() );
+    _qt_label->setFont( Y2QtComponent::ui()->currentFont() );
 
     _qt_progress = new QProgressBar( this );
-    _qt_progress->setFont( YUIQt::ui()->currentFont() );
+    _qt_progress->setFont( Y2QtComponent::ui()->currentFont() );
     _qt_progress->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) );
 
     _qt_progress->setTotalSteps( expectedSize );

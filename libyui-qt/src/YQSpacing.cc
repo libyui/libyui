@@ -17,7 +17,6 @@
 /-*/
 
 
-#include "YUIQt.h"
 #include "YQSpacing.h"
 
 

@@ -32,7 +32,7 @@
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQPackageSelector.h"
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 #include "YQi18n.h"
 
 
@@ -145,7 +145,7 @@ YQPkgDiskUsageWarningDialog::diskUsageWarning( const QString & 	message,
 					thresholdPercent,
 					acceptButtonLabel,
 					rejectButtonLabel );
-    YUIQt::ui()->normalCursor();
+    Y2QtComponent::ui()->normalCursor();
     dialog.exec();
 
     return dialog.result() == QDialog::Accepted;

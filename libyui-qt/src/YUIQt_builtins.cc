@@ -35,7 +35,7 @@
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 #include "YEvent.h"
 #include "YUISymbols.h"
 #include "YQDialog.h"
@@ -50,7 +50,7 @@
 
 
 
-YCPValue YUIQt::setLanguage( const YCPTerm & term)
+YCPValue Y2QtComponent::setLanguage( const YCPTerm & term)
 {
     loadPredefinedQtTranslations();
     
@@ -59,7 +59,7 @@ YCPValue YUIQt::setLanguage( const YCPTerm & term)
 
 
 YCPString
-YUIQt::glyph( const YCPSymbol & glyphSymbol )
+Y2QtComponent::glyph( const YCPSymbol & glyphSymbol )
 {
     string sym = glyphSymbol->symbol();
     QChar unicodeChar;
@@ -82,13 +82,13 @@ YUIQt::glyph( const YCPSymbol & glyphSymbol )
 }
 
 
-YCPValue YUIQt::runPkgSelection( YWidget * packageSelector )
+YCPValue Y2QtComponent::runPkgSelection( YWidget * packageSelector )
 {
     y2milestone( "Running package selection..." );
     _wm_close_blocked           = true;
     _auto_activate_dialogs      = false;
 
-    YCPValue input = evaluateUserInput( YCPTerm( YCPSymbol( "", false ) ) );
+    YCPValue input = evaluateUserInput();
 
     _auto_activate_dialogs      = true;
     _wm_close_blocked           = false;
@@ -98,7 +98,7 @@ YCPValue YUIQt::runPkgSelection( YWidget * packageSelector )
 }
 
 
-void YUIQt::makeScreenShot( std::string stl_filename )
+void Y2QtComponent::makeScreenShot( std::string stl_filename )
 {
 
     //
@@ -182,7 +182,7 @@ void YUIQt::makeScreenShot( std::string stl_filename )
 }
 
 
-void YUIQt::toggleRecordMacro()
+void Y2QtComponent::toggleRecordMacro()
 {
     if ( recordingMacro() )
     {
@@ -217,7 +217,7 @@ void YUIQt::toggleRecordMacro()
 }
 
 
-void YUIQt::askPlayMacro()
+void Y2QtComponent::askPlayMacro()
 {
     normalCursor();
 
@@ -248,7 +248,7 @@ void YUIQt::askPlayMacro()
 
 
 
-YCPValue YUIQt::askForExistingDirectory( const YCPString & startDir,
+YCPValue Y2QtComponent::askForExistingDirectory( const YCPString & startDir,
                                          const YCPString & headline )
 {
     normalCursor();
@@ -267,7 +267,7 @@ YCPValue YUIQt::askForExistingDirectory( const YCPString & startDir,
 }
 
 
-YCPValue YUIQt::askForExistingFile( const YCPString & startWith,
+YCPValue Y2QtComponent::askForExistingFile( const YCPString & startWith,
                                     const YCPString & filter,
                                     const YCPString & headline )
 {
@@ -288,7 +288,7 @@ YCPValue YUIQt::askForExistingFile( const YCPString & startWith,
 }
 
 
-YCPValue YUIQt::askForSaveFileName( const YCPString & startWith,
+YCPValue Y2QtComponent::askForSaveFileName( const YCPString & startWith,
                                     const YCPString & filter,
                                     const YCPString & headline )
 {
@@ -307,7 +307,7 @@ YCPValue YUIQt::askForSaveFileName( const YCPString & startWith,
 
 
 
-QString YUIQt::askForSaveFileName( const QString & startWith,
+QString Y2QtComponent::askForSaveFileName( const QString & startWith,
                                    const QString & filter,
                                    const QString & headline )
 {

@@ -25,7 +25,7 @@
 #include <ycp/y2log.h>
 
 #include "utf8.h"
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 #include "YEvent.h"
 #include "YQPushButton.h"
 #include "YQDialog.h"
@@ -43,7 +43,7 @@ YQPushButton::YQPushButton( QWidget *		parent,
 {
     setWidgetRep( this );
     _qPushButton = new QPushButton( fromUTF8( label->value() ), this );
-    _qPushButton->setFont( YUIQt::ui()->currentFont() );
+    _qPushButton->setFont( Y2QtComponent::ui()->currentFont() );
     _qPushButton->setMinimumSize( 2, 2 );
     _qPushButton->setAutoDefault( true );
     _qPushButton->installEventFilter( this );
@@ -151,7 +151,7 @@ void YQPushButton::activate()
 
 void YQPushButton::hit()
 {
-    YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
+    Y2QtComponent::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
 }
 
 

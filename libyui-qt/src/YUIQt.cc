@@ -31,7 +31,7 @@
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 #include "YEvent.h"
 #include "YUISymbols.h"
 #include "YQEBunny.h"
@@ -43,245 +43,10 @@
 
 #define BUSY_CURSOR_TIMEOUT	200	// milliseconds
 
-YUIQt * YUIQt::_ui = 0;
+Y2QtComponent * Y2QtComponent::_ui = 0;
 
 
-YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
-    : QApplication(argc, argv)
-    , YUIInterpreter(with_threads, callback)
-    , _main_dialog_id(0)
-    , _do_exit_loop( false )
-    , _loaded_current_font( false )
-    , _loaded_heading_font( false )
-    , _wm_close_blocked( false )
-    , _auto_activate_dialogs( true )
-    , _running_embedded( false )
-    , _qtTranslations( 0 )
-{
-    _ui				= this;
-    _fatal_error		= false;
-    _have_wm			= true;
-    _fullscreen			= false;
-    _decorate_toplevel_window	= true;
-    screenShotNameTemplate 	= "";
-
-    if ( argv )
-    {
-	for( int i=0; i < argc; i++ )
-	{
-	    QString opt = argv[i];
-
-	    // Normalize command line option - accept "--xy" as well as "-xy"
-
-	    if ( opt.startsWith( "--" ) )
-		opt.remove(0, 1);
-
-	    if      ( opt == QString( "-no-wm"	 	) )	_have_wm 			= false;
-	    else if ( opt == QString( "-fullscreen"	) )	_fullscreen 			= true;
-	    else if ( opt == QString( "-noborder" 	) )	_decorate_toplevel_window	= false;
-	    else if ( opt == QString( "-kcontrol_id"	) )
-	    {
-		if ( i+1 >= argc )
-		{
-		    y2error( "Missing arg for '--kcontrol_id'" );
-		}
-		else
-		{
-		    _kcontrol_id = argv[++i];
-		    y2milestone( "Starting with kcontrol_id='%s'",
-				 (const char *) _kcontrol_id );
-		}
-	    }
-	    else if ( opt == QString( "-macro"		) )
-	    {
-		if ( i+1 >= argc )
-		{
-		    y2error( "Missing arg for '--macro'" );
-		    fprintf( stderr, "y2base qt: Missing argument for --macro\n" );
-		    raiseFatalError();
-		}
-		else
-		{
-		    const char * macro_file = argv[++i];
-		    y2milestone( "Playing macro '%s' from command line", macro_file );
-		    playMacro( macro_file );
-		}
-	    }
-	    else if ( opt == QString( "-help"  ) )
-	    {
-		fprintf( stderr,
-			 "Command line options for the YaST2 Qt UI:\n"
-			 "\n"
-			 "--nothreads   run without additional UI threads\n"
-			 "--no-wm       assume no window manager is running\n"
-			 "--fullscreen  use full screen for `opt(`defaultsize) dialogs\n"
-			 "--noborder    no window manager border for `opt(`defaultsize) dialogs\n"
-			 "--help        this help text\n"
-			 "\n"
-			 "--macro <macro-file>        play a macro right on startup\n"
-			 "--_kcontrol_id <ID-String>   set KDE control center identification\n"
-			 "\n"
-			 "-no-wm, -noborder etc. are accepted as well as --no-wm, --noborder\n"
-			 "to maintain backwards compatibility.\n"
-			 "\n"
-			 );
-
-		raiseFatalError();
-	    }
-	}
-    }
-
-    // Qt handles command line option "-reverse" for Arabic / Hebrew
-    YUIInterpreter::_reverseLayout = QApplication::reverseLayout();
-
-
-    if ( _fullscreen )
-    {
-	QRect available = desktop()->availableGeometry();
-	_default_size.setWidth ( available.width()  );
-	_default_size.setHeight( available.height() );
-	y2milestone( "-fullscreen: using %dx%d for `opt(`defaultsize)",
-		     _default_size.width(), _default_size.height() );
-    }
-    else if ( _have_wm )
-    {
-	// Get _default_size via -geometry command line option
-
-	QWidget * dummy = new QWidget();
-	dummy->hide();
-	setMainWidget(dummy);
-	_default_size = dummy->size();
-
-
-        // Set min defaultsize
-
-	if ( _default_size.width()  < 640 ||
-	     _default_size.height() < 480   )
-	{
-	    // 640x480 is the absolute minimum, but let's go for 800x600 if we can
-
-	    if ( desktop()->width()  >= 800 &&
-		 desktop()->height() >= 600  )
-	    {
-		_default_size.setWidth ( 800 );
-		_default_size.setHeight( 600 );
-	    }
-	    else
-	    {
-		_default_size.setWidth ( 640 );
-		_default_size.setHeight( 480 );
-	    }
-
-	    y2debug( "Assuming default size of %dx%d",
-		     _default_size.width(), _default_size.height() );
-	}
-    }
-    else	// ! _have_wm
-    {
-	_default_size.setWidth ( desktop()->width()  );
-	_default_size.setHeight( desktop()->height() );
-    }
-
-
-    // Create main window for `opt(`defaultsize) dialogs.
-    //
-    // We have to use something else than QWidgetStack since QWidgetStack
-    // doesn't accept a WFlags arg which we badly need here.
-
-    WFlags wflags = WType_TopLevel;
-
-    if ( ! _decorate_toplevel_window )
-    {
-	y2debug( "Suppressing WM decorations for toplevel window" );
-	wflags |= WStyle_Customize | WStyle_NoBorder;
-    }
-
-    _main_win = new QVBox( 0, 0, wflags ); // parent, name, wflags
-
-
-    // Create widget stack for `opt(`defaultsize) dialogs
-
-    _widget_stack = new QWidgetStack( _main_win );
-    _widget_stack->setFocusPolicy( QWidget::StrongFocus );
-    setMainWidget( _main_win );
-    qApp->installEventFilter( this );
-    _main_win->installEventFilter( this );
-    _main_win->resize( _default_size );
-
-    if ( _fullscreen || ! _have_wm )
-	_main_win->move( desktop()->availableGeometry().topLeft() );
-    
-
-    _busy_cursor = new QCursor( WaitCursor );
-
-
-    // Set window title
-
-    if ( _kcontrol_id.isEmpty() )
-    {
-	QString title( "YaST2" );
-	char hostname[ MAXHOSTNAMELEN+1 ];
-	if ( gethostname( hostname, sizeof( hostname )-1 ) == 0 )
-	{
-	    hostname[ sizeof( hostname ) -1 ] = '\0'; // make sure it's terminated
-
-	    if ( strlen( hostname ) > 0 &&
-		 strcmp( hostname, "(none)" ) != 0 &&
-		 strcmp( hostname, "linux"  ) != 0 )
-	    {
-		title += "@";
-		title += hostname;
-	    }
-	}
-	_main_win->setCaption( title );
-	_kcontrol_id = title;
-    }
-    else // --_kcontrol_id in command line
-    {
-	_running_embedded = true;
-	_main_win->setCaption( _kcontrol_id );
-    }
-
-
-    // Hide the main window unless we are running embedded. The first call to
-    // UI::OpenDialog() on an `opt(`defaultSize) dialog will trigger a
-    // showDialog() call that shows the main window - there is nothing to
-    // display yet.
-    //
-    // In embedded mode, keep the main window open so the embedding application
-    // (kcontrol) catches the main window as YaST2's first window and not some
-    // popup window that may appear before this. An empty grey area for the
-    // main window (that will appear for a while) is a lot better than a
-    // "please wait" popup zoomed to near full screen that may be embedded -
-    // with a large main window that opens somewhere else on the screen.
-
-    if ( ! _running_embedded )
-	_main_win->hide();
-    else
-    {
-	_main_win->show();
-	y2milestone( "Running in embedded mode - leaving main window open" );
-    }
-
-
-    //  Init other stuff
-
-    setFont( currentFont() );
-    QXEmbed::initialize();
-    loadPredefinedQtTranslations();
-    busyCursor();
-
-    connect( & _user_input_timer,	SIGNAL( timeout()          ),
-	     this,		  	SLOT  ( userInputTimeout() ) );
-
-    connect( & _busy_cursor_timer,	SIGNAL( timeout()	),
-	     this,			SLOT  ( busyCursor()	) );
-
-    topmostConstructorHasFinished();
-}
-
-
-YUIQt::~YUIQt()
+Y2QtComponent::~Y2QtComponent()
 {
     y2debug("Closing down Qt UI.");
 
@@ -292,7 +57,7 @@ YUIQt::~YUIQt()
 }
 
 
-void YUIQt::internalError( const char * msg )
+void Y2QtComponent::internalError( const char * msg )
 {
     normalCursor();
     int button = QMessageBox::critical( 0, "YaST2 Internal Error", msg,
@@ -311,7 +76,7 @@ void YUIQt::internalError( const char * msg )
 }
 
 
-void YUIQt::idleLoop( int fd_ycp )
+void Y2QtComponent::idleLoop( int fd_ycp )
 {
     _leave_idle_loop = false;
 
@@ -327,13 +92,13 @@ void YUIQt::idleLoop( int fd_ycp )
 }
 
 
-void YUIQt::leaveIdleLoop( int )
+void Y2QtComponent::leaveIdleLoop( int )
 {
     _leave_idle_loop = true;
 }
 
 
-void YUIQt::sendEvent( YEvent * event )
+void Y2QtComponent::sendEvent( YEvent * event )
 {
     if ( event )
     {
@@ -345,7 +110,7 @@ void YUIQt::sendEvent( YEvent * event )
 }
 
 
-YEvent * YUIQt::userInput( unsigned long timeout_millisec )
+YEvent * Y2QtComponent::userInput( unsigned long timeout_millisec )
 {
     YEvent * 	event  = 0;
     YQDialog *	dialog = dynamic_cast<YQDialog *> ( currentDialog() );
@@ -388,7 +153,7 @@ YEvent * YUIQt::userInput( unsigned long timeout_millisec )
 }
 
 
-YEvent * YUIQt::pollInput()
+YEvent * Y2QtComponent::pollInput()
 {
     YEvent * event = 0;
 
@@ -415,14 +180,14 @@ YEvent * YUIQt::pollInput()
 }
 
 
-void YUIQt::userInputTimeout()
+void Y2QtComponent::userInputTimeout()
 {
     if ( ! pendingEvent() )
 	sendEvent( new YTimeoutEvent() );
 }
 
 
-YDialog * YUIQt::createDialog( YWidgetOpt & opt )
+YDialog * Y2QtComponent::createDialog( YWidgetOpt & opt )
 {
     bool has_defaultsize = opt.hasDefaultSize.value();
     QWidget * qt_parent = _main_win;
@@ -450,7 +215,7 @@ YDialog * YUIQt::createDialog( YWidgetOpt & opt )
 }
 
 
-void YUIQt::showDialog( YDialog * dialog )
+void Y2QtComponent::showDialog( YDialog * dialog )
 {
     QWidget * qw = (QWidget *) dialog->widgetRep();
 
@@ -488,7 +253,7 @@ void YUIQt::showDialog( YDialog * dialog )
 }
 
 
-void YUIQt::closeDialog( YDialog * dialog )
+void Y2QtComponent::closeDialog( YDialog * dialog )
 {
     QWidget * qw = (QWidget *) dialog->widgetRep();
 
@@ -537,7 +302,7 @@ void YUIQt::closeDialog( YDialog * dialog )
 }
 
 
-void YUIQt::easterEgg()
+void Y2QtComponent::easterEgg()
 {
     y2milestone( "Starting easter egg..." );
     
@@ -555,11 +320,11 @@ void YUIQt::easterEgg()
 }
 
 
-QString YUIQt::productName() const
+QString Y2QtComponent::productName() const
 {
-    return fromUTF8( YUIInterpreter::productName() );
+    return fromUTF8( Y2UIComponent::productName() );
 }
 
 
 
-#include "YUIQt.moc.cc"
+#include "Y2QtComponent.moc.cc"

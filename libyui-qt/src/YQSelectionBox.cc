@@ -29,7 +29,7 @@ using std::max;
 
 #include "utf8.h"
 #include "YEvent.h"
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 #include "YQSelectionBox.h"
 #include "YQDialog.h"
 
@@ -53,7 +53,7 @@ YQSelectionBox::YQSelectionBox( QWidget *		parent,
 
     _qt_label = new QLabel( fromUTF8(label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
-    _qt_label->setFont( YUIQt::ui()->currentFont() );
+    _qt_label->setFont( Y2QtComponent::ui()->currentFont() );
 
     _qt_listbox = new QListBox( this );
     _qt_listbox->installEventFilter( this );
@@ -180,7 +180,7 @@ void YQSelectionBox::slotSelected( int index )
 	returnImmediately();
     else
     {
-	if ( ! YUIQt::ui()->eventsBlocked() )
+	if ( ! Y2QtComponent::ui()->eventsBlocked() )
 	{
 	    // Delayed event delivery - only if events are to be delivered right now.
 	    //
@@ -200,18 +200,18 @@ void YQSelectionBox::slotSelected( int index )
 
 void YQSelectionBox::slotActivated( QListBoxItem * )
 {
-    YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
+    Y2QtComponent::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
 }
 
 
 void YQSelectionBox::returnImmediately()
 {
-    if ( ! YUIQt::ui()->eventPendingFor( this ) )
+    if ( ! Y2QtComponent::ui()->eventPendingFor( this ) )
     {
 	// Avoid overwriting a (more important) Activated event with a SelectionChanged event
 
 	y2milestone( "sending selbox event" );
-	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
+	Y2QtComponent::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
     }
 }
 

@@ -21,7 +21,7 @@
 #include <ycp/y2log.h>
 
 #include "utf8.h"
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 #include "YQColoredLabel.h"
 
 
@@ -44,7 +44,7 @@ YQColoredLabel::YQColoredLabel( QWidget *	parent,
     setMargin( margin );
     setAlignment( AlignLeft | AlignVCenter );
 
-    setFont( YUIQt::ui()->currentFont() );
+    setFont( Y2QtComponent::ui()->currentFont() );
 
 }
 

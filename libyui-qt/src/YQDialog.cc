@@ -26,7 +26,7 @@
 #include <qframe.h>
 #include <X11/Xlib.h>
 
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 #include "YEvent.h"
 #include "YQDialog.h"
 #include "YQPushButton.h"
@@ -70,7 +70,7 @@ YQDialog::YQDialog( YWidgetOpt &	opt,
 
     _qFrame = new QFrame ( this );
 
-    if ( ! hasDefaultSize() && ! YUIQt::ui()->haveWM() )
+    if ( ! hasDefaultSize() && ! Y2QtComponent::ui()->haveWM() )
     {
 	_qFrame->setFrameStyle ( QFrame::Box | QFrame::Raised );
 	_qFrame->setLineWidth(2);
@@ -100,7 +100,7 @@ long YQDialog::nicesize( YUIDimension dim )
 	}
 	else
 	{
-	    nice = YUIQt::ui()->defaultSize( dim );
+	    nice = Y2QtComponent::ui()->defaultSize( dim );
 	}
     }
     else
@@ -172,9 +172,9 @@ void YQDialog::activate( bool active )
 {
     if ( active )
     {
-	if ( ! YUIQt::ui()->haveWM() )
+	if ( ! Y2QtComponent::ui()->haveWM() )
 	{
-	    if ( YUIQt::ui()->autoActivateDialogs() )
+	    if ( Y2QtComponent::ui()->autoActivateDialogs() )
 		setActiveWindow();
 	    else
 		y2milestone( "Auto-activating dialog window turned off" );
@@ -365,12 +365,12 @@ YQDialog::keyPressEvent( QKeyEvent * event )
     {
 	if ( event->key() == Qt::Key_Print )
 	{
-	    YUIQt::ui()->makeScreenShot( "" );
+	    Y2QtComponent::ui()->makeScreenShot( "" );
 	    return;
 	}
 	else if ( event->key() == Qt::Key_F5 )	// No matter if Ctrl/Alt/Shift pressed
 	{
-	    YUIQt::ui()->easterEgg();
+	    Y2QtComponent::ui()->easterEgg();
 	    return;
 	}
 	else if ( event->state() == 0 )	// No Ctrl / Alt / Shift etc. pressed
@@ -390,17 +390,17 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 
 	    if ( event->key() == Qt::Key_M )
 	    {
-		YUIQt::ui()->toggleRecordMacro();
+		Y2QtComponent::ui()->toggleRecordMacro();
 		return;
 	    }
 	    else if ( event->key() == Qt::Key_P )
 	    {
-		YUIQt::ui()->askPlayMacro();
+		Y2QtComponent::ui()->askPlayMacro();
 		return;
 	    }
 	    else if ( event->key() == Qt::Key_D )
 	    {
-		YUIQt::ui()->sendEvent( new YDebugEvent() );
+		Y2QtComponent::ui()->sendEvent( new YDebugEvent() );
 		return;
 	    }
 	}
@@ -418,7 +418,7 @@ void YQDialog::closeEvent( QCloseEvent * event )
 
     y2debug( "Ignoring window manager close button." );
     event->ignore();
-    YUIQt::ui()->sendEvent( new YCancelEvent() );
+    Y2QtComponent::ui()->sendEvent( new YCancelEvent() );
 }
 
 

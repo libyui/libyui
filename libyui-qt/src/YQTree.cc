@@ -29,7 +29,7 @@
 using std::min;
 using std::max;
 
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 #include "YEvent.h"
 #include "utf8.h"
 #include "YQTree.h"
@@ -48,10 +48,10 @@ YQTree::YQTree( QWidget * parent, YWidgetOpt & opt, const YCPString & label )
 
     _qt_label = new QLabel( fromUTF8( label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
-    _qt_label->setFont( YUIQt::ui()->currentFont() );
+    _qt_label->setFont( Y2QtComponent::ui()->currentFont() );
 
     _listView = new QListView( this );
-    _listView->setFont( YUIQt::ui()->currentFont() );
+    _listView->setFont( Y2QtComponent::ui()->currentFont() );
     _listView->addColumn( "" );
     _listView->header()->hide();
     _listView->setRootIsDecorated ( true );
@@ -182,14 +182,14 @@ YQTree::findYQTreeItem( const YTreeItem * orig ) const
 
 void YQTree::slotSelected( void )
 {
-    if ( getNotify() && ! YUIQt::ui()->eventPendingFor( this ) )
-	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
+    if ( getNotify() && ! Y2QtComponent::ui()->eventPendingFor( this ) )
+	Y2QtComponent::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
 }
 
 void YQTree::slotActivated( void )
 {
     if ( getNotify() )
-	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
+	Y2QtComponent::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
 }
 
 

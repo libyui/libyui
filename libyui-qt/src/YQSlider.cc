@@ -21,7 +21,7 @@
 #include <ycp/y2log.h>
 
 #include "utf8.h"
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 #include "YEvent.h"
 #include "YQSlider.h"
 
@@ -42,7 +42,7 @@ YQSlider::YQSlider( QWidget *		parent,
     setMargin( YQWidgetMargin );
     _qt_label = new QLabel( fromUTF8( label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
-    _qt_label->setFont( YUIQt::ui()->currentFont() );
+    _qt_label->setFont( Y2QtComponent::ui()->currentFont() );
     _qt_label->setAlignment( Qt::AlignRight );
 
     _hbox = new QHBox( this );
@@ -52,13 +52,13 @@ YQSlider::YQSlider( QWidget *		parent,
 			      1, // pageStep
 			      initialValue,
 			      QSlider::Horizontal, _hbox );
-    _qt_slider->setFont( YUIQt::ui()->currentFont() );
+    _qt_slider->setFont( Y2QtComponent::ui()->currentFont() );
 
     _qt_spinbox = new QSpinBox( minValue, maxValue,
 				1, // step
 				_hbox );
     _qt_spinbox->setValue( initialValue );
-    _qt_spinbox->setFont( YUIQt::ui()->currentFont() );
+    _qt_spinbox->setFont( Y2QtComponent::ui()->currentFont() );
 
     _qt_label->setBuddy( _qt_spinbox );
 
@@ -118,7 +118,7 @@ void YQSlider::setValueSlot( int newValue )
     setValue( newValue );
 
     if ( getNotify() )
-	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+	Y2QtComponent::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 

@@ -18,7 +18,6 @@
 /-*/
 
 
-#include "YUIQt.h"
 #include "YQSquash.h"
 
 YQSquash::YQSquash( QWidget * 		parent,

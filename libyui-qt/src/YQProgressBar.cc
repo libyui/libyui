@@ -26,7 +26,7 @@
 using std::max;
 
 #include "utf8.h"
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 #include "YQProgressBar.h"
 
 
@@ -45,13 +45,13 @@ YQProgressBar::YQProgressBar( QWidget * 		parent,
 
     _qt_label = new QLabel( fromUTF8(label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
-    _qt_label->setFont( YUIQt::ui()->currentFont() );
+    _qt_label->setFont( Y2QtComponent::ui()->currentFont() );
     
     if ( label->value() == "" )
 	_qt_label->hide();
 
     _qt_progressbar = new QProgressBar( this );
-    _qt_progressbar->setFont( YUIQt::ui()->currentFont() );
+    _qt_progressbar->setFont( Y2QtComponent::ui()->currentFont() );
     _qt_progressbar->setTotalSteps( maxProgress->value() );
     _qt_label->setBuddy( _qt_progressbar );
 

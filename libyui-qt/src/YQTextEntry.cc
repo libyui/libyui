@@ -26,7 +26,7 @@
 using std::max;
 
 #include "utf8.h"
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 #include "YEvent.h"
 #include "QY2CharValidator.h"
 #include "YQTextEntry.h"
@@ -47,13 +47,13 @@ YQTextEntry::YQTextEntry( QWidget * 		parent,
 
     _qt_label = new QLabel( fromUTF8( label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
-    _qt_label->setFont( YUIQt::ui()->currentFont() );
+    _qt_label->setFont( Y2QtComponent::ui()->currentFont() );
 
     if ( label->value() == "" )
 	_qt_label->hide();
 
     _qt_lineedit = new QLineEdit( this );
-    _qt_lineedit->setFont( YUIQt::ui()->currentFont() );
+    _qt_lineedit->setFont( Y2QtComponent::ui()->currentFont() );
     _qt_lineedit->setText( fromUTF8(text->value() ) );
 
     _qt_label->setBuddy( _qt_lineedit );
@@ -150,7 +150,7 @@ bool YQTextEntry::setKeyboardFocus()
 void YQTextEntry::changed( const QString & )
 {
     if ( getNotify() )
-	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+	Y2QtComponent::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
 

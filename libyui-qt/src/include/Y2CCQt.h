@@ -65,7 +65,7 @@ public:
      */
     Y2Component *create(const char * name) const
     {
-	if (!strcmp(name, "qt") ) return new Y2QtComponent();
+	if (!strcmp(name, "qt") ) return new Y2QtComponent(0, 0, false, 0);
 	else return 0;
     }
 };

@@ -35,7 +35,7 @@
 #include "YQPkgList.h"
 #include "YQPackageSelector.h"
 #include "YQi18n.h"
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 
 
 #define SPACING			2	// between subwidgets
@@ -135,7 +135,7 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
 void
 YQPkgChangesDialog::filter( bool byAuto, bool byApp, bool byUser )
 {
-    YUIQt::ui()->busyCursor();
+    Y2QtComponent::ui()->busyCursor();
     _pkgList->clear();
 
     PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
@@ -157,7 +157,7 @@ YQPkgChangesDialog::filter( bool byAuto, bool byApp, bool byUser )
 	++it;
     }
 
-    YUIQt::ui()->normalCursor();
+    Y2QtComponent::ui()->normalCursor();
 }
 
 

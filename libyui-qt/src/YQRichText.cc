@@ -23,7 +23,7 @@
 #include "qregexp.h"
 #include "YEvent.h"
 #include "utf8.h"
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 #include "YQDialog.h"
 #include "YQRichText.h"
 
@@ -40,7 +40,7 @@ YQRichText::YQRichText( QWidget * 		parent,
 
     _textBrowser = new YQTextBrowser( this );
     _textBrowser->setMimeSourceFactory( 0 );
-    _textBrowser->setFont( YUIQt::ui()->currentFont() );
+    _textBrowser->setFont( Y2QtComponent::ui()->currentFont() );
     _textBrowser->installEventFilter( this );
 
     if ( opt.plainTextMode.value() )
@@ -113,7 +113,7 @@ void YQRichText::setText( const YCPString & ytext )
     QString text = fromUTF8( ytext->value() );
 
     if ( _textBrowser->textFormat() != Qt::PlainText )
-	text.replace( "&product;", YUIQt::ui()->productName() );
+	text.replace( "&product;", Y2QtComponent::ui()->productName() );
 
     YRichText::setText( ytext );
     _textBrowser->setText( text );
@@ -134,7 +134,7 @@ bool YQRichText::setKeyboardFocus()
 void YQRichText::linkClicked( const QString & url )
 {
     // y2debug( "Selected hyperlink \"%s\"", (const char *) url );
-    YUIQt::ui()->sendEvent( new YMenuEvent( YCPString( (const char *) url ) ) );
+    Y2QtComponent::ui()->sendEvent( new YMenuEvent( YCPString( (const char *) url ) ) );
 }
 
 

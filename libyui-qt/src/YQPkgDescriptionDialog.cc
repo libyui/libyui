@@ -38,7 +38,7 @@
 #include "YQPkgList.h"
 #include "YQPackageSelector.h"
 #include "YQi18n.h"
-#include "YUIQt.h"
+#include "Y2QtComponent.h"
 
 
 #define SPACING			2	// between subwidgets
@@ -116,7 +116,7 @@ void
 YQPkgDescriptionDialog::filter( const QString & qPkgName )
 {
     std::string pkgName( (const char *) qPkgName );
-    YUIQt::ui()->busyCursor();
+    Y2QtComponent::ui()->busyCursor();
     _pkgList->clear();
 
 
@@ -145,7 +145,7 @@ YQPkgDescriptionDialog::filter( const QString & qPkgName )
     else
 	_pkgDescription->clear();
 
-    YUIQt::ui()->normalCursor();
+    Y2QtComponent::ui()->normalCursor();
 }
 
 
