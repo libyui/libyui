@@ -1405,7 +1405,7 @@ const NCstring PkgNames::TextmodeHelp6()
 const NCstring PkgNames::TextmodeHelp7()
 {
     // part of help for text mode navigation
-    static const NCstring value =  _( "<p>Movement inside a dialog is done with <b>Tab</b> to go forward and <b>Alt</b> or <b>Shift</b> <b>Tab</b> to go back.<br> If the <b>Alt</b> and <b>Shift</b> key combinations are occupied by the windo wmanager or the terminal, <b>Ctrl</b> <b>F</b> (forward) and <b>Ctrl</b> <b>B</b> (back) can be used instead.</p>." );
+    static const NCstring value =  _( "<p>Movement inside a dialog is done with <b>Tab</b> to go forward and <b>Alt</b> or <b>Shift</b> <b>Tab</b> to go back.<br> If the <b>Alt</b> and <b>Shift</b> key combinations are occupied by the windowmanager or the terminal, <b>Ctrl</b> <b>F</b> (forward) and <b>Ctrl</b> <b>B</b> (back) can be used instead.</p>." );
     return value;
 }
 const NCstring PkgNames::TextmodeHelp8()
