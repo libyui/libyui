@@ -257,9 +257,9 @@ void NCPopupFile::saveToFile()
 
     if ( event == NCursesEvent::button )
     {
-	PMPackageImExPtr P( new PMPackageImEx );
+	PMPackageImEx pkgExport;
 	
-	NCPopupInfo saveInfo( wpos(10, 10),  YCPString( "" ),
+	NCPopupInfo saveInfo( wpos(5, 5),  YCPString( "" ),
 			      YCPString(PkgNames::Saving().str()) );
 	saveInfo.setNiceSize( 18, 4 );
 	saveInfo.popup();
@@ -269,12 +269,11 @@ void NCPopupFile::saveToFile()
 	     || mountDevice( floppyDevice, PkgNames::SaveErr1Text().str()) )
 	{
 	    // remember the current Package/SelectionManagers state.
-	    P->getPMState();
+	    pkgExport.getPMState();
 
 	    // write package selection to file
-	    if ( ! P->doExport( pathName ) )
+	    if ( ! pkgExport.doExport( pathName ) )
 	    {
-		saveInfo.popdown();	
 		NCPopupInfo info2( wpos(2, 2),
 				   YCPString( PkgNames::ErrorLabel().str() ),
 				   YCPString( PkgNames::SaveErr2Text().str() ) );
@@ -284,7 +283,6 @@ void NCPopupFile::saveToFile()
 	    }
 	    else
 	    {
-		saveInfo.popdown();
 		NCMIL << "Writing selection to: " << pathName << endl;	
 	    }
 	}
@@ -292,6 +290,8 @@ void NCPopupFile::saveToFile()
 	{
 	    system( string( "/bin/umount /media/floppy >/dev/null 2>&1" ).c_str() );    
 	}
+
+	saveInfo.popdown();
     }
 }
 
@@ -316,7 +316,7 @@ void NCPopupFile::loadFromFile()
   
     if ( event == NCursesEvent::button )
     {
-	PMPackageImExPtr P( new PMPackageImEx );
+	PMPackageImEx pkgImport;
 
 	// show popup "Really overwrite current selection?"
 	NCPopupInfo info1( wpos(2, 2),
@@ -329,7 +329,7 @@ void NCPopupFile::loadFromFile()
 
 	if ( event == NCursesEvent::button )
 	{
-	    NCPopupInfo loadInfo( wpos(10, 10),  YCPString( "" ),
+	    NCPopupInfo loadInfo( wpos(5, 5),  YCPString( "" ),
 				  YCPString(PkgNames::Loading().str()) );
 	    loadInfo.setNiceSize( 18, 4 );
 	    loadInfo.popup();
@@ -338,9 +338,8 @@ void NCPopupFile::loadFromFile()
 		 || mountDevice( floppyDevice, PkgNames::LoadErr1Text().str()) )
 	    {
 		// read selection from file
-		if ( ! P->doImport( pathName) )
+		if ( ! pkgImport.doImport( pathName) )
 		{
-		    loadInfo.popdown();
 		    NCPopupInfo info2( wpos(2, 2),
 				       YCPString( PkgNames::ErrorLabel().str() ),
 				       YCPString( PkgNames::LoadErr2Text().str() ) );
@@ -350,9 +349,8 @@ void NCPopupFile::loadFromFile()
 		}
 		else
 		{
-		    loadInfo.popdown();
 		    // restore Package/SelectionManagers state according to the
-		    P->setPMState();
+		    pkgImport.setPMState();
 		    NCMIL << "Package selection loaded from: " << pathName << endl;
 		    // show package dependencies (in case dependency check in on)
 		    packager->showPackageDependencies(false);
@@ -364,6 +362,8 @@ void NCPopupFile::loadFromFile()
 	    {
 		system( string( "/bin/umount /media/floppy >/dev/null 2>&1" ).c_str() );    
 	    }
+
+    	    loadInfo.popdown();
 	}
     }
 }
