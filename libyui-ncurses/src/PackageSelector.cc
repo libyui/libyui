@@ -1548,35 +1548,40 @@ bool PackageSelector::SelectionHandler( const NCursesEvent&  event )
 // 
 bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 {
-    // show a popup and ask the user
-    NCPopupInfo cancelMsg( wpos( 2, 2 ),
+    bool changes = Y2PM::packageManager().DiffState();
+
+    if ( youMode )
+	changes |= Y2PM::youPatchManager().DiffState();
+    else
+	changes |= Y2PM::selectionManager().DiffState();
+
+    if (changes) {
+	// show a popup and ask the user
+	NCPopupInfo cancelMsg( wpos( 2, 2 ),
 			   YCPString( PkgNames::NotifyLabel() ),
 			   YCPString( PkgNames::CancelText() ),
 			   PkgNames::OKLabel(),
 			   PkgNames::CancelLabel() );
-    cancelMsg.setNiceSize( 35, 8 ); 
-    NCursesEvent input = cancelMsg.showInfoPopup( );
-
-    if ( input == NCursesEvent::cancel )
-    {
-	// don't leave the package installation dialog
-	return true;
+	cancelMsg.setNiceSize( 35, 8 ); 
+	NCursesEvent input = cancelMsg.showInfoPopup( );
+	if ( input == NCursesEvent::cancel ) {
+	    // don't leave the package installation dialog
+	    return true;
+	}
     }
+
+    // restore the package/patch/selection states
+    Y2PM::packageManager().RestoreState();
+    if ( youMode )
+        Y2PM::youPatchManager().RestoreState();
     else
-    {
-	// restore the package/patch/selection states
-	Y2PM::packageManager().RestoreState();
-	if ( youMode )
-	    Y2PM::youPatchManager().RestoreState();
-	else
-	    Y2PM::selectionManager().RestoreState();
+        Y2PM::selectionManager().RestoreState();
 
-	NCMIL <<  "Cancel button pressed - leaving package selection" << endl;
-	const_cast<NCursesEvent &>(event).result = YCPSymbol("cancel");
+    NCMIL <<  "Cancel button pressed - leaving package selection" << endl;
+    const_cast<NCursesEvent &>(event).result = YCPSymbol("cancel");
     
-	// return false, which means stop the event loop (see runPkgSelection)
-	return false;
-    }
+    // return false, which means stop the event loop (see runPkgSelection)
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////
