@@ -42,6 +42,22 @@ class NCRichText : public YRichText, public NCPadWidget {
 
   private:
 
+    /**
+     * Lookup map for character entities (e.g. '&gt;'). Initialized
+     * and used by @ref entityLookup.
+     **/
+    static std::map<std::string,const char *> _charentity;
+
+    /**
+     * Lookup and return replacement for a character entity. Expects
+     * the leading <code>'&'</code> and trailing <code>';'<.code> to
+     * be stripped from <code>val_r</code>. Returns <code>NULL</code>,
+     * if the character entity should not be replaced.
+     **/
+    static const char * entityLookup( const std::string & val_r );
+
+  private:
+
     NCstring text;
 
     bool plainText;

@@ -1,9 +1,15 @@
 -------------------------------------------------------------------
+Tue Feb 18 12:01:17 CET 2003 - ma@suse.de
+
+- Filter character entities in richtext widget (&[amp|gt|lt|nbsp|quot];)
+  (#23721)
+
+-------------------------------------------------------------------
 Mon Feb 17 16:18:20 CET 2003 - gs@suse.de
 
 - V 2.7.8
 - setLanguage: never set encoding to UTF-8 (bug #23348)
-- package installation: show more package info, improved 
+- package installation: show more package info, improved
   selection popup, show total download size in YOU mode
 
 -------------------------------------------------------------------

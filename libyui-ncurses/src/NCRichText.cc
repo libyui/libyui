@@ -34,6 +34,40 @@ const bool NCRichText::showLinkTarget = false;
 
 ///////////////////////////////////////////////////////////////////
 
+std::map<std::string,const char *> NCRichText::_charentity;
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCRichText::entityLookup
+//	METHOD TYPE : const char *
+//
+//	DESCRIPTION :
+//
+const char * NCRichText::entityLookup( const std::string & val_r )
+{
+  if ( _charentity.empty() ) {
+    // initialize replacement for character entities. A value of NULL
+    // menas do not replace.
+#define REP(l,r) _charentity[l] = r
+    REP("amp",	"&");
+    REP("gt",	">");
+    REP("lt",	"<");
+    REP("nbsp",	" ");
+    REP("quot",	"\"");
+#undef REP
+  }
+
+  std::map<std::string,const char *>::const_iterator it = _charentity.find( val_r );
+  if ( it != _charentity.end() ) {
+    return it->second;
+  }
+
+  return 0;
+}
+
+///////////////////////////////////////////////////////////////////
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -437,11 +471,20 @@ inline void NCRichText::PadWS( const bool tab )
 inline void NCRichText::PadTXT( const char * osch, const unsigned olen )
 {
   string txt( osch, olen );
-  for( string::size_type special = txt.find( "&nbsp;" );
-       special != string::npos;
-       special = txt.find( "&nbsp;", special ) )
-    txt.replace( special, 6, 1, ' ' );
 
+  // filter known '&..;'
+  for( string::size_type special = txt.find( "&" );
+       special != string::npos; special = txt.find( "&", special+1 ) ) {
+    string::size_type colon = txt.find( ";", special+1 );
+    if ( colon == string::npos )
+      break;  // no ';'  -> no need to continue
+    const char * repl = entityLookup( txt.substr( special+1, colon-special-1 ) );
+    if ( repl ) {
+      txt.replace( special, colon-special+1, repl );
+    }
+  }
+
+  // insert text
   const char * sch = txt.c_str();
   unsigned     len = txt.length();
 
