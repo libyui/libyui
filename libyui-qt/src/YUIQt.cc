@@ -365,9 +365,15 @@ YWidget *YUIQt::userInput(YDialog *dialog, EventType *event)
 	busyCursor();
 	qd->activate(false);
     }
+    
     *event = event_type;
-    event_type = ET_NONE; // Clear for next time
-    return event_widget;
+    YWidget * ret = event_widget;
+    
+    // Clear for next time
+    event_type	 = ET_NONE;
+    event_widget = 0;
+    
+    return ret;
 }
 
 
