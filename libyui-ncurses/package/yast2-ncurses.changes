@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jan 27 16:59:37 CET 2003 - gs@suse.de
+
+- V 2.7.5
+- package installation: show dependencies between package selections
+
+-------------------------------------------------------------------
 Tue Dec 03 16:36:41 CET 2002 - arvin@suse.de
 
 - added curl-devel and openssl-devel to neededforbuild
