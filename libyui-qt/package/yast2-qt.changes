@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Feb 27 17:29:29 CET 2003 - sh@suse.de
+
+- Fixed bug #23368: kcontrol embedding fails if first dialog is a popup
+
+-------------------------------------------------------------------
 Wed Feb 26 19:26:29 CET 2003 - sh@suse.de
 
 -  Fixed bug #23574: "Checking dependencies" popup
