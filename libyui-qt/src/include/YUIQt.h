@@ -26,7 +26,6 @@
 #include <vector>
 
 #include "YUIInterpreter.h"
-#include "YQWidget.h"
 
 
 class QVBox;
@@ -179,7 +178,7 @@ public:
 
     /**
      * Are we running embedded into another application, e.g., inside the KDE
-     * control center? 
+     * control center?
      **/
     bool runningEmbedded() const { return running_embedded; }
 
@@ -543,7 +542,7 @@ private:
 
     /**
      * Are we running embedded into another application, e.g., inside the KDE
-     * control center? 
+     * control center?
      **/
     bool running_embedded;
 

@@ -11,7 +11,6 @@ pkginclude_HEADERS =				\
 	YUIQt.h					\
 	Y2CCQt.h				\
 	Y2QtComponent.h				\
-	YQWidget.h				\
 	YQIconPool.h				\
 						\
 	YQAlignment.h				\
