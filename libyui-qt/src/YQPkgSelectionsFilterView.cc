@@ -16,7 +16,6 @@
 
 /-*/
 
-#define USE_TACKAT_ICONS 0
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
