@@ -91,8 +91,8 @@ inline void NCstyleInit_linux( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextBT, 14592|A_BOLD );
   attrset->setAttr( NCstyle::RichTextIT, 15872 );
   attrset->setAttr( NCstyle::RichTextBIT, 14848 );
-  attrset->setAttr( NCstyle::ProgbarCh, 14112 );
-  attrset->setAttr( NCstyle::ProgbarBgch, 4203697|A_BOLD );
+  attrset->setAttr( NCstyle::ProgbarCh, 7968|A_BLINK );
+  attrset->setAttr( NCstyle::ProgbarBgch, 16160 );
   attrset->setAttr( NCstyle::TextCursor, 7936|A_BLINK );
   // InfoStyle
   attrset = &styleSet[NCstyle::InfoStyle].getAttrLocal();
@@ -153,8 +153,8 @@ inline void NCstyleInit_linux( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextBT, 14592|A_BOLD );
   attrset->setAttr( NCstyle::RichTextIT, 14592 );
   attrset->setAttr( NCstyle::RichTextBIT, 14592|A_BOLD );
-  attrset->setAttr( NCstyle::ProgbarCh, 32|A_BOLD );
-  attrset->setAttr( NCstyle::ProgbarBgch, 4198577|A_BOLD );
+  attrset->setAttr( NCstyle::ProgbarCh, 16160|A_BLINK );
+  attrset->setAttr( NCstyle::ProgbarBgch, 16160 );
   attrset->setAttr( NCstyle::TextCursor, 7936|A_BLINK );
   // WarnStyle
   attrset = &styleSet[NCstyle::WarnStyle].getAttrLocal();
@@ -215,8 +215,8 @@ inline void NCstyleInit_linux( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextBT, 14592|A_BOLD );
   attrset->setAttr( NCstyle::RichTextIT, 14592 );
   attrset->setAttr( NCstyle::RichTextBIT, 14592|A_BOLD );
-  attrset->setAttr( NCstyle::ProgbarCh, 32|A_BOLD );
-  attrset->setAttr( NCstyle::ProgbarBgch, 4196529|A_BOLD );
+  attrset->setAttr( NCstyle::ProgbarCh, 16160|A_BLINK );
+  attrset->setAttr( NCstyle::ProgbarBgch, 16160 );
   attrset->setAttr( NCstyle::TextCursor, 7936|A_BLINK );
   // PopupStyle
   attrset = &styleSet[NCstyle::PopupStyle].getAttrLocal();
@@ -277,8 +277,8 @@ inline void NCstyleInit_linux( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextBT, 14592|A_BOLD );
   attrset->setAttr( NCstyle::RichTextIT, 14592 );
   attrset->setAttr( NCstyle::RichTextBIT, 14592|A_BOLD );
-  attrset->setAttr( NCstyle::ProgbarCh, 9248|A_BOLD );
-  attrset->setAttr( NCstyle::ProgbarBgch, 4207793|A_BOLD );
+  attrset->setAttr( NCstyle::ProgbarCh, 7968|A_BLINK );
+  attrset->setAttr( NCstyle::ProgbarBgch, 16160|A_BOLD );
   attrset->setAttr( NCstyle::TextCursor, 7936|A_BLINK );
 }
 #endif // NCstyle_linux_h
