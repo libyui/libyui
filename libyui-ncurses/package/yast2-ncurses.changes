@@ -1,3 +1,11 @@
+-------------------------------------------------------------------
+Mon Oct 21 14:49:17 CEST 2002 - gs@suse.de
+
+- V 2.6.21
+- package installation: show correct package dependencies in case of
+  package conflicts (bug #21045/#21061)
+
+-------------------------------------------------------------------
 Wed Oct  9 15:15:49 CEST 2002 - gs@suse.de
 
 - V 2.6.20
