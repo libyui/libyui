@@ -32,7 +32,7 @@
 
 
 YQComboBox::YQComboBox( QWidget *parent, YWidgetOpt &opt,
-		       const YCPString& label)
+		       const YCPString & label)
     : QVBox(parent)
     , YComboBox(opt, label)
     , _validator( 0 )
@@ -101,7 +101,7 @@ void YQComboBox::setEnabling(bool enabled)
 }
 
 
-void YQComboBox::itemAdded(const YCPString& string, int index, bool selected)
+void YQComboBox::itemAdded(const YCPString & string, int index, bool selected)
 {
     qt_combo_box->insertItem(fromUTF8(string->value()));
 

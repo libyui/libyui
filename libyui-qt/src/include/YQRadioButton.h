@@ -70,7 +70,7 @@ public:
     /**
      * Sets the checked-state of the RadioButton
      */
-    void setValue(const YCPBoolean& checked);
+    void setValue(const YCPBoolean & checked);
 
     /**
      * Returns, whether the RadioButton is checked.
@@ -80,7 +80,7 @@ public:
     /**
      * Changes the label of the text entry.
      */
-    void setLabel(const YCPString& label);
+    void setLabel(const YCPString & label);
 
     /**
      * Accept the keyboard focus.

@@ -74,7 +74,7 @@ public:
      * Calls YSlider::setLabel at the end.
      * Inherited from YSlider.
      */
-    void setLabel( const YCPString& label );
+    void setLabel( const YCPString & label );
 
     /**
      * Accept the keyboard focus.

@@ -54,7 +54,7 @@ public:
     /**
      * Change the Frame label.
      */
-    void setLabel(const YCPString& newLabel);
+    void setLabel(const YCPString & newLabel);
 
     /**
      * Minimum size the widget should have to make it look and feel

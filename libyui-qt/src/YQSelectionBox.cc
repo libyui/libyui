@@ -41,7 +41,7 @@ using std::max;
 
 
 YQSelectionBox::YQSelectionBox( QWidget *parent, YWidgetOpt &opt,
-			       const YCPString& label)
+			       const YCPString & label)
     : QVBox(parent)
     , YSelectionBox(opt, label)
 {
@@ -116,7 +116,7 @@ void YQSelectionBox::setEnabling(bool enabled)
 }
 
 
-void YQSelectionBox::itemAdded(const YCPString& string, int index, bool selected)
+void YQSelectionBox::itemAdded(const YCPString & string, int index, bool selected)
 {
     qt_listbox->insertItem(fromUTF8(string->value()));
     if (selected) qt_listbox->setCurrentItem(index);

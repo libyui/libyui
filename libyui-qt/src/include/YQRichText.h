@@ -37,7 +37,7 @@ public:
     /**
      * Constructor
      */
-    YQRichText( QWidget *parent, YWidgetOpt &opt, const YCPString& text);
+    YQRichText( QWidget *parent, YWidgetOpt &opt, const YCPString & text);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -61,7 +61,7 @@ public:
     /**
      * Change the RichText text.
      */
-    void setText(const YCPString& RichText);
+    void setText(const YCPString & RichText);
 
     /**
      * Accept the keyboard focus.

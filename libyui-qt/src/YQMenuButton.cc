@@ -73,7 +73,7 @@ YQMenuButton::setSize(long newWidth, long newHeight)
 
 
 void
-YQMenuButton::setLabel(const YCPString& label)
+YQMenuButton::setLabel(const YCPString & label)
 {
     qt_pushbutton->setText( fromUTF8( label->value() ) );
 }

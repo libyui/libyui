@@ -68,7 +68,7 @@ public:
     /**
      * Set the text in the entry to a new value
      */
-    void setText(const YCPString& text);
+    void setText(const YCPString & text);
 
     /**
      * Gets the text currently entered in the text entry
@@ -78,7 +78,7 @@ public:
     /**
      * Changes the label of the text entry.
      */
-    void setLabel(const YCPString& label);
+    void setLabel(const YCPString & label);
 
     /**
      * Change the valid input characters.

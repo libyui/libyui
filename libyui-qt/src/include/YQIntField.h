@@ -74,7 +74,7 @@ public:
      * Calls YIntField::setLabel at the end.
      * Inherited from YIntField.
      */
-    void setLabel( const YCPString& label );
+    void setLabel( const YCPString & label );
 
     /**
      * Accept the keyboard focus.

@@ -63,7 +63,7 @@ YQTextEntry::YQTextEntry( QWidget *parent, YWidgetOpt &opt,
 
     shrinkable = opt.isShrinkable.value();
 
-    connect(qt_lineedit, SIGNAL(textChanged(const QString&)), this, SLOT(changed(const QString &)));
+    connect(qt_lineedit, SIGNAL(textChanged(const QString &)), this, SLOT(changed(const QString &)));
 }
 
 
@@ -146,7 +146,7 @@ bool YQTextEntry::setKeyboardFocus()
 
 // slots
 
-void YQTextEntry::changed(const QString&)
+void YQTextEntry::changed(const QString &)
 {
     if (getNotify())
 	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);

@@ -55,7 +55,7 @@ protected:
 
 public:
 
-    YQComboBox( QWidget *parent, YWidgetOpt &opt, const YCPString& label);
+    YQComboBox( QWidget *parent, YWidgetOpt &opt, const YCPString & label);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -79,7 +79,7 @@ public:
     /**
      * Change the label text.
      */
-    void setLabel(const YCPString& label);
+    void setLabel(const YCPString & label);
 
     /**
      * Change the valid input characters.
@@ -93,7 +93,7 @@ public:
      *
      * Reimplemented from YComboBox.
      */
-    void itemAdded(const YCPString& itemText, int itemIndex, bool selected);
+    void itemAdded(const YCPString & itemText, int itemIndex, bool selected);
 
     /**
      * Inherited from YComboBox:

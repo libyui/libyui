@@ -28,7 +28,7 @@
 
 
 YQRichText::YQRichText( QWidget *parent, YWidgetOpt &opt,
-		       const YCPString& text)
+		       const YCPString & text)
     : QTextBrowser(parent)
     , YRichText(opt, text)
 {

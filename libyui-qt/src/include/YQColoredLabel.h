@@ -62,7 +62,7 @@ public:
     /**
      * Change the label text.
      */
-    void setLabel(const YCPString& label);
+    void setLabel(const YCPString & label);
 };
 
 #endif // YQColoredLabel_h

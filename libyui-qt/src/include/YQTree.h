@@ -67,7 +67,7 @@ public:
     /**
      * Change the label text.
      */
-    void setLabel ( const YCPString& label );
+    void setLabel ( const YCPString & label );
 
     /**
      * Inherited fro YTree. Called once after items have been added.

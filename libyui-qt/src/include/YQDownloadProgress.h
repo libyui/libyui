@@ -68,7 +68,7 @@ public:
      * Calls YDownloadProgress::setLabel at the end.
      * Inherited from YDownloadProgress.
      */
-    void setLabel( const YCPString& label );
+    void setLabel( const YCPString & label );
 
 
     /**

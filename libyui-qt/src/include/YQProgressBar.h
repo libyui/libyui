@@ -78,13 +78,13 @@ public:
      * Change the ProgressBar label. Calls
      * YProgressBar::setLabel at the end.
      */
-    void setLabel(const YCPString& label);
+    void setLabel(const YCPString & label);
 
     /**
      * Change the progress. Calls
      * YProgressBar::setProgress at the end.
      */
-    void setProgress(const YCPInteger& progress);
+    void setProgress(const YCPInteger & progress);
 
     /**
      * Accept the keyboard focus.

@@ -81,7 +81,7 @@ YQImage::YQImage( QWidget *parent, YWidgetOpt &opt,
 
 
 YQImage::YQImage( QWidget *parent, YWidgetOpt &opt,
-		 const YCPByteblock& byteblock)
+		 const YCPByteblock & byteblock)
     : QLabel(parent)
     , YImage(opt)
 {

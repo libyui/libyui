@@ -36,7 +36,7 @@ class YQMultiSelectionBox : public QVBox, public YMultiSelectionBox
 
 public:
 
-    YQMultiSelectionBox( QWidget *parent, YWidgetOpt &opt, const YCPString& label);
+    YQMultiSelectionBox( QWidget *parent, YWidgetOpt &opt, const YCPString & label);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -60,7 +60,7 @@ public:
     /**
      * Change the label text.
      */
-    virtual void setLabel(const YCPString& label);
+    virtual void setLabel(const YCPString & label);
 
     /**
      * Notification that a new item has been added.
