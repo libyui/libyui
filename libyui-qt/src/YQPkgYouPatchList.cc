@@ -46,6 +46,7 @@ YQPkgYouPatchList::YQPkgYouPatchList( QWidget *parent )
     addColumn( _( "Kind"			) );	_kindCol	= numCol++;
     addColumn( _( "Size"			) );	_sizeCol	= numCol++;
     setAllColumnsShowFocus( true );
+    setColumnAlignment( sizeCol(), Qt::AlignRight );
 
     connect( this,	SIGNAL( selectionChanged	( QListViewItem * ) ),
 	     this,	SLOT  ( filter()				    ) );
