@@ -169,7 +169,11 @@ void NCPackageSelector::showDefaultList()
 
 	pkgList->setKeyboardFocus();
 
+	// show the required diskspace
 	packager.showDiskSpace();
+
+	// do an initial dependency solving
+	packager.showDependencies( true );
     }
     else
     {
