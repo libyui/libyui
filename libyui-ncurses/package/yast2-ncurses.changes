@@ -1,7 +1,7 @@
 -------------------------------------------------------------------
 Mon Jun 24 13:41:03 CEST 2002 - arvin@suse.de
 
-- renamed to yast2-ncurses
+- renamed from yast2-ui-ncurses to yast2-ncurses
 
 -------------------------------------------------------------------
 Wed Apr 24 11:25:41 CEST 2002 - arvin@suse.de
