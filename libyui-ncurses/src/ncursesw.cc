@@ -570,13 +570,6 @@ int NCursesWindow::box( const wrect & dim )
     addch( area.Pos.L, area.Pos.C+area.Sze.W-1, ACS_URCORNER );
     addch( area.Pos.L+area.Sze.H-1, area.Pos.C+area.Sze.W-1, ACS_LRCORNER );
     addch( area.Pos.L,              area.Pos.C, ACS_ULCORNER );
-// FIXME ???
-#if 0
-    mvadd_wch( area.Pos.L+area.Sze.H-1, area.Pos.C, WACS_LLCORNER );
-    mvadd_wch( area.Pos.L, area.Pos.C+area.Sze.W-1, WACS_URCORNER );
-    mvadd_wch( area.Pos.L+area.Sze.H-1, area.Pos.C+area.Sze.W-1, WACS_LRCORNER );
-    mvadd_wch( area.Pos.L,              area.Pos.C, WACS_ULCORNER );
-#endif
   }
 
   return OK;
