@@ -379,7 +379,7 @@ YQPackageSelector::makeConnections()
 	     _pkgList, 			SLOT  ( clear() 	) );
 
     connect( _rpmGroupTagsFilterView, 	SIGNAL( filterMatch( PMPackagePtr ) ),
-	     _pkgList, 			SLOT  ( addPkg     ( PMPackagePtr ) ) );
+	     _pkgList, 			SLOT  ( addPkgItem ( PMPackagePtr ) ) );
 
     connect( _rpmGroupTagsFilterView, 	SIGNAL( filterFinished()  ),
 	     _pkgList, 			SLOT  ( selectSomething() ) );
@@ -392,7 +392,7 @@ YQPackageSelector::makeConnections()
 	     _pkgList, 	SLOT  ( clear() 	) );
 
     connect( _selList,	SIGNAL( filterMatch( PMPackagePtr ) ),
-	     _pkgList, 	SLOT  ( addPkg     ( PMPackagePtr ) ) );
+	     _pkgList, 	SLOT  ( addPkgItem ( PMPackagePtr ) ) );
 
     connect( _selList, 	SIGNAL( filterFinished()  ),
 	     _pkgList, 	SLOT  ( selectSomething() ) );

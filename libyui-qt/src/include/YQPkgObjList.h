@@ -48,9 +48,9 @@ protected:
      **/
     virtual ~YQPkgObjList();
 
-    
+
 public:
-    
+
     // Column numbers
 
     int statusCol()		const	{ return _statusCol;		}
@@ -64,13 +64,17 @@ public:
 public slots:
 
     /**
-     * Add a PMObject to the list. Connect a filter's filterMatch() signal to this
-     * slot. Remember to connect filterStart() to clear() (inherited from
+     * Add a PMObject to the list. Connect a filter's filterMatch() signal to
+     * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
+     *
+     * Intentionally NOT named addItem() so the calling class cannot confuse
+     * this method with overlaid methods of the same name that were simply
+     * forgotten to implement!
      **/
-    void addPkgObj( PMObjectPtr pmObj );
+    void addPkgObjItem( PMObjectPtr pmObj );
 
-    
+
     /**
      * Dispatcher slot for mouse click: cycle status depending on column.
      **/
@@ -84,17 +88,17 @@ public slots:
      **/
     virtual void clear();
 
-    
+
 protected slots:
 
     /**
-     * Dispatcher slot for selection change - internal only
+     * Dispatcher slot for selection change - internal only.
      **/
     virtual void selectionChangedInternal( QListViewItem * item );
 
 
 signals:
-    
+
 
     /**
      * Emitted when a PMObject is selected.
@@ -105,7 +109,7 @@ signals:
 
 protected:
 
-    
+
     // Data members
 
     int 	_statusCol;
@@ -134,12 +138,12 @@ public:
     virtual ~YQPkgObjListItem();
 
     /**
-     * Returns the original object within the package manager backend
+     * Returns the original object within the package manager backend.
      **/
     PMObjectPtr pmObj() { return _pmObj; }
 
     /**
-     * Returns the original object within the package manager backend
+     * Returns the original object within the package manager backend.
      **/
     const PMObjectPtr constPMObj() const { return _pmObj; }
 
@@ -154,24 +158,37 @@ public:
     virtual void setStatus( PMSelectable::UI_Status newStatus );
 
     /**
-     * Set a status icon according to the package's status
+     * Update this item's status.
+     * Triggered by QY2ListView::updateAllItemStates().
+     * Overwritten from QY2ListViewItem.
+     **/
+    virtual void updateStatus();
+
+    /**
+     * Set a status icon according to the package's status.
      **/
     virtual void setStatusIcon();
 
     /**
-     * Cycle the package status to the next valid value
+     * Cycle the package status to the next valid value.
      **/
     virtual void cycleStatus();
-    
+
     /**
-     * Set a column text via STL string
-     * (QListViewItem::setText() expects a QString)
+     * Set a column text via STL string.
+     * (QListViewItem::setText() expects a QString!)
      **/
     void setText( int column, const std::string text );
 
     /**
-     * Set a column text via PkgEdition
-     * (QListViewItem::setText() expects a QString)
+     * Re-declare ordinary setText() method so the compiler doesn't get
+     * confused which one to use.
+     **/
+    void setText( int column, const QString & text )
+	{ QListViewItem::setText( column, text ); }
+
+    /**
+     * Set a column text via PkgEdition.
      **/
     void setText( int column, const PkgEdition & edition );
 

@@ -58,7 +58,7 @@ public slots:
      * slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addPkg( PMPackagePtr pmPkg );
+    void addPkgItem( PMPackagePtr pmPkg );
 
 
     /**
@@ -108,17 +108,17 @@ public:
     virtual ~YQPkgListItem();
 
     /**
-     * Returns the parent package list
+     * Returns the parent package list.
      **/
     YQPkgList * pkgList() { return _pkgList; }
 
     /**
-     * Returns the original object within the package manager backend
+     * Returns the original object within the package manager backend.
      **/
     PMPackagePtr pmPkg() { return _pmPkg; }
 
     /**
-     * Returns the original object within the package manager backend
+     * Returns the original object within the package manager backend.
      **/
     const PMPackagePtr constPMPkg() const { return _pmPkg; }
 
@@ -134,7 +134,7 @@ public:
     void setInstallSourceRpm( bool installSourceRpm );
 
     /**
-     * Cycle the source package status to the next valid value
+     * Cycle the source package status to the next valid value.
      **/
     void toggleSourceRpmStatus();
 

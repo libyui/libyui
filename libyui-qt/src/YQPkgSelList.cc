@@ -19,26 +19,20 @@
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
-#include <qheader.h>
 #include <qregexp.h>
 
 #include <Y2PM.h>
 #include <y2pm/PMManager.h>
 
-#include "YQPkgSelList.h"
-#include "YUIQt.h"
 #include "YQi18n.h"
-#include "YQIconPool.h"
 #include "utf8.h"
 
+#include "YQPkgSelList.h"
 
 
-YQPkgSelList::YQPkgSelList( YUIQt *yuiqt, QWidget *parent )
-    : QListView( parent )
-    , yuiqt( yuiqt )
-    , mousePressedItem( 0 )
-    , mousePressedCol( -1 )
-    , mousePressedButton( NoButton )
+
+YQPkgSelList::YQPkgSelList( QWidget *parent )
+    : YQPkgObjList( parent )
 {
     y2debug( "Creating selection list" );
 
@@ -47,16 +41,9 @@ YQPkgSelList::YQPkgSelList( YUIQt *yuiqt, QWidget *parent )
     addColumn( _( "Selection"	) );	_summaryCol	= numCol++;
     setAllColumnsShowFocus( true );
 
-
-    connect( this, 	SIGNAL( pkgSelClicked		( int, YQPkgSel *, int ) ),
-	     this, 	SLOT  ( slotPkgSelClicked	( int, YQPkgSel *, int ) ) );
-
-    connect( this, 	SIGNAL( pkgSelDoubleClicked	( int, YQPkgSel *, int ) ),
-	     this, 	SLOT  ( slotPkgSelClicked	( int, YQPkgSel *, int ) ) );
-
     connect( this, 	SIGNAL( selectionChanged        ( QListViewItem * ) ),
 	     this, 	SLOT  ( filter()                                    ) );
-
+    
     fillList();
     selectSomething();
 
@@ -96,7 +83,7 @@ YQPkgSelList::fillList()
 		}
 		// DEBUG
 #endif
-		new YQPkgSel( this, sel );
+		addPkgSelItem( sel );
 	    }
 	}
 
@@ -104,40 +91,6 @@ YQPkgSelList::fillList()
     }
 
     y2milestone( "Selection list filled" );
-}
-
-
-void
-YQPkgSelList::selectSomething()
-{
-    QListViewItem * item = firstChild();
-
-    if ( item )
-    {
-	setSelected( item, true );
-    }
-}
-
-
-void
-YQPkgSelList::updateAllItemStates()
-{
-    QListViewItem * item = firstChild();
-
-    while ( item )
-    {
-	YQPkgSel * sel = dynamic_cast<YQPkgSel *> ( item );
-	
-	if ( sel )
-	{
-	    // Maybe in some future version this list will contain other types
-	    // of items, too - so always use a dynamic cast and check for Null.
-	    
-	    sel->setStatusIcon();
-	}
-	
-	item = item->nextSibling();
-    }
 }
 
 
@@ -156,7 +109,7 @@ YQPkgSelList::filter()
 
     if ( selection() )
     {
-	PMSelectionPtr sel = selection()->pkgSel();
+	PMSelectionPtr sel = selection()->pmSel();
 
 	if ( sel )
 	{
@@ -176,13 +129,19 @@ YQPkgSelList::filter()
 
 
 void
-YQPkgSelList::addPkgSel( PMSelectionPtr sel )
+YQPkgSelList::addPkgSelItem( PMSelectionPtr pmSel )
 {
-    new YQPkgSel( this, sel);
+    if ( ! pmSel )
+    {
+	y2error( "NULL PMSelection!" );
+	return;
+    }
+    
+    new YQPkgSelListItem( this, pmSel);
 }
 
 
-YQPkgSel *
+YQPkgSelListItem *
 YQPkgSelList::selection() const
 {
     QListViewItem * item = selectedItem();
@@ -190,98 +149,7 @@ YQPkgSelList::selection() const
     if ( ! item )
 	return 0;
 
-    return dynamic_cast<YQPkgSel *> ( selectedItem() );
-}
-
-
-void
-YQPkgSelList::slotPkgSelClicked( int button, YQPkgSel * sel, int col )
-{
-    if ( sel )
-    {
-	if ( button == Qt::LeftButton )
-	{
-	    if ( col == statusCol() )
-		      // || col == summaryCol() )
-	    {
-		sel->cycleStatus();
-	    }
-	}
-    }
-}
-
-
-void
-YQPkgSelList::contentsMousePressEvent( QMouseEvent * ev )
-{
-    QListViewItem * item = itemAt( contentsToViewport( ev->pos() ) );
-
-    if ( item && item->isEnabled() )
-    {
-	mousePressedItem	= item;
-	mousePressedCol		= header()->sectionAt( ev->pos().x() );
-	mousePressedButton	= ev->button();
-    }
-    else	// invalidate last click data
-    {
-	mousePressedItem	= 0;
-	mousePressedCol		= -1;
-	mousePressedButton	= -1;
-    }
-
-    // Call base class method
-    QListView::contentsMousePressEvent( ev );
-}
-
-
-void
-YQPkgSelList::contentsMouseReleaseEvent( QMouseEvent * ev )
-{
-    QListViewItem * item = itemAt( contentsToViewport( ev->pos() ) );
-
-    if ( item && item->isEnabled() && item == mousePressedItem )
-    {
-	int col = header()->sectionAt( ev->pos().x() );
-
-	if ( item == mousePressedItem	&&
-	     col  == mousePressedCol	&&
-	     ev->button() == mousePressedButton )
-	{
-	    emit( pkgSelClicked( ev->button(), (YQPkgSel *) item, col ) );
-	}
-
-    }
-
-    // invalidate last click data
-
-    mousePressedItem	= 0;
-    mousePressedCol	= -1;
-    mousePressedButton	= NoButton;
-
-    // Call base class method
-    QListView::contentsMouseReleaseEvent( ev );
-}
-
-
-void
-YQPkgSelList::contentsMouseDoubleClickEvent( QMouseEvent * ev )
-{
-    QListViewItem * item = itemAt( contentsToViewport( ev->pos() ) );
-
-    if ( item && item->isEnabled() )
-    {
-	int col = header()->sectionAt( ev->pos().x() );
-	emit( pkgSelDoubleClicked( ev->button(), (YQPkgSel *) item, col ) );
-    }
-
-    // invalidate last click data
-
-    mousePressedItem	= 0;
-    mousePressedCol	= -1;
-    mousePressedButton	= NoButton;
-
-    // Call base class method
-    QListView::contentsMouseDoubleClickEvent( ev );
+    return dynamic_cast<YQPkgSelListItem *> ( selectedItem() );
 }
 
 
@@ -289,105 +157,30 @@ YQPkgSelList::contentsMouseDoubleClickEvent( QMouseEvent * ev )
 
 
 
-YQPkgSel::YQPkgSel( YQPkgSelList * pkgSelList, PMSelectionPtr pkgSel )
-    : QListViewItem( pkgSelList )
+YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList * pkgSelList, PMSelectionPtr pkgSel )
+    : YQPkgObjListItem( pkgSelList, pkgSel )
     , _pkgSelList( pkgSelList )
-    , _pkgSel( pkgSel )
+    , _pmSel( pkgSel )
 {
-    QString text = fromUTF8( _pkgSel->summary( Y2PM::getPreferredLocale() ) );
+    QString text = fromUTF8( _pmSel->summary( Y2PM::getPreferredLocale() ) );
     text.replace( QRegExp( "Graphical Basis System" ), "Graphical Base System" );
     setText( summaryCol(), text );
 
-    _isInstalled = pkgSel->hasInstalledObj();
     setStatusIcon();
 }
 
 
 
-YQPkgSel::~YQPkgSel()
+YQPkgSelListItem::~YQPkgSelListItem()
 {
-
-}
-
-
-PMSelectable::UI_Status
-YQPkgSel::status() const
-{
-    if ( ! _pkgSel )
-    {
-	y2error( "NULL package" );
-	return isInstalled() ? PMSelectable::S_KeepInstalled : PMSelectable::S_NoInst;
-    }
-
-    return _pkgSel->getSelectable()->status();
+    // NOP
 }
 
 
 void
-YQPkgSel::setStatus( PMSelectable::UI_Status newStatus )
+YQPkgSelListItem::cycleStatus()
 {
-    _pkgSel->getSelectable()->set_status( newStatus );
-    setStatusIcon();
-}
-
-
-void
-YQPkgSel::setStatusIcon()
-{
-    QPixmap icon = YQIconPool::pkgNoInst();
-
-    switch ( status() )
-    {
-        case PMSelectable::S_Taboo:		icon = YQIconPool::pkgTaboo();		break;
-        case PMSelectable::S_Del:		icon = YQIconPool::pkgDel();		break;
-        case PMSelectable::S_Update:		icon = YQIconPool::pkgUpdate();		break;
-        case PMSelectable::S_Install:		icon = YQIconPool::pkgInstall();	break;
-        case PMSelectable::S_AutoDel:		icon = YQIconPool::pkgAutoDel();	break;
-        case PMSelectable::S_AutoInstall:	icon = YQIconPool::pkgAuto();		break;
-        case PMSelectable::S_AutoUpdate:	icon = YQIconPool::pkgAuto();		break;
-        case PMSelectable::S_KeepInstalled:	icon = YQIconPool::pkgKeepInstalled();	break;
-        case PMSelectable::S_NoInst:		icon = YQIconPool::pkgNoInst();		break;
-
-	    // Intentionally omitting 'default' branch so the compiler can
-	    // catch unhandled enum states
-    }
-
-    setPixmap( statusCol(), icon );
-}
-
-
-void
-YQPkgSel::cycleStatus()
-{
-    PMSelectable::UI_Status oldStatus = status();
-    PMSelectable::UI_Status newStatus = oldStatus;
-
-    if ( isInstalled() )
-    {
-	switch ( oldStatus )
-	{
-	    case PMSelectable::S_KeepInstalled:	newStatus = _pkgSel->hasCandidateObj() ?
-						    PMSelectable::S_Update : PMSelectable::S_Del;
-						break;
-	    case PMSelectable::S_Update:	newStatus = PMSelectable::S_Del;		break;
-	    case PMSelectable::S_Del:		newStatus = PMSelectable::S_KeepInstalled;	break;
-	    default:				newStatus = PMSelectable::S_KeepInstalled;	break;
-	}
-    }
-    else	// pkg not installed
-    {
-	switch ( oldStatus )
-	{
-	    case PMSelectable::S_NoInst:	newStatus = PMSelectable::S_Install;	break;
-	    default:				newStatus = PMSelectable::S_NoInst;	break;
-
-		// Intentionally NOT cycling through YQPkgTaboo:
-		// This status is not common enough for that.
-	}
-    }
-
-    setStatus( newStatus );
-
+    YQPkgObjListItem::cycleStatus();
     Y2PM::selectionManager().activate( Y2PM::packageManager() );
     _pkgSelList->sendUpdatePackages();
 }
@@ -402,16 +195,16 @@ YQPkgSel::cycleStatus()
  * +1 if this >	 other
  **/
 int
-YQPkgSel::compare( QListViewItem *	otherListViewItem,
-		   int			col,
-		   bool			ascending ) const
+YQPkgSelListItem::compare( QListViewItem *	otherListViewItem,
+			   int			col,
+			   bool			ascending ) const
 {
-    YQPkgSel * other = (YQPkgSel *) otherListViewItem;
+    YQPkgSelListItem * other = (YQPkgSelListItem *) otherListViewItem;
 
-    if ( ! _pkgSel || ! other || ! other->pkgSel() )
+    if ( ! _pmSel || ! other || ! other->pmSel() )
 	return 0;
 
-    return _pkgSel->order().compare( other->pkgSel()->order() );
+    return _pmSel->order().compare( other->pmSel()->order() );
 }
 
 

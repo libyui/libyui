@@ -62,7 +62,7 @@ YQPkgObjList::~YQPkgObjList()
 
 
 void
-YQPkgObjList::addPkgObj( PMObjectPtr pmObj )
+YQPkgObjList::addPkgObjItem( PMObjectPtr pmObj )
 {
     if ( ! pmObj )
     {
@@ -176,6 +176,13 @@ void
 YQPkgObjListItem::setStatus( PMSelectable::UI_Status newStatus )
 {
     pmObj()->getSelectable()->set_status( newStatus );
+    setStatusIcon();
+}
+
+
+void
+YQPkgObjListItem::updateStatus()
+{
     setStatusIcon();
 }
 

@@ -34,9 +34,7 @@ YQPkgSelectionsFilterView::YQPkgSelectionsFilterView( YUIQt *yuiqt, QWidget *par
     : QVBox( parent )
     , yuiqt( yuiqt )
 {
-    y2milestone( "Creating selections view" );
-
-    _selList = new YQPkgSelList( yuiqt, this );
+    _selList = new YQPkgSelList( this );
 }
 
 

@@ -22,16 +22,14 @@
 #ifndef YQPkgSelList_h
 #define YQPkgSelList_h
 
-#include <qlistview.h>
-#include <qpixmap.h>
-#include <y2pm/PMPackage.h>
+#include <YQPkgObjList.h>
+#include <y2pm/PMSelection.h>
 
 
-class YQPkgSel;	// shorter name than "YQPkgSelListItem"
-class YUIQt;
+class YQPkgSelListItem;
 
 
-class YQPkgSelList : public QListView
+class YQPkgSelList : public YQPkgObjList
 {
     Q_OBJECT
 
@@ -40,18 +38,12 @@ public:
     /**
      * Constructor
      **/
-    YQPkgSelList( YUIQt *yuiqt, QWidget *parent );
+    YQPkgSelList( QWidget *parent );
 
     /**
      * Destructor
      **/
     virtual ~YQPkgSelList();
-
-
-    // Column numbers
-
-    int statusCol()	const	{ return _statusCol;	}
-    int summaryCol()	const	{ return _summaryCol;	}
 
 
 public slots:
@@ -76,28 +68,7 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addPkgSel( PMSelectionPtr sel );
-
-    /**
-     * Dispatcher slot for mouse click: cycle status depending on column
-     **/
-    void slotPkgSelClicked( int		button,
-			    YQPkgSel *	sel,
-			    int		col );
-
-    /**
-     * Select a list entry (if there is any).
-     * Usually this will be the first list entry, but don't rely on that - this
-     * might change without notice. Emits signal selectionChanged().
-     **/
-    void selectSomething();
-
-    /**
-     * Update the status display of all list entries.
-     * This is an expensive operation.
-     **/
-    void updateAllItemStates();
-    
+    void addPkgSelItem( PMSelectionPtr sel );
 
     /**
      * Emit an updatePackages() signal.
@@ -109,14 +80,14 @@ public:
     /**
      * Returns the currently selected item or 0 if there is none.
      **/
-    YQPkgSel * selection() const;
+    YQPkgSelListItem * selection() const;
 
 
 signals:
 
     /**
      * Emitted when it's time to update displayed package information,
-     * e.g., package states
+     * e.g., package states.
      **/
     void updatePackages();
 
@@ -135,26 +106,6 @@ signals:
      * Emitted when filtering is finished.
      **/
     void filterFinished();
-    /**
-     * Emitted for mouse clicks on a selection.
-     **/
-    void pkgSelClicked		( int		button,
-				  YQPkgSel *	sel,
-				  int		col );
-
-    /**
-     * Emitted for mouse double clicks on a selection.
-     **/
-    void pkgSelDoubleClicked	( int		button,
-				  YQPkgSel *	sel,
-				  int		col );
-
-
-    /**
-     * Emitted when a package selection is selected in the list.
-     * May be called with a null poiner if no package is selected.
-     **/
-    void selectionChanged	( PMSelectionPtr sel );
 
 
 protected slots:
@@ -163,56 +114,11 @@ protected slots:
      * Fill the selection list.
      **/
     void fillList();
-
-
-protected:
-
-    /**
-     * Handle mouse clicks.
-     * Reimplemented from QScrollView.
-     **/
-    virtual void contentsMousePressEvent( QMouseEvent * e );
-
-    /**
-     * Handle mouse clicks.
-     * Reimplemented from QScrollView.
-     **/
-    virtual void contentsMouseReleaseEvent( QMouseEvent* );
-
-    /**
-     * Handle mouse clicks.
-     * Reimplemented from QScrollView.
-     **/
-    virtual void contentsMouseDoubleClickEvent( QMouseEvent* );
-
-
-    // Data members
-
-    YUIQt *		yuiqt;
-    QListViewItem *	mousePressedItem;
-    int			mousePressedCol;
-    int			mousePressedButton;
-
-
-private:
-
-    int _statusCol;
-    int _summaryCol;
-    int _sizeCol;
-    int _versionCol;
-    int _srpmStatusCol;
-
-    QPixmap _iconOff;
-    QPixmap _iconOn;
-    QPixmap _iconAuto;
-    QPixmap _iconDelete;
-    QPixmap _iconUpdate;
-    QPixmap _iconTaboo;
 };
 
 
 
-class YQPkgSel: public QListViewItem
+class YQPkgSelListItem: public YQPkgObjListItem
 {
 public:
 
@@ -220,54 +126,34 @@ public:
      * Constructor. Creates a YQPkgSelList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgSel( YQPkgSelList * pkgSelList, PMSelectionPtr sel );
+    YQPkgSelListItem( YQPkgSelList * pkgSelList, PMSelectionPtr sel );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgSel();
+    virtual ~YQPkgSelListItem();
 
     /**
-     * Returns the parent package list
+     * Returns the original object within the package manager backend.
      **/
-    YQPkgSelList * pkgSelList() { return _pkgSelList; }
+    PMSelectionPtr pmSel() { return _pmSel; }
 
     /**
-     * Returns the original object within the package manager backend
+     * Returns the original object within the package manager backend.
      **/
-    PMSelectionPtr pkgSel() { return _pkgSel; }
+    const PMSelectionPtr constPkgSel() const { return _pmSel; }
 
     /**
-     * Returns the original object within the package manager backend
-     **/
-    const PMSelectionPtr constPkgSel() const { return _pkgSel; }
-
-    /**
-     * Returns the (binary RPM) package status
+     * Returns the (binary RPM) package status.
      **/
     PMSelectable::UI_Status status() const;
 
     /**
-     * Set the (binary RPM) package status
+     * Cycle the package status to the next valid value.
+     * Reimplemented from YQPkgObjList.
      **/
-    void setStatus( PMSelectable::UI_Status newStatus );
-
-    /**
-     * Set a status icon according to the package's status
-     **/
-    void setStatusIcon();
-
-    /**
-     * Cycle the package status to the next valid value
-     **/
-    void cycleStatus();
-
-    /**
-     * Return wheter or not this selection is already installed, i.e. if it can
-     * be updated or deleted.
-     **/
-    bool isInstalled() const { return _isInstalled; }
-
+    virtual void cycleStatus();
+    
     /**
      * Comparison function used for sorting the list.
      * Returns:
@@ -275,7 +161,8 @@ public:
      *	0 if this == other
      * +1 if this >  other
      *
-     * Reimplemented from QListViewItem
+     * Reimplemented from QListViewItem:
+     * Sort by PMSelection::order() only.
      **/
     virtual int compare( QListViewItem *	other,
 			 int			col,
@@ -292,9 +179,7 @@ protected:
     // Data members
 
     YQPkgSelList	*	_pkgSelList;
-    PMSelectionPtr		_pkgSel;
-
-    bool			_isInstalled;
+    PMSelectionPtr		_pmSel;
 };
 
 

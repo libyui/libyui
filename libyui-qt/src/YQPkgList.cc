@@ -68,7 +68,7 @@ YQPkgList::~YQPkgList()
 
 
 void
-YQPkgList::addPkg( PMPackagePtr pmPkg )
+YQPkgList::addPkgItem( PMPackagePtr pmPkg )
 {
     if ( ! pmPkg )
     {
