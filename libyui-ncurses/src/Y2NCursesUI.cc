@@ -56,7 +56,6 @@
 #include "NCMultiLineEdit.h"
 #include "NCPackageSelector.h"
 #include "NCPkgTable.h"
-#include "NCNew.h"
 #include "NCstring.h"
 
 extern string language2encoding( string lang );
