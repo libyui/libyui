@@ -955,12 +955,15 @@ void YQWizard::setDialogHeading( const QString & headingText )
 }
 
 
-void YQWizard::setHelpText( const QString & helpText )
+void YQWizard::setHelpText( QString helpText )
 {
     if ( _helpBrowser )
     {
 	if ( helpText )
+	{
+	    helpText.replace( "&product;", YQUI::ui()->productName() );
 	    _helpBrowser->setText( helpText );
+	}
 	else
 	    _helpBrowser->clear();
     }

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Mar 11 18:53:02 CET 2004 - sh@suse.de
+
+- Fixed bug #35611: &product; macro not expanded
+- Fixed bug #35623: Allow status "protected" for YOU patches
+
+-------------------------------------------------------------------
 Wed Mar 10 15:55:04 CET 2004 - lnussel@suse.de
 
 - New conflict resolution remove referers (#24306) 

@@ -149,7 +149,7 @@ public slots:
     /**
      * Set the help text. 0 is a valid value - it clears the old text.
      **/
-    void setHelpText( const QString & helpText );
+    void setHelpText( QString helpText );
 
     /**
      * Adapt the size of the client area (the ReplacePoint(`id(`contents)) to
