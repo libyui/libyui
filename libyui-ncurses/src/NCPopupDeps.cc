@@ -223,7 +223,6 @@ bool NCPopupDeps::fillDepsPackageList( NCPkgTable * table )
     
     // create the list of "bad" packages
     vector< PkgDep::ErrorResult>::iterator it = dependencies.begin();
-    unsigned int i = 0;
     vector<string> pkgLine;
     pkgLine.reserve(4);
     table->itemsCleared ();
@@ -242,7 +241,6 @@ bool NCPopupDeps::fillDepsPackageList( NCPkgTable * table )
 
 	    table->addLine( objPtr->getSelectable()->status(), //  get the package status
 			    pkgLine,
-			    i,		// the index
 			    objPtr );	// the corresponding package pointer
 	
 	}
@@ -254,12 +252,10 @@ bool NCPopupDeps::fillDepsPackageList( NCPkgTable * table )
 
 	    table->addLine( PMSelectable::S_NoInst, // use status not installed
 			    pkgLine,
-			    i,		// the index
 			    PMObjectPtr() );	// no pointer available 
 	}
 	
 	++it;
-	i++;
     }
 
     table->drawList();
@@ -303,7 +299,6 @@ string NCPopupDeps::getDependencyKind(  const PkgDep::ErrorResult & error )
 bool NCPopupDeps::concretelyDependency( int index )
 {
     unsigned int size = dependencies.size();
-    unsigned int i = 0;
     vector<string> pkgLine;
     pkgLine.reserve(4);
     bool labelSet = false;
@@ -331,11 +326,9 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    pkgLine.push_back( (*it).rel.asString() );
 	    deps->addLine( PMSelectable::S_NoInst, // use status NOInst
 			   pkgLine,
-			   i,		// the index
 			   PMObjectPtr() );	// null pointer
 		
 	    ++it;
-	    i++;
 	}
 	    
 	errorLabel1->setLabel( YCPString(getLabelRequire1())  );
@@ -360,12 +353,10 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    
 		deps->addLine( objPtr->getSelectable()->status(), //  get the package status
 			       pkgLine,
-			       i,		// the index
 			       objPtr );	// the corresponding package
 		lastPtr = (*it).solvable;	
 	    }
 	    ++it;
-	    i++;
 	}
 	if ( !labelSet )
 	{
@@ -393,11 +384,9 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    
 		deps->addLine( objPtr->getSelectable()->status(), //  get the package status
 			       pkgLine,
-			       i,		// the index
 			       objPtr );	// the corresponding package
 	    }
 	    ++it;
-	    i++;
 	}
 	if ( !labelSet )
 	{
@@ -429,7 +418,6 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    
 		deps->addLine( objPtr->getSelectable()->status(), //  get the package status
 			       pkgLine,
-			       i,		// the index
 			       objPtr );	// the corresponding package
 
 		lastPtr =  (*it).solvable;
@@ -440,16 +428,14 @@ bool NCPopupDeps::concretelyDependency( int index )
 		pkgLine.push_back( (*it).name );
 		deps->addLine( PMSelectable::S_NoInst, // use status NOInst
 			       pkgLine,
-			       i,		// the index
 			       PMObjectPtr() );	// null pointer
 
 		lastName = (*it).name; 
 	    }
 
 	    ++it;
-	    i++;
-	    
 	}
+
 	PMObjectPtr causePtr = error.solvable;
 	if ( !labelSet )
 	{
@@ -601,7 +587,6 @@ bool NCPopupDeps::postAgain()
 	    line.push_back( PkgNames::NoConflictText().str() );
 	    pkgs->addLine( PMSelectable::S_NoInst,
 			   line,
-			   0,
 			   PMObjectPtr() );
 	    pkgs->drawList();
 

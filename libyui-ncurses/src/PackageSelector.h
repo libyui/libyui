@@ -336,14 +336,14 @@ class PackageSelector
      * Returns true if there is a match, false otherwise or if 'pkg' is 0.
      * @return bool 
      **/
-    bool checkPackage( PMPackagePtr pkg, YStringTreeItem * rpmGroup, unsigned int index );
+    bool checkPackage( PMPackagePtr pkg, YStringTreeItem * rpmGroup );
 
     /**
      * Check if 'patch' matches the selected filter.
      * Returns true if there is a match, false otherwise or if 'patch' is 0.
      * @return bool
      **/ 
-    bool checkPatch(  PMYouPatchPtr patch, string filter, unsigned int index );
+    bool checkPatch(  PMYouPatchPtr patch, string filter );
 
    /**
     * Returns whether automatic dependency is on or off

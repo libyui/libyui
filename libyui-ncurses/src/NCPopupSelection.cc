@@ -143,7 +143,6 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
 	
 	sel->addLine( (*it)->getSelectable()->status(),	// the status 
 		      pkgLine,
-		      i,
 		      (*it) );		// PMSelectionPtr
     }
 

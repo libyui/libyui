@@ -313,8 +313,6 @@ void PackageSelector::setVisibleInfo( const YCPValue & info )
 //
 bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgPtr )
 {
-    unsigned int i = 0;
-
     if ( !pkgTable )
     {
 	NCERR << "No table widget for availbale packages existing" << endl;
@@ -339,8 +337,7 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
     // show all availables
     while ( it != selectable->av_end() )
     {
-	pkgTable->createListEntry( (*it), i );
-	i++;
+	pkgTable->createListEntry( (*it) );
 	++it;
     }
 
@@ -365,7 +362,6 @@ bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr 
 {
     list<PMSelectablePtr> slcList;
     list<PMSelectablePtr>::iterator listIt;
-    unsigned int i;
 
     NCPkgTable * packageList = getPackageList();
     
@@ -383,9 +379,9 @@ bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr 
 	slcList = sel->inspacks_ptrs ( );
     }
 
-    for ( i = 0, listIt = slcList.begin(); listIt != slcList.end();  ++listIt, i++ )    
+    for ( listIt = slcList.begin(); listIt != slcList.end();  ++listIt )    
     {
-	packageList->createListEntry( (*listIt)->theObject(), i );
+	packageList->createListEntry( (*listIt)->theObject() );
     }
 
     // show the package table
@@ -435,7 +431,6 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
     PMManager::PMSelectableVec::const_iterator listIt = Y2PM::packageManager().begin();
 
     // fill the package table
-    unsigned int i = 0;
     PMPackagePtr pkg;
     string description = "";
     string provides = "";
@@ -468,11 +463,10 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
 	     )
 	{
 	    // search sucessful
-	    packageList->createListEntry( pkg, i );
+	    packageList->createListEntry( pkg );
 	}
 	
 	++listIt;
-	i++;
     }
 
     // show the package list
@@ -510,12 +504,9 @@ bool PackageSelector::fillPatchList( string filter )
     PMManager::PMSelectableVec::const_iterator it = Y2PM::youPatchManager().begin();
 
     // fill the package table
-    unsigned int i;
     PMYouPatchPtr patchPtr;    
 
-    for ( i = 0, it = Y2PM::youPatchManager().begin() ;
-	  it != Y2PM::youPatchManager().end();
-	  ++it, i++ )
+    for ( it = Y2PM::youPatchManager().begin(); it != Y2PM::youPatchManager().end(); ++it )
     {
 	PMSelectablePtr selectable = *it;
 
@@ -526,8 +517,7 @@ bool PackageSelector::fillPatchList( string filter )
 	else
 	    patchPtr = selectable->theObject();
 
-	checkPatch( patchPtr, filter, i );
-			  
+	checkPatch( patchPtr, filter );
     }
 
     // show the patches
@@ -562,15 +552,13 @@ bool PackageSelector::fillUpdateList( )
     packageList->itemsCleared ();
 
     PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().updateBegin();
-    unsigned int i = 0;
 
     while ( it != Y2PM::packageManager().updateEnd() )
     {
 	PMSelectablePtr selectable = *it;
-	packageList->createListEntry( (*it)->theObject(), i );
+	packageList->createListEntry( (*it)->theObject() );
 	    
 	++it;
-	i++;
     }
 
     // show the list
@@ -604,10 +592,9 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, PMObjectPtr obj
     list<PMPackagePtr>::const_iterator listIt;
     NCMIL << "Number of patch packages: " << packages.size() << endl;
 	
-    unsigned int i;
-    for ( i = 0, listIt = packages.begin(); listIt != packages.end();  ++listIt, i++ )    
+    for ( listIt = packages.begin(); listIt != packages.end();  ++listIt )    
     {
-	pkgTable->createListEntry( (*listIt), i );
+	pkgTable->createListEntry( (*listIt) );
     }
 
     // show the list
@@ -642,7 +629,6 @@ bool PackageSelector::fillChangesList(  )
 
     // fill the package table
     list<PMSelectablePtr>::iterator listIt;
-    unsigned int i;
     PMPackagePtr pkgPtr;
     
     // do the dependency in case the dependency check is off ????
@@ -651,7 +637,7 @@ bool PackageSelector::fillChangesList(  )
 	// showPackageDependencies( true );
     }
     
-    for ( i = 0, listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt, i++ )
+    for ( listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt )
     {
 	PMSelectablePtr selectable = *listIt;
 	if ( selectable->status() == PMSelectable::S_Install
@@ -662,7 +648,7 @@ bool PackageSelector::fillChangesList(  )
 	     || selectable->status() == PMSelectable::S_Update
 	     || selectable->status() == PMSelectable::S_AutoUpdate)
 	{
-	    packageList->createListEntry( (*listIt)->theObject(), i );
+	    packageList->createListEntry( (*listIt)->theObject() );
 	}
     }
 
@@ -705,11 +691,10 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
 
     // fill the package table
     list<PMSelectablePtr>::iterator listIt;
-    unsigned int i;
     PMPackagePtr pkgPtr;
 
 
-    for ( i = 0, listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt, i++ )
+    for ( listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt )
     {
 	PMSelectablePtr selectable = *listIt;
 	    
@@ -722,8 +707,8 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
 	// entries for the same package!
 	    
 	bool match =
-	    checkPackage( selectable->candidateObj(), rpmGroup, i ) ||  
-	    checkPackage( selectable->installedObj(), rpmGroup, i ); 
+	    checkPackage( selectable->candidateObj(), rpmGroup ) ||  
+	    checkPackage( selectable->installedObj(), rpmGroup ); 
 
 	// If there is neither an installed nor a candidate package, check
 	// any other instance.  
@@ -731,7 +716,7 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
 	if ( ! match			&&
 	     ! selectable->installedObj()	&&
 	     ! selectable->candidateObj()     )
-	    checkPackage( selectable->theObject(), rpmGroup, i );
+	    checkPackage( selectable->theObject(), rpmGroup );
 
     }
 
@@ -783,8 +768,7 @@ bool PackageSelector::match ( string s1, string s2, bool ignoreCase )
 //
 //
 bool PackageSelector::checkPackage( PMPackagePtr pkg,
-				    YStringTreeItem * rpmGroup,
-				    unsigned int index )
+				    YStringTreeItem * rpmGroup )
 {
     if ( ! pkg || ! rpmGroup )
 	return false;
@@ -805,7 +789,7 @@ bool PackageSelector::checkPackage( PMPackagePtr pkg,
 
     if ( pkg->group_ptr()->isChildOf( rpmGroup ) )
     {
-	packageList->createListEntry( pkg, index );
+	packageList->createListEntry( pkg );
 	
 	return true;
     }
@@ -816,10 +800,8 @@ bool PackageSelector::checkPackage( PMPackagePtr pkg,
 }
 
 bool PackageSelector::checkPatch( PMYouPatchPtr patchPtr,
-				  string filter,
-				  unsigned int index )
+				  string filter )
 {
-
     NCPkgTable * packageList = getPackageList();
     
     if ( !packageList || !patchPtr )
@@ -835,7 +817,7 @@ bool PackageSelector::checkPatch( PMYouPatchPtr patchPtr,
 				   patchPtr->getSelectable()->status() == PMSelectable::S_NoInst ) )
 	 )
     {
-	packageList->createPatchEntry( patchPtr, index );
+	packageList->createPatchEntry( patchPtr );
 	return true;
     }
     else
@@ -852,7 +834,7 @@ bool PackageSelector::checkPatch( PMYouPatchPtr patchPtr,
 //
 bool PackageSelector::SearchHandler( const NCursesEvent& event)
 {
-     NCPkgTable * packageList = getPackageList();
+    NCPkgTable * packageList = getPackageList();
     
     if ( !packageList || !searchPopup )
     {

@@ -140,13 +140,11 @@ public:
     * This method is called to add a line to the package list.
     * @param status The package status (first column of the table)
     * @param elements A vector<string> containing the package data
-    * @param index The index in package list
     * @param objPtr The pointer to the packagemanager object
     * @eturn void
     */
     virtual void addLine( PMSelectable::UI_Status status,
 			  const vector<string> & elements,
-			  int index,
 			  PMObjectPtr objPtr );
 
    /**
@@ -282,20 +280,16 @@ public:
     /**
      * Creates a line in the package table.
      * @param pkgPtr The package pointer 
-     * @param index  The index (line) 
      * @return bool
      */  
-   bool createListEntry ( PMPackagePtr pkgPtr,
-			  unsigned int index );
+   bool createListEntry ( PMPackagePtr pkgPtr );
 
    /**
      * Creates a line in the YOU patch table.
      * @param pkgPtr The YOU patch pointer 
-     * @param index  The index (line) 
      * @return bool
      */  
-   bool createPatchEntry ( PMYouPatchPtr pkgPtr,
-			  unsigned int index );
+   bool createPatchEntry ( PMYouPatchPtr pkgPtr );
  
 };
 

@@ -141,7 +141,6 @@ NCPkgTable::~NCPkgTable()
 //
 void NCPkgTable::addLine( PMSelectable::UI_Status stat,
 			  const vector<string> & elements,
-			  int index,
 			  PMObjectPtr objPtr )
 {
     vector<NCTableCol*> Items( elements.size()+1, 0 );
@@ -458,8 +457,7 @@ void NCPkgTable::fillHeader( )
 // createListEntry
 //
 //
-bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr,
-				   unsigned int index )
+bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr )
 {
     vector<string> pkgLine;
     pkgLine.reserve(5);
@@ -542,7 +540,6 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr,
     
     addLine( status,	// get the package status
 	     pkgLine, 	// the package data
-	     index,	// the index
 	     pkgPtr );	// the corresponding package pointer
 
     return true;
@@ -553,8 +550,7 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr,
 // createPatchEntry
 //
 //
-bool NCPkgTable::createPatchEntry ( PMYouPatchPtr patchPtr,
-				    unsigned int index )
+bool NCPkgTable::createPatchEntry ( PMYouPatchPtr patchPtr )
 {
     vector<string> pkgLine;
     pkgLine.reserve(5);
@@ -573,7 +569,6 @@ bool NCPkgTable::createPatchEntry ( PMYouPatchPtr patchPtr,
     
     addLine( patchPtr->getSelectable()->status(), //  get the status
 	     pkgLine,
-	     index,		// the index
 	     patchPtr );	// the corresponding pointer
 
     return true;
