@@ -244,7 +244,6 @@ bool ObjectStatStrategy::toggleStatus( PMObjectPtr objPtr,
 	    newStatus = PMSelectable::S_Install ;
 	    break;
 	case PMSelectable::S_AutoInstall:
-	    // FIXME show a warning !!!!
 	    newStatus = PMSelectable::S_NoInst;
 	    break;
 	case PMSelectable::S_AutoDel:

@@ -399,7 +399,6 @@ int NCIntField::enterPopup( wchar_t first )
   NCPopupTextEntry dialog( at, label, text, vlen, 0,
 			   NCTextEntry::NUMBER );
 
-  // FIXME: is here something to fix?
   while ( dialog.post() != -1 ) {
       
     int nval = atoi( dialog.getText()->value().c_str() );

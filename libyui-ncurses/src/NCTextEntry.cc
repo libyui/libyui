@@ -256,7 +256,7 @@ bool NCTextEntry::validKey( wint_t key ) const
   // private: NCstring validChars;  
   const wstring vwch( validChars.str() );
 
-  if ( vwch.empty() )		// FIXME: test with validChars NOT empty !!!
+  if ( vwch.empty() )
     return true;
 
   if ( key < 0 || WCHAR_MAX < key )
@@ -367,7 +367,7 @@ void NCTextEntry::tUpdate()
 
   // draw field
   twin->bkgdset( style.data );
-  for ( /*adjusted i*/; *cp && i < end; ++i ) // FIXME: test password entry
+  for ( /*adjusted i*/; *cp && i < end; ++i )
   {
       if ( passwd )
       {
@@ -494,7 +494,7 @@ NCursesEvent NCTextEntry::wHandleInput( wint_t key )
       update = false;
       beep   = true;
    }
-   else if ( fldtype == NUMBER )	// FIXME: test field type NUMBER
+   else if ( fldtype == NUMBER )
    {	
        if ( bufferFull() && key != L'+' )
        {
