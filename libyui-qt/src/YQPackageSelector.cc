@@ -328,7 +328,7 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     CHECK_PTR( _pkgDescriptionView );
     _pkgDescriptionView->setMinimumSize( 0, 0 );
 
-    _detailsViews->addTab( _pkgDescriptionView, _( "&Description" ) );
+    _detailsViews->addTab( _pkgDescriptionView, _( "D&escription" ) );
     _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
     connect( _pkgList,			SIGNAL( selectionChanged    ( PMObjectPtr ) ),
@@ -351,7 +351,7 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     QLabel * dummy;
     dummy = new QLabel( "Versions of this package\non all the different installation media\n\nstill missing\n(Known bug)",
 			_detailsViews );
-    _detailsViews->addTab( dummy, _( "V&ersions" ) );
+    _detailsViews->addTab( dummy, _( "&Versions" ) );
 
 #if 0
     // DEBUG
@@ -398,7 +398,7 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 		 this,         SLOT  ( resolveDependencies() ) );
 
 
-	_autoDependenciesCheckBox = new QCheckBox( _( "&Automatic dependency checking" ), button_box );
+	_autoDependenciesCheckBox = new QCheckBox( _( "&Auto check" ), button_box );
 	CHECK_PTR( _autoDependenciesCheckBox );
 	_autoDependenciesCheckBox->setChecked( true );
     }
@@ -570,8 +570,17 @@ YQPackageSelector::fakeData()
 void
 YQPackageSelector::reject()
 {
-    _yuiqt->setMenuSelection( YCPSymbol("cancel", true) );
-    _yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
+    if ( QMessageBox::warning( this, "",
+			       _( "Abandon all changes?" ),
+			       _( "&OK" ), _( "&Cancel" ), "",
+			       1, // defaultButtonNumber (from 0)
+			       1 ) // escapeButtonNumber
+	 == 0 )	// Proceed upon button #0 (OK)
+    {
+
+	_yuiqt->setMenuSelection( YCPSymbol("cancel", true) );
+	_yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
+    }
 }
 
 
