@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Sep  9 20:01:22 CEST 2002 - sh@suse.de
+
+- V 2.6.16
+- Prepared disk usage display (still disabled for internal reasons)
+- Lots of small fixes 
+
+-------------------------------------------------------------------
 Mon Sep  9 18:46:35 CEST 2002 - sh@suse.de
 
 - Fixed minimumSize() hints for YQPkg* - works now in 640x480
