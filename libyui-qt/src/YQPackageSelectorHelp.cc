@@ -45,6 +45,9 @@ YQPackageSelector::help()
 void
 YQPackageSelector::symbolHelp()
 {
+    // Make sure all images used here are specified in
+    // helpimages_DATA in include/Makefile.am !
+    
     // Translators: Headline for help about package status icons
     QString html = YQPkgTextDialog::htmlHeading( _( "Symbols Overview" ) );
 

@@ -102,6 +102,27 @@ pkginclude_HEADERS =				\
 
 
 
+# Those icons are used at runtime by the online help system.
+# For everything else, they are included in the source code -
+# no need to install all the other icons as well.
+#
+# -sh 2003-01-14
+
+helpimagesdir = $(imagedir)
+
+helpimages_DATA =				\
+	autodel.xpm				\
+	autoinstall.xpm				\
+	autoupdate.xpm				\
+	del.xpm					\
+	install.xpm				\
+	keepinstalled.xpm			\
+	noinst.xpm				\
+	taboo.xpm				\
+	update.xpm
+
+EXTRA_DIST = $(helpimages_DATA)
+
 CLEANFILES = y2qt.kdoc
 
 #<INSTALL-HEADER-TARGET>
