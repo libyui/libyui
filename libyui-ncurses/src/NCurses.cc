@@ -179,7 +179,7 @@ int NCurses::ripinit( WINDOW * w, int c )
 
 void NCurses::init()
 {
-  UIMIL << "Launch NCurses..."
+  UIMIL << "Launch NCurses..." 
 #ifdef VERSION
     << "(ui-ncurses-" << VERSION << ")"
 #endif
@@ -294,7 +294,68 @@ void NCurses::init_title()
 //
 void NCurses::init_screen()
 {
+    bool redefine = false;
 
+    char *value = getenv( "Y2NCPSEUDO" );
+
+    if ( value != NULL )
+    {
+	if ( strcmp(value, "0") == 0 )
+	    redefine = false;		// use ACS in any case
+	else
+	    redefine = true;
+    }
+    else if (  NCstring::terminalEncoding() != "UTF-8" )
+    {
+	redefine = true;
+    }
+    
+    if ( redefine )
+    {
+	// redefine ACS chars (workaround for bug #30512) 
+	chtype cch = 0;
+
+	NCattribute::setChar(cch, '+');
+	ACS_ULCORNER = cch;
+	ACS_LLCORNER = cch;
+	ACS_URCORNER = cch;
+	ACS_LRCORNER = cch;
+	ACS_LTEE = cch;
+	ACS_RTEE = cch;
+	ACS_BTEE = cch;
+	ACS_TTEE = cch;
+	ACS_PLUS = cch;
+
+	NCattribute::setChar(cch, '|');
+	ACS_VLINE = cch;
+
+	NCattribute::setChar(cch, '-' );
+	ACS_HLINE = cch;
+
+	NCattribute::setChar(cch, '#' );
+	ACS_DIAMOND = cch;
+	ACS_CKBOARD = cch;
+	ACS_BOARD = cch;
+
+	NCattribute::setChar(cch, '<' );
+	ACS_LARROW = cch;
+
+	NCattribute::setChar(cch, '>' );
+	ACS_RARROW = cch;   
+
+	NCattribute::setChar(cch, 'v' );
+	ACS_DARROW = cch;
+
+	NCattribute::setChar(cch, '^' );
+	ACS_UARROW = cch;   
+    }
+#if 0
+    ret = stdpan->addch( 1, 1, ACS_HLINE);
+    ret = stdpan->addch( 2, 1, ACS_VLINE );
+    Redraw();
+    ::getch();
+#endif
+    
 }
 
 ///////////////////////////////////////////////////////////////////
