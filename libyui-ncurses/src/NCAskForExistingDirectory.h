@@ -29,6 +29,7 @@
 #include "NCFileTable.h"
 #include "NCPushButton.h"
 #include "NCComboBox.h"
+#include "NCCheckBox.h"
 
 
 ///////////////////////////////////////////////////////////////////
@@ -48,9 +49,12 @@ private:
     NCPushButton * cancelButton;
     NCComboBox * dirName;
     NCFileTable *dirList;		// directory list
-
+    NCCheckBox *detailed;
+    
     string currentDir;			// currently selected directory
     string startDir;
+
+    bool getCheckBoxValue( NCCheckBox * detailed );
     
 protected:
 

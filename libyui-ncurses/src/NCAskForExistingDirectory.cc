@@ -53,6 +53,7 @@ NCAskForExistingDirectory::NCAskForExistingDirectory( const wpos at,
     , cancelButton( 0 )
     , dirName( 0 )
     , dirList( 0 )
+    , detailed ( 0 )
     , currentDir( iniDir->value() )
     , startDir( iniDir->value() ) 
 {
@@ -117,7 +118,7 @@ void NCAskForExistingDirectory::createLayout( const YCPString & headline )
     NCLabel * head = new NCLabel( split, opt, headline );
     split->addChild( head );
 
-    split->addChild( new NCSpacing( split, opt, 0.8, false, true ) );
+    split->addChild( new NCSpacing( split, opt, 0.4, false, true ) );
 
     opt.isHStretchable.setValue( true );
 
@@ -136,6 +137,13 @@ void NCAskForExistingDirectory::createLayout( const YCPString & headline )
     vSplit->addChild( new NCSpacing( vSplit, opt, 0.6, false, true ) );
 
     split->addChild( frame );
+
+    // add the checkBox detailed
+    NCSplit * hSplit = new NCSplit( split, opt, YD_HORIZ );
+    split->addChild( hSplit );
+    detailed = new NCCheckBox( hSplit, opt, YCPString( "Details view" ), false );
+    hSplit->addChild( new NCSpacing( hSplit, opt, 0.1, true, false ) );
+    hSplit->addChild( detailed );
     
     // add the list of directories
     dirList = new NCFileTable( split, opt, NCFileTable::T_Overview );
@@ -144,27 +152,27 @@ void NCAskForExistingDirectory::createLayout( const YCPString & headline )
     split->addChild( new NCSpacing( split, opt, 0.4, false, true ) );
 
     // HBox for the buttons
-    NCSplit * hSplit = new NCSplit( split, opt, YD_HORIZ );
-    split->addChild( hSplit ); 
+    NCSplit * hSplit1 = new NCSplit( split, opt, YD_HORIZ );
+    split->addChild( hSplit1 ); 
     opt.isHStretchable.setValue( true );
-    hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
+    hSplit1->addChild( new NCSpacing( hSplit1, opt, 0.2, true, false ) );
 
     // add the OK button
     opt.key_Fxx.setValue( 10 );
-    okButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::OKLabel()) );
+    okButton = new NCPushButton( hSplit1, opt, YCPString(PkgNames::OKLabel()) );
     okButton->setId( PkgNames::OkButton() );
 
-    hSplit->addChild( okButton );
+    hSplit1->addChild( okButton );
 
-    hSplit->addChild( new NCSpacing( hSplit, opt, 0.4, true, false ) );
+    hSplit1->addChild( new NCSpacing( hSplit1, opt, 0.4, true, false ) );
       
     // add the Cancel button
     opt.key_Fxx.setValue( 9 );
-    cancelButton = new NCPushButton( hSplit, opt, PkgNames::CancelLabel() );
+    cancelButton = new NCPushButton( hSplit1, opt, PkgNames::CancelLabel() );
     cancelButton->setId( PkgNames::Cancel() );
 
-    hSplit->addChild( cancelButton );
-    hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );  
+    hSplit1->addChild( cancelButton );
+    hSplit1->addChild( new NCSpacing( hSplit1, opt, 0.2, true, false ) );  
   
 }
 
@@ -239,7 +247,7 @@ string  NCAskForExistingDirectory::getCurrentLine( )
 
 long NCAskForExistingDirectory::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? 50 : 20 );
+    return ( dim == YD_HORIZ ? 70 : 20 );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -308,6 +316,7 @@ NCursesEvent NCAskForExistingDirectory::wHandleInput( wint_t ch )
 	    break;
 	}
 	case KEY_RETURN: {
+	    
 	    bool ok = fillDirectoryList( );
 
 	    if ( ok )
@@ -379,13 +388,24 @@ bool NCAskForExistingDirectory::fillDirectoryList ( )
     list<string>	tmpList;
     list<string>::iterator   it;
 
-    
+    bool details = getCheckBoxValue( detailed );
+
+    if ( details )
+    {
+	dirList->fillHeader();
+	dirList->setTableType( NCFileTable::T_Detailed );
+    }
+    else
+    {
+	dirList->setTableType( NCFileTable::T_Overview );
+    }
+	
     DIR * diskDir = opendir( currentDir.c_str() );
     unsigned int i = dirName->getListSize();
     
     dirName->itemAdded( YCPString(currentDir),
-				    i,
-				    true );
+			i,
+			true );
 	
     if ( ( diskDir = opendir( currentDir.c_str() ) ) )
     {
@@ -440,4 +460,22 @@ bool NCAskForExistingDirectory::fillDirectoryList ( )
     closedir( diskDir );
     
     return true;
+}
+
+bool NCAskForExistingDirectory::getCheckBoxValue( NCCheckBox * checkBox )
+{
+    YCPValue value = YCPNull();
+
+    if ( checkBox )
+    {
+	value = checkBox->getValue();
+
+	// return whether the option is selected or not
+	if ( !value.isNull() )
+	{
+	    return ( value->asBoolean()->toString() == "true" ? true : false );
+	}
+    }
+
+    return false;
 }
