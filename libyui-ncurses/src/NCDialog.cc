@@ -822,12 +822,13 @@ wint_t NCDialog::getinput()
 
 	if ( gotch != -1 )
 	{
-	    NCDBG << "isprint( " << gotch << " ) " << (isprint(gotch)?"true":"false") << endl;
-	    if ( isprint( gotch ) )	// recode printable chars
+	    if ( (KEY_MIN > gotch || KEY_MAX < gotch)
+		  &&
+		 isprint( gotch ) )
 	    {
 		string str;
 		str += static_cast<char>(gotch);
-
+		// recode printable chars
 		NCstring::RecodeToWchar( str, NCstring::terminalEncoding(), &to ); 
 		got = to[0];
 
