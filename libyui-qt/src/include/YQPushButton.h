@@ -30,6 +30,7 @@
 
 class QPushButton;
 class YUIQt;
+class YQDialog;
 
 class YQPushButton : public QWidget, public YPushButton
 {
@@ -38,13 +39,12 @@ class YQPushButton : public QWidget, public YPushButton
 public:
     /**
      * Constructor.
-     *
-     * @param yuiqt the ui object
-     * @param parent the parent widget
-     * @param opt the widget options
-     * @param label the button label
      */
-    YQPushButton( YUIQt * yuiqt, QWidget * parent, YWidgetOpt & opt, YCPString label );
+    YQPushButton( YUIQt * 	yuiqt,
+		  QWidget * 	parent,
+		  YQDialog *	dialog,
+		  YWidgetOpt & 	opt,
+		  YCPString 	label );
 
     /**
      * Destructor.
@@ -114,6 +114,11 @@ public:
     virtual void setIcon( const YCPString & icon_name );
 
     /**
+     * Returns the button's text (label) - useful for log messages etc.
+     **/
+    QString text() const;
+    
+    /**
      * Returns the internal Qt PushButton.
      **/
     QPushButton * qPushButton() const { return _qPushButton; }
@@ -136,26 +141,17 @@ public slots:
 protected:
 
     /**
-     * Inherited from QObject
+     * Redirect events from the _qPushButton member to this object.
+     *
+     * Overwritten from QObject.
      **/
-    bool eventFilter( QObject *obj, QEvent *event );
-
-    /**
-     * Make this button the dialog's focus button.
-     **/
-    void makeFocusButton( bool hasFocus = true );
-
-    /**
-     * Makes this button the dialog's default button, i.e. the one that gets
-     * activated when [Return] is pressed anywhere within the dialog. This
-     * method propagates this to its parent dialog.
-     */
-    void makeDefaultButton();
+    bool eventFilter( QObject * obj, QEvent * event );
 
 
     // Data members
 
     YUIQt *		yuiqt;
+    YQDialog *		_dialog;
     QPushButton *	_qPushButton;
     bool		_isDefault;
 

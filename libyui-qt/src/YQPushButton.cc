@@ -36,11 +36,13 @@
 
 YQPushButton::YQPushButton( YUIQt *	yuiqt,
 			    QWidget *	parent,
+			    YQDialog *	dialog,
 			    YWidgetOpt &opt,
 			    YCPString 	label )
     : QWidget( parent )
     , YPushButton( opt, label )
     , yuiqt( yuiqt )
+    , _dialog( dialog )
 {
     setWidgetRep((QWidget *)this);
     _qPushButton = new QPushButton( fromUTF8(label->value()), this);
@@ -56,32 +58,20 @@ YQPushButton::YQPushButton( YUIQt *	yuiqt,
 
     _isDefault = opt.isDefaultButton.value();
 
-#if 0
-    // This would be nice, but it never works since the yParent() is only set
-    // AFTER the widget is created, certainly not in the constructor. We have
-    // to rely on the caller to take care of this:
-    
+    CHECK_PTR( _dialog );
+
     if ( _isDefault )
-	makeDefaultButton();
-#endif
+	_dialog->setDefaultButton( this );
 }
 
 
 YQPushButton::~YQPushButton()
 {
-    if ( yParent() ) 	// The yDialog parent may not be set yet!    
-    {
-	YQDialog * dialog = dynamic_cast<YQDialog *> ( yDialog() );
-
-	if ( dialog )
-	{
-	    if ( dialog->focusButton() == this )
-		dialog->losingFocus( this );
+    if ( _dialog->focusButton() == this )
+	_dialog->losingFocus( this );
 		
-	    if ( dialog->defaultButton() == this )
-		dialog->setDefaultButton( 0 );
-	}
-    }
+    if ( _dialog->defaultButton() == this )
+	_dialog->setDefaultButton( 0 );
 }
 
 
@@ -134,36 +124,6 @@ void YQPushButton::setLabel( const YCPString & label )
 }
 
 
-void YQPushButton::makeFocusButton( bool hasFocus )
-{
-    if ( ! yParent() ) 	// The yDialog parent may not be set yet!    
-	return;
-    
-    YQDialog * dialog = dynamic_cast<YQDialog *> ( yDialog() );
-
-    if ( dialog )
-    {
-	if ( hasFocus )		dialog->gettingFocus( this );
-	else			dialog->losingFocus ( this );
-    }
-}
-
-
-void YQPushButton::makeDefaultButton()
-{
-    if ( ! yParent() ) 	// The yDialog parent may not be set yet!
-    {
-	y2warning( "No parent yet." );
-	return;
-    }
-    
-    YQDialog * dialog = dynamic_cast<YQDialog *> ( yDialog() );
-
-    if ( dialog )
-	dialog->setDefaultButton( this );
-}
-
-
 void YQPushButton::showAsDefault( bool show )
 {
     _qPushButton->setDefault( show );
@@ -174,6 +134,13 @@ void YQPushButton::showAsDefault( bool show )
 bool YQPushButton::isShownAsDefault() const
 {
     return _qPushButton->isDefault();
+}
+
+
+QString
+YQPushButton::text() const
+{
+    return _qPushButton->text();
 }
 
 
@@ -193,12 +160,12 @@ bool YQPushButton::eventFilter( QObject *obj, QEvent *event )
 {
     if ( event->type() == QEvent::FocusIn )
     {
-	makeFocusButton();
+	_dialog->gettingFocus( this );
 	return false;	// event processed?
     }
     else if ( event->type() == QEvent::FocusOut )
     {
-	makeFocusButton( false );
+	_dialog->losingFocus( this );
 	return false;	// event processed?
     }
     
@@ -208,7 +175,7 @@ bool YQPushButton::eventFilter( QObject *obj, QEvent *event )
 
 bool YQPushButton::setKeyboardFocus()
 {
-    makeFocusButton();
+    _dialog->gettingFocus( this );
     _qPushButton->setFocus();
 
     return true;

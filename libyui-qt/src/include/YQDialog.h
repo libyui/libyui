@@ -125,6 +125,7 @@ public:
     /**
      * Set the dialog's default button - the button that is activated with
      * [Return] if no other button has the keyboard focus.
+     * 'newDefaultButton' may be 0 if the former default button is destroyed.
      **/
     void setDefaultButton( YQPushButton * newDefaultButton );
 

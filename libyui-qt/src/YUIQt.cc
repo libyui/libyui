@@ -520,7 +520,8 @@ YWidget *YUIQt::createPkgSpecial( YWidget *parent, YWidgetOpt &opt, const YCPStr
 
 YWidget *YUIQt::createPushButton(YWidget *parent, YWidgetOpt &opt, const YCPString& label)
 {
-    return new YQPushButton(this, (QWidget *)(parent->widgetRep()), opt, label);
+    YQDialog * dialog = dynamic_cast<YQDialog *> ( parent->yDialog() );
+    return new YQPushButton(this, (QWidget *)(parent->widgetRep()), dialog, opt, label);
 }
 
 YWidget *YUIQt::createMenuButton(YWidget *parent, YWidgetOpt &opt, const YCPString& label)

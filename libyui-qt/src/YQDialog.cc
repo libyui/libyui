@@ -237,8 +237,10 @@ YQDialog::ensureOnlyOneDefaultButton()
 	    {
 		if ( _defaultButton && button != _defaultButton )
 		{
-		    y2error( "Too many `opt(`default) PushButtons: \"%s\"",
-			     (const char *) button->qPushButton()->text() );
+		    y2error( "Too many `opt(`default) PushButtons: [%s]",
+			     (const char *) button->text() );
+		    y2error( "Using old default button: [%s]",
+			     (const char *) _defaultButton->text() );
 		}
 		else
 		{
@@ -261,19 +263,25 @@ YQDialog::ensureOnlyOneDefaultButton()
 void
 YQDialog::setDefaultButton( YQPushButton * newDefaultButton )
 {
-    if ( _defaultButton				&&
-	 newDefaultButton != _defaultButton	&&
-	 newDefaultButton->isShownAsDefault() 	  )
+    if ( _defaultButton	  &&
+	 newDefaultButton &&
+	 newDefaultButton != _defaultButton )
     {
-	y2error( "Too many `opt(`default) PushButtons: \"%s\"",
-		 (const char *) newDefaultButton->qPushButton()->text() );
+	y2error( "Too many `opt(`default) PushButtons: [%s]", (const char *) newDefaultButton->text() );
+	newDefaultButton->setDefault( false );
 	return;
     }
 
     _defaultButton = newDefaultButton;
-    
-    if ( _defaultButton && ! _focusButton )
-	_defaultButton->showAsDefault( true );
+
+    if ( _defaultButton )
+    {
+	_defaultButton->setDefault( true );
+	y2debug( "New default button: [%s]", (const char *) _defaultButton->text() );
+	
+	if ( _defaultButton && ! _focusButton )
+	    _defaultButton->showAsDefault( true );
+    }
 }
 
 
@@ -286,7 +294,7 @@ YQDialog::activateDefaultButton( bool warn )
 	 _focusButton->isEnabled() &&
 	 _focusButton->isShownAsDefault() )
     {
-	y2debug( "Activating focus button: [%s]", (const char *) _focusButton->qPushButton()->text() );
+	y2debug( "Activating focus button: [%s]", (const char *) _focusButton->text() );
 	_focusButton->activate();
 	return true;
     }
@@ -300,7 +308,7 @@ YQDialog::activateDefaultButton( bool warn )
 	 _defaultButton->isEnabled() 	&&
 	 _defaultButton->isShownAsDefault() )
     {
-	y2debug( "Activating default button: [%s]", (const char *) _defaultButton->qPushButton()->text() );
+	y2debug( "Activating default button: [%s]", (const char *) _defaultButton->text() );
 	_defaultButton->activate();
 	return true;
     }
