@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Sep  7 09:31:20 CEST 2004 - mlazar@suse.cz
+
+- fixed bug created during fixing previous bug
+
+-------------------------------------------------------------------
 Mon Sep  6 18:28:18 CEST 2004 - mlazar@suse.cz
 
 - fixed bug #44559 and #44575 - wizard menu in curses is not shown

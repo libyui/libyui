@@ -204,17 +204,6 @@ void NCWidget::wMoveChildTo( NCWidget & child, const wpos & newpos )
 {
   WIDDBG << "mc+ " << DLOC << child << " -> " << newpos << " in " << this << endl;
   try {
-
-     if ( skipNoDimWin && child.Sze.H == 0) {
-	WIDDBG << "Skip child with zero height: " << this << ' ' << child << " par " << Parent()->Value() << endl;
-	return;
-     }
-
-     if ( skipNoDimWin && child.Sze.W == 0) {
-	WIDDBG << "Skip child with zero width: " << this << ' ' << child << " par " << Parent()->Value() << endl;
-	return;
-     }
-     
     child.wMoveTo( newpos );
     Redraw( true );
   }
@@ -274,6 +263,16 @@ void NCWidget::wMoveTo( const wpos & newpos )
 
   if ( !Parent() )
     throw NCError( "wMoveTo: got no parent" );
+
+  if ( skipNoDimWin && inparent.Sze.H == 0) {
+    WIDDBG << "Skip widget with zero height: " << this << ' ' << inparent << " par " << Parent()->Value() << endl;
+    return;
+  }
+
+  if ( skipNoDimWin && inparent.Sze.W == 0) {
+    WIDDBG << "Skip widget with zero width: " << this << ' ' << inparent << " par " << Parent()->Value() << endl;
+    return;
+  }
 
   if ( inparent.Pos != newpos ) {
     WIDDBG << "mv+ " << this << " -> " << newpos << " par " << Parent()->Value() << endl;
