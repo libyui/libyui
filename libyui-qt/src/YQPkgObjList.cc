@@ -94,7 +94,7 @@ YQPkgObjList::pkgObjClicked( int		button,
 			     int		col,
 			     const QPoint &	pos )
 {
-    YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> ( listViewItem );
+    YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (listViewItem);
 
     if ( item )
     {
@@ -128,7 +128,7 @@ YQPkgObjList::pkgObjClicked( int		button,
 void
 YQPkgObjList::selectionChangedInternal( QListViewItem * listViewItem )
 {
-    YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> ( listViewItem );
+    YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (listViewItem);
 
     emit selectionChanged( item ? item->pmObj() : PMObjectPtr() );
 }
@@ -239,7 +239,7 @@ YQPkgObjList::setCurrentStatus( PMSelectable::UI_Status newStatus,
     if ( ! listViewItem )
 	return;
 
-    YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> ( listViewItem );
+    YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (listViewItem);
 
     if ( item && item->editable() && _editable )
     {
@@ -267,7 +267,7 @@ YQPkgObjList::setAllItemStatus( PMSelectable::UI_Status newStatus, bool force )
 
     while ( listViewItem )
     {
-	YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> ( listViewItem );
+	YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (listViewItem);
 
 	if ( item && item->editable() && newStatus != item->status() )
 	{
@@ -521,7 +521,7 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 
 	if ( selectedListViewItem )
 	{
-	    YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> ( selectedListViewItem );
+	    YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (selectedListViewItem);
 
 	    if ( item )
 	    {
@@ -895,7 +895,7 @@ YQPkgObjListItem::compare( QListViewItem *	otherListViewItem,
 			   int			col,
 			   bool			ascending ) const
 {
-    YQPkgObjListItem * other = dynamic_cast<YQPkgObjListItem *> ( otherListViewItem );
+    YQPkgObjListItem * other = dynamic_cast<YQPkgObjListItem *> (otherListViewItem);
 
     if ( other )
     {

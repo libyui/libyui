@@ -37,7 +37,7 @@ YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
     : QY2ListView( parent )
 {
     _pmObj		= 0;
-    _parentTab		= dynamic_cast<QTabWidget *> ( parent );
+    _parentTab		= dynamic_cast<QTabWidget *> (parent);
     _userCanSwitch 	= userCanSwitch;
 
 
@@ -160,7 +160,7 @@ YQPkgVersionsView::checkForChangedCandidate()
 
     while ( item )
     {
-	YQPkgVersion * versionItem = dynamic_cast<YQPkgVersion *> ( item );
+	YQPkgVersion * versionItem = dynamic_cast<YQPkgVersion *> (item);
 
 	if ( versionItem && versionItem->isOn() )
 	{
@@ -254,7 +254,7 @@ YQPkgVersion::compare( QListViewItem *	otherListViewItem,
 		       int		col,
 		       bool		ascending ) const
 {
-    YQPkgVersion * other = dynamic_cast<YQPkgVersion *> ( otherListViewItem );
+    YQPkgVersion * other = dynamic_cast<YQPkgVersion *> (otherListViewItem);
 
     if ( other )
     {

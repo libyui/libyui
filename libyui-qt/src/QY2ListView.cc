@@ -71,7 +71,7 @@ QY2ListView::updateToplevelItemStates()
 
     while ( item )
     {
-	QY2ListViewItem * qy2_item = dynamic_cast<QY2ListViewItem *> ( item );
+	QY2ListViewItem * qy2_item = dynamic_cast<QY2ListViewItem *> (item);
 
 	if ( qy2_item )
 	    qy2_item->updateStatus();
@@ -88,7 +88,7 @@ QY2ListView::updateToplevelItemData()
 
     while ( item )
     {
-	QY2ListViewItem * qy2_item = dynamic_cast<QY2ListViewItem *> ( item );
+	QY2ListViewItem * qy2_item = dynamic_cast<QY2ListViewItem *> (item);
 
 	if ( qy2_item )
 	    qy2_item->updateData();
@@ -112,12 +112,12 @@ QY2ListView::toolTip( QListViewItem * listViewItem, int column )
 
     // Try known item classes
 
-    QY2ListViewItem * item = dynamic_cast<QY2ListViewItem *> ( listViewItem );
+    QY2ListViewItem * item = dynamic_cast<QY2ListViewItem *> (listViewItem);
 
     if ( item )
 	return item->toolTip( column );
 
-    QY2CheckListItem * checkListItem = dynamic_cast<QY2CheckListItem *> ( listViewItem );
+    QY2CheckListItem * checkListItem = dynamic_cast<QY2CheckListItem *> (listViewItem);
 
     if ( checkListItem )
 	return checkListItem->toolTip( column );
@@ -297,7 +297,7 @@ QY2ListViewItem::compare( QListViewItem *	otherListViewItem,
 {
     if ( sortByInsertionSequence() )
     {
-	QY2ListViewItem * other = dynamic_cast<QY2ListViewItem *> ( otherListViewItem );
+	QY2ListViewItem * other = dynamic_cast<QY2ListViewItem *> (otherListViewItem);
 
 	if ( other )
 	{
@@ -308,7 +308,7 @@ QY2ListViewItem::compare( QListViewItem *	otherListViewItem,
 
 	// Still here? Try the other version: QY2CheckListItem.
 
-	QY2CheckListItem * otherCheckListItem = dynamic_cast<QY2CheckListItem *> ( otherListViewItem );
+	QY2CheckListItem * otherCheckListItem = dynamic_cast<QY2CheckListItem *> (otherListViewItem);
 
 	if ( otherCheckListItem )
 	{
@@ -415,7 +415,7 @@ QY2CheckListItem::compare( QListViewItem *	otherListViewItem,
 {
     if ( sortByInsertionSequence() )
     {
-	QY2CheckListItem * other = dynamic_cast<QY2CheckListItem *> ( otherListViewItem );
+	QY2CheckListItem * other = dynamic_cast<QY2CheckListItem *> (otherListViewItem);
 
 	if ( other )
 	{
@@ -427,7 +427,7 @@ QY2CheckListItem::compare( QListViewItem *	otherListViewItem,
 
 	// Still here? Try the other version: QY2ListViewItem.
 
-	QY2ListViewItem * otherCheckListItem = dynamic_cast<QY2ListViewItem *> ( otherListViewItem );
+	QY2ListViewItem * otherCheckListItem = dynamic_cast<QY2ListViewItem *> (otherListViewItem);
 
 	if ( otherCheckListItem )
 	{

@@ -33,7 +33,7 @@ YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
     : QTextBrowser( parent )
 {
     _pmObj = 0;
-    _parentTab = dynamic_cast<QTabWidget *> ( parent );
+    _parentTab = dynamic_cast<QTabWidget *> (parent);
 
     // Workaround for Bugzilla bug #19419: Y2Pkg hangs on middle mouse click
     viewport()->setMouseTracking( false );

@@ -116,7 +116,7 @@ YQPkgConflictList::applyResolutions()
 
     while ( child )
     {
-	YQPkgConflict * conflict = dynamic_cast<YQPkgConflict *> ( child );
+	YQPkgConflict * conflict = dynamic_cast<YQPkgConflict *> (child);
 
 	if ( conflict )
 	    conflict->applyResolution();
@@ -135,7 +135,7 @@ YQPkgConflictList::ignoreAll()
 
     while ( child )
     {
-	YQPkgConflict * conflict = dynamic_cast<YQPkgConflict *> ( child );
+	YQPkgConflict * conflict = dynamic_cast<YQPkgConflict *> (child);
 
 	if ( conflict )
 	    conflict->ignore();
@@ -231,7 +231,7 @@ YQPkgConflictList::saveItemToFile( FILE * 			file,
 
     // Write item
 
-    const QCheckListItem * checkListItem = dynamic_cast<const QCheckListItem *> ( item );
+    const QCheckListItem * checkListItem = dynamic_cast<const QCheckListItem *> (item);
 
     if ( checkListItem )
     {
@@ -889,7 +889,7 @@ YQPkgConflict::applyResolution()
 
     while ( item )
     {
-	YQPkgConflictResolution * res = dynamic_cast<YQPkgConflictResolution *> ( item );
+	YQPkgConflictResolution * res = dynamic_cast<YQPkgConflictResolution *> (item);
 
 	if ( ! res )
 	    y2error( "Non-resolution item in resolution list!" );

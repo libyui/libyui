@@ -110,7 +110,7 @@ YQPkgTextDialog::eventFilter( QObject * obj, QEvent * ev )
 {
     if ( ev && ev->type() == QEvent::KeyPress )
     {
-	QKeyEvent * keyEvent = dynamic_cast<QKeyEvent *> ( ev );
+	QKeyEvent * keyEvent = dynamic_cast<QKeyEvent *> (ev);
 
 	if ( keyEvent &&
 	     ( keyEvent->key() == Key_Return ||

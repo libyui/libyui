@@ -169,7 +169,7 @@ QY2DiskUsageListItem::compare( QListViewItem *	otherListViewItem,
 			       int		col,
 			       bool		ascending ) const
 {
-    QY2DiskUsageListItem * other = dynamic_cast<QY2DiskUsageListItem *> ( otherListViewItem );
+    QY2DiskUsageListItem * other = dynamic_cast<QY2DiskUsageListItem *> (otherListViewItem);
 
     if ( other )
     {
