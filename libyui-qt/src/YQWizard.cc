@@ -34,6 +34,7 @@
 #include <ycp/YCPTerm.h>
 #include <ycp/YCPValue.h>
 #include <ycp/YCPVoid.h>
+#include <YShortcut.h>
 
 #include <string>
 
@@ -127,6 +128,7 @@ YQWizard::YQWizard( QWidget *		parent,
     _stepsPanel		= 0;
     _stepsBox		= 0;
     _stepsGrid		= 0;
+    _releaseNotesButton	= 0;
     _treePanel		= 0;
     _tree		= 0;
     _helpPanel		= 0;
@@ -306,11 +308,44 @@ void YQWizard::layoutStepsPanel()
     setGradient( bottomGradient, _bottomGradientPixmap );
 
 
+
+    // Layouts for the buttons
+
+    QVBoxLayout * vbox = new QVBoxLayout( bottomGradient,
+					  0, 0 ); 	// margin, spacing
+    CHECK_PTR( vbox );
+    vbox->addStretch( 99 );
+    
+    
+    QHBoxLayout * hbox = new QHBoxLayout( vbox,
+					  0 );		// spacing
+    hbox->addStretch( 99 );
+    
+    _releaseNotesButton = new QPushButton( _( "Release Notes..." ), bottomGradient );
+    hbox->addWidget( _releaseNotesButton );
+
+
+    connect( _releaseNotesButton,	SIGNAL( clicked()  ),
+	     this,	    		SLOT  ( releaseNotesClicked() ) );
+    
+    _releaseNotesButton->hide();	// hidden until showReleaseNotesButton() is called
+
+    hbox->addStretch( 99 );
+    vbox->addStretch( 99 );
+
+    hbox = new QHBoxLayout( vbox, 
+			    0 );		// spacing
+    hbox->addStretch( 99 );
+
     // Help button - intentionally without keyboard shortcut
-    // (the text is only a fallback anyway if no icon can be found)
     QPushButton * helpButton = new QPushButton( _( "Help" ), bottomGradient );
     CHECK_PTR( helpButton );
-    centerAtBottom( bottomGradient, helpButton, WORK_AREA_BOTTOM_MARGIN );
+    
+    hbox->addWidget( helpButton );
+    hbox->addStretch( 99 );
+
+    connect( helpButton, SIGNAL( clicked()  ),
+	     this,	 SLOT  ( showHelp() ) );
 
 #if USE_ICON_ON_HELP_BUTTON
     QPixmap pixmap = QPixmap( PIXMAP_DIR "help-button.png" );
@@ -319,11 +354,11 @@ void YQWizard::layoutStepsPanel()
 	helpButton->setPixmap( pixmap );
 #endif
 
+
+    vbox->addSpacing( WORK_AREA_BOTTOM_MARGIN );
+
     if ( _bottomGradientPixmap.isNull() )
 	bottomGradient->setFixedHeight( helpButton->sizeHint().height() + WORK_AREA_BOTTOM_MARGIN );
-
-    connect( helpButton, SIGNAL( clicked()  ),
-	     this,	 SLOT  ( showHelp() ) );
 }
 
 
@@ -636,7 +671,6 @@ void YQWizard::layoutHelpPanel()
 	if ( _treeEnabled )
 	{
 	    // "Tree" button - intentionally without keyboard shortcut
-	    // (the text is only a fallback anyway if no icon can be found)
 	    button = new QPushButton( _( "Tree" ), buttonParent );
 	    CHECK_PTR( button );
 
@@ -647,7 +681,6 @@ void YQWizard::layoutHelpPanel()
 	else // if ( _stepsEnabled )
 	{
 	    // "Steps" button - intentionally without keyboard shortcut
-	    // (the text is only a fallback anyway if no icon can be found)
 	    button = new QPushButton( _( "Steps" ), buttonParent );
 	    CHECK_PTR( button );
 
@@ -728,7 +761,6 @@ void YQWizard::layoutTreePanel()
 
 
     // "Help" button - intentionally without keyboard shortcut
-    // (the text is only a fallback anyway if no icon can be found)
     QPushButton * button = new QPushButton( _( "Help" ), buttonParent );
     CHECK_PTR( button );
 
@@ -942,14 +974,14 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
 
     layoutClientArea( workArea );
 
-    
+
     //
     // Button box
     //
 
     layoutButtonBox( workAreaVBox );
 
-    
+
     if ( ! runningEmbedded() )
     {
 	//
@@ -1031,25 +1063,16 @@ void YQWizard::layoutButtonBox( QWidget * parent )
 					  0, 0 ); 	// margin, spacing
     CHECK_PTR( vbox );
 
-
-    //
-    // Top margin
-    //
-
-    QSpacerItem * vSpacer = new QSpacerItem( 0, BUTTON_BOX_TOP_MARGIN,		// width, height
-					     QSizePolicy::Minimum,		// horizontal
-					     QSizePolicy::Fixed );		// vertical
-    CHECK_PTR( vSpacer );
-    vbox->addItem( vSpacer );
+    vbox->addSpacing( BUTTON_BOX_TOP_MARGIN );
 
 
     //
     // QHBoxLayout for the buttons
     //
-    
+
     QHBoxLayout * hbox = new QHBoxLayout( vbox,
 					  0 );		// spacing
-    
+
     //
     // "Back" button
     //
@@ -1067,7 +1090,7 @@ void YQWizard::layoutButtonBox( QWidget * parent )
 					 QSizePolicy::Minimum );	// vertical
     CHECK_PTR( _backButtonSpacer );
     hbox->addItem( _backButtonSpacer );
-    
+
 
     if ( _backButton->text().isEmpty() )
     {
@@ -1092,6 +1115,11 @@ void YQWizard::layoutButtonBox( QWidget * parent )
     connect( _abortButton,	SIGNAL( clicked()	),
 	     this,		SLOT  ( abortClicked()  ) );
 
+
+    // Using spacer rather than addSpacing() since the default stretchability
+    // of a QSpacerItem is undefined, i.e. centering the middle button could
+    // not be guaranteed.
+
     QSpacerItem * spacer = new QSpacerItem( 0, 0,			// width, height
 					    QSizePolicy::Expanding,	// horizontal
 					    QSizePolicy::Minimum );	// vertical
@@ -1113,19 +1141,10 @@ void YQWizard::layoutButtonBox( QWidget * parent )
 
 
     //
-    // Bottom margin
+    // Bottom margin and gradient
     //
 
-    vSpacer = new QSpacerItem( 0, WORK_AREA_BOTTOM_MARGIN,	// width, height
-			       QSizePolicy::Minimum,		// horizontal
-			       QSizePolicy::Fixed );		// vertical
-    CHECK_PTR( vSpacer );
-    vbox->addItem( vSpacer );
-
-
-    //
-    // Gradient
-    //
+    vbox->addSpacing( WORK_AREA_BOTTOM_MARGIN );
 
     if ( ! runningEmbedded() )
     {
@@ -1375,7 +1394,7 @@ string YQWizard::debugLabel()
 	{
 	    label.prepend( "YQWizard \"" );
 	    label.append( "\"" );
-		
+
 	    return toUTF8( label );
 	}
     }
@@ -1438,6 +1457,16 @@ void YQWizard::showHelp()
     if ( _sideBar && _helpPanel )
     {
 	_sideBar->raiseWidget( _helpPanel );
+    }
+}
+
+
+void YQWizard::releaseNotesClicked()
+{
+    if ( ! _releaseNotesButtonId.isNull() )
+    {
+	y2milestone( "Release Notes button clicked" );
+	sendEvent( _releaseNotesButtonId );
     }
 }
 
@@ -1637,7 +1666,7 @@ void YQWizard::setButtonLabel( YQWizardButton * button, const QString & newLabel
 	    if ( button == _backButton && _backButtonSpacer )
 	    {
 		// Minimize _backButtonSpacer
-		
+
 		_backButtonSpacer->changeSize( 0, 0,				// width, height
 					       QSizePolicy::Minimum,		// horizontal
 					       QSizePolicy::Minimum );		// vertical
@@ -1650,7 +1679,7 @@ void YQWizard::setButtonLabel( YQWizardButton * button, const QString & newLabel
 	    if ( button == _backButton && _backButtonSpacer )
 	    {
 		// Restore _backButtonSpacer to normal size
-		
+
 		_backButtonSpacer->changeSize( 0, 0,				// width, height
 					       QSizePolicy::Expanding,		// horizontal
 					       QSizePolicy::Minimum );		// vertical
@@ -1683,6 +1712,35 @@ void YQWizard::setButtonFocus( YQWizardButton * button )
 {
     if ( button )
 	button->setKeyboardFocus();
+}
+
+
+void YQWizard::showReleaseNotesButton( string label, const YCPValue & id )
+{
+    if ( ! _releaseNotesButton )
+    {
+	y2error( "NULL Release Notes button" );
+	if ( ! _stepsBox )
+	    y2error( "This works only if there is a \"steps\" panel!" );
+
+	return;
+    }
+
+    label = YShortcut::cleanShortcutString( label );	// no way to check the shortcut, so strip it
+    _releaseNotesButton->setText( fromUTF8( label ) );
+    _releaseNotesButtonId = id;
+
+    
+    if ( _releaseNotesButton->isHidden() )
+	_releaseNotesButton->show();
+    
+}
+
+
+void YQWizard::hideReleaseNotesButton()
+{
+    if ( _releaseNotesButton && _releaseNotesButton->isShown() )
+	_releaseNotesButton->hide();
 }
 
 
@@ -1868,7 +1926,9 @@ YCPValue YQWizard::command( const YCPTerm & cmd )
 
     if ( isCommand( "AddMenuSeparator ( string )"            , cmd ) )	{ addMenuSeparator( qStringArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "DeleteMenus ()"                         , cmd ) )	{ deleteMenus();				return OK; }
-
+    if ( isCommand( "ShowReleaseNotesButton( string, any )"  , cmd ) )	{ showReleaseNotesButton( stringArg( cmd, 0 ),
+												  anyArg   ( cmd, 1 )); return OK; }
+    if ( isCommand( "HideReleaseNotesButton()"               , cmd ) )	{ hideReleaseNotesButton();			return OK; }
     y2error( "Undefined wizard command: %s", cmd->toString().c_str() );
     return YCPBoolean( false );
 

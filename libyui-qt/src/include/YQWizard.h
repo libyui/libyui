@@ -330,6 +330,12 @@ protected slots:
     void nextClicked();
 
     /**
+     * Propagate button clicked event of release notes button to the YCP
+     * application.  
+     **/
+    void releaseNotesClicked();
+
+    /**
      * Internal notification that [Space] or [Return] has been pressed on a
      * tree item.
      * If the item has an ID, that ID will be returned to UI::UserInput().
@@ -507,6 +513,18 @@ protected:
      **/
     YCPString currentTreeSelection();
 
+    /**
+     * Show a "Release Notes" button above the "Help" button in the steps panel
+     * with the specified label that will return the specified id to
+     * UI::UserInput() when clicked.
+     **/
+    void showReleaseNotesButton( string label, const YCPValue & id );
+
+    /**
+     * Hide an existing "Release Notes" button.
+     **/
+    void hideReleaseNotesButton();
+
 
     //
     // Data members
@@ -540,6 +558,8 @@ protected:
     QVBox *		    _stepsPanel;
     QVBox *			_stepsBox;
     QGridLayout *		    _stepsGrid;
+    QPushButton *		_releaseNotesButton;
+    YCPValue			_releaseNotesButtonId;
     QHBox *		    _helpPanel;
     QTextBrowser *		_helpBrowser;
     QHBox *		    _treePanel;

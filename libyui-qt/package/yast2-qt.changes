@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jan 31 17:09:00 CET 2005 - sh@suse.de
+
+- V 2.11.5
+- Added "Release Notes" button + functions to YQWizard 
+
+-------------------------------------------------------------------
 Mon Jan 24 16:59:35 CET 2005 - sh@suse.de
 
 - Minor usability changes in wizard layout
