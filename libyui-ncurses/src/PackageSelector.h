@@ -41,7 +41,8 @@ class PMSelectionPtr;
 class PMPackagePtr;
 class PMYouPatchPtr;
 class LangCode;
-class NCPopupDeps;
+class NCPopupPkgDeps;
+class NCPopupSelDeps;
 class NCPopupDiskspace;
 class NCPopupSearch;
 
@@ -76,7 +77,9 @@ class PackageSelector
 
     NCPopupTree * filterPopup;		// the rpm group tags popup
 
-    NCPopupDeps * depsPopup;		// the dependeny popup
+    NCPopupPkgDeps * pkgDepsPopup;	// the package dependeny popup
+
+    NCPopupSelDeps * selDepsPopup;	// the selection dependency popup
     
     NCPopupSelection * selectionPopup; 	// the selections popup
 
@@ -103,8 +106,8 @@ class PackageSelector
  
 
   public:
-    
-    /**
+
+   /**
      * The package selector class handles the events and holds the
      * data needed for the package selection.
      * @param ui The NCurses UI
@@ -288,7 +291,12 @@ class PackageSelector
     * Checks and shows the dependencies
     * @param doit true: do the check, false: only check if auto check is on
     */
-    void showDependencies ( bool doit );
+    void showPackageDependencies ( bool doit );
+
+    /**
+    * Checks and shows the selectiondependencies
+    */
+    void showSelectionDependencies ( );
     
    /**
     * Gets the required patch info from you patch manager and shows it
