@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Mar 11 13:22:52 CET 2005 - sh@suse.de
+
+- Fixed bug #72158: File selection box on screen shots
+- V 2.11.9 
+
+-------------------------------------------------------------------
 Fri Mar  4 12:57:32 CET 2005 - sh@suse.de
 
 - Increased calculated font sizes in inst-sys to compensate

@@ -109,6 +109,7 @@ void YQUI::makeScreenShot( std::string stl_filename )
 
     QWidget * dialog = (QWidget *) currentDialog()->widgetRep();
     QPixmap screenShot = QPixmap::grabWindow( dialog->winId() );
+    XFlush( dialog->x11Display() );
     QString fileName ( stl_filename.c_str() );
     bool interactive = false;
 
