@@ -115,10 +115,12 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt, string flo
     // YOU filter
     eventHandlerMap[ PkgNames::Recommended()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::Security()->toString() ] = &PackageSelector::FilterHandler;
+    eventHandlerMap[ PkgNames::Optional()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::InstalledPatches()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::AllPatches()->toString() ] = &PackageSelector::FilterHandler; 
     eventHandlerMap[ PkgNames::NewPatches()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::InstalledPatches()->toString() ] = &PackageSelector::FilterHandler;
+    eventHandlerMap[ PkgNames::InstallablePatches()->toString() ] = &PackageSelector::FilterHandler;    
     eventHandlerMap[ PkgNames::YaST2Patches()->toString() ] = &PackageSelector::FilterHandler;
 
     // Information menu
@@ -564,7 +566,18 @@ bool PackageSelector::fillPatchList( string filter )
     YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
     if ( filterLabel )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::YOUPatches()) );
+	if ( filter == "installable" )
+	{
+	    static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::YOUPatches()) );
+	}
+	else if ( filter == "installed" )
+	{
+  	    static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::InstPatches()) );  
+	}
+	else
+	{
+	    static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::Patches()) );  
+	}
     }
 
     return true;
@@ -626,6 +639,9 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, PMObjectPtr obj
     pkgTable->itemsCleared ();
      
     list<PMPackagePtr> packages = patchPtr->packages();
+    string preScript = patchPtr->preScript();
+    string postScript = patchPtr->postScript();
+    //files();
     list<PMPackagePtr>::const_iterator listIt;
     NCMIL << "Number of patch packages: " << packages.size() << endl;
 	
@@ -868,6 +884,7 @@ bool PackageSelector::checkPatch( PMYouPatchPtr patchPtr,
     if ( filter == "all"
 	 || ( filter == patchPtr->kindLabel(patchPtr->kind()) )
 	 || ( filter == "installed" && patchPtr->getSelectable()->status() == PMSelectable::S_KeepInstalled )
+	 || ( filter == "installable" && patchPtr->installable() )
 	 || ( filter == "new" && ( patchPtr->getSelectable()->status() == PMSelectable::S_Install ||
 				   patchPtr->getSelectable()->status() == PMSelectable::S_NoInst ) )
 	 )
@@ -1125,6 +1142,10 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
     {
 	fillPatchList( "Security" );		// patch kind
     }
+    else if ( event.selection->compare( PkgNames::Optional() )  ==  YO_EQUAL )
+    {
+	fillPatchList( "Optional" );		// patch kind
+    }
     else if (  event.selection->compare( PkgNames::YaST2Patches() ) ==  YO_EQUAL )
     {
 	fillPatchList( "YaST2" );		// patch kind
@@ -1136,6 +1157,10 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
     else if (  event.selection->compare( PkgNames::InstalledPatches() ) ==  YO_EQUAL )
     {
 	fillPatchList( "installed" );		// show installed patches
+    }
+    else if (  event.selection->compare( PkgNames::InstallablePatches() ) ==  YO_EQUAL )
+    {
+	fillPatchList( "installable" );		// show installed patches
     }
     else if (  event.selection->compare( PkgNames::NewPatches() ) ==  YO_EQUAL )
     {

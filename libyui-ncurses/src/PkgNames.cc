@@ -419,6 +419,14 @@ const YCPValue& PkgNames::InstalledPatches ()
     return value;
 }
 
+// id filter installable
+const YCPValue& PkgNames::InstallablePatches ()
+{
+    static const YCPValue value = createIdValue ( "installablepatches" );
+    return value;
+}
+
+
 // id filter uninstalled
 const YCPValue& PkgNames::NewPatches ()
 {
@@ -430,6 +438,13 @@ const YCPValue& PkgNames::NewPatches ()
 const YCPValue& PkgNames::YaST2Patches ()
 {
     static const YCPValue value = createIdValue ( "yast2" );
+    return value;
+}
+
+// id filter optional
+const YCPValue& PkgNames::Optional ()
+{
+    static const YCPValue value = createIdValue ( "optional" );
     return value;
 }
 
@@ -504,9 +519,25 @@ const string PkgNames::SelectionLabel()
 
 const string PkgNames::YOUPatches()
 {
-   // the label Filter: YOU Patches
-    static const string value = _( "Online Update Patches" );
+    // A label for a list of YOU Patches - keep it short - max 25 chars! 
+    // (the list shows all patches which can be installed) 
+    static const string value = _( "Installable Patches" );
     return value;  
+}
+
+const string PkgNames::InstPatches()
+{
+    // A label for a list of YOU Patches - keep it short - max. 25 chars! 
+    // (the list shows all patches which are already installed) 
+    static const string value = _( "Installed Patches" );
+    return value; 
+}
+
+const string PkgNames::Patches()
+{
+    // A common label for a list of YOU Patches - keep it short - max. 25 chars! 
+    static const string value = _( "Online Update Patches" );
+    return value; 
 }
 
 const string PkgNames::UpdateProblem()

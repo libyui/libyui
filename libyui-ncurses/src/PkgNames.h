@@ -294,10 +294,20 @@ public:
      */
     static const YCPValue& Security ();
 
+  /**
+     *  Widget id of Filter/optional
+     */
+    static const YCPValue& Optional ();
+    
     /**
      *  Widget id of Filter/installed
      */
     static const YCPValue& InstalledPatches ();
+
+    /**
+     *  Widget id of Filter/installable
+     */
+    static const YCPValue& InstallablePatches ();
 
     /**
      *  Widget id of Filter/all patches
@@ -348,8 +358,10 @@ public:
      *  The label Filter: YOU Patches
      */
     static const string YOUPatches();
-    
-    /**
+    static const string InstPatches();
+    static const string Patches();
+
+   /**
      *  The label for Filter: Search results
      */
     static const string SearchResults();
