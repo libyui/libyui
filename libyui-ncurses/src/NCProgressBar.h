@@ -40,6 +40,7 @@ class NCProgressBar : public YProgressBar, public NCWidget {
   NCProgressBar            ( const NCProgressBar & );
 
   private:
+    typedef long long Value_t;
 
     NClabel  label;
     Value_t  maxval;
@@ -52,6 +53,7 @@ class NCProgressBar : public YProgressBar, public NCWidget {
 
   protected:
 
+    
     virtual const char * location() const { return "NCProgressBar"; }
 
     virtual void wCreate( const wrect & newrect );
