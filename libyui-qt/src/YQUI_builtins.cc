@@ -195,7 +195,6 @@ void YQUI::toggleRecordMacro()
                                   QMessageBox::Ok | QMessageBox::Default,       // button0
                                   QMessageBox::NoButton,                        // button1
                                   QMessageBox::NoButton );                      // button2
-        busyCursor();
     }
     else
     {
@@ -207,7 +206,6 @@ void YQUI::toggleRecordMacro()
                                           0,                                    // parent
                                           0,                                    // (widget) name
                                           "Select Macro File to Record to" );   // caption
-        busyCursor();
 
         if ( ! filename.isEmpty() )     // file selection dialog has been cancelled
         {
