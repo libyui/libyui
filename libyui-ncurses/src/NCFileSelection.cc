@@ -274,12 +274,6 @@ bool NCFileSelection::createListEntry ( NCFileInfo fileInfo )
 	    char size_buf[50];
 	    sprintf( size_buf, "%d", fileInfo._size);
 	    data.push_back( size_buf );
-	    if ( fileInfo.isDir() )
-		data.push_back( "directory" );
-	    else if ( fileInfo.isLink() )
-		data.push_back( "link" );
-	    else
-		data.push_back( "file" );
 	    data.push_back( "read only" );	//FIXME
 	    break;
 	}
@@ -378,7 +372,6 @@ void NCFileTable::fillHeader( )
 	    header.push_back( "L" + string("  ") );
 	    header.push_back( "L" + string("File name") );
 	    header.push_back( "L" + string("Size") );
-	    header.push_back( "L" + string("Type") );
 	    header.push_back( "L" + string("Permissions") );
 	    break;
 	}
@@ -404,6 +397,28 @@ NCursesEvent NCFileTable::wHandleInput( wint_t key )
 {
     NCursesEvent ret = NCursesEvent::none;
 
+    // call handleInput of NCPad
+    handleInput( key );
+
+    currentFile = getCurrentLine();
+
+    switch ( key )
+    {
+	case KEY_UP:
+	case KEY_PPAGE:
+	case KEY_HOME:
+	case KEY_DOWN:
+	case KEY_NPAGE:
+	case KEY_END: {
+		ret = NCursesEvent::SelectionChanged;
+		ret.result = YCPString( currentFile );
+		break;
+	}
+	default:
+	    ret = NCursesEvent::none;
+    }
+
+    NCMIL << "CURRENT_FILE: " << currentFile << endl;
     return ret;
 }
 
@@ -445,8 +460,6 @@ bool NCFileTable::fillList ( )
 	{
 	    string fullName = currentDir + "/" + (*it);
 
-	    NCMIL << "FullName: " << fullName << endl;
-	    
 	    if ( lstat( fullName.c_str(), &statInfo ) == 0 )
 	    {
 		if ( S_ISREG( statInfo.st_mode ) )
@@ -471,10 +484,16 @@ bool NCFileTable::fillList ( )
 	    ++it;
 	}
 	drawList();		// draw the list
-	//startDir = currentDir;	// set start directory
 
 	if ( getNumLines() > 0 )
+	{
 	    setCurrentItem( 0 );	// set focus to the first list entry
+	    currentFile = getCurrentLine();
+	}
+	else
+	{
+	    currentFile = "";
+	}
     }
     else
     {
@@ -529,7 +548,6 @@ void NCDirectoryTable::fillHeader( )
 	    header.push_back( "L" + string("  ") );
 	    header.push_back( "L" + string("Direcory name") );
 	    header.push_back( "L" + string("Size") );
-	    header.push_back( "L" + string("Type") );
 	    header.push_back( "L" + string("Permissions") );
 	    break;
 	}

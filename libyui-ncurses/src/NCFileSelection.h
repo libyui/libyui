@@ -210,6 +210,10 @@ public:
 
 class NCFileTable : public NCFileSelection {
 
+private:
+
+    string currentFile;
+    
 public:
 
   /**
@@ -221,6 +225,12 @@ public:
 		 const YCPString & iniDir );
 
     virtual ~NCFileTable(){}
+
+    void setCurrentFile( const YCPString & file ) {
+	currentFile = file->value();
+    }
+
+    string getCurrentFile() { return currentFile; }
     
     virtual void fillHeader();
 
