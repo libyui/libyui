@@ -116,7 +116,6 @@ public:
 
     virtual ~NCPkgTable();
 
-    friend std::ostream & operator<<( std::ostream & str, NCPkgStatus obj );
 
    /**
     * This method is called to add a line to the package list.

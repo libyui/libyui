@@ -48,6 +48,8 @@ public:
     ObjectStatStrategy( ) {}
     
     virtual ~ObjectStatStrategy() {} 
+
+    friend std::ostream & operator<<( std::ostream & str, NCPkgStatus obj );
     
     /**
      * Calculate new installation status of given package.

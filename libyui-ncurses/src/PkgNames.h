@@ -342,8 +342,13 @@ public:
      /**
      *  Column header package version installed
      */
-    static const NCstring PkgVersionInst();
+    static const NCstring PkgVersion();
 
+    /**
+     *  Column header package version new
+     */
+    static const NCstring PkgVersionNew();
+    
     /**
      *  Column header package summary
      */

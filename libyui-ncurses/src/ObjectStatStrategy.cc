@@ -65,8 +65,10 @@ bool ObjectStatStrategy::validateNewStatus( const NCPkgStatus & oldStatus,
     switch ( oldStatus )
     {
 	case PkgToDelete: {
-	    if ( newStatus == PkgInstalled || newStatus == PkgToUpdate ||
-		 newStatus == PkgToReplace )
+	    if ( ( newStatus == PkgInstalled )	||
+		 ( objPtr->hasCandidateObj() &&
+		   ( newStatus == PkgToUpdate
+		     || newStatus == PkgToReplace ) ) )
 	    {
 		valid = true;
 	    }
@@ -268,3 +270,23 @@ PMSelectable::UI_Status AvailableStatStrategy::getStatus( PMObjectPtr objPtr )
     return retStatus;
 }
 
+
+ostream & operator<<( ostream & str, NCPkgStatus obj )
+{
+  switch ( obj ) {
+#define ENUM_OUT(V) case V: return str << #V; break
+
+    ENUM_OUT( PkgToDelete );
+    ENUM_OUT( PkgToInstall );
+    ENUM_OUT( PkgToUpdate );
+    ENUM_OUT( PkgNoInstall );
+    ENUM_OUT( PkgInstalled );
+    ENUM_OUT( PkgAutoInstall );
+    ENUM_OUT( PkgTaboo );
+    ENUM_OUT( PkgToReplace );
+
+#undef ENUM_OUT
+  }
+
+  return str << "NCPkgStatus(UNKNOWN)";
+}

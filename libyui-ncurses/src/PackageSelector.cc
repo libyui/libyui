@@ -237,12 +237,13 @@ void PackageSelector::setVisibleInfo( const YCPValue & info )
 //
 void PackageSelector::fillHeader( NCPkgTable *pkgTable )
 {
-    vector<NCstring> header(5);
+    vector<NCstring> header(10);
 
     header[0] = PkgNames::PkgStatus();
     header[1] = PkgNames::PkgName();
-    header[2] = PkgNames::PkgSummary();
-    header[3] = PkgNames::PkgSize();
+    header[2] = PkgNames::PkgVersion();
+    header[3] = PkgNames::PkgSummary();
+    header[4] = PkgNames::PkgSize();
 
     if ( pkgTable )
     {
@@ -262,7 +263,7 @@ void PackageSelector::fillHeader( NCPkgTable *pkgTable )
 //
 bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgPtr )
 {
-    vector<string> pkgLine (4);
+    vector<string> pkgLine (5);
     unsigned int i = 0;
 
     if ( !pkgTable )
@@ -290,9 +291,10 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
     while ( it != selectable->av_end() )
     {
 	pkgLine[0] = selectable->name();	// package name
-	pkgLine[1] = (*it)->summary();  	// short description
+	pkgLine[1] = (*it)->version();		// the version
+	pkgLine[2] = (*it)->summary();  	// short description
 	FSize size = (*it)->size();     	// installed size
-	pkgLine[2] = size.asString();
+	pkgLine[3] = size.asString();
 
 	pkgTable->addLine( selectable->status(), // get the package status
 			   pkgLine,
@@ -586,9 +588,10 @@ bool PackageSelector::createListEntry ( NCPkgTable *pkgTable,
     }
 
     pkgLine[0] = pkgPtr->getSelectable()->name();	// package name
-    pkgLine[1] = pkgPtr->summary();  	// short description
+    pkgLine[1] = pkgPtr->version();	// version
+    pkgLine[2] = pkgPtr->summary();  	// short description
     FSize size = pkgPtr->size();     	// installed size
-    pkgLine[2] = size.asString();
+    pkgLine[3] = size.asString();
 
     pkgTable->addLine( pkgPtr->getSelectable()->status(), //  get the package status
 		       pkgLine,

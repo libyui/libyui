@@ -510,10 +510,17 @@ const NCstring PkgNames::PkgName()
     return value;
 }
 
-const NCstring PkgNames::PkgVersionInst()
+const NCstring PkgNames::PkgVersion()
 {
     // column header installed package version (keep it short!)
     static const NCstring value = _("Version");
+    return value;
+}
+
+const NCstring PkgNames::PkgVersionNew()
+{
+    // column header installed package version (keep it short!)
+    static const NCstring value = _("New version");
     return value;
 }
 
