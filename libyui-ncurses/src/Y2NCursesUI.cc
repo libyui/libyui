@@ -109,16 +109,14 @@ Y2NCursesUI::Y2NCursesUI( bool with_threads,
 	string encoding =  nl_langinfo( CODESET );
 	
         // setlocale ( LC_ALL, "" ) is called in WMFInterpreter::WFMInterpreter;
+
 	// Explicitly set LC_CTYPE so that it won't be changed if setenv( LANG ) is called elsewhere.
-        // (it's not enough to call setlocale( LC_CTYPE, language.c_str() ), set env. variable LC_CTYPE!)
-	if ( setenv( "LC_CTYPE", language.c_str(), 1 ) == -1 )
-	{
-	    NCERR << "ERROR: setenv LC_CTYPE: " << language << endl;
-	}
-	else
-	{
-	    NCMIL << "set LC_CTYPE to: " << language << " encoding: " << encoding << endl;
-	}
+        // (it's not enough to call setlocale( LC_CTYPE, .. ), set env. variable LC_CTYPE!)
+
+	string locale = setlocale( LC_CTYPE, NULL );
+	setenv( "LC_CTYPE", locale.c_str(), 1 );
+
+	NCMIL << "setenv LC_CTYPE: " << locale << " encoding: " << encoding << endl;
 	
         // The encoding of a terminal (xterm, konsole usw. ) can never change; the encoding
 	// of "real" console is changed in setConsoleFont(). 
