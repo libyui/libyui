@@ -182,10 +182,8 @@ YQPkgListItem::YQPkgListItem( YQPkgList * pkgList, PMPackagePtr pmPkg )
     CHECK_PTR( pmPkg );
     CHECK_PTR( pkgList );
 
-    _hasSourceRpm	 = true;	// FIXME - get this from the package!
-
     setStatusIcon();
-    setInstallSourceRpm( false ); // No other chance - RPM won't tell if a SRPM is installed
+    setSourceRpmIcon();
     _candidateIsNewer = false;
     _installedIsNewer = false;
 
@@ -208,37 +206,79 @@ YQPkgListItem::~YQPkgListItem()
 }
 
 
-void
-YQPkgListItem::setInstallSourceRpm( bool installSourceRpm )
-{
-    _installSourceRpm = installSourceRpm;
 
-    if ( _hasSourceRpm )
+bool
+YQPkgListItem::hasSourceRpm() const
+{
+    PMSelectablePtr sel = _pmPkg->getSelectable();
+
+    if ( ! sel )
+	return false;
+
+    return sel->providesSources();
+}
+
+
+bool
+YQPkgListItem::installSourceRpm() const
+{
+    PMSelectablePtr sel = _pmPkg->getSelectable();
+
+    if ( ! sel )
+	return false;
+
+    if ( ! sel->providesSources() )
+	return false;
+
+    return sel->source_install();
+}
+
+
+void
+YQPkgListItem::setSourceRpmIcon()
+{
+    QPixmap icon;
+
+    if ( hasSourceRpm() )
     {
-	QPixmap icon;
 
 	if ( editable() && _pkgObjList->editable() )
 	{
-	    icon = _installSourceRpm ?
+	    icon = installSourceRpm() ?
 		YQIconPool::pkgInstall() :
 		YQIconPool::pkgNoInst();
 	}
 	else
 	{
-	    icon = _installSourceRpm ?
+	    icon = installSourceRpm() ?
 		YQIconPool::disabledPkgInstall() :
 		YQIconPool::disabledPkgNoInst();
 	}
-	setPixmap( srpmStatusCol(), icon );
     }
+
+    setPixmap( srpmStatusCol(), icon );
+}
+
+
+void
+YQPkgListItem::setInstallSourceRpm( bool installSourceRpm )
+{
+    if ( hasSourceRpm() )
+    {
+	PMSelectablePtr sel = _pmPkg->getSelectable();
+
+	if ( sel )
+	    sel->set_source_install( installSourceRpm );
+    }
+
+    setSourceRpmIcon();
 }
 
 
 void
 YQPkgListItem::toggleSourceRpmStatus()
 {
-    if ( _hasSourceRpm )
-	setInstallSourceRpm( ! _installSourceRpm );
+    setInstallSourceRpm( ! installSourceRpm() );
 }
 
 

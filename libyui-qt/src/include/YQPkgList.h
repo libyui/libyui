@@ -80,32 +80,32 @@ public slots:
      **/
     virtual QSize sizeHint() const;
 
-    
+
     // Direct access to some states for menu actions
-    
+
     void setInstallCurrentSourceRpm()	  { setInstallCurrentSourceRpm( true  ); }
     void setDontInstallCurrentSourceRpm() { setInstallCurrentSourceRpm( false ); }
 
-    
+
     // No separate selectionChanged( PMPackagePtr ) signal:
     // Use YQPkgObjList::selectionChanged( PMObjectPtr ) instead
     // and dynamic_cast to PMPackagePtr if required.
     // This saves duplicating a lot of code.
 
-    
+
 protected:
 
     /**
      * Create context menu for source RPMs.
      **/
     void createSourceRpmContextMenu();
-    
+
     /**
      * Sets the currently selected item's source RPM status.
      * Automatically selects the next item if 'selectNextItem' is 'true'.
      **/
     void setInstallCurrentSourceRpm( bool inst, bool selectNextItem = false );
-    
+
     // Data members
 
     int			_srpmStatusCol;
@@ -150,7 +150,7 @@ public:
      * Returns the source RPM package status:
      * Should the source RPM be installed?
      **/
-    bool installSourceRpm() const { return _installSourceRpm; }
+    bool installSourceRpm() const;
 
     /**
      * Set the source RPM status
@@ -165,7 +165,8 @@ public:
     /**
      * Returns whether or not a source RPM is available for this package.
      **/
-    bool hasSourceRpm() const { return _hasSourceRpm; }
+    bool hasSourceRpm() const;
+
 
     /**
      * Comparison function used for sorting the list.
@@ -186,7 +187,12 @@ public:
 
 
 protected:
-    
+
+    /**
+     * Set the suitable icon for the source RPM status.
+     **/
+    void setSourceRpmIcon();
+
     /**
      * Paint method. Reimplemented from @ref QListViewItem so different
      * colors can be used.
@@ -205,12 +211,6 @@ protected:
     PMPackagePtr	_pmPkg;
     bool		_candidateIsNewer;
     bool		_installedIsNewer;
-
-
-    // FIXME
-    // Preliminary - those are PMObject attributes!
-    bool		_installSourceRpm;
-    bool		_hasSourceRpm;
 };
 
 
