@@ -10,12 +10,12 @@ INCLUDES= -I$(srcdir)/../src/include -I$(includedir) -I$(includedir)/yui -I$(QTD
 
 noinst_PROGRAMS = runqt
 runqt_SOURCES = runqt.cc
-runqt_LDADD = ../src/liby2qt.la -lqt-mt -lpthread -lyui -lycp -lcrypt -lutil
+runqt_LDADD = ../src/liby2qt.la -lqt-mt -lpthread -lyui -lycp
 runqt_LDFLAGS = -L$(QTLIBDIR) -L$(libdir)
 
 ybin_PROGRAMS = y2qt
 y2qt_SOURCES = y2qt.cc
-y2qt_LDADD = -lqt-mt -lpthread -lyui -ly2 -lycp -lcrypt -lutil
+y2qt_LDADD = -lqt-mt -lpthread -lyui -ly2 -lycp
 y2qt_LDFLAGS = -L$(QTLIBDIR) -L$(libdir)	\
 	-Xlinker --whole-archive		\
 	$(plugindir)/libpy2stdio.la		\
