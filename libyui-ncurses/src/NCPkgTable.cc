@@ -384,8 +384,11 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 	    NClabel packageName = getCellContents( citem, 1 );
 	    UIDBG << "Package Name: " << packageName << endl;
 
-	    // show the required package info
-	    packager->showPackageInformation( getDataPointer(citem) );
+	    if ( packager )
+	    {
+		// show the required package info
+		packager->showPackageInformation( getDataPointer(citem) );
+	    }
 	    ret = NCursesEvent::handled;
 	    break;
 	}

@@ -277,6 +277,9 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
 	return false;
     }
     
+    // clear the package table
+    pkgTable->itemsCleared ();
+    
     // get the selectable
     PMSelectablePtr selectable = pkgPtr->getSelectable();
     NCMIL << "Number of available packages: " << selectable->availableObjs() << endl;
@@ -297,6 +300,11 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
 			   (*it) );	 // the corresponding package pointer
 	i++;
 	++it;
+    }
+
+    if ( pkgTable->getNumLines() > 0 )
+    {
+	pkgTable->setCurrentItem( 0 );
     }
     
     return true;
@@ -697,7 +705,9 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 
 	if ( pkgAvail )
 	{
-	    fillHeader( pkgAvail );
+	    // fillHeader( pkgAvail );  
+	    // set the connection to the PackageSelector !!!!
+	    pkgAvail->setPackager( this );
 	    fillAvailableList( pkgAvail, packageList->getDataPointer( packageList->getCurrentItem() ) );
 	}
     }
@@ -962,7 +972,7 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	
 	return true;
     }
-
+    
     if ( visibleInfo->compare( PkgNames::LongDescr() ) == YO_EQUAL )
     {
 	// ask the package manager for the description of this package
