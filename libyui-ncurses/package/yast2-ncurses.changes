@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Sat Aug 24 09:26:58 CEST 2002 - gs@suse.de
+
+- V 2.6.5
+- package installation: get rpm goups and selections,
+  enable YOU mode 
+
+-------------------------------------------------------------------
 Wed Aug 21 17:07:51 CEST 2002 - gs@suse.de
 
 - V 2.6.4
