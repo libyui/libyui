@@ -1010,7 +1010,7 @@ const NCstring PkgNames::MenuLoadSel()
 const NCstring PkgNames::DiskSpaceError()
 {
     // 
-    static const NCstring value = _("<b>Out of disk space!</b>");
+    static const NCstring value = _("<i>Out of disk space!</i>");
     return value;
 }
 

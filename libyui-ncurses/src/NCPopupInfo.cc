@@ -38,15 +38,17 @@
 NCPopupInfo::NCPopupInfo( const wpos at,
 			  const YCPString & headline,
 			  const YCPString & text,
-			  bool showOkButton )
+			  string okButtonLabel,
+			  string cancelButtonLabel )
     : NCPopup( at, false )
       , helpText( 0 )
       , okButton( 0 )
+      , cancelButton( 0 )
       , hDim( 50 )
       , vDim( 20 )
       , visible ( false )
 {
-    createLayout( headline, text, showOkButton );
+    createLayout( headline, text, okButtonLabel, cancelButtonLabel );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -71,7 +73,8 @@ NCPopupInfo::~NCPopupInfo()
 //
 void NCPopupInfo::createLayout( const YCPString & headline,
 				const YCPString & text,
-				bool showOkButton )
+				string okButtonLabel,
+				string cancelButtonLabel )
 {
 
   YWidgetOpt opt;
@@ -90,14 +93,30 @@ void NCPopupInfo::createLayout( const YCPString & headline,
   helpText = new NCRichText( split, opt, text );
   split->addChild( helpText );
 
-  if ( showOkButton )
+  NCSplit * hSplit = new NCSplit( split, opt, YD_HORIZ );
+  split->addChild( hSplit );
+
+  if ( okButtonLabel != "" )
   {
       opt.key_Fxx.setValue( 10 );
-      // add the ok button
-      okButton = new NCPushButton( split, opt, YCPString(PkgNames::OKLabel().str()) );
-      okButton->setId( PkgNames::OkButton () );
+      // add the OK button
+      okButton = new NCPushButton( hSplit, opt, YCPString(okButtonLabel) );
+      okButton->setId( PkgNames::OkButton() );
   
-      split->addChild( okButton );
+      hSplit->addChild( okButton );
+  }
+  
+  if ( cancelButtonLabel != "" )
+  {
+      NCSpacing * sp = new NCSpacing( hSplit, opt, 0.2, true, false );
+      hSplit->addChild( sp );
+      
+      opt.key_Fxx.setValue( 9 );
+      // add the Cancel button
+      cancelButton = new NCPushButton( hSplit, opt, YCPString(cancelButtonLabel) );
+      cancelButton->setId( PkgNames::Cancel() );
+  
+      hSplit->addChild( cancelButton );  
   }
 }
 
@@ -105,11 +124,11 @@ void NCPopupInfo::createLayout( const YCPString & headline,
 //
 //
 //	METHOD NAME : NCPopupInfo::showInfoPopup
-//	METHOD TYPE : void
+//	METHOD TYPE : NCursesEvent &
 //
 //	DESCRIPTION :
 //
-void NCPopupInfo::showInfoPopup( )
+NCursesEvent & NCPopupInfo::showInfoPopup( )
 {
     postevent = NCursesEvent();
     do {
@@ -117,6 +136,8 @@ void NCPopupInfo::showInfoPopup( )
     } while ( postAgain() );
     
     popdownDialog();
+
+    return postevent;
 }
 
 void NCPopupInfo::popup()
@@ -180,6 +201,23 @@ bool NCPopupInfo::postAgain()
     if ( ! postevent.widget )
 	return false;
 
+    if ( okButton && cancelButton )
+    {
+	YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
+
+	if ( currentId->compare( PkgNames::Cancel() ) == YO_EQUAL )
+	{
+	    // close the dialog 
+	    postevent = NCursesEvent::cancel;
+	    postevent.result = PkgNames::Cancel();
+	}
+	else if  ( currentId->compare( PkgNames::OkButton() ) == YO_EQUAL )
+	{
+	    postevent = NCursesEvent::button;
+	    postevent.result = PkgNames::OkButton();
+	}	
+    }
+    
     if ( postevent == NCursesEvent::button || postevent == NCursesEvent::cancel )
     {
         // return false means: close the popup dialog

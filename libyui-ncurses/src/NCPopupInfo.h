@@ -30,6 +30,7 @@
 #include "NCRichText.h"
 #include "NCCheckBox.h"
 #include "NCPushButton.h"
+#include "PkgNames.h"
 
 class YCPValue;
 
@@ -48,6 +49,8 @@ private:
 
     NCRichText * helpText;
     NCPushButton * okButton;
+    NCPushButton * cancelButton;
+    
     int hDim;
     int vDim;
     bool visible;
@@ -63,7 +66,8 @@ public:
     NCPopupInfo( const wpos at,
 		 const YCPString & headline,
 		 const YCPString & text,
-		 bool showOkButton = true );
+		 string okButtonLabel = PkgNames::OKLabel().str(),
+		 string cancelButtonLabel = "" );
     
     virtual ~NCPopupInfo();
 
@@ -71,9 +75,10 @@ public:
 
     void createLayout( const YCPString & headline,
 		       const YCPString & text,
-		       bool showOkButton );
+		       string okButtonLabel,
+		       string cancelButtonLabel );
 
-    void showInfoPopup( );
+    NCursesEvent & showInfoPopup( );
 
     void popup( );
 
