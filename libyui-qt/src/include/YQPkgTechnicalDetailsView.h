@@ -27,6 +27,11 @@
 #include "YQPkgGenericDetailsView.h"
 
 
+/**
+ * @short Display technical details (very much like 'rpm -qi') for a PMPackage
+ * object - the installed instance, the candidate instance or both (in two
+ * columns) if both exist. All other available instances are ignored.
+ **/
 class YQPkgTechnicalDetailsView : public YQPkgGenericDetailsView
 {
     Q_OBJECT

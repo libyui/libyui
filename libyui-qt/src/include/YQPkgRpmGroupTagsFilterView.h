@@ -30,6 +30,11 @@
 class YQPkgRpmGroupTag;
 
 
+/**
+ * @short RPM group tags filter view: Display the RPM group tags tree and emit
+ * signals if any group tag is selected so a package list can be filled or
+ * updated. 
+ **/
 class YQPkgRpmGroupTagsFilterView : public QListView
 {
     Q_OBJECT

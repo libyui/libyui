@@ -29,6 +29,9 @@
 class YQPkgListItem;
 
 
+/**
+ * @short Display a list of PMPackage objects.
+ **/
 class YQPkgList : public YQPkgObjList
 {
     Q_OBJECT

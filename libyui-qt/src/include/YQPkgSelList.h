@@ -29,6 +29,9 @@
 class YQPkgSelListItem;
 
 
+/**
+ * @short Display a list of PMSelection objects.
+ **/
 class YQPkgSelList : public YQPkgObjList
 {
     Q_OBJECT

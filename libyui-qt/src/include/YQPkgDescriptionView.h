@@ -25,6 +25,10 @@
 #include "YQPkgGenericDetailsView.h"
 
 
+/**
+ * @short Display the description of a PMObject derived object along with its
+ * name and summary. 
+ **/
 class YQPkgDescriptionView : public YQPkgGenericDetailsView
 {
     Q_OBJECT

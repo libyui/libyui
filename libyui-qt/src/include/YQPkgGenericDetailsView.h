@@ -29,6 +29,11 @@
 class QTabWidget;
 
 
+/**
+ * @short Base class for details views. Handles generic stuff like HTML
+ * formatting, Qt slots and display only if this view is visible at all (it may
+ * be hidden if it's part of a QTabWidget).
+ **/
 class YQPkgGenericDetailsView : public QTextBrowser
 {
     Q_OBJECT

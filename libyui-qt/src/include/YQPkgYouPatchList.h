@@ -28,7 +28,9 @@
 
 class YQPkgYouPatchListItem;
 
-
+/**
+ * @short Display a list of PMYouPatch objects.
+ **/
 class YQPkgYouPatchList : public YQPkgObjList
 {
     Q_OBJECT

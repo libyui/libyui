@@ -32,7 +32,7 @@ class QPopupMenu;
 
 
 /**
- * @short Abstract base class for a list of PMObjects.
+ * @short Abstract base class to display a list of PMObjects.
  * Handles most generic stuff like setting status etc.
  **/
 class YQPkgObjList : public QY2ListView
