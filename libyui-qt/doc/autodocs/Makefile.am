@@ -45,5 +45,5 @@ CLEANFILES = $(html_DATA)
 
 $(filter-out index.html, $(html_DATA)): index.html
 index.html: $(srcdir)/../../src/include/*.h
-	cd $(srcdir)/../../src/include && @ybindir@/ydoc @RPMNAME@ *.h
+	cd $(srcdir)/../../src/include && @ybindir@/ydoc qt *.h
 	mv -f $(srcdir)/../../src/include/*.html .
