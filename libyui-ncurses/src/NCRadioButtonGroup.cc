@@ -31,6 +31,7 @@
 NCRadioButtonGroup::NCRadioButtonGroup( NCWidget * parent, YWidgetOpt & opt )
     : YRadioButtonGroup( opt )
     , NCWidget( parent )
+    , focusId( 0 )
 {
   WIDDBG << endl;
   wstate = NC::WSdumb;
@@ -89,3 +90,40 @@ void NCRadioButtonGroup::removeRadioButton( YRadioButton *button )
   YRadioButtonGroup::removeRadioButton( button );
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCRadioButtonGroup::focusNextButton
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCRadioButtonGroup::focusNextButton( )
+{
+    if ( focusId < buttonlist.size() -1 )
+	focusId++;
+    else if ( focusId == buttonlist.size() -1 )
+	focusId = 0;
+
+    NCRadioButton * button = dynamic_cast<NCRadioButton*>(buttonlist[focusId]);
+    button->setKeyboardFocus();    
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCRadioButtonGroup::focusPrevButton
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCRadioButtonGroup::focusPrevButton()
+{
+    if ( focusId > 0 )
+	focusId--;
+    else if ( focusId == 0 )
+	focusId = buttonlist.size() -1;
+	
+    NCRadioButton * button = dynamic_cast<NCRadioButton*>(buttonlist[focusId]);
+    button->setKeyboardFocus();
+}

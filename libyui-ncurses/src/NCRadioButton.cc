@@ -180,6 +180,7 @@ NCursesEvent NCRadioButton::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
   bool oldChecked = checked;
+  NCRadioButtonGroup * group;
   
   switch ( key ) {
   case KEY_HOTKEY:
@@ -189,7 +190,14 @@ NCursesEvent NCRadioButton::wHandleInput( wint_t key )
     if ( getNotify() && oldChecked != checked )
       ret = NCursesEvent::ValueChanged;
     break;
-  }
+  case KEY_UP:
+	group = dynamic_cast<NCRadioButtonGroup *>(buttonGroup());
+	group->focusPrevButton();
+	break;
+   case KEY_DOWN:
+	group = dynamic_cast<NCRadioButtonGroup *>(buttonGroup());
+	group->focusNextButton();
+	break;	  
+  }	
   return ret;
 }
-

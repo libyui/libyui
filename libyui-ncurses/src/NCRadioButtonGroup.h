@@ -22,6 +22,7 @@
 #include <iosfwd>
 
 #include "YRadioButtonGroup.h"
+#include "NCRadioButton.h"
 #include "NCWidget.h"
 
 class NCRadioButtonGroup;
@@ -40,7 +41,8 @@ class NCRadioButtonGroup : public YRadioButtonGroup, public NCWidget {
   NCRadioButtonGroup            ( const NCRadioButtonGroup & );
 
   private:
-
+    unsigned int focusId;
+    
   protected:
 
     virtual const char * location() const { return "NCRadioButtonGroup"; }
@@ -57,6 +59,10 @@ class NCRadioButtonGroup : public YRadioButtonGroup, public NCWidget {
     virtual void removeRadioButton(YRadioButton *button);
 
     virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+
+    void focusNextButton( );
+    void focusPrevButton( );
+
 };
 
 ///////////////////////////////////////////////////////////////////
