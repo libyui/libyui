@@ -89,13 +89,45 @@ public:
      * Returns the minimal length of a segment in pixels.
      **/
     int segmentMinLength() const { return _segmentMinLength; }
-    
+
     /**
      * Set the minimal length of a segment in pixels.
      **/
     void setSegmentMinLength( int val ) { _segmentMinLength = val; }
 
-    
+    /**
+     * Returns the thickness (base to point) of the small triangles next to the
+     * spacing between individual segments. The base length of those small
+     * triangles is double this value minus one. A value <1 indicates no
+     * such triangles will be drawn.
+     **/
+    int triThickness() const { return _triThickness; }
+
+    /**
+     * Set the thickness (base to point) of the small triangles next to the
+     * spacing between individual segments. The base length of those small
+     * triangles is double this value minus one.
+     * 
+     * Use -1 to switch off those triangles - in which case triSpacing (see
+     * below) will be set to 0.
+     *
+     * This call does not trigger a screen update.
+     **/
+    void setTriThickness( int value );
+
+    /**
+     * Returns the spacing between the segment indicators and the small
+     * triangles next to the spacing between segments.
+     **/
+    int triSpacing() const { return _triSpacing; }
+
+    /**
+     * Sets the spacing between the segment indicators and the small
+     * triangles next to the spacing between segments.
+     **/
+    void setTriSpacing( int value ) { _triSpacing = value; }
+
+
 protected:
 
     /**
@@ -123,12 +155,19 @@ protected:
 		      int thickness,
 		      int indent );
 
-    
+    /**
+     * Draw markers between segments (or beside that spacing).
+     **/
+    void drawMarkers( QPainter & painter, int offset, int thickness );
+
+
 private:
 
     int	_margin;
     int _spacing;
     int _segmentMinLength;
+    int _triThickness;
+    int _triSpacing;
 };
 
 

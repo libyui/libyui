@@ -25,6 +25,8 @@
 #include "YQUI.h"
 #include "YQMultiProgressMeter.h"
 
+#define TRIANGLE_SHAPE	0
+
 
 YQMultiProgressMeter::YQMultiProgressMeter( QWidget *		parent,
 					    const YWidgetOpt & 	opt,
@@ -32,10 +34,18 @@ YQMultiProgressMeter::YQMultiProgressMeter( QWidget *		parent,
 					    const YCPList &	maxValues )
     : QWidget( parent )
     , YMultiProgressMeter( opt, horizontal, maxValues )
-    , _margin( 2 )
-    , _spacing ( 2 )
-    , _segmentMinLength( 15 )
 {
+    _margin 		= 2;
+    _spacing		= 2;
+    _segmentMinLength 	= 12;
+    _triSpacing		= 1;
+    setTriThickness( 4 );
+
+#if TRIANGLE_SHAPE
+    _spacing		= 0;
+    setTriThickness( -1 );
+#endif
+
     setWidgetRep( this );
 }
 
@@ -57,12 +67,15 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 	painter.eraseRect( event->rect() );
 
     int totalLength 	= horizontal() ? width() : height();
-    int totalThickness 	= horizontal() ? height() : width();
+    int thickness 	= horizontal() ? height() : width();
 
     totalLength 	-= 2 * margin() + spacing() * ( segments()-1 );
-    totalThickness	-= 2 * margin();
+    thickness		-= 2 * margin();
 
-    if ( totalLength < 1 || totalThickness < 1 || segments() < 1 )
+    if ( triThickness() > 0 )
+	thickness -= 2 * triThickness() + 2 * triSpacing();
+
+    if ( totalLength < 1 || thickness < 1 || segments() < 1 )
 	return;
 
 
@@ -96,7 +109,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
     double scale = ( (double) totalLength ) / ( (double) totalSum );
     int scaledMinLength = (int) ( minLength / scale );
 
-    
+
     // Check how many segments would become smaller than the minimum
 
     int smallSegmentsCount = 0;
@@ -127,11 +140,10 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
     scale = ( (double) distributableLength ) / ( (double) restSum );
 
 
-    // Calculate thickness and indentation
+    // Calculate indentation
 
-    int thickness = horizontal() ? height() : width();
-#if 0
-    int indent    = (int) ( thickness * 0.37 );
+#if TRIANGLE_SHAPE
+    int indent = (int) ( thickness * 0.37 );
 #else
     int indent = 0;
 #endif
@@ -145,9 +157,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 	painter.scale( 1.0, -1.0 );
     }
 
-    painter.setBrush( palette().active().highlight() );
     int offset = margin();
-
 
     // Draw each segment in turn
 
@@ -161,6 +171,10 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 	    length = (int) ( maxValue( i ) * scale + 0.5 );
 
 	drawSegment( i, painter, offset, length, thickness, indent );
+
+	if ( i > 0 )
+	    drawMarkers( painter, offset, thickness );
+
 	offset += length + spacing();
     }
 }
@@ -179,6 +193,10 @@ void YQMultiProgressMeter::drawSegment( int segment,
 
     int fillStart  = 0;
     int fillHeight = 0;
+    int border = margin();
+
+    if ( triThickness() > 0 )
+	border += triThickness() + triSpacing();
 
     if ( currentValue( segment ) < maxValue( segment ) )
     {
@@ -193,15 +211,18 @@ void YQMultiProgressMeter::drawSegment( int segment,
 	fillHeight = (int) ( indent * emptyPart );
     }
 
+    thickness--; // We always deal with tickness-1 anyway, so let's cut this short
+
     if ( fillStart < length )
     {
 	QPointArray points( 4 );
 	int p=0;
-	points.setPoint( p++, offset + fillStart,	margin() + fillHeight );
-	points.setPoint( p++, offset + fillStart, 	thickness - margin() - fillHeight );
-	points.setPoint( p++, offset + length, 		thickness - margin() - indent );
-	points.setPoint( p++, offset + length, 		margin() + indent );
+	points.setPoint( p++, offset + fillStart,	border + fillHeight );
+	points.setPoint( p++, offset + fillStart, 	border + thickness - fillHeight );
+	points.setPoint( p++, offset + length, 		border + thickness - indent );
+	points.setPoint( p++, offset + length, 		border + indent );
 
+	painter.setBrush( palette().active().highlight() );
 	painter.setPen( NoPen );
 	painter.drawConvexPolygon( points );
     }
@@ -218,26 +239,66 @@ void YQMultiProgressMeter::drawSegment( int segment,
 
     painter.setPen( dark );
     painter.setPen( SolidLine );
-    painter.drawLine( offset, margin(),
-		      offset, thickness - margin() );
+    painter.drawLine( offset, border,
+		      offset, border + thickness );
 
 
     // Draw upper outline
 
-    painter.drawLine( offset, margin(),
-		      offset + length - 1, margin() + indent );
+    painter.drawLine( offset, border,
+		      offset + length - 1, border + indent );
 
     // Draw arrow point (right)
 
     painter.setPen( light );
-    painter.drawLine( offset + length - 1, margin() + indent,
-		      offset + length - 1, thickness - margin() - indent );
+    painter.drawLine( offset + length - 1, border + indent,
+		      offset + length - 1, border + thickness - indent );
 
     // Draw lower outline
 
-    painter.drawLine( offset, thickness - margin(),
-		      offset + length - 1, thickness - margin() - indent );
+    painter.drawLine( offset, border + thickness,
+		      offset + length - 1, border + thickness - indent );
 
+}
+
+
+void YQMultiProgressMeter::drawMarkers( QPainter & painter, int offset, int thickness )
+{
+    if ( triThickness() < 1 )
+	return;
+
+    offset -= spacing() / 2 + 1; 	// integer division rounds down!
+
+    const QColor & color = palette().active().foreground();
+    painter.setPen( color );
+    painter.setPen( SolidLine );
+    painter.setBrush( color );
+    // painter.setBrush( NoBrush );
+    
+
+    // Draw upper marker triangle
+
+    int tri = triThickness();
+    QPointArray points( 3 );
+
+    int p=0;
+    points.setPoint( p++, offset - tri+1,	margin() );		// top left (base)
+    points.setPoint( p++, offset,		margin() + tri-1 );	// lower center (point)
+    points.setPoint( p++, offset + tri-1, 	margin() );		// top right (base)
+
+    painter.drawConvexPolygon( points );
+
+
+    // Draw lower marker triangle
+
+    int pointOffset = margin() + tri + thickness + 2 * triSpacing();
+
+    p=0;
+    points.setPoint( p++, offset,		pointOffset );		// top center (point)
+    points.setPoint( p++, offset + tri-1, 	pointOffset + tri-1 );	// top right (base)
+    points.setPoint( p++, offset - tri+1,	pointOffset + tri-1 );	// bottom left (base)
+
+    painter.drawConvexPolygon( points );
 }
 
 
@@ -250,11 +311,17 @@ void YQMultiProgressMeter::setEnabling( bool enabled )
 
 long YQMultiProgressMeter::nicesize( YUIDimension dim )
 {
-#if 0
-    int thickness = 35 + 2 * margin();
+    int length = 70 * segments() + 2 * margin();
+
+#if TRIANGLE_SHAPE
+    int thickness = 35;
+#else
+    int thickness = 23;
 #endif
-    int thickness = 23 + 2 * margin();
-    int length    = 70 * segments() + 2 * margin();
+    thickness += 2 * margin();
+
+    if ( triThickness() > 0 )
+	thickness += 2 * triThickness() + 2 * triSpacing();
 
     if ( dim == YD_HORIZ )	return horizontal() ? length : thickness;
     else 			return horizontal() ? thickness : length;
@@ -267,6 +334,14 @@ void YQMultiProgressMeter::setSize( long newWidth, long newHeight )
     doUpdate();
 }
 
+
+void YQMultiProgressMeter::setTriThickness( int value )
+{
+    _triThickness = value;
+
+    if ( _triThickness < 1 )
+	setTriSpacing( 0 );
+}
 
 
 #include "YQMultiProgressMeter.moc"
