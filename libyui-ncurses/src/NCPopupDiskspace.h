@@ -48,7 +48,6 @@ private:
     int hDim;
     int vDim;
 
-    string formatSpace( string space );
     string usedPercent( FSize used, FSize total );
     
 protected:

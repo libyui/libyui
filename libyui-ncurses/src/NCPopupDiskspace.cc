@@ -134,9 +134,9 @@ void NCPopupDiskspace::fillPartitionTable()
 	pkgLine.clear();
 	pkgLine.push_back( (*it).mountpoint() );
 
-	pkgLine.push_back( formatSpace( (*it).pkg_used().asString() ) );
-	pkgLine.push_back( formatSpace( (*it).pkg_available().asString() ) );
-	pkgLine.push_back( formatSpace( (*it).total().asString() ) );	
+	pkgLine.push_back( (*it).pkg_used().form(8) );
+	pkgLine.push_back( (*it).pkg_available().form(8) );
+	pkgLine.push_back( (*it).total().form(8) );	
 	pkgLine.push_back( usedPercent( (*it).pkg_used(), (*it).total() ) );
 	partitions->itemAdded( pkgLine, i );
 	
@@ -165,7 +165,9 @@ string NCPopupDiskspace::checkDiskSpace()
     {
 	if ( (*it).pkg_available() < (FSize)0 )
 	{
+	    text += "\"";
 	    text += (*it).mountpoint();
+	    text += "\""; 
 	    text += " ";
 	    text += PkgNames::MoreText().str();
 	    text += " ";
@@ -191,17 +193,6 @@ string NCPopupDiskspace::usedPercent( FSize used, FSize total )
     sprintf( percentStr, "%d%%", percent );
      
     return percentStr;
-}
-
-string NCPopupDiskspace::formatSpace( string space )
-{
-    // 			1024.00 GB
-    //                  0123456789
-    string diskSpace = "          ";
-
-    diskSpace.replace( diskSpace.size()-space.length(), diskSpace.size()-1, space );
-
-    return diskSpace;
 }
 
 ///////////////////////////////////////////////////////////////////

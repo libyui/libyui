@@ -560,7 +560,7 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr )
     }
 
     FSize size = pkgPtr->size();     	// installed size
-    pkgLine.push_back( size.form( 8 ) );	
+    pkgLine.push_back( size.form( 8 ) );  // format size	
     
     addLine( status,	// get the package status
 	     pkgLine, 	// the package data
@@ -589,7 +589,7 @@ bool NCPkgTable::createPatchEntry ( PMYouPatchPtr patchPtr )
     pkgLine.push_back( patchPtr->kindLabel(patchPtr->kind()) );  // patch kind
     pkgLine.push_back( patchPtr->summary() );  	// short description
     FSize size = patchPtr->size();     		// installed size
-    pkgLine.push_back( size.asString() );
+    pkgLine.push_back( size.form( 8 ) );
     
     addLine( patchPtr->getSelectable()->status(), //  get the status
 	     pkgLine,
