@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Jul  9 14:59:34 CEST 2003 - gs@suse.de
+
+- V 2.8.5
+- adapt ncurses-UI to UTF-8 support
+- use advanced event handling 
+
+-------------------------------------------------------------------
 Wed May 28 14:13:53 CEST 2003 - ma@suse.de
 
 - V 2.8.4
