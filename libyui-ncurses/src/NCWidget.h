@@ -138,7 +138,8 @@ class NCWidget : public tnode<NCWidget*>, protected NCursesError {
 
     virtual bool HasHotkey( int key ) const;
     virtual bool HasFunctionHotkey( int key ) const;
-
+    virtual int  GetFunctionHotkey() const;
+    
     virtual NCursesEvent wHandleHotkey( int key );
     virtual NCursesEvent wHandleInput( int key );
 

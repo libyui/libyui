@@ -506,7 +506,12 @@ bool NCWidget::HasFunctionHotkey( int key ) const
 
     return( key == hotfkey ) ;
 }
-  
+
+int NCWidget::GetFunctionHotkey() const
+{
+    return hotfkey;
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 //	METHOD NAME : NCWidget::setFunctionHotkey
