@@ -192,9 +192,9 @@ YQPackageSelector::YQPackageSelector( YUIQt * yuiqt, QWidget *parent, YWidgetOpt
 #endif
     }
 
-    
+
 #if FAKE_DISK_USAGE_IN_TEST_MODE
-    
+
     if ( _testMode && _diskUsageList )
     {
 	y2milestone( "Using fake disk usage data" );
@@ -636,7 +636,7 @@ YQPackageSelector::addMenus()
     // Menu entry for help about used symbols (icons)
     _helpMenu->insertItem( _( "&Symbols"  ), this, SLOT( symbolHelp() 	), SHIFT + Key_F1 );
 
-    // Menu entry for keyboard help 
+    // Menu entry for keyboard help
     _helpMenu->insertItem( _( "&Keys"     ), this, SLOT( keyboardHelp() )                 );
 }
 
@@ -706,21 +706,53 @@ YQPackageSelector::makeConnections()
     }
 
     //
-    // Connect conflict dialog
+    // Connect package conflict dialog
     //
 
     if ( _pkgConflictDialog && _pkgList )
     {
 	connect( _pkgConflictDialog,	SIGNAL( updatePackages()      ),
 		 _pkgList, 		SLOT  ( updateToplevelItemStates() ) );
+
+	if ( _diskUsageList )
+	{
+	    connect( _pkgConflictDialog, SIGNAL( updatePackages()	   ),
+		     _diskUsageList,	 SLOT  ( updateDiskUsage()	   ) );
+	}
     }
 
+
+    //
+    // Connect selection conflict dialog
+    //
+
+    if ( _selConflictDialog && _selList )
+    {
+	connect( _selConflictDialog,	SIGNAL( updatePackages()      	),
+		 _selList, 		SLOT  ( applyChanges() 		) );
+
+	connect( _selConflictDialog,	SIGNAL( updatePackages()      	),
+		 _selList, 		SLOT  ( updateToplevelItemStates() ) );
+
+	if ( _diskUsageList )
+	{
+	    connect( _selConflictDialog, SIGNAL( updatePackages()	   ),
+		     _diskUsageList,	 SLOT  ( updateDiskUsage()	   ) );
+	}
+    }
+
+
+
+    //
+    // Connect package versions view
+    //
 
     if ( _pkgVersionsView && _pkgList )
     {
 	connect( _pkgVersionsView, 	SIGNAL( candidateChanged( PMObjectPtr ) ),
 		 _pkgList,		SLOT  ( updateToplevelItemData() ) );
     }
+
 
 
     //
@@ -877,7 +909,7 @@ YQPackageSelector::pkgExport()
 	if ( exporter.doExport( Pathname( (const char *) filename ) ) )
 	{
 	    // Success
-	    
+
 	    autoResolveDependencies();
 	}
 	else	// Error

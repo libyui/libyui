@@ -78,6 +78,12 @@ public slots:
      **/
     void sendUpdatePackages() { emit updatePackages(); }
 
+    /**
+     * Activate current selections in the selection manager and emit an
+     * updatePackages() signal. 
+     **/
+    void applyChanges();
+
 public:
 
     /**

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Mar 10 17:37:33 CET 2003 - sh@suse.de
+
+- Update disk usage in PkgMgr after selection dependency solving
+
+-------------------------------------------------------------------
 Mon Mar 10 15:47:59 CET 2003 - sh@suse.de
 
 - V 2.7.15

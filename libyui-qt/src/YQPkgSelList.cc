@@ -143,6 +143,14 @@ YQPkgSelList::selection() const
 }
 
 
+void
+YQPkgSelList::applyChanges()
+{
+    Y2PM::selectionManager().activate( Y2PM::packageManager() );
+    emit updatePackages();
+}
+
+
 
 
 
@@ -172,8 +180,7 @@ void
 YQPkgSelListItem::setStatus( PMSelectable::UI_Status newStatus )
 {
     YQPkgObjListItem::setStatus( newStatus );
-    Y2PM::selectionManager().activate( Y2PM::packageManager() );
-    _pkgSelList->sendUpdatePackages();
+    _pkgSelList->applyChanges();
 }
 
 
