@@ -1,9 +1,14 @@
 -------------------------------------------------------------------
+Tue Dec 03 16:36:41 CET 2002 - arvin@suse.de
+
+- added curl-devel and openssl-devel to neededforbuild
+
+-------------------------------------------------------------------
 Fri Nov 29 16:20:29 CET 2002 - gs@suse.de
 
 - V 2.7.3
 - function key handling enabled
-- improvements for package installation dialog 
+- improvements for package installation dialog
 
 -------------------------------------------------------------------
 Thu Nov 14 20:56:17 CET 2002 - ma@suse.de
