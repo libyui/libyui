@@ -163,8 +163,10 @@ void YQDialog::activate(bool active)
 {
     if (active)
     {
+#if 0
 	if (! yuiqt->hasWM() )
 	    setActiveWindow();
+#endif
 
 	ensureOnlyOneDefaultButton();
     }

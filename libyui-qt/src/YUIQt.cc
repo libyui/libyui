@@ -888,8 +888,9 @@ bool YUIQt::close()
 }
 
 
-bool YUIQt::eventFilter( QObject *obj, QEvent *ev )
+bool YUIQt::eventFilter( QObject * obj, QEvent *ev )
 {
+    
     if ( ev->type() == QEvent::Close )
     {
 	// Don't simply close the application window, return from UserInput()
@@ -902,18 +903,25 @@ bool YUIQt::eventFilter( QObject *obj, QEvent *ev )
     }
     else if ( ev->type() == QEvent::Show )
     {
-	if ( main_dialog_id > 0 )
+	if ( obj == main_win )
 	{
-	    // Work around QWidgetStack bug: The last raiseWidget() call
-	    // (from closeDialog() ) might have failed if the widget was
-	    // invisible at that time, e.g., because the user had switched to
-	    // some other virtual desktop (bugzilla bug #11310)
+	    if ( main_dialog_id > 0 )
+	    {
+		// Work around QWidgetStack bug: The last raiseWidget() call
+		// (from closeDialog() ) might have failed if the widget was
+		// invisible at that time, e.g., because the user had switched to
+		// some other virtual desktop (bugzilla bug #11310)
 
-	    widget_stack->raiseWidget( main_dialog_id );
+		widget_stack->raiseWidget( main_dialog_id );
+	    }
+	}
+	else
+	{
+	    return showEventFilter( obj, ev );
 	}
     }
 
-    return QObject::eventFilter( obj, ev);
+    return false;	// Don't stop event processing
 }
 
 
@@ -927,7 +935,10 @@ bool YUIQt::showEventFilter( QObject * obj, QEvent * ev )
 	QWidget * wid = dynamic_cast<QWidget *> (obj);
 
 	if ( wid )
+	{
+	    y2milestone( "Force raising window" );
 	    wid->setActiveWindow();
+	}
     }
 
     return false;	// Don't stop event processing
