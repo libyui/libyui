@@ -140,16 +140,15 @@ void NCMenuButton::wRedraw()
   if ( label.height() > 1 ) {
     win->box( wrect(0,win->size()-wsze(0,1)) );
   }
-  win->printw( 0, 0, "(" );
-  win->printw( 0, win->maxx()-1, ")" );
+  win->printw( 0, 0, "[" );
+  win->printw( 0, win->maxx(), "]" );
 
   label.drawAt( *win, style, wpos(0,1), wsze(-1, win->width() - 3),
 		NC::CENTER );
 
   win->bkgdset( style.scrl );
-  win->vline( 0, win->maxx(), win->height(), ' ' );
-  win->addch( 0, win->maxx(), ACS_DARROW );
-
+  win->vline( 0, win->maxx()-1, win->height(), ' ' );
+  win->addch( 0, win->maxx()-1, ACS_DARROW );
 }
 
 ///////////////////////////////////////////////////////////////////
