@@ -167,7 +167,7 @@ void NCPopupDeps::showDependencies( )
 
     //	typedef std::list<ErrorResult> ErrorResultList;
     PkgDep::ErrorResultList	badList;
-   
+       
     NCMIL << "Solving..." << endl ;
 
     // call the Y2PM::packageManager() to get the "badlist"
@@ -178,14 +178,12 @@ void NCPopupDeps::showDependencies( )
 	// evaluate the ErrorResultList
 	evaluateErrorResult( badList );
 
-        // clear the lists
-	deps->itemsCleared();
-	pkgs->itemsCleared();
-	
 	// fill the list with packages  which have unresolved deps
 	fillDepsPackageList( pkgs );
 
 	showDependencyPopup();    // show the dependencies
+
+	pkgs->setKeyboardFocus();	
     }
     
 }
@@ -195,6 +193,9 @@ void NCPopupDeps::evaluateErrorResult( PkgDep::ErrorResultList errorlist )
 {
     int i = 0;
     PkgDep::ErrorResultList::iterator it = errorlist.begin();
+
+    // clear the deps vector !!!
+    dependencies.clear();
     
     while ( it != errorlist.end() )
     {
@@ -282,6 +283,8 @@ string NCPopupDeps::getDependencyKind(  PkgDep::ErrorResult error )
 void NCPopupDeps::concretelyDependency( int index )
 {
     unsigned int size = dependencies.size();
+
+    deps->itemsCleared();
     
     if ( index >= 0 && (unsigned int)index < size )
     {
@@ -305,6 +308,7 @@ NCursesEvent NCPopupDeps::showDependencyPopup( )
     postevent = NCursesEvent();
 
     do {
+	
 	popupDialog();
 	
     } while ( postAgain() );
@@ -369,8 +373,23 @@ bool NCPopupDeps::postAgain()
 	PMObjectPtr currentPtr = pkgs->getDataPointer( pkgs->getCurrentItem() );
 
 	// solve the dependencies and create new list of "bad" packages
-	// checkDependencies();
+	PkgDep::ErrorResultList	badList;
+	PkgDep::ResultList	goodList;
+   
+	NCMIL << "Solving..." << endl ;
+
+	// call the Y2PM::packageManager() to get the "badlist"
+	bool success = Y2PM::packageManager().solveInstall( goodList, badList );
+
+	// evaluate the ErrorResultList
+	evaluateErrorResult( badList );
+
+
 	
+	// fill the list with packages  which have unresolved deps
+	fillDepsPackageList( pkgs );
+
+
 	// set current item ( if the package is still there )
 	if ( currentPtr )
 	{
@@ -389,7 +408,6 @@ bool NCPopupDeps::postAgain()
 		index ++;
 	    }
 	}
-
 	pkgs->setKeyboardFocus();
     }
     else if  ( currentId->compare( PkgNames::OkButton () ) == YO_EQUAL )
@@ -404,4 +422,3 @@ bool NCPopupDeps::postAgain()
     }
     return true;
 }
-
