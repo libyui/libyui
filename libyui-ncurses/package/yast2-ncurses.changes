@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Sep 10 16:08:42 CEST 2002 - gs@suse.de
+
+- V 2.6.16
+- package installation: show the required disk space,
+  do an initial dependency solving, allow status change autoinstall -> taboo
+- bugfixes YOU: deselect works, don't check dependencies
+
+-------------------------------------------------------------------
 Mon Sep  9 18:31:47 CEST 2002 - gs@suse.de
 
 - V 2.6.15
