@@ -49,9 +49,12 @@ class NCPopupSearch : public NCPopup {
 private:
 
     NCComboBox * searchExpr;
-    NCRichText * helpText;
     NCCheckBox * ignoreCase;
+    NCCheckBox * checkName;
     NCCheckBox * checkDescr;
+    NCCheckBox * checkProvides;
+    NCCheckBox * checkRequires;
+    
     NCPushButton * cancelButton;
     NCPushButton * okButton;
 

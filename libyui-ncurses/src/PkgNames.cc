@@ -509,7 +509,7 @@ const NCstring PkgNames::SearchPhrase()
 const NCstring PkgNames::CheckDescr()
 {
     // text for search popup 
-    static const NCstring value = _("C&heck description");
+    static const NCstring value = _("&Description");
     return value;
 }
 
