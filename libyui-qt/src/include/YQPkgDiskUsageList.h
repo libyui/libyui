@@ -40,8 +40,12 @@ class YQPkgDiskUsageList : public QY2DiskUsageList
 public:
     /**
      * Constructor.
+     *
+     * 'thresholdPercent' can be used to include only partitions with at least
+     * this many percent used disk space in the list. This is useful for
+     * warning dialogs (only?).
      **/
-    YQPkgDiskUsageList( QWidget *parent );
+    YQPkgDiskUsageList( QWidget *parent, int thresholdPercent = 0 );
 
     /**
      * Destructor.

@@ -36,6 +36,7 @@ pkginclude_HEADERS =				\
 	YQPkgConflictList.h			\
 	YQPkgDependenciesView.h			\
 	YQPkgDiskUsageList.h			\
+	YQPkgDiskUsageWarningDialog.h		\
 	YQPkgDescriptionView.h			\
 	YQPkgGenericDetailsView.h		\
 	YQPkgList.h				\

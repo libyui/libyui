@@ -28,11 +28,12 @@
 
 #include "YUIQt.h"
 #include "YQPkgDiskUsageList.h"
+#include "YQPkgDiskUsageWarningDialog.h"
 #include "YQi18n.h"
 
 
 
-YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget *parent )
+YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget *parent, int thresholdPercent )
     : QY2DiskUsageList( parent, true )
 {
     _debug = false;
@@ -41,11 +42,15 @@ YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget *parent )
 
     while ( it != du.end() )
     {
-	YQPkgDiskUsageListItem * item = new YQPkgDiskUsageListItem( this, *it );
-	CHECK_PTR( item );
-	item->updateData();
-
-	_items.insert( it->mountpoint().c_str(), item );
+	if ( thresholdPercent == 0 ||	// Slight optimization for the most common case
+	     it->pkg_u_percent() >= thresholdPercent )
+	{
+	    YQPkgDiskUsageListItem * item = new YQPkgDiskUsageListItem( this, *it );
+	    CHECK_PTR( item );
+	    item->updateData();
+	    _items.insert( it->mountpoint().c_str(), item );
+	}
+	
 	++it;
     }
 }
@@ -133,11 +138,21 @@ YQPkgDiskUsageList::keyPressEvent( QKeyEvent *event )
 			case '7':	percent	= 70;	break;
 			case '8':	percent	= 80;	break;
 			case '9':	percent	= 90;	break;
+			case 'o':	percent	= 120;	break;
 			case '+':	percent += 2; 	break;
 			case '-':	percent--;	break;
+
+			case 'w':
+			    YQPkgDiskUsageWarningDialog::diskUsageWarning( _("<b>Warning:</b> Disk space is running out!") ,
+									   90, _("&OK") );
+			    break;
+			    
+			case 'f':
+			    YQPkgDiskUsageWarningDialog::diskUsageWarning( _("<b>Error:</b> Out of disk space!"), 100,
+									   _("&Continue anyway"), _("&Cancel") );
+			    break;
 		    }
 
-		    if ( percent > 100 ) percent = 100;
 		    if ( percent < 0   ) percent = 0;
 		    YQPkgDuData du( item->duData() );
 

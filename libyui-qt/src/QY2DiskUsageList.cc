@@ -133,9 +133,6 @@ QY2DiskUsageListItem::usedPercent() const
     if ( totalSize() != 0 )
 	percent = ( 100 * usedSize() ) / totalSize();
 
-    if ( percent > 100 )
-	percent = 100;
-
     return percent;
 }
 
@@ -231,7 +228,15 @@ QY2DiskUsageListItem::paintCell( QPainter *		painter,
     }
     else
     {
-	QY2ListViewItem::paintCell( painter, colorGroup, column, width, alignment );
+	QColorGroup cg( colorGroup );
+	
+	if ( usedSize() > totalSize() )
+	    cg.setColor( QColorGroup::Text, Qt::red );		// Set red text foreground
+
+	// Intentionally bypassing the direct parent class method, use the grandparent's:
+	// Don't let QY2ListViewItem::_textColor / _backgroundColor interfere with our colors.
+	
+	QListViewItem::paintCell( painter, cg, column, width, alignment );
     }
 }
 
@@ -247,6 +252,8 @@ QY2DiskUsageListItem::paintPercentageBar( float			percent,
 					  const QColor &	fillColor,
 					  const QColor &	barBackground )
 {
+    if ( percent > 100.0 )	percent = 100.0;
+    if ( percent < 0.0   )	percent = 0.0;
     int penWidth = 2;
     int extraMargin = 3;
     int x = _diskUsageList->itemMargin();
