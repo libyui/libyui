@@ -148,6 +148,8 @@ YQPkgConflictDialog::solveAndShowConflicts()
 
     if ( success )
     {
+	setResult( QDialog::Accepted );
+	
 	if ( isVisible() )
 	    accept();
     }
