@@ -1133,6 +1133,11 @@ string PackageSelector::createDescrText( list<string> value )
     return html_text;
 }
 
+void PackageSelector::updatePackageList()
+{
+    packageList->updateTable();
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 // createProvides

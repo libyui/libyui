@@ -142,8 +142,11 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
 	    PMSelectionPtr selPtr = selections[index].first;
 	
 	    NCMIL << "Current selection: " << getCurrentLine() << endl;
-
+	    // activate the package solving
+	    Y2PM::selectionManager().activate( Y2PM::packageManager() );
+	    // show the package list
 	    packager->showSelPackages( getCurrentLine(), selPtr );
+	 
 	}
     }
     
@@ -236,6 +239,8 @@ long NCPopupSelection::nicesize(YUIDimension dim)
 //
 NCursesEvent NCPopupSelection::wHandleInput( int ch )
 {
+    bool ok = true;
+    
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;
 
@@ -246,8 +251,6 @@ NCursesEvent NCPopupSelection::wHandleInput( int ch )
     
     if ( ch == KEY_SPACE )
     {
-	// FIXME: inform the instsource manager
-	
 	int index = selectionBox->getCurrentItem();
 	PMSelectionPtr selPtr = selections[index].first;
 	if ( selectionBox && (unsigned)index < selections.size() )
@@ -255,12 +258,19 @@ NCursesEvent NCPopupSelection::wHandleInput( int ch )
 	    if ( selections[index].second )
 	    {
 		selections[index] = make_pair( selPtr, false );
-		NCMIL << "Selection: " << selPtr->name() << " is DEselected" << endl;	
+		// inform the selection manager
+		ok = selPtr->getSelectable()->set_status( PMSelectable::S_NoInst );
+		
+		NCMIL << "Selection: " << selPtr->name() << " is DEselected" <<
+		         ", result: " << (ok?"true":"false") << endl;	
 	    }
 	    else
 	    {
-		selections[index] = make_pair( selPtr, true );	
-		NCMIL << "Selection: " << selPtr->name() << " is selected" << endl;	
+		selections[index] = make_pair( selPtr, true );
+		// inform the selection manager
+		ok = selPtr->getSelectable()->set_status( PMSelectable::S_Install );
+		NCMIL << "Selection: " << selPtr->name() << " is selected" <<
+		         ", result: " << (ok?"true":"false") << endl;	
 	    }
 	}
     }

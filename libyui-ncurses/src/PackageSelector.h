@@ -257,6 +257,11 @@ class PackageSelector
     */
     bool showSelPackages( const YCPString & label, PMSelectionPtr selPtr );
 
+   /**
+    * Updates the status in list of packages
+    */
+    void updatePackageList();
+    
     /**
      * Check if 'pkg' matches 'selectedRpmGroup'.
      * Returns true if there is a match, false otherwise or if 'pkg' is 0.

@@ -251,7 +251,14 @@ bool NCPkgTable::changeStatus( int index, NCPkgStatus newstatus )
 
     if ( ok )
     {
+	// update this list to show the status changes
 	updateTable();
+	
+	if ( statusStrategy->getType() == T_Avail )
+	{
+	    // additionally update the package list
+	    packager->updatePackageList();
+	}
     }
 
     return ok;
@@ -371,7 +378,6 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 	    
 	    PMObjectPtr objPtr = getDataPointer(citem);
 	    
-	    // debug only
 	    if ( objPtr && packager && (statusStrategy->getType() != T_Avail) )
 	    {
 		NCMIL << "Showing package information" << endl; 
