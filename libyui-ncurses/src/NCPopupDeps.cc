@@ -230,7 +230,7 @@ void NCPopupDeps::evaluateErrorResult( PkgDep::ErrorResultList errorlist )
 	}
 	else 
 	{
-	    NCMIL << "No PMSolvablePtr for " << (*it) << endl;
+	    NCDBG << "No PMSolvablePtr for " << (*it) << endl;
 	}
 	
 	++it;
@@ -343,7 +343,7 @@ bool NCPopupDeps::concretelyDependency( int index )
     // get the ErrorResult
     PkgDep::ErrorResult error = dependencies[index];
 	
-    NCMIL << "*** Showing: " << error << endl;	
+    NCDBG << "*** Showing: " << error << endl;	
 
     // get the dependencies
     
@@ -456,7 +456,8 @@ bool NCPopupDeps::concretelyDependency( int index )
     else if ( !error.referers.empty() )
     {
 	list<PkgDep::RelInfo>::iterator it = error.referers.begin();
-	while ( it != error.referers.end() )
+	// set a limit !!! (e.g. glibc is required by .....)
+	while ( it != error.referers.end() && i < 100 )
 	{
 	    pkgLine.clear();
 	    PMObjectPtr objPtr = (*it).solvable; 
