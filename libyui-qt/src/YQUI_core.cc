@@ -126,8 +126,8 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 
         // Set min defaultsize or figure one out if -geometry was not used
 
-	if ( _default_size.width()  < 640 ||
-	     _default_size.height() < 480   )
+	if ( _default_size.width()  < 800 ||
+	     _default_size.height() < 600   )
 	{
 	    int x_res = qApp->desktop()->width();
 	    int y_res = qApp->desktop()->height();
