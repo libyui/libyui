@@ -22,6 +22,8 @@
 
 #include "PackageSelector.h"
 #include <y2pm/PMSelectable.h>
+#include <Y2PM.h>
+#include <y2pm/PMManager.h>
 
 
 ///////////////////////////////////////////////////////////////////
@@ -302,8 +304,27 @@ bool NCPkgTable::fillDefaultList( )
 {
     switch ( tableType )
     {
-	case T_Packages:
+	case T_Patches: {
+	    packager->fillPatchList( "all" );	// default: all patches
+
+	    // set the visible info to long description 
+	    packager->setVisibleInfo ( PkgNames::PatchDescr() );
+	    // show the package description of the current item
+	    packager->showPatchInformation( getDataPointer( getCurrentItem() ) );
+	    break;
+	}
 	case T_Update: {
+	    if ( !Y2PM::packageManager().updateEmpty() )
+	    {
+		packager->fillUpdateList();
+		// set the visible info to package description 
+		packager->setVisibleInfo ( PkgNames::PkgInfo() );
+		// show the package description of the current item
+		packager->showPackageInformation( getDataPointer( getCurrentItem() ) );	
+		break;
+	    }
+	}
+	case T_Packages: {
 	    YStringTreeItem * defaultGroup =  packager->getDefaultRpmGroup();
 
 	    if ( defaultGroup )
@@ -320,15 +341,6 @@ bool NCPkgTable::fillDefaultList( )
 	    {
 		NCERR << "No default RPM group availbale" << endl;
 	    }
-	    break;
-	}
-	case T_Patches: {
-	    packager->fillPatchList( "all" );	// default: all patches
-
-	    // set the visible info to long description 
-	    packager->setVisibleInfo ( PkgNames::PatchDescr() );
-	    // show the package description of the current item
-	    packager->showPatchInformation( getDataPointer( getCurrentItem() ) );
 	    break;
 	}
 	default:

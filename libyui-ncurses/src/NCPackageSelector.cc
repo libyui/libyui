@@ -214,8 +214,8 @@ YCPTerm NCPackageSelector::readLayoutFile( Y2NCursesUI *ui, const char * layoutF
 
         layout = ui->evaluate (layout);
 
-	if (layout.isNull()
-	    || layout->isTerm() )
+	if ( layout.isNull()
+	     || !layout->isTerm() )
 	{
 	    NCERR << "Error parsing layout file - layout must be a term" << endl;	
 	}

@@ -236,25 +236,12 @@ const YCPValue& PkgNames::Relations ()
     return value;
 }
 
-// dependency menu selection requires 
-const YCPValue& PkgNames::RequRel ()
+// menu selection help/update 
+const YCPValue& PkgNames::UpdateHelp ()
 {
-    static const YCPValue value = createIdValue ( "requires" );
+    static const YCPValue value = createIdValue ( "help_update" );
     return value;
 }
-// dependency menu selection conflicts 
-const YCPValue& PkgNames::ConflRel ()
-{
-    static const YCPValue value = createIdValue ( "conflicts" );
-    return value;
-}
-// dependency menu selection alternatves 
-const YCPValue& PkgNames::AlterRel ()
-{
-    static const YCPValue value = createIdValue ( "alternatives" );
-    return value;
-}
-
 
 // menu selection package info
 const YCPValue& PkgNames::PkgInfo ()
@@ -412,6 +399,13 @@ const YCPString PkgNames::YOUPatches()
 {
    // the label Filter: YOU Patches
     static const YCPString value = toYCPString ( _("Online Update Patches") );
+    return value;  
+}
+
+const YCPString PkgNames::UpdateProblem()
+{
+   // the label Filter: Udpate Problem ( keep it short - max. 25 chars )
+    static const YCPString value = toYCPString ( _("Update problem - see help") );
     return value;  
 }
 
@@ -674,6 +668,12 @@ const NCstring PkgNames::HelpOnStatus()
     return value;
 }
 
+const NCstring PkgNames::HelpOnUpdate()
+{
+    // help text package status
+    static const YCPString value = toYCPString( _("<br><b>Update Problem</b><br><p>The packages in this list cannot be updated automatically.</p><p>Possible reasons:</p><p>They are obsoleted by other packages.</p><p>There is no newer version to update to on any installation media.</p><p>They are third-party packages</p><p>Please choose manually what to do with them.The safest course of action is to delete them.</p>") );
+    return value;
+}
 
 const NCstring PkgNames::PkgName()
 {
@@ -732,26 +732,25 @@ const NCstring PkgNames::PkgStatus()
     return value;
 }
 
-/*
-  Textdomain "online-update"
-*/
 const NCstring PkgNames::YouHelp1()
 {
     // help text online udpate
+    // (text see  textdomain online-update - only some changes were necessary)
+    // Do not translate 'recommended' and 'security'!
     static const YCPString value = toYCPString( _("<p>Mode \"recommended\" means you should install the patch.\"security\" is a security patch and it is highly recommended to install it.\"YaST2\" patches will be always installed first. The other patches must be installed on a second run.</p>") );
     return value;
 }						  
 
 const NCstring PkgNames::YouHelp2()
 {
-    // help text online udpate
+    // help text online udpate continue
     static const YCPString value = toYCPString( _("<p>Meaning of the status flags:</p><p><b>+</b>: Patches concerning your installation are preselected. They will be downloaded and installed on your system.If you do not want a certain patch, deselect it with '-'.</p>") );
     return value;
 }
 
 const NCstring PkgNames::YouHelp3()
 {
-    // help text online udpate
+    // help text online udpate continue
     static const YCPString value = toYCPString( _("<p><b>i</b>: This patch is already installed.</p><p><b>></b>: The patch will be reinstalled.</p>") );
     return value;
 }

@@ -138,26 +138,16 @@ public:
      */
     static const YCPValue& Files ();
 
-       
+   /**
+     *  Widget id of the menu selection Help/Udpate
+     */
+    static const YCPValue& PkgNames::UpdateHelp ();  
+
     /**
      *  Widget id of the menu selection Information/Relaione
      */
     static const YCPValue& PkgNames::Relations ();
     
-    /**
-     *  Widget id of the menu selection /Requires
-     */
-    static const YCPValue& PkgNames::RequRel ();
-
-    /**
-     *  Widget id of the menu selection Conflicts
-     */
-    static const YCPValue& PkgNames::ConflRel ();
-
-   /**
-     *  Widget id of the menu selection Alternative
-     */
-    static const YCPValue& PkgNames::AlterRel ();
     /**
      *  Widget id of the menu selection RPM groups
      */
@@ -276,6 +266,11 @@ public:
      *  The label for Filter: Search results
      */
     static const YCPString SearchResults();
+
+    /**
+     *  The label for Filter: Update problem
+     */
+    static const YCPString UpdateProblem();
     
     /**
      * The headline of the search popup
@@ -378,7 +373,6 @@ public:
     static const NCstring YouHelp1();
     static const NCstring YouHelp2();
     static const NCstring YouHelp3();
-
    /**
      * Part of help text used in installed system
      */
@@ -401,7 +395,9 @@ public:
      * Part 5 of help text package installation
      */
     static const NCstring HelpPkgInst5();
-    
+
+    static const NCstring HelpOnUpdate();
+
     /**
      * help package search
      */

@@ -120,6 +120,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     eventHandlerMap[ PkgNames::GeneralHelp()->toString() ] = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::StatusHelp()->toString() ]  = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::FilterHelp()->toString() ]  = &PackageSelector::HelpHandler;
+    eventHandlerMap[ PkgNames::UpdateHelp()->toString() ] = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::PatchHelp()->toString() ]  = &PackageSelector::YouHelpHandler;
    
     if ( opt.youMode.value() )
@@ -450,6 +451,47 @@ bool PackageSelector::fillPatchList( string filter )
     return true;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+// fillUpdateList
+//
+//
+bool PackageSelector::fillUpdateList( )
+{
+    NCPkgTable * packageList = getPackageList();
+    
+    if ( !packageList )
+    {
+	UIERR << "Widget is not a valid NCPkgTable widget" << endl;
+    	return false;
+    }
+
+    // clear the package table
+    packageList->itemsCleared ();
+
+    PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().updateBegin();
+    unsigned int i = 0;
+
+    while ( it != Y2PM::packageManager().updateEnd() )
+    {
+	PMSelectablePtr selectable = *it;
+	createListEntry( packageList,
+			(*it)->theObject(),
+			i );
+	    
+	++it;
+	i++;
+    }
+   
+    // show the selected filter label
+    YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
+    if ( filterLabel )
+    {
+	static_cast<NCLabel *>(filterLabel)->setLabel( PkgNames::UpdateProblem() );
+    }
+    
+    return true;
+}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -1074,7 +1116,10 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
 	text += PkgNames::HelpOnStatus3();
 	text += PkgNames::HelpOnStatus();
     }
-    
+    else if ( event.selection->compare( PkgNames::UpdateHelp() ) == YO_EQUAL )
+    {
+	text += PkgNames::HelpOnUpdate();
+    }
     // open the popup with the help text
     NCPopupInfo pkgHelp( wpos( 1, 1 ), PkgNames::PackageHelp(), text.YCPstr() );
     pkgHelp.showInfoPopup( );

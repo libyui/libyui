@@ -129,6 +129,12 @@ class PackageSelector
     * @return bool
     */
     bool fillPatchList( string filter );
+
+   /**
+    * Fills the package table with packages .... update ...
+    * @return bool
+    */
+    bool fillUpdateList( );
     
    /**
     * Fills the list of available packages
