@@ -81,7 +81,7 @@ YQCheckBox::getValue()
 	case QButton::NoChange:	return YCPVoid();	// nil
     }
     
-    y2error( "Unknown QCheckBox state: %d", ( int ) _qt_checkbox->state() );
+    y2error( "Unknown QCheckBox state: %d", (int) _qt_checkbox->state() );
     return YCPVoid();
 }
 

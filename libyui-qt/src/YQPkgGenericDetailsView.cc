@@ -40,8 +40,8 @@ YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
 
     if ( _parentTab )
     {
-	connect( parent, SIGNAL( currentChanged( QWidget * ) ),
-		 this,   SLOT  ( reload        ( QWidget * ) ) );
+	connect( parent, SIGNAL( currentChanged(QWidget *) ),
+		 this,   SLOT  ( reload        (QWidget *) ) );
     }
 }
 
@@ -111,7 +111,7 @@ QString
 YQPkgGenericDetailsView::htmlEscape( const QString & plainText )
 {
     QString html = plainText;
-    // y2debug( "Escaping '%s'", ( const char * ) plainText );
+    // y2debug( "Escaping '%s'", (const char *) plainText );
 
     html.replace( QRegExp( "&" ), "&amp;" );
     html.replace( QRegExp( "<" ), "&lt;"  );

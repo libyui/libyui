@@ -64,8 +64,8 @@ YQSelectionBox::YQSelectionBox( QWidget * parent, YWidgetOpt & opt,
     shrinkable 		= opt.isShrinkable.value();
     immediateMode	= opt.immediateMode.value();
 
-    connect( _qt_listbox, SIGNAL( highlighted ( int ) ),
-	     this, 	 SLOT  ( slotSelected( int ) ) );
+    connect( _qt_listbox, SIGNAL( highlighted (int) ),
+	     this, 	 SLOT  ( slotSelected(int) ) );
 
     if ( getNotify() )
     {

@@ -107,7 +107,7 @@ QY2ListView::toolTip( QListViewItem * listViewItem, int column )
     QString text;
 
 #if 0
-    text.sprintf( "Column %d:\n%s", column, ( const char * ) listViewItem->text( column ) );
+    text.sprintf( "Column %d:\n%s", column, (const char *) listViewItem->text( column ) );
 #endif
 
     // Try known item classes

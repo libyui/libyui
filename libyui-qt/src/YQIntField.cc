@@ -60,8 +60,8 @@ YQIntField::YQIntField( QWidget *		parent,
 
     setValue( initialValue );
 
-    connect( _qt_spinbox, SIGNAL( valueChanged( int ) ),
-	     this,  	SLOT  ( setValueSlot( int ) ) );
+    connect( _qt_spinbox, SIGNAL( valueChanged(int) ),
+	     this,  	SLOT  ( setValueSlot(int) ) );
 }
 
 

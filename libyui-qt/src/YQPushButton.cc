@@ -94,7 +94,7 @@ void YQPushButton::setIcon( const YCPString & y_icon_name )
     QPixmap icon( icon_name );
 
     if ( icon.isNull() )
-	y2warning( "Can't load icon '%s'", ( const char * ) icon_name );
+	y2warning( "Can't load icon '%s'", (const char *) icon_name );
     else
 	_qPushButton->setIconSet( icon );
 }

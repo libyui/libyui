@@ -108,7 +108,7 @@ YQImage::YQImage( QWidget * parent, YWidgetOpt & opt, const YCPString & ycp_file
 {
     init( parent, opt );
     QString file_name = fromUTF8( ycp_file_name->value() );
-    y2debug( "Loading image from %s", ( const char * ) file_name );
+    y2debug( "Loading image from %s", (const char *) file_name );
 
     if ( animated )
     {
@@ -116,7 +116,7 @@ YQImage::YQImage( QWidget * parent, YWidgetOpt & opt, const YCPString & ycp_file
 	
 	if ( movie .isNull() )
 	{
-	    y2error( "Couldn't load animation from %s", ( const char * ) file_name );
+	    y2error( "Couldn't load animation from %s", (const char *) file_name );
 	}
 	else
 	{
@@ -129,7 +129,7 @@ YQImage::YQImage( QWidget * parent, YWidgetOpt & opt, const YCPString & ycp_file
 
 	if ( pixmap.isNull() )
 	{
-	    y2error( "Couldn't load pixmap from %s", ( const char * ) file_name );
+	    y2error( "Couldn't load pixmap from %s", (const char *) file_name );
 	}
 	else
 	{

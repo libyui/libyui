@@ -92,7 +92,7 @@ YQPkgConflictList::fill( PkgDep::ErrorResultList & badList )
 
 	if ( conflict->isIgnored() )
 	{
-	    // y2debug( "Ignoring conflict: %s", ( const char * ) conflict->text(0) );
+	    // y2debug( "Ignoring conflict: %s", (const char *) conflict->text(0) );
 	    delete conflict;	// Yes, this is stupid. The solver should handle that.
 	}
 
@@ -163,11 +163,11 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 {
     // Open file
 
-    FILE * file = fopen( ( const char * ) filename, "w" );
+    FILE * file = fopen( (const char *) filename, "w" );
 
     if ( ! file )
     {
-	y2error( "Can't open file %s", ( const char * ) filename );
+	y2error( "Can't open file %s", (const char *) filename );
 
 	if ( interactive )
 	{
@@ -190,7 +190,7 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
     header += QDateTime::currentDateTime().toString( "yyyy-MM-dd hh:mm:ss" );
     header += " ####\n\n";
 
-    fputs( ( const char * ) header, file );
+    fputs( (const char *) header, file );
 
 
     // Recursively write all items
@@ -248,7 +248,7 @@ YQPkgConflictList::saveItemToFile( FILE * 			file,
 	}
     }
 
-    fprintf( file, "%s\n", ( const char * ) item->text(0) );
+    fprintf( file, "%s\n", (const char *) item->text(0) );
 
 
     if ( item->isOpen() )
@@ -737,7 +737,7 @@ YQPkgConflict::isIgnored( const QString & conflictHeader )
 void
 YQPkgConflict::ignore( const QString & conflictHeader )
 {
-    y2milestone( "Ignoring dependency conflict: %s", ( const char * ) conflictHeader );
+    y2milestone( "Ignoring dependency conflict: %s", (const char *) conflictHeader );
     _ignore.insert( conflictHeader, true );
 }
 
@@ -821,7 +821,7 @@ YQPkgConflict::saveIgnoredConflicts()
 
     while ( it != _ignore.end() )
     {
-	fprintf( file, "%s\n", ( const char * ) it.key() );
+	fprintf( file, "%s\n", (const char *) it.key() );
 	++it;
     }
 
@@ -896,7 +896,7 @@ YQPkgConflict::applyResolution()
 
 	if ( res && res->isOn() )
 	{
-	    y2milestone( "Resolution %s selected for %s", res->typeString(), ( const char * ) _shortName );
+	    y2milestone( "Resolution %s selected for %s", res->typeString(), (const char *) _shortName );
 
 	    switch ( res->type() )
 	    {
@@ -928,7 +928,7 @@ YQPkgConflict::applyResolution()
 	item = item->nextSibling();
     }
 
-    y2milestone( "Conflict %s unresolved", ( const char * ) _shortName );
+    y2milestone( "Conflict %s unresolved", (const char *) _shortName );
 }
 
 

@@ -133,7 +133,7 @@ void QY2BarGraph::drawContents( QPainter * p )
 
     for ( int i=0; i < segments(); i++ )
     {
-	int segWidth = ( ( long ) totalWidth * _values[i] ) / sum;
+	int segWidth = ( (long) totalWidth * _values[i] ) / sum;
 
 	if ( i == segments()-1 )
 	{

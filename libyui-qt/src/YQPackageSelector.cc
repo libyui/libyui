@@ -195,7 +195,7 @@ YQPackageSelector::YQPackageSelector( QWidget * parent, YWidgetOpt & opt, const 
     if ( _diskUsageList )
 	_diskUsageList->updateDiskUsage();
 
-    y2debug( "Floppy device: %s", ( const char * ) _floppyDevice );
+    y2debug( "Floppy device: %s", (const char *) _floppyDevice );
     y2milestone( "PackageSelector init done" );
 
 
@@ -651,7 +651,7 @@ YQPackageSelector::connectFilter( QWidget * filter,
 
     if ( _filters )
     {
-	connect( _filters,	SIGNAL( currentChanged( QWidget * ) ),
+	connect( _filters,	SIGNAL( currentChanged(QWidget *) ),
 		 filter,	SLOT  ( filterIfVisible()            ) );
     }
 
@@ -916,11 +916,11 @@ YQPackageSelector::pkgExport()
 
     if ( ! filename.isEmpty() )
     {
-	y2milestone( "Exporting package list to %s", ( const char * ) filename );
+	y2milestone( "Exporting package list to %s", (const char *) filename );
 	PMPackageImEx exporter;
 	exporter.getPMState();
 
-	if ( exporter.doExport( Pathname( ( const char * ) filename ) ) )
+	if ( exporter.doExport( Pathname( (const char *) filename ) ) )
 	{
 	    // Success
 
@@ -928,11 +928,11 @@ YQPackageSelector::pkgExport()
 	}
 	else	// Error
 	{
-	    y2warning( "Error writing package list to %s", ( const char * ) filename );
+	    y2warning( "Error writing package list to %s", (const char *) filename );
 
 	    // PMPackageImEx::doExport() might have left over a partially written file.
 	    // Try to delete that. Don't care if it doesn't exist and unlink() fails.
-	    ( void ) unlink( ( const char * ) filename );
+	    ( void ) unlink( (const char *) filename );
 
 	    // Post error popup
 	    QMessageBox::warning( this,						// parent
@@ -971,11 +971,11 @@ YQPackageSelector::pkgImport()
 
     if ( ! filename.isEmpty() )
     {
-	y2milestone( "Importing package list from %s", ( const char * ) filename );
+	y2milestone( "Importing package list from %s", (const char *) filename );
 	PMPackageImEx importer;
 	importer.getPMState();
 
-	if ( importer.doImport( Pathname( ( const char * ) filename ) ) )
+	if ( importer.doImport( Pathname( (const char *) filename ) ) )
 	{
 	    // Success
 
@@ -984,7 +984,7 @@ YQPackageSelector::pkgImport()
 	}
 	else // Error
 	{
-	    y2warning( "Error reading package list from %s", ( const char * ) filename );
+	    y2warning( "Error reading package list from %s", (const char *) filename );
 
 	    // Post error popup
 	    QMessageBox::warning( this,						// parent

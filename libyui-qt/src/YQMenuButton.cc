@@ -123,8 +123,8 @@ YQMenuButton::createMenu()
 {
     QPopupMenu * popup = new QPopupMenu( _qt_pushbutton );
     _qt_pushbutton->setPopup( popup );
-    connect( popup,	SIGNAL( activated( int ) ),
-	     this,	SLOT  ( menuEntryActivated( int ) ) );
+    connect( popup,	SIGNAL( activated(int) ),
+	     this,	SLOT  ( menuEntryActivated(int) ) );
 
     createMenu( getToplevelMenu(), popup );
 }
@@ -144,8 +144,8 @@ YQMenuButton::createMenu( YMenuItem * ymenu, QPopupMenu * qt_menu )
 	    QPopupMenu * sub_menu = new QPopupMenu( qt_menu );
 	    // y2debug( "Inserting sub menu '%s'", item->getLabel()->value().c_str() );
 	    qt_menu->insertItem( fromUTF8( item->getLabel()->value() ), sub_menu );
-	    connect( sub_menu,	SIGNAL( activated( int ) ),
-		     this,	SLOT  ( menuEntryActivated( int ) ) );
+	    connect( sub_menu,	SIGNAL( activated(int) ),
+		     this,	SLOT  ( menuEntryActivated(int) ) );
 	    createMenu( item, sub_menu );
 
 	}

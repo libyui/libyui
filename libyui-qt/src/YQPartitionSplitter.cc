@@ -138,14 +138,14 @@ YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
 
     // Connect signals
 
-    connect( _qt_freeSizeSlider,	SIGNAL( valueChanged   ( int ) ),
-	     this,		SLOT  ( setFreeSizeSlot( int ) ) );
+    connect( _qt_freeSizeSlider,	SIGNAL( valueChanged   (int) ),
+	     this,		SLOT  ( setFreeSizeSlot(int) ) );
 
-    connect( _qt_freeSizeField,	SIGNAL( valueChanged   ( int ) ),
-	     this,		SLOT  ( setFreeSizeSlot( int ) ) );
+    connect( _qt_freeSizeField,	SIGNAL( valueChanged   (int) ),
+	     this,		SLOT  ( setFreeSizeSlot(int) ) );
 
-    connect( _qt_newPartSizeField,SIGNAL( valueChanged	  ( int ) ),
-	     this,		SLOT  ( setNewPartSizeSlot( int ) ) );
+    connect( _qt_newPartSizeField,SIGNAL( valueChanged	  (int) ),
+	     this,		SLOT  ( setNewPartSizeSlot(int) ) );
 }
 
 

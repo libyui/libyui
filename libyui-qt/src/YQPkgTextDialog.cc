@@ -231,7 +231,7 @@ QString
 YQPkgTextDialog::htmlEscape( const QString & plainText )
 {
     QString html = plainText;
-    // y2debug( "Escaping '%s'", ( const char * ) plainText );
+    // y2debug( "Escaping '%s'", (const char *) plainText );
 
     html.replace( QRegExp( "&" ), "&amp;" );
     html.replace( QRegExp( "<" ), "&lt;"  );

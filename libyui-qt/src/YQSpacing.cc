@@ -43,7 +43,7 @@ long YQSpacing::absoluteSize( YUIDimension dim, float relativeSize )
     if ( dim==YD_HORIZ )	size = relativeSize * ( 640.0/80 );
     else		size = relativeSize * ( 480.0/25 );
 
-    return ( long ) ( size + 0.5 );
+    return (long) ( size + 0.5 );
 }
 
 

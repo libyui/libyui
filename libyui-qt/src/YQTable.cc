@@ -100,8 +100,8 @@ YQTable::YQTable( QWidget * parent, YWidgetOpt & opt, vector<string> header )
     }
     else
     {
-	connect( _qt_listview->header(), SIGNAL( clicked ( int ) ),
-		 this,			SLOT  ( userSort( int ) ) );
+	connect( _qt_listview->header(), SIGNAL( clicked (int) ),
+		 this,			SLOT  ( userSort(int) ) );
 	_qt_listview->setSorting( 65530, true ); // leave initial sorting
     }
 

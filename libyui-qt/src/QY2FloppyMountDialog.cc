@@ -352,17 +352,17 @@ QY2FloppyMountDialog::mount()
     }
 
     QString command = "/bin/mount " + device + " " + mountPoint;
-    y2milestone( "Mounting floppy: %s", ( const char * ) command );
+    y2milestone( "Mounting floppy: %s", (const char *) command );
 
     while ( true )
     {
 	qApp->setOverrideCursor( waitCursor );
-	int result = system( ( const char * ) command );
+	int result = system( (const char *) command );
 	qApp->restoreOverrideCursor();
 
 	if ( result != 0 )
 	{
-	    y2warning( "\"%s\" returned %d", ( const char * ) command, result );
+	    y2warning( "\"%s\" returned %d", (const char *) command, result );
 
 	    int button = QMessageBox::critical( this, "",
 						_( "Cannot mount floppy" ),
@@ -390,8 +390,8 @@ QY2FloppyMountDialog::unmount( bool verbose )
     if ( _floppyMounted )
     {
 	QString command = "/bin/umount " + _floppyDeviceField->currentText();
-	y2milestone( "Unmounting floppy: %s", ( const char * ) command );
-	int result = system( ( const char * ) command );
+	y2milestone( "Unmounting floppy: %s", (const char *) command );
+	int result = system( (const char *) command );
 
 	if ( result == 0 )
 	{
@@ -401,7 +401,7 @@ QY2FloppyMountDialog::unmount( bool verbose )
 	}
 	else
 	{
-	    y2warning( "\"%s\" returned %d", ( const char * ) command, result );
+	    y2warning( "\"%s\" returned %d", (const char *) command, result );
 	    error( _( "Cannot unmount floppy" ) );
 	}
 

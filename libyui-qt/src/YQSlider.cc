@@ -69,14 +69,14 @@ YQSlider::YQSlider( QWidget *		parent,
 
     setValue( initialValue );
 
-    connect( _qt_spinbox, SIGNAL( valueChanged( int ) ),
-	     _qt_slider,  SLOT  ( setValue    ( int ) ) );
+    connect( _qt_spinbox, SIGNAL( valueChanged(int) ),
+	     _qt_slider,  SLOT  ( setValue    (int) ) );
 
-    connect( _qt_slider, 	SIGNAL( valueChanged( int ) ),
-	     _qt_spinbox, SLOT  ( setValue    ( int ) ) );
+    connect( _qt_slider, 	SIGNAL( valueChanged(int) ),
+	     _qt_spinbox, SLOT  ( setValue    (int) ) );
 
-    connect( _qt_spinbox, SIGNAL( valueChanged( int ) ),
-	     this,  	SLOT  ( setValueSlot( int ) ) );
+    connect( _qt_spinbox, SIGNAL( valueChanged(int) ),
+	     this,  	SLOT  ( setValueSlot(int) ) );
 }
 
 

@@ -275,7 +275,7 @@ QY2DiskUsageListItem::paintPercentageBar( float			percent,
 	pen.setWidth(0);
 	painter->setPen( pen );
 	painter->setBrush( NoBrush );
-	fillWidth = ( int ) ( ( w - 2 * penWidth ) * percent / 100.0 );
+	fillWidth = (int) ( ( w - 2 * penWidth ) * percent / 100.0 );
 
 
 	// Fill bar background.
@@ -408,7 +408,7 @@ QY2DiskUsageListItem::interpolate( int from,
 	if ( x > minTo )	x = minTo;
     }
 
-    return ( int ) x;
+    return (int) x;
 }
 
 

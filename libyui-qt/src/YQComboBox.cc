@@ -50,7 +50,7 @@ YQComboBox::YQComboBox( QWidget * parent, YWidgetOpt & opt,
 
     _qt_label->setBuddy( _qt_combo_box );
 
-    connect( _qt_combo_box, SIGNAL( highlighted( int ) ), this, SLOT( slotSelected( int ) ) );
+    connect( _qt_combo_box, SIGNAL( highlighted(int) ), this, SLOT( slotSelected(int) ) );
     connect( _qt_combo_box, SIGNAL( activated( const QString & ) ), this, SLOT( textChanged(const QString & ) ) );
 }
 

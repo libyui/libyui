@@ -237,9 +237,9 @@ YQDialog::ensureOnlyOneDefaultButton()
 		if ( _defaultButton && button != _defaultButton )
 		{
 		    y2error( "Too many `opt( `default ) PushButtons: [%s]",
-			     ( const char * ) button->text() );
+			     (const char *) button->text() );
 		    y2error( "Using old default button: [%s]",
-			     ( const char * ) _defaultButton->text() );
+			     (const char *) _defaultButton->text() );
 		}
 		else
 		{
@@ -266,7 +266,7 @@ YQDialog::setDefaultButton( YQPushButton * newDefaultButton )
 	 newDefaultButton &&
 	 newDefaultButton != _defaultButton )
     {
-	y2error( "Too many `opt( `default ) PushButtons: [%s]", ( const char * ) newDefaultButton->text() );
+	y2error( "Too many `opt( `default ) PushButtons: [%s]", (const char *) newDefaultButton->text() );
 	newDefaultButton->setDefault( false );
 	return;
     }
@@ -276,7 +276,7 @@ YQDialog::setDefaultButton( YQPushButton * newDefaultButton )
     if ( _defaultButton )
     {
 	_defaultButton->setDefault( true );
-	y2debug( "New default button: [%s]", ( const char * ) _defaultButton->text() );
+	y2debug( "New default button: [%s]", (const char *) _defaultButton->text() );
 	
 	if ( _defaultButton && ! _focusButton )
 	    _defaultButton->showAsDefault( true );
@@ -293,7 +293,7 @@ YQDialog::activateDefaultButton( bool warn )
 	 _focusButton->isEnabled() &&
 	 _focusButton->isShownAsDefault() )
     {
-	y2debug( "Activating focus button: [%s]", ( const char * ) _focusButton->text() );
+	y2debug( "Activating focus button: [%s]", (const char *) _focusButton->text() );
 	_focusButton->activate();
 	return true;
     }
@@ -307,7 +307,7 @@ YQDialog::activateDefaultButton( bool warn )
 	 _defaultButton->isEnabled() 	&&
 	 _defaultButton->isShownAsDefault() )
     {
-	y2debug( "Activating default button: [%s]", ( const char * ) _defaultButton->text() );
+	y2debug( "Activating default button: [%s]", (const char *) _defaultButton->text() );
 	_defaultButton->activate();
 	return true;
     }
@@ -476,7 +476,7 @@ void
 YQDialog::childAdded( YWidget * child )
 {
 
-    ( ( QWidget * ) child->widgetRep() )->move ( decorationWidth( YD_HORIZ ),
+    ( (QWidget *) child->widgetRep() )->move ( decorationWidth( YD_HORIZ ),
 					       decorationWidth( YD_VERT  ) );
 }
 

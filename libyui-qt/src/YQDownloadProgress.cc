@@ -96,8 +96,8 @@ void YQDownloadProgress::pollFileSize()
 {
     long size = currentFileSize();
 
-    if ( size > ( long ) expectedSize() )
-	size = ( long ) expectedSize();
+    if ( size > (long) expectedSize() )
+	size = (long) expectedSize();
     _qt_progress->setProgress( size );
 }
 

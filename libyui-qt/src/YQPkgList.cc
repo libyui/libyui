@@ -339,11 +339,11 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
 {
     // Open file
 
-    FILE * file = fopen( ( const char * ) filename, "w" );
+    FILE * file = fopen( (const char *) filename, "w" );
 
     if ( ! file )
     {
-	y2error( "Can't open file %s", ( const char * ) filename );
+	y2error( "Can't open file %s", (const char *) filename );
 
 	if ( interactive )
 	{
@@ -372,10 +372,10 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
 	{
 	    QString status = "[" + statusText( pkg->status() ) + "]";
 	    fprintf( file, "%-16s %-30s | %-16s | %10s\n",
-		     ( const char * ) status,
-		     ( const char * ) pkg->text( nameCol()    ),
-		     ( const char * ) pkg->text( versionCol() ),
-		     ( const char * ) pkg->text( sizeCol()    )
+		     (const char *) status,
+		     (const char *) pkg->text( nameCol()    ),
+		     (const char *) pkg->text( versionCol() ),
+		     (const char *) pkg->text( sizeCol()    )
 		     );
 	}
 

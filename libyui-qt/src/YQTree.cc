@@ -83,8 +83,8 @@ YQTree::nicesize( YUIDimension dim )
 void
 YQTree::setSize( long newWidth, long newHeight )
 {
-    _qt_label->resize( min ( newWidth,  ( long ) ( _qt_label->sizeHint().width() ) ),
-		      min ( newHeight, ( long ) ( _qt_label->sizeHint().height() )	 ) );
+    _qt_label->resize( min ( newWidth,  (long) ( _qt_label->sizeHint().width() ) ),
+		      min ( newHeight, (long) ( _qt_label->sizeHint().height() )	 ) );
     _listView->resize( newWidth, newHeight - _qt_label->height() );
     resize( newWidth, newHeight );
 }

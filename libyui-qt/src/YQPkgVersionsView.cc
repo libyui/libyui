@@ -56,8 +56,8 @@ YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
 
     if ( _parentTab )
     {
-	connect( parent, SIGNAL( currentChanged( QWidget * ) ),
-		 this,   SLOT  ( reload        ( QWidget * ) ) );
+	connect( parent, SIGNAL( currentChanged(QWidget *) ),
+		 this,   SLOT  ( reload        (QWidget *) ) );
     }
 
     connect( this,	SIGNAL( selectionChanged	() ),
