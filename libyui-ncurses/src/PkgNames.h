@@ -296,37 +296,23 @@ public:
     static const YCPString ErrorLabel();
     static const YCPString NotifyLabel();
     static const YCPString DepsHelpLine();
-    static const YCPString Solving();
+    static const NCstring Solving();
     
    /**
      * text used in search popup
      */
-    static const YCPString SearchPhrase();
+    static const NCstring SearchPhrase();
 
    /**
      * text used in search popup
      */
-    static const YCPString CheckDescr();
+    static const NCstring CheckDescr();
     
    /**
      * text used in search popup
      */
-    static const YCPString IgnoreCase();
+    static const NCstring IgnoreCase();
 
-    /**
-     * menu entry dependency popup
-     */
-    static const YCPString RequiredBy();
-    
-    /**
-     * menu entry dependency popup
-     */
-    static const YCPString Alternatives();
-        /**
-     * menu entry dependency popup
-     */
-    static const YCPString ConflictDeps();
-    
     /**
      * The headline of the help popup
      */
@@ -416,7 +402,7 @@ public:
     /**
      * help package search
      */
-    static const YCPString HelpOnSearch();
+    static const NCstring HelpOnSearch();
 
     /**
      * bold text Version: (richtext) 

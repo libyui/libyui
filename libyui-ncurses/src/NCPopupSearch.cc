@@ -78,7 +78,7 @@ void NCPopupSearch::createLayout( const YCPString & headline )
   opt.hWeight.setValue( 40 );
 
   // the help text is the first child of the horizontal split
-  helpText = new NCRichText( hSplit, opt, PkgNames::HelpOnSearch() );
+  helpText = new NCRichText( hSplit, opt, YCPString(PkgNames::HelpOnSearch().str()) );
   
   opt.hWeight.setValue( 60 );
   opt.notifyMode.setValue( false );
@@ -103,7 +103,7 @@ void NCPopupSearch::createLayout( const YCPString & headline )
   // add the input field (a editable combo box) 
   opt.isEditable.setValue( true );
   opt.isHStretchable.setValue( true );
-  searchExpr = new NCComboBox( vSplit, opt, PkgNames::SearchPhrase() );
+  searchExpr = new NCComboBox( vSplit, opt, YCPString(PkgNames::SearchPhrase().str()) );
   searchExpr->setKeyboardFocus();
   vSplit->addChild( searchExpr );
 
@@ -112,8 +112,8 @@ void NCPopupSearch::createLayout( const YCPString & headline )
   
   // add the check boxes
   opt.isHStretchable.setValue( true );
-  checkDescr = new NCCheckBox( vSplit, opt, PkgNames::CheckDescr(), false );
-  ignoreCase = new NCCheckBox( vSplit, opt, PkgNames::IgnoreCase(), true );
+  checkDescr = new NCCheckBox( vSplit, opt, YCPString(PkgNames::CheckDescr().str()), false );
+  ignoreCase = new NCCheckBox( vSplit, opt, YCPString(PkgNames::IgnoreCase().str()), true );
   NCSpacing * sp2 = new NCSpacing( vSplit, opt, 0.8, false, true );
   NCSpacing * sp3 = new NCSpacing( vSplit, opt, 1.0, false, true );
 
@@ -181,7 +181,7 @@ YCPString  NCPopupSearch::getSearchExpression() const
 
 long NCPopupSearch::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? 55 : 15 );
+    return ( dim == YD_HORIZ ? 60 : 15 );
 }
 
 ///////////////////////////////////////////////////////////////////

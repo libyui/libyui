@@ -485,52 +485,31 @@ const YCPString PkgNames::PackageDeps()
     return value;
 }
 
-const YCPString PkgNames::Solving()
+const NCstring PkgNames::Solving()
 {
     // a label for a popup which is shown during package dependency checking
-    static const YCPString value = toYCPString ( _("Solving ...") );
+    static const NCstring value = _("Solving ...");
     return value;
 }    
 	
-const YCPString PkgNames::SearchPhrase()
+const NCstring PkgNames::SearchPhrase()
 {
     // text for search popup 
-    static const YCPString value = toYCPString ( _("&Search phrase") );
+    static const NCstring value = _("&Search phrase");
     return value;
 }
 
-const YCPString PkgNames::CheckDescr()
+const NCstring PkgNames::CheckDescr()
 {
     // text for search popup 
     static const YCPString value = toYCPString ( _("&Check description") );
     return value;
 }
 
-const YCPString PkgNames::IgnoreCase()
+const NCstring PkgNames::IgnoreCase()
 {
     // text for search popup 
-    static const YCPString value = toYCPString ( _("&Ignore case") );
-    return value;
-}
-
-const YCPString PkgNames::RequiredBy()
-{
-    // text for menu selection (package dependencies)
-    static const YCPString value = toYCPString ( _("&Required by") );
-    return value;
-}
-
-const YCPString PkgNames::ConflictDeps()
-{
-    // text for  menu selection (package dependencies)
-    static const YCPString value = toYCPString ( _("&Conflicts") );
-    return value;
-}
-
-const YCPString PkgNames::Alternatives()
-{
-    // text for menu selection (package dependencies)
-    static const YCPString value = toYCPString ( _("&Alternatives") );
+    static const NCstring value = _("&Ignore case");
     return value;
 }
 
@@ -799,10 +778,10 @@ const NCstring PkgNames::HelpPkgInst5()
     return value;
 }
 
-const YCPString PkgNames::HelpOnSearch()
+const NCstring PkgNames::HelpOnSearch()
 {
     // help text package search
-    static const YCPString value = toYCPString( _("<p>Enter a keyword for your package search. It is possible to enter only parts of a package name, for example, to search for all 3D packages with \"3d\".<br> If you are looking for a term in a package description, click the appropriate check box. Start the search with 'Enter'.</p>"));
+    static const NCstring value = _("<p>Enter a keyword for your package search. It is possible to enter only parts of a package name, for example, to search for all 3D packages with \"3d\".<br> If you are looking for a term in a package description, click the appropriate check box. Start the search with 'Enter'.</p>");
     return value;
 }
 

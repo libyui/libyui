@@ -185,7 +185,7 @@ void NCPopupDeps::showDependencies( )
        
     NCDBG << "Solving..." << endl ;
 
-    NCPopupInfo info( wpos(10, 10),  YCPString( "" ), PkgNames::Solving(), false );
+    NCPopupInfo info( wpos(10, 10),  YCPString( "" ), YCPString(PkgNames::Solving().str()), false );
     info.setNiceSize( 18, 4 );
     info.popup();
     
