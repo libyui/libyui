@@ -137,8 +137,9 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
 
     if ( _fullscreen )
     {
-	_default_size.setWidth ( desktop()->width()  );
-	_default_size.setHeight( desktop()->height() );
+	QRect available = desktop()->availableGeometry();
+	_default_size.setWidth ( available.width()  );
+	_default_size.setHeight( available.height() );
 	y2milestone( "-fullscreen: using %dx%d for `opt(`defaultsize)",
 		     _default_size.width(), _default_size.height() );
     }
@@ -208,7 +209,8 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
     _main_win->resize( _default_size );
 
     if ( _fullscreen || ! _have_wm )
-	_main_win->move( 0, 0 );
+	_main_win->move( desktop()->availableGeometry().topLeft() );
+    
 
     _busy_cursor = new QCursor( WaitCursor );
 
