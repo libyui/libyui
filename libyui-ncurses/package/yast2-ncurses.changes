@@ -1,7 +1,12 @@
 -------------------------------------------------------------------
-Fri Mar 19 15:45:59 CET 2004 - sh@suse.de
+Fri Mar 19 16:55:38 CET 2004 - gs@suse.de
 
 - V 2.9.16
+- file selection: check for valid group and user (bug #36556) 
+
+-------------------------------------------------------------------
+Fri Mar 19 15:45:59 CET 2004 - sh@suse.de
+
 - Graceful handling for duplicate entries in combo box
 
 -------------------------------------------------------------------
