@@ -27,6 +27,7 @@
 
 
 class YQGenericButton;
+class YQWizard;
 class QFrame;
 
 
@@ -138,6 +139,17 @@ public:
      **/
     bool activateDefaultButton( bool warn = true );
 
+    /**
+     * Find the first wizard in that dialog, if there is any.
+     * Returns 0 if there is none.
+     **/
+    YQWizard * findWizard() const;
+
+    /**
+     * Find a wizard button that would make sense as a default button.
+     * Returns 0 if none can be found.
+     **/
+    YQGenericButton * wizardDefaultButton( YQWizard * wizard ) const;
 
     /**
      * Center a dialog relative to 'parent'.

@@ -503,7 +503,6 @@ void YQWizard::setCurrentStep( const QString & id )
 }
 
 
-
 void YQWizard::deleteSteps()
 {
     _stepsList.clear();
@@ -517,20 +516,6 @@ YQWizard::Step * YQWizard::findStep( const QString & id )
 	return 0;
 
     return _stepsIDs[ id ];
-
-#if 0
-    YQWizard::Step * step = _stepsList.first();
-
-    while ( step )
-    {
-	if ( step->hasID( id ) )
-	    return step;
-
-	step = _stepsList.next();
-    }
-
-    return 0;
-#endif
 }
 
 
@@ -730,6 +715,7 @@ void YQWizard::layoutButtonBox()
 
     _abortButton = new YQWizardButton( this, dialog, _buttonBox, _abortButtonLabel, _abortButtonId );
     CHECK_PTR( _abortButton );
+    addChild( _abortButton ); // Enable shortcut checking for this button
     connect( _abortButton,	SIGNAL( clicked()	),
 	     this,		SLOT  ( abortClicked()  ) );
 
@@ -742,6 +728,7 @@ void YQWizard::layoutButtonBox()
 
     _backButton	 = new YQWizardButton( this, dialog, _buttonBox, _backButtonLabel, _backButtonId );
     CHECK_PTR( _backButton );
+    addChild( _backButton );  // Enable shortcut checking for this button
     connect( _backButton,	SIGNAL( clicked()	),
 	     this,		SLOT  ( backClicked()	) );
 
@@ -757,6 +744,7 @@ void YQWizard::layoutButtonBox()
 
     _nextButton	 = new YQWizardButton( this, dialog, _buttonBox, _nextButtonLabel, _nextButtonId );
     CHECK_PTR( _nextButton );
+    addChild( _nextButton );  // Enable shortcut checking for this button
     connect( _nextButton,	SIGNAL( clicked()	),
 	     this,		SLOT  ( nextClicked()	) );
 
@@ -975,21 +963,17 @@ void YQWizard::setHelpText( QString helpText )
 }
 
 
-void YQWizard::addChild( YWidget * ychild )
+void YQWizard::addChild( YWidget * child )
 {
-    if ( ! ychild )
+    if ( dynamic_cast<YQWizardButton *> (child) 
+	 || child == _contentsReplacePoint )
     {
-	y2error( "Cannot add NULL child" );
-	return;
+	YContainerWidget::addChild( child );
     }
-
-    // FIXME delete any old child first
-
-    QWidget * child = (QWidget *) ychild->widgetRep();
-    CHECK_PTR( child );
-    child->reparent( _clientArea, 0, QPoint( 0, 0 ) ); // parent, wflags, pos
-
-    YContainerWidget::addChild( ychild );
+    else
+    {
+	y2error( "Ignoring unwanted %s child", child->widgetClass() );
+    }
 }
 
 

@@ -30,6 +30,8 @@
 #include "YEvent.h"
 #include "YQDialog.h"
 #include "YQGenericButton.h"
+#include "YQWizardButton.h"
+#include "YQWizard.h"
 
 
 YQDialog::YQDialog( const YWidgetOpt &	opt,
@@ -228,12 +230,22 @@ YQDialog::ensureOnlyOneDefaultButton()
 {
     YQGenericButton * def     = _focusButton ? _focusButton : _defaultButton;
     YWidgetList widgetList = YDialog::widgets();
+    _defaultButton = 0;
+    YQWizard * wizard = 0;
 
     for ( YWidgetListIterator it = widgetList.begin(); it != widgetList.end(); ++it )
     {
-	YQGenericButton * button = dynamic_cast<YQGenericButton *> ( *it );
+	YQGenericButton * button = dynamic_cast<YQGenericButton *> (*it);
+	YQWizardButton * wizardButton = dynamic_cast<YQWizardButton *> (*it);
 
-	if ( button )
+	if ( ! wizard )
+	    wizard = dynamic_cast<YQWizard *> (*it);
+
+	if ( wizardButton )
+	{
+	    wizardButton->showAsDefault( false );
+	}
+	else if ( button )
 	{
 	    if ( button->isDefault() )
 	    {
@@ -255,10 +267,70 @@ YQDialog::ensureOnlyOneDefaultButton()
 	}
     }
     
+    if ( ! _defaultButton && wizard )	
+    {
+	_defaultButton = wizardDefaultButton( wizard );
+    }
+    
     def = _focusButton ? _focusButton : _defaultButton;
     
     if ( def )
 	def->showAsDefault();
+}
+
+
+YQWizard *
+YQDialog::findWizard() const
+{
+    YWidgetList widgetList = YDialog::widgets();
+    YQWizard * wizard = 0;
+
+    for ( YWidgetListIterator it = widgetList.begin(); it != widgetList.end(); ++it )
+    {
+	wizard = dynamic_cast<YQWizard *> (*it);
+
+	if ( wizard )
+	    return wizard;
+    }
+
+    return 0;
+}
+
+
+YQGenericButton *
+YQDialog::wizardDefaultButton( YQWizard * wizard ) const
+{
+    YQGenericButton * def = 0;
+    
+    if ( ! wizard )
+	wizard = findWizard();
+
+    if ( wizard )
+    {
+	// Pick one of the wizard buttons
+
+	if ( wizard->direction() == YQWizard::Backward )
+	{
+	    if ( wizard->backButton()
+		 && wizard->backButton()->isShown()
+		 && wizard->backButton()->isEnabled() )
+	    {
+		def = wizard->backButton();
+	    }
+	}
+
+	if ( ! def )
+	{
+	    if ( wizard->nextButton()
+		 && wizard->nextButton()->isShown()
+		 && wizard->nextButton()->isEnabled() )
+	    {
+		def = wizard->nextButton();
+	    }
+	}
+    }
+
+    return def;
 }
 
 
@@ -269,9 +341,18 @@ YQDialog::setDefaultButton( YQGenericButton * newDefaultButton )
 	 newDefaultButton &&
 	 newDefaultButton != _defaultButton )
     {
-	y2error( "Too many `opt( `default ) PushButtons: [%s]", (const char *) newDefaultButton->text() );
-	newDefaultButton->setDefault( false );
-	return;
+	if ( dynamic_cast<YQWizardButton *>( _defaultButton ) )
+	{
+	    // Let app defined default buttons override wizard buttons
+	    _defaultButton->setDefault( false );
+	}
+	else
+	{
+	    y2error( "Too many `opt( `default ) PushButtons: [%s]",
+		     (const char *) newDefaultButton->text() );
+	    newDefaultButton->setDefault( false );
+	    return;
+	}
     }
 
     _defaultButton = newDefaultButton;

@@ -50,19 +50,33 @@ public:
      **/
     virtual ~YQWizardButton();
 
+    /**
+     * Returns a descriptive name of this widget class for logging,
+     * debugging etc.
+     */
+    virtual char *widgetClass() { return "YQWizardButton"; }
 
     /**
      * Hide the associated QPushButton.
      **/
     void hide();
 
-
     /**
      * Show the associated QPushButton - not this widget itself (!).
      * This widget itself will never become visible.
      **/
     void show();
-    
+
+    /**
+     * Returns 'true' if the associated QPushButton (!) is shown.
+     **/
+    bool isShown() const;
+	
+    /**
+     * Returns 'true' if the associated QPushButton (!) is hidden.
+     **/
+    bool isHidden() const;
+	
     /**
      * Preferred size of the widget.
      * Reimplemented from YWidget.
@@ -77,6 +91,10 @@ public:
      */
     void setSize( long newWidth, long newHeight ) {}
 
+    /**
+     * Returns the wizard this wizard button belongs to.
+     **/
+    YQWizard * wizard() const { return _wizard; }
 
 signals:
 
@@ -84,6 +102,11 @@ signals:
      * Emitted when the button is clicked or otherwise activated.
      **/
     void clicked();
+
+    
+private:
+
+    YQWizard * _wizard;
 };
 
 #endif // YQWizardButton_h

@@ -63,6 +63,16 @@ public:
      **/
     virtual ~YQWizard();
 
+    
+    enum Direction { Forward, Backward };
+
+    /**
+     * Returns the current direction of wizard operations - going forward or
+     * going backward. This can be used to maintain a consistent direction when
+     * assigning default buttons to a dialog.
+     **/
+    Direction direction() const { return _direction; }
+    
     /**
      * Generic direct access to implementation-specific functions.
      * See YQWizard.cc for details.
@@ -146,17 +156,18 @@ public:
     /**
      * Returns the wizard's "Next" (or "Accept") button.
      **/
-    const YQWizardButton * nextButton() const  { return _nextButton; }
+    YQWizardButton * nextButton() const  { return _nextButton; }
     
     /**
      * Returns the wizard's "Back" button.
      **/
-    const YQWizardButton * backButton() const  { return _backButton; }
+    YQWizardButton * backButton() const  { return _backButton; }
     
     /**
      * Returns the wizard's "Abort" button.
      **/
-    const YQWizardButton * abortButton() const { return _abortButton; }
+    YQWizardButton * abortButton() const { return _abortButton; }
+    
     
 public slots:
 
@@ -233,8 +244,6 @@ protected slots:
 
 
 protected:
-
-    enum Direction { Forward, Backward };
 
     // Layout functions
 

@@ -34,6 +34,7 @@ YQWizardButton::YQWizardButton( YQWizard *		wizard,
 				const YCPString &	label,
 				const YCPValue & 	id )
     : YQGenericButton( wizard, dialog, YWidgetOpt(), label )
+    , _wizard( wizard )
 {
     QPushButton * button = new QPushButton( fromUTF8( label->value() ), buttonParent );
     CHECK_PTR( button );
@@ -43,13 +44,18 @@ YQWizardButton::YQWizardButton( YQWizard *		wizard,
     setId( id );
     button->setFont( YQUI::ui()->currentFont() );
 
+    // The parent dialog makes a wizard button the default button if the rest
+    // of the dialog doesn't have a default button, so make sure this button
+    // doesn't interfere with that.
+    setDefault( false );
+
     connect( button, SIGNAL( clicked() ),
 	     this,   SIGNAL( clicked() ) );
 
     
     // This widget itself will never be visible, only its button - which is not
     // a child of this widget.
-    hide();
+    QWidget::hide();
 }
 
 
@@ -71,6 +77,20 @@ void YQWizardButton::show()
 {
     if ( qPushButton() )
 	qPushButton()->show();
+}
+
+
+bool YQWizardButton::isShown() const
+{
+    if ( qPushButton() )
+	return qPushButton()->isShown();
+    else
+	return false;
+}
+
+bool YQWizardButton::isHidden() const
+{
+    return ! isShown();
 }
 
 
