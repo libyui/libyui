@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Feb 24 17:31:15 CET 2003 - gs@suse.de
+
+- package installation: save and load package selections (bug #23923) 
+
+-------------------------------------------------------------------
 Fri Feb 21 12:04:18 CET 2003 - gs@suse.de
 
 - package installation: display a list containing all packages which
