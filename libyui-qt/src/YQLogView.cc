@@ -40,6 +40,9 @@ YQLogView::YQLogView( QWidget * 		parent,
 {
     setWidgetRep( this );
 
+    setSpacing( YQWidgetSpacing );
+    setMargin( YQWidgetMargin );
+
     _qt_label = new QLabel( fromUTF8( label->value() ), this );
     _qt_label->setTextFormat( QLabel::PlainText );
     _qt_label->setFont( YQUI::ui()->currentFont() );
