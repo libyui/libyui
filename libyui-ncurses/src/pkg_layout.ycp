@@ -50,7 +50,7 @@
 						     `item(`id(`deselall), _( "Do &Not Install Any" ) ),
 						     `item(`id(`delall),   _( "&Delete All" ) ),
 						     `item(`id(`dontdel),  _( "Do Not D&elete Any" ) ),
-						     `item(`id(`updall),   _( "&Update all" )   ),
+						     `item(`id(`updall),   _( "&Update All" )   ),
 						      // end: submenu items: actions concerning all packages
 						     `item(`id(`dontupd),  _( "Do Not Update and &Keep Installed" ) )
 						     ]

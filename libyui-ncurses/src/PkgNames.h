@@ -722,8 +722,10 @@ public:
     static const NCstring UsedSpace();
     static const NCstring FreeSpace();
     static const NCstring TotalSpace();
-    
-    /**
+
+    static const NCstring ListOfFiles();
+
+   /**
      * dependency popup text
      */ 
     static const NCstring RequText();

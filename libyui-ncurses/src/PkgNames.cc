@@ -710,7 +710,7 @@ const NCstring PkgNames::MediumLabel()
 const NCstring PkgNames::Harddisk()
 {
     // combo box entry
-    static const NCstring value = _( "Hard disk" );
+    static const NCstring value = _( "Hard Disk" );
     return value;
 }
 
@@ -1342,6 +1342,13 @@ const NCstring PkgNames::TotalSpace()
     return value;
 }
 
+const NCstring PkgNames::ListOfFiles()
+{
+    // headline for a list of installed files
+    static const NCstring value =  _( "<i>List of Installed Files:</i><br>" );
+    return value;
+}
+
 const NCstring PkgNames::YouHelp1()
 {
     // help text online udpate
@@ -1416,7 +1423,7 @@ const NCstring PkgNames::TextmodeHelp6()
 const NCstring PkgNames::TextmodeHelp7()
 {
     // part of help for text mode navigation
-    static const NCstring value =  _( "<p>Movement inside a dialog is done with <b>Tab</b> to go forward and <b>Alt</b> or <b>Shift</b> <b>Tab</b> to go back.<br> If the <b>Alt</b> and <b>Shift</b> key combinations are occupied by the windowmanager or the terminal, <b>Ctrl</b> <b>F</b> (forward) and <b>Ctrl</b> <b>B</b> (back) can be used instead.</p>." );
+    static const NCstring value =  _( "<p>To move inside a dialog, use <b>Tab</b> to go forward and <b>Alt</b> or <b>Shift</b> + <b>Tab</b> to go back.<br> If the <b>Alt</b> and <b>Shift</b> key combinations are occupied by the window manager or the terminal, <b>Ctrl</b> + <b>F</b> (forward) and <b>Ctrl</b> + <b>B</b> (back) can be used instead.</p>." );
     return value;
 }
 const NCstring PkgNames::TextmodeHelp8()
@@ -1471,7 +1478,7 @@ const NCstring PkgNames::Saved1Text()
 const NCstring PkgNames::Saved2Text()
 {
     // text for a Notify popup
-    static const NCstring value =  _( "<p>Your package selection have been written to the hard disk.</p>" );
+    static const NCstring value =  _( "<p>Your package selection has been written to the hard disk.</p>" );
     return value;
 }
 
@@ -1520,7 +1527,7 @@ const NCstring PkgNames::LoadedText()
 const NCstring PkgNames::CancelText()
 {
     // text for a Notify popup
-    static const NCstring value =  _( "<p>All of your choices will be lost when exiting with Cancel!<br>Do you really want to exit?</p>" );
+    static const NCstring value =  _( "<p>All your choices will be lost when exiting with Cancel.<br>Really exit?</p>" );
     return value;
 }
 
