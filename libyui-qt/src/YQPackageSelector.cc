@@ -104,6 +104,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     _pkgVersionsView		= 0;
     _rpmGroupTagsFilterView	= 0;
     _searchFilterView		= 0;
+    _selConflictDialog		= 0;
     _selList			= 0;
     _selectionsFilterView	= 0;
     _statusFilterView		= 0;
@@ -124,8 +125,8 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     setTextdomain( "packages-qt" );
     setFont( _yuiqt->currentFont() );
     yuiqt->blockWmClose(); // Automatically undone after UI::RunPkgSelection()
-    _conflictDialog = new YQPkgConflictDialog( &( Y2PM::packageManager() ), this );
-    CHECK_PTR( _conflictDialog );
+    _pkgConflictDialog = new YQPkgConflictDialog( &( Y2PM::packageManager() ), this );
+    CHECK_PTR( _pkgConflictDialog );
 
     basicLayout();
     makeConnections();
@@ -272,9 +273,15 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
 	_selList = _selectionsFilterView->selList();
 	CHECK_PTR( _selList );
+	
+	_selConflictDialog = new YQPkgConflictDialog( &( Y2PM::selectionManager() ), this );
+	CHECK_PTR( _selConflictDialog );
 
 	connect( _filters, 	SIGNAL( currentChanged( QWidget * ) ),
 		 _selList,	SLOT  ( filterIfVisible()           ) );
+
+	connect( _selList, 	SIGNAL( statusChanged()	               	),
+		 this,		SLOT  ( resolveSelectionDependencies()	) );
     }
 
 
@@ -463,7 +470,7 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 	solve_button->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
 
 	connect( solve_button, SIGNAL( clicked() ),
-		 this,         SLOT  ( resolveDependencies() ) );
+		 this,         SLOT  ( resolvePackageDependencies() ) );
 
 
 	_autoDependenciesCheckBox = new QCheckBox( _( "A&uto check" ), button_box );
@@ -633,9 +640,9 @@ YQPackageSelector::makeConnections()
     // Connect conflict dialog
     //
 
-    if ( _conflictDialog && _pkgList )
+    if ( _pkgConflictDialog && _pkgList )
     {
-	connect( _conflictDialog,	SIGNAL( updatePackages()      ),
+	connect( _pkgConflictDialog,	SIGNAL( updatePackages()      ),
 		 _pkgList, 		SLOT  ( updateToplevelItemStates() ) );
     }
 
@@ -662,20 +669,33 @@ YQPackageSelector::autoResolveDependencies()
     if ( _autoDependenciesCheckBox && ! _autoDependenciesCheckBox->isChecked() )
 	return;
 
-    resolveDependencies();
+    resolvePackageDependencies();
 }
 
 
 int
-YQPackageSelector::resolveDependencies()
+YQPackageSelector::resolvePackageDependencies()
 {
-    if ( ! _conflictDialog )
+    if ( ! _pkgConflictDialog )
     {
-	y2error( "No conflict dialog existing" );
+	y2error( "No package conflict dialog existing" );
 	return QDialog::Accepted;
     }
 
-    return _conflictDialog->solveAndShowConflicts();
+    return _pkgConflictDialog->solveAndShowConflicts();
+}
+
+
+int
+YQPackageSelector::resolveSelectionDependencies()
+{
+    if ( _selConflictDialog )
+    {
+	y2debug( "Resolving selection dependencies" );
+	return _selConflictDialog->solveAndShowConflicts();
+    }
+    else
+	return QDialog::Accepted;
 }
 
 
@@ -764,7 +784,7 @@ YQPackageSelector::reject()
 void
 YQPackageSelector::accept()
 {
-    if ( resolveDependencies() != QDialog::Rejected &&
+    if ( resolvePackageDependencies() != QDialog::Rejected &&
 	 checkDiskUsage() != QDialog::Rejected )
     {
 	Y2PM::packageManager().ClearSaveState();

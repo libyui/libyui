@@ -103,7 +103,15 @@ public slots:
      *
      * Returns QDialog::Accepted or QDialog::Rejected.
      **/
-     int resolveDependencies();
+     int resolvePackageDependencies();
+
+    /**
+     * Resolve selection dependencies (unconditionally).
+     * Can safely be called even if there is no selection conflict dialog.
+     *
+     * Returns QDialog::Accepted or QDialog::Rejected.
+     **/
+     int resolveSelectionDependencies();
 
     /**
      * Automatically resolve package dependencies if desired
@@ -205,7 +213,8 @@ protected:
     QProgressBar *			_diskSpace;
     QTabWidget *			_detailsViews;
     QY2ComboTabWidget *			_filters;
-    YQPkgConflictDialog *		_conflictDialog;
+    YQPkgConflictDialog *		_pkgConflictDialog;
+    YQPkgConflictDialog *		_selConflictDialog;
     YQPkgDependenciesView *		_pkgDependenciesView;
     YQPkgDescriptionView *		_pkgDescriptionView;
     YQPkgDiskUsageList *		_diskUsageList;
