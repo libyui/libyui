@@ -105,8 +105,8 @@ YQPkgSelList::filter()
 
 	if ( sel )
 	{
-	    std::list<PMSelectablePtr> slcList = sel->inspacks_ptrs();
-	    std::list<PMSelectablePtr>::const_iterator it = slcList.begin();
+	    std::set<PMSelectablePtr> slcList = sel->inspacks_ptrs();
+	    std::set<PMSelectablePtr>::const_iterator it = slcList.begin();
 
 	    while ( it != slcList.end() )
 	    {
