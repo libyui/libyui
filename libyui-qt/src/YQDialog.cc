@@ -73,16 +73,16 @@ YQDialog::YQDialog( const YWidgetOpt &	opt,
     _qFrame = new QFrame ( this );
     bool decorate = ! hasDefaultSize() && ! YQUI::ui()->haveWM();
 	
+#if 0
     if ( hasSmallDecorations() )
     {
-#if 0
 	// None of this works (yet). :-((
 	
 	clearWFlags( getWFlags() );
 	setWFlags( WStyle_Customize | WStyle_DialogBorder | WStyle_StaysOnTop );
 	// decorate = true;
-#endif
     }
+#endif
 
     if ( decorate )
     {
