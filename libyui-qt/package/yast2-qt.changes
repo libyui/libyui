@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Nov  7 19:46:18 CET 2002 - sh@suse.de
+
+- Fixed bug #20539: Screen shot function causes unnecessary exits 
+- Fixed bug #8362:  File selection box for screen shots
+- Fixed possible security hole: Screen shots in /tmp by default
+
+-------------------------------------------------------------------
 Thu Nov  7 13:31:42 CET 2002 - sh@suse.de
 
 - Fixed bug #19389: Frame widget shows keyboard shortcuts, but

@@ -285,7 +285,7 @@ YQDialog::keyPressEvent( QKeyEvent *event )
 	if ( event->key() == Qt::Key_Print )
 	{
 	    yuiqt->makeScreenShot();
-	    event->accept();
+	    return;
 	}
 	else if ( event->state() == 0 )	// No Ctrl / Alt / Shift etc. pressed
 	{
@@ -293,7 +293,7 @@ YQDialog::keyPressEvent( QKeyEvent *event )
 		 event->key() == Qt::Key_Enter    )
 	    {
 		(void) activateDefaultButton();
-		event->accept();
+		return;
 	    }
 	}
 	else if ( ( event->state() & yast2_special_combo ) == yast2_special_combo )
@@ -305,47 +305,22 @@ YQDialog::keyPressEvent( QKeyEvent *event )
 	    if ( event->key() == Qt::Key_M )
 	    {
 		yuiqt->toggleRecordMacro();
-		event->accept();
+		return;
 	    }
 	    else if ( event->key() == Qt::Key_P )
 	    {
 		yuiqt->askPlayMacro();
-		event->accept();
-	    }
-	    /* L is for Lenka, my wife :-) Michal */
-	    else if ( event->key() == Qt::Key_L )
-	    {
-		// run xpenguins
-
-		int suseid = yuiqt->suseheaderID;
-
-		if( (! penguins) && (suseid != -1) && (suseid != 0) )
-		{
-		    QString command;
-		    command.sprintf( "/usr/bin/xpenguins --id %d >/dev/null 2>&1 &", suseid );
-		    y2milestone("Running: %s", (const char *) command );
-		    XClearWindow( x11Display(), suseid );
-		    if(!system( command ))
-			penguins = true;
-		}
-		else
-		{
-		    system("killall xpenguins >/dev/null 2>&1");
-		    penguins = false;
-		}
-		event->accept();
+		return;
 	    }
 	    else if ( event->key() == Qt::Key_D )
 	    {
-		event->accept();
 		yuiqt->returnNow(YUIInterpreter::ET_DEBUG, 0);
+		return;
 	    }
 	}
     }
-    else
-    {
-	QWidget::keyPressEvent( event );
-    }
+
+    QWidget::keyPressEvent( event );
 }
 
 

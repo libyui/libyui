@@ -353,7 +353,20 @@ protected:
 				  const YCPString & filter,
 				  const YCPString & headline );
 
+    /**
+     * Overloaded version to work with QStrings
+     **/
+    QString askForSaveFileName( const QString & startWith,
+				const QString & filter,
+				const QString & headline );
 
+    /**
+     * Overloaded version to work const char *
+     **/
+    QString askForSaveFileName( const char * startWith,
+				const char * filter,
+				const char * headline );
+    
     /**
      * Sets the X input method according to the locale.
      * [Inherited from YUIInterpreter]

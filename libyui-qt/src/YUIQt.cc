@@ -73,6 +73,7 @@
 
 #include <X11/Xlib.h>
 #include <unistd.h>
+#include <sys/stat.h>
 
 
 #define DEFAULT_MACRO_FILE_NAME		"/tmp/macro.ycp"
@@ -94,6 +95,7 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
     , auto_activate_dialogs(true)
 {
     suseheaderID = -1;
+    screenShotNameTemplate = "";
     _yuiqt = this;
 
     if (argv)
@@ -201,7 +203,6 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
 
     setFont( currentFont() );
     QXEmbed::initialize();
-    screenShotNameTemplate = "/tmp/%s-%03d.png";
     busyCursor();
     topmostConstructorHasFinished();
 #if defined(QT_THREAD_SUPPORT)
@@ -301,9 +302,9 @@ YCPValue YUIQt::runPkgSelection( YWidget * packageSelector )
     y2milestone( "Running package selection..." );
     wm_close_blocked		= true;
     auto_activate_dialogs	= false;
-    
+
     YCPValue input = evaluateUserInput( YCPTerm( YCPSymbol( "", false ) ), false );
-    
+
     auto_activate_dialogs	= true;
     wm_close_blocked 		= false;
     y2milestone( "Package selection done - returning %s", input->toString().c_str() );
@@ -982,35 +983,76 @@ long YUIQt::defaultSize(YUIDimension dim) const
 
 void YUIQt::makeScreenShot()
 {
+    if ( screenShotNameTemplate.isEmpty() )
+    {
+	//
+	// Initialize screen shot directory
+	//
+	
+	QString home = QDir::homeDirPath();
+	QString dir  = "yast2-screen-shots";
+
+	if ( home == "/" )
+	{
+	    // Special case: $HOME is not set. This is normal in the inst-sys.
+	    // In this case, rather than simply dumping all screen shots into
+	    // /tmp which is world-writable, let's try to create a subdirectory
+	    // below /tmp with restrictive permissions.
+	    // If that fails, trust nobody - in particular, do not suggest /tmp
+	    // as the default in the file selection box.
+
+	    dir = "/tmp/" + dir;
+
+	    if ( mkdir( dir, 0700 ) == -1 )
+		dir = "";
+	}
+	else
+	{
+	    // For all others let's create a directory ~/yast2-screen-shots and
+	    // simply ignore if this is already present. This gives the user a
+	    // chance to create symlinks to a better location if he wishes so.
+
+	    dir = home + "/" + dir;
+	    (void) mkdir( dir, 0750 );
+	}
+
+	screenShotNameTemplate = dir + "/%s-%03d.png";
+    }
+
+
+    //
+    // Grab the pixels off the screen
+    //
+
     QWidget *dialog = (QWidget *) currentDialog()->widgetRep();
     QPixmap screenShot = QPixmap::grabWindow( dialog->winId() );
+
+    //
+    // Figure out a file name
+    //
+
     QString fileName;
     const char *baseName = moduleName();
     if ( ! baseName ) baseName = "scr";
     int no = screenShotNo[ baseName ];
-
     fileName.sprintf( screenShotNameTemplate, baseName, no );
-    y2milestone("Saving screen shot to %s", (const char *) fileName );
+    fileName = askForSaveFileName( fileName, QString( "*.png" ) , _("Save screen shot to...") );
 
-    // Open a popup dialog to inform the user about the successful screen shot
+    if ( fileName.isEmpty() )
+    {
+	y2milestone("Save screen shot canceled by user" );
+    }
+    else
+    {
+	y2milestone("Saving screen shot to %s", (const char *) fileName );
 
-    QMessageBox *mbox = new QMessageBox("YaST2",				// caption
-					"Saving screen shot to\n" + fileName,	// text
-					QMessageBox::Information,		// icon
-					QMessageBox::Ok | QMessageBox::Default,	// button0
-					QMessageBox::NoButton,			// button1
-					QMessageBox::NoButton );		// button2
+	//
+	// Actually save the screen shot
+	//
 
-    // Actually make the screen shot
-
-    screenShot.save ( fileName, "PNG" );
-    screenShotNo.insert( baseName, ++no );
-
-    QTimer::singleShot( 3000,	// msec
-			mbox, SLOT(close()) );
-    mbox->exec();
-    delete mbox;
-
+	screenShot.save ( fileName, "PNG" );
+	screenShotNo.insert( baseName, ++no );
+    }
 }
 
 
@@ -1073,14 +1115,14 @@ void YUIQt::askPlayMacro()
 
 
 YCPValue YUIQt::askForExistingDirectory( const YCPString & startDir,
-					  const YCPString & headline )
+					 const YCPString & headline )
 {
     QString dir_name =
 	QFileDialog::getExistingDirectory( fromUTF8( startDir->value() ),
 					   main_win, 				// parent
 					   "dir_selector",			// name
 					   fromUTF8( headline->value() ) );	// caption
-    
+
     if ( dir_name.isEmpty() )	// this includes dir_name.isNull()
 	return YCPVoid();	// nothing selected -> return 'nil'
 
@@ -1089,8 +1131,8 @@ YCPValue YUIQt::askForExistingDirectory( const YCPString & startDir,
 
 
 YCPValue YUIQt::askForExistingFile( const YCPString & startWith,
-				     const YCPString & filter,
-				     const YCPString & headline )
+				    const YCPString & filter,
+				    const YCPString & headline )
 {
     QString file_name =
 	QFileDialog::getOpenFileName( fromUTF8( startWith->value() ),
@@ -1098,7 +1140,7 @@ YCPValue YUIQt::askForExistingFile( const YCPString & startWith,
 				      main_win, 			// parent
 				      "file_selector",			// name
 				      fromUTF8( headline->value() ) );	// caption
-    
+
     if ( file_name.isEmpty() )	// this includes file_name.isNull()
 	return YCPVoid();	// nothing selected -> return 'nil'
 
@@ -1107,22 +1149,38 @@ YCPValue YUIQt::askForExistingFile( const YCPString & startWith,
 
 
 YCPValue YUIQt::askForSaveFileName( const YCPString & startWith,
-				     const YCPString & filter,
-				     const YCPString & headline )
+				    const YCPString & filter,
+				    const YCPString & headline )
+{
+    QString file_name = askForSaveFileName( fromUTF8( startWith->value() ),
+					    fromUTF8( filter->value() ),
+					    fromUTF8( headline->value() ) );
+
+    if ( file_name.isEmpty() )		// this includes file_name.isNull()
+	return YCPVoid();		// nothing selected -> return 'nil'
+
+    return YCPString( toUTF8( file_name ) );
+}
+
+
+
+QString YUIQt::askForSaveFileName( const QString & startWith,
+				   const QString & filter,
+				   const QString & headline )
 {
     QString file_name;
     bool try_again = false;
 
     do
     {
-	file_name = QFileDialog::getSaveFileName( fromUTF8( startWith->value() ),
-						  fromUTF8( filter->value() ),
-						  main_win, 				// parent
-						  "file_selector",			// name
-						  fromUTF8( headline->value() ) );	// caption
-    
+	file_name = QFileDialog::getSaveFileName( startWith,
+						  filter,
+						  main_win, 		// parent
+						  "file_selector",	// name
+						  headline );		// caption
+
 	if ( file_name.isEmpty() )	// this includes file_name.isNull()
-	    return YCPVoid();		// nothing selected -> return 'nil'
+	    return QString();		// nothing selected -> return Null string
 
 
 	if ( access( (const char *) file_name, F_OK ) == 0 )	// file exists?
@@ -1148,10 +1206,20 @@ YCPValue YUIQt::askForSaveFileName( const YCPString & startWith,
 						      _( "&Cancel" ) );
 	    try_again = ( button_no != 0 );
 	}
-    
+
     } while ( try_again );
-    
-    return YCPString( toUTF8( file_name ) );
+
+    return file_name;
+}
+
+
+QString YUIQt::askForSaveFileName( const char * startWith,
+				   const char * filter,
+				   const char * headline )
+{
+    return askForSaveFileName( QString( startWith ),
+			       QString( filter ),
+			       QString( headline ) );
 }
 
 
