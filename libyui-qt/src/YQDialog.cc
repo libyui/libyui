@@ -163,10 +163,13 @@ void YQDialog::activate(bool active)
 {
     if (active)
     {
-#if 0
-	if (! yuiqt->hasWM() )
-	    setActiveWindow();
-#endif
+	if ( ! yuiqt->hasWM() )
+	{
+	    if ( yuiqt->autoActivateDialogs() )
+		setActiveWindow();
+	    else
+		y2milestone( "Auto-activating dialog window turned off" );
+	}
 
 	ensureOnlyOneDefaultButton();
     }

@@ -89,6 +89,7 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
     , loaded_current_font(false)
     , loaded_heading_font(false)
     , wm_close_blocked(false)
+    , auto_activate_dialogs(true)
 {
     suseheaderID = -1;
     _yuiqt = this;
@@ -166,6 +167,7 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
     widget_stack = new QWidgetStack( main_win );
     widget_stack->setFocusPolicy( QWidget::StrongFocus );
     setMainWidget( main_win );
+    qApp->installEventFilter( this );
     main_win->installEventFilter( this );
     main_win->resize( default_size );
     main_win->hide();	// visible only upon showDialog()
@@ -185,6 +187,7 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
 	    title += hostname;
 	}
 	main_win->setCaption( title );
+	kcontrol_id = title;
     }
     else
     {
@@ -294,9 +297,13 @@ YWidget *YUIQt::pollInput(YDialog *dialog, EventType *event)
 YCPValue YUIQt::runPkgSelection( YWidget * packageSelector )
 {
     y2milestone( "Running package selection..." );
-    wm_close_blocked	= true;
-    YCPValue input 	= evaluateUserInput( YCPTerm( YCPSymbol( "", false ) ), false );
-    wm_close_blocked 	= false;
+    wm_close_blocked		= true;
+    auto_activate_dialogs	= false;
+    
+    YCPValue input = evaluateUserInput( YCPTerm( YCPSymbol( "", false ) ), false );
+    
+    auto_activate_dialogs	= true;
+    wm_close_blocked 		= false;
     y2milestone( "Package selection done - returning %s", input->toString().c_str() );
 
     return input;
@@ -438,6 +445,7 @@ YWidget *YUIQt::createRichText(YWidget *parent, YWidgetOpt &opt, const YCPString
 
 YWidget *YUIQt::createPackageSelector(YWidget *parent, YWidgetOpt &opt)
 {
+    auto_activate_dialogs = false;
     return new YQPackageSelector(this, (QWidget *)(parent->widgetRep()), opt);
 }
 
@@ -893,7 +901,7 @@ bool YUIQt::close()
 
 bool YUIQt::eventFilter( QObject * obj, QEvent * ev )
 {
-    
+
     if ( ev->type() == QEvent::Close )
     {
 	if ( ! wm_close_blocked )
@@ -902,10 +910,10 @@ bool YUIQt::eventFilter( QObject * obj, QEvent * ev )
 	    // with `id(`cancel) and let the YCP application decide how to handle
 	    // that (e.g., ask for confirmation).
 
-	    y2milestone( "Caught window close event for main window" );
+	    y2milestone( "Caught window close event - returning with `cancel" );
 	    returnNow(YUIInterpreter::ET_CANCEL, 0);
 	}
-	
+
 	return true;	// Event processed
     }
     else if ( ev->type() == QEvent::Show )
@@ -943,7 +951,6 @@ bool YUIQt::showEventFilter( QObject * obj, QEvent * ev )
 
 	if ( wid )
 	{
-	    y2milestone( "Force raising window" );
 	    wid->setActiveWindow();
 	}
     }

@@ -59,7 +59,7 @@ public:
      * Returns the UI's default font.
      **/
     const QFont & currentFont();
-    
+
     /**
      * Returns the UI's heading font.
      **/
@@ -96,7 +96,7 @@ public:
      * Reimplemented from YUIInterpreter.
      **/
     YCPValue runPkgSelection( YWidget * packageSelector );
-    
+
     /**
      * Toggle macro recording (activated by Ctrl-Shift-Alt-M):
      * Stop macro recording if it is in progress,
@@ -139,14 +139,20 @@ public:
      * Block WM_CLOSE events for the main window.
      **/
     void blockWmClose()		{ wm_close_blocked = true;  }
-    
+
     /**
      * Unblock WM_CLOSE events for the main window.
      **/
     void unblockWmClose()	{ wm_close_blocked = false; }
 
+    /**
+     * Check if dialogs are to be activated automatically
+     **/
+    bool autoActivateDialogs() { return auto_activate_dialogs; }
+
+
 protected:
-    
+
     // Implement virtual functions inherited from YUIInterpreter
 
     /**
@@ -208,7 +214,7 @@ protected:
     /**
      * Make all UI windows usable without a mouse
      * (even predefined Qt dialogs that don't know the UI's dialogs' activate()
-     * magic)  
+     * magic)
      **/
     bool showEventFilter( QObject * obj, QEvent * ev );
 
@@ -258,7 +264,7 @@ protected:
 					 YCPString label,
 					 YColor foreground, YColor background,
 					 int margin );
-    
+
     bool 	hasDownloadProgress();
     YWidget *	createDownloadProgress	( YWidget *parent,
 					  YWidgetOpt &opt,
@@ -317,7 +323,7 @@ protected:
     bool hasAnimationSupport()		{ return true; 	}
     bool hasIconSupport()		{ return false; }	// not yet
     bool hasFullUtf8Support()		{ return true; 	}
-    
+
 
     QMap<QString, int>	screenShotNo;
     QString		screenShotNameTemplate;
@@ -369,7 +375,7 @@ private:
      */
     QSize default_size;
 
-    
+
     /**
      * A flag used during the idle loop. If it is set to true,
      * the idle loop is left. This happens, if the ycp-ui-communication
@@ -404,12 +410,17 @@ private:
     QFont heading_font;
     bool loaded_heading_font;
 
-    
+
     /**
      * Window manager close events blocked?
      **/
     bool wm_close_blocked;
-    
+
+    /**
+     *
+     **/
+    bool auto_activate_dialogs;
+
     /**
      * Window ID for KDE control center
      **/
@@ -420,7 +431,7 @@ private:
      **/
     static YUIQt * _yuiqt;
 
-    
+
 private slots:
 
     bool close();
