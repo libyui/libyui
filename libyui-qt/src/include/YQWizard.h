@@ -27,8 +27,8 @@
 
 class QGridLayout;
 class QHBox;
+class QLabel;
 class QPushButton;
-class QTabWidget;
 class QTextBrowser;
 class QToolButton;
 class QWidgetStack;
@@ -73,7 +73,17 @@ public:
      **/
     bool eventFilter( QObject * obj, QEvent * ev );
 
+    /**
+     * Set a dialog icon. 0 is a valid value - it clears the current icon.
+     **/
+    void setDialogIcon( const char * iconName );
 
+    /**
+     * Set a dialog heading. 0 is a valid value - it clears the old text.
+     **/
+    void setDialogHeading( const char * headingText );
+
+    
 public slots:
 
     /**
@@ -211,6 +221,8 @@ protected:
     QPushButton *		_stepsButton;
 
     QVBox *		_clientArea;
+    QLabel *		    _dialogIcon;
+    QLabel *		    _dialogHeading;
     YQReplacePoint *	    _contentsReplacePoint;
     QHBox *		_buttonBox;
     QPushButton *	    _abortButton;

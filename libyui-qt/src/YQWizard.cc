@@ -72,6 +72,8 @@ YQWizard::YQWizard( QWidget *		parent,
     _helpBrowser		= 0;
     _stepsButton		= 0;
     _clientArea			= 0;
+    _dialogIcon			= 0;
+    _dialogHeading		= 0;
     _contentsReplacePoint	= 0;
     _buttonBox			= 0;
     _abortButton		= 0;
@@ -208,7 +210,7 @@ void YQWizard::layoutStepsPanel()
     CHECK_PTR( steps );
 
     steps->setPaletteBackgroundColor( _gradientCenterColor );
-    steps->setFont( QFont( "Helvetica", 10 ) );
+    steps->setFont( YQUI::ui()->currentFont() );
 
     steps->setMargin( 10 );
 
@@ -338,6 +340,15 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
     setBottomCroppedGradient( bottomSpacer, _bottomGradientPixmap, WORK_AREA_BOTTOM_MARGIN );
 
     addGradientColumn( parentHBox, WORK_AREA_RIGHT_MARGIN );
+
+
+
+#if 1
+
+    setDialogIcon( "/usr/share/YaST2/images/user_add.png" );
+    setDialogHeading( "Welcome to the YaST2 installation" );
+    
+#endif
 }
 
 
@@ -348,6 +359,23 @@ void YQWizard::layoutClientArea( QWidget * parent )
     CHECK_PTR( _clientArea );
     _clientArea->setMargin( 4 );
 
+    //
+    // Dialog icon and heading
+    //
+
+    QHBox * headingHBox = new QHBox( _clientArea );
+    CHECK_PTR( headingHBox );
+    headingHBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
+    
+    _dialogIcon = new QLabel( headingHBox );
+    CHECK_PTR( _dialogIcon );
+
+    _dialogHeading = new QLabel( headingHBox );
+    CHECK_PTR( _dialogHeading );
+    _dialogHeading->setFont( YQUI::ui()->headingFont() );
+
+    addHStretch( headingHBox );
+    
 
     //
     // Replace point for wizard contents
@@ -360,6 +388,7 @@ void YQWizard::layoutClientArea( QWidget * parent )
     _contentsReplacePoint->setId( YCPSymbol( YWizardContentsReplacePointID ) ); // `id(`contents)
     addChild( _contentsReplacePoint );
     _contentsReplacePoint->installEventFilter( this );
+    _contentsReplacePoint->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
 
     //
@@ -566,6 +595,39 @@ void YQWizard::destroyButtons()
     }
 }
 
+
+
+void YQWizard::setDialogIcon( const char * iconName )
+{
+    if ( _dialogIcon )
+    {
+	if ( iconName )
+	{
+	    QPixmap icon( iconName );
+
+	    if ( icon.isNull() )
+		y2warning( "Couldn't load dialog icon \"%s\"", iconName );
+	    else
+		_dialogIcon->setPixmap( icon );
+	}
+	else
+	{
+	    _dialogIcon->clear();
+	}
+    }
+}
+
+
+void YQWizard::setDialogHeading( const char * headingText )
+{
+    if ( _dialogHeading )
+    {
+	if ( headingText )
+	    _dialogHeading->setText( headingText );
+	else
+	    _dialogHeading->clear();
+    }
+}
 
 
 void YQWizard::addChild( YWidget * ychild )
