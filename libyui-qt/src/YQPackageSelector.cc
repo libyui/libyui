@@ -1002,11 +1002,7 @@ YQPackageSelector::accept()
     if ( _youMode )
 	Y2PM::youPatchManager().ClearSaveState();
     else
-    {
 	Y2PM::selectionManager().ClearSaveState();
-#warning NOT IMPLEMENTED YET: Save current selections state (waiting for package manager function)
-    }
-
 
     _yuiqt->setMenuSelection( YCPSymbol("accept", true) );
     _yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
