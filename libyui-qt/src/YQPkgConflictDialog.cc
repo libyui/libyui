@@ -204,6 +204,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
     PkgDep::ResultList		goodList;
     PkgDep::ErrorResultList	badList;
 
+#if 0
     if ( _solveCount++ == 0 || averageSolveTime() > 0.0 )
     {
 	_busyPopup->show();
@@ -215,6 +216,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
 	// QTimer::singleShot( 0, _busyPopup, SLOT( repaint() ) );
 	qApp->processEvents();
     }
+#endif
 
     y2debug( "Solving..." );
     QTime solveTime;
