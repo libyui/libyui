@@ -118,7 +118,7 @@ void YUIQt::makeScreenShot( std::string stl_filename )
 	    //
 
 	    QString home = QDir::homeDirPath();
-	    char *ssdir = getenv("Y2SCREENSHOTS");
+	    char * ssdir = getenv("Y2SCREENSHOTS");
 	    QString dir  = ssdir ? ssdir : "yast2-screen-shots";
 
 	    if ( home == "/" )
@@ -153,7 +153,7 @@ void YUIQt::makeScreenShot( std::string stl_filename )
 	// Figure out a file name
 	//
 
-	const char *baseName = moduleName();
+	const char * baseName = moduleName();
 	if ( ! baseName ) baseName = "scr";
 	int no = screenShotNo[ baseName ];
 	fileName.sprintf( screenShotNameTemplate, baseName, no );

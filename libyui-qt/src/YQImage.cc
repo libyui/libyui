@@ -43,7 +43,7 @@ YQImage::YQImage( QWidget * parent, YWidgetOpt & opt,
     animated = false;
     
     QPixmap pixmap;
-    char *oem_logo;
+    char * oem_logo;
     
     switch (img)
     {

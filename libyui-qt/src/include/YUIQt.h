@@ -149,7 +149,7 @@ public:
      *
      * Reimplemented from YUIInterpreter.
      */
-    void internalError( const char *msg );
+    void internalError( const char * msg );
 
     /**
      * Show hourglass cursor.

@@ -39,7 +39,7 @@ using std::max;
 #define INDEX_INVALID(I) index_invalid(i, __FUNCTION__)
 
 
-QY2BarGraph::QY2BarGraph( QWidget * parent, const char *name )
+QY2BarGraph::QY2BarGraph( QWidget * parent, const char * name )
     : QFrame(parent, name)
 {
     setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
@@ -229,7 +229,7 @@ const QColor QY2BarGraph::segmentForegroundColor( int i )
 }
 
 
-bool QY2BarGraph::index_invalid( int i, const char *function_name ) const
+bool QY2BarGraph::index_invalid( int i, const char * function_name ) const
 {
     if ( i < 0 || i >= segments() )
     {

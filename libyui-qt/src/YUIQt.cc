@@ -278,7 +278,7 @@ YUIQt::~YUIQt()
 }
 
 
-void YUIQt::internalError( const char *msg )
+void YUIQt::internalError( const char * msg )
 {
     normalCursor();
     int button = QMessageBox::critical( 0, "YaST2 Internal Error", msg,

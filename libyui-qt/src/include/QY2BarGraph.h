@@ -37,7 +37,7 @@ class QY2BarGraph : public QFrame
 
 public:
 
-    QY2BarGraph( QWidget * parent=0, const char *name=0 );
+    QY2BarGraph( QWidget * parent=0, const char * name=0 );
 
     /**
      * Add one segment to the bar graph.
@@ -118,7 +118,7 @@ protected:
      * Sanity check for segment index.
      * Returns true if invalid, false if OK.
      */
-    bool index_invalid( int i, const char *funtion_name ) const;
+    bool index_invalid( int i, const char * function_name ) const;
 
 private:
 

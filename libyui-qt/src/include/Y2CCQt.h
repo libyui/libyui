@@ -63,7 +63,7 @@ public:
     /**
      * Creates a new Qt UI component.
      */
-    Y2Component *create(const char *name) const
+    Y2Component *create(const char * name) const
     {
 	if (!strcmp(name, "qt")) return new Y2QtComponent();
 	else return 0;
