@@ -472,6 +472,7 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 	    switch ( tableType )
 	    {
 		case T_Packages:
+		case T_Update:
 		    // show the required package info
 		    packager->showPackageInformation( objPtr );   
 		    break;
