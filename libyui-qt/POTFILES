@@ -1,4 +1,5 @@
 ./src/QY2DiskUsageList.cc
+./src/QY2FloppyMountDialog.cc
 ./src/YQPackageSelector.cc
 ./src/YQPackageSelectorHelp.cc
 ./src/YQPkgChangesDialog.cc
