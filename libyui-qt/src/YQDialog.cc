@@ -82,7 +82,7 @@ YQDialog::~YQDialog()
 {
     if ( penguins )
     {
-	system("killall xpenguins");
+	system("killall xpenguins >/dev/null 2>&1");
     }
 }
 
@@ -317,15 +317,15 @@ YQDialog::keyPressEvent( QKeyEvent *event )
 		if( (! penguins) && (suseid != -1) && (suseid != 0) )
 		{
 		    QString command;
-		    command.sprintf( "/usr/bin/xpenguins --id %d &", suseid );
+		    command.sprintf( "/usr/bin/xpenguins --id %d >/dev/null 2>&1 &", suseid );
 		    y2milestone("Running: %s", (const char *) command );
 		    XClearWindow( x11Display(), suseid );
-		    system( command );
-		    penguins = true;
+		    if(!system( command ))
+			penguins = true;
 		}
 		else
 		{
-		    system("killall xpenguins");
+		    system("killall xpenguins >/dev/null 2>&1");
 		    penguins = false;
 		}
 		event->accept();
