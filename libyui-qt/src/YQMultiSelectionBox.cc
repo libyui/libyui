@@ -147,7 +147,7 @@ YQMultiSelectionBox::getCurrentItem()
 	child = child->nextSibling();
     }
     
-    return 0;
+    return -1;
 }
 
 

@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Feb 14 18:43:11 CET 2005 - sh@suse.de
+
+- V 2.11.7
+- Fixed bug #50468: Segfault if querying current item in empty
+  MultiSelectionBox while recording macro 
+
+-------------------------------------------------------------------
 Fri Feb  4 19:01:54 CET 2005 - sh@suse.de
 
 - Fixed full-size dialog size for multihead
