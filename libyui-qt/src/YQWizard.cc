@@ -109,7 +109,7 @@ YQWizard::YQWizard( QWidget *		parent,
 
 #if 1
 
-    setDialogIcon( "/usr/share/YaST2/images/samba-server.png" );
+    setDialogIcon( "/usr/share/YaST2/images/user-add.png" );
     setDialogHeading( "Welcome to the YaST2 installation" );
     setHelpText( "<p>This is a help text.</p>"
 		 "<p>It should be helpful.</p>"
