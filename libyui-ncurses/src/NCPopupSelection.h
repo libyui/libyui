@@ -54,13 +54,14 @@ class NCPopupSelection : public NCPopup {
 
 private:
 
-    NCMultiSelectionBox * selectionBox;
+    NCPkgTable *sel;			// selection list
     NCPushButton * okButton;
 
     PackageSelector * packager;		// connection to the PackageSelector,
 
-    std::vector< std::pair<PMSelectionPtr, bool> > selections; 	// the available selections
-
+    //std::vector< std::pair<PMSelectionPtr, bool> > selections;
+    std::vector<PMSelectionPtr> selections;	// the available selections
+    
     // Get selections from the instsource manager
     bool getSelections( );
     
@@ -84,7 +85,7 @@ public:
     bool getSelectedItems( std::vector<int> & list );
 
     /**
-     * Shows the poup with the add ons (package categories).
+     * Shows the popup with the add ons (package categories).
      * The selected items all stored in NCursesEvent which ir
      * returned if the user exits the popup with OK.
      * @return NCursesEvent

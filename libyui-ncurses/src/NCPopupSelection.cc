@@ -23,6 +23,8 @@
 #include "NCSplit.h"
 #include "NCSpacing.h"
 #include "PkgNames.h"
+#include "NCPkgTable.h"
+#include "ObjectStatStrategy.h"
 
 #include <Y2PM.h>
 #include <y2pm/RpmDb.h>
@@ -39,7 +41,7 @@
 //
 NCPopupSelection::NCPopupSelection( const wpos at,  PackageSelector * pkg  )
     : NCPopup( at, false )
-    , selectionBox( 0 )
+    , sel( 0 )
     , okButton( 0 )
     , packager( pkg )
 {
@@ -81,11 +83,27 @@ void NCPopupSelection::createLayout( const YCPString & label )
 
   opt.notifyMode.setValue( false );
 
-  // the multi selection widget
-  selectionBox = new NCMultiSelectionBox( split, opt, label );
-  split->addChild( selectionBox );
+  //the headline
+  opt.isHeading.setValue( true );
 
+  NCLabel * head = new NCLabel( split, opt, PkgNames::SelectionLabel().str() );
+  split->addChild( head );
+  
+  // add the selection list
+  sel = new NCPkgTable( split, opt );
+  sel->setPackager( packager );
+  // set status strategy
+  ObjectStatStrategy * strat = new PackageStatStrategy();
+  sel->setTableType( NCPkgTable::T_Selections, strat );
+  split->addChild( sel );
+  
   opt.notifyMode.setValue( true );
+
+  NCLabel * help = new NCLabel( split, opt, YCPString(PkgNames::DepsHelpLine().str()) );
+  split->addChild( help );
+
+  NCSpacing * sp1 = new NCSpacing( split, opt, 0.4, false, true );
+  split->addChild( sp1 );
   
   // add an OK button
   opt.key_Fxx.setValue( 10 );
@@ -94,8 +112,8 @@ void NCPopupSelection::createLayout( const YCPString & label )
   
   split->addChild( okButton );
 
-  NCSpacing * sp = new NCSpacing( split, opt, 0.1, false, true );
-  split->addChild( sp );
+  NCSpacing * sp2 = new NCSpacing( split, opt, 0.4, false, true );
+  split->addChild( sp2 );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -106,21 +124,27 @@ void NCPopupSelection::createLayout( const YCPString & label )
 NCursesEvent & NCPopupSelection::showSelectionPopup( )
 {
     int i;
-    vector< pair<PMSelectionPtr, bool> >::iterator it;    
-
+    vector<PMSelectionPtr>::iterator it;    
+    vector<string> pkgLine;
+    pkgLine.reserve(4);
+    
     postevent = NCursesEvent();
 
-    if ( !selectionBox )
+    if ( !sel )
 	return postevent;
     
-    selectionBox->clearItems();
+    sel->itemsCleared();
 
     // fill the selection box
     for ( i = 0, it = selections.begin(); it != selections.end(); ++it, i++ )
     {
-	selectionBox->addItem( YCPString( (*it).first->summary(Y2PM::getPreferredLocale()) ),	// description
-			       PkgNames::Treeitem(),	// `id
-			       (*it).second );		// selected
+	pkgLine.clear();
+	pkgLine.push_back( (*it)->summary(Y2PM::getPreferredLocale()) );
+	
+	sel->addLine( (*it)->getSelectable()->status(),	// the status 
+		      pkgLine,
+		      i,
+		      (*it) );		// PMSelectionPtr
     }
 
     // event loop
@@ -138,8 +162,8 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
     {
 	if ( !selections.empty() )
 	{
-	    int index = selectionBox->getCurrentItem();
-	    PMSelectionPtr selPtr = selections[index].first;
+	    int index = sel->getCurrentItem();
+	    PMSelectionPtr selPtr = selections[index];
 	
 	    NCMIL << "Current selection: " << getCurrentLine() << endl;
 	    // activate the package solving
@@ -153,50 +177,6 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
     return postevent;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// bool getSelectedItems ( vector<int> & list )
-//
-// ------- UNUSED ---------
-//
-bool  NCPopupSelection::getSelectedItems ( vector<int> & selItems )
-{
-    vector<int> items;
-    items.reserve(20);
-    
-    const NCTableCol * tag = 0;
-
-    if ( !selectionBox )
-	return false;
-
-    // get the size of the selection box 
-    unsigned int size = selectionBox->getNumLines();
-    unsigned int index = 0;
-    
-    while ( index < size )
-    {
-	// get the line 
-	const NCTableLine * line = selectionBox->getLine( index );
-	if ( !line )
-	{
-	    NCINT << "No such line: " << index << endl; 
-	}
-	else
-	{
-	    tag = line->GetCol( 0 );
-	}
-	if ( tag && ( (NCTableTag *)tag )->Selected() )
-	{
-	    items.push_back( index );
-	    NCINT << "Selected line: " << index << endl;
-	}
-	index++;
-    }
-    
-    selItems = items;
-    
-    return true; 
-}
 
 //////////////////////////////////////////////////////////////////
 //
@@ -207,12 +187,12 @@ bool  NCPopupSelection::getSelectedItems ( vector<int> & selItems )
 //
 string  NCPopupSelection::getCurrentLine( )
 {
-    if ( !selectionBox )
+    if ( !sel )
 	return "";
     
-    int index = selectionBox->getCurrentItem();
+    int index = sel->getCurrentItem();
 
-    return ( selections[index].first->summary(Y2PM::getPreferredLocale()) );
+    return ( selections[index]->summary(Y2PM::getPreferredLocale()) );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -226,7 +206,7 @@ string  NCPopupSelection::getCurrentLine( )
 
 long NCPopupSelection::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? 30 : 20 );
+    return ( dim == YD_HORIZ ? NCurses::cols()-20 : NCurses::lines()-5 );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -239,43 +219,10 @@ long NCPopupSelection::nicesize(YUIDimension dim)
 //
 NCursesEvent NCPopupSelection::wHandleInput( int ch )
 {
-    bool ok = true;
-    
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;
 
-    if ( ch == KEY_RETURN )
-	return NCursesEvent::button;
-
-    NCursesEvent event = NCDialog::wHandleInput( ch );
-    
-    if ( ch == KEY_SPACE )
-    {
-	int index = selectionBox->getCurrentItem();
-	PMSelectionPtr selPtr = selections[index].first;
-	if ( selectionBox && (unsigned)index < selections.size() )
-	{
-	    if ( selections[index].second )
-	    {
-		selections[index] = make_pair( selPtr, false );
-		// inform the selection manager
-		ok = selPtr->getSelectable()->set_status( PMSelectable::S_NoInst );
-		
-		NCMIL << "Selection: " << selPtr->name() << " is DEselected" <<
-		         ", result: " << (ok?"true":"false") << endl;	
-	    }
-	    else
-	    {
-		selections[index] = make_pair( selPtr, true );
-		// inform the selection manager
-		ok = selPtr->getSelectable()->set_status( PMSelectable::S_Install );
-		NCMIL << "Selection: " << selPtr->name() << " is selected" <<
-		         ", result: " << (ok?"true":"false") << endl;	
-	    }
-	}
-    }
-    
-    return event;
+    return NCDialog::wHandleInput( ch );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -322,20 +269,17 @@ bool NCPopupSelection::getSelections( )
     // get selections
     PMSelectionPtr selPtr;
     PMManager::PMSelectableVec::const_iterator it;
-    bool selected;
     
     for (  it = Y2PM::selectionManager().begin();
 	 it != Y2PM::selectionManager().end();
 	 ++it )
     {
-	selected = false;
 	PMSelectionPtr instPtr = (*it)->installedObj();
 	PMSelectionPtr candPtr = (*it)->candidateObj();
 
 	if ( instPtr )
 	{
 	    selPtr = instPtr;
-	    selected = true;
 	}
 	else if ( candPtr )
 	{
@@ -346,20 +290,11 @@ bool NCPopupSelection::getSelections( )
 	    selPtr = (*it)->theObject();
 	}
 
-  	if ( selPtr )
-	{
-	    PMSelectable::UI_Status status = selPtr->getSelectable()->status();
-	    NCMIL << "Selection found: " << selPtr->name() << " status: " << status << endl;
-	    
-	    if ( status == PMSelectable::S_Install || status == PMSelectable::S_AutoInstall )
-		selected = true;
-	}
-	
-	// show the available add-ons
+	// get the available add-ons
 	if ( selPtr && selPtr->visible() && !selPtr->isBase() )
 	{
-	    NCMIL << "Add-on " <<  selPtr->name() << ", selected: " << (selected?"true":"false") << endl; 
-	    selections.push_back( make_pair(selPtr, selected) );
+	    NCMIL << "Add-on selection: " <<  selPtr->name() << ", status: " << selPtr->getSelectable()->status() << endl; 
+	    selections.push_back( selPtr );
 	}
     }
     
