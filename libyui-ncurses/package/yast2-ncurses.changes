@@ -4,6 +4,12 @@ Fri Sep 05 17:12:48 CEST 2003 - arvin@suse.de
 - don't allocate tmp buffer on stack (can be too huge) (bug #29716)
 
 -------------------------------------------------------------------
+Tue Sep  2 16:29:03 CEST 2003 - gs@suse.de
+
+- online udpate: show included scripts and files 
+- don't return `cancel after window resize (bug #29853)
+
+-------------------------------------------------------------------
 Thu Aug 28 13:54:17 CEST 2003 - gs@suse.de
 
 - V 2.8.15
