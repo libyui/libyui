@@ -24,10 +24,10 @@
 					     `item( `id(`updatelist),	_( "&Update List" ) ) ]
 					    )),
 			 // label Actions menu ( keep it short ) - actions to change status of a package
-			 `Left(`MenuButton( `opt(`key_F5), _( "&Actions" ),
-					    // Please note: add an appropriate number of whitespace get a well
-					    // formated menu (the [ ] should be one column)
-					    // toggle the status, e.g. change from installed to delete
+			 `Left(`MenuButton( `opt(`key_F5), _( "A&ctions" ),
+					    // Please note: add an appropriate number of whitespace to get a well
+					    // formated menu (the [ ]s should be in one column) and use unique hotkeys until end:
+					    // begin: Actions menu, toggle the status, e.g. change from installed to delete
 					    [`item( `id(`toggle), 	_( "&Toggle     [RET]" ) ),
 					     // select the package for installation
 					     `item( `id(`select), 	_( "&Select      [+]" ) ),
@@ -39,27 +39,31 @@
 					     `item( `id(`tabooOn), 	_( "Taboo &Yes   [!]" ) ),
 					     // reset the status 'Taboo' 
 					     `item( `id(`tabooOff), 	_( "Taboo &No    [-]" ) ),
-					     // title of a submenu: actions concerning all packages of the list
-					     `menu( _( "&All Listed Packages" ),
+					     // end: Actions menu, set status of all packages (title of a submenu)
+					     `menu( _( "All Listed &Packages" ),
 						    [
-						     // menu items: actions concerning all packages
-						     `item(`id(`selall),   _( "Install All" )  ),
-						     `item(`id(`deselall), _( "Do Not Install Any" ) ),
-						     `item(`id(`delall),   _( "De&lete All" ) ),
-						     `item(`id(`dontdel),  _( "Do &Not Delete Any" ) ),
-						     `item(`id(`updall),   _( "U&pdate all" )   ),
-						     `item(`id(`dontupd),  _( "Do Not Update and Keep Installed" ) )
+						     // begin: submenu items actions concerning all packages
+						     // please note: use unique hotkeys until end:
+						     `item(`id(`selall),   _( "&Install All" )  ),
+						     `item(`id(`deselall), _( "Do &Not Install Any" ) ),
+						     `item(`id(`delall),   _( "&Delete All" ) ),
+						     `item(`id(`dontdel),  _( "Do Not D&elete Any" ) ),
+						     `item(`id(`updall),   _( "&Update all" )   ),
+						      // end: submenu items: actions concerning all packages
+						     `item(`id(`dontupd),  _( "Do Not Update and &Keep Installed" ) )
 						     ]
 						    )
 					     ]
 					     )),
 			 // label Information menu ( keep it short! )
 			 `Left(`MenuButton( `opt(`key_F6), _( "&Information" ),
-					    // menu items of the info menu
+					    // begin: menu items of the info menu
+					    // please note: use unique hotkeys until end:
 					    [`item( `id(`pkginfo), 	_( "&Package Info" ) ),
 					     `item( `id(`longdescr), 	_( "&Long Description" ) ),
 					     `item( `id(`versions), 	_( "&Versions" ) ),
 					     `item( `id(`files), 	_( "&File List" ) ),
+					     // end: menu items of the info menu
 					     `item( `id(`relations), 	_( "Package &Relations" ) ) ]
 					    )),
 			 // label Etc. menu ( keep it short! )
