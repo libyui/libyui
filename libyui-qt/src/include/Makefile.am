@@ -11,6 +11,7 @@ pkginclude_HEADERS =				\
 	Y2CCQt.h				\
 	Y2QtComponent.h				\
 	YQWidget.h				\
+	YQIconPool.h				\
 						\
 	YQAlignment.h				\
 	YQBarGraph.h				\
@@ -29,6 +30,14 @@ pkginclude_HEADERS =				\
 	YQMultiLineEdit.h			\
 	YQMultiSelectionBox.h			\
 	YQPartitionSplitter.h			\
+	YQPackageSelector.h			\
+	YQPkgGenericDetailsView.h		\
+	YQPkgDescriptionView.h			\
+	YQPkgTechnicalDetailsView.h		\
+	YQPkgList.h				\
+	YQPkgRpmGroupTagsFilterView.h		\
+	YQPkgSelectionsFilterView.h		\
+	YQPkgSelList.h				\
 	YQProgressBar.h				\
 	YQPushButton.h				\
 	YQRadioButton.h				\
@@ -45,8 +54,18 @@ pkginclude_HEADERS =				\
 	YQTree.h				\
 						\
 	QY2BarGraph.h				\
+	QY2ComboTabWidget.h			\
 	QY2CharValidator.h			\
-	QXEmbed.h
+	QXEmbed.h				\
+						\
+	checklist_off.xpm			\
+	checklist_on.xpm			\
+	recycle.xpm				\
+	taboo.xpm				\
+	autoinst.xpm				\
+	trashcan.xpm
+
+
 
 CLEANFILES = y2qt.kdoc
 

@@ -17,9 +17,6 @@
 
 /-*/
 
-#ifndef __sparc__
-#define noUGLY_HACK_TO_GET_X_INPUT_METHOD_RIGHT
-#endif
 
 #include <rpc/types.h>		// MAXHOSTNAMELEN
 #include <unistd.h>		// gethostname()
@@ -31,6 +28,7 @@
 #include <qwidgetstack.h>
 #include <qcursor.h>
 #include <qwidgetlist.h>
+#include <ycp/YCPTerm.h>
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
@@ -56,6 +54,7 @@
 #include "YQMultiSelectionBox.h"
 #include "YQPartitionSplitter.h"
 #include "YQProgressBar.h"
+#include "YQPackageSelector.h"
 #include "YQPushButton.h"
 #include "YQRadioButton.h"
 #include "YQRadioButtonGroup.h"
@@ -73,15 +72,6 @@
 
 #include <X11/Xlib.h>
 
-#ifdef UGLY_HACK_TO_GET_X_INPUT_METHOD_RIGHT
-#  include "qt_x11.h"
-#  include <locale.h>
-
-#  ifndef NO_XIM
-extern XIM qt_xim;		// global in Qt (fortunately)
-extern XIMStyle qt_xim_style;	// global in Qt (fortunately)
-#   endif
-#endif
 
 #define DEFAULT_MACRO_FILE_NAME		"/tmp/macro.ycp"
 
@@ -124,9 +114,21 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
 	if ( default_size.width()  < 640 ||
 	     default_size.height() < 480   )
 	{
-	    default_size.setWidth ( 640 );
-	    default_size.setHeight( 480 );
-	    y2milestone( "Assuming minimum default size of %dx%d",
+	    // 640x480 is the absolute minimum, but let's go for 800x600 if we can
+	    
+	    if ( desktop()->width()  >= 800 &&
+		 desktop()->height() >= 600  )
+	    {
+		default_size.setWidth ( 800 );
+		default_size.setHeight( 600 );
+	    }
+	    else
+	    {
+		default_size.setWidth ( 640 );
+		default_size.setHeight( 480 );
+	    }
+	    
+	    y2milestone( "Assuming default size of %dx%d",
 			 default_size.width(), default_size.height() );
 	}
     }
@@ -261,6 +263,14 @@ YWidget *YUIQt::pollInput(YDialog *dialog, EventType *event)
 }
 
 
+void YUIQt::runPkgSelection( YWidget * packageSelector )
+{
+    y2milestone( "Running package selection..." );
+    evaluateUserInput( YCPTerm( YCPSymbol( "", false ) ), false );
+    y2milestone( "Package selection done" );
+}
+
+
 YDialog *YUIQt::createDialog(YWidgetOpt &opt)
 {
     bool has_defaultsize = opt.hasDefaultSize.value();
@@ -391,6 +401,17 @@ YWidget *YUIQt::createLogView(YWidget *parent, YWidgetOpt &opt,
 YWidget *YUIQt::createRichText(YWidget *parent, YWidgetOpt &opt, const YCPString& text)
 {
     return new YQRichText(this, (QWidget *)(parent->widgetRep()), opt, text);
+}
+
+YWidget *YUIQt::createPackageSelector(YWidget *parent, YWidgetOpt &opt)
+{
+    return new YQPackageSelector(this, (QWidget *)(parent->widgetRep()), opt);
+}
+
+YWidget *YUIQt::createPkgSpecial( YWidget *parent, YWidgetOpt &opt, const YCPString &subwidget )
+{
+    y2error( "The Qt UI does not support PkgSpecial subwidgets!" );
+    return 0;
 }
 
 YWidget *YUIQt::createPushButton(YWidget *parent, YWidgetOpt &opt, const YCPString& label)
@@ -606,12 +627,6 @@ YWidget *YUIQt::createPartitionSplitter( YWidget *		parent,
 
 YCPValue YUIQt::setLanguage(const YCPTerm &term)
 {
-#ifdef UGLY_HACK_TO_GET_X_INPUT_METHOD_RIGHT
-    // Modify the Qt global X input method variable :-(
-    qt_xim = XOpenIM(XDisplayOfIM(qt_xim), 0, 0, 0 );
-    y2debug("Setting X input method.");
-#endif
-
     return YCPVoid();	// OK (YCPNull() would mean error)
 }
 

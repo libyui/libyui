@@ -87,6 +87,13 @@ public:
     void makeScreenShot();
 
     /**
+     * UI-specific runPkgSeleciton method.
+     * This implementation does the same as UserInput().
+     * Reimplemented from YUIInterpreter.
+     **/
+    void runPkgSelection( YWidget * packageSelector );
+    
+    /**
      * Toggle macro recording (activated by Ctrl-Shift-Alt-M):
      * Stop macro recording if it is in progress,
      * open a file selection box and ask for a macro file name to save to and
@@ -193,6 +200,7 @@ protected:
     YWidget *createLogView		( YWidget *parent, YWidgetOpt &opt, const YCPString& label, int visibleLines, int maxLines );
     YWidget *createMultiLineEdit	( YWidget *parent, YWidgetOpt &opt, const YCPString &label, const YCPString& text);
     YWidget *createProgressBar		( YWidget *parent, YWidgetOpt &opt, const YCPString &label, const YCPInteger& maxprogress, const YCPInteger& progress);
+    YWidget *createPackageSelector	( YWidget *parent, YWidgetOpt &opt );
     YWidget *createPushButton		( YWidget *parent, YWidgetOpt &opt, const YCPString& label);
     YWidget *createMenuButton		( YWidget *parent, YWidgetOpt &opt, const YCPString& label);
     YWidget *createRadioButton		( YWidget *parent, YWidgetOpt &opt, YRadioButtonGroup *rbg, const YCPString& label, bool checked);
@@ -203,6 +211,7 @@ protected:
     YWidget *createTable		( YWidget *parent, YWidgetOpt &opt, vector<string> header);
     YWidget *createTextEntry		( YWidget *parent, YWidgetOpt &opt, const YCPString &label, const YCPString& text);
     YWidget *createTree			( YWidget *parent, YWidgetOpt &opt, const YCPString &label);
+    YWidget *createPkgSpecial		( YWidget *parent, YWidgetOpt &opt, const YCPString &subwidget );
 
 
     /*** Widget creation methods for optional widgets, all inherited from YUIInterpreter ***/

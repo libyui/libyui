@@ -1,0 +1,40 @@
+/*---------------------------------------------------------------------\
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
+\----------------------------------------------------------------------/
+
+  File:		YQi18n.h
+
+  Authors:	Ludwig Nussel <lnussel@suse.de>
+		Stefan Hundhammer <sh@suse.de>
+
+/-*/
+
+// -*- c++ -*-
+
+#ifndef YQi18n_h
+#define YQi18n_h
+
+#include <libintl.h>
+#include <qstring.h>
+
+
+inline QString _(const char * msgid)
+{
+	return QString::fromUtf8(gettext(msgid));
+}
+
+inline QString _(const char * msgid1, const char * msgid2, unsigned long int n)
+{
+	return QString::fromUtf8(ngettext(msgid1, msgid2, n));
+}
+
+
+#endif // YQLabel_h

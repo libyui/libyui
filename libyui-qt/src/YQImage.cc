@@ -18,6 +18,7 @@
 /-*/
 
 
+#include <unistd.h>
 #include <qpixmap.h>
 #include <qmovie.h>
 #define y2log_component "qt-ui"
@@ -30,6 +31,8 @@
 #include "yast2.xpm"
 
 
+#define DEFAULT_OEM_LOGO	"/usr/share/YaST2/images/oem_logo.png"
+
 
 YQImage::YQImage(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
 		 YUIInterpreter::ImageType img)
@@ -39,15 +42,33 @@ YQImage::YQImage(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
     init( yuiqt, parent, opt );
     animated = false;
     
-    const char **xpm = 0;
+    QPixmap pixmap;
+    char *oem_logo;
+    
     switch (img)
     {
 	case YUIInterpreter::IT_SUSEHEADER:
-	    xpm = (const char **) yast2_xpm;
+
+	    oem_logo = getenv( "YAST2_OEM_LOGO" );
+	    
+	    if ( ! oem_logo )
+	    {
+		oem_logo = DEFAULT_OEM_LOGO;
+	    }
+
+	    if ( access( oem_logo, R_OK ) == 0 )
+	    {
+		pixmap = QPixmap( QString( oem_logo ) );	// load file
+	    }
+	    
+	    if ( pixmap.isNull() )
+	    {	 
+		pixmap = QPixmap( (const char **) yast2_xpm );	// use XPM data
+	    }
 	    break;
 
 	case YUIInterpreter::IT_YAST2:
-	    xpm = (const char **) yast2_xpm;
+	    pixmap = QPixmap( (const char **) yast2_xpm );	// use XPM data
 	    break;
 
 	default:
@@ -55,7 +76,7 @@ YQImage::YQImage(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
 	    return; // Should not occur
     }
 
-    yqSetPixmap( QPixmap( xpm ) );
+    yqSetPixmap( pixmap );
 }
 
 

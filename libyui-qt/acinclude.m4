@@ -15,7 +15,7 @@ AC_DEFUN(AC_MIN_QT_VERSION,
 [
 AC_MSG_CHECKING([for Qt $2 or higher])
 save_CFLAGS="$CFLAGS"
-CFLAGS="$CFLAGS -I $QTDIR/include"
+CFLAGS="$CFLAGS -I$QTDIR/include"
 
 AC_TRY_COMPILE([
 #include <qglobal.h>
