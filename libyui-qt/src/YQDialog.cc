@@ -447,11 +447,10 @@ void YQDialog::focusInEvent( QFocusEvent * event )
 void
 YQDialog::show()
 {
-    if ( ! hasDefaultSize()
-	 && qApp->mainWidget()->isVisible() )
-    {
-	center( this, qApp->mainWidget() );
-    }
+    if ( ! hasDefaultSize() && qApp->mainWidget()->isVisible() )
+	    center( this, qApp->mainWidget() );
+    else if ( isCentered() )
+	center( this, qApp->desktop() );
     
     QWidget::show();
 }
