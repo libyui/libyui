@@ -256,7 +256,9 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
 	    // additionally update the package list
 	    packager->updatePackageList();
 	}
-	
+
+	// show the required diskspace
+	packager->showDiskSpace();
     }
 
     return ok;

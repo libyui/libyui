@@ -168,6 +168,8 @@ void NCPackageSelector::showDefaultList()
 	pkgList->fillDefaultList( );
 
 	pkgList->setKeyboardFocus();
+
+	packager.showDiskSpace();
     }
     else
     {
