@@ -68,7 +68,7 @@ NCPackageSelector::NCPackageSelector( YNCursesUI *ui,
     }
     else
     { 
-	pkgLayout = readLayoutFile( ui, "/usr/share/YaST2/data/pkg_layout.ycp" );	     
+	pkgLayout = readLayoutFile( ui, "/usr/share/YaST2/data/pkg_layout.ycp" );
     }
 
     if ( ! pkgLayout.isNull() )
@@ -244,9 +244,11 @@ YCPTerm NCPackageSelector::readLayoutFile( YNCursesUI *ui,
 	{
 	    NCERR << "Error parsing layout file - layout reading aborted" << endl;
 	}
-
-        layout = ui->evaluate (layout);
-
+	else
+	{
+	    layout = ui->evaluate (layout);
+	}
+	
 	if ( layout.isNull()
 	     || !layout->isTerm() )
 	{
@@ -255,13 +257,12 @@ YCPTerm NCPackageSelector::readLayoutFile( YNCursesUI *ui,
 	else
 	{
 	    pkgLayout = layout->asTerm();
+	    NCDBG <<  "LAYOUT TERM: " << layout->toString() << endl; 
 	}
-
-	NCDBG <<  "LAYOUT TERM: " << layout->toString() << endl;
 
 	fclose( layoutFile );
     }
-
+    
     return pkgLayout;
 }
 
