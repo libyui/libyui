@@ -25,7 +25,12 @@
 #include "NCSplit.h"
 #include "NCSpacing.h"
 #include "PkgNames.h"
+#include "NCPkgTable.h"
+#include "NCMenuButton.h"
+#include "NCPushButton.h"
 
+
+using namespace std;
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -35,21 +40,12 @@
 //
 //	DESCRIPTION :
 //
-NCPopupDeps::NCPopupDeps( const wpos at, PMObjectPtr pkgPtr )
+NCPopupDeps::NCPopupDeps( const wpos at )
     : NCPopup( at, false )
       , cancelButton( 0 )
+      , okButton( 0 )
+      , solveButton( 0 )
 {
-    
-    if ( pkgPtr )
-    {
-	PMSelectablePtr selPtr = pkgPtr->getSelectable();
-	string pkgName = selPtr->name();
-
-	// get the dependencies for the certain package
-	requires = pkgPtr->requires();
-	conflicts = pkgPtr->conflicts();  
-    }
-    
     createLayout( PkgNames::PackageDeps() );
 }
 
@@ -77,26 +73,18 @@ void NCPopupDeps::createLayout( const YCPString & headline )
 {
 
   YWidgetOpt opt;
- 
-  // horizontal split is the (only) child of the dialog
-  NCSplit * hSplit = new NCSplit( this, opt, YD_HORIZ );
-  addChild( hSplit );
 
-  opt.hWeight.setValue( 40 );
+  // vertical split is the (only) child of the dialog
+  NCSplit * vSplit = new NCSplit( this, opt, YD_VERT );
+  addChild( vSplit );
 
-  // the help text is the first child of the horizontal split
-  
-  opt.hWeight.setValue( 60 );
-  opt.notifyMode.setValue( false );
-  
-  // second child is a vertical split
-  NCSplit * vSplit = new NCSplit( hSplit, opt, YD_VERT );
-  
-  hSplit->addChild( vSplit );
+  // opt.vWeight.setValue( 40 );
+
+  opt.notifyMode.setValue( true );
 
   NCSpacing * sp0 = new NCSpacing( vSplit, opt, 0.2, false, true );
   vSplit->addChild( sp0 );
-  
+
   // add the headline
   opt.isHeading.setValue( true );
   NCLabel * head = new NCLabel( vSplit, opt, headline );
@@ -104,29 +92,42 @@ void NCPopupDeps::createLayout( const YCPString & headline )
 
   NCSpacing * sp = new NCSpacing( vSplit, opt, 0.8, false, true );
   vSplit->addChild( sp );
-  
-  // add the input field (a editable combo box) 
-  opt.isEditable.setValue( true );
-  opt.isHStretchable.setValue( true );
+
+  // add the list containing packages with unresolved depemdencies
+  pkgs = new NCPkgTable( vSplit, opt );
+  vSplit->addChild( pkgs );
+
+  depsMenu = new NCMenuButton( vSplit, opt, YCPString( "Dependencies" ) );
+  depsMenu->addMenuItem( PkgNames::RequiredBy(), PkgNames::RequRel() );
+  depsMenu->addMenuItem( PkgNames::ConflictDeps(), PkgNames::ConflRel() );
+  depsMenu->addMenuItem( PkgNames::Alternatives(), PkgNames::AlterRel() );
+
+  vSplit->addChild( depsMenu );
 
   NCSpacing * sp1 = new NCSpacing( vSplit, opt, 0.8, false, true );
   vSplit->addChild( sp1 );
-  
-  // add the check boxes
-  opt.isHStretchable.setValue( true );
-  NCSpacing * sp2 = new NCSpacing( vSplit, opt, 0.4, false, true );
-  NCSpacing * sp3 = new NCSpacing( vSplit, opt, 0.8, false, true );
 
-  vSplit->addChild( sp2 );
-  vSplit->addChild( sp3 );
-  
+  // add the package list containing the dependencies
+  deps = new NCPkgTable( vSplit, opt );
+  vSplit->addChild( deps );
+
+  NCSplit * hSplit = new NCSplit( vSplit, opt, YD_HORIZ );
+  vSplit->addChild( hSplit );
+
   // add the cancel button
   opt.isHStretchable.setValue( false );
-  cancelButton = new NCPushButton( vSplit, opt, YCPString( "Cancel" ) );
+  cancelButton = new NCPushButton( hSplit, opt, PkgNames::CancelLabel() );
   cancelButton->setId( PkgNames::Cancel () );
-  
-  vSplit->addChild( cancelButton );
-  
+  hSplit->addChild( cancelButton );
+
+  solveButton = new NCPushButton( hSplit, opt, PkgNames::SolveLabel() );
+  solveButton->setId( PkgNames::Solve () );
+  hSplit->addChild( solveButton );
+
+  okButton = new NCPushButton( hSplit, opt, PkgNames::OKLabel() );
+  okButton->setId( PkgNames::OkButton () );
+  hSplit->addChild( okButton );
+
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -141,7 +142,7 @@ void NCPopupDeps::createLayout( const YCPString & headline )
 void NCPopupDeps::createDependenyLayout( NCWidget * parent, string pkgName )
 {
 
-    
+
 }
 */
 
@@ -153,16 +154,16 @@ void NCPopupDeps::createDependenyLayout( NCWidget * parent, string pkgName )
 //
 //	DESCRIPTION :
 //
-YCPString NCPopupDeps::showDependencyPopup( )
+NCursesEvent NCPopupDeps::showDependencyPopup( )
 {
     postevent = NCursesEvent();
     do {
 	popupDialog();
     } while ( postAgain() );
-    
+
     popdownDialog();
 
-    return postevent.result->asString();
+    return postevent;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -176,7 +177,7 @@ YCPString NCPopupDeps::showDependencyPopup( )
 
 long NCPopupDeps::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? 50 : 15 );
+    return ( dim == YD_HORIZ ? 50 : 20 );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -192,9 +193,6 @@ NCursesEvent NCPopupDeps::wHandleInput( int ch )
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;
 
-    if ( ch == KEY_RETURN )
-	return NCursesEvent::button;
-    
     return NCDialog::wHandleInput( ch );
 }
 
@@ -210,14 +208,14 @@ bool NCPopupDeps::postAgain()
 {
     if ( ! postevent.widget )
 	return false;
-    
+
     YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
-    
+
     if ( currentId->compare( PkgNames::Cancel () ) == YO_EQUAL )
     {
 	// dummy
     }
-    
+
     if ( postevent == NCursesEvent::button || postevent == NCursesEvent::cancel )
     {
 	// return false means: close the popup dialog

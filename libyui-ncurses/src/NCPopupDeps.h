@@ -24,15 +24,16 @@
 #include <vector>
 #include <string>
 
-using namespace std;
-
 #include "NCPopup.h"
 #include "NCLabel.h"
-#include "NCPushButton.h"
 
 #include <Y2PM.h>
 #include <y2pm/RpmDb.h>
 #include <y2pm/PMManager.h>
+
+class NCPkgTable;
+class NCPushButton;
+class NCMenuButton;
 
 
 ///////////////////////////////////////////////////////////////////
@@ -52,6 +53,13 @@ private:
     list<PkgRelation> conflicts;	// package conflicts
 
     NCPushButton * cancelButton;
+    NCPushButton * okButton;
+    NCPushButton * solveButton;
+
+    NCPkgTable * pkgs;
+    NCPkgTable * deps;
+
+    NCMenuButton * depsMenu;
     
 protected:
 
@@ -61,14 +69,14 @@ protected:
     
 public:
     
-    NCPopupDeps( const wpos at, PMObjectPtr pkgPtr );
+    NCPopupDeps( const wpos at );
     virtual ~NCPopupDeps();
 
     virtual long nicesize(YUIDimension dim);
 
     void createLayout( const YCPString & headline );
 
-    YCPString showDependencyPopup( );
+    NCursesEvent showDependencyPopup( );
     
 };
 
