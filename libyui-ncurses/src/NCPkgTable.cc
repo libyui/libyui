@@ -211,6 +211,11 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
 	    // additionally update the package list
 	    packager->updatePackageList();
 	}
+	if ( tableType != T_Dependency )
+	{
+	    // only check/show deps if is't not the dependency table itself
+	    packager->checkDependencies( false );	// only check if automatic check is ON
+	}
     }
 
     return ok;
@@ -334,7 +339,6 @@ void NCPkgTable::fillHeader( )
     switch ( tableType )
     {
 	case T_Packages:
-	case T_Availables:
 	case T_Update:	       {
 	    int installedPkgs = Y2PM::instTarget().numPackages();
 	    if ( installedPkgs > 0 )
