@@ -355,7 +355,7 @@ bool NCPopupSelection::getSelections( )
 	// show the available add-ons
 	if ( selPtr && selPtr->visible() && !selPtr->isBase() )
 	{
-	    NCMIL << "Add-on " <<  selPtr->name() << ", selected: " << selected << endl; 
+	    NCMIL << "Add-on " <<  selPtr->name() << ", selected: " << (selected?"true":"false") << endl; 
 	    selections.push_back( make_pair(selPtr, selected) );
 	}
     }
