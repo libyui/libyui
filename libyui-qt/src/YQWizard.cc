@@ -109,11 +109,30 @@ YQWizard::YQWizard( QWidget *		parent,
     // Steps
     //
     
-    QLabel * steps = new QLabel( "- Step 1\n- Step 2\n- Step 3\n  ...\n- Step n", _sideBar );
+    QLabel * steps = new QLabel(
+				"<b>Base Installation</b>"
+				"<ul>"
+				"<li>Language Selection<br>"
+				"<li>Basic Settings<br>"
+				"<li>Software Installation<br>"
+				"</ul>"
+				"<b>Configuration</b>"
+				"<ul>"
+				"<li>Root Password"
+				"<li>Network"
+				"<li>YaST Online Update"
+				"<li>User"
+				"<li>Clean up"
+				"<li>Release Notes"
+				"<li>Device Configuration"
+				"</ul>",
+				_sideBar );
     CHECK_PTR( steps );
 
     _sideBar->addTab( steps, _( "Steps" ) );
     steps->setPaletteBackgroundColor( bg );
+    steps->setFont( QFont( "Helvetica", 12 ) );
+
     // steps->setPaletteForegroundColor( webGreenFG );
     steps->setFont( QFont( "Helvetica", 12 ) );
     steps->setMargin( 10 );
