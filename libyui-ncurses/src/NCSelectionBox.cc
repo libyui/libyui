@@ -182,17 +182,24 @@ void NCSelectionBox::wRecoded()
 NCursesEvent NCSelectionBox::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
+
   int citem = getCurrentItem();
 
-  if ( ! handleInput( key ) ) {
-    switch ( key ) {
+  // call handleInput of NCPad
+  handleInput( key );
+  
+  switch ( key ) {
     case KEY_SPACE:
     case KEY_RETURN:
       if ( getNotify() && citem != -1 )
         return NCursesEvent::Activated;
       break;
+    case KEY_LEFT:
+    case KEY_RIGHT:
+      if (  getNotify() && citem != -1 )
+        return NCursesEvent::ValueChanged;
+      break;
     }
-  }
 
   if ( getNotify() && immediate && citem != getCurrentItem() ) {
     ret = NCursesEvent::SelectionChanged;
