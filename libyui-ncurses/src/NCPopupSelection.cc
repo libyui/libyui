@@ -127,6 +127,7 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
     if ( !sel )
 	return postevent;
 
+    sel->updateTable();
     sel->setKeyboardFocus();
     
     // event loop
@@ -224,7 +225,8 @@ bool NCPopupSelection::postAgain( )
      
     YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
     
-    if ( currentId->compare( PkgNames::OkButton () ) == YO_EQUAL )
+    if ( !currentId.isNull()
+	 && currentId->compare( PkgNames::OkButton () ) == YO_EQUAL )
     {
 	postevent.detail = NCursesEvent::USERDEF ;
 	// return false means: close the popup
