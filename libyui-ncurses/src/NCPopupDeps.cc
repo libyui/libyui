@@ -184,10 +184,14 @@ void NCPopupDeps::createLayout( )
 //
 bool NCPopupDeps::showDependencies( )
 {
+    if ( !pkgs )
+	return true;
+    
     bool cancel = false;
     
     // set headline and table type
-    head->setLabel( YCPString(getHeadline()) );
+    if ( head )
+	head->setLabel( YCPString(getHeadline()) );
     setDepsTableType();
     
     // fill the table header
@@ -375,7 +379,7 @@ bool NCPopupDeps::addDepsLine( NCPkgTable * table,
 
 	table->addLine( pkgStatus, //  the package status
 			pkgLine,
-			pkgPtr );	// the corresponding package pointer
+			pkgPtr );  // the corresponding package pointer
 	return true;
     }
     else
@@ -439,6 +443,11 @@ string NCPopupDeps::getReferersList( const PkgDep::ErrorResult & error )
 
 bool NCPopupDeps::concretelyDependency( int index )
 {
+    if ( !deps
+	 || !errorLabel1
+	 || !errorLabel2 )
+	return false;
+    
     unsigned int size = dependencies.size();
     vector<string> pkgLine;
     pkgLine.reserve(4);
@@ -500,7 +509,9 @@ bool NCPopupDeps::concretelyDependency( int index )
 	errorLabel1->setLabel( YCPString(PkgNames::LabelAlternative().str()) );
 	errorLabel2->setLabel( YCPString( "" ) );
     }
-    else if ( dependencies[index].second == PkgNames::ConflictText().str() )
+    else if ( dependencies[index].second == PkgNames::ConflictText().str()
+	      || dependencies[index].second == PkgNames::RequConflictText().str()
+	      || dependencies[index].second == PkgNames::ObsoleteText().str() )
     {
 	PMObjectPtr lastPtr;
 	string causeName = "";
@@ -533,9 +544,9 @@ bool NCPopupDeps::concretelyDependency( int index )
 	errorLabel2->setLabel( YCPString(getLabelConflict2()) );
     }
     else if ( dependencies[index].second == PkgNames::RequByText().str()
-	 && error.conflicts_with.empty()
-	 && error.unresolvable.empty()
-	 && error.alternatives.empty() )
+	      && error.conflicts_with.empty()
+	      && error.unresolvable.empty()
+	      && error.alternatives.empty() )
     {
 	PMObjectPtr lastPtr;
 	string lastName = "";
