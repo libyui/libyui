@@ -23,6 +23,7 @@
 
 #include "YWizard.h"
 #include "qvbox.h"
+#include "qpixmap.h"
 
 class QHBox;
 class QPushButton;
@@ -145,6 +146,10 @@ protected:
 
     QColor	_bg;
     QColor	_stepsBg;
+
+    QPixmap	_topGradient;
+    QPixmap	_bottomGradient;
+    
 
     QWidgetStack *	_sideBar;
     QVBox *		    _stepsPanel;
