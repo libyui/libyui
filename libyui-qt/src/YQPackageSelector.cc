@@ -845,7 +845,7 @@ YQPackageSelector::checkDiskUsage()
 	+ _( "<p>"
 	     "You can choose to install anyway if you know what you are doing, "
 	     "but you risk getting a corrupted system that requires manual repairs. "
-	     "If you are not absolutely sure how to handle such a case, better "
+	     "If you are not absolutely sure how to handle such a case, "
 	     "press <b>Cancel</b> now and deselect some packages."
 	     "</p>"
 	     );
@@ -987,7 +987,7 @@ YQPackageSelector::accept()
 	    // Detailed explanation (automatic word wrap!)
 	    + "<p>"
 	    + _( "In addition to your manual selections, the following packages"
-		 " have been changed due to dependency resolving:" )
+		 " have been changed to resolve dependencies:" )
 	    + "<p>";
 
 	if ( YQPkgChangesDialog::showChangesDialog( msg, _( "C&ontinue" ), _( "&Cancel" ) )
