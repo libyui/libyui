@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Wed Feb 19 14:58:39 CET 2003 - sh@suse.de
+
+- Fixed bug #23654: Window partially invisible 
+
+-------------------------------------------------------------------
+Wed Feb 19 11:52:39 CET 2003 - sh@suse.de
+
+- Fixed bug #23770: Always show automatically selected pkgs, even
+  during base installation
+
+-------------------------------------------------------------------
 Tue Feb 18 11:47:27 CET 2003 - sh@suse.de
 
 - New "protected" icons by Ken
