@@ -293,20 +293,35 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
     {
 	case KEY_SPACE:
 	case KEY_RETURN:
-	    if ( getNotify() )
-		ret = NCursesEvent::button;
+	    // if ( getNotify() )
+	    // ret = NCursesEvent::button;
 	    break;
 	case KEY_UP:
 	case KEY_DOWN: {
 	    
 	    PMObjectPtr objPtr = getDataPointer(citem);
+
+	    if ( !objPtr || !packager )
+		break;
 	    
-	    if ( objPtr && packager && (statusStrategy->getType() != T_Avail) )
+	    switch ( statusStrategy->getType() )
 	    {
-		NCMIL << "Showing package information" << endl; 
-		// show the required package info
-		packager->showPackageInformation( objPtr );
+		case T_Package:
+		    // show the required package info
+		    packager->showPackageInformation( objPtr );   
+		    break;
+		case T_Patch:
+		    // show the patch info
+		    packager->showPatchInformation( objPtr );
+		    break;
+		case T_Dependency:
+		    // show the dependencies of this package
+		    packager->showConcretelyDependency( objPtr );
+		    break;
+		default:
+		    break;
 	    }
+	    
 	    ret = NCursesEvent::handled;
 	    break;
 	}
