@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQPkgSearchFilterView.h
+  File:	      YQPkgStatusFilterView.h
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
@@ -19,8 +19,8 @@
 // -*- c++ -*-
 
 
-#ifndef YQPkgSearchFilterView_h
-#define YQPkgSearchFilterView_h
+#ifndef YQPkgStatusFilterView_h
+#define YQPkgStatusFilterView_h
 
 #include <qvbox.h>
 #include <qregexp.h>
@@ -30,13 +30,12 @@
 class QComboBox;
 class QCheckBox;
 class QPushButton;
-class QRadioButton;
 
 
 /**
- * @short Filter view for searching within packages
+ * @short Filter view for packages that made problems during update
  **/
-class YQPkgSearchFilterView : public QVBox
+class YQPkgStatusFilterView : public QVBox
 {
     Q_OBJECT
 
@@ -45,12 +44,12 @@ public:
     /**
      * Constructor
      **/
-    YQPkgSearchFilterView( QWidget *parent );
+    YQPkgStatusFilterView( QWidget *parent );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgSearchFilterView();
+    virtual ~YQPkgStatusFilterView();
 
     /**
      * Returns the minimum size required for this widget.
@@ -94,55 +93,30 @@ signals:
      **/
     void filterFinished();
 
+
 protected:
 
     /**
-     * Check if pkg matches the search criteria.
+     * Check if pkg matches the filter criteria.
      **/
-    bool check( PMPackagePtr pkg, const QRegExp & regexp );
+    bool check( PMPackagePtr pkg );
 
-    /**
-     * Check if a single pkg attribute matches the search criteria.
-     **/
-    bool check( const std::string & attribute, const QRegExp & regexp );
-
-    /**
-     * Check multi-line attribute
-     **/
-    bool check( const std::list<std::string> & strList, const QRegExp & regexp );
-
-    /**
-     * Check PkgRelList attribute (PMSolvable::provides(), PMSolvable::requires(), ...)
-     **/
-    bool check( const PMSolvable::PkgRelList_type & relList, const QRegExp & regexp );
-
-    /**
-     * Key press event: Execute search upon 'Return'
-     * Reimplemented from QVBox / QWidget.
-     **/
-    virtual void keyPressEvent( QKeyEvent * event );
-
-
+    
     // Data members
 
-    QComboBox *		_searchText;
-    QPushButton *	_searchButton;
-
-    QCheckBox *		_searchInName;
-    QCheckBox *		_searchInSummary;
-    QCheckBox *		_searchInDescription;
-    QCheckBox *		_searchInRequires;
-    QCheckBox *		_searchInProvides;
-
-    QCheckBox *		_caseSensitive;
-
-    QRadioButton *	_contains;
-    QRadioButton *	_beginsWith;
-    QRadioButton *	_exactMatch;
-    QRadioButton *	_useWildcards;
-    QRadioButton *	_useRegexp;
+    QCheckBox *		_showAutoDel;
+    QCheckBox *		_showAutoInstall;
+    QCheckBox *		_showAutoUpdate;
+    QCheckBox *		_showDel;
+    QCheckBox *		_showInstall;
+    QCheckBox *		_showKeepInstalled;
+    QCheckBox *		_showNoInst;
+    QCheckBox *		_showTaboo;
+    QCheckBox *		_showUpdate;
+    
+    QPushButton *	_refreshButton;
 };
 
 
 
-#endif // ifndef YQPkgSearchFilterView_h
+#endif // ifndef YQPkgStatusFilterView_h

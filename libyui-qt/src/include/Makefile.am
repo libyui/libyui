@@ -43,6 +43,7 @@ pkginclude_HEADERS =				\
 	YQPkgSearchFilterView.h			\
 	YQPkgSelList.h				\
 	YQPkgSelectionsFilterView.h		\
+	YQPkgStatusFilterView.h			\
 	YQPkgTechnicalDetailsView.h		\
 	YQPkgTextDialog.h			\
 	YQPkgUpdateProblemFilterView.h		\

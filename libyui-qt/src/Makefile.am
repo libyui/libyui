@@ -62,6 +62,7 @@ liby2qt_la_SOURCES = 				\
 	YQPkgSearchFilterView.cc		\
 	YQPkgSelList.cc				\
 	YQPkgSelectionsFilterView.cc		\
+	YQPkgStatusFilterView.cc		\
 	YQPkgTechnicalDetailsView.cc		\
 	YQPkgTextDialog.cc			\
 	YQPkgUpdateProblemFilterView.cc		\
@@ -142,6 +143,7 @@ BUILT_SOURCES =					\
 	YQPkgSearchFilterView.moc.cc		\
 	YQPkgSelList.moc.cc			\
 	YQPkgSelectionsFilterView.moc.cc	\
+	YQPkgStatusFilterView.moc.cc		\
 	YQPkgTechnicalDetailsView.moc.cc	\
 	YQPkgTextDialog.moc.cc			\
 	YQPkgUpdateProblemFilterView.moc.cc	\
@@ -201,6 +203,7 @@ YQPkgRpmGroupTagsFilterView.o YQPkgRpmGroupTagsFilterView.lo:	YQPkgRpmGroupTagsF
 YQPkgSearchFilterView.o YQPkgSearchFilterView.lo:		YQPkgSearchFilterView.moc.cc
 YQPkgSelList.o YQPkgSelList.lo:					YQPkgSelList.moc.cc
 YQPkgSelectionsFilterView.o YQPkgSelectionsFilterView.lo:	YQPkgSelectionsFilterView.moc.cc
+YQPkgStatusFilterView.o YQPkgStatusFilterView.lo:		YQPkgStatusFilterView.moc.cc
 YQPkgTechnicalDetailsView.o YQPkgTechnicalDetailsView.lo:	YQPkgTechnicalDetailsView.moc.cc
 YQPkgTextDialog.o YQPkgTextDialog.lo:				YQPkgTextDialog.moc.cc
 YQPkgUpdateProblemFilterView.o YQPkgUpdateProblemFilterView.lo:	YQPkgUpdateProblemFilterView.moc.cc
@@ -261,6 +264,7 @@ YQPkgRpmGroupTagsFilterView.moc.cc:	include/YQPkgRpmGroupTagsFilterView.h
 YQPkgSearchFilterView.moc.cc:		include/YQPkgSearchFilterView.h
 YQPkgSelList.moc.cc:			include/YQPkgSelList.h
 YQPkgSelectionsFilterView.moc.cc:	include/YQPkgSelectionsFilterView.h
+YQPkgStatusFilterView.moc.cc:		include/YQPkgStatusFilterView.h
 YQPkgTechnicalDetailsView.moc.cc:	include/YQPkgTechnicalDetailsView.h
 YQPkgTextDialog.moc.cc:			include/YQPkgTextDialog.h
 YQPkgUpdateProblemFilterView.moc.cc:	include/YQPkgUpdateProblemFilterView.h

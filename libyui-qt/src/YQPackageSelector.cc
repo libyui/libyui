@@ -52,6 +52,7 @@
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgSelList.h"
 #include "YQPkgSelectionsFilterView.h"
+#include "YQPkgStatusFilterView.h"
 #include "YQPkgTechnicalDetailsView.h"
 #include "YQPkgUpdateProblemFilterView.h"
 #include "YQPkgVersionsView.h"
@@ -98,6 +99,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     _searchFilterView		= 0;
     _selList			= 0;
     _selectionsFilterView	= 0;
+    _statusFilterView		= 0;
     _updateProblemFilterView	= 0;
     _youPatchFilterView		= 0;
     _youPatchList		= 0;
@@ -288,8 +290,25 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	CHECK_PTR( _searchFilterView );
 	_filters->addPage( _( "Search" ), _searchFilterView );
 
-	connect( _filters, 			SIGNAL( currentChanged( QWidget * ) ),
+	connect( _filters, 		SIGNAL( currentChanged( QWidget * ) ),
 		 _searchFilterView,	SLOT  ( filterIfVisible()           ) );
+    }
+
+
+    //
+    // Status change view
+    //
+
+    // if ( ! _youMode )
+    {
+	_statusFilterView = new YQPkgStatusFilterView( parent );
+	CHECK_PTR( _statusFilterView );
+#warning FIXME: Better title for this view!
+	_filters->addPage( _( "Changes (\"What if...\")" ), _statusFilterView );
+	
+
+	connect( _filters, 	SIGNAL( currentChanged( QWidget * ) ),
+		 _selList,	SLOT  ( filterIfVisible()           ) );
     }
 
 
@@ -549,6 +568,7 @@ YQPackageSelector::makeConnections()
     connectFilter( _selList, 			_pkgList );
     connectFilter( _rpmGroupTagsFilterView, 	_pkgList, false );
     connectFilter( _searchFilterView, 		_pkgList, false );
+    connectFilter( _statusFilterView, 		_pkgList, false );
 
     //
     // Connect conflict dialog
