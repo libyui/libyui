@@ -123,14 +123,14 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     basicLayout();
     makeConnections();
     emit loadData();
-    
+
     Y2PM::packageManager().SaveState();
     Y2PM::selectionManager().SaveState();
 
     if ( _youMode )
     {
 	Y2PM::youPatchManager().SaveState();
-	
+
 	if ( _filters && _youPatchFilterView && _youPatchList )
 	{
 	    _filters->showPage( _youPatchFilterView );
@@ -304,7 +304,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	_statusFilterView = new YQPkgStatusFilterView( parent );
 	CHECK_PTR( _statusFilterView );
 	_filters->addPage( _( "Installation Summary" ), _statusFilterView );
-	
+
 	connect( _filters, 		SIGNAL( currentChanged( QWidget * ) ),
 		 _statusFilterView,	SLOT  ( filterIfVisible()           ) );
     }
@@ -370,11 +370,11 @@ YQPackageSelector::layoutPkgList( QWidget * parent )
 	_pkgList->setEditable( false );
     }
 
-    connect( _pkgList, 	SIGNAL( statusChanged( PMObjectPtr )	),
-	     this,	SLOT  ( autoResolveDependencies()	) );
+    connect( _pkgList, 	SIGNAL( statusChanged()	          ),
+	     this,	SLOT  ( autoResolveDependencies() ) );
 
-    connect( _pkgList,	SIGNAL( statusChanged( PMObjectPtr ) ),
-	     this,	SLOT  ( updateDiskUsage()	     ) );
+    connect( _pkgList,	SIGNAL( statusChanged()   ),
+	     this,	SLOT  ( updateDiskUsage() ) );
 }
 
 
@@ -393,7 +393,7 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
     // _detailsViews->setTabPosition( QTabWidget::Bottom );
 
-    
+
     //
     // Description
     //
@@ -419,7 +419,7 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     connect( _pkgList,			SIGNAL( selectionChanged    ( PMObjectPtr ) ),
 	     _pkgTechnicalDetailsView,	SLOT  ( showDetailsIfVisible( PMObjectPtr ) ) );
 
-    
+
     //
     // Dependencies
     //
@@ -437,15 +437,15 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     //
     // Versions
     //
-    
+
     // if ( ! _youMode )
     {
 	_pkgVersionsView = new YQPkgVersionsView( _detailsViews,
 						  ! _youMode );	// userCanSwitchVersions
 	CHECK_PTR( _pkgVersionsView );
-    
+
 	_detailsViews->addTab( _pkgVersionsView, _( "&Versions" ) );
-    
+
 	connect( _pkgList,		SIGNAL( selectionChanged    ( PMObjectPtr ) ),
 		 _pkgVersionsView,	SLOT  ( showDetailsIfVisible( PMObjectPtr ) ) );
     }
@@ -613,7 +613,7 @@ void
 YQPackageSelector::updateDiskUsage()
 {
     YUIQt::yuiqt()->busyCursor();
-    
+
     const PkgDuMaster & du = Y2PM::packageManager().updateDu();
     _diskSpace->setProgress( du.pkg_u_percent() );
 
@@ -621,15 +621,15 @@ YQPackageSelector::updateDiskUsage()
     {
 	// Workaround for a common problem: Maybe just the target partitions
 	// are not correctly initialized, so let's at least give a hint in the
-	// log file. 
-	
+	// log file.
+
 	FSize used = du.pkg_used();
 	y2milestone( "Used disk space: %s", used.asString().c_str() );
 
 	if ( _testMode )
 	    _diskSpace->setProgress( 42 );
     }
-    
+
     YUIQt::yuiqt()->normalCursor();
 }
 
@@ -680,7 +680,7 @@ YQPackageSelector::reject()
 
 	if ( _youMode )
 	    Y2PM::youPatchManager().RestoreState();
-	
+
 	_yuiqt->setMenuSelection( YCPSymbol("cancel", true) );
 	_yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
     }
@@ -697,7 +697,7 @@ YQPackageSelector::accept()
 
 	if ( _youMode )
 	    Y2PM::youPatchManager().ClearSaveState();
-	
+
 	_yuiqt->setMenuSelection( YCPSymbol("accept", true) );
 	_yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
     }

@@ -82,6 +82,13 @@ public:
     void setCurrentStatus( PMSelectable::UI_Status	newStatus,
 			   bool				selectNextItem = false );
 
+    /**
+     * Sets the status of all (toplevel) list items to 'newStatus', if possible.
+     * Only one single statusChanged() signal is emitted.
+     **/
+    void setAllItemStatus( PMSelectable::UI_Status newStatus );
+
+
 public slots:
 
     /**
@@ -100,7 +107,7 @@ public slots:
      * Dispatcher slot for mouse click: cycle status depending on column.
      **/
     virtual void pkgObjClicked( int		button,
-				QListViewItem *	item,
+				QListViewItem * item,
 				int		col,
 				const QPoint &	pos );
 
@@ -124,7 +131,7 @@ public slots:
     /**
      * Emit a statusChanged() signal for the specified PMObject.
      **/
-    void sendStatusChanged( PMObjectPtr pmObj ) { emit statusChanged( pmObj ); }
+    void sendStatusChanged() { emit statusChanged(); }
 
 
     // Direct access to some states for menu actions
@@ -135,6 +142,13 @@ public slots:
     void setCurrentDelete()	   { setCurrentStatus( PMSelectable::S_Del	     ); }
     void setCurrentUpdate()	   { setCurrentStatus( PMSelectable::S_Update	     ); }
     void setCurrentTaboo()	   { setCurrentStatus( PMSelectable::S_Taboo	     ); }
+
+    void setListInstall()	   { setAllItemStatus( PMSelectable::S_Install	     ); }
+    void setListDontInstall()	   { setAllItemStatus( PMSelectable::S_NoInst	     ); }
+    void setListKeepInstalled()	   { setAllItemStatus( PMSelectable::S_KeepInstalled ); }
+    void setListDelete()	   { setAllItemStatus( PMSelectable::S_Del	     ); }
+    void setListUpdate()	   { setAllItemStatus( PMSelectable::S_Update	     ); }
+    void setListTaboo()		   { setAllItemStatus( PMSelectable::S_Taboo	     ); }
 
 
 protected slots:
@@ -157,7 +171,7 @@ signals:
     /**
      * Emitted when the status of a PMObject is changed.
      **/
-    void statusChanged( PMObjectPtr pmObj );
+    void statusChanged();
 
 
 protected:
@@ -193,6 +207,11 @@ protected:
     virtual void createInstalledContextMenu();
 
     /**
+     * Add a submenu "All in this list..." to 'menu'.
+     **/
+    virtual void addAllInListSubMenu( QPopupMenu * menu );
+
+    /**
      * Create the actions for the context menus.
      **/
     void createActions();
@@ -207,12 +226,12 @@ protected:
 
     // Data members
 
-    int 	_statusCol;
-    int 	_nameCol;
-    int 	_summaryCol;
-    int 	_sizeCol;
-    int 	_versionCol;
-    int 	_instVersionCol;
+    int		_statusCol;
+    int		_nameCol;
+    int		_summaryCol;
+    int		_sizeCol;
+    int		_versionCol;
+    int		_instVersionCol;
     bool	_editable;
 
     QAction *		_actionSetCurrentInstall;
@@ -226,7 +245,15 @@ protected:
     QAction *		_actionSetCurrentAutoUpdate;
     QAction *		_actionSetCurrentAutoDelete;
 
-    QPopupMenu * 	_installedContextMenu;
+    QAction *		_actionSetListInstall;
+    QAction *		_actionSetListDontInstall;
+    QAction *		_actionSetListKeepInstalled;
+    QAction *		_actionSetListDelete;
+    QAction *		_actionSetListUpdate;
+    QAction *		_actionSetListTaboo;
+
+
+    QPopupMenu *	_installedContextMenu;
     QPopupMenu *	_notInstalledContextMenu;
 };
 
@@ -359,7 +386,7 @@ public:
     int summaryCol()		const	{ return _pkgObjList->summaryCol();	}
     int sizeCol()		const	{ return _pkgObjList->sizeCol();	}
     int versionCol()		const	{ return _pkgObjList->versionCol();	}
-    int instVersionCol()	const	{ return _pkgObjList->instVersionCol();	}
+    int instVersionCol()	const	{ return _pkgObjList->instVersionCol(); }
 
 
 protected:
