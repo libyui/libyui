@@ -136,6 +136,9 @@ YQTable::YQTable( YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, vector<string>
 	connect( qt_listview, SIGNAL(selectionChanged ( QListViewItem *)), this, SLOT(slotSelected(QListViewItem *)));
     else
 	connect( qt_listview, SIGNAL(doubleClicked ( QListViewItem *)), this, SLOT(slotSelected(QListViewItem *)));
+
+    if (opt.notifyMode.value())
+	connect( qt_listview, SIGNAL(spacePressed ( QListViewItem *)), this, SLOT(slotSelected(QListViewItem *)));
 }
 
 

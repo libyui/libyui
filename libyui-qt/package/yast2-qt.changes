@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Nov  7 20:04:33 CET 2002 - sh@suse.de
+
+- Fixed bug #16339: [Space] doesn't trigger UserInput() in YTable
+
+-------------------------------------------------------------------
 Thu Nov  7 19:46:18 CET 2002 - sh@suse.de
 
 - Fixed bug #20539: Screen shot function causes unnecessary exits 
