@@ -18,20 +18,13 @@
 
 /-*/
 
-#define USE_QT_CURSORS		1
-#define FORCE_UNICODE_FONT	0
-
 #include <rpc/types.h>		// MAXHOSTNAMELEN
-#include <sys/stat.h>
-#include <unistd.h>
 
 #include <qcursor.h>
 #include <qmessagebox.h>
 #include <qsocketnotifier.h>
 #include <qvbox.h>
 #include <qwidgetstack.h>
-
-#include <X11/Xlib.h>
 
 #include <ycp/YCPTerm.h>
 
@@ -45,13 +38,10 @@
 #include "QXEmbed.h"
 
 
-#define DEFAULT_MACRO_FILE_NAME		"macro.ycp"
-#define YQWIDGET_BORDER 3
-
 YUIQt * YUIQt::_ui = 0;
 
 
-YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
+YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
     : QApplication(argc, argv)
     , YUIInterpreter(with_threads, callback)
     , main_dialog_id(0)
@@ -291,7 +281,7 @@ void YUIQt::internalError( const char *msg )
 }
 
 
-void YUIQt::idleLoop(int fd_ycp)
+void YUIQt::idleLoop( int fd_ycp )
 {
     leave_idle_loop = false;
 
@@ -307,7 +297,58 @@ void YUIQt::idleLoop(int fd_ycp)
 }
 
 
-YWidget *YUIQt::userInput(YDialog *dialog, EventType *event)
+void YUIQt::leaveIdleLoop( int )
+{
+    leave_idle_loop = true;
+}
+
+
+void YUIQt::returnNow( EventType et, YWidget *wid )
+{
+
+    if ( wid && ! wid->isValid() )
+    {
+	y2error("Widget has become invalid - ignoring.");
+	return;
+    }
+
+    if ( wid && ! wid->yParent() )
+    {
+	/*
+	 * This is a common situation, so let's not complain about it in the log
+	 * file: The widget doesn't have a parent yet (since this is set from
+	 * outside after the constructor has finished), yet it already sends
+	 * signals. Most widgets with `opt(`notify) do this. Just silently ignore
+	 * this situation.
+	 */
+	return;
+    }
+
+    if ( et != ET_CANCEL && wid &&
+	 wid->yDialog() != currentDialog() )
+    {
+	/*
+	 * Silently discard events from all but the current (topmost) dialog.
+	 */
+
+	y2warning( "Ignoring event from foreign dialog" );
+	return;
+    }
+
+    if ( event_type == ET_NONE || event_type == ET_MENU )
+    {
+	event_type   = et;
+	event_widget = wid;
+    }
+
+    if ( do_exit_loop )
+    {
+	exit_loop();
+    }
+}
+
+
+YWidget *YUIQt::userInput( YDialog *dialog, EventType *event )
 {
     if (event_type == ET_NONE)
     {
@@ -342,7 +383,7 @@ YWidget *YUIQt::userInput(YDialog *dialog, EventType *event)
 }
 
 
-YWidget *YUIQt::pollInput(YDialog *dialog, EventType *event)
+YWidget *YUIQt::pollInput( YDialog *dialog, EventType *event )
 {
     if (event_type == ET_NONE)
     {
@@ -358,7 +399,9 @@ YWidget *YUIQt::pollInput(YDialog *dialog, EventType *event)
 }
 
 
-YDialog *YUIQt::createDialog(YWidgetOpt & opt)
+
+
+YDialog *YUIQt::createDialog( YWidgetOpt & opt )
 {
     bool has_defaultsize = opt.hasDefaultSize.value();
     QWidget *qt_parent = main_win;
@@ -470,57 +513,6 @@ void YUIQt::closeDialog( YDialog *dialog )
 	else
 	    y2error( "Popup dialog stack corrupted!" );
     }
-}
-
-
-void YUIQt::returnNow(EventType et, YWidget *wid)
-{
-
-    if ( wid && ! wid->isValid() )
-    {
-	y2error("Widget has become invalid - ignoring.");
-	return;
-    }
-
-    if ( wid && ! wid->yParent() )
-    {
-	/*
-	 * This is a common situation, so let's not complain about it in the log
-	 * file: The widget doesn't have a parent yet (since this is set from
-	 * outside after the constructor has finished), yet it already sends
-	 * signals. Most widgets with `opt(`notify) do this. Just silently ignore
-	 * this situation.
-	 */
-	return;
-    }
-
-    if ( et != ET_CANCEL && wid &&
-	 wid->yDialog() != currentDialog() )
-    {
-	/*
-	 * Silently discard events from all but the current (topmost) dialog.
-	 */
-
-	y2warning( "Ignoring event from foreign dialog" );
-	return;
-    }
-
-    if ( event_type == ET_NONE || event_type == ET_MENU )
-    {
-	event_type   = et;
-	event_widget = wid;
-    }
-
-    if ( do_exit_loop )
-    {
-	exit_loop();
-    }
-}
-
-
-void YUIQt::leaveIdleLoop(int)
-{
-    leave_idle_loop = true;
 }
 
 
