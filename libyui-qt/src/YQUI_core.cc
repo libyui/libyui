@@ -191,8 +191,6 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     if ( _fullscreen || ! _have_wm )
 	_main_win->move( 0, 0 );
 
-    _busy_cursor = new QCursor( WaitCursor );
-
 
     // Set window title
 
@@ -315,9 +313,6 @@ YQUI::~YQUI()
     y2debug("Closing down Qt UI.");
 
     normalCursor();
-
-    if ( _busy_cursor )
-	delete _busy_cursor;
 
 #if 0
     if ( ! runningEmbedded() && qApp )

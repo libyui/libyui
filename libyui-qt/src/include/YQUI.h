@@ -646,11 +646,6 @@ protected:
     bool _do_exit_loop;
 
     /**
-     * Cursor to use when no input is accepted (i.e. outside UserInput() )
-     **/
-    QCursor * _busy_cursor;
-
-    /**
      * Default font (cached)
      **/
     QFont _current_font;
