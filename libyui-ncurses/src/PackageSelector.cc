@@ -293,7 +293,6 @@ void PackageSelector::setVisibleInfo( const YCPValue & info )
 //
 bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgPtr )
 {
-    vector<string> pkgLine (5);
     unsigned int i = 0;
 
     if ( !pkgTable )
@@ -302,7 +301,7 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
 	return false;
     }
 
-    if ( !pkgPtr->hasSelectable() )
+    if ( !pkgPtr || !pkgPtr->hasSelectable() )
     {
 	NCERR << "Package pointer not valid" << endl;
 	return false;
@@ -320,16 +319,7 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
     // show all availables
     while ( it != selectable->av_end() )
     {
-	pkgLine[0] = selectable->name();	// package name
-	pkgLine[1] = (*it)->edition().asString();	// the version-release info
-	pkgLine[2] = (*it)->instSrcLabel();  	// show the installation source (instead of the summary)
-	FSize size = (*it)->size();     	// installed size
-	pkgLine[3] = size.asString();
-
-	pkgTable->addLine( pkgTable->getAvailableStatus(*it), // get the package status
-			   pkgLine,
-			   i,		 // the index
-			   (*it) );	 // the corresponding package pointer
+	pkgTable->createListEntry( (*it), i );
 	i++;
 	++it;
     }
@@ -760,44 +750,13 @@ bool PackageSelector::checkPatch( PMYouPatchPtr patchPtr,
 	 || ( filter == "installed" && patchPtr->getSelectable()->status() == PMSelectable::S_KeepInstalled ) 
 	 )
     {
-	createPatchEntry( packageList, patchPtr, index );
+	packageList->createPatchEntry( patchPtr, index );
 	return true;
     }
     else
     {
 	return false;
     }
-}
-
-///////////////////////////////////////////////////////////////////
-//
-// createPatchEntry
-//
-//
-bool PackageSelector::createPatchEntry ( NCPkgTable *pkgTable,
-					 PMYouPatchPtr patchPtr,
-					 unsigned int index )
-{
-    vector<string> pkgLine(5);
-    
-    if ( !patchPtr || !pkgTable )
-    {
-	NCERR << "No valid patch available" << endl;
-	return false;
-    }
-
-    pkgLine[0] = patchPtr->getSelectable()->name();	  // name
-    pkgLine[1] = patchPtr->kindLabel( patchPtr->kind() ); // patch kind
-    pkgLine[2] = patchPtr->summary();  	// short description
-    FSize size = patchPtr->size();     	// installed size
-    pkgLine[3] = size.asString();
-    
-    pkgTable->addLine( patchPtr->getSelectable()->status(), //  get the status
-		       pkgLine,
-		       index,		// the index
-		       patchPtr );	// the corresponding pointer
-
-    return true;
 }
 
 ///////////////////////////////////////////////////////////////////
