@@ -1509,7 +1509,7 @@ const NCstring PkgNames::LoadedText()
 const NCstring PkgNames::CancelText()
 {
     // text for a Notify popup
-    static const NCstring value =  _( "<p>Abandon all changes?</p>" );
+    static const NCstring value =  _( "<p>Your individual selection of packages and all of your choices will be lost when exiting with Cancel!<br>Do you really want to exit?</p>" );
     return value;
 }
 

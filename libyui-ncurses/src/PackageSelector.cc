@@ -647,8 +647,11 @@ bool PackageSelector::fillChangesList(  )
     // fill the package table
     list<PMSelectablePtr>::iterator listIt;
     PMPackagePtr pkgPtr;
-    
-    // FIXME: do the dependency in case the dependency check is off ????
+
+    // If the dependency check is off, the dependencies will not be solved for 
+    // the installation summary.
+    // This is not necessary because the dependencies will be solved and the
+    // "Automatic Changes" list will be shown if the OK button is pressed. 
     if ( !autoCheck )
     {
 	// showPackageDependencies( true );
@@ -1349,15 +1352,29 @@ bool PackageSelector::SelectionHandler( const NCursesEvent&  event )
 // 
 bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 {
-    // FIXME - show a popup and ask the user
-    // FIXME - restore state
+    // show a popup and ask the user
+    NCPopupInfo cancelMsg( wpos( 2, 2 ),
+			   YCPString( PkgNames::NotifyLabel().str() ),
+			   YCPString( PkgNames::CancelText().str() ),
+			   PkgNames::OKLabel().str(),
+			   PkgNames::CancelLabel().str() );
+    cancelMsg.setNiceSize( 40, 10 ); 
+    NCursesEvent input = cancelMsg.showInfoPopup( );
 
-    NCMIL <<  "Cancel button pressed - leaving package selection" << endl;
-
-    const_cast<NCursesEvent &>(event).result = YCPSymbol("cancel", true);
+    if ( input == NCursesEvent::cancel )
+    {
+	// don't leave the package installation dialog
+	return true;
+    }
+    else
+    {		
+	NCMIL <<  "Cancel button pressed - leaving package selection" << endl;
+	// return `cancel (RestoreState() is called in inst_sw_select.ycp) 
+	const_cast<NCursesEvent &>(event).result = YCPSymbol("cancel", true);
     
-    // return false, which means stop the event loop (see runPkgSelection)
-    return false;
+	// return false, which means stop the event loop (see runPkgSelection)
+	return false;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -1398,7 +1415,7 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	{
 	    // open the popup e.g. with the text "/usr needs 50 MB more disk space"
 	    NCPopupInfo spaceMsg( wpos( 2, 2 ),
-				  PkgNames::ErrorLabel().str(),
+				  YCPString( PkgNames::ErrorLabel().str() ),
 				  YCPString( PkgNames::DiskSpaceError().str() + "<br>" + message ),
 				  PkgNames::OKLabel().str(),
 				  PkgNames::CancelLabel().str() );
