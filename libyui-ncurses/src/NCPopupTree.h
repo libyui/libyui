@@ -52,9 +52,7 @@ private:
     NCTree * filterTree;		// the YTree
     
     PackageSelector * packager;		// connection to the PackageSelector
-    
-    // internal use (copies tree items got from YPkgRpmGroupTagsFilterView)
-    void cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone );
+
 
 protected:
 
@@ -80,6 +78,8 @@ public:
 			 void * 		data,
 			 bool  			open );
 
+    YTreeItem * getItemWithText( const YCPString & text );
+    
     NCursesEvent showFilterPopup( );
     
 };

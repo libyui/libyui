@@ -45,8 +45,6 @@ NCPopupTree::NCPopupTree( const wpos at, PackageSelector * pkg )
     // create the layout (the NCTree)
     createLayout( PkgNames::RpmTreeLabel() );
 
-    // clone the tree (fill the NCTree)
-    cloneTree( Y2PM::packageManager().rpmGroupsTree()->root(), 0 ); 
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -59,6 +57,7 @@ NCPopupTree::NCPopupTree( const wpos at, PackageSelector * pkg )
 //
 NCPopupTree::~NCPopupTree()
 {
+
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -228,26 +227,13 @@ bool NCPopupTree::postAgain()
 
 ///////////////////////////////////////////////////////////////////
 //
-// cloneTree
 //
-// Adds all tree items got from YPkgRpmGroupTagsFilterView to
-// the filter popup tree
+//	METHOD NAME : NCPopupTree::getItemWithText
+//	METHOD TYPE : YTreeItem
 //
-void NCPopupTree::cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone )
+//	DESCRIPTION :
+//
+YTreeItem * NCPopupTree::getItemWithText( const YCPString & text )
 {
-    // 	methods of YStringTreeItem see ../libyui/src/include/TreeItem.h:  SortedTreeItem
-    YStringTreeItem * child = parentOrig->firstChild();
-    YTreeItem *	clone;
-
-    while ( child )
-    {
-	clone = addItem( parentClone,
-			 YCPString( child->value().translation() ),
-			 child,
-			 false );
-
-	cloneTree( child, clone );
-
-	child = child->next();
-    }
+    return ( filterTree->findItemWithText( text ) );
 }

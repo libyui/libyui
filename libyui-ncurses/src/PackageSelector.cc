@@ -68,7 +68,7 @@ bool sortByName( PMSelectablePtr ptr1, PMSelectablePtr ptr2 )
 PackageSelector::PackageSelector( Y2NCursesUI * ui )
     : y2ui( ui )
       , visibleInfo( YCPNull() )
-      , filterPopup( 0 )
+      , defaultGroup ( YCPNull() )
 {
     // Fill the handler map
     eventHandlerMap[ PkgNames::Packages()->toString() ]	= &PackageSelector::PackageListHandler;
@@ -107,6 +107,9 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui )
     filterPopup = new NCPopupTree( wpos( 1, 1 ),	// position
 				   this );	 
 
+    // clone the tree (fill the NCTree)
+    cloneTree( Y2PM::packageManager().rpmGroupsTree()->root(), 0 );
+    
     // create the selections popup
     selectionPopup = new NCPopupSelection( wpos( 1, 1 ),
 					   this );
@@ -322,10 +325,29 @@ bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr 
 
 ///////////////////////////////////////////////////////////////////
 //
+// fillDefaultList
+//
+// Fills the package table with the list of default rpm group
+//
+bool PackageSelector::fillDefaultList( NCPkgTable * pkgTable )
+{
+    if ( !packageList )
+    {    
+	// set the package list widget
+	packageList = pkgTable;
+    }
+    
+    fillPackageList ( defaultGroup, (YStringTreeItem *)(defaultItem->data()) );
+
+    return true;
+}
+
+
+///////////////////////////////////////////////////////////////////
+//
 // fillPackageList
 //
-// Fills the package table with the list of packages matching
-// the selected filter
+// Fills the package table with the list of the selected rpm group
 //
 bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem * rpmGroup )
 {
@@ -348,7 +370,6 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
     list<PMSelectablePtr>::iterator listIt;
     unsigned int i;
     PMPackagePtr pkgPtr;
-
 
     for ( i = 0, listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt, i++ )
     {
@@ -389,7 +410,11 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
     return true;
 }
 
-
+///////////////////////////////////////////////////////////////////
+//
+// check
+//
+//
 bool PackageSelector::check( PMPackagePtr pkg,
 			     YStringTreeItem * rpmGroup,
 			     int index )
@@ -399,18 +424,14 @@ bool PackageSelector::check( PMPackagePtr pkg,
 
     if ( pkg->group_ptr() == 0 )
     {
-	y2error( "NULL pointer in group_ptr()!" );
+	NCERR <<  "NULL pointer in group_ptr()!" << endl ;
 	return false;
     }
 
     if ( pkg->group_ptr()->isChildOf( rpmGroup ) )
     {
-#if 1
-	// DEBUG
-	std::string name = pkg->name();
-	y2debug( "Found match for pkg '%s'", name.c_str() );
-	// DEBUG
-#endif
+	NCDBG <<  "Found match for pkg: " << pkg->name() << endl;
+
 	createListEntry( packageList, pkg, index );
 	
 	return true;
@@ -944,3 +965,33 @@ string PackageSelector::createText( list<string> info, bool oneline )
 }
 
 
+///////////////////////////////////////////////////////////////////
+//
+// cloneTree
+//
+// Adds all tree items got from YPkgRpmGroupTagsFilterView to
+// the filter popup tree
+//
+void PackageSelector::cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone )
+{
+    // 	methods of YStringTreeItem see ../libyui/src/include/TreeItem.h:  SortedTreeItem
+    YStringTreeItem * child = parentOrig->firstChild();
+    YTreeItem *	clone;
+
+    while ( child )
+    {
+	clone = filterPopup->addItem( parentClone,
+				      YCPString( child->value().translation() ),
+				      child,
+				      false );
+
+	if ( defaultGroup.isNull() )
+	    defaultGroup = YCPString( child->value().translation() );
+	if ( !defaultItem )
+	     defaultItem = clone;
+	
+	cloneTree( child, clone );
+
+	child = child->next();
+    }
+}

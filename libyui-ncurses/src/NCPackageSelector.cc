@@ -132,11 +132,8 @@ void NCPackageSelector::showDefaultList()
     // fill the package table with packages belonging to the default filter
     if ( pkgList )
     {
-	// FIRST, set the package list widget
-	packager.setPackageList( pkgList );
-
-	// second, fill the list with packages 
-	packager.fillPackageList( YCPString("default"), 0 );
+	// show default list of packages
+	packager.fillDefaultList( pkgList );
 	
         // set the visible info to package description 
 	packager.setVisibleInfo ( PkgNames::PkgInfo() );

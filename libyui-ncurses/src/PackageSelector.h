@@ -72,16 +72,22 @@ class PackageSelector
     YCPValue visibleInfo;		// visible package info (description, file list, ...)
 
     NCPopupTree * filterPopup;		// the rpm group tags popup
-
+    YTreeItem * defaultItem;
+    YCPString defaultGroup;
+    
     NCPopupSelection * selectionPopup; 	// the selections popup
 
     // internal helper functions (format list of string) 
     string createRelLine( list<PkgRelation> info );
     string createDescrText( list<string> info );
     string createText( list<string> info, bool oneline );
+
     // add a line to the package list
     bool   createListEntry ( NCPkgTable *table, PMPackagePtr pkgPtr, unsigned int index );
-
+    
+    // internal use (copies tree items got from YPkgRpmGroupTagsFilterView)
+    void cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone );
+    
   protected:
  
 
@@ -107,6 +113,13 @@ class PackageSelector
     */
     bool fillPackageList( const YCPString & label, YStringTreeItem * group );
 
+   /**
+    * Fills the package table with default list
+    * @param pkgTable The package list widget
+    * @return bool
+    */
+    bool fillDefaultList( NCPkgTable * pkgTable );
+    
    /**
     * Fills the list of available packages
     * @param table  The table widget
