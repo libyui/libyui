@@ -30,25 +30,27 @@ class QTabWidget;
 
 
 /**
- * @short Base class for details views. Handles generic stuff like HTML
- * formatting, Qt slots and display only if this view is visible at all (it may
- * be hidden if it's part of a QTabWidget).
+ * @short Abstract base class for details views. Handles generic stuff like
+ * HTML formatting, Qt slots and display only if this view is visible at all
+ * (it may be hidden if it's part of a QTabWidget).
  **/
 class YQPkgGenericDetailsView : public QTextBrowser
 {
     Q_OBJECT
 
-public:
+protected:
 
     /**
-     * Constructor for QWidget parents
+     * Constructor.
      **/
     YQPkgGenericDetailsView( QWidget * parent );
 
     /**
-     * Destructor
+     * Destructor.
      **/
     virtual ~YQPkgGenericDetailsView();
+
+public:
 
     /**
      * Returns a uniform heading in HTML format for the specified package:
@@ -72,7 +74,7 @@ public:
      **/
     virtual QSize minimumSizeHint() const;
 
-    
+
 public slots:
 
     /**
@@ -81,26 +83,26 @@ public slots:
      * parent: In this case, wait until this page becomes visible.
      **/
     void showDetailsIfVisible( PMObjectPtr pmObj );
-    
+
     // slot clear() inherited from QTextEdit
 
-    
+
 protected slots:
-    
+
     /**
      * Show data for the last package.
      **/
     void reload( QWidget *newCurrent );
 
-    
+
 protected:
-    
+
     /**
      * Show details for the specified package.
      * Reimplement this in derived classes.
      **/
     virtual void showDetails( PMObjectPtr pmObj ) = 0;
-    
+
 
     // Data members
 
