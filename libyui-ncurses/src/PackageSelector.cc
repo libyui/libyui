@@ -370,8 +370,8 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
 //
 bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr sel )
 {
-    list<PMSelectablePtr> slcList;
-    list<PMSelectablePtr>::iterator listIt;
+    set<PMSelectablePtr> slcList;
+    set<PMSelectablePtr>::iterator listIt;
 
     NCPkgTable * packageList = getPackageList();
     
