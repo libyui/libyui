@@ -115,6 +115,11 @@ void NCRichText::setSize( long newwidth, long newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
   YRichText::setSize( newwidth, newheight );
+
+  if ( autoScrollDown && pad ) {
+    pad->ScrlDown( pad->maxy() );
+    pad->update();
+  }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -247,6 +252,11 @@ void NCRichText::DrawPad()
   else
     DrawHTMLPad();
 
+  if ( autoScrollDown ) {
+    pad->ScrlDown( pad->maxy() );
+    pad->update();
+  }
+  
   MDBG << "Done" << endl;
 }
 
