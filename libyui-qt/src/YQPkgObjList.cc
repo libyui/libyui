@@ -639,11 +639,12 @@ YQPkgObjListItem::init()
     PMObjectPtr candidate = _pmObj->getCandidateObj();
     PMObjectPtr installed = _pmObj->getInstalledObj();
 
-    if ( candidate && installed )
+    if ( candidate && installed && candidate->edition() != installed->edition() )
     {
-	_candidateIsNewer = candidate->edition() > installed->edition();
-	_installedIsNewer = candidate->edition() < installed->edition();
-	// Cache this information, it's expensive to obtain!
+	if ( _pmObj->getSelectable()->downgrade_condition() )
+	    _installedIsNewer = true;
+	else
+	    _candidateIsNewer = true;
     }
 
 

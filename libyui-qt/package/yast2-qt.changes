@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Apr 10 15:29:01 CEST 2003 - sh@suse.de
+
+- Fixed bug #25419: Qt PkgMgr shows correct version downgrades red
+
+-------------------------------------------------------------------
 Tue Apr  8 13:39:02 CEST 2003 - sh@suse.de
 
 - Fixed bug #26155: Hiding YOU patches marked for update 
