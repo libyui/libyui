@@ -227,9 +227,10 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
     
     if ( !notify.empty() )
     {
+	string pkgName = objPtr->getSelectable()->name();
 	NCPopupInfo info( wpos(3, 3),
 			  header,
-			  YCPString( packager->createText( notify, false ) ) );
+			  YCPString( "<i>" + pkgName + "</i><br>" + packager->createText( notify, false ) ) );
 	info.showInfoPopup( );
     }
     
@@ -836,9 +837,10 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
     }
 
     // do the updates now
-    updateTable();
     packager->showPackageDependencies( false );
     packager->showDiskSpace();
+
+    updateTable();
 
     return true;
 }
