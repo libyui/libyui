@@ -44,6 +44,7 @@ NCPopupInfo::NCPopupInfo( const wpos at,
       , okButton( 0 )
       , hDim( 50 )
       , vDim( 20 )
+      , visible ( false )
 {
     createLayout( headline, text, showOkButton );
 }
@@ -118,6 +119,20 @@ void NCPopupInfo::showInfoPopup( )
     popdownDialog();
 }
 
+void NCPopupInfo::popup()
+{
+    	initDialog();
+	showDialog();
+	activate ( true );
+	visible = true;
+}
+
+void NCPopupInfo::popdown()
+{
+    	activate ( false );
+	closeDialog();
+	visible = false;
+}
 
 ///////////////////////////////////////////////////////////////////
 //

@@ -50,6 +50,7 @@ private:
     NCPushButton * okButton;
     int hDim;
     int vDim;
+    bool visible;
     
 protected:
 
@@ -74,16 +75,11 @@ public:
 
     void showInfoPopup( );
 
-    void popup( ) {
-	initDialog();
-	showDialog();
-	activate ( true );
-    }
+    void popup( );
 
-    void popdown( ) {
-	activate ( false );
-	closeDialog();
-    }
+    void popdown( ); 
+
+    bool isVisible( ) { return visible; }
     
     void setNiceSize( int horiz, int vert ) { hDim = horiz; vDim = vert; }
 };
