@@ -128,6 +128,9 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
 	}
     }
 
+    // Qt handles command line option "-reverse" for Arabic / Hebrew
+    YUIInterpreter::_reverseLayout = QApplication::reverseLayout();
+
 
     if ( _fullscreen )
     {
