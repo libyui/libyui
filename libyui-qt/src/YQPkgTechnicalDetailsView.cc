@@ -182,8 +182,6 @@ YQPkgTechnicalDetailsView::formatRpmGroup( PMPackagePtr pkg ) const
 QString
 YQPkgTechnicalDetailsView::simpleTable( PMPackagePtr pkg )
 {
-    pkg->startRetrieval();
-
     QString html = "<br>" +
 	table(
 	       row( hcell( _( "Version:"	) ) + cell( pkg->version() + "-" + pkg->release() ) ) +
@@ -208,8 +206,6 @@ YQPkgTechnicalDetailsView::simpleTable( PMPackagePtr pkg )
 	       row( hcell( _( "Authors:"	) ) + authorsListCell( pkg			  ) )
 	       );
 
-    pkg->stopRetrieval();
-
     return html;
 }
 
@@ -222,9 +218,6 @@ YQPkgTechnicalDetailsView::complexTable( PMPackagePtr installed, PMPackagePtr ca
 
     QString p1_header = _( "<b>Alternate Version</b>" );
     QString p2_header = _( "<b>Installed Version</b>" );
-
-    p1->startRetrieval();
-    p2->startRetrieval();
 
     QString html = "<br>" +
 	table(
@@ -249,9 +242,6 @@ YQPkgTechnicalDetailsView::complexTable( PMPackagePtr installed, PMPackagePtr ca
 	       row( hcell( _( "Media No.:"	) ) + cell( p1->medianr()			) + cell( p2->medianr()			      ) ) +
 	       row( hcell( _( "Authors:"	) ) + authorsListCell( p1			) + authorsListCell( p2			      ) )
 	       );
-
-    p1->stopRetrieval();
-    p2->stopRetrieval();
 
     return html;
 }
