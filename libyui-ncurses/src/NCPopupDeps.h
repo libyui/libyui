@@ -50,9 +50,9 @@ class NCPopupDeps : public NCPopup {
 
 private:
 
-    // the dependencies
-    vector<PkgDep::ErrorResult> dependencies;	// index corresponds to line in package list
-    
+    // the dependencies (index corresponds to line in package list)
+    vector<std::pair<PkgDep::ErrorResult, string> > dependencies;
+
     NCPushButton * cancelButton;
     NCPushButton * solveButton;		
 
@@ -65,8 +65,6 @@ private:
 
     PackageSelector * packager;		// connection to the package selector
     
-    string getDependencyKind( const PkgDep::ErrorResult & error );
-
     // method to solve the dependencies
     virtual bool solveInstall( PkgDep::ResultList & goodList, PkgDep::ErrorResultList & badList ) = 0;
 
@@ -77,11 +75,15 @@ private:
     virtual string getLabelRequBy2() = 0; 
     virtual string getLabelConflict2() = 0;
     virtual string getLabelContinueRequ() = 0;
+    // set the tabel type
+    virtual void setDepsTableType() = 0;
     
     void createLayout();
     
-    virtual void setDepsTableType() { // NOOP
-	                              ; }
+
+    void addDepsLine( NCPkgTable * table, const PkgDep::ErrorResult & error, string kind );
+
+    string getReferersList( const PkgDep::ErrorResult & error );
     
 protected:
 
@@ -92,7 +94,7 @@ protected:
     virtual NCursesEvent wHandleInput( int ch );
     
 public:
-    
+
     NCPopupDeps( const wpos at, PackageSelector * pkger );
     virtual ~NCPopupDeps();
 
@@ -102,10 +104,9 @@ public:
 
     void showDependencies( );
     
-    bool fillDepsPackageList( NCPkgTable * table );
+    bool evaluateErrorResult( NCPkgTable * table,
+			     const PkgDep::ErrorResultList & errorlist );
 
-    void evaluateErrorResult(  const PkgDep::ErrorResultList & errorlist );
-    
     bool concretelyDependency( int index );
     
 };

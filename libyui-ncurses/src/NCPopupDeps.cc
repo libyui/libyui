@@ -170,6 +170,9 @@ void NCPopupDeps::showDependencies( )
     head->setLabel( YCPString(getHeadline()) );
     setDepsTableType();
     
+    // fill the table header
+    pkgs->fillHeader( );
+	    
     // 	typedef std::list<Result> ResultList;
     PkgDep::ResultList		goodList;
     
@@ -189,11 +192,9 @@ void NCPopupDeps::showDependencies( )
 
     if ( !success )
     {
-	// evaluate the ErrorResultList
-	evaluateErrorResult( badList );
-
-	// fill the list with packages  which have unresolved deps
-	fillDepsPackageList( pkgs );
+	// fill the list with packages which have unresolved deps
+	evaluateErrorResult( pkgs, badList );
+	
 	// show first dependency
 	concretelyDependency( pkgs->getCurrentItem() );
 	
@@ -206,55 +207,49 @@ void NCPopupDeps::showDependencies( )
 }
 
 
-void NCPopupDeps::evaluateErrorResult( const PkgDep::ErrorResultList & errorlist )
-{
-    // clear the deps vector !!!
-    dependencies.clear();
-
-    // save the ErrorResults in vector dependencies
-    dependencies.assign (errorlist.begin(), errorlist.end());
-}
-
-
-bool NCPopupDeps::fillDepsPackageList( NCPkgTable * table )
+bool NCPopupDeps::evaluateErrorResult( NCPkgTable * table,
+				       const PkgDep::ErrorResultList & errorlist  )
 {
     if ( !table )
 	return false;
-    
-    // create the list of "bad" packages
-    vector< PkgDep::ErrorResult>::iterator it = dependencies.begin();
-    vector<string> pkgLine;
-    pkgLine.reserve(4);
+
+    // clear the deps vector !!!
+    dependencies.clear();
+    // clear list
     table->itemsCleared ();
-     
-    while ( it != dependencies.end() )
+    
+    // fill the dependencies vector and create the list of "bad" packages
+    list<PkgDep::ErrorResult>::const_iterator it = errorlist.begin();
+
+    
+    while ( it != errorlist.end() )
     {
-	pkgLine.clear();
-	  
-	PMObjectPtr objPtr = (*it).solvable;
-	if ( objPtr )
+	if ( !(*it).unresolvable.empty() )
 	{
-	    pkgLine.push_back( objPtr->getSelectable()->name() );	// package name
-	    string kind = getDependencyKind( (*it) );
-	    pkgLine.push_back( kind );
-	    // pkgLine.push_back( objPtr->summary() );
-
-	    table->addLine( objPtr->getSelectable()->status(), //  get the package status
-			    pkgLine,
-			    objPtr );	// the corresponding package pointer
-	
+	    addDepsLine( table, (*it), PkgNames::RequText().str() ); 
+	    dependencies.push_back( make_pair( (*it), PkgNames::RequText().str() ) );
 	}
-	else
+
+	if ( !(*it).alternatives.empty() )
 	{
-	    pkgLine.push_back( (*it).name );
-    	    string kind = getDependencyKind( (*it) );
-	    pkgLine.push_back( kind );
-
-	    table->addLine( PMSelectable::S_NoInst, // use status not installed
-			    pkgLine,
-			    PMObjectPtr() );	// no pointer available 
+	    addDepsLine( table, (*it), PkgNames::NeedsText().str() );
+	    dependencies.push_back( make_pair( (*it), PkgNames::NeedsText().str() ) );
 	}
-	
+
+	if ( !(*it).conflicts_with.empty() )
+	{
+	    addDepsLine( table, (*it), PkgNames::ConflictText().str() );
+	    dependencies.push_back( make_pair( (*it), PkgNames::ConflictText().str() ) );
+	}
+
+	if ( !(*it).referers.empty()
+	     && (*it).conflicts_with.empty()
+	     && (*it).unresolvable.empty()
+	     && (*it).alternatives.empty() )
+	{
+	    addDepsLine( table, (*it), PkgNames::RequByText().str());
+	    dependencies.push_back( make_pair( (*it), PkgNames::RequByText().str() ) );
+	}
 	++it;
     }
 
@@ -264,36 +259,92 @@ bool NCPopupDeps::fillDepsPackageList( NCPkgTable * table )
 }
 
 
-string NCPopupDeps::getDependencyKind(  const PkgDep::ErrorResult & error )
+void NCPopupDeps::addDepsLine( NCPkgTable * table,
+			       const PkgDep::ErrorResult & error,
+			       string kind )
 {
-    string ret = "";
+    vector<string> pkgLine;
+    pkgLine.reserve(4);
 
-    // Get the type of the dependency 
-    // FIXME: better classification of dependencies
-    // (use alsoKind kind from struct RelInfo, file PkgDep.h)
-
-    if ( !error.unresolvable.empty() )
+    PMObjectPtr objPtr = error.solvable;
+    
+    if ( objPtr )
     {
-	ret = PkgNames::RequText().str();
-    }
-    else if ( !error.alternatives.empty() )
-    {
-	ret = PkgNames::NeedsText().str();
-    }
-    else if ( !error.conflicts_with.empty() )
-    {
-	ret = PkgNames::ConflictText().str();
-	if ( !error.remove_to_solve_conflict.empty() )
+	pkgLine.push_back( objPtr->getSelectable()->name() );	// package name
+	pkgLine.push_back( kind );
+	if ( kind != PkgNames::RequByText().str()
+	     && !error.referers.empty() )
 	{
-	    NCDBG << "REMOVE to solve not empty" << endl;
+	    pkgLine.push_back( getReferersList( error) );
 	}
-    }
-    else if ( !error.referers.empty() )
-    {
-	ret = PkgNames::RequByText().str();
-    }
 
-    return ret;
+	table->addLine( objPtr->getSelectable()->status(), //  get the package status
+			pkgLine,
+			objPtr );	// the corresponding package pointer
+	
+    }
+    else
+    {
+	pkgLine.push_back( error.name );
+	pkgLine.push_back( kind );
+	if ( kind != PkgNames::RequByText().str()
+	     && !error.referers.empty() )
+	{
+	    pkgLine.push_back( getReferersList( error) );
+	}
+	table->addLine( PMSelectable::S_NoInst, // use status not installed
+			pkgLine,
+			PMObjectPtr() );	// no pointer available 
+    }
+}
+
+string NCPopupDeps::getReferersList( const PkgDep::ErrorResult & error )
+{
+    PMObjectPtr lastPtr;
+    string lastName = "";
+    unsigned int i = 0;
+    
+    PMObjectPtr objPtr = error.solvable;
+    
+    list<PkgDep::RelInfo>::const_iterator it = error.referers.begin();
+    string refList = "(";
+
+    if ( objPtr )
+    {
+	refList += objPtr->getSelectable()->name();
+    }
+    else
+    {
+	refList += error.name;
+    }
+    refList += " is required by ";
+
+    while ( it != error.referers.end() )
+    {
+	PMObjectPtr objPtr = (*it).solvable; 
+
+	if ( objPtr
+	     && (lastPtr != objPtr) )
+	{
+	    refList += objPtr->getSelectable()->name();
+	    if ( i < error.referers.size()-1 )
+		refList += ", ";
+	    lastPtr =  (*it).solvable;
+	    lastName = objPtr->getSelectable()->name();
+	}
+	else if ( (*it).name != lastName )
+	{
+	    refList += (*it).name;
+	    if ( i < error.referers.size()-1 )
+	        refList += ", ";
+	    lastName = (*it).name; 
+	}
+	++it;
+	i++;
+    }
+    refList += ")";
+	    
+    return refList;	    
 }
 
 bool NCPopupDeps::concretelyDependency( int index )
@@ -309,13 +360,13 @@ bool NCPopupDeps::concretelyDependency( int index )
 	return false;
 
     // get the ErrorResult
-    PkgDep::ErrorResult error = dependencies[index];
+    PkgDep::ErrorResult error = dependencies[index].first;
 	
-    // NCDBG << "*** Showing: " << error << endl;	
+    NCMIL << "*** Showing: " << error << endl;	
 
     // get the dependencies
     
-    if ( !error.unresolvable.empty() )
+    if ( dependencies[index].second == PkgNames::RequText().str() )
     {
 	list<PkgDep::RelInfo>::iterator it = error.unresolvable.begin();
 	while ( it != error.unresolvable.end() )
@@ -333,9 +384,8 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    
 	errorLabel1->setLabel( YCPString(getLabelRequire1())  );
 	errorLabel2->setLabel( YCPString(PkgNames::LabelRequire2().str()) );
-	labelSet = true;
     }
-    if ( !error.alternatives.empty() )
+    else if ( dependencies[index].second == PkgNames::NeedsText().str() )
     {
 	PMObjectPtr lastPtr;
 
@@ -358,14 +408,11 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    }
 	    ++it;
 	}
-	if ( !labelSet )
-	{
-	    errorLabel1->setLabel( YCPString(PkgNames::LabelAlternative().str()) );
-	    errorLabel2->setLabel( YCPString( "" ) );
-	    labelSet = true;
-	}
+
+	errorLabel1->setLabel( YCPString(PkgNames::LabelAlternative().str()) );
+	errorLabel2->setLabel( YCPString( "" ) );
     }
-    if ( !error.conflicts_with.empty() )
+    else if ( dependencies[index].second == PkgNames::ConflictText().str() )
     {
 	PMObjectPtr lastPtr;
 	string causeName = "";
@@ -388,14 +435,11 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    }
 	    ++it;
 	}
-	if ( !labelSet )
-	{
-	    errorLabel1->setLabel( YCPString(PkgNames::LabelConflict1().str()) );
-	    errorLabel2->setLabel( YCPString(getLabelConflict2()) );
-	    labelSet = true;
-	}
+	errorLabel1->setLabel( YCPString(PkgNames::LabelConflict1().str()) );
+	errorLabel2->setLabel( YCPString(getLabelConflict2()) );
+	labelSet = true;
     }
-    if ( !error.referers.empty()
+    else if ( dependencies[index].second == PkgNames::RequByText().str()
 	 && error.conflicts_with.empty()
 	 && error.unresolvable.empty()
 	 && error.alternatives.empty() )
@@ -432,25 +476,20 @@ bool NCPopupDeps::concretelyDependency( int index )
 
 		lastName = (*it).name; 
 	    }
-
 	    ++it;
 	}
 
 	PMObjectPtr causePtr = error.solvable;
-	if ( !labelSet )
+	if ( causePtr
+	     && (causePtr->getSelectable()->status() == PMSelectable::S_Del) )
 	{
-	    if ( causePtr
-		 && (causePtr->getSelectable()->status() == PMSelectable::S_Del) )
-	    {
-		errorLabel1->setLabel( YCPString(getLabelRequBy1()) );
-		errorLabel2->setLabel( YCPString(getLabelRequBy2()) );
-	    }
-	    else
-	    {
-		errorLabel1->setLabel( YCPString(getLabelContinueRequ()) );
-		errorLabel2->setLabel( YCPString( "" ) );
-	    }
-	    labelSet = true;
+	    errorLabel1->setLabel( YCPString(getLabelRequBy1()) );
+	    errorLabel2->setLabel( YCPString(getLabelRequBy2()) );
+	}
+	else
+	{
+	    errorLabel1->setLabel( YCPString(getLabelContinueRequ()) );
+	    errorLabel2->setLabel( YCPString( "" ) );
 	}
     }
 
@@ -474,9 +513,7 @@ NCursesEvent NCPopupDeps::showDependencyPopup( )
     postevent = NCursesEvent();
 
     do {
-	
 	popupDialog();
-	
     } while ( postAgain() );
 
     popdownDialog();
@@ -549,11 +586,8 @@ bool NCPopupDeps::postAgain()
 
 	if ( !success )
 	{
-	    // evaluate the ErrorResultList
-	    evaluateErrorResult( badList );
-
 	    // fill the list with packages  which have unresolved deps
-	    fillDepsPackageList( pkgs );
+	    evaluateErrorResult( pkgs, badList );
 
 	    // set current item ( if the package is still there )
 	    if ( currentPtr )
