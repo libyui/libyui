@@ -378,17 +378,37 @@ bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr 
 //
 // Fills the package table
 //
-bool PackageSelector::fillSearchList( const YCPString & expr )
+bool PackageSelector::fillSearchList( const YCPString & expr,
+				      bool ignoreCase,
+				      bool checkDescr )
 {
     NCPkgTable * packageList = getPackageList();
     
-    if ( !packageList )
+    if ( !packageList
+	 || expr.isNull() )
     {
 	return false;
     }
 
-    // FIXME: get packages from package manager
-    
+    // clear the package table
+    packageList->itemsCleared ();
+
+    PMManager::PMSelectableVec::const_iterator listIt = Y2PM::packageManager().begin();
+
+    // fill the package table
+    unsigned int i = 0;
+    PMPackagePtr pkgPtr;
+
+    string searchExpr = expr->value();
+
+    while ( listIt != Y2PM::packageManager().end() )
+    {
+	searchPackage( (*listIt)->theObject(), searchExpr, ignoreCase, checkDescr, i );
+
+	++listIt;
+	i++;
+    }
+
     // set filter label to 'Search'
     YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
     if ( filterLabel )
@@ -593,6 +613,42 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
 
 ///////////////////////////////////////////////////////////////////
 //
+// search
+//
+//
+bool PackageSelector::searchPackage( PMPackagePtr pkg,
+				     string searchExpr,
+				     bool ignoreCase,
+				     bool checkDescr,
+				     unsigned int index )
+{
+    if ( ! pkg )
+	return false;
+
+    NCPkgTable * packageList = getPackageList();
+    
+    if ( !packageList )
+    {
+	UIERR << "Widget is not a valid NCPkgTable widget" << endl;
+    	return false;
+    }
+    
+    string name = pkg->name().asString();
+    
+    if ( name.find( searchExpr ) == std::string::npos )
+    {
+	return false;
+    }
+
+    // search sucessful
+    createListEntry( packageList, pkg, index );
+
+    return true;
+}
+
+
+///////////////////////////////////////////////////////////////////
+//
 // check
 //
 //
@@ -769,23 +825,44 @@ bool PackageSelector::SearchHandler( const NCursesEvent& event)
 
     NCursesEvent retEvent = pkgSearch.showSearchPopup();
 
+	
     if ( !retEvent.result.isNull() )
-    {	
+    {
+	bool ignoreCase = true;
+	bool checkDescr = false;
+	
 	YCPString searchExpr = retEvent.result->asString();
-    
-	NCMIL << "Searching for: " <<  searchExpr->toString() << endl;
 
-	if ( !youMode )
+	if ( !retEvent.selection.isNull() )
 	{
-	    // fill the package list with packages matching the search expression
-	    fillSearchList ( searchExpr );
-	    showPackageInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );
+	    YCPBoolean ignore = retEvent.selection->asBoolean();
+	    if ( !ignore.isNull()  && (ignore->toString() == "false") )
+	    {
+		ignoreCase = false;
+	    }
 	}
+	if ( retEvent.detail == NCursesEvent::USERDEF )
+	{
+	    checkDescr = true;
+	}
+
+	NCMIL << "Searching for: " <<  searchExpr->toString() << endl;
+	NCMIL << "Ignore Case: " << (ignoreCase?"true":"false") << endl;
+	NCMIL << "Check description: " << (checkDescr?"true":"false") << endl;
+
+	// fill the package list with packages matching the search expression
+	fillSearchList ( searchExpr,
+			 ignoreCase,
+			 checkDescr );
+	
+	showPackageInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );
     }
     else
     {
 	NCMIL << "Search is canceled"  << endl;
     }
+
+    packageList->setKeyboardFocus();
     
     return true;
 }

@@ -156,7 +156,9 @@ class PackageSelector
     * @param expr The search expression
     * @return bool
     */
-    bool fillSearchList( const YCPString & expr );
+    bool fillSearchList( const YCPString & expr,
+			 bool ignoreCase,
+			 bool checkDescr );
 
    /**
     * Gets default RPM group (the first group)
@@ -318,6 +320,11 @@ class PackageSelector
      **/ 
     bool checkPatch(  PMYouPatchPtr patch, string filter, unsigned int index );
 
+    bool searchPackage( PMPackagePtr pkg,
+			string searchExpr,
+			bool ignoreCase,
+			bool checkDescr,
+			unsigned int i );
    /**
     * Returns whether automatic dependency is on or off
     * @return bool   

@@ -230,6 +230,22 @@ bool NCPopupSearch::postAgain()
     {
 	// get the search expression and store it in NCursesEvent.result
 	postevent.result =  getSearchExpression();
+
+	if ( ignoreCase )
+	{
+	    // ignore case true or false
+	    postevent.selection = ignoreCase->getValue();
+	}
+	if ( checkDescr )
+	{
+	    YCPValue value = checkDescr->getValue();
+	    
+	    // check description is selected 
+	    if ( value->asBoolean()->toString() == "true" )
+	    {
+		postevent.detail = NCursesEvent::USERDEF;
+	    }
+	}
     }
     
     if ( postevent == NCursesEvent::button || postevent == NCursesEvent::cancel )
