@@ -333,6 +333,7 @@ class PackageSelector
 
     string createText( list<string> info, bool oneline );
 
+    bool match( string s1, string s2, bool ignoreCase );
 };
 
 ///////////////////////////////////////////////////////////////////

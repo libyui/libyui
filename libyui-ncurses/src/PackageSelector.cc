@@ -63,6 +63,14 @@ bool sortByName( PMSelectablePtr ptr1, PMSelectablePtr ptr2 )
     return false;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+// ignore case compare  
+//
+bool ic_compare ( char c1, char c2 )
+{
+    return ( toupper( c1 ) == toupper( c2 ) );
+}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -552,6 +560,7 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, PMObjectPtr obj
 	createListEntry( pkgTable, (*listIt), i );
     }
 
+    // show the list
     pkgTable->drawList();
     
     return true;
@@ -642,6 +651,8 @@ bool PackageSelector::searchPackage( PMPackagePtr pkg,
 				     bool checkDescr,
 				     unsigned int index )
 {
+    bool ret = false;
+    
     if ( ! pkg )
 	return false;
 
@@ -654,22 +665,63 @@ bool PackageSelector::searchPackage( PMPackagePtr pkg,
     }
     
     string name = pkg->name().asString();
-    
+
+#if 0
     if ( name.find( searchExpr ) == std::string::npos )
     {
 	return false;
     }
+#endif
 
-    // search sucessful
-    createListEntry( packageList, pkg, index );
+    if ( match( name, searchExpr, ignoreCase ) )
+    {
+	// search sucessful
+	createListEntry( packageList, pkg, index );
+	ret = true;
+    }
 
-    return true;
+    if ( checkDescr )
+    {
+	string summary = pkg->summary();	
+	// additionally search in summary
+	if ( match( summary, searchExpr, ignoreCase ) )
+	{
+	    // search sucessful
+	    createListEntry( packageList, pkg, index );
+	    ret = true;
+	}
+    }
+    
+    return ret;
 }
-
 
 ///////////////////////////////////////////////////////////////////
 //
-// check
+// match
+//
+
+bool PackageSelector::match ( string s1, string s2, bool ignoreCase )
+{
+    string::iterator pos;
+
+    if ( ignoreCase )
+    {
+	pos = search( s1.begin(), s1.end(),
+		      s2.begin(), s2.end(),
+		      ic_compare );
+    }
+    else
+    {
+	pos = search( s1.begin(), s1.end(),
+		      s2.begin(), s2.end() );
+    }
+
+    return ( pos != s1.end() );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// checkPackage
 //
 //
 bool PackageSelector::checkPackage( PMPackagePtr pkg,
