@@ -47,6 +47,9 @@ YQPkgList::YQPkgList( QWidget *parent )
     // _statusCol = numCol;
     addColumn( _( "Package" ) );	_nameCol	= numCol++;
 
+    addColumn( _( "Summary"	) );	_summaryCol	= numCol++;
+    addColumn( _( "Size"	) );	_sizeCol	= numCol++;
+    
     if ( installedPkgs > 0 )
     {
 	addColumn( _( "Avail. Ver." ) ); _versionCol	= numCol++;
@@ -57,8 +60,6 @@ YQPkgList::YQPkgList( QWidget *parent )
 	addColumn( _( "Version"	) );	_versionCol	= numCol++;
 	_instVersionCol = -1;
     }
-    addColumn( _( "Summary"	) );	_summaryCol	= numCol++;
-    addColumn( _( "Size"	) );	_sizeCol	= numCol++;
 
 #if SOURCE_RPM_DISABLED
 #warning Selecting source RPMs disabled!
