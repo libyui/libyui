@@ -20,6 +20,7 @@
 
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
+#include "YUIQt.h"
 #include "utf8.h"
 
 using std::max;
@@ -33,6 +34,7 @@ YQFrame::YQFrame( YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
     , YFrame( opt, newLabel )
 {
     QGroupBox::setTitle ( fromUTF8 ( newLabel->value() ) );
+    setFont( yuiqt->currentFont() );
     setWidgetRep ( (QWidget *) this );
 }
 
