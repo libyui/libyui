@@ -4,14 +4,16 @@
 
 SUBDIRS = icons
 
-# pkgincludedir = $(includedir)/y2qt
+pkgincludedir = $(includedir)/y2qt
+
+pkginclude_HEADERS =				\
+	YQUI.h					
 
 noinst_HEADERS =				\
 	utf8.h					\
 	YQi18n.h				\
 	Y2CCQt.h				\
 	YQUIComponent.h				\
-	YQUI.h					\
 	YQIconPool.h				\
 						\
 	YQAlignment.h				\
