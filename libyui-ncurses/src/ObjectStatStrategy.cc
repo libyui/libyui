@@ -161,7 +161,7 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 	    }
 	    break;
 	case KEY_F(4):
-	    if ( oldStatus == PMSelectable::S_NoInst )
+	    if ( oldStatus == PMSelectable::S_NoInst || oldStatus == PMSelectable::S_AutoInstall )
 	    {
 		retStat = PMSelectable::S_Taboo;
 	    }
