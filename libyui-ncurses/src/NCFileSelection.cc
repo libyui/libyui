@@ -591,7 +591,7 @@ void NCDirectoryTable::fillHeader( )
 	case T_Detailed: {
 	    header.reserve(5);
 	    header.push_back( "L" + string("  ") );
-	    header.push_back( "L" + string("Direcory name") );
+	    header.push_back( "L" + string("Directory name") );
 	    header.push_back( "L" + string("Size") );
 	    header.push_back( "L" + string("Permissions") );
 	    break;
