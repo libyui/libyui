@@ -275,7 +275,7 @@ void YQWizard::addStep( const QString & text, const QString & id )
 {
     if ( _stepsIDs[ id ] )
     {
-	y2error( "Step ID \"%s\" (\"%s\")  already used for \"%s\"",
+	y2error( "Step ID \"%s\" (\"%s\") already used for \"%s\"",
 		 (const char *) id,
 		 (const char *) text,
 		 (const char *) _stepsIDs[ id ]->name() );
