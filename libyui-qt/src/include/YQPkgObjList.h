@@ -168,7 +168,7 @@ protected:
      *
      * Reimplemented from QListView / QWidget.
      */
-    void keyPressEvent( QKeyEvent * ev );
+    virtual void keyPressEvent( QKeyEvent * ev );
 
     /**
      * Returns the context menu for items that are not installed.

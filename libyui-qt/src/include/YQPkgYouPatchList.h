@@ -138,6 +138,14 @@ protected:
      **/
     virtual void createInstalledContextMenu();
 
+    /**
+     * Event handler for keyboard input.
+     * Only very special keys are processed here.
+     *
+     * Reimplemented from YQPkgObjList / QWidget.
+     */
+    virtual void keyPressEvent( QKeyEvent * ev );
+
 
     // Data members
 

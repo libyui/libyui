@@ -171,7 +171,18 @@ YQPkgYouPatchList::createInstalledContextMenu()
 }
 
 
+void
+YQPkgYouPatchList::keyPressEvent( QKeyEvent *event )
+{
+    if ( event && event->ascii() == '-' )
+    {
+	// Ignore attempts to delete a YOU patch -
+	// deleting patches is not supported (yet?). 
+	return;
+    }
 
+    YQPkgObjList::keyPressEvent( event );
+}
 
 
 
