@@ -818,19 +818,14 @@ wint_t NCDialog::getinput()
     else
     {
 	wstring to;
-	
 	int gotch = ::getch();	// get the character in terminal encoding
 
 	if ( gotch != -1 )
 	{
-	    // TO DO: test  isprint(), isalnum(), ... don't work ?!??
-	    // NCMIL << "isprint( " << gotch << "): " << (isprint( gotch )?"true":"false") << endl;
-
-	    if ( gotch > 10 && gotch < 255 )	// use isprint()
+	    if ( isalnum( gotch ) )	// recode alphamumeric chars
 	    {
 		string str;
 		str += static_cast<char>(gotch);
-		//str.insert( (std::string::size_type)0, 1, gotch );
 
 		NCstring::RecodeToWchar( str, NCstring::terminalEncoding(), &to ); 
 		got = to[0];
