@@ -574,11 +574,13 @@ NCursesEvent NCComboBox::wHandleInput( wint_t key )
 //
 int NCComboBox::listPopup()
 {
-  wpos        at( ScreenPos() + wpos( win->height(), -1 ) );
-  NCPopupList dialog( at, YCPString(""), deflist, index );
-  int         idx = dialog.post();
-  if ( idx != -1 )
-    setCurrentItem( idx );
+  if (!deflist.empty()) {
+    wpos        at( ScreenPos() + wpos( win->height(), -1 ) );
+    NCPopupList dialog( at, YCPString(""), deflist, index );
+    int         idx = dialog.post();
+    if ( idx != -1 )
+      setCurrentItem( idx );
+  }
   return 0;
 }
 
