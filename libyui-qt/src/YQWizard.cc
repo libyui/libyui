@@ -948,16 +948,20 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
     // Button box
     //
 
-    
+
+#if 0
     addVSpacing( workAreaVBox, BUTTON_BOX_TOP_MARGIN );
+#endif
     
     _buttonBox = new QHBox( workAreaVBox );
     CHECK_PTR( _buttonBox );
     _buttonBox->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
-    _buttonBox->setMargin( 0 );
+    _buttonBox->setMargin( BUTTON_BOX_TOP_MARGIN );
     layoutButtonBox();
 
+#if 0
     addVSpacing( workAreaVBox, WORK_AREA_BOTTOM_MARGIN );
+#endif
 
     if ( ! runningEmbedded() )
     {

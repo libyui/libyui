@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jan 24 16:59:35 CET 2005 - sh@suse.de
+
+- Minor usability changes in wizard layout
+- Added "add -debuginfo packages" menu action in pkg manager 
+
+-------------------------------------------------------------------
 Wed Dec  8 17:04:21 CET 2004 - sh@suse.de
 
 - Added hotkey to switch to a special high-contrast color
