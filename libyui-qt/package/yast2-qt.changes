@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Sep  5 17:01:14 CEST 2003 - sh@suse.de
+
+- V 2.8.10
+- Fixed bug #30151: Enable starting pkg mgr in search mode
+  by default in installed system 
+
+-------------------------------------------------------------------
 Thu Sep  4 17:14:49 CEST 2003 - sh@suse.de
 
 - V 2.8.9

@@ -280,9 +280,10 @@ protected:
 
     // Data members
 
-    bool				_youMode;
-    bool				_updateMode;
+    bool				_searchMode;
     bool				_testMode;
+    bool				_updateMode;
+    bool				_youMode;
     int					_installedPkgs;
     QString				_floppyDevice;
 

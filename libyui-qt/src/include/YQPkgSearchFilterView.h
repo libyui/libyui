@@ -78,6 +78,11 @@ public slots:
      **/
     void filterIfVisible();
 
+    /**
+     * Set the keyboard focus into this view's input field.
+     **/
+    void setFocus();
+
 
 signals:
 

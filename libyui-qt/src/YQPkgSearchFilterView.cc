@@ -157,6 +157,13 @@ YQPkgSearchFilterView::keyPressEvent( QKeyEvent * event )
 }
 
 
+void
+YQPkgSearchFilterView::setFocus()
+{
+    _searchText->setFocus();
+}
+
+
 QSize
 YQPkgSearchFilterView::minimumSizeHint() const
 {

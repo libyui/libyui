@@ -125,9 +125,10 @@ YQPackageSelector::YQPackageSelector( QWidget * parent, YWidgetOpt & opt, const 
     _youPatchFilterView		= 0;
     _youPatchList		= 0;
 
-    _youMode	= opt.youMode.value();
-    _updateMode	= opt.updateMode.value();
+    _searchMode	= opt.searchMode.value();
     _testMode	= opt.testMode.value();
+    _updateMode	= opt.updateMode.value();
+    _youMode	= opt.youMode.value();
 
     if ( _testMode )	fakeData();
     if ( _youMode )	y2milestone( "YOU mode" );
@@ -173,6 +174,12 @@ YQPackageSelector::YQPackageSelector( QWidget * parent, YWidgetOpt & opt, const 
 		_filters->showPage( _updateProblemFilterView );
 		_updateProblemFilterView->filter();
 
+	    }
+	    else if ( _searchMode && _searchFilterView )
+	    {
+		_filters->showPage( _searchFilterView );
+		_searchFilterView->filter();
+		QTimer::singleShot( 0, _searchFilterView, SLOT( setFocus() ) );
 	    }
 	    else if ( _selectionsFilterView && _selList )
 	    {
