@@ -77,13 +77,19 @@ YQPkgGenericDetailsView::showPkgDetailsIfVisible( PMPackagePtr pkg )
 QString
 YQPkgGenericDetailsView::htmlHeading( PMPackagePtr pkg )
 {
-    QString html_text =
-	"<table bgcolor=#E0E0F8><tr><td><b>"
-	+ fromUTF8( pkg->name()     ) + "</b> - "
-	+ fromUTF8( _pkg->summary() )
-	+ "</td></tr></table><br>";
+    QString summary = fromUTF8( _pkg->summary() );
     
-    return html_text;
+    QString html =
+	"<table bgcolor=#E0E0F8><tr><td><b>"
+	+ fromUTF8( pkg->name() )
+	+ "</b>";
+
+    if ( ! summary.isEmpty() )
+	html += " - " + summary;
+    
+    html += "</td></tr></table><br>";
+    
+    return html;
 }
 
 

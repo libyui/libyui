@@ -80,17 +80,10 @@ YQPkgSelList::fillList()
 
     while ( it != Y2PM::selectionManager().end() )
     {
-	y2debug( "Found something" );
-	
 	PMSelectionPtr sel = (*it)->theObject();
 
 	if ( sel )
 	{
-#if 1
-	    std::string name = sel->name();
-	    y2debug( "Found selection %s", name.c_str() );
-#endif
-		 
 	    if ( sel->visible() && ! sel->isBase() )
 	    {
 		new YQPkgSel( this, sel );
