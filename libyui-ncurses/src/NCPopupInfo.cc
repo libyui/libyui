@@ -89,12 +89,17 @@ void NCPopupInfo::createLayout( const YCPString & headline,
   split->addChild( head );
   
   // add the rich text widget 
-  opt.key_Fxx.setValue( 1 );
   helpText = new NCRichText( split, opt, text );
   split->addChild( helpText );
 
   NCSplit * hSplit = new NCSplit( split, opt, YD_HORIZ );
   split->addChild( hSplit );
+  if ( okButtonLabel != "" && cancelButtonLabel != "" )
+  {
+      opt.isHStretchable.setValue( true );
+      NCSpacing * sp1 = new NCSpacing( hSplit, opt, 0.4, true, false );
+      hSplit->addChild( sp1 ); 
+  }
 
   if ( okButtonLabel != "" )
   {
@@ -108,16 +113,19 @@ void NCPopupInfo::createLayout( const YCPString & headline,
   
   if ( cancelButtonLabel != "" )
   {
-      NCSpacing * sp = new NCSpacing( hSplit, opt, 0.2, true, false );
-      hSplit->addChild( sp );
+      NCSpacing * sp2 = new NCSpacing( hSplit, opt, 0.4, true, false );
+      hSplit->addChild( sp2 );
       
       opt.key_Fxx.setValue( 9 );
       // add the Cancel button
       cancelButton = new NCPushButton( hSplit, opt, YCPString(cancelButtonLabel) );
       cancelButton->setId( PkgNames::Cancel() );
-  
-      hSplit->addChild( cancelButton );  
+      hSplit->addChild( cancelButton );
+      
+      NCSpacing * sp3 = new NCSpacing( hSplit, opt, 0.4, true, false );
+      hSplit->addChild( sp3 ); 
   }
+  
 }
 
 ///////////////////////////////////////////////////////////////////
