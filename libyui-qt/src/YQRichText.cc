@@ -116,7 +116,7 @@ bool YQRichText::setKeyboardFocus()
 
 void YQRichText::setSource( const QString & name )
 {
-    y2milestone( "Selected hyperlink \"%s\"", (const char *) name );
+    y2debug( "Selected hyperlink \"%s\"", (const char *) name );
     yuiqt->setMenuSelection( YCPString( (const char *) name ) );
     yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
 }

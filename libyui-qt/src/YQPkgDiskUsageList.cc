@@ -235,7 +235,7 @@ YQPkgDiskUsageListItem::YQPkgDiskUsageListItem( YQPkgDiskUsageList * 	parent,
 	, _duData( duData )
 	, _pkgDiskUsageList( parent )
 {
-    y2milestone( "disk usage list entry for %s", duData.mountpoint().c_str() );
+    y2debug( "disk usage list entry for %s", duData.mountpoint().c_str() );
 }
 
 

@@ -103,7 +103,6 @@ YQMultiSelectionBox::nicesize( YUIDimension dim )
 void
 YQMultiSelectionBox::setSize( long newwidth, long newheight )
 {
-    y2debug("Resizing MultiSelectionBox to %ld,%ld", newwidth, newheight);
     resize(newwidth, newheight);
 }
 

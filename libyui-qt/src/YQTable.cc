@@ -163,7 +163,6 @@ long YQTable::nicesize(YUIDimension dim)
 
 void YQTable::setSize(long newwidth, long newheight)
 {
-    y2debug("Resizing Table to %ld,%ld", newwidth, newheight);
     resize(newwidth, newheight);
 }
 

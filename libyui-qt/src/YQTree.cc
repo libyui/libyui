@@ -76,7 +76,6 @@ long YQTree::nicesize ( YUIDimension dim )
 
 void YQTree::setSize ( long newwidth, long newheight )
 {
-    y2debug("Resizing Tree to %ld,%ld", newwidth, newheight );
     qt_label->resize ( min ( newwidth,  (long) ( qt_label->sizeHint().width() ) ),
 		       min ( newheight, (long) ( qt_label->sizeHint().height() )	 ) );
     listView->resize ( newwidth, newheight - qt_label->height() );

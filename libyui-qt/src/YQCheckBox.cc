@@ -70,7 +70,6 @@ long YQCheckBox::nicesize(YUIDimension dim)
 
 void YQCheckBox::setSize(long newwidth, long newheight)
 {
-    y2debug("Resizing CheckBox to %ld,%ld", newwidth, newheight);
     qt_checkbox->resize(newwidth - 2*SPACING, newheight);
     resize(newwidth, newheight);
 }

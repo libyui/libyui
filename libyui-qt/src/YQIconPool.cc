@@ -111,7 +111,6 @@ YQIconPool * YQIconPool::iconPool()
 
 YQIconPool::YQIconPool()
 {
-    // y2milestone( "Creating icon pool" );
     _iconCache.setAutoDelete( true );
 }
 
@@ -130,7 +129,6 @@ YQIconPool::cachedIcon( const char ** xpm_data )
 
     if ( ! iconPtr )
     {
-	// y2milestone( "Creating icon" );
 	iconPtr = new QPixmap( xpm_data );
 	_iconCache.insert( xpm_data, iconPtr );
     }

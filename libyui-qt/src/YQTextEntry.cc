@@ -95,7 +95,6 @@ long YQTextEntry::nicesize(YUIDimension dim)
 
 void YQTextEntry::setSize(long newwidth, long newheight)
 {
-    y2debug("Resizing TextEntry to %ld,%ld", newwidth, newheight);
     resize(newwidth, newheight);
 }
 

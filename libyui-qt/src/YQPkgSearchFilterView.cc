@@ -312,7 +312,7 @@ YQPkgSearchFilterView::check( const PMSolvable::PkgRelList_type & relList, const
     {
 	if ( check( (*it).asString(), regexp ) )
 	{
-	    // y2milestone( "Match for %s", (*it).asString().c_str() );
+	    // y2debug( "Match for %s", (*it).asString().c_str() );
 	    return true;
 	}
 	++it;

@@ -63,7 +63,7 @@ void
 YQPkgSelList::fillList()
 {
     clear();
-    y2milestone( "Filling selection list" );
+    y2debug( "Filling selection list" );
 
     PMManager::PMSelectableVec::const_iterator it = Y2PM::selectionManager().begin();
 
@@ -82,7 +82,7 @@ YQPkgSelList::fillList()
 	++it;
     }
 
-    y2milestone( "Selection list filled" );
+    y2debug( "Selection list filled" );
 }
 
 

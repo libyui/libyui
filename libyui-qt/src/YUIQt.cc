@@ -192,8 +192,8 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
 		default_size.setHeight( 480 );
 	    }
 
-	    y2milestone( "Assuming default size of %dx%d",
-			 default_size.width(), default_size.height() );
+	    y2debug( "Assuming default size of %dx%d",
+		     default_size.width(), default_size.height() );
 	}
     }
     else	// ! _have_wm
@@ -212,7 +212,7 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
 
     if ( ! _decorate_toplevel_window )
     {
-	y2milestone( "Suppressing WM decorations for toplevel window" );
+	y2debug( "Suppressing WM decorations for toplevel window" );
 	wflags |= WStyle_Customize | WStyle_NoBorder;
     }
 
@@ -936,7 +936,7 @@ const QFont &YUIQt::currentFont()
 	current_font = QFont( "Helvetica", 12 );
 	current_font.setStyleHint( QFont::SansSerif, QFont::PreferBitmap );
 	current_font.setRawName( "-gnu-unifont-medium-r-normal--16-160-75-75-p-80-iso10646-1" );
-	y2milestone( "Loading default font: %s", (const char *) current_font.rawName() );
+	y2debug( "Loading default font: %s", (const char *) current_font.rawName() );
 #else
 	current_font = qApp->font();
 #endif
@@ -959,7 +959,7 @@ const QFont &YUIQt::headingFont()
 	heading_font = QFont( "Helvetica", 14, QFont::Bold );
 	heading_font.setStyleHint( QFont::SansSerif, QFont::PreferBitmap );
 	heading_font.setRawName( "-gnu-unifont-bold-r-normal--18-180-75-75-p-80-iso10646-1" );
-	y2milestone( "Loading heading font: %s", (const char *) heading_font.rawName() );
+	y2debug( "Loading heading font: %s", (const char *) heading_font.rawName() );
 #else
 	heading_font = QFont( "Helvetica", 14, QFont::Bold );
 #endif
@@ -990,7 +990,7 @@ bool YUIQt::eventFilter( QObject * obj, QEvent * ev )
 	    // with `id(`cancel) and let the YCP application decide how to handle
 	    // that (e.g., ask for confirmation).
 
-	    y2milestone( "Caught window close event - returning with `cancel" );
+	    y2debug( "Caught window close event - returning with `cancel" );
 	    returnNow(YUIInterpreter::ET_CANCEL, 0);
 	}
 
@@ -1125,7 +1125,7 @@ void YUIQt::makeScreenShot( std::string stl_filename )
 
 	if ( fileName.isEmpty() )
 	{
-	    y2milestone( "Save screen shot canceled by user" );
+	    y2debug( "Save screen shot canceled by user" );
 	    return;
 	}
 
@@ -1137,7 +1137,7 @@ void YUIQt::makeScreenShot( std::string stl_filename )
     // Actually save the screen shot
     //
 
-    y2milestone( "Saving screen shot to %s", (const char *) fileName );
+    y2debug( "Saving screen shot to %s", (const char *) fileName );
     screenShot.save( fileName, "PNG" );
 }
 

@@ -72,7 +72,6 @@ long YQRadioButton::nicesize(YUIDimension dim)
 
 void YQRadioButton::setSize(long newwidth, long newheight)
 {
-    y2debug("Resizing RadioButton to %ld,%ld", newwidth, newheight);
     qt_radiobutton->resize(newwidth - 2*SPACING, newheight);
     resize(newwidth, newheight);
 }

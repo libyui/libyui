@@ -92,7 +92,6 @@ long YQComboBox::nicesize(YUIDimension dim)
 
 void YQComboBox::setSize(long newwidth, long newheight)
 {
-    y2debug("Resizing SelectionBox to %ld,%ld", newwidth, newheight);
     resize(newwidth, newheight);
 }
 

@@ -89,7 +89,6 @@ long YQProgressBar::nicesize(YUIDimension dim)
 
 void YQProgressBar::setSize(long newwidth, long newheight)
 {
-    y2debug("Resizing TextEntry to %ld,%ld", newwidth, newheight);
     resize(newwidth, newheight);
 }
 

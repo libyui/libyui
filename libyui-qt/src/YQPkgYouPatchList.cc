@@ -79,7 +79,7 @@ void
 YQPkgYouPatchList::fillList()
 {
     clear();
-    y2milestone( "Filling YOU patch list" );
+    y2debug( "Filling YOU patch list" );
 
     PMManager::PMSelectableVec::const_iterator it = Y2PM::youPatchManager().begin();
 
@@ -96,7 +96,7 @@ YQPkgYouPatchList::fillList()
 	++it;
     }
 
-    y2milestone( "YOU patch list filled" );
+    y2debug( "YOU patch list filled" );
 }
 
 

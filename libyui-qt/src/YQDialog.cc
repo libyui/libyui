@@ -137,8 +137,6 @@ void YQDialog::setEnabling(bool enabled)
 
 void YQDialog::setSize(long newWidth, long newHeight)
 {
-    y2debug("Resizing dialog to %ld %ld", newWidth, newHeight);
-
     if ( newWidth > qApp->desktop()->width() )
     {
 	y2warning( "Limiting dialog width to screen width (%d) instead of %ld - check the layout!",

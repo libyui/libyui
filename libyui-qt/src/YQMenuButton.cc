@@ -69,7 +69,6 @@ YQMenuButton::nicesize(YUIDimension dim)
 void
 YQMenuButton::setSize(long newwidth, long newheight)
 {
-    // y2debug("Resizing MenuButton to %ld,%ld", newwidth, newheight);
     qt_pushbutton->resize(newwidth - 2 * BORDER, newheight - 2 * BORDER);
     resize(newwidth, newheight);
 }
