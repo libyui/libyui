@@ -72,6 +72,10 @@ NCWidget::~NCWidget()
   WIDDBG << "DD- " << this << endl;
 }
 
+// Dont be too verbose
+#undef WIDDBG
+#define WIDDBG DDBG
+
 ///////////////////////////////////////////////////////////////////
 //
 //

@@ -22,6 +22,7 @@ extern "C" {
 
 #include <cstdarg>
 #include <fstream>
+#include <list>
 using namespace std;
 
 #include "../config.h"
@@ -31,6 +32,7 @@ using namespace std;
 #include "NCDialog.h"
 
 NCurses * NCurses::myself = 0;
+set<NCDialog*> NCurses::_knownDlgs;
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -363,7 +365,7 @@ void NCurses::Redraw()
 
     // TBD: initialize all dialogs rewdraw
     Refresh();
-    UIMIL << "done reraw ..." << endl;
+    UIMIL << "done redraw ..." << endl;
   }
 }
 
@@ -406,6 +408,77 @@ void NCurses::drawTitle()
 {
   if ( myself && myself->title_w ) {
     SetTitle( myself->title_t );
+  }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCurses::RememberDlg
+//	METHOD TYPE : void
+//
+void NCurses::RememberDlg( NCDialog * dlg_r )
+{
+  if ( dlg_r ) {
+    _knownDlgs.insert( dlg_r );
+  }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCurses::ForgetDlg
+//	METHOD TYPE : void
+//
+void NCurses::ForgetDlg( NCDialog * dlg_r )
+{
+  if ( dlg_r ) {
+    _knownDlgs.erase( dlg_r );
+  }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCurses::ResizeEvent
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCurses::ResizeEvent()
+{
+  if ( myself && myself->initialized() ) {
+    UIMIL << "start resize to " << NCurses::lines() << 'x' << NCurses::cols() << "..." << endl;
+
+    // remember stack of visible dialogs.
+    // don't hide on the fly, as it will mess up stacking order.
+    list<NCDialog*> dlgStack;
+    for ( PANEL * pan = ::panel_above( NULL ); pan; pan = ::panel_above( pan ) ) {
+      NCDialog * dlg = NCursesUserPanel<NCDialog>::UserDataOf( *pan );
+      if ( dlg ) {
+	dlgStack.push_back( dlg );
+      }
+    }
+
+    // hide all visible dialogs.
+    for ( list<NCDialog*>::iterator it = dlgStack.begin(); it != dlgStack.end(); ++it ) {
+      (*it)->getInvisible();
+    }
+    drawTitle();
+    Update();
+
+    // relayout all dialogs
+    for ( set<NCDialog*>::iterator it = _knownDlgs.begin(); it != _knownDlgs.end(); ++it ) {
+      (*it)->resizeEvent();
+    }
+
+    // recreate stack of visible dialogs
+    for ( list<NCDialog*>::iterator it = dlgStack.begin(); it != dlgStack.end(); ++it ) {
+      (*it)->getVisible();
+    }
+    Update();
+
+    UIMIL << "done resize ..." << endl;
   }
 }
 

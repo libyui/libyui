@@ -19,10 +19,10 @@
 #ifndef NCurses_h
 #define NCurses_h
 
-#include <iosfwd>
-
-#include <string>
 #include <iostream>
+#include <string>
+#include <set>
+
 using namespace std;
 
 #include <YCP.h>
@@ -33,6 +33,7 @@ using namespace std;
 #include "NCstyle.h"
 
 class NCWidget;
+class NCDialog;
 
 ///////////////////////////////////////////////////////////////////
 
@@ -83,7 +84,7 @@ class NCursesEvent {
     YCPValue   selection;
 
     YCPValue  	result;		// added by gs
-    
+
     int        detail;
 
     NCursesEvent( Type t = none )
@@ -170,6 +171,14 @@ class NCurses {
     static void ScreenShot( const string & name = "screen.shot" );
 
     static void drawTitle();
+
+  public:
+    // actually not for public use
+    static void ForgetDlg( NCDialog * dlg_r );
+    static void RememberDlg( NCDialog * dlg_r );
+    static void ResizeEvent();
+  private:
+    static set<NCDialog*> _knownDlgs;
 };
 
 ///////////////////////////////////////////////////////////////////

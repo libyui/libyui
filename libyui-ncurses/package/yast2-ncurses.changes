@@ -1,7 +1,13 @@
 -------------------------------------------------------------------
+Mon May 26 16:57:54 CEST 2003 - ma@suse.de
+
+- V 2.8.2
+- Fixed handling of resize events (#13272)
+
+-------------------------------------------------------------------
 Tue May 20 14:53:51 CEST 2003 - gs@suse.de
 
-- package installation: additional filter view "Installed Packages", 
+- package installation: additional filter view "Installed Packages",
   installation of source packages (SRPMs), improved dependency popup
 
 -------------------------------------------------------------------

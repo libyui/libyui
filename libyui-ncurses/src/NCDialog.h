@@ -49,6 +49,8 @@ class NCDialog : public YDialog, public NCWidget {
     NCWidget & GetNormal( NCWidget & startwith, SeekDir Direction );
     void       Activate( SeekDir Direction );
 
+    void _init( YWidgetOpt & opt );
+
   protected:
 
     virtual const char * location() const { return "NCDialog"; }
@@ -102,8 +104,6 @@ class NCDialog : public YDialog, public NCWidget {
     bool describeFunctionKeys( string & helpText );
 
   protected:
-
-    void _init( YWidgetOpt & opt );
 
     int getch( int timeout = -1 );
 
@@ -159,6 +159,13 @@ class NCDialog : public YDialog, public NCWidget {
     }
 
     virtual void setEnabling( bool do_bv ) { /*NOP*/ }
+
+  private:
+
+    friend class NCurses;
+    bool getInvisible();
+    bool getVisible();
+    void resizeEvent();
 };
 
 ///////////////////////////////////////////////////////////////////

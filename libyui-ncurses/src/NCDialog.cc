@@ -89,10 +89,12 @@ NCDialog::NCDialog( YWidgetOpt & opt, const wpos at, const bool boxed )
 //	METHOD NAME : NCDialog::_init
 //	METHOD TYPE : void
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Constructor helper
 //
 void NCDialog::_init( YWidgetOpt & opt )
 {
+  NCurses::RememberDlg( this );
+
   defsze.H = NCurses::lines();
   defsze.W = NCurses::cols();
   hshaddow = vshaddow = false;
@@ -127,6 +129,8 @@ void NCDialog::_init( YWidgetOpt & opt )
 //
 NCDialog::~NCDialog()
 {
+  NCurses::ForgetDlg( this );
+
   WIDDBG << "--+START destroy " << this << endl;
   if ( pan && !pan->hidden() ) {
     pan->hide();
@@ -312,12 +316,10 @@ void NCDialog::wCreate( const wrect & newrect )
     inparent.Pos += 1;
 
   if ( panrect.Pos.L + panrect.Sze.H < NCurses::lines() ) {
-    SDBG << "panrect.Sze.H " << panrect.Sze.H << " -> " << panrect.Sze.H+1 << endl;
     ++panrect.Sze.H;
     hshaddow = true;
   }
   if ( panrect.Pos.C + panrect.Sze.W < NCurses::cols() ) {
-    SDBG << "panrect.Sze.W " << panrect.Sze.W << " -> " << panrect.Sze.W+1 << endl;
     ++panrect.Sze.W;
     vshaddow = true;
   }
@@ -737,6 +739,11 @@ int NCDialog::getch( int timeout )
     // wait for input
     ::nodelay( ::stdscr, false );
     got = ::getch();
+    if ( got == -1 ) {
+      // We get a single -1 after resize, unfortunately without errno == EINTR.
+      // Thus retry once.
+      got = ::getch();
+    }
   } else if ( timeout ) {
     // max halfdelay is 25 seconds (250 tenths of seconds)
     do {
@@ -756,7 +763,11 @@ int NCDialog::getch( int timeout )
     got = ::getch();
   }
 
-  // no wait
+  if ( got == KEY_RESIZE ) {
+    NCurses::ResizeEvent();
+    return NCDialog::getch( timeout );
+  }
+
   return got;
 }
 
@@ -900,6 +911,8 @@ void NCDialog::processInput( int timeout )
 
     switch ( (ch = getch( timeout )) ) {
 
+      // case KEY_RESIZE: is directly handled in NCDialog::getch.
+
     case -1:
       if ( timeout == -1 )
 	pendingEvent = NCursesEvent::cancel;
@@ -925,10 +938,6 @@ void NCDialog::processInput( int timeout )
 	}
 	break;
       }
-      break;
-
-    case KEY_RESIZE:
-      NCDBG << "KEY_RESIZE " << NCurses::lines() << 'x' << NCurses::cols() << endl;
       break;
 
     case KEY_TAB:
@@ -1193,5 +1202,59 @@ ostream & operator<<( ostream & STREAM, const NCDialog & OBJ )
     STREAM << OBJ.pendingEvent.widget;
 
   return STREAM << '}';
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCDialog::getInvisible
+//	METHOD TYPE : bool
+//
+bool NCDialog::getInvisible()
+{
+  if ( !pan || pan->hidden() )
+    return false; // no change in visibility
+
+  // just do it.
+  // class NCurses is responsible for screen update.
+  pan->hide();
+  return true;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCDialog::getVisible
+//	METHOD TYPE : bool
+//
+bool NCDialog::getVisible()
+{
+  if ( !pan || !pan->hidden() )
+    return false; // no change in visibility
+
+  // just do it.
+  // class NCurses is responsible for screen update.
+  pan->show();
+  return true;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCDialog::resizeEvent
+//	METHOD TYPE : void
+//
+void NCDialog::resizeEvent()
+{
+  defsze.H = NCurses::lines();
+  defsze.W = NCurses::cols();
+  hshaddow = vshaddow = false;
+
+  if ( isBoxed() )
+    defsze -= 2;
+
+  if ( pan ) {
+    setInitialSize();
+  }
 }
 
