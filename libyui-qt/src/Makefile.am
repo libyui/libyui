@@ -86,6 +86,7 @@ liby2qt_la_SOURCES = 				\
 						\
 	QY2BarGraph.cc				\
 	QY2ComboTabWidget.cc			\
+	QY2DiskUsageList.cc			\
 	QY2CharValidator.cc			\
 	QY2ListView.cc				\
 	QXEmbed.cc
@@ -167,6 +168,7 @@ BUILT_SOURCES =					\
 						\
 	QY2BarGraph.moc.cc			\
 	QY2ComboTabWidget.moc.cc		\
+	QY2DiskUsageList.moc.cc			\
 	QY2CharValidator.moc.cc			\
 	QY2ListView.moc.cc			\
 	QXEmbed.moc.cc
@@ -227,6 +229,7 @@ YQTree.o YQTree.lo:						YQTree.moc.cc
 
 QY2BarGraph.o QY2BarGraph.lo:					QY2BarGraph.moc.cc
 QY2ComboTabWidget.o QY2ComboTabWidget.lo:			QY2ComboTabWidget.cc
+QY2DiskUsageList.o QY2DiskUsageList.lo:				QY2DiskUsageList.cc
 QY2CharValidator.o QY2CharValidator.lo:				QY2CharValidator.moc.cc
 QY2ListView.o QY2ListView.lo:					QY2ListView.moc.cc
 QXEmbed.o QXEmbed.lo:						QXEmbed.moc.cc
@@ -288,6 +291,7 @@ YQTree.moc.cc:				include/YQTree.h
 
 QY2BarGraph.moc.cc:			include/QY2BarGraph.h
 QY2ComboTabWidget.cc:			include/QY2ComboTabWidget.h
+QY2DiskUsageList.cc:			include/QY2DiskUsageList.h
 QY2CharValidator.moc.cc:		include/QY2CharValidator.h
 QY2ListView.moc.cc:			include/QY2ListView.h
 QXEmbed.moc.cc:				include/QXEmbed.h

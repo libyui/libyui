@@ -67,6 +67,7 @@ pkginclude_HEADERS =				\
 						\
 	QY2BarGraph.h				\
 	QY2ComboTabWidget.h			\
+	QY2DiskUsageList.h			\
 	QY2CharValidator.h			\
 	QY2ListView.h				\
 	QXEmbed.h				\
