@@ -84,7 +84,7 @@ protected:
     QString cell( QString contents		) const;
     QString cell( int contents 			) const;
     QString cell( const std::string & contents	) const;
-    QString cell( Date date			) const;
+    QString cell( const Date & date		) const;
 
     /**
      * Returns a string containing a HTML table cell with 'contents'
@@ -100,7 +100,7 @@ protected:
     /**
      * Format a date.
      **/
-    QString formatDate( Date date ) const;
+    QString formatDate( const Date & date ) const;
 
 };
 

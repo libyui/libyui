@@ -113,7 +113,7 @@ YQPkgTechnicalDetailsView::cell( int contents ) const
 
 
 QString
-YQPkgTechnicalDetailsView::cell( Date contents ) const
+YQPkgTechnicalDetailsView::cell( const Date & contents ) const
 {
     return cell( formatDate( contents ) );
 }
@@ -157,7 +157,7 @@ YQPkgTechnicalDetailsView::authorsListCell( PMPackagePtr pkg ) const
 
 
 QString
-YQPkgTechnicalDetailsView::formatDate( Date weird_date ) const
+YQPkgTechnicalDetailsView::formatDate( const Date & weird_date ) const
 {
     time_t seconds = weird_date;
 
