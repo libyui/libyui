@@ -103,6 +103,11 @@ protected:
      * Check multi-line attribute
      **/
     bool check( const std::list<std::string> & strList, const QRegExp & regexp );
+
+    /**
+     * Check PkgRelList attribute (PMSolvable::provides(), PMSolvable::requires(), ...)
+     **/
+    bool check( const PMSolvable::PkgRelList_type & relList, const QRegExp & regexp );
     
     /**
      * Add vertical stretchable space.
@@ -122,6 +127,8 @@ protected:
     QCheckBox *		_searchInName;
     QCheckBox *		_searchInSummary;
     QCheckBox *		_searchInDescription;
+    QCheckBox *		_searchInRequires;
+    QCheckBox *		_searchInProvides;
 
     QCheckBox *		_caseSensitive;
 

@@ -86,7 +86,10 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
     _searchInName        = new QCheckBox( _( "&Name"        ), gbox ); CHECK_PTR( _searchInName        );
     _searchInSummary     = new QCheckBox( _( "Su&mmary"     ), gbox ); CHECK_PTR( _searchInSummary     );
-    _searchInDescription = new QCheckBox( _( "Descri&ption" ), gbox ); CHECK_PTR( _searchInDescription );
+    _searchInDescription = new QCheckBox( _( "Descr&iption" ), gbox ); CHECK_PTR( _searchInDescription );
+    addVStretch( gbox );
+    _searchInProvides    = new QCheckBox( _( "&Provides"    ), gbox ); CHECK_PTR( _searchInProvides    );
+    _searchInRequires    = new QCheckBox( _( "Re&quires"    ), gbox ); CHECK_PTR( _searchInRequires    );
 
     _searchInName->setChecked( true );
     _searchInSummary->setChecked( true );
@@ -178,7 +181,9 @@ YQPkgSearchFilterView::check( PMPackagePtr pkg, const QRegExp & regexp )
     bool match =
 	( _searchInName->isChecked()        && check( pkg->name(),        regexp ) ) ||
 	( _searchInSummary->isChecked()     && check( pkg->summary(),     regexp ) ) ||
-	( _searchInDescription->isChecked() && check( pkg->description(), regexp ) );
+	( _searchInDescription->isChecked() && check( pkg->description(), regexp ) ) ||
+	( _searchInProvides->isChecked()    && check( pkg->provides(),    regexp ) ) ||
+	( _searchInRequires->isChecked()    && check( pkg->requires(),    regexp ) );
 
     if ( match )
 	emit filterMatch( pkg );
@@ -215,12 +220,33 @@ YQPkgSearchFilterView::check( const std::list<std::string> & strList, const QReg
     
     while ( it != strList.end() )
     {
-	text += (*it);
-	text += "\n";
+	if ( check( *it, regexp ) )
+	    return true;
 	++it;
     }
 
-    return check( text, regexp );
+    return false;
+}
+
+
+bool
+YQPkgSearchFilterView::check( const PMSolvable::PkgRelList_type & relList, const QRegExp & regexp )
+{
+    std::string text;
+    
+    PMSolvable::PkgRelList_const_iterator it = relList.begin();
+    
+    while ( it != relList.end() )
+    {
+	if ( check( (*it).asString(), regexp ) )
+	{
+	    // y2milestone( "Match for %s", (*it).asString().c_str() );
+	    return true;
+	}
+	++it;
+    }
+
+    return false;
 }
 
 
