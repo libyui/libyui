@@ -93,8 +93,22 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
     {
 	for(int i=0; i < argc; i++)
 	{
-	    if (argv[i] == QString("-no-wm"))
+	    if (argv[i] == QString( "-no-wm" ) )
 		has_windowmanager = false;
+
+	    if ( argv[i] == QString( "-kcontrol_id" ) )
+	    {
+		if ( i >= argc )
+		{
+		    y2error( "Missing arg for '-kcontrol_id'" );
+		}
+		else
+		{
+		    kcontrol_id = argv[++i];
+		    y2milestone( "Starting with kcontrol_id='%s'",
+				 (const char *) kcontrol_id );
+		}
+	    }
 	}
     }
 
@@ -153,15 +167,22 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
 
     // Set window title
 
-    QString title( "YaST2" );
-    char hostname[ MAXHOSTNAMELEN+1 ];
-    if ( gethostname( hostname, sizeof( hostname )-1 ) == 0 )
+    if ( kcontrol_id.isEmpty() )
     {
-	hostname[ sizeof( hostname ) -1 ] = '\0'; // make sure it's terminated
-	title += "@";
-	title += hostname;
+	QString title( "YaST2" );
+	char hostname[ MAXHOSTNAMELEN+1 ];
+	if ( gethostname( hostname, sizeof( hostname )-1 ) == 0 )
+	{
+	    hostname[ sizeof( hostname ) -1 ] = '\0'; // make sure it's terminated
+	    title += "@";
+	    title += hostname;
+	}
+	main_win->setCaption( title );
     }
-    main_win->setCaption( title );
+    else
+    {
+	main_win->setCaption( kcontrol_id );
+    }
 
 
     //  Init other stuff
@@ -311,6 +332,7 @@ void YUIQt::showDialog( YDialog *dialog )
     }
     else	// non-defaultsize dialog
     {
+	qw->setCaption( kcontrol_id );
 	qw->show();
     }
 

@@ -383,6 +383,10 @@ private:
     QFont heading_font;
     bool loaded_heading_font;
 
+    /**
+     * Window ID for KDE control center
+     **/
+    QString kcontrol_id;
 
 private slots:
 
