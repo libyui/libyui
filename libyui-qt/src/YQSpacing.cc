@@ -49,4 +49,11 @@ long YQSpacing::absoluteSize( YUIDimension dim, float relativeSize )
 }
 
 
+void YQSpacing::setSize( long newWidth, long newHeight )
+{
+    resize( newWidth, newHeight );
+}
+
+
+
 #include "YQSpacing.moc"

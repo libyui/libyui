@@ -45,6 +45,12 @@ public:
      * 80*25 characters at dialog default size ( 640*480 ).
      */
     long absoluteSize( YUIDimension dim, float relativeSize );
+    
+    /**
+     * Sets the new size of the widget.
+     * Reimplemented from YWidget.
+     */
+    void setSize( long newWidth, long newHeight );
 };
 
 #endif // YQSpacing_h
