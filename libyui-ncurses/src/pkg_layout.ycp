@@ -117,26 +117,26 @@
 				  ),
 			`VWeight( 5, `HBox(
 					   // label help menu 
-					   `HBox(`HWeight(1, `MenuButton(`opt(`key_F1), _( "&Help" ),
-									  // menu items of the help menu
-									  [`item( `id(`help_general), _( "&General Help" ) ),
-									   `item( `id(`help_status),  _( "Help on &Package Status" ) ),
-									   `item( `id(`help_search),  _( "Help on &Search" ) ),
-									   `item( `id(`help_update),  _( "Help on &Upate" ) ) ]
-									  )),
-						 `HStretch(),
+					   `HBox(`MenuButton(`opt(`key_F1), _( "&Help" ),
+							     // menu items of the help menu
+							     [`item( `id(`help_general), _( "&General Help" ) ),
+							      `item( `id(`help_status),  _( "Help on &Package Status" ) ),
+							      `item( `id(`help_search),  _( "Help on &Search" ) ),
+							      `item( `id(`help_update),  _( "Help on &Upate" ) ) ]
+							     ),
+						 `HWeight(1,`HStretch()),
 						 // button label - keep it short
-						 `HWeight(1, `PushButton(`id(`search), `opt(`key_F2), _( "&Search" ) ) ),
-						 `HStretch(),
-						  // button label - keep it short! (max. 15 chars -- use abbreviation)
-						 `HWeight(1, `PushButton(`id(`diskinfo), `opt(`key_F3), _( "&Disk Usage" ) ) ),
-					 	 `HStretch()
+						 `PushButton(`id(`search), `opt(`key_F2), _( "&Search" ) ),
+						 `HWeight(1, `HStretch()),
+						 // button label - keep it short! (max. 15 chars -- use abbreviation)
+						 `PushButton(`id(`diskinfo), `opt(`key_F3), _( "&Disk Usage" ) ),
+					 	 `HWeight(1,`HStretch())
 						 ),
 					   `HSpacing(5.0),
 					   // button label - keep it short
 					   `HBox( `Right( `PushButton(`id(`cancel), `opt(`key_F9) ,_( "&Cancel" ) ) ),
 						  // button label - keep it short
-						  `Right( `PushButton(`id(`ok), `opt(`key_F10), _( "&OK" ) ) )
+						  `Right( `PushButton(`id(`ok), `opt(`key_F10), _( "&Accept" ) ) )
 						  )
 					   )
 				  )
