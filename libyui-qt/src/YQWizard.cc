@@ -45,8 +45,11 @@
 
 #define PIXMAP_DIR THEMEDIR "/wizard/"
 
+#define USE_SEPARATOR			1
+
 #define WORK_AREA_BOTTOM_MARGIN		10
 #define WORK_AREA_RIGHT_MARGIN		10
+#define SEPARATOR_MARGIN		6
 
 
 YQWizard::YQWizard( QWidget *		parent,
@@ -220,7 +223,7 @@ void YQWizard::layoutStepsPanel()
     QWidget * stretch = addVStretch( _stepsPanel );
     CHECK_PTR( stretch );
     stretch->setPaletteBackgroundColor( _gradientCenterColor );
-    
+
 
     // Bottom gradient
 
@@ -347,7 +350,7 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
 
     setDialogIcon( "/usr/share/YaST2/images/user_add.png" );
     setDialogHeading( "Welcome to the YaST2 installation" );
-    
+
 #endif
 }
 
@@ -366,7 +369,7 @@ void YQWizard::layoutClientArea( QWidget * parent )
     QHBox * headingHBox = new QHBox( _clientArea );
     CHECK_PTR( headingHBox );
     headingHBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
-    
+
     _dialogIcon = new QLabel( headingHBox );
     CHECK_PTR( _dialogIcon );
 
@@ -375,7 +378,22 @@ void YQWizard::layoutClientArea( QWidget * parent )
     _dialogHeading->setFont( YQUI::ui()->headingFont() );
 
     addHStretch( headingHBox );
+    addVSpacing( _clientArea );
+
+#if USE_SEPARATOR
+
+    QHBox * hbox = new QHBox( _clientArea );
+
+    addHSpacing( hbox, SEPARATOR_MARGIN );
     
+    QFrame * separator = new QFrame( hbox );
+    CHECK_PTR( separator );
+    separator->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+    
+    addHSpacing( hbox, SEPARATOR_MARGIN );
+    addVSpacing( _clientArea );
+#endif
+
 
     //
     // Replace point for wizard contents
