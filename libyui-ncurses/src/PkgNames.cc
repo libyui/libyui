@@ -1073,6 +1073,20 @@ const NCstring PkgNames::PkgName()
     return value;
 }
 
+const NCstring PkgNames::PackageName()
+{
+    // column header package name (keep it short!)
+    static const NCstring value = _("Package/Library");
+    return value;
+}
+
+const NCstring PkgNames::SelectionName()
+{
+    // column header selection name (keep it short!)
+    static const NCstring value = _("Selection");
+    return value;
+}
+
 const NCstring PkgNames::PkgVersion()
 {
     // column header installed package version (keep it short!)
@@ -1113,6 +1127,20 @@ const NCstring PkgNames::PatchKind()
 {
     // column header patch kind (keep it short!)
     static const NCstring value = _("Kind");
+    return value;
+}
+
+const NCstring PkgNames::DepsKind()
+{
+    // column header kind of the package dependency, e.g. conflict (keep it short!)
+    static const NCstring value = _("Kind of dependency");
+    return value;
+}
+
+const NCstring PkgNames::Comment()
+{
+    // column header comment (keep it short!)
+    static const NCstring value = _("Additional information");
     return value;
 }
 

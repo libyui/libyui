@@ -596,6 +596,16 @@ public:
      */
     static const NCstring PkgName();
 
+    /**
+     *  Column header package name
+     */
+    static const NCstring PackageName();
+
+    /**
+     *  Column header selection name
+     */
+    static const NCstring SelectionName();
+    
      /**
      *  Column header package version installed
      */
@@ -625,7 +635,17 @@ public:
      *  Column header patch kind
      */
     static const NCstring PatchKind();
-    
+
+   /**
+     *  Column header dependency kind
+     */
+    static const NCstring DepsKind();
+
+    /**
+     *  Column header comment
+     */
+    static const NCstring Comment();
+
     /**
      *  Column header package status
      */
