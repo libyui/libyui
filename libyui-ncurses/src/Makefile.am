@@ -7,6 +7,8 @@ ydata_DATA = pkg_layout.ycp	\
 
 # plugin, libtool forces 'lib' prefix
 AM_CXXFLAGS = -DY2LOG=\"ui-ncurses\" -DLOCALEDIR=\"${localedir}\"
+AM_LDFLAGS = -L$(libdir)
+
 plugin_LTLIBRARIES = libpy2ncurses.la
 noinst_LTLIBRARIES = liby2ncurses.la
 
