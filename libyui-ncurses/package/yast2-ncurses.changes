@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Jul 16 14:47:27 CEST 2003 - gs@suse.de
+
+- V 2.8.7
+- fix RPM build error: Installed (but unpackaged) file(s) found:
+  /usr/lib/YaST2/bin/y2ncurses
+
+-------------------------------------------------------------------
 Wed Jul 16 13:28:56 CEST 2003 - gs@suse.de
 
 - V 2.8.6
