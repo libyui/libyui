@@ -31,11 +31,12 @@
  *  @param msgid	text which has to be translated
  *  @return NCstring
  */
+
 NCstring _(const char * msgid)
 {
     NCstring str( "" );
 
-    return str.assignUtf8( gettext(msgid) );
+    return NCstring( gettext(msgid) );
 }
 
 /**
@@ -49,7 +50,7 @@ NCstring _(const char * msgid1, const char * msgid2, unsigned long int n)
 {
     NCstring str( "" );
 
-    return str.assignUtf8( ngettext(msgid1, msgid2, n) );
+    return NCstring( ngettext(msgid1, msgid2, n) );
 }
 
 
