@@ -809,35 +809,35 @@ const YCPString PkgNames::HelpOnSearch()
 const NCstring PkgNames::HelpOnStatus1()
 {
     // part 1 of help text package status
-    static const YCPString value = toYCPString( _("<p>The package status can be changed using the <i>Actions</i> menu or the keys specified in the menu items. By default, the package dependencies are checked with every status change. You will be informed about package conflicts and additionally required packages will be selected (<i>Etc.</i> offers different settings).</p>"));
+    static const NCstring value = _("<p>The package status can be changed using the <i>Actions</i> menu or the keys specified in the menu items. By default, the package dependencies are checked with every status change. You will be informed about package conflicts and additionally required packages will be selected (<i>Etc.</i> offers different settings).</p>");
     return value;
 }
 
 const NCstring PkgNames::HelpOnStatus2()
 {
     // part 2 of help text package status
-    static const YCPString value = toYCPString( _("<p>There is also the possibility to use <b>F3</b> to toggle between the package status.") );
+    static const NCstring value = _("<p>There is also the possibility to use <b>F3</b> to toggle between the package status.");
     return value;
 }
 
 const NCstring PkgNames::HelpOnStatus3()
 {
     // part 3 of help text package status
-    static const YCPString value = toYCPString( _("<br>The meaning of the status flags:") );
+    static const NCstring value = _("<br>The meaning of the status flags:");
     return value;
 }
 
 const NCstring PkgNames::HelpOnStatus()
 {
     // help text package status
-    static const YCPString value = toYCPString( _("<p><b> + </b> : this package is selected for installation</p><p><b>a+ </b> : automatically selected for installation</p><p><b> > </b> : update this package</p><p><b>a> </b> : automatic update</p><p><b> i </b> : this package is installed</p><p><b> - </b> : the package will be deleted</p><p><b>---</b> : never install this package</p>") );
+    static const NCstring value =  _("<p><b> + </b> : this package is selected for installation</p><p><b>a+ </b> : automatically selected for installation</p><p><b> > </b> : update this package</p><p><b>a> </b> : automatic update</p><p><b> i </b> : this package is installed</p><p><b> - </b> : the package will be deleted</p><p><b>---</b> : never install this package</p>");
     return value;
 }
 
 const NCstring PkgNames::HelpOnUpdate()
 {
     // help text package status
-    static const YCPString value = toYCPString( _("<b>Update Problem list</b><br><p>The packages in the list cannot be updated automatically.</p><p>Possible reasons:</p><p>They are obsoleted by other packages.</p><p>There is no newer version to update to on any installation media.</p><p>They are third-party packages</p><p>Please choose manually what to do with them.The safest course of action is to delete them.</p>") );
+    static const NCstring value = _("<b>Update Problem list</b><br><p>The packages in the list cannot be updated automatically.</p><p>Possible reasons:</p><p>They are obsoleted by other packages.</p><p>There is no newer version to update to on any installation media.</p><p>They are third-party packages</p><p>Please choose manually what to do with them.The safest course of action is to delete them.</p>");
     return value;
 }
 
@@ -903,21 +903,21 @@ const NCstring PkgNames::YouHelp1()
     // help text online udpate
     // (text see  textdomain online-update - only some changes were necessary)
     // Do not translate 'recommended' and 'security'!
-    static const YCPString value = toYCPString( _("<p>Mode \"recommended\" means you should install the patch.\"security\" is a security patch and it is highly recommended to install it.\"YaST2\" patches will be always installed first. The other patches must be installed on a second run.</p>") );
+    static const NCstring value =  _("<p>Mode \"recommended\" means you should install the patch.\"security\" is a security patch and it is highly recommended to install it.\"YaST2\" patches will be always installed first. The other patches must be installed on a second run.</p>");
     return value;
 }						  
 
 const NCstring PkgNames::YouHelp2()
 {
     // help text online udpate continue
-    static const YCPString value = toYCPString( _("<p>Meaning of the status flags:</p><p><b>+</b>: Patches concerning your installation are preselected. They will be downloaded and installed on your system.If you do not want a certain patch, deselect it with '-'.</p>") );
+    static const NCstring value = _("<p>Meaning of the status flags:</p><p><b>+</b>: Patches concerning your installation are preselected. They will be downloaded and installed on your system.If you do not want a certain patch, deselect it with '-'.</p>");
     return value;
 }
 
 const NCstring PkgNames::YouHelp3()
 {
     // help text online udpate continue
-    static const YCPString value = toYCPString( _("<p><b>i</b>: This patch is already installed.</p><p><b>></b>: The patch will be reinstalled.</p>") );
+    static const NCstring value =  _("<p><b>i</b>: This patch is already installed.</p><p><b>></b>: The patch will be reinstalled.</p>");
     return value;
 }
 

@@ -1249,8 +1249,9 @@ bool PackageSelector::DiskspaceHandler( const NCursesEvent&  event )
 //
 bool PackageSelector::HelpHandler( const NCursesEvent&  event )
 {
-    NCstring text ( "" );
-
+    //NCstring text ( "" );
+    string text = "";
+    
     if ( event.selection.isNull() )
     {
 	return false;
@@ -1258,27 +1259,27 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
     
     if ( event.selection->compare( PkgNames::GeneralHelp() ) == YO_EQUAL )
     {
-	text += PkgNames::HelpPkgInst1();
-	text += PkgNames::HelpPkgInst12();
-	text += PkgNames::HelpPkgInst13();
-	text += PkgNames::HelpPkgInst2();
-	text += PkgNames::HelpPkgInst3();
-	text += PkgNames::HelpPkgInst4();
-	text += PkgNames::HelpPkgInst5();		
+	text += PkgNames::HelpPkgInst1().str();
+	text += PkgNames::HelpPkgInst12().str();
+	text += PkgNames::HelpPkgInst13().str();
+	text += PkgNames::HelpPkgInst2().str();
+	text += PkgNames::HelpPkgInst3().str();
+	text += PkgNames::HelpPkgInst4().str();
+	text += PkgNames::HelpPkgInst5().str();		
     }
     else if ( event.selection->compare( PkgNames::StatusHelp() ) == YO_EQUAL )
     {
-	text += PkgNames::HelpOnStatus1();
-	text += PkgNames::HelpOnStatus2();
-	text += PkgNames::HelpOnStatus3();
-	text += PkgNames::HelpOnStatus();
+	text += PkgNames::HelpOnStatus1().str();
+	text += PkgNames::HelpOnStatus2().str();
+	text += PkgNames::HelpOnStatus3().str();
+	text += PkgNames::HelpOnStatus().str();
     }
     else if ( event.selection->compare( PkgNames::UpdateHelp() ) == YO_EQUAL )
     {
-	text += PkgNames::HelpOnUpdate();
+	text += PkgNames::HelpOnUpdate().str();
     }
     // open the popup with the help text
-    NCPopupInfo pkgHelp( wpos( 1, 1 ), PkgNames::PackageHelp(), text.YCPstr() );
+    NCPopupInfo pkgHelp( wpos( 1, 1 ), PkgNames::PackageHelp(), YCPString( text ) );
     pkgHelp.showInfoPopup( );
     
     return true;
