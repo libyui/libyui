@@ -549,13 +549,8 @@ bool PackageSelector::fillPatchList( string filter )
     for ( it = patchList.begin(); it != patchList.end(); ++it )
     {
 	PMSelectablePtr selectable = *it;
-
-	if ( selectable->installedObj() )
-	    patchPtr = selectable->installedObj();
-	else if ( selectable->candidateObj() )
-	    patchPtr = selectable->candidateObj();
-	else
-	    patchPtr = selectable->theObject();
+	// always take "theObject()"
+	patchPtr = selectable->theObject();
 
 	checkPatch( patchPtr, filter );
     }
@@ -925,7 +920,8 @@ bool PackageSelector::checkPatch( PMYouPatchPtr patchPtr,
 {
     NCPkgTable * packageList = getPackageList();
     
-    if ( !packageList || !patchPtr )
+    if ( !packageList || !patchPtr
+	 || !patchPtr->hasSelectable() )
     {
 	UIERR << "Widget is not a valid NCPkgTable widget" << endl;
     	return false;
@@ -934,7 +930,9 @@ bool PackageSelector::checkPatch( PMYouPatchPtr patchPtr,
     if ( filter == "all"
 	 || ( filter == patchPtr->kindLabel(patchPtr->kind()) )
 	 || ( filter == "installed" && patchPtr->getSelectable()->status() == PMSelectable::S_KeepInstalled )
-	 || ( filter == "installable" && patchPtr->installable() )
+	 // show new installable patches
+	 || ( filter == "installable" && ( patchPtr->installable() &&
+					   patchPtr->getSelectable()->status() != PMSelectable::S_KeepInstalled ) )
 	 || ( filter == "new" && ( patchPtr->getSelectable()->status() == PMSelectable::S_Install ||
 				   patchPtr->getSelectable()->status() == PMSelectable::S_NoInst ) )
 	 )
