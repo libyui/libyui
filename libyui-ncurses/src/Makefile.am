@@ -69,8 +69,8 @@ liby2ncurses_la_SOURCES =				\
 	NCLogView.h NCLogView.cc			\
 	NCMultiLineEdit.h NCMultiLineEdit.cc		\
 	NCFileSelection.h NCFileSelection.cc		\
-	NCAskForExistingDirectory.h NCAskForExistingDirectory.cc	\
-	NCAskForExistingFile.h NCAskForExistingFile.cc	\
+	NCAskForDirectory.h NCAskForDirectory.cc	\
+	NCAskForFile.h NCAskForFile.cc			\
 							\
 	NCPopup.h NCPopup.cc				\
 	NCPopupTable.h NCPopupTable.cc			\

@@ -58,8 +58,8 @@
 #include "NCMultiLineEdit.h"
 #include "NCPackageSelector.h"
 #include "NCPkgTable.h"
-#include "NCAskForExistingDirectory.h"
-#include "NCAskForExistingFile.h"
+#include "NCAskForDirectory.h"
+#include "NCAskForFile.h"
 #include "NCstring.h"
 
 extern string language2encoding( string lang );
@@ -902,11 +902,21 @@ bool Y2NCursesUI::want_colors()
 //
 //	DESCRIPTION :
 //
-YCPValue Y2NCursesUI::askForSaveFileName( const YCPString & startWith,
+YCPValue Y2NCursesUI::askForSaveFileName( const YCPString & startDir,
 					  const YCPString & filter,
 					  const YCPString & headline )
 {
-    return YCPString( "" );
+    NCAskForSaveFileName filePopup( wpos( 1, 1 ), startDir, filter, headline );
+    
+    NCursesEvent retEvent = filePopup.showDirPopup( );
+
+    if ( !retEvent.result.isNull() )
+    {
+	NCMIL << "Returning: " <<  retEvent.result->toString() << endl;
+	return retEvent.result;
+    }
+    else
+	return YCPVoid(); // nothing selected -> return 'nil'  
 }
 
 ///////////////////////////////////////////////////////////////////
