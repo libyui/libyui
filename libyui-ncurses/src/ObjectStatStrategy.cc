@@ -113,6 +113,18 @@ PatchStatStrategy::PatchStatStrategy()
     type = T_Patch;
 }
 
+//------------------------------------------------------------
+// Class for strategies for depndencies
+//------------------------------------------------------------
+
+//
+// Constructor
+//
+DependencyStatStrategy::DependencyStatStrategy()
+    : ObjectStatStrategy()
+{
+    type = T_Dependency;
+}
 
 //------------------------------------------------------------
 // Class for strategies to get status for available packages

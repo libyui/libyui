@@ -31,6 +31,7 @@ enum NCStrategyType
 	T_Avail,
 	T_Package,
 	T_Patch,
+	T_Dependency,
 	T_Object
     };
 
@@ -72,6 +73,12 @@ public:
      */
     NCStrategyType getType() { return type; }
     
+   /**
+     * Sets the type of the object
+     * @param  NCStrategyType
+     */
+    void setType( NCStrategyType strategy ) { type = strategy; }
+
 };
 
 //------------------------------------------------------------
@@ -84,6 +91,19 @@ public:
     PackageStatStrategy( );
     
     virtual ~PackageStatStrategy() {}
+    
+};
+
+//------------------------------------------------------------
+// Class for strategies to handle dependencies
+//------------------------------------------------------------
+class DependencyStatStrategy : public ObjectStatStrategy
+{
+public:
+
+    DependencyStatStrategy( );
+    
+    virtual ~DependencyStatStrategy() {}
     
 };
 
