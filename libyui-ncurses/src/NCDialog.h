@@ -24,7 +24,9 @@
 #include "YDialog.h"
 #include "NCWidget.h"
 
+
 class NCDialog;
+class NCPopupInfo;
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -64,6 +66,8 @@ class NCDialog : public YDialog, public NCWidget {
 
     NCursesEvent pendingEvent;
 
+    NCPopupInfo *helpPopup;
+    
   private:
 
     void grabActive( NCWidget * nactive );
