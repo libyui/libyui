@@ -324,4 +324,4 @@ YQMultiSelectionBoxItem::key( int, bool ) const
 }
 
 
-#include "YQMultiSelectionBox.moc.cc"
+#include "YQMultiSelectionBox.moc"

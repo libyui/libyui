@@ -147,4 +147,4 @@ YQPkgDependenciesView::cell( const PMSolvable::PkgRelList_type & list )
 }
 
 
-#include "YQPkgDependenciesView.moc.cc"
+#include "YQPkgDependenciesView.moc"

@@ -490,4 +490,4 @@ YQDialog::childAdded( YWidget * child )
 
 
 
-#include "YQDialog.moc.cc"
+#include "YQDialog.moc"

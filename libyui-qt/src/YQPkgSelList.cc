@@ -207,4 +207,4 @@ YQPkgSelListItem::compare( QListViewItem *	otherListViewItem,
 
 
 
-#include "YQPkgSelList.moc.cc"
+#include "YQPkgSelList.moc"

@@ -982,4 +982,4 @@ YQPkgObjListItem::versionPoints() const
 
 
 
-#include "YQPkgObjList.moc.cc"
+#include "YQPkgObjList.moc"

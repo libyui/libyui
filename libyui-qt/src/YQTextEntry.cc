@@ -156,5 +156,5 @@ void YQTextEntry::changed( const QString & )
 
 
 
-#include "YQTextEntry.moc.cc"
+#include "YQTextEntry.moc"
 

@@ -169,4 +169,4 @@ void YQComboBox::textChanged( const QString & new_text )
 }
 
 
-#include "YQComboBox.moc.cc"
+#include "YQComboBox.moc"

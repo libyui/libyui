@@ -413,4 +413,4 @@ QY2DiskUsageListItem::interpolate( int from,
 
 
 
-#include "QY2DiskUsageList.moc.cc"
+#include "QY2DiskUsageList.moc"

@@ -223,4 +223,4 @@ void YQSelectionBox::returnDelayed()
 }
 
 
-#include "YQSelectionBox.moc.cc"
+#include "YQSelectionBox.moc"

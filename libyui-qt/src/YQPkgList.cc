@@ -649,4 +649,4 @@ YQPkgListItem::paintCell( QPainter *		painter,
 
 
 
-#include "YQPkgList.moc.cc"
+#include "YQPkgList.moc"

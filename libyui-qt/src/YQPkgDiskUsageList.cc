@@ -373,4 +373,4 @@ YQPkgWarningRangeNotifier::needWarning() const
 
 
 
-#include "YQPkgDiskUsageList.moc.cc"
+#include "YQPkgDiskUsageList.moc"

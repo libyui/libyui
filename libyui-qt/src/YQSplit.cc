@@ -53,4 +53,4 @@ void YQSplit::moveChild( YWidget * child, long newX, long newY )
 }
 
 
-#include "YQSplit.moc.cc"
+#include "YQSplit.moc"

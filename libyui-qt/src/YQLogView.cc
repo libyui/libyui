@@ -110,5 +110,5 @@ bool YQLogView::setKeyboardFocus()
 
 
 
-#include "YQLogView.moc.cc"
+#include "YQLogView.moc"
 

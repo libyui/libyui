@@ -213,4 +213,4 @@ void YQImage::setSize( long newWidth, long newHeight )
 }
 
 
-#include "YQImage.moc.cc"
+#include "YQImage.moc"

@@ -274,4 +274,4 @@ YQPkgTextDialog::htmlHeading( PMObjectPtr pmObj )
 
 
 
-#include "YQPkgTextDialog.moc.cc"
+#include "YQPkgTextDialog.moc"

@@ -103,4 +103,4 @@ void YQDownloadProgress::pollFileSize()
 
 
 
-#include "YQDownloadProgress.moc.cc"
+#include "YQDownloadProgress.moc"

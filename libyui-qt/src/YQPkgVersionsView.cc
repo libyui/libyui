@@ -269,4 +269,4 @@ YQPkgVersion::compare( QListViewItem *	otherListViewItem,
 
 
 
-#include "YQPkgVersionsView.moc.cc"
+#include "YQPkgVersionsView.moc"

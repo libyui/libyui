@@ -278,4 +278,4 @@ void YQTable::slotActivated( QListViewItem * )
 }
 
 
-#include "YQTable.moc.cc"
+#include "YQTable.moc"

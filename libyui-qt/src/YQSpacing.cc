@@ -49,4 +49,4 @@ long YQSpacing::absoluteSize( YUIDimension dim, float relativeSize )
 }
 
 
-#include "YQSpacing.moc.cc"
+#include "YQSpacing.moc"

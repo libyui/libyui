@@ -399,4 +399,4 @@ YQPkgConflictDialog::averageSolveTime() const
 
 
 
-#include "YQPkgConflictDialog.moc.cc"
+#include "YQPkgConflictDialog.moc"

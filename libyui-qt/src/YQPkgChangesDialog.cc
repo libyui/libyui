@@ -202,4 +202,4 @@ YQPkgChangesDialog::showChangesDialog( const QString & 	message,
 
 
 
-#include "YQPkgChangesDialog.moc.cc"
+#include "YQPkgChangesDialog.moc"

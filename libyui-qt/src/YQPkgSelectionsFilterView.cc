@@ -46,4 +46,4 @@ YQPkgSelectionsFilterView::~YQPkgSelectionsFilterView()
 
 
 
-#include "YQPkgSelectionsFilterView.moc.cc"
+#include "YQPkgSelectionsFilterView.moc"

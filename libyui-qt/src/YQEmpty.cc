@@ -30,4 +30,4 @@ YQEmpty::YQEmpty( QWidget * 	parent,
 }
 
 
-#include "YQEmpty.moc.cc"
+#include "YQEmpty.moc"

@@ -93,4 +93,4 @@ YQFrame::childAdded( YWidget * child )
 
 
 
-#include "YQFrame.moc.cc"
+#include "YQFrame.moc"

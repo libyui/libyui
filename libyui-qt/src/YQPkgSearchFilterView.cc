@@ -336,4 +336,4 @@ YQPkgSearchFilterView::check( const PMSolvable::PkgRelList_type & relList, const
 
 
 
-#include "YQPkgSearchFilterView.moc.cc"
+#include "YQPkgSearchFilterView.moc"

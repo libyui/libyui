@@ -153,4 +153,4 @@ YQPkgYouPatchFilterView::sizeHint() const
 }
 
 
-#include "YQPkgYouPatchFilterView.moc.cc"
+#include "YQPkgYouPatchFilterView.moc"

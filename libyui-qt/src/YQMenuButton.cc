@@ -160,4 +160,4 @@ YQMenuButton::createMenu( YMenuItem * ymenu, QPopupMenu * qt_menu )
 }
 
 
-#include "YQMenuButton.moc.cc"
+#include "YQMenuButton.moc"

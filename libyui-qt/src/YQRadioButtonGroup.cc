@@ -115,4 +115,4 @@ void YQRadioButtonGroup::radioButtonClicked( bool newState )
 }
 
 
-#include "YQRadioButtonGroup.moc.cc"
+#include "YQRadioButtonGroup.moc"

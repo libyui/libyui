@@ -187,4 +187,4 @@ YQPkgGenericDetailsView::formatDate( const Date & weird_date )
 
 
 
-#include "YQPkgGenericDetailsView.moc.cc"
+#include "YQPkgGenericDetailsView.moc"

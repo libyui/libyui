@@ -419,4 +419,4 @@ YQPkgYouPatchListItem::compare( QListViewItem * otherListViewItem,
 
 
 
-#include "YQPkgYouPatchList.moc.cc"
+#include "YQPkgYouPatchList.moc"

@@ -92,4 +92,4 @@ YQPkgUpdateProblemFilterView::filter()
 }
 
 
-#include "YQPkgUpdateProblemFilterView.moc.cc"
+#include "YQPkgUpdateProblemFilterView.moc"

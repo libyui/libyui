@@ -54,4 +54,4 @@ void YQAlignment::setSize( long newWidth, long newHeight )
 }
 
 
-#include "YQAlignment.moc.cc"
+#include "YQAlignment.moc"

@@ -181,4 +181,4 @@ bool YQPushButton::setKeyboardFocus()
 }
 
 
-#include "YQPushButton.moc.cc"
+#include "YQPushButton.moc"

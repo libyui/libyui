@@ -1081,5 +1081,5 @@ void QXEmbed::reparent( QWidget * parent, WFlags f, const QPoint & p, bool showI
 }
 
 // for KDE
-#include "QXEmbed.moc.cc"
+#include "QXEmbed.moc"
 #endif

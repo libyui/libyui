@@ -126,4 +126,4 @@ void YQRadioButton::changed( bool newState )
 }
 
 
-#include "YQRadioButton.moc.cc"
+#include "YQRadioButton.moc"

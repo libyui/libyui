@@ -211,4 +211,4 @@ YQPkgStatusFilterView::check( PMPackagePtr pkg )
 
 
 
-#include "YQPkgStatusFilterView.moc.cc"
+#include "YQPkgStatusFilterView.moc"

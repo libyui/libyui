@@ -119,4 +119,4 @@ bool YQIntField::setKeyboardFocus()
 }
 
 
-#include "YQIntField.moc.cc"
+#include "YQIntField.moc"

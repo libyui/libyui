@@ -1274,4 +1274,4 @@ void addHSpacing( QWidget * parent, int width )
 
 
 
-#include "YQPackageSelector.moc.cc"
+#include "YQPackageSelector.moc"

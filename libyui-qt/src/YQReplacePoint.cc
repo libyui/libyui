@@ -52,4 +52,4 @@ void YQReplacePoint::setSize( long newWidth, long newHeight )
     YReplacePoint::setSize( newWidth, newHeight );
 }
 
-#include "YQReplacePoint.moc.cc"
+#include "YQReplacePoint.moc"

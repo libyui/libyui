@@ -130,4 +130,4 @@ bool YQSlider::setKeyboardFocus()
 }
 
 
-#include "YQSlider.moc.cc"
+#include "YQSlider.moc"

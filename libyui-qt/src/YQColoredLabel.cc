@@ -74,4 +74,4 @@ void YQColoredLabel::setLabel( const YCPString & text )
 }
 
 
-#include "YQColoredLabel.moc.cc"
+#include "YQColoredLabel.moc"

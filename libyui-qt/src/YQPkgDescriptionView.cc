@@ -143,4 +143,4 @@ YQPkgDescriptionView::setSource( const QString & url )
 }
 
 
-#include "YQPkgDescriptionView.moc.cc"
+#include "YQPkgDescriptionView.moc"

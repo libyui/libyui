@@ -995,4 +995,4 @@ YQPkgConflictResolution::typeString() const
 }
 
 
-#include "YQPkgConflictList.moc.cc"
+#include "YQPkgConflictList.moc"

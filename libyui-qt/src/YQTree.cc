@@ -278,4 +278,4 @@ YQTreeItem::key( int column, bool ascending ) const
 }
 
 
-#include "YQTree.moc.cc"
+#include "YQTree.moc"

@@ -154,4 +154,4 @@ YQPkgDiskUsageWarningDialog::diskUsageWarning( const QString & 	message,
 
 
 
-#include "YQPkgDiskUsageWarningDialog.moc.cc"
+#include "YQPkgDiskUsageWarningDialog.moc"

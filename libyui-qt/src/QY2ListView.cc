@@ -499,4 +499,4 @@ QY2ListViewToolTip::maybeTip( const QPoint & pos )
 }
 
 
-#include "QY2ListView.moc.cc"
+#include "QY2ListView.moc"

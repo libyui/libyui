@@ -177,4 +177,4 @@ YQPkgDescriptionDialog::showDescriptionDialog( const QString & pkgName )
 
 
 
-#include "YQPkgDescriptionDialog.moc.cc"
+#include "YQPkgDescriptionDialog.moc"

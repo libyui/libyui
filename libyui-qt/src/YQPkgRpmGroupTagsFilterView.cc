@@ -221,4 +221,4 @@ YQPkgRpmGroupTag::~YQPkgRpmGroupTag()
 
 
 
-#include "YQPkgRpmGroupTagsFilterView.moc.cc"
+#include "YQPkgRpmGroupTagsFilterView.moc"

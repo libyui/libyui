@@ -327,4 +327,4 @@ QString Y2QtComponent::productName() const
 
 
 
-#include "Y2QtComponent.moc.cc"
+#include "Y2QtComponent.moc"

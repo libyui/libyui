@@ -75,4 +75,4 @@ void YQBarGraph::setSize( long newWidth, long newHeight )
 
 
 
-#include "YQBarGraph.moc.cc"
+#include "YQBarGraph.moc"

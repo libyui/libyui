@@ -268,4 +268,4 @@ QSize QY2BarGraph::sizeHint() const
 }
 
 
-#include "QY2BarGraph.moc.cc"
+#include "QY2BarGraph.moc"

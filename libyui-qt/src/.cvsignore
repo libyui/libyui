@@ -2,8 +2,8 @@ Makefile
 Makefile.in
 *.lo
 .deps
-*.moc.cc
-*.moc.h
+*.moc
+*.moc
 .libs
 y2qt.kdoc
 *.la

@@ -448,4 +448,4 @@ void QY2FloppyMountDialog::addHSpacing( QWidget * parent, int width )
 
 
 
-#include "QY2FloppyMountDialog.moc.cc"
+#include "QY2FloppyMountDialog.moc"

@@ -187,4 +187,4 @@ YQPkgTechnicalDetailsView::complexTable( PMPackagePtr installed, PMPackagePtr ca
 
 
 
-#include "YQPkgTechnicalDetailsView.moc.cc"
+#include "YQPkgTechnicalDetailsView.moc"

@@ -172,4 +172,4 @@ bool YQRichText::haveHyperLinks()
 
 
 
-#include "YQRichText.moc.cc"
+#include "YQRichText.moc"
