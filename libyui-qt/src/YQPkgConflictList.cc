@@ -25,6 +25,8 @@
 #include <qdatetime.h>
 #include <qmessagebox.h>
 
+#include <errno.h>
+
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 #include <Y2PM.h>
