@@ -19,6 +19,7 @@
 #include "Y2Log.h"
 #include "NCPkgTable.h"
 #include "NCTable.h"
+#include "NCPopupInfo.h"
 
 #include "PackageSelector.h"
 #include <y2pm/PMSelectable.h>
@@ -194,10 +195,38 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
 {
     if ( !packager )
 	return false;
+
+    list<string> notify;
+    YCPString header( "" );
     
     bool ok = false;
 
     int index  = getCurrentItem();
+
+    if ( newstatus == PMSelectable::S_Del )
+    {
+	if ( getDataPointer(index) )
+	{
+	    notify = getDataPointer(index)->delnotify();
+	    header = PkgNames::WarningLabel();
+	}
+    }
+    if ( newstatus == PMSelectable::S_Install )
+    {
+	if ( getDataPointer(index) )
+	{	
+	    notify = getDataPointer(index)->insnotify();
+	    header = PkgNames::NotifyLabel();
+	}
+    }
+    
+    if ( !notify.empty() )
+    {
+	NCPopupInfo info( wpos(3, 3),
+			  header,
+			  YCPString( packager->createText( notify, false ) ) );
+	info.showInfoPopup( );
+    }
     
     // inform the package manager
     ok = statusStrategy->setPackageStatus( newstatus,
@@ -452,7 +481,7 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 		    break;
 		case T_Dependency:
 		    // show the dependencies of this package
-		    NCMIL << "GET current item line: " <<  getCurrentItem() << endl;
+		    NCDBG << "GET current item line: " <<  getCurrentItem() << endl;
 		    packager->showConcretelyDependency( getCurrentItem() );
 		    break;
 		default:
