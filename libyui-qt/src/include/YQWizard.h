@@ -178,6 +178,32 @@ public:
      **/
     YQWizardButton * abortButton() const { return _abortButton; }
     
+
+    /**
+     * Set wizard command verbosity
+     **/
+    void setVerboseCommands( bool verbose ) { _verboseCommands = verbose; }
+
+    /**
+     * Add a tree item. If "parentID" is an empty string, it will be a root
+     * item. 'text' is the text that will be displayed in the tree, 'id' the ID
+     * with which this newly created item can be referenced - and that will be
+     * returned when the user clicks on a tree item.
+     **/
+    void addTreeItem( const QString & parentID,
+		      const QString & text,
+		      const QString & id	);
+
+    /**
+     * Select the tree item with the specified ID, if such an item exists.
+     **/
+    void selectTreeItem( const QString id );
+    
+    /**
+     * Delete all tree items.
+     **/
+    void deleteTreeItems();
+
     
 public slots:
 
@@ -400,11 +426,6 @@ protected:
     void setButtonFocus( YQWizardButton * button );
     
     /**
-     * Set wizard command verbosity
-     **/
-    void setVerboseCommands( bool verbose ) { _verboseCommands = verbose; }
-
-    /**
      * Set text color and status icon for one wizard step
      **/
     void setStepStatus( YQWizard::Step * step, const QPixmap & icon, const QColor & color );
@@ -413,19 +434,6 @@ protected:
      * Find a step with the specified ID. Returns 0 if there is no such step.
      **/
     YQWizard::Step * findStep( const QString & id );
-
-    /**
-     * Add a tree item. If "parentID" is an empty string, it will be a root
-     * item. 'text' is the text that will be displayed in the tree, 'id' the ID
-     * with which this newly created item can be referenced - and that will be
-     * returned when the user clicks on a tree item.
-     **/
-    void addTreeItem( const QString & parentID, const QString & text, const QString & id );
-
-    /**
-     * Delete all tree items.
-     **/
-    void deleteTreeItems();
 
     /**
      * Find a tree item with the specified ID. Tree items without IDs cannot be

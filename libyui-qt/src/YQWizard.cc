@@ -749,6 +749,23 @@ YQWizard::TreeItem * YQWizard::findTreeItem( const QString & id )
 }
 
 
+void YQWizard::selectTreeItem( const QString id )
+{
+    if ( _tree )
+    {
+	YQWizard::TreeItem * item = findTreeItem( id );
+
+	if ( item )
+	{
+	    _tree->blockSignals( true );
+	    _tree->setSelected( item, true );
+	    _tree->ensureItemVisible( item );
+	    _tree->blockSignals( false );
+	}
+    }
+}
+
+
 void YQWizard::sendTreeEvent( QListViewItem * listViewItem )
 {
     if ( listViewItem )
@@ -1491,6 +1508,7 @@ YCPValue YQWizard::command( const YCPTerm & cmd )
     if ( isCommand( "SetVerboseCommands	  ( bool )"  , cmd ) )	{ setVerboseCommands( boolArg( cmd, 0 ) );		return OK; }
 
     if ( isCommand( "DeleteTreeItems()"	             , cmd ) )	{ deleteTreeItems();					return OK; }
+    if ( isCommand( "SelectTreeItem( string )"	     , cmd ) )	{ selectTreeItem( qStringArg( cmd, 0 ) );		return OK; }
     if ( isCommand( "AddTreeItem( string, string, string )", cmd ) )	{ addTreeItem( qStringArg( cmd, 0 ),
 										       qStringArg( cmd, 1 ),
 										       qStringArg( cmd, 2 )  );		return OK; }
