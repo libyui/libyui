@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Sep  1 18:15:45 CEST 2003 - sh@suse.de
+
+- Fixed bug #27336: Combo box for YOU patch selection 
+- Fixed bug #27437: Display YOU pre/post scripts / extra files
+
+-------------------------------------------------------------------
 Mon Sep  1 16:34:42 CEST 2003 - sh@suse.de
 
 - V 2.8.8
