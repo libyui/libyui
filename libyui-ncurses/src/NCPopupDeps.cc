@@ -415,24 +415,14 @@ bool NCPopupDeps::concretelyDependency( int index )
 	PMObjectPtr lastPtr;
 	string causeName = "";
 	
-	list<PkgDep::RelInfo>::iterator it = error.conflicts_with.begin();
+	list<PMSolvablePtr>::iterator it = error.remove_to_solve_conflict.begin();
 
-	while ( it != error.conflicts_with.end() )
+	// show the list of packages which have to be removed
+	while ( it != error.remove_to_solve_conflict.end() )
 	{
 	    pkgLine.clear();
-	    PMObjectPtr causePtr = error.solvable;
-	    if ( causePtr )
-	    {
-		causeName = causePtr->getSelectable()->name();
-	    }
-	    
-	    PMObjectPtr objPtr = (*it).solvable; 
-
-            // do not show the dependency if the causing package equals this package
-	    // or it was the last package
-	    if ( objPtr
-		 && (causePtr != objPtr)
-		 && (lastPtr != objPtr ) )
+	    PMObjectPtr objPtr = (*it);
+	    if ( objPtr )
 	    {
 		pkgLine.push_back( objPtr->getSelectable()->name() );	// package name
 		pkgLine.push_back( objPtr->summary() );
@@ -441,17 +431,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 			       pkgLine,
 			       i,		// the index
 			       objPtr );	// the corresponding package
-		lastPtr = (*it).solvable;
 	    }
-	    else if ( causeName !=  (*it).name )
-	    {
-		pkgLine.push_back( (*it).name );
-		deps->addLine( PMSelectable::S_NoInst, // use status NOInst
-			       pkgLine,
-			       i,		// the index
-			       PMObjectPtr() );	// null pointer
-	    }
-	    
 	    ++it;
 	    i++;
 	}
