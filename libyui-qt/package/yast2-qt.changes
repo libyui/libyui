@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Feb 26 19:26:29 CET 2003 - sh@suse.de
+
+-  Fixed bug #23574: "Checking dependencies" popup
+
+-------------------------------------------------------------------
 Wed Feb 26 14:48:55 CET 2003 - sh@suse.de
 
 - Fixed bug #24274: Wrong disk initial usage display

@@ -24,9 +24,9 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
+#include <unistd.h>
 #include <Y2PM.h>
 #include <y2pm/PMManager.h>
-
 
 #include <qaction.h>
 #include <qhbox.h>
@@ -37,6 +37,7 @@
 #include <qpushbutton.h>
 #include <qdatetime.h>
 #include <qtimer.h>
+#include <qpainter.h>
 
 #include "YQPkgConflictDialog.h"
 #include "YQPkgConflictList.h"
@@ -62,7 +63,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
     _solveCount		= 0;
     _totalSolveTime	= 0.0;
 
-    
+
     // Set the dialog title.
     //
     // "Dependency conflict" is already used as the conflict list header just
@@ -158,8 +159,43 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
     _busyPopup = new QLabel( "   " + _( "Checking Dependencies..." ) + "   ", parent, 0,
 			     WStyle_Customize | WStyle_Dialog | WType_Dialog );
     CHECK_PTR( _busyPopup );
+    _busyPopup->setCaption( "" );
 
-    _busyPopup->resize( _busyPopup->sizeHint() );
+
+    // Here comes a real nasty hack.
+    //
+    // The busy popup is needed to indicate that the application is (you
+    // guessed right) busy. But as long as it is busy, it doesn't process X
+    // events, either, and I didn't manage to convince Qt to please paint this
+    // popup before the solver's calculations (which take quite a while) start
+    // - all combinations of show(), repaint(), XSync(), XFlush(),
+    // processEvents() etc. failed.
+    //
+    // So, let's do it the hard way: Give this popup a background pixmap into
+    // which we render the text to display. The X server draws background
+    // pixmaps immediately, so we don't have to wait until the X server, the
+    // window manager and this application are finished negotiating all their
+    // various events.
+
+    // Create a pixmap. Make it large enough so it isn't replicated (i.e. the
+    // text is displayed several times) if some window manager chooses not to
+    // honor the size hints (KDM for example uses double the height we
+    // request).
+    
+    QSize size = _busyPopup->sizeHint();
+    QPixmap pixmap( 3 * size.width(), 3 * size.height() );
+
+    // Clear the pixmap with the widget's normal background color.
+    pixmap.fill( _busyPopup->paletteBackgroundColor() );
+
+    // Render the text - aligned top and left because otherwise it will of
+    // course be centered inside the pixmap with is usually much larger than
+    // the popup, thus the text would be cut off.
+    QPainter painter( &pixmap );
+    painter.drawText( pixmap.rect(), AlignLeft | AlignTop, _busyPopup->text() );
+    painter.end();
+
+    _busyPopup->setPaletteBackgroundPixmap( pixmap );
 }
 
 
@@ -207,37 +243,35 @@ YQPkgConflictDialog::solveAndShowConflicts()
     PkgDep::ResultList		goodList;
     PkgDep::ErrorResultList	badList;
 
-#if 0
     if ( _solveCount++ == 0 || averageSolveTime() > 0.0 )
     {
 	_busyPopup->show();
 	
-	// qApp->processEvents();
-	// QPaintEvent paintEvent( _busyPopup->rect() );
-	// QApplication::sendEvent( _busyPopup, &paintEvent );
-	// QTimer::singleShot( 0, _busyPopup, SLOT( repaint() ) );
+	// No _busyPopup->repaint() - that doesn't help anyway (Qt doesn't do
+	// any actual painting until the window is mapped). We just rely on the
+	// background pixmap we provided in the constructor.
 	
-	_busyPopup->repaint();
-	qApp->processEvents();
+        // Make sure show() gets processed - usually, a window manager catches
+        // the show() (XMap) events, positions and maybe resizes the window and
+        // only then sends off an event that makes the window appear. This
+        // event needs to be processed.
+	qApp->processEvents();	
     }
-#endif
 
     y2debug( "Solving..." );
     QTime solveTime;
     solveTime.start();
-    
+
     // Solve.
     bool success = _selectableManager->solveInstall( goodList, badList );
 
     _totalSolveTime += solveTime.elapsed() / 1000.0;
-    
+
     y2debug( "Solving done in %f s - average: %f s",
 	     solveTime.elapsed() / 1000.0, averageSolveTime() );
 
-#if 1
     if ( _busyPopup->isVisible() )
 	_busyPopup->hide();
-#endif
 
 
     // Package states may have changed: The solver may have set packages to
