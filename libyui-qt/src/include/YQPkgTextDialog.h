@@ -115,6 +115,11 @@ protected:
      **/
     void  addHStretch( QWidget * parent );
 
+    /**
+     * Grab [Return] press events and close dialog.
+     * Inherited from QObject.
+     **/
+    bool eventFilter( QObject *obj, QEvent *ev );
 
     // Data members
     

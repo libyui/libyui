@@ -57,6 +57,7 @@ YQPkgTextDialog::YQPkgTextDialog( const QString & text, QWidget * parent )
     layout->addSpacing( 8 );
     _textBrowser->setText( text );
     _textBrowser->setTextFormat( Qt::RichText );
+    _textBrowser->installEventFilter( this );
 
 
     // Button box
@@ -92,6 +93,26 @@ QSize
 YQPkgTextDialog::sizeHint() const
 {
     return QSize( 400, 300 );
+}
+
+
+bool
+YQPkgTextDialog::eventFilter( QObject * obj, QEvent * ev )
+{
+    if ( ev && ev->type() == QEvent::KeyPress )
+    {
+	QKeyEvent * keyEvent = dynamic_cast<QKeyEvent *> (ev);
+
+	if ( keyEvent &&
+	     ( keyEvent->key() == Key_Return ||
+	       keyEvent->key() == Key_Enter    ) )
+	{
+	    _okButton->animateClick();
+	    return true; // Stop event processing
+	}
+    }
+
+    return false;	// Don't stop event processing
 }
 
 
