@@ -252,7 +252,7 @@ bool NCPopupDeps::fillDepsPackageList( NCPkgTable * table )
 	    pkgLine.push_back( objPtr->getSelectable()->name() );	// package name
 	    string kind = getDependencyKind( (*it) );
 	    pkgLine.push_back( kind );
-	    pkgLine.push_back( objPtr->summary() );
+	    // pkgLine.push_back( objPtr->summary() );
 
 	    table->addLine( objPtr->getSelectable()->status(), //  get the package status
 			    pkgLine,
@@ -282,30 +282,34 @@ bool NCPopupDeps::fillDepsPackageList( NCPkgTable * table )
 
 string NCPopupDeps::getDependencyKind(  PkgDep::ErrorResult error )
 {
-    string ret;
+    string ret = "";
     
     if ( !error.unresolvable.empty() )
     {
-	if ( error.unresolvable.front().is_conflict )
+	if ( !error.unresolvable.front().is_conflict )
 	{
-	    ret = "Conflict ";
+	    ret = "requires ...";
 	}
 	else
 	{
-	    ret = "Unresolvable ";
+	    ret = "unresolvable ";
 	}
     }
-    if ( !error.alternatives.empty() )
+    else if ( !error.alternatives.empty() )
     {
-	ret = "Needs packages ";
+	ret = "needs packages ...";
     }
-    if ( !error.conflicts_with.empty() )
+    else if ( !error.conflicts_with.empty() )
     {
-	ret = "Conflict ";
+	ret = "conflicts with ...";
 	if ( !error.remove_to_solve_conflict.empty() )
 	{
 	    NCMIL << "REMOVE to solve not empty" << endl;
 	}
+    }
+    else if ( !error.referers.empty() )
+    {
+	ret = "required by ...";
     }
 
     return ret;
@@ -326,15 +330,33 @@ bool NCPopupDeps::concretelyDependency( int index )
     // get the ErrorResult
     PkgDep::ErrorResult error = dependencies[index];
 	
-    NCMIL << "Showing: " << error << endl;	
+    NCMIL << "*** Showing: " << error << endl;	
 
     if ( !error.unresolvable.empty() )
     {
-	NCMIL << "Unresolvable: " << error.unresolvable << endl;
+	list<PkgDep::RelInfo>::iterator it = error.unresolvable.begin();
+	while ( it != error.unresolvable.end() )
+	{
+	    pkgLine.clear();
+	    PMObjectPtr objPtr = (*it).solvable;	// not needed here 
+	    pkgLine.clear();
+
+	    if ( !(*it).is_conflict )
+	    {
+		pkgLine.push_back( (*it).rel.asString() );
+		pkgLine.push_back( "no package available" );
+		deps->addLine( PMSelectable::S_NoInst, // use status NOInst
+			       pkgLine,
+			       i,		// the index
+			       PMObjectPtr() );	// null pointer
+	    }
+	    ++it;
+	    i++;
+	}
 	errorLabel1->setLabel( YCPString("Solve the conflict by selecting") );
 	errorLabel2->setLabel( YCPString("or deselecting packages.") );	
     }
-    if ( !error.alternatives.empty() )
+    else if ( !error.alternatives.empty() )
     {
 	list<PkgDep::Alternative>::iterator it = error.alternatives.begin();
 	while ( it != error.alternatives.end() )
@@ -353,18 +375,18 @@ bool NCPopupDeps::concretelyDependency( int index )
 			       i,		// the index
 			       objPtr );	// the corresponding package
 	    }
+
 	    ++it;
 	    i++;
 	}
 	errorLabel1->setLabel( YCPString("Select one of the alternatives below.") );
 	errorLabel2->setLabel( YCPString( "" ) );
     }
-    if ( !error.conflicts_with.empty() )
+    else if ( !error.conflicts_with.empty() )
     {
 	list<PkgDep::RelInfo>::iterator it = error.conflicts_with.begin();
 	while ( it != error.conflicts_with.end() )
 	{
-	    NCMIL << "Conflict: " << (*it).name << endl;
 	    pkgLine.clear();
 
 	    PMObjectPtr objPtr = (*it).solvable; 
@@ -379,12 +401,56 @@ bool NCPopupDeps::concretelyDependency( int index )
 			       i,		// the index
 			       objPtr );	// the corresponding package
 	    }
-	    
+	    else
+	    {
+		pkgLine.push_back( (*it).name );
+	    	pkgLine.push_back( "no package available" );
+		deps->addLine( PMSelectable::S_NoInst, // use status NOInst
+			       pkgLine,
+			       i,		// the index
+			       PMObjectPtr() );	// null pointer
+		
+	    }
 	    ++it;
 	    i++;
 	}
 	errorLabel1->setLabel( YCPString("Solve the conflict by deleting") );
 	errorLabel2->setLabel( YCPString("the unwanted package(s)" ) );
+    }
+    else if ( !error.referers.empty() )
+    {
+	list<PkgDep::RelInfo>::iterator it = error.referers.begin();
+	while ( it != error.referers.end() )
+	{
+	    pkgLine.clear();
+
+	    PMObjectPtr objPtr = (*it).solvable; 
+	    pkgLine.clear();
+	    if ( objPtr )
+	    {
+		pkgLine.push_back( objPtr->getSelectable()->name() );	// package name
+		pkgLine.push_back( objPtr->summary() );
+	    
+		deps->addLine( objPtr->getSelectable()->status(), //  get the package status
+			       pkgLine,
+			       i,		// the index
+			       objPtr );	// the corresponding package
+	    }
+	    else
+	    {
+		pkgLine.push_back( (*it).name );
+	    	pkgLine.push_back( "no package available" );
+		deps->addLine( PMSelectable::S_NoInst, // use status NOInst
+			       pkgLine,
+			       i,		// the index
+			       PMObjectPtr() );	// null pointer
+		
+	    }
+	    ++it;
+	    i++;
+	}
+	errorLabel1->setLabel( YCPString("Packages below does not work without") );
+	errorLabel2->setLabel( YCPString("the package you want to delete" ) );	
     }
     
     return true;
