@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Aug 28 13:54:17 CEST 2003 - gs@suse.de
+
+- V 2.8.15
+- bugfix for wide character support in RichText widget
+  (get correct width of text) 
+- online update: default is list of installable patches 
+
+-------------------------------------------------------------------
 Thu Aug 25 15:38:31 CEST 2003 - gs@suse.de
 
 - V 2.8.14
