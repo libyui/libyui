@@ -34,7 +34,7 @@
 #include <sys/errno.h>
 
 /*
-  Textdomain "fileselection"
+  Textdomain "packages"
 */
 
 ///////////////////////////////////////////////////////////////////
@@ -58,7 +58,7 @@ NCAskForFile::NCAskForFile( const wpos at,
     , fileList( 0 )
     , fileName ( 0 )
 {
-
+    setTextdomain( "packages" );
 }
 
 ///////////////////////////////////////////////////////////////////

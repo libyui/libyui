@@ -34,7 +34,7 @@
 #include <sys/errno.h>
 
 /*
-  Textdomain "fileselection"
+  Textdomain "packages"
 */
 
 ///////////////////////////////////////////////////////////////////
@@ -56,6 +56,7 @@ NCAskForExistingDirectory::NCAskForExistingDirectory( const wpos at,
     , detailed ( 0 )
 {
     createLayout( iniDir, headline );
+    setTextdomain( "packages" );
 }
 
 ///////////////////////////////////////////////////////////////////

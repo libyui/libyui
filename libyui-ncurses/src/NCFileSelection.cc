@@ -27,7 +27,7 @@
 #include <sys/types.h>
 
 /*
-  Textdomain "fileselection"
+  Textdomain "packages"
 */
 
 ///////////////////////////////////////////////////////////////////
@@ -189,6 +189,7 @@ NCFileSelection::NCFileSelection( NCWidget * parent,
       , tableType( type )
 {
     SetSepChar( ' ' );
+    setTextdomain( "packages" );
 
     if ( iniDir->value().empty() )
     {

@@ -104,7 +104,7 @@ void NCDialog::_init( YWidgetOpt & opt )
 {
   NCurses::RememberDlg( this );
 
-  setTextdomain( "ncurses" );
+  setTextdomain( "packages" );
   
   _init_size();
 

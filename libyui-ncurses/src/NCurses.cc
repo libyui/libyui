@@ -33,7 +33,7 @@ using namespace std;
 #include "NCi18n.h"
 
 /*
-  Textdomain "ncurses"
+  Textdomain "packages"
 */
 
 NCurses * NCurses::myself = 0;
@@ -120,6 +120,7 @@ ostream & operator<<( ostream & STREAM, const NCursesEvent & OBJ )
   ENUM_OUT( button );
   ENUM_OUT( menu );
   ENUM_OUT( timeout );
+  ENUM_OUT( key );
   }
 #undef ENUM_OUT
   return STREAM << "Ev::unknown";
@@ -457,8 +458,8 @@ void NCurses::SetTitle( const string & str )
     ::wbkgd( myself->title_w, myself->style()(NCstyle::AppTitle) );
     ::wclear( myself->title_w );
 
+    setTextdomain( "packages" );
     // part of title (headline) of the textmode yast
-    setTextdomain( "ncurses" );
     string helpF1 = _( "Press F1 for help" );
     
     int s = myself->title_w->_maxx - helpF1.length();
