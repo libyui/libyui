@@ -358,7 +358,7 @@ YQPkgListItem::toolTip( int col )
 	    }
 	    else
 	    {
-		text += _( "No longer available for installation" );
+		text += _( "Not available for installation" );
 	    }
 	}
 	else // not installed
