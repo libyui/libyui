@@ -71,6 +71,17 @@ public:
      */
     virtual bool setKeyboardFocus();
 
+    /**
+     * Event filter - inherited from QWidget
+     **/
+    bool eventFilter( QObject * obj, QEvent * ev );
+
+    /**
+     * Returns 'true' if the current text of this RichText widget contains
+     * hyperlinks.
+     **/
+    bool haveHyperLinks();
+
 
 protected slots:
 

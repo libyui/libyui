@@ -20,9 +20,11 @@
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
+#include "qregexp.h"
+#include "YEvent.h"
 #include "utf8.h"
 #include "YUIQt.h"
-#include "YEvent.h"
+#include "YQDialog.h"
 #include "YQRichText.h"
 
 
@@ -33,13 +35,14 @@ YQRichText::YQRichText( QWidget * 		parent,
     , YRichText( opt, text )
 {
     setWidgetRep( this );
-    
+
     setMargin( YQWidgetMargin );
 
     _textBrowser = new YQTextBrowser( this );
     _textBrowser->setMimeSourceFactory( 0 );
     _textBrowser->setFont( YUIQt::ui()->currentFont() );
-    
+    _textBrowser->installEventFilter( this );
+
     if ( opt.plainTextMode.value() )
     {
 	_textBrowser->setTextFormat( Qt::PlainText );
@@ -74,7 +77,7 @@ YQRichText::YQRichText( QWidget * 		parent,
 
 
     // Propagate clicks on hyperlinks
-    
+
     connect( _textBrowser, SIGNAL( linkClicked( const QString & ) ),
 	     this,	   SLOT  ( linkClicked( const QString & ) ) );
 }
@@ -108,13 +111,13 @@ void YQRichText::setText( const YCPString & ytext )
 	_textBrowser->verticalScrollBar()->setValue(0);
 
     QString text = fromUTF8( ytext->value() );
-    
+
     if ( _textBrowser->textFormat() != Qt::PlainText )
 	text.replace( "&product;", YUIQt::ui()->productName() );
-    
+
     YRichText::setText( ytext );
     _textBrowser->setText( text );
-    
+
     if ( autoScrollDown && _textBrowser->verticalScrollBar() )
 	_textBrowser->verticalScrollBar()->setValue( _textBrowser->verticalScrollBar()->maxValue() );
 }
@@ -133,6 +136,40 @@ void YQRichText::linkClicked( const QString & url )
     // y2debug( "Selected hyperlink \"%s\"", (const char *) url );
     YUIQt::ui()->sendEvent( new YMenuEvent( YCPString( (const char *) url ) ) );
 }
+
+
+bool YQRichText::eventFilter( QObject * obj, QEvent * ev )
+{
+    if ( ev->type() == QEvent::KeyPress )
+    {
+	QKeyEvent * event = ( QKeyEvent * ) ev;
+
+	if ( ( event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter ) &&
+	     ( event->state() == 0 || event->state() == Qt::Keypad ) &&
+	     ! haveHyperLinks() )
+	{
+	    YQDialog * dia = ( YQDialog * ) yDialog();
+
+	    if ( dia )
+	    {
+		( void ) dia->activateDefaultButton();
+		return true;
+	    }
+	}
+    }
+
+    return QWidget::eventFilter( obj, ev );
+}
+
+
+bool YQRichText::haveHyperLinks()
+{
+    if ( _textBrowser->textFormat() == Qt::PlainText )
+	return false;
+    
+    return ( _textBrowser->text().contains( QRegExp( "<a\\s+href\\s*=", false ) ) > 0 );
+}
+
 
 
 #include "YQRichText.moc.cc"

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Sep  2 13:39:42 CEST 2003 - sh@suse.de
+
+- Fixed bug #23660: RichText widget eats [Return]
+
+-------------------------------------------------------------------
 Mon Sep  1 18:15:45 CEST 2003 - sh@suse.de
 
 - Fixed bug #27336: Combo box for YOU patch selection 
