@@ -73,13 +73,12 @@ void NCtext::lset( const NCstring & ntext )
   wstring::size_type spos = 0;
   wstring::size_type cpos = wstring::npos;
 
-  while ( (cpos = text.find( '\n', spos )) != wstring::npos )
+  while ( (cpos = text.find( L'\n', spos )) != wstring::npos )
   {
     if ( sawnl )
       mtext.push_back( "" );
 
     mtext.back() = NCstring( mtext.back().str() + text.substr(spos, cpos-spos) );
-    
     sawnl = true;
     spos = cpos + 1;
   }
@@ -113,22 +112,23 @@ unsigned NCtext::Lines() const
 //
 //	DESCRIPTION :
 //
-unsigned NCtext::Columns() const
+size_t NCtext::Columns() const
 {
   size_t llen = 0;		// longest line
-  size_t tmp_len = 0;		// width od current line
+  size_t tmp_len = 0;		// width of current line
   
   const_iterator line;		// iterator for list <NCstring> mtext
   std::wstring::const_iterator wstr_it;	// iterator for wstring
-  
+
   for ( line = mtext.begin(); line != mtext.end(); ++line )
   {
+      tmp_len = 0;
       for ( wstr_it = (*line).str().begin(); wstr_it != (*line).str().end() ; ++wstr_it )
       {
 	  tmp_len += wcwidth( *wstr_it );
       }
-       if ( tmp_len > llen )
-	      llen = tmp_len; 
+      if ( tmp_len > llen )
+	      llen = tmp_len;
   }
 
   return llen;
@@ -142,7 +142,7 @@ unsigned NCtext::Columns() const
 //
 //	DESCRIPTION :
 //
-const NCstring & NCtext::operator[]( unsigned idx ) const
+const NCstring & NCtext::operator[]( wstring::size_type idx ) const
 {
   if ( idx >= Lines() )
     return emptyStr;
