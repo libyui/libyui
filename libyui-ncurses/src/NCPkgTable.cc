@@ -203,20 +203,21 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
     bool ok = false;
 
     int index  = getCurrentItem();
-
+    PMObjectPtr objPtr = getDataPointer(index);
+    
     if ( newstatus == PMSelectable::S_Del )
     {
-	if ( getDataPointer(index) )
+	if ( objPtr && objPtr->hasCandidateObj() )
 	{
-	    notify = getDataPointer(index)->delnotify();
+	    notify = objPtr->getCandidateObj()->delnotify();
 	    header = PkgNames::WarningLabel();
 	}
     }
     if ( newstatus == PMSelectable::S_Install )
     {
-	if ( getDataPointer(index) )
+	if ( objPtr && objPtr->hasCandidateObj() )
 	{	
-	    notify = getDataPointer(index)->insnotify();
+	    notify = objPtr->getCandidateObj()->insnotify();
 	    header = PkgNames::NotifyLabel();
 	}
     }
@@ -387,7 +388,7 @@ bool NCPkgTable::fillDefaultList( )
 //
 void NCPkgTable::fillHeader( )
 {
-    vector<NCstring> header;
+    vector<string> header;
 
     switch ( tableType )
     {
@@ -397,40 +398,40 @@ void NCPkgTable::fillHeader( )
 	    if ( installedPkgs > 0 )
 	    {
 		header.reserve(7);
-		header.push_back( PkgNames::PkgStatus() );
-		header.push_back( PkgNames::PkgName() );
-		header.push_back( PkgNames::PkgVersionNew() );
-		header.push_back( PkgNames::PkgVersionInst() );
-		header.push_back( PkgNames::PkgSummary() );
-		header.push_back( PkgNames::PkgSize() );
+		header.push_back( PkgNames::PkgStatus().str() );
+		header.push_back( PkgNames::PkgName().str() );
+		header.push_back( PkgNames::PkgVersionNew().str() );
+		header.push_back( PkgNames::PkgVersionInst().str() );
+		header.push_back( PkgNames::PkgSummary().str() );
+		header.push_back( PkgNames::PkgSize().str() );
 	    }
 	    else
 	    {
 		header.reserve(6);
-		header.push_back( PkgNames::PkgStatus() );
-		header.push_back( PkgNames::PkgName() );
-		header.push_back( PkgNames::PkgVersion() );
-		header.push_back( PkgNames::PkgSummary() );
-		header.push_back( PkgNames::PkgSize() );	
+		header.push_back( PkgNames::PkgStatus().str() );
+		header.push_back( PkgNames::PkgName().str() );
+		header.push_back( PkgNames::PkgVersion().str() );
+		header.push_back( PkgNames::PkgSummary().str() );
+		header.push_back( PkgNames::PkgSize().str() );	
 	    }
 	    break;
 	}
 	case T_Patches: {
 	    header.reserve(6);
-	    header.push_back( PkgNames::PkgStatus() );
-	    header.push_back( PkgNames::PkgName() );
-	    header.push_back( PkgNames::PatchKind() );
-	    header.push_back( PkgNames::PkgSummary() );
-	    header.push_back( PkgNames::PkgSize() );
+	    header.push_back( PkgNames::PkgStatus().str() );
+	    header.push_back( PkgNames::PkgName().str() );
+	    header.push_back( PkgNames::PatchKind().str() );
+	    header.push_back( PkgNames::PkgSummary().str() );
+	    header.push_back( PkgNames::PkgSize().str() );
 	    break;
 	}
 	default: {
 	    header.reserve(5);
-	    header.push_back( PkgNames::PkgStatus() );
-	    header.push_back( PkgNames::PkgName() );
-	    header.push_back( PkgNames::PkgVersion() );
-	    header.push_back( PkgNames::PkgSummary() );
-	    header.push_back( PkgNames::PkgSize() );
+	    header.push_back( PkgNames::PkgStatus().str() );
+	    header.push_back( PkgNames::PkgName().str() );
+	    header.push_back( PkgNames::PkgVersion().str() );
+	    header.push_back( PkgNames::PkgSummary().str() );
+	    header.push_back( PkgNames::PkgSize().str() );
 	    break;
 	}
     }
