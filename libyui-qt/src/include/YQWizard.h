@@ -101,6 +101,20 @@ public:
      **/
     bool stepsEnabled() const { return _stepsEnabled; }
 
+    /**
+     * Add a step to the steps panel on the side bar.
+     **/
+    void addStep( const QString & text, const QString & id );
+    
+    /**
+     * Add a step heading to the steps panel on the side bar.
+     **/
+    void addStepHeading( const QString & text );
+
+    /**
+     * Delete all steps and step headings from the steps panel.
+     **/
+    void deleteSteps();
 
 public slots:
 
@@ -187,6 +201,7 @@ protected:
     void layoutWorkArea	( QHBox * parentHBox );
     void layoutClientArea( QWidget * parent );
     void layoutButtonBox();
+    void createStepsGrid();
 
     /**
      * Load gradient pixmaps
@@ -282,6 +297,8 @@ protected:
 
     QWidgetStack *	_sideBar;
     QVBox *		    _stepsPanel;
+    QVBox *			_stepsBox;
+    QGridLayout *		    _stepsGrid;
     QPushButton	*		_helpButton;
     QHBox *		    _helpPanel;
     QTextBrowser *		_helpBrowser;

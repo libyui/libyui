@@ -70,6 +70,11 @@ using std::string;
 #define WORK_AREA_BOTTOM_MARGIN		10
 #define WORK_AREA_RIGHT_MARGIN		10
 #define SEPARATOR_MARGIN		6
+#define STEPS_MARGIN			10
+
+#define STEPS_FONT_FAMILY		"Sans Serif"
+#define STEPS_FONT_SIZE			11
+#define STEPS_HEADING_FONT_SIZE		13
 
 
 YQWizard::YQWizard( QWidget *		parent,
@@ -88,6 +93,8 @@ YQWizard::YQWizard( QWidget *		parent,
 
     _sideBar			= 0;
     _stepsPanel			= 0;
+    _stepsBox			= 0;
+    _stepsGrid			= 0;
     _helpButton			= 0;
     _helpPanel			= 0;
     _helpBrowser		= 0;
@@ -125,6 +132,11 @@ YQWizard::YQWizard( QWidget *		parent,
     layoutWorkArea( hBox );
 
     y2debug( "Constructor finished." );
+
+
+    addStep( "Step 1", "1" );
+    addStep( "Step 2", "2" );
+    addStep( "Step 3", "3" );
 }
 
 
@@ -216,8 +228,17 @@ void YQWizard::layoutStepsPanel()
 
     _sideBar->addWidget( _stepsPanel );
 
+    _stepsBox = new QVBox( _stepsPanel );
+    CHECK_PTR( _stepsBox );
+    _stepsBox->setPaletteBackgroundColor( _gradientCenterColor );
+    _stepsBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred ) ); // hor/vert
+    
+    _stepsBox->setPaletteBackgroundColor( green );
+    
+#if 0
     QLabel * steps = new QLabel(
 				"<font size=3 color=#669900>"
+				"<b>Test</b><br>"
 				"<b>Base Installation</b>"
 				"<ul>"
 				"<li>Language<br>"
@@ -235,7 +256,7 @@ void YQWizard::layoutStepsPanel()
 				"<li>Device Configuration"
 				"</ul>"
 				"</font>",
-				_stepsPanel );
+				_stepsBox );
     CHECK_PTR( steps );
 
     steps->setPaletteBackgroundColor( _gradientCenterColor );
@@ -245,6 +266,7 @@ void YQWizard::layoutStepsPanel()
 
     steps->setAlignment( Qt::AlignLeft | Qt::AlignTop );
     steps->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) ); // hor/vert
+#endif
 
     QWidget * stretch = addVStretch( _stepsPanel );
     CHECK_PTR( stretch );
@@ -270,6 +292,84 @@ void YQWizard::layoutStepsPanel()
 
     connect( _helpButton, SIGNAL( clicked()  ),
 	     this,	  SLOT	( showHelp() ) );
+}
+
+
+
+void YQWizard::addStep( const QString & text, const QString & id )
+{
+    int row = 0;
+    
+    if ( ! _stepsGrid )
+	createStepsGrid();
+    else
+	row = _stepsGrid->numRows();
+
+    y2debug( "Adding step '%s' with ID '%s' in row %d", (const char *) text, (const char *) id, row );
+    
+    QLabel * step = new QLabel( text, _stepsGrid->mainWidget() );
+    CHECK_PTR( step );
+    step->setAlignment( Qt::AlignLeft | Qt::AlignTop );
+    step->setFont( QFont( STEPS_FONT_FAMILY, STEPS_FONT_SIZE ) );
+    
+    _stepsGrid->addWidget( step, row, 2 );
+
+
+#if 1
+    QLabel * stepStatus = new QLabel( "-", _stepsGrid->mainWidget() );
+    CHECK_PTR( stepStatus );
+    _stepsGrid->addWidget( stepStatus, row, 1 );
+#endif
+}
+
+
+
+void YQWizard::addStepHeading( const QString & text )
+{
+    int row = 0;
+    
+    if ( ! _stepsGrid )
+	createStepsGrid();
+    else
+	row = _stepsGrid->numRows();
+
+    QLabel * heading = new QLabel( text, _stepsGrid->mainWidget() );
+    CHECK_PTR( heading );
+    heading->setAlignment( Qt::AlignLeft | Qt::AlignTop );
+    heading->setFont( QFont( STEPS_FONT_FAMILY, STEPS_HEADING_FONT_SIZE ) );
+
+    _stepsGrid->addMultiCellWidget( heading,
+				    row, row,	// from_row, to_row
+				    1, 2 );	// from_col, to_col
+}
+
+
+
+void YQWizard::createStepsGrid()
+{
+    QWidget * w = new QWidget( _stepsBox );
+    CHECK_PTR( w );
+    w->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) ); // hor/vert
+    w->setPaletteBackgroundColor( _gradientCenterColor );
+
+    _stepsGrid = new QGridLayout( w, 1, 4, STEPS_MARGIN ); // parent, rows, cols, margin
+    CHECK_PTR( _stepsGrid );
+    
+    _stepsGrid->setColStretch( 0, 99 );
+    _stepsGrid->setColStretch( 1, 0  );
+    _stepsGrid->setColStretch( 2, 0  );
+    _stepsGrid->setColStretch( 3, 99  );
+}
+
+
+
+void YQWizard::deleteSteps()
+{
+    if ( _stepsGrid )
+    {
+	delete _stepsGrid->mainWidget();
+	_stepsGrid = 0;
+    }
 }
 
 
@@ -732,6 +832,8 @@ void YQWizard::showHelp()
     if ( _sideBar && _helpPanel )
     {
 	_sideBar->raiseWidget( _helpPanel );
+#warning FIXME
+	addStep( "Einer geht noch", "42" );
     }
 }
 
@@ -937,13 +1039,17 @@ YCPValue YQWizard::command( const YCPTerm & cmd )
     if ( isCommand( "SetDialogIcon 	  ( string )", cmd ) )	{ setDialogIcon	( qStringArg( cmd, 0 ) );		return OK; }
     if ( isCommand( "SetDialogHeading	  ( string )", cmd ) )	{ setDialogHeading( qStringArg( cmd, 0 ) );		return OK; }
 
+    if ( isCommand( "AddStep ( string, string )"     , cmd ) )	{ addStep( qStringArg( cmd, 0 ), qStringArg( cmd, 1 ));	return OK; }
+    if ( isCommand( "AddStepHeading       ( string )", cmd ) )  { addStepHeading( qStringArg( cmd, 0 ) );		return OK; }
+    if ( isCommand( "DeleteSteps()"		     , cmd ) )	{ deleteSteps();					return OK; }
+
     if ( isCommand( "SetAbortButtonLabel  ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "SetBackButtonLabel   ( string )", cmd ) )	{ setButtonLabel( _backButton,  qStringArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "SetNextButtonLabel	  ( string )", cmd ) )	{ setButtonLabel( _nextButton,  qStringArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "SetCancelButtonLabel ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "SetAcceptButtonLabel ( string )", cmd ) )	{ setButtonLabel( _nextButton,  qStringArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "SetVerboseCommands	  ( bool   )", cmd ) )	{ setVerboseCommands( boolArg( cmd, 0 ) );		return OK; }
-
+    
     y2error( "Undefined wizard command: %s", cmd->toString().c_str() );
     return YCPBoolean( false );
 
