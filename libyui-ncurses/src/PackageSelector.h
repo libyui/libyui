@@ -32,6 +32,7 @@
 
 #include <y2pm/PMObject.h>
 #include <y2pm/PMSelectable.h>
+#include <y2pm/PMYouPatch.h>
 
 #include "NCPopupTree.h"
 #include "NCPkgTable.h"
@@ -132,7 +133,8 @@ class PackageSelector
     * @param filter
     * @return bool
     */
-    bool fillPatchList( string filter );
+    bool fillPatchList( string filter,
+			PMYouPatch::Kind kind = PMYouPatch::kind_all);
 
    /**
     * Fills the package table with packages with update problems
@@ -357,7 +359,7 @@ class PackageSelector
      * Returns true if there is a match, false otherwise or if 'patch' is 0.
      * @return bool
      **/ 
-    bool checkPatch(  PMYouPatchPtr patch, string filter );
+    bool checkPatch(  PMYouPatchPtr patch, string filter, PMYouPatch::Kind kind );
 
    /**
     * Returns whether automatic dependency is on or off

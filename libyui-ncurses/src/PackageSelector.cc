@@ -528,7 +528,7 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
 //
 // Fills the package table with the list of YOU patches
 //
-bool PackageSelector::fillPatchList( string filter )
+bool PackageSelector::fillPatchList( string filter, PMYouPatch::Kind kind )
 {
     NCPkgTable * packageList = getPackageList();
      
@@ -550,7 +550,7 @@ bool PackageSelector::fillPatchList( string filter )
     while ( listIt != patchList.end() )
     {
 	PMYouPatchPtr	patchPtr  = ( *listIt)->theObject();
-	checkPatch( patchPtr, filter );
+	checkPatch( patchPtr, filter, kind );
 	++listIt;
     }
     
@@ -919,7 +919,8 @@ bool PackageSelector::checkPackage( PMPackagePtr pkg,
 //
 //
 bool PackageSelector::checkPatch( PMYouPatchPtr patchPtr,
-				  string filter )
+				  string filter,
+				  PMYouPatch::Kind patchKind )
 {
     NCPkgTable * packageList = getPackageList();
     
@@ -931,13 +932,13 @@ bool PackageSelector::checkPatch( PMYouPatchPtr patchPtr,
     }
 
     if ( filter == "all"
-	 || ( filter == patchPtr->kindLabel(patchPtr->kind()) )
 	 || ( filter == "installed" && patchPtr->getSelectable()->status() == PMSelectable::S_KeepInstalled )
 	 // show new installable patches
 	 || ( filter == "installable" && ( patchPtr->installable() &&
 					   patchPtr->getSelectable()->status() != PMSelectable::S_KeepInstalled ) )
 	 || ( filter == "new" && ( patchPtr->getSelectable()->status() == PMSelectable::S_Install ||
 				   patchPtr->getSelectable()->status() == PMSelectable::S_NoInst ) )
+ 	 || ( patchKind == patchPtr->kind() )
 	 )
     {
 	packageList->createPatchEntry( patchPtr );
@@ -1210,15 +1211,15 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
     }
     else if ( event.selection->compare( PkgNames::Recommended() ) ==  YO_EQUAL )
     {
-	fillPatchList( "Recommended" );		// patch kind
+	fillPatchList( "", PMYouPatch::kind_recommended );	// patch kind
     }
     else if ( event.selection->compare( PkgNames::Security() )  ==  YO_EQUAL )
     {
-	fillPatchList( "Security" );		// patch kind
+	fillPatchList( "", PMYouPatch::kind_security );		// patch kind
     }
     else if ( event.selection->compare( PkgNames::Optional() )  ==  YO_EQUAL )
     {
-	fillPatchList( "Optional" );		// patch kind
+	fillPatchList( "", PMYouPatch::kind_optional );		// patch kind
     }
     else if (  event.selection->compare( PkgNames::YaST2Patches() ) ==  YO_EQUAL )
     {

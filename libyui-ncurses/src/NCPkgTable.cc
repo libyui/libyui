@@ -686,7 +686,7 @@ bool NCPkgTable::createPatchEntry ( PMYouPatchPtr patchPtr )
     }
 
     pkgLine.push_back( patchPtr->getSelectable()->name() );	 // name
-    pkgLine.push_back( patchPtr->kindLabel(patchPtr->kind()) );  // patch kind
+    pkgLine.push_back( patchPtr->kindLabel() ); // patch kind
     pkgLine.push_back( patchPtr->summary() );  	// short description
     FSize size = patchPtr->size();     		// installed size
     pkgLine.push_back( size.form( 8 ) );
