@@ -900,7 +900,7 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
     if ( event.selection->compare( PkgNames::ShowDeps() ) == YO_EQUAL )
     {
 	// show the dependency popup
-	showDependencies( true );
+	showDependencies( true ); 	// do the check
     }
     else if ( event.selection->compare( PkgNames::AutoDeps() ) == YO_EQUAL )
     {
@@ -1258,7 +1258,8 @@ bool PackageSelector::showConcretelyDependency ( int index )
 void PackageSelector::showDependencies ( bool doit )
 {
     // check dependencies
-    if ( doit || autoCheck )
+    if ( depsPopup
+	 && (doit || autoCheck) )
     {
 	depsPopup->showDependencies();
     }
