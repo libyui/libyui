@@ -37,14 +37,8 @@ class YQTable : public QVBox, public YTable
 public:
 
     /**
-     * Creates a new YQTable widget.
-     * @param header the texts for the column headers
-     * @param immediate If you set this flag to true, the `notify option
-     * triggers a user input each time the current item has changed. If you set
-     * it to false, `notify triggers user inputs only when the user clicks on
-     * another item.
-     * @param hshrinkable sets the horizontal nice size very small
-     * @param vshrinkable sets the vertical nice size to one row */
+     * Constructor.
+     */
     YQTable( QWidget *parent, YWidgetOpt &opt, vector<string> header);
 
     /**
@@ -67,12 +61,11 @@ public:
     void setSize(long newWidth, long newHeight);
 
     /**
-     * Inherited from YTable. Is called, when an item has been added.
-     * @param string text of the new item
-     * @param index index of the new item.
-     * @param selected true if the item should be selected.
+     * Notification that new items have been added.
+     *
+     * Reimplemented from YTable.
      */
-    void itemAdded(vector<string> elements, int index);
+    void itemAdded( vector<string> elements, int index);
 
     /**
      * Inherited from YTable. Is called, when alls items are cleared.

@@ -35,7 +35,7 @@ class YQReplacePoint : public QWidget, public YReplacePoint
 public:
 
     /**
-     * Creates a new YQReplacePoint.
+     * Constructor.
      */
     YQReplacePoint( QWidget *parent, YWidgetOpt &opt);
 

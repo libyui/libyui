@@ -35,7 +35,7 @@ class YQAlignment : public QWidget, public YAlignment
 public:
 
     /**
-     * Creates a new YQAlignment.
+     * Constructor.
      */
     YQAlignment( QWidget *parent, YWidgetOpt &opt, YAlignmentType halign, YAlignmentType valign);
 

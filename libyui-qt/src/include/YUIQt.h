@@ -44,11 +44,12 @@ class YUIQt :  public QApplication, public YUIInterpreter
 public:
 
     /**
-     * Create a new Qt user interface
-     * @param argc, argv Commandline parameters such as -geometry
-     * @param with_threads Set this to true, if you want a separate ui thread
+     * Constructor.
      */
-    YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback);
+    YUIQt( int 			argc,
+	   char **		argv,
+	   bool 		with_threads,
+	   Y2Component *	callback );
 
     /**
      * Cleans up

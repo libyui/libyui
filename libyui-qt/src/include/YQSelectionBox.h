@@ -75,12 +75,11 @@ public:
     void setLabel(const YCPString& label);
 
     /**
-     * Inherited from YSelectionBox. Is called, when an item has been added.
-     * @param string text of the new item
-     * @param index index of the new item.
-     * @param selected true if the item should be selected.
+     * Notification that a new item has been added.
+     *
+     * Reimplemented from YSelectionBox.
      */
-    void itemAdded(const YCPString& string, int index, bool selected);
+    void itemAdded( const YCPString & itemText, int itemIndex, bool selected);
 
     /**
      * Inherited from YSelectionBox. Returns the index of the currently

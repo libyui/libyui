@@ -39,14 +39,12 @@ class YQTextEntry : public QVBox, public YTextEntry
 
 public:
     /**
-     * Creates a new YQTextentry
-     * @param yuiqt pointer to the ui class
-     * @param parent pointer to the parent widget
-     * @param label Label to be shown above text entry
-     * @param text initial text in the text entry
+     * Constructor.
      */
-    YQTextEntry( QWidget *parent, YWidgetOpt &opt,
-		const YCPString& label, const YCPString& text);
+    YQTextEntry( QWidget *		parent,
+		 YWidgetOpt &		opt,
+		 const YCPString & 	label,
+		 const YCPString & 	text );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the

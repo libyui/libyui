@@ -35,18 +35,18 @@ class YQImage : public QLabel, public YImage
 
 public:
     /**
-     * Creates a new image widget from a set of predefined
+     * Constructor.
      * images.
      */
     YQImage( QWidget *parent, YWidgetOpt &opt, YUIInterpreter::ImageType img);
 
     /**
-     * Creates a new image widget from a byteblock
+     * Constructor.
      */
     YQImage( QWidget *parent, YWidgetOpt &opt, const YCPByteblock & byteblock);
 
     /**
-     * Creates a new image widget from a image file name
+     * Constructor.
      */
     YQImage( QWidget *parent, YWidgetOpt &opt, const YCPString & file_name);
 

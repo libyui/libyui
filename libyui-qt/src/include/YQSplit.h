@@ -34,10 +34,9 @@ class YQSplit : public QWidget, public YSplit
 public:
 
     /**
-     * Creates a new YQSplit.
-     * @param dimension dimension in which to split. YD_HORIZ or YD_VERT
+     * Constructor.
      */
-    YQSplit(QWidget *parent, YWidgetOpt &opt, YUIDimension dimension);
+    YQSplit( QWidget *parent, YWidgetOpt & opt, YUIDimension splitDimension );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the

@@ -40,13 +40,13 @@ class YQRadioButton : public QGroupBox, public YRadioButton
 
 public:
     /**
-     * Creates a new YQRadioButton
-     * @param yuiqt pointer to the ui class
-     * @param parent pointer to the parent widget
-     * @param label Label to be shown above text entry
+     * Constructor.
      */
-    YQRadioButton( QWidget *parent, YWidgetOpt &opt,
-		  YRadioButtonGroup *rbg, const YCPString& label, bool checked);
+    YQRadioButton( QWidget *		parent,
+		   YWidgetOpt &		opt,
+		   YRadioButtonGroup *	rbg,
+		   const YCPString & 	label,
+		   bool 		checked );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the

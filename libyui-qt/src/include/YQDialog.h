@@ -36,7 +36,7 @@ class YQDialog : public QWidget, public YDialog
 
 public:
     /**
-     * Constructor: Creates a new Qt dialog.
+     * Constructor: Constructor.
      */
     YQDialog( YWidgetOpt &	opt,
 	      QWidget *		qt_parent	= 0,

@@ -47,11 +47,7 @@ class YQCheckBox : public QGroupBox, public YCheckBox
 
 public:
     /**
-     * Creates a new YQCheckBox
-     * @param yuiqt pointer to the ui class
-     * @param parent pointer to the parent widget
-     * @param label Label to be shown above text entry
-     * @param checked true, if the checkbox starts checked
+     * Constructor.
      */
     YQCheckBox( QWidget *parent, YWidgetOpt &opt,
 	       const YCPString& label, bool checked);

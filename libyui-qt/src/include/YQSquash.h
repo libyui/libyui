@@ -35,7 +35,7 @@ class YQSquash : public QWidget, public YSquash
 public:
 
     /**
-     * Creates a new YQSquash.
+     * Constructor.
      */
     YQSquash( QWidget *parent, YWidgetOpt &opt, bool hsquash, bool vsquash);
 

@@ -35,7 +35,7 @@ class YQFrame : public QGroupBox, public YFrame
 public:
 
     /**
-     * Creates a new YQFrame.
+     * Constructor.
      */
     YQFrame ( QWidget *parent, YWidgetOpt &opt, const YCPString &label );
 

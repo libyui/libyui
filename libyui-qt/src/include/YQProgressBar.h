@@ -48,16 +48,13 @@ class YQProgressBar : public QVBox, public YProgressBar
 
 public:
     /**
-     * Creates a new YQProgressBar
-     * @param yuiqt pointer to the ui class
-     * @param parent pointer to the parent widget
-     * @param label Label to be shown above the progress bar
-     * @param maxprogress the progress value for 100%
-     * @param progress the current progress value
+     * Constructor.
      */
-    YQProgressBar( QWidget *parent, YWidgetOpt &opt,
-		  const YCPString& label,
-		  const YCPInteger& maxprogress, const YCPInteger& progress);
+    YQProgressBar( QWidget *		parent,
+		   YWidgetOpt &		opt,
+		   const YCPString  & 	label,
+		   const YCPInteger & 	maxProgress,
+		   const YCPInteger & 	initialProgress);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the

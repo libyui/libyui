@@ -63,14 +63,11 @@ public:
     virtual void setLabel(const YCPString& label);
 
     /**
-     * Called when an item has been added.
+     * Notification that a new item has been added.
      *
-     * Reimplemented from YMultiSelectionBox
-     *
-     * @param string text of the new item
-     * @param selected true if the item should be selected.
+     * Reimplemented from YMultiSelectionBox.
      */
-    virtual void itemAdded( const YCPString & text, bool selected );
+    virtual void itemAdded( const YCPString & itemText, bool selected );
 
     /**
      * Returns the index of the item that currently has the keyboard focus.

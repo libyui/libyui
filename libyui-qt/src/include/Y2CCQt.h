@@ -61,11 +61,7 @@ public:
     bool isServerCreator() const { return true; };
 
     /**
-     * Creates a new Qt Userinterface component, if it
-     * is asked to.
-     * @param name Name of the component to create. Only
-     * if this is "qt", the Qt component will be created.
-     * Otherwise 0 is returned.
+     * Creates a new Qt UI component.
      */
     Y2Component *create(const char *name) const
     {

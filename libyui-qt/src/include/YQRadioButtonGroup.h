@@ -31,7 +31,7 @@ class YQRadioButtonGroup : public QWidget, public YRadioButtonGroup
 
 public:
     /**
-     * Creates a new YQRadioButtonGroup.
+     * Constructor.
      */
     YQRadioButtonGroup( QWidget *parent, YWidgetOpt &opt);
 
