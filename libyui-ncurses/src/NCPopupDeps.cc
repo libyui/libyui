@@ -149,11 +149,25 @@ void NCPopupDeps::createLayout( )
   solveButton->setId( PkgNames::Solve () );
   hSplit->addChild( solveButton );
 
-  NCSpacing * sp4 = new NCSpacing( hSplit, opt, 0.4, true, false );
+  NCSpacing * sp4 = new NCSpacing( hSplit, opt, 0.2, true, false );
   hSplit->addChild( sp4 );
   
+  ignoreButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::IgnLabel().str()) );
+  ignoreButton->setId( PkgNames::Ignore() );
+  hSplit->addChild( ignoreButton );
+
+  NCSpacing * sp5 = new NCSpacing( hSplit, opt, 0.2, true, false );
+  hSplit->addChild( sp5 );
+
+  ignoreAllButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::IgnAllLabel().str()) );
+  ignoreAllButton->setId( PkgNames::IgnoreAll() );
+  hSplit->addChild( ignoreAllButton );
+
+  NCSpacing * sp6 = new NCSpacing( hSplit, opt, 0.2, true, false );
+  hSplit->addChild( sp6 );
+  
   // add the cancel button
-  cancelButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::CancelIgnore().str()) );
+  cancelButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::CancelLabel().str()) );
   cancelButton->setId( PkgNames::Cancel () );
   hSplit->addChild( cancelButton );
 
@@ -194,14 +208,16 @@ void NCPopupDeps::showDependencies( )
     {
 	// fill the list with packages which have unresolved deps
 	evaluateErrorResult( pkgs, badList );
-	
-	// show first dependency
-	concretelyDependency( pkgs->getCurrentItem() );
-	
-	showDependencyPopup();    // show the dependencies
 
-	pkgs->setKeyboardFocus();
+	if ( !dependencies.empty() )
+	{
+	    // show first dependency
+	    concretelyDependency( pkgs->getCurrentItem() );
+	
+	    showDependencyPopup();    // show the dependencies
 
+	    pkgs->setKeyboardFocus();
+	}
     }
     
 }
@@ -226,20 +242,20 @@ bool NCPopupDeps::evaluateErrorResult( NCPkgTable * table,
     {
 	if ( !(*it).unresolvable.empty() )
 	{
-	    addDepsLine( table, (*it), PkgNames::RequText().str() ); 
-	    dependencies.push_back( make_pair( (*it), PkgNames::RequText().str() ) );
+	    if ( addDepsLine( table, (*it), PkgNames::RequText().str() ) )
+		dependencies.push_back( make_pair( (*it), PkgNames::RequText().str() ) );
 	}
 
 	if ( !(*it).alternatives.empty() )
 	{
-	    addDepsLine( table, (*it), PkgNames::NeedsText().str() );
-	    dependencies.push_back( make_pair( (*it), PkgNames::NeedsText().str() ) );
+	    if ( addDepsLine( table, (*it), PkgNames::NeedsText().str() ) )
+		dependencies.push_back( make_pair( (*it), PkgNames::NeedsText().str() ) );
 	}
 
 	if ( !(*it).conflicts_with.empty() )
 	{
-	    addDepsLine( table, (*it), PkgNames::ConflictText().str() );
-	    dependencies.push_back( make_pair( (*it), PkgNames::ConflictText().str() ) );
+	    if ( addDepsLine( table, (*it), PkgNames::ConflictText().str() ) )
+		dependencies.push_back( make_pair( (*it), PkgNames::ConflictText().str() ) );
 	}
 
 	if ( !(*it).referers.empty()
@@ -247,8 +263,8 @@ bool NCPopupDeps::evaluateErrorResult( NCPkgTable * table,
 	     && (*it).unresolvable.empty()
 	     && (*it).alternatives.empty() )
 	{
-	    addDepsLine( table, (*it), PkgNames::RequByText().str());
-	    dependencies.push_back( make_pair( (*it), PkgNames::RequByText().str() ) );
+	    if ( addDepsLine( table, (*it), PkgNames::RequByText().str()) )
+		dependencies.push_back( make_pair( (*it), PkgNames::RequByText().str() ) );
 	}
 	++it;
     }
@@ -259,18 +275,34 @@ bool NCPopupDeps::evaluateErrorResult( NCPkgTable * table,
 }
 
 
-void NCPopupDeps::addDepsLine( NCPkgTable * table,
+bool NCPopupDeps::addDepsLine( NCPkgTable * table,
 			       const PkgDep::ErrorResult & error,
 			       string kind )
 {
     vector<string> pkgLine;
     pkgLine.reserve(4);
-
+    string pkgName;
     PMObjectPtr objPtr = error.solvable;
+    PMObjectPtr pkgPtr;
+    PMSelectable::UI_Status pkgStatus;
     
     if ( objPtr )
     {
-	pkgLine.push_back( objPtr->getSelectable()->name() );	// package name
+	pkgName =  objPtr->getSelectable()->name();
+	pkgPtr = objPtr;
+	pkgStatus =  objPtr->getSelectable()->status();
+    }
+    else
+    {
+	pkgName = error.name;
+	pkgPtr = PMObjectPtr();
+	pkgStatus = PMSelectable::S_NoInst; // use status not installed
+    }
+
+    // this dependencies is not ignored
+    if ( ignoreDependencies.find( pkgName+kind ) == ignoreDependencies.end() )
+    {
+	pkgLine.push_back( pkgName );	// package name
 	pkgLine.push_back( kind );
 	if ( kind != PkgNames::RequByText().str()
 	     && !error.referers.empty() )
@@ -278,25 +310,17 @@ void NCPopupDeps::addDepsLine( NCPkgTable * table,
 	    pkgLine.push_back( getReferersList( error) );
 	}
 
-	table->addLine( objPtr->getSelectable()->status(), //  get the package status
+	table->addLine( pkgStatus, //  the package status
 			pkgLine,
-			objPtr );	// the corresponding package pointer
-	
+			pkgPtr );	// the corresponding package pointer
+	return true;
     }
     else
     {
-	pkgLine.push_back( error.name );
-	pkgLine.push_back( kind );
-	if ( kind != PkgNames::RequByText().str()
-	     && !error.referers.empty() )
-	{
-	    pkgLine.push_back( getReferersList( error) );
-	}
-	table->addLine( PMSelectable::S_NoInst, // use status not installed
-			pkgLine,
-			PMObjectPtr() );	// no pointer available 
+	return false;
     }
 }
+
 
 string NCPopupDeps::getReferersList( const PkgDep::ErrorResult & error )
 {
@@ -317,7 +341,7 @@ string NCPopupDeps::getReferersList( const PkgDep::ErrorResult & error )
     {
 	refList += error.name;
     }
-    refList += " is required by ";
+    refList += PkgNames::RequiredByText().str();
 
     while ( it != error.referers.end() )
     {
@@ -570,7 +594,58 @@ bool NCPopupDeps::postAgain()
     {
 	return false;
     }
-    else if  ( currentId->compare( PkgNames::Solve () ) == YO_EQUAL )
+    else if ( currentId->compare( PkgNames::Ignore () ) == YO_EQUAL )
+    {
+	int index = pkgs->getCurrentItem();
+	string name;
+	
+	PkgDep::ErrorResult result = dependencies[index].first;
+	PMObjectPtr objPtr = result.solvable;
+
+	if ( objPtr )
+	{
+	    name = objPtr->getSelectable()->name();
+	}
+	else
+	{
+	    name = result.name;
+	}
+
+	string ignoreStr = name + dependencies[index].second;
+	NCMIL << "Ignoring: " << ignoreStr << endl;
+	
+	ignoreDependencies[ignoreStr] = true;
+
+	pkgs->setKeyboardFocus();
+    }
+    else if ( currentId->compare( PkgNames::IgnoreAll () ) == YO_EQUAL )
+    {
+	string name;
+	vector<pair<PkgDep::ErrorResult, string> >::iterator it;
+
+	for ( it = dependencies.begin(); it != dependencies.end(); ++it )
+	{
+	    PkgDep::ErrorResult result = (*it).first;
+	    PMObjectPtr objPtr = result.solvable;
+
+	    if ( objPtr )
+	    {
+		name = objPtr->getSelectable()->name();
+	    }
+	    else
+	    {
+		name = result.name;
+	    }
+
+	    string ignoreStr = name + (*it).second;
+	    NCMIL << "Ignoring: " << ignoreStr << endl;
+	
+	    ignoreDependencies[ignoreStr] = true;
+	}
+	
+	return false;
+    }
+    else if ( currentId->compare( PkgNames::Solve () ) == YO_EQUAL )
     {
 	// get currently selected package
 	PMObjectPtr currentPtr = pkgs->getDataPointer( pkgs->getCurrentItem() );

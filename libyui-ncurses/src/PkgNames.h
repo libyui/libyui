@@ -238,6 +238,16 @@ public:
      *  Widget id of the solve button
      */
     static const YCPValue& Solve ();
+
+   /**
+     *  Widget id of the Ignore button
+     */
+    static const YCPValue& Ignore ();
+
+    /**
+     *  Widget id of the Ignore all button
+     */
+    static const YCPValue& IgnoreAll ();
     
     /**
      *  Widget id of general help menu item
@@ -445,12 +455,12 @@ public:
    /**
      *  The label of the Ignore All button
      */
-    static const NCstring IgnoreAll();
+    static const NCstring IgnAllLabel();
 
     /**
      *  The label of the Ignore button
      */
-    static const NCstring Ignore();
+    static const NCstring IgnLabel();
     
     /**
      *  The label of the Solve button
@@ -661,6 +671,7 @@ public:
      */ 
     static const NCstring RequText();
     static const NCstring RequByText();
+    static const NCstring RequiredByText();
     static const NCstring UnresText();
     static const NCstring NoAvailText();
     static const NCstring NeedsText();

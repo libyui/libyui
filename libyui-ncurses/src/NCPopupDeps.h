@@ -51,11 +51,15 @@ class NCPopupDeps : public NCPopup {
 private:
 
     // the dependencies (index corresponds to line in package list)
-    vector<std::pair<PkgDep::ErrorResult, string> > dependencies;
+    vector<std::pair<PkgDep::ErrorResult, std::string> > dependencies;
 
+    map<std::string, bool> ignoreDependencies;
+    
     NCPushButton * cancelButton;
     NCPushButton * solveButton;		
-
+    NCPushButton * ignoreButton;
+    NCPushButton * ignoreAllButton;
+    
     NCPkgTable * deps;			// the conflict/alternative packages
 
     NCLabel * head;			// the headline
@@ -81,7 +85,7 @@ private:
     void createLayout();
     
 
-    void addDepsLine( NCPkgTable * table, const PkgDep::ErrorResult & error, string kind );
+    bool addDepsLine( NCPkgTable * table, const PkgDep::ErrorResult & error, string kind );
 
     string getReferersList( const PkgDep::ErrorResult & error );
     

@@ -325,6 +325,20 @@ const YCPValue& PkgNames::Solve ()
     return value;
 }
 
+// ignore button id
+const YCPValue& PkgNames::Ignore ()
+{
+    static const YCPValue value = createIdValue ( "ignore" );
+    return value;
+}
+
+// ignore button id
+const YCPValue& PkgNames::IgnoreAll ()
+{
+    static const YCPValue value = createIdValue ( "ignore_all" );
+    return value;
+}
+
 // combo box id
 const YCPValue& PkgNames::SearchBox ()
 {
@@ -511,7 +525,7 @@ const NCstring PkgNames::CancelIgnore()
     return value;
 }
 
-const NCstring PkgNames::IgnoreAll()
+const NCstring PkgNames::IgnAllLabel()
 {
     // the label of a Ingnire all button
     static const NCstring value = _("Ignore &All");
@@ -525,7 +539,7 @@ const NCstring PkgNames::SolveLabel()
     return value;
 }
 
-const NCstring PkgNames::Ignore()
+const NCstring PkgNames::IgnLabel()
 {
     // the label of a Ignore button
     static const NCstring value = _("&Ignore");
@@ -845,6 +859,14 @@ const NCstring PkgNames::RequByText()
     static const NCstring value = _("is required by ...");
     return value;
 }
+
+const NCstring PkgNames::RequiredByText()
+{
+    // part of a text (preserve the whitespace at the beginnig and end)
+    static const NCstring value = _(" is required by ");
+    return value;
+}
+
 const NCstring PkgNames::UnresText()
 {
      // text is shown in a  column of a package list entry
