@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Nov  4 19:13:47 CET 2004 - sh@suse.de
+
+- Added F8 hotkey to save y2logs 
+- V 2.11.2
+
+-------------------------------------------------------------------
 Tue Nov  2 14:05:39 CET 2004 - nashif@suse.de
 
 - Added new special widgets: YDate / YTime 
