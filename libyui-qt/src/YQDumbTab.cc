@@ -111,12 +111,7 @@ long YQDumbTab::nicesize( YUIDimension dim )
 void YQDumbTab::setSize( long newWidth, long newHeight )
 {
     resize( newWidth, newHeight );
-
-    // No need to call resizeClientArea() here:
-    // This widget is derived from QVBox which will handle geometry management
-    // for its children, i.e. they will get a resize event. This needs to be
-    // caught, however, to propagate the resizing to the YWidget geometry
-    // engine. The event filter handles this.
+    resizeClientArea();
 }
 
 
