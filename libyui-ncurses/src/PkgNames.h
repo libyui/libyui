@@ -560,9 +560,15 @@ public:
     static const NCstring NeedsText();
     static const NCstring ConflictText();
     static const NCstring NoConflictText();
+
+    static const NCstring MenuEtc();
+    static const NCstring MenuDeps();
     static const NCstring MenuCheckDeps();
     static const NCstring MenuAutoDeps();
     static const NCstring MenuNoAutoDeps();
+    static const NCstring MenuSel();
+    static const NCstring MenuSaveSel();	
+    static const NCstring MenuLoadSel();
     
 private:
     

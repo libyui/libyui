@@ -1007,14 +1007,20 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
     }
     else if ( event.selection->compare( PkgNames::AutoDeps() ) == YO_EQUAL )
     {
-	char menu[300];
-
+	char menu[600];
+	
 	if ( autoCheck )
 	{
 	    sprintf ( menu,
-		      "`ReplacePoint( `id(`replacemenu), `MenuButton( \"&Etc.\", [`item( `id(`showdeps), \"%s\" ), `item( `id(`autodeps), \"%s\" ) ] ) )",
+		      "`ReplacePoint( `id(`replacemenu),`MenuButton( \"%s\", [`menu( \"%s\", [`item( `id(`showdeps), \"%s\" ), `item( `id(`autodeps), \"%s\" ) ] ), `menu( \"%s\", [`item( `id(`save), \"%s\" ), `item( `id(`load), \"%s\" ) ] ) ] ) )",
+		      PkgNames::MenuEtc().str().c_str(),
+		      PkgNames::MenuDeps().str().c_str(),
 		      PkgNames::MenuCheckDeps().str().c_str(),
-		      PkgNames::MenuNoAutoDeps().str().c_str() ); 
+		      PkgNames::MenuNoAutoDeps().str().c_str(),
+		      PkgNames::MenuSel().str().c_str(),
+		      PkgNames::MenuSaveSel().str().c_str(),
+		      PkgNames::MenuLoadSel().str().c_str()  ); 
+
 
 	    YCPParser parser( menu );
 	    YCPValue layout = parser.parse();
@@ -1025,9 +1031,14 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 	else
 	{
 	    sprintf ( menu,
-		      "`ReplacePoint( `id(`replacemenu), `MenuButton( \"&Etc.\", [`item( `id(`showdeps), \"%s\" ), `item( `id(`autodeps), \"%s\" ) ] ) )",
+		      "`ReplacePoint( `id(`replacemenu),`MenuButton( \"%s\", [`menu( \"%s\", [`item( `id(`showdeps), \"%s\" ), `item( `id(`autodeps), \"%s\" ) ] ), `menu( \"%s\", [`item( `id(`save), \"%s\" ), `item( `id(`load), \"%s\" ) ] ) ] ) )",
+		      PkgNames::MenuEtc().str().c_str(),
+		      PkgNames::MenuDeps().str().c_str(),
 		      PkgNames::MenuCheckDeps().str().c_str(),
-		      PkgNames::MenuAutoDeps().str().c_str() );  
+		      PkgNames::MenuAutoDeps().str().c_str(),
+		      PkgNames::MenuSel().str().c_str(),
+		      PkgNames::MenuSaveSel().str().c_str(),
+		      PkgNames::MenuLoadSel().str().c_str()  ); 
 
 	    YCPParser parser( menu );
 	    YCPValue layout = parser.parse();

@@ -800,22 +800,59 @@ const NCstring PkgNames::ShortDescr()
     return value;
 }
 
+const NCstring PkgNames::MenuEtc()
+{
+    // menu Etc.
+    static const NCstring value = _("&Etc.");
+    return value;
+}
+
+const NCstring PkgNames::MenuDeps()
+{
+    // submenu: dependency
+    static const NCstring value = _("&Dependencies");
+    return value;
+}
+
 const NCstring PkgNames::MenuCheckDeps()
 {
-    // menu entry
+    // menu entry: do a dependency check 
     static const NCstring value = _("    &Check dependencies now");
     return value;
 }
 
 const NCstring PkgNames::MenuNoAutoDeps()
 {
+    // menu entry: dependency check off
     static const NCstring value = _("[ ] &Automatic dependency check");
     return value;
 }
 
 const NCstring PkgNames::MenuAutoDeps()
 {
+    // menu entry: dependency check on
     static const NCstring value = _("[X] &Automatic dependency check");
+    return value;
+}
+
+const NCstring PkgNames::MenuSel()
+{
+    // submenu: selections
+    static const NCstring value = _("&Selections");
+    return value;
+}
+
+const NCstring PkgNames::MenuSaveSel()
+{
+    // menu entry
+    static const NCstring value = _("S&ave selection");
+    return value;
+}
+
+const NCstring PkgNames::MenuLoadSel()
+{
+    // last menu entry of the Etc. menu
+    static const NCstring value = _("&Load selection");
     return value;
 }
 
