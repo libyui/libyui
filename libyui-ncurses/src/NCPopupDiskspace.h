@@ -68,6 +68,8 @@ public:
     virtual long nicesize(YUIDimension dim);
 
     void fillPartitionTable();
+
+    string checkDiskSpace();
     
     void createLayout( const YCPString & headline );
 

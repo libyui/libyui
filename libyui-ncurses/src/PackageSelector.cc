@@ -1305,12 +1305,24 @@ bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 // 
 bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 {
-    // FIXME - check diskspace
-
     if ( !youMode )
     {
 	// show the dependency popup
 	showPackageDependencies( true ); 	// do the check
+    }
+
+    if ( diskspacePopup )
+    {
+	string message = "";
+	message = diskspacePopup->checkDiskSpace();
+	if ( message != "" )
+	{
+	    // open the popup with the text
+	    NCPopupInfo spaceMsg( wpos( 1, 1 ),
+				  PkgNames::ErrorLabel().str(),
+				  YCPString( PkgNames::DiskSpaceError().str() + "<br>" + message ) );
+	    spaceMsg.showInfoPopup( );
+	}
     }
     
     NCMIL <<  "OK button pressed - leaving package selection, starting installation" << endl;

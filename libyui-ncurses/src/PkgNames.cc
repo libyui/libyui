@@ -853,6 +853,7 @@ const NCstring PkgNames::RequText()
     static const NCstring value = _("requires ...");
     return value;
 }
+
 const NCstring PkgNames::RequByText()
 {
     // text is shown in a column of a package list entry
@@ -862,8 +863,22 @@ const NCstring PkgNames::RequByText()
 
 const NCstring PkgNames::RequiredByText()
 {
-    // part of a text (preserve the whitespace at the beginnig and end)
-    static const NCstring value = _(" is required by ");
+    // part of a text
+    static const NCstring value = _("is required by");
+    return value;
+}
+
+const NCstring PkgNames::MoreText()
+{
+    // part of a text
+    static const NCstring value = _("needs");
+    return value;
+}
+
+const NCstring PkgNames::MoreSpaceText()
+{
+    // part of a text
+    static const NCstring value = _("more diskspace.");
     return value;
 }
 
@@ -873,6 +888,7 @@ const NCstring PkgNames::UnresText()
     static const NCstring value = _("unresolvable ...");
     return value;
 }
+
 const NCstring PkgNames::NoAvailText()
 {
      // text is shown in a line of a package list
@@ -986,14 +1002,14 @@ const NCstring PkgNames::MenuLoadSel()
 const NCstring PkgNames::DiskSpaceError()
 {
     // 
-    static const NCstring value = _("<b>Error:</b> Out of disk space!");
+    static const NCstring value = _("<b>Out of disk space!</b>");
     return value;
 }
 
 const NCstring PkgNames::DiskSpaceWarning()
 {
     // 
-    static const NCstring value = _("<b>Warning:</b> Disk space is running out!");
+    static const NCstring value = _("<b>Disk space is running out!</b>");
     return value;
 }
 

@@ -123,7 +123,6 @@ void NCPopupDiskspace::fillPartitionTable()
     pkgLine.reserve(5);
     int i = 0;
 
-    
     const PkgDuMaster & duMaster =  Y2PM::packageManager().updateDu();        
 
     std::set<PkgDuMaster::MountPoint>::iterator it = duMaster.mountpoints().begin();
@@ -144,6 +143,40 @@ void NCPopupDiskspace::fillPartitionTable()
 	++it;
 	i++;
     }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPopupDiskspace::checkDiskSpace
+//	METHOD TYPE : string
+//
+//	DESCRIPTION :
+//
+string NCPopupDiskspace::checkDiskSpace()
+{
+    string text = "";
+    
+    const PkgDuMaster & duMaster =  Y2PM::packageManager().updateDu();        
+
+    std::set<PkgDuMaster::MountPoint>::iterator it = duMaster.mountpoints().begin();
+
+    while ( it != duMaster.mountpoints().end() )
+    {
+	if ( (*it).pkg_available() < (FSize)0 )
+	{
+	    text += (*it).mountpoint();
+	    text += " ";
+	    text += PkgNames::MoreText().str();
+	    text += " ";
+	    text += (*it).pkg_available().asString();
+	    text += " ";
+	    text += PkgNames::MoreSpaceText().str();
+	    text += "<br>";
+	}
+	++it;
+    }
+    return text;
 }
 
 string NCPopupDiskspace::usedPercent( FSize used, FSize total )

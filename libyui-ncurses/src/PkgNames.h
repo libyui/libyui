@@ -693,7 +693,10 @@ public:
     static const NCstring MenuSel();
     static const NCstring MenuSaveSel();	
     static const NCstring MenuLoadSel();
-    
+
+    static const NCstring MoreText();
+    static const NCstring MoreSpaceText();
+
 private:
     
     // Need no object of this class: hide default constructor
