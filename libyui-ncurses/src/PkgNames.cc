@@ -684,7 +684,28 @@ const NCstring PkgNames::IgnoreCase()
 const NCstring PkgNames::DiskspaceLabel()
 {
     // the headline of the disk space popup
-    static const NCstring value = _( "&Disk Usage Overview" );
+    static const NCstring value = _( "Disk Usage Overview" );
+    return value;
+}
+
+const NCstring PkgNames::MediumLabel()
+{
+    // label of a combo box (medium means floppy or hard disk)
+    static const NCstring value = _( "&Medium" );
+    return value;
+}
+
+const NCstring PkgNames::Harddisk()
+{
+    // combo box entry
+    static const NCstring value = _( "Hard disk" );
+    return value;
+}
+
+const NCstring PkgNames::Floppy()
+{
+    // combo box entry
+    static const NCstring value = _( "Floppy" );
     return value;
 }
 

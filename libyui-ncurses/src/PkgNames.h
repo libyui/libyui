@@ -497,7 +497,22 @@ public:
      * The label of text input field 
      */
     static const NCstring FileName();
-    
+
+   /**
+     * The label of the combo box medium 
+     */
+    static const NCstring MediumLabel();
+
+    /**
+     * A combo box entry 
+     */
+    static const NCstring Harddisk();
+
+   /**
+     * A combo box entry 
+     */
+    static const NCstring Floppy();
+
     /**
      * Part 1 of help text package installation
      */
