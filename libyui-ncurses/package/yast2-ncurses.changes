@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Sep  8 16:34:57 CEST 2003 - gs@suse.de
+
+- V 2.8.16
+- new style for not active selection box widget (bug #30035)  
+
+-------------------------------------------------------------------
 Fri Sep 05 17:12:48 CEST 2003 - arvin@suse.de
 
 - don't allocate tmp buffer on stack (can be too huge) (bug #29716)
