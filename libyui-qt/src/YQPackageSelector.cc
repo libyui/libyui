@@ -1047,8 +1047,9 @@ YQPackageSelector::fakeData()
     {
 	PMYouServer server( "dir:///8.1-patches" );
 	InstYou &you = Y2PM::youPatchManager().instYou();
-	you.paths()->setPatchServer( server );
-	you.retrievePatchInfo( false );
+	you.settings()->setPatchServer( server );
+	you.settings()->setReloadPatches( false );
+        you.retrievePatchInfo();
 	Y2PM::youPatchManager().instYou().selectPatches( PMYouPatch::kind_recommended |
 							 PMYouPatch::kind_security     );
 	y2milestone( "Fake YOU patches initialized" );
