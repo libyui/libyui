@@ -24,7 +24,7 @@
 
 #include <QY2ListView.h>
 #include <y2pm/PMObject.h>
-
+#include <y2pm/PMSelectable.h>
 
 class YQPkgObjListItem;
 class QAction;

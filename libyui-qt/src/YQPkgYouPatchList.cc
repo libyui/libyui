@@ -26,7 +26,7 @@
 #include <qaction.h>
 
 #include <Y2PM.h>
-#include <y2pm/PMManager.h>
+#include <y2pm/PMYouPatchManager.h>
 
 #include "YQi18n.h"
 #include "utf8.h"
@@ -231,7 +231,7 @@ YQPkgYouPatchListItem::setStatus( PMSelectable::UI_Status newStatus )
 {
     YQPkgObjListItem::setStatus( newStatus );
 
-#warning TODO: Activate patch
+    Y2PM::youPatchManager().updatePackageStates();
 
     _youPatchList->sendUpdatePackages();
 }

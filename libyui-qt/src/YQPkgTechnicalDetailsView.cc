@@ -22,7 +22,7 @@
 #include <ycp/y2log.h>
 
 #include <Y2PM.h>
-#include <y2pm/PMManager.h>
+#include <y2pm/PMPackageManager.h>
 
 #include "YQPkgTechnicalDetailsView.h"
 #include "YQi18n.h"

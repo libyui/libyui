@@ -24,7 +24,7 @@
 #include <qregexp.h>
 
 #include <Y2PM.h>
-#include <y2pm/PMManager.h>
+#include <y2pm/PMSelectionManager.h>
 
 #include "YQi18n.h"
 #include "utf8.h"

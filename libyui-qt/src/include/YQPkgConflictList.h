@@ -24,6 +24,7 @@
 
 #include <qmap.h>
 #include <y2pm/PkgDep.h>
+#include <y2pm/PMSelectable.h>
 #include "QY2ListView.h"
 
 
