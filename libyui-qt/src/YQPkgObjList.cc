@@ -518,7 +518,7 @@ YQPkgObjListItem::setText( int column, const std::string text )
 void
 YQPkgObjListItem::setText( int column, const PkgEdition & edition )
 {
-    setText( column, PkgEdition::toString( edition ) );
+    setText( column, edition.asString() );
 }
 
 

@@ -180,7 +180,7 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
     if ( ! edition.is_unspecified() )
     {
 	_fullName += " ";
-	_fullName += ( PkgEdition::toString( edition ) ).c_str();
+	_fullName += edition.asString().c_str();
     }
 
     setBackgroundColor( LIGHT_BLUE );
@@ -354,7 +354,7 @@ YQPkgConflict::dumpList( QListViewItem * 	parent,
 	}
 
 	std::string pkg1 = (*it).name;
-	std::string pkg2 = PkgRelation::toString( (*it).rel );
+	std::string pkg2 = (*it).rel.asString();
 	QString text;
 
 	if ( (*it).is_conflict )

@@ -139,7 +139,7 @@ YQPkgDependenciesView::cell( const PMSolvable::PkgRelList_type & list )
 	if ( ! html.isEmpty() )
 	    html += "<br>";
 
-	html += htmlEscape( PkgRelation::toString( *it ).c_str() );
+	html += htmlEscape( (*it).asString().c_str() );
 	++it;
     }
 

@@ -209,7 +209,7 @@ YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
 {
     std::string arch = pmObj->arch();
     
-    setText( versionCol(), PkgEdition::toString( pmObj->edition() ).c_str() );
+    setText( versionCol(), pmObj->edition().asString().c_str() );
     setText( archCol(),    arch.c_str() );
     setText( instSrcCol(), pmObj->instSrcLabel().c_str() );
     setOn( pmObj->isCandidateObj() );
