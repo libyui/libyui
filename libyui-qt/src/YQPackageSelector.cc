@@ -14,6 +14,8 @@
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
+  Textdomain "packages-qt"
+  
 /-*/
 
 #define CHECK_DEPENDENCIES_ON_STARTUP	1
@@ -104,6 +106,8 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     if ( _youMode )	y2milestone( "YOU mode" );
     if ( _updateMode )	y2milestone( "Update mode" );
 
+
+    textdomain( "packages-qt" );
     setFont( _yuiqt->currentFont() );
     yuiqt->blockWmClose(); // Automatically undone after UI::RunPkgSelection()
     _conflictDialog = new YQPkgConflictDialog( this );
