@@ -101,16 +101,25 @@ public:
     int kindCol() const { return _kindCol; }
 
     /**
-     * Returns whether or not the list should include patches that are installed.
+     * Categories of patches to display in the list
      **/
-    bool showInstalledPatches() const { return _showInstalledPatches; }
+    enum PatchCategory
+    {
+	InstallablePatches,
+	InstallableAndInstalledPatches,
+	AllPatches
+    };
+    
+    /**
+     * Return the patch category that is displayed in the list.
+     **/
+    PatchCategory patchCategory() const { return _patchCategory; }
 
     /**
-     * Switch display of installed patches on or off.
+     * Set the category of patches to be displayed in the list.
      * This does NOT trigger redisplaying the list - use fillList() for that.
-     * Default is off.
      **/
-    void setShowInstalledPatches( bool show ) { _showInstalledPatches = show; }
+    void setPatchCategory( PatchCategory newCt ) { _patchCategory = newCt; }
 
     /**
      * Add a submenu "All in this list..." to 'menu'.
@@ -179,8 +188,8 @@ protected:
 
     // Data members
 
-    int		_kindCol;
-    bool	_showInstalledPatches;
+    int			_kindCol;
+    PatchCategory	_patchCategory;
 };
 
 

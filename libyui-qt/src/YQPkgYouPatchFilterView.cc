@@ -22,7 +22,7 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include <qcheckbox.h>
+#include <qcombobox.h>
 #include <qlabel.h>
 #include <qsplitter.h>
 #include <qtabwidget.h>
@@ -55,11 +55,20 @@ YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
     _youPatchList		= new YQPkgYouPatchList( vbox );		CHECK_PTR( _youPatchList 	);
 
     addVSpacing( vbox, 4 );
-    _showInstalledPatches	= new QCheckBox( _( "Include &Installed Patches" ), vbox );
-    CHECK_PTR( _showInstalledPatches );
-    _showInstalledPatches->setChecked( false );
-    connect( _showInstalledPatches, SIGNAL( clicked() ), this, SLOT( fillPatchList() ) );
-    _youPatchList->setShowInstalledPatches( _showInstalledPatches->isChecked() );
+    
+    QHBox * hbox 		= new QHBox( vbox ); CHECK_PTR( hbox );
+    QLabel * label		= new QLabel( _( "&Show Patch Category:" ), hbox );
+    
+    _patchCategory		= new QComboBox( hbox );
+    CHECK_PTR( _patchCategory );
+    
+    _patchCategory->insertItem( _( "Installable Patches" ),			0 );
+    _patchCategory->insertItem( _( "Installable and Installed Patches" ),	1 );
+    _patchCategory->insertItem( _( "All Patches" ),				2 );
+    _patchCategory->setCurrentItem( 0 );
+    label->setBuddy( _patchCategory );
+    
+    connect( _patchCategory, SIGNAL( activated( int ) ), this, SLOT( fillPatchList() ) );
     addVSpacing( vbox, 4 );
 
     vbox			= new QVBox( _splitter );			CHECK_PTR( vbox			);
@@ -78,7 +87,7 @@ YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
     //
 
     addVSpacing( vbox, 4 );
-    QHBox * hbox 		= new QHBox( vbox ); CHECK_PTR( hbox );
+    hbox = new QHBox( vbox ); CHECK_PTR( hbox );
     addHStretch( hbox );
     
     new QLabel( _( "Total Download Size:" ) + " ", hbox );
@@ -119,7 +128,17 @@ YQPkgYouPatchFilterView::updateTotalDownloadSize()
 void
 YQPkgYouPatchFilterView::fillPatchList()
 {
-    _youPatchList->setShowInstalledPatches( _showInstalledPatches->isChecked() );
+    YQPkgYouPatchList::PatchCategory category;
+    
+    switch ( _patchCategory->currentItem() )
+    {
+	case 0:		category = YQPkgYouPatchList::InstallablePatches;			break;
+	case 1:		category = YQPkgYouPatchList::InstallableAndInstalledPatches;		break;
+	case 2:		category = YQPkgYouPatchList::AllPatches;				break;
+	default:	category = YQPkgYouPatchList::InstallablePatches;			break;
+    }
+    
+    _youPatchList->setPatchCategory( category );
     _youPatchList->fillList();
     _youPatchList->selectSomething();
 }

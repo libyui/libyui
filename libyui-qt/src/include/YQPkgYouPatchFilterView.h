@@ -28,7 +28,7 @@
 
 class YQPkgYouPatchList;
 class YQPkgDescriptionView;
-class QCheckBox;
+class QComboBox;
 class QLabel;
 class QSplitter;
 class QTabWidget;
@@ -78,8 +78,8 @@ public slots:
 protected slots:
 
     /**
-     * Fill the YOU patch list with regard to the _showInstalledPatches
-     * check box.
+     * Fill the YOU patch list with regard to the _patchCategory
+     * combo box.
      **/
     void fillPatchList();
 
@@ -91,7 +91,7 @@ protected:
 
     QSplitter *			_splitter;
     YQPkgYouPatchList *		_youPatchList;
-    QCheckBox *			_showInstalledPatches;
+    QComboBox *			_patchCategory;
     QTabWidget *		_detailsViews;
     YQPkgDescriptionView *	_descriptionView;
     QLabel *			_totalDownloadSize;

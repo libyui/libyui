@@ -39,7 +39,7 @@ using std::list;
 
 YQPkgYouPatchList::YQPkgYouPatchList( QWidget * parent )
     : YQPkgObjList( parent )
-    , _showInstalledPatches( false )
+    , _patchCategory( InstallablePatches )
 {
     y2debug( "Creating YOU patch list" );
 
@@ -91,8 +91,21 @@ YQPkgYouPatchList::fillList()
 
 	if ( patch )
 	{
-	    if ( _showInstalledPatches || status != PMSelectable::S_KeepInstalled )
-		addYouPatchItem( patch );
+	    switch ( _patchCategory )
+	    {
+		case InstallablePatches:
+		    if ( patch->installable() && status != PMSelectable::S_KeepInstalled )
+			addYouPatchItem( patch );
+		    break;
+		    
+		case InstallableAndInstalledPatches:
+		    if ( patch->installable() )
+			addYouPatchItem( patch );
+		    break;
+
+		case AllPatches:
+		    addYouPatchItem( patch );
+	    }
 	}
 
 	++it;
