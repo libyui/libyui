@@ -75,7 +75,7 @@ YQPkgConflictList::fill( PkgDep::ErrorResultList & badList )
 
 	if ( conflict->isIgnored() )
 	{
-	    // y2milestone( "Ignoring conflict: %s", (const char *) conflict->text(0) );
+	    // y2debug( "Ignoring conflict: %s", (const char *) conflict->text(0) );
 	    delete conflict;	// Yes, this is stupid. The solver should handle that.
 	}
 
@@ -568,6 +568,7 @@ YQPkgConflict::isIgnored( const QString & conflictHeader )
 void
 YQPkgConflict::ignore( const QString & conflictHeader )
 {
+    y2milestone( "Ignoring conflict: %s", (const char *) conflictHeader );
     _ignore.insert( conflictHeader, true );
 }
 
@@ -575,6 +576,7 @@ YQPkgConflict::ignore( const QString & conflictHeader )
 void
 YQPkgConflict::resetIgnoredConflicts()
 {
+    y2milestone( "Resetting all ignored conflicts" );
     _ignore.clear();
 }
 

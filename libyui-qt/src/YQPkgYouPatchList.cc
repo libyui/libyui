@@ -77,14 +77,6 @@ YQPkgYouPatchList::fillList()
 
 	if ( patch )
 	{
-#if 0
-	    // DEBUG
-	    {
-		std::string name = patch->name();
-		y2milestone( "Found patch '%s'", name.c_str() );
-	    }
-	    // DEBUG
-#endif
 	    addYouPatchItem( patch );
 	}
 

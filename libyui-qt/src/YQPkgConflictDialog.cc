@@ -137,13 +137,13 @@ YQPkgConflictDialog::solveAndShowConflicts()
     PkgDep::ResultList		goodList;
     PkgDep::ErrorResultList	badList;
 
-    // y2milestone( "Solving..." );
+    y2debug( "Solving..." );
     YUIQt::yuiqt()->busyCursor();
 
     bool success = Y2PM::packageManager().solveInstall( goodList, badList );
 
     YUIQt::yuiqt()->normalCursor();
-    // y2milestone( "Solving done" );
+    y2debug( "Solving done" );
     emit updatePackages();
 
     if ( success )
@@ -153,7 +153,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
     }
     else
     {
-	// y2milestone( "Dependency conflict!" );
+	y2debug( "Dependency conflict!" );
 	_conflictList->fill( badList );
 
 	if ( _conflictList->isEmpty() ) // Maybe all conflicts are ignored

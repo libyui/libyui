@@ -34,26 +34,24 @@
 YQPkgUpdateProblemFilterView::YQPkgUpdateProblemFilterView( QWidget *parent )
     : QTextBrowser( parent )
 {
-    y2milestone( "Creating update problems view" );
-
     QString html = _( "\
-<br>\
-<h2>Update Problem</h2>\
-<p>\
-<font color=blue>\
-The packages in this list cannot be updated automatically.\
-</font>\
-</p>\
-<p>Possible reasons:</p>\
-<ul>\
-<li>They are obsoleted by other packages\
-<li>There is no newer version to update to on any installation media\
-<li>They are third-party packages\
-</ul>\
-</p>\
-<p>\
-Please choose manually what to do with them.\
-The safest course of action is to delete them.\
+<br>\n\
+<h2>Update Problem</h2>\n\
+<p>\n\
+<font color=blue>\n\
+The packages in this list cannot be updated automatically.\n\
+</font>\n\
+</p>\n\
+<p>Possible reasons:</p>\n\
+<ul>\n\
+<li>They are obsoleted by other packages\n\
+<li>There is no newer version to update to on any installation media\n\
+<li>They are third-party packages\n\
+</ul>\n\
+</p>\n\
+<p>\n\
+Please choose manually what to do with them.\n\
+The safest course of action is to delete them.\n\
 </p>\
 " );
 

@@ -624,7 +624,7 @@ YQPkgObjListItem::showNotifyTexts( PMSelectable::UI_Status status )
 
     if ( ! text.empty() )
     {
-	// y2milestone( "Showing notify text" );
+	y2debug( "Showing notify text" );
 	YQPkgTextDialog::showText( _pkgObjList, _pmObj, text );
     }
 }
