@@ -1,7 +1,9 @@
 -------------------------------------------------------------------
 Mon Mar  1 14:26:00 CET 2004 - gs@suse.de
 
+- V 2.9.10
 - package installation: sort list of search results (bug #35060)
+- RichText: change colors for bold text and headline (bug #34410)
 
 -------------------------------------------------------------------
 Fri Feb 27 13:45:51 CET 2004 - visnov@suse.cz
