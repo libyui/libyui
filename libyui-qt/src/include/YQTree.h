@@ -155,19 +155,19 @@ public:
     /**
      * Constructor for a top level item.
      **/
-    YQTreeItem( YQTree	*		tree,
-		QListView *		parent,
-		const YTreeItem *	origItem,
-		int			serial	);
+    YQTreeItem( YQTree	*	tree,
+		QListView *	parent,
+		YTreeItem *	origItem,
+		int		serial	);
 
 
     /**
      * Constructor for a non-top level item.
      **/
-    YQTreeItem( YQTree	*		tree,
-		YQTreeItem *		parent,
-		const YTreeItem *	origItem,
-		int			serial	);
+    YQTreeItem( YQTree	*	tree,
+		YQTreeItem *	parent,
+		YTreeItem *	origItem,
+		int		serial	);
 
     /**
      * Recursively build the subtree corresponding to 'items'.
@@ -177,7 +177,14 @@ public:
     /**
      * Returns the original YTreeItem of which this item is a clone.
      */
-    const YTreeItem * origItem() { return _origItem; }
+    YTreeItem * origItem() { return _origItem; }
+
+    /**
+     * Open this item.
+     *
+     * Reimplemented from QListViewItem.
+     **/
+    virtual void setOpen( bool open );
 
 
 private:
@@ -185,9 +192,9 @@ private:
     /**
      * Init function. All constructors end up here.
      */
-    void init( YQTree *			tree,
-	       const YTreeItem *	yTreeItem,
-	       int			serial );
+    void init( YQTree *		tree,
+	       YTreeItem *	yTreeItem,
+	       int		serial );
 
 
 protected:
@@ -200,7 +207,7 @@ protected:
     /**
      * The original YTreeItem of which this item is a clone.
      */
-    const YTreeItem * _origItem;
+    YTreeItem * _origItem;
 
     /**
      * The serial number of this item so the insertion sort order can

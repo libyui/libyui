@@ -155,7 +155,9 @@ YQTree::setCurrentItem( YTreeItem * yit )
 	while ( ( it = ( YQTreeItem * ) it->parent() ) )
 	{
 	    if ( ! it->isOpen() )
+	    {
 		it->setOpen( true );
+	    }
 	}
 
 	_listView->ensureItemVisible( it );
@@ -208,20 +210,20 @@ YQTree::setKeyboardFocus()
 
 
 
-YQTreeItem::YQTreeItem( YQTree	*		tree,
-			QListView *		parent,
-			const YTreeItem *	yTreeItem,
-			int			serial )
+YQTreeItem::YQTreeItem( YQTree	*	tree,
+			QListView *	parent,
+			YTreeItem *	yTreeItem,
+			int		serial )
     : QListViewItem( parent )
 {
     init( tree, yTreeItem, serial );
 }
 
 
-YQTreeItem::YQTreeItem( YQTree	*		tree,
-			YQTreeItem *		parent,
-			const YTreeItem *	yTreeItem,
-			int			serial )
+YQTreeItem::YQTreeItem( YQTree	*	tree,
+			YQTreeItem *	parent,
+			YTreeItem *	yTreeItem,
+			int		serial )
     : QListViewItem( parent )
 {
     init( tree, yTreeItem, serial );
@@ -229,9 +231,9 @@ YQTreeItem::YQTreeItem( YQTree	*		tree,
 
 
 void
-YQTreeItem::init( YQTree *		tree,
-		  const YTreeItem *	yTreeItem,
-		  int			serial )
+YQTreeItem::init( YQTree *	tree,
+		  YTreeItem *	yTreeItem,
+		  int		serial )
 {
     _tree = tree;
     _tree->registerItem ( yTreeItem, this );
@@ -259,6 +261,15 @@ YQTreeItem::buildSubTree( YTreeItemList & items, int & nextSerialNo )
 	}
     }
 }
+
+
+void
+YQTreeItem::setOpen( bool open )
+{
+    QListViewItem::setOpen( open );
+    _origItem->setOpen( open );
+}
+
 
 
 QString
