@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Sep  5 19:08:32 CEST 2002 - gs@suse.de
+
+- V 2.6.10
+- package installation: return `cancel and `accept
+- show the package dependencies (not yet completed)
+- set status to taboo is possible now 
+
+-------------------------------------------------------------------
 Tue Sep  3 14:46:43 CEST 2002 - gs@suse.de
 
 - V 2.6.9
