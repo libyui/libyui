@@ -112,8 +112,9 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui )
     // create the selections popup
     selectionPopup = new NCPopupSelection( wpos( 1, 1 ), this );
 
-    NCstring text( "This is for UI testing only.");
-    NCPopupInfo info( wpos( 1, 1 ), YCPString( "Warning" ), text.YCPstr() );
+    NCstring text( "This is a development version of the NCurses single package selection, included in this Beta as a kind of demo.<br>Some things work, some don't, some work but are still really slow. You can view some package data, but setting a package status does not have any effect yet. As of now, all bug reports for this thing will be routed to /dev/null.<br>We are working heavily on it, so if you want to contribute, the easiest thing you can do right now is not swamp us with bugzilla reports, but let us work in the remaining time.<br> Thank you.<br> -gs" );
+    NCPopupInfo info( wpos( 5, 5 ), YCPString( "Warning" ), text.YCPstr() );
+    info.setNiceSize( 50, 20 );
     info.showInfoPopup( );
 }
 
@@ -337,7 +338,7 @@ bool PackageSelector::fillPackageList( NCPkgTable *pkgTable, const YCPString & l
     	return false;
     }
 
-    NCMIL <<  "Filter: " <<  label->toString() << " is selected" << endl;
+    NCMIL <<  "Label: " <<  label->toString() << " Filter: " << filter << endl;
 
     string::size_type len = filter.length();
 
