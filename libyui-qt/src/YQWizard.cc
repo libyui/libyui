@@ -42,14 +42,18 @@
 #include <qimage.h>
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qmenubar.h>
+#include <qmenudata.h>
 #include <qobjectlist.h>
 #include <qpixmap.h>
+#include <qpopupmenu.h>
 #include <qpushbutton.h>
 #include <qregexp.h>
 #include <qtabwidget.h>
 #include <qtextbrowser.h>
 #include <qtoolbutton.h>
 #include <qwidgetstack.h>
+
 #include "QY2ListView.h"
 
 #include "utf8.h"
@@ -119,6 +123,7 @@ YQWizard::YQWizard( QWidget *		parent,
     _helpPanel		= 0;
     _helpBrowser	= 0;
     _clientArea		= 0;
+    _menuBar		= 0;
     _dialogIcon		= 0;
     _dialogHeading	= 0;
     _contents		= 0;
@@ -821,6 +826,22 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
     workArea->setFrameStyle( QFrame::Box | QFrame::Plain );
     workArea->setMargin( 4 );
 
+    
+    //
+    // Menu bar
+    //
+
+    // Placed directly inside workArea the menu bar positions itself at (0,0)
+    // and so obscures any kind of frame there might be.
+    QVBox * menuBarParent = new QVBox( workArea );
+    CHECK_PTR( menuBarParent );
+    
+    _menuBar = new QMenuBar( menuBarParent );
+    CHECK_PTR( _menuBar );
+
+    _menuBar->hide();	// will be made visible when menus are added
+
+
     //
     // Dialog icon and heading
     //
@@ -1269,6 +1290,110 @@ void YQWizard::showTree()
 
 
 
+void YQWizard::addMenu( const QString & text,
+			const QString & id )
+{
+    if ( _menuBar )
+    {
+	QPopupMenu * menu = new QPopupMenu( this );
+	CHECK_PTR( menu );
+
+	_menuIDs.insert( id, menu );
+	_menuBar->insertItem( text, menu );
+
+	connect( menu, SIGNAL( activated    ( int ) ),
+		 this, SLOT  ( sendMenuEvent( int ) ) );
+	
+	if ( _menuBar->isHidden() )
+	    _menuBar->show();
+    }
+}
+
+
+void YQWizard::addSubMenu( const QString & parentMenuID,
+			   const QString & text,
+			   const QString & id )
+{
+    QPopupMenu * parentMenu = _menuIDs[ parentMenuID ];
+
+    if ( parentMenu )
+    {
+	QPopupMenu * menu = new QPopupMenu( this );
+	CHECK_PTR( menu );
+
+	_menuIDs.insert( id, menu );
+	parentMenu->insertItem( text, menu );
+	
+	connect( menu, SIGNAL( activated    ( int ) ),
+		 this, SLOT  ( sendMenuEvent( int ) ) );
+    }
+    else
+    {
+	y2error( "Can't find menu with ID %s", (const char *) parentMenuID );
+    }
+}
+
+
+void YQWizard::addMenuEntry( const QString & parentMenuID,
+			     const QString & text,
+			     const QString & idString )
+{
+    QPopupMenu * parentMenu = _menuIDs[ parentMenuID ];
+
+    if ( parentMenu )
+    {
+	int id = _menuEntryIDs.size();
+	_menuEntryIDs.push_back( idString );
+	parentMenu->insertItem( text, id );
+    }
+    else
+    {
+	y2error( "Can't find menu with ID %s", (const char *) parentMenuID );
+    }
+}
+
+
+void YQWizard::addMenuSeparator( const QString & parentMenuID )
+{
+    QPopupMenu * parentMenu = _menuIDs[ parentMenuID ];
+
+    if ( parentMenu )
+    {
+	parentMenu->insertSeparator();
+    }
+    else
+    {
+	y2error( "Can't find menu with ID %s", (const char *) parentMenuID );
+    }
+}
+
+
+void YQWizard::deleteMenus()
+{
+    if ( _menuBar )
+    {
+	_menuBar->clear();
+	_menuBar->hide();
+	_menuIDs.clear();
+	_menuEntryIDs.clear();
+    }
+}
+
+
+void YQWizard::sendMenuEvent( int numID )
+{
+    if ( numID >= 0 && numID < (int) _menuEntryIDs.size() )
+    {
+	sendEvent( YCPString( (const char *) _menuEntryIDs[ numID ] ) );
+    }
+    else
+    {
+	y2error( "Invalid menu ID: %d", numID );
+    }
+}
+
+
+
 void YQWizard::sendEvent( YCPValue id )
 {
     // Wizard events are sent as menu events - the semantics are similar.
@@ -1320,6 +1445,52 @@ bool YQWizard::eventFilter( QObject * obj, QEvent * ev )
 
     return QWidget::eventFilter( obj, ev );
 }
+
+
+void YQWizard::setButtonLabel( YQWizardButton * button, const QString & newLabel )
+{
+    if ( button )
+    {
+	button->setLabel( newLabel );
+
+	if ( newLabel.isEmpty() )
+	{
+	    button->hide();
+
+	    if ( button == _backButton && _backButtonSpacer )
+		_backButtonSpacer->hide();
+	}
+	else
+	    button->show();
+    }
+}
+
+
+void YQWizard::setButtonID( YQWizardButton * button, const YCPValue & id )
+{
+    if ( button )
+    {
+	button->setId( id );
+    }
+}
+
+
+void YQWizard::enableButton( YQWizardButton * button, bool enabled )
+{
+    if ( button == _nextButton && _protectNextButton && ! enabled )
+	return;
+
+    if ( button )
+	button->setEnabling( enabled );
+}
+
+
+void YQWizard::setButtonFocus( YQWizardButton * button )
+{
+    if ( button )
+	button->setKeyboardFocus();
+}
+
 
 
 bool YQWizard::isCommand( QString declaration, const YCPTerm & term )
@@ -1447,51 +1618,6 @@ YCPValue YQWizard::anyArg( const YCPTerm & term, int argNo )
 }
 
 
-void YQWizard::setButtonLabel( YQWizardButton * button, const QString & newLabel )
-{
-    if ( button )
-    {
-	button->setLabel( newLabel );
-
-	if ( newLabel.isEmpty() )
-	{
-	    button->hide();
-
-	    if ( button == _backButton && _backButtonSpacer )
-		_backButtonSpacer->hide();
-	}
-	else
-	    button->show();
-    }
-}
-
-
-void YQWizard::setButtonID( YQWizardButton * button, const YCPValue & id )
-{
-    if ( button )
-    {
-	button->setId( id );
-    }
-}
-
-
-void YQWizard::enableButton( YQWizardButton * button, bool enabled )
-{
-    if ( button == _nextButton && _protectNextButton && ! enabled )
-	return;
-
-    if ( button )
-	button->setEnabling( enabled );
-}
-
-
-void YQWizard::setButtonFocus( YQWizardButton * button )
-{
-    if ( button )
-	button->setKeyboardFocus();
-}
-
-
 
 YCPValue YQWizard::command( const YCPTerm & cmd )
 {
@@ -1531,9 +1657,23 @@ YCPValue YQWizard::command( const YCPTerm & cmd )
 
     if ( isCommand( "DeleteTreeItems()"	             , cmd ) )	{ deleteTreeItems();					return OK; }
     if ( isCommand( "SelectTreeItem( string )"	     , cmd ) )	{ selectTreeItem( qStringArg( cmd, 0 ) );		return OK; }
-    if ( isCommand( "AddTreeItem( string, string, string )", cmd ) )	{ addTreeItem( qStringArg( cmd, 0 ),
-										       qStringArg( cmd, 1 ),
-										       qStringArg( cmd, 2 )  );		return OK; }
+    if ( isCommand( "AddTreeItem( string, string, string )", cmd ) )	{ addTreeItem	( qStringArg( cmd, 0 ),
+											  qStringArg( cmd, 1 ),
+											  qStringArg( cmd, 2 )  );	return OK; }
+
+    if ( isCommand( "AddMenu      ( string, string )"         , cmd ) )	{ addMenu	( qStringArg( cmd, 0 ),
+											  qStringArg( cmd, 1 ) );	return OK; }
+    
+    if ( isCommand( "AddSubMenu	  ( string, string, string )" , cmd ) )	{ addSubMenu	( qStringArg( cmd, 0 ),
+											  qStringArg( cmd, 1 ),
+											  qStringArg( cmd, 2 ) );	return OK; }
+    
+    if ( isCommand( "AddMenuEntry ( string, string, string )" , cmd ) )	{ addMenuEntry	( qStringArg( cmd, 0 ),
+											  qStringArg( cmd, 1 ),
+											  qStringArg( cmd, 2 ) );	return OK; }
+
+    if ( isCommand( "AddMenuSeparator ( string )"            , cmd ) )	{ addMenuSeparator( qStringArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "DeleteMenus ()"                         , cmd ) )	{ deleteMenus();				return OK; }
 
     y2error( "Undefined wizard command: %s", cmd->toString().c_str() );
     return YCPBoolean( false );

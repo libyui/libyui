@@ -30,10 +30,13 @@
 #include "QY2ListView.h"
 
 #include <string>
+#include <vector>
 
 class QGridLayout;
 class QHBox;
 class QLabel;
+class QMenuBar;
+class QPopupMenu;
 class QPushButton;
 class QTextBrowser;
 class QToolButton;
@@ -51,7 +54,7 @@ class YQWizard : public QVBox, public YWizard
 
     class Step;
     class TreeItem;
-    
+
 public:
     /**
      * Constructor
@@ -67,7 +70,7 @@ public:
      **/
     virtual ~YQWizard();
 
-    
+
     enum Direction { Forward, Backward };
 
     /**
@@ -76,7 +79,7 @@ public:
      * assigning default buttons to a dialog.
      **/
     Direction direction() const { return _direction; }
-    
+
     /**
      * Generic direct access to implementation-specific functions.
      * See YQWizard.cc for details.
@@ -150,7 +153,7 @@ public:
      * Set the current step. This also triggers updateSteps() if necessary.
      **/
     void setCurrentStep( const QString & id );
-    
+
     /**
      * Update the steps display: Reflect the internal steps and heading lists
      * in the layout.
@@ -167,17 +170,17 @@ public:
      * Returns the wizard's "Next" (or "Accept") button.
      **/
     YQWizardButton * nextButton() const  { return _nextButton; }
-    
+
     /**
      * Returns the wizard's "Back" button.
      **/
     YQWizardButton * backButton() const  { return _backButton; }
-    
+
     /**
      * Returns the wizard's "Abort" button.
      **/
     YQWizardButton * abortButton() const { return _abortButton; }
-    
+
 
     /**
      * Set wizard command verbosity
@@ -198,13 +201,48 @@ public:
      * Select the tree item with the specified ID, if such an item exists.
      **/
     void selectTreeItem( const QString id );
-    
+
     /**
      * Delete all tree items.
      **/
     void deleteTreeItems();
 
-    
+
+    /**
+     * Add a menu to the menu bar. If the menu bar is not visible yet, it will
+     * be made visible. 'text' is the user-visible text for the menu bar
+     * (including keyboard shortcuts marked with '&'), 'id' is the menu ID for
+     * later addMenuEntry() etc. calls.
+     **/
+    void addMenu( const QString & text,
+		  const QString & id );
+
+    /**
+     * Add a submenu to the menu with ID 'parentMenuID'.
+     **/
+    void addSubMenu( const QString & parentMenuID,
+		     const QString & text,
+		     const QString & id );
+
+    /**
+     * Add a menu entry to the menu with ID 'parentMenuID'. 'id' is what will
+     * be returned by UI::UserInput() etc. when a user activates this menu entry.
+     **/
+    void addMenuEntry( const QString & parentMenuID,
+		       const QString & text,
+		       const QString & id );
+
+    /**
+     * Add a menu separator to a menu.
+     **/
+    void addMenuSeparator( const QString & parentMenuID );
+
+    /**
+     * Delete all menus and hide the menu bar.
+     **/
+    void deleteMenus();
+
+
 public slots:
 
 
@@ -290,7 +328,7 @@ protected slots:
      * If the item has an ID, that ID will be returned to UI::UserInput().
      **/
     void sendTreeEvent( QListViewItem * item );
-    
+
     /**
      * Internal notification that the tree selection has changed.
      *
@@ -298,6 +336,12 @@ protected slots:
      * UI::UserInput().
      **/
     void treeSelectionChanged();
+
+    /**
+     * Internal notification that a menu item with numeric ID 'numID' has been
+     * activated.
+     **/
+    void sendMenuEvent( int numID );
 
 
 protected:
@@ -333,7 +377,7 @@ protected:
      * Update all step - use appropriate icons and colors
      **/
     void updateStepStates();
-    
+
     /**
      * Add a (left or right) margin of the specified width to a widget,
      * consisting of a fixed height top gradient , a flexible center part (in
@@ -358,11 +402,11 @@ protected:
      **/
     void sendEvent( YCPValue id );
 
-    
+
     /**
      * Check if we are running embedded as a KCMShell or KPart or something
      * similar. This is really just a (chached) shortcut to
-     * YQUI::runningEmbedded(). 
+     * YQUI::runningEmbedded().
      **/
     bool runningEmbedded() const { return _runningEmbedded; }
 
@@ -424,7 +468,7 @@ protected:
      * Set the keyboard focus to a button.
      **/
     void setButtonFocus( YQWizardButton * button );
-    
+
     /**
      * Set text color and status icon for one wizard step
      **/
@@ -437,7 +481,7 @@ protected:
 
     /**
      * Find a tree item with the specified ID. Tree items without IDs cannot be
-     * found at all. 
+     * found at all.
      * Returns the item or 0 if no such item found.
      **/
     YQWizard::TreeItem * findTreeItem( const QString & id );
@@ -450,7 +494,7 @@ protected:
      **/
     YCPString currentTreeSelection();
 
-    
+
     //
     // Data members
     //
@@ -489,6 +533,7 @@ protected:
     QY2ListView *		_tree;
 
     QVBox *		_clientArea;
+    QMenuBar *		    _menuBar;
     QLabel *		    _dialogIcon;
     QLabel *		    _dialogHeading;
     YQAlignment *	    _contents;
@@ -501,9 +546,10 @@ protected:
     QPtrList<YQWizard::Step> 	_stepsList;
     QDict<YQWizard::Step>	_stepsIDs;
     QDict<YQWizard::TreeItem>	_treeIDs;
+    QDict<QPopupMenu>		_menuIDs;
+    vector<QString>		_menuEntryIDs;
 
 
-    
 protected:
 
     /**
@@ -579,7 +625,7 @@ protected:
 	    : QY2ListViewItem( parent, text, true )
 	    , _id( id )
 	    {}
-	
+
 	TreeItem( YQWizard::TreeItem * 	parent,
 		  const QString & 	text,
 		  const QString & 	id )
