@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Mar  7 13:02:04 CET 2003 - gs@suse.de
+
+- package installation: bugfix for not translated messages (#24834) 
+
+-------------------------------------------------------------------
 Tue Mar  4 10:22:04 CET 2003 - gs@suse.de
 
 - NCstyle.braille.h added to Makefile.am 
