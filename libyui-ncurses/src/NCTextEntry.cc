@@ -351,7 +351,7 @@ void NCTextEntry::tUpdate()
   // draw left scrollhint if
   if ( *cp && fldstart ) {
     twin->bkgdset( style.scrl );
-    twin->add_wch( WACS_LARROW );
+    twin->addch( ACS_LARROW );
     ++i;
     ++cp;
   }
@@ -377,13 +377,13 @@ void NCTextEntry::tUpdate()
   }
   twin->bkgdset( style.plain );
   for ( /*adjusted i*/; i < end; ++i ) {
-      twin->add_wch( WACS_CKBOARD ); 
+      twin->addch( ACS_CKBOARD ); 
   }
 
   // draw right scrollhint if
   if ( end < fldlength ) {
     twin->bkgdset( style.scrl );
-    twin->add_wch( WACS_RARROW );
+    twin->addch( ACS_RARROW );
   }
 
   // reverse curpos

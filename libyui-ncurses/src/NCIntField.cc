@@ -296,12 +296,6 @@ void NCIntField::tUpdate()
                (cvalue != minValue() ? ACS_DARROW : ' ' ) );
   twin->addch( 0, vstart+vlen+1,
                (cvalue != maxValue() ? ACS_UARROW : ' ' ) );
-#if 0
-  twin->mvadd_wch( 0, vstart,
-		   (cvalue != minValue() ? WACS_DARROW : empty) );
-  twin->mvadd_wch( 0, vstart+vlen+1,
-		   (cvalue != maxValue() ? WACS_UARROW : empty) );
-#endif
 }
 
 ///////////////////////////////////////////////////////////////////

@@ -380,7 +380,7 @@ void NCComboBox::tUpdate()
       // draw left scrollhint if
       if ( *cp && fldstart ) {
 	  twin->bkgdset( style.scrl );
-	  twin->add_wch( WACS_LARROW );
+	  twin->addch( ACS_LARROW );
 	  ++i;
 	  ++cp;
       }
@@ -401,17 +401,17 @@ void NCComboBox::tUpdate()
       twin->bkgdset( style.plain );
       for ( /*adjusted i*/; i < end; ++i )
       {
-	  twin->add_wch( WACS_CKBOARD );
+	  twin->addch( ACS_CKBOARD );
       }
 
       // draw right scrollhints
       twin->bkgdset( style.scrl );
       if ( end < fldlength )
       {
-	  twin->add_wch( WACS_RARROW );
+	  twin->addch( ACS_RARROW );
       }
   }
-  twin->add_wch( 0, twin->maxx(), WACS_DARROW );
+  twin->addch( 0, twin->maxx(), ACS_DARROW );
 
   if ( mayedit && GetState() == NC::WSactive )
   {
