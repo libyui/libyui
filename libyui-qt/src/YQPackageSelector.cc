@@ -15,7 +15,7 @@
   Author:     Stefan Hundhammer <sh@suse.de>
 
   Textdomain "packages-qt"
-  
+
 /-*/
 
 #define CHECK_DEPENDENCIES_ON_STARTUP	1
@@ -303,8 +303,6 @@ YQPackageSelector::layoutDiskSpaceSummary( QWidget * parent )
 
     _diskSpace->setStyle( QStyleFactory::create( "motif" ) ); // consumes less space than platinum
 
-#warning TODO: Disk space
-    
 #if 0
     QPushButton *details_button = new QPushButton( _( "D&etails..." ), gbox );
     CHECK_PTR( details_button );
@@ -312,13 +310,8 @@ YQPackageSelector::layoutDiskSpaceSummary( QWidget * parent )
     details_button->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) ); // hor/vert
 #endif
 
-    // TO DO: connect()
-
-#if 1
-    // DEBUG
     _diskSpace->setTotalSteps( 100 );
-    _diskSpace->setProgress( 42 );
-#endif
+    updateDiskUsage();
 
     gbox->setMinimumHeight( gbox->sizeHint().height() );
 }
@@ -349,6 +342,9 @@ YQPackageSelector::layoutPkgList( QWidget * parent )
 
     connect( _pkgList, 	SIGNAL( statusChanged( PMObjectPtr )	),
 	     this,	SLOT  ( autoResolveDependencies()	) );
+
+    connect( _pkgList,	SIGNAL( statusChanged( PMObjectPtr ) ),
+	     this,	SLOT  ( updateDiskUsage()	     ) );
 }
 
 
@@ -504,6 +500,9 @@ YQPackageSelector::connectFilter( QWidget * filter,
     {
 	connect( filter, 	SIGNAL( updatePackages()           ),
 		 pkgList,	SLOT  ( updateToplevelItemStates() ) );
+
+	connect( filter,	SIGNAL( updatePackages()	   ),
+		 this,		SLOT  ( updateDiskUsage()	   ) );
     }
 }
 
@@ -549,6 +548,25 @@ YQPackageSelector::resolveDependencies()
     }
 
     return _conflictDialog->solveAndShowConflicts();
+}
+
+
+void
+YQPackageSelector::updateDiskUsage()
+{
+#warning Disk usage disabled - PkgDuMaster always throws a floating point exception
+#if 0
+    const PkgDuMaster & du = Y2PM::packageManager().updateDu();
+    
+    {
+	// DEBUG
+	FSize used = du.pkg_used();
+	y2debug( "About to print disk usage percent" );
+	y2debug( "Used disk space: %s - %d%%", used.asString().c_str(), du.pkg_u_percent() );
+    }
+
+    _diskSpace->setProgress( du.pkg_u_percent() );
+#endif
 }
 
 

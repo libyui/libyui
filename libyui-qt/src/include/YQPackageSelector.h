@@ -105,6 +105,11 @@ public slots:
     void autoResolveDependencies();
 
     /**
+     * Update the disk usage display.
+     **/
+    void updateDiskUsage();
+    
+    /**
      * Close processing and abandon changes
      **/
     void reject();
