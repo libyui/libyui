@@ -273,15 +273,18 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
 	_selList = _selectionsFilterView->selList();
 	CHECK_PTR( _selList );
-	
+
 	_selConflictDialog = new YQPkgConflictDialog( &( Y2PM::selectionManager() ), this );
 	CHECK_PTR( _selConflictDialog );
 
-	connect( _filters, 	SIGNAL( currentChanged( QWidget * ) ),
-		 _selList,	SLOT  ( filterIfVisible()           ) );
+	connect( _filters, 		SIGNAL( currentChanged( QWidget * ) 	),
+		 _selList,		SLOT  ( filterIfVisible()           	) );
 
-	connect( _selList, 	SIGNAL( statusChanged()	               	),
-		 this,		SLOT  ( resolveSelectionDependencies()	) );
+	connect( _selList, 		SIGNAL( statusChanged()	               	),
+		 this,			SLOT  ( resolveSelectionDependencies()	) );
+
+	connect( _selConflictDialog,	SIGNAL( updatePackages()      		),
+		 _selList, 		SLOT  ( updateToplevelItemStates() 	) );
     }
 
 
