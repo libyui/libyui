@@ -24,6 +24,7 @@
 
 #include <qtextbrowser.h>
 #include <y2pm/PMObject.h>
+#include <y2util/Date.h>
 
 
 class QTabWidget;
@@ -53,6 +54,12 @@ protected:
 public:
 
     /**
+     * Returns the minimum size required for this widget.
+     * Inherited from QWidget.
+     **/
+    virtual QSize minimumSizeHint() const;
+
+    /**
      * Returns a uniform heading in HTML format for the specified package:
      * Package name and summary
      **/
@@ -67,12 +74,35 @@ public:
      * Returns the escaped string.
      **/
     static QString htmlEscape( const QString & plainText );
+    
+    /**
+     * Returns a string containing a HTML table with 'contents'.
+     **/
+    static QString table( const QString & contents );
 
     /**
-     * Returns the minimum size required for this widget.
-     * Inherited from QWidget.
+     * Returns a string containing a HTML table row with 'contents'.
      **/
-    virtual QSize minimumSizeHint() const;
+    static QString row( const QString & contents );
+
+    /**
+     * Returns a string containing a HTML table cell with 'contents'.
+     **/
+    static QString cell( QString contents		);
+    static QString cell( int contents 			);
+    static QString cell( const std::string & contents	);
+    static QString cell( const Date & date		);
+
+    /**
+     * Returns a string containing a HTML table cell with 'contents'
+     * for table headers.
+     **/
+    static QString hcell( QString contents );
+
+    /**
+     * Format a date.
+     **/
+    static QString formatDate( const Date & date );
 
 
 public slots:

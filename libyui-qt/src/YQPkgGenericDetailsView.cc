@@ -20,6 +20,7 @@
 #include <ycp/y2log.h>
 #include <qtabwidget.h>
 #include <qregexp.h>
+#include <qdatetime.h>
 
 #include "YQPkgGenericDetailsView.h"
 #include "YQi18n.h"
@@ -75,6 +76,14 @@ YQPkgGenericDetailsView::showDetailsIfVisible( PMObjectPtr pmObj )
 }
 
 
+QSize
+YQPkgGenericDetailsView::minimumSizeHint() const
+{
+    return QSize( 0, 0 );
+}
+
+
+
 QString
 YQPkgGenericDetailsView::htmlHeading( PMObjectPtr pmObj )
 {
@@ -108,10 +117,71 @@ YQPkgGenericDetailsView::htmlEscape( const QString & plainText )
 }
 
 
-QSize
-YQPkgGenericDetailsView::minimumSizeHint() const
+QString
+YQPkgGenericDetailsView::table( const QString & contents ) 
 {
-    return QSize( 0, 0 );
+    return "<table border=1 bgcolor=#F0F0F0>" + contents + "</table>";
+}
+
+
+QString
+YQPkgGenericDetailsView::row( const QString & contents ) 
+{
+    return "<tr>" + contents + "</tr>";
+}
+
+
+QString
+YQPkgGenericDetailsView::cell( QString contents ) 
+{
+    contents = htmlEscape( contents );
+    return "<td align=top>" + contents + "</td>";
+}
+
+
+QString
+YQPkgGenericDetailsView::cell( int contents ) 
+{
+    QString html;
+    html.sprintf( "<td align=top>%d</td>", contents );
+
+    return html;
+}
+
+
+QString
+YQPkgGenericDetailsView::cell( const Date & contents ) 
+{
+    return cell( formatDate( contents ) );
+}
+
+
+QString
+YQPkgGenericDetailsView::cell( const std::string & contents ) 
+{
+    return cell( QString::fromUtf8( contents.c_str() ) );
+}
+
+
+QString
+YQPkgGenericDetailsView::hcell( QString contents )
+{
+    return "<td align=top bgcolor=#D0D0D0>" + contents + "</td>";
+}
+
+
+QString
+YQPkgGenericDetailsView::formatDate( const Date & weird_date ) 
+{
+    time_t seconds = weird_date;
+
+    if ( seconds == 0 ) // Special case: Don't display "1.1.1970 0:00"
+	return "";
+
+    QDateTime date;
+    date.setTime_t( seconds );
+
+    return date.toString( Qt::LocalDate );
 }
 
 

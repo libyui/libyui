@@ -75,38 +75,9 @@ protected:
 			  PMPackagePtr candidatePkg );
 
     /**
-     * Returns a string containing a HTML table with 'contents'.
-     **/
-    QString table( const QString & contents ) const;
-
-    /**
-     * Returns a string containing a HTML table row with 'contents'.
-     **/
-    QString row( const QString & contents ) const;
-
-    /**
-     * Returns a string containing a HTML table cell with 'contents'.
-     **/
-    QString cell( QString contents		) const;
-    QString cell( int contents 			) const;
-    QString cell( const std::string & contents	) const;
-    QString cell( const Date & date		) const;
-
-    /**
-     * Returns a string containing a HTML table cell with 'contents'
-     * for table headers.
-     **/
-    QString hcell( QString contents ) const;
-
-    /**
      * Returns a string containing HTML code for a package's authors list.
      **/
     QString authorsListCell( PMPackagePtr pkg ) const;
-
-    /**
-     * Format a date.
-     **/
-    QString formatDate( const Date & date ) const;
 
     /**
      * Format an RPM group. Retrieves the translated (!) version.

@@ -24,7 +24,6 @@
 #include <Y2PM.h>
 #include <y2pm/PMManager.h>
 
-#include <qdatetime.h>
 #include "YQPkgTechnicalDetailsView.h"
 #include "YQi18n.h"
 #include "utf8.h"
@@ -84,59 +83,6 @@ YQPkgTechnicalDetailsView::showDetails( PMObjectPtr pmObj )
 
 
 QString
-YQPkgTechnicalDetailsView::table( const QString & contents ) const
-{
-    return "<table border=1 bgcolor=#F0F0F0>" + contents + "</table>";
-}
-
-
-QString
-YQPkgTechnicalDetailsView::row( const QString & contents ) const
-{
-    return "<tr>" + contents + "</tr>";
-}
-
-
-QString
-YQPkgTechnicalDetailsView::cell( QString contents ) const
-{
-    contents = htmlEscape( contents );
-    return "<td align=top>" + contents + "</td>";
-}
-
-
-QString
-YQPkgTechnicalDetailsView::cell( int contents ) const
-{
-    QString html;
-    html.sprintf( "<td align=top>%d</td>", contents );
-
-    return html;
-}
-
-
-QString
-YQPkgTechnicalDetailsView::cell( const Date & contents ) const
-{
-    return cell( formatDate( contents ) );
-}
-
-
-QString
-YQPkgTechnicalDetailsView::cell( const std::string & contents ) const
-{
-    return cell( QString::fromUtf8( contents.c_str() ) );
-}
-
-
-QString
-YQPkgTechnicalDetailsView::hcell( QString contents ) const
-{
-    return "<td align=top bgcolor=#D0D0D0>" + contents + "</td>";
-}
-
-
-QString
 YQPkgTechnicalDetailsView::authorsListCell( PMPackagePtr pkg ) const
 {
     QString html = "<td align=top>";
@@ -155,21 +101,6 @@ YQPkgTechnicalDetailsView::authorsListCell( PMPackagePtr pkg ) const
     html += "</td>";
 
     return html;
-}
-
-
-QString
-YQPkgTechnicalDetailsView::formatDate( const Date & weird_date ) const
-{
-    time_t seconds = weird_date;
-
-    if ( seconds == 0 ) // Special case: Don't display "1.1.1970 0:00"
-	return "";
-
-    QDateTime date;
-    date.setTime_t( seconds );
-
-    return date.toString( Qt::LocalDate );
 }
 
 
