@@ -163,7 +163,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
 	updateMode = true;
 
     // NCMIL << "Number of packages: " << Y2PM::packageManager().size() << endl;
-#if 0
+
     // read test source information
     if ( opt.testMode.value() )
     {
@@ -192,7 +192,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
 	    }
 	}
     }    
-#endif
+
     if ( !youMode )
     {
 	// create the selections popup

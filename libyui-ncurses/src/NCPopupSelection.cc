@@ -45,10 +45,9 @@ NCPopupSelection::NCPopupSelection( const wpos at,  PackageSelector * pkg  )
     , okButton( 0 )
     , packager( pkg )
 {
-    // get the available selections
-    getSelections();
-
     createLayout( YCPString(PkgNames::SelectionLabel().str()) );
+
+    fillSelectionList( sel );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -123,29 +122,10 @@ void NCPopupSelection::createLayout( const YCPString & label )
 //
 NCursesEvent & NCPopupSelection::showSelectionPopup( )
 {
-    int i;
-    vector<PMSelectionPtr>::iterator it;    
-    vector<string> pkgLine;
-    pkgLine.reserve(4);
-    
     postevent = NCursesEvent();
 
     if ( !sel )
 	return postevent;
-    
-    sel->itemsCleared();
-
-    // fill the selection box
-    for ( i = 0, it = selections.begin(); it != selections.end(); ++it, i++ )
-    {
-	pkgLine.clear();
-	pkgLine.push_back( (*it)->summary(Y2PM::getPreferredLocale()) );
-	//pkgLine.push_back( packager->createText((*it)->description(Y2PM::getPreferredLocale()), false ) );
-	
-	sel->addLine( (*it)->getSelectable()->status(),	// the status 
-		      pkgLine,
-		      (*it) );		// PMSelectionPtr
-    }
 
     sel->setKeyboardFocus();
     
@@ -162,11 +142,10 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
     // if OK is clicked get the current item and show the package list
     if ( postevent.detail == NCursesEvent::USERDEF )
     {
-	if ( !selections.empty() )
+	int index = sel->getCurrentItem();
+	PMSelectionPtr selPtr = sel->getDataPointer( index );
+	if ( selPtr )
 	{
-	    int index = sel->getCurrentItem();
-	    PMSelectionPtr selPtr = selections[index];
-	
 	    NCMIL << "Current selection: " << getCurrentLine() << endl;
 	    // activate the package solving
 	    Y2PM::selectionManager().activate( Y2PM::packageManager() );
@@ -193,8 +172,9 @@ string  NCPopupSelection::getCurrentLine( )
 	return "";
     
     int index = sel->getCurrentItem();
-
-    return ( selections[index]->summary(Y2PM::getPreferredLocale()) );
+    PMSelectionPtr selPtr = sel->getDataPointer(index);
+    
+    return ( selPtr?selPtr->summary(Y2PM::getPreferredLocale()):"" );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -260,43 +240,36 @@ bool NCPopupSelection::postAgain( )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : PackageSelector::getSelections
-//	METHOD TYPE : void
+//	METHOD NAME : NCPopupSelection::fillSelectionList
+//	METHOD TYPE : bool
 //
 //	DESCRIPTION :
 //
-bool NCPopupSelection::getSelections( )
+bool NCPopupSelection::fillSelectionList( NCPkgTable * sel )
 {
+    if ( !sel )
+	return false;
+    
+    vector<string> pkgLine;
+    pkgLine.reserve(4);
 
-    // get selections
     PMSelectionPtr selPtr;
     PMManager::PMSelectableVec::const_iterator it;
     
-    for (  it = Y2PM::selectionManager().begin();
-	 it != Y2PM::selectionManager().end();
-	 ++it )
+    for (  it = Y2PM::selectionManager().begin(); it != Y2PM::selectionManager().end(); ++it )
     {
-	PMSelectionPtr instPtr = (*it)->installedObj();
-	PMSelectionPtr candPtr = (*it)->candidateObj();
-
-	if ( instPtr )
-	{
-	    selPtr = instPtr;
-	}
-	else if ( candPtr )
-	{
-	    selPtr = candPtr;
-	}
-	else
-	{
-	    selPtr = (*it)->theObject();
-	}
-
-	// get the available add-ons
+	PMSelectionPtr selPtr = (*it)->theObject();
 	if ( selPtr && selPtr->visible() && !selPtr->isBase() )
 	{
-	    NCMIL << "Add-on selection: " <<  selPtr->name() << ", status: " << selPtr->getSelectable()->status() << endl; 
-	    selections.push_back( selPtr );
+	    NCMIL << "Add-on selection: " <<  selPtr->name() << ", initial status: "
+		  << selPtr->getSelectable()->status() << endl; 
+	
+	    pkgLine.clear();
+	    pkgLine.push_back( selPtr->summary(Y2PM::getPreferredLocale()) );	// the description
+	
+	    sel->addLine( selPtr->getSelectable()->status(),	// the status 
+			  pkgLine,
+			  selPtr );		// PMSelectionPtr
 	}
     }
     

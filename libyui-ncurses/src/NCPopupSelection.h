@@ -59,12 +59,6 @@ private:
 
     PackageSelector * packager;		// connection to the PackageSelector,
 
-    //std::vector< std::pair<PMSelectionPtr, bool> > selections;
-    std::vector<PMSelectionPtr> selections;	// the available selections
-    
-    // Get selections from the instsource manager
-    bool getSelections( );
-    
 protected:
 
     std::string getCurrentLine();
@@ -80,14 +74,17 @@ public:
 
     virtual long nicesize(YUIDimension dim);
 
+    
     void createLayout( const YCPString & label );
 
-    bool getSelectedItems( std::vector<int> & list );
-
+    /**
+     * Fills the list with the available selections (and the status info)
+     * @return bool
+     */
+    bool fillSelectionList ( NCPkgTable * table );
+    
     /**
      * Shows the popup with the add ons (package categories).
-     * The selected items all stored in NCursesEvent which ir
-     * returned if the user exits the popup with OK.
      * @return NCursesEvent
      */
     NCursesEvent & showSelectionPopup( );
