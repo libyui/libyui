@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Mar 31 14:19:50 CEST 2004 - sh@suse.de
+
+- Implemented YQWizard::currentTreeSelection() for QueryWidget()
+
+-------------------------------------------------------------------
 Wed Mar 31 13:59:51 CEST 2004 - cschum@suse.de
 
 - Do UTF8 conversion for patch kind tooltips (#37584).

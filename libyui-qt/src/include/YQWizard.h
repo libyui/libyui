@@ -441,6 +441,15 @@ protected:
      * Returns the item or 0 if no such item found.
      **/
     YQWizard::TreeItem * findTreeItem( const QString & id );
+
+    /**
+     * Returns the current tree selection or an empty string if nothing is
+     * selected or there is no tree.
+     *
+     * Reimplemented from YWizard.
+     **/
+    YCPString currentTreeSelection();
+
     
     //
     // Data members

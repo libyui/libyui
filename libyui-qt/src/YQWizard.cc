@@ -785,6 +785,26 @@ void YQWizard::treeSelectionChanged()
 }
 
 
+YCPString YQWizard::currentTreeSelection()
+{
+    if ( _tree )
+    {
+	QListViewItem * sel = _tree->selectedItem();
+
+	if ( sel )
+	{
+	    YQWizard::TreeItem * item = dynamic_cast<YQWizard::TreeItem *> (sel);
+
+	    if ( item && ! item->id().isEmpty() )
+		return YCPString( (const char *) item->id() );
+	}
+    }
+
+    return YCPString( "" );
+}
+
+
+
 
 void YQWizard::layoutWorkArea( QHBox * parentHBox )
 {
