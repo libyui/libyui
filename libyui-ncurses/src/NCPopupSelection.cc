@@ -339,17 +339,20 @@ bool NCPopupSelection::getSelections( )
 	}
 	else if ( candPtr )
 	{
-	    if ( (*it)->status() == PMSelectable::S_Install )
-		selected = true;
 	    selPtr = candPtr;
 	}
 	else
 	{
-	    selPtr = (*it)->theObject(); 
+	    selPtr = (*it)->theObject();
 	}
-	if ( selPtr )
+
+  	if ( selPtr )
 	{
-	    NCMIL << "Selection found: " << selPtr->name() << endl;
+	    PMSelectable::UI_Status status = selPtr->getSelectable()->status();
+	    NCMIL << "Selection found: " << selPtr->name() << " status: " << status << endl;
+	    
+	    if ( status == PMSelectable::S_Install )
+		selected = true;
 	}
 	
 	// show the available add-ons
