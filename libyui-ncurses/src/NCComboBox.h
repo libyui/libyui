@@ -98,6 +98,7 @@ class NCComboBox : public YComboBox, public NCWidget {
 
     virtual void setValidChars( const YCPString & validchars );
 
+    virtual int getCurrentItem() const;
     virtual void setCurrentItem( int index );
 
     virtual NCursesEvent wHandleInput( wint_t key );

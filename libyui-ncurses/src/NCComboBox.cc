@@ -216,6 +216,20 @@ void NCComboBox::setCurrentItem( int nindex )
   }
 }
 
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCComboBox::getCurrentItem
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int NCComboBox::getCurrentItem() const
+{
+  return index;
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 //
