@@ -20,6 +20,7 @@
 #include "NCDialog.h"
 #include "NCPopupInfo.h"
 #include "NCMenuButton.h"
+#include "YShortcut.h"
 
 #if 0
 #undef  DBG_CLASS
@@ -986,13 +987,15 @@ void NCDialog::processInput( int timeout )
 	     else
 	     {
 		 helpPopup->popdown();
+		 delete helpPopup;
+		 helpPopup = 0;
 		 pendingEvent = wHandleHotkey( ch ); 
 	     }
 	 }
 	 break;
 	    
     default:
-	// only handle the keys if help popup is not existing or not visible
+	// only handle keys if the help popup is not existing or not visible
 	if ( !helpPopup
 	      || (helpPopup && !helpPopup->isVisible()) )
 	{
@@ -1038,27 +1041,32 @@ void NCDialog::processInput( int timeout )
 string NCDialog::describeFunctionKeys()
 {
     string text = "";
-    char no[5];
+    char no[20];
     YCPString label( "" );
-    NCPushButton *button = 0;
-    NCMenuButton *menuButton = 0;
     
     for ( tnode<NCWidget*> * c = this->Next(); c; c = c->Next() )
     {
 	int fkey =  c->Value()->GetFunctionHotkey( );
 	if ( fkey != 0 )
 	{
-	    sprintf( no, "%d", fkey-264 );
-	    text = text + "F" +  no + ": ";
-	    if ( (button = dynamic_cast<NCPushButton *>(c->Value())) )
-	    { 
-		label = button->getLabel();
-		text = text + label->value() + "<br>";
-	    }
-	    else if ( (menuButton = dynamic_cast<NCMenuButton *>(c->Value())) )
+	    YWidget * w = dynamic_cast<YWidget *> (c->Value() );
+
+	    if ( w )
 	    {
-		label = menuButton->getLabel();
-		text = text + label->value() + "<br>";
+		// Retrieve the widget's "shortcut property" that describes
+		// whatever it is - regardless of widget type (PushButton, ...)
+		YCPSymbol propertyName( w->shortcutProperty(), true );
+		YCPValue  propertyValue = w->queryWidget( propertyName );
+
+		// Get rid of unwanted '&' shortcut markers
+		string desc = YShortcut::cleanShortcutString(  propertyValue->asString()->value() );
+	    
+		sprintf( no, "F%d: ",  fkey - KEY_F(1) + 1 );
+		text += no + desc + "<br>";
+	    }
+	    else
+	    {
+		NCERR << "Dynamic cast to YWidget * failed for" << c->Value() << endl;
 	    }
 	}
     }
