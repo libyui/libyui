@@ -208,8 +208,9 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
 
     list<string> notify;
     list<string> license;
+    bool license_confirmed = true;
+    PMPackagePtr pkgPtr = NULL;
     YCPString header( "" );
-    
     bool ok = true;
 
     switch ( newstatus )
@@ -230,10 +231,11 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
 		notify = objPtr->getCandidateObj()->insnotify();
 		header = YCPString(PkgNames::NotifyLabel());
 		// get license (available for packages only)  
-		PMPackagePtr pkgPtr = objPtr->getCandidateObj();
+		pkgPtr = objPtr->getCandidateObj();
 		if ( pkgPtr )
 		{
 		    license = pkgPtr->licenseToConfirm();
+		    license_confirmed = ! pkgPtr->hasLicenseToConfirm();
 		}
 	    }
 	    break;
@@ -245,13 +247,16 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
 
     if ( !license.empty() )
     {
-	NCPopupInfo info( wpos( 1, 1),
+	if (!license_confirmed) {
+	    NCPopupInfo info( wpos( 1, 1),
 			  YCPString(_("End User License Agreement") ),
 			  YCPString( "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( license ) ),
 			  PkgNames::AcceptLabel(),
 			  PkgNames::CancelLabel() );
+	    license_confirmed = info.showInfoPopup( ) != NCursesEvent::cancel;
+	}
 
-	if ( info.showInfoPopup( ) == NCursesEvent::cancel )
+	if ( !license_confirmed )
 	{
 	    // make sure the package won't be installed
 	    switch ( newstatus )
@@ -269,6 +274,10 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
 	    }
 	    
 	    ok = false;
+	} else {
+	    if (pkgPtr) {
+		pkgPtr->markLicenseConfirmed();
+	    }
 	}
     }
 

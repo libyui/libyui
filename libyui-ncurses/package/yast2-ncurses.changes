@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Sep  6 10:08:23 CEST 2004 - mlazar@suse.cz
+
+- patch for confirming license (Bugzilla Bug 44145)
+
+-------------------------------------------------------------------
 Wed Jul 21 11:14:52 CEST 2004 - mlazar@suse.cz
 
 - fixed Bugzilla Bug 35409 - `Top( `Frame() ) without top left corner 
