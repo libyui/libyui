@@ -73,7 +73,8 @@ using std::string;
 
 #define PIXMAP_DIR THEMEDIR "/wizard/"
 
-#define USE_SEPARATOR			1
+#define USE_SEPARATOR			0
+#define USE_HELP_ICON			0
 
 #define WORK_AREA_BOTTOM_MARGIN		10
 #define WORK_AREA_RIGHT_MARGIN		10
@@ -198,6 +199,7 @@ void YQWizard::layoutTitleBar( QWidget * parent )
     setGradient( titleBar, _titleBarGradientPixmap );
     titleBar->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
 
+    
     //
     // Left logo
     //
@@ -216,10 +218,26 @@ void YQWizard::layoutTitleBar( QWidget * parent )
 
 
     //
-    // Center stretch space
+    // Dialog icon and heading
     //
 
-    addHStretch( titleBar );
+    QHBox * headingHBox = new QHBox( titleBar );
+    CHECK_PTR( headingHBox );
+    headingHBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
+
+    addHSpacing( headingHBox, SEPARATOR_MARGIN );
+
+    _dialogIcon = new QLabel( headingHBox );
+    CHECK_PTR( _dialogIcon );
+    _dialogIcon->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) ); // hor/vert
+
+    addHSpacing( headingHBox );
+
+    _dialogHeading = new QLabel( headingHBox );
+    CHECK_PTR( _dialogHeading );
+    _dialogHeading->setFont( YQUI::ui()->headingFont() );
+    _dialogHeading->setAlignment( Qt::AlignLeft | Qt::WordBreak | Qt::AlignVCenter );
+    _dialogHeading->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
 
 
     //
@@ -305,10 +323,12 @@ void YQWizard::layoutStepsPanel()
     QPushButton * helpButton = new QPushButton( _( "Help" ), bottomGradient );
     CHECK_PTR( helpButton );
     centerAtBottom( bottomGradient, helpButton, WORK_AREA_BOTTOM_MARGIN );
+#if USE_HELP_ICON
     QPixmap pixmap = QPixmap( PIXMAP_DIR "help-button.png" );
 
     if ( ! pixmap.isNull() )
 	helpButton->setPixmap( pixmap );
+#endif
 
     if ( _bottomGradientPixmap.isNull() )
 	bottomGradient->setFixedHeight( helpButton->sizeHint().height() + WORK_AREA_BOTTOM_MARGIN );
@@ -630,7 +650,9 @@ void YQWizard::layoutHelpPanel()
 	    button = new QPushButton( _( "Tree" ), buttonParent );
 	    CHECK_PTR( button );
 
+#if USE_HELP_ICON
 	    pixmap = QPixmap( PIXMAP_DIR "tree-button.png" );
+#endif
 	}
 	else // if ( _stepsEnabled )
 	{
@@ -639,7 +661,9 @@ void YQWizard::layoutHelpPanel()
 	    button = new QPushButton( _( "Steps" ), buttonParent );
 	    CHECK_PTR( button );
 
+#if USE_HELP_ICON
 	    pixmap = QPixmap( PIXMAP_DIR "steps-button.png" );
+#endif
 	}
 
 
@@ -718,10 +742,12 @@ void YQWizard::layoutTreePanel()
     QPushButton * button = new QPushButton( _( "Help" ), buttonParent );
     CHECK_PTR( button );
 
+#if USE_HELP_ICON
     QPixmap pixmap( PIXMAP_DIR "help-button.png" );
 
     if ( ! pixmap.isNull() )
 	button->setPixmap( pixmap );
+#endif
 
     QGridLayout * grid = centerAtBottom( buttonParent, button, WORK_AREA_BOTTOM_MARGIN );
     setBottomCroppedGradient( buttonParent, _bottomGradientPixmap, grid->sizeHint().height() );
@@ -879,6 +905,7 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
     _menuBarBox->hide(); // will be made visible when menus are added
 
 
+#if 0
     //
     // Dialog icon and heading
     //
@@ -900,6 +927,7 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
     _dialogHeading->setFont( YQUI::ui()->headingFont() );
     _dialogHeading->setAlignment( Qt::AlignLeft | Qt::WordBreak );
     _dialogHeading->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
+#endif
 
 #if 0
     addHStretch( headingHBox );
