@@ -68,6 +68,8 @@
 #include "YQPkgDescriptionView.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
+#include "YQPkgLangFilterView.h"
+#include "YQPkgLangList.h"
 #include "YQPkgList.h"
 #include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQPkgSearchFilterView.h"
@@ -114,6 +116,8 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     _detailsViews		= 0;
     _diskUsageList		= 0;
     _filters			= 0;
+    _langFilterView		= 0;
+    _langList			= 0;
     _pkgDependenciesView	= 0;
     _pkgDescriptionView		= 0;
     _pkgList			= 0;
@@ -331,6 +335,33 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
 	connect( this,    			SIGNAL( loadData() ),
 		 _rpmGroupTagsFilterView,	SLOT  ( filter()   ) );
+    }
+
+
+    //
+    // Languages view
+    //
+
+    if ( ! _youMode )
+    {
+	_langFilterView = new YQPkgLangFilterView( parent );
+	CHECK_PTR( _langFilterView );
+	_filters->addPage( _( "Languages" ), _langFilterView );
+
+	_langList = _langFilterView->langList();
+	CHECK_PTR( _langList );
+
+	_selConflictDialog = new YQPkgConflictDialog( &( Y2PM::selectionManager() ), this );
+	CHECK_PTR( _selConflictDialog );
+
+	connect( _langList, 		SIGNAL( statusChanged()	               	),
+		 this,			SLOT  ( resolveSelectionDependencies()	) );
+
+	connect( _selConflictDialog,	SIGNAL( updatePackages()      		),
+		 _langList, 		SLOT  ( updateToplevelItemStates() 	) );
+
+	connect( this,			SIGNAL( refresh()			),
+		 _langList, 		SLOT  ( updateToplevelItemStates() 	) );
     }
 
 
@@ -708,6 +739,7 @@ YQPackageSelector::makeConnections()
     connectFilter( _youPatchList, 		_pkgList );
     connectFilter( _selList, 			_pkgList );
     connectFilter( _rpmGroupTagsFilterView, 	_pkgList, false );
+    connectFilter( _langList, 			_pkgList );
     connectFilter( _statusFilterView, 		_pkgList, false );
     connectFilter( _searchFilterView, 		_pkgList, false );
 

@@ -24,7 +24,7 @@
 #include <y2pm/PMManager.h>
 
 #include "YQPkgLangFilterView.h"
-#include "YQPkgLangSelList.h"
+#include "YQPkgLangList.h"
 #include "YQi18n.h"
 
 
@@ -32,7 +32,7 @@
 YQPkgLangFilterView::YQPkgLangFilterView( QWidget * parent )
     : QVBox( parent )
 {
-    _langSelList = new YQPkgLangSelList( this );
+    _langList = new YQPkgLangList( this );
 }
 
 

@@ -76,7 +76,7 @@ liby2qt_la_SOURCES = 				\
 	YQPkgDiskUsageWarningDialog.cc		\
 	YQPkgGenericDetailsView.cc		\
 	YQPkgLangFilterView.cc			\
-	YQPkgLangSelList.cc			\
+	YQPkgLangList.cc			\
 	YQPkgList.cc				\
 	YQPkgObjList.cc				\
 	YQPkgRpmGroupTagsFilterView.cc		\
@@ -162,7 +162,7 @@ BUILT_SOURCES =					\
 	YQPkgDiskUsageWarningDialog.moc		\
 	YQPkgGenericDetailsView.moc		\
 	YQPkgLangFilterView.moc			\
-	YQPkgLangSelList.moc			\
+	YQPkgLangList.moc			\
 	YQPkgList.moc				\
 	YQPkgObjList.moc			\
 	YQPkgRpmGroupTagsFilterView.moc		\
@@ -239,7 +239,7 @@ YQPkgDiskUsageList.o YQPkgDiskUsageList.lo:			YQPkgDiskUsageList.moc
 YQPkgDiskUsageWarningDialog.o YQPkgDiskUsageWarningDialog.lo:	YQPkgDiskUsageWarningDialog.moc
 YQPkgGenericDetailsView.o YQPkgGenericDetailsView.lo:		YQPkgGenericDetailsView.moc
 YQPkgLangFilterView.o YQPkgLangFilterView.lo:			YQPkgLangFilterView.moc
-YQPkgLangSelList.o YQPkgLangSelList.lo:				YQPkgLangSelList.moc
+YQPkgLangList.o YQPkgLangList.lo:				YQPkgLangList.moc
 YQPkgList.o YQPkgList.lo:					YQPkgList.moc
 YQPkgObjList.o YQPkgObjList.lo:					YQPkgObjList.moc
 YQPkgRpmGroupTagsFilterView.o YQPkgRpmGroupTagsFilterView.lo:	YQPkgRpmGroupTagsFilterView.moc
@@ -314,7 +314,7 @@ YQPkgDiskUsageList.moc:			include/YQPkgDiskUsageList.h
 YQPkgDiskUsageWarningDialog.moc:	include/YQPkgDiskUsageWarningDialog.h
 YQPkgGenericDetailsView.moc:		include/YQPkgGenericDetailsView.h
 YQPkgLangFilterView.moc:		include/YQPkgLangFilterView.h
-YQPkgLangSelList.moc:			include/YQPkgLangSelList.h
+YQPkgLangList.moc:			include/YQPkgLangList.h
 YQPkgList.moc:				include/YQPkgList.h
 YQPkgObjList.moc:			include/YQPkgObjList.h
 YQPkgRpmGroupTagsFilterView.moc:	include/YQPkgRpmGroupTagsFilterView.h

@@ -131,12 +131,12 @@ public slots:
 
     /**
      * Add a purely passive list item that has a name and optional summary and
-     * size.  
+     * size.
      **/
     void addPassiveItem( const QString & name,
 			 const QString & summary = QString::null,
 			 FSize 		 size    = -1 );
-    
+
     /**
      * Dispatcher slot for mouse click: cycle status depending on column.
      **/
@@ -363,10 +363,10 @@ public:
 
     /**
      * Returns 'true' if this selectable's status is set by a selection
-     * ( rather than by the user or by the dependency solver ).  
+     * ( rather than by the user or by the dependency solver ).
      **/
     bool bySelection() const;
-    
+
     /**
      * Set the ( binary RPM ) package status
      **/

@@ -23,10 +23,10 @@
 #define YQPkgLangFilterView_h
 
 #include <qvbox.h>
-#include <y2pm/PMSelection.h>
+#include <y2pm/PMLanguage.h>
 
 
-class YQPkgLangSelList;
+class YQPkgLangList;
 
 
 class YQPkgLangFilterView : public QVBox
@@ -49,7 +49,7 @@ public:
     /**
      * Returns this view's language selections list.
      **/
-    YQPkgLangSelList * langSelList() const { return _langSelList; }
+    YQPkgLangList * langList() const { return _langList; }
 
 
 protected:
@@ -57,7 +57,7 @@ protected:
 
     // Data members
 
-    YQPkgLangSelList	* _langSelList;
+    YQPkgLangList	* _langList;
 };
 
 

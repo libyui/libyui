@@ -44,6 +44,8 @@ class YQPkgConflictDialog;
 class YQPkgDependenciesView;
 class YQPkgDescriptionView;
 class YQPkgDiskUsageList;
+class YQPkgLangFilterView;
+class YQPkgLangList;
 class YQPkgList;
 class YQPkgRpmGroupTagsFilterView;
 class YQPkgSearchFilterView;
@@ -314,6 +316,8 @@ protected:
     YQPkgDependenciesView *		_pkgDependenciesView;
     YQPkgDescriptionView *		_pkgDescriptionView;
     YQPkgDiskUsageList *		_diskUsageList;
+    YQPkgLangFilterView *		_langFilterView;
+    YQPkgLangList *			_langList;
     YQPkgList *				_pkgList;
     YQPkgRpmGroupTagsFilterView *	_rpmGroupTagsFilterView;
     YQPkgSearchFilterView *		_searchFilterView;

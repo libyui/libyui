@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQPkgLangSelList.h
+  File:	      YQPkgLangList.h
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
@@ -19,20 +19,20 @@
 // -*- c++ -*-
 
 
-#ifndef YQPkgLangSelList_h
-#define YQPkgLangSelList_h
+#ifndef YQPkgLangList_h
+#define YQPkgLangList_h
 
 #include <YQPkgObjList.h>
-#include <y2pm/PMSelection.h>
+#include <y2pm/PMLanguage.h>
 
 
-class YQPkgLangSelListItem;
+class YQPkgLangListItem;
 
 
 /**
  * @short Display a list of PMSelection objects.
  **/
-class YQPkgLangSelList : public YQPkgObjList
+class YQPkgLangList : public YQPkgObjList
 {
     Q_OBJECT
 
@@ -41,12 +41,12 @@ public:
     /**
      * Constructor
      **/
-    YQPkgLangSelList( QWidget * parent );
+    YQPkgLangList( QWidget * parent );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgLangSelList();
+    virtual ~YQPkgLangList();
 
 
 public slots:
@@ -71,25 +71,20 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addPkgSelItem( PMSelectionPtr sel );
+    void addLangItem( PMLanguagePtr lang );
 
     /**
      * Emit an updatePackages() signal.
      **/
     void sendUpdatePackages() { emit updatePackages(); }
 
-    /**
-     * Activate current selections in the selection manager and emit an
-     * updatePackages() signal. 
-     **/
-    void applyChanges();
-
+    
 public:
 
     /**
      * Returns the currently selected item or 0 if there is none.
      **/
-    YQPkgLangSelListItem * selection() const;
+    YQPkgLangListItem * selection() const;
 
 
 signals:
@@ -120,37 +115,37 @@ signals:
 protected slots:
 
     /**
-     * Fill the selection list.
+     * Fill the language list.
      **/
     void fillList();
 };
 
 
 
-class YQPkgLangSelListItem: public YQPkgObjListItem
+class YQPkgLangListItem: public YQPkgObjListItem
 {
 public:
 
     /**
-     * Constructor. Creates a YQPkgLangSelList item that corresponds to the package
+     * Constructor. Creates a YQPkgLangList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgLangSelListItem( YQPkgLangSelList * pkgSelList, PMSelectionPtr sel );
+    YQPkgLangListItem( YQPkgLangList * pkgSelList, PMLanguagePtr lang );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgLangSelListItem();
+    virtual ~YQPkgLangListItem();
 
     /**
      * Returns the original object within the package manager backend.
      **/
-    PMSelectionPtr pmSel() { return _pmSel; }
+    PMLanguagePtr pmLang() { return _pmLang; }
 
     /**
      * Returns the original object within the package manager backend.
      **/
-    const PMSelectionPtr constPmSel() const { return _pmSel; }
+    const PMLanguagePtr constPmLang() const { return _pmLang; }
 
     /**
      * Set the selection status.
@@ -162,33 +157,18 @@ public:
     virtual void setStatus( PMSelectable::UI_Status newStatus );
 
 
-    /**
-     * Comparison function used for sorting the list.
-     * Returns:
-     * -1 if this <  other
-     *	0 if this == other
-     * +1 if this >  other
-     *
-     * Reimplemented from QListViewItem:
-     * Sort by PMSelection::order() only.
-     **/
-    virtual int compare( QListViewItem *	other,
-			 int			col,
-			 bool			ascending ) const;
-
     // Columns
 
-    int statusCol()	const	{ return _pkgSelList->statusCol();	}
-    int summaryCol()	const	{ return _pkgSelList->summaryCol();	}
+    int statusCol()	const	{ return _langList->statusCol();	}
 
 
 protected:
 
     // Data members
 
-    YQPkgLangSelList	*	_pkgSelList;
-    PMSelectionPtr		_pmSel;
+    YQPkgLangList	*	_langList;
+    PMLanguagePtr		_pmLang;
 };
 
 
-#endif // ifndef YQPkgLangSelList_h
+#endif // ifndef YQPkgLangList_h
