@@ -36,7 +36,17 @@ YQRichText::YQRichText(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
     setWidgetRep((QWidget *)this);
     setFont(yuiqt->currentFont());
     setMargin(AlignRight);
-    setTextFormat( opt.plainTextMode.value() ? Qt::PlainText : Qt::RichText );
+    
+    if ( opt.plainTextMode.value() )
+    {
+	setTextFormat( Qt::PlainText );
+	setWordWrap( QTextEdit::NoWrap );
+    }
+    else
+    {
+	setTextFormat( Qt::RichText );
+    }
+    
     QTextBrowser::setText( fromUTF8(text->value()) );
 
 
