@@ -337,8 +337,8 @@ void NCRichText::PadPlainTXT( const wchar_t * osch, const unsigned olen )
 
     if ( ftext.Columns() > textwidth )
 	textwidth = ftext.Columns();
-    
-    AdjustPad( wsze( ftext.Lines(), ftext.Columns() ) );
+
+    AdjustPad( wsze( cl+ftext.Lines(), textwidth ) );
 
     // insert the text
     const wchar_t * sch = wtxt.data();
@@ -460,7 +460,7 @@ void NCRichText::DrawHTMLPad()
 	      else
 	      {
 		  SkipPreTXT( wch );
-		  PadPlainTXT( swch, wch - swch  );	  
+		  PadPlainTXT( swch, wch - swch );
 	      }
 	      break;
       }
