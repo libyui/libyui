@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Sat Sep  7 18:37:55 CEST 2002 - gs@suse.de
+
+- V 2.6.13
+- package installation: show a popup during dependency checking,
+- search in package names 
+
+-------------------------------------------------------------------
 Fri Sep  6 19:39:58 CEST 2002 - gs@suse.de
 
 - V 2.6.12
