@@ -72,8 +72,6 @@ class PackageSelector
     YCPValue visibleInfo;		// visible package info (description, file list, ...)
 
     NCPopupTree * filterPopup;		// the rpm group tags popup
-    YTreeItem * defaultItem;
-    YCPString defaultGroup;
     
     NCPopupSelection * selectionPopup; 	// the selections popup
 

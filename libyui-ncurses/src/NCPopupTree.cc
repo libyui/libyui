@@ -45,6 +45,8 @@ NCPopupTree::NCPopupTree( const wpos at, PackageSelector * pkg )
     // create the layout (the NCTree)
     createLayout( PkgNames::RpmTreeLabel() );
 
+    // clone the tree (fill the NCTree)
+    cloneTree( Y2PM::packageManager().rpmGroupsTree()->root(), 0 ); 
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -57,7 +59,6 @@ NCPopupTree::NCPopupTree( const wpos at, PackageSelector * pkg )
 //
 NCPopupTree::~NCPopupTree()
 {
-
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -111,22 +112,25 @@ NCursesEvent NCPopupTree::showFilterPopup( )
     if ( postevent.detail == NCursesEvent::USERDEF )
     {
 	const YTreeItem * item = filterTree->getCurrentItem();
-    
-	// get the data pointer
-	YStringTreeItem * origItem = (YStringTreeItem *) (item->data());
 
-	if ( origItem )
+	if ( item )
 	{
-	    string label =  origItem->value().translation();
+	    // get the data pointer
+	    YStringTreeItem * origItem = (YStringTreeItem *) (item->data());
 
-	    // fill the package list 
-	    packager->fillPackageList( YCPString( label ), origItem ); 
+	    if ( origItem )
+	    {
+		string label =  origItem->value().translation();
 
-	    NCMIL << "Selected RPM group: " << label << endl;
+		// fill the package list 
+		packager->fillPackageList( YCPString( label ), origItem ); 
+
+		NCMIL << "Selected RPM group: " << label << endl;
+	    }
 	}
 	else
 	{
-	    NCERR << "Orig item not set" << endl;	
+	    NCERR << "No RPM group tree existing" << endl;	
 	}
     }
     
@@ -227,13 +231,27 @@ bool NCPopupTree::postAgain()
 
 ///////////////////////////////////////////////////////////////////
 //
+// cloneTree
 //
-//	METHOD NAME : NCPopupTree::getItemWithText
-//	METHOD TYPE : YTreeItem
+// Adds all tree items got from YPkgRpmGroupTagsFilterView to
+// the filter popup tree
 //
-//	DESCRIPTION :
-//
-YTreeItem * NCPopupTree::getItemWithText( const YCPString & text )
+void NCPopupTree::cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone )
 {
-    return ( filterTree->findItemWithText( text ) );
+    // 	methods of YStringTreeItem see ../libyui/src/include/TreeItem.h:  SortedTreeItem
+    YStringTreeItem * child = parentOrig->firstChild();
+    YTreeItem *	clone;
+    
+    while ( child )
+    {
+	NCMIL << "TRANSLATION: " << child->value().translation() << endl;
+	clone = addItem( parentClone,
+			 YCPString( child->value().translation() ),
+			 child,
+			 false );
+
+	cloneTree( child, clone );
+
+	child = child->next();
+    }
 }
