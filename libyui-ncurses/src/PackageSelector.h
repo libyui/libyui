@@ -82,6 +82,8 @@ class PackageSelector
     string createText( list<string> info, bool oneline );
     // add a line to the package list
     bool   createListEntry ( NCPkgTable *table, PMPackagePtr pkgPtr, unsigned int index );
+
+    bool selOk;
     
   protected:
  

@@ -108,7 +108,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui )
 				   false );		// without a description 
 
     // get the available selections
-    getSelections();
+    selOk = getSelections();
     // create the selections popup
     selectionPopup = new NCPopupSelection( wpos( 1, 1 ), this );
 
@@ -337,7 +337,12 @@ bool PackageSelector::fillPackageList( NCPkgTable *pkgTable, const YCPString & l
 	UIERR << "Widget is not a valid NCPkgTable widget" << endl;
     	return false;
     }
-
+    if ( !selOk )
+    {
+	UIERR << "Selections not available" << endl;
+	return false;
+    }
+    
     NCMIL <<  "Label: " <<  label->toString() << " Filter: " << filter << endl;
 
     string::size_type len = filter.length();
