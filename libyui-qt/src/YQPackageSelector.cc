@@ -112,7 +112,6 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     _autoDependenciesCheckBox	= 0;
     _checkDependenciesButton	= 0;
     _detailsViews		= 0;
-    _diskSpace			= 0;
     _diskUsageList		= 0;
     _filters			= 0;
     _pkgDependenciesView	= 0;

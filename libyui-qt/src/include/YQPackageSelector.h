@@ -294,7 +294,6 @@ protected:
     QString				_floppyDevice;
 
     QCheckBox *				_autoDependenciesCheckBox;
-    QProgressBar *			_diskSpace;
     QPushButton *			_checkDependenciesButton;
     QTabWidget *			_detailsViews;
     QY2ComboTabWidget *			_filters;
