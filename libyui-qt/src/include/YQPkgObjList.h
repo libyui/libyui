@@ -293,6 +293,7 @@ public:
     QAction *		actionSetCurrentDelete;
     QAction *		actionSetCurrentUpdate;
     QAction *		actionSetCurrentTaboo;
+    QAction *		actionSetCurrentProtected;
 
     QAction *		actionSetListInstall;
     QAction *		actionSetListDontInstall;
@@ -301,6 +302,7 @@ public:
     QAction *		actionSetListUpdate;
     QAction *		actionSetListUpdateForce;
     QAction *		actionSetListTaboo;
+    QAction *		actionSetListProtected;
 };
 
 

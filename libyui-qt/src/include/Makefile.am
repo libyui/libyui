@@ -93,13 +93,15 @@ pkginclude_HEADERS =				\
 	noinst.xpm				\
 	noinst_disabled.xpm			\
 	normal_conflict.xpm			\
-	select_conflict.xpm			\
+	protected.xpm				\
+	protected_disabled.xpm			\
 	sel_autodel.xpm				\
 	sel_autodel_disabled.xpm		\
 	sel_autoinstall.xpm			\
 	sel_autoinstall_disabled.xpm		\
 	sel_autoupdate.xpm			\
 	sel_autoupdate_disabled.xpm		\
+	select_conflict.xpm			\
 	stop.xpm				\
 	taboo.xpm				\
 	taboo_disabled.xpm			\
@@ -121,13 +123,14 @@ helpimages_DATA =				\
 	autodel.xpm				\
 	autoinstall.xpm				\
 	autoupdate.xpm				\
-	sel_autodel.xpm				\
-	sel_autoinstall.xpm			\
-	sel_autoupdate.xpm			\
 	del.xpm					\
 	install.xpm				\
 	keepinstalled.xpm			\
 	noinst.xpm				\
+	protected.xpm				\
+	sel_autodel.xpm				\
+	sel_autoinstall.xpm			\
+	sel_autoupdate.xpm			\
 	taboo.xpm				\
 	update.xpm
 

@@ -119,6 +119,7 @@ protected:
     QCheckBox *		_showKeepInstalled;
     QCheckBox *		_showNoInst;
     QCheckBox *		_showTaboo;
+    QCheckBox *		_showProtected;
     QCheckBox *		_showUpdate;
 
     QPushButton *	_refreshButton;

@@ -29,31 +29,33 @@ class YQIconPool
 {
 public:
 
-    static QPixmap pkgTaboo();
-    static QPixmap pkgDel();
-    static QPixmap pkgUpdate();
-    static QPixmap pkgInstall();
+    static QPixmap pkgAutoDel();
     static QPixmap pkgAutoInstall();
     static QPixmap pkgAutoUpdate();
-    static QPixmap pkgAutoDel();
-    static QPixmap pkgSelAutoInstall();
-    static QPixmap pkgSelAutoUpdate();
-    static QPixmap pkgSelAutoDel();
+    static QPixmap pkgDel();
+    static QPixmap pkgInstall();
     static QPixmap pkgKeepInstalled();
     static QPixmap pkgNoInst();
+    static QPixmap pkgProtected();
+    static QPixmap pkgSelAutoDel();
+    static QPixmap pkgSelAutoInstall();
+    static QPixmap pkgSelAutoUpdate();
+    static QPixmap pkgTaboo();
+    static QPixmap pkgUpdate();
 
-    static QPixmap disabledPkgTaboo();
-    static QPixmap disabledPkgDel();
-    static QPixmap disabledPkgUpdate();
-    static QPixmap disabledPkgInstall();
+    static QPixmap disabledPkgAutoDel();
     static QPixmap disabledPkgAutoInstall();
     static QPixmap disabledPkgAutoUpdate();
-    static QPixmap disabledPkgAutoDel();
-    static QPixmap disabledPkgSelAutoInstall();
-    static QPixmap disabledPkgSelAutoUpdate();
-    static QPixmap disabledPkgSelAutoDel();
+    static QPixmap disabledPkgDel();
+    static QPixmap disabledPkgInstall();
     static QPixmap disabledPkgKeepInstalled();
     static QPixmap disabledPkgNoInst();
+    static QPixmap disabledPkgProtected();
+    static QPixmap disabledPkgSelAutoDel();
+    static QPixmap disabledPkgSelAutoInstall();
+    static QPixmap disabledPkgSelAutoUpdate();
+    static QPixmap disabledPkgTaboo();
+    static QPixmap disabledPkgUpdate();
 
     static QPixmap checkMarkOn();
     static QPixmap checkMarkOff();
