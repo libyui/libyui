@@ -406,6 +406,15 @@ public:
 			 bool			ascending ) const;
 
     /**
+     * Calculate a numerical value to compare versions, based on version relations:
+     * - Installed newer than candidate (red)
+     * - Candidate newer than installed (blue) - worthwhile updating
+     * - Installed
+     * - Not installed, but candidate available
+     **/
+    int versionPoints() const;
+
+    /**
      * Update this item's data completely.
      * Triggered by QY2ListView::updateAllItemData().
      *

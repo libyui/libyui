@@ -828,12 +828,45 @@ YQPkgObjListItem::compare( QListViewItem *	otherListViewItem,
 	    if ( this->status() > other->status() ) return 1;
 	    return 0;
 	}
+	else if ( col == instVersionCol() ||
+		  col == versionCol() )
+	{
+	    // Sorting by version numbers doesn't make too much sense, so let's
+	    // sort by package relation:
+	    // - Installed newer than candidate (red)
+	    // - Candidate newer than installed (blue) - worthwhile updating
+	    // - Installed
+	    // - Not installed, but candidate available
+	    //
+	    // Within these categories, sort versions by ASCII - OK, it's
+	    // pretty random, but predictable.
+	    
+	    int thisPoints  = this->versionPoints();
+	    int otherPoints = other->versionPoints();
+
+	    if ( thisPoints > otherPoints ) return -1;
+	    if ( thisPoints < otherPoints ) return  1;
+	    return QY2ListViewItem::compare( otherListViewItem, col, ascending );
+	}
     }
 
     // Fallback: Use parent class method
     return QY2ListViewItem::compare( otherListViewItem, col, ascending );
 }
 
+
+int
+YQPkgObjListItem::versionPoints() const
+{
+    int points = 0;
+
+    if ( installedIsNewer() )		points += 1000;
+    if ( candidateIsNewer() )		points += 100;
+    if ( _pmObj->hasInstalledObj() )	points += 10;
+    if ( _pmObj->hasCandidateObj() )	points += 1;
+
+    return points;
+}
 
 
 
