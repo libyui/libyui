@@ -182,7 +182,7 @@ void YQPkgTextDialog::showText( QWidget * parent,
 				PMObjectPtr pmObj,
 				const string & text )
 {
-    showText( parent, htmlHeading( pmObj ) + QString( text.c_str() ) );
+    showText( parent, htmlHeading( pmObj ) + QString::fromUtf8( text.c_str() ) );
 }
 
 

@@ -1,7 +1,15 @@
 -------------------------------------------------------------------
+Fri Oct 10 12:24:00 CEST 2003 - sh@suse.de
+
+- V 2.9.0
+
+- Applied cschum's fix for bug #31965:
+  Wrong encoding in YOU "display raw package info" dialog 
+
+-------------------------------------------------------------------
 Fri Sep 19 17:19:13 CEST 2003 - sh@suse.de
 
-- V 2.4.15
+- V 2.8.15
 
 - Applied visnov's patch to fix bug #5547: IntField value
 
@@ -11,7 +19,7 @@ Fri Sep 19 17:19:13 CEST 2003 - sh@suse.de
 -------------------------------------------------------------------
 Wed Sep 17 17:59:15 CEST 2003 - sh@suse.de
 
-- V 2.4.14
+- V 2.8.14
 
 -------------------------------------------------------------------
 Wed Sep 17 15:31:22 CEST 2003 - sh@suse.de
