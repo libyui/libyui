@@ -30,6 +30,11 @@ using namespace std;
 #include "Y2Log.h"
 #include "NCurses.h"
 #include "NCDialog.h"
+#include "NCi18n.h"
+
+/*
+  Textdomain "ncurses"
+*/
 
 NCurses * NCurses::myself = 0;
 set<NCDialog*> NCurses::_knownDlgs;
@@ -451,14 +456,14 @@ void NCurses::SetTitle( const string & str )
     myself->title_t = str;
     ::wbkgd( myself->title_w, myself->style()(NCstyle::AppTitle) );
     ::wclear( myself->title_w );
-#ifdef VERSION
-    if ( string( VERSION ).length() ) {
-      string v( "(ui-ncurses-" VERSION ")" );
-      int s = myself->title_w->_maxx - v.length();
-      if ( s > 0 )
-	::mvwaddstr( myself->title_w, 0, s, v.c_str() );
-    }
-#endif
+
+    // part of title (headline) of the textmode yast
+    setTextdomain( "ncurses" );
+    string helpF1 = _( "Press F1 for help" );
+    
+    int s = myself->title_w->_maxx - helpF1.length();
+    ::mvwaddstr( myself->title_w, 0, s, helpF1.c_str() );
+
     ::mvwaddstr( myself->title_w, 0, 1, myself->title_t.c_str() );
     ::wnoutrefresh( myself->title_w );
   }
