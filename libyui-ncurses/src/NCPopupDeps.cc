@@ -182,7 +182,7 @@ void NCPopupDeps::showDependencies( )
     //	typedef std::list<ErrorResult> ErrorResultList;
     PkgDep::ErrorResultList	badList;
        
-    NCMIL << "Solving..." << endl ;
+    NCDBG << "Solving..." << endl ;
 
     // call the Y2PM::packageManager() to get the "badlist"
     bool success = Y2PM::packageManager().solveInstall( goodList, badList );
@@ -197,7 +197,7 @@ void NCPopupDeps::showDependencies( )
 
 	showDependencyPopup();    // show the dependencies
 
-	pkgs->setKeyboardFocus();	
+	pkgs->setKeyboardFocus();
     }
     
 }
@@ -220,7 +220,7 @@ void NCPopupDeps::evaluateErrorResult( PkgDep::ErrorResultList errorlist )
 	}
 	else 
 	{
-	    NCMIL << "No PMSolvablePtr for " << (*it) << endl;
+	    NCDBG << "No PMSolvablePtr for " << (*it) << endl;
 	}
 	
 	++it;
@@ -304,7 +304,7 @@ string NCPopupDeps::getDependencyKind(  PkgDep::ErrorResult error )
 	ret = PkgNames::ConflictText().str();
 	if ( !error.remove_to_solve_conflict.empty() )
 	{
-	    NCMIL << "REMOVE to solve not empty" << endl;
+	    NCDBG << "REMOVE to solve not empty" << endl;
 	}
     }
     else if ( !error.referers.empty() )
@@ -321,7 +321,7 @@ bool NCPopupDeps::concretelyDependency( int index )
     unsigned int i = 0;
     vector<string> pkgLine;
     pkgLine.reserve(4);
-    
+
     deps->itemsCleared();
 
     if ( index < 0 || (unsigned int)index >= size )
@@ -330,7 +330,7 @@ bool NCPopupDeps::concretelyDependency( int index )
     // get the ErrorResult
     PkgDep::ErrorResult error = dependencies[index];
 	
-    NCMIL << "*** Showing: " << error << endl;	
+    NCDBG << "*** Showing: " << error << endl;	
 
     if ( !error.unresolvable.empty() )
     {
@@ -559,7 +559,7 @@ bool NCPopupDeps::postAgain()
 	PkgDep::ErrorResultList	badList;
 	PkgDep::ResultList	goodList;
    
-	NCMIL << "Solving..." << endl ;
+	NCDBG << "Solving..." << endl ;
 
 	// call the Y2PM::packageManager() to get the "badlist"
 	bool success = Y2PM::packageManager().solveInstall( goodList, badList );
