@@ -236,6 +236,16 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
 
     if ( ok )
     {
+
+	if ( tableType != T_Dependency
+	     && tableType != T_DepsPackages
+	     && tableType != T_Patches )
+	{
+	    // only check/show deps if is't not the dependency table itself
+	    // or the list of YOU patches
+	    packager->showDependencies( false );	// only check if automatic check is ON
+	}
+
 	// update this list to show the status changes
 	updateTable();
 	
@@ -246,15 +256,7 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
 	    // additionally update the package list
 	    packager->updatePackageList();
 	}
-
-	if ( tableType != T_Dependency
-	     && tableType != T_DepsPackages
-	     && tableType != T_Patches )
-	{
-	    // only check/show deps if is't not the dependency table itself
-	    // or the list of YOU patches
-	    packager->showDependencies( false );	// only check if automatic check is ON
-	}
+	
     }
 
     return ok;
