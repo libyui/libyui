@@ -173,9 +173,9 @@ YQPkgObjList::createActions()
     _actionSetCurrentUpdate	   = createAction( YQIconPool::pkgUpdate(),	   _( "&Update"		       ) );
     _actionSetCurrentTaboo	   = createAction( YQIconPool::pkgTaboo(),	   _( "&Taboo - never install" ) );
 
-    _actionSetCurrentAutoInstall   = createAction( YQIconPool::pkgAutoInstall(),   _( "Auto-install" ), false );
-    _actionSetCurrentAutoUpdate	   = createAction( YQIconPool::pkgAutoUpdate(),	   _( "Auto-update"  ), false );
-    _actionSetCurrentAutoDelete	   = createAction( YQIconPool::pkgAutoDel(),	   _( "Auto-delete"  ), false );
+    _actionSetCurrentAutoInstall   = createAction( YQIconPool::pkgAutoInstall(),   _( "(Auto-install)" ) );
+    _actionSetCurrentAutoUpdate	   = createAction( YQIconPool::pkgAutoUpdate(),	   _( "(Auto-update)"  ) );
+    _actionSetCurrentAutoDelete	   = createAction( YQIconPool::pkgAutoDel(),	   _( "(Auto-delete)"  ) );
 
     connect( _actionSetCurrentInstall,	     SIGNAL( activated() ), this, SLOT( setCurrentInstall()	  ) );
     connect( _actionSetCurrentDontInstall,   SIGNAL( activated() ), this, SLOT( setCurrentDontInstall()	  ) );
