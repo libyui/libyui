@@ -398,12 +398,13 @@ bool NCPopupDeps::addDepsLine( NCPkgTable * table,
 	    else if( pkgStatus == PMSelectable::S_Taboo )
 	    {
 		string taboo = "(" + pkgName + " "
-		    + "is set to \"Taboo\" status" + ")";
+		    + PkgNames::TabooText() + ")";
 		pkgLine.push_back( taboo );	
 	    }
 	    else if ( error.edition.asString() != "" )
 	    {
-		string version = "(version " + error.edition.asString() + " is required)";
+		string version = "(" + PkgNames::PkgVersion() + " " + error.edition.asString()
+		    + " " + PkgNames::NotAvailableText() + ")";
 		pkgLine.push_back( version );
 	    }
 	}

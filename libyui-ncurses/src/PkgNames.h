@@ -418,6 +418,10 @@ public:
     static const string Loading();
     static const string ContinueRequ();
     static const string ContinueSelRequ();
+
+    static const string File();
+    static const string PreScript();
+    static const string PostScript();
     
    /**
      * text used in search popup
@@ -774,6 +778,7 @@ public:
     static const string MenuLoadSel();
 
     static const string MoreText();
+    static const string TabooText();
     static const string MoreSpaceText();
 
     /**

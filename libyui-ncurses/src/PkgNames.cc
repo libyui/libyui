@@ -722,11 +722,25 @@ const string PkgNames::DiskspaceLabel()
     return value;
 }
 
-
-const string PkgNames::MediumLabel()
+const string PkgNames::File()
 {
-    // label of a combo box (medium means floppy or hard disk)
-    static const string value = _( "&Medium" );
+    // additional file (included in a YOU patch)
+    static const string value = _( "Additional File" );
+    return value;  
+}
+
+
+const string PkgNames::PreScript()
+{
+    // a pre script (included in a YOU patch)
+    static const string value = _( "Pre Script" );
+    return value;
+}
+
+const string PkgNames::PostScript()
+{
+    // a post script (included in aYOU patch)
+    static const string value = _( "Post Script" );
     return value;
 }
 
@@ -973,6 +987,14 @@ const string PkgNames::MoreText()
     static const string value = _( "needs" );
     return value;
 }
+
+const string PkgNames::TabooText()
+{
+    // part of a text (package 'aa' has Taboo status)
+    static const string value = _( "is set to \"Taboo\" status" );
+    return value;
+}
+
 
 const string PkgNames::MoreSpaceText()
 {
