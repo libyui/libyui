@@ -1,6 +1,5 @@
 @HEADER-COMMENT@
-
-# neededforbuild  autoconf automake gpp libgpp libxcrypt libxcrypt-devel yast2-core yast2-core-devel yast2-devtools
+# neededforbuild gpp libgpp libxcrypt libxcrypt-devel yast2-devel-packages
 
 @HEADER@
 
@@ -11,37 +10,24 @@ Provides:	y2base:/usr/lib/YaST2/servers/ncurses
 Provides:	y2base:/usr/lib/YaST2/plugin/libpy2ncurses.so.2
 Provides:	yast2-ui-ncurses
 Obsoletes:	yast2-ui-ncurses
+Provides:	y2curses
+Obsoletes:	y2curses
 
 %description
 -
 
-@HEADER-DEVEL@
-
-Summary:	-
-Provides:	y2curses
-Obsoletes:	y2curses
-
-%description devel
--
-
 @PREP@
 
-@BUILD-PROGRAM@
+@BUILD@
 
-@INSTALL-PROGRAM@
+@INSTALL@
 
 @CLEAN@
 
 %files
 %defattr (-, root, root)
-%dir @plugindir@
 @plugindir@/libpy2ncurses.so.*
-
-%files devel
-%defattr (-, root, root)
-%dir @ybindir@
-@ybindir@/y2ncurses
-%dir @plugindir@
 @plugindir@/libpy2ncurses.so
 @plugindir@/libpy2ncurses.la
+# @ybindir@/y2ncurses
 %doc @docdir@
