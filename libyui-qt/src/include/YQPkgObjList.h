@@ -88,7 +88,13 @@ public:
      **/
     void setAllItemStatus( PMSelectable::UI_Status newStatus );
 
+    /**
+     * Add a submenu "All in this list..." to 'menu'.
+     * Returns the newly created submenu.
+     **/
+    virtual QPopupMenu * addAllInListSubMenu( QPopupMenu * menu );
 
+    
 public slots:
 
     /**
@@ -212,11 +218,6 @@ protected:
     virtual void createInstalledContextMenu();
 
     /**
-     * Add a submenu "All in this list..." to 'menu'.
-     **/
-    virtual void addAllInListSubMenu( QPopupMenu * menu );
-
-    /**
      * Create the actions for the context menus.
      **/
     void createActions();
@@ -226,7 +227,7 @@ protected:
      **/
     QAction * createAction( const QPixmap &	icon,
 			    const QString &	text,
-			    bool		enabled = true );
+			    bool		enabled = false );
 
 
     // Data members
@@ -239,27 +240,30 @@ protected:
     int		_instVersionCol;
     bool	_editable;
 
-    QAction *		_actionSetCurrentInstall;
-    QAction *		_actionSetCurrentDontInstall;
-    QAction *		_actionSetCurrentKeepInstalled;
-    QAction *		_actionSetCurrentDelete;
-    QAction *		_actionSetCurrentUpdate;
-    QAction *		_actionSetCurrentTaboo;
-
-    QAction *		_actionSetCurrentAutoInstall;
-    QAction *		_actionSetCurrentAutoUpdate;
-    QAction *		_actionSetCurrentAutoDelete;
-
-    QAction *		_actionSetListInstall;
-    QAction *		_actionSetListDontInstall;
-    QAction *		_actionSetListKeepInstalled;
-    QAction *		_actionSetListDelete;
-    QAction *		_actionSetListUpdate;
-    QAction *		_actionSetListTaboo;
-
 
     QPopupMenu *	_installedContextMenu;
     QPopupMenu *	_notInstalledContextMenu;
+
+
+public:
+
+    QAction *		actionSetCurrentInstall;
+    QAction *		actionSetCurrentDontInstall;
+    QAction *		actionSetCurrentKeepInstalled;
+    QAction *		actionSetCurrentDelete;
+    QAction *		actionSetCurrentUpdate;
+    QAction *		actionSetCurrentTaboo;
+
+    QAction *		actionSetCurrentAutoInstall;
+    QAction *		actionSetCurrentAutoUpdate;
+    QAction *		actionSetCurrentAutoDelete;
+
+    QAction *		actionSetListInstall;
+    QAction *		actionSetListDontInstall;
+    QAction *		actionSetListKeepInstalled;
+    QAction *		actionSetListDelete;
+    QAction *		actionSetListUpdate;
+    QAction *		actionSetListTaboo;
 };
 
 
@@ -391,7 +395,7 @@ public:
      **/
     virtual QString toolTip( int column );
 
-    
+
     // Columns
 
     int statusCol()		const	{ return _pkgObjList->statusCol();	}

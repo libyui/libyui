@@ -109,9 +109,13 @@ protected:
     // Data members
 
     int			_srpmStatusCol;
-    QAction *		_actionInstallSourceRpm;
-    QAction *		_actionDontInstallSourceRpm;
     QPopupMenu *	_sourceRpmContextMenu;
+
+    
+public:
+    
+    QAction *		actionInstallSourceRpm;
+    QAction *		actionDontInstallSourceRpm;
 };
 
 

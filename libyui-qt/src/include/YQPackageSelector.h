@@ -34,6 +34,8 @@ class QListView;
 class QProgressBar;
 class QSplitter;
 class QTabWidget;
+class QPopupMenu;
+class QMenuBar;
 
 class QY2ComboTabWidget;
 
@@ -153,7 +155,21 @@ protected:
     void layoutButtons		( QWidget * parent );
     void layoutMenuBar		( QWidget * parent );
 
+    /**
+     * Establish Qt signal / slot connections.
+     * 
+     * This really needs to be a separate method to make sure all affected
+     * wigets are created at this point. 
+     **/
     void makeConnections();
+
+    /**
+     * Add pulldown menus to the menu bar.
+     *
+     * This really needs to be a separate method to make sure all affected
+     * wigets are created at this point. 
+     **/
+    void addMenus();
 
     /**
      * Provide some fake data for testing
@@ -199,6 +215,12 @@ protected:
     YQPkgUpdateProblemFilterView *	_updateProblemFilterView;
     YQPkgYouPatchFilterView *		_youPatchFilterView;
     YQPkgYouPatchList *			_youPatchList;
+
+    QMenuBar *				_menuBar;
+    QPopupMenu *			_fileMenu;
+    QPopupMenu *			_viewMenu;
+    QPopupMenu *			_pkgMenu;
+    QPopupMenu *			_helpMenu;
 };
 
 
