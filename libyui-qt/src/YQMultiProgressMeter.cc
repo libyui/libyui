@@ -33,7 +33,7 @@ YQMultiProgressMeter::YQMultiProgressMeter( QWidget *		parent,
     : QWidget( parent )
     , YMultiProgressMeter( opt, horizontal, maxValues )
     , _margin( 2 )
-    , _segmentMinLength( 10 )
+    , _segmentMinLength( 15 )
 {
     setWidgetRep( this );
 }
@@ -95,7 +95,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
     double scale = ( (double) totalLength ) / ( (double) totalSum );
     int scaledMinLength = (int) ( minLength / scale );
 
-
+    
     // Check how many segments would become smaller than the minimum
 
     int smallSegmentsCount = 0;
@@ -151,7 +151,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 	int length;
 
 	if ( maxValue( i ) < scaledMinLength )
-	    length = scaledMinLength;
+	    length = minLength;
 	else
 	    length = (int) ( maxValue( i ) * scale + 0.5 );
 
@@ -245,7 +245,7 @@ void YQMultiProgressMeter::setEnabling( bool enabled )
 
 long YQMultiProgressMeter::nicesize( YUIDimension dim )
 {
-    int thickness = 40 + 2 * margin();
+    int thickness = 35 + 2 * margin();
     int length    = 70 * segments() + 2 * margin();
 
     if ( dim == YD_HORIZ )	return horizontal() ? length : thickness;
