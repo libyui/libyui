@@ -151,7 +151,8 @@ void NCPkgTable::addLine( PMSelectable::UI_Status stat,
 	Items[i] = new NCTableCol( YCPString( elements[i-1] ) );
     }
     pad->Append( Items );
-    DrawPad();
+    
+    // don't call DrawPad(); for every line - is called once after the loop
   
 }
 
