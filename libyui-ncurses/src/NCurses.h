@@ -75,7 +75,8 @@ class NCursesEvent {
       cancel,
       timeout,
       button,
-      menu
+      menu,
+      key
     };
 
     enum DETAIL {
@@ -86,10 +87,12 @@ class NCursesEvent {
 
     Type       type;
     NCWidget * widget;
-    YCPValue   selection;
+    YCPValue   selection;	// used for MenuEvent (the menu selection)
 
-    YCPValue  	result;		// added by gs
-
+    YCPValue  	result;		// can be used for any result
+    
+    string	keySymbol;	// used for KeyEvent (symbol pressed key)
+    
     int        detail;
     
     YEvent::EventReason reason;

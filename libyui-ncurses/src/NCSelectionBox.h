@@ -45,7 +45,8 @@ class NCSelectionBox : public YSelectionBox, public NCPadWidget {
     NCTablePad *& pad;
     bool          biglist;
     bool          immediate;
-
+    bool	  keyevent;
+    
   protected:
 
     virtual const char * location() const { return "NCSelectionBox"; }

@@ -226,7 +226,10 @@ struct NCtoY2Event : public NCursesEvent {
 	      
 	  case timeout:
 	      return new YTimeoutEvent();
-	    
+
+	  case key:
+	      return new YKeyEvent( keySymbol, dynamic_cast<YWidget *> (widget) );
+	      
 	  case none:
 	  case handled:
 	      return 0;
