@@ -80,7 +80,7 @@ YQWizard::YQWizard( QWidget *		parent,
 
 
     //
-    // Load graphics stuff
+    // Load graphics
     //
 
     loadGradientPixmaps();
@@ -210,16 +210,15 @@ void YQWizard::layoutStepsPanel()
     steps->setPaletteBackgroundColor( _gradientCenterColor );
     steps->setFont( QFont( "Helvetica", 10 ) );
 
-    steps->setFont( QFont( "Helvetica", 12 ) );
     steps->setMargin( 10 );
 
     steps->setAlignment( Qt::AlignLeft | Qt::AlignTop );
-    steps->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
+    steps->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) ); // hor/vert
 
     QWidget * stretch = addVStretch( _stepsPanel );
     CHECK_PTR( stretch );
     stretch->setPaletteBackgroundColor( _gradientCenterColor );
-
+    
 
     // Bottom gradient
 
