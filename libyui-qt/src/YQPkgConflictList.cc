@@ -30,6 +30,7 @@
 #include <Y2PM.h>
 #include <y2pm/PkgDep.h>
 #include <y2pm/PMObject.h>
+#include <y2pm/PMPackageManager.h>
 
 #include "YQPkgConflictList.h"
 #include "YQPkgConflictDialog.h"
