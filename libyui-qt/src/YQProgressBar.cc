@@ -29,6 +29,8 @@ using std::max;
 #include "YQUI.h"
 #include "YQProgressBar.h"
 
+#define MAX_PROGRESS 10000
+
 
 YQProgressBar::YQProgressBar( QWidget * 		parent,
 			      const YWidgetOpt & 	opt,
@@ -52,7 +54,7 @@ YQProgressBar::YQProgressBar( QWidget * 		parent,
 
     _qt_progressbar = new QProgressBar( this );
     _qt_progressbar->setFont( YQUI::ui()->currentFont() );
-    _qt_progressbar->setTotalSteps( maxProgress->value() );
+    _qt_progressbar->setTotalSteps( MAX_PROGRESS );
     _qt_label->setBuddy( _qt_progressbar );
 
     setProgress( progress );
@@ -96,20 +98,20 @@ void YQProgressBar::setLabel( const YCPString & text )
 }
 
 
-void YQProgressBar::setProgress( const YCPInteger & progress )
+void YQProgressBar::setProgress( const YCPInteger & newProgress )
 {
-    if ( progress->value() < _qt_progressbar->progress() )
-    {
-	/*
-	 * Qt bug workaround: Decreased progress bar values are not
-	 * honored correctly. So we need to reset the progress bar prior
-	 * to setting the new value.
-	 */
+    int progress = 0;
 
-	_qt_progressbar->reset();
+    if ( maxProgress->value() != 0 )
+    {
+	progress = (int) ( MAX_PROGRESS *
+			   ( (float) newProgress->value() ) /
+			   ( (float) maxProgress->value() ) );
+	
     }
 
-    _qt_progressbar->setProgress( progress->value() );
+    _qt_progressbar->setProgress( progress );
+    YProgressBar::setProgress( newProgress );
 }
 
 
