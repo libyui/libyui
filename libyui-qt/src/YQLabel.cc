@@ -26,9 +26,9 @@
 #include "YQLabel.h"
 
 
-YQLabel::YQLabel( QWidget * 	parent,
-		  YWidgetOpt &	opt,
-		  YCPString 	text )
+YQLabel::YQLabel( QWidget * 		parent,
+		  const YWidgetOpt &	opt,
+		  YCPString 		text )
     : QLabel( parent )
     , YLabel( opt, text )
 {

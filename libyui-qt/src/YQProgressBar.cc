@@ -31,7 +31,7 @@ using std::max;
 
 
 YQProgressBar::YQProgressBar( QWidget * 		parent,
-			      YWidgetOpt & 		opt,
+			      const YWidgetOpt & 	opt,
 			      const YCPString & 	label,
 			      const YCPInteger & 	maxProgress,
 			      const YCPInteger &	progress )

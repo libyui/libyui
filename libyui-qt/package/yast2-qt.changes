@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Mar 12 23:25:48 CET 2004 - sh@suse.de
+
+- Enabled shortcut checking for wizard buttons
+- Integrated wizard buttons in YQDialog default button handling
+- Adapted to const ref fix in libyui for all widget constructors 
+- V 2.9.11
+
+-------------------------------------------------------------------
 Thu Mar 11 18:53:02 CET 2004 - sh@suse.de
 
 - Fixed bug #35611: &product; macro not expanded

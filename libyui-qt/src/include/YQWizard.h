@@ -39,6 +39,7 @@ class QToolButton;
 class QWidgetStack;
 
 class YQReplacePoint;
+class YQWizardButton;
 
 
 class YQWizard : public QVBox, public YWizard
@@ -51,8 +52,8 @@ public:
     /**
      * Constructor
      */
-    YQWizard( QWidget * 	parent,
-	      YWidgetOpt & 	opt,
+    YQWizard( QWidget * 		parent,
+	      const YWidgetOpt & 	opt,
 	      const YCPValue & 	backButtonId,	const YCPString & backButtonLabel,
 	      const YCPValue & 	abortButtonId,	const YCPString & abortButtonLabel,
 	      const YCPValue & 	nextButtonId,	const YCPString & nextButtonLabel  );
@@ -142,7 +143,21 @@ public:
      **/
     void updateSteps();
 
-
+    /**
+     * Returns the wizard's "Next" (or "Accept") button.
+     **/
+    const YQWizardButton * nextButton() const  { return _nextButton; }
+    
+    /**
+     * Returns the wizard's "Back" button.
+     **/
+    const YQWizardButton * backButton() const  { return _backButton; }
+    
+    /**
+     * Returns the wizard's "Abort" button.
+     **/
+    const YQWizardButton * abortButton() const { return _abortButton; }
+    
 public slots:
 
 
@@ -218,6 +233,8 @@ protected slots:
 
 
 protected:
+
+    enum Direction { Forward, Backward };
 
     // Layout functions
 
@@ -317,23 +334,27 @@ protected:
     /**
      * Set a button's label.
      **/
-    void setButtonLabel( QPushButton * button, const QString & newLabel );
+    void setButtonLabel( YQWizardButton * button, const QString & newLabel );
 
     /**
-     * Enable or disable a widget.
+     * Set a button's ID.
      **/
-    void enableWidget( QWidget * w, bool enabled );
+    void setButtonID( YQWizardButton * button, const YCPValue & id );
 
     /**
-     * Set the keyboard focus to a widget.
+     * Enable or disable a button.
      **/
-    void setFocus( QWidget * w );
+    void enableButton( YQWizardButton * button, bool enabled );
+
+    /**
+     * Set the keyboard focus to a button.
+     **/
+    void setButtonFocus( YQWizardButton * button );
     
     /**
      * Set wizard command verbosity
      **/
     void setVerboseCommands( bool verbose ) { _verboseCommands = verbose; }
-
 
     /**
      * Set text color and status icon for one wizard step
@@ -354,6 +375,7 @@ protected:
     bool	_verboseCommands;
     bool	_protectNextButton;
     bool	_stepsDirty;
+    Direction	_direction;
 
     QPixmap	_titleBarGradientPixmap;
     QPixmap	_topGradientPixmap;
@@ -385,9 +407,9 @@ protected:
     QLabel *		    _dialogHeading;
     YQReplacePoint *	    _contentsReplacePoint;
     QHBox *		_buttonBox;
-    QPushButton *	    _abortButton;
-    QPushButton *	    _backButton;
-    QPushButton *	    _nextButton;
+    YQWizardButton *	    _abortButton;
+    YQWizardButton *	    _backButton;
+    YQWizardButton *	    _nextButton;
 
     QPtrList<YQWizard::Step> 	_stepsList;
     QDict<YQWizard::Step>	_stepsIDs;

@@ -29,10 +29,10 @@
 #include "YQUI.h"
 #include "YEvent.h"
 #include "YQDialog.h"
-#include "YQPushButton.h"
+#include "YQGenericButton.h"
 
 
-YQDialog::YQDialog( YWidgetOpt &	opt,
+YQDialog::YQDialog( const YWidgetOpt &	opt,
 		    QWidget *		qt_parent,
 		    bool		default_size )
     : QWidget( qt_parent,
@@ -197,7 +197,7 @@ YQDialog::resizeEvent( QResizeEvent * event )
 }
 
 
-YQPushButton *
+YQGenericButton *
 YQDialog::findDefaultButton()
 {
     if ( _defaultButton )
@@ -207,7 +207,7 @@ YQDialog::findDefaultButton()
 
     for ( YWidgetListIterator it = widgetList.begin(); it != widgetList.end(); ++it )
     {
-	YQPushButton * button = dynamic_cast<YQPushButton *> ( *it );
+	YQGenericButton * button = dynamic_cast<YQGenericButton *> ( *it );
 
 	if ( button && button->isDefault() )
 	{
@@ -226,12 +226,12 @@ YQDialog::findDefaultButton()
 void
 YQDialog::ensureOnlyOneDefaultButton()
 {
-    YQPushButton * def     = _focusButton ? _focusButton : _defaultButton;
+    YQGenericButton * def     = _focusButton ? _focusButton : _defaultButton;
     YWidgetList widgetList = YDialog::widgets();
 
     for ( YWidgetListIterator it = widgetList.begin(); it != widgetList.end(); ++it )
     {
-	YQPushButton * button = dynamic_cast<YQPushButton *> ( *it );
+	YQGenericButton * button = dynamic_cast<YQGenericButton *> ( *it );
 
 	if ( button )
 	{
@@ -263,7 +263,7 @@ YQDialog::ensureOnlyOneDefaultButton()
 
 
 void
-YQDialog::setDefaultButton( YQPushButton * newDefaultButton )
+YQDialog::setDefaultButton( YQGenericButton * newDefaultButton )
 {
     if ( _defaultButton	  &&
 	 newDefaultButton &&
@@ -326,7 +326,7 @@ YQDialog::activateDefaultButton( bool warn )
 }
 
 
-void YQDialog::losingFocus( YQPushButton * button )
+void YQDialog::losingFocus( YQGenericButton * button )
 {
     if ( button == _focusButton )
     {
@@ -341,7 +341,7 @@ void YQDialog::losingFocus( YQPushButton * button )
 }
 
 
-void YQDialog::gettingFocus( YQPushButton * button )
+void YQDialog::gettingFocus( YQGenericButton * button )
 {
     if ( _focusButton && _focusButton != button )
 	_focusButton->showAsDefault( false );

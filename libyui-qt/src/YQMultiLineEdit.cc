@@ -32,8 +32,10 @@ using std::max;
 #define VISIBLE_LINES	3
 
 
-YQMultiLineEdit::YQMultiLineEdit( QWidget * parent, YWidgetOpt & opt,
-				  const YCPString & label, const YCPString & initialText )
+YQMultiLineEdit::YQMultiLineEdit( QWidget * 		parent,
+				  const YWidgetOpt & 	opt,
+				  const YCPString & 	label,
+				  const YCPString & 	initialText )
     : QVBox( parent )
     , YMultiLineEdit( opt, label )
 {

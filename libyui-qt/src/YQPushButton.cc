@@ -12,15 +12,13 @@
 
   File:	      YQPushButton.cc
 
-  Author:     Mathias Kettner <kettner@suse.de>
-  Maintainer: Stefan Hundhammer <sh@suse.de>
+  Author:     Maintainer: Stefan Hundhammer <sh@suse.de>
 
 /-*/
 
 
 #include <qpushbutton.h>
 #include <qsize.h>
-#include <qevent.h>
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
@@ -28,154 +26,56 @@
 #include "YQUI.h"
 #include "YEvent.h"
 #include "YQPushButton.h"
-#include "YQDialog.h"
 
-
-#define FOCUS_CHANGES_DEFAULT_BUTTON 0
 
 YQPushButton::YQPushButton( QWidget *		parent,
 			    YQDialog *		dialog,
-			    YWidgetOpt &	opt,
-			    YCPString 		label )
-    : QWidget( parent )
-    , YPushButton( opt, label )
-    , _dialog( dialog )
+			    const YWidgetOpt &	opt,
+			    const YCPString &	label )
+    : YQGenericButton( parent, dialog, opt, label )
 {
     setWidgetRep( this );
-    _qPushButton = new QPushButton( fromUTF8( label->value() ), this );
-    _qPushButton->setFont( YQUI::ui()->currentFont() );
-    _qPushButton->setMinimumSize( 2, 2 );
-    _qPushButton->setAutoDefault( true );
-    _qPushButton->installEventFilter( this );
-    _qPushButton->move( YQButtonBorder, YQButtonBorder );
-    setMinimumSize( _qPushButton->minimumSize()
+
+    QPushButton * button = new QPushButton( fromUTF8( label->value() ), this );
+    CHECK_PTR( button );
+
+    setQPushButton( button );
+    
+    button->setFont( YQUI::ui()->currentFont() );
+    button->setMinimumSize( 2, 2 );
+    button->move( YQButtonBorder, YQButtonBorder );
+    setMinimumSize( button->minimumSize()
 		    + 2 * QSize( YQButtonBorder, YQButtonBorder ) );
     
-    connect( _qPushButton, SIGNAL( clicked() ),
-	     this,         SLOT  ( hit()     ) );
-
-    _isDefault = opt.isDefaultButton.value();
-
-    if ( _dialog && _isDefault )
-	_dialog->setDefaultButton( this );
+    connect( button, SIGNAL( clicked() ),
+	     this,   SLOT  ( hit()     ) );
 }
 
 
 YQPushButton::~YQPushButton()
 {
-    if ( _dialog->focusButton() == this )
-	_dialog->losingFocus( this );
-		
-    if ( _dialog->defaultButton() == this )
-	_dialog->setDefaultButton(0);
-}
-
-
-void YQPushButton::setEnabling( bool enabled )
-{
-    _qPushButton->setEnabled( enabled );
-    YWidget::setEnabling( enabled );
-}
-
-
-void YQPushButton::setIcon( const YCPString & y_icon_name )
-{
-    QString icon_name = fromUTF8( y_icon_name->value() );
-
-    if ( icon_name.isEmpty() )
-    {
-	_qPushButton->setIconSet( QIconSet() );
-	return;
-    }
-
-    icon_name = QString( ICONDIR ) + "/" + icon_name;
-    QPixmap icon( icon_name );
-
-    if ( icon.isNull() )
-	y2warning( "Can't load icon '%s'", (const char *) icon_name );
-    else
-	_qPushButton->setIconSet( icon );
 }
 
 
 long YQPushButton::nicesize( YUIDimension dim )
 {
     return 2 * YQButtonBorder + ( dim == YD_HORIZ
-				  ? _qPushButton->sizeHint().width()
-				  : _qPushButton->sizeHint().height() );
+				  ? qPushButton()->sizeHint().width()
+				  : qPushButton()->sizeHint().height() );
 }
 
 
 void YQPushButton::setSize( long newWidth, long newHeight )
 {
-    _qPushButton->resize( newWidth  - 2 * YQButtonBorder,
-			  newHeight - 2 * YQButtonBorder );
+    qPushButton()->resize( newWidth  - 2 * YQButtonBorder,
+			   newHeight - 2 * YQButtonBorder );
     resize( newWidth, newHeight );
-}
-
-
-void YQPushButton::setLabel( const YCPString & label )
-{
-    _qPushButton->setText( fromUTF8(label->value() ) );
-    YPushButton::setLabel( label );
-}
-
-
-void YQPushButton::showAsDefault( bool show )
-{
-    _qPushButton->setDefault( show );
-    update();
-}
-
-
-bool YQPushButton::isShownAsDefault() const
-{
-    return _qPushButton->isDefault();
-}
-
-
-QString
-YQPushButton::text() const
-{
-    return _qPushButton->text();
-}
-
-
-void YQPushButton::activate()
-{
-    _qPushButton->animateClick();
 }
 
 
 void YQPushButton::hit()
 {
     YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
-}
-
-
-bool YQPushButton::eventFilter( QObject * obj, QEvent * event )
-{
-    if ( event->type() == QEvent::FocusIn )
-    {
-	_dialog->gettingFocus( this );
-	return false;	// event processed?
-    }
-    else if ( event->type() == QEvent::FocusOut )
-    {
-	_dialog->losingFocus( this );
-	return false;	// event processed?
-    }
-    
-    return QWidget::eventFilter( obj, event );
-}
-
-
-bool YQPushButton::setKeyboardFocus()
-{
-    _dialog->gettingFocus( this );
-    _qPushButton->setFocus();
-
-    return true;
 }
 
 

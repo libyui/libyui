@@ -98,7 +98,9 @@ using std::max;
 
 
 
-YQPackageSelector::YQPackageSelector( QWidget * parent, YWidgetOpt & opt, const YCPString & floppyDevice )
+YQPackageSelector::YQPackageSelector( QWidget * 		parent,
+				      const YWidgetOpt & 	opt,
+				      const YCPString & 	floppyDevice )
     : QVBox( parent )
     , YPackageSelector( opt )
     , _floppyDevice( floppyDevice->value().c_str() )

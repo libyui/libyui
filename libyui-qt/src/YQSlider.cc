@@ -27,7 +27,7 @@
 
 
 YQSlider::YQSlider( QWidget *		parent,
-		    YWidgetOpt &	opt,
+		    const YWidgetOpt &	opt,
 		    const YCPString &	label,
 		    int 		minValue,
 		    int 		maxValue,

@@ -26,7 +26,7 @@
 #include "YDialog.h"
 
 
-class YQPushButton;
+class YQGenericButton;
 class QFrame;
 
 
@@ -38,9 +38,9 @@ public:
     /**
      * Constructor: Constructor.
      */
-    YQDialog( YWidgetOpt &	opt,
-	      QWidget *		qt_parent	= 0,
-	      bool		default_size	= false );
+    YQDialog( const YWidgetOpt &	opt,
+	      QWidget *			qt_parent	= 0,
+	      bool			default_size	= false );
 
     /**
      * Destructor: Cleans up.
@@ -73,7 +73,7 @@ public:
     /**
      * Return this dialog's ( first ) default button or 0 if none
      **/
-    YQPushButton * findDefaultButton();
+    YQGenericButton * findDefaultButton();
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -96,13 +96,13 @@ public:
      * Returns the button that has the keyboard focus or 0 if no button has
      * the keyboard focus.
      **/
-    YQPushButton * focusButton() const { return _focusButton; }
+    YQGenericButton * focusButton() const { return _focusButton; }
 
     /**
      * Returns the dialog's default button - the button that is activated with
      * [Return] if no button has the keyboard focus.
      **/
-    YQPushButton * defaultButton() const { return _defaultButton; }
+    YQGenericButton * defaultButton() const { return _defaultButton; }
 
     /**
      * Notification that a button loses the keyboard focus.
@@ -110,7 +110,7 @@ public:
      * All pushbuttons are required to call this whenever they lose focus so
      * the dialog can keep track of its focusButton.
      **/
-    void losingFocus( YQPushButton * button );
+    void losingFocus( YQGenericButton * button );
     
     /**
      * Notification that a button gets the keyboard focus.
@@ -118,14 +118,14 @@ public:
      * All pushbuttons are required to call this whenever they gain focus so
      * the dialog can keep track of its focusButton.
      **/
-    void gettingFocus( YQPushButton * button );
+    void gettingFocus( YQGenericButton * button );
 
     /**
      * Set the dialog's default button - the button that is activated with
      * [Return] if no other button has the keyboard focus.
      * 'newDefaultButton' may be 0 if the former default button is destroyed.
      **/
-    void setDefaultButton( YQPushButton * newDefaultButton );
+    void setDefaultButton( YQGenericButton * newDefaultButton );
 
     /**
      * Ensure presence of no more than one single default button.
@@ -196,8 +196,8 @@ protected:
     bool  		_userResized;
     QSize 		_userSize;
 
-    YQPushButton * 	_focusButton;
-    YQPushButton * 	_defaultButton;
+    YQGenericButton * 	_focusButton;
+    YQGenericButton * 	_defaultButton;
 };
 
 

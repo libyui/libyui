@@ -29,7 +29,7 @@ using std::max;
 
 
 YQFrame::YQFrame( QWidget * 		parent,
-		  YWidgetOpt & 		opt,
+		  const YWidgetOpt & 	opt,
 		  const YCPString &	newLabel )
     : QGroupBox( parent )
     , YFrame( opt, newLabel )

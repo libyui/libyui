@@ -35,7 +35,9 @@ using std::max;
 #include "YQTree.h"
 
 
-YQTree::YQTree( QWidget * parent, YWidgetOpt & opt, const YCPString & label )
+YQTree::YQTree( QWidget * 		parent,
+		const YWidgetOpt &	opt,
+		const YCPString & 	label )
     : QVBox( parent )
     , YTree	( opt, label )
 {

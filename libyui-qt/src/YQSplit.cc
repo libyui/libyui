@@ -23,9 +23,9 @@
 #include "YQSplit.h"
 
 
-YQSplit::YQSplit( QWidget * 	parent,
-		  YWidgetOpt &	opt,
-		  YUIDimension	dimension )
+YQSplit::YQSplit( QWidget * 		parent,
+		  const YWidgetOpt &	opt,
+		  YUIDimension		dimension )
     : QWidget( parent )
     , YSplit( opt, dimension )
 {

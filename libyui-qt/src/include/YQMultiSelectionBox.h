@@ -40,7 +40,7 @@ public:
      * Constructor.
      **/
     YQMultiSelectionBox( QWidget * 		parent,
-			 YWidgetOpt & 		opt,
+			 const YWidgetOpt & 	opt,
 			 const YCPString &	label );
 
     /**

@@ -32,7 +32,7 @@
 
 
 YQMenuButton::YQMenuButton( QWidget * 		parent,
-			    YWidgetOpt & 	opt,
+			    const YWidgetOpt & 	opt,
 			    YCPString 		label )
     : QWidget( parent )
     , YMenuButton( opt, label )

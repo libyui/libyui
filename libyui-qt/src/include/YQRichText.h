@@ -40,7 +40,7 @@ public:
     /**
      * Constructor
      */
-    YQRichText( QWidget * parent, YWidgetOpt & opt, const YCPString & text );
+    YQRichText( QWidget * parent, const YWidgetOpt & opt, const YCPString & text );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the

@@ -41,7 +41,7 @@ public:
      * Constructor.
      */
     YQCheckBox( QWidget *		parent,
-		YWidgetOpt & 		opt,
+		const YWidgetOpt &	opt,
 		const YCPString & 	label,
 		bool 			initiallyChecked );
 

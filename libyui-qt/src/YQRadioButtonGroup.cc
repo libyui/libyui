@@ -28,8 +28,8 @@
 #include "YQRadioButton.h"
 
 
-YQRadioButtonGroup::YQRadioButtonGroup( QWidget * 	parent,
-					YWidgetOpt &	opt )
+YQRadioButtonGroup::YQRadioButtonGroup( QWidget * 		parent,
+					const YWidgetOpt &	opt )
     : QWidget( parent )
     , YRadioButtonGroup( opt )
 {

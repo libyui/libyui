@@ -79,7 +79,9 @@ YQListViewItem::YQListViewItem( YQTable *	 table,
 }
 
 
-YQTable::YQTable( QWidget * parent, YWidgetOpt & opt, vector<string> header )
+YQTable::YQTable( QWidget * 		parent,
+		  const YWidgetOpt & 	opt,
+		  vector<string> 	header )
     : QVBox( parent )
     , YTable( opt, header.size() )
     , _last_item(0)

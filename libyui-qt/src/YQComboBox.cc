@@ -34,7 +34,7 @@
 
 
 YQComboBox::YQComboBox( QWidget * 		parent,
-			YWidgetOpt & 		opt,
+			const YWidgetOpt & 	opt,
 			const YCPString &	label )
     : QVBox( parent )
     , YComboBox( opt, label )

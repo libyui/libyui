@@ -42,7 +42,7 @@ public:
      * Constructor.
      */
     YQPartitionSplitter( QWidget *		parent,
-			 YWidgetOpt &		opt,
+			 const YWidgetOpt &	opt,
 			 int 			usedSize,
 			 int 			freeSize,
 			 int 			newPartSize,

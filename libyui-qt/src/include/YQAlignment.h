@@ -37,10 +37,10 @@ public:
     /**
      * Constructor.
      */
-    YQAlignment( QWidget *	parent,
-		 YWidgetOpt & 	opt,
-		 YAlignmentType horAlign,
-		 YAlignmentType vertAlign );
+    YQAlignment( QWidget *		parent,
+		 const YWidgetOpt & 	opt,
+		 YAlignmentType 	horAlign,
+		 YAlignmentType 	vertAlign );
 
     /**
      * Moves a child widget to a new position.

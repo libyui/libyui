@@ -37,7 +37,7 @@ public:
      * Constructor.
      */
     YQColoredLabel( QWidget * 		parent,
-		    YWidgetOpt & 	opt,
+		    const YWidgetOpt & 	opt,
 		    YCPString 		text,
 		    YColor & 		fg,
 		    YColor & 		bg,

@@ -36,7 +36,7 @@ public:
     /**
      * Constructor.
      */
-    YQSplit( QWidget * parent, YWidgetOpt & opt, YUIDimension splitDimension );
+    YQSplit( QWidget * parent, const YWidgetOpt & opt, YUIDimension splitDimension );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the

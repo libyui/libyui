@@ -20,11 +20,11 @@
 #include "YQSpacing.h"
 
 
-YQSpacing::YQSpacing( QWidget * 	parent,
-		      YWidgetOpt & 	opt,
-		      float 		size,
-		      bool 		horizontal,
-		      bool 		vertical )
+YQSpacing::YQSpacing( QWidget * 		parent,
+		      const YWidgetOpt & 	opt,
+		      float 			size,
+		      bool 			horizontal,
+		      bool 			vertical )
     : QWidget( parent )
     , YSpacing( opt, size, horizontal, vertical )
 {

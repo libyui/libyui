@@ -33,7 +33,7 @@ using std::max;
 
 
 YQTextEntry::YQTextEntry( QWidget * 		parent,
-			  YWidgetOpt & 		opt,
+			  const YWidgetOpt & 	opt,
 			  const YCPString & 	label,
 			  const YCPString & 	text )
     : QVBox( parent )

@@ -53,10 +53,11 @@
 #include "utf8.h"
 #include "YQi18n.h"
 #include "YQUI.h"
+#include "YQDialog.h"
 #include "YQReplacePoint.h"
 #include "YQEmpty.h"
 #include "YQLabel.h"
-#include "YQIconPool.h"
+#include "YQWizardButton.h"
 #include "QY2LayoutUtils.h"
 #include "YEvent.h"
 
@@ -80,7 +81,7 @@ using std::string;
 
 
 YQWizard::YQWizard( QWidget *		parent,
-		    YWidgetOpt &	opt,
+		    const YWidgetOpt &	opt,
 		    const YCPValue &	backButtonId,	const YCPString & backButtonLabel,
 		    const YCPValue &	abortButtonId,	const YCPString & abortButtonLabel,
 		    const YCPValue &	nextButtonId,	const YCPString & nextButtonLabel  )
@@ -95,6 +96,7 @@ YQWizard::YQWizard( QWidget *		parent,
     _verboseCommands		= false;
     _protectNextButton		= false;
     _stepsDirty			= false;
+    _direction 			= YQWizard::Forward;
 
     _sideBar			= 0;
     _stepsPanel			= 0;
@@ -649,10 +651,10 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
     addVSpacing( workArea );
 #endif
 
-    // 
+    //
     // Client area (the part that belongs to the YCP application)
     //
-    
+
     layoutClientArea( workArea );
 
     //
@@ -715,18 +717,21 @@ void YQWizard::layoutClientArea( QWidget * parent )
 void YQWizard::layoutButtonBox()
 {
     destroyButtons();
-    
+
     addHSpacing( _buttonBox, 4 );
 
-    
+    YQDialog * dialog = dynamic_cast<YQDialog *>( YQUI::ui()->currentDialog() );
+    CHECK_PTR( dialog );
+
+
     //
     // "Abort" button
     //
 
-    _abortButton = new QPushButton( fromUTF8( _abortButtonLabel->value() ), _buttonBox );
+    _abortButton = new YQWizardButton( this, dialog, _buttonBox, _abortButtonLabel, _abortButtonId );
     CHECK_PTR( _abortButton );
     connect( _abortButton,	SIGNAL( clicked()	),
-	     this,		SLOT  ( abortClicked() ) );
+	     this,		SLOT  ( abortClicked()  ) );
 
     addHStretch( _buttonBox );
 
@@ -735,7 +740,7 @@ void YQWizard::layoutButtonBox()
     // "Back" button
     //
 
-    _backButton	 = new QPushButton( fromUTF8( _backButtonLabel->value()	 ), _buttonBox );
+    _backButton	 = new YQWizardButton( this, dialog, _buttonBox, _backButtonLabel, _backButtonId );
     CHECK_PTR( _backButton );
     connect( _backButton,	SIGNAL( clicked()	),
 	     this,		SLOT  ( backClicked()	) );
@@ -750,7 +755,7 @@ void YQWizard::layoutButtonBox()
     // "Next" button
     //
 
-    _nextButton	 = new QPushButton( fromUTF8( _nextButtonLabel->value()	 ), _buttonBox );
+    _nextButton	 = new YQWizardButton( this, dialog, _buttonBox, _nextButtonLabel, _nextButtonId );
     CHECK_PTR( _nextButton );
     connect( _nextButton,	SIGNAL( clicked()	),
 	     this,		SLOT  ( nextClicked()	) );
@@ -991,19 +996,21 @@ void YQWizard::addChild( YWidget * ychild )
 
 void YQWizard::backClicked()
 {
-    sendEvent( _backButtonId );
+    sendEvent( _backButton->id() );
+    _direction = YQWizard::Backward;
 }
 
 
 void YQWizard::abortClicked()
 {
-    sendEvent( _abortButtonId );
+    sendEvent( _abortButton->id() );
 }
 
 
 void YQWizard::nextClicked()
 {
-    sendEvent( _nextButtonId );
+    sendEvent( _nextButton->id() );
+    _direction = YQWizard::Forward;
 }
 
 
@@ -1204,11 +1211,11 @@ YCPValue YQWizard::anyArg( const YCPTerm & term, int argNo )
 }
 
 
-void YQWizard::setButtonLabel( QPushButton * button, const QString & newLabel )
+void YQWizard::setButtonLabel( YQWizardButton * button, const QString & newLabel )
 {
     if ( button )
     {
-	button->setText( newLabel );
+	button->setLabel( newLabel );
 
 	if ( newLabel.isEmpty() )
 	    button->hide();
@@ -1218,20 +1225,29 @@ void YQWizard::setButtonLabel( QPushButton * button, const QString & newLabel )
 }
 
 
-void YQWizard::enableWidget( QWidget * w, bool enabled )
+void YQWizard::setButtonID( YQWizardButton * button, const YCPValue & id )
 {
-    if ( w == _nextButton && _protectNextButton && ! enabled )
-	return;
-    
-    if ( w )
-	w->setEnabled( enabled );
+    if ( button )
+    {
+	button->setId( id );
+    }
 }
 
 
-void YQWizard::setFocus( QWidget * w )
+void YQWizard::enableButton( YQWizardButton * button, bool enabled )
 {
-    if ( w )
-	w->setFocus();
+    if ( button == _nextButton && _protectNextButton && ! enabled )
+	return;
+
+    if ( button )
+	button->setEnabling( enabled );
+}
+
+
+void YQWizard::setButtonFocus( YQWizardButton * button )
+{
+    if ( button )
+	button->setKeyboardFocus();
 }
 
 
@@ -1256,22 +1272,22 @@ YCPValue YQWizard::command( const YCPTerm & cmd )
     if ( isCommand( "SetNextButtonLabel	  ( string )", cmd ) )	{ setButtonLabel( _nextButton,  qStringArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "SetCancelButtonLabel ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "SetAcceptButtonLabel ( string )", cmd ) )	{ setButtonLabel( _nextButton,  qStringArg( cmd, 0 ) );	return OK; }
-    
-    if ( isCommand( "SetAbortButtonID     ( any )"   , cmd ) )	{ _abortButtonId = anyArg( cmd, 0 );			return OK; }
-    if ( isCommand( "SetBackButtonID	  ( any )"   , cmd ) )	{ _backButtonId  = anyArg( cmd, 0 );			return OK; }
-    if ( isCommand( "SetNextButtonID	  ( any )"   , cmd ) )	{ _nextButtonId  = anyArg( cmd, 0 );			return OK; }
-    
-    if ( isCommand( "EnableBackButton 	  ( bool )"  , cmd ) )	{ enableWidget( _backButton,  boolArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "EnableNextButton     ( bool )"  , cmd ) )	{ enableWidget( _nextButton,  boolArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "EnableAbortButton    ( bool )"  , cmd ) )	{ enableWidget( _abortButton, boolArg( cmd, 0 ) );	return OK; }
+
+    if ( isCommand( "SetAbortButtonID     ( any )"   , cmd ) )	{ setButtonID( _abortButton, 	anyArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "SetBackButtonID	  ( any )"   , cmd ) )	{ setButtonID( _backButton,  	anyArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "SetNextButtonID	  ( any )"   , cmd ) )	{ setButtonID( _nextButton,	anyArg( cmd, 0 ) );	return OK; }
+
+    if ( isCommand( "EnableBackButton 	  ( bool )"  , cmd ) )	{ enableButton( _backButton,  	boolArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "EnableNextButton     ( bool )"  , cmd ) )	{ enableButton( _nextButton,  	boolArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "EnableAbortButton    ( bool )"  , cmd ) )	{ enableButton( _abortButton, 	boolArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "ProtectNextButton    ( bool )"  , cmd ) )	{ _protectNextButton = boolArg( cmd, 0 );		return OK; }
-    
-    if ( isCommand( "SetFocusToNextButton ()"        , cmd ) )	{ setFocus( _nextButton );				return OK; }
-    if ( isCommand( "SetFocusToBackButton ()"        , cmd ) )	{ setFocus( _backButton );				return OK; }
-    
+
+    if ( isCommand( "SetFocusToNextButton ()"        , cmd ) )	{ setButtonFocus( _nextButton );			return OK; }
+    if ( isCommand( "SetFocusToBackButton ()"        , cmd ) )	{ setButtonFocus( _backButton );			return OK; }
+
     if ( isCommand( "SetVerboseCommands	  ( bool )"  , cmd ) )	{ setVerboseCommands( boolArg( cmd, 0 ) );		return OK; }
 
-    
+
     y2error( "Undefined wizard command: %s", cmd->toString().c_str() );
     return YCPBoolean( false );
 

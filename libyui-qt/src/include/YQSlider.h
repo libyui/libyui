@@ -44,12 +44,12 @@ public:
     /**
      * Constructor.
      */
-    YQSlider( QWidget *		parent,
-	      YWidgetOpt &	opt,
-	      const YCPString &	label,
-	      int 		minValue,
-	      int 		maxValue,
-	      int 		initialValue );
+    YQSlider( QWidget *			parent,
+	      const YWidgetOpt &	opt,
+	      const YCPString &		label,
+	      int 			minValue,
+	      int 			maxValue,
+	      int 			initialValue );
 
     /**
      * Sets the widget's enabled state.

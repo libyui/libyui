@@ -27,7 +27,7 @@
 
 
 YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
-					  YWidgetOpt &		opt,
+					  const YWidgetOpt &	opt,
 					  int			arg_usedSize,
 					  int			arg_totalFreeSize,
 					  int			arg_newPartSize,

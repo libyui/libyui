@@ -29,7 +29,7 @@
 
 
 YQRichText::YQRichText( QWidget * 		parent,
-			YWidgetOpt & 		opt,
+			const YWidgetOpt & 	opt,
 			const YCPString &	text )
     : QVBox( parent )
     , YRichText( opt, text )

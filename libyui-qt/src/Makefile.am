@@ -51,6 +51,7 @@ liby2qt_la_SOURCES = 				\
 	YQEBunny.cc				\
 	YQEmpty.cc				\
 	YQFrame.cc				\
+	YQGenericButton.cc			\
 	YQImage.cc				\
 	YQIntField.cc				\
 	YQLabel.cc				\
@@ -98,6 +99,7 @@ liby2qt_la_SOURCES = 				\
 	YQTextEntry.cc				\
 	YQTree.cc				\
 	YQWizard.cc				\
+	YQWizardButton.cc			\
 						\
 	YFrameBuffer.cc				\
 	QY2BarGraph.cc				\
@@ -130,6 +132,7 @@ BUILT_SOURCES =					\
 	YQDownloadProgress.moc			\
 	YQEmpty.moc				\
 	YQFrame.moc				\
+	YQGenericButton.moc			\
 	YQImage.moc				\
 	YQIntField.moc				\
 	YQLabel.moc				\
@@ -176,6 +179,7 @@ BUILT_SOURCES =					\
 	YQTextEntry.moc				\
 	YQTree.moc				\
 	YQWizard.moc				\
+	YQWizardButton.moc			\
 						\
 	QY2BarGraph.moc				\
 	QY2ComboTabWidget.moc			\
@@ -199,6 +203,7 @@ YQDialog.o YQDialog.lo:						YQDialog.moc
 YQDownloadProgress.o YQDownloadProgress.lo:			YQDownloadProgress.moc
 YQEmpty.o YQEmpty.lo:						YQEmpty.moc
 YQFrame.o YQFrame.lo:						YQFrame.moc
+YQGenericButton.o YQGenericButton.lo:				YQGenericButton.moc
 YQImage.o YQImage.lo:						YQImage.moc
 YQIntField.o YQIntField.lo:					YQIntField.moc
 YQLabel.o YQLabel.lo:						YQLabel.moc
@@ -245,6 +250,7 @@ YQTable.o YQTable.lo:						YQTable.moc
 YQTextEntry.o YQTextEntry.lo:					YQTextEntry.moc
 YQTree.o YQTree.lo:						YQTree.moc
 YQWizard.o YQWizard.lo:						YQWizard.moc
+YQWizardButton.o YQWizardButton.lo:				YQWizardButton.moc
 
 QY2BarGraph.o QY2BarGraph.lo:					QY2BarGraph.moc
 QY2ComboTabWidget.o QY2ComboTabWidget.lo:			QY2ComboTabWidget.cc
@@ -266,6 +272,7 @@ YQDialog.moc: 				include/YQDialog.h
 YQDownloadProgress.moc:			include/YQDownloadProgress.h
 YQEmpty.moc:				include/YQEmpty.h
 YQFrame.moc:				include/YQFrame.h
+YQGenericButton.moc:			include/YQGenericButton.h
 YQImage.moc:				include/YQImage.h
 YQIntField.moc:				include/YQIntField.h
 YQLabel.moc:				include/YQLabel.h
@@ -312,6 +319,7 @@ YQTable.moc:				include/YQTable.h
 YQTextEntry.moc:			include/YQTextEntry.h
 YQTree.moc:				include/YQTree.h
 YQWizard.moc:				include/YQWizard.h
+YQWizardButton.moc:			include/YQWizardButton.h
 
 QY2BarGraph.moc:			include/QY2BarGraph.h
 QY2ComboTabWidget.cc:			include/QY2ComboTabWidget.h

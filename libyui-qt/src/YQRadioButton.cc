@@ -39,7 +39,7 @@
 
 
 YQRadioButton::YQRadioButton( QWidget * 		parent,
-			      YWidgetOpt & 		opt,
+			      const YWidgetOpt & 	opt,
 			      YRadioButtonGroup *	rbg,
 			      const YCPString & 	label,
 			      bool 			checked )

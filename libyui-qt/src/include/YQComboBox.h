@@ -38,7 +38,7 @@ class YQComboBox : public QVBox, public YComboBox
 
 public:
 
-    YQComboBox( QWidget * parent, YWidgetOpt & opt, const YCPString & label );
+    YQComboBox( QWidget * parent, const YWidgetOpt & opt, const YCPString & label );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the

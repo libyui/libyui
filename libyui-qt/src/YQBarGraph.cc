@@ -25,7 +25,7 @@
 #include "YQBarGraph.h"
 
 
-YQBarGraph::YQBarGraph( QWidget * parent, YWidgetOpt & opt )
+YQBarGraph::YQBarGraph( QWidget * parent, const YWidgetOpt & opt )
     : QWidget( parent )
     , YBarGraph( opt )
 {

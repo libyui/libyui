@@ -21,7 +21,7 @@
 #include "YQSquash.h"
 
 YQSquash::YQSquash( QWidget * 		parent,
-		    YWidgetOpt & 	opt,
+		    const YWidgetOpt & 	opt,
 		    bool 		horSquash,
 		    bool 		vertSquash )
     : QWidget( parent )

@@ -38,7 +38,7 @@ using std::max;
 
 
 YQMultiSelectionBox::YQMultiSelectionBox( QWidget *		parent,
-					  YWidgetOpt &		opt,
+					  const YWidgetOpt &	opt,
 					  const YCPString &	label )
     : QVBox( parent )
     , YMultiSelectionBox( opt, label )

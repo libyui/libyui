@@ -29,7 +29,7 @@
 
 
 YQDownloadProgress::YQDownloadProgress( QWidget *		parent,
-					YWidgetOpt &		opt,
+					const YWidgetOpt &	opt,
 					const YCPString & 	label,
 					const YCPString &	filename,
 					int 			expectedSize )

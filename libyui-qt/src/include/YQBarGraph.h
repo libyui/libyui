@@ -36,7 +36,7 @@ public:
     /**
      * Constructor.
      */
-    YQBarGraph( QWidget * parent, YWidgetOpt & opt );
+    YQBarGraph( QWidget * parent, const YWidgetOpt & opt );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
