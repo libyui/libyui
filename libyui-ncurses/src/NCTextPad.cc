@@ -457,13 +457,29 @@ void NCTextPad::setText( const NCtext & ntext )
   assertSze( wsze( ntext.Lines(), ntext.Columns() + 1 ) );
   curs = 0;
 
+  cchar_t cchar;
+  attr_t attr;
+  short int color;
+  attr_get ( &attr, &color, NULL );
+  wchar_t wch[2];
+
   lines.clear();
   unsigned cl = 0;
   for ( NCtext::const_iterator line = ntext.begin(); line != ntext.end(); ++line ) {
     lines.push_back( (*line).str().length() );
 
-    move( cl++, 0 );
-    addwstr( (*line).str().c_str() );
+    unsigned cc = 0;
+    for (wstring::const_iterator c = line->str().begin(); c!=line->str().end(); c++) {
+	if (*c == 9) { // horizontal tabulation
+	    wch[0] = 8677; // U+21E5 RIGHTWARDS ARROW TO BAR (rightward tab)
+	} else {
+	    wch[0] = *c;
+	}
+	wch[1] = L'\0';
+	setcchar( &cchar, wch, attr, color, NULL );
+	ins_wch( cl, cc++, &cchar );
+    }
+    cl++;
   }
   if ( lines.empty() )
     lines.push_back( 0U );
