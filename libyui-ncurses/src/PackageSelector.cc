@@ -555,6 +555,11 @@ bool PackageSelector::fillPatchList( string filter )
 	checkPatch( patchPtr, filter );
     }
 
+    if ( packageList->getNumLines() == 0 )
+    {
+	packageList->createInfoEntry( PkgNames::UpToDate() );	
+    }
+    
     // show the patches
     packageList->drawList();
     
@@ -575,7 +580,8 @@ bool PackageSelector::fillPatchList( string filter )
 	    static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::Patches()) );  
 	}
     }
-
+    showPatchInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );
+    
     return true;
 }
 
@@ -1028,8 +1034,8 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	    // set status strategy
 	    ObjectStatStrategy * strategy = new AvailableStatStrategy();
 	    pkgAvail->setTableType( NCPkgTable::T_Availables, strategy );
-	    // fill the header
-	    // pkgAvail->fillHeader( );
+
+	    pkgAvail->fillHeader( );
 	    fillAvailableList( pkgAvail, packageList->getDataPointer( packageList->getCurrentItem() ) );
 	}
     }
@@ -1052,8 +1058,7 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	    ObjectStatStrategy * strategy = new PatchPkgStatStrategy();
 	    patchPkgs->setTableType( NCPkgTable::T_PatchPkgs, strategy );
 
-	    // FIXME: filling the header overwrites first line of the package list 
-	    // patchPkgs->fillHeader( );
+	    patchPkgs->fillHeader( );
 	    fillPatchPackages( patchPkgs, packageList->getDataPointer( packageList->getCurrentItem() ) );
 	}	
     }
@@ -1657,9 +1662,17 @@ bool PackageSelector::showPatchInformation ( PMObjectPtr objPtr )
 
     if (  visibleInfo->compare( PkgNames::PatchDescr() ) == YO_EQUAL )
     {
+	string descr;
+	FSize size = patchPtr->size(); 
+	descr += PkgNames::Patch();
+	descr += patchPtr->getSelectable()->name();
+	descr += "&nbsp;";
+	descr += PkgNames::Size();
+	descr += size.form( 8 );
+	descr += "<br>";
 	// get and format the patch description
 	list<string> value = patchPtr->description();
-	string descr = createDescrText( value );
+	descr += createDescrText( value );
 	
 	// show the description	
 	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
