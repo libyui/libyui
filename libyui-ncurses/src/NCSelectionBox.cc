@@ -113,7 +113,7 @@ string NCSelectionBox::getLine( const int & index )
     if ( line->Cols() == 1 )
     {
 	value = line->GetItems()[0];
-	const NClabel label = value->Label();
+	const NClabelNoHotkey label = value->Label();
 	const list<NCstring> text = label.getText();
 	list<NCstring>::const_iterator it = text.begin();
 

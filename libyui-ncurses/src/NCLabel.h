@@ -42,7 +42,7 @@ class NCLabel : public YLabel, public NCWidget {
   private:
 
     bool    heading;
-    NClabel label;
+    NClabelNoHotkey label;
 
   protected:
 

@@ -174,5 +174,22 @@ class NClabel : protected NCtext {
 };
 
 ///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME : NClabelNoHotkey
+//
+//	DESCRIPTION :
+//
+class NClabelNoHotkey : public NClabel {
+
+  friend std::ostream & operator<<( std::ostream & STREAM, const NClabelNoHotkey & OBJ );
+
+  protected:
+    virtual void lset(const NCstring & ntext) {NCtext::lset(ntext); }
+
+  public:
+    NClabelNoHotkey(const NCstring & nstr = "") { NCtext::lset(nstr); };
+};
+
+///////////////////////////////////////////////////////////////////
 
 #endif // NCtext_h

@@ -866,14 +866,14 @@ bool NCPkgTable::SourceInstall( bool install )
 	ok = selPtr->set_source_install( true );
 	NCMIL << "Set source install returns: " << (ok?"true":"false") << endl;
 	if ( currentCol )
-	    currentCol->SetLabel( NClabel( " x " ) );
+	    currentCol->SetLabel( NClabelNoHotkey( " x " ) );
     }
     else if ( !install && selPtr->source_install() )
     {
 	ok = selPtr->set_source_install( false );
 	NCMIL << "ReSet source install returns: " << (ok?"true":"false") << endl;
 	if ( currentCol )
-	    currentCol->SetLabel( NClabel( "   " ) );
+	    currentCol->SetLabel( NClabelNoHotkey( "   " ) );
     }
 	
     return true;
