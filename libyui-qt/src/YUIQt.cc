@@ -907,6 +907,8 @@ bool YUIQt::eventFilter( QObject * obj, QEvent * ev )
 
     if ( ev->type() == QEvent::Close )
     {
+	emit wmClose();
+
 	if ( ! wm_close_blocked )
 	{
 	    // Don't simply close the application window, return from UserInput()

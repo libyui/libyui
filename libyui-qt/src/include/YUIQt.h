@@ -151,6 +151,13 @@ public:
     bool autoActivateDialogs() { return auto_activate_dialogs; }
 
 
+signals:
+    /**
+     * Emitted upon WM_CLOSE
+     **/
+    void wmClose();
+
+
 protected:
 
     // Implement virtual functions inherited from YUIInterpreter

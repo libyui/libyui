@@ -178,7 +178,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
 void
 YQPackageSelector::basicLayout()
 {
-#if 0
+#if 1
     layoutMenuBar( this );
 #endif
 
@@ -593,6 +593,14 @@ YQPackageSelector::makeConnections()
 	connect( _pkgVersionsView, 	SIGNAL( candidateChanged( PMObjectPtr ) ),
 		 _pkgList,		SLOT  ( updateToplevelItemData() ) );
     }
+
+
+    //
+    // Handle WM_CLOSE like "Cancel"
+    //
+    
+    connect( _yuiqt, SIGNAL( wmClose() ),
+	     this,   SLOT  ( reject()   ) );
 }
 
 
