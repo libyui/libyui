@@ -402,7 +402,8 @@ bool NCPopupDeps::addDepsLine( NCPkgTable * table,
 		    + PkgNames::TabooText() + ")";
 		pkgLine.push_back( taboo );	
 	    }
-	    else if ( error.edition.asString() != "" )
+	    else if ( error.edition.asString() != ""
+		      &&  error.edition.asString() != "-" )
 	    {
 		string version = "(" + PkgNames::PkgVersion() + " " + error.edition.asString()
 		    + " " + PkgNames::NotAvailableText() + ")";
