@@ -792,6 +792,7 @@ public:
     static const string ObsoleteText();
     
     static const string RequByText();
+    static const string ReinstallText();
     static const string RequiredByText();
     static const string NoAvailText();
     static const string NeedsText();

@@ -1077,6 +1077,12 @@ const string PkgNames::ConflictText()
     static const string value = _( "conflicts with..." );
     return value;
 }
+const string PkgNames::ReinstallText()
+{
+     // text is shown in a line of a package list
+    static const string value = _( "needs to be reinstalled" );
+    return value;
+}
 const string PkgNames::NoConflictText()
 {
      // text is shown in a line of a package list

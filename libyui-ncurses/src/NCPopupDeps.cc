@@ -31,6 +31,8 @@
 #include "NCPopupInfo.h"
 #include "ObjectStatStrategy.h"
 
+#include "NCi18n.h"
+
 #include <y2pm/PMPackageManager.h>
 
 using namespace std;
@@ -329,6 +331,12 @@ bool NCPopupDeps::evaluateErrorResult( NCPkgTable * table,
 	    if ( addDepsLine( table, (*it), PkgNames::RequByText()) )
 		dependencies.push_back( make_pair( (*it), PkgNames::RequByText() ) );
 	}
+
+	if( !(*it).is_downgrade_from.is_unspecified() && (*it).state_change_not_possible)
+	{
+	    if ( addDepsLine( table, (*it), PkgNames::ReinstallText()) )
+		dependencies.push_back( make_pair( (*it), PkgNames::ReinstallText() ) );
+	}
 	++it;
     }
 
@@ -383,10 +391,17 @@ bool NCPopupDeps::addDepsLine( NCPkgTable * table,
     {
 	pkgLine.push_back( pkgName );	// package name
 	pkgLine.push_back( kind );
-	if ( kind != PkgNames::RequByText()
-	     && !error.referers.empty() )
+	if ( kind != PkgNames::RequByText() )
 	{
-	    pkgLine.push_back( getReferersList( error) );
+	    if( !error.referers.empty() )
+		pkgLine.push_back( getReferersList( error) );
+	    else if(!error.is_downgrade_from.is_unspecified())
+	    {
+		string text = stringutil::form(_("(Version %s required, %s currently installed)").c_str(),
+		    error.edition.asString().c_str(),
+		    error.is_downgrade_from.asString().c_str());
+		pkgLine.push_back( text );
+	    }
 	}
 	if ( kind == PkgNames::RequByText() )
 	{
@@ -401,6 +416,13 @@ bool NCPopupDeps::addDepsLine( NCPkgTable * table,
 		string taboo = "(" + pkgName + " "
 		    + PkgNames::TabooText() + ")";
 		pkgLine.push_back( taboo );	
+	    }
+	    else if (error.state_change_not_possible && !error.is_downgrade_from.is_unspecified())
+	    {
+		string text = stringutil::form(_("(Version %s required, %s currently installed)").c_str(),
+		    error.edition.asString().c_str(),
+		    error.is_downgrade_from.asString().c_str());
+		pkgLine.push_back( text );
 	    }
 	    else if ( error.edition.asString() != ""
 		      &&  error.edition.asString() != "-"
@@ -634,6 +656,11 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    errorLabel1->setLabel( YCPString(getLabelContinueRequ()) );
 	    errorLabel2->setLabel( YCPString("") );
 	}
+    }
+    else
+    {
+	    errorLabel1->setLabel( YCPString("") );
+	    errorLabel2->setLabel( YCPString("") );
     }
 
     // show the list
