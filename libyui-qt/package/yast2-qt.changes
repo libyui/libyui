@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov 17 13:53:29 CET 2004 - sh@suse.de
+
+- Improved YQWizard debugLabel() readability 
+- V 2.11.3 
+
+-------------------------------------------------------------------
 Fri Nov  5 17:41:40 CET 2004 - sh@suse.de
 
 - Changed save_y2logs key from plain F8 to Shift-F8 
