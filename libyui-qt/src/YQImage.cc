@@ -121,16 +121,14 @@ YQImage::yqSetPixmap( const QPixmap & pixmap )
     {
 	_pixmapWidth  = 0;
 	_pixmapHeight = 0;
-	
-	QLabel::setPixmap( pixmap );
     }
     else
     {
 	_pixmapWidth  = pixmap.size().width();
 	_pixmapHeight = pixmap.size().height();
-
-	setPaletteBackgroundPixmap( pixmap );
     }
+	
+    QLabel::setPixmap( pixmap );
 }
 
 
