@@ -962,6 +962,7 @@ chtype NCStyleDef::queryChar( int column, chtype selbg )
 {
   vector<queryCharEnt> men;
   men.push_back( queryCharEnt( "NO CHAR", ' ' ) );
+  men.push_back( queryCharEnt( "BLANK", ' ') );
 #define PUT(a) men.push_back( queryCharEnt( #a, a ) );
   PUT(ACS_CKBOARD);
   PUT(ACS_BOARD);
