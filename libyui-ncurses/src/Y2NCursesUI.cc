@@ -58,6 +58,7 @@
 #include "NCMultiLineEdit.h"
 #include "NCPackageSelector.h"
 #include "NCPkgTable.h"
+#include "NCAskForExistingDirectory.h"
 #include "NCstring.h"
 
 extern string language2encoding( string lang );
@@ -717,19 +718,6 @@ bool Y2NCursesUI::setLanguage( string lang )
     language.erase( pos );
   }
 
-#if 0
-  // 8.2 code
-  if ( encoding == ""
-       || encoding == "UTF-8" )
-  {
-    pos = lang.find( '_' );
-    if ( pos != string::npos ) {
-      lang.erase( pos );
-    }
-    encoding = language2encoding( lang );
-  }
-#endif
-  
   NCDBG << "Language: " << language << " Encoding: " << ((encoding!="")?encoding:"NOT SET") << endl;
   
   return true;
@@ -905,9 +893,58 @@ bool Y2NCursesUI::want_colors()
   return true;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : Y2NCursesUI::askForSaveFileName()
+//	METHOD TYPE : YCPValue()
+//
+//	DESCRIPTION :
+//
+YCPValue Y2NCursesUI::askForSaveFileName( const YCPString & startWith,
+					  const YCPString & filter,
+					  const YCPString & headline )
+{
+    return YCPString( "" );
+}
 
-#warning TODO: Implement askForExistingDirectory
-#warning TODO: Implement askForExistingFile
-#warning TODO: Implement askForSaveFileName
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : Y2NCursesUI::askForExistingFile()
+//	METHOD TYPE : YCPValue
+//
+//	DESCRIPTION :
+//
+YCPValue Y2NCursesUI::askForExistingFile( const YCPString & startWith,
+					  const YCPString & filter,
+					  const YCPString & headline )
+{
+    return YCPString( "" );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : Y2NCursesUI::askForExistingDirectory()
+//	METHOD TYPE : YCPValue
+//
+//	DESCRIPTION :
+//
+YCPValue Y2NCursesUI::askForExistingDirectory( const YCPString & startDir,
+					       const YCPString & headline )
+{
+    NCAskForExistingDirectory dirPopup( wpos( 1, 1 ), startDir, headline );
+    
+    NCursesEvent retEvent = dirPopup.showDirPopup( );
+
+    if ( !retEvent.result.isNull() )
+    {
+	NCMIL << "Returning: " <<  retEvent.result->toString() << endl;
+	return retEvent.result;
+    }
+    else
+	return YCPVoid(); // nothing selected -> return 'nil'
+}
 
 

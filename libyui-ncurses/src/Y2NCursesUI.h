@@ -338,8 +338,7 @@ class Y2NCursesUI : public NCurses, public YUIInterpreter {
      * or 'nil' (YCPVoid()) if the user canceled the operation. 
      **/
     virtual YCPValue askForExistingDirectory ( const YCPString & startDir,
-					       const YCPString & headline )
-	{ return YCPVoid(); }
+					       const YCPString & headline );
     
     /**
      * Open a file selection box and prompt the user for an existing file.
@@ -357,8 +356,7 @@ class Y2NCursesUI : public NCurses, public YUIInterpreter {
      **/
     virtual YCPValue askForExistingFile	( const YCPString & startWith,
 					  const YCPString & filter,
-					  const YCPString & headline )
-	{ return YCPVoid(); }
+					  const YCPString & headline );
 	
 
     /**
@@ -378,8 +376,7 @@ class Y2NCursesUI : public NCurses, public YUIInterpreter {
      **/
     virtual YCPValue askForSaveFileName	( const YCPString & startWith,
 					  const YCPString & filter,
-					  const YCPString & headline )
-		{ return YCPVoid(); }
+					  const YCPString & headline );
 
     
     /**
