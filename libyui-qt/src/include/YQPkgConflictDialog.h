@@ -27,6 +27,7 @@
 
 class YQPkgConflictList;
 class QPushButton;
+class QPopupMenu;
 
 
 /**
@@ -85,6 +86,7 @@ signals:
 protected:
 
     YQPkgConflictList *	_conflictList;
+    QPopupMenu *	_expertMenu;
 };
 
 

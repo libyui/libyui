@@ -131,14 +131,6 @@ protected:
      **/
     void saveItemToFile( FILE * file, const QListViewItem * item ) const;
     
-    /**
-     * Event handler for keyboard input.
-     * Only very special keys are processed here.
-     *
-     * Reimplemented from QListView / QWidget.
-     */
-    virtual void keyPressEvent( QKeyEvent * ev );
-
 
 signals:
 

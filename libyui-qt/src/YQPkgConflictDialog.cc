@@ -29,6 +29,7 @@
 
 #include <qpushbutton.h>
 #include <qmessagebox.h>
+#include <qpopupmenu.h>
 #include <qlayout.h>
 #include <qhbox.h>
 
@@ -98,6 +99,24 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 	     this,    SLOT  ( ignoreAll() ) );
 
     addHStretch( buttonBox );
+
+
+    // "Expert" menu button
+
+    button = new QPushButton( _( "&Expert" ), buttonBox );
+    CHECK_PTR( button );
+    
+    addHStretch( buttonBox );
+
+
+    // "Expert" menu
+    
+    _expertMenu = new QPopupMenu( button );
+    CHECK_PTR( _expertMenu );
+    button->setPopup( _expertMenu );
+
+    _expertMenu->insertItem( _( "&Save this list to file..." ),
+			     _conflictList, SLOT( askSaveToFile() ) );
 
 
     // "Cancel" button

@@ -50,6 +50,11 @@
 #define LIGHT_ORANGE		QColor( 0xFF, 0xC0, 0x50 )
 
 
+// The conflict ignore list
+
+QMap<QString, bool> YQPkgConflict::_ignore;
+
+
 YQPkgConflictList::YQPkgConflictList( QWidget * parent )
     : QY2ListView( parent )
 {
@@ -259,32 +264,6 @@ YQPkgConflictList::saveItemToFile( FILE * 			file,
     }
 }
 
-
-void
-YQPkgConflictList::keyPressEvent( QKeyEvent *event )
-{
-    unsigned yast2_special_combo = ( Qt::ControlButton | Qt::ShiftButton | Qt::AltButton );
-
-    if ( ( event->state() & yast2_special_combo ) == yast2_special_combo )
-    {
-	// Qt-UI special keys - all with Ctrl-Shift-Alt
-
-	y2milestone( "Caught YaST2 magic key combination" );
-
-	if ( event->key() == Qt::Key_S )
-	{
-	    askSaveToFile();
-	    return;
-	}
-    }
-
-    QWidget::keyPressEvent( event );
-}
-
-
-
-// The conflict ignore list
-QMap<QString, bool> YQPkgConflict::_ignore;
 
 
 
