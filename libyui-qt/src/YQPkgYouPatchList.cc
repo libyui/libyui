@@ -188,6 +188,16 @@ YQPkgYouPatchListItem::YQPkgYouPatchListItem( YQPkgYouPatchList * youPatchList, 
 {
     setText( kindCol(), _pmYouPatch->kindLabel() );
     setStatusIcon();
+
+    switch ( _pmYouPatch->kind() )
+    {
+	case PMYouPatch::kind_yast:		setTextColor( QColor( 0, 0, 0xC0 ) );	break;	// medium blue
+	case PMYouPatch::kind_security:		setTextColor( Qt::red );		break;
+	case PMYouPatch::kind_recommended:	setTextColor( QColor( 0, 0, 0xC0 ) );	break;	// medium blue
+	case PMYouPatch::kind_optional:		break;
+	case PMYouPatch::kind_document:		break;
+	default:				break;
+    }
 }
 
 
@@ -244,34 +254,6 @@ YQPkgYouPatchListItem::compare( QListViewItem * otherListViewItem,
     return YQPkgObjListItem::compare( otherListViewItem, col, ascending );
 }
 
-
-void
-YQPkgYouPatchListItem::paintCell( QPainter *		painter,
-				  const QColorGroup &	colorGroup,
-				  int			column,
-				  int			width,
-				  int			alignment )
-{
-    QColorGroup cg = colorGroup;
-    QColor bg = cg.color( QColorGroup::Base );
-    QColor fg = cg.color( QColorGroup::Text );
-
-    switch ( _pmYouPatch->kind() )
-    {
-	case PMYouPatch::kind_yast:		fg = QColor( 0, 0, 0xC0 );	break;	// medium blue
-	case PMYouPatch::kind_security:		fg = Qt::red;			break;
-	case PMYouPatch::kind_recommended:	fg = QColor( 0, 0, 0xC0 );	break;	// medium blue
-	case PMYouPatch::kind_optional:		break;
-	case PMYouPatch::kind_document:		break;
-	default:				break;
-
-    }
-
-    cg.setColor( QColorGroup::Base, bg );
-    cg.setColor( QColorGroup::Text, fg );
-
-    QListViewItem::paintCell( painter, cg, column, width, alignment );
-}
 
 
 #include "YQPkgYouPatchList.moc.cc"

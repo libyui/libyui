@@ -26,6 +26,7 @@
 
 #include <qlistview.h>
 #include <qpoint.h>
+#include <qcolor.h>
 #include <vector>
 
 
@@ -242,11 +243,43 @@ public:
      **/
     void setSortByInsertionSequence( bool doit )
 	{ _sortByInsertionSequence = doit; }
+
+    /**
+     * Set the text foreground color for all columns.
+     * For more specific purposes reimiplement paintCell().
+     **/
+    void setTextColor( const QColor & col )
+	{ _textColor = col; }
+    
+    /**
+     * Set the text background color for all columns.
+     * For more specific purposes reimiplement paintCell().
+     **/
+    void setBackgroundColor( const QColor & col )
+	{ _backgroundColor = col; }
+
     
 protected:
 
+    /**
+     * Paint method. Reimplemented from @ref QListViewItem so different
+     * colors can be used.
+     *
+     * Reimplemented from QListViewItem.
+     **/
+    virtual void paintCell( QPainter *		painter,
+			    const QColorGroup &	colorGroup,
+			    int			column,
+			    int			width,
+			    int			alignment );
+
+    // Data members
+    
     int		_serial;
     bool	_sortByInsertionSequence;
+    
+    QColor	_textColor;
+    QColor	_backgroundColor;
 };
 
 
@@ -334,11 +367,43 @@ public:
      **/
     void setSortByInsertionSequence( bool doit )
 	{ _sortByInsertionSequence = doit; }
+
+    /**
+     * Set the text foreground color for all columns.
+     * For more specific purposes reimiplement paintCell().
+     **/
+    void setTextColor( const QColor & col )
+	{ _textColor = col; }
+    
+    /**
+     * Set the text background color for all columns.
+     * For more specific purposes reimiplement paintCell().
+     **/
+    void setBackgroundColor( const QColor & col )
+	{ _backgroundColor = col; }
+    
     
 protected:
 
+    /**
+     * Paint method. Reimplemented from @ref QListViewItem so different
+     * colors can be used.
+     *
+     * Reimplemented from QListViewItem.
+     **/
+    virtual void paintCell( QPainter *		painter,
+			    const QColorGroup &	colorGroup,
+			    int			column,
+			    int			width,
+			    int			alignment );
+
+    // Data members
+
     int		_serial;
     bool	_sortByInsertionSequence;
+    
+    QColor	_textColor;
+    QColor	_backgroundColor;
 };
 
 

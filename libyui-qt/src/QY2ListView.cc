@@ -282,6 +282,22 @@ QY2ListViewItem::compare( QListViewItem *	otherListViewItem,
 }
 
 
+void
+QY2ListViewItem::paintCell( QPainter *		painter,
+			    const QColorGroup &	colorGroup,
+			    int			column,
+			    int			width,
+			    int			alignment )
+{
+    QColorGroup cg = colorGroup;
+
+    if ( _textColor.isValid() )		cg.setColor( QColorGroup::Text, _textColor );
+    if ( _backgroundColor.isValid() )	cg.setColor( QColorGroup::Base, _backgroundColor );
+
+    QListViewItem::paintCell( painter, cg, column, width, alignment );
+}
+
+
 
 
 
@@ -363,6 +379,22 @@ QY2CheckListItem::compare( QListViewItem *	otherListViewItem,
     }
 
     return QListViewItem::compare( otherListViewItem, col, ascending );
+}
+
+
+void
+QY2CheckListItem::paintCell( QPainter *			painter,
+			     const QColorGroup &	colorGroup,
+			     int			column,
+			     int			width,
+			     int			alignment )
+{
+    QColorGroup cg = colorGroup;
+
+    if ( _textColor.isValid() )		cg.setColor( QColorGroup::Text, _textColor );
+    if ( _backgroundColor.isValid() )	cg.setColor( QColorGroup::Base, _backgroundColor );
+
+    QListViewItem::paintCell( painter, cg, column, width, alignment );
 }
 
 
