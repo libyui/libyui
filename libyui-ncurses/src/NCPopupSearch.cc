@@ -144,10 +144,11 @@ void NCPopupSearch::createLayout( const YCPString & headline )
   vSplit->addChild( hSplit3 );
 
   // add the cancel and the ok button 
+  opt.key_Fxx.setValue( 9 );
   opt.isVStretchable.setValue( false );
   cancelButton = new NCPushButton( hSplit3, opt, YCPString(PkgNames::CancelLabel().str()) );
   cancelButton->setId( PkgNames::Cancel () );
-
+  opt.key_Fxx.setValue( 10 );
   okButton = new NCPushButton( hSplit3, opt, YCPString(PkgNames::OKLabel().str()) );
   okButton->setId( PkgNames::OkButton () );
 
