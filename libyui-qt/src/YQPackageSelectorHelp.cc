@@ -223,15 +223,15 @@ YQPackageSelector::symbolHelp()
 		     _( "Autoinstall" ) + bySelection,
 		     // Translators: Automatic word-wrapping.
 		     _( "This package will be installed automatically because it is contained in a"
-			" predefined software selection ( e.g., \"Multimedia\", \"Development\" )." ) );
+			" predefined software selection (e.g., \"Multimedia\", \"Development\")." ) );
 
     html += symHelp( "sel_autoupdate.xpm",
 		     // Translators: Package status short ( ! ) description
 		     _( "Autoupdate" ) + bySelection,
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is already installed, but there is a newer version."
-			" It is contained in a predefined software selection ( e.g., \"Multimedia\","
-			" \"Development\" ) that you requested to update, so this package will"
+			" It is contained in a predefined software selection (e.g., \"Multimedia\","
+			" \"Development\") that you requested to update, so this package will"
 			" automatically be updated." ) );
 
     html += symHelp( "sel_autodel.xpm",
@@ -239,7 +239,7 @@ YQPackageSelector::symbolHelp()
 		     _( "Autodelete" ) + bySelection,
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is already installed, but some predefined software selection"
-			" ( e.g., \"Multimedia\", \"Development\" ) requires that it is deleted." ) );
+			" (e.g., \"Multimedia\", \"Development\") requires that it is deleted." ) );
 
     html += "/<table>";
 
