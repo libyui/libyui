@@ -816,6 +816,26 @@ YCPValue Y2NCursesUI::setConsoleFont( const YCPString & console_magic,
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : Y2NCursesUI::hasFullUtf8Support
+//	METHOD TYPE : bool
+//
+//	DESCRIPTION :
+//
+bool Y2NCursesUI::hasFullUtf8Support()
+{
+    if ( NCstring::terminalEncoding() == "UTF-8" )
+    {
+	return true;
+    }
+    else
+    {
+	return false;
+    }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : Y2NCursesUI::init_title
 //	METHOD TYPE : void
 //

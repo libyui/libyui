@@ -392,7 +392,8 @@ class Y2NCursesUI : public NCurses, public YUIInterpreter {
     virtual bool textMode()                  { return true; }
     virtual bool hasImageSupport()           { return false; }
     virtual bool hasIconSupport()            { return false; }
-    virtual bool hasFullUtf8Support()        { return false; }
+    
+    virtual bool hasFullUtf8Support();
 
   private:
 
