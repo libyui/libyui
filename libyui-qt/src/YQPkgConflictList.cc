@@ -432,6 +432,9 @@ YQPkgConflict::dumpLists()
 		  _( "Required by:" ) );
     }
 
+    dumpList( this, _conflict.was_inconsistent, LIST_SPLIT_THRESHOLD,
+	      _( "Broken dependencies of installed:" ) );
+
     dumpList( this, _conflict.unresolvable, LIST_SPLIT_THRESHOLD,
 	      _( "Unresolved Requirements:" ) );
 
