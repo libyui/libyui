@@ -100,8 +100,10 @@ YQPkgRpmGroupTagsFilterView::filter()
 
     if ( _selection )
     {
+#if 0
 	std::string selectedRpmGroupPath = Y2PM::packageManager().rpmGroup( _selection->rpmGroup() );
 	y2debug( "Searching packages that match '%s'", selectedRpmGroupPath.c_str() );
+#endif
 	
 	PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
@@ -132,7 +134,9 @@ YQPkgRpmGroupTagsFilterView::filter()
 	    ++it;
 	}
 
+#if 0
 	y2debug( "Search for '%s' finished", selectedRpmGroupPath.c_str() );
+#endif
     }
 
     emit filterFinished();
