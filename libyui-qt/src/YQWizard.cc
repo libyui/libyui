@@ -98,6 +98,7 @@ YQWizard::YQWizard( QWidget *		parent,
     _protectNextButton	= false;
     _stepsDirty		= false;
     _direction 		= YQWizard::Forward;
+    _runningEmbedded	= YQUI::ui()->runningEmbedded() || YQUI::ui()->debugEmbedding();
 
     _sideBar		= 0;
     _stepsPanel		= 0;
@@ -125,23 +126,29 @@ YQWizard::YQWizard( QWidget *		parent,
     // Load graphics
     //
 
-    loadGradientPixmaps();
-    _gradientCenterColor = pixelColor( _bottomGradientPixmap, 0, 0 );
+    if ( ! runningEmbedded() )
+    {
+	loadGradientPixmaps();
+	_gradientCenterColor = pixelColor( _bottomGradientPixmap, 0, 0 );
 
-    if ( _stepsEnabled )
-	loadStepsIcons();
+	if ( _stepsEnabled )
+	    loadStepsIcons();
+    }
 
 
     //
     // Create widgets
     //
 
-    layoutTitleBar( this );
+    if ( ! runningEmbedded() )
+	layoutTitleBar( this );
 
     QHBox * hBox = new QHBox( this );
     CHECK_PTR( hBox );
 
-    layoutSideBar( hBox );
+    if ( ! runningEmbedded() )
+	layoutSideBar( hBox );
+    
     layoutWorkArea( hBox );
 
     y2debug( "Constructor finished." );
@@ -655,15 +662,18 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
     layoutButtonBox();
 
 
-    //
-    // Spacers (purely decorative) at the bottom and right of the client area
-    //
+    if ( ! runningEmbedded() )
+    {
+	//
+	// Spacers (purely decorative) at the bottom and right of the client area
+	//
 
-    QWidget * bottomSpacer = addVSpacing( workAreaVBox, WORK_AREA_BOTTOM_MARGIN );
-    CHECK_PTR( bottomSpacer );
-    setBottomCroppedGradient( bottomSpacer, _bottomGradientPixmap, WORK_AREA_BOTTOM_MARGIN );
+	QWidget * bottomSpacer = addVSpacing( workAreaVBox, WORK_AREA_BOTTOM_MARGIN );
+	CHECK_PTR( bottomSpacer );
+	setBottomCroppedGradient( bottomSpacer, _bottomGradientPixmap, WORK_AREA_BOTTOM_MARGIN );
 
-    addGradientColumn( parentHBox, WORK_AREA_RIGHT_MARGIN );
+	addGradientColumn( parentHBox, WORK_AREA_RIGHT_MARGIN );
+    }
 }
 
 

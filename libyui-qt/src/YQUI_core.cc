@@ -70,6 +70,7 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     _have_wm			= true;
     _fullscreen			= false;
     _decorate_toplevel_window	= true;
+    _debug_embedding		= false;
     screenShotNameTemplate 	= "";
 
     qInstallMsgHandler( qMessageHandler );
@@ -249,6 +250,7 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 	    if      ( opt == QString( "-no-wm"	 	) )	_have_wm 			= false;
 	    else if ( opt == QString( "-fullscreen"	) )	_fullscreen 			= true;
 	    else if ( opt == QString( "-noborder" 	) )	_decorate_toplevel_window	= false;
+	    else if ( opt == QString( "-debug-embedding") )	_debug_embedding		= true;
 	    // --macro is handled by YUI_component 
 	    else if ( opt == QString( "-help"  ) )
 	    {

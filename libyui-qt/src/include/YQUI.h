@@ -201,6 +201,12 @@ public:
     bool runningEmbedded() const { return _embeddingParent != 0; }
 
     /**
+     * Returns true if debugging embedding mode is on, i.e., when cmd line arg
+     * --debug-embedding was given.
+     **/
+    bool debugEmbedding() const { return _debug_embedding; }
+
+    /**
      * Block (or unblock) events. If events are blocked, any event sent
      * should be ignored until events are unblocked again.
      *
@@ -566,6 +572,11 @@ protected:
      * Decorate the toplevel window
      **/
     bool _decorate_toplevel_window;
+
+    /**
+     * Fake embedding mode (for layout debugging in embedding mode)
+     **/
+    bool _debug_embedding;
 
     /**
      * Container for the widget stack. QWidgetStack cannot handle a WFlags

@@ -296,11 +296,18 @@ protected:
      **/
     QGridLayout * centerAtBottom( QWidget * parent, QWidget * child, int margin );
 
-    
     /**
      * Send a wizard event with the specified ID.
      **/
     void sendEvent( YCPValue id );
+
+    
+    /**
+     * Check if we are running embedded as a KCMShell or KPart or something
+     * similar. This is really just a (chached) shortcut to
+     * YQUI::runningEmbedded(). 
+     **/
+    bool runningEmbedded() const { return _runningEmbedded; }
 
 
     //
@@ -385,6 +392,7 @@ protected:
     bool	_verboseCommands;
     bool	_protectNextButton;
     bool	_stepsDirty;
+    bool	_runningEmbedded;
     Direction	_direction;
 
     QPixmap	_titleBarGradientPixmap;
