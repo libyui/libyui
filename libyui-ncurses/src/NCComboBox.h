@@ -74,10 +74,6 @@ class NCComboBox : public YComboBox, public NCWidget {
     virtual void wRedraw();
     virtual void wRecoded();
 
-    virtual void itemAdded( const YCPString & string,
-			    int index,
-			    bool selected );
-
     int listPopup();
 
     bool validKey( int key ) const;
@@ -88,6 +84,10 @@ class NCComboBox : public YComboBox, public NCWidget {
 		const YCPString & label );
     virtual ~NCComboBox();
 
+    virtual void itemAdded( const YCPString & string,
+			    int index,
+			    bool selected );
+    
     virtual long nicesize( YUIDimension dim );
     virtual void setSize( long newwidth, long newheight );
 
@@ -109,6 +109,8 @@ class NCComboBox : public YComboBox, public NCWidget {
         return YWidget::setKeyboardFocus();
       return true;
     }
+
+    unsigned int getListSize( ) { return deflist.size(); }
 };
 
 ///////////////////////////////////////////////////////////////////
