@@ -80,91 +80,7 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, Y2Component *callback )
 
 void YQUI::init()
 {
-    for ( int i=1; i < _argc; i++ )
-        {
-            if ( strcmp( _argv[i], "--nothreads") == 0 ||
-                 strcmp( _argv[i], "-nothreads" ) == 0   )
-            {
-                _with_threads = false;
-                y2milestone( "Running Qt UI without threads." );
-            }
-        }
-
-        // FIXME: The handler must be installed before calling the
-        // constructor of QApplication
-        qInstallMsgHandler( qMessageHandler );
-
-    if ( _argv )
-    {
-	for( int i=0; i < _argc; i++ )
-	{
-	    QString opt = _argv[i];
-	    
-	    y2milestone ("Qt argument: %s", _argv[i]);
-
-	    // Normalize command line option - accept "--xy" as well as "-xy"
-
-	    if ( opt.startsWith( "--" ) )
-		opt.remove(0, 1);
-
-	    if      ( opt == QString( "-no-wm"	 	) )	_have_wm 			= false;
-	    else if ( opt == QString( "-fullscreen"	) )	_fullscreen 			= true;
-	    else if ( opt == QString( "-noborder" 	) )	_decorate_toplevel_window	= false;
-	    else if ( opt == QString( "-kcontrol_id"	) )
-	    {
-		if ( i+1 >= _argc )
-		{
-		    y2error( "Missing arg for '--kcontrol_id'" );
-		}
-		else
-		{
-		    _kcontrol_id = _argv[++i];
-		    y2milestone( "Starting with kcontrol_id='%s'",
-				 (const char *) _kcontrol_id );
-		}
-	    }
-	    else if ( opt == QString( "-macro"		) )
-	    {
-		if ( i+1 >= _argc )
-		{
-		    y2error( "Missing arg for '--macro'" );
-		    fprintf( stderr, "y2base qt: Missing argument for --macro\n" );
-		    raiseFatalError();
-		}
-		else
-		{
-		    const char * macro_file = _argv[++i];
-		    y2milestone( "Playing macro '%s' from command line", macro_file );
-		    playMacro( macro_file );
-		}
-	    }
-	    else if ( opt == QString( "-help"  ) )
-	    {
-		fprintf( stderr,
-			 "Command line options for the YaST2 Qt UI:\n"
-			 "\n"
-			 "--nothreads   run without additional UI threads\n"
-			 "--no-wm       assume no window manager is running\n"
-			 "--fullscreen  use full screen for `opt(`defaultsize) dialogs\n"
-			 "--noborder    no window manager border for `opt(`defaultsize) dialogs\n"
-			 "--help        this help text\n"
-			 "\n"
-			 "--macro <macro-file>        play a macro right on startup\n"
-			 "--_kcontrol_id <ID-String>   set KDE control center identification\n"
-			 "\n"
-			 "-no-wm, -noborder etc. are accepted as well as --no-wm, --noborder\n"
-			 "to maintain backwards compatibility.\n"
-			 "\n"
-			 );
-
-		raiseFatalError();
-	    }
-	}
-    }
-
-    // Qt handles command line option "-reverse" for Arabic / Hebrew
-    YUI::_reverseLayout = QApplication::reverseLayout();
-
+    processCommandLineArgs();
 
     if ( _fullscreen )
     {
@@ -314,6 +230,95 @@ void YQUI::init()
 #if defined(QT_THREAD_SUPPORT)
     qApp->unlock();
 #endif
+}
+
+
+void YQUI::processCommandLineArgs()
+{
+        for ( int i=1; i < _argc; i++ )
+        {
+            if ( strcmp( _argv[i], "--nothreads") == 0 ||
+                 strcmp( _argv[i], "-nothreads" ) == 0   )
+            {
+                _with_threads = false;
+                y2milestone( "Running Qt UI without threads." );
+            }
+        }
+
+        // FIXME: The handler must be installed before calling the
+        // constructor of QApplication
+        qInstallMsgHandler( qMessageHandler );
+
+    if ( _argv )
+    {
+	for( int i=0; i < _argc; i++ )
+	{
+	    QString opt = _argv[i];
+	    
+	    y2milestone ("Qt argument: %s", _argv[i]);
+
+	    // Normalize command line option - accept "--xy" as well as "-xy"
+
+	    if ( opt.startsWith( "--" ) )
+		opt.remove(0, 1);
+
+	    if      ( opt == QString( "-no-wm"	 	) )	_have_wm 			= false;
+	    else if ( opt == QString( "-fullscreen"	) )	_fullscreen 			= true;
+	    else if ( opt == QString( "-noborder" 	) )	_decorate_toplevel_window	= false;
+	    else if ( opt == QString( "-kcontrol_id"	) )
+	    {
+		if ( i+1 >= _argc )
+		{
+		    y2error( "Missing arg for '--kcontrol_id'" );
+		}
+		else
+		{
+		    _kcontrol_id = _argv[++i];
+		    y2milestone( "Starting with kcontrol_id='%s'",
+				 (const char *) _kcontrol_id );
+		}
+	    }
+	    else if ( opt == QString( "-macro"		) )
+	    {
+		if ( i+1 >= _argc )
+		{
+		    y2error( "Missing arg for '--macro'" );
+		    fprintf( stderr, "y2base qt: Missing argument for --macro\n" );
+		    raiseFatalError();
+		}
+		else
+		{
+		    const char * macro_file = _argv[++i];
+		    y2milestone( "Playing macro '%s' from command line", macro_file );
+		    playMacro( macro_file );
+		}
+	    }
+	    else if ( opt == QString( "-help"  ) )
+	    {
+		fprintf( stderr,
+			 "Command line options for the YaST2 Qt UI:\n"
+			 "\n"
+			 "--nothreads   run without additional UI threads\n"
+			 "--no-wm       assume no window manager is running\n"
+			 "--fullscreen  use full screen for `opt(`defaultsize) dialogs\n"
+			 "--noborder    no window manager border for `opt(`defaultsize) dialogs\n"
+			 "--help        this help text\n"
+			 "\n"
+			 "--macro <macro-file>        play a macro right on startup\n"
+			 "--_kcontrol_id <ID-String>   set KDE control center identification\n"
+			 "\n"
+			 "-no-wm, -noborder etc. are accepted as well as --no-wm, --noborder\n"
+			 "to maintain backwards compatibility.\n"
+			 "\n"
+			 );
+
+		raiseFatalError();
+	    }
+	}
+    }
+
+    // Qt handles command line option "-reverse" for Arabic / Hebrew
+    YUI::_reverseLayout = QApplication::reverseLayout();
 }
 
 

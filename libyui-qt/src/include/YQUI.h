@@ -523,7 +523,15 @@ protected slots:
 
 private:
 
-    void init ();
+    /**
+     * General initialization
+     **/
+    void init();
+
+    /**
+     * Handle command line args
+     **/
+    void processCommandLineArgs();
     
     /**
      * Assume presence of a window manager
@@ -656,7 +664,7 @@ private:
 public:
 
     /**
-     * The name of this component is qt.
+     * The name of this YaST2 component: qt.
      */
     string name() const { return "qt"; }
 
