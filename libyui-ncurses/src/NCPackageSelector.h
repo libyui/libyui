@@ -102,7 +102,7 @@ class NCPackageSelector : public NCSplit
     * @param layoutFilename The filename
     * @return YCPTerm
     */
-    YCPTerm readLayoutFile( const char * layoutFilename );
+    YCPTerm readLayoutFile( Y2NCursesUI *ui, const char * layoutFilename );
     
 };
 

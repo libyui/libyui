@@ -9,10 +9,12 @@
  *
  * $Id$
  */
+{
+    textdomain "ncurses";
 
-`VBox( `VSpacing(0.3),
+    return `VBox( `VSpacing(0.3),
        `HBox( `HSpacing(0.3),
-	      `Left(`MenuButton( "&Filter", [`item( `id(`groups), "&RPM groups"),
+	      `Left(`MenuButton( _("&Filter"), [`item( `id(`groups), _("&RPM groups")),
 					     `item( `id(`selections), "Se&lections" ),
 					     `item( `id(`keys), "&Keywords" ),
 					     `item( `id(`mimetype), "&MIME Types" ),
@@ -78,6 +80,5 @@
 				)
 		       )
 	     )
-       )
-
-
+       );
+}

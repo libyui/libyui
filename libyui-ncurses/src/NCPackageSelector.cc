@@ -57,11 +57,11 @@ NCPackageSelector::NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
     YCPTerm pkgLayout = YCPNull();
     if ( youMode )
     {
-	pkgLayout = readLayoutFile( "/usr/share/YaST2/data/you_layout.ycp" );
+	pkgLayout = readLayoutFile( ui, "/usr/share/YaST2/data/you_layout.ycp" );
     }
     else
     { 
-	pkgLayout = readLayoutFile( "/usr/share/YaST2/data/pkg_layout.ycp" );	     
+	pkgLayout = readLayoutFile( ui, "/usr/share/YaST2/data/pkg_layout.ycp" );	     
     }
 
     if ( ! pkgLayout.isNull() )
@@ -190,7 +190,7 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent & event )
 // 
 // Read a layout file (containing a YCPTerm)
 //
-YCPTerm NCPackageSelector::readLayoutFile( const char * layoutFilename )
+YCPTerm NCPackageSelector::readLayoutFile( Y2NCursesUI *ui, const char * layoutFilename )
 {
     YCPTerm   pkgLayout = YCPNull();
     
@@ -206,12 +206,16 @@ YCPTerm NCPackageSelector::readLayoutFile( const char * layoutFilename )
     
 	YCPParser parser( layoutFile, layoutFilename );
 	YCPValue layout = parser.parse();
-	
+
 	if ( layout.isNull() )
 	{
 	    NCERR << "Error parsing layout file - layout reading aborted" << endl;
 	}
-	else if ( ! layout->isTerm() )
+
+        layout = ui->evaluate (layout);
+
+	if (layout.isNull()
+	    || layout->isTerm() )
 	{
 	    NCERR << "Error parsing layout file - layout must be a term" << endl;	
 	}
