@@ -1,8 +1,10 @@
 -------------------------------------------------------------------
-Thu Aug 21 15:38:31 CEST 2003 - gs@suse.de
+Thu Aug 25 15:38:31 CEST 2003 - gs@suse.de
 
+- V 2.8.14
 - package installation: support a link to a related package
-  in the package description 
+  in the package description, bugfix two line messages 
+- Y2NCursesUI: setenv( LC_CTYPE, language ) 
 
 -------------------------------------------------------------------
 Fri Aug 18 16:15:52 CEST 2003 - gs@suse.de
