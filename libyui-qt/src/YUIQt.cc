@@ -378,7 +378,8 @@ YCPValue YUIQt::runPkgSelection( YWidget * packageSelector )
 YDialog *YUIQt::createDialog(YWidgetOpt &opt)
 {
     bool has_defaultsize = opt.hasDefaultSize.value();
-    QWidget *qt_parent = has_defaultsize ? main_win : 0;
+    // QWidget *qt_parent = has_defaultsize ? main_win : 0;
+    QWidget *qt_parent = main_win;
     YDialog *dialog = new YQDialog( this, opt, qt_parent, has_defaultsize );
 
     return dialog;
