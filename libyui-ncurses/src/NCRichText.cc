@@ -19,7 +19,7 @@
 
 #include "Y2Log.h"
 #include "NCRichText.h"
-#include "Y2NCursesUIComponent.h"
+#include "YNCursesUI.h"
 
 #if 0
 #undef  DBG_CLASS
@@ -51,7 +51,7 @@ const wstring NCRichText::entityLookup( const std::wstring & val_r )
     // initialize replacement for character entities. A value of NULL
     // means do not replace.
     wstring product;
-    NCstring::RecodeToWchar( Y2NCursesUIComponent::ui()->productName(), "UTF-8", &product);
+    NCstring::RecodeToWchar( YNCursesUI::ui()->productName(), "UTF-8", &product);
 
 #define REP(l,r) _charentity[l] = r
     REP(L"amp",	L"&");

@@ -22,7 +22,7 @@
 #define _Y2CCNCursesUI_h
 
 
-#include "Y2NCursesUIComponent.h"
+#include "YNCursesUI.h"
 #include <iosfwd>
 
 #include "ycp/y2log.h"
@@ -59,7 +59,7 @@ public:
     {
         y2internal( "Creating %s component", name );
         if (!strcmp(name, "ncurses") ) {
-            Y2Component* r = new Y2NCursesUIComponent(0, 0, false, 0);
+            Y2Component* r = new YNCursesUI(0, 0, false, 0);
             return r;
         }
         else return 0;

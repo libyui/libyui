@@ -10,7 +10,7 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       Y2NCursesUIComponent.h
+   File:       YNCursesUI.h
 
    Author:     Michael Andres <ma@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
@@ -18,16 +18,16 @@
 /-*/
 // -*- c++ -*-
 
-#ifndef Y2NCursesUIComponent_h
-#define Y2NCursesUIComponent_h
+#ifndef YNCursesUI_h
+#define YNCursesUI_h
 
 #include <iosfwd>
 
 #include <Y2.h>
-#include "Y2UIComponent.h"
+#include "YUI.h"
 #include "NCurses.h"
 
-class Y2UIComponent;
+class YUI;
 class NCDialog;
 
 /**
@@ -35,7 +35,7 @@ class NCDialog;
  * The YaST2 Component realizes a NCursesUI based user interface with an
  * embedded YCP interpreter.
  */
-class Y2NCursesUIComponent : public NCurses, public Y2UIComponent
+class YNCursesUI : public NCurses, public YUI
 {
    /**
     * Used to store the server options until the server is launched
@@ -62,12 +62,12 @@ public:
    /**
     * Initialize data.
      */
-   Y2NCursesUIComponent(int argc, char **argv, bool with_threads, Y2Component *callback);
+   YNCursesUI(int argc, char **argv, bool with_threads, Y2Component *callback);
 
    /**
      * Cleans up.
      */
-   ~Y2NCursesUIComponent();
+   ~YNCursesUI();
 
    /**
      * The name of this component
@@ -106,7 +106,7 @@ public:
    /**
     * Global reference to the UI
     **/
-   static Y2NCursesUIComponent * _ui;
+   static YNCursesUI * _ui;
     
   public:
 
@@ -116,7 +116,7 @@ public:
    /**
     * Access the global Y2NCursesUI.
     */
-    static Y2NCursesUIComponent * ui() { return _ui; }
+    static YNCursesUI * ui() { return _ui; }
     
     /**
      * Idle around until fd_ycp is readable
@@ -474,5 +474,5 @@ public:
     bool setLanguage( string lang );
 };
 
-#endif // Y2NCursesUIComponent_h
+#endif // YNCursesUI_h
 

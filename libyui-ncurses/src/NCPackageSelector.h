@@ -21,7 +21,7 @@
 
 #include <iosfwd>
 
-#include "Y2NCursesUIComponent.h"
+#include "YNCursesUI.h"
 #include "YPackageSelector.h"
 #include "YSplit.h"
 #include "NCSplit.h"
@@ -67,7 +67,7 @@ class NCPackageSelector : public NCSplit
      * Constructor
      * creates the widget tree of the package selector
      */
-    NCPackageSelector( Y2NCursesUIComponent *ui, NCWidget * parent,
+    NCPackageSelector( YNCursesUI *ui, NCWidget * parent,
 		       YWidgetOpt & opt, YUIDimension dimension,
 		       string floppyDevice );
 
@@ -105,7 +105,7 @@ class NCPackageSelector : public NCSplit
     * @param layoutFilename The filename
     * @return YCPTerm
     */
-    YCPTerm readLayoutFile( Y2NCursesUIComponent *ui, const char * layoutFilename );
+    YCPTerm readLayoutFile( YNCursesUI *ui, const char * layoutFilename );
 
 };
 

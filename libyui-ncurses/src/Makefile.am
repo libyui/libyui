@@ -97,7 +97,7 @@ liby2ncurses_la_SOURCES =				\
 
 libpy2ncurses_la_SOURCES = $(liby2ncurses_la_SOURCES)	\
 	Y2CCNCursesUI.cc Y2CCNCursesUI.h	\
-	Y2NCursesUIComponent.cc Y2NCursesUIComponent.h
+	YNCursesUI.cc YNCursesUI.h
 
 INCLUDES = -I$(includedir) -I$(includedir)/yui -I$(includedir)/y2util/qt
 

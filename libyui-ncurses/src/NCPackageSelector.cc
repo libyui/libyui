@@ -40,7 +40,7 @@
 //
 //	DESCRIPTION :
 //
-NCPackageSelector::NCPackageSelector( Y2NCursesUIComponent *ui,
+NCPackageSelector::NCPackageSelector( YNCursesUI *ui,
 				      NCWidget * parent,
 				      YWidgetOpt & opt, YUIDimension dimension,
 				      string floppyDevice )
@@ -219,7 +219,7 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent & event )
 // 
 // Read a layout file (containing a YCPTerm)
 //
-YCPTerm NCPackageSelector::readLayoutFile( Y2NCursesUIComponent *ui,
+YCPTerm NCPackageSelector::readLayoutFile( YNCursesUI *ui,
 					   const char * layoutFilename )
 {
     YCPTerm   pkgLayout = YCPNull();

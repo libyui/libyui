@@ -21,7 +21,7 @@
 
 #include <iosfwd>
 
-#include "Y2NCursesUIComponent.h"
+#include "YNCursesUI.h"
 #include "PkgNames.h"
 
 #include <map>          
@@ -71,7 +71,7 @@ class PackageSelector
 
     tHandlerMap eventHandlerMap;    	// event handler map
     
-    Y2NCursesUIComponent * y2ui;			// the UI
+    YNCursesUI * y2ui;			// the UI
 
     YCPValue visibleInfo;		// visible package info (description, file list, ...)
 
@@ -115,7 +115,7 @@ class PackageSelector
      * @param opt The widget options
      * @param floppyDevice The floppy device
      */
-    PackageSelector( Y2NCursesUIComponent * ui, YWidgetOpt & opt, string floppyDevice );
+    PackageSelector( YNCursesUI * ui, YWidgetOpt & opt, string floppyDevice );
 
     /**
      * Destructor

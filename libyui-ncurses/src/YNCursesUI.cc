@@ -10,14 +10,14 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       Y2NCursesUIComponent.cc
+   File:       YNCursesUI.cc
 
    Author:     Michael Andres <ma@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 
-#include "Y2NCursesUIComponent.h"
+#include "YNCursesUI.h"
 #include <string>
 #include <sys/time.h>
 #include <unistd.h>
@@ -30,7 +30,7 @@
 #include <ycp/YCPString.h>
 #include <ycp/YCPVoid.h>
 #include <ycp/YCPMap.h>
-#include <yui/Y2UIComponent.h>
+#include <yui/YUI.h>
 
 #include "NCDialog.h"
 #include "NCAlignment.h"
@@ -66,14 +66,14 @@
 
 extern string language2encoding( string lang );
 
-Y2NCursesUIComponent::Y2NCursesUIComponent(int argc, char **argv, bool with_threads, Y2Component *callback)
-    : Y2UIComponent (with_threads, callback)
+YNCursesUI::YNCursesUI(int argc, char **argv, bool with_threads, Y2Component *callback)
+    : YUI (with_threads, callback)
     , argc(argc)
     , argv(argv)
     , m_callback(0)
     , with_threads(true)
 {
-    y2milestone ("Start Y2NCursesUIComponent");
+    y2milestone ("Start YNCursesUI");
     _ui = this;
     
     if ( getenv( "LANG" ) != NULL )
@@ -114,17 +114,17 @@ Y2NCursesUIComponent::Y2NCursesUIComponent(int argc, char **argv, bool with_thre
 //	playMacro( macro_file );
 }
 
-Y2NCursesUIComponent::~Y2NCursesUIComponent()
+YNCursesUI::~YNCursesUI()
 {
-    y2milestone ("Stop Y2NCursesUIComponent");
+    y2milestone ("Stop YNCursesUI");
 }
 
-string Y2NCursesUIComponent::name() const
+string YNCursesUI::name() const
 {
     return "ncurses";
 }
 
-void Y2NCursesUIComponent::result(const YCPValue &result)
+void YNCursesUI::result(const YCPValue &result)
 {
 /*    if (interpreter)
     {
@@ -135,7 +135,7 @@ void Y2NCursesUIComponent::result(const YCPValue &result)
     interpreter = 0;*/
 }
 
-void Y2NCursesUIComponent::setServerOptions(int argc, char **argv)
+void YNCursesUI::setServerOptions(int argc, char **argv)
 {
     this->argc = argc;
     this->argv = argv;
@@ -144,7 +144,7 @@ void Y2NCursesUIComponent::setServerOptions(int argc, char **argv)
 #if 0
 
 Y2Component *
-Y2NCursesUIComponent::getCallback (void) const
+YNCursesUI::getCallback (void) const
 {
     Y2Component *callback;
     if (interpreter)
@@ -155,15 +155,15 @@ Y2NCursesUIComponent::getCallback (void) const
     {
 	callback = m_callback;
     }
-    y2debug ("Y2NCursesUIComponent[%p]::getCallback[i %p]() = %p", this, interpreter, callback);
+    y2debug ("YNCursesUI[%p]::getCallback[i %p]() = %p", this, interpreter, callback);
     return callback;
 }
 
 
 void
-Y2NCursesUIComponent::setCallback (Y2Component *callback)
+YNCursesUI::setCallback (Y2Component *callback)
 {
-    y2debug ("Y2NCursesUIComponent[%p]::setCallback[i %p](%p)", this, interpreter, callback);
+    y2debug ("YNCursesUI[%p]::setCallback[i %p](%p)", this, interpreter, callback);
     if (interpreter)
     {
 	// interpreter allready running, pass callback directly
@@ -182,7 +182,7 @@ Y2NCursesUIComponent::setCallback (Y2Component *callback)
 
 #endif
 
-Y2NCursesUIComponent * Y2NCursesUIComponent::_ui = 0;
+YNCursesUI * YNCursesUI::_ui = 0;
 
 /******************************************************************
 **
@@ -195,18 +195,18 @@ Y2NCursesUIComponent * Y2NCursesUIComponent::_ui = 0;
 int Recode( const string & str, const string & from,
 	    const string & to, string & outstr )
 {
-  return Y2UIComponent::Recode( str, from, to, outstr );
+  return YUI::Recode( str, from, to, outstr );
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : Y2NCursesUIComponent::idleLoop
+//	METHOD NAME : YNCursesUI::idleLoop
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void Y2NCursesUIComponent::idleLoop( int fd_ycp )
+void YNCursesUI::idleLoop( int fd_ycp )
 {
   NCDialog * ncd = static_cast<NCDialog *>( currentDialog() );
 
@@ -303,12 +303,12 @@ struct NCtoY2Event : public NCursesEvent {
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : Y2NCursesUIComponent::userInput
+//	METHOD NAME : YNCursesUI::userInput
 //	METHOD TYPE : YEvent *
 //
 //	DESCRIPTION :
 //
-YEvent * Y2NCursesUIComponent::userInput( unsigned long timeout_millisec )
+YEvent * YNCursesUI::userInput( unsigned long timeout_millisec )
 {
   NCDialog * ncd = static_cast<NCDialog *>( currentDialog() );
   if ( !ncd ) {
@@ -330,12 +330,12 @@ YEvent * Y2NCursesUIComponent::userInput( unsigned long timeout_millisec )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : Y2NCursesUIComponent::pollInput
+//	METHOD NAME : YNCursesUI::pollInput
 //	METHOD TYPE : YWidget *
 //
 //	DESCRIPTION :
 //
-YEvent * Y2NCursesUIComponent::pollInput()
+YEvent * YNCursesUI::pollInput()
 {
   NCDialog * ncd = static_cast<NCDialog *>( currentDialog() );
   if ( !ncd ) {
@@ -360,21 +360,21 @@ YEvent * Y2NCursesUIComponent::pollInput()
 //
 ///////////////////////////////////////////////////////////////////
 
-YDialog * Y2NCursesUIComponent::createDialog( YWidgetOpt & opt )
+YDialog * YNCursesUI::createDialog( YWidgetOpt & opt )
 {
   NCDialog * dialog = new NCDialog( opt );
   UIDBG << dialog << endl;
   return dialog;
 }
 
-void Y2NCursesUIComponent::showDialog( YDialog * dialog ) {
+void YNCursesUI::showDialog( YDialog * dialog ) {
   NCDialog * dlg = dynamic_cast<NCDialog *>( dialog );
   UIDBG << dlg << endl;
   if ( dlg )
     dlg->showDialog();
 }
 
-void Y2NCursesUIComponent::closeDialog( YDialog * dialog ) {
+void YNCursesUI::closeDialog( YDialog * dialog ) {
   NCDialog * dlg = dynamic_cast<NCDialog *>( dialog );
   UIDBG << dlg << endl;
   if ( dlg )
@@ -390,7 +390,7 @@ void Y2NCursesUIComponent::closeDialog( YDialog * dialog ) {
 //#define ONCREATE WIDDBG << endl
 #define ONCREATE
 
-YContainerWidget * Y2NCursesUIComponent::createSplit( YWidget * parent, YWidgetOpt & opt,
+YContainerWidget * YNCursesUI::createSplit( YWidget * parent, YWidgetOpt & opt,
 					     YUIDimension dimension )
 {
   ONCREATE;
@@ -398,13 +398,13 @@ YContainerWidget * Y2NCursesUIComponent::createSplit( YWidget * parent, YWidgetO
 		      dimension );
 }
 
-YContainerWidget * Y2NCursesUIComponent::createReplacePoint( YWidget * parent, YWidgetOpt & opt )
+YContainerWidget * YNCursesUI::createReplacePoint( YWidget * parent, YWidgetOpt & opt )
 {
   ONCREATE;
   return new NCReplacePoint( dynamic_cast<NCWidget *>( parent ), opt );
 }
 
-YContainerWidget * Y2NCursesUIComponent::createAlignment( YWidget * parent, YWidgetOpt & opt,
+YContainerWidget * YNCursesUI::createAlignment( YWidget * parent, YWidgetOpt & opt,
 						 YAlignmentType halign,
 						 YAlignmentType valign )
 {
@@ -413,7 +413,7 @@ YContainerWidget * Y2NCursesUIComponent::createAlignment( YWidget * parent, YWid
 			  halign, valign );
 }
 
-YContainerWidget * Y2NCursesUIComponent::createSquash( YWidget * parent, YWidgetOpt & opt,
+YContainerWidget * YNCursesUI::createSquash( YWidget * parent, YWidgetOpt & opt,
 					      bool hsquash,
 					      bool vsquash )
 {
@@ -422,13 +422,13 @@ YContainerWidget * Y2NCursesUIComponent::createSquash( YWidget * parent, YWidget
 		       hsquash, vsquash );
 }
 
-YContainerWidget * Y2NCursesUIComponent::createRadioButtonGroup( YWidget * parent, YWidgetOpt & opt )
+YContainerWidget * YNCursesUI::createRadioButtonGroup( YWidget * parent, YWidgetOpt & opt )
 {
   ONCREATE;
   return new NCRadioButtonGroup( dynamic_cast<NCWidget *>( parent ), opt );
 }
 
-YContainerWidget * Y2NCursesUIComponent::createFrame( YWidget * parent, YWidgetOpt & opt,
+YContainerWidget * YNCursesUI::createFrame( YWidget * parent, YWidgetOpt & opt,
 					     const YCPString & label )
 {
   ONCREATE;
@@ -442,14 +442,14 @@ YContainerWidget * Y2NCursesUIComponent::createFrame( YWidget * parent, YWidgetO
 //
 ///////////////////////////////////////////////////////////////////
 
-YWidget * Y2NCursesUIComponent::createEmpty( YWidget * parent, YWidgetOpt & opt )
+YWidget * YNCursesUI::createEmpty( YWidget * parent, YWidgetOpt & opt )
 {
   ONCREATE;
   return new NCEmpty( dynamic_cast<NCWidget *>( parent ), opt );
 }
 
 
-YWidget * Y2NCursesUIComponent::createSpacing( YWidget * parent, YWidgetOpt & opt,
+YWidget * YNCursesUI::createSpacing( YWidget * parent, YWidgetOpt & opt,
 				      float size,
 				      bool horizontal, bool vertical )
 {
@@ -458,7 +458,7 @@ YWidget * Y2NCursesUIComponent::createSpacing( YWidget * parent, YWidgetOpt & op
 			size, horizontal, vertical );
 }
 
-YWidget * Y2NCursesUIComponent::createLabel( YWidget * parent, YWidgetOpt & opt,
+YWidget * YNCursesUI::createLabel( YWidget * parent, YWidgetOpt & opt,
 				    const YCPString & text )
 {
   ONCREATE;
@@ -466,7 +466,7 @@ YWidget * Y2NCursesUIComponent::createLabel( YWidget * parent, YWidgetOpt & opt,
 		      text );
 }
 
-YWidget * Y2NCursesUIComponent::createRichText( YWidget * parent, YWidgetOpt & opt,
+YWidget * YNCursesUI::createRichText( YWidget * parent, YWidgetOpt & opt,
 				       const YCPString & text )
 {
   ONCREATE;
@@ -474,7 +474,7 @@ YWidget * Y2NCursesUIComponent::createRichText( YWidget * parent, YWidgetOpt & o
 			 text );
 }
 
-YWidget * Y2NCursesUIComponent::createLogView( YWidget * parent, YWidgetOpt & opt,
+YWidget * YNCursesUI::createLogView( YWidget * parent, YWidgetOpt & opt,
 				      const YCPString & label,
 				      int visibleLines,
 				      int maxLines )
@@ -484,7 +484,7 @@ YWidget * Y2NCursesUIComponent::createLogView( YWidget * parent, YWidgetOpt & op
 			label, visibleLines, maxLines );
 }
 
-YWidget * Y2NCursesUIComponent::createPushButton( YWidget * parent, YWidgetOpt & opt,
+YWidget * YNCursesUI::createPushButton( YWidget * parent, YWidgetOpt & opt,
 					 const YCPString & label )
 {
   ONCREATE;
@@ -492,7 +492,7 @@ YWidget * Y2NCursesUIComponent::createPushButton( YWidget * parent, YWidgetOpt &
 			   label );
 }
 
-YWidget * Y2NCursesUIComponent::createMenuButton( YWidget * parent, YWidgetOpt & opt,
+YWidget * YNCursesUI::createMenuButton( YWidget * parent, YWidgetOpt & opt,
 					 const YCPString & label )
 {
   ONCREATE;
@@ -500,7 +500,7 @@ YWidget * Y2NCursesUIComponent::createMenuButton( YWidget * parent, YWidgetOpt &
 			   label );
 }
 
-YWidget * Y2NCursesUIComponent::createRadioButton( YWidget * parent, YWidgetOpt & opt,
+YWidget * YNCursesUI::createRadioButton( YWidget * parent, YWidgetOpt & opt,
 					  YRadioButtonGroup * rbg,
 					  const YCPString & label,
 					  bool checked )
@@ -510,7 +510,7 @@ YWidget * Y2NCursesUIComponent::createRadioButton( YWidget * parent, YWidgetOpt 
 			    rbg, label, checked );
 }
 
-YWidget * Y2NCursesUIComponent::createCheckBox( YWidget * parent, YWidgetOpt & opt,
+YWidget * YNCursesUI::createCheckBox( YWidget * parent, YWidgetOpt & opt,
 				       const YCPString & label,
 				       bool checked )
 {
@@ -519,7 +519,7 @@ YWidget * Y2NCursesUIComponent::createCheckBox( YWidget * parent, YWidgetOpt & o
 			 label, checked );
 }
 
-YWidget * Y2NCursesUIComponent::createTextEntry( YWidget * parent, YWidgetOpt & opt,
+YWidget * YNCursesUI::createTextEntry( YWidget * parent, YWidgetOpt & opt,
 					const YCPString & label,
 					const YCPString & text )
 {
@@ -528,7 +528,7 @@ YWidget * Y2NCursesUIComponent::createTextEntry( YWidget * parent, YWidgetOpt & 
 			  label, text );
 }
 
-YWidget *Y2NCursesUIComponent::createMultiLineEdit( YWidget * parent, YWidgetOpt & opt,
+YWidget *YNCursesUI::createMultiLineEdit( YWidget * parent, YWidgetOpt & opt,
 					   const YCPString & label,
 					   const YCPString & initialText )
 {
@@ -537,7 +537,7 @@ YWidget *Y2NCursesUIComponent::createMultiLineEdit( YWidget * parent, YWidgetOpt
 			      label, initialText );
 }
 
-YWidget * Y2NCursesUIComponent::createSelectionBox( YWidget * parent, YWidgetOpt & opt,
+YWidget * YNCursesUI::createSelectionBox( YWidget * parent, YWidgetOpt & opt,
 					   const YCPString & label )
 {
   ONCREATE;
@@ -545,7 +545,7 @@ YWidget * Y2NCursesUIComponent::createSelectionBox( YWidget * parent, YWidgetOpt
 			     label );
 }
 
-YWidget * Y2NCursesUIComponent::createMultiSelectionBox( YWidget *parent, YWidgetOpt & opt,
+YWidget * YNCursesUI::createMultiSelectionBox( YWidget *parent, YWidgetOpt & opt,
 						const YCPString & label )
 {
   ONCREATE;
@@ -553,7 +553,7 @@ YWidget * Y2NCursesUIComponent::createMultiSelectionBox( YWidget *parent, YWidge
 				  label );
 }
 
-YWidget * Y2NCursesUIComponent::createComboBox( YWidget * parent, YWidgetOpt & opt,
+YWidget * YNCursesUI::createComboBox( YWidget * parent, YWidgetOpt & opt,
 				       const YCPString & label )
 {
   ONCREATE;
@@ -561,7 +561,7 @@ YWidget * Y2NCursesUIComponent::createComboBox( YWidget * parent, YWidgetOpt & o
 			 label );
 }
 
-YWidget * Y2NCursesUIComponent::createTree( YWidget * parent, YWidgetOpt & opt,
+YWidget * YNCursesUI::createTree( YWidget * parent, YWidgetOpt & opt,
 				   const YCPString & label )
 {
   ONCREATE;
@@ -569,7 +569,7 @@ YWidget * Y2NCursesUIComponent::createTree( YWidget * parent, YWidgetOpt & opt,
 		     label );
 }
 
-YWidget * Y2NCursesUIComponent::createTable( YWidget * parent, YWidgetOpt & opt,
+YWidget * YNCursesUI::createTable( YWidget * parent, YWidgetOpt & opt,
 				    vector<string> header )
 {
   ONCREATE;
@@ -577,7 +577,7 @@ YWidget * Y2NCursesUIComponent::createTable( YWidget * parent, YWidgetOpt & opt,
 		      header );
 }
 
-YWidget * Y2NCursesUIComponent::createProgressBar( YWidget * parent, YWidgetOpt & opt,
+YWidget * YNCursesUI::createProgressBar( YWidget * parent, YWidgetOpt & opt,
 					  const YCPString & label,
 					  const YCPInteger & maxprogress,
 					  const YCPInteger & progress )
@@ -587,7 +587,7 @@ YWidget * Y2NCursesUIComponent::createProgressBar( YWidget * parent, YWidgetOpt 
 			    label, maxprogress, progress );
 }
 
-YWidget * Y2NCursesUIComponent::createImage( YWidget * parent, YWidgetOpt & opt,
+YWidget * YNCursesUI::createImage( YWidget * parent, YWidgetOpt & opt,
 				    YCPByteblock /* not used */,
 				    YCPString defaulttext )
 {
@@ -596,7 +596,7 @@ YWidget * Y2NCursesUIComponent::createImage( YWidget * parent, YWidgetOpt & opt,
 		      defaulttext );
 }
 
-YWidget * Y2NCursesUIComponent::createImage( YWidget * parent, YWidgetOpt & opt,
+YWidget * YNCursesUI::createImage( YWidget * parent, YWidgetOpt & opt,
 				    YCPString /* not used */,
 				    YCPString defaulttext )
 {
@@ -605,7 +605,7 @@ YWidget * Y2NCursesUIComponent::createImage( YWidget * parent, YWidgetOpt & opt,
 		      defaulttext );
 }
 
-YWidget * Y2NCursesUIComponent::createImage( YWidget * parent, YWidgetOpt & opt,
+YWidget * YNCursesUI::createImage( YWidget * parent, YWidgetOpt & opt,
 				    ImageType /* not used */,
 				    YCPString defaulttext )
 {
@@ -614,7 +614,7 @@ YWidget * Y2NCursesUIComponent::createImage( YWidget * parent, YWidgetOpt & opt,
 		      defaulttext );
 }
 
-YWidget * Y2NCursesUIComponent::createIntField( YWidget * parent, YWidgetOpt & opt,
+YWidget * YNCursesUI::createIntField( YWidget * parent, YWidgetOpt & opt,
 				       const YCPString & label,
 				       int minValue, int maxValue,
 				       int initialValue )
@@ -634,13 +634,13 @@ YWidget * Y2NCursesUIComponent::createIntField( YWidget * parent, YWidgetOpt & o
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : Y2NCursesUIComponent::createPackageSelector
+//	METHOD NAME : YNCursesUI::createPackageSelector
 //	METHOD TYPE : YWidget
 //
 //	DESCRIPTION : Reads the layout term of the package selection dialog
 // 		      and creates the widget tree.
 //
-YWidget * Y2NCursesUIComponent::createPackageSelector( YWidget * parent,
+YWidget * YNCursesUI::createPackageSelector( YWidget * parent,
 					      YWidgetOpt & opt,
 					      const YCPString & floppyDevice )
 {
@@ -652,13 +652,13 @@ YWidget * Y2NCursesUIComponent::createPackageSelector( YWidget * parent,
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : Y2NCursesUIComponent::runPkgSelection
+//	METHOD NAME : YNCursesUI::runPkgSelection
 //	METHOD TYPE : void
 //
 //	DESCRIPTION : Implementation of UI builtin RunPkgSelection() which
 //		      has to be called after OpenDialog( `PackageSelector() ).
 //
-YCPValue Y2NCursesUIComponent::runPkgSelection(  YWidget * selector )
+YCPValue YNCursesUI::runPkgSelection(  YWidget * selector )
 {
     NCPackageSelector * ncSelector = 0;
 
@@ -711,13 +711,13 @@ YCPValue Y2NCursesUIComponent::runPkgSelection(  YWidget * selector )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : Y2NCursesUIComponent::createPkgSpecial
+//	METHOD NAME : YNCursesUI::createPkgSpecial
 //	METHOD TYPE : YWidget
 //
 //	DESCRIPTION : creates special widgets used for the package selection
 //		      dialog (which do not have a corresponding widget in qt-ui)
 //
-YWidget * Y2NCursesUIComponent::createPkgSpecial( YWidget *parent, YWidgetOpt &opt, const YCPString &subwidget )
+YWidget * YNCursesUI::createPkgSpecial( YWidget *parent, YWidgetOpt &opt, const YCPString &subwidget )
 {
     ONCREATE;
 
@@ -738,12 +738,12 @@ YWidget * Y2NCursesUIComponent::createPkgSpecial( YWidget *parent, YWidgetOpt &o
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : Y2NCursesUIComponent::setLanguage
+//	METHOD NAME : YNCursesUI::setLanguage
 //	METHOD TYPE : YCPValue
 //
 //	DESCRIPTION :
 //
-YCPValue Y2NCursesUIComponent::setLanguage( const YCPTerm & term )
+YCPValue YNCursesUI::setLanguage( const YCPTerm & term )
 {
    if ( term->size() == 1 && term->value(0)->isString() ) {
      setLanguage( term->value(0)->asString()->value() );
@@ -755,7 +755,7 @@ YCPValue Y2NCursesUIComponent::setLanguage( const YCPTerm & term )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : Y2NCursesUIComponent::setLanguage
+//	METHOD NAME : YNCursesUI::setLanguage
 //	METHOD TYPE : bool
 //
 //	DESCRIPTION : Expect lang to be 'language[_country][.encoding]'
@@ -763,7 +763,7 @@ YCPValue Y2NCursesUIComponent::setLanguage( const YCPTerm & term )
 //		      From version 9.0 on (UTF-8 support) setLanguage()
 //		      don't have to look for the correct encoding.
 //
-bool Y2NCursesUIComponent::setLanguage( string lang )
+bool YNCursesUI::setLanguage( string lang )
 {
   string encoding;
   string language = lang;
@@ -783,11 +783,11 @@ bool Y2NCursesUIComponent::setLanguage( string lang )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : Y2NCursesUIComponent::setKeyboard
+//	METHOD NAME : YNCursesUI::setKeyboard
 //	METHOD TYPE : YCPValue
 //
 //
-YCPValue Y2NCursesUIComponent::setKeyboard()
+YCPValue YNCursesUI::setKeyboard()
 {
     string cmd = "/bin/dumpkeys | /bin/loadkeys --unicode";
     if ( NCstring::terminalEncoding() == "UTF-8" )
@@ -805,13 +805,13 @@ YCPValue Y2NCursesUIComponent::setKeyboard()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : Y2NCursesUIComponent::setConsoleFont
+//	METHOD NAME : YNCursesUI::setConsoleFont
 //	METHOD TYPE : YCPValue
 //
 //	DESCRIPTION : UI::setConsoleFont() is called in Console.ycp.
 //		      The terminal encoding must be set correctly.
 //
-YCPValue Y2NCursesUIComponent::setConsoleFont( const YCPString & console_magic,
+YCPValue YNCursesUI::setConsoleFont( const YCPString & console_magic,
 				      const YCPString & font,
 				      const YCPString & screen_map,
 				      const YCPString & unicode_map,
@@ -891,12 +891,12 @@ YCPValue Y2NCursesUIComponent::setConsoleFont( const YCPString & console_magic,
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : Y2NCursesUIComponent::hasFullUtf8Support
+//	METHOD NAME : YNCursesUI::hasFullUtf8Support
 //	METHOD TYPE : bool
 //
 //	DESCRIPTION :
 //
-bool Y2NCursesUIComponent::hasFullUtf8Support()
+bool YNCursesUI::hasFullUtf8Support()
 {
     if ( NCstring::terminalEncoding() == "UTF-8" )
     {
@@ -911,12 +911,12 @@ bool Y2NCursesUIComponent::hasFullUtf8Support()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : Y2NCursesUIComponent::init_title
+//	METHOD NAME : YNCursesUI::init_title
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void Y2NCursesUIComponent::init_title()
+void YNCursesUI::init_title()
 {
     string title_ti( "YaST" );
     char hostname_ti[256];
@@ -936,12 +936,12 @@ void Y2NCursesUIComponent::init_title()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : Y2NCursesUIComponent::want_colors()
+//	METHOD NAME : YNCursesUI::want_colors()
 //	METHOD TYPE : bool
 //
 //	DESCRIPTION :
 //
-bool Y2NCursesUIComponent::want_colors()
+bool YNCursesUI::want_colors()
 {
   if ( getenv( "Y2NCURSES_BW" ) != NULL ) {
     UIMIL << "Y2NCURSES_BW is set - won't use colors" << endl;
@@ -953,12 +953,12 @@ bool Y2NCursesUIComponent::want_colors()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : Y2NCursesUIComponent::askForSaveFileName()
+//	METHOD NAME : YNCursesUI::askForSaveFileName()
 //	METHOD TYPE : YCPValue()
 //
 //	DESCRIPTION :
 //
-YCPValue Y2NCursesUIComponent::askForSaveFileName( const YCPString & startDir,
+YCPValue YNCursesUI::askForSaveFileName( const YCPString & startDir,
 					  const YCPString & filter,
 					  const YCPString & headline )
 {
@@ -978,12 +978,12 @@ YCPValue Y2NCursesUIComponent::askForSaveFileName( const YCPString & startDir,
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : Y2NCursesUIComponent::askForExistingFile()
+//	METHOD NAME : YNCursesUI::askForExistingFile()
 //	METHOD TYPE : YCPValue
 //
 //	DESCRIPTION :
 //
-YCPValue Y2NCursesUIComponent::askForExistingFile( const YCPString & startDir,
+YCPValue YNCursesUI::askForExistingFile( const YCPString & startDir,
 					  const YCPString & filter,
 					  const YCPString & headline )
 {
@@ -1003,12 +1003,12 @@ YCPValue Y2NCursesUIComponent::askForExistingFile( const YCPString & startDir,
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : Y2NCursesUIComponent::askForExistingDirectory()
+//	METHOD NAME : YNCursesUI::askForExistingDirectory()
 //	METHOD TYPE : YCPValue
 //
 //	DESCRIPTION :
 //
-YCPValue Y2NCursesUIComponent::askForExistingDirectory( const YCPString & startDir,
+YCPValue YNCursesUI::askForExistingDirectory( const YCPString & startDir,
 					       const YCPString & headline )
 {
     NCAskForExistingDirectory dirPopup( wpos( 1, 1 ), startDir, headline );
