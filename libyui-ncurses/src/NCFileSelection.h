@@ -41,7 +41,8 @@ struct NCFileInfo
       * Constructor from a stat buffer (i.e. based on an lstat() call).
       **/
      NCFileInfo( string 	fileName,
-		 struct stat *	statInfo );
+		 struct stat *	statInfo,
+		 bool link 	= false );
 
      NCFileInfo ();
      
@@ -52,6 +53,7 @@ struct NCFileInfo
      string		_name;		// the file name (without path!)
 
      string		_tag;		// short label 
+     string		_perm;		// permission string
      dev_t		_device;	// device this object resides on
      mode_t		_mode;		// file permissions + object type
      nlink_t		_links;		// number of links

@@ -32,7 +32,8 @@
 //	DESCRIPTION :
 //
 NCFileInfo::NCFileInfo( string 	fileName,
-			struct stat *	statInfo )
+			struct stat *	statInfo,
+			bool 	link )
 {
     _name   = fileName;
     _mode   = statInfo->st_mode;
@@ -41,14 +42,52 @@ NCFileInfo::NCFileInfo( string 	fileName,
     _size   = statInfo->st_size;
     _mtime  = statInfo->st_mtime;
     
-    if ( S_ISLNK(_mode) )
+    if ( link )
 	_tag = " @";	// links
     else if ( S_ISREG(_mode)
 	      && (_mode & S_IXUSR) )
 	_tag = " *";	// user executable files
     else
 	_tag = "  ";
-    
+
+    if ( _mode & S_IRUSR )
+	_perm += "r";
+    else
+	_perm += "-";
+    if ( _mode & S_IWUSR )
+	_perm += "w";
+    else
+	_perm += "-";
+    if ( _mode & S_IXUSR )
+	_perm += "x";
+    else
+	_perm += "-";
+
+    if ( _mode & S_IRGRP )
+	_perm += "r";
+    else
+	_perm += "-";
+    if ( _mode & S_IWGRP )
+	_perm += "w";
+    else
+	_perm += "-";
+    if ( _mode & S_IXGRP )
+	_perm += "x";
+    else
+	_perm += "-";
+
+    if ( _mode & S_IROTH )
+	_perm += "r";
+    else
+	_perm += "-";
+    if ( _mode & S_IWOTH )
+	_perm += "w";
+    else
+	_perm += "-";
+    if ( _mode & S_IXOTH )
+	_perm += "x";
+    else
+	_perm += "-";
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -63,6 +102,7 @@ NCFileInfo::NCFileInfo( )
 {
     _name   = "";
     _tag    = "";
+    _perm   = "";
     _mode   = (mode_t)0;
     _device = (dev_t)0;
     _links  = (nlink_t)0;
@@ -94,9 +134,9 @@ NCFileSelectionTag::NCFileSelectionTag( const NCFileInfo & info )
 //	DESCRIPTION :
 //
 void NCFileSelectionTag::DrawAt( NCursesWindow & w, const wrect at,
-			    NCTableStyle & tableStyle,
-			    NCTableLine::STATE linestate,
-			    unsigned colidx ) const
+				 NCTableStyle & tableStyle,
+				 NCTableLine::STATE linestate,
+				 unsigned colidx ) const
 {
     NCTableCol::DrawAt( w, at, tableStyle, linestate, colidx );
 
@@ -227,7 +267,7 @@ void NCFileSelection::setCurrentDir()
 //	DESCRIPTION :
 //
 void NCFileSelection::addLine( const vector<string> & elements,
-			   NCFileInfo & info )
+			       NCFileInfo & info )
 {
     vector<NCTableCol*> Items( elements.size()+1, 0 );
     
@@ -276,7 +316,7 @@ bool NCFileSelection::createListEntry ( NCFileInfo fileInfo )
 	    char size_buf[50];
 	    sprintf( size_buf, "%d", fileInfo._size);
 	    data.push_back( size_buf );
-	    data.push_back( "read only" );	//FIXME
+	    data.push_back( fileInfo._perm );	
 	    break;
 	}
 	default: {
@@ -521,7 +561,7 @@ bool NCFileTable::fillList ( )
 		    {
 			if ( S_ISREG( linkInfo.st_mode ) )
 			{
-			    createListEntry( NCFileInfo( (*it), &statInfo ) );
+			    createListEntry( NCFileInfo( (*it), &linkInfo, true ) );
 			}
 		    }
 		}
@@ -660,7 +700,7 @@ bool NCDirectoryTable::fillList ( )
 		    {
 			if ( S_ISDIR( linkInfo.st_mode ) )
 			{
-			    createListEntry( NCFileInfo( (*it), &statInfo ) );
+			    createListEntry( NCFileInfo( (*it), &linkInfo, true ) );
 			}
 		    }
 		}
