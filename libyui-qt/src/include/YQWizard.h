@@ -27,6 +27,7 @@
 #include <qptrlist.h>
 #include <qstringlist.h>
 #include <qdict.h>
+#include "QY2ListView.h"
 
 #include <string>
 
@@ -49,6 +50,7 @@ class YQWizard : public QVBox, public YWizard
     Q_OBJECT
 
     class Step;
+    class TreeItem;
     
 public:
     /**
@@ -397,6 +399,24 @@ protected:
      **/
     YQWizard::Step * findStep( const QString & id );
 
+    /**
+     * Add a tree item. If "parentID" is an empty string, it will be a root item.
+     * 'text' is the text that will be displayed in the tree, 'id' the ID with which
+     * this newly created item can be referenced - and that will be returned when the user
+     * clicks on a tree item.
+     **/
+    void addTreeItem( const QString & parentID, const QString & text, const QString & id );
+
+    /**
+     * Delete all tree items.
+     **/
+    void deleteTreeItems();
+
+    /**
+     * Find a tree item with the specified ID. Tree items without IDs cannot be found at all.
+     * Returns the item or 0 if no such item found.
+     **/
+    YQWizard::TreeItem * findTreeItem( const QString & id );
     
     //
     // Data members
@@ -447,6 +467,7 @@ protected:
 
     QPtrList<YQWizard::Step> 	_stepsList;
     QDict<YQWizard::Step>	_stepsIDs;
+    QDict<YQWizard::TreeItem>	_treeIDs;
 
 
     
@@ -510,6 +531,34 @@ protected:
 	virtual ~StepHeading() {}
 	virtual bool isHeading() const { return true; }
 	virtual bool hasID( const QString & id ) { return false; }
+    };
+
+
+    /**
+     * Helper class for wizard tree item
+     **/
+    class TreeItem: public QY2ListViewItem
+    {
+    public:
+	TreeItem( QY2ListView *		parent,
+		  const QString & 	text,
+		  const QString & 	id )
+	    : QY2ListViewItem( parent, text, true )
+	    , _id( id )
+	    {}
+	
+	TreeItem( YQWizard::TreeItem * 	parent,
+		  const QString & 	text,
+		  const QString & 	id )
+	    : QY2ListViewItem( parent, text, true )
+	    , _id( id )
+	    {}
+
+	QString text() const { return QListViewItem::text(0); }
+	QString id()   const { return _id.isEmpty() ? text() : _id; }
+
+    private:
+	QString _id;
     };
 
 }; // class YQWizard

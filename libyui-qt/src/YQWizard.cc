@@ -103,7 +103,7 @@ YQWizard::YQWizard( QWidget *		parent,
 	y2error( "Can't enable steps and tree at the same time - disabling steps" );
 	_stepsEnabled = false;
     }
-    
+
     _verboseCommands	= false;
     _protectNextButton	= false;
     _stepsDirty		= false;
@@ -158,7 +158,7 @@ YQWizard::YQWizard( QWidget *		parent,
 
     if ( ! runningEmbedded() )
 	layoutSideBar( hBox );
-    
+
     layoutWorkArea( hBox );
 
     y2debug( "Constructor finished." );
@@ -342,7 +342,7 @@ void YQWizard::updateSteps()
 {
     if ( ! _stepsBox )
 	return;
-    
+
     //
     // Delete any previous step widgets
     //
@@ -586,14 +586,14 @@ void YQWizard::layoutHelpPanel()
 
 	QPushButton * button;
 	QPixmap pixmap;
-	
+
 	if ( _treeEnabled )
 	{
 	    // "Tree" button - intentionally without keyboard shortcut
 	    // (the text is only a fallback anyway if no icon can be found)
 	    button = new QPushButton( _( "Tree" ), buttonParent );
 	    CHECK_PTR( button );
-	    
+
 	    pixmap = QPixmap( PIXMAP_DIR "tree-button.png" );
 	}
 	else // if ( _stepsEnabled )
@@ -602,7 +602,7 @@ void YQWizard::layoutHelpPanel()
 	    // (the text is only a fallback anyway if no icon can be found)
 	    button = new QPushButton( _( "Steps" ), buttonParent );
 	    CHECK_PTR( button );
-	    
+
 	    pixmap = QPixmap( PIXMAP_DIR "steps-button.png" );
 	}
 
@@ -658,23 +658,6 @@ void YQWizard::layoutTreePanel()
     _tree->header()->hide();
     _tree->setRootIsDecorated( true );
 
-    QY2ListViewItem * branch = 0;
-    branch = new QY2ListViewItem( _tree, "item 3", true );
-    new QY2ListViewItem( branch, "item 3-first", true );
-    new QY2ListViewItem( branch, "item 3-second", true );
-    new QY2ListViewItem( branch, "item 3-third", true );
-
-    
-    branch = new QY2ListViewItem( _tree, "item 2", true );
-    new QY2ListViewItem( branch, "item 2-first", true );
-    new QY2ListViewItem( branch, "item 2-second", true );
-    new QY2ListViewItem( branch, "item 2-third", true );
-    
-    branch = new QY2ListViewItem( _tree, "item 1", true );
-    new QY2ListViewItem( branch, "item 1-first", true );
-    new QY2ListViewItem( branch, "item 1-second", true );
-    new QY2ListViewItem( branch, "item 1-third", true );
-
 
     // Bottom gradient
 
@@ -698,9 +681,62 @@ void YQWizard::layoutTreePanel()
     connect( button, SIGNAL( clicked()  ),
 	     this,   SLOT  ( showHelp() ) );
 
-    
+
     // Right margin (with gradients)
     addGradientColumn( _treePanel );
+}
+
+
+
+void YQWizard::addTreeItem( const QString & parentID, const QString & text, const QString & id )
+{
+    if ( ! _tree )
+    {
+	y2error( "YQWizard widget not created with `opt(`treeEnabled) !" );
+	return;
+    }
+
+    YQWizard::TreeItem * item   = 0;
+    YQWizard::TreeItem * parent = 0;
+
+    if ( ! parentID.isEmpty() )
+    {
+	parent = findTreeItem( parentID );
+    }
+
+    if ( parent )
+    {
+	item = new YQWizard::TreeItem( parent, text, id );
+	CHECK_PTR( item );
+    }
+    else
+    {
+	item = new YQWizard::TreeItem( _tree, text, id );
+	CHECK_PTR( item );
+    }
+
+    if ( ! id.isEmpty() )
+	_treeIDs.insert( id, item );
+}
+
+
+
+void YQWizard::deleteTreeItems()
+{
+    if ( _tree )
+	_tree->clear();
+
+    _treeIDs.clear();
+}
+
+
+
+YQWizard::TreeItem * YQWizard::findTreeItem( const QString & id )
+{
+    if ( id.isEmpty() )
+	return 0;
+
+    return _treeIDs[ id ];
 }
 
 
@@ -793,7 +829,7 @@ void YQWizard::layoutClientArea( QWidget * parent )
     CHECK_PTR( _clientArea );
     _clientArea->setMargin( 4 );
 
-    
+
     //
     // HVCenter for wizard contents
     //
@@ -860,7 +896,7 @@ void YQWizard::layoutButtonBox()
 	_backButtonSpacer->hide();
     }
 
-    
+
     //
     // "Abort" button
     //
@@ -1105,7 +1141,7 @@ void YQWizard::setHelpText( QString helpText )
 
 void YQWizard::addChild( YWidget * child )
 {
-    if ( dynamic_cast<YQWizardButton *> (child) 
+    if ( dynamic_cast<YQWizardButton *> (child)
 	 || child == _contents )
     {
 	YContainerWidget::addChild( child );
@@ -1423,8 +1459,13 @@ YCPValue YQWizard::command( const YCPTerm & cmd )
     if ( isCommand( "SetFocusToNextButton ()"        , cmd ) )	{ setButtonFocus( _nextButton );			return OK; }
     if ( isCommand( "SetFocusToBackButton ()"        , cmd ) )	{ setButtonFocus( _backButton );			return OK; }
 
+
     if ( isCommand( "SetVerboseCommands	  ( bool )"  , cmd ) )	{ setVerboseCommands( boolArg( cmd, 0 ) );		return OK; }
 
+    if ( isCommand( "DeleteTreeItems()"	             , cmd ) )	{ deleteTreeItems();					return OK; }
+    if ( isCommand( "AddTreeItem( string, string, string )", cmd ) )	{ addTreeItem( qStringArg( cmd, 0 ),
+										       qStringArg( cmd, 1 ),
+										       qStringArg( cmd, 2 )  );		return OK; }
 
     y2error( "Undefined wizard command: %s", cmd->toString().c_str() );
     return YCPBoolean( false );
