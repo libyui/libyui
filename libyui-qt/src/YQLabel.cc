@@ -33,6 +33,7 @@ YQLabel::YQLabel( QWidget * 		parent,
     , YLabel( opt, text )
 {
     setWidgetRep( this );
+    y2debug("label");
 
     setTextFormat( QLabel::PlainText );
     setText( fromUTF8(text->value() ) );

@@ -20,6 +20,7 @@ noinst_HEADERS =				\
 	YQCheckBox.h				\
 	YQColoredLabel.h			\
 	YQComboBox.h				\
+	YQDate.h				\
 	YQDialog.h				\
 	YQDownloadProgress.h			\
 	YQDumbTab.h				\

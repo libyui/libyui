@@ -47,6 +47,7 @@ liby2qt_la_SOURCES = 				\
 	YQCheckBox.cc				\
 	YQColoredLabel.cc			\
 	YQComboBox.cc				\
+	YQDate.cc				\
 	YQDialog.cc				\
 	YQDownloadProgress.cc			\
 	YQDumbTab.cc				\
@@ -99,6 +100,7 @@ liby2qt_la_SOURCES = 				\
 	YQSplit.cc				\
 	YQSquash.cc				\
 	YQTable.cc				\
+	YQTime.cc				\
 	YQTextEntry.cc				\
 	YQTree.cc				\
 	YQWizard.cc				\
@@ -206,6 +208,7 @@ YQBarGraph.o YQBarGraph.lo:   					YQBarGraph.moc
 YQCheckBox.o YQCheckBox.lo:					YQCheckBox.moc
 YQColoredLabel.o YQColoredLabel.lo:				YQColoredLabel.moc
 YQComboBox.o YQComboBox.lo:					YQComboBox.moc
+YQDate.o YQDate.lo:						YQDate.moc
 YQDialog.o YQDialog.lo:						YQDialog.moc
 YQDownloadProgress.o YQDownloadProgress.lo:			YQDownloadProgress.moc
 YQDumbTab.o YQDumbTab.lo:					YQDumbTab.moc
@@ -257,6 +260,7 @@ YQSplit.o YQSplit.lo:						YQSplit.moc
 YQSquash.o YQSquash.lo:						YQSquash.moc
 YQTable.o YQTable.lo:						YQTable.moc
 YQTextEntry.o YQTextEntry.lo:					YQTextEntry.moc
+YQTime.o YQTime.lo:						YQTime.moc
 YQTree.o YQTree.lo:						YQTree.moc
 YQWizard.o YQWizard.lo:						YQWizard.moc
 YQWizardButton.o YQWizardButton.lo:				YQWizardButton.moc

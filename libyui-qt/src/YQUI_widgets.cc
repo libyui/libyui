@@ -29,6 +29,7 @@
 #include "YQCheckBox.h"
 #include "YQComboBox.h"
 #include "YQColoredLabel.h"
+#include "YQDate.h"
 #include "YQDialog.h"
 #include "YQDownloadProgress.h"
 #include "YQDumbTab.h"
@@ -57,6 +58,7 @@
 #include "YQSquash.h"
 #include "YQTable.h"
 #include "YQTextEntry.h"
+#include "YQTime.h"
 #include "YQTree.h"
 #include "YQWizard.h"
 
@@ -119,6 +121,24 @@ YWidget * YQUI::createLabel		( YWidget *		parent,
 {
     return new YQLabel( (QWidget *) ( parent->widgetRep() ), opt, text);
 }
+
+
+YWidget * YQUI::createDate		( YWidget *		parent,
+					  YWidgetOpt & 		opt,
+					  const YCPString & 	label,
+					  const YCPString & 	date )
+{
+    return new YQDate( (QWidget *) ( parent->widgetRep() ), opt, label, date);
+}
+
+YWidget * YQUI::createTime		( YWidget *		parent,
+					  YWidgetOpt & 		opt,
+					  const YCPString & 	label,
+					  const YCPString & 	time )
+{
+    return new YQTime( (QWidget *) ( parent->widgetRep() ), opt, label, time);
+}
+
 
 YWidget * YQUI::createLogView		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
