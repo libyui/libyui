@@ -120,7 +120,8 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     eventHandlerMap[ PkgNames::GeneralHelp()->toString() ] = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::StatusHelp()->toString() ]  = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::FilterHelp()->toString() ]  = &PackageSelector::HelpHandler;
-
+    // eventHandlerMap[ PkgNames::PatchHelp()->toString() ]  = &PackageSelector::HelpHandler;
+   
     if ( opt.youMode.value() )
 	youMode = true;
 
@@ -1053,6 +1054,7 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
 
     if ( event.selection.isNull() )
     {
+	NCMIL << "Event.selection is null ???????" << endl;
 	return false;
     }
     
@@ -1252,18 +1254,17 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
     {
 	string instVersion = "";
 	string version = "";
-	NCstring text ( "" );
+	string text = "";
 	
 	if ( pkgPtr->hasSelectable() )
 	{
-	    text += NCstring( pkgPtr->getSelectable()->name() );
-	    text += NCstring( " - " );
+	    text += pkgPtr->getSelectable()->name();
+	    text += " - ";
 	}
 	
 	// the summary is UTF8 encoded -> use a YCPString as argument for NCstring  
-	YCPString summary( pkgPtr->summary() );
-	text += NCstring( summary );	
-	text += NCstring( "<br>" );
+	text += pkgPtr->summary();
+	text += "<br>";
 
 	if ( pkgPtr->hasInstalledObj() && pkgPtr->hasCandidateObj() )
 	{
@@ -1275,43 +1276,43 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	    version = pkgPtr->version();
 	}
 
-	text += PkgNames::Version();
-	text += NCstring( version );
+	text += "<b>Version: </b>";
+	text +=  version;
 	if ( instVersion != "" )
 	{
-	    text += NCstring( "  " );
-	    text += PkgNames::InstVersion();
-	    text += NCstring( instVersion );
+	    text += "  ";
+	    text += "<b>Installed: </b>" ;
+	    text += instVersion;
 	}
 
-	text += NCstring( "  " );
+	text +=  "  ";
 	
 	// show the size
-	text += PkgNames::Size();
-	text += NCstring( pkgPtr->size().asString() );
+	text += "<b>Size:</b> ";
+	text += pkgPtr->size().asString();
 	
-	text += NCstring( "<br>" );
+	text += "<br>";
 
 	// show Provides:
-	text += PkgNames::Provides();
+	text += "<b>Provides: </b>";
 	list<PkgRelation> provides = pkgPtr->provides();	// PMSolvable
-	text += NCstring( createRelLine(provides) );
-	text += NCstring( "<br>" );
+	text += createRelLine(provides);
+	text += "<br>";
 
 	// show the authors
-	text += PkgNames::Authors();
+	text +="<b>Authors: </b>";
 	PMPackagePtr package = pkgPtr;
 	if ( package )
 	{
 	    list<string> authors = package->authors(); // PMPackage	
-	    text += NCstring( createText( authors, true ) );
+	    text += createText( authors, true );
 	}
         // show the description	
 	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
 	
 	if ( descrInfo )
 	{
-	    static_cast<NCRichText *>(descrInfo)->setText( text.YCPstr() );
+	    static_cast<NCRichText *>(descrInfo)->setText( YCPString(text) );
 	}
     }
     else if (  visibleInfo->compare( PkgNames::Versions() ) == YO_EQUAL )
@@ -1324,44 +1325,44 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
     }
     else if (  visibleInfo->compare( PkgNames::Relations() ) == YO_EQUAL )
     {
-	NCstring text ( "" );
+	string text = "";
 	list<PkgRelation> relations;
 	
 	if ( pkgPtr->hasSelectable() )
 	{
-	    text += NCstring( pkgPtr->getSelectable()->name() );
-	    text += NCstring( " - " );
+	    text += pkgPtr->getSelectable()->name();
+	    text += " - ";
 	}
 
-	text += NCstring( pkgPtr->summary() );		// the summary
-	text += NCstring( "<br>" );
+	text += pkgPtr->summary();		// the summary
+	text += "<br>";
 
         // show Requires:
-	text += PkgNames::Requires();
+	text += "<b>Requires: </b>";
 	relations = pkgPtr->requires();
 
-	text += NCstring( createRelLine(relations) );
-	text += NCstring( "<br>" );
+	text += createRelLine(relations);
+	text += "<br>";
 
 	// show Required by:
-	text += PkgNames::PreRequires();
+	text += "<b>Prerequires: </b>";
 	relations = pkgPtr->prerequires();
 
-	text += NCstring( createRelLine(relations) );
-	text += NCstring( "<br>" );
+	text += createRelLine(relations);
+	text += "<br>";
 
 	// show Conflicts:
-	text += PkgNames::Conflicts();
+	text += "<b>Conflicts: </b>";
 	relations = pkgPtr->conflicts();
 
-	text += NCstring( createRelLine(relations) );
+	text += createRelLine(relations);
 	
         // show the package relations	
 	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
 	
 	if ( descrInfo )
 	{
-	    static_cast<NCRichText *>(descrInfo)->setText( text.YCPstr() );
+	    static_cast<NCRichText *>(descrInfo)->setText( YCPString( text ) );
 	}
     }
  
