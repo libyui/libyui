@@ -488,16 +488,23 @@ YQPkgConflict::dumpList( QListViewItem * 	parent,
 	std::string pkg2 = (*it).rel.asString();
 	QString text;
 
-	if ( (*it).is_conflict )
+	switch ( (*it).kind )
 	{
-	    // "somepackage conflicts with otherpackage"
-	    text = ( _( "%1 conflicts with %2" ) ).arg( pkg1.c_str() ).arg( pkg2.c_str() );
-	}
-	else
-	{
-	    // "somepackage requires libfoo.so > 1.2"
-	    // "somepackage requires otherpackage"
-	    text =( _( "%1 requires %2" ) ).arg( pkg1.c_str() ).arg( pkg2.c_str() );
+	    case PkgDep::RelInfo::REQUIREMENT:
+		// "somepackage requires libfoo.so > 1.2"
+		// "somepackage requires otherpackage"
+		text =( _( "%1 requires %2" ) ).arg( pkg1.c_str() ).arg( pkg2.c_str() );
+		break;
+		
+	    case PkgDep::RelInfo::CONFLICT:
+		// "somepackage conflicts with otherpackage"
+		text = ( _( "%1 conflicts with %2" ) ).arg( pkg1.c_str() ).arg( pkg2.c_str() );
+		break;
+			
+	    case PkgDep::RelInfo::OBSOLETION:
+		// "somepackage obsoletes otherpackage"
+		text = ( _( "%1 obsoletes %2" ) ).arg( pkg1.c_str() ).arg( pkg2.c_str() );
+		break;
 	}
 
 	new QY2ListViewItem( parent, text, true );
