@@ -42,7 +42,7 @@ NCPackageSelector::NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
 				      YWidgetOpt & opt, YUIDimension dimension )
     : NCSplit( parent, opt, dimension )
       , widgetRoot( 0 )
-      , packager( ui )
+      , packager( ui, opt )
 {
     // FIXME: get mode ONLINE/UPDATE/INSTALL (and pass it to the packager)
     

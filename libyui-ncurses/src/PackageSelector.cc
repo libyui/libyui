@@ -67,12 +67,12 @@ bool sortByName( PMSelectablePtr ptr1, PMSelectablePtr ptr2 )
 //
 // Constructor
 //
-PackageSelector::PackageSelector( Y2NCursesUI * ui )
+PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     : y2ui( ui )
       , visibleInfo( YCPNull() )
       , filterPopup( 0 )
       , selectionPopup( 0 )
-      , youMode( true )
+      , youMode( false )
 {
     // Fill the handler map
     eventHandlerMap[ PkgNames::Packages()->toString() ]	= &PackageSelector::PackageListHandler;
@@ -107,6 +107,9 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui )
     eventHandlerMap[ PkgNames::InstSourceHelp()->toString() ] = &PackageSelector::HelpHandler;
     // FIXME: add handler for all `id s
 
+    if ( opt.notifyMode.defined() )
+	youMode = true;
+    
     if ( !youMode )
     {
 	// create the filter popup
@@ -376,6 +379,7 @@ bool PackageSelector::fillSearchList( const YCPString & expr )
 // fillDefaultList
 //
 // Fills the package table with the list of default rpm group
+// or show the complete patch list in YOU mode
 //
 bool PackageSelector::fillDefaultList( NCPkgTable * pkgTable )
 {
@@ -780,7 +784,7 @@ bool PackageSelector::StatusHandler( const NCursesEvent&  event )
 	// nothing to do
 	return true;
     }
-    
+
     // call the corresponding method of NCPkgTable
     if ( event.selection->compare( PkgNames::Toggle() ) == YO_EQUAL )
     {

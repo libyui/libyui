@@ -100,7 +100,7 @@ class PackageSelector
      * data needed for the package selection.
      * @param ui The NCurses UI
      */
-    PackageSelector( Y2NCursesUI * ui );
+    PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt);
 
     /**
      * Destructor
