@@ -89,17 +89,11 @@ YQPkgSelList::fillList()
 
 	if ( sel )
 	{
-	    y2milestone( "Found selection" );
-	    
 	    if ( sel->visible() && ! sel->isBase() )
 	    {
 		new YQPkgSel( this, sel );
 	    }
-	    else
-		y2milestone( "Selection invisible or base selection" );
 	}
-	else
-	    y2error( "NULL pointer selection" );
 	
 	++it;
     }
