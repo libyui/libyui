@@ -159,6 +159,8 @@ YQPkgYouPatchList::createNotInstalledContextMenu()
     actionSetCurrentInstall->addTo( _notInstalledContextMenu );
     actionSetCurrentDontInstall->addTo( _notInstalledContextMenu );
     actionSetCurrentTaboo->addTo( _notInstalledContextMenu );
+    
+    addAllInListSubMenu( _notInstalledContextMenu );
 }
 
 
@@ -170,6 +172,27 @@ YQPkgYouPatchList::createInstalledContextMenu()
 
     actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
     actionSetCurrentUpdate->addTo( _installedContextMenu );
+    
+    addAllInListSubMenu( _installedContextMenu );
+}
+
+
+QPopupMenu *
+YQPkgYouPatchList::addAllInListSubMenu( QPopupMenu * menu )
+{
+    QPopupMenu * submenu = new QPopupMenu( menu );
+    CHECK_PTR( submenu );
+
+    actionSetListInstall->addTo( submenu );
+    actionSetListDontInstall->addTo( submenu );
+    actionSetListKeepInstalled->addTo( submenu );
+    actionSetListUpdate->addTo( submenu );
+    actionSetListUpdateForce->addTo( submenu );
+    actionSetListTaboo->addTo( submenu );
+
+    menu->insertItem( _( "&All in this list" ), submenu );
+
+    return submenu;
 }
 
 
