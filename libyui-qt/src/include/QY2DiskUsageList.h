@@ -58,25 +58,25 @@ public:
     // Column numbers
 
     int nameCol()		const	{ return _nameCol;		}
-    int	percentageBarCol()	const	{ return _percentageBarCol;	}
-    int	percentageCol()		const	{ return _percentageCol;	}
-    int	usedSizeCol()		const	{ return _usedSizeCol;		}
+    int percentageBarCol()	const	{ return _percentageBarCol;	}
+    int percentageCol()		const	{ return _percentageCol;	}
+    int usedSizeCol()		const	{ return _usedSizeCol;		}
     int freeSizeCol()		const	{ return _freeSizeCol;		}
-    int	totalSizeCol()		const	{ return _totalSizeCol;		}
-    int	deviceNameCol()		const	{ return _deviceNameCol;	}
+    int totalSizeCol()		const	{ return _totalSizeCol;		}
+    int deviceNameCol()		const	{ return _deviceNameCol;	}
 
 
 protected:
 
     // Data members
 
-    int	_nameCol;
-    int	_percentageBarCol;
-    int	_percentageCol;
-    int	_usedSizeCol;
-    int	_freeSizeCol;
-    int	_totalSizeCol;
-    int	_deviceNameCol;
+    int _nameCol;
+    int _percentageBarCol;
+    int _percentageCol;
+    int _usedSizeCol;
+    int _freeSizeCol;
+    int _totalSizeCol;
+    int _deviceNameCol;
 };
 
 
@@ -181,7 +181,7 @@ public:
      * Set a column text via FSize.
      **/
     void setText( int column, const FSize & size );
-    
+
     /**
      * Comparison function used for sorting the list.
      * Returns:
@@ -198,12 +198,12 @@ public:
     // Columns
 
     int nameCol()		const	{ return _diskUsageList->nameCol();		}
-    int	percentageBarCol()	const	{ return _diskUsageList->percentageBarCol();	}
-    int	percentageCol()		const	{ return _diskUsageList->percentageCol();	}
-    int	usedSizeCol()		const	{ return _diskUsageList->usedSizeCol();		}
+    int percentageBarCol()	const	{ return _diskUsageList->percentageBarCol();	}
+    int percentageCol()		const	{ return _diskUsageList->percentageCol();	}
+    int usedSizeCol()		const	{ return _diskUsageList->usedSizeCol();		}
     int freeSizeCol()		const	{ return _diskUsageList->freeSizeCol();		}
-    int	totalSizeCol()		const	{ return _diskUsageList->totalSizeCol();	}
-    int	deviceNameCol()		const	{ return _diskUsageList->deviceNameCol();	}
+    int totalSizeCol()		const	{ return _diskUsageList->totalSizeCol();	}
+    int deviceNameCol()		const	{ return _diskUsageList->deviceNameCol();	}
 
 
 protected:
@@ -213,18 +213,39 @@ protected:
      * 'true') or only the varying fields (used, free, percentage).
      **/
     void init( bool allFields );
-    
+
     /**
      * Paint method.
      *
      * Reimplemented from QY2ListViewItem.
      **/
     virtual void paintCell( QPainter *		painter,
-			    const QColorGroup &	colorGroup,
+			    const QColorGroup & colorGroup,
 			    int			column,
 			    int			width,
 			    int			alignment );
 
+    /**
+     * Paint a percentage bar into a @ref QListViewItem cell.
+     * 'width' is the width of the entire cell.
+     * 'indent' is the number of pixels to indent the bar.
+     *
+     * Stolen from KDirStat::KDirTreeView with the author's permission.
+     **/
+    void paintPercentageBar( float		percent,
+			     QPainter *		painter,
+			     int		indent,
+			     int		width,
+			     const QColor &	fillColor,
+			     const QColor &	barBackground	);
+
+    /**
+     * Return a color that contrasts to 'contrastColor'.
+     *
+     * Stolen from KDirStat::KDirTreeView with the author's permission.
+     **/
+    QColor contrastingColor ( const QColor &	desiredColor,
+			      const QColor &	contrastColor );
 
     // Data members
 

@@ -55,6 +55,7 @@ liby2qt_la_SOURCES = 				\
 	YQPkgConflictList.cc			\
 	YQPkgDescriptionView.cc			\
 	YQPkgDependenciesView.cc		\
+	YQPkgDiskUsageList.cc			\
 	YQPkgGenericDetailsView.cc		\
 	YQPkgList.cc				\
 	YQPkgObjList.cc				\
@@ -137,6 +138,7 @@ BUILT_SOURCES =					\
 	YQPkgConflictList.moc.cc		\
 	YQPkgDescriptionView.moc.cc		\
 	YQPkgDependenciesView.moc.cc		\
+	YQPkgDiskUsageList.moc.cc		\
 	YQPkgGenericDetailsView.moc.cc		\
 	YQPkgList.moc.cc			\
 	YQPkgObjList.moc.cc			\
@@ -198,6 +200,7 @@ YQPkgConflictDialog.o YQPkgConflictDialog.lo:			YQPkgConflictDialog.moc.cc
 YQPkgConflictList.o YQPkgConflictList.lo:			YQPkgConflictList.moc.cc
 YQPkgDescriptionView.o YQPkgDescriptionView.lo:			YQPkgDescriptionView.moc.cc
 YQPkgDependenciesView.o YQPkgDependenciesView.lo:		YQPkgDependenciesView.moc.cc
+YQPkgDiskUsageList.o YQPkgDiskUsageList.lo:			YQPkgDiskUsageList.moc.cc
 YQPkgGenericDetailsView.o YQPkgGenericDetailsView.lo:		YQPkgGenericDetailsView.moc.cc
 YQPkgList.o YQPkgList.lo:					YQPkgList.moc.cc
 YQPkgObjList.o YQPkgObjList.lo:					YQPkgObjList.moc.cc
@@ -260,6 +263,7 @@ YQPkgConflictDialog.moc.cc:		include/YQPkgConflictDialog.h
 YQPkgConflictList.moc.cc:		include/YQPkgConflictList.h
 YQPkgDescriptionView.moc.cc:		include/YQPkgDescriptionView.h
 YQPkgDependenciesView.moc.cc:		include/YQPkgDependenciesView.h
+YQPkgDiskUsageList.moc.cc:		include/YQPkgDiskUsageList.h
 YQPkgGenericDetailsView.moc.cc:		include/YQPkgGenericDetailsView.h
 YQPkgList.moc.cc:			include/YQPkgList.h
 YQPkgObjList.moc.cc:			include/YQPkgObjList.h
