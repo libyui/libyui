@@ -126,9 +126,11 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
     }
 
     setBackgroundColor( QColor( 0xE0, 0xE0, 0xF8 ) );
+    setOpen( true );
+    
     formatLine();
     dumpLists();
-    setOpen( true );
+    addResolutionSuggestions();
 }
 
 
@@ -281,6 +283,50 @@ YQPkgConflict::dumpList( QListViewItem * 	parent,
 	++it;
     }
 }
+
+
+void
+YQPkgConflict::addResolutionSuggestions()
+{
+    QY2ListViewItem * header = new QY2ListViewItem( this,
+						    // Heading for the choices
+						    // how to resolve this conflict
+						    _( "Resolution" ),
+						    true );
+    addUndoResolution  ( header );
+    addAlternativesList( header );
+    addDeleteResolution( header );
+    addIgnoreResolution( header );
+}
+
+void
+YQPkgConflict::addUndoResolution  ( QListViewItem * parent )
+{
+    
+}
+
+
+void
+YQPkgConflict::addAlternativesList( QListViewItem * parent )
+{
+    
+}
+
+
+void
+YQPkgConflict::addDeleteResolution( QListViewItem * parent )
+{
+    
+}
+
+
+void
+YQPkgConflict::addIgnoreResolution( QListViewItem * parent )
+{
+    
+}
+
+
 
 void
 YQPkgConflict::paintCell( QPainter *		painter,

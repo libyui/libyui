@@ -30,6 +30,8 @@ class YQPkgConflictAlternative;
 class YQPkgConflictResolution;
 
 
+typedef 
+
 /**
  * @short Display package dependency conflicts in a tree list and let the user
  * choose how to resolve each conflict.
@@ -143,6 +145,34 @@ protected:
 		   int				splitThreshold = -1,
 		   const QString & 		header	   = QString::null );
 
+    /**
+     * Add suggestions how to resolve this conflict.
+     **/
+    void addResolutionSuggestions();
+
+    /**
+     * Add resolution suggestion: Undo what caused this conflict
+     * (i.e. don't remove, don't install, ...).
+     **/
+    void addUndoResolution  ( QListViewItem * parent );
+
+    /**
+     * Add a list of alternatives if there are any.
+     **/
+    void addAlternativesList( QListViewItem * parent );
+
+    /**
+     * Add brute force resolution suggestion: Delete all dependent packages.
+     **/
+    void addDeleteResolution( QListViewItem * parent );
+
+    /**
+     * Add resolution suggestion: Ignore conflict, risk inconsistent system
+     **/
+    void addIgnoreResolution( QListViewItem * parent );
+
+
+    
     /**
      * Paint method. Reimplemented from @ref QListViewItem a different
      * font can be used.

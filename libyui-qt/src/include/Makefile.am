@@ -86,6 +86,7 @@ pkginclude_HEADERS =				\
 	taboo.xpm				\
 	taboo_disabled.xpm			\
 	update.xpm				\
+	unresolvable_conflict.xpm		\
 	update_disabled.xpm
 
 
