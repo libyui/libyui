@@ -205,7 +205,8 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
     int index  = getCurrentItem();
     PMObjectPtr objPtr = getDataPointer(index);
     
-    if ( newstatus == PMSelectable::S_Del )
+    if ( newstatus == PMSelectable::S_Del
+	 || newstatus == PMSelectable::S_NoInst )
     {
 	if ( objPtr && objPtr->hasCandidateObj() )
 	{
