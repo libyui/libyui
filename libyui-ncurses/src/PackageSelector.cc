@@ -100,12 +100,11 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     eventHandlerMap[ PkgNames::Update()->toString() ] 	= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::Installed()->toString() ]= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::Taboo()->toString() ]	= &PackageSelector::StatusHandler;
-
+    eventHandlerMap[ PkgNames::ToggleSource()->toString() ]	= &PackageSelector::StatusHandler;
     // help menu
     eventHandlerMap[ PkgNames::GeneralHelp()->toString() ] = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::StatusHelp()->toString() ]  = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::FilterHelp()->toString() ]  = &PackageSelector::HelpHandler;
-    eventHandlerMap[ PkgNames::InstSourceHelp()->toString() ] = &PackageSelector::HelpHandler;
     // FIXME: add handler for all `id s
 
     if ( opt.notifyMode.defined() )
@@ -242,13 +241,14 @@ void PackageSelector::setVisibleInfo( const YCPValue & info )
 void PackageSelector::fillHeader( NCPkgTable *pkgTable )
 {
     vector<NCstring> header;
-    header.reserve(5);
+    header.reserve(6);
 
     header.push_back( PkgNames::PkgStatus() );
     header.push_back( PkgNames::PkgName() );
     header.push_back( PkgNames::PkgVersion() );
     header.push_back( PkgNames::PkgSummary() );
     header.push_back( PkgNames::PkgSize() );
+    header.push_back( YCPString( "SPM" ) );
 
     if ( pkgTable )
     {
@@ -840,6 +840,11 @@ bool PackageSelector::StatusHandler( const NCursesEvent&  event )
     {
 	packageList->setNewStatus( PkgTaboo );	
     }
+    else if ( event.selection->compare( PkgNames::ToggleSource() ) == YO_EQUAL )
+    {
+	packageList->toggleSourceStatus( );	
+    }
+    
     packageList->setKeyboardFocus();
     
     return true;

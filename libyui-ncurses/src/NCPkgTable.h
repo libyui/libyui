@@ -210,6 +210,12 @@ public:
     NCPkgStatus getStatus( int index );
 
     /**
+     * Toggles the installation of the source package.
+     * @return bool
+     */ 
+    bool toggleSourceStatus( );
+    
+    /**
      * Sets the status strategy. which means call particular methods to set/get the
      * status for different PMObject s (PNYouPatch, PMPackage or available PMPackage s)
      */

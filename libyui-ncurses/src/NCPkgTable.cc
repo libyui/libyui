@@ -33,7 +33,7 @@
 //	DESCRIPTION :
 //
 NCPkgTableTag::NCPkgTableTag( PMObjectPtr objPtr, NCPkgStatus stat )
-      : NCTableCol( NCstring( "   " ), SEPARATOR )
+      : NCTableCol( NCstring( "     " ), SEPARATOR )
 	, status ( stat )
 	, dataPointer( objPtr )
 {
@@ -56,7 +56,11 @@ void NCPkgTableTag::DrawAt( NCursesWindow & w, const wrect at,
     NCTableCol::DrawAt( w, at, tableStyle, linestate, colidx );
 
     string statusStr =  statusToStr( status );
-    w.addch( at.Pos.L, at.Pos.C +1, statusStr.c_str()[0] );
+    w.addch( at.Pos.L, at.Pos.C, statusStr.c_str()[0] );
+    w.addch( at.Pos.L, at.Pos.C +1, statusStr.c_str()[1] );
+    w.addch( at.Pos.L, at.Pos.C +2, statusStr.c_str()[2] );
+    w.addch( at.Pos.L, at.Pos.C +3, statusStr.c_str()[3] );
+    w.addch( at.Pos.L, at.Pos.C +4, statusStr.c_str()[4] );
 }
 
 
@@ -66,23 +70,25 @@ string NCPkgTableTag::statusToStr( NCPkgStatus stat ) const
     switch ( stat )
     {
 	case PkgNoInstall:	// Is not installed and will not be installed
-	    return " ";
+	    return " [ ] ";
 	case PkgInstalled: 	// Is installed - keep this version
-	    return "i";
+	    return " [x] ";
 	case PkgToInstall:	// ??Is?? or will be installed
-	    return "X";
+	    return " [+] ";
 	case PkgToDelete:	// Will be deleted
-	    return "d";
+	    return " [-] ";
 	case PkgToUpdate:	// Will be updated
-	    return "u";
+	    return " [>] ";
 	case PkgToReplace:	// Replace
-	    return "X";
+	    return " [+] ";
 	case PkgAutoInstall:	// Will be automatically installed
-	    return "a";
-	case PkgAutoDelete:
-	    return "-";
+	    return "a[+] ";
+	case PkgAutoDelete:	// Will be automatically deleted
+	    return "a[-] ";
+	case PkgAutoUpdate:	// Will be automatically updated
+	    return "a[>] ";    
 	case PkgTaboo:		// Never install this 
-	    return "#";
+	    return " [t] ";
     }
 
     return " ";
@@ -125,7 +131,7 @@ PMSelectable::UI_Status NCPkgTable::statusToUIStat( NCPkgStatus stat )
 	    return PMSelectable::S_NoInst;
 	case PkgInstalled: 	// Is installed - keep this version
 	    return PMSelectable:: S_KeepInstalled;
-	case PkgToInstall:	// ??Is?? or will be installed
+	case PkgToInstall:	// Will be installed
 	    return PMSelectable::S_Install;
 	case PkgToDelete:	// Will be deleted
 	    return PMSelectable:: S_Del;
@@ -448,6 +454,17 @@ NCPkgTableTag * NCPkgTable::getTag( const int & index )
 
     return cc;
 }
+///////////////////////////////////////////////////////////////////
+//
+// NCPkgTable::toggleSourceStatus()
+//
+//
+bool NCPkgTable::toggleSourceStatus( )
+{
+    PMObjectPtr objPtr = getDataPointer( getCurrentItem() );
+    return true;
+}
+			       
 
 ///////////////////////////////////////////////////////////////////
 //

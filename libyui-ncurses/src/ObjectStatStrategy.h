@@ -43,6 +43,7 @@ enum NCPkgStatus
     PkgInstalled,	// S_KeepInstalled: keep this version - no modification ( have installedObj )
     PkgAutoInstall,	// S_Auto: automatically installed - like S_Install, but not requested by user
     PkgAutoDelete,	// S_AutoDel: automatically deleted - unmaintained packages (update)
+    PkgAutoUpdate,	// S_AutoUpdate: automatic update
     PkgTaboo,		// F_Taboo: Never install this
     PkgToReplace	// Replace
 };

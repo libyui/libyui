@@ -145,6 +145,13 @@ const YCPValue& PkgNames::Taboo ()
     return value;
 }
 
+// the menu entry Action/SPM yes/no
+const YCPValue& PkgNames::ToggleSource ()
+{
+    static const YCPValue value = createIdValue ( "toggleSrc" );
+    return value;
+}
+
 // the search button
 const YCPValue& PkgNames::Search ()
 {
@@ -542,7 +549,7 @@ const NCstring PkgNames::PkgSize()
 const NCstring PkgNames::PkgStatus()
 {
     // column header status
-    static const NCstring value =  NCstring("  ");
+    static const NCstring value =  NCstring("     ");
     return value;
 }
 

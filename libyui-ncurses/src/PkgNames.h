@@ -84,6 +84,11 @@ public:
      */
     static const YCPValue& Taboo ();
 
+   /**
+     * Widget id of the menu selection Action/SPM yes/no
+     */
+    static const YCPValue& ToggleSource ();
+    
     /**
      * Widget id of the menu selection Action/Replace
      */
