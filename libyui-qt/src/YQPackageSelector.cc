@@ -175,7 +175,7 @@ YQPackageSelector::layoutLeftPane( QWidget * parent )
 void
 YQPackageSelector::layoutFilters( QWidget * parent )
 {
-    _filters = new QY2ComboTabWidget( _( "F&ilter:" ), parent );
+    _filters = new QY2ComboTabWidget( _( "Fi&lter:" ), parent );
     CHECK_PTR( _filters );
 
 
@@ -393,7 +393,7 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
 
     dummy = new QLabel( "File List", _detailsViews );
-    _detailsViews->addTab( dummy, _( "File &List" ) );
+    _detailsViews->addTab( dummy, _( "&File List" ) );
 
     dummy = new QLabel( "Required packages", _detailsViews );
     _detailsViews->addTab( dummy, _( "&Requires" ) );
