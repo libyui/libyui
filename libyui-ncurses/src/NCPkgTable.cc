@@ -214,7 +214,7 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
 	if ( tableType != T_Dependency )
 	{
 	    // only check/show deps if is't not the dependency table itself
-	    packager->checkDependencies( false );	// only check if automatic check is ON
+	    packager->showDependencies( false );	// only check if automatic check is ON
 	}
     }
 
@@ -429,7 +429,7 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 		    break;
 		case T_Dependency:
 		    // show the dependencies of this package
-		    packager->showConcretelyDependency( objPtr );
+		    packager->showConcretelyDependency( getCurrentItem() );
 		    break;
 		default:
 		    break;
