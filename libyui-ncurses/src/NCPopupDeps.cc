@@ -412,8 +412,10 @@ string NCPopupDeps::getReferersList( const PkgDep::ErrorResult & error )
     refList += " ";
     refList += PkgNames::RequiredByText().str();
     refList += " ";
-    
-    while ( it != error.referers.end() )
+
+    // create the column "Additional information"
+    // (don't show more than 20 packages)
+    while ( it != error.referers.end() && i < 20 )
     {
 	PMObjectPtr objPtr = (*it).solvable; 
 
@@ -435,6 +437,8 @@ string NCPopupDeps::getReferersList( const PkgDep::ErrorResult & error )
 	}
 	++it;
 	i++;
+	if ( i == 20 )
+	    refList += "...";
     }
     refList += ")";
 	    
