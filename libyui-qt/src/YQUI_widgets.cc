@@ -136,10 +136,13 @@ YWidget * YQUI::createDate		( YWidget *		parent,
     return new YQDate( (QWidget *) ( parent->widgetRep() ), opt, label, date);
 }
 
+
 bool YQUI::hasTime()
 {
     return true;
 }
+
+
 YWidget * YQUI::createTime		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label,

@@ -250,7 +250,7 @@ public slots:
     /**
      * Open file selection box and let the user Save y2logs to that location
      **/
-    void YQUI::askSaveLogs();
+    void askSaveLogs();
     
     /**
      * Fun stuff (release dependent)

@@ -216,24 +216,44 @@ void YQUI::makeScreenShot( std::string stl_filename )
 void YQUI::askSaveLogs()
 {
     QString fileName = askForSaveFileName( "/tmp/y2logs.tgz",			// startWith
-					   "*.tgz *.tar.gz *.tar.bz2",		// filter
+					   "*.tgz *.tar.gz",			// filter
 					   "Save y2logs to..." );		// headline
 
     if ( ! fileName.isEmpty() )
     {
 	QString saveLogsCommand = "/sbin/save_y2logs";
 
-	if ( access( saveLogsCommand.ascii(), X_OK ) )
+	if ( access( saveLogsCommand.ascii(), X_OK ) == 0 )
 	{
 	    saveLogsCommand += " '" + fileName + "'";
 	    y2milestone( "Saving y2logs: %s", saveLogsCommand.ascii() );
-	    system( saveLogsCommand.ascii() );
+	    result = system( saveLogsCommand.ascii() );
+
+	    if ( result != 0 )
+	    {
+		y2error( "Error saving y2logs: \"%s\" exited with %d",
+			 (const char *) saveLogsCommand, result );
+		QMessageBox::warning( 0,					// parent
+				      "Error",					// caption
+				      QString( "Couldn't save y2logs to %1 - "
+					       "exit code %2" ).arg( fileName ).arg( result ),
+				      QMessageBox::Ok | QMessageBox::Default,	// button0
+				      QMessageBox::NoButton,			// button1
+				      QMessageBox::NoButton );			// button2
+	    }
+	    else
+	    {
+		y2milestone( "y2logs saved to %s", (const char *) fileName );
+	    }
 	}
 	else
 	{
+	    y2error( "Error saving y2logs: Command %s not found",
+		     saveLogsCommand.ascii() );
+	    
 	    QMessageBox::warning( 0,						// parent
 				  "Error",					// caption
-				  QString( "Couldn't save y2logs\nto %1:\n"
+				  QString( "Couldn't save y2logs to %1:\n"
 					   "Command %2 not found" ).arg( fileName ).arg( saveLogsCommand ),
 				  QMessageBox::Ok | QMessageBox::Default,	// button0
 				  QMessageBox::NoButton,			// button1
