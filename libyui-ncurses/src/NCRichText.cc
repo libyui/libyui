@@ -52,7 +52,7 @@ const wstring NCRichText::entityLookup( const std::wstring & val_r )
     // means do not replace.
     wstring product;
     NCstring::RecodeToWchar( Y2NCursesUI::ui()->productName(), "UTF-8", &product);
-    
+
 #define REP(l,r) _charentity[l] = r
     REP(L"amp",	L"&");
     REP(L"gt",	L">");
@@ -68,7 +68,7 @@ const wstring NCRichText::entityLookup( const std::wstring & val_r )
     return it->second;
   }
 
-  return 0;
+  return L"";
 }
 
 ///////////////////////////////////////////////////////////////////
