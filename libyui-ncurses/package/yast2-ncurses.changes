@@ -5,7 +5,7 @@ Fri Sep 12 15:28:42 CEST 2003 - gs@suse.de
 - bugfix in RichText widget (bug #30621) 
 - cut lines in LogView widget (don't allocate too much memory)
 - don't use ACS chars on console if locale is not UTF-8 (bug #30512) 
-- new style for ProgressBar (related to bug #30512)
+- new style for ProgressBar
 
 -------------------------------------------------------------------
 Mon Sep  8 16:34:57 CEST 2003 - gs@suse.de
