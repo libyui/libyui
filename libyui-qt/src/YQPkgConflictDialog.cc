@@ -53,6 +53,14 @@
 #define MARGIN			4	// around the widget
 
 
+// The busy dialog ("Checking Dependencies") will only be shown if solving
+// (on average) takes longer than this many seconds. The first one will be
+// shown in any case.
+
+#define SUPPRESS_BUSY_DIALOG_SECONDS	1.5
+
+
+
 YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
 					  QWidget * 	parent 		)
     : QDialog( parent )
@@ -246,7 +254,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
     PkgDep::ResultList		goodList;
     PkgDep::ErrorResultList	badList;
 
-    if ( _solveCount++ == 0 || averageSolveTime() > 0.0 )
+    if ( _solveCount++ == 0 || averageSolveTime() > SUPPRESS_BUSY_DIALOG_SECONDS )
     {
 	YQDialog::center( _busyPopup, parentWidget() );
 	_busyPopup->show();
