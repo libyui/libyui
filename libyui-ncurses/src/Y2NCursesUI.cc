@@ -642,7 +642,12 @@ YCPValue Y2NCursesUI::runPkgSelection(  YWidget * selector )
 
     UIMIL << "Return value: " << event.result->toString() << endl;
 
-    return event.result;
+    if ( !event.result.isNull() )
+    {
+	return event.result;
+    }
+    else
+	return YCPVoid();
 }
 
 ///////////////////////////////////////////////////////////////////
