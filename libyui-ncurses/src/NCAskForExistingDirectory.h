@@ -26,17 +26,9 @@
 
 #include "NCPopup.h"
 #include "NCLabel.h"
-#include "NCSelectionBox.h"
+#include "NCFileTable.h"
 #include "NCPushButton.h"
 #include "NCTextEntry.h"
-
-#include <y2pm/PMError.h>
-#include <y2pm/PMSelection.h>
-#include <y2pm/PMSelectionPtr.h>
-#include <y2pm/PMPackage.h>
-#include <y2pm/PMPackagePtr.h>
-#include <y2pm/InstSrc.h>
-#include <y2pm/InstSrcPtr.h>
 
 
 ///////////////////////////////////////////////////////////////////
@@ -55,7 +47,7 @@ private:
     NCPushButton * okButton;
     NCPushButton * cancelButton;
     NCTextEntry * dirName;
-    NCSelectionBox *dirList;		// directory list
+    NCFileTable *dirList;		// directory list
 
     string currentDir;			// currently selected directory
     string startDir;
