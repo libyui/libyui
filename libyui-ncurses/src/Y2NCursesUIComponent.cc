@@ -69,7 +69,7 @@ YCPValue Y2NCursesUIComponent::evaluate(const YCPValue &command)
 	y2milestone ("Y2NCursesUIComponent @ %p, Y2NCursesUI @ %p ready, callback @ %p", this, interpreter, getCallback());
     }
 
-    return interpreter->evaluateUI (command);
+    return interpreter->evaluate(command);
 }
 
 
