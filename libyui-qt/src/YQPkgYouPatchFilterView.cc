@@ -56,7 +56,7 @@ YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
     _descriptionView	= new YQPkgDescriptionView( _detailsViews );	CHECK_PTR( _descriptionView	);
     
     _descriptionView->setMinimumSize( 0, 0 );
-    _detailsViews->addTab( _descriptionView, _( "&Patch Description" ) );
+    _detailsViews->addTab( _descriptionView, _( "Patch Description" ) );
 
 #if 0
     _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
