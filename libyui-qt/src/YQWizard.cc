@@ -604,6 +604,8 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
     QVBox * workAreaVBox = new QVBox( parentHBox );
     CHECK_PTR( workAreaVBox );
 
+    // An extra QVBox inside the workAreaVBox is needed for frame and margin
+
     QVBox * workArea = new QVBox( workAreaVBox );
     CHECK_PTR( workArea );
 
@@ -612,6 +614,44 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
     workArea->setFrameStyle( QFrame::Box | QFrame::Plain );
     workArea->setMargin( 4 );
 
+    //
+    // Dialog icon and heading
+    //
+
+    QHBox * headingHBox = new QHBox( workArea );
+    CHECK_PTR( headingHBox );
+    headingHBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
+
+    _dialogIcon = new QLabel( headingHBox );
+    CHECK_PTR( _dialogIcon );
+
+    addHSpacing( headingHBox );
+
+    _dialogHeading = new QLabel( headingHBox );
+    CHECK_PTR( _dialogHeading );
+    _dialogHeading->setFont( YQUI::ui()->headingFont() );
+
+    addHStretch( headingHBox );
+    addVSpacing( workArea );
+
+#if USE_SEPARATOR
+
+    QHBox * hbox = new QHBox( workArea );
+
+    addHSpacing( hbox, SEPARATOR_MARGIN );
+
+    QFrame * separator = new QFrame( hbox );
+    CHECK_PTR( separator );
+    separator->setFrameStyle( QFrame::HLine | QFrame::Sunken );
+
+    addHSpacing( hbox, SEPARATOR_MARGIN );
+    addVSpacing( workArea );
+#endif
+
+    // 
+    // Client area (the part that belongs to the YCP application)
+    //
+    
     layoutClientArea( workArea );
 
     //
@@ -644,40 +684,6 @@ void YQWizard::layoutClientArea( QWidget * parent )
     CHECK_PTR( _clientArea );
     _clientArea->setMargin( 4 );
 
-    //
-    // Dialog icon and heading
-    //
-
-    QHBox * headingHBox = new QHBox( _clientArea );
-    CHECK_PTR( headingHBox );
-    headingHBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
-
-    _dialogIcon = new QLabel( headingHBox );
-    CHECK_PTR( _dialogIcon );
-
-    addHSpacing( headingHBox );
-
-    _dialogHeading = new QLabel( headingHBox );
-    CHECK_PTR( _dialogHeading );
-    _dialogHeading->setFont( YQUI::ui()->headingFont() );
-
-    addHStretch( headingHBox );
-    addVSpacing( _clientArea );
-
-#if USE_SEPARATOR
-
-    QHBox * hbox = new QHBox( _clientArea );
-
-    addHSpacing( hbox, SEPARATOR_MARGIN );
-
-    QFrame * separator = new QFrame( hbox );
-    CHECK_PTR( separator );
-    separator->setFrameStyle( QFrame::HLine | QFrame::Sunken );
-
-    addHSpacing( hbox, SEPARATOR_MARGIN );
-    addVSpacing( _clientArea );
-#endif
-
 
     //
     // Replace point for wizard contents
@@ -708,10 +714,10 @@ void YQWizard::layoutClientArea( QWidget * parent )
 void YQWizard::layoutButtonBox()
 {
     destroyButtons();
-
-
+    
     addHSpacing( _buttonBox, 4 );
 
+    
     //
     // "Abort" button
     //
