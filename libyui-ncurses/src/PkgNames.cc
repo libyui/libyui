@@ -110,13 +110,6 @@ const YCPValue& PkgNames::Select ()
     return value;
 }
 
-// the menu entry Action/deselect
-const YCPValue& PkgNames::Deselect ()
-{
-    static const YCPValue value = createIdValue ( "deselect" );
-    return value;
-}
-
 // the menu entry Action/delete
 const YCPValue& PkgNames::Delete ()
 {
@@ -124,24 +117,31 @@ const YCPValue& PkgNames::Delete ()
     return value;
 }
 
-// the menu entry Action/replace
-const YCPValue& PkgNames::Replace ()
-{
-    static const YCPValue value = createIdValue ( "replace" );
-    return value;
-}
-
-// the menu entry Action/installed
-const YCPValue& PkgNames::Installed()
-{
-    static const YCPValue value = createIdValue ( "installed" );
-    return value;
-}
-
 // the menu entry Action/update
 const YCPValue& PkgNames::Update ()
 {
     static const YCPValue value = createIdValue ( "update" );
+    return value;
+}
+
+// the menu entry Action/update all
+const YCPValue& PkgNames::UpdateAll ()
+{
+    static const YCPValue value = createIdValue ( "updall" );
+    return value;
+}
+
+// the menu entry Action/select all
+const YCPValue& PkgNames::SelectAll ()
+{
+    static const YCPValue value = createIdValue ( "selall" );
+    return value;
+}
+
+// the menu entry Action/delete all
+const YCPValue& PkgNames::DeleteAll ()
+{
+    static const YCPValue value = createIdValue ( "delall" );
     return value;
 }
 
