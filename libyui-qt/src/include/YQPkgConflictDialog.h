@@ -50,6 +50,12 @@ public:
      **/
     virtual ~YQPkgConflictDialog();
 
+    /**
+     * Reimplemented from QWidget:
+     * Reserve a reasonable amount of space.
+     **/
+    virtual QSize sizeHint() const;
+
     
 public slots:
 

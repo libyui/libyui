@@ -20,6 +20,8 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 #include <Y2PM.h>
+#include <y2pm/PkgDep.h>
+#include <y2pm/PMObject.h>
 
 #include "YQPkgConflictList.h"
 
@@ -44,7 +46,36 @@ YQPkgConflictList::~YQPkgConflictList()
 void
 YQPkgConflictList::fill( PkgDep::ErrorResultList & badList )
 {
-    // TODO
+    clear();
+    QY2ListViewItem * item;
+    std::string text;
+    
+    std::list<PkgDep::ErrorResult>::iterator it = badList.begin();
+
+    while ( it != badList.end() )
+    {
+	PMSolvablePtr solvable = (*it).solvable;
+	PMObjectPtr pmObj = solvable;
+	    
+	item = new QY2ListViewItem( this );
+
+	if ( solvable )
+	{
+	    if ( ! pmObj )
+		item->setText( 0, "<Unspecified - no PMObject>" );
+	    else
+	    {
+		text = pmObj->name();
+		item->setText( 0, fromUTF8( text ) );
+	    }
+	}
+	else
+	{
+	    item->setText( 0, "<Unspecified>" );
+	}
+	
+	++it;
+    }
 }
 
 

@@ -102,6 +102,13 @@ YQPkgConflictDialog::~YQPkgConflictDialog()
 }
 
 
+QSize
+YQPkgConflictDialog::sizeHint() const
+{
+    return QSize( 500, 450 );
+}
+
+
 void
 YQPkgConflictDialog::solveAndShowConflicts()
 {
@@ -111,7 +118,8 @@ YQPkgConflictDialog::solveAndShowConflicts()
     {
 	_conflictList->activateUserChoices();
     }
-    
+
+    _conflictList->clear();
     PkgDep::ResultList		goodList;
     PkgDep::ErrorResultList	badList;
 
