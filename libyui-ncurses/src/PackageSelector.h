@@ -37,9 +37,6 @@
 #include "NCPkgTable.h"
 
 class NCPopupSelection;
-class PMSelectionPtr;
-class PMPackagePtr;
-class PMYouPatchPtr;
 class LangCode;
 class NCPopupPkgDeps;
 class NCPopupSelDeps;

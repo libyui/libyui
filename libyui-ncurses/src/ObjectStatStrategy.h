@@ -22,10 +22,6 @@
 
 #include  <y2pm/PMSelectable.h>
 
-
-class PMObjectPtr;
-
-
 //------------------------------------------------------------
 // Abstract base class for strategies to get status for packages or patches 
 //------------------------------------------------------------
