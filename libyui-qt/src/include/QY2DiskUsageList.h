@@ -92,6 +92,11 @@ class QY2DiskUsageListItem: public QY2ListViewItem
 protected:
     /**
      * Constructor.
+     *
+     * Call updateData() after the constructor for the initial display
+     * update. Unfortunately, this cannot be done automatically in the
+     * constructor since it uses virtual methods that are not available yet at
+     * this point.
      **/
     QY2DiskUsageListItem( QY2DiskUsageList * parent );
 
@@ -109,6 +114,7 @@ public:
      *
      * Derived classes need to implement this method.
      **/
+
     virtual FSize usedSize() const = 0;
 
     /**

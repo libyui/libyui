@@ -44,7 +44,9 @@ QY2DiskUsageList::QY2DiskUsageList( QWidget * parent, bool addStdColumns )
 	addColumn( _( "Used"		) );	_usedSizeCol		= numCol++;
 	addColumn( _( "Free"		) );	_freeSizeCol		= numCol++;
 	addColumn( _( "Total"		) );	_totalSizeCol		= numCol++;
+#if 0
 	addColumn( _( "Device"		) );	_deviceNameCol		= numCol++;
+#endif
 	
 	setColumnAlignment( percentageCol(),	Qt::AlignRight );
 	setColumnAlignment( usedSizeCol(),	Qt::AlignRight );
@@ -68,13 +70,10 @@ QY2DiskUsageList::~QY2DiskUsageList()
 
 
 
-
-
 QY2DiskUsageListItem::QY2DiskUsageListItem( QY2DiskUsageList * parent )
     : QY2ListViewItem( parent )
     , _diskUsageList( parent )
 {
-    init( true );
 }
 
 
@@ -99,12 +98,12 @@ QY2DiskUsageListItem::init( bool allFields )
     }
     
     if ( usedSizeCol()		>= 0 ) setText( usedSizeCol(),		usedSize() 	);
-    if ( freeSizeCol()		>= 0 ) setText( usedSizeCol(),		freeSize() 	);
+    if ( freeSizeCol()		>= 0 ) setText( freeSizeCol(),		freeSize() 	);
 
     if ( allFields )
     {
 	if ( totalSizeCol()	>= 0 ) setText( totalSizeCol(), 	totalSize() 	);
-	if ( nameCol()		>= 0 ) setText( nameCol(),		name()		);
+	if ( nameCol()		>= 0 ) setText( nameCol(),		" " + name()	);
 	if ( deviceNameCol()	>= 0 ) setText( deviceNameCol(),	deviceName()	);
     }
 }
@@ -131,8 +130,8 @@ QY2DiskUsageListItem::usedPercent() const
 {
     int percent = 0;
 
-    if ( usedSize() != 0 )
-	percent = 100 * ( totalSize() / usedSize() );
+    if ( totalSize() != 0 )
+	percent = ( 100 * usedSize() ) / totalSize();
 
     if ( percent > 100 )
 	percent = 100;
@@ -177,8 +176,10 @@ QY2DiskUsageListItem::compare( QListViewItem *	otherListViewItem,
 	if ( col == percentageCol()    ||
 	     col == percentageBarCol()   )
 	{
-	    if ( this->usedPercent() < other->usedPercent() ) 	return -1;
-	    if ( this->usedPercent() > other->usedPercent() ) 	return  1;
+	    // Intentionally reverting sort order: Fullest first
+	    
+	    if ( this->usedPercent() < other->usedPercent() ) 	return  1;
+	    if ( this->usedPercent() > other->usedPercent() ) 	return -1;
 	    return 0;
 	}
 	else if ( col == usedSizeCol() )
@@ -221,7 +222,7 @@ QY2DiskUsageListItem::paintCell( QPainter *		painter,
 	
 	paintPercentageBar ( usedPercent(),
 			     painter,
-			     _diskUsageList->treeStepSize() * ( depth()-1 ),
+			     _diskUsageList->treeStepSize() * depth(),
 			     width,
 			     fillColor,
 			     background.dark( 115 ) );

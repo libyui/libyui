@@ -40,8 +40,9 @@ class QMenuBar;
 class QY2ComboTabWidget;
 
 class YQPkgConflictDialog;
-class YQPkgDescriptionView;
 class YQPkgDependenciesView;
+class YQPkgDescriptionView;
+class YQPkgDiskUsageList;
 class YQPkgList;
 class YQPkgRpmGroupTagsFilterView;
 class YQPkgSearchFilterView;
@@ -110,11 +111,6 @@ public slots:
     void autoResolveDependencies();
 
     /**
-     * Update the disk usage display.
-     **/
-    void updateDiskUsage();
-    
-    /**
      * Close processing and abandon changes
      **/
     void reject();
@@ -148,7 +144,6 @@ protected:
 
     void layoutLeftPane		( QWidget * parent );
     void layoutFilters		( QWidget * parent );
-    void layoutDiskSpaceSummary ( QWidget * parent );
     void layoutRightPane	( QWidget * parent );
     void layoutPkgList		( QWidget * parent );
     void layoutDetailsViews	( QWidget * parent );
@@ -201,8 +196,9 @@ protected:
     QTabWidget *			_detailsViews;
     QY2ComboTabWidget *			_filters;
     YQPkgConflictDialog *		_conflictDialog;
-    YQPkgDescriptionView *		_pkgDescriptionView;
     YQPkgDependenciesView *		_pkgDependenciesView;
+    YQPkgDescriptionView *		_pkgDescriptionView;
+    YQPkgDiskUsageList *		_diskUsageList;
     YQPkgList *				_pkgList;
     YQPkgRpmGroupTagsFilterView *	_rpmGroupTagsFilterView;
     YQPkgSearchFilterView *		_searchFilterView;
@@ -210,8 +206,8 @@ protected:
     YQPkgSelectionsFilterView *		_selectionsFilterView;
     YQPkgStatusFilterView *		_statusFilterView;
     YQPkgTechnicalDetailsView *		_pkgTechnicalDetailsView;
-    YQPkgVersionsView *			_pkgVersionsView;
     YQPkgUpdateProblemFilterView *	_updateProblemFilterView;
+    YQPkgVersionsView *			_pkgVersionsView;
     YQPkgYouPatchFilterView *		_youPatchFilterView;
     YQPkgYouPatchList *			_youPatchList;
 

@@ -42,6 +42,7 @@ YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget *parent )
     {
 	YQPkgDiskUsageListItem * item = new YQPkgDiskUsageListItem( this, *it );
 	CHECK_PTR( item );
+	item->updateData();
 
 	_items.insert( it->mountpoint().c_str(), item );
 	++it;
@@ -50,7 +51,7 @@ YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget *parent )
 
 
 void
-YQPkgDiskUsageList::updateDuData()
+YQPkgDiskUsageList::updateDiskUsage()
 {
     YUIQt::yuiqt()->busyCursor();
 
@@ -73,6 +74,24 @@ YQPkgDiskUsageList::updateDuData()
 }
 
 
+QSize
+YQPkgDiskUsageList::sizeHint() const
+{
+    return QSize( 400, 100 );
+}
+
+
+void
+YQPkgDiskUsageList::fakeData()
+{
+    YQPkgDiskUsageListItem * item;
+    
+    item = new YQPkgDiskUsageListItem( this, YQPkgDuData( "/",     1024,  2 * FSize::GB, 1400 * FSize::MB ) ); item->updateData();
+    item = new YQPkgDiskUsageListItem( this, YQPkgDuData( "/usr",  1024,  3 * FSize::GB, 1800 * FSize::MB ) ); item->updateData();
+    item = new YQPkgDiskUsageListItem( this, YQPkgDuData( "/opt",  1024,  3 * FSize::GB, 2750 * FSize::MB ) ); item->updateData();
+    item = new YQPkgDiskUsageListItem( this, YQPkgDuData( "/home", 1024, 30 * FSize::GB,   25 * FSize::GB ) ); item->updateData();
+}
+
 
 
 
@@ -82,6 +101,21 @@ YQPkgDiskUsageListItem::YQPkgDiskUsageListItem( YQPkgDiskUsageList * 	parent,
 	: QY2DiskUsageListItem( parent )
 	, _duData( duData )
 {
+    y2milestone( "disk usage list entry for %s", duData.mountpoint().c_str() );
+}
+
+
+FSize
+YQPkgDiskUsageListItem::usedSize() const
+{
+    return _duData.pkg_used();
+}
+
+
+FSize
+YQPkgDiskUsageListItem::totalSize() const
+{
+    return _duData.total();
 }
 
 

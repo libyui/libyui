@@ -63,6 +63,7 @@
 #include "YQPkgVersionsView.h"
 #include "YQPkgYouPatchFilterView.h"
 #include "YQPkgYouPatchList.h"
+#include "YQPkgDiskUsageList.h"
 
 #include "QY2ComboTabWidget.h"
 #include "YQDialog.h"
@@ -93,9 +94,10 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     _autoDependenciesCheckBox	= 0;
     _detailsViews		= 0;
     _diskSpace			= 0;
+    _diskUsageList		= 0;
     _filters			= 0;
-    _pkgDescriptionView		= 0;
     _pkgDependenciesView	= 0;
+    _pkgDescriptionView		= 0;
     _pkgList			= 0;
     _pkgTechnicalDetailsView	= 0;
     _pkgVersionsView		= 0;
@@ -171,6 +173,12 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
 	}
 #endif
     }
+    
+    if ( _testMode && _diskUsageList )
+    {
+	y2milestone( "Using fake disk usage data" );
+	_diskUsageList->fakeData();
+    }
 
     y2milestone( "PackageSelector init done" );
 }
@@ -200,7 +208,10 @@ YQPackageSelector::layoutLeftPane( QWidget * parent )
     layoutFilters( vbox );
     addVSpacing( vbox, MARGIN );
 
-    layoutDiskSpaceSummary( splitter );
+    vbox = new QVBox( splitter );
+    addVSpacing( vbox, MARGIN );
+    _diskUsageList = new YQPkgDiskUsageList( vbox );
+    CHECK_PTR( _diskUsageList );
 }
 
 
@@ -324,33 +335,6 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 }
 
 
-
-void
-YQPackageSelector::layoutDiskSpaceSummary( QWidget * parent )
-{
-    QHGroupBox * gbox = new QHGroupBox( _( "Disk space" ), parent );
-    CHECK_PTR( gbox );
-    gbox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
-
-    _diskSpace = new QProgressBar( gbox );
-    CHECK_PTR( _diskSpace );
-
-    _diskSpace->setStyle( QStyleFactory::create( "motif" ) ); // consumes less space than platinum
-
-#if 0
-    QPushButton *details_button = new QPushButton( _( "D&etails..." ), gbox );
-    CHECK_PTR( details_button );
-
-    details_button->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) ); // hor/vert
-#endif
-
-    _diskSpace->setTotalSteps( 100 );
-    updateDiskUsage();
-
-    gbox->setMinimumHeight( gbox->sizeHint().height() );
-}
-
-
 void
 YQPackageSelector::layoutRightPane( QWidget * parent )
 {
@@ -379,9 +363,6 @@ YQPackageSelector::layoutPkgList( QWidget * parent )
 
     connect( _pkgList, 	SIGNAL( statusChanged()	          ),
 	     this,	SLOT  ( autoResolveDependencies() ) );
-
-    connect( _pkgList,	SIGNAL( statusChanged()   ),
-	     this,	SLOT  ( updateDiskUsage() ) );
 }
 
 
@@ -612,11 +593,14 @@ YQPackageSelector::connectFilter( QWidget * filter,
 
     if ( hasUpdateSignal )
     {
-	connect( filter, 	SIGNAL( updatePackages()           ),
-		 pkgList,	SLOT  ( updateToplevelItemStates() ) );
+	connect( filter, 		SIGNAL( updatePackages()           ),
+		 pkgList,		SLOT  ( updateToplevelItemStates() ) );
 
-	connect( filter,	SIGNAL( updatePackages()	   ),
-		 this,		SLOT  ( updateDiskUsage()	   ) );
+	if ( _diskUsageList )
+	{
+	    connect( filter,		SIGNAL( updatePackages()	   ),
+		     _diskUsageList,	SLOT  ( updateDiskUsage()	   ) );
+	}
     }
 }
 
@@ -637,6 +621,13 @@ YQPackageSelector::makeConnections()
 		 _pkgList,		SLOT  ( message( const QString & ) ) );
     }
 
+    if ( _pkgList && _diskUsageList )
+    {
+
+	connect( _pkgList,		SIGNAL( statusChanged()   ),
+		 _diskUsageList,	SLOT  ( updateDiskUsage() ) );
+    }
+    
     //
     // Connect conflict dialog
     //
@@ -684,31 +675,6 @@ YQPackageSelector::resolveDependencies()
     }
 
     return _conflictDialog->solveAndShowConflicts();
-}
-
-
-void
-YQPackageSelector::updateDiskUsage()
-{
-    YUIQt::yuiqt()->busyCursor();
-
-    const PkgDuMaster & du = Y2PM::packageManager().updateDu();
-    _diskSpace->setProgress( du.pkg_u_percent() );
-
-    if ( du.pkg_u_percent() < 1 )
-    {
-	// Workaround for a common problem: Maybe just the target partitions
-	// are not correctly initialized, so let's at least give a hint in the
-	// log file.
-
-	FSize used = du.pkg_used();
-	y2milestone( "Used disk space: %s", used.asString().c_str() );
-
-	if ( _testMode )
-	    _diskSpace->setProgress( 42 );
-    }
-
-    YUIQt::yuiqt()->normalCursor();
 }
 
 

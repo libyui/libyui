@@ -48,12 +48,24 @@ public:
      **/
     virtual ~YQPkgDiskUsageList() {}
 
+    /**
+     * For debugging: Add some fake data.
+     **/
+    void fakeData();
 
+    /**
+     * Suggest reasonable default size.
+     *
+     * Reimplemented from QListView.
+     **/
+    virtual QSize sizeHint() const;
+
+    
 public slots:
     /**
      * Update all statistical data in the list.
      **/
-    void updateDuData();
+    void updateDiskUsage();
 
 
 protected:
@@ -96,14 +108,14 @@ public:
      *
      * Reimplemented from QY2DiskUsageListItem.
      **/
-    virtual FSize usedSize() const { return _duData.pkg_used(); }
+    virtual FSize usedSize() const;
 
     /**
      * The total size of this partition.
      *
      * Reimplemented from QY2DiskUsageListItem.
      **/
-    virtual FSize totalSize() const { return _duData.total(); }
+    virtual FSize totalSize() const;
 
     /**
      * The name to display for this partition (the mount point).
