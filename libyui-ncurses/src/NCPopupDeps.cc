@@ -225,7 +225,8 @@ bool NCPopupDeps::showDependencies( )
 	
 	    NCursesEvent input = showDependencyPopup();    // show the dependencies
 
-	    if ( input == NCursesEvent::cancel )
+	    if ( input == NCursesEvent::cancel
+		 && input.detail != NCursesEvent::USERDEF )
 	    {
 		cancel = true;
 	    }
@@ -714,6 +715,7 @@ bool NCPopupDeps::postAgain()
 
 	// close the dialog
 	postevent = NCursesEvent::cancel;
+	postevent.detail = NCursesEvent::USERDEF ;
     }
     else if ( currentId->compare( PkgNames::Solve () ) == YO_EQUAL )
     {
