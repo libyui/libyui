@@ -18,6 +18,7 @@
 
 // -*- c++ -*-
 
+#include "YFrameBuffer.h"
 
 #ifndef YQEasterBunny_h
 #define YQEasterBunny_h
@@ -30,7 +31,7 @@ public:
 
 protected:
 
-    static void draw();
+    static void draw(YFrameBuffer *fb, int sw, int sh);
 };
 
 
