@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Jul  8 11:29:51 CEST 2004 - sh@suse.de
+
+- Fixed bug #42846: Installing unneeded header files
+
+-------------------------------------------------------------------
 Tue Jul  6 16:44:00 CEST 2004 - sh@suse.de
 
 - Added "Install all matching -devel packages" to pkg selection

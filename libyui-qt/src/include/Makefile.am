@@ -6,10 +6,9 @@ SUBDIRS = icons
 
 pkgincludedir = $(includedir)/y2qt
 
-pkginclude_HEADERS =				\
-	YQUI.h
 
 noinst_HEADERS =				\
+	YQUI.h					\
 	utf8.h					\
 	YQi18n.h				\
 	Y2CCQt.h				\
