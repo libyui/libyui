@@ -815,10 +815,10 @@ wint_t NCDialog::getinput()
 
 	if ( gotch != -1 )
 	{
-	    // FIXME: isprint(), isalnum(), ... don't work ?!??
+	    // TO DO: test  isprint(), isalnum(), ... don't work ?!??
 	    // NCMIL << "isprint( " << gotch << "): " << (isprint( gotch )?"true":"false") << endl;
 
-	    if ( gotch > 10 && gotch < 255 )	// FIXME
+	    if ( gotch > 10 && gotch < 255 )	// use isprint()
 	    {
 		string str;
 		str += static_cast<char>(gotch);
@@ -892,8 +892,6 @@ wint_t NCDialog::getch( int timeout_millisec )
     do {
 	got =  NCDialog::getch( timeout_millisec );
     } while ( timeout_millisec < 0 && got == WEOF && --i );
-    
-    return got;
   }
 
   return got;
