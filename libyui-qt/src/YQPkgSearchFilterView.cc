@@ -68,11 +68,11 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     addHStretch( hbox );
 
     // Search button
-    QPushButton * searchButton = new QPushButton( _( "&Search" ), hbox );
-    CHECK_PTR( searchButton );
+    _searchButton = new QPushButton( _( "&Search" ), hbox );
+    CHECK_PTR( _searchButton );
 
-    connect( searchButton, SIGNAL( clicked() ),
-             this,         SLOT  ( filter()  ) );
+    connect( _searchButton, SIGNAL( clicked() ),
+             this,          SLOT  ( filter()  ) );
 
     addVStretch( this );
 
@@ -125,6 +125,28 @@ YQPkgSearchFilterView::~YQPkgSearchFilterView()
 {
     // NOP
 }
+
+
+void
+YQPkgSearchFilterView::keyPressEvent( QKeyEvent * event )
+{
+    if ( event )
+    {
+	if ( event->state() == 0 )	// No Ctrl / Alt / Shift etc. pressed
+	{
+	    if ( event->key() == Qt::Key_Return ||
+		 event->key() == Qt::Key_Enter    )
+	    {
+		_searchButton->animateClick();
+		return;
+	    }
+	}
+
+    }
+
+    QVBox::keyPressEvent( event );
+}
+
 
 void
 YQPkgSearchFilterView::filterIfVisible()

@@ -29,6 +29,7 @@
 
 class QComboBox;
 class QCheckBox;
+class QPushButton;
 class QRadioButton;
 
 
@@ -119,10 +120,17 @@ protected:
      **/
     void addHStretch( QWidget * parent );
 
+    /**
+     * Key press event: Execute search upon 'Return'
+     * Reimplemented from QVBox / QWidget.
+     **/
+    virtual void keyPressEvent( QKeyEvent * event );
+
     
     // Data members
 
     QComboBox *		_searchText;
+    QPushButton *	_searchButton;
 
     QCheckBox *		_searchInName;
     QCheckBox *		_searchInSummary;
