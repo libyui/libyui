@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Sep 10 19:52:13 CEST 2002 - gs@suse.de
+
+- V 2.6.17
+- package installation: bugfix duplicate search results (#19342)
+- YOU: don't check package dependencies  
+
+-------------------------------------------------------------------
 Tue Sep 10 16:08:42 CEST 2002 - gs@suse.de
 
 - V 2.6.16
