@@ -973,7 +973,8 @@ void NCDialog::processInput( int timeout )
 	 {
 	     string helpText = describeFunctionKeys();
 	     helpPopup = new NCPopupInfo( wpos(1,1), YCPString( "Text mode navigation" ),
-					  YCPString( "Press F1 again to get help<br>" + helpText ),
+					  YCPString( "Press F1 again to get help<br>"
+						     + helpText ),
 					  false );
 	 }
 	 if ( helpPopup )
@@ -991,13 +992,18 @@ void NCDialog::processInput( int timeout )
 	 break;
 	    
     default:
-	if ( ch >= KEY_F(2) && ch <= KEY_F(24) )
+	// only handle the keys if help popup is not existing or not visible
+	if ( !helpPopup
+	      || (helpPopup && !helpPopup->isVisible()) )
 	{
-	    pendingEvent = wHandleHotkey( ch );
-	}
-	else
-	{
-	    pendingEvent = wHandleInput( ch );
+	    if ( ch >= KEY_F(2) && ch <= KEY_F(24) )
+	    {
+		pendingEvent = wHandleHotkey( ch );
+	    }
+	    else
+	    {
+		pendingEvent = wHandleInput( ch );
+	    }
 	}
       break;
     }
