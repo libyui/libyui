@@ -512,10 +512,11 @@ NCursesEvent NCComboBox::wHandleInput( wint_t key )
     break;
 
   default:
-    // FIXME use !iswalnum() in condition - BUT this doesn't work ????
     if ( !mayedit || !validKey( key )
 	 ||
-	 key < 32 || ( key >= 127 && key < 160 ) || UCHAR_MAX < key ) {
+	 ( KEY_MIN < key && KEY_MAX > key )
+	 ||
+	 !iswprint( key ) ) {
       update = false;
       beep   = true;
     } else {

@@ -487,9 +487,9 @@ NCursesEvent NCTextEntry::wHandleInput( wint_t key )
     break;
 
   default:
-   // FIXME: use condition ( !iswalnum( key ) && (key != L'/' || key != L'.' || ... ) ???
-   //        iswalnum() does not work ????    
-   if ( key < 32 || ( key >= 127 && key < 160 ) || UCHAR_MAX < key )
+   if ( ( KEY_MIN < key && KEY_MAX > key )
+	||
+	!iswprint( key ) )
    {
       update = false;
       beep   = true;
