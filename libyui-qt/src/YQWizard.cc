@@ -41,9 +41,6 @@
 #include "QY2LayoutUtils.h"
 #include "YEvent.h"
 
-#define IMAGE_DIR	HELPIMAGEDIR	// FIXME
-
-#define IMAGE_HELP_BG	"wizard-help-bg.png"
 
 
 YQWizard::YQWizard( QWidget *		parent,
@@ -171,7 +168,7 @@ YQWizard::YQWizard( QWidget *		parent,
     _helpButton = new QPushButton( _( "&Help" ), hbox );
     CHECK_PTR( _helpButton );
 
-    pixmap = QPixmap( ICONDIR "/help.png" );
+    pixmap = QPixmap( ICONDIR "/wizard-help-button.png" );
 
     if ( ! pixmap.isNull() )
 	_helpButton->setPixmap( pixmap );
@@ -210,7 +207,7 @@ YQWizard::YQWizard( QWidget *		parent,
     _helpBrowser->setTextFormat( Qt::RichText );
     _helpBrowser->setMargin( 4 );
 
-    QPixmap bgPixmap( QString( HELPIMAGEDIR ) + "/" + IMAGE_HELP_BG );
+    QPixmap bgPixmap( ICONDIR "/wizard-help-background.png" );
 
     if ( ! bgPixmap.isNull() )
 	_helpBrowser->setPaletteBackgroundPixmap( bgPixmap );
@@ -235,7 +232,7 @@ YQWizard::YQWizard( QWidget *		parent,
     _stepsButton = new QPushButton( _( "Steps" ), hbox );
     CHECK_PTR( _stepsButton );
 
-    pixmap = QPixmap( ICONDIR "/steps.png" );
+    pixmap = QPixmap( ICONDIR "/wizard-steps-button.png" );
 
     if ( ! pixmap.isNull() )
 	_stepsButton->setPixmap( pixmap );
