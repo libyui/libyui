@@ -287,11 +287,13 @@ YWidget *YUIQt::pollInput(YDialog *dialog, EventType *event)
 }
 
 
-void YUIQt::runPkgSelection( YWidget * packageSelector )
+YCPValue YUIQt::runPkgSelection( YWidget * packageSelector )
 {
     y2milestone( "Running package selection..." );
-    evaluateUserInput( YCPTerm( YCPSymbol( "", false ) ), false );
-    y2milestone( "Package selection done" );
+    YCPValue input = evaluateUserInput( YCPTerm( YCPSymbol( "", false ) ), false );
+    y2milestone( "Package selection done - returning %s", input->toString().c_str() );
+
+    return input;
 }
 
 

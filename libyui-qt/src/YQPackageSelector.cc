@@ -408,13 +408,22 @@ YQPackageSelector::layoutButtons( QWidget * parent )
     CHECK_PTR( spacer );
     spacer->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
 
-    
-    QPushButton * close_button = new QPushButton( _( "&Close" ), button_box );
-    CHECK_PTR( close_button );
-    close_button->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
 
-    connect( close_button, SIGNAL( clicked() ),
-	     this,         SLOT  ( close()   ) );
+    
+    QPushButton * cancel_button = new QPushButton( _( "&Cancel" ), button_box );
+    CHECK_PTR( cancel_button );
+    cancel_button->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
+
+    connect( cancel_button, SIGNAL( clicked() ),
+	     this,          SLOT  ( reject()   ) );
+
+    
+    QPushButton * accept_button = new QPushButton( _( "&Accept" ), button_box );
+    CHECK_PTR( accept_button );
+    accept_button->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
+
+    connect( accept_button, SIGNAL( clicked() ),
+	     this,          SLOT  ( accept()   ) );
 }
 
 
@@ -559,9 +568,18 @@ YQPackageSelector::fakeData()
 
 
 void
-YQPackageSelector::close()
+YQPackageSelector::reject()
 {
-    _yuiqt->returnNow( YUIInterpreter::ET_WIDGET, this );
+    _yuiqt->setMenuSelection( YCPSymbol("cancel", true) );
+    _yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
+}
+
+
+void
+YQPackageSelector::accept()
+{
+    _yuiqt->setMenuSelection( YCPSymbol("accept", true) );
+    _yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
 }
 
 

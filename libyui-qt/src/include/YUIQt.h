@@ -95,7 +95,7 @@ public:
      * This implementation does the same as UserInput().
      * Reimplemented from YUIInterpreter.
      **/
-    void runPkgSelection( YWidget * packageSelector );
+    YCPValue runPkgSelection( YWidget * packageSelector );
     
     /**
      * Toggle macro recording (activated by Ctrl-Shift-Alt-M):

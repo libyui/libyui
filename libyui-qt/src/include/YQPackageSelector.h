@@ -97,9 +97,14 @@ public slots:
     void autoResolveDependencies();
 
     /**
-     * Close processing - return back to UserInput()
+     * Close processing and abandon changes
      **/
-    void close();
+    void reject();
+
+    /**
+     * Close processing and accept changes
+     **/
+    void accept();
 
     /**
      * Display online help
