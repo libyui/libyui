@@ -200,7 +200,7 @@ public:
     /**
      * Select the tree item with the specified ID, if such an item exists.
      **/
-    void selectTreeItem( const QString id );
+    void selectTreeItem( const QString & id );
 
     /**
      * Delete all tree items.
@@ -533,7 +533,8 @@ protected:
     QY2ListView *		_tree;
 
     QVBox *		_clientArea;
-    QMenuBar *		    _menuBar;
+    QWidget *		    _menuBarBox;
+    QMenuBar *		        _menuBar;
     QLabel *		    _dialogIcon;
     QLabel *		    _dialogHeading;
     YQAlignment *	    _contents;

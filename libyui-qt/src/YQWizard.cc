@@ -81,6 +81,7 @@ using std::string;
 #define STEPS_MARGIN			10
 #define STEPS_SPACING			2
 #define STEPS_HEADING_SPACING		8
+#define MENU_BAR_MARGIN			8
 
 #define STEPS_FONT_FAMILY		"Sans Serif"
 #define STEPS_FONT_SIZE			11
@@ -123,6 +124,7 @@ YQWizard::YQWizard( QWidget *		parent,
     _helpPanel		= 0;
     _helpBrowser	= 0;
     _clientArea		= 0;
+    _menuBarBox		= 0;
     _menuBar		= 0;
     _dialogIcon		= 0;
     _dialogHeading	= 0;
@@ -754,7 +756,7 @@ YQWizard::TreeItem * YQWizard::findTreeItem( const QString & id )
 }
 
 
-void YQWizard::selectTreeItem( const QString id )
+void YQWizard::selectTreeItem( const QString & id )
 {
     if ( _tree )
     {
@@ -826,20 +828,20 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
     workArea->setFrameStyle( QFrame::Box | QFrame::Plain );
     workArea->setMargin( 4 );
 
-    
+
     //
     // Menu bar
     //
 
     // Placed directly inside workArea the menu bar positions itself at (0,0)
     // and so obscures any kind of frame there might be.
-    QVBox * menuBarParent = new QVBox( workArea );
-    CHECK_PTR( menuBarParent );
-    
-    _menuBar = new QMenuBar( menuBarParent );
+    _menuBarBox = new QVBox( workArea );
+    CHECK_PTR( _menuBarBox );
+
+    _menuBar = new QMenuBar( _menuBarBox );
     CHECK_PTR( _menuBar );
 
-    _menuBar->hide();	// will be made visible when menus are added
+    _menuBarBox->hide(); // will be made visible when menus are added
 
 
     //
@@ -851,7 +853,7 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
     headingHBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
 
     addHSpacing( headingHBox, SEPARATOR_MARGIN );
-    
+
     _dialogIcon = new QLabel( headingHBox );
     CHECK_PTR( _dialogIcon );
 
@@ -1303,9 +1305,12 @@ void YQWizard::addMenu( const QString & text,
 
 	connect( menu, SIGNAL( activated    ( int ) ),
 		 this, SLOT  ( sendMenuEvent( int ) ) );
-	
-	if ( _menuBar->isHidden() )
-	    _menuBar->show();
+
+	if ( _menuBarBox && _menuBarBox->isHidden() )
+	{
+	    _menuBarBox->show();
+	    _menuBarBox->setFixedHeight( _menuBar->sizeHint().height() + MENU_BAR_MARGIN );
+	}
     }
 }
 
@@ -1323,7 +1328,7 @@ void YQWizard::addSubMenu( const QString & parentMenuID,
 
 	_menuIDs.insert( id, menu );
 	parentMenu->insertItem( text, menu );
-	
+
 	connect( menu, SIGNAL( activated    ( int ) ),
 		 this, SLOT  ( sendMenuEvent( int ) ) );
     }
@@ -1663,11 +1668,11 @@ YCPValue YQWizard::command( const YCPTerm & cmd )
 
     if ( isCommand( "AddMenu      ( string, string )"         , cmd ) )	{ addMenu	( qStringArg( cmd, 0 ),
 											  qStringArg( cmd, 1 ) );	return OK; }
-    
+
     if ( isCommand( "AddSubMenu	  ( string, string, string )" , cmd ) )	{ addSubMenu	( qStringArg( cmd, 0 ),
 											  qStringArg( cmd, 1 ),
 											  qStringArg( cmd, 2 ) );	return OK; }
-    
+
     if ( isCommand( "AddMenuEntry ( string, string, string )" , cmd ) )	{ addMenuEntry	( qStringArg( cmd, 0 ),
 											  qStringArg( cmd, 1 ),
 											  qStringArg( cmd, 2 ) );	return OK; }
