@@ -146,9 +146,12 @@ protected:
 
     // Layout functions
 
-    void layoutTitleBar();
+    void layoutTitleBar	( QWidget * parent );
+    void layoutSideBar	( QWidget * parent );
     void layoutStepsPanel();
     void layoutHelpPanel();
+    void layoutWorkArea	( QHBox * parentHBox );
+    void layoutClientArea( QWidget * parent );
     void layoutButtonBox();
 
     /**
@@ -193,8 +196,7 @@ protected:
     YCPString	_abortButtonLabel;
     YCPString	_nextButtonLabel;
 
-    QColor	_bg;
-
+    
     QPixmap	_titleBarGradientPixmap;
     QPixmap	_topGradientPixmap;
     QColor	_gradientCenterColor;
@@ -208,13 +210,12 @@ protected:
     QTextBrowser *		_helpBrowser;
     QPushButton *		_stepsButton;
 
-    QVBox *		_workArea;
-    QVBox *		    _clientArea;
-    YQReplacePoint *	        _contentsReplacePoint;
-    QHBox *		    _buttonBox;
-    QPushButton *	        _abortButton;
-    QPushButton *	        _backButton;
-    QPushButton *	        _nextButton;
+    QVBox *		_clientArea;
+    YQReplacePoint *	    _contentsReplacePoint;
+    QHBox *		_buttonBox;
+    QPushButton *	    _abortButton;
+    QPushButton *	    _backButton;
+    QPushButton *	    _nextButton;
 };
 
 #endif // YQWizard_h

@@ -51,161 +51,60 @@
 
 YQWizard::YQWizard( QWidget *		parent,
 		    YWidgetOpt &	opt,
-		    const YCPValue & 	backButtonId,	const YCPString & backButtonLabel,
-		    const YCPValue & 	abortButtonId,	const YCPString & abortButtonLabel,
-		    const YCPValue & 	nextButtonId,	const YCPString & nextButtonLabel  )
+		    const YCPValue &	backButtonId,	const YCPString & backButtonLabel,
+		    const YCPValue &	abortButtonId,	const YCPString & abortButtonLabel,
+		    const YCPValue &	nextButtonId,	const YCPString & nextButtonLabel  )
     : QVBox( parent )
     , YWizard( opt,
 	       backButtonId,	backButtonLabel,
 	       abortButtonId,	abortButtonLabel,
-	       nextButtonId,	nextButtonLabel  )
+	       nextButtonId,	nextButtonLabel	 )
     , _backButtonLabel ( backButtonLabel  )
     , _abortButtonLabel( abortButtonLabel )
     , _nextButtonLabel ( nextButtonLabel  )
-    , _sideBar( 0 )
-    , _stepsPanel( 0 )
-    , _helpPanel( 0 )
-    , _abortButton( 0 )
-    , _backButton( 0 )
-    , _nextButton( 0 )
 {
     setWidgetRep( this );
 
-    QColor webGreenBG( 0x9c, 0xce, 0x9c );
-    QColor webGreenFG( 0x31, 0x65, 0x00 );
+    _sideBar			= 0;
+    _stepsPanel			= 0;
+    _helpButton			= 0;
+    _helpPanel			= 0;
+    _helpBrowser		= 0;
+    _stepsButton		= 0;
+    _clientArea			= 0;
+    _contentsReplacePoint	= 0;
+    _buttonBox			= 0;
+    _abortButton		= 0;
+    _backButton			= 0;
+    _nextButton			= 0;
 
-    QColor lightGrey	( 0xf8, 0xf8, 0xf8 );
-    QColor darkGrey	( 0xde, 0xde, 0xde );
-    QColor darkGreen	( 0x66, 0x99, 0x00 );
-    QColor lightGreen	( 0x8c, 0xbc, 0x07 );
-    QColor clientAreaBG	( 0xee, 0xee, 0xee );
-    QColor greyText	( 0x66, 0x66, 0x66 );
 
-    _bg		= QColor( 0xE6, 0xE6, 0xE6 );
+    //
+    // Load graphics stuff
+    //
 
     loadGradientPixmaps();
     _gradientCenterColor = pixelColor( _bottomGradientPixmap, 0, 0 );
 
 
     //
-    // Title Bar
-    //
-    
-    layoutTitleBar();
-
-    
-    //
-    // Center part - side bar and work area
+    // Create widgets
     //
 
-    QHBox * outerHBox = new QHBox( this );
-    CHECK_PTR( outerHBox );
+    layoutTitleBar( this );
 
+    QHBox * hBox = new QHBox( this );
+    CHECK_PTR( hBox );
 
-    //
-    // Side Bar
-    //
-
-    _sideBar = new QWidgetStack( outerHBox );
-    CHECK_PTR( _sideBar );
-    _sideBar->setMinimumWidth( YQUI::ui()->defaultSize( YD_HORIZ ) / 5 );
-    _sideBar->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred ) ); // hor/vert
-    _sideBar->setPaletteBackgroundColor( _bg );
-    _sideBar->setMargin( 0 );
-
-
-    layoutStepsPanel();
-    layoutHelpPanel();
-    showSteps();
-
-
-    //
-    // Help
-    //
-
-
-    //
-    // Work area (contains client area and button box)
-    //
-
-    QVBox * workAreaVBox = new QVBox( outerHBox );
-    CHECK_PTR( workAreaVBox );
-
-    _workArea = new QVBox( workAreaVBox );
-    CHECK_PTR( _workArea );
-
-    // _workArea->setFrameStyle( QFrame::TabWidgetPanel | QFrame::Sunken );
-    // _workArea->setFrameStyle( QFrame::Box | QFrame::Sunken );
-    _workArea->setFrameStyle( QFrame::Box | QFrame::Plain );
-    _workArea->setMargin( 4 );
-
-
-    //
-    // Client area
-    //
-
-    _clientArea = new QVBox( _workArea );
-    CHECK_PTR( _clientArea );
-    _clientArea->setMargin( 4 );
-
-
-    //
-    // Replace point for wizard contents
-    //
-
-    YWidgetOpt widgetOpt;
-    _contentsReplacePoint = new YQReplacePoint( _clientArea, widgetOpt );
-    CHECK_PTR( _contentsReplacePoint );
-
-    _contentsReplacePoint->setId( YCPSymbol( YWizardContentsReplacePointID ) ); // `id(`contents)
-    addChild( _contentsReplacePoint );
-    _contentsReplacePoint->installEventFilter( this );
-
-
-    //
-    // Initial YEmpty widget contents of replace point
-    //
-
-#if 1
-    YQEmpty * empty = new YQEmpty( _contentsReplacePoint, widgetOpt );
-    empty->setParent( _contentsReplacePoint );
-    _contentsReplacePoint->addChild( empty );
-#else
-    YQLabel * label =new YQLabel( _contentsReplacePoint, widgetOpt,
-				  YCPString( "Initial placeholder\nfor the wizard replace point")  );
-    label->setParent( _contentsReplacePoint );
-    _contentsReplacePoint->addChild( label );
-
-    label->setPaletteBackgroundColor( white );
-#endif
-
-
-    //
-    // Button box
-    //
-
-    _buttonBox = new QHBox( _workArea );
-    CHECK_PTR( _buttonBox );
-    _buttonBox->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
-    _buttonBox->setMargin( 5 );
-    layoutButtonBox();
-
-
-    //
-    // Spacers (purely decorative) at the bottom and right of the client area
-    //
-
-    QWidget * bottomSpacer = addVSpacing( workAreaVBox, WORK_AREA_BOTTOM_MARGIN );
-    CHECK_PTR( bottomSpacer );
-    setBottomCroppedGradient( bottomSpacer, _bottomGradientPixmap, WORK_AREA_BOTTOM_MARGIN );
-
-    addGradientColumn( outerHBox, WORK_AREA_RIGHT_MARGIN );
+    layoutSideBar( hBox );
+    layoutWorkArea( hBox );
 }
 
 
-void YQWizard::layoutTitleBar()
+
+void YQWizard::layoutTitleBar( QWidget * parent )
 {
-    QHBox * titleBar = new QHBox( this );
+    QHBox * titleBar = new QHBox( parent );
     CHECK_PTR( titleBar );
     setGradient( titleBar, _titleBarGradientPixmap );
     titleBar->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
@@ -213,25 +112,13 @@ void YQWizard::layoutTitleBar()
     //
     // Left logo
     //
-    
-    QLabel * left = new QLabel( "YaST", titleBar );
-    left->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
-    
-    QPixmap leftLogo( PIXMAP_DIR "title-bar-left.png" );
-    
-    if ( leftLogo.isNull() )
-    {
-	QColor webGreenFG( 0x31, 0x65, 0x00 );
 
-	left->setText( "YaST" );
-	left->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
-	left->setFont( QFont( "Helvetica", 14, QFont::Bold ) );
-	left->setMargin( 15 );
-	left->setMinimumHeight( 80 );
-	left->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
-	left->setPaletteForegroundColor( webGreenFG );
-    }
-    else
+    QLabel * left = new QLabel( titleBar );
+    left->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
+
+    QPixmap leftLogo( PIXMAP_DIR "title-bar-left.png" );
+
+    if ( ! leftLogo.isNull() )
     {
 	left->setPixmap( leftLogo );
 	left->setFixedSize( leftLogo.size() );
@@ -242,32 +129,20 @@ void YQWizard::layoutTitleBar()
     //
     // Center stretch space
     //
-    
+
     addHStretch( titleBar );
 
 
     //
     // Right logo
     //
-    
+
     QLabel * right = new QLabel( titleBar );
     CHECK_PTR( right );
 
     QPixmap rightLogo( PIXMAP_DIR "title-bar-right.png" );
 
-    if ( rightLogo.isNull() )
-    {
-	QColor webGreenFG( 0x31, 0x65, 0x00 );
-
-	right->setText( "SUSE Linux" );
-	right->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
-	right->setFont( QFont( "Helvetica", 14, QFont::Bold ) );
-	right->setMargin( 15 );
-	right->setMinimumHeight( 80 );
-	right->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
-	right->setPaletteForegroundColor( webGreenFG );
-    }
-    else
+    if ( ! rightLogo.isNull() )
     {
 	right->setPixmap( rightLogo );
 	right->setFixedSize( rightLogo.size() );
@@ -276,11 +151,27 @@ void YQWizard::layoutTitleBar()
 }
 
 
+
+void YQWizard::layoutSideBar( QWidget * parent )
+{
+    _sideBar = new QWidgetStack( parent );
+    CHECK_PTR( _sideBar );
+    _sideBar->setMinimumWidth( YQUI::ui()->defaultSize( YD_HORIZ ) / 5 );
+    _sideBar->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred ) ); // hor/vert
+    _sideBar->setMargin( 0 );
+
+
+    layoutStepsPanel();
+    layoutHelpPanel();
+    showSteps();
+}
+
+
+
 void YQWizard::layoutStepsPanel()
 {
     _stepsPanel = new QVBox( _sideBar );
     CHECK_PTR( _stepsPanel );
-    _stepsPanel->setPaletteBackgroundColor( _bg );
 
 
     // Top gradient
@@ -348,8 +239,9 @@ void YQWizard::layoutStepsPanel()
 	_helpButton->setPixmap( pixmap );
 
     connect( _helpButton, SIGNAL( clicked()  ),
-	     this,        SLOT  ( showHelp() ) );
+	     this,	  SLOT	( showHelp() ) );
 }
+
 
 
 void YQWizard::layoutHelpPanel()
@@ -388,7 +280,7 @@ void YQWizard::layoutHelpPanel()
     CHECK_PTR( buttonParent );
     // buttonParent->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum ) ); // hor/vert
 
-    
+
     // "Steps" button - intentionally without keyboard shortcut
     // (the text is only a fallback anyway if no icon can be found)
     _stepsButton = new QPushButton( _( "Steps" ), buttonParent );
@@ -404,11 +296,82 @@ void YQWizard::layoutHelpPanel()
 
 
     connect( _stepsButton, SIGNAL( clicked()   ),
-	     this,         SLOT  ( showSteps() ) );
+	     this,	   SLOT	 ( showSteps() ) );
 
 
     addGradientColumn( _helpPanel );
 }
+
+
+
+void YQWizard::layoutWorkArea( QHBox * parentHBox )
+{
+    QVBox * workAreaVBox = new QVBox( parentHBox );
+    CHECK_PTR( workAreaVBox );
+
+    QVBox * workArea = new QVBox( workAreaVBox );
+    CHECK_PTR( workArea );
+
+    // workArea->setFrameStyle( QFrame::TabWidgetPanel | QFrame::Sunken );
+    // workArea->setFrameStyle( QFrame::Box | QFrame::Sunken );
+    workArea->setFrameStyle( QFrame::Box | QFrame::Plain );
+    workArea->setMargin( 4 );
+
+    layoutClientArea( workArea );
+
+    //
+    // Button box
+    //
+
+    _buttonBox = new QHBox( workArea );
+    CHECK_PTR( _buttonBox );
+    _buttonBox->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
+    _buttonBox->setMargin( 5 );
+    layoutButtonBox();
+
+
+    //
+    // Spacers (purely decorative) at the bottom and right of the client area
+    //
+
+    QWidget * bottomSpacer = addVSpacing( workAreaVBox, WORK_AREA_BOTTOM_MARGIN );
+    CHECK_PTR( bottomSpacer );
+    setBottomCroppedGradient( bottomSpacer, _bottomGradientPixmap, WORK_AREA_BOTTOM_MARGIN );
+
+    addGradientColumn( parentHBox, WORK_AREA_RIGHT_MARGIN );
+}
+
+
+
+void YQWizard::layoutClientArea( QWidget * parent )
+{
+    _clientArea = new QVBox( parent );
+    CHECK_PTR( _clientArea );
+    _clientArea->setMargin( 4 );
+
+
+    //
+    // Replace point for wizard contents
+    //
+
+    YWidgetOpt widgetOpt;
+    _contentsReplacePoint = new YQReplacePoint( _clientArea, widgetOpt );
+    CHECK_PTR( _contentsReplacePoint );
+
+    _contentsReplacePoint->setId( YCPSymbol( YWizardContentsReplacePointID ) ); // `id(`contents)
+    addChild( _contentsReplacePoint );
+    _contentsReplacePoint->installEventFilter( this );
+
+
+    //
+    // Initial YEmpty widget contents of replace point
+    //
+
+    YQEmpty * empty = new YQEmpty( _contentsReplacePoint, widgetOpt );
+    empty->setParent( _contentsReplacePoint );
+    _contentsReplacePoint->addChild( empty );
+}
+
 
 
 void YQWizard::layoutButtonBox()
@@ -424,8 +387,8 @@ void YQWizard::layoutButtonBox()
 
     _abortButton = new QPushButton( fromUTF8( _abortButtonLabel->value() ), _buttonBox );
     CHECK_PTR( _abortButton );
-    connect( _abortButton,	SIGNAL( clicked()     	),
-	     this,	  	SLOT  ( abortClicked() ) );
+    connect( _abortButton,	SIGNAL( clicked()	),
+	     this,		SLOT  ( abortClicked() ) );
 
     addHStretch( _buttonBox );
 
@@ -434,10 +397,10 @@ void YQWizard::layoutButtonBox()
     // "Back" button
     //
 
-    _backButton  = new QPushButton( fromUTF8( _backButtonLabel->value()  ), _buttonBox );
+    _backButton	 = new QPushButton( fromUTF8( _backButtonLabel->value()	 ), _buttonBox );
     CHECK_PTR( _backButton );
-    connect( _backButton,	SIGNAL( clicked()      	),
-	     this,	  	SLOT  ( backClicked()	) );
+    connect( _backButton,	SIGNAL( clicked()	),
+	     this,		SLOT  ( backClicked()	) );
 
     addHSpacing( _buttonBox );
 
@@ -446,14 +409,15 @@ void YQWizard::layoutButtonBox()
     // "Next" button
     //
 
-    _nextButton  = new QPushButton( fromUTF8( _nextButtonLabel->value()  ), _buttonBox );
+    _nextButton	 = new QPushButton( fromUTF8( _nextButtonLabel->value()	 ), _buttonBox );
     CHECK_PTR( _nextButton );
     connect( _nextButton,	SIGNAL( clicked()	),
-	     this,	  	SLOT  ( nextClicked()	) );
+	     this,		SLOT  ( nextClicked()	) );
 
 
     addHSpacing( _buttonBox, 4 );
 }
+
 
 
 void YQWizard::loadGradientPixmaps()
@@ -462,6 +426,7 @@ void YQWizard::loadGradientPixmaps()
     _bottomGradientPixmap	= QPixmap( PIXMAP_DIR "bottom-gradient.png"	);
     _titleBarGradientPixmap	= QPixmap( PIXMAP_DIR "title-bar-gradient.png"	);
 }
+
 
 
 void YQWizard::setGradient( QWidget * widget, const QPixmap & pixmap )
@@ -474,10 +439,12 @@ void YQWizard::setGradient( QWidget * widget, const QPixmap & pixmap )
 }
 
 
+
 void YQWizard::setBottomCroppedGradient( QWidget * widget, const QPixmap & pixmap, int croppedHeight )
 {
     setGradient( widget, bottomCropPixmap( pixmap, croppedHeight ) );
 }
+
 
 
 QPixmap YQWizard::bottomCropPixmap( const QPixmap & full, int croppedHeight )
@@ -487,18 +454,19 @@ QPixmap YQWizard::bottomCropPixmap( const QPixmap & full, int croppedHeight )
     if ( full.height() > croppedHeight )
     {
 	pixmap = QPixmap( full.width(), croppedHeight );
-	
+
 	bitBlt( &pixmap, 0, 0,					// dest, dest_x, dest_y
-		&full,   0, full.height() - croppedHeight - 1,	// src, src_x, src_y
+		&full,	 0, full.height() - croppedHeight - 1,	// src, src_x, src_y
 		full.width(), croppedHeight );			// src_width, src_height
     }
     else
     {
 	pixmap = full;
     }
-    
+
     return pixmap;
 }
+
 
 
 QColor YQWizard::pixelColor( const QPixmap & pixmap, int x, int y )
@@ -510,7 +478,7 @@ QColor YQWizard::pixelColor( const QPixmap & pixmap, int x, int y )
     // some performance if we only convert the part we really need - so let's
     // cut out a tiny portion of the original pixmap and convert only that tiny
     // portion.
-    
+
     QPixmap tiny( 1, 1 );
 
     bitBlt( &tiny, 0, 0,	// dest, dest_x, dest_y
@@ -519,9 +487,10 @@ QColor YQWizard::pixelColor( const QPixmap & pixmap, int x, int y )
 
     QImage image = tiny.convertToImage();
 
-    
+
     return QColor( image.pixel( 0, 0 ) );
 }
+
 
 
 QWidget * YQWizard::addGradientColumn( QWidget * parent, int width )
@@ -547,6 +516,7 @@ QWidget * YQWizard::addGradientColumn( QWidget * parent, int width )
 
     return bottomGradient;
 }
+
 
 
 QGridLayout * YQWizard::centerAtBottom( QWidget * parent, QWidget * child, int margin )
@@ -598,6 +568,7 @@ void YQWizard::destroyButtons()
 }
 
 
+
 void YQWizard::addChild( YWidget * ychild )
 {
     if ( ! ychild )
@@ -616,10 +587,12 @@ void YQWizard::addChild( YWidget * ychild )
 }
 
 
+
 void YQWizard::backClicked()
 {
     sendEvent( _backButtonId );
 }
+
 
 
 void YQWizard::abortClicked()
@@ -628,10 +601,12 @@ void YQWizard::abortClicked()
 }
 
 
+
 void YQWizard::nextClicked()
 {
     sendEvent( _nextButtonId );
 }
+
 
 
 void YQWizard::showHelp()
@@ -643,6 +618,7 @@ void YQWizard::showHelp()
 }
 
 
+
 void YQWizard::showSteps()
 {
     if ( _sideBar && _stepsPanel )
@@ -650,6 +626,7 @@ void YQWizard::showSteps()
 	_sideBar->raiseWidget( _stepsPanel );
     }
 }
+
 
 
 void YQWizard::sendEvent( YCPValue id )
@@ -668,10 +645,12 @@ void YQWizard::sendEvent( YCPValue id )
 }
 
 
+
 long YQWizard::nicesize( YUIDimension dim )
 {
     return dim == YD_HORIZ ? sizeHint().width() : sizeHint().height();
 }
+
 
 
 void YQWizard::setSize( long newWidth, long newHeight )
@@ -681,12 +660,14 @@ void YQWizard::setSize( long newWidth, long newHeight )
 }
 
 
+
 void YQWizard::resizeClientArea()
 {
     // y2debug( "resizing client area" );
     QRect contentsRect = _clientArea->contentsRect();
     _contentsReplacePoint->setSize( contentsRect.width(), contentsRect.height() );
 }
+
 
 
 bool YQWizard::eventFilter( QObject * obj, QEvent * ev )
@@ -699,6 +680,7 @@ bool YQWizard::eventFilter( QObject * obj, QEvent * ev )
 
     return QWidget::eventFilter( obj, ev );
 }
+
 
 
 #include "YQWizard.moc"
