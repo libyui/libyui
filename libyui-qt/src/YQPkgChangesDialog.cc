@@ -128,14 +128,6 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
 	addHStretch( hbox );
     }
 
-#if 0
-    // If there is only one button, it's safe to make that one ( the accept
-    // button ) the default. If there are two, better be safe than sorry and
-    // make the reject button the default.
-
-    button->setDefault( true );
-#endif
-
     filter();
 }
 
@@ -164,7 +156,7 @@ YQPkgChangesDialog::filter( bool byAuto, bool byApp, bool byUser )
 
 	++it;
     }
-    
+
     YUIQt::ui()->normalCursor();
 }
 
@@ -173,6 +165,17 @@ bool
 YQPkgChangesDialog::isEmpty() const
 {
     return _pkgList->firstChild() == 0;
+}
+
+
+QSize
+YQPkgChangesDialog::sizeHint() const
+{
+    QRect available = qApp->desktop()->availableGeometry( (QWidget *) this );
+    QSize size = QDialog::sizeHint();
+    size = size.boundedTo( QSize( available.width(), available.height() ) );
+
+    return size;
 }
 
 

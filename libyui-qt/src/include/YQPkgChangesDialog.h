@@ -57,6 +57,13 @@ public:
 				   const QString &	rejectButtonLabel = QString::null,
 				   bool			showIfListEmpty   = false	);
 
+    /**
+     * Returns the preferred size.
+     *
+     * Reimplemented from QWidget to limit the dialog to the screen dimensions.
+     **/
+    virtual QSize sizeHint () const;
+
 protected:
 
     /**

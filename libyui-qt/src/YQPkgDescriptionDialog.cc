@@ -156,6 +156,17 @@ YQPkgDescriptionDialog::isEmpty() const
 }
 
 
+QSize
+YQPkgDescriptionDialog::sizeHint() const
+{
+    QRect available = qApp->desktop()->availableGeometry( (QWidget *) this );
+    QSize size = QDialog::sizeHint();
+    size = size.boundedTo( QSize( available.width(), available.height() ) );
+
+    return size;
+}
+
+
 void
 YQPkgDescriptionDialog::showDescriptionDialog( const QString & pkgName )
 {

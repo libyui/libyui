@@ -43,6 +43,13 @@ public:
      **/
     static void showDescriptionDialog( const QString & pkgName );
 
+    /**
+     * Returns the preferred size.
+     *
+     * Reimplemented from QWidget to limit the dialog to the screen dimensions.
+     **/
+    virtual QSize sizeHint () const;
+
     
 protected:
 
