@@ -88,12 +88,14 @@ YQPkgDependenciesView::simpleTable( PMPackagePtr pkg )
 {
     QString html = "<br>" +
 	table(
-	       row( hcell( _( "Version:"	) ) + cell( pkg->version() + "-" + pkg->release() ) ) +
-	       row( hcell( _( "Provides:"	) ) + cell( pkg->provides()			  ) ) +
-	       row( hcell( _( "Requires:"	) ) + cell( pkg->requires()			  ) ) +
-	       row( hcell( _( "Pre-Requires:"	) ) + cell( pkg->prerequires()			  ) ) +
-	       row( hcell( _( "Obsoletes:"	) ) + cell( pkg->obsoletes()			  ) ) +
-	       row( hcell( _( "Conflicts:"	) ) + cell( pkg->conflicts()			  ) )
+	       row( hcell( _( "Version:"	) )	+ cell( pkg->version() + "-" + pkg->release() ) ) +
+	       row( hcell( _( "Provides:"	) )	+ cell( pkg->provides()		) ) +
+	       row( hcell( _( "Requires:<br>(at run time)" ) )
+							+ cell( pkg->requires()		) ) +
+	       row( hcell( _( "Pre-Requires:<br>(at installation time)"	) )
+							+ cell( pkg->prerequires()	) ) +
+	       row( hcell( _( "Obsoletes:"	) )	+ cell( pkg->obsoletes()	) ) +
+	       row( hcell( _( "Conflicts:"	) )	+ cell( pkg->conflicts()	) )
 	       );
 
     return html;
