@@ -104,6 +104,7 @@ YQTable::YQTable( YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, vector<string>
     {
 	connect( qt_listview->header(), SIGNAL( clicked ( int ) ),
 		 this,			SLOT  ( userSort( int ) ) );
+	qt_listview->setSorting( 65530, true ); // leave initial sorting
     }
 
     // The header is a vector of strings, each defining one
