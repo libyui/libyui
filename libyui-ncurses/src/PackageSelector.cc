@@ -46,6 +46,7 @@
 #include <y2pm/PMManager.h>
 #include <y2pm/PMPackageManager.h>
 #include <y2pm/PMYouPatchManager.h>
+#include <y2pm/PMSelectionManager.h>
 #include <y2pm/InstYou.h>
 
 #include <ycp/YCPString.h>
@@ -192,11 +193,15 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
 		NCMIL << "Fake source enabled: " << err << endl;
 	    }
 	}
-    }    
+    }
+    
+    Y2PM::packageManager().SaveState();
 
     if ( !youMode )
     {
-	// create the selections popup
+	Y2PM::selectionManager().SaveState();
+
+        // create the selections popup
 	selectionPopup = new NCPopupSelection( wpos( 1, 1 ), this );
 
 	// create the filter popup
@@ -218,6 +223,10 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
 
 	// the file popup
 	filePopup = new NCPopupFile( wpos( 1, 1), floppyDevice, this );
+    }
+    else
+    {
+	Y2PM::youPatchManager().SaveState();
     }
 }
 
@@ -1358,7 +1367,7 @@ bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 			   YCPString( PkgNames::CancelText().str() ),
 			   PkgNames::OKLabel().str(),
 			   PkgNames::CancelLabel().str() );
-    cancelMsg.setNiceSize( 40, 10 ); 
+    cancelMsg.setNiceSize( 35, 8 ); 
     NCursesEvent input = cancelMsg.showInfoPopup( );
 
     if ( input == NCursesEvent::cancel )
@@ -1367,9 +1376,15 @@ bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 	return true;
     }
     else
-    {		
+    {
+	// restore manager states
+	Y2PM::packageManager().RestoreState();
+	if ( youMode )
+	    Y2PM::youPatchManager().RestoreState();
+	else
+	    Y2PM::selectionManager().RestoreState();
+
 	NCMIL <<  "Cancel button pressed - leaving package selection" << endl;
-	// return `cancel (RestoreState() is called in inst_sw_select.ycp) 
 	const_cast<NCursesEvent &>(event).result = YCPSymbol("cancel", true);
     
 	// return false, which means stop the event loop (see runPkgSelection)
