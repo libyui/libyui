@@ -1,7 +1,13 @@
 -------------------------------------------------------------------
+Fri Mar 12 13:53:47 CET 2004 - gs@suse.de
+
+- V 2.9.13
+- bugfix setfont options (YNCursesUI::setConsoleFont)
+
+-------------------------------------------------------------------
 Wed Mar 10 12:57:49 CET 2004 - lnussel@suse.de
 
-- handle downgrade case
+- package installation: handle downgrade case in dependency popup
 
 -------------------------------------------------------------------
 Fri Mar  5 10:01:14 CET 2004 - gs@suse.de
