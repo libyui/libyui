@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Jul 16 15:05:26 CEST 2004 - mlazar@suse.cz
+
+- fixed Bugzilla Bug 43005 - Hardware information not shown in ncurses mode
+
+-------------------------------------------------------------------
 Thu Jul  8 11:16:29 CEST 2004 - mlazar@suse.cz
 
 - fixed bug #42736: file selection dialog does not show large files (>1GB)

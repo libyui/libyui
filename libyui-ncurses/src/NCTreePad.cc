@@ -302,8 +302,8 @@ wsze NCTreePad::UpdateFormat()
 
   maxspos.L = visLines() > (unsigned)srect.Sze.H ? visLines() - srect.Sze.H : 0;
 
-  resize( wsze( Lines(), ItemStyle.TableWidth() ) );
-  return wsze( Lines(), ItemStyle.TableWidth() );
+  resize( wsze( visLines(), ItemStyle.TableWidth() ) );
+  return wsze( visLines(), ItemStyle.TableWidth() );
 }
 
 ///////////////////////////////////////////////////////////////////
