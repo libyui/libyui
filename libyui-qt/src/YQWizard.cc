@@ -689,6 +689,7 @@ void YQWizard::layoutClientArea( QWidget * parent )
 
     _contentsReplacePoint->setId( YCPSymbol( YWizardContentsReplacePointID ) ); // `id(`contents)
     addChild( _contentsReplacePoint );
+    _contentsReplacePoint->setParent( this );
     _contentsReplacePoint->installEventFilter( this );
     _contentsReplacePoint->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
