@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Feb 25 16:28:13 CET 2003 - sh@suse.de
+
+- Fixed bug #24255: Multiple search in yast2-qt package 
+
+-------------------------------------------------------------------
 Tue Feb 25 14:50:18 CET 2003 - sh@suse.de
 
 - Fixed wrong tool tip "this version is installed in your system"

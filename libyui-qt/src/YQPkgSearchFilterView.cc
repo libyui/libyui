@@ -183,9 +183,11 @@ YQPkgSearchFilterView::filter()
 	// Create a progress dialog that is only displayed if the search takes
 	// longer than a couple of seconds (default: 4).
 
-	QProgressDialog progress( _( "Searching..." ),
-				  _( "&Cancel" ),
-				  Y2PM::packageManager().size() );
+	QProgressDialog progress( _( "Searching..." ),			// text
+				  _( "&Cancel" ),			// cancelButtonLabel
+				  Y2PM::packageManager().size(),	// totalSteps
+				  this, 0,				// parent, name
+				  true );				// modal
 	progress.setMinimumDuration( 2000 ); // millisec
 	QTime timer;
 
