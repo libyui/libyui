@@ -67,7 +67,7 @@ long YQLogView::nicesize( YUIDimension dim )
     }
     else
     {
-	long minSize    	 = 10;
+	long minSize     = 10;
 	long hintHeight	 = qt_label->sizeHint().height();
 	hintHeight 	+= visibleLines() * qt_text->fontMetrics().lineSpacing();
 	hintHeight	+= qt_text->style().scrollBarExtent().height();
@@ -87,9 +87,7 @@ void YQLogView::setSize(long newwidth, long newheight)
 void YQLogView::setLogText( const YCPString & text)
 {
     qt_text->setText( fromUTF8( text->value() ) );
-    qt_text->setReadOnly( false );
-    qt_text->setCursorPosition( lines()-1, 0, false );
-    qt_text->setReadOnly( true );
+    qt_text->scrollToBottom();
 }
 
 
