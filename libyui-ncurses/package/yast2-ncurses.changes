@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Sep  6 18:08:04 CEST 2004 - mlazar@suse.cz
+
+- fixed bug when activate resized panel with new state same as old
+  state (in this case panel was not showed)
+
+-------------------------------------------------------------------
 Mon Sep  6 16:43:58 CEST 2004 - mlazar@suse.cz
 
 - 2.10.1 

@@ -289,7 +289,7 @@ void NCDialog::closeDialog()
 //
 void NCDialog::activate( const bool newactive )
 {
-  if ( active != newactive ) {
+  if ( active != newactive || pan->hidden()) {
     active = newactive;
     if ( pan ) {
       pan->show(); // not getVisible() because wRedraw() follows.
