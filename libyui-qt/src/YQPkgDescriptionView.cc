@@ -123,7 +123,8 @@ YQPkgDescriptionView::showLink( const QString & url )
     if ( url.startsWith( "pkg:" ) )
     {
 	QString pkgName = url;
-	pkgName.remove( QRegExp( "^pkg:/*" ) );
+	pkgName.remove( QRegExp( "^pkg:/*" ) );	// Remove leading protocol and slashes
+	pkgName.remove( QRegExp( "/*$" ) );	// Remove trailing slashes
 	y2milestone( "Hyperlinking to package '%s'", (const char *) pkgName );
 	YQPkgDescriptionDialog::showDescriptionDialog( pkgName );
     }

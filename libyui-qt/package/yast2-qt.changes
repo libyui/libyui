@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Sep  4 17:14:49 CEST 2003 - sh@suse.de
+
+- V 2.8.9
+- Fixed bug #29529: Package links (again):
+  Discard trailing slashes in URL
+
+-------------------------------------------------------------------
 Tue Sep  2 13:39:42 CEST 2003 - sh@suse.de
 
 - Fixed bug #23660: RichText widget eats [Return]
