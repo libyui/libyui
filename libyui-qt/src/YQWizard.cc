@@ -76,7 +76,7 @@ using std::string;
 
 #define USE_SEPARATOR			1
 
-#define BUTTON_BOX_TOP_MARGIN		10
+#define BUTTON_BOX_TOP_MARGIN		14
 #define WORK_AREA_BOTTOM_MARGIN		10
 
 #define WORK_AREA_RIGHT_MARGIN		10
@@ -118,7 +118,7 @@ YQWizard::YQWizard( QWidget *		parent,
     _verboseCommands	= false;
     _protectNextButton	= false;
     _stepsDirty		= false;
-    _direction 		= YQWizard::Forward;
+    _direction		= YQWizard::Forward;
     _runningEmbedded	= YQUI::ui()->runningEmbedded() || YQUI::ui()->debugEmbedding();
 
     if ( _treeEnabled )
@@ -128,7 +128,7 @@ YQWizard::YQWizard( QWidget *		parent,
     _stepsPanel		= 0;
     _stepsBox		= 0;
     _stepsGrid		= 0;
-    _releaseNotesButton	= 0;
+    _releaseNotesButton = 0;
     _treePanel		= 0;
     _tree		= 0;
     _helpPanel		= 0;
@@ -312,35 +312,35 @@ void YQWizard::layoutStepsPanel()
     // Layouts for the buttons
 
     QVBoxLayout * vbox = new QVBoxLayout( bottomGradient,
-					  0, 0 ); 	// margin, spacing
+					  0, 0 );	// margin, spacing
     CHECK_PTR( vbox );
     vbox->addStretch( 99 );
-    
-    
+
+
     QHBoxLayout * hbox = new QHBoxLayout( vbox,
 					  0 );		// spacing
     hbox->addStretch( 99 );
-    
+
     _releaseNotesButton = new QPushButton( _( "Release Notes..." ), bottomGradient );
     hbox->addWidget( _releaseNotesButton );
 
 
     connect( _releaseNotesButton,	SIGNAL( clicked()  ),
-	     this,	    		SLOT  ( releaseNotesClicked() ) );
-    
+	     this,			SLOT  ( releaseNotesClicked() ) );
+
     _releaseNotesButton->hide();	// hidden until showReleaseNotesButton() is called
 
     hbox->addStretch( 99 );
     vbox->addStretch( 99 );
 
-    hbox = new QHBoxLayout( vbox, 
+    hbox = new QHBoxLayout( vbox,
 			    0 );		// spacing
     hbox->addStretch( 99 );
 
     // Help button - intentionally without keyboard shortcut
     QPushButton * helpButton = new QPushButton( _( "Help" ), bottomGradient );
     CHECK_PTR( helpButton );
-    
+
     hbox->addWidget( helpButton );
     hbox->addStretch( 99 );
 
@@ -440,7 +440,7 @@ void YQWizard::updateSteps()
 
     _stepsGrid->setColStretch( 0, 99 );		// Left margin column - stretch
     _stepsGrid->setColStretch( statusCol, 0 );	// Status column - don't stretch
-    _stepsGrid->setColStretch( nameCol,   0 );	// Name column - don't stretch
+    _stepsGrid->setColStretch( nameCol,	  0 );	// Name column - don't stretch
     _stepsGrid->setColStretch( 3, 99  );	// Left margin column - stretch
 
 
@@ -702,12 +702,12 @@ void YQWizard::layoutHelpPanel()
 
 	if ( _treeEnabled )
 	{
-	    connect( button, SIGNAL( clicked()  ),
+	    connect( button, SIGNAL( clicked()	),
 		     this,   SLOT  ( showTree() ) );
 	}
 	else
 	{
-	    connect( button, SIGNAL( clicked()   ),
+	    connect( button, SIGNAL( clicked()	 ),
 		     this,   SLOT  ( showSteps() ) );
 	}
     }
@@ -745,13 +745,13 @@ void YQWizard::layoutTreePanel()
     _tree->setRootIsDecorated( true );
 
     connect( _tree,	SIGNAL( selectionChanged     ( void ) ),
-	     this, 	SLOT  ( treeSelectionChanged ( void ) ) );
+	     this,	SLOT  ( treeSelectionChanged ( void ) ) );
 
-    connect( _tree,	SIGNAL( spacePressed  ( QListViewItem *	) ),
-	     this, 	SLOT  ( sendTreeEvent ( QListViewItem *	) ) );
+    connect( _tree,	SIGNAL( spacePressed  ( QListViewItem * ) ),
+	     this,	SLOT  ( sendTreeEvent ( QListViewItem * ) ) );
 
     connect( _tree,	SIGNAL( doubleClicked ( QListViewItem * ) ),
-	     this, 	SLOT  ( sendTreeEvent ( QListViewItem *	) ) );
+	     this,	SLOT  ( sendTreeEvent ( QListViewItem * ) ) );
 
 
     // Bottom gradient
@@ -777,7 +777,7 @@ void YQWizard::layoutTreePanel()
     if ( _bottomGradientPixmap.isNull() )
 	buttonParent->setFixedHeight( button->sizeHint().height() + WORK_AREA_BOTTOM_MARGIN );
 
-    connect( button, SIGNAL( clicked()  ),
+    connect( button, SIGNAL( clicked()	),
 	     this,   SLOT  ( showHelp() ) );
 
 
@@ -795,7 +795,7 @@ void YQWizard::addTreeItem( const QString & parentID, const QString & text, cons
 	return;
     }
 
-    YQWizard::TreeItem * item   = 0;
+    YQWizard::TreeItem * item	= 0;
     YQWizard::TreeItem * parent = 0;
 
     if ( ! parentID.isEmpty() )
@@ -1060,7 +1060,7 @@ void YQWizard::layoutButtonBox( QWidget * parent )
     // be very hard to cover all cases - resizing, hiding individual buttons, etc.
 
     QVBoxLayout * vbox = new QVBoxLayout( buttonBox,
-					  0, 0 ); 	// margin, spacing
+					  0, 0 );	// margin, spacing
     CHECK_PTR( vbox );
 
     vbox->addSpacing( BUTTON_BOX_TOP_MARGIN );
@@ -1113,7 +1113,7 @@ void YQWizard::layoutButtonBox( QWidget * parent )
     hbox->addWidget( (QWidget *) _abortButton->widgetRep() );
     addChild( _abortButton ); // Enable shortcut checking for this button
     connect( _abortButton,	SIGNAL( clicked()	),
-	     this,		SLOT  ( abortClicked()  ) );
+	     this,		SLOT  ( abortClicked()	) );
 
 
     // Using spacer rather than addSpacing() since the default stretchability
@@ -1164,7 +1164,7 @@ void YQWizard::loadGradientPixmaps()
     {
 	_topGradientPixmap	= QPixmap( PIXMAP_DIR "top-gradient.png"	);
 	_bottomGradientPixmap	= QPixmap( PIXMAP_DIR "bottom-gradient.png"	);
-	_titleBarGradientPixmap	= QPixmap( PIXMAP_DIR "title-bar-gradient.png"	);
+	_titleBarGradientPixmap = QPixmap( PIXMAP_DIR "title-bar-gradient.png"	);
 	_gradientCenterColor = pixelColor( _bottomGradientPixmap, 0, 0 );
     }
     else // 8 bit display or worse - don't use gradients
@@ -1184,8 +1184,8 @@ void YQWizard::loadStepsIcons()
     if ( highColorDisplay() )
     {
 	_stepCurrentColor	= pixelColor( QPixmap( PIXMAP_DIR "color-step-current.png" ), 0, 0 );
-	_stepToDoColor		= pixelColor( QPixmap( PIXMAP_DIR "color-step-todo.png"    ), 0, 0 );
-	_stepDoneColor		= pixelColor( QPixmap( PIXMAP_DIR "color-step-done.png"    ), 0, 0 );
+	_stepToDoColor		= pixelColor( QPixmap( PIXMAP_DIR "color-step-todo.png"	   ), 0, 0 );
+	_stepDoneColor		= pixelColor( QPixmap( PIXMAP_DIR "color-step-done.png"	   ), 0, 0 );
     }
     else
     {
@@ -1730,10 +1730,10 @@ void YQWizard::showReleaseNotesButton( string label, const YCPValue & id )
     _releaseNotesButton->setText( fromUTF8( label ) );
     _releaseNotesButtonId = id;
 
-    
+
     if ( _releaseNotesButton->isHidden() )
 	_releaseNotesButton->show();
-    
+
 }
 
 
@@ -1790,14 +1790,14 @@ bool YQWizard::isCommand( QString declaration, const YCPTerm & term )
 	QString wanted = argDeclList[ i ].stripWhiteSpace();
 	YCPValue seen  = term->value( i );
 
-	if 	( wanted == "string"	)	ok = seen->isString();
-	else if ( wanted == "boolean" 	)	ok = seen->isBoolean();
-	else if ( wanted == "bool" 	)	ok = seen->isBoolean();
-	else if ( wanted == "list" 	)	ok = seen->isList();
-	else if ( wanted == "map" 	)	ok = seen->isMap();
-	else if ( wanted == "integer" 	)	ok = seen->isInteger();
-	else if ( wanted == "int" 	)	ok = seen->isInteger();
-	else if ( wanted == "any" 	)	ok = true;
+	if	( wanted == "string"	)	ok = seen->isString();
+	else if ( wanted == "boolean"	)	ok = seen->isBoolean();
+	else if ( wanted == "bool"	)	ok = seen->isBoolean();
+	else if ( wanted == "list"	)	ok = seen->isList();
+	else if ( wanted == "map"	)	ok = seen->isMap();
+	else if ( wanted == "integer"	)	ok = seen->isInteger();
+	else if ( wanted == "int"	)	ok = seen->isInteger();
+	else if ( wanted == "any"	)	ok = true;
 	else
 	{
 	    y2error( "Bad declaration for wizard command %s : Unknown type \"%s\"",
@@ -1876,59 +1876,59 @@ YCPValue YQWizard::command( const YCPTerm & cmd )
 #define OK YCPBoolean( true );
 
 
-    if ( isCommand( "SetHelpText   	  ( string )", cmd ) )	{ setHelpText	( qStringArg( cmd, 0 ) );		return OK; }
-    if ( isCommand( "SetDialogIcon 	  ( string )", cmd ) )	{ setDialogIcon	( qStringArg( cmd, 0 ) );		return OK; }
+    if ( isCommand( "SetHelpText	  ( string )", cmd ) )	{ setHelpText	( qStringArg( cmd, 0 ) );		return OK; }
+    if ( isCommand( "SetDialogIcon	  ( string )", cmd ) )	{ setDialogIcon ( qStringArg( cmd, 0 ) );		return OK; }
     if ( isCommand( "SetDialogHeading	  ( string )", cmd ) )	{ setDialogHeading( qStringArg( cmd, 0 ) );		return OK; }
 
     if ( isCommand( "SetCurrentStep	  ( string )", cmd ) )	{ setCurrentStep( qStringArg( cmd, 0 ) );		return OK; }
-    if ( isCommand( "AddStep ( string, string )"     , cmd ) )	{ addStep( qStringArg( cmd, 0 ), qStringArg( cmd, 1 ));	return OK; }
-    if ( isCommand( "AddStepHeading       ( string )", cmd ) )  { addStepHeading( qStringArg( cmd, 0 ) );		return OK; }
+    if ( isCommand( "AddStep ( string, string )"     , cmd ) )	{ addStep( qStringArg( cmd, 0 ), qStringArg( cmd, 1 )); return OK; }
+    if ( isCommand( "AddStepHeading	  ( string )", cmd ) )	{ addStepHeading( qStringArg( cmd, 0 ) );		return OK; }
     if ( isCommand( "DeleteSteps()"		     , cmd ) )	{ deleteSteps();					return OK; }
     if ( isCommand( "UpdateSteps()"		     , cmd ) )	{ updateSteps();					return OK; }
 
-    if ( isCommand( "SetAbortButtonLabel  ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "SetBackButtonLabel   ( string )", cmd ) )	{ setButtonLabel( _backButton,  qStringArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "SetNextButtonLabel	  ( string )", cmd ) )	{ setButtonLabel( _nextButton,  qStringArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "SetCancelButtonLabel ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "SetAcceptButtonLabel ( string )", cmd ) )	{ setButtonLabel( _nextButton,  qStringArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "SetAbortButtonLabel  ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) ); return OK; }
+    if ( isCommand( "SetBackButtonLabel	  ( string )", cmd ) )	{ setButtonLabel( _backButton,	qStringArg( cmd, 0 ) ); return OK; }
+    if ( isCommand( "SetNextButtonLabel	  ( string )", cmd ) )	{ setButtonLabel( _nextButton,	qStringArg( cmd, 0 ) ); return OK; }
+    if ( isCommand( "SetCancelButtonLabel ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) ); return OK; }
+    if ( isCommand( "SetAcceptButtonLabel ( string )", cmd ) )	{ setButtonLabel( _nextButton,	qStringArg( cmd, 0 ) ); return OK; }
 
-    if ( isCommand( "SetAbortButtonID     ( any )"   , cmd ) )	{ setButtonID( _abortButton, 	anyArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "SetBackButtonID	  ( any )"   , cmd ) )	{ setButtonID( _backButton,  	anyArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "SetAbortButtonID	  ( any )"   , cmd ) )	{ setButtonID( _abortButton,	anyArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "SetBackButtonID	  ( any )"   , cmd ) )	{ setButtonID( _backButton,	anyArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "SetNextButtonID	  ( any )"   , cmd ) )	{ setButtonID( _nextButton,	anyArg( cmd, 0 ) );	return OK; }
 
-    if ( isCommand( "EnableBackButton 	  ( bool )"  , cmd ) )	{ enableButton( _backButton,  	boolArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "EnableNextButton     ( bool )"  , cmd ) )	{ enableButton( _nextButton,  	boolArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "EnableAbortButton    ( bool )"  , cmd ) )	{ enableButton( _abortButton, 	boolArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "ProtectNextButton    ( bool )"  , cmd ) )	{ _protectNextButton = boolArg( cmd, 0 );		return OK; }
+    if ( isCommand( "EnableBackButton	  ( bool )"  , cmd ) )	{ enableButton( _backButton,	boolArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "EnableNextButton	  ( bool )"  , cmd ) )	{ enableButton( _nextButton,	boolArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "EnableAbortButton	  ( bool )"  , cmd ) )	{ enableButton( _abortButton,	boolArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "ProtectNextButton	  ( bool )"  , cmd ) )	{ _protectNextButton = boolArg( cmd, 0 );		return OK; }
 
-    if ( isCommand( "SetFocusToNextButton ()"        , cmd ) )	{ setButtonFocus( _nextButton );			return OK; }
-    if ( isCommand( "SetFocusToBackButton ()"        , cmd ) )	{ setButtonFocus( _backButton );			return OK; }
+    if ( isCommand( "SetFocusToNextButton ()"	     , cmd ) )	{ setButtonFocus( _nextButton );			return OK; }
+    if ( isCommand( "SetFocusToBackButton ()"	     , cmd ) )	{ setButtonFocus( _backButton );			return OK; }
 
 
     if ( isCommand( "SetVerboseCommands	  ( bool )"  , cmd ) )	{ setVerboseCommands( boolArg( cmd, 0 ) );		return OK; }
 
-    if ( isCommand( "DeleteTreeItems()"	             , cmd ) )	{ deleteTreeItems();					return OK; }
+    if ( isCommand( "DeleteTreeItems()"		     , cmd ) )	{ deleteTreeItems();					return OK; }
     if ( isCommand( "SelectTreeItem( string )"	     , cmd ) )	{ selectTreeItem( qStringArg( cmd, 0 ) );		return OK; }
     if ( isCommand( "AddTreeItem( string, string, string )", cmd ) )	{ addTreeItem	( qStringArg( cmd, 0 ),
 											  qStringArg( cmd, 1 ),
-											  qStringArg( cmd, 2 )  );	return OK; }
+											  qStringArg( cmd, 2 )	);	return OK; }
 
-    if ( isCommand( "AddMenu      ( string, string )"         , cmd ) )	{ addMenu	( qStringArg( cmd, 0 ),
+    if ( isCommand( "AddMenu	  ( string, string )"	      , cmd ) ) { addMenu	( qStringArg( cmd, 0 ),
 											  qStringArg( cmd, 1 ) );	return OK; }
 
-    if ( isCommand( "AddSubMenu	  ( string, string, string )" , cmd ) )	{ addSubMenu	( qStringArg( cmd, 0 ),
+    if ( isCommand( "AddSubMenu	  ( string, string, string )" , cmd ) ) { addSubMenu	( qStringArg( cmd, 0 ),
 											  qStringArg( cmd, 1 ),
 											  qStringArg( cmd, 2 ) );	return OK; }
 
-    if ( isCommand( "AddMenuEntry ( string, string, string )" , cmd ) )	{ addMenuEntry	( qStringArg( cmd, 0 ),
+    if ( isCommand( "AddMenuEntry ( string, string, string )" , cmd ) ) { addMenuEntry	( qStringArg( cmd, 0 ),
 											  qStringArg( cmd, 1 ),
 											  qStringArg( cmd, 2 ) );	return OK; }
 
-    if ( isCommand( "AddMenuSeparator ( string )"            , cmd ) )	{ addMenuSeparator( qStringArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "DeleteMenus ()"                         , cmd ) )	{ deleteMenus();				return OK; }
+    if ( isCommand( "AddMenuSeparator ( string )"	     , cmd ) )	{ addMenuSeparator( qStringArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "DeleteMenus ()"			     , cmd ) )	{ deleteMenus();				return OK; }
     if ( isCommand( "ShowReleaseNotesButton( string, any )"  , cmd ) )	{ showReleaseNotesButton( stringArg( cmd, 0 ),
 												  anyArg   ( cmd, 1 )); return OK; }
-    if ( isCommand( "HideReleaseNotesButton()"               , cmd ) )	{ hideReleaseNotesButton();			return OK; }
+    if ( isCommand( "HideReleaseNotesButton()"		     , cmd ) )	{ hideReleaseNotesButton();			return OK; }
     y2error( "Undefined wizard command: %s", cmd->toString().c_str() );
     return YCPBoolean( false );
 
