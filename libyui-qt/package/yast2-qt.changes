@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Mar 31 13:59:51 CEST 2004 - cschum@suse.de
+
+- Do UTF8 conversion for patch kind tooltips (#37584).
+
+-------------------------------------------------------------------
 Tue Mar 30 20:29:21 CEST 2004 - sh@suse.de
 
 - Added tree to wizard side panel (for autoyast, sysconfig-editor)

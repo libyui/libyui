@@ -381,12 +381,12 @@ YQPkgYouPatchListItem::toolTip( int col )
     }
     else
     {
-	text = _pmYouPatch->kindLabel().c_str();
+	text = fromUTF8( _pmYouPatch->kindLabel().c_str() );
 
 	if ( ! text.isEmpty() )
 	    text += "\n";
 
-	text += _pmYouPatch->size().form().c_str();
+	text += fromUTF8( _pmYouPatch->size().form().c_str() );
     }
 
     return text;
