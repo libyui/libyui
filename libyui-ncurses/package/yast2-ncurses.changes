@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Sep  6 19:39:58 CEST 2002 - gs@suse.de
+
+- V 2.6.12
+- package installation: dependencies popup improved,
+- show the "update problem" list 
+
+-------------------------------------------------------------------
 Thu Sep  5 20:34:24 CEST 2002 - gs@suse.de
 
 - V 2.6.11
