@@ -74,7 +74,7 @@
 					     `item( `id("relations"), 	_( "Package &Relations" ) ) ]
 					    )),
 			 // label Etc. menu ( keep it short! )
-			 `Left(`ReplacePoint(`id("replacemenu"), `MenuButton( `opt(`key_F7), _( "&Etc." ),
+			 `Left(`ReplacePoint(`id(`replacemenu), `MenuButton( `opt(`key_F7), _( "&Etc." ),
 									    // menu item of the Etc. menu
 									    [`menu( _( "&Dependencies" ),
 										    // menu items of the Etc./Dependencies submenu
@@ -113,7 +113,7 @@
 					   )
 				  )
 			 ),
-		  `VBox(`VWeight( 40, `ReplacePoint( `id("replaceinfo"),
+		  `VBox(`VWeight( 40, `ReplacePoint( `id(`replaceinfo),
 						     `RichText( `id("description")," ")
 						     )
 				  ),

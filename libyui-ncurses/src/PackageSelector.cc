@@ -1014,7 +1014,7 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	if (parsed_code != NULL)
 	    layout = parsed_code->evaluate();
 
-	y2ui->evaluateReplaceWidget( YCPString ("replaceinfo"), layout->asTerm() );
+	y2ui->evaluateReplaceWidget( YCPSymbol("replaceinfo"), layout->asTerm() );
 
 	NCPkgTable * pkgAvail = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::AvailPkgs(), true));
 
@@ -1040,7 +1040,7 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	if (parsed_code != NULL)
 	    layout = parsed_code->evaluate();
 
-	y2ui->evaluateReplaceWidget( YCPString ("replaceinfo"), layout->asTerm() );
+	y2ui->evaluateReplaceWidget( YCPSymbol ("replaceinfo"), layout->asTerm() );
 
 	NCPkgTable * patchPkgs = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::PatchPkgs(), true));
 
@@ -1066,7 +1066,7 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	if (parsed_code != NULL)
 	    layout = parsed_code->evaluate ();
 
-	y2ui->evaluateReplaceWidget( YCPString ("replaceinfo"), layout->asTerm() );
+	y2ui->evaluateReplaceWidget( YCPSymbol ("replaceinfo"), layout->asTerm() );
     
 	packageList->showInformation( );
     }
@@ -1123,7 +1123,7 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 
 	    if ( !layout.isNull() )
 	    {
-		y2ui->evaluateReplaceWidget( YCPString ("replacemenu"), layout->asTerm() );
+		y2ui->evaluateReplaceWidget( YCPSymbol ("replacemenu"), layout->asTerm() );
 		autoCheck = false;
 	    }
 	}
@@ -1149,7 +1149,7 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 
 	    if ( !layout.isNull() )
 	    {
-		y2ui->evaluateReplaceWidget( YCPString ("replacemenu"), layout->asTerm() );	
+		y2ui->evaluateReplaceWidget( YCPSymbol ("replacemenu"), layout->asTerm() );	
 		autoCheck = true;
 	    }
 	}
