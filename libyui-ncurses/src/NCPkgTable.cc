@@ -746,29 +746,31 @@ bool NCPkgTable::toggleSourceStatus( )
 	return false;
     }
     PMSelectablePtr selPtr = objPtr->getSelectable();
-
-    if ( !selPtr )
+    NCTableLine * currentLine = pad->ModifyLine( index );
+    
+    if ( !selPtr  || !currentLine )
     {
 	NCERR << "Invalid Selectable" << endl;
 	return false;
     }
-    NCTableLine * currentLine = pad->ModifyLine( index );
-    NCTableCol * currentCol = currentLine->GetCol( currentLine->Cols() );    
+
+    NCTableCol * currentCol = currentLine->GetCol( currentLine->Cols()-1 );    
 
     if ( selPtr->providesSources()
 	 && !selPtr->source_install() )
     {
 	ok = selPtr->set_source_install( true );
 	NCMIL << "Set source install returns: " << (ok?"true":"false") << endl;
-	currentCol->SetLabel( NClabel( " x " ) );
+	if ( currentCol )
+	    currentCol->SetLabel( NClabel( " x " ) );
     }
     else if ( selPtr->source_install() )
     {
 	ok = selPtr->set_source_install( false );
 	NCMIL << "ReSet source install returns: " << (ok?"true":"false") << endl;
-	currentCol->SetLabel( NClabel( "   " ) );
+	if ( currentCol )
+	    currentCol->SetLabel( NClabel( "   " ) );
     }
-    NCMIL << "NO Source" << endl;
 	
     return true;
 }
