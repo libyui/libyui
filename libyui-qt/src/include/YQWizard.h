@@ -26,6 +26,9 @@
 
 class QHBox;
 class QPushButton;
+class QTabWidget;
+class QTextBrowser;
+
 class YQReplacePoint;
 
 
@@ -116,6 +119,9 @@ protected:
     YCPString _backButtonLabel;
     YCPString _abortButtonLabel;
     YCPString _nextButtonLabel;
+
+    QTabWidget *	_sideBar;
+    QTextBrowser *	   _helpBrowser;
 
     QVBox *		_clientArea;
     YQReplacePoint *	    _contentsReplacePoint;

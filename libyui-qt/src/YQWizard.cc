@@ -24,8 +24,11 @@
 #include <qlabel.h>
 #include <qhbox.h>
 #include <qpushbutton.h>
+#include <qtabwidget.h>
+#include <qtextbrowser.h>
 
 #include "utf8.h"
+#include "YQi18n.h"
 #include "YQUI.h"
 #include "YQReplacePoint.h"
 #include "YQEmpty.h"
@@ -54,16 +57,21 @@ YQWizard::YQWizard( QWidget *		parent,
 {
     setWidgetRep( this );
 
-    // Official SuSE corporate design colors
-    // - they all look horrible on-screen. 
+    // Official SuSE colors according to the corporate design;
+    // they all look horrible on-screen. 
 
     QColor suseColorLinux ( (int) (.45*255), (int) (.75*255), (int) (.10*255) );
     QColor suseColorOcean ( (int) (0),       (int) (.30*255), (int) (.25*255) );
     QColor suseColorJungle( (int) (.10*255), (int) (.60*255), (int) (.20*255) );
     QColor suseColorOlive ( (int) (.20*255), (int) (.35*255), (int) (.10*255) );
-    
-    QColor bg( suseColorJungle );
 
+    // The SuSE web site version of the corporate design colors
+    QColor webGreenBG( 0x9c, 0xce, 0x9c );
+    QColor webGreenFG( 0x31, 0x65, 0x00 );
+    
+    QColor bg( webGreenBG );
+
+    
     //
     // Top decoration
     //
@@ -76,23 +84,60 @@ YQWizard::YQWizard( QWidget *		parent,
     top->setMargin( 15 );
     top->setMinimumHeight( 80 );
     top->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
+    top->setPaletteForegroundColor( webGreenFG );
+
 
     //
-    // Left pane
+    // Center part - side bar and work area
     //
-
+    
     QHBox * hbox = new QHBox( this );
     CHECK_PTR( hbox );
 
-    QLabel * left_pane = new QLabel( "\n\n- Step 1\n- Step 2\n- Step 3\n  ...\n- Step n", hbox );
-    CHECK_PTR( left_pane );
-    left_pane->setPaletteBackgroundColor( bg );
-    left_pane->setFont( QFont( "Helvetica", 12 ) );
-    left_pane->setMargin( 30 );
-    left_pane->setMinimumWidth( 150 );
-    left_pane->setAlignment( Qt::AlignLeft | Qt::AlignTop );
-    left_pane->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred ) ); // hor/vert
+    
+    //
+    // Side Bar
+    //
 
+    _sideBar = new QTabWidget( hbox );
+    CHECK_PTR( _sideBar );
+    _sideBar->setTabPosition( QTabWidget::Bottom );
+    _sideBar->setMinimumWidth( YQUI::ui()->defaultSize( YD_HORIZ ) / 5 );
+    _sideBar->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred ) ); // hor/vert
+
+    //
+    // Steps
+    //
+    
+    QLabel * steps = new QLabel( "- Step 1\n- Step 2\n- Step 3\n  ...\n- Step n", _sideBar );
+    CHECK_PTR( steps );
+
+    _sideBar->addTab( steps, _( "Steps" ) );
+    steps->setPaletteBackgroundColor( bg );
+    // steps->setPaletteForegroundColor( webGreenFG );
+    steps->setFont( QFont( "Helvetica", 12 ) );
+    steps->setMargin( 10 );
+    
+    steps->setAlignment( Qt::AlignLeft | Qt::AlignTop );
+    steps->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred ) ); // hor/vert
+
+    //
+    // Help
+    //
+
+    QTextBrowser * _helpBrowser = new QTextBrowser( _sideBar );
+    CHECK_PTR( _helpBrowser );
+
+    _sideBar->addTab( _helpBrowser, _( "Help" ) );
+    
+    _helpBrowser->setMimeSourceFactory( 0 );
+    _helpBrowser->setFont( YQUI::ui()->currentFont() );
+    _helpBrowser->installEventFilter( this );
+    _helpBrowser->setTextFormat( Qt::RichText );
+    _helpBrowser->setMargin( 4 );
+
+    _helpBrowser->setText( "<p>This is a help text.</p><p>It should be helpful.</p>" );
+    
 
     //
     // Work area (contains client area and button box)
