@@ -93,7 +93,7 @@ inline void NCstyleInit_linux( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextBIT, 14848 );
   attrset->setAttr( NCstyle::ProgbarCh, 7968 );
   attrset->setAttr( NCstyle::ProgbarBgch, 16160 );
-  attrset->setAttr( NCstyle::TextCursor, 7936 );
+  attrset->setAttr( NCstyle::TextCursor, 7936|A_BLINK );
   // InfoStyle
   attrset = &styleSet[NCstyle::InfoStyle].getAttrLocal();
   attrset->setAttr( NCstyle::DialogBorder, 5888 );
@@ -155,7 +155,7 @@ inline void NCstyleInit_linux( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextBIT, 14592|A_BOLD );
   attrset->setAttr( NCstyle::ProgbarCh, 7968 );
   attrset->setAttr( NCstyle::ProgbarBgch, 16160 );
-  attrset->setAttr( NCstyle::TextCursor, 7936 );
+  attrset->setAttr( NCstyle::TextCursor, 7936|A_BLINK );
   // WarnStyle
   attrset = &styleSet[NCstyle::WarnStyle].getAttrLocal();
   attrset->setAttr( NCstyle::DialogBorder, 3840 );
@@ -217,7 +217,7 @@ inline void NCstyleInit_linux( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextBIT, 14592|A_BOLD );
   attrset->setAttr( NCstyle::ProgbarCh, 7968 );
   attrset->setAttr( NCstyle::ProgbarBgch, 16160 );
-  attrset->setAttr( NCstyle::TextCursor, 7936 );
+  attrset->setAttr( NCstyle::TextCursor, 7936|A_BLINK );
   // PopupStyle
   attrset = &styleSet[NCstyle::PopupStyle].getAttrLocal();
   attrset->setAttr( NCstyle::DialogBorder, 14080 );
@@ -279,6 +279,6 @@ inline void NCstyleInit_linux( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextBIT, 14592|A_BOLD );
   attrset->setAttr( NCstyle::ProgbarCh, 7968 );
   attrset->setAttr( NCstyle::ProgbarBgch, 16160|A_BOLD );
-  attrset->setAttr( NCstyle::TextCursor, 7936 );
+  attrset->setAttr( NCstyle::TextCursor, 7936|A_BLINK );
 }
 #endif // NCstyle_linux_h
