@@ -1,4 +1,21 @@
 -------------------------------------------------------------------
+Mon Sep  9 02:20:37 CEST 2002 - sh@suse.de
+
+- V 2.6.15
+
+Package manager changes:
+
+- Really ignore conflicts when user chooses so
+- Auto dependency check on startup
+- "Ignore All" button in dependency conflict dialog
+- Show InsNotify / DelNotify
+- Search for provides / requires
+- Search immediately upon [Return]
+- Show pkgs without any RPM group in "zzz All"
+- Ignore WM_CLOSE for package selection
+- Prepared translation stuff  
+
+-------------------------------------------------------------------
 Fri Sep  6 17:13:10 CEST 2002 - sh@suse.de
 
 - V 2.6.14
