@@ -19,28 +19,26 @@
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
-#include <qpixmap.h>
-#include <qheader.h>
 
 #include <Y2PM.h>
 #include <y2pm/PMManager.h>
 
 #include "YQPkgRpmGroupTagsFilterView.h"
-#include "YUIQt.h"
 #include "YQi18n.h"
+#include "utf8.h"
 
 
 
-YQPkgRpmGroupTagsFilterView::YQPkgRpmGroupTagsFilterView( YUIQt *yuiqt, QWidget *parent )
+YQPkgRpmGroupTagsFilterView::YQPkgRpmGroupTagsFilterView( QWidget *parent )
     : QListView( parent )
-    , yuiqt(yuiqt)
 {
     y2milestone( "Creating group tags view" );
-    setFont( yuiqt->currentFont() );
 
     addColumn( _( "Package Groups" ) );
     setRootIsDecorated( true );
     cloneTree( Y2PM::packageManager().rpmGroupsTree()->root(), 0 );
+    new YQPkgRpmGroupTag( this, _( "zzz All" ),
+			  Y2PM::packageManager().rpmGroupsTree()->root() );
 
     connect( this, SIGNAL( selectionChanged( QListViewItem * ) ),
 	     this, SLOT  ( filter()                            ) );
@@ -83,7 +81,7 @@ void
 YQPkgRpmGroupTagsFilterView::selectSomething()
 {
     QListViewItem * item = firstChild();
-    
+
     if ( item )
     {
 	setSelected( item, true );
@@ -110,13 +108,13 @@ YQPkgRpmGroupTagsFilterView::filter()
 	std::string selectedRpmGroupPath = Y2PM::packageManager().rpmGroup( selection()->rpmGroup() );
 	y2debug( "Searching packages that match '%s'", selectedRpmGroupPath.c_str() );
 #endif
-	
+
 	PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
 	while ( it != Y2PM::packageManager().end() )
 	{
 	    PMSelectablePtr selectable = *it;
-	    
+
 	    // Multiple instances of this package may or may not be in the same
 	    // RPM group, so let's check both the installed version (if there
 	    // is any) and the candidate version.
@@ -124,14 +122,14 @@ YQPkgRpmGroupTagsFilterView::filter()
 	    // Make sure we emit only one filterMatch() signal if both exist
 	    // and both are in the same RPM group. We don't want multiple list
 	    // entries for the same package!
-	    
+
 	    bool match =
-		check( selectable->installedObj() ) || 
-		check( selectable->candidateObj() );  
+		check( selectable->installedObj() ) ||
+		check( selectable->candidateObj() );
 
 	    // If there is neither an installed nor a candidate package, check
-	    // any other instance.  
-	    
+	    // any other instance.
+
 	    if ( ! match			&&
 		 ! selectable->installedObj()	&&
 		 ! selectable->candidateObj()     )
@@ -169,7 +167,7 @@ YQPkgRpmGroupTagsFilterView::check( PMPackagePtr pkg )
 	y2debug( "Found match for pkg '%s'", name.c_str() );
 	// DEBUG
 #endif
-	
+
 	emit filterMatch( pkg );
 	return true;
     }
@@ -187,7 +185,7 @@ YQPkgRpmGroupTagsFilterView::selection() const
 
     if ( ! item )
 	return 0;
-    
+
     return dynamic_cast<YQPkgRpmGroupTag *> ( selectedItem() );
 }
 
@@ -202,7 +200,7 @@ YQPkgRpmGroupTag::YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView * 	parentFilterV
     , _filterView( parentFilterView )
     , _rpmGroup( rpmGroup )
 {
-    setText( 0,  QString::fromUtf8( _rpmGroup->value().translation().c_str() ) );
+    setText( 0,  fromUTF8( _rpmGroup->value().translation().c_str() ) );
 }
 
 
@@ -213,7 +211,18 @@ YQPkgRpmGroupTag::YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView * 	parentFilterV
     , _filterView( parentFilterView )
     , _rpmGroup( rpmGroup )
 {
-    setText( 0,  QString::fromUtf8( _rpmGroup->value().translation().c_str() )  );
+    setText( 0,  fromUTF8( _rpmGroup->value().translation().c_str() )  );
+}
+
+
+YQPkgRpmGroupTag::YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView * 	parentFilterView,
+				    const QString &			rpmGroupName,
+				    YStringTreeItem *			rpmGroup	)
+    : QListViewItem( parentFilterView )
+    , _filterView( parentFilterView )
+    , _rpmGroup( rpmGroup )
+{
+    setText( 0,  rpmGroupName );
 }
 
 

@@ -27,7 +27,6 @@
 #include <y2util/YRpmGroupsTree.h>
 
 
-class YUIQt;
 class YQPkgRpmGroupTag;
 
 
@@ -40,7 +39,7 @@ public:
     /**
      * Constructor
      **/
-    YQPkgRpmGroupTagsFilterView( YUIQt *yuiqt, QWidget *parent );
+    YQPkgRpmGroupTagsFilterView( QWidget *parent );
 
     /**
      * Destructor
@@ -112,11 +111,6 @@ protected:
      * Returns true if there is a match, false otherwise or if 'pkg' is 0.
      **/
     bool check( PMPackagePtr pkg );
-
-    
-    // Data members
-
-    YUIQt		* yuiqt;
 };
 
 
@@ -138,6 +132,14 @@ public:
 		      YQPkgRpmGroupTag *		parentGroupTag,
 		      YStringTreeItem *			rpmGroup );
 
+    /**
+     * Constructor for toplevel RPM group tags via STL string
+     * (for special cases like "zzz All")
+     **/
+    YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView * 	parentFilterView,
+		      const QString &			rpmGroupName,
+		      YStringTreeItem *			rpmGroup	);
+    
     /**
      * Destructor
      **/
