@@ -4,6 +4,7 @@ Fri Apr  2 14:52:12 CEST 2004 - gs@suse.de
 - V 2.9.19
 - deactivate logging (bug #37768)
 - bugfix in RichText for <pre> tag
+- license changed to GPL
 
 -------------------------------------------------------------------
 Fri Mar 26 15:45:38 CET 2004 - gs@suse.de
