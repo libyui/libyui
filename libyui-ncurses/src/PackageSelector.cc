@@ -338,7 +338,7 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
 	return false;
     }
 
-    if ( !pkgPtr || !pkgPtr->hasSelectable() )
+    if ( !(pkgPtr && pkgPtr->hasSelectable()) )
     {
 	NCERR << "Package pointer not valid" << endl;
 	return false;
@@ -1345,6 +1345,8 @@ bool PackageSelector::SelectionHandler( const NCursesEvent&  event )
     else if ( event.selection->compare( PkgNames::LoadSel() ) == YO_EQUAL )
     {
 	filePopup->loadFromFile();
+	updatePackageList();
+	showDiskSpace();
     }
 
     if ( packageList )
