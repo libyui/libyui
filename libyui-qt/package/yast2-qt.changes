@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Sep 10 21:31:55 CEST 2002 - sh@suse.de
+
+- Fixed sort by source RPM status in pkg list 
+
+-------------------------------------------------------------------
 Tue Sep 10 21:01:37 CEST 2002 - sh@suse.de
 
 - Change packager priorities: Prefer candidateObj over installedObj
