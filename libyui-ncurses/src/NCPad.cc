@@ -176,9 +176,11 @@ bool NCPad::handleInput( wint_t key )
     break;
 
   case KEY_LEFT:
-    ScrlLeft();
+  case KEY_SLEFT:
+      ScrlLeft();
     break;
   case KEY_RIGHT:
+  case KEY_SRIGHT:
     ScrlRight();
     break;
 
