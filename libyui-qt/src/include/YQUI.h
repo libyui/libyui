@@ -226,7 +226,7 @@ public:
     /**
      * Returns the current product name
      * ("SuSE Linux", "SuSE Linux Enterprise Server", "United Linux", etc.)
-     * as QString. 
+     * as QString.
      **/
     QString YQUI::productName() const;
 
@@ -333,7 +333,24 @@ protected:
      * Load translations for Qt's predefined dialogs like file selection box
      * etc.
      **/
-    void YQUI::loadPredefinedQtTranslations();
+    void loadPredefinedQtTranslations();
+
+    /**
+     * Determine good fonts based on defaultsize geometry and set
+     * _auto_normal_font_size and _auto_heading_font_size accordingly.
+     * Caches the values, so it's safe to call this repeatedly.
+     **/
+    void pickAutoFonts();
+
+    /**
+     * Returns 'true' if the UI  automatically picks fonts, disregarding Qt
+     * standard settings.
+     *
+     * This makes sense in the installation system where
+     * the display DPI cannot reliably be retrieved and thus Qt uses random
+     * font sizes based on that random DPI.
+     **/
+    bool autoFonts() const { return _auto_fonts; }
 
 
     /*** Widget creation methods, all reimplemented from YUI ***/
@@ -370,7 +387,7 @@ protected:
     YWidget * createTree		( YWidget * parent, YWidgetOpt & opt, const YCPString & label);
     YWidget * createPkgSpecial		( YWidget * parent, YWidgetOpt & opt, const YCPString & subwidget );
 
-    
+
     /*** Widget creation methods for optional widgets, all reimplemented from YUI ***/
 
     bool 	hasBarGraph();
@@ -392,6 +409,9 @@ protected:
 					  const YCPString & 	filename,
 					  int 			expectedSize );
 
+    bool	hasDumbTab();
+    YWidget *	createDumbTab		( YWidget *		parent,
+					  YWidgetOpt & 		opt );
 
     bool 	hasSlider();
     YWidget *	createSlider		( YWidget *		parent,
@@ -400,7 +420,6 @@ protected:
 					  int 			minValue,
 					  int 			maxValue,
 					  int 			initialValue );
-
 
     bool 	hasPartitionSplitter();
     YWidget *	createPartitionSplitter( YWidget *		parent,
@@ -415,7 +434,7 @@ protected:
 					 const YCPString &	newPartLabel,
 					 const YCPString &	freeFieldLabel,
 					 const YCPString &	newPartFieldLabel );
-    
+
     bool	hasWizard();
     YWidget * 	createWizard		( YWidget * parent, YWidgetOpt & opt,
 					  const YCPValue & backButtonId,	const YCPString & backButtonLabel,
@@ -553,11 +572,11 @@ protected:
      **/
     void processCommandLineArgs( int argc, char **argv );
 
-    
+
     //
     // Data members
     //
-    
+
     /**
      * Assume presence of a window manager
      */
@@ -637,6 +656,12 @@ protected:
     QFont _heading_font;
     bool _loaded_heading_font;
 
+    /**
+     * For auto fonts
+     **/
+    bool _auto_fonts;
+    int  _auto_normal_font_size;
+    int  _auto_heading_font_size;
 
     /**
      * Window manager close events blocked?
@@ -679,7 +704,7 @@ protected:
      **/
     QTranslator _qtTranslations;
 
-    
+
     /**
      * Parent widget for embedding in a KPart or KCMShell
      **/

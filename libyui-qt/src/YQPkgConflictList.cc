@@ -591,7 +591,7 @@ YQPkgConflict::addUndoResolution( QY2CheckListItem * parent )
 	    if(!_conflict.is_downgrade_from.is_unspecified())
 	    {
 		// %1 package name, %2 version
-		text = ( _( "Downgrade %1 to version %2" ) ).arg(
+		text = ( _( "Downgrade %1 to Version %2" ) ).arg(
 		    _shortName+"-"+_conflict.is_downgrade_from.asString().c_str() ).arg(
 			_conflict.edition.asString().c_str());
 		_undo_status = PMSelectable::S_Update;

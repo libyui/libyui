@@ -14,7 +14,7 @@
 
   Authors:	Mathias Kettner <kettner@suse.de>
 		Stefan Hundhammer <sh@suse.de>
-		
+
   Maintainer:	Stefan Hundhammer <sh@suse.de>
 
 /-*/
@@ -63,6 +63,9 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     , _do_exit_loop( false )
     , _loaded_current_font( false )
     , _loaded_heading_font( false )
+    , _auto_fonts( false )
+    , _auto_normal_font_size( -1 )
+    , _auto_heading_font_size( -1 )
     , _wm_close_blocked( false )
     , _auto_activate_dialogs( true )
 {
@@ -76,7 +79,7 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     screenShotNameTemplate 	= "";
 
     qInstallMsgHandler( qMessageHandler );
-    
+
 #if ! KYAST_EMBEDDING
     _running_embedded = ( getenv( "KCMYAST2_CALL" ) != 0 );
 #endif
@@ -85,10 +88,10 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     if ( ! runningEmbedded() )
 #endif
 	new QApplication( argc, argv );
-    
+
     // Qt keeps track to a global QApplication in qApp.
     CHECK_PTR( qApp );
-	
+
     qApp->installEventFilter( this );
     processCommandLineArgs( argc, argv );
 
@@ -101,7 +104,7 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     }
     else if ( _have_wm )
     {
-	// Get _default_size via -geometry command line option
+	// Get _default_size via -geometry command line option (if set)
 
 	QWidget * dummy = new QWidget();
 	dummy->hide();
@@ -109,23 +112,24 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 	_default_size = dummy->size();
 
 
-        // Set min defaultsize
+        // Set min defaultsize or figure one out if -geometry was not used
 
 	if ( _default_size.width()  < 640 ||
 	     _default_size.height() < 480   )
 	{
-	    // 640x480 is the absolute minimum, but let's go for 800x600 if we can
+	    int x_res = qApp->desktop()->width();
+	    int y_res = qApp->desktop()->height();
 
-	    if ( qApp->desktop()->width()  >= 800 &&
-		 qApp->desktop()->height() >= 600  )
+	    if ( x_res >= 1024 && y_res >= 768  )
 	    {
-		_default_size.setWidth ( 800 );
-		_default_size.setHeight( 600 );
+		_default_size.setWidth ( max( (int) (x_res * 0.60), 800 ) );
+		_default_size.setHeight( max( (int) (y_res * 0.60), 600 ) );
 	    }
 	    else
 	    {
-		_default_size.setWidth ( 640 );
-		_default_size.setHeight( 480 );
+		// Use what is available
+
+		_default_size = qApp->desktop()->availableGeometry().size();
 	    }
 
 	    y2debug( "Assuming default size of %dx%d",
@@ -153,9 +157,9 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 	y2debug( "Suppressing WM decorations for toplevel window" );
 	wflags |= WStyle_Customize | WStyle_NoBorder;
     }
-    
+
     // if we have a window already, delete it
-    if (_main_win) 
+    if (_main_win)
 	delete _main_win;
 
     if ( _embeddingParent )
@@ -180,26 +184,26 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 
     // Set window title
 
-#if 0
-    if ( ! runningEmbedded() )
-#endif
-    {
-	QString title( "YaST2" );
-	char hostname[ MAXHOSTNAMELEN+1 ];
-	if ( gethostname( hostname, sizeof( hostname )-1 ) == 0 )
-	{
-	    hostname[ sizeof( hostname ) -1 ] = '\0'; // make sure it's terminated
+    QString title( "YaST2" );
+    char hostname[ MAXHOSTNAMELEN+1 ];
 
-	    if ( strlen( hostname ) > 0 &&
-		 strcmp( hostname, "(none)" ) != 0 &&
-		 strcmp( hostname, "linux"  ) != 0 )
+    if ( gethostname( hostname, sizeof( hostname )-1 ) == 0 )
+    {
+	hostname[ sizeof( hostname ) -1 ] = '\0'; // make sure it's terminated
+
+	if ( strlen( hostname ) > 0 )
+	{
+	    if ( ( strcmp( hostname, "(none)" ) != 0 &&
+		   strcmp( hostname, "linux"  ) != 0 )
+		 || runningEmbedded() )
 	    {
 		title += "@";
 		title += hostname;
 	    }
 	}
-	_main_win->setCaption( title );
     }
+
+    _main_win->setCaption( title );
 
 
     // Hide the main window unless we are running embedded. The first call to
@@ -231,13 +235,13 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 
     connect( & _user_input_timer,	SIGNAL( timeout()          ),
 	     this,		  	SLOT  ( userInputTimeout() ) );
-    
+
     connect( & _busy_cursor_timer,	SIGNAL( timeout()	),
 	     this,			SLOT  ( busyCursor()	) );
 
     if ( macro_file )
 	playMacro( macro_file );
-    
+
     topmostConstructorHasFinished();
 }
 
@@ -249,7 +253,7 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 	for( int i=0; i < argc; i++ )
 	{
 	    QString opt = argv[i];
-	    
+
 	    y2milestone ("Qt argument: %s", argv[i]);
 
 	    // Normalize command line option - accept "--xy" as well as "-xy"
@@ -261,7 +265,9 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 	    else if ( opt == QString( "-fullscreen"	) )	_fullscreen 			= true;
 	    else if ( opt == QString( "-noborder" 	) )	_decorate_toplevel_window	= false;
 	    else if ( opt == QString( "-debug-embedding") )	_debug_embedding		= true;
-	    // --macro is handled by YUI_component 
+	    else if ( opt == QString( "-auto-font"	) )	_auto_fonts			= true;
+	    else if ( opt == QString( "-auto-fonts"	) )	_auto_fonts			= true;
+	    // --macro is handled by YUI_component
 	    else if ( opt == QString( "-help"  ) )
 	    {
 		fprintf( stderr,
@@ -271,6 +277,7 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 			 "--no-wm       assume no window manager is running\n"
 			 "--fullscreen  use full screen for `opt(`defaultsize) dialogs\n"
 			 "--noborder    no window manager border for `opt(`defaultsize) dialogs\n"
+			 "--auto-fonts	automatically pick fonts, disregard Qt standard settings\n"
 			 "--help        this help text\n"
 			 "\n"
 			 "--macro <macro-file>        play a macro right on startup\n"
@@ -554,7 +561,7 @@ void YQUI::closeDialog( YDialog * dialog )
 void YQUI::easterEgg()
 {
     y2milestone( "Starting easter egg..." );
-    
+
 
 #if 0
     system( "sudo dd if=/dev/urandom bs=1024 count=1024 of=/dev/fb0" );

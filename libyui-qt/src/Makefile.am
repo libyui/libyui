@@ -23,6 +23,7 @@ libpy2qt_la_LDFLAGS = -version-info 2:0
 liby2qt_la_LDFLAGS = -version-info 2:0
 
 libpy2qt_la_LIBADD =			\
+	-lyui				\
 	-L$(QTLIBDIR) -lqt-mt		\
 	-lX11 -lXext -lSM -lICE		\
 	-ly2pm
@@ -48,6 +49,7 @@ liby2qt_la_SOURCES = 				\
 	YQComboBox.cc				\
 	YQDialog.cc				\
 	YQDownloadProgress.cc			\
+	YQDumbTab.cc				\
 	YQEBunny.cc				\
 	YQEmpty.cc				\
 	YQFrame.cc				\
@@ -131,6 +133,7 @@ BUILT_SOURCES =					\
 	YQComboBox.moc				\
 	YQDialog.moc				\
 	YQDownloadProgress.moc			\
+	YQDumbTab.moc				\
 	YQEmpty.moc				\
 	YQFrame.moc				\
 	YQGenericButton.moc			\
@@ -203,6 +206,7 @@ YQColoredLabel.o YQColoredLabel.lo:				YQColoredLabel.moc
 YQComboBox.o YQComboBox.lo:					YQComboBox.moc
 YQDialog.o YQDialog.lo:						YQDialog.moc
 YQDownloadProgress.o YQDownloadProgress.lo:			YQDownloadProgress.moc
+YQDumbTab.o YQDumbTab.lo:					YQDumbTab.moc
 YQEmpty.o YQEmpty.lo:						YQEmpty.moc
 YQFrame.o YQFrame.lo:						YQFrame.moc
 YQGenericButton.o YQGenericButton.lo:				YQGenericButton.moc
@@ -273,6 +277,7 @@ YQColoredLabel.moc:			include/YQColoredLabel.h
 YQComboBox.moc:				include/YQComboBox.h
 YQDialog.moc: 				include/YQDialog.h
 YQDownloadProgress.moc:			include/YQDownloadProgress.h
+YQDumbTab.moc:				include/YQDumbTab.h
 YQEmpty.moc:				include/YQEmpty.h
 YQFrame.moc:				include/YQFrame.h
 YQGenericButton.moc:			include/YQGenericButton.h

@@ -83,6 +83,7 @@ using std::string;
 #define STEPS_HEADING_SPACING		8
 #define MENU_BAR_MARGIN			8
 
+#define USE_FIXED_STEP_FONTS		0
 #define STEPS_FONT_FAMILY		"Sans Serif"
 #define STEPS_FONT_SIZE			11
 #define STEPS_HEADING_FONT_SIZE		13
@@ -138,6 +139,8 @@ YQWizard::YQWizard( QWidget *		parent,
     _stepsList.setAutoDelete( true );
     _stepsIDs.setAutoDelete( false );	// Only for one of both!
 
+    setFont( YQUI::ui()->currentFont() );	// Make sure qApp->font() is initialized
+
 
     //
     // Load graphics
@@ -146,7 +149,6 @@ YQWizard::YQWizard( QWidget *		parent,
     if ( ! runningEmbedded() )
     {
 	loadGradientPixmaps();
-	_gradientCenterColor = pixelColor( _bottomGradientPixmap, 0, 0 );
 
 	if ( _stepsEnabled )
 	    loadStepsIcons();
@@ -182,6 +184,15 @@ YQWizard::~YQWizard()
 
 void YQWizard::layoutTitleBar( QWidget * parent )
 {
+    if ( ! highColorDisplay() )		// 8 bit display or worse?
+    {
+	// No colorful title bar, just a spacing to match the one at the bottom.
+	addVSpacing( parent, WORK_AREA_BOTTOM_MARGIN );
+
+	return;
+    }
+
+
     QHBox * titleBar = new QHBox( parent );
     CHECK_PTR( titleBar );
     setGradient( titleBar, _titleBarGradientPixmap );
@@ -298,6 +309,9 @@ void YQWizard::layoutStepsPanel()
 
     if ( ! pixmap.isNull() )
 	helpButton->setPixmap( pixmap );
+
+    if ( _bottomGradientPixmap.isNull() )
+	bottomGradient->setFixedHeight( helpButton->sizeHint().height() + WORK_AREA_BOTTOM_MARGIN );
 
     connect( helpButton, SIGNAL( clicked()  ),
 	     this,	 SLOT  ( showHelp() ) );
@@ -430,9 +444,14 @@ void YQWizard::updateSteps()
 	    QLabel * label = new QLabel( step->name(), stepsParent );
 	    CHECK_PTR( label );
 	    label->setAlignment( Qt::AlignLeft | Qt::AlignTop );
+
+#if USE_FIXED_STEP_FONTS
 	    QFont font( STEPS_FONT_FAMILY, STEPS_HEADING_FONT_SIZE );
 	    font.setWeight( QFont::Bold );
 	    label->setFont( font );
+#else
+	    label->setFont( YQUI::ui()->headingFont() );
+#endif
 
 	    step->setNameLabel( label );
 	    _stepsGrid->addMultiCellWidget( label,
@@ -459,7 +478,12 @@ void YQWizard::updateSteps()
 	    QLabel * nameLabel = new QLabel( step->name(), stepsParent );
 	    CHECK_PTR( nameLabel );
 	    nameLabel->setAlignment( Qt::AlignLeft | Qt::AlignTop );
+
+#if USE_FIXED_STEP_FONTS
 	    nameLabel->setFont( QFont( STEPS_FONT_FAMILY, STEPS_FONT_SIZE ) );
+#else
+	    nameLabel->setFont( YQUI::ui()->currentFont() );
+#endif
 
 	    step->setNameLabel( nameLabel );
 	    _stepsGrid->addWidget( nameLabel, row, nameCol );
@@ -576,10 +600,15 @@ void YQWizard::layoutHelpPanel()
     _helpBrowser->setTextFormat( Qt::RichText );
     _helpBrowser->setMargin( 4 );
 
-    QPixmap bgPixmap( PIXMAP_DIR "help-background.png" );
+    if ( highColorDisplay() )
+    {
+	// Set fancy help browser background pixmap
 
-    if ( ! bgPixmap.isNull() )
-	_helpBrowser->setPaletteBackgroundPixmap( bgPixmap );
+	QPixmap bgPixmap( PIXMAP_DIR "help-background.png" );
+
+	if ( ! bgPixmap.isNull() )
+	    _helpBrowser->setPaletteBackgroundPixmap( bgPixmap );
+    }
 
 
 
@@ -619,6 +648,9 @@ void YQWizard::layoutHelpPanel()
 
 	QGridLayout * grid = centerAtBottom( buttonParent, button, WORK_AREA_BOTTOM_MARGIN );
 	setBottomCroppedGradient( buttonParent, _bottomGradientPixmap, grid->sizeHint().height() );
+
+	if ( _bottomGradientPixmap.isNull() )
+	    buttonParent->setFixedHeight( button->sizeHint().height() + WORK_AREA_BOTTOM_MARGIN );
 
 
 	if ( _treeEnabled )
@@ -693,6 +725,9 @@ void YQWizard::layoutTreePanel()
 
     QGridLayout * grid = centerAtBottom( buttonParent, button, WORK_AREA_BOTTOM_MARGIN );
     setBottomCroppedGradient( buttonParent, _bottomGradientPixmap, grid->sizeHint().height() );
+
+    if ( _bottomGradientPixmap.isNull() )
+	buttonParent->setFixedHeight( button->sizeHint().height() + WORK_AREA_BOTTOM_MARGIN );
 
     connect( button, SIGNAL( clicked()  ),
 	     this,   SLOT  ( showHelp() ) );
@@ -780,7 +815,7 @@ void YQWizard::sendTreeEvent( QListViewItem * listViewItem )
 	YQWizard::TreeItem * item = dynamic_cast<YQWizard::TreeItem *> ( listViewItem );
 
 	if ( item && ! item->id().isEmpty() )
-	    sendEvent( YCPString( (const char *) item->id() ) );
+	    sendEvent( YCPString( toUTF8( item->id() ) ) );
     }
 }
 
@@ -856,14 +891,19 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
 
     _dialogIcon = new QLabel( headingHBox );
     CHECK_PTR( _dialogIcon );
+    _dialogIcon->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) ); // hor/vert
 
     addHSpacing( headingHBox );
 
     _dialogHeading = new QLabel( headingHBox );
     CHECK_PTR( _dialogHeading );
     _dialogHeading->setFont( YQUI::ui()->headingFont() );
+    _dialogHeading->setAlignment( Qt::AlignLeft | Qt::WordBreak );
+    _dialogHeading->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
 
+#if 0
     addHStretch( headingHBox );
+#endif
     addVSpacing( workArea );
 
 #if USE_SEPARATOR
@@ -1018,17 +1058,39 @@ void YQWizard::layoutButtonBox()
 
 void YQWizard::loadGradientPixmaps()
 {
-    _topGradientPixmap		= QPixmap( PIXMAP_DIR "top-gradient.png"	);
-    _bottomGradientPixmap	= QPixmap( PIXMAP_DIR "bottom-gradient.png"	);
-    _titleBarGradientPixmap	= QPixmap( PIXMAP_DIR "title-bar-gradient.png"	);
+    if ( highColorDisplay() )
+    {
+	_topGradientPixmap	= QPixmap( PIXMAP_DIR "top-gradient.png"	);
+	_bottomGradientPixmap	= QPixmap( PIXMAP_DIR "bottom-gradient.png"	);
+	_titleBarGradientPixmap	= QPixmap( PIXMAP_DIR "title-bar-gradient.png"	);
+	_gradientCenterColor = pixelColor( _bottomGradientPixmap, 0, 0 );
+    }
+    else // 8 bit display or worse - don't use gradients
+    {
+	// Gradient pixmaps remain empty. The respecive widgets will retain the
+	// default widget background (grey, depending on the widget theme).
+
+	// Use deault widget background (some shade of grey) for the center
+	// stretchable part of the side bar.
+	_gradientCenterColor = paletteBackgroundColor();
+    }
 }
 
 
 void YQWizard::loadStepsIcons()
 {
-    _stepCurrentColor	= pixelColor( QPixmap( PIXMAP_DIR "color-step-current.png" ), 0, 0 );
-    _stepToDoColor	= pixelColor( QPixmap( PIXMAP_DIR "color-step-todo.png"    ), 0, 0 );
-    _stepDoneColor	= pixelColor( QPixmap( PIXMAP_DIR "color-step-done.png"    ), 0, 0 );
+    if ( highColorDisplay() )
+    {
+	_stepCurrentColor	= pixelColor( QPixmap( PIXMAP_DIR "color-step-current.png" ), 0, 0 );
+	_stepToDoColor		= pixelColor( QPixmap( PIXMAP_DIR "color-step-todo.png"    ), 0, 0 );
+	_stepDoneColor		= pixelColor( QPixmap( PIXMAP_DIR "color-step-done.png"    ), 0, 0 );
+    }
+    else
+    {
+	_stepCurrentColor	= paletteForegroundColor();
+	_stepToDoColor		= paletteForegroundColor();
+	_stepDoneColor		= paletteForegroundColor();
+    }
 
     _stepCurrentIcon	= QPixmap( PIXMAP_DIR "step-current.png" );
     _stepToDoIcon	= QPixmap( PIXMAP_DIR "step-todo.png"	 );
@@ -1173,6 +1235,13 @@ void YQWizard::destroyButtons()
 	delete _nextButton;
 	_nextButton = 0;
     }
+}
+
+
+
+bool YQWizard::highColorDisplay() const
+{
+    return QColor::numBitPlanes() > 8;
 }
 
 
@@ -1389,7 +1458,7 @@ void YQWizard::sendMenuEvent( int numID )
 {
     if ( numID >= 0 && numID < (int) _menuEntryIDs.size() )
     {
-	sendEvent( YCPString( (const char *) _menuEntryIDs[ numID ] ) );
+	sendEvent( YCPString( toUTF8( _menuEntryIDs[ numID ] ) ) );
     }
     else
     {
@@ -1458,6 +1527,9 @@ void YQWizard::setButtonLabel( YQWizardButton * button, const QString & newLabel
     {
 	button->setLabel( newLabel );
 
+	if ( YQUI::ui()->currentDialog() )
+	    YQUI::ui()->currentDialog()->checkShortcuts();
+
 	if ( newLabel.isEmpty() )
 	{
 	    button->hide();
@@ -1466,7 +1538,12 @@ void YQWizard::setButtonLabel( YQWizardButton * button, const QString & newLabel
 		_backButtonSpacer->hide();
 	}
 	else
+	{
 	    button->show();
+
+	    if ( button == _backButton && _backButtonSpacer )
+		_backButtonSpacer->show();
+	}
     }
 }
 

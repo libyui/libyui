@@ -410,7 +410,13 @@ protected:
      **/
     bool runningEmbedded() const { return _runningEmbedded; }
 
+    /**
+     * Returns 'true' if the application is running on a high-color display,
+     * i.e., on an X visual with more than 8 bit depth.
+     **/
+    bool YQWizard::highColorDisplay() const;
 
+    
     //
     // Wizard command mini-parser
     //

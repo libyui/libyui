@@ -31,6 +31,7 @@
 #include "YQColoredLabel.h"
 #include "YQDialog.h"
 #include "YQDownloadProgress.h"
+#include "YQDumbTab.h"
 #include "YQEmpty.h"
 #include "YQFrame.h"
 #include "YQImage.h"
@@ -345,6 +346,18 @@ YWidget * YQUI::createDownloadProgress	( YWidget *		parent,
 				   label,
 				   filename,
 				   expectedSize );
+}
+
+
+bool YQUI::hasDumbTab()
+{
+    return true;
+}
+
+YWidget * YQUI::createDumbTab		( YWidget *		parent,
+					  YWidgetOpt & 		opt )
+{
+    return new YQDumbTab( (QWidget *) ( parent->widgetRep() ), opt );
 }
 
 

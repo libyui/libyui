@@ -1,4 +1,64 @@
 -------------------------------------------------------------------
+Wed May 26 18:30:28 CEST 2004 - sh@suse.de
+
+- Improved support for low-color (<= 8 bit) displays (bug #40228):
+  Only use complex wizard pixmaps in high color modes 
+
+-------------------------------------------------------------------
+Wed May 12 16:47:32 CEST 2004 - sh@suse.de
+
+- Workaround for bug #35612: Layout problems with 800x600
+  Now using smaller fonts in 600x600: 12/14 instead of 14/16
+
+-------------------------------------------------------------------
+Thu May  6 16:44:10 CEST 2004 - sh@suse.de
+
+- Fixed bug #40071: Obsolete doc about making screen shots
+
+-------------------------------------------------------------------
+Tue May  4 19:07:41 CEST 2004 - sh@suse.de
+
+- Fixed bug #39846: Strange button layout after RestoreBackButton()
+- Fixed bug #39692: Wizard tree and menu item IDs returned in wrong encoding
+- V 2.9.24
+
+-------------------------------------------------------------------
+Tue May  4 16:10:22 CEST 2004 - gs@suse.de
+
+- messages from proof reading merged back 
+
+-------------------------------------------------------------------
+Fri Apr 30 13:48:01 CEST 2004 - sh@suse.de
+
+- Added new DumbTab widget
+- V 2.9.23 
+
+-------------------------------------------------------------------
+Tue Apr 20 14:21:14 CEST 2004 - mvidner@suse.cz
+
+- link against libyui to make loading from Perl work (#39192)
+- 2.9.22
+
+-------------------------------------------------------------------
+Wed Apr  7 16:00:09 CEST 2004 - sh@suse.de
+
+- V 2.9.21
+- Fixed bug #38603: Excessive wizard headings make buttons disappear
+
+-------------------------------------------------------------------
+Tue Apr  6 16:10:39 CEST 2004 - sh@suse.de
+
+- V 2.9.20
+- Fixed bug #36908: Dynamic font sizes during installation
+- Fixed bug #37001: Dynamic default window size based on resolution 
+
+-------------------------------------------------------------------
+Tue Apr  6 12:23:30 CEST 2004 - sh@suse.de
+
+- V 2.9.19
+- Fixed bug #38216: No shortcut check upon Wizard::Set???Button()
+
+-------------------------------------------------------------------
 Mon Apr  5 18:41:36 CEST 2004 - sh@suse.de
 
 - V 2.9.18

@@ -23,6 +23,7 @@ noinst_HEADERS =				\
 	YQComboBox.h				\
 	YQDialog.h				\
 	YQDownloadProgress.h			\
+	YQDumbTab.h				\
 	YQEBunny.h				\
 	YQEmpty.h				\
 	YQFrame.h				\

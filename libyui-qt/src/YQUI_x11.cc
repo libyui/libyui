@@ -124,7 +124,23 @@ const QFont &YQUI::currentFont()
 	_current_font.setRawName( "-gnu-unifont-medium-r-normal--16-160-75-75-p-80-iso10646-1" );
 	y2debug( "Loading default font: %s", (const char *) _current_font.rawName() );
 #else
-	_current_font = qApp->font();
+	if ( autoFonts() )
+	{
+	    pickAutoFonts();
+	    
+	    _current_font = QFont( "Sans Serif" );
+	    _current_font.setPixelSize( _auto_normal_font_size );
+	    _current_font.setWeight( QFont::Normal );
+
+	    y2milestone( "Loaded %d pixel font: %s", _auto_normal_font_size,
+			 (const char *) _current_font.toString() );
+	    
+	    qApp->setFont( _current_font, true );	// font, informWidgets
+	}
+	else
+	{
+	    _current_font = qApp->font();
+	}
 #endif
 	_loaded_current_font = true;
     }
@@ -147,12 +163,81 @@ const QFont &YQUI::headingFont()
 	_heading_font.setRawName( "-gnu-unifont-bold-r-normal--18-180-75-75-p-80-iso10646-1" );
 	y2debug( "Loading heading font: %s", (const char *) _heading_font.rawName() );
 #else
-	_heading_font = QFont( "Sans Serif", 14, QFont::Bold );
+	if ( autoFonts() )
+	{
+	    pickAutoFonts();
+	    
+	    _heading_font = QFont( "Sans Serif" );
+	    _heading_font.setPixelSize( _auto_heading_font_size );
+	    _heading_font.setWeight( QFont::Bold );
+	    
+	    y2milestone( "Loaded %d pixel bold font: %s", _auto_heading_font_size,
+			 (const char *) _heading_font.toString() );
+	}
+	else
+	{
+	    _heading_font = QFont( "Sans Serif", 14, QFont::Bold );
+	}
 #endif
 	_loaded_heading_font = true;
     }
 
     return _heading_font;
+}
+
+
+void YQUI::pickAutoFonts()
+{
+    if ( _auto_normal_font_size >= 0 )	// Use cached values
+	return;
+
+    int x = _default_size.width();
+    int y = _default_size.height();
+
+    int normal  = 10;
+    int heading	= 12;
+
+    if ( x >= 800 && y >= 600 )
+    {
+	normal	= 12;
+	heading	= 14;
+    }
+    
+    if ( x >= 1024 && y >= 768 )
+    {
+	normal	= 14;
+	heading	= 18;
+    }
+
+    if ( x >= 1280 && y >= 1024 )
+    {
+	normal	= 14;
+	heading	= 18;
+    }
+    
+    if ( x >= 1400 )
+    {
+	normal	= 16;
+	heading	= 20;
+    }
+
+    if ( x >= 1600 )
+    {
+	normal	= 18;
+	heading	= 24;
+    }
+
+    if ( x >= 2048 )	// Sounds futuristic? Just wait one or two years...
+    {
+	normal	= 20;
+	heading	= 28;
+    }
+
+    _auto_normal_font_size  = normal;
+    _auto_heading_font_size = heading;
+
+    y2milestone( "Selecting auto fonts - normal: %d, heading: %d (bold)",
+		 _auto_normal_font_size, _auto_heading_font_size );
 }
 
 
