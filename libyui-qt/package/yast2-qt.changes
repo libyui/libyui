@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Sep 10 21:01:37 CEST 2002 - sh@suse.de
+
+- Change packager priorities: Prefer candidateObj over installedObj
+  so the user gets to see his native language more often in pkg
+  descriptions (RPM DB is English only) 
+
+-------------------------------------------------------------------
 Tue Sep 10 20:06:11 CEST 2002 - sh@suse.de
 
 - V 2.6.18
