@@ -79,6 +79,20 @@ public slots:
      **/
     void resizeClientArea();
 
+    /**
+     * Show the current help text.
+     *
+     * This is useful only if it is obscured by any wizard steps, but it can
+     * safely be called at any time.
+     **/
+    void showHelp();
+
+    /**
+     * Show the current wizard steps, if there are any. If there are none,
+     * nothing happens.
+     **/
+    void showSteps();
+
     
 protected slots:
 
@@ -111,16 +125,6 @@ protected:
     void destroyButtons();
 
     /**
-     * Find a QTabWidget's QWidgetStack child to disable 3D frame effects.
-     *
-     * Queries the tab widget's children list to find the first QWidgetStack
-     * child and change its frame parameters.  This is only needed due to an
-     * oversight of the QTabWidget designer: There is no access to a
-     * QTabWidget's 3D properties.
-     **/
-    QWidgetStack * findWidgetStack( QTabWidget * tab );
-
-    /**
      * Send a wizard event with the specified ID.
      **/
     void sendEvent( YCPValue id );
@@ -131,9 +135,12 @@ protected:
     YCPString _abortButtonLabel;
     YCPString _nextButtonLabel;
 
-    QTabWidget *	_sideBar;
-    QWidgetStack * 	    _widgetStack;
-    QTextBrowser *	    _helpBrowser;
+    QWidgetStack *	_sideBar;
+    QVBox *		    _stepsPanel;
+    QPushButton	*		_helpButton;
+    QVBox *		    _helpPanel;
+    QTextBrowser *		_helpBrowser;
+    QPushButton *		_stepsButton;
 
     QVBox *		_clientArea;
     YQReplacePoint *	    _contentsReplacePoint;

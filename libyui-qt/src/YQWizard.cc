@@ -63,19 +63,18 @@ YQWizard::YQWizard( QWidget *		parent,
 {
     setWidgetRep( this );
 
-    // Official SuSE colors according to the corporate design;
-    // they all look horrible on-screen.
-
-    QColor suseColorLinux ( (int) (.45*255), (int) (.75*255), (int) (.10*255) );
-    QColor suseColorOcean ( (int) (0),       (int) (.30*255), (int) (.25*255) );
-    QColor suseColorJungle( (int) (.10*255), (int) (.60*255), (int) (.20*255) );
-    QColor suseColorOlive ( (int) (.20*255), (int) (.35*255), (int) (.10*255) );
+    _sideBar	= 0;
+    _stepsPanel	= 0;
+    _helpPanel	= 0;
 
     // The SuSE web site version of the corporate design colors
     QColor webGreenBG( 0x9c, 0xce, 0x9c );
     QColor webGreenFG( 0x31, 0x65, 0x00 );
 
-    QColor bg( webGreenBG );
+    QColor kenGrey( 0xE6, 0xE6, 0xE6 );
+
+    QColor bg( kenGrey );
+    QColor lightGreen( 0xA4, 0xC2, 0x6A );
 
 
     //
@@ -105,52 +104,46 @@ YQWizard::YQWizard( QWidget *		parent,
     // Side Bar
     //
 
-    _sideBar = new QTabWidget( hbox );
+    _sideBar = new QWidgetStack( hbox );
     CHECK_PTR( _sideBar );
-    _sideBar->setTabPosition( QTabWidget::Bottom );
+
     _sideBar->setMinimumWidth( YQUI::ui()->defaultSize( YD_HORIZ ) / 5 );
     _sideBar->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred ) ); // hor/vert
+    _sideBar->setPaletteBackgroundColor( bg );
     _sideBar->setMargin( 8 );
-    
-    _widgetStack = findWidgetStack( _sideBar );
-
-    if ( _widgetStack )
-    {
-	_widgetStack->setPaletteBackgroundColor( bg );
-	// Postponing widgetStack->setFrameStyle( QFrame::NoFrame );
-	// until the last tab is added - each call to QTabWidget::addTab()
-	// restores the 3D effects that we don't want here.
-    }
-
 
 
     //
     // Steps
     //
 
+    _stepsPanel = new QVBox( _sideBar );
+    CHECK_PTR( _stepsPanel );
+
+    _sideBar->addWidget( _stepsPanel );
+
     QLabel * steps = new QLabel(
-				"<font size=3>"
+				"<font size=3 color=#629900>"
 				"<b>Base Installation</b>"
 				"<ul>"
-				"<li>Language Selection<br>"
-				"<li>Basic Settings<br>"
-				"<li>Software Installation<br>"
+				"<li>Language<br>"
+				"<li>Installation Settings<br>"
+				"<li>Perform Installation<br>"
 				"</ul>"
 				"<b>Configuration</b>"
 				"<ul>"
 				"<li>Root Password"
 				"<li>Network"
 				"<li>Online Update"
-				"<li>User"
-				"<li>Clean up"
+				"<li>Users"
+				"<li>Clean Up"
 				"<li>Release Notes"
 				"<li>Device Configuration"
 				"</ul>"
 				"</font>",
-				_sideBar );
+				_stepsPanel );
     CHECK_PTR( steps );
 
-    _sideBar->addTab( steps, _( "Steps" ) );
     steps->setPaletteBackgroundColor( bg );
     steps->setFont( QFont( "Helvetica", 10 ) );
 
@@ -161,14 +154,25 @@ YQWizard::YQWizard( QWidget *		parent,
     steps->setAlignment( Qt::AlignLeft | Qt::AlignTop );
     steps->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred ) ); // hor/vert
 
+    _helpButton = new QPushButton( _( "Help" ), _stepsPanel );
+    CHECK_PTR( _helpButton );
+
+    connect( _helpButton, SIGNAL( clicked()  ),
+	     this,        SLOT  ( showHelp() ) );
+
+
     //
     // Help
     //
 
-    QTextBrowser * _helpBrowser = new QTextBrowser( _sideBar );
-    CHECK_PTR( _helpBrowser );
+    _helpPanel = new QVBox( _sideBar );
+    CHECK_PTR( _helpPanel );
 
-    _sideBar->addTab( _helpBrowser, _( "Help" ) );
+    _sideBar->addWidget( _helpPanel );
+
+
+    _helpBrowser = new QTextBrowser( _helpPanel );
+    CHECK_PTR( _helpBrowser );
 
     _helpBrowser->setMimeSourceFactory( 0 );
     _helpBrowser->setFont( YQUI::ui()->currentFont() );
@@ -183,13 +187,11 @@ YQWizard::YQWizard( QWidget *		parent,
 
     _helpBrowser->setText( "<p>This is a help text.</p><p>It should be helpful.</p>" );
 
+    _stepsButton = new QPushButton( _( "Steps" ), _helpPanel );
+    CHECK_PTR( _stepsButton );
 
-    // Disable 3D effects (they ruin the overall appearance) - but only after
-    // the last tab is added: Each call to QTabWidget::addTab() restores the 3D
-    // effects.
-
-    if ( _widgetStack )
-	_widgetStack->setFrameStyle( QFrame::NoFrame );
+    connect( _stepsButton, SIGNAL( clicked()   ),
+	     this,         SLOT  ( showSteps() ) );
 
 
     //
@@ -248,30 +250,8 @@ YQWizard::YQWizard( QWidget *		parent,
     _buttonBox->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
     _buttonBox->setMargin( 5 );
     layoutButtonBox();
-}
 
-
-QWidgetStack * YQWizard::findWidgetStack( QTabWidget * tab )
-{
-    // The author of QTabBar saw fit not to allow disabling or changing of any
-    // 3D effects or margins.
-    //
-    // But Qt generally provides access to any child widgets, so let's do the
-    // brute force approach and search the one and only QWidgetStack (derived
-    // from QFrame) widget that is responsible for those 3D effects. We can't
-    // use them here in this wizard - they would destroy the overall effect.
-    // Yes, strictly spoken, this is an ugly hack...
-
-    QWidgetStack * widgetStack = 0;
-    QObjectList * childrenList = tab->queryList( "QWidgetStack" );
-
-    if ( childrenList )
-    {
-	widgetStack = (QWidgetStack *) childrenList->first();
-	delete childrenList;
-    }
-
-    return widgetStack;
+    showSteps();
 }
 
 
@@ -369,6 +349,24 @@ void YQWizard::abortClicked()
 void YQWizard::nextClicked()
 {
     sendEvent( _nextButtonId );
+}
+
+
+void YQWizard::showHelp()
+{
+    if ( _sideBar && _helpPanel )
+    {
+	_sideBar->raiseWidget( _helpPanel );
+    }
+}
+
+
+void YQWizard::showSteps()
+{
+    if ( _sideBar && _stepsPanel )
+    {
+	_sideBar->raiseWidget( _stepsPanel );
+    }
 }
 
 
