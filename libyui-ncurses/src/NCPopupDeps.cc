@@ -344,7 +344,7 @@ bool NCPopupDeps::concretelyDependency( int index )
     if ( !error.unresolvable.empty() )
     {
 	bool require = false;
-	
+
 	list<PkgDep::RelInfo>::iterator it = error.unresolvable.begin();
 	while ( it != error.unresolvable.end() )
 	{
@@ -369,6 +369,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 			       PMObjectPtr() );	// null pointer	
 
 	    }
+	    
 	    ++it;
 	    i++;
 	}
@@ -383,15 +384,18 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    errorLabel2->setLabel(  YCPString( "" ) );
 	}
     }
-    else if ( !error.alternatives.empty() )
+    if ( !error.alternatives.empty() )
     {
+	PMObjectPtr lastPtr;
+
 	list<PkgDep::Alternative>::iterator it = error.alternatives.begin();
 	while ( it != error.alternatives.end() )
 	{
 	    pkgLine.clear();
 	    PMObjectPtr objPtr = (*it).solvable; 
 
-	    if ( objPtr )
+	    if ( objPtr
+		 && ( lastPtr != objPtr ) )
 	    {
 		pkgLine.push_back( objPtr->getSelectable()->name() );	// package name
 		pkgLine.push_back( objPtr->summary() );
@@ -400,63 +404,30 @@ bool NCPopupDeps::concretelyDependency( int index )
 			       pkgLine,
 			       i,		// the index
 			       objPtr );	// the corresponding package
+		lastPtr = (*it).solvable;	
 	    }
-
 	    ++it;
 	    i++;
 	}
 	errorLabel1->setLabel( YCPString(PkgNames::LabelAlternative().str()) );
 	errorLabel2->setLabel( YCPString( "" ) );
     }
-    else if ( !error.conflicts_with.empty() )
+    if ( !error.conflicts_with.empty() )
     {
+	PMObjectPtr lastPtr;
 	list<PkgDep::RelInfo>::iterator it = error.conflicts_with.begin();
+
 	while ( it != error.conflicts_with.end() )
 	{
 	    pkgLine.clear();
 	    PMObjectPtr causePtr = error.solvable;
-	    
 	    PMObjectPtr objPtr = (*it).solvable; 
 
-	    if ( objPtr )
-	    {
-		// do not show the dependency if the causing pointer == object pointer
-		if ( causePtr != objPtr )
-		{
-		    pkgLine.push_back( objPtr->getSelectable()->name() );	// package name
-		    pkgLine.push_back( objPtr->summary() );
-	    
-		    deps->addLine( objPtr->getSelectable()->status(), //  get the package status
-				   pkgLine,
-				   i,		// the index
-				   objPtr );	// the corresponding package
-		}
-	    }
-	    else
-	    {
-		pkgLine.push_back( (*it).name );
-		deps->addLine( PMSelectable::S_NoInst, // use status NOInst
-			       pkgLine,
-			       i,		// the index
-			       PMObjectPtr() );	// null pointer
-		
-	    }
-	    ++it;
-	    i++;
-	}
-	errorLabel1->setLabel( YCPString(PkgNames::LabelConflict1().str()) );
-	errorLabel2->setLabel( YCPString(PkgNames::LabelConflict2().str()) );
-    }
-    else if ( !error.referers.empty() )
-    {
-	list<PkgDep::RelInfo>::iterator it = error.referers.begin();
-	// set a limit !!! (e.g. glibc is required by .....)
-	while ( it != error.referers.end() && i < 100 )
-	{
-	    pkgLine.clear();
-	    PMObjectPtr objPtr = (*it).solvable; 
-
-	    if ( objPtr )
+            // do not show the dependency if the causing package equals this package
+	    // or it was the last package
+	    if ( objPtr
+		 && (causePtr != objPtr)
+		 && (lastPtr != objPtr ) )
 	    {
 		pkgLine.push_back( objPtr->getSelectable()->name() );	// package name
 		pkgLine.push_back( objPtr->summary() );
@@ -465,19 +436,66 @@ bool NCPopupDeps::concretelyDependency( int index )
 			       pkgLine,
 			       i,		// the index
 			       objPtr );	// the corresponding package
+		lastPtr = (*it).solvable;
 	    }
 	    else
 	    {
 		pkgLine.push_back( (*it).name );
-	    	pkgLine.push_back( PkgNames::NoAvailText().str() );
 		deps->addLine( PMSelectable::S_NoInst, // use status NOInst
 			       pkgLine,
 			       i,		// the index
 			       PMObjectPtr() );	// null pointer
 		
 	    }
+	    
 	    ++it;
 	    i++;
+	}
+	errorLabel1->setLabel( YCPString(PkgNames::LabelConflict1().str()) );
+	errorLabel2->setLabel( YCPString(PkgNames::LabelConflict2().str()) );
+    }
+    if ( !error.referers.empty()
+	 && error.conflicts_with.empty()
+	 && error.unresolvable.empty() )
+    {
+	PMObjectPtr lastPtr;
+	string lastName = "";
+	
+	list<PkgDep::RelInfo>::iterator it = error.referers.begin();
+
+	while ( it != error.referers.end() )
+	{
+	    pkgLine.clear();
+	    PMObjectPtr objPtr = (*it).solvable; 
+
+	    if ( objPtr
+		 && (lastPtr != objPtr) )
+	    {
+		pkgLine.push_back( objPtr->getSelectable()->name() );	// package name
+		pkgLine.push_back( objPtr->summary() );
+	    
+		deps->addLine( objPtr->getSelectable()->status(), //  get the package status
+			       pkgLine,
+			       i,		// the index
+			       objPtr );	// the corresponding package
+
+		lastPtr =  (*it).solvable;
+		lastName = objPtr->getSelectable()->name();
+	    }
+	    else if ( (*it).name != lastName )
+	    {
+		pkgLine.push_back( (*it).name );
+		deps->addLine( PMSelectable::S_NoInst, // use status NOInst
+			       pkgLine,
+			       i,		// the index
+			       PMObjectPtr() );	// null pointer
+
+		lastName = (*it).name; 
+	    }
+
+	    ++it;
+	    i++;
+	    
 	}
 	errorLabel1->setLabel( YCPString(PkgNames::LabelRequBy1().str()) );
 	errorLabel2->setLabel( YCPString(PkgNames::LabelRequBy2().str()) );	
