@@ -298,7 +298,7 @@ class PackageSelector
     * Checks and shows the dependencies
     * @param doit true: do the check, false: only check if auto check is on
     */
-    void showPackageDependencies ( bool doit );
+    bool showPackageDependencies ( bool doit );
 
     /**
     * Checks and shows the selectiondependencies

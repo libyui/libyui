@@ -1310,12 +1310,17 @@ bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 // 
 bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 {
-    bool exit = true;
+    bool closeDialog = true;
     
     if ( !youMode )
     {
 	// show the dependency popup
-	showPackageDependencies( true ); 	// true: do the check
+	if ( showPackageDependencies( true ) )
+	{
+	    // don't leave the package installation if the user has clicked on Cancel
+	    // in dependency popup because maybe he wants to change his choices
+	    closeDialog = false;
+	}
     }
 
     if ( diskspacePopup )
@@ -1324,7 +1329,7 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	message = diskspacePopup->checkDiskSpace();
 	if ( message != "" )
 	{
-	    // open the popup with the text
+	    // open the popup e.g. with the text "/usr needs 50 MB more disk space"
 	    NCPopupInfo spaceMsg( wpos( 2, 2 ),
 				  PkgNames::ErrorLabel().str(),
 				  YCPString( PkgNames::DiskSpaceError().str() + "<br>" + message ),
@@ -1333,20 +1338,16 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	    
 	    spaceMsg.setNiceSize( 50, 10 ); 
 	    NCursesEvent input = spaceMsg.showInfoPopup( );
-	    if ( input.result->compare( PkgNames::Cancel() ) == YO_EQUAL )
+
+	    if ( input == NCursesEvent::cancel )
 	    {
 		// disk space error warning returned `cancel
-		exit = false;
-		NCPkgTable * packageList = getPackageList();
-		if ( packageList )
-		{
-		    packageList->setKeyboardFocus();
-		}
+		closeDialog = false;
 	    }
 	}
     }
 
-    if ( exit )
+    if ( closeDialog )
     {
 	const_cast<NCursesEvent &>(event).result = YCPSymbol("accept", true); 
 	NCMIL <<  "OK button pressed - leaving package selection, starting installation" << endl;
@@ -1356,7 +1357,12 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
     }
     else
     {
-	// the user has decided not to leave the dialog
+	NCPkgTable * packageList = getPackageList();
+	if ( packageList )
+	{
+	    packageList->setKeyboardFocus();
+	}
+	// don't leave the dialog
 	return true;
     }
 }
@@ -1448,13 +1454,17 @@ bool PackageSelector::showConcretelySelDependency ( int index )
 //
 // Checks and shows the dependencies
 //
-void PackageSelector::showPackageDependencies ( bool doit )
+bool PackageSelector::showPackageDependencies ( bool doit )
 {
+    bool cancel = false;
+    
     if ( pkgDepsPopup
 	 && (doit || autoCheck) )
     {
-	pkgDepsPopup->showDependencies( );
+	cancel = pkgDepsPopup->showDependencies( );
     }
+
+    return cancel;
 }
 
 ///////////////////////////////////////////////////////////////////
