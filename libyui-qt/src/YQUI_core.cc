@@ -89,6 +89,7 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 #endif
 	new QApplication( argc, argv );
 
+    loadPredefinedQtTranslations();
     _normalPalette = qApp->palette();
     
     // Qt keeps track to a global QApplication in qApp.

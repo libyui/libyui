@@ -254,7 +254,7 @@ void YQUI::toggleVisionImpairedPalette()
     {
 	qApp->setPalette( visionImpairedPalette(),
 			  true );  // informWidgets
-	
+
 	_usingVisionImpairedPalette = true;
     }
 }
@@ -263,9 +263,9 @@ void YQUI::toggleVisionImpairedPalette()
 QPalette YQUI::visionImpairedPalette()
 {
     const QColor dark  ( 0x20, 0x20, 0x20 );
-	    
+
     QColorGroup activeCg;	// for the active window (the one with the keyboard focus)
-	    
+
     activeCg.setColor( QColorGroup::Background,		Qt::black 	);
     activeCg.setColor( QColorGroup::Foreground,		Qt::cyan	);
     activeCg.setColor( QColorGroup::Text,		Qt::cyan	);
@@ -276,7 +276,7 @@ QPalette YQUI::visionImpairedPalette()
     activeCg.setColor( QColorGroup::HighlightedText,	Qt::black	);
 
     QColorGroup inactiveCg;	// for other windows (those that don't have the keyboard focus)
-	    
+
     inactiveCg.setColor( QColorGroup::Background,	Qt::black 	);
     inactiveCg.setColor( QColorGroup::Foreground,	Qt::cyan	);
     inactiveCg.setColor( QColorGroup::Text,		Qt::cyan	);
@@ -285,7 +285,7 @@ QPalette YQUI::visionImpairedPalette()
     inactiveCg.setColor( QColorGroup::ButtonText,	Qt::green	);
 
     QColorGroup disabledCg;	// for disabled widgets
-	    
+
     disabledCg.setColor( QColorGroup::Background,	Qt::black 	);
     disabledCg.setColor( QColorGroup::Foreground,	Qt::gray	);
     disabledCg.setColor( QColorGroup::Text,		Qt::gray	);
@@ -383,8 +383,13 @@ bool YQUI::showEventFilter( QObject * obj, QEvent * ev )
 
 void YQUI::loadPredefinedQtTranslations()
 {
-    QString language = QTextCodec::locale();
     QString path = QT_LOCALEDIR;
+    QString language = QTextCodec::locale();
+
+    if ( language.length() > 2 )
+	language.remove( 2, language.length() - 2 );
+    QString trans_file = QString( "qt_%1.qm").arg( language );
+    
 
     if ( path.isEmpty() )
     {
@@ -393,12 +398,18 @@ void YQUI::loadPredefinedQtTranslations()
 	return;
     }
 
-    _qtTranslations.load( QString( "qt_" ) + language, path );
+    _qtTranslations.load( trans_file, path );
 
     if ( _qtTranslations.isEmpty() )
     {
-	y2warning( "Loading translations for predefined Qt dialogs failed" );
+	y2warning( "Can't load translations for predefined Qt dialogs from %s/%s",
+		   (const char *) path, (const char *) trans_file );
 	return;
+    }
+    else
+    {
+	y2milestone( "Loaded translations for predefined Qt dialogs from %s/%s",
+		     (const char *) path, (const char *) trans_file );
     }
 
     qApp->installTranslator( & _qtTranslations );
