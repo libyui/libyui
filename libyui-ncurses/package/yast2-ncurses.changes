@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jan 27 17:32:22 CET 2004 - sh@suse.de
+
+- V 2.9.4
+- Reasonable and consistent naming (new interpreter components etc.) 
+
+-------------------------------------------------------------------
 Fri Jan 16 15:59:46 CET 2004 - jsrain@suse.de
 
 - merged the new interpreter branch
