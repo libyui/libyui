@@ -56,6 +56,7 @@
 #include "YQTable.h"
 #include "YQTextEntry.h"
 #include "YQTree.h"
+#include "YQWizard.h"
 
 
 
@@ -286,6 +287,17 @@ YWidget * YQUI::createIntField		( YWidget *		parent,
 			   initialValue );
 }
 
+
+YWidget * YQUI::createWizard( YWidget *parent, YWidgetOpt & opt,
+			      const YCPValue & backButtonId,	const YCPString & backButtonLabel,
+			      const YCPValue & abortButtonId,	const YCPString & abortButtonLabel,
+			      const YCPValue & nextButtonId,	const YCPString & nextButtonLabel  )
+{
+    return new YQWizard( (QWidget *) ( parent->widgetRep() ), opt,
+			 backButtonId,	backButtonLabel,
+			 abortButtonId,	abortButtonLabel,
+			 nextButtonId,	nextButtonLabel  );
+}
 
 
 

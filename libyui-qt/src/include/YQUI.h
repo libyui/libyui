@@ -363,6 +363,10 @@ protected:
     YWidget * createTextEntry		( YWidget * parent, YWidgetOpt & opt, const YCPString & label, const YCPString & text);
     YWidget * createTree		( YWidget * parent, YWidgetOpt & opt, const YCPString & label);
     YWidget * createPkgSpecial		( YWidget * parent, YWidgetOpt & opt, const YCPString & subwidget );
+    YWidget * createWizard		( YWidget * parent, YWidgetOpt & opt,
+					  const YCPValue & backButtonId,	const YCPString & backButtonLabel,
+					  const YCPValue & abortButtonId,	const YCPString & abortButtonLabel,
+					  const YCPValue & nextButtonId,	const YCPString & nextButtonLabel  );
 
 
     /*** Widget creation methods for optional widgets, all reimplemented from YUI ***/
