@@ -229,9 +229,9 @@ void
 YQPkgYouPatchListItem::setStatus( PMSelectable::UI_Status newStatus )
 {
     YQPkgObjListItem::setStatus( newStatus );
-    
+
 #warning TODO: Activate patch
-    
+
     _youPatchList->sendUpdatePackages();
 }
 
@@ -243,6 +243,29 @@ YQPkgYouPatchListItem::cycleStatus()
 
     if ( status() == PMSelectable::S_Del )	// Can't delete YOU patches
 	setStatus( PMSelectable::S_KeepInstalled );
+}
+
+
+QString
+YQPkgYouPatchListItem::toolTip( int col )
+{
+    QString text;
+
+    if ( col == statusCol() )
+    {
+	text = YQPkgObjListItem::toolTip( col );
+    }
+    else
+    {
+	text = _pmYouPatch->kindLabel().c_str();
+
+	if ( ! text.isEmpty() )
+	    text += "\n";
+
+	text += _pmYouPatch->size().form().c_str();
+    }
+
+    return text;
 }
 
 

@@ -203,6 +203,14 @@ public:
     virtual void cycleStatus();
 
     /**
+     * Returns a tool tip text for a specific column of this item.
+     * 'column' is -1 if the mouse pointer is in the tree indentation area.
+     *
+     * Reimplemented from YQPkgObjList.
+     **/
+    virtual QString toolTip( int column );
+
+    /**
      * Comparison function used for sorting the list.
      * Returns:
      * -1 if this <  other
