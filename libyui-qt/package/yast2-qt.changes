@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Feb 10 15:30:27 CET 2003 - sh@suse.de
+
+- V 2.7.9
+- Don't force Unicode font
+- Show different icons in package manager for autoinstall etc. by
+  selection and autoinstall etc. by dependencies 
+
+-------------------------------------------------------------------
 Fri Jan 31 18:11:03 CET 2003 - sh@suse.de
 
 - V 2.7.8

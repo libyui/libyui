@@ -19,7 +19,8 @@
 
 /-*/
 
-#define USE_QT_CURSORS	1
+#define USE_QT_CURSORS		1
+#define FORCE_UNICODE_FONT	0
 
 #include <rpc/types.h>		// MAXHOSTNAMELEN
 #include <unistd.h>		// gethostname()
@@ -930,11 +931,15 @@ const QFont &YUIQt::currentFont()
 
     if ( ! loaded_current_font )
     {
+#if FORCE_UNICODE_FONT
 	current_font = QFont( "Helvetica", 12 );
 	current_font.setStyleHint( QFont::SansSerif, QFont::PreferBitmap );
 	current_font.setRawName( "-gnu-unifont-medium-r-normal--16-160-75-75-p-80-iso10646-1" );
-	loaded_current_font = true;
 	y2milestone( "Loading default font: %s", (const char *) current_font.rawName() );
+#else
+	current_font = qApp->font();
+#endif
+	loaded_current_font = true;
     }
 
     return current_font;
@@ -949,10 +954,14 @@ const QFont &YUIQt::headingFont()
 
     if ( ! loaded_heading_font )
     {
+#if FORCE_UNICODE_FONT
 	heading_font = QFont( "Helvetica", 14, QFont::Bold );
 	heading_font.setStyleHint( QFont::SansSerif, QFont::PreferBitmap );
 	heading_font.setRawName( "-gnu-unifont-bold-r-normal--18-180-75-75-p-80-iso10646-1" );
 	y2milestone( "Loading heading font: %s", (const char *) heading_font.rawName() );
+#else
+	heading_font = QFont( "Helvetica", 14, QFont::Bold );
+#endif
 	loaded_heading_font = true;
     }
 
