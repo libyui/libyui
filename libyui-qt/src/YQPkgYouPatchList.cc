@@ -44,6 +44,7 @@ YQPkgYouPatchList::YQPkgYouPatchList( QWidget *parent )
     addColumn( "" );					_statusCol	= numCol++;
     addColumn( _( "YaST Online Update Patch"	) );	_summaryCol	= numCol++;
     addColumn( _( "Kind"			) );	_kindCol	= numCol++;
+    addColumn( _( "Size"			) );	_sizeCol	= numCol++;
     setAllColumnsShowFocus( true );
 
     connect( this,	SIGNAL( selectionChanged	( QListViewItem * ) ),
