@@ -137,7 +137,7 @@ YQPkgObjList::clear()
 
 void
 YQPkgObjList::setCurrentStatus( PMSelectable::UI_Status	newStatus,
-				bool			selectNextItem )
+				bool			doSelectNextItem )
 {
     QListViewItem * listViewItem = selectedItem();
 
@@ -146,7 +146,7 @@ YQPkgObjList::setCurrentStatus( PMSelectable::UI_Status	newStatus,
 
     YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (listViewItem);
 
-    if ( item )
+    if ( item && item->editable() && _editable )
     {
 	if ( newStatus != item->status() )
 	{
@@ -154,11 +154,23 @@ YQPkgObjList::setCurrentStatus( PMSelectable::UI_Status	newStatus,
 	    emit statusChanged( item->pmObj() );
 	}
 
-	if ( selectNextItem && item->nextSibling() )
-	{
-	    item->setSelected( false );			// doesn't emit signals
-	    setSelected( item->nextSibling(), true );	// emits signals
-	}
+    }
+
+    if ( doSelectNextItem )
+	selectNextItem();
+}
+
+
+void
+YQPkgObjList::selectNextItem()
+{
+    QListViewItem * item = selectedItem();
+
+    if ( item && item->nextSibling() )
+    {
+	item->setSelected( false );			// Doesn't emit signals
+	ensureItemVisible( item->nextSibling() );	// Scroll if necessary
+	setSelected( item->nextSibling(), true );	// Emits signals
     }
 }
 
@@ -166,12 +178,12 @@ YQPkgObjList::setCurrentStatus( PMSelectable::UI_Status	newStatus,
 void
 YQPkgObjList::createActions()
 {
-    _actionSetCurrentInstall	   = createAction( YQIconPool::pkgInstall(),	   _( "&Install"	       ) );
-    _actionSetCurrentDontInstall   = createAction( YQIconPool::pkgNoInst(),	   _( "Do&n't install"	       ) );
-    _actionSetCurrentKeepInstalled = createAction( YQIconPool::pkgKeepInstalled(), _( "&Keep"		       ) );
-    _actionSetCurrentDelete	   = createAction( YQIconPool::pkgDel(),	   _( "&Delete"		       ) );
-    _actionSetCurrentUpdate	   = createAction( YQIconPool::pkgUpdate(),	   _( "&Update"		       ) );
-    _actionSetCurrentTaboo	   = createAction( YQIconPool::pkgTaboo(),	   _( "&Taboo - never install" ) );
+    _actionSetCurrentInstall	   = createAction( YQIconPool::pkgInstall(),	   _( "&Install"	       ) + " [+]" );
+    _actionSetCurrentDontInstall   = createAction( YQIconPool::pkgNoInst(),	   _( "Do&n't install"	       ) + " [-]" );
+    _actionSetCurrentKeepInstalled = createAction( YQIconPool::pkgKeepInstalled(), _( "&Keep"		       ) + " [<], [-]");
+    _actionSetCurrentDelete	   = createAction( YQIconPool::pkgDel(),	   _( "&Delete"		       ) + " [-]" );
+    _actionSetCurrentUpdate	   = createAction( YQIconPool::pkgUpdate(),	   _( "&Update"		       ) + " [>], [+]");
+    _actionSetCurrentTaboo	   = createAction( YQIconPool::pkgTaboo(),	   _( "&Taboo - never install" ) + " [!]");
 
     _actionSetCurrentAutoInstall   = createAction( YQIconPool::pkgAutoInstall(),   _( "(Auto-install)" ) );
     _actionSetCurrentAutoUpdate	   = createAction( YQIconPool::pkgAutoUpdate(),	   _( "(Auto-update)"  ) );
@@ -281,6 +293,92 @@ YQPkgObjList::updateActions( YQPkgObjListItem * item )
     }
 }
 
+
+void
+YQPkgObjList::keyPressEvent( QKeyEvent *event )
+{
+    if ( event )
+    {
+	QListViewItem * selectedListViewItem = selectedItem();
+
+	if ( selectedListViewItem )
+	{
+	    YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (selectedListViewItem);
+
+	    if ( item )
+	    {
+		if ( event->state() == 0 ||		// No Ctrl / Alt / Shift etc. pressed
+		     event->state() == Qt::Keypad )
+		{
+		    bool installed = item->pmObj()->hasInstalledObj();
+		    PMSelectable::UI_Status status = item->status();
+		    
+		    switch( event->key() )
+		    {
+			case Qt::Key_Space:		// Cycle
+			    item->cycleStatus();
+			    event->accept();
+			    return;
+				
+			case Qt::Key_Plus:		// Grab everything - install or update
+
+			    if ( installed )
+			    {
+				PMSelectable::UI_Status newStatus = PMSelectable::S_KeepInstalled;
+				    
+				if ( item->candidateIsNewer() )
+				    newStatus = PMSelectable::S_Update;
+				    
+				setCurrentStatus( newStatus );
+			    }
+			    else
+				setCurrentStatus( PMSelectable::S_Install );
+			    selectNextItem();
+			    event->accept();
+			    return;
+				
+			case Qt::Key_Minus:		// Get rid of everything - don't install or delete
+			    setCurrentStatus( installed ? PMSelectable::S_Del : PMSelectable::S_NoInst );
+			    selectNextItem();
+			    event->accept();
+			    return;
+				
+			case Qt::Key_Exclam:	// Taboo
+
+			    if ( ! installed )
+				setCurrentStatus( PMSelectable::S_Taboo );
+			    selectNextItem();
+			    event->accept();
+			    return;
+				
+			case Qt::Key_Greater:	// Update what is worth to be updated
+
+			    if ( installed && item->candidateIsNewer() )
+				setCurrentStatus( PMSelectable::S_Update );
+			    selectNextItem();
+			    event->accept();
+			    return;
+				
+			case Qt::Key_Less:		// Revert update
+
+			    if ( status == PMSelectable::S_Update ||
+				 status == PMSelectable::S_AutoUpdate )
+			    {
+				setCurrentStatus( PMSelectable::S_KeepInstalled );
+			    }
+			    selectNextItem();
+			    event->accept();
+			    return;
+		    }
+
+		    y2milestone( "Key code: %u (0x%x)", (unsigned) event->key(), (unsigned) event->key() );
+		}
+	    }
+	}
+    }
+    
+    QListView::keyPressEvent( event );
+}
 
 
 
@@ -437,39 +535,68 @@ YQPkgObjListItem::setStatusIcon()
 void
 YQPkgObjListItem::cycleStatus()
 {
+    if ( ! _editable || ! _pkgObjList->editable() )
+	return;
+    
     PMSelectable::UI_Status oldStatus = status();
     PMSelectable::UI_Status newStatus = oldStatus;
+    bool showInsNotify = false;
+    bool showDelNotify = false;
 
     if ( pmObj()->hasInstalledObj() )
     {
 	switch ( oldStatus )
 	{
-	    case PMSelectable::S_KeepInstalled:	newStatus = pmObj()->hasCandidateObj() && candidateIsNewer() ?
-						    PMSelectable::S_Update : PMSelectable::S_Del;
-						break;
-	    case PMSelectable::S_Update:	newStatus = PMSelectable::S_Del;		break;
-	    case PMSelectable::S_Del:		newStatus = PMSelectable::S_KeepInstalled;	break;
-#warning TODO: Show DELNOTIFY
-	    default:				newStatus = PMSelectable::S_KeepInstalled;	break;
+	    case PMSelectable::S_KeepInstalled:
+		newStatus = pmObj()->hasCandidateObj() && candidateIsNewer() ?
+		    PMSelectable::S_Update : PMSelectable::S_Del;
+		break;
+		
+	    case PMSelectable::S_Update:
+		newStatus = PMSelectable::S_Del;
+		showDelNotify = true;
+		break;
+		
+	    case PMSelectable::S_Del:
+		newStatus = PMSelectable::S_KeepInstalled;
+		break;
+		
+	    default:
+		newStatus = PMSelectable::S_KeepInstalled;
+		break;
 	}
     }
-    else	// pkg not installed
+    else	// Pkg not installed
     {
 	switch ( oldStatus )
 	{
-	    case PMSelectable::S_NoInst:	newStatus = pmObj()->hasCandidateObj() ?
-						    PMSelectable::S_Install : PMSelectable::S_NoInst;
-#warning TODO: Show INSNOTIFY
-						break;
-	    default:				newStatus = PMSelectable::S_NoInst;	break;
-
-		// Intentionally NOT cycling through YQPkgTaboo:
-		// This status is not common enough for that.
+	    case PMSelectable::S_NoInst:
+		if ( pmObj()->hasCandidateObj() )
+		{
+		    newStatus = PMSelectable::S_Install;
+		    showInsNotify = true;
+		}
+		else
+		{		
+		    newStatus = PMSelectable::S_NoInst;
+		}
+		break;
+		
+	    case PMSelectable::S_AutoInstall:
+		newStatus =  PMSelectable::S_Taboo;
+		break;
+		
+	    default:
+		newStatus = PMSelectable::S_NoInst;
+		break;
 	}
     }
 
     if ( oldStatus != newStatus )
     {
+#warning TODO: Show INSNOTIFY
+#warning TODO: Show DELNOTIFY
+	
 	setStatus( newStatus );
 	_pkgObjList->sendStatusChanged( pmObj() );
     }

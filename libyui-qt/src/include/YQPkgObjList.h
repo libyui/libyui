@@ -116,6 +116,12 @@ public slots:
     virtual void updateActions( YQPkgObjListItem * item );
 
     /**
+     * Select the next item, i.e. move the selection one item further down the
+     * list. 
+     **/
+    void selectNextItem();
+    
+    /**
      * Emit a statusChanged() signal for the specified PMObject.
      **/
     void sendStatusChanged( PMObjectPtr pmObj ) { emit statusChanged( pmObj ); }
@@ -156,6 +162,14 @@ signals:
 
 protected:
 
+    /**
+     * Event handler for keyboard input.
+     * Only very special keys are processed here.
+     *
+     * Reimplemented from QListView / QWidget.
+     */
+    void keyPressEvent( QKeyEvent * ev );
+    
     /**
      * Returns the context menu for items that are not installed.
      * Creates the menu upon the first call.
