@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Nov 23 16:28:41 CET 2004 - mlazar@suse.cz
+
+- KEY_RETURN open/close subtree in TreeWidget (#31154)
+
+-------------------------------------------------------------------
 Tue Nov 23 15:49:51 CET 2004 - mlazar@suse.cz
 
 - KEY_SPACE open/close subtree in TreeWidget (#31154)

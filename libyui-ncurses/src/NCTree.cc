@@ -112,6 +112,7 @@ class NCTreeLine : public NCTableLine {
 	  return 0;
 	break;
       case KEY_SPACE:
+      case KEY_RETURN:
       case '+':
       case '-':
 	break;
@@ -389,7 +390,6 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 {
   NCursesEvent ret = NCursesEvent::none;
   const YTreeItem * oldCurrentItem = getCurrentItem();
-
   if ( ! handleInput( key ) )
   {
     switch ( key ) {
