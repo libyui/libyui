@@ -145,28 +145,32 @@ void NCPopupDeps::createLayout( )
   opt.isHStretchable.setValue( true );
 
   // add the solve button
+  opt.key_Fxx.setValue( 10 );
   solveButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::SolveLabel().str()) );
   solveButton->setId( PkgNames::Solve () );
   hSplit->addChild( solveButton );
 
   NCSpacing * sp4 = new NCSpacing( hSplit, opt, 0.2, true, false );
   hSplit->addChild( sp4 );
-  
-  ignoreButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::IgnLabel().str()) );
-  ignoreButton->setId( PkgNames::Ignore() );
-  hSplit->addChild( ignoreButton );
+
+  opt.key_Fxx.setValue( 5 );
+  ignoreAllButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::IgnAllLabel().str()) );
+  ignoreAllButton->setId( PkgNames::IgnoreAll() );
+  hSplit->addChild( ignoreAllButton );
 
   NCSpacing * sp5 = new NCSpacing( hSplit, opt, 0.2, true, false );
   hSplit->addChild( sp5 );
 
-  ignoreAllButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::IgnAllLabel().str()) );
-  ignoreAllButton->setId( PkgNames::IgnoreAll() );
-  hSplit->addChild( ignoreAllButton );
+  opt.key_Fxx.setValue( 4 );
+  ignoreButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::IgnLabel().str()) );
+  ignoreButton->setId( PkgNames::Ignore() );
+  hSplit->addChild( ignoreButton );
 
   NCSpacing * sp6 = new NCSpacing( hSplit, opt, 0.2, true, false );
   hSplit->addChild( sp6 );
   
   // add the cancel button
+  opt.key_Fxx.setValue( 9 );
   cancelButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::CancelLabel().str()) );
   cancelButton->setId( PkgNames::Cancel () );
   hSplit->addChild( cancelButton );
@@ -206,7 +210,8 @@ void NCPopupDeps::showDependencies( )
 
     if ( !success )
     {
-	// fill the list with packages which have unresolved deps
+	// evaluate the result and fill the list with packages
+	// which have unresolved deps
 	evaluateErrorResult( pkgs, badList );
 
 	if ( !dependencies.empty() )
@@ -234,10 +239,9 @@ bool NCPopupDeps::evaluateErrorResult( NCPkgTable * table,
     // clear list
     table->itemsCleared ();
     
-    // fill the dependencies vector and create the list of "bad" packages
     list<PkgDep::ErrorResult>::const_iterator it = errorlist.begin();
 
-    
+    // fill the dependencies vector and create the list of "bad" packages
     while ( it != errorlist.end() )
     {
 	if ( !(*it).unresolvable.empty() )
@@ -319,6 +323,7 @@ bool NCPopupDeps::addDepsLine( NCPkgTable * table,
     {
 	return false;
     }
+
 }
 
 
@@ -376,7 +381,6 @@ bool NCPopupDeps::concretelyDependency( int index )
     unsigned int size = dependencies.size();
     vector<string> pkgLine;
     pkgLine.reserve(4);
-    bool labelSet = false;
     
     deps->itemsCleared();
 
@@ -386,10 +390,9 @@ bool NCPopupDeps::concretelyDependency( int index )
     // get the ErrorResult
     PkgDep::ErrorResult error = dependencies[index].first;
 	
-    NCMIL << "*** Showing: " << error << endl;	
+    NCDBG << "*** Showing: " << error << endl;	
 
-    // get the dependencies
-    
+    // show the corresponding dependency
     if ( dependencies[index].second == PkgNames::RequText().str() )
     {
 	list<PkgDep::RelInfo>::iterator it = error.unresolvable.begin();
@@ -459,9 +462,9 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    }
 	    ++it;
 	}
+	
 	errorLabel1->setLabel( YCPString(PkgNames::LabelConflict1().str()) );
 	errorLabel2->setLabel( YCPString(getLabelConflict2()) );
-	labelSet = true;
     }
     else if ( dependencies[index].second == PkgNames::RequByText().str()
 	 && error.conflicts_with.empty()
@@ -592,7 +595,8 @@ bool NCPopupDeps::postAgain()
 
     if ( currentId->compare( PkgNames::Cancel () ) == YO_EQUAL )
     {
-	return false;
+	// close the dialog 
+	postevent = NCursesEvent::cancel;
     }
     else if ( currentId->compare( PkgNames::Ignore () ) == YO_EQUAL )
     {
@@ -642,8 +646,8 @@ bool NCPopupDeps::postAgain()
 	
 	    ignoreDependencies[ignoreStr] = true;
 	}
-	
-	return false;
+	// close the dialog
+	postevent = NCursesEvent::cancel;
     }
     else if ( currentId->compare( PkgNames::Solve () ) == YO_EQUAL )
     {

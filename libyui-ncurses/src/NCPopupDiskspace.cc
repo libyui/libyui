@@ -102,6 +102,7 @@ void NCPopupDiskspace::createLayout( const YCPString & headline )
     split->addChild( partitions );
 
     // add the ok button
+    opt.key_Fxx.setValue( 10 );
     okButton = new NCPushButton( split, opt, YCPString(PkgNames::OKLabel().str()) );
     okButton->setId( PkgNames::OkButton () );
   
