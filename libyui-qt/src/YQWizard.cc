@@ -82,9 +82,6 @@ YQWizard::YQWizard( QWidget *		parent,
 	       backButtonId,	backButtonLabel,
 	       abortButtonId,	abortButtonLabel,
 	       nextButtonId,	nextButtonLabel	 )
-    , _backButtonLabel ( backButtonLabel  )
-    , _abortButtonLabel( abortButtonLabel )
-    , _nextButtonLabel ( nextButtonLabel  )
 {
     setWidgetRep( this );
     _stepsEnabled = opt.stepsEnabled.value();
@@ -127,18 +124,6 @@ YQWizard::YQWizard( QWidget *		parent,
     layoutSideBar( hBox );
     layoutWorkArea( hBox );
 
-
-
-
-#if 0
-
-    setDialogIcon( "/usr/share/YaST2/images/user_add.png" );
-    setDialogHeading( "Welcome to the YaST2 installation" );
-    setHelpText( "<p>This is a help text.</p>"
-		 "<p>It should be helpful.</p>"
-		 "<p>If it isn't helpful, it should rather not be called a "
-		 "<i>help text</i>.</p>" );
-#endif
     y2debug( "Constructor finished." );
 }
 
@@ -946,6 +931,7 @@ void YQWizard::setButtonLabel( QPushButton * button, const QString & newLabel )
 YCPValue YQWizard::command( const YCPTerm & cmd )
 {
 #define OK YCPBoolean( true );
+
 
     if ( isCommand( "SetHelpText   	  ( string )", cmd ) )	{ setHelpText	( qStringArg( cmd, 0 ) );		return OK; }
     if ( isCommand( "SetDialogIcon 	  ( string )", cmd ) )	{ setDialogIcon	( qStringArg( cmd, 0 ) );		return OK; }

@@ -272,11 +272,7 @@ protected:
     // Data members
     //
 
-    YCPString	_backButtonLabel;
-    YCPString	_abortButtonLabel;
-    YCPString	_nextButtonLabel;
     bool	_stepsEnabled;
-
 
     QPixmap	_titleBarGradientPixmap;
     QPixmap	_topGradientPixmap;
