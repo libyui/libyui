@@ -112,8 +112,9 @@ YQWizard::YQWizard( QWidget *		parent,
     _dialogHeading	= 0;
     _contents		= 0;
     _buttonBox		= 0;
-    _abortButton	= 0;
     _backButton		= 0;
+    _backButtonSpacer	= 0;
+    _abortButton	= 0;
     _nextButton		= 0;
 
     _stepsList.setAutoDelete( true );
@@ -722,6 +723,26 @@ void YQWizard::layoutButtonBox()
 
 
     //
+    // "Back" button
+    //
+
+    _backButton	 = new YQWizardButton( this, dialog, _buttonBox, _backButtonLabel, _backButtonId );
+    CHECK_PTR( _backButton );
+    addChild( _backButton );  // Enable shortcut checking for this button
+    connect( _backButton,	SIGNAL( clicked()	),
+	     this,		SLOT  ( backClicked()	) );
+
+    _backButtonSpacer = addHStretch( _buttonBox );
+    CHECK_PTR( _backButtonSpacer );
+
+    if ( _backButton->text().isEmpty() )
+    {
+	_backButton->hide();
+	_backButtonSpacer->hide();
+    }
+
+    
+    //
     // "Abort" button
     //
 
@@ -732,22 +753,6 @@ void YQWizard::layoutButtonBox()
 	     this,		SLOT  ( abortClicked()  ) );
 
     addHStretch( _buttonBox );
-
-
-    //
-    // "Back" button
-    //
-
-    _backButton	 = new YQWizardButton( this, dialog, _buttonBox, _backButtonLabel, _backButtonId );
-    CHECK_PTR( _backButton );
-    addChild( _backButton );  // Enable shortcut checking for this button
-    connect( _backButton,	SIGNAL( clicked()	),
-	     this,		SLOT  ( backClicked()	) );
-
-    addHSpacing( _buttonBox );
-
-    if ( _backButton->text().isEmpty() )
-	_backButton->hide();
 
 
     //
@@ -1214,7 +1219,12 @@ void YQWizard::setButtonLabel( YQWizardButton * button, const QString & newLabel
 	button->setLabel( newLabel );
 
 	if ( newLabel.isEmpty() )
+	{
 	    button->hide();
+
+	    if ( button == _backButton && _backButtonSpacer )
+		_backButtonSpacer->hide();
+	}
 	else
 	    button->show();
     }

@@ -417,8 +417,9 @@ protected:
     QLabel *		    _dialogHeading;
     YQAlignment *	    _contents;
     QHBox *		_buttonBox;
-    YQWizardButton *	    _abortButton;
     YQWizardButton *	    _backButton;
+    QWidget *		    _backButtonSpacer;
+    YQWizardButton *	    _abortButton;
     YQWizardButton *	    _nextButton;
 
     QPtrList<YQWizard::Step> 	_stepsList;
