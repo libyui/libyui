@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Nov 23 15:49:51 CET 2004 - mlazar@suse.cz
+
+- KEY_SPACE open/close subtree in TreeWidget (#31154)
+
+-------------------------------------------------------------------
 Mon Nov  1 10:06:52 CET 2004 - mvidner@suse.cz
 
 - Added pkgconfig support.

@@ -448,6 +448,7 @@ bool NCTreePad::handleInput( wint_t key )
   case '-':
   case KEY_IC:
   case KEY_DC:
+  case KEY_SPACE:
     if ( visItems[citem.L]->handleInput( key ) ) {
       UpdateFormat();
       setpos( wpos( citem.L, srect.Pos.C ) );
