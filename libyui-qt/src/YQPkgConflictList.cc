@@ -242,8 +242,10 @@ YQPkgConflict::formatLine()
 void
 YQPkgConflict::dumpLists()
 {
+#if 0
     if ( _conflict.state_change_not_possible ||
 	 ! _pmObj )
+#endif
     {
 	dumpList( this, _conflict.referers, LIST_SPLIT_THRESHOLD,
 		  _( "Required by:" ) );
