@@ -106,6 +106,7 @@ protected:
      **/
     QCheckBox * addStatusCheckBox( QWidget * 		parent,
 				   const QString & 	label,
+				   const QPixmap &	icon,
 				   bool 		initiallyChecked );
     
     // Data members

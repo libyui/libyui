@@ -32,6 +32,7 @@
 
 #include "YQPkgStatusFilterView.h"
 #include "YQPackageSelector.h"
+#include "YQIconPool.h"
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YUIQt.h"
@@ -64,18 +65,18 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     QVGroupBox * gbox = new QVGroupBox( _( "Show packages with status" ), this );
     CHECK_PTR( gbox );
 
-    _showDel		= addStatusCheckBox( gbox, _( "Delete"		), true );
-    _showInstall	= addStatusCheckBox( gbox, _( "Install"		), true );
-    _showUpdate		= addStatusCheckBox( gbox, _( "Update"		), true );
-    _showAutoDel	= addStatusCheckBox( gbox, _( "Auto-delete"	), true );
-    _showAutoInstall	= addStatusCheckBox( gbox, _( "Auto-install"	), true );
-    _showAutoUpdate	= addStatusCheckBox( gbox, _( "Auto-update"	), true );
-    _showTaboo		= addStatusCheckBox( gbox, _( "Taboo"		), true );
+    _showDel		= addStatusCheckBox( gbox, _( "Delete"	      ), YQIconPool::pkgDel(),		 true );
+    _showInstall	= addStatusCheckBox( gbox, _( "Install"	      ), YQIconPool::pkgInstall(),	 true );
+    _showUpdate		= addStatusCheckBox( gbox, _( "Update"	      ), YQIconPool::pkgAutoUpdate(),	 true );
+    _showAutoDel	= addStatusCheckBox( gbox, _( "Auto-delete"   ), YQIconPool::pkgAutoDel(),	 true );
+    _showAutoInstall	= addStatusCheckBox( gbox, _( "Auto-install"  ), YQIconPool::pkgAutoInstall(),	 true );
+    _showAutoUpdate	= addStatusCheckBox( gbox, _( "Auto-update"   ), YQIconPool::pkgUpdate(),	 true );
+    _showTaboo		= addStatusCheckBox( gbox, _( "Taboo"	      ), YQIconPool::pkgTaboo(),	 true );
 
     addVSpacing( gbox, 8 );
 
-    _showKeepInstalled	= addStatusCheckBox( gbox, _( "Keep"		), false );
-    _showNoInst		= addStatusCheckBox( gbox, _( "Don't install"	), false );
+    _showKeepInstalled	= addStatusCheckBox( gbox, _( "Keep"	      ), YQIconPool::pkgKeepInstalled(), false );
+    _showNoInst		= addStatusCheckBox( gbox, _( "Don't install" ), YQIconPool::pkgNoInst(),	 false );
 
     addVStretch( this );
 
@@ -92,7 +93,7 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     addHStretch( hbox );
 
     connect( _refreshButton,	SIGNAL( clicked() ),
-	     this,	    	SLOT  ( filter()  ) );
+	     this,		SLOT  ( filter()  ) );
 
     for ( int i=0; i < 6; i++ )
 	addVStretch( this );
@@ -109,11 +110,15 @@ YQPkgStatusFilterView::~YQPkgStatusFilterView()
 QCheckBox *
 YQPkgStatusFilterView::addStatusCheckBox( QWidget *		parent,
 					  const QString &	label,
+					  const QPixmap & 	icon,
 					  bool			initiallyChecked )
 {
     QCheckBox * checkBox = new QCheckBox( label, parent );
     CHECK_PTR( checkBox );
     checkBox->setChecked( initiallyChecked );
+#if 0
+    checkBox->setIconSet( icon );
+#endif
 
     connect( checkBox,	SIGNAL( clicked() ),
 	     this,	SLOT  ( filter()  ) );
