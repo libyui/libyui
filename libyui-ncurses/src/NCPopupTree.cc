@@ -244,7 +244,7 @@ void NCPopupTree::cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClo
     
     while ( child )
     {
-	NCMIL << "TRANSLATION: " << child->value().translation() << endl;
+	NCDBG << "TRANSLATION: " << child->value().translation() << endl;
 	clone = addItem( parentClone,
 			 YCPString( child->value().translation() ),
 			 child,
