@@ -64,7 +64,11 @@ NCSelectionBox::~NCSelectionBox()
 long NCSelectionBox::nicesize( YUIDimension dim )
 {
   wsze sze = ( biglist ) ? pad->tableSize() + 2 : wGetDefsze();
-  return dim == YD_HORIZ ? sze.W : sze.H;
+  if (dim == YD_HORIZ) {
+    return sze.W > (int)(labelWidht()+2) ? sze.W : (labelWidht()+2);
+  } else {
+    return sze.H;
+  }
 }
 
 ///////////////////////////////////////////////////////////////////

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Sep  7 14:40:40 CEST 2004 - mlazar@suse.cz
+
+- fixed nicesize in SelectionBox
+
+-------------------------------------------------------------------
 Tue Sep  7 14:15:15 CEST 2004 - mlazar@suse.cz
 
 - fixed Bugzilla Bug 27296 - provider name displayed wrong 
