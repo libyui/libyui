@@ -29,6 +29,7 @@
 #include <qcheckbox.h>
 #include <qcursor.h>
 #include <qdialog.h>
+#include <qfiledialog.h>
 #include <qhbox.h>
 #include <qhgroupbox.h>
 #include <qlabel.h>
@@ -536,11 +537,8 @@ YQPackageSelector::addMenus()
 
     if ( ! _youMode )
     {
-#warning NOT IMPLEMENTED YET: Load status (waiting for package manager function)
-	_fileMenu->insertItem( _( "&Load..." ),	this, SLOT( notImplemented() ) );
-
-#warning NOT IMPLEMENTED YET: Save status (waiting for package manager function)
-	_fileMenu->insertItem( _( "Save &As..." ),	this, SLOT( notImplemented() ) );
+	_fileMenu->insertItem( _( "&Import..." ),	this, SLOT( pkgImport() ) );
+	_fileMenu->insertItem( _( "&Export..." ),	this, SLOT( pkgExport() ) );
 
 	_fileMenu->insertSeparator();
     }
@@ -591,7 +589,7 @@ YQPackageSelector::addMenus()
 
     if ( _pkgList )
     {
-	_extrasMenu->insertItem( _( "Export &Package List To Text File" ), _pkgList, SLOT( askExportList() ) );
+	_extrasMenu->insertItem( _( "Export &Package List to Text File" ), _pkgList, SLOT( askExportList() ) );
 	_extrasMenu->insertSeparator();
     }
 
@@ -822,6 +820,36 @@ press <b>Cancel</b> now and deselect some packages.\
     return YQPkgDiskUsageWarningDialog::diskUsageWarning( msg,
 							  100, _("C&ontinue anyway"), _("&Cancel") );
 
+}
+
+
+void
+YQPackageSelector::pkgExport()
+{
+    QString filename = YUIQt::yuiqt()->askForSaveFileName( "user.sel",		// startsWith
+							   "*.sel",		// filter
+							   _( "Save package list" ) );
+    if ( ! filename.isEmpty() )
+    {
+	notImplemented();
+#warning NOT IMPLEMENTED YET: Save status (waiting for package manager function)
+    }
+}
+
+
+void
+YQPackageSelector::pkgImport()
+{
+    QString filename = 	QFileDialog::getOpenFileName( "user.sel",			// startsWith
+						      "*.sel",				// filter
+						      this,				// parent
+						      0,				// name
+						      _( "Load package list" ) );	// caption
+    if ( ! filename.isEmpty() )
+    {
+	notImplemented();
+#warning NOT IMPLEMENTED YET: Load status (waiting for package manager function)
+    }
 }
 
 

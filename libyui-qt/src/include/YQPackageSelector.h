@@ -137,6 +137,16 @@ public slots:
     int checkDiskUsage();
 
     /**
+     * Export all current selection/package states
+     **/
+    void pkgExport();
+
+    /**
+     * Import selection/package states
+     **/
+    void pkgImport();
+
+    /**
      * Close processing and abandon changes
      **/
     void reject();
