@@ -963,7 +963,7 @@ YQPackageSelector::accept()
 		 " have been changed due to dependency resolving:" )
 	    + "<p>";
 
-	if ( YQPkgChangesDialog::showChangesDialog( msg, _( "&Install" ), _( "&Back" ) )
+	if ( YQPkgChangesDialog::showChangesDialog( msg, _( "C&ontinue" ), _( "&Cancel" ) )
 	     == QDialog::Rejected )
 	    return;
     }
