@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Feb 28 12:34:31 CET 2003 - sh@suse.de
+
+- Fixed bug #24388: YQFrame repaint one pixel off in both dimensions
+
+-------------------------------------------------------------------
 Thu Feb 27 18:03:03 CET 2003 - sh@suse.de
 
 - Fixed bug #24445: Missing status update when importing pkg list 

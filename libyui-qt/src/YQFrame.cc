@@ -49,8 +49,8 @@ YQFrame::setSize ( long newwidth, long newheight )
 {
     resize ( newwidth, newheight );
 
-    long newChildWidth  = max ( 0L, newwidth  - 2 * frameWidth() );
-    long newChildHeight = max ( 0L, newheight - frameWidth() - fontMetrics().height() );
+    long newChildWidth  = max ( 0L, newwidth  - 2 * frameWidth() - 1 );
+    long newChildHeight = max ( 0L, newheight - frameWidth() - fontMetrics().height() - 1 );
 
     if ( numChildren() > 0 )
 	YContainerWidget::child(0)->setSize (newChildWidth, newChildHeight);
@@ -73,11 +73,11 @@ long YQFrame::nicesize ( YUIDimension dim )
 
     if ( dim == YD_HORIZ )
     {
-	niceSize = max(childNiceSize, (long)(10 + fontMetrics().width(title()))) + 2 * frameWidth();
+	niceSize = max(childNiceSize, (long)(10 + fontMetrics().width(title()))) + 2 * frameWidth() + 1;
     }
     else
     {
-	niceSize = childNiceSize + frameWidth() + fontMetrics().height();
+	niceSize = childNiceSize + frameWidth() + fontMetrics().height() + 1;
     }
 
     return niceSize;
