@@ -119,7 +119,7 @@ YQPkgConflictDialog::~YQPkgConflictDialog()
 QSize
 YQPkgConflictDialog::sizeHint() const
 {
-    return QSize( 500, 450 );
+    return QSize( 550, 450 );
 }
 
 

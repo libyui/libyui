@@ -78,6 +78,7 @@ pkginclude_HEADERS =				\
 	checklist_on.xpm			\
 	del.xpm					\
 	del_disabled.xpm			\
+	delete_conflict.xpm			\
 	install.xpm				\
 	install_disabled.xpm			\
 	keepinstalled.xpm			\
@@ -89,8 +90,8 @@ pkginclude_HEADERS =				\
 	stop.xpm				\
 	taboo.xpm				\
 	taboo_disabled.xpm			\
-	update.xpm				\
 	unresolvable_conflict.xpm		\
+	update.xpm				\
 	update_disabled.xpm
 
 
