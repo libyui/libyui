@@ -200,7 +200,7 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
 			       const PMObjectPtr & objPtr,
 			       bool singleChange )
 {
-    if ( !packager || !objPtr )
+    if ( !packager || !objPtr || !objPtr->hasSelectable() )
 	return false;
 
     list<string> notify;
@@ -258,6 +258,7 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
 	}
 	else if ( tableType == T_Patches )
 	{
+	    // show the download size for all selected patches
 	    packager->showDownloadSize();
 	}
 
@@ -500,16 +501,21 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr )
 	    {
 		instVersion = pkgPtr->getInstalledObj()->edition().asString();
 	    }
+	    else
+	    {
+		instVersion = " - - - ";	// package not installed
+	    }
 	    
-	    // in case of YOU patches: always show the version of the package
-	    // which is contained in the patch
+	    // in case of YOU patches: show the version of the package which
+	    // is contained in the patch
 	    version = pkgPtr->edition().asString();
    	    pkgLine.push_back( version );
 
-	    if ( Y2PM::instTarget().numPackages() > 0 )
-	    {
-		pkgLine.push_back( instVersion );	// installed version
-	    }
+	    // if ( Y2PM::instTarget().numPackages() > 0 )
+	    // doesn't make sense for YOU mode because there are always installed packages
+	    // -> show installed version or - - -
+	    pkgLine.push_back( instVersion );
+
    	    pkgLine.push_back( pkgPtr->summary() );  	// short description
 	    
 	    status = pkgPtr->getSelectable()->status(); // the package status
