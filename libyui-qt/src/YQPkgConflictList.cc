@@ -18,6 +18,7 @@
 
 
 #include <qpainter.h>
+#include <qpixmap.h>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
@@ -26,6 +27,7 @@
 #include <y2pm/PMObject.h>
 
 #include "YQPkgConflictList.h"
+#include "YQIconPool.h"
 
 #include "YUIQt.h"
 #include "YQi18n.h"
@@ -134,6 +136,7 @@ void
 YQPkgConflict::formatLine()
 {
     QString text;
+    QPixmap icon = YQIconPool::normalPkgConflict();
 
     // Generic conflict with package %1
     // text = ( _( "%1 conflict" ) ).arg( _shortName );
@@ -144,15 +147,18 @@ YQPkgConflict::formatLine()
 	if ( needAlternative() )
 	{
 	    // Select one from a number of functionalities (Window manager etc.)
+	    // e.g., "Select window manager"
 	    text = ( _( "Select %1" ) ).arg( _shortName );
 	    setTextColor( QColor( 0, 0, 0xC0 ) );
+	    icon = YQIconPool::selectPkgConflict();
 	}
 	else
 	{
 	    // (Pseudo) package / functionality %1 missing, e.g.,
-	    // "libfoo.so.1.0 not available", "Window manager not available"
+	    // "libfoo.so.1.0 not available"
 	    text = ( _( "%1 not available" ) ).arg( _fullName );
 	    setTextColor( Qt::red );
+	    icon = YQIconPool::unresolvablePkgConflict();
 	}
     }
     else
@@ -172,12 +178,14 @@ YQPkgConflict::formatLine()
 		case PMSelectable::S_Taboo:
 		    // Package %1 is set to taboo, yet other packages require it
 		    text = ( _( "Taboo package %1 is required by other packages" ) ).arg( _shortName );
+		    icon = YQIconPool::tabooPkgConflict();
 		    break;
 
                 case PMSelectable::S_AutoDel:
                 case PMSelectable::S_Del:
 		    // Package %1 is marked for deletion, yet other packages require it
 		    text = ( _( "Deleting %1 breaks other packages" ) ).arg( _shortName );
+		    icon = YQIconPool::deletePkgConflict();
 		    break;
 
 		default: // leave generic text
@@ -194,22 +202,24 @@ YQPkgConflict::formatLine()
     }
 
     setText( 0, text );
+    setPixmap( 0, icon );
 }
 
 
 void
 YQPkgConflict::dumpLists()
 {
-    if ( _conflict.state_change_not_possible )
+    if ( _conflict.state_change_not_possible ||
+	 ! _pmObj )
     {
-	dumpList( this, _conflict.referers, LIST_SPLIT_THRESHOLD, "",
+	dumpList( this, _conflict.referers, LIST_SPLIT_THRESHOLD,
 		  _( "Required by:" ) );
     }
 
-    dumpList( this, _conflict.unresolvable, LIST_SPLIT_THRESHOLD, "", 
+    dumpList( this, _conflict.unresolvable, LIST_SPLIT_THRESHOLD,
 	      _( "Unresolved Reqirements:" ) );
 
-    dumpList( this, _conflict.conflicts_with, LIST_SPLIT_THRESHOLD, "",
+    dumpList( this, _conflict.conflicts_with, LIST_SPLIT_THRESHOLD,
 	      _( "Conflicts with:" ) );
 }
 
@@ -218,7 +228,6 @@ void
 YQPkgConflict::dumpList( QListViewItem * 	parent,
 			 PkgDep::RelInfoList &	list,
 			 int			splitThreshold,
-			 const QString &	itemPrefix,
 			 const QString & 	header )
 {
     if ( ! parent )
@@ -241,7 +250,7 @@ YQPkgConflict::dumpList( QListViewItem * 	parent,
 
     bool doSplit	= splitThreshold > 1 && list.size() > (unsigned) splitThreshold + 3;
     bool didSplit	= false;
-    int count		= 0;
+    int  count		= 0;
     PkgDep::RelInfoList_const_iterator it = list.begin();
 
 
@@ -250,7 +259,7 @@ YQPkgConflict::dumpList( QListViewItem * 	parent,
 	if ( doSplit && ! didSplit && ++count > splitThreshold )
 	{
 	    // Split list
-	    
+
 	    QString text = ( _( "%1 more..." ) ).arg( list.size() - count );
 	    QY2ListViewItem * sublist = new QY2ListViewItem( parent, text, true );
 	    didSplit = true;
@@ -261,15 +270,14 @@ YQPkgConflict::dumpList( QListViewItem * 	parent,
 		parent = sublist;
 	    }
 	}
-	    
-	QString contents = itemPrefix;
-	std::string rel = (*it).name;
-	rel += " " + _( "requires" ) + " ";
-	rel += PkgRelation::toString( (*it).rel );
-	
-	contents += rel.c_str();
-	new QY2ListViewItem( parent, contents, true );
 
+	std::string pkg1 = (*it).name;
+	std::string pkg2 = PkgRelation::toString( (*it).rel );
+	new QY2ListViewItem( parent,
+			     // "somepackage requires libfoo.so > 1.2"
+			     // "somepackage requires otherpackage"
+			     ( _( "%1 requires %2" ) ).arg( pkg1.c_str() ).arg( pkg2.c_str() ),
+			     true );
 	++it;
     }
 }
