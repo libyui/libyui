@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Mar 17 15:07:36 CET 2004 - sh@suse.de
+
+- Fixed bug #35645: Wizard layout looks strange
+  added HVCenter() around ReplacePoint()
+
+-------------------------------------------------------------------
 Wed Mar 17 00:35:10 CET 2004 - nashif@suse.de
 
 - #if 0 not working hasSmallDecorations completely

@@ -54,6 +54,7 @@
 #include "YQi18n.h"
 #include "YQUI.h"
 #include "YQDialog.h"
+#include "YQAlignment.h"
 #include "YQReplacePoint.h"
 #include "YQEmpty.h"
 #include "YQLabel.h"
@@ -93,27 +94,27 @@ YQWizard::YQWizard( QWidget *		parent,
 {
     setWidgetRep( this );
     _stepsEnabled = opt.stepsEnabled.value();
-    _verboseCommands		= false;
-    _protectNextButton		= false;
-    _stepsDirty			= false;
-    _direction 			= YQWizard::Forward;
+    _verboseCommands	= false;
+    _protectNextButton	= false;
+    _stepsDirty		= false;
+    _direction 		= YQWizard::Forward;
 
-    _sideBar			= 0;
-    _stepsPanel			= 0;
-    _stepsBox			= 0;
-    _stepsGrid			= 0;
-    _helpButton			= 0;
-    _helpPanel			= 0;
-    _helpBrowser		= 0;
-    _stepsButton		= 0;
-    _clientArea			= 0;
-    _dialogIcon			= 0;
-    _dialogHeading		= 0;
-    _contentsReplacePoint	= 0;
-    _buttonBox			= 0;
-    _abortButton		= 0;
-    _backButton			= 0;
-    _nextButton			= 0;
+    _sideBar		= 0;
+    _stepsPanel		= 0;
+    _stepsBox		= 0;
+    _stepsGrid		= 0;
+    _helpButton		= 0;
+    _helpPanel		= 0;
+    _helpBrowser	= 0;
+    _stepsButton	= 0;
+    _clientArea		= 0;
+    _dialogIcon		= 0;
+    _dialogHeading	= 0;
+    _contents		= 0;
+    _buttonBox		= 0;
+    _abortButton	= 0;
+    _backButton		= 0;
+    _nextButton		= 0;
 
     _stepsList.setAutoDelete( true );
     _stepsIDs.setAutoDelete( false );	// Only for one of both!
@@ -672,29 +673,40 @@ void YQWizard::layoutClientArea( QWidget * parent )
     CHECK_PTR( _clientArea );
     _clientArea->setMargin( 4 );
 
+    
+    //
+    // HVCenter for wizard contents
+    //
+
+    YWidgetOpt widgetOpt;
+    _contents = new YQAlignment( _clientArea, widgetOpt, YAlignCenter, YAlignCenter );
+    CHECK_PTR( _contents );
+
+    addChild( _contents );
+    _contents->setParent( this );
+    _contents->installEventFilter( this );
+    _contents->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
+
 
     //
     // Replace point for wizard contents
     //
 
-    YWidgetOpt widgetOpt;
-    _contentsReplacePoint = new YQReplacePoint( _clientArea, widgetOpt );
-    CHECK_PTR( _contentsReplacePoint );
+    YQReplacePoint * replacePoint = new YQReplacePoint( _contents, widgetOpt );
+    CHECK_PTR( replacePoint );
 
-    _contentsReplacePoint->setId( YCPSymbol( YWizardContentsReplacePointID ) ); // `id(`contents)
-    addChild( _contentsReplacePoint );
-    _contentsReplacePoint->setParent( this );
-    _contentsReplacePoint->installEventFilter( this );
-    _contentsReplacePoint->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
+    replacePoint->setId( YCPSymbol( YWizardContentsReplacePointID ) ); // `id(`contents)
+    _contents->addChild( replacePoint );
+    replacePoint->setParent( _contents );
 
 
     //
     // Initial YEmpty widget contents of replace point
     //
 
-    YQEmpty * empty = new YQEmpty( _contentsReplacePoint, widgetOpt );
-    empty->setParent( _contentsReplacePoint );
-    _contentsReplacePoint->addChild( empty );
+    YQEmpty * empty = new YQEmpty( replacePoint, widgetOpt );
+    empty->setParent( replacePoint );
+    replacePoint->addChild( empty );
 }
 
 
@@ -966,7 +978,7 @@ void YQWizard::setHelpText( QString helpText )
 void YQWizard::addChild( YWidget * child )
 {
     if ( dynamic_cast<YQWizardButton *> (child) 
-	 || child == _contentsReplacePoint )
+	 || child == _contents )
     {
 	YContainerWidget::addChild( child );
     }
@@ -1053,14 +1065,14 @@ void YQWizard::resizeClientArea()
 {
     // y2debug( "resizing client area" );
     QRect contentsRect = _clientArea->contentsRect();
-    _contentsReplacePoint->setSize( contentsRect.width(), contentsRect.height() );
+    _contents->setSize( contentsRect.width(), contentsRect.height() );
 }
 
 
 
 bool YQWizard::eventFilter( QObject * obj, QEvent * ev )
 {
-    if ( ev->type() == QEvent::Resize && obj == _contentsReplacePoint )
+    if ( ev->type() == QEvent::Resize && obj == _contents )
     {
 	resizeClientArea();
 	return true;		// Event handled

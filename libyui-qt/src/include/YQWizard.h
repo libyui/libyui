@@ -38,6 +38,7 @@ class QTextBrowser;
 class QToolButton;
 class QWidgetStack;
 
+class YQAlignment;
 class YQReplacePoint;
 class YQWizardButton;
 
@@ -414,7 +415,7 @@ protected:
     QVBox *		_clientArea;
     QLabel *		    _dialogIcon;
     QLabel *		    _dialogHeading;
-    YQReplacePoint *	    _contentsReplacePoint;
+    YQAlignment *	    _contents;
     QHBox *		_buttonBox;
     YQWizardButton *	    _abortButton;
     YQWizardButton *	    _backButton;
