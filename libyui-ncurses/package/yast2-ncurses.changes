@@ -1,8 +1,13 @@
 -------------------------------------------------------------------
+Thu Jan 29 16:42:13 CET 2004 - arvin@suse.de
+
+- fixed for ncurses 5.4
+
+-------------------------------------------------------------------
 Tue Jan 27 17:32:22 CET 2004 - sh@suse.de
 
 - V 2.9.4
-- Reasonable and consistent naming (new interpreter components etc.) 
+- Reasonable and consistent naming (new interpreter components etc.)
 
 -------------------------------------------------------------------
 Fri Jan 16 15:59:46 CET 2004 - jsrain@suse.de
@@ -20,7 +25,7 @@ Fri Nov 21 14:03:01 CET 2003 - gs@suse.de
 
 - V 2.9.2
 - don't draw the outer frame in full screen mode
-- package installation: show column headers for all package lists 
+- package installation: show column headers for all package lists
 
 -------------------------------------------------------------------
 Wed Nov 12 16:03:51 CET 2003 - gs@suse.de
@@ -41,22 +46,22 @@ Mon Sep 22 11:24:32 CEST 2003 - gs@suse.de
 Fri Sep 19 12:20:05 CEST 2003 - gs@suse.de
 
 - V 2.8.18
-- Requires: glibc-locale added to spec-file 
+- Requires: glibc-locale added to spec-file
 
 -------------------------------------------------------------------
 Fri Sep 12 15:28:42 CEST 2003 - gs@suse.de
 
 - V 2.8.17
-- bugfix in RichText widget (bug #30621) 
+- bugfix in RichText widget (bug #30621)
 - cut lines in LogView widget (don't allocate too much memory)
-- don't use ACS chars on console if locale is not UTF-8 (bug #30512) 
+- don't use ACS chars on console if locale is not UTF-8 (bug #30512)
 - new style for ProgressBar
 
 -------------------------------------------------------------------
 Mon Sep  8 16:34:57 CEST 2003 - gs@suse.de
 
 - V 2.8.16
-- new style for not active selection box widget (bug #30035)  
+- new style for not active selection box widget (bug #30035)
 
 -------------------------------------------------------------------
 Fri Sep 05 17:12:48 CEST 2003 - arvin@suse.de
@@ -66,7 +71,7 @@ Fri Sep 05 17:12:48 CEST 2003 - arvin@suse.de
 -------------------------------------------------------------------
 Tue Sep  2 16:29:03 CEST 2003 - gs@suse.de
 
-- online udpate: show included scripts and files 
+- online udpate: show included scripts and files
 - don't return `cancel after window resize (bug #29853)
 
 -------------------------------------------------------------------

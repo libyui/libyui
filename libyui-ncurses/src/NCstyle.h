@@ -21,6 +21,7 @@
 
 extern "C" {
 #include <ncurses.h>
+#undef bool
 }
 
 #include <iosfwd>
