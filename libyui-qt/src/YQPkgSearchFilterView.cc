@@ -217,16 +217,22 @@ YQPkgSearchFilterView::check( PMPackagePtr pkg, const QRegExp & regexp )
 bool
 YQPkgSearchFilterView::check( const std::string & attribute, const QRegExp & regexp )
 {
-    QString att = attribute.c_str();
+    QString att    	= attribute.c_str();
+    QString searchText	= _searchText->currentText();
 
     if ( _contains->isChecked() )
     {
-	return att.contains( _searchText->currentText(), _caseSensitive->isChecked() );
+	return att.contains( searchText, _caseSensitive->isChecked() );
     }
 
     if ( _beginsWith->isChecked() )
     {
-	return att.startsWith( _searchText->currentText() );	// only case sensitive
+	return att.startsWith( searchText );	// only case sensitive
+    }
+
+    if ( _exactMatch->isChecked() )
+    {
+	return att == searchText;
     }
 
     return att.contains( regexp );
