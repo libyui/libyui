@@ -41,23 +41,23 @@ YQComboBox::YQComboBox( QWidget * parent, YWidgetOpt & opt,
     setSpacing( SPACING );
     setMargin( YQWIDGET_BORDER );
 
-    qt_label = new QLabel(fromUTF8(label->value()), this);
+    qt_label = new QLabel(fromUTF8(label->value() ), this);
     qt_label->setTextFormat(QLabel::PlainText);
-    qt_label->setFont(YUIQt::ui()->currentFont());
+    qt_label->setFont(YUIQt::ui()->currentFont() );
 
     qt_combo_box = new QComboBox(opt.isEditable.value(), this);
-    qt_combo_box->setFont(YUIQt::ui()->currentFont());
+    qt_combo_box->setFont(YUIQt::ui()->currentFont() );
 
     qt_label->setBuddy(qt_combo_box);
 
-    connect( qt_combo_box, SIGNAL( highlighted( int) ), this, SLOT( slotSelected(int)));
-    connect( qt_combo_box, SIGNAL( activated( const QString & ) ), this, SLOT(textChanged(const QString & )));
+    connect( qt_combo_box, SIGNAL( highlighted( int) ), this, SLOT( slotSelected(int) ) );
+    connect( qt_combo_box, SIGNAL( activated( const QString & ) ), this, SLOT(textChanged(const QString & ) ) );
 }
 
 
 void YQComboBox::setLabel(const YCPString & label)
 {
-    qt_label->setText(fromUTF8(label->value()));
+    qt_label->setText(fromUTF8(label->value() ) );
     YComboBox::setLabel(label);
 }
 
@@ -103,7 +103,7 @@ void YQComboBox::setEnabling(bool enabled)
 
 void YQComboBox::itemAdded(const YCPString & string, int index, bool selected)
 {
-    qt_combo_box->insertItem(fromUTF8(string->value()));
+    qt_combo_box->insertItem(fromUTF8(string->value() ) );
 
     if (selected)
 	setValue(string);
@@ -140,14 +140,14 @@ bool YQComboBox::setKeyboardFocus()
 
 void YQComboBox::slotSelected(int i)
 {
-    if (getNotify())
+    if (getNotify() )
 	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
 }
 
 
 void YQComboBox::textChanged(const QString &new_text)
 {
-    if (getNotify())
+    if (getNotify() )
 	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
 }
 

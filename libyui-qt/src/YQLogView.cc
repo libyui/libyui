@@ -37,14 +37,14 @@ YQLogView::YQLogView( QWidget * parent, YWidgetOpt & opt,
 {
     setWidgetRep( this );
 
-    qt_label = new QLabel( fromUTF8(label->value()), this );
+    qt_label = new QLabel( fromUTF8(label->value() ), this );
     qt_label->setTextFormat( QLabel::PlainText );
     qt_label->setFont( YUIQt::ui()->currentFont() );
 
     qt_text = new QMultiLineEdit( this );
     qt_text->setFont( YUIQt::ui()->currentFont() );
     qt_text->setReadOnly( true );
-    qt_text->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ));
+    qt_text->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
 }
 
 

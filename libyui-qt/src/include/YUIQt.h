@@ -365,7 +365,7 @@ public:
      * Graphical UIs may omit that if no window manager is running.
      *
      * Returns the selected directory name
-     * or 'nil' (YCPVoid()) if the user canceled the operation.
+     * or 'nil' (YCPVoid() ) if the user canceled the operation.
      **/
     YCPValue askForExistingDirectory ( const YCPString & startDir,
 				       const YCPString & headline );
@@ -382,7 +382,7 @@ public:
      * Graphical UIs may omit that if no window manager is running.
      *
      * Returns the selected file name
-     * or 'nil' (YCPVoid()) if the user canceled the operation.
+     * or 'nil' (YCPVoid() ) if the user canceled the operation.
      **/
     YCPValue askForExistingFile	( const YCPString & startWith,
 				  const YCPString & filter,
@@ -401,7 +401,7 @@ public:
      * Graphical UIs may omit that if no window manager is running.
      *
      * Returns the selected file name
-     * or 'nil' (YCPVoid()) if the user canceled the operation.
+     * or 'nil' (YCPVoid() ) if the user canceled the operation.
      **/
     YCPValue askForSaveFileName	( const YCPString & startWith,
 				  const YCPString & filter,

@@ -28,12 +28,12 @@
 
 inline QString _(const char * msgid)
 {
-	return QString::fromUtf8(gettext(msgid));
+	return QString::fromUtf8(gettext(msgid) );
 }
 
 inline QString _(const char * msgid1, const char * msgid2, unsigned long int n)
 {
-	return QString::fromUtf8(ngettext(msgid1, msgid2, n));
+	return QString::fromUtf8(ngettext(msgid1, msgid2, n) );
 }
 
 

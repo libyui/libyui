@@ -50,14 +50,14 @@ YQSelectionBox::YQSelectionBox( QWidget * parent, YWidgetOpt & opt,
     setSpacing( SPACING );
     setMargin( MARGIN );
 
-    qt_label = new QLabel(fromUTF8(label->value()), this);
+    qt_label = new QLabel(fromUTF8(label->value() ), this);
     qt_label->setTextFormat(QLabel::PlainText);
-    qt_label->setFont(YUIQt::ui()->currentFont());
+    qt_label->setFont(YUIQt::ui()->currentFont() );
 
     qt_listbox = new QListBox(this);
     qt_listbox->installEventFilter( this );
     qt_listbox->setVariableHeight(false);
-    qt_listbox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ));
+    qt_listbox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
     qt_listbox->setTopItem(0);
     qt_label->setBuddy(qt_listbox);
 
@@ -77,7 +77,7 @@ YQSelectionBox::YQSelectionBox( QWidget * parent, YWidgetOpt & opt,
 
 void YQSelectionBox::setLabel(const YCPString & label)
 {
-    qt_label->setText(fromUTF8(label->value()));
+    qt_label->setText(fromUTF8(label->value() ) );
     YSelectionBox::setLabel(label);
 }
 
@@ -118,7 +118,7 @@ void YQSelectionBox::setEnabling(bool enabled)
 
 void YQSelectionBox::itemAdded(const YCPString & string, int index, bool selected)
 {
-    qt_listbox->insertItem(fromUTF8(string->value()));
+    qt_listbox->insertItem(fromUTF8(string->value() ) );
     if (selected) qt_listbox->setCurrentItem(index);
 }
 

@@ -129,7 +129,7 @@ YUIQt::normalCursor( void )
      * Restore the normal cursor for all widgets (undo busyCursor() ).
      *
      * Fortunately enough, Qt widgets keep track of their normal cursor
-     * (QWidget::cursor()) so this can easily be restored - it's not always the
+     * (QWidget::cursor() ) so this can easily be restored - it's not always the
      * arrow cursor - e.g., input fields (QLineEdit) have the "I-beam" cursor.
      **/
 

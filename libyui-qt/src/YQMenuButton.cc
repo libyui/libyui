@@ -60,7 +60,7 @@ YQMenuButton::nicesize(YUIDimension dim)
 {
     return 2 * BORDER + (dim == YD_HORIZ
 			 ? qt_pushbutton->sizeHint().width()
-			 : qt_pushbutton->sizeHint().height());
+			 : qt_pushbutton->sizeHint().height() );
 }
 
 

@@ -27,14 +27,14 @@
 
 inline QString fromUTF8(const string &str)
 {
-    return QString::fromUtf8(str.c_str());
+    return QString::fromUtf8(str.c_str() );
 }
 
 
 inline string toUTF8(const QString &str)
 {
     QCString result = str.isEmpty() ? QCString("") : str.utf8();
-    return string(result.data());
+    return string(result.data() );
 }
 
 #endif // utf8_h

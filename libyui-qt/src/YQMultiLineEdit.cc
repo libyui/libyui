@@ -42,7 +42,7 @@ YQMultiLineEdit::YQMultiLineEdit( QWidget * parent, YWidgetOpt & opt,
 
     qt_multiLineEdit = new QMultiLineEdit( this );
     qt_multiLineEdit->setFont( YUIQt::ui()->currentFont() );
-    qt_multiLineEdit->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ));
+    qt_multiLineEdit->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
     qt_multiLineEdit->setText( fromUTF8( initialText->value() ) );
     qt_label->setBuddy( qt_multiLineEdit );
 
@@ -114,7 +114,7 @@ bool YQMultiLineEdit::setKeyboardFocus()
 
 void YQMultiLineEdit::changed()
 {
-    if (getNotify())
+    if (getNotify() )
 	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
 }
 

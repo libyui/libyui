@@ -81,7 +81,7 @@ YCPValue Y2QtComponent::evaluate(const YCPValue & command)
 	// constructor of QApplication
 	qInstallMsgHandler (myqmsg);
 
-	interpreter = new YUIQt(argc, argv, with_threads, getCallback());
+	interpreter = new YUIQt(argc, argv, with_threads, getCallback() );
 	
 	if ( !interpreter || interpreter->fatalError() )
 	    return YCPNull();

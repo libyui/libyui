@@ -43,7 +43,7 @@ YQPushButton::YQPushButton( 			    QWidget *	parent,
     , _dialog( dialog )
 {
     setWidgetRep( this );
-    _qPushButton = new QPushButton( fromUTF8(label->value()), this);
+    _qPushButton = new QPushButton( fromUTF8(label->value() ), this);
     _qPushButton->setFont( YUIQt::ui()->currentFont() );
     _qPushButton->setMinimumSize( 2, 2 );
     _qPushButton->setAutoDefault( true );
@@ -104,7 +104,7 @@ long YQPushButton::nicesize(YUIDimension dim)
 {
     return 2 * BORDER + (dim == YD_HORIZ
 			 ? _qPushButton->sizeHint().width()
-			 : _qPushButton->sizeHint().height());
+			 : _qPushButton->sizeHint().height() );
 }
 
 
@@ -117,7 +117,7 @@ void YQPushButton::setSize( long newWidth, long newHeight )
 
 void YQPushButton::setLabel( const YCPString & label )
 {
-    _qPushButton->setText(fromUTF8(label->value()));
+    _qPushButton->setText(fromUTF8(label->value() ) );
     YPushButton::setLabel( label );
 }
 

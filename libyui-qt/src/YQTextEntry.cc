@@ -53,17 +53,17 @@ YQTextEntry::YQTextEntry( QWidget * parent, YWidgetOpt & opt,
 	qt_label->hide();
 
     qt_lineedit = new QLineEdit(this);
-    qt_lineedit->setFont(YUIQt::ui()->currentFont());
-    qt_lineedit->setText(fromUTF8(text->value()));
+    qt_lineedit->setFont(YUIQt::ui()->currentFont() );
+    qt_lineedit->setText(fromUTF8(text->value() ) );
 
     qt_label->setBuddy(qt_lineedit);
 
-    if (opt.passwordMode.value())
+    if (opt.passwordMode.value() )
 	qt_lineedit->setEchoMode(QLineEdit::Password);
 
     shrinkable = opt.isShrinkable.value();
 
-    connect(qt_lineedit, SIGNAL(textChanged(const QString &)), this, SLOT(changed(const QString &)));
+    connect(qt_lineedit, SIGNAL(textChanged(const QString &) ), this, SLOT(changed(const QString &) ) );
 }
 
 
@@ -99,19 +99,19 @@ void YQTextEntry::setSize(long newWidth, long newHeight)
 
 void YQTextEntry::setText(const YCPString & text)
 {
-    qt_lineedit->setText(fromUTF8(text->value()));
+    qt_lineedit->setText(fromUTF8(text->value() ) );
 }
 
 
 YCPString YQTextEntry::getText()
 {
-    return YCPString(toUTF8(qt_lineedit->text()));
+    return YCPString(toUTF8(qt_lineedit->text() ) );
 }
 
 
 void YQTextEntry::setLabel(const YCPString & label)
 {
-    qt_label->setText(fromUTF8(label->value()));
+    qt_label->setText(fromUTF8(label->value() ) );
     YTextEntry::setLabel(label);
 }
 
@@ -148,7 +148,7 @@ bool YQTextEntry::setKeyboardFocus()
 
 void YQTextEntry::changed(const QString &)
 {
-    if (getNotify())
+    if (getNotify() )
 	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
 }
 

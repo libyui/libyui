@@ -39,13 +39,13 @@ YQDownloadProgress::YQDownloadProgress( 					QWidget *	parent,
     setWidgetRep( this );
     setMargin( YQWIDGET_BORDER );
 
-    qt_label = new QLabel( fromUTF8(label->value()), this );
+    qt_label = new QLabel( fromUTF8(label->value() ), this );
     qt_label->setTextFormat( QLabel::PlainText );
     qt_label->setFont( YUIQt::ui()->currentFont() );
 
     qt_progress = new QProgressBar( this );
     qt_progress->setFont( YUIQt::ui()->currentFont() );
-    qt_progress->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed));
+    qt_progress->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed) );
 
     qt_progress->setTotalSteps( expectedSize );
     qt_progress->setProgress( currentFileSize() );
@@ -79,7 +79,7 @@ void YQDownloadProgress::setSize(long newWidth, long newHeight)
 
 void YQDownloadProgress::setLabel(const YCPString & label)
 {
-    qt_label->setText( fromUTF8( label->value() ));
+    qt_label->setText( fromUTF8( label->value() ) );
     YDownloadProgress::setLabel( label );
 }
 

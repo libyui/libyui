@@ -92,7 +92,7 @@ YQCheckBox::setValue( const YCPValue & val )
     if ( val->isBoolean() )
     {
 	setTristate(false);
-	_qt_checkbox->setChecked(val->asBoolean()->value());
+	_qt_checkbox->setChecked(val->asBoolean()->value() );
     }
     else	// "Nil" -> set TriState: neither on nor off
     {

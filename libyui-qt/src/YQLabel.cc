@@ -34,12 +34,12 @@ YQLabel::YQLabel( QWidget * parent, YWidgetOpt & opt,
     setWidgetRep( this );
 
     setTextFormat(QLabel::PlainText);
-    setText(fromUTF8(text->value()));
+    setText(fromUTF8(text->value() ) );
     setIndent( 0 );
 
     setFont( opt.isHeading.value() ? YUIQt::ui()->headingFont() : YUIQt::ui()->currentFont() );
 
-    if ( opt.isOutputField.value())
+    if ( opt.isOutputField.value() )
     {
 	setFrameStyle ( QFrame::Panel | QFrame::Sunken );
 	setLineWidth( 2 );
@@ -71,7 +71,7 @@ void YQLabel::setSize(long newWidth, long newHeight)
 
 void YQLabel::setLabel(const YCPString & text)
 {
-    setText(fromUTF8(text->value()));
+    setText(fromUTF8(text->value() ) );
     YLabel::setLabel(text);
 }
 

@@ -48,11 +48,11 @@ YQRadioButton::YQRadioButton( 			     QWidget * parent,
 
     QBoxLayout * layout = new QBoxLayout(this, QBoxLayout::LeftToRight);
 
-    qt_radiobutton = new QRadioButton( fromUTF8(label->value()), this);
+    qt_radiobutton = new QRadioButton( fromUTF8(label->value() ), this);
     layout->addSpacing(SPACING);
     layout->addWidget(qt_radiobutton);
     layout->addSpacing(SPACING);
-    qt_radiobutton->setFont(YUIQt::ui()->currentFont());
+    qt_radiobutton->setFont(YUIQt::ui()->currentFont() );
     qt_radiobutton->setChecked(checked);
 
     connect ( qt_radiobutton, SIGNAL ( toggled ( bool ) ),
@@ -76,19 +76,19 @@ void YQRadioButton::setSize(long newWidth, long newHeight)
 
 YCPBoolean YQRadioButton::getValue()
 {
-    return YCPBoolean(qt_radiobutton->isChecked());
+    return YCPBoolean(qt_radiobutton->isChecked() );
 }
 
 
 void YQRadioButton::setValue(const YCPBoolean & c)
 {
-    qt_radiobutton->setChecked(c->value());
+    qt_radiobutton->setChecked(c->value() );
 }
 
 
 void YQRadioButton::setLabel(const YCPString & label)
 {
-    qt_radiobutton->setText(fromUTF8(label->value()));
+    qt_radiobutton->setText(fromUTF8(label->value() ) );
     YRadioButton::setLabel(label);
 }
 

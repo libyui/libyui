@@ -35,7 +35,7 @@ YQColoredLabel::YQColoredLabel( QWidget * parent, YWidgetOpt & opt,
     setWidgetRep( this );
 
     setTextFormat(QLabel::PlainText);
-    setText(fromUTF8(text->value()));
+    setText(fromUTF8(text->value() ) );
     setIndent( 0 );
     setPaletteForegroundColor( QColor( fg.red, fg.green, fg.blue ) );
     setPaletteBackgroundColor( QColor( bg.red, bg.green, bg.blue ) );
@@ -67,7 +67,7 @@ void YQColoredLabel::setSize(long newWidth, long newHeight)
 
 void YQColoredLabel::setLabel(const YCPString & text)
 {
-    setText(fromUTF8(text->value()));
+    setText(fromUTF8(text->value() ) );
     YLabel::setLabel(text);
 }
 

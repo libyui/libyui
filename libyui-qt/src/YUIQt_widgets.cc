@@ -62,7 +62,7 @@
 YContainerWidget * YUIQt::createReplacePoint( YWidget *		parent,
 					      YWidgetOpt & 	opt )
 {
-    return new YQReplacePoint( ((QWidget *)parent->widgetRep() ), opt );
+    return new YQReplacePoint( ( (QWidget *)parent->widgetRep() ), opt );
 }
 
 YWidget * YUIQt::createEmpty		( YWidget *		parent,
@@ -91,7 +91,7 @@ YContainerWidget * YUIQt::createSplit	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  YUIDimension 		dimension )
 {
-    return new YQSplit(((QWidget *)parent->widgetRep() ), opt, dimension);
+    return new YQSplit( ( (QWidget *)parent->widgetRep() ), opt, dimension);
 }
 
 YContainerWidget * YUIQt::createAlignment( YWidget *		parent,
@@ -99,7 +99,7 @@ YContainerWidget * YUIQt::createAlignment( YWidget *		parent,
 					   YAlignmentType 	halign,
 					   YAlignmentType 	valign )
 {
-    return new YQAlignment( ((QWidget *)parent->widgetRep() ), opt, halign, valign);
+    return new YQAlignment( ( (QWidget *)parent->widgetRep() ), opt, halign, valign);
 }
 
 YContainerWidget * YUIQt::createSquash	( YWidget *		parent,
@@ -107,7 +107,7 @@ YContainerWidget * YUIQt::createSquash	( YWidget *		parent,
 					  bool 			hsquash,
 					  bool 			vsquash )
 {
-    return new YQSquash( ((QWidget *)parent->widgetRep() ), opt, hsquash, vsquash);
+    return new YQSquash( ( (QWidget *)parent->widgetRep() ), opt, hsquash, vsquash);
 }
 
 YWidget * YUIQt::createLabel		( YWidget *		parent,

@@ -54,15 +54,15 @@ YQRichText::YQRichText( QWidget * parent, YWidgetOpt & opt,
     // warnColor dialog - which we cannot find right now out since our
     // parent is not set yet :-(
 
-    QPalette pal(palette());
-    QColorGroup normalColors(pal.normal());
+    QPalette pal(palette() );
+    QColorGroup normalColors(pal.normal() );
     normalColors.setColor(QColorGroup::Text, black);
     pal.setNormal(normalColors);
     setPalette(pal);
 
     // Set the text background to a light grey
 
-    setPaper(QColor( 234, 234, 234 ));
+    setPaper(QColor( 234, 234, 234 ) );
 
     // Very small default size if specified
 

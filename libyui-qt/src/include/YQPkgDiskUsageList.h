@@ -89,7 +89,7 @@ public:
 
     /**
      * Check if a warning should be posted, i.e. if the value is currently in
-     * range (see 'inRange()) and there has been no notification yet that a
+     * range (see 'inRange() ) and there has been no notification yet that a
      * warning has already been posted.
      **/
     bool needWarning() const;

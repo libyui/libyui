@@ -47,7 +47,7 @@ YQIntField::YQIntField( 			QWidget *		parent,
     vbox->setMargin( MARGIN );
     qt_label = new QLabel( fromUTF8(label->value() ), vbox );
     qt_label->setTextFormat( QLabel::PlainText );
-    qt_label->setFont(YUIQt::ui()->currentFont());
+    qt_label->setFont(YUIQt::ui()->currentFont() );
     qt_label->setAlignment( Qt::AlignRight );
 
     qt_spinbox = new QSpinBox( minValue, maxValue,

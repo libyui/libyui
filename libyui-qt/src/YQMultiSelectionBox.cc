@@ -49,12 +49,12 @@ YQMultiSelectionBox::YQMultiSelectionBox( 					  QWidget *		parent,
     setSpacing( SPACING );
     setMargin( MARGIN );
 
-    qt_label = new QLabel(fromUTF8(label->value()), this);
+    qt_label = new QLabel(fromUTF8(label->value() ), this);
     qt_label->setTextFormat(QLabel::PlainText);
     qt_label->setFont( YUIQt::ui()->currentFont() );
 
     qt_listview = new QListView( this );
-    qt_listview->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ));
+    qt_listview->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
     qt_listview->addColumn( "" );	// we need at least one column - yes, QListView is too dumb to do without that. :-(
     qt_listview->setSorting( 0, false );
     qt_listview->header()->hide();
@@ -71,7 +71,7 @@ YQMultiSelectionBox::YQMultiSelectionBox( 					  QWidget *		parent,
 void
 YQMultiSelectionBox::setLabel( const YCPString & label )
 {
-    qt_label->setText(fromUTF8(label->value()));
+    qt_label->setText(fromUTF8(label->value() ) );
     YMultiSelectionBox::setLabel(label);
 }
 

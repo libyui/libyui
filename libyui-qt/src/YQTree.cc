@@ -175,7 +175,7 @@ YQTree::findYQTreeItem( const YTreeItem * orig ) const
 
 void YQTree::slotSelected( void )
 {
-    if (getNotify())
+    if (getNotify() )
 	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
 }
 

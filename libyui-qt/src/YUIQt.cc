@@ -303,7 +303,7 @@ void YUIQt::idleLoop( int fd_ycp )
 
     // process Qt events until fd_ycp is readable.
     QSocketNotifier * notifier = new QSocketNotifier(fd_ycp, QSocketNotifier::Read);
-    QObject::connect(notifier, SIGNAL(activated(int)), this, SLOT(leaveIdleLoop(int)));
+    QObject::connect(notifier, SIGNAL(activated(int) ), this, SLOT(leaveIdleLoop(int) ) );
     notifier->setEnabled(true);
 
     while (!_leave_idle_loop)
