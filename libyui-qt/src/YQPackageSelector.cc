@@ -552,15 +552,14 @@ YQPackageSelector::addMenus()
 	_pkgList->actionSetCurrentDelete->addTo( _pkgMenu );
 	_pkgList->actionSetCurrentUpdate->addTo( _pkgMenu );
 	_pkgList->actionSetCurrentTaboo->addTo( _pkgMenu );
-
+	
 	_pkgMenu->insertSeparator();
-
-        QPopupMenu * submenu = _pkgList->addAllInListSubMenu( _pkgMenu );
-
-	_pkgMenu->insertSeparator();
-
+	
 	_pkgList->actionInstallSourceRpm->addTo( _pkgMenu );
 	_pkgList->actionDontInstallSourceRpm->addTo( _pkgMenu );
+	
+	_pkgMenu->insertSeparator();
+        QPopupMenu * submenu = _pkgList->addAllInListSubMenu( _pkgMenu );
 
 #warning TODO: Install / dont install all source RPMs
     }
