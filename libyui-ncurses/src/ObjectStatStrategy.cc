@@ -74,7 +74,7 @@ PMSelectable::UI_Status ObjectStatStrategy::getPackageStatus( PMObjectPtr objPtr
 bool ObjectStatStrategy::setObjectStatus( PMSelectable::UI_Status newstatus, PMObjectPtr objPtr )
 {
     bool ok = false;
-
+    
     if ( !objPtr || !objPtr->hasSelectable() )
     {
 	NCERR << "Invalid package object" << endl;
@@ -82,7 +82,9 @@ bool ObjectStatStrategy::setObjectStatus( PMSelectable::UI_Status newstatus, PMO
     }
 
     ok = objPtr->getSelectable()->set_status( newstatus );
-    NCMIL << "Set status to: " << newstatus << " returns: " << (ok?"true":"false") << endl;
+
+    NCMIL << "Set status of: " <<  objPtr->getSelectable()->name() << " to: "
+	  << newstatus << " returns: " << (ok?"true":"false") << endl;
     
     return ok;
 }
@@ -246,7 +248,10 @@ bool ObjectStatStrategy::toggleStatus( PMObjectPtr objPtr,
 	    newStatus = PMSelectable:: S_KeepInstalled;
 	    break;
 	case PMSelectable::S_Taboo:
-	    newStatus = PMSelectable::S_Taboo;
+	    newStatus = PMSelectable::S_NoInst;
+	    break;
+	case PMSelectable::S_Protected:
+	    newStatus = PMSelectable::S_KeepInstalled;
 	    break;
     }
 
@@ -409,10 +414,11 @@ bool PatchStatStrategy::setObjectStatus( PMSelectable::UI_Status newstatus, PMOb
     }
 
     ok = objPtr->getSelectable()->set_status( newstatus );
-    NCMIL << "Set status to: " << newstatus << " returns: " << (ok?"true":"false") << endl;
+    NCMIL << "Set status of: " << objPtr->getSelectable()->name() << " to: "
+	  << newstatus << " returns: " << (ok?"true":"false") << endl;
 
     // additionally inform the YOU patch manager about the status change
-    // (which sets the right status of the patch packages)
+    // (which sets the correct status of the patch packages)
     Y2PM::youPatchManager().updatePackageStates();
     
     return ok;
