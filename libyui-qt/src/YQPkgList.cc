@@ -40,7 +40,7 @@ YQPkgList::YQPkgList( QWidget *parent )
     int numCol = 0;
     addColumn( ""		);	_statusCol	= numCol++;
     // _statusCol = numCol;
-    addColumn( _( "Name"	) );	_nameCol	= numCol++;
+    addColumn( _( "Package" ) );	_nameCol	= numCol++;
 
     if ( installedPkgs > 0 )
     {
