@@ -24,6 +24,7 @@
 #include "NCStyleDef.h"
 
 #include "NCstyle.mono.h"
+#include "NCstyle.braille.h"
 #include "NCstyle.linux.h"
 #include "NCstyle.xterm.h"
 
@@ -294,8 +295,12 @@ NCstyle::NCstyle( string term_t )
     , fakestyle_e( MaxStyleSet )
 {
   if ( NCattribute::colors() ) {
-    if ( term_t == "xterm" )
-      styleName = "xterm";
+    if ( getenv( "Y2_BRAILLE" ) != NULL ) {
+      styleName = "braille";
+    } else {
+      if ( term_t == "xterm" )
+	styleName = "xterm";
+    }
   } else {
     styleName = "mono";
   }
@@ -303,14 +308,12 @@ NCstyle::NCstyle( string term_t )
   UIMIL << "Init " << term_t << " using " << (NCattribute::colors() ? "color" : "bw" )
     << " => " << MaxStyleSet << " styles in " << styleName << endl;
 
-  if ( styleName == "linux" )
-    NCstyleInit_linux( styleSet );
-  else if ( styleName == "xterm" )
-    NCstyleInit_xterm( styleSet );
-  else if ( styleName == "mono" )
-    NCstyleInit_mono( styleSet );
-  else
-    NCstyleInit_linux( styleSet );
+#define IF_STYLE_INIT(n) if ( styleName == #n ) { NCstyleInit_##n( styleSet ); }
+  IF_STYLE_INIT(linux)
+  else IF_STYLE_INIT(xterm)
+  else IF_STYLE_INIT(mono)
+  else IF_STYLE_INIT(braille)
+  else NCstyleInit_linux( styleSet );
 }
 
 ///////////////////////////////////////////////////////////////////

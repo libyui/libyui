@@ -113,7 +113,7 @@ void NCDialog::_init( YWidgetOpt & opt )
   dlgstyle = &NCurses::style()[mystyleset];
 
   helpPopup = 0;
-  
+
   WIDDBG << "+++ " << this << endl;
 }
 
@@ -957,15 +957,15 @@ void NCDialog::processInput( int timeout )
 	}
 	else
 	{
-	  pendingEvent = wHandleInput( ch );
+	  pendingEvent = getInputEvent( ch );
 	}
 	break;
       case KEY_ESC:
       case CTRL('X'):
-	pendingEvent = wHandleInput( hch );
+	pendingEvent = getInputEvent( hch );
 	break;
       default:
-	pendingEvent = wHandleHotkey( hch );
+	pendingEvent = getHotkeyEvent( hch );
 	break;
       }
       break;
@@ -993,11 +993,11 @@ void NCDialog::processInput( int timeout )
 		 helpPopup->popdown();
 		 delete helpPopup;
 		 helpPopup = 0;
-		 pendingEvent = wHandleHotkey( ch ); 
+		 pendingEvent = getHotkeyEvent( ch );
 	     }
 	 }
 	 break;
-	    
+
     default:
 	// only handle keys if the help popup is not existing or not visible
 	if ( !helpPopup
@@ -1005,11 +1005,11 @@ void NCDialog::processInput( int timeout )
 	{
 	    if ( ch >= KEY_F(2) && ch <= KEY_F(24) )
 	    {
-		pendingEvent = wHandleHotkey( ch );
+		pendingEvent = getHotkeyEvent( ch );
 	    }
 	    else
 	    {
-		pendingEvent = wHandleInput( ch );
+		pendingEvent = getInputEvent( ch );
 	    }
 	}
       break;
@@ -1018,6 +1018,7 @@ void NCDialog::processInput( int timeout )
   }
   noUpdates = false;
 
+#if 0 // handled in get...Event
   switch ( pendingEvent.type ) {
   case NCursesEvent::handled:
   case NCursesEvent::none:
@@ -1029,8 +1030,90 @@ void NCDialog::processInput( int timeout )
     pendingEvent.widget = wActive;
     break;
   }
+#endif
 
   IODBG << "process- " << this << " active " << wActive << endl;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCDialog::getInputEvent
+//	METHOD TYPE : NCursesEvent
+//
+//	DESCRIPTION :
+//
+NCursesEvent NCDialog::getInputEvent( int ch )
+{
+  NCursesEvent ret = wHandleInput( ch );
+  ret.widget = wActive;
+  return ret;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCDialog::wHandleInput
+//	METHOD TYPE : NCursesEvent
+//
+//	DESCRIPTION :
+//
+NCursesEvent NCDialog::wHandleInput( int ch )
+{
+  return wActive->wHandleInput( ch );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCDialog::getHotkeyEvent
+//	METHOD TYPE : NCursesEvent
+//
+//	DESCRIPTION :
+//
+NCursesEvent NCDialog::getHotkeyEvent( int key )
+{
+  NCWidget *const oActive = wActive;
+  NCursesEvent ret = wHandleHotkey( key );
+  ret.widget = wActive;
+#if 0 // depends on kind of widget
+  if ( wActive != oActive ) {
+    Activate( *oActive );
+  }
+#endif
+  return ret;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCDialog::wHandleHotkey
+//	METHOD TYPE : NCursesEvent
+//
+//	DESCRIPTION :
+//
+NCursesEvent NCDialog::wHandleHotkey( int key )
+{
+  if ( key >= 0 && ActivateByKey( key ) )
+    return wActive->wHandleHotkey( key );
+
+  return NCursesEvent::none;
+}
+
+/******************************************************************
+**
+**
+**	FUNCTION NAME : operator<<
+**	FUNCTION TYPE : ostream &
+**
+**	DESCRIPTION :
+*/
+ostream & operator<<( ostream & STREAM, const NCDialog * OBJ )
+{
+  if ( OBJ )
+    return STREAM << *OBJ;
+
+  return STREAM << "(NoNCDialog)";
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -1040,7 +1123,7 @@ void NCDialog::processInput( int timeout )
 //	METHOD TYPE : string
 //
 //	DESCRIPTION : get all PushButtons and MenuButtons with `opt(`key_Fn)
-//		      and create a text like F1: Help, F2: Info and so on 
+//		      and create a text like F1: Help, F2: Info and so on
 //
 bool NCDialog::describeFunctionKeys( string & helpText )
 {
@@ -1049,7 +1132,7 @@ bool NCDialog::describeFunctionKeys( string & helpText )
     YCPString label( "" );
     bool hasF1 = false;
     std::map<int, string> fkeys;
-    
+
     for ( tnode<NCWidget*> * c = this->Next(); c; c = c->Next() )
     {
 	int fkey =  c->Value()->GetFunctionHotkey( );
@@ -1085,57 +1168,12 @@ bool NCDialog::describeFunctionKeys( string & helpText )
     for ( it = fkeys.begin(); it != fkeys.end(); ++it )
     {
 	sprintf( key, "F%2d: ", (*it).first );
-	text += key + (*it).second + "<br>";	
+	text += key + (*it).second + "<br>";
     }
-    
+
     helpText = text;
 
     return hasF1;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCDialog::wHandleHotkey
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
-NCursesEvent NCDialog::wHandleHotkey( int key )
-{
-  if ( key >= 0 && ActivateByKey( key ) )
-    return wActive->wHandleHotkey( key );
-
-  return NCursesEvent::none;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCDialog::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
-NCursesEvent NCDialog::wHandleInput( int ch )
-{
-  return wActive->wHandleInput( ch );
-}
-
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
-ostream & operator<<( ostream & STREAM, const NCDialog * OBJ )
-{
-  if ( OBJ )
-    return STREAM << *OBJ;
-
-  return STREAM << "(NoNCDialog)";
 }
 
 /******************************************************************

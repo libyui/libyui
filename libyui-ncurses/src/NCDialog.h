@@ -68,6 +68,10 @@ class NCDialog : public YDialog, public NCWidget {
 
     NCPopupInfo *helpPopup;
 
+    // wrapper for wHandle... calls in processInput()
+    NCursesEvent getInputEvent( int ch );
+    NCursesEvent getHotkeyEvent( int key );
+
   private:
 
     void grabActive( NCWidget * nactive );
@@ -103,7 +107,7 @@ class NCDialog : public YDialog, public NCWidget {
 
     int getch( int timeout = -1 );
 
-    virtual NCursesEvent wHandleInput( int key );
+    virtual NCursesEvent wHandleInput( int ch );
     virtual NCursesEvent wHandleHotkey( int key );
 
     virtual void startMultipleChanges();

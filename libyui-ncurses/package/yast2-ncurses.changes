@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Feb 26 15:39:37 CET 2003 - ma@suse.de
+
+- Support unsing a different styleset for Braille-Users. Activated, if
+  environmentvariable Y2_BRAILLE is set.
+
+-------------------------------------------------------------------
 Mon Feb 24 17:54:17 CET 2003 - ma@suse.de
 
 - V 2.7.10
