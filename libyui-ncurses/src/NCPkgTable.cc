@@ -514,7 +514,7 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr )
 	    }
 	    else
 	    {
-		instVersion = " - - - ";	// package not installed
+		instVersion = "    ";	// package not installed
 	    }
 	    
 	    // in case of YOU patches: show the version of the package which
