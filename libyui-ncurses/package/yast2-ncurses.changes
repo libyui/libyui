@@ -1,17 +1,23 @@
 -------------------------------------------------------------------
+Thu Feb 13 22:46:02 CET 2003 - ma@suse.de
+
+- Let all widgets respond to UI enable/disable requests.
+- Let Frames enable/disable all widgets in it (#22471)
+
+-------------------------------------------------------------------
 Mon Feb 10 15:20:46 CET 2003 - gs@suse.de
 
 - V 2.7.7
 - package installation: allow status "Taboo" for installed packages,
-  provide the save/load settings popup (not yet finished) 
+  provide the save/load settings popup (not yet finished)
 
 -------------------------------------------------------------------
 Fri Jan 31 15:42:54 CET 2003 - gs@suse.de
 
 - V 2.7.6
 - package installation: dependency popup improved (it is possible to
-  ignore dependencies); show used/free/total disk space; 
-  show error popup if disk space is exhausted  
+  ignore dependencies); show used/free/total disk space;
+  show error popup if disk space is exhausted
 
 -------------------------------------------------------------------
 Thu Jan 30 15:24:25 CET 2003 - ma@suse.de
