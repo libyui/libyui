@@ -1355,15 +1355,15 @@ bool PackageSelector::showPatchInformation ( PMObjectPtr objPtr )
 
     if (  visibleInfo->compare( PkgNames::PatchDescr() ) == YO_EQUAL )
     {
-	//  NCstring text ( patchPtr->shortDescription() );
-	NCstring text ( patchPtr->longDescription() );
+	//  NCstring text ( patchPtr->longDescription() );
+	string text = patchPtr->longDescription();
 	
 	// show the description	
 	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
 	
 	if ( descrInfo )
 	{
-	    static_cast<NCRichText *>(descrInfo)->setText( text.YCPstr() );
+	    static_cast<NCRichText *>(descrInfo)->setText( YCPString( text ) );
 	}	
     }
     else if (  visibleInfo->compare( PkgNames::PatchPackages() ) == YO_EQUAL )
