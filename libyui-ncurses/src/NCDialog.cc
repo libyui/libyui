@@ -593,10 +593,11 @@ bool NCDialog::wantFocus( NCWidget & ngrab )
 //
 void NCDialog::wDelete()
 {
+  // deactivate logging - reason of crash? (bug #37768)
   if ( pan ) {
-    WIDDBG << DLOC << "+++ " << this << endl;
+    //WIDDBG << DLOC << "+++ " << this << endl;
     NCWidget::wDelete();
-    WIDDBG << DLOC << "--- " << this << endl;
+    //WIDDBG << DLOC << "--- " << this << endl;
   }
 }
 
