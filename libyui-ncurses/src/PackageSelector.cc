@@ -1305,10 +1305,12 @@ bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 // 
 bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 {
+    bool exit = true;
+    
     if ( !youMode )
     {
 	// show the dependency popup
-	showPackageDependencies( true ); 	// do the check
+	showPackageDependencies( true ); 	// true: do the check
     }
 
     if ( diskspacePopup )
@@ -1318,19 +1320,37 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	if ( message != "" )
 	{
 	    // open the popup with the text
-	    NCPopupInfo spaceMsg( wpos( 1, 1 ),
+	    NCPopupInfo spaceMsg( wpos( 2, 2 ),
 				  PkgNames::ErrorLabel().str(),
-				  YCPString( PkgNames::DiskSpaceError().str() + "<br>" + message ) );
-	    spaceMsg.showInfoPopup( );
+				  YCPString( PkgNames::DiskSpaceError().str() + "<br>" + message ),
+				  PkgNames::OKLabel().str(),
+				  PkgNames::CancelLabel().str() );
+	    
+	    spaceMsg.setNiceSize( 50, 10 ); 
+	    NCursesEvent input = spaceMsg.showInfoPopup( );
+	    if ( input.result->compare( PkgNames::Cancel() ) == YO_EQUAL )
+	    {
+		// disk space error warning returned `cancel
+		exit = false;
+		// FIXME ...
+		// packageList->setKeyboardFocus();
+	    }
 	}
     }
-    
-    NCMIL <<  "OK button pressed - leaving package selection, starting installation" << endl;
 
-    const_cast<NCursesEvent &>(event).result = YCPSymbol("accept", true); 
+    if ( exit )
+    {
+	const_cast<NCursesEvent &>(event).result = YCPSymbol("accept", true); 
+	NCMIL <<  "OK button pressed - leaving package selection, starting installation" << endl;
 
-    // return false, leave the package selection
-    return false;
+        // return false, leave the package selection	
+	return false;
+    }
+    else
+    {
+	// the user has decided not to leave the dialog
+	return true;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////
