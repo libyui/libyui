@@ -603,7 +603,7 @@ const YCPString PkgNames::LabelRequire1()
 const YCPString PkgNames::LabelRequire2()
 {
     // text part 2 describing packages are not available (it's a label - keep it short)
-    static const YCPString value = toYCPString( _( "are not available." ) );
+    static const YCPString value = toYCPString( _( "are not installed." ) );
     return value;
 }
 const NCstring PkgNames::FileList()
