@@ -23,6 +23,7 @@
 #define YQPkgConflictDialog_h
 
 #include <qdialog.h>
+#include <qlabel.h>
 
 
 class YQPkgConflictList;
@@ -67,6 +68,22 @@ public:
      * dependencies. 
      **/
     PMManager * selectableManager() const { return _selectableManager; }
+
+    /**
+     * Returns the average time in seconds used for solving or 0 if solving
+     * hasn't taken place yet.  
+     **/
+    double averageSolveTime() const;
+
+    /**
+     * Returns the total amount of time in seconds used for solving.
+     **/
+    double totalSolveTime() const { return _totalSolveTime; }
+    
+    /**
+     * Returns the times solving has taken place (with this dialog).
+     **/ 
+    int solveCount() const { return _solveCount; }
     
 
 public slots:
@@ -105,6 +122,10 @@ protected:
     PMManager *		_selectableManager;
     YQPkgConflictList *	_conflictList;
     QPopupMenu *	_expertMenu;
+    QLabel *		_busyPopup;
+    
+    double		_totalSolveTime;
+    int			_solveCount;
 };
 
 

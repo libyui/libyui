@@ -22,6 +22,7 @@
 #define CHECK_DEPENDENCIES_ON_STARTUP	1
 #define DEPENDENCY_FEEDBACK_IF_OK	1
 #define SHOW_CHANGES_DIALOG		1
+#define FAKE_DISK_USAGE_IN_TEST_MODE	1
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT	false
 
 #include <qaction.h>
@@ -189,11 +190,16 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
 #endif
     }
 
+    
+#if FAKE_DISK_USAGE_IN_TEST_MODE
+    
     if ( _testMode && _diskUsageList )
     {
 	y2milestone( "Using fake disk usage data" );
+	_diskUsageList->clear();
 	_diskUsageList->fakeData();
     }
+#endif
 
     y2milestone( "PackageSelector init done" );
 }
@@ -971,7 +977,7 @@ YQPackageSelector::accept()
 
 #if SHOW_CHANGES_DIALOG
 
-    if ( _installedPkgs > 0 && ! _youMode )
+    if ( ! _youMode )
     {
 	// Show which packages are installed/deleted automatically
 	QString msg =

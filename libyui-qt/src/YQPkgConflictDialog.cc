@@ -27,12 +27,16 @@
 #include <Y2PM.h>
 #include <y2pm/PMManager.h>
 
-#include <qpushbutton.h>
+
+#include <qaction.h>
+#include <qhbox.h>
+#include <qlabel.h>
+#include <qlayout.h>
 #include <qmessagebox.h>
 #include <qpopupmenu.h>
-#include <qlayout.h>
-#include <qhbox.h>
-#include <qaction.h>
+#include <qpushbutton.h>
+#include <qdatetime.h>
+#include <qtimer.h>
 
 #include "YQPkgConflictDialog.h"
 #include "YQPkgConflictList.h"
@@ -55,6 +59,10 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
     if ( ! _selectableManager )
 	y2error( "NULL selectable manager!" );
 
+    _solveCount		= 0;
+    _totalSolveTime	= 0.0;
+
+    
     // Set the dialog title.
     //
     // "Dependency conflict" is already used as the conflict list header just
@@ -143,6 +151,12 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
 
     connect( button, SIGNAL( clicked() ),
 	     this,   SLOT  ( reject()  ) );
+
+
+    // Busy popup
+
+    _busyPopup = new QLabel( "   " + _( "Checking Dependencies..." ) + "   ", parent, 0,
+			     WStyle_Customize | WStyle_Dialog | WType_Dialog );
 }
 
 
@@ -190,12 +204,34 @@ YQPkgConflictDialog::solveAndShowConflicts()
     PkgDep::ResultList		goodList;
     PkgDep::ErrorResultList	badList;
 
-    y2debug( "Solving..." );
+    if ( _solveCount++ == 0 || averageSolveTime() > 0.0 )
+    {
+	_busyPopup->show();
+	qApp->processEvents();
+	QPaintEvent paintEvent( _busyPopup->rect() );
+	QApplication::sendEvent( _busyPopup, &paintEvent );
+	
+	// _busyPopup->repaint();
+	// QTimer::singleShot( 0, _busyPopup, SLOT( repaint() ) );
+	qApp->processEvents();
+    }
 
+    y2debug( "Solving..." );
+    QTime solveTime;
+    solveTime.start();
+    
     // Solve.
     bool success = _selectableManager->solveInstall( goodList, badList );
 
-    y2debug( "Solving done" );
+    _totalSolveTime += solveTime.elapsed() / 1000.0;
+    
+    y2debug( "Solving done in %f s - average: %f s",
+	     solveTime.elapsed() / 1000.0, averageSolveTime() );
+
+#if 1
+    if ( _busyPopup->isVisible() )
+	_busyPopup->hide();
+#endif
 
 
     // Package states may have changed: The solver may have set packages to
@@ -282,6 +318,17 @@ YQPkgConflictDialog::resetIgnoredConflicts()
 				 "no conflicts ignored." ),
 			      QMessageBox::Ok );
 }
+
+
+double
+YQPkgConflictDialog::averageSolveTime() const
+{
+    if ( _solveCount < 1 )
+	return 0.0;
+
+    return _totalSolveTime / _solveCount;
+}
+
 
 
 
