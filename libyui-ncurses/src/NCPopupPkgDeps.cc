@@ -75,24 +75,19 @@ bool NCPopupPkgDeps::solveInstall( PkgDep::ResultList & goodList, PkgDep::ErrorR
     return Y2PM::packageManager().solveInstall( goodList, badList );
 }
 
-string NCPopupPkgDeps::getLabelRequire1()
+string NCPopupPkgDeps::getLabelRequire()
 {
-    return PkgNames::LabelRequire1();
+    return PkgNames::LabelRequire();
 }
 
-string NCPopupPkgDeps::getLabelRequBy1()
+string NCPopupPkgDeps::getLabelRequBy()
 {
-    return PkgNames::LabelRequBy1();
+    return PkgNames::LabelRequBy();
 }
 
-string NCPopupPkgDeps::getLabelRequBy2()
+string NCPopupPkgDeps::getLabelConflict()
 {
-    return PkgNames::LabelRequBy2();
-}
-
-string NCPopupPkgDeps::getLabelConflict2()
-{
-    return PkgNames::LabelConflict2();
+    return PkgNames::LabelConflict();
 }
 
 string NCPopupPkgDeps::getLabelContinueRequ()

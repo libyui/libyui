@@ -49,8 +49,7 @@ NCPopupDeps::NCPopupDeps( const wpos at, PackageSelector * pkger )
       , solveButton( 0 )
       , deps( 0 )
       , head( 0 )
-      , errorLabel1( 0 )
-      , errorLabel2( 0 )
+      , errorLabel( 0 )
       , packager( pkger )
       , pkgs( 0 )
 
@@ -115,10 +114,8 @@ void NCPopupDeps::createLayout( )
   opt.isHStretchable.setValue( true );
   opt.isHeading.setValue( false );
  
-  errorLabel1 = new NCLabel(  vSplit, opt, YCPString("") );
-  vSplit->addChild( errorLabel1 );
-  errorLabel2 = new NCLabel(  vSplit, opt, YCPString("") );
-  vSplit->addChild( errorLabel2 );
+  errorLabel = new NCLabel(  vSplit, opt, YCPString("") );
+  vSplit->addChild( errorLabel );
 
   NCSpacing * sp2 = new NCSpacing( vSplit, opt, 0.2, false, true );
   vSplit->addChild( sp2 );
@@ -463,8 +460,7 @@ string NCPopupDeps::getReferersList( const PkgDep::ErrorResult & error )
 bool NCPopupDeps::concretelyDependency( int index )
 {
     if ( !deps
-	 || !errorLabel1
-	 || !errorLabel2 )
+	 || !errorLabel )
 	return false;
     
     unsigned int size = dependencies.size();
@@ -498,8 +494,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    ++it;
 	}
 	    
-	errorLabel1->setLabel( YCPString(getLabelRequire1())  );
-	errorLabel2->setLabel( YCPString(PkgNames::LabelRequire2()) );
+	errorLabel->setLabel( YCPString(getLabelRequire()) );
     }
     else if ( dependencies[index].second == PkgNames::NeedsText() )
     {
@@ -525,8 +520,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    ++it;
 	}
 
-	errorLabel1->setLabel( YCPString(PkgNames::LabelAlternative()) );
-	errorLabel2->setLabel( YCPString( "" ) );
+	errorLabel->setLabel( YCPString(PkgNames::LabelAlternative()) );
     }
     else if ( dependencies[index].second == PkgNames::ConflictText()
 	      || dependencies[index].second == PkgNames::RequConflictText()
@@ -559,8 +553,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    ++it;
 	}
 	
-	errorLabel1->setLabel( YCPString(PkgNames::LabelConflict1()) );
-	errorLabel2->setLabel( YCPString(getLabelConflict2()) );
+	errorLabel->setLabel( YCPString(PkgNames::LabelConflict()) );
     }
     else if ( dependencies[index].second == PkgNames::RequByText()
 	      && error.conflicts_with.empty()
@@ -606,13 +599,11 @@ bool NCPopupDeps::concretelyDependency( int index )
 	if ( causePtr
 	     && (causePtr->getSelectable()->status() == PMSelectable::S_Del) )
 	{
-	    errorLabel1->setLabel( YCPString(getLabelRequBy1()) );
-	    errorLabel2->setLabel( YCPString(getLabelRequBy2()) );
+	    errorLabel->setLabel( YCPString(getLabelRequBy()) );
 	}
 	else
 	{
-	    errorLabel1->setLabel( YCPString(getLabelContinueRequ()) );
-	    errorLabel2->setLabel( YCPString( "" ) );
+	    errorLabel->setLabel( YCPString(getLabelContinueRequ()) );
 	}
     }
 

@@ -381,19 +381,14 @@ public:
     static const string DiskSpaceError();
     static const string DiskSpaceWarning();
     
-    static const string LabelUnres1();
-    static const string LabelUnres2();
+    static const string LabelUnres();
     static const string LabelAlternative();
-    static const string LabelConflict1();
-    static const string LabelConflict2();
-    static const string LabelSelConflict2();
-    static const string LabelRequBy1();
-    static const string LabelSelRequBy1();
-    static const string LabelRequBy2();
-    static const string LabelSelRequBy2();
-    static const string LabelRequire1();
-    static const string LabelSelRequire1();
-    static const string LabelRequire2();
+    static const string LabelConflict();
+    static const string LabelSelConflict();
+    static const string LabelRequBy();
+    static const string LabelSelRequBy();
+    static const string LabelRequire();
+    static const string LabelSelRequire();
     static const string LabelUnresolvable();
     static const string WarningLabel();
     static const string ErrorLabel();
@@ -565,8 +560,7 @@ public:
      *  text used for automatic changes popup
      */
     static const string AutoChangeLabel();
-    static const string AutoChangeText1();
-    static const string AutoChangeText2();
+    static const string AutoChangeText();
 
     /**
      * Part of help text used in installed system

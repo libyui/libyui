@@ -77,24 +77,19 @@ bool NCPopupSelDeps::solveInstall( PkgDep::ResultList & goodList, PkgDep::ErrorR
 //	METHOD NAME : NCPopupSelDeps::getLabelRequire1
 //	METHOD TYPE : string
 //
-string NCPopupSelDeps::getLabelRequire1()
+string NCPopupSelDeps::getLabelRequire()
 {
-    return PkgNames::LabelSelRequire1();
+    return PkgNames::LabelSelRequire();
 }
 
-string NCPopupSelDeps::getLabelRequBy1()
+string NCPopupSelDeps::getLabelRequBy()
 {
-    return PkgNames::LabelSelRequBy1();
+    return PkgNames::LabelSelRequBy();
 }
 
-string NCPopupSelDeps::getLabelRequBy2()
+string NCPopupSelDeps::getLabelConflict()
 {
-    return PkgNames::LabelSelRequBy2();
-}
-
-string NCPopupSelDeps::getLabelConflict2()
-{
-    return PkgNames::LabelSelConflict2();
+    return PkgNames::LabelSelConflict();
 }
 
 string NCPopupSelDeps::getLabelContinueRequ()

@@ -97,10 +97,8 @@ void NCPopupPkgTable::createLayout( )
     split->addChild( sp1 );
 
     opt.isHeading.setValue( false );
-    NCLabel * lb1 = new NCLabel( split, opt, YCPString(PkgNames::AutoChangeText1()) );
+    NCLabel * lb1 = new NCLabel( split, opt, YCPString(PkgNames::AutoChangeText()) );
     split->addChild( lb1 );
-    NCLabel * lb2 = new NCLabel( split, opt, YCPString(PkgNames::AutoChangeText2()) );
-    split->addChild( lb2 );
     
     // add the package table (use default type T_Packages) 
     pkgTable = new NCPkgTable( split, opt );

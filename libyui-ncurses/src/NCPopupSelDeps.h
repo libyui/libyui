@@ -49,10 +49,9 @@ private:
     // method to solve the dependencies
     bool solveInstall( PkgDep::ResultList & goodList, PkgDep::ErrorResultList & badList );
 
-    string getLabelRequire1();
-    string getLabelRequBy1();
-    string getLabelRequBy2();
-    string getLabelConflict2();
+    string getLabelRequire();
+    string getLabelRequBy();
+    string getLabelConflict();
     string getLabelContinueRequ();
     
     string getHeadline();    
