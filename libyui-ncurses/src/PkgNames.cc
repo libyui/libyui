@@ -1450,6 +1450,20 @@ const NCstring PkgNames::SaveErr2Text()
     return value;
 }
 
+const NCstring PkgNames::Saved1Text()
+{
+    // text for a Notify popup
+    static const NCstring value =  _( "<p>Your settings have been saved to the floppy disk.</p>" );
+    return value;
+}
+
+const NCstring PkgNames::Saved2Text()
+{
+    // text for a Notify popup
+    static const NCstring value =  _( "<p>Your package selection have been written to the hard disk.</p>" );
+    return value;
+}
+
 const NCstring PkgNames::LoadSelHeadline()
 {
     // headline for the popup
@@ -1485,6 +1499,19 @@ const NCstring PkgNames::LoadErr2Text()
     return value;
 }
 
+const NCstring PkgNames::LoadedText()
+{
+    // text for a Notify popup
+    static const NCstring value =  _( "<p>The package selection is loaded succesfully.</p>" );
+    return value;
+}
+
+const NCstring PkgNames::CancelText()
+{
+    // text for a Notify popup
+    static const NCstring value =  _( "<p>Abandon all changes?</p>" );
+    return value;
+}
 
 ///////////////////////////////////////////////////////////////////
 

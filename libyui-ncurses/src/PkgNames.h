@@ -754,11 +754,16 @@ public:
     static const NCstring SaveErr2Text();
     static const NCstring SaveSelHeadline();
     static const NCstring SaveSelText();
+    static const NCstring Saved1Text();
+    static const NCstring Saved2Text();
+    
     static const NCstring LoadSelHeadline();
     static const NCstring LoadSel1Text();
     static const NCstring LoadSel2Text();
     static const NCstring LoadErr1Text();
     static const NCstring LoadErr2Text();
+    static const NCstring LoadedText();
+    static const NCstring CancelText();
     
 private:
     
