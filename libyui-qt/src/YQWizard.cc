@@ -87,6 +87,7 @@ YQWizard::YQWizard( QWidget *		parent,
     , _nextButtonLabel ( nextButtonLabel  )
 {
     setWidgetRep( this );
+    _stepsEnabled = opt.stepsEnabled.value();
 
     _sideBar			= 0;
     _stepsPanel			= 0;
@@ -202,9 +203,13 @@ void YQWizard::layoutSideBar( QWidget * parent )
     _sideBar->setMargin( 0 );
 
 
-    layoutStepsPanel();
     layoutHelpPanel();
-    showSteps();
+    
+    if ( _stepsEnabled )
+    {
+	layoutStepsPanel();
+	showSteps();
+    }
 }
 
 
@@ -314,30 +319,38 @@ void YQWizard::layoutHelpPanel()
 
 
 
-    // Bottom gradient
+    if ( _stepsEnabled )
+    {
+	// Bottom gradient
 
-    QLabel * buttonParent = new QLabel( vbox );
-    CHECK_PTR( buttonParent );
-    // buttonParent->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum ) ); // hor/vert
-
-
-    // "Steps" button - intentionally without keyboard shortcut
-    // (the text is only a fallback anyway if no icon can be found)
-    _stepsButton = new QPushButton( _( "Steps" ), buttonParent );
-    CHECK_PTR( _stepsButton );
-
-    QPixmap pixmap( PIXMAP_DIR "steps-button.png" );
-
-    if ( ! pixmap.isNull() )
-	_stepsButton->setPixmap( pixmap );
-
-    QGridLayout * grid = centerAtBottom( buttonParent, _stepsButton, WORK_AREA_BOTTOM_MARGIN );
-    setBottomCroppedGradient( buttonParent, _bottomGradientPixmap, grid->sizeHint().height() );
+	QLabel * buttonParent = new QLabel( vbox );
+	CHECK_PTR( buttonParent );
+	// buttonParent->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum ) ); // hor/vert
 
 
-    connect( _stepsButton, SIGNAL( clicked()   ),
-	     this,	   SLOT	 ( showSteps() ) );
+	// "Steps" button - intentionally without keyboard shortcut
+	// (the text is only a fallback anyway if no icon can be found)
+	_stepsButton = new QPushButton( _( "Steps" ), buttonParent );
+	CHECK_PTR( _stepsButton );
 
+	QPixmap pixmap( PIXMAP_DIR "steps-button.png" );
+
+	if ( ! pixmap.isNull() )
+	    _stepsButton->setPixmap( pixmap );
+
+	QGridLayout * grid = centerAtBottom( buttonParent, _stepsButton, WORK_AREA_BOTTOM_MARGIN );
+	setBottomCroppedGradient( buttonParent, _bottomGradientPixmap, grid->sizeHint().height() );
+
+
+	connect( _stepsButton, SIGNAL( clicked()   ),
+		 this,	   SLOT	 ( showSteps() ) );
+    }
+    else
+    {
+	QWidget * bottomSpacer = addVSpacing( vbox, WORK_AREA_BOTTOM_MARGIN );
+	CHECK_PTR( bottomSpacer );
+	setBottomCroppedGradient( bottomSpacer, _bottomGradientPixmap, WORK_AREA_BOTTOM_MARGIN );
+    }
 
     addGradientColumn( _helpPanel );
 }
@@ -802,33 +815,6 @@ bool YQWizard::eventFilter( QObject * obj, QEvent * ev )
 }
 
 
-//
-// The wizard command mini-parser
-//
-
-
-YCPValue YQWizard::command( const YCPTerm & cmd )
-{
-#define OK YCPBoolean( true );
-
-    if ( isCommand( "SetHelpText   	  ( string )", cmd ) )	{ setHelpText	( qStringArg( cmd, 0 ) );		return OK; }
-    if ( isCommand( "SetDialogIcon 	  ( string )", cmd ) )	{ setDialogIcon	( qStringArg( cmd, 0 ) );		return OK; }
-    if ( isCommand( "SetDialogHeading	  ( string )", cmd ) )	{ setDialogHeading( qStringArg( cmd, 0 ) );		return OK; }
-
-    if ( isCommand( "SetAbortButtonLabel  ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "SetBackButtonLabel   ( string )", cmd ) )	{ setButtonLabel( _backButton,  qStringArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "SetNextButtonLabel	  ( string )", cmd ) )	{ setButtonLabel( _nextButton,  qStringArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "SetCancelButtonLabel ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "SetAcceptButtonLabel ( string )", cmd ) )	{ setButtonLabel( _nextButton,  qStringArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "SetVerboseCommands	  ( bool   )", cmd ) )	{ setVerboseCommands( boolArg( cmd, 0 ) );		return OK; }
-
-    y2error( "Undefined wizard command: %s", cmd->toString().c_str() );
-    return YCPBoolean( false );
-
-#undef OK
-}
-
-
 bool YQWizard::isCommand( QString declaration, const YCPTerm & term )
 {
     declaration = declaration.simplifyWhiteSpace();
@@ -953,6 +939,29 @@ void YQWizard::setButtonLabel( QPushButton * button, const QString & newLabel )
 	else
 	    button->show();
     }
+}
+
+
+
+YCPValue YQWizard::command( const YCPTerm & cmd )
+{
+#define OK YCPBoolean( true );
+
+    if ( isCommand( "SetHelpText   	  ( string )", cmd ) )	{ setHelpText	( qStringArg( cmd, 0 ) );		return OK; }
+    if ( isCommand( "SetDialogIcon 	  ( string )", cmd ) )	{ setDialogIcon	( qStringArg( cmd, 0 ) );		return OK; }
+    if ( isCommand( "SetDialogHeading	  ( string )", cmd ) )	{ setDialogHeading( qStringArg( cmd, 0 ) );		return OK; }
+
+    if ( isCommand( "SetAbortButtonLabel  ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "SetBackButtonLabel   ( string )", cmd ) )	{ setButtonLabel( _backButton,  qStringArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "SetNextButtonLabel	  ( string )", cmd ) )	{ setButtonLabel( _nextButton,  qStringArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "SetCancelButtonLabel ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "SetAcceptButtonLabel ( string )", cmd ) )	{ setButtonLabel( _nextButton,  qStringArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "SetVerboseCommands	  ( bool   )", cmd ) )	{ setVerboseCommands( boolArg( cmd, 0 ) );		return OK; }
+
+    y2error( "Undefined wizard command: %s", cmd->toString().c_str() );
+    return YCPBoolean( false );
+
+#undef OK
 }
 
 

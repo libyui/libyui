@@ -95,6 +95,12 @@ public:
      **/
     void setDialogHeading( const QString & headingText );
 
+    /**
+     * Returns 'true' if this wizard was created with steps enabled, i.e. the
+     * side bar has a "steps" view.
+     **/
+    bool stepsEnabled() const { return _stepsEnabled; }
+
 
 public slots:
 
@@ -269,6 +275,7 @@ protected:
     YCPString	_backButtonLabel;
     YCPString	_abortButtonLabel;
     YCPString	_nextButtonLabel;
+    bool	_stepsEnabled;
 
 
     QPixmap	_titleBarGradientPixmap;
