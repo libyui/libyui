@@ -18,7 +18,6 @@
 /-*/
 #include "Y2Log.h"
 
-#include "NCPopupDiskspace.h"
 
 #include "YMenuButton.h"
 #include "YDialog.h"
@@ -33,6 +32,7 @@
 #include <y2pm/PMPackageManager.h>
 #include <y2pm/PkgDu.h>
 
+#include "NCPopupDiskspace.h"
 
 using namespace std;
 
@@ -90,10 +90,12 @@ void NCPopupDiskspace::createLayout( const YCPString & headline )
 
     vector<string> header;
     header.reserve(5);
-    header.push_back( "Partition");
-    header.push_back( "Used");
-    header.push_back( "Free");
-
+    header.push_back( PkgNames::Partition().str() );
+    header.push_back( PkgNames::UsedSpace().str() );
+    header.push_back( PkgNames::FreeSpace().str() );
+    header.push_back( PkgNames::TotalSpace().str() );
+    header.push_back( "%   ");
+    
     // add the partition table 
     partitions = new NCTable( split, opt, header );
 
@@ -120,6 +122,7 @@ void NCPopupDiskspace::fillPartitionTable()
     pkgLine.reserve(5);
     int i = 0;
 
+    
     const PkgDuMaster & duMaster =  Y2PM::packageManager().updateDu();        
 
     std::set<PkgDuMaster::MountPoint>::iterator it = duMaster.mountpoints().begin();
@@ -130,15 +133,40 @@ void NCPopupDiskspace::fillPartitionTable()
     {
 	pkgLine.clear();
 	pkgLine.push_back( (*it).mountpoint() );
-	pkgLine.push_back( (*it).pkg_used().asString() );
-	pkgLine.push_back( (*it).pkg_available().asString() );
-	
+
+	pkgLine.push_back( formatSpace( (*it).pkg_used().asString() ) );
+	pkgLine.push_back( formatSpace( (*it).pkg_available().asString() ) );
+	pkgLine.push_back( formatSpace( (*it).total().asString() ) );	
+	pkgLine.push_back( usedPercent( (*it).pkg_used(), (*it).total() ) );
 	partitions->itemAdded( pkgLine, i );
 	
 	++it;
 	i++;
     }
+}
+
+string NCPopupDiskspace::usedPercent( FSize used, FSize total )
+{
+    int percent = 0;
+    char percentStr[10];
     
+    if ( total != 0 )
+	percent = ( 100 * used ) / total;
+
+    sprintf( percentStr, "%d%%", percent );
+     
+    return percentStr;
+}
+
+string NCPopupDiskspace::formatSpace( string space )
+{
+    // 			1024.00 GB
+    //                  0123456789
+    string diskSpace = "          ";
+
+    diskSpace.replace( 10-space.length(), 9, space );
+
+    return diskSpace;
 }
 
 ///////////////////////////////////////////////////////////////////

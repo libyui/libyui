@@ -472,7 +472,7 @@ const NCstring PkgNames::RpmTreeLabel()
 const NCstring PkgNames::SelectionLabel()
 {
    // the label of the selections
-    static const NCstring value = _("Package categories");
+    static const NCstring value = _("Package Categories");
     return value;  
 }
 
@@ -486,7 +486,7 @@ const NCstring PkgNames::YOUPatches()
 const NCstring PkgNames::UpdateProblem()
 {
    // the label Filter: Update Problem ( keep it short - max. 25 chars )
-    static const NCstring value = _("Update problem - see help");
+    static const NCstring value = _("Update Problem - see help");
     return value;  
 }
 
@@ -513,8 +513,8 @@ const NCstring PkgNames::CancelIgnore()
 
 const NCstring PkgNames::IgnoreAll()
 {
-    // the label of a Cancel button
-    static const NCstring value = _("&Ignore all");
+    // the label of a Ingnire all button
+    static const NCstring value = _("Ignore &All");
     return value;
 }
 
@@ -525,10 +525,17 @@ const NCstring PkgNames::SolveLabel()
     return value;
 }
 
+const NCstring PkgNames::Ignore()
+{
+    // the label of a Ignore button
+    static const NCstring value = _("&Ignore");
+    return value;
+}
+
 const NCstring PkgNames::SearchResults()
 {
     // the label for Filter: Search results 
-    static const NCstring value = _("Search results");
+    static const NCstring value = _("Search Results");
     return value;
 }
 
@@ -542,7 +549,7 @@ const NCstring PkgNames::InstSummary()
 const NCstring PkgNames::PackageSearch()
 {
     // the headline of the search popup 
-    static const NCstring value = _("Package search");
+    static const NCstring value = _("Package Search");
     return value;
 }
 
@@ -556,14 +563,14 @@ const NCstring PkgNames::DepsHelpLine()
 const NCstring PkgNames::PackageDeps()
 {
     // the headline of the dependency popup 
-    static const NCstring value = _("Package dependencies");
+    static const NCstring value = _("Package Dependencies");
     return value;
 }
 
 const NCstring PkgNames::SelectionDeps()
 {
     // the headline of the popup showing dependencies between selections of packages 
-    static const NCstring value = _("Selection dependencies");
+    static const NCstring value = _("Selection Dependencies");
     return value;
 }
 
@@ -635,28 +642,28 @@ const NCstring PkgNames::IgnoreCase()
 const NCstring PkgNames::DiskspaceLabel()
 {
     // the headline of the disk space popup
-    static const NCstring value = _("&Disk usage overview");
+    static const NCstring value = _("&Disk Usage Overview");
     return value;
 }
 
 const NCstring PkgNames::PackageHelp()
 {
     // the headline of the help popup 
-    static const NCstring value = _("Help package installation");
+    static const NCstring value = _("Help Package Installation");
     return value;
 }
 
 const NCstring PkgNames::SearchHeadline()
 {
     // the headline of the popup showing help on search  
-    static const NCstring value = _("Help package search");
+    static const NCstring value = _("Help Package Search");
     return value;
 }
 
 const NCstring PkgNames::YouHelp()
 {
     // the headline of the help popup 
-    static const NCstring value = _("Help online update");
+    static const NCstring value = _("Help Online Update");
     return value;
 }
 const NCstring PkgNames::LabelUnresolvable()
@@ -914,6 +921,7 @@ const NCstring PkgNames::MenuDeps()
 const NCstring PkgNames::MenuCheckDeps()
 {
     // menu entry: do a dependency check 
+    // Please note: preserve the whitespaces at the beginning
     static const NCstring value = _("    &Check dependencies now");
     return value;
 }
@@ -1112,6 +1120,34 @@ const NCstring PkgNames::PkgStatus()
 {
     // column header status
     static const NCstring value =  NCstring("     ");
+    return value;
+}
+
+const NCstring PkgNames::Partition()
+{
+    // column header name of the partition (keep it short!)
+    static const NCstring value =  _("Partition");
+    return value;
+}
+
+const NCstring PkgNames::UsedSpace()
+{
+    // column header used disk space (keep it short!)
+    static const NCstring value =  _("Used");
+    return value;
+}
+
+const NCstring PkgNames::FreeSpace()
+{
+    // column header free disk space (keep it short!)
+    static const NCstring value =  _("Free");
+    return value;
+}
+
+const NCstring PkgNames::TotalSpace()
+{
+    // column header total disk space (keep it short!)
+    static const NCstring value =  _("Total");
     return value;
 }
 

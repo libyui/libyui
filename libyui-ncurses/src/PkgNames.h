@@ -448,6 +448,11 @@ public:
     static const NCstring IgnoreAll();
 
     /**
+     *  The label of the Ignore button
+     */
+    static const NCstring Ignore();
+    
+    /**
      *  The label of the Solve button
      */
     static const NCstring SolveLabel();
@@ -626,6 +631,11 @@ public:
      */
     static const NCstring PkgStatus();
 
+    static const NCstring Partition();
+    static const NCstring UsedSpace();
+    static const NCstring FreeSpace();
+    static const NCstring TotalSpace();
+    
     /**
      * dependency popup text
      */ 
