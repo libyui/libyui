@@ -1193,9 +1193,12 @@ public:
    * drawing characters. If you specifiy a zero as character, curses will try
    * to find a "nice" character.
   */
-  int            box(chtype vert=0, chtype  hor=0) {
-    return ::wborder(w, vert, vert, hor, hor, 0, 0 ,0, 0); }
+  // int            box(chtype vert=0, chtype  hor=0) {
+  //   return ::wborder(w, vert, vert, hor, hor, 0, 0 ,0, 0); }
 
+  // workaround for 8.1: don't use wborder to draw the box 
+  int box() { return box(wrect( wpos(0,0), size() )); }
+    
   /**
    * Draw a border around the window with the given characters for the
    * various parts of the border. If you pass zero for a character, curses
