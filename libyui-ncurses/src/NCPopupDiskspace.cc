@@ -94,7 +94,7 @@ void NCPopupDiskspace::createLayout( const YCPString & headline )
     header.push_back( "L" + PkgNames::UsedSpace().str() );
     header.push_back( "L" + PkgNames::FreeSpace().str() );
     header.push_back( "L" + PkgNames::TotalSpace().str() );
-    header.push_back( "L" + "%   ");
+    header.push_back( "L%   ");
     
     // add the partition table 
     partitions = new NCTable( split, opt, header );
