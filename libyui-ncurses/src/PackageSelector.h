@@ -331,9 +331,25 @@ class PackageSelector
     */ 
     bool autoChecking() { return autoCheck; }
 
+    /**
+     * Creates a text from a list of strings
+     * @param oneline	true: create one line, items seperated by comma; false: every string is a line
+     * @return string	The text
+     */
     string createText( list<string> info, bool oneline );
 
+    /**
+     * Used for package search
+     * @param s1 Search in s1
+     * @param s2 Searching for s2
+     * @return bool
+     */
     bool match( string s1, string s2, bool ignoreCase );
+
+    /**
+     * Calls the package mananager (updateDu()) and shows the required disk space
+     */ 
+    void showDiskSpace();
 };
 
 ///////////////////////////////////////////////////////////////////
