@@ -1048,6 +1048,7 @@ bool NCDialog::describeFunctionKeys( string & helpText )
     char key[20];
     YCPString label( "" );
     bool hasF1 = false;
+    std::map<int, string> fkeys;
     
     for ( tnode<NCWidget*> * c = this->Next(); c; c = c->Next() )
     {
@@ -1070,8 +1071,7 @@ bool NCDialog::describeFunctionKeys( string & helpText )
 		{
 		    hasF1 = true;
 		}
-		sprintf( key, "F%d: ",  no );
-		text += key + desc + "<br>";
+		fkeys[ no ] = desc;
 	    }
 	    else
 	    {
@@ -1079,6 +1079,15 @@ bool NCDialog::describeFunctionKeys( string & helpText )
 	    }
 	}
     }
+    // create the text with sorted F-keys
+    std::map<int, string>::iterator it;
+
+    for ( it = fkeys.begin(); it != fkeys.end(); ++it )
+    {
+	sprintf( key, "F%2d: ", (*it).first );
+	text += key + (*it).second + "<br>";	
+    }
+    
     helpText = text;
 
     return hasF1;
