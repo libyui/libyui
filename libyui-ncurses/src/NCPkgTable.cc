@@ -211,9 +211,11 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
 	    // additionally update the package list
 	    packager->updatePackageList();
 	}
-	if ( tableType != T_Dependency )
+	if ( tableType != T_Dependency
+	     && tableType != T_Patches )
 	{
 	    // only check/show deps if is't not the dependency table itself
+	    // or the list of YOU patches
 	    packager->showDependencies( false );	// only check if automatic check is ON
 	}
     }
