@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Mar 16 14:09:57 CET 2004 - gs@suse.de
+
+- package installation: improve license popup (bug #33584),
+  			check size of popups (bug #35873)
+
+-------------------------------------------------------------------
 Mon Mar 15 17:59:48 CET 2004 - gs@suse.de
 
 - V 2.9.15
