@@ -850,7 +850,7 @@ wint_t NCDialog::getinput()
 		NCstring::RecodeToWchar( str, NCstring::terminalEncoding(), &to ); 
 		got = to[0];
 
-		if ( gotch != got )
+		if ( gotch != (int)got )
 		{
 		    got += 0xFFFF;			// mark this key 
 		}    
@@ -1062,7 +1062,8 @@ void NCDialog::processInput( int timeout_millisec )
   noUpdates = true;
   while ( !pendingEvent.isReturnEvent() && ch != WEOF ) {
 
-    switch ( (ch = getch( timeout_millisec )) ) {
+    ch = getch(timeout_millisec);
+    switch (ch) {
 
       // case KEY_RESIZE: is directly handled in NCDialog::getch.
 
@@ -1072,6 +1073,11 @@ void NCDialog::processInput( int timeout_millisec )
       else if ( timeout_millisec > 0 )
         pendingEvent = NCursesEvent::timeout;
       break;
+
+    case KEY_F(16):
+	const_cast<NCstyle&>(NCurses::style()).nextStyle();
+	NCurses::Redraw();
+	break;
       
     case CTRL('D'):
       hch = getch( -1 );
@@ -1266,7 +1272,7 @@ NCursesEvent NCDialog::wHandleInput( wint_t ch )
 //
 NCursesEvent NCDialog::getHotkeyEvent( wint_t key )
 {
-  NCWidget *const oActive = wActive;
+//  NCWidget *const oActive = wActive;
   NCursesEvent ret = NCursesEvent::none;
 
   if ( wActive->isValid() )

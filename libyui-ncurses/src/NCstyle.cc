@@ -291,6 +291,7 @@ string NCstyle::dumpName( NCstyle::STlocal a ) {
 //
 NCstyle::NCstyle( string term_t )
     : styleName( "linux" )
+    , term ( term_t )
     , styleSet( MaxStyleSet )
     , fakestyle_e( MaxStyleSet )
 {
@@ -326,6 +327,35 @@ NCstyle::NCstyle( string term_t )
 //
 NCstyle::~NCstyle()
 {
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCstyle::nextSyle
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCstyle::nextStyle()
+{
+  if (!NCattribute::colors() ) return;
+
+  if ( styleName == "mono") {
+    if ( term == "xterm") {
+      styleName = "xterm";
+      NCstyleInit_xterm( styleSet );
+    } else {
+      styleName = "linux";
+      NCstyleInit_linux( styleSet );
+    }
+  } else if (styleName == "braille") {
+    styleName = "mono";
+    NCstyleInit_mono( styleSet );
+  } else {
+    styleName = "braille";
+    NCstyleInit_braille( styleSet );
+  }
 }
 
 ///////////////////////////////////////////////////////////////////

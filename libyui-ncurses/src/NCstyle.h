@@ -451,6 +451,7 @@ class NCstyle {
   private:
 
     string        styleName;
+    string        term;
     vector<Style> styleSet;
 
     StyleSet fakestyle_e;
@@ -474,6 +475,7 @@ class NCstyle {
   public:
 
     void changeSyle();
+    void nextStyle();
 
     static string dumpName( StyleSet a );
     static string dumpName( STglobal a );

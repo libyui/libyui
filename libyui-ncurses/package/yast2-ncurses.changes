@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Mar 16 10:54:12 CET 2005 - mlazar@suse.cz
+
+- 2.12.1
+- implemented feature 100313: Allow switching of color palette at
+  runtime in ncurses
+
+-------------------------------------------------------------------
 Mon Mar 14 16:19:15 CET 2005 - mlazar@suse.cz
 
 - fixed Bug 71815 - yast: unnecessary warning in packager (ncurses)
