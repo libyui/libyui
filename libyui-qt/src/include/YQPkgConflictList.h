@@ -99,14 +99,31 @@ public:
      * Access the internal ErrorResult.
      **/
     PkgDep::ErrorResult & errorResult() { return _conflict; }
+    
+    /**
+     * Returns if this conflict needs an alternative from a list.
+     **/
+    bool needAlternative() { return ! _conflict.alternatives.empty(); }
+
+    /**
+     * Returns if this package collides with other packages.
+     **/
+    bool hasCollisions() { return ! _conflict.conflicts_with.empty(); }
+
+    /**
+     * Returns if this package has open (unresolved) requirements.
+     **/
+    bool hasOpenRequirements() { return ! _conflict.unresolvable.empty(); }
+    
 
 protected:
+
 
     /**
      * Format the text line for this item.
      **/
     void formatLine();
-    
+
 
     PMObjectPtr			_pmObj;
     QString			_shortName;	// Only pkg name (no version)
@@ -114,7 +131,6 @@ protected:
     PMSelectable::UI_Status	_status;
 
     bool			_collision;
-    bool			_needAlternative;
 
     YQPkgConflictAlternative *	_firstAlternative;
     YQPkgConflictResolution *	_firstResolution;
@@ -122,35 +138,6 @@ protected:
     PkgDep::ErrorResult		_conflict;
     YQPkgConflictList *		_parentList;
 };
-
-
-
-/**
- * @short Generic conflict list item with a simple text
- **/
-class YQPkgConflictTextItem: public QY2ListViewItem
-{
-public:
-
-    /**
-     * Constructor.
-     **/
-    
-    YQPkgConflictTextItem( QListViewItem * 	parent,
-			   const QString & 	text,
-			   bool			sortByInsertionOrder = true )
-	: QY2ListViewItem( parent, sortByInsertionOrder )
-    {
-	setText( 0, text );    
-    }
-
-
-    /**
-     * Destructor.
-     **/
-    virtual ~YQPkgConflictTextItem() {}
-};
-
 
 
 class YQPkgConflictAlternative: public QY2CheckListItem

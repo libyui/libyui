@@ -117,9 +117,7 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
 	_fullName += ( PkgEdition::toString( edition ) ).c_str();
     }
 
-    _needAlternative	= ! _conflict.alternatives.empty();
-    _collision		= ! _conflict.conflicts_with.empty();
-
+    setBackgroundColor( QColor( 0xE0, 0xE0, 0xF8 ) );
     formatLine();
 }
 
@@ -135,16 +133,18 @@ YQPkgConflict::formatLine()
 
     if ( ! _pmObj )
     {
-	if ( _needAlternative )
+	if ( needAlternative() )
 	{
 	    // Select one from a number of functionalities (Window manager etc.)
 	    text = ( _( "Select %1" ) ).arg( _shortName );
+	    setTextColor( QColor( 0, 0, 0xC0 ) );
 	}
 	else
 	{
 	    // (Pseudo) package / functionality %1 missing, e.g.,
 	    // "libfoo.so.1.0 not available", "Window manager not available"
 	    text = ( _( "%1 not available" ) ).arg( _fullName );
+	    setTextColor( Qt::red );
 	}
     }
     else
@@ -157,7 +157,7 @@ YQPkgConflict::formatLine()
 	    // This means that the user has set this package to "remove" or "taboo",
 	    // yet other packages still need it.
 
-	    QString pkgStatus;
+	    setTextColor( Qt::red );
 	    
 	    switch ( _status )
 	    {

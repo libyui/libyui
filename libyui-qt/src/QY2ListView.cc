@@ -207,9 +207,10 @@ QY2ListView::columnWidthChanged( int, int, int )
 
 
 
-QY2ListViewItem::QY2ListViewItem( QY2ListView * parentListView,
-				  bool sortByInsertionSequence )
-    : QListViewItem( parentListView )
+QY2ListViewItem::QY2ListViewItem( QY2ListView * 	parentListView,
+				  const QString &	text,
+				  bool 			sortByInsertionSequence )
+    : QListViewItem( parentListView, text )
     , _sortByInsertionSequence( sortByInsertionSequence )
 {
     _serial = 0;
@@ -219,9 +220,10 @@ QY2ListViewItem::QY2ListViewItem( QY2ListView * parentListView,
 }
 
 
-QY2ListViewItem::QY2ListViewItem(  QListViewItem * parentItem,
-				   bool sortByInsertionSequence )
-    : QListViewItem( parentItem )
+QY2ListViewItem::QY2ListViewItem(  QListViewItem * 	parentItem,
+				   const QString &	text,
+				   bool 		sortByInsertionSequence )
+    : QListViewItem( parentItem, text )
     , _sortByInsertionSequence( sortByInsertionSequence )
 {
     _serial = 0;

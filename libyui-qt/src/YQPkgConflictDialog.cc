@@ -138,7 +138,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
     }
     else
     {
-	y2error( "Dependency conflict!" );
+	y2milestone( "Dependency conflict!" );
 	_conflictList->fill( badList );
 	
 	if ( ! isVisible() )

@@ -178,8 +178,9 @@ public:
      * order (true) or leaves sorting to the user (false - sort-by-click on
      * column headers).
      **/
-    QY2ListViewItem( QY2ListView * parentListView,
-		     bool sortByInsertionSequence = false );
+    QY2ListViewItem( QY2ListView * 		parentListView,
+		     const QString &		text = QString::null,
+		     bool 			sortByInsertionSequence = false );
 
 
     /**
@@ -189,8 +190,9 @@ public:
      * order (true) or leaves sorting to the user (false - sort-by-click on
      * column headers).
      **/
-    QY2ListViewItem( QListViewItem * parentItem,
-		     bool sortByInsertionSequence = false );
+    QY2ListViewItem( QListViewItem * 		parentItem,
+		     const QString &		text = QString::null,
+		     bool 			sortByInsertionSequence = false );
 
     /**
      * Destructor

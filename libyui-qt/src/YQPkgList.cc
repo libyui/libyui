@@ -295,7 +295,7 @@ YQPkgListItem::paintCell( QPainter *		painter,
     {
 	QColorGroup cg = colorGroup;
 
-	cg.setColor( QColorGroup::Text, QColor( 0, 0, 0xC0 ) );		// Foreground
+	cg.setColor( QColorGroup::Text, QColor( 0, 0, 0xC0 ) );			// Foreground
 
 	if ( column == versionCol() )
 	    cg.setColor( QColorGroup::Base, QColor( 0xF0, 0xF0, 0xF0 ) );	// Background
