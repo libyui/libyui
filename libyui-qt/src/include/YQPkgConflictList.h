@@ -37,7 +37,7 @@ typedef enum YQPkgConflictResolutionType
 {
     YQPkgConflictUndo,
     YQPkgConflictIgnore,
-    YQPkgConflictBulkDelete,
+    YQPkgConflictBruteForceDelete,
     YQPkgConflictAlternative
 };
 
@@ -181,7 +181,11 @@ protected:
      **/
     void addIgnoreResolution( QY2CheckListItem * parent );
 
-
+    /**
+     * Dump the 'remove_to_solve_conflict' list into the conflict list.
+     **/
+    void dumpDeleteList( QListViewItem * parent );
+    
 
     /**
      * Paint method. Reimplemented from @ref QListViewItem a different
