@@ -10,8 +10,7 @@
  * $Id$
  */
 {
-    textdomain "ncurses";
-
+    textdomain "packages";
 
     return `VBox( `VSpacing(0.3),
        `HBox( `HSpacing(0.4),
