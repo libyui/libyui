@@ -38,10 +38,10 @@
 struct NCFileInfo
  {
      /**
-      * Constructor from a stat buffer (i.e. based on an lstat() call).
+      * Constructor from a stat buffer (i.e. based on an lstat64() call).
       **/
      NCFileInfo( string 	fileName,
-		 struct stat *	statInfo,
+		 struct stat64	* statInfo,
 		 bool link 	= false );
 
      NCFileInfo ();
@@ -59,7 +59,7 @@ struct NCFileInfo
      dev_t		_device;	// device this object resides on
      mode_t		_mode;		// file permissions + object type
      nlink_t		_links;		// number of links
-     off_t		_size;		// size in bytes
+     off64_t		_size;		// size in bytes
      time_t		_mtime;		// modification time
 
      bool isDir()  { return ( (S_ISDIR(_mode)) ? true : false ); }

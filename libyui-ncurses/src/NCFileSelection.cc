@@ -39,7 +39,7 @@
 //	DESCRIPTION :
 //
 NCFileInfo::NCFileInfo( string 	fileName,
-			struct stat *	statInfo,
+			struct stat64 *	statInfo,
 			bool 	link )
 {
     _name   = fileName;
@@ -135,7 +135,7 @@ NCFileInfo::NCFileInfo( )
     _mode   = (mode_t)0;
     _device = (dev_t)0;
     _links  = (nlink_t)0;
-    _size   = (off_t)0;
+    _size   = (off64_t)0;
     _mtime  = (time_t)0;
 }
 
@@ -193,10 +193,10 @@ NCFileSelection::NCFileSelection( NCWidget * parent,
     SetSepChar( ' ' );
     setTextdomain( "packages" );
 
-    struct stat statInfo;
+    struct stat64 statInfo;
     if ( !iniDir->value().empty() )
     {
-	stat( iniDir->value().c_str(), &statInfo );
+	stat64( iniDir->value().c_str(), &statInfo );
     }
     
     if ( iniDir->value().empty()
@@ -632,8 +632,8 @@ NCursesEvent NCFileTable::wHandleInput( wint_t key )
 //
 bool NCFileTable::fillList ( )
 {
-    struct stat 	statInfo;
-    struct stat		linkInfo;
+    struct stat64 	statInfo;
+    struct stat64	linkInfo;
     struct dirent *	entry;
     list<string>	tmpList;
     list<string>::iterator   it;
@@ -661,7 +661,7 @@ bool NCFileTable::fillList ( )
 	{
 	    string fullName = currentDir + "/" + (*it);
 
-	    if ( lstat( fullName.c_str(), &statInfo ) == 0 )
+	    if ( lstat64( fullName.c_str(), &statInfo ) == 0 )
 	    {
 		if ( S_ISREG( statInfo.st_mode ) )
 		{
@@ -673,7 +673,7 @@ bool NCFileTable::fillList ( )
 		}
 		else if ( S_ISLNK( statInfo.st_mode ) )	
 		{
-		    if ( stat( fullName.c_str(), &linkInfo ) == 0 )
+		    if ( stat64( fullName.c_str(), &linkInfo ) == 0 )
 		    {
 			if ( S_ISREG( linkInfo.st_mode ) )
 			{
@@ -775,8 +775,8 @@ void NCDirectoryTable::fillHeader( )
 //
 bool NCDirectoryTable::fillList ( )
 {
-    struct stat 	statInfo;
-    struct stat		linkInfo;
+    struct stat64 	statInfo;
+    struct stat64	linkInfo;
     struct dirent *	entry;
     list<string>	tmpList;
     list<string>::iterator   it;
@@ -803,7 +803,7 @@ bool NCDirectoryTable::fillList ( )
 	while ( it != tmpList.end() )
 	{
 	    string fullName = currentDir + "/" + (*it);
-	    if ( lstat( fullName.c_str(), &statInfo ) == 0 )
+	    if ( lstat64( fullName.c_str(), &statInfo ) == 0 )
 	    {
 		if ( S_ISDIR( statInfo.st_mode ) )
 		{
@@ -815,7 +815,7 @@ bool NCDirectoryTable::fillList ( )
 		}
 		else if ( S_ISLNK( statInfo.st_mode ) )	
 		{
-		    if ( stat( fullName.c_str(), &linkInfo ) == 0 )
+		    if ( stat64( fullName.c_str(), &linkInfo ) == 0 )
 		    {
 			if ( S_ISDIR( linkInfo.st_mode ) )
 			{

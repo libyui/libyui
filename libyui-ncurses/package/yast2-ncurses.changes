@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Jul  8 11:16:29 CEST 2004 - mlazar@suse.cz
+
+- fixed bug #42736: file selection dialog does not show large files (>1GB)
+
+-------------------------------------------------------------------
 Tue Jun 22 16:09:55 CEST 2004 - mlazar@suse.cz
 
 - fixed bug #42327 (yast2-ncurses abort when resizing window)
