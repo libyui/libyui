@@ -103,7 +103,7 @@ void NCPopupDeps::createLayout( )
 
   vSplit->addChild( new NCSpacing( vSplit, opt, 0.4, false, true ) );
 
-  // add the list containing packages with unresolved depemdencies
+  // add the list containing packages with unresolved dependencies
   pkgs = new NCPkgTable( vSplit, opt );
   pkgs->setPackager( packager );
   vSplit->addChild( pkgs );
@@ -191,6 +191,7 @@ bool NCPopupDeps::showDependencies( )
     
     // fill the table header
     pkgs->fillHeader( );
+    deps->fillHeader( );
 	    
     // 	typedef std::list<Result> ResultList;
     PkgDep::ResultList		goodList;
