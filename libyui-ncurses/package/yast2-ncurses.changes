@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Sep 12 13:40:20 CEST 2002 - gs@suse.de
+
+- V 2.6.18
+- package installation: show the delete notify also if a package
+  is deselected
+
+-------------------------------------------------------------------
 Tue Sep 10 19:52:13 CEST 2002 - gs@suse.de
 
 - V 2.6.17
