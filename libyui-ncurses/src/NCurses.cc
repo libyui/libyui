@@ -454,7 +454,7 @@ void NCurses::SetTitle( const string & str )
 
     setTextdomain( "packages" );
     // part of title (headline) of the textmode yast
-    string helpF1 = _( "Press F1 for help" );
+    string helpF1 = _( "Press F1 for Help" );
     
     int s = myself->title_w->_maxx - helpF1.length();
     ::mvwaddstr( myself->title_w, 0, s, helpF1.c_str() );

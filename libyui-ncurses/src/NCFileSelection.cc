@@ -491,28 +491,28 @@ void NCFileTable::fillHeader( )
 	    header.reserve(2);
 	    header.push_back( "L" + string("  ") );
 	    // column header name of the file 
-	    header.push_back( "L" + string(_("File name")) );
+	    header.push_back( "L" + string(_( "File name" )) );
 	    break;
 	}
 	case T_Detailed: {
 	    header.reserve(6);
 	    header.push_back( "L" + string("  ") );
     	    // column header name of the file 
-	    header.push_back( "L" + string(_("File name")) );
+	    header.push_back( "L" + string(_( "File name" )) );
 	    // column header size of the file  
-	    header.push_back( "L" + string(_("Size")) );
+	    header.push_back( "L" + string(_( "Size" )) );
 	    // column header file permissions 
-	    header.push_back( "L" + string(_("Permissions")) );
+	    header.push_back( "L" + string(_( "Permissions" )) );
 	    // column header user
-	    header.push_back( "L" + string(_("User")) );
+	    header.push_back( "L" + string(_( "User" )) );
 	    // column header group
-	    header.push_back( "L" + string(_("Group")) );
+	    header.push_back( "L" + string(_( "Group" )) );
 	    break;
 	}
 	default: {
 	    header.reserve(2);
 	    header.push_back( "L" + string("   ") );
-	    header.push_back( "L" + string(_("File name")) );
+	    header.push_back( "L" + string(_( "File name" )) );
 	    break;
 	}
     }
@@ -733,23 +733,23 @@ void NCDirectoryTable::fillHeader( )
 	    header.reserve(2);
 	    header.push_back( "L" + string("  ") );
 	    // column header name of diretcory
-	    header.push_back( "L" + string(_("Directory name")) );
+	    header.push_back( "L" + string(_( "Directory Name" )) );
 	    break;
 	}
 	case T_Detailed: {
 	    header.reserve(5);
 	    header.push_back( "L" + string("  ") );
     	    // column header name of diretcory
-	    header.push_back( "L" + string(_("Directory name")) );
-	    header.push_back( "L" + string(_("Permissions")) );
-	    header.push_back( "L" + string(_("User")) );
-	    header.push_back( "L" + string(_("Group")) );
+	    header.push_back( "L" + string(_( "Directory Name" )) );
+	    header.push_back( "L" + string(_( "Permissions" )) );
+	    header.push_back( "L" + string(_( "User" )) );
+	    header.push_back( "L" + string(_( "Group" )) );
 	    break;
 	}
 	default: {
 	    header.reserve(2);
 	    header.push_back( "L" + string("   ") );
-	    header.push_back( "L" + string(_("Directory name")) );
+	    header.push_back( "L" + string(_( "Directory Name" )) );
 	    break;
 	}
     }

@@ -43,9 +43,9 @@
 					     // reset the status 'Taboo' 
 					     `item( `id("tabooOff"), 	_( "Taboo &No    [-]" ) ),
 					     // install the source package (SRPM)
-					     `item( `id("sourceYes"), 	_( "&Install Sources (SRPM)") ),
+					     `item( `id("sourceYes"), 	_( "&Install Sources (SRPM)" ) ),
 					     // don't install sources
-					     `item( `id("sourceNo"), 	_( "D&on't Install Sources") ),
+					     `item( `id("sourceNo"), 	_( "D&o Not Install Sources" ) ),
 					     // end: Actions menu, set status of all packages (title of a submenu)
 					     `menu( _( "All Listed &Packages" ),
 						    [

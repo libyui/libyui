@@ -111,7 +111,7 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
     opt.isEditable.setValue( false );
     opt.notifyMode.setValue( true );
     // label for text field showing the selected dir
-    dirName = new NCComboBox( frame, opt, YCPString(_("Selected directory:")) );
+    dirName = new NCComboBox( frame, opt, YCPString(_( "Selected Directory:" )) );
     frame->addChild( dirName );
 
     dirName->setId( PkgNames::DirName() );
@@ -124,7 +124,7 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
     NCSplit * hSplit = new NCSplit( split, opt, YD_HORIZ );
     split->addChild( hSplit );
     // label for checkbox
-    detailed = new NCCheckBox( hSplit, opt, YCPString( _("&Details view") ), false );
+    detailed = new NCCheckBox( hSplit, opt, YCPString( _( "&Detailed View" ) ), false );
     detailed->setId( PkgNames::Details() );
     hSplit->addChild( new NCSpacing( hSplit, opt, 0.1, true, false ) );
     hSplit->addChild( detailed );
@@ -153,12 +153,12 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
     opt.isEditable.setValue( edit );
     fileName = new NCTextEntry( hSplit2, opt,
 				// label for text field showing the filename
-			       YCPString(_("&File name:")),
+			       YCPString(_( "&File name:" )),
 			       YCPString( "" ),
 			       100, 50 );
     hSplit2->addChild( fileName );
     // label for text field showing the filter (e.g. *.bak)
-    NCComboBox * extension = new NCComboBox( hSplit2, opt, YCPString(_("Filter:")) );
+    NCComboBox * extension = new NCComboBox( hSplit2, opt, YCPString(_( "Filter:" )) );
     hSplit2->addChild( extension );
     extension->itemAdded( filter,
 			  0,		 // index

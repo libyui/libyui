@@ -108,7 +108,7 @@ void NCAskForExistingDirectory::createLayout( const YCPString & iniDir,
     opt.isEditable.setValue( false );
     opt.notifyMode.setValue( true );
     // label for text field showing the selected dir
-    dirName = new NCComboBox( frame, opt, YCPString(_("Selected directory:")) );
+    dirName = new NCComboBox( frame, opt, YCPString(_( "Selected Directory:" )) );
     frame->addChild( dirName );
 
     dirName->setId( PkgNames::DirName() );
@@ -121,7 +121,7 @@ void NCAskForExistingDirectory::createLayout( const YCPString & iniDir,
     NCSplit * hSplit = new NCSplit( split, opt, YD_HORIZ );
     split->addChild( hSplit );
     // label for checkbox 
-    detailed = new NCCheckBox( hSplit, opt, YCPString(_("&Details view")), false );
+    detailed = new NCCheckBox( hSplit, opt, YCPString(_( "&Detailed View" )), false );
     detailed->setId( PkgNames::Details() );
     hSplit->addChild( new NCSpacing( hSplit, opt, 0.1, true, false ) );
     hSplit->addChild( detailed );
