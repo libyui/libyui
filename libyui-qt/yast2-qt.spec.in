@@ -1,6 +1,6 @@
 @HEADER-COMMENT@
 
-# neededforbuild  gpp libgpp libxcrypt libxcrypt-devel qt3-devel-packages xf86 yast2-devel-packages
+# neededforbuild  gpp libgpp libxcrypt libxcrypt-devel qt3-devel-packages yast2-devel-packages
 
 @HEADER@
 
