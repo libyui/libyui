@@ -147,12 +147,13 @@ YQPkgObjList::statusIcon( PMSelectable::UI_Status status, bool enabled, bool byS
     {
 	switch ( status )
 	{
-	    case PMSelectable::S_Taboo:		icon = YQIconPool::pkgTaboo();		break;
 	    case PMSelectable::S_Del:		icon = YQIconPool::pkgDel();		break;
-	    case PMSelectable::S_Update:	icon = YQIconPool::pkgUpdate();		break;
 	    case PMSelectable::S_Install:	icon = YQIconPool::pkgInstall();	break;
 	    case PMSelectable::S_KeepInstalled: icon = YQIconPool::pkgKeepInstalled();	break;
 	    case PMSelectable::S_NoInst:	icon = YQIconPool::pkgNoInst();		break;
+	    case PMSelectable::S_Protected:	icon = YQIconPool::pkgProtected();	break;
+	    case PMSelectable::S_Taboo:		icon = YQIconPool::pkgTaboo();		break;
+	    case PMSelectable::S_Update:	icon = YQIconPool::pkgUpdate();		break;
 		
 	    case PMSelectable::S_AutoDel:	icon = bySelection ?
 						    YQIconPool::pkgSelAutoDel() :
@@ -175,12 +176,13 @@ YQPkgObjList::statusIcon( PMSelectable::UI_Status status, bool enabled, bool byS
     {
 	switch ( status )
 	{
-	    case PMSelectable::S_Taboo:		icon = YQIconPool::disabledPkgTaboo();		break;
 	    case PMSelectable::S_Del:		icon = YQIconPool::disabledPkgDel();		break;
-	    case PMSelectable::S_Update:	icon = YQIconPool::disabledPkgUpdate();		break;
 	    case PMSelectable::S_Install:	icon = YQIconPool::disabledPkgInstall();	break;
 	    case PMSelectable::S_KeepInstalled: icon = YQIconPool::disabledPkgKeepInstalled();	break;
 	    case PMSelectable::S_NoInst:	icon = YQIconPool::disabledPkgNoInst();		break;
+	    case PMSelectable::S_Protected:	icon = YQIconPool::disabledPkgProtected();	break;
+	    case PMSelectable::S_Taboo:		icon = YQIconPool::disabledPkgTaboo();		break;
+	    case PMSelectable::S_Update:	icon = YQIconPool::disabledPkgUpdate();		break;
 		
 	    case PMSelectable::S_AutoDel:	icon = bySelection ?
 						    YQIconPool::disabledPkgSelAutoDel() :
@@ -208,15 +210,16 @@ YQPkgObjList::statusText( PMSelectable::UI_Status status ) const
 {
     switch ( status )
     {
-	case PMSelectable::S_Taboo:		return _( "Taboo -- never install"	);
-	case PMSelectable::S_Del:		return _( "Delete"			);
-	case PMSelectable::S_Update:		return _( "Update"			);
-	case PMSelectable::S_Install:		return _( "Install"			);
 	case PMSelectable::S_AutoDel:		return _( "Autodelete"			);
 	case PMSelectable::S_AutoInstall:	return _( "Autoinstall"			);
 	case PMSelectable::S_AutoUpdate:	return _( "Autoupdate"			);
+	case PMSelectable::S_Del:		return _( "Delete"			);
+	case PMSelectable::S_Install:		return _( "Install"			);
 	case PMSelectable::S_KeepInstalled:	return _( "Keep"			);
 	case PMSelectable::S_NoInst:		return _( "Do not install"		);
+	case PMSelectable::S_Protected:		return _( "Protected -- do not modify"	);
+	case PMSelectable::S_Taboo:		return _( "Taboo -- never install"	);
+	case PMSelectable::S_Update:		return _( "Update"			);
     }
 
     return QString::null;
@@ -304,6 +307,7 @@ YQPkgObjList::createActions()
     actionSetCurrentDelete		= createAction( PMSelectable::S_Del,		"[-]"		);
     actionSetCurrentUpdate		= createAction( PMSelectable::S_Update,		"[>], [+]"	);
     actionSetCurrentTaboo		= createAction( PMSelectable::S_Taboo,		"[!]"		);
+    actionSetCurrentProtected		= createAction( PMSelectable::S_Protected,	"[*]"		);
 
 
     actionSetListInstall		= createAction( PMSelectable::S_Install,	"", true );
@@ -324,6 +328,7 @@ YQPkgObjList::createActions()
 							true );
 
     actionSetListTaboo			= createAction( PMSelectable::S_Taboo,		"", true );
+    actionSetListProtected		= createAction( PMSelectable::S_Protected,	"", true );
 
     connect( actionSetCurrentInstall,	     SIGNAL( activated() ), this, SLOT( setCurrentInstall()	  ) );
     connect( actionSetCurrentDontInstall,    SIGNAL( activated() ), this, SLOT( setCurrentDontInstall()	  ) );
@@ -331,6 +336,7 @@ YQPkgObjList::createActions()
     connect( actionSetCurrentDelete,	     SIGNAL( activated() ), this, SLOT( setCurrentDelete()	  ) );
     connect( actionSetCurrentUpdate,	     SIGNAL( activated() ), this, SLOT( setCurrentUpdate()	  ) );
     connect( actionSetCurrentTaboo,	     SIGNAL( activated() ), this, SLOT( setCurrentTaboo()	  ) );
+    connect( actionSetCurrentProtected,	     SIGNAL( activated() ), this, SLOT( setCurrentProtected()	  ) );
 
     connect( actionSetListInstall,	     SIGNAL( activated() ), this, SLOT( setListInstall()	  ) );
     connect( actionSetListDontInstall,	     SIGNAL( activated() ), this, SLOT( setListDontInstall()	  ) );
@@ -339,6 +345,7 @@ YQPkgObjList::createActions()
     connect( actionSetListUpdate,	     SIGNAL( activated() ), this, SLOT( setListUpdate()		  ) );
     connect( actionSetListUpdateForce,	     SIGNAL( activated() ), this, SLOT( setListUpdateForce()	  ) );
     connect( actionSetListTaboo,	     SIGNAL( activated() ), this, SLOT( setListTaboo()		  ) );
+    connect( actionSetListProtected,	     SIGNAL( activated() ), this, SLOT( setListProtected()	  ) );
 }
 
 
@@ -411,6 +418,7 @@ YQPkgObjList::createInstalledContextMenu()
     actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
     actionSetCurrentDelete->addTo( _installedContextMenu );
     actionSetCurrentUpdate->addTo( _installedContextMenu );
+    actionSetCurrentProtected->addTo( _installedContextMenu );
 
     addAllInListSubMenu( _installedContextMenu );
 }
@@ -429,6 +437,7 @@ YQPkgObjList::addAllInListSubMenu( QPopupMenu * menu )
     actionSetListUpdate->addTo( submenu );
     actionSetListUpdateForce->addTo( submenu );
     actionSetListTaboo->addTo( submenu );
+    actionSetListProtected->addTo( submenu );
 
     menu->insertItem( _( "&All in This List" ), submenu );
 
@@ -477,6 +486,7 @@ YQPkgObjList::updateActions( YQPkgObjListItem * item )
 	actionSetCurrentTaboo->setEnabled( false);
 
 	actionSetCurrentKeepInstalled->setEnabled( true );
+	actionSetCurrentProtected->setEnabled( true );
 	actionSetCurrentDelete->setEnabled( true );
 	actionSetCurrentUpdate->setEnabled( pmObj->hasCandidateObj() );
     }
@@ -487,6 +497,7 @@ YQPkgObjList::updateActions( YQPkgObjListItem * item )
 	actionSetCurrentTaboo->setEnabled( true );
 
 	actionSetCurrentKeepInstalled->setEnabled( false);
+	actionSetCurrentProtected->setEnabled( false );
 	actionSetCurrentDelete->setEnabled( false );
 	actionSetCurrentUpdate->setEnabled( false );
     }
@@ -543,6 +554,14 @@ YQPkgObjList::keyPressEvent( QKeyEvent *event )
 
 			if ( ! installed )
 			    setCurrentStatus( PMSelectable::S_Taboo );
+			selectNextItem();
+			event->accept();
+			return;
+
+		    case '*':	// Protected
+
+			if ( installed )
+			    setCurrentStatus( PMSelectable::S_Protected );
 			selectNextItem();
 			event->accept();
 			return;
@@ -734,6 +753,11 @@ YQPkgObjListItem::cycleStatus()
     {
 	switch ( oldStatus )
 	{
+	    case PMSelectable::S_Protected:
+		newStatus = pmObj()->hasCandidateObj() ?
+		    PMSelectable::S_KeepInstalled: PMSelectable::S_NoInst;
+		break;
+
 	    case PMSelectable::S_KeepInstalled:
 		newStatus = pmObj()->hasCandidateObj() ?
 		    PMSelectable::S_Update : PMSelectable::S_Del;

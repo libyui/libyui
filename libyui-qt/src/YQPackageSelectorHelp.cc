@@ -174,6 +174,16 @@ YQPackageSelector::symbolHelp()
 		     + " "
 		     + _( "Packages set to \"taboo\" are treated as if they did not exist on any installation media." ) );
 
+    html += symHelp( "protected.xpm",
+		     // Translators: Package status short (!) description
+		     _( "Protected" ),
+		     // Translators: Automatic word-wrapping.
+		     _( "This package is installed and should not be modified, "
+			" especially not because of unresolved dependencies that other packages"
+			" might have or get." )
+		     + " "
+		     + _( "Use this status for third-party packages that should not be overwritten by newer versions"
+			  " that may come with the distribution." ) );
 
     html += symHelp( "autoinstall.xpm",
 		     // Translators: Package status short (!) description
@@ -304,6 +314,19 @@ YQPackageSelector::keyboardHelp()
 			" because of unresolved dependencies that other packages might have or get. " )
 		     + " "
 		     + _( "Packages set to \"taboo\" are treated as if they did not exist on any installation media." )
+		     + "<br>"
+		     + goto_next );
+
+    html += keyHelp( "*",
+		     // Translators: Keyboard action short (!) description
+		     _( "Protect" ),
+		     // Translators: Automatic word-wrapping.
+		     _( "Set this package to \"protected\" if it is installed:"
+			" make sure this package will not be modified, especially not"
+			" because of unresolved dependencies that other packages might have or get. " )
+		     + " "
+		     + _( "Use this for third-party packages that should not be overwritten by newer versions"
+			  " that may come with the distribution." )
 		     + "<br>"
 		     + goto_next );
 

@@ -565,6 +565,7 @@ YQPackageSelector::addMenus()
 	_pkgList->actionSetCurrentDelete->addTo( _pkgMenu );
 	_pkgList->actionSetCurrentUpdate->addTo( _pkgMenu );
 	_pkgList->actionSetCurrentTaboo->addTo( _pkgMenu );
+	_pkgList->actionSetCurrentProtected->addTo( _pkgMenu );
 
 	_pkgMenu->insertSeparator();
 

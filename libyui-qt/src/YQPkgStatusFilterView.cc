@@ -72,6 +72,7 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     _showAutoInstall	= addStatusCheckBox( gbox, _( "Autoinstall"	), YQIconPool::disabledPkgAutoInstall(),   true );
     _showAutoUpdate	= addStatusCheckBox( gbox, _( "Autoupdate"	), YQIconPool::disabledPkgAutoUpdate(),	   true );
     _showTaboo		= addStatusCheckBox( gbox, _( "Taboo"		), YQIconPool::disabledPkgTaboo(),	   true );
+    _showProtected	= addStatusCheckBox( gbox, _( "Protected"	), YQIconPool::disabledPkgProtected(),	   true );
 
     addVSpacing( gbox, 8 );
     addHStretch( gbox ); // For the other columns of the QGroupBox (prevent wraparound)
@@ -187,15 +188,16 @@ YQPkgStatusFilterView::check( PMPackagePtr pkg )
 
     switch ( pkg->getSelectable()->status() )
     {
-	case PMSelectable::S_Taboo:		match = _showTaboo->isChecked();		break;
-	case PMSelectable::S_Del:		match = _showDel->isChecked();			break;
-	case PMSelectable::S_Update:		match = _showUpdate->isChecked();		break;
-	case PMSelectable::S_Install:		match = _showInstall->isChecked();		break;
 	case PMSelectable::S_AutoDel:		match = _showAutoDel->isChecked();		break;
 	case PMSelectable::S_AutoInstall:	match = _showAutoInstall->isChecked();		break;
 	case PMSelectable::S_AutoUpdate:	match = _showAutoUpdate->isChecked();		break;
+	case PMSelectable::S_Del:		match = _showDel->isChecked();			break;
+	case PMSelectable::S_Install:		match = _showInstall->isChecked();		break;
 	case PMSelectable::S_KeepInstalled:	match = _showKeepInstalled->isChecked();	break;
 	case PMSelectable::S_NoInst:		match = _showNoInst->isChecked();		break;
+	case PMSelectable::S_Protected:		match = _showProtected->isChecked();		break;
+	case PMSelectable::S_Taboo:		match = _showTaboo->isChecked();		break;
+	case PMSelectable::S_Update:		match = _showUpdate->isChecked();		break;
 
 	    // Intentionally omitting 'default' branch so the compiler can
 	    // catch unhandled enum states

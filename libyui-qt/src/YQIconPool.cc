@@ -28,12 +28,6 @@
 #include "autoinstall_disabled.xpm"
 #include "autoupdate.xpm"
 #include "autoupdate_disabled.xpm"
-#include "sel_autodel.xpm"
-#include "sel_autodel_disabled.xpm"
-#include "sel_autoinstall.xpm"
-#include "sel_autoinstall_disabled.xpm"
-#include "sel_autoupdate.xpm"
-#include "sel_autoupdate_disabled.xpm"
 #include "del.xpm"
 #include "del_disabled.xpm"
 #include "install.xpm"
@@ -42,6 +36,14 @@
 #include "keepinstalled_disabled.xpm"
 #include "noinst.xpm"
 #include "noinst_disabled.xpm"
+#include "protected.xpm"
+#include "protected_disabled.xpm"
+#include "sel_autodel.xpm"
+#include "sel_autodel_disabled.xpm"
+#include "sel_autoinstall.xpm"
+#include "sel_autoinstall_disabled.xpm"
+#include "sel_autoupdate.xpm"
+#include "sel_autoupdate_disabled.xpm"
 #include "taboo.xpm"
 #include "taboo_disabled.xpm"
 #include "update.xpm"
@@ -71,6 +73,7 @@ QPixmap YQIconPool::pkgSelAutoUpdate()		{ return iconPool()->cachedIcon( sel_aut
 QPixmap YQIconPool::pkgSelAutoDel()		{ return iconPool()->cachedIcon( sel_autodel_xpm );		}
 QPixmap YQIconPool::pkgKeepInstalled()		{ return iconPool()->cachedIcon( keepinstalled_xpm );		}
 QPixmap YQIconPool::pkgNoInst()			{ return iconPool()->cachedIcon( noinst_xpm );			}
+QPixmap YQIconPool::pkgProtected()		{ return iconPool()->cachedIcon( protected_xpm );		}
 
 QPixmap YQIconPool::disabledPkgTaboo()		{ return iconPool()->cachedIcon( taboo_disabled_xpm );		}
 QPixmap YQIconPool::disabledPkgDel()		{ return iconPool()->cachedIcon( del_disabled_xpm );		}
@@ -84,6 +87,7 @@ QPixmap YQIconPool::disabledPkgSelAutoUpdate()	{ return iconPool()->cachedIcon( 
 QPixmap YQIconPool::disabledPkgSelAutoDel()	{ return iconPool()->cachedIcon( sel_autodel_disabled_xpm );	}
 QPixmap YQIconPool::disabledPkgKeepInstalled()	{ return iconPool()->cachedIcon( keepinstalled_disabled_xpm );	}
 QPixmap YQIconPool::disabledPkgNoInst()		{ return iconPool()->cachedIcon( noinst_disabled_xpm );		}
+QPixmap YQIconPool::disabledPkgProtected()	{ return iconPool()->cachedIcon( protected_disabled_xpm );	}
 
 QPixmap YQIconPool::checkMarkOn()		{ return iconPool()->cachedIcon( checklist_on_xpm );		}
 QPixmap YQIconPool::checkMarkOff()		{ return iconPool()->cachedIcon( checklist_off_xpm );		}

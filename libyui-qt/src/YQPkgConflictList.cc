@@ -529,6 +529,8 @@ YQPkgConflict::addResolutionSuggestions()
     addUndoResolution  ( header );
     addAlternativesList( header );
     addDeleteResolution( header );
+
+#warning TODO: No ignore resolution for obsoleted pkgs (RPM cannot handle that)
     addIgnoreResolution( header );
 
     _resolutionsHeader = header;
@@ -547,6 +549,12 @@ YQPkgConflict::addUndoResolution( QY2CheckListItem * parent )
     {
 	case PMSelectable::S_Taboo:
 	    text = ( _( "Do Not Set %1 to Taboo" ) ).arg( _shortName );
+	    _undo_status = _pmObj->hasInstalledObj() ?
+		PMSelectable::S_KeepInstalled : PMSelectable::S_NoInst;
+	    break;
+
+	case PMSelectable::S_Protected:
+	    text = ( _( "Do Not Set %1 to Protected" ) ).arg( _shortName );
 	    _undo_status = _pmObj->hasInstalledObj() ?
 		PMSelectable::S_KeepInstalled : PMSelectable::S_NoInst;
 	    break;
