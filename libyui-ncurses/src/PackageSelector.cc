@@ -264,9 +264,6 @@ void PackageSelector::fillHeader( NCPkgTable *pkgTable )
 //
 bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgPtr )
 {
-    vector<string> pkgLine;
-    pkgLine.reserve(5);
-    
     unsigned int i = 0;
 
     if ( !pkgTable )
@@ -291,20 +288,21 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
     std::list<PMObjectPtr>::const_iterator it = selectable->av_begin();
 
     // show all availables
-    while ( it != selectable->av_end() )
+    for ( i = 0, it = selectable->av_begin(); it != selectable->av_end();  ++it, i++ )
     {
+	vector<string> pkgLine;
+	pkgLine.reserve(5);	
+
 	pkgLine.push_back( selectable->name() );	// package name
 	pkgLine.push_back( (*it)->version() );		// the version
 	pkgLine.push_back( (*it)->summary() );  	// short description
 	FSize size = (*it)->size();     	// installed size
 	pkgLine.push_back( size.asString() );
-
+	
 	pkgTable->addLine( selectable->status(), // get the package status
 			   pkgLine,
 			   i,		 // the index
 			   (*it) );	 // the corresponding package pointer
-	i++;
-	++it;
     }
 
     if ( pkgTable->getNumLines() > 0 )
@@ -984,6 +982,7 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	
 	return true;
     }
+    NCMIL << "INFO " << visibleInfo->toString() << endl;
     
     if ( visibleInfo->compare( PkgNames::LongDescr() ) == YO_EQUAL )
     {
@@ -1010,6 +1009,14 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	{
 	    NCMIL <<  "Size of the file list: " << fileList.size() << endl;
 	    static_cast<NCRichText *>(descrInfo)->setText( YCPString(createText(fileList, false)) );
+	}
+    }
+    else if (  visibleInfo->compare( PkgNames::Versions() ) == YO_EQUAL )
+    {
+	NCPkgTable * pkgAvail = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::AvailPkgs(), true));
+	if ( pkgAvail )
+	{
+	    fillAvailableList( pkgAvail, pkgPtr );
 	}
     }
     else if ( visibleInfo->compare( PkgNames::PkgInfo() ) == YO_EQUAL )
