@@ -314,12 +314,13 @@ YQPkgListItem::toolTip( int col )
 	    text = _( "No sources available" );
 	}
     }
-    else if ( col == nameCol()    ||
-	      col == versionCol() ||
-	      col == instVersionCol() )
+    else
     {
+#if 0
 	if ( col != nameCol() )
-	    text = name + "\n\n";
+	    ;
+#endif
+	text = name + "\n\n";
 	    
 	QString installed;
 	QString candidate;
@@ -364,10 +365,6 @@ YQPkgListItem::toolTip( int col )
 	{
 	    text += candidate;
 	}
-    }
-    else
-    {
-	text = name;
     }
 	
     return text;
