@@ -99,6 +99,9 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 				      PMObjectPtr objPtr,
 				      PMSelectable::UI_Status & newStat )
 {
+    if ( !objPtr )
+	return false;
+    
     bool valid = true;
     PMSelectable::UI_Status retStat = PMSelectable::S_NoInst;
     PMSelectable::UI_Status oldStatus = getPackageStatus( objPtr );
@@ -208,6 +211,9 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 bool ObjectStatStrategy::toggleStatus( PMObjectPtr objPtr,
 				       PMSelectable::UI_Status & newStat )
 {
+    if ( !objPtr )
+	return false;
+    
     bool ok = true;
     
     PMSelectable::UI_Status oldStatus = getPackageStatus( objPtr ); 
@@ -297,6 +303,9 @@ bool PatchStatStrategy::keyToStatus( const int & key,
 				      PMObjectPtr objPtr,
 				      PMSelectable::UI_Status & newStat )
 {
+    if ( !objPtr )
+	return false;
+    
     bool valid = true;
     PMSelectable::UI_Status retStat = PMSelectable::S_NoInst;
     PMSelectable::UI_Status oldStatus = getPackageStatus( objPtr );
@@ -365,6 +374,9 @@ bool PatchStatStrategy::keyToStatus( const int & key,
 bool PatchStatStrategy::toggleStatus( PMObjectPtr objPtr,
 				      PMSelectable::UI_Status & newStat )
 {
+    if ( !objPtr )
+	return false;
+    
     bool ok = true;
     
     PMSelectable::UI_Status oldStatus = getPackageStatus( objPtr ); 
@@ -452,7 +464,7 @@ AvailableStatStrategy::AvailableStatStrategy()
 
 ///////////////////////////////////////////////////////////////////
 //
-// AvailableStatStrategy::setPackageStatus
+// AvailableStatStrategy::setObjectStatus
 //
 // Informs the package manager about the new status (sets the candidate)
 //
@@ -472,7 +484,8 @@ bool AvailableStatStrategy::setObjectStatus( PMSelectable::UI_Status newstatus, 
 	bool ret = objPtr->getSelectable()->setUserCandidate( objPtr );
 	NCMIL << "Set user candidate returns: " <<  (ret?"true":"false") << endl;	
     }
-    NCMIL << "Set status to: " << newstatus << " returns: " << (ok?"true":"false") << endl;
+    NCMIL << "Set status of: " << objPtr->getSelectable()->name() << "to: "
+	  << newstatus << " returns: " << (ok?"true":"false") << endl;
     
     return ok;
 }
@@ -488,7 +501,7 @@ PMSelectable::UI_Status AvailableStatStrategy::getPackageStatus( PMObjectPtr obj
 {
     PMSelectable::UI_Status retStatus = PMSelectable::S_NoInst;
 
-    if ( !objPtr )
+    if ( !objPtr || !objPtr->hasSelectable() )
     {
 	return retStatus;
     }
