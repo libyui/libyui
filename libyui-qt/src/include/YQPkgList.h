@@ -111,11 +111,9 @@ public slots:
 
     // Direct access to some states for menu actions
 
-    void setCurrentProtected()	   	  { setCurrentStatus( PMSelectable::S_Protected ); }
     void setInstallCurrentSourceRpm()	  { setInstallCurrentSourceRpm( true  ); }
     void setDontInstallCurrentSourceRpm() { setInstallCurrentSourceRpm( false ); }
 
-    void setListProtected()	   	  { setAllItemStatus( PMSelectable::S_Protected ); }
     void setInstallListSourceRpms()	  { setInstallListSourceRpms( true  ); }
     void setDontInstallListSourceRpms()	  { setInstallListSourceRpms( false ); }
 
@@ -172,9 +170,6 @@ protected:
 
 public:
 
-    QAction *		actionSetCurrentProtected;
-    QAction *		actionSetListProtected;
-    
     QAction *		actionInstallSourceRpm;
     QAction *		actionDontInstallSourceRpm;
     QAction *		actionInstallListSourceRpms;

@@ -254,6 +254,7 @@ YQPkgYouPatchList::createInstalledContextMenu()
 
     actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
     actionSetCurrentUpdate->addTo( _installedContextMenu );
+    actionSetCurrentProtected->addTo( _installedContextMenu );
 
     addAllInListSubMenu( _installedContextMenu );
 }
@@ -271,6 +272,7 @@ YQPkgYouPatchList::addAllInListSubMenu( QPopupMenu * menu )
     actionSetListUpdate->addTo( submenu );
     actionSetListUpdateForce->addTo( submenu );
     actionSetListTaboo->addTo( submenu );
+    actionSetListProtected->addTo( submenu );
 
     menu->insertItem( _( "&All in This List" ), submenu );
 

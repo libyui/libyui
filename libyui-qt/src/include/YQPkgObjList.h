@@ -189,6 +189,7 @@ public slots:
     void setCurrentDelete()	   { setCurrentStatus( PMSelectable::S_Del	     ); }
     void setCurrentUpdate()	   { setCurrentStatus( PMSelectable::S_Update	     ); }
     void setCurrentTaboo()	   { setCurrentStatus( PMSelectable::S_Taboo	     ); }
+    void setCurrentProtected()	   { setCurrentStatus( PMSelectable::S_Protected     ); }
 
     void setListInstall()	   { setAllItemStatus( PMSelectable::S_Install	     ); }
     void setListDontInstall()	   { setAllItemStatus( PMSelectable::S_NoInst	     ); }
@@ -197,6 +198,7 @@ public slots:
     void setListUpdate()	   { setAllItemStatus( PMSelectable::S_Update	     ); }
     void setListUpdateForce()	   { setAllItemStatus( PMSelectable::S_Update, true  ); }
     void setListTaboo()		   { setAllItemStatus( PMSelectable::S_Taboo	     ); }
+    void setListProtected()	   { setAllItemStatus( PMSelectable::S_Protected     ); }
 
 
 protected slots:
@@ -303,6 +305,7 @@ public:
     QAction *		actionSetCurrentDelete;
     QAction *		actionSetCurrentUpdate;
     QAction *		actionSetCurrentTaboo;
+    QAction *		actionSetCurrentProtected;
 
     QAction *		actionSetListInstall;
     QAction *		actionSetListDontInstall;
@@ -311,6 +314,7 @@ public:
     QAction *		actionSetListUpdate;
     QAction *		actionSetListUpdateForce;
     QAction *		actionSetListTaboo;
+    QAction *		actionSetListProtected;
 };
 
 
