@@ -97,9 +97,9 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
     std::string name;
     PkgEdition edition;
 
-    _firstAlternative	= 0;
     _firstResolution	= 0;
     _status		= PMSelectable::S_NoInst;
+    _undo_status	= PMSelectable::S_NoInst;
     _pmObj		= _conflict.solvable;
 
     if ( _pmObj )
@@ -127,7 +127,7 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
 
     setBackgroundColor( QColor( 0xE0, 0xE0, 0xF8 ) );
     setOpen( true );
-    
+
     formatLine();
     dumpLists();
     addResolutionSuggestions();
@@ -288,44 +288,98 @@ YQPkgConflict::dumpList( QListViewItem * 	parent,
 void
 YQPkgConflict::addResolutionSuggestions()
 {
-    QY2ListViewItem * header = new QY2ListViewItem( this,
-						    // Heading for the choices
-						    // how to resolve this conflict
-						    _( "Resolution" ),
-						    true );
+    QY2CheckListItem * header = new QY2CheckListItem( this,
+						      // Heading for the choices
+						      // how to resolve this conflict
+						      _( "Resolution" ),
+						      QCheckListItem::Controller,
+						      true );
+    CHECK_PTR( header );
+    header->setOpen( true );
+
     addUndoResolution  ( header );
     addAlternativesList( header );
     addDeleteResolution( header );
     addIgnoreResolution( header );
-}
 
-void
-YQPkgConflict::addUndoResolution  ( QListViewItem * parent )
-{
-    
+    _firstResolution = dynamic_cast<YQPkgConflictResolution *> ( header->firstChild() );
 }
 
 
 void
-YQPkgConflict::addAlternativesList( QListViewItem * parent )
+YQPkgConflict::addUndoResolution( QY2CheckListItem * parent )
 {
-    
+    if ( ! _pmObj )
+	return;
+
+    QString text;
+
+    switch ( _status )
+    {
+	case PMSelectable::S_Taboo:
+	    text = ( _( "Don't set %1 to taboo" ) ).arg( _shortName );
+	    _undo_status = _pmObj->hasInstalledObj() ?
+		PMSelectable::S_KeepInstalled : PMSelectable::S_NoInst;
+	    break;
+
+	case PMSelectable::S_Del:
+	case PMSelectable::S_AutoDel:
+	    text = ( _( "Don't delete %1" ) ).arg( _shortName );
+	    _undo_status = PMSelectable::S_KeepInstalled;
+	    break;
+
+	case PMSelectable::S_AutoUpdate:
+	case PMSelectable::S_Update:
+	    text = ( _( "Don't update %1" ) ).arg( _shortName );
+	    _undo_status = PMSelectable::S_KeepInstalled;
+	    break;
+
+	case PMSelectable::S_AutoInstall:
+	case PMSelectable::S_Install:
+	    text = ( _( "Don't install %1" ) ).arg( _shortName );
+	    _undo_status = PMSelectable::S_NoInst;
+	    break;
+
+	case PMSelectable::S_KeepInstalled:	return;	// shouldn't happen
+	case PMSelectable::S_NoInst:		return;	// shouldn't happen
+    }
+
+    new YQPkgConflictResolution( parent, text, YQPkgConflictUndo );
 }
 
 
 void
-YQPkgConflict::addDeleteResolution( QListViewItem * parent )
+YQPkgConflict::addAlternativesList( QY2CheckListItem * parent )
 {
-    
+
 }
 
 
 void
-YQPkgConflict::addIgnoreResolution( QListViewItem * parent )
+YQPkgConflict::addDeleteResolution( QY2CheckListItem * parent )
 {
-    
+    QString text;
+    int conflictingPkgsCount = (int) _conflict.remove_to_solve_conflict.size();
+
+    if ( conflictingPkgsCount < 1 )
+	return;
+
+    if ( conflictingPkgsCount == 1 )
+	text = _( "Remove the conflicting package" );
+    else
+	text = ( _( "Remove all %1 conflicting packages" ) ).arg( conflictingPkgsCount );
+
+    new YQPkgConflictResolution( parent, text, YQPkgConflictBulkDelete );
 }
 
+
+void
+YQPkgConflict::addIgnoreResolution( QY2CheckListItem * parent )
+{
+    new YQPkgConflictResolution( parent,
+				 _( "Ignore this conflict and risk inconsistent system" ),
+				 YQPkgConflictIgnore );
+}
 
 
 void
@@ -347,6 +401,29 @@ YQPkgConflict::isResolved()
 
     return true;
 }
+
+
+
+YQPkgConflictResolution::YQPkgConflictResolution( QY2CheckListItem * 			parent,
+						  const QString & 			text,
+						  YQPkgConflictResolutionType		type )
+    : QY2CheckListItem( parent, text, QCheckListItem::RadioButton, true )
+    , _type( type )
+{
+}
+
+
+YQPkgConflictResolution::YQPkgConflictResolution( QY2CheckListItem *	parent,
+						  PMObjectPtr		pmObj )
+    : QY2CheckListItem( parent, "", QCheckListItem::RadioButton, true )
+    , _type( YQPkgConflictAlternative )
+    , _pmObj( pmObj )
+{
+    std::string name = _pmObj->name();
+    setText( 0, ( _( "Install %1" ) ).arg( name.c_str() ) );
+}
+
+
 
 
 

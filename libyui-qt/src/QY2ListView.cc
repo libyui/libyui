@@ -337,6 +337,25 @@ QY2CheckListItem::QY2CheckListItem( QListViewItem * 		parentItem,
 }
 
 
+QY2CheckListItem::QY2CheckListItem( QCheckListItem * 		parentItem,
+				    const QString &		text,
+				    QCheckListItem::Type	type,
+				    bool 			sortByInsertionSequence )
+    : QCheckListItem( parentItem, text, type )
+    , _sortByInsertionSequence( sortByInsertionSequence )
+{
+    _serial = 0;
+
+    if ( _sortByInsertionSequence )
+    {
+	QY2ListView * parentListView = dynamic_cast<QY2ListView *> ( listView() );
+
+	if ( parentListView )
+	    _serial = parentListView->nextSerial();
+    }
+}
+
+
 QY2CheckListItem::~QY2CheckListItem()
 {
     // NOP

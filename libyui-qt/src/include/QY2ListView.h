@@ -318,6 +318,19 @@ public:
 		      QCheckListItem::Type	type,
 		      bool 			sortByInsertionSequence = false );
 
+
+    /**
+     * Constructor for deeper level items for QCheckListItem parents.
+     *
+     * 'sortByInsertionSequence' indicates if this item keeps the insertion
+     * order (true) or leaves sorting to the user (false - sort-by-click on
+     * column headers).
+     **/
+    QY2CheckListItem( QCheckListItem * 		parentItem,
+		      const QString &		text,
+		      QCheckListItem::Type	type,
+		      bool 			sortByInsertionSequence = false );
+
     /**
      * Destructor
      **/

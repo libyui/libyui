@@ -30,7 +30,17 @@ class YQPkgConflictAlternative;
 class YQPkgConflictResolution;
 
 
-typedef 
+/**
+ * Resolution types for conflicts
+ **/
+typedef enum YQPkgConflictResolutionType
+{
+    YQPkgConflictUndo,
+    YQPkgConflictIgnore,
+    YQPkgConflictBulkDelete,
+    YQPkgConflictAlternative
+};
+
 
 /**
  * @short Display package dependency conflicts in a tree list and let the user
@@ -101,7 +111,7 @@ public:
      * Access the internal ErrorResult.
      **/
     PkgDep::ErrorResult & errorResult() { return _conflict; }
-    
+
     /**
      * Returns if this conflict needs an alternative from a list.
      **/
@@ -116,7 +126,7 @@ public:
      * Returns if this package has open (unresolved) requirements.
      **/
     bool hasOpenRequirements() { return ! _conflict.unresolvable.empty(); }
-    
+
 
 protected:
 
@@ -128,7 +138,7 @@ protected:
 
     /**
      * Dump all relevant lists from the internal ErrorResult into the conflict
-     * list.  
+     * list.
      **/
     void dumpLists();
 
@@ -154,25 +164,25 @@ protected:
      * Add resolution suggestion: Undo what caused this conflict
      * (i.e. don't remove, don't install, ...).
      **/
-    void addUndoResolution  ( QListViewItem * parent );
+    void addUndoResolution( QY2CheckListItem * parent );
 
     /**
      * Add a list of alternatives if there are any.
      **/
-    void addAlternativesList( QListViewItem * parent );
+    void addAlternativesList( QY2CheckListItem * parent );
 
     /**
      * Add brute force resolution suggestion: Delete all dependent packages.
      **/
-    void addDeleteResolution( QListViewItem * parent );
+    void addDeleteResolution( QY2CheckListItem * parent );
 
     /**
      * Add resolution suggestion: Ignore conflict, risk inconsistent system
      **/
-    void addIgnoreResolution( QListViewItem * parent );
+    void addIgnoreResolution( QY2CheckListItem * parent );
 
 
-    
+
     /**
      * Paint method. Reimplemented from @ref QListViewItem a different
      * font can be used.
@@ -187,35 +197,57 @@ protected:
 
 
     // Data members
-    
+
     PMObjectPtr			_pmObj;
     QString			_shortName;	// Only pkg name (no version)
     QString			_fullName;	// Name + edition
     PMSelectable::UI_Status	_status;
+    PMSelectable::UI_Status	_undo_status;
 
     bool			_collision;
 
-    YQPkgConflictAlternative *	_firstAlternative;
     YQPkgConflictResolution *	_firstResolution;
-    
+
     PkgDep::ErrorResult		_conflict;
     YQPkgConflictList *		_parentList;
 };
 
 
-class YQPkgConflictAlternative: public QY2CheckListItem
-{
-    YQPkgConflictAlternative( QListViewItem * parent, const QString & text )
-	: QY2CheckListItem( parent, text, QCheckListItem::RadioButton )
-	{}
-};
-
 
 class YQPkgConflictResolution: public QY2CheckListItem
 {
-    YQPkgConflictResolution( QListViewItem * parent, const QString & text )
-	: QY2CheckListItem( parent, text, QCheckListItem::RadioButton )
-	{}
+public:
+
+    /**
+     * Constructor for generic resolutions (not alternatives)
+     **/
+    YQPkgConflictResolution( QY2CheckListItem *			parent,
+			     const QString & 			text,
+			     YQPkgConflictResolutionType	type );
+
+    /**
+     * Constructor for alternatives
+     **/
+    YQPkgConflictResolution( QY2CheckListItem *	parent,
+			     PMObjectPtr	pmObj );
+
+    /**
+     * Returns the type of this resolution.
+     **/
+    YQPkgConflictResolutionType type() const { return _type; }
+
+    /**
+     * Returns the corresponding PMObject.
+     **/
+    PMObjectPtr pmObj() const { return _pmObj; }
+
+    
+protected:
+
+    // Data members
+
+    YQPkgConflictResolutionType	_type;
+    PMObjectPtr			_pmObj;
 };
 
 
