@@ -608,6 +608,69 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, PMObjectPtr obj
 // Fills the package table with the list of packages matching
 // the selected filter
 //
+bool PackageSelector::fillChangesList(  )
+{
+    NCPkgTable * packageList = getPackageList();
+     
+    if ( !packageList )
+    {
+	UIERR << "No valid NCPkgTable widget" << endl;
+    	return false;
+    }
+    
+    // clear the package table
+    packageList->itemsCleared ();
+
+    // get the package list and sort it
+    list<PMSelectablePtr> pkgList( Y2PM::packageManager().begin(), Y2PM::packageManager().end() );
+    pkgList.sort( sortByName );
+
+    // fill the package table
+    list<PMSelectablePtr>::iterator listIt;
+    unsigned int i;
+    PMPackagePtr pkgPtr;
+    
+    // do the dependency in case the dependency check is off
+    if ( !autoCheck )
+    {
+	showDependencies( true );
+    }
+    
+    for ( i = 0, listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt, i++ )
+    {
+	PMSelectablePtr selectable = *listIt;
+	if ( selectable->status() == PMSelectable::S_Install
+	     || selectable->status() == PMSelectable::S_Del
+	     || selectable->status() == PMSelectable::S_AutoInstall
+	     || selectable->status() == PMSelectable::S_AutoDel
+	     || selectable->status() == PMSelectable::S_Taboo
+	     || selectable->status() == PMSelectable::S_Update
+	     || selectable->status() == PMSelectable::S_AutoUpdate)
+	{
+	    packageList->createListEntry( (*listIt)->theObject(), i );
+	}
+    }
+
+    // show the package list
+    packageList->drawList();
+    
+    // show the selected filter label
+    YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
+    if ( filterLabel )
+    {
+	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString("What if ...") );
+    }
+
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// fillPackageList
+//
+// Fills the package table with the list of packages matching
+// the selected filter
+//
 bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem * rpmGroup )
 {
      NCPkgTable * packageList = getPackageList();
