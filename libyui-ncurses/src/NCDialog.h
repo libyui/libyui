@@ -95,6 +95,8 @@ class NCDialog : public YDialog, public NCWidget {
 
     void processInput( int timeout );
 
+    string describeFunctionKeys();
+    
   protected:
 
     void _init( YWidgetOpt & opt );

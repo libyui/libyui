@@ -19,6 +19,7 @@
 #include "Y2Log.h"
 #include "NCDialog.h"
 #include "NCPopupInfo.h"
+#include "NCMenuButton.h"
 
 #if 0
 #undef  DBG_CLASS
@@ -970,8 +971,9 @@ void NCDialog::processInput( int timeout )
      case KEY_F(1):
 	 if ( !helpPopup )
 	 {
+	     string helpText = describeFunctionKeys();
 	     helpPopup = new NCPopupInfo( wpos(1,1), YCPString( "Text mode navigation" ),
-					  YCPString( "Press F1 again to get help" ),
+					  YCPString( "Press F1 again to get help<br>" + helpText ),
 					  false );
 	 }
 	 if ( helpPopup )
@@ -1016,6 +1018,46 @@ void NCDialog::processInput( int timeout )
   }
 
   IODBG << "process- " << this << " active " << wActive << endl;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCDialog::describeFunctionKeys
+//	METHOD TYPE : string
+//
+//	DESCRIPTION : get all PushButtons and MenuButtons with `opt(`key_Fn)
+//		      and create a text like F1: Help, F2: Info and so on 
+//
+string NCDialog::describeFunctionKeys()
+{
+    string text = "";
+    char no[5];
+    YCPString label( "" );
+    NCPushButton *button = 0;
+    NCMenuButton *menuButton = 0;
+    
+    for ( tnode<NCWidget*> * c = this->Next(); c; c = c->Next() )
+    {
+	int fkey =  c->Value()->GetFunctionHotkey( );
+	if ( fkey != 0 )
+	{
+	    sprintf( no, "%d", fkey-264 );
+	    text = text + "F" +  no + ": ";
+	    if ( (button = dynamic_cast<NCPushButton *>(c->Value())) )
+	    { 
+		label = button->getLabel();
+		text = text + label->value() + "<br>";
+	    }
+	    else if ( (menuButton = dynamic_cast<NCMenuButton *>(c->Value())) )
+	    {
+		label = menuButton->getLabel();
+		text = text + label->value() + "<br>";
+	    }
+	}
+    }
+
+    return text;
 }
 
 ///////////////////////////////////////////////////////////////////
