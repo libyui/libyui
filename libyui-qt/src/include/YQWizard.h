@@ -352,6 +352,7 @@ protected:
 
     bool	_stepsEnabled;
     bool	_verboseCommands;
+    bool	_protectNextButton;
     bool	_stepsDirty;
 
     QPixmap	_titleBarGradientPixmap;

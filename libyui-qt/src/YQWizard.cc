@@ -93,6 +93,7 @@ YQWizard::YQWizard( QWidget *		parent,
     setWidgetRep( this );
     _stepsEnabled = opt.stepsEnabled.value();
     _verboseCommands		= false;
+    _protectNextButton		= false;
     _stepsDirty			= false;
 
     _sideBar			= 0;
@@ -1215,6 +1216,9 @@ void YQWizard::setButtonLabel( QPushButton * button, const QString & newLabel )
 
 void YQWizard::enableWidget( QWidget * w, bool enabled )
 {
+    if ( w == _nextButton && _protectNextButton && ! enabled )
+	return;
+    
     if ( w )
 	w->setEnabled( enabled );
 }
@@ -1256,6 +1260,7 @@ YCPValue YQWizard::command( const YCPTerm & cmd )
     if ( isCommand( "EnableBackButton 	  ( bool )"  , cmd ) )	{ enableWidget( _backButton,  boolArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "EnableNextButton     ( bool )"  , cmd ) )	{ enableWidget( _nextButton,  boolArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "EnableAbortButton    ( bool )"  , cmd ) )	{ enableWidget( _abortButton, boolArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "ProtectNextButton    ( bool )"  , cmd ) )	{ _protectNextButton = boolArg( cmd, 0 );		return OK; }
     
     if ( isCommand( "SetFocusToNextButton ()"        , cmd ) )	{ setFocus( _nextButton );				return OK; }
     if ( isCommand( "SetFocusToBackButton ()"        , cmd ) )	{ setFocus( _backButton );				return OK; }
