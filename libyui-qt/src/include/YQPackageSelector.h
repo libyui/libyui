@@ -157,6 +157,18 @@ public slots:
     void installDevelPkgs();
 
     /**
+     * Install any -debuginfo package for packages that are installed or marked
+     * for installation 
+     **/
+    void installDebugInfoPkgs();
+
+    /**
+     * Install any subpackage that ends with 'suffix' for packages that are
+     * installed or marked for installation
+     **/
+    void installSubPkgs( const QString suffix );
+
+    /**
      * Close processing and abandon changes
      **/
     void reject();

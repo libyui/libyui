@@ -633,6 +633,10 @@ YQPackageSelector::addMenus()
 	// Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
 	_extrasMenu->insertItem( _( "Install All Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
 
+    if ( ! _youMode )
+	// Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
+	_extrasMenu->insertItem( _( "Install All Matching -de&buginfo Packages" ), this, SLOT( installDebugInfoPkgs() ) );
+
     //
     // Help menu
     //
@@ -1047,9 +1051,23 @@ YQPackageSelector::showAutoPkgList()
 void
 YQPackageSelector::installDevelPkgs()
 {
-    // Find all -devel packages and put them into a QMap
+    installSubPkgs( "-devel" );
+}
 
-    QMap<QString, PMSelectablePtr> develPkgs;
+
+void
+YQPackageSelector::installDebugInfoPkgs()
+{
+    installSubPkgs( "-debuginfo" );
+}
+
+
+void
+YQPackageSelector::installSubPkgs( const QString suffix )
+{
+    // Find all matching packages and put them into a QMap
+
+    QMap<QString, PMSelectablePtr> subPkgs;
 
     for ( PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
 	  it != Y2PM::packageManager().end();
@@ -1057,16 +1075,16 @@ YQPackageSelector::installDevelPkgs()
     {
 	QString name = (*it)->name().asString().c_str();
 
-	if ( name.endsWith( "-devel" ) )
+	if ( name.endsWith( suffix ) )
 	{
-	    develPkgs[ name ] = *it;
+	    subPkgs[ name ] = *it;
 
-	    y2debug( "Found -devel package: %s", (const char *) name );
+	    y2debug( "Found subpackage: %s", (const char *) name );
 	}
     }
 
 
-    // Now go through all packages and look if there is a corresponding -devel package in the QMap
+    // Now go through all packages and look if there is a corresponding subpackage in the QMap
 
     for ( PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
 	  it != Y2PM::packageManager().end();
@@ -1074,9 +1092,10 @@ YQPackageSelector::installDevelPkgs()
     {
 	QString name = (*it)->name().asString().c_str();
 
-	if ( develPkgs.contains( name + "-devel" ) )
+	if ( subPkgs.contains( name + suffix ) )
 	{
-	    PMSelectablePtr devel = develPkgs[ name + "-devel" ];
+	    PMSelectablePtr subPkg = subPkgs[ name + suffix ];
+	    QString subPkgName;
 
 	    switch ( (*it)->status() )
 	    {
@@ -1085,20 +1104,20 @@ YQPackageSelector::installDevelPkgs()
 		case PMSelectable::S_Protected:
 		case PMSelectable::S_Taboo:
 		case PMSelectable::S_Del:
-		    // Don't install the -devel package
-		    y2milestone( "Ignoring unwanted -devel package %s-devel", (const char *) name );
+		    // Don't install the subpackage
+		    y2milestone( "Ignoring unwanted subpackage %s", (const char *) subPkgName );
 		    break;
 
 		case PMSelectable::S_AutoInstall:
 		case PMSelectable::S_Install:
 		case PMSelectable::S_KeepInstalled:
 
-		    // Install the -devel package, but don't try to update it
+		    // Install the subpackage, but don't try to update it
 
-		    if ( ! devel->installedObj() )
+		    if ( ! subPkg->installedObj() )
 		    {
-			devel->set_status( PMSelectable::S_Install );
-			y2milestone( "Installing -devel package %s-devel", (const char *) name );
+			subPkg->set_status( PMSelectable::S_Install );
+			y2milestone( "Installing subpackage %s", (const char *) subPkgName );
 		    }
 		    break;
 
@@ -1106,17 +1125,17 @@ YQPackageSelector::installDevelPkgs()
 		case PMSelectable::S_Update:
 		case PMSelectable::S_AutoUpdate:
 
-		    // Install or update the -devel package
+		    // Install or update the subpackage
 
-		    if ( ! devel->installedObj() )
+		    if ( ! subPkg->installedObj() )
 		    {
-			devel->set_status( PMSelectable::S_Install );
-			y2milestone( "Installing -devel package %s-devel", (const char *) name );
+			subPkg->set_status( PMSelectable::S_Install );
+			y2milestone( "Installing subpackage %s", (const char *) subPkgName );
 		    }
 		    else
 		    {
-			devel->set_status( PMSelectable::S_Update );
-			y2milestone( "Updating -devel package %s-devel", (const char *) name );
+			subPkg->set_status( PMSelectable::S_Update );
+			y2milestone( "Updating subpackage %s", (const char *) subPkgName );
 		    }
 		    break;
 
@@ -1132,10 +1151,9 @@ YQPackageSelector::installDevelPkgs()
 	_filters->showPage( _statusFilterView );
 	_statusFilterView->filter();
     }
-    
-    // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
-    YQPkgChangesDialog::showChangesDialog( _( "Added -devel Packages:" ),
-					   QRegExp( ".*-devel$" ),
+
+    YQPkgChangesDialog::showChangesDialog( _( "Added subpackages:" ),
+					   QRegExp( ".*" + suffix + "$" ),
 					   _( "&OK" ),
 					   QString::null,	// rejectButtonLabel
 					   true );		// showIfEmpty
