@@ -208,12 +208,12 @@ bool NCPopupFile::mountDevice( string device, string errText )
 				       " /media/floppy" + " >/dev/null 2>&1" ).c_str() );
 	if ( exitCode == 0 )
 	{
-	    NCMIL << floppyDevice << " mounted on /media/floppy" << endl;
+	    NCMIL << device << " mounted on /media/floppy" << endl;
 	    mounted = true;
 	}
 	else
 	{
-	    NCERR << "mount " << floppyDevice << " exit code: " << exitCode << endl;
+	    NCERR << "mount " << device << " exit code: " << exitCode << endl;
 	}
 
 	if ( !mounted )
@@ -258,7 +258,12 @@ void NCPopupFile::saveToFile()
     if ( event == NCursesEvent::button )
     {
 	PMPackageImExPtr P( new PMPackageImEx );
-
+	
+	NCPopupInfo saveInfo( wpos(10, 10),  YCPString( "" ),
+			      YCPString(PkgNames::Saving().str()) );
+	saveInfo.setNiceSize( 18, 4 );
+	saveInfo.popup();
+	    
 	// if the medium is a floppy mount the device
 	if ( !mountFloppy
 	     || mountDevice( floppyDevice, PkgNames::SaveErr1Text().str()) )
@@ -269,6 +274,7 @@ void NCPopupFile::saveToFile()
 	    // write package selection to file
 	    if ( ! P->doExport( pathName ) )
 	    {
+		saveInfo.popdown();	
 		NCPopupInfo info2( wpos(2, 2),
 				   YCPString( PkgNames::ErrorLabel().str() ),
 				   YCPString( PkgNames::SaveErr2Text().str() ) );
@@ -278,6 +284,7 @@ void NCPopupFile::saveToFile()
 	    }
 	    else
 	    {
+		saveInfo.popdown();
 		NCMIL << "Writing selection to: " << pathName << endl;	
 	    }
 	}
@@ -322,12 +329,18 @@ void NCPopupFile::loadFromFile()
 
 	if ( event == NCursesEvent::button )
 	{
+	    NCPopupInfo loadInfo( wpos(10, 10),  YCPString( "" ),
+				  YCPString(PkgNames::Loading().str()) );
+	    loadInfo.setNiceSize( 18, 4 );
+	    loadInfo.popup();
+	
 	    if ( !mountFloppy
 		 || mountDevice( floppyDevice, PkgNames::LoadErr1Text().str()) )
 	    {
 		// read selection from file
 		if ( ! P->doImport( pathName) )
 		{
+		    loadInfo.popdown();
 		    NCPopupInfo info2( wpos(2, 2),
 				       YCPString( PkgNames::ErrorLabel().str() ),
 				       YCPString( PkgNames::LoadErr2Text().str() ) );
@@ -337,6 +350,7 @@ void NCPopupFile::loadFromFile()
 		}
 		else
 		{
+		    loadInfo.popdown();
 		    // restore Package/SelectionManagers state according to the
 		    P->setPMState();
 		    NCMIL << "Package selection loaded from: " << pathName << endl;
