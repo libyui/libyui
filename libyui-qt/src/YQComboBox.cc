@@ -126,7 +126,9 @@ YCPString YQComboBox::getValue() const
 
 void YQComboBox::setValue( const YCPString & new_value )
 {
+    _qt_combo_box->blockSignals( true );
     _qt_combo_box->setEditText( fromUTF8( new_value->value() ) );
+    _qt_combo_box->blockSignals( false );
 }
 
 

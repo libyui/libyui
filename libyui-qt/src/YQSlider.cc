@@ -106,7 +106,9 @@ void YQSlider::setLabel( const YCPString & newLabel )
 
 void YQSlider::setValue( int newValue )
 {
+    _qt_slider->blockSignals( true );
     _qt_slider->setValue( newValue );
+    _qt_slider->blockSignals( false );
     YSlider::setValue( newValue );
 }
 

@@ -89,8 +89,10 @@ void YQIntField::setLabel( const YCPString & newLabel )
 
 void YQIntField::setValue( int newValue )
 {
+    _qt_spinbox->blockSignals( true );
     _qt_spinbox->setValue( newValue );
     YIntField::setValue( newValue );
+    _qt_spinbox->blockSignals( false );
 }
 
 int YQIntField::value()

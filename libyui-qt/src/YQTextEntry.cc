@@ -100,7 +100,9 @@ void YQTextEntry::setSize( long newWidth, long newHeight )
 
 void YQTextEntry::setText( const YCPString & text )
 {
+    _qt_lineedit->blockSignals( true );
     _qt_lineedit->setText( fromUTF8(text->value() ) );
+    _qt_lineedit->blockSignals( false );
 }
 
 

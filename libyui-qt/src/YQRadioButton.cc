@@ -84,7 +84,9 @@ YCPBoolean YQRadioButton::getValue()
 
 void YQRadioButton::setValue( const YCPBoolean & c )
 {
+    _qt_radiobutton->blockSignals( true );
     _qt_radiobutton->setChecked( c->value() );
+    _qt_radiobutton->blockSignals( false );
 }
 
 

@@ -100,7 +100,7 @@ YQTable::YQTable( QWidget * parent, YWidgetOpt & opt, vector<string> header )
     else
     {
 	connect( _qt_listview->header(), SIGNAL( clicked (int) ),
-		 this,			SLOT  ( userSort(int) ) );
+		 this,			 SLOT  ( userSort(int) ) );
 	_qt_listview->setSorting( 65530, true ); // leave initial sorting
     }
 
@@ -191,12 +191,18 @@ void YQTable::itemAdded( vector<string> elements, int index )
 	item->setText( i, fromUTF8( elements[i] ) );
 
     if ( ! _qt_listview->selectedItem() )
+    {
+	_qt_listview->blockSignals( true );
 	item->setSelected( true );
+	_qt_listview->blockSignals( false );
+    }
 }
 
 void YQTable::itemsCleared()
 {
+    _qt_listview->blockSignals( true );
     _qt_listview->clear();
+    _qt_listview->blockSignals( false );
 }
 
 
@@ -218,10 +224,13 @@ int YQTable::getCurrentItem()
 void YQTable::setCurrentItem( int index )
 {
     QListViewItem * item = findItem( index );
+    
     if ( item )  // should be always true
     {
+	_qt_listview->blockSignals( true );
 	_qt_listview->setCurrentItem( item );
 	_qt_listview->ensureItemVisible( item );
+	_qt_listview->blockSignals( false );
     }
 }
 

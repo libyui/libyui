@@ -100,7 +100,9 @@ void YQMultiLineEdit::setSize( long newWidth, long newHeight )
 
 void YQMultiLineEdit::setText( const YCPString & text )
 {
+    _qt_textedit->blockSignals( true );
     _qt_textedit->setText( fromUTF8( text->value() ) );
+    _qt_textedit->blockSignals( false );
 }
 
 

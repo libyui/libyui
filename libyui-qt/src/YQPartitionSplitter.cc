@@ -173,6 +173,11 @@ void YQPartitionSplitter::setValue( int new_newPartSize )
     if ( ! _barGraph )
 	return;
 
+    _barGraph->blockSignals( true );
+    _qt_freeSizeField->blockSignals( true );
+    _qt_freeSizeSlider->blockSignals( true );
+    _qt_newPartSizeField->blockSignals( true );
+    
     _barGraph->setValue( 0, usedSize() );
     _barGraph->setValue( 1, remainingFreeSize() );
     _barGraph->setValue( 2, newPartSize() );
@@ -180,6 +185,12 @@ void YQPartitionSplitter::setValue( int new_newPartSize )
     _qt_freeSizeField->setValue ( remainingFreeSize() );
     _qt_freeSizeSlider->setValue( remainingFreeSize() );
     _qt_newPartSizeField->setValue( newPartSize() );
+    
+    _barGraph->blockSignals( false );
+    _qt_freeSizeField->blockSignals( false );
+    _qt_freeSizeSlider->blockSignals( false );
+    _qt_newPartSizeField->blockSignals( false );
+    
 }
 
 

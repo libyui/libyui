@@ -118,12 +118,16 @@ YQMultiSelectionBox::setEnabling( bool enabled )
 void
 YQMultiSelectionBox::itemAdded( const YCPString & label, bool selected )
 {
+    _qt_listview->blockSignals( true );
+    
     YQMultiSelectionBoxItem * item = new YQMultiSelectionBoxItem( this, _qt_listview, fromUTF8( label->value() ) );
     
     if ( item && selected )
     {
 	item->setOn( true );
     }
+    
+    _qt_listview->blockSignals( false );
 }
 
 
@@ -150,6 +154,7 @@ YQMultiSelectionBox::getCurrentItem()
 void
 YQMultiSelectionBox::setCurrentItem( int index )
 {
+    _qt_listview->blockSignals( true );
     _qt_listview->clearSelection();
     QListViewItem * child = _qt_listview->firstChild();
 
@@ -165,6 +170,7 @@ YQMultiSelectionBox::setCurrentItem( int index )
     }
 
     child->setSelected( true );
+    _qt_listview->blockSignals( false );
 }
 
 
@@ -180,8 +186,10 @@ YQMultiSelectionBox::setKeyboardFocus()
 void
 YQMultiSelectionBox::deleteAllItems()
 {
+    _qt_listview->blockSignals( true );
     _qt_listview->clear();
     YMultiSelectionBox::deleteAllItems();
+    _qt_listview->blockSignals( false );
 }
 
 
@@ -210,6 +218,7 @@ YQMultiSelectionBox::itemIsSelected( int index )
 void
 YQMultiSelectionBox::selectItem( int index )
 {
+    _qt_listview->blockSignals( true );
     QListViewItem * child = _qt_listview->firstChild();
 
     for ( int i = 0; i < index; i++ )
@@ -226,12 +235,15 @@ YQMultiSelectionBox::selectItem( int index )
     QCheckListItem * item = ( QCheckListItem * ) child;
 
     item->setOn( true );
+    _qt_listview->blockSignals( false );
 }
 
 
 void
 YQMultiSelectionBox::deselectAllItems()
 {
+    _qt_listview->blockSignals( true );
+    
     QListViewItem * child = _qt_listview->firstChild();
 
     while ( child )
@@ -240,6 +252,8 @@ YQMultiSelectionBox::deselectAllItems()
 	item->setOn( false );
 	child = child->nextSibling();
     }
+    
+    _qt_listview->blockSignals( false );
 }
 
 

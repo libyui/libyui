@@ -103,6 +103,7 @@ YQTree::setEnabling( bool enabled )
 void
 YQTree::rebuildTree()
 {
+    _listView->blockSignals( true );
     _listView->clear();
 
     for ( YTreeItemListIterator it = items.begin(); it < items.end(); ++it )
@@ -118,6 +119,8 @@ YQTree::rebuildTree()
 	    item->buildSubTree( itemList, _nextSerialNo );
 	}
     }
+    
+    _listView->blockSignals( false );
 }
 
 
@@ -133,6 +136,8 @@ YQTree::getCurrentItem() const
 void
 YQTree::setCurrentItem( YTreeItem * yit )
 {
+    _listView->blockSignals( true );
+    
     YQTreeItem * it = findYQTreeItem( yit );
 
     if ( it )
@@ -155,6 +160,8 @@ YQTree::setCurrentItem( YTreeItem * yit )
     }
     else
 	_listView->clearSelection();
+    
+    _listView->blockSignals( false );
 }
 
 
@@ -205,7 +212,7 @@ YQTreeItem::YQTreeItem( YQTree	*		tree,
 			int			serial )
     : QListViewItem( parent )
 {
-    init ( tree, yTreeItem, serial );
+    init( tree, yTreeItem, serial );
 }
 
 
@@ -215,7 +222,7 @@ YQTreeItem::YQTreeItem( YQTree	*		tree,
 			int			serial )
     : QListViewItem( parent )
 {
-    init ( tree, yTreeItem, serial );
+    init( tree, yTreeItem, serial );
 }
 
 
@@ -228,8 +235,8 @@ YQTreeItem::init( YQTree *		tree,
     _tree->registerItem ( yTreeItem, this );
     _origItem = yTreeItem;
     _serialNo = serial;
-    setText ( 0, fromUTF8 ( _origItem->getText()->value() ) );
-    setOpen ( _origItem->isOpenByDefault() );
+    setText( 0, fromUTF8 ( _origItem->getText()->value() ) );
+    setOpen( _origItem->isOpenByDefault() );
 }
 
 

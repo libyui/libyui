@@ -122,10 +122,10 @@ void YQSelectionBox::setEnabling( bool enabled )
 
 void YQSelectionBox::itemAdded( const YCPString & string, int index, bool selected )
 {
-    _qt_listbox->blockSignals( true );
     _qt_listbox->insertItem( fromUTF8(string->value() ) );
-    if ( selected ) _qt_listbox->setCurrentItem( index );
-    _qt_listbox->blockSignals( false );
+    
+    if ( selected )
+	setCurrentItem( index );
 }
 
 
@@ -137,7 +137,9 @@ int YQSelectionBox::getCurrentItem()
 
 void YQSelectionBox::setCurrentItem( int index )
 {
+    _qt_listbox->blockSignals( true );
     _qt_listbox->setCurrentItem( index );
+    _qt_listbox->blockSignals( false );
 }
 
 
