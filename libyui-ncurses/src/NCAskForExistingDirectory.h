@@ -52,10 +52,13 @@ class NCAskForExistingDirectory : public NCPopup {
 
 private:
 
-    NCSelectionBox *dir;		// directory list
     NCPushButton * okButton;
     NCPushButton * cancelButton;
     NCTextEntry * dirName;
+    NCSelectionBox *dirList;		// directory list
+
+    string currentDir;			// currently selected directory
+    string startDir;
     
 protected:
 
@@ -75,14 +78,18 @@ public:
     virtual long nicesize(YUIDimension dim);
 
     
-    void createLayout( const YCPString & startDir, const YCPString & headline );
+    /**
+     * Create layout of file selection popup
+     * @return bool
+     */
+    void createLayout( const YCPString & headline );
 
     /**
      * Fills the list with the directories
      * @return bool
      */
-    bool fillDirectoryList ( NCSelectionBox * dir, const YCPString & startDir );
-	
+    bool fillDirectoryList ( );
+
     /**
      * Shows the popup with the list of directories.
      * @return NCursesEvent
