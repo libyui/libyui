@@ -113,14 +113,8 @@ NCFileTable::NCFileTable( NCWidget * parent,
     : NCTable( parent, opt, vector<string> () )
       , tableType( type )
 {
-    vector<string> header;
-    header.reserve(2);
-
-    header.push_back( "L" + string("   ") );
-    header.push_back( "L" + string("Name") );
-
+    fillHeader();
     SetSepChar( ' ' );
-    setHeader( header ); 
 
     WIDDBG << endl;
 }
@@ -194,13 +188,13 @@ void NCFileTable::fillHeader( )
     {
 	case T_Overview: {
 	    header.reserve(2);
-	    header.push_back( "L" + string("   ") );
+	    header.push_back( "L" + string("  ") );
 	    header.push_back( "L" + string("Name") );
 	    break;
 	}
 	case T_Detailed: {
 	    header.reserve(5);
-	    header.push_back( "L" + string("   ") );
+	    header.push_back( "L" + string("  ") );
 	    header.push_back( "L" + string("Name") );
 	    header.push_back( "L" + string("Size") );
 	    header.push_back( "L" + string("Type") );

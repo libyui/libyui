@@ -315,7 +315,8 @@ NCursesEvent NCAskForExistingDirectory::wHandleInput( wint_t ch )
 				    true );
 	    break;
 	}
-	case KEY_RETURN: {
+	case KEY_RETURN:
+	case KEY_SPACE: {
 	    
 	    bool ok = fillDirectoryList( );
 
@@ -392,12 +393,13 @@ bool NCAskForExistingDirectory::fillDirectoryList ( )
 
     if ( details )
     {
-	dirList->fillHeader();
 	dirList->setTableType( NCFileTable::T_Detailed );
+	dirList->fillHeader();
     }
     else
     {
 	dirList->setTableType( NCFileTable::T_Overview );
+	dirList->fillHeader();
     }
 	
     DIR * diskDir = opendir( currentDir.c_str() );
