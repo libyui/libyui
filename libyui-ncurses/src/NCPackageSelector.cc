@@ -41,10 +41,11 @@
 //	DESCRIPTION :
 //
 NCPackageSelector::NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
-				      YWidgetOpt & opt, YUIDimension dimension )
+				      YWidgetOpt & opt, YUIDimension dimension,
+				      string floppyDevice )
     : NCSplit( parent, opt, dimension )
       , widgetRoot( 0 )
-      , packager( ui, opt )
+      , packager( ui, opt, floppyDevice )
       , youMode ( false )
       , updateMode ( false )
 {

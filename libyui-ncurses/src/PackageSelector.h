@@ -112,8 +112,10 @@ class PackageSelector
      * The package selector class handles the events and holds the
      * data needed for the package selection.
      * @param ui The NCurses UI
+     * @param opt The widget options
+     * @param floppyDevice The floppy device
      */
-    PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt);
+    PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt, string floppyDevice );
 
     /**
      * Destructor

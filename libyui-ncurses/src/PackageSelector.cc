@@ -83,7 +83,7 @@ bool ic_compare ( char c1, char c2 )
 //
 // Constructor
 //
-PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
+PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt, string floppyDevice )
     : y2ui( ui )
       , visibleInfo( YCPNull() )
       , filterPopup( 0 )
@@ -216,10 +216,6 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
 
 	// the disk space popup
 	diskspacePopup = new NCPopupDiskspace( wpos( 1, 1 ) );
-
-	// FIXME: get floppy device from opt
-	// string floppyDevcie = opt.floppy.value();
-	string floppyDevice = "/dev/fd0";
 
 	// the file popup
 	filePopup = new NCPopupFile( wpos( 1, 1), floppyDevice, this );

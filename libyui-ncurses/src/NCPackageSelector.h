@@ -66,7 +66,9 @@ class NCPackageSelector : public NCSplit
      * Constructor
      * creates the widget tree of the package selector
      */
-    NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent, YWidgetOpt & opt, YUIDimension dimension );
+    NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
+		       YWidgetOpt & opt, YUIDimension dimension,
+		       string floppyDevice );
 
     /**
      * Destructor
