@@ -144,6 +144,11 @@ public:
     static const YCPValue& PkgNames::UpdateHelp ();  
 
     /**
+     *  Widget id of the menu selection Help/Search
+     */
+    static const YCPValue& PkgNames::SearchHelp ();
+    
+    /**
      *  Widget id of the menu selection Information/Relaione
      */
     static const YCPValue& PkgNames::Relations ();
@@ -192,6 +197,11 @@ public:
      */
     static const YCPValue& OkButton ();
 
+    /**
+     *  Widget id combo box
+     */
+    static const YCPValue& SearchBox ();
+    
    /**
      *  Widget id of the solve button
      */
@@ -354,6 +364,11 @@ public:
      */
     static const NCstring PackageHelp();
 
+    /**
+     * The headline of the search help popup
+     */
+    static const NCstring SearchHeadline();
+    
     /**
      * The headline of the help YOU popup
      */

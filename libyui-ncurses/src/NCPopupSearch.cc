@@ -102,7 +102,7 @@ void NCPopupSearch::createLayout( const YCPString & headline )
   opt.isEditable.setValue( true );
   searchExpr = new NCComboBox( frame0, opt, YCPString(PkgNames::SearchPhrase().str()) );
   frame0->addChild( searchExpr );
- 
+  searchExpr->setId( PkgNames::SearchBox() );
   vSplit2->addChild( vSp1 );
   vSplit->addChild( frame0 );
 
@@ -197,6 +197,7 @@ YCPString  NCPopupSearch::getSearchExpression() const
     
     if ( searchExpr )
     {
+	// get the expression and store it in combo box list
 	value = searchExpr->getValue();
 	i = searchExpr->getListSize();
 	
@@ -235,8 +236,9 @@ NCursesEvent NCPopupSearch::wHandleInput( int ch )
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;
 
-    // if ( ch == KEY_RETURN )
-    // return NCursesEvent::button;
+    // start package search if Return is pressed
+    if ( ch == KEY_RETURN )
+	return NCursesEvent::button;
     
     return NCDialog::wHandleInput( ch );
 }
@@ -257,13 +259,14 @@ bool NCPopupSearch::postAgain()
     postevent.result = YCPNull();
 	
     YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
-    
-    if ( currentId->compare( PkgNames::Cancel () ) == YO_EQUAL )
+
+    if ( !currentId.isNull() &&
+	 currentId->compare( PkgNames::Cancel () ) == YO_EQUAL )
     {
 	// set postevent.result to Null (checked in PackageSelector.cc)
 	postevent.result = YCPNull();
     }
-    else if ( currentId->compare( PkgNames::OkButton () ) == YO_EQUAL )
+    else 
     {
 	// get the search expression
 	postevent.result =  getSearchExpression();

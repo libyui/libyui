@@ -67,13 +67,13 @@ const YCPValue& PkgNames::AvailPkgs ()
     static const YCPValue value = createIdValue ( "availpkgs" );
     return value;
 }
+
 // the list of patch packages
 const YCPValue& PkgNames::PatchPkgs ()
 {
     static const YCPValue value = createIdValue ( "patchpkgs" );
     return value;
 }
-
 
 // the description section ( shown on bottom of the selection dialog )
 const YCPValue& PkgNames::Description ()
@@ -250,6 +250,13 @@ const YCPValue& PkgNames::UpdateHelp ()
     return value;
 }
 
+// menu selection help/search 
+const YCPValue& PkgNames::SearchHelp ()
+{
+    static const YCPValue value = createIdValue ( "help_search" );
+    return value;
+}
+
 // menu selection package info
 const YCPValue& PkgNames::PkgInfo ()
 {
@@ -289,6 +296,13 @@ const YCPValue& PkgNames::Cancel ()
 const YCPValue& PkgNames::Solve ()
 {
     static const YCPValue value = createIdValue ( "solve" );
+    return value;
+}
+
+// combo box id
+const YCPValue& PkgNames::SearchBox ()
+{
+    static const YCPValue value = createIdValue ( "search_box" );
     return value;
 }
 
@@ -566,6 +580,13 @@ const NCstring PkgNames::PackageHelp()
 {
     // the headline of the help popup 
     static const NCstring value = _("Help package installation");
+    return value;
+}
+
+const NCstring PkgNames::SearchHeadline()
+{
+    // the headline of the popup showing help on search  
+    static const NCstring value = _("Help package search");
     return value;
 }
 

@@ -132,6 +132,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     eventHandlerMap[ PkgNames::StatusHelp()->toString() ]  = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::FilterHelp()->toString() ]  = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::UpdateHelp()->toString() ] = &PackageSelector::HelpHandler;
+    eventHandlerMap[ PkgNames::SearchHelp()->toString() ] = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::PatchHelp()->toString() ]  = &PackageSelector::YouHelpHandler;
    
     if ( opt.youMode.value() )
@@ -1182,6 +1183,7 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
 {
     //NCstring text ( "" );
     string text = "";
+    YCPString headline = YCPString(PkgNames::PackageHelp().str());
     
     if ( event.selection.isNull() )
     {
@@ -1209,8 +1211,14 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
     {
 	text += PkgNames::HelpOnUpdate().str();
     }
+    else if ( event.selection->compare( PkgNames::SearchHelp() ) == YO_EQUAL )
+    {
+	headline = YCPString(PkgNames::SearchHeadline().str());
+	text += PkgNames::HelpOnSearch().str();
+    }
+    
     // open the popup with the help text
-    NCPopupInfo pkgHelp( wpos( 1, 1 ), YCPString(PkgNames::PackageHelp().str()), YCPString( text ) );
+    NCPopupInfo pkgHelp( wpos( 1, 1 ), headline, YCPString( text ) );
     pkgHelp.showInfoPopup( );
     
     return true;

@@ -100,9 +100,10 @@
 					   // label help menu 
 					   `HBox(`HWeight(1, `MenuButton( _("&Help"),
 									  // menu items of the help menu
-									  [`item( `id(`help_general), _("&General Help") ),
-									   `item( `id(`help_status),  _("&Help on package status") ),
-									   `item( `id(`help_update), _("H&elp on Update") ) ]
+									  [`item( `id(`help_general), _("&General help") ),
+									   `item( `id(`help_status),  _("Help on &package status") ),
+									   `item( `id(`help_search),  _("Help on &search") ),
+									   `item( `id(`help_update),  _("Help on &update") ) ]
 									  )),
 						 `HStretch(),
 						 // button label
