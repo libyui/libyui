@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Nov  8 16:18:33 CET 2002 - sh@suse.de
+
+- Fixed bug #20326: [Cancel] doesn't abandon changes in package mgr
+
+-------------------------------------------------------------------
 Thu Nov  7 20:04:33 CET 2002 - sh@suse.de
 
 - Fixed bug #16339: [Space] doesn't trigger UserInput() in YTable

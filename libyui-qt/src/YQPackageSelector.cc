@@ -121,9 +121,14 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     basicLayout();
     makeConnections();
     emit loadData();
+    
+    Y2PM::packageManager().SaveState();
+    Y2PM::selectionManager().SaveState();
 
     if ( _youMode )
     {
+	Y2PM::youPatchManager().SaveState();
+	
 	if ( _filters && _youPatchFilterView && _youPatchList )
 	{
 	    _filters->showPage( _youPatchFilterView );
@@ -653,7 +658,12 @@ YQPackageSelector::reject()
 			       1 ) // escapeButtonNumber
 	 == 0 )	// Proceed upon button #0 (OK)
     {
+	Y2PM::packageManager().RestoreState();
+	Y2PM::selectionManager().RestoreState();
 
+	if ( _youMode )
+	    Y2PM::youPatchManager().RestoreState();
+	
 	_yuiqt->setMenuSelection( YCPSymbol("cancel", true) );
 	_yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
     }
@@ -665,6 +675,12 @@ YQPackageSelector::accept()
 {
     if ( resolveDependencies() != QDialog::Rejected )
     {
+	Y2PM::packageManager().ClearSaveState();
+	Y2PM::selectionManager().ClearSaveState();
+
+	if ( _youMode )
+	    Y2PM::youPatchManager().ClearSaveState();
+	
 	_yuiqt->setMenuSelection( YCPSymbol("accept", true) );
 	_yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
     }
