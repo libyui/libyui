@@ -119,8 +119,8 @@ public slots:
 
     /**
      * Add a PMObject to the list. Connect a filter's filterMatch() signal to
-     * this slot. Remember to connect filterStart() to clear() ( inherited from
-     * QListView ).
+     * this slot. Remember to connect filterStart() to clear() (inherited from
+     * QListView).
      *
      * Intentionally NOT named addItem() so the calling class cannot confuse
      * this method with overlaid methods of the same name that were simply

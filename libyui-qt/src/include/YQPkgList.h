@@ -74,8 +74,8 @@ public slots:
 
     /**
      * Add a pkg to the list. Connect a filter's filterMatch() signal to this
-     * slot. Remember to connect filterStart() to clear() ( inherited from
-     * QListView ).
+     * slot. Remember to connect filterStart() to clear() (inherited from
+     * QListView).
      **/
     void addPkgItem( PMPackagePtr pmPkg );
 
