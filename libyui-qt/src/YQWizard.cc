@@ -10,10 +10,12 @@
 |						     (c) SuSE Linux AG |
 \----------------------------------------------------------------------/
 
-  File:	      YQWizard.cc
+  File:		YQWizard.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:	Stefan Hundhammer <sh@suse.de>
 
+  Textdomain    "packages-qt"
+  
 /-*/
 
 

@@ -1,5 +1,6 @@
 ./src/QY2DiskUsageList.cc
 ./src/QY2FloppyMountDialog.cc
+./src/YQDialog.cc
 ./src/YQPackageSelector.cc
 ./src/YQPackageSelectorHelp.cc
 ./src/YQPkgChangesDialog.cc
@@ -9,6 +10,7 @@
 ./src/YQPkgDescriptionDialog.cc
 ./src/YQPkgDiskUsageList.cc
 ./src/YQPkgDiskUsageWarningDialog.cc
+./src/YQPkgLangList.cc
 ./src/YQPkgList.cc
 ./src/YQPkgObjList.cc
 ./src/YQPkgRpmGroupTagsFilterView.cc
@@ -22,3 +24,4 @@
 ./src/YQPkgYouPatchFilterView.cc
 ./src/YQPkgYouPatchList.cc
 ./src/YQUI_builtins.cc
+./src/YQWizard.cc
