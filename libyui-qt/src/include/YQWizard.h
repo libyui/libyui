@@ -315,6 +315,11 @@ protected:
     void setButtonLabel( QPushButton * button, const QString & newLabel );
 
     /**
+     * Enable or disable a widget.
+     **/
+    void enableWidget( QWidget * w, bool enabled );
+
+    /**
      * Set wizard command verbosity
      **/
     void setVerboseCommands( bool verbose ) { _verboseCommands = verbose; }
