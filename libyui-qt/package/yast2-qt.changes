@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct 28 19:38:43 CEST 2004 - sh@suse.de
+
+- Fixed bug #46805: Error handling for TextEntry and ComboBox
+  with restricted ValidChars 
+
+-------------------------------------------------------------------
 Thu Oct 28 15:42:46 CEST 2004 - sh@suse.de
 
 - Fixed bug #43389: Tristate checkbox doesn't send events properly 

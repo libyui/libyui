@@ -43,7 +43,7 @@ QY2CharValidator::~QY2CharValidator()
 QValidator::State
 QY2CharValidator::validate( QString & fieldContents, int & pos ) const
 {
-    if ( validChars().isEmpty() )
+    if ( validChars().isEmpty() || fieldContents.isEmpty() )
 	return QValidator::Acceptable;
 
 

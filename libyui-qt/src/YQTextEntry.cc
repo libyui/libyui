@@ -98,11 +98,21 @@ void YQTextEntry::setSize( long newWidth, long newHeight )
     resize( newWidth, newHeight );
 }
 
-void YQTextEntry::setText( const YCPString & text )
+void YQTextEntry::setText( const YCPString & ytext )
 {
-    _qt_lineedit->blockSignals( true );
-    _qt_lineedit->setText( fromUTF8(text->value() ) );
-    _qt_lineedit->blockSignals( false );
+    QString text = fromUTF8( ytext->value() );
+    
+    if ( isValidText( text ) )
+    {
+	_qt_lineedit->blockSignals( true );
+	_qt_lineedit->setText( text );
+	_qt_lineedit->blockSignals( false );
+    }
+    else
+    {
+	y2error( "%s \"%s\": Rejecting invalid value \"%s\"",
+		 widgetClass(), debugLabel().c_str(), ytext->value().c_str() );
+    }
 }
 
 
@@ -119,6 +129,18 @@ void YQTextEntry::setLabel( const YCPString & label )
 }
 
 
+bool YQTextEntry::isValidText( const QString & txt ) const
+{
+    if ( ! _validator )
+	return true;
+
+    int pos = 0;
+    QString text( txt );	// need a non-const QString &
+    
+    return _validator->validate( text, pos ) == QValidator::Acceptable;
+}
+
+
 void YQTextEntry::setValidChars( const YCPString & newValidChars )
 {
     if ( _validator )
@@ -132,6 +154,15 @@ void YQTextEntry::setValidChars( const YCPString & newValidChars )
 
 	// No need to delete the validator in the destructor - Qt will take
 	// care of that since it's a QObject with a parent!
+    }
+
+    if ( ! isValidText( _qt_lineedit->text() ) )
+    {
+	y2error( "Old value \"%s\" of %s \"%s\" invalid according to ValidChars \"%s\" - deleting",
+		 (const char *) _qt_lineedit->text(),
+		 widgetClass(), debugLabel().c_str(),
+		 newValidChars->value().c_str() );
+	_qt_lineedit->setText( "" );
     }
 
     YTextEntry::setValidChars( newValidChars );

@@ -72,6 +72,13 @@ void YQComboBox::setLabel( const YCPString & label )
 
 void YQComboBox::setValidChars( const YCPString & newValidChars )
 {
+    if ( ! _qt_combo_box->editable() )
+    {
+	y2warning( "Setting ValidChars is useless on a combo box that isn't editable! (%s)",
+		   debugLabel().c_str() );
+	return;
+    }
+    
     if ( _validator )
     {
 	_validator->setValidChars( fromUTF8( newValidChars->value() ) );
@@ -84,6 +91,15 @@ void YQComboBox::setValidChars( const YCPString & newValidChars )
 	// No need to delete the validator in the destructor - Qt will take
 	// care of that since it's a QObject with a parent!
     }
+    
+    if ( ! isValidText( _qt_combo_box->currentText() ) )
+    {
+	y2error( "Old value \"%s\" of %s \"%s\" invalid according to ValidChars \"%s\" - deleting",
+		 (const char *) _qt_combo_box->currentText(),
+		 widgetClass(), debugLabel().c_str(),
+		 newValidChars->value().c_str() );
+	_qt_combo_box->setCurrentText( "" );
+    }
 
     YComboBox::setValidChars( newValidChars );
 }
@@ -91,7 +107,7 @@ void YQComboBox::setValidChars( const YCPString & newValidChars )
 
 long YQComboBox::nicesize( YUIDimension dim )
 {
-    if ( dim == YD_HORIZ ) return sizeHint().width();
+    if ( dim == YD_HORIZ ) 	return sizeHint().width();
     else			return sizeHint().height();
 }
 
@@ -130,11 +146,33 @@ YCPString YQComboBox::getValue() const
 }
 
 
-void YQComboBox::setValue( const YCPString & new_value )
+bool YQComboBox::isValidText( const QString & txt ) const
 {
-    _qt_combo_box->blockSignals( true );
-    _qt_combo_box->setEditText( fromUTF8( new_value->value() ) );
-    _qt_combo_box->blockSignals( false );
+    if ( ! _validator )
+	return true;
+
+    int pos = 0;
+    QString text( txt );	// need a non-const QString &
+    
+    return _validator->validate( text, pos ) == QValidator::Acceptable;
+}
+
+
+void YQComboBox::setValue( const YCPString & ytext )
+{
+    QString text = fromUTF8( ytext->value() );
+    
+    if ( isValidText( text ) )
+    {
+	_qt_combo_box->blockSignals( true );
+	_qt_combo_box->setCurrentText( text );
+	_qt_combo_box->blockSignals( false );
+    }
+    else
+    {
+	y2error( "%s \"%s\": Rejecting invalid value \"%s\"",
+		 widgetClass(), debugLabel().c_str(), ytext->value().c_str() );
+    }
 }
 
 

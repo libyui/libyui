@@ -72,6 +72,12 @@ public:
     void setValidChars( const YCPString & validChars );
 
     /**
+     * Returns 'true' if the given text is valid according to the current
+     * setting of ValidChars. 
+     **/
+    bool YQComboBox::isValidText( const QString & txt ) const;
+    
+    /**
      * Notification that a new item has been added.
      *
      * Reimplemented from YComboBox.

@@ -92,6 +92,11 @@ public:
      */
     virtual bool setKeyboardFocus();
 
+    /**
+     * Returns 'true' if a given text is valid according to ValidChars.
+     **/
+    bool YQTextEntry::isValidText( const QString & text ) const;
+
 
 protected slots:
     /**
