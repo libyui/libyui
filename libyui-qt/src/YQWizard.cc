@@ -71,6 +71,8 @@ using std::string;
 #define WORK_AREA_RIGHT_MARGIN		10
 #define SEPARATOR_MARGIN		6
 #define STEPS_MARGIN			10
+#define STEPS_SPACING			2
+#define STEPS_HEADING_SPACING		8
 
 #define STEPS_FONT_FAMILY		"Sans Serif"
 #define STEPS_FONT_SIZE			11
@@ -90,6 +92,8 @@ YQWizard::YQWizard( QWidget *		parent,
 {
     setWidgetRep( this );
     _stepsEnabled = opt.stepsEnabled.value();
+    _verboseCommands		= false;
+    _stepsDirty			= false;
 
     _sideBar			= 0;
     _stepsPanel			= 0;
@@ -108,7 +112,6 @@ YQWizard::YQWizard( QWidget *		parent,
     _backButton			= 0;
     _nextButton			= 0;
 
-    _verboseCommands		= false;
     _stepsList.setAutoDelete( true );
 
 
@@ -118,6 +121,9 @@ YQWizard::YQWizard( QWidget *		parent,
 
     loadGradientPixmaps();
     _gradientCenterColor = pixelColor( _bottomGradientPixmap, 0, 0 );
+
+    if ( _stepsEnabled )
+	loadStepsIcons();
 
 
     //
@@ -139,7 +145,7 @@ YQWizard::YQWizard( QWidget *		parent,
 
 YQWizard::~YQWizard()
 {
-    _stepsList.clear();
+    deleteSteps();
 }
 
 
@@ -266,7 +272,21 @@ void YQWizard::layoutStepsPanel()
 
 void YQWizard::addStep( const QString & text, const QString & id )
 {
-    _stepsList.append( new YQWizard::Step( text, id ) );
+    if ( _stepsList.last()->name() == text )
+    {
+	// Consecutive steps with the same name will be shown as one single step.
+	//
+	// Since steps are always added at the end of the list, it is
+	// sufficient to check the last step of the list. If the texts are the
+	// same, the other with the same text needs to get another (additional)
+	// ID to make sure setCurrentStep() works as it should.
+	_stepsList.last()->addID( id );
+    }
+    else
+    {
+	_stepsList.append( new YQWizard::Step( text, id ) );
+	_stepsDirty = true;
+    }
 }
 
 
@@ -274,6 +294,7 @@ void YQWizard::addStep( const QString & text, const QString & id )
 void YQWizard::addStepHeading( const QString & text )
 {
     _stepsList.append( new YQWizard::StepHeading( text ) );
+    _stepsDirty = true;
 }
 
 
@@ -302,7 +323,9 @@ void YQWizard::updateSteps()
 
     // Create a grid layout for the steps
 
-    _stepsGrid = new QGridLayout( stepsParent, _stepsList.count(), 4, STEPS_MARGIN ); // parent, rows, cols, margin
+    _stepsGrid = new QGridLayout( stepsParent,			// parent
+				  _stepsList.count(), 4,	// rows, cols
+				  0, STEPS_SPACING );		// margin, spacing
     CHECK_PTR( _stepsGrid );
 
     const int statusCol = 1;
@@ -313,21 +336,44 @@ void YQWizard::updateSteps()
     _stepsGrid->setColStretch( nameCol,   0 );	// Name column - don't stretch
     _stepsGrid->setColStretch( 3, 99  );	// Left margin column - stretch
 
-    // Work around Qt bug: Grid layout only works right if the parent widget isn't visible (yet?)
+    
+    // Work around Qt bug: Grid layout only works right if the parent widget isn't visible.
     stepsParent->hide();
+
+    //
+    // Add left and right (but not top and bottom) margins
+    //
+    
+    int row = 0;
+
+    QWidget * leftSpacer  = addHSpacing( stepsParent, STEPS_MARGIN );
+    CHECK_PTR( leftSpacer );
+    _stepsGrid->addWidget( leftSpacer, row, 0 );
+    
+    QWidget * rightSpacer = addHSpacing( stepsParent, STEPS_MARGIN );
+    CHECK_PTR( rightSpacer );
+    _stepsGrid->addWidget( rightSpacer, row, 3 );
 
 
     //
     // Create widgets for all steps and step headings in the internal list
     //
 
-    int row = 0;
     YQWizard::Step * step = _stepsList.first();
 
     while ( step )
     {
 	if ( step->isHeading() )
 	{
+	    if ( row > 0 )
+	    {
+		// Spacing
+
+		QWidget * spacer = addVSpacing( stepsParent, STEPS_HEADING_SPACING );
+		CHECK_PTR( spacer );
+		_stepsGrid->addWidget( spacer, row++, nameCol );
+	    }
+	    
 	    //
 	    // Heading
 	    //
@@ -338,7 +384,7 @@ void YQWizard::updateSteps()
 	    QFont font( STEPS_FONT_FAMILY, STEPS_HEADING_FONT_SIZE );
 	    font.setWeight( QFont::Bold );
 	    label->setFont( font );
-
+	    
 	    step->setNameLabel( label );
 	    _stepsGrid->addMultiCellWidget( label,
 					    row, row,			// from_row, to_row
@@ -350,7 +396,7 @@ void YQWizard::updateSteps()
 	    // Step status
 	    //
 
-	    QLabel * statusLabel = new QLabel( "-", stepsParent );
+	    QLabel * statusLabel = new QLabel( stepsParent );
 	    CHECK_PTR( statusLabel );
 
 	    step->setStatusLabel( statusLabel );
@@ -376,7 +422,71 @@ void YQWizard::updateSteps()
 
     _stepsGrid->activate();
     stepsParent->show();
+    _stepsDirty = false;
 }
+
+
+void YQWizard::updateStepStates()
+{
+    if ( _stepsDirty )
+	updateSteps();
+    
+    YQWizard::Step * currentStep = findStep( _currentStepID );
+    YQWizard::Step * step = _stepsList.first();
+
+    if ( currentStep )
+    {
+	// Set status icon and color for the current step
+	setStepStatus( currentStep, _stepCurrentIcon, _stepCurrentColor );
+
+	
+	//
+	// Set all steps before the current to "done"
+	//
+
+	while ( step && step != currentStep )
+	{
+	    setStepStatus( step, _stepDoneIcon, _stepDoneColor );
+	    step = _stepsList.next();
+	}
+
+	// Skip the current step - continue with the step after it
+	
+	if ( step )
+	    step = _stepsList.next();
+    }
+
+    //
+    // Set all steps after the current to "to do"
+    //
+
+    while ( step )
+    {
+	setStepStatus( step, _stepToDoIcon, _stepToDoColor );
+	step = _stepsList.next();
+    }
+}
+
+
+void YQWizard::setStepStatus( YQWizard::Step * step, const QPixmap & icon, const QColor & color )
+{
+    if ( step )
+    {
+	if ( step->nameLabel() )
+	    step->nameLabel()->setPaletteForegroundColor( color );
+
+	if ( step->statusLabel() )
+	    step->statusLabel()->setPixmap( icon );
+    }
+}
+
+
+void YQWizard::setCurrentStep( const QString & id )
+{
+    _currentStepID = id;
+    updateStepStates();
+}
+
 
 
 void YQWizard::deleteSteps()
@@ -384,6 +494,24 @@ void YQWizard::deleteSteps()
     _stepsList.clear();
 }
 
+
+YQWizard::Step * YQWizard::findStep( const QString & id )
+{
+    if ( id.isEmpty() )
+	return 0;
+    
+    YQWizard::Step * step = _stepsList.first();
+
+    while ( step )
+    {
+	if ( step->hasID( id ) )
+	    return step;
+
+	step = _stepsList.next();
+    }
+
+    return 0;
+}
 
 
 void YQWizard::layoutHelpPanel()
@@ -613,6 +741,18 @@ void YQWizard::loadGradientPixmaps()
 }
 
 
+void YQWizard::loadStepsIcons()
+{
+    _stepCurrentColor	= pixelColor( QPixmap( PIXMAP_DIR "color-step-current.png" ), 0, 0 );
+    _stepToDoColor	= pixelColor( QPixmap( PIXMAP_DIR "color-step-todo.png"    ), 0, 0 );
+    _stepDoneColor	= pixelColor( QPixmap( PIXMAP_DIR "color-step-done.png"    ), 0, 0 );
+    
+    _stepCurrentIcon	= QPixmap( PIXMAP_DIR "step-current.png" );
+    _stepToDoIcon	= QPixmap( PIXMAP_DIR "step-todo.png"	 );
+    _stepDoneIcon	= QPixmap( PIXMAP_DIR "step-done.png"	 );
+}
+
+
 
 void YQWizard::setGradient( QWidget * widget, const QPixmap & pixmap )
 {
@@ -824,19 +964,16 @@ void YQWizard::backClicked()
 }
 
 
-
 void YQWizard::abortClicked()
 {
     sendEvent( _abortButtonId );
 }
 
 
-
 void YQWizard::nextClicked()
 {
     sendEvent( _nextButtonId );
 }
-
 
 
 void YQWizard::showHelp()
@@ -846,7 +983,6 @@ void YQWizard::showHelp()
 	_sideBar->raiseWidget( _helpPanel );
     }
 }
-
 
 
 void YQWizard::showSteps()
@@ -1049,6 +1185,7 @@ YCPValue YQWizard::command( const YCPTerm & cmd )
     if ( isCommand( "SetDialogIcon 	  ( string )", cmd ) )	{ setDialogIcon	( qStringArg( cmd, 0 ) );		return OK; }
     if ( isCommand( "SetDialogHeading	  ( string )", cmd ) )	{ setDialogHeading( qStringArg( cmd, 0 ) );		return OK; }
 
+    if ( isCommand( "SetCurrentStep	  ( string )", cmd ) )	{ setCurrentStep( qStringArg( cmd, 0 ) );		return OK; }
     if ( isCommand( "AddStep ( string, string )"     , cmd ) )	{ addStep( qStringArg( cmd, 0 ), qStringArg( cmd, 1 ));	return OK; }
     if ( isCommand( "AddStepHeading       ( string )", cmd ) )  { addStepHeading( qStringArg( cmd, 0 ) );		return OK; }
     if ( isCommand( "DeleteSteps()"		     , cmd ) )	{ deleteSteps();					return OK; }

@@ -25,6 +25,7 @@
 #include <qvbox.h>
 #include <qpixmap.h>
 #include <qptrlist.h>
+#include <qstringlist.h>
 
 #include <string>
 
@@ -43,6 +44,8 @@ class YQWizard : public QVBox, public YWizard
 {
     Q_OBJECT
 
+    class Step;
+    
 public:
     /**
      * Constructor
@@ -127,6 +130,11 @@ public:
      **/
     void deleteSteps();
 
+    /**
+     * Set the current step. This also triggers updateSteps() if necessary.
+     **/
+    void setCurrentStep( const QString & id );
+    
     /**
      * Update the steps display: Reflect the internal steps and heading lists
      * in the layout.
@@ -224,14 +232,23 @@ protected:
     /**
      * Load gradient pixmaps
      **/
-    void YQWizard::loadGradientPixmaps();
+    void loadGradientPixmaps();
 
+    /**
+     * Load step status icons
+     **/
+    void loadStepsIcons();
 
     /**
      * Destroy the button box's buttons
      **/
     void destroyButtons();
 
+    /**
+     * Update all step - use appropriate icons and colors
+     **/
+    void updateStepStates();
+    
     /**
      * Add a (left or right) margin of the specified width to a widget,
      * consisting of a fixed height top gradient , a flexible center part (in
@@ -251,6 +268,7 @@ protected:
      **/
     QGridLayout * centerAtBottom( QWidget * parent, QWidget * child, int margin );
 
+    
     /**
      * Send a wizard event with the specified ID.
      **/
@@ -301,16 +319,39 @@ protected:
     void setVerboseCommands( bool verbose ) { _verboseCommands = verbose; }
 
 
+    /**
+     * Set text color and status icon for one wizard step
+     **/
+    void setStepStatus( YQWizard::Step * step, const QPixmap & icon, const QColor & color );
+
+    /**
+     * Find a step with the specified ID. Returns 0 if there is no such step.
+     **/
+    YQWizard::Step * findStep( const QString & id );
+
+    
     //
     // Data members
     //
 
     bool	_stepsEnabled;
+    bool	_verboseCommands;
+    bool	_stepsDirty;
 
     QPixmap	_titleBarGradientPixmap;
     QPixmap	_topGradientPixmap;
     QColor	_gradientCenterColor;
     QPixmap	_bottomGradientPixmap;
+
+    QPixmap	_stepCurrentIcon;
+    QPixmap	_stepToDoIcon;
+    QPixmap	_stepDoneIcon;
+
+    QColor	_stepCurrentColor;
+    QColor	_stepToDoColor;
+    QColor	_stepDoneColor;
+
+    QString	_currentStepID;
 
 
     QWidgetStack *	_sideBar;
@@ -331,8 +372,8 @@ protected:
     QPushButton *	    _backButton;
     QPushButton *	    _nextButton;
 
+    QPtrList<YQWizard::Step> _stepsList;
 
-    bool	_verboseCommands;
 
     
 protected:
@@ -346,11 +387,11 @@ protected:
 
 	Step( const QString & name = "", const QString & id = "" )
 	    : _name( name )
-	    , _id( id )
 	    , _statusLabel( 0 )
 	    , _nameLabel(0)
 	    , _enabled( true )
-	    {}
+	    , _idList( id )
+	{}
 
 	/**
 	 * Destructor. Intentionally not deleting the widgets.
@@ -360,10 +401,12 @@ protected:
 	virtual bool isHeading() const { return false; }
 
 	QString  name()		const { return _name;		}
-	QString  id()		const { return _id;		}
 	QLabel * statusLabel()	const { return _statusLabel;	}
 	QLabel * nameLabel()	const { return _nameLabel;	}
 	bool	 isEnabled() 	const { return _enabled;	}
+	const QStringList & id() const { return _idList;	}
+	void addID( const QString & id ) { _idList.append( id ); }
+	virtual bool hasID( const QString & id ) { return _idList.find( id ) != _idList.end(); }
 
 	void setStatusLabel( QLabel * label )	{ _statusLabel = label; }
 	void setNameLabel  ( QLabel * label )	{ _nameLabel   = label; }
@@ -372,10 +415,10 @@ protected:
     protected:
 
 	QString		_name;
-	QString		_id;
 	QLabel * 	_statusLabel;
 	QLabel *	_nameLabel;
 	bool		_enabled;
+	QStringList	_idList;
     };
 
 
@@ -392,13 +435,10 @@ protected:
 
 	virtual ~StepHeading() {}
 	virtual bool isHeading() const { return true; }
+	virtual bool hasID( const QString & id ) { return false; }
     };
 
-
-    typedef QPtrList<YQWizard::Step> StepList;
-    StepList	_stepsList;
-
-};
+}; // class YQWizard
 
 
 
