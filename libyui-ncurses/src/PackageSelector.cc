@@ -1774,10 +1774,8 @@ void PackageSelector::showDiskSpace()
 {
     const PkgDuMaster & duMaster =  Y2PM::packageManager().updateDu();
 
-    // FSize totalSize = duMaster.pkg_used();
-    
-    // show pkg_diff instead of pkg_used because pkg_used contains the used disk space
-    // of all partitions, i.e. all mounted partitions, too.
+    // show pkg_diff, i.e. total difference of disk space (can be negative in installed system
+    // if packages are deleted) 
     //                  0123456789
     string totalSize = "          ";
     string diff = duMaster.pkg_diff().asString();
