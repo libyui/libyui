@@ -622,6 +622,11 @@ protected:
      **/
     void processCommandLineArgs( int argc, char **argv );
 
+    /**
+     * Calculate size of `opt(`defaultsize) dialogs
+     **/
+    void calcDefaultSize();
+
 
     //
     // Data members

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Feb  4 19:01:54 CET 2005 - sh@suse.de
+
+- Fixed full-size dialog size for multihead
+
+-------------------------------------------------------------------
 Thu Feb  3 18:27:43 CET 2005 - sh@suse.de
 
 - Added empty space below wizard side panel upon explicit request

@@ -97,74 +97,8 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 
     qApp->installEventFilter( this );
     processCommandLineArgs( argc, argv );
+    calcDefaultSize();
 
-    if ( _fullscreen )
-    {
-        QDesktopWidget* desktopWidget = qApp->desktop();
-
-        if( desktopWidget->isVirtualDesktop() )
-        {
-            // Multihead, set to size of primary screen
-            y2milestone( "assuming multihead environment" );
-            QRect primaryScreenGeometry = desktopWidget->screenGeometry( desktopWidget->primaryScreen() );
-            _default_size.setWidth( primaryScreenGeometry.width() );
-            _default_size.setHeight( primaryScreenGeometry.height() );
-        }
-        else
-        {
-            _default_size.setWidth ( qApp->desktop()->width()  );
-            _default_size.setHeight( qApp->desktop()->height() );
-        }
-        y2milestone( "-fullscreen: using %dx%d for `opt(`defaultsize)",
-		     _default_size.width(), _default_size.height() );
-    }
-    else if ( _have_wm )
-    {
-	// Get _default_size via -geometry command line option (if set)
-
-	QWidget * dummy = new QWidget();
-	dummy->hide();
-	qApp->setMainWidget( dummy );
-	_default_size = dummy->size();
-
-
-        // Set min defaultsize or figure one out if -geometry was not used
-
-	if ( _default_size.width()  < 800 ||
-	     _default_size.height() < 600   )
-	{
-	    int x_res = qApp->desktop()->width();
-	    int y_res = qApp->desktop()->height();
-
-	    if ( x_res >= 1024 && y_res >= 768  )
-	    {
-		_default_size.setWidth ( max( (int) (x_res * 0.7), 800 ) );
-		_default_size.setHeight( max( (int) (y_res * 0.7), 600 ) );
-	    }
-	    else
-	    {
-		// Use what is available
-
-		_default_size = qApp->desktop()->availableGeometry().size();
-	    }
-
-	    y2milestone( "Assuming default size of %dx%d",
-			 _default_size.width(), _default_size.height() );
-	}
-	else
-	{
-	    y2milestone( "Requested default size: %dx%d",
-			 _default_size.width(), _default_size.height() );
-	}
-    }
-    else	// ! _have_wm
-    {
-	_default_size.setWidth ( qApp->desktop()->width()  );
-	_default_size.setHeight( qApp->desktop()->height() );
-    }
-
-
-    y2milestone( "Default size of %dx%d", _default_size.width(), _default_size.height() );
 
     // Create main window for `opt(`defaultsize) dialogs.
     //
@@ -328,6 +262,62 @@ YQUI::~YQUI()
 	delete qApp;
 #endif
 }
+
+
+void YQUI::calcDefaultSize()
+{
+    QSize primaryScreenSize 	= qApp->desktop()->screenGeometry( qApp->desktop()->primaryScreen() ).size();
+    QSize availableSize		= qApp->desktop()->availableGeometry().size();
+
+    if ( _fullscreen )
+    {
+	_default_size = availableSize;
+
+        y2milestone( "-fullscreen: using %dx%d for `opt(`defaultsize)",
+		     _default_size.width(), _default_size.height() );
+    }
+    else if ( _have_wm )
+    {
+	// Get _default_size via -geometry command line option (if set)
+
+	QWidget * dummy = new QWidget();
+	dummy->hide();
+	qApp->setMainWidget( dummy );
+	_default_size = dummy->size();
+
+
+        // Set min defaultsize or figure one out if -geometry was not used
+
+	if ( _default_size.width()  < 800 ||
+	     _default_size.height() < 600   )
+	{
+	    if ( primaryScreenSize.width() >= 1024 && primaryScreenSize.height() >= 768  )
+	    {
+		// Scale down to 70% of screen size
+		
+		_default_size.setWidth ( max( (int) (availableSize.width()  * 0.7), 800 ) );
+		_default_size.setHeight( max( (int) (availableSize.height() * 0.7), 600 ) );
+	    }
+	    else
+	    {
+		_default_size = availableSize;
+	    }
+	}
+	else
+	{
+	    y2milestone( "Forced size (via -geometry): %dx%d",
+			 _default_size.width(), _default_size.height() );
+	}
+    }
+    else	// ! _have_wm
+    {
+	_default_size = primaryScreenSize;
+    }
+
+
+    y2milestone( "Default size: %dx%d", _default_size.width(), _default_size.height() );
+}
+
 
 
 void YQUI::internalError( const char * msg )
