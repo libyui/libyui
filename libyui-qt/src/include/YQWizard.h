@@ -26,6 +26,7 @@
 
 class QHBox;
 class QPushButton;
+class YQReplacePoint;
 
 
 class YQWizard : public QVBox, public YWizard
@@ -103,6 +104,7 @@ protected:
     YCPString _nextButtonLabel;
 
     QVBox *		_clientArea;
+    YQReplacePoint *	    _contentsReplacePoint;
     QHBox *		_buttonBox;
     QPushButton *	    _backButton;
     QPushButton *	    _abortButton;

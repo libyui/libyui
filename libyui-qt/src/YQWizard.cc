@@ -22,15 +22,15 @@
 #include <ycp/y2log.h>
 
 #include <qlabel.h>
-#include <qvbox.h>
 #include <qhbox.h>
 #include <qpushbutton.h>
 
 #include "utf8.h"
 #include "YQUI.h"
+#include "YQReplacePoint.h"
+#include "YQEmpty.h"
 #include "QY2LayoutUtils.h"
 #include "YEvent.h"
-
 
 
 
@@ -52,13 +52,22 @@ YQWizard::YQWizard( QWidget *		parent,
     , _nextButton( 0 )
 {
     setWidgetRep( this );
-    QColor bg( 0x9c, 0xcf, 0x9c );
+
+    // Official SuSE CD colors
+    // They all look horrible on-screen.
+
+    QColor suseColorLinux ( (int) (.45*255), (int) (.75*255), (int) (.10*255) );
+    QColor suseColorOcean ( (int) (0),       (int) (.30*255), (int) (.25*255) );
+    QColor suseColorJungle( (int) (.10*255), (int) (.60*255), (int) (.20*255) );
+    QColor suseColorOlive ( (int) (.20*255), (int) (.35*255), (int) (.10*255) );
+    
+    QColor bg( suseColorOlive );
 
     //
     // Top decoration
     //
 
-    QLabel * top = new QLabel( "SuSE Linux", this );
+    QLabel * top = new QLabel( "SUSE Linux", this );
     CHECK_PTR( top );
     top->setPaletteBackgroundColor( bg );
     top->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
@@ -96,6 +105,26 @@ YQWizard::YQWizard( QWidget *		parent,
 
     _clientArea = new QVBox( work_area );
     CHECK_PTR( _clientArea );
+
+    //
+    // Replace point for wizard contents
+    //
+
+    YWidgetOpt widgetOpt;
+    _contentsReplacePoint = new YQReplacePoint( _clientArea, widgetOpt );
+    CHECK_PTR( _contentsReplacePoint );
+    
+    _contentsReplacePoint->setId( YCPSymbol( YWizardContentsReplacePointID ) ); // `id(`contents)
+    addChild( _contentsReplacePoint );
+
+    
+    //
+    // Initial YEmpty widget contents of replace point
+    //
+
+    YQEmpty * empty =new YQEmpty( _contentsReplacePoint, widgetOpt );
+    empty->setParent( _contentsReplacePoint );
+    _contentsReplacePoint->addChild( empty );
 
 
     //
@@ -184,6 +213,8 @@ void YQWizard::addChild( YWidget * ychild )
     QWidget * child = (QWidget *) ychild->widgetRep();
     CHECK_PTR( child );
     child->reparent( _clientArea, 0, QPoint( 0, 0 ) ); // parent, wflags, pos
+
+    YContainerWidget::addChild( ychild );
 }
 
 

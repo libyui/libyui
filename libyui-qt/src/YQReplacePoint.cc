@@ -33,6 +33,16 @@ YQReplacePoint::YQReplacePoint( QWidget *	parent,
     setWidgetRep( this );
 }
 
+void
+YQReplacePoint::resizeEvent( QResizeEvent * event )
+{
+    if ( event && YContainerWidget::hasChildren() )
+    {
+	YContainerWidget::child(0)->setSize( event->size().width(),
+					     event->size().height() );
+    }
+}
+
 
 void YQReplacePoint::childAdded( YWidget * child )
 {
