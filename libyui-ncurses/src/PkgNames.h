@@ -383,10 +383,17 @@ public:
     
     static const string LabelUnres();
     static const string LabelAlternative();
+
     static const string LabelConflict();
     static const string LabelSelConflict();
-    static const string LabelRequBy();
-    static const string LabelSelRequBy();
+    static const string LabelPkgConflict();
+
+    static const string LabelPkgRequBy1();
+    static const string LabelPkgRequBy2();
+    
+    static const string LabelSelRequBy1();
+    static const string LabelSelRequBy2();
+
     static const string LabelRequire();
     static const string LabelSelRequire();
     static const string LabelUnresolvable();
@@ -560,7 +567,8 @@ public:
      *  text used for automatic changes popup
      */
     static const string AutoChangeLabel();
-    static const string AutoChangeText();
+    static const string AutoChangeText1();
+    static const string AutoChangeText2();
 
     /**
      * Part of help text used in installed system

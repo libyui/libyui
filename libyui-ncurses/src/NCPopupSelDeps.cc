@@ -82,9 +82,14 @@ string NCPopupSelDeps::getLabelRequire()
     return PkgNames::LabelSelRequire();
 }
 
-string NCPopupSelDeps::getLabelRequBy()
+string NCPopupSelDeps::getLabelRequBy1()
 {
-    return PkgNames::LabelSelRequBy();
+    return PkgNames::LabelSelRequBy1();
+}
+
+string NCPopupSelDeps::getLabelRequBy2()
+{
+    return PkgNames::LabelSelRequBy2();
 }
 
 string NCPopupSelDeps::getLabelConflict()

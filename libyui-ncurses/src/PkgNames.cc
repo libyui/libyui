@@ -539,15 +539,9 @@ const string PkgNames::LoadLabel()
 
 const string PkgNames::CancelLabel()
 {
-    // the label of the Cancel button
+    // Please note: use unique hot keys for the buttons from 'begin:' to 'end:'
+    // begin: the label of the Cancel button
     static const string value = _( "&Cancel" );
-    return value;
-}
-
-const string PkgNames::CancelIgnore()
-{
-    // the label of the Cancel/Ignore button
-    static const string value = _( "&Cancel or Ignore" );
     return value;
 }
 
@@ -567,7 +561,7 @@ const string PkgNames::SolveLabel()
 
 const string PkgNames::IgnLabel()
 {
-    // the label of a Ignore button
+    // end: the label of a Ignore button
     static const string value = _( "&Ignore" );
     return value;
 }
@@ -748,8 +742,8 @@ const string PkgNames::LabelUnresolvable()
 
 const string PkgNames::LabelUnres()
 {
-    // text describing package conflict (it's a label - respect the newline!)
-    static const string value = _( "Solve the conflict by selecting\nor deselecting packages." );
+    // text describing package conflict (it's a label - keep it short!)
+    static const string value = _( "Solve the conflict by selecting or deselecting packages." );
     return value;  
 }
 
@@ -762,42 +756,63 @@ const string PkgNames::LabelAlternative()
 
 const string PkgNames::LabelConflict()
 {
-     // text describing package conflict (it's a label - respect the newline!)
-    static const string value = _( "Solve the conflict by deleting (or deselecting)\nthe unwanted package or packages." );
+     // text describing a conflict (it's a label; text continous  )
+    static const string value = _( "Solve the conflict by deleting (or deselecting)" );
+    return value;
+}
+
+const string PkgNames::LabelPkgConflict()
+{
+      // text describing a conflict continous (package conflict)
+    static const string value = _( "the unwanted package or packages." );
     return value;
 }
 
 const string PkgNames::LabelSelConflict()
 {
-      // text describing package conflict (it's a label - respect the newline!)
-    static const string value = _( "Solve the conflict by deleting (or deselecting)\nthe unwanted selection or selections." );
+      // text describing a conflict continous (selection conflict)
+    static const string value = _( "the unwanted selection or selections." );
     return value;
 }
 
-const string PkgNames::LabelRequBy()
+const string PkgNames::LabelSelRequBy1()
 {
-    // text describing package does not work (it's a label - respect the newline!)
-    static const string value = _( "The package or packages below will not work\nwithout the package to delete." );
+    // text describing package does not work (it's a label; text contonous)
+    static const string value = _( "The selection or selections below will not work" );
     return value;
 }
 
-const string PkgNames::LabelSelRequBy()
+const string PkgNames::LabelSelRequBy2()
 {
-    // text describing selection does not work (it's a label - respect the newline!)
-    static const string value = _( "The selection or selections below will not work\nwithout the selection to delete." );
+    // text describing selection does not work continous
+    static const string value = _( "without the selection to delete." );
+    return value;
+}
+
+const string PkgNames::LabelPkgRequBy1()
+{
+    // text describing package does not work (it's a label; text continous )
+    static const string value = _( "The package or packages below will not work" );
+    return value;
+}
+
+const string PkgNames::LabelPkgRequBy2()
+{
+    // text describing package does not work continous
+    static const string value = _( "without the package to delete." );
     return value;
 }
 
 const string PkgNames::LabelRequire()
 {
-    // text describing packages are not available (it's a label - respect the newline!)
-    static const string value = _( "The required libraries or packages\nare not installed." );
+    // text describing packages are not available (it's a label - keep it short!)
+    static const string value = _( "The required libraries or packages are not installed." );
     return value;
 }
 const string PkgNames::LabelSelRequire()
 {
-    // text describing selections are not available (it's a label - respect the newline!)
-    static const string value = _( "The required selections\nare not installed." );
+    // text describing selections are not available (it's a label - keep it short!)
+    static const string value = _( "The required selections are not installed." );
     return value;
 }
 
@@ -1067,10 +1082,17 @@ const string PkgNames::AutoChangeLabel()
     return value;
 }
 
-const string PkgNames::AutoChangeText()
+const string PkgNames::AutoChangeText1()
 {
-    // text part1 of popup with automatic changes (it's a label - respect the newline!) 
-    static const string value = _( "In addition to your manual selections, the following\npackages have been changed to resolve dependencies:" );
+    // text part1 of popup with automatic changes (it's a label; text continous) 
+    static const string value = _( "In addition to your manual selections, the following" );
+    return value;
+}
+
+const string PkgNames::AutoChangeText2()
+{
+    // text part1 of popup with automatic changes continous 
+    static const string value = _( "packages have been changed to resolve dependencies:" );
     return value;
 }
 

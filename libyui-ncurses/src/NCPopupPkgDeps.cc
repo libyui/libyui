@@ -80,14 +80,19 @@ string NCPopupPkgDeps::getLabelRequire()
     return PkgNames::LabelRequire();
 }
 
-string NCPopupPkgDeps::getLabelRequBy()
+string NCPopupPkgDeps::getLabelRequBy1()
 {
-    return PkgNames::LabelRequBy();
+    return PkgNames::LabelPkgRequBy1();
+}
+
+string NCPopupPkgDeps::getLabelRequBy2()
+{
+    return PkgNames::LabelPkgRequBy2();
 }
 
 string NCPopupPkgDeps::getLabelConflict()
 {
-    return PkgNames::LabelConflict();
+    return PkgNames::LabelPkgConflict();
 }
 
 string NCPopupPkgDeps::getLabelContinueRequ()

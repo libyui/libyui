@@ -47,9 +47,12 @@ NCPopupDeps::NCPopupDeps( const wpos at, PackageSelector * pkger )
     : NCPopup( at, false )
       , cancelButton( 0 )
       , solveButton( 0 )
+      , ignoreButton( 0 )
+      , ignoreAllButton( 0 )
       , deps( 0 )
       , head( 0 )
-      , errorLabel( 0 )
+      , errorLabel1( 0 )
+      , errorLabel2( 0 )
       , packager( pkger )
       , pkgs( 0 )
 
@@ -110,8 +113,10 @@ void NCPopupDeps::createLayout( )
   opt.isHStretchable.setValue( true );
   opt.isHeading.setValue( false );
  
-  errorLabel = new NCLabel(  vSplit, opt, YCPString("") );
-  vSplit->addChild( errorLabel );
+  errorLabel1 = new NCLabel(  vSplit, opt, YCPString("") );
+  vSplit->addChild( errorLabel1 );
+  errorLabel2 = new NCLabel(  vSplit, opt, YCPString("") );
+  vSplit->addChild( errorLabel2 );
 
   vSplit->addChild( new NCSpacing( vSplit, opt, 0.2, false, true ) );
 
@@ -340,10 +345,26 @@ bool NCPopupDeps::addDepsLine( NCPkgTable * table,
     pkgLine.reserve(4);
     string pkgName;
     PMObjectPtr objPtr = error.solvable;
+
+#if 0
+    NCMIL << "ERROR.SOLVABLE is: " << error.solvable << endl ;
+    if ( objPtr )
+    {
+	if ( objPtr->hasSelectable() )
+	    NCMIL << "Name: " <<  objPtr->getSelectable()->name() << endl;
+	else
+	    NCMIL << "NO selectable" << endl;
+    }
+    else
+    {
+	  NCMIL << "NO OBJ" << endl;
+    }
+#endif
+    
     PMObjectPtr pkgPtr;
     PMSelectable::UI_Status pkgStatus;
     
-    if ( objPtr )
+    if ( objPtr && objPtr->hasSelectable() )
     {
 	pkgName =  objPtr->getSelectable()->name();
 	pkgPtr = objPtr;
@@ -379,6 +400,11 @@ bool NCPopupDeps::addDepsLine( NCPkgTable * table,
 		string taboo = "(" + pkgName + " "
 		    + "is set to \"Taboo\" status" + ")";
 		pkgLine.push_back( taboo );	
+	    }
+	    else if ( error.edition.asString() != "" )
+	    {
+		string version = "(version " + error.edition.asString() + " is required)";
+		pkgLine.push_back( version );
 	    }
 	}
 	
@@ -453,7 +479,8 @@ string NCPopupDeps::getReferersList( const PkgDep::ErrorResult & error )
 bool NCPopupDeps::concretelyDependency( int index )
 {
     if ( !deps
-	 || !errorLabel )
+	 || !errorLabel1
+	 || !errorLabel2 )
 	return false;
     
     unsigned int size = dependencies.size();
@@ -487,7 +514,8 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    ++it;
 	}
 	    
-	errorLabel->setLabel( YCPString(getLabelRequire()) );
+	errorLabel1->setLabel( YCPString( getLabelRequire()) );
+	errorLabel2->setLabel( YCPString( "" ) );
     }
     else if ( dependencies[index].second == PkgNames::NeedsText() )
     {
@@ -513,7 +541,8 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    ++it;
 	}
 
-	errorLabel->setLabel( YCPString(PkgNames::LabelAlternative()) );
+	errorLabel1->setLabel( YCPString(PkgNames::LabelAlternative()) );
+	errorLabel2->setLabel( YCPString( "" ) );	
     }
     else if ( dependencies[index].second == PkgNames::ConflictText()
 	      || dependencies[index].second == PkgNames::RequConflictText()
@@ -546,7 +575,8 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    ++it;
 	}
 	
-	errorLabel->setLabel( YCPString(PkgNames::LabelConflict()) );
+	errorLabel1->setLabel( YCPString( PkgNames::LabelConflict()) );
+	errorLabel2->setLabel( YCPString( getLabelConflict() ) );
     }
     else if ( dependencies[index].second == PkgNames::RequByText()
 	      && error.conflicts_with.empty()
@@ -592,11 +622,13 @@ bool NCPopupDeps::concretelyDependency( int index )
 	if ( causePtr
 	     && (causePtr->getSelectable()->status() == PMSelectable::S_Del) )
 	{
-	    errorLabel->setLabel( YCPString(getLabelRequBy()) );
+	    errorLabel1->setLabel( YCPString(getLabelRequBy1()) );
+	    errorLabel2->setLabel( YCPString(getLabelRequBy2()) );
 	}
 	else
 	{
-	    errorLabel->setLabel( YCPString(getLabelContinueRequ()) );
+	    errorLabel1->setLabel( YCPString(getLabelContinueRequ()) );
+	    errorLabel2->setLabel( YCPString("") );
 	}
     }
 

@@ -50,7 +50,8 @@ private:
     bool solveInstall( PkgDep::ResultList & goodList, PkgDep::ErrorResultList & badList );
 
     string getLabelRequire();
-    string getLabelRequBy();
+    string getLabelRequBy1();
+    string getLabelRequBy2();    
     string getLabelConflict();
     string getLabelContinueRequ();
     

@@ -64,7 +64,8 @@ private:
 
     NCLabel * head;			// the headline
     
-    NCLabel * errorLabel; 		// the error message
+    NCLabel * errorLabel1; 		// the error messages
+    NCLabel * errorLabel2; 
 
     PackageSelector * packager;		// connection to the package selector
     
@@ -74,7 +75,8 @@ private:
     // methods to create different text for package/selection popup
     virtual string getHeadline() = 0;
     virtual string getLabelRequire() = 0;
-    virtual string getLabelRequBy() = 0;
+    virtual string getLabelRequBy1() = 0;
+    virtual string getLabelRequBy2() = 0;
     virtual string getLabelConflict() = 0;
     virtual string getLabelContinueRequ() = 0;
     // set the tabel type
