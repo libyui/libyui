@@ -93,10 +93,6 @@ class PackageSelector
     string createRelLine( list<PkgRelation> info );
     string createDescrText( list<string> info );
 
-    // add a line to the package list
-    bool createListEntry ( NCPkgTable *table, PMPackagePtr pkgPtr, unsigned int index );
-    bool createPatchEntry ( NCPkgTable *table, PMYouPatchPtr patchPtr, unsigned int index );
-    
     // internal use (copies tree items got from YPkgRpmGroupTagsFilterView)
     void cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone );
 
