@@ -14,7 +14,7 @@
 
     return `VBox( `VSpacing(0.3),
 		  `HBox( `HSpacing(0.3),
-			 // label of the Filter menu ( ( keep it short ) - filters out a set of packages
+			 // label of the Filter menu ( keep it short ) - filters out a set of packages
 			 `Left(`MenuButton( `opt(`key_F4), _( "&Filter" ),
 					    // begin: menu items of the filter menu
 					    // please note: use unique hotkeys until end:
@@ -122,15 +122,15 @@
 									   `item( `id(`help_update),  _( "Help on &Upate" ) ) ]
 									  )),
 						 `HStretch(),
-						 // button label
+						 // button label - keep it short
 						 `HWeight(1, `PushButton(`id(`search), `opt(`key_F2), _( "&Search" ) ) ),
 						 `HStretch(),
-						  // button label
+						  // button label - keep it short
 						 `HWeight(1, `PushButton(`id(`diskinfo), `opt(`key_F3), _( "&Disk Usage" ) ) ),
 					 	 `HStretch()
 						 ),
 					   `HSpacing(5.0),
-					   // button label
+					   // button label - keep it short
 					   `HBox( `Right( `PushButton(`id(`cancel), `opt(`key_F9) ,_( "&Cancel" ) ) ),
 						  // button label  
 						  `Right( `PushButton(`id(`ok), `opt(`key_F10), _( "&OK" ) ) )
