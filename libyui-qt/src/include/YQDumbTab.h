@@ -116,6 +116,8 @@ protected:
     QTabBar *		_tabBar;
     QVBox *		_clientArea;
     YQAlignment *	    _contents;
+
+    bool _doingResize;
 };
 
 #endif // YQDumbTab_h

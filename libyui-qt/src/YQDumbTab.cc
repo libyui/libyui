@@ -38,14 +38,15 @@ YQDumbTab::YQDumbTab( QWidget *			parent,
     setWidgetRep( this );
     setFont( YQUI::ui()->currentFont() );
     addVSpacing( this, 4 );
+    _doingResize = false;
 
     //
     // Tab bar
     //
-    
+
     _tabBar = new QTabBar( this );
     CHECK_PTR( _tabBar );
-    
+
     _tabBar->setFont( YQUI::ui()->currentFont() );
     _tabBar->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
     setFocusProxy( _tabBar );
@@ -54,15 +55,22 @@ YQDumbTab::YQDumbTab( QWidget *			parent,
     connect( _tabBar, SIGNAL( selected( int ) ),
 	     this,    SLOT  ( sendTabSelectedEvent( int ) ) );
 
-    
+
     //
     // Client area for tab page contents
     //
-    
+
     _clientArea = new QVBox( this );
-    
+
     CHECK_PTR( _clientArea );
+
+#if 0
+    _clientArea->setFrameStyle( QFrame::WinPanel | QFrame::Raised );
+    _clientArea->setLineWidth( 1 );
+    _clientArea->setMidLineWidth( 1 );
+#endif
     _clientArea->setFrameStyle( QFrame::TabWidgetPanel | QFrame::Raised );
+    // _clientArea->setFrameStyle( QFrame::TabWidgetPanel | QFrame::Sunken );
     _clientArea->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
 
@@ -75,6 +83,7 @@ YQDumbTab::YQDumbTab( QWidget *			parent,
     CHECK_PTR( _contents );
 
     addChild( _contents );
+
     _contents->setParent( this );
     _contents->installEventFilter( this );
 }
@@ -102,32 +111,43 @@ long YQDumbTab::nicesize( YUIDimension dim )
 void YQDumbTab::setSize( long newWidth, long newHeight )
 {
     resize( newWidth, newHeight );
-    resizeClientArea();
+
+    // No need to call resizeClientArea() here:
+    // This widget is derived from QVBox which will handle geometry management
+    // for its children, i.e. they will get a resize event. This needs to be
+    // caught, however, to propagate the resizing to the YWidget geometry
+    // engine. The event filter handles this.
 }
-
-
-void YQDumbTab::resizeClientArea()
-{
-    if ( _contents->numChildren() > 0 )
-    {
-	// y2debug( "resizing client area" );
-	QRect contentsRect = _clientArea->contentsRect();
-	_contents->setSize( contentsRect.width(), contentsRect.height() );
-    }
-}
-
 
 
 bool YQDumbTab::eventFilter( QObject * obj, QEvent * ev )
 {
-    if ( ev->type() == QEvent::Resize && obj == _contents )
+    if ( ev->type() == QEvent::Resize && obj == _contents && ! _doingResize )
     {
+	// Propagate resize event to YWidget derived children
 	resizeClientArea();
 	return true;		// Event handled
     }
 
     return QWidget::eventFilter( obj, ev );
 }
+
+
+void YQDumbTab::resizeClientArea()
+{
+    // Prevent endless recursion if this triggers another resize event
+    _doingResize = true;
+    
+    if ( _contents )
+    {
+	// Propagate resize event to YWidget derived children
+	QRect contentsRect = _clientArea->contentsRect();
+	_contents->setSize( contentsRect.width(), contentsRect.height() );
+    }
+    
+    _doingResize = false;
+}
+
 
 
 void YQDumbTab::addChild( YWidget * child )
@@ -141,17 +161,17 @@ void YQDumbTab::addChild( YWidget * child )
 	//
 	// Reparent any other child: Make it a child of _contents (YAlignment)
 	//
-	
+
 	// y2debug( "Reparenting %s %s", child->widgetClass(), child->debugLabel().c_str() );
 
 	// Reparent for Qt
-	
+
 	QWidget * qChild = (QWidget *) child->widgetRep();
-	qChild->reparent( (QWidget *) _contents->widgetRep(), QPoint( 0, 0 ) );	
+	qChild->reparent( (QWidget *) _contents->widgetRep(), QPoint( 0, 0 ) );
 
 	// Reparent for libyui
-	
-	child->setParent( _contents );				
+
+	child->setParent( _contents );
 	_contents->addChild( child );
     }
     else
@@ -174,7 +194,7 @@ void YQDumbTab::addTab( const YCPString & label )
 
 int YQDumbTab::getSelectedTabIndex()
 {
-    return _tabBar->currentTab(); 
+    return _tabBar->currentTab();
 }
 
 
@@ -190,11 +210,11 @@ void YQDumbTab::sendTabSelectedEvent( int index )
     if ( index >= 0 && (unsigned) index < _tabs.size() )
     {
 	YCPValue id = _tabs[ index ].id();
-	
+
 	y2debug( "Switching to tab \"%s\" (ID %s)",
 		 _tabs[ index ].label()->value().c_str(),
 		 id->toString().c_str() );
-	
+
 	YQUI::ui()->sendEvent( new YMenuEvent( id ) );
     }
     else
@@ -202,6 +222,7 @@ void YQDumbTab::sendTabSelectedEvent( int index )
 	y2error( "Tab index %d out of range (0..%u)", index, _tabs.size() );
     }
 }
+
 
 
 #include "YQDumbTab.moc"
