@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Feb  4 11:31:41 CET 2004 - gs@suse.de
+
+- V 2.9.6
+- change layout files for package/patch installation to work with NI
+- remove workaround for missing ACS chars 
+
+-------------------------------------------------------------------
 Thu Jan 29 19:46:54 CET 2004 - sh@suse.de
 
 - Fixed Y2Component handling (cmd line args etc.) 
