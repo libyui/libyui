@@ -672,7 +672,7 @@ bool PackageSelector::fillChangesList(  )
     YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
     if ( filterLabel )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString("What if ...") );
+	static_cast<NCLabel *>(filterLabel)->setLabel( PkgNames::InstSummary().str() );
     }
 
     return true;
@@ -1073,7 +1073,6 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 	{
 	    // show the selection popup
 	    retEvent = selectionPopup->showSelectionPopup( );
-	    showSelectionDependencies( );
 	}
     }
     else if ( event.selection->compare( PkgNames::Recommended() ) ==  YO_EQUAL )
