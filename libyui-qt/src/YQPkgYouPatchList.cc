@@ -208,6 +208,16 @@ YQPkgYouPatchListItem::setStatus( PMSelectable::UI_Status newStatus )
 }
 
 
+void
+YQPkgYouPatchListItem::cycleStatus()
+{
+    YQPkgObjListItem::cycleStatus();
+
+    if ( status() == PMSelectable::S_Del )	// Can't delete YOU patches
+	setStatus( PMSelectable::S_KeepInstalled );
+}
+
+
 /**
  * Comparison function used for sorting the list.
  * Returns:

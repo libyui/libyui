@@ -74,6 +74,7 @@ public slots:
      * Emit an updatePackages() signal.
      **/
     void sendUpdatePackages() { emit updatePackages(); }
+    
 
 public:
 
@@ -175,6 +176,12 @@ public:
      * Emit updatePackages signals after changing status.
      **/
     virtual void setStatus( PMSelectable::UI_Status newStatus );
+
+    /**
+     * Cycle the package status to the next valid value.
+     * Reimplemented from YQPkgObjList.
+     **/
+    virtual void cycleStatus();
 
     /**
      * Comparison function used for sorting the list.

@@ -333,8 +333,11 @@ PMSelectable::UI_Status
 YQPkgObjListItem::status() const
 {
     PMSelectablePtr selectable = constPMObj()->getSelectable();
-    if ( !selectable ) return PMSelectable::S_NoInst;
-    else return selectable->status();
+    
+    if ( ! selectable )
+	return PMSelectable::S_NoInst;
+    
+    return selectable->status();
 }
 
 
