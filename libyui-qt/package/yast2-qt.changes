@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Feb 25 14:50:18 CET 2003 - sh@suse.de
+
+- Fixed wrong tool tip "this version is installed in your system"
+  (for all versions) in package manager "versions" view 
+
+-------------------------------------------------------------------
 Tue Feb 25 14:35:11 CET 2003 - sh@suse.de
 
 - Fixed bug #23855: Asking for loading Modules does not have focus 

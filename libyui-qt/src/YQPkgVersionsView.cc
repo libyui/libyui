@@ -235,10 +235,8 @@ YQPkgVersion::toolTip( int )
 {
     QString tip;
 
-    if ( _pmObj->hasInstalledObj() )
-    {
+    if ( _pmObj->isInstalledObj() )
 	tip = _( "This version is installed in your system." );
-    }
 
     return tip;
 }
