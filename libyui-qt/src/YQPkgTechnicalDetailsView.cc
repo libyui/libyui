@@ -29,8 +29,9 @@
 #include "utf8.h"
 
 
-YQPkgTechnicalDetailsView::YQPkgTechnicalDetailsView( QWidget * parent )
+YQPkgTechnicalDetailsView::YQPkgTechnicalDetailsView( QWidget * parent, bool youMode )
     : YQPkgGenericDetailsView( parent )
+    , _youMode( youMode )
 {
 }
 
@@ -125,7 +126,8 @@ YQPkgTechnicalDetailsView::simpleTable( PMPackagePtr pkg )
 	       row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( pkg )		  ) ) +
 	       row( hcell( _( "License:"	) ) + cell( pkg->license()			  ) ) +
 	       row( hcell( _( "Installed Size:" ) ) + cell( pkg->size().form()			  ) ) +
-	       row( hcell( _( "Archive Size:"	) ) + cell( pkg->archivesize().form()		  ) ) +
+	       row( hcell( _youMode ? _( "Download Size:") : _( "Archive Size:" ) )
+		                                    + cell( pkg->archivesize().form()	  	  ) ) +
 	       row( hcell( _( "Distribution:"	) ) + cell( pkg->distribution()			  ) ) +
 	       row( hcell( _( "Vendor:"		) ) + cell( pkg->vendor()			  ) ) +
 	       row( hcell( _( "Packager:"	) ) + cell( pkg->packager()			  ) ) +
@@ -162,7 +164,8 @@ YQPkgTechnicalDetailsView::complexTable( PMPackagePtr installed, PMPackagePtr ca
 	       row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( p1 )		) + cell( formatRpmGroup( p2 )		      ) ) +
 	       row( hcell( _( "License:"	) ) + cell( p1->license()			) + cell( p2->license()			      ) ) +
 	       row( hcell( _( "Installed Size:" ) ) + cell( p1->size().form()			) + cell( p2->size().form()		      ) ) +
-	       row( hcell( _( "Archive Size:"	) ) + cell( p1->archivesize().form()		) + cell( p2->archivesize().form()	      ) ) +
+	       row( hcell( _youMode ? _( "Download Size:"	) : _( "Archive Size:" ) )
+						    + cell( p1->archivesize().form()		) + cell( p2->archivesize().form()	      ) ) +
 	       row( hcell( _( "Distribution:"	) ) + cell( p1->distribution()			) + cell( p2->distribution()		      ) ) +
 	       row( hcell( _( "Vendor:"		) ) + cell( p1->vendor()			) + cell( p2->vendor()			      ) ) +
 	       row( hcell( _( "Packager:"	) ) + cell( p1->packager()			) + cell( p2->packager()		      ) ) +

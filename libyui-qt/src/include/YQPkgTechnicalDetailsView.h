@@ -41,7 +41,7 @@ public:
     /**
      * Constructor
      **/
-    YQPkgTechnicalDetailsView( QWidget *parent );
+    YQPkgTechnicalDetailsView( QWidget *parent, bool youMode = false );
 
 
     /**
@@ -84,6 +84,10 @@ protected:
      **/
     QString formatRpmGroup( PMPackagePtr pkg ) const;
 
+
+    // Data members
+
+    bool	_youMode;
 };
 
 

@@ -421,7 +421,7 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     // Technical details
     //
 
-    _pkgTechnicalDetailsView = new YQPkgTechnicalDetailsView( _detailsViews );
+    _pkgTechnicalDetailsView = new YQPkgTechnicalDetailsView( _detailsViews, _youMode );
     CHECK_PTR( _pkgTechnicalDetailsView );
 
     _detailsViews->addTab( _pkgTechnicalDetailsView, _( "&Technical Data" ) );
@@ -595,7 +595,7 @@ YQPackageSelector::addMenus()
 	_extrasMenu->insertSeparator();
     }
 
-    if ( _pkgConflictDialog )
+    if ( _pkgConflictDialog && ! _youMode )
     {
 	YQPkgConflict::actionResetIgnoredConflicts( _pkgConflictDialog )->addTo( _extrasMenu );
     }
