@@ -108,6 +108,19 @@ void NCTable::setLabel( const YCPString & nlabel )
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : NCTable::setHeader
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCTable::setHeader( vector<NCstring> headline ) 
+{
+  hasHeadline = pad->SetHeadline( headline );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : NCTable::getCurrentItem
 //	METHOD TYPE : int
 //

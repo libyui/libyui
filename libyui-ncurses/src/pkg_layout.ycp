@@ -1,0 +1,82 @@
+/**
+ * File:        pkg_layout.ycp
+ * Package:     
+ * Authors:     Gabriele Strattner <gs@suse.de>
+ *
+ * Purpose:
+ *
+ * ncurses layout for package selection
+ *
+ * $Id$
+ */
+
+`VBox( `VSpacing(0.3),
+       `HBox( `HSpacing(0.3),
+	      `Left(`MenuButton( "&Filter", [`item( `id(`groups), "&RPM groups"),
+					     `item( `id(`selections), "Se&lections" ),
+					     `item( `id(`keys), "&Keywords" ),
+					     `item( `id(`mimetype), "&MIME Types" ),
+					     `item( `id(`search), "&Search" ) ]
+				 )),
+	      `Left(`MenuButton( "&Actions", [`item( `id(`toggle), 	"&Toggle   [F4]"),
+					      `item( `id(`select), 	"&Select    [s]"),
+					      `item( `id(`deselect), 	"Dese&lect  [l]"),
+					      `item( `id(`delete), 	"&Delete    [d]"),
+					      `item( `id(`replace), 	"&Replace   [r]"),
+					      `item( `id(`update), 	"&Update    [u]"),
+					      `item( `id(`installed), 	"&Installed [i]") ]
+				 )),
+	      `Left(`MenuButton( "&Information", [`item( `id(`pkginfo), "Package info" ),
+						  `item( `id(`longdescr), "&Long description" ),
+						  `item( `id(`versions), "&Version(s)" ),
+						  `item( `id(`files), "&File list" ),
+						  `item( `id(`requires), "&Requires" ) ]
+				 )),
+	      `Left(`MenuButton( "&Etc.", [`item( `id(`showdeps), "&Check dependencies now" ),
+					  `item( `id(`check), "&Automatic dependency check" ),
+					  `item( `id(`nocheck), "Do&n't check dependencies" ),
+					  `item( `id(`diskinfo), "&Diskspace information" ) ]
+				 )),
+	      `HSpacing(0.3)
+					   
+	      ),
+       `VSpacing(0.3),
+       `VWeight( 50, `HBox(`HSpacing(0.3),
+			   `PkgSpecial( `id(`packages), `opt(`notify), "pkgTable" ), 
+			   `HSpacing(0.3)
+			   )
+		 ),
+       `HBox( `HWeight(1, `HBox(`Label( "Filter: "),
+				`Label( `id(`filter), `opt(`hStretchable), "........................." )
+				)
+		       ),
+	      `HStretch(),
+	      `HWeight(1, `HBox(`Label( "Required diskspace: "),
+				`Label( `id(`diskspace), `opt(`hStretchable), "         " )
+				)
+		       )
+	      ),
+       `VBox(`VWeight( 40, `ReplacePoint( `id(`replaceinfo),
+					  `RichText( `id(`description)," ")
+					  )
+		       ),
+	     `VWeight( 5, `HBox(
+				`HBox(`HWeight(1, `MenuButton( "&Help", [`item( `id(`help_general), "&General Help"),
+									 `item( `id(`help_status), "&Help on package status"),
+									 `item( `id(`help_filter), "&Help on dependency check") ]
+							       )),
+				      `HStretch(),
+				      `HWeight(1, `PushButton(`id(`search), "&Search")),
+				      `HStretch(),
+				      `HWeight(1,`PushButton(`id(`diskinfo), "&Diskspace"))
+				      ),
+				`HSpacing(5.0),
+				`HBox( `Right( `PushButton(`id(`cancel), "&Cancel")),
+				       `Right( `PushButton(`id(`ok), "&OK"))
+				       )
+				)
+		       )
+	     )
+       );
+
+

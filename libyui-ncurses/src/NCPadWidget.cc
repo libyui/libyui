@@ -487,6 +487,7 @@ void NCPadWidget::DrawPad()
 {
   if ( pad && !inMultidraw() ) {
     pad->update();
+    Redraw();
   }
 }
 

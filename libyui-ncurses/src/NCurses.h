@@ -82,12 +82,17 @@ class NCursesEvent {
     NCWidget * widget;
     YCPValue   selection;
 
+    YCPString  item;		// added by gs
+    vector<string> itemList;	// added by gs
+    
     int        detail;
 
     NCursesEvent( Type t = none )
       : type     ( t )
       , widget   ( 0 )
       , selection( YCPNull() )
+      , item ( YCPNull() )
+	, itemList()
       , detail   ( NODETAIL )
     {}
     virtual ~NCursesEvent() {}

@@ -134,6 +134,13 @@ class NCstring {
       return *this;
     }
 
+    NCstring & operator+=( const NCstring & nstr ) {
+	mstr = this->mstr + nstr.mstr;
+	mutf8 = this->mutf8 + nstr.mstr;
+
+	return *this;
+    }	
+
     const string & str()      const { checkEncoding(); return mstr; }
     const string & utf8str()  const { checkEncoding( true ); return mutf8; }
 

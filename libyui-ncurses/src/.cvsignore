@@ -5,7 +5,6 @@ widgetlist
 core
 bak
 *.swp
-*.ycp
 *.o
 *.lo
 *.la

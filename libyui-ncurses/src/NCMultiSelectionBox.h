@@ -29,6 +29,45 @@
 class NCMultiSelectionBox;
 class NCTableTag;
 
+
+///////////////////////////////////////////////////////////////////
+//
+//	CLASS NAME : NCTableTag
+//
+//	DESCRIPTION :
+//
+class NCTableTag : public NCTableCol {
+
+  private:
+
+    bool selected;
+
+  public:
+
+    NCTableTag( const bool sel = false )
+      : NCTableCol( NCstring( "[ ]" ), SEPARATOR )
+      , selected( sel )
+    {}
+    virtual ~NCTableTag() {}
+
+    virtual void SetLabel( const NCstring & ) { /*NOOP*/; }
+
+    virtual void DrawAt( NCursesWindow & w, const wrect at,
+			 NCTableStyle & tableStyle,
+			 NCTableLine::STATE linestate,
+			 unsigned colidx ) const {
+      NCTableCol::DrawAt( w, at, tableStyle, linestate, colidx );
+      if ( selected ) {
+	setBkgd( w, tableStyle, linestate, DATA );
+	w.addch( at.Pos.L, at.Pos.C +1, 'x' );
+      }
+    }
+
+    void SetSelected( const bool sel ) { selected = sel; }
+    bool Selected() const              { return selected; }
+};
+
+
 ///////////////////////////////////////////////////////////////////
 //
 //	CLASS NAME : NCMultiSelectionBox
@@ -98,6 +137,11 @@ class NCMultiSelectionBox : public YMultiSelectionBox, public NCPadWidget {
         return YWidget::setKeyboardFocus();
       return true;
     }
+
+    // added by gs
+    unsigned int getNumLines( ) { return pad->Lines(); }
+    const NCTableLine * getLine( const int & index ) { return pad->GetLine(index); }
+    
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -23,6 +23,11 @@
 #include "Y2Log.h"
 #include "Y2NCursesUI.h"
 
+#include <ycp/YCPString.h>
+#include <ycp/YCPVoid.h>
+#include <ycp/YCPParser.h>
+#include <ycp/YCPBlock.h>
+
 #include "NCDialog.h"
 #include "NCAlignment.h"
 #include "NCCheckBox.h"
@@ -49,6 +54,9 @@
 #include "NCTree.h"
 #include "NCLogView.h"
 #include "NCMultiLineEdit.h"
+#include "NCPackageSelector.h"
+#include "NCPkgTable.h"
+#include "NCNew.h"
 #include "NCstring.h"
 
 extern string language2encoding( string lang );
@@ -562,6 +570,106 @@ YWidget * Y2NCursesUI::createIntField( YWidget * parent, YWidgetOpt & opt,
 
 ///////////////////////////////////////////////////////////////////
 //
+// package selection 
+//
+///////////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : Y2NCursesUI::createPackageSelector
+//	METHOD TYPE : YWidget
+//
+//	DESCRIPTION : Reads the layout term of the package selection dialog
+// 		      and creates the widget tree.
+//
+YWidget * Y2NCursesUI::createPackageSelector( YWidget * parent, YWidgetOpt & opt )
+{
+    ONCREATE;
+    return new NCPackageSelector ( this, dynamic_cast<NCWidget *>(parent), opt, YD_HORIZ );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : Y2NCursesUI::runPkgSelection
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : Implementation of UI builtin RunPkgSelection() which
+//		      has to be called after OpenDialog( `PackageSelector() ).
+//
+void Y2NCursesUI::runPkgSelection(  YWidget * selector )
+{
+    NCPackageSelector * ncSelector = 0;
+    
+    YDialog *dialog = currentDialog();
+
+    if (!dialog)
+    {
+	UIERR << "ERROR package selection: No dialog existing." << endl;
+    }
+    else
+    {
+	ncSelector = dynamic_cast<NCPackageSelector *>( selector );
+
+	// debug: dump the widget tree
+	dialog->dumpDialogWidgetTree();
+    }
+
+    bool result = true;
+    
+    // start event loop
+
+    if ( ncSelector )
+    {
+	ncSelector->showDefaultList();
+	
+	NCDialog * ncd = static_cast<NCDialog *>( dialog );
+
+	NCursesEvent event = NCursesEvent::cancel;
+	do
+	{
+	    event = ncd->userInput();
+	    result = ncSelector->handleEvent( event );
+	}
+	while ( event != NCursesEvent::cancel && result == true );
+    }
+    else
+    {
+	UIERR << "No NCPackageSelector existing" << endl;
+    }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : Y2NCursesUI::createPkgSpecial
+//	METHOD TYPE : YWidget
+//
+//	DESCRIPTION : creates special widgets used for the package selection
+//		      dialog (which do not have a corresponding widget in qt-ui)
+//
+YWidget * Y2NCursesUI::createPkgSpecial( YWidget *parent, YWidgetOpt &opt, const YCPString &subwidget )
+{
+    ONCREATE;
+
+    YCPString pkgTable( "pkgTable" );
+    
+    if ( subwidget->compare( pkgTable ) == YO_EQUAL )
+    {
+	NCDBG << "Creating a NCPkgTable" << endl;
+	return new NCPkgTable( dynamic_cast<NCWidget *>( parent ), opt );
+    }
+    else
+    {
+	NCERR <<  "PkgSpecial( "  << subwidget->toString() << " )  not found - take default `Label" << endl;
+	return new NCLabel( dynamic_cast<NCWidget *>( parent ), opt, subwidget );
+    }
+}
+
+///////////////////////////////////////////////////////////////////
+//
 //
 //	METHOD NAME : Y2NCursesUI::setLanguage
 //	METHOD TYPE : YCPValue
@@ -668,7 +776,7 @@ YCPValue Y2NCursesUI::setConsoleFont( const YCPString & console_magic,
 //
 void Y2NCursesUI::init_title()
 {
-    string title_ti( "YaST2" );
+    string title_ti( "YaST" );
     char hostname_ti[256];
     hostname_ti[0] = hostname_ti[255] = '\0';
 

@@ -89,7 +89,7 @@ NCstring & NCstring::assignUtf8( const string & nstr )
 //
 YCPString NCstring::YCPstr() const
 {
-  genUtf8();
+    genUtf8();
   return mutf8;
 }
 

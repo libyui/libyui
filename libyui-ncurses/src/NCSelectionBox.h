@@ -67,7 +67,7 @@ class NCSelectionBox : public YSelectionBox, public NCPadWidget {
     virtual void setSize( long newwidth, long newheight );
 
     virtual void setLabel( const YCPString & nlabel );
-
+    
     virtual int getCurrentItem();
     virtual void setCurrentItem( int index );
 
@@ -80,6 +80,7 @@ class NCSelectionBox : public YSelectionBox, public NCPadWidget {
         return YWidget::setKeyboardFocus();
       return true;
     }
+
 };
 
 ///////////////////////////////////////////////////////////////////
