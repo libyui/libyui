@@ -1221,7 +1221,14 @@ bool PackageSelector::PackageListHandler( const NCursesEvent&  event )
 // 
 bool PackageSelector::DiskinfoHandler( const NCursesEvent&  event )
 {
+    NCPkgTable * packageList = getPackageList();
+     
+    if ( !packageList )
+	return false;
+
     diskspacePopup->showInfoPopup();
+    packageList->setKeyboardFocus();
+
     return true;
 }
 
