@@ -184,12 +184,16 @@ public:
      * the currently selected package and updates the states
      * of all packages in the list
      * @param newstat The new status
+     * @param objPtr The pointer to the object to change 
      * @return bool
      */
-    bool changeStatus( PMSelectable::UI_Status newstat);
-
+    bool changeStatus( PMSelectable::UI_Status newstat,
+		       const PMObjectPtr & objPtr,
+		       bool singleChange );
     
     bool changeObjStatus( int key );
+
+    bool changeListObjStatus( int key );
 
     bool toggleObjStatus( );
 
@@ -211,7 +215,7 @@ public:
      * @param objPtr The certain package 
      * @return PMSelectable::UI_Status
      */ 
-    PMSelectable::UI_Status getAvailableStatus( PMObjectPtr objPtr );
+    PMSelectable::UI_Status getAvailableStatus( const PMObjectPtr & objPtr );
     
     /**
      * Toggles the installation of the source package.

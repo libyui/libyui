@@ -192,9 +192,11 @@ void NCPkgTable::cellChanged( int index, int colnum, const YCPString & newtext )
 //	DESCRIPTION : sets the new status in first column of the package table
 //		      and informs the package manager
 //
-bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
+bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
+			       const PMObjectPtr & objPtr,
+			       bool singleChange )
 {
-    if ( !packager )
+    if ( !packager || !objPtr )
 	return false;
 
     list<string> notify;
@@ -202,14 +204,11 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
     
     bool ok = false;
 
-    int index  = getCurrentItem();
-    PMObjectPtr objPtr = getDataPointer(index);
-    
     if ( newstatus == PMSelectable::S_Del
 	 || newstatus == PMSelectable::S_NoInst
 	 || newstatus == PMSelectable::S_Taboo )
     {
-	if ( objPtr && objPtr->hasCandidateObj() )
+	if ( objPtr->hasCandidateObj() )
 	{
 	    notify = objPtr->getCandidateObj()->delnotify();
 	    header = YCPString(PkgNames::WarningLabel().str());
@@ -217,7 +216,7 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
     }
     if ( newstatus == PMSelectable::S_Install )
     {
-	if ( objPtr && objPtr->hasCandidateObj() )
+	if ( objPtr->hasCandidateObj() )
 	{	
 	    notify = objPtr->getCandidateObj()->insnotify();
 	    header = YCPString(PkgNames::NotifyLabel().str());
@@ -234,11 +233,10 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
     
     // inform the package manager
     ok = statusStrategy->setPackageStatus( newstatus,
-					   getDataPointer(index) );
+					   objPtr );
 
-    if ( ok )
+    if ( ok && singleChange )
     {
-
 	if ( tableType != T_Dependency
 	     && tableType != T_DepsPackages
 	     && tableType != T_Patches )
@@ -324,7 +322,7 @@ bool NCPkgTable::updateTable()
 //
 // get status of a certain package in list of available packages
 //
-PMSelectable::UI_Status NCPkgTable::getAvailableStatus ( PMObjectPtr objPtr )
+PMSelectable::UI_Status NCPkgTable::getAvailableStatus ( const PMObjectPtr & objPtr )
 {
     return ( statusStrategy->getPackageStatus( objPtr) );
 };
@@ -586,7 +584,7 @@ bool NCPkgTable::toggleObjStatus( )
 
     if ( ok )
     {
-	changeStatus( newStatus );	
+	changeStatus( newStatus, objPtr, true );	
     }
     
     return true;
@@ -610,12 +608,50 @@ bool NCPkgTable::changeObjStatus( int key )
     
     if ( ok )
     {
-	changeStatus( newStatus );
+	changeStatus( newStatus, objPtr, true );
     }
     return true;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+// NCPkgTable::changeListObjStatus()
+//
+//
+bool NCPkgTable::changeListObjStatus( int key )
+{
+    PMSelectable::UI_Status newStatus;
+    PMObjectPtr objPtr;
+    unsigned int size = getNumLines();
+    unsigned int index = 0;
 
+    while ( index < size )
+    {
+	// get the object pointer
+	objPtr = getDataPointer( index );
+
+	if ( objPtr )
+	{
+	    bool ok = statusStrategy->keyToStatus( key, objPtr, newStatus );
+    
+	    if ( ok )
+	    {
+		changeStatus( newStatus,
+			      objPtr,
+			      false );	// do not do the updates with every change
+	    }
+	}
+
+	index++;
+    }
+
+    // do the updates now
+    updateTable();
+    packager->showDependencies( false );
+    packager->showDiskSpace();
+
+    return true;
+}
 
 
 
