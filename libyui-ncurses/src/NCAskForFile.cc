@@ -306,7 +306,8 @@ bool NCAskForFile::postAgain( )
 	    // return false means: close the popup
 	    return false;
 	}
-	else if ( currentId->compare( PkgNames::DirList() ) == YO_EQUAL )
+	else if ( currentId->compare( PkgNames::DirList() ) == YO_EQUAL
+		  && !postevent.result.isNull() )
 	{
 	    unsigned int i = dirName->getListSize();
 	    // show the currently selected directory
