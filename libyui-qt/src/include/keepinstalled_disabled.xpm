@@ -1,0 +1,32 @@
+/* XPM */
+static const char *keepinstalled_disabled_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"22 16 10 1",
+"  c #2d2d2d",
+". c gray50",
+"X c #b0b0b0",
+"o c #bbbbbb",
+"O c gainsboro",
+"+ c #e3e3e3",
+"@ c #ebebeb",
+"# c #f4f4f4",
+"$ c #fefefe",
+"% c None",
+/* pixels */
+"%%%%%$$$$$$$$$$$$$$$$%",
+"%%%%%$..............$%",
+"%%%%%$.$$$$$$$$$$$$.$%",
+"%%%%%$.$$$$$$$$$$$$.# ",
+"%%%%%$.$$$$$$$$$$XX$+ ",
+"%%%%%$.$$$$$$$$$XXXX$ ",
+"%%%%%$.$$$@#$$$XXXX$o ",
+"%%%%%$.$XX$+#$XXXX$.o ",
+"%%%%%$$XXXX$$XXXX$X.O ",
+"%%%%%$.$XXXXXXXX$oo.# ",
+"%%%%%$.+$XXXXXX$XoO.$%",
+"%%%%%$.#O$XXXX$XoO#.$%",
+"%%%%%$.$#+$XX$ooO#$.$%",
+"%%%%%$.$$#+$$XoO#$$.$%",
+"%%%%%$..............$%",
+"%%%%%$$$$$$#@+#$$$$$$%"
+};

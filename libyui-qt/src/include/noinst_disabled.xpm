@@ -1,0 +1,25 @@
+/* XPM */
+static const char *noinst_disabled_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"22 16 3 1",
+"  c #a0a0a0",
+". c white",
+"X c None",
+/* pixels */
+"XXXXX................X",
+"XXXXX.              .X",
+"XXXXX. ............ .X",
+"XXXXX. ............ .X",
+"XXXXX. ............ .X",
+"XXXXX. ............ .X",
+"XXXXX. ............ .X",
+"XXXXX. ............ .X",
+"XXXXX. ............ .X",
+"XXXXX. ............ .X",
+"XXXXX. ............ .X",
+"XXXXX. ............ .X",
+"XXXXX. ............ .X",
+"XXXXX. ............ .X",
+"XXXXX.              .X",
+"XXXXX................X"
+};

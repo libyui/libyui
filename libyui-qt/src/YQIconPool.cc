@@ -22,39 +22,54 @@
 #include "YQIconPool.h"
 
 
-#define USE_TACKAT_ICONS 0
-
-#include "checklist_on.xpm"
-#include "checklist_off.xpm"
-#include "dep.xpm"	// bad icon name (auto_inst etc.)
-
-
-#if USE_TACKAT_ICONS
-#include "dontrm.xpm"
-#include "stop.xpm"
-#include "trash.xpm"
-#else
-#include "trashcan.xpm"
-#include "recycle.xpm"
+#include "autodel.xpm"
+#include "autodel_disabled.xpm"
+#include "autoinstall.xpm"
+#include "autoinstall_disabled.xpm"
+#include "autoupdate.xpm"
+#include "autoupdate_disabled.xpm"
+#include "del.xpm"
+#include "del_disabled.xpm"
+#include "install.xpm"
+#include "install_disabled.xpm"
+#include "keepinstalled.xpm"
+#include "keepinstalled_disabled.xpm"
+#include "noinst.xpm"
+#include "noinst_disabled.xpm"
 #include "taboo.xpm"
-#endif
+#include "taboo_disabled.xpm"
+#include "update.xpm"
+#include "update_disabled.xpm"
+
+#include "checklist_off.xpm"
+#include "checklist_on.xpm"
 
 
 
 YQIconPool * YQIconPool::_iconPool = 0;
 
-QPixmap YQIconPool::pkgTaboo()		{ return iconPool()->cachedIcon( taboo_xpm );		}
-QPixmap YQIconPool::pkgDel()		{ return iconPool()->cachedIcon( trashcan_xpm );	}
-QPixmap YQIconPool::pkgUpdate()		{ return iconPool()->cachedIcon( recycle_xpm );		}
-QPixmap YQIconPool::pkgInstall()	{ return iconPool()->cachedIcon( checklist_on_xpm );	}
-QPixmap YQIconPool::pkgAutoInstall()	{ return iconPool()->cachedIcon( dep_xpm );		}
-QPixmap YQIconPool::pkgAutoUpdate()	{ return iconPool()->cachedIcon( dep_xpm );		}
-QPixmap YQIconPool::pkgAutoDel()	{ return iconPool()->cachedIcon( trashcan_xpm );	}
-QPixmap YQIconPool::pkgKeepInstalled()	{ return iconPool()->cachedIcon( checklist_on_xpm );	}
-QPixmap YQIconPool::pkgNoInst()		{ return iconPool()->cachedIcon( checklist_off_xpm );	}
+QPixmap YQIconPool::pkgTaboo()			{ return iconPool()->cachedIcon( taboo_xpm );			}
+QPixmap YQIconPool::pkgDel()			{ return iconPool()->cachedIcon( del_xpm );			}
+QPixmap YQIconPool::pkgUpdate()			{ return iconPool()->cachedIcon( update_xpm );			}
+QPixmap YQIconPool::pkgInstall()		{ return iconPool()->cachedIcon( install_xpm );			}
+QPixmap YQIconPool::pkgAutoInstall()		{ return iconPool()->cachedIcon( autoinstall_xpm );		}
+QPixmap YQIconPool::pkgAutoUpdate()		{ return iconPool()->cachedIcon( autoupdate_xpm );		}
+QPixmap YQIconPool::pkgAutoDel()		{ return iconPool()->cachedIcon( autodel_xpm );			}
+QPixmap YQIconPool::pkgKeepInstalled()		{ return iconPool()->cachedIcon( keepinstalled_xpm );		}
+QPixmap YQIconPool::pkgNoInst()			{ return iconPool()->cachedIcon( noinst_xpm );			}
 
-QPixmap YQIconPool::checkMarkOn()	{ return iconPool()->cachedIcon( checklist_on_xpm );	}
-QPixmap YQIconPool::checkMarkOff()	{ return iconPool()->cachedIcon( checklist_off_xpm );	}
+QPixmap YQIconPool::disabledPkgTaboo()		{ return iconPool()->cachedIcon( taboo_disabled_xpm );		}
+QPixmap YQIconPool::disabledPkgDel()		{ return iconPool()->cachedIcon( del_disabled_xpm );		}
+QPixmap YQIconPool::disabledPkgUpdate()		{ return iconPool()->cachedIcon( update_disabled_xpm );		}
+QPixmap YQIconPool::disabledPkgInstall()	{ return iconPool()->cachedIcon( install_disabled_xpm );	}
+QPixmap YQIconPool::disabledPkgAutoInstall()	{ return iconPool()->cachedIcon( autoinstall_disabled_xpm );	}
+QPixmap YQIconPool::disabledPkgAutoUpdate()	{ return iconPool()->cachedIcon( autoupdate_disabled_xpm );	}
+QPixmap YQIconPool::disabledPkgAutoDel()	{ return iconPool()->cachedIcon( autodel_disabled_xpm );	}
+QPixmap YQIconPool::disabledPkgKeepInstalled()	{ return iconPool()->cachedIcon( keepinstalled_disabled_xpm );	}
+QPixmap YQIconPool::disabledPkgNoInst()		{ return iconPool()->cachedIcon( noinst_disabled_xpm );		}
+
+QPixmap YQIconPool::checkMarkOn()		{ return iconPool()->cachedIcon( checklist_on_xpm );		}
+QPixmap YQIconPool::checkMarkOff()		{ return iconPool()->cachedIcon( checklist_off_xpm );		}
 
 
 
