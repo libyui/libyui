@@ -304,23 +304,17 @@ void NCurses::init_screen()
 
     char *value = getenv( "Y2NCPSEUDO" );
     
-    if ( value != NULL )
+    // The 9.0 workaround for missing ACS chars (bug #30512) is not necessary
+    // any longer (a patch is provided for ncurses-5.4).
+
+    // Redefine ACS chars if Y2NCPSEUDO is set to "1" (just in case of ...)  
+    if ( value != NULL && strcmp(value, "1") == 0 )
     {
-	if ( strcmp(value, "0") == 0 )
-	    redefine = false;		// use ACS in any case
-	else
-	    redefine = true;
-    }
-    else if (  NCstring::terminalEncoding() != "UTF-8"
-	       && strcmp(envTerm.c_str(), "linux") == 0 )
-    {
-	// don't use ACS charset on console in NOT UTF-8 locale
 	redefine = true;
     }
     
     if ( redefine )
     {
-	// redefine ACS chars (workaround for bug #30512) 
 	chtype cch = 0;
 
 	NCattribute::setChar(cch, '+');
