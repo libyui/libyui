@@ -20,3 +20,4 @@ missing
 mkinstalldirs
 packages-qt.pot
 stamp-h*
+Makefile.am.common
