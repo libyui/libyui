@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Sep 14 11:28:39 CEST 2004 - mlazar@suse.cz
+
+- temporary reverted fix #27296 (not completly fixed)
+- removed yast2 from needforbuild
+- 2.10.3
+
+-------------------------------------------------------------------
 Tue Sep  7 14:40:40 CEST 2004 - mlazar@suse.cz
 
 - fixed nicesize in SelectionBox

@@ -36,7 +36,11 @@
 NCTableCol::NCTableCol( const NCstring & l, const STYLE & st )
     : label( l )
     , style( st )
+    , stripHotkey( 1 )
 {
+    if (stripHotkey) {
+	label.stripHotkey();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////

@@ -89,8 +89,6 @@ class NClabel : protected NCtext {
 
     std::wstring::size_type hotline;
 
-    void stripHotkey();
-
     virtual void lset( const NCstring & ntext ) {
       NCtext::lset( ntext );
       stripHotkey();
@@ -98,6 +96,7 @@ class NClabel : protected NCtext {
 
   public:
 
+    void stripHotkey();
     NClabel( const NCstring & nstr = "" )
       : NCtext( nstr )
     { stripHotkey(); }
