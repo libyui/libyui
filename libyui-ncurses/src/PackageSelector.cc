@@ -48,6 +48,7 @@
 #include <y2pm/PMPackageManager.h>
 #include <y2pm/PMYouPatchManager.h>
 #include <y2pm/PMSelectionManager.h>
+#include <y2pm/InstSrcManager.h>
 #include <y2pm/InstYou.h>
 
 #include <ycp/YCPString.h>
