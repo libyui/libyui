@@ -26,6 +26,7 @@
 #include <qpixmap.h>
 #include <qptrlist.h>
 #include <qstringlist.h>
+#include <qdict.h>
 
 #include <string>
 
@@ -372,7 +373,8 @@ protected:
     QPushButton *	    _backButton;
     QPushButton *	    _nextButton;
 
-    QPtrList<YQWizard::Step> _stepsList;
+    QPtrList<YQWizard::Step> 	_stepsList;
+    QDict<YQWizard::Step>	_stepsIDs;
 
 
     

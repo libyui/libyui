@@ -113,6 +113,7 @@ YQWizard::YQWizard( QWidget *		parent,
     _nextButton			= 0;
 
     _stepsList.setAutoDelete( true );
+    _stepsIDs.setAutoDelete( false );	// Only for one of both!
 
 
     //
@@ -272,6 +273,15 @@ void YQWizard::layoutStepsPanel()
 
 void YQWizard::addStep( const QString & text, const QString & id )
 {
+    if ( _stepsIDs[ id ] )
+    {
+	y2error( "Step ID \"%s\" (\"%s\")  already used for \"%s\"",
+		 (const char *) id,
+		 (const char *) text,
+		 (const char *) _stepsIDs[ id ]->name() );
+	return;
+    }
+
     if ( _stepsList.last()->name() == text )
     {
 	// Consecutive steps with the same name will be shown as one single step.
@@ -287,6 +297,8 @@ void YQWizard::addStep( const QString & text, const QString & id )
 	_stepsList.append( new YQWizard::Step( text, id ) );
 	_stepsDirty = true;
     }
+
+    _stepsIDs.insert( id, _stepsList.last() );
 }
 
 
@@ -336,20 +348,20 @@ void YQWizard::updateSteps()
     _stepsGrid->setColStretch( nameCol,   0 );	// Name column - don't stretch
     _stepsGrid->setColStretch( 3, 99  );	// Left margin column - stretch
 
-    
+
     // Work around Qt bug: Grid layout only works right if the parent widget isn't visible.
     stepsParent->hide();
 
     //
     // Add left and right (but not top and bottom) margins
     //
-    
+
     int row = 0;
 
     QWidget * leftSpacer  = addHSpacing( stepsParent, STEPS_MARGIN );
     CHECK_PTR( leftSpacer );
     _stepsGrid->addWidget( leftSpacer, row, 0 );
-    
+
     QWidget * rightSpacer = addHSpacing( stepsParent, STEPS_MARGIN );
     CHECK_PTR( rightSpacer );
     _stepsGrid->addWidget( rightSpacer, row, 3 );
@@ -373,7 +385,7 @@ void YQWizard::updateSteps()
 		CHECK_PTR( spacer );
 		_stepsGrid->addWidget( spacer, row++, nameCol );
 	    }
-	    
+
 	    //
 	    // Heading
 	    //
@@ -384,7 +396,7 @@ void YQWizard::updateSteps()
 	    QFont font( STEPS_FONT_FAMILY, STEPS_HEADING_FONT_SIZE );
 	    font.setWeight( QFont::Bold );
 	    label->setFont( font );
-	    
+
 	    step->setNameLabel( label );
 	    _stepsGrid->addMultiCellWidget( label,
 					    row, row,			// from_row, to_row
@@ -430,7 +442,7 @@ void YQWizard::updateStepStates()
 {
     if ( _stepsDirty )
 	updateSteps();
-    
+
     YQWizard::Step * currentStep = findStep( _currentStepID );
     YQWizard::Step * step = _stepsList.first();
 
@@ -439,7 +451,7 @@ void YQWizard::updateStepStates()
 	// Set status icon and color for the current step
 	setStepStatus( currentStep, _stepCurrentIcon, _stepCurrentColor );
 
-	
+
 	//
 	// Set all steps before the current to "done"
 	//
@@ -451,7 +463,7 @@ void YQWizard::updateStepStates()
 	}
 
 	// Skip the current step - continue with the step after it
-	
+
 	if ( step )
 	    step = _stepsList.next();
     }
@@ -492,6 +504,7 @@ void YQWizard::setCurrentStep( const QString & id )
 void YQWizard::deleteSteps()
 {
     _stepsList.clear();
+    _stepsIDs.clear();
 }
 
 
@@ -499,7 +512,10 @@ YQWizard::Step * YQWizard::findStep( const QString & id )
 {
     if ( id.isEmpty() )
 	return 0;
-    
+
+    return _stepsIDs[ id ];
+
+#if 0
     YQWizard::Step * step = _stepsList.first();
 
     while ( step )
@@ -511,6 +527,7 @@ YQWizard::Step * YQWizard::findStep( const QString & id )
     }
 
     return 0;
+#endif
 }
 
 
@@ -746,7 +763,7 @@ void YQWizard::loadStepsIcons()
     _stepCurrentColor	= pixelColor( QPixmap( PIXMAP_DIR "color-step-current.png" ), 0, 0 );
     _stepToDoColor	= pixelColor( QPixmap( PIXMAP_DIR "color-step-todo.png"    ), 0, 0 );
     _stepDoneColor	= pixelColor( QPixmap( PIXMAP_DIR "color-step-done.png"    ), 0, 0 );
-    
+
     _stepCurrentIcon	= QPixmap( PIXMAP_DIR "step-current.png" );
     _stepToDoIcon	= QPixmap( PIXMAP_DIR "step-todo.png"	 );
     _stepDoneIcon	= QPixmap( PIXMAP_DIR "step-done.png"	 );
