@@ -18,6 +18,7 @@
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
+#include <qregexp.h>
 
 #include "YQPkgDescriptionView.h"
 #include "YQi18n.h"
@@ -63,6 +64,8 @@ YQPkgDescriptionView::showPkgDetails( PMPackagePtr pkg )
     while ( it != description.end() )
     {
 	QString line = fromUTF8( *it );
+	line.replace( QRegExp( "<" ), "&lt;" );
+	line.replace( QRegExp( ">" ), "&gt;" );
 
 	if ( line.startsWith( "Authors:" ) )
 	{

@@ -81,20 +81,21 @@ protected:
     /**
      * Returns a string containing a HTML table cell with 'contents'.
      **/
-    QString cell( const QString & contents	) const;
+    QString cell( QString contents		) const;
     QString cell( int contents 			) const;
     QString cell( const std::string & contents	) const;
+    QString cell( Date date			) const;
 
     /**
      * Returns a string containing a HTML table cell with 'contents'
      * for table headers.
      **/
-    QString hcell( const QString & contents ) const;
+    QString hcell( QString contents ) const;
 
     /**
      * Returns a string containing HTML code for a package's authors list.
      **/
-    QString formatAuthorsList( PMPackagePtr pkg ) const;
+    QString authorsListCell( PMPackagePtr pkg ) const;
 
     /**
      * Format a date.

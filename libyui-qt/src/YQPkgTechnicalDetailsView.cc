@@ -20,6 +20,7 @@
 #include <ycp/y2log.h>
 
 #include <qdatetime.h>
+#include <qregexp.h>
 #include "YQPkgTechnicalDetailsView.h"
 #include "YQi18n.h"
 #include "utf8.h"
@@ -93,8 +94,10 @@ YQPkgTechnicalDetailsView::row( const QString & contents ) const
 
 
 QString
-YQPkgTechnicalDetailsView::cell( const QString & contents ) const
+YQPkgTechnicalDetailsView::cell( QString contents ) const
 {
+    contents.replace( QRegExp( "<" ), "&lt;" );
+    contents.replace( QRegExp( ">" ), "&gt;" );
     return "<td align=top>" + contents + "</td>";
 }
 
@@ -110,31 +113,44 @@ YQPkgTechnicalDetailsView::cell( int contents ) const
 
 
 QString
-YQPkgTechnicalDetailsView::cell( const std::string & contents ) const
+YQPkgTechnicalDetailsView::cell( Date contents ) const
 {
-    return "<td align=top>" + QString::fromUtf8( contents.c_str() ) + "</td>";
+    return cell( formatDate( contents ) );
 }
 
 
 QString
-YQPkgTechnicalDetailsView::hcell( const QString & contents ) const
+YQPkgTechnicalDetailsView::cell( const std::string & contents ) const
+{
+    return cell( QString::fromUtf8( contents.c_str() ) );
+}
+
+
+QString
+YQPkgTechnicalDetailsView::hcell( QString contents ) const
 {
     return "<td align=top bgcolor=#D0D0D0>" + contents + "</td>";
 }
 
 
 QString
-YQPkgTechnicalDetailsView::formatAuthorsList( PMPackagePtr pkg ) const
+YQPkgTechnicalDetailsView::authorsListCell( PMPackagePtr pkg ) const
 {
-    QString html;
+    QString html = "<td align=top>";
+    QString line;
     std::list<std::string> authors = pkg->authors();
     std::list<std::string>::const_iterator it = authors.begin();
 
     while ( it != authors.end() )
     {
-	html += fromUTF8(*it) + "<br>";
+	line = fromUTF8(*it);
+	line.replace( QRegExp( "<" ), "&lt;" );
+	line.replace( QRegExp( ">" ), "&gt;" );
+	html += line + "<br>";
 	++it;
     }
+    
+    html += "</td>";
 
     return html;
 }
@@ -164,9 +180,9 @@ YQPkgTechnicalDetailsView::simpleTable( PMPackagePtr pkg )
 	table(
 	       row( hcell( _( "Version:"	) ) + cell( pkg->version()		   ) ) +
 	       row( hcell( _( "Release:"	) ) + cell( pkg->release()		   ) ) +
-	       row( hcell( _( "Build Time:"	) ) + cell( formatDate( pkg->buildtime() ) ) ) +
+	       row( hcell( _( "Build Time:"	) ) + cell( pkg->buildtime() 		   ) ) +
 	       ( pkg->isInstalledObj() ?
-		 row( hcell( _( "Install Time:" ) ) + cell( formatDate( pkg->installtime() ) ) )
+		 row( hcell( _( "Install Time:" ) ) + cell( pkg->installtime() 		   ) )
 		 : "" ) +
 	       row( hcell( _( "Package Group:"	) ) + cell( pkg->group()		   ) ) +
 	       row( hcell( _( "License:"	) ) + cell( pkg->license()		   ) ) +
@@ -182,7 +198,7 @@ YQPkgTechnicalDetailsView::simpleTable( PMPackagePtr pkg )
 	       row( hcell( _( "Source RPM:"	) ) + cell( pkg->sourcerpm()		   ) ) +
 	       row( hcell( _( "Location:"	) ) + cell( pkg->location()		   ) ) +
 	       row( hcell( _( "Media No.:"	) ) + cell( pkg->medianr()		   ) ) +
-	       row( hcell( _( "Authors:"	) ) + cell( formatAuthorsList( pkg )	   ) )
+	       row( hcell( _( "Authors:"	) ) + authorsListCell( pkg                 ) )
 	       );
 
     pkg->stopRetrieval();
@@ -209,8 +225,8 @@ YQPkgTechnicalDetailsView::complexTable( PMPackagePtr installed, PMPackagePtr ca
 
 	       row( hcell( _( "Version:"	) ) + cell( p1->version()		    ) + cell( p2->version()		      ) ) +
 	       row( hcell( _( "Release:"	) ) + cell( p1->release()		    ) + cell( p2->release()		      ) ) +
-	       row( hcell( _( "Build Time:"	) ) + cell( formatDate( p1->buildtime() )   ) + cell( formatDate( p2->buildtime() )   ) ) +
-	       row( hcell( _( "Install Time:"	) ) + cell( formatDate( p1->installtime() ) ) + cell( formatDate( p2->installtime() ) ) ) +
+	       row( hcell( _( "Build Time:"	) ) + cell( p1->buildtime()                 ) + cell( p2->buildtime() 		      ) ) +
+	       row( hcell( _( "Install Time:"	) ) + cell( p1->installtime()               ) + cell( p2->installtime()               ) ) +
 	       row( hcell( _( "Package Group:"	) ) + cell( p1->group()			    ) + cell( p2->group()		      ) ) +
 	       row( hcell( _( "License:"	) ) + cell( p1->license()		    ) + cell( p2->license()		      ) ) +
 	       row( hcell( _( "Installed Size:" ) ) + cell( p1->size().form()		    ) + cell( p2->size().form()		      ) ) +
@@ -225,7 +241,7 @@ YQPkgTechnicalDetailsView::complexTable( PMPackagePtr installed, PMPackagePtr ca
 	       row( hcell( _( "Source RPM:"	) ) + cell( p1->sourcerpm()		    ) + cell( p2->sourcerpm()		      ) ) +
 	       row( hcell( _( "Location:"	) ) + cell( p1->location()		    ) + cell( p2->location()		      ) ) +
 	       row( hcell( _( "Media No.:"	) ) + cell( p1->medianr() 		    ) + cell( p2->medianr() 		      ) ) +
-	       row( hcell( _( "Authors:"	) ) + cell( formatAuthorsList( p1 )	    ) + cell( formatAuthorsList( p2 )	      ) )
+	       row( hcell( _( "Authors:"	) ) + authorsListCell( p1 	            ) + authorsListCell( p2 	      	      ) )
 	       );
 
     p1->stopRetrieval();
