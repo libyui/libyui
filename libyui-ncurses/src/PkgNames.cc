@@ -1179,7 +1179,7 @@ const NCstring PkgNames::HelpOnStatus2()
 const NCstring PkgNames::HelpOnStatus3()
 {
     // part 2 of help text package status
-    static const NCstring value = _( "<p>You can also use <b>SPACE</b> to toggle the package status." );
+    static const NCstring value = _( "<p>You can also use <b>RET</b> or <b>SPACE</b> to toggle the package status." );
     return value;
 }
 
