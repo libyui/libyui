@@ -101,9 +101,7 @@ YQPkgRpmGroupTagsFilterView::filter()
 
     if ( _selection )
     {
-	std::string selectedRpmGroup = completePath( _selection->rpmGroup(), '/',
-						     false ); // startWithDelimiter
-	
+	std::string selectedRpmGroup = rpmGroup( _selection->rpmGroup() );
 	y2debug( "Searching packages that match '%s'", selectedRpmGroup.c_str() );
 	
 	PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
