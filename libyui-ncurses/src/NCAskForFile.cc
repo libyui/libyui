@@ -221,7 +221,7 @@ NCursesEvent & NCAskForFile::showDirPopup( )
 //
 long NCAskForFile::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? 80 : 20 );
+    return ( dim == YD_HORIZ ? NCurses::cols()-10 : NCurses::lines()-4 );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -238,6 +238,24 @@ NCursesEvent NCAskForFile::wHandleInput( wint_t ch )
 	return NCursesEvent::cancel;
 
     return NCDialog::wHandleInput( ch );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCAskForFile::updateFileList
+//	METHOD TYPE : bool
+//
+//	DESCRIPTION :
+//
+void NCAskForFile::updateFileList()
+{
+    // set new start dir and show the file list
+    fileList->setStartDir( dirList->getCurrentDir() );
+    fileList->fillList( );
+
+    // show the currently selected file
+    fileName->setText( fileList->getCurrentFile() );  
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -273,24 +291,21 @@ bool NCAskForFile::postAgain( )
 	    dirName->itemAdded( postevent.result->asString(),
 				i,
 				true );
-	    
-	    fileList->setStartDir( dirList->getCurrentDir() );
-	    // show the corresponding file list
-	    fileList->fillList( );
-	    fileName->setText( fileList->getCurrentFile() );
+	    updateFileList();
 	    
 	    if ( postevent.reason == YEvent::Activated )
 	    {
-		// fill directory list
+		// fill directory and file list
 		dirList->fillList();
-		fileName->setText( YCPString( "" ) );
-		fileList->setCurrentFile( YCPString( "" ) );
+		updateFileList();
 	    }
 	}
 	else if ( currentId->compare( PkgNames::DirName() ) == YO_EQUAL )
 	{
 	    dirList->setStartDir( dirName->getValue() );
 	    dirList->fillList();
+
+	    updateFileList();
 	}
 	else if ( currentId->compare( PkgNames::Details() ) == YO_EQUAL )
 	{

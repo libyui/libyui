@@ -64,7 +64,7 @@ protected:
     virtual NCursesEvent wHandleInput( wint_t ch );
 
     virtual string getFileName() = 0;
-    
+
 public:
     
     NCAskForFile( const wpos at,
@@ -98,6 +98,12 @@ public:
      */
     NCursesEvent & showDirPopup( );
 
+    /**
+     * Show new file information
+     * @return void
+     */
+    void updateFileList();
+    
 };
 
 ///////////////////////////////////////////////////////////////////
