@@ -36,6 +36,8 @@ liby2qt_la_SOURCES = 				\
 	YUIQt.cc				\
 	YUIQt_widgets.cc			\
 	YUIQt_builtins.cc			\
+	YUIQt_x11.cc				\
+						\
 	YQIconPool.cc				\
 						\
 	YQAlignment.cc				\
@@ -191,6 +193,7 @@ BUILT_SOURCES =					\
 YUIQt.o YUIQt.lo:						YUIQt.moc.cc
 YUIQt_widgets.o YUIQt_widgets.lo:				YUIQt.moc.cc
 YUIQt_builtins.o YUIQt_builtins.lo:				YUIQt.moc.cc
+YUIQt_x11.o YUIQt_x11.lo:					YUIQt.moc.cc
 
 YQAlignment.o YQAlignment.lo:   				YQAlignment.moc.cc
 YQBarGraph.o YQBarGraph.lo:   					YQBarGraph.moc.cc

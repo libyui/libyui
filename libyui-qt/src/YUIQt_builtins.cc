@@ -10,12 +10,12 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YUIQt_builtins.cc
+  File:	      	YUIQt_builtins.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
-  Maintainer: Stefan Hundhammer <sh@suse.de>
+  Author:     	Stefan Hundhammer <sh@suse.de>
+  Maintainer: 	Stefan Hundhammer <sh@suse.de>
 
-  Textdomain "packages-qt"
+  Textdomain 	"packages-qt"
 
 /-*/
 
@@ -53,123 +53,6 @@
 YCPValue YUIQt::setLanguage( const YCPTerm & term)
 {
     return YCPVoid();	// OK (YCPNull() would mean error)
-}
-
-
-int YUIQt::getDisplayWidth()
-{
-    return desktop()->width();
-}
-
-
-int YUIQt::getDisplayHeight()
-{
-    return desktop()->height();
-}
-
-
-int YUIQt::getDisplayDepth()
-{
-    return QColor::numBitPlanes();
-}
-
-
-long YUIQt::getDisplayColors()
-{
-    return 1L << QColor::numBitPlanes();
-}
-
-
-int YUIQt::getDefaultWidth()
-{
-    return default_size.width();
-}
-
-
-int YUIQt::getDefaultHeight()
-{
-    return default_size.height();
-}
-
-
-long YUIQt::defaultSize(YUIDimension dim) const
-{
-    if ( haveWM() )
-	return dim == YD_HORIZ ? default_size.width() : default_size.height();
-    else
-	return dim == YD_HORIZ ? desktop()->width() : desktop()->height();
-}
-
-
-void
-YUIQt::busyCursor ( void )
-{
-#if USE_QT_CURSORS
-
-    setOverrideCursor( waitCursor );
-
-#else
-    /**
-     * There were versions of Qt where simply using
-     * QApplication::setOverrideCursor( waitCursor ) didn't work any more:
-     * We _need_ the WType_Modal flag for non-defaultsize dialogs (i.e. for
-     * popups), but Qt unfortunately didn't let such dialogs have a clock
-     * cursor.  :-(
-     *
-     * They might have their good reasons for this (whatever they are), so
-     * let's simply make our own busy cursors and set them to all widgets
-     * created thus far.
-     **/
-
-    QWidgetList *widget_list = allWidgets();
-    QWidgetListIt it( *widget_list );
-
-    while ( *it )
-    {
-	if ( ! (*it)->testWFlags( WType_Desktop ) )	// except desktop (root window)
-	{
-	    XDefineCursor( (*it)->x11Display(), (*it)->winId(), busy_cursor->handle() );
-	}
-	++it;
-    }
-
-    if ( widget_list )
-	delete widget_list;
-#endif
-}
-
-
-void
-YUIQt::normalCursor ( void )
-{
-#if USE_QT_CURSORS
-
-    while ( overrideCursor() )
-	restoreOverrideCursor();
-#else
-    /**
-     * Restore the normal cursor for all widgets (undo busyCursor() ).
-     *
-     * Fortunately enough, Qt widgets keep track of their normal cursor
-     * (QWidget::cursor()) so this can easily be restored - it's not always the
-     * arrow cursor - e.g., input fields (QLineEdit) have the "I-beam" cursor.
-     **/
-
-    QWidgetList *widget_list = allWidgets();
-    QWidgetListIt it( *widget_list );
-
-    while ( *it )
-    {
-	if ( ! (*it)->testWFlags( WType_Desktop ) )	// except desktop (root window)
-	{
-	    XDefineCursor( (*it)->x11Display(), (*it)->winId(), (*it)->cursor().handle() );
-	}
-	++it;
-    }
-
-    if ( widget_list )
-	delete widget_list;
-#endif
 }
 
 

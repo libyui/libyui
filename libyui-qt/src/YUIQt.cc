@@ -10,12 +10,11 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YUIQt.cc
+  File:	      	YUIQt.cc
 
-  Author:     Mathias Kettner <kettner@suse.de>
-  Maintainer: Stefan Hundhammer <sh@suse.de>
-
-  Textdomain "packages-qt"
+  Authors:	Mathias Kettner <kettner@suse.de>
+		Stefan Hundhammer <sh@suse.de>
+  Maintainer:	Stefan Hundhammer <sh@suse.de>
 
 /-*/
 
@@ -28,11 +27,8 @@
 
 #include <qcursor.h>
 #include <qmessagebox.h>
-#include <qpixmap.h>
 #include <qsocketnotifier.h>
-#include <qtimer.h>
 #include <qvbox.h>
-#include <qwidgetlist.h>
 #include <qwidgetstack.h>
 
 #include <X11/Xlib.h>
@@ -45,9 +41,7 @@
 #include "YUIQt.h"
 #include "YUISymbols.h"
 
-#include "utf8.h"
 #include "YQDialog.h"
-#include "YQi18n.h"
 #include "QXEmbed.h"
 
 
@@ -479,10 +473,6 @@ void YUIQt::closeDialog( YDialog *dialog )
 }
 
 
-
-// ----------------------------------------------------------------------
-
-
 void YUIQt::returnNow(EventType et, YWidget *wid)
 {
 
@@ -525,127 +515,6 @@ void YUIQt::returnNow(EventType et, YWidget *wid)
     {
 	exit_loop();
     }
-}
-
-
-const QFont &YUIQt::currentFont()
-{
-    /**
-     * Brute force approach to make sure we'll really get a complete Unicode font:
-     * Explicitly load the one font that we made sure to contain all required
-     * characters, including Latin1, Latin2, Japanese, Korean, and the
-     * characters used for glyphs.
-     *
-     * There are many fonts that claim to be Unicode, but most of them contain
-     * just a sorry excuse for a complete Unicode character set. Qt can't know
-     * how complete a font is, so it chooses one that might be better in other
-     * aspects, but lacks necessary characters.
-     **/
-
-    if ( ! loaded_current_font )
-    {
-#if FORCE_UNICODE_FONT
-	current_font = QFont( "Helvetica", 12 );
-	current_font.setStyleHint( QFont::SansSerif, QFont::PreferBitmap );
-	current_font.setRawName( "-gnu-unifont-medium-r-normal--16-160-75-75-p-80-iso10646-1" );
-	y2debug( "Loading default font: %s", (const char *) current_font.rawName() );
-#else
-	current_font = qApp->font();
-#endif
-	loaded_current_font = true;
-    }
-
-    return current_font;
-}
-
-
-const QFont &YUIQt::headingFont()
-{
-    /**
-     * Brute force load the heading font - see currentFont() above for more.
-     **/
-
-    if ( ! loaded_heading_font )
-    {
-#if FORCE_UNICODE_FONT
-	heading_font = QFont( "Helvetica", 14, QFont::Bold );
-	heading_font.setStyleHint( QFont::SansSerif, QFont::PreferBitmap );
-	heading_font.setRawName( "-gnu-unifont-bold-r-normal--18-180-75-75-p-80-iso10646-1" );
-	y2debug( "Loading heading font: %s", (const char *) heading_font.rawName() );
-#else
-	heading_font = QFont( "Helvetica", 14, QFont::Bold );
-#endif
-	loaded_heading_font = true;
-    }
-
-    return heading_font;
-}
-
-
-bool YUIQt::close()
-{
-    returnNow(ET_CANCEL, 0);
-    return true;
-}
-
-
-bool YUIQt::eventFilter( QObject * obj, QEvent * ev )
-{
-
-    if ( ev->type() == QEvent::Close )
-    {
-	emit wmClose();
-
-	if ( ! wm_close_blocked )
-	{
-	    // Don't simply close the application window, return from UserInput()
-	    // with `id(`cancel) and let the YCP application decide how to handle
-	    // that (e.g., ask for confirmation).
-
-	    y2debug( "Caught window close event - returning with `cancel" );
-	    returnNow(YUIInterpreter::ET_CANCEL, 0);
-	}
-
-	return true;	// Event processed
-    }
-    else if ( ev->type() == QEvent::Show )
-    {
-	if ( obj == main_win )
-	{
-	    if ( main_dialog_id > 0 )
-	    {
-		// Work around QWidgetStack bug: The last raiseWidget() call
-		// (from closeDialog() ) might have failed if the widget was
-		// invisible at that time, e.g., because the user had switched to
-		// some other virtual desktop (bugzilla bug #11310)
-
-		widget_stack->raiseWidget( main_dialog_id );
-	    }
-	}
-	else
-	{
-	    return showEventFilter( obj, ev );
-	}
-    }
-
-    return false;	// Don't stop event processing
-}
-
-
-bool YUIQt::showEventFilter( QObject * obj, QEvent * ev )
-{
-    if ( ! haveWM() )
-    {
-	// Make sure newly opened windows get the keyboard focus even without a
-	// window manager. Otherwise the app might be unusable without a mouse.
-
-	QWidget * widget = dynamic_cast<QWidget *> (obj);
-
-	if ( widget )
-	    widget->setActiveWindow();
-    }
-
-    return false;	// Don't stop event processing
 }
 
 
