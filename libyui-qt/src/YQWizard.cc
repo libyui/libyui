@@ -21,9 +21,10 @@
 #define y2log_component "qt-wizard"
 #include <ycp/y2log.h>
 
-#include <qlayout.h>
 #include <qhbox.h>
+#include <qimage.h>
 #include <qlabel.h>
+#include <qlayout.h>
 #include <qobjectlist.h>
 #include <qpixmap.h>
 #include <qpushbutton.h>
@@ -81,7 +82,10 @@ YQWizard::YQWizard( QWidget *		parent,
     QColor greyText	( 0x66, 0x66, 0x66 );
 
     _bg		= QColor( 0xE6, 0xE6, 0xE6 );
-    _stepsBg	= lightGrey;
+    _gradientCenterColor	= lightGrey;
+
+
+    loadGradientPixmaps();
 
 
     //
@@ -90,13 +94,15 @@ YQWizard::YQWizard( QWidget *		parent,
 
     QLabel * top = new QLabel( "SUSE Linux", this );
     CHECK_PTR( top );
-    top->setPaletteBackgroundColor( _bg );
     top->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
     top->setFont( QFont( "Helvetica", 14, QFont::Bold ) );
     top->setMargin( 15 );
     top->setMinimumHeight( 80 );
     top->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
     top->setPaletteForegroundColor( webGreenFG );
+
+
+    setGradient( top, _titleBarCenterGradientPixmap );
 
 
     //
@@ -113,7 +119,6 @@ YQWizard::YQWizard( QWidget *		parent,
 
     _sideBar = new QWidgetStack( outerHBox );
     CHECK_PTR( _sideBar );
-
     _sideBar->setMinimumWidth( YQUI::ui()->defaultSize( YD_HORIZ ) / 5 );
     _sideBar->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred ) ); // hor/vert
     _sideBar->setPaletteBackgroundColor( _bg );
@@ -203,12 +208,9 @@ YQWizard::YQWizard( QWidget *		parent,
 
     QWidget * bottomSpacer = addVSpacing( workAreaVBox, WORK_AREA_BOTTOM_MARGIN );
     CHECK_PTR( bottomSpacer );
-    bottomSpacer->setPaletteBackgroundColor( _bg );
+    setBottomCroppedGradient( bottomSpacer, _bottomGradientPixmap, WORK_AREA_BOTTOM_MARGIN );
 
-
-    QWidget * rightSpacer = addHSpacing( outerHBox, WORK_AREA_RIGHT_MARGIN );
-    CHECK_PTR( rightSpacer );
-    rightSpacer->setPaletteBackgroundColor( _bg );
+    addGradientColumn( outerHBox, WORK_AREA_RIGHT_MARGIN );
 }
 
 
@@ -216,8 +218,17 @@ void YQWizard::layoutStepsPanel()
 {
     _stepsPanel = new QVBox( _sideBar );
     CHECK_PTR( _stepsPanel );
-
     _stepsPanel->setPaletteBackgroundColor( _bg );
+
+
+    // Top gradient
+
+    QLabel * topGradient = new QLabel( _stepsPanel );
+    CHECK_PTR( topGradient );
+    setGradient( topGradient, _topGradientPixmap );
+
+
+    // Steps
 
     _sideBar->addWidget( _stepsPanel );
 
@@ -243,7 +254,7 @@ void YQWizard::layoutStepsPanel()
 				_stepsPanel );
     CHECK_PTR( steps );
 
-    steps->setPaletteBackgroundColor( _stepsBg );
+    steps->setPaletteBackgroundColor( _gradientCenterColor );
     steps->setFont( QFont( "Helvetica", 10 ) );
 
     steps->setFont( QFont( "Helvetica", 12 ) );
@@ -254,86 +265,46 @@ void YQWizard::layoutStepsPanel()
 
     QWidget * stretch = addVStretch( _stepsPanel );
     CHECK_PTR( stretch );
-
-    stretch->setPaletteBackgroundColor( _stepsBg );
+    stretch->setPaletteBackgroundColor( _gradientCenterColor );
 
 
     // Bottom gradient
 
     QLabel * bottomGradient= new QLabel( _stepsPanel );
     CHECK_PTR( bottomGradient );
-
-    QPixmap pixmap( PIXMAP_DIR "bottom-gradient.png" );
-
-    if ( ! pixmap.isNull() )
-    {
-	bottomGradient->setFixedHeight( pixmap.height() );
-	bottomGradient->setPaletteBackgroundPixmap( pixmap );
-    }
+    setGradient( bottomGradient, _bottomGradientPixmap );
 
 
-    // Since we want the gradient pixmap to "flow around" the "Help" button, we
-    // can't simply use QVBox and QHBox here. Instead, we make that gradient
-    // label fill all available space to the bottom of the dialog and make the
-    // "Help" button a child of that gradient label. We we use a QGridLayout
-    // within the gradient QLabel to position the button. Only one single cell
-    // of that grid layout actually has a widget (the button), all others are
-    // only used as strechable placeholders to keep the button centered at the
-    // bottom of the label.
-
-    QGridLayout * grid = new QGridLayout( bottomGradient,		// parent
-					  2,				// rows
-					  3,				// columns
-					  WORK_AREA_BOTTOM_MARGIN );	// margin
-
-
-    // Give as much space as possible to the (empty) top row
-    // -> Bottom-align the bottom widget
-    grid->setRowStretch( 0, 99 );
-    grid->setRowStretch( 1, 0  );
-
-    // Evenly distribute excess space between left and right column,
-    // don't resize the center column
-    // -> center the widget in the center column
-    grid->setColStretch( 0, 99 );
-    grid->setColStretch( 1, 0  );
-    grid->setColStretch( 2, 99 );
-
-
-    // Help button
-    _helpButton = new QPushButton( _( "&Help" ), bottomGradient );
+    // Help button - intentionally without keyboard shortcut
+    // (the text is only a fallback anyway if no icon can be found)
+    _helpButton = new QPushButton( _( "Help" ), bottomGradient );
     CHECK_PTR( _helpButton );
-
-    pixmap = QPixmap( PIXMAP_DIR "help-button.png" );
+    centerAtBottom( bottomGradient, _helpButton, WORK_AREA_BOTTOM_MARGIN );
+    QPixmap pixmap = QPixmap( PIXMAP_DIR "help-button.png" );
 
     if ( ! pixmap.isNull() )
 	_helpButton->setPixmap( pixmap );
 
-    grid->addWidget( _helpButton, 1, 1 );	// Bottom row, center column
-
     connect( _helpButton, SIGNAL( clicked()  ),
 	     this,        SLOT  ( showHelp() ) );
-
 }
 
 
 void YQWizard::layoutHelpPanel()
 {
-    _helpPanel = new QVBox( _sideBar );
+    _helpPanel = new QHBox( _sideBar );
     CHECK_PTR( _helpPanel );
-
     _sideBar->addWidget( _helpPanel );
 
+    addGradientColumn( _helpPanel );
 
-    QHBox * hbox = new QHBox( _helpPanel );
-    CHECK_PTR( hbox );
-
-    addHelpMarginColumn( hbox );
+    QVBox * vbox = new QVBox( _helpPanel );
+    CHECK_PTR( vbox );
 
 
     // Help browser
 
-    _helpBrowser = new QTextBrowser( hbox );
+    _helpBrowser = new QTextBrowser( vbox );
     CHECK_PTR( _helpBrowser );
 
     _helpBrowser->setMimeSourceFactory( 0 );
@@ -347,24 +318,18 @@ void YQWizard::layoutHelpPanel()
     if ( ! bgPixmap.isNull() )
 	_helpBrowser->setPaletteBackgroundPixmap( bgPixmap );
 
-    _helpBrowser->setText( "<p>This is a help text.</p><p>It should be helpful.</p>" );
-
-    addHelpMarginColumn( hbox );
-
-    QWidget * spacer = addVSpacing( _helpPanel );
-    CHECK_PTR( spacer );
 
 
+    // Bottom gradient
 
+    QLabel * buttonParent = new QLabel( vbox );
+    CHECK_PTR( buttonParent );
+    // buttonParent->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum ) ); // hor/vert
 
-    hbox = new QHBox( _helpPanel );
-    CHECK_PTR( hbox );
-
-    addHStretch( hbox );
-
-
+    
     // "Steps" button - intentionally without keyboard shortcut
-    _stepsButton = new QPushButton( _( "Steps" ), hbox );
+    // (the text is only a fallback anyway if no icon can be found)
+    _stepsButton = new QPushButton( _( "Steps" ), buttonParent );
     CHECK_PTR( _stepsButton );
 
     QPixmap pixmap( PIXMAP_DIR "steps-button.png" );
@@ -372,12 +337,15 @@ void YQWizard::layoutHelpPanel()
     if ( ! pixmap.isNull() )
 	_stepsButton->setPixmap( pixmap );
 
+    QGridLayout * grid = centerAtBottom( buttonParent, _stepsButton, WORK_AREA_BOTTOM_MARGIN );
+    setBottomCroppedGradient( buttonParent, _bottomGradientPixmap, grid->sizeHint().height() );
+
 
     connect( _stepsButton, SIGNAL( clicked()   ),
 	     this,         SLOT  ( showSteps() ) );
 
-    addHStretch( hbox );
-    addVSpacing( _helpPanel, WORK_AREA_BOTTOM_MARGIN );
+
+    addGradientColumn( _helpPanel );
 }
 
 
@@ -426,22 +394,99 @@ void YQWizard::layoutButtonBox()
 }
 
 
-void YQWizard::addHelpMarginColumn( QWidget * parent )
+void YQWizard::loadGradientPixmaps()
+{
+    _topGradientPixmap		  = QPixmap( PIXMAP_DIR "top-gradient.png"		);
+    _bottomGradientPixmap	  = QPixmap( PIXMAP_DIR "bottom-gradient.png"		);
+    _titleBarCenterGradientPixmap = QPixmap( PIXMAP_DIR "title-bar-center-gradient.png"	);
+}
+
+
+void YQWizard::setGradient( QWidget * widget, const QPixmap & pixmap )
+{
+    if ( widget && ! pixmap.isNull() )
+    {
+	widget->setFixedHeight( pixmap.height() );
+	widget->setPaletteBackgroundPixmap( pixmap );
+    }
+}
+
+
+void YQWizard::setBottomCroppedGradient( QWidget * widget, const QPixmap & pixmap, int croppedHeight )
+{
+    setGradient( widget, bottomCropPixmap( pixmap, croppedHeight ) );
+}
+
+
+QPixmap YQWizard::bottomCropPixmap( const QPixmap & full, int croppedHeight )
+{
+    QPixmap pixmap;
+
+    if ( full.height() > croppedHeight )
+    {
+	QImage cropped = full.convertToImage();
+	cropped = cropped.copy( 0,  full.height() - croppedHeight - 1, // x, y
+				full.width(), croppedHeight );
+
+	pixmap = QPixmap( cropped );	      
+    }
+    else
+    {
+	pixmap = full;
+    }
+    
+    return pixmap;
+}
+
+
+QWidget * YQWizard::addGradientColumn( QWidget * parent, int width )
 {
     if ( ! parent )
-	return;
+	return 0;
 
     QVBox * vbox = new QVBox( parent );
     CHECK_PTR( vbox );
 
+    QWidget * topGradient = addHSpacing( vbox, width );
+    CHECK_PTR( topGradient );
+    setGradient( topGradient, _topGradientPixmap );
+
+    QWidget * centerStretch = new QWidget( vbox );
+    CHECK_PTR( centerStretch );
+    centerStretch->setPaletteBackgroundColor( _gradientCenterColor );
 
 
-    // TO DO: upper (flexible) and lower (gradient) margin
+    QWidget * bottomGradient = new QWidget( vbox );
+    CHECK_PTR( bottomGradient );
+    setGradient( bottomGradient, _bottomGradientPixmap );
 
-    QWidget * spacer = addHSpacing( vbox );
-    CHECK_PTR( spacer );
+    return bottomGradient;
+}
 
-    spacer->setPaletteBackgroundColor( parent->paletteBackgroundColor() );
+
+QGridLayout * YQWizard::centerAtBottom( QWidget * parent, QWidget * child, int margin )
+{
+    QGridLayout * grid = new QGridLayout( parent,
+					  2,		// rows
+					  3,		// columns
+					  margin );
+    CHECK_PTR( grid );
+
+    // Give as much space as possible to the (empty) top row
+    // -> Bottom-align the child widget
+    grid->setRowStretch( 0, 99 );
+    grid->setRowStretch( 1, 0  );
+
+    // Evenly distribute excess space between left and right column,
+    // don't resize the center column
+    // -> center the widget in the center column
+    grid->setColStretch( 0, 99 );
+    grid->setColStretch( 1, 0  );
+    grid->setColStretch( 2, 99 );
+
+    grid->addWidget( child, 1, 1 );	// Bottom row, center column
+
+    return grid;
 }
 
 
@@ -476,7 +521,7 @@ void YQWizard::addChild( YWidget * ychild )
 	return;
     }
 
-#warning FIXME delete any old child first
+    // FIXME delete any old child first
 
     QWidget * child = (QWidget *) ychild->widgetRep();
     CHECK_PTR( child );
