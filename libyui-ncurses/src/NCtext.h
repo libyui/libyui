@@ -61,6 +61,8 @@ class NCtext {
     unsigned Lines()   const;
     size_t Columns() const;
 
+    void append( const NCstring & line );
+    
     const list<NCstring> & Text() const { return mtext; }
     const NCstring &       operator[]( std::wstring::size_type idx ) const;
 

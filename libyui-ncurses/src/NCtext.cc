@@ -110,6 +110,19 @@ unsigned NCtext::Lines() const
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : NCtext::append
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCtext::append( const NCstring &line )
+{
+    mtext.push_back( line );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : NCtext::Columns
 //	METHOD TYPE : unsigned
 //
