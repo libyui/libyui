@@ -31,8 +31,7 @@ class YUIQt;
 class YQPkgRpmGroupTag;
 
 
-class YQPkgRpmGroupTagsFilterView : public QListView,
-				    public YRpmGroupsTree
+class YQPkgRpmGroupTagsFilterView : public QListView
 {
     Q_OBJECT
 

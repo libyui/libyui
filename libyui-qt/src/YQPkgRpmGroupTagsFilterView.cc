@@ -33,7 +33,6 @@
 
 YQPkgRpmGroupTagsFilterView::YQPkgRpmGroupTagsFilterView( YUIQt *yuiqt, QWidget *parent )
     : QListView( parent )
-    , YRpmGroupsTree()
     , yuiqt(yuiqt)
 {
     y2milestone( "Creating group tags view" );
@@ -41,7 +40,7 @@ YQPkgRpmGroupTagsFilterView::YQPkgRpmGroupTagsFilterView( YUIQt *yuiqt, QWidget 
 
     addColumn( _( "Package Groups" ) );
     setRootIsDecorated( true );
-    cloneTree( root(), 0 );
+    cloneTree( Y2PM::packageManager().rpmGroupsTree()->root(), 0 );
 
     connect( this, SIGNAL( selectionChanged        ( QListViewItem * ) ),
 	     this, SLOT  ( selectionChangedInternal( QListViewItem * ) ) );
@@ -101,7 +100,7 @@ YQPkgRpmGroupTagsFilterView::filter()
 
     if ( _selection )
     {
-	std::string selectedRpmGroup = rpmGroup( _selection->rpmGroup() );
+	std::string selectedRpmGroup = Y2PM::packageManager().rpmGroup( _selection->rpmGroup() );
 	y2debug( "Searching packages that match '%s'", selectedRpmGroup.c_str() );
 	
 	PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
