@@ -122,8 +122,10 @@ void YQSelectionBox::setEnabling( bool enabled )
 
 void YQSelectionBox::itemAdded( const YCPString & string, int index, bool selected )
 {
+    _qt_listbox->blockSignals( true );
     _qt_listbox->insertItem( fromUTF8(string->value() ) );
     if ( selected ) _qt_listbox->setCurrentItem( index );
+    _qt_listbox->blockSignals( false );
 }
 
 
@@ -206,6 +208,7 @@ void YQSelectionBox::returnImmediately()
     {
 	// Avoid overwriting a (more important) Activated event with a SelectionChanged event
 
+	y2milestone( "sending selbox event" );
 	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
     }
 }
@@ -213,6 +216,7 @@ void YQSelectionBox::returnImmediately()
 
 void YQSelectionBox::returnDelayed()
 {
+    y2milestone( "Starting selbox timer" );
     _timer.start( 250, true ); // millisec, singleShot
 }
 
