@@ -30,6 +30,7 @@
 class YQPkgObjListItem;
 class QAction;
 class QPopupMenu;
+using std::string;
 
 
 /**
@@ -390,7 +391,7 @@ public:
      * Set a column text via STL string.
      * (QListViewItem::setText() expects a QString!)
      **/
-    void setText( int column, const std::string text );
+    void setText( int column, const string text );
 
     /**
      * Re-declare ordinary setText() method so the compiler doesn't get

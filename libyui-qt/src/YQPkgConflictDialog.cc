@@ -157,6 +157,9 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
 
     _busyPopup = new QLabel( "   " + _( "Checking Dependencies..." ) + "   ", parent, 0,
 			     WStyle_Customize | WStyle_Dialog | WType_Dialog );
+    CHECK_PTR( _busyPopup );
+
+    _busyPopup->resize( _busyPopup->sizeHint() );
 }
 
 
@@ -208,12 +211,13 @@ YQPkgConflictDialog::solveAndShowConflicts()
     if ( _solveCount++ == 0 || averageSolveTime() > 0.0 )
     {
 	_busyPopup->show();
-	qApp->processEvents();
-	QPaintEvent paintEvent( _busyPopup->rect() );
-	QApplication::sendEvent( _busyPopup, &paintEvent );
 	
-	// _busyPopup->repaint();
+	// qApp->processEvents();
+	// QPaintEvent paintEvent( _busyPopup->rect() );
+	// QApplication::sendEvent( _busyPopup, &paintEvent );
 	// QTimer::singleShot( 0, _busyPopup, SLOT( repaint() ) );
+	
+	_busyPopup->repaint();
 	qApp->processEvents();
     }
 #endif

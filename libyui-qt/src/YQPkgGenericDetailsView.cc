@@ -26,6 +26,8 @@
 #include "YQi18n.h"
 #include "utf8.h"
 
+using std::string;
+
 
 YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
     : QTextBrowser( parent )
@@ -159,7 +161,7 @@ YQPkgGenericDetailsView::cell( const Date & contents )
 
 
 QString
-YQPkgGenericDetailsView::cell( const std::string & contents )
+YQPkgGenericDetailsView::cell( const string & contents )
 {
     return cell( QString::fromUtf8( contents.c_str() ) );
 }

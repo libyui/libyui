@@ -28,6 +28,9 @@
 class QPushButton;
 class QTextBrowser;
 
+using std::list;
+using std::string;
+
 
 /**
  * @short Dialog that shows a scrolled (HTML) text.
@@ -60,24 +63,24 @@ public:
      * Show a text and wait until the user confirmed with 'OK'.
      **/
     static void showText( QWidget * parent, const QString & text );
-    static void showText( QWidget * parent, const std::string & text );
-    static void showText( QWidget * parent, const std::list<std::string> & text );
+    static void showText( QWidget * parent, const string & text );
+    static void showText( QWidget * parent, const list<string> & text );
 
     /**
      * Show a text with a headline identifying a PMObject (name+summary).
      **/
     static void showText( QWidget * parent,
 			  PMObjectPtr pmObj,
-			  const std::list<std::string> & text );
+			  const list<string> & text );
     static void showText( QWidget * parent,
 			  PMObjectPtr pmObj,
-			  const std::string & text );
+			  const string & text );
 
     /**
      * Convert a string list into its HTML paragraphs (empty lines delimit
      * paragraphs).
      **/
-    static QString htmlParagraphs( const std::list<std::string> & text );
+    static QString htmlParagraphs( const list<string> & text );
 
     /**
      * Returns a uniform heading in HTML format.
@@ -107,14 +110,14 @@ public slots:
      * Set the text contents.
      **/
     void setText( const QString & text );
-    void setText( const std::string & text );
-    void setText( const std::list<std::string> & text );
+    void setText( const string & text );
+    void setText( const list<string> & text );
 
     /**
      * Show a text with a headline identifying a PMObject (name+summary).
      **/
     void setText( PMObjectPtr pmObj,
-		  const std::list<std::string> & text );
+		  const list<string> & text );
 
 protected:
 

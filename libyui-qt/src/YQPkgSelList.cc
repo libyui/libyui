@@ -22,15 +22,13 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 #include <qregexp.h>
-
 #include <Y2PM.h>
 #include <y2pm/PMSelectionManager.h>
-
 #include "YQi18n.h"
 #include "utf8.h"
-
 #include "YQPkgSelList.h"
 
+using std::set;
 
 
 YQPkgSelList::YQPkgSelList( QWidget *parent )
@@ -105,8 +103,8 @@ YQPkgSelList::filter()
 
 	if ( sel )
 	{
-	    std::set<PMSelectablePtr> slcList = sel->inspacks_ptrs();
-	    std::set<PMSelectablePtr>::const_iterator it = slcList.begin();
+	    set<PMSelectablePtr> slcList = sel->inspacks_ptrs();
+	    set<PMSelectablePtr>::const_iterator it = slcList.begin();
 
 	    while ( it != slcList.end() )
 	    {

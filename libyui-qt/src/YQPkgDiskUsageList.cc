@@ -31,6 +31,8 @@
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQi18n.h"
 
+using std::set;
+
 
 // Warning ranges for "disk space is running out" or "disk space overflow".
 // The WARN value triggers a warning popup once (!). The warning will not be
@@ -55,8 +57,8 @@ YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget *parent, int thresholdPercent )
 {
     _debug 	= false;
 
-    const std::set<PkgDuMaster::MountPoint>	du = Y2PM::packageManager().getDu().mountpoints();
-    std::set<PkgDuMaster::MountPoint>::iterator it = du.begin();
+    const set<PkgDuMaster::MountPoint>	du = Y2PM::packageManager().getDu().mountpoints();
+    set<PkgDuMaster::MountPoint>::iterator it = du.begin();
 
     while ( it != du.end() )
     {
@@ -82,8 +84,8 @@ YQPkgDiskUsageList::updateDiskUsage()
     runningOutWarning.clear();
     overflowWarning.clear();
 
-    const std::set<PkgDuMaster::MountPoint> 	du = Y2PM::packageManager().updateDu().mountpoints();
-    std::set<PkgDuMaster::MountPoint>::iterator it = du.begin();
+    const set<PkgDuMaster::MountPoint> 	du = Y2PM::packageManager().updateDu().mountpoints();
+    set<PkgDuMaster::MountPoint>::iterator it = du.begin();
 
     while ( it != du.end() )
     {

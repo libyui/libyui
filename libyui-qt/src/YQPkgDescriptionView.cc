@@ -23,6 +23,9 @@
 #include "YQi18n.h"
 #include "utf8.h"
 
+using std::list;
+using std::string;
+
 
 YQPkgDescriptionView::YQPkgDescriptionView( QWidget * parent )
     : YQPkgGenericDetailsView( parent )
@@ -57,8 +60,8 @@ YQPkgDescriptionView::showDetails( PMObjectPtr pmObj )
 
     bool auto_format  = true;
     bool preformatted = false;
-    std::list<std::string> description = pmObj->description();
-    std::list<std::string>::const_iterator it = description.begin();
+    list<string> description = pmObj->description();
+    list<string>::const_iterator it = description.begin();
 
     if ( it != description.end()
 	 && *it == "<!-- DT:Rich -->" )	// Special doctype for preformatted HTML

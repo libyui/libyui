@@ -23,13 +23,12 @@
 #define YQPkgConflictDialog_h
 
 #include <qdialog.h>
-#include <qlabel.h>
-
 
 class YQPkgConflictList;
 class PMManager;
 class QPushButton;
 class QPopupMenu;
+class QLabel;
 
 
 /**

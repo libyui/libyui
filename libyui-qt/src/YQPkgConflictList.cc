@@ -39,6 +39,9 @@
 #include "YQi18n.h"
 #include "utf8.h"
 
+using std::list;
+using std::string;
+
 
 #define LIST_SPLIT_THRESHOLD	8
 
@@ -78,9 +81,9 @@ void
 YQPkgConflictList::fill( PkgDep::ErrorResultList & badList )
 {
     clear();
-    std::string text;
+    string text;
 
-    std::list<PkgDep::ErrorResult>::iterator it = badList.begin();
+    list<PkgDep::ErrorResult>::iterator it = badList.begin();
 
     while ( it != badList.end() )
     {
@@ -271,7 +274,7 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
     , _conflict( errorResult )
     , _parentList( parentList )
 {
-    std::string name;
+    string name;
     PkgEdition edition;
 
     _resolutionsHeader	= 0;
@@ -484,8 +487,8 @@ YQPkgConflict::dumpList( QListViewItem * 	parent,
 	    }
 	}
 
-	std::string pkg1 = (*it).name;
-	std::string pkg2 = (*it).rel.asString();
+	string pkg1 = (*it).name;
+	string pkg2 = (*it).rel.asString();
 	QString text;
 
 	switch ( (*it).kind )
@@ -591,7 +594,7 @@ YQPkgConflict::addAlternativesList( QY2CheckListItem * parent )
     if ( _conflict.alternatives.empty() )
 	return;
 
-    std::list<PkgDep::Alternative>::const_iterator it = _conflict.alternatives.begin();
+    list<PkgDep::Alternative>::const_iterator it = _conflict.alternatives.begin();
 
     while ( it != _conflict.alternatives.end() )
     {
@@ -651,7 +654,7 @@ YQPkgConflict::dumpDeleteList( QListViewItem * parent )
     bool doSplit	= _conflict.remove_to_solve_conflict.size() > (unsigned) splitThreshold + 3;
     bool didSplit	= false;
     int  count		= 0;
-    std::list<PMSolvablePtr>::const_iterator it = _conflict.remove_to_solve_conflict.begin();
+    list<PMSolvablePtr>::const_iterator it = _conflict.remove_to_solve_conflict.begin();
 
     while ( it != _conflict.remove_to_solve_conflict.end() )
     {
@@ -930,7 +933,7 @@ YQPkgConflict::bruteForceDelete()
     if ( _conflict.remove_to_solve_conflict.empty() )
 	return;
 
-    std::list<PMSolvablePtr>::const_iterator it = _conflict.remove_to_solve_conflict.begin();
+    list<PMSolvablePtr>::const_iterator it = _conflict.remove_to_solve_conflict.begin();
 
     while ( it != _conflict.remove_to_solve_conflict.end() )
     {

@@ -34,6 +34,7 @@
 #include "YQPkgYouPatchList.h"
 #include "YQPkgTextDialog.h"
 
+using std::list;
 
 
 YQPkgYouPatchList::YQPkgYouPatchList( QWidget *parent )
@@ -119,8 +120,8 @@ YQPkgYouPatchList::filter()
 
 	if ( patch )
 	{
-	    std::list<PMPackagePtr> pkgList = patch->packages();
-	    std::list<PMPackagePtr>::const_iterator it = pkgList.begin();
+	    list<PMPackagePtr> pkgList = patch->packages();
+	    list<PMPackagePtr>::const_iterator it = pkgList.begin();
 
 	    while ( it != pkgList.end() )
 	    {

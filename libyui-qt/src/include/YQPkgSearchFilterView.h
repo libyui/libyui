@@ -32,6 +32,9 @@ class QCheckBox;
 class QPushButton;
 class QRadioButton;
 
+using std::list;
+using std::string;
+
 
 /**
  * @short Filter view for searching within packages
@@ -110,12 +113,12 @@ protected:
     /**
      * Check if a single pkg attribute matches the search criteria.
      **/
-    bool check( const std::string & attribute, const QRegExp & regexp );
+    bool check( const string & attribute, const QRegExp & regexp );
 
     /**
      * Check multi-line attribute
      **/
-    bool check( const std::list<std::string> & strList, const QRegExp & regexp );
+    bool check( const list<string> & strList, const QRegExp & regexp );
 
     /**
      * Check PkgRelList attribute (PMSolvable::provides(), PMSolvable::requires(), ...)

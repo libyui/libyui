@@ -23,8 +23,9 @@
 #define YQPkgDependenciesView_h
 
 #include <y2pm/PMPackage.h>
-
 #include "YQPkgGenericDetailsView.h"
+
+using std::string;
 
 
 /**
@@ -82,7 +83,7 @@ protected:
     /**
      * Returns a string containing a HTML table cell with 'contents'.
      **/
-    static QString cell( const std::string & contents	)
+    static QString cell( const string & contents	)
 	{ return YQPkgGenericDetailsView::cell( contents ); }
 };
 

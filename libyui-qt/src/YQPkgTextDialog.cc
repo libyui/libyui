@@ -35,9 +35,12 @@
 #include "YQi18n.h"
 #include "utf8.h"
 
-
 #define SPACING			6	// between subwidgets
 #define MARGIN			4	// around the widget
+
+using std::list;
+using std::string;
+
 
 
 YQPkgTextDialog::YQPkgTextDialog( const QString & text, QWidget * parent )
@@ -128,20 +131,20 @@ void YQPkgTextDialog::setText( const QString & text )
 }
 
 
-void YQPkgTextDialog::setText( const std::string & text )
+void YQPkgTextDialog::setText( const string & text )
 {
     setText( QString( text.c_str() ) );
 }
 
 
-void YQPkgTextDialog::setText( const std::list<std::string> & text )
+void YQPkgTextDialog::setText( const list<string> & text )
 {
     setText( htmlParagraphs( text ) );
 }
 
 
 void YQPkgTextDialog::setText( PMObjectPtr pmObj,
-			       const std::list<std::string> & text )
+			       const list<string> & text )
 {
     setText( htmlHeading( pmObj ) + htmlParagraphs( text ) );
 }
@@ -156,13 +159,13 @@ void YQPkgTextDialog::showText( QWidget * parent, const QString & text )
 }
 
 
-void YQPkgTextDialog::showText( QWidget * parent, const std::string & text )
+void YQPkgTextDialog::showText( QWidget * parent, const string & text )
 {
     showText( parent, QString( text.c_str() ) );
 }
 
 
-void YQPkgTextDialog::showText( QWidget * parent, const std::list<std::string> & text )
+void YQPkgTextDialog::showText( QWidget * parent, const list<string> & text )
 {
     showText( parent, htmlParagraphs( text ) );
 }
@@ -170,24 +173,24 @@ void YQPkgTextDialog::showText( QWidget * parent, const std::list<std::string> &
 
 void YQPkgTextDialog::showText( QWidget * parent,
 				PMObjectPtr pmObj,
-				const std::list<std::string> & text )
+				const list<string> & text )
 {
     showText( parent, htmlHeading( pmObj ) + htmlParagraphs( text ) );
 }
 
 void YQPkgTextDialog::showText( QWidget * parent,
 				PMObjectPtr pmObj,
-				const std::string & text )
+				const string & text )
 {
     showText( parent, htmlHeading( pmObj ) + QString( text.c_str() ) );
 }
 
 
 QString
-YQPkgTextDialog::htmlParagraphs( const std::list<std::string> & text )
+YQPkgTextDialog::htmlParagraphs( const list<string> & text )
 {
     QString html = "<p>";
-    std::list<std::string>::const_iterator it = text.begin();
+    list<string>::const_iterator it = text.begin();
 
     while ( it != text.end() )
     {

@@ -28,6 +28,9 @@
 #include "YQi18n.h"
 #include "utf8.h"
 
+using std::list;
+using std::string;
+
 
 YQPkgTechnicalDetailsView::YQPkgTechnicalDetailsView( QWidget * parent, bool youMode )
     : YQPkgGenericDetailsView( parent )
@@ -88,8 +91,8 @@ YQPkgTechnicalDetailsView::authorsListCell( PMPackagePtr pkg ) const
 {
     QString html = "<td align=top>";
     QString line;
-    std::list<std::string> authors = pkg->authors();
-    std::list<std::string>::const_iterator it = authors.begin();
+    list<string> authors = pkg->authors();
+    list<string>::const_iterator it = authors.begin();
 
     while ( it != authors.end() )
     {
@@ -108,7 +111,7 @@ YQPkgTechnicalDetailsView::authorsListCell( PMPackagePtr pkg ) const
 QString
 YQPkgTechnicalDetailsView::formatRpmGroup( PMPackagePtr pkg ) const
 {
-    std::string group = Y2PM::packageManager().translatedRpmGroup( pkg->group_ptr() );
+    string group = Y2PM::packageManager().translatedRpmGroup( pkg->group_ptr() );
     return fromUTF8( group );
 }
 

@@ -31,6 +31,7 @@
 class QVBox;
 class QWidgetStack;
 class QCursor;
+using std::string;
 
 
 class YUIQt :  public QApplication, public YUIInterpreter
@@ -112,7 +113,7 @@ public:
      * Make a screen shot in .png format and save it to 'filename'.
      * Opens a file selection box if 'filename' is empty.
      */
-    void makeScreenShot( std::string filename );
+    void makeScreenShot( string filename );
 
     /**
      * UI-specific runPkgSeleciton method.

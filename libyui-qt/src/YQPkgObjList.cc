@@ -34,6 +34,9 @@
 #include "YQi18n.h"
 #include "YQIconPool.h"
 
+using std::list;
+using std::string;
+
 
 YQPkgObjList::YQPkgObjList( QWidget *parent )
     : QY2ListView( parent )
@@ -677,7 +680,7 @@ YQPkgObjListItem::updateData()
 
 
 void
-YQPkgObjListItem::setText( int column, const std::string text )
+YQPkgObjListItem::setText( int column, const string text )
 {
     QListViewItem::setText( column, fromUTF8( text.c_str() ) );
 }
@@ -817,7 +820,7 @@ YQPkgObjListItem::cycleStatus()
 void
 YQPkgObjListItem::showNotifyTexts( PMSelectable::UI_Status status )
 {
-    std::list<std::string> text;
+    list<string> text;
 
     switch ( status )
     {

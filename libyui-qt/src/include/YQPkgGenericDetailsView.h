@@ -28,6 +28,7 @@
 
 
 class QTabWidget;
+using std::string;
 
 
 /**
@@ -90,7 +91,7 @@ public:
      **/
     static QString cell( QString contents		);
     static QString cell( int contents 			);
-    static QString cell( const std::string & contents	);
+    static QString cell( const string & contents	);
     static QString cell( const Date & date		);
 
     /**

@@ -41,6 +41,9 @@
 #include "utf8.h"
 #include "YUIQt.h"
 
+using std::list;
+using std::string;
+
 
 #define SPACING                 6       // between subwidgets
 #define MARGIN                  4       // around the widget
@@ -260,7 +263,7 @@ YQPkgSearchFilterView::check( PMPackagePtr pkg, const QRegExp & regexp )
 
 
 bool
-YQPkgSearchFilterView::check( const std::string & attribute, const QRegExp & regexp )
+YQPkgSearchFilterView::check( const string & attribute, const QRegExp & regexp )
 {
     QString att    	= attribute.c_str();
     QString searchText	= _searchText->currentText();
@@ -285,10 +288,10 @@ YQPkgSearchFilterView::check( const std::string & attribute, const QRegExp & reg
 
 
 bool
-YQPkgSearchFilterView::check( const std::list<std::string> & strList, const QRegExp & regexp )
+YQPkgSearchFilterView::check( const list<string> & strList, const QRegExp & regexp )
 {
-    std::string text;
-    std::list<std::string>::const_iterator it = strList.begin();
+    string text;
+    list<string>::const_iterator it = strList.begin();
 
     while ( it != strList.end() )
     {
@@ -304,7 +307,7 @@ YQPkgSearchFilterView::check( const std::list<std::string> & strList, const QReg
 bool
 YQPkgSearchFilterView::check( const PMSolvable::PkgRelList_type & relList, const QRegExp & regexp )
 {
-    std::string text;
+    string text;
 
     PMSolvable::PkgRelList_const_iterator it = relList.begin();
 
