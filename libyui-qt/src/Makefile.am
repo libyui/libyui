@@ -69,12 +69,14 @@ liby2qt_la_SOURCES = 				\
 	YQPkgChangesDialog.cc			\
 	YQPkgConflictDialog.cc			\
 	YQPkgConflictList.cc			\
+	YQPkgDependenciesView.cc		\
 	YQPkgDescriptionDialog.cc		\
 	YQPkgDescriptionView.cc			\
-	YQPkgDependenciesView.cc		\
 	YQPkgDiskUsageList.cc			\
 	YQPkgDiskUsageWarningDialog.cc		\
 	YQPkgGenericDetailsView.cc		\
+	YQPkgLangFilterView.cc			\
+	YQPkgLangSelList.cc			\
 	YQPkgList.cc				\
 	YQPkgObjList.cc				\
 	YQPkgRpmGroupTagsFilterView.cc		\
@@ -100,8 +102,8 @@ liby2qt_la_SOURCES = 				\
 	YQSplit.cc				\
 	YQSquash.cc				\
 	YQTable.cc				\
-	YQTime.cc				\
 	YQTextEntry.cc				\
+	YQTime.cc				\
 	YQTree.cc				\
 	YQWizard.cc				\
 	YQWizardButton.cc			\
@@ -153,12 +155,14 @@ BUILT_SOURCES =					\
 	YQPkgChangesDialog.moc			\
 	YQPkgConflictDialog.moc			\
 	YQPkgConflictList.moc			\
+	YQPkgDependenciesView.moc		\
 	YQPkgDescriptionDialog.moc		\
 	YQPkgDescriptionView.moc		\
-	YQPkgDependenciesView.moc		\
 	YQPkgDiskUsageList.moc			\
 	YQPkgDiskUsageWarningDialog.moc		\
 	YQPkgGenericDetailsView.moc		\
+	YQPkgLangFilterView.moc			\
+	YQPkgLangSelList.moc			\
 	YQPkgList.moc				\
 	YQPkgObjList.moc			\
 	YQPkgRpmGroupTagsFilterView.moc		\
@@ -228,12 +232,14 @@ YQPartitionSplitter.o YQPartitionSplitter.lo:			YQPartitionSplitter.moc
 YQPkgChangesDialog.o YQPkgChangesDialog.lo:			YQPkgChangesDialog.moc
 YQPkgConflictDialog.o YQPkgConflictDialog.lo:			YQPkgConflictDialog.moc
 YQPkgConflictList.o YQPkgConflictList.lo:			YQPkgConflictList.moc
+YQPkgDependenciesView.o YQPkgDependenciesView.lo:		YQPkgDependenciesView.moc
 YQPkgDescriptionDialog.o YQPkgDescriptionDialog.lo:		YQPkgDescriptionDialog.moc
 YQPkgDescriptionView.o YQPkgDescriptionView.lo:			YQPkgDescriptionView.moc
-YQPkgDependenciesView.o YQPkgDependenciesView.lo:		YQPkgDependenciesView.moc
 YQPkgDiskUsageList.o YQPkgDiskUsageList.lo:			YQPkgDiskUsageList.moc
 YQPkgDiskUsageWarningDialog.o YQPkgDiskUsageWarningDialog.lo:	YQPkgDiskUsageWarningDialog.moc
 YQPkgGenericDetailsView.o YQPkgGenericDetailsView.lo:		YQPkgGenericDetailsView.moc
+YQPkgLangFilterView.o YQPkgLangFilterView.lo:			YQPkgLangFilterView.moc
+YQPkgLangSelList.o YQPkgLangSelList.lo:				YQPkgLangSelList.moc
 YQPkgList.o YQPkgList.lo:					YQPkgList.moc
 YQPkgObjList.o YQPkgObjList.lo:					YQPkgObjList.moc
 YQPkgRpmGroupTagsFilterView.o YQPkgRpmGroupTagsFilterView.lo:	YQPkgRpmGroupTagsFilterView.moc
@@ -301,12 +307,14 @@ YQPartitionSplitter.moc:		include/YQPartitionSplitter.h
 YQPkgChangesDialog.moc:			include/YQPkgChangesDialog.h
 YQPkgConflictDialog.moc:		include/YQPkgConflictDialog.h
 YQPkgConflictList.moc:			include/YQPkgConflictList.h
+YQPkgDependenciesView.moc:		include/YQPkgDependenciesView.h
 YQPkgDescriptionDialog.moc:		include/YQPkgDescriptionDialog.h
 YQPkgDescriptionView.moc:		include/YQPkgDescriptionView.h
-YQPkgDependenciesView.moc:		include/YQPkgDependenciesView.h
 YQPkgDiskUsageList.moc:			include/YQPkgDiskUsageList.h
 YQPkgDiskUsageWarningDialog.moc:	include/YQPkgDiskUsageWarningDialog.h
 YQPkgGenericDetailsView.moc:		include/YQPkgGenericDetailsView.h
+YQPkgLangFilterView.moc:		include/YQPkgLangFilterView.h
+YQPkgLangSelList.moc:			include/YQPkgLangSelList.h
 YQPkgList.moc:				include/YQPkgList.h
 YQPkgObjList.moc:			include/YQPkgObjList.h
 YQPkgRpmGroupTagsFilterView.moc:	include/YQPkgRpmGroupTagsFilterView.h
