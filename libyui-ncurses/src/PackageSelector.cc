@@ -1301,6 +1301,7 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
     
     // open the popup with the help text
     NCPopupInfo pkgHelp( wpos( 1, 1 ), headline, YCPString( text ) );
+    pkgHelp.setNiceSize( (NCurses::cols()*65)/100, (NCurses::lines()*85)/100 );
     pkgHelp.showInfoPopup( );
 
     if ( packageList )
