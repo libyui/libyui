@@ -307,72 +307,68 @@ YQPkgObjList::keyPressEvent( QKeyEvent *event )
 
 	    if ( item )
 	    {
-		if ( event->state() == 0 ||		// No Ctrl / Alt / Shift etc. pressed
-		     event->state() == Qt::Keypad )
-		{
-		    bool installed = item->pmObj()->hasInstalledObj();
-		    PMSelectable::UI_Status status = item->status();
+		bool installed = item->pmObj()->hasInstalledObj();
+		PMSelectable::UI_Status status = item->status();
 		    
-		    switch( event->key() )
-		    {
-			case Qt::Key_Space:		// Cycle
-			    item->cycleStatus();
-			    event->accept();
-			    return;
+		switch( event->ascii() )
+		{
+		    case Qt::Key_Space:		// Cycle
+			item->cycleStatus();
+			event->accept();
+			return;
 				
-			case Qt::Key_Plus:		// Grab everything - install or update
+		    case '+':	// Grab everything - install or update
 
-			    if ( installed )
-			    {
-				PMSelectable::UI_Status newStatus = PMSelectable::S_KeepInstalled;
+			if ( installed )
+			{
+			    PMSelectable::UI_Status newStatus = PMSelectable::S_KeepInstalled;
 				    
-				if ( item->candidateIsNewer() )
-				    newStatus = PMSelectable::S_Update;
+			    if ( item->candidateIsNewer() )
+				newStatus = PMSelectable::S_Update;
 				    
-				setCurrentStatus( newStatus );
-			    }
-			    else
-				setCurrentStatus( PMSelectable::S_Install );
-			    selectNextItem();
-			    event->accept();
-			    return;
+			    setCurrentStatus( newStatus );
+			}
+			else
+			    setCurrentStatus( PMSelectable::S_Install );
+			selectNextItem();
+			event->accept();
+			return;
 				
-			case Qt::Key_Minus:		// Get rid of everything - don't install or delete
-			    setCurrentStatus( installed ? PMSelectable::S_Del : PMSelectable::S_NoInst );
-			    selectNextItem();
-			    event->accept();
-			    return;
+		    case '-':	// Get rid of everything - don't install or delete
+			setCurrentStatus( installed ? PMSelectable::S_Del : PMSelectable::S_NoInst );
+			selectNextItem();
+			event->accept();
+			return;
 				
-			case Qt::Key_Exclam:	// Taboo
+		    case '!':	// Taboo
 
-			    if ( ! installed )
-				setCurrentStatus( PMSelectable::S_Taboo );
-			    selectNextItem();
-			    event->accept();
-			    return;
+			if ( ! installed )
+			    setCurrentStatus( PMSelectable::S_Taboo );
+			selectNextItem();
+			event->accept();
+			return;
 				
-			case Qt::Key_Greater:	// Update what is worth to be updated
+		    case '>':	// Update what is worth to be updated
 
-			    if ( installed && item->candidateIsNewer() )
-				setCurrentStatus( PMSelectable::S_Update );
-			    selectNextItem();
-			    event->accept();
-			    return;
+			if ( installed && item->candidateIsNewer() )
+			    setCurrentStatus( PMSelectable::S_Update );
+			selectNextItem();
+			event->accept();
+			return;
 				
-			case Qt::Key_Less:		// Revert update
+		    case '<':	// Revert update
 
-			    if ( status == PMSelectable::S_Update ||
-				 status == PMSelectable::S_AutoUpdate )
-			    {
-				setCurrentStatus( PMSelectable::S_KeepInstalled );
-			    }
-			    selectNextItem();
-			    event->accept();
-			    return;
-		    }
-
-		    y2milestone( "Key code: %u (0x%x)", (unsigned) event->key(), (unsigned) event->key() );
+			if ( status == PMSelectable::S_Update ||
+			     status == PMSelectable::S_AutoUpdate )
+			{
+			    setCurrentStatus( PMSelectable::S_KeepInstalled );
+			}
+			selectNextItem();
+			event->accept();
+			return;
 		}
+
+		y2milestone( "Key code: %u (0x%x)", (unsigned) event->key(), (unsigned) event->key() );
 	    }
 	}
     }
