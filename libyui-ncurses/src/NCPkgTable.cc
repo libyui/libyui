@@ -471,14 +471,23 @@ void NCPkgTable::fillHeader( )
 	    header.push_back( "L" + PkgNames::DepsKind() );	
 	    break;
 	}
-	case T_Selections:{
+	case T_Selections: {
 	    header.reserve(3);
 	    header.push_back( "L" + PkgNames::PkgStatus() );
 	    header.push_back( "L" + PkgNames::SelectionName() );
 	    break;
 	}
+	case T_Availables: {
+	    header.reserve(6);
+	    header.push_back( "L" + PkgNames::PkgStatus() );
+	    header.push_back( "L" + PkgNames::PkgName() );
+	    header.push_back( "L" + PkgNames::PkgVersion() );
+	    header.push_back( "L" + PkgNames::PkgInstSource() );
+	    header.push_back( "L" + PkgNames::PkgSize() );
+	    break;
+	}
 	default: {
-	    header.reserve(5);
+	    header.reserve(4);
 	    header.push_back( "L" + PkgNames::PkgStatus() );
 	    header.push_back( "L" + PkgNames::PkgName() );
 	    header.push_back( "L" + PkgNames::PkgSummary() );

@@ -729,6 +729,11 @@ public:
     static const string PkgVersion();
 
     /**
+     *  Column header package source installed
+     */
+    static const string PkgInstSource();
+    
+    /**
      *  Column header package version new
      */
     static const string PkgVersionNew();

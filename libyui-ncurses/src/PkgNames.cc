@@ -1351,6 +1351,13 @@ const string PkgNames::PkgVersion()
     return value;
 }
 
+const string PkgNames::PkgInstSource()
+{
+    // column header installation source e.g. SuSE 9.0 Professional (keep it short!)
+    static const string value = _( "Installation Source" );
+    return value;
+}
+
 const string PkgNames::PkgVersionNew()
 {
     // column header available package version (keep it short - use abbreviation!)
