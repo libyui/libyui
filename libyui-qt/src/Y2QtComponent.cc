@@ -72,6 +72,8 @@ Y2QtComponent::Y2QtComponent( int argc, char **argv, bool with_threads, Y2Compon
     _decorate_toplevel_window	= true;
     screenShotNameTemplate 	= "";
 
+    qApp->installEventFilter( this );
+
     init ();
 }
 
@@ -237,7 +239,6 @@ void Y2QtComponent::init ()
     _widget_stack = new QWidgetStack( _main_win );
     _widget_stack->setFocusPolicy( QWidget::StrongFocus );
     setMainWidget( _main_win );
-    qApp->installEventFilter( this );
     _main_win->installEventFilter( this );
     _main_win->resize( _default_size );
 
