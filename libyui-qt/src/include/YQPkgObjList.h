@@ -247,6 +247,7 @@ protected:
 
     /**
      * Create the actions for the context menus.
+     * Note: This is intentionally not virtual!
      **/
     void createActions();
 
@@ -293,7 +294,6 @@ public:
     QAction *		actionSetCurrentDelete;
     QAction *		actionSetCurrentUpdate;
     QAction *		actionSetCurrentTaboo;
-    QAction *		actionSetCurrentProtected;
 
     QAction *		actionSetListInstall;
     QAction *		actionSetListDontInstall;
@@ -302,7 +302,6 @@ public:
     QAction *		actionSetListUpdate;
     QAction *		actionSetListUpdateForce;
     QAction *		actionSetListTaboo;
-    QAction *		actionSetListProtected;
 };
 
 

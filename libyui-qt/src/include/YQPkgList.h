@@ -61,6 +61,14 @@ public:
      **/
     void exportList( const QString filename, bool interactive ) const;
 
+    /**
+     * Add a submenu "All in this list..." to 'menu'.
+     * Returns the newly created submenu.
+     *
+     * Reimplemented from YQPkgObjList.
+     **/
+    virtual QPopupMenu * addAllInListSubMenu( QPopupMenu * menu );
+
 
 public slots:
 
@@ -119,6 +127,25 @@ public slots:
 protected:
 
     /**
+     * Create (additional) actions for the context menus.
+     **/
+    void createActions();
+    
+    /**
+     * Create the context menu for items that are not installed.
+     *
+     * Reimplemented from YQPkgObjList.
+     **/
+    virtual void createNotInstalledContextMenu();
+
+    /**
+     * Create the context menu for installed items.
+     *
+     * Reimplemented from YQPkgObjList.
+     **/
+    virtual void createInstalledContextMenu();
+
+    /**
      * Create context menu for source RPMs.
      **/
     void createSourceRpmContextMenu();
@@ -143,6 +170,9 @@ protected:
 
 public:
 
+    QAction *		actionSetCurrentProtected;
+    QAction *		actionSetListProtected;
+    
     QAction *		actionInstallSourceRpm;
     QAction *		actionDontInstallSourceRpm;
     QAction *		actionInstallListSourceRpms;

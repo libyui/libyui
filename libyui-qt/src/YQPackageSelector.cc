@@ -614,12 +614,6 @@ YQPackageSelector::addMenus()
     if ( ! _youMode )
 	_extrasMenu->insertItem( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), CTRL + Key_A );
 
-    if ( _pkgList )
-    {
-	_extrasMenu->insertItem( _( "Export &Package List to Text File" ), _pkgList, SLOT( askExportList() ) );
-	_extrasMenu->insertSeparator();
-    }
-
     if ( ! _youMode && _pkgConflictDialog )
 	YQPkgConflict::actionResetIgnoredConflicts( _pkgConflictDialog )->addTo( _extrasMenu );
 

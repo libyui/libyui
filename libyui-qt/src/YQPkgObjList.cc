@@ -307,8 +307,6 @@ YQPkgObjList::createActions()
     actionSetCurrentDelete		= createAction( PMSelectable::S_Del,		"[-]"		);
     actionSetCurrentUpdate		= createAction( PMSelectable::S_Update,		"[>], [+]"	);
     actionSetCurrentTaboo		= createAction( PMSelectable::S_Taboo,		"[!]"		);
-    actionSetCurrentProtected		= createAction( PMSelectable::S_Protected,	"[*]"		);
-
 
     actionSetListInstall		= createAction( PMSelectable::S_Install,	"", true );
     actionSetListDontInstall		= createAction( PMSelectable::S_NoInst,		"", true );
@@ -328,7 +326,6 @@ YQPkgObjList::createActions()
 							true );
 
     actionSetListTaboo			= createAction( PMSelectable::S_Taboo,		"", true );
-    actionSetListProtected		= createAction( PMSelectable::S_Protected,	"", true );
 
     connect( actionSetCurrentInstall,	     SIGNAL( activated() ), this, SLOT( setCurrentInstall()	  ) );
     connect( actionSetCurrentDontInstall,    SIGNAL( activated() ), this, SLOT( setCurrentDontInstall()	  ) );
@@ -336,7 +333,6 @@ YQPkgObjList::createActions()
     connect( actionSetCurrentDelete,	     SIGNAL( activated() ), this, SLOT( setCurrentDelete()	  ) );
     connect( actionSetCurrentUpdate,	     SIGNAL( activated() ), this, SLOT( setCurrentUpdate()	  ) );
     connect( actionSetCurrentTaboo,	     SIGNAL( activated() ), this, SLOT( setCurrentTaboo()	  ) );
-    connect( actionSetCurrentProtected,	     SIGNAL( activated() ), this, SLOT( setCurrentProtected()	  ) );
 
     connect( actionSetListInstall,	     SIGNAL( activated() ), this, SLOT( setListInstall()	  ) );
     connect( actionSetListDontInstall,	     SIGNAL( activated() ), this, SLOT( setListDontInstall()	  ) );
@@ -345,7 +341,6 @@ YQPkgObjList::createActions()
     connect( actionSetListUpdate,	     SIGNAL( activated() ), this, SLOT( setListUpdate()		  ) );
     connect( actionSetListUpdateForce,	     SIGNAL( activated() ), this, SLOT( setListUpdateForce()	  ) );
     connect( actionSetListTaboo,	     SIGNAL( activated() ), this, SLOT( setListTaboo()		  ) );
-    connect( actionSetListProtected,	     SIGNAL( activated() ), this, SLOT( setListProtected()	  ) );
 }
 
 
@@ -418,7 +413,6 @@ YQPkgObjList::createInstalledContextMenu()
     actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
     actionSetCurrentDelete->addTo( _installedContextMenu );
     actionSetCurrentUpdate->addTo( _installedContextMenu );
-    actionSetCurrentProtected->addTo( _installedContextMenu );
 
     addAllInListSubMenu( _installedContextMenu );
 }
@@ -437,7 +431,6 @@ YQPkgObjList::addAllInListSubMenu( QPopupMenu * menu )
     actionSetListUpdate->addTo( submenu );
     actionSetListUpdateForce->addTo( submenu );
     actionSetListTaboo->addTo( submenu );
-    actionSetListProtected->addTo( submenu );
 
     menu->insertItem( _( "&All in This List" ), submenu );
 
@@ -486,7 +479,6 @@ YQPkgObjList::updateActions( YQPkgObjListItem * item )
 	actionSetCurrentTaboo->setEnabled( false);
 
 	actionSetCurrentKeepInstalled->setEnabled( true );
-	actionSetCurrentProtected->setEnabled( true );
 	actionSetCurrentDelete->setEnabled( true );
 	actionSetCurrentUpdate->setEnabled( pmObj->hasCandidateObj() );
     }
@@ -497,7 +489,6 @@ YQPkgObjList::updateActions( YQPkgObjListItem * item )
 	actionSetCurrentTaboo->setEnabled( true );
 
 	actionSetCurrentKeepInstalled->setEnabled( false);
-	actionSetCurrentProtected->setEnabled( false );
 	actionSetCurrentDelete->setEnabled( false );
 	actionSetCurrentUpdate->setEnabled( false );
     }

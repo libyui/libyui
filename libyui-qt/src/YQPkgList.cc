@@ -73,6 +73,7 @@ YQPkgList::YQPkgList( QWidget *parent )
     setColumnAlignment( sizeCol(), Qt::AlignRight );
     setAllColumnsShowFocus( true );
 
+    createActions();
     createSourceRpmContextMenu();
 }
 
@@ -143,33 +144,6 @@ YQPkgList::sizeHint() const
 void
 YQPkgList::createSourceRpmContextMenu()
 {
-    actionInstallSourceRpm		= createAction( _( "&Install Source" ),
-							statusIcon( PMSelectable::S_Install, true ),
-							statusIcon( PMSelectable::S_Install, false ) );
-
-    actionDontInstallSourceRpm		= createAction( _( "Do &Not Install Source" ),
-							statusIcon( PMSelectable::S_NoInst, true ),
-							statusIcon( PMSelectable::S_NoInst, false ) );
-
-    actionInstallListSourceRpms		= createAction( _( "&Install All Available Sources" ),
-							statusIcon( PMSelectable::S_Install, true ),
-							statusIcon( PMSelectable::S_Install, false ),
-							QString::null,		// key
-							true );			// enabled
-
-    actionDontInstallListSourceRpms	= createAction( _( "Do &Not Install Any Sources" ),
-							statusIcon( PMSelectable::S_NoInst, true ),
-							statusIcon( PMSelectable::S_NoInst, false ),
-							QString::null,		// key
-							true );			// enabled
-
-    connect( actionInstallSourceRpm,		SIGNAL( activated() ), this, SLOT( setInstallCurrentSourceRpm()	    ) );
-    connect( actionDontInstallSourceRpm,	SIGNAL( activated() ), this, SLOT( setDontInstallCurrentSourceRpm() ) );
-
-    connect( actionInstallListSourceRpms,	SIGNAL( activated() ), this, SLOT( setInstallListSourceRpms()	    ) );
-    connect( actionDontInstallListSourceRpms,	SIGNAL( activated() ), this, SLOT( setDontInstallListSourceRpms()   ) );
-
-
     _sourceRpmContextMenu = new QPopupMenu( this );
 
     actionInstallSourceRpm->addTo( _sourceRpmContextMenu );
@@ -230,6 +204,103 @@ YQPkgList::setInstallListSourceRpms( bool installSourceRpm )
 }
 
 
+
+void
+YQPkgList::createNotInstalledContextMenu()
+{
+    _notInstalledContextMenu = new QPopupMenu( this );
+    CHECK_PTR( _notInstalledContextMenu );
+
+    actionSetCurrentInstall->addTo( _notInstalledContextMenu );
+    actionSetCurrentDontInstall->addTo( _notInstalledContextMenu );
+    actionSetCurrentTaboo->addTo( _notInstalledContextMenu );
+
+    addAllInListSubMenu( _notInstalledContextMenu );
+
+    
+    _notInstalledContextMenu->insertSeparator();
+    _notInstalledContextMenu->insertItem( _( "Export this List to &Text File..." ),
+					  this, SLOT( askExportList() ) );
+}
+
+
+void
+YQPkgList::createInstalledContextMenu()
+{
+    _installedContextMenu = new QPopupMenu( this );
+    CHECK_PTR( _installedContextMenu );
+
+    actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
+    actionSetCurrentDelete->addTo( _installedContextMenu );
+    actionSetCurrentUpdate->addTo( _installedContextMenu );
+    actionSetCurrentProtected->addTo( _installedContextMenu );
+
+    addAllInListSubMenu( _installedContextMenu );
+    
+    _installedContextMenu->insertSeparator();
+    _installedContextMenu->insertItem( _( "Export this List to &Text File..." ),
+				       this, SLOT( askExportList() ) );
+}
+
+
+QPopupMenu *
+YQPkgList::addAllInListSubMenu( QPopupMenu * menu )
+{
+    QPopupMenu * submenu = new QPopupMenu( menu );
+    CHECK_PTR( submenu );
+
+    actionSetListInstall->addTo( submenu );
+    actionSetListDontInstall->addTo( submenu );
+    actionSetListKeepInstalled->addTo( submenu );
+    actionSetListDelete->addTo( submenu );
+    actionSetListUpdate->addTo( submenu );
+    actionSetListUpdateForce->addTo( submenu );
+    actionSetListTaboo->addTo( submenu );
+    actionSetListProtected->addTo( submenu );
+
+    menu->insertItem( _( "&All in This List" ), submenu );
+
+    return submenu;
+}
+
+
+void
+YQPkgList::createActions()
+{
+    actionSetCurrentProtected		= createAction( PMSelectable::S_Protected, "[*]" );
+    actionSetListProtected		= createAction( PMSelectable::S_Protected, "", true );
+    
+    actionInstallSourceRpm		= createAction( _( "&Install Source" ),
+							statusIcon( PMSelectable::S_Install, true ),
+							statusIcon( PMSelectable::S_Install, false ) );
+
+    actionDontInstallSourceRpm		= createAction( _( "Do &Not Install Source" ),
+							statusIcon( PMSelectable::S_NoInst, true ),
+							statusIcon( PMSelectable::S_NoInst, false ) );
+
+    actionInstallListSourceRpms		= createAction( _( "&Install All Available Sources" ),
+							statusIcon( PMSelectable::S_Install, true ),
+							statusIcon( PMSelectable::S_Install, false ),
+							QString::null,		// key
+							true );			// enabled
+
+    actionDontInstallListSourceRpms	= createAction( _( "Do &Not Install Any Sources" ),
+							statusIcon( PMSelectable::S_NoInst, true ),
+							statusIcon( PMSelectable::S_NoInst, false ),
+							QString::null,		// key
+							true );			// enabled
+
+    connect( actionSetCurrentProtected,	     	SIGNAL( activated() ), this, SLOT( setCurrentProtected()	  ) );
+    connect( actionSetListProtected,	     	SIGNAL( activated() ), this, SLOT( setListProtected()	  ) );
+    
+    connect( actionInstallSourceRpm,		SIGNAL( activated() ), this, SLOT( setInstallCurrentSourceRpm()	    ) );
+    connect( actionDontInstallSourceRpm,	SIGNAL( activated() ), this, SLOT( setDontInstallCurrentSourceRpm() ) );
+
+    connect( actionInstallListSourceRpms,	SIGNAL( activated() ), this, SLOT( setInstallListSourceRpms()	    ) );
+    connect( actionDontInstallListSourceRpms,	SIGNAL( activated() ), this, SLOT( setDontInstallListSourceRpms()   ) );
+}
+
+
 void
 YQPkgList::updateActions( YQPkgObjListItem * pkgObjListItem )
 {
@@ -242,6 +313,8 @@ YQPkgList::updateActions( YQPkgObjListItem * pkgObjListItem )
 	actionInstallSourceRpm->setEnabled( item->hasSourceRpm() );
 	actionDontInstallSourceRpm->setEnabled( item->hasSourceRpm() );
     }
+    
+    actionSetCurrentProtected->setEnabled( item->pmObj()->hasInstalledObj() );
 }
 
 
