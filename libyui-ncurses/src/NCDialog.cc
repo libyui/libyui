@@ -21,6 +21,7 @@
 #include "NCPopupInfo.h"
 #include "NCMenuButton.h"
 #include "YShortcut.h"
+#include "PkgNames.h"
 
 #if 0
 #undef  DBG_CLASS
@@ -972,10 +973,13 @@ void NCDialog::processInput( int timeout )
      case KEY_F(1):
 	 if ( !helpPopup )
 	 {
-	     string helpText = describeFunctionKeys();
-	     helpPopup = new NCPopupInfo( wpos(1,1), YCPString( "Text mode navigation" ),
-					  YCPString( "Press F1 again to get help<br>"
-						     + helpText ),
+	     string helpText = "";
+	     bool hasF1 = describeFunctionKeys( helpText ) ;
+	     helpPopup = new NCPopupInfo( wpos(1,1),  PkgNames::TextmodeHelp().str(),
+					  YCPString( (hasF1?PkgNames::TextmodeHelp1().str():PkgNames::TextmodeHelp2().str()) +
+						     PkgNames::TextmodeHelp3().str() +
+						     helpText
+						     ),
 					  false );
 	 }
 	 if ( helpPopup )
@@ -1038,11 +1042,12 @@ void NCDialog::processInput( int timeout )
 //	DESCRIPTION : get all PushButtons and MenuButtons with `opt(`key_Fn)
 //		      and create a text like F1: Help, F2: Info and so on 
 //
-string NCDialog::describeFunctionKeys()
+bool NCDialog::describeFunctionKeys( string & helpText )
 {
     string text = "";
-    char no[20];
+    char key[20];
     YCPString label( "" );
+    bool hasF1 = false;
     
     for ( tnode<NCWidget*> * c = this->Next(); c; c = c->Next() )
     {
@@ -1060,9 +1065,13 @@ string NCDialog::describeFunctionKeys()
 
 		// Get rid of unwanted '&' shortcut markers
 		string desc = YShortcut::cleanShortcutString(  propertyValue->asString()->value() );
-	    
-		sprintf( no, "F%d: ",  fkey - KEY_F(1) + 1 );
-		text += no + desc + "<br>";
+		int no =  fkey - KEY_F(1) + 1;
+		if ( no == 1 )
+		{
+		    hasF1 = true;
+		}
+		sprintf( key, "F%d: ",  no );
+		text += key + desc + "<br>";
 	    }
 	    else
 	    {
@@ -1070,8 +1079,9 @@ string NCDialog::describeFunctionKeys()
 	    }
 	}
     }
+    helpText = text;
 
-    return text;
+    return hasF1;
 }
 
 ///////////////////////////////////////////////////////////////////
