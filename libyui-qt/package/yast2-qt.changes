@@ -1,7 +1,7 @@
 -------------------------------------------------------------------
 Mon Jun 24 13:40:16 CEST 2002 - arvin@suse.de
 
-- renamed to yast2-qt
+- renamed from yast2-ui-qt to yast2-qt
 
 -------------------------------------------------------------------
 Thu Jun 06 14:55:22 CEST 2002 - arvin@suse.de
