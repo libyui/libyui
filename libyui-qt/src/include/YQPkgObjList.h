@@ -178,7 +178,7 @@ public slots:
     /**
      * Display a one-line message in the list.
      **/
-    void message( const QString & text );
+    virtual void message( const QString & text );
 
 
     // Direct access to some states for menu actions

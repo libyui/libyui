@@ -87,6 +87,12 @@ public slots:
      **/
     void showRawPatchInfo();
 
+    /**
+     * Display a one-line message in the list.
+     * Reimplemented from YQPkgObjList.
+     **/
+    virtual void message( const QString & text );
+
 
 public:
 

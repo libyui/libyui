@@ -111,8 +111,24 @@ YQPkgYouPatchList::fillList()
 	++it;
     }
 
+    if ( ! firstChild() )
+	message( _( "No patches available." ) );
+
     y2debug( "YOU patch list filled" );
 }
+
+
+
+void
+YQPkgYouPatchList::message( const QString & text )
+{
+    QY2ListViewItem * item = new QY2ListViewItem( this );
+    CHECK_PTR( item );
+
+    item->setText( 1, text );
+    item->setBackgroundColor( QColor( 0xE0, 0xE0, 0xF8 ) );
+}
+
 
 
 void
