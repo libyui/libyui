@@ -35,6 +35,7 @@ class QListView;
 class QTabWidget;
 class QProgressBar;
 class QCheckBox;
+class QY2ComboTabWidget;
 class YQPkgList;
 class YQPkgRpmGroupTagsFilterView;
 class YQPkgDescriptionView;
@@ -129,6 +130,7 @@ protected:
 
 
     QWidget			* _leftPane;
+    QY2ComboTabWidget		* _filters;
     QProgressBar		* _diskSpace;
     YQPkgList			* _pkgList;
     QTabWidget			* _detailsViews;

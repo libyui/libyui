@@ -105,11 +105,20 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     QTimer::singleShot( 2500, this, SLOT( preAlphaWarning() ) );
 #endif
 
+#if 0
     // Delay loading the data until the main loop: This should make sure the
     // dialog is visible and all set up so the user at least sees an empty
     // dialog rather than nothing.
     QTimer::singleShot( 100, this, SIGNAL( loadData() ) );
+#else
+    emit loadData();
+#endif
 
+    CHECK_PTR( _filters );
+    CHECK_PTR( _selList );
+    _filters->showPage( _selList );
+    _selList->filter();
+    
     y2milestone( "PackageSelector init done" );
 }
 
@@ -144,22 +153,22 @@ YQPackageSelector::layoutLeftPane( QWidget * parent )
 void
 YQPackageSelector::layoutFilters( QWidget * parent )
 {
-    QY2ComboTabWidget * filters = new QY2ComboTabWidget( _( "F&ilter:" ), parent );
-    CHECK_PTR( filters );
+    _filters = new QY2ComboTabWidget( _( "F&ilter:" ), parent );
+    CHECK_PTR( _filters );
 
 
     //
     // Selections view
     //
 
-    _selectionsFilterView = new YQPkgSelectionsFilterView( yuiqt, parent );
+    _selectionsFilterView = new YQPkgSelectionsFilterView( parent );
     CHECK_PTR( _selectionsFilterView );
-    filters->addPage( _( "Selections" ), _selectionsFilterView );
+    _filters->addPage( _( "Selections" ), _selectionsFilterView );
 
     _selList = _selectionsFilterView->selList();
     CHECK_PTR( _selList );
 
-    connect( filters, 	SIGNAL( currentChanged( QWidget * ) ),
+    connect( _filters, 	SIGNAL( currentChanged( QWidget * ) ),
 	     _selList,	SLOT  ( filterIfVisible()           ) );
 
 
@@ -167,27 +176,27 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     // RPM group tags view
     //
 
-    _rpmGroupTagsFilterView = new YQPkgRpmGroupTagsFilterView( yuiqt, parent );
+    _rpmGroupTagsFilterView = new YQPkgRpmGroupTagsFilterView( parent );
     CHECK_PTR( _rpmGroupTagsFilterView );
-    filters->addPage( _( "Package Groups" ), _rpmGroupTagsFilterView );
+    _filters->addPage( _( "Package Groups" ), _rpmGroupTagsFilterView );
 
     connect( this,    			SIGNAL( loadData() ),
 	     _rpmGroupTagsFilterView,	SLOT  ( filter()   ) );
 
-    connect( filters, 			SIGNAL( currentChanged( QWidget * ) ),
+    connect( _filters, 			SIGNAL( currentChanged( QWidget * ) ),
 	     _rpmGroupTagsFilterView,	SLOT  ( filterIfVisible()           ) );
 
 
 #if 0
-    filters->addPage( _("YOU Patches"   ), new QLabel( "YOU Patches - this will require this side to grow much wider\nfor future use", 0 ) );
+    _filters->addPage( _("YOU Patches"   ), new QLabel( "YOU Patches - this will require this side to grow much wider\nfor future use", 0 ) );
 
     // DEBUG
 
-    filters->addPage( _("Keywords"   ), new QLabel( "Keywords\nfilter\n\nfor future use", 0 ) );
-    filters->addPage( _("MIME Types" ), new QLabel( "MIME Types\nfilter\n\nfor future use" , 0 ) );
+    _filters->addPage( _("Keywords"   ), new QLabel( "Keywords\nfilter\n\nfor future use", 0 ) );
+    _filters->addPage( _("MIME Types" ), new QLabel( "MIME Types\nfilter\n\nfor future use" , 0 ) );
 #endif
 
-    filters->addPage( _("Search"     ), new QLabel( "Search\nfilter\n\nmissing", 0 ) );
+    _filters->addPage( _("Search"     ), new QLabel( "Search\nfilter\n\nmissing", 0 ) );
 
 
 }
