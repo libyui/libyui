@@ -532,6 +532,12 @@ YQPackageSelector::addMenus()
     CHECK_PTR( _fileMenu );
     _menuBar->insertItem( _( "&File" ), _fileMenu );
 
+    if ( _pkgList )
+    {
+	_fileMenu->insertItem( _( "Export &Package List" ), _pkgList, SLOT( askExportList() ) );
+	_fileMenu->insertSeparator();
+    }
+    
     _fileMenu->insertItem( _( "E&xit - Discard Changes" ), this, SLOT( reject() ) );
     _fileMenu->insertItem( _( "&Quit - Save Changes"    ), this, SLOT( accept() ) );
 

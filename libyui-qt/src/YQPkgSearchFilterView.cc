@@ -26,6 +26,8 @@
 #include <qradiobutton.h>
 #include <qvbuttongroup.h>
 #include <qvgroupbox.h>
+#include <qprogressdialog.h>
+#include <qdatetime.h>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
@@ -175,14 +177,25 @@ YQPkgSearchFilterView::filter()
 
     if ( ! _searchText->currentText().isEmpty() )
     {
+	// Create a progress dialog that is only displayed if the search takes
+	// longer than a couple of seconds (default: 4).
+	
+	QProgressDialog progress( _( "Searching..." ),
+				  _( "Cancel" ),
+				  Y2PM::packageManager().size() );
+	progress.setMinimumDuration( 2000 ); // millisec
+	QTime timer;
+
 	QRegExp regexp = _searchText->currentText();
 	regexp.setCaseSensitive( _caseSensitive->isChecked() );
 	regexp.setWildcard( _useWildcards->isChecked() );
-	
+
+	int count = 0;
+	timer.start();
 	
 	PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
-	while ( it != Y2PM::packageManager().end() )
+	while ( it != Y2PM::packageManager().end() && ! progress.wasCancelled() )
 	{
 	    PMSelectablePtr selectable = *it;
 
@@ -198,9 +211,23 @@ YQPkgSearchFilterView::filter()
 		 ! selectable->installedObj()   )
 		check( selectable->theObject(), regexp );
 
+	    
+	    progress.setProgress( count++ );
+	    
+	    if ( timer.elapsed() > 300 ) // milisec
+	    {
+		// Process events only every 300 milliseconds - this is very
+		// expensive since both the progress dialog and the package
+		// list change all the time, thus display updates are necessary
+		// each time.
+		
+		qApp->processEvents();
+		timer.restart();
+	    }
+	    
 	    ++it;
 	}
-	
+
 	if ( _matchCount == 0 )
 	    emit message( _( "No results." ) );
     }
@@ -262,7 +289,7 @@ YQPkgSearchFilterView::check( const std::list<std::string> & strList, const QReg
 {
     std::string text;
     std::list<std::string>::const_iterator it = strList.begin();
-    
+
     while ( it != strList.end() )
     {
 	if ( check( *it, regexp ) )
@@ -278,9 +305,9 @@ bool
 YQPkgSearchFilterView::check( const PMSolvable::PkgRelList_type & relList, const QRegExp & regexp )
 {
     std::string text;
-    
+
     PMSolvable::PkgRelList_const_iterator it = relList.begin();
-    
+
     while ( it != relList.end() )
     {
 	if ( check( (*it).asString(), regexp ) )

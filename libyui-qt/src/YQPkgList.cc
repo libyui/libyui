@@ -25,6 +25,7 @@
 #include <qpixmap.h>
 #include <qaction.h>
 #include <qpopupmenu.h>
+#include <qmessagebox.h>
 
 #include <Y2PM.h>
 #include <y2pm/InstTarget.h>
@@ -227,6 +228,74 @@ YQPkgList::setInstallListSourceRpms( bool installSourceRpm )
 
 	listViewItem = listViewItem->nextSibling();
     }
+}
+
+
+
+void
+YQPkgList::askExportList() const
+{
+    QString filename = YUIQt::yuiqt()->askForSaveFileName( "pkglist.txt",	// startsWith
+							   "*.txt",		// filter
+							   _( "Export package list" ) );
+    if ( ! filename.isEmpty() )
+	exportList( filename, true );
+}
+
+
+void
+YQPkgList::exportList(  const QString filename, bool interactive ) const
+{
+    // Open file
+
+    FILE * file = fopen( (const char *) filename, "w" );
+
+    if ( ! file )
+    {
+	y2error( "Can't open file %s", (const char *) filename );
+
+	if ( interactive )
+	{
+	    // Post error popup.
+
+	    QMessageBox::warning( 0,						// parent
+				  _( "Error" ),					// caption
+				  _( "Can't open file %1" ).arg( filename ),
+				  QMessageBox::Ok | QMessageBox::Default,	// button0
+				  QMessageBox::NoButton,			// button1
+				  QMessageBox::NoButton );			// button2
+	}
+	return;
+    }
+
+
+    // Write all items
+
+    const QListViewItem * item = firstChild();
+
+    while ( item )
+    {
+	const YQPkgListItem * pkg = dynamic_cast<const YQPkgListItem *> ( item );
+
+	if ( pkg )
+	{
+	    QString status = "[" + statusText( pkg->status() ) + "]";
+	    fprintf( file, "%-16s %-30s | %-16s | %10s\n",
+		     (const char *) status,
+		     (const char *) pkg->text( nameCol()    ),
+		     (const char *) pkg->text( versionCol() ),
+		     (const char *) pkg->text( sizeCol()    )
+		     );
+	}
+	
+	item = item->nextSibling();
+    }
+
+
+    // Clean up
+
+    if ( file )
+	fclose( file );
 }
 
 

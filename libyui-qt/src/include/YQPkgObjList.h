@@ -108,7 +108,7 @@ public:
     /**
      * Returns a short (one line) descriptive text for a PMObject status.
      **/
-    virtual QString statusText( PMSelectable::UI_Status status );
+    virtual QString statusText( PMSelectable::UI_Status status ) const;
 
 
 public slots:

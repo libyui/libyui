@@ -185,7 +185,7 @@ YQPkgObjList::statusIcon( PMSelectable::UI_Status status, bool enabled )
 
 
 QString
-YQPkgObjList::statusText( PMSelectable::UI_Status status )
+YQPkgObjList::statusText( PMSelectable::UI_Status status ) const
 {
     switch ( status )
     {

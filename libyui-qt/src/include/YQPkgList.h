@@ -53,6 +53,14 @@ public:
 
     int srpmStatusCol() 	const	{ return _srpmStatusCol; 	}
 
+    /**
+     * Save the pkg list to a file.
+     *
+     * Posts error popups if 'interactive' is 'true' (only log entries
+     * otherwise). 
+     **/
+    void exportList( const QString filename, bool interactive ) const;
+
 
 public slots:
 
@@ -80,6 +88,11 @@ public slots:
      **/
     virtual QSize sizeHint() const;
 
+    /**
+     * Ask for a file name and save the current pkg list to file.
+     **/
+    void askExportList() const;
+
 
     // Direct access to some states for menu actions
 
@@ -95,7 +108,7 @@ public slots:
     // and dynamic_cast to PMPackagePtr if required.
     // This saves duplicating a lot of code.
 
-
+    
 protected:
 
     /**
