@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue May 20 14:53:51 CEST 2003 - gs@suse.de
+
+- package installation: additional filter view "Installed Packages", 
+  installation of source packages (SRPMs), improved dependency popup
+
+-------------------------------------------------------------------
 Wed Apr 30 16:34:59 CEST 2003 - ma@suse.de
 
 - Fixed list indentation in RichText widget (#18204)
