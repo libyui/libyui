@@ -46,6 +46,9 @@ YQPkgTextDialog::YQPkgTextDialog( const QString & text, QWidget * parent )
     // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );
 
+    // Dialog title
+    setCaption( _( "YaST2" ) );
+    
     // Layout for the dialog (can't simply insert a QVBox)
 
     QVBoxLayout * layout = new QVBoxLayout( this, MARGIN, SPACING );

@@ -53,7 +53,16 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
 {
     if ( ! _selectableManager )
 	y2error( "NULL selectable manager!" );
-    
+
+    // Set the dialog title.
+    //
+    // "Dependency conflict" is already used as the conflict list header just
+    // some pixels below that, so don't use this twice. This dialog title may
+    // or may not be visible, depending on whether or not there is a window
+    // manager running (and configured to show any dialog titles).
+
+    setCaption( _( "Warning" ) );
+
     // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );
 

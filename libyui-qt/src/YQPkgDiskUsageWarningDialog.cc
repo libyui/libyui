@@ -46,6 +46,7 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *		parent,
 							  const QString &	rejectButtonLabel )
     : QDialog( parent )
 {
+    // Dialog title
     setCaption( _("Disk Space Warning") );
 
     // Enable dialog resizing even without window manager

@@ -31,6 +31,7 @@
 #include "YQi18n.h"
 
 
+#warning TODO: Make sure all files are included in POTFILES!
 
 void
 YQPackageSelector::help()
@@ -51,6 +52,7 @@ YQPackageSelector::symbolHelp()
     // Translators: Headline for help about package status icons
     QString html = YQPkgTextDialog::htmlHeading( _( "Symbols Overview" ) );
 
+    html += "<br>";
     html += "<table border=1>";
     
     html += symHelp( "noinst.xpm",
@@ -152,6 +154,7 @@ YQPackageSelector::keyboardHelp()
     // Automatic word wrapping.
     QString goto_next = "<br>" + _( "In any case, go to the next list item." );
 
+    html += "<br>";
     html += "<table border=1>";
     
     html += keyHelp( "+",
@@ -214,7 +217,7 @@ YQPackageSelector::keyHelp( const QString & key,
 {
     QString html = "<tr valign=top>";
     html +=
-	"<td><table bgcolor=#E0E0E0><tr><td><b>"
+	"<td><table bgcolor=#E0E0E0><tr><td align=center><b>"
 	+ key
 	+ "</b></td></tr></table></td>"
 	+ "<td>" + summary 	+ "</td>"
