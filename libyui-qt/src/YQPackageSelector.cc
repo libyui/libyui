@@ -272,7 +272,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	connect( _filters, 			SIGNAL( currentChanged( QWidget * ) ),
 		 _searchFilterView,	SLOT  ( filterIfVisible()           ) );
     }
-    
+
 
 #if 0
     // DEBUG
@@ -385,6 +385,7 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 	     _pkgTechnicalDetailsView,	SLOT  ( showDetailsIfVisible( PMObjectPtr ) ) );
 
 
+#warning TODO: Versions details view (select some other candidate)
 
 #if 0
     QLabel * dummy;
@@ -443,12 +444,7 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 	_autoDependenciesCheckBox->setChecked( true );
     }
 
-
-    QWidget * spacer = new QWidget( button_box );
-    CHECK_PTR( spacer );
-    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
-
-
+    addHStretch( button_box );
 
     QPushButton * cancel_button = new QPushButton( _( "&Cancel" ), button_box );
     CHECK_PTR( cancel_button );
@@ -665,6 +661,20 @@ YQPackageSelector::setKeyboardFocus()
     setFocus();
 
     return true;
+}
+
+
+void addVStretch( QWidget * parent )
+{
+    QWidget * spacer = new QWidget( parent );
+    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) ); // hor/vert
+}
+
+
+void addHStretch( QWidget * parent )
+{
+    QWidget * spacer = new QWidget( parent );
+    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum) ); // hor/vert
 }
 
 

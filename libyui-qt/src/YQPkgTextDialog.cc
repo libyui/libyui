@@ -28,6 +28,7 @@
 #include <qhbox.h>
 
 #include "YQPkgTextDialog.h"
+#include "YQPackageSelector.h"
 
 #include "YQi18n.h"
 #include "utf8.h"
@@ -113,13 +114,6 @@ YQPkgTextDialog::eventFilter( QObject * obj, QEvent * ev )
     }
 
     return false;	// Don't stop event processing
-}
-
-
-void YQPkgTextDialog::addHStretch( QWidget * parent )
-{
-    QWidget * spacer = new QWidget( parent );
-    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum) ); // hor/vert
 }
 
 

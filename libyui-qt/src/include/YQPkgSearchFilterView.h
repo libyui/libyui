@@ -111,16 +111,6 @@ protected:
     bool check( const PMSolvable::PkgRelList_type & relList, const QRegExp & regexp );
     
     /**
-     * Add vertical stretchable space.
-     **/
-    void addVStretch( QWidget * parent );
-
-    /**
-     * Add horizontal stretchable space.
-     **/
-    void addHStretch( QWidget * parent );
-
-    /**
      * Key press event: Execute search upon 'Return'
      * Reimplemented from QVBox / QWidget.
      **/

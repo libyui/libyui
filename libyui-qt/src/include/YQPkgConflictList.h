@@ -76,7 +76,12 @@ public:
     /**
      * Check if the conflict list is empty.
      **/
-    bool isEmpty() { return childCount() == 0; }
+    bool isEmpty() const { return childCount() == 0; }
+
+    /**
+     * Returns the number of conflicts in the list.
+     **/
+    int conflictCount() const { return childCount(); }
 
 
 public slots:

@@ -111,11 +111,6 @@ public slots:
 protected:
 
     /**
-     * Add horizontal stretch space to a widget.
-     **/
-    void  addHStretch( QWidget * parent );
-
-    /**
      * Grab [Return] press events and close dialog.
      * Inherited from QObject.
      **/

@@ -32,6 +32,7 @@
 #include <y2pm/PMManager.h>
 
 #include "YQPkgSearchFilterView.h"
+#include "YQPackageSelector.h"
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YUIQt.h"
@@ -275,22 +276,6 @@ YQPkgSearchFilterView::check( const PMSolvable::PkgRelList_type & relList, const
     }
 
     return false;
-}
-
-
-void
-YQPkgSearchFilterView::addVStretch( QWidget * parent )
-{
-    QWidget * spacer = new QWidget( parent );
-    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) ); // hor/vert
-}
-
-
-void
-YQPkgSearchFilterView::addHStretch( QWidget * parent )
-{
-    QWidget * spacer = new QWidget( parent );
-    spacer->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum) ); // hor/vert
 }
 
 

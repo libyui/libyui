@@ -113,7 +113,7 @@ public slots:
      **/
     void help();
 
-
+    
 signals:
 
     /**
@@ -183,5 +183,19 @@ protected:
     YQPkgYouPatchFilterView *		_youPatchFilterView;
     YQPkgYouPatchList *			_youPatchList;
 };
+
+
+
+/**
+ * Add vertical stretchable space.
+ **/
+void addVStretch( QWidget * parent );
+
+/**
+ * Add horizontal stretchable space.
+ **/
+void addHStretch( QWidget * parent );
+
+
 
 #endif // YQPackageSelector_h

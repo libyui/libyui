@@ -29,6 +29,7 @@
 
 #include "YQPkgConflictDialog.h"
 #include "YQPkgConflictList.h"
+#include "YQPackageSelector.h"
 
 #include "YUIQt.h"
 #include "YQi18n.h"
@@ -69,6 +70,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     buttonBox->setSpacing( SPACING );
     buttonBox->setMargin ( MARGIN  );
     layout->addWidget( buttonBox );
+    addHStretch( buttonBox );
 
 
     // OK button
@@ -80,13 +82,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     connect( _okButton, SIGNAL( clicked() ),
 	     this,      SLOT  ( solveAndShowConflicts() ) );
 
-
-    // Strechtable space between the buttons
-
-    QWidget * stretch = new QWidget( buttonBox );
-    CHECK_PTR( stretch );
-    stretch->setSizePolicy( QSizePolicy( QSizePolicy::Expanding,	// hor
-					 QSizePolicy::Minimum ) );	// vert
+    addHStretch( buttonBox );
 
     // Cancel button
 
@@ -95,6 +91,8 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
     connect( _cancelButton, SIGNAL( clicked() ),
 	     this,          SLOT  ( reject()  ) );
+    
+    addHStretch( buttonBox );
 }
 
 
