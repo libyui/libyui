@@ -75,12 +75,8 @@ using std::string;
 
 #define USE_SEPARATOR			1
 
-#define BUTTON_BOX_MARGIN		6
-#if 0
-#    define WORK_AREA_BOTTOM_MARGIN	10
-#else
-#    define WORK_AREA_BOTTOM_MARGIN	BUTTON_BOX_MARGIN
-#endif
+#define BUTTON_BOX_TOP_MARGIN		10
+#define WORK_AREA_BOTTOM_MARGIN		10
 
 #define WORK_AREA_RIGHT_MARGIN		10
 #define SEPARATOR_MARGIN		6
@@ -94,7 +90,7 @@ using std::string;
 #define STEPS_FONT_SIZE			11
 #define STEPS_HEADING_FONT_SIZE		13
 
-#define USE_ICON_ON_HELP_BUTTON		1
+#define USE_ICON_ON_HELP_BUTTON		0
 
 
 YQWizard::YQWizard( QWidget *		parent,
@@ -952,12 +948,16 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
     // Button box
     //
 
+    
+    addVSpacing( workAreaVBox, BUTTON_BOX_TOP_MARGIN );
+    
     _buttonBox = new QHBox( workAreaVBox );
     CHECK_PTR( _buttonBox );
     _buttonBox->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
-    _buttonBox->setMargin( BUTTON_BOX_MARGIN );
+    _buttonBox->setMargin( 0 );
     layoutButtonBox();
 
+    addVSpacing( workAreaVBox, WORK_AREA_BOTTOM_MARGIN );
 
     if ( ! runningEmbedded() )
     {
@@ -1025,8 +1025,6 @@ void YQWizard::layoutButtonBox()
 {
     destroyButtons();
 
-    addHSpacing( _buttonBox, BUTTON_BOX_MARGIN );
-
     YQDialog * dialog = dynamic_cast<YQDialog *>( YQUI::ui()->currentDialog() );
     CHECK_PTR( dialog );
 
@@ -1073,8 +1071,6 @@ void YQWizard::layoutButtonBox()
     addChild( _nextButton );  // Enable shortcut checking for this button
     connect( _nextButton,	SIGNAL( clicked()	),
 	     this,		SLOT  ( nextClicked()	) );
-
-    addHSpacing( _buttonBox, BUTTON_BOX_MARGIN );
 }
 
 
