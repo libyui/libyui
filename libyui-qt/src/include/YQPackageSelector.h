@@ -250,6 +250,7 @@ protected:
     bool				_youMode;
     bool				_updateMode;
     bool				_testMode;
+    int					_installedPkgs;
 
     QCheckBox *				_autoDependenciesCheckBox;
     QProgressBar *			_diskSpace;

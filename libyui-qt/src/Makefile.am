@@ -56,6 +56,7 @@ liby2qt_la_SOURCES = 				\
 	YQPackageSelector.cc			\
 	YQPackageSelectorHelp.cc		\
 	YQPartitionSplitter.cc			\
+	YQPkgChangesDialog.cc			\
 	YQPkgConflictDialog.cc			\
 	YQPkgConflictList.cc			\
 	YQPkgDescriptionView.cc			\
@@ -140,6 +141,7 @@ BUILT_SOURCES =					\
 	YQMultiSelectionBox.moc.cc		\
 	YQPackageSelector.moc.cc		\
 	YQPartitionSplitter.moc.cc		\
+	YQPkgChangesDialog.moc.cc		\
 	YQPkgConflictDialog.moc.cc		\
 	YQPkgConflictList.moc.cc		\
 	YQPkgDescriptionView.moc.cc		\
@@ -203,6 +205,7 @@ YQMultiLineEdit.o YQMultiLineEdit.lo:				YQMultiLineEdit.moc.cc
 YQMultiSelectionBox.o YQMultiSelectionBox.lo:			YQMultiSelectionBox.moc.cc
 YQPackageSelector.o YQPackageSelector.lo:			YQPackageSelector.moc.cc
 YQPartitionSplitter.o YQPartitionSplitter.lo:			YQPartitionSplitter.moc.cc
+YQPkgChangesDialog.o YQPkgChangesDialog.lo:			YQPkgChangesDialog.moc.cc
 YQPkgConflictDialog.o YQPkgConflictDialog.lo:			YQPkgConflictDialog.moc.cc
 YQPkgConflictList.o YQPkgConflictList.lo:			YQPkgConflictList.moc.cc
 YQPkgDescriptionView.o YQPkgDescriptionView.lo:			YQPkgDescriptionView.moc.cc
@@ -267,6 +270,7 @@ YQMultiLineEdit.moc.cc:			include/YQMultiLineEdit.h
 YQMultiSelectionBox.moc.cc:		include/YQMultiSelectionBox.h
 YQPackageSelector.moc.cc:		include/YQPackageSelector.h
 YQPartitionSplitter.moc.cc:		include/YQPartitionSplitter.h
+YQPkgChangesDialog.moc.cc:		include/YQPkgChangesDialog.h
 YQPkgConflictDialog.moc.cc:		include/YQPkgConflictDialog.h
 YQPkgConflictList.moc.cc:		include/YQPkgConflictList.h
 YQPkgDescriptionView.moc.cc:		include/YQPkgDescriptionView.h

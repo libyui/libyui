@@ -47,11 +47,13 @@
 #include <y2pm/PMSelectionManager.h>
 #include <y2pm/PMYouPatchManager.h>
 #include <y2pm/InstYou.h>
+#include <y2pm/InstTarget.h>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
 #include "YQPackageSelector.h"
+#include "YQPkgChangesDialog.h"
 #include "YQPkgConflictDialog.h"
 #include "YQPkgDependenciesView.h"
 #include "YQPkgDescriptionView.h"
@@ -97,6 +99,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     setWidgetRep(this);
 
     _autoDependenciesCheckBox	= 0;
+    _checkDependenciesButton	= 0;
     _detailsViews		= 0;
     _diskSpace			= 0;
     _diskUsageList		= 0;
@@ -116,7 +119,6 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     _youPatchFilterView		= 0;
     _youPatchList		= 0;
 
-
     _youMode	= opt.youMode.value();
     _updateMode	= opt.updateMode.value();
     _testMode	= opt.testMode.value();
@@ -129,6 +131,8 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     setTextdomain( "packages-qt" );
     setFont( _yuiqt->currentFont() );
     yuiqt->blockWmClose(); // Automatically undone after UI::RunPkgSelection()
+    _installedPkgs = Y2PM::instTarget().numPackages();
+    
     _pkgConflictDialog = new YQPkgConflictDialog( &( Y2PM::packageManager() ), this );
     CHECK_PTR( _pkgConflictDialog );
 
@@ -686,15 +690,7 @@ YQPackageSelector::autoResolveDependencies()
 	return;
 
     YUIQt::yuiqt()->busyCursor();
-
-#if ! DEPENDENCY_FEEDBACK_IF_OK
-
-    if ( _checkDependenciesButton )
-	_checkDependenciesButton->animateClick();
-    else
-	resolvePackageDependencies();
-#endif
-
+    resolvePackageDependencies();
     YUIQt::yuiqt()->normalCursor();
 }
 
@@ -774,7 +770,7 @@ press <b>Cancel</b> now and deselect some packages.\
 ");
 
     return YQPkgDiskUsageWarningDialog::diskUsageWarning( msg,
-							  100, _("&Continue anyway"), _("&Cancel") );
+							  100, _("C&ontinue anyway"), _("&Cancel") );
 
 }
 
@@ -835,20 +831,36 @@ YQPackageSelector::reject()
 void
 YQPackageSelector::accept()
 {
-    if ( resolvePackageDependencies() != QDialog::Rejected &&
-	 checkDiskUsage() != QDialog::Rejected )
-    {
-	Y2PM::packageManager().ClearSaveState();
-	Y2PM::selectionManager().ClearSaveState();
+    // Force final dependency resolving
+    if ( resolvePackageDependencies() == QDialog::Rejected )
+	return;
 
-	if ( _youMode )
-	    Y2PM::youPatchManager().ClearSaveState();
+    if ( _installedPkgs > 0 && ! _youMode )
+    {
+	// Show which packages are installed/deleted automatically
+	
+	QString msg = _( "Packages changed automatically due to dependency resolving: " );
+	
+	if ( YQPkgChangesDialog::showChangesDialog( msg, _( "C&ontinue" ), _( "&Cancel"   ) )
+	     == QDialog::Rejected )
+	    return;
+    }
+
+    // Check disk usage
+    if ( checkDiskUsage() == QDialog::Rejected )
+	return;
+
+    
+    Y2PM::packageManager().ClearSaveState();
+    Y2PM::selectionManager().ClearSaveState();
+
+    if ( _youMode )
+	Y2PM::youPatchManager().ClearSaveState();
 
 #warning TODO: Save current selections state (no Y2PM::PMSelectionManager call yet)
 
-	_yuiqt->setMenuSelection( YCPSymbol("accept", true) );
-	_yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
-    }
+    _yuiqt->setMenuSelection( YCPSymbol("accept", true) );
+    _yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
 }
 
 
