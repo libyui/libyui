@@ -153,7 +153,7 @@ YQPkgRpmGroupTagsFilterView::check( PMPackagePtr pkg )
 
     if ( pkg->group_ptr()->isChildOf( _selection->rpmGroup() ) )
     {
-#if 1
+#if 0
 	// DEBUG
 	std::string name = pkg->name();
 	y2debug( "Found match for pkg '%s'", name.c_str() );

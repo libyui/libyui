@@ -18,7 +18,7 @@
 
 
 #define ALPHA_WARNING	1
-#define FAKE_INST_SRC	0
+#define FAKE_INST_SRC	1
 
 #include <qcombobox.h>
 #include <qframe.h>
@@ -99,7 +99,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     basicLayout();
     makeConnections();
 
-#if ALPHA_VERSION_WARNING
+#if ALPHA_WARNING
     QTimer::singleShot( 2500, this, SLOT( preAlphaWarning() ) );
 #endif
 
