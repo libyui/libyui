@@ -38,7 +38,13 @@ YQPkgLangList::YQPkgLangList( QWidget * parent )
 
     int numCol = 0;
     addColumn( ""		);	_statusCol	= numCol++;
-    addColumn( _( "Language" ) );	_nameCol	= numCol++;
+
+    // Translators: Table column heading for language ISO code like "de_DE", "en_US"
+    // Please keep this short to avoid stretching the column too wide!
+    addColumn( _( "Code"	) );	_nameCol	= numCol++;
+
+    // Full (human readable) language / country name like "German (Austria)"
+    addColumn( _( "Language" ) );	_summaryCol	= numCol++;
     setAllColumnsShowFocus( true );
 
     connect( this, 	SIGNAL( selectionChanged        ( QListViewItem * ) ),
