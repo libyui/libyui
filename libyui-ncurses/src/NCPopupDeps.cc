@@ -346,7 +346,6 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    if ( !(*it).is_conflict )	// it is a requires dependency
 	    {
 		pkgLine.push_back( (*it).rel.asString() );
-		pkgLine.push_back( "--------------------" );
 		deps->addLine( PMSelectable::S_NoInst, // use status NOInst
 			       pkgLine,
 			       i,		// the index
@@ -356,7 +355,6 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    else
 	    {
 		pkgLine.push_back( (*it).rel.asString() );
-		pkgLine.push_back( PkgNames::ConflictText().str() );
 		deps->addLine( PMSelectable::S_NoInst, // use status NOInst
 			       pkgLine,
 			       i,		// the index
