@@ -36,21 +36,21 @@ public:
     /**
      * Constructor.
      */
-    YQBarGraph( QWidget *parent, YWidgetOpt &opt );
+    YQBarGraph( QWidget * parent, YWidgetOpt & opt );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
      * widget. All new widgets are enabled per definition. Only
      * enabled widgets can take user input.
      */
-    void setEnabling(bool enabled);
+    void setEnabling( bool enabled );
 
     /**
      * Minimum size the widget should have to make it look and feel
      * nice.
      * @dim Dimension, either YD_HORIZ or YD_VERT
      */
-    long nicesize(YUIDimension dim);
+    long nicesize( YUIDimension dim );
 
     /**
      * Sets the new size of the widget.
@@ -66,7 +66,8 @@ public:
 
 protected:
 
-    QY2BarGraph *_barGraph;
+    QY2BarGraph * _barGraph;
 };
+
 
 #endif // YQBarGraph_h

@@ -28,9 +28,9 @@
 #define VERTICAL_MARGIN		4
 
 
-YQBarGraph::YQBarGraph( QWidget *parent, YWidgetOpt &opt )
-    : QWidget(parent)
-    , YBarGraph(opt)
+YQBarGraph::YQBarGraph( QWidget * parent, YWidgetOpt & opt )
+    : QWidget( parent )
+    , YBarGraph( opt )
 {
     setWidgetRep( this );
     _barGraph = new QY2BarGraph( this );
@@ -55,20 +55,20 @@ void YQBarGraph::doUpdate()
 }
 
 
-void YQBarGraph::setEnabling(bool enabled)
+void YQBarGraph::setEnabling( bool enabled )
 {
     _barGraph->setEnabled(enabled);
 }
 
 
-long YQBarGraph::nicesize(YUIDimension dim)
+long YQBarGraph::nicesize( YUIDimension dim )
 {
     if (dim == YD_HORIZ)	return _barGraph->sizeHint().width()  + 2*HORIZONTAL_MARGIN;
-    else 		return _barGraph->sizeHint().height() + 2*VERTICAL_MARGIN;
+    else 			return _barGraph->sizeHint().height() + 2*VERTICAL_MARGIN;
 }
 
 
-void YQBarGraph::setSize(long newWidth, long newHeight)
+void YQBarGraph::setSize( long newWidth, long newHeight )
 {
     _barGraph->move( HORIZONTAL_MARGIN, VERTICAL_MARGIN );
     _barGraph->resize( newWidth  - 2*HORIZONTAL_MARGIN,

@@ -23,8 +23,8 @@
 #include "YQAlignment.h"
 
 
-YQAlignment::YQAlignment( QWidget *parent,
-			  YWidgetOpt &opt,
+YQAlignment::YQAlignment( QWidget *	 parent,
+			  YWidgetOpt &	 opt,
 			  YAlignmentType horAlign,
 			  YAlignmentType vertAlign )
     : QWidget( parent )
