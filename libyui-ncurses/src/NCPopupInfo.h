@@ -49,6 +49,8 @@ private:
 
     NCRichText * helpText;
     NCPushButton * okButton;
+    int hDim;
+    int vDim;
     
 protected:
 
@@ -68,7 +70,8 @@ public:
     void createLayout( const YCPString & headline, const YCPString & text );
 
     void showInfoPopup( );
-    
+
+    void setNiceSize( int horiz, int vert ) { hDim = horiz; vDim = vert; }
 };
 
 ///////////////////////////////////////////////////////////////////

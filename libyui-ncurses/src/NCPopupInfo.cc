@@ -39,6 +39,8 @@ NCPopupInfo::NCPopupInfo( const wpos at, const YCPString & headline, const YCPSt
     : NCPopup( at, false )
       , helpText( 0 )
       , okButton( 0 )
+      , hDim( 50 )
+      , vDim( 20 )
 {
     createLayout( headline, text );
 }
@@ -119,7 +121,7 @@ void NCPopupInfo::showInfoPopup( )
 
 long NCPopupInfo::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? 50 : 20 );
+    return ( dim == YD_HORIZ ? hDim : vDim );
 }
 
 			   
