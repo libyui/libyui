@@ -302,6 +302,7 @@ public:
     static const NCstring NotifyLabel();
     static const NCstring DepsHelpLine();
     static const NCstring Solving();
+    static const NCstring ContinueRequ();
     
    /**
      * text used in search popup

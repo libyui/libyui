@@ -703,6 +703,13 @@ const NCstring PkgNames::NoConflictText()
     return value;
 }
 
+const NCstring PkgNames::ContinueRequ()
+{
+     // label continues the part required by ...
+    static const NCstring value = _("... the package(s) below");
+    return value;   
+}
+
 const NCstring PkgNames::Conflicts()
 {
     // part of the package description
