@@ -230,7 +230,7 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
     if ( !notify.empty() )
     {
 	string pkgName = objPtr->getSelectable()->name();
-	NCPopupInfo info( wpos(3, 3),
+	NCPopupInfo info( wpos( 1, 1),
 			  header,
 			  YCPString( "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( notify ) ) );
 	info.showInfoPopup( );
