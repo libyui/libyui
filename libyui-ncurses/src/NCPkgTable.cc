@@ -524,7 +524,7 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr )
 
 	    // if ( Y2PM::instTarget().numPackages() > 0 )
 	    // doesn't make sense for YOU mode because there are always installed packages
-	    // -> show installed version or - - -
+	    // -> show installed version or empty column
 	    pkgLine.push_back( instVersion );
 
    	    pkgLine.push_back( pkgPtr->summary() );  	// short description
@@ -588,7 +588,7 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr )
 	}
     }
     
-    addLine( status,	// get the package status
+    addLine( status,	// the package status
 	     pkgLine, 	// the package data
 	     pkgPtr );	// the corresponding package pointer
 
