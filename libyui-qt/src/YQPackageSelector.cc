@@ -18,7 +18,7 @@
 
 
 #define ALPHA_WARNING	1
-#define FAKE_INST_SRC	1
+#define FAKE_INST_SRC	0
 
 #include <qcombobox.h>
 #include <qframe.h>
@@ -419,15 +419,17 @@ YQPackageSelector::help()
 void
 YQPackageSelector::preAlphaWarning()
 {
-    QMessageBox::information( this, "Pre-Alpha version", "\
-This is a development version of the Qt single package selection,\n\
-included in this Beta as a kind of demo.\n\
+    QMessageBox::information( this, "Alpha version", "\
+This is a development version of the Qt single package selection.\n\
 \n\
-Some things work, some don't, some work but are still really slow.\n\
-You can view some package data, but setting a package status does not have\n\
-any effect yet.\n\
+Many things work now, but it's still far from complete.\n\
+Selections and packages can now be selected and deselected\n\
+and that status is really propagated to the backend package manager\n\
+(i.e. you'll really get those packages installed), but there is no\n\
+dependency checking or solving yet.\n\
 \n\
-As of now, all bug reports for this thing will be routed to /dev/null.\n\
+It doesn't make sense yet to file any bug reports -\n\
+we know there is still a lot of work to do.\n\
 \n\
 We are working heavily on it, so if you want to contribute,\n\
 the easiest thing you can do right now is not swamp us with\n\
