@@ -21,6 +21,7 @@ noinst_HEADERS =				\
 	YQColoredLabel.h			\
 	YQComboBox.h				\
 	YQDate.h				\
+	YQDate.h				\
 	YQDialog.h				\
 	YQDownloadProgress.h			\
 	YQDumbTab.h				\
@@ -73,6 +74,7 @@ noinst_HEADERS =				\
 	YQSquash.h				\
 	YQTable.h				\
 	YQTextEntry.h				\
+	YQTime.h				\
 	YQTree.h				\
 	YQWizard.h				\
 	YQWizardButton.h			\
