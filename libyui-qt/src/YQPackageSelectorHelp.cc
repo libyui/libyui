@@ -46,7 +46,7 @@ YQPackageSelector::help()
     {
 	// Help specific to YOU ( YaST Online Update ) mode
 
-	html += para( _( "In this dialog, select YOU ( YaST Online Update ) patches to download and install." ) );
+	html += para( _( "In this dialog, select YOU (YaST Online Update) patches to download and install." ) );
 	html += para( _( "The list on the left side contains available patches"
 			 " along with the respective patch kind ( security, recommended, or optional )"
 			 " and the ( estimated ) download size." ) );
@@ -216,7 +216,7 @@ YQPackageSelector::symbolHelp()
     // Translators: This is added to the explanation of a status. Use of
     // "non-breakable space" ( HTML &nbsp; ) is recommended ( if the line doesn't
     // get too long ) to avoid line-break in the middle of this explanaton.
-    QString bySelection = " " + _( "( by&nbsp;selection )" );
+    QString bySelection = " " + _( "(by&nbsp;selection)" );
 
     html += symHelp( "sel_autoinstall.xpm",
 		     // Translators: Package status short ( ! ) description

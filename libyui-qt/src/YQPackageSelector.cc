@@ -350,7 +350,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 #if 0
     // DEBUG
 
-    _filters->addPage( _( "Keywords"   ), new QLabel( "Keywords\nfilter\n\nfor future use", 0 ) );
+    _filters->addPage( _( "Keywords" ), new QLabel( "Keywords\nfilter\n\nfor future use", 0 ) );
     _filters->addPage( _( "MIME Types" ), new QLabel( "MIME Types\nfilter\n\nfor future use" , 0 ) );
 #endif
 
@@ -544,7 +544,7 @@ YQPackageSelector::addMenus()
     }
 
     _fileMenu->insertItem( _( "E&xit -- Discard Changes" ), this, SLOT( reject() ) );
-    _fileMenu->insertItem( _( "&Quit -- Save Changes"    ), this, SLOT( accept() ) );
+    _fileMenu->insertItem( _( "&Quit -- Save Changes" ), this, SLOT( accept() ) );
 
 
     if ( _pkgList && ! _youMode )
@@ -635,10 +635,10 @@ YQPackageSelector::addMenus()
     _helpMenu->insertItem( _( "&Overview" ), this, SLOT( help() 	), Key_F1         );
 
     // Menu entry for help about used symbols ( icons )
-    _helpMenu->insertItem( _( "&Symbols"  ), this, SLOT( symbolHelp() 	), SHIFT + Key_F1 );
+    _helpMenu->insertItem( _( "&Symbols" ), this, SLOT( symbolHelp() 	), SHIFT + Key_F1 );
 
     // Menu entry for keyboard help
-    _helpMenu->insertItem( _( "&Keys"     ), this, SLOT( keyboardHelp() )                 );
+    _helpMenu->insertItem( _( "&Keys" ), this, SLOT( keyboardHelp() )                 );
 }
 
 
@@ -886,8 +886,7 @@ YQPackageSelector::checkDiskUsage()
 	     "but you risk getting a corrupted system that requires manual repairs. "
 	     "If you are not absolutely sure how to handle such a case, "
 	     "press <b>Cancel</b> now and deselect some packages."
-	     "</p>"
-	     );
+	     "</p>" );
 
     return YQPkgDiskUsageWarningDialog::diskUsageWarning( msg,
 							  100, _( "C&ontinue Anyway" ), _( "&Cancel" ) );

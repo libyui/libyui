@@ -214,16 +214,16 @@ YQPkgObjList::statusText( PMSelectable::UI_Status status ) const
 {
     switch ( status )
     {
-	case PMSelectable::S_AutoDel:		return _( "Autodelete"			);
-	case PMSelectable::S_AutoInstall:	return _( "Autoinstall"			);
-	case PMSelectable::S_AutoUpdate:	return _( "Autoupdate"			);
-	case PMSelectable::S_Del:		return _( "Delete"			);
-	case PMSelectable::S_Install:		return _( "Install"			);
-	case PMSelectable::S_KeepInstalled:	return _( "Keep"			);
-	case PMSelectable::S_NoInst:		return _( "Do Not Install"		);
-	case PMSelectable::S_Protected:		return _( "Protected -- Do Not Modify"	);
-	case PMSelectable::S_Taboo:		return _( "Taboo -- Never Install"	);
-	case PMSelectable::S_Update:		return _( "Update"			);
+	case PMSelectable::S_AutoDel:		return _( "Autodelete" );
+	case PMSelectable::S_AutoInstall:	return _( "Autoinstall" );
+	case PMSelectable::S_AutoUpdate:	return _( "Autoupdate" );
+	case PMSelectable::S_Del:		return _( "Delete" );
+	case PMSelectable::S_Install:		return _( "Install" );
+	case PMSelectable::S_KeepInstalled:	return _( "Keep" );
+	case PMSelectable::S_NoInst:		return _( "Do Not Install" );
+	case PMSelectable::S_Protected:		return _( "Protected -- Do Not Modify" );
+	case PMSelectable::S_Taboo:		return _( "Taboo -- Never Install" );
+	case PMSelectable::S_Update:		return _( "Update" );
     }
 
     return QString::null;
@@ -866,9 +866,9 @@ YQPkgObjListItem::toolTip( int col )
 
 		if ( bySelection() )
 		    // Translators: Additional hint what caused an auto-status
-		    tip += "\n" + _( "( by a software selection )" );
+		    tip += "\n" + _( "(by a software selection)" );
 		else
-		    tip += "\n" + _( "( by dependencies )" );
+		    tip += "\n" + _( "(by dependencies)" );
 
 		break;
 
