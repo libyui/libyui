@@ -369,8 +369,6 @@ YQPkgObjList::keyPressEvent( QKeyEvent *event )
 			event->accept();
 			return;
 		}
-
-		y2milestone( "Key code: %u (0x%x)", (unsigned) event->key(), (unsigned) event->key() );
 	    }
 	}
     }
