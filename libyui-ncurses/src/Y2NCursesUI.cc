@@ -92,15 +92,6 @@ Y2NCursesUI::Y2NCursesUI( bool with_threads,
 			  Y2Component *callback )
     : YUIInterpreter(with_threads, callback)
 {
-    try {
-	NCurses::init();
-    }
-    catch ( NCursesError & err ) {
-	UIINT << err << endl;
-	::endwin();
-	abort();
-    }
-
     _ui = this;
     
     if ( getenv( "LANG" ) != NULL )
@@ -123,6 +114,15 @@ Y2NCursesUI::Y2NCursesUI( bool with_threads,
 	NCstring::setTerminalEncoding( encoding );
   
 	setLanguage( language );
+    }
+
+    try {
+	NCurses::init();
+    }
+    catch ( NCursesError & err ) {
+	UIINT << err << endl;
+	::endwin();
+	abort();
     }
     
     topmostConstructorHasFinished();
