@@ -356,6 +356,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    i++;
 	}
 	errorLabel1->setLabel( YCPString("Select one of the alternatives below.") );
+	errorLabel2->setLabel( YCPString( "" ) );
     }
     if ( !error.conflicts_with.empty() )
     {
