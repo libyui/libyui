@@ -110,6 +110,7 @@ void NCPopupDeps::createLayout( const YCPString & headline )
   vSplit->addChild( sp1 );
 
   opt.isHStretchable.setValue( true );
+  opt.isHeading.setValue( false );
  
   errorLabel1 = new NCLabel(  vSplit, opt, YCPString("") );
   vSplit->addChild( errorLabel1 );
@@ -126,11 +127,18 @@ void NCPopupDeps::createLayout( const YCPString & headline )
   ObjectStatStrategy * strat = new DependencyStatStrategy();
   deps->setTableType( NCPkgTable::T_DepsPackages, strat );
   vSplit->addChild( deps );
-
+  
+  opt.isHStretchable.setValue( false );
+  opt.isHeading.setValue( true );
+  NCLabel * helplb = new NCLabel( vSplit, opt, PkgNames::DepsHelpLine() );
+  vSplit->addChild( helplb );
+  
+  NCSpacing * sp3 = new NCSpacing( vSplit, opt, 0.6, false, true );
+  vSplit->addChild( sp3 );
+  
   NCSplit * hSplit = new NCSplit( vSplit, opt, YD_HORIZ );
   vSplit->addChild( hSplit );
 
-  
   opt.isHStretchable.setValue( true );
 
   // add the solve button
@@ -138,8 +146,8 @@ void NCPopupDeps::createLayout( const YCPString & headline )
   solveButton->setId( PkgNames::Solve () );
   hSplit->addChild( solveButton );
 
-  NCSpacing * sp3 = new NCSpacing( hSplit, opt, 0.4, true, false );
-  hSplit->addChild( sp3 );
+  NCSpacing * sp4 = new NCSpacing( hSplit, opt, 0.4, true, false );
+  hSplit->addChild( sp4 );
   
   // add the cancel button
   cancelButton = new NCPushButton( hSplit, opt, PkgNames::CancelIgnore() );
@@ -326,6 +334,8 @@ bool NCPopupDeps::concretelyDependency( int index )
 
     if ( !error.unresolvable.empty() )
     {
+	bool require = false;
+	
 	list<PkgDep::RelInfo>::iterator it = error.unresolvable.begin();
 	while ( it != error.unresolvable.end() )
 	{
@@ -333,7 +343,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    PMObjectPtr objPtr = (*it).solvable;	// not needed here 
 	    pkgLine.clear();
 
-	    if ( !(*it).is_conflict )
+	    if ( !(*it).is_conflict )	// it is a requires dependency
 	    {
 		pkgLine.push_back( (*it).rel.asString() );
 		pkgLine.push_back( PkgNames::NoAvailText().str() );
@@ -341,12 +351,31 @@ bool NCPopupDeps::concretelyDependency( int index )
 			       pkgLine,
 			       i,		// the index
 			       PMObjectPtr() );	// null pointer
+		require = true;
+	    }
+	    else
+	    {
+		pkgLine.push_back( (*it).rel.asString() );
+		pkgLine.push_back( PkgNames::ConflictText().str() );
+		deps->addLine( PMSelectable::S_NoInst, // use status NOInst
+			       pkgLine,
+			       i,		// the index
+			       PMObjectPtr() );	// null pointer	
+
 	    }
 	    ++it;
 	    i++;
 	}
-	errorLabel1->setLabel( PkgNames::LabelRequire1()  );
-	errorLabel2->setLabel( PkgNames::LabelRequire2() );	
+	if ( require )
+	{
+	    errorLabel1->setLabel( PkgNames::LabelRequire1()  );
+	    errorLabel2->setLabel( PkgNames::LabelRequire2() );
+	}
+	else
+	{	
+	    errorLabel1->setLabel( PkgNames::LabelUnresolvable() );
+	    errorLabel2->setLabel(  YCPString( "" ) );
+	}
     }
     else if ( !error.alternatives.empty() )
     {
@@ -483,7 +512,7 @@ NCursesEvent NCPopupDeps::showDependencyPopup( )
 
 long NCPopupDeps::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? NCurses::cols()-10 : NCurses::lines()-5 );
+    return ( dim == YD_HORIZ ? NCurses::cols()-15 : NCurses::lines()-5 );
 }
 
 ///////////////////////////////////////////////////////////////////

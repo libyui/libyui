@@ -291,10 +291,11 @@ public:
     static const YCPString LabelRequBy2();
     static const YCPString LabelRequire1();
     static const YCPString LabelRequire2();
-
+    static const YCPString LabelUnresolvable();
     static const YCPString WarningLabel();
     static const YCPString ErrorLabel();
     static const YCPString NotifyLabel();
+    static const YCPString DepsHelpLine();
     
    /**
      * text used in search popup

@@ -468,6 +468,12 @@ const YCPString PkgNames::PackageSearch()
     return value;
 }
 
+const YCPString PkgNames::DepsHelpLine()
+{
+    static const YCPString value = toYCPString ( _( " [+] Select    [-] Delete    [>] Update " ) );
+    return value;
+}
+
 const YCPString PkgNames::PackageDeps()
 {
     // the headline of the dependency popup 
@@ -530,6 +536,12 @@ const YCPString PkgNames::YouHelp()
     // the headline of the help popup 
     static const YCPString value = toYCPString ( _("Help online update") );
     return value;
+}
+const YCPString PkgNames::LabelUnresolvable()
+{
+    // text part describing package conflict (it's a label - keep it short)
+    static const YCPString value = toYCPString( _("Unresolvable package conflict.") );
+    return value;   
 }
 
 const YCPString PkgNames::LabelUnres1()
