@@ -50,6 +50,10 @@ public:
      */
     ~YUIQt();
 
+    /**
+     * Access the global Qt-UI.
+     **/
+    static YUIQt * yuiqt() { return _yuiqt; }
 
     /**
      * Returns the UI's default font.
@@ -388,6 +392,12 @@ private:
      **/
     QString kcontrol_id;
 
+    /**
+     * Global reference to the UI
+     **/
+    static YUIQt * _yuiqt;
+
+    
 private slots:
 
     bool close();

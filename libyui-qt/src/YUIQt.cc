@@ -75,6 +75,8 @@
 
 #define DEFAULT_MACRO_FILE_NAME		"/tmp/macro.ycp"
 
+YUIQt * YUIQt::_yuiqt = 0;
+
 
 YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
     : QApplication(argc, argv)
@@ -88,6 +90,7 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
     , loaded_heading_font(false)
 {
     suseheaderID = -1;
+    _yuiqt = this;
 
     if (argv)
     {
