@@ -55,9 +55,9 @@ class Y2NCursesUI : public NCurses, public YUIInterpreter {
     virtual YWidget * userInput( YDialog * dialog, EventType * event );
 
     /**
-     * like userInput, but return 0(ET_NONE) after timeout seconds of inactivity
+     * like userInput, but return 0(ET_NONE) after timeout_millisec milliseconds of inactivity
     */
-    virtual YWidget * timeoutUserInput( YDialog * dialog, EventType * event, unsigned timeout );
+    virtual YWidget * timeoutUserInput( YDialog * dialog, EventType * event, unsigned timeout_millisec );
 
     /**
      * This virtual method is called, when the YCPUIInterpreter evaluates

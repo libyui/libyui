@@ -101,7 +101,7 @@ class NCDialog : public YDialog, public NCWidget {
 
     bool ActivateByKey( int key );
 
-    void processInput( int timeout );
+    void processInput( int timeout_millisec );
 
     bool describeFunctionKeys( string & helpText );
 

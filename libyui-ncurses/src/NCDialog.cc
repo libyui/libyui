@@ -786,11 +786,11 @@ bool NCDialog::ActivateByKey( int key )
 //
 //	DESCRIPTION :
 //
-int NCDialog::getch( int timeout )
+int NCDialog::getch( int timeout_millisec )
 {
   int got = -1;
 
-  if ( timeout < 0 ) {
+  if ( timeout_millisec < 0 ) {
     // wait for input
     ::nodelay( ::stdscr, false );
     got = ::getch();
@@ -799,18 +799,22 @@ int NCDialog::getch( int timeout )
       // Thus retry once.
       got = ::getch();
     }
-  } else if ( timeout ) {
-    // max halfdelay is 25 seconds (250 tenths of seconds)
+  } else if ( timeout_millisec ) {
+    // max halfdelay is 25 seconds (25000 milliseconds)
     do {
-      if ( timeout > 25 ) {
+      if ( timeout_millisec > 25000 ) {
 	::halfdelay( 250 );
-	timeout -= 25;
+	timeout_millisec -= 25000;
       } else {
-	::halfdelay( timeout*10 );
-	timeout = 0;
+	if ( timeout_millisec < 100 ) {
+	  // min halfdelay is 1/10 second (100 milliseconds)
+	  ::halfdelay( 1 );
+	} else
+	  ::halfdelay( timeout_millisec/100 );
+	timeout_millisec = 0;
       }
       got = ::getch();
-    } while( got == -1 && timeout );
+    } while( got == -1 && timeout_millisec );
     ::cbreak(); // stop halfdelay
   } else {
     // no wait
@@ -820,7 +824,7 @@ int NCDialog::getch( int timeout )
 
   if ( got == KEY_RESIZE ) {
     NCurses::ResizeEvent();
-    return NCDialog::getch( timeout );
+    return NCDialog::getch( timeout_millisec );
   }
 
   return got;

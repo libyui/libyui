@@ -255,7 +255,7 @@ YWidget * Y2NCursesUI::userInput( YDialog * dialog, EventType * event )
 //
 //	DESCRIPTION :
 //
-YWidget * Y2NCursesUI::timeoutUserInput( YDialog * dialog, EventType * event, unsigned timeout )
+YWidget * Y2NCursesUI::timeoutUserInput( YDialog * dialog, EventType * event, unsigned timeout_millisec )
 {
   NCDialog * ncd = static_cast<NCDialog *>( dialog );
   if ( !ncd ) {
@@ -265,7 +265,7 @@ YWidget * Y2NCursesUI::timeoutUserInput( YDialog * dialog, EventType * event, un
 
   NCtoY2Event cevent;
   ncd->activate ( true );
-  cevent = ncd->userInput( timeout ? (int)timeout : -1 );
+  cevent = ncd->userInput( timeout_millisec ? (long)timeout_millisec : -1 );
   ncd->activate ( false );
 
   YWidget * ret = cevent.propagate( *this, event );
