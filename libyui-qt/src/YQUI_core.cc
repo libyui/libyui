@@ -134,8 +134,8 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 
 	    if ( x_res >= 1024 && y_res >= 768  )
 	    {
-		_default_size.setWidth ( max( (int) (x_res * 0.60), 800 ) );
-		_default_size.setHeight( max( (int) (y_res * 0.60), 600 ) );
+		_default_size.setWidth ( max( (int) (x_res * 0.7), 800 ) );
+		_default_size.setHeight( max( (int) (y_res * 0.7), 600 ) );
 	    }
 	    else
 	    {
@@ -144,8 +144,13 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 		_default_size = qApp->desktop()->availableGeometry().size();
 	    }
 
-	    y2debug( "Assuming default size of %dx%d",
-		     _default_size.width(), _default_size.height() );
+	    y2milestone( "Assuming default size of %dx%d",
+			 _default_size.width(), _default_size.height() );
+	}
+	else
+	{
+	    y2milestone( "Requested default size: %dx%d",
+			 _default_size.width(), _default_size.height() );
 	}
     }
     else	// ! _have_wm
