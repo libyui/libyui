@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Feb 20 17:14:07 CET 2003 - sh@suse.de
+
+- "Obsolete" dependency conflicts cannot be ignored
+  (RPM always deletes the obsoleted package)
+
+-------------------------------------------------------------------
 Thu Feb 20 16:38:11 CET 2003 - sh@suse.de
 
 - Fixed bug #23914: Package manager crashes when opening "package"
