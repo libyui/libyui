@@ -48,8 +48,8 @@ NCPopupDiskspace::NCPopupDiskspace( const wpos at )
     : NCPopup( at, false )
       , partitions( 0 )
       , okButton( 0 )
-      , hDim( 50 )
-      , vDim( 20 )
+      , hDim( 55 )
+      , vDim( 15 )
 {
     createLayout( YCPString(PkgNames::DiskspaceLabel().str()) );
 }
