@@ -48,6 +48,7 @@ NCPopupDeps::NCPopupDeps( const wpos at, PackageSelector * pkger )
       , pkgs( 0 )
       , deps( 0 )
       , depsMenu( 0 )
+      , errorLabel( 0 )
       , packager( pkger )
 {
     createLayout( PkgNames::PackageDeps() );
@@ -105,15 +106,22 @@ void NCPopupDeps::createLayout( const YCPString & headline )
   pkgs->setTableType( NCPkgTable::T_Dependency, strategy );
   vSplit->addChild( pkgs );
 
+#if 0
   depsMenu = new NCMenuButton( vSplit, opt, YCPString( "Dependencies" ) );
   depsMenu->addMenuItem( PkgNames::RequiredBy(), PkgNames::RequRel() );
   depsMenu->addMenuItem( PkgNames::ConflictDeps(), PkgNames::ConflRel() );
   depsMenu->addMenuItem( PkgNames::Alternatives(), PkgNames::AlterRel() );
-
   vSplit->addChild( depsMenu );
+#endif
 
   NCSpacing * sp1 = new NCSpacing( vSplit, opt, 0.8, false, true );
   vSplit->addChild( sp1 );
+  
+  errorLabel = new NCLabel(  vSplit, opt, YCPString("") );
+  vSplit->addChild( errorLabel );
+  
+  NCSpacing * sp2 = new NCSpacing( vSplit, opt, 0.8, false, true );
+  vSplit->addChild( sp2 );
 
   // add the package list containing the dependencies
   deps = new NCPkgTable( vSplit, opt );
@@ -126,20 +134,27 @@ void NCPopupDeps::createLayout( const YCPString & headline )
   NCSplit * hSplit = new NCSplit( vSplit, opt, YD_HORIZ );
   vSplit->addChild( hSplit );
 
-  // add the cancel button
-  opt.isHStretchable.setValue( false );
-  cancelButton = new NCPushButton( hSplit, opt, PkgNames::CancelLabel() );
-  cancelButton->setId( PkgNames::Cancel () );
-  hSplit->addChild( cancelButton );
+  
+  opt.isHStretchable.setValue( true );
 
+  // add the solve button
   solveButton = new NCPushButton( hSplit, opt, PkgNames::SolveLabel() );
   solveButton->setId( PkgNames::Solve () );
   hSplit->addChild( solveButton );
 
+  NCSpacing * sp3 = new NCSpacing( hSplit, opt, 0.4, true, false );
+  hSplit->addChild( sp3 );
+  
+  // add the cancel button
+  cancelButton = new NCPushButton( hSplit, opt, PkgNames::CancelIgnore() );
+  cancelButton->setId( PkgNames::Cancel () );
+  hSplit->addChild( cancelButton );
+
+#if 0
   okButton = new NCPushButton( hSplit, opt, PkgNames::OKLabel() );
   okButton->setId( PkgNames::OkButton () );
   hSplit->addChild( okButton );
-
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -201,7 +216,7 @@ void NCPopupDeps::evaluateErrorResult( PkgDep::ErrorResultList errorlist )
     {
 	if ( (*it).solvable || !(*it).alternatives.empty() )
 	{
-	    // save (*it) is an ErrorResult
+	    // save this error ( (*it) has type ErrorResult )
 	    dependencies.push_back( *it );
 	}
 	else 
@@ -230,10 +245,11 @@ bool NCPopupDeps::fillDepsPackageList( NCPkgTable * table )
      
     while ( it != dependencies.end() )
     {
+	pkgLine.clear();
+	  
 	PMObjectPtr objPtr = (*it).solvable;
 	if ( objPtr )
 	{
-	    pkgLine.clear();
 	    pkgLine.push_back( objPtr->getSelectable()->name() );	// package name
 	    string kind = getDependencyKind( (*it) );
 	    pkgLine.push_back( kind );
@@ -245,6 +261,18 @@ bool NCPopupDeps::fillDepsPackageList( NCPkgTable * table )
 			    objPtr );	// the corresponding package pointer
 	
 	}
+	else
+	{
+	    pkgLine.push_back( (*it).name );
+    	    string kind = getDependencyKind( (*it) );
+	    pkgLine.push_back( kind );
+
+	    table->addLine( PMSelectable::S_NoInst, // use status not installed
+			    pkgLine,
+			    i,		// the index
+			    PMObjectPtr() );	// no pointer available 
+	}
+	
 	++it;
 	i++;
     }
@@ -260,17 +288,21 @@ string NCPopupDeps::getDependencyKind(  PkgDep::ErrorResult error )
     if ( !error.unresolvable.empty() )
     {
 	NCMIL << "UNRESOLVABLE " << error.unresolvable << endl;
-	ret = "UNRESOLVABLE";
+	ret = "UNRESOLVABLE ";
     }
     if ( !error.alternatives.empty() )
     {
 	NCMIL << "ALTERNATIVES " << error.alternatives << endl;
 	ret = "ALTERNATIVES";
+	if ( !error.solvable )
+	{
+	    ret = "ALTERNATIVES see below";
+	}
     }
     if ( !error.conflicts_with.empty() )
     {
 	NCMIL << "CONFLICTS: " << error.conflicts_with << endl;
-	ret = "CONFLICT";
+	ret = "CONFLICT ";
 	if ( !error.remove_to_solve_conflict.empty() )
 	{
 	    NCMIL << "REMOVE to solve not empty" << endl;
@@ -280,18 +312,22 @@ string NCPopupDeps::getDependencyKind(  PkgDep::ErrorResult error )
     return ret;
 }
 
-void NCPopupDeps::concretelyDependency( int index )
+bool NCPopupDeps::concretelyDependency( int index )
 {
     unsigned int size = dependencies.size();
 
     deps->itemsCleared();
-    
-    if ( index >= 0 && (unsigned int)index < size )
-    {
-	PkgDep::ErrorResult error = dependencies[index];
-	NCMIL << "Showing: " << error << endl;	
-    } 
 
+    if ( index < 0 || (unsigned int)index >= size )
+	return false;
+    
+    PkgDep::ErrorResult error = dependencies[index];
+	
+    NCMIL << "Showing: " << error << endl;	
+
+    
+    
+    return true;
 }
 
 

@@ -429,6 +429,13 @@ const YCPString PkgNames::CancelLabel()
     return value;
 }
 
+const YCPString PkgNames::CancelIgnore()
+{
+    // the label of a Cancel button
+    static const YCPString value = toYCPString ( _("&Cancel/Ignore") );
+    return value;
+}
+
 const YCPString PkgNames::SolveLabel()
 {
     // the label of a Cancel button
@@ -676,15 +683,15 @@ const NCstring PkgNames::PkgVersion()
 
 const NCstring PkgNames::PkgVersionNew()
 {
-    // column header installed package version (keep it short!)
-    static const NCstring value = _("Avail. Version");
+    // column header available package version (keep it short - use abbreviation!)
+    static const NCstring value = _("Avail. Vers.");
     return value;
 }
 
 const NCstring PkgNames::PkgVersionInst()
 {
-    // column header installed package version (keep it short!)
-    static const NCstring value = _("Inst. Version");
+    // column header installed package version (keep it short - use abbreviation!)
+    static const NCstring value = _("Inst. Vers.");
     return value;
 }
 

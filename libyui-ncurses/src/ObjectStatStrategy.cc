@@ -57,7 +57,7 @@ PMSelectable::UI_Status ObjectStatStrategy::getPackageStatus( PMObjectPtr objPtr
     }
     else
     {
-	NCERR << "Pointer not valid" << endl;
+	NCERR << "Object pointer not valid" << endl;
 	return PMSelectable::S_NoInst;
     }
 }

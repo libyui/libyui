@@ -331,7 +331,12 @@ public:
      *  The label of the Cancel button
      */
     static const YCPString CancelLabel();
-
+    
+    /**
+     *  The label of the Cancel/Ignore button
+     */
+    static const YCPString CancelIgnore();
+    
     /**
      *  The label of the Solve button
      */

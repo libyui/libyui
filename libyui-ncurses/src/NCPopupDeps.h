@@ -51,7 +51,7 @@ class NCPopupDeps : public NCPopup {
 private:
 
     // the dependencies
-    vector<PkgDep::ErrorResult> dependencies;
+    vector<PkgDep::ErrorResult> dependencies;	// index corresponds to line in package list
     
     NCPushButton * cancelButton;
     NCPushButton * okButton;
@@ -62,6 +62,8 @@ private:
 
     NCMenuButton * depsMenu;		// the menu button
 
+    NCLabel * errorLabel; 		// the error message
+    
     PackageSelector * packager;		// connection to the package selector
 
     string getDependencyKind(  PkgDep::ErrorResult error );
@@ -89,7 +91,7 @@ public:
 
     void evaluateErrorResult(  PkgDep::ErrorResultList errorlist );
     
-    void concretelyDependency( int index );
+    bool concretelyDependency( int index );
     
 };
 
