@@ -107,9 +107,6 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui )
     filterPopup = new NCPopupTree( wpos( 1, 1 ),	// position
 				   false );		// without a description 
 
-    // get the available selections
-    // getSelections();
-
     // create the selections popup
     selectionPopup = new NCPopupSelection( wpos( 1, 1 ), this );
 
@@ -272,38 +269,30 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
     
     return true;
 }
+
 ///////////////////////////////////////////////////////////////////
 //
-// showSelectionPackages
+// showSelPackages
 //
 // Fills the package table with the list of packages matching
 // the selected filter
 //
-bool PackageSelector::showSelectionPackages( NCPkgTable *pkgTable,
-					     const YCPString & label,
-					     int index )
+bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr sel )
 {
     list<PMPackagePtr> pkgList;
     list<PMPackagePtr>::iterator listIt;
     unsigned int i;
     
-    if ( !pkgTable )
+    if ( !packageList )
     {
 	UIERR << "Widget is not a valid NCPkgTable widget" << endl;
     	return false;
     }
 
     // clear the package table
-    pkgTable->itemsCleared ();
+    packageList->itemsCleared ();
     
-    NCMIL << "INDEX: " << index << "  Label: " << label->toString() << endl;
-
-    PMSelectionPtr sel;
-
-    if ( (unsigned int)index < selections.size() )
-    {
-	sel = selections[index];
-    }
+    NCMIL << "  Label: " << label->toString() << endl;
 
     if ( sel )
     {
@@ -312,7 +301,7 @@ bool PackageSelector::showSelectionPackages( NCPkgTable *pkgTable,
 
     for ( i = 0, listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt, i++ )    
     {
-	createListEntry( pkgTable, (*listIt), i );
+	createListEntry( packageList, (*listIt), i );
     }
       
     if ( !label.isNull() && label->compare( YCPString("default") ) != YO_EQUAL )
@@ -360,7 +349,8 @@ bool PackageSelector::fillPackageList( NCPkgTable *pkgTable, const YCPString & l
     unsigned int i;
     PMPackagePtr pkgPtr;
 
-    for ( i = 0, listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt, i++ )    
+    // for ( i = 0, listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt, i++ )
+    for ( i = 0, listIt = pkgList.begin(); i < 100;  ++listIt, i++ )  
     {
 	PMPackagePtr instPtr = (*listIt)->installedObj();
 	PMPackagePtr candPtr = (*listIt)->candidateObj();
@@ -581,7 +571,7 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 	if ( !item.isNull() )
 	{
 	    // show packages belonging to selected list entry
-	    showSelectionPackages( packageList, item, event.detail );
+	    // showSelectionPackages( packageList, item, event.detail );
 	}
     }
 
@@ -956,115 +946,4 @@ string PackageSelector::createText( list<string> info, bool oneline )
     return text;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : PackageSelector::getSelections
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
-bool PackageSelector::getSelections( )
-{
-    InstSrcPtr nsrc = 0;
-    unsigned int i;
 
-    // TEST only (remove this part)
-    string media_url = "dir:///";
-    string product_dir = "/develop/yast2/source/packagemanager/testsuite/media/";
-
-    system ( "rm -rf /tmp/tcache" );	// remove it first ????????
-    
-    Pathname cache   ( "/tmp/tcache" ); // cachedir (must not exist)
-
-    PMError err = InstSrc::vconstruct( nsrc,
-				       cache,
-				       media_url,
-				       product_dir,
-				       InstSrc::T_UnitedLinux );
-
-    if ( err != InstSrcError::E_ok )
-    {
-	NCERR << "Failed to enableSource: "<< err << endl;
-	return false;
-    }
-
-    err = nsrc->enableSource();
-
-    if ( err != InstSrcError::E_ok )
-    {
-	NCERR << "Failed to enableSource" << endl;
-	return false;
-    }
-    // end remove this part
-
-    if ( !nsrc )
-    {
-	NCERR << "No selections available" << endl;
-	return false;
-    }
-    
-    // get selections
-    const list<PMSelectionPtr> sels = nsrc->getSelections ();
-
-    if ( sels.empty() )
-    {
-	NCERR << "Selections are NOT available" << endl;
-	return false;
-    }
-    else
-    {
-	list<PMSelectionPtr>::const_iterator p_it;	
-	for ( i = 0, p_it = sels.begin(); p_it != sels.end(); ++p_it, i++ )
-	{
-	    // show the available add-ons
-	    if ( (*p_it)->visible() && !(*p_it)->isBase() )
-	    {
-		NCMIL << "Add-on " <<  (*p_it)->name() << " available" << endl;
-		selections.push_back( (*p_it) );	// store the PMSelectionPtr 
-	    }
-	}
-    }
-
-    return true;
-}
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : PackageSelector::selectionNames
-//	METHOD TYPE : list <string>
-//
-//	DESCRIPTION :
-//
-vector<string> PackageSelector::selectionNames( )
-{
-    vector<string> selList;
-    vector<PMSelectionPtr>::iterator it = selections.begin();
-
-    while ( it != selections.end() )
-    {
-	selList.push_back( (*it)->name() );
-	++it;
-    }
-
-    return selList;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : PackageSelector::selectionId
-//	METHOD TYPE : string
-//
-//	DESCRIPTION :
-//
-string PackageSelector::selectionId( unsigned int index )
-{
-    string id  = "";
-    if ( index < selections.size() )
-    {
-	id = selections[index]->name();
-    }
-    
-    return id;
-}

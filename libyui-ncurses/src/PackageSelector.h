@@ -74,8 +74,6 @@ class PackageSelector
 
     NCPopupSelection * selectionPopup; 	// the selections popup
 
-    vector<PMSelectionPtr> selections; 	// the available selections
-    
     // internal helper functions (format list of string) 
     string createRelLine( list<PkgRelation> info );
     string createDescrText( list<string> info );
@@ -85,11 +83,7 @@ class PackageSelector
 
   protected:
  
-  /**
-   * Get selections from the instsource manager
-   */
-  bool getSelections( );
-    
+
   public:
     
     /**
@@ -113,15 +107,6 @@ class PackageSelector
     */
     bool fillPackageList( NCPkgTable *table, const YCPString & label, string filter );
 
-   /**
-    * Fills the package table
-    * @param table  The table widget
-    * @param label The selected selection (the label)
-    * @param index Internal index
-    * @return bool
-    */
-    bool showSelectionPackages( NCPkgTable *table, const YCPString & detail, int index );
-    
    /**
     * Fills the list of available packages
     * @param table  The table widget
@@ -236,16 +221,13 @@ class PackageSelector
     */
     void setPackageList( NCPkgTable * pkgList ) { packageList = pkgList; }
 
-    /**
-     * Returns a list of the names of all available selections
-     */
-    std::vector<std::string> selectionNames( );
-
-    /**
-     * Returns the origin name (the id) of the selection
-     */
-    std::string selectionId( unsigned int index );
-
+   /**
+    * Fills the package table
+    * @param label The selected selection (the label)
+    * @param selPtr The selection
+    * @return bool
+    */
+    bool showSelPackages( const YCPString & label, PMSelectionPtr selPtr );
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -61,6 +61,11 @@ private:
 
     PackageSelector * packager;		// connection to the PackageSelector,
 
+    vector< pair<PMSelectionPtr, bool> > selections; 	// the available selections
+
+    // Get selections from the instsource manager
+    bool getSelections( );
+    
 protected:
 
     string getCurrentLine();
@@ -78,7 +83,7 @@ public:
 
     void createLayout( const YCPString & label );
 
-    bool getSelectedItems( vector<string> & list );
+    bool getSelectedItems( vector<int> & list );
 
     /**
      * Shows the poup with the add ons (package categories).

@@ -24,6 +24,9 @@
 #include "NCSpacing.h"
 #include "PkgNames.h"
 
+#include <Y2PM.h>
+#include <y2pm/RpmDb.h>
+#include <y2pm/PMManager.h>
 
 
 ///////////////////////////////////////////////////////////////////
@@ -40,6 +43,9 @@ NCPopupSelection::NCPopupSelection( const wpos at,  PackageSelector * pkg  )
     , okButton( 0 )
     , packager( pkg )
 {
+    // get the available selections
+    getSelections();
+
     createLayout( PkgNames::SelectionLabel() );
 }
 
@@ -69,19 +75,12 @@ void NCPopupSelection::createLayout( const YCPString & label )
 
   YWidgetOpt opt;
 
-  // get the available selections from the PackageSelector
-  vector<string> selections;
+  vector< pair<PMSelectionPtr, bool> >::iterator it;
 
-  if ( packager )
-  {
-      selections =  packager->selectionNames( );
-  }
   // the vertical split is the (only) child of the dialog
   NCSplit * split = new NCSplit( this, opt, YD_VERT );
   addChild( split );
 
-  vector<string>::iterator pos;
-  
   opt.notifyMode.setValue( false );
 
   // the multi selection widget
@@ -89,15 +88,14 @@ void NCPopupSelection::createLayout( const YCPString & label )
   split->addChild( selectionBox );
   int i;
   
-  for ( i = 0, pos = selections.begin(); pos != selections.end(); ++pos, i++ )
+  for ( i = 0, it = selections.begin(); it != selections.end(); ++it, i++ )
   {
-      // FIXME: get the currently selected add-ons from packagemanager
       // FIXME: get the (translated) description
-      selectionBox->addItem( (*pos),			// description
+      selectionBox->addItem( YCPString( (*it).first->name() ),	// description
 			     PkgNames::Treeitem(),	// `id
-			     false );			// selected
+			     (*it).second );		// selected
   }
-  
+
   opt.notifyMode.setValue( true );
   
   // add an OK button
@@ -117,8 +115,6 @@ void NCPopupSelection::createLayout( const YCPString & label )
 //
 NCursesEvent & NCPopupSelection::showSelectionPopup( )
 {
-
-
     postevent = NCursesEvent();
     do {
 	popupDialog();
@@ -126,6 +122,22 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
     
     popdownDialog();
 
+    if ( !packager || !selectionBox )
+	return postevent;
+    
+    // if OK is clicked get the current item and show the package list
+    if ( postevent.detail == NCursesEvent::USERDEF )
+    {
+	if ( selectionBox && !selections.empty() )
+	{
+	    int index = selectionBox->getCurrentItem();
+	    PMSelectionPtr selPtr = selections[index].first;
+	
+	    NCMIL << "Current selection: " << getCurrentLine() << endl;
+
+	    packager->showSelPackages( getCurrentLine(), selPtr );
+	}
+    }
     return postevent;
 }
 
@@ -134,9 +146,9 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
 // bool getSelectedItems ( vector<string> & list )
 //
 //
-bool  NCPopupSelection::getSelectedItems ( vector<string> & selItems )
+bool  NCPopupSelection::getSelectedItems ( vector<int> & selItems )
 {
-    vector<std::string> items;
+    vector<int> items;
     items.reserve(20);
     
     const NCTableCol * tag = 0;
@@ -162,10 +174,8 @@ bool  NCPopupSelection::getSelectedItems ( vector<string> & selItems )
 	}
 	if ( tag && ( (NCTableTag *)tag )->Selected() )
 	{
-	    // add this category to the list of selected items
-	    string origName = packager->selectionId( index );
-	    items.push_back( origName );
-	    NCINT << "Selected: " << origName << endl;
+	    items.push_back( index );
+	    NCINT << "Selected line: " << index << endl;
 	}
 	index++;
     }
@@ -189,7 +199,7 @@ string  NCPopupSelection::getCurrentLine( )
     
     int index = selectionBox->getCurrentItem();
 
-    return ( packager->selectionId(index) );
+    return ( selections[index].first->name() );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -235,31 +245,16 @@ NCursesEvent NCPopupSelection::wHandleInput( int ch )
 //
 bool NCPopupSelection::postAgain( )
 {
-    bool ok = false;
-    vector<string> selItems;
-    
-    if ( !selectionBox
-	 || !postevent.widget )
+    if( !postevent.widget )
 	return false;
 
-    postevent.item = YCPNull();
+    postevent.detail = NCursesEvent::NODETAIL;
      
     YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
     
     if ( currentId->compare( PkgNames::OkButton () ) == YO_EQUAL )
     {
-	// if OK is clicked get the current item and the list of selected items
-	postevent.detail = selectionBox->getCurrentItem();
-
-	NCMIL << "GOT INDEX: " << selectionBox->getCurrentItem() << endl;
-	
-	postevent.item =  getCurrentLine(); 
-	ok =  getSelectedItems( selItems );
-    
-	if ( ok )
-	{
-	    postevent.itemList = selItems;
-	}
+	postevent.detail = NCursesEvent::USERDEF ;
 	// return false means: close the popup
 	return false;
     }
@@ -270,3 +265,52 @@ bool NCPopupSelection::postAgain( )
     return true;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : PackageSelector::getSelections
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+bool NCPopupSelection::getSelections( )
+{
+
+    // get selections
+    PMSelectionPtr selPtr;
+    PMManager::PMSelectableVec::const_iterator it;
+    bool selected;
+    
+    for (  it = Y2PM::selectionManager().begin();
+	 it != Y2PM::selectionManager().end();
+	 ++it )
+    {
+	selected = false;
+	PMSelectionPtr instPtr = (*it)->installedObj();
+	PMSelectionPtr candPtr = (*it)->candidateObj();
+
+	if ( instPtr )
+	{
+	    selPtr = instPtr;
+	    selected = true;
+	}
+	else if ( candPtr )
+	{
+	    if ( (*it)->status() == PMSelectable::S_Install )
+		selected = true;
+	    selPtr = candPtr;
+	}
+	else
+	{
+	    selPtr = (*it)->theObject(); 
+	}
+	 // show the available add-ons
+	if ( selPtr && selPtr->visible() && !selPtr->isBase() )
+	{
+	    NCMIL << "Add-on " <<  selPtr->name() << ", selected: " << selected << endl; 
+	    selections.push_back( make_pair(selPtr, selected) );
+	}
+    }
+    
+    return true;
+}

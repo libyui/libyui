@@ -48,12 +48,13 @@
 			   )
 		 ),
        `HBox( `HWeight(1, `HBox(`Label( "Filter: "),
-				`Label( `id(`filter), `opt(`hStretchable), "........................." )
+				`Label( `id(`filter), "........................." ),
+				`HSpacing( 0.1 )
 				)
 		       ),
-	      `HStretch(),
 	      `HWeight(1, `HBox(`Label( "Required diskspace: "),
-				`Label( `id(`diskspace), `opt(`hStretchable), "         " )
+				`Label( `id(`diskspace), "         " ),
+				`HSpacing( 0.1 )
 				)
 		       )
 	      ),
