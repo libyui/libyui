@@ -19,6 +19,7 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
+#include "qregexp.h"
 #include "YQPkgDescriptionView.h"
 #include "YQPkgDescriptionDialog.h"
 #include "YQi18n.h"
@@ -121,7 +122,8 @@ YQPkgDescriptionView::showLink( const QString & url )
 {
     if ( url.startsWith( "pkg:" ) )
     {
-	QString pkgName = url.mid( sizeof( "pkg:/" ) );	// Qt autmatically inserts '/' 
+	QString pkgName = url;
+	pkgName.remove( QRegExp( "^pkg:/*" ) );
 	y2milestone( "Hyperlinking to package '%s'", (const char *) pkgName );
 	YQPkgDescriptionDialog::showDescriptionDialog( pkgName );
     }
