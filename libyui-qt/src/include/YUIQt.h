@@ -181,7 +181,13 @@ protected:
      * Inherited from QObject: Grab show events and work around QWidgetStack bug
      **/
     bool eventFilter( QObject *obj, QEvent *ev );
-    
+
+    /**
+     * Make all UI windows usable without a mouse
+     * (even predefined Qt dialogs that don't know the UI's dialogs' activate()
+     * magic)  
+     **/
+    bool showEventFilter( QObject * obj, QEvent * ev );
 
     /*** Widget creation methods, all inherited from YUIInterpreter ***/
 

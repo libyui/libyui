@@ -97,7 +97,10 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
 	for(int i=0; i < argc; i++)
 	{
 	    if (argv[i] == QString( "-no-wm" ) )
+	    {
+		y2milestone( "Assuming the UI runs without window manager" );
 		has_windowmanager = false;
+	    }
 
 	    if ( argv[i] == QString( "-kcontrol_id" ) )
 	    {
@@ -132,7 +135,7 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
 	     default_size.height() < 480   )
 	{
 	    // 640x480 is the absolute minimum, but let's go for 800x600 if we can
-	    
+
 	    if ( desktop()->width()  >= 800 &&
 		 desktop()->height() >= 600  )
 	    {
@@ -144,7 +147,7 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
 		default_size.setWidth ( 640 );
 		default_size.setHeight( 480 );
 	    }
-	    
+
 	    y2milestone( "Assuming default size of %dx%d",
 			 default_size.width(), default_size.height() );
 	}
@@ -911,6 +914,23 @@ bool YUIQt::eventFilter( QObject *obj, QEvent *ev )
     }
 
     return QObject::eventFilter( obj, ev);
+}
+
+
+bool YUIQt::showEventFilter( QObject * obj, QEvent * ev )
+{
+    if ( ! hasWM() )
+    {
+	// Make sure newly opened windows get the keyboard focus even without a
+	// window manager. Otherwise the app might be unusable without a mouse.
+
+	QWidget * wid = dynamic_cast<QWidget *> (obj);
+
+	if ( wid )
+	    wid->setActiveWindow();
+    }
+
+    return false;	// Don't stop event processing
 }
 
 
