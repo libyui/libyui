@@ -20,6 +20,7 @@
 /-*/
 
 #define CHECK_DEPENDENCIES_ON_STARTUP	1
+#define DEPENDENCY_FEEDBACK_IF_OK	0
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT	false
 
 #include <qaction.h>
@@ -466,12 +467,12 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 
     if ( ! _youMode )
     {
-	QPushButton * solve_button = new QPushButton( _( "Check &Dependencies" ), button_box );
-	CHECK_PTR( solve_button );
-	solve_button->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
+	_checkDependenciesButton = new QPushButton( _( "Check &Dependencies" ), button_box );
+	CHECK_PTR( _checkDependenciesButton );
+	_checkDependenciesButton->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
 
-	connect( solve_button, SIGNAL( clicked() ),
-		 this,         SLOT  ( resolvePackageDependencies() ) );
+	connect( _checkDependenciesButton,	SIGNAL( clicked() ),
+		 this,         			SLOT  ( manualResolvePackageDependencies() ) );
 
 
 	_autoDependenciesCheckBox = new QCheckBox( _( "A&uto check" ), button_box );
@@ -684,7 +685,41 @@ YQPackageSelector::autoResolveDependencies()
     if ( _autoDependenciesCheckBox && ! _autoDependenciesCheckBox->isChecked() )
 	return;
 
+#if ! DEPENDENCY_FEEDBACK_IF_OK
+    if ( _checkDependenciesButton )
+	_checkDependenciesButton->animateClick();
+#endif
+    
+    YUIQt::yuiqt()->busyCursor();
+    
     resolvePackageDependencies();
+    
+    YUIQt::yuiqt()->normalCursor();
+}
+
+
+int
+YQPackageSelector::manualResolvePackageDependencies()
+{
+    if ( ! _pkgConflictDialog )
+    {
+	y2error( "No package conflict dialog existing" );
+	return QDialog::Accepted;
+    }
+
+    int result = _pkgConflictDialog->solveAndShowConflicts();
+
+#if DEPENDENCY_FEEDBACK_IF_OK
+
+    if ( result == QDialog::Accepted )
+    {
+	QMessageBox::information( this, "",
+				  _( "All package dependencies are OK." ),
+				  QMessageBox::Ok );
+    }
+#endif
+
+    return result;
 }
 
 

@@ -32,6 +32,7 @@ class QComboBox;
 class QLabel;
 class QListView;
 class QProgressBar;
+class QPushButton;
 class QSplitter;
 class QTabWidget;
 class QPopupMenu;
@@ -104,6 +105,13 @@ public slots:
      * Returns QDialog::Accepted or QDialog::Rejected.
      **/
      int resolvePackageDependencies();
+
+    /**
+     * Resolve package dependencies manually.
+     *
+     * Returns QDialog::Accepted or QDialog::Rejected.
+     **/
+     int manualResolvePackageDependencies();
 
     /**
      * Resolve selection dependencies (unconditionally).
@@ -245,6 +253,7 @@ protected:
 
     QCheckBox *				_autoDependenciesCheckBox;
     QProgressBar *			_diskSpace;
+    QPushButton *			_checkDependenciesButton;
     QTabWidget *			_detailsViews;
     QY2ComboTabWidget *			_filters;
     YQPkgConflictDialog *		_pkgConflictDialog;

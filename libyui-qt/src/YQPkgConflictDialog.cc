@@ -168,6 +168,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
 	return result;
     }
     
+    YUIQt::yuiqt()->busyCursor();
 
     if ( isVisible() )
     {
@@ -186,7 +187,6 @@ YQPkgConflictDialog::solveAndShowConflicts()
     PkgDep::ResultList		goodList;
     PkgDep::ErrorResultList	badList;
 
-    YUIQt::yuiqt()->busyCursor();
     y2debug( "Solving..." );
 
     // Solve.
