@@ -91,7 +91,7 @@ void NCLabel::setSize( long newwidth, long newheight )
 //
 void NCLabel::setLabel( const YCPString & nlabel )
 {
-  // FIXME: why setting label in constructor ( :label(nlabel) ) + here ???????
+  // TO DO: why setting label in constructor ( :label(nlabel) ) + here ?
   // RecodeToWchar is called twice !!!!
   label  = NCstring( nlabel );
   NCDBG << "LABEL: " << NCstring(nlabel) << " Longest line: " << label.width()<< endl;
