@@ -49,9 +49,6 @@ private:
     NCPushButton * cancelButton;
     PackageSelector * packager;
 
-    int hDim;
-    int vDim;
-    
 protected:
 
     virtual bool postAgain();
@@ -72,7 +69,6 @@ public:
 
     NCursesEvent showInfoPopup( );
 
-    void setNiceSize( int horiz, int vert ) { hDim = horiz; vDim = vert; }
 };
 
 ///////////////////////////////////////////////////////////////////

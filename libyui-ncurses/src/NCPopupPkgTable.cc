@@ -49,8 +49,6 @@ NCPopupPkgTable::NCPopupPkgTable( const wpos at, PackageSelector * pkger )
       , okButton( 0 )
       , cancelButton( 0 )
       , packager( pkger )
-      , hDim( 50 )
-      , vDim( 20 )
 {
     createLayout( );
 }

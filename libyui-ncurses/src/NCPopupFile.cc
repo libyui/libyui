@@ -48,8 +48,6 @@ NCPopupFile::NCPopupFile( const wpos at, string device,  PackageSelector * pkger
     , pathName( "" )
     , mountFloppy( true )
     , floppyDevice( device )
-    , hDim( 50 )
-    , vDim( 13 )
 {
     createLayout( );
 }
@@ -164,7 +162,13 @@ NCursesEvent & NCPopupFile::showFilePopup( )
 //
 long NCPopupFile::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? hDim : vDim );
+    long vdim;
+    if ( NCurses::lines() > 13 )
+	vdim = 13;
+    else
+	vdim = NCurses::lines()-4;
+	
+    return ( dim == YD_HORIZ ? NCurses::cols()/2 : vdim );
 }
 
 ///////////////////////////////////////////////////////////////////

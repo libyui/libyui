@@ -91,7 +91,6 @@ public:
     void saveToFile();
     void loadFromFile();
     
-    void setNiceSize( int horiz, int vert ) { hDim = horiz; vDim = vert; }
 };
 
 ///////////////////////////////////////////////////////////////////
