@@ -389,7 +389,7 @@ bool NCPkgTable::fillDefaultList( )
 	    }
 	    else
 	    {
-		NCERR << "No default RPM group availbale" << endl;
+		NCERR << "No default RPM group available" << endl;
 	    }
 	    break;
 	}
@@ -481,9 +481,7 @@ void NCPkgTable::fillHeader( )
 	    header.reserve(5);
 	    header.push_back( "L" + PkgNames::PkgStatus() );
 	    header.push_back( "L" + PkgNames::PkgName() );
-	    header.push_back( "L" + PkgNames::PkgVersion() );
 	    header.push_back( "L" + PkgNames::PkgSummary() );
-	    header.push_back( "L" + PkgNames::PkgSize() );
 	    break;
 	}
     }

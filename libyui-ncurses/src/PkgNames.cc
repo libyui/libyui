@@ -1332,7 +1332,7 @@ const string PkgNames::PkgName()
 
 const string PkgNames::PackageName()
 {
-    // column header package name (keep it short!)
+    // column header (keep it short!)
     static const string value = _( "Package/Library" );
     return value;
 }
