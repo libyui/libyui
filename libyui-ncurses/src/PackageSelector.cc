@@ -108,7 +108,8 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui )
 				   false );		// without a description 
 
     // get the available selections
-    selOk = getSelections();
+    // getSelections();
+
     // create the selections popup
     selectionPopup = new NCPopupSelection( wpos( 1, 1 ), this );
 
@@ -241,6 +242,11 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
     {
 	return false;
     }
+
+    if ( !pkgPtr->hasSelectable() )
+    {
+	return false;
+    }
     
     // get the selectable
     PMSelectablePtr selectable = pkgPtr->getSelectable();
@@ -337,11 +343,6 @@ bool PackageSelector::fillPackageList( NCPkgTable *pkgTable, const YCPString & l
 	UIERR << "Widget is not a valid NCPkgTable widget" << endl;
     	return false;
     }
-    if ( !selOk )
-    {
-	UIERR << "Selections not available" << endl;
-	return false;
-    }
     
     NCMIL <<  "Label: " <<  label->toString() << " Filter: " << filter << endl;
 
@@ -359,8 +360,7 @@ bool PackageSelector::fillPackageList( NCPkgTable *pkgTable, const YCPString & l
     unsigned int i;
     PMPackagePtr pkgPtr;
 
-    //for ( i = 0, listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt, i++ )    
-    for ( i = 0, listIt = pkgList.begin(); i < 100;  ++listIt, i++ )    
+    for ( i = 0, listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt, i++ )    
     {
 	PMPackagePtr instPtr = (*listIt)->installedObj();
 	PMPackagePtr candPtr = (*listIt)->candidateObj();
@@ -966,10 +966,9 @@ string PackageSelector::createText( list<string> info, bool oneline )
 //
 bool PackageSelector::getSelections( )
 {
-    InstSrcPtr nsrc;
+    InstSrcPtr nsrc = 0;
     unsigned int i;
 
-#if 0
     // TEST only (remove this part)
     string media_url = "dir:///";
     string product_dir = "/develop/yast2/source/packagemanager/testsuite/media/";
@@ -998,11 +997,10 @@ bool PackageSelector::getSelections( )
 	return false;
     }
     // end remove this part
-#endif    
 
     if ( !nsrc )
     {
-	NCERR << "No instsource manager" << endl;
+	NCERR << "No selections available" << endl;
 	return false;
     }
     
