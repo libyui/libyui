@@ -229,9 +229,12 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
 	    {	
 		notify = objPtr->getCandidateObj()->insnotify();
 		header = YCPString(PkgNames::NotifyLabel());
-		
+		// get license (available for packages only)  
 		PMPackagePtr pkgPtr = objPtr->getCandidateObj();
-		license = pkgPtr->licenseToConfirm();
+		if ( pkgPtr )
+		{
+		    license = pkgPtr->licenseToConfirm();
+		}
 	    }
 	    break;
 
