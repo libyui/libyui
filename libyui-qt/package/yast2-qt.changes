@@ -1,7 +1,15 @@
 -------------------------------------------------------------------
+Thu Apr  1 15:35:48 CEST 2004 - sh@suse.de
+
+- V 2.9.16
+- Small fixes for wizard menus + trees
+  patch verified by cschum 
+
+-------------------------------------------------------------------
 Wed Mar 31 16:20:37 CEST 2004 - sh@suse.de
 
-- Added wizard menus
+- Fixed bug #37581: Inconsistent widgets in yast2 modules:
+  Added wizard menus and trees
 
 -------------------------------------------------------------------
 Wed Mar 31 14:19:50 CEST 2004 - sh@suse.de
