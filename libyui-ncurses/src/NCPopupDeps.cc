@@ -328,7 +328,8 @@ bool NCPopupDeps::concretelyDependency( int index )
     unsigned int i = 0;
     vector<string> pkgLine;
     pkgLine.reserve(4);
-
+    bool labelSet = false;
+    
     deps->itemsCleared();
 
     if ( index < 0 || (unsigned int)index >= size )
@@ -377,11 +378,13 @@ bool NCPopupDeps::concretelyDependency( int index )
 	{
 	    errorLabel1->setLabel( YCPString(PkgNames::LabelRequire1().str())  );
 	    errorLabel2->setLabel( YCPString(PkgNames::LabelRequire2().str()) );
+	    labelSet = true;
 	}
 	else
 	{	
 	    errorLabel1->setLabel( YCPString(PkgNames::LabelUnresolvable().str()) );
 	    errorLabel2->setLabel(  YCPString( "" ) );
+	    labelSet = true;
 	}
     }
     if ( !error.alternatives.empty() )
@@ -409,8 +412,12 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    ++it;
 	    i++;
 	}
-	errorLabel1->setLabel( YCPString(PkgNames::LabelAlternative().str()) );
-	errorLabel2->setLabel( YCPString( "" ) );
+	if ( !labelSet )
+	{
+	    errorLabel1->setLabel( YCPString(PkgNames::LabelAlternative().str()) );
+	    errorLabel2->setLabel( YCPString( "" ) );
+	    labelSet = true;
+	}
     }
     if ( !error.conflicts_with.empty() )
     {
@@ -451,12 +458,17 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    ++it;
 	    i++;
 	}
-	errorLabel1->setLabel( YCPString(PkgNames::LabelConflict1().str()) );
-	errorLabel2->setLabel( YCPString(PkgNames::LabelConflict2().str()) );
+	if ( !labelSet )
+	{
+	    errorLabel1->setLabel( YCPString(PkgNames::LabelConflict1().str()) );
+	    errorLabel2->setLabel( YCPString(PkgNames::LabelConflict2().str()) );
+	    labelSet = true;
+	}
     }
     if ( !error.referers.empty()
 	 && error.conflicts_with.empty()
-	 && error.unresolvable.empty() )
+	 && error.unresolvable.empty()
+	 && error.alternatives.empty() )
     {
 	PMObjectPtr lastPtr;
 	string lastName = "";
@@ -497,8 +509,12 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    i++;
 	    
 	}
-	errorLabel1->setLabel( YCPString(PkgNames::LabelRequBy1().str()) );
-	errorLabel2->setLabel( YCPString(PkgNames::LabelRequBy2().str()) );	
+	if ( !labelSet )
+	{
+	    errorLabel1->setLabel( YCPString(PkgNames::LabelRequBy1().str()) );
+	    errorLabel2->setLabel( YCPString(PkgNames::LabelRequBy2().str()) );
+	    labelSet = true;
+	}
     }
 
     // show the list
