@@ -133,7 +133,7 @@ void NCPopupDeps::createLayout( )
   
   opt.isHStretchable.setValue( false );
   opt.isHeading.setValue( true );
-  NCLabel * helplb = new NCLabel( vSplit, opt, YCPString(PkgNames::DepsHelpLine().str()) );
+  NCLabel * helplb = new NCLabel( vSplit, opt, YCPString(PkgNames::DepsHelpLine()) );
   vSplit->addChild( helplb );
   
   NCSpacing * sp3 = new NCSpacing( vSplit, opt, 0.6, false, true );
@@ -146,7 +146,7 @@ void NCPopupDeps::createLayout( )
 
   // add the solve button
   opt.key_Fxx.setValue( 10 );
-  solveButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::SolveLabel().str()) );
+  solveButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::SolveLabel()) );
   solveButton->setId( PkgNames::Solve () );
   hSplit->addChild( solveButton );
 
@@ -154,7 +154,7 @@ void NCPopupDeps::createLayout( )
   hSplit->addChild( sp4 );
 
   opt.key_Fxx.setValue( 5 );
-  ignoreAllButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::IgnAllLabel().str()) );
+  ignoreAllButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::IgnAllLabel()) );
   ignoreAllButton->setId( PkgNames::IgnoreAll() );
   hSplit->addChild( ignoreAllButton );
 
@@ -162,7 +162,7 @@ void NCPopupDeps::createLayout( )
   hSplit->addChild( sp5 );
 
   opt.key_Fxx.setValue( 4 );
-  ignoreButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::IgnLabel().str()) );
+  ignoreButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::IgnLabel()) );
   ignoreButton->setId( PkgNames::Ignore() );
   hSplit->addChild( ignoreButton );
 
@@ -171,7 +171,7 @@ void NCPopupDeps::createLayout( )
   
   // add the cancel button
   opt.key_Fxx.setValue( 9 );
-  cancelButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::CancelLabel().str()) );
+  cancelButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::CancelLabel()) );
   cancelButton->setId( PkgNames::Cancel () );
   hSplit->addChild( cancelButton );
 
@@ -206,8 +206,8 @@ bool NCPopupDeps::showDependencies( )
     NCDBG << "Solving..." << endl ;
 
     NCPopupInfo info( wpos(10, 10),  YCPString( "" ),
-		      YCPString(PkgNames::Solving().str()),
-		      PkgNames::OKLabel().str() );
+		      YCPString(PkgNames::Solving()),
+		      PkgNames::OKLabel() );
     info.setNiceSize( 18, 4 );
     info.popup();
     
@@ -268,8 +268,8 @@ bool NCPopupDeps::evaluateErrorResult( NCPkgTable * table,
 	 * */
 	if ( !(*it).unresolvable.empty() )
 	{
-	    if ( addDepsLine( table, (*it), PkgNames::RequText().str() ) )
-		dependencies.push_back( make_pair( (*it), PkgNames::RequText().str() ) );
+	    if ( addDepsLine( table, (*it), PkgNames::RequText() ) )
+		dependencies.push_back( make_pair( (*it), PkgNames::RequText() ) );
 	}
 	/**
 	 * If this list is not empty, it means that the
@@ -282,8 +282,8 @@ bool NCPopupDeps::evaluateErrorResult( NCPkgTable * table,
 	 * */
 	if ( !(*it).alternatives.empty() )
 	{
-	    if ( addDepsLine( table, (*it), PkgNames::NeedsText().str() ) )
-		dependencies.push_back( make_pair( (*it), PkgNames::NeedsText().str() ) );
+	    if ( addDepsLine( table, (*it), PkgNames::NeedsText() ) )
+		dependencies.push_back( make_pair( (*it), PkgNames::NeedsText() ) );
 	}
 
 	/**
@@ -299,17 +299,17 @@ bool NCPopupDeps::evaluateErrorResult( NCPkgTable * table,
 	    {
 		case PkgDep::RelInfo::REQUIREMENT:
 		    // "somepackage requires otherpackage"
-		    text = PkgNames::RequConflictText().str() ;
+		    text = PkgNames::RequConflictText() ;
 		    break;
 		
 		case PkgDep::RelInfo::CONFLICT:
 		    // "somepackage conflicts with otherpackage"
-		    text =  PkgNames::ConflictText().str();
+		    text =  PkgNames::ConflictText();
 		    break;
 			
 		case PkgDep::RelInfo::OBSOLETION:
 		    // "somepackage obsoletes otherpackage"
-		    text = PkgNames::ObsoleteText().str();
+		    text = PkgNames::ObsoleteText();
 		    break;
 	    }
 	    if ( addDepsLine( table, (*it), text ) )
@@ -330,8 +330,8 @@ bool NCPopupDeps::evaluateErrorResult( NCPkgTable * table,
 	     && (*it).unresolvable.empty()
 	     && (*it).alternatives.empty() )
 	{
-	    if ( addDepsLine( table, (*it), PkgNames::RequByText().str()) )
-		dependencies.push_back( make_pair( (*it), PkgNames::RequByText().str() ) );
+	    if ( addDepsLine( table, (*it), PkgNames::RequByText()) )
+		dependencies.push_back( make_pair( (*it), PkgNames::RequByText() ) );
 	}
 	++it;
     }
@@ -371,17 +371,17 @@ bool NCPopupDeps::addDepsLine( NCPkgTable * table,
     {
 	pkgLine.push_back( pkgName );	// package name
 	pkgLine.push_back( kind );
-	if ( kind != PkgNames::RequByText().str()
+	if ( kind != PkgNames::RequByText()
 	     && !error.referers.empty() )
 	{
 	    pkgLine.push_back( getReferersList( error) );
 	}
-	if ( kind == PkgNames::RequByText().str() )
+	if ( kind == PkgNames::RequByText() )
 	{
 	    if ( !objPtr )
 	    {
 		string notAvail = "(" + pkgName + " "
-		    + PkgNames::NotAvailableText().str() + ")";
+		    + PkgNames::NotAvailableText() + ")";
 		pkgLine.push_back( notAvail );
 	    }
 	    else if( pkgStatus == PMSelectable::S_Taboo )
@@ -425,7 +425,7 @@ string NCPopupDeps::getReferersList( const PkgDep::ErrorResult & error )
 	refList += error.name;
     }
     refList += " ";
-    refList += PkgNames::RequiredByText().str();
+    refList += PkgNames::RequiredByText();
     refList += " ";
 
     // create the column "Additional information"
@@ -482,7 +482,7 @@ bool NCPopupDeps::concretelyDependency( int index )
     NCDBG << "*** Showing: " << error << endl;	
 
     // show the corresponding dependency
-    if ( dependencies[index].second == PkgNames::RequText().str() )
+    if ( dependencies[index].second == PkgNames::RequText() )
     {
 	list<PkgDep::RelInfo>::iterator it = error.unresolvable.begin();
 	while ( it != error.unresolvable.end() )
@@ -499,9 +499,9 @@ bool NCPopupDeps::concretelyDependency( int index )
 	}
 	    
 	errorLabel1->setLabel( YCPString(getLabelRequire1())  );
-	errorLabel2->setLabel( YCPString(PkgNames::LabelRequire2().str()) );
+	errorLabel2->setLabel( YCPString(PkgNames::LabelRequire2()) );
     }
-    else if ( dependencies[index].second == PkgNames::NeedsText().str() )
+    else if ( dependencies[index].second == PkgNames::NeedsText() )
     {
 	PMObjectPtr lastPtr;
 
@@ -525,12 +525,12 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    ++it;
 	}
 
-	errorLabel1->setLabel( YCPString(PkgNames::LabelAlternative().str()) );
+	errorLabel1->setLabel( YCPString(PkgNames::LabelAlternative()) );
 	errorLabel2->setLabel( YCPString( "" ) );
     }
-    else if ( dependencies[index].second == PkgNames::ConflictText().str()
-	      || dependencies[index].second == PkgNames::RequConflictText().str()
-	      || dependencies[index].second == PkgNames::ObsoleteText().str() )
+    else if ( dependencies[index].second == PkgNames::ConflictText()
+	      || dependencies[index].second == PkgNames::RequConflictText()
+	      || dependencies[index].second == PkgNames::ObsoleteText() )
     {
 	PMObjectPtr lastPtr;
 	string causeName = "";
@@ -559,10 +559,10 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    ++it;
 	}
 	
-	errorLabel1->setLabel( YCPString(PkgNames::LabelConflict1().str()) );
+	errorLabel1->setLabel( YCPString(PkgNames::LabelConflict1()) );
 	errorLabel2->setLabel( YCPString(getLabelConflict2()) );
     }
-    else if ( dependencies[index].second == PkgNames::RequByText().str()
+    else if ( dependencies[index].second == PkgNames::RequByText()
 	      && error.conflicts_with.empty()
 	      && error.unresolvable.empty()
 	      && error.alternatives.empty() )
@@ -666,7 +666,7 @@ long NCPopupDeps::nicesize(YUIDimension dim)
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupDeps::wHandleInput( int ch )
+NCursesEvent NCPopupDeps::wHandleInput( wint_t ch )
 {
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;
@@ -762,8 +762,8 @@ bool NCPopupDeps::postAgain()
 	NCDBG << "Solving..." << endl ;
 
 	NCPopupInfo info( wpos(10, 10),  YCPString( "" ),
-		      YCPString(PkgNames::Solving().str()),
-		      PkgNames::OKLabel().str() );
+		      YCPString(PkgNames::Solving()),
+		      PkgNames::OKLabel() );
 	info.setNiceSize( 18, 4 );
 	info.popup();
     

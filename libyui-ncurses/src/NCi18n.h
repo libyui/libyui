@@ -32,11 +32,9 @@
  *  @return NCstring
  */
 
-NCstring _(const char * msgid)
+string _(const char * msgid)
 {
-    NCstring str( "" );
-
-    return NCstring( gettext(msgid) );
+    return gettext(msgid);
 }
 
 /**
@@ -46,11 +44,9 @@ NCstring _(const char * msgid)
  * @param n 	choose singular/plural form based on this value
  * @return NCstring
  */
-NCstring _(const char * msgid1, const char * msgid2, unsigned long int n)
+string _(const char * msgid1, const char * msgid2, unsigned long int n)
 {
-    NCstring str( "" );
-
-    return NCstring( ngettext(msgid1, msgid2, n) );
+    return ngettext(msgid1, msgid2, n);
 }
 
 

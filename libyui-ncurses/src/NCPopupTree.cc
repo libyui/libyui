@@ -43,7 +43,7 @@ NCPopupTree::NCPopupTree( const wpos at, PackageSelector * pkg )
     , packager ( pkg )
 {
     // create the layout (the NCTree)
-    createLayout( YCPString(PkgNames::RpmTreeLabel().str()) );
+    createLayout( YCPString(PkgNames::RpmTreeLabel()) );
 
     // clone the tree (fill the NCTree)
     cloneTree( Y2PM::packageManager().rpmGroupsTree()->root(), 0 ); 
@@ -181,7 +181,7 @@ YTreeItem * NCPopupTree::addItem( YTreeItem * parentItem,
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupTree::wHandleHotkey( int key )
+NCursesEvent NCPopupTree::wHandleHotkey( wint_t key )
 {
 
     return NCursesEvent::none;
@@ -195,7 +195,7 @@ NCursesEvent NCPopupTree::wHandleHotkey( int key )
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupTree::wHandleInput( int ch )
+NCursesEvent NCPopupTree::wHandleInput( wint_t ch )
 {
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;

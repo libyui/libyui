@@ -22,14 +22,14 @@
 #include <iosfwd>
 
 #include <string>
+
+using std::string;
+using std::wstring;
+
 using namespace std;
 
 class YCPString;
 
-///////////////////////////////////////////////////////////////////
-
-extern int Recode( const string & str, const string & from,
-		   const string & to, string & outstr );
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -43,67 +43,24 @@ class NCstring {
 
   private:
 
-    static const string utf8Encoding;
-    static string       defaultEncoding;
+    mutable wchar_t hotk;
+    mutable wstring::size_type hotp;
+    mutable wstring   mstr;
 
-  private:
+    static string       termEncoding;
+    
+public:
 
-    enum Flags {
-      CLEAN  = 0x00,
-      HOTKEY = 0x01,
-      NOUTF8 = 0x10,
-      DIRTY  = 0x20,
-      //////////////
-      M_LOCAL  = HOTKEY  // remains set in opeartor=()
-    };
+    NCstring();
 
-    mutable unsigned flags;
-    mutable unsigned char hotk;
-    mutable string::size_type hotp;
-    mutable string   mutf8;
-    mutable string   mstr;
-    mutable string   mencoding;
+    NCstring( const NCstring & nstr );
 
-    unsigned f_local() const { return flags & M_LOCAL; }
+    NCstring( const wstring & wstr );
 
-    void genUtf8() const;
-    void checkEncoding( bool needutf8 = false ) const;
+    NCstring( const string & str );
 
-  public:
-
-    NCstring()
-      : flags    ( CLEAN )
-      , hotk     ( 0 )
-      , hotp     ( string::npos )
-      , mutf8    ( "" )
-      , mstr     ( "" )
-      , mencoding( defaultEncoding )
-      {}
-    NCstring( const char * cstr )
-      : flags    ( NOUTF8 )
-      , hotk     ( 0 )
-      , hotp     ( string::npos )
-      , mutf8    ( "" )
-      , mstr     ( cstr ? cstr : "" )
-      , mencoding( defaultEncoding )
-      {}
-    NCstring( const string & str )
-      : flags    ( NOUTF8 )
-      , hotk     ( 0 )
-      , hotp     ( string::npos )
-      , mutf8    ( "" )
-      , mstr     ( str )
-      , mencoding( defaultEncoding )
-      {}
-    NCstring( const NCstring & nstr )
-      : flags    ( nstr.flags )
-      , hotk     ( nstr.hotk )
-      , hotp     ( nstr.hotp )
-      , mutf8    ( nstr.mutf8 )
-      , mstr     ( nstr.mstr )
-      , mencoding( nstr.mencoding )
-      {}
-
+    NCstring( const char * cstr );
+    
     ~NCstring() {}
 
   public: // filter from/to YCPString(utf8)
@@ -111,55 +68,37 @@ class NCstring {
     NCstring( const YCPString & ystr );
 
     NCstring & operator=( const YCPString & ystr );
-    NCstring & assignUtf8( const string & nstr );
-
+    
     YCPString YCPstr() const;
 
-  public:
+    string Str() const;
 
-    NCstring & operator=( const NCstring & nstr ) {
-      if ( &nstr != this ) {
-	flags     = nstr.flags | f_local();
-	hotk      = nstr.hotk;
-	hotp      = nstr.hotp;
-	if ( (flags & HOTKEY) && !(nstr.flags & HOTKEY) ) {
-	  // nstr does not pass a hotkey, so force
-	  // next checkEncoding() to look for it.
-	  flags |= DIRTY;
-	}
-	mutf8     = nstr.mutf8;
-	mstr      = nstr.mstr;
-	mencoding = nstr.mencoding;
-      }
-      return *this;
-    }
+ public:
 
-    NCstring & operator+=( const NCstring & nstr ) {
-	mstr = this->mstr + nstr.mstr;
-	mutf8 = this->mutf8 + nstr.mstr;
+    NCstring & operator=( const NCstring & nstr );
 
-	return *this;
-    }	
+    NCstring & operator+=( const NCstring & nstr );
 
-    const string & str()      const { checkEncoding(); return mstr; }
-    const string & utf8str()  const { checkEncoding( true ); return mutf8; }
+    const wstring & str()      const { return mstr; }
 
   private:
 
     friend class NClabel;
-    unsigned char     hotkey() const { checkEncoding(); return hotk; }
-    string::size_type hotpos() const { checkEncoding(); return hotp; }
-
-    void stripHotkey() {
-      if ( !(flags & HOTKEY) ) {
-	flags |= DIRTY | HOTKEY;
-      }
-    }
+    wchar_t 	      hotkey() const { return hotk; }
+    string::size_type hotpos() const { return hotp; }
 
   public:
 
-    static const string & DefaultEncoding();
-    static bool setDefaultEncoding( const string & encoding = "" );
+    static bool RecodeToWchar( const string& in, const string & from_encoding, wstring* out );
+    static bool RecodeFromWchar( const wstring & in, const string & to_encoding, string* out);
+
+    static const string & terminalEncoding () {
+	return termEncoding;
+    }
+    
+    static bool setTerminalEncoding( const string & encoding = "" );
+
+    void getHotkey() const;
 };
 
 ///////////////////////////////////////////////////////////////////

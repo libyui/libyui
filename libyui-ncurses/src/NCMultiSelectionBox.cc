@@ -298,7 +298,7 @@ void NCMultiSelectionBox::wRecoded()
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCMultiSelectionBox::wHandleInput( int key )
+NCursesEvent NCMultiSelectionBox::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
   bool valueChanged = false;

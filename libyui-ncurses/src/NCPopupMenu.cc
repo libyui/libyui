@@ -64,7 +64,7 @@ NCPopupMenu::~NCPopupMenu()
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupMenu::wHandleInput( int ch )
+NCursesEvent NCPopupMenu::wHandleInput( wint_t ch )
 {
   NCursesEvent ret;
   switch ( ch ) {

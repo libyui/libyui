@@ -441,7 +441,7 @@ bool NCTableStyle::SetStyleFrom( const vector<NCstring> & head )
 
   bool hascontent = false;
   for ( unsigned i = 0; i < head.size(); ++i ) {
-    const string & entry( head[i].utf8str() );
+    const wstring & entry( head[i].str() );
     bool strip = false;
 
     if( entry.length() ) {
@@ -465,9 +465,9 @@ bool NCTableStyle::SetStyleFrom( const vector<NCstring> & head )
     }
 
     NCstring coltxt;
-    coltxt.assignUtf8( strip ? entry.substr( 1 ) : entry );
+    coltxt = strip ? entry.substr( 1 ) : entry;
     headline.AddCol( i, new NCTableCol( coltxt ) );
-    if ( !hascontent && coltxt.utf8str().length() )
+    if ( !hascontent && coltxt.str().length() )
       hascontent = true;
   }
   return hascontent;

@@ -77,7 +77,7 @@ class NCTablePad : public NCPad {
     virtual void wRecoded();
 
     virtual wpos CurPos() const;
-    virtual bool handleInput( int key );
+    virtual bool handleInput( wint_t key );
 
     bool setItemByKey( int key );
 

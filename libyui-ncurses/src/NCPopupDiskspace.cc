@@ -51,7 +51,7 @@ NCPopupDiskspace::NCPopupDiskspace( const wpos at )
       , hDim( 55 )
       , vDim( 15 )
 {
-    createLayout( YCPString(PkgNames::DiskspaceLabel().str()) );
+    createLayout( YCPString(PkgNames::DiskspaceLabel()) );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -90,10 +90,10 @@ void NCPopupDiskspace::createLayout( const YCPString & headline )
 
     vector<string> header;
     header.reserve(5);
-    header.push_back( "L" + PkgNames::Partition().str() );
-    header.push_back( "L" + PkgNames::UsedSpace().str() );
-    header.push_back( "L" + PkgNames::FreeSpace().str() );
-    header.push_back( "L" + PkgNames::TotalSpace().str() );
+    header.push_back( "L" + PkgNames::Partition() );
+    header.push_back( "L" + PkgNames::UsedSpace() );
+    header.push_back( "L" + PkgNames::FreeSpace() );
+    header.push_back( "L" + PkgNames::TotalSpace() );
     header.push_back( "L%   ");
     
     // add the partition table 
@@ -103,7 +103,7 @@ void NCPopupDiskspace::createLayout( const YCPString & headline )
 
     // add the ok button
     opt.key_Fxx.setValue( 10 );
-    okButton = new NCPushButton( split, opt, YCPString(PkgNames::OKLabel().str()) );
+    okButton = new NCPushButton( split, opt, YCPString(PkgNames::OKLabel()) );
     okButton->setId( PkgNames::OkButton () );
   
     split->addChild( okButton );
@@ -169,12 +169,12 @@ string NCPopupDiskspace::checkDiskSpace()
 	    text += (*it).mountpoint();
 	    text += "\""; 
 	    text += " ";
-	    text += PkgNames::MoreText().str();
+	    text += PkgNames::MoreText();
 	    text += " ";
 	    string available = (*it).pkg_available().asString();
 	    text += available.replace( 0, 1, " " );
 	    text += " ";
-	    text += PkgNames::MoreSpaceText().str();
+	    text += PkgNames::MoreSpaceText();
 	    text += "<br>";
 	}
 	++it;
@@ -240,7 +240,7 @@ long NCPopupDiskspace::nicesize(YUIDimension dim)
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupDiskspace::wHandleInput( int ch )
+NCursesEvent NCPopupDiskspace::wHandleInput( wint_t ch )
 {
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;

@@ -45,7 +45,7 @@ NCPopupSelection::NCPopupSelection( const wpos at,  PackageSelector * pkg  )
     , okButton( 0 )
     , packager( pkg )
 {
-    createLayout( YCPString(PkgNames::SelectionLabel().str()) );
+    createLayout( YCPString(PkgNames::SelectionLabel()) );
 
     fillSelectionList( sel );
 }
@@ -85,7 +85,7 @@ void NCPopupSelection::createLayout( const YCPString & label )
   //the headline
   opt.isHeading.setValue( true );
 
-  NCLabel * head = new NCLabel( split, opt, PkgNames::SelectionLabel().str() );
+  NCLabel * head = new NCLabel( split, opt, PkgNames::SelectionLabel() );
   split->addChild( head );
   
   // add the selection list
@@ -98,7 +98,7 @@ void NCPopupSelection::createLayout( const YCPString & label )
   
   opt.notifyMode.setValue( true );
 
-  NCLabel * help = new NCLabel( split, opt, YCPString(PkgNames::DepsHelpLine().str()) );
+  NCLabel * help = new NCLabel( split, opt, YCPString(PkgNames::DepsHelpLine()) );
   split->addChild( help );
 
   NCSpacing * sp1 = new NCSpacing( split, opt, 0.4, false, true );
@@ -106,7 +106,7 @@ void NCPopupSelection::createLayout( const YCPString & label )
   
   // add an OK button
   opt.key_Fxx.setValue( 10 );
-  okButton = new NCPushButton( split, opt, YCPString(PkgNames::OKLabel().str()) );
+  okButton = new NCPushButton( split, opt, YCPString(PkgNames::OKLabel()) );
   okButton->setId( PkgNames::OkButton () );
   
   split->addChild( okButton );
@@ -200,7 +200,7 @@ long NCPopupSelection::nicesize(YUIDimension dim)
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupSelection::wHandleInput( int ch )
+NCursesEvent NCPopupSelection::wHandleInput( wint_t ch )
 {
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;

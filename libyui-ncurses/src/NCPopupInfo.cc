@@ -185,7 +185,7 @@ long NCPopupInfo::nicesize(YUIDimension dim)
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupInfo::wHandleInput( int ch )
+NCursesEvent NCPopupInfo::wHandleInput( wint_t ch )
 {
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;

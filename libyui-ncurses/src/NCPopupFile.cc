@@ -90,7 +90,7 @@ void NCPopupFile::createLayout( )
     // add the text 
     opt.isHeading.setValue( false );
     opt.isVStretchable.setValue( true );
-    textLabel = new NCRichText( split, opt, YCPString(PkgNames::SaveSelText().str()) );
+    textLabel = new NCRichText( split, opt, YCPString(PkgNames::SaveSelText()) );
     split->addChild( textLabel );
 
     // add a frame 
@@ -100,14 +100,14 @@ void NCPopupFile::createLayout( )
 
     // the combo box for selecting the medium
     opt.isHStretchable.setValue( true );
-    comboBox = new NCComboBox( vSplit2, opt, YCPString(PkgNames::MediumLabel().str()) );
-    comboBox->itemAdded( YCPString(PkgNames::Floppy().str()), 0, true );
-    comboBox->itemAdded( YCPString(PkgNames::Harddisk().str()), 0, false );
+    comboBox = new NCComboBox( vSplit2, opt, YCPString(PkgNames::MediumLabel()) );
+    comboBox->itemAdded( YCPString(PkgNames::Floppy()), 0, true );
+    comboBox->itemAdded( YCPString(PkgNames::Harddisk()), 0, false );
     vSplit2->addChild( comboBox );
   
     // the text entry field for the file name
     fileName = new NCTextEntry( vSplit2, opt,
-				YCPString(PkgNames::FileName().str()),
+				YCPString(PkgNames::FileName()),
 				YCPString( "" ),
 				100, 100 );
     vSplit2->addChild( fileName );
@@ -137,7 +137,7 @@ void NCPopupFile::createLayout( )
 
     // add the Cancel button
     opt.key_Fxx.setValue( 9 );
-    cancelButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::CancelLabel().str()) );
+    cancelButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::CancelLabel()) );
     cancelButton->setId( PkgNames::Cancel() );
   
     hSplit->addChild( cancelButton );
@@ -178,7 +178,7 @@ long NCPopupFile::nicesize(YUIDimension dim)
 //	METHOD TYPE : NCursesEvent
 //
 //
-NCursesEvent NCPopupFile::wHandleInput( int ch )
+NCursesEvent NCPopupFile::wHandleInput( wint_t ch )
 {
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;
@@ -219,10 +219,10 @@ bool NCPopupFile::mountDevice( string device, string errText )
 	if ( !mounted )
 	{
 	    NCPopupInfo info1( wpos(2, 2),
-			       YCPString( PkgNames::ErrorLabel().str() ),
+			       YCPString( PkgNames::ErrorLabel() ),
 			       YCPString( errText ),
-			       PkgNames::OKLabel().str(),
-			       PkgNames::CancelLabel().str() );
+			       PkgNames::OKLabel(),
+			       PkgNames::CancelLabel() );
 	    info1.setNiceSize( 35, 10 );
 	    NCursesEvent event =info1.showInfoPopup();
 
@@ -243,7 +243,7 @@ void NCPopupFile::unmount()
     if ( result != 0 )
     {
 	NCPopupInfo info2( wpos(2, 2),
-			   YCPString( PkgNames::ErrorLabel().str() ),
+			   YCPString( PkgNames::ErrorLabel() ),
 			   YCPString( "\"/bin/umount /media/floppy\" failed !" ) );
 	info2.setNiceSize( 35, 10 );
 	info2.showInfoPopup();
@@ -266,9 +266,9 @@ void NCPopupFile::saveToFile()
 {
     if ( headline && textLabel && okButton )
     {
-	headline->setLabel( YCPString( PkgNames::SaveSelHeadline().str() ) );
-	textLabel->setText( YCPString( PkgNames::SaveSelText().str() ) );
-	okButton->setLabel( YCPString( PkgNames::SaveLabel().str() ) );
+	headline->setLabel( YCPString( PkgNames::SaveSelHeadline() ) );
+	textLabel->setText( YCPString( PkgNames::SaveSelText() ) );
+	okButton->setLabel( YCPString( PkgNames::SaveLabel() ) );
 	setDefaultPath();
     }
     // show the save selection popup
@@ -279,14 +279,14 @@ void NCPopupFile::saveToFile()
 	PMPackageImEx pkgExport;
 	
 	NCPopupInfo saveInfo( wpos(5, 5),  YCPString( "" ),
-			      YCPString(PkgNames::Saving().str()) );
+			      YCPString(PkgNames::Saving()) );
 	saveInfo.setNiceSize( 18, 4 );
 	saveInfo.popup();
 	bool mounted = false;
 	
 	// if the medium is a floppy mount the device
 	if ( !mountFloppy
-	     || (mounted = mountDevice( floppyDevice, PkgNames::SaveErr1Text().str()) ) )
+	     || (mounted = mountDevice( floppyDevice, PkgNames::SaveErr1Text()) ) )
 	{
 	    // remember the current Package/SelectionManagers state.
 	    pkgExport.getPMState();
@@ -295,8 +295,8 @@ void NCPopupFile::saveToFile()
 	    if ( ! pkgExport.doExport( pathName ) )
 	    {
 		NCPopupInfo info2( wpos(2, 2),
-				   YCPString( PkgNames::ErrorLabel().str() ),
-				   YCPString( PkgNames::SaveErr2Text().str() ) );
+				   YCPString( PkgNames::ErrorLabel() ),
+				   YCPString( PkgNames::SaveErr2Text() ) );
 		info2.setNiceSize( 35, 10 );
 		info2.showInfoPopup();
 		NCERR << "Error: could not write selection to: " << pathName << endl;	
@@ -327,10 +327,10 @@ void NCPopupFile::loadFromFile()
 {
     if ( headline && textLabel && okButton )
     {
-	headline->setLabel( YCPString(PkgNames::LoadSelHeadline().str()) );
-	string text = PkgNames::LoadSel2Text().str();
+	headline->setLabel( YCPString(PkgNames::LoadSelHeadline()) );
+	string text = PkgNames::LoadSel2Text();
 	textLabel->setText( YCPString(text) );
-	okButton->setLabel( YCPString( PkgNames::LoadLabel().str() ) );
+	okButton->setLabel( YCPString( PkgNames::LoadLabel() ) );
 	setDefaultPath();
     }
     // show the load selection popup
@@ -342,30 +342,30 @@ void NCPopupFile::loadFromFile()
 
 	// show popup "Really overwrite current selection?"
 	NCPopupInfo info1( wpos(2, 2),
-			   YCPString( PkgNames::NotifyLabel().str() ),
-			   YCPString( PkgNames::LoadSel1Text().str() ),
-			   PkgNames::OKLabel().str(),
-			   PkgNames::CancelLabel().str() );
+			   YCPString( PkgNames::NotifyLabel() ),
+			   YCPString( PkgNames::LoadSel1Text() ),
+			   PkgNames::OKLabel(),
+			   PkgNames::CancelLabel() );
 	info1.setNiceSize( 30, 8 );
 	NCursesEvent event = info1.showInfoPopup();
 
 	if ( event == NCursesEvent::button )
 	{
 	    NCPopupInfo loadInfo( wpos(5, 5),  YCPString( "" ),
-				  YCPString(PkgNames::Loading().str()) );
+				  YCPString(PkgNames::Loading()) );
 	    loadInfo.setNiceSize( 18, 4 );
 	    loadInfo.popup();
 	    bool mounted = false;
 	    
 	    if ( !mountFloppy
-		 || (mounted = mountDevice( floppyDevice, PkgNames::LoadErr1Text().str())) )
+		 || (mounted = mountDevice( floppyDevice, PkgNames::LoadErr1Text())) )
 	    {
 		// read selection from file
 		if ( ! pkgImport.doImport( pathName) )
 		{
 		    NCPopupInfo info2( wpos(2, 2),
-				       YCPString( PkgNames::ErrorLabel().str() ),
-				       YCPString( PkgNames::LoadErr2Text().str() ) );
+				       YCPString( PkgNames::ErrorLabel() ),
+				       YCPString( PkgNames::LoadErr2Text() ) );
 		    info2.setNiceSize( 35, 10 );
 		    info2.showInfoPopup();
 		    NCERR << "Could not load selection from: " << pathName << endl;
@@ -404,7 +404,7 @@ void NCPopupFile::setDefaultPath()
 {
     YCPString value = comboBox->getValue();
 
-    if ( value->compare( YCPString(PkgNames::Harddisk().str()) ) == YO_EQUAL ) 
+    if ( value->compare( YCPString(PkgNames::Harddisk()) ) == YO_EQUAL ) 
     {
 	pathName = YAST2PATH + USERFILE;
 	mountFloppy = false;
@@ -444,7 +444,7 @@ bool NCPopupFile::postAgain()
 	YCPString path = fileName->getText();
 	pathName = path->value();
 	
-	if ( value->compare( YCPString(PkgNames::Harddisk().str()) ) == YO_EQUAL )
+	if ( value->compare( YCPString(PkgNames::Harddisk()) ) == YO_EQUAL )
 	{
 	    mountFloppy = false;
 	}

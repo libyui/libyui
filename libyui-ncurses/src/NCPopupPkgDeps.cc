@@ -77,32 +77,32 @@ bool NCPopupPkgDeps::solveInstall( PkgDep::ResultList & goodList, PkgDep::ErrorR
 
 string NCPopupPkgDeps::getLabelRequire1()
 {
-    return PkgNames::LabelRequire1().str();
+    return PkgNames::LabelRequire1();
 }
 
 string NCPopupPkgDeps::getLabelRequBy1()
 {
-    return PkgNames::LabelRequBy1().str();
+    return PkgNames::LabelRequBy1();
 }
 
 string NCPopupPkgDeps::getLabelRequBy2()
 {
-    return PkgNames::LabelRequBy2().str();
+    return PkgNames::LabelRequBy2();
 }
 
 string NCPopupPkgDeps::getLabelConflict2()
 {
-    return PkgNames::LabelConflict2().str();
+    return PkgNames::LabelConflict2();
 }
 
 string NCPopupPkgDeps::getLabelContinueRequ()
 {
-    return PkgNames::ContinueRequ().str();
+    return PkgNames::ContinueRequ();
 }
 
 string NCPopupPkgDeps::getHeadline()
 {
-    return PkgNames::PackageDeps().str();
+    return PkgNames::PackageDeps();
 }
 
 void NCPopupPkgDeps::setDepsTableType()

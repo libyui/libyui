@@ -48,12 +48,13 @@ class NCPopupTable : public NCPopup {
   protected:
 
     void createList( vector<string> & row );
+
     void addItem( const YCPValue & id, vector<string> & row );
 
     void setCurrentItem( int index );
     int  getCurrentItem() const;
 
-    virtual NCursesEvent wHandleHotkey( int ch );
+    virtual NCursesEvent wHandleHotkey( wint_t ch );
 
   protected:
 

@@ -45,7 +45,7 @@ class NCPopup : protected NCDialog {
     void popupDialog();
     void popdownDialog();
 
-    virtual NCursesEvent wHandleInput( int ch );
+    virtual NCursesEvent wHandleInput( wint_t ch );
 
   protected:
 

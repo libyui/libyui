@@ -150,7 +150,7 @@ void NCMultiLineEdit::wRedraw()
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCMultiLineEdit::wHandleInput( int key )
+NCursesEvent NCMultiLineEdit::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
   handleInput( key );

@@ -19,6 +19,8 @@
 #include "Y2Log.h"
 #include "NCtext.h"
 
+#include <wchar.h>		// wcwidth
+
 ///////////////////////////////////////////////////////////////////
 
 const NCstring NCtext::emptyStr;
@@ -67,14 +69,17 @@ void NCtext::lset( const NCstring & ntext )
   if ( ntext.str().empty() )
     return;
 
-  const string & text( ntext.utf8str() );
-  string::size_type spos = 0;
-  string::size_type cpos = string::npos;
+  const wstring & text( ntext.str() );
+  wstring::size_type spos = 0;
+  wstring::size_type cpos = wstring::npos;
 
-  while ( (cpos = text.find( '\n', spos )) != string::npos ) {
+  while ( (cpos = text.find( '\n', spos )) != wstring::npos )
+  {
     if ( sawnl )
       mtext.push_back( "" );
-    mtext.back().assignUtf8( mtext.back().utf8str() + text.substr( spos, cpos-spos ) );
+
+    mtext.back() = NCstring( mtext.back().str() + text.substr(spos, cpos-spos) );
+    
     sawnl = true;
     spos = cpos + 1;
   }
@@ -82,7 +87,8 @@ void NCtext::lset( const NCstring & ntext )
   if ( spos < text.size() ) {
     if ( sawnl )
       mtext.push_back( "" );
-    mtext.back().assignUtf8( mtext.back().utf8str() + text.substr( spos ) );
+
+    mtext.back() = NCstring( mtext.back().str() + text.substr( spos ) );
   }
 }
 
@@ -109,12 +115,20 @@ unsigned NCtext::Lines() const
 //
 unsigned NCtext::Columns() const
 {
-  unsigned llen = 0;
-
-  const_iterator line;
-  for ( line = mtext.begin(); line != mtext.end(); ++line ) {
-    if ( (*line).str().length() > llen )
-      llen = (*line).str().length();
+  size_t llen = 0;		// longest line
+  size_t tmp_len = 0;		// width od current line
+  
+  const_iterator line;		// iterator for list <NCstring> mtext
+  std::wstring::const_iterator wstr_it;	// iterator for wstring
+  
+  for ( line = mtext.begin(); line != mtext.end(); ++line )
+  {
+      for ( wstr_it = (*line).str().begin(); wstr_it != (*line).str().end() ; ++wstr_it )
+      {
+	  tmp_len += wcwidth( *wstr_it );
+      }
+       if ( tmp_len > llen )
+	      llen = tmp_len; 
   }
 
   return llen;
@@ -167,11 +181,11 @@ ostream & operator<<( ostream & STREAM, const NCtext & OBJ )
 //
 void NClabel::stripHotkey()
 {
-  hotline = string::npos;
+  hotline = wstring::npos;
   unsigned lineno = 0;
   for ( iterator line = mtext.begin(); line != mtext.end(); ++line, ++lineno ) {
-    line->stripHotkey();
-    if ( line->hotpos() != string::npos ) {
+    line->getHotkey();
+    if ( line->hotpos() != wstring::npos ) {
       hotline = lineno;
       break;
     }
@@ -219,27 +233,46 @@ void NClabel::drawAt( NCursesWindow & w, chtype style, chtype hotstyle,
 
     for ( NCtext::const_iterator line = begin();
 	  line != end() && l < maxl;
-	  ++line, ++l, ++lineno ) {
-
+	  ++line, ++l, ++lineno )
+    {
       if ( pre && fillup ) {
 	w.move( l, area.Pos.C );
-	w.addstr( string( pre, ' ' ).c_str() );
+	w.addwstr( wstring( pre, L' ' ).c_str() );
       } else {
 	w.move( l, area.Pos.C + pre );
       }
 
-      if ( len ) {
-	w.printw( "%-*.*s", len, (int)len, (*line).str().c_str() );
+      NCDBG << "TERMINAL: " << NCstring::terminalEncoding() << " CODESET: " << nl_langinfo( CODESET) << endl;
+      if ( len )
+      {
+	  if ( NCstring::terminalEncoding() != "UTF-8" )
+	  {
+	      string out;
+	      bool ok = NCstring::RecodeFromWchar( (*line).str(), NCstring::terminalEncoding(), &out );
+	      if ( ok )
+	      {
+		 w.printw( "%-*.*s", len, (int)len, out.c_str() );
+	      }
+	  }
+	  else
+	  {
+	      // FIXME: add formatting if needed 
+	      // w.printw( "%-*.*ls", len, (int)len, (*line).str().c_str() );   
+	      w.printw( "%ls", (*line).str().c_str() );
+	  }
       }
 
       if ( post && fillup ) {
-	w.addstr( string( post, ' ' ).c_str() );
+	w.addwstr( wstring( post, L' ' ).c_str() );
       }
 
-      if ( lineno == hotline && hotstyle && pre + hotpos() < maxlen ) {
-	w.bkgdset( hotstyle );
-	w.addch( w.inchar( l, area.Pos.C + pre + hotpos() ) );
-	w.bkgdset( style );
+      if ( lineno == hotline && hotstyle && pre + hotpos() < maxlen )
+      {
+	  w.bkgdset( hotstyle );
+
+	  w.add_attr_char( l, area.Pos.C + pre + hotpos() );
+	  
+	  w.bkgdset( style );
       }
 
     }

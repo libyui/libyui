@@ -129,7 +129,7 @@ int NCPopupTable::getCurrentItem() const
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupTable::wHandleHotkey( int key )
+NCursesEvent NCPopupTable::wHandleHotkey( wint_t key )
 {
   if ( key >= 0 && sellist->setItemByKey( key ) )
     return wHandleInput( KEY_RETURN );

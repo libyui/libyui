@@ -499,7 +499,7 @@ void NCPadWidget::DrawPad()
 //
 //	DESCRIPTION :
 //
-bool NCPadWidget::handleInput( int key )
+bool NCPadWidget::handleInput( wint_t key )
 {
   return pad->handleInput( key );
 }

@@ -60,11 +60,11 @@ protected:
 
     void setCurrentItem( int index );
 
-    virtual NCursesEvent wHandleHotkey( int ch );
+    virtual NCursesEvent wHandleHotkey( wint_t ch );
 
     virtual bool postAgain();
 
-    virtual NCursesEvent wHandleInput( int ch );
+    virtual NCursesEvent wHandleInput( wint_t ch );
     
 public:
     

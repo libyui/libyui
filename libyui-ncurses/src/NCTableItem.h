@@ -100,7 +100,7 @@ class NCTableLine {
 
   public:
 
-    virtual int  handleInput( int key ) { return 0; }
+    virtual int  handleInput( wint_t key ) { return 0; }
     virtual int  ChangeToVisible()      { return 0; }
 
     virtual unsigned Hotspot( unsigned & at ) const { at = 0; return 0; }

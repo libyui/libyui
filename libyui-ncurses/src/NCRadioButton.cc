@@ -176,7 +176,7 @@ void NCRadioButton::wRedraw()
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCRadioButton::wHandleInput( int key )
+NCursesEvent NCRadioButton::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
   bool oldChecked = checked;

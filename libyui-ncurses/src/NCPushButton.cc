@@ -91,7 +91,7 @@ void NCPushButton::setSize( long newwidth, long newheight )
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPushButton::wHandleInput( int key )
+NCursesEvent NCPushButton::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
   switch ( key ) {

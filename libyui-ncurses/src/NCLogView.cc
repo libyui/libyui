@@ -153,7 +153,7 @@ void NCLogView::wRecoded()
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCLogView::wHandleInput( int key )
+NCursesEvent NCLogView::wHandleInput( wint_t key )
 {
   handleInput( key );
   return NCursesEvent::none;
@@ -189,7 +189,7 @@ void NCLogView::DrawPad()
   unsigned cl = 0;
   for ( NCtext::const_iterator line = text.begin(); line != text.end(); ++line ) {
     pad->move( cl++, 0 );
-    pad->addstr( (*line).str().c_str() );
+    pad->addwstr( (*line).str().c_str() );
   }
 }
 

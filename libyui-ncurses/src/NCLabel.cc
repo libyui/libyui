@@ -91,7 +91,10 @@ void NCLabel::setSize( long newwidth, long newheight )
 //
 void NCLabel::setLabel( const YCPString & nlabel )
 {
+  // FIXME: why setting label in constructor ( :label(nlabel) ) + here ???????
+  // RecodeToWchar is called twice !!!!
   label  = NCstring( nlabel );
+
   defsze = label.size();
   YLabel::setLabel( nlabel );
   Redraw();

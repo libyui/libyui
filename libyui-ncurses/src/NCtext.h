@@ -50,7 +50,7 @@ class NCtext {
   protected:
 
     list<NCstring> mtext;
-    bool           sawnl;
+    bool           sawnl;	// saw new line
 
     virtual void lset( const NCstring & ntext );
 

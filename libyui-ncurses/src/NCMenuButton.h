@@ -61,7 +61,7 @@ class NCMenuButton : public YMenuButton, public NCWidget {
     virtual long nicesize( YUIDimension dim );
     virtual void setSize( long newwidth, long newheight );
 
-    virtual NCursesEvent wHandleInput( int key );
+    virtual NCursesEvent wHandleInput( wint_t key );
 
     virtual void setLabel( const YCPString & nlabel );
     virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }

@@ -99,7 +99,7 @@ class NCTreeLine : public NCTableLine {
       at = Level(); return 6;
     }
 
-    virtual int  handleInput( int key ) {
+    virtual int  handleInput( wint_t key ) {
       if ( !fchild )
 	return 0;
       switch ( key ) {
@@ -385,7 +385,7 @@ void NCTree::DrawPad()
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCTree::wHandleInput( int key )
+NCursesEvent NCTree::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
   const YTreeItem * oldCurrentItem = getCurrentItem();

@@ -425,7 +425,7 @@ void NCTreePad::updateScrollHint()
 //
 //	DESCRIPTION :
 //
-bool NCTreePad::handleInput( int key )
+bool NCTreePad::handleInput( wint_t key )
 {
   bool handled = true;
 

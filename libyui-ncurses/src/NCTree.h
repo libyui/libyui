@@ -74,7 +74,7 @@ class NCTree : public YTree, public NCPadWidget {
     virtual const YTreeItem * getCurrentItem() const;
     virtual void setCurrentItem( YTreeItem * it );
 
-    virtual NCursesEvent wHandleInput( int key );
+    virtual NCursesEvent wHandleInput( wint_t key );
 
     virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
 

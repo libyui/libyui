@@ -45,6 +45,7 @@
 using namespace std;
 
 #include "ncursesw.h"
+#include "NCstring.h"
 
 #define COLORS_NEED_INITIALIZATION  -1
 #define COLORS_NOT_INITIALIZED       0
@@ -55,6 +56,8 @@ using namespace std;
 long NCursesWindow::count = 0L;
 bool NCursesWindow::b_initialized = FALSE;
 
+
+//---------------------------------------------------------------------------
 #if 0
 int
 NCursesWindow::scanw(const char* fmt, ...)
@@ -74,7 +77,6 @@ NCursesWindow::scanw(const char* fmt, ...)
     return ERR;
 #endif
 }
-
 
 int
 NCursesWindow::scanw(int y, int x, const char* fmt, ...)
@@ -98,6 +100,8 @@ NCursesWindow::scanw(int y, int x, const char* fmt, ...)
 #endif
 }
 #endif
+//------------------------------------------------------------------------
+
 
 int
 NCursesWindow::printw(const char * fmt, ...)
@@ -126,6 +130,98 @@ NCursesWindow::printw(int y, int x, const char * fmt, ...)
     return result;
 }
 
+int
+NCursesWindow::addwstr(int y, int x, const wchar_t * str, int n)
+{
+    const wstring wstr ( str );
+    string out;
+    
+    if ( NCstring::terminalEncoding() != "UTF-8" )
+    {
+	NCstring::RecodeFromWchar( wstr, NCstring::terminalEncoding(), &out );
+	return ::mvwaddnstr( w, y, x, out.c_str(), n );
+    }
+    else 
+	return ::mvwaddnwstr(w, y, x,(wchar_t*)str, n);
+
+}
+
+
+int
+NCursesWindow::addwstr(const wchar_t* str, int n)
+{
+    const wstring wstr ( str );
+    string out;
+    
+    if ( NCstring::terminalEncoding() != "UTF-8" )
+    {
+	NCstring::RecodeFromWchar( wstr, NCstring::terminalEncoding(), &out );
+	return ::waddnstr( w, out.c_str(), n );
+    }
+    else
+	return ::waddnwstr(w, (wchar_t*)str, n);
+}      // FIXME !!!
+
+
+int
+NCursesWindow::in_wchar( int y, int x, cchar_t *combined)
+{
+    int ret = mvwin_wch( w, y, x, combined );
+    combined->attr = combined->attr&(A_CHARTEXT|A_ALTCHARSET);
+    
+    return ret;
+}
+
+int
+NCursesWindow::in_wchar( cchar_t *combined)
+{
+    int ret = win_wch( w, combined );
+    combined->attr = combined->attr&(A_CHARTEXT|A_ALTCHARSET);
+
+    return ret;
+}
+
+int
+NCursesWindow::add_attr_char( int y, int x )
+{
+    int ret = ERR;
+    
+    if ( NCstring::terminalEncoding() != "UTF-8" )
+    {	
+	ret = addch( inchar(y, x) );
+    }
+    else
+    {
+	cchar_t combined;
+	ret = in_wchar( y, x, &combined );
+	if ( ret == OK )
+	{
+	    ret = add_wch( &combined );
+	}
+    }
+    return ret;
+}
+
+int
+NCursesWindow::add_attr_char(  )
+{
+    int ret = ERR;
+    
+    if ( NCstring::terminalEncoding() != "UTF-8" )
+    {	
+	ret = addch( inchar() );
+    }
+    else
+    {
+	cchar_t combined;
+	ret = in_wchar( &combined );
+	if ( ret == OK )
+	{
+	    ret = add_wch( &combined );
+	}
+    }
+    return ret;
+}
 
 void
 NCursesWindow::init(void)
@@ -474,7 +570,14 @@ int NCursesWindow::box( const wrect & dim )
     addch( area.Pos.L, area.Pos.C+area.Sze.W-1, ACS_URCORNER );
     addch( area.Pos.L+area.Sze.H-1, area.Pos.C+area.Sze.W-1, ACS_LRCORNER );
     addch( area.Pos.L,              area.Pos.C, ACS_ULCORNER );
+#if 0
+    mvadd_wch( area.Pos.L+area.Sze.H-1, area.Pos.C, WACS_LLCORNER );
+    mvadd_wch( area.Pos.L, area.Pos.C+area.Sze.W-1, WACS_URCORNER );
+    mvadd_wch( area.Pos.L+area.Sze.H-1, area.Pos.C+area.Sze.W-1, WACS_LRCORNER );
+    mvadd_wch( area.Pos.L,              area.Pos.C, WACS_ULCORNER );
+#endif
   }
+
   return OK;
 }
 

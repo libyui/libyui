@@ -18,10 +18,13 @@
 /-*/
 #include "Y2Log.h"
 #include "NCDialog.h"
+#include "NCstring.h"
 #include "NCPopupInfo.h"
 #include "NCMenuButton.h"
 #include "YShortcut.h"
 #include "PkgNames.h"
+
+#include "ncursesw.h"
 
 #if 0
 #undef  DBG_CLASS
@@ -781,26 +784,86 @@ bool NCDialog::ActivateByKey( int key )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCDialog::getch
-//	METHOD TYPE : int
+//	METHOD NAME : NCDialog::getinput
+//	METHOD TYPE : wint_t
 //
 //	DESCRIPTION :
 //
-int NCDialog::getch( int timeout_millisec )
+wint_t NCDialog::getinput()
 {
-  int got = -1;
+    wint_t got = WEOF;
+
+    if ( NCstring::terminalEncoding() == "UTF-8" )
+    {
+	wint_t gotwch = WEOF;
+	int ret = ::get_wch( &gotwch );	// get a wide character
+
+	if ( ret != ERR )	// get_wch() returns OK or KEY_CODE_YES on success
+	{
+	    got = gotwch;
+	}
+	else
+	{
+	    got = WEOF;
+	}
+    }
+    else
+    {
+	wstring to;
+	
+	int gotch = ::getch();	// get the character in terminal encoding
+
+	if ( gotch != -1 )
+	{
+	    // FIXME: isprint(), isalnum(), ... don't work ?!??
+	    // NCMIL << "isprint( " << gotch << "): " << (isprint( gotch )?"true":"false") << endl;
+
+	    if ( gotch > 10 && gotch < 255 )	// FIXME
+	    {
+		string str;
+		str += static_cast<char>(gotch);
+		//str.insert( (std::string::size_type)0, 1, gotch );
+
+		NCstring::RecodeToWchar( str, NCstring::terminalEncoding(), &to ); 
+		got = to[0];
+
+		NCMIL << "Recode: " << str << " (encoding: " << NCstring::terminalEncoding() << ") "
+		      << "to wint_t: " << got << endl; 
+	    }
+	    else
+	    {
+		got = gotch;
+	    }
+	}
+	else
+	{
+	    got = WEOF;
+	}
+    }
+    
+    return got;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCDialog::getch
+//	METHOD TYPE : wint_t
+//
+//	DESCRIPTION :
+//
+wint_t NCDialog::getch( int timeout_millisec )
+{
+  wint_t got = WEOF;
 
   if ( timeout_millisec < 0 ) {
     // wait for input
     ::nodelay( ::stdscr, false );
-    got = ::getch();
-    if ( got == -1 ) {
-      // We get a single -1 after resize, unfortunately without errno == EINTR.
-      // Thus retry once.
-      got = ::getch();
-    }
+
+    got = getinput();
+    
   } else if ( timeout_millisec ) {
-    // max halfdelay is 25 seconds (25000 milliseconds)
+    // max halfdelay is 25 seconds (250 tenths of seconds)
     do {
       if ( timeout_millisec > 25000 ) {
 	::halfdelay( 250 );
@@ -813,13 +876,13 @@ int NCDialog::getch( int timeout_millisec )
 	  ::halfdelay( timeout_millisec/100 );
 	timeout_millisec = 0;
       }
-      got = ::getch();
-    } while( got == -1 && timeout_millisec > 0 );
+      got = getinput();
+    } while( got == WEOF && timeout_millisec > 0 );
     ::cbreak(); // stop halfdelay
   } else {
     // no wait
     ::nodelay( ::stdscr, true );
-    got = ::getch();
+    got = getinput();
   }
 
   if ( got == KEY_RESIZE ) {
@@ -961,18 +1024,18 @@ void NCDialog::processInput( int timeout_millisec )
   }
 
   // get and process user input
-  int ch = 0;
-  int hch = 0;
+  wint_t ch = 0;
+  wint_t hch = 0;
 
   IODBG << "enter loop..." << endl;
   noUpdates = true;
-  while ( !pendingEvent.isReturnEvent() && ch != -1 ) {
+  while ( !pendingEvent.isReturnEvent() && ch != WEOF ) {
 
     switch ( (ch = getch( timeout_millisec )) ) {
 
       // case KEY_RESIZE: is directly handled in NCDialog::getch.
 
-    case -1:
+    case WEOF:
       if ( timeout_millisec == -1 )
 	pendingEvent = NCursesEvent::cancel;
       else if ( timeout_millisec > 0 )
@@ -1020,14 +1083,14 @@ void NCDialog::processInput( int timeout_millisec )
       hch = getch( 0 );
       ::flushinp();
       switch ( hch ) {
-      case -1: // no 2nd char, handle ch
+      case WEOF: // no 2nd char, handle ch
 	if ( helpPopup )
 	{
 	    helpPopup->popdown();
 	}
 	else
 	{
-	  pendingEvent = getInputEvent( ch );
+	    pendingEvent = getInputEvent( ch );
 	}
 	break;
       case KEY_ESC:
@@ -1045,9 +1108,9 @@ void NCDialog::processInput( int timeout_millisec )
 	 {
 	     string helpText = "";
 	     bool hasF1 = describeFunctionKeys( helpText ) ;
-	     helpPopup = new NCPopupInfo( wpos(1,1),  PkgNames::TextmodeHelp().str(),
-					  YCPString( (hasF1?PkgNames::TextmodeHelp1().str():PkgNames::TextmodeHelp2().str()) +
-						     PkgNames::TextmodeHelp3().str() +
+	     helpPopup = new NCPopupInfo( wpos(1,1),  PkgNames::TextmodeHelp(),
+					  YCPString( (hasF1?PkgNames::TextmodeHelp1():PkgNames::TextmodeHelp2()) +
+						     PkgNames::TextmodeHelp3() +
 						     helpText
 						     ),
 					  "" );
@@ -1114,7 +1177,7 @@ void NCDialog::processInput( int timeout_millisec )
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCDialog::getInputEvent( int ch )
+NCursesEvent NCDialog::getInputEvent( wint_t ch )
 {
   NCursesEvent ret = wHandleInput( ch );
   ret.widget = wActive;
@@ -1129,7 +1192,7 @@ NCursesEvent NCDialog::getInputEvent( int ch )
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCDialog::wHandleInput( int ch )
+NCursesEvent NCDialog::wHandleInput( wint_t ch )
 {
   return wActive->wHandleInput( ch );
 }
@@ -1142,7 +1205,7 @@ NCursesEvent NCDialog::wHandleInput( int ch )
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCDialog::getHotkeyEvent( int key )
+NCursesEvent NCDialog::getHotkeyEvent( wint_t key )
 {
   NCWidget *const oActive = wActive;
   NCursesEvent ret = wHandleHotkey( key );
@@ -1163,7 +1226,7 @@ NCursesEvent NCDialog::getHotkeyEvent( int key )
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCDialog::wHandleHotkey( int key )
+NCursesEvent NCDialog::wHandleHotkey( wint_t key )
 {
   if ( key >= 0 && ActivateByKey( key ) )
     return wActive->wHandleHotkey( key );

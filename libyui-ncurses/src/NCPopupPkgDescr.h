@@ -58,7 +58,7 @@ protected:
 
     virtual bool postAgain();
 
-    virtual NCursesEvent wHandleInput( int ch );
+    virtual NCursesEvent wHandleInput( wint_t ch );
     
 public:
     

@@ -174,7 +174,7 @@ class NCPad : public NCursesPad, public NCScrollHint {
       return adjpos( wpos( 0, -cols ) );
     }
 
-    virtual bool handleInput( int key );
+    virtual bool handleInput( wint_t key );
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -7,10 +7,12 @@ std::string language2encoding( std::string lang )
 {
   using std::string;
   lang = ":" + lang + ":";
-  if ( string( ":ca:da:de:en:es:fi:fr:gl:is:it:nl:no:pt:sv:" ).find( lang ) != string::npos )
+  if ( string( ":ca:da:en:es:fi:fr:gl:is:it:nl:no:pt:sv:" ).find( lang ) != string::npos )
     return "ISO-8859-1";
   else if ( string( ":lt:" ).find( lang ) != string::npos )
     return "ISO-8859-13";
+  else if ( string( ":de:" ).find( lang ) != string::npos )
+    return "ISO-8859-15";
   else if ( string( ":cs:hr:hu:pl:ro:sk:sl:" ).find( lang ) != string::npos )
     return "ISO-8859-2";
   else if ( string( ":ru:" ).find( lang ) != string::npos )

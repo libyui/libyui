@@ -66,7 +66,7 @@ class NCIntField : public YIntField, public NCWidget {
     bool Increment( const bool bigstep = false );
     bool Decrement( const bool bigstep = false );
 
-    int enterPopup( char first = '\0' );
+    int enterPopup( wchar_t first = L'\0' );
 
   public:
 
@@ -83,7 +83,7 @@ class NCIntField : public YIntField, public NCWidget {
 
     virtual void setValue( int newValue );
 
-    virtual NCursesEvent wHandleInput( int key );
+    virtual NCursesEvent wHandleInput( wint_t key );
 
     virtual bool setKeyboardFocus() {
       if ( !grabFocus() )

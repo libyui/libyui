@@ -1,3 +1,4 @@
+
 /*---------------------------------------------------------------------\
 |                                                                      |
 |                      __   __    ____ _____ ____                      |
@@ -46,7 +47,7 @@ class NCRichText : public YRichText, public NCPadWidget {
      * Lookup map for character entities (e.g. '&gt;'). Initialized
      * and used by @ref entityLookup.
      **/
-    static std::map<std::string,const char *> _charentity;
+    static std::map<std::wstring,const wchar_t *> _charentity;
 
     /**
      * Lookup and return replacement for a character entity. Expects
@@ -54,7 +55,7 @@ class NCRichText : public YRichText, public NCPadWidget {
      * be stripped from <code>val_r</code>. Returns <code>NULL</code>,
      * if the character entity should not be replaced.
      **/
-    static const char * entityLookup( const std::string & val_r );
+    static const wchar_t * entityLookup( const std::wstring & val_r );
 
   private:
 
@@ -89,7 +90,7 @@ class NCRichText : public YRichText, public NCPadWidget {
   private:
 
     static const unsigned listindent;
-    static const string   listleveltags;
+    static const wstring   listleveltags;
 
     stack<int> liststack;
 
@@ -109,7 +110,7 @@ class NCRichText : public YRichText, public NCPadWidget {
 	unsigned eline;
 	unsigned ecol;
 
-	string target;
+	wstring target;
 
 	Anchor() {
 	  sline = scol = eline = ecol = unset;
@@ -121,7 +122,7 @@ class NCRichText : public YRichText, public NCPadWidget {
 	  sline = sl;
 	  scol  = sc;
 	  eline = ecol = unset;
-	  target = "";
+	  target = L"";
 	}
 	void close( int el, int ec ) {
 	  eline = el;
@@ -151,7 +152,7 @@ class NCRichText : public YRichText, public NCPadWidget {
     unsigned vScrollFirstvisible;
     unsigned vScrollNextinvisible;
 
-    void openAnchor( string args );
+    void openAnchor( wstring args );
     void closeAnchor();
 
     void arm( unsigned i );
@@ -167,8 +168,8 @@ class NCRichText : public YRichText, public NCPadWidget {
     void PadNL();
     void PadBOL();
     void PadWS( const bool tab = false );
-    void PadTXT( const char * sch, const unsigned len );
-    bool PadTOKEN( const char * sch, const char *& ech );
+    void PadTXT( const wchar_t * sch, const unsigned len );
+    bool PadTOKEN( const wchar_t * sch, const wchar_t *& ech );
 
   protected:
 
@@ -183,7 +184,7 @@ class NCRichText : public YRichText, public NCPadWidget {
     virtual void HScroll( unsigned total, unsigned visible, unsigned start );
     virtual void VScroll( unsigned total, unsigned visible, unsigned start );
 
-    virtual bool handleInput( int key );
+    virtual bool handleInput( wint_t key );
 
   public:
 
@@ -196,7 +197,7 @@ class NCRichText : public YRichText, public NCPadWidget {
 
     virtual void setLabel( const YCPString & nlabel );
 
-    virtual NCursesEvent wHandleInput( int key );
+    virtual NCursesEvent wHandleInput( wint_t key );
 
     virtual void setText( const YCPString & ntext );
 

@@ -72,7 +72,7 @@ class NCMultiLineEdit : public YMultiLineEdit, public NCPadWidget {
 
     virtual YCPString text();
 
-    virtual NCursesEvent wHandleInput( int key );
+    virtual NCursesEvent wHandleInput( wint_t key );
 
     virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
 

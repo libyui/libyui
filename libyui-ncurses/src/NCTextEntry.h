@@ -50,7 +50,7 @@ class NCTextEntry : public YTextEntry, public NCWidget {
 
     bool     passwd;
     NClabel  label;
-    string   buffer;
+    wstring   buffer;
 
     NCursesWindow * lwin;
     NCursesWindow * twin;
@@ -82,7 +82,7 @@ class NCTextEntry : public YTextEntry, public NCWidget {
 
     virtual void wRedraw();
 
-    bool validKey( int key ) const;
+    bool validKey( wint_t key ) const;
 
   public:
 
@@ -106,7 +106,7 @@ class NCTextEntry : public YTextEntry, public NCWidget {
 
     virtual void setValidChars( const YCPString & validchars );
 
-    virtual NCursesEvent wHandleInput( int key );
+    virtual NCursesEvent wHandleInput( wint_t key );
 
     virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
 

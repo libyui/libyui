@@ -94,7 +94,7 @@ class NCPadWidget : public NCWidget, protected NCSchrollCB {
     virtual void AdjustPadSize( wsze & minsze );
 
     // input
-    virtual bool handleInput( int key );
+    virtual bool handleInput( wint_t key );
 
   public:
 

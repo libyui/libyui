@@ -87,7 +87,7 @@ void NCPopup::popdownDialog()
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopup::wHandleInput( int ch )
+NCursesEvent NCPopup::wHandleInput( wint_t ch )
 {
   if ( ch == 27 ) // ESC
     return NCursesEvent::cancel;

@@ -56,7 +56,8 @@
 #include <ycp/YCPBlock.h>
 
 using namespace std;
-
+using std::string;
+using std::wstring;
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -508,7 +509,7 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
     YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
     if ( filterLabel )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::SearchResults().str()) );
+	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::SearchResults()) );
     }
 
     return true;
@@ -563,7 +564,7 @@ bool PackageSelector::fillPatchList( string filter )
     YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
     if ( filterLabel )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::YOUPatches().str()) );
+	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::YOUPatches()) );
     }
 
     return true;
@@ -604,7 +605,7 @@ bool PackageSelector::fillUpdateList( )
     YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
     if ( filterLabel )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::UpdateProblem().str()) );
+	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::UpdateProblem()) );
     }
     
     return true;
@@ -708,7 +709,7 @@ bool PackageSelector::fillSummaryList( NCPkgTable::NCPkgTableListType type )
     YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
     if ( filterLabel )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( PkgNames::InstSummary().str() );
+	static_cast<NCLabel *>(filterLabel)->setLabel( PkgNames::InstSummary() );
     }
 
     return true;
@@ -1037,13 +1038,13 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 	{
 	    sprintf ( menu,
 		      "`ReplacePoint( `id(`replacemenu),`MenuButton( \"%s\", [`menu( \"%s\", [`item( `id(`showdeps), \"%s\" ), `item( `id(`autodeps), \"%s\" ) ] ), `menu( \"%s\", [`item( `id(`save), \"%s\" ), `item( `id(`load), \"%s\" ) ] ) ] ) )",
-		      PkgNames::MenuEtc().str().c_str(),
-		      PkgNames::MenuDeps().str().c_str(),
-		      PkgNames::MenuCheckDeps().str().c_str(),
-		      PkgNames::MenuNoAutoDeps().str().c_str(),
-		      PkgNames::MenuSel().str().c_str(),
-		      PkgNames::MenuSaveSel().str().c_str(),
-		      PkgNames::MenuLoadSel().str().c_str()  ); 
+		      PkgNames::MenuEtc().c_str(),
+		      PkgNames::MenuDeps().c_str(),
+		      PkgNames::MenuCheckDeps().c_str(),
+		      PkgNames::MenuNoAutoDeps().c_str(),
+		      PkgNames::MenuSel().c_str(),
+		      PkgNames::MenuSaveSel().c_str(),
+		      PkgNames::MenuLoadSel().c_str()  ); 
 
 
 	    YCPParser parser( menu );
@@ -1056,13 +1057,13 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 	{
 	    sprintf ( menu,
 		      "`ReplacePoint( `id(`replacemenu),`MenuButton( \"%s\", [`menu( \"%s\", [`item( `id(`showdeps), \"%s\" ), `item( `id(`autodeps), \"%s\" ) ] ), `menu( \"%s\", [`item( `id(`save), \"%s\" ), `item( `id(`load), \"%s\" ) ] ) ] ) )",
-		      PkgNames::MenuEtc().str().c_str(),
-		      PkgNames::MenuDeps().str().c_str(),
-		      PkgNames::MenuCheckDeps().str().c_str(),
-		      PkgNames::MenuAutoDeps().str().c_str(),
-		      PkgNames::MenuSel().str().c_str(),
-		      PkgNames::MenuSaveSel().str().c_str(),
-		      PkgNames::MenuLoadSel().str().c_str()  ); 
+		      PkgNames::MenuEtc().c_str(),
+		      PkgNames::MenuDeps().c_str(),
+		      PkgNames::MenuCheckDeps().c_str(),
+		      PkgNames::MenuAutoDeps().c_str(),
+		      PkgNames::MenuSel().c_str(),
+		      PkgNames::MenuSaveSel().c_str(),
+		      PkgNames::MenuLoadSel().c_str()  ); 
 
 	    YCPParser parser( menu );
 	    YCPValue layout = parser.parse();
@@ -1323,7 +1324,7 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
 {
     NCPkgTable * packageList = getPackageList();
     string text = "";
-    YCPString headline = YCPString(PkgNames::PackageHelp().str());
+    YCPString headline = YCPString(PkgNames::PackageHelp());
     
     if ( event.selection.isNull() )
     {
@@ -1332,33 +1333,33 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
     
     if ( event.selection->compare( PkgNames::GeneralHelp() ) == YO_EQUAL )
     {
-	text += PkgNames::HelpPkgInst1().str();
-	text += PkgNames::HelpPkgInst12().str();
-	text += PkgNames::HelpPkgInst13().str();
-	text += PkgNames::HelpPkgInst2().str();
-	text += PkgNames::HelpPkgInst3().str();
-	text += PkgNames::HelpPkgInst4().str();
-	text += PkgNames::HelpPkgInst5().str();
-	text += PkgNames::HelpPkgInst6().str();
+	text += PkgNames::HelpPkgInst1();
+	text += PkgNames::HelpPkgInst12();
+	text += PkgNames::HelpPkgInst13();
+	text += PkgNames::HelpPkgInst2();
+	text += PkgNames::HelpPkgInst3();
+	text += PkgNames::HelpPkgInst4();
+	text += PkgNames::HelpPkgInst5();
+	text += PkgNames::HelpPkgInst6();
     }
     else if ( event.selection->compare( PkgNames::StatusHelp() ) == YO_EQUAL )
     {
-	text += PkgNames::HelpOnStatus1().str();
-	text += PkgNames::HelpOnStatus2().str();
-	text += PkgNames::HelpOnStatus3().str();
-	text += PkgNames::HelpOnStatus4().str();
-	text += PkgNames::HelpOnStatus5().str();
-	text += PkgNames::HelpOnStatus6().str();
-	text += PkgNames::HelpOnStatus7().str();
+	text += PkgNames::HelpOnStatus1();
+	text += PkgNames::HelpOnStatus2();
+	text += PkgNames::HelpOnStatus3();
+	text += PkgNames::HelpOnStatus4();
+	text += PkgNames::HelpOnStatus5();
+	text += PkgNames::HelpOnStatus6();
+	text += PkgNames::HelpOnStatus7();
     }
     else if ( event.selection->compare( PkgNames::UpdateHelp() ) == YO_EQUAL )
     {
-	text += PkgNames::HelpOnUpdate().str();
+	text += PkgNames::HelpOnUpdate();
     }
     else if ( event.selection->compare( PkgNames::SearchHelp() ) == YO_EQUAL )
     {
-	headline = YCPString(PkgNames::SearchHeadline().str());
-	text += PkgNames::HelpOnSearch().str();
+	headline = YCPString(PkgNames::SearchHeadline());
+	text += PkgNames::HelpOnSearch();
     }
     
     // open the popup with the help text
@@ -1385,12 +1386,12 @@ bool PackageSelector::YouHelpHandler( const NCursesEvent&  event )
     NCPkgTable * packageList = getPackageList();
     string text  = "";
 
-    text += PkgNames::YouHelp1().str();
-    text += PkgNames::YouHelp2().str();
-    text += PkgNames::YouHelp3().str();
+    text += PkgNames::YouHelp1();
+    text += PkgNames::YouHelp2();
+    text += PkgNames::YouHelp3();
 
     // open the popup with the help text
-    NCPopupInfo youHelp( wpos( 1, 1 ), YCPString(PkgNames::YouHelp().str()), YCPString(text) );
+    NCPopupInfo youHelp( wpos( 1, 1 ), YCPString(PkgNames::YouHelp()), YCPString(text) );
     youHelp.showInfoPopup( );
 
     if ( packageList )
@@ -1445,10 +1446,10 @@ bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 {
     // show a popup and ask the user
     NCPopupInfo cancelMsg( wpos( 2, 2 ),
-			   YCPString( PkgNames::NotifyLabel().str() ),
-			   YCPString( PkgNames::CancelText().str() ),
-			   PkgNames::OKLabel().str(),
-			   PkgNames::CancelLabel().str() );
+			   YCPString( PkgNames::NotifyLabel() ),
+			   YCPString( PkgNames::CancelText() ),
+			   PkgNames::OKLabel(),
+			   PkgNames::CancelLabel() );
     cancelMsg.setNiceSize( 35, 8 ); 
     NCursesEvent input = cancelMsg.showInfoPopup( );
 
@@ -1512,10 +1513,10 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	{
 	    // open the popup e.g. with the text "/usr needs 50 MB more disk space"
 	    NCPopupInfo spaceMsg( wpos( 2, 2 ),
-				  YCPString( PkgNames::ErrorLabel().str() ),
-				  YCPString( PkgNames::DiskSpaceError().str() + "<br>" + message ),
-				  PkgNames::OKLabel().str(),
-				  PkgNames::CancelLabel().str() );
+				  YCPString( PkgNames::ErrorLabel() ),
+				  YCPString( PkgNames::DiskSpaceError() + "<br>" + message ),
+				  PkgNames::OKLabel(),
+				  PkgNames::CancelLabel() );
 	    
 	    spaceMsg.setNiceSize( 50, 10 ); 
 	    NCursesEvent input = spaceMsg.showInfoPopup( );
@@ -1707,7 +1708,7 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
     {
 	// the file list is available only for installed packages
 	PMPackagePtr package = pkgPtr->getSelectable()->installedObj();
-	string text = PkgNames::ListOfFiles().str();
+	string text = PkgNames::ListOfFiles();
 
 	if ( package )
 	{
@@ -1755,18 +1756,18 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	    version += pkgPtr->release(); 
 	}
 	
-	text += PkgNames::Version().str();
+	text += PkgNames::Version();
 	text +=  version;
 	if ( instVersion != "" )
 	{
 	    text += "  ";
-	    text += PkgNames::InstVersion().str();
+	    text += PkgNames::InstVersion();
 	    text += instVersion;
 	}
 	text +=  "  ";
 	
 	// show the size
-	text += PkgNames::Size().str();
+	text += PkgNames::Size();
 	text += pkgPtr->size().asString();
 	text +=  "  ";
 	
@@ -1774,27 +1775,27 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	if ( package )
 	{
 	    // add the media nr
-	    text += PkgNames::MediaNo().str();
+	    text += PkgNames::MediaNo();
 	    char num[5];
 	    sprintf( num, "%d", package->medianr() );
 	    text += num;
 	    text += "<br>";	    
 
 	    // the license
-	    text += PkgNames::License().str();
+	    text += PkgNames::License();
 	    text += package->license();
 	    text += "  ";
 	    text += "<br>";
 
 	    // the rpm group
-	    text += PkgNames::RpmGroup().str();
+	    text += PkgNames::RpmGroup();
 	    string group = Y2PM::packageManager().translatedRpmGroup( package->group_ptr() );
 	    text += group;
 	    text += "<br>";
 	}
 	
 	// show Provides:
-	text += PkgNames::Provides().str();
+	text += PkgNames::Provides();
 	list<PkgRelation> provides = pkgPtr->provides();	// PMSolvable
 	text += createRelLine(provides);
 	text += "<br>";
@@ -1802,7 +1803,7 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	// show the authors
 	if ( package )
 	{
-	    text += PkgNames::Authors().str();
+	    text += PkgNames::Authors();
 	    list<string> authors = package->authors(); // PMPackage	
 	    text += createText( authors, true );
 	}

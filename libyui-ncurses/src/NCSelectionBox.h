@@ -72,7 +72,7 @@ class NCSelectionBox : public YSelectionBox, public NCPadWidget {
     virtual int getCurrentItem();
     virtual void setCurrentItem( int index );
 
-    virtual NCursesEvent wHandleInput( int key );
+    virtual NCursesEvent wHandleInput( wint_t key );
 
     virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
 

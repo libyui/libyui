@@ -171,7 +171,7 @@ void NCCheckBox::wRedraw()
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCCheckBox::wHandleInput( int key )
+NCursesEvent NCCheckBox::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
   switch ( key ) {

@@ -22,6 +22,8 @@
 #include "NCurses.h"
 #include "NCTextEntry.h"
 
+#include <wctype.h>		// iswalnum()
+
 #if 0
 #undef  DBG_CLASS
 #define DBG_CLASS "_NCTextEntry_"
@@ -216,8 +218,12 @@ void NCTextEntry::setText( const YCPString & ntext )
 //	DESCRIPTION :
 //
 YCPString NCTextEntry::getText()
+    
 {
   NCstring text( buffer );
+  
+  NCMIL << "YCPString: " << text.YCPstr() << endl;
+
   return text.YCPstr();
 }
 
@@ -243,17 +249,18 @@ void NCTextEntry::setValidChars( const YCPString & validchars )
 //
 //	DESCRIPTION :
 //
-bool NCTextEntry::validKey( int key ) const
+bool NCTextEntry::validKey( wint_t key ) const
 {
-  const string & vch( validChars.str() );
+  // private: NCstring validChars;  
+  const wstring vwch( validChars.str() );
 
-  if ( vch.empty() )
+  if ( vwch.empty() )		// FIXME: test with validChars NOT empty !!!
     return true;
 
-  if ( key < 0 || UCHAR_MAX < key )
+  if ( key < 0 || WCHAR_MAX < key )
     return false;
 
-  return( vch.find( (unsigned char)key ) != string::npos );
+  return( vwch.find( (wchar_t)key ) != wstring::npos );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -339,46 +346,53 @@ void NCTextEntry::tUpdate()
   twin->bkgd( widgetStyle( true ).plain );
   twin->move( 0, 0 );
 
-  if ( fldlength ) {
-    unsigned i      = 0;
-    unsigned end    = fldlength;
-    const char * cp = buffer.c_str() + fldstart;
+  unsigned i      = 0;
+  unsigned end    = fldlength;
+  const wchar_t * cp = buffer.data() + fldstart;
 
-    // draw left scrollhint if
-    if ( *cp && fldstart ) {
-      twin->bkgdset( style.scrl );
-      twin->addch( ACS_LARROW );
-      ++i;
-      ++cp;
-    }
-
-    // check for right scrollhint
-    if ( fldstart + fldlength <= maxc ) {
-      --end;
-    }
-
-    // draw field
-    twin->bkgdset( style.data );
-    for ( /*adjusted i*/; *cp && i < end; ++i ) {
-      twin->addch( passwd ? '*' : *cp );
-      ++cp;
-    }
-    twin->bkgdset( style.plain );
-    for ( /*adjusted i*/; i < end; ++i ) {
-      twin->addch( ACS_CKBOARD );
-    }
-
-    // draw right scrollhint if
-    if ( end < fldlength ) {
-      twin->bkgdset( style.scrl );
-      twin->addch( ACS_RARROW );
-    }
+  // draw left scrollhint if
+  if ( *cp && fldstart ) {
+    twin->bkgdset( style.scrl );
+    twin->add_wch( WACS_LARROW );
+    ++i;
+    ++cp;
   }
+
+  // check for right scrollhint
+  if ( fldstart + fldlength <= maxc ) {
+    --end;
+  }
+
+  // draw field
+  twin->bkgdset( style.data );
+  for ( /*adjusted i*/; *cp && i < end; ++i ) // FIXME: test password entry
+  {
+      if ( passwd )
+      {
+	  twin->addwstr( L"*" );
+      }
+      else
+      {
+	  twin->addwstr( cp, 1 );
+      }
+      ++cp;
+  }
+  twin->bkgdset( style.plain );
+  for ( /*adjusted i*/; i < end; ++i ) {
+      twin->add_wch( WACS_CKBOARD ); 
+  }
+
+  // draw right scrollhint if
+  if ( end < fldlength ) {
+    twin->bkgdset( style.scrl );
+    twin->add_wch( WACS_RARROW );
+  }
+
   // reverse curpos
   if ( GetState() == NC::WSactive ) {
     twin->move( 0, curpos - fldstart );
     twin->bkgdset( wStyle().cursor );
-    twin->addch( twin->inchar() );
+    twin->add_attr_char( );
   }
 }
 
@@ -390,7 +404,7 @@ void NCTextEntry::tUpdate()
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCTextEntry::wHandleInput( int key )
+NCursesEvent NCTextEntry::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
   bool   beep   = false;
@@ -466,70 +480,79 @@ NCursesEvent NCTextEntry::wHandleInput( int key )
     break;
 
   default:
-    if ( key < 32 || ( key >= 127 && key < 160 ) || UCHAR_MAX < key ) {
+   // FIXME: use condition ( !iswalnum( key ) && (key != L'/' || key != L'.' || ... ) ???
+   //        iswalnum() does not work ????    
+   if ( key < 32 || ( key >= 127 && key < 160 ) || UCHAR_MAX < key )
+   {
       update = false;
       beep   = true;
-    } else if ( fldtype == NUMBER ) {
+   }
+   else if ( fldtype == NUMBER )	// FIXME: test field type NUMBER
+   {	
+       if ( bufferFull() && key != L'+' )
+       {
+	   update = false;
+	   beep   = true;
+       }
+       else
+       {
+	   switch ( key ) {
+	       case L'0':
+	       case L'1':
+	       case L'2':
+	       case L'3':
+	       case L'4':
+	       case L'5':
+	       case L'6':
+	       case L'7':
+	       case L'8':
+	       case L'9':
+		   if ( curpos || buffer.empty() || buffer[0] != L'-' ) {
+		       buffer.insert(wstring::size_type(curpos), 1, key );
+		       if ( curpos < maxCursor() )
+			   ++curpos;
+		   } else {
+		       update = false;
+		       beep   = true;
+		   }
+		   break;
 
-      if ( bufferFull() && key != '+' ) {
-	update = false;
-	beep   = true;
-      } else {
-	switch ( key ) {
-	case '0':
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	case '9':
-	  if ( curpos || buffer.empty() || buffer[0] != '-' ) {
-	    buffer.insert( curpos, 1, key );
-	    if ( curpos < maxCursor() )
-	      ++curpos;
-	  } else {
-	    update = false;
-	    beep   = true;
-	  }
-	  break;
+	       case L'+':
+		   if ( !buffer.empty() && buffer[0] == L'-' ) {
+		       buffer.erase(wstring::size_type(0), 1);
+		       if ( curpos )
+			   --curpos;
+		   } else {
+		       update = false;
+		   }
+		   break;
 
-	case '+':
-	  if ( !buffer.empty() && buffer[0] == '-' ) {
-	    buffer.erase(string::size_type(0), 1);
-	    if ( curpos )
-	      --curpos;
-	  } else {
-	    update = false;
-	  }
-	  break;
+	       case L'-':
+		   if ( buffer.empty() || buffer[0] != L'-' ) {
+		       buffer.insert(wstring::size_type(0), 1, L'-');
+		       if ( curpos < maxCursor() )
+			   ++curpos;
+		   } else {
+		       update = false;
+		   }
+		   break;
 
-	case '-':
-	  if ( buffer.empty() || buffer[0] != '-' ) {
-	    buffer.insert(string::size_type(0), 1, '-');
-	    if ( curpos < maxCursor() )
-	      ++curpos;
-	  } else {
-	    update = false;
-	  }
-	  break;
+	       default:
+		   update = false;
+		   beep   = true;
+		   break;
+	   }
+       }
 
-	default:
-	  update = false;
-	  beep   = true;
-	  break;
-	}
-      }
-
-    } else { // PLAIN
+   }
+   else    // PLAIN
+   {
 
       if ( bufferFull() || !validKey( key ) ) {
 	update = false;
 	beep   = true;
       } else {
-	buffer.insert( curpos, 1, key );
+	buffer.insert( wstring::size_type(curpos), 1, key );
 	if ( curpos < maxCursor() )
 	  ++curpos;
       }

@@ -91,7 +91,7 @@ class NCTable : public YTable, public NCPadWidget {
 
     bool setItemByKey( int key );
 
-    virtual NCursesEvent wHandleInput( int key );
+    virtual NCursesEvent wHandleInput( wint_t key );
 
     virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
 

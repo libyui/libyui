@@ -73,8 +73,8 @@ class NCDialog : public YDialog, public NCWidget {
     NCPopupInfo *helpPopup;
 
     // wrapper for wHandle... calls in processInput()
-    NCursesEvent getInputEvent( int ch );
-    NCursesEvent getHotkeyEvent( int key );
+    NCursesEvent getInputEvent( wint_t ch );
+    NCursesEvent getHotkeyEvent( wint_t key );
 
   private:
 
@@ -105,12 +105,14 @@ class NCDialog : public YDialog, public NCWidget {
 
     bool describeFunctionKeys( string & helpText );
 
+    wint_t getinput();		// get the input (respect terminal encoding)
+    
   protected:
 
-    int getch( int timeout_millisec = -1 );
+    wint_t getch( int timeout_millisec = -1 );
 
-    virtual NCursesEvent wHandleInput( int ch );
-    virtual NCursesEvent wHandleHotkey( int key );
+    virtual NCursesEvent wHandleInput( wint_t ch );
+    virtual NCursesEvent wHandleHotkey( wint_t key );
 
     virtual void startMultipleChanges();
     virtual void doneMultipleChanges();

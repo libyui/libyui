@@ -59,14 +59,14 @@ protected:
 
     virtual bool postAgain();
 
-    virtual NCursesEvent wHandleInput( int ch );
+    virtual NCursesEvent wHandleInput( wint_t ch );
     
 public:
     
     NCPopupInfo( const wpos at,
 		 const YCPString & headline,
 		 const YCPString & text,
-		 string okButtonLabel = PkgNames::OKLabel().str(),
+		 string okButtonLabel = PkgNames::OKLabel(),
 		 string cancelButtonLabel = "" );
     
     virtual ~NCPopupInfo();

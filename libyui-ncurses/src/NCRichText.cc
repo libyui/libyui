@@ -16,6 +16,7 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
+
 #include "Y2Log.h"
 #include "NCRichText.h"
 
@@ -27,13 +28,13 @@
 ///////////////////////////////////////////////////////////////////
 
 const unsigned NCRichText::listindent = 4;
-const string   NCRichText::listleveltags( "@*+o#-%$&" );//
+const wstring   NCRichText::listleveltags( L"@*+o#-%$&" );//
 
 const bool NCRichText::showLinkTarget = false;
 
 ///////////////////////////////////////////////////////////////////
 
-std::map<std::string,const char *> NCRichText::_charentity;
+std::map<std::wstring,const wchar_t *> NCRichText::_charentity;
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -43,21 +44,21 @@ std::map<std::string,const char *> NCRichText::_charentity;
 //
 //	DESCRIPTION :
 //
-const char * NCRichText::entityLookup( const std::string & val_r )
+const wchar_t * NCRichText::entityLookup( const std::wstring & val_r )
 {
   if ( _charentity.empty() ) {
     // initialize replacement for character entities. A value of NULL
     // menas do not replace.
 #define REP(l,r) _charentity[l] = r
-    REP("amp",	"&");
-    REP("gt",	">");
-    REP("lt",	"<");
-    REP("nbsp",	" ");
-    REP("quot",	"\"");
+    REP(L"amp",	L"&");
+    REP(L"gt",	L">");
+    REP(L"lt",	L"<");
+    REP(L"nbsp", L" ");
+    REP(L"quot", L"\"");
 #undef REP
   }
 
-  std::map<std::string,const char *>::const_iterator it = _charentity.find( val_r );
+  std::map<std::wstring,const wchar_t *>::const_iterator it = _charentity.find( val_r );
   if ( it != _charentity.end() ) {
     return it->second;
   }
@@ -227,7 +228,7 @@ void NCRichText::wRecoded()
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCRichText::wHandleInput( int key )
+NCursesEvent NCRichText::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
   handleInput( key );
@@ -238,7 +239,10 @@ NCursesEvent NCRichText::wHandleInput( int key )
     case KEY_RETURN:
       if ( armed != Anchor::unset ) {
 	ret = NCursesEvent::menu;
-	ret.selection = YCPString( anchors[armed].target );
+	string ycpstr;
+	NCstring::RecodeFromWchar( anchors[armed].target, "UTF-8", &ycpstr );
+	NCMIL << "LINK: " << ycpstr << endl;
+	ret.selection = YCPString( ycpstr );
       }
       break;
     }
@@ -307,7 +311,7 @@ void NCRichText::DrawPlainPad()
   cl = 0;
   for ( NCtext::const_iterator line = ftext.begin();
 	line != ftext.end(); ++line, ++cl ) {
-    pad->addstr( cl, 0, (*line).str().c_str() );
+    pad->addwstr( cl, 0, (*line).str().c_str() );
   }
 }
 
@@ -319,27 +323,27 @@ void NCRichText::DrawPlainPad()
 **
 **	DESCRIPTION : DrawHTMLPad tools
 */
-inline void SkipToken( const char *& ch )
+inline void SkipToken( const wchar_t *& wch )
 {
   do {
-    ++ch;
-  } while ( *ch && *ch != '>' );
-  if ( *ch )
-    ++ch;
+    ++wch;
+  } while ( *wch && *wch != L'>' );
+  if ( *wch )
+    ++wch;
 }
 
-static string WStoken( " \n\t\v\r" );
-inline void SkipWS( const char *& ch ) {
+static wstring WStoken( L" \n\t\v\r" );
+inline void SkipWS( const wchar_t *& wch ) {
   do {
-    ++ch;
-  } while ( *ch && WStoken.find( *ch ) != string::npos );
+    ++wch;
+  } while ( *wch && WStoken.find( *wch ) != wstring::npos );
 }
 
-static string WDtoken( " <\n\t\v\r" ); // WS + TokenStart '<'
-inline void SkipWord( const char *& ch ) {
+static wstring WDtoken( L" <\n\t\v\r" ); // WS + TokenStart '<'
+inline void SkipWord( const wchar_t *& wch ) {
   do {
-    ++ch;
-  } while ( *ch && WDtoken.find( *ch ) == string::npos );
+    ++wch;
+  } while ( *wch && WDtoken.find( *wch ) == wstring::npos );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -365,34 +369,35 @@ void NCRichText::DrawHTMLPad()
   pad->move( cl, cc );
   atbol = true;
 
-  const char * ch = text.str().c_str();
-  const char * sch = 0;
+  const wchar_t * wch = (wchar_t *)text.str().data(); 
+  const wchar_t * swch = 0;
 
-  while ( *ch ) {
-    switch ( *ch ) {
-    case ' ':
-    case '\t':
-    case '\n':
-    case '\v':
-    case '\r':
-      SkipWS( ch );
-      PadWS();
-      break;
+  while ( *wch )
+  {
+      switch ( *wch ) {
+	  case L' ':
+	  case L'\t':
+	  case L'\n':
+	  case L'\v':
+	  case L'\r':
+	      SkipWS( wch );
+	      PadWS();
+	      break;
 
-    case '<':
-      sch = ch;
-      SkipToken( ch );
-      if ( PadTOKEN( sch, ch ) )
-	break;    // strip token
-      else
-	ch = sch; // reset and fall through
+	  case L'<':
+	      swch = wch;
+	      SkipToken( wch );
+	      if ( PadTOKEN( swch, wch ) )
+		  break;    	// strip token
+	      else
+		  wch = swch; 	// reset and fall through
 
-    default:
-      sch = ch;
-      SkipWord( ch );
-      PadTXT( sch, ch - sch );
-      break;
-    }
+	  default:
+	      swch = wch;
+	      SkipWord( wch );
+	      PadTXT( swch, wch - swch );
+	      break;
+      }
   }
 
   PadBOL();
@@ -450,12 +455,16 @@ inline void NCRichText::PadBOL()
 inline void NCRichText::PadWS( const bool tab )
 {
   if ( atbol )
-    return; // no WS at beginning of line
+      return; // no WS at beginning of line
+
   if ( cc == textwidth )
-    PadNL();
-  else {
-    pad->addch( ' ' );
-    ++cc;
+  {
+      PadNL();
+  }
+  else
+  {
+      pad->addwstr( L" " );
+      ++cc;
   }
 }
 
@@ -467,34 +476,43 @@ inline void NCRichText::PadWS( const bool tab )
 //
 //	DESCRIPTION :
 //
-inline void NCRichText::PadTXT( const char * osch, const unsigned olen )
+inline void NCRichText::PadTXT( const wchar_t * osch, const unsigned olen )
 {
-  string txt( osch, olen );
+  wstring txt( osch, olen );
 
   // filter known '&..;'
-  for( string::size_type special = txt.find( "&" );
-       special != string::npos; special = txt.find( "&", special+1 ) ) {
-    string::size_type colon = txt.find( ";", special+1 );
-    if ( colon == string::npos )
+  for( wstring::size_type special = txt.find( L"&" );
+       special != wstring::npos;
+       special = txt.find( L"&", special+1 ) )
+  {
+    wstring::size_type colon = txt.find( L";", special+1 );
+
+    if ( colon == wstring::npos )
       break;  // no ';'  -> no need to continue
-    const char * repl = entityLookup( txt.substr( special+1, colon-special-1 ) );
-    if ( repl ) {
-      txt.replace( special, colon-special+1, repl );
+
+   const wchar_t * repl = entityLookup( txt.substr( special+1, colon-special-1 ) );
+    if ( repl )
+    {
+	txt.replace( special, colon-special+1, repl );
     }
   }
 
-  // insert text
-  const char * sch = txt.c_str();
   unsigned     len = txt.length();
-
   if ( !atbol && cc + len > textwidth )
     PadNL();
-  for ( unsigned i = 0; i < len; ++i, ++sch ) {
-    pad->addch( *sch );
-    atbol = false;
-    if ( ++cc >= textwidth ) {
-      PadNL();
-    }
+
+  // insert the text
+  const wchar_t * sch = txt.data();
+
+  while ( *sch )
+  {
+      pad->addwstr( sch, 1 );	// add one wide chararacter
+      atbol = false;	// at begin of line = false
+      if ( ++cc >= textwidth )
+      {
+	  PadNL();	// add a new line
+      }
+      sch++;
   }
 }
 
@@ -577,25 +595,25 @@ void NCRichText::PadChangeLevel( bool down, int tag )
 //
 //	DESCRIPTION :
 //
-void NCRichText::openAnchor( string args )
+void NCRichText::openAnchor( wstring args )
 {
   canchor.open( cl, cc );
 
-  const char * ch = args.c_str();
-  const char * lookupstr = "href = ";
-  const char * lookup = lookupstr;
+  const wchar_t * ch = (wchar_t *)args.data();
+  const wchar_t * lookupstr = L"href = ";
+  const wchar_t * lookup = lookupstr;
 
   for ( ; *ch && *lookup; ++ch ) {
-    char c = tolower(*ch);
+    wchar_t c = towlower(*ch);
     switch ( c ) {
-    case '\t':
-    case ' ':
-      if ( *lookup != ' ' )
+    case L'\t':
+    case L' ':
+      if ( *lookup != L' ' )
 	lookup = lookupstr;
       break;
 
     default:
-      if ( *lookup == ' ' ) {
+      if ( *lookup == L' ' ) {
 	++lookup;
 	if ( !*lookup ) {
 	  // ch is the 1st char after lookupstr
@@ -612,11 +630,11 @@ void NCRichText::openAnchor( string args )
   }
 
   if ( !*lookup ) {
-    const char * delim = ( *ch == '"' ) ? "\"" : " \t";
-    args = ( *ch == '"' ) ? ++ch : ch;
+    const wchar_t * delim = ( *ch == L'"' ) ? L"\"" : L" \t";
+    args = ( *ch == L'"' ) ? ++ch : ch;
 
-    string::size_type end = args.find_first_of( delim );
-    if ( end != string::npos )
+    wstring::size_type end = args.find_first_of( delim );
+    if ( end != wstring::npos )
       args.erase( end );
 
     canchor.target = args;
@@ -649,14 +667,14 @@ void NCRichText::closeAnchor()
 //
 //	DESCRIPTION : expect "<[/]value>"
 //
-bool NCRichText::PadTOKEN( const char * sch, const char *& ech )
+bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 {
   // "<[/]value>"
-  if ( *sch++ != '<' || *(ech-1) != '>' )
+  if ( *sch++ != L'<' || *(ech-1) != L'>' )
     return false;
 
   // "[/]value>"
-  bool endtag = ( *sch == '/' );
+  bool endtag = ( *sch == L'/' );
   if ( endtag )
     ++sch;
 
@@ -664,10 +682,10 @@ bool NCRichText::PadTOKEN( const char * sch, const char *& ech )
   if ( ech - sch <= 1 )
     return false;
 
-  string value( sch, ech - 1 - sch );
-  string args;
-  string::size_type argstart = value.find_first_of( " \t\n" );
-  if ( argstart != string::npos ) {
+  wstring value( sch, ech - 1 - sch );
+  wstring args;
+  wstring::size_type argstart = value.find_first_of( L" \t\n" );
+  if ( argstart != wstring::npos ) {
     args = value.substr( argstart );
     value.erase( argstart );
   }
@@ -688,37 +706,37 @@ bool NCRichText::PadTOKEN( const char * sch, const char *& ech )
     else if ( value[0] == 'a' )		token = T_ANC;
     break;
   case 2:
-    if (      value == "br" )		token = T_BR;
-    else if ( value == "em" )		token = T_IT;
-    else if ( value == "h1" )		token = T_HEAD;
-    else if ( value == "h2" )		token = T_HEAD;
-    else if ( value == "h3" )		token = T_HEAD;
-    else if ( value == "hr" )		token = T_IGNORE;
-    else if ( value == "li" )		token = T_LI;
-    else if ( value == "ol" )		{ token = T_LEVEL; leveltag = 1; }
-    else if ( value == "qt" )		token = T_IGNORE;
-    else if ( value == "tt" )		token = T_TT;
-    else if ( value == "ul" )		{ token = T_LEVEL; leveltag = 0; }
+    if (      value == L"br" )		token = T_BR;
+    else if ( value == L"em" )		token = T_IT;
+    else if ( value == L"h1" )		token = T_HEAD;
+    else if ( value == L"h2" )		token = T_HEAD;
+    else if ( value == L"h3" )		token = T_HEAD;
+    else if ( value == L"hr" )		token = T_IGNORE;
+    else if ( value == L"li" )		token = T_LI;
+    else if ( value == L"ol" )		{ token = T_LEVEL; leveltag = 1; }
+    else if ( value == L"qt" )		token = T_IGNORE;
+    else if ( value == L"tt" )		token = T_TT;
+    else if ( value == L"ul" )		{ token = T_LEVEL; leveltag = 0; }
     break;
   case 3:
-    if (      value == "big" )		token = T_IGNORE;
-    else if ( value == "pre" )		token = T_IGNORE;
+    if (      value == L"big" )		token = T_IGNORE;
+    else if ( value == L"pre" )		token = T_IGNORE;
     break;
   case 4:
-    if (      value == "bold" )		token = T_BOLD;
-    else if ( value == "code" )		token = T_TT;
-    else if ( value == "font" )		token = T_IGNORE;
+    if (      value == L"bold" )	token = T_BOLD;
+    else if ( value == L"code" )	token = T_TT;
+    else if ( value == L"font" )	token = T_IGNORE;
     break;
   case 5:
-    if (      value == "large" )	token = T_IGNORE;
-    else if ( value == "small" )	token = T_IGNORE;
+    if (      value == L"large" )	token = T_IGNORE;
+    else if ( value == L"small" )	token = T_IGNORE;
     break;
   case 6:
-    if (      value == "center" )	token = T_PAR;
-    else if ( value == "strong" )	token = T_BOLD;
+    if (      value == L"center" )	token = T_PAR;
+    else if ( value == L"strong" )	token = T_BOLD;
     break;
   case 10:
-    if (      value == "blockquote" )	token = T_PAR;
+    if (      value == L"blockquote" )	token = T_PAR;
     break;
   default:
     token = T_UNKNOWN;
@@ -756,7 +774,7 @@ bool NCRichText::PadTOKEN( const char * sch, const char *& ech )
   case T_PAR:
     PadBOL();
     if ( !endtag && !cindent ) {
-      PadTXT( "  ", 2 );
+      PadTXT( L"  ", 2 );
     }
     break;
 
@@ -764,15 +782,20 @@ bool NCRichText::PadTOKEN( const char * sch, const char *& ech )
     PadSetLevel();
     PadBOL();
     if ( !endtag ) {
-      string tag;
+      wstring tag;
       if ( liststack.empty() ) {
-	tag = string( listindent, ' ' );
+	tag = wstring( listindent, L' ' );
       } else {
-	char buf[16];
+	wchar_t buf[16];
+	// FIXME - test lists !!!
 	if ( liststack.top() )
-	  sprintf( buf, "%2d. ", liststack.top()++ );
+	{
+	    swprintf( buf, 15, L"%2ld. ", liststack.top()++ );
+	}
 	else
-	  sprintf( buf, " %c  ", listleveltags[liststack.size()%listleveltags.size()] );
+	{
+	    swprintf( buf, 15, L" %lc  ",listleveltags[liststack.size()%listleveltags.size()] );
+	}
 	tag = buf;
       }
       // outsent list tag:
@@ -785,9 +808,13 @@ bool NCRichText::PadTOKEN( const char * sch, const char *& ech )
 
   case T_ANC:
     if ( endtag )
-      closeAnchor();
+    {
+	closeAnchor();
+    }
     else
-      openAnchor( args );
+    {
+	openAnchor( args );
+    }
     // fall through
   case T_BOLD:
   case T_IT:
@@ -906,7 +933,7 @@ void NCRichText::VScroll( unsigned total, unsigned visible, unsigned start )
 //
 //	DESCRIPTION :
 //
-bool NCRichText::handleInput( int key )
+bool NCRichText::handleInput( wint_t key )
 {
   if ( plainText || anchors.empty() ) {
     return NCPadWidget::handleInput( key );

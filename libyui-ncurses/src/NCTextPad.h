@@ -53,7 +53,7 @@ class NCTextPad : public NCPad {
     void cursorOn()  { cursor( true ); }
     void cursorOff() { cursor( false ); }
 
-    bool insert( int key );
+    bool insert( wint_t key );
     bool delch( bool previous = false );
     bool openLine();
 
@@ -75,10 +75,10 @@ class NCTextPad : public NCPad {
     virtual void resize( wsze nsze );
     virtual int setpos();
     virtual wpos CurPos() const;
-    virtual bool handleInput( int key );
+    virtual bool handleInput( wint_t key );
 
     void setText( const NCtext & ntext );
-    string getText() const;
+    wstring getText() const;
 };
 
 ///////////////////////////////////////////////////////////////////

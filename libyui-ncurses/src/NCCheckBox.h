@@ -76,7 +76,7 @@ class NCCheckBox : public YCheckBox, public NCWidget {
     virtual void setValue( const YCPValue & newval );
     virtual YCPValue getValue();
 
-    virtual NCursesEvent wHandleInput( int key );
+    virtual NCursesEvent wHandleInput( wint_t key );
 
     virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
 

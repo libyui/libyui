@@ -45,7 +45,7 @@ NCTable::NCTable( NCWidget * parent, YWidgetOpt & opt,
   // !!! head is UTF8 encoded, thus should be vector<YCPstring>
   vector<NCstring> headline( head.size() );
   for ( unsigned i = 0; i < head.size(); ++i ) {
-    headline[i].assignUtf8( head[i] );
+    headline[i] = NCstring( head[i] );
   }
   hasHeadline = pad->SetHeadline( headline );
 }
@@ -117,7 +117,7 @@ void NCTable::setHeader( const vector<string> & head )
 {
     vector<NCstring> headline( head.size() );
     for ( unsigned i = 0; i < head.size(); ++i ) {
-	headline[i].assignUtf8( head[i] );
+	headline[i] = NCstring( head[i] );
     }
     hasHeadline = pad->SetHeadline( headline );
 }
@@ -246,7 +246,7 @@ NCPad * NCTable::CreatePad()
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCTable::wHandleInput( int key )
+NCursesEvent NCTable::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
   int citem  = getCurrentItem();

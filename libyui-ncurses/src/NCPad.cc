@@ -150,7 +150,7 @@ void NCPad::wRecoded()
 //
 //	DESCRIPTION :
 //
-bool NCPad::handleInput( int key )
+bool NCPad::handleInput( wint_t key )
 {
   bool handled = true;
   switch ( key ) {

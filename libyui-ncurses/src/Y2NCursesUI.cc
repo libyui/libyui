@@ -111,23 +111,33 @@ Y2NCursesUI::Y2NCursesUI( bool with_threads,
 			  Y2Component *callback )
     : YUIInterpreter(with_threads, callback)
 {
-  try {
-    NCurses::init();
-  }
-  catch ( NCursesError & err ) {
-    UIINT << err << endl;
-    ::endwin();
-    abort();
-  }
-
-  if ( getenv( "LANG" ) != NULL ) {
-    setLanguage( getenv( "LANG" ) );
-  }
-
-  topmostConstructorHasFinished();
+    try {
+	NCurses::init();
+    }
+    catch ( NCursesError & err ) {
+	UIINT << err << endl;
+	::endwin();
+	abort();
+    }
   
-  if ( macro_file )
-    playMacro( macro_file );
+    if ( getenv( "LANG" ) != NULL )
+    {
+	string language = getenv( "LANG" );
+	setLanguage( language );
+
+	// Explicitly set LC_CTYPE so that it won't be changed if setenv(LANG) is called elsewwhere.
+	NCMIL << "setlocale( LC_CTYPE, " << nl_langinfo( CODESET ) << " )" << " LANG: " << language.c_str() << endl;
+        setlocale( LC_CTYPE, "" );
+
+	// setlocale( LC_ALL ) was called in WFMInterpreter::changeToModuleLanguage() which
+	// sets LC_CTYPE to the wrong encoding !!!!!
+	// -> this is removed in WFMInterpreter
+    }
+    
+    topmostConstructorHasFinished();
+
+    if ( macro_file )
+	playMacro( macro_file );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -705,13 +715,19 @@ bool Y2NCursesUI::setLanguage( string lang )
 {
   string encoding;
   UIMIL << form( "Encoding for '%s' ", lang.c_str() );
+  string language = lang;
 
-  string::size_type pos = lang.find( '.' );
+  string::size_type pos = language.find( '.' );
   if ( pos != string::npos )
   {
-    encoding = lang.substr( pos+1 );
-    lang.erase( pos );
+    encoding = language.substr( pos+1 );
+    language.erase( pos );
   }
+
+  string lang_LANG = language;
+
+#if 0
+  // "old" 8.2 code
   if ( encoding == ""
        || encoding == "UTF-8" )
   {
@@ -721,9 +737,26 @@ bool Y2NCursesUI::setLanguage( string lang )
     }
     encoding = language2encoding( lang );
   }
+#endif
 
+  // FIXME - use language2encoding if encoding is NOT UTF-8 ??????
+  // or use nl_langinfo() ????
+  // Encoding is the terminal encoding (encoding internally used for
+  // gettext() is always UTF-8).
+
+  if ( encoding != "UTF-8" )
+  {
+      pos = language.find( '_' );
+      if ( pos != string::npos ) {
+	  language.erase( pos );
+      }
+      encoding = language2encoding( language );
+  }
+  
   UIMIL << form( "is '%s'\n", encoding.c_str() );
-  if ( NCstring::setDefaultEncoding( encoding ) )
+
+  // set terminal Encoding
+  if ( NCstring::setTerminalEncoding( encoding ) )
     Redraw();
 
   return true;
@@ -771,10 +804,11 @@ YCPValue Y2NCursesUI::setConsoleFont( const YCPString & console_magic,
     UIERR << cmd.c_str() << " returned " << ret << endl;
   }
 
-  if ( NCstring::setDefaultEncoding( encoding->value() ) )
+  // FIXME: Refresh() or Redraw() ? condition ???
+  //if ( NCstring::setDefaultEncoding( encoding->value() ) )
     Redraw();
-  else
-    Refresh();
+    //else
+    //Refresh();
 
   return YCPVoid();
 }

@@ -49,6 +49,12 @@ inline int UNDEF(addch)(chtype ch)  { return addch(ch); }
 #define addch UNDEF(addch)
 #endif
 
+#ifdef add_wch
+inline int UNDEF(add_wch)(cchar_t * cch)  { return add_wch(cch); }
+#undef add_wch
+#define add_wch UNDEF(add_wch)
+#endif
+
 #ifdef echochar
 inline int UNDEF(echochar)(chtype ch)  { return echochar(ch); }
 #undef echochar
@@ -66,6 +72,13 @@ inline int UNDEF(insdelln)(int n)  { return insdelln(n); }
 inline int UNDEF(addstr)(const char * str)  { return addstr((char*)str); }
 #undef addstr
 #define addstr UNDEF(addstr)
+#endif
+
+#ifdef addwstr
+/* The (wchar*_t) cast is to hack around missing const's */
+inline int UNDEF(addwstr)(const wchar_t * str)  { return addwstr((wchar_t*)str); }
+#undef addwstr
+#define addwstr UNDEF(addwstr)
 #endif
 
 #ifdef attron
@@ -290,10 +303,28 @@ inline chtype UNDEF(inch)()  { return inch(); }
 #define inch UNDEF(inch)
 #endif
 
+#ifdef in_wch
+inline int UNDEF(in_wch)(cchar_t * cch)  { return in_wch(cch); }
+#undef in_wch
+#define in_wch UNDEF(in_wch)
+#endif
+
 #ifdef insch
 inline int UNDEF(insch)(char c)  { return insch(c); }
 #undef insch
 #define insch UNDEF(insch)
+#endif
+
+#ifdef ins_wch
+inline int UNDEF(ins_wch)(const cchar_t *c)  { return ins_wch(c); }
+#undef ins_wch
+#define ins_wch UNDEF(ins_wch)
+#endif
+
+#ifdef mvwins_wch
+inline int UNDEF(mvwins_wch)(WINDOW *w, int y, int x, const cchar_t *cchar)  { return mvwins_wch(w,y,x,cchar); }
+#undef mvwins_wch
+#define mvwins_wch UNDEF(mvwins_wch)
 #endif
 
 #ifdef insertln
@@ -418,6 +449,12 @@ inline int UNDEF(waddstr)(WINDOW *win, char *str) { return waddstr(win, str); }
 #define waddstr UNDEF(waddstr)
 #endif
 
+#ifdef waddwstr
+inline int UNDEF(waddwstr)(WINDOW *win, wchar_t *str) { return waddwstr(win, str); }
+#undef waddwstr
+#define waddwstr UNDEF(waddwstr)
+#endif
+
 #ifdef waddchstr
 inline int UNDEF(waddchstr)(WINDOW *win, chtype *at) { return waddchstr(win, at); }
 #undef waddchstr
@@ -506,11 +543,25 @@ inline int UNDEF(addnstr)(const char *str, int n)
 #define addnstr UNDEF(addnstr)
 #endif
 
+#ifdef addnwstr
+inline int UNDEF(addnwstr)(const wchar_t *str, int n)
+{ return addnwstr((wchar_t*)str, n); }
+#undef addnwstr
+#define addnwstr UNDEF(addnwstr)
+#endif
+
 #ifdef mvwaddnstr
 inline int UNDEF(mvwaddnstr)(WINDOW *win, int y, int x, const char *str, int n)
 { return mvwaddnstr(win, y, x, (char*)str, n); }
 #undef mvwaddnstr
 #define mvwaddnstr UNDEF(mvwaddnstr)
+#endif
+
+#ifdef mvwaddnwstr
+inline int UNDEF(mvwaddnwstr)(WINDOW *win, int y, int x, const wchar_t *str, int n)
+{ return mvwaddnwstr(win, y, x, (wchar_t*)str, n); }
+#undef mvwaddnwstr
+#define mvwaddnwstr UNDEF(mvwaddnwstr)
 #endif
 
 #ifdef mvwaddstr
@@ -554,6 +605,13 @@ inline chtype UNDEF(mvwinch)(WINDOW *win, int y, int x) {
 #define mvwinch UNDEF(mvwinch)
 #endif
 
+#ifdef mvwin_wch
+inline int UNDEF(mvwin_wch)(WINDOW *win, int y, int x, cchar_t * cch) {
+  return mvwin_wch(win, y, x, cch);}
+#undef mvwin_wch
+#define mvwin_wch UNDEF(mvwin_wch)
+#endif
+
 #ifdef mvwinsch
 inline int UNDEF(mvwinsch)(WINDOW *win, int y, int x, char c)
 { return mvwinsch(win, y, x, c); }
@@ -580,6 +638,13 @@ inline int UNDEF(mvaddstr)(int y, int x, const char * str)
 { return mvaddstr(y, x, (char*)str); }
 #undef mvaddstr
 #define mvaddstr UNDEF(mvaddstr)
+#endif
+
+#ifdef mvwadd_wch
+inline int UNDEF(mvwadd_wch)(WINDOW *win, int y, int x, const cchar_t * cch)
+{ return mvwadd_wch(win, y, x, (cchar_t*)cch); }
+#undef mvwadd_wch
+#define mvwadd_wch UNDEF(mvwadd_wch)
 #endif
 
 #ifdef mvdelch
@@ -1033,6 +1098,18 @@ public:
   int            addch(const chtype ch) { return ::waddch(w, ch); }
 
   /**
+  * Put attributed character from given position to the window.
+  */  
+  int		add_attr_char( int y, int x );
+  int		add_attr_char();
+    
+  /**
+  * Put a combined character to the window.
+  */
+  int            add_wch( const cchar_t * cch ) { return ::wadd_wch(w, cch); }
+  int            add_wch( int y, int x, const cchar_t * cch ) { return mvwadd_wch(w, y, x, cch); }
+     
+  /**
    * Move cursor to the requested position and then put attributed character
    * to the window.
   */
@@ -1057,12 +1134,25 @@ public:
   int            addstr(const char* str, int n=-1) {
     return ::waddnstr(w, (char*)str,n); }
 
-  /**
+ /**
    * Move the cursor to the requested position and then perform the addstr
    * as described above.
   */
   int            addstr(int y, int x, const char * str, int n=-1) {
-    return ::mvwaddnstr(w,y,x,(char*)str,n); }
+    return ::mvwaddnstr(w,y,x,(char*)str,n);
+  }
+
+ /**
+   * Write the wchar_t str to the window, stop writing if the terminating
+   * NUL or the limit n is reached. If n is negative, it is ignored.
+  */
+  int            addwstr(const wchar_t* str, int n=-1);
+    
+  /**
+   * Move the cursor to the requested position and then perform the addwstr
+   * as described above.
+  */
+  int            addwstr(int y, int x, const wchar_t * str, int n=-1);
 
     /**
      * Do a formatted print to the window.
@@ -1097,6 +1187,12 @@ public:
   chtype         inch(int y, int x) { return ::mvwinch(w,y,x); }
   chtype         inchar(int y, int x) { return inch(y,x)&(A_CHARTEXT|A_ALTCHARSET); }
 
+ /**
+  * Retrieve combined character under the current cursor position.
+  */
+  int		in_wchar( cchar_t * cchar );
+  int 		in_wchar( int y, int x, cchar_t * cchar );
+
   /**
    * Insert attributed character into the window before current cursor
    * position.
@@ -1110,7 +1206,14 @@ public:
   int            insch(int y, int x, chtype ch) {
     return ::mvwinsch(w,y,x,ch); }
 
-  /**
+ /**
+   * Move cursor to requested position and then insert the attributed
+   * character before that position.
+  */
+  int            ins_wch(int y, int x, const cchar_t * cchar) {
+    return mvwins_wch(w,y,x,cchar); }
+
+    /**
    * Insert an empty line above the current line.
   */
   int            insertln() { return ::winsdelln(w,1); }

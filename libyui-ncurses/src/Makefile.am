@@ -14,7 +14,7 @@ libpy2ncurses_la_LDFLAGS = -version-info 2:0
 liby2ncurses_la_LDFLAGS = -version-info 2:0
 
 libpy2ncurses_la_LIBADD =		\
-	-lncurses -lpanel -ly2pm
+	-lncursesw -lpanelw -ly2pm
 liby2ncurses_la_LIBADD = $(libpy2ncurses_la_LIBADD)
 
 liby2ncurses_la_SOURCES =				\

@@ -90,16 +90,16 @@ void NCPopupPkgTable::createLayout( )
 
     // add the headline
     opt.isHeading.setValue( true );
-    NCLabel * head = new NCLabel( split, opt, YCPString(PkgNames::AutoChangeLabel().str()) );
+    NCLabel * head = new NCLabel( split, opt, YCPString(PkgNames::AutoChangeLabel()) );
     split->addChild( head );
 
     NCSpacing * sp1 = new NCSpacing( split, opt, 0.6, false, true );
     split->addChild( sp1 );
 
     opt.isHeading.setValue( false );
-    NCLabel * lb1 = new NCLabel( split, opt, YCPString(PkgNames::AutoChangeText1().str()) );
+    NCLabel * lb1 = new NCLabel( split, opt, YCPString(PkgNames::AutoChangeText1()) );
     split->addChild( lb1 );
-    NCLabel * lb2 = new NCLabel( split, opt, YCPString(PkgNames::AutoChangeText2().str()) );
+    NCLabel * lb2 = new NCLabel( split, opt, YCPString(PkgNames::AutoChangeText2()) );
     split->addChild( lb2 );
     
     // add the package table (use default type T_Packages) 
@@ -121,7 +121,7 @@ void NCPopupPkgTable::createLayout( )
 
     // add the OK button
     opt.key_Fxx.setValue( 10 );
-    okButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::OKLabel().str()) );
+    okButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::OKLabel()) );
     okButton->setId( PkgNames::OkButton() );
   
     hSplit->addChild( okButton );
@@ -129,7 +129,7 @@ void NCPopupPkgTable::createLayout( )
 
     // add the Cancel button
     opt.key_Fxx.setValue( 9 );
-    cancelButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::CancelLabel().str()) );
+    cancelButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::CancelLabel()) );
     cancelButton->setId( PkgNames::Cancel() );
   
     hSplit->addChild( cancelButton );
@@ -231,7 +231,7 @@ long NCPopupPkgTable::nicesize(YUIDimension dim)
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupPkgTable::wHandleInput( int ch )
+NCursesEvent NCPopupPkgTable::wHandleInput( wint_t ch )
 {
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;

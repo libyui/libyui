@@ -332,453 +332,453 @@ public:
     /**
      *  The label of the RPM-group-tags tree widget
      */
-    static const NCstring RpmTreeLabel();
+    static const string RpmTreeLabel();
 
     /**
      *  The headline of the disk space popup
      */ 
-    static const NCstring DiskspaceLabel();
+    static const string DiskspaceLabel();
 
    /**
      *  The label of the package selections popup
      */
-    static const NCstring SelectionLabel();
+    static const string SelectionLabel();
 
    /**
      *  The label Filter: YOU Patches
      */
-    static const NCstring YOUPatches();
+    static const string YOUPatches();
     
     /**
      *  The label for Filter: Search results
      */
-    static const NCstring SearchResults();
+    static const string SearchResults();
 
    /**
      *  The label for Filter: Installation Summary
      */
-    static const NCstring InstSummary();
+    static const string InstSummary();
     
     /**
      *  The label for Filter: Update problem
      */
-    static const NCstring UpdateProblem();
+    static const string UpdateProblem();
     
     /**
      * The headline of the search popup
      */
-    static const NCstring PackageSearch();
+    static const string PackageSearch();
 
     /**
      * The headline of the dependency popup
      */
-    static const NCstring PackageDeps();
-    static const NCstring SelectionDeps();
+    static const string PackageDeps();
+    static const string SelectionDeps();
 
    /**
      * The headline of the disk space popup
      */
-    static const NCstring DiskSpaceError();
-    static const NCstring DiskSpaceWarning();
+    static const string DiskSpaceError();
+    static const string DiskSpaceWarning();
     
-    static const NCstring LabelUnres1();
-    static const NCstring LabelUnres2();
-    static const NCstring LabelAlternative();
-    static const NCstring LabelConflict1();
-    static const NCstring LabelConflict2();
-    static const NCstring LabelSelConflict2();
-    static const NCstring LabelRequBy1();
-    static const NCstring LabelSelRequBy1();
-    static const NCstring LabelRequBy2();
-    static const NCstring LabelSelRequBy2();
-    static const NCstring LabelRequire1();
-    static const NCstring LabelSelRequire1();
-    static const NCstring LabelRequire2();
-    static const NCstring LabelUnresolvable();
-    static const NCstring WarningLabel();
-    static const NCstring ErrorLabel();
-    static const NCstring NotifyLabel();
-    static const NCstring DepsHelpLine();
-    static const NCstring Solving();
-    static const NCstring Saving();
-    static const NCstring Loading();
-    static const NCstring ContinueRequ();
-    static const NCstring ContinueSelRequ();
+    static const string LabelUnres1();
+    static const string LabelUnres2();
+    static const string LabelAlternative();
+    static const string LabelConflict1();
+    static const string LabelConflict2();
+    static const string LabelSelConflict2();
+    static const string LabelRequBy1();
+    static const string LabelSelRequBy1();
+    static const string LabelRequBy2();
+    static const string LabelSelRequBy2();
+    static const string LabelRequire1();
+    static const string LabelSelRequire1();
+    static const string LabelRequire2();
+    static const string LabelUnresolvable();
+    static const string WarningLabel();
+    static const string ErrorLabel();
+    static const string NotifyLabel();
+    static const string DepsHelpLine();
+    static const string Solving();
+    static const string Saving();
+    static const string Loading();
+    static const string ContinueRequ();
+    static const string ContinueSelRequ();
     
    /**
      * text used in search popup
      */
-    static const NCstring SearchPhrase();
+    static const string SearchPhrase();
 
    /**
      * text used in search popup
      */
-    static const NCstring CheckDescr();
+    static const string CheckDescr();
     
    /**
      * text used in search popup
      */
-    static const NCstring IgnoreCase();
+    static const string IgnoreCase();
 
    /**
      * text used in search popup
      */
-    static const NCstring SearchIn();
+    static const string SearchIn();
 
    /**
      * text used in search popup
      */
-    static const NCstring CheckName();
+    static const string CheckName();
     
    /**
      * text used in search popup
      */
-    static const NCstring CheckSummary();
+    static const string CheckSummary();
 
    /**
      * text used in search popup
      */
-    static const NCstring CheckProvides();
+    static const string CheckProvides();
     
    /**
      * text used in search popup
      */
-    static const NCstring CheckRequires();
+    static const string CheckRequires();
     
     /**
      * The headline of the help popup
      */
-    static const NCstring PackageHelp();
+    static const string PackageHelp();
 
     /**
      * The headline of the search help popup
      */
-    static const NCstring SearchHeadline();
+    static const string SearchHeadline();
     
     /**
      * The headline of the help YOU popup
      */
-    static const NCstring YouHelp();
+    static const string YouHelp();
 
     /**
      *  The label of the OK button
      */
-    static const NCstring OKLabel();
+    static const string OKLabel();
 
     /**
      *  The label of the Cancel button
      */
-    static const NCstring CancelLabel();
+    static const string CancelLabel();
     
     /**
      *  The label of the Cancel/Ignore button
      */
-    static const NCstring CancelIgnore();
+    static const string CancelIgnore();
 
    /**
      *  The label of the Ignore All button
      */
-    static const NCstring IgnAllLabel();
+    static const string IgnAllLabel();
 
     /**
      *  The label of the Ignore button
      */
-    static const NCstring IgnLabel();
+    static const string IgnLabel();
     
     /**
      *  The label of the Solve button
      */
-    static const NCstring SolveLabel();
+    static const string SolveLabel();
 
    /**
      *  The label of the Save button
      */
-    static const NCstring SaveLabel();
+    static const string SaveLabel();
 
     /**
      *  The label of the Load button
      */
-    static const NCstring LoadLabel();
+    static const string LoadLabel();
     
     /**
      * The label of text input field 
      */
-    static const NCstring FileName();
+    static const string FileName();
 
    /**
      * The label of the combo box medium 
      */
-    static const NCstring MediumLabel();
+    static const string MediumLabel();
 
     /**
      * A combo box entry 
      */
-    static const NCstring Harddisk();
+    static const string Harddisk();
 
    /**
      * A combo box entry 
      */
-    static const NCstring Floppy();
+    static const string Floppy();
 
     /**
      * Part 1 of help text package installation
      */
-    static const NCstring HelpPkgInst1();
+    static const string HelpPkgInst1();
 
     /**
      * Part 12 of help text package installation
      */
-    static const NCstring HelpPkgInst12();
+    static const string HelpPkgInst12();
 
     /**
      * Part 13 of help text package installation
      */
-    static const NCstring HelpPkgInst13();
+    static const string HelpPkgInst13();
 
     /**
      * help text package status
      */
-    static const NCstring HelpOnStatus1();
-    static const NCstring HelpOnStatus2();
-    static const NCstring HelpOnStatus3(); 
-    static const NCstring HelpOnStatus4();
-    static const NCstring HelpOnStatus5();
-    static const NCstring HelpOnStatus6();
-    static const NCstring HelpOnStatus7();
+    static const string HelpOnStatus1();
+    static const string HelpOnStatus2();
+    static const string HelpOnStatus3(); 
+    static const string HelpOnStatus4();
+    static const string HelpOnStatus5();
+    static const string HelpOnStatus6();
+    static const string HelpOnStatus7();
 
-    static const NCstring YouHelp1();
-    static const NCstring YouHelp2();
-    static const NCstring YouHelp3();
+    static const string YouHelp1();
+    static const string YouHelp2();
+    static const string YouHelp3();
 
-    static const NCstring TextmodeHelp1();
-    static const NCstring TextmodeHelp2();
-    static const NCstring TextmodeHelp3();
-    static const NCstring TextmodeHelp4();
-    static const NCstring TextmodeHelp5();
-    static const NCstring TextmodeHelp6();
-    static const NCstring TextmodeHelp7();
-    static const NCstring TextmodeHelp8();
-    static const NCstring TextmodeHelp9();
-    static const NCstring TextmodeHelp();
+    static const string TextmodeHelp1();
+    static const string TextmodeHelp2();
+    static const string TextmodeHelp3();
+    static const string TextmodeHelp4();
+    static const string TextmodeHelp5();
+    static const string TextmodeHelp6();
+    static const string TextmodeHelp7();
+    static const string TextmodeHelp8();
+    static const string TextmodeHelp9();
+    static const string TextmodeHelp();
 
    /**
      *  text used for automatic changes popup
      */
-    static const NCstring AutoChangeLabel();
-    static const NCstring AutoChangeText1();
-    static const NCstring AutoChangeText2();
+    static const string AutoChangeLabel();
+    static const string AutoChangeText1();
+    static const string AutoChangeText2();
 
     /**
      * Part of help text used in installed system
      */
-    static const NCstring HelpPkgPostInst();
+    static const string HelpPkgPostInst();
 
     /**
      * Part 2 of help text package installation
      */
-    static const NCstring HelpPkgInst2();
+    static const string HelpPkgInst2();
        /**
      * Part 3 of help text package installation
      */
-    static const NCstring HelpPkgInst3();
+    static const string HelpPkgInst3();
     /**
      * Part 4 of help text package installation
      */
-    static const NCstring HelpPkgInst4();
+    static const string HelpPkgInst4();
 
     /**
      * Part 5 of help text package installation
      */
-    static const NCstring HelpPkgInst5();
+    static const string HelpPkgInst5();
 
    /**
      * Part 6 of help text package installation
      */
-    static const NCstring HelpPkgInst6();
+    static const string HelpPkgInst6();
     
-    static const NCstring HelpOnUpdate();
+    static const string HelpOnUpdate();
 
     /**
      * help package search
      */
-    static const NCstring HelpOnSearch();
+    static const string HelpOnSearch();
 
     /**
      * bold text Version: (richtext) 
      */
-    static const NCstring Version();
+    static const string Version();
 
     /**
      * bold text Installed version: (richtext) 
      */
-    static const NCstring InstVersion();
+    static const string InstVersion();
 
     /**
      * bold text License: (richtext) 
      */
-    static const NCstring License();
+    static const string License();
 
     /**
      * bold text Media No.: (richtext) 
      */
-    static const NCstring MediaNo();
+    static const string MediaNo();
     
     /**
      * bold text Size: (richtext) 
      */
-    static const NCstring Size();
+    static const string Size();
     
    /**
      * bold text Package Group: (richtext) 
      */
-    static const NCstring RpmGroup();
+    static const string RpmGroup();
 
    /**
      * bold text Authors: (richtext) 
      */
-    static const NCstring Authors();
+    static const string Authors();
 
     /**
      * bold text Provides: (richtext) 
      */
-    static const NCstring Provides();
+    static const string Provides();
 
     /**
      * bold text Description: (richtext) 
      */
-    static const NCstring ShortDescr();
+    static const string ShortDescr();
     
     /**
      * bold text Requires: (richtext) 
      */
-    static const NCstring Requires();
+    static const string Requires();
 
     /**
      * bold text Required by: (richtext) 
      */
-    static const NCstring PreRequires();
+    static const string PreRequires();
 
     /**
      * bold text Conflicts with: (richtext) 
      */
-    static const NCstring Conflicts();
+    static const string Conflicts();
     
     /**
      *  Column header package name
      */
-    static const NCstring PkgName();
+    static const string PkgName();
 
     /**
      *  Column header package name
      */
-    static const NCstring PackageName();
+    static const string PackageName();
 
     /**
      *  Column header selection name
      */
-    static const NCstring SelectionName();
+    static const string SelectionName();
     
      /**
      *  Column header package version installed
      */
-    static const NCstring PkgVersion();
+    static const string PkgVersion();
 
     /**
      *  Column header package version new
      */
-    static const NCstring PkgVersionNew();
+    static const string PkgVersionNew();
 
     /**
      *  Column header package version installed
      */
-    static const NCstring PkgVersionInst();
+    static const string PkgVersionInst();
     
     /**
      *  Column header package summary
      */
-    static const NCstring PkgSummary();
+    static const string PkgSummary();
 
     /**
      *  Column header package size
      */
-    static const NCstring PkgSize();
+    static const string PkgSize();
 
    /**
      *  Column header package source
      */
-    static const NCstring PkgSource();
+    static const string PkgSource();
     
      /**
      *  Column header patch kind
      */
-    static const NCstring PatchKind();
+    static const string PatchKind();
 
    /**
      *  Column header dependency kind
      */
-    static const NCstring DepsKind();
+    static const string DepsKind();
 
     /**
      *  Column header comment
      */
-    static const NCstring Comment();
+    static const string Comment();
 
     /**
      *  Column header package status
      */
-    static const NCstring PkgStatus();
+    static const string PkgStatus();
 
-    static const NCstring Partition();
-    static const NCstring UsedSpace();
-    static const NCstring FreeSpace();
-    static const NCstring TotalSpace();
+    static const string Partition();
+    static const string UsedSpace();
+    static const string FreeSpace();
+    static const string TotalSpace();
 
-    static const NCstring ListOfFiles();
+    static const string ListOfFiles();
 
    /**
      * dependency popup text
      */ 
-    static const NCstring RequText();
-    static const NCstring RequConflictText();
-    static const NCstring ObsoleteText();
+    static const string RequText();
+    static const string RequConflictText();
+    static const string ObsoleteText();
     
-    static const NCstring RequByText();
-    static const NCstring RequiredByText();
-    static const NCstring NoAvailText();
-    static const NCstring NeedsText();
-    static const NCstring ConflictText();
-    static const NCstring NoConflictText();
-    static const NCstring NotAvailableText();
+    static const string RequByText();
+    static const string RequiredByText();
+    static const string NoAvailText();
+    static const string NeedsText();
+    static const string ConflictText();
+    static const string NoConflictText();
+    static const string NotAvailableText();
 
-    static const NCstring MenuEtc();
-    static const NCstring MenuDeps();
-    static const NCstring MenuCheckDeps();
-    static const NCstring MenuAutoDeps();
-    static const NCstring MenuNoAutoDeps();
-    static const NCstring MenuSel();
-    static const NCstring MenuSaveSel();	
-    static const NCstring MenuLoadSel();
+    static const string MenuEtc();
+    static const string MenuDeps();
+    static const string MenuCheckDeps();
+    static const string MenuAutoDeps();
+    static const string MenuNoAutoDeps();
+    static const string MenuSel();
+    static const string MenuSaveSel();	
+    static const string MenuLoadSel();
 
-    static const NCstring MoreText();
-    static const NCstring MoreSpaceText();
+    static const string MoreText();
+    static const string MoreSpaceText();
 
     /**
      * save/load selections
      */
-    static const NCstring SaveErr1Text();
-    static const NCstring SaveErr2Text();
-    static const NCstring SaveSelHeadline();
-    static const NCstring SaveSelText();
-    static const NCstring Saved1Text();
-    static const NCstring Saved2Text();
+    static const string SaveErr1Text();
+    static const string SaveErr2Text();
+    static const string SaveSelHeadline();
+    static const string SaveSelText();
+    static const string Saved1Text();
+    static const string Saved2Text();
     
-    static const NCstring LoadSelHeadline();
-    static const NCstring LoadSel1Text();
-    static const NCstring LoadSel2Text();
-    static const NCstring LoadErr1Text();
-    static const NCstring LoadErr2Text();
-    static const NCstring LoadedText();
-    static const NCstring CancelText();
+    static const string LoadSelHeadline();
+    static const string LoadSel1Text();
+    static const string LoadSel2Text();
+    static const string LoadErr1Text();
+    static const string LoadErr2Text();
+    static const string LoadedText();
+    static const string CancelText();
     
 private:
     
@@ -789,11 +789,6 @@ private:
      *  Create an id value with ` at the beginning
      */
     static YCPValue createIdValue ( const std::string &name );
-
-    /**
-     *  Convert a NCstring into a YCPString
-     */
-    static YCPString toYCPString ( const NCstring & str );
 
 };
 

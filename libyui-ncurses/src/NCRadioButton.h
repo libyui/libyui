@@ -68,7 +68,7 @@ class NCRadioButton : public YRadioButton, public NCWidget {
 
     virtual YCPBoolean getValue();
 
-    virtual NCursesEvent wHandleInput( int key );
+    virtual NCursesEvent wHandleInput( wint_t key );
 
     virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
 

@@ -150,8 +150,8 @@ class NCWidget : public tnode<NCWidget*>, protected NCursesError {
     virtual bool HasFunctionHotkey( int key ) const;
     virtual int  GetFunctionHotkey() const;
 
-    virtual NCursesEvent wHandleHotkey( int key );
-    virtual NCursesEvent wHandleInput( int key );
+    virtual NCursesEvent wHandleHotkey( wint_t key );
+    virtual NCursesEvent wHandleInput( wint_t key );
 
     void DumpOn( std::ostream & str, string prfx ) const;
 };

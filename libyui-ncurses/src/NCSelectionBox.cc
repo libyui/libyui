@@ -179,7 +179,7 @@ void NCSelectionBox::wRecoded()
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCSelectionBox::wHandleInput( int key )
+NCursesEvent NCSelectionBox::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
   int citem = getCurrentItem();

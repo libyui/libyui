@@ -554,7 +554,7 @@ void NCWidget::setFunctionHotkey( YWidgetOpt & opt )
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCWidget::wHandleHotkey( int /*key*/ )
+NCursesEvent NCWidget::wHandleHotkey( wint_t /*key*/ )
 {
   return wHandleInput( KEY_HOTKEY );
 }
@@ -567,7 +567,7 @@ NCursesEvent NCWidget::wHandleHotkey( int /*key*/ )
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCWidget::wHandleInput( int /*key*/ )
+NCursesEvent NCWidget::wHandleInput( wint_t /*key*/ )
 {
   return NCursesEvent::none;
 }

@@ -67,7 +67,7 @@ class NCLogView : public YLogView, public NCPadWidget {
     virtual void setLabel( const YCPString & nlabel );
     virtual void setLogText( const YCPString & ntext);
 
-    virtual NCursesEvent wHandleInput( int key );
+    virtual NCursesEvent wHandleInput( wint_t key );
 
     virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
 

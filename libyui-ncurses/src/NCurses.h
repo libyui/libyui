@@ -28,6 +28,9 @@ using namespace std;
 #include <YCP.h>
 #include "YEvent.h"
 
+#include <curses.h>	/* curses.h: #define  NCURSES_CH_T cchar_t */
+#include <wchar.h>
+
 #include "ncursesw.h"
 #include "ncursesp.h"
 #include "position.h"

@@ -390,7 +390,7 @@ bool NCTablePad::setItemByKey( int key )
 //
 //	DESCRIPTION :
 //
-bool NCTablePad::handleInput( int key )
+bool NCTablePad::handleInput( wint_t key )
 {
   return NCPad::handleInput( key );
 }

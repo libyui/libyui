@@ -284,17 +284,18 @@ void NCComboBox::setValidChars( const YCPString & validchars )
 //
 //	DESCRIPTION :
 //
-bool NCComboBox::validKey( int key ) const
+bool NCComboBox::validKey( wint_t key ) const
 {
-  const string & vch( validChars.str() );
+  // private: NCstring validChars;
+  const wstring vwch( validChars.str() );
 
-  if ( vch.empty() )
+  if ( vwch.empty() )		// usually empty -> return true
     return true;
 
-  if ( key < 0 || UCHAR_MAX < key )
+  if ( key < 0 || WCHAR_MAX < key )
     return false;
 
-  return( vch.find( (unsigned char)key ) != string::npos );
+  return( vwch.find( (wchar_t)key ) != wstring::npos );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -349,7 +350,7 @@ void NCComboBox::tUpdate()
   if ( !win )
     return;
 
-  const string & str( buffer );
+  const wstring & str( buffer );
 
   if ( curpos > str.length() ) {
     curpos = str.length();
@@ -372,45 +373,51 @@ void NCComboBox::tUpdate()
   twin->move( 0, 0 );
 
   if ( fldlength ) {
-    unsigned i      = 0;
-    unsigned end    = fldlength;
-    const char * cp = str.c_str() + fldstart;
+      unsigned i      = 0;
+      unsigned end    = fldlength;
+      const wchar_t * cp = str.data() + fldstart;
+      
+      // draw left scrollhint if
+      if ( *cp && fldstart ) {
+	  twin->bkgdset( style.scrl );
+	  twin->add_wch( WACS_LARROW );
+	  ++i;
+	  ++cp;
+      }
 
-    // draw left scrollhint if
-    if ( *cp && fldstart ) {
+      // check for right scrollhint
+      if ( fldstart + fldlength <= str.length() ) {
+	  --end;
+      }
+
+      // draw field
+      twin->bkgdset( style.data );
+      for ( /*adjusted i*/; *cp && i < end; ++i )
+      {
+	  twin->addwstr( cp, 1 );
+	  cp++;
+      }
+
+      twin->bkgdset( style.plain );
+      for ( /*adjusted i*/; i < end; ++i )
+      {
+	  twin->add_wch( WACS_CKBOARD );
+      }
+
+      // draw right scrollhints
       twin->bkgdset( style.scrl );
-      twin->addch( ACS_LARROW );
-      ++i;
-      ++cp;
-    }
-
-    // check for right scrollhint
-    if ( fldstart + fldlength <= str.length() ) {
-      --end;
-    }
-
-    // draw field
-    twin->bkgdset( style.data );
-    for ( /*adjusted i*/; *cp && i < end; ++i ) {
-      twin->addch( *cp++ );
-    }
-    twin->bkgdset( style.plain );
-    for ( /*adjusted i*/; i < end; ++i ) {
-      twin->addch( ACS_CKBOARD );
-    }
-
-    // draw right scrollhints
-    twin->bkgdset( style.scrl );
-    if ( end < fldlength ) {
-      twin->addch( ACS_RARROW );
-    }
+      if ( end < fldlength )
+      {
+	  twin->add_wch( WACS_RARROW );
+      }
   }
-  twin->addch( 0, twin->maxx(), ACS_DARROW );
+  twin->add_wch( 0, twin->maxx(), WACS_DARROW );
 
-  if ( mayedit && GetState() == NC::WSactive ) {
+  if ( mayedit && GetState() == NC::WSactive )
+  {
     twin->move( 0, curpos - fldstart );
     twin->bkgdset( wStyle().cursor );
-    twin->addch( twin->inchar() );
+    twin->add_attr_char( );
   }
 }
 
@@ -422,12 +429,12 @@ void NCComboBox::tUpdate()
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCComboBox::wHandleInput( int key )
+NCursesEvent NCComboBox::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
   bool   beep   = false;
   bool   update = true;
-  string oval = buffer;
+  wstring oval = buffer;
 
   switch ( key ) {
 
@@ -507,7 +514,7 @@ NCursesEvent NCComboBox::wHandleInput( int key )
   default:
     if ( !mayedit || !validKey( key )
 	 ||
-	 key < 32 || ( key >= 127 && key < 160 ) || UCHAR_MAX < key ) {
+	 !iswalnum( key ) ) {
       update = false;
       beep   = true;
     } else {

@@ -186,7 +186,7 @@ public:
      * @param key The key which is pressed
      * @return NCursesEvent
      */
-    virtual NCursesEvent wHandleInput( int key );
+    virtual NCursesEvent wHandleInput( wint_t key );
 
    /**
      * Sets the member variable PackageSelector *packager

@@ -139,11 +139,11 @@ void NCTextPad::cursor( bool on )
   if ( on != curson ) {
     if ( (curson = on) ) {
       bkgdset( parw.wStyle().cursor );
-      addch( inchar( curs.L, curs.C ) );
+      add_attr_char( curs.L, curs.C );
       bkgdset( parw.widgetStyle().data );
     }
     else
-      addch( inchar( curs.L, curs.C ) );
+      add_attr_char( curs.L, curs.C );
   }
 }
 
@@ -207,7 +207,7 @@ int NCTextPad::setpos( const wpos & newpos )
 //
 //	DESCRIPTION :
 //
-bool NCTextPad::handleInput( int key )
+bool NCTextPad::handleInput( wint_t key )
 {
   bool handled = true;
   bool beep    = false;
@@ -327,7 +327,7 @@ bool NCTextPad::handleInput( int key )
 //
 //	DESCRIPTION :
 //
-bool NCTextPad::insert( int key )
+bool NCTextPad::insert( wint_t key )
 {
   if ( key == 10 ) {
     return openLine();
@@ -337,7 +337,18 @@ bool NCTextPad::insert( int key )
   }
 
   assertWidht( ++(*cline) );
-  insch( curs.L, curs.C++, key );
+  cchar_t cchar;
+  attr_t attr;
+  short int color;
+  attr_get ( &attr, &color, NULL );
+
+  wchar_t wch[2]; 
+  wch[0] = key;
+  wch[1] = L'\0';
+  
+  setcchar( &cchar, wch, attr, color, NULL );
+  ins_wch( curs.L, curs.C++, &cchar );
+  
   return true;
 }
 
@@ -452,7 +463,7 @@ void NCTextPad::setText( const NCtext & ntext )
     lines.push_back( (*line).str().length() );
 
     move( cl++, 0 );
-    addstr( (*line).str().c_str() );
+    addwstr( (*line).str().c_str() );
   }
   if ( lines.empty() )
     lines.push_back( 0U );
@@ -470,19 +481,26 @@ void NCTextPad::setText( const NCtext & ntext )
 //
 //	DESCRIPTION :
 //
-string NCTextPad::getText() const
+wstring NCTextPad::getText() const
 {
   // just for inch(x,y) call, which isn't const due to
   // hw cursor movement, but that's of no interest here.
   NCTextPad * myself = const_cast<NCTextPad *>( this );
 
-  string ret;
+  cchar_t cchar;
+  wstring ret;
   unsigned l = 0;
+  wchar_t wch[CCHARW_MAX+1];
+  attr_t attr;
+  short int colorpair;
+  
   for ( list<unsigned>::const_iterator cgetl( lines.begin() ); cgetl != lines.end(); ++cgetl ) {
     for ( unsigned c = 0; c < (*cgetl); ++c ) {
-      ret += (char)(myself->inch( l, c )&A_CHARTEXT);
+      myself->in_wchar( l, c, &cchar );
+      getcchar( &cchar, wch, &attr, &colorpair, NULL );
+      ret += wch[0];
     }
-    ret += "\n";
+    ret += L"\n";
     ++l;
   }
   return ret;

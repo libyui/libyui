@@ -293,9 +293,15 @@ void NCIntField::tUpdate()
   twin->printw( 0, vstart, " %*d ", vlen, cvalue );
   twin->bkgdset( style.scrl );
   twin->addch( 0, vstart,
-	       (cvalue != minValue() ? ACS_DARROW : ' ' ) );
+               (cvalue != minValue() ? ACS_DARROW : ' ' ) );
   twin->addch( 0, vstart+vlen+1,
-	       (cvalue != maxValue() ? ACS_UARROW : ' ' ) );
+               (cvalue != maxValue() ? ACS_UARROW : ' ' ) );
+#if 0
+  twin->mvadd_wch( 0, vstart,
+		   (cvalue != minValue() ? WACS_DARROW : empty) );
+  twin->mvadd_wch( 0, vstart+vlen+1,
+		   (cvalue != maxValue() ? WACS_UARROW : empty) );
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -306,7 +312,7 @@ void NCIntField::tUpdate()
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCIntField::wHandleInput( int key )
+NCursesEvent NCIntField::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
   bool   beep   = false;
@@ -344,20 +350,20 @@ NCursesEvent NCIntField::wHandleInput( int key )
       beep = true;
     break;
 
-  case '0':
-  case '1':
-  case '2':
-  case '3':
-  case '4':
-  case '5':
-  case '6':
-  case '7':
-  case '8':
-  case '9':
-  case '-':
+  case L'0':
+  case L'1':
+  case L'2':
+  case L'3':
+  case L'4':
+  case L'5':
+  case L'6':
+  case L'7':
+  case L'8':
+  case L'9':
+  case L'-':
     enterPopup( key );
     break;
-  case '+':
+  case L'+':
     enterPopup();
     break;
 
@@ -386,16 +392,22 @@ NCursesEvent NCIntField::wHandleInput( int key )
 //
 //	DESCRIPTION :
 //
-int NCIntField::enterPopup( char first )
+int NCIntField::enterPopup( wchar_t first )
 {
+  wstring wch( &first );
+  string utf8;
+
   wpos at( ScreenPos() + wpos( win->maxy()-1, vstart+1 ) );
-  string l( string( "[" ) + numstring( minValue() )
-	    + "," + numstring( maxValue() ) + "]" );
-  string c( 1, first );
-  NCPopupTextEntry dialog( at, l, c, vlen, 0,
+  string label( string( "[" ) + numstring( minValue() )
+		+ "," + numstring( maxValue() ) + "]" );
+
+  string text( 1, (char )first);
+  NCPopupTextEntry dialog( at, label, text, vlen, 0,
 			   NCTextEntry::NUMBER );
 
+  // FIXME: is here something to fix?
   while ( dialog.post() != -1 ) {
+      
     int nval = atoi( dialog.getText()->value().c_str() );
     if ( nval < minValue() ) {
       dialog.setText( numstring( minValue() ) );

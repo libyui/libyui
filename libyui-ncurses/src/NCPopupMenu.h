@@ -45,7 +45,7 @@ class NCPopupMenu : public NCPopupTable {
 
   protected:
 
-    virtual NCursesEvent wHandleInput( int ch );
+    virtual NCursesEvent wHandleInput( wint_t ch );
     virtual bool postAgain();
 
   public:

@@ -79,27 +79,27 @@ bool NCPopupSelDeps::solveInstall( PkgDep::ResultList & goodList, PkgDep::ErrorR
 //
 string NCPopupSelDeps::getLabelRequire1()
 {
-    return PkgNames::LabelSelRequire1().str();
+    return PkgNames::LabelSelRequire1();
 }
 
 string NCPopupSelDeps::getLabelRequBy1()
 {
-    return PkgNames::LabelSelRequBy1().str();
+    return PkgNames::LabelSelRequBy1();
 }
 
 string NCPopupSelDeps::getLabelRequBy2()
 {
-    return PkgNames::LabelSelRequBy2().str();
+    return PkgNames::LabelSelRequBy2();
 }
 
 string NCPopupSelDeps::getLabelConflict2()
 {
-    return PkgNames::LabelSelConflict2().str();
+    return PkgNames::LabelSelConflict2();
 }
 
 string NCPopupSelDeps::getLabelContinueRequ()
 {
-    return PkgNames::ContinueSelRequ().str();
+    return PkgNames::ContinueSelRequ();
 }
 
 
@@ -113,7 +113,7 @@ string NCPopupSelDeps::getLabelContinueRequ()
 //
 string NCPopupSelDeps::getHeadline()
 {
-    return PkgNames::SelectionDeps().str();
+    return PkgNames::SelectionDeps();
 }
 
 ///////////////////////////////////////////////////////////////////

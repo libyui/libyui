@@ -42,15 +42,6 @@ YCPValue PkgNames::createIdValue ( const std::string &name )
 }
 
 //
-// Converts a NCString into a YCPString
-//
-YCPString PkgNames::toYCPString ( const NCstring & str )
-{
-    return str.YCPstr();
-}
-
-
-//
 // All `id s used in pkg_layout.ycp
 //
 
@@ -476,1079 +467,1079 @@ const YCPValue& PkgNames::Treeitem ()
 //
 // label, text for translation
 //
-const NCstring PkgNames::WarningLabel()
+const string PkgNames::WarningLabel()
 {
     // label for a warning popup
-    static const NCstring value = _( "Warning" );
+    static const string value = _( "Warning" );
     return value;
 }
 
-const NCstring PkgNames::ErrorLabel()
+const string PkgNames::ErrorLabel()
 {
      // label for an error popup
-    static const NCstring value = _( "Error" );
+    static const string value = _( "Error" );
     return value;
 }
 
-const NCstring PkgNames::NotifyLabel()
+const string PkgNames::NotifyLabel()
 {
     // label for a notify popup 
-    static const NCstring value = _( "Notify" );
+    static const string value = _( "Notify" );
     return value;
 }
 
-const NCstring PkgNames::RpmTreeLabel()
+const string PkgNames::RpmTreeLabel()
 {
     // the label of the RPM-group-tags tree widget
-    static const NCstring value = _( "RPM Groups" );
+    static const string value = _( "RPM Groups" );
     return value;
 }
 
-const NCstring PkgNames::SelectionLabel()
+const string PkgNames::SelectionLabel()
 {
    // the label of the selections
-    static const NCstring value = _( "Package Categories" );
+    static const string value = _( "Package Categories" );
     return value;  
 }
 
-const NCstring PkgNames::YOUPatches()
+const string PkgNames::YOUPatches()
 {
    // the label Filter: YOU Patches
-    static const NCstring value = _( "Online Update Patches" );
+    static const string value = _( "Online Update Patches" );
     return value;  
 }
 
-const NCstring PkgNames::UpdateProblem()
+const string PkgNames::UpdateProblem()
 {
    // the label Filter: Update Problem ( keep it short - max. 25 chars )
-    static const NCstring value = _( "Update Problem -- see help" );
+    static const string value = _( "Update Problem -- see help" );
     return value;  
 }
 
-const NCstring PkgNames::OKLabel()
+const string PkgNames::OKLabel()
 {
     // the label of an OK button
-    static const NCstring value = _( "&OK" );
+    static const string value = _( "&OK" );
     return value;
 }
 
-const NCstring PkgNames::SaveLabel()
+const string PkgNames::SaveLabel()
 {
     // the label of the Save button
-    static const NCstring value = _( "&Save" );
+    static const string value = _( "&Save" );
     return value;
 }
 
-const NCstring PkgNames::LoadLabel()
+const string PkgNames::LoadLabel()
 {
     // the label of the Load button
-    static const NCstring value = _( "&Load" );
+    static const string value = _( "&Load" );
     return value;
 }
 
-const NCstring PkgNames::CancelLabel()
+const string PkgNames::CancelLabel()
 {
     // the label of the Cancel button
-    static const NCstring value = _( "&Cancel" );
+    static const string value = _( "&Cancel" );
     return value;
 }
 
-const NCstring PkgNames::CancelIgnore()
+const string PkgNames::CancelIgnore()
 {
     // the label of the Cancel/Ignore button
-    static const NCstring value = _( "&Cancel or Ignore" );
+    static const string value = _( "&Cancel or Ignore" );
     return value;
 }
 
-const NCstring PkgNames::IgnAllLabel()
+const string PkgNames::IgnAllLabel()
 {
     // the label of the Ingnore all button
-    static const NCstring value = _( "Ignore &All" );
+    static const string value = _( "Ignore &All" );
     return value;
 }
 
-const NCstring PkgNames::SolveLabel()
+const string PkgNames::SolveLabel()
 {
     // the label of the Solve button
-    static const NCstring value = _( "&Solve" );
+    static const string value = _( "&Solve" );
     return value;
 }
 
-const NCstring PkgNames::IgnLabel()
+const string PkgNames::IgnLabel()
 {
     // the label of a Ignore button
-    static const NCstring value = _( "&Ignore" );
+    static const string value = _( "&Ignore" );
     return value;
 }
 
-const NCstring PkgNames::SearchResults()
+const string PkgNames::SearchResults()
 {
     // the label for Filter: Search results 
-    static const NCstring value = _( "Search Results" );
+    static const string value = _( "Search Results" );
     return value;
 }
 
-const NCstring PkgNames::InstSummary()
+const string PkgNames::InstSummary()
 {
     // the label for Filter: Installation summary
-    static const NCstring value = _( "Inst. Summary" );
+    static const string value = _( "Inst. Summary" );
     return value;
 }
 
-const NCstring PkgNames::PackageSearch()
+const string PkgNames::PackageSearch()
 {
     // the headline of the search popup 
-    static const NCstring value = _( "Package Search" );
+    static const string value = _( "Package Search" );
     return value;
 }
 
-const NCstring PkgNames::DepsHelpLine()
+const string PkgNames::DepsHelpLine()
 {
     // a help line for the dependency popup
-    static const NCstring value = _( " [+] Select    [-] Delete    [>] Update " );
+    static const string value = _( " [+] Select    [-] Delete    [>] Update " );
     return value;
 }
 
-const NCstring PkgNames::PackageDeps()
+const string PkgNames::PackageDeps()
 {
     // the headline of the dependency popup 
-    static const NCstring value = _( "Package Dependencies" );
+    static const string value = _( "Package Dependencies" );
     return value;
 }
 
-const NCstring PkgNames::SelectionDeps()
+const string PkgNames::SelectionDeps()
 {
     // the headline of the popup showing dependencies between selections of packages 
-    static const NCstring value = _( "Selection Dependencies" );
+    static const string value = _( "Selection Dependencies" );
     return value;
 }
 
-const NCstring PkgNames::Solving()
+const string PkgNames::Solving()
 {
     // a text for a small popup which is shown during package dependency checking
-    static const NCstring value = _( "Solving..." );
+    static const string value = _( "Solving..." );
     return value;
 }    
-const NCstring PkgNames::Saving()
+const string PkgNames::Saving()
 {
     // a text for a small popup which is shown during writing package selection to a file
-    static const NCstring value = _( "Saving..." );
+    static const string value = _( "Saving..." );
     return value;
 } 
-const NCstring PkgNames::Loading()
+const string PkgNames::Loading()
 {
     // a text for a samll popup which is shown during loading package selections from a file
-    static const NCstring value = _( "Loading..." );
+    static const string value = _( "Loading..." );
     return value;
 } 
-const NCstring PkgNames::SearchPhrase()
+const string PkgNames::SearchPhrase()
 {
     // begin: text/labels for search popups (use unique hotkeys until the end:)
     // text for the package search popup 
-    static const NCstring value = _( "&Search Phrase" );
+    static const string value = _( "&Search Phrase" );
     return value;
 }
 
-const NCstring PkgNames::SearchIn()
+const string PkgNames::SearchIn()
 {
     // label of a frame in search popup (without hotkey)
-    static const NCstring value = _( " Search in " );
+    static const string value = _( " Search in " );
     return value;
 }
 
-const NCstring PkgNames::CheckDescr()
+const string PkgNames::CheckDescr()
 {
     // label of a combo box  (search popup)
-    static const NCstring value = _( "&Description (time-consuming)" );
+    static const string value = _( "&Description (time-consuming)" );
     return value;
 }
 
-const NCstring PkgNames::CheckName()
+const string PkgNames::CheckName()
 {
     // label of a combo box  (search popup)
-    static const NCstring value = _( "&Name of the Package" );
+    static const string value = _( "&Name of the Package" );
     return value;
 }
 
-const NCstring PkgNames::CheckSummary()
+const string PkgNames::CheckSummary()
 {
     // label of a combo box  (search popup)
-    static const NCstring value = _( "S&ummary" );
+    static const string value = _( "S&ummary" );
     return value;
 }
 
-const NCstring PkgNames::CheckProvides()
+const string PkgNames::CheckProvides()
 {
     // label of a combo box  (search popup)
-    static const NCstring value = _( "&Provides" );
+    static const string value = _( "&Provides" );
     return value;
 }
 
-const NCstring PkgNames::CheckRequires()
+const string PkgNames::CheckRequires()
 {
     // label of a combo box  (search popup)
-    static const NCstring value = _( "&Requires" );
+    static const string value = _( "&Requires" );
     return value;
 }
 
-const NCstring PkgNames::IgnoreCase()
+const string PkgNames::IgnoreCase()
 {
     // end: text/labels for search popups
     // label of a combo box  (search popup)
-    static const NCstring value = _( "&Ignore Case" );
+    static const string value = _( "&Ignore Case" );
     return value;
 }
 
-const NCstring PkgNames::DiskspaceLabel()
+const string PkgNames::DiskspaceLabel()
 {
     // the headline of the disk space popup
-    static const NCstring value = _( "Disk Usage Overview" );
+    static const string value = _( "Disk Usage Overview" );
     return value;
 }
 
 
-const NCstring PkgNames::MediumLabel()
+const string PkgNames::MediumLabel()
 {
     // label of a combo box (medium means floppy or hard disk)
-    static const NCstring value = _( "&Medium" );
+    static const string value = _( "&Medium" );
     return value;
 }
 
-const NCstring PkgNames::Harddisk()
+const string PkgNames::Harddisk()
 {
     // combo box entry
-    static const NCstring value = _( "Hard Disk" );
+    static const string value = _( "Hard Disk" );
     return value;
 }
 
-const NCstring PkgNames::Floppy()
+const string PkgNames::Floppy()
 {
     // combo box entry
-    static const NCstring value = _( "Floppy" );
+    static const string value = _( "Floppy" );
     return value;
 }
 
-const NCstring PkgNames::PackageHelp()
+const string PkgNames::PackageHelp()
 {
     // the headline of the help popup 
-    static const NCstring value = _( "Package Installation Help" );
+    static const string value = _( "Package Installation Help" );
     return value;
 }
 
-const NCstring PkgNames::SearchHeadline()
+const string PkgNames::SearchHeadline()
 {
     // the headline of the popup showing help on search  
-    static const NCstring value = _( "Package Search Help" );
+    static const string value = _( "Package Search Help" );
     return value;
 }
 
-const NCstring PkgNames::YouHelp()
+const string PkgNames::YouHelp()
 {
     // the headline of the help popup 
-    static const NCstring value = _( "Online Update Help" );
+    static const string value = _( "Online Update Help" );
     return value;
 }
-const NCstring PkgNames::LabelUnresolvable()
+const string PkgNames::LabelUnresolvable()
 {
     // text part describing package conflict (it's a label - keep it short)
-    static const NCstring value = _( "Unresolvable package conflict." );
+    static const string value = _( "Unresolvable package conflict." );
     return value;   
 }
 
-const NCstring PkgNames::LabelUnres1()
+const string PkgNames::LabelUnres1()
 {
     // text part 1 describing package conflict (it's a label - keep it short)
-    static const NCstring value = _( "Solve the conflict by selecting" );
+    static const string value = _( "Solve the conflict by selecting" );
     return value;  
 }
 
-const NCstring PkgNames::LabelUnres2()
+const string PkgNames::LabelUnres2()
 {
     // text part 2 describing package conflict (it's a label - keep it short) 
-    static const NCstring value =  _( "or deselecting packages." );
+    static const string value =  _( "or deselecting packages." );
     return value;
 }
 
-const NCstring PkgNames::LabelAlternative()
+const string PkgNames::LabelAlternative()
 {
      // text part describing package dependency (it's a label - keep it short)
-    static const NCstring value =  _( "Select one of the alternatives below." );
+    static const string value =  _( "Select one of the alternatives below." );
     return value;  
 }
 
-const NCstring PkgNames::LabelConflict1()
+const string PkgNames::LabelConflict1()
 {
      // text part 1 describing package conflict (it's a label - keep it short)
-    static const NCstring value = _( "Solve the conflict by deleting (or deselecting)" );
+    static const string value = _( "Solve the conflict by deleting (or deselecting)" );
     return value;
 }
 
-const NCstring PkgNames::LabelConflict2()
+const string PkgNames::LabelConflict2()
 {
       // text part 2 describing package conflict (it's a label - keep it short)
-    static const NCstring value = _( "the unwanted package or packages." );
+    static const string value = _( "the unwanted package or packages." );
     return value;
 }
 
-const NCstring PkgNames::LabelSelConflict2()
+const string PkgNames::LabelSelConflict2()
 {
       // text part 2 describing package conflict (it's a label - keep it short)
-    static const NCstring value = _( "the unwanted selection or selections." );
+    static const string value = _( "the unwanted selection or selections." );
     return value;
 }
 
-const NCstring PkgNames::LabelRequBy1()
+const string PkgNames::LabelRequBy1()
 {
     // text part 1 describing package does not work (it's a label - keep it short)
-    static const NCstring value = _( "The package or packages below will not work" );
+    static const string value = _( "The package or packages below will not work" );
     return value;
 }
 
-const NCstring PkgNames::LabelSelRequBy1()
+const string PkgNames::LabelSelRequBy1()
 {
     // text part 1 describing selection does not work (it's a label - keep it short)
-    static const NCstring value = _( "The selection or selections below will not work" );
+    static const string value = _( "The selection or selections below will not work" );
     return value;
 }
 
-const NCstring PkgNames::LabelRequBy2()
+const string PkgNames::LabelRequBy2()
 {
     // text part 2 describing package does not work (it's a label - keep it short)
-    static const NCstring value = _( "without the package to delete." );
+    static const string value = _( "without the package to delete." );
     return value;
 }
 
-const NCstring PkgNames::LabelSelRequBy2()
+const string PkgNames::LabelSelRequBy2()
 {
     // text part 2 describing selection does not work (it's a label - keep it short)
-    static const NCstring value = _( "without the selection to delete." );
+    static const string value = _( "without the selection to delete." );
     return value;
 }
 
-const NCstring PkgNames::LabelRequire1()
+const string PkgNames::LabelRequire1()
 {
     // text part 1 describing packages are not available (it's a label - keep it short)
-    static const NCstring value = _( "The required libraries or packages" );
+    static const string value = _( "The required libraries or packages" );
     return value;
 }
-const NCstring PkgNames::LabelSelRequire1()
+const string PkgNames::LabelSelRequire1()
 {
     // text part 1 describing selections are not available (it's a label - keep it short)
-    static const NCstring value = _( "The required selections" );
+    static const string value = _( "The required selections" );
     return value;
 }
 
-const NCstring PkgNames::LabelRequire2()
+const string PkgNames::LabelRequire2()
 {
     // text part 2 describing packages or elections are not available (it's a label - keep it short)
-    static const NCstring value =  _( "are not installed." );
+    static const string value =  _( "are not installed." );
     return value;
 }
-const NCstring PkgNames::FileName()
+const string PkgNames::FileName()
 {
     // label of a text input field
-    static const NCstring value = _( "Enter the file name" );
+    static const string value = _( "Enter the file name" );
     return value;
 }
 
-const NCstring PkgNames::Version()
+const string PkgNames::Version()
 {
     // part of the package description
-    static const NCstring value = _( "<b>Version: </b>" );
+    static const string value = _( "<b>Version: </b>" );
     return value;
 }
 
-const NCstring PkgNames::InstVersion()
+const string PkgNames::InstVersion()
 {
     // part of the package description
-    static const NCstring value = _( "<b>Installed: </b>" );
+    static const string value = _( "<b>Installed: </b>" );
     return value;
 }
 
-const NCstring PkgNames::Authors()
+const string PkgNames::Authors()
 {
     // part of the package description
-    static const NCstring value = _( "<b>Authors: </b>" );
+    static const string value = _( "<b>Authors: </b>" );
     return value;
 }
 
-const NCstring PkgNames::License()
+const string PkgNames::License()
 {
     // part of the package description
-    static const NCstring value = _( "<b>License: </b>" );
+    static const string value = _( "<b>License: </b>" );
     return value;
 }
 
-const NCstring PkgNames::MediaNo()
+const string PkgNames::MediaNo()
 {
     // part of the package description
-    static const NCstring value = _( "<b>Media No.: </b>" );
+    static const string value = _( "<b>Media No.: </b>" );
     return value;
 }
 
-const NCstring PkgNames::Size()
+const string PkgNames::Size()
 {
     // part of the package description
-    static const NCstring value = _( "<b>Size: </b>" );
+    static const string value = _( "<b>Size: </b>" );
     return value;
 }
 
-const NCstring PkgNames::RpmGroup()
+const string PkgNames::RpmGroup()
 {
     // part of the package description
-    static const NCstring value = _( "<b>Package Group: </b>" );
+    static const string value = _( "<b>Package Group: </b>" );
     return value;
 }
 
-const NCstring PkgNames::Provides()
+const string PkgNames::Provides()
 {
     // part of the package description
-    static const NCstring value = _( "<b>Provides: </b>" );
+    static const string value = _( "<b>Provides: </b>" );
     return value;
 }
 
-const NCstring PkgNames::Requires()
+const string PkgNames::Requires()
 {
     // part of the package description
-    static const NCstring value = _( "<b>Requires: </b>" );
+    static const string value = _( "<b>Requires: </b>" );
     return value;
 }
 
-const NCstring PkgNames::PreRequires()
+const string PkgNames::PreRequires()
 {
     // part of the package description
-    static const NCstring value = _( "<b>Prerequires: </b>" );
+    static const string value = _( "<b>Prerequires: </b>" );
     return value;
 }
 
-const NCstring PkgNames::RequText()
+const string PkgNames::RequText()
 {
     // text is shown in a column of a package list entry
     // e.g. | i | aaa_base | requires ..... |
-    static const NCstring value = _( "requires..." );
+    static const string value = _( "requires..." );
     return value;
 }
 
-const NCstring PkgNames::RequConflictText()
+const string PkgNames::RequConflictText()
 {
     // text is shown in a column of a package list entry
-    static const NCstring value = _( "has unresolved requirements..." );
+    static const string value = _( "has unresolved requirements..." );
     return value;
 }
 
-const NCstring PkgNames::ObsoleteText()
+const string PkgNames::ObsoleteText()
 {
     // text is shown in a column of a package list entry
-    static const NCstring value = _( "obsoletes..." );
+    static const string value = _( "obsoletes..." );
     return value;
 }
 
-const NCstring PkgNames::RequByText()
+const string PkgNames::RequByText()
 {
     // text is shown in a column of a package list entry
-    static const NCstring value = _( "is required by..." );
+    static const string value = _( "is required by..." );
     return value;
 }
 
-const NCstring PkgNames::RequiredByText()
+const string PkgNames::RequiredByText()
 {
     // part of a text
-    static const NCstring value = _( "is required by" );
+    static const string value = _( "is required by" );
     return value;
 }
 
-const NCstring PkgNames::NotAvailableText()
+const string PkgNames::NotAvailableText()
 {
     // part of a text
-    static const NCstring value = _( "is not available" );
+    static const string value = _( "is not available" );
     return value;
 }
 
-const NCstring PkgNames::MoreText()
+const string PkgNames::MoreText()
 {
     // part of a text
-    static const NCstring value = _( "needs" );
+    static const string value = _( "needs" );
     return value;
 }
 
-const NCstring PkgNames::MoreSpaceText()
+const string PkgNames::MoreSpaceText()
 {
     // part of a text
-    static const NCstring value = _( "more disk space." );
+    static const string value = _( "more disk space." );
     return value;
 }
 
 
-const NCstring PkgNames::NoAvailText()
+const string PkgNames::NoAvailText()
 {
      // text is shown in a line of a package list
-    static const NCstring value = _( "no package available" );
+    static const string value = _( "no package available" );
     return value;
 }
-const NCstring PkgNames::NeedsText()
+const string PkgNames::NeedsText()
 {
     // text is shown in a line of a package list 
-    static const NCstring value = _( "needs packages..." );
+    static const string value = _( "needs packages..." );
     return value;
 }
-const NCstring PkgNames::ConflictText()
+const string PkgNames::ConflictText()
 {
      // text is shown in a line of a package list
-    static const NCstring value = _( "conflicts with..." );
+    static const string value = _( "conflicts with..." );
     return value;
 }
-const NCstring PkgNames::NoConflictText()
+const string PkgNames::NoConflictText()
 {
      // text is shown in a line of a package list
-    static const NCstring value = _( "No conflicts or unresolved dependencies" );
+    static const string value = _( "No conflicts or unresolved dependencies" );
     return value;
 }
 
-const NCstring PkgNames::ContinueRequ()
+const string PkgNames::ContinueRequ()
 {
      // label continues the part required by ...
-    static const NCstring value = _( "...the package or packages below" );
+    static const string value = _( "...the package or packages below" );
     return value;   
 }
 
-const NCstring PkgNames::ContinueSelRequ()
+const string PkgNames::ContinueSelRequ()
 {
      // label continues the part required by ...
-    static const NCstring value = _( "...the selection or selections below" );
+    static const string value = _( "...the selection or selections below" );
     return value;   
 }
 
-const NCstring PkgNames::Conflicts()
+const string PkgNames::Conflicts()
 {
     // part of the package description
-    static const NCstring value = _( "<b>Conflicts with: </b>" );
+    static const string value = _( "<b>Conflicts with: </b>" );
     return value;
 }
 
-const NCstring PkgNames::ShortDescr()
+const string PkgNames::ShortDescr()
 {
     // part of the package description
-    static const NCstring value = _( "<b>Description: </b>" );
+    static const string value = _( "<b>Description: </b>" );
     return value;
 }
 
-const NCstring PkgNames::MenuEtc()
+const string PkgNames::MenuEtc()
 {
     // menu Etc.
-    static const NCstring value = _( "&Etc." );
+    static const string value = _( "&Etc." );
     return value;
 }
 
-const NCstring PkgNames::MenuDeps()
+const string PkgNames::MenuDeps()
 {
     // submenu: dependency
-    static const NCstring value = _( "&Dependencies" );
+    static const string value = _( "&Dependencies" );
     return value;
 }
 
-const NCstring PkgNames::MenuCheckDeps()
+const string PkgNames::MenuCheckDeps()
 {
     // menu entry: do a dependency check 
     // Please note: preserve the whitespaces at the beginning
-    static const NCstring value = _( "    &Check Dependencies Now" );
+    static const string value = _( "    &Check Dependencies Now" );
     return value;
 }
 
-const NCstring PkgNames::MenuNoAutoDeps()
+const string PkgNames::MenuNoAutoDeps()
 {
     // menu entry: dependency check off
-    static const NCstring value = _( "[ ] &Automatic Dependency Check" );
+    static const string value = _( "[ ] &Automatic Dependency Check" );
     return value;
 }
 
-const NCstring PkgNames::MenuAutoDeps()
+const string PkgNames::MenuAutoDeps()
 {
     // menu entry: dependency check on
-    static const NCstring value = _( "[X] &Automatic Dependency Check" );
+    static const string value = _( "[X] &Automatic Dependency Check" );
     return value;
 }
 
-const NCstring PkgNames::MenuSel()
+const string PkgNames::MenuSel()
 {
     // submenu: selections
-    static const NCstring value = _( "&Selections" );
+    static const string value = _( "&Selections" );
     return value;
 }
 
-const NCstring PkgNames::MenuSaveSel()
+const string PkgNames::MenuSaveSel()
 {
     // menu entry
-    static const NCstring value = _( "S&ave Selection" );
+    static const string value = _( "S&ave Selection" );
     return value;
 }
 
-const NCstring PkgNames::MenuLoadSel()
+const string PkgNames::MenuLoadSel()
 {
     // last menu entry of the Etc. menu
-    static const NCstring value = _( "&Load Selection" );
+    static const string value = _( "&Load Selection" );
     return value;
 }
 
-const NCstring PkgNames::DiskSpaceError()
+const string PkgNames::DiskSpaceError()
 {
     // 
-    static const NCstring value = _( "<i>Out of disk space!</i>" );
+    static const string value = _( "<i>Out of disk space!</i>" );
     return value;
 }
 
-const NCstring PkgNames::DiskSpaceWarning()
+const string PkgNames::DiskSpaceWarning()
 {
     // 
-    static const NCstring value = _( "<b>Disk space is running out!</b>" );
+    static const string value = _( "<b>Disk space is running out!</b>" );
     return value;
 }
 
-const NCstring PkgNames::AutoChangeLabel()
+const string PkgNames::AutoChangeLabel()
 {
     // the headline of the popup containing a list with packages with status changes
-    static const NCstring value = _( "Automatic Changes" );
+    static const string value = _( "Automatic Changes" );
     return value;
 }
 
-const NCstring PkgNames::AutoChangeText1()
+const string PkgNames::AutoChangeText1()
 {
     // text part1 of popup with automatic changes (it's a label - keep it short) 
-    static const NCstring value = _( "In addition to your manual selections, the following" );
+    static const string value = _( "In addition to your manual selections, the following" );
     return value;
 }
 
-const NCstring PkgNames::AutoChangeText2()
+const string PkgNames::AutoChangeText2()
 {
     // text part2 of popup with automatic changes (it's a label - keep it short) 
-    static const NCstring value = _( "packages have been changed to resolve dependencies:" );
+    static const string value = _( "packages have been changed to resolve dependencies:" );
     return value;
 }
 
-const NCstring PkgNames::HelpPkgInst1()
+const string PkgNames::HelpPkgInst1()
 {
     // part1 of help text package installation 
-    static const NCstring value = _( "<p>The package installation dialog offers the features to customize your SuSE Linux installation. You have the opportunity to make your own decision about the installation or removal of particular packages. For example, select additional categories for installation (see menu <i>Filter</i>) or deselect unwanted packages.</p>" );
+    static const string value = _( "<p>The package installation dialog offers the features to customize your SuSE Linux installation. You have the opportunity to make your own decision about the installation or removal of particular packages. For example, select additional categories for installation (see menu <i>Filter</i>) or deselect unwanted packages.</p>" );
     return value;
 }
 
-const NCstring PkgNames::HelpPkgInst12()
+const string PkgNames::HelpPkgInst12()
 {
     // part of help text package installation 
-    static const NCstring value = _( "<p>The list shows all packages belonging to the current filter with status information in the first column. To change the package status, see <i>Actions</i>.</p>" );
+    static const string value = _( "<p>The list shows all packages belonging to the current filter with status information in the first column. To change the package status, see <i>Actions</i>.</p>" );
     return value;
 }
 
-const NCstring PkgNames::HelpPkgInst13()
+const string PkgNames::HelpPkgInst13()
 {
     // additional help text for post installation 
-    static const NCstring value = _( "<p>Be careful when deleting packages and always pay attention to <i>Warning</i> pop-ups.</p>" );
+    static const string value = _( "<p>Be careful when deleting packages and always pay attention to <i>Warning</i> pop-ups.</p>" );
     return value;  
 }
 
-const NCstring PkgNames::HelpPkgInst2()
+const string PkgNames::HelpPkgInst2()
 {
     // part2 of help text package installation 
-    static const NCstring value =  _( "Description of the menus:<br><p><b>Filter:</b> the packages shown in the package list match the selected filter, such as an RPM group, a keyword, or a category of packages (like Development or Games).</p>" );
+    static const string value =  _( "Description of the menus:<br><p><b>Filter:</b> the packages shown in the package list match the selected filter, such as an RPM group, a keyword, or a category of packages (like Development or Games).</p>" );
     return value;
 }
 
-const NCstring PkgNames::HelpPkgInst3()
+const string PkgNames::HelpPkgInst3()
 {
     // part3 of help text package installation 
-    static const NCstring value =  _( "<p><b>Actions:</b> provides the possibilities to change the status of the selected package (or all packages in the list), for example, to delete a package or select an additional package for installation. The status change can also be done directly by pressing the key specified in the menu item (for detailed information about the package status, see 'Help on package status').</p>" );
+    static const string value =  _( "<p><b>Actions:</b> provides the possibilities to change the status of the selected package (or all packages in the list), for example, to delete a package or select an additional package for installation. The status change can also be done directly by pressing the key specified in the menu item (for detailed information about the package status, see 'Help on package status').</p>" );
     return value;
 }
 
-const NCstring PkgNames::HelpPkgInst4()
+const string PkgNames::HelpPkgInst4()
 {
     // part4 of help text package installation
-    static const NCstring value =  _( "<p><b>Information:</b> you have the possibility to view different information about the selected package in the window on the bottom of the dialog, such as the long description, all available versions of the package, or the file list.</p>" );
+    static const string value =  _( "<p><b>Information:</b> you have the possibility to view different information about the selected package in the window on the bottom of the dialog, such as the long description, all available versions of the package, or the file list.</p>" );
     return value;
 }
 
-const NCstring PkgNames::HelpPkgInst5()
+const string PkgNames::HelpPkgInst5()
 {
     // part5 of help text package installation
-    static const NCstring value =  _( "<p><b>Etc.:</b> The menu item 'Dependencies' offers different settings for the dependency checking. Automatic dependency check means check after every change of the package status whether all requirements are fulfilled or whether conflicts occurred.</p>" );
+    static const string value =  _( "<p><b>Etc.:</b> The menu item 'Dependencies' offers different settings for the dependency checking. Automatic dependency check means check after every change of the package status whether all requirements are fulfilled or whether conflicts occurred.</p>" );
     return value;
 }
 
-const NCstring PkgNames::HelpPkgInst6()
+const string PkgNames::HelpPkgInst6()
 {
     // part6 of help text package installation
-    static const NCstring value =  _( "<p>To save or load a package selection, choose 'Selections'.</p>" );
+    static const string value =  _( "<p>To save or load a package selection, choose 'Selections'.</p>" );
     return value;
 }
 
-const NCstring PkgNames::HelpOnSearch()
+const string PkgNames::HelpOnSearch()
 {
     // help text package search
-    static const NCstring value = _( "<p>Enter a keyword for your package search. It is possible to enter only parts of a package name, for example, to search for all 3D packages with \"3d\".<br> If you are looking for a term in a package description, click the appropriate check box. Start the search with 'Enter'.</p>" );
+    static const string value = _( "<p>Enter a keyword for your package search. It is possible to enter only parts of a package name, for example, to search for all 3D packages with \"3d\".<br> If you are looking for a term in a package description, click the appropriate check box. Start the search with 'Enter'.</p>" );
     return value;
 }
 
-const NCstring PkgNames::HelpOnStatus1()
+const string PkgNames::HelpOnStatus1()
 {
     // part 1 of help text package status
-    static const NCstring value = _( "<p>The package status can be changed using the <i>Actions</i> menu or the keys specified in the menu items. For example, use '+' to install an additional package. The \"Taboo\" status means the package should not be installed or the installed version should always be kept.</p>" );
+    static const string value = _( "<p>The package status can be changed using the <i>Actions</i> menu or the keys specified in the menu items. For example, use '+' to install an additional package. The \"Taboo\" status means the package should not be installed or the installed version should always be kept.</p>" );
     return value;
 }
 
-const NCstring PkgNames::HelpOnStatus2()
+const string PkgNames::HelpOnStatus2()
 {
     // part 1 of help text package status
-    static const NCstring value = _( "<p>By default, the package dependencies are checked with every status change. You will be informed about package conflicts and additionally required packages will be selected (the menu item <i>Etc.</i>/<i>Dependencies</i> offers different settings).</p>" );
+    static const string value = _( "<p>By default, the package dependencies are checked with every status change. You will be informed about package conflicts and additionally required packages will be selected (the menu item <i>Etc.</i>/<i>Dependencies</i> offers different settings).</p>" );
     return value;
 }
 
-const NCstring PkgNames::HelpOnStatus3()
+const string PkgNames::HelpOnStatus3()
 {
     // part 2 of help text package status
-    static const NCstring value = _( "<p>You can also use <b>RET</b> or <b>SPACE</b> to toggle the package status." );
+    static const string value = _( "<p>You can also use <b>RET</b> or <b>SPACE</b> to toggle the package status." );
     return value;
 }
 
-const NCstring PkgNames::HelpOnStatus4()
+const string PkgNames::HelpOnStatus4()
 {
     // part 3 of help text package status
-    static const NCstring value = _( "<br>The meaning of the status flags:" );
+    static const string value = _( "<br>The meaning of the status flags:" );
     return value;
 }
 
-const NCstring PkgNames::HelpOnStatus5()
+const string PkgNames::HelpOnStatus5()
 {
     // help text package status
-    static const NCstring value =  _( "<p><b> + </b>: this package is selected for installation</p><p><b>a+ </b>: automatically selected for installation</p><p><b> > </b>: update this package</p><p><b>a> </b>: automatic update</p><p><b> i </b>: this package is installed</p><p><b> - </b>: the package will be deleted</p><p><b>---</b>: never install this package</p>" );
+    static const string value =  _( "<p><b> + </b>: this package is selected for installation</p><p><b>a+ </b>: automatically selected for installation</p><p><b> > </b>: update this package</p><p><b>a> </b>: automatic update</p><p><b> i </b>: this package is installed</p><p><b> - </b>: the package will be deleted</p><p><b>---</b>: never install this package</p>" );
     return value;
 }
 
-const NCstring PkgNames::HelpOnStatus6()
+const string PkgNames::HelpOnStatus6()
 {
     // help text package status
-    static const NCstring value =  _( "<p><b>-i-</b>: the package is \"protected\" -- keep the installed version and never update or delete it.</p>" );
+    static const string value =  _( "<p><b>-i-</b>: the package is \"protected\" -- keep the installed version and never update or delete it.</p>" );
     return value;
 }
 
-const NCstring PkgNames::HelpOnStatus7()
+const string PkgNames::HelpOnStatus7()
 {
     // help text package status
-    static const NCstring value =  _( "<p>The <i>Actions</i> menu also provides the possibility to change the status for all packages in the list (select 'All Listed Packages').</p>" );
+    static const string value =  _( "<p>The <i>Actions</i> menu also provides the possibility to change the status for all packages in the list (select 'All Listed Packages').</p>" );
     return value;
 }
 
-const NCstring PkgNames::HelpOnUpdate()
+const string PkgNames::HelpOnUpdate()
 {
     // help text package status
-    static const NCstring value = _( "<b>Update Problem List</b><br><p>The packages in the list cannot be updated automatically.</p><p>Possible reasons:</p><p>They are obsoleted by other packages.</p><p>There is no newer version to which to update on any installation media.</p><p>They are third-party packages</p><p>Manually select what to do with them. The safest course of action is to delete them.</p>" );
+    static const string value = _( "<b>Update Problem List</b><br><p>The packages in the list cannot be updated automatically.</p><p>Possible reasons:</p><p>They are obsoleted by other packages.</p><p>There is no newer version to which to update on any installation media.</p><p>They are third-party packages</p><p>Manually select what to do with them. The safest course of action is to delete them.</p>" );
     return value;
 }
 
-const NCstring PkgNames::PkgName()
+const string PkgNames::PkgName()
 {
     // column header package name (keep it short!)
-    static const NCstring value = _( "Name" );
+    static const string value = _( "Name" );
     return value;
 }
 
-const NCstring PkgNames::PackageName()
+const string PkgNames::PackageName()
 {
     // column header package name (keep it short!)
-    static const NCstring value = _( "Package/Library" );
+    static const string value = _( "Package/Library" );
     return value;
 }
 
-const NCstring PkgNames::SelectionName()
+const string PkgNames::SelectionName()
 {
     // column header selection name (keep it short!)
-    static const NCstring value = _( "Selection" );
+    static const string value = _( "Selection" );
     return value;
 }
 
-const NCstring PkgNames::PkgVersion()
+const string PkgNames::PkgVersion()
 {
     // column header installed package version (keep it short!)
-    static const NCstring value = _( "Version" );
+    static const string value = _( "Version" );
     return value;
 }
 
-const NCstring PkgNames::PkgVersionNew()
+const string PkgNames::PkgVersionNew()
 {
     // column header available package version (keep it short - use abbreviation!)
-    static const NCstring value = _( "Avail. Vers." );
+    static const string value = _( "Avail. Vers." );
     return value;
 }
 
-const NCstring PkgNames::PkgVersionInst()
+const string PkgNames::PkgVersionInst()
 {
     // column header installed package version (keep it short - use abbreviation!)
-    static const NCstring value = _( "Inst. Vers." );
+    static const string value = _( "Inst. Vers." );
     return value;
 }
 
-const NCstring PkgNames::PkgSummary()
+const string PkgNames::PkgSummary()
 {
     // column header package description (keep it short!)
-    static const NCstring value = _( "Summary" );
+    static const string value = _( "Summary" );
     return value;  
 }
 
 
-const NCstring PkgNames::PkgSize()
+const string PkgNames::PkgSize()
 {
     // column header package size (keep it short!)
-    static const NCstring value = _( "Size" );
+    static const string value = _( "Size" );
     return value;
 }
 
-const NCstring PkgNames::PkgSource()
+const string PkgNames::PkgSource()
 {
     // column header source RPM installation (keep it short!)
-    static const NCstring value = _( "Source" );
+    static const string value = _( "Source" );
     return value;
 }
 
-const NCstring PkgNames::PatchKind()
+const string PkgNames::PatchKind()
 {
     // column header patch kind (keep it short!)
-    static const NCstring value = _( "Kind" );
+    static const string value = _( "Kind" );
     return value;
 }
 
-const NCstring PkgNames::DepsKind()
+const string PkgNames::DepsKind()
 {
     // column header kind of the package dependency, e.g. conflict (keep it short!)
-    static const NCstring value = _( "Kind of Dependency" );
+    static const string value = _( "Kind of Dependency" );
     return value;
 }
 
-const NCstring PkgNames::Comment()
+const string PkgNames::Comment()
 {
     // column header comment (keep it short!)
-    static const NCstring value = _( "Additional Information" );
+    static const string value = _( "Additional Information" );
     return value;
 }
 
-const NCstring PkgNames::PkgStatus()
+const string PkgNames::PkgStatus()
 {
     // column header status
-    static const NCstring value =  NCstring("     ");
+    static const string value =  string("     ");
     return value;
 }
 
-const NCstring PkgNames::Partition()
+const string PkgNames::Partition()
 {
     // column header name of the partition (keep it short!)
-    static const NCstring value =  _( "Partition" );
+    static const string value =  _( "Partition" );
     return value;
 }
 
-const NCstring PkgNames::UsedSpace()
+const string PkgNames::UsedSpace()
 {
     // column header used disk space (keep it short!)
-    static const NCstring value =  _( "Used" );
+    static const string value =  _( "Used" );
     return value;
 }
 
-const NCstring PkgNames::FreeSpace()
+const string PkgNames::FreeSpace()
 {
     // column header free disk space (keep it short!)
-    static const NCstring value =  _( "Free" );
+    static const string value =  _( "Free" );
     return value;
 }
 
-const NCstring PkgNames::TotalSpace()
+const string PkgNames::TotalSpace()
 {
     // column header total disk space (keep it short!)
-    static const NCstring value =  _( "Total" );
+    static const string value =  _( "Total" );
     return value;
 }
 
-const NCstring PkgNames::ListOfFiles()
+const string PkgNames::ListOfFiles()
 {
     // headline for a list of installed files
-    static const NCstring value =  _( "<i>List of Installed Files:</i><br>" );
+    static const string value =  _( "<i>List of Installed Files:</i><br>" );
     return value;
 }
 
-const NCstring PkgNames::YouHelp1()
+const string PkgNames::YouHelp1()
 {
     // help text online udpate
     // Do NOT translate 'recommended' and 'security'! because the patch kind is always shown as english text. 
-    static const NCstring value =  _( "<p>Mode \"recommended\" means you should install the patch. \"security\" is a security patch and it is highly recommended to install it. \"YaST2\" patches will be always installed first. The other patches must be installed on a second run.</p>" );
+    static const string value =  _( "<p>Mode \"recommended\" means you should install the patch. \"security\" is a security patch and it is highly recommended to install it. \"YaST2\" patches will be always installed first. The other patches must be installed on a second run.</p>" );
     return value;
 }						  
 
-const NCstring PkgNames::YouHelp2()
+const string PkgNames::YouHelp2()
 {
     // help text online udpate continue
-    static const NCstring value = _( "<p>Meaning of the status flags:</p><p><b>+</b>: Patches concerning your installation are preselected. They will be downloaded and installed on your system. If you do not want a certain patch, deselect it with '-'.</p>" );
+    static const string value = _( "<p>Meaning of the status flags:</p><p><b>+</b>: Patches concerning your installation are preselected. They will be downloaded and installed on your system. If you do not want a certain patch, deselect it with '-'.</p>" );
     return value;
 }
 
-const NCstring PkgNames::YouHelp3()
+const string PkgNames::YouHelp3()
 {
     // help text online udpate continue
-    static const NCstring value =  _( "<p><b>i</b>: This patch is already installed.</p><p><b>></b>: The patch will be reinstalled.</p>" );
+    static const string value =  _( "<p><b>i</b>: This patch is already installed.</p><p><b>></b>: The patch will be reinstalled.</p>" );
     return value;
 }
 
-const NCstring PkgNames::TextmodeHelp()
+const string PkgNames::TextmodeHelp()
 {
     // headline of the text mode help
-    static const NCstring value =  _( "Text Mode Navigation" );
+    static const string value =  _( "Text Mode Navigation" );
     return value;
 }
 
-const NCstring PkgNames::TextmodeHelp1()
+const string PkgNames::TextmodeHelp1()
 {
     // part of help for textmode navigation (shown if there is further help available) 
-    static const NCstring value =  _( "<p>Press <b>F1</b> again to get further help or <b>ESC</b> to close this dialog.</p>" );
+    static const string value =  _( "<p>Press <b>F1</b> again to get further help or <b>ESC</b> to close this dialog.</p>" );
     return value;
 }
 
-const NCstring PkgNames::TextmodeHelp2()
+const string PkgNames::TextmodeHelp2()
 {
     // part of help for text mode navigation
-    static const NCstring value =  _( "<p>Press <b>F1</b> or <b>ESC</b> to close this dialog.</p>" );
+    static const string value =  _( "<p>Press <b>F1</b> or <b>ESC</b> to close this dialog.</p>" );
     return value;
 }
 
-const NCstring PkgNames::TextmodeHelp3()
+const string PkgNames::TextmodeHelp3()
 {
     // part of help for text mode navigation
-    static const NCstring value =  _( "<p>Function key bindings:</p>" );
+    static const string value =  _( "<p>Function key bindings:</p>" );
     return value;
 }
 
-const NCstring PkgNames::TextmodeHelp4()
+const string PkgNames::TextmodeHelp4()
 {
     // part of help for text mode navigation
-    static const NCstring value =  _( "<p>Special keys:<br>Function keys provide a quick access to the main functions (frequently used buttons) of this dialog. See the listing below to get the bindings.</p>" );
+    static const string value =  _( "<p>Special keys:<br>Function keys provide a quick access to the main functions (frequently used buttons) of this dialog. See the listing below to get the bindings.</p>" );
     return value;
 }
 
-const NCstring PkgNames::TextmodeHelp5()
+const string PkgNames::TextmodeHelp5()
 {
     // part of help for text mode navigation
-    static const NCstring value =  _( "<p>Shortcuts are used to perform the desired action by pressing the <b>Alt</b> key followed by the key marked in the corresponding button, check box, radio button, or other item.</p>If the <b>Alt</b> key combinations are captured by the X server, use <b>ESC</b> instead." );
+    static const string value =  _( "<p>Shortcuts are used to perform the desired action by pressing the <b>Alt</b> key followed by the key marked in the corresponding button, check box, radio button, or other item.</p>If the <b>Alt</b> key combinations are captured by the X server, use <b>ESC</b> instead." );
     return value;
 }
 
-const NCstring PkgNames::TextmodeHelp6()
+const string PkgNames::TextmodeHelp6()
 {
     // part of help for text mode navigation
-    static const NCstring value =  _( "<p>General keyboard navigation:</p>" );
+    static const string value =  _( "<p>General keyboard navigation:</p>" );
     return value;
 }
 
-const NCstring PkgNames::TextmodeHelp7()
+const string PkgNames::TextmodeHelp7()
 {
     // part of help for text mode navigation
-    static const NCstring value =  _( "<p>To move inside a dialog, use <b>Tab</b> to go forward and <b>Alt</b> or <b>Shift</b> + <b>Tab</b> to go back.<br> If the <b>Alt</b> and <b>Shift</b> key combinations are occupied by the window manager or the terminal, <b>Ctrl</b> + <b>F</b> (forward) and <b>Ctrl</b> + <b>B</b> (back) can be used instead.</p>." );
+    static const string value =  _( "<p>To move inside a dialog, use <b>Tab</b> to go forward and <b>Alt</b> or <b>Shift</b> + <b>Tab</b> to go back.<br> If the <b>Alt</b> and <b>Shift</b> key combinations are occupied by the window manager or the terminal, <b>Ctrl</b> + <b>F</b> (forward) and <b>Ctrl</b> + <b>B</b> (back) can be used instead.</p>." );
     return value;
 }
-const NCstring PkgNames::TextmodeHelp8()
+const string PkgNames::TextmodeHelp8()
 {
     // part of help for text mode navigation
-    static const NCstring value =  _( "<p>The command specified on an activated button (e.g., Next, Add) is executed if the <b>Enter</b> key is pressed.</p> <p>Radio buttons or check boxes are switched on or off with <b>Enter</b> or <b>Space</b>. " );
+    static const string value =  _( "<p>The command specified on an activated button (e.g., Next, Add) is executed if the <b>Enter</b> key is pressed.</p> <p>Radio buttons or check boxes are switched on or off with <b>Enter</b> or <b>Space</b>. " );
 
    return value;
 }
-const NCstring PkgNames::TextmodeHelp9()
+const string PkgNames::TextmodeHelp9()
 {
     // part of help for text mode navigation
-    static const NCstring value =  _( "<p>Scroll in lists or text (e.g., the help text) with the <b>arrow</b> keys.</p>" );
+    static const string value =  _( "<p>Scroll in lists or text (e.g., the help text) with the <b>arrow</b> keys.</p>" );
     return value;
 }
 
-const NCstring PkgNames::SaveSelHeadline()
+const string PkgNames::SaveSelHeadline()
 {
     // headline for the popup
-    static const NCstring value =  _( "Save Package List" );
+    static const string value =  _( "Save Package List" );
     return value;
 }
 
-const NCstring PkgNames::SaveSelText()
+const string PkgNames::SaveSelText()
 {
     // text for thepopup "Save Package List"
-    static const NCstring value =  _( "<p>The current package selection can be saved on a floppy (insert a formatted floppy) or on the hard disk.<br>Select the medium and specify the file name in the input field below.</p>" );
+    static const string value =  _( "<p>The current package selection can be saved on a floppy (insert a formatted floppy) or on the hard disk.<br>Select the medium and specify the file name in the input field below.</p>" );
     return value;
 }
 
-const NCstring PkgNames::SaveErr1Text()
+const string PkgNames::SaveErr1Text()
 {
     // text for an Error popup
-    static const NCstring value =  _( "<p>Could not find a formatted floppy. Check that a formatted and verified floppy is inserted in the drive.</p>" );
+    static const string value =  _( "<p>Could not find a formatted floppy. Check that a formatted and verified floppy is inserted in the drive.</p>" );
     return value;
 }
 
-const NCstring PkgNames::SaveErr2Text()
+const string PkgNames::SaveErr2Text()
 {
     // text for an Error popup
-    static const NCstring value =  _( "<p>Could not write to file.<br>Check that the path name is correct and the directory is accessible.</p>" );
+    static const string value =  _( "<p>Could not write to file.<br>Check that the path name is correct and the directory is accessible.</p>" );
     return value;
 }
 
-const NCstring PkgNames::Saved1Text()
+const string PkgNames::Saved1Text()
 {
     // text for a Notify popup
-    static const NCstring value =  _( "<p>Your settings have been saved to the floppy disk.</p>" );
+    static const string value =  _( "<p>Your settings have been saved to the floppy disk.</p>" );
     return value;
 }
 
-const NCstring PkgNames::Saved2Text()
+const string PkgNames::Saved2Text()
 {
     // text for a Notify popup
-    static const NCstring value =  _( "<p>Your package selection has been written to the hard disk.</p>" );
+    static const string value =  _( "<p>Your package selection has been written to the hard disk.</p>" );
     return value;
 }
 
-const NCstring PkgNames::LoadSelHeadline()
+const string PkgNames::LoadSelHeadline()
 {
     // headline for the popup
-    static const NCstring value =  _( "Load Package List" );
+    static const string value =  _( "Load Package List" );
     return value;  
 }
 
-const NCstring PkgNames::LoadSel1Text()
+const string PkgNames::LoadSel1Text()
 {
     // text for a Notify popup
-    static const NCstring value =  _( "<p>Really overwrite your package selection?</p>" );
+    static const string value =  _( "<p>Really overwrite your package selection?</p>" );
     return value;
 }
 
-const NCstring PkgNames::LoadSel2Text()
+const string PkgNames::LoadSel2Text()
 {
     // text for popup "Load Package List"
-    static const NCstring value =  _( "<p>Specify the medium and the name of the file containing the user-defined package selection to install.<br>If required, insert the floppy.</p>" );
+    static const string value =  _( "<p>Specify the medium and the name of the file containing the user-defined package selection to install.<br>If required, insert the floppy.</p>" );
     return value;
 }
 
-const NCstring PkgNames::LoadErr1Text()
+const string PkgNames::LoadErr1Text()
 {
     // text for an Error popup
-    static const NCstring value =  _( "<p>Could not mount the floppy. Check that the floppy is inserted in the drive.</p>" );
+    static const string value =  _( "<p>Could not mount the floppy. Check that the floppy is inserted in the drive.</p>" );
     return value;
 }
 
-const NCstring PkgNames::LoadErr2Text()
+const string PkgNames::LoadErr2Text()
 {
     // text for an Error popup
-    static const NCstring value =  _( "<p>Could not load the settings.<br>Check that the path name is correct and the floppy disk, if required, is inserted correctly.</p>" );
+    static const string value =  _( "<p>Could not load the settings.<br>Check that the path name is correct and the floppy disk, if required, is inserted correctly.</p>" );
     return value;
 }
 
-const NCstring PkgNames::LoadedText()
+const string PkgNames::LoadedText()
 {
     // text for a Notify popup
-    static const NCstring value =  _( "<p>The package selection is loaded succesfully.</p>" );
+    static const string value =  _( "<p>The package selection is loaded succesfully.</p>" );
     return value;
 }
 
-const NCstring PkgNames::CancelText()
+const string PkgNames::CancelText()
 {
     // text for a Notify popup
-    static const NCstring value =  _( "<p>All your choices will be lost when exiting with Cancel.<br>Really exit?</p>" );
+    static const string value =  _( "<p>All your choices will be lost when exiting with Cancel.<br>Really exit?</p>" );
     return value;
 }
 

@@ -47,7 +47,7 @@ class NCComboBox : public YComboBox, public NCWidget {
     bool     mayedit;
     NClabel  label;
     NCstring text;
-    string   buffer;
+    wstring   buffer;
     bool     modified;
     NCursesWindow * lwin;
     NCursesWindow * twin;
@@ -76,7 +76,7 @@ class NCComboBox : public YComboBox, public NCWidget {
 
     int listPopup();
 
-    bool validKey( int key ) const;
+    bool validKey( wint_t key ) const;
 
   public:
 
@@ -100,7 +100,7 @@ class NCComboBox : public YComboBox, public NCWidget {
 
     virtual void setCurrentItem( int index );
 
-    virtual NCursesEvent wHandleInput( int key );
+    virtual NCursesEvent wHandleInput( wint_t key );
 
     virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
 

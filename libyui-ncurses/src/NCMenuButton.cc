@@ -92,7 +92,7 @@ void NCMenuButton::setSize( long newwidth, long newheight )
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCMenuButton::wHandleInput( int key )
+NCursesEvent NCMenuButton::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
   switch ( key ) {
