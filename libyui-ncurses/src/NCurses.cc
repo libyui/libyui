@@ -32,6 +32,8 @@ using namespace std;
 #include "NCDialog.h"
 #include "NCi18n.h"
 
+#include <signal.h>
+
 /*
   Textdomain "packages"
 */
@@ -192,6 +194,8 @@ void NCurses::init()
     << endl;
   UIMIL << "TERM=" << envTerm << endl;
 
+  signal( SIGINT, SIG_IGN );	// ignore Ctrl C
+  
   if ( title_line() && ::ripoffline( 1, ripinit ) != OK )
       throw NCursesError( "ripoffline() failed" );
 
@@ -457,18 +461,19 @@ void NCurses::SetTitle( const string & str )
     setTextdomain( "packages" );
     // part of title (headline) of the textmode yast
     NCstring helpF1 ( _( "Press F1 for Help" ) );
-    wstring help = helpF1.str();
-    int s = myself->title_w->_maxx - help.length();
+    NCtext textF1 ( helpF1 );
+
+    int s = myself->title_w->_maxx - textF1.Columns();
     
     if ( NCstring::terminalEncoding() != "UTF-8" )
     {
 	string out;
-	NCstring::RecodeFromWchar( help, NCstring::terminalEncoding(), &out );
+	NCstring::RecodeFromWchar( helpF1.str(), NCstring::terminalEncoding(), &out );
 	::mvwaddstr( myself->title_w, 0, s, out.c_str() );
     }
     else
     {
-	::mvwaddwstr( myself->title_w, 0, s, (wchar_t *)help.c_str() );
+	::mvwaddwstr( myself->title_w, 0, s, (wchar_t *)helpF1.str().c_str() );
     }
     ::mvwaddstr( myself->title_w, 0, 1, myself->title_t.c_str() );
     ::wnoutrefresh( myself->title_w );
