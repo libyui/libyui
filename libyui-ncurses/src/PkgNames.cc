@@ -1458,69 +1458,41 @@ const string PkgNames::YouHelp3()
     return value;
 }
 
-const string PkgNames::TextmodeHelp()
-{
-    // headline of the text mode help
-    static const string value =  _( "Text Mode Navigation" );
-    return value;
-}
-
 const string PkgNames::TextmodeHelp1()
-{
-    // part of help for textmode navigation (shown if there is further help available) 
-    static const string value =  _( "<p>Press <b>F1</b> again to get further help or <b>ESC</b> to close this dialog.</p>" );
-    return value;
-}
-
-const string PkgNames::TextmodeHelp2()
-{
-    // part of help for text mode navigation
-    static const string value =  _( "<p>Press <b>F1</b> or <b>ESC</b> to close this dialog.</p>" );
-    return value;
-}
-
-const string PkgNames::TextmodeHelp3()
-{
-    // part of help for text mode navigation
-    static const string value =  _( "<p>Function key bindings:</p>" );
-    return value;
-}
-
-const string PkgNames::TextmodeHelp4()
 {
     // part of help for text mode navigation
     static const string value =  _( "<p>Special keys:<br>Function keys provide a quick access to the main functions (frequently used buttons) of this dialog. See the listing below to get the bindings.</p>" );
     return value;
 }
 
-const string PkgNames::TextmodeHelp5()
+const string PkgNames::TextmodeHelp2()
 {
     // part of help for text mode navigation
     static const string value =  _( "<p>Shortcuts are used to perform the desired action by pressing the <b>Alt</b> key followed by the key marked in the corresponding button, check box, radio button, or other item.</p>If the <b>Alt</b> key combinations are captured by the X server, use <b>ESC</b> instead." );
     return value;
 }
 
-const string PkgNames::TextmodeHelp6()
+const string PkgNames::TextmodeHelp3()
 {
     // part of help for text mode navigation
     static const string value =  _( "<p>General keyboard navigation:</p>" );
     return value;
 }
 
-const string PkgNames::TextmodeHelp7()
+const string PkgNames::TextmodeHelp4()
 {
     // part of help for text mode navigation
     static const string value =  _( "<p>To move inside a dialog, use <b>Tab</b> to go forward and <b>Alt</b> or <b>Shift</b> + <b>Tab</b> to go back.<br> If the <b>Alt</b> and <b>Shift</b> key combinations are occupied by the window manager or the terminal, <b>Ctrl</b> + <b>F</b> (forward) and <b>Ctrl</b> + <b>B</b> (back) can be used instead.</p>." );
     return value;
 }
-const string PkgNames::TextmodeHelp8()
+const string PkgNames::TextmodeHelp5()
 {
     // part of help for text mode navigation
     static const string value =  _( "<p>The command specified on an activated button (e.g., Next, Add) is executed if the <b>Enter</b> key is pressed.</p> <p>Radio buttons or check boxes are switched on or off with <b>Enter</b> or <b>Space</b>. " );
 
    return value;
 }
-const string PkgNames::TextmodeHelp9()
+const string PkgNames::TextmodeHelp6()
 {
     // part of help for text mode navigation
     static const string value =  _( "<p>Scroll in lists or text (e.g., the help text) with the <b>arrow</b> keys.</p>" );

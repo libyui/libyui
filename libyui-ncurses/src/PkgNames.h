@@ -595,10 +595,6 @@ public:
     static const string TextmodeHelp4();
     static const string TextmodeHelp5();
     static const string TextmodeHelp6();
-    static const string TextmodeHelp7();
-    static const string TextmodeHelp8();
-    static const string TextmodeHelp9();
-    static const string TextmodeHelp();
 
    /**
      *  text used for automatic changes popup
