@@ -1209,6 +1209,13 @@ void YQWizard::enableWidget( QWidget * w, bool enabled )
 }
 
 
+void YQWizard::setFocus( QWidget * w )
+{
+    if ( w )
+	w->setFocus();
+}
+
+
 
 YCPValue YQWizard::command( const YCPTerm & cmd )
 {
@@ -1230,11 +1237,16 @@ YCPValue YQWizard::command( const YCPTerm & cmd )
     if ( isCommand( "SetNextButtonLabel	  ( string )", cmd ) )	{ setButtonLabel( _nextButton,  qStringArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "SetCancelButtonLabel ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) );	return OK; }
     if ( isCommand( "SetAcceptButtonLabel ( string )", cmd ) )	{ setButtonLabel( _nextButton,  qStringArg( cmd, 0 ) );	return OK; }
+    
+    if ( isCommand( "EnableBackButton 	  ( bool )"  , cmd ) )	{ enableWidget( _backButton,  boolArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "EnableNextButton     ( bool )"  , cmd ) )	{ enableWidget( _nextButton,  boolArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "EnableAbortButton    ( bool )"  , cmd ) )	{ enableWidget( _abortButton, boolArg( cmd, 0 ) );	return OK; }
+    
+    if ( isCommand( "SetFocusToNextButton ()"  , cmd ) )	{ setFocus( _nextButton );				return OK; }
+    if ( isCommand( "SetFocusToBackButton ()"  , cmd ) )	{ setFocus( _backButton );				return OK; }
+    
     if ( isCommand( "SetVerboseCommands	  ( bool )"  , cmd ) )	{ setVerboseCommands( boolArg( cmd, 0 ) );		return OK; }
-    if ( isCommand( "EnableBackButton 	  ( bool )"  , cmd ) )	{ enableWidget( _backButton, boolArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "EnableNextButton     ( bool )"  , cmd ) )	{ enableWidget( _nextButton, boolArg( cmd, 0 ) );	return OK; }
 
-    // TO DO: SetFocus...()
     
     y2error( "Undefined wizard command: %s", cmd->toString().c_str() );
     return YCPBoolean( false );

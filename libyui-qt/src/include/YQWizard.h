@@ -320,6 +320,11 @@ protected:
     void enableWidget( QWidget * w, bool enabled );
 
     /**
+     * Set the keyboard focus to a widget.
+     **/
+    void setFocus( QWidget * w );
+    
+    /**
      * Set wizard command verbosity
      **/
     void setVerboseCommands( bool verbose ) { _verboseCommands = verbose; }
