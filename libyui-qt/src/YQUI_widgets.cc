@@ -288,18 +288,6 @@ YWidget * YQUI::createIntField		( YWidget *		parent,
 }
 
 
-YWidget * YQUI::createWizard( YWidget *parent, YWidgetOpt & opt,
-			      const YCPValue & backButtonId,	const YCPString & backButtonLabel,
-			      const YCPValue & abortButtonId,	const YCPString & abortButtonLabel,
-			      const YCPValue & nextButtonId,	const YCPString & nextButtonLabel  )
-{
-    return new YQWizard( (QWidget *) ( parent->widgetRep() ), opt,
-			 backButtonId,	backButtonLabel,
-			 abortButtonId,	abortButtonLabel,
-			 nextButtonId,	nextButtonLabel  );
-}
-
-
 
 //========= Optional widgets ========================================================
 
@@ -412,6 +400,24 @@ YWidget * YQUI::createPartitionSplitter( YWidget *		parent,
 				    newPartLabel,
 				    freeFieldLabel,
 				    newPartFieldLabel );
+}
+
+
+bool YQUI::hasWizard()
+{
+    return true;
+}
+
+
+YWidget * YQUI::createWizard( YWidget *parent, YWidgetOpt & opt,
+			      const YCPValue & backButtonId,	const YCPString & backButtonLabel,
+			      const YCPValue & abortButtonId,	const YCPString & abortButtonLabel,
+			      const YCPValue & nextButtonId,	const YCPString & nextButtonLabel  )
+{
+    return new YQWizard( (QWidget *) ( parent->widgetRep() ), opt,
+			 backButtonId,	backButtonLabel,
+			 abortButtonId,	abortButtonLabel,
+			 nextButtonId,	nextButtonLabel  );
 }
 
 
