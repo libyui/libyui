@@ -72,7 +72,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui )
       , visibleInfo( YCPNull() )
       , filterPopup( 0 )
       , selectionPopup( 0 )
-      , youMode( false )
+      , youMode( true )
 {
     // Fill the handler map
     eventHandlerMap[ PkgNames::Packages()->toString() ]	= &PackageSelector::PackageListHandler;
@@ -604,10 +604,11 @@ bool PackageSelector::createPatchEntry ( NCPkgTable *pkgTable,
     }
 
     pkgLine[0] = patchPtr->getSelectable()->name();	// name
-    pkgLine[1] = patchPtr->summary();  	// short description
-    FSize size = patchPtr->size();     	// installed size
-    pkgLine[2] = size.asString();
-
+    pkgLine[1] = patchPtr->shortDescription();  	// short description
+    //FSize size = patchPtr->size();     	// installed size
+    //pkgLine[2] = size.asString();
+    pkgLine[2] =  "95 kB";
+    
     pkgTable->addLine( patchPtr->getSelectable()->status(), //  get the status
 		       pkgLine,
 		       index,		// the index
@@ -943,6 +944,21 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	return false;	
     }
     
+    if ( youMode )
+    {
+	NCstring text ( ((PMYouPatchPtr)pkgPtr)->shortDescription() );
+	
+	// show the description	
+	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
+	
+	if ( descrInfo )
+	{
+	    static_cast<NCRichText *>(descrInfo)->setText( text.YCPstr() );
+	}
+	
+	return true;
+    }
+
     if ( visibleInfo->compare( PkgNames::LongDescr() ) == YO_EQUAL )
     {
 	// ask the package manager for the description of this package
