@@ -640,10 +640,9 @@ YCPValue Y2NCursesUI::runPkgSelection(  YWidget * selector )
 	UIERR << "No NCPackageSelector existing" << endl;
     }
 
-    UIMIL << "Return value: " << event.result->toString() << endl;
-
     if ( !event.result.isNull() )
     {
+	UIMIL << "Return value: " << event.result->toString() << endl;
 	return event.result;
     }
     else
