@@ -1286,6 +1286,20 @@ void YQWizard::setDialogHeading( const QString & headingText )
     }
 }
 
+string YQWizard::debugLabel()
+{
+    if ( _dialogHeading )
+    {
+	string text = toUTF8( _dialogHeading->text() );
+	text = string( "Wizard Dialog \"" ) + text + "\"";
+
+	return text;
+    }
+    else
+    {
+	return "Wizard Dialog";
+    }
+}
 
 void YQWizard::setHelpText( QString helpText )
 {

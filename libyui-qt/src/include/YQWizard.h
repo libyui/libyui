@@ -89,6 +89,12 @@ public:
      **/
     virtual YCPValue command( const YCPTerm & command );
 
+    /**
+     * Returns a descriptive label of this dialog instance for debugging.
+     *
+     * Reimplemented from YWidget
+     **/
+    virtual std::string debugLabel();
 
     /**
      * Notification that a child widget has been added.
