@@ -1154,21 +1154,27 @@ void YUIQt::toggleRecordMacro()
     if ( recordingMacro() )
     {
 	stopRecordMacro();
+	normalCursor();
+
 	QMessageBox::information( 0,						// parent
 				  "YaST2 Macro Recorder",			// caption
 				  "Macro recording done.",			// text
 				  QMessageBox::Ok | QMessageBox::Default,	// button0
 				  QMessageBox::NoButton,			// button1
 				  QMessageBox::NoButton );			// button2
+	busyCursor();
     }
     else
     {
+	normalCursor();
+	
 	QString filename =
 	    QFileDialog::getSaveFileName( DEFAULT_MACRO_FILE_NAME,		// startWith
 					  "*.ycp",				// filter
 					  0,					// parent
 					  0,					// (widget) name
 					  "Select Macro File to Record to" );	// caption
+	busyCursor();
 
 	if ( ! filename.isEmpty() )	// file selection dialog has been cancelled
 	{
@@ -1180,12 +1186,15 @@ void YUIQt::toggleRecordMacro()
 
 void YUIQt::askPlayMacro()
 {
+    normalCursor();
+    
     QString filename =
 	QFileDialog::getOpenFileName( DEFAULT_MACRO_FILE_NAME,		// startWith
 				      "*.ycp",				// filter
 				      0,				// parent
 				      0,				// (widget) name
 				      "Select Macro File to Play" );	// caption
+    busyCursor();
 
     if ( ! filename.isEmpty() )	// file selection dialog has been cancelled
     {
@@ -1210,11 +1219,14 @@ void YUIQt::askPlayMacro()
 YCPValue YUIQt::askForExistingDirectory( const YCPString & startDir,
 					 const YCPString & headline )
 {
+    normalCursor();
+    
     QString dir_name =
 	QFileDialog::getExistingDirectory( fromUTF8( startDir->value() ),
 					   main_win, 				// parent
 					   "dir_selector",			// name
 					   fromUTF8( headline->value() ) );	// caption
+    busyCursor();
 
     if ( dir_name.isEmpty() )	// this includes dir_name.isNull()
 	return YCPVoid();	// nothing selected -> return 'nil'
@@ -1227,12 +1239,15 @@ YCPValue YUIQt::askForExistingFile( const YCPString & startWith,
 				    const YCPString & filter,
 				    const YCPString & headline )
 {
+    normalCursor();
+    
     QString file_name =
 	QFileDialog::getOpenFileName( fromUTF8( startWith->value() ),
 				      fromUTF8( filter->value() ),
 				      main_win, 			// parent
 				      "file_selector",			// name
 				      fromUTF8( headline->value() ) );	// caption
+    busyCursor();
 
     if ( file_name.isEmpty() )	// this includes file_name.isNull()
 	return YCPVoid();	// nothing selected -> return 'nil'
@@ -1245,10 +1260,13 @@ YCPValue YUIQt::askForSaveFileName( const YCPString & startWith,
 				    const YCPString & filter,
 				    const YCPString & headline )
 {
+    normalCursor();
+    
     QString file_name = askForSaveFileName( fromUTF8( startWith->value() ),
 					    fromUTF8( filter->value() ),
 					    fromUTF8( headline->value() ) );
-
+    busyCursor();
+    
     if ( file_name.isEmpty() )		// this includes file_name.isNull()
 	return YCPVoid();		// nothing selected -> return 'nil'
 
@@ -1266,11 +1284,14 @@ QString YUIQt::askForSaveFileName( const QString & startWith,
 
     do
     {
+	normalCursor();
+	
 	file_name = QFileDialog::getSaveFileName( startWith,
 						  filter,
 						  main_win, 		// parent
 						  "file_selector",	// name
 						  headline );		// caption
+	busyCursor();
 
 	if ( file_name.isEmpty() )	// this includes file_name.isNull()
 	    return QString::null;
@@ -1291,12 +1312,14 @@ QString YUIQt::askForSaveFileName( const QString & startWith,
 		msg = ( _( "%1 exists and is write-protected!\nReally overwrite?" ) ).arg( file_name );
 	    }
 
+	    normalCursor();
 	    int button_no = QMessageBox::information( main_win,
 						      // Window title for confirmation dialog
 						      _( "Confirm"   ),
 						      msg,
 						      _( "C&ontinue" ),
 						      _( "&Cancel"   ) );
+	    busyCursor();
 	    try_again = ( button_no != 0 );
 	}
 
