@@ -54,7 +54,7 @@
 YCPValue YQUI::setLanguage( const YCPTerm & term)
 {
     loadPredefinedQtTranslations();
-    
+
     return YCPVoid();   // OK (YCPNull() would mean error)
 }
 
@@ -109,9 +109,12 @@ void YQUI::makeScreenShot( std::string stl_filename )
     QWidget * dialog = (QWidget *) currentDialog()->widgetRep();
     QPixmap screenShot = QPixmap::grabWindow( dialog->winId() );
     QString fileName ( stl_filename.c_str() );
+    bool interactive = false;
 
     if ( fileName.isEmpty() )
     {
+	interactive = true;
+
         // Open a file selection box. Figure out a reasonable default
         // directory / file name.
 
@@ -179,8 +182,23 @@ void YQUI::makeScreenShot( std::string stl_filename )
     //
 
     y2debug( "Saving screen shot to %s", (const char *) fileName );
-    screenShot.save( fileName, "PNG" );
-    
+    bool success = screenShot.save( fileName, "PNG" );
+
+    if ( ! success )
+    {
+	y2error( "Couldn't save screen shot %s", (const char *) fileName );
+
+	if ( interactive )
+	{
+	    QMessageBox::warning( 0,						// parent
+				  "Error",					// caption
+				  QString( "Couldn't save screen shot\nto %1" ).arg( fileName ),
+				  QMessageBox::Ok | QMessageBox::Default,	// button0
+				  QMessageBox::NoButton,			// button1
+				  QMessageBox::NoButton );			// button2
+	}
+    }
+
     if ( recordingMacro() )
     {
 	macroRecorder->beginBlock();
