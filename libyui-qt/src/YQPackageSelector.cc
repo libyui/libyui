@@ -259,11 +259,13 @@ YQPackageSelector::layoutDiskSpaceSummary( QWidget * parent )
 
     _diskSpace->setStyle( QStyleFactory::create( "motif" ) ); // consumes less space than platinum
 
+#if 0
     QPushButton *details_button = new QPushButton( _( "D&etails..." ), gbox );
     CHECK_PTR( details_button );
 
     details_button->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) ); // hor/vert
-
+#endif
+    
     // TO DO: connect()
 
 #if 1
