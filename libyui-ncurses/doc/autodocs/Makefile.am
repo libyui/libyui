@@ -1,5 +1,5 @@
 #
-# Makefile.am for .../agent-XXpkgXX/doc/autodocs
+# Makefile.am for ncurses/doc/autodocs
 #
 
 htmldir = $(docdir)/autodocs
@@ -11,4 +11,4 @@ CLEANFILES = $(html_DATA) doxygen.log doxygen.conf installdox
 doxygen.css @RPMNAME@.tag: index.html
 
 index.html: $(srcdir)/../../src/*.h
-	@ybindir@/ydoxygen PROJECT_NAME=@RPMNAME@
+	${YDOXYGEN} PROJECT_NAME=@RPMNAME@ INPUT=$(srcdir)/../../src
