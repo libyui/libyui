@@ -38,6 +38,7 @@ class QLabel;
 class QMenuBar;
 class QPopupMenu;
 class QPushButton;
+class QSpacerItem;
 class QTextBrowser;
 class QToolButton;
 class QWidgetStack;
@@ -361,7 +362,7 @@ protected:
     void layoutTreePanel();
     void layoutWorkArea	( QHBox * parentHBox );
     void layoutClientArea( QWidget * parent );
-    void layoutButtonBox();
+    void layoutButtonBox( QWidget * parent );
 
 
     /**
@@ -550,9 +551,8 @@ protected:
     QLabel *		    _dialogIcon;
     QLabel *		    _dialogHeading;
     YQAlignment *	    _contents;
-    QHBox *		_buttonBox;
     YQWizardButton *	    _backButton;
-    QWidget *		    _backButtonSpacer;
+    QSpacerItem *	    _backButtonSpacer;
     YQWizardButton *	    _abortButton;
     YQWizardButton *	    _nextButton;
 

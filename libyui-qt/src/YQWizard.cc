@@ -137,7 +137,6 @@ YQWizard::YQWizard( QWidget *		parent,
     _dialogIcon		= 0;
     _dialogHeading	= 0;
     _contents		= 0;
-    _buttonBox		= 0;
     _backButton		= 0;
     _backButtonSpacer	= 0;
     _abortButton	= 0;
@@ -948,25 +947,11 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
     // Button box
     //
 
+    layoutButtonBox( workAreaVBox );
 
-#if 0
-    addVSpacing( workAreaVBox, BUTTON_BOX_TOP_MARGIN );
-#endif
     
-    _buttonBox = new QHBox( workAreaVBox );
-    CHECK_PTR( _buttonBox );
-    _buttonBox->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
-    _buttonBox->setMargin( BUTTON_BOX_TOP_MARGIN );
-    layoutButtonBox();
-
-#if 0
-    addVSpacing( workAreaVBox, WORK_AREA_BOTTOM_MARGIN );
-#endif
-
     if ( ! runningEmbedded() )
     {
-	setBottomCroppedGradient( _buttonBox, _bottomGradientPixmap, _buttonBox->sizeHint().height() );
-
 	//
 	// Spacer (purely decorative) at the right of the client area
 	//
@@ -1025,31 +1010,73 @@ void YQWizard::layoutClientArea( QWidget * parent )
 
 
 
-void YQWizard::layoutButtonBox()
+void YQWizard::layoutButtonBox( QWidget * parent )
 {
-    destroyButtons();
+    //
+    // Button box and layout
+    //
+
+    QWidget * buttonBox = new QWidget( parent );
+    CHECK_PTR( buttonBox );
 
     YQDialog * dialog = dynamic_cast<YQDialog *>( YQUI::ui()->currentDialog() );
     CHECK_PTR( dialog );
 
+    // Using old-style layouts to enable a seamless background with the
+    // gradient pixmap: Any sub-widgets (QVBox, QHBox) would have to get yet
+    // another portion of that gradient as their backround pixmap, and it would
+    // be very hard to cover all cases - resizing, hiding individual buttons, etc.
 
+    QVBoxLayout * vbox = new QVBoxLayout( buttonBox,
+					  0, 0 ); 	// margin, spacing
+    CHECK_PTR( vbox );
+
+
+    //
+    // Top margin
+    //
+
+    QSpacerItem * vSpacer = new QSpacerItem( 0, BUTTON_BOX_TOP_MARGIN,		// width, height
+					     QSizePolicy::Minimum,		// horizontal
+					     QSizePolicy::Fixed );		// vertical
+    CHECK_PTR( vSpacer );
+    vbox->addItem( vSpacer );
+
+
+    //
+    // QHBoxLayout for the buttons
+    //
+    
+    QHBoxLayout * hbox = new QHBoxLayout( vbox,
+					  0 );		// spacing
+    
     //
     // "Back" button
     //
 
-    _backButton	 = new YQWizardButton( this, dialog, _buttonBox, _backButtonLabel, _backButtonId );
+    _backButton	 = new YQWizardButton( this, dialog, buttonBox, _backButtonLabel, _backButtonId );
     CHECK_PTR( _backButton );
+
+    hbox->addWidget( (QWidget *) _backButton->widgetRep() );
     addChild( _backButton );  // Enable shortcut checking for this button
     connect( _backButton,	SIGNAL( clicked()	),
 	     this,		SLOT  ( backClicked()	) );
 
-    _backButtonSpacer = addHStretch( _buttonBox );
+    _backButtonSpacer = new QSpacerItem( 0, 0,				// width, height
+					 QSizePolicy::Expanding,	// horizontal
+					 QSizePolicy::Minimum );	// vertical
     CHECK_PTR( _backButtonSpacer );
+    hbox->addItem( _backButtonSpacer );
+    
 
     if ( _backButton->text().isEmpty() )
     {
 	_backButton->hide();
-	_backButtonSpacer->hide();
+
+	// Minimize _backButtonSpacer
+	_backButtonSpacer->changeSize( 0, 0,				// width, height
+				       QSizePolicy::Minimum,		// horizontal
+				       QSizePolicy::Minimum );		// vertical
     }
 
 
@@ -1057,24 +1084,57 @@ void YQWizard::layoutButtonBox()
     // "Abort" button
     //
 
-    _abortButton = new YQWizardButton( this, dialog, _buttonBox, _abortButtonLabel, _abortButtonId );
+    _abortButton = new YQWizardButton( this, dialog, buttonBox, _abortButtonLabel, _abortButtonId );
     CHECK_PTR( _abortButton );
+
+    hbox->addWidget( (QWidget *) _abortButton->widgetRep() );
     addChild( _abortButton ); // Enable shortcut checking for this button
     connect( _abortButton,	SIGNAL( clicked()	),
 	     this,		SLOT  ( abortClicked()  ) );
 
-    addHStretch( _buttonBox );
+    QSpacerItem * spacer = new QSpacerItem( 0, 0,			// width, height
+					    QSizePolicy::Expanding,	// horizontal
+					    QSizePolicy::Minimum );	// vertical
+    CHECK_PTR( spacer );
+    hbox->addItem( spacer );
 
 
     //
     // "Next" button
     //
 
-    _nextButton	 = new YQWizardButton( this, dialog, _buttonBox, _nextButtonLabel, _nextButtonId );
+    _nextButton	 = new YQWizardButton( this, dialog, buttonBox, _nextButtonLabel, _nextButtonId );
     CHECK_PTR( _nextButton );
+
+    hbox->addWidget( (QWidget *) _nextButton->widgetRep() );
     addChild( _nextButton );  // Enable shortcut checking for this button
     connect( _nextButton,	SIGNAL( clicked()	),
 	     this,		SLOT  ( nextClicked()	) );
+
+
+    //
+    // Bottom margin
+    //
+
+    vSpacer = new QSpacerItem( 0, WORK_AREA_BOTTOM_MARGIN,	// width, height
+			       QSizePolicy::Minimum,		// horizontal
+			       QSizePolicy::Fixed );		// vertical
+    CHECK_PTR( vSpacer );
+    vbox->addItem( vSpacer );
+
+
+    //
+    // Gradient
+    //
+
+    if ( ! runningEmbedded() )
+    {
+	setBottomCroppedGradient( buttonBox, _bottomGradientPixmap, buttonBox->sizeHint().height() );
+    }
+
+    vbox->activate();
+    buttonBox->adjustSize();
+    buttonBox->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
 }
 
 
@@ -1575,14 +1635,26 @@ void YQWizard::setButtonLabel( YQWizardButton * button, const QString & newLabel
 	    button->hide();
 
 	    if ( button == _backButton && _backButtonSpacer )
-		_backButtonSpacer->hide();
+	    {
+		// Minimize _backButtonSpacer
+		
+		_backButtonSpacer->changeSize( 0, 0,				// width, height
+					       QSizePolicy::Minimum,		// horizontal
+					       QSizePolicy::Minimum );		// vertical
+	    }
 	}
 	else
 	{
 	    button->show();
 
 	    if ( button == _backButton && _backButtonSpacer )
-		_backButtonSpacer->show();
+	    {
+		// Restore _backButtonSpacer to normal size
+		
+		_backButtonSpacer->changeSize( 0, 0,				// width, height
+					       QSizePolicy::Expanding,		// horizontal
+					       QSizePolicy::Minimum );		// vertical
+	    }
 	}
     }
 }
