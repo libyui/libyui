@@ -324,6 +324,31 @@ public:
      */
     static const NCstring IgnoreCase();
 
+   /**
+     * text used in search popup
+     */
+    static const NCstring SearchIn();
+
+   /**
+     * text used in search popup
+     */
+    static const NCstring CheckName();
+    
+   /**
+     * text used in search popup
+     */
+    static const NCstring CheckSummary();
+
+       /**
+     * text used in search popup
+     */
+    static const NCstring CheckProvides();
+    
+   /**
+     * text used in search popup
+     */
+    static const NCstring CheckRequires();
+    
     /**
      * The headline of the help popup
      */

@@ -42,6 +42,7 @@ NCPopupSearch::NCPopupSearch( const wpos at, PackageSelector * pkger )
       , searchExpr( 0 )
       , ignoreCase( 0 )
       , checkName( 0 )
+      , checkSummary( 0 )
       , checkDescr( 0 )
       , checkProvides( 0 )
       , checkRequires( 0 )
@@ -119,16 +120,18 @@ void NCPopupSearch::createLayout( const YCPString & headline )
   // add a frame contianing the check boxes
   opt.isHStretchable.setValue( true );
   opt.isVStretchable.setValue( true );
-  NCFrame * frame = new NCFrame( vSplit, opt, YCPString("Search in" ) );
+  NCFrame * frame = new NCFrame( vSplit, opt, YCPString(PkgNames::SearchIn().str()) );
   NCSplit * vSplit3 = new NCSplit( frame, opt, YD_VERT );
 
   opt.isVStretchable.setValue( false );
-  checkName = new NCCheckBox( vSplit3, opt, YCPString( "&Name and Summary" ), true );
+  checkName = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckName().str()), true );
+  checkSummary = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckSummary().str()), true );
   checkDescr = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckDescr().str()), false );
-  checkProvides = new NCCheckBox( vSplit3, opt, YCPString( "&Provides" ), false );
-  checkRequires = new NCCheckBox( vSplit3, opt, YCPString( "&Requires" ), false );
-  
+  checkProvides = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckProvides().str()), false );
+  checkRequires = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckRequires().str()), false );
+    
   vSplit3->addChild( checkName );
+  vSplit3->addChild( checkSummary );
   vSplit3->addChild( checkDescr );
   vSplit3->addChild( checkProvides );
   vSplit3->addChild( checkRequires ); 
@@ -142,7 +145,7 @@ void NCPopupSearch::createLayout( const YCPString & headline )
   vSplit->addChild( hSplit3 );
 
   // add the cancel and the ok button 
-  opt.isHStretchable.setValue( false );
+  opt.isVStretchable.setValue( false );
   cancelButton = new NCPushButton( hSplit3, opt, YCPString(PkgNames::CancelLabel().str()) );
   cancelButton->setId( PkgNames::Cancel () );
 
@@ -157,6 +160,7 @@ void NCPopupSearch::createLayout( const YCPString & headline )
   hSplit3->addChild( sp5 );
   hSplit3->addChild( okButton );
   hSplit3->addChild( sp4 );
+
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -199,7 +203,7 @@ YCPString  NCPopupSearch::getSearchExpression() const
 
 long NCPopupSearch::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? 45 : 18);
+    return ( dim == YD_HORIZ ? 45 : 20 );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -245,38 +249,16 @@ bool NCPopupSearch::postAgain()
     }
     else if ( currentId->compare( PkgNames::OkButton () ) == YO_EQUAL )
     {
-	YCPValue value = YCPNull();
-	bool ignore = true;
-	bool descr = false;
-	
 	// get the search expression
 	postevent.result =  getSearchExpression();
 
-	if ( ignoreCase )
-	{
-	    value = ignoreCase->getValue();
-
-	    // ignore case is not selected
-	    if ( !value.isNull() && value->asBoolean()->toString() == "false" )
-	    {
-		ignore = false;
-	    }
-	}
-	if ( checkDescr )
-	{
-	    value = checkDescr->getValue();
-
-            // check description is selected 
-	    if ( !value.isNull() && value->asBoolean()->toString() == "true" )
-	    {
-		descr = true;
-	    }
-	}
-
 	// fill the package list with packages matching the search expression	
 	packager->fillSearchList( postevent.result->asString(),
-				  ignore,
-				  descr  );
+				  getCheckBoxValue( ignoreCase ),
+				  getCheckBoxValue( checkName ),
+				  getCheckBoxValue( checkSummary ),
+				  getCheckBoxValue( checkDescr )
+				  );
     }
     
     if ( postevent == NCursesEvent::button || postevent == NCursesEvent::cancel )
@@ -287,3 +269,20 @@ bool NCPopupSearch::postAgain()
     return true;
 }
 
+bool NCPopupSearch::getCheckBoxValue( NCCheckBox * checkBox )
+{
+    YCPValue value = YCPNull();
+    
+    if ( checkBox )
+    {
+	value = checkBox->getValue();
+
+	// check description is selected 
+	if ( !value.isNull() )
+	{
+	    return ( value->asBoolean()->toString() == "true" ? true : false );
+	}
+    }
+
+    return false;
+}

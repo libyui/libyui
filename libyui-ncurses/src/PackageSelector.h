@@ -156,10 +156,16 @@ class PackageSelector
    /**
     * Fills the package table with packages matching the search expression
     * @param expr The search expression
-    * @return bool
-    */
+    * @param ignoreCase Ignore case (true or false)
+    * @param checkName Search in package name (true or false)
+    * @param checkSummary Check the summary (true or false)
+    * @param checkDescr Check the long description (true or false)
+    * @return bool Returns true if the expression matches.
+    */ 
     bool fillSearchList( const YCPString & expr,
 			 bool ignoreCase,
+			 bool checkName,
+			 bool checkSummary,
 			 bool checkDescr );
 
    /**
@@ -315,11 +321,6 @@ class PackageSelector
      **/ 
     bool checkPatch(  PMYouPatchPtr patch, string filter, unsigned int index );
 
-    bool searchPackage( PMPackagePtr pkg,
-			string searchExpr,
-			bool ignoreCase,
-			bool checkDescr,
-			unsigned int i );
    /**
     * Returns whether automatic dependency is on or off
     * @return bool   

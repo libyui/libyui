@@ -474,7 +474,7 @@ const NCstring PkgNames::SearchResults()
 const NCstring PkgNames::PackageSearch()
 {
     // the headline of the search popup 
-    static const NCstring value = _("Package search");
+    static const NCstring value = _("Package blabsdsjadjs search");
     return value;
 }
 
@@ -501,21 +501,56 @@ const NCstring PkgNames::Solving()
 	
 const NCstring PkgNames::SearchPhrase()
 {
-    // text for search popup 
+    // text for the package search popup 
     static const NCstring value = _("&Search phrase");
+    return value;
+}
+
+const NCstring PkgNames::SearchIn()
+{
+    // label of a frame (search popup)
+    static const NCstring value = _(" Search in ");
     return value;
 }
 
 const NCstring PkgNames::CheckDescr()
 {
-    // text for search popup 
-    static const NCstring value = _("&Description");
+    // label of a combo box  (search popup)
+    static const NCstring value = _("&Description (time-consuming!)");
+    return value;
+}
+
+const NCstring PkgNames::CheckName()
+{
+    // label of a combo box  (search popup)
+    static const NCstring value = _("&Name of the package");
+    return value;
+}
+
+const NCstring PkgNames::CheckSummary()
+{
+    // label of a combo box  (search popup)
+    static const NCstring value = _("&Summary");
+    return value;
+}
+
+const NCstring PkgNames::CheckProvides()
+{
+    // label of a combo box  (search popup)
+    static const NCstring value = _("&Provides");
+    return value;
+}
+
+const NCstring PkgNames::CheckRequires()
+{
+    // label of a combo box  (search popup)
+    static const NCstring value = _("&Requires");
     return value;
 }
 
 const NCstring PkgNames::IgnoreCase()
 {
-    // text for search popup 
+    // label of a combo box  (search popup)
     static const NCstring value = _("&Ignore case");
     return value;
 }

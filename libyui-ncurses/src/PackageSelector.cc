@@ -397,6 +397,8 @@ bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr 
 //
 bool PackageSelector::fillSearchList( const YCPString & expr,
 				      bool ignoreCase,
+				      bool checkName,
+				      bool checkSummary,
 				      bool checkDescr )
 {
     NCPkgTable * packageList = getPackageList();
@@ -414,14 +416,27 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
 
     // fill the package table
     unsigned int i = 0;
-    PMPackagePtr pkgPtr;
-
-    string searchExpr = expr->value();
-
+    PMPackagePtr pkg;
+    string description = "";
+    
     while ( listIt != Y2PM::packageManager().end() )
     {
-	searchPackage( (*listIt)->theObject(), searchExpr, ignoreCase, checkDescr, i );
+	pkg = (*listIt)->theObject();
 
+	if ( checkDescr )
+	{
+	    list<string> value = pkg->description();
+	    description = createDescrText( value );    
+	}
+	if ( ( checkName && match( pkg->name().asString(), expr->value(), ignoreCase )) ||
+	     ( checkSummary && match( pkg->summary(), expr->value(), ignoreCase) ) ||
+	     ( checkDescr && match( description, expr->value(), ignoreCase) )
+	     )
+	{
+	    // search sucessful
+	    createListEntry( packageList, pkg, i );
+	}
+	
 	++listIt;
 	i++;
     }
@@ -641,53 +656,6 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
     }
 
     return true;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-// search
-//
-//
-bool PackageSelector::searchPackage( PMPackagePtr pkg,
-				     string searchExpr,
-				     bool ignoreCase,
-				     bool checkDescr,
-				     unsigned int index )
-{
-    bool ret = false;
-    
-    if ( ! pkg )
-	return false;
-
-    NCPkgTable * packageList = getPackageList();
-    
-    if ( !packageList )
-    {
-	UIERR << "Widget is not a valid NCPkgTable widget" << endl;
-    	return false;
-    }
-    
-    string name = pkg->name().asString();
-
-    if ( match( name, searchExpr, ignoreCase ) )
-    {
-	// search sucessful
-	createListEntry( packageList, pkg, index );
-	ret = true;
-    }
-    else if ( checkDescr )
-    {
-	string summary = pkg->summary();	
-	// additionally search in summary
-	if ( match( summary, searchExpr, ignoreCase ) )
-	{
-	    // search sucessful
-	    createListEntry( packageList, pkg, index );
-	    ret = true;
-	}
-    }
-    
-    return ret;
 }
 
 ///////////////////////////////////////////////////////////////////

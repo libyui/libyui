@@ -51,6 +51,7 @@ private:
     NCComboBox * searchExpr;
     NCCheckBox * ignoreCase;
     NCCheckBox * checkName;
+    NCCheckBox * checkSummary;
     NCCheckBox * checkDescr;
     NCCheckBox * checkProvides;
     NCCheckBox * checkRequires;
@@ -60,6 +61,8 @@ private:
 
     PackageSelector * packager;		// connection to the package selector
 
+    bool getCheckBoxValue( NCCheckBox * checkBox );
+    
 protected:
 
     YCPString getSearchExpression() const;
