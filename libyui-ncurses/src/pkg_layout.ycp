@@ -13,72 +13,88 @@
     textdomain "packages";
 
     return `VBox( `VSpacing(0.3),
-       `HBox( `HSpacing(0.3),
-	      `Left(`MenuButton( _("&Filter"), [`item( `id(`groups), _("&RPM groups")),
-					     `item( `id(`selections), "Se&lections" ),
-					     `item( `id(`keys), "&Keywords" ),
-					     `item( `id(`mimetype), "&MIME Types" ),
-					     `item( `id(`search), "&Search" ) ]
-				 )),
-	      `Left(`MenuButton( "&Actions", [`item( `id(`toggle), 	"&Toggle     [F3]"),
-					      `item( `id(`select), 	"&Select      [+]"),
-					      `item( `id(`delete), 	"&Delete      [-]"),
-					      `item( `id(`update), 	"&Update      [>]"),
-					      `item( `id(`tabooOn), 	"Taboo &yes  [F4]"),
-					      `item( `id(`tabooOff), 	"Taboo &no   [F5]"),
-					      `item( `id(`toggleSrc), 	"SP&M yes/no" ) ]
-				 )),
-	      `Left(`MenuButton( "&Information", [`item( `id(`pkginfo), "Package info" ),
-						  `item( `id(`longdescr), "&Long description" ),
-						  `item( `id(`versions), "&Version(s)" ),
-						  `item( `id(`files), "&File list" ),
-						  `item( `id(`relations), "&Package relations" ) ]
-				 )),
-	      `Left(`ReplacePoint(`id(`replacemenu),`MenuButton(  "&Etc.", [`item( `id(`showdeps), "    &Check dependencies now" ),
-									    `item( `id(`autodeps), "[X] &Automatic dependency check" ) ]
-								  )
-				  )
-		    ),
-	      `HSpacing(0.3)
+		  `HBox( `HSpacing(0.3),
+			 // label of the Filter menu ( ( keep it short ) - filters out a set of packages
+			 `Left(`MenuButton( _("&Filter"),
+					    // menu items of the filter menu
+					    [`item( `id(`groups), 	_("&RPM groups") ),
+					     `item( `id(`selections), 	_("Se&lections") ),
+					     `item( `id(`search), 	_("&Search") ) ]
+					    )),
+			 // label Actions menu ( keep it short ) - actions to change status of a package
+			 `Left(`MenuButton( _("&Actions"),
+					    // menu items of the Actions menu
+					    [`item( `id(`toggle), 	_( "&Toggle     [F3]") ),
+					     `item( `id(`select), 	_( "&Select      [+]") ),
+					     `item( `id(`delete), 	_( "&Delete      [-]") ),
+					     `item( `id(`update), 	_( "&Update      [>]") ),
+					     `item( `id(`tabooOn), 	_( "Taboo &yes  [F4]") ),
+					     `item( `id(`tabooOff), 	_( "Taboo &no   [F5]") ),
+					     `item( `id(`toggleSrc), 	_( "SP&M yes/no" ) ) ]
+					    )),
+			 // label Information menu ( keep it short! )
+			 `Left(`MenuButton( _("&Information"),
+					    // menu items of the info menu
+					    [`item( `id(`pkginfo), 	_( "Package info" ) ),
+					     `item( `id(`longdescr), 	_("&Long description") ),
+					     `item( `id(`versions), 	_("&Version(s)") ),
+					     `item( `id(`files), 	_("&File list") ),
+					     `item( `id(`relations), 	_("&Package relations") ) ]
+					    )),
+			 // label Etc. menu ( keep it short! )
+			 `Left(`ReplacePoint(`id(`replacemenu),`MenuButton(  _("&Etc."),
+									     // menu items of the Etc. menu
+									     [`item( `id(`showdeps), _("    &Check dependencies now") ),
+									      `item( `id(`autodeps), _("[X] &Automatic dependency check") ) ]
+									     )
+					     )
+			       ),
+			 `HSpacing(0.3)
 					   
-	      ),
-       `VSpacing(0.3),
-       `VWeight( 50, `HBox(`HSpacing(0.3),
-			   `PkgSpecial( `id(`packages), `opt(`notify), "pkgTable" ), 
-			   `HSpacing(0.3)
-			   )
-		 ),
-       `HBox( `HWeight(1, `HBox(`Label( "Filter: "),
-				`Label( `id(`filter), "........................." ),
-				`HSpacing( 0.1 )
-				)
-		       ),
-	      `HWeight(1, `HBox(`Label( "Required diskspace: "),
-				`Label( `id(`diskspace), "         " ),
-				`HSpacing( 0.1 )
-				)
-		       )
-	      ),
-       `VBox(`VWeight( 40, `ReplacePoint( `id(`replaceinfo),
-					  `RichText( `id(`description)," ")
-					  )
-		       ),
-	     `VWeight( 5, `HBox(
-				`HBox(`HWeight(1, `MenuButton( "&Help", [`item( `id(`help_general), "&General Help"),
-									 `item( `id(`help_status), "&Help on package status"),
-									 `item( `id(`help_filter), "&Help on dependency check") ]
-							       )),
-				      `HStretch(),
-				      `HWeight(1, `PushButton(`id(`search), "&Search")),
-				      `HStretch(),
-				      `HWeight(1,`PushButton(`id(`diskinfo), "&Diskspace"))
-				      ),
-				`HSpacing(5.0),
-				`HBox( `Right( `PushButton(`id(`cancel), "&Cancel")),
-				       `Right( `PushButton(`id(`ok), "&OK"))
-				       )
-				)
-		       )
-	     )
-       );
+			 ),
+		  `VSpacing(0.3),
+		  `VWeight( 50, `HBox(`HSpacing(0.3),
+				      `PkgSpecial( `id(`packages), `opt(`notify), "pkgTable" ), 
+				      `HSpacing(0.3)
+				      )
+			    ),
+		  // label text - keep it short
+		  `HBox( `HWeight(1, `HBox(`Label( _("Filter: ") ),
+					   `Label( `id(`filter), "........................." ),
+					   `HSpacing( 0.1 )
+					   )
+				  ),
+			 // label text - keep it short (use abbreviation if necessary)
+			 `HWeight(1, `HBox(`Label( _("Required diskspace: ") ),
+					   `Label( `id(`diskspace), "         " ),
+					   `HSpacing( 0.1 )
+					   )
+				  )
+			 ),
+		  `VBox(`VWeight( 40, `ReplacePoint( `id(`replaceinfo),
+						     `RichText( `id(`description)," ")
+						     )
+				  ),
+			`VWeight( 5, `HBox(
+					   // label help menu 
+					   `HBox(`HWeight(1, `MenuButton( _("&Help"),
+									  // menu items of the help menu
+									  [`item( `id(`help_general), _("&General Help") ),
+									   `item( `id(`help_status),  _("&Help on package status") ),
+									   `item( `id(`help_update), _("&Help on Update") ) ]
+									  )),
+						 `HStretch(),
+						 // button label
+						 `HWeight(1, `PushButton(`id(`search), _("&Search") ) )
+						 ),
+					   `HSpacing(5.0),
+					   // button label
+					   `HBox( `Right( `PushButton(`id(`cancel), _("&Cancel") ) ),
+						  // button label  
+						  `Right( `PushButton(`id(`ok), _("&OK") ) )
+						  )
+					   )
+				  )
+			)
+		  );
 }

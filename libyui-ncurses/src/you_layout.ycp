@@ -13,48 +13,61 @@
     textdomain "packages";
 
     return `VBox( `VSpacing(0.3),
-       `HBox( `HSpacing(0.4),
-	      `Left(`MenuButton( "&Filter", [`item( `id(`recommended), "&Recommended"),
-					     `item( `id(`security), "&Security" ),
-					     `item( `id(`instpatches), "&Installed" ),
-					     `item( `id(`allpatches), "&All patches" )
-				 ]
-				 )),
-	      `Left(`MenuButton( "&Actions", [`item( `id(`toggle), 	"&Toggle    [F3]"),
-					      `item( `id(`select), 	"&Select     [+]"),
-					      `item( `id(`deselect), 	"Dese&lect   [-]"),
-					      `item( `id(`update), 	"&Update     [>]")
-				 ]
-				 )),
-	      `Left(`MenuButton( "&Information", [`item( `id(`patchdescr), "&Long description" ),
-						  `item( `id(`patchpackages), "&Package list" )
-				 ]
-				 )),
-	      `HStretch()
-	      ),
-       `VSpacing(0.3),
-       `VWeight( 50, `HBox(`HSpacing(0.3),
-			   `PkgSpecial( `id(`packages), `opt(`notify), "pkgTable" ), 
-			   `HSpacing(0.3)
-			   )
-		 ),
-       `HBox( `HSpacing(0.4),
-	     `Left( `Label( "Filter: ") ),
-	      `Left( `Label( `id(`filter), "........................." ) ), 
-	      `HStretch( )
-	      ),
-       `VBox(`VWeight( 40, `ReplacePoint( `id(`replaceinfo),
-					  `RichText( `id(`description)," ")
-					  )
-		       ),
-	     `VWeight( 5, `HBox(`Left(`PushButton(`id(`youhelp), "&Help") ), 
-				`HSpacing(5.0),
-				`Right( `PushButton(`id(`cancel), "&Cancel")),
-				`Right( `PushButton(`id(`ok), "&OK"))
-				)
-		       )
-	     )
-       );
+		  `HBox( `HSpacing(0.4),
+			 // menu label (keep it short)
+			 `Left(`MenuButton( _("&Filter"),
+					    // menu items
+					    [`item( `id(`recommended), _("&Recommended")),
+					     `item( `id(`security), _("&Security") ),
+					     `item( `id(`instpatches), _("&Installed") ),
+					     `item( `id(`allpatches), _("&All patches") )
+					     ]
+					    )),
+			 // menu label (keep it short)
+			 `Left(`MenuButton( _("&Actions"),
+					    // menu items
+					    [`item( `id(`toggle),  _("&Toggle    [F3]") ),
+					     `item( `id(`select),  _("&Select     [+]") ),
+					     `item( `id(`deselect), _("Dese&lect   [-]") ),
+					     `item( `id(`update),  _("&Update     [>]") )
+					     ]
+					    )),
+			 //  menu label (keep it short)
+			 `Left(`MenuButton( _("&Information"),
+					    // menu items
+					    [`item( `id(`patchdescr), _("&Long description") ),
+					     `item( `id(`patchpackages), _("&Package list") )
+					     ]
+					    )),
+			 `HStretch()
+			 ),
+		  `VSpacing(0.3),
+		  `VWeight( 50, `HBox(`HSpacing(0.3),
+				      `PkgSpecial( `id(`packages), `opt(`notify), "pkgTable" ), 
+				      `HSpacing(0.3)
+				      )
+			    ),
+		  `HBox( `HSpacing(0.4),
+			 // label text
+			 `Left( `Label( _("Filter: ")) ),
+			 `Left( `Label( `id(`filter), "........................." ) ), 
+			 `HStretch( )
+			 ),
+		  `VBox(`VWeight( 40, `ReplacePoint( `id(`replaceinfo),
+						     `RichText( `id(`description)," ")
+						     )
+				  ),
+			// button label
+			`VWeight( 5, `HBox(`Left(`PushButton(`id(`youhelp), _("&Help")) ), 
+					   `HSpacing(5.0),
+					   // button label
+					   `Right( `PushButton(`id(`cancel), _("&Cancel")) ),
+					   // button label
+					   `Right( `PushButton(`id(`ok), _("&OK")) )
+					   )
+				  )
+			)
+		  );
 }
 
 
