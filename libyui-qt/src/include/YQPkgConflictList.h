@@ -124,6 +124,24 @@ protected:
      **/
     void formatLine();
 
+    /**
+     * Dump all relevant lists from the internal ErrorResult into the conflict
+     * list.  
+     **/
+    void dumpLists();
+
+    /**
+     * Dump a list of package relations into the conflict list:
+     * Create a new list entry for each list entry.
+     * If 'header' is non-null, create a bracketing list item with text
+     * 'header' and insert the list items below that new item.
+     * If 'itemPrefix' is non-null, prefix each list entry's text with it.
+     * Does nothing if the list is empty.
+     **/
+    void dumpList( QListViewItem * 		parent,
+		   PkgDep::RelInfoList & 	list,
+		   const QString &		itemPrefix = QString::null,
+		   const QString & 		header	   = QString::null );
 
     PMObjectPtr			_pmObj;
     QString			_shortName;	// Only pkg name (no version)

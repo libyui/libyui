@@ -34,6 +34,7 @@ YQPkgConflictList::YQPkgConflictList( QWidget * parent )
     : QY2ListView( parent )
 {
     addColumn( _("Dependency conflict") );
+    setRootIsDecorated( true );
 }
 
 
@@ -48,7 +49,7 @@ YQPkgConflictList::fill( PkgDep::ErrorResultList & badList )
 {
     clear();
     std::string text;
-    
+
     std::list<PkgDep::ErrorResult>::iterator it = badList.begin();
 
     while ( it != badList.end() )
@@ -88,7 +89,7 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
 {
     std::string name;
     PkgEdition edition;
-    
+
     _firstAlternative	= 0;
     _firstResolution	= 0;
     _status		= PMSelectable::S_NoInst;
@@ -98,7 +99,7 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
     {
 	name		= _pmObj->name();
 	edition		= _pmObj->edition();
-	
+
 	if ( _pmObj->getSelectable() )
 	    _status	= _pmObj->getSelectable()->status();
     }
@@ -119,6 +120,8 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
 
     setBackgroundColor( QColor( 0xE0, 0xE0, 0xF8 ) );
     formatLine();
+    dumpLists();
+    setOpen( true );
 }
 
 
@@ -126,7 +129,7 @@ void
 YQPkgConflict::formatLine()
 {
     QString text;
-    
+
     // Generic conflict with package %1
     // text = ( _( "%1 conflict" ) ).arg( _shortName );
     text = ( _( "%1 conflict" ) ).arg( _fullName );
@@ -153,25 +156,25 @@ YQPkgConflict::formatLine()
 	{
 	    // The solver would have liked to change this package's status,
 	    // i.e. to add it automatically, but it couldn't.
-	    // 
+	    //
 	    // This means that the user has set this package to "remove" or "taboo",
 	    // yet other packages still need it.
 
 	    setTextColor( Qt::red );
-	    
+
 	    switch ( _status )
 	    {
 		case PMSelectable::S_Taboo:
 		    // Package %1 is set to taboo, yet other packages require it
 		    text = ( _( "Taboo package %1 is required by other packages" ) ).arg( _shortName );
 		    break;
-		    
+
                 case PMSelectable::S_AutoDel:
                 case PMSelectable::S_Del:
 		    // Package %1 is marked for deletion, yet other packages require it
 		    text = ( _( "Deleting %1 breaks other packages" ) ).arg( _shortName );
 		    break;
-		    
+
 		default: // leave generic text
 		    break;
 	    }
@@ -182,10 +185,68 @@ YQPkgConflict::formatLine()
 
 	    // leave generic text
 	}
-	
+
     }
 
     setText( 0, text );
+}
+
+
+void
+YQPkgConflict::dumpLists()
+{
+    if ( _conflict.state_change_not_possible )
+    {
+	dumpList( this, _conflict.referers, "",
+		  _( "Required by:" ) );
+    }
+
+    dumpList( this, _conflict.unresolvable, "", 
+	      _( "Unresolved Reqirements:" ) );
+
+    dumpList( this, _conflict.conflicts_with, "",
+	      _( "Conflicts with:" ) );
+}
+
+
+void
+YQPkgConflict::dumpList( QListViewItem * 	parent,
+			 PkgDep::RelInfoList &	list,
+			 const QString &	itemPrefix,
+			 const QString & 	header )
+{
+    if ( ! parent )
+    {
+	y2error( "Null parent" );
+	return;
+    }
+
+    if ( list.empty() )
+    {
+	return;
+    }
+
+    if ( ! header.isEmpty() )
+    {
+	parent = new QY2ListViewItem( parent, header, true );
+	CHECK_PTR( parent );
+	parent->setOpen( true );
+    }
+
+    PkgDep::RelInfoList_const_iterator it = list.begin();
+
+    while ( it != list.end() )
+    {
+	QString contents = itemPrefix;
+	std::string rel = (*it).name;
+	rel += " " + _( "requires" ) + " ";
+	rel += PkgRelation::toString( (*it).rel );
+	
+	contents += rel.c_str();
+	new QY2ListViewItem( parent, contents );
+
+	++it;
+    }
 }
 
 
