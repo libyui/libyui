@@ -300,6 +300,10 @@ bool NCTextPad::handleInput( int key )
     beep = !delch();
     break;
 
+  case KEY_HOTKEY:
+    update = false;
+    break;
+
   default:
     beep = !insert( key );
     break;

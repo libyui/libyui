@@ -361,6 +361,9 @@ NCursesEvent NCIntField::wHandleInput( int key )
     enterPopup();
     break;
 
+  case KEY_HOTKEY:
+    break;
+
   default:
     beep = true;
     break;

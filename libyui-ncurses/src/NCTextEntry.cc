@@ -460,6 +460,10 @@ NCursesEvent NCTextEntry::wHandleInput( int key )
       ret = NCursesEvent::button;
     break;
 
+  case KEY_HOTKEY:
+    update = false;
+    break;
+
   default:
     if ( key < 32 || ( key >= 127 && key < 160 ) || UCHAR_MAX < key ) {
       update = false;
