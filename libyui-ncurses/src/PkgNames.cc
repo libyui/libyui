@@ -1069,6 +1069,76 @@ const NCstring PkgNames::YouHelp3()
     return value;
 }
 
+const NCstring PkgNames::TextmodeHelp()
+{
+    // headline of the text mode help
+    static const NCstring value =  _("Text mode navigation"); 
+    return value;
+}
+
+const NCstring PkgNames::TextmodeHelp1()
+{
+    // part of help for textmode navigation (shown if there is further help available) 
+    static const NCstring value =  _("<p>Press <b>F1</b> again to get further help or <b>ESC</b> to close this dialog.</p>");
+    return value;
+}
+
+const NCstring PkgNames::TextmodeHelp2()
+{
+    // part of help for text mode navigation
+    static const NCstring value =  _("<p>Press <b>F1</b> or <b>ESC</b> to close this dialog.</p>");
+    return value;
+}
+
+const NCstring PkgNames::TextmodeHelp3()
+{
+    // part of help for text mode navigation
+    static const NCstring value =  _("<p>Function key bindings:</p>");
+    return value;
+}
+
+const NCstring PkgNames::TextmodeHelp4()
+{
+    // part of help for text mode navigation
+    static const NCstring value =  _("<p>Special keys:<br>Function keys provide a quick access to the main functions (frequently used buttons) of this dialog. See listing below to get the bindings.</p>");
+    return value;
+}
+
+const NCstring PkgNames::TextmodeHelp5()
+{
+    // part of help for text mode navigation
+    static const NCstring value =  _("<p>Shortcuts allow to do the desired action by pressing the <b>Alt</b> key followed by the key which is marked at the corresponding pushbutton, checkbox, radiobutton and so on.</p>If the <b>Alt</b> key combinations are set by the X server use <b>ESC</b> instead.");
+    return value;
+}
+
+const NCstring PkgNames::TextmodeHelp6()
+{
+    // part of help for text mode navigation
+    static const NCstring value =  _("<p>General keyboard navigation:</p>");
+    return value;
+}
+
+const NCstring PkgNames::TextmodeHelp7()
+{
+    // part of help for text mode navigation
+    static const NCstring value =  _("<p>Movement inside a dialog is done with <b>Tab</b> to go forward and <b>Alt</b> or <b>Shift</b> <b>Tab</b> to go back.<br> If the <b>Alt</b> and <b>Shift</b> key combinations are occupied by the windowmanager or the terminal, <b>Ctrl</b> <b>f</b> (forward) and <b>Ctrl</b> <b>b</b> (back) can be used instead.</p>.");
+    return value;
+}
+const NCstring PkgNames::TextmodeHelp8()
+{
+    // part of help for text mode navigation
+    static const NCstring value =  _("<p>The command specified on an activated button (e.g. go Next, Add someting) is executed if the <b>Enter</b> key is pressed.</p> <p>Radio buttons or check boxes are switched on or off with <b>Enter</b> or <b>Space</b> key. ");
+
+   return value;
+}
+const NCstring PkgNames::TextmodeHelp9()
+{
+    // part of help for text mode navigation
+    static const NCstring value =  _("<p>Scrolling in lists or text (e.g. the help text) is done with the <b>Arrow</b> keys.</p>");
+    return value;
+}
+
+
 ///////////////////////////////////////////////////////////////////
 
 

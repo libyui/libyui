@@ -312,7 +312,7 @@ public:
     /**
      *  The headline of the disk space popup
      */ 
-    static const NCstring PkgNames::DiskspaceLabel();
+    static const NCstring DiskspaceLabel();
 
    /**
      *  The label of the package selections popup
@@ -467,7 +467,19 @@ public:
     static const NCstring YouHelp1();
     static const NCstring YouHelp2();
     static const NCstring YouHelp3();
-   /**
+
+    static const NCstring TextmodeHelp1();
+    static const NCstring TextmodeHelp2();
+    static const NCstring TextmodeHelp3();
+    static const NCstring TextmodeHelp4();
+    static const NCstring TextmodeHelp5();
+    static const NCstring TextmodeHelp6();
+    static const NCstring TextmodeHelp7();
+    static const NCstring TextmodeHelp8();
+    static const NCstring TextmodeHelp9();
+    static const NCstring TextmodeHelp();
+    
+    /**
      * Part of help text used in installed system
      */
     static const NCstring HelpPkgPostInst();
