@@ -789,6 +789,7 @@ YCPValue Y2NCursesUI::setConsoleFont( const YCPString & console_magic,
     Refresh();
     return YCPVoid();
   }
+  // go on in case of a "real" console
   cmd = "(echo -en \"\\033";
   if ( console_magic->value().length() )
     cmd += console_magic->value();
@@ -802,8 +803,8 @@ YCPValue Y2NCursesUI::setConsoleFont( const YCPString & console_magic,
   }
 
   // set terminal encoding for console
-  // FIXME: setConsoleFont() in Console.ycp has passed the encoding as last argument
-  //        but this encoding was not correct (now Console.ycp passes the language)
+  // (setConsoleFont() in Console.ycp has passed the encoding as last argument
+  // but this encoding was not correct; now Console.ycp passes the language)
 
   // if the encoding is NOT UTF-8 set the console encoding according to the language
   if ( NCstring::terminalEncoding() != "UTF-8" )
