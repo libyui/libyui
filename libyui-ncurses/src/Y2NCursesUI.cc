@@ -62,27 +62,6 @@
 
 extern string language2encoding( string lang );
 
-/******************************************************************
- **
- **
- **	FUNCTION NAME : operator<<
- **	FUNCTION TYPE : static ostream &
- **
- **	DESCRIPTION :
-*/
-ostream & operator<<( ostream & STREAM, const YUIInterpreter::EventType ev )
-{
-#define ENUM_OUT(v) case YUIInterpreter::v: return STREAM << #v
-  switch ( ev ) {
-    ENUM_OUT( ET_NONE );
-    ENUM_OUT( ET_WIDGET );
-    ENUM_OUT( ET_CANCEL );
-    ENUM_OUT( ET_DEBUG );
-    ENUM_OUT( ET_MENU );
-  }
-#undef ENUM_OUT
-  return STREAM << "ET_unknown";
-}
 
 /******************************************************************
 **

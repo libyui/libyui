@@ -28,8 +28,6 @@
 
 class NCDialog;
 
-ostream & operator<<( std::ostream & STREAM, const YUIInterpreter::EventType ev );
-
 class Y2NCursesUI : public NCurses, public YUIInterpreter {
 
   protected:
