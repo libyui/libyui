@@ -172,8 +172,25 @@ bool YQSelectionBox::eventFilter( QObject * obj, QEvent * ev )
 
 void YQSelectionBox::slotSelected( int index )
 {
-    if ( _immediateMode )	returnImmediately();
-    else			returnDelayed();
+    if ( _immediateMode )
+	returnImmediately();
+    else
+    {
+	if ( ! YUIQt::ui()->eventsBlocked() )
+	{
+	    // Delayed event delivery - only if events are to be delivered right now.
+	    //
+	    // An event block that is in effect right now may or may not affect
+	    // events after the timer delay is expired.
+	    //
+	    // This may create nasty side effects such as bug #32510: When an
+	    // item is initially selected, that initial selection event gets
+	    // through even though (!) events are blocked during widget
+	    // creation.
+
+	    returnDelayed();
+	}
+    }
 }
 
 
@@ -188,7 +205,7 @@ void YQSelectionBox::returnImmediately()
     if ( ! YUIQt::ui()->eventPendingFor( this ) )
     {
 	// Avoid overwriting a (more important) Activated event with a SelectionChanged event
-	    
+
 	YUIQt::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
     }
 }
