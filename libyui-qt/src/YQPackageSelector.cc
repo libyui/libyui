@@ -85,7 +85,7 @@ using std::max;
 
 
 
-YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt )
+YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt & opt )
     : QVBox(parent)
     , YPackageSelector( opt )
     , _yuiqt(yuiqt)
@@ -124,7 +124,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     setTextdomain( "packages-qt" );
     setFont( _yuiqt->currentFont() );
     yuiqt->blockWmClose(); // Automatically undone after UI::RunPkgSelection()
-    _conflictDialog = new YQPkgConflictDialog( this );
+    _conflictDialog = new YQPkgConflictDialog( &( Y2PM::packageManager() ), this );
     CHECK_PTR( _conflictDialog );
 
     basicLayout();

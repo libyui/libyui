@@ -25,7 +25,7 @@
 #include <ycp/y2log.h>
 
 #include <Y2PM.h>
-#include <y2pm/PMPackageManager.h>
+#include <y2pm/PMManager.h>
 
 #include <qpushbutton.h>
 #include <qmessagebox.h>
@@ -46,9 +46,14 @@
 #define MARGIN			4	// around the widget
 
 
-YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
+YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
+					  QWidget * 	parent 		)
     : QDialog( parent )
+    , _selectableManager( selectableManager )
 {
+    if ( ! _selectableManager )
+	y2error( "NULL selectable manager!" );
+    
     // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );
 
@@ -145,8 +150,15 @@ YQPkgConflictDialog::sizeHint() const
 int
 YQPkgConflictDialog::solveAndShowConflicts()
 {
-    CHECK_PTR( _conflictList );
     int result = QDialog::Accepted;
+    CHECK_PTR( _conflictList );
+    
+    if ( ! _selectableManager )
+    {
+	y2error( "NULL selectable manager - can't resolve dependendies!" );
+	return result;
+    }
+    
 
     if ( isVisible() )
     {
@@ -169,7 +181,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
     y2debug( "Solving..." );
 
     // Solve.
-    bool success = Y2PM::packageManager().solveInstall( goodList, badList );
+    bool success = _selectableManager->solveInstall( goodList, badList );
 
     y2debug( "Solving done" );
 

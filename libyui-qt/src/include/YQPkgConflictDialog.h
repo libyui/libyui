@@ -26,6 +26,7 @@
 
 
 class YQPkgConflictList;
+class PMManager;
 class QPushButton;
 class QPopupMenu;
 
@@ -43,8 +44,12 @@ public:
     /**
      * Constructor. Does not pop up a dialog yet.
      * Use solveAndShowConflicts().
+     * 
+     * 'selectableManager' is one of &Y2PM::packageManager() or
+     * &Y2PM::selectionManager(). 
      **/
-    YQPkgConflictDialog( QWidget * parent );
+    YQPkgConflictDialog( PMManager * 	selectableManager,
+			 QWidget *	parent );
 
     /**
      * Destructor.
@@ -56,6 +61,12 @@ public:
      * Reserve a reasonable amount of space.
      **/
     virtual QSize sizeHint() const;
+
+    /**
+     * Returns the selectable manager used by this dialog to resolve
+     * dependencies. 
+     **/
+    PMManager * selectableManager() const { return _selectableManager; }
 
 
 public slots:
@@ -85,6 +96,7 @@ signals:
 
 protected:
 
+    PMManager *		_selectableManager;
     YQPkgConflictList *	_conflictList;
     QPopupMenu *	_expertMenu;
 };
