@@ -22,7 +22,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qpushbutton.h>
-#include <qvgroupbox.h>
+#include <qgroupbox.h>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
@@ -62,21 +62,23 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     // Packages with what status to show
     //
 
-    QVGroupBox * gbox = new QVGroupBox( _( "Show packages with status" ), this );
+    QGroupBox * gbox = new QGroupBox( 3, Qt::Horizontal, _( "Show packages with status" ), this );
     CHECK_PTR( gbox );
 
-    _showDel		= addStatusCheckBox( gbox, _( "Delete"	      ), YQIconPool::pkgDel(),		 true );
-    _showInstall	= addStatusCheckBox( gbox, _( "Install"	      ), YQIconPool::pkgInstall(),	 true );
-    _showUpdate		= addStatusCheckBox( gbox, _( "Update"	      ), YQIconPool::pkgAutoUpdate(),	 true );
-    _showAutoDel	= addStatusCheckBox( gbox, _( "Auto-delete"   ), YQIconPool::pkgAutoDel(),	 true );
-    _showAutoInstall	= addStatusCheckBox( gbox, _( "Auto-install"  ), YQIconPool::pkgAutoInstall(),	 true );
-    _showAutoUpdate	= addStatusCheckBox( gbox, _( "Auto-update"   ), YQIconPool::pkgUpdate(),	 true );
-    _showTaboo		= addStatusCheckBox( gbox, _( "Taboo"	      ), YQIconPool::pkgTaboo(),	 true );
+    _showDel            = addStatusCheckBox( gbox, _( "Delete"        ), YQIconPool::disabledPkgDel(),           true );
+    _showInstall        = addStatusCheckBox( gbox, _( "Install"       ), YQIconPool::disabledPkgInstall(),       true );
+    _showUpdate         = addStatusCheckBox( gbox, _( "Update"        ), YQIconPool::disabledPkgAutoUpdate(),    true );
+    _showAutoDel        = addStatusCheckBox( gbox, _( "Auto-delete"   ), YQIconPool::disabledPkgAutoDel(),       true );
+    _showAutoInstall    = addStatusCheckBox( gbox, _( "Auto-install"  ), YQIconPool::disabledPkgAutoInstall(),   true );
+    _showAutoUpdate     = addStatusCheckBox( gbox, _( "Auto-update"   ), YQIconPool::disabledPkgUpdate(),        true );
+    _showTaboo          = addStatusCheckBox( gbox, _( "Taboo"         ), YQIconPool::disabledPkgTaboo(),         true );
 
     addVSpacing( gbox, 8 );
+    addHStretch( gbox ); // For the other columns of the QGroupBox (prevent wraparound)
+    addHStretch( gbox );
 
-    _showKeepInstalled	= addStatusCheckBox( gbox, _( "Keep"	      ), YQIconPool::pkgKeepInstalled(), false );
-    _showNoInst		= addStatusCheckBox( gbox, _( "Don't install" ), YQIconPool::pkgNoInst(),	 false );
+    _showKeepInstalled  = addStatusCheckBox( gbox, _( "Keep"          ), YQIconPool::disabledPkgKeepInstalled(), false );
+    _showNoInst         = addStatusCheckBox( gbox, _( "Don't install" ), YQIconPool::disabledPkgNoInst(),        false );
 
     addVStretch( this );
 
@@ -109,16 +111,19 @@ YQPkgStatusFilterView::~YQPkgStatusFilterView()
 
 QCheckBox *
 YQPkgStatusFilterView::addStatusCheckBox( QWidget *		parent,
-					  const QString &	label,
+					  const QString &	text,
 					  const QPixmap & 	icon,
 					  bool			initiallyChecked )
 {
-    QCheckBox * checkBox = new QCheckBox( label, parent );
+    QCheckBox * checkBox = new QCheckBox( text, parent );
     CHECK_PTR( checkBox );
     checkBox->setChecked( initiallyChecked );
-#if 0
-    checkBox->setIconSet( icon );
-#endif
+
+    QLabel * label = new QLabel( parent );
+    CHECK_PTR( label );
+    label->setPixmap( icon );
+
+    addHStretch( parent );
 
     connect( checkBox,	SIGNAL( clicked() ),
 	     this,	SLOT  ( filter()  ) );
