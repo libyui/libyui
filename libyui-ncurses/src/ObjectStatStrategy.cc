@@ -50,7 +50,15 @@ ObjectStatStrategy::~ObjectStatStrategy()
 //
 PMSelectable::UI_Status ObjectStatStrategy::getPackageStatus( PMObjectPtr objPtr )
 {
-    return objPtr->getSelectable()->status();
+    if ( objPtr && objPtr->hasSelectable() )
+    {
+	return objPtr->getSelectable()->status();
+    }
+    else
+    {
+	NCERR << "Pointer not valid" << endl;
+	return PMSelectable::S_NoInst;
+    }
 }
 
 /////////////////////////////////////////////////////////////////
@@ -65,7 +73,7 @@ bool ObjectStatStrategy::setPackageStatus( PMSelectable::UI_Status newstatus, PM
 
     if ( !objPtr || !objPtr->hasSelectable() )
     {
-	NCERR << "Invalif package object" << endl;
+	NCERR << "Invalid package object" << endl;
 	return false;
     }
 
