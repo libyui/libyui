@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Mar 30 20:29:21 CEST 2004 - sh@suse.de
+
+- Added tree to wizard side panel (for autoyast, sysconfig-editor)
+
+-------------------------------------------------------------------
 Mon Mar 22 17:07:52 CET 2004 - sh@suse.de
 
 - Fixed bug #36218: Use YaST icons for YaST windows WM decorations
