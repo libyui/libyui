@@ -70,11 +70,11 @@ string NCPkgTableTag::statusToStr( PMSelectable::UI_Status stat ) const
     {
 	case PMSelectable::S_NoInst:	// Is not installed and will not be installed
 	    return "    ";
-	case PMSelectable:: S_KeepInstalled: 	// Is installed - keep this version
+	case PMSelectable::S_KeepInstalled: 	// Is installed - keep this version
 	    return "  i ";
 	case PMSelectable::S_Install:	// Will be installed
 	    return "  + ";
-	case PMSelectable:: S_Del:	// Will be deleted
+	case PMSelectable::S_Del:	// Will be deleted
 	    return "  - ";
 	case PMSelectable::S_Update:	// Will be updated
 	    return "  > ";
@@ -85,7 +85,7 @@ string NCPkgTableTag::statusToStr( PMSelectable::UI_Status stat ) const
 	case PMSelectable::S_AutoUpdate: // Will be automatically updated
 	    return " a> ";    
 	case PMSelectable::S_Taboo:	// Never install this 
-	    return "  ! ";
+	    return "----";
     }
 
     return " ";
@@ -281,7 +281,8 @@ PMSelectable::UI_Status NCPkgTable::getAvailableStatus ( PMObjectPtr objPtr )
 NCursesEvent NCPkgTable::wHandleInput( int key )
 {
     NCursesEvent ret = NCursesEvent::none;
-  
+    PMSelectable::UI_Status newStat = PMSelectable::S_NoInst;
+    
     // call handleInput of NCPad
     handleInput( key );
     
@@ -318,8 +319,11 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 	}
 	default: {
 	    // set the new status
-	    changeStatus( keyToStatus(key) );
-	    
+	    bool ok = keyToStatus( key, newStat );
+	    if ( ok )
+	    {
+		changeStatus( newStat );
+	    }
 	    ret = NCursesEvent::handled;
 	    break;
 	}
@@ -388,7 +392,7 @@ bool NCPkgTable::toggleSourceStatus( )
 //
 // Returns the new status
 //
-bool NCPkgTable::toggleStatus( PMPackagePtr objPtr )
+bool NCPkgTable::toggleStatus( PMObjectPtr objPtr )
 {
     bool ok = false;
     
@@ -446,33 +450,47 @@ bool NCPkgTable::toggleStatus( PMPackagePtr objPtr )
 //
 // Returns the corresponding status
 //
-PMSelectable::UI_Status NCPkgTable::keyToStatus( const int & key )
+bool NCPkgTable::keyToStatus( const int & key, PMSelectable::UI_Status & newStat )
 {
+    bool valid = true;
+    PMSelectable::UI_Status retStat = PMSelectable::S_NoInst;
+    
     // get the new status
     switch ( key )
     {
 	case '-':
 	case 'd':
 	case KEY_F(5):
-	    return PMSelectable:: S_Del;
+	    retStat = PMSelectable:: S_Del;
+	    break;
 	case 's':
 	case '+':
 	case KEY_F(3):
-	    return PMSelectable::S_Install;
+	    retStat = PMSelectable::S_Install;
+	    break;
 	case 'u':
 	case '>':
-	    return PMSelectable::S_Update;
+	    retStat = PMSelectable::S_Update;
+	    break;
 	case 'i':
-	    return PMSelectable:: S_KeepInstalled;
+	    retStat = PMSelectable:: S_KeepInstalled;
+	    break;
 	case 'l':
-	    return PMSelectable::S_NoInst;
+	    retStat = PMSelectable::S_NoInst;
+	    break;
 	case 't':
 	case '!': 
-	    return PMSelectable::S_Taboo;
+	    retStat = PMSelectable::S_Taboo;
+	    break;
 	default:
-	    NCDBG <<  "Key not valid - returning current status" << endl;
-	    return getStatus( getCurrentItem() );
+	    NCDBG <<  "Key not valid" << endl;
+	    valid = false;
     }
+
+    if ( valid )
+	newStat = retStat;
+    
+    return valid;
 }
 
 

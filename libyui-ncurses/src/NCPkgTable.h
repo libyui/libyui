@@ -87,12 +87,15 @@ class NCPkgTable : public NCTable {
 
 private:
 
+    NCPkgTable & operator=( const NCPkgTable & );
+    NCPkgTable            ( const NCPkgTable & );
+    
     PackageSelector * packager;		// connection to the PackageSelector,
 
     ObjectStatStrategy * statusStrategy; 	// particular methods to get the status
     
     // returns the corresponding package status to the given key
-    PMSelectable::UI_Status keyToStatus( const int & key );
+    bool keyToStatus( const int & key,  PMSelectable::UI_Status & status );
 
     // returns the first column of line with 'index' (the tag)
     NCPkgTableTag * getTag ( const int & index );
@@ -164,7 +167,7 @@ public:
      * Toggles the package status (e.g. from installed to delete)
      * @return bool
      */
-    bool toggleStatus( PMPackagePtr pkgPtr );
+    bool toggleStatus( PMObjectPtr pkgPtr );
 
     /**
      * Informs the package manager about the status change of
