@@ -235,6 +235,7 @@ void YQWizard::layoutTitleBar()
     {
 	left->setPixmap( leftLogo );
 	left->setFixedSize( leftLogo.size() );
+	left->setBackgroundOrigin( QWidget::ParentOrigin );
     }
 
 
@@ -270,6 +271,7 @@ void YQWizard::layoutTitleBar()
     {
 	right->setPixmap( rightLogo );
 	right->setFixedSize( rightLogo.size() );
+	right->setBackgroundOrigin( QWidget::ParentOrigin );
     }
 }
 
