@@ -353,7 +353,7 @@ bool NCPkgTable::fillDefaultList( )
     switch ( tableType )
     {
 	case T_Patches: {
-	    packager->fillPatchList( "all" );	// default: all patches
+	    packager->fillPatchList( "installable" );	// default: installable patches
 
 	    // set the visible info to long description 
 	    packager->setVisibleInfo ( PkgNames::PatchDescr() );
