@@ -147,6 +147,8 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
 		      (*it) );		// PMSelectionPtr
     }
 
+    sel->setKeyboardFocus();
+    
     // event loop
     do {
 	popupDialog();
