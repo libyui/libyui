@@ -141,17 +141,17 @@ public:
    /**
      *  Widget id of the menu selection Help/Udpate
      */
-    static const YCPValue& PkgNames::UpdateHelp ();  
+    static const YCPValue& UpdateHelp ();  
 
     /**
      *  Widget id of the menu selection Help/Search
      */
-    static const YCPValue& PkgNames::SearchHelp ();
+    static const YCPValue& SearchHelp ();
     
     /**
-     *  Widget id of the menu selection Information/Relaione
+     *  Widget id of the menu selection Information/Relations
      */
-    static const YCPValue& PkgNames::Relations ();
+    static const YCPValue& Relations ();
     
     /**
      *  Widget id of the menu selection RPM groups
@@ -183,8 +183,19 @@ public:
      */
     static const YCPValue& Diskspace ();
 
+   /**
+     *  Widget id of the Etc./Dependencies/Check deps menu item
+     */
     static const YCPValue& ShowDeps ();
+
+   /**
+     *  Widget id of the Etc./Dependencies/Auto check menu item
+     */
     static const YCPValue& AutoDeps ();
+
+    /**
+     *  Widget id for internal use
+     */
     static const YCPValue& ReplaceMenu ();
 
     /**
@@ -252,6 +263,16 @@ public:
      */
     static const YCPValue& AllPatches ();
 
+   /**
+     *  Widget id of Filter/new patches
+     */
+    static const YCPValue& NewPatches ();
+
+   /**
+     *  Widget id of Filter/YaST2 patches
+     */
+    static const YCPValue& YaST2Patches ();
+    
    /**
      *  Widget id information patch descr
      */
@@ -354,7 +375,7 @@ public:
      */
     static const NCstring CheckSummary();
 
-       /**
+   /**
      * text used in search popup
      */
     static const NCstring CheckProvides();

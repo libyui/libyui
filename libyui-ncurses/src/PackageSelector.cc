@@ -99,11 +99,16 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     eventHandlerMap[ PkgNames::RpmGroups()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::Selections()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::UpdateList()->toString() ] = &PackageSelector::FilterHandler;
+    eventHandlerMap[ PkgNames::Whatif()->toString() ] = &PackageSelector::FilterHandler;
+
     // YOU filter
     eventHandlerMap[ PkgNames::Recommended()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::Security()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::InstalledPatches()->toString() ] = &PackageSelector::FilterHandler;
-    eventHandlerMap[ PkgNames::AllPatches()->toString() ] = &PackageSelector::FilterHandler;
+    eventHandlerMap[ PkgNames::AllPatches()->toString() ] = &PackageSelector::FilterHandler; 
+    eventHandlerMap[ PkgNames::NewPatches()->toString() ] = &PackageSelector::FilterHandler;
+    eventHandlerMap[ PkgNames::InstalledPatches()->toString() ] = &PackageSelector::FilterHandler;
+    eventHandlerMap[ PkgNames::YaST2Patches()->toString() ] = &PackageSelector::FilterHandler;
 
     // Information menu
     eventHandlerMap[ PkgNames::Files()->toString() ]   	= &PackageSelector::InformationHandler;
@@ -747,7 +752,9 @@ bool PackageSelector::checkPatch( PMYouPatchPtr patchPtr,
 
     if ( filter == "all"
 	 || filter == patchPtr->kindLabel( patchPtr->kind() )
-	 || ( filter == "installed" && patchPtr->getSelectable()->status() == PMSelectable::S_KeepInstalled ) 
+	 || ( filter == "installed" && patchPtr->getSelectable()->status() == PMSelectable::S_KeepInstalled )
+	 || ( filter == "new" && ( patchPtr->getSelectable()->status() == PMSelectable::S_Install ||
+				   patchPtr->getSelectable()->status() == PMSelectable::S_NoInst ) )
 	 )
     {
 	packageList->createPatchEntry( patchPtr, index );
@@ -993,25 +1000,37 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
     }
     else if ( event.selection->compare( PkgNames::Recommended() ) ==  YO_EQUAL )
     {
-	fillPatchList( "Recommended" );
+	fillPatchList( "Recommended" );		// patch kind
     }
     else if ( event.selection->compare( PkgNames::Security() )  ==  YO_EQUAL )
     {
-	fillPatchList( "Security" );
+	fillPatchList( "Security" );		// patch kind
     }
+    else if (  event.selection->compare( PkgNames::YaST2Patches() ) ==  YO_EQUAL )
+    {
+	fillPatchList( "YaST2" );		// patch kind
+    } 
     else if ( event.selection->compare( PkgNames::AllPatches() )  ==  YO_EQUAL )
     {
-	fillPatchList( "all" );
+	fillPatchList( "all" );			// show all patches
     }
     else if (  event.selection->compare( PkgNames::InstalledPatches() ) ==  YO_EQUAL )
     {
-	fillPatchList( "installed" );
+	fillPatchList( "installed" );		// show installed patches
+    }
+    else if (  event.selection->compare( PkgNames::NewPatches() ) ==  YO_EQUAL )
+    {
+	fillPatchList( "new" );			// show new patches
     }
     else if (  event.selection->compare( PkgNames::UpdateList() ) ==  YO_EQUAL )
     {
 	fillUpdateList();
     }
-
+    else if (  event.selection->compare( PkgNames::Whatif() ) ==  YO_EQUAL )
+    {
+	fillChangesList();
+    }
+    
     showPackageInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );
     packageList->setKeyboardFocus();	
     

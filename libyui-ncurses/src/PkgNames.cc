@@ -180,7 +180,7 @@ const YCPValue& PkgNames::AutoDeps ()
     return value;
 }
 
-// the menu Etc.
+// internal use
 const YCPValue& PkgNames::ReplaceMenu ()
 {
     static const YCPValue value = createIdValue ( "replacemenu" );
@@ -371,6 +371,20 @@ const YCPValue& PkgNames::Security ()
 const YCPValue& PkgNames::InstalledPatches ()
 {
     static const YCPValue value = createIdValue ( "instpatches" );
+    return value;
+}
+
+// id filter uninstalled
+const YCPValue& PkgNames::NewPatches ()
+{
+    static const YCPValue value = createIdValue ( "newpatches" );
+    return value;
+}
+
+// id filter yast2
+const YCPValue& PkgNames::YaST2Patches ()
+{
+    static const YCPValue value = createIdValue ( "yast2" );
     return value;
 }
 
@@ -1017,15 +1031,15 @@ const NCstring PkgNames::YouHelp1()
 {
     // help text online udpate
     // (text see  textdomain online-update - only some changes were necessary)
-    // Do not translate 'recommended' and 'security'!
-    static const NCstring value =  _("<p>Mode \"recommended\" means you should install the patch.\"security\" is a security patch and it is highly recommended to install it.\"YaST2\" patches will be always installed first. The other patches must be installed on a second run.</p>");
+    // Do not translate 'recommended' and 'security'! because the patch kind is always shown as english text. 
+    static const NCstring value =  _("<p>Mode \"recommended\" means you should install the patch.\"security\" is a security patch and it is highly recommended to install it. \"YaST2\" patches will be always installed first. The other patches must be installed on a second run.</p>");
     return value;
 }						  
 
 const NCstring PkgNames::YouHelp2()
 {
     // help text online udpate continue
-    static const NCstring value = _("<p>Meaning of the status flags:</p><p><b>+</b>: Patches concerning your installation are preselected. They will be downloaded and installed on your system.If you do not want a certain patch, deselect it with '-'.</p>");
+    static const NCstring value = _("<p>Meaning of the status flags:</p><p><b>+</b>: Patches concerning your installation are preselected. They will be downloaded and installed on your system. If you do not want a certain patch, deselect it with '-'.</p>");
     return value;
 }
 

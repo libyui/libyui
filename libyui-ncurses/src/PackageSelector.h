@@ -136,6 +136,12 @@ class PackageSelector
     * @return bool
     */
     bool fillUpdateList( );
+
+  /**
+    * Fills the package table with packages 
+    * @return bool
+    */
+    bool fillChangesList( );
     
    /**
     * Fills the list of available packages

@@ -15,25 +15,27 @@
     return `VBox( `VSpacing(0.3),
 		  `HBox( `HSpacing(0.4),
 			 // menu label (keep it short)
-			 `Left(`MenuButton( _("&Filter"),
+			 `Left(`MenuButton( `opt(`key_F4), _("&Filter"),
 					    // menu items
 					    [`item( `id(`recommended), _("&Recommended")),
 					     `item( `id(`security), _("&Security") ),
+					     `item( `id(`yast2), _("&YaST2") ),
 					     `item( `id(`instpatches), _("&Installed") ),
+					     `item( `id(`newpatches), _("&New patches") ),
 					     `item( `id(`allpatches), _("&All patches") )
 					     ]
 					    )),
 			 // menu label (keep it short)
-			 `Left(`MenuButton( _("&Actions"),
+			 `Left(`MenuButton( `opt(`key_F5), _("&Actions"),
 					    // menu items
-					    [`item( `id(`toggle),  _("&Toggle    [F3]") ),
+					    [`item( `id(`toggle),  _("&Toggle    [RET]") ),
 					     `item( `id(`select),  _("&Select     [+]") ),
-					     `item( `id(`delete), _("Dese&lect   [-]") ),
+					     `item( `id(`delete),  _("Dese&lect   [-]") ),
 					     `item( `id(`update),  _("&Update     [>]") )
 					     ]
 					    )),
 			 //  menu label (keep it short)
-			 `Left(`MenuButton( _("&Information"),
+			 `Left(`MenuButton( `opt(`key_F6), _("&Information"),
 					    // menu items
 					    [`item( `id(`patchdescr), _("&Long description") ),
 					     `item( `id(`patchpackages), _("&Package list") )
@@ -58,12 +60,12 @@
 						     )
 				  ),
 			// button label
-			`VWeight( 5, `HBox(`Left(`PushButton(`id(`youhelp), _("&Help")) ), 
+			`VWeight( 5, `HBox(`Left(`PushButton(`id(`youhelp), `opt(`key_F1), _("&Help")) ), 
 					   `HSpacing(5.0),
 					   // button label
-					   `Right( `PushButton(`id(`cancel), _("&Cancel")) ),
+					   `Right( `PushButton(`id(`cancel), `opt(`key_F9), _("&Cancel")) ),
 					   // button label
-					   `Right( `PushButton(`id(`ok), _("&OK")) )
+					   `Right( `PushButton(`id(`ok), `opt(`key_F10), _("&OK")) )
 					   )
 				  )
 			)
