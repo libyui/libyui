@@ -65,13 +65,28 @@ pkginclude_HEADERS =				\
 	QY2ListView.h				\
 	QXEmbed.h				\
 						\
+	autodel.xpm				\
+	autodel_disabled.xpm			\
+	autoinstall.xpm				\
+	autoinstall_disabled.xpm		\
+	autoupdate.xpm				\
+	autoupdate_disabled.xpm			\
 	checklist_off.xpm			\
 	checklist_on.xpm			\
-	recycle.xpm				\
+	del.xpm					\
+	del_disabled.xpm			\
+	install.xpm				\
+	install_disabled.xpm			\
+	keepinstalled.xpm			\
+	keepinstalled_disabled.xpm		\
+	noinst.xpm				\
+	noinst_disabled.xpm			\
+	stop.xpm				\
 	taboo.xpm				\
-	autoinst.xpm				\
-	trashcan.xpm				\
-	dep.xpm
+	taboo_disabled.xpm			\
+	update.xpm				\
+	update_disabled.xpm
+
 
 
 CLEANFILES = y2qt.kdoc
