@@ -230,39 +230,50 @@ int main (int argc, char *argv[])
     NCstring_test textinput;
     
     textinput = YCPString(text);
+
+    bool first = true;
     
     for (;;)
     {
 	wint_t k;
-
-	// waiting for input
+	wstring   buffer;
+	
+        // waiting for input
         get_wch( &k );
-
-	line = line+2;
-	mvprintw( line, 1, "The argument (converted in wstring): \n" );
+	buffer.insert( 0, 1, k );
 	
-	for ( i = 0; i <= textinput.str().length() ; i++ )
-	{
-	    wchar_t out[CCHARW_MAX+1];
-	    out[0] =  textinput.str()[i];
-	    out[1] = L'\0';
-	    addwstr( out );	
-	}
-	
-	size_t outwidth = 0;
-	for ( i = 0; i <= textinput.str().length() ; i++ )
-	{
-	    // The behaviour of wcwidth depends on the LC_CTYPE  category
-	    // of the current locale.
-	    // That means width is correct for UTF-8 text on UTF-8 terminal
-	    // and UTF-8 text with luit on terminal with encoding corresponding
-	    // to the language of input and for text of encoding which
-	    // corresponds encoding of the terminal
-	    outwidth += wcwidth( textinput.str()[i] );
-	}
 	line = line+2;
-	mvprintw( line, 1, "Width on the terminal %d:\n", outwidth );
+	mvprintw( line, 1, "INPUT: \n" );
+	addwstr( buffer.data() );
 
+	if ( first )
+	{
+	    line = line +2;
+	    mvprintw( line, 1, "The argument (converted in wstring): \n" );
+	
+	    for ( i = 0; i <= textinput.str().length() ; i++ )
+	    {
+		wchar_t out[CCHARW_MAX+1];
+		out[0] =  textinput.str()[i];
+		out[1] = L'\0';
+		addwstr( out );	
+	    }
+	
+	    size_t outwidth = 0;
+	    for ( i = 0; i <= textinput.str().length() ; i++ )
+	    {
+		// The behaviour of wcwidth depends on the LC_CTYPE  category
+		// of the current locale.
+		// That means width is correct for UTF-8 text on UTF-8 terminal
+		// and UTF-8 text with luit on terminal with encoding corresponding
+		// to the language of input and for text of encoding which
+		// corresponds encoding of the terminal
+		outwidth += wcwidth( textinput.str()[i] );
+	    }
+	    line = line+2;
+	    mvprintw( line, 1, "Width on the terminal %d:\n", outwidth );
+	    first = false;
+	}
 	refresh();
 
     }
