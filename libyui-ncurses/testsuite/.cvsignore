@@ -9,3 +9,4 @@ tmp.out.*
 tmp.err.*
 runcurses
 y2ncurses
+utf8test
