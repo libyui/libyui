@@ -1087,14 +1087,14 @@ const NCstring PkgNames::AutoChangeLabel()
 
 const NCstring PkgNames::AutoChangeText1()
 {
-    // text part1 of popup with automatic changes
+    // text part1 of popup with automatic changes (it's a label - keep it short) 
     static const NCstring value = _( "In addition to your manual selections, the following" );
     return value;
 }
 
 const NCstring PkgNames::AutoChangeText2()
 {
-    // text part2 of popup with automatic changes
+    // text part2 of popup with automatic changes (it's a label - keep it short) 
     static const NCstring value = _( "packages have been changed to resolve dependencies:" );
     return value;
 }
