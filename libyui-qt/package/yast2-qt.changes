@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Sep 11 17:48:32 CEST 2002 - sh@suse.de
+
+- Fixed bug #19419: Y2Pkg hangs on middle mouse click 
+  This is really a Qt bug. Introduced workaround for that.
+
+-------------------------------------------------------------------
 Wed Sep 11 14:07:50 CEST 2002 - sh@suse.de
 
 - Fixed bug #19390: Sometimes no keyboard focus without a mouse

@@ -74,7 +74,7 @@ public:
      * Returns the escaped string.
      **/
     static QString htmlEscape( const QString & plainText );
-    
+
     /**
      * Returns a string containing a HTML table with 'contents'.
      **/
@@ -132,6 +132,19 @@ protected:
      * Reimplement this in derived classes.
      **/
     virtual void showDetails( PMObjectPtr pmObj ) = 0;
+
+    /**
+     * Workaround for Bugzilla bug #19419: Y2Pkg hangs on middle mouse click.
+     * Ignore all those events. We don't want them.
+     *
+     * Reimplemented from QTextEdit / QScrollView.
+     **/
+    virtual void contentsMousePressEvent   ( QMouseEvent * )  {}
+    virtual void contentsMouseReleaseEvent ( QMouseEvent * )  {}
+    virtual void contentsDragEnterEvent ( QDragEnterEvent * ) {}
+    virtual void contentsDragLeaveEvent ( QDragLeaveEvent * ) {}
+    virtual void contentsDragMoveEvent 	( QDragMoveEvent *  ) {}
+    virtual void contentsDropEvent 	( QDropEvent *      ) {}
 
 
     // Data members

@@ -32,7 +32,10 @@ YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
 {
     _pmObj = 0;
     _parentTab = dynamic_cast<QTabWidget *> (parent);
-    
+
+    // Workaround for Bugzilla bug #19419: Y2Pkg hangs on middle mouse click
+    viewport()->setMouseTracking( false );
+
     if ( _parentTab )
     {
 	connect( parent, SIGNAL( currentChanged( QWidget * ) ),
@@ -61,7 +64,7 @@ void
 YQPkgGenericDetailsView::showDetailsIfVisible( PMObjectPtr pmObj )
 {
     _pmObj = pmObj;
-    
+
     if ( _parentTab )		// Is this view embedded into a tab widget?
     {
 	if ( _parentTab->currentPage() == this )  // Is this page the topmost?
@@ -83,12 +86,11 @@ YQPkgGenericDetailsView::minimumSizeHint() const
 }
 
 
-
 QString
 YQPkgGenericDetailsView::htmlHeading( PMObjectPtr pmObj )
 {
     QString summary = fromUTF8( pmObj->summary() );
-    
+
     QString html =
 	"<table bgcolor=#E0E0F8><tr><td><b>"
 	+ fromUTF8( pmObj->name() )
@@ -96,9 +98,9 @@ YQPkgGenericDetailsView::htmlHeading( PMObjectPtr pmObj )
 
     if ( ! summary.isEmpty() )
 	html += " - " + summary;
-    
+
     html += "</td></tr></table><br>";
-    
+
     return html;
 }
 
@@ -112,27 +114,27 @@ YQPkgGenericDetailsView::htmlEscape( const QString & plainText )
     html.replace( QRegExp( "&" ), "&amp;" );
     html.replace( QRegExp( "<" ), "&lt;"  );
     html.replace( QRegExp( ">" ), "&gt;"  );
-    
+
     return html;
 }
 
 
 QString
-YQPkgGenericDetailsView::table( const QString & contents ) 
+YQPkgGenericDetailsView::table( const QString & contents )
 {
     return "<table border=1 bgcolor=#F0F0F0>" + contents + "</table>";
 }
 
 
 QString
-YQPkgGenericDetailsView::row( const QString & contents ) 
+YQPkgGenericDetailsView::row( const QString & contents )
 {
     return "<tr>" + contents + "</tr>";
 }
 
 
 QString
-YQPkgGenericDetailsView::cell( QString contents ) 
+YQPkgGenericDetailsView::cell( QString contents )
 {
     contents = htmlEscape( contents );
     return "<td align=top>" + contents + "</td>";
@@ -140,7 +142,7 @@ YQPkgGenericDetailsView::cell( QString contents )
 
 
 QString
-YQPkgGenericDetailsView::cell( int contents ) 
+YQPkgGenericDetailsView::cell( int contents )
 {
     QString html;
     html.sprintf( "<td align=top>%d</td>", contents );
@@ -150,14 +152,14 @@ YQPkgGenericDetailsView::cell( int contents )
 
 
 QString
-YQPkgGenericDetailsView::cell( const Date & contents ) 
+YQPkgGenericDetailsView::cell( const Date & contents )
 {
     return cell( formatDate( contents ) );
 }
 
 
 QString
-YQPkgGenericDetailsView::cell( const std::string & contents ) 
+YQPkgGenericDetailsView::cell( const std::string & contents )
 {
     return cell( QString::fromUtf8( contents.c_str() ) );
 }
@@ -171,7 +173,7 @@ YQPkgGenericDetailsView::hcell( QString contents )
 
 
 QString
-YQPkgGenericDetailsView::formatDate( const Date & weird_date ) 
+YQPkgGenericDetailsView::formatDate( const Date & weird_date )
 {
     time_t seconds = weird_date;
 
