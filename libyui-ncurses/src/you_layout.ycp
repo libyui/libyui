@@ -14,18 +14,22 @@
 
     return `VBox( `VSpacing(0.3),
 		  `HBox( `HSpacing(0.4),
-			 // menu label (keep it short)
+			 // label of the Online Update 'Filter' menu (keep it short)
 			 `Left(`MenuButton( `opt(`key_F4), _( "&Filter" ),
-					    // menu items
-					    [`item( `id(`recommended), _( "&Recommended" )),
-					     `item( `id(`security), _( "&Security" ) ),
-					     `item( `id(`yast2), _( "&YaST2" ) ),
-					     `item( `id(`instpatches), _( "&Installed" ) ),
-					     `item( `id(`newpatches), _( "&New Patches" ) ),
-					     `item( `id(`allpatches), _( "&All Patches" ) )
-					     ]
-					    )),
-			 // menu label (keep it short)
+					    // menu items - keep them short and use unique hotkeys from begin: to end:
+					    // begin:
+					    [ `item( `id(`installablepatches), _( "&Installable Patches" ) ),
+					      `item( `id(`instpatches), _( "Installed &Patches" ) ),
+					      `item( `id(`allpatches), _( "&All Patches" ) ),
+					      `item( `id(`newpatches), _( "&New Patches" ) ),
+					      `item( `id(`recommended), _( "&Recommended" )),
+					      `item( `id(`security), _( "&Security" ) ),
+					      `item( `id(`optional), _( "&Optional" ) ),
+					      // end:
+					      `item( `id(`yast2), _( "&YaST2" ) )
+					      ]
+					      )),
+			 // label of the Online Update 'Actions' menu (keep it short)
 			 `Left(`MenuButton( `opt(`key_F5), _( "&Actions" ),
 					    // menu items
 					    [`item( `id(`toggle),  _( "&Toggle   [SPACE]" ) ),
@@ -34,7 +38,7 @@
 					     `item( `id(`update),  _( "&Update     [>]" ) )
 					     ]
 					    )),
-			 //  menu label (keep it short)
+			 // label of the Online Update 'Information' menu (keep it short)
 			 `Left(`MenuButton( `opt(`key_F6), _( "&Information" ),
 					    // menu items
 					    [`item( `id(`patchdescr), _( "&Long Description" ) ),
