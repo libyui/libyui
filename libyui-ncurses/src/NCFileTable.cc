@@ -326,7 +326,6 @@ NCursesEvent NCFileTable::wHandleInput( wint_t key )
     // call handleInput of NCPad
     handleInput( key );
     
-    NCMIL << "HANDLE ***" << endl;
     return ret;
 }
 
