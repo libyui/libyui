@@ -193,6 +193,23 @@ public:
      **/
     bool runningEmbedded() const { return _running_embedded; }
 
+    /**
+     * Block (or unblock) events. If events are blocked, any event sent
+     * should be ignored until events are unblocked again.
+     *
+     * Reimplemented from YUIInterpreter.
+     **/
+    virtual void blockEvents( bool block = true )
+	{ _event_handler.blockEvents( block ); }
+
+    /**
+     * Returns 'true' if events are currently blocked.
+     *
+     * Reimplemented from YUIInterpreter.
+     **/
+    virtual bool eventsBlocked() const
+	{ return _event_handler.eventsBlocked(); }
+
 
 public slots:
 
