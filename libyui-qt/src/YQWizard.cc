@@ -75,7 +75,13 @@ using std::string;
 
 #define USE_SEPARATOR			1
 
-#define WORK_AREA_BOTTOM_MARGIN		10
+#define BUTTON_BOX_MARGIN		6
+#if 0
+#    define WORK_AREA_BOTTOM_MARGIN	10
+#else
+#    define WORK_AREA_BOTTOM_MARGIN	BUTTON_BOX_MARGIN
+#endif
+
 #define WORK_AREA_RIGHT_MARGIN		10
 #define SEPARATOR_MARGIN		6
 #define STEPS_MARGIN			10
@@ -87,6 +93,8 @@ using std::string;
 #define STEPS_FONT_FAMILY		"Sans Serif"
 #define STEPS_FONT_SIZE			11
 #define STEPS_HEADING_FONT_SIZE		13
+
+#define USE_ICON_ON_HELP_BUTTON		1
 
 
 YQWizard::YQWizard( QWidget *		parent,
@@ -308,10 +316,13 @@ void YQWizard::layoutStepsPanel()
     QPushButton * helpButton = new QPushButton( _( "Help" ), bottomGradient );
     CHECK_PTR( helpButton );
     centerAtBottom( bottomGradient, helpButton, WORK_AREA_BOTTOM_MARGIN );
+
+#if USE_ICON_ON_HELP_BUTTON
     QPixmap pixmap = QPixmap( PIXMAP_DIR "help-button.png" );
 
     if ( ! pixmap.isNull() )
 	helpButton->setPixmap( pixmap );
+#endif
 
     if ( _bottomGradientPixmap.isNull() )
 	bottomGradient->setFixedHeight( helpButton->sizeHint().height() + WORK_AREA_BOTTOM_MARGIN );
@@ -634,7 +645,9 @@ void YQWizard::layoutHelpPanel()
 	    button = new QPushButton( _( "Tree" ), buttonParent );
 	    CHECK_PTR( button );
 
+#if USE_ICON_ON_HELP_BUTTON
 	    pixmap = QPixmap( PIXMAP_DIR "tree-button.png" );
+#endif
 	}
 	else // if ( _stepsEnabled )
 	{
@@ -643,7 +656,9 @@ void YQWizard::layoutHelpPanel()
 	    button = new QPushButton( _( "Steps" ), buttonParent );
 	    CHECK_PTR( button );
 
+#if USE_ICON_ON_HELP_BUTTON
 	    pixmap = QPixmap( PIXMAP_DIR "steps-button.png" );
+#endif
 	}
 
 
@@ -722,10 +737,12 @@ void YQWizard::layoutTreePanel()
     QPushButton * button = new QPushButton( _( "Help" ), buttonParent );
     CHECK_PTR( button );
 
+#if USE_ICON_ON_HELP_BUTTON
     QPixmap pixmap( PIXMAP_DIR "help-button.png" );
 
     if ( ! pixmap.isNull() )
 	button->setPixmap( pixmap );
+#endif
 
     QGridLayout * grid = centerAtBottom( buttonParent, button, WORK_AREA_BOTTOM_MARGIN );
     setBottomCroppedGradient( buttonParent, _bottomGradientPixmap, grid->sizeHint().height() );
@@ -930,26 +947,25 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
 
     layoutClientArea( workArea );
 
+    
     //
     // Button box
     //
 
-    _buttonBox = new QHBox( workArea );
+    _buttonBox = new QHBox( workAreaVBox );
     CHECK_PTR( _buttonBox );
     _buttonBox->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
-    _buttonBox->setMargin( 5 );
+    _buttonBox->setMargin( BUTTON_BOX_MARGIN );
     layoutButtonBox();
 
 
     if ( ! runningEmbedded() )
     {
-	//
-	// Spacers (purely decorative) at the bottom and right of the client area
-	//
+	setBottomCroppedGradient( _buttonBox, _bottomGradientPixmap, _buttonBox->sizeHint().height() );
 
-	QWidget * bottomSpacer = addVSpacing( workAreaVBox, WORK_AREA_BOTTOM_MARGIN );
-	CHECK_PTR( bottomSpacer );
-	setBottomCroppedGradient( bottomSpacer, _bottomGradientPixmap, WORK_AREA_BOTTOM_MARGIN );
+	//
+	// Spacer (purely decorative) at the right of the client area
+	//
 
 	addGradientColumn( parentHBox, WORK_AREA_RIGHT_MARGIN );
     }
@@ -962,6 +978,10 @@ void YQWizard::layoutClientArea( QWidget * parent )
     _clientArea = new QVBox( parent );
     CHECK_PTR( _clientArea );
     _clientArea->setMargin( 4 );
+
+#if 0
+    _clientArea->setPaletteBackgroundColor( QColor( 0x60, 0x60, 0x60 ) );
+#endif
 
 
     //
@@ -1005,7 +1025,7 @@ void YQWizard::layoutButtonBox()
 {
     destroyButtons();
 
-    addHSpacing( _buttonBox, 4 );
+    addHSpacing( _buttonBox, BUTTON_BOX_MARGIN );
 
     YQDialog * dialog = dynamic_cast<YQDialog *>( YQUI::ui()->currentDialog() );
     CHECK_PTR( dialog );
@@ -1054,8 +1074,7 @@ void YQWizard::layoutButtonBox()
     connect( _nextButton,	SIGNAL( clicked()	),
 	     this,		SLOT  ( nextClicked()	) );
 
-
-    addHSpacing( _buttonBox, 4 );
+    addHSpacing( _buttonBox, BUTTON_BOX_MARGIN );
 }
 
 
