@@ -70,7 +70,7 @@ long YQMultiLineEdit::nicesize( YUIDimension dim )
     }
     else
     {
-	long minSize    	 = 10;
+	long minSize     = 10;
 	long hintHeight	 = _qt_label->sizeHint().height();
 	hintHeight 	+= visibleLines() * _qt_multiLineEdit->fontMetrics().lineSpacing();
 	hintHeight	+= _qt_multiLineEdit->frameWidth() * 2;
