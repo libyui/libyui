@@ -131,7 +131,9 @@ public:
     * @param pkgPtr The pointer to the package object
     * @eturn void
     */
-    virtual void addLine( NCPkgStatus status, vector<string> elements, int index, PMObjectPtr pkgPtr );
+    virtual void addLine( PMSelectable::UI_Status status,
+			  vector<string> elements, int index,
+			  PMObjectPtr pkgPtr );
 
    /**
     * Clears the package list

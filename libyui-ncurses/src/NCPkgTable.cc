@@ -177,10 +177,14 @@ NCPkgTable::~NCPkgTable()
 //
 //	DESCRIPTION :
 //
-void NCPkgTable::addLine( NCPkgStatus status, vector<string> elements, int index, PMObjectPtr pkgPtr )
+void NCPkgTable::addLine( PMSelectable::UI_Status stat,
+			  vector<string> elements,
+			  int index,
+			  PMObjectPtr pkgPtr )
 {
     vector<NCTableCol*> Items( elements.size()+1, 0 );
-
+    NCPkgStatus status = statusToPkgStat( stat );
+    
     // fill first column (containing the status information and the package pointer)
     Items[0] = new NCPkgTableTag( pkgPtr, status );
     

@@ -256,7 +256,7 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
 	FSize size = (*it)->size();     	// installed size
 	pkgLine[2] = size.asString();
 
-	pkgTable->addLine( PkgNoInstall, // FIXME: get the package status
+	pkgTable->addLine( selectable->status(), // get the package status
 			   pkgLine,
 			   i,		 // the index
 			   (*it) );	 // the corresponding package pointer
@@ -374,7 +374,7 @@ bool PackageSelector::fillPackageList( NCPkgTable *pkgTable, const YCPString & l
 	}
 
 	// filter the packages
-	if ( pkgPtr->group().compare( 0, len, filter ) == 0 )
+	if ( pkgPtr && pkgPtr->group().compare( 0, len, filter ) == 0 )
 	{
 	     createListEntry( pkgTable, pkgPtr, i );
 	}
@@ -415,7 +415,7 @@ bool PackageSelector::createListEntry ( NCPkgTable *pkgTable,
     FSize size = pkgPtr->size();     	// installed size
     pkgLine[2] = size.asString();
 
-    pkgTable->addLine( PkgInstalled,	// FIXME: get the package status
+    pkgTable->addLine( pkgPtr->getSelectable()->status(), //  get the package status
 		       pkgLine,
 		       index,		// the index
 		       pkgPtr );	// the corresponding package pointer
