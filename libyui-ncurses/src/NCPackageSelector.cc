@@ -24,6 +24,8 @@
 #include "NCLabel.h"
 #include "PkgNames.h"
 
+#include <libintl.h>
+
 #include <ycp/YCPString.h>
 #include <ycp/YCPVoid.h>
 #include <ycp/YCPParser.h>
@@ -46,6 +48,9 @@ NCPackageSelector::NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
       , youMode ( false )
       , updateMode ( false )
 {
+    // set the textdomain
+    textdomain( "packages" );
+    
     // get the mode (the mode is also available in PackageSelector via YWidgetOpt & opt)
     if ( opt.youMode.value() )
 	youMode = true;
