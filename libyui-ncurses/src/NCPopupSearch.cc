@@ -181,7 +181,7 @@ YCPString  NCPopupSearch::getSearchExpression() const
 
 long NCPopupSearch::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? 50 : 15 );
+    return ( dim == YD_HORIZ ? 55 : 15 );
 }
 
 ///////////////////////////////////////////////////////////////////
