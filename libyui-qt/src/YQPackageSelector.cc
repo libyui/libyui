@@ -190,12 +190,16 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     if ( _updateMode )
     {
-	_updateProblemFilterView = new YQPkgUpdateProblemFilterView( parent );
-	CHECK_PTR( _updateProblemFilterView );
-	_filters->addPage( _( "Update Problems" ), _updateProblemFilterView );
+	if ( ! Y2PM::packageManager().updateEmpty()
+	     || _testMode )
+	{
+	    _updateProblemFilterView = new YQPkgUpdateProblemFilterView( parent );
+	    CHECK_PTR( _updateProblemFilterView );
+	    _filters->addPage( _( "Update Problems" ), _updateProblemFilterView );
 
-	connect( _filters,			SIGNAL( currentChanged( QWidget * ) ),
-		 _updateProblemFilterView,	SLOT  ( filterIfVisible()           ) );
+	    connect( _filters,			SIGNAL( currentChanged( QWidget * ) ),
+		     _updateProblemFilterView,	SLOT  ( filterIfVisible()            ) );
+	}
     }
 
 

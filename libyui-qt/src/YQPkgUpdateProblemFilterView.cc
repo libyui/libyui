@@ -35,24 +35,24 @@ YQPkgUpdateProblemFilterView::YQPkgUpdateProblemFilterView( QWidget *parent )
     y2milestone( "Creating update problems view" );
 
     QString html = _( "\
-<br>
-<h2>Update Problem</h2>
-<p>
-<font color=blue>
-The packages in this list cannot be updated automatically.
-</font>
-</p>
-<p>Possible reasons:</p>
-<ul>
-<li>They are obsoleted by other packages
-<li>There is no newer version to update to on any installation media
-<li>They are third-party packages
-</ul>
-</p>
-<p>
-Please choose manually what to do with them.
-The safest course of action is to delete them.
-</p>
+<br>\
+<h2>Update Problem</h2>\
+<p>\
+<font color=blue>\
+The packages in this list cannot be updated automatically.\
+</font>\
+</p>\
+<p>Possible reasons:</p>\
+<ul>\
+<li>They are obsoleted by other packages\
+<li>There is no newer version to update to on any installation media\
+<li>They are third-party packages\
+</ul>\
+</p>\
+<p>\
+Please choose manually what to do with them.\
+The safest course of action is to delete them.\
+</p>\
 " );
 
     setTextFormat( Qt::RichText );
@@ -78,9 +78,9 @@ YQPkgUpdateProblemFilterView::filter()
 {
     emit filterStart();
 
-    PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
+    PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().updateBegin();
 
-    while ( it != Y2PM::packageManager().end() )
+    while ( it != Y2PM::packageManager().updateEnd() )
     {
 	PMSelectablePtr selectable = *it;
 	emit filterMatch( (*it)->theObject() );
