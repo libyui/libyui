@@ -217,7 +217,7 @@ YCPString  NCPopupSearch::getSearchExpression() const
 
 long NCPopupSearch::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? 45 : 20 );
+    return ( dim == YD_HORIZ ? NCurses::cols()-25 : NCurses::lines()-5 );
 }
 
 ///////////////////////////////////////////////////////////////////

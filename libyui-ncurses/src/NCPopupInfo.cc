@@ -171,7 +171,14 @@ void NCPopupInfo::popdown()
 
 long NCPopupInfo::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? hDim : vDim );
+    long vertDim = vDim;
+    long horDim = hDim;
+    
+    if ( vDim >= NCurses::lines() )
+	vertDim = NCurses::lines()-5;
+    if ( hDim >= NCurses::cols() )
+	horDim = NCurses::cols()-10;
+    return ( dim == YD_HORIZ ? horDim : vertDim );
 }
 
 ///////////////////////////////////////////////////////////////////
