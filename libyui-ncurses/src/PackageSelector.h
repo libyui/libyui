@@ -86,7 +86,6 @@ class PackageSelector
     // internal helper functions (format list of string) 
     string createRelLine( list<PkgRelation> info );
     string createDescrText( list<string> info );
-    string createText( list<string> info, bool oneline );
 
     // add a line to the package list
     bool createListEntry ( NCPkgTable *table, PMPackagePtr pkgPtr, unsigned int index );
@@ -324,6 +323,9 @@ class PackageSelector
     * @return bool   
     */ 
     bool autoChecking() { return autoCheck; }
+
+    string createText( list<string> info, bool oneline );
+
 };
 
 ///////////////////////////////////////////////////////////////////
