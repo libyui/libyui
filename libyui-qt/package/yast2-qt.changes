@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Sep 10 20:06:11 CEST 2002 - sh@suse.de
+
+- V 2.6.18
+- New details view: Dependencies 
+- Bugfix: No initial dependency check in YOU mode
+- Show patch sizes in YOU mode
+
+-------------------------------------------------------------------
 Tue Sep 10 18:55:25 CEST 2002 - sh@suse.de
 
 - V 2.6.17
