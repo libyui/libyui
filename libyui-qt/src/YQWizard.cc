@@ -1297,7 +1297,7 @@ void YQWizard::addMenu( const QString & text,
 {
     if ( _menuBar )
     {
-	QPopupMenu * menu = new QPopupMenu( this );
+	QPopupMenu * menu = new QPopupMenu( _menuBar );
 	CHECK_PTR( menu );
 
 	_menuIDs.insert( id, menu );
@@ -1323,7 +1323,7 @@ void YQWizard::addSubMenu( const QString & parentMenuID,
 
     if ( parentMenu )
     {
-	QPopupMenu * menu = new QPopupMenu( this );
+	QPopupMenu * menu = new QPopupMenu( _menuBar );
 	CHECK_PTR( menu );
 
 	_menuIDs.insert( id, menu );
