@@ -96,6 +96,7 @@ void NCPopupPkgTable::createLayout( )
     NCSpacing * sp1 = new NCSpacing( split, opt, 0.6, false, true );
     split->addChild( sp1 );
 
+    opt.isHeading.setValue( false );
     NCLabel * lb1 = new NCLabel( split, opt, YCPString(PkgNames::AutoChangeText1().str()) );
     split->addChild( lb1 );
     NCLabel * lb2 = new NCLabel( split, opt, YCPString(PkgNames::AutoChangeText2().str()) );
