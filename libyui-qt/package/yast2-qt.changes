@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Feb 14 15:40:11 CET 2003 - sh@suse.de
+
+- V 2.7.11
+- Fixed bug #23577: Popups can be clicked into the background
+
+-------------------------------------------------------------------
 Fri Feb 14 12:33:35 CET 2003 - sh@suse.de
 
 - Fixed bug #23650: Confusion about "Export List to Text File":
