@@ -161,6 +161,7 @@ NCursesEvent & NCPopupSearch::showSearchPopup( )
     return postevent;
 }
 
+///////////////////////////////////////////////////////////////////
 //
 //	DESCRIPTION :
 //
@@ -222,12 +223,12 @@ bool NCPopupSearch::postAgain()
     if ( currentId->compare( PkgNames::Cancel () ) == YO_EQUAL )
     {
 	// do not start the package search if cancel button is pressed
-	// (item is checked in PackageSelector::SearchHandler)
+	// (result is checked in PackageSelector::SearchHandler)
 	postevent.result = YCPNull();
     }
     else if ( currentId->compare( PkgNames::OkButton () ) == YO_EQUAL )
     {
-	// get the search expression and store it in NCursesEvent.item
+	// get the search expression and store it in NCursesEvent.result
 	postevent.result =  getSearchExpression();
     }
     
