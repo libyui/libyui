@@ -48,7 +48,8 @@ NCPopupDeps::NCPopupDeps( const wpos at, PackageSelector * pkger )
       , pkgs( 0 )
       , deps( 0 )
       , depsMenu( 0 )
-      , errorLabel( 0 )
+      , errorLabel1( 0 )
+      , errorLabel2( 0 )
       , packager( pkger )
 {
     createLayout( PkgNames::PackageDeps() );
@@ -87,7 +88,7 @@ void NCPopupDeps::createLayout( const YCPString & headline )
 
   opt.notifyMode.setValue( true );
 
-  NCSpacing * sp0 = new NCSpacing( vSplit, opt, 0.4, false, true );
+  NCSpacing * sp0 = new NCSpacing( vSplit, opt, 0.8, false, true );
   vSplit->addChild( sp0 );
 
   // add the headline
@@ -95,7 +96,7 @@ void NCPopupDeps::createLayout( const YCPString & headline )
   NCLabel * head = new NCLabel( vSplit, opt, headline );
   vSplit->addChild( head );
 
-  NCSpacing * sp = new NCSpacing( vSplit, opt, 0.8, false, true );
+  NCSpacing * sp = new NCSpacing( vSplit, opt, 0.4, false, true );
   vSplit->addChild( sp );
 
   // add the list containing packages with unresolved depemdencies
@@ -114,15 +115,17 @@ void NCPopupDeps::createLayout( const YCPString & headline )
   vSplit->addChild( depsMenu );
 #endif
 
-  NCSpacing * sp1 = new NCSpacing( vSplit, opt, 0.8, false, true );
+  NCSpacing * sp1 = new NCSpacing( vSplit, opt, 0.2, false, true );
   vSplit->addChild( sp1 );
 
   opt.isHStretchable.setValue( true );
  
-  errorLabel = new NCLabel(  vSplit, opt, YCPString("") );
-  vSplit->addChild( errorLabel );
-  
-  NCSpacing * sp2 = new NCSpacing( vSplit, opt, 0.8, false, true );
+  errorLabel1 = new NCLabel(  vSplit, opt, YCPString("") );
+  vSplit->addChild( errorLabel1 );
+  errorLabel2 = new NCLabel(  vSplit, opt, YCPString("") );
+  vSplit->addChild( errorLabel2 );
+
+  NCSpacing * sp2 = new NCSpacing( vSplit, opt, 0.2, false, true );
   vSplit->addChild( sp2 );
 
   // add the package list containing the dependencies
@@ -130,7 +133,7 @@ void NCPopupDeps::createLayout( const YCPString & headline )
   deps->setPackager( packager );
   // set status strategy
   ObjectStatStrategy * strat = new DependencyStatStrategy();
-  deps->setTableType( NCPkgTable::T_Dependency, strat );
+  deps->setTableType( NCPkgTable::T_DepsPackages, strat );
   vSplit->addChild( deps );
 
   NCSplit * hSplit = new NCSplit( vSplit, opt, YD_HORIZ );
@@ -311,6 +314,8 @@ bool NCPopupDeps::concretelyDependency( int index )
 {
     unsigned int size = dependencies.size();
     unsigned int i = 0;
+    vector<string> pkgLine;
+    pkgLine.reserve(4);
     
     deps->itemsCleared();
 
@@ -325,18 +330,32 @@ bool NCPopupDeps::concretelyDependency( int index )
     if ( !error.unresolvable.empty() )
     {
 	NCMIL << "Unresolvable: " << error.unresolvable << endl;
-	errorLabel->setLabel( YCPString("Solve the conflict by selecting or deselecting packages.") );	
+	errorLabel1->setLabel( YCPString("Solve the conflict by selecting") );
+	errorLabel2->setLabel( YCPString("or deselecting packages.") );	
     }
     if ( !error.alternatives.empty() )
     {
 	list<PkgDep::Alternative>::iterator it = error.alternatives.begin();
 	while ( it != error.alternatives.end() )
 	{
-	    NCMIL << "Alternative: " << (*it).kind << endl;
+	    pkgLine.clear();
+
+	    PMObjectPtr objPtr = (*it).solvable; 
+	    pkgLine.clear();
+	    if ( objPtr )
+	    {
+		pkgLine.push_back( objPtr->getSelectable()->name() );	// package name
+		pkgLine.push_back( objPtr->summary() );
+	    
+		deps->addLine( objPtr->getSelectable()->status(), //  get the package status
+			       pkgLine,
+			       i,		// the index
+			       objPtr );	// the corresponding package
+	    }
 	    ++it;
 	    i++;
 	}
-	errorLabel->setLabel( YCPString("Select one of the alternatives below.") );
+	errorLabel1->setLabel( YCPString("Select one of the alternatives below.") );
     }
     if ( !error.conflicts_with.empty() )
     {
@@ -344,10 +363,26 @@ bool NCPopupDeps::concretelyDependency( int index )
 	while ( it != error.conflicts_with.end() )
 	{
 	    NCMIL << "Conflict: " << (*it).name << endl;
+	    pkgLine.clear();
+
+	    PMObjectPtr objPtr = (*it).solvable; 
+	    pkgLine.clear();
+	    if ( objPtr )
+	    {
+		pkgLine.push_back( objPtr->getSelectable()->name() );	// package name
+		pkgLine.push_back( objPtr->summary() );
+	    
+		deps->addLine( objPtr->getSelectable()->status(), //  get the package status
+			       pkgLine,
+			       i,		// the index
+			       objPtr );	// the corresponding package
+	    }
+	    
 	    ++it;
 	    i++;
 	}
-	errorLabel->setLabel( YCPString("Solve the conflict by deleting the unwanted package(s)") ); 
+	errorLabel1->setLabel( YCPString("Solve the conflict by deleting") );
+	errorLabel2->setLabel( YCPString("the unwanted package(s)" ) );
     }
     
     return true;

@@ -62,7 +62,8 @@ private:
 
     NCMenuButton * depsMenu;		// the menu button
 
-    NCLabel * errorLabel; 		// the error message
+    NCLabel * errorLabel1; 		// the error message
+    NCLabel * errorLabel2;
     
     PackageSelector * packager;		// connection to the package selector
 

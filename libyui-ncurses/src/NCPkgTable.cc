@@ -207,13 +207,15 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
 	updateTable();
 	
 	if ( tableType == T_Availables
-	     || tableType == T_Dependency )
+	     || tableType == T_Dependency
+	     || tableType == T_DepsPackages )
 	{
 	    // additionally update the package list
 	    packager->updatePackageList();
 	}
 
 	if ( tableType != T_Dependency
+	     && tableType != T_DepsPackages
 	     && tableType != T_Patches )
 	{
 	    // only check/show deps if is't not the dependency table itself
