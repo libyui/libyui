@@ -92,7 +92,8 @@ YQPkgList::pkgObjClicked( int button, QListViewItem * listViewItem, int col )
 	
 	    if ( item )
 	    {
-		item->toggleSourceRpmStatus();
+		if ( editable() && item->editable() )
+		    item->toggleSourceRpmStatus();
 		return;
 	    }
 	}

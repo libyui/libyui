@@ -32,6 +32,7 @@
 
 YQPkgObjList::YQPkgObjList( QWidget *parent )
     : QY2ListView( parent )
+    , _editable( true )
 {
     // This class does not add any columns. This is the main reason why this is
     // an abstract base class: It doesn't know which columns are desired and in
@@ -86,7 +87,8 @@ YQPkgObjList::pkgObjClicked( int button, QListViewItem * listViewItem, int col )
 	    if ( col == statusCol() )
 		// || col == nameCol() )
 	    {
-		item->cycleStatus();
+		if ( editable() && item->editable() )
+		    item->cycleStatus();
 	    }
 	}
     }
@@ -118,6 +120,7 @@ YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList * pkgObjList, PMObjectPtr pm_ob
     : QY2ListViewItem( pkgObjList )
     , _pkgObjList( pkgObjList )
     , _pmObj( pm_obj )
+    , _editable( true )
 {
     if ( nameCol()    >= 0 ) 	setText( nameCol(),	pmObj()->name()		);
     if ( summaryCol() >= 0 )	setText( summaryCol(),	pmObj()->summary()	);

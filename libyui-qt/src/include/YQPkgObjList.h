@@ -60,7 +60,20 @@ public:
     int versionCol()		const	{ return _versionCol;		}
     int instVersionCol()	const	{ return _instVersionCol;	}
 
+    /**
+     * Return whether or not items in this list are generally editable,
+     * i.e. the user can change their status. Note that individual items can be
+     * set to non-editable even if the list is generally editable.
+     * Lists are editable by default.
+     **/
+    bool editable() const { return _editable; }
 
+    /**
+     * Set the list's editable status.
+     **/
+    void setEditable( bool editable = true ) { _editable = editable; }
+
+    
 public slots:
 
     /**
@@ -118,6 +131,7 @@ protected:
     int 	_sizeCol;
     int 	_versionCol;
     int 	_instVersionCol;
+    bool	_editable;
 };
 
 
@@ -146,6 +160,18 @@ public:
      * Returns the original object within the package manager backend.
      **/
     const PMObjectPtr constPMObj() const { return _pmObj; }
+
+    /**
+     * Return whether or not this items is editable, i.e. the user can change
+     * its status. This requires the corresponding list to be editable, too.
+     * Items are editable by default.
+     **/
+    bool editable() const { return _editable; }
+
+    /**
+     * Set this item's editable status.
+     **/
+    void setEditable( bool editable = true ) { _editable = editable; }
 
     /**
      * Returns the (binary RPM) package status
@@ -221,6 +247,7 @@ protected:
 
     YQPkgObjList *	_pkgObjList;
     PMObjectPtr		_pmObj;
+    bool		_editable;
 };
 
 
