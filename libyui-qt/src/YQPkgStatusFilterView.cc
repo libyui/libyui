@@ -78,7 +78,7 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     addHStretch( gbox );
 
     _showKeepInstalled	= addStatusCheckBox( gbox, _( "Keep"		), YQIconPool::disabledPkgKeepInstalled(), false );
-    _showNoInst		= addStatusCheckBox( gbox, _( "Don't install"	), YQIconPool::disabledPkgNoInst(),	   false );
+    _showNoInst		= addStatusCheckBox( gbox, _( "Do not install"	), YQIconPool::disabledPkgNoInst(),	   false );
 
     addVStretch( this );
 

@@ -135,7 +135,7 @@ YQPackageSelector::symbolHelp()
 
     html += symHelp( "noinst.xpm",
 		     // Translators: Package status short (!) description
-		     _( "Don't install" ),
+		     _( "Do not install" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is not installed and it will not be installed." ) );
 
@@ -179,9 +179,7 @@ YQPackageSelector::symbolHelp()
 		     // Translators: Package status short (!) description
 		     _( "Autoinstall" ),
 		     // Translators: Automatic word-wrapping.
-		     _( "This package will be installed automatically because some other package needs it"
-			" or because it is contained in a predefined software selection"
-			" (e.g., \"Multimedia\", \"Development\")." )
+		     _( "This package will be installed automatically because some other package needs it." )
 		     + " "
 		     + _( "<b>Hint:</b> You may have to use \"taboo\" to get rid of such a package." ) );
 
@@ -189,12 +187,40 @@ YQPackageSelector::symbolHelp()
 		     // Translators: Package status short (!) description
 		     _( "Autoupdate" ),
 		     // Translators: Automatic word-wrapping.
-		     _( "This package is already installed, but some other package (or selection)"
+		     _( "This package is already installed, but some other package"
 			" needs a newer version, so it will automatically be updated." ) );
 
     html += symHelp( "autodel.xpm",
 		     // Translators: Package status short (!) description
 		     _( "Autodelete" ),
+		     // Translators: Automatic word-wrapping.
+		     _( "This package is already installed, but package dependencies require that it is deleted." )
+		     + _( "This can happen for example if some other package obsoletes this one." ) );
+
+    // Translators: This is added to the explanation of a status. Use of
+    // "non-breakable space" (HTML &nbsp; ) is recommended (if the line doesn't 
+    // get too long) to avoid line-break in the middle of this explanaton.
+    QString bySelection = " " + _( "(by&nbsp;selection)" );
+
+    html += symHelp( "sel_autoinstall.xpm",
+		     // Translators: Package status short (!) description
+		     _( "Autoinstall" ) + bySelection,
+		     // Translators: Automatic word-wrapping.
+		     _( "This package will be installed automatically because it is contained in a"
+			" predefined software selection (e.g., \"Multimedia\", \"Development\")." ) );
+
+    html += symHelp( "sel_autoupdate.xpm",
+		     // Translators: Package status short (!) description
+		     _( "Autoupdate" ) + bySelection,
+		     // Translators: Automatic word-wrapping.
+		     _( "This package is already installed, but there is a newer version."
+			" It is contained in a predefined software selection (e.g., \"Multimedia\","
+			" \"Development\") that you requested to update, so this package will"
+			" automatically be updated." ) );
+
+    html += symHelp( "sel_autodel.xpm",
+		     // Translators: Package status short (!) description
+		     _( "Autodelete" ) + bySelection,
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is already installed, but some predefined software selection"
 			" (e.g., \"Multimedia\", \"Development\") requires that it is deleted." ) );

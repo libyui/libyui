@@ -121,6 +121,9 @@ helpimages_DATA =				\
 	autodel.xpm				\
 	autoinstall.xpm				\
 	autoupdate.xpm				\
+	sel_autodel.xpm				\
+	sel_autoinstall.xpm			\
+	sel_autoupdate.xpm			\
 	del.xpm					\
 	install.xpm				\
 	keepinstalled.xpm			\

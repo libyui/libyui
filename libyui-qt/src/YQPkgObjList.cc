@@ -216,7 +216,7 @@ YQPkgObjList::statusText( PMSelectable::UI_Status status ) const
 	case PMSelectable::S_AutoInstall:	return _( "Autoinstall"			);
 	case PMSelectable::S_AutoUpdate:	return _( "Autoupdate"			);
 	case PMSelectable::S_KeepInstalled:	return _( "Keep"			);
-	case PMSelectable::S_NoInst:		return _( "Don't install"		);
+	case PMSelectable::S_NoInst:		return _( "Do not install"		);
     }
 
     return QString::null;
