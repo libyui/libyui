@@ -417,7 +417,10 @@ void NCComboBox::tUpdate()
   {
     twin->move( 0, curpos - fldstart );
     twin->bkgdset( wStyle().cursor );
-    twin->add_attr_char( );
+    if (  curpos < buffer.length() )
+	twin->add_attr_char( );
+    else
+	twin->addch( ACS_CKBOARD );
   }
 }
 
