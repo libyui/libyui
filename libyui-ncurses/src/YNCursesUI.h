@@ -258,19 +258,19 @@ public:
 
     /**
      * Creates a tree
-    */
+     */
     virtual YWidget * createTree( YWidget * parent, YWidgetOpt & opt,
 				  const YCPString & label );
 
     /**
      * Creates a table widget
-    */
+     */
     virtual YWidget * createTable( YWidget * parent, YWidgetOpt & opt,
 				   vector<string> header );
 
     /**
      * Creates a progress bar
-    */
+     */
     virtual YWidget * createProgressBar( YWidget * parent, YWidgetOpt & opt,
 					 const YCPString & label,
 					 const YCPInteger & maxprogress,
@@ -278,28 +278,21 @@ public:
 
     /**
      * Creates an image widget from a YCP byteblock
-    */
+     */
     virtual YWidget * createImage( YWidget * parent, YWidgetOpt & opt,
 				   YCPByteblock imagedata,
 				   YCPString defaulttext);
 
     /**
      * Creates an image widget from a YCP byteblock
-    */
+     */
     virtual YWidget * createImage( YWidget * parent, YWidgetOpt & opt,
 				   YCPString filename,
 				   YCPString defaulttext);
 
     /**
-     * Creates an image widget from a predefined set of images
-    */
-    virtual YWidget * createImage( YWidget * parent, YWidgetOpt & opt,
-				   ImageType img,
-				   YCPString defaulttext );
-
-    /**
      * Creates an IntField widget.
-    */
+     */
     virtual YWidget * createIntField( YWidget * parent, YWidgetOpt & opt,
 				      const YCPString & label,
 				      int minValue, int maxValue,

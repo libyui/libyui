@@ -544,14 +544,6 @@ YWidget * YNCursesUI::createImage( YWidget * parent, YWidgetOpt & opt,
 		      defaulttext );
 }
 
-YWidget * YNCursesUI::createImage( YWidget * parent, YWidgetOpt & opt,
-				    ImageType /* not used */,
-				    YCPString defaulttext )
-{
-  ONCREATE;
-  return new NCImage( dynamic_cast<NCWidget *>( parent ), opt,
-		      defaulttext );
-}
 
 YWidget * YNCursesUI::createIntField( YWidget * parent, YWidgetOpt & opt,
 				       const YCPString & label,
