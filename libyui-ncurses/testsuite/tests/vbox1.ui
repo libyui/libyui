@@ -33,101 +33,99 @@
 
 
 {
-
     define Check( boolean CheckBoxTwoState )
-        `` {
-               return( ( is( CurrentMap, map ) == true ) &&
-                       ( size( CurrentMap ) == 4 ) &&
-                       ( select( CurrentMap, 0 ) == [`Id("cb1"), false] ) &&
-                       ( select( CurrentMap, 1 ) == [`Id("cb2"), CheckBoxTwoState] ) &&
-                       ( select( CurrentMap, 2 ) == [`Id("cb3"), false] ) &&
-                       ( select( CurrentMap, 3 ) == [`Id("cb4"), false] ) );
-           };
+	``{
+	       return( ( is( CurrentMap, map ) == true ) &&
+		       ( size( CurrentMap ) == 4 ) &&
+		       ( CurrentMap[0]:[] == [`Id("cb1"), false] ) &&
+		       ( CurrentMap[1]:[] == [`Id("cb2"), CheckBoxTwoState] ) &&
+		       ( CurrentMap[2]:[] == [`Id("cb3"), false] ) &&
+		       ( CurrentMap[3]:[] == [`Id("cb4"), false] ) );
+	   };
 
 
 // the display function ShowDialog() is called without parameters
     if( true )
     {  
-        any ok = `HBox(`Stretch(), `Pushbutton(`Id("ok"), "OK"), `Stretch());
+	any ok = `HBox(`Stretch(), `Pushbutton(`Id("ok"), "OK"), `Stretch());
     
-        integer loop = 0;
-        while( loop < 100 )
-        {
-            any dialog = Dialog( `VBox(
-              `VBox( 
-              `Checkbox(`Id("cb1"), "Option1"),
-              `Checkbox(`Id("cb2"), "Option2"),
-              `Checkbox(`Id("cb3"), "Option3"),
-              `Checkbox(`Id("cb4"), "Option4")
-              ),
-              ok
-             ));
+	integer loop = 0;
+	while( loop < 100 )
+	{
+	    any dialog = Dialog( `VBox(
+	      `VBox( 
+	      `Checkbox(`Id("cb1"), "Option1"),
+	      `Checkbox(`Id("cb2"), "Option2"),
+	      `Checkbox(`Id("cb3"), "Option3"),
+	      `Checkbox(`Id("cb4"), "Option4")
+	      ),
+	      ok
+	     ));
     
-            ShowDialog( );
-            any CurrentMap = QueryDialog( dialog );
-            CloseDialog( );
+	    UI::ShowDialog( );
+	    any CurrentMap = UI::QueryDialog( dialog );
+	    UI::CloseDialog( );
     
-            if( Check( false ) == false ) return false;
+	    if( Check( false ) == false ) return false;
 
-            loop = loop + 1;
-        }
+	    loop = loop + 1;
+	}
     }
 
 // the display function ShowDialog() is called with the dialog parameter
     if( true )
     {  
-        any ok = `HBox(`Stretch(), `Pushbutton(`Id("ok"), "OK"), `Stretch());
+	any ok = `HBox(`Stretch(), `Pushbutton(`Id("ok"), "OK"), `Stretch());
     
-        integer loop = 0;
-        while( loop < 100 )
-        {
-            any dialog = Dialog( `VBox(
-              `VBox( 
-              `Checkbox(`Id("cb1"), "Option1"),
-              `Checkbox(`Id("cb2"), "Option2"),
-              `Checkbox(`Id("cb3"), "Option3"),
-              `Checkbox(`Id("cb4"), "Option4")
-              ),
-              ok
-             ));
+	integer loop = 0;
+	while( loop < 100 )
+	{
+	    any dialog = Dialog( `VBox(
+	      `VBox( 
+	      `Checkbox(`Id("cb1"), "Option1"),
+	      `Checkbox(`Id("cb2"), "Option2"),
+	      `Checkbox(`Id("cb3"), "Option3"),
+	      `Checkbox(`Id("cb4"), "Option4")
+	      ),
+	      ok
+	     ));
     
-            ShowDialog( dialog );
-            any CurrentMap = QueryDialog( dialog );
-            CloseDialog( dialog );
+	    UI::ShowDialog( dialog );
+	    any CurrentMap = UI::QueryDialog( dialog );
+	    UI::CloseDialog( dialog );
     
-            if( Check( false ) == false ) return false;
+	    if( Check( false ) == false ) return false;
 
-            loop = loop + 1;
-        }
+	    loop = loop + 1;
+	}
     }
 
 // the display function ShowDialog() is called with the dialog itself
     if( true )
     {  
-        any ok = `HBox(`Stretch(), `Pushbutton(`Id("ok"), "OK"), `Stretch());
+	any ok = `HBox(`Stretch(), `Pushbutton(`Id("ok"), "OK"), `Stretch());
     
-        integer loop = 0;
-        while( loop < 100 )
-        {
-            ShowDialog( 
-                 Dialog( `VBox(
-                          `VBox( 
-                            `Checkbox(`Id("cb1"), "Option1"),
-                            `Checkbox(`Id("cb2"), "Option2", true),
-                            `Checkbox(`Id("cb3"), "Option3"),
-                            `Checkbox(`Id("cb4"), "Option4", false)
-                             ),
-                           ok
-                        )));
-            any CurrentMap = QueryDialog( );
-            CloseDialog( );
+	integer loop = 0;
+	while( loop < 100 )
+	{
+	    UI::ShowDialog( 
+		 Dialog( `VBox(
+			  `VBox( 
+			    `Checkbox(`Id("cb1"), "Option1"),
+			    `Checkbox(`Id("cb2"), "Option2", true),
+			    `Checkbox(`Id("cb3"), "Option3"),
+			    `Checkbox(`Id("cb4"), "Option4", false)
+			     ),
+			   ok
+			)));
+	    any CurrentMap = UI::QueryDialog( );
+	    UI::CloseDialog( );
     
-            if( Check( true ) == false ) return false;
+	    if( Check( true ) == false ) return false;
 
-            loop = loop + 1;
-        }
-    }
-
+	    loop = loop + 1;
+	} // while loop
+    } // if (true)
     return true;
 }
 

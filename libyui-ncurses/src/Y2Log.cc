@@ -67,7 +67,7 @@ class Y2Loglinebuf : public streambuf {
 	for ( int i = 0; i < n; ++i, ++c ) {
 	  if ( *c == '\n' ) {
 	    buffer += string( s, c-s );
-	    y2_logger( (loglevel_t)level, name.c_str(),
+	    Y2Logging::y2_logger( (loglevel_t)level, name.c_str(),
 		       file, line, func,
 		       "%s", buffer.c_str() );
 	    buffer = "";
