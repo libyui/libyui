@@ -93,6 +93,13 @@ public:
 
     /**
      * Inherited from YComboBox:
+     * Returns the index of the currently selected item (from 0 on)
+     * or -1 if no item is selected.
+     **/
+    int getCurrentItem() const;
+    
+    /**
+     * Inherited from YComboBox:
      * Selects an item from the list. Notice there intentionally is no
      * corresponding getCurrentItem() method - use getValue() instead.
      */

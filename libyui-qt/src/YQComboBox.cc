@@ -118,6 +118,12 @@ void YQComboBox::itemAdded( const YCPString & string, int index, bool selected )
 }
 
 
+int YQComboBox::getCurrentItem() const
+{
+    return _qt_combo_box->currentItem();
+}
+
+
 YCPString YQComboBox::getValue() const
 {
     return YCPString( toUTF8( _qt_combo_box->currentText() ) );
