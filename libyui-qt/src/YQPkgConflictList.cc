@@ -19,6 +19,7 @@
 /-*/
 
 
+#include <qaction.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qdatetime.h>
@@ -31,6 +32,7 @@
 #include <y2pm/PMObject.h>
 
 #include "YQPkgConflictList.h"
+#include "YQPkgConflictDialog.h"
 #include "YQIconPool.h"
 
 #include "YUIQt.h"
@@ -39,6 +41,8 @@
 
 
 #define LIST_SPLIT_THRESHOLD	8
+
+#define IGNORED_CONFLICT_FILE	"/var/adm/YaST/ignored-conflicts"
 
 #define RED			QColor( 0xC0, 0, 0 )
 #define BRIGHT_RED		QColor( 0xFF, 0, 0 )
@@ -52,7 +56,8 @@
 
 // The conflict ignore list
 
-QMap<QString, bool> YQPkgConflict::_ignore;
+QMap<QString, bool>	YQPkgConflict::_ignore;
+QAction *		YQPkgConflict::_actionResetIgnoredConflicts = 0;
 
 
 YQPkgConflictList::YQPkgConflictList( QWidget * parent )
@@ -136,13 +141,6 @@ YQPkgConflictList::ignoreAll()
     }
 
     clear();
-}
-
-
-void
-YQPkgConflictList::resetIgnoredConflicts()
-{
-    YQPkgConflict::resetIgnoredConflicts();
 }
 
 
@@ -379,13 +377,13 @@ YQPkgConflict::formatHeading()
 	    switch ( _status )
 	    {
 		case PMSelectable::S_Taboo:
-		    
+
 		    if ( _isPkg )
 			// Package %1 is set to taboo, yet other packages require it
 			text = ( _( "Taboo package %1 is required by other packages" ) ).arg( _shortName );
 		    else
 			text = ( _( "Taboo selection %1 is required by other selections" ) ).arg( _shortName );
-			
+
 		    icon = YQIconPool::tabooPkgConflict();
 		    break;
 
@@ -702,6 +700,7 @@ void
 YQPkgConflict::ignore()
 {
     ignore( text(0) );
+    updateActions();
 }
 
 
@@ -715,7 +714,7 @@ YQPkgConflict::isIgnored( const QString & conflictHeader )
 void
 YQPkgConflict::ignore( const QString & conflictHeader )
 {
-    y2milestone( "Ignoring conflict: %s", (const char *) conflictHeader );
+    y2milestone( "Ignoring dependency conflict: %s", (const char *) conflictHeader );
     _ignore.insert( conflictHeader, true );
 }
 
@@ -723,8 +722,128 @@ YQPkgConflict::ignore( const QString & conflictHeader )
 void
 YQPkgConflict::resetIgnoredConflicts()
 {
-    y2milestone( "Resetting all ignored conflicts" );
+    y2milestone( "Resetting all ignored dependency conflicts" );
     _ignore.clear();
+    updateActions();
+}
+
+
+void
+YQPkgConflict::loadIgnoredConflicts()
+{
+    char buffer[ 1024 ];
+    FILE * file = fopen( IGNORED_CONFLICT_FILE, "r" );
+
+    if ( ! file )
+    {
+	y2milestone( "No ignored dependency conflicts" );
+	// This is not a warning since this should be the most usual case.
+
+	return;
+    }
+
+    int count = 0;
+
+    while ( ! feof( file ) )
+    {
+	buffer[0] = '\0';
+	fgets( buffer, sizeof( buffer ), file );
+	int len = strlen( buffer );
+
+	if ( len > 0 )
+	{
+	    // Chop off trailing newline (left over by fgets() )
+
+	    if ( buffer[ len-1 ] == '\n' )
+		buffer[ len-1 ] = '\0';
+
+	    _ignore.insert( QString( buffer ), true );
+	    y2milestone( "Ignoring dependency conflict: \"%s\"", buffer );
+	    count++;
+	}
+    }
+
+    if ( count > 0 )
+    {
+	y2milestone( "Loaded %d ignored dependency conflict%s from %s",
+		     count, count > 1 ? "s" : "", IGNORED_CONFLICT_FILE );
+    }
+
+    fclose( file );
+    updateActions();
+}
+
+
+void
+YQPkgConflict::saveIgnoredConflicts()
+{
+    if ( _ignore.empty() )
+    {
+	// Remove any previous ignore file, but don't create a new one with zero length
+
+	remove( IGNORED_CONFLICT_FILE );
+	return;
+    }
+
+    FILE * file = fopen( IGNORED_CONFLICT_FILE, "w" );
+
+    if ( ! file )
+    {
+	y2error( "Can't save ignored conflicts to %s: %s",
+		 IGNORED_CONFLICT_FILE, strerror( errno ) );
+	return;
+    }
+
+    QMap<QString, bool>::const_iterator it = _ignore.begin();
+
+    while ( it != _ignore.end() )
+    {
+	fprintf( file, "%s\n", (const char *) it.key() );
+	++it;
+    }
+
+    fclose( file );
+}
+
+
+bool
+YQPkgConflict::haveIgnoredConflicts()
+{
+    return ! _ignore.empty();
+}
+
+
+QAction *
+YQPkgConflict::actionResetIgnoredConflicts( YQPkgConflictDialog * dialog )
+{
+    if ( ! _actionResetIgnoredConflicts )
+    {
+	QString label = _( "Reset &Ignored Dependency Conflicts" );
+	_actionResetIgnoredConflicts = new QAction( label,	// text
+						    label,	// menu text
+						    0,		// accel
+						    0 ); 	// parent
+	
+	_actionResetIgnoredConflicts->setEnabled( ! _ignore.empty() );
+    }
+
+    if ( _actionResetIgnoredConflicts && dialog )
+    {
+	QObject::connect( _actionResetIgnoredConflicts,	SIGNAL( activated() ),
+			  dialog,			SLOT  ( resetIgnoredConflicts() ) );
+    }
+	
+    return _actionResetIgnoredConflicts;
+}
+
+
+void
+YQPkgConflict::updateActions()
+{
+    if ( _actionResetIgnoredConflicts )
+    {
+	_actionResetIgnoredConflicts->setEnabled( ! _ignore.empty() );
+    }
 }
 
 

@@ -30,9 +30,11 @@
 #include "QY2ListView.h"
 
 
+class QAction;
 class YQPkgConflict;
 class YQPkgConflictAlternative;
 class YQPkgConflictResolution;
+class YQPkgConflictDialog;
 
 
 /**
@@ -98,12 +100,6 @@ public slots:
      * Ignore all conflicts.
      **/
     void ignoreAll();
-
-    /**
-     * Reset all ignored conflicts as if the user had never selected any
-     * conflict to ignore.
-     **/
-    void resetIgnoredConflicts();
 
     /**
      * Ask for a file name and save the current conflict list to file.
@@ -213,6 +209,36 @@ public:
      * conflict to ignore.
      **/
     static void resetIgnoredConflicts();
+    
+    /**
+     * Save all ignored conflicts to (predefined) file.
+     **/
+    static void saveIgnoredConflicts();
+
+    /**
+     * Load ignored conflicts from (predefined) file.
+     **/
+    static void loadIgnoredConflicts();
+
+    /**
+     * Returns 'true' if there are any ignored conflicts, 'false' otherwise.
+     **/
+    static bool haveIgnoredConflicts();
+
+    /**
+     * Returns a pointer to the one and only internal QAction that resets
+     * ignored dependency conflicts. If none exists yet, it will be created.
+     *
+     * 'dialog' is the conflict dialog this action is connected to.
+     **/
+    static QAction * actionResetIgnoredConflicts( YQPkgConflictDialog * dialog = 0 );
+
+    /**
+     * Update the enabled / disabled state of all internal QActions (that are
+     * created yet - this method will not create any if they don't exist yet).
+     **/
+    static void updateActions();
+
 
 protected:
 
@@ -308,6 +334,8 @@ protected:
      * Conflicts that are to be ignored.
      **/
     static QMap<QString, bool> _ignore;
+
+    static QAction *		_actionResetIgnoredConflicts;
 };
 
 

@@ -32,6 +32,7 @@
 #include <qpopupmenu.h>
 #include <qlayout.h>
 #include <qhbox.h>
+#include <qaction.h>
 
 #include "YQPkgConflictDialog.h"
 #include "YQPkgConflictList.h"
@@ -132,7 +133,9 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
     _expertMenu->insertItem( _( "&Save this list to file..." ),
 			     _conflictList, SLOT( askSaveToFile() ) );
 
+    YQPkgConflict::actionResetIgnoredConflicts()->addTo( _expertMenu );
 
+    
     // "Cancel" button
 
     button = new QPushButton( _( "&Cancel" ), buttonBox );
@@ -161,13 +164,13 @@ YQPkgConflictDialog::solveAndShowConflicts()
 {
     int result = QDialog::Accepted;
     CHECK_PTR( _conflictList );
-    
+
     if ( ! _selectableManager )
     {
 	y2error( "NULL selectable manager - can't resolve dependendies!" );
 	return result;
     }
-    
+
     YUIQt::yuiqt()->busyCursor();
 
     if ( isVisible() )
@@ -267,6 +270,18 @@ Do this only if you know exactly what you are doing!\
 
     _conflictList->ignoreAll();
     solveAndShowConflicts();
+}
+
+
+void
+YQPkgConflictDialog::resetIgnoredConflicts()
+{
+    YQPkgConflict::resetIgnoredConflicts();
+
+    QMessageBox::information( this, "",
+			      _( "Dependency solver is now reset to original state -\n"
+				 "no conflicts ignored." ),
+			      QMessageBox::Ok );
 }
 
 

@@ -67,7 +67,7 @@ public:
      * dependencies. 
      **/
     PMManager * selectableManager() const { return _selectableManager; }
-
+    
 
 public slots:
 
@@ -84,6 +84,12 @@ public slots:
      * Ignore all conflicts.
      **/
     void ignoreAll();
+
+    /**
+     * Reset all ignored conflicts as if the user had never selected any
+     * conflict to ignore.
+     **/
+    void resetIgnoredConflicts();
 
 
 signals:

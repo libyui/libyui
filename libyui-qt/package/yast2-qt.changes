@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Mon Jan 20 20:00:44 CET 2003 - sh@suse.de
+
+- Package manager enhancements:
+  - Enhanced feedback while checking dependencies
+  - Changed default to "off" for auto dependency check
+  - Save/load ignored dependency conflicts to/from
+    /var/adm/YaST/ignored-conflicts 
+- Bumped version to 2.7.4
+
+-------------------------------------------------------------------
 Tue Jan 14 19:05:09 CET 2003 - sh@suse.de
 
 - Package manager enhancements:

@@ -56,6 +56,7 @@
 #include "YQPackageSelector.h"
 #include "YQPkgChangesDialog.h"
 #include "YQPkgConflictDialog.h"
+#include "YQPkgConflictList.h"
 #include "YQPkgDependenciesView.h"
 #include "YQPkgDescriptionView.h"
 #include "YQPkgDiskUsageList.h"
@@ -142,6 +143,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     makeConnections();
     emit loadData();
 
+    YQPkgConflict::loadIgnoredConflicts();
     Y2PM::packageManager().SaveState();
     Y2PM::selectionManager().SaveState();
 
@@ -515,6 +517,7 @@ YQPackageSelector::layoutMenuBar( QWidget * parent )
     _fileMenu	= 0;
     _viewMenu	= 0;
     _pkgMenu 	= 0;
+    _extrasMenu	= 0;
     _helpMenu 	= 0;
 
 }
@@ -531,9 +534,14 @@ YQPackageSelector::addMenus()
     CHECK_PTR( _fileMenu );
     _menuBar->insertItem( _( "&File" ), _fileMenu );
 
-    if ( _pkgList )
+    if ( ! _youMode )
     {
-	_fileMenu->insertItem( _( "Export &Package List" ), _pkgList, SLOT( askExportList() ) );
+#warning NOT IMPLEMENTED YET: Load status (waiting for package manager function)
+	_fileMenu->insertItem( _( "&Load..." ),	this, SLOT( notImplemented() ) );
+
+#warning NOT IMPLEMENTED YET: Save status (waiting for package manager function)
+	_fileMenu->insertItem( _( "Save &As..." ),	this, SLOT( notImplemented() ) );
+
 	_fileMenu->insertSeparator();
     }
 
@@ -570,6 +578,26 @@ YQPackageSelector::addMenus()
 	submenu->insertSeparator();
 	_pkgList->actionInstallListSourceRpms->addTo( submenu );
 	_pkgList->actionDontInstallListSourceRpms->addTo( submenu );
+    }
+
+
+    //
+    // Extras menu
+    //
+
+    _extrasMenu = new QPopupMenu( _menuBar );
+    CHECK_PTR( _extrasMenu );
+    _menuBar->insertItem( _( "&Extras" ), _extrasMenu );
+
+    if ( _pkgList )
+    {
+	_extrasMenu->insertItem( _( "Export &Package List To Text File" ), _pkgList, SLOT( askExportList() ) );
+	_extrasMenu->insertSeparator();
+    }
+
+    if ( _pkgConflictDialog )
+    {
+	YQPkgConflict::actionResetIgnoredConflicts( _pkgConflictDialog )->addTo( _extrasMenu );
     }
 
 
@@ -704,9 +732,9 @@ YQPackageSelector::manualResolvePackageDependencies()
     }
 
     YUIQt::yuiqt()->busyCursor();
-    
+
     int result = _pkgConflictDialog->solveAndShowConflicts();
-    
+
     YUIQt::yuiqt()->normalCursor();
 
 #if DEPENDENCY_FEEDBACK_IF_OK
@@ -736,7 +764,7 @@ YQPackageSelector::resolvePackageDependencies()
     YUIQt::yuiqt()->busyCursor();
 
     QColor oldBackground;
-    
+
     if ( _checkDependenciesButton )
     {
 	oldBackground = _checkDependenciesButton->paletteBackgroundColor();
@@ -745,12 +773,12 @@ YQPackageSelector::resolvePackageDependencies()
     }
 
     int result = _pkgConflictDialog->solveAndShowConflicts();
-    
+
     if ( _checkDependenciesButton )
 	_checkDependenciesButton->setPaletteBackgroundColor( oldBackground );
 
     YUIQt::yuiqt()->normalCursor();
-    
+
     return result;
 }
 
@@ -882,14 +910,25 @@ YQPackageSelector::accept()
 
     Y2PM::packageManager().ClearSaveState();
     Y2PM::selectionManager().ClearSaveState();
+    YQPkgConflict::saveIgnoredConflicts();
 
     if ( _youMode )
 	Y2PM::youPatchManager().ClearSaveState();
 
-#warning TODO: Save current selections state (no Y2PM::PMSelectionManager call yet)
+#warning NOT IMPLEMENTED YET: Save current selections state (waiting for package manager function)
+#warning NOT IMPLEMENTED YET: Save taboo packages / selections (waiting for package manager function)
 
     _yuiqt->setMenuSelection( YCPSymbol("accept", true) );
     _yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
+}
+
+
+void
+YQPackageSelector::notImplemented()
+{
+    QMessageBox::information( this, "",
+			      _( "Not implemented yet. Sorry." ),
+			      QMessageBox::Ok );
 }
 
 

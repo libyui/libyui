@@ -161,6 +161,11 @@ public slots:
      **/
     void keyboardHelp();
 
+    /**
+     * Inform user about a feature that is not implemented yet.
+     * This should NEVER show up in the final version.
+     **/
+    void notImplemented();
 
 signals:
 
@@ -278,6 +283,7 @@ protected:
     QPopupMenu *			_fileMenu;
     QPopupMenu *			_viewMenu;
     QPopupMenu *			_pkgMenu;
+    QPopupMenu *			_extrasMenu;
     QPopupMenu *			_helpMenu;
 };
 
