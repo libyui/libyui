@@ -176,6 +176,10 @@ void NCPackageSelector::showDefaultList()
 	    // do an initial dependency solving
 	    packager.showPackageDependencies( true );
 	}
+	if ( youMode )
+	{
+	    packager.showDownloadSize();
+	}
     }
     else
     {
