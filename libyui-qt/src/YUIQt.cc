@@ -34,6 +34,7 @@
 #include "YUIQt.h"
 #include "YEvent.h"
 #include "YUISymbols.h"
+#include "YQEBunny.h"
 #include "utf8.h"
 
 #include "YQDialog.h"
@@ -534,51 +535,15 @@ void YUIQt::closeDialog( YDialog * dialog )
 
 void YUIQt::easterEgg()
 {
-    int bytes_per_pixel;
-
-    switch ( desktop()->x11AppDepth() )
-    {
-	case 15:
-	case 16: bytes_per_pixel = 2;
-	    break;
-
-	case 24:
-	case 32: bytes_per_pixel = 4;
-	    break;
-
-	default:
-	    y2warning( "Pixel depth %d not supported - no easter egg",
-		       desktop()->x11AppDepth() );
-	    return;
-    }
-
-    const char * display = getenv( "DISPLAY" );
-
-    if ( ! display )
-    {
-	y2warning( "$DISPLAY not set - no easter egg" );
-	return;
-    }
-
-    if ( strcmp( display, ":0"   ) != 0 &&
-	 strcmp( display, ":0.0" ) != 0   )
-    {
-	y2warning( "Not on system console - no easter egg" );
-	return;
-    }
-
     y2milestone( "Starting easter egg..." );
-#if 0
-    drawStuff( (unsigned long) desktop()->width(),
-	       (unsigned long) desktop()->height,
-	       (unsigned long) bytes_per_pixel );
-#endif
+    
 
-#if 1
+#if 0
     system( "sudo dd if=/dev/urandom bs=1024 count=1024 of=/dev/fb0" );
     sleep( 2 );
 #endif
-    
+
+    YQEasterBunny::layEgg();
     y2milestone( "Done." );
 
     // desktop()->repaint() has no effect - we need to do it the hard way.

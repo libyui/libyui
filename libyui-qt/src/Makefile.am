@@ -46,6 +46,7 @@ liby2qt_la_SOURCES = 				\
 	YQComboBox.cc				\
 	YQDialog.cc				\
 	YQDownloadProgress.cc			\
+	YQEBunny.cc				\
 	YQEmpty.cc				\
 	YQFrame.cc				\
 	YQImage.cc				\
@@ -95,6 +96,7 @@ liby2qt_la_SOURCES = 				\
 	YQTextEntry.cc				\
 	YQTree.cc				\
 						\
+	YFrameBuffer.cc				\
 	QY2BarGraph.cc				\
 	QY2ComboTabWidget.cc			\
 	QY2DiskUsageList.cc			\

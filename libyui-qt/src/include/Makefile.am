@@ -22,6 +22,7 @@ noinst_HEADERS =				\
 	YQDialog.h				\
 	YQDownloadProgress.h			\
 	YQEmpty.h				\
+	YQEBunny.h				\
 	YQFrame.h				\
 	YQImage.h				\
 	YQIntField.h				\
@@ -69,6 +70,7 @@ noinst_HEADERS =				\
 	YQTextEntry.h				\
 	YQTree.h				\
 						\
+	YFrameBuffer.h				\
 	QY2BarGraph.h				\
 	QY2CharValidator.h			\
 	QY2ComboTabWidget.h			\
