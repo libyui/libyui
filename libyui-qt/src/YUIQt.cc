@@ -15,7 +15,7 @@
   Author:     Mathias Kettner <kettner@suse.de>
   Maintainer: Stefan Hundhammer <sh@suse.de>
 
-  Textdomain "general"
+  Textdomain "qt-packages"
 
 /-*/
 
