@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Mar 10 18:57:03 CET 2003 - sh@suse.de
+
+- Fixed bug #25011: Force dependency check on startup in PkgMgr
+
+-------------------------------------------------------------------
 Mon Mar 10 17:37:33 CET 2003 - sh@suse.de
 
 - Update disk usage in PkgMgr after selection dependency solving

@@ -180,16 +180,6 @@ YQPackageSelector::YQPackageSelector( YUIQt * yuiqt, QWidget *parent, YWidgetOpt
 		_selList->filter();
 	    }
 	}
-
-#if CHECK_DEPENDENCIES_ON_STARTUP
-
-	if ( ! _youMode )
-	{
-	    // Fire up the first dependency check in the main loop.
-	    // Don't do this right away - wait until all initializations are finished.
-	    QTimer::singleShot( 0, this, SLOT( autoResolveDependencies() ) );
-	}
-#endif
     }
 
 
@@ -208,6 +198,17 @@ YQPackageSelector::YQPackageSelector( YUIQt * yuiqt, QWidget *parent, YWidgetOpt
 
     y2debug( "Floppy device: %s", (const char *) _floppyDevice );
     y2milestone( "PackageSelector init done" );
+
+    
+#if CHECK_DEPENDENCIES_ON_STARTUP
+
+    if ( ! _youMode )
+    {
+	// Fire up the first dependency check in the main loop.
+	// Don't do this right away - wait until all initializations are finished.
+	QTimer::singleShot( 0, this, SLOT( resolvePackageDependencies() ) );
+    }
+#endif
 }
 
 
