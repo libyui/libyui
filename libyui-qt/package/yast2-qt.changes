@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Nov  2 14:05:39 CET 2004 - nashif@suse.de
+
+- Added new special widgets: YDate / YTime 
+
+-------------------------------------------------------------------
 Thu Oct 28 19:38:43 CEST 2004 - sh@suse.de
 
 - Fixed bug #46805: Error handling for TextEntry and ComboBox
