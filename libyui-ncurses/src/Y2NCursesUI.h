@@ -35,11 +35,21 @@ class Y2NCursesUI : public NCurses, public YUIInterpreter {
     virtual bool want_colors();
     virtual void init_title();
 
+   /**
+    * Global reference to the UI
+    **/
+   static Y2NCursesUI * _ui;
+    
   public:
 
     Y2NCursesUI( bool with_threads, const char * macro_file, Y2Component *callback );
     virtual ~Y2NCursesUI();
 
+   /**
+    * Access the global Y2NCursesUI.
+    */
+    static Y2NCursesUI * ui() { return _ui; }
+    
     /**
      * Idle around until fd_ycp is readable
     */

@@ -62,6 +62,8 @@
 
 extern string language2encoding( string lang );
 
+Y2NCursesUI * Y2NCursesUI::_ui = 0;
+
 
 /******************************************************************
 **
@@ -98,7 +100,9 @@ Y2NCursesUI::Y2NCursesUI( bool with_threads,
 	::endwin();
 	abort();
     }
-  
+
+    _ui = this;
+    
     if ( getenv( "LANG" ) != NULL )
     {
 	string language = getenv( "LANG" );
