@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Mon Sep  2 18:15:01 CEST 2002 - sh@suse.de
+
+- V 2.6.10
+- Generalized internal pkg classes 
+- YOU UI now usable
+- colorized lists
+- context menus
+- lots of small stuff
+
+-------------------------------------------------------------------
 Tue Aug 27 19:15:23 CEST 2002 - sh@suse.de
 
 - V 2.6.9
