@@ -45,8 +45,8 @@ YQPkgYouPatchList::YQPkgYouPatchList( QWidget *parent )
     int numCol = 0;
     addColumn( "" );					_statusCol	= numCol++;
     addColumn( _( "YaST Online Update Patch"	) );	_summaryCol	= numCol++;
-    addColumn( _( "Kind"			) );	_kindCol	= numCol++;
-    addColumn( _( "Size"			) );	_sizeCol	= numCol++;
+    addColumn( _( "Kind" 			) );	_kindCol	= numCol++;
+    addColumn( _( "Size" 			) );	_sizeCol	= numCol++;
     setAllColumnsShowFocus( true );
     setColumnAlignment( sizeCol(), Qt::AlignRight );
 
@@ -199,7 +199,7 @@ YQPkgYouPatchList::addAllInListSubMenu( QPopupMenu * menu )
     actionSetListUpdateForce->addTo( submenu );
     actionSetListTaboo->addTo( submenu );
 
-    menu->insertItem( _( "&All in this list" ), submenu );
+    menu->insertItem( _( "&All in This List" ), submenu );
 
     return submenu;
 }

@@ -90,12 +90,12 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     CHECK_PTR( gbox );
 
 
-    _searchInName        = new QCheckBox( _( "&Name"        ), gbox ); CHECK_PTR( _searchInName        );
-    _searchInSummary     = new QCheckBox( _( "Su&mmary"     ), gbox ); CHECK_PTR( _searchInSummary     );
-    _searchInDescription = new QCheckBox( _( "Descr&iption" ), gbox ); CHECK_PTR( _searchInDescription );
+    _searchInName        = new QCheckBox( _( "&Name" 		), gbox ); CHECK_PTR( _searchInName        );
+    _searchInSummary     = new QCheckBox( _( "Su&mmary" 	), gbox ); CHECK_PTR( _searchInSummary     );
+    _searchInDescription = new QCheckBox( _( "Descr&iption"	), gbox ); CHECK_PTR( _searchInDescription );
     addVStretch( gbox );
-    _searchInProvides    = new QCheckBox( _( "&Provides"    ), gbox ); CHECK_PTR( _searchInProvides    );
-    _searchInRequires    = new QCheckBox( _( "Re&quires"    ), gbox ); CHECK_PTR( _searchInRequires    );
+    _searchInProvides    = new QCheckBox( _( "&Provides" 	), gbox ); CHECK_PTR( _searchInProvides    );
+    _searchInRequires    = new QCheckBox( _( "Re&quires" 	), gbox ); CHECK_PTR( _searchInRequires    );
 
     _searchInName->setChecked( true );
     _searchInSummary->setChecked( true );
@@ -111,16 +111,16 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     CHECK_PTR( bgroup );
     bgroup->setRadioButtonExclusive( true );
 
-    _contains     = new QRadioButton( _( "C&ontains"               ), bgroup ); CHECK_PTR( _contains     );
-    _beginsWith   = new QRadioButton( _( "&Begins with"            ), bgroup ); CHECK_PTR( _beginsWith   );
-    _exactMatch   = new QRadioButton( _( "E&xact match"            ), bgroup ); CHECK_PTR( _exactMatch   );
-    _useWildcards = new QRadioButton( _( "Use &wildcards"          ), bgroup ); CHECK_PTR( _useWildcards );
-    _useRegexp    = new QRadioButton( _( "Use &regular expression" ), bgroup ); CHECK_PTR( _useRegexp    );
+    _contains     = new QRadioButton( _( "C&ontains" 		), bgroup ); CHECK_PTR( _contains     );
+    _beginsWith   = new QRadioButton( _( "&Begins with" 	), bgroup ); CHECK_PTR( _beginsWith   );
+    _exactMatch   = new QRadioButton( _( "E&xact Match" 	), bgroup ); CHECK_PTR( _exactMatch   );
+    _useWildcards = new QRadioButton( _( "Use &Wild Cards" 	), bgroup ); CHECK_PTR( _useWildcards );
+    _useRegexp    = new QRadioButton( _( "Use &Regular Expression" ), bgroup ); CHECK_PTR( _useRegexp    );
 
     _contains->setChecked( true );
 
     addVStretch( this );
-    _caseSensitive = new QCheckBox( _( "Case sensiti&ve" ), this ); CHECK_PTR( _caseSensitive );
+    _caseSensitive = new QCheckBox( _( "Case Sensiti&ve" ), this ); CHECK_PTR( _caseSensitive );
 
     for ( int i=0; i < 6; i++ )
 	addVStretch( this );
@@ -181,7 +181,7 @@ YQPkgSearchFilterView::filter()
 	// longer than a couple of seconds (default: 4).
 
 	QProgressDialog progress( _( "Searching..." ),
-				  _( "Cancel" ),
+				  _( "&Cancel" ),
 				  Y2PM::packageManager().size() );
 	progress.setMinimumDuration( 2000 ); // millisec
 	QTime timer;
@@ -229,7 +229,7 @@ YQPkgSearchFilterView::filter()
 	}
 
 	if ( _matchCount == 0 )
-	    emit message( _( "No results." ) );
+	    emit message( _( "No Results." ) );
     }
 
     emit filterFinished();

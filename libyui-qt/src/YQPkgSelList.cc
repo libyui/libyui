@@ -40,7 +40,7 @@ YQPkgSelList::YQPkgSelList( QWidget *parent )
 
     int numCol = 0;
     addColumn( ""		);	_statusCol	= numCol++;
-    addColumn( _( "Selection"	) );	_summaryCol	= numCol++;
+    addColumn( _( "Selection" ) );	_summaryCol	= numCol++;
     setAllColumnsShowFocus( true );
 
     connect( this, 	SIGNAL( selectionChanged        ( QListViewItem * ) ),

@@ -42,9 +42,9 @@ YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
 
 
     int numCol = 0;
-    addColumn( _( "Version" ) );		_versionCol	= numCol++;
-    addColumn( _( "Arch."   ) );		_archCol	= numCol++;
-    addColumn( _( "Installation Source" ) );	_instSrcCol	= numCol++;
+    addColumn( _( "Version" 		) );	_versionCol	= numCol++;
+    addColumn( _( "Arch." 		) );	_archCol	= numCol++;
+    addColumn( _( "Installation Source"	) );	_instSrcCol	= numCol++;
     _statusCol	= _instSrcCol;
 
     _nameCol	= _versionCol;

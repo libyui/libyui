@@ -189,13 +189,13 @@ YQPkgObjList::statusText( PMSelectable::UI_Status status ) const
 {
     switch ( status )
     {
-	case PMSelectable::S_Taboo:		return _( "Taboo - never install"	);
+	case PMSelectable::S_Taboo:		return _( "Taboo -- never install"	);
 	case PMSelectable::S_Del:		return _( "Delete"			);
 	case PMSelectable::S_Update:		return _( "Update"			);
 	case PMSelectable::S_Install:		return _( "Install"			);
-	case PMSelectable::S_AutoDel:		return _( "Auto-delete"			);
-	case PMSelectable::S_AutoInstall:	return _( "Auto-install"		);
-	case PMSelectable::S_AutoUpdate:	return _( "Auto-update"			);
+	case PMSelectable::S_AutoDel:		return _( "Autodelete"			);
+	case PMSelectable::S_AutoInstall:	return _( "Autoinstall"			);
+	case PMSelectable::S_AutoUpdate:	return _( "Autoupdate"			);
 	case PMSelectable::S_KeepInstalled:	return _( "Keep"			);
 	case PMSelectable::S_NoInst:		return _( "Don't install"		);
     }
@@ -336,11 +336,11 @@ YQPkgObjList::createAction( PMSelectable::UI_Status status, const QString & key,
 
 
 QAction *
-YQPkgObjList::createAction( const QString & 	text,
-			    const QPixmap & 	icon,
-			    const QPixmap & 	insensitiveIcon,
-			    const QString & 	key,
-			    bool 		enabled )
+YQPkgObjList::createAction( const QString &	text,
+			    const QPixmap &	icon,
+			    const QPixmap &	insensitiveIcon,
+			    const QString &	key,
+			    bool		enabled )
 {
     QString label = text;
 
@@ -411,7 +411,7 @@ YQPkgObjList::addAllInListSubMenu( QPopupMenu * menu )
     actionSetListUpdateForce->addTo( submenu );
     actionSetListTaboo->addTo( submenu );
 
-    menu->insertItem( _( "&All in this list" ), submenu );
+    menu->insertItem( _( "&All in This List" ), submenu );
 
     return submenu;
 }

@@ -95,7 +95,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
 
     // "OK" button
 
-    QPushButton * button = new QPushButton( _( "&OK - Try Again" ), buttonBox );
+    QPushButton * button = new QPushButton( _( "&OK -- Try Again" ), buttonBox );
     CHECK_PTR( button );
     button->setDefault( true );
 
@@ -130,7 +130,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
     CHECK_PTR( _expertMenu );
     button->setPopup( _expertMenu );
 
-    _expertMenu->insertItem( _( "&Save this list to file..." ),
+    _expertMenu->insertItem( _( "&Save This List to a File..." ),
 			     _conflictList, SLOT( askSaveToFile() ) );
 
     YQPkgConflict::actionResetIgnoredConflicts()->addTo( _expertMenu );
@@ -255,12 +255,11 @@ YQPkgConflictDialog::ignoreAll()
     if ( _conflictList->count() >= IGNORE_WARNING_THRESHOLD )
     {
 	if ( QMessageBox::warning( this, "",
-			       _( "\
-Ignoring that many dependency problems\n\
-may result in a really inconsistent system.\n\
-\n\
-Do this only if you know exactly what you are doing!\
-" ),
+			       _( "Ignoring so many dependency problems\n"
+				  "may result in an inconsistent system.\n"
+				  "\n"
+				  "Only do this if you know exactly what you are doing!"
+				  ),
 			       _( "&Ignore Anyway" ), _( "&Cancel" ), "",
 			       1, // defaultButtonNumber (from 0)
 			       1 ) // escapeButtonNumber

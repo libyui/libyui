@@ -49,7 +49,7 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
     : QDialog( parent )
 {
     // Dialog title
-    setCaption( _("Changed Packages") );
+    setCaption( _( "Changed Packages" ) );
 
     // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );

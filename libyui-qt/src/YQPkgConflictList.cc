@@ -63,7 +63,7 @@ QAction *		YQPkgConflict::_actionResetIgnoredConflicts = 0;
 YQPkgConflictList::YQPkgConflictList( QWidget * parent )
     : QY2ListView( parent )
 {
-    addColumn( _("Dependency conflict") );
+    addColumn( _( "Dependency Conflict" ) );
     setRootIsDecorated( true );
 }
 
@@ -149,7 +149,7 @@ YQPkgConflictList::askSaveToFile() const
 {
     QString filename = YUIQt::yuiqt()->askForSaveFileName( "conflicts.txt",	// startsWith
 							   "*.txt",		// filter
-							   _( "Save conflicts list" ) );
+							   _( "Save Conflicts List" ) );
     if ( ! filename.isEmpty() )
 	saveToFile( filename, true );
 }
@@ -172,7 +172,7 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 
 	    QMessageBox::warning( 0,						// parent
 				  _( "Error" ),					// caption
-				  _( "Can't open file %1" ).arg( filename ),
+				  _( "Cannot open file %1" ).arg( filename ),
 				  QMessageBox::Ok | QMessageBox::Default,	// button0
 				  QMessageBox::NoButton,			// button1
 				  QMessageBox::NoButton );			// button2
@@ -512,7 +512,7 @@ YQPkgConflict::addResolutionSuggestions()
     QY2CheckListItem * header = new QY2CheckListItem( this,
 						      // Heading for the choices
 						      // how to resolve this conflict
-						      _( "Conflict resolution:" ),
+						      _( "Conflict Resolution:" ),
 						      QCheckListItem::Controller,
 						      true );
     CHECK_PTR( header );
@@ -539,26 +539,26 @@ YQPkgConflict::addUndoResolution( QY2CheckListItem * parent )
     switch ( _status )
     {
 	case PMSelectable::S_Taboo:
-	    text = ( _( "Do not set %1 to taboo" ) ).arg( _shortName );
+	    text = ( _( "Do Not Set %1 to Taboo" ) ).arg( _shortName );
 	    _undo_status = _pmObj->hasInstalledObj() ?
 		PMSelectable::S_KeepInstalled : PMSelectable::S_NoInst;
 	    break;
 
 	case PMSelectable::S_Del:
 	case PMSelectable::S_AutoDel:
-	    text = ( _( "Do not delete %1" ) ).arg( _shortName );
+	    text = ( _( "Do Not Delete %1" ) ).arg( _shortName );
 	    _undo_status = PMSelectable::S_KeepInstalled;
 	    break;
 
 	case PMSelectable::S_AutoUpdate:
 	case PMSelectable::S_Update:
-	    text = ( _( "Do not update %1" ) ).arg( _shortName );
+	    text = ( _( "Do Not Update %1" ) ).arg( _shortName );
 	    _undo_status = PMSelectable::S_KeepInstalled;
 	    break;
 
 	case PMSelectable::S_AutoInstall:
 	case PMSelectable::S_Install:
-	    text = ( _( "Do not install %1" ) ).arg( _shortName );
+	    text = ( _( "Do Not Install %1" ) ).arg( _shortName );
 	    _undo_status = PMSelectable::S_NoInst;
 	    break;
 
@@ -601,16 +601,16 @@ YQPkgConflict::addDeleteResolution( QY2CheckListItem * parent )
     if ( _conflict.remove_to_solve_conflict.size() == 1 )
     {
 	if ( _isPkg )
-	    text = _( "Remove the conflicting package" );
+	    text = _( "Remove the Conflicting Package" );
 	else
-	    text = _( "Remove the conflicting selection" );
+	    text = _( "Remove the Conflicting Selection" );
     }
     else
     {
 	if ( _isPkg )
-	    text = ( _( "Remove all %1 conflicting packages" ) ).arg( _conflict.remove_to_solve_conflict.size() );
+	    text = ( _( "Remove All %1 Conflicting Packages" ) ).arg( _conflict.remove_to_solve_conflict.size() );
 	else
-	    text = ( _( "Remove all %1 conflicting selections" ) ).arg( _conflict.remove_to_solve_conflict.size() );
+	    text = ( _( "Remove All %1 Conflicting Selections" ) ).arg( _conflict.remove_to_solve_conflict.size() );
     }
 
     YQPkgConflictResolution * res =
@@ -667,7 +667,7 @@ YQPkgConflict::dumpDeleteList( QListViewItem * parent )
 	    if ( pkg->hasInstalledObj() )
 		text = ( _( "Delete %1" ) ).arg( name );
 	    else
-		text = ( _( "Do not install %1" ) ).arg( name );
+		text = ( _( "Do Not Install %1" ) ).arg( name );
 
 
 	    QY2ListViewItem * item = new QY2ListViewItem( parent, text, true );
@@ -684,7 +684,7 @@ void
 YQPkgConflict::addIgnoreResolution( QY2CheckListItem * parent )
 {
     new YQPkgConflictResolution( parent,
-				 _( "Ignore this conflict and risk system inconsistencies" ),
+				 _( "Ignore Conflict and Risk System Inconsistencies" ),
 				 YQPkgConflictIgnore );
 }
 

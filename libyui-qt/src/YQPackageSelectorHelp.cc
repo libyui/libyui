@@ -46,7 +46,7 @@ YQPackageSelector::help()
     {
 	// Help specific to YOU (YaST Online Update) mode
 
-	html += para( _( "In this dialog you can select YOU (YaST Online Update) patches to download and install." ) );
+	html += para( _( "In this dialog, select YOU (YaST Online Update) patches to download and install." ) );
 	html += para( _( "The list on the left side contains available patches"
 			 " along with the respective patch kind (security, recommended, or optional)"
 			 " and the (estimated) download size." ) );
@@ -177,7 +177,7 @@ YQPackageSelector::symbolHelp()
 
     html += symHelp( "autoinstall.xpm",
 		     // Translators: Package status short (!) description
-		     _( "Auto-install" ),
+		     _( "Autoinstall" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package will be installed automatically because some other package needs it"
 			" or because it is contained in a predefined software selection"
@@ -187,14 +187,14 @@ YQPackageSelector::symbolHelp()
 
     html += symHelp( "autoupdate.xpm",
 		     // Translators: Package status short (!) description
-		     _( "Auto-update" ),
+		     _( "Autoupdate" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is already installed, but some other package (or selection)"
 			" needs a newer version, so it will automatically be updated." ) );
 
     html += symHelp( "autodel.xpm",
 		     // Translators: Package status short (!) description
-		     _( "Auto-delete" ),
+		     _( "Autodelete" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is already installed, but some predefined software selection"
 			"(e.g., \"Multimedia\", \"Development\" ) requires that it is deleted." ) );
@@ -263,7 +263,7 @@ YQPackageSelector::keyboardHelp()
 
     html += keyHelp( "&lt;",
 		     // Translators: Keyboard action short (!) description
-		     _( "Undo update" ),
+		     _( "Undo Update" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "Undo the effect of \">\" above: Set package to \"keep\""
 			" if it is currently set to \"update\". Ignore all other packages." )

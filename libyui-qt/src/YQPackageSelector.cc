@@ -352,8 +352,8 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 #if 0
     // DEBUG
 
-    _filters->addPage( _("Keywords"   ), new QLabel( "Keywords\nfilter\n\nfor future use", 0 ) );
-    _filters->addPage( _("MIME Types" ), new QLabel( "MIME Types\nfilter\n\nfor future use" , 0 ) );
+    _filters->addPage( _( "Keywords"   ), new QLabel( "Keywords\nfilter\n\nfor future use", 0 ) );
+    _filters->addPage( _( "MIME Types" ), new QLabel( "MIME Types\nfilter\n\nfor future use" , 0 ) );
 #endif
 
 }
@@ -484,7 +484,7 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 		 this,         			SLOT  ( manualResolvePackageDependencies() ) );
 
 
-	_autoDependenciesCheckBox = new QCheckBox( _( "A&uto check" ), button_box );
+	_autoDependenciesCheckBox = new QCheckBox( _( "A&utocheck" ), button_box );
 	CHECK_PTR( _autoDependenciesCheckBox );
 	_autoDependenciesCheckBox->setChecked( AUTO_CHECK_DEPENDENCIES_DEFAULT );
     }
@@ -545,8 +545,8 @@ YQPackageSelector::addMenus()
 	_fileMenu->insertSeparator();
     }
 
-    _fileMenu->insertItem( _( "E&xit - Discard Changes" ), this, SLOT( reject() ) );
-    _fileMenu->insertItem( _( "&Quit - Save Changes"    ), this, SLOT( accept() ) );
+    _fileMenu->insertItem( _( "E&xit -- Discard Changes" ), this, SLOT( reject() ) );
+    _fileMenu->insertItem( _( "&Quit -- Save Changes"    ), this, SLOT( accept() ) );
 
 
     if ( _pkgList && ! _youMode )
@@ -635,9 +635,9 @@ YQPackageSelector::addMenus()
     // Note: The help functions and their texts are moved out
     // to a separate source file YQPackageSelectorHelp.cc
 
-    _helpMenu->insertItem( _( "&Overview" 	), this, SLOT( help() 		), Key_F1 );
-    _helpMenu->insertItem( _( "&Symbols" 	), this, SLOT( symbolHelp() 	), SHIFT + Key_F1 );
-    _helpMenu->insertItem( _( "&Keys" 		), this, SLOT( keyboardHelp() 	) );
+    _helpMenu->insertItem( _( "&Overview" ), this, SLOT( help() 	), Key_F1         );
+    _helpMenu->insertItem( _( "&Symbols"  ), this, SLOT( symbolHelp() 	), SHIFT + Key_F1 );
+    _helpMenu->insertItem( _( "&Keys"     ), this, SLOT( keyboardHelp() )                 );
 }
 
 
@@ -838,17 +838,17 @@ YQPackageSelector::checkDiskUsage()
 
     QString msg =
 	// Translators: RichText (HTML-like) format
-	"<p><b>" + _("Error: Out of disk space!") + "</b></p>" + _("\
-<p>\
-You can choose to install anyway if you know very well what you are doing, \
-but you risk getting a corrupted system that requires manual repairs. \
-If you are not absolutely sure how to handle such a case, better \
-press <b>Cancel</b> now and deselect some packages.\
-</p>\
-");
+	"<p><b>" + _( "Error: Out of disk space!" ) + "</b></p>"
+	+ _( "<p>"
+	     "You can choose to install anyway if you know very well what you are doing, "
+	     "but you risk getting a corrupted system that requires manual repairs. "
+	     "If you are not absolutely sure how to handle such a case, better "
+	     "press <b>Cancel</b> now and deselect some packages."
+	     "</p>"
+	     );
 
     return YQPkgDiskUsageWarningDialog::diskUsageWarning( msg,
-							  100, _("C&ontinue anyway"), _("&Cancel") );
+							  100, _( "C&ontinue Anyway" ), _( "&Cancel" ) );
 
 }
 
@@ -858,7 +858,7 @@ YQPackageSelector::pkgExport()
 {
     QString filename = YUIQt::yuiqt()->askForSaveFileName( "user.sel",		// startsWith
 							   "*.sel",		// filter
-							   _( "Save package list" ) );
+							   _( "Save Package List" ) );
     if ( ! filename.isEmpty() )
     {
 	notImplemented();
@@ -874,7 +874,7 @@ YQPackageSelector::pkgImport()
 						      "*.sel",				// filter
 						      this,				// parent
 						      0,				// name
-						      _( "Load package list" ) );	// caption
+						      _( "Load Package List" ) );	// caption
     if ( ! filename.isEmpty() )
     {
 	notImplemented();

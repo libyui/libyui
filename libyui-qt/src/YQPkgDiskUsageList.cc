@@ -107,8 +107,8 @@ YQPkgDiskUsageList::postPendingWarnings()
 {
     if ( overflowWarning.needWarning() )
     {
-	YQPkgDiskUsageWarningDialog::diskUsageWarning( _("<b>Error:</b> Out of disk space!"),
-						       100, _("&OK") );
+	YQPkgDiskUsageWarningDialog::diskUsageWarning( _( "<b>Error:</b> Out of disk space!" ),
+						       100, _( "&OK" ) );
 
 	overflowWarning.warningPostedNotify();
 	runningOutWarning.warningPostedNotify(); // Suppress this (now redundant) other warning
@@ -116,8 +116,8 @@ YQPkgDiskUsageList::postPendingWarnings()
 
     if ( runningOutWarning.needWarning() )
     {
-	YQPkgDiskUsageWarningDialog::diskUsageWarning( _("<b>Warning:</b> Disk space is running out!") ,
-						       MIN_PERCENT_WARN, _("&OK") );
+	YQPkgDiskUsageWarningDialog::diskUsageWarning( _( "<b>Warning:</b> Disk space is running out!" ) ,
+						       MIN_PERCENT_WARN, _( "&OK" ) );
 	runningOutWarning.warningPostedNotify();
     }
 

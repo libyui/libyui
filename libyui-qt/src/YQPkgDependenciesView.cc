@@ -92,7 +92,7 @@ YQPkgDependenciesView::simpleTable( PMPackagePtr pkg )
 	       row( hcell( _( "Provides:"	) )	+ cell( pkg->provides()		) ) +
 	       row( hcell( _( "Requires:<br>(at run time)" ) )
 							+ cell( pkg->requires()		) ) +
-	       row( hcell( _( "Pre-Requires:<br>(at installation time)"	) )
+	       row( hcell( _( "Prerequires:<br>(at installation time)"	) )
 							+ cell( pkg->prerequires()	) ) +
 	       row( hcell( _( "Obsoletes:"	) )	+ cell( pkg->obsoletes()	) ) +
 	       row( hcell( _( "Conflicts:"	) )	+ cell( pkg->conflicts()	) )
@@ -118,7 +118,7 @@ YQPkgDependenciesView::complexTable( PMPackagePtr installed, PMPackagePtr candid
 	       row( hcell( _( "Version:"	) ) + cell( p1->version() + "-" + p1->release() ) + cell( p2->version() + "-" + p2->release() ) ) +
 	       row( hcell( _( "Provides:"	) ) + cell( p1->provides()			) + cell( p2->provides()		      ) ) +
 	       row( hcell( _( "Requires:"	) ) + cell( p1->requires()			) + cell( p2->requires()		      ) ) +
-	       row( hcell( _( "Pre-Requires:"	) ) + cell( p1->prerequires()			) + cell( p2->prerequires()		      ) ) +
+	       row( hcell( _( "Prerequires:"	) ) + cell( p1->prerequires()			) + cell( p2->prerequires()		      ) ) +
 	       row( hcell( _( "Obsoletes:"	) ) + cell( p1->obsoletes()			) + cell( p2->obsoletes()		      ) ) +
 	       row( hcell( _( "Conflicts:"	) ) + cell( p1->conflicts()			) + cell( p2->conflicts()		      ) )
 	       );

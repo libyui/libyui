@@ -1275,10 +1275,10 @@ QString YUIQt::askForSaveFileName( const QString & startWith,
 
 	    int button_no = QMessageBox::information( main_win,
 						      // Window title for confirmation dialog
-						      _( "Please confirm" ),
+						      _( "Confirm"   ),
 						      msg,
 						      _( "C&ontinue" ),
-						      _( "&Cancel" ) );
+						      _( "&Cancel"   ) );
 	    try_again = ( button_no != 0 );
 	}
 

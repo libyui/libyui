@@ -44,28 +44,28 @@ YQPkgList::YQPkgList( QWidget *parent )
     int installedPkgs	= Y2PM::instTarget().numPackages();
 
     int numCol = 0;
-    addColumn( ""		);	_statusCol	= numCol++;
+    addColumn( "" );			_statusCol	= numCol++;
     // _statusCol = numCol;
-    addColumn( _( "Package" ) );	_nameCol	= numCol++;
+    addColumn( _( "Package" 	) );	_nameCol	= numCol++;
 
-    addColumn( _( "Summary"	) );	_summaryCol	= numCol++;
-    addColumn( _( "Size"	) );	_sizeCol	= numCol++;
+    addColumn( _( "Summary" 	) );	_summaryCol	= numCol++;
+    addColumn( _( "Size" 	) );	_sizeCol	= numCol++;
 
     if ( installedPkgs > 0 )
     {
-	addColumn( _( "Avail. Ver." ) ); _versionCol	= numCol++;
+	addColumn( _( "Avail. Ver." ) ); _versionCol	 = numCol++;
 	addColumn( _( "Inst. Ver."  ) ); _instVersionCol = numCol++;
     }
     else
     {
-	addColumn( _( "Version" ) );	_versionCol	= numCol++;
+	addColumn( _( "Version"	) );	_versionCol	= numCol++;
 	_instVersionCol = -1;
     }
 
 #if SOURCE_RPM_DISABLED
 #warning Selecting source RPMs disabled!
 #else
-    addColumn( _( "Source"	) );	_srpmStatusCol	= numCol++;
+    addColumn( _( "Source" ) );		_srpmStatusCol	= numCol++;
 #endif
 
     saveColumnWidths();
@@ -147,7 +147,7 @@ YQPkgList::createSourceRpmContextMenu()
 							statusIcon( PMSelectable::S_Install, true ),
 							statusIcon( PMSelectable::S_Install, false ) );
 
-    actionDontInstallSourceRpm		= createAction( _( "Do&n't Install Source" ),
+    actionDontInstallSourceRpm		= createAction( _( "Do &Not Install Source" ),
 							statusIcon( PMSelectable::S_NoInst, true ),
 							statusIcon( PMSelectable::S_NoInst, false ) );
 
@@ -157,7 +157,7 @@ YQPkgList::createSourceRpmContextMenu()
 							QString::null,		// key
 							true );			// enabled
 
-    actionDontInstallListSourceRpms	= createAction( _( "Do&n't Install Any Sources" ),
+    actionDontInstallListSourceRpms	= createAction( _( "Do &Not Install Any Sources" ),
 							statusIcon( PMSelectable::S_NoInst, true ),
 							statusIcon( PMSelectable::S_NoInst, false ),
 							QString::null,		// key
@@ -177,7 +177,7 @@ YQPkgList::createSourceRpmContextMenu()
 
     QPopupMenu * submenu = new QPopupMenu( _sourceRpmContextMenu );
     CHECK_PTR( submenu );
-    _sourceRpmContextMenu->insertItem( _( "&All in this list" ), submenu );
+    _sourceRpmContextMenu->insertItem( _( "&All in This List" ), submenu );
 
     actionInstallListSourceRpms->addTo( submenu );
     actionDontInstallListSourceRpms->addTo( submenu );
@@ -250,7 +250,7 @@ YQPkgList::askExportList() const
 {
     QString filename = YUIQt::yuiqt()->askForSaveFileName( "pkglist.txt",	// startsWith
 							   "*.txt",		// filter
-							   _( "Export package list" ) );
+							   _( "Export Package List" ) );
     if ( ! filename.isEmpty() )
 	exportList( filename, true );
 }
@@ -273,7 +273,7 @@ YQPkgList::exportList(  const QString filename, bool interactive ) const
 
 	    QMessageBox::warning( 0,						// parent
 				  _( "Error" ),					// caption
-				  _( "Can't open file %1" ).arg( filename ),
+				  _( "Cannot open file %1" ).arg( filename ),
 				  QMessageBox::Ok | QMessageBox::Default,	// button0
 				  QMessageBox::NoButton,			// button1
 				  QMessageBox::NoButton );			// button2
@@ -438,12 +438,12 @@ YQPkgListItem::toolTip( int col )
 	if ( hasSourceRpm() )
 	{
 	    text += installSourceRpm() ?
-		_( "Install sources" ) :
-		_( "Don't install sources" );
+		_( "Install Sources" ) :
+		_( "Do Not Install Sources" );
 	}
 	else
 	{
-	    text += _( "No sources available" );
+	    text += _( "No Sources Available" );
 	}
     }
     else
@@ -458,7 +458,7 @@ YQPkgListItem::toolTip( int col )
 	    installed  = _pmObj->getInstalledObj()->edition().asString().c_str();
 	    installed += "-";
 	    installed +=  _pmObj->getInstalledObj()->arch().asString().c_str();
-	    installed  = _( "Installed version: %1" ).arg( installed );
+	    installed  = _( "Installed Version: %1" ).arg( installed );
 	}
 
 	if (  _pmObj->hasCandidateObj() )
@@ -482,7 +482,7 @@ YQPkgListItem::toolTip( int col )
 		if ( _installedIsNewer )	relation = _( "older" );
 
 		// Translators: %1 is the version, %2 is one of "newer", "older", "same"
-		text += _( "Available version: %1 (%2)" ).arg( candidate ).arg( relation );
+		text += _( "Available Version: %1 (%2)" ).arg( candidate ).arg( relation );
 	    }
 	    else
 	    {

@@ -44,11 +44,11 @@ QY2DiskUsageList::QY2DiskUsageList( QWidget * parent, bool addStdColumns )
 	addColumn( _( "Name" 		) );	_nameCol 		= numCol++;
 	addColumn( _( "Disk Usage" 	) );	_percentageBarCol	= numCol++;
 	addColumn( "" 			  );	_percentageCol		= numCol++;
-	addColumn( _( "Used"		) );	_usedSizeCol		= numCol++;
-	addColumn( _( "Free"		) );	_freeSizeCol		= numCol++;
-	addColumn( _( "Total"		) );	_totalSizeCol		= numCol++;
+	addColumn( _( "Used" 		) );	_usedSizeCol		= numCol++;
+	addColumn( _( "Free" 		) );	_freeSizeCol		= numCol++;
+	addColumn( _( "Total" 		) );	_totalSizeCol		= numCol++;
 #if 0
-	addColumn( _( "Device"		) );	_deviceNameCol		= numCol++;
+	addColumn( _( "Device" 		) );	_deviceNameCol		= numCol++;
 #endif
 
 	setColumnAlignment( percentageCol(),	Qt::AlignRight );
