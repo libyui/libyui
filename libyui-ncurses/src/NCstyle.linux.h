@@ -80,7 +80,7 @@ inline void NCstyleInit_linux( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::ListActiveSelData, 13312|A_BOLD );
   attrset->setAttr( NCstyle::ListActiveSelHint, 13312|A_BOLD );
   attrset->setAttr( NCstyle::RichTextPlain, 16128 );
-  attrset->setAttr( NCstyle::RichTextTitle, 15872 );
+  attrset->setAttr( NCstyle::RichTextTitle, 15360|A_BOLD );
   attrset->setAttr( NCstyle::RichTextLink, 15104 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 15104|A_BOLD );
   attrset->setAttr( NCstyle::RichTextActiveArmedlink, 8192|A_BOLD );
