@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Feb 25 17:32:45 CET 2003 - sh@suse.de
+
+- Workaround for bug #24088: Leftover busy cursor in root window
+
+-------------------------------------------------------------------
 Tue Feb 25 16:28:13 CET 2003 - sh@suse.de
 
 - Fixed bug #24255: Multiple search in yast2-qt package 

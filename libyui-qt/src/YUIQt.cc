@@ -278,6 +278,8 @@ YUIQt::~YUIQt()
 {
     y2debug("Closing down Qt UI.");
 
+    normalCursor();
+    
     if ( busy_cursor )
 	delete busy_cursor;
 }
