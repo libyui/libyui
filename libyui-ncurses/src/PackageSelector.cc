@@ -124,6 +124,10 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     eventHandlerMap[ PkgNames::TabooOn()->toString() ]	= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::TabooOff()->toString() ]	= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::ToggleSource()->toString() ] = &PackageSelector::StatusHandler;
+    eventHandlerMap[ PkgNames::SelectAll()->toString() ] = &PackageSelector::StatusHandler;
+    eventHandlerMap[ PkgNames::DeleteAll()->toString() ] = &PackageSelector::StatusHandler;
+    eventHandlerMap[ PkgNames::UpdateAll()->toString() ] = &PackageSelector::StatusHandler;
+    
     // Etc. menu
     eventHandlerMap[ PkgNames::ShowDeps()->toString() ] = &PackageSelector::DependencyHandler;
     eventHandlerMap[ PkgNames::AutoDeps()->toString() ] = &PackageSelector::DependencyHandler;
@@ -1170,6 +1174,18 @@ bool PackageSelector::StatusHandler( const NCursesEvent&  event )
     else if ( event.selection->compare( PkgNames::ToggleSource() ) == YO_EQUAL )
     {
 	packageList->toggleSourceStatus( );	
+    }
+    else if ( event.selection->compare( PkgNames::SelectAll() ) == YO_EQUAL )
+    {
+	packageList->changeListObjStatus( '+' );
+    }
+    else if ( event.selection->compare( PkgNames::DeleteAll() ) == YO_EQUAL )
+    {
+	packageList->changeListObjStatus( '-' );
+    }
+    else if ( event.selection->compare( PkgNames::UpdateAll() ) == YO_EQUAL )
+    {
+	packageList->changeListObjStatus( '>' );
     }
     
     packageList->setKeyboardFocus();
