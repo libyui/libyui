@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Feb 17 16:18:20 CET 2003 - gs@suse.de
+
+- V 2.7.8
+- setLanguage: never set encoding to UTF-8 (bug #23348)
+- package installation: show more package info, improved 
+  selection popup, show total download size in YOU mode
+
+-------------------------------------------------------------------
 Thu Feb 13 22:46:02 CET 2003 - ma@suse.de
 
 - Let all widgets respond to UI enable/disable requests.
