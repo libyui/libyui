@@ -517,7 +517,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    }
 	    else
 	    {
-		errorLabel1->setLabel( YCPString( "... the package(s) below" ) );
+		errorLabel1->setLabel( YCPString(PkgNames::ContinueRequ().str()) );
 		errorLabel2->setLabel( YCPString( "" ) );
 	    }
 	    labelSet = true;
