@@ -20,7 +20,7 @@
 					    [`item( `id(`groups), 	_("&RPM groups") ),
 					     `item( `id(`selections), 	_("Se&lections") ),
 					     `item( `id(`search), 	_("&Search") ),
-					     `item( `id(`whatif), 	_("&What if ...") ),
+					     `item( `id(`whatif), 	_("&Installation summary") ),
 					     `item( `id(`updatelist),	_("&Update list") ) ]
 					    )),
 			 // label Actions menu ( keep it short ) - actions to change status of a package
