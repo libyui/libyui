@@ -96,12 +96,13 @@ using std::max;
 
 
 
-YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt & opt )
+YQPackageSelector::YQPackageSelector( YUIQt * yuiqt, QWidget *parent, YWidgetOpt & opt, const YCPString & floppyDevice )
     : QVBox(parent)
     , YPackageSelector( opt )
     , _yuiqt(yuiqt)
+    , _floppyDevice( floppyDevice->value().c_str() )
 {
-    setWidgetRep(this);
+    setWidgetRep( this );
 
     _autoDependenciesCheckBox	= 0;
     _checkDependenciesButton	= 0;
@@ -205,6 +206,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     if ( _diskUsageList )
 	_diskUsageList->updateDiskUsage();
 
+    y2debug( "Floppy device: %s", (const char *) _floppyDevice );
     y2milestone( "PackageSelector init done" );
 }
 

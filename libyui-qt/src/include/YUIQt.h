@@ -260,63 +260,63 @@ protected:
 
     /*** Widget creation methods, all inherited from YUIInterpreter ***/
 
-    YContainerWidget *createAlignment		( YWidget *parent, YWidgetOpt &opt, YAlignmentType halign, YAlignmentType valign);
-    YContainerWidget *createFrame		( class YWidget *parent, YWidgetOpt &opt, const YCPString &label );
-    YContainerWidget *createRadioButtonGroup	( YWidget *parent, YWidgetOpt &opt);
-    YContainerWidget *createReplacePoint		( YWidget *parent, YWidgetOpt &opt);
-    YContainerWidget *createSplit		( YWidget *parent, YWidgetOpt &opt, YUIDimension dimension);
-    YContainerWidget *createSquash		( YWidget *parent, YWidgetOpt &opt, bool hsquash, bool vsquash);
-    YContainerWidget *createWeight		( YWidget *parent, YWidgetOpt &opt, YUIDimension dim, long weight);
+    YContainerWidget *createAlignment		( YWidget *parent, YWidgetOpt & opt, YAlignmentType halign, YAlignmentType valign);
+    YContainerWidget *createFrame		( class YWidget *parent, YWidgetOpt & opt, const YCPString & label );
+    YContainerWidget *createRadioButtonGroup	( YWidget *parent, YWidgetOpt & opt);
+    YContainerWidget *createReplacePoint		( YWidget *parent, YWidgetOpt & opt);
+    YContainerWidget *createSplit		( YWidget *parent, YWidgetOpt & opt, YUIDimension dimension);
+    YContainerWidget *createSquash		( YWidget *parent, YWidgetOpt & opt, bool hsquash, bool vsquash);
+    YContainerWidget *createWeight		( YWidget *parent, YWidgetOpt & opt, YUIDimension dim, long weight);
 
-    YWidget *createCheckBox		( YWidget *parent, YWidgetOpt &opt, const YCPString& label, bool checked);
-    YWidget *createComboBox		( YWidget *parent, YWidgetOpt &opt, const YCPString &label);
-    YWidget *createEmpty		( YWidget *parent, YWidgetOpt &opt);
-    YWidget *createImage		( YWidget *parent, YWidgetOpt &opt, ImageType img, YCPString defaulttext);
-    YWidget *createImage		( YWidget *parent, YWidgetOpt &opt, YCPByteblock imagedata, YCPString defaulttext);
-    YWidget *createImage		( YWidget *parent, YWidgetOpt &opt, YCPString file_name, YCPString defaulttext);
-    YWidget *createIntField		( YWidget *parent, YWidgetOpt &opt, const YCPString &label, int minValue, int maxValue, int initialValue);
-    YWidget *createLabel		( YWidget *parent, YWidgetOpt &opt, const YCPString& text);
-    YWidget *createLogView		( YWidget *parent, YWidgetOpt &opt, const YCPString& label, int visibleLines, int maxLines );
-    YWidget *createMultiLineEdit	( YWidget *parent, YWidgetOpt &opt, const YCPString &label, const YCPString& text);
-    YWidget *createProgressBar		( YWidget *parent, YWidgetOpt &opt, const YCPString &label, const YCPInteger& maxprogress, const YCPInteger& progress);
-    YWidget *createPackageSelector	( YWidget *parent, YWidgetOpt &opt );
-    YWidget *createPushButton		( YWidget *parent, YWidgetOpt &opt, const YCPString& label);
-    YWidget *createMenuButton		( YWidget *parent, YWidgetOpt &opt, const YCPString& label);
-    YWidget *createRadioButton		( YWidget *parent, YWidgetOpt &opt, YRadioButtonGroup *rbg, const YCPString& label, bool checked);
-    YWidget *createRichText		( YWidget *parent, YWidgetOpt &opt, const YCPString& text);
-    YWidget *createSelectionBox		( YWidget *parent, YWidgetOpt &opt, const YCPString &label);
-    YWidget *createMultiSelectionBox	( YWidget *parent, YWidgetOpt &opt, const YCPString &label);
-    YWidget *createSpacing		( YWidget *parent, YWidgetOpt &opt, float size, bool horizontal, bool vertical);
-    YWidget *createTable		( YWidget *parent, YWidgetOpt &opt, vector<string> header);
-    YWidget *createTextEntry		( YWidget *parent, YWidgetOpt &opt, const YCPString &label, const YCPString& text);
-    YWidget *createTree			( YWidget *parent, YWidgetOpt &opt, const YCPString &label);
-    YWidget *createPkgSpecial		( YWidget *parent, YWidgetOpt &opt, const YCPString &subwidget );
+    YWidget *createCheckBox		( YWidget *parent, YWidgetOpt & opt, const YCPString & label, bool checked);
+    YWidget *createComboBox		( YWidget *parent, YWidgetOpt & opt, const YCPString & label);
+    YWidget *createEmpty		( YWidget *parent, YWidgetOpt & opt);
+    YWidget *createImage		( YWidget *parent, YWidgetOpt & opt, ImageType img, YCPString defaulttext);
+    YWidget *createImage		( YWidget *parent, YWidgetOpt & opt, YCPByteblock imagedata, YCPString defaulttext);
+    YWidget *createImage		( YWidget *parent, YWidgetOpt & opt, YCPString file_name, YCPString defaulttext);
+    YWidget *createIntField		( YWidget *parent, YWidgetOpt & opt, const YCPString & label, int minValue, int maxValue, int initialValue);
+    YWidget *createLabel		( YWidget *parent, YWidgetOpt & opt, const YCPString & text);
+    YWidget *createLogView		( YWidget *parent, YWidgetOpt & opt, const YCPString & label, int visibleLines, int maxLines );
+    YWidget *createMultiLineEdit	( YWidget *parent, YWidgetOpt & opt, const YCPString & label, const YCPString & text);
+    YWidget *createProgressBar		( YWidget *parent, YWidgetOpt & opt, const YCPString & label, const YCPInteger & maxprogress, const YCPInteger & progress);
+    YWidget *createPackageSelector	( YWidget *parent, YWidgetOpt & opt, const YCPString & floppyDevice );
+    YWidget *createPushButton		( YWidget *parent, YWidgetOpt & opt, const YCPString & label);
+    YWidget *createMenuButton		( YWidget *parent, YWidgetOpt & opt, const YCPString & label);
+    YWidget *createRadioButton		( YWidget *parent, YWidgetOpt & opt, YRadioButtonGroup *rbg, const YCPString & label, bool checked);
+    YWidget *createRichText		( YWidget *parent, YWidgetOpt & opt, const YCPString & text);
+    YWidget *createSelectionBox		( YWidget *parent, YWidgetOpt & opt, const YCPString & label);
+    YWidget *createMultiSelectionBox	( YWidget *parent, YWidgetOpt & opt, const YCPString & label);
+    YWidget *createSpacing		( YWidget *parent, YWidgetOpt & opt, float size, bool horizontal, bool vertical);
+    YWidget *createTable		( YWidget *parent, YWidgetOpt & opt, vector<string> header);
+    YWidget *createTextEntry		( YWidget *parent, YWidgetOpt & opt, const YCPString & label, const YCPString & text);
+    YWidget *createTree			( YWidget *parent, YWidgetOpt & opt, const YCPString & label);
+    YWidget *createPkgSpecial		( YWidget *parent, YWidgetOpt & opt, const YCPString & subwidget );
 
 
     /*** Widget creation methods for optional widgets, all inherited from YUIInterpreter ***/
 
     bool 	hasBarGraph();
-    YWidget *	createBarGraph		(YWidget *parent, YWidgetOpt &opt);
+    YWidget *	createBarGraph		(YWidget *parent, YWidgetOpt & opt);
 
 
     bool 	hasColoredLabel();
-    YWidget *	createColoredLabel	(YWidget *parent, YWidgetOpt &opt,
+    YWidget *	createColoredLabel	(YWidget *parent, YWidgetOpt & opt,
 					 YCPString label,
 					 YColor foreground, YColor background,
 					 int margin );
 
     bool 	hasDownloadProgress();
     YWidget *	createDownloadProgress	( YWidget *parent,
-					  YWidgetOpt &opt,
-					  const YCPString &label,
-					  const YCPString &filename,
+					  YWidgetOpt & opt,
+					  const YCPString & label,
+					  const YCPString & filename,
 					  int expectedSize);
 
 
     bool 	hasSlider();
     YWidget *	createSlider		( YWidget *parent,
-					  YWidgetOpt &opt,
-					  const YCPString &label,
+					  YWidgetOpt & opt,
+					  const YCPString & label,
 					  int minValue,
 					  int maxValue,
 					  int initialValue );

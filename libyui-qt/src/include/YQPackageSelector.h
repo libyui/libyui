@@ -65,7 +65,7 @@ class YQPackageSelector : public QVBox, public YPackageSelector
 
 public:
 
-    YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt );
+    YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt & opt, const YCPString & floppyDevice );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -287,6 +287,7 @@ protected:
     bool				_updateMode;
     bool				_testMode;
     int					_installedPkgs;
+    QString				_floppyDevice;
 
     QCheckBox *				_autoDependenciesCheckBox;
     QProgressBar *			_diskSpace;

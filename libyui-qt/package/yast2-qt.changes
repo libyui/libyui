@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Feb 28 15:27:58 CET 2003 - sh@suse.de
+
+- Use new 'floppyDevice' parameter for PackageSelector
+
+-------------------------------------------------------------------
 Fri Feb 28 12:34:31 CET 2003 - sh@suse.de
 
 - Fixed bug #24388: YQFrame repaint one pixel off in both dimensions
