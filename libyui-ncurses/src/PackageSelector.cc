@@ -679,8 +679,7 @@ bool PackageSelector::searchPackage( PMPackagePtr pkg,
 	createListEntry( packageList, pkg, index );
 	ret = true;
     }
-
-    if ( checkDescr )
+    else if ( checkDescr )
     {
 	string summary = pkg->summary();	
 	// additionally search in summary
