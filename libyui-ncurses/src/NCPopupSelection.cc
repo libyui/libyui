@@ -188,7 +188,7 @@ string  NCPopupSelection::getCurrentLine( )
 
 long NCPopupSelection::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? NCurses::cols()-20 : NCurses::lines()-5 );
+    return ( dim == YD_HORIZ ? 50 : 20 );
 }
 
 ///////////////////////////////////////////////////////////////////
