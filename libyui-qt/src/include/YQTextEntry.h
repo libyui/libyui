@@ -98,7 +98,7 @@ protected slots:
      * Triggered when the text in the TextEntry changes.
      * This _may_ be of interest to the module.
      */
-    void changed(const QString&);
+    void changed(const QString &);
 
 
 protected:
