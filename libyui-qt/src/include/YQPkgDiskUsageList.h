@@ -64,8 +64,39 @@ public:
      **/
     virtual QSize sizeHint() const;
 
-    
+    /**
+     * Returns the percentage threshold at which to warn about running out of
+     * disk space.
+     **/
+    int warningPercentThreshold() const { return _warningPercentThreshold; }
+
+    /**
+     * Returns the free size threshold at which to warn about running out of
+     * disk space. This is meant to prevent warnings about file systems being
+     * 90% full when there are still Gigabytes of free space left.
+     **/
+    FSize freeSizeThreshold() const { return _freeSizeThreshold; }
+
+    /**
+     * Notify the list that a warning about disk space is necessary.
+     * This does _not_ immediately post a warning dialog.
+     **/
+    void warningNotify() { _warn = true; }
+
+    /**
+     * Notify the list about file system overflow.
+     * This does _not_ immediately post a warning dialog.
+     **/
+    void overflowNotify() { _overflow = true; }
+
+    /**
+     * Return 'true' if one or more file system are overflowing.
+     **/
+    bool overflow() const { return _overflow; }
+
+
 public slots:
+
     /**
      * Update all statistical data in the list.
      **/
@@ -82,11 +113,15 @@ protected:
      */
     virtual void keyPressEvent( QKeyEvent * ev );
 
-    
+
     // Data members
 
     QAsciiDict<YQPkgDiskUsageListItem>  _items;
     bool				_debug;
+    bool				_warn;
+    bool				_overflow;
+    int					_warningPercentThreshold;
+    FSize				_freeSizeThreshold;
 };
 
 
@@ -150,8 +185,38 @@ protected:
 
     // Data members
 
-    YQPkgDuData _duData;
+    YQPkgDuData 		_duData;
+    YQPkgDiskUsageList *	_pkgDiskUsageList;
 };
+
+
+#if 0
+// EXPERIMENTAL
+// EXPERIMENTAL
+// EXPERIMENTAL
+class YQPkgWarningRange
+{
+public:
+    /**
+     * Constructor.
+     **/
+    YQPkgWarningRange( int min, int max );
+
+    bool check( int val );
+
+    void warningPosted();
+    
+
+protected:
+
+    int		_min;
+    int 	_max;
+    bool 	_inRange;
+    bool 	_warningPosted;
+};
+// EXPERIMENTAL
+// EXPERIMENTAL
+#endif
 
 
 

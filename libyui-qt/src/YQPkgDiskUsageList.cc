@@ -36,7 +36,12 @@
 YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget *parent, int thresholdPercent )
     : QY2DiskUsageList( parent, true )
 {
-    _debug = false;
+    _debug 	= false;
+    _warn  	= false;
+    _overflow	= false;
+    _warningPercentThreshold	= 95;
+    _freeSizeThreshold		= 500 * FSize::MB;
+	
     const std::set<PkgDuMaster::MountPoint>	du = Y2PM::packageManager().getDu().mountpoints();
     std::set<PkgDuMaster::MountPoint>::iterator it = du.begin();
 
@@ -61,6 +66,8 @@ YQPkgDiskUsageList::updateDiskUsage()
 {
     YUIQt::yuiqt()->busyCursor();
 
+    _warn 	= false;
+    _overflow	= false;
     const std::set<PkgDuMaster::MountPoint> 	du = Y2PM::packageManager().updateDu().mountpoints();
     std::set<PkgDuMaster::MountPoint>::iterator it = du.begin();
 
@@ -178,6 +185,7 @@ YQPkgDiskUsageListItem::YQPkgDiskUsageListItem( YQPkgDiskUsageList * 	parent,
 						YQPkgDuData		duData )
 	: QY2DiskUsageListItem( parent )
 	, _duData( duData )
+	, _pkgDiskUsageList( parent )
 {
     y2milestone( "disk usage list entry for %s", duData.mountpoint().c_str() );
 }
@@ -209,6 +217,17 @@ YQPkgDiskUsageListItem::updateDuData( const YQPkgDuData & fromData )
 {
     _duData.assignData( fromData );
     updateData();
+
+    if ( usedPercent() > _pkgDiskUsageList->warningPercentThreshold() &&
+	 freeSize() < _pkgDiskUsageList->freeSizeThreshold()		)
+    {
+	_pkgDiskUsageList->warningNotify();
+    }
+
+    if ( freeSize() <= 0 )
+    {
+	_pkgDiskUsageList->overflowNotify();
+    }
 }
 
 
