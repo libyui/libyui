@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Sun Sep  8 17:36:42 CEST 2002 - gs@suse.de
+
+- V 2.6.14
+- package installation: improved performance for large lists,
+  search ignore case works, search in summary
+
+-------------------------------------------------------------------
 Sat Sep  7 18:37:55 CEST 2002 - gs@suse.de
 
 - V 2.6.13
