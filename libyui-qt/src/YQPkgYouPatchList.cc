@@ -164,7 +164,7 @@ YQPkgYouPatchList::filter()
 	    // Check for extra files outside packages
 	    //
 
-	    list<PMYouFile> files;
+	    list<PMYouFile> files = patch->files();
 
 	    for ( list<PMYouFile>::iterator it = files.begin(); it != files.end(); ++it )
 	    {

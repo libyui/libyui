@@ -253,10 +253,7 @@ QY2ListViewItem::QY2ListViewItem( QY2ListView * 	parentListView,
     : QListViewItem( parentListView, text )
     , _sortByInsertionSequence( sortByInsertionSequence )
 {
-    _serial = 0;
-
-    if ( _sortByInsertionSequence )
-	_serial = parentListView->nextSerial();
+    _serial = parentListView->nextSerial();
 }
 
 
@@ -268,13 +265,10 @@ QY2ListViewItem::QY2ListViewItem( QListViewItem * 	parentItem,
 {
     _serial = 0;
 
-    if ( _sortByInsertionSequence )
-    {
-	QY2ListView * parentListView = dynamic_cast<QY2ListView *> ( listView() );
+    QY2ListView * parentListView = dynamic_cast<QY2ListView *> ( listView() );
 
-	if ( parentListView )
-	    _serial = parentListView->nextSerial();
-    }
+    if ( parentListView )
+	_serial = parentListView->nextSerial();
 }
 
 

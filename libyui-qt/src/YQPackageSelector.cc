@@ -708,8 +708,8 @@ YQPackageSelector::makeConnections()
     
     if ( _pkgList && _youPatchList )
     {
-	connect( _youPatchList, SIGNAL( filterMatch   ( const QString &, const QString &, long ) ),
-		 _pkgList,	SIGNAL( addPassiveItem( const QString &, const QString &, long ) ) );
+	connect( _youPatchList, SIGNAL( filterMatch   ( const QString &, const QString &, FSize ) ),
+		 _pkgList,	SLOT  ( addPassiveItem( const QString &, const QString &, FSize ) ) );
     }
 
     //
