@@ -150,9 +150,13 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
 	}
 
 #if CHECK_DEPENDENCIES_ON_STARTUP
-	// Fire up the first dependency check in the main loop.
-	// Don't do this right away - wait until all initializations are finished.
-	QTimer::singleShot( 0, this, SLOT( autoResolveDependencies() ) );
+
+	if ( ! _youMode )
+	{
+	    // Fire up the first dependency check in the main loop.
+	    // Don't do this right away - wait until all initializations are finished.
+	    QTimer::singleShot( 0, this, SLOT( autoResolveDependencies() ) );
+	}
 #endif
     }
 
