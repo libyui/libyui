@@ -276,7 +276,9 @@ bool NCPopupSearch::postAgain()
 				  getCheckBoxValue( ignoreCase ),
 				  getCheckBoxValue( checkName ),
 				  getCheckBoxValue( checkSummary ),
-				  getCheckBoxValue( checkDescr )
+				  getCheckBoxValue( checkDescr ),
+				  getCheckBoxValue( checkProvides ),
+				  getCheckBoxValue( checkRequires )
 				  );
     }
     

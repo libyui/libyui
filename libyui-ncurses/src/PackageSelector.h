@@ -163,14 +163,17 @@ class PackageSelector
     * @param ignoreCase Ignore case (true or false)
     * @param checkName Search in package name (true or false)
     * @param checkSummary Check the summary (true or false)
-    * @param checkDescr Check the long description (true or false)
+    * @param checkProvides Check in Provides (true or false)
+    * @param checkRequires Check in Requires (true or false)
     * @return bool
     */ 
     bool fillSearchList( const YCPString & expr,
 			 bool ignoreCase,
 			 bool checkName,
 			 bool checkSummary,
-			 bool checkDescr );
+			 bool checkDescr,
+			 bool checkProvides,
+			 bool checkRequires );
 
    /**
     * Gets default RPM group (the first group)

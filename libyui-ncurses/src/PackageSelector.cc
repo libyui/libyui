@@ -403,7 +403,9 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
 				      bool ignoreCase,
 				      bool checkName,
 				      bool checkSummary,
-				      bool checkDescr )
+				      bool checkDescr,
+				      bool checkProvides,
+				      bool checkRequires )
 {
     NCPkgTable * packageList = getPackageList();
     
@@ -422,6 +424,8 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
     unsigned int i = 0;
     PMPackagePtr pkg;
     string description = "";
+    string provides = "";
+    string requires = "";
     
     while ( listIt != Y2PM::packageManager().end() )
     {
@@ -432,9 +436,21 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
 	    list<string> value = pkg->description();
 	    description = createDescrText( value );    
 	}
+	if ( checkProvides )
+	{
+	    list<PkgRelation> value = pkg->provides();	
+	    provides = createRelLine( value );  
+	}
+	if ( checkRequires )
+	{
+	    list<PkgRelation> value = pkg->requires();	
+	    requires = createRelLine( value );    
+	}
 	if ( ( checkName && match( pkg->name().asString(), expr->value(), ignoreCase )) ||
 	     ( checkSummary && match( pkg->summary(), expr->value(), ignoreCase) ) ||
-	     ( checkDescr && match( description, expr->value(), ignoreCase) )
+	     ( checkDescr && match( description, expr->value(), ignoreCase) ) ||
+	     ( checkProvides && match( provides, expr->value(), ignoreCase) ) ||
+	     ( checkRequires && match( requires,  expr->value(), ignoreCase) )
 	     )
 	{
 	    // search sucessful
