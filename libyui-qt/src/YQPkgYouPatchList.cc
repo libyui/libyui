@@ -20,6 +20,9 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
+#include <qpopupmenu.h>
+#include <qaction.h>
+
 #include <Y2PM.h>
 #include <y2pm/PMManager.h>
 
@@ -146,6 +149,31 @@ YQPkgYouPatchList::selection() const
 
     return dynamic_cast<YQPkgYouPatchListItem *> (item);
 }
+
+
+void
+YQPkgYouPatchList::createNotInstalledContextMenu()
+{
+    _notInstalledContextMenu = new QPopupMenu( this );
+    CHECK_PTR( _notInstalledContextMenu );
+
+    _actionSetCurrentInstall->addTo( _notInstalledContextMenu );
+    _actionSetCurrentDontInstall->addTo( _notInstalledContextMenu );
+    _actionSetCurrentAutoInstall->addTo( _notInstalledContextMenu );
+}
+
+
+void
+YQPkgYouPatchList::createInstalledContextMenu()
+{
+    _installedContextMenu = new QPopupMenu( this );
+    CHECK_PTR( _installedContextMenu );
+
+    _actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
+    _actionSetCurrentUpdate->addTo( _installedContextMenu );
+    _actionSetCurrentAutoUpdate->addTo( _installedContextMenu );
+}
+
 
 
 

@@ -124,6 +124,7 @@ protected:
     void layoutMenuBar		( QWidget * parent );
 
     void makeConnections();
+    void fakeData();
     
 
     // Data members

@@ -95,30 +95,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     _testMode	= opt.testMode.value();
 
     if ( _testMode )
-    {
-	if ( _youMode )
-	{
-	    Url url( "dir:///8.1-patches" );
-	    Y2PM::youPatchManager().instYou().retrievePatchInfo( url, false );
-	    Y2PM::youPatchManager().instYou().selectPatches( PMYouPatch::kind_recommended |
-							     PMYouPatch::kind_security     );
-	}
-	else
-	{
-	    y2warning( "Enabling fake inst sources" );
-
-	    InstSrcManager & MGR( Y2PM::instSrcManager() );
-
-	    Url url( "dir:///8.1" );
-	    InstSrcManager::ISrcIdList nids;
-	    PMError err = MGR.scanMedia( nids, url );
-
-	    if ( nids.size() )
-	    {
-		err = MGR.enableSource( *nids.begin() );
-	    }
-	}
-    }
+	fakeData();
 
     setFont( _yuiqt->currentFont() );
     basicLayout();
@@ -128,14 +105,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     QTimer::singleShot( 2500, this, SLOT( preAlphaWarning() ) );
 #endif
 
-#if 0
-    // Delay loading the data until the main loop: This should make sure the
-    // dialog is visible and all set up so the user at least sees an empty
-    // dialog rather than nothing.
-    QTimer::singleShot( 100, this, SIGNAL( loadData() ) );
-#else
     emit loadData();
-#endif
 
     if ( _youMode )
     {
@@ -143,6 +113,8 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
 	{
 	    _filters->showPage( _youPatchFilterView );
 	    _youPatchList->filter();
+	    _youPatchList->clearSelection();
+	    _youPatchList->selectSomething();
 	}
     }
     else
@@ -504,6 +476,37 @@ YQPackageSelector::makeConnections()
 
 	connect( _youPatchList,	SIGNAL( updatePackages()      ),
 		 _pkgList, 	SLOT  ( updateToplevelItemStates() ) );
+    }
+}
+
+
+void
+YQPackageSelector::fakeData()
+{
+    y2warning( "*** Using fake data ***" );
+    
+    if ( _youMode )
+    {
+	Url url( "dir:///8.1-patches" );
+	Y2PM::youPatchManager().instYou().retrievePatchInfo( url, false );
+	Y2PM::youPatchManager().instYou().selectPatches( PMYouPatch::kind_recommended |
+							 PMYouPatch::kind_security     );
+	y2milestone( "Fake YOU patches initialized" );
+    }
+    else
+    {
+	InstSrcManager & MGR( Y2PM::instSrcManager() );
+
+	Url url( "dir:///8.1" );
+	InstSrcManager::ISrcIdList nids;
+	PMError err = MGR.scanMedia( nids, url );
+
+	if ( nids.size() )
+	{
+	    err = MGR.enableSource( *nids.begin() );
+	}
+	
+	y2milestone( "Fake installation sources initialized" );
     }
 }
 

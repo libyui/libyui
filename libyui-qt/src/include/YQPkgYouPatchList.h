@@ -114,6 +114,21 @@ protected slots:
      * Fill the selection list.
      **/
     void fillList();
+
+    
+protected:
+    
+    /**
+     * Create the context menu for items that are not installed.
+     * Reimplemented from YQPkgObjList.
+     **/
+    virtual void createNotInstalledContextMenu();
+
+    /**
+     * Create the context menu for installed items.
+     * Reimplemented from YQPkgObjList.
+     **/
+    virtual void createInstalledContextMenu();
 };
 
 
