@@ -1339,9 +1339,12 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 {
     // FIXME - check diskspace
 
-    // show the dependency popup
-    showDependencies( true ); 	// do the check
-	
+    if ( !youMode )
+    {
+	// show the dependency popup
+	showDependencies( true ); 	// do the check
+    }
+    
     NCMIL <<  "OK button pressed - leaving package selection, starting installation" << endl;
 
     const_cast<NCursesEvent &>(event).result = YCPSymbol("accept", true); 
@@ -1711,6 +1714,24 @@ string PackageSelector::createText( list<string> info, bool oneline )
 
     return text;
 }
+
+void PackageSelector::showDiskSpace()
+{
+    const PkgDuMaster & duMaster =  Y2PM::packageManager().updateDu();
+
+    FSize totalSize = duMaster.pkg_used();
+    //  totalSize = duMaster.pkg_diff();
+    
+    YCPString label( totalSize.asString() );
+    
+    // show the required diskspace
+    YWidget * diskSpace = y2ui->widgetWithId( PkgNames::Diskspace(), true );
+    if ( diskSpace )
+    {
+	static_cast<NCLabel *>(diskSpace)->setLabel( label );
+    }
+}  
+
 
 ///////////////////////////////////////////////////////////////////
 //
