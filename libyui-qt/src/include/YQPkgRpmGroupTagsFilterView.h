@@ -24,7 +24,7 @@
 
 #include <qlistview.h>
 #include <y2pm/PMPackage.h>
-#include "YPkgRpmGroupTagsFilterView.h"
+#include <y2util/YRpmGroupsTree.h>
 
 
 class YUIQt;
@@ -32,7 +32,7 @@ class YQPkgRpmGroupTag;
 
 
 class YQPkgRpmGroupTagsFilterView : public QListView,
-				    public YPkgRpmGroupTagsFilterView
+				    public YRpmGroupsTree
 {
     Q_OBJECT
 
@@ -105,8 +105,8 @@ protected:
      * Make a deep copy of the tree starting at 'parentRpmGroup' and
      * 'parentClone'.
      **/
-    void cloneTree( YPkgStringTreeItem *	parentRpmGroup,
-		    YQPkgRpmGroupTag *		parentClone = 0 );
+    void cloneTree( YStringTreeItem *	parentRpmGroup,
+		    YQPkgRpmGroupTag *	parentClone = 0 );
 
 
     /**
@@ -132,14 +132,14 @@ public:
      * Constructor for toplevel RPM group tags
      **/
     YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView *	parentFilterView,
-		      YPkgStringTreeItem *		rpmGroup	);
+		      YStringTreeItem *			rpmGroup	);
 
     /**
      * Constructor for RPM group tags that have a parent
      **/
     YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView *	parentFilterView,
 		      YQPkgRpmGroupTag *		parentGroupTag,
-		      YPkgStringTreeItem *		rpmGroup );
+		      YStringTreeItem *			rpmGroup );
 
     /**
      * Destructor
@@ -155,7 +155,7 @@ public:
     /**
      * Returns the original tree item
      **/
-    const YPkgStringTreeItem * rpmGroup() const { return _rpmGroup; }
+    const YStringTreeItem * rpmGroup() const { return _rpmGroup; }
 
     
 private:
@@ -163,7 +163,7 @@ private:
     // Data members
 
     YQPkgRpmGroupTagsFilterView *	_filterView;
-    YPkgStringTreeItem *		_rpmGroup;
+    YStringTreeItem *			_rpmGroup;
 };
 
 

@@ -17,6 +17,9 @@
 /-*/
 
 
+#define ALPHA_WARNING	0
+#define FAKE_INST_SRC	1
+
 #include <qcombobox.h>
 #include <qframe.h>
 #include <qhbox.h>
@@ -75,7 +78,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
 {
     setWidgetRep(this);
 
-#if 0
+#if FAKE_INST_SRC
     {
 	Y2PM y2pm;
 	InstSrcManager& MGR = y2pm.instSrcManager();
@@ -96,7 +99,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     basicLayout();
     makeConnections();
 
-#if 1
+#if ALPHA_VERSION_WARNING
     QTimer::singleShot( 2500, this, SLOT( preAlphaWarning() ) );
 #endif
 

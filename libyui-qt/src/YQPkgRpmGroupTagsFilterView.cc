@@ -16,7 +16,6 @@
 
 /-*/
 
-#define USE_TACKAT_ICONS 0
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
@@ -34,7 +33,7 @@
 
 YQPkgRpmGroupTagsFilterView::YQPkgRpmGroupTagsFilterView( YUIQt *yuiqt, QWidget *parent )
     : QListView( parent )
-    , YPkgRpmGroupTagsFilterView()
+    , YRpmGroupsTree()
     , yuiqt(yuiqt)
 {
     y2milestone( "Creating group tags view" );
@@ -57,11 +56,11 @@ YQPkgRpmGroupTagsFilterView::~YQPkgRpmGroupTagsFilterView()
 
 
 void
-YQPkgRpmGroupTagsFilterView::cloneTree( YPkgStringTreeItem * 	parentRpmGroup,
+YQPkgRpmGroupTagsFilterView::cloneTree( YStringTreeItem * 	parentRpmGroup,
 					YQPkgRpmGroupTag * 	parentClone )
 {
-    YPkgStringTreeItem * 	child = parentRpmGroup->firstChild();
-    YQPkgRpmGroupTag *	 	clone;
+    YStringTreeItem * 	child = parentRpmGroup->firstChild();
+    YQPkgRpmGroupTag * 	clone;
 
     while ( child )
     {
@@ -179,7 +178,7 @@ YQPkgRpmGroupTagsFilterView::check( PMPackagePtr pkg, const std::string & select
 
 
 YQPkgRpmGroupTag::YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView * 	parentFilterView,
-				    YPkgStringTreeItem *		rpmGroup	)
+				    YStringTreeItem *			rpmGroup	)
     : QListViewItem( parentFilterView )
     , _filterView( parentFilterView )
     , _rpmGroup( rpmGroup )
@@ -190,7 +189,7 @@ YQPkgRpmGroupTag::YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView * 	parentFilterV
 
 YQPkgRpmGroupTag::YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView * 	parentFilterView,
 				    YQPkgRpmGroupTag * 			parentGroupTag,
-				    YPkgStringTreeItem * 		rpmGroup	)
+				    YStringTreeItem *	 		rpmGroup	)
     : QListViewItem( parentGroupTag )
     , _filterView( parentFilterView )
     , _rpmGroup( rpmGroup )
