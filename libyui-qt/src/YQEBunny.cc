@@ -47,6 +47,8 @@ YQEasterBunny::layEgg()
     }
 
     draw();
+    sleep(7);
+    draw();
 }
 
 
@@ -67,8 +69,10 @@ YQEasterBunny::draw()
 	    p1 = fb.pixel( x, y );
 	    p2 = fb.pixel( width-1 - x, height-1 - y );
 
+#if 1
 	    p1 ^= 0xAA55AA55;
 	    p2 ^= 0xAA55AA55;
+#endif
 	    
 	    fb.setPixel( x, y, p2 );
 	    fb.setPixel( width-1 - x, height-1 - y, p1 );
@@ -105,6 +109,4 @@ YQEasterBunny::draw()
 	}
     }
 #endif
-    
-    sleep( 7 );
 }
