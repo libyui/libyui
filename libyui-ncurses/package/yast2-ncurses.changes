@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Jul 21 11:14:52 CEST 2004 - mlazar@suse.cz
+
+- fixed Bugzilla Bug 35409 - `Top( `Frame() ) without top left corner 
+
+-------------------------------------------------------------------
 Fri Jul 16 15:05:26 CEST 2004 - mlazar@suse.cz
 
 - fixed Bugzilla Bug 43005 - Hardware information not shown in ncurses mode

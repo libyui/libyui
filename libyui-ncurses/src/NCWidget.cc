@@ -45,7 +45,7 @@ NCWidget::NCWidget( NCWidget * myparent )
     , framedim( 0, 0 )
     , inparent( -1, -1 )
     , noUpdates( false )
-    , skipNoDimWin( false )
+    , skipNoDimWin( true )
     , wstate( NC::WSnormal )
     , hotlabel( 0 )
     , hotfkey( 0 )
@@ -292,6 +292,16 @@ void NCWidget::wCreate( const wrect & newrect )
 
   if ( skipNoDimWin && inparent.Sze == wsze(0,0) ) {
     WIDDBG << "Skip nodim widget: " << this << ' ' << inparent << " par " << Parent()->Value() << endl;
+    return;
+  }
+
+  if ( skipNoDimWin && inparent.Sze.H == 0) {
+    WIDDBG << "Skip widget with zero height: " << this << ' ' << inparent << " par " << Parent()->Value() << endl;
+    return;
+  }
+
+  if ( skipNoDimWin && inparent.Sze.W == 0) {
+    WIDDBG << "Skip widget with zero width: " << this << ' ' << inparent << " par " << Parent()->Value() << endl;
     return;
   }
 
