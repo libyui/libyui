@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jul 28 11:49:50 CEST 2003 - gs@suse.de
+
+- V 2.8.9
+- support &product; in RichText (automatically replace the product info) 
+
+-------------------------------------------------------------------
 Fri Jul 25 15:30:53 CEST 2003 - gs@suse.de
 
 - V 2.8.8
