@@ -61,7 +61,7 @@ YQPkgGenericDetailsView::showPkgDetailsIfVisible( PMPackagePtr pkg )
 {
     _pkg = pkg;
     
-    if ( ! _parentTab )		// Is this view embedded into a tab widget?
+    if ( _parentTab )		// Is this view embedded into a tab widget?
     {
 	if ( _parentTab->currentPage() == this )  // Is this page the topmost?
 	{

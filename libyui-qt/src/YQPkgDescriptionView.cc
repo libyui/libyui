@@ -51,7 +51,7 @@ YQPkgDescriptionView::showPkgDetails( PMPackagePtr pkg )
     QString html_text = htmlHeading( pkg );
     
     string name = pkg->name();
-    y2debug( "Showing description for package %s", name.c_str() );
+    // y2debug( "Showing description for package %s", name.c_str() );
 
     
     // Add all lines of the package description

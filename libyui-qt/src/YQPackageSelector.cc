@@ -92,12 +92,8 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
 
 	if ( nids.size() )
 	{
-	    y2milestone( "Enabling fake inst source" );
 	    err = MGR.enableSource( *nids.begin() );
-	    y2milestone( "Enabling fake inst source done" );
 	}
-
-	y2milestone( "Fake inst sources enabled" );
     }
 #endif
 
