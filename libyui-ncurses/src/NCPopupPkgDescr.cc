@@ -52,8 +52,6 @@ NCPopupPkgDescr::NCPopupPkgDescr( const wpos at, PackageSelector * pkger )
       , okButton( 0 )
       , headline( 0 )
       , packager( pkger )
-      , hDim( 70 )
-      , vDim( 17 )
 {
     createLayout( );
 }
@@ -186,7 +184,13 @@ NCursesEvent NCPopupPkgDescr::showInfoPopup( PMPackagePtr & pkgPtr )
 
 long NCPopupPkgDescr::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? hDim : vDim );
+    long vdim;
+    if ( NCurses::lines() > 17 )
+	vdim = 17;
+    else
+	vdim = NCurses::lines()-4;
+	
+    return ( dim == YD_HORIZ ? NCurses::cols()*2/3 : vdim );
 }
 
 ///////////////////////////////////////////////////////////////////

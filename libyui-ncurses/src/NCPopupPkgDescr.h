@@ -52,9 +52,6 @@ private:
     
     PackageSelector * packager;
 
-    int hDim;
-    int vDim;
-    
 protected:
 
     virtual bool postAgain();
@@ -75,7 +72,6 @@ public:
 
     NCursesEvent showInfoPopup( PMPackagePtr & pkgPtr );
 
-    void setNiceSize( int horiz, int vert ) { hDim = horiz; vDim = vert; }
 };
 
 ///////////////////////////////////////////////////////////////////
