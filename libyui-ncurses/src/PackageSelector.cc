@@ -1007,14 +1007,14 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
     if ( visibleInfo->compare( PkgNames::Versions() ) == YO_EQUAL )
     {
 	// show the package table
-	const char * tableLayout = "`PkgSpecial( `id(`availpkgs), `opt(`notify), \"pkgTable\" )"; 
+	const char * tableLayout = "`PkgSpecial( `id(\"availpkgs\"), `opt(`notify), \"pkgTable\" )"; 
 	Parser parser( tableLayout );
 	YCode *parsed_code = parser.parse ();
 	YCPValue layout = YCPNull ();
 	if (parsed_code != NULL)
-	    layout = parsed_code->evaluate (true);
+	    layout = parsed_code->evaluate();
 
-	y2ui->evaluateReplaceWidget( YCPSymbol ("replaceinfo"), layout->asTerm() );
+	y2ui->evaluateReplaceWidget( YCPString ("replaceinfo"), layout->asTerm() );
 
 	NCPkgTable * pkgAvail = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::AvailPkgs(), true));
 
@@ -1033,14 +1033,14 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
     else if ( visibleInfo->compare( PkgNames::PatchPackages() ) == YO_EQUAL )
     {
         // show the package table
-	const char * tableLayout = "`PkgSpecial( `id(`patchpkgs), `opt(`notify), \"pkgTable\" )"; 
+	const char * tableLayout = "`PkgSpecial( `id(\"patchpkgs\"), `opt(`notify), \"pkgTable\" )"; 
 	Parser parser( tableLayout );
 	YCode *parsed_code = parser.parse ();
 	YCPValue layout = YCPNull ();
 	if (parsed_code != NULL)
-	    layout = parsed_code->evaluate (true);
+	    layout = parsed_code->evaluate();
 
-	y2ui->evaluateReplaceWidget( YCPSymbol ("replaceinfo"), layout->asTerm() );
+	y2ui->evaluateReplaceWidget( YCPString ("replaceinfo"), layout->asTerm() );
 
 	NCPkgTable * patchPkgs = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::PatchPkgs(), true));
 
@@ -1059,14 +1059,14 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
     else
     {
 	// show the rich text widget
-	const char * textLayout = "`RichText( `id(`description), \" \")"; 
+	const char * textLayout = "`RichText( `id(\"description\"), \" \")"; 
 	Parser parser( textLayout );
 	YCode *parsed_code = parser.parse ();
 	YCPValue layout = YCPNull ();
 	if (parsed_code != NULL)
-	    layout = parsed_code->evaluate (true);
+	    layout = parsed_code->evaluate ();
 
-	y2ui->evaluateReplaceWidget( YCPSymbol ("replaceinfo"), layout->asTerm() );
+	y2ui->evaluateReplaceWidget( YCPString ("replaceinfo"), layout->asTerm() );
     
 	packageList->showInformation( );
     }
@@ -1104,7 +1104,7 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 	if ( autoCheck )
 	{
 	    sprintf ( menu,
-		      "MenuButton( \"%s\", [`menu( \"%s\", [`item( `id(`showdeps), \"%s\" ), `item( `id(`autodeps), \"%s\" ) ] ), `menu( \"%s\", [`item( `id(`save), \"%s\" ), `item( `id(`load), \"%s\" ) ] ) ] )",
+		      "`MenuButton( \"%s\", [`menu( \"%s\", [`item( `id(\"showdeps\"), \"%s\" ), `item( `id(\"autodeps\"), \"%s\" ) ] ), `menu( \"%s\", [`item( `id(\"save\"), \"%s\" ), `item( `id(\"load\"), \"%s\" ) ] ) ] )",
 		      PkgNames::MenuEtc().c_str(),
 		      PkgNames::MenuDeps().c_str(),
 		      PkgNames::MenuCheckDeps().c_str(),
@@ -1117,16 +1117,20 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 	    Parser parser( menu );
 	    YCode *parsed_code = parser.parse ();
 	    YCPValue layout = YCPNull ();
-	    if (parsed_code != NULL)
-		layout = parsed_code->evaluate (true);
-	
-	    y2ui->evaluateReplaceWidget( YCPSymbol ("replacemenu"), layout->asTerm() );
-	    autoCheck = false;
+	    
+	    if ( parsed_code != NULL )
+		layout = parsed_code->evaluate();
+
+	    if ( !layout.isNull() )
+	    {
+		y2ui->evaluateReplaceWidget( YCPString ("replacemenu"), layout->asTerm() );
+		autoCheck = false;
+	    }
 	}
 	else
 	{
 	    sprintf ( menu,
-		      "`MenuButton( \"%s\", [`menu( \"%s\", [`item( `id(`showdeps), \"%s\" ), `item( `id(`autodeps), \"%s\" ) ] ), `menu( \"%s\", [`item( `id(`save), \"%s\" ), `item( `id(`load), \"%s\" ) ] ) ] )",
+		      "`MenuButton( \"%s\", [`menu( \"%s\", [`item( `id(\"showdeps\"), \"%s\" ), `item( `id(\"autodeps\"), \"%s\" ) ] ), `menu( \"%s\", [`item( `id(\"save\"), \"%s\" ), `item( `id(\"load\"), \"%s\" ) ] ) ] )",
 		      PkgNames::MenuEtc().c_str(),
 		      PkgNames::MenuDeps().c_str(),
 		      PkgNames::MenuCheckDeps().c_str(),
@@ -1139,11 +1143,15 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 	    Parser parser( menu );
 	    YCode *parsed_code = parser.parse ();
 	    YCPValue layout = YCPNull ();
-	    if (parsed_code != NULL)
-		layout = parsed_code->evaluate (true);
-	
-	    y2ui->evaluateReplaceWidget( YCPSymbol ("replacemenu"), layout->asTerm() );	
-	    autoCheck = true;	
+	    
+	    if ( parsed_code != NULL )
+		layout = parsed_code->evaluate();
+
+	    if ( !layout.isNull() )
+	    {
+		y2ui->evaluateReplaceWidget( YCPString ("replacemenu"), layout->asTerm() );	
+		autoCheck = true;
+	    }
 	}
     }
 
