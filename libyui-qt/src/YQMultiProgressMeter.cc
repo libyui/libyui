@@ -135,7 +135,10 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
     // Set up painter
 
     if ( vertical() )
-	painter.rotate( -90 );
+    {
+	painter.rotate( 90 );
+	painter.scale( 1.0, -1.0 );
+    }
 
     painter.setBrush( palette().active().highlight() );
     int offset = margin();
@@ -216,7 +219,6 @@ void YQMultiProgressMeter::drawSegment( int segment,
 
     // Draw upper outline
 
-    painter.setPen( horizontal() ? dark : light );
     painter.drawLine( offset, margin(),
 		      offset + length, margin() + indent );
 
@@ -228,7 +230,6 @@ void YQMultiProgressMeter::drawSegment( int segment,
 
     // Draw lower outline
 
-    painter.setPen( horizontal() ? light : dark );
     painter.drawLine( offset, thickness - margin(),
 		      offset + length, thickness - margin() - indent );
 
