@@ -33,6 +33,7 @@ YQMultiProgressMeter::YQMultiProgressMeter( QWidget *		parent,
     : QWidget( parent )
     , YMultiProgressMeter( opt, horizontal, maxValues )
     , _margin( 2 )
+    , _spacing ( 2 )
     , _segmentMinLength( 15 )
 {
     setWidgetRep( this );
@@ -58,7 +59,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
     int totalLength 	= horizontal() ? width() : height();
     int totalThickness 	= horizontal() ? height() : width();
 
-    totalLength 	-= 2 * margin();
+    totalLength 	-= 2 * margin() + spacing() * ( segments()-1 );
     totalThickness	-= 2 * margin();
 
     if ( totalLength < 1 || totalThickness < 1 || segments() < 1 )
@@ -73,7 +74,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 	totalSum += maxValue( i );
 
 
-    // Calculate minimal segment length
+    // Figure out minimal segment length
 
     int minLength = segmentMinLength();
 
@@ -129,7 +130,11 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
     // Calculate thickness and indentation
 
     int thickness = horizontal() ? height() : width();
+#if 0
     int indent    = (int) ( thickness * 0.37 );
+#else
+    int indent = 0;
+#endif
 
 
     // Set up painter
@@ -156,7 +161,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 	    length = (int) ( maxValue( i ) * scale + 0.5 );
 
 	drawSegment( i, painter, offset, length, thickness, indent );
-	offset += length;
+	offset += length + spacing();
     }
 }
 
@@ -220,18 +225,18 @@ void YQMultiProgressMeter::drawSegment( int segment,
     // Draw upper outline
 
     painter.drawLine( offset, margin(),
-		      offset + length, margin() + indent );
+		      offset + length - 1, margin() + indent );
 
     // Draw arrow point (right)
 
     painter.setPen( light );
-    painter.drawLine( offset + length, margin() + indent,
-		      offset + length, thickness - margin() - indent );
+    painter.drawLine( offset + length - 1, margin() + indent,
+		      offset + length - 1, thickness - margin() - indent );
 
     // Draw lower outline
 
     painter.drawLine( offset, thickness - margin(),
-		      offset + length, thickness - margin() - indent );
+		      offset + length - 1, thickness - margin() - indent );
 
 }
 
@@ -245,7 +250,10 @@ void YQMultiProgressMeter::setEnabling( bool enabled )
 
 long YQMultiProgressMeter::nicesize( YUIDimension dim )
 {
+#if 0
     int thickness = 35 + 2 * margin();
+#endif
+    int thickness = 23 + 2 * margin();
     int length    = 70 * segments() + 2 * margin();
 
     if ( dim == YD_HORIZ )	return horizontal() ? length : thickness;

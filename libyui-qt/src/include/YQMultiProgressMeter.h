@@ -75,6 +75,17 @@ public:
     void setMargin( int value ) { _margin = value; }
 
     /**
+     * Returns the spacing between segments in pixels.
+     **/
+    int spacing() const { return _spacing; }
+
+    /**
+     * Sets the spacing between segments in pixels.
+     * Does not trigger an update.
+     **/
+    void setSpacing( int value ) { _spacing = value; }
+
+    /**
      * Returns the minimal length of a segment in pixels.
      **/
     int segmentMinLength() const { return _segmentMinLength; }
@@ -116,6 +127,7 @@ protected:
 private:
 
     int	_margin;
+    int _spacing;
     int _segmentMinLength;
 };
 
