@@ -482,6 +482,13 @@ const YCPValue& PkgNames::DirList ()
     return value;
 }
 
+// id information file list
+const YCPValue& PkgNames::FileList ()
+{
+    static const YCPValue value = createIdValue ( "filelist" );
+    return value;
+}
+
 // id information directory name
 const YCPValue& PkgNames::DirName ()
 {

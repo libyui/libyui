@@ -336,17 +336,22 @@ public:
     static const YCPValue& PatchPackages ();
 
     /**
-     *  Widget id information directory list
+     *  Widget id of the directory list
      */
     static const YCPValue& DirList ();
 
     /**
-     *  Widget id information diretcory name
+     *  Widget id of the file list
+     */
+    static const YCPValue& FileList ();
+    
+    /**
+     *  Widget id of the diretcory name
      */
     static const YCPValue& DirName ();
 
     /**
-     *  Widget id information details view
+     *  Widget id of the details view
      */
     static const YCPValue& Details ();
     
