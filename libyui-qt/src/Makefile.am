@@ -52,6 +52,8 @@ liby2qt_la_SOURCES = 				\
 	YQPartitionSplitter.cc			\
 	YQProgressBar.cc			\
 	YQPackageSelector.cc			\
+	YQPkgConflictDialog.cc			\
+	YQPkgConflictList.cc			\
 	YQPkgGenericDetailsView.cc		\
 	YQPkgTechnicalDetailsView.cc		\
 	YQPkgDescriptionView.cc			\
@@ -125,6 +127,8 @@ BUILT_SOURCES =					\
 	YQPartitionSplitter.moc.cc		\
 	YQProgressBar.moc.cc			\
 	YQPackageSelector.moc.cc		\
+	YQPkgConflictDialog.moc.cc		\
+	YQPkgConflictList.moc.cc		\
 	YQPkgGenericDetailsView.moc.cc		\
 	YQPkgTechnicalDetailsView.moc.cc	\
 	YQPkgDescriptionView.moc.cc		\
@@ -177,6 +181,8 @@ YQMultiSelectionBox.o YQMultiSelectionBox.lo:			YQMultiSelectionBox.moc.cc
 YQPartitionSplitter.o YQPartitionSplitter.lo:			YQPartitionSplitter.moc.cc
 YQProgressBar.o YQProgressBar.lo:				YQProgressBar.moc.cc
 YQPackageSelector.o YQPackageSelector.lo:			YQPackageSelector.moc.cc
+YQPkgConflictDialog.o YQPkgConflictDialog.lo:			YQPkgConflictDialog.moc.cc
+YQPkgConflictList.o YQPkgConflictList.lo:			YQPkgConflictList.moc.cc
 YQPkgGenericDetailsView.o YQPkgGenericDetailsView.lo:		YQPkgGenericDetailsView.moc.cc
 YQPkgTechnicalDetailsView.o YQPkgTechnicalDetailsView.lo:	YQPkgTechnicalDetailsView.moc.cc
 YQPkgDescriptionView.o YQPkgDescriptionView.lo:			YQPkgDescriptionView.moc.cc
@@ -232,6 +238,8 @@ YQProgressBar.moc.cc:			include/YQProgressBar.h
 YQPackageSelector.moc.cc:		include/YQPackageSelector.h
 YQPkgList.moc.cc:			include/YQPkgList.h
 YQPkgObjList.moc.cc:			include/YQPkgObjList.h
+YQPkgConflictDialog.moc.cc:		include/YQPkgConflictDialog.h
+YQPkgConflictList.moc.cc:		include/YQPkgConflictList.h
 YQPkgGenericDetailsView.moc.cc:		include/YQPkgGenericDetailsView.h
 YQPkgTechnicalDetailsView.moc.cc:	include/YQPkgTechnicalDetailsView.h
 YQPkgDescriptionView.moc.cc:		include/YQPkgDescriptionView.h

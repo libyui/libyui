@@ -32,6 +32,8 @@ pkginclude_HEADERS =				\
 	YQMultiSelectionBox.h			\
 	YQPartitionSplitter.h			\
 	YQPackageSelector.h			\
+	YQPkgConflictDialog.h			\
+	YQPkgConflictList.h			\
 	YQPkgGenericDetailsView.h		\
 	YQPkgDescriptionView.h			\
 	YQPkgTechnicalDetailsView.h		\

@@ -37,6 +37,7 @@ class QTabWidget;
 
 class QY2ComboTabWidget;
 
+class YQPkgConflictDialog;
 class YQPkgDescriptionView;
 class YQPkgList;
 class YQPkgRpmGroupTagsFilterView;
@@ -158,6 +159,7 @@ protected:
     YQPkgSelList *			_selList;
     YQPkgYouPatchFilterView *		_youPatchFilterView;
     YQPkgYouPatchList *			_youPatchList;
+    YQPkgConflictDialog *		_conflictDialog;
 };
 
 #endif // YQPackageSelector_h

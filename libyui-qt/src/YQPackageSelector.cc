@@ -19,20 +19,21 @@
 
 #define ALPHA_WARNING	1
 
+#include <qapplication.h>
+#include <qcheckbox.h>
+#include <qcursor.h>
 #include <qhbox.h>
 #include <qhgroupbox.h>
 #include <qlabel.h>
 #include <qmenubar.h>
 #include <qmessagebox.h>
-// #include <qnamespace.h>
 #include <qprogressbar.h>
 #include <qpushbutton.h>
 #include <qsplitter.h>
 #include <qstylefactory.h>
 #include <qtabwidget.h>
-#include <qvbox.h>
-#include <qcheckbox.h>
 #include <qtimer.h>
+#include <qvbox.h>
 
 #include <Y2PM.h>
 #include <y2pm/PMManager.h>
@@ -41,6 +42,7 @@
 #include <ycp/y2log.h>
 
 #include "YQPackageSelector.h"
+#include "YQPkgConflictDialog.h"
 #include "YQPkgDescriptionView.h"
 #include "YQPkgList.h"
 #include "YQPkgRpmGroupTagsFilterView.h"
@@ -99,6 +101,9 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
 	fakeData();
 
     setFont( _yuiqt->currentFont() );
+    _conflictDialog = new YQPkgConflictDialog( this );
+    CHECK_PTR( _conflictDialog );
+    
     basicLayout();
     makeConnections();
 
@@ -506,23 +511,13 @@ YQPackageSelector::autoResolveDependencies()
 void
 YQPackageSelector::resolveDependencies()
 {
-    if ( _autoDependenciesCheckBox && ! _autoDependenciesCheckBox->isChecked() )
-	return;
-	
-    PkgDep::ResultList		goodList;
-    PkgDep::ErrorResultList	badList;
-
-    y2milestone( "Solving..." );
-    bool success = Y2PM::packageManager().solveInstall( goodList, badList );
-    y2milestone( "Solving done" );
-
-    if ( ! success )
+    if ( ! _conflictDialog )
     {
-	y2error( "Dependency conflict!" );
-	QMessageBox::warning( this, _( "Conflict" ),
-			      "Dependency conflict!",
-			      QMessageBox::Ok, QMessageBox::NoButton );
+	y2error( "No conflict dialog existing" );
+	return;
     }
+
+    _conflictDialog->solveAndShowConflicts();
 }
 
 
