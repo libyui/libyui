@@ -331,6 +331,8 @@ QY2FloppyMountDialog.cc:		include/QY2FloppyMountDialog.h
 QY2CharValidator.moc:			include/QY2CharValidator.h
 QY2ListView.moc:			include/QY2ListView.h
 
+qxembed.moc:				include/qxembed.h
+
 
 %.moc: include/%.h
 	$(MOC) $< -o $@
