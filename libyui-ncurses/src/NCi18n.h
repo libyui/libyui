@@ -49,5 +49,17 @@ static string _(const char * msgid1, const char * msgid2, unsigned long int n)
     return ngettext(msgid1, msgid2, n);
 }
 
+static void setTextdomain( const char * domain )
+{
+    bindtextdomain( domain, LOCALEDIR );
+    bind_textdomain_codeset( domain, "utf8" );
+    textdomain( domain );
+
+    // Make change known.
+    {
+	extern int _nl_msg_cat_cntr;
+	++_nl_msg_cat_cntr;
+    }
+}
 
 #endif // NCi18n_h
