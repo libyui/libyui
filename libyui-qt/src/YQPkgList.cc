@@ -49,7 +49,7 @@ YQPkgList::YQPkgList( QWidget *parent )
 
     addColumn( _( "Summary"	) );	_summaryCol	= numCol++;
     addColumn( _( "Size"	) );	_sizeCol	= numCol++;
-    
+
     if ( installedPkgs > 0 )
     {
 	addColumn( _( "Avail. Ver." ) ); _versionCol	= numCol++;
@@ -143,8 +143,13 @@ YQPkgList::sizeHint() const
 void
 YQPkgList::createSourceRpmContextMenu()
 {
-    actionInstallSourceRpm	= createAction( YQIconPool::pkgInstall(),  _( "&Install Source"	      ) );
-    actionDontInstallSourceRpm	= createAction( YQIconPool::pkgNoInst(),   _( "Do&n't Install Source" ) );
+    actionInstallSourceRpm	= createAction( _( "&Install Source" ),
+						statusIcon( PMSelectable::S_Install, true ),
+						statusIcon( PMSelectable::S_Install, false ) );
+
+    actionDontInstallSourceRpm	= createAction( _( "Do&n't Install Source" ),
+						statusIcon( PMSelectable::S_NoInst, true ),
+						statusIcon( PMSelectable::S_NoInst, false ) );
 
     connect( actionInstallSourceRpm,	 SIGNAL( activated() ), this, SLOT( setInstallCurrentSourceRpm()     ) );
     connect( actionDontInstallSourceRpm, SIGNAL( activated() ), this, SLOT( setDontInstallCurrentSourceRpm() ) );
@@ -245,7 +250,7 @@ YQPkgListItem::setSourceRpmIcon()
 {
     if ( srpmStatusCol() < 0 )
 	return;
-    
+
     QPixmap icon;
 
     if ( hasSourceRpm() )
@@ -296,7 +301,7 @@ YQPkgListItem::toolTip( int col )
 {
     QString text;
     QString name = _pmObj->name().asString().c_str();
-    
+
     if ( col == statusCol() )
     {
 	text = YQPkgObjListItem::toolTip( col );
@@ -304,7 +309,7 @@ YQPkgListItem::toolTip( int col )
     else if ( col == srpmStatusCol() )
     {
 	text = name + "\n\n";
-	
+
 	if ( hasSourceRpm() )
 	{
 	    text += installSourceRpm() ?
@@ -319,7 +324,7 @@ YQPkgListItem::toolTip( int col )
     else
     {
 	text = name + "\n\n";
-	    
+
 	QString installed;
 	QString candidate;
 
@@ -330,18 +335,18 @@ YQPkgListItem::toolTip( int col )
 	    installed +=  _pmObj->getInstalledObj()->arch().asString().c_str();
 	    installed  = _( "Installed version: %1" ).arg( installed );
 	}
-	
+
 	if (  _pmObj->hasCandidateObj() )
 	{
 	    candidate  = _pmObj->getCandidateObj()->edition().asString().c_str();
 	    candidate += "-";
 	    candidate +=  _pmObj->getCandidateObj()->arch().asString().c_str();
 	}
-	
+
 	if ( _pmObj->hasInstalledObj() )
 	{
 	    text += installed + "\n";
-	    
+
 	    if ( _pmObj->hasCandidateObj() )
 	    {
 		// Translators: This is the relation between two versions of one package
@@ -364,7 +369,7 @@ YQPkgListItem::toolTip( int col )
 	    text += candidate;
 	}
     }
-	
+
     return text;
 }
 

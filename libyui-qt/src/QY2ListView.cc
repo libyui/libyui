@@ -101,7 +101,7 @@ QString
 QY2ListView::toolTip( QListViewItem * listViewItem, int column )
 {
     if ( ! listViewItem )
-	return QString();
+	return QString::null;
 
     QString text;
 
@@ -121,7 +121,7 @@ QY2ListView::toolTip( QListViewItem * listViewItem, int column )
     if ( checkListItem )
 	return checkListItem->toolTip( column );
     
-    return QString();
+    return QString::null;
 }
 
 

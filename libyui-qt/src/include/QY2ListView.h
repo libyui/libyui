@@ -290,7 +290,7 @@ public:
      *
      * This default implementation does nothing.
      **/
-    virtual QString toolTip( int column ) { return QString(); }
+    virtual QString toolTip( int column ) { return QString::null; }
 
 
 protected:

@@ -1189,7 +1189,7 @@ QString YUIQt::askForSaveFileName( const QString & startWith,
 						  headline );		// caption
 
 	if ( file_name.isEmpty() )	// this includes file_name.isNull()
-	    return QString();		// nothing selected -> return Null string
+	    return QString::null;
 
 
 	if ( access( (const char *) file_name, F_OK ) == 0 )	// file exists?

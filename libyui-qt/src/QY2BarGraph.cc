@@ -74,7 +74,7 @@ void QY2BarGraph::setSegments( int segmentCount )
     for ( int i=0; i < segments(); i++ )
     {
 	_values[i] = 0;
-	_labels[i] = QString();
+	_labels[i] = QString::null;
     }
 }
 
@@ -102,7 +102,7 @@ int QY2BarGraph::value( int i ) const
 
 const QString QY2BarGraph::label( int i ) const
 {
-    if ( INDEX_INVALID(i) ) return QString();
+    if ( INDEX_INVALID(i) ) return QString::null;
     return _labels[i];
 }
 

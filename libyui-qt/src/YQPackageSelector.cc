@@ -532,9 +532,8 @@ YQPackageSelector::addMenus()
     CHECK_PTR( _fileMenu );
     _menuBar->insertItem( _( "&File" ), _fileMenu );
 
-    _fileMenu->insertItem( _( "&Quit - Save Changes)"   ), this, SLOT( accept() ) );
     _fileMenu->insertItem( _( "E&xit - Discard Changes" ), this, SLOT( reject() ) );
-
+    _fileMenu->insertItem( _( "&Quit - Save Changes"    ), this, SLOT( accept() ) );
 
 
     if ( _pkgList )
@@ -553,11 +552,11 @@ YQPackageSelector::addMenus()
 	_pkgList->actionSetCurrentDelete->addTo( _pkgMenu );
 	_pkgList->actionSetCurrentUpdate->addTo( _pkgMenu );
 	_pkgList->actionSetCurrentTaboo->addTo( _pkgMenu );
-	
+
 	_pkgMenu->insertSeparator();
-	
+
         QPopupMenu * submenu = _pkgList->addAllInListSubMenu( _pkgMenu );
-	
+
 	_pkgMenu->insertSeparator();
 
 	_pkgList->actionInstallSourceRpm->addTo( _pkgMenu );

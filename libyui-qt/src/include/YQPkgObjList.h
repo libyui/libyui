@@ -22,6 +22,7 @@
 #ifndef YQPkgObjList_h
 #define YQPkgObjList_h
 
+#include <qpixmap.h>
 #include <QY2ListView.h>
 #include <y2pm/PMObject.h>
 #include <y2pm/PMSelectable.h>
@@ -94,7 +95,19 @@ public:
      **/
     virtual QPopupMenu * addAllInListSubMenu( QPopupMenu * menu );
 
-    
+    /**
+     * Returns the suitable icon for a PMObject status - the regular icon if
+     * 'enabled' is 'true' or the insensitive icon if 'enabled' is 'false.
+     **/
+    virtual QPixmap statusIcon( PMSelectable::UI_Status status,
+				bool 			enabled = true );
+
+    /**
+     * Returns a short (one line) descriptive text for a PMObject status.
+     **/
+    virtual QString statusText( PMSelectable::UI_Status status );
+
+
 public slots:
 
     /**
@@ -223,11 +236,23 @@ protected:
     void createActions();
 
     /**
-     * Create one action
+     * Create an action based on a PMObject status - automatically retrieve the
+     * corresponding status icons (both sensitive and insensitive) and text.
+     * 'key' is only a descriptive text, no true accelerator.
      **/
-    QAction * createAction( const QPixmap &	icon,
-			    const QString &	text,
-			    bool		enabled = false );
+    QAction * createAction( PMSelectable::UI_Status 	status,
+			    const QString &		key	= QString::null,
+			    bool 			enabled = false );
+
+    /**
+     * Low-level: Create an action.
+     * 'key' is only a descriptive text, no true accelerator.
+     **/
+    QAction * createAction( const QString & 	text,
+			    const QPixmap & 	icon		= QPixmap(),
+			    const QPixmap & 	insensitiveIcon	= QPixmap(),
+			    const QString & 	key		= QString::null,
+			    bool 		enabled		= false );
 
 
     // Data members
@@ -253,10 +278,6 @@ public:
     QAction *		actionSetCurrentDelete;
     QAction *		actionSetCurrentUpdate;
     QAction *		actionSetCurrentTaboo;
-
-    QAction *		actionSetCurrentAutoInstall;
-    QAction *		actionSetCurrentAutoUpdate;
-    QAction *		actionSetCurrentAutoDelete;
 
     QAction *		actionSetListInstall;
     QAction *		actionSetListDontInstall;

@@ -138,8 +138,74 @@ YQPkgObjList::clear()
 }
 
 
+QPixmap
+YQPkgObjList::statusIcon( PMSelectable::UI_Status status, bool enabled )
+{
+    QPixmap icon = YQIconPool::pkgNoInst();
+
+    if ( enabled )
+    {
+	switch ( status )
+	{
+	    case PMSelectable::S_Taboo:		icon = YQIconPool::pkgTaboo();		break;
+	    case PMSelectable::S_Del:		icon = YQIconPool::pkgDel();		break;
+	    case PMSelectable::S_Update:	icon = YQIconPool::pkgUpdate();		break;
+	    case PMSelectable::S_Install:	icon = YQIconPool::pkgInstall();	break;
+	    case PMSelectable::S_AutoDel:	icon = YQIconPool::pkgAutoDel();	break;
+	    case PMSelectable::S_AutoInstall:	icon = YQIconPool::pkgAutoInstall();	break;
+	    case PMSelectable::S_AutoUpdate:	icon = YQIconPool::pkgAutoUpdate();	break;
+	    case PMSelectable::S_KeepInstalled: icon = YQIconPool::pkgKeepInstalled();	break;
+	    case PMSelectable::S_NoInst:	icon = YQIconPool::pkgNoInst();		break;
+
+		// Intentionally omitting 'default' branch so the compiler can
+		// catch unhandled enum states
+	}
+    }
+    else
+    {
+	switch ( status )
+	{
+	    case PMSelectable::S_Taboo:		icon = YQIconPool::disabledPkgTaboo();		break;
+	    case PMSelectable::S_Del:		icon = YQIconPool::disabledPkgDel();		break;
+	    case PMSelectable::S_Update:	icon = YQIconPool::disabledPkgUpdate();		break;
+	    case PMSelectable::S_Install:	icon = YQIconPool::disabledPkgInstall();	break;
+	    case PMSelectable::S_AutoDel:	icon = YQIconPool::disabledPkgAutoDel();	break;
+	    case PMSelectable::S_AutoInstall:	icon = YQIconPool::disabledPkgAutoInstall();	break;
+	    case PMSelectable::S_AutoUpdate:	icon = YQIconPool::disabledPkgAutoUpdate();	break;
+	    case PMSelectable::S_KeepInstalled: icon = YQIconPool::disabledPkgKeepInstalled();	break;
+	    case PMSelectable::S_NoInst:	icon = YQIconPool::disabledPkgNoInst();		break;
+
+		// Intentionally omitting 'default' branch so the compiler can
+		// catch unhandled enum states
+	}
+    }
+
+    return icon;
+}
+
+
+QString
+YQPkgObjList::statusText( PMSelectable::UI_Status status )
+{
+    switch ( status )
+    {
+	case PMSelectable::S_Taboo:		return _( "Taboo - never install"	);
+	case PMSelectable::S_Del:		return _( "Delete"			);
+	case PMSelectable::S_Update:		return _( "Update"			);
+	case PMSelectable::S_Install:		return _( "Install"			);
+	case PMSelectable::S_AutoDel:		return _( "Auto-delete"			);
+	case PMSelectable::S_AutoInstall:	return _( "Auto-install"		);
+	case PMSelectable::S_AutoUpdate:	return _( "Auto-update"			);
+	case PMSelectable::S_KeepInstalled:	return _( "Keep"			);
+	case PMSelectable::S_NoInst:		return _( "Don't install"		);
+    }
+
+    return QString::null;
+}
+
+
 void
-YQPkgObjList::setCurrentStatus( PMSelectable::UI_Status	newStatus,
+YQPkgObjList::setCurrentStatus( PMSelectable::UI_Status newStatus,
 				bool			doSelectNextItem )
 {
     QListViewItem * listViewItem = selectedItem();
@@ -165,7 +231,7 @@ YQPkgObjList::setCurrentStatus( PMSelectable::UI_Status	newStatus,
 
 
 void
-YQPkgObjList::setAllItemStatus( PMSelectable::UI_Status	newStatus )
+YQPkgObjList::setAllItemStatus( PMSelectable::UI_Status newStatus )
 {
     if ( ! _editable )
 	return;
@@ -205,24 +271,20 @@ YQPkgObjList::selectNextItem()
 void
 YQPkgObjList::createActions()
 {
-    actionSetCurrentInstall	   = createAction( YQIconPool::pkgInstall(),	   _( "&Install"	       ) + "\t[+]" );
-    actionSetCurrentDontInstall    = createAction( YQIconPool::pkgNoInst(),	   _( "Do&n't install"	       ) + "\t[-]" );
-    actionSetCurrentKeepInstalled  = createAction( YQIconPool::pkgKeepInstalled(), _( "&Keep"		       ) + "\t[<], [-]");
-    actionSetCurrentDelete	   = createAction( YQIconPool::pkgDel(),	   _( "&Delete"		       ) + "\t[-]" );
-    actionSetCurrentUpdate	   = createAction( YQIconPool::pkgUpdate(),	   _( "&Update"		       ) + "\t[>], [+]");
-    actionSetCurrentTaboo	   = createAction( YQIconPool::pkgTaboo(),	   _( "&Taboo - never install" ) + "\t[!]");
-
-    actionSetCurrentAutoInstall    = createAction( YQIconPool::pkgAutoInstall(),   _( "(Auto-install)" ) );
-    actionSetCurrentAutoUpdate	   = createAction( YQIconPool::pkgAutoUpdate(),	   _( "(Auto-update)"  ) );
-    actionSetCurrentAutoDelete	   = createAction( YQIconPool::pkgAutoDel(),	   _( "(Auto-delete)"  ) );
+    actionSetCurrentInstall		= createAction( PMSelectable::S_Install,	"[+]"		);
+    actionSetCurrentDontInstall		= createAction( PMSelectable::S_NoInst,		"[-]"		);
+    actionSetCurrentKeepInstalled	= createAction( PMSelectable::S_KeepInstalled,	"[<], [-]"	);
+    actionSetCurrentDelete		= createAction( PMSelectable::S_Del,		"[-]"		);
+    actionSetCurrentUpdate		= createAction( PMSelectable::S_Update,		"[>], [+]"	);
+    actionSetCurrentTaboo		= createAction( PMSelectable::S_Taboo,		"[!]"		);
 
 
-    actionSetListInstall          = createAction( YQIconPool::pkgInstall(),       _( "&Install"               ), true );
-    actionSetListDontInstall      = createAction( YQIconPool::pkgNoInst(),        _( "Do&n't install"         ), true );
-    actionSetListKeepInstalled    = createAction( YQIconPool::pkgKeepInstalled(), _( "&Keep"                  ), true );
-    actionSetListDelete           = createAction( YQIconPool::pkgDel(),           _( "&Delete"                ), true );
-    actionSetListUpdate           = createAction( YQIconPool::pkgUpdate(),        _( "&Update"                ), true );
-    actionSetListTaboo            = createAction( YQIconPool::pkgTaboo(),         _( "&Taboo - never install" ), true );
+    actionSetListInstall		= createAction( PMSelectable::S_Install,	"", true );
+    actionSetListDontInstall		= createAction( PMSelectable::S_NoInst,		"", true );
+    actionSetListKeepInstalled		= createAction( PMSelectable::S_KeepInstalled,	"", true );
+    actionSetListDelete			= createAction( PMSelectable::S_Del,		"", true );
+    actionSetListUpdate			= createAction( PMSelectable::S_Update,		"", true );
+    actionSetListTaboo			= createAction( PMSelectable::S_Taboo,		"", true );
 
 
     connect( actionSetCurrentInstall,	     SIGNAL( activated() ), this, SLOT( setCurrentInstall()	  ) );
@@ -233,22 +295,53 @@ YQPkgObjList::createActions()
     connect( actionSetCurrentTaboo,	     SIGNAL( activated() ), this, SLOT( setCurrentTaboo()	  ) );
 
     connect( actionSetListInstall,	     SIGNAL( activated() ), this, SLOT( setListInstall()	  ) );
-    connect( actionSetListDontInstall,       SIGNAL( activated() ), this, SLOT( setListDontInstall()	  ) );
-    connect( actionSetListKeepInstalled,     SIGNAL( activated() ), this, SLOT( setListKeepInstalled() 	  ) );
-    connect( actionSetListDelete,	     SIGNAL( activated() ), this, SLOT( setListDelete()	          ) );
-    connect( actionSetListUpdate,	     SIGNAL( activated() ), this, SLOT( setListUpdate()	          ) );
-    connect( actionSetListTaboo,	     SIGNAL( activated() ), this, SLOT( setListTaboo()	          ) );
+    connect( actionSetListDontInstall,	     SIGNAL( activated() ), this, SLOT( setListDontInstall()	  ) );
+    connect( actionSetListKeepInstalled,     SIGNAL( activated() ), this, SLOT( setListKeepInstalled()	  ) );
+    connect( actionSetListDelete,	     SIGNAL( activated() ), this, SLOT( setListDelete()		  ) );
+    connect( actionSetListUpdate,	     SIGNAL( activated() ), this, SLOT( setListUpdate()		  ) );
+    connect( actionSetListTaboo,	     SIGNAL( activated() ), this, SLOT( setListTaboo()		  ) );
+}
+
+
+
+QAction *
+YQPkgObjList::createAction( PMSelectable::UI_Status status, const QString & key, bool enabled )
+{
+    return createAction( statusText( status ),
+			 statusIcon( status, true ),
+			 statusIcon( status, false ),
+			 key,
+			 enabled );
 }
 
 
 QAction *
-YQPkgObjList::createAction( const QPixmap & icon, const QString & text, bool enabled )
+YQPkgObjList::createAction( const QString & 	text,
+			    const QPixmap & 	icon,
+			    const QPixmap & 	insensitiveIcon,
+			    const QString & 	key,
+			    bool 		enabled )
 {
-    QAction * action = new QAction( text,		// text
-				    QIconSet( icon ),	// icon set
-				    text,		// menu text
-				    0,			// accel key
-				    this );		// parent
+    QString label = text;
+
+    if ( ! key.isEmpty() )
+	label += "\t" + key;
+
+
+    QIconSet iconSet ( icon );
+
+    if ( ! insensitiveIcon.isNull() )
+    {
+	iconSet.setPixmap( insensitiveIcon,
+			   QIconSet::Automatic,
+			   QIconSet::Disabled );
+    }
+
+    QAction * action = new QAction( label,	// text
+				    iconSet,	// icon set
+				    label,	// menu text
+				    0,		// accel key
+				    this );	// parent
     CHECK_PTR( action );
     action->setEnabled( enabled );
 
@@ -295,7 +388,7 @@ YQPkgObjList::addAllInListSubMenu( QPopupMenu * menu )
     actionSetListDelete->addTo( submenu );
     actionSetListUpdate->addTo( submenu );
     actionSetListTaboo->addTo( submenu );
-    
+
     menu->insertItem( _( "&All in this list" ), submenu );
 
     return menu;
@@ -558,49 +651,11 @@ YQPkgObjListItem::updateStatus()
 void
 YQPkgObjListItem::setStatusIcon()
 {
-    if ( statusCol() < 0 )
-	return;
-
-    QPixmap icon = YQIconPool::pkgNoInst();
-
-    if ( editable() && _pkgObjList->editable() )
+    if ( statusCol() >= 0 )
     {
-	switch ( status() )
-	{
-	    case PMSelectable::S_Taboo:		icon = YQIconPool::pkgTaboo();		break;
-	    case PMSelectable::S_Del:		icon = YQIconPool::pkgDel();		break;
-	    case PMSelectable::S_Update:	icon = YQIconPool::pkgUpdate();		break;
-	    case PMSelectable::S_Install:	icon = YQIconPool::pkgInstall();	break;
-	    case PMSelectable::S_AutoDel:	icon = YQIconPool::pkgAutoDel();	break;
-	    case PMSelectable::S_AutoInstall:	icon = YQIconPool::pkgAutoInstall();	break;
-	    case PMSelectable::S_AutoUpdate:	icon = YQIconPool::pkgAutoUpdate();	break;
-	    case PMSelectable::S_KeepInstalled:	icon = YQIconPool::pkgKeepInstalled();	break;
-	    case PMSelectable::S_NoInst:	icon = YQIconPool::pkgNoInst();		break;
-
-		// Intentionally omitting 'default' branch so the compiler can
-		// catch unhandled enum states
-	}
+	bool enabled = editable() && _pkgObjList->editable();
+	setPixmap( statusCol(), _pkgObjList->statusIcon( status(), enabled ) );
     }
-    else
-    {
-	switch ( status() )
-	{
-	    case PMSelectable::S_Taboo:		icon = YQIconPool::disabledPkgTaboo();		break;
-	    case PMSelectable::S_Del:		icon = YQIconPool::disabledPkgDel();		break;
-	    case PMSelectable::S_Update:	icon = YQIconPool::disabledPkgUpdate();		break;
-	    case PMSelectable::S_Install:	icon = YQIconPool::disabledPkgInstall();	break;
-	    case PMSelectable::S_AutoDel:	icon = YQIconPool::disabledPkgAutoDel();	break;
-	    case PMSelectable::S_AutoInstall:	icon = YQIconPool::disabledPkgAutoInstall();	break;
-	    case PMSelectable::S_AutoUpdate:	icon = YQIconPool::disabledPkgAutoUpdate();	break;
-	    case PMSelectable::S_KeepInstalled:	icon = YQIconPool::disabledPkgKeepInstalled();	break;
-	    case PMSelectable::S_NoInst:	icon = YQIconPool::disabledPkgNoInst();		break;
-
-		// Intentionally omitting 'default' branch so the compiler can
-		// catch unhandled enum states
-	}
-    }
-
-    setPixmap( statusCol(), icon );
 }
 
 
@@ -706,25 +761,12 @@ YQPkgObjListItem::showNotifyTexts( PMSelectable::UI_Status status )
 QString
 YQPkgObjListItem::toolTip( int col )
 {
-    QString text;
-    
     if ( col == statusCol() )
     {
-	switch ( status() )
-	{
-	    case PMSelectable::S_Taboo:		return _( "Taboo - never install" 	);
-	    case PMSelectable::S_Del:		return _( "Delete" 			);
-	    case PMSelectable::S_Update:	return _( "Update" 			);
-	    case PMSelectable::S_Install:	return _( "Install" 			);
-	    case PMSelectable::S_AutoDel:	return _( "Auto-delete" 		);
-	    case PMSelectable::S_AutoInstall:	return _( "Auto-install" 		);
-	    case PMSelectable::S_AutoUpdate:	return _( "Auto-update" 		);
-	    case PMSelectable::S_KeepInstalled:	return _( "Keep" 			);
-	    case PMSelectable::S_NoInst:	return _( "Don't install" 		);
-	}
+	return _pkgObjList->statusText( status() );
     }
 
-    return QString();
+    return QString::null;
 }
 
 

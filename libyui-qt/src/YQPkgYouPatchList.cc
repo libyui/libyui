@@ -159,7 +159,6 @@ YQPkgYouPatchList::createNotInstalledContextMenu()
     actionSetCurrentInstall->addTo( _notInstalledContextMenu );
     actionSetCurrentDontInstall->addTo( _notInstalledContextMenu );
     actionSetCurrentTaboo->addTo( _notInstalledContextMenu );
-    actionSetCurrentAutoInstall->addTo( _notInstalledContextMenu );
 }
 
 
@@ -171,7 +170,6 @@ YQPkgYouPatchList::createInstalledContextMenu()
 
     actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
     actionSetCurrentUpdate->addTo( _installedContextMenu );
-    actionSetCurrentAutoUpdate->addTo( _installedContextMenu );
 }
 
 
