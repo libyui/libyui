@@ -365,7 +365,6 @@ protected:
 
     YWidget * createCheckBox		( YWidget * parent, YWidgetOpt & opt, const YCPString & label, bool checked);
     YWidget * createComboBox		( YWidget * parent, YWidgetOpt & opt, const YCPString & label);
-    YWidget * createDate		( YWidget * parent, YWidgetOpt & opt,const YCPString & label,  const YCPString & date);
     YWidget * createEmpty		( YWidget * parent, YWidgetOpt & opt);
     YWidget * createImage		( YWidget * parent, YWidgetOpt & opt, YCPByteblock imageData,	YCPString fallbackText );
     YWidget * createImage		( YWidget * parent, YWidgetOpt & opt, YCPString    fileName, 	YCPString fallbackText );
@@ -384,7 +383,6 @@ protected:
     YWidget * createSpacing		( YWidget * parent, YWidgetOpt & opt, float size, bool horizontal, bool vertical);
     YWidget * createTable		( YWidget * parent, YWidgetOpt & opt, vector<string> header);
     YWidget * createTextEntry		( YWidget * parent, YWidgetOpt & opt, const YCPString & label, const YCPString & text);
-    YWidget * createTime		( YWidget * parent, YWidgetOpt & opt,const YCPString & label,  const YCPString & time);
     YWidget * createTree		( YWidget * parent, YWidgetOpt & opt, const YCPString & label);
     YWidget * createPkgSpecial		( YWidget * parent, YWidgetOpt & opt, const YCPString & subwidget );
 
@@ -402,6 +400,18 @@ protected:
 					  YColor 		foreground,
 					  YColor 		background,
 					  int 			margin );
+
+    bool 	hasDate();
+    YWidget *	createDate	        ( YWidget *		parent,
+					  YWidgetOpt & 		opt,
+					  const YCPString & 	label,
+					  const YCPString & 	date);
+
+    bool 	hasTime();
+    YWidget *	createTime	        ( YWidget *		parent,
+					  YWidgetOpt & 		opt,
+					  const YCPString & 	label,
+					  const YCPString & 	time);
 
     bool 	hasDownloadProgress();
     YWidget *	createDownloadProgress	( YWidget *		parent,
