@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Feb 23 14:59:49 CET 2005 - sh@suse.de
+
+- Fallback rule for reverse layout for Arabic and Hebrew
+  even if no translations for predefined Qt dialogs are available 
+
+-------------------------------------------------------------------
 Wed Feb 16 16:03:13 CET 2005 - sh@suse.de
 
 - Package selector: Keep width of left pane minimal 

@@ -404,15 +404,27 @@ void YQUI::loadPredefinedQtTranslations()
     {
 	y2warning( "Can't load translations for predefined Qt dialogs from %s/%s",
 		   (const char *) path, (const char *) trans_file );
-	return;
     }
     else
     {
 	y2milestone( "Loaded translations for predefined Qt dialogs from %s/%s",
 		     (const char *) path, (const char *) trans_file );
+	
+	qApp->installTranslator( & _qtTranslations );
     }
 
-    qApp->installTranslator( & _qtTranslations );
+
+    // Force reverse layout for Arabic and Hebrew 
+    
+    if ( ( language.startsWith( "ar" ) ||	// Arabic
+	   language.startsWith( "he" ) )	// Hebrew
+	 && ! reverseLayout() )
+    {
+	y2warning( "Using fallback rule for reverse layout for language '%s'",
+		   (const char *) language );
+
+	qApp->setReverseLayout( true );
+    }
 }
 
 
