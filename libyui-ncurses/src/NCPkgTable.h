@@ -123,17 +123,20 @@ public:
 
     virtual ~NCPkgTable();
 
+    friend std::ostream & operator<<( std::ostream & str, NCPkgStatus obj );
+
    /**
     * This method is called to add a line to the package list.
     * @param status The package status (first column of the table)
     * @param elements A vector<string> containing the package data
     * @param index The index in package list
-    * @param pkgPtr The pointer to the package object
+    * @param objPtr The pointer to the packagemanager object
     * @eturn void
     */
     virtual void addLine( PMSelectable::UI_Status status,
-			  vector<string> elements, int index,
-			  PMObjectPtr pkgPtr );
+			  vector<string> elements,
+			  int index,
+			  PMObjectPtr objPtr );
 
    /**
     * Clears the package list
@@ -195,6 +198,12 @@ public:
     bool setPackageStatus( PMObjectPtr pkgPtr, PMSelectable::UI_Status newstatus );
 
    /**
+     * Set the status information if status has changed 
+     * @return bool
+     */  
+    bool updateTable();
+
+   /**
      * Returns the UI status to given internal package status.
      * @param stat The NCPkgStatus
      * @return UI_Status
@@ -222,8 +231,10 @@ public:
      */ 
     PMObjectPtr getDataPointer( int index );
 
-    friend std::ostream & operator<<( std::ostream & str, NCPkgStatus obj );
-
+   /**
+     * Returns the number of lines in the table (the table size)
+     * @return unsigned int
+     */ 
     unsigned int getNumLines( ) { return pad->Lines(); }
 };
 

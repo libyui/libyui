@@ -32,10 +32,10 @@
 //
 //	DESCRIPTION :
 //
-NCPkgTableTag::NCPkgTableTag( PMObjectPtr pkgPtr, NCPkgStatus stat )
+NCPkgTableTag::NCPkgTableTag( PMObjectPtr objPtr, NCPkgStatus stat )
       : NCTableCol( NCstring( "   " ), SEPARATOR )
 	, status ( stat )
-	, dataPointer( pkgPtr )
+	, dataPointer( objPtr )
 {
 
 }
@@ -180,13 +180,13 @@ NCPkgTable::~NCPkgTable()
 void NCPkgTable::addLine( PMSelectable::UI_Status stat,
 			  vector<string> elements,
 			  int index,
-			  PMObjectPtr pkgPtr )
+			  PMObjectPtr objPtr )
 {
     vector<NCTableCol*> Items( elements.size()+1, 0 );
     NCPkgStatus status = statusToPkgStat( stat );
     
     // fill first column (containing the status information and the package pointer)
-    Items[0] = new NCPkgTableTag( pkgPtr, status );
+    Items[0] = new NCPkgTableTag( objPtr, status );
 
     for ( unsigned i = 1; i < elements.size()+1; ++i ) {
 	// use YCPString to enforce recoding from 'utf8'
@@ -242,22 +242,59 @@ bool NCPkgTable::changeStatus( int index, NCPkgStatus newstatus )
 
     if ( ok )
     {
-	// get the table line 
-	NCTableLine * cl = pad->ModifyLine( index );
-	if ( !cl )
-	    return false;
-    
-	// get first column (the column containing the status info)
-	NCPkgTableTag * cc = static_cast<NCPkgTableTag *>( cl->GetCol( 0 ) );
-    
-	// set new status
-	cc->setStatus( newstatus );
-	// redraw the table
-	DrawPad();
-
+	updateTable();
     }
 
     return ok;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPkgTable::updateTable
+//	METHOD TYPE : bool
+//
+//	DESCRIPTION : set the new status info if status has changed
+//
+bool NCPkgTable::updateTable()
+{
+    unsigned int size = getNumLines();
+    unsigned int index = 0;
+    bool ret = true;
+    
+    while ( index < size )
+    {
+    	// get the table line 
+	NCTableLine * cl = pad->ModifyLine( index );
+	if ( !cl )
+	{
+	    ret = false;
+	    break;
+	}
+
+        // get first column (the column containing the status info)
+	NCPkgTableTag * cc = static_cast<NCPkgTableTag *>( cl->GetCol( 0 ) );
+	// get the object pointer
+	PMObjectPtr objPtr = getDataPointer( index );
+
+	if ( !cc || !objPtr )
+	{
+	    ret = false;
+	    break;
+	}
+
+	// set the new status (if status has changed)
+	NCPkgStatus newstatus = statusToPkgStat( objPtr->getSelectable()->status() );
+	if ( getStatus(index) != newstatus )
+	{
+	    cc->setStatus( newstatus );
+	}
+	index++;
+    }
+
+    DrawPad();
+
+    return ret;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -268,16 +305,16 @@ bool NCPkgTable::changeStatus( int index, NCPkgStatus newstatus )
 //
 //	DESCRIPTION : informs the package manager
 //
-bool NCPkgTable::setPackageStatus( PMObjectPtr pkgPtr, PMSelectable::UI_Status newstatus )
+bool NCPkgTable::setPackageStatus( PMObjectPtr objPtr, PMSelectable::UI_Status newstatus )
 {
     bool ok = false;
 
-    if ( !pkgPtr || !pkgPtr->hasSelectable() )
+    if ( !objPtr || !objPtr->hasSelectable() )
     {
 	return false;
     }
 
-    ok = pkgPtr->getSelectable()->set_status( newstatus );
+    ok = objPtr->getSelectable()->set_status( newstatus );
     NCMIL << "Set status to: " << newstatus << " returns: " << (ok?"true":"false") << endl;
     
     return ok;
@@ -421,7 +458,7 @@ NCPkgTableTag * NCPkgTable::getTag( const int & index )
 //
 // Returns the new status
 //
-bool NCPkgTable::toggleStatus( PMPackagePtr pkgPtr )
+bool NCPkgTable::toggleStatus( PMPackagePtr objPtr )
 {
     bool ok = false;
     
@@ -440,7 +477,7 @@ bool NCPkgTable::toggleStatus( PMPackagePtr pkgPtr )
 	    newStatus = PkgToDelete;
 	    break;
 	case PkgInstalled:
-	    if ( pkgPtr->hasCandidateObj() )
+	    if ( objPtr->hasCandidateObj() )
 	    {
 		newStatus = PkgToUpdate;
 	    }
@@ -520,7 +557,7 @@ bool NCPkgTable::setNewStatus( const NCPkgStatus & newStatus  )
     int citem = getCurrentItem();
 
     // must be a PMObjectPtr !!! to handle PMYouPatchPtr and PMPackagePtr   
-    PMObjectPtr pkgPtr = getDataPointer( getCurrentItem() );
+    PMObjectPtr objPtr = getDataPointer( getCurrentItem() );
     
     // check whether the status change is possible
     switch ( getStatus( citem ) )
@@ -550,7 +587,7 @@ bool NCPkgTable::setNewStatus( const NCPkgStatus & newStatus  )
 	}
 	case PkgInstalled: {
 	    if ( ( newStatus == PkgToDelete ) 	||
-		 ( pkgPtr->hasCandidateObj() &&
+		 ( objPtr->hasCandidateObj() &&
 		   ( newStatus == PkgToUpdate
 		     || newStatus == PkgToReplace
 		     || newStatus == PkgToDelete ) ) )
