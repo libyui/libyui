@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Mar  5 10:01:14 CET 2004 - gs@suse.de
+
+- V 2.9.12
+- fixed for autobuild (missing #include <y2pm/InstSrcManager.h> added) 
+
+-------------------------------------------------------------------
 Wed Mar  3 16:01:49 CET 2004 - gs@suse.de
 
 - V 2.9.11
