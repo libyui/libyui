@@ -168,7 +168,7 @@ int main (int argc, char *argv[])
     // - utf8test `cat testfile.cs` in cs_CZ.UTF-8 locale -> OK
     // - utf8test öööäää            in de_DE@euro  locale  -> RecodeToWchar Not OK (input not UTF-8)
     // - utf8test `cat testfile.cs` in de_DE@euro locale -> RecodeFromWchar Not OK (terminal cannot show czech)
-    ok = NCstring_test::RecodeToWchar( text, "UTF-8", &wtext );
+    ok = NCstring_test::RecodeToWchar( text, "UTF-8", &wtext ); // INPUT is always UTF-8
     fprintf( stderr, "RecodeToWchar(): %ls\n", wtext.c_str());
 
     if ( ok )
