@@ -200,12 +200,12 @@ YQPkgSearchFilterView::filter()
 
 	    ++it;
 	}
+	
+	if ( _matchCount == 0 )
+	    emit message( _( "No results." ) );
     }
 
     emit filterFinished();
-
-    if ( _matchCount == 0 )
-	emit message( _( "No results." ) );
 }
 
 
