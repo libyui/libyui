@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Sep  5 20:34:24 CEST 2002 - gs@suse.de
+
+- V 2.6.11
+- package installation: show conflict dependencies (still not
+  yet finished) 
+
+-------------------------------------------------------------------
 Thu Sep  5 19:08:32 CEST 2002 - gs@suse.de
 
 - V 2.6.10
