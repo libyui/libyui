@@ -500,6 +500,7 @@ const YCPString PkgNames::Alternatives()
     return value;
 }
 
+
 const YCPString PkgNames::PackageHelp()
 {
     // the headline of the help popup 
@@ -514,6 +515,68 @@ const YCPString PkgNames::YouHelp()
     return value;
 }
 
+const YCPString PkgNames::LabelUnres1()
+{
+    // text part 1 describing package conflict (it's a label - keep it short)
+    static const YCPString value = toYCPString( _("Solve the conflict by selecting") );
+    return value;  
+}
+
+const YCPString PkgNames::LabelUnres2()
+{
+    // text part 2 describing package conflict (it's a label - keep it short) 
+    static const YCPString value = toYCPString( _("or deselecting packages.") );
+    return value;
+}
+
+const YCPString PkgNames::LabelAlternative()
+{
+     // text part describing package dependency (it's a label - keep it short)
+    static const YCPString value = toYCPString( _("Select one of the alternatives below.") );
+    return value;  
+}
+
+const YCPString PkgNames::LabelConflict1()
+{
+     // text part 1 describing package conflict (it's a label - keep it short)
+    static const YCPString value = toYCPString( _( "Solve the conflict by deleting") );
+    return value;
+}
+
+const YCPString PkgNames::LabelConflict2()
+{
+      // text part 2 describing package conflict (it's a label - keep it short)
+    static const YCPString value = toYCPString( _( "the unwanted package(s)." ) );
+    return value;
+}
+
+const YCPString PkgNames::LabelRequBy1()
+{
+    // text part 1 describing package does not work (it's a label - keep it short)
+    static const YCPString value = toYCPString( _( "The packages below does not work without" ) );
+    return value;
+}
+
+const YCPString PkgNames::LabelRequBy2()
+{
+    // text part 2 describing packages does not work (it's a label - keep it short)
+    static const YCPString value = toYCPString( _( "the package you want to delete." ) );
+    return value;
+}
+
+const YCPString PkgNames::LabelRequire1()
+{
+    // text part 1 describing packages are not available (it's a label - keep it short)
+    static const YCPString value = toYCPString( _( "The required libraries or packages" ) );
+    return value;
+}
+
+const YCPString PkgNames::LabelRequire2()
+{
+    // text part 2 describing packages are not available (it's a label - keep it short)
+    static const YCPString value = toYCPString( _( "are not available." ) );
+    return value;
+}
 const NCstring PkgNames::FileList()
 {
     // label of the frame around the file list
@@ -567,6 +630,44 @@ const NCstring PkgNames::PreRequires()
 {
     // part of the package description
     static const NCstring value = _("<b>Prerequires: </b>");
+    return value;
+}
+
+const NCstring PkgNames::RequText()
+{
+    // text is shown in a column of a package list entry
+    // e.g. | i | aaa_base | requires ..... |
+    static const NCstring value = _("requires ...");
+    return value;
+}
+const NCstring PkgNames::RequByText()
+{
+    // text is shown in a column of a package list entry
+    static const NCstring value = _("required by ...");
+    return value;
+}
+const NCstring PkgNames::UnresText()
+{
+     // text is shown in a  column of a package list entry
+    static const NCstring value = _("unresolvable ...");
+    return value;
+}
+const NCstring PkgNames::NoAvailText()
+{
+     // text is shown in a line of a package list
+    static const NCstring value = _("no package available");
+    return value;
+}
+const NCstring PkgNames::NeedsText()
+{
+    // text is shown in a line of a package list 
+    static const NCstring value = _("needs packages ...");
+    return value;
+}
+const NCstring PkgNames::ConflictText()
+{
+     // text is shown in a line of a package list
+    static const NCstring value = _("conflicts with ...");
     return value;
 }
 
@@ -671,7 +772,7 @@ const NCstring PkgNames::HelpOnStatus()
 const NCstring PkgNames::HelpOnUpdate()
 {
     // help text package status
-    static const YCPString value = toYCPString( _("<br><b>Update Problem</b><br><p>The packages in this list cannot be updated automatically.</p><p>Possible reasons:</p><p>They are obsoleted by other packages.</p><p>There is no newer version to update to on any installation media.</p><p>They are third-party packages</p><p>Please choose manually what to do with them.The safest course of action is to delete them.</p>") );
+    static const YCPString value = toYCPString( _("<b>Update Problem list</b><br><p>The packages in the list cannot be updated automatically.</p><p>Possible reasons:</p><p>They are obsoleted by other packages.</p><p>There is no newer version to update to on any installation media.</p><p>They are third-party packages</p><p>Please choose manually what to do with them.The safest course of action is to delete them.</p>") );
     return value;
 }
 

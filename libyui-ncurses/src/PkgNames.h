@@ -282,7 +282,16 @@ public:
      */
     static const YCPString PackageDeps();
 
-
+    static const YCPString LabelUnres1();
+    static const YCPString LabelUnres2();
+    static const YCPString LabelAlternative();
+    static const YCPString LabelConflict1();
+    static const YCPString LabelConflict2();
+    static const YCPString LabelRequBy1();
+    static const YCPString LabelRequBy2();
+    static const YCPString LabelRequire1();
+    static const YCPString LabelRequire2();
+    
    /**
      * text used in search popup
      */
@@ -488,6 +497,15 @@ public:
      */
     static const NCstring PkgStatus();
 
+    /**
+     * dependency popup text
+     */ 
+    static const NCstring RequText();
+    static const NCstring RequByText();
+    static const NCstring UnresText();
+    static const NCstring NoAvailText();
+    static const NCstring NeedsText();
+    static const NCstring ConflictText();
     
 private:
     

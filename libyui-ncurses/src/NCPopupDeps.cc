@@ -106,14 +106,6 @@ void NCPopupDeps::createLayout( const YCPString & headline )
   pkgs->setTableType( NCPkgTable::T_Dependency, strategy );
   vSplit->addChild( pkgs );
 
-#if 0
-  depsMenu = new NCMenuButton( vSplit, opt, YCPString( "Dependencies" ) );
-  depsMenu->addMenuItem( PkgNames::RequiredBy(), PkgNames::RequRel() );
-  depsMenu->addMenuItem( PkgNames::ConflictDeps(), PkgNames::ConflRel() );
-  depsMenu->addMenuItem( PkgNames::Alternatives(), PkgNames::AlterRel() );
-  vSplit->addChild( depsMenu );
-#endif
-
   NCSpacing * sp1 = new NCSpacing( vSplit, opt, 0.2, false, true );
   vSplit->addChild( sp1 );
 
@@ -283,25 +275,25 @@ bool NCPopupDeps::fillDepsPackageList( NCPkgTable * table )
 string NCPopupDeps::getDependencyKind(  PkgDep::ErrorResult error )
 {
     string ret = "";
-    
+
     if ( !error.unresolvable.empty() )
     {
 	if ( !error.unresolvable.front().is_conflict )
 	{
-	    ret = "requires ...";
+	    ret = PkgNames::RequText().str();
 	}
 	else
 	{
-	    ret = "unresolvable ";
+	    ret = PkgNames::UnresText().str();
 	}
     }
     else if ( !error.alternatives.empty() )
     {
-	ret = "needs packages ...";
+	ret = PkgNames::NeedsText().str();
     }
     else if ( !error.conflicts_with.empty() )
     {
-	ret = "conflicts with ...";
+	ret = PkgNames::ConflictText().str();
 	if ( !error.remove_to_solve_conflict.empty() )
 	{
 	    NCMIL << "REMOVE to solve not empty" << endl;
@@ -309,7 +301,7 @@ string NCPopupDeps::getDependencyKind(  PkgDep::ErrorResult error )
     }
     else if ( !error.referers.empty() )
     {
-	ret = "required by ...";
+	ret = PkgNames::RequByText().str();
     }
 
     return ret;
@@ -344,7 +336,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    if ( !(*it).is_conflict )
 	    {
 		pkgLine.push_back( (*it).rel.asString() );
-		pkgLine.push_back( "no package available" );
+		pkgLine.push_back( PkgNames::NoAvailText().str() );
 		deps->addLine( PMSelectable::S_NoInst, // use status NOInst
 			       pkgLine,
 			       i,		// the index
@@ -353,8 +345,8 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    ++it;
 	    i++;
 	}
-	errorLabel1->setLabel( YCPString("Solve the conflict by selecting") );
-	errorLabel2->setLabel( YCPString("or deselecting packages.") );	
+	errorLabel1->setLabel( PkgNames::LabelRequire1()  );
+	errorLabel2->setLabel( PkgNames::LabelRequire2() );	
     }
     else if ( !error.alternatives.empty() )
     {
@@ -379,7 +371,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    ++it;
 	    i++;
 	}
-	errorLabel1->setLabel( YCPString("Select one of the alternatives below.") );
+	errorLabel1->setLabel( PkgNames::LabelAlternative() );
 	errorLabel2->setLabel( YCPString( "" ) );
     }
     else if ( !error.conflicts_with.empty() )
@@ -404,7 +396,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    else
 	    {
 		pkgLine.push_back( (*it).name );
-	    	pkgLine.push_back( "no package available" );
+	    	pkgLine.push_back( PkgNames::NoAvailText().str() );
 		deps->addLine( PMSelectable::S_NoInst, // use status NOInst
 			       pkgLine,
 			       i,		// the index
@@ -414,8 +406,8 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    ++it;
 	    i++;
 	}
-	errorLabel1->setLabel( YCPString("Solve the conflict by deleting") );
-	errorLabel2->setLabel( YCPString("the unwanted package(s)" ) );
+	errorLabel1->setLabel( PkgNames::LabelConflict1() );
+	errorLabel2->setLabel( PkgNames::LabelConflict2() );
     }
     else if ( !error.referers.empty() )
     {
@@ -439,7 +431,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    else
 	    {
 		pkgLine.push_back( (*it).name );
-	    	pkgLine.push_back( "no package available" );
+	    	pkgLine.push_back( PkgNames::NoAvailText().str() );
 		deps->addLine( PMSelectable::S_NoInst, // use status NOInst
 			       pkgLine,
 			       i,		// the index
@@ -449,8 +441,8 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    ++it;
 	    i++;
 	}
-	errorLabel1->setLabel( YCPString("Packages below does not work without") );
-	errorLabel2->setLabel( YCPString("the package you want to delete" ) );	
+	errorLabel1->setLabel( PkgNames::LabelRequBy1() );
+	errorLabel2->setLabel( PkgNames::LabelRequBy2() );	
     }
     
     return true;
@@ -491,7 +483,7 @@ NCursesEvent NCPopupDeps::showDependencyPopup( )
 
 long NCPopupDeps::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? 50 : 20 );
+    return ( dim == YD_HORIZ ? NCurses::cols()-10 : NCurses::lines()-5 );
 }
 
 ///////////////////////////////////////////////////////////////////

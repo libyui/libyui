@@ -85,7 +85,8 @@
 									  )),
 						 `HStretch(),
 						 // button label
-						 `HWeight(1, `PushButton(`id(`search), _("&Search") ) )
+						 `HWeight(1, `PushButton(`id(`search), _("&Search") ) ),
+					 	 `HStretch()
 						 ),
 					   `HSpacing(5.0),
 					   // button label
