@@ -57,6 +57,7 @@ YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
     addVSpacing( vbox, 4 );
     
     QHBox * hbox 		= new QHBox( vbox ); CHECK_PTR( hbox );
+    hbox->setSpacing( SPACING );
     QLabel * label		= new QLabel( _( "&Show Patch Category:" ), hbox );
     
     _patchCategory		= new QComboBox( hbox );
@@ -66,6 +67,7 @@ YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
     _patchCategory->insertItem( _( "Installable and Installed Patches" ),	1 );
     _patchCategory->insertItem( _( "All Patches" ),				2 );
     _patchCategory->setCurrentItem( 0 );
+    _patchCategory->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
     label->setBuddy( _patchCategory );
     
     connect( _patchCategory, SIGNAL( activated( int ) ), this, SLOT( fillPatchList() ) );
