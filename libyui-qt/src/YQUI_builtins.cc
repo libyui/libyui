@@ -227,7 +227,7 @@ void YQUI::askSaveLogs()
 	{
 	    saveLogsCommand += " '" + fileName + "'";
 	    y2milestone( "Saving y2logs: %s", saveLogsCommand.ascii() );
-	    result = system( saveLogsCommand.ascii() );
+	    int result = system( saveLogsCommand.ascii() );
 
 	    if ( result != 0 )
 	    {
@@ -243,7 +243,7 @@ void YQUI::askSaveLogs()
 	    }
 	    else
 	    {
-		y2milestone( "y2logs saved to %s", (const char *) fileName );
+		y2milestone( "y2logs saved to %s", (const char *) fileName, result );
 	    }
 	}
 	else
