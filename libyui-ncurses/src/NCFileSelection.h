@@ -51,9 +51,11 @@ struct NCFileInfo
      // Data members.
 
      string		_name;		// the file name (without path!)
-
+     string		_realName; 	// actual file name
      string		_tag;		// short label 
      string		_perm;		// permission string
+     string 		_user;		// user name
+     string 		_group;		// group name
      dev_t		_device;	// device this object resides on
      mode_t		_mode;		// file permissions + object type
      nlink_t		_links;		// number of links
@@ -157,7 +159,7 @@ public:
     * @return void
     */
     virtual void addLine( const vector<string> & elements,
-			  NCFileInfo & fileInfo );
+			  const NCFileInfo & fileInfo );
 
     /**
      * Get number of lines ( list entries )
@@ -186,7 +188,7 @@ public:
      * @param pkgPtr The package pointer 
      * @return bool
      */  
-    bool createListEntry ( NCFileInfo fileInfo );
+    virtual bool createListEntry ( const NCFileInfo & fileInfo ) = 0;
 
     /**
      * Get the current directory
@@ -240,6 +242,8 @@ public:
     
     virtual void fillHeader();
 
+    virtual bool createListEntry( const NCFileInfo & fileInfo );
+    
     /**
      * Fill the list of files
      * @return bool List successfully filled
@@ -264,8 +268,10 @@ public:
     virtual ~NCDirectoryTable(){}
 
     virtual void fillHeader();
-    
-    /**
+
+    virtual bool createListEntry( const NCFileInfo & fileInfo );
+
+   /**
      * Fill the list of directories
      * @return bool List successfully filled
      */  

@@ -21,6 +21,9 @@
 #include "NCTable.h"
 
 #include <fnmatch.h>
+#include <grp.h>
+#include <pwd.h>
+#include <sys/types.h>
 
 
 ///////////////////////////////////////////////////////////////////
@@ -41,15 +44,32 @@ NCFileInfo::NCFileInfo( string 	fileName,
     _links  = statInfo->st_nlink;
     _size   = statInfo->st_size;
     _mtime  = statInfo->st_mtime;
-    
+
     if ( link )
-	_tag = " @";	// links
+    {
+	char tmpName[PATH_MAX+1];
+	// get actual file name
+	int len = readlink( fileName.c_str(), tmpName, PATH_MAX );
+	if ( len >= 0 )
+	{
+	    tmpName[len] = '\0';
+	    _realName = tmpName;
+	}
+	_tag = " @";	// set tag
+    }
     else if ( S_ISREG(_mode)
 	      && (_mode & S_IXUSR) )
 	_tag = " *";	// user executable files
     else
 	_tag = "  ";
 
+    // get user and group name
+    struct passwd * pwdInfo  = getpwuid( statInfo->st_uid );
+    _user = pwdInfo->pw_name;
+
+    struct group * groupInfo = getgrgid( statInfo->st_gid );
+    _group = groupInfo->gr_name;
+    
     if ( _mode & S_IRUSR )
 	_perm += "r";
     else
@@ -101,8 +121,11 @@ NCFileInfo::NCFileInfo( string 	fileName,
 NCFileInfo::NCFileInfo( )
 {
     _name   = "";
+    _realName = "";
     _tag    = "";
     _perm   = "";
+    _user   = "";
+    _group  = "";
     _mode   = (mode_t)0;
     _device = (dev_t)0;
     _links  = (nlink_t)0;
@@ -266,7 +289,7 @@ void NCFileSelection::setCurrentDir()
 //	DESCRIPTION :
 //
 void NCFileSelection::addLine( const vector<string> & elements,
-			       NCFileInfo & info )
+			       const NCFileInfo & info )
 {
     vector<NCTableCol*> Items( elements.size()+1, 0 );
     
@@ -298,7 +321,7 @@ void NCFileSelection::itemsCleared()
 // createListEntry
 //
 //
-bool NCFileSelection::createListEntry ( NCFileInfo fileInfo )
+bool NCFileTable::createListEntry ( const NCFileInfo & fileInfo )
 {
     vector<string> data;
 
@@ -310,12 +333,51 @@ bool NCFileSelection::createListEntry ( NCFileInfo fileInfo )
 	    break;
 	}
 	case T_Detailed: {
-	    data.reserve(5);
+	    data.reserve(6);
 	    data.push_back( fileInfo._name );
 	    char size_buf[50];
 	    sprintf( size_buf, "%d", fileInfo._size);
 	    data.push_back( size_buf );
-	    data.push_back( fileInfo._perm );	
+	    data.push_back( fileInfo._perm );
+	    data.push_back( fileInfo._user );
+	    data.push_back( fileInfo._group );
+	    break;
+	}
+	default: {
+	    data.reserve(2);
+	    data.push_back( " " );
+	    data.push_back( " " );
+	    break;
+	}
+    }
+	
+    addLine( data, fileInfo );
+
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// createListEntry
+//
+//
+bool NCDirectoryTable::createListEntry ( const NCFileInfo & fileInfo )
+{
+    vector<string> data;
+
+    switch ( tableType )
+    {
+	case T_Overview: {
+	    data.reserve(2);
+	    data.push_back( fileInfo._name );
+	    break;
+	}
+	case T_Detailed: {
+	    data.reserve(4);
+	    data.push_back( fileInfo._name );
+	    data.push_back( fileInfo._perm );
+	    data.push_back( fileInfo._user );
+	    data.push_back( fileInfo._group );
 	    break;
 	}
 	default: {
@@ -427,11 +489,13 @@ void NCFileTable::fillHeader( )
 	    break;
 	}
 	case T_Detailed: {
-	    header.reserve(5);
+	    header.reserve(6);
 	    header.push_back( "L" + string("  ") );
 	    header.push_back( "L" + string("File name") );
 	    header.push_back( "L" + string("Size") );
 	    header.push_back( "L" + string("Permissions") );
+	    header.push_back( "L" + string("User") );
+	    header.push_back( "L" + string("Group") );
 	    break;
 	}
 	default: {
@@ -631,8 +695,9 @@ void NCDirectoryTable::fillHeader( )
 	    header.reserve(5);
 	    header.push_back( "L" + string("  ") );
 	    header.push_back( "L" + string("Directory name") );
-	    header.push_back( "L" + string("Size") );
 	    header.push_back( "L" + string("Permissions") );
+	    header.push_back( "L" + string("User") );
+	    header.push_back( "L" + string("Group") );
 	    break;
 	}
 	default: {
