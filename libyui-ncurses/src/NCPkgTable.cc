@@ -645,7 +645,9 @@ NCursesEvent NCPkgTable::wHandleInput( wint_t key )
     switch ( key )
     {
 	case KEY_UP:
-	case KEY_DOWN: {
+	case KEY_DOWN:
+	case KEY_NPAGE:
+	case KEY_PPAGE:  {
 	    
 	    PMObjectPtr objPtr = getDataPointer(citem);
 
