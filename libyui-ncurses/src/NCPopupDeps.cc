@@ -329,7 +329,7 @@ bool NCPopupDeps::concretelyDependency( int index )
     // get the ErrorResult
     PkgDep::ErrorResult error = dependencies[index];
 	
-    NCMIL << "*** Showing: " << error << endl;	
+    // NCDBG << "*** Showing: " << error << endl;	
 
     // get the dependencies
     
