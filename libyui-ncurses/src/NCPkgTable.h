@@ -95,6 +95,7 @@ public:
 	T_Update,
 	T_PatchPkgs,
 	T_DepsPackages,
+	T_Selections,
 	T_Unknown
     };
 

@@ -240,17 +240,18 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
 
     if ( ok && singleChange )
     {
-	if ( tableType != T_Dependency
-	     && tableType != T_DepsPackages
-	     && tableType != T_Patches
-	     && tableType != T_SelDependency )
+	if ( tableType == T_Packages
+	     || tableType == T_Update
+	     || tableType == T_Availables )
 	{
-	    // only check/show deps if is't not the dependency table itself
-	    // or the list of YOU patches
+	    // check/show dependencies of packages
 	    packager->showPackageDependencies( false );	// only check if automatic check is ON
 	}
-        // if ( tableType == T_Selections )
-	// 	packager->showSelectionDependencies();
+        else if ( tableType == T_Selections )
+	{
+	    // check/show dependencies of selections 
+	    packager->showSelectionDependencies();
+	}
 	
 	// update this list to show the status changes
 	updateTable();
