@@ -873,6 +873,9 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 //
 bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 {
+    // deactivate this part for beta3
+    return true;
+    
     if ( depsPopup )
     {
 	depsPopup->showDependencyPopup( true );
