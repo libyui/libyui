@@ -180,7 +180,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
 #if 0
     filters->addPage( _("YOU Patches"   ), new QLabel( "YOU Patches - this will require this side to grow much wider\nfor future use", 0 ) );
-    
+
     // DEBUG
 
     filters->addPage( _("Keywords"   ), new QLabel( "Keywords\nfilter\n\nfor future use", 0 ) );
@@ -236,7 +236,7 @@ YQPackageSelector::layoutRightPane( QWidget * parent )
 void
 YQPackageSelector::layoutPkgList( QWidget * parent )
 {
-    _pkgList= new YQPkgList( yuiqt, parent );
+    _pkgList= new YQPkgList( parent );
     CHECK_PTR( _pkgList );
 }
 
@@ -268,8 +268,8 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     _detailsViews->addTab( _pkgDescriptionView, _( "&Description" ) );
     _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _pkgList,			SIGNAL( selectionChanged       ( PMPackagePtr ) ),
-	     _pkgDescriptionView,	SLOT  ( showPkgDetailsIfVisible( PMPackagePtr ) ) );
+    connect( _pkgList,			SIGNAL( selectionChanged    ( PMObjectPtr ) ),
+	     _pkgDescriptionView,	SLOT  ( showDetailsIfVisible( PMObjectPtr ) ) );
 
 
     // Technical details
@@ -280,8 +280,8 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
     _detailsViews->addTab( _pkgTechnicalDetailsView, _( "&Technical data" ) );
 
-    connect( _pkgList,			SIGNAL( selectionChanged       ( PMPackagePtr ) ),
-	     _pkgTechnicalDetailsView,	SLOT  ( showPkgDetailsIfVisible( PMPackagePtr ) ) );
+    connect( _pkgList,			SIGNAL( selectionChanged    ( PMObjectPtr ) ),
+	     _pkgTechnicalDetailsView,	SLOT  ( showDetailsIfVisible( PMObjectPtr ) ) );
 
 
 
@@ -398,7 +398,7 @@ YQPackageSelector::makeConnections()
 	     _pkgList, 	SLOT  ( selectSomething() ) );
 
     connect( _selList, 	SIGNAL( updatePackages()      ),
-	     _pkgList, 	SLOT  ( updateAllItemStates() ) );
+	     _pkgList, 	SLOT  ( updateToplevelItemStates() ) );
 }
 
 

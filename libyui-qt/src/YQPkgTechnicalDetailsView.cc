@@ -41,23 +41,23 @@ YQPkgTechnicalDetailsView::~YQPkgTechnicalDetailsView()
 
 
 void
-YQPkgTechnicalDetailsView::showPkgDetails( PMPackagePtr pkg )
+YQPkgTechnicalDetailsView::showDetails( PMObjectPtr pmObj )
 {
-    _pkg = pkg;
+    _pmObj = pmObj;
 
-    if ( ! pkg )
+    if ( ! pmObj )
     {
 	clear();
 	return;
     }
 
-    QString html_text = htmlHeading( pkg );
+    QString html_text = htmlHeading( pmObj );
 
-    string name = pkg->name();
-    y2debug( "Showing technical details for package %s", name.c_str() );
+    string name = pmObj->name();
+    y2debug( "Showing technical details for PMObject %s", name.c_str() );
 
-    PMPackagePtr candidate = pkg->getCandidateObj();
-    PMPackagePtr installed = pkg->getInstalledObj();
+    PMPackagePtr candidate = pmObj->getCandidateObj();
+    PMPackagePtr installed = pmObj->getInstalledObj();
 
 #if 0
     html_text += complexTable( installed, installed );

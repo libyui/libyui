@@ -29,7 +29,7 @@
 YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
     : QTextBrowser( parent )
 {
-    _pkg = 0;
+    _pmObj = 0;
     _parentTab = dynamic_cast<QTabWidget *> (parent);
     
     if ( _parentTab )
@@ -51,38 +51,38 @@ YQPkgGenericDetailsView::reload( QWidget * newCurrent )
 {
     if ( newCurrent == this )
     {
-	showPkgDetailsIfVisible( _pkg );
+	showDetailsIfVisible( _pmObj );
     }
 }
 
 
 void
-YQPkgGenericDetailsView::showPkgDetailsIfVisible( PMPackagePtr pkg )
+YQPkgGenericDetailsView::showDetailsIfVisible( PMObjectPtr pmObj )
 {
-    _pkg = pkg;
+    _pmObj = pmObj;
     
     if ( _parentTab )		// Is this view embedded into a tab widget?
     {
 	if ( _parentTab->currentPage() == this )  // Is this page the topmost?
 	{
-	    showPkgDetails( pkg );
+	    showDetails( pmObj );
 	}
     }
     else	// No tab parent - simply show data unconditionally.
     {
-	showPkgDetails( pkg );
+	showDetails( pmObj );
     }
 }
 
 
 QString
-YQPkgGenericDetailsView::htmlHeading( PMPackagePtr pkg )
+YQPkgGenericDetailsView::htmlHeading( PMObjectPtr pmObj )
 {
-    QString summary = fromUTF8( pkg->summary() );
+    QString summary = fromUTF8( pmObj->summary() );
     
     QString html =
 	"<table bgcolor=#E0E0F8><tr><td><b>"
-	+ fromUTF8( pkg->name() )
+	+ fromUTF8( pmObj->name() )
 	+ "</b>";
 
     if ( ! summary.isEmpty() )

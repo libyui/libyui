@@ -50,7 +50,7 @@ protected:
      * In this case the package description.
      * Overwritten from YQPkgGenericDetailsView.
      **/
-    virtual void showPkgDetails( PMPackagePtr pkg );
+    virtual void showDetails( PMObjectPtr pmObj );
 };
 
 

@@ -37,27 +37,26 @@ YQPkgDescriptionView::~YQPkgDescriptionView()
 
 
 void
-YQPkgDescriptionView::showPkgDetails( PMPackagePtr pkg )
+YQPkgDescriptionView::showDetails( PMObjectPtr pmObj )
 {
-    _pkg = pkg;
+    _pmObj = pmObj;
 
-    if ( ! pkg )
+    if ( ! pmObj )
     {
 	clear();
 	return;
     }
 
-
-    QString html_text = htmlHeading( pkg );
+    QString html_text = htmlHeading( pmObj );
     
-    string name = pkg->name();
+    string name = pmObj->name();
     // y2debug( "Showing description for package %s", name.c_str() );
 
     
     // Add all lines of the package description
 
     bool auto_format = true;
-    std::list<std::string> description = _pkg->description();
+    std::list<std::string> description = pmObj->description();
     std::list<std::string>::const_iterator it = description.begin();
 
     while ( it != description.end() )

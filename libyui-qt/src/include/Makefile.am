@@ -35,6 +35,7 @@ pkginclude_HEADERS =				\
 	YQPkgGenericDetailsView.h		\
 	YQPkgDescriptionView.h			\
 	YQPkgTechnicalDetailsView.h		\
+	YQPkgObjList.h				\
 	YQPkgList.h				\
 	YQPkgRpmGroupTagsFilterView.h		\
 	YQPkgSelectionsFilterView.h		\
@@ -57,6 +58,7 @@ pkginclude_HEADERS =				\
 	QY2BarGraph.h				\
 	QY2ComboTabWidget.h			\
 	QY2CharValidator.h			\
+	QY2ListView.h				\
 	QXEmbed.h				\
 						\
 	checklist_off.xpm			\

@@ -22,16 +22,14 @@
 #ifndef YQPkgList_h
 #define YQPkgList_h
 
-#include <qlistview.h>
+#include <YQPkgObjList.h>
 #include <y2pm/PMPackage.h>
-#include <vector>
 
 
-class YQPkg;	// shorter name than "YQPkgListItem"
-class YUIQt;
+class YQPkgListItem;
 
 
-class YQPkgList : public QListView
+class YQPkgList : public YQPkgObjList
 {
     Q_OBJECT
 
@@ -40,7 +38,7 @@ public:
     /**
      * Constructor
      **/
-    YQPkgList( YUIQt *yuiqt, QWidget *parent );
+    YQPkgList( QWidget *parent );
 
     /**
      * Destructor
@@ -50,12 +48,6 @@ public:
 
     // Column numbers
 
-    int statusCol()		const	{ return _statusCol;		}
-    int nameCol()		const	{ return _nameCol;		}
-    int summaryCol()		const	{ return _summaryCol;		}
-    int sizeCol()		const	{ return _sizeCol;		}
-    int versionCol()		const	{ return _versionCol;		}
-    int instVersionCol()	const	{ return _instVersionCol;	}
     int srpmStatusCol() 	const	{ return _srpmStatusCol; 	}
 
 
@@ -66,28 +58,18 @@ public slots:
      * slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addPkg( PMPackagePtr pkg );
+    void addPkg( PMPackagePtr pmPkg );
+
 
     /**
-     * Dispatcher slot for mouse click: cycle status depending on column
+     * Dispatcher slot for mouse click: Take care of source RPM status.
+     * Let the parent class handle the normal status.
+     * Reimplemented from YQPkgObjList.
      **/
-    void slotPkgClicked( int		button,
-			 YQPkg *	pkg,
-			 int		col );
+    virtual void pkgObjClicked( int		button,
+				QListViewItem *	item,
+				int		col    );
 
-    /**
-     * Select a list entry (if there is any).
-     * Usually this will be the first list entry, but don't rely on that - this
-     * might change without notice. Emits signal selectionChanged().
-     **/
-    void selectSomething();
-
-    /**
-     * Update the status display of all list entries.
-     * This is an expensive operation.
-     **/
-    void updateAllItemStates();
-    
     /**
      * Reimplemented from QListView / QWidget:
      * Reserve a reasonable amount of space.
@@ -95,107 +77,22 @@ public slots:
     virtual QSize sizeHint() const;
 
 
-    /**
-     * Reimplemented from QListView:
-     * Adjust header sizes after clearing contents.
-     **/
-    virtual void clear();
+    // No separate selectionChanged( PMPackagePtr ) signal:
+    // Use YQPkgObjList::selectionChanged( PMObjectPtr ) instead
+    // and dynamic_cast to PMPackagePtr if required.
+    // This saves duplicating a lot of code.
 
     
-signals:
-    
-    /**
-     * Emitted for mouse clicks on a package
-     **/
-    void pkgClicked		( int		button,
-				  YQPkg *	pkg,
-				  int		col );
-
-    /**
-     * Emitted for mouse double clicks on a package
-     **/
-    void pkgDoubleClicked	( int		button,
-				  YQPkg *	pkg,
-				  int		col );
-
-
-    /**
-     * Emitted when a package is selected.
-     * May be called with a null poiner if no package is selected.
-     **/
-    void selectionChanged	( PMPackagePtr	pkg );
-
-
-protected slots:
-
-    /**
-     * Dispatcher slot for selection change - internal only
-     **/
-    void selectionChangedInternal( QListViewItem * sel );
-
-    /**
-     * Internal: Handle manual column resize.
-     * Save the user's preferred sizes so they don't get overwritten each time
-     * the list is cleared and filled with new contents.
-     **/
-    void columnWidthChanged( int col, int oldSize, int newSize );
-
 protected:
-
-    /**
-     * Handle mouse clicks.
-     * Reimplemented from QScrollView.
-     **/
-    virtual void contentsMousePressEvent( QMouseEvent * e );
-
-    /**
-     * Handle mouse clicks.
-     * Reimplemented from QScrollView.
-     **/
-    virtual void contentsMouseReleaseEvent( QMouseEvent* );
-
-    /**
-     * Handle mouse clicks.
-     * Reimplemented from QScrollView.
-     **/
-    virtual void contentsMouseDoubleClickEvent( QMouseEvent* );
-
-    /**
-     * Save the current column widths.
-     **/
-    void saveColumnWidths();
-
-    /**
-     * Restore the column widths to what was saved previously with
-     * saveColumnWidths().   
-     **/
-    void restoreColumnWidths();
-
 
     // Data members
 
-    YUIQt *		yuiqt;
-    QListViewItem *	mousePressedItem;
-    int			mousePressedCol;
-    int			mousePressedButton;
-
-
-private:
-
-    int _statusCol;
-    int _nameCol;
-    int _summaryCol;
-    int _sizeCol;
-    int _versionCol;
-    int _instVersionCol;
     int _srpmStatusCol;
-
-    std::vector<int> _savedColumnWidth;
 };
 
 
 
-class YQPkg: public QListViewItem
+class YQPkgListItem: public YQPkgObjListItem
 {
 public:
 
@@ -203,12 +100,12 @@ public:
      * Constructor. Creates a YQPkgList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkg( YQPkgList * pkgList, PMPackagePtr pkg );
+    YQPkgListItem( YQPkgList * pkgList, PMPackagePtr pmPkg );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkg();
+    virtual ~YQPkgListItem();
 
     /**
      * Returns the parent package list
@@ -218,32 +115,12 @@ public:
     /**
      * Returns the original object within the package manager backend
      **/
-    PMPackagePtr pkg() { return _pkg; }
+    PMPackagePtr pmPkg() { return _pmPkg; }
 
     /**
      * Returns the original object within the package manager backend
      **/
-    const PMPackagePtr constPkg() const { return _pkg; }
-
-    /**
-     * Returns the (binary RPM) package status
-     **/
-    PMSelectable::UI_Status status() const;
-
-    /**
-     * Set the (binary RPM) package status
-     **/
-    void setStatus( PMSelectable::UI_Status newStatus );
-
-    /**
-     * Set a status icon according to the package's status
-     **/
-    void setStatusIcon();
-
-    /**
-     * Cycle the package status to the next valid value
-     **/
-    void cycleStatus();
+    const PMPackagePtr constPMPkg() const { return _pmPkg; }
 
     /**
      * Returns the source RPM package status:
@@ -262,24 +139,6 @@ public:
     void toggleSourceRpmStatus();
 
     /**
-     * Set a column text via STL string
-     * (QListViewItem::setText() expects a QString)
-     **/
-    void setText( int column, const std::string text );
-
-    /**
-     * Set a column text via PkgEdition
-     * (QListViewItem::setText() expects a QString)
-     **/
-    void setText( int column, const PkgEdition & edition );
-
-    /**
-     * Return wheter or not this pkg is already installed, i.e. if it can be
-     * updated or deleted.
-     **/
-    bool isInstalled() const { return _isInstalled; }
-
-    /**
      * Comparison function used for sorting the list.
      * Returns:
      * -1 if this <  other
@@ -294,23 +153,15 @@ public:
 
     // Columns
 
-    int statusCol()		const	{ return _pkgList->statusCol();		}
-    int nameCol()		const	{ return _pkgList->nameCol();		}
-    int summaryCol()		const	{ return _pkgList->summaryCol();	}
-    int sizeCol()		const	{ return _pkgList->sizeCol();		}
-    int versionCol()		const	{ return _pkgList->versionCol();	}
-    int instVersionCol()	const	{ return _pkgList->instVersionCol();	}
-    int srpmStatusCol() 	const	{ return _pkgList->srpmStatusCol();	}
+    int srpmStatusCol() const { return _pkgList->srpmStatusCol(); }
 
 
 protected:
 
-
     // Data members
 
-    YQPkgList	*	_pkgList;
-    PMPackagePtr	_pkg;
-    bool		_isInstalled;
+    YQPkgList *		_pkgList;
+    PMPackagePtr	_pmPkg;
 
 
     // FIXME

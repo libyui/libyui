@@ -56,6 +56,7 @@ liby2qt_la_SOURCES = 				\
 	YQPkgTechnicalDetailsView.cc		\
 	YQPkgDescriptionView.cc			\
 	YQPkgList.cc				\
+	YQPkgObjList.cc				\
 	YQPkgRpmGroupTagsFilterView.cc		\
 	YQPkgSelectionsFilterView.cc		\
 	YQPkgSelList.cc				\
@@ -76,6 +77,7 @@ liby2qt_la_SOURCES = 				\
 	QY2BarGraph.cc				\
 	QY2ComboTabWidget.cc			\
 	QY2CharValidator.cc			\
+	QY2ListView.cc				\
 	QXEmbed.cc
 
 # the plugin adds the liby2 component interface
@@ -125,6 +127,7 @@ BUILT_SOURCES =					\
 	YQPkgTechnicalDetailsView.moc.cc	\
 	YQPkgDescriptionView.moc.cc		\
 	YQPkgList.moc.cc			\
+	YQPkgObjList.moc.cc			\
 	YQPkgRpmGroupTagsFilterView.moc.cc	\
 	YQPkgSelectionsFilterView.moc.cc	\
 	YQPkgSelList.moc.cc			\
@@ -145,6 +148,7 @@ BUILT_SOURCES =					\
 	QY2BarGraph.moc.cc			\
 	QY2ComboTabWidget.moc.cc		\
 	QY2CharValidator.moc.cc			\
+	QY2ListView.moc.cc			\
 	QXEmbed.moc.cc
 
 
@@ -173,6 +177,7 @@ YQPkgGenericDetailsView.o YQPkgGenericDetailsView.lo:		YQPkgGenericDetailsView.m
 YQPkgTechnicalDetailsView.o YQPkgTechnicalDetailsView.lo:	YQPkgTechnicalDetailsView.moc.cc
 YQPkgDescriptionView.o YQPkgDescriptionView.lo:			YQPkgDescriptionView.moc.cc
 YQPkgList.o YQPkgList.lo:					YQPkgList.moc.cc
+YQPkgObjList.o YQPkgObjList.lo:					YQPkgObjList.moc.cc
 YQPkgRpmGroupTagsFilterView.o YQPkgRpmGroupTagsFilterView.lo:	YQPkgRpmGroupTagsFilterView.moc.cc
 YQPkgSelectionsFilterView.o YQPkgSelectionsFilterView.lo:	YQPkgSelectionsFilterView.moc.cc
 YQPkgSelList.o YQPkgSelList.lo:					YQPkgSelList.moc.cc
@@ -193,6 +198,7 @@ YQTree.o YQTree.lo:						YQTree.moc.cc
 QY2BarGraph.o QY2BarGraph.lo:					QY2BarGraph.moc.cc
 QY2ComboTabWidget.o QY2ComboTabWidget.lo:			QY2ComboTabWidget.cc
 QY2CharValidator.o QY2CharValidator.lo:				QY2CharValidator.moc.cc
+QY2ListView.o QY2ListView.lo:					QY2ListView.moc.cc
 QXEmbed.o QXEmbed.lo:						QXEmbed.moc.cc
 
 
@@ -219,6 +225,7 @@ YQPartitionSplitter.moc.cc:		include/YQPartitionSplitter.h
 YQProgressBar.moc.cc:			include/YQProgressBar.h
 YQPackageSelector.moc.cc:		include/YQPackageSelector.h
 YQPkgList.moc.cc:			include/YQPkgList.h
+YQPkgObjList.moc.cc:			include/YQPkgObjList.h
 YQPkgGenericDetailsView.moc.cc:		include/YQPkgGenericDetailsView.h
 YQPkgTechnicalDetailsView.moc.cc:	include/YQPkgTechnicalDetailsView.h
 YQPkgDescriptionView.moc.cc:		include/YQPkgDescriptionView.h
@@ -242,6 +249,7 @@ YQTree.moc.cc:				include/YQTree.h
 QY2BarGraph.moc.cc:			include/QY2BarGraph.h
 QY2ComboTabWidget.cc:			include/QY2ComboTabWidget.h
 QY2CharValidator.moc.cc:		include/QY2CharValidator.h
+QY2ListView.moc.cc:			include/QY2ListView.h
 QXEmbed.moc.cc:				include/QXEmbed.h
 
 

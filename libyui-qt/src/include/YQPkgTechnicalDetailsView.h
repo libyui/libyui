@@ -22,8 +22,9 @@
 #ifndef YQPkgTechnicalDetailsView_h
 #define YQPkgTechnicalDetailsView_h
 
+#include <y2pm/PMPackage.h>
+
 #include "YQPkgGenericDetailsView.h"
-#include <string>
 
 
 class YQPkgTechnicalDetailsView : public YQPkgGenericDetailsView
@@ -47,11 +48,11 @@ public:
 protected:
  
     /**
-     * Show details for the specified package:
+     * Show details for the specified PMObject:
      * In this case technical data, very much like "rpm -qi".
      * Overwritten from YQPkgGenericDetailsView.
      **/
-    virtual void showPkgDetails( PMPackagePtr pkg );
+    virtual void showDetails( PMObjectPtr pmObj );
 
     /**
      * Returns a string containing a HTML table for technical details for one
