@@ -679,7 +679,9 @@ bool NCDialog::ActivateByKey( int key )
     switch ( c->Value()->GetState() ) {
     case NC::WSnormal:
     case NC::WSactive:
-      if ( c->Value()->HasHotkey( key ) ) {
+      if ( c->Value()->HasHotkey( key )
+	   || c->Value()->HasFunctionHotkey( key ) )
+      {
 	Activate( *c->Value() );
 	return true;
       }
@@ -694,7 +696,9 @@ bool NCDialog::ActivateByKey( int key )
       }
       break;
     case NC::WSdumb:
-      if ( c->Value()->HasHotkey( key ) ) {
+      if ( c->Value()->HasHotkey( key )
+	   || c->Value()->HasFunctionHotkey( key ) )
+      {
 	SDBG << "DUMB HOT KEY " << key << " in " << c->Value() << endl;
 	buddy = c->Value();
       }
@@ -888,7 +892,7 @@ void NCDialog::processInput( int timeout )
     case -1:
       if ( timeout == -1 )
 	pendingEvent = NCursesEvent::cancel;
-      break;
+     break;
 
     case CTRL('D'):
       hch = getch( -1 );
@@ -948,6 +952,21 @@ void NCDialog::processInput( int timeout )
       }
       break;
 
+   case KEY_F(1):
+   case KEY_F(2):
+   case KEY_F(3):
+   case KEY_F(4):
+   case KEY_F(5):
+   case KEY_F(6):
+   case KEY_F(7):
+   case KEY_F(8):
+   case KEY_F(9):
+   case KEY_F(10):
+   case KEY_F(11):
+   case KEY_F(12):
+  	pendingEvent = wHandleHotkey( ch );
+	break;  
+		
     default:
       pendingEvent = wHandleInput( ch );
       break;

@@ -23,6 +23,7 @@
 
 #include "NCurses.h"
 #include "tnode.h"
+#include "YWidgetOpt.h"
 
 class NCWidget;
 class NCursesWindow;
@@ -107,7 +108,10 @@ class NCWidget : public tnode<NCWidget*>, protected NCursesError {
   protected:
 
     NClabel * hotlabel;
+    int hotfkey;
 
+    virtual void setFunctionHotkey( YWidgetOpt & opt );
+    
   public:
 
     NCWidget( NCWidget * myparent = 0 );
@@ -133,6 +137,8 @@ class NCWidget : public tnode<NCWidget*>, protected NCursesError {
     bool       Enable( const bool do_bv );
 
     virtual bool HasHotkey( int key ) const;
+    virtual bool HasFunctionHotkey( int key ) const;
+
     virtual NCursesEvent wHandleHotkey( int key );
     virtual NCursesEvent wHandleInput( int key );
 

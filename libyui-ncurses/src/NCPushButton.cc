@@ -39,6 +39,8 @@ NCPushButton::NCPushButton( NCWidget * parent, YWidgetOpt & opt,
   setLabel( nlabel );
   if ( opt.isDefaultButton.value() )
     setKeyboardFocus();
+
+  setFunctionHotkey( opt );
 }
 
 ///////////////////////////////////////////////////////////////////

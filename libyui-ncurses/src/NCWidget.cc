@@ -46,6 +46,7 @@ NCWidget::NCWidget( NCWidget * myparent )
     , noUpdates( false )
     , wstate( NC::WSnormal )
     , hotlabel( 0 )
+    , hotfkey( 0 )
 {
   if ( myparent ) {
     ReparentTo( *myparent );
@@ -489,6 +490,80 @@ bool NCWidget::HasHotkey( int key ) const
     return false;
 
   return( tolower( key ) == tolower( hotlabel->hotkey() ) );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//	METHOD NAME : NCWidget::HasFunctionHotkey
+//	METHOD TYPE : bool
+//
+//	DESCRIPTION :
+//
+bool NCWidget::HasFunctionHotkey( int key ) const
+{
+    if ( key < 0 || (hotfkey == 0) )
+	return false;
+
+    return( key == hotfkey ) ;
+}
+  
+///////////////////////////////////////////////////////////////////
+//
+//	METHOD NAME : NCWidget::setFunctionHotkey
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCWidget::setFunctionHotkey( YWidgetOpt & opt )
+{
+    if ( opt.key_F1.value() )
+    {
+	hotfkey = KEY_F(1);
+    }
+    else if ( opt.key_F2.value() )
+    {
+	hotfkey = KEY_F(2);	
+    }
+    else if ( opt.key_F3.value() )
+    {
+	hotfkey = KEY_F(3);
+    }
+    else if ( opt.key_F4.value() )
+    {
+	hotfkey = KEY_F(4);	
+    }
+    else if ( opt.key_F5.value() )
+    {
+	hotfkey = KEY_F(5);
+    }
+    else if ( opt.key_F6.value() )
+    {
+	hotfkey = KEY_F(6);	
+    }
+    else if ( opt.key_F7.value() )
+    {
+	hotfkey = KEY_F(7);
+    }
+    else if ( opt.key_F8.value() )
+    {
+	hotfkey = KEY_F(8);	
+    }
+    else if ( opt.key_F9.value() )
+    {
+	hotfkey = KEY_F(9);	
+    }
+    else if ( opt.key_F10.value() )
+    {
+	hotfkey = KEY_F(10);
+    }
+    else if ( opt.key_F11.value() )
+    {
+	hotfkey = KEY_F(11);	
+    }
+    else if ( opt.key_F12.value() )
+    {
+	hotfkey = KEY_F(12);
+    }
 }
 
 ///////////////////////////////////////////////////////////////////
