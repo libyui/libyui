@@ -515,6 +515,7 @@ const NCstring PkgNames::Solving()
 	
 const NCstring PkgNames::SearchPhrase()
 {
+    // begin: text/labels for search popups (use unique hotkeys until the end:)
     // text for the package search popup 
     static const NCstring value = _("&Search phrase");
     return value;
@@ -522,7 +523,7 @@ const NCstring PkgNames::SearchPhrase()
 
 const NCstring PkgNames::SearchIn()
 {
-    // label of a frame (search popup)
+    // label of a frame in search popup (without hotkey)
     static const NCstring value = _(" Search in ");
     return value;
 }
@@ -544,7 +545,7 @@ const NCstring PkgNames::CheckName()
 const NCstring PkgNames::CheckSummary()
 {
     // label of a combo box  (search popup)
-    static const NCstring value = _("&Summary");
+    static const NCstring value = _("S&ummary");
     return value;
 }
 
@@ -564,6 +565,7 @@ const NCstring PkgNames::CheckRequires()
 
 const NCstring PkgNames::IgnoreCase()
 {
+    // end: text/labels for search popups
     // label of a combo box  (search popup)
     static const NCstring value = _("&Ignore case");
     return value;
@@ -922,7 +924,7 @@ const NCstring PkgNames::HelpOnStatus1()
 const NCstring PkgNames::HelpOnStatus2()
 {
     // part 2 of help text package status
-    static const NCstring value = _("<p>There is also the possibility to use <b>F3</b> to toggle between the package status.");
+    static const NCstring value = _("<p>There is also the possibility to use <b>RET</b> to toggle between the package status.");
     return value;
 }
 
