@@ -94,6 +94,9 @@ pkginclude_HEADERS =				\
 	noinst_disabled.xpm			\
 	normal_conflict.xpm			\
 	select_conflict.xpm			\
+	sel_autodel.xpm				\
+	sel_autoinstall.xpm			\
+	sel_autoupdate.xpm			\
 	stop.xpm				\
 	taboo.xpm				\
 	taboo_disabled.xpm			\
