@@ -23,7 +23,6 @@
 #include <string>
 
 
-// Forward declaration
 class YCPValue;
 
 

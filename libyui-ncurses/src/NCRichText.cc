@@ -875,7 +875,6 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 	tag = wstring( listindent, L' ' );
       } else {
 	wchar_t buf[16];
-	// FIXME - test lists !!!
 	if ( liststack.top() )
 	{
 	    swprintf( buf, 15, L"%2ld. ", liststack.top()++ );

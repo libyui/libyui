@@ -272,8 +272,7 @@ void NClabel::drawAt( NCursesWindow & w, chtype style, chtype hotstyle,
 	  }
 	  else
 	  {
-	      // FIXME: add formatting if needed
-	      // w.printw( "%-*.*ls", len, (int)len, (*line).str().c_str() );
+	      // TODO formatting (like above) needed ?
 	      w.printw( "%ls", (*line).str().c_str() );
 	  }
       }
