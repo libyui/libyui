@@ -199,7 +199,9 @@ void NCPopupDeps::showDependencies( )
        
     NCDBG << "Solving..." << endl ;
 
-    NCPopupInfo info( wpos(10, 10),  YCPString( "" ), YCPString(PkgNames::Solving().str()), false );
+    NCPopupInfo info( wpos(10, 10),  YCPString( "" ),
+		      YCPString(PkgNames::Solving().str()),
+		      PkgNames::OKLabel().str() );
     info.setNiceSize( 18, 4 );
     info.popup();
     
@@ -302,6 +304,16 @@ bool NCPopupDeps::evaluateErrorResult( NCPkgTable * table,
 		dependencies.push_back( make_pair((*it), text) );
 	}
 
+	/**
+	 * A list of packages that require the package
+	 * described by the Result. Please note that a
+	 * referer is remembered only if no installed package
+	 * would have satisfied the requirement, too.
+	 *
+         * Only show the referers as "own" dependency if the list is not related to another
+	 * kind of dependency (conflicts, unresolvable or alternatives).
+	 * */
+	
 	if ( !(*it).referers.empty()
 	     && (*it).conflicts_with.empty()
 	     && (*it).unresolvable.empty()
