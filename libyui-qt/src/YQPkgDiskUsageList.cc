@@ -32,16 +32,29 @@
 #include "YQi18n.h"
 
 
+// Warning ranges for "disk space is running out" or "disk space overflow".
+// The WARN value triggers a warning popup once (!). The warning will not be
+// displayed again until the value sinks below the PROXIMITY value and then
+// increases again to the WARN value.
+//
+// See class YQPkgWarningRangeNotifier in file YQPkgDiskUsageList.h for details.
+
+#define MIN_FREE_MB_WARN	400
+#define MIN_FREE_MB_PROXIMITY	700
+
+#define MIN_PERCENT_WARN	90
+#define MIN_PERCENT_PROXIMITY	80
+
+#define OVERFLOW_MB_WARN	0
+#define OVERFLOW_MB_PROXIMITY	300
+
+
 
 YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget *parent, int thresholdPercent )
     : QY2DiskUsageList( parent, true )
 {
     _debug 	= false;
-    _warn  	= false;
-    _overflow	= false;
-    _warningPercentThreshold	= 95;
-    _freeSizeThreshold		= 500 * FSize::MB;
-	
+
     const std::set<PkgDuMaster::MountPoint>	du = Y2PM::packageManager().getDu().mountpoints();
     std::set<PkgDuMaster::MountPoint>::iterator it = du.begin();
 
@@ -55,7 +68,7 @@ YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget *parent, int thresholdPercent )
 	    item->updateData();
 	    _items.insert( it->mountpoint().c_str(), item );
 	}
-	
+
 	++it;
     }
 }
@@ -66,8 +79,9 @@ YQPkgDiskUsageList::updateDiskUsage()
 {
     YUIQt::yuiqt()->busyCursor();
 
-    _warn 	= false;
-    _overflow	= false;
+    runningOutWarning.clear();
+    overflowWarning.clear();
+
     const std::set<PkgDuMaster::MountPoint> 	du = Y2PM::packageManager().updateDu().mountpoints();
     std::set<PkgDuMaster::MountPoint>::iterator it = du.begin();
 
@@ -84,6 +98,34 @@ YQPkgDiskUsageList::updateDiskUsage()
     }
 
     YUIQt::yuiqt()->normalCursor();
+    postPendingWarnings();
+}
+
+
+void
+YQPkgDiskUsageList::postPendingWarnings()
+{
+    if ( overflowWarning.needWarning() )
+    {
+	YQPkgDiskUsageWarningDialog::diskUsageWarning( _("<b>Error:</b> Out of disk space!"),
+						       100, _("&OK") );
+
+	overflowWarning.warningPostedNotify();
+	runningOutWarning.warningPostedNotify(); // Suppress this (now redundant) other warning
+    }
+
+    if ( runningOutWarning.needWarning() )
+    {
+	YQPkgDiskUsageWarningDialog::diskUsageWarning( _("<b>Warning:</b> Disk space is running out!") ,
+						       MIN_PERCENT_WARN, _("&OK") );
+	runningOutWarning.warningPostedNotify();
+    }
+
+    if ( overflowWarning.leavingProximity() )
+	overflowWarning.clearHistory();
+
+    if ( runningOutWarning.leavingProximity() )
+	runningOutWarning.clearHistory();
 }
 
 
@@ -150,13 +192,14 @@ YQPkgDiskUsageList::keyPressEvent( QKeyEvent *event )
 			case '-':	percent--;	break;
 
 			case 'w':
-			    YQPkgDiskUsageWarningDialog::diskUsageWarning( _("<b>Warning:</b> Disk space is running out!") ,
-									   90, _("&OK") );
+			    // Only for testing, thus intentionally using no translations
+			    YQPkgDiskUsageWarningDialog::diskUsageWarning( "<b>Warning:</b> Disk space is running out!",
+									   90, "&OK" );
 			    break;
-			    
+
 			case 'f':
-			    YQPkgDiskUsageWarningDialog::diskUsageWarning( _("<b>Error:</b> Out of disk space!"), 100,
-									   _("&Continue anyway"), _("&Cancel") );
+			    YQPkgDiskUsageWarningDialog::diskUsageWarning( "<b>Error:</b> Out of disk space!",
+									   100, "&Continue anyway", "&Cancel" );
 			    break;
 		    }
 
@@ -166,7 +209,12 @@ YQPkgDiskUsageList::keyPressEvent( QKeyEvent *event )
 		    if ( percent != item->usedPercent() )
 		    {
 			du._used = du.total() * percent / 100;
+			
+			runningOutWarning.clear();
+			overflowWarning.clear();
+			
 			item->updateDuData( du );
+			postPendingWarnings();
 		    }
 		}
 	    }
@@ -217,18 +265,113 @@ YQPkgDiskUsageListItem::updateDuData( const YQPkgDuData & fromData )
 {
     _duData.assignData( fromData );
     updateData();
-
-    if ( usedPercent() > _pkgDiskUsageList->warningPercentThreshold() &&
-	 freeSize() < _pkgDiskUsageList->freeSizeThreshold()		)
-    {
-	_pkgDiskUsageList->warningNotify();
-    }
-
-    if ( freeSize() <= 0 )
-    {
-	_pkgDiskUsageList->overflowNotify();
-    }
+    checkRemainingDiskSpace();
 }
+
+
+void
+YQPkgDiskUsageListItem::checkRemainingDiskSpace()
+{
+    int	percent = usedPercent();
+    int	free	= freeSize() / FSize::MB;
+
+    if ( percent > MIN_PERCENT_WARN )
+    {
+	// Modern hard disks can be huge, so a warning based on percentage only
+	// can be misleading - check the absolute value, too.
+
+	if ( free < MIN_FREE_MB_PROXIMITY )
+	    _pkgDiskUsageList->runningOutWarning.enterProximity();
+
+	if ( free < MIN_FREE_MB_WARN )
+	    _pkgDiskUsageList->runningOutWarning.enterRange();
+    }
+
+    if ( free < MIN_FREE_MB_PROXIMITY )
+    {
+	if ( percent > MIN_PERCENT_PROXIMITY )
+	    _pkgDiskUsageList->runningOutWarning.enterProximity();
+    }
+
+    if ( free < OVERFLOW_MB_WARN )
+	_pkgDiskUsageList->overflowWarning.enterRange();
+
+    if ( free < OVERFLOW_MB_PROXIMITY )
+	_pkgDiskUsageList->overflowWarning.enterProximity();
+}
+
+
+
+
+
+
+YQPkgWarningRangeNotifier::YQPkgWarningRangeNotifier()
+{
+    clearHistory();
+}
+
+
+void
+YQPkgWarningRangeNotifier::clear()
+{
+    _inRange 		= false;
+    _hasBeenClose	= _isClose;
+    _isClose 		= false;
+}
+
+
+void
+YQPkgWarningRangeNotifier::clearHistory()
+{
+    clear();
+    _hasBeenClose  = false;
+    _warningPosted = false;
+}
+
+
+void
+YQPkgWarningRangeNotifier::enterRange()
+{
+    _inRange = true;
+    enterProximity();
+}
+
+
+void
+YQPkgWarningRangeNotifier::enterProximity()
+{
+    _isClose      = true;
+    _hasBeenClose = true;
+}
+
+
+void
+YQPkgWarningRangeNotifier::warningPostedNotify()
+{
+    _warningPosted = true;
+}
+
+
+bool
+YQPkgWarningRangeNotifier::inRange() const
+{
+    return _inRange;
+}
+
+
+bool
+YQPkgWarningRangeNotifier::leavingProximity() const
+{
+    return ! _isClose && ! _hasBeenClose;
+}
+
+
+bool
+YQPkgWarningRangeNotifier::needWarning() const
+{
+    return _inRange && ! _warningPosted;
+}
+
 
 
 

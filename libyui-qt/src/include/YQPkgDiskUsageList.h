@@ -30,6 +30,99 @@ class YQPkgDiskUsageListItem;
 typedef PkgDuMaster::MountPoint YQPkgDuData;
 
 
+
+/**
+ * Helper class to manage warnings that are to be issued when a value enters a
+ * predefined range, but repeated only when that value leaves a (wider)
+ * "proximity" range and then re-enters the (narrower) "inner" range.
+ *
+ * Example: Disk space usage:
+ *
+ *	70%
+ *	75%
+ *	80% 	[proximity range start]
+ *	85%
+ *	90%	[inner range start]
+ *	95%
+ *	100%
+ *
+ * A warning is to be posted when there is only 90% disk space left. After the
+ * warning is displayed, there shall be no more warning until disk usage decreases
+ * below 80% (the proximity range) and then later increases again to 90%.
+ *
+ * The net effect of all that is to avoid posting the warning over and over
+ * again while the value changes back and forth around the boundary of the
+ * (inner) warning range.
+ **/
+class YQPkgWarningRangeNotifier
+{
+public:
+
+    /**
+     * Constructor.
+     **/
+    YQPkgWarningRangeNotifier();
+
+    /**
+     * Notification that the inner range is entered.
+     * The caller has to decide the criteria for that.
+     **/
+    void enterRange();
+
+    /**
+     * Notification that the proximity range is entered, i.e. that the value is
+     * getting near the inner range.
+     * 'enterRange()' automatically includes this, too.
+     **/
+    void enterProximity();
+
+    /**
+     * Notification that a warning has been posted.
+     **/
+    void warningPostedNotify();
+
+    /**
+     * Check if the value is in range, i.e. if anybody from the outside has
+     * called 'enterRange()' since the last call to 'clear()'.
+     **/
+    bool inRange() const;
+
+    /**
+     * Check if a warning should be posted, i.e. if the value is currently in
+     * range (see 'inRange()) and there has been no notification yet that a
+     * warning has already been posted.
+     **/
+    bool needWarning() const;
+
+    /**
+     * Check if the value is leaving the proximity range.
+     **/
+    bool leavingProximity() const;
+
+    /**
+     * Clear the current values, i.e. prepare for a new round of checks
+     **/
+    void clear();
+
+    /**
+     * Clear everything, including all history values such as if a warning has
+     * been posted.
+     **/
+    void clearHistory();
+    
+
+protected:
+
+    bool 	_inRange;
+    bool	_isClose;
+    bool	_hasBeenClose;
+    bool 	_warningPosted;
+};
+
+
+
+
+
 /**
  * @short List of disk usage of all attached partitions.
  **/
@@ -65,42 +158,28 @@ public:
     virtual QSize sizeHint() const;
 
     /**
-     * Returns the percentage threshold at which to warn about running out of
-     * disk space.
+     * Warning range notifier about running out of disk space warning.
      **/
-    int warningPercentThreshold() const { return _warningPercentThreshold; }
+    YQPkgWarningRangeNotifier runningOutWarning;
 
     /**
-     * Returns the free size threshold at which to warn about running out of
-     * disk space. This is meant to prevent warnings about file systems being
-     * 90% full when there are still Gigabytes of free space left.
+     * Warning range notifier about disk space overflow warning.
      **/
-    FSize freeSizeThreshold() const { return _freeSizeThreshold; }
+    YQPkgWarningRangeNotifier overflowWarning;
 
-    /**
-     * Notify the list that a warning about disk space is necessary.
-     * This does _not_ immediately post a warning dialog.
-     **/
-    void warningNotify() { _warn = true; }
-
-    /**
-     * Notify the list about file system overflow.
-     * This does _not_ immediately post a warning dialog.
-     **/
-    void overflowNotify() { _overflow = true; }
-
-    /**
-     * Return 'true' if one or more file system are overflowing.
-     **/
-    bool overflow() const { return _overflow; }
-
-
+    
 public slots:
 
     /**
      * Update all statistical data in the list.
      **/
     void updateDiskUsage();
+
+    /**
+     * Post all pending disk space warnings based on the warning range
+     * notifiers. 
+     **/
+    void postPendingWarnings();
 
 
 protected:
@@ -118,10 +197,6 @@ protected:
 
     QAsciiDict<YQPkgDiskUsageListItem>  _items;
     bool				_debug;
-    bool				_warn;
-    bool				_overflow;
-    int					_warningPercentThreshold;
-    FSize				_freeSizeThreshold;
 };
 
 
@@ -180,7 +255,14 @@ public:
      **/
     virtual QString deviceName() const { return ""; }
 
+    /**
+     * Check the remaining disk space of this partition based on percentage and
+     * absolute free MB. Notify the parent YQPkgDiskUsageList's warning ranges
+     * accordingly.
+     **/
+    void checkRemainingDiskSpace();
 
+    
 protected:
 
     // Data members
@@ -188,35 +270,6 @@ protected:
     YQPkgDuData 		_duData;
     YQPkgDiskUsageList *	_pkgDiskUsageList;
 };
-
-
-#if 0
-// EXPERIMENTAL
-// EXPERIMENTAL
-// EXPERIMENTAL
-class YQPkgWarningRange
-{
-public:
-    /**
-     * Constructor.
-     **/
-    YQPkgWarningRange( int min, int max );
-
-    bool check( int val );
-
-    void warningPosted();
-    
-
-protected:
-
-    int		_min;
-    int 	_max;
-    bool 	_inRange;
-    bool 	_warningPosted;
-};
-// EXPERIMENTAL
-// EXPERIMENTAL
-#endif
 
 
 
