@@ -274,7 +274,7 @@ void YQUI::askConfigureLogging()
     QString result = QInputDialog::getItem( "YaST2 Logging",		// caption
 					    "Configure YaST2 Logging:",	// label
 					    items,
-					    get_log_debug() ? 0 : 1,
+					    get_log_debug() ? 1 : 0,
 					    false,			// editable
 					    &okButtonPressed,
 					    _main_win );		// parent
