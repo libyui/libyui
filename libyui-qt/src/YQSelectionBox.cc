@@ -63,10 +63,17 @@ YQSelectionBox::YQSelectionBox(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
     qt_listbox->setTopItem(0);
     qt_label->setBuddy(qt_listbox);
 
-    // Very small default size if specified
-    shrinkable = opt.isShrinkable.value();
+    shrinkable 		= opt.isShrinkable.value();
+    immediateMode	= opt.immediateMode.value();
 
-    connect( qt_listbox, SIGNAL( highlighted( int)), this, SLOT( slotSelected(int)));
+    connect( qt_listbox, SIGNAL( highlighted ( int) ),
+	     this, 	 SLOT  ( slotSelected( int ) ) );
+
+    if ( getNotify() )
+    {
+	connect( &timer, SIGNAL( timeout() ),
+		 this,	 SLOT  ( returnImmediately() ) );
+    }
 }
 
 
@@ -156,17 +163,30 @@ bool YQSelectionBox::eventFilter( QObject *obj, QEvent *ev )
 	    }
 	}
     }
-    
-    return QWidget::eventFilter( obj, ev);   
+
+    return QWidget::eventFilter( obj, ev);
 }
 
 
-// slots
-
-void YQSelectionBox::slotSelected(int i)
+void YQSelectionBox::slotSelected( int index )
 {
-    if (getNotify())
-	yuiqt->returnNow(YUIInterpreter::ET_WIDGET, this);
+    if ( getNotify() )
+    {
+	if ( immediateMode )	returnImmediately();
+	else			returnDelayed();
+    }
+}
+
+
+void YQSelectionBox::returnImmediately()
+{
+    yuiqt->returnNow( YUIInterpreter::ET_WIDGET, this );
+}
+
+
+void YQSelectionBox::returnDelayed()
+{
+    timer.start( 250, true ); // millisec, singleShot
 }
 
 

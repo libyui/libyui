@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Feb 28 16:41:20 CET 2003 - sh@suse.de
+
+- Fixed bug #22513 - language selection loses some key events
+
+-------------------------------------------------------------------
 Fri Feb 28 15:27:58 CET 2003 - sh@suse.de
 
 - Use new 'floppyDevice' parameter for PackageSelector

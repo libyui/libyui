@@ -23,6 +23,7 @@
 #define YQSelectionBox_h
 
 #include <qvbox.h>
+#include <qtimer.h>
 #include <ycp/YCPString.h>
 
 #include "YSelectionBox.h"
@@ -109,18 +110,41 @@ public:
      **/
     bool eventFilter( QObject *obj, QEvent *ev );
 
-protected:
-
-    bool shrinkable;
-
-
-private slots:
+protected slots:
 
     /**
-     * Tells the ui that an item has been selected. This is only
-     * interesting, if the `notify option is set.
+     * Tells the ui that an item has been selected.
+     * This is only relevant if `opt(`notify) is set.
      */
-    void slotSelected(int i);
+    void slotSelected( int index );
+
+    /**
+     * Return after some millseconds delay - collect multiple events.
+     * This is only relevant if `opt(`notify) is set.
+     **/
+    void returnDelayed();
+    
+    /**
+     * Return immediately.
+     * This is only relevant if `opt(`notify) is set.
+     **/
+    void returnImmediately();
+
+    
+protected:
+
+    //
+    // Data members
+    //
+    
+    // Very small default size if specified
+    bool shrinkable;
+
+    // Don't user a timer to collect events
+    bool immediateMode;
+
+    // Timer to collect multiple events before returning
+    QTimer timer;
 };
 
 #endif // YQLabel_h
