@@ -20,6 +20,7 @@
 #include <ycp/y2log.h>
 
 #include "YQPkgDescriptionView.h"
+#include "YQPkgDescriptionDialog.h"
 #include "YQi18n.h"
 #include "utf8.h"
 
@@ -30,6 +31,7 @@ using std::string;
 YQPkgDescriptionView::YQPkgDescriptionView( QWidget * parent )
     : YQPkgGenericDetailsView( parent )
 {
+    setMimeSourceFactory( 0 );
 }
 
 
@@ -110,8 +112,32 @@ YQPkgDescriptionView::showDetails( PMObjectPtr pmObj )
 
     setTextFormat( Qt::RichText );
     setText( html_text );
+    ensureVisible( 0, 0 );	// Otherwise hyperlinks will be centered
 }
 
+
+void
+YQPkgDescriptionView::showLink( const QString & url )
+{
+    if ( url.startsWith( "pkg:" ) )
+    {
+	QString pkgName = url.mid( sizeof( "pkg:/" ) );	// Qt autmatically inserts '/' 
+	y2milestone( "Hyperlinking to package '%s'", (const char *) pkgName );
+	YQPkgDescriptionDialog::showDescriptionDialog( pkgName );
+    }
+    else
+    {
+	y2error( "Protocol not supported - can't follow hyperlink '%s'",
+		 (const char *) url );
+    }
+}
+
+
+void
+YQPkgDescriptionView::setSource( const QString & url )
+{
+    showLink( url );
+}
 
 
 #include "YQPkgDescriptionView.moc.cc"

@@ -52,6 +52,7 @@ protected:
      **/
     virtual ~YQPkgGenericDetailsView();
 
+
 public:
 
     /**
@@ -117,7 +118,7 @@ public slots:
 
     // slot clear() inherited from QTextEdit
 
-
+    
 protected slots:
 
     /**
@@ -125,7 +126,7 @@ protected slots:
      **/
     void reload( QWidget * newCurrent );
 
-
+    
 protected:
 
     /**
@@ -133,19 +134,6 @@ protected:
      * Reimplement this in derived classes.
      **/
     virtual void showDetails( PMObjectPtr pmObj ) = 0;
-
-    /**
-     * Workaround for Bugzilla bug #19419: Y2Pkg hangs on middle mouse click.
-     * Ignore all those events. We don't want them.
-     *
-     * Reimplemented from QTextEdit / QScrollView.
-     **/
-    virtual void contentsMousePressEvent   ( QMouseEvent * )  {}
-    virtual void contentsMouseReleaseEvent ( QMouseEvent * )  {}
-    virtual void contentsDragEnterEvent ( QDragEnterEvent * ) {}
-    virtual void contentsDragLeaveEvent ( QDragLeaveEvent * ) {}
-    virtual void contentsDragMoveEvent 	( QDragMoveEvent *  ) {}
-    virtual void contentsDropEvent 	( QDropEvent *      ) {}
 
 
     // Data members

@@ -40,14 +40,10 @@ public:
      **/
     YQPkgDescriptionView( QWidget * parent );
 
-
     /**
      * Destructor
      **/
     virtual ~YQPkgDescriptionView();
-
-
-protected:
 
     /**
      * Show details for the specified package:
@@ -55,6 +51,22 @@ protected:
      * Overwritten from YQPkgGenericDetailsView.
      **/
     virtual void showDetails( PMObjectPtr pmObj );
+
+    /**
+     * Get the document pointed to by a hyperlink.
+     *
+     * Reimplemented from QTextBrowser to avoid having an empty text each time
+     * the user clicks on a hyperlink.
+     **/
+    virtual void setSource( const QString & name );
+
+protected:
+
+    /**
+     * Show information for a hyperlinked object,
+     * e.g., a "pkg:somepkg" link to another package.
+     **/
+    void showLink( const QString & url );
 };
 
 

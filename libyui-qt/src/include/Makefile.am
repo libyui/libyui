@@ -36,9 +36,10 @@ noinst_HEADERS =				\
 	YQPkgConflictDialog.h			\
 	YQPkgConflictList.h			\
 	YQPkgDependenciesView.h			\
+	YQPkgDescriptionDialog.h		\
+	YQPkgDescriptionView.h			\
 	YQPkgDiskUsageList.h			\
 	YQPkgDiskUsageWarningDialog.h		\
-	YQPkgDescriptionView.h			\
 	YQPkgGenericDetailsView.h		\
 	YQPkgList.h				\
 	YQPkgObjList.h				\

@@ -61,6 +61,7 @@ liby2qt_la_SOURCES = 				\
 	YQPkgChangesDialog.cc			\
 	YQPkgConflictDialog.cc			\
 	YQPkgConflictList.cc			\
+	YQPkgDescriptionDialog.cc		\
 	YQPkgDescriptionView.cc			\
 	YQPkgDependenciesView.cc		\
 	YQPkgDiskUsageList.cc			\
@@ -134,6 +135,7 @@ BUILT_SOURCES =					\
 	YQPkgChangesDialog.moc.cc		\
 	YQPkgConflictDialog.moc.cc		\
 	YQPkgConflictList.moc.cc		\
+	YQPkgDescriptionDialog.moc.cc		\
 	YQPkgDescriptionView.moc.cc		\
 	YQPkgDependenciesView.moc.cc		\
 	YQPkgDiskUsageList.moc.cc		\
@@ -202,6 +204,7 @@ YQPartitionSplitter.o YQPartitionSplitter.lo:			YQPartitionSplitter.moc.cc
 YQPkgChangesDialog.o YQPkgChangesDialog.lo:			YQPkgChangesDialog.moc.cc
 YQPkgConflictDialog.o YQPkgConflictDialog.lo:			YQPkgConflictDialog.moc.cc
 YQPkgConflictList.o YQPkgConflictList.lo:			YQPkgConflictList.moc.cc
+YQPkgDescriptionDialog.o YQPkgDescriptionDialog.lo:		YQPkgDescriptionDialog.moc.cc
 YQPkgDescriptionView.o YQPkgDescriptionView.lo:			YQPkgDescriptionView.moc.cc
 YQPkgDependenciesView.o YQPkgDependenciesView.lo:		YQPkgDependenciesView.moc.cc
 YQPkgDiskUsageList.o YQPkgDiskUsageList.lo:			YQPkgDiskUsageList.moc.cc
@@ -268,6 +271,7 @@ YQPartitionSplitter.moc.cc:		include/YQPartitionSplitter.h
 YQPkgChangesDialog.moc.cc:		include/YQPkgChangesDialog.h
 YQPkgConflictDialog.moc.cc:		include/YQPkgConflictDialog.h
 YQPkgConflictList.moc.cc:		include/YQPkgConflictList.h
+YQPkgDescriptionDialog.moc.cc:		include/YQPkgDescriptionDialog.h
 YQPkgDescriptionView.moc.cc:		include/YQPkgDescriptionView.h
 YQPkgDependenciesView.moc.cc:		include/YQPkgDependenciesView.h
 YQPkgDiskUsageList.moc.cc:		include/YQPkgDiskUsageList.h
