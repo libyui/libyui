@@ -160,12 +160,12 @@ YQPkgSelList::filter()
 
 	if ( sel )
 	{
-	    std::list<PMPackagePtr> pkgList = sel->inspacks_ptrs();
-	    std::list<PMPackagePtr>::const_iterator it = pkgList.begin();
+	    std::list<PMSelectablePtr> slcList = sel->inspacks_ptrs();
+	    std::list<PMSelectablePtr>::const_iterator it = slcList.begin();
 
-	    while ( it != pkgList.end() )
+	    while ( it != slcList.end() )
 	    {
-		emit filterMatch( *it );
+		emit filterMatch( (*it)->theObject() );
 		++it;
 	    }
 	}
@@ -294,7 +294,7 @@ YQPkgSel::YQPkgSel( YQPkgSelList * pkgSelList, PMSelectionPtr pkgSel )
     , _pkgSelList( pkgSelList )
     , _pkgSel( pkgSel )
 {
-    QString text = fromUTF8( _pkgSel->summary( "" ) );
+    QString text = fromUTF8( _pkgSel->summary( Y2PM::getPreferredLocale() ) );
     text.replace( QRegExp( "Graphical Basis System" ), "Graphical Base System" );
     setText( summaryCol(), text );
 
