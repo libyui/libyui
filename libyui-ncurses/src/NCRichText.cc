@@ -27,7 +27,6 @@
 ///////////////////////////////////////////////////////////////////
 
 const unsigned NCRichText::listindent = 4;
-const unsigned NCRichText::listindentafterlevel = 1;
 const string   NCRichText::listleveltags( "@*+o#-%$&" );//
 
 const bool NCRichText::showLinkTarget = false;
@@ -541,16 +540,14 @@ inline void NCRichText::PadSetAttr()
 //
 void NCRichText::PadSetLevel()
 {
-  if ( liststack.size() <= listindentafterlevel ) {
-    cindent = 0;
-  } else {
-    cindent = listindent * (liststack.size() - listindentafterlevel);
-    if ( cindent > textwidth/2 )
-      cindent = textwidth/2;
-  }
+  cindent = listindent * liststack.size();
+  if ( cindent > textwidth/2 )
+    cindent = textwidth/2;
 
-  if ( atbol )
-    pad->move( cl, cindent );
+  if ( atbol ) {
+    cc = cindent;
+    pad->move( cl, cc );
+  }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -778,8 +775,10 @@ bool NCRichText::PadTOKEN( const char * sch, const char *& ech )
 	  sprintf( buf, " %c  ", listleveltags[liststack.size()%listleveltags.size()] );
 	tag = buf;
       }
+      // outsent list tag:
+      cc = (tag.size() < cc ? cc - tag.size() : 0 );
+      pad->move( cl, cc );
       PadTXT( tag.c_str(), tag.size() );
-      cindent += listindent;
       atbol = true;
     }
     break;

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Apr 30 16:34:59 CEST 2003 - ma@suse.de
+
+- Fixed list indentation in RichText widget (#18204)
+
+-------------------------------------------------------------------
 Tue Mar 11 14:57:32 CET 2003 - gs@suse.de
 
 - V 2.7.13
@@ -10,12 +15,12 @@ Fri Mar  7 13:02:04 CET 2003 - gs@suse.de
 
 - V 2.7.12
 - package installation: bugfix for not translated messages (#24834),
-  update required diskspace after dependency solving 
+  update required diskspace after dependency solving
 
 -------------------------------------------------------------------
 Tue Mar  4 10:22:04 CET 2003 - gs@suse.de
 
-- NCstyle.braille.h added to Makefile.am 
+- NCstyle.braille.h added to Makefile.am
 
 -------------------------------------------------------------------
 Mon Mar  3 12:39:50 CET 2003 - gs@suse.de
@@ -33,7 +38,7 @@ Wed Feb 26 15:39:37 CET 2003 - ma@suse.de
 Tue Feb 25 15:23:52 CET 2003 - gs@suse.de
 
 - package installation: restore the package manager state on Cancel,
-  show a warning popup, show file list for installed packages  
+  show a warning popup, show file list for installed packages
 
 -------------------------------------------------------------------
 Mon Feb 24 17:54:17 CET 2003 - ma@suse.de

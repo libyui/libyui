@@ -89,7 +89,6 @@ class NCRichText : public YRichText, public NCPadWidget {
   private:
 
     static const unsigned listindent;
-    static const unsigned listindentafterlevel;
     static const string   listleveltags;
 
     stack<int> liststack;
