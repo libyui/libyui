@@ -274,7 +274,17 @@ public:
      * @return bool
      */  
    bool createListEntry ( PMPackagePtr pkgPtr,
-			  unsigned int index ); 
+			  unsigned int index );
+
+   /**
+     * Creates a line in the YOU patch table.
+     * @param pkgPtr The YOU patch pointer 
+     * @param index  The index (line) 
+     * @return bool
+     */  
+   bool createPatchEntry ( PMYouPatchPtr pkgPtr,
+			  unsigned int index );
+ 
 };
 
 ///////////////////////////////////////////////////////////////////

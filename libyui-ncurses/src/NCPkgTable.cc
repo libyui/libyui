@@ -454,7 +454,7 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr,
     vector<string> pkgLine;
     pkgLine.reserve(5);
 
-    if ( !pkgPtr )
+    if ( !pkgPtr || !pkgPtr->hasSelectable() )
     {
 	NCERR << "No valid package available" << endl;
 	return false;
@@ -465,7 +465,8 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr,
 
     string instVersion = "";
     string version = "";
-	    
+    PMSelectable::UI_Status status;
+    
     switch( tableType )
     {
 	case T_PatchPkgs: {
@@ -473,11 +474,29 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr,
 	    {
 		instVersion = pkgPtr->getInstalledObj()->edition().asString();
 	    }
+	    
 	    // in case of YOU patches: always show the version of the package
 	    // which is contained in the patch
 	    version = pkgPtr->edition().asString();
    	    pkgLine.push_back( version );
-	    pkgLine.push_back( instVersion );
+
+	    if ( Y2PM::instTarget().numPackages() > 0 )
+	    {
+		pkgLine.push_back( instVersion );	// installed version
+	    }
+   	    pkgLine.push_back( pkgPtr->summary() );  	// short description
+	    
+	    status = pkgPtr->getSelectable()->status(); // the package status
+
+	    break;
+	}
+	case T_Availables: {
+	    version = pkgPtr->edition().asString();
+	    pkgLine.push_back( version );
+	    pkgLine.push_back( pkgPtr->instSrcLabel() ); // show the installation source
+
+	    status = getAvailableStatus( pkgPtr ); // the status of this certain
+	                                           // available package
 	    break;
 	}
 	default: {   
@@ -486,9 +505,9 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr,
 	    {
 		instVersion = pkgPtr->getInstalledObj()->version();
 
+                // if a candidate is available, get the candidate version
 		if ( pkgPtr->hasCandidateObj() )
 		{
-		    // if a candidate is available, get the candidate version
 		    version = pkgPtr->getCandidateObj()->version();
 		}
 	    }
@@ -496,19 +515,56 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr,
 	    {
 		version = pkgPtr->version();
 	    }
+	    pkgLine.push_back( version );	// the available version (the candidate)
 
-	    pkgLine.push_back( version );	// available version
-	    pkgLine.push_back( instVersion );	// installed version
+	    if ( Y2PM::instTarget().numPackages() > 0 )
+	    {
+		pkgLine.push_back( instVersion );	// installed version
+	    }
+	    pkgLine.push_back( pkgPtr->summary() );  	// short description
+
+	    status =  status = pkgPtr->getSelectable()->status(); // the package status
 	}
     }
-    pkgLine.push_back( pkgPtr->summary() );  	// short description
+
     FSize size = pkgPtr->size();     	// installed size
     pkgLine.push_back( size.asString() );	
     
-    addLine( pkgPtr->getSelectable()->status(), //  get the package status
+    addLine( status,	// get the package status
+	     pkgLine, 	// the package data
+	     index,	// the index
+	     pkgPtr );	// the corresponding package pointer
+
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// createPatchEntry
+//
+//
+bool NCPkgTable::createPatchEntry ( PMYouPatchPtr patchPtr,
+				    unsigned int index )
+{
+    vector<string> pkgLine;
+    pkgLine.reserve(5);
+    
+    if ( !patchPtr )
+    {
+	NCERR << "No valid patch available" << endl;
+	return false;
+    }
+
+    pkgLine.push_back( patchPtr->getSelectable()->name() );	 // name
+    pkgLine.push_back( patchPtr->kindLabel(patchPtr->kind()) );  // patch kind
+    pkgLine.push_back( patchPtr->summary() );  	// short description
+    FSize size = patchPtr->size();     		// installed size
+    pkgLine.push_back( size.asString() );
+    
+    addLine( patchPtr->getSelectable()->status(), //  get the status
 	     pkgLine,
 	     index,		// the index
-	     pkgPtr );	// the corresponding package pointer
+	     patchPtr );	// the corresponding pointer
 
     return true;
 }
