@@ -439,6 +439,21 @@ void NCPkgTable::fillHeader( )
 	    header.push_back( PkgNames::PkgSize().str() );
 	    break;
 	}
+	case T_Dependency: {
+	    header.reserve(6);
+	    header.push_back( PkgNames::PkgStatus().str() );
+	    header.push_back( PkgNames::PackageName().str() );
+	    header.push_back( PkgNames::DepsKind().str() );
+	    header.push_back( PkgNames::Comment().str() );
+	    break;
+	}
+	case T_SelDependency: {
+	    header.reserve(6);
+	    header.push_back( PkgNames::PkgStatus().str() );
+	    header.push_back( PkgNames::SelectionName().str() );
+	    header.push_back( PkgNames::DepsKind().str() );	
+	    break;
+	}    
 	default: {
 	    header.reserve(5);
 	    header.push_back( PkgNames::PkgStatus().str() );
