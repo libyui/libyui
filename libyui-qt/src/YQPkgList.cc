@@ -18,6 +18,8 @@
 
 /-*/
 
+#define SOURCE_RPM_DISABLED 1
+
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 #include <qpixmap.h>
@@ -37,7 +39,8 @@
 YQPkgList::YQPkgList( QWidget *parent )
     : YQPkgObjList( parent )
 {
-    int installedPkgs = Y2PM::instTarget().numPackages();
+    _srpmStatusCol	= -42;
+    int installedPkgs	= Y2PM::instTarget().numPackages();
 
     int numCol = 0;
     addColumn( ""		);	_statusCol	= numCol++;
@@ -56,7 +59,12 @@ YQPkgList::YQPkgList( QWidget *parent )
     }
     addColumn( _( "Summary"	) );	_summaryCol	= numCol++;
     addColumn( _( "Size"	) );	_sizeCol	= numCol++;
+
+#if SOURCE_RPM_DISABLED
+#warning Selecting source RPMs disabled!
+#else
     addColumn( _( "Source"	) );	_srpmStatusCol	= numCol++;
+#endif
 
     saveColumnWidths();
     setSorting( nameCol() );
@@ -234,6 +242,9 @@ YQPkgListItem::installSourceRpm() const
 void
 YQPkgListItem::setSourceRpmIcon()
 {
+    if ( srpmStatusCol() < 0 )
+	return;
+    
     QPixmap icon;
 
     if ( hasSourceRpm() )

@@ -580,7 +580,7 @@ YQPackageSelector::resolveDependencies()
     if ( ! _conflictDialog )
     {
 	y2error( "No conflict dialog existing" );
-	return true;
+	return QDialog::Accepted;
     }
 
     return _conflictDialog->solveAndShowConflicts();
@@ -603,6 +603,9 @@ YQPackageSelector::updateDiskUsage()
 	
 	FSize used = du.pkg_used();
 	y2milestone( "Used disk space: %s", used.asString().c_str() );
+
+	if ( _testMode )
+	    _diskSpace->setProgress( 42 );
     }
     
     YUIQt::yuiqt()->normalCursor();

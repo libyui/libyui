@@ -1,4 +1,24 @@
 -------------------------------------------------------------------
+Fri Sep 20 16:23:32 CEST 2002 - msvec@suse.cz
+
+- added missing textdomain
+- added missing files to POTFILES
+- 2.6.23
+
+-------------------------------------------------------------------
+Fri Sep 13 14:56:41 CEST 2002 - sh@suse.de
+
+- V 2.6.22
+- Disabled selecting source RPMs until it works further down 
+
+-------------------------------------------------------------------
+Thu Sep 12 14:24:47 CEST 2002 - sh@suse.de
+
+- V 2.6.21
+- Show DelNotify popup even if pkg not installed yet
+- Fixed bug #19333: Can't get out of pkg dialog with "Accept"
+
+-------------------------------------------------------------------
 Wed Sep 11 17:48:32 CEST 2002 - sh@suse.de
 
 - Fixed bug #19419: Y2Pkg hangs on middle mouse click 

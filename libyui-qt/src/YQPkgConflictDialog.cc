@@ -127,6 +127,7 @@ int
 YQPkgConflictDialog::solveAndShowConflicts()
 {
     CHECK_PTR( _conflictList );
+    int result = QDialog::Accepted;
 
     if ( isVisible() )
     {
@@ -162,7 +163,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
 
     if ( success )	// Solving went without any complaints?
     {
-	setResult( QDialog::Accepted );
+	result = QDialog::Accepted;
 
 	if ( isVisible() )
 	    accept();	// Pop down the dialog.
@@ -194,12 +195,12 @@ YQPkgConflictDialog::solveAndShowConflicts()
 	    if ( ! isVisible() )
 	    {
 		// Pop up the dialog and run a local event loop.
-		exec();
+		result = exec();
 	    }
 	}
     }
 
-    return result();	// QDialog::Accepted or QDialog::Rejected
+    return result;	// QDialog::Accepted or QDialog::Rejected
 }
 
 
