@@ -767,6 +767,8 @@ YQPackageSelector::accept()
 	if ( _youMode )
 	    Y2PM::youPatchManager().ClearSaveState();
 
+#warning TODO: Save current selections state (no Y2PM::PMSelectionManager call yet)
+
 	_yuiqt->setMenuSelection( YCPSymbol("accept", true) );
 	_yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
     }
