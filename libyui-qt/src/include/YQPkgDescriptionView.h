@@ -27,7 +27,7 @@
 
 /**
  * @short Display the description of a PMObject derived object along with its
- * name and summary. 
+ * name and summary.
  **/
 class YQPkgDescriptionView : public YQPkgGenericDetailsView
 {
@@ -40,7 +40,7 @@ public:
      **/
     YQPkgDescriptionView( QWidget *parent );
 
-    
+
     /**
      * Destructor
      **/

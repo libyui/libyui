@@ -48,44 +48,62 @@ YQPkgDescriptionView::showDetails( PMObjectPtr pmObj )
     }
 
     QString html_text = htmlHeading( pmObj );
-    
+
     string name = pmObj->name();
     // y2debug( "Showing description for package %s", name.c_str() );
 
-    
+
     // Add all lines of the package description
 
-    bool auto_format = true;
+    bool auto_format  = true;
+    bool preformatted = false;
     std::list<std::string> description = pmObj->description();
     std::list<std::string>::const_iterator it = description.begin();
+
+    if ( it != description.end()
+	 && *it == "<!-- DT:Rich -->" )	// Special doctype for preformatted HTML
+    {
+	preformatted = true;
+	++it;					// Discard doctype line
+    }
+
 
     while ( it != description.end() )
     {
 	QString line = fromUTF8( *it );
-	line = htmlEscape( line );
 
-	if ( line.startsWith( "Authors:" ) )
+	if ( preformatted )
 	{
-	    line = "<b>" + line + "</b>";
-	    auto_format = false;
-	}
-
-	if ( auto_format )
-	{
-	    if ( line.length() == 0 )	// Empty lines mean new paragraph
-		html_text += "</p><p>";
-	    else
-		html_text += " " + line;
+	    html_text += line + "\n";
 	}
 	else
 	{
-	    html_text += line + "<br>";
-	}	
-	
+	    line = htmlEscape( line );
+
+	    if ( line.startsWith( "Authors:" ) )
+	    {
+		line = "<b>" + line + "</b>";
+		auto_format = false;
+	    }
+
+	    if ( auto_format )
+	    {
+		if ( line.length() == 0 )	// Empty lines mean new paragraph
+		    html_text += "</p><p>";
+		else
+		    html_text += " " + line;
+	    }
+	    else
+	    {
+		html_text += line + "<br>";
+	    }
+	}
+
 	++it;
     }
 
-    html_text += "</p>";
+    if ( ! preformatted )
+	html_text += "</p>";
 
     setTextFormat( Qt::RichText );
     setText( html_text );
