@@ -775,9 +775,9 @@ YCPValue Y2NCursesUI::setConsoleFont( const YCPString & console_magic,
   }
 
   // set terminal encoding for console
-  // FIXME: setConsoleFont() which is called in Console.ycp gets the encoding
-  //        from WFM::GetEncoding() which returns the currentEncoding which is
-  //	    always UTF-8 (for gettext()) and which is definitfly WRONG here !!!!!
+  // FIXME: setConsoleFont() must called correctly in Console.ycp
+  NCMIL << "setConsoleFont( ENCODING:  " << encoding->value() << " )" << endl;
+  
   if ( NCstring::setTerminalEncoding( encoding->value() ) )
     Redraw();
   else
