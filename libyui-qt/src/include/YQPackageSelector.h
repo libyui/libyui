@@ -147,6 +147,12 @@ public slots:
     void pkgImport();
 
     /**
+     * Display a list of automatically selected packages
+     * (excluding packages contained in any selections that are to be installed)
+     **/
+    void showAutoPkgList();
+
+    /**
      * Close processing and abandon changes
      **/
     void reject();
@@ -233,6 +239,14 @@ protected:
     void connectFilter( QWidget *	filter,
 			QWidget *	pkgList,
 			bool		hasUpdateSignal = true );
+    /**
+     * Event handler for keyboard input - for debugging and testing.
+     * Changes the current item's percentage on the fly.
+     *
+     * Reimplemented from QListView / QWidget.
+     */
+    virtual void keyPressEvent( QKeyEvent * ev );
+
     /**
      * Return HTML code describing a symbol (an icon).
      **/

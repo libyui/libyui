@@ -162,7 +162,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     else
     {
 	Y2PM::selectionManager().SaveState();
-	
+
 	if ( _filters )
 	{
 	    if ( _updateProblemFilterView )
@@ -610,6 +610,8 @@ YQPackageSelector::addMenus()
     CHECK_PTR( _extrasMenu );
     _menuBar->insertItem( _( "&Extras" ), _extrasMenu );
 
+    _extrasMenu->insertItem( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), CTRL + Key_A );
+
     if ( _pkgList )
     {
 	_extrasMenu->insertItem( _( "Export &Package List to Text File" ), _pkgList, SLOT( askExportList() ) );
@@ -884,6 +886,30 @@ YQPackageSelector::pkgImport()
 
 
 void
+YQPackageSelector::showAutoPkgList()
+{
+    resolvePackageDependencies();
+
+    // Show which packages are installed/deleted automatically
+    QString msg =
+	"<p><b>"
+	// Dialog header
+	+ _( "Automatic Changes" )
+	+ "</b></p>"
+	// Detailed explanation (automatic word wrap!)
+	+ "<p>"
+	+ _( "In addition to your manual selections, the following packages"
+	     " have been changed due to dependency resolving:" )
+	+ "<p>";
+
+    YQPkgChangesDialog::showChangesDialog( msg,
+					   _( "&OK" ),
+					   QString::null,	// rejectButtonLable
+					   true );		// showIfEmpty
+}
+
+
+void
 YQPackageSelector::fakeData()
 {
     y2warning( "*** Using fake data ***" );
@@ -977,14 +1003,14 @@ YQPackageSelector::accept()
     Y2PM::packageManager().ClearSaveState();
     YQPkgConflict::saveIgnoredConflicts();
 
-    if ( _youMode )	
+    if ( _youMode )
 	Y2PM::youPatchManager().ClearSaveState();
     else
     {
 	Y2PM::selectionManager().ClearSaveState();
 #warning NOT IMPLEMENTED YET: Save current selections state (waiting for package manager function)
     }
-    
+
 
     _yuiqt->setMenuSelection( YCPSymbol("accept", true) );
     _yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
@@ -997,6 +1023,28 @@ YQPackageSelector::notImplemented()
     QMessageBox::information( this, "",
 			      _( "Not implemented yet. Sorry." ),
 			      QMessageBox::Ok );
+}
+
+
+void
+YQPackageSelector::keyPressEvent( QKeyEvent *event )
+{
+    if ( event )
+    {
+	unsigned special_combo = ( Qt::ControlButton | Qt::ShiftButton | Qt::AltButton );
+
+	if ( ( event->state() & special_combo ) == special_combo )
+	{
+	    if ( event->key() == Qt::Key_A )
+	    {
+		showAutoPkgList();
+		event->accept();
+		return;
+	    }
+	}
+    }
+
+    QWidget::keyPressEvent( event );
 }
 
 
