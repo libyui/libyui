@@ -770,7 +770,7 @@ const NCstring PkgNames::HelpPkgInst4()
 const NCstring PkgNames::HelpPkgInst5()
 {
     // part5 of help text package installation
-    static const NCstring value =  _("<p><b>Etc.:</b> offers different settings for the dependency checking. Automatic dependency check means check, after every change of the package status, whether all requirements are fulfilled or whether conflicts occurred. For more information, see 'Help/Help on dependencies').</p>");
+    static const NCstring value =  _("<p><b>Etc.:</b> offers different settings for the dependency checking. Automatic dependency check means check, after every change of the package status, whether all requirements are fulfilled or whether conflicts occurred.</p>");
     return value;
 }
 
