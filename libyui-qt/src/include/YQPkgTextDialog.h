@@ -69,6 +69,9 @@ public:
     static void showText( QWidget * parent,
 			  PMObjectPtr pmObj,
 			  const std::list<std::string> & text );
+    static void showText( QWidget * parent,
+			  PMObjectPtr pmObj,
+			  const std::string & text );
 
     /**
      * Convert a string list into its HTML paragraphs (empty lines delimit

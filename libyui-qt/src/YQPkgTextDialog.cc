@@ -175,6 +175,13 @@ void YQPkgTextDialog::showText( QWidget * parent,
     showText( parent, htmlHeading( pmObj ) + htmlParagraphs( text ) );
 }
 
+void YQPkgTextDialog::showText( QWidget * parent,
+				PMObjectPtr pmObj,
+				const std::string & text )
+{
+    showText( parent, htmlHeading( pmObj ) + QString( text.c_str() ) );
+}
+
 
 QString
 YQPkgTextDialog::htmlParagraphs( const std::list<std::string> & text )
