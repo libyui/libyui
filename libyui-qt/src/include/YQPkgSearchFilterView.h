@@ -110,6 +110,17 @@ signals:
 
 protected:
 
+    // Caution: Enum order must match corresponding message strings in combo box!
+    typedef enum SearchMode
+    {
+	Contains = 0,
+	BeginsWith,
+	ExactMatch,
+	UseWildcards,
+	UseRegExp
+    };
+
+    
     /**
      * Check if pkg matches the search criteria.
      **/
@@ -148,13 +159,8 @@ protected:
     QCheckBox *		_searchInRequires;
     QCheckBox *		_searchInProvides;
 
+    QComboBox *		_searchMode;
     QCheckBox *		_caseSensitive;
-
-    QRadioButton *	_contains;
-    QRadioButton *	_beginsWith;
-    QRadioButton *	_exactMatch;
-    QRadioButton *	_useWildcards;
-    QRadioButton *	_useRegexp;
 
     int			_matchCount;
 };

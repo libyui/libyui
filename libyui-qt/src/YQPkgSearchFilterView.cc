@@ -110,20 +110,29 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     // Search mode
     //
 
-    QVButtonGroup * bgroup = new QVButtonGroup( _( "Search Mode" ), this );
-    CHECK_PTR( bgroup );
-    bgroup->setRadioButtonExclusive( true );
+    label = new QLabel( _( "Search &Mode:" ), this );
+    CHECK_PTR( label );
 
-    _contains     = new QRadioButton( _( "C&ontains" 		), bgroup ); CHECK_PTR( _contains     );
-    _beginsWith   = new QRadioButton( _( "&Begins with" 	), bgroup ); CHECK_PTR( _beginsWith   );
-    _exactMatch   = new QRadioButton( _( "E&xact Match" 	), bgroup ); CHECK_PTR( _exactMatch   );
-    _useWildcards = new QRadioButton( _( "Use &Wild Cards" 	), bgroup ); CHECK_PTR( _useWildcards );
-    _useRegexp    = new QRadioButton( _( "Use &Regular Expression" ), bgroup ); CHECK_PTR( _useRegexp    );
+    _searchMode = new QComboBox( this );
+    CHECK_PTR( _searchMode );
+    _searchMode->setEditable( false );
 
-    _contains->setChecked( true );
+    label->setBuddy( _searchMode );
+
+    // Caution: combo box items must be inserted in the same order as enum SearchMode!
+    _searchMode->insertItem( _( "Contains"		 ) );
+    _searchMode->insertItem( _( "Begins with"		 ) );
+    _searchMode->insertItem( _( "Exact Match"		 ) );
+    _searchMode->insertItem( _( "Use Wild Cards" 	 ) );
+    _searchMode->insertItem( _( "Use Regular Expression" ) );
+
+    _searchMode->setCurrentItem( Contains );
+
 
     addVStretch( this );
-    _caseSensitive = new QCheckBox( _( "Case Sensiti&ve" ), this ); CHECK_PTR( _caseSensitive );
+
+    _caseSensitive = new QCheckBox( _( "Case Sensiti&ve" ), this );
+    CHECK_PTR( _caseSensitive );
 
     for ( int i=0; i < 6; i++ )
 	addVStretch( this );
@@ -201,7 +210,7 @@ YQPkgSearchFilterView::filter()
 
 	QRegExp regexp = _searchText->currentText();
 	regexp.setCaseSensitive( _caseSensitive->isChecked() );
-	regexp.setWildcard( _useWildcards->isChecked() );
+	regexp.setWildcard( _searchMode->currentItem() == UseWildcards );
 
 	int count = 0;
 	timer.start();
@@ -277,23 +286,32 @@ YQPkgSearchFilterView::check( const string & attribute, const QRegExp & regexp )
 {
     QString att    	= fromUTF8( attribute );
     QString searchText	= _searchText->currentText();
+    bool match		= false;
 
-    if ( _contains->isChecked() )
+    switch ( _searchMode->currentItem() )
     {
-	return att.contains( searchText, _caseSensitive->isChecked() );
+	case Contains:
+	    match = att.contains( searchText, _caseSensitive->isChecked() );
+	    break;
+
+	case BeginsWith:
+	    match = att.startsWith( searchText );	// only case sensitive
+	    break;
+
+	case ExactMatch:
+	    match = ( att == searchText );
+	    break;
+
+	case UseWildcards:
+	case UseRegExp:
+	    // Both cases differ in how the regexp is set up during initialization
+	    match = att.contains( regexp );
+	    break;
+
+	    // Intentionally omitting "default" branch - let gcc watch for unhandled enums
     }
 
-    if ( _beginsWith->isChecked() )
-    {
-	return att.startsWith( searchText );	// only case sensitive
-    }
-
-    if ( _exactMatch->isChecked() )
-    {
-	return att == searchText;
-    }
-
-    return att.contains( regexp );
+    return match;
 }
 
 

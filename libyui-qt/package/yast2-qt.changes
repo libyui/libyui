@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jun 28 17:29:44 CEST 2004 - sh@suse.de
+
+- Fixed bug #40259: package selection hides search widgets 
+  now using a combo box instead of radio buttons
+
+-------------------------------------------------------------------
 Wed May 26 18:30:28 CEST 2004 - sh@suse.de
 
 - Improved support for low-color (<= 8 bit) displays (bug #40228):
