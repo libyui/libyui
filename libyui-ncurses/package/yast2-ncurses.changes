@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Aug 21 15:38:31 CEST 2003 - gs@suse.de
+
+- package installation: support a link to a related package
+  in the package description 
+
+-------------------------------------------------------------------
 Fri Aug 18 16:15:52 CEST 2003 - gs@suse.de
 
 - V 2.8.13
