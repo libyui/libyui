@@ -56,9 +56,7 @@ YQPushButton::YQPushButton( QWidget *		parent,
 
     _isDefault = opt.isDefaultButton.value();
 
-    CHECK_PTR( _dialog );
-
-    if ( _isDefault )
+    if ( _dialog && _isDefault )
 	_dialog->setDefaultButton( this );
 }
 
