@@ -25,6 +25,8 @@
 #include "qvbox.h"
 #include "qpixmap.h"
 
+#include <string>
+
 class QGridLayout;
 class QHBox;
 class QLabel;
@@ -49,6 +51,16 @@ public:
 	      const YCPValue & 	backButtonId,	const YCPString & backButtonLabel,
 	      const YCPValue & 	abortButtonId,	const YCPString & abortButtonLabel,
 	      const YCPValue & 	nextButtonId,	const YCPString & nextButtonLabel  );
+
+    /**
+     * Generic direct access to implementation-specific functions.
+     * See YQWizard.cc for details.
+     *
+     * Returns 'true' on success, 'false' on failure.
+     * Reimplemented from YWizard.
+     **/
+    virtual YCPValue command( const YCPTerm & command );
+
 
     /**
      * Notification that a child widget has been added.
@@ -83,7 +95,7 @@ public:
      **/
     void setDialogHeading( const QString & headingText );
 
-    
+
 public slots:
 
 
@@ -129,7 +141,7 @@ public slots:
 
     /**
      * Bottom-crop a pixmap: Return a pixmap with the bottom 'croppedHeight'
-     * pixels. 
+     * pixels.
      **/
     static QPixmap bottomCropPixmap( const QPixmap & pixmap, int croppedHeight );
 
@@ -138,8 +150,8 @@ public slots:
      * This is a _very_ expensive operation!
      **/
     static QColor pixelColor( const QPixmap & pixmap, int x, int y );
-    
-    
+
+
 protected slots:
 
     /**
@@ -206,13 +218,49 @@ protected:
     void sendEvent( YCPValue id );
 
 
+    //
+    // Wizard command mini-parser
+    //
+
+    /**
+     * Check if 'term' matches wizard command 'declaration'.
+     * 'declaration' is a function prototype like this:
+     *
+     *		myFunction ( string, boolean, string )
+     *
+     * Void functions are declared without any parameters:
+     *
+     *		myFunction ()
+     *
+     * Function names must be unique. They cannot be overloaded.
+     **/
+    bool isCommand( QString declaration, const YCPTerm & term );
+
+    /**
+     * Return argument number 'argNo' from 'term' as QString.
+     **/
+    QString YQWizard::qStringArg( const YCPTerm & term, int argNo );
+
+    /**
+     * Return argument number 'argNo' from 'term' as std::string.
+     **/
+    std::string stringArg( const YCPTerm & term, int argNo );
+
+    /**
+     * Set a button's label.
+     **/
+    void setButtonLabel( QPushButton * button, const QString & newLabel );
+
+
+    //
     // Data members
+    //
 
     YCPString	_backButtonLabel;
     YCPString	_abortButtonLabel;
     YCPString	_nextButtonLabel;
 
-    
+
     QPixmap	_titleBarGradientPixmap;
     QPixmap	_topGradientPixmap;
     QColor	_gradientCenterColor;

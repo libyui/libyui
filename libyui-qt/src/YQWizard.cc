@@ -21,6 +21,22 @@
 #define y2log_component "qt-wizard"
 #include <ycp/y2log.h>
 
+// For the command parser
+
+#include <ycp/YCPBoolean.h>
+#include <ycp/YCPCode.h>
+#include <ycp/YCPInteger.h>
+#include "ycp/YCPInteger.h"
+#include <ycp/YCPList.h>
+#include <ycp/YCPMap.h>
+#include <ycp/YCPString.h>
+#include <ycp/YCPSymbol.h>
+#include <ycp/YCPTerm.h>
+#include <ycp/YCPValue.h>
+#include <ycp/YCPVoid.h>
+
+#include <string>
+
 #include <qhbox.h>
 #include <qimage.h>
 #include <qlabel.h>
@@ -28,6 +44,7 @@
 #include <qobjectlist.h>
 #include <qpixmap.h>
 #include <qpushbutton.h>
+#include <qregexp.h>
 #include <qtabwidget.h>
 #include <qtextbrowser.h>
 #include <qtoolbutton.h>
@@ -42,6 +59,9 @@
 #include "YQIconPool.h"
 #include "QY2LayoutUtils.h"
 #include "YEvent.h"
+
+using std::string;
+
 
 #define PIXMAP_DIR THEMEDIR "/wizard/"
 
@@ -109,7 +129,7 @@ YQWizard::YQWizard( QWidget *		parent,
 
 #if 1
 
-    setDialogIcon( "/usr/share/YaST2/images/user-add.png" );
+    setDialogIcon( "/usr/share/YaST2/images/user_add.png" );
     setDialogHeading( "Welcome to the YaST2 installation" );
     setHelpText( "<p>This is a help text.</p>"
 		 "<p>It should be helpful.</p>"
@@ -376,7 +396,7 @@ void YQWizard::layoutClientArea( QWidget * parent )
 
     _dialogIcon = new QLabel( headingHBox );
     CHECK_PTR( _dialogIcon );
-    
+
     addHSpacing( headingHBox );
 
     _dialogHeading = new QLabel( headingHBox );
@@ -776,6 +796,136 @@ bool YQWizard::eventFilter( QObject * obj, QEvent * ev )
     }
 
     return QWidget::eventFilter( obj, ev );
+}
+
+
+//
+// The wizard command mini-parser
+//
+
+
+YCPValue YQWizard::command( const YCPTerm & cmd )
+{
+#define OK YCPBoolean( true );
+    
+    if ( isCommand( "SetHelpText   	  ( string )", cmd ) )	{ setHelpText	( qStringArg( cmd, 0 ) );		return OK; }
+    if ( isCommand( "SetDialogIcon 	  ( string )", cmd ) )	{ setDialogIcon	( qStringArg( cmd, 0 ) );		return OK; }
+    if ( isCommand( "SetDialogHeading	  ( string )", cmd ) )	{ setDialogHeading( qStringArg( cmd, 0 ) );		return OK; }
+    
+    if ( isCommand( "SetAbortButtonLabel  ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "SetBackButtonLabel   ( string )", cmd ) )	{ setButtonLabel( _backButton,  qStringArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "SetNextButtonLabel	  ( string )", cmd ) )	{ setButtonLabel( _nextButton,  qStringArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "SetCancelButtonLabel ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) );	return OK; }
+    if ( isCommand( "SetAcceptButtonLabel ( string )", cmd ) )	{ setButtonLabel( _nextButton,  qStringArg( cmd, 0 ) );	return OK; }
+
+    y2error( "Undefined wizard command: %s", cmd->toString().c_str() );
+    return YCPBoolean( false );
+
+#undef OK
+}
+
+
+bool YQWizard::isCommand( QString declaration, const YCPTerm & term )
+{
+    declaration.simplifyWhiteSpace();
+
+    // Check command name
+    
+    QString command = declaration;
+    command.remove( QRegExp( "\\s*\\(.*$" ) );	// remove arguments
+
+    if ( term->name().c_str() != command )
+	return false;
+
+    //
+    // Check arguments
+    //
+    
+    QString arg_decl = declaration;
+    arg_decl.remove( QRegExp( "^.*\\(" ) );	// remove "command ("
+    arg_decl.remove( QRegExp( "\\).*$" ) );	// remove ")"
+    
+    QStringList argDeclList = QStringList::split( ",", arg_decl );
+
+    //
+    // Check number of arguments
+    //
+    
+    if ( argDeclList.size() != (unsigned) term->size() )
+    {
+	y2error( "Bad arguments for wizard command %s : %s",
+		 (const char *) declaration, term->toString().c_str() );
+	return false;
+    }
+
+    
+    //
+    // Check each individual argument
+    //
+    
+    bool ok = true;
+    
+    for ( unsigned i=0; i < argDeclList.size() && ok; i++ )
+    {
+	QString wanted = argDeclList[ i ];
+	YCPValue seen  = term->value( i );
+
+	if 	( wanted == "string"	)	ok = seen->isString();
+	else if ( wanted == "boolean" 	)	ok = seen->isBoolean();
+	else if ( wanted == "bool" 	)	ok = seen->isBoolean();
+	else if ( wanted == "list" 	)	ok = seen->isList();
+	else if ( wanted == "map" 	)	ok = seen->isMap();
+	else if ( wanted == "integer" 	)	ok = seen->isInteger();
+	else if ( wanted == "int" 	)	ok = seen->isInteger();
+	else
+	{
+	    y2error( "Bad declaration for wizard command %s : Unknown type %s",
+		     (const char *) declaration, (const char *) wanted );
+	}
+    }
+
+    if ( ! ok )
+    {
+	y2error( "Bad arguments for wizard command %s : %s",
+		 (const char *) declaration, term->toString().c_str() );
+    }
+
+    return ok;
+}
+
+
+QString YQWizard::qStringArg( const YCPTerm & term, int argNo )
+{
+    return fromUTF8( stringArg( term, argNo ).c_str() );
+}
+
+
+string YQWizard::stringArg( const YCPTerm & term, int argNo )
+{
+    if ( term->size() > argNo )
+    {
+	YCPValue arg( term->value( argNo ) );
+
+	if ( arg->isString() )
+	    return arg->asString()->value();
+    }
+
+    y2error( "Couldn't convert arg #%d of '%s' to string", argNo, term->toString().c_str() );
+    return "";
+}
+
+
+void setButtonLabel( QPushButton * button, const QString & newLabel )
+{
+    if ( button )
+    {
+	button->setText( newLabel );
+
+	if ( newLabel.isEmpty() )
+	    button->hide();
+	else
+	    button->show();
+    }
 }
 
 
