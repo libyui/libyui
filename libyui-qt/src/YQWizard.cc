@@ -38,6 +38,7 @@
 #include <string>
 
 #include <qhbox.h>
+#include <qheader.h>
 #include <qimage.h>
 #include <qlabel.h>
 #include <qlayout.h>
@@ -49,6 +50,7 @@
 #include <qtextbrowser.h>
 #include <qtoolbutton.h>
 #include <qwidgetstack.h>
+#include "QY2ListView.h"
 
 #include "utf8.h"
 #include "YQi18n.h"
@@ -94,6 +96,14 @@ YQWizard::YQWizard( QWidget *		parent,
 {
     setWidgetRep( this );
     _stepsEnabled = opt.stepsEnabled.value();
+    _treeEnabled  = opt.treeEnabled.value();
+
+    if ( _stepsEnabled && _treeEnabled )
+    {
+	y2error( "Can't enable steps and tree at the same time - disabling steps" );
+	_stepsEnabled = false;
+    }
+    
     _verboseCommands	= false;
     _protectNextButton	= false;
     _stepsDirty		= false;
@@ -104,10 +114,10 @@ YQWizard::YQWizard( QWidget *		parent,
     _stepsPanel		= 0;
     _stepsBox		= 0;
     _stepsGrid		= 0;
-    _helpButton		= 0;
+    _treePanel		= 0;
+    _tree		= 0;
     _helpPanel		= 0;
     _helpBrowser	= 0;
-    _stepsButton	= 0;
     _clientArea		= 0;
     _dialogIcon		= 0;
     _dialogHeading	= 0;
@@ -224,7 +234,12 @@ void YQWizard::layoutSideBar( QWidget * parent )
 
     layoutHelpPanel();
 
-    if ( _stepsEnabled )
+    if ( _treeEnabled )
+    {
+	layoutTreePanel();
+	showTree();
+    }
+    else if ( _stepsEnabled )
     {
 	layoutStepsPanel();
 	showSteps();
@@ -262,23 +277,23 @@ void YQWizard::layoutStepsPanel()
 
     // Bottom gradient
 
-    QLabel * bottomGradient= new QLabel( _stepsPanel );
+    QLabel * bottomGradient = new QLabel( _stepsPanel );
     CHECK_PTR( bottomGradient );
     setGradient( bottomGradient, _bottomGradientPixmap );
 
 
     // Help button - intentionally without keyboard shortcut
     // (the text is only a fallback anyway if no icon can be found)
-    _helpButton = new QPushButton( _( "Help" ), bottomGradient );
-    CHECK_PTR( _helpButton );
-    centerAtBottom( bottomGradient, _helpButton, WORK_AREA_BOTTOM_MARGIN );
+    QPushButton * helpButton = new QPushButton( _( "Help" ), bottomGradient );
+    CHECK_PTR( helpButton );
+    centerAtBottom( bottomGradient, helpButton, WORK_AREA_BOTTOM_MARGIN );
     QPixmap pixmap = QPixmap( PIXMAP_DIR "help-button.png" );
 
     if ( ! pixmap.isNull() )
-	_helpButton->setPixmap( pixmap );
+	helpButton->setPixmap( pixmap );
 
-    connect( _helpButton, SIGNAL( clicked()  ),
-	     this,	  SLOT	( showHelp() ) );
+    connect( helpButton, SIGNAL( clicked()  ),
+	     this,	 SLOT  ( showHelp() ) );
 }
 
 
@@ -561,7 +576,7 @@ void YQWizard::layoutHelpPanel()
 
 
 
-    if ( _stepsEnabled )
+    if ( _stepsEnabled || _treeEnabled )
     {
 	// Bottom gradient
 
@@ -569,23 +584,46 @@ void YQWizard::layoutHelpPanel()
 	CHECK_PTR( buttonParent );
 	// buttonParent->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum ) ); // hor/vert
 
+	QPushButton * button;
+	QPixmap pixmap;
+	
+	if ( _treeEnabled )
+	{
+	    // "Tree" button - intentionally without keyboard shortcut
+	    // (the text is only a fallback anyway if no icon can be found)
+	    button = new QPushButton( _( "Tree" ), buttonParent );
+	    CHECK_PTR( button );
+	    
+	    pixmap = QPixmap( PIXMAP_DIR "tree-button.png" );
+	}
+	else // if ( _stepsEnabled )
+	{
+	    // "Steps" button - intentionally without keyboard shortcut
+	    // (the text is only a fallback anyway if no icon can be found)
+	    button = new QPushButton( _( "Steps" ), buttonParent );
+	    CHECK_PTR( button );
+	    
+	    pixmap = QPixmap( PIXMAP_DIR "steps-button.png" );
+	}
 
-	// "Steps" button - intentionally without keyboard shortcut
-	// (the text is only a fallback anyway if no icon can be found)
-	_stepsButton = new QPushButton( _( "Steps" ), buttonParent );
-	CHECK_PTR( _stepsButton );
-
-	QPixmap pixmap( PIXMAP_DIR "steps-button.png" );
 
 	if ( ! pixmap.isNull() )
-	    _stepsButton->setPixmap( pixmap );
+	    button->setPixmap( pixmap );
 
-	QGridLayout * grid = centerAtBottom( buttonParent, _stepsButton, WORK_AREA_BOTTOM_MARGIN );
+	QGridLayout * grid = centerAtBottom( buttonParent, button, WORK_AREA_BOTTOM_MARGIN );
 	setBottomCroppedGradient( buttonParent, _bottomGradientPixmap, grid->sizeHint().height() );
 
 
-	connect( _stepsButton, SIGNAL( clicked()   ),
-		 this,	   SLOT	 ( showSteps() ) );
+	if ( _treeEnabled )
+	{
+	    connect( button, SIGNAL( clicked()  ),
+		     this,   SLOT  ( showTree() ) );
+	}
+	else
+	{
+	    connect( button, SIGNAL( clicked()   ),
+		     this,   SLOT  ( showSteps() ) );
+	}
     }
     else
     {
@@ -595,6 +633,74 @@ void YQWizard::layoutHelpPanel()
     }
 
     addGradientColumn( _helpPanel );
+}
+
+
+
+void YQWizard::layoutTreePanel()
+{
+    _treePanel = new QHBox( _sideBar );
+    CHECK_PTR( _treePanel );
+    _sideBar->addWidget( _treePanel );
+
+    // Left margin (with gradients)
+    addGradientColumn( _treePanel );
+
+    QVBox * vbox = new QVBox( _treePanel );
+    CHECK_PTR( vbox );
+
+
+    // Selection tree
+
+    _tree = new QY2ListView( vbox );
+    CHECK_PTR( _tree );
+    _tree->addColumn( "" );
+    _tree->header()->hide();
+    _tree->setRootIsDecorated( true );
+
+    QY2ListViewItem * branch = 0;
+    branch = new QY2ListViewItem( _tree, "item 3", true );
+    new QY2ListViewItem( branch, "item 3-first", true );
+    new QY2ListViewItem( branch, "item 3-second", true );
+    new QY2ListViewItem( branch, "item 3-third", true );
+
+    
+    branch = new QY2ListViewItem( _tree, "item 2", true );
+    new QY2ListViewItem( branch, "item 2-first", true );
+    new QY2ListViewItem( branch, "item 2-second", true );
+    new QY2ListViewItem( branch, "item 2-third", true );
+    
+    branch = new QY2ListViewItem( _tree, "item 1", true );
+    new QY2ListViewItem( branch, "item 1-first", true );
+    new QY2ListViewItem( branch, "item 1-second", true );
+    new QY2ListViewItem( branch, "item 1-third", true );
+
+
+    // Bottom gradient
+
+    QLabel * buttonParent = new QLabel( vbox );
+    CHECK_PTR( buttonParent );
+
+
+    // "Help" button - intentionally without keyboard shortcut
+    // (the text is only a fallback anyway if no icon can be found)
+    QPushButton * button = new QPushButton( _( "Help" ), buttonParent );
+    CHECK_PTR( button );
+
+    QPixmap pixmap( PIXMAP_DIR "help-button.png" );
+
+    if ( ! pixmap.isNull() )
+	button->setPixmap( pixmap );
+
+    QGridLayout * grid = centerAtBottom( buttonParent, button, WORK_AREA_BOTTOM_MARGIN );
+    setBottomCroppedGradient( buttonParent, _bottomGradientPixmap, grid->sizeHint().height() );
+
+    connect( button, SIGNAL( clicked()  ),
+	     this,   SLOT  ( showHelp() ) );
+
+    
+    // Right margin (with gradients)
+    addGradientColumn( _treePanel );
 }
 
 
@@ -1046,6 +1152,15 @@ void YQWizard::showSteps()
     if ( _sideBar && _stepsPanel )
     {
 	_sideBar->raiseWidget( _stepsPanel );
+    }
+}
+
+
+void YQWizard::showTree()
+{
+    if ( _sideBar && _treePanel )
+    {
+	_sideBar->raiseWidget( _treePanel );
     }
 }
 

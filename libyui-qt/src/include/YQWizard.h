@@ -41,6 +41,7 @@ class QWidgetStack;
 class YQAlignment;
 class YQReplacePoint;
 class YQWizardButton;
+class QY2ListView;
 
 
 class YQWizard : public QVBox, public YWizard
@@ -155,6 +156,12 @@ public:
     void updateSteps();
 
     /**
+     * Returns 'true' if this wizard was created with a selection tree enabled,
+     * i.e. the side bar has a tree selection.
+     **/
+    bool treeEnabled() const { return _treeEnabled; }
+
+    /**
      * Returns the wizard's "Next" (or "Accept") button.
      **/
     YQWizardButton * nextButton() const  { return _nextButton; }
@@ -197,6 +204,12 @@ public slots:
      * nothing happens.
      **/
     void showSteps();
+
+    /**
+     * Show the current selection tree in the side panel, if there is any. If
+     * there is none, nothing happens.
+     **/
+    void showTree();
 
     /**
      * Set a widget's background pixmap to a gradient pixmap and set the
@@ -252,6 +265,7 @@ protected:
     void layoutSideBar	( QWidget * parent );
     void layoutStepsPanel();
     void layoutHelpPanel();
+    void layoutTreePanel();
     void layoutWorkArea	( QHBox * parentHBox );
     void layoutClientArea( QWidget * parent );
     void layoutButtonBox();
@@ -389,6 +403,7 @@ protected:
     //
 
     bool	_stepsEnabled;
+    bool	_treeEnabled;
     bool	_verboseCommands;
     bool	_protectNextButton;
     bool	_stepsDirty;
@@ -415,10 +430,10 @@ protected:
     QVBox *		    _stepsPanel;
     QVBox *			_stepsBox;
     QGridLayout *		    _stepsGrid;
-    QPushButton	*		_helpButton;
     QHBox *		    _helpPanel;
     QTextBrowser *		_helpBrowser;
-    QPushButton *		_stepsButton;
+    QHBox *		    _treePanel;
+    QY2ListView *		_tree;
 
     QVBox *		_clientArea;
     QLabel *		    _dialogIcon;
