@@ -1041,6 +1041,7 @@ YQPackageSelector::showAutoPkgList()
 void
 YQPackageSelector::fakeData()
 {
+#if 0
     y2warning( "*** Using fake data ***" );
 
     if ( _youMode )
@@ -1069,6 +1070,7 @@ YQPackageSelector::fakeData()
 
 	y2milestone( "Fake installation sources initialized" );
     }
+#endif
 }
 
 
