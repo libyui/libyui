@@ -49,7 +49,7 @@ NCPackageSelector::NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
       , updateMode ( false )
 {
     // set the textdomain
-    textdomain( "packages" );
+    setTextdomain( "packages" );
     
     // get the mode (the mode is also available in PackageSelector via YWidgetOpt & opt)
     if ( opt.youMode.value() )
@@ -235,4 +235,17 @@ YCPTerm NCPackageSelector::readLayoutFile( Y2NCursesUI *ui, const char * layoutF
     }
 
     return pkgLayout;
+}
+
+void NCPackageSelector::setTextdomain( const char * domain )
+{
+    bindtextdomain( domain, LOCALEDIR );
+    bind_textdomain_codeset( domain, "utf8" );
+    textdomain( domain );
+
+    // Make change known.
+    {
+	extern int _nl_msg_cat_cntr;
+	++_nl_msg_cat_cntr;
+    }
 }
