@@ -26,6 +26,7 @@
 #include "YQMultiProgressMeter.h"
 
 
+
 YQMultiProgressMeter::YQMultiProgressMeter( QWidget *		parent,
 					    const YWidgetOpt & 	opt,
 					    bool 		horizontal,
@@ -96,7 +97,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 
     // Add up the total sum of all maxValues
 
-    int totalSum = 0;
+    Value_t totalSum = 0;
 
     for( int i=0; i < segments(); i++ )
 	totalSum += maxValue( i );
@@ -104,7 +105,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 
     // Figure out minimal segment length
 
-    int minLength = segmentMinLength();
+    Value_t minLength = segmentMinLength();
 
 
     // Limit the minimum if there isn't even that much space
@@ -128,7 +129,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
     // Check how many segments would become smaller than the minimum
 
     int smallSegmentsCount = 0;
-    int restSum = 0;
+    Value_t restSum = 0;
 
     for ( int i=0; i < segments(); i++ )
     {
