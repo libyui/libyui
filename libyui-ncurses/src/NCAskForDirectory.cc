@@ -18,7 +18,7 @@
 /-*/
 #include "Y2Log.h"
 
-#include "NCAskForExistingDirectory.h"
+#include "NCAskForDirectory.h"
 
 #include "YDialog.h"
 #include "NCSplit.h"

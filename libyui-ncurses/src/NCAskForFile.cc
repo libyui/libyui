@@ -50,9 +50,22 @@ NCAskForFile::NCAskForFile( const wpos at,
     , cancelButton( 0 )
     , dirName( 0 )
     , dirList( 0 )
-    , fileList( 0 )
     , detailed ( 0 )
+    , fileList( 0 )
     , fileName ( 0 )
+{
+
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCAskForFile::NCAskForFile
+//	METHOD TYPE : Destructor
+//
+//	DESCRIPTION :
+//
+NCAskForFile::~NCAskForFile( )
 {
 
 }
@@ -70,7 +83,6 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
 				 const YCPString & headline,
 				 bool edit )
 {
-
     YWidgetOpt opt;
 
     // the vertical split is the (only) child of the dialog
@@ -207,8 +219,6 @@ NCursesEvent & NCAskForFile::showDirPopup( )
 //
 //	DESCRIPTION :
 //
-
-
 long NCAskForFile::nicesize(YUIDimension dim)
 {
     return ( dim == YD_HORIZ ? 80 : 20 );
@@ -251,8 +261,8 @@ bool NCAskForFile::postAgain( )
     {
 	if ( currentId->compare( PkgNames::OkButton () ) == YO_EQUAL )
 	{
-	    postevent.result = YCPString(dirList->getCurrentDir() + "/"
-					 + fileList->getCurrentFile());
+	    postevent.result = YCPString( dirList->getCurrentDir() + "/"
+					 + getFileName() );
 	    // return false means: close the popup
 	    return false;
 	}
@@ -318,7 +328,14 @@ bool NCAskForFile::postAgain( )
     return true;
 }
 
-
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCAskForFile::NCAskForFile
+//	METHOD TYPE : bool
+//
+//	DESCRIPTION :
+//
 bool NCAskForFile::getCheckBoxValue( NCCheckBox * checkBox )
 {
     YCPValue value = YCPNull();
@@ -360,6 +377,19 @@ NCAskForExistingFile::NCAskForExistingFile( const wpos at,
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : NCAskForExistingFile::getFileName
+//	METHOD TYPE : bool
+//
+//	DESCRIPTION :
+//
+string NCAskForExistingFile::getFileName()
+{
+    return fileList->getCurrentFile();
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : NCAskForExistingFile::NCAskForExistingFile
 //	METHOD TYPE : Constructor
 //
@@ -375,4 +405,17 @@ NCAskForSaveFileName::NCAskForSaveFileName( const wpos at,
 		  filter,
 		  headline,
 		  true );	// file name is editable
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCAskForSaveFileName::NCAskForSaveFileName
+//	METHOD TYPE : string
+//
+//	DESCRIPTION :
+//
+string NCAskForSaveFileName::getFileName()
+{
+    return fileName->getText()->value();
 }

@@ -48,20 +48,22 @@ private:
 
     NCPushButton * okButton;
     NCPushButton * cancelButton;
-    NCComboBox * dirName;
-    NCDirectoryTable *dirList;		// directory list
-    NCFileTable *fileList;		// file list
-    NCCheckBox *detailed;
-
-    NCTextEntry *fileName;
+    NCComboBox * dirName;		// the selected directory
+    NCDirectoryTable *dirList;		// the directory list
+    NCCheckBox *detailed;		// the 'Details' checkbox
     
     bool getCheckBoxValue( NCCheckBox * detailed );
     
 protected:
 
+    NCFileTable *fileList;		// the file list
+    NCTextEntry *fileName;
+
     virtual bool postAgain();
 
     virtual NCursesEvent wHandleInput( wint_t ch );
+
+    virtual string getFileName() = 0;
     
 public:
     
@@ -70,7 +72,7 @@ public:
 		  const YCPString & filter,
 		  const YCPString & headline );
 
-    virtual ~NCAskForFile() {}
+    virtual ~NCAskForFile() = 0;
 
     /**
      * Set the default size
@@ -116,7 +118,11 @@ public:
 			  const YCPString & filter,
 			  const YCPString & headline );
 
-    virtual ~NCAskForExistingFile() {} 
+    virtual ~NCAskForExistingFile() {}
+
+protected:
+
+    virtual string getFileName(); 
 };
 
 ///////////////////////////////////////////////////////////////////
@@ -138,7 +144,11 @@ public:
 			  const YCPString & headline );
 
     virtual ~NCAskForSaveFileName() {}
-    
+
+protected:
+
+    virtual string getFileName();
+
 };
 
 ///////////////////////////////////////////////////////////////////
