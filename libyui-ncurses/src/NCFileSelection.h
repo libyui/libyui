@@ -85,8 +85,6 @@ class NCFileSelectionTag : public NCTableCol {
 
     virtual ~NCFileSelectionTag() {}
 
-    virtual void SetLabel( const NCstring & ) 	{ /*NOOP*/; }
-
     virtual void DrawAt( NCursesWindow & w, const wrect at,
 			 NCTableStyle & tableStyle,
 			 NCTableLine::STATE linestate,
