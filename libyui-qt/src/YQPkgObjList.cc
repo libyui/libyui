@@ -592,8 +592,8 @@ YQPkgObjListItem::cycleStatus()
 
     if ( oldStatus != newStatus )
     {
-	showNotifyTexts( newStatus );
 	setStatus( newStatus );
+	showNotifyTexts( newStatus );
 	_pkgObjList->sendStatusChanged( pmObj() );
     }
 }
