@@ -145,7 +145,13 @@ YQPkgRpmGroupTagsFilterView::check( PMPackagePtr pkg )
     if ( ! pkg || ! _selection )
 	return false;
 
-    if ( _selection->rpmGroup() == pkg->group_ptr() )
+    if ( pkg->group_ptr() == 0 )
+    {
+	y2error( "NULL pointer in group_ptr()!" );
+	return false;
+    }
+
+    if ( pkg->group_ptr()->isChildOf( _selection->rpmGroup() ) )
     {
 #if 1
 	// DEBUG

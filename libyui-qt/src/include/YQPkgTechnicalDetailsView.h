@@ -45,7 +45,7 @@ public:
 
 
 protected:
-
+ 
     /**
      * Show details for the specified package:
      * In this case technical data, very much like "rpm -qi".
@@ -101,6 +101,11 @@ protected:
      * Format a date.
      **/
     QString formatDate( const Date & date ) const;
+
+    /**
+     * Format an RPM group. Retrieves the translated (!) version.
+     **/
+    QString formatRpmGroup( PMPackagePtr pkg ) const;
 
 };
 

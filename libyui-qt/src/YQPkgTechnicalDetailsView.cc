@@ -19,6 +19,9 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
+#include <Y2PM.h>
+#include <y2pm/PMManager.h>
+
 #include <qdatetime.h>
 #include <qregexp.h>
 #include "YQPkgTechnicalDetailsView.h"
@@ -172,6 +175,14 @@ YQPkgTechnicalDetailsView::formatDate( const Date & weird_date ) const
 
 
 QString
+YQPkgTechnicalDetailsView::formatRpmGroup( PMPackagePtr pkg ) const
+{
+    std::string group = Y2PM::packageManager().translatedRpmGroup( pkg->group_ptr() );
+    return fromUTF8( group );
+}
+
+
+QString
 YQPkgTechnicalDetailsView::simpleTable( PMPackagePtr pkg )
 {
     pkg->startRetrieval();
@@ -184,7 +195,7 @@ YQPkgTechnicalDetailsView::simpleTable( PMPackagePtr pkg )
 	       ( pkg->isInstalledObj() ?
 		 row( hcell( _( "Install Time:" ) ) + cell( pkg->installtime() 		   ) )
 		 : "" ) +
-	       row( hcell( _( "Package Group:"	) ) + cell( pkg->group()		   ) ) +
+	       row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( pkg )	   ) ) +
 	       row( hcell( _( "License:"	) ) + cell( pkg->license()		   ) ) +
 	       row( hcell( _( "Installed Size:" ) ) + cell( pkg->size().form()		   ) ) +
 	       row( hcell( _( "Archive Size:"	) ) + cell( pkg->archivesize().form()	   ) ) +
@@ -227,7 +238,7 @@ YQPkgTechnicalDetailsView::complexTable( PMPackagePtr installed, PMPackagePtr ca
 	       row( hcell( _( "Release:"	) ) + cell( p1->release()		    ) + cell( p2->release()		      ) ) +
 	       row( hcell( _( "Build Time:"	) ) + cell( p1->buildtime()                 ) + cell( p2->buildtime() 		      ) ) +
 	       row( hcell( _( "Install Time:"	) ) + cell( p1->installtime()               ) + cell( p2->installtime()               ) ) +
-	       row( hcell( _( "Package Group:"	) ) + cell( p1->group()			    ) + cell( p2->group()		      ) ) +
+	       row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( p1 )	    ) + cell( formatRpmGroup( p2 )	      ) ) +
 	       row( hcell( _( "License:"	) ) + cell( p1->license()		    ) + cell( p2->license()		      ) ) +
 	       row( hcell( _( "Installed Size:" ) ) + cell( p1->size().form()		    ) + cell( p2->size().form()		      ) ) +
 	       row( hcell( _( "Archive Size:"	) ) + cell( p1->archivesize().form()	    ) + cell( p2->archivesize().form()	      ) ) +
