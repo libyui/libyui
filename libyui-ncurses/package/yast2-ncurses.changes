@@ -1,8 +1,20 @@
 -------------------------------------------------------------------
+Mon Mar  3 12:39:50 CET 2003 - gs@suse.de
+
+- V 2.7.11
+- get the floppy device to save/load package selections (bug #23923)
+
+-------------------------------------------------------------------
 Wed Feb 26 15:39:37 CET 2003 - ma@suse.de
 
 - Support unsing a different styleset for Braille-Users. Activated, if
   environmentvariable Y2_BRAILLE is set.
+
+-------------------------------------------------------------------
+Tue Feb 25 15:23:52 CET 2003 - gs@suse.de
+
+- package installation: restore the package manager state on Cancel,
+  show a warning popup, show file list for installed packages  
 
 -------------------------------------------------------------------
 Mon Feb 24 17:54:17 CET 2003 - ma@suse.de
