@@ -4,7 +4,11 @@
 
 SUBDIRS = include
 
-AM_CXXFLAGS = -DY2LOG=\"ui-qt\" -DQT_THREAD_SUPPORT -DLOCALEDIR=\"${localedir}\" -DICONDIR=\"${themedir}/current\"
+AM_CXXFLAGS = -DY2LOG=\"ui-qt\" 		\
+	-DQT_THREAD_SUPPORT 			\
+	-DLOCALEDIR=\"${localedir}\"  		\
+	-DICONDIR=\"${themedir}/current\" 	\
+	-DHELPIMAGEDIR=\"${imagedir}\"
 
 MOC = $(QTDIR)/bin/moc
 
@@ -50,6 +54,7 @@ liby2qt_la_SOURCES = 				\
 	YQMultiLineEdit.cc			\
 	YQMultiSelectionBox.cc			\
 	YQPackageSelector.cc			\
+	YQPackageSelectorHelp.cc		\
 	YQPartitionSplitter.cc			\
 	YQPkgConflictDialog.cc			\
 	YQPkgConflictList.cc			\

@@ -77,6 +77,11 @@ public:
     static QString htmlParagraphs( const std::list<std::string> & text );
 
     /**
+     * Returns a uniform heading in HTML format.
+     **/
+    static QString htmlHeading( const QString & text );
+
+    /**
      * Returns a uniform heading in HTML format for the specified package:
      * Package name and summary
      **/

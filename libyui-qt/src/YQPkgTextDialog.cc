@@ -95,7 +95,7 @@ YQPkgTextDialog::~YQPkgTextDialog()
 QSize
 YQPkgTextDialog::sizeHint() const
 {
-    return QSize( 400, 300 );
+    return QSize( 500, 450 );
 }
 
 
@@ -206,6 +206,18 @@ YQPkgTextDialog::htmlEscape( const QString & plainText )
     html.replace( QRegExp( "&" ), "&amp;" );
     html.replace( QRegExp( "<" ), "&lt;"  );
     html.replace( QRegExp( ">" ), "&gt;"  );
+
+    return html;
+}
+
+
+QString
+YQPkgTextDialog::htmlHeading( const QString & text )
+{
+    QString html =
+	"<table bgcolor=#E0E0F8><tr><td><b>"
+	+ text
+	+ "</b></td></tr></table><br>";
 
     return html;
 }

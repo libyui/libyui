@@ -11,6 +11,7 @@
 \----------------------------------------------------------------------/
 
   File:	      YQPackageSelector.cc
+  See also:   YQPackageSelectorHelp.cc
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
@@ -62,6 +63,7 @@
 #include "YQPkgSelectionsFilterView.h"
 #include "YQPkgStatusFilterView.h"
 #include "YQPkgTechnicalDetailsView.h"
+#include "YQPkgTextDialog.h"
 #include "YQPkgUpdateProblemFilterView.h"
 #include "YQPkgVersionsView.h"
 #include "YQPkgYouPatchFilterView.h"
@@ -462,11 +464,6 @@ YQPackageSelector::layoutButtons( QWidget * parent )
     CHECK_PTR( button_box );
     button_box->setSpacing( SPACING );
 
-#if 0
-    QPushButton * help_button = new QPushButton( _( "&Help" ), button_box );
-    CHECK_PTR( help_button );
-#endif
-
     if ( ! _youMode )
     {
 	QPushButton * solve_button = new QPushButton( _( "Check &Dependencies" ), button_box );
@@ -579,9 +576,12 @@ YQPackageSelector::addMenus()
     _menuBar->insertSeparator();
     _menuBar->insertItem( _( "&Help" ), _helpMenu );
 
-    _helpMenu->insertItem( _( "&Overview" 	), this, SLOT( help() ), Key_F1 );
-    _helpMenu->insertItem( _( "&Symbols" 	), this, SLOT( help() ) );	// TODO
-    _helpMenu->insertItem( _( "&Keys" 		), this, SLOT( help() ) );	// TODO
+    // Note: The help functions and their texts are moved out
+    // to a separate source file YQPackageSelectorHelp.cc
+    
+    _helpMenu->insertItem( _( "&Overview" 	), this, SLOT( help() 		), Key_F1 );
+    _helpMenu->insertItem( _( "&Symbols" 	), this, SLOT( symbolHelp() 	), SHIFT + Key_F1 );
+    _helpMenu->insertItem( _( "&Keys" 		), this, SLOT( keyboardHelp() 	) );
 }
 
 
@@ -802,15 +802,6 @@ YQPackageSelector::accept()
 	_yuiqt->setMenuSelection( YCPSymbol("accept", true) );
 	_yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
     }
-}
-
-
-void
-YQPackageSelector::help()
-{
-    QMessageBox::information( this, _( "Help" ),
-			      "No online help available yet.\nSorry.",
-			      QMessageBox::Ok );
 }
 
 

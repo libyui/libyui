@@ -139,9 +139,19 @@ public slots:
     void accept();
 
     /**
-     * Display online help
+     * Display (generic) online help.
      **/
     void help();
+
+    /**
+     * Display online help about symbols (package status icons).
+     **/
+    void symbolHelp();
+
+    /**
+     * Display online help about magic keys.
+     **/
+    void keyboardHelp();
 
 
 signals:
@@ -200,7 +210,22 @@ protected:
     void connectFilter( QWidget *	filter,
 			QWidget *	pkgList,
 			bool		hasUpdateSignal = true );
+    /**
+     * Return HTML code describing a symbol (an icon).
+     **/
+    QString symHelp( const QString & imgFileName,
+		     const QString & summary,
+		     const QString & explanation	);
 
+    
+    /**
+     * Return HTML code describing a key.
+     **/
+    QString keyHelp( const QString & key,
+		     const QString & summary,
+		     const QString & explanation	);
+
+    
 
     // Data members
 

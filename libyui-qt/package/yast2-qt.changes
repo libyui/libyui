@@ -1,4 +1,23 @@
 -------------------------------------------------------------------
+Tue Jan 14 19:05:09 CET 2003 - sh@suse.de
+
+- Package manager enhancements:
+  - Added menu bar
+  - Added bubble help for all kinds of lists 
+  - Rearranged pkg list columns (moved summary left)
+  - Re-enabled source RPM handling
+  - Added currently installed version to "versions" view
+    (non-editable)
+  - Status change actions for "all in current list"
+  - Show disk space for all available partitions
+  - Added "installation summary" filter view
+  - Dependency checking now for selections, too
+  - Added symbols help
+  - Added special keys help
+  - Auto check is now "off" by default
+- Bumped version to 2.7.3
+
+-------------------------------------------------------------------
 Tue Dec 03 16:37:31 CET 2002 - arvin@suse.de
 
 - added curl-devel and openssl-devel to neededforbuild
