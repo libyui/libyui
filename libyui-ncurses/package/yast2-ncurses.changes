@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Sep  6 18:28:18 CEST 2004 - mlazar@suse.cz
+
+- fixed bug #44559 and #44575 - wizard menu in curses is not shown
+- 2.10.2
+
+-------------------------------------------------------------------
 Mon Sep  6 18:08:04 CEST 2004 - mlazar@suse.cz
 
 - fixed bug when activate resized panel with new state same as old

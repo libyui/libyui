@@ -204,6 +204,17 @@ void NCWidget::wMoveChildTo( NCWidget & child, const wpos & newpos )
 {
   WIDDBG << "mc+ " << DLOC << child << " -> " << newpos << " in " << this << endl;
   try {
+
+     if ( skipNoDimWin && child.Sze.H == 0) {
+	WIDDBG << "Skip child with zero height: " << this << ' ' << child << " par " << Parent()->Value() << endl;
+	return;
+     }
+
+     if ( skipNoDimWin && child.Sze.W == 0) {
+	WIDDBG << "Skip child with zero width: " << this << ' ' << child << " par " << Parent()->Value() << endl;
+	return;
+     }
+     
     child.wMoveTo( newpos );
     Redraw( true );
   }
