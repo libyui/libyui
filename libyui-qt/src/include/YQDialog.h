@@ -22,37 +22,18 @@
 #ifndef YQDialog_h
 #define YQDialog_h
 
-#include <qdialog.h>
-#include <qframe.h>
+#include <qwidget.h>
 #include "YDialog.h"
+
 
 class YUIQt;
 class YQPushButton;
+class QFrame;
+
 
 class YQDialog : public QWidget, public YDialog
 {
     Q_OBJECT
-
-private:
-
-    /**
-     * Pointer to the YaST2 qt user interface. The widget
-     * must access this when it handles an event during
-     * the event loop of the ui. It then calls @ref YUIQt#returnNow
-     * to tell the ui that it should leave the event loop.
-     */
-    YUIQt *yuiqt;
-
-    /**
-     * Frame around the dialog. Used only if the `decorated option is set.
-     * Otherwise, this might be 0.
-     */
-    QFrame *qt_frame;
-
-    /**
-     * are penguins walking?
-     */
-    bool penguins;
 
 public:
     /**
@@ -80,12 +61,6 @@ public:
     void closeEvent( QCloseEvent *ev);
 
     /**
-     * Inherited from QDialog: Escape pressed.
-     * The Qt UI simply ignores this.
-     */
-    void reject();
-
-    /**
      * Returns the nice size of this dialog (may depend on -geometry)
      */
     long nicesize(YUIDimension dim);
@@ -97,30 +72,10 @@ public:
      */
     long decorationWidth(YUIDimension dim);
 
-
     /**
      * Return this dialog's (first) default button or 0 if none
      **/
-    YQPushButton *findDefaultButton();
-
-
-    /**
-     * Ensure presence of no more than one single default button
-     **/
-    void ensureOnlyOneDefaultButton();
-
-
-    /**
-     * Make the specified button the default button
-     **/
-    void makeDefaultButton( YQPushButton *new_default_button );
-
-    
-    /**
-     * Activate (i.e. click) this dialog's default button, if there is any.
-     * Issue a warning to the log file if 'warn' is true.
-     **/
-    bool activateDefaultButton( bool warn = true );
+    YQPushButton * findDefaultButton();
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -134,19 +89,62 @@ public:
      */
     void setSize(long newwidth, long newheight);
 
-
     /**
      * Returns whether or not the user has resized this dialog.
      **/
     bool userResized() { return _userResized; }
 
+    /**
+     * Returns the button that has the keyboard focus or 0 if no button has
+     * the keyboard focus.
+     **/
+    YQPushButton * focusButton() const { return _focusButton; }
 
+    /**
+     * Returns the dialog's default button - the button that is activated with
+     * [Return] if no button has the keyboard focus.
+     **/
+    YQPushButton * defaultButton() const { return _defaultButton; }
+
+    /**
+     * Notification that a button loses the keyboard focus.
+     *
+     * All pushbuttons are required to call this whenever they lose focus so
+     * the dialog can keep track of its focusButton.
+     **/
+    void losingFocus( YQPushButton * button );
+    
+    /**
+     * Notification that a button gets the keyboard focus.
+     *
+     * All pushbuttons are required to call this whenever they gain focus so
+     * the dialog can keep track of its focusButton.
+     **/
+    void gettingFocus( YQPushButton * button );
+
+    /**
+     * Set the dialog's default button - the button that is activated with
+     * [Return] if no other button has the keyboard focus.
+     **/
+    void setDefaultButton( YQPushButton * newDefaultButton );
+
+    /**
+     * Ensure presence of no more than one single default button.
+     **/
+    void ensureOnlyOneDefaultButton();
+    
+    /**
+     * Activate (i.e. click) this dialog's default button, if there is any.
+     * Issue a warning to the log file if 'warn' is true.
+     **/
+    bool activateDefaultButton( bool warn = true );
+
+    
 protected:
 
     /**
      * Callback function that reports to the ui specific
-     * widget that a child has been added. The default implementation
-     * does nothing.
+     * widget that a child has been added.
      */
     void childAdded(YWidget *child);
 
@@ -165,7 +163,7 @@ protected:
      * Inherited from QWidget.
      **/
     void focusInEvent( QFocusEvent *event);
-    
+
     /**
      * Event handler for window resize.
      *
@@ -179,12 +177,19 @@ protected:
      **/
     void show();
 
+
     //
     // Data members
     //
-    
-    bool  _userResized;
-    QSize _userSize;
+
+    YUIQt *		yuiqt;
+    QFrame *		_qFrame;
+
+    bool  		_userResized;
+    QSize 		_userSize;
+
+    YQPushButton * 	_focusButton;
+    YQPushButton * 	_defaultButton;
 };
 
 

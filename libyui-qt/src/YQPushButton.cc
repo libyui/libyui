@@ -32,32 +32,62 @@
 
 #define BORDER 3
 #define BORDERSIZE QSize(BORDER, BORDER)
+#define FOCUS_CHANGES_DEFAULT_BUTTON 0
 
-YQPushButton::YQPushButton(YUIQt *yuiqt,
-			   QWidget *parent,
-			   YWidgetOpt &opt,
-			   YCPString label)
-    : QWidget(parent)
-    , YPushButton(opt, label)
-    , yuiqt(yuiqt)
+YQPushButton::YQPushButton( YUIQt *	yuiqt,
+			    QWidget *	parent,
+			    YWidgetOpt &opt,
+			    YCPString 	label )
+    : QWidget( parent )
+    , YPushButton( opt, label )
+    , yuiqt( yuiqt )
 {
     setWidgetRep((QWidget *)this);
-    qt_pushbutton = new QPushButton( fromUTF8(label->value()), this);
-    qt_pushbutton->setFont(yuiqt->currentFont());
-    qt_pushbutton->setMinimumSize(2,2);
-    qt_pushbutton->setAutoDefault( true );
-    qt_pushbutton->installEventFilter( this );
-    qt_pushbutton->move(BORDER, BORDER);
-    setMinimumSize(qt_pushbutton->minimumSize() + 2 * BORDERSIZE);
-    connect(qt_pushbutton, SIGNAL(clicked()), this, SLOT(hit()));
+    _qPushButton = new QPushButton( fromUTF8(label->value()), this);
+    _qPushButton->setFont( yuiqt->currentFont() );
+    _qPushButton->setMinimumSize( 2, 2 );
+    _qPushButton->setAutoDefault( true );
+    _qPushButton->installEventFilter( this );
+    _qPushButton->move(BORDER, BORDER );
+    setMinimumSize( _qPushButton->minimumSize() + 2 * BORDERSIZE );
+    
+    connect( _qPushButton, SIGNAL( clicked() ),
+	     this,          SLOT  ( hit()     ) );
 
-    if (opt.isDefaultButton.value()) makeDefaultButton();
+    _isDefault = opt.isDefaultButton.value();
+
+#if 0
+    // This would be nice, but it never works since the yParent() is only set
+    // AFTER the widget is created, certainly not in the constructor. We have
+    // to rely on the caller to take care of this:
+    
+    if ( _isDefault )
+	makeDefaultButton();
+#endif
 }
 
 
-void YQPushButton::setEnabling(bool enabled)
+YQPushButton::~YQPushButton()
 {
-    qt_pushbutton->setEnabled(enabled);
+    if ( yParent() ) 	// The yDialog parent may not be set yet!    
+    {
+	YQDialog * dialog = dynamic_cast<YQDialog *> ( yDialog() );
+
+	if ( dialog )
+	{
+	    if ( dialog->focusButton() == this )
+		dialog->losingFocus( this );
+		
+	    if ( dialog->defaultButton() == this )
+		dialog->setDefaultButton( 0 );
+	}
+    }
+}
+
+
+void YQPushButton::setEnabling( bool enabled )
+{
+    _qPushButton->setEnabled(enabled);
     YWidget::setEnabling( enabled );
 }
 
@@ -68,7 +98,7 @@ void YQPushButton::setIcon( const YCPString & y_icon_name )
 
     if ( icon_name.isEmpty() )
     {
-	qt_pushbutton->setIconSet( QIconSet() );
+	_qPushButton->setIconSet( QIconSet() );
 	return;
     }
 
@@ -78,53 +108,84 @@ void YQPushButton::setIcon( const YCPString & y_icon_name )
     if ( icon.isNull() )
 	y2warning( "Can't load icon '%s'", (const char *) icon_name );
     else
-	qt_pushbutton->setIconSet( icon );
+	_qPushButton->setIconSet( icon );
 }
 
 
 long YQPushButton::nicesize(YUIDimension dim)
 {
     return 2 * BORDER + (dim == YD_HORIZ
-			 ? qt_pushbutton->sizeHint().width()
-			 : qt_pushbutton->sizeHint().height());
+			 ? _qPushButton->sizeHint().width()
+			 : _qPushButton->sizeHint().height());
 }
 
 
-void YQPushButton::setSize(long newwidth, long newheight)
+void YQPushButton::setSize( long newwidth, long newheight )
 {
-    y2debug("Resizing PushButton to %ld,%ld", newwidth, newheight);
-    qt_pushbutton->resize(newwidth - 2 * BORDER, newheight - 2 * BORDER);
+    _qPushButton->resize(newwidth - 2 * BORDER, newheight - 2 * BORDER);
     resize(newwidth, newheight);
 }
 
 
-void YQPushButton::setLabel(const YCPString& label)
+void YQPushButton::setLabel( const YCPString & label )
 {
-    qt_pushbutton->setText(fromUTF8(label->value()));
+    _qPushButton->setText(fromUTF8(label->value()));
     YPushButton::setLabel( label );
+}
+
+
+void YQPushButton::makeFocusButton( bool hasFocus )
+{
+    if ( ! yParent() ) 	// The yDialog parent may not be set yet!    
+	return;
+    
+    YQDialog * dialog = dynamic_cast<YQDialog *> ( yDialog() );
+
+    if ( dialog )
+    {
+	if ( hasFocus )		dialog->gettingFocus( this );
+	else			dialog->losingFocus ( this );
+    }
 }
 
 
 void YQPushButton::makeDefaultButton()
 {
-    YQDialog *dia;
+    if ( ! yParent() ) 	// The yDialog parent may not be set yet!
+    {
+	y2warning( "No parent yet." );
+	return;
+    }
+    
+    YQDialog * dialog = dynamic_cast<YQDialog *> ( yDialog() );
 
-    if ( yParent() && ( dia = (YQDialog *) yDialog() ) )
-    {
-	dia->makeDefaultButton( this );
-    }
-    else	// the yDialog parent may not be set yet!
-    {
-	qt_pushbutton->setDefault( true );
-    }
+    if ( dialog )
+	dialog->setDefaultButton( this );
+}
+
+
+void YQPushButton::showAsDefault( bool show )
+{
+    _qPushButton->setDefault( show );
     update();
+}
+
+
+bool YQPushButton::isShownAsDefault() const
+{
+    return _qPushButton->isDefault();
+}
+
+
+void YQPushButton::activate()
+{
+    _qPushButton->animateClick();
 }
 
 
 void YQPushButton::hit()
 {
-    makeDefaultButton();
-    yuiqt->returnNow(YUIInterpreter::ET_WIDGET, this);
+    yuiqt->returnNow( YUIInterpreter::ET_WIDGET, this );
 }
 
 
@@ -132,28 +193,23 @@ bool YQPushButton::eventFilter( QObject *obj, QEvent *event )
 {
     if ( event->type() == QEvent::FocusIn )
     {
-	// y2milestone( "FocusIn %s", (const char *) qt_pushbutton->text() );
-	makeDefaultButton();
+	makeFocusButton();
 	return false;	// event processed?
     }
-#if 0
     else if ( event->type() == QEvent::FocusOut )
     {
-	y2milestone( "FocusOut %s - new focus in %s",
-		     (const char *) qt_pushbutton->text(),
-		     focusWidget() ? (const char *) focusWidget()->className() : "nowhere" );
+	makeFocusButton( false );
 	return false;	// event processed?
     }
-#endif
+    
     return QWidget::eventFilter( obj, event );
 }
 
 
-
 bool YQPushButton::setKeyboardFocus()
 {
-    makeDefaultButton();
-    qt_pushbutton->setFocus();
+    makeFocusButton();
+    _qPushButton->setFocus();
 
     return true;
 }

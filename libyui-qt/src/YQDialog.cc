@@ -20,8 +20,8 @@
 
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
-#include <qobjectlist.h>
 #include <qpushbutton.h>
+#include <qframe.h>
 #include <X11/Xlib.h>
 
 #include "YUIQt.h"
@@ -36,19 +36,23 @@ YQDialog::YQDialog( YUIQt *		yuiqt,
     : QWidget( qt_parent,
 	       0,	// name
 	       default_size ? 0 : WType_Modal | WStyle_Dialog )
-    , YDialog(opt)
-    , yuiqt(yuiqt)
-    , penguins(false)
-    , _userResized(false)
+    , YDialog( opt )
+    , yuiqt( yuiqt )
+
 {
+    _userResized	= false;
+    _focusButton	= 0;
+    _defaultButton	= 0;
+
+
     setWidgetRep(this);
     setCaption( hasDefaultSize() ? "YaST2" : "");
     setFocusPolicy( QWidget::StrongFocus );
 
     if ( hasWarnColor() || hasInfoColor() )
     {
-	QColor normalBackground	  ( 0, 128, 0 );
-	QColor inputFieldBackground ( 0,	96, 0 );
+	QColor normalBackground     ( 0, 128, 0 );
+	QColor inputFieldBackground ( 0,  96, 0 );
 	QColor text = white;
 
 	if ( hasInfoColor() )
@@ -64,27 +68,23 @@ YQDialog::YQDialog( YUIQt *		yuiqt,
 	setPalette(warnPalette);
     }
 
-    qt_frame = new QFrame ( this );
+    _qFrame = new QFrame ( this );
 
     if ( ! hasDefaultSize() && ! yuiqt->haveWM() )
     {
-	qt_frame->setFrameStyle ( QFrame::Box | QFrame::Raised );
-	qt_frame->setLineWidth( 2 );
-	qt_frame->setMidLineWidth( 3 );
+	_qFrame->setFrameStyle ( QFrame::Box | QFrame::Raised );
+	_qFrame->setLineWidth( 2 );
+	_qFrame->setMidLineWidth( 3 );
     }
     else
     {
-	qt_frame->setFrameStyle ( QFrame::NoFrame );
+	_qFrame->setFrameStyle ( QFrame::NoFrame );
     }
 }
 
 
 YQDialog::~YQDialog()
 {
-    if ( penguins )
-    {
-	system("killall xpenguins >/dev/null 2>&1");
-    }
 }
 
 
@@ -122,8 +122,8 @@ long YQDialog::nicesize(YUIDimension dim)
 
 long YQDialog::decorationWidth(YUIDimension dim)
 {
-    if ( ! hasDefaultSize() && qt_frame )
-	return qt_frame->frameWidth();
+    if ( ! hasDefaultSize() && _qFrame )
+	return _qFrame->frameWidth();
     else
 	return 0L;
 }
@@ -158,8 +158,8 @@ void YQDialog::setSize(long newWidth, long newHeight)
 
     YContainerWidget::child(0)->setSize (newWidth  - 2 * decorationWidth( YD_HORIZ ),
 					 newHeight - 2 * decorationWidth( YD_VERT  ) );
-    if ( qt_frame )
-	qt_frame->resize(newWidth, newHeight);
+    if ( _qFrame )
+	_qFrame->resize( newWidth, newHeight );
 
     resize( newWidth, newHeight );
 }
@@ -189,7 +189,7 @@ YQDialog::resizeEvent ( QResizeEvent *event )
     if ( event )
     {
 	setSize ( event->size().width(), event->size().height() );
-	_userSize = event->size();
+	_userSize    = event->size();
 	_userResized = true;
     }
 }
@@ -198,68 +198,110 @@ YQDialog::resizeEvent ( QResizeEvent *event )
 YQPushButton *
 YQDialog::findDefaultButton()
 {
-    YWidgetList widgetList   = YDialog::widgets();
+    if ( _defaultButton )
+	return _defaultButton;
     
+    YWidgetList widgetList   = YDialog::widgets();
+
     for ( YWidgetListIterator it = widgetList.begin(); it != widgetList.end(); ++it )
     {
 	YQPushButton * button = dynamic_cast<YQPushButton *> ( *it );
 
-	if ( button && button->qPushButton()->isDefault() )
-	    return button;
+	if ( button && button->isDefault() )
+	{
+	    _defaultButton = button;
+	    
+	    return _defaultButton;
+	}
     }
 
-    return 0;
+    _defaultButton = 0;
+    
+    return _defaultButton;
 }
 
 
 void
 YQDialog::ensureOnlyOneDefaultButton()
 {
-    bool have_default_button = false;
-    YWidgetList widgetList   = YDialog::widgets();
-    
-    for ( YWidgetListIterator it = widgetList.begin(); it != widgetList.end(); ++it )
-    {
-	YQPushButton * button = dynamic_cast<YQPushButton *> ( *it );
+    YQPushButton * def     = _focusButton ? _focusButton : _defaultButton;
+    YWidgetList widgetList = YDialog::widgets();
 
-	if ( button && button->qPushButton()->isDefault() )
-	{
-	    if ( have_default_button )
-	    {
-		y2error( "Too many `opt(`default) PushButtons: \"%s\"",
-			 (const char *) button->qPushButton()->text() );
-	    }
-
-	    button->qPushButton()->setDefault( ! have_default_button );
-	    have_default_button = true;
-	}
-    }
-}
-
-
-void
-YQDialog::makeDefaultButton( YQPushButton * new_default_button )
-{
-    YWidgetList widgetList   = YDialog::widgets();
-    
     for ( YWidgetListIterator it = widgetList.begin(); it != widgetList.end(); ++it )
     {
 	YQPushButton * button = dynamic_cast<YQPushButton *> ( *it );
 
 	if ( button )
-	    button->qPushButton()->setDefault( button == new_default_button );
+	{
+	    if ( button->isDefault() )
+	    {
+		if ( _defaultButton && button != _defaultButton )
+		{
+		    y2error( "Too many `opt(`default) PushButtons: \"%s\"",
+			     (const char *) button->qPushButton()->text() );
+		}
+		else
+		{
+		    _defaultButton = button;
+		}
+	    }
+	    
+	    if ( button->isShownAsDefault() && button != def )
+		button->showAsDefault( false );
+	}
     }
+    
+    def = _focusButton ? _focusButton : _defaultButton;
+    
+    if ( def )
+	def->showAsDefault();
+}
+
+
+void
+YQDialog::setDefaultButton( YQPushButton * newDefaultButton )
+{
+    if ( _defaultButton				&&
+	 newDefaultButton != _defaultButton	&&
+	 newDefaultButton->isShownAsDefault() 	  )
+    {
+	y2error( "Too many `opt(`default) PushButtons: \"%s\"",
+		 (const char *) newDefaultButton->qPushButton()->text() );
+	return;
+    }
+
+    _defaultButton = newDefaultButton;
+    
+    if ( _defaultButton && ! _focusButton )
+	_defaultButton->showAsDefault( true );
 }
 
 
 bool
 YQDialog::activateDefaultButton( bool warn )
 {
-    YQPushButton * default_button = findDefaultButton();
-
-    if ( default_button && default_button->qPushButton()->isEnabled() )
+    // Try the focus button first, if there is any.
+    
+    if ( _focusButton 		   &&
+	 _focusButton->isEnabled() &&
+	 _focusButton->isShownAsDefault() )
     {
-	default_button->qPushButton()->animateClick();
+	y2debug( "Activating focus button: [%s]", (const char *) _focusButton->qPushButton()->text() );
+	_focusButton->activate();
+	return true;
+    }
+
+    
+    // No focus button - try the default button, if there is any.
+    
+    _defaultButton = findDefaultButton();
+
+    if ( _defaultButton 		&&
+	 _defaultButton->isEnabled() 	&&
+	 _defaultButton->isShownAsDefault() )
+    {
+	y2debug( "Activating default button: [%s]", (const char *) _defaultButton->qPushButton()->text() );
+	_defaultButton->activate();
 	return true;
     }
     else
@@ -271,6 +313,36 @@ YQDialog::activateDefaultButton( bool warn )
     }
 
     return false;
+}
+
+
+void YQDialog::losingFocus( YQPushButton * button )
+{
+    if ( button == _focusButton )
+    {
+	if ( _focusButton && _focusButton != _defaultButton )
+	    _focusButton->showAsDefault( false );
+
+	_focusButton = 0;
+    }
+
+    if ( ! _focusButton && _defaultButton )
+	_defaultButton->showAsDefault( true );
+}
+
+
+void YQDialog::gettingFocus( YQPushButton * button )
+{
+    if ( _focusButton && _focusButton != button )
+	_focusButton->showAsDefault( false );
+
+    if ( _defaultButton && _defaultButton != button )
+	_defaultButton->showAsDefault( false );
+
+    _focusButton = button;
+
+    if ( _focusButton )
+	_focusButton->showAsDefault( true );
 }
 
 
@@ -349,16 +421,10 @@ void YQDialog::focusInEvent( QFocusEvent *event)
     }
     else
     {
-	YQPushButton *default_button = findDefaultButton();
-
-	if ( default_button )
-	{
-	    default_button->qPushButton()->setFocus();
-	}
+	if ( _defaultButton )
+	    _defaultButton->setKeyboardFocus();
 	else
-	{
 	    focusNextPrevChild( true );
-	}
     }
 }
 
@@ -377,12 +443,6 @@ void YQDialog::show()
 	move( dia_pos );
     }
     QWidget::show();
-}
-
-
-void YQDialog::reject()
-{
-    // NOP - we don't want Escape to close the dialog
 }
 
 
