@@ -1061,12 +1061,21 @@ YQPackageSelector::fakeData()
 void
 YQPackageSelector::reject()
 {
-    if ( QMessageBox::warning( this, "",
-			       _( "Abandon all changes?" ),
-			       _( "&OK" ), _( "&Cancel" ), "",
-			       1, // defaultButtonNumber (from 0)
-			       1 ) // escapeButtonNumber
-	 == 0 )	// Proceed upon button #0 (OK)
+    bool changes = Y2PM::packageManager().DiffState();
+
+    if ( _youMode )
+	changes |= Y2PM::youPatchManager().DiffState();
+    else
+	changes |= Y2PM::selectionManager().DiffState();
+	
+    if ( ! changes ||
+	 ( QMessageBox::warning( this, "",
+				 _( "Abandon all changes?" ),
+				 _( "&OK" ), _( "&Cancel" ), "",
+				 1, // defaultButtonNumber (from 0)
+				 1 ) // escapeButtonNumber
+	   == 0 )	// Proceed upon button #0 (OK)
+	 )
     {
 	Y2PM::packageManager().RestoreState();
 
