@@ -138,6 +138,12 @@ const YCPValue& PkgNames::Update ()
     return value;
 }
 
+// the menu entry Action/Taboo
+const YCPValue& PkgNames::Taboo ()
+{
+    static const YCPValue value = createIdValue ( "taboo" );
+    return value;
+}
 
 // the search button
 const YCPValue& PkgNames::Search ()

@@ -75,7 +75,7 @@ string NCPkgTableTag::statusToStr( NCPkgStatus stat ) const
 	    return "d";
 	case PkgToUpdate:	// Will be updated
 	    return "u";
-	case PkgToReplace:	// ?????????
+	case PkgToReplace:	// Replace
 	    return "X";
 	case PkgAutoInstall:	// Will be automatically installed
 	    return "a";
@@ -86,37 +86,56 @@ string NCPkgTableTag::statusToStr( NCPkgStatus stat ) const
     return " ";
 }
 
-// convert NCPkgStatus to UI_Status
-PMSelectable::UI_Status NCPkgTable::statusToUIStat( NCPkgStatus stat )
-{
-
-    map<NCPkgStatus, PMSelectable::UI_Status>::iterator it = statusMap.find( stat );
-
-    if ( it != statusMap.end() )
-    {
-	return (*it).second;
-    }
-
-    return PMSelectable::S_NoInst;
-}
-
 // convert UI_Status to NCPkgStatus
 NCPkgStatus NCPkgTable::statusToPkgStat( PMSelectable::UI_Status stat )
 {
-    NCPkgStatus pkgStat = PkgNoInstall;
-    
-    map<NCPkgStatus, PMSelectable::UI_Status>::iterator it = statusMap.begin();
-
-    while ( it != statusMap.end() )
+    // convert NCPkgStatus to string
+    switch ( stat )
     {
-	if ( (*it).second == stat )
-	{
-	    pkgStat = (*it).first;
-	}
-	++it;
+	case PMSelectable::S_NoInst:
+	    return PkgNoInstall;
+	case PMSelectable:: S_KeepInstalled: 	
+	    return PkgInstalled;
+	case PMSelectable::S_Install:
+	    return PkgToInstall;		// includes PkgToReplace 
+	case PMSelectable:: S_Del:	
+	    return PkgToDelete;
+	case PMSelectable::S_Update:
+	    return PkgToUpdate;
+	case PMSelectable::S_Auto:
+	    return PkgAutoInstall;
+	case PMSelectable::S_Taboo:
+	    return  PkgTaboo;
     }
 
-    return pkgStat;
+    return PkgNoInstall;
+}
+
+// convert NCPkgStatus to UI_Status
+PMSelectable::UI_Status NCPkgTable::statusToUIStat( NCPkgStatus stat )
+{
+    // convert NCPkgStatus to string
+    switch ( stat )
+    {
+	case PkgNoInstall:	// Is not installed and will not be installed
+	    return PMSelectable::S_NoInst;
+	case PkgInstalled: 	// Is installed - keep this version
+	    return PMSelectable:: S_KeepInstalled;
+	case PkgToInstall:	// ??Is?? or will be installed
+	    return PMSelectable::S_Install;
+	case PkgToDelete:	// Will be deleted
+	    return PMSelectable:: S_Del;
+	case PkgToUpdate:	// Will be updated
+	    return PMSelectable::S_Update;
+	case PkgToReplace:	// Replace
+	    return PMSelectable::S_Install;
+	case PkgAutoInstall:	// Will be automatically installed
+	    return PMSelectable::S_Auto;
+	case PkgTaboo:		// Never install this 
+	    return PMSelectable::S_Taboo;
+    }
+
+    return PMSelectable::S_NoInst;
 }
 
 
@@ -132,14 +151,6 @@ NCPkgTable::NCPkgTable( NCWidget * parent, YWidgetOpt & opt )
     : NCTable( parent, opt, vector<string> () )
       , packager ( 0 )
 {
-    statusMap[PkgNoInstall] = PMSelectable::S_NoInst;
-    statusMap[PkgInstalled] = PMSelectable:: S_KeepInstalled;
-    statusMap[PkgToInstall] = PMSelectable::S_Install;
-    statusMap[PkgToDelete] = PMSelectable:: S_Del;
-    statusMap[PkgToUpdate] = PMSelectable::S_Update;
-    statusMap[PkgToReplace] = PMSelectable::S_Install;
-    statusMap[PkgTaboo] = PMSelectable::F_Taboo;
-    
     WIDDBG << endl;
 }
 
@@ -483,6 +494,8 @@ NCPkgStatus NCPkgTable::keyToStatus( const int & key )
 	    return PkgToReplace;
 	case 'l':
 	    return PkgNoInstall;
+	case 't':
+	    return PkgTaboo;
 	default:
 	    y2warning( "Key not valid - returning current status" );
 	    return getStatus( getCurrentItem() );
@@ -561,7 +574,7 @@ bool NCPkgTable::setNewStatus( const NCPkgStatus & newStatus  )
 	    }
 	    break;
 	case PkgTaboo:
-	    if ( newStatus == PkgTaboo )
+	    if ( newStatus == PkgNoInstall )
 	    {
 		valid = true;
 	    }

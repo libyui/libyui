@@ -24,7 +24,8 @@
 					      `item( `id(`delete), 	"&Delete    [d]"),
 					      `item( `id(`replace), 	"&Replace   [r]"),
 					      `item( `id(`update), 	"&Update    [u]"),
-					      `item( `id(`installed), 	"&Installed [i]") ]
+					      `item( `id(`installed), 	"&Installed [i]"),
+					      `item( `id(`taboo), 	"&Taboo     [t]") ]
 				 )),
 	      `Left(`MenuButton( "&Information", [`item( `id(`pkginfo), "Package info" ),
 						  `item( `id(`longdescr), "&Long description" ),

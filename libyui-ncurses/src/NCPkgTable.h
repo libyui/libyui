@@ -46,7 +46,7 @@ enum NCPkgStatus
     PkgInstalled,	// S_KeepInstalled: keep this version - no modification ( have installedObj )
     PkgAutoInstall,	// S_Auto: automatically installed - like S_Install, but not requested by user
     PkgTaboo,		// F_Taboo: Never install this
-    PkgToReplace	// 
+    PkgToReplace	// Replace
 };
 
 /**
@@ -103,8 +103,6 @@ private:
     // returns the first column of line with 'index' (the tag)
     NCPkgTableTag * getTag ( const int & index );
 
-    std::map<NCPkgStatus, PMSelectable::UI_Status> statusMap;
-    
 protected:
 
     /**

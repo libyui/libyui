@@ -93,7 +93,9 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui )
     eventHandlerMap[ PkgNames::Delete()->toString() ] 	= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::Replace()->toString() ] 	= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::Update()->toString() ] 	= &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::Installed()->toString() ]= &PackageSelector::StatusHandler; 
+    eventHandlerMap[ PkgNames::Installed()->toString() ]= &PackageSelector::StatusHandler;
+    eventHandlerMap[ PkgNames::Taboo()->toString() ]	= &PackageSelector::StatusHandler;
+
     // help menu
     eventHandlerMap[ PkgNames::GeneralHelp()->toString() ] = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::StatusHelp()->toString() ]  = &PackageSelector::HelpHandler;
@@ -625,6 +627,10 @@ bool PackageSelector::StatusHandler( const NCursesEvent&  event )
     else if ( event.selection->compare( PkgNames::Installed() ) == YO_EQUAL )
     {
 	packageList->setNewStatus( PkgInstalled );	
+    }
+    else if ( event.selection->compare( PkgNames::Taboo() ) == YO_EQUAL )
+    {
+	packageList->setNewStatus( PkgTaboo );	
     }
     packageList->setKeyboardFocus();
     

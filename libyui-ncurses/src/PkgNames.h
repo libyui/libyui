@@ -80,6 +80,11 @@ public:
     static const YCPValue& Delete ();
 
     /**
+     * Widget id of the menu selection Action/Taboo
+     */
+    static const YCPValue& Taboo ();
+
+    /**
      * Widget id of the menu selection Action/Replace
      */
     static const YCPValue& Replace ();
