@@ -42,7 +42,8 @@ YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
 
 
     int numCol = 0;
-    addColumn( _( "Version") );			_versionCol	= numCol++;
+    addColumn( _( "Version" ) );		_versionCol	= numCol++;
+    addColumn( _( "Arch."   ) );		_archCol	= numCol++;
     addColumn( _( "Installation Source" ) );	_instSrcCol	= numCol++;
     _statusCol	= _instSrcCol;
 
@@ -206,7 +207,10 @@ YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
     , _pkgVersionList( pkgVersionList )
     , _pmObj( pmObj )
 {
+    std::string arch = pmObj->arch();
+    
     setText( versionCol(), PkgEdition::toString( pmObj->edition() ).c_str() );
+    setText( archCol(),    arch.c_str() );
     setText( instSrcCol(), pmObj->instSrcLabel().c_str() );
     setOn( pmObj->isCandidateObj() );
 

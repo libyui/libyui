@@ -67,6 +67,7 @@ public:
     int nameCol()	const 	{ return _nameCol; 	}
     int summaryCol()	const 	{ return _summaryCol; 	}
     int statusCol()	const 	{ return _statusCol; 	}
+    int archCol()	const 	{ return _archCol; 	}
 
 
 public slots:
@@ -122,6 +123,7 @@ protected:
     int			_nameCol;
     int			_summaryCol;
     int			_statusCol;
+    int			_archCol;
 };
 
 
@@ -171,6 +173,7 @@ public:
     int versionCol()		const	{ return _pkgVersionList->versionCol();	}
     int instSrcCol()		const	{ return _pkgVersionList->instSrcCol();	}
     int statusCol()		const	{ return _pkgVersionList->statusCol();	}
+    int archCol()		const	{ return _pkgVersionList->archCol();	}
 
 
 protected:
