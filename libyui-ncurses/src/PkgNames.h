@@ -128,11 +128,26 @@ public:
      */
     static const YCPValue& Files ();
 
+       
     /**
-     *  Widget id of the menu selection Information/Requires
+     *  Widget id of the menu selection Information/Relaione
+     */
+    static const YCPValue& PkgNames::Relations ();
+    
+    /**
+     *  Widget id of the menu selection /Requires
      */
     static const YCPValue& PkgNames::RequRel ();
-    
+
+    /**
+     *  Widget id of the menu selection Conflicts
+     */
+    static const YCPValue& PkgNames::ConflRel ();
+
+   /**
+     *  Widget id of the menu selection Alternative
+     */
+    static const YCPValue& PkgNames::AlterRel ();
     /**
      *  Widget id of the menu selection RPM groups
      */
@@ -152,7 +167,7 @@ public:
      *  Widget id of the label for disk space information
      */
     static const YCPValue& Diskspace ();
-
+    static const YCPValue& ShowDeps ();
     /**
      *  Widget id of the button disk space
      */
@@ -168,6 +183,11 @@ public:
      */
     static const YCPValue& OkButton ();
 
+   /**
+     *  Widget id of the solve button
+     */
+    static const YCPValue& Solve ();
+    
     /**
      *  Widget id of general help menu item
      */
@@ -217,8 +237,9 @@ public:
      * The headline of the dependency popup
      */
     static const YCPString PackageDeps();
-    
-    /**
+
+
+   /**
      * text used in search popup
      */
     static const YCPString SearchPhrase();
@@ -227,10 +248,25 @@ public:
      * text used in search popup
      */
     static const YCPString CheckDescr();
-      /**
+    
+   /**
      * text used in search popup
      */
     static const YCPString IgnoreCase();
+
+    /**
+     * menu entry dependency popup
+     */
+    static const YCPString RequiredBy();
+    
+    /**
+     * menu entry dependency popup
+     */
+    static const YCPString Alternatives();
+        /**
+     * menu entry dependency popup
+     */
+    static const YCPString ConflictDeps();
     
     /**
      * The headline of the help popup
@@ -246,6 +282,11 @@ public:
      *  The label of the Cancel button
      */
     static const YCPString CancelLabel();
+
+    /**
+     *  The label of the Solve button
+     */
+    static const YCPString SolveLabel();
     
     /**
      * The label of the file list frame

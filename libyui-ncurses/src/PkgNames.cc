@@ -152,6 +152,13 @@ const YCPValue& PkgNames::ToggleSource ()
     return value;
 }
 
+// the menu entry Action/SPM yes/no
+const YCPValue& PkgNames::ShowDeps ()
+{
+    static const YCPValue value = createIdValue ( "showdeps" );
+    return value;
+}
+
 // the search button
 const YCPValue& PkgNames::Search ()
 {
@@ -194,12 +201,32 @@ const YCPValue& PkgNames::Files ()
     return value;
 }
 
-// menu selection requires 
+// menu selection relations 
+const YCPValue& PkgNames::Relations ()
+{
+    static const YCPValue value = createIdValue ( "relations" );
+    return value;
+}
+
+// dependency menu selection requires 
 const YCPValue& PkgNames::RequRel ()
 {
     static const YCPValue value = createIdValue ( "requires" );
     return value;
 }
+// dependency menu selection conflicts 
+const YCPValue& PkgNames::ConflRel ()
+{
+    static const YCPValue value = createIdValue ( "conflicts" );
+    return value;
+}
+// dependency menu selection alternatves 
+const YCPValue& PkgNames::AlterRel ()
+{
+    static const YCPValue value = createIdValue ( "alternatives" );
+    return value;
+}
+
 
 // menu selection package info
 const YCPValue& PkgNames::PkgInfo ()
@@ -233,6 +260,13 @@ const YCPValue& PkgNames::Diskinfo ()
 const YCPValue& PkgNames::Cancel ()
 {
     static const YCPValue value = createIdValue ( "cancel" );
+    return value;
+}
+
+// solve button id
+const YCPValue& PkgNames::Solve ()
+{
+    static const YCPValue value = createIdValue ( "solve" );
     return value;
 }
 
@@ -314,6 +348,13 @@ const YCPString PkgNames::CancelLabel()
     return value;
 }
 
+const YCPString PkgNames::SolveLabel()
+{
+    // the label of a Cancel button
+    static const YCPString value = toYCPString ( _("&Solve") );
+    return value;
+}
+
 const YCPString PkgNames::SearchResults()
 {
     // the label for Filter: Search results 
@@ -353,6 +394,27 @@ const YCPString PkgNames::IgnoreCase()
 {
     // text for search popup 
     static const YCPString value = toYCPString ( _("&Ignore case") );
+    return value;
+}
+
+const YCPString PkgNames::RequiredBy()
+{
+    // text for menu selection (package dependencies)
+    static const YCPString value = toYCPString ( _("&Required by") );
+    return value;
+}
+
+const YCPString PkgNames::ConflictDeps()
+{
+    // text for  menu selection (package dependencies)
+    static const YCPString value = toYCPString ( _("&Conflicts") );
+    return value;
+}
+
+const YCPString PkgNames::Alternatives()
+{
+    // text for menu selection (package dependencies)
+    static const YCPString value = toYCPString ( _("&Alternatives") );
     return value;
 }
 
