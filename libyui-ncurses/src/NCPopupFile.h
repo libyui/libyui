@@ -86,6 +86,7 @@ public:
     NCursesEvent & showFilePopup( );
 
     bool mountDevice( string device, string errText );
+    void unmount();
 
     void saveToFile();
     void loadFromFile();

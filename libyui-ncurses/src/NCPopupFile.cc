@@ -236,6 +236,25 @@ bool NCPopupFile::mountDevice( string device, string errText )
     return mounted;
 }
 
+void NCPopupFile::unmount()
+{
+    int result = system( string( "/bin/umount /media/floppy >/dev/null 2>&1" ).c_str() );
+
+    if ( result != 0 )
+    {
+	NCPopupInfo info2( wpos(2, 2),
+			   YCPString( PkgNames::ErrorLabel().str() ),
+			   YCPString( "\"/bin/umount /media/floppy\" failed !" ) );
+	info2.setNiceSize( 35, 10 );
+	info2.showInfoPopup();
+	NCERR << "Umount /media/floppy failed !" << endl;
+    }
+    else
+    {
+	NCMIL << "/media/floppy unmounted succesfully" << endl;
+    }
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 //	METHOD NAME : NCPopupFile::saveSelection
@@ -263,10 +282,11 @@ void NCPopupFile::saveToFile()
 			      YCPString(PkgNames::Saving().str()) );
 	saveInfo.setNiceSize( 18, 4 );
 	saveInfo.popup();
-	    
+	bool mounted = false;
+	
 	// if the medium is a floppy mount the device
 	if ( !mountFloppy
-	     || mountDevice( floppyDevice, PkgNames::SaveErr1Text().str()) )
+	     || (mounted = mountDevice( floppyDevice, PkgNames::SaveErr1Text().str()) ) )
 	{
 	    // remember the current Package/SelectionManagers state.
 	    pkgExport.getPMState();
@@ -286,14 +306,16 @@ void NCPopupFile::saveToFile()
 		NCMIL << "Writing selection to: " << pathName << endl;	
 	    }
 	}
-	if ( mountFloppy )
+	if ( mounted )
 	{
-	    system( string( "/bin/umount /media/floppy >/dev/null 2>&1" ).c_str() );    
+	    unmount();
 	}
 
 	saveInfo.popdown();
     }
 }
+
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -333,9 +355,10 @@ void NCPopupFile::loadFromFile()
 				  YCPString(PkgNames::Loading().str()) );
 	    loadInfo.setNiceSize( 18, 4 );
 	    loadInfo.popup();
-	
+	    bool mounted = false;
+	    
 	    if ( !mountFloppy
-		 || mountDevice( floppyDevice, PkgNames::LoadErr1Text().str()) )
+		 || (mounted = mountDevice( floppyDevice, PkgNames::LoadErr1Text().str())) )
 	    {
 		// read selection from file
 		if ( ! pkgImport.doImport( pathName) )
@@ -358,9 +381,9 @@ void NCPopupFile::loadFromFile()
 		    packager->showSelectionDependencies();
 		}
 	    }
-	    if ( mountFloppy )
+	    if ( mounted )
 	    {
-		system( string( "/bin/umount /media/floppy >/dev/null 2>&1" ).c_str() );    
+		unmount();
 	    }
 
     	    loadInfo.popdown();
