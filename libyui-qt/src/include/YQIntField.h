@@ -87,6 +87,8 @@ public:
      */
     void setValue( int newValue );
 
+    virtual int value();
+
 public slots:
     /**
      * Slot for setting the value.

@@ -93,6 +93,12 @@ void YQIntField::setValue( int newValue )
     YIntField::setValue( newValue );
 }
 
+int YQIntField::value()
+{ 
+    YIntField::setValue( _qt_spinbox->value() );
+    return YIntField::value(); 
+}
+
 
 void YQIntField::setValueSlot( int newValue )
 {

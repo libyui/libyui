@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Fri Sep 19 17:19:13 CEST 2003 - sh@suse.de
+
+- V 2.4.15
+
+- Applied visnov's patch to fix bug #5547: IntField value
+
+- Fixed bug #31015 thanks to llunak: "Solving dependencies" 
+  popup without WM decoreations 
+
+-------------------------------------------------------------------
 Wed Sep 17 17:59:15 CEST 2003 - sh@suse.de
 
 - V 2.4.14

@@ -60,7 +60,6 @@
 #define SUPPRESS_BUSY_DIALOG_SECONDS	1.5
 
 
-
 YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
 					  QWidget * 	parent 		)
     : QDialog( parent )
@@ -166,7 +165,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
     // Busy popup
 
     _busyPopup = new QLabel( "   " + _( "Checking Dependencies..." ) + "   ", parent, 0,
-			     WStyle_Customize | WStyle_Dialog | WType_Dialog );
+			     WType_Dialog );
     CHECK_PTR( _busyPopup );
     _busyPopup->setCaption( "" );
     _busyPopup->resize( _busyPopup->sizeHint() );
