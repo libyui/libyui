@@ -102,15 +102,18 @@ Y2NCursesUI::Y2NCursesUI( bool with_threads,
     if ( getenv( "LANG" ) != NULL )
     {
 	string language = getenv( "LANG" );
-	setLanguage( language );
-
-	// Explicitly set LC_CTYPE so that it won't be changed if setenv(LANG) is called elsewwhere.
-	NCMIL << "setlocale( LC_CTYPE, " << nl_langinfo( CODESET ) << " )" << " LANG: " << language.c_str() << endl;
+	string encoding =  nl_langinfo( CODESET );
+	
+        // setlocale ( LC_ALL, "" ) is called in WMFInterpreter::WFMInterpreter;
+	// explicitly set LC_CTYPE so that it won't be changed if setenv(LANG) is called elsewhere.
         setlocale( LC_CTYPE, "" );
+	NCMIL << "setlocale( LC_CTYPE, " << encoding << " )" << " LANG: " << language.c_str() << endl;
 
-	// setlocale( LC_ALL ) was called in WFMInterpreter::changeToModuleLanguage() which
-	// sets LC_CTYPE to the wrong encoding !!!!!
-	// -> this is removed in WFMInterpreter
+        // The encoding of a terminal (xterm, konsole usw. ) can never change; the encoding
+	// of "real" console is changed in setConsoleFont(). 
+	NCstring::setTerminalEncoding( encoding );
+  
+	setLanguage( language );
     }
     
     topmostConstructorHasFinished();
@@ -688,12 +691,14 @@ YCPValue Y2NCursesUI::setLanguage( const YCPTerm & term )
 //	METHOD NAME : Y2NCursesUI::setLanguage
 //	METHOD TYPE : bool
 //
-//	DESCRIPTION : expect lang to be 'language[_country][.encoding]'
+//	DESCRIPTION : Expect lang to be 'language[_country][.encoding]'
+//
+//		      From version 9.0 on (UTF-8 support) setLanguage()
+//		      don't have to look for the correct encoding.
 //
 bool Y2NCursesUI::setLanguage( string lang )
 {
   string encoding;
-  UIMIL << form( "Encoding for '%s' ", lang.c_str() );
   string language = lang;
 
   string::size_type pos = language.find( '.' );
@@ -703,10 +708,8 @@ bool Y2NCursesUI::setLanguage( string lang )
     language.erase( pos );
   }
 
-  string lang_LANG = language;
-
 #if 0
-  // "old" 8.2 code
+  // 8.2 code
   if ( encoding == ""
        || encoding == "UTF-8" )
   {
@@ -717,27 +720,9 @@ bool Y2NCursesUI::setLanguage( string lang )
     encoding = language2encoding( lang );
   }
 #endif
-
-  // FIXME - use language2encoding if encoding is NOT UTF-8 ??????
-  // or use nl_langinfo() ????
-  // Encoding is the terminal encoding (encoding internally used for
-  // gettext() is always UTF-8).
-
-  if ( encoding != "UTF-8" )
-  {
-      pos = language.find( '_' );
-      if ( pos != string::npos ) {
-	  language.erase( pos );
-      }
-      encoding = language2encoding( language );
-  }
   
-  UIMIL << form( "is '%s'\n", encoding.c_str() );
-
-  // set terminal Encoding
-  if ( NCstring::setTerminalEncoding( encoding ) )
-    Redraw();
-
+  NCDBG << "Language: " << language << " Encoding: " << ((encoding!="")?encoding:"NOT SET") << endl;
+  
   return true;
 }
 
@@ -747,7 +732,8 @@ bool Y2NCursesUI::setLanguage( string lang )
 //	METHOD NAME : Y2NCursesUI::setConsoleFont
 //	METHOD TYPE : YCPValue
 //
-//	DESCRIPTION :
+//	DESCRIPTION : UI::setConsoleFont() is called in Console.ycp.
+//		      The terminal encoding must be set correctly.
 //
 YCPValue Y2NCursesUI::setConsoleFont( const YCPString & console_magic,
 				      const YCPString & font,
@@ -765,12 +751,13 @@ YCPValue Y2NCursesUI::setConsoleFont( const YCPString & console_magic,
 
   UIMIL << cmd << endl;
   int ret = system( (cmd + " >/dev/null 2>&1").c_str() );
+
+  // setfont returns error if called e.g. on a xterm -> return YCPVoid()
   if ( ret ) {
     UIERR << cmd.c_str() << " returned " << ret << endl;
     Refresh();
     return YCPVoid();
   }
-
   cmd = "(echo -en \"\\033";
   if ( console_magic->value().length() )
     cmd += console_magic->value();
@@ -783,12 +770,15 @@ YCPValue Y2NCursesUI::setConsoleFont( const YCPString & console_magic,
     UIERR << cmd.c_str() << " returned " << ret << endl;
   }
 
-  // FIXME: Refresh() or Redraw() ? condition ???
-  //if ( NCstring::setDefaultEncoding( encoding->value() ) )
+  // set terminal encoding for console
+  // FIXME: setConsoleFont() which is called in Console.ycp gets the encoding
+  //        from WFM::GetEncoding() which returns the currentEncoding which is
+  //	    always UTF-8 (for gettext()) and which is definitfly WRONG here !!!!!
+  if ( NCstring::setTerminalEncoding( encoding->value() ) )
     Redraw();
-    //else
-    //Refresh();
-
+  else
+    Refresh();
+  
   return YCPVoid();
 }
 
