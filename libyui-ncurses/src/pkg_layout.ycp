@@ -42,7 +42,7 @@
 					     // reset the status 'Taboo' 
 					     `item( `id(`tabooOff), 	_( "Taboo &No    [-]" ) ),
 					     // toggle installation of sources (SPM)
-					     `item( `id(`toggleSrc), 	_( "&Install source Yes/No" ) ),
+					     `item( `id(`toggleSrc), 	_( "&Install Sources Yes/No" ) ),
 					     // end: Actions menu, set status of all packages (title of a submenu)
 					     `menu( _( "All Listed &Packages" ),
 						    [
@@ -127,7 +127,7 @@
 						 // button label - keep it short
 						 `HWeight(1, `PushButton(`id(`search), `opt(`key_F2), _( "&Search" ) ) ),
 						 `HStretch(),
-						  // button label - keep it short
+						  // button label - keep it short! (max. 15 chars -- use abbreviation)
 						 `HWeight(1, `PushButton(`id(`diskinfo), `opt(`key_F3), _( "&Disk Usage" ) ) ),
 					 	 `HStretch()
 						 ),
