@@ -96,17 +96,27 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
 
     if ( _testMode )
     {
-	y2warning( "Enabling fake inst sources" );
-
-	InstSrcManager & MGR( Y2PM::instSrcManager() );
-
-	Url url( "dir:///8.1" );
-	InstSrcManager::ISrcIdList nids;
-	PMError err = MGR.scanMedia( nids, url );
-
-	if ( nids.size() )
+	if ( _youMode )
 	{
-	    err = MGR.enableSource( *nids.begin() );
+	    Url url( "dir:///8.1-patches" );
+	    Y2PM::youPatchManager().instYou().retrievePatchInfo( url, false );
+	    Y2PM::youPatchManager().instYou().selectPatches( PMYouPatch::kind_recommended |
+							     PMYouPatch::kind_security     );
+	}
+	else
+	{
+	    y2warning( "Enabling fake inst sources" );
+
+	    InstSrcManager & MGR( Y2PM::instSrcManager() );
+
+	    Url url( "dir:///8.1" );
+	    InstSrcManager::ISrcIdList nids;
+	    PMError err = MGR.scanMedia( nids, url );
+
+	    if ( nids.size() )
+	    {
+		err = MGR.enableSource( *nids.begin() );
+	    }
 	}
     }
 
@@ -127,10 +137,21 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     emit loadData();
 #endif
 
-    if ( _filters && _selList )
+    if ( _youMode )
     {
-	_filters->showPage( _selectionsFilterView );
-	_selList->filter();
+	if ( _filters && _youPatchFilterView && _youPatchList )
+	{
+	    _filters->showPage( _youPatchFilterView );
+	    _youPatchList->filter();
+	}
+    }
+    else
+    {
+	if ( _filters && _selectionsFilterView && _selList )
+	{
+	    _filters->showPage( _selectionsFilterView );
+	    _selList->filter();
+	}
     }
     
     y2milestone( "PackageSelector init done" );
@@ -213,7 +234,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     // RPM group tags view
     //
 
-    if ( ! _youMode )
+    // if ( ! _youMode )
     {
 	_rpmGroupTagsFilterView = new YQPkgRpmGroupTagsFilterView( parent );
 	CHECK_PTR( _rpmGroupTagsFilterView );
@@ -231,7 +252,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     // Package search view
     //
 
-    if ( ! _youMode )
+    // if ( ! _youMode )
     {
 	_filters->addPage( _("Search"     ), new QLabel( "Search\nfilter\n\nmissing", 0 ) );
     }
@@ -292,6 +313,11 @@ YQPackageSelector::layoutPkgList( QWidget * parent )
 {
     _pkgList= new YQPkgList( parent );
     CHECK_PTR( _pkgList );
+
+    if ( _youMode )
+    {
+	_pkgList->setEditable( false );
+    }
 }
 
 

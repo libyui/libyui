@@ -44,6 +44,7 @@ YQPkgYouPatchList::YQPkgYouPatchList( QWidget *parent )
 	     this, 	SLOT  ( filter()                                    ) );
 
     fillList();
+    setSorting( statusCol() );
     selectSomething();
 
     y2debug( "Creating YOU patch list done" );
@@ -70,7 +71,7 @@ YQPkgYouPatchList::fillList()
 
 	if ( patch )
 	{
-#if 0
+#if 1
 		// DEBUG
 	    {
 		std::string name = patch->name();
