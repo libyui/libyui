@@ -83,6 +83,7 @@ liby2ncurses_la_SOURCES =				\
 	NCPopupSelection.cc NCPopupSelection.h		\
 	NCPopupDeps.cc NCPopupDeps.h			\
 	PkgNames.cc PkgNames.h				\
+	ObjectStatStrategy.cc ObjectStatStrategy.h	\
 	NCstyle.mono.h NCstyle.linux.h NCstyle.xterm.h
 
 

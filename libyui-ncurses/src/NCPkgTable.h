@@ -35,6 +35,9 @@
 #include <y2pm/PMManager.h>
 #include <y2pm/PMSelectable.h>
 
+#include "ObjectStatStrategy.h"
+
+
 class PackageSelector;
 
 enum NCPkgStatus
@@ -95,8 +98,9 @@ class NCPkgTable : public NCTable {
 private:
 
     PackageSelector * packager;		// connection to the PackageSelector,
-                                        // i.e. to the package manager
 
+    ObjectStatStrategy * statusStrategy; 	// particular methods to get the status
+    
     // returns the corresponding package status to the given key
     NCPkgStatus keyToStatus( const int & key );
 
@@ -189,13 +193,6 @@ public:
      */ 
     bool setNewStatus( const NCPkgStatus & pkgStat );
 
-   /**
-     * Informs the package manager.
-     * @param pkgPtr  The package pointer
-     * @param newStatus The new package status
-     * @return bool
-     */ 
-    bool setPackageStatus( PMObjectPtr pkgPtr, PMSelectable::UI_Status newstatus );
 
    /**
      * Set the status information if status has changed 
@@ -224,6 +221,15 @@ public:
      */ 
     NCPkgStatus getStatus( int index );
 
+    /**
+     * Sets the status strategy. which means call particular methods to set/get the
+     * status for different PMObject s (PNYouPatch, PMPackage or available PMPackage s)
+     */
+    void setStatusStrategy( ObjectStatStrategy * strategy ) {
+	delete statusStrategy;
+	statusStrategy = strategy;
+    }
+	
    /**
      * Gets the data pointer of a certain package.
      * @param index The index in package table (the line)

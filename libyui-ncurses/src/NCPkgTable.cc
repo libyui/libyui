@@ -150,6 +150,7 @@ PMSelectable::UI_Status NCPkgTable::statusToUIStat( NCPkgStatus stat )
 NCPkgTable::NCPkgTable( NCWidget * parent, YWidgetOpt & opt )
     : NCTable( parent, opt, vector<string> () )
       , packager ( 0 )
+      , statusStrategy( new PackageStatStrategy )	// default strategy
 {
     WIDDBG << endl;
 }
@@ -165,7 +166,8 @@ NCPkgTable::NCPkgTable( NCWidget * parent, YWidgetOpt & opt )
 //
 NCPkgTable::~NCPkgTable()
 {
-  WIDDBG << endl;
+    delete statusStrategy;
+    WIDDBG << endl;
 }
 
 
@@ -238,7 +240,7 @@ bool NCPkgTable::changeStatus( int index, NCPkgStatus newstatus )
     bool ok = false;
 
     // inform the package manager
-    ok = setPackageStatus( getDataPointer(index), statusToUIStat( newstatus ) );
+    ok = statusStrategy->setPackageStatus( getDataPointer(index), statusToUIStat( newstatus ) );
 
     if ( ok )
     {
@@ -283,8 +285,8 @@ bool NCPkgTable::updateTable()
 	    break;
 	}
 
-	// set the new status (if status has changed)
-	NCPkgStatus newstatus = statusToPkgStat( objPtr->getSelectable()->status() );
+	// set the new status (if status has changed) - use particular strategy
+	NCPkgStatus newstatus = statusToPkgStat( statusStrategy->getStatus( objPtr) );
 	if ( getStatus(index) != newstatus )
 	{
 	    cc->setStatus( newstatus );
@@ -297,28 +299,7 @@ bool NCPkgTable::updateTable()
     return ret;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPkgTable::setPackageStatus
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION : informs the package manager
-//
-bool NCPkgTable::setPackageStatus( PMObjectPtr objPtr, PMSelectable::UI_Status newstatus )
-{
-    bool ok = false;
 
-    if ( !objPtr || !objPtr->hasSelectable() )
-    {
-	return false;
-    }
-
-    ok = objPtr->getSelectable()->set_status( newstatus );
-    NCMIL << "Set status to: " << newstatus << " returns: " << (ok?"true":"false") << endl;
-    
-    return ok;
-}
 
 ///////////////////////////////////////////////////////////////////
 //

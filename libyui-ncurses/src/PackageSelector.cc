@@ -708,6 +708,9 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	    // fillHeader( pkgAvail );  
 	    // set the connection to the PackageSelector !!!!
 	    pkgAvail->setPackager( this );
+	    // set status strategy
+	    ObjectStatStrategy * strategy = new AvailableStatStrategy();
+	    pkgAvail->setStatusStrategy( strategy );
 	    fillAvailableList( pkgAvail, packageList->getDataPointer( packageList->getCurrentItem() ) );
 	}
     }

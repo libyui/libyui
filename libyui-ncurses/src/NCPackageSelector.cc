@@ -72,6 +72,9 @@ NCPackageSelector::NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
 	    packager.fillHeader( pkgList );
 	    // set the pointer to the packager object
 	    pkgList->setPackager( &packager );
+	    // set the status strategy
+	    ObjectStatStrategy * strategy = new PackageStatStrategy();
+	    pkgList->setStatusStrategy( strategy );
 	}
     }
     else
