@@ -90,7 +90,10 @@ YCPValue Y2QtComponent::evaluate(const YCPValue &command)
     YCPValue val = interpreter->evaluate(command);
 
     if ( interpreter->fatalError() )
+    {
+	y2error( "Fatal UI error" );
 	return YCPNull();
+    }
     
     return val;
 }

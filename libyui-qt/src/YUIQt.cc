@@ -115,14 +115,14 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
 	    if ( opt.startsWith( "--" ) )
 		opt.remove(0, 1);
 
-	    if      ( argv[i] == QString( "-no-wm"	 ) )	_have_wm 			= false;
-	    else if ( argv[i] == QString( "-fullscreen"  ) )	_fullscreen 			= true;
-	    else if ( argv[i] == QString( "-noborder" 	 ) )	_decorate_toplevel_window	= false;
-	    else if ( argv[i] == QString( "-kcontrol_id" ) )
+	    if      ( opt == QString( "-no-wm"	 	) )	_have_wm 			= false;
+	    else if ( opt == QString( "-fullscreen"	) )	_fullscreen 			= true;
+	    else if ( opt == QString( "-noborder" 	) )	_decorate_toplevel_window	= false;
+	    else if ( opt == QString( "-kcontrol_id"	) )
 	    {
 		if ( i >= argc )
 		{
-		    y2error( "Missing arg for '-kcontrol_id'" );
+		    y2error( "Missing arg for '--kcontrol_id'" );
 		}
 		else
 		{
@@ -131,8 +131,7 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
 				 (const char *) kcontrol_id );
 		}
 	    }
-	    else if ( argv[i] == QString( "-help"  ) ||
-		      argv[i] == QString( "--help" )   )
+	    else if ( opt == QString( "-help"  ) )
 	    {
 		fprintf( stderr,
 			 "Command line options for the YaST2 Qt UI:\n"
@@ -146,7 +145,7 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
 			 "--kcontrol_id <ID-String>   set KDE control center identification\n"
 			 "\n"
 			 "-no-wm, -noborder etc. are accepted as well as --no-wm, --noborder\n"
-			 "to maintain backward compatibility.\n"
+			 "to maintain backwards compatibility.\n"
 			 "\n"
 			 );
 		
@@ -281,15 +280,17 @@ void YUIQt::internalError( const char *msg )
 {
     normalCursor();
     int button = QMessageBox::critical( 0, "YaST2 Internal Error", msg,
-					QMessageBox::Retry | QMessageBox::Default,
-					QMessageBox::Abort );
+					QMessageBox::Abort | QMessageBox::Default,
+					0 ); // button1
     busyCursor();
 
     if ( button == QMessageBox::Abort )
     {
 	raiseFatalError();
-	// abort();
-	// exit(1);	// exit() leaves a process running (WFM?).
+	abort();
+
+	// exit() leaves a process running (WFM?), so this really seems to be
+	// the only way to make sure we are really going down.
     }
 }
 
