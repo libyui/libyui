@@ -91,7 +91,7 @@ YQPkgYouPatchList::fillList()
 
 	if ( patch )
 	{
-	    if ( _showInstalledPatches && status != PMSelectable::S_KeepInstalled )
+	    if ( _showInstalledPatches || status != PMSelectable::S_KeepInstalled )
 		addYouPatchItem( patch );
 	}
 
