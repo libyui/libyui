@@ -57,7 +57,7 @@ YQPkgList::YQPkgList( QWidget *parent )
     }
     else
     {
-	addColumn( _( "Version"	) );	_versionCol	= numCol++;
+	addColumn( _( "Version" ) );	_versionCol	= numCol++;
 	_instVersionCol = -1;
     }
 
@@ -96,10 +96,10 @@ YQPkgList::addPkgItem( PMPackagePtr pmPkg )
 
 
 void
-YQPkgList::pkgObjClicked( int 			button,
+YQPkgList::pkgObjClicked( int			button,
 			  QListViewItem *	listViewItem,
-			  int 			col,
-			  const QPoint & 	pos )
+			  int			col,
+			  const QPoint &	pos )
 {
     if ( col == srpmStatusCol() )
     {
@@ -143,21 +143,44 @@ YQPkgList::sizeHint() const
 void
 YQPkgList::createSourceRpmContextMenu()
 {
-    actionInstallSourceRpm	= createAction( _( "&Install Source" ),
-						statusIcon( PMSelectable::S_Install, true ),
-						statusIcon( PMSelectable::S_Install, false ) );
+    actionInstallSourceRpm		= createAction( _( "&Install Source" ),
+							statusIcon( PMSelectable::S_Install, true ),
+							statusIcon( PMSelectable::S_Install, false ) );
 
-    actionDontInstallSourceRpm	= createAction( _( "Do&n't Install Source" ),
-						statusIcon( PMSelectable::S_NoInst, true ),
-						statusIcon( PMSelectable::S_NoInst, false ) );
+    actionDontInstallSourceRpm		= createAction( _( "Do&n't Install Source" ),
+							statusIcon( PMSelectable::S_NoInst, true ),
+							statusIcon( PMSelectable::S_NoInst, false ) );
 
-    connect( actionInstallSourceRpm,	 SIGNAL( activated() ), this, SLOT( setInstallCurrentSourceRpm()     ) );
-    connect( actionDontInstallSourceRpm, SIGNAL( activated() ), this, SLOT( setDontInstallCurrentSourceRpm() ) );
+    actionInstallListSourceRpms		= createAction( _( "&Install All Available Sources" ),
+							statusIcon( PMSelectable::S_Install, true ),
+							statusIcon( PMSelectable::S_Install, false ),
+							QString::null,		// key
+							true );			// enabled
+
+    actionDontInstallListSourceRpms	= createAction( _( "Do&n't Install Any Sources" ),
+							statusIcon( PMSelectable::S_NoInst, true ),
+							statusIcon( PMSelectable::S_NoInst, false ),
+							QString::null,		// key
+							true );			// enabled
+
+    connect( actionInstallSourceRpm,		SIGNAL( activated() ), this, SLOT( setInstallCurrentSourceRpm()	    ) );
+    connect( actionDontInstallSourceRpm,	SIGNAL( activated() ), this, SLOT( setDontInstallCurrentSourceRpm() ) );
+
+    connect( actionInstallListSourceRpms,	SIGNAL( activated() ), this, SLOT( setInstallListSourceRpms()	    ) );
+    connect( actionDontInstallListSourceRpms,	SIGNAL( activated() ), this, SLOT( setDontInstallListSourceRpms()   ) );
+
 
     _sourceRpmContextMenu = new QPopupMenu( this );
 
     actionInstallSourceRpm->addTo( _sourceRpmContextMenu );
     actionDontInstallSourceRpm->addTo( _sourceRpmContextMenu );
+
+    QPopupMenu * submenu = new QPopupMenu( _sourceRpmContextMenu );
+    CHECK_PTR( submenu );
+    _sourceRpmContextMenu->insertItem( _( "&All in this list" ), submenu );
+
+    actionInstallListSourceRpms->addTo( submenu );
+    actionDontInstallListSourceRpms->addTo( submenu );
 }
 
 
@@ -184,6 +207,27 @@ YQPkgList::setInstallCurrentSourceRpm( bool installSourceRpm,
     }
 }
 
+
+void
+YQPkgList::setInstallListSourceRpms( bool installSourceRpm )
+{
+    if ( ! _editable )
+	return;
+
+    QListViewItem * listViewItem = firstChild();
+
+    while ( listViewItem )
+    {
+	YQPkgListItem * item = dynamic_cast<YQPkgListItem *> (listViewItem);
+
+	if ( item && item->editable() )
+	{
+	    item->setInstallSourceRpm( installSourceRpm );
+	}
+
+	listViewItem = listViewItem->nextSibling();
+    }
+}
 
 
 

@@ -560,8 +560,10 @@ YQPackageSelector::addMenus()
 	
 	_pkgMenu->insertSeparator();
         QPopupMenu * submenu = _pkgList->addAllInListSubMenu( _pkgMenu );
-
-#warning TODO: Install / dont install all source RPMs
+	CHECK_PTR( submenu );
+	
+	_pkgList->actionInstallListSourceRpms->addTo( submenu );
+	_pkgList->actionDontInstallListSourceRpms->addTo( submenu );
     }
 
 

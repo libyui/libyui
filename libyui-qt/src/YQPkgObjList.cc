@@ -381,6 +381,7 @@ QPopupMenu *
 YQPkgObjList::addAllInListSubMenu( QPopupMenu * menu )
 {
     QPopupMenu * submenu = new QPopupMenu( menu );
+    CHECK_PTR( submenu );
 
     actionSetListInstall->addTo( submenu );
     actionSetListDontInstall->addTo( submenu );
@@ -391,7 +392,7 @@ YQPkgObjList::addAllInListSubMenu( QPopupMenu * menu )
 
     menu->insertItem( _( "&All in this list" ), submenu );
 
-    return menu;
+    return submenu;
 }
 
 

@@ -86,6 +86,9 @@ public slots:
     void setInstallCurrentSourceRpm()	  { setInstallCurrentSourceRpm( true  ); }
     void setDontInstallCurrentSourceRpm() { setInstallCurrentSourceRpm( false ); }
 
+    void setInstallListSourceRpms()	  { setInstallListSourceRpms( true  ); }
+    void setDontInstallListSourceRpms()	  { setInstallListSourceRpms( false ); }
+
 
     // No separate selectionChanged( PMPackagePtr ) signal:
     // Use YQPkgObjList::selectionChanged( PMObjectPtr ) instead
@@ -106,6 +109,12 @@ protected:
      **/
     void setInstallCurrentSourceRpm( bool inst, bool selectNextItem = false );
 
+    /**
+     * Sets the source RPM status of all items in this list.
+     **/
+    void setInstallListSourceRpms( bool inst );
+
+    
     // Data members
 
     int			_srpmStatusCol;
@@ -116,6 +125,8 @@ public:
     
     QAction *		actionInstallSourceRpm;
     QAction *		actionDontInstallSourceRpm;
+    QAction *		actionInstallListSourceRpms;
+    QAction *		actionDontInstallListSourceRpms;
 };
 
 
