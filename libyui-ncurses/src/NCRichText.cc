@@ -57,7 +57,7 @@ const wstring NCRichText::entityLookup( const std::wstring & val_r )
     REP(L"amp",	L"&");
     REP(L"gt",	L">");
     REP(L"lt",	L"<");
-    REP(L"nbsp", L"   ");
+    REP(L"nbsp", L" ");
     REP(L"quot", L"\"");
     REP(L"product", product);
 #undef REP
