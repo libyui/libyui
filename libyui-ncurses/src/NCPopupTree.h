@@ -82,7 +82,7 @@ public:
 
     NCursesEvent showFilterPopup( );
 
-    YTreeItem * getDefaultGroup( );
+    YStringTreeItem * getDefaultGroup( );
     
 };
 

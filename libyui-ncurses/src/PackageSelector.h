@@ -75,8 +75,7 @@ class PackageSelector
     
     NCPopupSelection * selectionPopup; 	// the selections popup
 
-    bool packages;
-    bool online_update;
+    bool youMode;			// YOU
     
     // internal helper functions (format list of string) 
     string createRelLine( list<PkgRelation> info );

@@ -256,9 +256,7 @@ void NCPopupTree::cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClo
     }
 }
 
-YTreeItem *  NCPopupTree::getDefaultGroup( )
+YStringTreeItem *  NCPopupTree::getDefaultGroup( )
 {
-    YTree * tree = dynamic_cast<YTree *>(filterTree);
-
-    return 0;
+    return Y2PM::packageManager().rpmGroupsTree()->root()->firstChild();
 }

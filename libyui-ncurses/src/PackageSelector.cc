@@ -47,7 +47,6 @@
 using namespace std;
 
 #define FAKE_INST_SRC 0
-#define ONLINE_UPDATE 0	
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -71,6 +70,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui )
     : y2ui( ui )
       , visibleInfo( YCPNull() )
       , filterPopup( 0 )
+      , youMode( false )
 {
     // Fill the handler map
     eventHandlerMap[ PkgNames::Packages()->toString() ]	= &PackageSelector::PackageListHandler;
@@ -105,16 +105,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui )
     eventHandlerMap[ PkgNames::InstSourceHelp()->toString() ] = &PackageSelector::HelpHandler;
     // FIXME: add handler for all `id s
 
-    
-#if ONLINE_UPDATE
-    online_update = true;
-    packages = false;
-#else
-    online_update = false;
-    packages = true;
-#endif
-
-    if ( packages )
+    if ( !youMode )
     {
 	// create the filter popup
 	filterPopup = new NCPopupTree( wpos( 1, 1 ),	// position
@@ -148,8 +139,6 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui )
     info.setNiceSize( 50, 20 );
     info.showInfoPopup( );
 
-
-    
 }
 
 
@@ -354,6 +343,36 @@ bool PackageSelector::showSelPackages( const YCPString & label,  PMSelectionPtr 
     return true;
 
 }
+
+///////////////////////////////////////////////////////////////////
+//
+// fillDefaultList
+//
+// Fills the package table with the list of default rpm group
+//
+bool PackageSelector::fillDefaultList( NCPkgTable * pkgTable )
+{
+    if ( !packageList )
+    {    
+	// set the package list widget
+	packageList = pkgTable;
+    }
+
+    YStringTreeItem * defaultGroup =  filterPopup->getDefaultGroup();
+
+    if ( defaultGroup )
+    {
+	fillPackageList ( YCPString( defaultGroup->value().translation()),
+			  defaultGroup );
+    }
+    else
+    {
+	NCERR << "No default RPM group availbale" << endl;
+    }
+    
+    return true;
+}
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -620,6 +639,8 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 //
 bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 {
+    NCursesEvent retEvent;
+
     if ( !packageList || event.selection.isNull() )
     {
 	return false;
@@ -627,14 +648,20 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 
     if ( event.selection->compare( PkgNames::RpmGroups() ) == YO_EQUAL )
     {
-	// show the filter popup (fills the package list) 
-	NCursesEvent event = filterPopup->showFilterPopup( );
+	if ( filterPopup )
+	{
+	    // show the filter popup (fills the package list) 
+	    retEvent = filterPopup->showFilterPopup( );
+	}
 	
     }
     else if ( event.selection->compare( PkgNames::Selections() ) == YO_EQUAL )
     {
-	// show the selection popup
-	NCursesEvent event = selectionPopup->showSelectionPopup( );
+	if ( selectionPopup )
+	{
+	    // show the selection popup
+	    retEvent = selectionPopup->showSelectionPopup( );
+	}
     }
 
     showPackageInformation( packageList->getDataPointer( packageList->getCurrentItem() ) );

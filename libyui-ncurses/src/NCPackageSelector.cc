@@ -73,13 +73,6 @@ NCPackageSelector::NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
 	    // set the pointer to the packager object
 	    pkgList->setPackager( &packager );
 	}
-	
-        // set the label for the default filter
-	YWidget * label = ui->widgetWithId( widgetRoot, PkgNames::Filter(), true );
-	if ( label )
-	{
-	    static_cast<NCLabel *>(label)->setLabel( YCPString("default") );
-	}
     }
     else
     {
@@ -136,7 +129,7 @@ void NCPackageSelector::showDefaultList()
 	packager.setPackageList( pkgList );
 
 	// second, fill the list with packages 
-	packager.fillPackageList( YCPString("default"), 0 );
+	packager.fillDefaultList( pkgList );
 	
         // set the visible info to package description 
 	packager.setVisibleInfo ( PkgNames::PkgInfo() );
