@@ -47,7 +47,7 @@ class NCstring {
     mutable wstring::size_type hotp;	// position of hotkey
     mutable wstring   wstr;
 
-    static string       termEncoding;
+    static string       termEncoding;	// the encoding of the terminal
     
 public:
 
