@@ -163,7 +163,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
 	updateMode = true;
 
     // NCMIL << "Number of packages: " << Y2PM::packageManager().size() << endl;
-
+#if 0
     // read test source information
     if ( opt.testMode.value() )
     {
@@ -192,7 +192,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
 	    }
 	}
     }    
-
+#endif
     if ( !youMode )
     {
 	// create the selections popup
@@ -211,8 +211,12 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
 	// the disk space popup
 	diskspacePopup = new NCPopupDiskspace( wpos( 1, 1 ) );
 
+	// FIXME: get floppy device from opt
+	// string floppyDevcie = opt.floppy.value();
+	string floppyDevice = "/dev/fd0";
+
 	// the file popup
-	filePopup = new NCPopupFile( wpos( 1, 1) );
+	filePopup = new NCPopupFile( wpos( 1, 1), floppyDevice );
     }
 }
 
