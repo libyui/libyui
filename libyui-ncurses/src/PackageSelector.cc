@@ -1287,27 +1287,27 @@ bool PackageSelector::LinkHandler ( string link )
     // fill the package table
     PMPackagePtr pkgPtr;
     
-    if ( link.substr(0, 4) == "pkg:" )
+    // e.g. link is pkg://hp-officeJet
+    string pkgName = link.substr(6);
+
+    // search for the package
+    while ( listIt != Y2PM::packageManager().end() )
     {
-	// search for the package
-	while ( listIt != Y2PM::packageManager().end() )
+	pkgPtr = (*listIt)->theObject();
+	if ( pkgPtr->name().asString() == pkgName )
 	{
-	    pkgPtr = (*listIt)->theObject();
-	    if ( pkgPtr->name().asString() == link.substr(4) )
-	    {
-		NCMIL << "Package " << link.substr(4) << " found" << endl;
-		// open popup with package info
-		NCPopupPkgDescr popupDescr( wpos(1,1), this );
-		popupDescr.showInfoPopup( pkgPtr );
-		found = true;
-	    }
-	    ++listIt;
+	    NCMIL << "Package " << pkgName << " found" << endl;
+	    // open popup with package info
+	    NCPopupPkgDescr popupDescr( wpos(1,1), this );
+	    popupDescr.showInfoPopup( pkgPtr );
+	    found = true;
 	}
+	++listIt;
     }
 
     if ( !found )
     {
-	NCERR << "Package " << link.substr(4) << " NOT found" << endl;
+	NCERR << "Package " << pkgName << " NOT found" << endl;
 	// open error popup
     }
     
