@@ -34,7 +34,7 @@
 class NCPkgTable;
 class NCPushButton;
 class NCMenuButton;
-
+class PackageSelector;
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -49,9 +49,10 @@ class NCPopupDeps : public NCPopup {
 
 private:
 
-    list<PkgRelation> requires;		// additional required packages
-    list<PkgRelation> conflicts;	// package conflicts
-
+    map<PMObjectPtr, list<PMObjectPtr> > conflicts;
+    map<PMObjectPtr, list<PMObjectPtr> > alternatives;
+    map<PMObjectPtr, list<PMObjectPtr> > broken;
+    
     NCPushButton * cancelButton;
     NCPushButton * okButton;
     NCPushButton * solveButton;
@@ -60,6 +61,8 @@ private:
     NCPkgTable * deps;
 
     NCMenuButton * depsMenu;
+
+    PackageSelector * packager;
     
 protected:
 
@@ -69,15 +72,21 @@ protected:
     
 public:
     
-    NCPopupDeps( const wpos at );
+    NCPopupDeps( const wpos at, PackageSelector * pkger );
     virtual ~NCPopupDeps();
 
     virtual long nicesize(YUIDimension dim);
 
     void createLayout( const YCPString & headline );
 
-    NCursesEvent showDependencyPopup( );
+    NCursesEvent showDependencyPopup( bool solve );
+
+    void checkDependencies( );
     
+    bool fillDepsPackageList( NCPkgTable * table, list<PMObjectPtr> badPkgs );
+
+    void concretelyDependency( PMObjectPtr pkgPtr );
+
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -28,7 +28,7 @@
 #include "NCPkgTable.h"
 #include "NCMenuButton.h"
 #include "NCPushButton.h"
-
+#include "ObjectStatStrategy.h"
 
 using namespace std;
 
@@ -40,11 +40,15 @@ using namespace std;
 //
 //	DESCRIPTION :
 //
-NCPopupDeps::NCPopupDeps( const wpos at )
+NCPopupDeps::NCPopupDeps( const wpos at, PackageSelector * pkger )
     : NCPopup( at, false )
       , cancelButton( 0 )
       , okButton( 0 )
       , solveButton( 0 )
+      , pkgs( 0 )
+      , deps( 0 )
+      , depsMenu( 0 )
+      , packager( pkger )
 {
     createLayout( PkgNames::PackageDeps() );
 }
@@ -95,6 +99,11 @@ void NCPopupDeps::createLayout( const YCPString & headline )
 
   // add the list containing packages with unresolved depemdencies
   pkgs = new NCPkgTable( vSplit, opt );
+  pkgs->setPackager( packager );
+  // set status strategy
+  ObjectStatStrategy * strategy =
+      new DependencyStatStrategy();
+  pkgs->setStatusStrategy( strategy );
   vSplit->addChild( pkgs );
 
   depsMenu = new NCMenuButton( vSplit, opt, YCPString( "Dependencies" ) );
@@ -109,6 +118,10 @@ void NCPopupDeps::createLayout( const YCPString & headline )
 
   // add the package list containing the dependencies
   deps = new NCPkgTable( vSplit, opt );
+  deps->setPackager( packager );
+  // set status strategy
+  strategy = new AvailableStatStrategy();
+  deps->setStatusStrategy( strategy );
   vSplit->addChild( deps );
 
   NCSplit * hSplit = new NCSplit( vSplit, opt, YD_HORIZ );
@@ -132,19 +145,133 @@ void NCPopupDeps::createLayout( const YCPString & headline )
 
 ///////////////////////////////////////////////////////////////////
 //
+//  checkDependencies
+// 
+//  creates local list of package dependencies
 //
-//	METHOD NAME : NCPopupDeps::createDependenyLayout
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : create the dependeny layout for a single package
-//
-/*
-void NCPopupDeps::createDependenyLayout( NCWidget * parent, string pkgName )
+void NCPopupDeps::checkDependencies( )
 {
+    
+    // FIXME: call something like Y2PM::packageManager().solve();
 
+    // get some test pointer
+    list<PMSelectablePtr> pkgList( Y2PM::packageManager().begin(), Y2PM::packageManager().end() );
+
+    list<PMSelectablePtr>::iterator listIt = pkgList.begin();
+
+    unsigned int i;
+    PMObjectPtr pkgPtr;
+    PMObjectPtr conflPtr;
+    list<PMObjectPtr> conflList;
+
+    NCMIL << "SOLVING" << endl;
+    
+    conflicts.clear();
+    
+    // TEST 
+    for ( i = 0; listIt != pkgList.end(), i < 20;   ++listIt, i++ )
+    {
+	if ( (*listIt)->installedObj() )
+	{
+	    pkgPtr = (*listIt)->installedObj();
+	}
+	else if ( (*listIt)->candidateObj() )
+	{
+	    pkgPtr =  (*listIt)->candidateObj();
+	}
+	++listIt;
+	if ( (*listIt)->installedObj() )
+	{
+	    conflPtr = (*listIt)->installedObj();
+	}
+	else if ( (*listIt)->candidateObj() )
+	{
+	    conflPtr =  (*listIt)->candidateObj();
+	}
+	conflList.push_back( conflPtr );
+	++listIt;
+	if ( (*listIt)->installedObj() )
+	{
+	    conflPtr = (*listIt)->installedObj();
+	}
+	else if ( (*listIt)->candidateObj() )
+	{
+	    conflPtr =  (*listIt)->candidateObj();
+	}
+	
+	conflList.push_back( conflPtr );
+	
+	conflicts[pkgPtr] = conflList; 
+
+    }
+
+    // create the list of packages which have unresolved deps
+    map<PMObjectPtr, list<PMObjectPtr> >::iterator it = conflicts.begin();
+    list<PMObjectPtr> badPkgs; 
+    
+    while ( it != conflicts.end() )
+    {
+	badPkgs.push_back( (*it).first );
+	++it;
+    }
+
+    fillDepsPackageList( pkgs, badPkgs );
 
 }
-*/
+
+bool NCPopupDeps::fillDepsPackageList( NCPkgTable * table, list<PMObjectPtr> badPkgs )
+{
+    list<PMObjectPtr>::iterator it = badPkgs.begin();
+    unsigned int i;
+    vector<string> pkgLine;
+    pkgLine.reserve(4);
+    
+    if ( !table )
+	return false;
+    
+    table->itemsCleared ();
+
+    for ( i = 0, it = badPkgs.begin(); it != badPkgs.end();  ++it, i++ )    
+    {
+	pkgLine.clear();
+
+	pkgLine.push_back( (*it)->getSelectable()->name() );	// package name
+	pkgLine.push_back( (*it)->version() );	// version
+	pkgLine.push_back( (*it)->summary() );  // short description
+	FSize size = (*it)->size();     	// installed size
+	pkgLine.push_back( size.asString() );
+
+	table->addLine( (*it)->getSelectable()->status(), //  get the package status
+			pkgLine,
+			i,		// the index
+			(*it) );	// the corresponding package pointer
+	
+    }
+
+    return true;
+}
+
+
+void NCPopupDeps::concretelyDependency( PMObjectPtr pkgPtr )
+{
+    list<PMObjectPtr> conflList;
+    
+    // search for package in conflicts map
+     map<PMObjectPtr, list<PMObjectPtr> >::iterator it = conflicts.find( pkgPtr );
+     if ( it != conflicts.end() )
+     {
+	 // found a conflict dependeny for this package
+	 conflList = (*it).second; 
+     }
+
+     // fill dependency table
+
+     if ( !conflList.empty() )
+     {
+	 fillDepsPackageList( deps, conflList );
+     }
+    
+}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -154,8 +281,13 @@ void NCPopupDeps::createDependenyLayout( NCWidget * parent, string pkgName )
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupDeps::showDependencyPopup( )
+NCursesEvent NCPopupDeps::showDependencyPopup( bool solve )
 {
+    if ( solve )
+    {
+	checkDependencies();
+    }
+    
     postevent = NCursesEvent();
     do {
 	popupDialog();
@@ -213,10 +345,18 @@ bool NCPopupDeps::postAgain()
 
     if ( currentId->compare( PkgNames::Cancel () ) == YO_EQUAL )
     {
-	// dummy
+	return false;
+    }
+    else if  ( currentId->compare( PkgNames::Solve () ) == YO_EQUAL )
+    {
+	checkDependencies();
+    }
+    else if  ( currentId->compare( PkgNames::OkButton () ) == YO_EQUAL )
+    {
+	return false;
     }
 
-    if ( postevent == NCursesEvent::button || postevent == NCursesEvent::cancel )
+    if ( postevent == NCursesEvent::cancel )
     {
 	// return false means: close the popup dialog
 	return false;
