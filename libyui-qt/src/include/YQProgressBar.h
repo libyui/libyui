@@ -36,16 +36,6 @@ class YQProgressBar : public QVBox, public YProgressBar
 {
     Q_OBJECT
 
-    /**
-     * Pointer to the qt widget representing the label
-     */
-    QLabel * _qt_label;
-
-    /**
-     * Pointer to the qt widget representing the progress bar
-     */
-    QProgressBar * _qt_progressbar;
-
 public:
     /**
      * Constructor.
@@ -90,6 +80,16 @@ public:
      * Accept the keyboard focus.
      */
     virtual bool setKeyboardFocus();
+
+    
+protected:
+
+    //
+    // Data members
+    //
+    
+    QLabel *		_qt_label;
+    QProgressBar *	_qt_progressbar;
 };
 
 #endif // YQProgressBar_h

@@ -32,32 +32,6 @@ class YUIQt;
  */
 class Y2QtComponent : public Y2Component
 {
-    /**
-     * Used to store the server options until the server is launched
-     */
-    int argc;
-
-    /**
-     * Used to store the server options until the server is launched
-     */
-    char **argv;
-
-    /**
-     * Does the actual work.
-     */
-    YUIQt * interpreter;
-
-    /**
-     * since we're defining our own setCallback/getCallback function
-     * we must save the callback pointer ourselfs. See Y2Component.
-     */
-    Y2Component *m_callback;
-
-    /**
-     * This is false, if not threads should be used.
-     */
-    bool with_threads;
-
 public:
     /**
      * Initialize data.
@@ -72,36 +46,43 @@ public:
     /**
      * The name of this component is qt.
      */
-    string name() const;
+    string name() const { return "qt"; }
 
     /**
      * Implements the server. The interpreter is created here and not
      * in the constructor, because in the meantime the server options
      * may have been set.
      */
-    YCPValue evaluate(const YCPValue & command);
+    YCPValue evaluate( const YCPValue & command );
 
     /**
      * Is called by the genericfrontend, when the session is finished.
      * Close the user interace here.
      */
-    void result(const YCPValue & result);
+    void result( const YCPValue & result );
 
     /**
      * Is called by the genericfrontend after it parsed the commandline.
      * gives the QT UI its commandline options. We store it here and
      * wait until we create the interpreter in @ref #evaluate.
      */
-    void setServerOptions(int argc, char **argv);
+    void setServerOptions( int argc, char **argv );
 
     /**
      * Functions to pass callback information
      * The callback is a pointer to a Y2Component with
      * a valid evaluate() function.
      */
+    Y2Component * getCallback (void) const;
+    void setCallback(Y2Component * callback );
 
-    Y2Component *getCallback (void) const;
-    void setCallback (Y2Component *callback);
+
+protected:
+    int			_argc;
+    char **		_argv;
+    YUIQt * 		_interpreter;
+    Y2Component *	_callback;
+    bool 		_with_threads;
 
 };
 

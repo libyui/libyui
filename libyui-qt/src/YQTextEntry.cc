@@ -63,7 +63,7 @@ YQTextEntry::YQTextEntry( QWidget * 		parent,
     if ( opt.passwordMode.value() )
 	_qt_lineedit->setEchoMode( QLineEdit::Password );
 
-    shrinkable = opt.isShrinkable.value();
+    _shrinkable = opt.isShrinkable.value();
 
     connect( _qt_lineedit, SIGNAL( textChanged(const QString & ) ), this, SLOT( changed(const QString & ) ) );
 }
@@ -79,8 +79,8 @@ long YQTextEntry::nicesize( YUIDimension dim )
 {
     if ( dim == YD_HORIZ )
     {
-	long minSize = shrinkable ? 15 : 200;
-	long hintWidth = _qt_label->sizeHint().width() + margin();
+	long minSize	= _shrinkable ? 15 : 200;
+	long hintWidth	= _qt_label->sizeHint().width() + margin();
 
 	if ( ! _qt_label->isVisible() )
 	    hintWidth = 0;

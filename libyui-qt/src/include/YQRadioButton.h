@@ -33,11 +33,6 @@ class YQRadioButton : public QGroupBox, public YRadioButton
 {
     Q_OBJECT
 
-    /**
-     * Pointer to the qt widget representing the text entry
-     */
-    QRadioButton * _qt_radiobutton;
-
 public:
     /**
      * Constructor.
@@ -93,12 +88,21 @@ public:
      */
     QRadioButton * getQtButton();
 
-private slots:
+protected slots:
     /**
      * Triggered when the RadioButton is toggled.
      * This _may_ be of interest to the module.
      */
     void changed ( bool newState );
+
+
+protected:
+
+    //
+    // Data members
+    //
+
+    QRadioButton * _qt_radiobutton;
 };
 
 #endif // YQRadioButton_h

@@ -31,10 +31,13 @@ class YQSpacing : public QWidget, public YSpacing
 
 public:
     /**
-     * Constructor
+     * Constructor.
      */
-    YQSpacing( QWidget * parent, YWidgetOpt & opt,
-	      float size, bool horizontal, bool vertical );
+    YQSpacing( QWidget *	parent,
+	       YWidgetOpt & 	opt,
+	       float 		size,
+	       bool 		horizontal,
+	       bool 		vertical );
 
     /**
      * Inherited from YSpacing:

@@ -41,7 +41,7 @@ YQImage::YQImage( QWidget * 			parent,
     , YImage( opt )
 {
     init( parent, opt );
-    animated = false;
+    _animated = false;
     
     QPixmap pixmap;
     char * oem_logo;
@@ -89,7 +89,7 @@ YQImage::YQImage( QWidget * 		parent,
 {
     init( parent, opt );
 
-    if ( animated )
+    if ( _animated )
     {
 	QMovie movie( byteblock->size() );
 	movie.pushData( byteblock->value(), byteblock->size() );
@@ -114,7 +114,7 @@ YQImage::YQImage( QWidget * 		parent,
     QString file_name = fromUTF8( ycp_file_name->value() );
     y2debug( "Loading image from %s", (const char *) file_name );
 
-    if ( animated )
+    if ( _animated )
     {
 	QMovie movie( file_name );
 	
@@ -149,19 +149,19 @@ YQImage::init( QWidget * parent, YWidgetOpt & opt )
     setWidgetRep( this );
     setAlignment( Qt::AlignLeft | Qt::AlignTop );
 
-    zeroWidth	= opt.zeroWidth.value();
-    zeroHeight	= opt.zeroHeight.value();
-    animated	= opt.animated.value();
-    tiled	= opt.tiled.value();
+    _zeroWidth	= opt.zeroWidth.value();
+    _zeroHeight	= opt.zeroHeight.value();
+    _animated	= opt.animated.value();
+    _tiled	= opt.tiled.value();
     setScaledContents( opt.scaleToFit.value() );
     windowID	 = winId();
-    pixmapHeight = 0;
-    pixmapWidth  = 0;
+    _pixmapHeight = 0;
+    _pixmapWidth  = 0;
 
-    if ( zeroWidth  )
+    if ( _zeroWidth  )
 	setStretchable( YD_HORIZ, true );
 
-    if ( zeroHeight )
+    if ( _zeroHeight )
 	setStretchable( YD_VERT,  true );
 }
 
@@ -171,15 +171,15 @@ YQImage::yqSetPixmap( const QPixmap & pixmap )
 {
     if ( hasScaledContents() )
     {
-	pixmapWidth  = 0;
-	pixmapHeight = 0;
+	_pixmapWidth  = 0;
+	_pixmapHeight = 0;
 	
 	QLabel::setPixmap( pixmap );
     }
     else
     {
-	pixmapWidth  = pixmap.size().width();
-	pixmapHeight = pixmap.size().height();
+	_pixmapWidth  = pixmap.size().width();
+	_pixmapHeight = pixmap.size().height();
 
 	setPaletteBackgroundPixmap( pixmap );
     }
@@ -188,12 +188,12 @@ YQImage::yqSetPixmap( const QPixmap & pixmap )
 
 long YQImage::nicesize( YUIDimension dim )
 {
-    if ( animated )
+    if ( _animated )
     {
 	// a QMovie doesn't have a size() method, thus use sizeHint() instead.
 	
-	if ( dim == YD_HORIZ )	return zeroWidth  ? 0L : sizeHint().width();
-	else			return zeroHeight ? 0L : sizeHint().height();
+	if ( dim == YD_HORIZ )	return _zeroWidth  ? 0L : sizeHint().width();
+	else			return _zeroHeight ? 0L : sizeHint().height();
     }
     else
     {
@@ -201,8 +201,8 @@ long YQImage::nicesize( YUIDimension dim )
 	// sizeHint() will always return ( 0,0 ) - thus, use the internally
 	// stored sizes instead.
 	
-	if ( dim == YD_HORIZ )	return zeroWidth  ? 0L : pixmapWidth;
-	else			return zeroHeight ? 0L : pixmapHeight;
+	if ( dim == YD_HORIZ )	return _zeroWidth  ? 0L : _pixmapWidth;
+	else			return _zeroHeight ? 0L : _pixmapHeight;
     }
 }
 

@@ -36,6 +36,7 @@ class YQCheckBox : public QGroupBox, public YCheckBox
     Q_OBJECT
 
 public:
+    
     /**
      * Constructor.
      */
@@ -103,7 +104,7 @@ private slots:
     void changed ( bool newState );
 
     
-private:
+protected:
     
     /**
      * Pointer to the qt widget that actually does the job

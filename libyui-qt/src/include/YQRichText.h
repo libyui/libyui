@@ -68,15 +68,21 @@ public:
      */
     virtual bool setKeyboardFocus();
 
+    
 protected:
-
-    bool shrinkable;
-
+    
     /**
      * Inherited from QTextBrowser: Set the current document to 'name'.
      **/
     void setSource( const QString & name );
     
+
+    //
+    // Data members
+    //
+    
+    bool _shrinkable;
 };
+
 
 #endif // YQRichText_h

@@ -36,23 +36,6 @@ class YQComboBox : public QVBox, public YComboBox
 {
     Q_OBJECT
 
-protected:
-
-    /**
-     * Title label of the box
-     */
-    QLabel * _qt_label;
-
-    /**
-     * The actual Qt list box
-     */
-    QComboBox * _qt_combo_box;
-
-    /**
-     * Pointer to the validator object
-     **/
-    QY2CharValidator *	_validator;
-
 public:
 
     YQComboBox( QWidget * parent, YWidgetOpt & opt, const YCPString & label );
@@ -135,6 +118,17 @@ protected slots:
      * This is only interesting if the `notify option is set.
      */
     void textChanged( const QString &new_text );
+
+    
+protected:
+
+    //
+    // Data members
+    //
+    
+    QLabel * 		_qt_label;
+    QComboBox * 	_qt_combo_box;
+    QY2CharValidator *	_validator;
 };
 
 

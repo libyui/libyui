@@ -81,9 +81,9 @@ private slots:
 private:
 
     /**
-     * Prevent infinite recursion due to signal race conditions
+     * Used to prevent infinite recursion due to signal race conditions
      */
-    int recursionCounter;
+    int _recursionCounter;
 };
 
 

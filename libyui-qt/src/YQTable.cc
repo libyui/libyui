@@ -81,17 +81,17 @@ YQListViewItem::YQListViewItem( YQTable *	 table,
 YQTable::YQTable( QWidget * parent, YWidgetOpt & opt, vector<string> header )
     : QVBox( parent )
     , YTable( opt, header.size() )
-    , last_item(0)
+    , _last_item(0)
 {
-    sort_by_insertion_order = true;
-    enable_user_sort = ! opt.keepSorting.value();
+    _sort_by_insertion_order = true;
+    _enable_user_sort = ! opt.keepSorting.value();
     setWidgetRep( this );
     setMargin( YQWIDGET_BORDER );
 
     _qt_listview = new QListView( this );
 
 
-    if ( ! enable_user_sort )
+    if ( ! _enable_user_sort )
     {
 	y2debug( "User sorting disabled" );
 	_qt_listview->setSorting( -1, true );	// disable sorting by click
@@ -140,9 +140,9 @@ YQTable::YQTable( QWidget * parent, YWidgetOpt & opt, vector<string> header )
 
 void YQTable::userSort( int column )	// column
 {
-    if ( enable_user_sort )
+    if ( _enable_user_sort )
     {
-	sort_by_insertion_order = false;
+	_sort_by_insertion_order = false;
     }
 }
 
@@ -174,12 +174,12 @@ void YQTable::itemAdded( vector<string> elements, int index )
 {
     YQListViewItem * item;
 
-    if ( sort_by_insertion_order && last_item )
-	item = new YQListViewItem( this, _qt_listview, last_item, index );
+    if ( _sort_by_insertion_order && _last_item )
+	item = new YQListViewItem( this, _qt_listview, _last_item, index );
     else
 	item = new YQListViewItem( this, _qt_listview, index );
 
-    last_item = item;
+    _last_item = item;
     
     for ( unsigned int i=0; i < elements.size(); i++ )
 	item->setText( i, fromUTF8( elements[i] ) );

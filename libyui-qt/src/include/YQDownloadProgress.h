@@ -39,11 +39,11 @@ public:
     /**
      * Constructor.
      */
-    YQDownloadProgress( 			QWidget *	parent,
-			YWidgetOpt &	opt,
-			const YCPString & label,
-			const YCPString & filename,
-			int 		expectedSize );
+    YQDownloadProgress( QWidget *		parent,
+			YWidgetOpt &		opt,
+			const YCPString & 	label,
+			const YCPString &	filename,
+			int 			expectedSize );
 
     /**
      * Sets the widget's enabled state.
@@ -90,7 +90,7 @@ protected:
 
     QLabel *		_qt_label;
     QProgressBar *	_qt_progress;
-    QTimer *		timer;
+    QTimer *		_timer;
 };
 
 

@@ -35,19 +35,10 @@ class YQImage : public QLabel, public YImage
 
 public:
     /**
-     * Constructor.
-     * images.
+     * Constructors
      */
     YQImage( QWidget * parent, YWidgetOpt & opt, YUIInterpreter::ImageType img );
-
-    /**
-     * Constructor.
-     */
     YQImage( QWidget * parent, YWidgetOpt & opt, const YCPByteblock & byteblock );
-
-    /**
-     * Constructor.
-     */
     YQImage( QWidget * parent, YWidgetOpt & opt, const YCPString & file_name );
 
     /**
@@ -62,7 +53,7 @@ public:
      */
     void setSize( long newWidth, long newHeight );
 
-private:
+protected:
 
     /**
      * Common init method for all constructors
@@ -75,14 +66,18 @@ private:
      */
     void yqSetPixmap( const QPixmap &pixmap );
 
-    
-    bool zeroWidth;	// override nice width  with 0
-    bool zeroHeight;	// override nice height with 0
-    bool tiled;		// tile image ( repeat endlessly )
-    bool animated;	// animation, no static image
 
-    int pixmapWidth;	// pixmap or movie width
-    int pixmapHeight;	// pixmap or movie height
+    //
+    // Data members
+    //
+    
+    bool _zeroWidth;	// override nice width  with 0
+    bool _zeroHeight;	// override nice height with 0
+    bool _tiled;	// tile image ( repeat endlessly )
+    bool _animated;	// animation, no static image
+
+    int	_pixmapWidth;	// pixmap or movie width
+    int _pixmapHeight;	// pixmap or movie height
 };
 
 #endif // YQImage_h

@@ -42,26 +42,26 @@ YQSlider::YQSlider( QWidget *		parent,
 {
     setWidgetRep( this );
 
-    vbox = new QVBox( this );
-    vbox->setSpacing( VSPACING );
-    vbox->setMargin( MARGIN );
-    _qt_label = new QLabel( fromUTF8( label->value() ), vbox );
+    _vbox = new QVBox( this );
+    _vbox->setSpacing( VSPACING );
+    _vbox->setMargin( MARGIN );
+    _qt_label = new QLabel( fromUTF8( label->value() ), _vbox );
     _qt_label->setTextFormat( QLabel::PlainText );
     _qt_label->setFont( YUIQt::ui()->currentFont() );
     _qt_label->setAlignment( Qt::AlignRight );
 
-    hbox = new QHBox( vbox );
-    hbox->setSpacing( HSPACING );
+    _hbox = new QHBox( _vbox );
+    _hbox->setSpacing( HSPACING );
 
     _qt_slider = new QSlider( minValue, maxValue,
 			      1, // pageStep
 			      initialValue,
-			      QSlider::Horizontal, hbox );
+			      QSlider::Horizontal, _hbox );
     _qt_slider->setFont( YUIQt::ui()->currentFont() );
 
     _qt_spinbox = new QSpinBox( minValue, maxValue,
 				1, // step
-				hbox );
+				_hbox );
     _qt_spinbox->setValue( initialValue );
     _qt_spinbox->setFont( YUIQt::ui()->currentFont() );
 
@@ -91,13 +91,13 @@ void YQSlider::setEnabling( bool enabled )
 long YQSlider::nicesize( YUIDimension dim )
 {
     if ( dim == YD_HORIZ ) return 200;
-    else return vbox->sizeHint().height();
+    else return _vbox->sizeHint().height();
 }
 
 
 void YQSlider::setSize( long newWidth, long newHeight )
 {
-    vbox->resize( newWidth, newHeight );
+    _vbox->resize( newWidth, newHeight );
     resize( newWidth, newHeight );
 }
 

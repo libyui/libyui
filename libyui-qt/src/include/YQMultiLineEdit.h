@@ -39,8 +39,10 @@ public:
     /**
      * Constructor
      */
-    YQMultiLineEdit( QWidget * parent, YWidgetOpt & opt,
-		    const YCPString & label, const YCPString & initialText );
+    YQMultiLineEdit( QWidget * 		parent,
+		     YWidgetOpt & 	opt,
+		     const YCPString &	label,
+		     const YCPString &	initialText );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -99,8 +101,8 @@ protected slots:
 
 protected:
 
-    QLabel		* _qt_label;
-    QMultiLineEdit	* _qt_multiLineEdit;
+    QLabel *		_qt_label;
+    QMultiLineEdit *	_qt_multiLineEdit;
 };
 
 

@@ -39,7 +39,7 @@ public:
     /**
      * Constructor.
      */
-    YQPushButton( 		  QWidget * 	parent,
+    YQPushButton( QWidget * 	parent,
 		  YQDialog *	dialog,
 		  YWidgetOpt & 	opt,
 		  YCPString 	label );

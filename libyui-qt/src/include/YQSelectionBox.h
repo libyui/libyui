@@ -35,17 +35,7 @@ class QListBox;
 class YQSelectionBox : public QVBox, public YSelectionBox
 {
     Q_OBJECT
-
-    /**
-     * Title label of the box
-     */
-    QLabel * _qt_label;
-
-    /**
-     * The actual Qt list box
-     */
-    QListBox * _qt_listbox;
-
+    
 public:
 
     YQSelectionBox( QWidget * parent, YWidgetOpt & opt, const YCPString & label );
@@ -129,15 +119,21 @@ protected:
     //
     // Data members
     //
+
+    // Widgets
+    
+    QLabel *	_qt_label;
+    QListBox *	_qt_listbox;
+
     
     // Very small default size if specified
-    bool shrinkable;
+    bool _shrinkable;
 
-    // Don't user a timer to collect events
-    bool immediateMode;
+    // Don't use a timer to collect events
+    bool _immediateMode;
 
     // Timer to collect multiple events before returning
-    QTimer timer;
+    QTimer _timer;
 };
 
 #endif // YQLabel_h

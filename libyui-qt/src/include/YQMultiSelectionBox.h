@@ -36,7 +36,12 @@ class YQMultiSelectionBox : public QVBox, public YMultiSelectionBox
 
 public:
 
-    YQMultiSelectionBox( QWidget * parent, YWidgetOpt & opt, const YCPString & label );
+    /**
+     * Constructor.
+     **/
+    YQMultiSelectionBox( QWidget * 		parent,
+			 YWidgetOpt & 		opt,
+			 const YCPString &	label );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -132,17 +137,10 @@ private slots:
     
 protected:
     
-    /**
-     * Title label of the box
-     */
-    QLabel * _qt_label;
-
-    /**
-     * The actual Qt list view
-     */
+    QLabel *	_qt_label;
     QListView * _qt_listview;
 
-    bool shrinkable;
+    bool 	_shrinkable;
 };
 
 
@@ -177,12 +175,12 @@ protected:
     /**
      * This item's serial number - just for sorting purposes.
      **/
-    int serial;
+    int _serial;
 
     /**
      * The next serial number to use
      **/
-    static int item_count;
+    static int _item_count;
 };
 
 #endif // YQLabel_h

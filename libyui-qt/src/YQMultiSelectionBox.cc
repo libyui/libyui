@@ -61,7 +61,7 @@ YQMultiSelectionBox::YQMultiSelectionBox( QWidget *		parent,
     _qt_label->setBuddy( _qt_listview );
 
     // Very small default size if specified
-    shrinkable = opt.isShrinkable.value();
+    _shrinkable = opt.isShrinkable.value();
 
     connect( _qt_listview, SIGNAL( selectionChanged() ),
 	     this, 	  SLOT  ( slotSelected() ) );
@@ -88,7 +88,7 @@ YQMultiSelectionBox::nicesize( YUIDimension dim )
     else
     {
 	int hintHeight	 	 = _qt_label->sizeHint().height();
-	int visibleLines	 = shrinkable ? SHRINKABLE_VISIBLE_LINES : DEFAULT_VISIBLE_LINES;
+	int visibleLines	 = _shrinkable ? SHRINKABLE_VISIBLE_LINES : DEFAULT_VISIBLE_LINES;
 	hintHeight 		+= visibleLines * _qt_listview->fontMetrics().lineSpacing();
 	hintHeight		+= _qt_listview->frameWidth() * 2;
 
@@ -250,13 +250,14 @@ void YQMultiSelectionBox::slotSelected()
 
 
 
-int YQMultiSelectionBoxItem::item_count = 0;
+int YQMultiSelectionBoxItem::_item_count = 0;
 
 
-YQMultiSelectionBoxItem::YQMultiSelectionBoxItem( QListView * parent, const QString &text )
+YQMultiSelectionBoxItem::YQMultiSelectionBoxItem( QListView * 		parent,
+						  const QString &	text )
     : QCheckListItem( parent, text, QCheckListItem::CheckBox )
 {
-    serial = item_count++;
+    _serial = _item_count++;
 }
 
 
@@ -268,7 +269,7 @@ YQMultiSelectionBoxItem::key( int, bool ) const
      */
     
     static QString sortKey;
-    sortKey.sprintf( "%010d", INT_MAX - serial );
+    sortKey.sprintf( "%010d", INT_MAX - _serial );
 
     return sortKey;
 }

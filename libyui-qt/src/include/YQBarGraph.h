@@ -64,8 +64,10 @@ public:
      */
     void doUpdate();
 
+    
 protected:
 
+    
     QY2BarGraph * _barGraph;
 };
 

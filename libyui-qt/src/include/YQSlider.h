@@ -44,7 +44,7 @@ public:
     /**
      * Constructor.
      */
-    YQSlider( 	      QWidget *		parent,
+    YQSlider( QWidget *		parent,
 	      YWidgetOpt &	opt,
 	      const YCPString &	label,
 	      int 		minValue,
@@ -102,8 +102,8 @@ protected:
     QLabel *	_qt_label;
     QSlider *	_qt_slider;
     QSpinBox *	_qt_spinbox;
-    QVBox *	vbox;
-    QHBox *	hbox;
+    QVBox *	_vbox;
+    QHBox *	_hbox;
 };
 
 

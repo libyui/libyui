@@ -50,11 +50,11 @@ YQDownloadProgress::YQDownloadProgress( QWidget *		parent,
     _qt_progress->setTotalSteps( expectedSize );
     _qt_progress->setProgress( currentFileSize() );
 
-    timer = new QTimer( this );
-    connect( timer, SIGNAL( timeout() ), this, SLOT( pollFileSize() ) );
+    _timer = new QTimer( this );
+    connect( _timer, SIGNAL( timeout() ), this, SLOT( pollFileSize() ) );
 
-    timer->start( 250,		// millisec
-		  false );	// single shot?
+    _timer->start( 250,		// millisec
+		   false );	// single shot?
 }
 
 

@@ -37,7 +37,7 @@ public:
     /**
      * Constructor.
      */
-    YQSquash( QWidget * parent, YWidgetOpt & opt, bool hsquash, bool vsquash );
+    YQSquash( QWidget * parent, YWidgetOpt & opt, bool horSquash, bool vertSquash );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the

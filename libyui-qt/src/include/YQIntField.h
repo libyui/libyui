@@ -44,7 +44,7 @@ public:
     /**
      * Constructor.
      */
-    YQIntField( 		QWidget *		parent,
+    YQIntField( QWidget *		parent,
 		YWidgetOpt &		opt,
 		const YCPString &	label,
 		int 			minValue,
@@ -101,8 +101,7 @@ protected:
 
     QLabel *	_qt_label;
     QSpinBox *	_qt_spinbox;
-    QVBox *	vbox;
-    QHBox *	hbox;
+    QVBox *	_vbox;
 };
 
 

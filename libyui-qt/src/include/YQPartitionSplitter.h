@@ -41,7 +41,7 @@ public:
     /**
      * Constructor.
      */
-    YQPartitionSplitter( 			 QWidget *		parent,
+    YQPartitionSplitter( QWidget *		parent,
 			 YWidgetOpt &		opt,
 			 int 			usedSize,
 			 int 			freeSize,
@@ -105,17 +105,17 @@ protected:
      * Indentation indicates widget hierarchy
      */
 
-    QVBox *	vbox;
-    QY2BarGraph *	barGraph;
-    QHBox *		labels_hbox;
-    QLabel *			_qt_freeFieldLabel;
-    QLabel *			_qt_newPartFieldLabel;
-    QHBox *		fields_hbox;
-    QSpinBox *			_qt_freeSizeField;
-    QSlider *			_qt_freeSizeSlider;
-    QSpinBox *			_qt_newPartSizeField;
+    QVBox *		_vbox;
+    QY2BarGraph *		_barGraph;
+    QHBox *			_labels_hbox;
+    QLabel *				_qt_freeFieldLabel;
+    QLabel *				_qt_newPartFieldLabel;
+    QHBox *			_fields_hbox;
+    QSpinBox *				_qt_freeSizeField;
+    QSlider *				_qt_freeSizeSlider;
+    QSpinBox *				_qt_newPartSizeField;
 
-    bool             countShowDelta;
+    bool _countShowDelta;
 };
 
 

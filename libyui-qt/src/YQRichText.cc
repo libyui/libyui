@@ -67,7 +67,7 @@ YQRichText::YQRichText( QWidget * 		parent,
 
     // Very small default size if specified
 
-    shrinkable = opt.isShrinkable.value();
+    _shrinkable = opt.isShrinkable.value();
 }
 
 
@@ -79,8 +79,8 @@ void YQRichText::setEnabling( bool enabled )
 
 long YQRichText::nicesize( YUIDimension dim )
 {
-    if ( dim == YD_HORIZ )	return shrinkable ? 10 : 100;
-    else 			return shrinkable ? 10 : 100;
+    if ( dim == YD_HORIZ )	return _shrinkable ? 10 : 100;
+    else 			return _shrinkable ? 10 : 100;
 }
 
 

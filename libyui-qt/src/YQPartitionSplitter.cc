@@ -57,34 +57,34 @@ YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
 {
     setWidgetRep( this );
 
-    countShowDelta = opt.countShowDelta.value();
+    _countShowDelta = opt.countShowDelta.value();
 
     // Outer VBox
 
-    vbox = new QVBox( this );
-    vbox->setSpacing( VSPACING );
-    vbox->setMargin( MARGIN );
+    _vbox = new QVBox( this );
+    _vbox->setSpacing( VSPACING );
+    _vbox->setMargin( MARGIN );
 
 
     // BarGraph
 
-    barGraph = new QY2BarGraph( vbox );
-    barGraph->setSegments(3);
-    barGraph->setLabel( 0, fromUTF8( usedLabel()->value()    ) );
-    barGraph->setLabel( 1, fromUTF8( freeLabel()->value()    ) );
-    barGraph->setLabel( 2, fromUTF8( newPartLabel()->value() ) );
+    _barGraph = new QY2BarGraph( _vbox );
+    _barGraph->setSegments(3);
+    _barGraph->setLabel( 0, fromUTF8( usedLabel()->value()    ) );
+    _barGraph->setLabel( 1, fromUTF8( freeLabel()->value()    ) );
+    _barGraph->setLabel( 2, fromUTF8( newPartLabel()->value() ) );
 
 
     // upper inner HBox for the labels
 
-    labels_hbox = new QHBox( vbox );
-    labels_hbox->setSpacing( HSPACING );
+    _labels_hbox = new QHBox( _vbox );
+    _labels_hbox->setSpacing( HSPACING );
 
 
     // Label for the free size
 
     _qt_freeFieldLabel = new QLabel( fromUTF8( freeFieldLabel()->value() ),
-				    labels_hbox );
+				    _labels_hbox );
     _qt_freeFieldLabel->setTextFormat( QLabel::PlainText );
     _qt_freeFieldLabel->setFont( YUIQt::ui()->currentFont() );
     _qt_freeFieldLabel->setAlignment( Qt::AlignLeft );
@@ -93,7 +93,7 @@ YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
     // Label for the new partition size
 
     _qt_newPartFieldLabel = new QLabel( fromUTF8( newPartFieldLabel()->value() ),
-				       labels_hbox );
+				       _labels_hbox );
     _qt_newPartFieldLabel->setTextFormat( QLabel::PlainText );
     _qt_newPartFieldLabel->setFont( YUIQt::ui()->currentFont() );
     _qt_newPartFieldLabel->setAlignment( Qt::AlignRight );
@@ -101,15 +101,15 @@ YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
 
     // lower inner HBox for the fields and the slider
 
-    fields_hbox = new QHBox( vbox );
-    fields_hbox->setSpacing( HSPACING );
+    _fields_hbox = new QHBox( _vbox );
+    _fields_hbox->setSpacing( HSPACING );
 
 
     // SpinBox for the free size
 
     _qt_freeSizeField = new QSpinBox( minFreeSize(), maxFreeSize(),
 				     1, // step
-				     fields_hbox );
+				     _fields_hbox );
     _qt_freeSizeField->setFont( YUIQt::ui()->currentFont() );
     _qt_freeFieldLabel->setBuddy( _qt_freeSizeField );
 
@@ -119,7 +119,7 @@ YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
     _qt_freeSizeSlider = new QSlider( minFreeSize(), maxFreeSize(),
 				     1, // pageStep
 				     remainingFreeSize(),	// initial value
-				     QSlider::Horizontal, fields_hbox );
+				     QSlider::Horizontal, _fields_hbox );
     _qt_freeSizeSlider->setFont( YUIQt::ui()->currentFont() );
 
 
@@ -127,7 +127,7 @@ YQPartitionSplitter::YQPartitionSplitter( QWidget *		parent,
 
     _qt_newPartSizeField = new QSpinBox( minNewPartSize(), maxNewPartSize(),
 					1, // step
-					fields_hbox );
+					_fields_hbox );
     _qt_newPartSizeField->setFont( YUIQt::ui()->currentFont() );
     _qt_newPartFieldLabel->setBuddy( _qt_newPartSizeField );
 
@@ -162,14 +162,14 @@ void YQPartitionSplitter::setEnabling( bool enabled )
 
 long YQPartitionSplitter::nicesize( YUIDimension dim )
 {
-    if ( dim == YD_HORIZ ) return vbox->sizeHint().width();
-    else			return vbox->sizeHint().height();
+    if ( dim == YD_HORIZ )	return _vbox->sizeHint().width();
+    else			return _vbox->sizeHint().height();
 }
 
 
 void YQPartitionSplitter::setSize( long newWidth, long newHeight )
 {
-    vbox->resize( newWidth, newHeight );
+    _vbox->resize( newWidth, newHeight );
     resize( newWidth, newHeight );
 }
 
@@ -178,26 +178,25 @@ void YQPartitionSplitter::setValue( int new_newPartSize )
 {
     YPartitionSplitter::setValue( new_newPartSize );
 
-    if ( ! barGraph )
+    if ( ! _barGraph )
 	return;
 
-    barGraph->setValue( 0, usedSize() );
-    barGraph->setValue( 1, remainingFreeSize() );
-    barGraph->setValue( 2, newPartSize() );
-    barGraph->update();
+    _barGraph->setValue( 0, usedSize() );
+    _barGraph->setValue( 1, remainingFreeSize() );
+    _barGraph->setValue( 2, newPartSize() );
+    _barGraph->update();
     _qt_freeSizeField->setValue ( remainingFreeSize() );
     _qt_freeSizeSlider->setValue( remainingFreeSize() );
-    _qt_newPartSizeField->setValue  ( newPartSize() );
+    _qt_newPartSizeField->setValue( newPartSize() );
 }
 
 
 void YQPartitionSplitter::setFreeSizeSlot( int newFreeSize )
 {
     int newPartSize = totalFreeSize() - newFreeSize;
-    if( countShowDelta )
-	{
+    if( _countShowDelta )
 	newPartSize += usedSize();
-	}
+
     setValue( newPartSize );
 
     if ( getNotify() )
@@ -208,14 +207,11 @@ void YQPartitionSplitter::setFreeSizeSlot( int newFreeSize )
 void YQPartitionSplitter::setNewPartSizeSlot( int newPartSize )
 {
 
-    if( countShowDelta )
-	{
+    if( _countShowDelta )
 	setValue( remainingFreeSize() - totalFreeSize() );
-	}
     else
-	{
 	setValue( newPartSize );
-	}
+	
     if ( getNotify() )
 	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }

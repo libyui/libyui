@@ -34,7 +34,7 @@ YQRadioButtonGroup::YQRadioButtonGroup( QWidget * 	parent,
     , YRadioButtonGroup( opt )
 {
     setWidgetRep( this );
-    recursionCounter = 0;
+    _recursionCounter = 0;
 }
 
 
@@ -83,10 +83,10 @@ void YQRadioButtonGroup::radioButtonClicked( bool newState )
     // Prevent infinite recursion: YQRadioButton::setValue() might cause Qt
     // signals that would cause recursion to this place.
 
-    if ( recursionCounter > 0 )
+    if ( _recursionCounter > 0 )
 	return;
 
-    recursionCounter++;
+    _recursionCounter++;
 
     QRadioButton * sender_button = ( QRadioButton * ) sender();
 
@@ -111,7 +111,7 @@ void YQRadioButtonGroup::radioButtonClicked( bool newState )
 	}
     }
 
-    recursionCounter--;
+    _recursionCounter--;
 }
 
 

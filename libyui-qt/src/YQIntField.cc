@@ -42,17 +42,17 @@ YQIntField::YQIntField( QWidget *		parent,
 {
     setWidgetRep( this );
 
-    vbox = new QVBox( this );
-    vbox->setSpacing( VSPACING );
-    vbox->setMargin( MARGIN );
-    _qt_label = new QLabel( fromUTF8( label->value() ), vbox );
+    _vbox = new QVBox( this );
+    _vbox->setSpacing( VSPACING );
+    _vbox->setMargin( MARGIN );
+    _qt_label = new QLabel( fromUTF8( label->value() ), _vbox );
     _qt_label->setTextFormat( QLabel::PlainText );
     _qt_label->setFont( YUIQt::ui()->currentFont() );
     _qt_label->setAlignment( Qt::AlignRight );
 
     _qt_spinbox = new QSpinBox( minValue, maxValue,
 				1, // step
-				vbox );
+				_vbox );
     _qt_spinbox->setValue( initialValue );
     _qt_spinbox->setFont( YUIQt::ui()->currentFont() );
 
@@ -74,14 +74,14 @@ void YQIntField::setEnabling( bool enabled )
 
 long YQIntField::nicesize( YUIDimension dim )
 {
-    if ( dim == YD_HORIZ )	return vbox->sizeHint().width();
-    else			return vbox->sizeHint().height();
+    if ( dim == YD_HORIZ )	return _vbox->sizeHint().width();
+    else			return _vbox->sizeHint().height();
 }
 
 
 void YQIntField::setSize( long newWidth, long newHeight )
 {
-    vbox->resize( newWidth, newHeight );
+    _vbox->resize( newWidth, newHeight );
     resize( newWidth, newHeight );
 }
 

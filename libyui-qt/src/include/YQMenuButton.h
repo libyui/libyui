@@ -33,18 +33,13 @@ class YQMenuButton : public QWidget, public YMenuButton
 {
     Q_OBJECT
 
-protected:
-
-    /**
-     * The actual push button
-     */
-    QPushButton * _qt_pushbutton;
-
 public:
     /**
      * Constructor.
      */
-    YQMenuButton( QWidget * parent, YWidgetOpt & opt, YCPString label );
+    YQMenuButton( QWidget * 	parent,
+		  YWidgetOpt &	opt,
+		  YCPString 	label );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -96,10 +91,18 @@ protected slots:
 
     /**
      * Triggered via menuEntryActivated() by zero timer to get back in sync
-     * with the Qt event loop. You don't really need to understand this, it's
-     * kind of black magic. ;- ) 
+     * with the Qt event loop. 
      */
     void returnNow();
+
+    
+protected:
+
+    //
+    // Data members
+    //
+    
+    QPushButton * _qt_pushbutton;
 };
 
 #endif // YQMenuButton_h

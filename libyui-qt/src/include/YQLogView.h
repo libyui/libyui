@@ -34,11 +34,15 @@ class YQLogView : public QVBox, public YLogView
     Q_OBJECT
     
 public:
+    
     /**
      * Constructor
      */
-    YQLogView( QWidget * parent, YWidgetOpt & opt,
-	      const YCPString & label, int visibleLines, int maxLines );
+    YQLogView( QWidget * 		parent,
+	       YWidgetOpt & 		opt,
+	       const YCPString & 	label,
+	       int 			visibleLines,
+	       int 			maxLines );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -77,8 +81,13 @@ public:
 
 protected:
 
+    //
+    // Data members
+    //
+
     QLabel		* _qt_label;
     QMultiLineEdit	* _qt_text;
 };
+
 
 #endif // YQLogView_h

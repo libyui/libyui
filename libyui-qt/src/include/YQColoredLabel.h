@@ -36,9 +36,12 @@ public:
     /**
      * Constructor.
      */
-    YQColoredLabel( QWidget * parent, YWidgetOpt & opt,
-		    YCPString text,
-		    YColor & fg, YColor & bg, int margin );
+    YQColoredLabel( QWidget * 		parent,
+		    YWidgetOpt & 	opt,
+		    YCPString 		text,
+		    YColor & 		fg,
+		    YColor & 		bg,
+		    int			margin );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the

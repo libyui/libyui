@@ -96,7 +96,7 @@ public:
     /**
      * Returns 'true' if items should be ordered by insertion order
      **/
-    bool sortByInsertionOrder() const { return sort_by_insertion_order; }
+    bool sortByInsertionOrder() const { return _sort_by_insertion_order; }
 
 
 
@@ -126,21 +126,25 @@ protected:
      */
     QListView * _qt_listview;
 
+
+    //
+    // Data members
+    //
     
     /**
      * Sorting strategy
      **/
-    bool sort_by_insertion_order;
+    bool _sort_by_insertion_order;
 
     /**
      * Flag: User may re-sort the table by clicking on a header?
      **/
-    bool enable_user_sort;
+    bool _enable_user_sort;
 
     /**
      * For maintaining insertion order
      **/
-    YQListViewItem * last_item;
+    YQListViewItem * _last_item;
 };
 
 #endif // YQLabel_h

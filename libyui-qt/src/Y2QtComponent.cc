@@ -25,7 +25,7 @@
 
 
 static void
-myqmsg (QtMsgType type, const char * msg)
+qMessageHandler( QtMsgType type, const char * msg )
 {
     switch (type)
     {
@@ -43,53 +43,48 @@ myqmsg (QtMsgType type, const char * msg)
 
 
 Y2QtComponent::Y2QtComponent()
-    : argc(0)
-    , argv(0)
-    , interpreter(0)
-    , with_threads(true)
+    : _argc(0)
+    , _argv(0)
+    , _interpreter(0)
+    , _with_threads(true)
 {
 }
 
 
 Y2QtComponent::~Y2QtComponent()
 {
-    if (interpreter) delete interpreter;
+    if ( _interpreter )
+	delete _interpreter;
 }
 
 
-string Y2QtComponent::name() const
+YCPValue Y2QtComponent::evaluate( const YCPValue & command )
 {
-    return "qt";
-}
-
-
-YCPValue Y2QtComponent::evaluate(const YCPValue & command)
-{
-    if (!interpreter)
+    if ( ! _interpreter )
     {
-	for (int i=1; i<argc; i++)
+	for ( int i=1; i < _argc; i++ )
 	{
-	    if ( strcmp(argv[i], "--nothreads") == 0 ||
-		 strcmp(argv[i], "-nothreads" ) == 0   )
+	    if ( strcmp( _argv[i], "--nothreads") == 0 ||
+		 strcmp( _argv[i], "-nothreads" ) == 0   )
 	    {
-		with_threads = false;
-		y2milestone("Running Qt UI without threads.");
+		_with_threads = false;
+		y2milestone( "Running Qt UI without threads." );
 	    }
 	}
 
-	// the handler must be installed before calling the
+	// The handler must be installed before calling the
 	// constructor of QApplication
-	qInstallMsgHandler (myqmsg);
+	qInstallMsgHandler( qMessageHandler );
 
-	interpreter = new YUIQt(argc, argv, with_threads, getCallback() );
+	_interpreter = new YUIQt( _argc, _argv, _with_threads, getCallback() );
 	
-	if ( !interpreter || interpreter->fatalError() )
+	if ( ! _interpreter || _interpreter->fatalError() )
 	    return YCPNull();
     }
 
-    YCPValue val = interpreter->evaluate(command);
+    YCPValue val = _interpreter->evaluate(command);
 
-    if ( interpreter->fatalError() )
+    if ( _interpreter->fatalError() )
     {
 	y2error( "Fatal UI error" );
 	return YCPNull();
@@ -99,44 +94,48 @@ YCPValue Y2QtComponent::evaluate(const YCPValue & command)
 }
 
 
-void Y2QtComponent::result(const YCPValue &)
+void Y2QtComponent::result( const YCPValue & )
 {
-    if (interpreter) delete interpreter;
-    interpreter = 0;
+    if ( _interpreter )
+	delete _interpreter;
+    
+    _interpreter = 0;
 }
 
 
-void Y2QtComponent::setServerOptions(int argc, char **argv)
+void Y2QtComponent::setServerOptions( int argc, char **argv )
 {
-    this->argc = argc;
-    this->argv = argv;
+    _argc = argc;
+    _argv = argv;
 }
 
 
 Y2Component *
-Y2QtComponent::getCallback(void) const
+Y2QtComponent::getCallback( void ) const
 {
-    if (interpreter)
-	return interpreter->getCallback ();
-    return m_callback;
+    if ( _interpreter)
+	return _interpreter->getCallback();
+    
+    return _callback;
 }
 
 void
-Y2QtComponent::setCallback(Y2Component *callback)
+Y2QtComponent::setCallback( Y2Component * callback )
 {
-    if (interpreter)
+    if ( _interpreter)
     {
 	// interpreter allready running, pass callback directly
 	// to where it belongs
-	return interpreter->setCallback (callback);
+	return _interpreter->setCallback( callback );
     }
     else
     {
 	// interpreter not yet running, save the callback information
 	// until first evaluate() call which starts the interpreter
 	// and passes this information to it.
-	m_callback = callback;
+	_callback = callback;
     }
+    
     return;
 }
 

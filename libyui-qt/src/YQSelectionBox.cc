@@ -62,16 +62,16 @@ YQSelectionBox::YQSelectionBox( QWidget *		parent,
     _qt_listbox->setTopItem(0);
     _qt_label->setBuddy( _qt_listbox );
 
-    shrinkable 		= opt.isShrinkable.value();
-    immediateMode	= opt.immediateMode.value();
+    _shrinkable 	= opt.isShrinkable.value();
+    _immediateMode	= opt.immediateMode.value();
 
     connect( _qt_listbox, SIGNAL( highlighted (int) ),
 	     this, 	 SLOT  ( slotSelected(int) ) );
 
     if ( getNotify() )
     {
-	connect( &timer, SIGNAL( timeout() ),
-		 this,	 SLOT  ( returnImmediately() ) );
+	connect( &_timer, SIGNAL( timeout()           ),
+		 this,	  SLOT  ( returnImmediately() ) );
     }
 }
 
@@ -94,7 +94,7 @@ long YQSelectionBox::nicesize( YUIDimension dim )
     else
     {
 	int hintHeight	 = _qt_label->sizeHint().height();
-	int visibleLines	 = shrinkable ? SHRINKABLE_VISIBLE_LINES : DEFAULT_VISIBLE_LINES;
+	int visibleLines = _shrinkable ? SHRINKABLE_VISIBLE_LINES : DEFAULT_VISIBLE_LINES;
 	hintHeight 	+= visibleLines * _qt_listbox->fontMetrics().lineSpacing();
 	hintHeight	+= _qt_listbox->frameWidth() * 2;
 
@@ -171,7 +171,7 @@ void YQSelectionBox::slotSelected( int index )
 {
     if ( getNotify() )
     {
-	if ( immediateMode )	returnImmediately();
+	if ( _immediateMode )	returnImmediately();
 	else			returnDelayed();
     }
 }
@@ -185,7 +185,7 @@ void YQSelectionBox::returnImmediately()
 
 void YQSelectionBox::returnDelayed()
 {
-    timer.start( 250, true ); // millisec, singleShot
+    _timer.start( 250, true ); // millisec, singleShot
 }
 
 

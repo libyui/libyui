@@ -121,7 +121,7 @@ protected:
     /**
      * true if the horizontal nice size should be very small
      */
-    bool shrinkable;
+    bool _shrinkable;
 };
 
 #endif // YQTextEntry_h
