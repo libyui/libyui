@@ -291,6 +291,10 @@ public:
     static const YCPString LabelRequBy2();
     static const YCPString LabelRequire1();
     static const YCPString LabelRequire2();
+
+    static const YCPString WarningLabel();
+    static const YCPString ErrorLabel();
+    static const YCPString NotifyLabel();
     
    /**
      * text used in search popup

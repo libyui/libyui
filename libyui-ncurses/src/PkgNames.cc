@@ -380,6 +380,23 @@ const YCPValue& PkgNames::Treeitem ()
 //
 // label, text for translation
 //
+const YCPString PkgNames::WarningLabel()
+{
+    static const YCPString value = toYCPString ( _("Warning") );
+    return value;
+}
+
+const YCPString PkgNames::ErrorLabel()
+{
+    static const YCPString value = toYCPString ( _("Error") );
+    return value;
+}
+
+const YCPString PkgNames::NotifyLabel()
+{
+        static const YCPString value = toYCPString ( _("Notify") );
+    return value;
+}
 
 const YCPString PkgNames::RpmTreeLabel()
 {
