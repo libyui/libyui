@@ -30,25 +30,39 @@
 					     `item( `id(`delete), 	_( "&Delete      [-]") ),
 					     `item( `id(`update), 	_( "&Update      [>]") ),
 					     `item( `id(`tabooOn), 	_( "Taboo &yes  [F4]") ),
-					     `item( `id(`tabooOff), 	_( "Taboo &no   [F5]") )
-					     //`item( `id(`toggleSrc), 	_( "SP&M yes/no" ) )
+					     `item( `id(`tabooOff), 	_( "Taboo &no   [F5]") ),
+					     //`item( `id(`toggleSrc), 	_( "SP&M yes/no" ) ),
+					     `menu( "&All list packages",
+						    [
+						     `item(`id(`selall),  "S&elect all"   ),
+						     `item(`id(`delall),  "De&lete all"   ),
+						     `item(`id(`updall),  "U&pdate all"   )
+						     ]
+						    )
 					     ]
-					    )),
+					     )),
 			 // label Information menu ( keep it short! )
 			 `Left(`MenuButton( _("&Information"),
 					    // menu items of the info menu
-					    [`item( `id(`pkginfo), 	_( "Package info" ) ),
+					    [`item( `id(`pkginfo), 	_("&Package info" ) ),
 					     `item( `id(`longdescr), 	_("&Long description") ),
 					     `item( `id(`versions), 	_("&Version(s)") ),
 					     `item( `id(`files), 	_("&File list") ),
-					     `item( `id(`relations), 	_("&Package relations") ) ]
+					     `item( `id(`relations), 	_("Package &relations") ) ]
 					    )),
 			 // label Etc. menu ( keep it short! )
-			 `Left(`ReplacePoint(`id(`replacemenu),`MenuButton(  _("&Etc."),
-									     // menu items of the Etc. menu
-									     [`item( `id(`showdeps), _("    &Check dependencies now") ),
-									      `item( `id(`autodeps), _("[X] &Automatic dependency check") ) ]
-									     )
+			 `Left(`ReplacePoint(`id(`replacemenu),`MenuButton( _("&Etc."),
+									    [`menu( "&Dependencies",
+										    // menu items of the Etc. menu
+										    [`item( `id(`showdeps), _("    &Check dependencies now") ),
+										     `item( `id(`autodeps), _("[X] &Automatic dependency check") ) ]
+										    ),
+									     `menu( "&Selections",
+										    [`item( `id(`save), _("Save selection") ),
+										     `item( `id(`load), _("Load selection") ) ]
+										    )
+									     ]
+									    )
 					     )
 			       ),
 			 `HSpacing(0.3)
