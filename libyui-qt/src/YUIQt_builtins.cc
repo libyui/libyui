@@ -82,13 +82,13 @@ YUIQt::glyph( const YCPSymbol & glyphSymbol )
 YCPValue YUIQt::runPkgSelection( YWidget * packageSelector )
 {
     y2milestone( "Running package selection..." );
-    wm_close_blocked		= true;
-    auto_activate_dialogs	= false;
+    _wm_close_blocked		= true;
+    _auto_activate_dialogs	= false;
 
     YCPValue input = evaluateUserInput( YCPTerm( YCPSymbol( "", false ) ), false );
 
-    auto_activate_dialogs	= true;
-    wm_close_blocked 		= false;
+    _auto_activate_dialogs	= true;
+    _wm_close_blocked 		= false;
     y2milestone( "Package selection done - returning %s", input->toString().c_str() );
 
     return input;
@@ -234,10 +234,10 @@ void YUIQt::askPlayMacro()
 	// without doing any harm - otherwise this would hang until the next
 	// mouse click on a PushButton etc.
 
-	event_type	= ET_WIDGET;
-	event_widget	= currentDialog();
+	_event_type	= ET_WIDGET;
+	_event_widget	= currentDialog();
 
-	if ( do_exit_loop )
+	if ( _do_exit_loop )
 	{
 	    exit_loop();
 	}
@@ -253,7 +253,7 @@ YCPValue YUIQt::askForExistingDirectory( const YCPString & startDir,
 
     QString dir_name =
 	QFileDialog::getExistingDirectory( fromUTF8( startDir->value() ),
-					   main_win, 				// parent
+					   _main_win, 				// parent
 					   "dir_selector",			// name
 					   fromUTF8( headline->value() ) );	// caption
     busyCursor();
@@ -274,7 +274,7 @@ YCPValue YUIQt::askForExistingFile( const YCPString & startWith,
     QString file_name =
 	QFileDialog::getOpenFileName( fromUTF8( startWith->value() ),
 				      fromUTF8( filter->value() ),
-				      main_win, 			// parent
+				      _main_win, 			// parent
 				      "file_selector",			// name
 				      fromUTF8( headline->value() ) );	// caption
     busyCursor();
@@ -319,7 +319,7 @@ QString YUIQt::askForSaveFileName( const QString & startWith,
 
 	file_name = QFileDialog::getSaveFileName( startWith,
 						  filter,
-						  main_win, 		// parent
+						  _main_win, 		// parent
 						  "file_selector",	// name
 						  headline );		// caption
 
@@ -342,7 +342,7 @@ QString YUIQt::askForSaveFileName( const QString & startWith,
 		msg = ( _( "%1 exists and is write-protected!\nReally overwrite?" ) ).arg( file_name );
 	    }
 
-	    int button_no = QMessageBox::information( main_win,
+	    int button_no = QMessageBox::information( _main_win,
 						      // Window title for confirmation dialog
 						      _( "Confirm"   ),
 						      msg,

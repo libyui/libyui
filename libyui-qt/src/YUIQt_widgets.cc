@@ -137,7 +137,7 @@ YWidget *YUIQt::createPackageSelector	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	floppyDevice )
 {
-    auto_activate_dialogs = false;
+    _auto_activate_dialogs = false;
     return new YQPackageSelector( (QWidget *) ( parent->widgetRep() ), opt, floppyDevice );
 }
 

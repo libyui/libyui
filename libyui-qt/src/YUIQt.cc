@@ -44,15 +44,15 @@ YUIQt * YUIQt::_ui = 0;
 YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
     : QApplication(argc, argv)
     , YUIInterpreter(with_threads, callback)
-    , main_dialog_id(0)
-    , event_widget(0)
-    , event_type(ET_NONE)
-    , do_exit_loop(false)
-    , loaded_current_font(false)
-    , loaded_heading_font(false)
-    , wm_close_blocked(false)
-    , auto_activate_dialogs(true)
-    , running_embedded(false)
+    , _main_dialog_id(0)
+    , _event_widget(0)
+    , _event_type(ET_NONE)
+    , _do_exit_loop(false)
+    , _loaded_current_font(false)
+    , _loaded_heading_font(false)
+    , _wm_close_blocked(false)
+    , _auto_activate_dialogs(true)
+    , _running_embedded(false)
 {
     _ui				= this;
     _fatal_error		= false;
@@ -75,17 +75,17 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
 	    if      ( opt == QString( "-no-wm"	 	) )	_have_wm 			= false;
 	    else if ( opt == QString( "-fullscreen"	) )	_fullscreen 			= true;
 	    else if ( opt == QString( "-noborder" 	) )	_decorate_toplevel_window	= false;
-	    else if ( opt == QString( "-kcontrol_id"	) )
+	    else if ( opt == QString( "-_kcontrol_id"	) )
 	    {
 		if ( i+1 >= argc )
 		{
-		    y2error( "Missing arg for '--kcontrol_id'" );
+		    y2error( "Missing arg for '--_kcontrol_id'" );
 		}
 		else
 		{
-		    kcontrol_id = argv[++i];
-		    y2milestone( "Starting with kcontrol_id='%s'",
-				 (const char *) kcontrol_id );
+		    _kcontrol_id = argv[++i];
+		    y2milestone( "Starting with _kcontrol_id='%s'",
+				 (const char *) _kcontrol_id );
 		}
 	    }
 	    else if ( opt == QString( "-macro"		) )
@@ -115,7 +115,7 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
 			 "--help        this help text\n"
 			 "\n"
 			 "--macro <macro-file>        play a macro right on startup\n"
-			 "--kcontrol_id <ID-String>   set KDE control center identification\n"
+			 "--_kcontrol_id <ID-String>   set KDE control center identification\n"
 			 "\n"
 			 "-no-wm, -noborder etc. are accepted as well as --no-wm, --noborder\n"
 			 "to maintain backwards compatibility.\n"
@@ -130,48 +130,48 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
 
     if ( _fullscreen )
     {
-	default_size.setWidth ( desktop()->width()  );
-	default_size.setHeight( desktop()->height() );
+	_default_size.setWidth ( desktop()->width()  );
+	_default_size.setHeight( desktop()->height() );
 	y2milestone( "-fullscreen: using %dx%d for `opt(`defaultsize)",
-		     default_size.width(), default_size.height() );
+		     _default_size.width(), _default_size.height() );
     }
     else if ( _have_wm )
     {
-	// Get default_size via -geometry command line option
+	// Get _default_size via -geometry command line option
 
 	QWidget *dummy = new QWidget();
 	dummy->hide();
 	setMainWidget(dummy);
-	default_size = dummy->size();
+	_default_size = dummy->size();
 
 
         // Set min defaultsize
 
-	if ( default_size.width()  < 640 ||
-	     default_size.height() < 480   )
+	if ( _default_size.width()  < 640 ||
+	     _default_size.height() < 480   )
 	{
 	    // 640x480 is the absolute minimum, but let's go for 800x600 if we can
 
 	    if ( desktop()->width()  >= 800 &&
 		 desktop()->height() >= 600  )
 	    {
-		default_size.setWidth ( 800 );
-		default_size.setHeight( 600 );
+		_default_size.setWidth ( 800 );
+		_default_size.setHeight( 600 );
 	    }
 	    else
 	    {
-		default_size.setWidth ( 640 );
-		default_size.setHeight( 480 );
+		_default_size.setWidth ( 640 );
+		_default_size.setHeight( 480 );
 	    }
 
 	    y2debug( "Assuming default size of %dx%d",
-		     default_size.width(), default_size.height() );
+		     _default_size.width(), _default_size.height() );
 	}
     }
     else	// ! _have_wm
     {
-	default_size.setWidth ( desktop()->width()  );
-	default_size.setHeight( desktop()->height() );
+	_default_size.setWidth ( desktop()->width()  );
+	_default_size.setHeight( desktop()->height() );
     }
 
 
@@ -188,27 +188,27 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
 	wflags |= WStyle_Customize | WStyle_NoBorder;
     }
 
-    main_win = new QVBox( 0, 0, wflags ); // parent, name, wflags
+    _main_win = new QVBox( 0, 0, wflags ); // parent, name, wflags
 
 
     // Create widget stack for `opt(`defaultsize) dialogs
 
-    widget_stack = new QWidgetStack( main_win );
-    widget_stack->setFocusPolicy( QWidget::StrongFocus );
-    setMainWidget( main_win );
+    _widget_stack = new QWidgetStack( _main_win );
+    _widget_stack->setFocusPolicy( QWidget::StrongFocus );
+    setMainWidget( _main_win );
     qApp->installEventFilter( this );
-    main_win->installEventFilter( this );
-    main_win->resize( default_size );
+    _main_win->installEventFilter( this );
+    _main_win->resize( _default_size );
 
     if ( _fullscreen || ! _have_wm )
-	main_win->move( 0, 0 );
+	_main_win->move( 0, 0 );
 
-    busy_cursor = new QCursor( WaitCursor );
+    _busy_cursor = new QCursor( WaitCursor );
 
 
     // Set window title
 
-    if ( kcontrol_id.isEmpty() )
+    if ( _kcontrol_id.isEmpty() )
     {
 	QString title( "YaST2" );
 	char hostname[ MAXHOSTNAMELEN+1 ];
@@ -224,13 +224,13 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
 		title += hostname;
 	    }
 	}
-	main_win->setCaption( title );
-	kcontrol_id = title;
+	_main_win->setCaption( title );
+	_kcontrol_id = title;
     }
-    else // --kcontrol_id in command line
+    else // --_kcontrol_id in command line
     {
-	running_embedded = true;
-	main_win->setCaption( kcontrol_id );
+	_running_embedded = true;
+	_main_win->setCaption( _kcontrol_id );
     }
 
 
@@ -246,11 +246,11 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
     // "please wait" popup zoomed to near full screen that may be embedded -
     // with a large main window that opens somewhere else on the screen.
 
-    if ( ! running_embedded )
-	main_win->hide();
+    if ( ! _running_embedded )
+	_main_win->hide();
     else
     {
-	main_win->show();
+	_main_win->show();
 	y2milestone( "Running in embedded mode - leaving main window open" );
     }
     
@@ -273,8 +273,8 @@ YUIQt::~YUIQt()
 
     normalCursor();
 
-    if ( busy_cursor )
-	delete busy_cursor;
+    if ( _busy_cursor )
+	delete _busy_cursor;
 }
 
 
@@ -299,14 +299,14 @@ void YUIQt::internalError( const char *msg )
 
 void YUIQt::idleLoop( int fd_ycp )
 {
-    leave_idle_loop = false;
+    _leave_idle_loop = false;
 
     // process Qt events until fd_ycp is readable.
     QSocketNotifier *notifier = new QSocketNotifier(fd_ycp, QSocketNotifier::Read);
     QObject::connect(notifier, SIGNAL(activated(int)), this, SLOT(leaveIdleLoop(int)));
     notifier->setEnabled(true);
 
-    while (!leave_idle_loop)
+    while (!_leave_idle_loop)
 	processOneEvent ();
 
     delete notifier;
@@ -315,7 +315,7 @@ void YUIQt::idleLoop( int fd_ycp )
 
 void YUIQt::leaveIdleLoop( int )
 {
-    leave_idle_loop = true;
+    _leave_idle_loop = true;
 }
 
 
@@ -351,13 +351,13 @@ void YUIQt::returnNow( EventType et, YWidget *wid )
 	return;
     }
 
-    if ( event_type == ET_NONE || event_type == ET_MENU )
+    if ( _event_type == ET_NONE || _event_type == ET_MENU )
     {
-	event_type   = et;
-	event_widget = wid;
+	_event_type   = et;
+	_event_widget = wid;
     }
 
-    if ( do_exit_loop )
+    if ( _do_exit_loop )
     {
 	exit_loop();
     }
@@ -366,7 +366,7 @@ void YUIQt::returnNow( EventType et, YWidget *wid )
 
 YWidget *YUIQt::userInput( YDialog *dialog, EventType *event )
 {
-    if (event_type == ET_NONE)
+    if (_event_type == ET_NONE)
     {
 	YQDialog *qd = (YQDialog *)dialog;
 	qd->activate(true);
@@ -376,24 +376,24 @@ YWidget *YUIQt::userInput( YDialog *dialog, EventType *event )
 	    qApp->focusWidget()->setFocus();
 	}
 	normalCursor();
-	do_exit_loop = true; // in returnNow exit_loop() should be called.
+	_do_exit_loop = true; // in returnNow exit_loop() should be called.
 
-	while (event_type == ET_NONE)
+	while (_event_type == ET_NONE)
 	{
 	    enter_loop();
 	}
 
-	do_exit_loop = false;
+	_do_exit_loop = false;
 	busyCursor();
 	qd->activate(false);
     }
     
-    *event = event_type;
-    YWidget * ret = event_widget;
+    *event = _event_type;
+    YWidget * ret = _event_widget;
     
     // Clear for next time
-    event_type	 = ET_NONE;
-    event_widget = 0;
+    _event_type	 = ET_NONE;
+    _event_widget = 0;
     
     return ret;
 }
@@ -401,7 +401,7 @@ YWidget *YUIQt::userInput( YDialog *dialog, EventType *event )
 
 YWidget *YUIQt::pollInput( YDialog *dialog, EventType *event )
 {
-    if (event_type == ET_NONE)
+    if (_event_type == ET_NONE)
     {
 	// if ( focusWidget() ) focusWidget()->repaint();
 	YQDialog *qd = (YQDialog *)dialog;
@@ -409,9 +409,9 @@ YWidget *YUIQt::pollInput( YDialog *dialog, EventType *event )
 	processEvents();
 	qd->activate(false);
     }
-    *event = event_type;
-    event_type = ET_NONE; // Clear for next time
-    return event_widget;
+    *event = _event_type;
+    _event_type = ET_NONE; // Clear for next time
+    return _event_widget;
 }
 
 
@@ -420,26 +420,26 @@ YWidget *YUIQt::pollInput( YDialog *dialog, EventType *event )
 YDialog *YUIQt::createDialog( YWidgetOpt & opt )
 {
     bool has_defaultsize = opt.hasDefaultSize.value();
-    QWidget *qt_parent = main_win;
+    QWidget *qt_parent = _main_win;
 
 
     // Popup dialogs get the topmost other popup dialog as their parent since
     // some window managers (e.g., fvwm2 as used in the inst-sys) otherwise
     // tend to confuse the stacking order of popup dialogs.
     //
-    // This popup_stack handling would be better placed in showDialog(), but we
+    // This _popup_stack handling would be better placed in showDialog(), but we
     // need the parent here for QWidget creation. libyui guarantees that each
     // createDialog() will be followed by showDialog() for the same dialog
     // without any chance for other dialogs to get in between.
 
-    if ( ! has_defaultsize && ! popup_stack.empty() )
-	qt_parent = popup_stack.back();
+    if ( ! has_defaultsize && ! _popup_stack.empty() )
+	qt_parent = _popup_stack.back();
 
     YQDialog *dialog = new YQDialog( opt, qt_parent, has_defaultsize );
     CHECK_PTR( dialog );
 
     if ( ! has_defaultsize )
-	popup_stack.push_back( (QWidget *) dialog->widgetRep() );
+	_popup_stack.push_back( (QWidget *) dialog->widgetRep() );
 
     return dialog;
 }
@@ -457,24 +457,24 @@ void YUIQt::showDialog( YDialog *dialog )
 
     if ( dialog->hasDefaultSize() )
     {
-	widget_stack->addWidget  ( qw, ++main_dialog_id );
-	widget_stack->raiseWidget( qw ); // maybe this is not necessary (?)
+	_widget_stack->addWidget  ( qw, ++_main_dialog_id );
+	_widget_stack->raiseWidget( qw ); // maybe this is not necessary (?)
 
-	if ( ! main_win->isVisible() )
+	if ( ! _main_win->isVisible() )
 	{
 	    // y2milestone( "Showing main window" );
-	    main_win->resize( default_size );
+	    _main_win->resize( _default_size );
 
 	    if ( ! _have_wm )
-		main_win->move( 0, 0 );
+		_main_win->move( 0, 0 );
 
-	    main_win->show();
+	    _main_win->show();
 	    qw->setFocus();
 	}
     }
     else	// non-defaultsize dialog
     {
-	qw->setCaption( kcontrol_id );
+	qw->setCaption( _kcontrol_id );
 	qw->show();
     }
 
@@ -495,25 +495,25 @@ void YUIQt::closeDialog( YDialog *dialog )
 
     if ( dialog->hasDefaultSize() )
     {
-	widget_stack->removeWidget( qw );
+	_widget_stack->removeWidget( qw );
 
-	if ( --main_dialog_id < 1 )	// nothing left on the stack
+	if ( --_main_dialog_id < 1 )	// nothing left on the stack
 	{
-	    if ( ! running_embedded )
+	    if ( ! _running_embedded )
 	    {
 		// y2milestone( "Hiding main window" );
-		main_win->hide();
+		_main_win->hide();
 	    }
 	    else
 	    {
 		y2milestone( "Running embedded - keeping (empty) main window open" );
 	    }
 	    
-	    main_dialog_id = 0;	// this should not be necessary - but better be safe than sorry
+	    _main_dialog_id = 0;	// this should not be necessary - but better be safe than sorry
 	}
 	else
 	{
-	    widget_stack->raiseWidget( main_dialog_id );
+	    _widget_stack->raiseWidget( _main_dialog_id );
 	}
     }
     else	// non-defaultsize dialog
@@ -524,8 +524,8 @@ void YUIQt::closeDialog( YDialog *dialog )
 	// deleted after closeDialog() so it is safe to pop that dialog from
 	// the popup stack here.
 
-	if ( ! popup_stack.empty() && popup_stack.back() == qw )
-	    popup_stack.pop_back();
+	if ( ! _popup_stack.empty() && _popup_stack.back() == qw )
+	    _popup_stack.pop_back();
 	else
 	    y2error( "Popup dialog stack corrupted!" );
     }

@@ -14,7 +14,7 @@
 
   Authors:	Mathias Kettner   <kettner@suse.de>,
 		Stefan Hundhammer <sh@suse.de>
-  
+
   Maintainer:	Stefan Hundhammer <sh@suse.de>
 
 /-*/
@@ -52,7 +52,7 @@ public:
 	   Y2Component *	callback );
 
     /**
-     * Cleans up
+     * Destructor.
      */
     ~YUIQt();
 
@@ -73,7 +73,7 @@ public:
 
 
     /**
-     * Is called within the event loop from some event handler in
+     * Called within the event loop from some event handler in
      * case an event happend that should be the answer of some PollInput
      * or UserInput call. Sets the type and the widget of the event, if
      * no other event is already pending. Exits the event loop.
@@ -81,18 +81,20 @@ public:
     void returnNow(EventType et, YWidget *wid);
 
     /**
-     * Return 'true' if a window manager is running, 'false' otherwise.
+     * Returns 'false" if the "--no-wm" was specified on the command line, i.e.
+     * we should assume no window manager is running.
      */
     bool haveWM() const { return _have_wm; }
 
     /**
-     * Return 'true' if defaultsize windows should use the full screen
+     * Returns 'true' if defaultsize windows should use the full screen.
      **/
     bool fullscreen() const { return _fullscreen; }
 
     /**
-     * Return 'true' if toplevel (defaultsize) windows should get window
-     * manager decorations
+     * Returns 'false' if toplevel (defaultsize) windows should not get window
+     * manager decorations, i.e. "--noborder" was specified on the command
+     * line. 
      **/
     bool decorateToplevelWindow() const { return _decorate_toplevel_window; }
 
@@ -110,9 +112,9 @@ public:
     void raiseFatalError() { _fatal_error = true; }
 
     /**
-     * Returns the default size in one dimension
+     * Returns size for `opt(`defaultsize) dialogs (in one dimension).
      */
-    long defaultSize(YUIDimension dim) const;
+    long defaultSize( YUIDimension dim ) const;
 
     /**
      * Make a screen shot in .png format and save it to 'filename'.
@@ -121,8 +123,9 @@ public:
     void makeScreenShot( string filename );
 
     /**
-     * UI-specific runPkgSeleciton method.
+     * UI-specific runPkgSeleciton method: Start the package selection.
      * This implementation does the same as UserInput().
+     *
      * Reimplemented from YUIInterpreter.
      **/
     YCPValue runPkgSelection( YWidget * packageSelector );
@@ -165,23 +168,23 @@ public:
     /**
      * Block WM_CLOSE events for the main window.
      **/
-    void blockWmClose()		{ wm_close_blocked = true;  }
+    void blockWmClose()		{ _wm_close_blocked = true;  }
 
     /**
      * Unblock WM_CLOSE events for the main window.
      **/
-    void unblockWmClose()	{ wm_close_blocked = false; }
+    void unblockWmClose()	{ _wm_close_blocked = false; }
 
     /**
      * Check if dialogs are to be activated automatically
      **/
-    bool autoActivateDialogs() const { return auto_activate_dialogs; }
+    bool autoActivateDialogs() const { return _auto_activate_dialogs; }
 
     /**
      * Are we running embedded into another application, e.g., inside the KDE
      * control center?
      **/
-    bool runningEmbedded() const { return running_embedded; }
+    bool runningEmbedded() const { return _running_embedded; }
 
 
 signals:
@@ -212,27 +215,28 @@ protected:
 
     /**
      * Go into event loop until next user input is received that is to be
-     * notified to the client component.  
+     * notified to the client component.
      *
-     * 'dialog' is the dialog that should receive user input - the topmost dialog.
+     * 'dialog' is the dialog that should receive user input - the topmost
+     * dialog.  
      *
      * Reimplemented from YUIInterpreter.
      */
-    YWidget *userInput( YDialog *dialog, EventType *event );
+    YWidget * userInput( YDialog *dialog, EventType *event );
 
     /**
      * Check the event queue for user input. Don't wait.
      *
      * Reimplemented from YUIInterpreter.
      */
-    YWidget *pollInput( YDialog *dialog, EventType *event );
+    YWidget * pollInput( YDialog *dialog, EventType *event );
 
     /**
      * Create a dialog.
      *
      * Reimplemented from YUIInterpreter.
      */
-    YDialog *createDialog( YWidgetOpt & opt );
+    YDialog * createDialog( YWidgetOpt & opt );
 
     /**
      * Show and activate a dialog.
@@ -257,13 +261,13 @@ protected:
 
     /**
      * Make all UI windows usable without a mouse - even predefined Qt dialogs
-     * that don't know the UI's dialogs' activate() magic.  
+     * that don't know the UI's dialogs' activate() magic.
      *
      * Reimplemented from QObject.
      **/
     bool showEventFilter( QObject * obj, QEvent * ev );
 
-    
+
     /*** Widget creation methods, all reimplemented from YUIInterpreter ***/
 
     YContainerWidget * createAlignment		( YWidget * parent, YWidgetOpt & opt, YAlignmentType horAlign, YAlignmentType vertAlign );
@@ -271,24 +275,24 @@ protected:
     YContainerWidget * createRadioButtonGroup	( YWidget * parent, YWidgetOpt & opt);
     YContainerWidget * createReplacePoint	( YWidget * parent, YWidgetOpt & opt);
     YContainerWidget * createSplit		( YWidget * parent, YWidgetOpt & opt, YUIDimension dimension);
-    YContainerWidget * createSquash		( YWidget * parent, YWidgetOpt & opt, bool hsquash, bool vsquash);
+    YContainerWidget * createSquash		( YWidget * parent, YWidgetOpt & opt, bool horSquash, bool vertSquash);
     YContainerWidget * createWeight		( YWidget * parent, YWidgetOpt & opt, YUIDimension dim, long weight);
 
     YWidget * createCheckBox		( YWidget * parent, YWidgetOpt & opt, const YCPString & label, bool checked);
     YWidget * createComboBox		( YWidget * parent, YWidgetOpt & opt, const YCPString & label);
     YWidget * createEmpty		( YWidget * parent, YWidgetOpt & opt);
-    YWidget * createImage		( YWidget * parent, YWidgetOpt & opt, ImageType img, YCPString defaulttext);
-    YWidget * createImage		( YWidget * parent, YWidgetOpt & opt, YCPByteblock imagedata, YCPString defaulttext);
-    YWidget * createImage		( YWidget * parent, YWidgetOpt & opt, YCPString file_name, YCPString defaulttext);
+    YWidget * createImage		( YWidget * parent, YWidgetOpt & opt, ImageType    img, 	YCPString fallbackText );
+    YWidget * createImage		( YWidget * parent, YWidgetOpt & opt, YCPByteblock imageData,	YCPString fallbackText );
+    YWidget * createImage		( YWidget * parent, YWidgetOpt & opt, YCPString    fileName, 	YCPString fallbackText );
     YWidget * createIntField		( YWidget * parent, YWidgetOpt & opt, const YCPString & label, int minValue, int maxValue, int initialValue);
     YWidget * createLabel		( YWidget * parent, YWidgetOpt & opt, const YCPString & text);
     YWidget * createLogView		( YWidget * parent, YWidgetOpt & opt, const YCPString & label, int visibleLines, int maxLines );
     YWidget * createMultiLineEdit	( YWidget * parent, YWidgetOpt & opt, const YCPString & label, const YCPString & text);
-    YWidget * createProgressBar		( YWidget * parent, YWidgetOpt & opt, const YCPString & label, const YCPInteger & maxprogress, const YCPInteger & progress);
+    YWidget * createProgressBar		( YWidget * parent, YWidgetOpt & opt, const YCPString & label, const YCPInteger & maxProgress, const YCPInteger & currentProgress );
     YWidget * createPackageSelector	( YWidget * parent, YWidgetOpt & opt, const YCPString & floppyDevice );
     YWidget * createPushButton		( YWidget * parent, YWidgetOpt & opt, const YCPString & label);
     YWidget * createMenuButton		( YWidget * parent, YWidgetOpt & opt, const YCPString & label);
-    YWidget * createRadioButton		( YWidget * parent, YWidgetOpt & opt, YRadioButtonGroup *rbg, const YCPString & label, bool checked);
+    YWidget * createRadioButton		( YWidget * parent, YWidgetOpt & opt, YRadioButtonGroup * rbg, const YCPString & label, bool checked);
     YWidget * createRichText		( YWidget * parent, YWidgetOpt & opt, const YCPString & text);
     YWidget * createSelectionBox	( YWidget * parent, YWidgetOpt & opt, const YCPString & label);
     YWidget * createMultiSelectionBox	( YWidget * parent, YWidgetOpt & opt, const YCPString & label);
@@ -463,22 +467,22 @@ private:
      * argument, so this needs to be embedded into something else - and a QVBox
      * at least handles all the sizeHint and resize stuff.
      **/
-    QVBox * main_win;
+    QVBox * _main_win;
 
     /**
      * Stack for the Qt widgets inside the main window.
      **/
-    QWidgetStack * widget_stack;
+    QWidgetStack * _widget_stack;
 
     /**
      * Stack to keep track of the stacking order of popup dialogs.
      **/
-    vector<QWidget *> popup_stack;
+    vector<QWidget *> _popup_stack;
 
     /**
      * Numeric ID for defaultsize dialogs for the widget stack
      **/
-    int main_dialog_id;
+    int _main_dialog_id;
 
     /**
      * Is set by some widget during #userInput or #pollInput
@@ -486,7 +490,7 @@ private:
      * It may be 0 in which case some implicite event
      * happend (such as closeWindow)
      */
-    YWidget * event_widget;
+    YWidget * _event_widget;
 
     /**
      * Is set by some widget during #userInput or #pollInput.
@@ -494,71 +498,67 @@ private:
      * it to determine whether it should return or further wait
      * for an input.
      */
-    EventType event_type;
+    EventType _event_type;
 
     /**
-     * Default Size for windows
-     * Can be changed with -geometry
+     * Size for `opt(`defaultsize) dialogs.
      */
-    QSize default_size;
-
+    QSize _default_size;
 
     /**
      * A flag used during the idle loop. If it is set to true,
      * the idle loop is left. This happens, if the ycp-ui-communication
      * pipe to the ui gets readable.
      */
-    bool leave_idle_loop;
+    bool _leave_idle_loop;
 
     /**
      * This flag is set during @ref #userInput in order to tell
      * @ref #returnNow to call exit_loop, which only may be called
      * after enter_loop.
      */
-    bool do_exit_loop;
-
+    bool _do_exit_loop;
 
     /**
      * Cursor to use when no input is accepted (i.e. outside UserInput() )
      **/
-    QCursor *busy_cursor;
-
+    QCursor * _busy_cursor;
 
     /**
      * Default font (cached)
      **/
-    QFont current_font;
-    bool loaded_current_font;
+    QFont _current_font;
+    bool _loaded_current_font;
 
 
     /**
      * Heading font (cached)
      **/
-    QFont heading_font;
-    bool loaded_heading_font;
+    QFont _heading_font;
+    bool _loaded_heading_font;
 
 
     /**
      * Window manager close events blocked?
      **/
-    bool wm_close_blocked;
+    bool _wm_close_blocked;
 
     /**
      * Force new dialogs to the foreground and grab the keyboard focus?
      * (Only if running without a window manager)
      **/
-    bool auto_activate_dialogs;
+    bool _auto_activate_dialogs;
 
     /**
      * Are we running embedded into another application, e.g., inside the KDE
      * control center?
      **/
-    bool running_embedded;
+    bool _running_embedded;
 
     /**
      * Window ID for KDE control center
      **/
-    QString kcontrol_id;
+    QString _kcontrol_id;
 
     /**
      * Global reference to the UI
