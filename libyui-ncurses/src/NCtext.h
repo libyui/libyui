@@ -60,10 +60,10 @@ class NCtext {
     virtual ~NCtext();
 
     unsigned Lines()   const;
-    unsigned Columns() const;
+    size_t Columns() const;
 
     const list<NCstring> & Text() const { return mtext; }
-    const NCstring &       operator[]( unsigned idx ) const;
+    const NCstring &       operator[]( std::wstring::size_type idx ) const;
 
     const_iterator begin() const { return mtext.begin(); }
     const_iterator end()   const { return mtext.end(); }
@@ -83,7 +83,7 @@ class NClabel : protected NCtext {
 
   protected:
 
-    unsigned hotline;
+    std::wstring::size_type hotline;
 
     void stripHotkey();
 
@@ -102,7 +102,7 @@ class NClabel : protected NCtext {
 
   public:
 
-    unsigned width()  const { return Columns(); }
+    size_t   width()  const { return Columns(); }
     unsigned height() const { return Lines(); }
     wsze     size()   const { return wsze( Lines(), Columns() ); }
 
@@ -163,9 +163,9 @@ class NClabel : protected NCtext {
     //
 
 
-    bool          hasHotkey() const { return hotline != (unsigned) string::npos; }
-    unsigned char hotkey() const { return hasHotkey() ? operator[]( hotline ).hotkey() : '\0'; }
-    unsigned      hotpos() const { return hasHotkey() ? operator[]( hotline ).hotpos() : string::npos; }
+    bool        hasHotkey() const { return hotline != wstring::npos; }
+    wchar_t 	hotkey() const { return hasHotkey() ? operator[]( hotline ).hotkey() : L'\0'; }
+    std::wstring::size_type   hotpos() const { return hasHotkey() ? operator[]( hotline ).hotpos() : wstring::npos; }
 };
 
 ///////////////////////////////////////////////////////////////////

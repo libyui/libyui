@@ -43,9 +43,9 @@ class NCstring {
 
   private:
 
-    mutable wchar_t hotk;
-    mutable wstring::size_type hotp;
-    mutable wstring   mstr;
+    mutable wchar_t hotk;		// hotkey
+    mutable wstring::size_type hotp;	// position of hotkey
+    mutable wstring   wstr;
 
     static string       termEncoding;
     
@@ -79,13 +79,13 @@ public:
 
     NCstring & operator+=( const NCstring & nstr );
 
-    const wstring & str()      const { return mstr; }
+    const wstring & str()      const { return wstr; }
 
   private:
 
     friend class NClabel;
-    wchar_t 	      hotkey() const { return hotk; }
-    string::size_type hotpos() const { return hotp; }
+    wchar_t 	       hotkey() const { return hotk; }
+    wstring::size_type hotpos() const { return hotp; }
 
   public:
 
