@@ -200,7 +200,7 @@ NCursesEvent & NCAskForExistingDirectory::showDirPopup( )
 
 long NCAskForExistingDirectory::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? 70 : 20 );
+    return ( dim == YD_HORIZ ? NCurses::cols()-10 : NCurses::lines()-4 );
 }
 
 ///////////////////////////////////////////////////////////////////
