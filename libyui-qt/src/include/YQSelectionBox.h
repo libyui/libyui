@@ -88,12 +88,12 @@ public:
      */
     virtual bool setKeyboardFocus();
 
-
     /**
      * Event filter - inherited from QWidget
      **/
     bool eventFilter( QObject * obj, QEvent * ev );
 
+    
 protected slots:
 
     /**
