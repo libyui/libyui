@@ -54,7 +54,6 @@ private:
     vector<PkgDep::ErrorResult> dependencies;	// index corresponds to line in package list
     
     NCPushButton * cancelButton;
-    NCPushButton * okButton;
     NCPushButton * solveButton;		
 
     NCPkgTable * pkgs;			// the list of packages with unresolved deps

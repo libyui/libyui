@@ -43,7 +43,6 @@ using namespace std;
 NCPopupDeps::NCPopupDeps( const wpos at, PackageSelector * pkger )
     : NCPopup( at, false )
       , cancelButton( 0 )
-      , okButton( 0 )
       , solveButton( 0 )
       , pkgs( 0 )
       , deps( 0 )
@@ -155,11 +154,6 @@ void NCPopupDeps::createLayout( const YCPString & headline )
   cancelButton->setId( PkgNames::Cancel () );
   hSplit->addChild( cancelButton );
 
-#if 0
-  okButton = new NCPushButton( hSplit, opt, PkgNames::OKLabel() );
-  okButton->setId( PkgNames::OkButton () );
-  hSplit->addChild( okButton );
-#endif
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -292,15 +286,22 @@ string NCPopupDeps::getDependencyKind(  PkgDep::ErrorResult error )
     
     if ( !error.unresolvable.empty() )
     {
-	ret = "unresolvable dependency";
+	if ( error.unresolvable.front().is_conflict )
+	{
+	    ret = "Conflict ";
+	}
+	else
+	{
+	    ret = "Unresolvable ";
+	}
     }
     if ( !error.alternatives.empty() )
     {
-	ret = "needs libs or packages";
+	ret = "Needs packages ";
     }
     if ( !error.conflicts_with.empty() )
     {
-	ret = "conflicts with packages ";
+	ret = "Conflict ";
 	if ( !error.remove_to_solve_conflict.empty() )
 	{
 	    NCMIL << "REMOVE to solve not empty" << endl;
@@ -476,38 +477,46 @@ bool NCPopupDeps::postAgain()
 	// call the Y2PM::packageManager() to get the "badlist"
 	bool success = Y2PM::packageManager().solveInstall( goodList, badList );
 
-	// evaluate the ErrorResultList
-	evaluateErrorResult( badList );
-
-
-	
-	// fill the list with packages  which have unresolved deps
-	fillDepsPackageList( pkgs );
-
-
-	// set current item ( if the package is still there )
-	if ( currentPtr )
+	if ( !success )
 	{
-	    unsigned int size = pkgs->getNumLines();
-	    unsigned int index = 0;
-	    PMObjectPtr pkgPtr;
-	    while ( index < size )
+	    // evaluate the ErrorResultList
+	    evaluateErrorResult( badList );
+
+	    // fill the list with packages  which have unresolved deps
+	    fillDepsPackageList( pkgs );
+
+	    // set current item ( if the package is still there )
+	    if ( currentPtr )
 	    {
-		pkgPtr = pkgs->getDataPointer( index );
-		if ( pkgPtr == currentPtr )
+		unsigned int size = pkgs->getNumLines();
+		unsigned int index = 0;
+		PMObjectPtr pkgPtr;
+		while ( index < size )
 		{
-		    NCMIL << "Setting current package line: " << index << endl;
-		    pkgs->setCurrentItem( index );
-		    break;
+		    pkgPtr = pkgs->getDataPointer( index );
+		    if ( pkgPtr == currentPtr )
+		    {
+			NCDBG << "Setting current package line: " << index << endl;
+			pkgs->setCurrentItem( index );
+			break;
+		    }
+		    index ++;
 		}
-		index ++;
 	    }
+	    pkgs->setKeyboardFocus();
 	}
-	pkgs->setKeyboardFocus();
-    }
-    else if  ( currentId->compare( PkgNames::OkButton () ) == YO_EQUAL )
-    {
-	return false;
+	else
+	{
+	    pkgs->itemsCleared();
+	    deps->itemsCleared();
+	    vector<string> line;
+	    line.reserve(2);
+	    line.push_back( "No conflicts or unresolved dependencies" );
+	    pkgs->addLine( PMSelectable::S_NoInst,
+			   line,
+			   0,
+			   PMObjectPtr() );
+	}
     }
 
     if ( postevent == NCursesEvent::cancel )
