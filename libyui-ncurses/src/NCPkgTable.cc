@@ -212,79 +212,101 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
     
     bool ok = true;
 
-    if ( newstatus == PMSelectable::S_Del
-	 || newstatus == PMSelectable::S_NoInst
-	 || newstatus == PMSelectable::S_Taboo )
+    switch ( newstatus )
     {
-	if ( objPtr->hasCandidateObj() )
-	{
-	    notify = objPtr->getCandidateObj()->delnotify();
-	    header = YCPString(PkgNames::WarningLabel());
-	}
-    }
-    if ( newstatus == PMSelectable::S_Install )
-    {
-	if ( objPtr->hasCandidateObj() )
-	{	
-	    notify = objPtr->getCandidateObj()->insnotify();
-	    header = YCPString(PkgNames::NotifyLabel());
-	}
-	if ( objPtr->hasSelectable() )
-	{
-	    PMPackagePtr pkgPtr = objPtr->getSelectable()->theObject();
-	    license = pkgPtr->licenseToConfirm();
-	}
+	case PMSelectable::S_Del:
+	case PMSelectable::S_NoInst:
+	case PMSelectable::S_Taboo:
+	    if ( objPtr->hasCandidateObj() )
+	    {
+		notify = objPtr->getCandidateObj()->delnotify();
+		header = YCPString(PkgNames::WarningLabel());
+	    }
+	break;
+	case PMSelectable::S_Install:
+	case PMSelectable::S_Update:
+	    if ( objPtr->hasCandidateObj() )
+	    {	
+		notify = objPtr->getCandidateObj()->insnotify();
+		header = YCPString(PkgNames::NotifyLabel());
+		
+		PMPackagePtr pkgPtr = objPtr->getCandidateObj();
+		license = pkgPtr->licenseToConfirm();
+		license.push_back("This is the license text" );
+	    }
+	    break;
+
+	default: break;
     }
 
     string pkgName = objPtr->getSelectable()->name();
-    if ( !notify.empty() )
+
+    if ( !license.empty() )
+    {
+	NCPopupInfo info( wpos( 1, 1),
+			  YCPString(_("End User License Agreement") ),
+			  YCPString( "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( license ) ),
+			  PkgNames::AcceptLabel(),
+			  PkgNames::CancelLabel() );
+
+	if ( info.showInfoPopup( ) == NCursesEvent::cancel )
+	{
+	    // make sure the package won't be installed
+	    switch ( newstatus )
+	    {
+		case PMSelectable::S_Install:
+		    newstatus = PMSelectable::S_Taboo;
+		    break;
+		    
+		case PMSelectable::S_Update:
+		    newstatus = PMSelectable::S_Protected;
+		    break;
+
+		default:
+		    break;
+	    }
+	    
+	    ok = false;
+	}
+    }
+
+    if ( ok && !notify.empty() )
     {
 	NCPopupInfo info( wpos( 1, 1),
 			  header,
 			  YCPString( "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( notify ) ) );
 	info.showInfoPopup( );
     }
-    if ( !license.empty() )
-    {
-	NCPopupInfo info( wpos( 1, 1),
-			  YCPString(_("End User License Agreement") ),
-			  YCPString( "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( license )
-				     + "<br><br>" + _("Installing the package means accepting the license.")
-				     + "<br>" + _("<b>Install the package now?</b>") ),
-			  PkgNames::OKLabel(),
-			  PkgNames::CancelLabel() );
-	if ( info.showInfoPopup( ) == NCursesEvent::cancel )
-	    ok = false;
-    }
-
-    if ( ok )
-    {
-	// inform the package manager
-	ok = statusStrategy->setObjectStatus( newstatus, objPtr );
-    }
+    
+    // inform the package manager
+    ok = statusStrategy->setObjectStatus( newstatus, objPtr );
     
     if ( ok && singleChange )
     {
-	if ( tableType == T_Packages
-	     || tableType == T_Update
-	     || tableType == T_Availables )
+	switch ( tableType )
 	{
-	    // check/show dependencies of packages
-	    packager->showPackageDependencies( false );	// only check if automatic check is ON
-	    // show the required diskspace
-	    packager->showDiskSpace();
+	    case T_Packages:
+	    case T_Update:
+	    case T_Availables:
+		// check/show dependencies of packages
+		packager->showPackageDependencies( false );	// only check if automatic check is ON
+		// show the required diskspace
+		packager->showDiskSpace();
+		break;
+		
+	    case T_Selections:
+		// check/show dependencies of selections 
+		packager->showSelectionDependencies();
+		break;
+	    
+	    case T_Patches:
+		// show the download size for all selected patches
+		packager->showDownloadSize();
+		break;
+		
+	    default:
+		break;
 	}
-        else if ( tableType == T_Selections )
-	{
-	    // check/show dependencies of selections 
-	    packager->showSelectionDependencies();
-	}
-	else if ( tableType == T_Patches )
-	{
-	    // show the download size for all selected patches
-	    packager->showDownloadSize();
-	}
-
         // update this list to show the status changes
 	updateTable();
 	

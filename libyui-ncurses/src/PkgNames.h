@@ -503,6 +503,11 @@ public:
      */
     static const string OKLabel();
 
+   /**
+     *  The label of the Accept button
+     */
+    static const string AcceptLabel();
+    
     /**
      *  The label of the Cancel button
      */

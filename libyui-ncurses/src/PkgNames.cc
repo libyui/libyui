@@ -588,6 +588,13 @@ const string PkgNames::OKLabel()
     return value;
 }
 
+const string PkgNames::AcceptLabel()
+{
+    // the label of an Accept button
+    static const string value = _( "&Accept" );
+    return value;
+}
+
 const string PkgNames::SaveLabel()
 {
     // the label of the Save button
