@@ -353,9 +353,7 @@ void
 YQPkgYouPatchListItem::setStatus( PMSelectable::UI_Status newStatus )
 {
     YQPkgObjListItem::setStatus( newStatus );
-
     Y2PM::youPatchManager().updatePackageStates();
-
     _youPatchList->sendUpdatePackages();
 }
 
