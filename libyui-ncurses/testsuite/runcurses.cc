@@ -16,13 +16,22 @@
    Maintainer: Klaus Kaempf (kkaempf@suse.de)
 
 /-*/
+/*
+#include <scr/run_agent.h>
 
+#include "../src/LiloAgent.h"
+
+int main (int argc, char *argv[])
+{
+    run_agent <LiloAgent>(argc, argv, true);
+}
+*/
 #include <stdio.h>
 
-#include "Y2NCursesUI.h"
+#include "Y2NCursesUIComponent.h"
 
-#include <ycp/YCPParser.h>
-#include <yui/YUIInterpreter.h>
+#include <ycp/Parser.h>
+#include "../src/Y2NCursesUIComponent.h"
 #include <ycp/y2log.h>
 
 extern int yydebug;
@@ -57,8 +66,8 @@ main (int argc, char *argv[])
 	}
     }
 
-    YCPParser *parser;
-    parser = new YCPParser ();
+    Parser *parser;
+    parser = new Parser ();
 
     if (!parser)
     {
@@ -66,10 +75,9 @@ main (int argc, char *argv[])
 	return 1;
     }
 
-    YUIInterpreter *interpreter;
-    interpreter = new Y2NCursesUI(true, 0, 0 );
+    Y2NCursesUIComponent* interpreter = new Y2NCursesUIComponent(true, 0, 0, 0 );
 
-    if (!interpreter)
+    if (! interpreter)
     {
 	fprintf (stderr, "Failed to create Y2NCursesUI\n");
 	delete parser;
@@ -97,11 +105,11 @@ main (int argc, char *argv[])
 
     for (;;)
     {
-	value = parser->parse();
-	if (value.isNull())
+	YCode* code = parser->parse();
+	if (code == NULL)
 	    break;
 
-	value = interpreter->evaluate(value);
+	YCPValue value = code->evaluate ();
 
 	printf ("(%s)\n", value->toString().c_str());
     }
