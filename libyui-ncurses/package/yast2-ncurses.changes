@@ -2,6 +2,7 @@
 Mon Jan 27 16:59:37 CET 2003 - gs@suse.de
 
 - V 2.7.5
+- rpm-devel added to neededforbuild
 - package installation: show dependencies between package selections
 
 -------------------------------------------------------------------
