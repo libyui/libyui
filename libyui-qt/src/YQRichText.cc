@@ -108,7 +108,9 @@ void YQRichText::setText( const YCPString & ytext )
 	_textBrowser->verticalScrollBar()->setValue(0);
 
     QString text = fromUTF8( ytext->value() );
-    text.replace( "&product;", YUIQt::ui()->productName() );
+    
+    if ( _textBrowser->textFormat() != Qt::PlainText )
+	text.replace( "&product;", YUIQt::ui()->productName() );
     
     YRichText::setText( ytext );
     _textBrowser->setText( text );
