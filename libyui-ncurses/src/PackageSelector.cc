@@ -1331,6 +1331,7 @@ bool PackageSelector::YouHelpHandler( const NCursesEvent&  event )
 //
 bool PackageSelector::SelectionHandler( const NCursesEvent&  event )
 {
+    NCPkgTable * packageList = getPackageList();
     if ( event.selection.isNull()
 	 || !filePopup )
     {
@@ -1345,7 +1346,12 @@ bool PackageSelector::SelectionHandler( const NCursesEvent&  event )
     {
 	filePopup->loadFromFile();
     }
-    
+
+    if ( packageList )
+    {
+	packageList->setKeyboardFocus();
+    }
+       
     return true;
 }
 
@@ -1619,20 +1625,27 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
     }
     else if (  visibleInfo->compare( PkgNames::Files() ) == YO_EQUAL )
     {
-	PMPackagePtr package = pkgPtr;
+	// the file list is available only for installed packages
+	PMPackagePtr package = pkgPtr->getSelectable()->installedObj();
+	string text;
+
 	if ( package )
 	{
 	    // get the file list from the package manager/show the list
 	    list<string> fileList = package->filenames();
-	
-	    // get the widget id 
-	    YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );  
-	    if ( descrInfo  )
-	    {
-		NCMIL <<  "Size of the file list: " << fileList.size() << endl;
-		static_cast<NCRichText *>(descrInfo)->setText( YCPString(createText(fileList, false)) );
-	    }
+	    text = createText( fileList, false ) ;
 	}
+	else
+	{
+	    text = "";
+	}
+	
+	// get the widget id 
+	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );  
+	if ( descrInfo  )
+	{
+	    static_cast<NCRichText *>(descrInfo)->setText( YCPString(text) );
+	}	
     }
     else if ( visibleInfo->compare( PkgNames::PkgInfo() ) == YO_EQUAL )
     {
@@ -1907,19 +1920,23 @@ string PackageSelector::createText( list<string> info, bool oneline )
     string text = "";
     unsigned int i;
     
-    for ( i = 0, it = info.begin(); it != info.end(); ++it, i++ )
+    for ( i = 0, it = info.begin(); it != info.end() && i < 1000; ++it, i++ )
     {
-	text = text + (*it);
+	text += (*it);
 	if ( i < info.size()-1 )
 	{
-	    if ( oneline )
+	    if ( oneline && i < 999 )
 	    {
-		text = text + ", ";
+		text += ", ";
 	    }
 	    else
 	    {
-		text = text + "<br>";	
+		text += "<br>";	
 	    }
+	}
+	if ( i == 999 )
+	{
+	    text += "...";
 	}
     }
 
