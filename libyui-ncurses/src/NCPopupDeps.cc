@@ -753,9 +753,17 @@ bool NCPopupDeps::postAgain()
    
 	NCDBG << "Solving..." << endl ;
 
+	NCPopupInfo info( wpos(10, 10),  YCPString( "" ),
+		      YCPString(PkgNames::Solving().str()),
+		      PkgNames::OKLabel().str() );
+	info.setNiceSize( 18, 4 );
+	info.popup();
+    
 	// call Y2PM::packageManager() or Y2PM::selectionManager() to get the "badlist"
 	bool success = solveInstall( goodList, badList );
 
+	info.popdown();
+	
 	if ( !success )
 	{
 	    // fill the list with packages which have unresolved deps
