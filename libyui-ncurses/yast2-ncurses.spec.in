@@ -1,5 +1,6 @@
 @HEADER-COMMENT@
-# neededforbuild gpp libgpp libxcrypt libxcrypt-devel yast2-devel-packages
+
+# neededforbuild  gpp libgpp libxcrypt libxcrypt-devel yast2-devel-packages
 
 @HEADER@
 
