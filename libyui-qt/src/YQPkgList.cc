@@ -219,7 +219,7 @@ YQPkgList::createNotInstalledContextMenu()
 
 
     _notInstalledContextMenu->insertSeparator();
-    _notInstalledContextMenu->insertItem( _( "Export this List to &Text File..." ),
+    _notInstalledContextMenu->insertItem( _( "Export This List to &Text File..." ),
 					  this, SLOT( askExportList() ) );
 }
 
@@ -238,7 +238,7 @@ YQPkgList::createInstalledContextMenu()
     addAllInListSubMenu( _installedContextMenu );
 
     _installedContextMenu->insertSeparator();
-    _installedContextMenu->insertItem( _( "Export this List to &Text File..." ),
+    _installedContextMenu->insertItem( _( "Export This List to &Text File..." ),
 				       this, SLOT( askExportList() ) );
 }
 

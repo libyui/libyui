@@ -205,7 +205,7 @@ YQPackageSelector::symbolHelp()
 		     _( "Autodelete" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is already installed, but package dependencies require that it is deleted." )
-		     + _( "This can happen for example if some other package obsoletes this one." ) );
+		     + _( "This can happen, for example, if some other package obsoletes this one." ) );
 
     // Translators: This is added to the explanation of a status. Use of
     // "non-breakable space" (HTML &nbsp; ) is recommended (if the line doesn't 
