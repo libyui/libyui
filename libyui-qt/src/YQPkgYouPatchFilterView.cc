@@ -92,7 +92,7 @@ YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
     hbox = new QHBox( vbox ); CHECK_PTR( hbox );
     addHStretch( hbox );
     
-    new QLabel( _( "Total Download Size:" ) + " ", hbox );
+    new QLabel( _( "Estimated Download Size:" ) + " ", hbox );
     _totalDownloadSize		= new QLabel( FSize(0).asString().c_str(), hbox );
     CHECK_PTR( _totalDownloadSize );
 
