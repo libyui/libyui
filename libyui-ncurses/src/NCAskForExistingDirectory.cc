@@ -121,12 +121,21 @@ void NCAskForExistingDirectory::createLayout( const YCPString & headline )
 
     opt.isHStretchable.setValue( true );
 
-    // the field for the selected directory
-    dirName = new NCTextEntry( split, opt,
-			       YCPString( "Selected directory" ),
-			       YCPString( "" ),
-			       100, 100 );
-    split->addChild( dirName );
+    NCFrame * frame = new NCFrame( split, opt, YCPString("" ) );
+    NCSplit * vSplit = new NCSplit( frame, opt, YD_VERT );
+
+    opt.isEditable.setValue( false );
+    dirName = new NCComboBox( frame, opt, YCPString("Selected directory:") );
+    frame->addChild( dirName );
+
+    dirName->setId( PkgNames::SearchBox() );	// FIXME
+
+    dirName->itemAdded( YCPString( "" ), // set initial value
+			0,		 // index
+			false );	 // not selected
+    vSplit->addChild( new NCSpacing( vSplit, opt, 0.6, false, true ) );
+
+    split->addChild( frame );
     
     // add the list of directories
     dirList = new NCFileTable( split, opt, NCFileTable::T_Overview );
@@ -275,7 +284,8 @@ NCursesEvent NCAskForExistingDirectory::wHandleInput( wint_t ch )
 	    currentDir = "/";
 	}
     }
-
+    unsigned int i = dirName->getListSize();;
+    
     switch ( ch )
     {
 	case KEY_UP:
@@ -283,14 +293,18 @@ NCursesEvent NCAskForExistingDirectory::wHandleInput( wint_t ch )
 	case KEY_HOME: {
 	    if ( old_pos != 0 )
 	    {
-		dirName->setText( currentDir );
+		dirName->itemAdded( YCPString(currentDir),
+				    i,
+				    true );
 	    }
 	    break;
 	}
 	case KEY_DOWN:
 	case KEY_NPAGE:
 	case KEY_END: {
-	    dirName->setText( currentDir );
+	    dirName->itemAdded( YCPString(currentDir),
+				    i,
+				    true );
 	    break;
 	}
 	case KEY_RETURN: {
@@ -299,7 +313,9 @@ NCursesEvent NCAskForExistingDirectory::wHandleInput( wint_t ch )
 	    if ( ok )
 	    {
 		startDir = currentDir;		// set new start directory 
-		dirName->setText( currentDir );
+		dirName->itemAdded( YCPString(currentDir),
+				    i,
+				    true );
 	    }
 	    break;
 	}
@@ -365,8 +381,11 @@ bool NCAskForExistingDirectory::fillDirectoryList ( )
 
     
     DIR * diskDir = opendir( currentDir.c_str() );
-
-    dirName->setText( YCPString( currentDir ) );
+    unsigned int i = dirName->getListSize();
+    
+    dirName->itemAdded( YCPString(currentDir),
+				    i,
+				    true );
 	
     if ( ( diskDir = opendir( currentDir.c_str() ) ) )
     {
@@ -380,7 +399,7 @@ bool NCAskForExistingDirectory::fillDirectoryList ( )
 	    }
 	}
 	
-	// sort the directory list and fill the selection box widget
+	// sort the list and fill the table widget with directory entries
 	tmpList.sort( );
 	it = tmpList.begin();
 	while ( it != tmpList.end() )
@@ -414,7 +433,8 @@ bool NCAskForExistingDirectory::fillDirectoryList ( )
     }
     else
     {
-	NCERR << "ERROR opening directory: " << currentDir << " errno: " << strerror( errno ) << endl;
+	NCERR << "ERROR opening directory: " << currentDir << " errno: "
+	      << strerror( errno ) << endl;
 	return false;
     }
     closedir( diskDir );

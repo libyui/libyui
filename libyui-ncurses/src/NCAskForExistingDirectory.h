@@ -28,7 +28,7 @@
 #include "NCLabel.h"
 #include "NCFileTable.h"
 #include "NCPushButton.h"
-#include "NCTextEntry.h"
+#include "NCComboBox.h"
 
 
 ///////////////////////////////////////////////////////////////////
@@ -46,7 +46,7 @@ private:
 
     NCPushButton * okButton;
     NCPushButton * cancelButton;
-    NCTextEntry * dirName;
+    NCComboBox * dirName;
     NCFileTable *dirList;		// directory list
 
     string currentDir;			// currently selected directory
