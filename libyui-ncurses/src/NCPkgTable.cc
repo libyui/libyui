@@ -518,10 +518,6 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr )
 	    {
 		instVersion = pkgPtr->getInstalledObj()->edition().asString();
 	    }
-	    else
-	    {
-		instVersion = "    ";	// package not installed
-	    }
 	    
 	    // in case of YOU patches: show the version of the package which
 	    // is contained in the patch

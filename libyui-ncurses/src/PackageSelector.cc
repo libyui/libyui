@@ -537,24 +537,15 @@ bool PackageSelector::fillPatchList( string filter )
     // clear the package table
     packageList->itemsCleared ();
 
-    // get the patch list and sort it
-    list<PMSelectablePtr> patchList( Y2PM::youPatchManager().begin(), Y2PM::youPatchManager().end() );
-    patchList.sort( sortByName );
-    
-    list<PMSelectablePtr>::const_iterator it;
+    PMManager::PMSelectableVec::const_iterator it = Y2PM::youPatchManager().begin();
 
-    // fill the package table
-    PMYouPatchPtr patchPtr;    
-
-    for ( it = patchList.begin(); it != patchList.end(); ++it )
+    while ( it != Y2PM::youPatchManager().end() )
     {
-	PMSelectablePtr selectable = *it;
-	// always take "theObject()"
-	patchPtr = selectable->theObject();
-
+	PMYouPatchPtr	patchPtr  = ( *it)->theObject();
 	checkPatch( patchPtr, filter );
+	++it;
     }
-
+    
     if ( filter == "installable"
 	 && packageList->getNumLines() == 0 )
     {
@@ -1824,7 +1815,6 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	    text += " - ";
 	}
 	
-	// the summary is UTF8 encoded -> use a YCPString as argument for NCstring  
 	text += pkgPtr->summary();
 	text += "<br>";
 
