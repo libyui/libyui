@@ -842,10 +842,10 @@ YQPkgConflict::actionResetIgnoredConflicts( YQPkgConflictDialog * dialog )
     if ( ! _actionResetIgnoredConflicts )
     {
 	QString label = _( "Reset &Ignored Dependency Conflicts" );
-	_actionResetIgnoredConflicts = new QAction( label,	// text
-						    label,	// menu text
-						    0,		// accel
-						    0 ); 	// parent
+	_actionResetIgnoredConflicts = new QAction( label,		// text
+						    label,		// menu text
+						    (QKeySequence) 0,	// accel
+						    (QObject *) 0 ); 	// parent
 	
 	_actionResetIgnoredConflicts->setEnabled( ! _ignore.empty() );
     }

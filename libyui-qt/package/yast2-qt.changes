@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri May 23 11:59:39 CEST 2003 - sh@suse.de
+
+- Fixed build problems due to new Qt lib (ambiguous overload)
+- V 2.8.1
+
+-------------------------------------------------------------------
 Thu Apr 10 15:29:01 CEST 2003 - sh@suse.de
 
 - Fixed bug #25419: Qt PkgMgr shows correct version downgrades red
