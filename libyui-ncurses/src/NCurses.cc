@@ -297,7 +297,7 @@ void NCurses::init_screen()
     bool redefine = false;
 
     char *value = getenv( "Y2NCPSEUDO" );
-
+    
     if ( value != NULL )
     {
 	if ( strcmp(value, "0") == 0 )
@@ -305,8 +305,10 @@ void NCurses::init_screen()
 	else
 	    redefine = true;
     }
-    else if (  NCstring::terminalEncoding() != "UTF-8" )
+    else if (  NCstring::terminalEncoding() != "UTF-8"
+	       && strcmp(envTerm.c_str(), "linux") == 0 )
     {
+	// don't use ACS charset on console in NOT UTF-8 locale
 	redefine = true;
     }
     
