@@ -641,15 +641,64 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, PMObjectPtr obj
     list<PMPackagePtr> packages = patchPtr->packages();
     string preScript = patchPtr->preScript();
     string postScript = patchPtr->postScript();
-    //files();
+    list<PMYouFile> files = patchPtr->files();
+
     list<PMPackagePtr>::const_iterator listIt;
+    list<PMYouFile>::const_iterator fileIt;
+    
     NCMIL << "Number of patch packages: " << packages.size() << endl;
 	
     for ( listIt = packages.begin(); listIt != packages.end();  ++listIt )    
     {
 	pkgTable->createListEntry( (*listIt) );
     }
+    for ( fileIt = files.begin(); fileIt != files.end(); ++fileIt )
+    {
+	vector<string> pkgLine;
+	pkgLine.reserve(4);
 
+	pkgLine.push_back( fileIt->name() );
+	pkgLine.push_back( "   " );	// versions empty
+	pkgLine.push_back( "   " );	
+	pkgLine.push_back( PkgNames::File() );	// additional file
+	
+	pkgTable->addLine( PMSelectable::S_NoInst,
+			   pkgLine,
+			   PMObjectPtr()
+			   );	
+    }
+
+    if ( preScript != "" )
+    {
+	vector<string> pkgLine;
+	pkgLine.reserve(4);
+
+	pkgLine.push_back( preScript ); 
+	pkgLine.push_back( "   " );	// versions empty
+	pkgLine.push_back( "   " );	
+	pkgLine.push_back( PkgNames::PreScript() );
+	
+	pkgTable->addLine( PMSelectable::S_NoInst,
+			   pkgLine,
+			   PMObjectPtr()
+			   );
+    }
+    if ( postScript != "" )
+    {
+	vector<string> pkgLine;
+	pkgLine.reserve(4);
+
+	pkgLine.push_back(  postScript );
+	pkgLine.push_back( "   " );	// versions empty
+	pkgLine.push_back( "   " );	
+	pkgLine.push_back( PkgNames::PostScript() );
+	
+	pkgTable->addLine( PMSelectable::S_NoInst,
+			   pkgLine,
+			   PMObjectPtr()
+			   );
+    }
+    
     // show the list
     pkgTable->drawList();
     
