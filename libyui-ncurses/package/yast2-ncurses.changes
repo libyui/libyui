@@ -4,7 +4,6 @@ Mon Sep 22 11:24:32 CEST 2003 - gs@suse.de
 - V 2.8.19
 - remove blinking from progress bar (bug #31454)
 - show correct patch size in YOU mode (bug #31522)
-- yast2-ncurses is licensed under GPL 
 
 -------------------------------------------------------------------
 Fri Sep 19 12:20:05 CEST 2003 - gs@suse.de
