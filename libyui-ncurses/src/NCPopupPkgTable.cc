@@ -18,7 +18,6 @@
 /-*/
 #include "Y2Log.h"
 
-
 #include "YMenuButton.h"
 #include "YDialog.h"
 #include "NCSplit.h"
@@ -78,29 +77,26 @@ NCPopupPkgTable::~NCPopupPkgTable()
 //
 void NCPopupPkgTable::createLayout( )
 {
-
     YWidgetOpt opt;
 
     // the vertical split is the (only) child of the dialog
     NCSplit * split = new NCSplit( this, opt, YD_VERT );
     addChild( split );
 
-    NCSpacing * sp = new NCSpacing( split, opt, 0.6, false, true );
-    split->addChild( sp );
+    split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
 
     // add the headline
     opt.isHeading.setValue( true );
     NCLabel * head = new NCLabel( split, opt, YCPString(PkgNames::AutoChangeLabel()) );
     split->addChild( head );
 
-    NCSpacing * sp1 = new NCSpacing( split, opt, 0.6, false, true );
-    split->addChild( sp1 );
+    split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
 
     opt.isHeading.setValue( false );
     NCLabel * lb1 = new NCLabel( split, opt, YCPString(PkgNames::AutoChangeText()) );
     split->addChild( lb1 );
-    
-    // add the package table (use default type T_Packages) 
+
+    // add the package table (use default type T_Packages)
     pkgTable = new NCPkgTable( split, opt );
     pkgTable->setPackager( packager );
     pkgTable->fillHeader();
@@ -112,29 +108,28 @@ void NCPopupPkgTable::createLayout( )
     split->addChild( hSplit );
 
     opt.isHStretchable.setValue( true );
-    NCSpacing * sp3 = new NCSpacing( hSplit, opt, 0.2, true, false );
-    NCSpacing * sp4 = new NCSpacing( hSplit, opt, 0.4, true, false );
 
-    hSplit->addChild( sp3 );
+    hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
 
     // add the OK button
     opt.key_Fxx.setValue( 10 );
     okButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::OKLabel()) );
     okButton->setId( PkgNames::OkButton() );
-  
+
     hSplit->addChild( okButton );
-    hSplit->addChild( sp4 );
+    hSplit->addChild( new NCSpacing( hSplit, opt, 0.4, true, false ) );
 
     // add the Cancel button
     opt.key_Fxx.setValue( 9 );
     cancelButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::CancelLabel()) );
     cancelButton->setId( PkgNames::Cancel() );
-  
-    hSplit->addChild( cancelButton );
-    hSplit->addChild( sp3 );
 
-    split->addChild( sp1 );
+    hSplit->addChild( cancelButton );
+    hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
+
+    split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -152,12 +147,12 @@ bool NCPopupPkgTable::fillAutoChanges( NCPkgTable * pkgTable )
     pkgTable->itemsCleared();		// clear the table
 
     PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
-    
+
     while ( it != Y2PM::packageManager().end() )
     {
 	PMSelectablePtr selectable = *it;
 	PMPackagePtr pkgPtr = (*it)->theObject();
-	
+
 	// show all packages which are automatically selected for installation
 	if ( selectable->to_modify() && selectable->by_auto() )
 	{
@@ -201,7 +196,7 @@ NCursesEvent NCPopupPkgTable::showInfoPopup( )
 	// show the popup
 	popupDialog( );
     } while ( postAgain() );
-    
+
     popdownDialog();
 
     return postevent;
@@ -236,7 +231,7 @@ NCursesEvent NCPopupPkgTable::wHandleInput( wint_t ch )
 
     if ( ch == KEY_RETURN )
 	return NCursesEvent::button;
-    
+
     return NCDialog::wHandleInput( ch );
 }
 
@@ -258,9 +253,9 @@ bool NCPopupPkgTable::postAgain()
     if ( !currentId.isNull()
 	 && currentId->compare( PkgNames::Cancel() ) == YO_EQUAL )
     {
-	// close the dialog 
+	// close the dialog
 	postevent = NCursesEvent::cancel;
-    } 
+    }
 
     if ( postevent == NCursesEvent::button || postevent == NCursesEvent::cancel )
     {

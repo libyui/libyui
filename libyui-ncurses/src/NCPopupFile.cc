@@ -72,28 +72,26 @@ NCPopupFile::~NCPopupFile()
 //
 void NCPopupFile::createLayout( )
 {
-
     YWidgetOpt opt;
 
     // the vertical split is the (only) child of the dialog
     NCSplit * split = new NCSplit( this, opt, YD_VERT );
     addChild( split );
-  
+
     // add the headline
     opt.isHeading.setValue( true );
     headline = new NCLabel( split, opt, YCPString("") );
     split->addChild( headline );
 
-    NCSpacing * sp1 = new NCSpacing( split, opt, 0.4, false, true );
-    split->addChild( sp1 );
-    
-    // add the text 
+    split->addChild( new NCSpacing( split, opt, 0.4, false, true ) );
+
+    // add the text
     opt.isHeading.setValue( false );
     opt.isVStretchable.setValue( true );
     textLabel = new NCRichText( split, opt, YCPString(PkgNames::SaveSelText()) );
     split->addChild( textLabel );
 
-    // add a frame 
+    // add a frame
     opt.isVStretchable.setValue( true );
     NCFrame * frame = new NCFrame( split, opt, YCPString("") );
     NCSplit * vSplit2 = new NCSplit( frame, opt, YD_VERT );
@@ -104,7 +102,7 @@ void NCPopupFile::createLayout( )
     comboBox->itemAdded( YCPString(PkgNames::Floppy()), 0, true );
     comboBox->itemAdded( YCPString(PkgNames::Harddisk()), 0, false );
     vSplit2->addChild( comboBox );
-  
+
     // the text entry field for the file name
     fileName = new NCTextEntry( vSplit2, opt,
 				YCPString(PkgNames::FileName()),
@@ -114,34 +112,31 @@ void NCPopupFile::createLayout( )
     frame->addChild( vSplit2 );
     split->addChild( frame );
 
-    NCSpacing * sp2 = new NCSpacing( split, opt, 0.4, false, true );
-    split->addChild( sp2 );
+    split->addChild( new NCSpacing( split, opt, 0.4, false, true ) );
 
     // HBox for the buttons
     NCSplit * hSplit = new NCSplit( split, opt, YD_HORIZ );
     split->addChild( hSplit );
 
     opt.isHStretchable.setValue( true );
-    NCSpacing * sp3 = new NCSpacing( hSplit, opt, 0.2, true, false );
-    hSplit->addChild( sp3 );
+    hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
 
     // add the OK button
     opt.key_Fxx.setValue( 10 );
     okButton = new NCPushButton( hSplit, opt, YCPString( "" ) );
     okButton->setId( PkgNames::OkButton() );
-  
+
     hSplit->addChild( okButton );
 
-    NCSpacing * sp4 = new NCSpacing( hSplit, opt, 0.4, true, false );
-    hSplit->addChild( sp4 );
+    hSplit->addChild( new NCSpacing( hSplit, opt, 0.4, true, false ) );
 
     // add the Cancel button
     opt.key_Fxx.setValue( 9 );
     cancelButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::CancelLabel()) );
     cancelButton->setId( PkgNames::Cancel() );
-  
+
     hSplit->addChild( cancelButton );
-    hSplit->addChild( sp3 );
+    hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -155,7 +150,7 @@ NCursesEvent & NCPopupFile::showFilePopup( )
     do {
 	popupDialog( );
     } while ( postAgain() );
-    
+
     popdownDialog();
 
     return postevent;
@@ -186,7 +181,7 @@ NCursesEvent NCPopupFile::wHandleInput( wint_t ch )
     if ( ch == KEY_RETURN )
 	return NCursesEvent::button;
 
-    // call NCDialog::wHandleInput to handle KEY_DOWN 
+    // call NCDialog::wHandleInput to handle KEY_DOWN
     NCursesEvent retEvent = NCDialog::wHandleInput( ch );
 
     if ( ch == KEY_DOWN )
@@ -194,7 +189,7 @@ NCursesEvent NCPopupFile::wHandleInput( wint_t ch )
 	// use NCursesEvent::menu (is checked in postAgain())
 	retEvent = NCursesEvent::menu;
     }
-    
+
     return retEvent;
 }
 
@@ -277,13 +272,13 @@ void NCPopupFile::saveToFile()
     if ( event == NCursesEvent::button )
     {
 	PMPackageImEx pkgExport;
-	
+
 	NCPopupInfo saveInfo( wpos(5, 5),  YCPString( "" ),
 			      YCPString(PkgNames::Saving()) );
 	saveInfo.setNiceSize( 18, 4 );
 	saveInfo.popup();
 	bool mounted = false;
-	
+
 	// if the medium is a floppy mount the device
 	if ( !mountFloppy
 	     || (mounted = mountDevice( floppyDevice, PkgNames::SaveErr1Text()) ) )
@@ -299,11 +294,11 @@ void NCPopupFile::saveToFile()
 				   YCPString( PkgNames::SaveErr2Text() ) );
 		info2.setNiceSize( 35, 10 );
 		info2.showInfoPopup();
-		NCERR << "Error: could not write selection to: " << pathName << endl;	
+		NCERR << "Error: could not write selection to: " << pathName << endl;
 	    }
 	    else
 	    {
-		NCMIL << "Writing selection to: " << pathName << endl;	
+		NCMIL << "Writing selection to: " << pathName << endl;
 	    }
 	}
 	if ( mounted )
@@ -335,7 +330,7 @@ void NCPopupFile::loadFromFile()
     }
     // show the load selection popup
     NCursesEvent event = showFilePopup();
-  
+
     if ( event == NCursesEvent::button )
     {
 	PMPackageImEx pkgImport;
@@ -356,7 +351,7 @@ void NCPopupFile::loadFromFile()
 	    loadInfo.setNiceSize( 18, 4 );
 	    loadInfo.popup();
 	    bool mounted = false;
-	    
+
 	    if ( !mountFloppy
 		 || (mounted = mountDevice( floppyDevice, PkgNames::LoadErr1Text())) )
 	    {
@@ -404,7 +399,7 @@ void NCPopupFile::setDefaultPath()
 {
     YCPString value = comboBox->getValue();
 
-    if ( value->compare( YCPString(PkgNames::Harddisk()) ) == YO_EQUAL ) 
+    if ( value->compare( YCPString(PkgNames::Harddisk()) ) == YO_EQUAL )
     {
 	pathName = YAST2PATH + USERFILE;
 	mountFloppy = false;
@@ -415,7 +410,7 @@ void NCPopupFile::setDefaultPath()
 	mountFloppy = true;
     }
     fileName->setText( YCPString(pathName) );
-    
+
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -433,7 +428,7 @@ bool NCPopupFile::postAgain()
 
     if ( currentId->compare( PkgNames::Cancel() ) == YO_EQUAL )
     {
-	// close the dialog 
+	// close the dialog
 	postevent = NCursesEvent::cancel;
     }
     else if  ( currentId->compare( PkgNames::OkButton() ) == YO_EQUAL )
@@ -443,7 +438,7 @@ bool NCPopupFile::postAgain()
 
 	YCPString path = fileName->getText();
 	pathName = path->value();
-	
+
 	if ( value->compare( YCPString(PkgNames::Harddisk()) ) == YO_EQUAL )
 	{
 	    mountFloppy = false;
@@ -460,7 +455,7 @@ bool NCPopupFile::postAgain()
     {
 	setDefaultPath();
     }
-    
+
     if ( postevent == NCursesEvent::button || postevent == NCursesEvent::cancel )
     {
         // return false means: close the popup dialog

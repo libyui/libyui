@@ -87,7 +87,7 @@ void NCPopupSelection::createLayout( const YCPString & label )
 
   NCLabel * head = new NCLabel( split, opt, PkgNames::SelectionLabel() );
   split->addChild( head );
-  
+
   // add the selection list
   sel = new NCPkgTable( split, opt );
   sel->setPackager( packager );
@@ -95,7 +95,7 @@ void NCPopupSelection::createLayout( const YCPString & label )
   ObjectStatStrategy * strat = new PackageStatStrategy();
   sel->setTableType( NCPkgTable::T_Selections, strat );
   split->addChild( sel );
-  
+
   opt.notifyMode.setValue( true );
 
   NCLabel * help = new NCLabel( split, opt, YCPString(PkgNames::DepsHelpLine()) );
@@ -103,12 +103,12 @@ void NCPopupSelection::createLayout( const YCPString & label )
 
   NCSpacing * sp1 = new NCSpacing( split, opt, 0.4, false, true );
   split->addChild( sp1 );
-  
+
   // add an OK button
   opt.key_Fxx.setValue( 10 );
   okButton = new NCPushButton( split, opt, YCPString(PkgNames::OKLabel()) );
   okButton->setId( PkgNames::OkButton () );
-  
+
   split->addChild( okButton );
 
   NCSpacing * sp2 = new NCSpacing( split, opt, 0.4, false, true );
@@ -129,17 +129,17 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
 
     sel->updateTable();
     sel->setKeyboardFocus();
-    
+
     // event loop
     do {
 	popupDialog();
     } while ( postAgain() );
-    
+
     popdownDialog();
 
     if ( !packager )
 	return postevent;
-    
+
     // if OK is clicked get the current item and show the package list
     if ( postevent.detail == NCursesEvent::USERDEF )
     {
@@ -155,7 +155,7 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
 	    packager->showDiskSpace();
 	}
     }
-    
+
     return postevent;
 }
 
@@ -171,10 +171,10 @@ string  NCPopupSelection::getCurrentLine( )
 {
     if ( !sel )
 	return "";
-    
+
     int index = sel->getCurrentItem();
     PMSelectionPtr selPtr = sel->getDataPointer(index);
-    
+
     return ( selPtr?selPtr->summary(Y2PM::getPreferredLocale()):"" );
 }
 
@@ -222,9 +222,9 @@ bool NCPopupSelection::postAgain( )
 	return false;
 
     postevent.detail = NCursesEvent::NODETAIL;
-     
+
     YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
-    
+
     if ( !currentId.isNull()
 	 && currentId->compare( PkgNames::OkButton () ) == YO_EQUAL )
     {
@@ -232,7 +232,7 @@ bool NCPopupSelection::postAgain( )
 	// return false means: close the popup
 	return false;
     }
-    
+
     if (postevent == NCursesEvent::cancel)
 	return false;
 
@@ -251,29 +251,29 @@ bool NCPopupSelection::fillSelectionList( NCPkgTable * sel )
 {
     if ( !sel )
 	return false;
-    
+
     vector<string> pkgLine;
     pkgLine.reserve(4);
 
     PMSelectionPtr selPtr;
     PMManager::PMSelectableVec::const_iterator it;
-    
+
     for (  it = Y2PM::selectionManager().begin(); it != Y2PM::selectionManager().end(); ++it )
     {
 	PMSelectionPtr selPtr = (*it)->theObject();
 	if ( selPtr && selPtr->visible() && !selPtr->isBase() )
 	{
 	    NCMIL << "Add-on selection: " <<  selPtr->name() << ", initial status: "
-		  << selPtr->getSelectable()->status() << endl; 
-	
+		  << selPtr->getSelectable()->status() << endl;
+
 	    pkgLine.clear();
 	    pkgLine.push_back( selPtr->summary(Y2PM::getPreferredLocale()) );	// the description
-	
-	    sel->addLine( selPtr->getSelectable()->status(),	// the status 
+
+	    sel->addLine( selPtr->getSelectable()->status(),	// the status
 			  pkgLine,
 			  selPtr );		// PMSelectionPtr
 	}
     }
-    
+
     return true;
 }
