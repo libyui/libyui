@@ -313,7 +313,6 @@ bool NCPopupDeps::evaluateErrorResult( NCPkgTable * table,
          * Only show the referers as "own" dependency if the list is not related to another
 	 * kind of dependency (conflicts, unresolvable or alternatives).
 	 * */
-	
 	if ( !(*it).referers.empty()
 	     && (*it).conflicts_with.empty()
 	     && (*it).unresolvable.empty()
@@ -724,45 +723,42 @@ bool NCPopupDeps::postAgain()
 
 	if ( !success )
 	{
-	    // fill the list with packages  which have unresolved deps
+	    // fill the list with packages which have unresolved deps
 	    evaluateErrorResult( pkgs, badList );
 
-	    // set current item ( if the package is still there )
-	    if ( currentPtr )
+	    if ( !dependencies.empty() )
 	    {
-		unsigned int size = pkgs->getNumLines();
-		unsigned int index = 0;
-		PMObjectPtr pkgPtr;
-		while ( index < size )
+		// set current item ( if the package is still there )
+		if ( currentPtr )
 		{
-		    pkgPtr = pkgs->getDataPointer( index );
-		    if ( pkgPtr == currentPtr )
+		    unsigned int size = pkgs->getNumLines();
+		    unsigned int index = 0;
+		    PMObjectPtr pkgPtr;
+		    while ( index < size )
 		    {
-			NCDBG << "Setting current package line: " << index << endl;
-			pkgs->setCurrentItem( index );
-			break;
+			pkgPtr = pkgs->getDataPointer( index );
+			if ( pkgPtr == currentPtr )
+			{
+			    NCDBG << "Setting current package line: " << index << endl;
+			    pkgs->setCurrentItem( index );
+			    break;
+			}
+			index ++;
 		    }
-		    index ++;
 		}
-	    }
-	    pkgs->setKeyboardFocus();
+		pkgs->setKeyboardFocus();
 
-	    concretelyDependency( pkgs->getCurrentItem() );
+		concretelyDependency( pkgs->getCurrentItem() );
+	    }
+	    else
+	    {
+		// close the dialog
+		postevent = NCursesEvent::cancel;	
+	    }
 	}
 	else	// everything ok
 	{
-	    pkgs->itemsCleared();
-	    deps->itemsCleared();
-	    vector<string> line;
-	    line.reserve(2);
-	    // show a line with text: no conflicts ...
-	    line.push_back( PkgNames::NoConflictText().str() );
-	    pkgs->addLine( PMSelectable::S_NoInst,
-			   line,
-			   PMObjectPtr() );
-	    pkgs->drawList();
-
-            // close the dialog automatically
+            // close the dialog
 	    postevent = NCursesEvent::cancel;
 	}
     }
