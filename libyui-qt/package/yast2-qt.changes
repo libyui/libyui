@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Feb 27 18:03:03 CET 2003 - sh@suse.de
+
+- Fixed bug #24445: Missing status update when importing pkg list 
+
+-------------------------------------------------------------------
 Thu Feb 27 17:29:29 CET 2003 - sh@suse.de
 
 - Fixed bug #23368: kcontrol embedding fails if first dialog is a popup

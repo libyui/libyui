@@ -299,6 +299,9 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
 	connect( _selConflictDialog,	SIGNAL( updatePackages()      		),
 		 _selList, 		SLOT  ( updateToplevelItemStates() 	) );
+
+	connect( this,			SIGNAL( refresh()			),
+		 _selList, 		SLOT  ( updateToplevelItemStates() 	) );
     }
 
 
