@@ -32,13 +32,10 @@
 YQPkgRpmGroupTagsFilterView::YQPkgRpmGroupTagsFilterView( QWidget *parent )
     : QListView( parent )
 {
-    y2milestone( "Creating group tags view" );
-
     addColumn( _( "Package Groups" ) );
     setRootIsDecorated( true );
     cloneTree( Y2PM::packageManager().rpmGroupsTree()->root(), 0 );
-    new YQPkgRpmGroupTag( this, _( "zzz All" ),
-			  Y2PM::packageManager().rpmGroupsTree()->root() );
+    new YQPkgRpmGroupTag( this, _( "zzz All" ), 0 );
 
     connect( this, SIGNAL( selectionChanged( QListViewItem * ) ),
 	     this, SLOT  ( filter()                            ) );
@@ -104,11 +101,6 @@ YQPkgRpmGroupTagsFilterView::filter()
 
     if ( selection() )
     {
-#if 0
-	std::string selectedRpmGroupPath = Y2PM::packageManager().rpmGroup( selection()->rpmGroup() );
-	y2debug( "Searching packages that match '%s'", selectedRpmGroupPath.c_str() );
-#endif
-
 	PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
 	while ( it != Y2PM::packageManager().end() )
@@ -137,10 +129,6 @@ YQPkgRpmGroupTagsFilterView::filter()
 
 	    ++it;
 	}
-
-#if 0
-	y2debug( "Search for '%s' finished", selectedRpmGroupPath.c_str() );
-#endif
     }
 
     emit filterFinished();
@@ -153,28 +141,27 @@ YQPkgRpmGroupTagsFilterView::check( PMPackagePtr pkg )
     if ( ! pkg || ! selection() )
 	return false;
 
+    if ( selection()->rpmGroup() == 0 )	// Special case: All packages
+    {
+	emit filterMatch( pkg );
+	return true;
+    }
+
+    
     if ( pkg->group_ptr() == 0 )
     {
-	y2error( "NULL pointer in group_ptr()!" );
+	std::string name = pkg->name();
+	y2error( "NULL pointer in group_ptr() for package %s", name.c_str() );
 	return false;
     }
 
     if ( pkg->group_ptr()->isChildOf( selection()->rpmGroup() ) )
     {
-#if 0
-	// DEBUG
-	std::string name = pkg->name();
-	y2debug( "Found match for pkg '%s'", name.c_str() );
-	// DEBUG
-#endif
-
 	emit filterMatch( pkg );
 	return true;
     }
-    else
-    {
-	return false;
-    }
+
+    return false;
 }
 
 
