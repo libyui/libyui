@@ -25,6 +25,7 @@
 #include "NCSpacing.h"
 #include "PkgNames.h"
 #include "NCFrame.h"
+#include "NCi18n.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -32,6 +33,9 @@
 #include <dirent.h>
 #include <sys/errno.h>
 
+/*
+  Textdomain "fileselection"
+*/
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -102,7 +106,8 @@ void NCAskForExistingDirectory::createLayout( const YCPString & iniDir,
 
     opt.isEditable.setValue( false );
     opt.notifyMode.setValue( true );
-    dirName = new NCComboBox( frame, opt, YCPString("Selected directory:") );
+    // label for text field showing the selected dir
+    dirName = new NCComboBox( frame, opt, YCPString(_("Selected directory:")) );
     frame->addChild( dirName );
 
     dirName->setId( PkgNames::DirName() );
@@ -114,7 +119,8 @@ void NCAskForExistingDirectory::createLayout( const YCPString & iniDir,
     // add the checkBox detailed
     NCSplit * hSplit = new NCSplit( split, opt, YD_HORIZ );
     split->addChild( hSplit );
-    detailed = new NCCheckBox( hSplit, opt, YCPString( "&Details view" ), false );
+    // label for checkbox 
+    detailed = new NCCheckBox( hSplit, opt, YCPString(_("&Details view")), false );
     detailed->setId( PkgNames::Details() );
     hSplit->addChild( new NCSpacing( hSplit, opt, 0.1, true, false ) );
     hSplit->addChild( detailed );

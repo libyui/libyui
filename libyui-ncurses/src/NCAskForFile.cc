@@ -25,6 +25,7 @@
 #include "NCSpacing.h"
 #include "PkgNames.h"
 #include "NCFrame.h"
+#include "NCi18n.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -32,6 +33,9 @@
 #include <dirent.h>
 #include <sys/errno.h>
 
+/*
+  Textdomain "fileselection"
+*/
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -106,7 +110,8 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
 
     opt.isEditable.setValue( false );
     opt.notifyMode.setValue( true );
-    dirName = new NCComboBox( frame, opt, YCPString("Selected directory:") );
+    // label for text field showing the selected dir
+    dirName = new NCComboBox( frame, opt, YCPString(_("Selected directory:")) );
     frame->addChild( dirName );
 
     dirName->setId( PkgNames::DirName() );
@@ -118,7 +123,8 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
     // add the checkBox detailed
     NCSplit * hSplit = new NCSplit( split, opt, YD_HORIZ );
     split->addChild( hSplit );
-    detailed = new NCCheckBox( hSplit, opt, YCPString( "&Details view" ), false );
+    // label for checkbox
+    detailed = new NCCheckBox( hSplit, opt, YCPString( _("&Details view") ), false );
     detailed->setId( PkgNames::Details() );
     hSplit->addChild( new NCSpacing( hSplit, opt, 0.1, true, false ) );
     hSplit->addChild( detailed );
@@ -144,11 +150,13 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
     // add the text entry for the file name
     opt.isEditable.setValue( edit );
     fileName = new NCTextEntry( hSplit2, opt,
-			       YCPString( "&File name:" ),
+				// label for text field showing the filename
+			       YCPString(_("&File name:")),
 			       YCPString( "" ),
 			       100, 50 );
     hSplit2->addChild( fileName );
-    NCComboBox * extension = new NCComboBox( hSplit2, opt, YCPString("Filter:") );
+    // label for text field showing the filter (e.g. *.bak)
+    NCComboBox * extension = new NCComboBox( hSplit2, opt, YCPString(_("Filter:")) );
     hSplit2->addChild( extension );
     extension->itemAdded( filter,
 			  0,		 // index

@@ -19,12 +19,16 @@
 #include "Y2Log.h"
 #include "NCFileSelection.h"
 #include "NCTable.h"
+#include "NCi18n.h"
 
 #include <fnmatch.h>
 #include <grp.h>
 #include <pwd.h>
 #include <sys/types.h>
 
+/*
+  Textdomain "fileselection"
+*/
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -485,23 +489,29 @@ void NCFileTable::fillHeader( )
 	case T_Overview: {
 	    header.reserve(2);
 	    header.push_back( "L" + string("  ") );
-	    header.push_back( "L" + string("File name") );
+	    // column header name of the file 
+	    header.push_back( "L" + string(_("File name")) );
 	    break;
 	}
 	case T_Detailed: {
 	    header.reserve(6);
 	    header.push_back( "L" + string("  ") );
-	    header.push_back( "L" + string("File name") );
-	    header.push_back( "L" + string("Size") );
-	    header.push_back( "L" + string("Permissions") );
-	    header.push_back( "L" + string("User") );
-	    header.push_back( "L" + string("Group") );
+    	    // column header name of the file 
+	    header.push_back( "L" + string(_("File name")) );
+	    // column header size of the file  
+	    header.push_back( "L" + string(_("Size")) );
+	    // column header file permissions 
+	    header.push_back( "L" + string(_("Permissions")) );
+	    // column header user
+	    header.push_back( "L" + string(_("User")) );
+	    // column header group
+	    header.push_back( "L" + string(_("Group")) );
 	    break;
 	}
 	default: {
 	    header.reserve(2);
 	    header.push_back( "L" + string("   ") );
-	    header.push_back( "L" + string("Name") );
+	    header.push_back( "L" + string(_("File name")) );
 	    break;
 	}
     }
@@ -688,22 +698,24 @@ void NCDirectoryTable::fillHeader( )
 	case T_Overview: {
 	    header.reserve(2);
 	    header.push_back( "L" + string("  ") );
-	    header.push_back( "L" + string("Directory name") );
+	    // column header name of diretcory
+	    header.push_back( "L" + string(_("Directory name")) );
 	    break;
 	}
 	case T_Detailed: {
 	    header.reserve(5);
 	    header.push_back( "L" + string("  ") );
-	    header.push_back( "L" + string("Directory name") );
-	    header.push_back( "L" + string("Permissions") );
-	    header.push_back( "L" + string("User") );
-	    header.push_back( "L" + string("Group") );
+    	    // column header name of diretcory
+	    header.push_back( "L" + string(_("Directory name")) );
+	    header.push_back( "L" + string(_("Permissions")) );
+	    header.push_back( "L" + string(_("User")) );
+	    header.push_back( "L" + string(_("Group")) );
 	    break;
 	}
 	default: {
 	    header.reserve(2);
 	    header.push_back( "L" + string("   ") );
-	    header.push_back( "L" + string("Name") );
+	    header.push_back( "L" + string(_("Directory name")) );
 	    break;
 	}
     }
