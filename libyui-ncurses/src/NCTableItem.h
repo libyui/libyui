@@ -138,7 +138,7 @@ class NCTableCol {
 
   private:
 
-    NClabelNoHotkey label;
+    NClabel label;
     STYLE   style;
     int stripHotkey;
 
@@ -147,8 +147,8 @@ class NCTableCol {
     NCTableCol( const NCstring & l = "", const STYLE & st = ACTIVEDATA );
     virtual ~NCTableCol();
 
-    const NClabelNoHotkey & Label() const { return label; }
-    virtual void SetLabel( const NClabelNoHotkey & l ) { label = l; if (stripHotkey) label.stripHotkey(); }
+    const NClabel & Label() const { return label; }
+    virtual void SetLabel( const NClabel & l ) { label = l; }
 
   protected:
 

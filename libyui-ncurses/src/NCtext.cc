@@ -379,11 +379,3 @@ ostream & operator<<( ostream & STREAM, const NClabel & OBJ )
   return STREAM  << ']';
 }
 
-ostream & operator<<( ostream & STREAM, const NClabelNoHotkey & OBJ )
-{
-  STREAM << "[label(without hotkey)" << OBJ.size() << ':' << OBJ[0].str();
-  if ( OBJ.hasHotkey() )
-    STREAM << ':' << OBJ.hotkey() << " at " << OBJ.hotpos();
-  return STREAM  << ']';
-}
-
