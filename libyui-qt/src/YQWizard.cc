@@ -809,6 +809,8 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
     CHECK_PTR( headingHBox );
     headingHBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
 
+    addHSpacing( headingHBox, SEPARATOR_MARGIN );
+    
     _dialogIcon = new QLabel( headingHBox );
     CHECK_PTR( _dialogIcon );
 
