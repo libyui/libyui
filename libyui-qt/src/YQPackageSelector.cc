@@ -20,7 +20,8 @@
 /-*/
 
 #define CHECK_DEPENDENCIES_ON_STARTUP	1
-#define DEPENDENCY_FEEDBACK_IF_OK	0
+#define DEPENDENCY_FEEDBACK_IF_OK	1
+#define SHOW_CHANGES_DIALOG		0
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT	false
 
 #include <qaction.h>
@@ -132,7 +133,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
     setFont( _yuiqt->currentFont() );
     yuiqt->blockWmClose(); // Automatically undone after UI::RunPkgSelection()
     _installedPkgs = Y2PM::instTarget().numPackages();
-    
+
     _pkgConflictDialog = new YQPkgConflictDialog( &( Y2PM::packageManager() ), this );
     CHECK_PTR( _pkgConflictDialog );
 
@@ -835,22 +836,29 @@ YQPackageSelector::accept()
     if ( resolvePackageDependencies() == QDialog::Rejected )
 	return;
 
+#if SHOW_CHANGES_DIALOG
+
     if ( _installedPkgs > 0 && ! _youMode )
     {
 	// Show which packages are installed/deleted automatically
-	
-	QString msg = _( "Packages changed automatically due to dependency resolving: " );
-	
-	if ( YQPkgChangesDialog::showChangesDialog( msg, _( "C&ontinue" ), _( "&Cancel"   ) )
+	//
+	// Translators: Automatic word wrap
+	QString msg = "<p>" +
+	    _( "In addition to your manual selections, the following packages"
+	       " have been changed due to dependency resolving:" )
+	    + "<p>";
+
+	if ( YQPkgChangesDialog::showChangesDialog( msg, _( "&Install" ), _( "&Back" ) )
 	     == QDialog::Rejected )
 	    return;
     }
+#endif
 
     // Check disk usage
     if ( checkDiskUsage() == QDialog::Rejected )
 	return;
 
-    
+
     Y2PM::packageManager().ClearSaveState();
     Y2PM::selectionManager().ClearSaveState();
 
