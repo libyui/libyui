@@ -21,3 +21,4 @@ mkinstalldirs
 autom4te.cache
 configure.in
 packages.pot
+fileselection.pot
