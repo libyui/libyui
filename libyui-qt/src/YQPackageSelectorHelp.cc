@@ -64,6 +64,7 @@ YQPackageSelector::help()
 
 	html += para( _( "In addition to \"YOU patches\", you can also select one of the other filter views"
 			 " from the <b>Filter</b> combo-box at the upper left:" ) );
+	html += "<ul>";
     }
     else // ! _youMode
     {
@@ -84,13 +85,18 @@ YQPackageSelector::help()
 	// affect the amount of visible packages in the package list and "details views" ( below the package list )
 	// that show details about the ( one ) currently selected package in the package list.
 
-	html += para( _( "In addition to \"Selections\", you can also switch to one of the other filter views"
-			 " with the <b>Filter</b> combo-box at the upper left:" ) );
+	html += para( _( "Select one of the available filter views with the <b>Filter</b> combo-box"
+			 " at the upper left:" ) );
+	html += "<ul>";
+
+	html += listItem( para( _( "<b>Selections</b> shows some predefined sets of packages that logically belong together." ) ) +
+			  para( _( "Use the checkbox next to the selection to select it as a whole."
+				   " You can also select or deselect individual packages in the package list at the right." ) ) );
+
     }
 
     // Help common to all modes: Description of the various filter views
 
-    html += "<ul>";
 
     html += listItem( para( _( "<b>Package Groups</b> shows packages by category. You can expand and collapse tree items"
 			       " to refine or generalize categories. Click any category to display the packages"
@@ -208,7 +214,7 @@ YQPackageSelector::symbolHelp()
 		     + _( "This can happen, for example, if some other package obsoletes this one." ) );
 
     // Translators: This is added to the explanation of a status. Use of
-    // "non-breakable space" ( HTML &nbsp; ) is recommended ( if the line doesn't 
+    // "non-breakable space" ( HTML &nbsp; ) is recommended ( if the line doesn't
     // get too long ) to avoid line-break in the middle of this explanaton.
     QString bySelection = " " + _( "( by&nbsp;selection )" );
 
