@@ -86,7 +86,7 @@ YQPackageSelector::YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt 
 
 	InstSrcManager & MGR( Y2PM::instSrcManager() );
 
-	Url url( "dir:///8.0" );
+	Url url( "dir:///8.1" );
 	InstSrcManager::ISrcIdList nids;
 	PMError err = MGR.scanMedia( nids, url );
 
