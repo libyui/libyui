@@ -25,7 +25,9 @@
 					    )),
 			 // label Actions menu ( keep it short ) - actions to change status of a package
 			 `Left(`MenuButton( `opt(`key_F5), _("&Actions"),
-					     // toggle the status, e.g. change from installed to delete
+					    // Please note: add an appropriate number of whitespace get a well
+					    // formated menu (the [ ] should be one column)
+					    // toggle the status, e.g. change from installed to delete
 					    [`item( `id(`toggle), 	_("&Toggle     [RET]") ),
 					     // select the package for installation
 					     `item( `id(`select), 	_("&Select      [+]") ),
@@ -38,14 +40,15 @@
 					     // reset the status 'Taboo' 
 					     `item( `id(`tabooOff), 	_("Taboo &no    [-]") ),
 					     // title of a submenu: actions concerning all packages of the list
-					     `menu( "&All list packages",
+					     `menu( _("&All list packages"),
 						    [
-						     `item(`id(`selall),   "Install all"   ),
-						     `item(`id(`deselall), "Don't install any" ),
-						     `item(`id(`delall),   "De&lete all"   ),
-						     `item(`id(`dontdel),  "Do&n't delete any" ),
-						     `item(`id(`updall),   "U&pdate all"   ),
-						     `item(`id(`dontupd),  "Don't update/keep installed" )
+						     // menu items: actions concerning all packages
+						     `item(`id(`selall),   _("Install all")  ),
+						     `item(`id(`deselall), _("Don't install any") ),
+						     `item(`id(`delall),   _("De&lete all" ) ),
+						     `item(`id(`dontdel),  _("Do&n't delete any") ),
+						     `item(`id(`updall),   _("U&pdate all")   ),
+						     `item(`id(`dontupd),  _("Don't update/keep installed") )
 						     ]
 						    )
 					     ]
