@@ -317,7 +317,7 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
     while ( it != selectable->av_end() )
     {
 	pkgLine[0] = selectable->name();	// package name
-	pkgLine[1] = (*it)->version();		// the version
+	pkgLine[1] = (*it)->edition().asString();	// the version-release info
 	pkgLine[2] = (*it)->instSrcLabel();  	// show the installation source (instead of the summary)
 	FSize size = (*it)->size();     	// installed size
 	pkgLine[3] = size.asString();
