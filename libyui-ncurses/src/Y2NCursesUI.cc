@@ -739,13 +739,13 @@ bool Y2NCursesUI::setLanguage( string lang )
 //
 YCPValue Y2NCursesUI::setKeyboard()
 {
-    string cmd = "/usr/bin/dumpkeys | /bin/loadkeys --unicode";
+    string cmd = "/bin/dumpkeys | /bin/loadkeys --unicode";
     if ( NCstring::terminalEncoding() == "UTF-8" )
     {
 	int ret = system( (cmd + " >/dev/null 2>&1").c_str() );
 	if ( ret != 0 )
 	{
-	    NCERR << "ERROR: /usr/bin/dumpkeys | /bin/loadkeys --unicode returned: "<< ret << endl;
+	    NCERR << "ERROR: /bin/dumpkeys | /bin/loadkeys --unicode returned: "<< ret << endl;
 	}
     }
 
