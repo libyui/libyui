@@ -173,10 +173,12 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt, string flo
     {
 	if ( youMode )
 	{
-	    Url url( "dir:///8.1-patches" );
-	    Y2PM::youPatchManager().instYou().retrievePatchInfo( url, false );
-	    Y2PM::youPatchManager().instYou().selectPatches( PMYouPatch::kind_recommended |
-							     PMYouPatch::kind_security     );
+	    PMYouServer server( "dir:///8.1-patches" );
+            InstYou &you = Y2PM::youPatchManager().instYou();
+            you.paths()->setPatchServer( server );
+	    you.retrievePatchInfo( false );
+	    you.selectPatches( PMYouPatch::kind_recommended |
+			       PMYouPatch::kind_security     );
 	    NCMIL <<  "Fake YOU patches initialized" << endl;	
 	}
 	else
