@@ -90,9 +90,10 @@ public:
     static const YCPValue& TabooOff ();
     
    /**
-     * Widget id of the menu item Action/SPM yes/no
+     * Widget id of the menu item Action/SPM yes
      */
-    static const YCPValue& ToggleSource ();
+    static const YCPValue& SourceYes ();
+    static const YCPValue& SourceNo ();
     
     /**
      * Widget id of the menu item Action/All packages/Delete all

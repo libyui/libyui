@@ -170,9 +170,15 @@ const YCPValue& PkgNames::TabooOff ()
 }
 
 // the menu entry Action/SPM yes/no
-const YCPValue& PkgNames::ToggleSource ()
+const YCPValue& PkgNames::SourceYes ()
 {
-    static const YCPValue value = createIdValue ( "toggleSrc" );
+    static const YCPValue value = createIdValue ( "sourceYes" );
+    return value;
+}
+// the menu entry Action/SPM yes/no
+const YCPValue& PkgNames::SourceNo ()
+{
+    static const YCPValue value = createIdValue ( "sourceNo" );
     return value;
 }
 
@@ -741,6 +747,13 @@ const string PkgNames::PostScript()
 {
     // a post script (included in aYOU patch)
     static const string value = _( "Post Script" );
+    return value;
+}
+
+const string PkgNames::MediumLabel()
+{
+    // label of a combo box (medium means floppy or hard disk)
+    static const string value = _( "&Medium" );
     return value;
 }
 
