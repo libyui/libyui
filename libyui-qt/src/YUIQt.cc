@@ -273,9 +273,6 @@ YUIQt::YUIQt( int argc, char **argv, bool with_threads, Y2Component *callback )
 	     this,			SLOT  ( busyCursor()	) );
     
     topmostConstructorHasFinished();
-#if defined(QT_THREAD_SUPPORT)
-    qApp->unlock ();
-#endif
 }
 
 

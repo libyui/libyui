@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Aug 27 12:20:32 CEST 2003 - sh@suse.de
+
+- V 2.8.6
+- Removed qApp->unlock() at end of YUIQt constructor:
+  No more QMutex warning in log 
+
+-------------------------------------------------------------------
 Tue Aug 12 15:02:25 CEST 2003 - gs@suse.de
 
 - V 2.8.5
