@@ -18,7 +18,7 @@
 
 /-*/
 
-#define SOURCE_RPM_DISABLED 1
+#define SOURCE_RPM_DISABLED 0
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
