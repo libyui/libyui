@@ -1,0 +1,16 @@
+// Example for a RichText widget
+UI(``{
+    OpenDialog( `opt(`defaultsize),
+		`VBox(
+		      `RichText( "<h3>RichText example 1</h3>"
+				 + "<ul><li><font color=blue>line1</font></li></ul>"
+				 + "<h3>RichText example 2</h3>"
+				 + "<ul><li><font color=blue>line2</font></li><li>line3</li></ul>"
+				 + "<h3>Blah</h3>Blubb!<b>Örks</b>"
+				 ),
+		      `PushButton(`opt(`default), "&OK")
+		      )
+	     );
+  UserInput();
+  CloseDialog();
+})

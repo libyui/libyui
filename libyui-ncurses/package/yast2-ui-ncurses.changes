@@ -1,0 +1,553 @@
+-------------------------------------------------------------------
+Wed Apr 24 11:25:41 CEST 2002 - arvin@suse.de
+
+- fixed paths for x86-64
+
+-------------------------------------------------------------------
+Fri Mar 22 17:10:36 CET 2002 - kkaempf@suse.de
+
+- pass callback information from component stub to interpreter
+  (#15311).
+
+-------------------------------------------------------------------
+Mon Mar 11 18:56:32 CET 2002 - ma@suse.de
+
+- version to 2.5.14
+- Prevent '<li><p>' from opening a new line. Disable first line
+  indentation for indented paragraphs. (#14816)
+
+-------------------------------------------------------------------
+Fri Mar  8 14:46:55 CET 2002 - ma@suse.de
+
+- version to 2.5.13
+- fixed bad text layout in RichText (#14395)
+- regard libyui hint, and supress screen upadtes while a ReplacePoints
+  content is exchanged.
+
+-------------------------------------------------------------------
+Tue Mar  5 15:58:34 CET 2002 - kkaempf@suse.de
+
+- Better vertical space usage in RichText widget:
+  Suppress implicit <br> after </hX> (end header tag) if
+  <ol> or <ul> (begin list tag) follows, since lists always
+  start on a new line. This makes i.e the package installation
+  widget display the package name and label in 4 lines instead
+  of 6.
+
+-------------------------------------------------------------------
+Tue Mar  5 15:13:47 CET 2002 - kkaempf@suse.de
+
+- Suppress "(none)" as hostname in title bar.
+
+-------------------------------------------------------------------
+Mon Feb 25 16:21:36 CET 2002 - ma@suse.de
+
+- version to 2.5.10
+- show hostname in title line
+
+-------------------------------------------------------------------
+Sun Feb 24 12:52:20 CET 2002 - ma@suse.de
+
+- version to 2.5.9
+- Removed some superflous mention of of default arguments in
+  function definitions. In addition one definition didn't
+  comletely match the declaration. At least gcc3 is so kind to
+  report this incident.
+
+-------------------------------------------------------------------
+Fri Feb 22 12:49:00 CET 2002 - ma@suse.de
+
+- version to 2.5.8
+- Revert behaviour of `opt(`notify). UserInput is triggered iff <SPACE>
+  or <RETURN> ist pressed. There's too much ycp code, that otherwise breaks.
+
+-------------------------------------------------------------------
+Wed Feb 20 20:55:10 CET 2002 - ma@suse.de
+
+- version to 2.5.7
+- Changed `opt(`notify) for Table, Lists and Tree. Should behave
+  more like qt now. UserInput is now triggered not only if you
+  explicitly select an item by pressing <SPACE> or <RETURN>, but
+  also if the highlighted item changes.
+
+-------------------------------------------------------------------
+Wed Feb 20 18:48:38 CET 2002 - ma@suse.de
+
+- version to 2.5.6
+- Fixed screen update. Some widgets changes became not immediatelty
+  visible, if dialog is not waiting for userinput. (#13335)
+
+-------------------------------------------------------------------
+Fri Feb 15 13:36:27 CET 2002 - kkaempf@suse.de
+
+- "utf-8" -> "UTF-8" for iconv (#13276).
+
+-------------------------------------------------------------------
+Thu Feb 14 13:54:40 CET 2002 - schwab@suse.de
+
+- Fix for gcc 3.1.
+- Remove ia64 workaround.
+
+-------------------------------------------------------------------
+Fri Feb  8 17:03:43 CET 2002 - sh@suse.de
+
+- version to 2.5.4
+- added filename constructor to NCImage
+
+-------------------------------------------------------------------
+Thu Feb  7 18:41:08 CET 2002 - ma@suse.de
+
+- version to 2.5.3
+- fixed IntField: Number entry popup popped down too early.
+- fixed CheckBox: Redwaw sometimes left vestiges.
+- removed usage of BLINK attribute, as it realy blinks on some
+  xterm's and normal VGA linux console.
+
+-------------------------------------------------------------------
+Sat Jan 26 17:53:27 CET 2002 - ma@suse.de
+
+- version to 2.5.2
+- libyui now is able to tell that multiple drawing operations will
+  be performed, so we can avoid superfluous screen updates. This
+  speeds up building of large tables, as used in single package
+  selection.
+
+-------------------------------------------------------------------
+Fri Jan 25 00:26:52 CET 2002 - ma@suse.de
+
+- version to 2.5.1
+- fixed `opt(`notify) not working for TextEntry (#12237)
+- fixed Frame widget discarding accelerator. Now a Frame activates
+  the first appropriate child found. (#10458 )
+- new: RichText now supports headlines, ordered and unorderd lists
+  and hyperlinks.
+- (almost) all widget attributes are now managed by NCStyle class.
+  This makes it easier to create introduce new skins.
+
+-------------------------------------------------------------------
+Wed Oct 10 13:54:35 CEST 2001 - ma@suse.de
+
+- version to 2.5.0
+- fix: usage of va_args on ppc caused segmentation fault.
+
+-------------------------------------------------------------------
+Sun Sep  9 13:09:37 CEST 2001 - ma@suse.de
+
+- fix: setFocus reported an error if the widget already has the
+  focus.
+
+-------------------------------------------------------------------
+Fri Sep  7 16:04:52 CEST 2001 - ma@suse.de
+
+- version to 2.4.5
+- UI-specific getDisplayInfo() functions added
+
+-------------------------------------------------------------------
+Tue Aug 21 10:25:45 CEST 2001 - ma@suse.de
+
+- fixes to compile with gcc 3.0
+
+-------------------------------------------------------------------
+Fri Aug 17 10:18:27 CEST 2001 - ma@suse.de
+
+- version to 2.4.4
+- new: Hotkeys and BackTab (<ESC-key>/<ESC-TAB>) (#8448)
+- new: May restrict input characters in TextEntry (#8357)
+- new: MenuButton widgets
+- fix: Comobox didn't send notify
+- fix: Unused special keys (e.g. FKeys,Cursor) in MultiLineEdit
+  produced garbage input.
+- changed: No more auto disabling of nonscrollable (text fits in
+  widget) RichText and LogView. Next step will be to provide zoom
+  and collapse function.
+- changed: Navigation in Tree. Curs-Left/Right either collapse/expand
+  current entry if possible or move to previous/next item otherwise.
+  Not both in on step.
+
+-------------------------------------------------------------------
+Wed Jul 11 16:12:35 CEST 2001 - ma@suse.de
+
+- version to 2.4.3
+- fixed setConsoleFont(). 'setfont' and 'magic char echo' now
+  explicitly use the same tty ncurses opened at startup.
+
+-------------------------------------------------------------------
+Tue Jul 10 20:09:18 CEST 2001 - ma@suse.de
+
+- version to 2.4.2
+- new widget: MultiSelectionBox
+- fixes in font switching
+
+-------------------------------------------------------------------
+Tue Jun 19 15:11:58 CEST 2001 - kkaempf@suse.de
+
+- implement callback mechanism
+- version 2.4.1
+
+-------------------------------------------------------------------
+Fri May 11 23:52:44 CEST 2001 - kendy@suse.cz
+
+- version 2.3.12
+- fixed switching of fonts: czech language was unreadable
+  (not reported bug)
+
+-------------------------------------------------------------------
+Fri May 11 17:43:08 CEST 2001 - kkaempf@suse.de
+
+- version to 2.3.11
+- add split-alias entries to specfile (#8133)
+
+-------------------------------------------------------------------
+Fri May 11 09:30:03 CEST 2001 - ma@suse.de
+
+- version to 2.3.10
+- fixed: ComboBox now shows 1st entry if no default provided (#8072)
+- fixed: TextEntry en/disabling was unfunctional (#8072)
+
+-------------------------------------------------------------------
+Mon Apr 30 16:14:48 CEST 2001 - kkaempf@suse.de
+
+- only -devel provides y2curses
+
+-------------------------------------------------------------------
+Mon Apr 30 16:12:42 CEST 2001 - ma@suse.de
+
+- let yast2-ui-ncurses provide 'YaST2-UI'
+
+-------------------------------------------------------------------
+Mon Apr 30 15:59:14 CEST 2001 - ma@suse.de
+
+- version to 2.3.8
+- log tty detection in ncurses init as milestone
+
+-------------------------------------------------------------------
+Wed Apr 25 16:32:28 CEST 2001 - ma@suse.de
+
+- don't return an error if setfont fails, as the calling libyui
+  function isn't able to make anything usefull out of it.
+
+-------------------------------------------------------------------
+Tue Apr 17 15:00:06 CEST 2001 - ma@suse.de
+
+- version to 2.3.7
+- new color scheme.
+
+-------------------------------------------------------------------
+Wed Apr 11 12:29:52 CEST 2001 - schwab@suse.de
+
+- Fix ambiguous call to string::insert.
+
+-------------------------------------------------------------------
+Wed Apr  4 15:23:36 CEST 2001 - ma@suse.de
+
+- version to 2.3.6
+- fixed tree widget to expand/hide subtrees
+- fixed richtext widget to recognize html tags with arguments and
+  handle '&nbsp;'
+
+-------------------------------------------------------------------
+Fri Mar 30 09:02:18 CEST 2001 - kkaempf@suse.de
+
+- dont install lib, only plugin is needed
+
+-------------------------------------------------------------------
+Mon Mar 26 11:52:04 CEST 2001 - ma@suse.de
+
+- added missing 'const' in previous fix
+
+-------------------------------------------------------------------
+Fri Mar 23 14:38:01 CET 2001 - ma@suse.de
+
+- version to 2.3.5
+- fixed dirty hack in NCurses.cc, using NCursesPanel's private
+  'typedef struct UserHook;'.
+
+-------------------------------------------------------------------
+Thu Mar 22 18:31:57 CET 2001 - ma@suse.de
+
+- version to 2.3.4
+- allow multiline labeltexts for RadioButton and PushButton (#6711)
+- let ComboBox's list popup appear below value field (not centered
+  on screen)
+- provide a TextEntry popup in IntField, to manually enter a value
+
+-------------------------------------------------------------------
+Mon Mar 12 13:17:03 CET 2001 - arvin@suse.de
+
+- version to 2.3.3
+- Strip plugin in package.
+
+-------------------------------------------------------------------
+Thu Mar  8 17:33:47 CET 2001 - ma@suse.de
+
+- package name changed from y2curses(old) to yast2-ui-ncurses(new).
+
+-------------------------------------------------------------------
+Fri Feb 23 17:37:52 CET 2001 - ma@suse.de
+
+- setLanguage now sets a proper defaultEncoding. At startup the
+  defaultEncoding is set according to ${LANG}.
+- The default 'language to encoding' mapping is stored in the
+  script 'lang2encoding.tab' which generates 'lang2encoding.cc'.
+- Evaluation of ${Y2NCURSES_ENCODING} has been removed.
+
+-------------------------------------------------------------------
+Fri Feb 23 13:53:32 CET 2001 - ma@suse.de
+
+- version to 2.3.2
+- moved class NCstring back from libyui.
+
+-------------------------------------------------------------------
+Thu Feb 22 10:32:41 CET 2001 - ma@suse.de
+
+- initiate NCurses::Redraw for _all_ visible dialogs on encoding
+  change.
+- Y2NCursesUI constructor will set the defaultEncoding to the value
+  of Y2NCURSES_ENCODING environment variable, if present. Might be
+  helpfull for testing until some other y2 part sets the encoding
+  according to the LANG variable.
+
+-------------------------------------------------------------------
+Wed Feb 21 15:55:33 CET 2001 - ma@suse.de
+
+- version to 2.3.1
+- adjustments to new libyui(NCstring) interface
+- various changes to get a correct screen after font/encoding
+  has been changed.
+
+-------------------------------------------------------------------
+Sat Jan 27 21:20:12 CET 2001 - arvin@suse.de
+
+- package split y2curses / y2curses-devel
+
+-------------------------------------------------------------------
+Sat Jan 20 15:47:59 CET 2001 - arvin@suse.de
+
+- version to 2.2.19
+- make package compile
+
+-------------------------------------------------------------------
+Fri Jan 19 17:30:52 CET 2001 - ma@suse.de
+
+- version to 2.2.18
+- Pass encoding as argument to NCstring::setDefaultEncoding()
+
+-------------------------------------------------------------------
+Thu Jan 18 18:39:16 CET 2001 - sh@suse.de
+
+- version to 2.2.17
+- added new parameter "encoding" to setConsoleFont()
+
+-------------------------------------------------------------------
+Mon Jan 15 11:04:10 CET 2001 - ma@suse.de
+
+- version to 2.2.16
+- fixed IntField not responding to opt(notify) (#5636, no volume control
+  in sound configuration due to missing callback)
+- map UI-specific redrawScreen() to NCurses::Refresh()
+
+-------------------------------------------------------------------
+Thu Jan 11 20:21:10 CET 2001 - ma@suse.de
+
+- version to 2.2.15
+- fixed attribute set for BW mode (list and table selection were
+  not visible) (#3756)
+
+-------------------------------------------------------------------
+Thu Jan 11 14:45:55 CET 2001 - ma@suse.de
+
+- version to 2.2.14
+- Do screen refresh on <Ctrl-L> to get rid of any messages that
+  might have been writen to the console (e.g. network shutdown)
+
+-------------------------------------------------------------------
+Fri Jan  5 15:58:26 CET 2001 - ma@suse.de
+
+- version to 2.2.13
+- fixed missing caption in empty tables (#5192)
+
+-------------------------------------------------------------------
+Thu Jan  4 16:42:24 CET 2001 - ma@suse.de
+
+- version to 2.2.12
+- fixed incorrect display of 8bit chars in RichText widgets (#4967)
+
+-------------------------------------------------------------------
+Thu Jan  4 10:53:15 CET 2001 - kkaempf@suse.de
+
+- version to 2.2.11
+  move NCstring to libyui
+
+-------------------------------------------------------------------
+Thu Jan  2 14:27:39 CET 2001 - ma@suse.de
+
+- fixed: whole passwd field filled with '*' (#5107)
+
+-------------------------------------------------------------------
+Fri Dec 22 18:25:22 CET 2000 - ma@suse.de
+
+- version to 2.2.10
+- new MultiLineEdit widget
+
+-------------------------------------------------------------------
+Wed Dec 20 14:16:15 CET 2000 - ma@suse.de
+
+- version to 2.2.9
+- new LogView widget
+
+-------------------------------------------------------------------
+Tue Dec 19 18:29:57 CET 2000 - ma@suse.de
+
+- version to 2.2.8
+- basic Tree (always expanded)
+
+-------------------------------------------------------------------
+Tue Dec 19 15:18:37 CET 2000 - ma@suse.de
+
+- version to 2.2.7
+- pass YCPstrings to ui specific widgets
+
+-------------------------------------------------------------------
+Mon Dec 18 16:59:30 CET 2000 - ma@suse.de
+
+- version to 2.2.6
+- some more missing recodes fixed.
+- changed behaviour of NCDialog if UI requests input from a dialog
+  with no active items. Previous version missed to look for a widget
+  that might have been enabeled since the last request, and thus may
+  be activated now. If there's still no active widget, the request is
+  ignored on pollInput() and idleLoop(). Previous version sent ET_CANCEL,
+  causing the dialog to be closed.
+
+-------------------------------------------------------------------
+Thu Dec 14 17:22:30 CET 2000 - ma@suse.de
+
+- version to 2.2.5
+- fixed Table to show column separator and headline
+- force recoding of utf8 strings where YUI provides them as
+  'class string' (only YCPString is recoded automaticaly).
+- separated table items and style from TablePad structure.
+
+-------------------------------------------------------------------
+Wed Dec 13 11:48:09 CET 2000 - ma@suse.de
+
+- version to 2.2.4
+- new NCPadWidget as base for all scrollable widgets.
+- new NCPad's for plain and list style
+
+-------------------------------------------------------------------
+Wed Dec  6 11:15:05 CET 2000 - ma@suse.de
+
+- version to 2.2.3
+- provide ComboBox widget
+- fix TextEntry (didn't scroll on long texts)
+- fix RichText (avoid hscroll, support bold/it/tt and simple list)
+- code, layout and debug stuff cleanup
+- dummy Tree and LogView widgets
+
+-------------------------------------------------------------------
+Tue Nov 28 17:20:48 CET 2000 - arvin@suse.de
+
+- version to 2.2.2
+- plugin is linked against libncurses and libpanel.
+
+-------------------------------------------------------------------
+Thu Nov 16 17:52:36 CET 2000 - ma@suse.de
+
+- version to 2.2.1
+- provide IntField widget
+
+-------------------------------------------------------------------
+Thu Nov 16 17:12:39 CET 2000 - kkaempf@suse.de
+
+- split library and plugin
+
+-------------------------------------------------------------------
+Wed Nov  8 12:38:48 CET 2000 - kkaempf@suse.de
+
+- link with libutil and libcrypt
+
+-------------------------------------------------------------------
+Wed Oct 25 18:41:26 CEST 2000 - kkaempf@suse.de
+
+- provide lib and plugin
+
+-------------------------------------------------------------------
+Wed Oct 25 18:29:03 CEST 2000 - kkaempf@suse.de
+
+- Group set
+
+-------------------------------------------------------------------
+Wed Oct 25 13:07:36 CEST 2000 - kkaempf@suse.de
+
+- updated version, prepared for new libyui interface
+  version 2.1.1
+
+-------------------------------------------------------------------
+Mon Jul 24 18:05:10 CEST 2000 - ma@suse.de
+
+- version to 2.0.8
+- workaround another librecode memory leak (#3589)
+
+-------------------------------------------------------------------
+Thu Jul 20 14:06:29 CEST 2000 - ma@suse.de
+
+- version to 2.0.7
+- fixed broken enable/disable items (#3550)
+
+-------------------------------------------------------------------
+Mon Jul 17 20:24:32 CEST 2000 - ma@suse.de
+
+- version to 2.0.6
+- fixed `opt(`default) for Pushbuttons (#3071)
+
+-------------------------------------------------------------------
+Fri Jul 14 18:35:37 CEST 2000 - ma@suse.de
+
+- version to 2.0.5
+- replaced dummy ComboBox by copy of TextEntry widget.
+- hotkey indicator stripped from widget labels (#3511)
+
+-------------------------------------------------------------------
+Fri Jul 14 10:36:28 CEST 2000 - ma@suse.de
+
+- version to 2.0.4
+- always(!) limit dialog size by screen size. There was one
+  case missing, causing eg. package descriptions to abort because
+  too large dialog sizes were requested (#3136)
+
+-------------------------------------------------------------------
+Thu Jul 13 14:26:09 CEST 2000 - ma@suse.de
+
+- version to 2.0.3
+- redraw screen immediately after any setfont request (#3220)
+
+-------------------------------------------------------------------
+Wed Jul 12 18:37:59 CEST 2000 - ma@suse.de
+
+- version to 2.0.2
+- missing frames and frame labes added (#3133)
+
+-------------------------------------------------------------------
+Mon Jun 19 17:30:14 CEST 2000 - schwab@suse.de
+
+- Add %suse_update_config.
+- Lower opt level on ia64.
+
+-------------------------------------------------------------------
+Mon Jun  5 11:00:18 CEST 2000 - kkaempf@suse.de
+
+- fix include path
+
+-------------------------------------------------------------------
+Thu May 18 12:19:30 CEST 2000 - kkaempf@suse.de
+
+- install in plugin
+  interface change for tree widget
+  bump version to 2.0.1
+
+-------------------------------------------------------------------
+Wed Apr 26 16:25:39 CEST 2000 - kkaempf@suse.de
+
+- Initial version based on yast2 from SuSE 6.4
+

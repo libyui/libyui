@@ -1,0 +1,12 @@
+## general configure.in.in
+
+## initialize
+@YAST2-INIT-COMMON@
+@YAST2-INIT-PROGRAM@
+
+## some common checks
+@YAST2-CHECKS-COMMON@
+@YAST2-CHECKS-PROGRAM@
+
+## and generate the output
+@YAST2-OUTPUT@

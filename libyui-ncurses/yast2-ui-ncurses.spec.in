@@ -1,0 +1,43 @@
+@HEADER-COMMENT@
+
+# neededforbuild  autoconf automake gpp libgpp libxcrypt libxcrypt-devel liby2 liby2-devel libycp libycp-devel libyui libyui-devel yast2-core-wfm yast2-core-wfm-devel yast2-devtools ydoc
+
+@HEADER@
+Summary:	-
+Provides:	YaST2-UI
+Provides:	y2base:/var/lib/YaST2/servers/ncurses
+Provides:	y2base:/usr/lib/YaST2/servers/ncurses
+Provides:	y2base:/usr/lib/YaST2/plugin/libpy2ncurses.so.2
+
+%description
+-
+
+@HEADER-DEVEL@
+Summary:	-
+Provides:	y2curses
+Obsoletes:	y2curses
+
+%description devel
+-
+
+@PREP@
+
+@BUILD-PROGRAM@
+
+@INSTALL-PROGRAM@
+
+@CLEAN@
+
+%files
+%defattr (-, root, root)
+%dir @plugindir@
+@plugindir@/libpy2ncurses.so.*
+
+%files devel
+%defattr (-, root, root)
+%dir @ybindir@
+@ybindir@/y2ncurses
+%dir @plugindir@
+@plugindir@/libpy2ncurses.so
+@plugindir@/libpy2ncurses.la
+%doc @docdir@

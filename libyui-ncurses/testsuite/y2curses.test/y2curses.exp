@@ -1,0 +1,12 @@
+#
+# ncurses.exp
+# 'main' file for all ncurses tests
+#
+
+# get all files matching tests/*.ui
+
+set filenames [glob $srcdir/tests/*.ui]
+
+# foreach file, call ncurses-run (from testsuite/lib)
+
+foreach file $filenames { ncurses-run $file }

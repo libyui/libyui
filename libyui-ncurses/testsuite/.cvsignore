@@ -1,0 +1,11 @@
+.deps
+.libs
+Makefile
+Makefile.in
+site.exp
+*.sum
+*.log
+tmp.out.*
+tmp.err.*
+runcurses
+y2ncurses
