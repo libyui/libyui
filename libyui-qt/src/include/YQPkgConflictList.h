@@ -71,14 +71,21 @@ public:
      **/
     bool choicesComplete();
 
+    
 public slots:
 
     /**
-     * Activate the choices the user made.
+     * Apply the choices the user made.
      **/
-    void activateUserChoices();
+    void applyResolutions();
 
+    
+signals:
 
+    /**
+     * Update package states - they may have changed.
+     **/
+    void updatePackages();
 };
 
 

@@ -66,7 +66,15 @@ public slots:
      **/
     void solveAndShowConflicts();
 
+    
+signals:
 
+    /**
+     * Update package states - they may have changed.
+     **/
+    void updatePackages();
+
+    
 protected:
 
     YQPkgConflictList *	_conflictList;

@@ -510,6 +510,18 @@ YQPackageSelector::makeConnections()
 	connect( _youPatchList,	SIGNAL( updatePackages()      ),
 		 _pkgList, 	SLOT  ( updateToplevelItemStates() ) );
     }
+
+
+    //
+    // Connect conflict dialog
+    //
+
+    if ( _conflictDialog && _pkgList )
+    {
+	connect( _conflictDialog,	SIGNAL( updatePackages()      ),
+		 _pkgList, 		SLOT  ( updateToplevelItemStates() ) );
+	
+    }
 }
 
 

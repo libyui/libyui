@@ -46,22 +46,25 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );
 
-    
+
     // Layout for the dialog (can't simply insert a QVbox)
-    
+
     QVBoxLayout * layout = new QVBoxLayout( this, MARGIN, SPACING );
     CHECK_PTR( layout );
-    
+
     // Conflict list
-    
+
     _conflictList = new YQPkgConflictList( this );
     CHECK_PTR( _conflictList );
     layout->addWidget( _conflictList );
     layout->addSpacing( 8 );
 
+    connect( _conflictList, SIGNAL( updatePackages() ),
+	     this,	    SIGNAL( updatePackages() ) );
+
 
     // Button box
-    
+
     QHBox * buttonBox	= new QHBox( this );
     CHECK_PTR( buttonBox );
     buttonBox->setSpacing( SPACING );
@@ -70,27 +73,27 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
 
     // OK button
-    
+
     _okButton = new QPushButton( _( "&OK - Try Again" ), buttonBox );
     CHECK_PTR( _okButton );
     _okButton->setDefault( true );
-    
+
     connect( _okButton, SIGNAL( clicked() ),
 	     this,      SLOT  ( solveAndShowConflicts() ) );
 
-    
+
     // Strechtable space between the buttons
-    
+
     QWidget * stretch = new QWidget( buttonBox );
     CHECK_PTR( stretch );
     stretch->setSizePolicy( QSizePolicy( QSizePolicy::Expanding,	// hor
 					 QSizePolicy::Minimum ) );	// vert
 
     // Cancel button
-    
+
     _cancelButton = new QPushButton( _( "&Cancel - Ignore All" ), buttonBox );
     CHECK_PTR( _cancelButton );
-    
+
     connect( _cancelButton, SIGNAL( clicked() ),
 	     this,          SLOT  ( reject()  ) );
 }
@@ -113,10 +116,10 @@ void
 YQPkgConflictDialog::solveAndShowConflicts()
 {
     CHECK_PTR( _conflictList );
-    
+
     if ( isVisible() )
     {
-	_conflictList->activateUserChoices();
+	_conflictList->applyResolutions();
     }
 
     _conflictList->clear();
@@ -125,9 +128,9 @@ YQPkgConflictDialog::solveAndShowConflicts()
 
     y2milestone( "Solving..." );
     QApplication::setOverrideCursor( Qt::WaitCursor );
-    
+
     bool success = Y2PM::packageManager().solveInstall( goodList, badList );
-    
+
     QApplication::restoreOverrideCursor();
     y2milestone( "Solving done" );
 
@@ -140,7 +143,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
     {
 	y2milestone( "Dependency conflict!" );
 	_conflictList->fill( badList );
-	
+
 	if ( ! isVisible() )
 	{
 	    exec();

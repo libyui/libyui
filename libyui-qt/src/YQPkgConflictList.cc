@@ -36,6 +36,12 @@
 
 #define LIST_SPLIT_THRESHOLD	8
 
+#define RED			QColor( 0xC0, 0, 0 )
+#define BLUE			QColor( 0, 0, 0xC0 )
+#define LIGHT_BLUE		QColor( 0xE0, 0xE0, 0xF8 )
+#define LIGHT_GREY		QColor( 0xE0, 0xE0, 0xE0 )
+#define MAGENTA			Qt::magenta
+
 
 YQPkgConflictList::YQPkgConflictList( QWidget * parent )
     : QY2ListView( parent )
@@ -76,7 +82,7 @@ YQPkgConflictList::choicesComplete()
 
 
 void
-YQPkgConflictList::activateUserChoices()
+YQPkgConflictList::applyResolutions()
 {
     // TODO
     // TODO
@@ -125,8 +131,22 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
 	_fullName += ( PkgEdition::toString( edition ) ).c_str();
     }
 
-    setBackgroundColor( QColor( 0xE0, 0xE0, 0xF8 ) );
+    setBackgroundColor( LIGHT_BLUE );
     setOpen( true );
+
+#if 0
+    // DEBUG
+    // DEBUG
+
+    if ( _pmObj )
+    {
+	for ( int i=0; i < 30; i++ )
+	    _conflict.remove_to_solve_conflict.push_back( _pmObj );
+    }
+    
+    // DEBUG
+    // DEBUG
+#endif
 
     formatLine();
     dumpLists();
@@ -151,7 +171,7 @@ YQPkgConflict::formatLine()
 	    // Select one from a number of functionalities (Window manager etc.)
 	    // e.g., "Select window manager"
 	    text = ( _( "Select %1" ) ).arg( _shortName );
-	    setTextColor( QColor( 0, 0, 0xC0 ) );
+	    setTextColor( BLUE );
 	    icon = YQIconPool::selectPkgConflict();
 	}
 	else
@@ -159,7 +179,7 @@ YQPkgConflict::formatLine()
 	    // (Pseudo) package / functionality %1 missing, e.g.,
 	    // "libfoo.so.1.0 not available"
 	    text = ( _( "%1 not available" ) ).arg( _fullName );
-	    setTextColor( Qt::red );
+	    setTextColor( RED );
 	    icon = YQIconPool::unresolvablePkgConflict();
 	}
     }
@@ -173,7 +193,7 @@ YQPkgConflict::formatLine()
 	    // This means that the user has set this package to "remove" or "taboo",
 	    // yet other packages still need it.
 
-	    setTextColor( Qt::red );
+	    setTextColor( RED );
 
 	    switch ( _status )
 	    {
@@ -262,15 +282,15 @@ YQPkgConflict::dumpList( QListViewItem * 	parent,
 	{
 	    // Split list
 
-	    int more = list.size() - count;
+	    int more = list.size() - count + 1;
 	    QString text = ( _( "%1 more..." ) ).arg( more );
 	    QY2ListViewItem * sublist = new QY2ListViewItem( parent, text, true );
 	    didSplit = true;
 
 	    if ( sublist )
 	    {
-		if ( more < 20 )	sublist->setTextColor( QColor( 0, 0, 0xC0 ) );
-		else			sublist->setTextColor( QColor( 0xFF, 0, 0 ) );
+		if ( more < 20 )	sublist->setTextColor( BLUE );
+		else			sublist->setTextColor( MAGENTA );
 		parent = sublist;
 	    }
 	}
@@ -298,7 +318,7 @@ YQPkgConflict::addResolutionSuggestions()
 						      true );
     CHECK_PTR( header );
     header->setOpen( true );
-    header->setBackgroundColor( QColor( 0xE0, 0xE0, 0xE0 ) );
+    header->setBackgroundColor( LIGHT_GREY );
 
     addUndoResolution  ( header );
     addAlternativesList( header );
@@ -354,23 +374,35 @@ YQPkgConflict::addUndoResolution( QY2CheckListItem * parent )
 void
 YQPkgConflict::addAlternativesList( QY2CheckListItem * parent )
 {
-#warning TODO
+    if ( _conflict.alternatives.empty() )
+	return;
+
+    std::list<PkgDep::Alternative>::const_iterator it = _conflict.alternatives.begin();
+
+    while ( it != _conflict.alternatives.end() )
+    {
+	PMObjectPtr pkg = (*it).solvable;
+
+	if ( pkg )
+	    new YQPkgConflictResolution( parent, pkg );
+	
+	++it;
+    }
 }
 
 
 void
 YQPkgConflict::addDeleteResolution( QY2CheckListItem * parent )
 {
-    QString text;
-    int conflictingPkgsCount = (int) _conflict.remove_to_solve_conflict.size();
-
-    if ( conflictingPkgsCount < 1 )
+    if ( _conflict.remove_to_solve_conflict.empty() )
 	return;
 
-    if ( conflictingPkgsCount == 1 )
+    QString text;
+
+    if ( _conflict.remove_to_solve_conflict.size() == 1 )
 	text = _( "Remove the conflicting package" );
     else
-	text = ( _( "Remove all %1 conflicting packages" ) ).arg( conflictingPkgsCount );
+	text = ( _( "Remove all %1 conflicting packages" ) ).arg( _conflict.remove_to_solve_conflict.size() );
 
     YQPkgConflictResolution * res =
 	new YQPkgConflictResolution( parent, text, YQPkgConflictBruteForceDelete );
@@ -403,15 +435,15 @@ YQPkgConflict::dumpDeleteList( QListViewItem * parent )
 	{
 	    // Split list
 
-	    int more = _conflict.remove_to_solve_conflict.size() - count;
+	    int more = _conflict.remove_to_solve_conflict.size() - count + 1;
 	    QString text = ( _( "%1 more..." ) ).arg( more );
 	    QY2ListViewItem * sublist = new QY2ListViewItem( parent, text, true );
 	    didSplit = true;
 
 	    if ( sublist )
 	    {
-		if ( more < 20 )	sublist->setTextColor( QColor( 0, 0, 0xC0 ) );
-		else			sublist->setTextColor( QColor( 0xFF, 0, 0 ) );
+		if ( more < 20 )	sublist->setTextColor( BLUE );
+		else			sublist->setTextColor( MAGENTA );
 		parent = sublist;
 	    }
 	}
@@ -427,11 +459,11 @@ YQPkgConflict::dumpDeleteList( QListViewItem * parent )
 		text = ( _( "Delete %1" ) ).arg( name.c_str() );
 	    else
 		text = ( _( "Don't install %1" ) ).arg( name.c_str() );
-	    
+
 
 	    new QY2ListViewItem( parent, text, true );
 	}
-	
+
 	++it;
     }
 }
