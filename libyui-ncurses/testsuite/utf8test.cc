@@ -229,7 +229,7 @@ int main (int argc, char *argv[])
     
     NCstring_test textinput;
     
-    textinput = text;
+    textinput = YCPString(text);
     
     for (;;)
     {

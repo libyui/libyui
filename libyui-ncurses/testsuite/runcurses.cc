@@ -105,7 +105,7 @@ main (int argc, char *argv[])
 
     for (;;)
     {
-	YCode* code = parser->parse();
+	YCodePtr code = parser->parse();
 	if (code == NULL)
 	    break;
 

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Feb 27 13:45:51 CET 2004 - visnov@suse.cz
+
+- adapted for the new counted pointers in core 
+
+-------------------------------------------------------------------
 Sun Feb 22 21:30:40 CET 2004 - kkaempf@suse.de
 
 - dont redeclare package pointers

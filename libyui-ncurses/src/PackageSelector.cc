@@ -1010,7 +1010,7 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	// show the package table
 	const char * tableLayout = "`PkgSpecial( `id(\"availpkgs\"), `opt(`notify), \"pkgTable\" )"; 
 	Parser parser( tableLayout );
-	YCode *parsed_code = parser.parse ();
+	YCodePtr parsed_code = parser.parse ();
 	YCPValue layout = YCPNull ();
 	if (parsed_code != NULL)
 	    layout = parsed_code->evaluate();
@@ -1036,7 +1036,7 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
         // show the package table
 	const char * tableLayout = "`PkgSpecial( `id(\"patchpkgs\"), `opt(`notify), \"pkgTable\" )"; 
 	Parser parser( tableLayout );
-	YCode *parsed_code = parser.parse ();
+	YCodePtr parsed_code = parser.parse ();
 	YCPValue layout = YCPNull ();
 	if (parsed_code != NULL)
 	    layout = parsed_code->evaluate();
@@ -1062,7 +1062,7 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	// show the rich text widget
 	const char * textLayout = "`RichText( `id(\"description\"), \" \")"; 
 	Parser parser( textLayout );
-	YCode *parsed_code = parser.parse ();
+	YCodePtr parsed_code = parser.parse ();
 	YCPValue layout = YCPNull ();
 	if (parsed_code != NULL)
 	    layout = parsed_code->evaluate ();
@@ -1116,7 +1116,7 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 
 
 	    Parser parser( menu );
-	    YCode *parsed_code = parser.parse ();
+	    YCodePtr parsed_code = parser.parse ();
 	    YCPValue layout = YCPNull ();
 	    
 	    if ( parsed_code != NULL )
@@ -1142,7 +1142,7 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 
 
 	    Parser parser( menu );
-	    YCode *parsed_code = parser.parse ();
+	    YCodePtr parsed_code = parser.parse ();
 	    YCPValue layout = YCPNull ();
 	    
 	    if ( parsed_code != NULL )

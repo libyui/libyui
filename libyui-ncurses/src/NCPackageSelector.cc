@@ -235,7 +235,7 @@ YCPTerm NCPackageSelector::readLayoutFile( YNCursesUI *ui,
 	NCMIL <<  "Loading layout file " << layoutFilename << endl;
     
 	Parser parser( layoutFile, layoutFilename );
-	YCode *parsed_code = parser.parse ();
+	YCodePtr parsed_code = parser.parse ();
 	YCPValue layout = YCPNull ();
 
 	if ( parsed_code != NULL )
