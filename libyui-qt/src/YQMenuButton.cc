@@ -131,13 +131,13 @@ YQMenuButton::createMenu()
 
 
 void
-YQMenuButton::createMenu( YMenuItem *ymenu, QPopupMenu *qt_menu )
+YQMenuButton::createMenu( YMenuItem * ymenu, QPopupMenu *qt_menu )
 {
     YMenuItemListIterator it = ymenu->itemList().begin();
 
     while ( it != ymenu->itemList().end() )
     {
-	YMenuItem *item = *it;
+	YMenuItem * item = *it;
 
 	if ( item->isMenu() )
 	{

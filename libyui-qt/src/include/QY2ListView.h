@@ -164,13 +164,13 @@ protected:
      * Handle mouse clicks.
      * Reimplemented from QScrollView.
      **/
-    virtual void contentsMouseReleaseEvent( QMouseEvent* );
+    virtual void contentsMouseReleaseEvent( QMouseEvent * );
 
     /**
      * Handle mouse clicks.
      * Reimplemented from QScrollView.
      **/
-    virtual void contentsMouseDoubleClickEvent( QMouseEvent* );
+    virtual void contentsMouseDoubleClickEvent( QMouseEvent * );
 
 
 

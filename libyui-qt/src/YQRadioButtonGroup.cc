@@ -43,7 +43,7 @@ YQRadioButtonGroup::~YQRadioButtonGroup()
 }
 
 
-void YQRadioButtonGroup::addRadioButton(YRadioButton *button)
+void YQRadioButtonGroup::addRadioButton(YRadioButton * button)
 {
     YRadioButtonGroup::addRadioButton(button);
 
@@ -59,7 +59,7 @@ void YQRadioButtonGroup::addRadioButton(YRadioButton *button)
 }
 
 
-void YQRadioButtonGroup::removeRadioButton(YRadioButton *button)
+void YQRadioButtonGroup::removeRadioButton(YRadioButton * button)
 {
     YRadioButtonGroup::removeRadioButton(button);
 }
@@ -93,7 +93,7 @@ void YQRadioButtonGroup::radioButtonClicked( bool newState )
 
     for ( unsigned i=0; i < buttonlist.size(); i++ )
     {
-	YQRadioButton *current_button = (YQRadioButton *) buttonlist[i];
+	YQRadioButton * current_button = (YQRadioButton *) buttonlist[i];
 
 	if ( current_button->getQtButton() == sender_button )
 	{

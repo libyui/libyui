@@ -55,7 +55,7 @@ public:
 
 protected:
 
-    YQTable *table;
+    YQTable * table;
 };
 
 
@@ -174,7 +174,7 @@ void YQTable::setEnabling(bool enabled)
 
 void YQTable::itemAdded(vector<string> elements, int index)
 {
-    YQListViewItem *item;
+    YQListViewItem * item;
 
     if ( sort_by_insertion_order && last_item )
 	item = new YQListViewItem( this, qt_listview, last_item, index );
@@ -205,7 +205,7 @@ void YQTable::cellChanged(int index, int colnum, const YCPString & newtext)
 
 int YQTable::getCurrentItem()
 {
-    YQListViewItem *ci = (YQListViewItem *)(qt_listview->currentItem());
+    YQListViewItem * ci = (YQListViewItem *)(qt_listview->currentItem());
     if (ci) return ci->index;
     else	   return -1;
 }

@@ -103,7 +103,7 @@ public:
      * Find the corresponding YQTreeItem for a given YTreeItem.
      * Returns 0 if not found.
      */
-    YQTreeItem *findYQTreeItem ( const YTreeItem * orig ) const;
+    YQTreeItem * findYQTreeItem ( const YTreeItem * orig ) const;
 
 
 protected slots:

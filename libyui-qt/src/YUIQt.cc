@@ -319,7 +319,7 @@ void YUIQt::leaveIdleLoop( int )
 }
 
 
-void YUIQt::returnNow( EventType et, YWidget *wid )
+void YUIQt::returnNow( EventType et, YWidget * wid )
 {
 
     if ( wid && ! wid->isValid() )
@@ -364,11 +364,11 @@ void YUIQt::returnNow( EventType et, YWidget *wid )
 }
 
 
-YWidget *YUIQt::userInput( YDialog *dialog, EventType *event )
+YWidget * YUIQt::userInput( YDialog * dialog, EventType *event )
 {
     if (_event_type == ET_NONE)
     {
-	YQDialog *qd = (YQDialog *)dialog;
+	YQDialog * qd = (YQDialog *)dialog;
 	qd->activate(true);
 
 	if ( qApp->focusWidget() )
@@ -399,12 +399,12 @@ YWidget *YUIQt::userInput( YDialog *dialog, EventType *event )
 }
 
 
-YWidget *YUIQt::pollInput( YDialog *dialog, EventType *event )
+YWidget * YUIQt::pollInput( YDialog * dialog, EventType *event )
 {
     if (_event_type == ET_NONE)
     {
 	// if ( focusWidget() ) focusWidget()->repaint();
-	YQDialog *qd = (YQDialog *)dialog;
+	YQDialog * qd = (YQDialog *)dialog;
 	qd->activate(true);
 	processEvents();
 	qd->activate(false);
@@ -417,7 +417,7 @@ YWidget *YUIQt::pollInput( YDialog *dialog, EventType *event )
 
 
 
-YDialog *YUIQt::createDialog( YWidgetOpt & opt )
+YDialog * YUIQt::createDialog( YWidgetOpt & opt )
 {
     bool has_defaultsize = opt.hasDefaultSize.value();
     QWidget *qt_parent = _main_win;
@@ -435,7 +435,7 @@ YDialog *YUIQt::createDialog( YWidgetOpt & opt )
     if ( ! has_defaultsize && ! _popup_stack.empty() )
 	qt_parent = _popup_stack.back();
 
-    YQDialog *dialog = new YQDialog( opt, qt_parent, has_defaultsize );
+    YQDialog * dialog = new YQDialog( opt, qt_parent, has_defaultsize );
     CHECK_PTR( dialog );
 
     if ( ! has_defaultsize )
@@ -445,7 +445,7 @@ YDialog *YUIQt::createDialog( YWidgetOpt & opt )
 }
 
 
-void YUIQt::showDialog( YDialog *dialog )
+void YUIQt::showDialog( YDialog * dialog )
 {
     QWidget *qw = (QWidget *) dialog->widgetRep();
 
@@ -483,7 +483,7 @@ void YUIQt::showDialog( YDialog *dialog )
 }
 
 
-void YUIQt::closeDialog( YDialog *dialog )
+void YUIQt::closeDialog( YDialog * dialog )
 {
     QWidget *qw = (QWidget *) dialog->widgetRep();
 

@@ -155,7 +155,7 @@ protected:
      * Callback function that reports to the ui specific
      * widget that a child has been added.
      */
-    void childAdded(YWidget *child);
+    void childAdded(YWidget * child);
 
     /**
      * Event handler for keyboard input.

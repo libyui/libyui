@@ -78,7 +78,7 @@ public:
      * or UserInput call. Sets the type and the widget of the event, if
      * no other event is already pending. Exits the event loop.
      */
-    void returnNow(EventType et, YWidget *wid);
+    void returnNow(EventType et, YWidget * wid);
 
     /**
      * Returns 'false" if the "--no-wm" was specified on the command line, i.e.
@@ -222,14 +222,14 @@ protected:
      *
      * Reimplemented from YUIInterpreter.
      */
-    YWidget * userInput( YDialog *dialog, EventType *event );
+    YWidget * userInput( YDialog * dialog, EventType *event );
 
     /**
      * Check the event queue for user input. Don't wait.
      *
      * Reimplemented from YUIInterpreter.
      */
-    YWidget * pollInput( YDialog *dialog, EventType *event );
+    YWidget * pollInput( YDialog * dialog, EventType *event );
 
     /**
      * Create a dialog.
@@ -306,7 +306,7 @@ protected:
     /*** Widget creation methods for optional widgets, all reimplemented from YUIInterpreter ***/
 
     bool 	hasBarGraph();
-    YWidget *	createBarGraph		( YWidget *parent, YWidgetOpt & opt);
+    YWidget *	createBarGraph		( YWidget * parent, YWidgetOpt & opt);
 
 
     bool 	hasColoredLabel();

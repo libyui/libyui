@@ -473,7 +473,7 @@ YQDialog::center( QWidget * dialog, QWidget * parent )
 
 
 void
-YQDialog::childAdded ( YWidget *child )
+YQDialog::childAdded ( YWidget * child )
 {
 
     ( (QWidget *) child->widgetRep() )->move ( decorationWidth( YD_HORIZ ),

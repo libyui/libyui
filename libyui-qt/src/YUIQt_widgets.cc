@@ -59,19 +59,19 @@
 
 
 
-YContainerWidget *YUIQt::createReplacePoint( YWidget *		parent,
+YContainerWidget * YUIQt::createReplacePoint( YWidget *		parent,
 					     YWidgetOpt & 	opt )
 {
     return new YQReplacePoint( ((QWidget *)parent->widgetRep() ), opt );
 }
 
-YWidget *YUIQt::createEmpty		( YWidget *		parent,
+YWidget * YUIQt::createEmpty		( YWidget *		parent,
 					  YWidgetOpt & 		opt )
 {
     return new YQEmpty( (QWidget *) parent->widgetRep(), opt );
 }
 
-YWidget *YUIQt::createSpacing		( YWidget *		parent,
+YWidget * YUIQt::createSpacing		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  float 		size,
 					  bool 			horizontal,
@@ -80,21 +80,21 @@ YWidget *YUIQt::createSpacing		( YWidget *		parent,
     return new YQSpacing( (QWidget *) parent->widgetRep(), opt, size, horizontal, vertical);
 }
 
-YContainerWidget *YUIQt::createFrame	( YWidget *		parent,
+YContainerWidget * YUIQt::createFrame	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label )
 {
     return new YQFrame ( ( (QWidget *) parent->widgetRep() ), opt, label );
 }
 
-YContainerWidget *YUIQt::createSplit	( YWidget *		parent,
+YContainerWidget * YUIQt::createSplit	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  YUIDimension 		dimension )
 {
     return new YQSplit(((QWidget *)parent->widgetRep() ), opt, dimension);
 }
 
-YContainerWidget *YUIQt::createAlignment( YWidget *		parent,
+YContainerWidget * YUIQt::createAlignment( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  YAlignmentType 	halign,
 					  YAlignmentType 	valign )
@@ -102,7 +102,7 @@ YContainerWidget *YUIQt::createAlignment( YWidget *		parent,
     return new YQAlignment( ((QWidget *)parent->widgetRep() ), opt, halign, valign);
 }
 
-YContainerWidget *YUIQt::createSquash	( YWidget *		parent,
+YContainerWidget * YUIQt::createSquash	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  bool 			hsquash,
 					  bool 			vsquash )
@@ -110,14 +110,14 @@ YContainerWidget *YUIQt::createSquash	( YWidget *		parent,
     return new YQSquash( ((QWidget *)parent->widgetRep() ), opt, hsquash, vsquash);
 }
 
-YWidget *YUIQt::createLabel		( YWidget *		parent,
+YWidget * YUIQt::createLabel		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	text )
 {
     return new YQLabel( (QWidget *) ( parent->widgetRep() ), opt, text);
 }
 
-YWidget *YUIQt::createLogView		( YWidget *		parent,
+YWidget * YUIQt::createLogView		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString &	label,
 					  int 			visibleLines,
@@ -126,14 +126,14 @@ YWidget *YUIQt::createLogView		( YWidget *		parent,
     return new YQLogView( (QWidget *) ( parent->widgetRep() ), opt, label, visibleLines, maxLines);
 }
 
-YWidget *YUIQt::createRichText		( YWidget *		parent,
+YWidget * YUIQt::createRichText		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	text )
 {
     return new YQRichText( (QWidget *) ( parent->widgetRep() ), opt, text);
 }
 
-YWidget *YUIQt::createPackageSelector	( YWidget *		parent,
+YWidget * YUIQt::createPackageSelector	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	floppyDevice )
 {
@@ -141,7 +141,7 @@ YWidget *YUIQt::createPackageSelector	( YWidget *		parent,
     return new YQPackageSelector( (QWidget *) ( parent->widgetRep() ), opt, floppyDevice );
 }
 
-YWidget *YUIQt::createPkgSpecial	( YWidget *		parent,
+YWidget * YUIQt::createPkgSpecial	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	subwidget )
 {
@@ -149,7 +149,7 @@ YWidget *YUIQt::createPkgSpecial	( YWidget *		parent,
     return 0;
 }
 
-YWidget *YUIQt::createPushButton	( YWidget *		parent,
+YWidget * YUIQt::createPushButton	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label )
 {
@@ -157,14 +157,14 @@ YWidget *YUIQt::createPushButton	( YWidget *		parent,
     return new YQPushButton( (QWidget *) ( parent->widgetRep() ), dialog, opt, label);
 }
 
-YWidget *YUIQt::createMenuButton	( YWidget *		parent,
+YWidget * YUIQt::createMenuButton	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label )
 {
     return new YQMenuButton( (QWidget *) ( parent->widgetRep() ), opt, label);
 }
 
-YWidget *YUIQt::createCheckBox		( YWidget *		parent,
+YWidget * YUIQt::createCheckBox		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label,
 					  bool 			checked )
@@ -172,7 +172,7 @@ YWidget *YUIQt::createCheckBox		( YWidget *		parent,
     return new YQCheckBox( (QWidget *) ( parent->widgetRep() ), opt, label, checked);
 }
 
-YWidget *YUIQt::createRadioButton	( YWidget *		parent,
+YWidget * YUIQt::createRadioButton	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  YRadioButtonGroup *	rbg,
 					  const YCPString & 	label,
@@ -181,13 +181,13 @@ YWidget *YUIQt::createRadioButton	( YWidget *		parent,
     return new YQRadioButton( (QWidget *) ( parent->widgetRep() ), opt, rbg, label, checked);
 }
 
-YContainerWidget *YUIQt::createRadioButtonGroup( YWidget *	parent,
+YContainerWidget * YUIQt::createRadioButtonGroup( YWidget *	parent,
 						 YWidgetOpt & 	opt )
 {
     return new YQRadioButtonGroup( (QWidget *) ( parent->widgetRep() ), opt );
 }
 
-YWidget *YUIQt::createTextEntry		( YWidget *		parent,
+YWidget * YUIQt::createTextEntry		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label,
 					  const YCPString & 	text )
@@ -195,7 +195,7 @@ YWidget *YUIQt::createTextEntry		( YWidget *		parent,
     return new YQTextEntry( (QWidget *) ( parent->widgetRep() ), opt, label, text);
 }
 
-YWidget *YUIQt::createMultiLineEdit	( YWidget *		parent,
+YWidget * YUIQt::createMultiLineEdit	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label,
 					  const YCPString & 	initialText )
@@ -203,42 +203,42 @@ YWidget *YUIQt::createMultiLineEdit	( YWidget *		parent,
     return new YQMultiLineEdit( (QWidget *) ( parent->widgetRep() ), opt, label, initialText);
 }
 
-YWidget *YUIQt::createSelectionBox	( YWidget *		parent,
+YWidget * YUIQt::createSelectionBox	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label )
 {
     return new YQSelectionBox( (QWidget *) ( parent->widgetRep() ), opt, label);
 }
 
-YWidget *YUIQt::createMultiSelectionBox	( YWidget *		parent,
+YWidget * YUIQt::createMultiSelectionBox	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString &	label )
 {
     return new YQMultiSelectionBox( (QWidget *) ( parent->widgetRep() ), opt, label);
 }
 
-YWidget *YUIQt::createComboBox		( YWidget *		parent,
+YWidget * YUIQt::createComboBox		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label )
 {
     return new YQComboBox( (QWidget *) ( parent->widgetRep() ), opt, label);
 }
 
-YWidget *YUIQt::createTree		( YWidget *		parent,
+YWidget * YUIQt::createTree		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label )
 {
     return new YQTree( (QWidget *) ( parent->widgetRep() ), opt, label);
 }
 
-YWidget *YUIQt::createTable		( YWidget *		parent,
+YWidget * YUIQt::createTable		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  vector<string> 	header	)
 {
     return new YQTable( (QWidget *) ( parent->widgetRep() ), opt, header);
 }
 
-YWidget *YUIQt::createProgressBar	( YWidget *		parent,
+YWidget * YUIQt::createProgressBar	( YWidget *		parent,
 					  YWidgetOpt & 	opt,
 					  const YCPString & 	label,
 					  const YCPInteger & 	maxProgress,
@@ -247,7 +247,7 @@ YWidget *YUIQt::createProgressBar	( YWidget *		parent,
     return new YQProgressBar( (QWidget *) ( parent->widgetRep() ), opt, label, maxProgress, progress );
 }
 
-YWidget *YUIQt::createImage		( YWidget *		parent,
+YWidget * YUIQt::createImage		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  YCPByteblock 		imagedata,
 					  YCPString 		default_text )
@@ -255,7 +255,7 @@ YWidget *YUIQt::createImage		( YWidget *		parent,
     return new YQImage( (QWidget *) ( parent->widgetRep() ), opt, imagedata );
 } 
 
-YWidget *YUIQt::createImage		( YWidget *		parent,
+YWidget * YUIQt::createImage		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  YCPString 		file_name,
 					  YCPString 		default_text )
@@ -263,7 +263,7 @@ YWidget *YUIQt::createImage		( YWidget *		parent,
     return new YQImage( (QWidget *) ( parent->widgetRep() ), opt, file_name );
 }
 
-YWidget *YUIQt::createImage		( YWidget *		parent,
+YWidget * YUIQt::createImage		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  ImageType 		img,
 					  YCPString 		default_text )
@@ -271,7 +271,7 @@ YWidget *YUIQt::createImage		( YWidget *		parent,
     return new YQImage( (QWidget *) ( parent->widgetRep() ), opt, img );
 }
 
-YWidget *YUIQt::createIntField		( YWidget *		parent,
+YWidget * YUIQt::createIntField		( YWidget *		parent,
 					  YWidgetOpt &		opt,
 					  const YCPString &	label,
 					  int 			minValue,
@@ -297,7 +297,7 @@ bool YUIQt::hasBarGraph()
     return true;
 }
 
-YWidget *YUIQt::createBarGraph( YWidget *parent, YWidgetOpt & opt)
+YWidget * YUIQt::createBarGraph( YWidget * parent, YWidgetOpt & opt)
 {
     return new YQBarGraph( (QWidget *) ( parent->widgetRep() ), opt );
 }
@@ -308,7 +308,7 @@ bool YUIQt::hasColoredLabel()
     return QColor::numBitPlanes() >= 15;
 }
 
-YWidget *YUIQt::createColoredLabel	( YWidget *	parent,
+YWidget * YUIQt::createColoredLabel	( YWidget *	parent,
 					  YWidgetOpt & 	opt,
 					  YCPString 	label,
 					  YColor 	foreground,
@@ -334,7 +334,7 @@ bool YUIQt::hasDownloadProgress()
     return true;
 }
 
-YWidget *YUIQt::createDownloadProgress	( YWidget *		parent,
+YWidget * YUIQt::createDownloadProgress	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	label,
 					  const YCPString & 	filename,
@@ -354,7 +354,7 @@ bool YUIQt::hasSlider()
 }
 
 
-YWidget *YUIQt::createSlider( YWidget *		parent,
+YWidget * YUIQt::createSlider( YWidget *		parent,
 			      YWidgetOpt &	opt,
 			      const YCPString &	label,
 			      int 		minValue,
@@ -375,7 +375,7 @@ bool YUIQt::hasPartitionSplitter()
     return true;
 }
 
-YWidget *YUIQt::createPartitionSplitter( YWidget *		parent,
+YWidget * YUIQt::createPartitionSplitter( YWidget *		parent,
 					 YWidgetOpt &		opt,
 					 int 			usedSize,
 					 int 			totalFreeSize,

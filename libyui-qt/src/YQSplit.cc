@@ -47,7 +47,7 @@ void YQSplit::setSize(long newWidth, long newHeight)
 }
 
 
-void YQSplit::moveChild(YWidget *child, long newX, long newY)
+void YQSplit::moveChild(YWidget * child, long newX, long newY)
 {
     QWidget *qw = (QWidget *)(child->widgetRep());
     qw->move(newX, newY);

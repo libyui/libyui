@@ -116,7 +116,7 @@ YQMultiSelectionBox::setEnabling( bool enabled )
 void
 YQMultiSelectionBox::itemAdded( const YCPString & label, bool selected )
 {
-    YQMultiSelectionBoxItem* item = new YQMultiSelectionBoxItem( qt_listview, fromUTF8( label->value() ) );
+    YQMultiSelectionBoxItem * item = new YQMultiSelectionBoxItem( qt_listview, fromUTF8( label->value() ) );
     
     if ( item && selected )
     {

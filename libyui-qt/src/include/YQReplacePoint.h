@@ -43,7 +43,7 @@ public:
      * Inherited from YContainerWidget. Called when a child
      * has been added. We call show() for the new widget.
      */
-    void childAdded(YWidget *child);
+    void childAdded(YWidget * child);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the

@@ -71,7 +71,7 @@ protected:
      * widget that a child has been added. The default implementation
      * does nothing.
      */
-    void childAdded(YWidget *child);
+    void childAdded(YWidget * child);
 };
 
 

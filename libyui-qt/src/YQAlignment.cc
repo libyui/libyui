@@ -40,7 +40,7 @@ void YQAlignment::setEnabling( bool enabled )
 }
 
 
-void YQAlignment::moveChild( YWidget *child, long newX, long newY )
+void YQAlignment::moveChild( YWidget * child, long newX, long newY )
 {
     QWidget *qw = (QWidget *) ( child->widgetRep() );
     qw->move( newX, newY );

@@ -85,7 +85,7 @@ public:
     /**
      * Recursively create the menu structure.
      */
-    void createMenu( YMenuItem *ymenu, QPopupMenu *qt_menu );
+    void createMenu( YMenuItem * ymenu, QPopupMenu *qt_menu );
     
 protected slots:
 

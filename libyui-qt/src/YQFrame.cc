@@ -85,7 +85,7 @@ long YQFrame::nicesize ( YUIDimension dim )
 
 
 void
-YQFrame::childAdded ( YWidget *child )
+YQFrame::childAdded ( YWidget * child )
 {
     ( (QWidget *) child->widgetRep() )->move ( frameWidth(), fontMetrics().height() );
 }

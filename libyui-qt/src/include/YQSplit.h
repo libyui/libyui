@@ -53,7 +53,7 @@ public:
     /**
      * Inherited from YSplit. Moves a child to a new position
      */
-    void moveChild(YWidget *child, long newX, long newY);
+    void moveChild(YWidget * child, long newX, long newY);
 };
 
 

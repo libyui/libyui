@@ -105,7 +105,7 @@ YQTree::rebuildTree()
 
     for ( YTreeItemListIterator it = items.begin(); it < items.end(); ++it )
     {
-	YQTreeItem *item = new YQTreeItem( this,
+	YQTreeItem * item = new YQTreeItem( this,
 					   _listView,
 					   *it,
 					   _nextSerialNo++ );
@@ -122,7 +122,7 @@ YQTree::rebuildTree()
 const YTreeItem *
 YQTree::getCurrentItem() const
 {
-    YQTreeItem *it = (YQTreeItem *) _listView->selectedItem();
+    YQTreeItem * it = (YQTreeItem *) _listView->selectedItem();
 
     return it ? it->origItem() : 0;
 }
@@ -131,7 +131,7 @@ YQTree::getCurrentItem() const
 void
 YQTree::setCurrentItem( YTreeItem * yit )
 {
-    YQTreeItem *it = findYQTreeItem( yit );
+    YQTreeItem * it = findYQTreeItem( yit );
 
     if ( it )
     {
@@ -232,7 +232,7 @@ YQTreeItem::buildSubTree( YTreeItemList & items, int & nextSerialNo )
 {
     for ( YTreeItemListIterator it = items.begin(); it < items.end(); ++it )
     {
-	YQTreeItem *item = new YQTreeItem ( _tree,
+	YQTreeItem * item = new YQTreeItem ( _tree,
 					    this,
 					    *it,
 					    nextSerialNo++ );

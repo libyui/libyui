@@ -45,7 +45,7 @@ class Y2QtComponent : public Y2Component
     /**
      * Does the actual work.
      */
-    YUIQt *interpreter;
+    YUIQt * interpreter;
 
     /**
      * since we're defining our own setCallback/getCallback function
