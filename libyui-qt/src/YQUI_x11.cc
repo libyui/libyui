@@ -199,14 +199,14 @@ void YQUI::pickAutoFonts()
 
     if ( x >= 800 && y >= 600 )
     {
-	normal	= 12;
-	heading	= 14;
+	normal	= 10;
+	heading	= 12;
     }
 
     if ( x >= 1024 && y >= 768 )
     {
-	normal	= 14;
-	heading	= 18;
+	normal	= 12;
+	heading	= 14;
     }
 
     if ( x >= 1280 && y >= 1024 )

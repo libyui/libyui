@@ -1,4 +1,50 @@
 -------------------------------------------------------------------
+Tue Apr  5 14:38:04 CEST 2005 - sh@suse.de
+
+- Merged 9.3-branch 21937:22910 to to trunk
+- V 2.12.12
+
+-------------------------------------------------------------------
+Tue Mar 22 18:54:04 CET 2005 - sh@suse.de
+
+- Reverting back to old (SL 9.2) auto font sizes for bug #66498
+  (Qt inst-sys default font is reverted to 9.2 font, too)
+- V 2.11.13 
+
+-------------------------------------------------------------------
+Mon Mar 21 16:24:09 CET 2005 - sh@suse.de
+
+- One more fix for bug #72799: Help/Steps buttons not translated
+- V 2.11.12
+
+-------------------------------------------------------------------
+Wed Mar 16 18:30:09 CET 2005 - sh@suse.de
+
+- Fixed bug #72799: Help/Steps buttons not translated
+  Added setTextdomain() call to YQWizard
+- V 2.11.11 
+
+-------------------------------------------------------------------
+Fri Mar 11 18:11:03 CET 2005 - sh@suse.de
+
+- V 2.11.10
+- Fixed bug #72174: Installation font too small in 800x600 and 1024x768 
+
+-------------------------------------------------------------------
+Fri Mar 11 13:22:52 CET 2005 - sh@suse.de
+
+- Fixed bug #72158: File selection box on screen shots
+- V 2.11.9 
+
+-------------------------------------------------------------------
+Fri Mar  4 12:57:32 CET 2005 - sh@suse.de
+
+- Increased calculated font sizes in inst-sys to compensate
+  for new (much smaller) default font
+- Fixed bug #6649: Japanese, Chinese, Korean chars clipped
+- V 2.11.8 
+
+-------------------------------------------------------------------
 Wed Feb 23 14:59:49 CET 2005 - sh@suse.de
 
 - Fallback rule for reverse layout for Arabic and Hebrew

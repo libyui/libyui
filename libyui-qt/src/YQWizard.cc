@@ -10,9 +10,11 @@
 |						     (c) SuSE Linux AG |
 \----------------------------------------------------------------------/
 
-  File:	      YQWizard.cc
+  File:		YQWizard.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:	Stefan Hundhammer <sh@suse.de>
+
+  Textdomain    "packages-qt"
 
 /-*/
 
@@ -74,6 +76,12 @@ using std::string;
 
 #define PIXMAP_DIR THEMEDIR "/wizard/"
 
+#ifdef TEXTDOMAIN
+#    undef TEXTDOMAIN
+#endif
+
+#define TEXTDOMAIN "packages-qt"
+
 #define USE_SEPARATOR			1
 
 #define BUTTON_BOX_TOP_MARGIN		14
@@ -128,6 +136,9 @@ YQWizard::YQWizard( QWidget *		parent,
     _stepsPanel		= 0;
     _stepsBox		= 0;
     _stepsGrid		= 0;
+    _helpButton		= 0;
+    _stepsButton	= 0;
+    _treeButton		= 0;
     _releaseNotesButton = 0;
     _treePanel		= 0;
     _tree		= 0;
@@ -148,6 +159,7 @@ YQWizard::YQWizard( QWidget *		parent,
     _stepsIDs.setAutoDelete( false );	// Only for one of both!
 
     setFont( YQUI::ui()->currentFont() );	// Make sure qApp->font() is initialized
+    YQUI::setTextdomain( TEXTDOMAIN );
 
 
     //
@@ -335,27 +347,27 @@ void YQWizard::layoutStepsPanel()
     hbox->addStretch( 99 );
 
     // Help button - intentionally without keyboard shortcut
-    QPushButton * helpButton = new QPushButton( _( "Help" ), bottomGradient );
-    CHECK_PTR( helpButton );
+    _helpButton = new QPushButton( _( "Help" ), bottomGradient );
+    CHECK_PTR( _helpButton );
 
-    hbox->addWidget( helpButton );
+    hbox->addWidget( _helpButton );
     hbox->addStretch( 99 );
 
-    connect( helpButton, SIGNAL( clicked()  ),
+    connect( _helpButton, SIGNAL( clicked()  ),
 	     this,	 SLOT  ( showHelp() ) );
 
 #if USE_ICON_ON_HELP_BUTTON
     QPixmap pixmap = QPixmap( PIXMAP_DIR "help-button.png" );
 
     if ( ! pixmap.isNull() )
-	helpButton->setPixmap( pixmap );
+	_helpButton->setPixmap( pixmap );
 #endif
 
 
     vbox->addSpacing( WORK_AREA_BOTTOM_MARGIN );
 
     if ( _bottomGradientPixmap.isNull() )
-	bottomGradient->setFixedHeight( helpButton->sizeHint().height() + WORK_AREA_BOTTOM_MARGIN );
+	bottomGradient->setFixedHeight( _helpButton->sizeHint().height() + WORK_AREA_BOTTOM_MARGIN );
 }
 
 
@@ -670,6 +682,7 @@ void YQWizard::layoutHelpPanel()
 	// "Tree" button - intentionally without keyboard shortcut
 	button = new QPushButton( _( "Tree" ), buttonBox );
 	CHECK_PTR( button );
+	_treeButton = button;
 
 #if USE_ICON_ON_HELP_BUTTON
 	pixmap = QPixmap( PIXMAP_DIR "tree-button.png" );
@@ -681,6 +694,7 @@ void YQWizard::layoutHelpPanel()
 	// "Steps" button - intentionally without keyboard shortcut
 	button = new QPushButton( _( "Steps" ), buttonBox );
 	CHECK_PTR( button );
+	_stepsButton = button;
 
 #if USE_ICON_ON_HELP_BUTTON
 	pixmap = QPixmap( PIXMAP_DIR "steps-button.png" );
@@ -725,7 +739,7 @@ void YQWizard::layoutSideBarButtonBox( QWidget * parent, QPushButton * button )
     QVBoxLayout * vbox = new QVBoxLayout( parent, 0, 0 );	// parent, margin, spacing
     CHECK_PTR( vbox );
     vbox->addSpacing( BUTTON_BOX_TOP_MARGIN );
-    
+
     QHBoxLayout * hbox = new QHBoxLayout( vbox, 0 );		// parent, spacing
     CHECK_PTR( hbox );
 
@@ -738,7 +752,7 @@ void YQWizard::layoutSideBarButtonBox( QWidget * parent, QPushButton * button )
     // For whatever strange reason, parent->sizeHint() does not return anything
     // meaningful yet - not even after vbox->activate() or parent->adjustSize()
     int height = button->sizeHint().height() + BUTTON_BOX_TOP_MARGIN + WORK_AREA_BOTTOM_MARGIN;
-    
+
     if ( ! _bottomGradientPixmap.isNull() )
 	setBottomCroppedGradient( parent, _bottomGradientPixmap, height );
 
@@ -1734,6 +1748,23 @@ void YQWizard::hideReleaseNotesButton()
 }
 
 
+void YQWizard::retranslateInternalButtons()
+{
+    YQUI::setTextdomain( TEXTDOMAIN );
+
+    if ( _helpButton )
+	// "Help" button - intentionally without keyboard shortcut
+	_helpButton->setText( _( "Help" ) );
+
+    if ( _stepsButton )
+	// "Steps" button - intentionally without keyboard shortcut
+	_stepsButton->setText( _( "Steps" ) );
+
+    if ( _treeButton )
+	// "Tree" button - intentionally without keyboard shortcut
+	_treeButton->setText( _( "Tree" ) );
+}
+
 
 bool YQWizard::isCommand( QString declaration, const YCPTerm & term )
 {
@@ -1919,6 +1950,7 @@ YCPValue YQWizard::command( const YCPTerm & cmd )
     if ( isCommand( "ShowReleaseNotesButton( string, any )"  , cmd ) )	{ showReleaseNotesButton( stringArg( cmd, 0 ),
 												  anyArg   ( cmd, 1 )); return OK; }
     if ( isCommand( "HideReleaseNotesButton()"		     , cmd ) )	{ hideReleaseNotesButton();			return OK; }
+    if ( isCommand( "RetranslateInternalButtons()"	     , cmd ) )	{ retranslateInternalButtons() ;		return OK; }
     y2error( "Undefined wizard command: %s", cmd->toString().c_str() );
     return YCPBoolean( false );
 

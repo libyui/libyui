@@ -605,6 +605,22 @@ bool YQUI::runningEmbedded() const
 }
 
 
+void
+YQUI::setTextdomain( const char * domain )
+{
+    bindtextdomain( domain, LOCALEDIR );
+    bind_textdomain_codeset( domain, "utf8" );
+    textdomain( domain );
+
+    // Make change known.
+    {
+	extern int _nl_msg_cat_cntr;
+	++_nl_msg_cat_cntr;
+    }
+}
+
+
+
 static void
 qMessageHandler( QtMsgType type, const char * msg )
 {

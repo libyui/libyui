@@ -331,7 +331,7 @@ protected slots:
 
     /**
      * Propagate button clicked event of release notes button to the YCP
-     * application.  
+     * application.
      **/
     void releaseNotesClicked();
 
@@ -356,6 +356,14 @@ protected slots:
      **/
     void sendMenuEvent( int numID );
 
+
+    /**
+     * Retranslate internal buttons that are not accessible from the outside:
+     * - [Help]
+     * - [Steps]
+     * - [Tree]
+     **/
+    void retranslateInternalButtons();
 
 protected:
 
@@ -421,7 +429,7 @@ protected:
      **/
     bool YQWizard::highColorDisplay() const;
 
-    
+
     //
     // Wizard command mini-parser
     //
@@ -552,8 +560,11 @@ protected:
     QGridLayout *		    _stepsGrid;
     QPushButton *		_releaseNotesButton;
     YCPValue			_releaseNotesButtonId;
+    QPushButton *		_helpButton;
     QHBox *		    _helpPanel;
     QTextBrowser *		_helpBrowser;
+    QPushButton *		_stepsButton;
+    QPushButton *		_treeButton;
     QHBox *		    _treePanel;
     QY2ListView *		_tree;
 
