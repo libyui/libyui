@@ -33,7 +33,7 @@
 #endif
 
 /*
-  Textdomain "ncurses"
+  Textdomain "packages"
 */
 
 
@@ -429,7 +429,18 @@ void NCDialog::wRedraw()
   if ( pan ) {
     if ( isBoxed() ) {
       pan->bkgdset( wStyle().getDlgBorder( active ).text );
-      pan->box();
+     
+      if (    pan->height() != NCurses::lines()
+	   || pan->width() != NCurses::cols() ) {
+	  pan->box();	// not fullscreen
+      }
+      else {	
+	  pan->hline( 0, 0, pan->width(), ' ' );
+	  pan->hline( pan->height()-1, 0, pan->width(), ' ' );
+	  pan->vline( 0, 0, pan->height(), ' ' );
+	  pan->vline( 0, pan->width()-1, pan->height(), ' ' );
+      }
+      
       if ( hshaddow ) {
 	pan->copywin( *pan,
 		      pan->maxy(), 0,
