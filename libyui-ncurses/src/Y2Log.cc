@@ -53,7 +53,8 @@ class Y2Loglinebuf : public streambuf {
 
     virtual int overflow( int ch = EOF ) {
       if ( ch != EOF ) {
-        writeout( (const char*)&ch, 1 );
+	char tmp = ch;
+        writeout( &tmp, 1 );
       }
       return 0;
     }

@@ -1,15 +1,21 @@
 -------------------------------------------------------------------
+Thu Nov 14 20:56:17 CET 2002 - ma@suse.de
+
+- V 2.7.2
+- Fixed bug that inhibits logging on big-endian architectures.
+
+-------------------------------------------------------------------
 Wed Nov 13 12:35:21 CET 2002 - gs@suse.de
 
 - V 2.6.22
 - package installation: package categories which will be installed
-  are selected in Filter/Selections menu (bug #21700) 
+  are selected in Filter/Selections menu (bug #21700)
 
 -------------------------------------------------------------------
 Thu Nov  7 13:30:02 CET 2002 - sh@suse.de
 
 - Fixed bug #19389: Frame widget shows keyboard shortcuts, but
-  can't handle any 
+  can't handle any
 
 -------------------------------------------------------------------
 Mon Oct 21 14:49:17 CEST 2002 - gs@suse.de
@@ -23,18 +29,18 @@ Wed Oct  9 15:15:49 CEST 2002 - gs@suse.de
 
 - V 2.6.20
 - package installation: show the source of installation in the list
-  of available packages (bug #20734) 
+  of available packages (bug #20734)
 
 -------------------------------------------------------------------
 Wed Sep 18 15:23:08 CEST 2002 - gs@suse.de
 
 - V 2.6.19
-- package installation: update the required disk space info 
-  if selections are selected/deselected (bug #19770), 
+- package installation: update the required disk space info
+  if selections are selected/deselected (bug #19770),
   show translated summary of installed packages and
   the selections, toggle the package status with space key,
   layout of search popup changed (headline was truncated)
-  (bug #19725) 
+  (bug #19725)
 
 -------------------------------------------------------------------
 Thu Sep 12 13:40:20 CEST 2002 - gs@suse.de
@@ -48,7 +54,7 @@ Tue Sep 10 19:52:13 CEST 2002 - gs@suse.de
 
 - V 2.6.17
 - package installation: bugfix duplicate search results (#19342)
-- YOU: don't check package dependencies  
+- YOU: don't check package dependencies
 
 -------------------------------------------------------------------
 Tue Sep 10 16:08:42 CEST 2002 - gs@suse.de
@@ -62,7 +68,7 @@ Tue Sep 10 16:08:42 CEST 2002 - gs@suse.de
 Mon Sep  9 18:31:47 CEST 2002 - gs@suse.de
 
 - V 2.6.15
-- package installation: improved dependency checking 
+- package installation: improved dependency checking
 
 -------------------------------------------------------------------
 Sun Sep  8 17:36:42 CEST 2002 - gs@suse.de
@@ -76,21 +82,21 @@ Sat Sep  7 18:37:55 CEST 2002 - gs@suse.de
 
 - V 2.6.13
 - package installation: show a popup during dependency checking,
-- search in package names 
+- search in package names
 
 -------------------------------------------------------------------
 Fri Sep  6 19:39:58 CEST 2002 - gs@suse.de
 
 - V 2.6.12
 - package installation: dependencies popup improved,
-- show the "update problem" list 
+- show the "update problem" list
 
 -------------------------------------------------------------------
 Thu Sep  5 20:34:24 CEST 2002 - gs@suse.de
 
 - V 2.6.11
 - package installation: show conflict dependencies (still not
-  yet finished) 
+  yet finished)
 
 -------------------------------------------------------------------
 Thu Sep  5 19:08:32 CEST 2002 - gs@suse.de
@@ -98,54 +104,54 @@ Thu Sep  5 19:08:32 CEST 2002 - gs@suse.de
 - V 2.6.10
 - package installation: return `cancel and `accept
 - show the package dependencies (not yet completed)
-- set status to taboo is possible now 
+- set status to taboo is possible now
 
 -------------------------------------------------------------------
 Tue Sep  3 14:46:43 CEST 2002 - gs@suse.de
 
 - V 2.6.9
-- old behaviour of SelectionBox (notify only on return, space) 
+- old behaviour of SelectionBox (notify only on return, space)
 - package installation: status change respects previous status,
   toggle status enabled
-- online udpate: new layout, correct status change  
+- online udpate: new layout, correct status change
 
 -------------------------------------------------------------------
 Wed Aug 28 16:24:09 CEST 2002 - gs@suse.de
 
 - V 2.6.8
-- SelectionBox respects `opt(`notify) 
+- SelectionBox respects `opt(`notify)
 
 -------------------------------------------------------------------
 Tue Aug 27 18:02:46 CEST 2002 - gs@suse.de
 
 - V 2.6.7
 - package installation: show more package information,
-  select/deselect selections 
+  select/deselect selections
 
 -------------------------------------------------------------------
 Mon Aug 26 17:06:08 CEST 2002 - gs@suse.de
 
 - V 2.6.6
-- package installation: set the package status 
+- package installation: set the package status
 
 -------------------------------------------------------------------
 Sat Aug 24 09:26:58 CEST 2002 - gs@suse.de
 
 - V 2.6.5
 - package installation: get rpm goups and selections,
-  enable YOU mode 
+  enable YOU mode
 
 -------------------------------------------------------------------
 Wed Aug 21 17:07:51 CEST 2002 - gs@suse.de
 
 - V 2.6.4
-- popup added (beta version), more logging 
+- popup added (beta version), more logging
 
 -------------------------------------------------------------------
 Mon Aug 19 19:06:20 CEST 2002 - sh@suse.de
 
 - V 2.6.3
-- New package management 
+- New package management
 
 -------------------------------------------------------------------
 Wed Jul 03 12:26:33 CEST 2002 - msvec@suse.cz
