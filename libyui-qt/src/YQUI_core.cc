@@ -28,6 +28,7 @@
 #include <qwidgetstack.h>
 
 #include <ycp/YCPTerm.h>
+#include <ycp/YCPCode.h>
 
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
@@ -49,9 +50,9 @@ YQUI * YQUI::_ui = 0;
 static void qMessageHandler( QtMsgType type, const char * msg );
 
 
-YQUI::YQUI( int argc, char **argv, bool with_threads, Y2Component *callback )
+YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     : QApplication( argc, argv )
-    , YUI( with_threads, callback )
+    , YUI( with_threads )
     , _main_win( NULL )
     , _main_dialog_id(0)
     , _do_exit_loop( false )
@@ -60,10 +61,6 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, Y2Component *callback )
     , _wm_close_blocked( false )
     , _auto_activate_dialogs( true )
     , _running_embedded( false )
-    , _argc( argc )
-    , _argv( argv )
-    , _with_threads( with_threads )
-
 {
     _ui				= this;
     _fatal_error		= false;
@@ -74,13 +71,7 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, Y2Component *callback )
 
     qApp->installEventFilter( this );
 
-    init();
-}
-
-
-void YQUI::init()
-{
-    processCommandLineArgs();
+    processCommandLineArgs( argc, argv );
 
     if ( _fullscreen )
     {
@@ -230,29 +221,17 @@ void YQUI::init()
 }
 
 
-void YQUI::processCommandLineArgs()
+void YQUI::processCommandLineArgs( int argc, char **argv )
 {
-        for ( int i=1; i < _argc; i++ )
-        {
-            if ( strcmp( _argv[i], "--nothreads") == 0 ||
-                 strcmp( _argv[i], "-nothreads" ) == 0   )
-            {
-                _with_threads = false;
-                y2milestone( "Running Qt UI without threads." );
-            }
-        }
+#warning FIXME: Install qMessageHandler before QApplication constructor
 
-        // FIXME: The handler must be installed before calling the
-        // constructor of QApplication
-        qInstallMsgHandler( qMessageHandler );
-
-    if ( _argv )
+    if ( argv )
     {
-	for( int i=0; i < _argc; i++ )
+	for( int i=0; i < argc; i++ )
 	{
-	    QString opt = _argv[i];
+	    QString opt = argv[i];
 	    
-	    y2milestone ("Qt argument: %s", _argv[i]);
+	    y2milestone ("Qt argument: %s", argv[i]);
 
 	    // Normalize command line option - accept "--xy" as well as "-xy"
 
@@ -264,20 +243,20 @@ void YQUI::processCommandLineArgs()
 	    else if ( opt == QString( "-noborder" 	) )	_decorate_toplevel_window	= false;
 	    else if ( opt == QString( "-kcontrol_id"	) )
 	    {
-		if ( i+1 >= _argc )
+		if ( i+1 >= argc )
 		{
 		    y2error( "Missing arg for '--kcontrol_id'" );
 		}
 		else
 		{
-		    _kcontrol_id = _argv[++i];
+		    _kcontrol_id = argv[++i];
 		    y2milestone( "Starting with kcontrol_id='%s'",
 				 (const char *) _kcontrol_id );
 		}
 	    }
 	    else if ( opt == QString( "-macro"		) )
 	    {
-		if ( i+1 >= _argc )
+		if ( i+1 >= argc )
 		{
 		    y2error( "Missing arg for '--macro'" );
 		    fprintf( stderr, "y2base qt: Missing argument for --macro\n" );
@@ -285,7 +264,7 @@ void YQUI::processCommandLineArgs()
 		}
 		else
 		{
-		    const char * macro_file = _argv[++i];
+		    const char * macro_file = argv[++i];
 		    y2milestone( "Playing macro '%s' from command line", macro_file );
 		    playMacro( macro_file );
 		}
@@ -597,61 +576,6 @@ void YQUI::easterEgg()
 QString YQUI::productName() const
 {
     return fromUTF8( YUI::productName() );
-}
-
-
-YCPValue YQUI::evaluate( const YCPValue & command )
-{
-    if( command->isCode() )
-    {
-	return command->asCode()->evaluate();
-    }
-    
-    y2error( "Don't know how to handle %s", command->toString().c_str() );
-
-    return YCPVoid();
-}
-
-
-void YQUI::result( const YCPValue & )
-{
-}
-
-
-void YQUI::setServerOptions( int argc, char **argv )
-{
-    y2milestone ("SetServerOptions, num: %d", argc);
-    
-    for (int i = 0 ; i < argc ; i++)
-	y2milestone( "Arg %d: %s", i, argv[i] );
-
-    _argc = argc;
-    _argv = argv;
-    
-    
-    // do a new initialization with the arguments
-#if 0
-    init();
-#endif
-}
-
-
-Y2Component *
-YQUI::getCallback( void ) const
-{
-    return _callback;
-}
-
-
-void
-YQUI::setCallback( Y2Component * callback )
-{
-    // interpreter not yet running, save the callback information
-    // until first evaluate() call which starts the interpreter
-    // and passes this information to it.
-    _callback = callback;
-    
-    return;
 }
 
 

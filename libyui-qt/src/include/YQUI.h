@@ -52,10 +52,10 @@ public:
     /**
      * Constructor.
      */
-    YQUI( int 			argc,
-	   char **		argv,
-	   bool 		with_threads,
-	   Y2Component *	callback );
+    YQUI( int 		argc,
+	  char **	argv,
+	  bool 		with_threads,
+	  const char *	macro_file );
 
     /**
      * Destructor.
@@ -521,17 +521,17 @@ protected slots:
     void leaveIdleLoop( int );
 
 
-private:
-
-    /**
-     * General initialization
-     **/
-    void init();
+protected:
 
     /**
      * Handle command line args
      **/
-    void processCommandLineArgs();
+    void processCommandLineArgs( int argc, char **argv );
+
+    
+    //
+    // Data members
+    //
     
     /**
      * Assume presence of a window manager
@@ -659,50 +659,6 @@ private:
      * Translator for the predefined Qt dialogs
      **/
     QTranslator _qtTranslations;
-
-
-public:
-
-    /**
-     * The name of this YaST2 component: qt.
-     */
-    string name() const { return "qt"; }
-
-    /**
-     * Implements the server. The interpreter is created here and not
-     * in the constructor, because in the meantime the server options
-     * may have been set.
-     */
-    YCPValue evaluate( const YCPValue & command );
-
-    /**
-     * Is called by the genericfrontend, when the session is finished.
-     * Close the user interace here.
-     */
-    void result( const YCPValue & result );
-
-    /**
-     * Is called by the genericfrontend after it parsed the commandline.
-     * gives the QT UI its commandline options. We store it here and
-     * wait until we create the interpreter in @ref #evaluate.
-     */
-    void setServerOptions( int argc, char **argv );
-
-    /**
-     * Functions to pass callback information
-     * The callback is a pointer to a Y2Component with
-     * a valid evaluate() function.
-     */
-    Y2Component * getCallback (void) const;
-    void setCallback(Y2Component * callback );
-
-
-protected:
-    int			_argc;
-    char **		_argv;
-    Y2Component *	_callback;
-    bool 		_with_threads;
-
 };
 
 

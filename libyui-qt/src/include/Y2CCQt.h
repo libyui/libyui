@@ -17,27 +17,12 @@
 
 /-*/
 
-/**
- * This file is part of YaST2.
- *
- * $Id$
- *
- * Author: Waldo Bastian <bastian@suse.de>
- * Maintainer: Stefan Hundhammer <sh@suse.de>
- *
- * Description: YaST2 Qt Component Creator
- *
- * Copyright:
- *
- * Licence:
- *
- */
 
 
 #ifndef _Y2CCQt_h
 #define _Y2CCQt_h
 
-#include "YQUI.h"
+#include "YQUIComponent.h"
 
 /**
  * @short Y2ComponentCreator that can create Qt user interfaces
@@ -65,8 +50,10 @@ public:
      */
     Y2Component *create(const char * name) const
     {
-	if (!strcmp(name, "qt") ) return new YQUI(0, 0, true, 0);
-	else return 0;
+	if (!strcmp(name, "qt") )
+	    return new YQUIComponent();
+	else
+	    return 0;
     }
 };
 

@@ -10,6 +10,7 @@ noinst_HEADERS =				\
 	utf8.h					\
 	YQi18n.h				\
 	Y2CCQt.h				\
+	YQUIComponent.h				\
 	YQUI.h					\
 	YQIconPool.h				\
 						\
