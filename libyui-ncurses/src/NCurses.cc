@@ -34,6 +34,13 @@ using namespace std;
 
 #include <signal.h>
 
+#include <y2util/y2log.h>
+extern "C" {
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+}
+
 /*
   Textdomain "packages"
 */
@@ -199,17 +206,21 @@ void NCurses::init()
   if ( title_line() && ::ripoffline( 1, ripinit ) != OK )
       throw NCursesError( "ripoffline() failed" );
 
-  if ( isatty( 1 ) || isatty( 2 ) ) {
-    UIMIL
-      << "isatty: stdout-" << (isatty( 1 ) ? "yes" : "no")
-	<< " stderr-" << (isatty( 2 ) ? "yes" : "no") << endl;
-    char * mytty = ttyname( 1 );
-    if ( !mytty )
-      mytty = ttyname( 2 );
+  string log = get_log_filename();
+  
+  UIMIL << "isatty(stdin)" << (isatty(0) ? "yes" : "no") << endl;
+  if (isatty( 0 )) {
+    char * mytty = ttyname( 0 );
     if ( mytty ) {
       UIMIL << "mytty: " << mytty << endl;
       FILE * fdi = fopen( mytty, "r" );
+      if (!fdi) {
+         UIERR << "fdi: (" << errno << ") " << strerror(errno) << endl;
+      }
       FILE * fdo = fopen( mytty, "w" );
+      if (!fdo) {
+         UIERR << "fdo: (" << errno << ") " << strerror(errno) << endl;
+      }
       if ( fdi && fdo ) {
 	theTerm = newterm( 0, fdo, fdi );
 	if ( theTerm == NULL )
@@ -219,6 +230,20 @@ void NCurses::init()
 	myTerm = mytty;
       }
     }
+  }
+
+  UIMIL << "isatty(stderr)" << (isatty(2) ? "yes" : "no") << endl;
+  if (isatty(2) && theTerm) {
+    // redirect stderr to log
+    close(2);
+    open(log.c_str(), O_APPEND | O_CREAT);
+  }
+
+  UIMIL << "isatty(stdout)" << (isatty(1) ? "yes" : "no") << endl;
+  if (isatty(1) && theTerm) {
+    // redirect stdout to log
+    close(1);
+    open(log.c_str(), O_APPEND | O_CREAT);
   }
 
   if ( !theTerm ) {
