@@ -10,6 +10,8 @@ Provides:	y2base:/usr/lib/YaST2/servers/ncurses
 Provides:	y2base:/usr/lib/YaST2/plugin/libpy2ncurses.so.2
 Provides:	yast2-ui-ncurses
 Obsoletes:	yast2-ui-ncurses
+Provides:	yast2-ui-ncurses-devel
+Obsoletes:	yast2-ui-ncurses-devel
 Provides:	y2curses
 Obsoletes:	y2curses
 
