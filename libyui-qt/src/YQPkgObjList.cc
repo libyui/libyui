@@ -604,8 +604,19 @@ YQPkgObjListItem::showNotifyTexts( PMSelectable::UI_Status status )
 
     switch ( status )
     {
-	case PMSelectable::S_Install:	text = _pmObj->insnotify();	break;
-	case PMSelectable::S_Del:	text = _pmObj->delnotify();	break;
+	case PMSelectable::S_Install:
+	    if ( _pmObj->hasCandidateObj() )
+		text = _pmObj->getCandidateObj()->insnotify();
+	    break;
+	    
+	case PMSelectable::S_Del:
+	    
+#warning Preliminary workaround: RPM provider cannot deliver DelNotify texts, use candidate instead
+	    
+	    if ( _pmObj->hasCandidateObj() )
+		text = _pmObj->getCandidateObj()->delnotify();
+	    break;
+	    
 	default: break;
     }
 
