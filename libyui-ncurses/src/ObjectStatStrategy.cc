@@ -121,8 +121,8 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 	    {
 		retStat =  PMSelectable::S_KeepInstalled;
 	    }
-	    else if ( oldStatus == PMSelectable:: S_Install
-		      || oldStatus == PMSelectable:: S_AutoInstall )
+	    else if ( oldStatus == PMSelectable::S_Install
+		      || oldStatus == PMSelectable::S_AutoInstall )
 	    {
 		retStat = PMSelectable::S_NoInst;	
 	    }
@@ -177,11 +177,13 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 	    }
 	    break;
 	case '!':
-	    if ( oldStatus == PMSelectable::S_NoInst || oldStatus == PMSelectable::S_AutoInstall )
+	    if ( oldStatus == PMSelectable::S_NoInst
+		 || oldStatus == PMSelectable::S_AutoInstall )
 	    {
 		retStat = PMSelectable::S_Taboo;
 	    }
-	    else if  ( oldStatus == PMSelectable::S_KeepInstalled )
+	    else if  ( oldStatus == PMSelectable::S_KeepInstalled
+		       || oldStatus == PMSelectable::S_AutoUpdate )
 	    {
 		retStat = PMSelectable::S_Protected;
 	    }
