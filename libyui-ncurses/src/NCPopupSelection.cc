@@ -46,7 +46,7 @@ NCPopupSelection::NCPopupSelection( const wpos at,  PackageSelector * pkg  )
     // get the available selections
     getSelections();
 
-    createLayout( PkgNames::SelectionLabel() );
+    createLayout( YCPString(PkgNames::SelectionLabel().str()) );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -88,7 +88,7 @@ void NCPopupSelection::createLayout( const YCPString & label )
   opt.notifyMode.setValue( true );
   
   // add an OK button
-  okButton = new NCPushButton( split, opt, PkgNames::OKLabel() );
+  okButton = new NCPushButton( split, opt, YCPString(PkgNames::OKLabel().str()) );
   okButton->setId( PkgNames::OkButton () );
   
   split->addChild( okButton );

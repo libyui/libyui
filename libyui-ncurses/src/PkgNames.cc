@@ -208,6 +208,13 @@ const YCPValue& PkgNames::Selections ()
     return value;
 }
 
+// menu selection update list
+const YCPValue& PkgNames::UpdateList ()
+{
+    static const YCPValue value = createIdValue ( "updatelist" );
+    return value;
+}
+
 // menu selection long description 
 const YCPValue& PkgNames::LongDescr ()
 {
@@ -380,108 +387,108 @@ const YCPValue& PkgNames::Treeitem ()
 //
 // label, text for translation
 //
-const YCPString PkgNames::WarningLabel()
+const NCstring PkgNames::WarningLabel()
 {
     // label for a warning popup
-    static const YCPString value = toYCPString ( _("Warning") );
+    static const NCstring value = _("Warning");
     return value;
 }
 
-const YCPString PkgNames::ErrorLabel()
+const NCstring PkgNames::ErrorLabel()
 {
      // label for an error popup
-    static const YCPString value = toYCPString ( _("Error") );
+    static const NCstring value = _("Error");
     return value;
 }
 
-const YCPString PkgNames::NotifyLabel()
+const NCstring PkgNames::NotifyLabel()
 {
     // label for a notify popup 
-    static const YCPString value = toYCPString ( _("Notify") );
+    static const NCstring value = _("Notify");
     return value;
 }
 
-const YCPString PkgNames::RpmTreeLabel()
+const NCstring PkgNames::RpmTreeLabel()
 {
     // the label of the RPM-group-tags tree widget
-    static const YCPString value = toYCPString ( _("RPM Groups") );
+    static const NCstring value = _("RPM Groups");
     return value;
 }
 
-const YCPString PkgNames::SelectionLabel()
+const NCstring PkgNames::SelectionLabel()
 {
    // the label of the selections
-    static const YCPString value = toYCPString ( _("Package categories") );
+    static const NCstring value = _("Package categories");
     return value;  
 }
 
-const YCPString PkgNames::YOUPatches()
+const NCstring PkgNames::YOUPatches()
 {
    // the label Filter: YOU Patches
-    static const YCPString value = toYCPString ( _("Online Update Patches") );
+    static const NCstring value = _("Online Update Patches");
     return value;  
 }
 
-const YCPString PkgNames::UpdateProblem()
+const NCstring PkgNames::UpdateProblem()
 {
-   // the label Filter: Udpate Problem ( keep it short - max. 25 chars )
-    static const YCPString value = toYCPString ( _("Update problem - see help") );
+   // the label Filter: Update Problem ( keep it short - max. 25 chars )
+    static const NCstring value = _("Update problem - see help");
     return value;  
 }
 
-const YCPString PkgNames::OKLabel()
+const NCstring PkgNames::OKLabel()
 {
     // the label of an OK button
-    static const YCPString value = toYCPString ( _("&OK") );
+    static const NCstring value = _("&OK");
     return value;
 }
 
-const YCPString PkgNames::CancelLabel()
+const NCstring PkgNames::CancelLabel()
 {
     // the label of a Cancel button
-    static const YCPString value = toYCPString ( _("&Cancel") );
+    static const NCstring value = _("&Cancel");
     return value;
 }
 
-const YCPString PkgNames::CancelIgnore()
+const NCstring PkgNames::CancelIgnore()
 {
     // the label of a Cancel button
-    static const YCPString value = toYCPString ( _("&Cancel/Ignore") );
+    static const NCstring value = _("&Cancel/Ignore");
     return value;
 }
 
-const YCPString PkgNames::SolveLabel()
+const NCstring PkgNames::SolveLabel()
 {
     // the label of a Cancel button
-    static const YCPString value = toYCPString ( _("&Solve") );
+    static const NCstring value = _("&Solve");
     return value;
 }
 
-const YCPString PkgNames::SearchResults()
+const NCstring PkgNames::SearchResults()
 {
     // the label for Filter: Search results 
-    static const YCPString value = toYCPString ( _("Search results") );
+    static const NCstring value = _("Search results");
     return value;
 }
 
-const YCPString PkgNames::PackageSearch()
+const NCstring PkgNames::PackageSearch()
 {
     // the headline of the search popup 
-    static const YCPString value = toYCPString ( _("Package search") );
+    static const NCstring value = _("Package search");
     return value;
 }
 
-const YCPString PkgNames::DepsHelpLine()
+const NCstring PkgNames::DepsHelpLine()
 {
     // a help line for the dependency popup
-    static const YCPString value = toYCPString ( _( " [+] Select    [-] Delete    [>] Update " ) );
+    static const NCstring value = _( " [+] Select    [-] Delete    [>] Update " );
     return value;
 }
 
-const YCPString PkgNames::PackageDeps()
+const NCstring PkgNames::PackageDeps()
 {
     // the headline of the dependency popup 
-    static const YCPString value = toYCPString ( _("Package dependencies") );
+    static const NCstring value = _("Package dependencies");
     return value;
 }
 
@@ -502,7 +509,7 @@ const NCstring PkgNames::SearchPhrase()
 const NCstring PkgNames::CheckDescr()
 {
     // text for search popup 
-    static const YCPString value = toYCPString ( _("&Check description") );
+    static const NCstring value = _("&Check description");
     return value;
 }
 
@@ -514,86 +521,86 @@ const NCstring PkgNames::IgnoreCase()
 }
 
 
-const YCPString PkgNames::PackageHelp()
+const NCstring PkgNames::PackageHelp()
 {
     // the headline of the help popup 
-    static const YCPString value = toYCPString ( _("Help package installation") );
+    static const NCstring value = _("Help package installation");
     return value;
 }
 
-const YCPString PkgNames::YouHelp()
+const NCstring PkgNames::YouHelp()
 {
     // the headline of the help popup 
-    static const YCPString value = toYCPString ( _("Help online update") );
+    static const NCstring value = _("Help online update");
     return value;
 }
-const YCPString PkgNames::LabelUnresolvable()
+const NCstring PkgNames::LabelUnresolvable()
 {
     // text part describing package conflict (it's a label - keep it short)
-    static const YCPString value = toYCPString( _("Unresolvable package conflict.") );
+    static const NCstring value = _("Unresolvable package conflict.");
     return value;   
 }
 
-const YCPString PkgNames::LabelUnres1()
+const NCstring PkgNames::LabelUnres1()
 {
     // text part 1 describing package conflict (it's a label - keep it short)
-    static const YCPString value = toYCPString( _("Solve the conflict by selecting") );
+    static const NCstring value = _("Solve the conflict by selecting");
     return value;  
 }
 
-const YCPString PkgNames::LabelUnres2()
+const NCstring PkgNames::LabelUnres2()
 {
     // text part 2 describing package conflict (it's a label - keep it short) 
-    static const YCPString value = toYCPString( _("or deselecting packages.") );
+    static const NCstring value =  _("or deselecting packages.");
     return value;
 }
 
-const YCPString PkgNames::LabelAlternative()
+const NCstring PkgNames::LabelAlternative()
 {
      // text part describing package dependency (it's a label - keep it short)
-    static const YCPString value = toYCPString( _("Select one of the alternatives below.") );
+    static const NCstring value =  _("Select one of the alternatives below.");
     return value;  
 }
 
-const YCPString PkgNames::LabelConflict1()
+const NCstring PkgNames::LabelConflict1()
 {
      // text part 1 describing package conflict (it's a label - keep it short)
-    static const YCPString value = toYCPString( _( "Solve the conflict by deleting (or") );
+    static const NCstring value = _( "Solve the conflict by deleting (or");
     return value;
 }
 
-const YCPString PkgNames::LabelConflict2()
+const NCstring PkgNames::LabelConflict2()
 {
       // text part 2 describing package conflict (it's a label - keep it short)
-    static const YCPString value = toYCPString( _( "deselecting) the unwanted package(s)." ) );
+    static const NCstring value = _( "deselecting) the unwanted package(s)." );
     return value;
 }
 
-const YCPString PkgNames::LabelRequBy1()
+const NCstring PkgNames::LabelRequBy1()
 {
     // text part 1 describing package does not work (it's a label - keep it short)
-    static const YCPString value = toYCPString( _( "The packages below will not work without" ) );
+    static const NCstring value = _( "The packages below will not work without" );
     return value;
 }
 
-const YCPString PkgNames::LabelRequBy2()
+const NCstring PkgNames::LabelRequBy2()
 {
     // text part 2 describing packages does not work (it's a label - keep it short)
-    static const YCPString value = toYCPString( _( "the package you want to delete." ) );
+    static const NCstring value = _( "the package you want to delete." );
     return value;
 }
 
-const YCPString PkgNames::LabelRequire1()
+const NCstring PkgNames::LabelRequire1()
 {
     // text part 1 describing packages are not available (it's a label - keep it short)
-    static const YCPString value = toYCPString( _( "The required libraries or packages" ) );
+    static const NCstring value = _( "The required libraries or packages" );
     return value;
 }
 
-const YCPString PkgNames::LabelRequire2()
+const NCstring PkgNames::LabelRequire2()
 {
     // text part 2 describing packages are not available (it's a label - keep it short)
-    static const YCPString value = toYCPString( _( "are not installed." ) );
+    static const NCstring value =  _( "are not installed." );
     return value;
 }
 const NCstring PkgNames::FileList()

@@ -43,7 +43,7 @@ NCPopupSearch::NCPopupSearch( const wpos at )
       , checkDescr( 0 )
       , cancelButton( 0 )
 {
-    createLayout( PkgNames::PackageSearch() );
+    createLayout( YCPString(PkgNames::PackageSearch().str()) );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -128,10 +128,10 @@ void NCPopupSearch::createLayout( const YCPString & headline )
 
   opt.isHStretchable.setValue( false );
   
-  cancelButton = new NCPushButton( hSplit2, opt, PkgNames::CancelLabel() );
+  cancelButton = new NCPushButton( hSplit2, opt, YCPString(PkgNames::CancelLabel().str()) );
   cancelButton->setId( PkgNames::Cancel () );
 
-  okButton = new NCPushButton( hSplit2, opt, PkgNames::OKLabel() );
+  okButton = new NCPushButton( hSplit2, opt, YCPString(PkgNames::OKLabel().str()) );
   okButton->setId( PkgNames::OkButton () );
 
   NCSpacing * sp4 = new NCSpacing( vSplit, opt, 0.4, true, false );

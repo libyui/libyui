@@ -43,7 +43,7 @@ NCPopupTree::NCPopupTree( const wpos at, PackageSelector * pkg )
     , packager ( pkg )
 {
     // create the layout (the NCTree)
-    createLayout( PkgNames::RpmTreeLabel() );
+    createLayout( YCPString(PkgNames::RpmTreeLabel().str()) );
 
     // clone the tree (fill the NCTree)
     cloneTree( Y2PM::packageManager().rpmGroupsTree()->root(), 0 ); 

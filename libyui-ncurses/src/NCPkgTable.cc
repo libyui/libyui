@@ -210,7 +210,7 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
 	if ( objPtr && objPtr->hasCandidateObj() )
 	{
 	    notify = objPtr->getCandidateObj()->delnotify();
-	    header = PkgNames::WarningLabel();
+	    header = YCPString(PkgNames::WarningLabel().str());
 	}
     }
     if ( newstatus == PMSelectable::S_Install )
@@ -218,7 +218,7 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
 	if ( objPtr && objPtr->hasCandidateObj() )
 	{	
 	    notify = objPtr->getCandidateObj()->insnotify();
-	    header = PkgNames::NotifyLabel();
+	    header = YCPString(PkgNames::NotifyLabel().str());
 	}
     }
     

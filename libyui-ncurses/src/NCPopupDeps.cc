@@ -52,7 +52,7 @@ NCPopupDeps::NCPopupDeps( const wpos at, PackageSelector * pkger )
       , errorLabel2( 0 )
       , packager( pkger )
 {
-    createLayout( PkgNames::PackageDeps() );
+    createLayout( YCPString(PkgNames::PackageDeps().str()) );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -131,7 +131,7 @@ void NCPopupDeps::createLayout( const YCPString & headline )
   
   opt.isHStretchable.setValue( false );
   opt.isHeading.setValue( true );
-  NCLabel * helplb = new NCLabel( vSplit, opt, PkgNames::DepsHelpLine() );
+  NCLabel * helplb = new NCLabel( vSplit, opt, YCPString(PkgNames::DepsHelpLine().str()) );
   vSplit->addChild( helplb );
   
   NCSpacing * sp3 = new NCSpacing( vSplit, opt, 0.6, false, true );
@@ -143,7 +143,7 @@ void NCPopupDeps::createLayout( const YCPString & headline )
   opt.isHStretchable.setValue( true );
 
   // add the solve button
-  solveButton = new NCPushButton( hSplit, opt, PkgNames::SolveLabel() );
+  solveButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::SolveLabel().str()) );
   solveButton->setId( PkgNames::Solve () );
   hSplit->addChild( solveButton );
 
@@ -151,7 +151,7 @@ void NCPopupDeps::createLayout( const YCPString & headline )
   hSplit->addChild( sp4 );
   
   // add the cancel button
-  cancelButton = new NCPushButton( hSplit, opt, PkgNames::CancelIgnore() );
+  cancelButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::CancelIgnore().str()) );
   cancelButton->setId( PkgNames::Cancel () );
   hSplit->addChild( cancelButton );
 
@@ -382,12 +382,12 @@ bool NCPopupDeps::concretelyDependency( int index )
 	}
 	if ( require )
 	{
-	    errorLabel1->setLabel( PkgNames::LabelRequire1()  );
-	    errorLabel2->setLabel( PkgNames::LabelRequire2() );
+	    errorLabel1->setLabel( YCPString(PkgNames::LabelRequire1().str())  );
+	    errorLabel2->setLabel( YCPString(PkgNames::LabelRequire2().str()) );
 	}
 	else
 	{	
-	    errorLabel1->setLabel( PkgNames::LabelUnresolvable() );
+	    errorLabel1->setLabel( YCPString(PkgNames::LabelUnresolvable().str()) );
 	    errorLabel2->setLabel(  YCPString( "" ) );
 	}
     }
@@ -413,7 +413,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    ++it;
 	    i++;
 	}
-	errorLabel1->setLabel( PkgNames::LabelAlternative() );
+	errorLabel1->setLabel( YCPString(PkgNames::LabelAlternative().str()) );
 	errorLabel2->setLabel( YCPString( "" ) );
     }
     else if ( !error.conflicts_with.empty() )
@@ -452,8 +452,8 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    ++it;
 	    i++;
 	}
-	errorLabel1->setLabel( PkgNames::LabelConflict1() );
-	errorLabel2->setLabel( PkgNames::LabelConflict2() );
+	errorLabel1->setLabel( YCPString(PkgNames::LabelConflict1().str()) );
+	errorLabel2->setLabel( YCPString(PkgNames::LabelConflict2().str()) );
     }
     else if ( !error.referers.empty() )
     {
@@ -487,8 +487,8 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    ++it;
 	    i++;
 	}
-	errorLabel1->setLabel( PkgNames::LabelRequBy1() );
-	errorLabel2->setLabel( PkgNames::LabelRequBy2() );	
+	errorLabel1->setLabel( YCPString(PkgNames::LabelRequBy1().str()) );
+	errorLabel2->setLabel( YCPString(PkgNames::LabelRequBy2().str()) );	
     }
 
     // show the list

@@ -91,7 +91,7 @@ void NCPopupInfo::createLayout( const YCPString & headline,
   if ( showOkButton )
   {
       // add the ok button
-      okButton = new NCPushButton( split, opt, PkgNames::OKLabel() );
+      okButton = new NCPushButton( split, opt, YCPString(PkgNames::OKLabel().str()) );
       okButton->setId( PkgNames::OkButton () );
   
       split->addChild( okButton );

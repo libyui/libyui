@@ -159,6 +159,11 @@ public:
     static const YCPValue& Selections ();
 
     /**
+     *  Widget id of the menu selection update list
+     */
+    static const YCPValue& UpdateList ();
+
+    /**
      *  Widget id of the label which shows the selected filter
      */
     static const YCPValue& Filter ();
@@ -250,52 +255,52 @@ public:
     /**
      *  The label of the RPM-group-tags tree widget
      */
-    static const YCPString RpmTreeLabel();
+    static const NCstring RpmTreeLabel();
 
     /**
      *  The label of the package selections popup
      */
-    static const YCPString SelectionLabel();
+    static const NCstring SelectionLabel();
 
    /**
      *  The label Filter: YOU Patches
      */
-    static const YCPString YOUPatches();
+    static const NCstring YOUPatches();
     
     /**
      *  The label for Filter: Search results
      */
-    static const YCPString SearchResults();
+    static const NCstring SearchResults();
 
     /**
      *  The label for Filter: Update problem
      */
-    static const YCPString UpdateProblem();
+    static const NCstring UpdateProblem();
     
     /**
      * The headline of the search popup
      */
-    static const YCPString PackageSearch();
+    static const NCstring PackageSearch();
 
     /**
      * The headline of the dependency popup
      */
-    static const YCPString PackageDeps();
+    static const NCstring PackageDeps();
 
-    static const YCPString LabelUnres1();
-    static const YCPString LabelUnres2();
-    static const YCPString LabelAlternative();
-    static const YCPString LabelConflict1();
-    static const YCPString LabelConflict2();
-    static const YCPString LabelRequBy1();
-    static const YCPString LabelRequBy2();
-    static const YCPString LabelRequire1();
-    static const YCPString LabelRequire2();
-    static const YCPString LabelUnresolvable();
-    static const YCPString WarningLabel();
-    static const YCPString ErrorLabel();
-    static const YCPString NotifyLabel();
-    static const YCPString DepsHelpLine();
+    static const NCstring LabelUnres1();
+    static const NCstring LabelUnres2();
+    static const NCstring LabelAlternative();
+    static const NCstring LabelConflict1();
+    static const NCstring LabelConflict2();
+    static const NCstring LabelRequBy1();
+    static const NCstring LabelRequBy2();
+    static const NCstring LabelRequire1();
+    static const NCstring LabelRequire2();
+    static const NCstring LabelUnresolvable();
+    static const NCstring WarningLabel();
+    static const NCstring ErrorLabel();
+    static const NCstring NotifyLabel();
+    static const NCstring DepsHelpLine();
     static const NCstring Solving();
     
    /**
@@ -316,32 +321,32 @@ public:
     /**
      * The headline of the help popup
      */
-    static const YCPString PackageHelp();
+    static const NCstring PackageHelp();
 
     /**
      * The headline of the help YOU popup
      */
-    static const YCPString YouHelp();
+    static const NCstring YouHelp();
 
     /**
      *  The label of the OK button
      */
-    static const YCPString OKLabel();
+    static const NCstring OKLabel();
 
     /**
      *  The label of the Cancel button
      */
-    static const YCPString CancelLabel();
+    static const NCstring CancelLabel();
     
     /**
      *  The label of the Cancel/Ignore button
      */
-    static const YCPString CancelIgnore();
+    static const NCstring CancelIgnore();
     
     /**
      *  The label of the Solve button
      */
-    static const YCPString SolveLabel();
+    static const NCstring SolveLabel();
     
     /**
      * The label of the file list frame
