@@ -857,7 +857,7 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
     if ( event.selection->compare( PkgNames::ShowDeps() ) == YO_EQUAL )
     {
 	// show the dependency popup
-	checkDependencies( true );
+	showDependencies( true );
     }
     else if ( event.selection->compare( PkgNames::AutoDeps() ) == YO_EQUAL )
     {
@@ -1161,12 +1161,11 @@ bool PackageSelector::showPatchInformation ( PMObjectPtr objPtr )
 //
 // Shows the dependency of this package
 //
-bool PackageSelector::showConcretelyDependency ( PMObjectPtr pkgPtr )
+bool PackageSelector::showConcretelyDependency ( int index )
 {
     if ( depsPopup )
     {
-	NCMIL << "GET dependeny" << endl;
-	depsPopup->concretelyDependency( pkgPtr );
+	depsPopup->concretelyDependency( index );
     }
 
     return true;
@@ -1174,16 +1173,16 @@ bool PackageSelector::showConcretelyDependency ( PMObjectPtr pkgPtr )
 
 ///////////////////////////////////////////////////////////////////
 //
-// checkDependencies
+// showDependencies
 //
 // Checks and shows the dependencies
 //
-void PackageSelector::checkDependencies ( bool doit )
+void PackageSelector::showDependencies ( bool doit )
 {
     // check dependencies
     if ( doit || autoCheck )
     {
-	depsPopup->checkDependencies();
+	depsPopup->showDependencies();
     }
 }
 

@@ -255,16 +255,16 @@ class PackageSelector
 
   /**
     * Shows the dependency of this package 
-    * @param pkgPtr the data pointer
+    * @param index The line
     * @return bool
     */
-    bool showConcretelyDependency ( PMObjectPtr pkgPtr );
+    bool showConcretelyDependency ( int index );
 
   /**
     * Checks and shows the dependencies
     * @param doit true: do the check, false: only check if auto check is on
     */
-    void checkDependencies ( bool doit );
+    void showDependencies ( bool doit );
     
    /**
     * Gets the required patch info from you patch manager and shows it
