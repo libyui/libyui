@@ -5,7 +5,7 @@
 @HEADER@
 
 Summary:	-
-Provides:	YaST2-UI
+Provides:	yast2_ui
 Provides:	y2base:/var/lib/YaST2/servers/qt
 Provides:	y2base:/usr/lib/YaST2/servers/qt
 Provides:	y2base:/usr/lib/YaST2/plugin/libpy2qt.so.2
