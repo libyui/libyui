@@ -610,7 +610,8 @@ YQPackageSelector::addMenus()
     CHECK_PTR( _extrasMenu );
     _menuBar->insertItem( _( "&Extras" ), _extrasMenu );
 
-    _extrasMenu->insertItem( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), CTRL + Key_A );
+    if ( ! _youMode )
+	_extrasMenu->insertItem( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), CTRL + Key_A );
 
     if ( _pkgList )
     {
