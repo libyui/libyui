@@ -322,7 +322,8 @@ class Y2NCursesUI : public NCurses, public YUIInterpreter {
 				      const YCPString & unicode_map,
 				      const YCPString & encoding );
 
-
+    virtual YCPValue setKeyboard ( );
+    
     /**
      *
      * Open a directory selection box and prompt the user for an existing directory.

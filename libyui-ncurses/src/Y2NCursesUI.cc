@@ -733,6 +733,28 @@ bool Y2NCursesUI::setLanguage( string lang )
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : Y2NCursesUI::setKeyboard
+//	METHOD TYPE : YCPValue
+//
+//
+YCPValue Y2NCursesUI::setKeyboard()
+{
+    string cmd = "/usr/bin/dumpkeys | /bin/loadkeys --unicode";
+    if ( NCstring::terminalEncoding() == "UTF-8" )
+    {
+	int ret = system( (cmd + " >/dev/null 2>&1").c_str() );
+	if ( ret != 0 )
+	{
+	    NCERR << "ERROR: /usr/bin/dumpkeys | /bin/loadkeys --unicode returned: "<< ret << endl;
+	}
+    }
+
+    return YCPVoid();
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : Y2NCursesUI::setConsoleFont
 //	METHOD TYPE : YCPValue
 //
@@ -743,7 +765,7 @@ YCPValue Y2NCursesUI::setConsoleFont( const YCPString & console_magic,
 				      const YCPString & font,
 				      const YCPString & screen_map,
 				      const YCPString & unicode_map,
-				      const YCPString & encoding )
+				      const YCPString & lang )
 {
   string cmd( "setfont" );
   cmd += " -c " + myTerm;
@@ -775,14 +797,44 @@ YCPValue Y2NCursesUI::setConsoleFont( const YCPString & console_magic,
   }
 
   // set terminal encoding for console
-  // FIXME: setConsoleFont() must called correctly in Console.ycp
-  NCMIL << "setConsoleFont( ENCODING:  " << encoding->value() << " )" << endl;
-  
-  if ( NCstring::setTerminalEncoding( encoding->value() ) )
-    Redraw();
+  // FIXME: setConsoleFont() in Console.ycp sets the encoding for the last argument
+  //        but this encoding does not fit (now hacked Console.ycp to pass the language)
+
+  // if the encoding is NOT UTF-8 set the console encoding according to the language
+  if ( NCstring::terminalEncoding() != "UTF-8" )
+  {
+      string language = lang->value();
+      string::size_type pos = language.find( '.' );
+
+      if ( pos != string::npos )
+      {
+	  language.erase( pos );
+      }
+      pos = language.find( '_' );
+      if ( pos != string::npos )
+      {
+	  language.erase( pos );
+      }
+
+      string code = language2encoding( language );
+
+      NCMIL << "setConsoleFont( ENCODING:  " << code << " )" << endl;
+    
+      if ( NCstring::setTerminalEncoding( code ) )
+      {
+	  setlocale( LC_CTYPE, code.c_str() ); 
+	  Redraw();
+      }
+      else
+      {    
+	  Refresh();
+      }
+  }
   else
-    Refresh();
-  
+  {
+      Refresh();
+  }
+
   return YCPVoid();
 }
 
