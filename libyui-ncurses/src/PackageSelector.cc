@@ -100,7 +100,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     eventHandlerMap[ PkgNames::Update()->toString() ] 	= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::Installed()->toString() ]= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::Taboo()->toString() ]	= &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::ToggleSource()->toString() ]	= &PackageSelector::StatusHandler;
+    eventHandlerMap[ PkgNames::ToggleSource()->toString() ] = &PackageSelector::StatusHandler;
     // help menu
     eventHandlerMap[ PkgNames::GeneralHelp()->toString() ] = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::StatusHelp()->toString() ]  = &PackageSelector::HelpHandler;
@@ -1089,6 +1089,48 @@ bool PackageSelector::showPackageInformation ( PMObjectPtr pkgPtr )
 	    ObjectStatStrategy * strategy = new AvailableStatStrategy();
 	    pkgAvail->setStatusStrategy( strategy );
 	    fillAvailableList( pkgAvail, pkgPtr );
+	}
+    }
+    else if (  visibleInfo->compare( PkgNames::RequRel() ) == YO_EQUAL )
+    {
+	NCstring text ( "" );
+	list<PkgRelation> relations;
+	
+	if ( pkgPtr->hasSelectable() )
+	{
+	    text += NCstring( pkgPtr->getSelectable()->name() );
+	    text += NCstring( " - " );
+	}
+
+	text += NCstring( pkgPtr->summary() );		// the summary
+	text += NCstring( "<br>" );
+
+        // show Requires:
+	text += NCstring( PkgNames::Requires() );
+	relations = pkgPtr->requires();
+
+	text += NCstring( createRelLine(relations) );
+	text += NCstring( "<br>" );
+
+	// show Required by:
+	text += NCstring( PkgNames::PreRequires() );
+	relations = pkgPtr->prerequires();
+
+	text += NCstring( createRelLine(relations) );
+	text += NCstring( "<br>" );
+
+	// show Conflicts:
+	text += NCstring( PkgNames::Conflicts() );
+	relations = pkgPtr->conflicts();
+
+	text += NCstring( createRelLine(relations) );
+	
+        // show the package relations	
+	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
+	
+	if ( descrInfo )
+	{
+	    static_cast<NCRichText *>(descrInfo)->setText( text.YCPstr() );
 	}
     }
     

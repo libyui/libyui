@@ -412,6 +412,20 @@ const NCstring PkgNames::Requires()
     return value;
 }
 
+const NCstring PkgNames::PreRequires()
+{
+    // part of the package description
+    static const NCstring value = _("<b>Prerequires: </b>");
+    return value;
+}
+
+const NCstring PkgNames::Conflicts()
+{
+    // part of the package description
+    static const NCstring value = _("<b>Conflicts with: </b>");
+    return value;
+}
+
 const NCstring PkgNames::ShortDescr()
 {
     // part of the package description

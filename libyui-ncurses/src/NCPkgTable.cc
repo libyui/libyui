@@ -110,10 +110,12 @@ NCPkgStatus NCPkgTable::statusToPkgStat( PMSelectable::UI_Status stat )
 	    return PkgToDelete;
 	case PMSelectable::S_Update:
 	    return PkgToUpdate;
-	case PMSelectable::S_Auto:
+	case PMSelectable::S_AutoInstall:
 	    return PkgAutoInstall;
     	case PMSelectable::S_AutoDel:
 	    return PkgAutoDelete;
+	case PMSelectable::S_AutoUpdate:
+	    return PkgAutoUpdate;
 	case PMSelectable::S_Taboo:
 	    return  PkgTaboo;
     }
@@ -140,9 +142,11 @@ PMSelectable::UI_Status NCPkgTable::statusToUIStat( NCPkgStatus stat )
 	case PkgToReplace:	// Replace
 	    return PMSelectable::S_Install;
 	case PkgAutoInstall:	// Will be automatically installed
-	    return PMSelectable::S_Auto;
+	    return PMSelectable::S_AutoInstall;
 	case PkgAutoDelete:	// Will be automaticall deleted
 	    return PMSelectable::S_AutoDel;
+	case PkgAutoUpdate:	// Automatic update
+	    return PMSelectable::S_AutoUpdate;
 	case PkgTaboo:		// Never install this 
 	    return PMSelectable::S_Taboo;
     }
@@ -511,6 +515,9 @@ bool NCPkgTable::toggleStatus( PMPackagePtr objPtr )
 	    newStatus = PkgNoInstall;
 	    break;
 	case PkgAutoDelete:
+	    newStatus = PkgInstalled;
+	    break;
+	case PkgAutoUpdate:
 	    newStatus = PkgInstalled;
 	    break;
 	case PkgTaboo:

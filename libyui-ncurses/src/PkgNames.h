@@ -338,6 +338,16 @@ public:
      * bold text Requires: (richtext) 
      */
     static const NCstring Requires();
+
+    /**
+     * bold text Required by: (richtext) 
+     */
+    static const NCstring PreRequires();
+
+    /**
+     * bold text Conflicts with: (richtext) 
+     */
+    static const NCstring Conflicts();
     
     /**
      *  Column header package name

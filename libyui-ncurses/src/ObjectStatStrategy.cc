@@ -152,6 +152,12 @@ bool ObjectStatStrategy::validateNewStatus( const NCPkgStatus & oldStatus,
 		valid = true;
 	    }
 	    break;
+	case PkgAutoUpdate:
+	    if ( newStatus == PkgInstalled || newStatus == PkgToDelete )
+	    {
+		valid = true;
+	    }
+	    break;
 	case PkgTaboo:
 	    if ( newStatus == PkgNoInstall )
 	    {
@@ -323,7 +329,8 @@ ostream & operator<<( ostream & str, NCPkgStatus obj )
     ENUM_OUT( PkgTaboo );
     ENUM_OUT( PkgToReplace );
     ENUM_OUT( PkgAutoDelete );
-    
+    ENUM_OUT( PkgAutoUpdate );
+
 #undef ENUM_OUT
   }
 
