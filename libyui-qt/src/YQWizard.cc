@@ -1128,6 +1128,7 @@ bool YQWizard::isCommand( QString declaration, const YCPTerm & term )
 	else if ( wanted == "map" 	)	ok = seen->isMap();
 	else if ( wanted == "integer" 	)	ok = seen->isInteger();
 	else if ( wanted == "int" 	)	ok = seen->isInteger();
+	else if ( wanted == "any" 	)	ok = true;
 	else
 	{
 	    y2error( "Bad declaration for wizard command %s : Unknown type \"%s\"",
