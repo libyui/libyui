@@ -399,24 +399,6 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     _detailsViews->addTab( dummy, _( "&Versions" ) );
 #endif
 
-#if 0
-    // DEBUG
-    // DEBUG
-    // DEBUG
-
-
-    dummy = new QLabel( "File List", _detailsViews );
-    _detailsViews->addTab( dummy, _( "&File List" ) );
-
-    dummy = new QLabel( "Required packages", _detailsViews );
-    _detailsViews->addTab( dummy, _( "&Requires" ) );
-
-    dummy = new QLabel( "Packages required by this package", _detailsViews );
-    _detailsViews->addTab( dummy, _( "Required &by" ) );
-    // DEBUG
-    // DEBUG
-    // DEBUG
-#endif
 
     layoutButtons( details_vbox );
 }
