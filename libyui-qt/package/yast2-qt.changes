@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jun 10 15:30:13 CEST 2003 - sh@suse.de
+
+- V 2.8.3
+- Don't build obsolete standalone server component "qt" any more 
+- Don't install header files: they are not packaged anyway
+
+-------------------------------------------------------------------
 Wed Jun  4 11:25:52 CEST 2003 - sh@suse.de
 
 - V 2.8.2 

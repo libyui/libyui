@@ -13,7 +13,6 @@ AM_CXXFLAGS = -DY2LOG=\"ui-qt\" 		\
 MOC = $(QTDIR)/bin/moc
 
 serversdir = $(execcompdir)/servers
-servers_PROGRAMS = qt
 
 # plugin, libtool forces 'lib' prefix
 plugin_LTLIBRARIES = libpy2qt.la
@@ -110,19 +109,6 @@ libpy2qt_la_SOURCES =				\
 	Y2CCQt.cc				\
 	Y2QtComponent.cc
 
-# now the stand alone qt version
-
-qt_SOURCES =
-
-qt_LDADD = libpy2qt.la -lycp -ly2		\
-	-lyui -lpthread -lz			\
-	-lutil
-
-qt_LDFLAGS =					\
-	-Xlinker --whole-archive		\
-	$(plugindir)/libpy2plugin.la		\
-	$(plugindir)/libpy2stdio.la		\
-	-Xlinker --no-whole-archive
 
 BUILT_SOURCES =					\
 	YUIQt.moc.cc				\

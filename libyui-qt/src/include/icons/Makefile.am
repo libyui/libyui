@@ -2,9 +2,9 @@
 # Makefile.am for qt/src/include/icons
 #
 
-pkgincludedir = $(includedir)/y2qt/icons
+# pkgincludedir = $(includedir)/y2qt/icons
 
-pkginclude_HEADERS =				\
+noinst_HEADERS =				\
 	autodel.xpm				\
 	autodel_disabled.xpm			\
 	autoinstall.xpm				\
@@ -77,16 +77,16 @@ CLEANFILES = y2qt.kdoc
 # prevent unnecessary installations to keep make dependency changes
 # and thus rebuilds for dependent packages as low as possible.
 
-install-pkgincludeHEADERS: $(pkginclude_HEADERS)
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(pkgincludedir)
-	@list='$(pkginclude_HEADERS)';							\
-	for p in $$list; do								\
-		if test -f "$$p"; then d= ; else d="$(srcdir)/"; fi; 			\
-		if ! cmp -s $$d$$p $(DESTDIR)$(pkgincludedir)/$$p; then			\
-			echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgincludedir)/$$p";	\
-			$(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgincludedir)/$$p;		\
-	  	fi									\
-	done
+###	install-pkgincludeHEADERS: $(pkginclude_HEADERS)
+###		@$(NORMAL_INSTALL)
+###		$(mkinstalldirs) $(DESTDIR)$(pkgincludedir)
+###		@list='$(pkginclude_HEADERS)';							\
+###		for p in $$list; do								\
+###			if test -f "$$p"; then d= ; else d="$(srcdir)/"; fi; 			\
+###			if ! cmp -s $$d$$p $(DESTDIR)$(pkgincludedir)/$$p; then			\
+###				echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgincludedir)/$$p";	\
+###				$(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgincludedir)/$$p;		\
+###		  	fi									\
+###		done
 
 #</INSTALL-HEADER-TARGET>
