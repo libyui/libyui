@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Feb 20 16:38:11 CET 2003 - sh@suse.de
+
+- Fixed bug #23914: Package manager crashes when opening "package"
+  menu and package list is empty (e.g., empty search result) 
+
+-------------------------------------------------------------------
 Wed Feb 19 16:18:06 CET 2003 - sh@suse.de
 
 - Fixed bug #23755: Busy cursor in file selection dialogs
