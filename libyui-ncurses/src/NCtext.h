@@ -91,7 +91,7 @@ class NClabel : protected NCtext {
 
     virtual void lset( const NCstring & ntext ) {
       NCtext::lset( ntext );
-      stripHotkey();
+//      stripHotkey();
     }
 
   public:
@@ -99,7 +99,7 @@ class NClabel : protected NCtext {
     void stripHotkey();
     NClabel( const NCstring & nstr = "" )
       : NCtext( nstr )
-    { stripHotkey(); }
+    { /*stripHotkey();*/ }
 
     virtual ~NClabel() {}
 

@@ -38,11 +38,10 @@ NCRadioButton::NCRadioButton( NCWidget * parent, const YWidgetOpt & opt,
     : YRadioButton( opt, nlabel, rbg )
     , NCWidget( parent )
     , checked( false )
-    , label( nlabel )
 {
   WIDDBG << endl;
-  hotlabel = &label;
   setLabel( nlabel );
+  hotlabel = &label;
   setValue( check );
 }
 
@@ -97,6 +96,7 @@ void NCRadioButton::setSize( long newwidth, long newheight )
 void NCRadioButton::setLabel( const YCPString & nlabel )
 {
   label  = NCstring( nlabel );
+  label.stripHotkey();
   defsze = wsze( label.height(), label.width() + 4 );
   YRadioButton::setLabel( nlabel );
   Redraw();

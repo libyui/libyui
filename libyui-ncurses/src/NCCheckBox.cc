@@ -42,11 +42,10 @@ NCCheckBox::NCCheckBox( NCWidget * parent, const YWidgetOpt & opt,
     , NCWidget( parent )
     , tristate( false )
     , checkstate( check ? S_ON : S_OFF )
-    , label( nlabel )
 {
   WIDDBG << endl;
-  hotlabel = &label;
   setLabel( nlabel );
+  hotlabel = &label;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -100,6 +99,7 @@ void NCCheckBox::setSize( long newwidth, long newheight )
 void NCCheckBox::setLabel( const YCPString & nlabel )
 {
   label  = NCstring( nlabel );
+  label.stripHotkey();
   defsze = wsze( label.height(), label.width() + 4 );
   YCheckBox::setLabel( nlabel );
   Redraw();

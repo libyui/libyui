@@ -36,7 +36,6 @@ NCComboBox::NCComboBox( NCWidget * parent, const YWidgetOpt & opt,
     : YComboBox( opt, nlabel )
     , NCWidget( parent )
     , mayedit( opt.isEditable.value() )
-    , label( nlabel )
     , text( "" )
     , lwin( 0 )
     , twin( 0 )
@@ -46,8 +45,8 @@ NCComboBox::NCComboBox( NCWidget * parent, const YWidgetOpt & opt,
     , index( -1 )
 {
   WIDDBG << endl;
-  hotlabel = &label;
   setLabel( nlabel );
+  hotlabel = &label;
   setValue( YCPString( string("") ) );
 }
 
@@ -186,6 +185,7 @@ void NCComboBox::itemAdded( const YCPString & ntext,
 void NCComboBox::setLabel( const YCPString & nlabel )
 {
   label = NCstring( nlabel );
+  label.stripHotkey();
   setDefsze();
   YComboBox::setLabel( nlabel );
   Redraw();

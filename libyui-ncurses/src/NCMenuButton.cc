@@ -33,11 +33,10 @@ NCMenuButton::NCMenuButton( NCWidget * parent, const YWidgetOpt & opt,
 			    YCPString nlabel )
     : YMenuButton( opt, nlabel )
     , NCWidget( parent )
-    , label( nlabel )
 {
   WIDDBG << endl;
-  hotlabel = &label;
   setLabel( nlabel );
+  hotlabel = &label;
   if ( opt.isDefaultButton.value() )
     setKeyboardFocus();
 
@@ -117,6 +116,7 @@ NCursesEvent NCMenuButton::wHandleInput( wint_t key )
 void NCMenuButton::setLabel( const YCPString & nlabel )
 {
   label = NCstring( nlabel );
+  label.stripHotkey();
   defsze = wsze( label.height(), label.width() + 3 );
   YMenuButton::setLabel( nlabel );
   Redraw();

@@ -118,6 +118,8 @@ class NCTablePad : public NCPad {
 
     const NCTableLine * GetLine( unsigned idx ) const;
     NCTableLine *       ModifyLine( unsigned idx );
+    
+    void stripHotkeys();
 };
 
 ///////////////////////////////////////////////////////////////////

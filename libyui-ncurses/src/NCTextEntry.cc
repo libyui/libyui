@@ -46,7 +46,6 @@ NCTextEntry::NCTextEntry( NCWidget * parent, const YWidgetOpt & opt,
     , NCWidget( parent )
     , mayedit( true )
     , passwd( opt.passwordMode.value() )
-    , label( nlabel )
     , lwin( 0 )
     , twin( 0 )
     , maxFldLength  ( maxFld )
@@ -65,8 +64,8 @@ NCTextEntry::NCTextEntry( NCWidget * parent, const YWidgetOpt & opt,
   if ( opt.isEditable.defined() )
       mayedit = opt.isEditable.value();
 
-  hotlabel = &label;
   setLabel( nlabel );
+  hotlabel = &label;
   setText( ntext );
 }
 
@@ -189,6 +188,7 @@ void NCTextEntry::wDelete()
 void NCTextEntry::setLabel( const YCPString & nlabel )
 {
   label  = NCstring( nlabel );
+  label.stripHotkey();
   YTextEntry::setLabel( nlabel );
   setDefsze();
   Redraw();

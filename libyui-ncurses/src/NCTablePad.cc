@@ -395,6 +395,15 @@ bool NCTablePad::handleInput( wint_t key )
   return NCPad::handleInput( key );
 }
 
+void NCTablePad::stripHotkeys()
+{
+  for( unsigned i = 0; i < Lines(); ++i ) {
+    if (Items[i]) {
+      Items[i]->stripHotkeys();
+    }
+  }
+}
+
 /******************************************************************
 **
 **

@@ -36,11 +36,7 @@
 NCTableCol::NCTableCol( const NCstring & l, const STYLE & st )
     : label( l )
     , style( st )
-    , stripHotkey( 1 )
 {
-    if (stripHotkey) {
-	label.stripHotkey();
-    }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -185,6 +181,14 @@ void NCTableLine::SetCols( unsigned idx )
   }
 
   Items.resize( idx, 0 );
+}
+
+void NCTableLine::stripHotkeys()
+{
+  for( unsigned i = 0; i < Cols(); ++i ) {
+    if ( Items[i] )
+	Items[i]->stripHotkey();
+  }
 }
 
 ///////////////////////////////////////////////////////////////////

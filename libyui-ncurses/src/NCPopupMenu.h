@@ -52,6 +52,9 @@ class NCPopupMenu : public NCPopupTable {
 
     NCPopupMenu( const wpos at, YMenuItem & menuitem );
     virtual ~NCPopupMenu();
+//    virtual void itemAdded( const YCPString & string,
+//			    int index,
+//			    bool selected );
 
 };
 

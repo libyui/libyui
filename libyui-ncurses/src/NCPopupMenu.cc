@@ -42,6 +42,7 @@ NCPopupMenu::NCPopupMenu( const wpos at, YMenuItem & menuitem )
     row[1] = (*entry)->hasChildren() ? "..." : "";
     addItem( (*entry)->getId(), row );
   }
+  stripHotkeys();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -111,3 +112,8 @@ bool NCPopupMenu::postAgain()
   }
   return again;
 }
+
+//void itemAdded(const YCPString & string, int index, bool selected)
+//{
+//    return;
+//}

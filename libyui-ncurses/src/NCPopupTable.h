@@ -62,6 +62,9 @@ class NCPopupTable : public NCPopup {
     virtual ~NCPopupTable();
 
     virtual bool postAgain();
+    
+public:
+  void stripHotkeys();
 };
 
 ///////////////////////////////////////////////////////////////////

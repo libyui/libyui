@@ -37,8 +37,8 @@ NCFrame::NCFrame( NCWidget * parent, const YWidgetOpt & opt,
   wstate = NC::WSdumb;
   framedim.Pos = wpos( 1 );
   framedim.Sze = wsze( 2 );
+  setLabel( nlabel );
   hotlabel = &label;
-  setLabel( getLabel() );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -101,6 +101,7 @@ void NCFrame::setLabel( const YCPString & nlabel )
 {
   YFrame::setLabel( nlabel );
   label = NCstring( getLabel() );
+  label.stripHotkey();
   Redraw();
 }
 

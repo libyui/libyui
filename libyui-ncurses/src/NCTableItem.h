@@ -111,6 +111,8 @@ class NCTableLine {
     virtual void DrawAt( NCursesWindow & w, const wrect at,
 			 NCTableStyle & tableStyle,
 			 bool active ) const;
+
+    void stripHotkeys();
 };
 
 ///////////////////////////////////////////////////////////////////
@@ -140,7 +142,6 @@ class NCTableCol {
 
     NClabel label;
     STYLE   style;
-    int stripHotkey;
 
   public:
 
@@ -149,6 +150,8 @@ class NCTableCol {
 
     const NClabel & Label() const { return label; }
     virtual void SetLabel( const NClabel & l ) { label = l; }
+    
+    void stripHotkey(){ label.stripHotkey(); }
 
   protected:
 

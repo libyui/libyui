@@ -375,6 +375,7 @@ void NCPadWidget::DelPad()
 void NCPadWidget::setLabel( const NClabel & nlabel )
 {
   label = nlabel;
+  label.stripHotkey();
   Redraw();
 }
 

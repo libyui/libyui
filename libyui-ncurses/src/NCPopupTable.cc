@@ -152,3 +152,9 @@ bool NCPopupTable::postAgain()
   return false;
 }
 
+void NCPopupTable::stripHotkeys()
+{
+    if(sellist) {
+	sellist->stripHotkeys();
+    }
+}

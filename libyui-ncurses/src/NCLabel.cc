@@ -33,11 +33,10 @@ NCLabel::NCLabel( NCWidget * parent, const YWidgetOpt & opt,
     : YLabel( opt, nlabel )
     , NCWidget( parent )
     , heading( opt.isHeading.value() )
-    , label( nlabel )
 {
   WIDDBG << endl;
-  hotlabel = &label;
   setLabel( nlabel );
+  hotlabel = &label;
   wstate = NC::WSdumb;
 }
 
@@ -91,11 +90,8 @@ void NCLabel::setSize( long newwidth, long newheight )
 //
 void NCLabel::setLabel( const YCPString & nlabel )
 {
-  // TO DO: why setting label in constructor ( :label(nlabel) ) + here ?
-  // RecodeToWchar is called twice !!!!
   label  = NCstring( nlabel );
   NCDBG << "LABEL: " << NCstring(nlabel) << " Longest line: " << label.width()<< endl;
-  
   defsze = label.size();
   YLabel::setLabel( nlabel );
   Redraw();

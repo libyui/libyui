@@ -32,11 +32,10 @@ NCPushButton::NCPushButton( NCWidget * parent, const YWidgetOpt & opt,
 			    YCPString nlabel )
     : YPushButton( opt, nlabel )
     , NCWidget( parent )
-    , label( nlabel )
 {
   WIDDBG << endl;
-  hotlabel = &label;
   setLabel( nlabel );
+  hotlabel = &label;
   if ( opt.isDefaultButton.value() )
     setKeyboardFocus();
 
@@ -114,6 +113,7 @@ NCursesEvent NCPushButton::wHandleInput( wint_t key )
 void NCPushButton::setLabel( const YCPString & nlabel )
 {
   label = NCstring( nlabel );
+  label.stripHotkey();
   defsze = wsze( label.height(), label.width() + 2 );
   YPushButton::setLabel( nlabel );
   Redraw();

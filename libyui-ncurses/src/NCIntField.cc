@@ -45,7 +45,6 @@ NCIntField::NCIntField( NCWidget * parent, const YWidgetOpt & opt,
 		 maxV >= minV ? maxV : minV,
 		 initialV )
     , NCWidget( parent )
-    , label( nlabel )
     , lwin( 0 )
     , twin( 0 )
     , cvalue( initialV )
@@ -57,8 +56,8 @@ NCIntField::NCIntField( NCWidget * parent, const YWidgetOpt & opt,
   unsigned tmpval = numstring( maxValue() ).length();
   if ( tmpval > vlen )
     vlen = tmpval;
-  hotlabel = &label;
   setLabel( nlabel );
+  hotlabel = &label;
   setValue( initialV );
 }
 
@@ -180,6 +179,7 @@ void NCIntField::wDelete()
 void NCIntField::setLabel( const YCPString & nlabel )
 {
   label = NCstring( nlabel );
+  label.stripHotkey();
   setDefsze();
   YIntField::setLabel( nlabel );
   Redraw();

@@ -56,6 +56,7 @@ class NCTable : public YTable, public NCPadWidget {
     virtual NCPad * CreatePad();
 
     virtual void cellChanged( int index, int colnum, const YCPString & newtext );
+    
 
   protected:
 
@@ -100,6 +101,8 @@ class NCTable : public YTable, public NCPadWidget {
         return YWidget::setKeyboardFocus();
       return true;
     }
+
+    void stripHotkeys() { pad->stripHotkeys(); }
 };
 
 ///////////////////////////////////////////////////////////////////
