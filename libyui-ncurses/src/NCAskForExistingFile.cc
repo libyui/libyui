@@ -110,7 +110,6 @@ void NCAskForExistingFile::createLayout( const YCPString & iniDir,
     frame->addChild( dirName );
 
     dirName->setId( PkgNames::DirName() );
-
     dirName->itemAdded( YCPString( iniDir ), // set initial value
 			0,		 // index
 			true );		 // selected
@@ -141,38 +140,47 @@ void NCAskForExistingFile::createLayout( const YCPString & iniDir,
     
     split->addChild( hSplit1 );
     opt.notifyMode.setValue( false );
+
+    NCSplit * hSplit2 = new NCSplit( split, opt, YD_HORIZ );
     
     // add the text entry for the file name
-    fileName = new NCTextEntry( split, opt,
+    opt.isEditable.setValue( false );
+    fileName = new NCTextEntry( hSplit2, opt,
 			       YCPString( "File name:" ),
 			       YCPString( "" ),
-			       100, 100 );
-    split->addChild( fileName );
-    
+			       100, 50 );
+    hSplit2->addChild( fileName );
+    NCComboBox * extension = new NCComboBox( hSplit2, opt, YCPString("Extension:") );
+    hSplit2->addChild( extension );
+    extension->itemAdded( YCPString( "*" ),
+			  0,		 // index
+			  true );	 // selected
+    split->addChild( hSplit2 );
+
     split->addChild( new NCSpacing( split, opt, 0.8, false, true ) );
 
     // HBox for the buttons
-    NCSplit * hSplit2 = new NCSplit( split, opt, YD_HORIZ );
-    split->addChild( hSplit2 ); 
+    NCSplit * hSplit3 = new NCSplit( split, opt, YD_HORIZ );
+    split->addChild( hSplit3 ); 
     opt.isHStretchable.setValue( true );
-    hSplit2->addChild( new NCSpacing( hSplit2, opt, 0.2, true, false ) );
+    hSplit3->addChild( new NCSpacing( hSplit3, opt, 0.2, true, false ) );
 
     // add the OK button
     opt.key_Fxx.setValue( 10 );
-    okButton = new NCPushButton( hSplit2, opt, YCPString(PkgNames::OKLabel()) );
+    okButton = new NCPushButton( hSplit3, opt, YCPString(PkgNames::OKLabel()) );
     okButton->setId( PkgNames::OkButton() );
 
-    hSplit2->addChild( okButton );
+    hSplit3->addChild( okButton );
 
-    hSplit2->addChild( new NCSpacing( hSplit2, opt, 0.4, true, false ) );
+    hSplit3->addChild( new NCSpacing( hSplit3, opt, 0.4, true, false ) );
       
     // add the Cancel button
     opt.key_Fxx.setValue( 9 );
-    cancelButton = new NCPushButton( hSplit2, opt, PkgNames::CancelLabel() );
+    cancelButton = new NCPushButton( hSplit3, opt, PkgNames::CancelLabel() );
     cancelButton->setId( PkgNames::Cancel() );
 
-    hSplit2->addChild( cancelButton );
-    hSplit2->addChild( new NCSpacing( hSplit2, opt, 0.2, true, false ) );  
+    hSplit3->addChild( cancelButton );
+    hSplit3->addChild( new NCSpacing( hSplit3, opt, 0.2, true, false ) );  
   
 }
 
@@ -197,7 +205,6 @@ NCursesEvent & NCAskForExistingFile::showDirPopup( )
 
     popdownDialog();
 
-
     return postevent;
 }
 
@@ -213,7 +220,7 @@ NCursesEvent & NCAskForExistingFile::showDirPopup( )
 
 long NCAskForExistingFile::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? 70 : 20 );
+    return ( dim == YD_HORIZ ? 80 : 20 );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -254,7 +261,8 @@ bool NCAskForExistingFile::postAgain( )
     {
 	if ( currentId->compare( PkgNames::OkButton () ) == YO_EQUAL )
 	{
-	    postevent.result = YCPString( dirList->getCurrentDir() );
+	    postevent.result = YCPString(dirList->getCurrentDir() + "/"
+					 + fileList->getCurrentFile());
 	    // return false means: close the popup
 	    return false;
 	}
@@ -269,20 +277,14 @@ bool NCAskForExistingFile::postAgain( )
 	    fileList->setStartDir( dirList->getCurrentDir() );
 	    // show the corresponding file list
 	    fileList->fillList( );
+	    fileName->setText( fileList->getCurrentFile() );
 	    
 	    if ( postevent.reason == YEvent::Activated )
 	    {
-		bool details = getCheckBoxValue( detailed );
-		if ( details )
-		{
-		    dirList->setTableType( NCFileTable::T_Detailed );
-		}
-		else
-		{
-		    dirList->setTableType( NCFileTable::T_Overview );
-		}
 		// fill directory list
 		dirList->fillList();
+		fileName->setText( YCPString( "" ) );
+		fileList->setCurrentFile( YCPString( "" ) );
 	    }
 	}
 	else if ( currentId->compare( PkgNames::DirName() ) == YO_EQUAL )
@@ -295,14 +297,20 @@ bool NCAskForExistingFile::postAgain( )
 	    bool details = getCheckBoxValue( detailed );
 	    if ( details )
 	    {
+		fileList->setTableType( NCFileTable::T_Detailed );
 		dirList->setTableType( NCFileTable::T_Detailed );
 	    }
 	    else
 	    {
+		fileList->setTableType( NCFileTable::T_Overview );
 		dirList->setTableType( NCFileTable::T_Overview );
 	    }
-	    // fill directory list
-	    dirList->fillList(); 
+	    fileList->fillList();
+	    dirList->fillList();
+	}
+	else if ( currentId->compare( PkgNames::FileList() ) == YO_EQUAL )
+	{
+	    fileName->setText( postevent.result->asString() );
 	}
 	else
 	{
@@ -319,7 +327,6 @@ bool NCAskForExistingFile::postAgain( )
     
     return true;
 }
-
 
 
 bool NCAskForExistingFile::getCheckBoxValue( NCCheckBox * checkBox )

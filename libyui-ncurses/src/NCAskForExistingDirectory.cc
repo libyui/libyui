@@ -248,16 +248,7 @@ bool NCAskForExistingDirectory::postAgain( )
 
 	    if ( postevent.reason == YEvent::Activated )
 	    {
-		bool details = getCheckBoxValue( detailed );
-		if ( details )
-		{
-		    dirList->setTableType( NCFileTable::T_Detailed );
-		}
-		else
-		{
-		    dirList->setTableType( NCFileTable::T_Overview );
-		}
-		// fill directory list
+		// fill the directory list
 		dirList->fillList();
 	    }
 	}
@@ -277,7 +268,6 @@ bool NCAskForExistingDirectory::postAgain( )
 	    {
 		dirList->setTableType( NCFileTable::T_Overview );
 	    }
-	    // fill directory list
 	    dirList->fillList(); 
 	}
 	else
