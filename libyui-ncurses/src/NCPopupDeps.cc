@@ -273,7 +273,6 @@ string NCPopupDeps::getDependencyKind(  const PkgDep::ErrorResult & error )
     string ret = "";
 
     // Get the type of the dependency 
-    // TO DO: better classification of dependency
 
     if ( !error.unresolvable.empty() )
     {
@@ -625,6 +624,9 @@ bool NCPopupDeps::postAgain()
 			   0,
 			   PMObjectPtr() );
 	    pkgs->drawList();
+
+            // close the dialog automatically
+	    postevent = NCursesEvent::cancel;
 	}
     }
 
