@@ -1223,12 +1223,12 @@ bool PackageSelector::DiskinfoHandler( const NCursesEvent&  event )
 {
     NCPkgTable * packageList = getPackageList();
      
-    if ( !packageList )
-	return false;
-
     diskspacePopup->showInfoPopup();
-    packageList->setKeyboardFocus();
-
+    if ( packageList )
+    {
+	packageList->setKeyboardFocus();
+    }
+    
     return true;
 }
 
@@ -1240,6 +1240,7 @@ bool PackageSelector::DiskinfoHandler( const NCursesEvent&  event )
 //
 bool PackageSelector::HelpHandler( const NCursesEvent&  event )
 {
+    NCPkgTable * packageList = getPackageList();
     string text = "";
     YCPString headline = YCPString(PkgNames::PackageHelp().str());
     
@@ -1282,7 +1283,12 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
     // open the popup with the help text
     NCPopupInfo pkgHelp( wpos( 1, 1 ), headline, YCPString( text ) );
     pkgHelp.showInfoPopup( );
-    
+
+    if ( packageList )
+    {
+	packageList->setKeyboardFocus();
+    }
+	
     return true;
 }
 
@@ -1294,6 +1300,7 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
 //
 bool PackageSelector::YouHelpHandler( const NCursesEvent&  event )
 {
+    NCPkgTable * packageList = getPackageList();
     string text  = "";
 
     text += PkgNames::YouHelp1().str();
@@ -1303,7 +1310,12 @@ bool PackageSelector::YouHelpHandler( const NCursesEvent&  event )
     // open the popup with the help text
     NCPopupInfo youHelp( wpos( 1, 1 ), YCPString(PkgNames::YouHelp().str()), YCPString(text) );
     youHelp.showInfoPopup( );
-    
+
+    if ( packageList )
+    {
+	packageList->setKeyboardFocus();
+    }
+       
     return true;
 }
 
