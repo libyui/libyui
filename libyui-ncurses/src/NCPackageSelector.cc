@@ -23,6 +23,7 @@
 #include "NCPkgTable.h"
 #include "NCLabel.h"
 #include "PkgNames.h"
+#include "NCi18n.h"
 
 #include <libintl.h>
 
@@ -260,15 +261,3 @@ YCPTerm NCPackageSelector::readLayoutFile( Y2NCursesUI *ui, const char * layoutF
     return pkgLayout;
 }
 
-void NCPackageSelector::setTextdomain( const char * domain )
-{
-    bindtextdomain( domain, LOCALEDIR );
-    bind_textdomain_codeset( domain, "utf8" );
-    textdomain( domain );
-
-    // Make change known.
-    {
-	extern int _nl_msg_cat_cntr;
-	++_nl_msg_cat_cntr;
-    }
-}

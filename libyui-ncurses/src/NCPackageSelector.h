@@ -107,10 +107,6 @@ class NCPackageSelector : public NCSplit
     */
     YCPTerm readLayoutFile( Y2NCursesUI *ui, const char * layoutFilename );
 
-    /**
-     * Sets text domain
-     */ 
-    void setTextdomain( const char * domain ); 
 };
 
 ///////////////////////////////////////////////////////////////////
