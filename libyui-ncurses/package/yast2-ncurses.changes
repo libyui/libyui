@@ -2,7 +2,9 @@
 Wed Sep 15 16:56:19 CEST 2004 - sh@suse.de
 
 - V 2.10.4
-- Added huge numbers (long long) support (YCPInteger is long long) 
+- Added huge numbers (long long) support (YCPInteger is long long)
+  (fix for bug #44680: Progress bar in NCurses UI shows bogus values)
+
 
 -------------------------------------------------------------------
 Tue Sep 14 11:28:39 CEST 2004 - mlazar@suse.cz
