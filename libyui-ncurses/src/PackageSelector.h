@@ -285,8 +285,15 @@ class PackageSelector
     * @param index The line
     * @return bool
     */
-    bool showConcretelyDependency ( int index );
+    bool showConcretelyPkgDependency ( int index );
 
+  /**
+    * Shows the dependency of this selection 
+    * @param index The line
+    * @return bool
+    */
+    bool showConcretelySelDependency ( int index );
+    
   /**
     * Checks and shows the dependencies
     * @param doit true: do the check, false: only check if auto check is on

@@ -1389,7 +1389,7 @@ bool PackageSelector::showPatchInformation ( PMObjectPtr objPtr )
 //
 // Shows the dependency of this package
 //
-bool PackageSelector::showConcretelyDependency ( int index )
+bool PackageSelector::showConcretelyPkgDependency ( int index )
 {
     if ( pkgDepsPopup )
     {
@@ -1398,6 +1398,23 @@ bool PackageSelector::showConcretelyDependency ( int index )
 
     return true;
 }
+
+///////////////////////////////////////////////////////////////////
+//
+// showConcretelyDependency
+//
+// Shows the dependency of this package
+//
+bool PackageSelector::showConcretelySelDependency ( int index )
+{
+    if ( selDepsPopup )
+    {
+	selDepsPopup->concretelyDependency( index );
+    }
+
+    return true;
+}
+
 
 ///////////////////////////////////////////////////////////////////
 //
