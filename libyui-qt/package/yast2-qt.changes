@@ -1,6 +1,7 @@
 -------------------------------------------------------------------
 Mon Apr  5 18:41:36 CEST 2004 - sh@suse.de
 
+- V 2.9.18
 - Honor environment variable KCMYAST2_CALL for KControl embedding
   (no wizard decorations, suppress wizard help) 
 
