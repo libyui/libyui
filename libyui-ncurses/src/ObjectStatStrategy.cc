@@ -442,16 +442,31 @@ bool AvailableStatStrategy::setPackageStatus( PMSelectable::UI_Status newstatus,
 //
 PMSelectable::UI_Status AvailableStatStrategy::getPackageStatus( PMObjectPtr objPtr )
 {
-    PMSelectable::UI_Status selStatus = objPtr->getSelectable()->status();
     PMSelectable::UI_Status retStatus = PMSelectable::S_NoInst;
 
-    // return status for installed package or the candidate ( not for all availables )
-    if ( objPtr->isInstalledObj()
-	 || objPtr->isCandidateObj() )
+    if ( !objPtr )
     {
-	retStatus = selStatus;
+	return retStatus;
     }
 
+    PMSelectable::UI_Status status = objPtr->getSelectable()->status();
+    
+    if ( objPtr->hasInstalledObj()
+	 && objPtr->edition() == objPtr->getInstalledObj()->edition() )
+    {
+	// installed package: show status S_KeepInstalled or S_Delete
+	if ( status == PMSelectable::S_KeepInstalled
+	     || status == PMSelectable::S_Del )
+	    retStatus = status;
+    }
+    else if ( objPtr->isCandidateObj() )
+    {
+	if ( status != PMSelectable::S_KeepInstalled
+	     && status != PMSelectable::S_Del )
+	retStatus = status;
+    }
+    // else show S_NoInst
+	
     return retStatus;
 }
 
