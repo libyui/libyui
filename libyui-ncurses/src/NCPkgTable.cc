@@ -542,74 +542,10 @@ bool NCPkgTable::setNewStatus( const NCPkgStatus & newStatus  )
 
     // must be a PMObjectPtr !!! to handle PMYouPatchPtr and PMPackagePtr   
     PMObjectPtr objPtr = getDataPointer( getCurrentItem() );
-    
-    // check whether the status change is possible
-    switch ( getStatus( citem ) )
-    {
-	case PkgToDelete: {
-	    if ( newStatus == PkgInstalled || newStatus == PkgToUpdate ||
-		 newStatus == PkgToReplace )
-	    {
-		valid = true;
-	    }
-	    break;
-	}
-	case PkgToInstall: {
-	    if ( newStatus == PkgNoInstall || newStatus == PkgTaboo )
-	    {
-		valid = true;
-	    }
-	    break;
-	}
-	case PkgToUpdate: {
-	    if ( newStatus == PkgToDelete ||  newStatus == PkgInstalled ||
-		 newStatus == PkgToReplace )
-	    {
-		valid = true;
-	    }
-	    break;
-	}
-	case PkgInstalled: {
-	    if ( ( newStatus == PkgToDelete ) 	||
-		 ( objPtr->hasCandidateObj() &&
-		   ( newStatus == PkgToUpdate
-		     || newStatus == PkgToReplace
-		     || newStatus == PkgToDelete ) ) )
-	    {
-		valid = true;
-	    }
-	    break;
-	}
-	case PkgToReplace: {
-	   if ( newStatus == PkgToDelete || newStatus == PkgInstalled )
-	    {
-		valid = true;
-	    }
-	    break;  
-	}
-	case PkgNoInstall:
-	    if ( newStatus == PkgToInstall || newStatus == PkgTaboo )
-	    {
-		valid = true;
-	    }
-	    break;
- 	case PkgAutoInstall:
-	    // FIXME show a warning !!!!!
-	    if ( newStatus == PkgNoInstall )
-	    {
-		valid = true;
-	    }
-	    break;
-	case PkgTaboo:
-	    if ( newStatus == PkgNoInstall )
-	    {
-		valid = true;
-	    }
-	    break;
-    }
 
-    NCMIL << "Change from: " << getStatus( citem ) << " to "
-	  << newStatus << ": " << (valid?"true":"false") << endl;
+    valid = statusStrategy->validateNewStatus( getStatus( citem ),	// old status
+					       newStatus,		// new status
+					       objPtr );			
 
     if ( valid )
     {

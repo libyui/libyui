@@ -40,17 +40,6 @@
 
 class PackageSelector;
 
-enum NCPkgStatus
-{
-    PkgToDelete,	// S_Del: delete installedObj
-    PkgToInstall,	// S_Install: install candidateObj ( have no installedObj )
-    PkgToUpdate,	// S_Update: install candidateObj ( have installedObj )
-    PkgNoInstall,	// S_NoInst: is not/will not installed - no modification ( have no installedObj )
-    PkgInstalled,	// S_KeepInstalled: keep this version - no modification ( have installedObj )
-    PkgAutoInstall,	// S_Auto: automatically installed - like S_Install, but not requested by user
-    PkgTaboo,		// F_Taboo: Never install this
-    PkgToReplace	// Replace
-};
 
 /**
  * This class is used for the first column of the package table
