@@ -247,13 +247,7 @@ YCPTerm NCPackageSelector::readLayoutFile( YNCursesUI *ui,
 	}
 	else
 	{
-	    layout = ui->evaluate (layout);
-
-	    if ( layout.isNull() )
-	    {
-		NCERR << "Error evaluating layout file" << endl;
-	    }
-	    else if ( !layout->isTerm() )
+	    if ( !layout->isTerm() )
 	    {
 		NCERR << "Error evaluating layout file - layout must be a term" << endl;	
 	    }
