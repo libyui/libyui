@@ -1,5 +1,5 @@
 #
-# Makefile.am for y2qt/doc
+# Makefile.am for qt/doc
 #
 
 SUBDIRS = autodocs

@@ -1,5 +1,5 @@
 #
-# Makefile.am for y2qt/tools/mset
+# Makefile.am for qt/tools/mset
 #
 
 ybin_PROGRAMS = mset xmset

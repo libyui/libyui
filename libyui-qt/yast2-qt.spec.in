@@ -1,18 +1,22 @@
 @HEADER-COMMENT@
 
-# neededforbuild  gpp libgpp libxcrypt libxcrypt-devel liby2 liby2-devel libycp libycp-devel libyui libyui-devel qt3-devel-packages xf86 yast2-core-wfm yast2-core-wfm-devel yast2-devtools ydoc
+# neededforbuild  gpp libgpp libxcrypt libxcrypt-devel qt3-devel-packages xf86 yast2-core yast2-core-devel yast2-devtools
 
 @HEADER@
+
 Summary:	-
 Provides:	YaST2-UI
 Provides:	y2base:/var/lib/YaST2/servers/qt
 Provides:	y2base:/usr/lib/YaST2/servers/qt
 Provides:	y2base:/usr/lib/YaST2/plugin/libpy2qt.so.2
+Provides:	yast2-ui-qt
+Obsoletes:	yast2-ui-qt
 
 %description
 -
 
 @HEADER-DEVEL@
+
 Summary:	-
 Provides:	y2qt
 Obsoletes:	y2qt

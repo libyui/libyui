@@ -1,10 +1,10 @@
 #
-# Makefile.am for y2qt/src
+# Makefile.am for qt/src
 #
 
 SUBDIRS = include
 
-AM_CXXFLAGS = -DQT_THREAD_SUPPORT
+AM_CXXFLAGS = -DY2LOG=\"ui-qt\" -DQT_THREAD_SUPPORT
 
 MOC = $(QTDIR)/bin/moc
 

@@ -1,4 +1,4 @@
 #
-# Makefile.am for ui/tools
+# Makefile.am for qt/tools
 #
 SUBDIRS = mset xkbset

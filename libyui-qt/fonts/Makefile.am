@@ -1,5 +1,5 @@
 #
-# Makefile.am for y2qt/fonts
+# Makefile.am for qt/fonts
 #
 
 fontsdir = /usr/X11R6/lib/X11/fonts/uni

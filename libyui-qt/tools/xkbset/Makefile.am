@@ -1,5 +1,5 @@
 #
-# Makefile.am for y2qt/tools/xkbset
+# Makefile.am for qt/tools/xkbset
 #
 
 ybin_PROGRAMS = xkbset

@@ -1,5 +1,5 @@
 #
-# Makefile.am for y2qt/src/include
+# Makefile.am for qt/src/include
 #
 
 pkgincludedir = $(includedir)/y2qt

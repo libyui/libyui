@@ -1,6 +1,8 @@
 #
-# Makefile.am for y2qt/testsuite
+# Makefile.am for qt/testsuite
 #
+
+AM_CXXFLAGS = -DY2LOG=\"ui-qt\"
 
 AUTOMAKE_OPTIONS = dejagnu
 
