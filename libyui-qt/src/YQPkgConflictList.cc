@@ -250,7 +250,7 @@ YQPkgConflict::dumpLists()
     }
 
     dumpList( this, _conflict.unresolvable, LIST_SPLIT_THRESHOLD,
-	      _( "Unresolved Reqirements:" ) );
+	      _( "Unresolved Requirements:" ) );
 
     dumpList( this, _conflict.conflicts_with, LIST_SPLIT_THRESHOLD,
 	      _( "Conflicts with:" ) );
@@ -351,26 +351,26 @@ YQPkgConflict::addUndoResolution( QY2CheckListItem * parent )
     switch ( _status )
     {
 	case PMSelectable::S_Taboo:
-	    text = ( _( "Don't set %1 to taboo" ) ).arg( _shortName );
+	    text = ( _( "Do not set %1 to taboo" ) ).arg( _shortName );
 	    _undo_status = _pmObj->hasInstalledObj() ?
 		PMSelectable::S_KeepInstalled : PMSelectable::S_NoInst;
 	    break;
 
 	case PMSelectable::S_Del:
 	case PMSelectable::S_AutoDel:
-	    text = ( _( "Don't delete %1" ) ).arg( _shortName );
+	    text = ( _( "Do not delete %1" ) ).arg( _shortName );
 	    _undo_status = PMSelectable::S_KeepInstalled;
 	    break;
 
 	case PMSelectable::S_AutoUpdate:
 	case PMSelectable::S_Update:
-	    text = ( _( "Don't update %1" ) ).arg( _shortName );
+	    text = ( _( "Do not update %1" ) ).arg( _shortName );
 	    _undo_status = PMSelectable::S_KeepInstalled;
 	    break;
 
 	case PMSelectable::S_AutoInstall:
 	case PMSelectable::S_Install:
-	    text = ( _( "Don't install %1" ) ).arg( _shortName );
+	    text = ( _( "Do not install %1" ) ).arg( _shortName );
 	    _undo_status = PMSelectable::S_NoInst;
 	    break;
 
@@ -469,7 +469,7 @@ YQPkgConflict::dumpDeleteList( QListViewItem * parent )
 	    if ( pkg->hasInstalledObj() )
 		text = ( _( "Delete %1" ) ).arg( name.c_str() );
 	    else
-		text = ( _( "Don't install %1" ) ).arg( name.c_str() );
+		text = ( _( "Do not install %1" ) ).arg( name.c_str() );
 
 
 	    new QY2ListViewItem( parent, text, true );
@@ -486,7 +486,7 @@ void
 YQPkgConflict::addIgnoreResolution( QY2CheckListItem * parent )
 {
     new YQPkgConflictResolution( parent,
-				 _( "Ignore this conflict and risk inconsistent system" ),
+				 _( "Ignore this conflict and risk system inconsistencies" ),
 				 YQPkgConflictIgnore );
 }
 
