@@ -334,11 +334,11 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, PMObjectPtr pkgP
 {
     if ( !pkgTable )
     {
-	NCERR << "No table widget for availbale packages existing" << endl;
+	NCERR << "No table widget for available packages existing" << endl;
 	return false;
     }
 
-    if ( !(pkgPtr && pkgPtr->hasSelectable()) )
+    if ( !pkgPtr || !pkgPtr->hasSelectable() )
     {
 	NCERR << "Package pointer not valid" << endl;
 	return false;
