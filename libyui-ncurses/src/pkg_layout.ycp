@@ -22,10 +22,9 @@
 					      `item( `id(`select), 	"&Select      [+]"),
 					      `item( `id(`delete), 	"&Delete      [-]"),
 					      `item( `id(`update), 	"&Update      [>]"),
-					      `item( `id(`tabooOn), 	"&Taboo yes  [F4]"),
-					      `item( `id(`tabooOff), 	"&Taboo no   [F5]")
-					      // `item( `id(`toggleSrc), 	"SP&M yes/no" )
-				 ]
+					      `item( `id(`tabooOn), 	"Taboo &yes  [F4]"),
+					      `item( `id(`tabooOff), 	"Taboo &no   [F5]"),
+					      `item( `id(`toggleSrc), 	"SP&M yes/no" ) ]
 				 )),
 	      `Left(`MenuButton( "&Information", [`item( `id(`pkginfo), "Package info" ),
 						  `item( `id(`longdescr), "&Long description" ),
