@@ -129,7 +129,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
     // Calculate thickness and indentation
 
     int thickness = horizontal() ? height() : width();
-    int indent    = (int) ( thickness * 0.45 );
+    int indent    = (int) ( thickness * 0.37 );
 
 
     // Set up painter
