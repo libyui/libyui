@@ -554,19 +554,18 @@ YQPackageSelector::resolveDependencies()
 void
 YQPackageSelector::updateDiskUsage()
 {
-#warning Disk usage disabled - PkgDuMaster always throws a floating point exception
-#if 0
     const PkgDuMaster & du = Y2PM::packageManager().updateDu();
-    
-    {
-	// DEBUG
-	FSize used = du.pkg_used();
-	y2debug( "About to print disk usage percent" );
-	y2debug( "Used disk space: %s - %d%%", used.asString().c_str(), du.pkg_u_percent() );
-    }
-
     _diskSpace->setProgress( du.pkg_u_percent() );
-#endif
+
+    if ( du.pkg_u_percent() < 1 )
+    {
+	// Workaround for a common problem: Maybe just the target partitions
+	// are not correctly initialized, so let's at least give a hint in the
+	// log file. 
+	
+	FSize used = du.pkg_used();
+	y2milestone( "Used disk space: %s - %d%%", du.pkg_u_percent() );
+    }
 }
 
 
