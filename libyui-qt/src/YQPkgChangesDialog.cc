@@ -54,6 +54,9 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
     // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );
 
+    // Limit dialog size to available screen size
+    setMaximumSize( qApp->desktop()->availableGeometry().size() );
+
     // Layout for the dialog ( can't simply insert a QVBox )
 
     QVBoxLayout * layout = new QVBoxLayout( this, MARGIN, SPACING );

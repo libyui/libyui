@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Mar  4 19:10:51 CET 2004 - sh@suse.de
+
+- Fixed bug #34909: Pkg Mgr "auto-changed pkgs" too large for screen 
+
+-------------------------------------------------------------------
 Mon Mar  1 18:39:22 CET 2004 - sh@suse.de
 
 - Save screen shot name if recording macro 
