@@ -301,14 +301,69 @@ protected:
 
 
     /**
-     * Inherited from YUIInterpreter.
+     *
+     * Open a directory selection box and prompt the user for an existing directory.
+     * [Inherited from YUIInterpreter]
+     *
+     * 'startDir' is the initial directory that is displayed.
+     *
+     * 'headline' is an explanatory text for the directory selection box.
+     * Graphical UIs may omit that if no window manager is running.
+     *
+     * Returns the selected directory name
+     * or 'nil' (YCPVoid()) if the user canceled the operation. 
+     **/
+    YCPValue askForExistingDirectory ( const YCPString & startDir,
+				       const YCPString & headline );
+    
+    /**
+     * Open a file selection box and prompt the user for an existing file.
+     * [Inherited from YUIInterpreter]
+     * 
+     * 'startWith' is the initial directory or file.
+     * 
+     * 'filter' is one or more blank-separated file patterns, e.g. "*.png *.jpg"
+     * 
+     * 'headline' is an explanatory text for the file selection box.
+     * Graphical UIs may omit that if no window manager is running.
+     * 
+     * Returns the selected file name
+     * or 'nil' (YCPVoid()) if the user canceled the operation.
+     **/
+    YCPValue askForExistingFile	( const YCPString & startWith,
+				  const YCPString & filter,
+				  const YCPString & headline );
+
+    /**
+     * Open a file selection box and prompt the user for a file to save data to.
+     * Automatically asks for confirmation if the user selects an existing file.
+     * [Inherited from YUIInterpreter]
+     * 
+     * 'startWith' is the initial directory or file.
+     * 
+     * 'filter' is one or more blank-separated file patterns, e.g. "*.png *.jpg"
+     * 
+     * 'headline' is an explanatory text for the file selection box.
+     * Graphical UIs may omit that if no window manager is running.
+     * 
+     * Returns the selected file name
+     * or 'nil' (YCPVoid()) if the user canceled the operation.
+     **/
+    YCPValue askForSaveFileName	( const YCPString & startWith,
+				  const YCPString & filter,
+				  const YCPString & headline );
+
+
+    /**
      * Sets the X input method according to the locale.
+     * [Inherited from YUIInterpreter]
      */
     YCPValue setLanguage( const YCPTerm &term );
 
 
     /**
-     * Inherited from YUIInterpreter: Display capabilities.
+     * Display capabilities.
+     * [Inherited from YUIInterpreter]
      * See UI builtin GetDisplayInfo() doc for details.
      **/
     int  getDisplayWidth();

@@ -68,9 +68,11 @@
 #include "YQTable.h"
 #include "YQTextEntry.h"
 #include "YQTree.h"
+#include "YQi18n.h"
 #include "QXEmbed.h"
 
 #include <X11/Xlib.h>
+#include <unistd.h>
 
 
 #define DEFAULT_MACRO_FILE_NAME		"/tmp/macro.ycp"
@@ -1067,6 +1069,91 @@ void YUIQt::askPlayMacro()
 	}
     }
 }
+
+
+
+YCPValue YUIQt::askForExistingDirectory( const YCPString & startDir,
+					  const YCPString & headline )
+{
+    QString dir_name =
+	QFileDialog::getExistingDirectory( fromUTF8( startDir->value() ),
+					   main_win, 				// parent
+					   "dir_selector",			// name
+					   fromUTF8( headline->value() ) );	// caption
+    
+    if ( dir_name.isEmpty() )	// this includes dir_name.isNull()
+	return YCPVoid();	// nothing selected -> return 'nil'
+
+    return YCPString( toUTF8( dir_name ) );
+}
+
+
+YCPValue YUIQt::askForExistingFile( const YCPString & startWith,
+				     const YCPString & filter,
+				     const YCPString & headline )
+{
+    QString file_name =
+	QFileDialog::getOpenFileName( fromUTF8( startWith->value() ),
+				      fromUTF8( filter->value() ),
+				      main_win, 			// parent
+				      "file_selector",			// name
+				      fromUTF8( headline->value() ) );	// caption
+    
+    if ( file_name.isEmpty() )	// this includes file_name.isNull()
+	return YCPVoid();	// nothing selected -> return 'nil'
+
+    return YCPString( toUTF8( file_name ) );
+}
+
+
+YCPValue YUIQt::askForSaveFileName( const YCPString & startWith,
+				     const YCPString & filter,
+				     const YCPString & headline )
+{
+    QString file_name;
+    bool try_again = false;
+
+    do
+    {
+	file_name = QFileDialog::getSaveFileName( fromUTF8( startWith->value() ),
+						  fromUTF8( filter->value() ),
+						  main_win, 				// parent
+						  "file_selector",			// name
+						  fromUTF8( headline->value() ) );	// caption
+    
+	if ( file_name.isEmpty() )	// this includes file_name.isNull()
+	    return YCPVoid();		// nothing selected -> return 'nil'
+
+
+	if ( access( (const char *) file_name, F_OK ) == 0 )	// file exists?
+	{
+	    QString msg;
+
+	    if ( access( (const char *) file_name, W_OK ) == 0 )
+	    {
+		// Confirm if the user wishes to overwrite an existing file
+		msg = ( _( "%1 exists! Really overwrite?" ) ).arg( file_name );
+	    }
+	    else
+	    {
+		// Confirm if the user wishes to overwrite a write-protected file %1
+		msg = ( _( "%1 exists and is write-protected!\nReally overwrite?" ) ).arg( file_name );
+	    }
+
+	    int button_no = QMessageBox::information( main_win,
+						      // Window title for confirmation dialog
+						      _( "Please confirm" ),
+						      msg,
+						      _( "C&ontinue" ),
+						      _( "&Cancel" ) );
+	    try_again = ( button_no != 0 );
+	}
+    
+    } while ( try_again );
+    
+    return YCPString( toUTF8( file_name ) );
+}
+
 
 
 #include "YUIQt.moc.cc"
