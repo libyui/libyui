@@ -144,9 +144,15 @@ YQPkgConflictDialog::solveAndShowConflicts()
 	// y2milestone( "Dependency conflict!" );
 	_conflictList->fill( badList );
 
-	if ( ! isVisible() )
+	if ( _conflictList->isEmpty() ) // Maybe all conflicts are ignored
 	{
-	    exec();
+	    if ( isVisible() )
+		accept();
+	}
+	else // There are conflicts
+	{
+	    if ( ! isVisible() )
+		exec();
 	}
     }
 }

@@ -68,7 +68,15 @@ YQPkgConflictList::fill( PkgDep::ErrorResultList & badList )
 
     while ( it != badList.end() )
     {
-	new YQPkgConflict( this, *it );
+	YQPkgConflict * conflict = new YQPkgConflict( this, *it );
+	CHECK_PTR( conflict );
+
+	if ( conflict->isIgnored() )
+	{
+	    // y2milestone( "Ignoring conflict: %s", (const char *) conflict->text(0) );
+	    delete conflict;	// Yes, this is stupid. The solver should handle that.
+	}
+
 	++it;
     }
 }
@@ -101,8 +109,18 @@ YQPkgConflictList::applyResolutions()
 }
 
 
+void
+YQPkgConflictList::resetIgnoredConflicts()
+{
+    YQPkgConflict::resetIgnoredConflicts();
+}
 
 
+
+
+
+
+QMap<QString, bool> YQPkgConflict::_ignore;
 
 
 YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
@@ -159,14 +177,18 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
     // DEBUG
 #endif
 
-    formatLine();
+    formatHeading();
+
+    if ( isIgnored() )	// Don't bother creating any child items etc.
+	return;
+
     dumpLists();
     addResolutionSuggestions();
 }
 
 
 void
-YQPkgConflict::formatLine()
+YQPkgConflict::formatHeading()
 {
     QString text;
     QPixmap icon = YQIconPool::normalPkgConflict();
@@ -323,7 +345,7 @@ YQPkgConflict::dumpList( QListViewItem * 	parent,
 	    // "somepackage requires otherpackage"
 	    text =( _( "%1 requires %2" ) ).arg( pkg1.c_str() ).arg( pkg2.c_str() );
 	}
-	
+
 	new QY2ListViewItem( parent, text, true );
 	++it;
     }
@@ -492,14 +514,47 @@ YQPkgConflict::dumpDeleteList( QListViewItem * parent )
 }
 
 
-
-
 void
 YQPkgConflict::addIgnoreResolution( QY2CheckListItem * parent )
 {
     new YQPkgConflictResolution( parent,
 				 _( "Ignore this conflict and risk system inconsistencies" ),
 				 YQPkgConflictIgnore );
+}
+
+
+bool
+YQPkgConflict::isIgnored()
+{
+    return isIgnored( text(0) );
+}
+
+
+void
+YQPkgConflict::ignore()
+{
+    ignore( text(0) );
+}
+
+
+bool
+YQPkgConflict::isIgnored( const QString & conflictHeader )
+{
+    return _ignore.contains( conflictHeader );
+}
+
+
+void
+YQPkgConflict::ignore( const QString & conflictHeader )
+{
+    _ignore.insert( conflictHeader, true );
+}
+
+
+void
+YQPkgConflict::resetIgnoredConflicts()
+{
+    _ignore.clear();
 }
 
 
@@ -539,7 +594,7 @@ YQPkgConflict::applyResolution()
 		    return;
 
 		case YQPkgConflictIgnore:
-#warning TODO: Store info about ignored conflict!
+		    ignore();
 		    return;
 
 		case YQPkgConflictBruteForceDelete:

@@ -22,10 +22,12 @@
 #ifndef YQPkgConflictList_h
 #define YQPkgConflictList_h
 
+#include <qmap.h>
 #include <y2pm/PkgDep.h>
 #include "QY2ListView.h"
 
 
+class YQPkgConflict;
 class YQPkgConflictAlternative;
 class YQPkgConflictResolution;
 
@@ -71,7 +73,12 @@ public:
      **/
     bool choicesComplete();
 
-    
+    /**
+     * Check if the conflict list is empty.
+     **/
+    bool isEmpty() { return childCount() == 0; }
+
+
 public slots:
 
     /**
@@ -79,7 +86,13 @@ public slots:
      **/
     void applyResolutions();
 
-    
+    /**
+     * Reset all ignored conflicts as if the user had never selected any
+     * conflict to ignore.
+     **/
+    void resetIgnoredConflicts();
+
+
 signals:
 
     /**
@@ -133,13 +146,41 @@ public:
      **/
     void applyResolution();
 
+    
+    /**
+     * Check if this conflict with header should be ignored.
+     **/
+    bool isIgnored();
+
+    /**
+     * Ignore this conflict - i.e. add it to the ignore list.
+     **/
+    void ignore();
+
+    /**
+     * Check if a conflict with header (first text line in list)
+     * 'conflictHeader is ignored.
+     **/
+    static bool isIgnored( const QString & conflictHeader );
+
+    /**
+     * Ignore a conflict with header (first text line in list)
+     * 'conflictHeader'.
+     **/
+    static void ignore( const QString & conflictHeader );
+	
+    /**
+     * Reset all ignored conflicts as if the user had never selected any
+     * conflict to ignore.
+     **/
+    static void resetIgnoredConflicts();
 
 protected:
 
     /**
-     * Format the text line for this item.
+     * Format the text heading line for this item.
      **/
-    void formatLine();
+    void formatHeading();
 
     /**
      * Dump all relevant lists from the internal ErrorResult into the conflict
@@ -221,6 +262,12 @@ protected:
     QListViewItem *		_resolutionsHeader;
     PkgDep::ErrorResult		_conflict;
     YQPkgConflictList *		_parentList;
+
+    
+    /**
+     * Conflicts that are to be ignored.
+     **/
+    static QMap<QString, bool> _ignore;
 };
 
 
@@ -257,7 +304,7 @@ public:
      * Returns the resolution type as string.
      **/
     const char * typeString() const;
-    
+
 protected:
 
     // Data members
