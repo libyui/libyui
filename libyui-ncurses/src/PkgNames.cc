@@ -950,6 +950,13 @@ const NCstring PkgNames::RequiredByText()
     return value;
 }
 
+const NCstring PkgNames::NotAvailableText()
+{
+    // part of a text
+    static const NCstring value = _( "is not available" );
+    return value;
+}
+
 const NCstring PkgNames::MoreText()
 {
     // part of a text

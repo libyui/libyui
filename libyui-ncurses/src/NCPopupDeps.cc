@@ -379,7 +379,8 @@ bool NCPopupDeps::addDepsLine( NCPkgTable * table,
 	if ( kind == PkgNames::RequByText().str()
 	     && !objPtr )
 	{
-	    string notAvail = "(" + pkgName + " is not available)";
+	    string notAvail = "(" + pkgName + " "
+		               + PkgNames::NotAvailableText().str() + ")";
 	    pkgLine.push_back( notAvail );
 	}
 	

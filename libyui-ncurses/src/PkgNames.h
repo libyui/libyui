@@ -738,6 +738,7 @@ public:
     static const NCstring NeedsText();
     static const NCstring ConflictText();
     static const NCstring NoConflictText();
+    static const NCstring NotAvailableText();
 
     static const NCstring MenuEtc();
     static const NCstring MenuDeps();
