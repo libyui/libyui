@@ -98,10 +98,11 @@ QString
 YQPkgGenericDetailsView::htmlEscape( const QString & plainText )
 {
     QString html = plainText;
+    // y2debug( "Escaping '%s'", (const char *) plainText );
 
+    html.replace( QRegExp( "&" ), "&amp;" );
     html.replace( QRegExp( "<" ), "&lt;"  );
     html.replace( QRegExp( ">" ), "&gt;"  );
-    html.replace( QRegExp( "&" ), "&amp;" );
     
     return html;
 }
