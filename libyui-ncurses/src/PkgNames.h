@@ -323,6 +323,11 @@ public:
     static const YCPString PackageHelp();
 
     /**
+     * The headline of the help YOU popup
+     */
+    static const YCPString YouHelp();
+
+    /**
      *  The label of the OK button
      */
     static const YCPString OKLabel();
@@ -369,8 +374,12 @@ public:
     static const NCstring HelpOnStatus2();
     static const NCstring HelpOnStatus3(); 
     static const NCstring HelpOnStatus();
-    
-    /**
+
+    static const NCstring YouHelp1();
+    static const NCstring YouHelp2();
+    static const NCstring YouHelp3();
+
+   /**
      * Part of help text used in installed system
      */
     static const NCstring HelpPkgPostInst();

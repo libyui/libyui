@@ -244,6 +244,13 @@ class PackageSelector
     * @return bool
     */
     bool HelpHandler( const NCursesEvent&  event );
+
+  /**
+    * Handler function for the "Help" button in YOU
+    * @param event The Ncurses event
+    * @return bool
+    */
+    bool YouHelpHandler( const NCursesEvent&  event );
     
    /**
     * Gets the required package info from package manager and shows it

@@ -120,7 +120,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
     eventHandlerMap[ PkgNames::GeneralHelp()->toString() ] = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::StatusHelp()->toString() ]  = &PackageSelector::HelpHandler;
     eventHandlerMap[ PkgNames::FilterHelp()->toString() ]  = &PackageSelector::HelpHandler;
-    // eventHandlerMap[ PkgNames::PatchHelp()->toString() ]  = &PackageSelector::HelpHandler;
+    eventHandlerMap[ PkgNames::PatchHelp()->toString() ]  = &PackageSelector::YouHelpHandler;
    
     if ( opt.youMode.value() )
 	youMode = true;
@@ -1054,7 +1054,6 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
 
     if ( event.selection.isNull() )
     {
-	NCMIL << "Event.selection is null ???????" << endl;
 	return false;
     }
     
@@ -1079,6 +1078,27 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
     // open the popup with the help text
     NCPopupInfo pkgHelp( wpos( 1, 1 ), PkgNames::PackageHelp(), text.YCPstr() );
     pkgHelp.showInfoPopup( );
+    
+    return true;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// YOUHelpHandler
+// 
+// Show the required disk space
+//
+bool PackageSelector::YouHelpHandler( const NCursesEvent&  event )
+{
+    NCstring text ( "" );
+
+    text += PkgNames::YouHelp1();
+    text += PkgNames::YouHelp2();
+    text += PkgNames::YouHelp3();
+
+    // open the popup with the help text
+    NCPopupInfo youHelp( wpos( 1, 1 ), PkgNames::YouHelp(), text.YCPstr() );
+    youHelp.showInfoPopup( );
     
     return true;
 }
