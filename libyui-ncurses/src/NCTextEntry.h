@@ -47,7 +47,8 @@ class NCTextEntry : public YTextEntry, public NCWidget {
     };
 
   private:
-
+    
+    bool     mayedit;
     bool     passwd;
     NClabel  label;
     wstring   buffer;

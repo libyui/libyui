@@ -44,6 +44,7 @@ NCTextEntry::NCTextEntry( NCWidget * parent, YWidgetOpt & opt,
 			  unsigned maxFld )
     : YTextEntry( opt, nlabel )
     , NCWidget( parent )
+    , mayedit( opt.isEditable.value() )
     , passwd( opt.passwordMode.value() )
     , label( nlabel )
     , lwin( 0 )
@@ -407,6 +408,11 @@ NCursesEvent NCTextEntry::wHandleInput( wint_t key )
   NCursesEvent ret;
   bool   beep   = false;
   bool   update = true;
+
+  if ( !mayedit )
+  {
+      return NCursesEvent::none;
+  }
 
   switch ( key ) {
 
