@@ -128,7 +128,7 @@ void NCPopupPkgDescr::createLayout( )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupPkgDescr::fillAutoChanges
+//	METHOD NAME : NCPopupPkgDescr::fillData
 //	METHOD TYPE : bool
 //
 //	DESCRIPTION :
@@ -144,7 +144,7 @@ bool NCPopupPkgDescr::fillData( PMPackagePtr & pkgPtr )
 
     pkgTable->drawList();
 
-    headline->setLabel( YCPString(pkgPtr->name().asString()) );
+    headline->setLabel( YCPString(pkgPtr->summary()) );
 
     descrText->setText( YCPString(packager->createDescrText(pkgPtr->description())) );
 
