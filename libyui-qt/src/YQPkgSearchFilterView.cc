@@ -267,7 +267,7 @@ YQPkgSearchFilterView::check( PMPackagePtr pkg, const QRegExp & regexp )
 bool
 YQPkgSearchFilterView::check( const string & attribute, const QRegExp & regexp )
 {
-    QString att    	= attribute.c_str();
+    QString att    	= fromUTF8( attribute );
     QString searchText	= _searchText->currentText();
 
     if ( _contains->isChecked() )
