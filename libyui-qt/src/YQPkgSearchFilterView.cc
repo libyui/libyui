@@ -85,7 +85,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
 
     _searchInName        = new QCheckBox( _( "&Name"        ), gbox ); CHECK_PTR( _searchInName        );
-    _searchInSummary     = new QCheckBox( _( "S&ummary"     ), gbox ); CHECK_PTR( _searchInSummary     );
+    _searchInSummary     = new QCheckBox( _( "Su&mmary"     ), gbox ); CHECK_PTR( _searchInSummary     );
     _searchInDescription = new QCheckBox( _( "Descri&ption" ), gbox ); CHECK_PTR( _searchInDescription );
 
     _searchInName->setChecked( true );

@@ -431,7 +431,7 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 		 this,         SLOT  ( resolveDependencies() ) );
 
 
-	_autoDependenciesCheckBox = new QCheckBox( _( "&Auto check" ), button_box );
+	_autoDependenciesCheckBox = new QCheckBox( _( "A&uto check" ), button_box );
 	CHECK_PTR( _autoDependenciesCheckBox );
 	_autoDependenciesCheckBox->setChecked( true );
     }
