@@ -239,7 +239,7 @@ YCPTerm NCPackageSelector::readLayoutFile( YNCursesUI *ui,
 	YCPValue layout = YCPNull ();
 
 	if ( parsed_code != NULL )
-	    layout = parsed_code->evaluate (true);
+	    layout = parsed_code->evaluate ();
 
 	if ( layout.isNull() )
 	{
@@ -248,10 +248,14 @@ YCPTerm NCPackageSelector::readLayoutFile( YNCursesUI *ui,
 	else
 	{
 	    layout = ui->evaluate (layout);
-	
-	    if ( !layout->isTerm() )
+
+	    if ( layout.isNull() )
 	    {
-		NCERR << "Error parsing layout file - layout must be a term" << endl;	
+		NCERR << "Error evaluating layout file" << endl;
+	    }
+	    else if ( !layout->isTerm() )
+	    {
+		NCERR << "Error evaluating layout file - layout must be a term" << endl;	
 	    }
 	    else
 	    {
