@@ -739,14 +739,14 @@ const string PkgNames::File()
 const string PkgNames::PreScript()
 {
     // a pre script (included in a YOU patch)
-    static const string value = _( "Pre Script" );
+    static const string value = _( "Pre-Script" );
     return value;
 }
 
 const string PkgNames::PostScript()
 {
     // a post script (included in aYOU patch)
-    static const string value = _( "Post Script" );
+    static const string value = _( "Post-Script" );
     return value;
 }
 
