@@ -230,7 +230,7 @@ void NCPopupDeps::evaluateErrorResult( PkgDep::ErrorResultList errorlist )
 	}
 	else 
 	{
-	    NCDBG << "No PMSolvablePtr for " << (*it) << endl;
+	    NCMIL << "No PMSolvablePtr for " << (*it) << endl;
 	}
 	
 	++it;
@@ -294,7 +294,7 @@ string NCPopupDeps::getDependencyKind(  PkgDep::ErrorResult error )
 {
     string ret = "";
 
-    // Get the type of the dependency - check all possibilities, last wins 
+    // Get the type of the dependency 
     // TO DO: better classification of dependency
 
     if ( !error.unresolvable.empty() )
@@ -308,11 +308,11 @@ string NCPopupDeps::getDependencyKind(  PkgDep::ErrorResult error )
 	    ret = PkgNames::UnresText().str();
 	}
     }
-    if ( !error.alternatives.empty() )
+    else if ( !error.alternatives.empty() )
     {
 	ret = PkgNames::NeedsText().str();
     }
-    if ( !error.conflicts_with.empty() )
+    else if ( !error.conflicts_with.empty() )
     {
 	ret = PkgNames::ConflictText().str();
 	if ( !error.remove_to_solve_conflict.empty() )
@@ -320,7 +320,7 @@ string NCPopupDeps::getDependencyKind(  PkgDep::ErrorResult error )
 	    NCDBG << "REMOVE to solve not empty" << endl;
 	}
     }
-    if ( !error.referers.empty() )
+    else if ( !error.referers.empty() )
     {
 	ret = PkgNames::RequByText().str();
     }
@@ -343,13 +343,10 @@ bool NCPopupDeps::concretelyDependency( int index )
     // get the ErrorResult
     PkgDep::ErrorResult error = dependencies[index];
 	
-    NCDBG << "*** Showing: " << error << endl;	
+    NCMIL << "*** Showing: " << error << endl;	
 
-    // Go through all variables which may contain information about package
-    // dependencies. Add all info to the list of dependency packages.
-    // The error label is set to the last match - like above in getDependencyKind().
-    // TO DO: better classification of dependency
-
+    // get the dependencies
+    
     if ( !error.unresolvable.empty() )
     {
 	bool require = false;
@@ -392,7 +389,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    errorLabel2->setLabel(  YCPString( "" ) );
 	}
     }
-    if ( !error.alternatives.empty() )
+    else if ( !error.alternatives.empty() )
     {
 	list<PkgDep::Alternative>::iterator it = error.alternatives.begin();
 	while ( it != error.alternatives.end() )
@@ -417,7 +414,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 	errorLabel1->setLabel( PkgNames::LabelAlternative() );
 	errorLabel2->setLabel( YCPString( "" ) );
     }
-    if ( !error.conflicts_with.empty() )
+    else if ( !error.conflicts_with.empty() )
     {
 	list<PkgDep::RelInfo>::iterator it = error.conflicts_with.begin();
 	while ( it != error.conflicts_with.end() )
@@ -456,7 +453,7 @@ bool NCPopupDeps::concretelyDependency( int index )
 	errorLabel1->setLabel( PkgNames::LabelConflict1() );
 	errorLabel2->setLabel( PkgNames::LabelConflict2() );
     }
-    if ( !error.referers.empty() )
+    else if ( !error.referers.empty() )
     {
 	list<PkgDep::RelInfo>::iterator it = error.referers.begin();
 	while ( it != error.referers.end() )

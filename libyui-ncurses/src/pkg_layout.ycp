@@ -29,8 +29,9 @@
 					     `item( `id(`delete), 	_( "&Delete      [-]") ),
 					     `item( `id(`update), 	_( "&Update      [>]") ),
 					     `item( `id(`tabooOn), 	_( "Taboo &yes  [F4]") ),
-					     `item( `id(`tabooOff), 	_( "Taboo &no   [F5]") ),
-					     `item( `id(`toggleSrc), 	_( "SP&M yes/no" ) ) ]
+					     `item( `id(`tabooOff), 	_( "Taboo &no   [F5]") )
+					     //`item( `id(`toggleSrc), 	_( "SP&M yes/no" ) )
+					     ]
 					    )),
 			 // label Information menu ( keep it short! )
 			 `Left(`MenuButton( _("&Information"),
