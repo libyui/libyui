@@ -31,6 +31,8 @@
 #include "NCPopupInfo.h"
 #include "ObjectStatStrategy.h"
 
+#include <y2pm/PMPackageManager.h>
+
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////

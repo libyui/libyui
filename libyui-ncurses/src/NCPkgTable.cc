@@ -24,8 +24,9 @@
 #include "PackageSelector.h"
 #include <y2pm/PMSelectable.h>
 #include <Y2PM.h>
-#include <y2pm/PMManager.h>
-
+#include <y2pm/PMPackageManager.h>
+#include <y2pm/PMYouPatchManager.h>
+#include <y2pm/InstTarget.h>
 
 ///////////////////////////////////////////////////////////////////
 //

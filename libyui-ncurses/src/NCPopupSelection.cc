@@ -26,7 +26,7 @@
 
 #include <Y2PM.h>
 #include <y2pm/RpmDb.h>
-#include <y2pm/PMManager.h>
+#include <y2pm/PMSelectionManager.h>
 
 
 ///////////////////////////////////////////////////////////////////

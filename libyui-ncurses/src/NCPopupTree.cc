@@ -27,7 +27,7 @@
 #include "PackageSelector.h"
 
 #include <Y2PM.h>
-#include <y2pm/PMManager.h>
+#include <y2pm/PMPackageManager.h>
 
 ///////////////////////////////////////////////////////////////////
 //
