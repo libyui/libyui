@@ -44,7 +44,7 @@ using std::string;
 using std::vector;
 
 
-class YQUI :  public QApplication, public YUI
+class YQUI: public QObject, public YUI
 {
     Q_OBJECT
 public:
@@ -66,6 +66,12 @@ public:
      * Access the global Qt-UI.
      **/
     static YQUI * ui() { return _ui; }
+
+    /**
+     * Set the parent widget for embedding the UI into a KPart or KCMShell.
+     * Used by kyast.
+     **/
+    static void setEmbeddingParent( QWidget * p );
 
     /**
      * Returns the UI's default font.
@@ -192,7 +198,7 @@ public:
      * Are we running embedded into another application, e.g., inside the KDE
      * control center?
      **/
-    bool runningEmbedded() const { return _running_embedded; }
+    bool runningEmbedded() const { return _embeddingParent != 0; }
 
     /**
      * Block (or unblock) events. If events are blocked, any event sent
@@ -620,17 +626,6 @@ protected:
     bool _auto_activate_dialogs;
 
     /**
-     * Are we running embedded into another application, e.g., inside the KDE
-     * control center?
-     **/
-    bool _running_embedded;
-
-    /**
-     * Window ID for KDE control center
-     **/
-    QString _kcontrol_id;
-
-    /**
      * Global reference to the UI
      **/
     static YQUI * _ui;
@@ -659,6 +654,12 @@ protected:
      * Translator for the predefined Qt dialogs
      **/
     QTranslator _qtTranslations;
+
+    
+    /**
+     * Parent widget for embedding in a KPart or KCMShell
+     **/
+    static QWidget * _embeddingParent;
 };
 
 

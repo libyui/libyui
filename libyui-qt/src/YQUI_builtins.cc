@@ -241,7 +241,7 @@ void YQUI::askPlayMacro()
 
         if ( _do_exit_loop )
         {
-            exit_loop();
+            qApp->exit_loop();
         }
     }
 }

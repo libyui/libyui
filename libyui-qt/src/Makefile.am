@@ -103,8 +103,7 @@ liby2qt_la_SOURCES = 				\
 	QY2DiskUsageList.cc			\
 	QY2FloppyMountDialog.cc			\
 	QY2CharValidator.cc			\
-	QY2ListView.cc				\
-	QXEmbed.cc
+	QY2ListView.cc
 
 # the plugin adds the liby2 component interface
 
@@ -176,8 +175,7 @@ BUILT_SOURCES =					\
 	QY2DiskUsageList.moc			\
 	QY2FloppyMountDialog.moc		\
 	QY2CharValidator.moc			\
-	QY2ListView.moc				\
-	QXEmbed.moc
+	QY2ListView.moc
 
 
 YQUI_core.o YQUI_core.lo:					YQUI.moc
@@ -246,7 +244,6 @@ QY2DiskUsageList.o QY2DiskUsageList.lo:				QY2DiskUsageList.cc
 QY2FloppyMountDialog.o QY2FloppyMountDialog.lo:			QY2FloppyMountDialog.cc
 QY2CharValidator.o QY2CharValidator.lo:				QY2CharValidator.moc
 QY2ListView.o QY2ListView.lo:					QY2ListView.moc
-QXEmbed.o QXEmbed.lo:						QXEmbed.moc
 
 
 
@@ -313,7 +310,6 @@ QY2DiskUsageList.cc:			include/QY2DiskUsageList.h
 QY2FloppyMountDialog.cc:		include/QY2FloppyMountDialog.h
 QY2CharValidator.moc:			include/QY2CharValidator.h
 QY2ListView.moc:			include/QY2ListView.h
-QXEmbed.moc:				include/QXEmbed.h
 
 
 %.moc: include/%.h

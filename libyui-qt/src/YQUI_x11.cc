@@ -17,7 +17,6 @@
 
 /-*/
 
-#define USE_QT_CURSORS		1
 #define FORCE_UNICODE_FONT	0
 
 #include <qcursor.h>
@@ -38,13 +37,13 @@
 
 int YQUI::getDisplayWidth()
 {
-    return desktop()->width();
+    return qApp->desktop()->width();
 }
 
 
 int YQUI::getDisplayHeight()
 {
-    return desktop()->height();
+    return qApp->desktop()->height();
 }
 
 
@@ -77,82 +76,25 @@ long YQUI::defaultSize(YUIDimension dim) const
     if ( haveWM() )
 	return dim == YD_HORIZ ? _default_size.width() : _default_size.height();
     else
-	return dim == YD_HORIZ ? desktop()->width() : desktop()->height();
+	return dim == YD_HORIZ ? qApp->desktop()->width() : qApp->desktop()->height();
 }
 
 
 void
 YQUI::busyCursor( void )
 {
-#if USE_QT_CURSORS
-
-    setOverrideCursor( waitCursor );
-
-#else
-    /**
-     * There were versions of Qt where simply using
-     * QApplication::setOverrideCursor( waitCursor ) didn't work any more:
-     * We _need_ the WType_Modal flag for non-defaultsize dialogs (i.e. for
-     * popups), but Qt unfortunately didn't let such dialogs have a clock
-     * cursor.  :-(
-     *
-     * They might have their good reasons for this (whatever they are), so
-     * let's simply make our own busy cursors and set them to all widgets
-     * created thus far.
-     **/
-
-    QWidgetList * widget_list = allWidgets();
-    QWidgetListIt it( *widget_list );
-
-    while ( *it )
-    {
-	if ( ! (*it)->testWFlags( WType_Desktop ) )	// except desktop (root window)
-	{
-	    XDefineCursor( (*it)->x11Display(), (*it)->winId(), _busy_cursor->handle() );
-	}
-	++it;
-    }
-
-    if ( widget_list )
-	delete widget_list;
-#endif
+    qApp->setOverrideCursor( waitCursor );
 }
 
 
 void
 YQUI::normalCursor( void )
 {
-#if USE_QT_CURSORS
-
     if ( _busy_cursor_timer.isActive() )
 	_busy_cursor_timer.stop();
 
-    while ( overrideCursor() )
-	restoreOverrideCursor();
-#else
-    /**
-     * Restore the normal cursor for all widgets (undo busyCursor() ).
-     *
-     * Fortunately enough, Qt widgets keep track of their normal cursor
-     * (QWidget::cursor() ) so this can easily be restored - it's not always the
-     * arrow cursor - e.g., input fields (QLineEdit) have the "I-beam" cursor.
-     **/
-
-    QWidgetList * widget_list = allWidgets();
-    QWidgetListIt it( *widget_list );
-
-    while ( *it )
-    {
-	if ( ! (*it)->testWFlags( WType_Desktop ) )	// except desktop (root window)
-	{
-	    XDefineCursor( (*it)->x11Display(), (*it)->winId(), (*it)->cursor().handle() );
-	}
-	++it;
-    }
-
-    if ( widget_list )
-	delete widget_list;
-#endif
+    while ( qApp->overrideCursor() )
+	qApp->restoreOverrideCursor();
 }
 
 

@@ -40,18 +40,20 @@
 #include "utf8.h"
 
 #include "YQDialog.h"
-#include "QXEmbed.h"
 
 
 #define BUSY_CURSOR_TIMEOUT	200	// milliseconds
 
-YQUI * YQUI::_ui = 0;
+
+YQUI *		YQUI::_ui		= 0;
+QWidget *	YQUI::_embeddingParent	= 0;
+
 
 static void qMessageHandler( QtMsgType type, const char * msg );
 
 
 YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
-    : QApplication( argc, argv )
+    : QObject()
     , YUI( with_threads )
     , _main_win( NULL )
     , _main_dialog_id(0)
@@ -60,7 +62,6 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     , _loaded_heading_font( false )
     , _wm_close_blocked( false )
     , _auto_activate_dialogs( true )
-    , _running_embedded( false )
 {
     _ui				= this;
     _fatal_error		= false;
@@ -69,14 +70,21 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     _decorate_toplevel_window	= true;
     screenShotNameTemplate 	= "";
 
+    qInstallMsgHandler( qMessageHandler );
+    
+    if ( ! runningEmbedded() )
+	new QApplication( argc, argv );
+    
+    // Qt keeps track to a global QApplication in qApp.
+    CHECK_PTR( qApp );
+	
     qApp->installEventFilter( this );
-
     processCommandLineArgs( argc, argv );
 
     if ( _fullscreen )
     {
-	_default_size.setWidth ( desktop()->width()  );
-	_default_size.setHeight( desktop()->height() );
+	_default_size.setWidth ( qApp->desktop()->width()  );
+	_default_size.setHeight( qApp->desktop()->height() );
 	y2milestone( "-fullscreen: using %dx%d for `opt(`defaultsize)",
 		     _default_size.width(), _default_size.height() );
     }
@@ -86,7 +94,7 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 
 	QWidget * dummy = new QWidget();
 	dummy->hide();
-	setMainWidget(dummy);
+	qApp->setMainWidget( dummy );
 	_default_size = dummy->size();
 
 
@@ -97,8 +105,8 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 	{
 	    // 640x480 is the absolute minimum, but let's go for 800x600 if we can
 
-	    if ( desktop()->width()  >= 800 &&
-		 desktop()->height() >= 600  )
+	    if ( qApp->desktop()->width()  >= 800 &&
+		 qApp->desktop()->height() >= 600  )
 	    {
 		_default_size.setWidth ( 800 );
 		_default_size.setHeight( 600 );
@@ -115,8 +123,8 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     }
     else	// ! _have_wm
     {
-	_default_size.setWidth ( desktop()->width()  );
-	_default_size.setHeight( desktop()->height() );
+	_default_size.setWidth ( qApp->desktop()->width()  );
+	_default_size.setHeight( qApp->desktop()->height() );
     }
 
 
@@ -139,14 +147,17 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     if (_main_win) 
 	delete _main_win;
 
-    _main_win = new QVBox( 0, 0, wflags ); // parent, name, wflags
+    if ( _embeddingParent )
+	_main_win = new QVBox( _embeddingParent );
+    else
+	_main_win = new QVBox( 0, 0, wflags ); // parent, name, wflags
 
 
     // Create widget stack for `opt(`defaultsize) dialogs
 
     _widget_stack = new QWidgetStack( _main_win );
     _widget_stack->setFocusPolicy( QWidget::StrongFocus );
-    setMainWidget( _main_win );
+    qApp->setMainWidget( _main_win );
     _main_win->installEventFilter( this );
     _main_win->resize( _default_size );
 
@@ -158,7 +169,7 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 
     // Set window title
 
-    if ( _kcontrol_id.isEmpty() )
+    if ( ! runningEmbedded() )
     {
 	QString title( "YaST2" );
 	char hostname[ MAXHOSTNAMELEN+1 ];
@@ -175,12 +186,6 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 	    }
 	}
 	_main_win->setCaption( title );
-	_kcontrol_id = title;
-    }
-    else // --_kcontrol_id in command line
-    {
-	_running_embedded = true;
-	_main_win->setCaption( _kcontrol_id );
     }
 
 
@@ -196,7 +201,7 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     // "please wait" popup zoomed to near full screen that may be embedded -
     // with a large main window that opens somewhere else on the screen.
 
-    if ( ! _running_embedded )
+    if ( ! runningEmbedded() )
 	_main_win->hide();
     else
     {
@@ -207,8 +212,7 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 
     //  Init other stuff
 
-    setFont( currentFont() );
-    QXEmbed::initialize();
+    qApp->setFont( currentFont() );
     busyCursor();
 
     connect( & _user_input_timer,	SIGNAL( timeout()          ),
@@ -223,8 +227,6 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 
 void YQUI::processCommandLineArgs( int argc, char **argv )
 {
-#warning FIXME: Install qMessageHandler before QApplication constructor
-
     if ( argv )
     {
 	for( int i=0; i < argc; i++ )
@@ -241,19 +243,6 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 	    if      ( opt == QString( "-no-wm"	 	) )	_have_wm 			= false;
 	    else if ( opt == QString( "-fullscreen"	) )	_fullscreen 			= true;
 	    else if ( opt == QString( "-noborder" 	) )	_decorate_toplevel_window	= false;
-	    else if ( opt == QString( "-kcontrol_id"	) )
-	    {
-		if ( i+1 >= argc )
-		{
-		    y2error( "Missing arg for '--kcontrol_id'" );
-		}
-		else
-		{
-		    _kcontrol_id = argv[++i];
-		    y2milestone( "Starting with kcontrol_id='%s'",
-				 (const char *) _kcontrol_id );
-		}
-	    }
 	    else if ( opt == QString( "-macro"		) )
 	    {
 		if ( i+1 >= argc )
@@ -281,7 +270,6 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 			 "--help        this help text\n"
 			 "\n"
 			 "--macro <macro-file>        play a macro right on startup\n"
-			 "--_kcontrol_id <ID-String>   set KDE control center identification\n"
 			 "\n"
 			 "-no-wm, -noborder etc. are accepted as well as --no-wm, --noborder\n"
 			 "to maintain backwards compatibility.\n"
@@ -307,6 +295,11 @@ YQUI::~YQUI()
 
     if ( _busy_cursor )
 	delete _busy_cursor;
+
+#if 0
+    if ( ! runningEmbedded() && qApp )
+	delete qApp;
+#endif
 }
 
 
@@ -339,7 +332,7 @@ void YQUI::idleLoop( int fd_ycp )
     notifier->setEnabled( true );
 
     while ( !_leave_idle_loop )
-	processOneEvent();
+	qApp->processOneEvent();
 
     delete notifier;
 }
@@ -358,7 +351,7 @@ void YQUI::sendEvent( YEvent * event )
 	_event_handler.sendEvent( event );
 
 	if ( _do_exit_loop )
-	    exit_loop();
+	    qApp->exit_loop();
     }
 }
 
@@ -386,7 +379,7 @@ YEvent * YQUI::userInput( unsigned long timeout_millisec )
 
 	while ( ! pendingEvent() )
 	{
-	    enter_loop();
+	    qApp->enter_loop();
 	}
 
 	_do_exit_loop = false;
@@ -420,7 +413,7 @@ YEvent * YQUI::pollInput()
 	if ( dialog )
 	{
 	    dialog->activate( true );
-	    processEvents();
+	    qApp->processEvents();
 	    event = _event_handler.consumePendingEvent();
 	    dialog->activate( false );
 	}
@@ -497,12 +490,11 @@ void YQUI::showDialog( YDialog * dialog )
     }
     else	// non-defaultsize dialog
     {
-	qw->setCaption( _kcontrol_id );
 	qw->show();
     }
 
     ( (YQDialog *) dialog)->ensureOnlyOneDefaultButton();
-    processEvents();
+    qApp->processEvents();
 }
 
 
@@ -522,7 +514,7 @@ void YQUI::closeDialog( YDialog * dialog )
 
 	if ( --_main_dialog_id < 1 )	// nothing left on the stack
 	{
-	    if ( ! _running_embedded )
+	    if ( ! runningEmbedded() )
 	    {
 		// y2milestone( "Hiding main window" );
 		_main_win->hide();
@@ -576,6 +568,12 @@ void YQUI::easterEgg()
 QString YQUI::productName() const
 {
     return fromUTF8( YUI::productName() );
+}
+
+
+void YQUI::setEmbeddingParent( QWidget * p )
+{
+    _embeddingParent = p;
 }
 
 
