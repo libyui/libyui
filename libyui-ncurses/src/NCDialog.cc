@@ -33,7 +33,7 @@
 #endif
 
 /*
-  Textdomain "packages"
+  Textdomain "ncurses"
 */
 
 
@@ -104,7 +104,7 @@ void NCDialog::_init( YWidgetOpt & opt )
 {
   NCurses::RememberDlg( this );
 
-  setTextdomain( "packages" );
+  setTextdomain( "ncurses" );
   
   _init_size();
 
@@ -1119,10 +1119,24 @@ void NCDialog::processInput( int timeout_millisec )
 	 if ( !helpPopup )
 	 {
 	     string helpText = "";
-	     bool hasF1 = describeFunctionKeys( helpText ) ;
-	     helpPopup = new NCPopupInfo( wpos(1,1),  PkgNames::TextmodeHelp(),
-					  YCPString( (hasF1?PkgNames::TextmodeHelp1():PkgNames::TextmodeHelp2()) +
-						     PkgNames::TextmodeHelp3() +
+	     string helpIntro = "";
+	     bool hasF1 = describeFunctionKeys( helpText );
+	     if ( hasF1 )
+	     {
+		 // part of help for textmode navigation (shown if there is further help available) 
+		 helpIntro = _( "<p>Press <b>F1</b> again to get further help or <b>ESC</b> to close this dialog.</p>" );
+	     }
+	     else
+	     {
+                 // part of help for text mode navigation
+		 helpIntro =  _( "<p>Press <b>F1</b> or <b>ESC</b> to close this dialog.</p>" );
+	     }
+		 
+	     helpPopup = new NCPopupInfo( wpos(1,1),
+					   // headline of the text mode help
+					  _( "Text Mode Navigation" ),
+					  YCPString( helpIntro +
+						     _( "<p>Function key bindings:</p>" ) +
 						     helpText
 						     ),
 					  "" );
@@ -1313,7 +1327,7 @@ bool NCDialog::describeFunctionKeys( string & helpText )
 
     for ( it = fkeys.begin(); it != fkeys.end(); ++it )
     {
-	sprintf( key, "F%2d: ", (*it).first );
+	sprintf( key, "F%-2d: ", (*it).first );
 	text += key + (*it).second + "<br>";
     }
 
