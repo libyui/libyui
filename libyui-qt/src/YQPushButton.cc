@@ -34,19 +34,17 @@
 #define BORDERSIZE QSize(BORDER, BORDER)
 #define FOCUS_CHANGES_DEFAULT_BUTTON 0
 
-YQPushButton::YQPushButton( YUIQt *	yuiqt,
-			    QWidget *	parent,
+YQPushButton::YQPushButton( 			    QWidget *	parent,
 			    YQDialog *	dialog,
 			    YWidgetOpt &opt,
 			    YCPString 	label )
     : QWidget( parent )
     , YPushButton( opt, label )
-    , yuiqt( yuiqt )
     , _dialog( dialog )
 {
-    setWidgetRep((QWidget *)this);
+    setWidgetRep( this );
     _qPushButton = new QPushButton( fromUTF8(label->value()), this);
-    _qPushButton->setFont( yuiqt->currentFont() );
+    _qPushButton->setFont( YUIQt::ui()->currentFont() );
     _qPushButton->setMinimumSize( 2, 2 );
     _qPushButton->setAutoDefault( true );
     _qPushButton->installEventFilter( this );
@@ -110,10 +108,10 @@ long YQPushButton::nicesize(YUIDimension dim)
 }
 
 
-void YQPushButton::setSize( long newwidth, long newheight )
+void YQPushButton::setSize( long newWidth, long newHeight )
 {
-    _qPushButton->resize(newwidth - 2 * BORDER, newheight - 2 * BORDER);
-    resize(newwidth, newheight);
+    _qPushButton->resize(newWidth - 2 * BORDER, newHeight - 2 * BORDER);
+    resize(newWidth, newHeight);
 }
 
 
@@ -152,7 +150,7 @@ void YQPushButton::activate()
 
 void YQPushButton::hit()
 {
-    yuiqt->returnNow( YUIInterpreter::ET_WIDGET, this );
+    YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }
 
 

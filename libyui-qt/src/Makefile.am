@@ -35,7 +35,6 @@ liby2qt_la_LIBADD = $(libpy2qt_la_LIBADD)
 liby2qt_la_SOURCES = 				\
 	YUIQt.cc				\
 	YQIconPool.cc				\
-	layoututils.cc				\
 						\
 	YQAlignment.cc				\
 	YQBarGraph.cc				\

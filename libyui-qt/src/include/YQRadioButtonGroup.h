@@ -23,7 +23,6 @@
 #include <qwidget.h>
 #include "YRadioButtonGroup.h"
 
-class YUIQt;
 class QButtonGroup;
 
 class YQRadioButtonGroup : public QWidget, public YRadioButtonGroup
@@ -34,7 +33,7 @@ public:
     /**
      * Creates a new YQRadioButtonGroup.
      */
-    YQRadioButtonGroup(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt);
+    YQRadioButtonGroup( QWidget *parent, YWidgetOpt &opt);
 
     /**
      * Cleans up
@@ -67,7 +66,7 @@ public:
     /**
      * Resize this widget
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
 
 private slots:

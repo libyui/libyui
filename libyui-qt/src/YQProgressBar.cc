@@ -34,26 +34,26 @@ using std::max;
 #define MARGIN			4	// around the widget
 
 
-YQProgressBar::YQProgressBar(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
+YQProgressBar::YQProgressBar( QWidget *parent, YWidgetOpt &opt,
 			     const YCPString& label,
 			     const YCPInteger& maxProgress, const YCPInteger& progress)
     : QVBox(parent)
     , YProgressBar(opt, label, maxProgress, progress)
 {
-    setWidgetRep((QWidget *)this);
+    setWidgetRep( this );
 
     setSpacing( SPACING );
     setMargin( MARGIN );
 
     qt_label = new QLabel(fromUTF8(label->value()), this);
     qt_label->setTextFormat(QLabel::PlainText);
-    qt_label->setFont(yuiqt->currentFont());
+    qt_label->setFont(YUIQt::ui()->currentFont());
     
     if ( label->value() == "" )
 	qt_label->hide();
 
     qt_progressbar = new QProgressBar(this);
-    qt_progressbar->setFont(yuiqt->currentFont());
+    qt_progressbar->setFont(YUIQt::ui()->currentFont());
     qt_progressbar->setTotalSteps(maxProgress->value());
     qt_label->setBuddy(qt_progressbar);
 
@@ -87,9 +87,9 @@ long YQProgressBar::nicesize(YUIDimension dim)
 }
 
 
-void YQProgressBar::setSize(long newwidth, long newheight)
+void YQProgressBar::setSize(long newWidth, long newHeight)
 {
-    resize(newwidth, newheight);
+    resize(newWidth, newHeight);
 }
 
 void YQProgressBar::setLabel(const YCPString &text)

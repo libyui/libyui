@@ -30,8 +30,7 @@
 #define MARGIN	 4
 
 
-YQPartitionSplitter::YQPartitionSplitter( YUIQt *		yuiqt,
-					  QWidget *		parent,
+YQPartitionSplitter::YQPartitionSplitter( 					  QWidget *		parent,
 					  YWidgetOpt &		opt,
 					  int			arg_usedSize,
 					  int			arg_totalFreeSize,
@@ -55,9 +54,8 @@ YQPartitionSplitter::YQPartitionSplitter( YUIQt *		yuiqt,
 			  arg_newPartLabel,
 			  arg_freeFieldLabel,
 			  arg_newPartFieldLabel )
-    , yuiqt( yuiqt )
 {
-    setWidgetRep( (QWidget *) this );
+    setWidgetRep( this );
 
     countShowDelta = opt.countShowDelta.value();
 
@@ -88,7 +86,7 @@ YQPartitionSplitter::YQPartitionSplitter( YUIQt *		yuiqt,
     qt_freeFieldLabel = new QLabel( fromUTF8( freeFieldLabel()->value() ),
 				    labels_hbox );
     qt_freeFieldLabel->setTextFormat( QLabel::PlainText );
-    qt_freeFieldLabel->setFont( yuiqt->currentFont() );
+    qt_freeFieldLabel->setFont( YUIQt::ui()->currentFont() );
     qt_freeFieldLabel->setAlignment( Qt::AlignLeft );
 
 
@@ -97,7 +95,7 @@ YQPartitionSplitter::YQPartitionSplitter( YUIQt *		yuiqt,
     qt_newPartFieldLabel = new QLabel( fromUTF8( newPartFieldLabel()->value() ),
 				       labels_hbox );
     qt_newPartFieldLabel->setTextFormat( QLabel::PlainText );
-    qt_newPartFieldLabel->setFont( yuiqt->currentFont() );
+    qt_newPartFieldLabel->setFont( YUIQt::ui()->currentFont() );
     qt_newPartFieldLabel->setAlignment( Qt::AlignRight );
 
 
@@ -112,7 +110,7 @@ YQPartitionSplitter::YQPartitionSplitter( YUIQt *		yuiqt,
     qt_freeSizeField = new QSpinBox( minFreeSize(), maxFreeSize(),
 				     1, // step
 				     fields_hbox );
-    qt_freeSizeField->setFont( yuiqt->currentFont() );
+    qt_freeSizeField->setFont( YUIQt::ui()->currentFont() );
     qt_freeFieldLabel->setBuddy( qt_freeSizeField );
 
 
@@ -122,7 +120,7 @@ YQPartitionSplitter::YQPartitionSplitter( YUIQt *		yuiqt,
 				     1, // pageStep
 				     remainingFreeSize(),	// initial value
 				     QSlider::Horizontal, fields_hbox );
-    qt_freeSizeSlider->setFont( yuiqt->currentFont() );
+    qt_freeSizeSlider->setFont( YUIQt::ui()->currentFont() );
 
 
     // SpinBox for the new partition size
@@ -130,7 +128,7 @@ YQPartitionSplitter::YQPartitionSplitter( YUIQt *		yuiqt,
     qt_newPartSizeField = new QSpinBox( minNewPartSize(), maxNewPartSize(),
 					1, // step
 					fields_hbox );
-    qt_newPartSizeField->setFont( yuiqt->currentFont() );
+    qt_newPartSizeField->setFont( YUIQt::ui()->currentFont() );
     qt_newPartFieldLabel->setBuddy( qt_newPartSizeField );
 
     // Initialize all fields and the bar graph
@@ -203,7 +201,7 @@ void YQPartitionSplitter::setFreeSizeSlot( int newFreeSize )
     setValue( newPartSize );
 
     if ( getNotify() )
-	yuiqt->returnNow( YUIInterpreter::ET_WIDGET, this );
+	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }
 
 
@@ -219,7 +217,7 @@ void YQPartitionSplitter::setNewPartSizeSlot( int newPartSize )
 	setValue( newPartSize );
 	}
     if ( getNotify() )
-	yuiqt->returnNow( YUIInterpreter::ET_WIDGET, this );
+	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }
 
 

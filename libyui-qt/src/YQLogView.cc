@@ -27,24 +27,22 @@ using std::max;
 
 #include "utf8.h"
 #include "YUIQt.h"
-#include "layoututils.h"
 #include "YQLogView.h"
 
 
-YQLogView::YQLogView(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
+YQLogView::YQLogView( QWidget *parent, YWidgetOpt &opt,
 		     const YCPString & label, int visLines, int maxLines )
     : QVBox( parent )
     , YLogView( opt, label, visLines, maxLines )
-    , yuiqt(yuiqt)
 {
-    setWidgetRep((QWidget *)this);
+    setWidgetRep( this );
 
     qt_label = new QLabel( fromUTF8(label->value()), this );
     qt_label->setTextFormat( QLabel::PlainText );
-    qt_label->setFont( yuiqt->currentFont() );
+    qt_label->setFont( YUIQt::ui()->currentFont() );
 
     qt_text = new QMultiLineEdit( this );
-    qt_text->setFont( yuiqt->currentFont() );
+    qt_text->setFont( YUIQt::ui()->currentFont() );
     qt_text->setReadOnly( true );
     qt_text->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ));
 }
@@ -78,9 +76,9 @@ long YQLogView::nicesize( YUIDimension dim )
 }
 
 
-void YQLogView::setSize(long newwidth, long newheight)
+void YQLogView::setSize(long newWidth, long newHeight)
 {
-    resize(newwidth, newheight);
+    resize(newWidth, newHeight);
 }
 
 

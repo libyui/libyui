@@ -26,7 +26,6 @@
 
 #include "YReplacePoint.h"
 
-class YUIQt;
 class QWidget;
 
 class YQReplacePoint : public QWidget, public YReplacePoint
@@ -38,7 +37,7 @@ public:
     /**
      * Creates a new YQReplacePoint.
      */
-    YQReplacePoint(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt);
+    YQReplacePoint( QWidget *parent, YWidgetOpt &opt);
 
     /**
      * Inherited from YContainerWidget. Called when a child
@@ -56,7 +55,7 @@ public:
     /**
      * Sets the size
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 };
 
 

@@ -84,8 +84,6 @@
 #include "utf8.h"
 #include "YUIQt.h"
 #include "YQi18n.h"
-#include "layoututils.h"
-
 
 
 using std::max;
@@ -98,10 +96,9 @@ using std::max;
 
 
 
-YQPackageSelector::YQPackageSelector( YUIQt * yuiqt, QWidget *parent, YWidgetOpt & opt, const YCPString & floppyDevice )
+YQPackageSelector::YQPackageSelector( QWidget *parent, YWidgetOpt & opt, const YCPString & floppyDevice )
     : QVBox(parent)
     , YPackageSelector( opt )
-    , _yuiqt(yuiqt)
     , _floppyDevice( floppyDevice->value().c_str() )
 {
     setWidgetRep( this );
@@ -137,8 +134,8 @@ YQPackageSelector::YQPackageSelector( YUIQt * yuiqt, QWidget *parent, YWidgetOpt
 
 
     setTextdomain( "packages-qt" );
-    setFont( _yuiqt->currentFont() );
-    yuiqt->blockWmClose(); // Automatically undone after UI::RunPkgSelection()
+    setFont( YUIQt::ui()->currentFont() );
+    YUIQt::ui()->blockWmClose(); // Automatically undone after UI::RunPkgSelection()
     _installedPkgs = Y2PM::instTarget().numPackages();
 
     _pkgConflictDialog = new YQPkgConflictDialog( &( Y2PM::packageManager() ), this );
@@ -779,8 +776,8 @@ YQPackageSelector::makeConnections()
     // Handle WM_CLOSE like "Cancel"
     //
 
-    connect( _yuiqt, SIGNAL( wmClose() ),
-	     this,   SLOT  ( reject()   ) );
+    connect( YUIQt::ui(),	SIGNAL( wmClose() ),
+	     this,		SLOT  ( reject()   ) );
 }
 
 
@@ -803,11 +800,11 @@ YQPackageSelector::manualResolvePackageDependencies()
 	return QDialog::Accepted;
     }
 
-    YUIQt::yuiqt()->busyCursor();
+    YUIQt::ui()->busyCursor();
 
     int result = _pkgConflictDialog->solveAndShowConflicts();
 
-    YUIQt::yuiqt()->normalCursor();
+    YUIQt::ui()->normalCursor();
 
 #if DEPENDENCY_FEEDBACK_IF_OK
 
@@ -833,7 +830,7 @@ YQPackageSelector::resolvePackageDependencies()
     }
 
 
-    YUIQt::yuiqt()->busyCursor();
+    YUIQt::ui()->busyCursor();
 
     QColor oldBackground;
 
@@ -849,7 +846,7 @@ YQPackageSelector::resolvePackageDependencies()
     if ( _checkDependenciesButton )
 	_checkDependenciesButton->setPaletteBackgroundColor( oldBackground );
 
-    YUIQt::yuiqt()->normalCursor();
+    YUIQt::ui()->normalCursor();
 
     return result;
 }
@@ -911,7 +908,7 @@ YQPackageSelector::pkgExport()
     QString filename = fileDialog.askForSaveFileName();
 
 #if 0
-    QString filename = YUIQt::yuiqt()->askForSaveFileName( QString( "user.sel" ),	// startsWith
+    QString filename = YUIQt::ui()->askForSaveFileName( QString( "user.sel" ),	// startsWith
 							   QString( "*.sel;;*" ),	// filter
 							   _( "Save Package List" ) );
 #endif
@@ -1084,8 +1081,8 @@ YQPackageSelector::reject()
 	else
 	    Y2PM::selectionManager().RestoreState();
 
-	_yuiqt->setMenuSelection( YCPSymbol("cancel", true) );
-	_yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
+	YUIQt::ui()->setMenuSelection( YCPSymbol("cancel", true) );
+	YUIQt::ui()->returnNow( YUIInterpreter::ET_MENU, this );
     }
 }
 
@@ -1135,8 +1132,8 @@ YQPackageSelector::accept()
     else
 	Y2PM::selectionManager().ClearSaveState();
 
-    _yuiqt->setMenuSelection( YCPSymbol("accept", true) );
-    _yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
+    YUIQt::ui()->setMenuSelection( YCPSymbol("accept", true) );
+    YUIQt::ui()->returnNow( YUIInterpreter::ET_MENU, this );
 }
 
 

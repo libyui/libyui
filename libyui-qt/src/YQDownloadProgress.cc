@@ -25,29 +25,26 @@
 
 #include "utf8.h"
 #include "YUIQt.h"
-#include "layoututils.h"
 #include "YQDownloadProgress.h"
 
 
-YQDownloadProgress::YQDownloadProgress( YUIQt *		yuiqt,
-					QWidget *	parent,
+YQDownloadProgress::YQDownloadProgress( 					QWidget *	parent,
 					YWidgetOpt &	opt,
 					const YCPString &label,
 					const YCPString &filename,
 					int 		expectedSize)
     : QVBox( parent )
     , YDownloadProgress( opt, label, filename, expectedSize )
-    , yuiqt(yuiqt)
 {
-    setWidgetRep((QWidget *)this);
+    setWidgetRep( this );
     setMargin( YQWIDGET_BORDER );
 
     qt_label = new QLabel( fromUTF8(label->value()), this );
     qt_label->setTextFormat( QLabel::PlainText );
-    qt_label->setFont( yuiqt->currentFont() );
+    qt_label->setFont( YUIQt::ui()->currentFont() );
 
     qt_progress = new QProgressBar( this );
-    qt_progress->setFont( yuiqt->currentFont() );
+    qt_progress->setFont( YUIQt::ui()->currentFont() );
     qt_progress->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed));
 
     qt_progress->setTotalSteps( expectedSize );
@@ -74,9 +71,9 @@ long YQDownloadProgress::nicesize( YUIDimension dim )
 }
 
 
-void YQDownloadProgress::setSize(long newwidth, long newheight)
+void YQDownloadProgress::setSize(long newWidth, long newHeight)
 {
-    resize(newwidth, newheight);
+    resize(newWidth, newHeight);
 }
 
 

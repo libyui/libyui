@@ -34,27 +34,26 @@ using std::max;
 #define MARGIN			4	// around the widget
 
 
-YQTextEntry::YQTextEntry(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
+YQTextEntry::YQTextEntry( QWidget *parent, YWidgetOpt &opt,
 			 const YCPString &label, const YCPString &text)
     : QVBox(parent)
     , YTextEntry(opt, label)
-    , yuiqt(yuiqt)
     , _validator( 0 )
 {
-    setWidgetRep((QWidget *)this);
+    setWidgetRep( this );
 
     setSpacing( SPACING );
     setMargin( MARGIN );
 
-    qt_label = new QLabel(fromUTF8(label->value()), this);
-    qt_label->setTextFormat(QLabel::PlainText);
-    qt_label->setFont(yuiqt->currentFont());
+    qt_label = new QLabel( fromUTF8( label->value() ), this );
+    qt_label->setTextFormat( QLabel::PlainText );
+    qt_label->setFont( YUIQt::ui()->currentFont() );
 
     if ( label->value() == "" )
 	qt_label->hide();
 
     qt_lineedit = new QLineEdit(this);
-    qt_lineedit->setFont(yuiqt->currentFont());
+    qt_lineedit->setFont(YUIQt::ui()->currentFont());
     qt_lineedit->setText(fromUTF8(text->value()));
 
     qt_label->setBuddy(qt_lineedit);
@@ -93,9 +92,9 @@ long YQTextEntry::nicesize(YUIDimension dim)
 }
 
 
-void YQTextEntry::setSize(long newwidth, long newheight)
+void YQTextEntry::setSize(long newWidth, long newHeight)
 {
-    resize(newwidth, newheight);
+    resize(newWidth, newHeight);
 }
 
 void YQTextEntry::setText(const YCPString &text)
@@ -150,7 +149,7 @@ bool YQTextEntry::setKeyboardFocus()
 void YQTextEntry::changed(const QString&)
 {
     if (getNotify())
-	yuiqt->returnNow(YUIInterpreter::ET_WIDGET, this);
+	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
 }
 
 

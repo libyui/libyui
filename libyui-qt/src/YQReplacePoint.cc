@@ -25,11 +25,11 @@
 #include "YQReplacePoint.h"
 
 
-YQReplacePoint::YQReplacePoint(YUIQt *, QWidget *parent, YWidgetOpt &opt)
+YQReplacePoint::YQReplacePoint( QWidget *parent, YWidgetOpt &opt)
     : QWidget(parent)
     , YReplacePoint(opt)
 {
-    setWidgetRep((QWidget *)this);
+    setWidgetRep( this );
 }
 
 
@@ -45,10 +45,10 @@ void YQReplacePoint::setEnabling(bool enabled)
 }
 
 
-void YQReplacePoint::setSize(long newwidth, long newheight)
+void YQReplacePoint::setSize(long newWidth, long newHeight)
 {
-    resize(newwidth, newheight);
-    YReplacePoint::setSize(newwidth, newheight);
+    resize(newWidth, newHeight);
+    YReplacePoint::setSize(newWidth, newHeight);
 }
 
 #include "YQReplacePoint.moc.cc"

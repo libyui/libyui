@@ -27,8 +27,6 @@
 #include "YBarGraph.h"
 
 
-class YUIQt;
-
 class YQBarGraph : public QWidget, public YBarGraph
 {
     Q_OBJECT
@@ -36,14 +34,9 @@ class YQBarGraph : public QWidget, public YBarGraph
 public:
 
     /**
-     * Create a new YQBarGraph.
-     * @param yuiqt the YUIQt, for getting the font info
-     * @param parent the parent widget
-     * @param text the initial text of the label
-     * @param heading true if this should be a big Heading()
-     * @param output_field true if this should look like a read-only input field
+     * Constructor.
      */
-    YQBarGraph( YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt );
+    YQBarGraph( QWidget *parent, YWidgetOpt &opt );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -62,7 +55,7 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
 
     /**

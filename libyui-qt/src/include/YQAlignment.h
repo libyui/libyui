@@ -26,7 +26,6 @@
 
 #include "YAlignment.h"
 
-class YUIQt;
 class QWidget;
 
 class YQAlignment : public QWidget, public YAlignment
@@ -38,12 +37,12 @@ public:
     /**
      * Creates a new YQAlignment.
      */
-    YQAlignment(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, YAlignmentType halign, YAlignmentType valign);
+    YQAlignment( QWidget *parent, YWidgetOpt &opt, YAlignmentType halign, YAlignmentType valign);
 
     /**
      * Moves a child widget to a new position.
      */
-    void moveChild(YWidget *child, long newx, long newy);
+    void moveChild(YWidget *child, long newX, long newY);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -55,7 +54,7 @@ public:
     /**
      * Sets the size
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 };
 
 

@@ -28,7 +28,6 @@ using std::max;
 
 #include "utf8.h"
 #include "YUIQt.h"
-#include "layoututils.h"
 #include "YQMultiSelectionBox.h"
 
 #define DEFAULT_VISIBLE_LINES		5
@@ -39,22 +38,20 @@ using std::max;
 #define MARGIN				4	// around the widget
 
 
-YQMultiSelectionBox::YQMultiSelectionBox( YUIQt *		yuiqt,
-					  QWidget *		parent,
+YQMultiSelectionBox::YQMultiSelectionBox( 					  QWidget *		parent,
 					  YWidgetOpt &		opt,
 					  const YCPString &	label )
     : QVBox(parent)
     , YMultiSelectionBox(opt, label)
-    , yuiqt(yuiqt)
 {
-    setWidgetRep(this);
+    setWidgetRep( this );
 
     setSpacing( SPACING );
     setMargin( MARGIN );
 
     qt_label = new QLabel(fromUTF8(label->value()), this);
     qt_label->setTextFormat(QLabel::PlainText);
-    qt_label->setFont( yuiqt->currentFont() );
+    qt_label->setFont( YUIQt::ui()->currentFont() );
 
     qt_listview = new QListView( this );
     qt_listview->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ));
@@ -101,9 +98,9 @@ YQMultiSelectionBox::nicesize( YUIDimension dim )
 
 
 void
-YQMultiSelectionBox::setSize( long newwidth, long newheight )
+YQMultiSelectionBox::setSize( long newWidth, long newHeight )
 {
-    resize(newwidth, newheight);
+    resize(newWidth, newHeight);
 }
 
 
@@ -247,7 +244,7 @@ YQMultiSelectionBox::deselectAllItems()
 void YQMultiSelectionBox::slotSelected()
 {
     if ( getNotify() )
-	yuiqt->returnNow(YUIInterpreter::ET_WIDGET, this);
+	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
 }
 
 

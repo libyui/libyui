@@ -28,13 +28,13 @@
 #define VERTICAL_MARGIN		4
 
 
-YQBarGraph::YQBarGraph( YUIQt* yuiqt, QWidget *parent, YWidgetOpt &opt )
+YQBarGraph::YQBarGraph( QWidget *parent, YWidgetOpt &opt )
     : QWidget(parent)
     , YBarGraph(opt)
 {
-    setWidgetRep( (QWidget *) this );
+    setWidgetRep( this );
     _barGraph = new QY2BarGraph( this );
-    _barGraph->setFont( yuiqt->currentFont() );
+    _barGraph->setFont( YUIQt::ui()->currentFont() );
     _barGraph->move( HORIZONTAL_MARGIN, VERTICAL_MARGIN );
 }
 

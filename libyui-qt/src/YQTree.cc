@@ -18,10 +18,11 @@
 /-*/
 
 
-#include <qstring.h>
-#include <qlabel.h>
-#include <qlistview.h>
 #include <qheader.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qlistview.h>
+#include <qstring.h>
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
@@ -30,66 +31,66 @@ using std::max;
 
 #include "YUIQt.h"
 #include "utf8.h"
-#include "layoututils.h"
 #include "YQTree.h"
 
+#define YQWIDGET_BORDER 3
 
-YQTree::YQTree ( YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, const YCPString & label )
+YQTree::YQTree ( QWidget *parent, YWidgetOpt &opt, const YCPString & label )
     : QWidget	( parent )
     , YTree	( opt, label )
-    , yuiqt	( yuiqt	)
 {
-    setWidgetRep(this);
+    setWidgetRep( this );
 
     nextSerialNo = 0;
 
-    qt_label = new QLabel ( fromUTF8 ( label->value() ), this );
-    qt_label->setTextFormat ( QLabel::PlainText );
-    qt_label->setFont ( yuiqt->currentFont() );
+    qt_label = new QLabel( fromUTF8( label->value() ), this );
+    qt_label->setTextFormat( QLabel::PlainText );
+    qt_label->setFont( YUIQt::ui()->currentFont() );
 
-    listView = new QListView (this );
-    listView->setFont ( yuiqt->currentFont() );
+    listView = new QListView( this );
+    listView->setFont( YUIQt::ui()->currentFont() );
     listView->addColumn( "" );
     listView->header()->hide();
     listView->setRootIsDecorated ( true );
 
     qt_label->setBuddy ( listView );
-    oneUponTheOther ( this, qt_label, listView );
+    
+    QGridLayout *grid = new QGridLayout( this, 2,1, YQWIDGET_BORDER);
+    grid->addWidget( qt_label, 0,0);
+    grid->addWidget( listView, 1,0);
 
-    connect( listView, SIGNAL( selectionChanged ( void )), this, SLOT( slotSelected( void )));
+    connect( listView,	SIGNAL( selectionChanged ( void ) ),
+	     this, 	SLOT  ( slotSelected     ( void ) ) );
 }
 
 
 void YQTree::setLabel ( const YCPString &label )
 {
-    qt_label->setText ( fromUTF8 ( label->value() ) );
-    YTree::setLabel ( label );
+    qt_label->setText( fromUTF8( label->value() ) );
+    YTree::setLabel( label );
 }
 
 
 long YQTree::nicesize ( YUIDimension dim )
 {
-    if  ( dim == YD_HORIZ )  return max ( 200, qt_label->sizeHint().width() );
+    if  ( dim == YD_HORIZ )  return max( 200, qt_label->sizeHint().width() );
     else return 300 + qt_label->sizeHint().height();
 }
 
 
-void YQTree::setSize ( long newwidth, long newheight )
+void YQTree::setSize ( long newWidth, long newHeight )
 {
-    qt_label->resize ( min ( newwidth,  (long) ( qt_label->sizeHint().width() ) ),
-		       min ( newheight, (long) ( qt_label->sizeHint().height() )	 ) );
-    listView->resize ( newwidth, newheight - qt_label->height() );
-    resize ( newwidth, newheight );
+    qt_label->resize( min ( newWidth,  (long) ( qt_label->sizeHint().width() ) ),
+		      min ( newHeight, (long) ( qt_label->sizeHint().height() )	 ) );
+    listView->resize( newWidth, newHeight - qt_label->height() );
+    resize( newWidth, newHeight );
 }
 
 
 void YQTree::setEnabling ( bool enabled )
 {
-    qt_label->setEnabled ( enabled );
-    listView->setEnabled ( enabled );
-#if 0
-    listView->triggerUpdate ();
-#endif
+    qt_label->setEnabled( enabled );
+    listView->setEnabled( enabled );
 }
 
 
@@ -100,15 +101,15 @@ YQTree::rebuildTree()
 
     for ( YTreeItemListIterator it = items.begin(); it < items.end(); ++it )
     {
-	YQTreeItem *item = new YQTreeItem ( this,
-					    listView,
-					    *it,
-					    nextSerialNo++ );
+	YQTreeItem *item = new YQTreeItem( this,
+					   listView,
+					   *it,
+					   nextSerialNo++ );
 	YTreeItemList itemList = (*it)->itemList();
 
 	if ( itemList.size() > 0 )
 	{
-	    item->buildSubTree ( itemList, nextSerialNo );
+	    item->buildSubTree( itemList, nextSerialNo );
 	}
     }
 }
@@ -124,7 +125,7 @@ YQTree::getCurrentItem() const
 
 
 void
-YQTree::setCurrentItem ( YTreeItem * yit )
+YQTree::setCurrentItem( YTreeItem * yit )
 {
     YQTreeItem *it = findYQTreeItem( yit );
 
@@ -152,15 +153,15 @@ YQTree::setCurrentItem ( YTreeItem * yit )
 
 
 void
-YQTree::registerItem ( const YTreeItem *	orig,
-		       const YQTreeItem *	clone )
+YQTree::registerItem( const YTreeItem *		orig,
+		      const YQTreeItem *	clone )
 {
     yTreeItemToYQTreeItem.insert( (void *) orig, clone );
 }
 
 
 YQTreeItem *
-YQTree::findYQTreeItem ( const YTreeItem *	orig ) const
+YQTree::findYQTreeItem( const YTreeItem * orig ) const
 {
     return yTreeItemToYQTreeItem[ (void *) orig ];
 }
@@ -168,10 +169,10 @@ YQTree::findYQTreeItem ( const YTreeItem *	orig ) const
 
 // slots
 
-void YQTree::slotSelected ( void )
+void YQTree::slotSelected( void )
 {
     if (getNotify())
-	yuiqt->returnNow(YUIInterpreter::ET_WIDGET, this);
+	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
 }
 
 
@@ -188,30 +189,30 @@ YQTree::setKeyboardFocus()
 
 
 
-YQTreeItem::YQTreeItem ( YQTree	*		tree,
-			 QListView *		parent,
-			 const YTreeItem *	yTreeItem,
-			 int			serial )
-    : QListViewItem	( parent )
+YQTreeItem::YQTreeItem( YQTree	*		tree,
+			QListView *		parent,
+			const YTreeItem *	yTreeItem,
+			int			serial )
+    : QListViewItem( parent )
 {
     init ( tree, yTreeItem, serial );
 }
 
 
-YQTreeItem::YQTreeItem ( YQTree	*		tree,
-			 YQTreeItem *		parent,
-			 const YTreeItem *	yTreeItem,
-			 int			serial )
-    : QListViewItem	( parent )
+YQTreeItem::YQTreeItem( YQTree	*		tree,
+			YQTreeItem *		parent,
+			const YTreeItem *	yTreeItem,
+			int			serial )
+    : QListViewItem( parent )
 {
     init ( tree, yTreeItem, serial );
 }
 
 
 void
-YQTreeItem::init ( YQTree *		yqtree,
-		   const YTreeItem *	yTreeItem,
-		   int			serial )
+YQTreeItem::init( YQTree *		yqtree,
+		  const YTreeItem *	yTreeItem,
+		  int			serial )
 {
     tree = yqtree;
     tree->registerItem ( yTreeItem, this );
@@ -223,7 +224,7 @@ YQTreeItem::init ( YQTree *		yqtree,
 
 
 void
-YQTreeItem::buildSubTree ( YTreeItemList &items, int &nextSerialNo )
+YQTreeItem::buildSubTree( YTreeItemList &items, int &nextSerialNo )
 {
     for ( YTreeItemListIterator it = items.begin(); it < items.end(); ++it )
     {
@@ -242,7 +243,7 @@ YQTreeItem::buildSubTree ( YTreeItemList &items, int &nextSerialNo )
 
 
 QString
-YQTreeItem::key ( int column, bool ascending ) const
+YQTreeItem::key( int column, bool ascending ) const
 {
     /*
      * Sorting key for QListView internal sorting:

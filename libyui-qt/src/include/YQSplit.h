@@ -49,12 +49,12 @@ public:
     /**
      * Inherited from YWidget. Sets the new size of the widget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
     /**
      * Inherited from YSplit. Moves a child to a new position
      */
-    void moveChild(YWidget *child, long newx, long newy);
+    void moveChild(YWidget *child, long newX, long newY);
 };
 
 

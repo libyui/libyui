@@ -28,11 +28,11 @@
 #include "YQRadioButton.h"
 
 
-YQRadioButtonGroup::YQRadioButtonGroup(YUIQt *, QWidget *parent, YWidgetOpt &opt)
+YQRadioButtonGroup::YQRadioButtonGroup( QWidget *parent, YWidgetOpt &opt )
     : QWidget(parent)
     , YRadioButtonGroup(opt)
 {
-    setWidgetRep((QWidget *)this);
+    setWidgetRep( this );
     recursionCounter = 0;
 }
 
@@ -70,10 +70,10 @@ void YQRadioButtonGroup::setEnabling(bool enabled)
     QWidget::setEnabled(enabled);
 }
 
-void YQRadioButtonGroup::setSize(long newwidth, long newheight)
+void YQRadioButtonGroup::setSize(long newWidth, long newHeight)
 {
-    resize(newwidth, newheight);
-    YRadioButtonGroup::setSize(newwidth, newheight);
+    resize(newWidth, newHeight);
+    YRadioButtonGroup::setSize(newWidth, newHeight);
 }
 
 

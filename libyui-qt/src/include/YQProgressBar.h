@@ -31,16 +31,10 @@
 class QString;
 class QLabel;
 class QProgressBar;
-class YUIQt;
 
 class YQProgressBar : public QVBox, public YProgressBar
 {
     Q_OBJECT
-
-    /**
-     * Pointer to the ui class, for reporting events
-     */
-    YUIQt *yuiqt;
 
     /**
      * Pointer to the qt widget representing the label
@@ -61,7 +55,7 @@ public:
      * @param maxprogress the progress value for 100%
      * @param progress the current progress value
      */
-    YQProgressBar(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
+    YQProgressBar( QWidget *parent, YWidgetOpt &opt,
 		  const YCPString& label,
 		  const YCPInteger& maxprogress, const YCPInteger& progress);
 
@@ -81,7 +75,7 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
     /**
      * Change the ProgressBar label. Calls

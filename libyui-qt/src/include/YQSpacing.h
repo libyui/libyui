@@ -24,7 +24,6 @@
 #include <qwidget.h>
 #include "YSpacing.h"
 
-class YUIQt;
 
 class YQSpacing : public QWidget, public YSpacing
 {
@@ -34,7 +33,7 @@ public:
     /**
      * Constructor
      */
-    YQSpacing(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
+    YQSpacing( QWidget *parent, YWidgetOpt &opt,
 	      float size, bool horizontal, bool vertical );
 
     /**

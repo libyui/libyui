@@ -31,7 +31,6 @@
 class QString;
 class QLabel;
 class QLineEdit;
-class YUIQt;
 class QY2CharValidator;
 
 class YQTextEntry : public QVBox, public YTextEntry
@@ -46,7 +45,7 @@ public:
      * @param label Label to be shown above text entry
      * @param text initial text in the text entry
      */
-    YQTextEntry(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
+    YQTextEntry( QWidget *parent, YWidgetOpt &opt,
 		const YCPString& label, const YCPString& text);
 
     /**
@@ -66,7 +65,7 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
     /**
      * Set the text in the entry to a new value
@@ -105,10 +104,6 @@ protected slots:
 
 
 protected:
-    /**
-     * Pointer to the ui class, for reporting events
-     */
-    YUIQt *yuiqt;
 
     /**
      * Pointer to the qt widget representing the label

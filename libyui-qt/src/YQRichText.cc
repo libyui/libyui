@@ -27,14 +27,13 @@
 #include "YQRichText.h"
 
 
-YQRichText::YQRichText(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
+YQRichText::YQRichText( QWidget *parent, YWidgetOpt &opt,
 		       const YCPString& text)
     : QTextBrowser(parent)
     , YRichText(opt, text)
-    , yuiqt(yuiqt)
 {
-    setWidgetRep((QWidget *)this);
-    setFont(yuiqt->currentFont());
+    setWidgetRep( this );
+    setFont( YUIQt::ui()->currentFont() );
     setMargin(AlignRight);
     
     if ( opt.plainTextMode.value() )
@@ -84,9 +83,9 @@ long YQRichText::nicesize(YUIDimension dim)
 }
 
 
-void YQRichText::setSize(long newwidth, long newheight)
+void YQRichText::setSize(long newWidth, long newHeight)
 {
-    resize(newwidth, newheight);
+    resize(newWidth, newHeight);
 }
 
 
@@ -117,8 +116,8 @@ bool YQRichText::setKeyboardFocus()
 void YQRichText::setSource( const QString & name )
 {
     y2debug( "Selected hyperlink \"%s\"", (const char *) name );
-    yuiqt->setMenuSelection( YCPString( (const char *) name ) );
-    yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
+    YUIQt::ui()->setMenuSelection( YCPString( (const char *) name ) );
+    YUIQt::ui()->returnNow( YUIInterpreter::ET_MENU, this );
 }
 
 

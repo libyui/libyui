@@ -29,15 +29,15 @@
 #include "YLogView.h"
 
 
-class YUIQt;
-
 class YQLogView : public QVBox, public YLogView
 {
+    Q_OBJECT
+    
 public:
     /**
      * Constructor
      */
-    YQLogView(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
+    YQLogView( QWidget *parent, YWidgetOpt &opt,
 	      const YCPString & label, int visibleLines, int maxLines );
 
     /**
@@ -57,7 +57,7 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize( long newwidth, long newheight );
+    void setSize( long newWidth, long newHeight );
 
     /**
      * Accept the keyboard focus.
@@ -76,8 +76,6 @@ public:
 
 
 protected:
-
-    YUIQt 		*yuiqt;
 
     QLabel		*qt_label;
     QMultiLineEdit	*qt_text;

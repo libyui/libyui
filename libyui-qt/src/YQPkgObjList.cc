@@ -262,7 +262,7 @@ YQPkgObjList::setAllItemStatus( PMSelectable::UI_Status newStatus, bool force )
     if ( ! _editable )
 	return;
 
-    YUIQt::yuiqt()->busyCursor();
+    YUIQt::ui()->busyCursor();
     QListViewItem * listViewItem = firstChild();
 
     while ( listViewItem )
@@ -285,7 +285,7 @@ YQPkgObjList::setAllItemStatus( PMSelectable::UI_Status newStatus, bool force )
 	listViewItem = listViewItem->nextSibling();
     }
 
-    YUIQt::yuiqt()->normalCursor();
+    YUIQt::ui()->normalCursor();
     emit statusChanged();
 }
 

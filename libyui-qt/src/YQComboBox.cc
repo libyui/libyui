@@ -24,7 +24,6 @@
 #include <ycp/y2log.h>
 
 #include "utf8.h"
-#include "layoututils.h"
 #include "YUIQt.h"
 #include "QY2CharValidator.h"
 #include "YQComboBox.h"
@@ -32,23 +31,22 @@
 #define SPACING			4	// between subwidgets
 
 
-YQComboBox::YQComboBox(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
+YQComboBox::YQComboBox( QWidget *parent, YWidgetOpt &opt,
 		       const YCPString& label)
     : QVBox(parent)
     , YComboBox(opt, label)
-    , yuiqt(yuiqt)
     , _validator( 0 )
 {
-    setWidgetRep(this);
+    setWidgetRep( this );
     setSpacing( SPACING );
     setMargin( YQWIDGET_BORDER );
 
     qt_label = new QLabel(fromUTF8(label->value()), this);
     qt_label->setTextFormat(QLabel::PlainText);
-    qt_label->setFont(yuiqt->currentFont());
+    qt_label->setFont(YUIQt::ui()->currentFont());
 
     qt_combo_box = new QComboBox(opt.isEditable.value(), this);
-    qt_combo_box->setFont(yuiqt->currentFont());
+    qt_combo_box->setFont(YUIQt::ui()->currentFont());
 
     qt_label->setBuddy(qt_combo_box);
 
@@ -90,9 +88,9 @@ long YQComboBox::nicesize(YUIDimension dim)
 }
 
 
-void YQComboBox::setSize(long newwidth, long newheight)
+void YQComboBox::setSize(long newWidth, long newHeight)
 {
-    resize(newwidth, newheight);
+    resize(newWidth, newHeight);
 }
 
 
@@ -143,14 +141,14 @@ bool YQComboBox::setKeyboardFocus()
 void YQComboBox::slotSelected(int i)
 {
     if (getNotify())
-	yuiqt->returnNow(YUIInterpreter::ET_WIDGET, this);
+	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
 }
 
 
 void YQComboBox::textChanged(const QString &new_text)
 {
     if (getNotify())
-	yuiqt->returnNow(YUIInterpreter::ET_WIDGET, this);
+	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
 }
 
 

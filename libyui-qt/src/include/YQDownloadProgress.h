@@ -29,7 +29,6 @@
 
 class QLabel;
 class QProgressBar;
-class YUIQt;
 
 class YQDownloadProgress : public QVBox, public YDownloadProgress
 {
@@ -40,8 +39,7 @@ public:
     /**
      * Constructor.
      */
-    YQDownloadProgress( YUIQt *		yuiqt,
-			QWidget *	parent,
+    YQDownloadProgress( 			QWidget *	parent,
 			YWidgetOpt &	opt,
 			const YCPString &label,
 			const YCPString &filename,
@@ -63,7 +61,7 @@ public:
      * Set the new size of the widget.
      * Inherited from YWidget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
     /**
      * Change the label.
@@ -93,7 +91,6 @@ protected:
     QLabel *		qt_label;
     QProgressBar*	qt_progress;
     QTimer *		timer;
-    YUIQt *		yuiqt;
 };
 
 

@@ -25,7 +25,6 @@
 
 #include "utf8.h"
 #include "YUIQt.h"
-#include "layoututils.h"
 #include "YQTable.h"
 
 
@@ -81,15 +80,14 @@ YQListViewItem::YQListViewItem( YQTable *	 table,
 }
 
 
-YQTable::YQTable( YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, vector<string> header )
+YQTable::YQTable( QWidget *parent, YWidgetOpt &opt, vector<string> header )
     : QVBox( parent )
     , YTable( opt, header.size() )
-    , yuiqt( yuiqt )
     , last_item( 0 )
 {
     sort_by_insertion_order = true;
     enable_user_sort = ! opt.keepSorting.value();
-    setWidgetRep(this);
+    setWidgetRep( this );
     setMargin( YQWIDGET_BORDER );
 
     qt_listview = new QListView(this);
@@ -129,7 +127,7 @@ YQTable::YQTable( YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, vector<string>
 	}
     }
 
-    qt_listview->setFont(yuiqt->currentFont());
+    qt_listview->setFont(YUIQt::ui()->currentFont());
     qt_listview->setAllColumnsShowFocus(true);
 
     if (opt.immediateMode.value())
@@ -161,9 +159,9 @@ long YQTable::nicesize(YUIDimension dim)
 }
 
 
-void YQTable::setSize(long newwidth, long newheight)
+void YQTable::setSize(long newWidth, long newHeight)
 {
-    resize(newwidth, newheight);
+    resize(newWidth, newHeight);
 }
 
 
@@ -248,7 +246,7 @@ bool YQTable::setKeyboardFocus()
 
 void YQTable::slotSelected(QListViewItem *)
 {
-    if (getNotify()) yuiqt->returnNow(YUIInterpreter::ET_WIDGET, this);
+    if (getNotify()) YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
 }
 
 #include "YQTable.moc.cc"

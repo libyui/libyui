@@ -61,7 +61,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     // Headline
     QLabel * label = new QLabel( _( "Searc&h:" ), this );
     CHECK_PTR( label );
-    label->setFont( YUIQt::yuiqt()->headingFont() );
+    label->setFont( YUIQt::ui()->headingFont() );
 
     // Input field (combo box) for search text
     _searchText = new QComboBox( this );

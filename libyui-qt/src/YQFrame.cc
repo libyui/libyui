@@ -28,14 +28,14 @@ using std::max;
 #include "YQFrame.h"
 
 
-YQFrame::YQFrame( YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
+YQFrame::YQFrame( QWidget *parent, YWidgetOpt &opt,
 		  const YCPString &newLabel )
     : QGroupBox( parent )
     , YFrame( opt, newLabel )
 {
     QGroupBox::setTitle ( fromUTF8 ( getLabel()->value() ) );
-    setFont( yuiqt->currentFont() );
-    setWidgetRep ( (QWidget *) this );
+    setFont( YUIQt::ui()->currentFont() );
+    setWidgetRep ( this );
 }
 
 void YQFrame::setEnabling(bool enabled)
@@ -45,12 +45,12 @@ void YQFrame::setEnabling(bool enabled)
 
 
 void
-YQFrame::setSize ( long newwidth, long newheight )
+YQFrame::setSize ( long newWidth, long newHeight )
 {
-    resize ( newwidth, newheight );
+    resize ( newWidth, newHeight );
 
-    long newChildWidth  = max ( 0L, newwidth  - 2 * frameWidth() - 1 );
-    long newChildHeight = max ( 0L, newheight - frameWidth() - fontMetrics().height() - 1 );
+    long newChildWidth  = max ( 0L, newWidth  - 2 * frameWidth() - 1 );
+    long newChildHeight = max ( 0L, newHeight - frameWidth() - fontMetrics().height() - 1 );
 
     if ( numChildren() > 0 )
 	YContainerWidget::child(0)->setSize (newChildWidth, newChildHeight);

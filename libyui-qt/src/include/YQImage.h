@@ -27,10 +27,7 @@
 
 #include "YImage.h"
 #include "YUIInterpreter.h"
-#include "YUIQt.h"
 
-
-class YUIQt;
 
 class YQImage : public QLabel, public YImage
 {
@@ -41,17 +38,17 @@ public:
      * Creates a new image widget from a set of predefined
      * images.
      */
-    YQImage(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, YUIInterpreter::ImageType img);
+    YQImage( QWidget *parent, YWidgetOpt &opt, YUIInterpreter::ImageType img);
 
     /**
      * Creates a new image widget from a byteblock
      */
-    YQImage(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, const YCPByteblock & byteblock);
+    YQImage( QWidget *parent, YWidgetOpt &opt, const YCPByteblock & byteblock);
 
     /**
      * Creates a new image widget from a image file name
      */
-    YQImage(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, const YCPString & file_name);
+    YQImage( QWidget *parent, YWidgetOpt &opt, const YCPString & file_name);
 
     /**
      * Minimum size the widget should have to make it look and feel
@@ -63,14 +60,14 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
 private:
 
     /**
      * Common init method for all constructors
      **/
-    void init( YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt );
+    void init( QWidget *parent, YWidgetOpt &opt );
 
     /**
      * Set the pixmap contents. That weird name is to prevent overwriting a

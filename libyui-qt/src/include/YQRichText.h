@@ -28,8 +28,6 @@
 #include "YRichText.h"
 
 
-class YUIQt;
-
 class YQRichText : public QTextBrowser, public YRichText
 {
     Q_OBJECT
@@ -39,7 +37,7 @@ public:
     /**
      * Constructor
      */
-    YQRichText(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, const YCPString& text);
+    YQRichText( QWidget *parent, YWidgetOpt &opt, const YCPString& text);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -58,7 +56,7 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
     /**
      * Change the RichText text.
@@ -79,10 +77,6 @@ protected:
      **/
     void setSource( const QString & name );
     
-    /**
-     * Pointer to the ui for reporting events.
-     */
-    YUIQt *yuiqt;
 };
 
 #endif // YQRichText_h

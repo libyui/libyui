@@ -29,18 +29,12 @@
 #include "YSelectionBox.h"
 
 
-class YUIQt;
 class QLabel;
 class QListBox;
 
 class YQSelectionBox : public QVBox, public YSelectionBox
 {
     Q_OBJECT
-
-    /**
-     * Pointer to the ui
-     */
-    YUIQt *yuiqt;
 
     /**
      * Title label of the box
@@ -54,7 +48,7 @@ class YQSelectionBox : public QVBox, public YSelectionBox
 
 public:
 
-    YQSelectionBox(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, const YCPString& label);
+    YQSelectionBox( QWidget *parent, YWidgetOpt &opt, const YCPString& label);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -73,7 +67,7 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
     /**
      * Change the label text.

@@ -29,7 +29,6 @@
 
 
 class QPushButton;
-class YUIQt;
 class YQDialog;
 
 class YQPushButton : public QWidget, public YPushButton
@@ -40,8 +39,7 @@ public:
     /**
      * Constructor.
      */
-    YQPushButton( YUIQt * 	yuiqt,
-		  QWidget * 	parent,
+    YQPushButton( 		  QWidget * 	parent,
 		  YQDialog *	dialog,
 		  YWidgetOpt & 	opt,
 		  YCPString 	label );
@@ -68,7 +66,7 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
     /**
      * Changes the label of the button
@@ -150,7 +148,6 @@ protected:
 
     // Data members
 
-    YUIQt *		yuiqt;
     YQDialog *		_dialog;
     QPushButton *	_qPushButton;
     bool		_isDefault;

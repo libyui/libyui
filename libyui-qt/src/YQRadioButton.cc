@@ -36,17 +36,14 @@
 #define SPACING 8
 
 
-YQRadioButton::YQRadioButton(YUIQt *yuiqt,
-			     QWidget *parent,
+YQRadioButton::YQRadioButton( 			     QWidget *parent,
 			     YWidgetOpt &opt,
 			     YRadioButtonGroup *rbg,
 			     const YCPString& label, bool checked)
     : QGroupBox(parent)
     , YRadioButton(opt, label, rbg)
-    , yuiqt(yuiqt)
 {
-    setWidgetRep(this);
-
+    setWidgetRep( this );
     setFrameStyle(NoFrame);
 
     QBoxLayout *layout = new QBoxLayout(this, QBoxLayout::LeftToRight);
@@ -55,7 +52,7 @@ YQRadioButton::YQRadioButton(YUIQt *yuiqt,
     layout->addSpacing(SPACING);
     layout->addWidget(qt_radiobutton);
     layout->addSpacing(SPACING);
-    qt_radiobutton->setFont(yuiqt->currentFont());
+    qt_radiobutton->setFont(YUIQt::ui()->currentFont());
     qt_radiobutton->setChecked(checked);
 
     connect ( qt_radiobutton, SIGNAL ( toggled ( bool ) ),
@@ -70,10 +67,10 @@ long YQRadioButton::nicesize(YUIDimension dim)
 }
 
 
-void YQRadioButton::setSize(long newwidth, long newheight)
+void YQRadioButton::setSize(long newWidth, long newHeight)
 {
-    qt_radiobutton->resize(newwidth - 2*SPACING, newheight);
-    resize(newwidth, newheight);
+    qt_radiobutton->resize(newWidth - 2*SPACING, newHeight);
+    resize(newWidth, newHeight);
 }
 
 
@@ -121,7 +118,7 @@ bool YQRadioButton::setKeyboardFocus()
 void YQRadioButton::changed( bool newState )
 {
     if (getNotify() && newState)
-	yuiqt->returnNow(YUIInterpreter::ET_WIDGET, this);
+	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
 }
 
 

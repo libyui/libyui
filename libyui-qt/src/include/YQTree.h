@@ -30,7 +30,6 @@
 #include "YTree.h"
 
 
-class YUIQt;
 class QLabel;
 class YQTreeItem;
 
@@ -41,7 +40,7 @@ class YQTree : public QWidget, public YTree
 
 public:
 
-    YQTree ( YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, const YCPString & label );
+    YQTree ( QWidget *parent, YWidgetOpt &opt, const YCPString & label );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -60,7 +59,7 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize ( long newwidth, long newheight );
+    void setSize ( long newWidth, long newHeight );
 
     /**
      * Change the label text.
@@ -114,10 +113,6 @@ protected slots:
 
 
 protected:
-    /**
-     * Pointer to the ui.
-     */
-    YUIQt *yuiqt;
 
     /**
      * Title label of the box.

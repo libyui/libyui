@@ -26,24 +26,22 @@ using std::max;
 
 #include "utf8.h"
 #include "YUIQt.h"
-#include "layoututils.h"
 #include "YQMultiLineEdit.h"
 
 
-YQMultiLineEdit::YQMultiLineEdit( YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
+YQMultiLineEdit::YQMultiLineEdit( QWidget *parent, YWidgetOpt &opt,
 				  const YCPString & label, const YCPString & initialText )
     : QVBox( parent )
     , YMultiLineEdit( opt, label )
-    , yuiqt(yuiqt)
 {
-    setWidgetRep((QWidget *)this);
+    setWidgetRep( this );
 
     qt_label = new QLabel( fromUTF8(label->value() ), this );
     qt_label->setTextFormat( QLabel::PlainText );
-    qt_label->setFont( yuiqt->currentFont() );
+    qt_label->setFont( YUIQt::ui()->currentFont() );
 
     qt_multiLineEdit = new QMultiLineEdit( this );
-    qt_multiLineEdit->setFont( yuiqt->currentFont() );
+    qt_multiLineEdit->setFont( YUIQt::ui()->currentFont() );
     qt_multiLineEdit->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ));
     qt_multiLineEdit->setText( fromUTF8( initialText->value() ) );
     qt_label->setBuddy( qt_multiLineEdit );
@@ -79,9 +77,9 @@ long YQMultiLineEdit::nicesize( YUIDimension dim )
 }
 
 
-void YQMultiLineEdit::setSize(long newwidth, long newheight)
+void YQMultiLineEdit::setSize(long newWidth, long newHeight)
 {
-    resize(newwidth, newheight);
+    resize(newWidth, newHeight);
 }
 
 
@@ -117,7 +115,7 @@ bool YQMultiLineEdit::setKeyboardFocus()
 void YQMultiLineEdit::changed()
 {
     if (getNotify())
-	yuiqt->returnNow(YUIInterpreter::ET_WIDGET, this);
+	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
 }
 
 

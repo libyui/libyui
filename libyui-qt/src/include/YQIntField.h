@@ -34,7 +34,6 @@
 class QString;
 class QLabel;
 class QIntField;
-class YUIQt;
 
 class YQIntField : public QWidget, public YIntField
 {
@@ -45,8 +44,7 @@ public:
     /**
      * Constructor.
      */
-    YQIntField( YUIQt *			yuiqt,
-		QWidget *		parent,
+    YQIntField( 		QWidget *		parent,
 		YWidgetOpt &		opt,
 		const YCPString &	label,
 		int 			minValue,
@@ -69,7 +67,7 @@ public:
      * Set the new size of the widget.
      * Inherited from YWidget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
     /**
      * Change the IntField label.
@@ -105,7 +103,6 @@ protected:
     QSpinBox *	qt_spinbox;
     QVBox *	vbox;
     QHBox *	hbox;
-    YUIQt *	yuiqt;
 };
 
 

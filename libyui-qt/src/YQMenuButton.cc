@@ -33,17 +33,15 @@
 #define BORDER 3
 #define BORDERSIZE QSize(BORDER, BORDER)
 
-YQMenuButton::YQMenuButton(YUIQt *yuiqt,
-			   QWidget *parent,
+YQMenuButton::YQMenuButton( 			   QWidget *parent,
 			   YWidgetOpt &opt,
 			   YCPString label)
     : QWidget(parent)
     , YMenuButton(opt, label)
-    , yuiqt(yuiqt)
 {
-    setWidgetRep((QWidget *)this);
+    setWidgetRep( this );
     qt_pushbutton = new QPushButton( fromUTF8(label->value() ), this );
-    qt_pushbutton->setFont( yuiqt->currentFont() );
+    qt_pushbutton->setFont( YUIQt::ui()->currentFont() );
     qt_pushbutton->setMinimumSize( 2,2 );
     qt_pushbutton->installEventFilter( this );
     qt_pushbutton->move( BORDER, BORDER );
@@ -67,10 +65,10 @@ YQMenuButton::nicesize(YUIDimension dim)
 
 
 void
-YQMenuButton::setSize(long newwidth, long newheight)
+YQMenuButton::setSize(long newWidth, long newHeight)
 {
-    qt_pushbutton->resize(newwidth - 2 * BORDER, newheight - 2 * BORDER);
-    resize(newwidth, newheight);
+    qt_pushbutton->resize(newWidth - 2 * BORDER, newHeight - 2 * BORDER);
+    resize(newWidth, newHeight);
 }
 
 
@@ -94,7 +92,7 @@ void
 YQMenuButton::menuEntryActivated( int menu_item_index )
 {
     // y2debug( "Selected menu entry #%d", menu_item_index );
-    yuiqt->setMenuSelection( indexToId( menu_item_index ) );
+    YUIQt::ui()->setMenuSelection( indexToId( menu_item_index ) );
 
     /*
      * Defer the real returnNow() until all popup related events have been
@@ -108,15 +106,15 @@ YQMenuButton::menuEntryActivated( int menu_item_index )
      */
     QTimer::singleShot( 100, this, SLOT( returnNow() ) );
 
-    // yuiqt->wakeUpGuiThread ();
-    // yuiqt->processEvents ();
+    // YUIQt::ui()->wakeUpGuiThread ();
+    // YUIQt::ui()->processEvents ();
 }
 
 
 void
 YQMenuButton::returnNow()
 {
-    yuiqt->returnNow( YUIInterpreter::ET_MENU, this );
+    YUIQt::ui()->returnNow( YUIInterpreter::ET_MENU, this );
 }
 
 

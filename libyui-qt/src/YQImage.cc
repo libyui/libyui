@@ -34,12 +34,12 @@
 #define DEFAULT_OEM_LOGO	"/usr/share/YaST2/images/oem_logo.png"
 
 
-YQImage::YQImage(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
+YQImage::YQImage( QWidget *parent, YWidgetOpt &opt,
 		 YUIInterpreter::ImageType img)
     : QLabel(parent)
     , YImage(opt)
 {
-    init( yuiqt, parent, opt );
+    init( parent, opt );
     animated = false;
     
     QPixmap pixmap;
@@ -80,12 +80,12 @@ YQImage::YQImage(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
 }
 
 
-YQImage::YQImage(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
+YQImage::YQImage( QWidget *parent, YWidgetOpt &opt,
 		 const YCPByteblock& byteblock)
     : QLabel(parent)
     , YImage(opt)
 {
-    init( yuiqt, parent, opt );
+    init( parent, opt );
 
     if ( animated )
     {
@@ -102,11 +102,11 @@ YQImage::YQImage(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
 }
 
 
-YQImage::YQImage(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, const YCPString & ycp_file_name )
+YQImage::YQImage( QWidget *parent, YWidgetOpt &opt, const YCPString & ycp_file_name )
     : QLabel( parent )
     , YImage( opt)
 {
-    init( yuiqt, parent, opt );
+    init( parent, opt );
     QString file_name = fromUTF8( ycp_file_name->value() );
     y2debug( "Loading image from %s", (const char *) file_name );
 
@@ -140,9 +140,9 @@ YQImage::YQImage(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, const YCPString
 
 
 void
-YQImage::init( YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt )
+YQImage::init( QWidget *parent, YWidgetOpt &opt )
 {
-    setWidgetRep( (QWidget *)this );
+    setWidgetRep( this );
     setAlignment( Qt::AlignLeft | Qt::AlignTop );
 
     zeroWidth	= opt.zeroWidth.value();
@@ -159,9 +159,6 @@ YQImage::init( YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt )
 
     if ( zeroHeight )
 	setStretchable( YD_VERT,  true );
-    
-    if ( opt.easterEgg.value() )
-	yuiqt->suseheaderID = winId();
 }
 
 
@@ -206,9 +203,9 @@ long YQImage::nicesize( YUIDimension dim )
 }
 
 
-void YQImage::setSize( long newwidth, long newheight )
+void YQImage::setSize( long newWidth, long newHeight )
 {
-    resize( newwidth, newheight );
+    resize( newWidth, newHeight );
 }
 
 #include "YQImage.moc.cc"

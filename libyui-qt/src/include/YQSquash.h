@@ -26,7 +26,6 @@
 
 #include "YSquash.h"
 
-class YUIQt;
 class QWidget;
 
 class YQSquash : public QWidget, public YSquash
@@ -38,7 +37,7 @@ public:
     /**
      * Creates a new YQSquash.
      */
-    YQSquash(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, bool hsquash, bool vsquash);
+    YQSquash( QWidget *parent, YWidgetOpt &opt, bool hsquash, bool vsquash);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -50,7 +49,7 @@ public:
     /**
      * Sets the size
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 };
 
 

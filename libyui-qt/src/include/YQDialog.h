@@ -26,7 +26,6 @@
 #include "YDialog.h"
 
 
-class YUIQt;
 class YQPushButton;
 class QFrame;
 
@@ -39,8 +38,7 @@ public:
     /**
      * Constructor: Creates a new Qt dialog.
      */
-    YQDialog( YUIQt *		yuiqt,
-	      YWidgetOpt &	opt,
+    YQDialog( YWidgetOpt &	opt,
 	      QWidget *		qt_parent	= 0,
 	      bool		default_size	= false );
 
@@ -87,7 +85,7 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
     /**
      * Returns whether or not the user has resized this dialog.
@@ -193,7 +191,6 @@ protected:
     // Data members
     //
 
-    YUIQt *		yuiqt;
     QFrame *		_qFrame;
 
     bool  		_userResized;

@@ -20,11 +20,11 @@
 
 #include "YQEmpty.h"
 
-YQEmpty::YQEmpty(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt)
+YQEmpty::YQEmpty( QWidget *parent, YWidgetOpt &opt)
     : QWidget(parent)
     , YEmpty(opt)
 {
-    setWidgetRep((QWidget *)this);
+    setWidgetRep( this );
 }
 
 #include "YQEmpty.moc.cc"

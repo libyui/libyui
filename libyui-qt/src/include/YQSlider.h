@@ -34,7 +34,6 @@
 class QString;
 class QLabel;
 class QSlider;
-class YUIQt;
 
 class YQSlider : public QWidget, public YSlider
 {
@@ -45,8 +44,7 @@ public:
     /**
      * Constructor.
      */
-    YQSlider( YUIQt *		yuiqt,
-	      QWidget *		parent,
+    YQSlider( 	      QWidget *		parent,
 	      YWidgetOpt &	opt,
 	      const YCPString &	label,
 	      int 		minValue,
@@ -69,7 +67,7 @@ public:
      * Set the new size of the widget.
      * Inherited from YWidget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
     /**
      * Change the Slider label.
@@ -106,7 +104,6 @@ protected:
     QSpinBox *	qt_spinbox;
     QVBox *	vbox;
     QHBox *	hbox;
-    YUIQt *	yuiqt;
 };
 
 

@@ -27,8 +27,6 @@
 #include "YLabel.h"
 
 
-class YUIQt;
-
 class YQColoredLabel : public QLabel, public YLabel
 {
     Q_OBJECT
@@ -38,7 +36,7 @@ public:
     /**
      * Constructor.
      */
-    YQColoredLabel( YUIQt* yuiqt, QWidget *parent, YWidgetOpt &opt,
+    YQColoredLabel( QWidget *parent, YWidgetOpt &opt,
 		    YCPString text,
 		    YColor &fg, YColor &bg, int margin );
 
@@ -59,7 +57,7 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
     /**
      * Change the label text.

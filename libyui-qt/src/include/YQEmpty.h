@@ -25,7 +25,6 @@
 #include <qwidget.h>
 #include "YEmpty.h"
 
-class YUIQt;
 
 class YQEmpty : public QWidget, public YEmpty
 {
@@ -35,7 +34,7 @@ public:
     /**
      * Constructor
      */
-    YQEmpty(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt);
+    YQEmpty( QWidget *parent, YWidgetOpt &opt);
 };
 
 #endif // YQEmpty_h

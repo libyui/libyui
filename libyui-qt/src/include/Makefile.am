@@ -5,7 +5,6 @@
 pkgincludedir = $(includedir)/y2qt
 
 pkginclude_HEADERS =				\
-	layoututils.h				\
 	utf8.h					\
 	YQi18n.h				\
 	YUIQt.h					\

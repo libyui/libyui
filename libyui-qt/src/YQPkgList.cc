@@ -326,7 +326,7 @@ YQPkgList::updateActions( YQPkgObjListItem * pkgObjListItem )
 void
 YQPkgList::askExportList() const
 {
-    QString filename = YUIQt::yuiqt()->askForSaveFileName( "pkglist.txt",	// startsWith
+    QString filename = YUIQt::ui()->askForSaveFileName( "pkglist.txt",	// startsWith
 							   "*.txt",		// filter
 							   _( "Export Package List" ) );
     if ( ! filename.isEmpty() )

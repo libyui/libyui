@@ -26,7 +26,6 @@
 
 #include "YFrame.h"
 
-class YUIQt;
 class QWidget;
 
 class YQFrame : public QGroupBox, public YFrame
@@ -38,7 +37,7 @@ public:
     /**
      * Creates a new YQFrame.
      */
-    YQFrame ( YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, const YCPString &label );
+    YQFrame ( QWidget *parent, YWidgetOpt &opt, const YCPString &label );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -50,7 +49,7 @@ public:
     /**
      * Set the size.
      */
-    void setSize ( long newwidth, long newheight );
+    void setSize ( long newWidth, long newHeight );
 
     /**
      * Change the Frame label.

@@ -28,7 +28,6 @@
 #include "YMultiSelectionBox.h"
 
 
-class YUIQt;
 class QLabel;
 
 class YQMultiSelectionBox : public QVBox, public YMultiSelectionBox
@@ -37,7 +36,7 @@ class YQMultiSelectionBox : public QVBox, public YMultiSelectionBox
 
 public:
 
-    YQMultiSelectionBox(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, const YCPString& label);
+    YQMultiSelectionBox( QWidget *parent, YWidgetOpt &opt, const YCPString& label);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -56,7 +55,7 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
     /**
      * Change the label text.
@@ -136,11 +135,6 @@ private slots:
     
 protected:
     
-    /**
-     * Pointer to the ui
-     */
-    YUIQt *yuiqt;
-
     /**
      * Title label of the box
      */

@@ -29,16 +29,10 @@
 
 
 class QCheckBox;
-class YUIQt;
 
 class YQCheckBox : public QGroupBox, public YCheckBox
 {
     Q_OBJECT
-
-    /**
-     * Pointer to the ui class, for reporting events
-     */
-    YUIQt *yuiqt;
 
     /**
      * Pointer to the qt widget representing the text entry
@@ -59,7 +53,7 @@ public:
      * @param label Label to be shown above text entry
      * @param checked true, if the checkbox starts checked
      */
-    YQCheckBox(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
+    YQCheckBox( QWidget *parent, YWidgetOpt &opt,
 	       const YCPString& label, bool checked);
 
     /**
@@ -79,7 +73,7 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
     /**
      * Sets the checked-state of the checkbox

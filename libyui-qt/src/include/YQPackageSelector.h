@@ -56,8 +56,6 @@ class YQPkgVersionsView;
 class YQPkgYouPatchFilterView;
 class YQPkgYouPatchList;
 
-class YUIQt;
-
 
 class YQPackageSelector : public QVBox, public YPackageSelector
 {
@@ -65,7 +63,7 @@ class YQPackageSelector : public QVBox, public YPackageSelector
 
 public:
 
-    YQPackageSelector( YUIQt *yuiqt, QWidget *parent, YWidgetOpt & opt, const YCPString & floppyDevice );
+    YQPackageSelector( QWidget *parent, YWidgetOpt & opt, const YCPString & floppyDevice );
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -84,7 +82,7 @@ public:
     /**
      * Sets the new size of the widget.
      **/
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
     /**
      * Accept the keyboard focus.
@@ -282,7 +280,6 @@ protected:
 
     // Data members
 
-    YUIQt *				_yuiqt;
     bool				_youMode;
     bool				_updateMode;
     bool				_testMode;

@@ -10,10 +10,12 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YUIQt.h
+  File:		YUIQt.h
 
-  Author:     Mathias Kettner <kettner@suse.de>
-  Maintainer: Stefan Hundhammer <sh@suse.de>
+  Authors:	Mathias Kettner   <kettner@suse.de>,
+		Stefan Hundhammer <sh@suse.de>
+  
+  Maintainer:	Stefan Hundhammer <sh@suse.de>
 
 /-*/
 
@@ -27,6 +29,7 @@
 
 #include "YUIInterpreter.h"
 
+#define YQWIDGET_BORDER 3
 
 class QVBox;
 class QWidgetStack;
@@ -55,7 +58,7 @@ public:
     /**
      * Access the global Qt-UI.
      **/
-    static YUIQt * yuiqt() { return _yuiqt; }
+    static YUIQt * ui() { return _ui; }
 
     /**
      * Returns the UI's default font.
@@ -145,19 +148,16 @@ public:
     void internalError( const char *msg );
 
     /**
-     * ID of the suse header
-     */
-    int suseheaderID;
-
-    /**
-     * Inherited from YUIInterpreter:
-     * Show hourglass cursor
+     * Show hourglass cursor.
+     *
+     * Reimplemented from YUIInterpreter.
      */
     void busyCursor();
 
     /**
-     * Inherited from YUIInterpreter:
-     * Show pointer cursor
+     * Show pointer cursor.
+     *
+     * Reimplemented from YUIInterpreter.
      */
     void normalCursor();
 
@@ -192,133 +192,141 @@ signals:
 
 protected:
 
-    // Implement virtual functions inherited from YUIInterpreter
 
     /**
-     * Inherited from YUIInterpreter. Idle around until fd_ycp is readable.
-     * This is called only when a separate ui thread is running. It does
-     * for example repaints.
+     * Idle around until fd_ycp is readable and handle repaints.
+     * This is only used when a separate ui thread is running.
+     *
+     * Reimplemented from YUIInterpreter.
      */
-    void idleLoop(int fd_ycp);
+    void idleLoop( int fd_ycp );
 
     /**
      * Return a representation for the glyph symbol specified in UTF-8 encoding
      * or an empty string to get a default textual representation.
      *
-     * Inherited from YUIInterpreter.
+     * Reimplemented from YUIInterpreter.
      */
     YCPString glyph( const YCPSymbol & glyphSymbol );
 
     /**
-     * Inherited from YUIInterpreter. Go into event loop until next user input
-     * is received that is to be notified to the client component.
-     * @param dialog the dialog that should receive user input. Only one dialog
-     * can be active at a time.
+     * Go into event loop until next user input is received that is to be
+     * notified to the client component.  
+     *
+     * 'dialog' is the dialog that should receive user input - the topmost dialog.
+     *
+     * Reimplemented from YUIInterpreter.
      */
-    YWidget *userInput(YDialog *dialog, EventType *event);
+    YWidget *userInput( YDialog *dialog, EventType *event );
 
     /**
-     * Inherited from YUIInterpreter. Just look if a user input for the client
-     * component is pending and have a short look into my own event queue.
-     * @param dialog the dialog that should receive user input. Only one dialog
-     * can be active at a time.
+     * Check the event queue for user input. Don't wait.
+     *
+     * Reimplemented from YUIInterpreter.
      */
-    YWidget *pollInput(YDialog *dialog, EventType *event);
+    YWidget *pollInput( YDialog *dialog, EventType *event );
 
     /**
-     * Inherited from YUIInterpreter. Creates a dialog.
-     * @param widget Widget the dialog contains. Each dialog contains exactly one widget.
-     * @param opt the dialog options
+     * Create a dialog.
+     *
+     * Reimplemented from YUIInterpreter.
      */
-    YDialog *createDialog(YWidgetOpt &opt);
+    YDialog *createDialog( YWidgetOpt & opt );
 
     /**
-     * Inherited from YUIInterpreter. Shows and activates a previously created dialog.
-     * @param dialog dialog to show. Must be of type @ref YQDialog.
+     * Show and activate a dialog.
+     *
+     * Reimplemented from YUIInterpreter.
      */
-    void showDialog(YDialog *dialog);
+    void showDialog( YDialog * dialog );
 
     /**
-     * Inherited from YUIInterpreter. Decativates and closes a previously created dialog.
-     * Don't delete the dialog. This will be done at some other place.
-     * @param dialog dialog to close. Must be of type @ref YQDialog.
+     * Decativate and close a dialog. This does not delete the dialog yet.
+     *
+     * Reimplemented from YUIInterpreter.
      */
-    void closeDialog(YDialog *dialog);
+    void closeDialog( YDialog * dialog );
 
     /**
-     * Inherited from QObject: Grab show events and work around QWidgetStack bug
+     * Grab show events and work around QWidgetStack bug.
+     *
+     * Reimplemented from QObject.
      **/
-    bool eventFilter( QObject *obj, QEvent *ev );
+    bool eventFilter( QObject * obj, QEvent * ev );
 
     /**
-     * Make all UI windows usable without a mouse
-     * (even predefined Qt dialogs that don't know the UI's dialogs' activate()
-     * magic)
+     * Make all UI windows usable without a mouse - even predefined Qt dialogs
+     * that don't know the UI's dialogs' activate() magic.  
+     *
+     * Reimplemented from QObject.
      **/
     bool showEventFilter( QObject * obj, QEvent * ev );
 
-    /*** Widget creation methods, all inherited from YUIInterpreter ***/
+    
+    /*** Widget creation methods, all reimplemented from YUIInterpreter ***/
 
-    YContainerWidget *createAlignment		( YWidget *parent, YWidgetOpt & opt, YAlignmentType halign, YAlignmentType valign);
-    YContainerWidget *createFrame		( class YWidget *parent, YWidgetOpt & opt, const YCPString & label );
-    YContainerWidget *createRadioButtonGroup	( YWidget *parent, YWidgetOpt & opt);
-    YContainerWidget *createReplacePoint		( YWidget *parent, YWidgetOpt & opt);
-    YContainerWidget *createSplit		( YWidget *parent, YWidgetOpt & opt, YUIDimension dimension);
-    YContainerWidget *createSquash		( YWidget *parent, YWidgetOpt & opt, bool hsquash, bool vsquash);
-    YContainerWidget *createWeight		( YWidget *parent, YWidgetOpt & opt, YUIDimension dim, long weight);
+    YContainerWidget * createAlignment		( YWidget * parent, YWidgetOpt & opt, YAlignmentType horAlign, YAlignmentType vertAlign );
+    YContainerWidget * createFrame		( YWidget * parent, YWidgetOpt & opt, const YCPString & label );
+    YContainerWidget * createRadioButtonGroup	( YWidget * parent, YWidgetOpt & opt);
+    YContainerWidget * createReplacePoint	( YWidget * parent, YWidgetOpt & opt);
+    YContainerWidget * createSplit		( YWidget * parent, YWidgetOpt & opt, YUIDimension dimension);
+    YContainerWidget * createSquash		( YWidget * parent, YWidgetOpt & opt, bool hsquash, bool vsquash);
+    YContainerWidget * createWeight		( YWidget * parent, YWidgetOpt & opt, YUIDimension dim, long weight);
 
-    YWidget *createCheckBox		( YWidget *parent, YWidgetOpt & opt, const YCPString & label, bool checked);
-    YWidget *createComboBox		( YWidget *parent, YWidgetOpt & opt, const YCPString & label);
-    YWidget *createEmpty		( YWidget *parent, YWidgetOpt & opt);
-    YWidget *createImage		( YWidget *parent, YWidgetOpt & opt, ImageType img, YCPString defaulttext);
-    YWidget *createImage		( YWidget *parent, YWidgetOpt & opt, YCPByteblock imagedata, YCPString defaulttext);
-    YWidget *createImage		( YWidget *parent, YWidgetOpt & opt, YCPString file_name, YCPString defaulttext);
-    YWidget *createIntField		( YWidget *parent, YWidgetOpt & opt, const YCPString & label, int minValue, int maxValue, int initialValue);
-    YWidget *createLabel		( YWidget *parent, YWidgetOpt & opt, const YCPString & text);
-    YWidget *createLogView		( YWidget *parent, YWidgetOpt & opt, const YCPString & label, int visibleLines, int maxLines );
-    YWidget *createMultiLineEdit	( YWidget *parent, YWidgetOpt & opt, const YCPString & label, const YCPString & text);
-    YWidget *createProgressBar		( YWidget *parent, YWidgetOpt & opt, const YCPString & label, const YCPInteger & maxprogress, const YCPInteger & progress);
-    YWidget *createPackageSelector	( YWidget *parent, YWidgetOpt & opt, const YCPString & floppyDevice );
-    YWidget *createPushButton		( YWidget *parent, YWidgetOpt & opt, const YCPString & label);
-    YWidget *createMenuButton		( YWidget *parent, YWidgetOpt & opt, const YCPString & label);
-    YWidget *createRadioButton		( YWidget *parent, YWidgetOpt & opt, YRadioButtonGroup *rbg, const YCPString & label, bool checked);
-    YWidget *createRichText		( YWidget *parent, YWidgetOpt & opt, const YCPString & text);
-    YWidget *createSelectionBox		( YWidget *parent, YWidgetOpt & opt, const YCPString & label);
-    YWidget *createMultiSelectionBox	( YWidget *parent, YWidgetOpt & opt, const YCPString & label);
-    YWidget *createSpacing		( YWidget *parent, YWidgetOpt & opt, float size, bool horizontal, bool vertical);
-    YWidget *createTable		( YWidget *parent, YWidgetOpt & opt, vector<string> header);
-    YWidget *createTextEntry		( YWidget *parent, YWidgetOpt & opt, const YCPString & label, const YCPString & text);
-    YWidget *createTree			( YWidget *parent, YWidgetOpt & opt, const YCPString & label);
-    YWidget *createPkgSpecial		( YWidget *parent, YWidgetOpt & opt, const YCPString & subwidget );
+    YWidget * createCheckBox		( YWidget * parent, YWidgetOpt & opt, const YCPString & label, bool checked);
+    YWidget * createComboBox		( YWidget * parent, YWidgetOpt & opt, const YCPString & label);
+    YWidget * createEmpty		( YWidget * parent, YWidgetOpt & opt);
+    YWidget * createImage		( YWidget * parent, YWidgetOpt & opt, ImageType img, YCPString defaulttext);
+    YWidget * createImage		( YWidget * parent, YWidgetOpt & opt, YCPByteblock imagedata, YCPString defaulttext);
+    YWidget * createImage		( YWidget * parent, YWidgetOpt & opt, YCPString file_name, YCPString defaulttext);
+    YWidget * createIntField		( YWidget * parent, YWidgetOpt & opt, const YCPString & label, int minValue, int maxValue, int initialValue);
+    YWidget * createLabel		( YWidget * parent, YWidgetOpt & opt, const YCPString & text);
+    YWidget * createLogView		( YWidget * parent, YWidgetOpt & opt, const YCPString & label, int visibleLines, int maxLines );
+    YWidget * createMultiLineEdit	( YWidget * parent, YWidgetOpt & opt, const YCPString & label, const YCPString & text);
+    YWidget * createProgressBar		( YWidget * parent, YWidgetOpt & opt, const YCPString & label, const YCPInteger & maxprogress, const YCPInteger & progress);
+    YWidget * createPackageSelector	( YWidget * parent, YWidgetOpt & opt, const YCPString & floppyDevice );
+    YWidget * createPushButton		( YWidget * parent, YWidgetOpt & opt, const YCPString & label);
+    YWidget * createMenuButton		( YWidget * parent, YWidgetOpt & opt, const YCPString & label);
+    YWidget * createRadioButton		( YWidget * parent, YWidgetOpt & opt, YRadioButtonGroup *rbg, const YCPString & label, bool checked);
+    YWidget * createRichText		( YWidget * parent, YWidgetOpt & opt, const YCPString & text);
+    YWidget * createSelectionBox	( YWidget * parent, YWidgetOpt & opt, const YCPString & label);
+    YWidget * createMultiSelectionBox	( YWidget * parent, YWidgetOpt & opt, const YCPString & label);
+    YWidget * createSpacing		( YWidget * parent, YWidgetOpt & opt, float size, bool horizontal, bool vertical);
+    YWidget * createTable		( YWidget * parent, YWidgetOpt & opt, vector<string> header);
+    YWidget * createTextEntry		( YWidget * parent, YWidgetOpt & opt, const YCPString & label, const YCPString & text);
+    YWidget * createTree		( YWidget * parent, YWidgetOpt & opt, const YCPString & label);
+    YWidget * createPkgSpecial		( YWidget * parent, YWidgetOpt & opt, const YCPString & subwidget );
 
 
-    /*** Widget creation methods for optional widgets, all inherited from YUIInterpreter ***/
+    /*** Widget creation methods for optional widgets, all reimplemented from YUIInterpreter ***/
 
     bool 	hasBarGraph();
-    YWidget *	createBarGraph		(YWidget *parent, YWidgetOpt & opt);
+    YWidget *	createBarGraph		( YWidget *parent, YWidgetOpt & opt);
 
 
     bool 	hasColoredLabel();
-    YWidget *	createColoredLabel	(YWidget *parent, YWidgetOpt & opt,
-					 YCPString label,
-					 YColor foreground, YColor background,
-					 int margin );
+    YWidget *	createColoredLabel	( YWidget *		parent,
+					  YWidgetOpt & 		opt,
+					  YCPString 		label,
+					  YColor 		foreground,
+					  YColor 		background,
+					  int 			margin );
 
     bool 	hasDownloadProgress();
-    YWidget *	createDownloadProgress	( YWidget *parent,
-					  YWidgetOpt & opt,
-					  const YCPString & label,
-					  const YCPString & filename,
-					  int expectedSize);
+    YWidget *	createDownloadProgress	( YWidget *		parent,
+					  YWidgetOpt & 		opt,
+					  const YCPString & 	label,
+					  const YCPString & 	filename,
+					  int 			expectedSize );
 
 
     bool 	hasSlider();
-    YWidget *	createSlider		( YWidget *parent,
-					  YWidgetOpt & opt,
-					  const YCPString & label,
-					  int minValue,
-					  int maxValue,
-					  int initialValue );
+    YWidget *	createSlider		( YWidget *		parent,
+					  YWidgetOpt & 		opt,
+					  const YCPString & 	label,
+					  int 			minValue,
+					  int 			maxValue,
+					  int 			initialValue );
 
 
     bool 	hasPartitionSplitter();
@@ -344,7 +352,7 @@ public:
     /**
      *
      * Open a directory selection box and prompt the user for an existing directory.
-     * [Inherited from YUIInterpreter]
+     * [Reimplemented from YUIInterpreter]
      *
      * 'startDir' is the initial directory that is displayed.
      *
@@ -359,7 +367,7 @@ public:
 
     /**
      * Open a file selection box and prompt the user for an existing file.
-     * [Inherited from YUIInterpreter]
+     * [Reimplemented from YUIInterpreter]
      *
      * 'startWith' is the initial directory or file.
      *
@@ -378,7 +386,7 @@ public:
     /**
      * Open a file selection box and prompt the user for a file to save data to.
      * Automatically asks for confirmation if the user selects an existing file.
-     * [Inherited from YUIInterpreter]
+     * [Reimplemented from YUIInterpreter]
      *
      * 'startWith' is the initial directory or file.
      *
@@ -405,14 +413,14 @@ protected:
 
     /**
      * Sets the X input method according to the locale.
-     * [Inherited from YUIInterpreter]
+     * [Reimplemented from YUIInterpreter]
      */
     YCPValue setLanguage( const YCPTerm &term );
 
 
     /**
      * Display capabilities.
-     * [Inherited from YUIInterpreter]
+     * [Reimplemented from YUIInterpreter]
      * See UI builtin GetDisplayInfo() doc for details.
      **/
     int  getDisplayWidth();
@@ -554,7 +562,7 @@ private:
     /**
      * Global reference to the UI
      **/
-    static YUIQt * _yuiqt;
+    static YUIQt * _ui;
 
     /**
      * Indicate a fatal error that requires the UI to terminate

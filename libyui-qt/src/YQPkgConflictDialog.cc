@@ -247,7 +247,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
 	return result;
     }
 
-    YUIQt::yuiqt()->busyCursor();
+    YUIQt::ui()->busyCursor();
 
     if ( isVisible() )
     {
@@ -302,7 +302,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
     // autoInstall or autoUpdate. Make those changes known.
     emit updatePackages();
 
-    YUIQt::yuiqt()->normalCursor();
+    YUIQt::ui()->normalCursor();
 
     if ( success )	// Solving went without any complaints?
     {
@@ -314,14 +314,14 @@ YQPkgConflictDialog::solveAndShowConflicts()
     else		// There were solving problems.
     {
 	y2debug( "Dependency conflict!" );
-	YUIQt::yuiqt()->busyCursor();
+	YUIQt::ui()->busyCursor();
 
 	// Make the bad list human readable and fill the conflictList
 	// widget. During that process, filter out any conflicts the user
 	// previously chose to ignore.
 
 	_conflictList->fill( badList );
-	YUIQt::yuiqt()->normalCursor();
+	YUIQt::ui()->normalCursor();
 
 	if ( _conflictList->isEmpty() ) // No conflicts?
 	{

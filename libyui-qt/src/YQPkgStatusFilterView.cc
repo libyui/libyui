@@ -54,7 +54,7 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     // Headline
     QLabel * label = new QLabel( _( "Changes Overview" ), this );
     CHECK_PTR( label );
-    label->setFont( YUIQt::yuiqt()->headingFont() );
+    label->setFont( YUIQt::ui()->headingFont() );
 #endif
 
 

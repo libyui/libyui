@@ -26,7 +26,6 @@
 #include "YTable.h"
 
 
-class YUIQt;
 class QListView;
 class QListViewItem;
 class YQListViewItem;
@@ -46,7 +45,7 @@ public:
      * another item.
      * @param hshrinkable sets the horizontal nice size very small
      * @param vshrinkable sets the vertical nice size to one row */
-    YQTable(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, vector<string> header);
+    YQTable( QWidget *parent, YWidgetOpt &opt, vector<string> header);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -65,7 +64,7 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
     /**
      * Inherited from YTable. Is called, when an item has been added.
@@ -128,11 +127,6 @@ protected:
      * Helper function. Find item with given id.
      */
     QListViewItem *findItem(int index);
-
-    /**
-     * Pointer to the ui
-     */
-    YUIQt *yuiqt;
 
     /**
      * The Qt widget representing the table

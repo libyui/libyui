@@ -30,8 +30,7 @@
 #define MARGIN   2
 
 
-YQSlider::YQSlider( YUIQt *		yuiqt,
-		    QWidget *		parent,
+YQSlider::YQSlider( 		    QWidget *		parent,
 		    YWidgetOpt &	opt,
 		    const YCPString &	label,
 		    int 		minValue,
@@ -40,16 +39,15 @@ YQSlider::YQSlider( YUIQt *		yuiqt,
 
     : QWidget( parent )
     , YSlider( opt, label, minValue, maxValue, initialValue )
-    , yuiqt( yuiqt )
 {
-    setWidgetRep( (QWidget *) this );
+    setWidgetRep( this );
 
     vbox = new QVBox( this );
     vbox->setSpacing( VSPACING );
     vbox->setMargin( MARGIN );
     qt_label = new QLabel( fromUTF8(label->value() ), vbox );
     qt_label->setTextFormat( QLabel::PlainText );
-    qt_label->setFont(yuiqt->currentFont());
+    qt_label->setFont(YUIQt::ui()->currentFont());
     qt_label->setAlignment( Qt::AlignRight );
 
     hbox = new QHBox( vbox );
@@ -59,13 +57,13 @@ YQSlider::YQSlider( YUIQt *		yuiqt,
 			     1, // pageStep
 			     initialValue,
 			     QSlider::Horizontal, hbox );
-    qt_slider->setFont( yuiqt->currentFont() );
+    qt_slider->setFont( YUIQt::ui()->currentFont() );
 
     qt_spinbox = new QSpinBox( minValue, maxValue,
 			       1, // step
 			       hbox );
     qt_spinbox->setValue( initialValue );
-    qt_spinbox->setFont( yuiqt->currentFont() );
+    qt_spinbox->setFont( YUIQt::ui()->currentFont() );
 
     qt_label->setBuddy( qt_spinbox );
 
@@ -123,7 +121,7 @@ void YQSlider::setValueSlot( int newValue )
     setValue( newValue );
 
     if ( getNotify() )
-	yuiqt->returnNow( YUIInterpreter::ET_WIDGET, this );
+	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }
 
 

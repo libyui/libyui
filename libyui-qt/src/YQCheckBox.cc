@@ -36,15 +36,13 @@
 #define SPACING 8
 
 
-YQCheckBox::YQCheckBox(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
+YQCheckBox::YQCheckBox( QWidget *parent, YWidgetOpt &opt,
 		       const YCPString& label, bool checked)
     : QGroupBox(parent)
     , YCheckBox(opt, label)
-    , yuiqt(yuiqt)
     , dont_care(false)
 {
-    setWidgetRep(this);
-
+    setWidgetRep( this );
     setFrameStyle(NoFrame);
 
     QBoxLayout *layout = new QBoxLayout(this, QBoxLayout::LeftToRight);
@@ -53,7 +51,7 @@ YQCheckBox::YQCheckBox(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
     layout->addSpacing(SPACING);
     layout->addWidget(qt_checkbox);
     layout->addSpacing(SPACING);
-    qt_checkbox->setFont(yuiqt->currentFont());
+    qt_checkbox->setFont(YUIQt::ui()->currentFont());
     qt_checkbox->setChecked(checked);
 
     connect ( qt_checkbox, SIGNAL ( toggled ( bool ) ),
@@ -68,10 +66,10 @@ long YQCheckBox::nicesize(YUIDimension dim)
 }
 
 
-void YQCheckBox::setSize(long newwidth, long newheight)
+void YQCheckBox::setSize(long newWidth, long newHeight)
 {
-    qt_checkbox->resize(newwidth - 2*SPACING, newheight);
-    resize(newwidth, newheight);
+    qt_checkbox->resize(newWidth - 2*SPACING, newHeight);
+    resize(newWidth, newHeight);
 }
 
 
@@ -144,7 +142,7 @@ bool YQCheckBox::setKeyboardFocus()
 void YQCheckBox::changed( bool newState )
 {
     if (getNotify())
-	yuiqt->returnNow(YUIInterpreter::ET_WIDGET, this);
+	YUIQt::ui()->returnNow(YUIInterpreter::ET_WIDGET, this);
 }
 
 

@@ -143,7 +143,7 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
 void
 YQPkgChangesDialog::filter( bool byAuto, bool byApp, bool byUser )
 {
-    YUIQt::yuiqt()->busyCursor();
+    YUIQt::ui()->busyCursor();
     _pkgList->clear();
 
     PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
@@ -165,7 +165,7 @@ YQPkgChangesDialog::filter( bool byAuto, bool byApp, bool byUser )
 	++it;
     }
     
-    YUIQt::yuiqt()->normalCursor();
+    YUIQt::ui()->normalCursor();
 }
 
 

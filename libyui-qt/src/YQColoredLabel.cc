@@ -25,14 +25,14 @@
 #include "YQColoredLabel.h"
 
 
-YQColoredLabel::YQColoredLabel( YUIQt* yuiqt, QWidget *parent, YWidgetOpt &opt,
+YQColoredLabel::YQColoredLabel( QWidget *parent, YWidgetOpt &opt,
 				YCPString text,
 				YColor &fg, YColor &bg,
 				int margin )
     : QLabel(parent)
     , YLabel(opt, text)
 {
-    setWidgetRep((QWidget *)this);
+    setWidgetRep( this );
 
     setTextFormat(QLabel::PlainText);
     setText(fromUTF8(text->value()));
@@ -42,7 +42,7 @@ YQColoredLabel::YQColoredLabel( YUIQt* yuiqt, QWidget *parent, YWidgetOpt &opt,
     setMargin( margin );
     setAlignment( AlignLeft | AlignVCenter );
 
-    setFont( yuiqt->currentFont() );
+    setFont( YUIQt::ui()->currentFont() );
 
 }
 
@@ -59,9 +59,9 @@ long YQColoredLabel::nicesize(YUIDimension dim)
 }
 
 
-void YQColoredLabel::setSize(long newwidth, long newheight)
+void YQColoredLabel::setSize(long newWidth, long newHeight)
 {
-    resize(newwidth, newheight);
+    resize(newWidth, newHeight);
 }
 
 

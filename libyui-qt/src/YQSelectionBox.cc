@@ -29,7 +29,6 @@ using std::max;
 
 #include "utf8.h"
 #include "YUIQt.h"
-#include "layoututils.h"
 #include "YQSelectionBox.h"
 #include "YQDialog.h"
 
@@ -41,20 +40,19 @@ using std::max;
 #define MARGIN				4	// around the widget
 
 
-YQSelectionBox::YQSelectionBox(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
+YQSelectionBox::YQSelectionBox( QWidget *parent, YWidgetOpt &opt,
 			       const YCPString& label)
     : QVBox(parent)
     , YSelectionBox(opt, label)
-    , yuiqt(yuiqt)
 {
-    setWidgetRep(this);
+    setWidgetRep( this );
 
     setSpacing( SPACING );
     setMargin( MARGIN );
 
     qt_label = new QLabel(fromUTF8(label->value()), this);
     qt_label->setTextFormat(QLabel::PlainText);
-    qt_label->setFont(yuiqt->currentFont());
+    qt_label->setFont(YUIQt::ui()->currentFont());
 
     qt_listbox = new QListBox(this);
     qt_listbox->installEventFilter( this );
@@ -104,9 +102,9 @@ long YQSelectionBox::nicesize(YUIDimension dim)
 }
 
 
-void YQSelectionBox::setSize(long newwidth, long newheight)
+void YQSelectionBox::setSize(long newWidth, long newHeight)
 {
-    resize(newwidth, newheight);
+    resize(newWidth, newHeight);
 }
 
 
@@ -180,7 +178,7 @@ void YQSelectionBox::slotSelected( int index )
 
 void YQSelectionBox::returnImmediately()
 {
-    yuiqt->returnNow( YUIInterpreter::ET_WIDGET, this );
+    YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }
 
 

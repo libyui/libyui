@@ -150,7 +150,7 @@ YQPkgConflictList::ignoreAll()
 void
 YQPkgConflictList::askSaveToFile() const
 {
-    QString filename = YUIQt::yuiqt()->askForSaveFileName( "conflicts.txt",	// startsWith
+    QString filename = YUIQt::ui()->askForSaveFileName( "conflicts.txt",	// startsWith
 							   "*.txt",		// filter
 							   _( "Save Conflicts List" ) );
     if ( ! filename.isEmpty() )
@@ -877,7 +877,7 @@ YQPkgConflict::paintCell( QPainter *		painter,
 			  int			width,
 			  int			alignment )
 {
-    painter->setFont( YUIQt::yuiqt()->headingFont() );
+    painter->setFont( YUIQt::ui()->headingFont() );
     QY2ListViewItem::paintCell( painter, colorGroup, column, width, alignment );
 }
 

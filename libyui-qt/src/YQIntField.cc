@@ -30,8 +30,7 @@
 #define MARGIN   2
 
 
-YQIntField::YQIntField( YUIQt *			yuiqt,
-			QWidget *		parent,
+YQIntField::YQIntField( 			QWidget *		parent,
 			YWidgetOpt &		opt,
 			const YCPString &	label,
 			int 			minValue,
@@ -40,23 +39,22 @@ YQIntField::YQIntField( YUIQt *			yuiqt,
 
     : QWidget( parent )
     , YIntField( opt, label, minValue, maxValue, initialValue )
-    , yuiqt( yuiqt )
 {
-    setWidgetRep( (QWidget *) this );
+    setWidgetRep( this );
 
     vbox = new QVBox( this );
     vbox->setSpacing( VSPACING );
     vbox->setMargin( MARGIN );
     qt_label = new QLabel( fromUTF8(label->value() ), vbox );
     qt_label->setTextFormat( QLabel::PlainText );
-    qt_label->setFont(yuiqt->currentFont());
+    qt_label->setFont(YUIQt::ui()->currentFont());
     qt_label->setAlignment( Qt::AlignRight );
 
     qt_spinbox = new QSpinBox( minValue, maxValue,
 			       1, // step
 			       vbox );
     qt_spinbox->setValue( initialValue );
-    qt_spinbox->setFont( yuiqt->currentFont() );
+    qt_spinbox->setFont( YUIQt::ui()->currentFont() );
 
     qt_label->setBuddy( qt_spinbox );
 
@@ -107,7 +105,7 @@ void YQIntField::setValueSlot( int newValue )
     setValue( newValue );
 
     if ( getNotify() )
-	yuiqt->returnNow( YUIInterpreter::ET_WIDGET, this );
+	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }
 
 

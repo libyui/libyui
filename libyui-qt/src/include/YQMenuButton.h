@@ -28,17 +28,12 @@
 
 
 class QPushButton;
-class YUIQt;
 
 class YQMenuButton : public QWidget, public YMenuButton
 {
     Q_OBJECT
 
 protected:
-    /**
-     * Pointer to the ui for reporting events.
-     */
-    YUIQt *yuiqt;
 
     /**
      * The actual push button
@@ -49,7 +44,7 @@ public:
     /**
      * Constructor.
      */
-    YQMenuButton(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, YCPString label);
+    YQMenuButton( QWidget *parent, YWidgetOpt &opt, YCPString label);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -68,7 +63,7 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
     /**
      * Changes the label of the button

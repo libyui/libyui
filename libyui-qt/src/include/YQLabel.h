@@ -28,8 +28,6 @@
 #include "YLabel.h"
 
 
-class YUIQt;
-
 class YQLabel : public QLabel, public YLabel
 {
     Q_OBJECT
@@ -37,14 +35,9 @@ class YQLabel : public QLabel, public YLabel
 public:
 
     /**
-     * Create a new YQLabel.
-     * @param yuiqt the YUIQt, for getting the font info
-     * @param parent the parent widget
-     * @param text the initial text of the label
-     * @param heading true if this should be a big Heading()
-     * @param output_field true if this should look like a read-only input field
+     * Constructor.
      */
-    YQLabel(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, YCPString text);
+    YQLabel( QWidget *parent, YWidgetOpt &opt, YCPString text);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -63,7 +56,7 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
     /**
      * Change the label text.

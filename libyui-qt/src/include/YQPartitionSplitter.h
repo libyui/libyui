@@ -32,8 +32,6 @@
 #include "YPartitionSplitter.h"
 
 
-class YUIQt;
-
 class YQPartitionSplitter : public QWidget, public YPartitionSplitter
 {
     Q_OBJECT
@@ -43,8 +41,7 @@ public:
     /**
      * Constructor.
      */
-    YQPartitionSplitter( YUIQt *		yuiqt,
-			 QWidget *		parent,
+    YQPartitionSplitter( 			 QWidget *		parent,
 			 YWidgetOpt &		opt,
 			 int 			usedSize,
 			 int 			freeSize,
@@ -73,7 +70,7 @@ public:
      * Set the new size of the widget.
      * Inherited from YWidget.
      */
-    void setSize( long newwidth, long newheight );
+    void setSize( long newWidth, long newHeight );
 
 
     /**
@@ -119,9 +116,6 @@ protected:
     QSpinBox *			qt_newPartSizeField;
 
     bool             countShowDelta;
-
-
-    YUIQt *	yuiqt;
 };
 
 

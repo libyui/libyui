@@ -27,7 +27,6 @@
 #include "YComboBox.h"
 
 
-class YUIQt;
 class QLabel;
 class QComboBox;
 class QY2CharValidator;
@@ -38,10 +37,6 @@ class YQComboBox : public QVBox, public YComboBox
     Q_OBJECT
 
 protected:
-    /**
-     * Pointer to the ui
-     */
-    YUIQt *yuiqt;
 
     /**
      * Title label of the box
@@ -60,7 +55,7 @@ protected:
 
 public:
 
-    YQComboBox(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, const YCPString& label);
+    YQComboBox( QWidget *parent, YWidgetOpt &opt, const YCPString& label);
 
     /**
      * Inherited from YWidget: Sets the enabled state of the
@@ -79,7 +74,7 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
     /**
      * Change the label text.

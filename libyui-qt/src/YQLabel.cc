@@ -26,18 +26,18 @@
 #include "YQLabel.h"
 
 
-YQLabel::YQLabel(YUIQt* yuiqt, QWidget *parent, YWidgetOpt &opt,
+YQLabel::YQLabel( QWidget *parent, YWidgetOpt &opt,
 		 YCPString text)
     : QLabel(parent)
     , YLabel(opt, text)
 {
-    setWidgetRep((QWidget *)this);
+    setWidgetRep( this );
 
     setTextFormat(QLabel::PlainText);
     setText(fromUTF8(text->value()));
     setIndent( 0 );
 
-    setFont( opt.isHeading.value() ? yuiqt->headingFont() : yuiqt->currentFont() );
+    setFont( opt.isHeading.value() ? YUIQt::ui()->headingFont() : YUIQt::ui()->currentFont() );
 
     if ( opt.isOutputField.value())
     {
@@ -63,9 +63,9 @@ long YQLabel::nicesize(YUIDimension dim)
 }
 
 
-void YQLabel::setSize(long newwidth, long newheight)
+void YQLabel::setSize(long newWidth, long newHeight)
 {
-    resize(newwidth, newheight);
+    resize(newWidth, newHeight);
 }
 
 

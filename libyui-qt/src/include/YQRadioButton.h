@@ -28,16 +28,10 @@
 
 
 class QRadioButton;
-class YUIQt;
 
 class YQRadioButton : public QGroupBox, public YRadioButton
 {
     Q_OBJECT
-
-    /**
-     * Pointer to the ui class, for reporting events
-     */
-    YUIQt *yuiqt;
 
     /**
      * Pointer to the qt widget representing the text entry
@@ -51,7 +45,7 @@ public:
      * @param parent pointer to the parent widget
      * @param label Label to be shown above text entry
      */
-    YQRadioButton(YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt,
+    YQRadioButton( QWidget *parent, YWidgetOpt &opt,
 		  YRadioButtonGroup *rbg, const YCPString& label, bool checked);
 
     /**
@@ -71,7 +65,7 @@ public:
     /**
      * Sets the new size of the widget.
      */
-    void setSize(long newwidth, long newheight);
+    void setSize(long newWidth, long newHeight);
 
     /**
      * Sets the checked-state of the RadioButton
