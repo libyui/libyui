@@ -50,10 +50,10 @@ NCPopupPkgDescr::NCPopupPkgDescr( const wpos at, PackageSelector * pkger )
     : NCPopup( at, false )
       , pkgTable( 0 )
       , okButton( 0 )
-      , cancelButton( 0 )
+      , headline( 0 )
       , packager( pkger )
-      , hDim( 50 )
-      , vDim( 20 )
+      , hDim( 70 )
+      , vDim( 17 )
 {
     createLayout( );
 }
@@ -86,12 +86,19 @@ void NCPopupPkgDescr::createLayout( )
     NCSplit * split = new NCSplit( this, opt, YD_VERT );
     addChild( split );
 
-    split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
+    split->addChild( new NCSpacing( split, opt, 0.8, false, true ) );
 
     // add the headline
     opt.isHeading.setValue( true );
-    NCLabel * head = new NCLabel( split, opt, YCPString( "Related Package" ) );
-    split->addChild( head );
+    headline = new NCLabel( split, opt, YCPString( "" ) );
+    split->addChild( headline );
+
+    split->addChild( new NCSpacing( split, opt, 0.4, false, true ) );
+
+    // add the rich text widget for the package description
+    opt.isVStretchable.setValue( true );
+    descrText = new NCRichText( split, opt, YCPString( "" ) );
+    split->addChild( descrText );
 
     split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
 
@@ -101,41 +108,21 @@ void NCPopupPkgDescr::createLayout( )
     pkgTable->fillHeader();
 
     split->addChild( pkgTable );
-
-    opt.isHeading.setValue( false );
-    NCLabel * lb1 = new NCLabel( split, opt, YCPString( "Package Description:" ) );
-    split->addChild( lb1 );
-
-    // add the rich text widget for the package description
-    opt.isVStretchable.setValue( true );
-    descrText = new NCRichText( split, opt, YCPString( "" ) );
-    split->addChild( descrText );
-
-    // HBox for the buttons
-    NCSplit * hSplit = new NCSplit( split, opt, YD_HORIZ );
-    split->addChild( hSplit );
-
-    opt.isHStretchable.setValue( true );
-
-    hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
+    split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
+    
+    opt.isHStretchable.setValue( false );
+    NCLabel * helplb = new NCLabel( split, opt, YCPString(PkgNames::DepsHelpLine()) );
+    split->addChild( helplb );
+  
+    split->addChild( new NCSpacing( split, opt, 0.6, false, true ) ); 
 
     // add the OK button
     opt.key_Fxx.setValue( 10 );
-    okButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::OKLabel()) );
+    okButton = new NCPushButton( split, opt, YCPString(PkgNames::OKLabel()) );
     okButton->setId( PkgNames::OkButton() );
 
-    hSplit->addChild( okButton );
-    hSplit->addChild( new NCSpacing( hSplit, opt, 0.4, true, false ) );
+    split->addChild( okButton );
 
-    // add the Cancel button
-    opt.key_Fxx.setValue( 9 );
-    cancelButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::CancelLabel()) );
-    cancelButton->setId( PkgNames::Cancel() );
-
-    hSplit->addChild( cancelButton );
-    hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
-
-    split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -157,7 +144,9 @@ bool NCPopupPkgDescr::fillData( PMPackagePtr & pkgPtr )
 
     pkgTable->drawList();
 
-    descrText->setText( packager->createDescrText( pkgPtr->description() ) );
+    headline->setLabel( YCPString(pkgPtr->name().asString()) );
+
+    descrText->setText( YCPString(packager->createDescrText(pkgPtr->description())) );
 
     return true;
 }
@@ -197,7 +186,7 @@ NCursesEvent NCPopupPkgDescr::showInfoPopup( PMPackagePtr & pkgPtr )
 
 long NCPopupPkgDescr::nicesize(YUIDimension dim)
 {
-    return ( dim == YD_HORIZ ? NCurses::cols()-15 : NCurses::lines()-5 );
+    return ( dim == YD_HORIZ ? hDim : vDim );
 }
 
 ///////////////////////////////////////////////////////////////////

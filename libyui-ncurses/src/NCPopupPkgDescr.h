@@ -47,8 +47,9 @@ private:
 
     NCPkgTable * pkgTable;
     NCPushButton * okButton;
-    NCPushButton * cancelButton;
     NCRichText *descrText;
+    NCLabel *headline;
+    
     PackageSelector * packager;
 
     int hDim;
