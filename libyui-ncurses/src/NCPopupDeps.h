@@ -26,6 +26,7 @@
 
 #include "NCPopup.h"
 #include "NCLabel.h"
+#include "y2pm/PkgDep.h"
 
 #include <Y2PM.h>
 #include <y2pm/RpmDb.h>
@@ -49,9 +50,8 @@ class NCPopupDeps : public NCPopup {
 
 private:
 
-    map<PMObjectPtr, list<PMObjectPtr> > conflicts;
-    map<PMObjectPtr, list<PMObjectPtr> > alternatives;
-    map<PMObjectPtr, list<PMObjectPtr> > broken;
+    // the dependencies
+    vector<PkgDep::ErrorResult> dependencies;
     
     NCPushButton * cancelButton;
     NCPushButton * okButton;
@@ -64,6 +64,8 @@ private:
 
     PackageSelector * packager;		// connection to the package selector
 
+    string getDependencyKind(  PkgDep::ErrorResult error );
+    
 protected:
 
     virtual bool postAgain();
@@ -81,15 +83,13 @@ public:
 
     NCursesEvent showDependencyPopup( );
 
-    void checkDependencies( );
+    void showDependencies( );
     
-    bool fillDepsPackageList( NCPkgTable * table, list<PMObjectPtr> pkgs );
+    bool fillDepsPackageList( NCPkgTable * table );
 
-    list<PMObjectPtr> evaluateErrorResult(  PkgDep::ErrorResultList errorlist );
+    void evaluateErrorResult(  PkgDep::ErrorResultList errorlist );
     
-    void concretelyDependency( PMObjectPtr objPtr );
-    
-    void fillTestData();
+    void concretelyDependency( int index );
     
 };
 
