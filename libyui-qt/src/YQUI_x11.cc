@@ -127,14 +127,14 @@ const QFont &YQUI::currentFont()
 	if ( autoFonts() )
 	{
 	    pickAutoFonts();
-	    
+
 	    _current_font = QFont( "Sans Serif" );
 	    _current_font.setPixelSize( _auto_normal_font_size );
 	    _current_font.setWeight( QFont::Normal );
 
 	    y2milestone( "Loaded %d pixel font: %s", _auto_normal_font_size,
 			 (const char *) _current_font.toString() );
-	    
+
 	    qApp->setFont( _current_font, true );	// font, informWidgets
 	}
 	else
@@ -166,11 +166,11 @@ const QFont &YQUI::headingFont()
 	if ( autoFonts() )
 	{
 	    pickAutoFonts();
-	    
+
 	    _heading_font = QFont( "Sans Serif" );
 	    _heading_font.setPixelSize( _auto_heading_font_size );
 	    _heading_font.setWeight( QFont::Bold );
-	    
+
 	    y2milestone( "Loaded %d pixel bold font: %s", _auto_heading_font_size,
 			 (const char *) _heading_font.toString() );
 	}
@@ -202,7 +202,7 @@ void YQUI::pickAutoFonts()
 	normal	= 12;
 	heading	= 14;
     }
-    
+
     if ( x >= 1024 && y >= 768 )
     {
 	normal	= 14;
@@ -214,7 +214,7 @@ void YQUI::pickAutoFonts()
 	normal	= 14;
 	heading	= 18;
     }
-    
+
     if ( x >= 1400 )
     {
 	normal	= 16;
@@ -251,22 +251,37 @@ bool YQUI::close()
 
 bool YQUI::eventFilter( QObject * obj, QEvent * ev )
 {
-
     if ( ev->type() == QEvent::Close )
     {
-	emit wmClose();
+	// Handle WM_CLOSE - but only if it comes from a dialog that is managed by the UI,
+	// not from an independent Qt dialog (such as the package selector popups)
 
-	if ( ! _wm_close_blocked )
+	QWidget * objDialog = 0;
+
+	if ( obj && obj->isWidgetType() )
 	{
-	    // Don't simply close the application window, return from UserInput()
-	    // with `id(`cancel) and let the YCP application decide how to handle
-	    // that (e.g., ask for confirmation).
-
-	    y2debug( "Caught window close event - returning with `cancel" );
-	    sendEvent( new YCancelEvent() );
+	    objDialog = (QWidget *) obj;
+	    objDialog = objDialog->topLevelWidget();
 	}
 
-	return true;	// Event processed
+	if ( objDialog &&
+	     ( objDialog == mainWidget() ||
+	       objDialog == (QObject *) currentDialog()->widgetRep() ) )
+	{
+	    emit wmClose();
+
+	    if ( ! _wm_close_blocked )
+	    {
+		// Don't simply close the application window, return from UserInput()
+		// with `id(`cancel) and let the YCP application decide how to handle
+		// that (e.g., ask for confirmation).
+
+		y2debug( "Caught window close event - returning with `cancel" );
+		sendEvent( new YCancelEvent() );
+	    }
+
+	    return true;	// Event processed
+	}
     }
     else if ( ev->type() == QEvent::Show )
     {
