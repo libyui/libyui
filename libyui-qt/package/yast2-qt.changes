@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Apr  8 13:39:02 CEST 2003 - sh@suse.de
+
+- Fixed bug #26155: Hiding YOU patches marked for update 
+
+-------------------------------------------------------------------
 Wed Mar 12 18:39:26 CET 2003 - sh@suse.de
 
 - Don't force *.sel extension for pkg lists

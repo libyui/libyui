@@ -86,11 +86,12 @@ YQPkgYouPatchList::fillList()
 
     while ( it != Y2PM::youPatchManager().end() )
     {
-	PMYouPatchPtr patch = (*it)->theObject();
+	PMYouPatchPtr		patch  = (*it)->theObject();
+	PMSelectable::UI_Status	status = (*it)->status();
 
 	if ( patch )
 	{
-	    if ( _showInstalledPatches || ! patch->hasInstalledObj() )
+	    if ( _showInstalledPatches && status != PMSelectable::S_KeepInstalled )
 		addYouPatchItem( patch );
 	}
 
