@@ -42,8 +42,8 @@ YQPkgRpmGroupTagsFilterView::YQPkgRpmGroupTagsFilterView( YUIQt *yuiqt, QWidget 
     setRootIsDecorated( true );
     cloneTree( Y2PM::packageManager().rpmGroupsTree()->root(), 0 );
 
-    connect( this, SIGNAL( selectionChanged        ( QListViewItem * ) ),
-	     this, SLOT  ( selectionChangedInternal( QListViewItem * ) ) );
+    connect( this, SIGNAL( selectionChanged( QListViewItem * ) ),
+	     this, SLOT  ( filter()                            ) );
 }
 
 
@@ -78,14 +78,6 @@ YQPkgRpmGroupTagsFilterView::cloneTree( YStringTreeItem * 	parentRpmGroup,
 
 
 void
-YQPkgRpmGroupTagsFilterView::selectionChangedInternal( QListViewItem * sel )
-{
-    _selection = (YQPkgRpmGroupTag *) sel;
-    filter();
-}
-
-
-void
 YQPkgRpmGroupTagsFilterView::filterIfVisible()
 {
     if ( isVisible() )
@@ -98,10 +90,10 @@ YQPkgRpmGroupTagsFilterView::filter()
 {
     emit filterStart();
 
-    if ( _selection )
+    if ( selection() )
     {
 #if 0
-	std::string selectedRpmGroupPath = Y2PM::packageManager().rpmGroup( _selection->rpmGroup() );
+	std::string selectedRpmGroupPath = Y2PM::packageManager().rpmGroup( selection()->rpmGroup() );
 	y2debug( "Searching packages that match '%s'", selectedRpmGroupPath.c_str() );
 #endif
 	
@@ -146,7 +138,7 @@ YQPkgRpmGroupTagsFilterView::filter()
 bool
 YQPkgRpmGroupTagsFilterView::check( PMPackagePtr pkg )
 {
-    if ( ! pkg || ! _selection )
+    if ( ! pkg || ! selection() )
 	return false;
 
     if ( pkg->group_ptr() == 0 )
@@ -155,7 +147,7 @@ YQPkgRpmGroupTagsFilterView::check( PMPackagePtr pkg )
 	return false;
     }
 
-    if ( pkg->group_ptr()->isChildOf( _selection->rpmGroup() ) )
+    if ( pkg->group_ptr()->isChildOf( selection()->rpmGroup() ) )
     {
 #if 0
 	// DEBUG
@@ -171,6 +163,18 @@ YQPkgRpmGroupTagsFilterView::check( PMPackagePtr pkg )
     {
 	return false;
     }
+}
+
+
+YQPkgRpmGroupTag *
+YQPkgRpmGroupTagsFilterView::selection() const
+{
+    QListViewItem * item = selectedItem();
+
+    if ( ! item )
+	return 0;
+    
+    return dynamic_cast<YQPkgRpmGroupTag *> ( selectedItem() );
 }
 
 

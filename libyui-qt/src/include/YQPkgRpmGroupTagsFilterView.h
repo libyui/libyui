@@ -50,7 +50,7 @@ public:
     /**
      * Returns the currently selected item or 0 if there is none.
      **/
-    YQPkgRpmGroupTag * selection() const { return _selection; }
+    YQPkgRpmGroupTag * selection() const;
 
     
 public slots:
@@ -88,14 +88,6 @@ signals:
      **/
     void filterFinished();
 
-
-protected slots:
-
-    /**
-     * Selection has changed - the user clicked on an item
-     **/
-    void selectionChangedInternal( QListViewItem * sel );
-
     
 protected:
 
@@ -118,7 +110,6 @@ protected:
     // Data members
 
     YUIQt		* yuiqt;
-    YQPkgRpmGroupTag 	* _selection;
 };
 
 
