@@ -103,7 +103,14 @@ YQMenuButton::menuEntryActivated( int menu_item_index )
      * doesn't have any effect as long as there are still popups open. So be it
      * - use a zero timer to perform the real returnNow() later.
      */
-    QTimer::singleShot( 0, this, SLOT( returnNow() ) );
+
+    /*
+     * the 100 delay is a ugly dirty workaround
+     */
+    QTimer::singleShot( 100, this, SLOT( returnNow() ) );
+
+    // yuiqt->wakeUpGuiThread ();
+    // yuiqt->processEvents ();
 }
 
 
@@ -143,7 +150,7 @@ YQMenuButton::createMenu( YMenuItem *ymenu, QPopupMenu *qt_menu )
 	    connect( sub_menu,	SIGNAL( activated( int ) ),
 		     this,	SLOT  ( menuEntryActivated( int ) ) );
 	    createMenu( item, sub_menu );
-	    
+
 	}
 	else	// simple menu item, no submenu
 	{
