@@ -630,8 +630,13 @@ YQPackageSelector::addMenus()
     // Note: The help functions and their texts are moved out
     // to a separate source file YQPackageSelectorHelp.cc
 
+    // Menu entry for help overview
     _helpMenu->insertItem( _( "&Overview" ), this, SLOT( help() 	), Key_F1         );
+
+    // Menu entry for help about used symbols (icons)
     _helpMenu->insertItem( _( "&Symbols"  ), this, SLOT( symbolHelp() 	), SHIFT + Key_F1 );
+
+    // Menu entry for keyboard help 
     _helpMenu->insertItem( _( "&Keys"     ), this, SLOT( keyboardHelp() )                 );
 }
 
