@@ -185,11 +185,38 @@ NCPad * NCLogView::CreatePad()
 //
 void NCLogView::DrawPad()
 {
-  AdjustPad( wsze( text.Lines(), text.Columns() ) );
-  unsigned cl = 0;
-  for ( NCtext::const_iterator line = text.begin(); line != text.end(); ++line ) {
-    pad->move( cl++, 0 );
-    pad->addwstr( (*line).str().c_str() );
-  }
+    size_t columns = Columns();
+    unsigned int lines = text.Lines();
+    AdjustPad( wsze( lines, columns ) );
+    unsigned cl = 0;
+
+    for ( NCtext::const_iterator line = text.begin(); line != text.end(); ++line )
+    {
+	pad->move( cl++, 0 );
+	wstring cline = (*line).str();
+	if ( cline.size() <= columns )
+	{
+	    pad->addwstr( cline.c_str() );
+	}
+	else
+	{
+	    size_t start = columns;
+	    pad->addwstr( cline.substr( 0, columns).c_str() );
+
+	    while ( start < cline.size() )
+	    {
+		if ( cl > lines )
+		{
+		    lines += 50;
+		    AdjustPad( wsze( lines, columns ) );
+		}	
+		pad->move( cl++, 0 );
+
+		pad->addch( '~' );
+		pad->addwstr( cline.substr( start, columns-1).c_str() );
+		start += columns-1;
+	    }
+	}
+    }
 }
 
