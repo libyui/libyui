@@ -57,7 +57,7 @@ YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget * parent, int thresholdPercent )
 {
     _debug 	= false;
 
-    const set<PkgDuMaster::MountPoint>	du = Y2PM::packageManager().getDu().mountpoints();
+    const set<PkgDuMaster::MountPoint> du = Y2PM::packageManager().getDu().mountpoints();
     set<PkgDuMaster::MountPoint>::iterator it = du.begin();
 
     while ( it != du.end() )
@@ -131,7 +131,14 @@ YQPkgDiskUsageList::postPendingWarnings()
 QSize
 YQPkgDiskUsageList::sizeHint() const
 {
-    return QSize( header()->headerWidth(), 100 );
+    int width = header()->headerWidth() + 2*frameWidth();
+
+    // Found out by experiment:
+    width += 8;
+    // Neither the Qt docs nor the local Qt specialists could give any good
+    // explanation how to figure out that constant add-on from style() or whatever.
+    
+    return QSize( width, 100 );
 }
 
 

@@ -241,12 +241,15 @@ YQPackageSelector::basicLayout()
     QSplitter * outer_splitter = new QSplitter( QSplitter::Horizontal, this );
     CHECK_PTR( outer_splitter );
 
-    layoutLeftPane ( outer_splitter );
-    layoutRightPane( outer_splitter );
+    QWidget * left_pane  = layoutLeftPane ( outer_splitter );
+    QWidget * right_pane = layoutRightPane( outer_splitter );
+
+    outer_splitter->setResizeMode( left_pane,  QSplitter::FollowSizeHint );
+    outer_splitter->setResizeMode( right_pane, QSplitter::Stretch );
 }
 
 
-void
+QWidget *
 YQPackageSelector::layoutLeftPane( QWidget * parent )
 {
     QSplitter * splitter = new QSplitter( QSplitter::Vertical, parent );
@@ -254,6 +257,7 @@ YQPackageSelector::layoutLeftPane( QWidget * parent )
     splitter->setMargin( MARGIN );
 
     QVBox * vbox = new QVBox( splitter );
+    CHECK_PTR( vbox );
     layoutFilters( vbox );
     addVSpacing( vbox, MARGIN );
 
@@ -261,6 +265,8 @@ YQPackageSelector::layoutLeftPane( QWidget * parent )
     addVSpacing( vbox, MARGIN );
     _diskUsageList = new YQPkgDiskUsageList( vbox );
     CHECK_PTR( _diskUsageList );
+
+    return splitter;
 }
 
 
@@ -405,7 +411,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 }
 
 
-void
+QWidget *
 YQPackageSelector::layoutRightPane( QWidget * parent )
 {
     QSplitter * splitter = new QSplitter( QSplitter::Vertical, parent );
@@ -413,10 +419,13 @@ YQPackageSelector::layoutRightPane( QWidget * parent )
     splitter->setMargin( MARGIN );
 
     QVBox * vbox = new QVBox( splitter );
+    CHECK_PTR( vbox );
     layoutPkgList( vbox );
     addVSpacing( vbox, MARGIN );
 
     layoutDetailsViews( splitter );
+
+    return splitter;
 }
 
 

@@ -224,13 +224,13 @@ protected:
 
     void basicLayout();
 
-    void layoutLeftPane		( QWidget * parent );
-    void layoutFilters		( QWidget * parent );
-    void layoutRightPane	( QWidget * parent );
-    void layoutPkgList		( QWidget * parent );
-    void layoutDetailsViews	( QWidget * parent );
-    void layoutButtons		( QWidget * parent );
-    void layoutMenuBar		( QWidget * parent );
+    QWidget *	layoutLeftPane		( QWidget * parent );
+    QWidget *	layoutRightPane		( QWidget * parent );
+    void	layoutFilters		( QWidget * parent );
+    void 	layoutPkgList		( QWidget * parent );
+    void 	layoutDetailsViews	( QWidget * parent );
+    void 	layoutButtons		( QWidget * parent );
+    void 	layoutMenuBar		( QWidget * parent );
 
     /**
      * Establish Qt signal / slot connections.
