@@ -109,7 +109,7 @@ NCRichText::NCRichText( NCWidget * parent, YWidgetOpt & opt,
     , NCPadWidget( parent )
     , text( ntext )
     , plainText( opt.plainTextMode.value() )
-    , skipWS( true )
+    , preTag( false )
     , Tattr( 0 )
 {
   WIDDBG << endl;
@@ -321,6 +321,40 @@ void NCRichText::DrawPlainPad()
   }
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCRichText::PadPlainTXT
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCRichText::PadPlainTXT( const wchar_t * osch, const unsigned olen )
+{
+    wstring wtxt( osch, olen );
+    NCstring nctxt( wtxt );
+    NCtext ftext( nctxt );
+
+    if ( ftext.Columns() > textwidth )
+	textwidth = ftext.Columns();
+    
+    AdjustPad( wsze( ftext.Lines(), ftext.Columns() ) );
+
+    // insert the text
+    const wchar_t * sch = wtxt.data();
+    while ( *sch )
+    {
+	pad->addwstr( sch, 1 );	// add one wide chararacter
+	++cc;
+	if ( *sch == L'\n' )
+	{
+	    PadNL();	// add a new line
+	}
+	++sch;
+    }
+}
+
+
 /******************************************************************
 **
 **
@@ -350,6 +384,14 @@ inline void SkipWord( const wchar_t *& wch ) {
   do {
     ++wch;
   } while ( *wch && WDtoken.find( *wch ) == wstring::npos );
+}
+
+inline void SkipPreTXT( const wchar_t *& wch ) {
+    wstring wstr( wch, 6 );
+    do {
+	++wch;
+	wstr.assign( wch, 6 );
+    } while ( *wch && wstr != L"</pre>" ); 
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -386,14 +428,15 @@ void NCRichText::DrawHTMLPad()
 	  case L'\n':
 	  case L'\v':
 	  case L'\r':
-	      if ( skipWS )
+	      if ( !preTag )
 	      {
 		  SkipWS( wch );
 		  PadWS();
 	      }
 	      else
 	      {
-		  PadWS( wch );
+		  pad->addwstr( wch, 1 );	// add one wide chararacter
+		  ++cc;
 		  ++wch;
 	      }
 	      break;
@@ -408,15 +451,23 @@ void NCRichText::DrawHTMLPad()
 
 	  default:
 	      swch = wch;
-	      SkipWord( wch );
-	      PadTXT( swch, wch - swch );
+	      if ( !preTag )
+	      {
+		  SkipWord( wch );
+		  PadTXT( swch, wch - swch );
+	      }
+	      else
+	      {
+		  SkipPreTXT( wch );
+		  PadPlainTXT( swch, wch - swch  );	  
+	      }
 	      break;
       }
   }
 
   PadBOL();
   AdjustPad( wsze( cl, textwidth ) );
-
+  
   MDBG << "Anchors: " << anchors.size() << endl;
   for ( unsigned i = 0; i < anchors.size(); ++i ) {
     MDBG << form( "  %2d: [%2d,%2d] -> [%2d,%2d]",
@@ -466,35 +517,20 @@ inline void NCRichText::PadBOL()
 //
 //	DESCRIPTION :
 //
-inline void NCRichText::PadWS( const wchar_t * ws, const bool tab )
+inline void NCRichText::PadWS( const bool tab )
 {
-  if ( skipWS && atbol )
-      return; // no WS at beginning of line
+    if ( atbol )
+	return; // no WS at beginning of line
 
-  if ( skipWS )
-  {
-      if ( cc == textwidth )
-      {
-	  PadNL();
-      }
-      else
-      {
-	  pad->addwstr( L" " );
-	  ++cc;
-      }
-  }
-  else
-  {
-      if ( *ws == L'\n' )
-      {
-	  PadNL();
-      }
-      else
-      {
-	  pad->addwstr( ws, 1 );	// write one wide char
-	  ++cc;  
-      }
-  }
+    if ( cc == textwidth )
+    {
+	PadNL();
+    }
+    else
+    {
+	pad->addwstr( L" " );
+	++cc;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -839,11 +875,11 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
   case T_PLAIN:
       if ( !endtag )
       {
-	  skipWS = false; 	// don't skip white spaces
+	  preTag = true; 	// display plain text
       }
       else
       {
-	  skipWS = true;
+	  preTag = false;
       }
       break;
       
