@@ -28,11 +28,11 @@
 #include "YQDownloadProgress.h"
 
 
-YQDownloadProgress::YQDownloadProgress( QWidget *	parent,
-					YWidgetOpt &	opt,
-					const YCPString & label,
-					const YCPString & filename,
-					int 		expectedSize )
+YQDownloadProgress::YQDownloadProgress( QWidget *		parent,
+					YWidgetOpt &		opt,
+					const YCPString & 	label,
+					const YCPString &	filename,
+					int 			expectedSize )
     : QVBox( parent )
     , YDownloadProgress( opt, label, filename, expectedSize )
 {

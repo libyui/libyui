@@ -139,3 +139,4 @@ Y2QtComponent::setCallback(Y2Component *callback)
     }
     return;
 }
+

@@ -29,12 +29,10 @@
 
 
 
-// Helper class. See Qt docu. We need an own subclass,
-// because we want to store the index of the row.
-
 class YQListViewItem : public QListViewItem
 {
 public:
+    
     int index;
 
     /**

@@ -40,8 +40,9 @@ using std::max;
 #define MARGIN				4	// around the widget
 
 
-YQSelectionBox::YQSelectionBox( QWidget * parent, YWidgetOpt & opt,
-			       const YCPString & label )
+YQSelectionBox::YQSelectionBox( QWidget *		parent,
+				YWidgetOpt &		opt,
+				const YCPString &	label )
     : QVBox( parent )
     , YSelectionBox( opt, label )
 {

@@ -27,19 +27,20 @@
 #include "YUIQt.h"
 #include "YQRadioButton.h"
 
+#define SPACING 8
 
 // +----+----------------------------------+----+
 // |	|(o) RadioButtonlabel		   |	|
 // +----+----------------------------------+----+
 // <----> SPACING			   <---->
 
-#define SPACING 8
 
 
-YQRadioButton::YQRadioButton( QWidget * parent,
-			     YWidgetOpt & opt,
-			     YRadioButtonGroup * rbg,
-			     const YCPString & label, bool checked )
+YQRadioButton::YQRadioButton( QWidget * 		parent,
+			      YWidgetOpt & 		opt,
+			      YRadioButtonGroup *	rbg,
+			      const YCPString & 	label,
+			      bool 			checked )
     : QGroupBox( parent )
     , YRadioButton( opt, label, rbg )
 {
@@ -120,8 +121,6 @@ void YQRadioButton::changed( bool newState )
     if ( getNotify() && newState )
 	YUIQt::ui()->returnNow( YUIInterpreter::ET_WIDGET, this );
 }
-
-
 
 
 #include "YQRadioButton.moc.cc"

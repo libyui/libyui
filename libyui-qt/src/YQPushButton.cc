@@ -34,10 +34,10 @@
 #define BORDERSIZE QSize( BORDER, BORDER )
 #define FOCUS_CHANGES_DEFAULT_BUTTON 0
 
-YQPushButton::YQPushButton( QWidget *	parent,
-			    YQDialog *	dialog,
-			    YWidgetOpt & opt,
-			    YCPString 	label )
+YQPushButton::YQPushButton( QWidget *		parent,
+			    YQDialog *		dialog,
+			    YWidgetOpt &	opt,
+			    YCPString 		label )
     : QWidget( parent )
     , YPushButton( opt, label )
     , _dialog( dialog )
@@ -103,8 +103,8 @@ void YQPushButton::setIcon( const YCPString & y_icon_name )
 long YQPushButton::nicesize( YUIDimension dim )
 {
     return 2 * BORDER + ( dim == YD_HORIZ
-			 ? _qPushButton->sizeHint().width()
-			 : _qPushButton->sizeHint().height() );
+			  ? _qPushButton->sizeHint().width()
+			  : _qPushButton->sizeHint().height() );
 }
 
 

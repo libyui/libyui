@@ -21,8 +21,11 @@
 #include "YQSpacing.h"
 
 
-YQSpacing::YQSpacing( QWidget * parent, YWidgetOpt & opt,
-		     float size, bool horizontal, bool vertical )
+YQSpacing::YQSpacing( QWidget * 	parent,
+		      YWidgetOpt & 	opt,
+		      float 		size,
+		      bool 		horizontal,
+		      bool 		vertical )
     : QWidget( parent )
     , YSpacing( opt, size, horizontal, vertical )
 {
@@ -36,12 +39,12 @@ long YQSpacing::absoluteSize( YUIDimension dim, float relativeSize )
      * Rather than using actual font metrics, we try to get as close to
      * the character based NCurses UI as possible: Divide the dialog
      * default size ( 640*480 ) into 80*25 character cells.
-    */
+     */
 
     float size;
 
     if ( dim==YD_HORIZ )	size = relativeSize * ( 640.0/80 );
-    else		size = relativeSize * ( 480.0/25 );
+    else			size = relativeSize * ( 480.0/25 );
 
     return (long) ( size + 0.5 );
 }

@@ -51,8 +51,8 @@ YQIntField::YQIntField( QWidget *		parent,
     _qt_label->setAlignment( Qt::AlignRight );
 
     _qt_spinbox = new QSpinBox( minValue, maxValue,
-			       1, // step
-			       vbox );
+				1, // step
+				vbox );
     _qt_spinbox->setValue( initialValue );
     _qt_spinbox->setFont( YUIQt::ui()->currentFont() );
 

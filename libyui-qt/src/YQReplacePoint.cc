@@ -25,7 +25,8 @@
 #include "YQReplacePoint.h"
 
 
-YQReplacePoint::YQReplacePoint( QWidget * parent, YWidgetOpt & opt )
+YQReplacePoint::YQReplacePoint( QWidget *	parent,
+				YWidgetOpt &	opt )
     : QWidget( parent )
     , YReplacePoint( opt )
 {

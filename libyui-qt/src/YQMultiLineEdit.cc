@@ -119,7 +119,5 @@ void YQMultiLineEdit::changed()
 }
 
 
-
-
 #include "YQMultiLineEdit.moc.cc"
 

@@ -27,8 +27,9 @@
 #include "YQRichText.h"
 
 
-YQRichText::YQRichText( QWidget * parent, YWidgetOpt & opt,
-		       const YCPString & text )
+YQRichText::YQRichText( QWidget * 		parent,
+			YWidgetOpt & 		opt,
+			const YCPString &	text )
     : QTextBrowser( parent )
     , YRichText( opt, text )
 {
@@ -78,8 +79,8 @@ void YQRichText::setEnabling( bool enabled )
 
 long YQRichText::nicesize( YUIDimension dim )
 {
-    if ( dim == YD_HORIZ ) return shrinkable ? 10 : 100;
-    else 		return shrinkable ? 10 :100;
+    if ( dim == YD_HORIZ )	return shrinkable ? 10 : 100;
+    else 			return shrinkable ? 10 : 100;
 }
 
 
@@ -92,10 +93,10 @@ void YQRichText::setSize( long newWidth, long newHeight )
 void YQRichText::setText( const YCPString & text )
 {
     if ( horizontalScrollBar() )
-	horizontalScrollBar()->setValue(0 );
+	horizontalScrollBar()->setValue(0);
 
     if ( ! autoScrollDown && verticalScrollBar() )
-	verticalScrollBar()->setValue(0 );
+	verticalScrollBar()->setValue(0);
     
     QTextBrowser::setText( fromUTF8( text->value() ) );
     YRichText::setText( text );

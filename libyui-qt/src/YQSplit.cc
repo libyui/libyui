@@ -18,15 +18,15 @@
 /-*/
 
 
-//#include <qlayout.h>
-
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 #include "YUIQt.h"
 #include "YQSplit.h"
 
 
-YQSplit::YQSplit( QWidget * parent, YWidgetOpt & opt, YUIDimension dimension )
+YQSplit::YQSplit( QWidget * 	parent,
+		  YWidgetOpt &	opt,
+		  YUIDimension	dimension )
     : QWidget( parent )
     , YSplit( opt, dimension )
 {
@@ -52,5 +52,6 @@ void YQSplit::moveChild( YWidget * child, long newX, long newY )
     QWidget * qw = (QWidget *)( child->widgetRep() );
     qw->move( newX, newY );
 }
+
 
 #include "YQSplit.moc.cc"

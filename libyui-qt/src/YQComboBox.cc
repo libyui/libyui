@@ -31,8 +31,9 @@
 #define SPACING			4	// between subwidgets
 
 
-YQComboBox::YQComboBox( QWidget * parent, YWidgetOpt & opt,
-		       const YCPString & label )
+YQComboBox::YQComboBox( QWidget * 		parent,
+			YWidgetOpt & 		opt,
+			const YCPString &	label )
     : QVBox( parent )
     , YComboBox( opt, label )
     , _validator(0)
@@ -50,8 +51,11 @@ YQComboBox::YQComboBox( QWidget * parent, YWidgetOpt & opt,
 
     _qt_label->setBuddy( _qt_combo_box );
 
-    connect( _qt_combo_box, SIGNAL( highlighted(int) ), this, SLOT( slotSelected(int) ) );
-    connect( _qt_combo_box, SIGNAL( activated( const QString & ) ), this, SLOT( textChanged(const QString & ) ) );
+    connect( _qt_combo_box,	SIGNAL( highlighted (int) ),
+	     this,		SLOT  ( slotSelected(int) ) );
+    
+    connect( _qt_combo_box,	SIGNAL( activated  ( const QString & ) ),
+	     this,		SLOT  ( textChanged( const QString & ) ) );
 }
 
 

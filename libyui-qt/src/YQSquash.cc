@@ -21,10 +21,12 @@
 #include "YUIQt.h"
 #include "YQSquash.h"
 
-YQSquash::YQSquash( QWidget * parent, YWidgetOpt & opt,
-		   bool hsquash, bool vsquash )
+YQSquash::YQSquash( QWidget * 		parent,
+		    YWidgetOpt & 	opt,
+		    bool 		horSquash,
+		    bool 		vertSquash )
     : QWidget( parent )
-    , YSquash( opt, hsquash, vsquash )
+    , YSquash( opt, horSquash, vertSquash )
 {
     setWidgetRep( this );
 }
@@ -41,5 +43,6 @@ void YQSquash::setSize( long newWidth, long newHeight )
     resize( newWidth, newHeight );
     YSquash::setSize( newWidth, newHeight );
 }
+
 
 #include "YQSquash.moc.cc"

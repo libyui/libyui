@@ -18,6 +18,7 @@
 
 /-*/
 
+
 #include <qpixmap.h>
 #include <qheader.h>
 
@@ -34,8 +35,8 @@ QY2ListView::QY2ListView( QWidget * parent )
     QListView::setShowToolTips( false );
     _toolTip = new QY2ListViewToolTip( this );
 
-    connect( header(),	SIGNAL( sizeChange		( int, int, int ) ),
-	     this,	SLOT  ( columnWidthChanged	( int, int, int ) ) );
+    connect( header(),	SIGNAL( sizeChange        ( int, int, int ) ),
+	     this,	SLOT  ( columnWidthChanged( int, int, int ) ) );
 }
 
 
@@ -260,8 +261,8 @@ QY2ListViewItem::QY2ListViewItem( QY2ListView * 	parentListView,
 
 
 QY2ListViewItem::QY2ListViewItem( QListViewItem * 	parentItem,
-				   const QString &	text,
-				   bool 		sortByInsertionSequence )
+				  const QString &	text,
+				  bool 		sortByInsertionSequence )
     : QListViewItem( parentItem, text )
     , _sortByInsertionSequence( sortByInsertionSequence )
 {

@@ -17,28 +17,14 @@
 
 /-*/
 
-/**
- * This file is part of YaST2.
- *
- * $Id$
- *
- * Author: Waldo Bastian <bastian@suse.de>
- * Maintainer: Stefan Hundhammer <sh@suse.de>
- *
- * Description: Implementation of the YaST2 Qt Component Creator
- *
- * Copyright:
- *
- * Licence:
- *
- **/
 
 #include "Y2CCQt.h"
 
-// This is very import: We create one global variable of
+// This is very important: We create one global variable of
 // Y2CCQt. Its constructor will register it automatically to
 // the Y2ComponentBroker, so that will be able to find it.
 // This all happens before main() is called!
 
 Y2CCQt g_y2ccqt;
+
 

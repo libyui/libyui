@@ -10,10 +10,12 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQDialog.cc
+  File:	      	YQDialog.cc
 
-  Author:     Mathias Kettner <kettner@suse.de>
-  Maintainer: Stefan Hundhammer <sh@suse.de>
+  Authors:	Mathias Kettner <kettner@suse.de>
+		Stefan Hundhammer <sh@suse.de>
+		
+  Maintainer:	Stefan Hundhammer <sh@suse.de>
 
 /-*/
 
@@ -154,7 +156,7 @@ void YQDialog::setSize( long newWidth, long newHeight )
     if ( numChildren() > 0 )
     {
 	YContainerWidget::child(0)->setSize(newWidth  - 2 * decorationWidth( YD_HORIZ ),
-					     newHeight - 2 * decorationWidth( YD_VERT  ) );
+					    newHeight - 2 * decorationWidth( YD_VERT  ) );
     }
     
     if ( _qFrame )

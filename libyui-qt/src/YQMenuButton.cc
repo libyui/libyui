@@ -33,9 +33,9 @@
 #define BORDER 3
 #define BORDERSIZE QSize( BORDER, BORDER )
 
-YQMenuButton::YQMenuButton( QWidget * parent,
-			   YWidgetOpt & opt,
-			   YCPString label )
+YQMenuButton::YQMenuButton( QWidget * 		parent,
+			    YWidgetOpt & 	opt,
+			    YCPString 		label )
     : QWidget( parent )
     , YMenuButton( opt, label )
 {
@@ -59,8 +59,8 @@ long
 YQMenuButton::nicesize( YUIDimension dim )
 {
     return 2 * BORDER + ( dim == YD_HORIZ
-			 ? _qt_pushbutton->sizeHint().width()
-			 : _qt_pushbutton->sizeHint().height() );
+			  ? _qt_pushbutton->sizeHint().width()
+			  : _qt_pushbutton->sizeHint().height() );
 }
 
 

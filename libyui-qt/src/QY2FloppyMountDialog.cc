@@ -276,7 +276,7 @@ QY2FloppyMountDialog::askForFile( bool wantExistingFile )
 	QString mountPoint = _floppyMountPointField->currentText();
 
 	if ( ! mountPoint.endsWith( "/" ) )
-	     mountPoint.append( "/" );
+	    mountPoint.append( "/" );
 
 	if ( ! filename.startsWith( mountPoint ) )
 	    filename.prepend( mountPoint );

@@ -54,14 +54,14 @@ YQSlider::YQSlider( QWidget *		parent,
     hbox->setSpacing( HSPACING );
 
     _qt_slider = new QSlider( minValue, maxValue,
-			     1, // pageStep
-			     initialValue,
-			     QSlider::Horizontal, hbox );
+			      1, // pageStep
+			      initialValue,
+			      QSlider::Horizontal, hbox );
     _qt_slider->setFont( YUIQt::ui()->currentFont() );
 
     _qt_spinbox = new QSpinBox( minValue, maxValue,
-			       1, // step
-			       hbox );
+				1, // step
+				hbox );
     _qt_spinbox->setValue( initialValue );
     _qt_spinbox->setFont( YUIQt::ui()->currentFont() );
 
@@ -72,11 +72,11 @@ YQSlider::YQSlider( QWidget *		parent,
     connect( _qt_spinbox, SIGNAL( valueChanged(int) ),
 	     _qt_slider,  SLOT  ( setValue    (int) ) );
 
-    connect( _qt_slider, 	SIGNAL( valueChanged(int) ),
+    connect( _qt_slider,  SIGNAL( valueChanged(int) ),
 	     _qt_spinbox, SLOT  ( setValue    (int) ) );
 
     connect( _qt_spinbox, SIGNAL( valueChanged(int) ),
-	     this,  	SLOT  ( setValueSlot(int) ) );
+	     this,  	  SLOT  ( setValueSlot(int) ) );
 }
 
 

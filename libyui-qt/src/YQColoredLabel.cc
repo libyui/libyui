@@ -25,10 +25,12 @@
 #include "YQColoredLabel.h"
 
 
-YQColoredLabel::YQColoredLabel( QWidget * parent, YWidgetOpt & opt,
-				YCPString text,
-				YColor & fg, YColor & bg,
-				int margin )
+YQColoredLabel::YQColoredLabel( QWidget *	parent,
+				YWidgetOpt & 	opt,
+				YCPString 	text,
+				YColor & 	fg,
+				YColor & 	bg,
+				int 		margin )
     : QLabel( parent )
     , YLabel( opt, text )
 {
