@@ -44,7 +44,7 @@ NCTextEntry::NCTextEntry( NCWidget * parent, YWidgetOpt & opt,
 			  unsigned maxFld )
     : YTextEntry( opt, nlabel )
     , NCWidget( parent )
-    , mayedit( opt.isEditable.value() )
+    , mayedit( true )
     , passwd( opt.passwordMode.value() )
     , label( nlabel )
     , lwin( 0 )
@@ -62,6 +62,9 @@ NCTextEntry::NCTextEntry( NCWidget * parent, YWidgetOpt & opt,
        ( !maxFldLength || maxFldLength > maxInputLength ) ) {
      maxFldLength = maxInputLength;
   }
+  if ( opt.isEditable.defined() )
+      mayedit = opt.isEditable.value();
+
   hotlabel = &label;
   setLabel( nlabel );
   setText( ntext );
