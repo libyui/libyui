@@ -402,6 +402,7 @@ QY2FloppyMountDialog::unmount( bool verbose )
 	else
 	{
 	    y2warning( "\"%s\" returned %d", (const char *) command, result );
+	    error( _("Cannot unmount floppy") );
 	}
 
 	_floppyMounted = false;
