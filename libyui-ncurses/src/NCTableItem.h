@@ -77,7 +77,8 @@ class NCTableLine {
     void     SetCols( unsigned idx );
     void     SetCols( vector<NCTableCol*> & nItems );
     void     ClearLine()  { SetCols( 0 ); }
-
+    vector<NCTableCol*> GetItems() const { return Items; }
+    
     void Append( NCTableCol * item ) { AddCol( Cols(), item ); }
     void AddCol( unsigned idx, NCTableCol * item );
     void DelCol( unsigned idx );
