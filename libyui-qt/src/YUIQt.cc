@@ -76,7 +76,7 @@
 #include <sys/stat.h>
 
 
-#define DEFAULT_MACRO_FILE_NAME		"/tmp/macro.ycp"
+#define DEFAULT_MACRO_FILE_NAME		"macro.ycp"
 
 YUIQt * YUIQt::_yuiqt = 0;
 
