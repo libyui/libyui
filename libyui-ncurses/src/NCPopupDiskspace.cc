@@ -169,7 +169,8 @@ string NCPopupDiskspace::checkDiskSpace()
 	    text += " ";
 	    text += PkgNames::MoreText().str();
 	    text += " ";
-	    text += (*it).pkg_available().asString();
+	    string available = (*it).pkg_available().asString();
+	    text += available.replace( 0, 1, " " );
 	    text += " ";
 	    text += PkgNames::MoreSpaceText().str();
 	    text += "<br>";
