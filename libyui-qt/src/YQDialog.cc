@@ -284,7 +284,7 @@ YQDialog::keyPressEvent( QKeyEvent *event )
     {
 	if ( event->key() == Qt::Key_Print )
 	{
-	    yuiqt->makeScreenShot();
+	    yuiqt->makeScreenShot( "" );
 	    return;
 	}
 	else if ( event->state() == 0 )	// No Ctrl / Alt / Shift etc. pressed

@@ -981,44 +981,8 @@ long YUIQt::defaultSize(YUIDimension dim) const
 }
 
 
-void YUIQt::makeScreenShot()
+void YUIQt::makeScreenShot( std::string stl_filename )
 {
-    if ( screenShotNameTemplate.isEmpty() )
-    {
-	//
-	// Initialize screen shot directory
-	//
-	
-	QString home = QDir::homeDirPath();
-	QString dir  = "yast2-screen-shots";
-
-	if ( home == "/" )
-	{
-	    // Special case: $HOME is not set. This is normal in the inst-sys.
-	    // In this case, rather than simply dumping all screen shots into
-	    // /tmp which is world-writable, let's try to create a subdirectory
-	    // below /tmp with restrictive permissions.
-	    // If that fails, trust nobody - in particular, do not suggest /tmp
-	    // as the default in the file selection box.
-
-	    dir = "/tmp/" + dir;
-
-	    if ( mkdir( dir, 0700 ) == -1 )
-		dir = "";
-	}
-	else
-	{
-	    // For all others let's create a directory ~/yast2-screen-shots and
-	    // simply ignore if this is already present. This gives the user a
-	    // chance to create symlinks to a better location if he wishes so.
-
-	    dir = home + "/" + dir;
-	    (void) mkdir( dir, 0750 );
-	}
-
-	screenShotNameTemplate = dir + "/%s-%03d.png";
-    }
-
 
     //
     // Grab the pixels off the screen
@@ -1026,33 +990,76 @@ void YUIQt::makeScreenShot()
 
     QWidget *dialog = (QWidget *) currentDialog()->widgetRep();
     QPixmap screenShot = QPixmap::grabWindow( dialog->winId() );
-
-    //
-    // Figure out a file name
-    //
-
-    QString fileName;
-    const char *baseName = moduleName();
-    if ( ! baseName ) baseName = "scr";
-    int no = screenShotNo[ baseName ];
-    fileName.sprintf( screenShotNameTemplate, baseName, no );
-    fileName = askForSaveFileName( fileName, QString( "*.png" ) , _("Save screen shot to...") );
+    QString fileName ( stl_filename.c_str() );
 
     if ( fileName.isEmpty() )
     {
-	y2milestone("Save screen shot canceled by user" );
-    }
-    else
-    {
-	y2milestone("Saving screen shot to %s", (const char *) fileName );
+	// Open a file selection box. Figure out a reasonable default
+	// directory / file name.
+
+	if ( screenShotNameTemplate.isEmpty() )
+	{
+	    //
+	    // Initialize screen shot directory
+	    //
+
+	    QString home = QDir::homeDirPath();
+	    QString dir  = "yast2-screen-shots";
+
+	    if ( home == "/" )
+	    {
+		// Special case: $HOME is not set. This is normal in the inst-sys.
+		// In this case, rather than simply dumping all screen shots into
+		// /tmp which is world-writable, let's try to create a subdirectory
+		// below /tmp with restrictive permissions.
+		// If that fails, trust nobody - in particular, do not suggest /tmp
+		// as the default in the file selection box.
+
+		dir = "/tmp/" + dir;
+
+		if ( mkdir( dir, 0700 ) == -1 )
+		    dir = "";
+	    }
+	    else
+	    {
+		// For all others let's create a directory ~/yast2-screen-shots and
+		// simply ignore if this is already present. This gives the user a
+		// chance to create symlinks to a better location if he wishes so.
+
+		dir = home + "/" + dir;
+		(void) mkdir( dir, 0750 );
+	    }
+
+	    screenShotNameTemplate = dir + "/%s-%03d.png";
+	}
+
 
 	//
-	// Actually save the screen shot
+	// Figure out a file name
 	//
 
-	screenShot.save ( fileName, "PNG" );
+	const char *baseName = moduleName();
+	if ( ! baseName ) baseName = "scr";
+	int no = screenShotNo[ baseName ];
+	fileName.sprintf( screenShotNameTemplate, baseName, no );
+	fileName = askForSaveFileName( fileName, QString( "*.png" ) , _("Save screen shot to...") );
+
+	if ( fileName.isEmpty() )
+	{
+	    y2milestone("Save screen shot canceled by user" );
+	    return;
+	}
+	
 	screenShotNo.insert( baseName, ++no );
-    }
+    } // if fileName.isEmpty()
+
+
+    //
+    // Actually save the screen shot
+    //
+
+    y2milestone( "Saving screen shot to %s", (const char *) fileName );
+    screenShot.save( fileName, "PNG" );
 }
 
 

@@ -85,10 +85,10 @@ public:
     long defaultSize(YUIDimension dim) const;
 
     /**
-     * Make a screen shot in .png format and dump it into the
-     * screenShotDir directory.
+     * Make a screen shot in .png format and save it to 'filename'.
+     * Opens a file selection box if 'filename' is empty.
      */
-    void makeScreenShot();
+    void makeScreenShot( std::string filename );
 
     /**
      * UI-specific runPkgSeleciton method.
