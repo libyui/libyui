@@ -29,6 +29,7 @@
 class YUIQt;
 class QListView;
 class QListViewItem;
+class YQListViewItem;
 
 class YQTable : public QVBox, public YTable
 {
@@ -148,6 +149,11 @@ protected:
      * Flag: User may re-sort the table by clicking on a header?
      **/
     bool enable_user_sort;
+
+    /**
+     * For maintaining insertion order
+     **/
+    YQListViewItem * last_item;
 };
 
 #endif // YQLabel_h

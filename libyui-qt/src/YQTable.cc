@@ -29,10 +29,6 @@
 #include "YQTable.h"
 
 
-// Give each item a number that corresponds to the insertion order so insertion
-// order can be maintained 
-static unsigned long next_item_no = 0;
-
 
 // Helper class. See Qt docu. We need an own subclass,
 // because we want to store the index of the row.
@@ -41,17 +37,22 @@ class YQListViewItem : public QListViewItem
 {
 public:
     int index;
-    unsigned long item_no;;
 
     /**
-     * Constructor
+     * Constructor for auto-sorting
      **/
-    YQListViewItem( YQTable *table, QListView *list_view, int index );
+    YQListViewItem( YQTable *		table,
+		    QListView *		list_view,
+		    int 		index );
 
     /**
-     * Sort key. Maintain insertion order unless otherwise told.
+     * Constructor for maintaining insertion order.
+     * 'after' is the item this one is to be inserted after.
      **/
-    virtual QString key ( int column, bool ascending ) const;
+    YQListViewItem( YQTable *		table,
+		    QListView *		list_view,
+		    YQListViewItem *	after,
+		    int 		index );
 
 protected:
 
@@ -59,29 +60,24 @@ protected:
 };
 
 
-YQListViewItem::YQListViewItem( YQTable *table, QListView *list_view, int index )
+YQListViewItem::YQListViewItem( YQTable *	table,
+				QListView *	list_view,
+				int 		index )
     : QListViewItem( list_view )
     , index( index )
-    , item_no( next_item_no++ )
     , table( table )
 {
 }
 
 
-QString
-YQListViewItem::key( int column, bool ascending ) const
+YQListViewItem::YQListViewItem( YQTable *	 table,
+				QListView *	 list_view,
+				YQListViewItem * after,
+				int 		 index )
+    : QListViewItem( list_view, after )
+    , index( index )
+    , table( table )
 {
-    if ( table->sortByInsertionOrder() )
-    {
-	QString no;
-	no.sprintf( "%020lu", item_no );
-
-	return no;
-    }
-    else
-    {
-	return QListViewItem::key( column, ascending );
-    }
 }
 
 
@@ -89,6 +85,7 @@ YQTable::YQTable( YUIQt *yuiqt, QWidget *parent, YWidgetOpt &opt, vector<string>
     : QVBox( parent )
     , YTable( opt, header.size() )
     , yuiqt( yuiqt )
+    , last_item( 0 )
 {
     sort_by_insertion_order = true;
     enable_user_sort = ! opt.keepSorting.value();
@@ -176,7 +173,14 @@ void YQTable::setEnabling(bool enabled)
 
 void YQTable::itemAdded(vector<string> elements, int index)
 {
-    QListViewItem *item = new YQListViewItem( this, qt_listview, index );
+    YQListViewItem *item;
+
+    if ( sort_by_insertion_order && last_item )
+	item = new YQListViewItem( this, qt_listview, last_item, index );
+    else
+	item = new YQListViewItem( this, qt_listview, index );
+
+    last_item = item;
     
     for ( unsigned int i=0; i < elements.size(); i++ )
 	item->setText( i, fromUTF8( elements[i] ) );
