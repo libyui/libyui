@@ -888,7 +888,7 @@ bool YUIQt::close()
 }
 
 
-bool YUIQt::eventFilter( QObject * obj, QEvent *ev )
+bool YUIQt::eventFilter( QObject * obj, QEvent * ev )
 {
     
     if ( ev->type() == QEvent::Close )
