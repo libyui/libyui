@@ -23,7 +23,7 @@
 #define FORCE_UNICODE_FONT	0
 
 #include <rpc/types.h>		// MAXHOSTNAMELEN
-#include <unistd.h>		// gethostname()
+#include <unistd.h>
 #include <qsocketnotifier.h>
 #include <qmessagebox.h>
 #include <qtimer.h>
@@ -149,7 +149,7 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
 			 "to maintain backwards compatibility.\n"
 			 "\n"
 			 );
-		
+
 		raiseFatalError();
 	    }
 	}
@@ -230,7 +230,7 @@ YUIQt::YUIQt(int argc, char **argv, bool with_threads, Y2Component *callback)
 
     if ( _fullscreen || ! _have_wm )
 	main_win->move( 0, 0 );
-    
+
     main_win->hide();	// visible only upon showDialog()
     busy_cursor = new QCursor( WaitCursor );
 
@@ -382,9 +382,26 @@ YCPValue YUIQt::runPkgSelection( YWidget * packageSelector )
 YDialog *YUIQt::createDialog(YWidgetOpt &opt)
 {
     bool has_defaultsize = opt.hasDefaultSize.value();
-    // QWidget *qt_parent = has_defaultsize ? main_win : 0;
     QWidget *qt_parent = main_win;
-    YDialog *dialog = new YQDialog( this, opt, qt_parent, has_defaultsize );
+
+
+    // Popup dialogs get the topmost other popup dialog as their parent since
+    // some window managers (e.g., fvwm2 as used in the inst-sys) otherwise
+    // tend to confuse the stacking order of popup dialogs.
+    //
+    // This popup_stack handling would be better placed in showDialog(), but we
+    // need the parent here for QWidget creation. libyui guarantees that each
+    // createDialog() will be followed by showDialog() for the same dialog
+    // without any chance for other dialogs to get in between.
+
+    if ( ! has_defaultsize && ! popup_stack.empty() )
+	qt_parent = popup_stack.back();
+
+    YQDialog *dialog = new YQDialog( this, opt, qt_parent, has_defaultsize );
+    CHECK_PTR( dialog );
+
+    if ( ! has_defaultsize )
+	popup_stack.push_back( (QWidget *) dialog->widgetRep() );
 
     return dialog;
 }
@@ -456,6 +473,15 @@ void YUIQt::closeDialog( YDialog *dialog )
     else	// non-defaultsize dialog
     {
 	qw->hide();
+
+	// Clean up the popup stack. libyui guarantees that a dialog will be
+	// deleted after closeDialog() so it is safe to pop that dialog from
+	// the popup stack here.
+
+	if ( ! popup_stack.empty() && popup_stack.back() == qw )
+	    popup_stack.pop_back();
+	else
+	    y2error( "Popup dialog stack corrupted!" );
     }
 }
 
@@ -1167,7 +1193,7 @@ void YUIQt::toggleRecordMacro()
     else
     {
 	normalCursor();
-	
+
 	QString filename =
 	    QFileDialog::getSaveFileName( DEFAULT_MACRO_FILE_NAME,		// startWith
 					  "*.ycp",				// filter
@@ -1187,7 +1213,7 @@ void YUIQt::toggleRecordMacro()
 void YUIQt::askPlayMacro()
 {
     normalCursor();
-    
+
     QString filename =
 	QFileDialog::getOpenFileName( DEFAULT_MACRO_FILE_NAME,		// startWith
 				      "*.ycp",				// filter
@@ -1220,7 +1246,7 @@ YCPValue YUIQt::askForExistingDirectory( const YCPString & startDir,
 					 const YCPString & headline )
 {
     normalCursor();
-    
+
     QString dir_name =
 	QFileDialog::getExistingDirectory( fromUTF8( startDir->value() ),
 					   main_win, 				// parent
@@ -1240,7 +1266,7 @@ YCPValue YUIQt::askForExistingFile( const YCPString & startWith,
 				    const YCPString & headline )
 {
     normalCursor();
-    
+
     QString file_name =
 	QFileDialog::getOpenFileName( fromUTF8( startWith->value() ),
 				      fromUTF8( filter->value() ),
@@ -1261,12 +1287,12 @@ YCPValue YUIQt::askForSaveFileName( const YCPString & startWith,
 				    const YCPString & headline )
 {
     normalCursor();
-    
+
     QString file_name = askForSaveFileName( fromUTF8( startWith->value() ),
 					    fromUTF8( filter->value() ),
 					    fromUTF8( headline->value() ) );
     busyCursor();
-    
+
     if ( file_name.isEmpty() )		// this includes file_name.isNull()
 	return YCPVoid();		// nothing selected -> return 'nil'
 
@@ -1286,7 +1312,7 @@ QString YUIQt::askForSaveFileName( const QString & startWith,
     {
 	// Leave the mouse cursor alone - this function might be called from
 	// some other widget, not only from UI::AskForSaveFileName().
-	
+
 	file_name = QFileDialog::getSaveFileName( startWith,
 						  filter,
 						  main_win, 		// parent

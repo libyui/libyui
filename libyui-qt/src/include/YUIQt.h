@@ -23,6 +23,7 @@
 #include <qapplication.h>
 #include <qmap.h>
 #include <qfont.h>
+#include <vector>
 
 #include "YUIInterpreter.h"
 #include "YQWidget.h"
@@ -32,6 +33,7 @@ class QVBox;
 class QWidgetStack;
 class QCursor;
 using std::string;
+using std::vector;
 
 
 class YUIQt :  public QApplication, public YUIInterpreter
@@ -450,9 +452,14 @@ private:
     QVBox * main_win;
 
     /**
-     * Stack for the Qt widgets. This will become the main window, too.
+     * Stack for the Qt widgets inside the main window.
      **/
     QWidgetStack * widget_stack;
+
+    /**
+     * Stack to keep track of the stacking order of popup dialogs.
+     **/
+    vector<QWidget *> popup_stack;
 
     /**
      * Numeric ID for defaultsize dialogs for the widget stack
