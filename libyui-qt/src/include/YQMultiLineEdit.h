@@ -23,13 +23,14 @@
 
 #include <qvbox.h>
 #include <qlabel.h>
-#include <qmultilineedit.h>
 #include <ycp/YCPString.h>
 
 #include "YMultiLineEdit.h"
 
 #define DEFAULT_VISIBLE_LINES 3
 
+
+class QTextEdit;
 
 class YQMultiLineEdit : public QVBox, public YMultiLineEdit
 {
@@ -101,8 +102,8 @@ protected slots:
 
 protected:
 
-    QLabel *		_qt_label;
-    QMultiLineEdit *	_qt_multiLineEdit;
+    QLabel *	_qt_label;
+    QTextEdit *	_qt_textedit;
 };
 
 
