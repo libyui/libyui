@@ -474,9 +474,9 @@ public:
     static const NCstring SolveLabel();
     
     /**
-     * The label of the file list frame
+     * The label of text input field 
      */
-    static const NCstring FileList();
+    static const NCstring FileName();
     
     /**
      * Part 1 of help text package installation

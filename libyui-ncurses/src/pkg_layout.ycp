@@ -15,66 +15,66 @@
     return `VBox( `VSpacing(0.3),
 		  `HBox( `HSpacing(0.3),
 			 // label of the Filter menu ( ( keep it short ) - filters out a set of packages
-			 `Left(`MenuButton( `opt(`key_F4), _("&Filter"),
+			 `Left(`MenuButton( `opt(`key_F4), _( "&Filter" ),
 					    // menu items of the filter menu
-					    [`item( `id(`groups), 	_("&RPM groups") ),
-					     `item( `id(`selections), 	_("Se&lections") ),
-					     `item( `id(`search), 	_("&Search") ),
-					     `item( `id(`whatif), 	_("&Installation summary") ),
-					     `item( `id(`updatelist),	_("&Update list") ) ]
+					    [`item( `id(`groups), 	_( "&RPM Groups" ) ),
+					     `item( `id(`selections), 	_( "Se&lections" ) ),
+					     `item( `id(`search), 	_( "&Search" ) ),
+					     `item( `id(`whatif), 	_( "&Installation Summary" ) ),
+					     `item( `id(`updatelist),	_( "&Update List" ) ) ]
 					    )),
 			 // label Actions menu ( keep it short ) - actions to change status of a package
-			 `Left(`MenuButton( `opt(`key_F5), _("&Actions"),
+			 `Left(`MenuButton( `opt(`key_F5), _( "&Actions" ),
 					    // Please note: add an appropriate number of whitespace get a well
 					    // formated menu (the [ ] should be one column)
 					    // toggle the status, e.g. change from installed to delete
-					    [`item( `id(`toggle), 	_("&Toggle     [RET]") ),
+					    [`item( `id(`toggle), 	_( "&Toggle     [RET]" ) ),
 					     // select the package for installation
-					     `item( `id(`select), 	_("&Select      [+]") ),
+					     `item( `id(`select), 	_( "&Select      [+]" ) ),
 					     // delete the package
-					     `item( `id(`delete), 	_("&Delete      [-]") ),
+					     `item( `id(`delete), 	_( "&Delete      [-]" ) ),
 					     // update the package
-					     `item( `id(`update), 	_("&Update      [>]") ),
+					     `item( `id(`update), 	_( "&Update      [>]" ) ),
 					     // set package status to 'Taboo', i.e. never install this package
-					     `item( `id(`tabooOn), 	_("Taboo &yes   [!]") ),
+					     `item( `id(`tabooOn), 	_( "Taboo &yes   [!]" ) ),
 					     // reset the status 'Taboo' 
-					     `item( `id(`tabooOff), 	_("Taboo &no    [-]") ),
+					     `item( `id(`tabooOff), 	_( "Taboo &no    [-]" ) ),
 					     // title of a submenu: actions concerning all packages of the list
-					     `menu( _("&All list packages"),
+					     `menu( _( "&All List Packages" ),
 						    [
 						     // menu items: actions concerning all packages
-						     `item(`id(`selall),   _("Install all")  ),
-						     `item(`id(`deselall), _("Don't install any") ),
-						     `item(`id(`delall),   _("De&lete all" ) ),
-						     `item(`id(`dontdel),  _("Do&n't delete any") ),
-						     `item(`id(`updall),   _("U&pdate all")   ),
-						     `item(`id(`dontupd),  _("Don't update/keep installed") )
+						     `item(`id(`selall),   _( "Install all" )  ),
+						     `item(`id(`deselall), _( "Don't install any" ) ),
+						     `item(`id(`delall),   _( "De&lete all" ) ),
+						     `item(`id(`dontdel),  _( "Do&n't delete any" ) ),
+						     `item(`id(`updall),   _( "U&pdate all" )   ),
+						     `item(`id(`dontupd),  _( "Don't update/keep installed" ) )
 						     ]
 						    )
 					     ]
 					     )),
 			 // label Information menu ( keep it short! )
-			 `Left(`MenuButton( `opt(`key_F6), _("&Information"),
+			 `Left(`MenuButton( `opt(`key_F6), _( "&Information" ),
 					    // menu items of the info menu
-					    [`item( `id(`pkginfo), 	_("&Package info" ) ),
-					     `item( `id(`longdescr), 	_("&Long description") ),
-					     `item( `id(`versions), 	_("&Version(s)") ),
-					     `item( `id(`files), 	_("&File list") ),
-					     `item( `id(`relations), 	_("Package &relations") ) ]
+					    [`item( `id(`pkginfo), 	_( "&Package Info" ) ),
+					     `item( `id(`longdescr), 	_( "&Long Description" ) ),
+					     `item( `id(`versions), 	_( "&Version(s)" ) ),
+					     `item( `id(`files), 	_( "&File List" ) ),
+					     `item( `id(`relations), 	_( "Package &Relations" ) ) ]
 					    )),
 			 // label Etc. menu ( keep it short! )
-			 `Left(`ReplacePoint(`id(`replacemenu), `MenuButton( `opt(`key_F7), _("&Etc."),
+			 `Left(`ReplacePoint(`id(`replacemenu), `MenuButton( `opt(`key_F7), _( "&Etc." ),
 									    // menu item of the Etc. menu
 									    [`menu( "&Dependencies",
 										    // menu items of the Etc./Dependencies submenu
-										    [`item( `id(`showdeps), _("    &Check dependencies now") ),
-										     `item( `id(`autodeps), _("[X] &Automatic dependency check") ) ]
+										    [`item( `id(`showdeps), _( "    &Check Dependencies Now" ) ),
+										     `item( `id(`autodeps), _( "[X] &Automatic Dependency Check" ) ) ]
 										    ),
 									      // menu item of the Etc. menu
 									     `menu( "&Selections",
 										    // menu item of the Etc./Selections submenu
-										    [`item( `id(`save), _("S&ave selection") ),
-										     `item( `id(`load), _("&Load selection") ) ]
+										    [`item( `id(`save), _( "S&ave Selection" ) ),
+										     `item( `id(`load), _( "&Load Selection" ) ) ]
 										    )
 									     ]
 									    )
@@ -90,13 +90,13 @@
 				      )
 			    ),
 		  // label text - keep it short
-		  `HBox( `HWeight(1, `HBox(`Label( _("Filter: ") ),
+		  `HBox( `HWeight(1, `HBox(`Label( _( "Filter: " ) ),
 					   `Label( `id(`filter), "........................." ),
 					   `HSpacing( 0.1 )
 					   )
 				  ),
 			 // label text - keep it short (use abbreviation if necessary)
-			 `HWeight(1, `HBox(`Label( _("Required diskspace: ") ),
+			 `HWeight(1, `HBox(`Label( _( "Required Diskspace: " ) ),
 					   `Label( `id(`diskspace), "         " ),
 					   `HSpacing( 0.1 )
 					   )
@@ -108,26 +108,26 @@
 				  ),
 			`VWeight( 5, `HBox(
 					   // label help menu 
-					   `HBox(`HWeight(1, `MenuButton(`opt(`key_F1), _("&Help"),
+					   `HBox(`HWeight(1, `MenuButton(`opt(`key_F1), _( "&Help" ),
 									  // menu items of the help menu
-									  [`item( `id(`help_general), _("&General help") ),
-									   `item( `id(`help_status),  _("Help on &package status") ),
-									   `item( `id(`help_search),  _("Help on &search") ),
-									   `item( `id(`help_update),  _("Help on &update") ) ]
+									  [`item( `id(`help_general), _( "&General Help" ) ),
+									   `item( `id(`help_status),  _( "Help on &Package Status" ) ),
+									   `item( `id(`help_search),  _( "Help on &Search" ) ),
+									   `item( `id(`help_update),  _( "Help on &Upate" ) ) ]
 									  )),
 						 `HStretch(),
 						 // button label
-						 `HWeight(1, `PushButton(`id(`search), `opt(`key_F2), _("&Search") ) ),
+						 `HWeight(1, `PushButton(`id(`search), `opt(`key_F2), _( "&Search" ) ) ),
 						 `HStretch(),
 						  // button label
-						 `HWeight(1, `PushButton(`id(`diskinfo), `opt(`key_F3), _("&Disk usage") ) ),
+						 `HWeight(1, `PushButton(`id(`diskinfo), `opt(`key_F3), _( "&Disk Usage" ) ) ),
 					 	 `HStretch()
 						 ),
 					   `HSpacing(5.0),
 					   // button label
-					   `HBox( `Right( `PushButton(`id(`cancel), `opt(`key_F9) ,_("&Cancel") ) ),
+					   `HBox( `Right( `PushButton(`id(`cancel), `opt(`key_F9) ,_( "&Cancel" ) ) ),
 						  // button label  
-						  `Right( `PushButton(`id(`ok), `opt(`key_F10), _("&OK") ) )
+						  `Right( `PushButton(`id(`ok), `opt(`key_F10), _( "&OK" ) ) )
 						  )
 					   )
 				  )
