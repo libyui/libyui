@@ -109,6 +109,11 @@ void
 YQPkgSelList::filter()
 {
     // TODO
+    // TODO
+    // TODO
+
+    // Do something with _selection->sel->inspacks_ptrs()
+    // std::list<PMPackagePtr>
 }
     
 void

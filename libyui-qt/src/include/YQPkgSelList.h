@@ -69,17 +69,6 @@ public:
     int summaryCol()	const	{ return _summaryCol;	}
 
 
-    // Icons
-
-    QPixmap iconOff()		{ return _iconOff;	}
-    QPixmap iconOn()		{ return _iconOn;	}
-    QPixmap iconAuto()		{ return _iconAuto;	}
-    QPixmap iconDelete()	{ return _iconDelete;	}
-    QPixmap iconUpdate()	{ return _iconUpdate;	}
-    QPixmap iconTaboo()		{ return _iconTaboo;	}
-
-
-
 public slots:
 
     /**
@@ -289,19 +278,8 @@ public:
     int nameCol()	const	{ return _pkgSelList->nameCol();	}
     int summaryCol()	const	{ return _pkgSelList->summaryCol();	}
 
-
-    // Icons
-
-    QPixmap iconOff()		{ return _pkgSelList->iconOff();	}
-    QPixmap iconOn()		{ return _pkgSelList->iconOn();		}
-    QPixmap iconAuto()		{ return _pkgSelList->iconAuto();	}
-    QPixmap iconDelete()	{ return _pkgSelList->iconDelete();	}
-    QPixmap iconUpdate()	{ return _pkgSelList->iconUpdate();	}
-    QPixmap iconTaboo()		{ return _pkgSelList->iconTaboo();	}
-
-
+    
 protected:
-
 
     // Data members
 
@@ -313,8 +291,7 @@ protected:
     // Preliminary - those are PMObject attributes!
     YQPkgSelStatus		_status;
 
-public: // FIXME
-    bool		_isInstalled;
+    bool			_isInstalled;
 };
 
 
