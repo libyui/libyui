@@ -33,9 +33,9 @@
 #include <y2pm/PMObject.h>
 #include <y2pm/PMSelectable.h>
 
+#include "NCPopupTree.h"
 
 class NCPkgTable;
-class NCPopupTree;
 class NCPopupSelection;
 class PMSelectionPtr;
 class PMPackagePtr;
@@ -128,13 +128,6 @@ class PackageSelector
     bool fillPatchList( );
     
    /**
-    * Fills the package table with default list
-    * @param pkgTable The package list widget
-    * @return bool
-    */
-    bool fillDefaultList( NCPkgTable * pkgTable );
-    
-   /**
     * Fills the list of available packages
     * @param table  The table widget
     * @param pkgPtr Show all available versions of this package 
@@ -155,6 +148,12 @@ class PackageSelector
     * @return void
     */
     void fillHeader( NCPkgTable *table );
+
+   /**
+    * Gets default RPM group (the first group)
+    * @return YStringTreeItem *
+    */
+    YStringTreeItem * getDefaultRpmGroup() { return filterPopup->getDefaultGroup(); }
     
     /**
      * Handle the given event. For the given event (the widget-id

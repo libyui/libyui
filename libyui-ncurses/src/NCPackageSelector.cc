@@ -57,19 +57,21 @@ NCPackageSelector::NCPackageSelector( Y2NCursesUI *ui, NCWidget * parent,
     YCPTerm pkgLayout = YCPNull();
     if ( youMode )
     {
-	// FIXME: use you_layout.ycp
-	pkgLayout = readLayoutFile( "/usr/share/YaST2/data/pkg_layout.ycp" );
+	pkgLayout = readLayoutFile( "/usr/share/YaST2/data/you_layout.ycp" );
     }
     else
     { 
 	pkgLayout = readLayoutFile( "/usr/share/YaST2/data/pkg_layout.ycp" );	     
     }
-    
+
     if ( ! pkgLayout.isNull() )
     {
+	NCMIL << "Creating widget tree" << endl;
 	widgetRoot = (YContainerWidget *)ui->createWidgetTree( dynamic_cast<YWidget *>(parent),
 							       opt, 0, pkgLayout );
     }
+    else
+	NCERR << "Layout is NULL" << endl;
 
     if ( widgetRoot )
     {
@@ -161,7 +163,7 @@ void NCPackageSelector::showDefaultList()
     if ( pkgList )
     {
 	// fill the list with packages 
-	packager.fillDefaultList( pkgList );
+	pkgList->fillDefaultList( pkgList );
 	
         // set the visible info to package description 
 	packager.setVisibleInfo ( PkgNames::PkgInfo() );

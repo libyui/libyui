@@ -88,7 +88,7 @@ string NCPkgTableTag::statusToStr( PMSelectable::UI_Status stat ) const
 	    return "----";
     }
 
-    return " ";
+    return "    ";
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -270,6 +270,50 @@ PMSelectable::UI_Status NCPkgTable::getAvailableStatus ( PMObjectPtr objPtr )
 {
     return ( statusStrategy->getPackageStatus( objPtr) );
 };
+
+
+///////////////////////////////////////////////////////////////////
+//
+// fillDefaultList
+//
+// Fills the package table with the list of default rpm group
+// or show the complete patch list in YOU mode
+//
+bool NCPkgTable::fillDefaultList( NCPkgTable * pkgTable )
+{
+    if ( !pkgTable )
+    {    
+	// set the package list widget
+	NCERR << "Package list not valid" << endl;
+	return false;
+    }
+
+    switch ( tableType )
+    {
+	case T_Packages:
+	case T_Update: {
+	    YStringTreeItem * defaultGroup =  packager->getDefaultRpmGroup();
+
+	    if ( defaultGroup )
+	    {
+		packager->fillPackageList ( YCPString( defaultGroup->value().translation()),
+					    defaultGroup );
+	    }
+	    else
+	    {
+		NCERR << "No default RPM group availbale" << endl;
+	    }
+	    break;
+	}
+	case T_Patches: {
+	    packager->fillPatchList();
+	    break;
+	}
+	default:
+	    break;
+    }
+    return true;
+}
 
 
 ///////////////////////////////////////////////////////////////////

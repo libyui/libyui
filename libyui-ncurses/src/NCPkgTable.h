@@ -238,6 +238,9 @@ public:
      * @return unsigned int
      */ 
     unsigned int getNumLines( ) { return pad->Lines(); }
+
+    
+    bool fillDefaultList( NCPkgTable * pkgTable );
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -403,44 +403,6 @@ bool PackageSelector::fillSearchList( const YCPString & expr )
 
 ///////////////////////////////////////////////////////////////////
 //
-// fillDefaultList
-//
-// Fills the package table with the list of default rpm group
-// or show the complete patch list in YOU mode
-//
-bool PackageSelector::fillDefaultList( NCPkgTable * pkgTable )
-{
-    NCPkgTable * packageList = getPackageList();
-     
-    if ( !packageList )
-    {    
-	return false;
-    }
-
-    if ( !youMode )
-    {
-	YStringTreeItem * defaultGroup =  filterPopup->getDefaultGroup();
-
-	if ( defaultGroup )
-	{
-	    fillPackageList ( YCPString( defaultGroup->value().translation()),
-			      defaultGroup );
-	}
-	else
-	{
-	    NCERR << "No default RPM group availbale" << endl;
-	}
-    }
-    else
-    {
-	fillPatchList();
-    }
-    
-    return true;
-}
-
-///////////////////////////////////////////////////////////////////
-//
 // fillPatchList
 //
 // Fills the package table with the list of YOU patches

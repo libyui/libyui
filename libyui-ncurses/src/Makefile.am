@@ -2,7 +2,8 @@
 # Makefile.am for ncurses/src
 #
 
-ydata_DATA = pkg_layout.ycp
+ydata_DATA = pkg_layout.ycp	\
+	you_layout.ycp
 
 # plugin, libtool forces 'lib' prefix
 AM_CXXFLAGS = -DY2LOG=\"ui-ncurses\"
