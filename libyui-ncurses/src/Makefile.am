@@ -16,6 +16,7 @@ libpy2ncurses_la_LDFLAGS = -version-info 2:0
 liby2ncurses_la_LDFLAGS = -version-info 2:0
 
 libpy2ncurses_la_LIBADD =		\
+	-lyui				\
 	-lncursesw -lpanelw -ly2pm
 liby2ncurses_la_LIBADD = $(libpy2ncurses_la_LIBADD)
 
@@ -94,7 +95,7 @@ liby2ncurses_la_SOURCES =				\
 	NCPopupPkgDescr.cc NCPopupPkgDescr.h		\
 	PkgNames.cc PkgNames.h				\
 	ObjectStatStrategy.cc ObjectStatStrategy.h	\
-	NCstyle.braille.h NCstyle.mono.h 		\
+	NCstyle.braille.h NCstyle.mono.h		\
 	NCstyle.linux.h NCstyle.xterm.h
 
 

@@ -193,7 +193,14 @@ NCFileSelection::NCFileSelection( NCWidget * parent,
     SetSepChar( ' ' );
     setTextdomain( "packages" );
 
-    if ( iniDir->value().empty() )
+    struct stat statInfo;
+    if ( !iniDir->value().empty() )
+    {
+	stat( iniDir->value().c_str(), &statInfo );
+    }
+    
+    if ( iniDir->value().empty()
+	 || !S_ISDIR(statInfo.st_mode) )
     {
 	char wDir[PATH_MAX+1];		// <limits.h>
     

@@ -52,10 +52,13 @@ class NCtext {
     list<NCstring> mtext;
 
     virtual void lset( const NCstring & ntext );
+    void lbrset( const NCstring & ntext, size_t columns ); 
 
   public:
 
     NCtext( const NCstring & nstr = "" );
+    NCtext( const NCstring & nstr, size_t columns );
+
     virtual ~NCtext();
 
     unsigned Lines()   const;

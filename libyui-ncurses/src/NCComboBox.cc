@@ -529,9 +529,16 @@ NCursesEvent NCComboBox::wHandleInput( wint_t key )
     break;
 
   default:
+    bool is_special = false;
+    if ( key > 0xFFFF )
+    {
+       is_special = true;
+       key -= 0xFFFF;
+    }
+
     if ( !mayedit || !validKey( key )
 	 ||
-	 ( KEY_MIN < key && KEY_MAX > key )
+	 ( !is_special && KEY_MIN < key && KEY_MAX > key )
 	 ||
 	 !iswprint( key ) ) {
       update = false;

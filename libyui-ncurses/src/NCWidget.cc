@@ -38,6 +38,7 @@
 //
 NCWidget::NCWidget( NCWidget * myparent )
     : tnode<NCWidget*>( this )
+    , magic( YWIDGET_MAGIC )
     , grabedBy( 0 )
     , win( 0 )
     , defsze( 11, 45 )
@@ -70,6 +71,9 @@ NCWidget::~NCWidget()
   while ( Fchild() )
     Fchild()->Disconnect();
   Disconnect();
+
+  invalidate();
+
   WIDDBG << "DD- " << this << endl;
 }
 
@@ -582,7 +586,7 @@ NCursesEvent NCWidget::wHandleInput( wint_t /*key*/ )
 */
 ostream & operator<<( ostream & STREAM, const NCWidget * OBJ )
 {
-  if ( OBJ )
+  if ( OBJ && OBJ->isValid() )
     return STREAM << *OBJ;
 
   return STREAM << "(NoNCWidget)";
@@ -598,11 +602,13 @@ ostream & operator<<( ostream & STREAM, const NCWidget * OBJ )
 */
 ostream & operator<<( ostream & STREAM, const NCWidget & OBJ )
 {
-  return STREAM << OBJ.location() << (void*)&OBJ
-    << '(' << OBJ.win
-    << ' ' << OBJ.inparent
-    << ' ' << OBJ.wstate
-    << ')';
+    if ( OBJ.isValid() )
+	return STREAM << OBJ.location() << (void*)&OBJ
+		      << '(' << OBJ.win
+		      << ' ' << OBJ.inparent
+		      << ' ' << OBJ.wstate
+		      << ')';
+    return STREAM << "( invalid NCWidget)"; 
 }
 
 ///////////////////////////////////////////////////////////////////

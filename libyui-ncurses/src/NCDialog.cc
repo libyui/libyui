@@ -593,11 +593,10 @@ bool NCDialog::wantFocus( NCWidget & ngrab )
 //
 void NCDialog::wDelete()
 {
-  // deactivate logging - reason of crash? (bug #37768)
   if ( pan ) {
-    //WIDDBG << DLOC << "+++ " << this << endl;
+    WIDDBG << DLOC << "+++ " << this << endl;
     NCWidget::wDelete();
-    //WIDDBG << DLOC << "--- " << this << endl;
+    WIDDBG << DLOC << "--- " << this << endl;
   }
 }
 
@@ -821,6 +820,13 @@ wint_t NCDialog::getinput()
 	if ( ret != ERR )	// get_wch() returns OK or KEY_CODE_YES on success
 	{
 	    got = gotwch;
+	    // UTF-8 keys (above KEY_MIN) may deliver same keycode as curses KEY_...
+	    // -> mark this keys
+	    if ( ret == OK
+		 && got > KEY_MIN )
+	    {
+		got += 0xFFFF; 
+	    }
 	}
 	else
 	{
@@ -844,6 +850,10 @@ wint_t NCDialog::getinput()
 		NCstring::RecodeToWchar( str, NCstring::terminalEncoding(), &to ); 
 		got = to[0];
 
+		if ( gotch != got )
+		{
+		    got += 0xFFFF;			// mark this key 
+		}    
 		NCDBG << "Recode: " << str << " (encoding: " << NCstring::terminalEncoding() << ") "
 		      << "to wint_t: " << got << endl; 
 	    }
@@ -1222,8 +1232,14 @@ void NCDialog::processInput( int timeout_millisec )
 //
 NCursesEvent NCDialog::getInputEvent( wint_t ch )
 {
-  NCursesEvent ret = wHandleInput( ch );
-  ret.widget = wActive;
+  NCursesEvent ret = NCursesEvent::none;
+
+  if ( wActive->isValid() )
+  {
+      ret = wHandleInput( ch );
+      ret.widget = wActive;
+  }
+  
   return ret;
 }
 
@@ -1251,13 +1267,20 @@ NCursesEvent NCDialog::wHandleInput( wint_t ch )
 NCursesEvent NCDialog::getHotkeyEvent( wint_t key )
 {
   NCWidget *const oActive = wActive;
-  NCursesEvent ret = wHandleHotkey( key );
-  ret.widget = wActive;
+  NCursesEvent ret = NCursesEvent::none;
+
+  if ( wActive->isValid() )
+  {
+      ret = wHandleHotkey( key );
+      ret.widget = wActive;
+  }  
+
 #if 0 // depends on kind of widget
   if ( wActive != oActive ) {
     Activate( *oActive );
   }
 #endif
+
   return ret;
 }
 

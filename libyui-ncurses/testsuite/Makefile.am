@@ -10,7 +10,7 @@ PACKAGE = ncurses
 
 INCLUDES = -I../src -I$(includedir) -I$(includedir)/yui
 
-noinst_PROGRAMS = runcurses utf8test y2ncurses
+noinst_PROGRAMS = runcurses utf8test y2ncurses in_wch
 
 runcurses_SOURCES = runcurses.cc
 runcurses_LDADD = ../src/liby2ncurses.la -lncurses -lpanel -lpthread \
@@ -27,6 +27,11 @@ utf8test_SOURCES = utf8test.cc			\
 
 utf8test_LDADD = ../src/liby2ncurses.la -lncursesw -lpanelw -lpthread \
 	-ly2 -lyui -lycp -lutil -ly2pm
+
+in_wch_SOURCES = in_wch.cc
+
+#in_wch_LDADD = -lncursesw -lpanelw -lpthread -ly2 -lyui -lycp -lutil
+in_wch_LDADD = -lncursesw
 
 y2ncurses_SOURCES = y2ncurses.cc
 y2ncurses_LDADD = -lncurses -lpanel -lpthread -ly2 -lyui -lycp \

@@ -43,6 +43,19 @@ NCtext::NCtext( const NCstring & nstr )
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : NCtext::NCtext
+//	METHOD TYPE : Constructor
+//
+//	DESCRIPTION :
+//
+NCtext::NCtext( const NCstring & nstr, size_t columns )
+{
+  lbrset( nstr, columns );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : NCtext::~NCtext
 //	METHOD TYPE : Destructor
 //
@@ -62,7 +75,7 @@ NCtext::~NCtext()
 void NCtext::lset( const NCstring & ntext )
 {
     // FIXME: rewrite this function so one understands it
-
+    
     mtext.clear();
     mtext.push_back( "" );
 
@@ -91,6 +104,56 @@ void NCtext::lset( const NCstring & ntext )
 	    mtext.push_back( "" );
 
 	mtext.back() = NCstring( mtext.back().str() + text.substr( spos ) );
+    }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCtext::lbrset
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCtext::lbrset( const NCstring & ntext, size_t columns )
+{
+    mtext.clear();
+
+    if ( ntext.str().empty() )
+	return;
+
+    const wstring & text( ntext.str() );
+    wstring::size_type spos = 0;
+    wstring::size_type cpos = wstring::npos;
+
+    cpos = text.find( L'\n', spos );
+    
+    while ( cpos != wstring::npos )
+    {
+	wstring line = text.substr(spos, cpos-spos);
+	
+	if ( line.size() <= columns )
+	{
+	    mtext.push_back( NCstring(line) );
+	}
+	else
+	{
+	    size_t start = columns;
+	    mtext.push_back( NCstring( line.substr(0, columns) ) );
+	    while ( start < line.size() )
+	    {
+		NCDBG << "Add: " << line.substr(start, columns) << endl;
+		mtext.push_back( NCstring( L'~' + line.substr(start, columns-1) ) );
+		start +=columns-1;
+	    }
+	}
+	spos = cpos + 1;
+	cpos = text.find( L'\n', spos );
+    }
+
+    if ( spos < text.size() )
+    {
+	mtext.push_back( NCstring( text.substr(spos) ) );
     }
 }
 

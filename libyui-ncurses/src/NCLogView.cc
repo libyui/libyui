@@ -105,7 +105,7 @@ void NCLogView::setLabel( const YCPString & nlabel )
 void NCLogView::setLogText( const YCPString & ntext )
 {
   DelPad();
-  text = NCstring( ntext );
+  text = NCtext( NCstring(ntext), Columns() );
   Redraw();
 }
 
@@ -185,48 +185,31 @@ NCPad * NCLogView::CreatePad()
 //
 void NCLogView::DrawPad()
 {
-    size_t columns = Columns();
+    // maximal value for lines is 32000!
+    unsigned int maxLines = 20000;
+    unsigned int skipLines = 0;
     unsigned int lines = text.Lines();
-    AdjustPad( wsze( lines, columns ) );
-    unsigned cl = 0;
+    unsigned int cl = 0;
+
+    if ( lines > maxLines )
+    {
+	skipLines = lines - maxLines;
+	lines = maxLines;
+    }
+
+    AdjustPad( wsze( lines, Columns() ) );
 
     for ( NCtext::const_iterator line = text.begin(); line != text.end(); ++line )
     {
-	pad->move( cl++, 0 );
-	wstring cline = (*line).str();
-
-	if ( cl > lines )
+	if ( skipLines == 0 )
 	{
-	    lines += 10;
-	    AdjustPad( wsze( lines, columns ) );
-	    pad->move( cl-1, 0 );
-	}
-
-	if ( cline.size() <= columns )
-	{
-	    pad->addwstr( cline.c_str() );
+	    pad->move( cl++, 0 );
+	    wstring cline = (*line).str();
+	    pad->addwstr( cline.c_str() ); 
 	}
 	else
 	{
-	    size_t start = columns;
-	    pad->addwstr( cline.substr( 0, columns).c_str() );
-
-	    while ( start < cline.size() )
-	    {
-		pad->move( cl++, 0 );
-		if ( cl > lines )
-		{
-		    lines += 10;
-		    AdjustPad( wsze( lines, columns ) );
-		    pad->move( cl-1, 0 );
-		}
-		chtype cch = 0;
-		NCattribute::setChar(cch,'~');
-		pad->addch( cch );
-
-		pad->addwstr( cline.substr( start, columns-1).c_str() );
-		start += columns-1;
-	    }
+	    skipLines--;
 	}
     }
 }

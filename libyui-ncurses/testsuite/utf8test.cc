@@ -134,7 +134,7 @@ int main (int argc, char *argv[])
 
     if ( setlocale( LC_CTYPE, language.c_str() ) == NULL )
     {
-	fprintf(stderr, "error: setlocale %s\n", language.c_str() );	
+	y2error( "Error: setlocale %s", language.c_str() );	
     }
     
     if ( strcmp( codeset, "UTF-8") == 0 )
@@ -142,11 +142,13 @@ int main (int argc, char *argv[])
 	use_utf8 = true;
     }
 
+    y2milestone( "UTF-8: %s", use_utf8?"true":"false" );
+
     // always use UTF-8 for gettext() !!!
     bind_textdomain_codeset ( TEXTDOMAIN, "UTF-8" );
 
     textdomain ( TEXTDOMAIN );
-
+    
     //
     // TEST: LC_CTYPE is not changed by setenv () if explicitly set
     //

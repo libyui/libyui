@@ -202,8 +202,11 @@ struct NCtoY2Event : public NCursesEvent {
 	  // created on the heap with 'new'. libyui takes care of deleting them.
 	  
 	  case button:
-	      return new YWidgetEvent( dynamic_cast<YWidget *> (widget), reason );
-	    
+	      if ( widget->isValid() )
+		  return new YWidgetEvent( dynamic_cast<YWidget *> (widget), reason );
+	      else
+		  return 0;
+	      
 	  case menu:
 	      return new YMenuEvent( selection );
 	    
@@ -214,7 +217,10 @@ struct NCtoY2Event : public NCursesEvent {
 	      return new YTimeoutEvent();
 
 	  case key:
-	      return new YKeyEvent( keySymbol, dynamic_cast<YWidget *> (widget) );
+	      if ( widget->isValid() )
+		  return new YKeyEvent( keySymbol, dynamic_cast<YWidget *> (widget) );
+	      else
+		  return 0;
 	      
 	  case none:
 	  case handled:

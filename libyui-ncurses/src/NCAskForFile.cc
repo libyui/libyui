@@ -74,6 +74,40 @@ NCAskForFile::~NCAskForFile( )
 
 }
 
+string NCAskForFile::checkIniDir( string iniDir )
+{
+    string dname = "";
+    
+    struct stat 	statInfo;
+    stat( iniDir.c_str(), &statInfo );
+
+    if ( S_ISDIR( statInfo.st_mode ) )
+    {
+	dname = iniDir;
+    }
+    else
+    {
+	string::size_type pos;
+
+	pos = iniDir.find_last_of( "/" );
+	if ( pos != string::npos
+	     && pos != 0 )
+	{
+	    string dir = iniDir.substr(0, pos );
+	    stat( dir.c_str(), &statInfo );
+
+	    if ( S_ISDIR( statInfo.st_mode ) )
+	    {
+		dname = dir;
+		iniFileName  = iniDir.substr( pos+1 );
+	    }
+	}
+    }
+
+    return dname;
+}
+
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -88,7 +122,10 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
 				 bool edit )
 {
     YWidgetOpt opt;
-
+    string startDir;
+    
+    startDir = checkIniDir( iniDir->value() );
+    
     // the vertical split is the (only) child of the dialog
     NCSplit * split = new NCSplit( this, opt, YD_VERT );
     addChild( split );
@@ -134,12 +171,12 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
 
     // add the list of directories
     opt.keyEvents.setValue( true );
-    dirList = new NCDirectoryTable( hSplit1, opt, NCFileSelection::T_Overview, iniDir );
+    dirList = new NCDirectoryTable( hSplit1, opt, NCFileSelection::T_Overview, YCPString(startDir) );
     dirList->setId( PkgNames::DirList() );
     hSplit1->addChild( dirList );
     
     // add the list of files
-    fileList = new NCFileTable( hSplit1, opt, NCFileSelection::T_Overview, filter, iniDir );
+    fileList = new NCFileTable( hSplit1, opt, NCFileSelection::T_Overview, filter, YCPString(startDir) );
     fileList->setId( PkgNames::FileList() );
     hSplit1->addChild( fileList );
 
@@ -154,7 +191,7 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
     fileName = new NCTextEntry( hSplit2, opt,
 				// label for text field showing the filename
 			       YCPString(_( "&File name:" )),
-			       YCPString( "" ),
+			       YCPString( iniFileName ),
 			       100, 50 );
     hSplit2->addChild( fileName );
     // label for text field showing the filter (e.g. *.bak)
@@ -264,9 +301,9 @@ void NCAskForFile::updateFileList()
     // set new start dir and show the file list
     fileList->setStartDir( dirList->getCurrentDir() );
     fileList->fillList( );
-
-    // show the currently selected file
-    fileName->setText( fileList->getCurrentFile() );  
+    if ( iniFileName == "" )
+	// show the currently selected file
+	fileName->setText( fileList->getCurrentFile() );  
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -292,6 +329,7 @@ bool NCAskForFile::postAgain( )
     else if ( postevent.keySymbol == "CursorRight" )
     {
 	fileList->setKeyboardFocus();
+	fileName->setText( fileList->getCurrentFile() ); 
 	return true;
     }
 
@@ -425,7 +463,10 @@ NCAskForExistingFile::NCAskForExistingFile( const wpos at,
 //
 string NCAskForExistingFile::getFileName()
 {
-    return fileList->getCurrentFile();
+    if ( fileName->getText()->value() == "" )
+	return fileList->getCurrentFile();
+    else
+	return fileName->getText()->value();
 }
 
 ///////////////////////////////////////////////////////////////////

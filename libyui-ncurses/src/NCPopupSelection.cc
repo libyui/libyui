@@ -246,6 +246,19 @@ bool NCPopupSelection::postAgain( )
 
 ///////////////////////////////////////////////////////////////////
 //
+// OrderFunc 
+//
+bool order( PMSelectionPtr ptr1, PMSelectionPtr ptr2 )
+{
+    if ( ptr1->order() < ptr2->order() )
+    {
+	return true;
+    }
+    return false;
+}
+
+///////////////////////////////////////////////////////////////////
+//
 //
 //	METHOD NAME : NCPopupSelection::fillSelectionList
 //	METHOD TYPE : bool
@@ -260,9 +273,11 @@ bool NCPopupSelection::fillSelectionList( NCPkgTable * sel )
     vector<string> pkgLine;
     pkgLine.reserve(4);
 
-    PMSelectionPtr selPtr;
+    list<PMSelectionPtr> selList;
+    list<PMSelectionPtr>::iterator listIt;
+    
     PMManager::PMSelectableVec::const_iterator it;
-
+    
     for (  it = Y2PM::selectionManager().begin(); it != Y2PM::selectionManager().end(); ++it )
     {
 	PMSelectionPtr selPtr = (*it)->theObject();
@@ -271,14 +286,21 @@ bool NCPopupSelection::fillSelectionList( NCPkgTable * sel )
 	    NCMIL << "Add-on selection: " <<  selPtr->name() << ", initial status: "
 		  << selPtr->getSelectable()->status() << endl;
 
-	    pkgLine.clear();
-	    pkgLine.push_back( selPtr->summary(Y2PM::getPreferredLocale()) );	// the description
-
-	    sel->addLine( selPtr->getSelectable()->status(),	// the status
-			  pkgLine,
-			  selPtr );		// PMSelectionPtr
+	    selList.push_back( selPtr ); 
 	}
     }
 
+    selList.sort( order );
+    
+    for ( listIt = selList.begin(); listIt != selList.end(); ++listIt )
+    {
+	pkgLine.clear();
+	pkgLine.push_back( (*listIt)->summary(Y2PM::getPreferredLocale()) );	// the description
+
+	sel->addLine( (*listIt)->getSelectable()->status(),	// the status
+		      pkgLine,
+		      (*listIt) );		// PMSelectionPtr	
+    }
+    
     return true;
 }

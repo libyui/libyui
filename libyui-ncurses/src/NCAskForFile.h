@@ -53,6 +53,8 @@ private:
     NCCheckBox *detailed;		// the 'Details' checkbox
     
     bool getCheckBoxValue( NCCheckBox * detailed );
+
+    string iniFileName;			// initial file name
     
 protected:
 
@@ -65,6 +67,8 @@ protected:
 
     virtual string getFileName() = 0;
 
+    string checkIniDir( string startDir );
+    
 public:
     
     NCAskForFile( const wpos at,

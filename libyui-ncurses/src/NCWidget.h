@@ -31,6 +31,8 @@ class NClabel;
 
 #define DLOC  location() << ' '
 
+#define YWIDGET_MAGIC         42
+
 ///////////////////////////////////////////////////////////////////
 //
 //	CLASS NAME : NCWidget
@@ -45,6 +47,18 @@ class NCWidget : public tnode<NCWidget*>, protected NCursesError {
   NCWidget & operator=( const NCWidget & );
   NCWidget            ( const NCWidget & );
 
+  private:
+  
+    /**
+     * Make this widget invalid. This operation cannot be reversed.
+     */
+    void invalidate() { magic=0; }
+
+    /**
+     * This object is only valid if this magic number is YWIDGET_MAGIC.
+     */
+    int magic;
+    
   protected:
 
     virtual const char * location() const { return "NCWidget"; }
@@ -117,6 +131,8 @@ class NCWidget : public tnode<NCWidget*>, protected NCursesError {
 
     NCWidget( NCWidget * myparent = 0 );
     virtual ~NCWidget();
+
+    bool isValid() const 	{ return magic == YWIDGET_MAGIC; }
 
     virtual const NCstyle::Style & wStyle() const {
       if ( Parent() )
