@@ -56,11 +56,10 @@ private:
     NCPushButton * cancelButton;
     NCPushButton * solveButton;		
 
-    NCPkgTable * pkgs;			// the list of packages with unresolved deps
     NCPkgTable * deps;			// the conflict/alternative packages
 
-    NCMenuButton * depsMenu;		// the menu button
-
+    NCLabel * head;			// the headline
+    
     NCLabel * errorLabel1; 		// the error message
     NCLabel * errorLabel2;
 
@@ -71,11 +70,20 @@ private:
     // method to solve the dependencies
     virtual bool solveInstall( PkgDep::ResultList & goodList, PkgDep::ErrorResultList & badList ) = 0;
 
-    // method to create the layout
-    virtual void createLayout(  );
+    virtual string getLabelRequire1() = 0;
+
+    void createLayout();
+
+    // method to create different layout for package/selection popup
+    virtual string getHeadline() { return ""; }
+
+    virtual void setDepsTableType() { // NOOP
+	                              ; }
     
 protected:
 
+    NCPkgTable * pkgs;			// the list of packages with unresolved deps
+    
     virtual bool postAgain();
 
     virtual NCursesEvent wHandleInput( int ch );

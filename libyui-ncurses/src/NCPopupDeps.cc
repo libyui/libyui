@@ -47,12 +47,13 @@ NCPopupDeps::NCPopupDeps( const wpos at, PackageSelector * pkger )
     : NCPopup( at, false )
       , cancelButton( 0 )
       , solveButton( 0 )
-      , pkgs( 0 )
       , deps( 0 )
-      , depsMenu( 0 )
+      , head( 0 )
       , errorLabel1( 0 )
       , errorLabel2( 0 )
       , packager( pkger )
+      , pkgs( 0 )
+
 {
     createLayout();
 }
@@ -95,7 +96,8 @@ void NCPopupDeps::createLayout( )
 
   // add the headline
   opt.isHeading.setValue( true );
-  NCLabel * head = new NCLabel( vSplit, opt, YCPString(PkgNames::PackageDeps().str()) );
+
+  head = new NCLabel( vSplit, opt, YCPString("") );
   vSplit->addChild( head );
 
   NCSpacing * sp = new NCSpacing( vSplit, opt, 0.4, false, true );
@@ -104,9 +106,7 @@ void NCPopupDeps::createLayout( )
   // add the list containing packages with unresolved depemdencies
   pkgs = new NCPkgTable( vSplit, opt );
   pkgs->setPackager( packager );
-  // set status strategy
-  ObjectStatStrategy * strategy =  new DependencyStatStrategy();
-  pkgs->setTableType( NCPkgTable::T_Dependency, strategy );
+ 
   vSplit->addChild( pkgs );
 
   NCSpacing * sp1 = new NCSpacing( vSplit, opt, 0.2, false, true );
@@ -166,7 +166,10 @@ void NCPopupDeps::createLayout( )
 //
 void NCPopupDeps::showDependencies( )
 {
-
+    // set headline and table type
+    head->setLabel( YCPString(getHeadline()) );
+    setDepsTableType();
+    
     // 	typedef std::list<Result> ResultList;
     PkgDep::ResultList		goodList;
     
@@ -333,31 +336,23 @@ bool NCPopupDeps::concretelyDependency( int index )
 	    pkgLine.clear();
 	    PMObjectPtr objPtr = (*it).solvable;	// not needed here 
 
+	    pkgLine.push_back( (*it).rel.asString() );
+	    deps->addLine( PMSelectable::S_NoInst, // use status NOInst
+			   pkgLine,
+			   i,		// the index
+			   PMObjectPtr() );	// null pointer
+		
 	    if ( !(*it).is_conflict )	// it is a requires dependency
 	    {
-		pkgLine.push_back( (*it).rel.asString() );
-		deps->addLine( PMSelectable::S_NoInst, // use status NOInst
-			       pkgLine,
-			       i,		// the index
-			       PMObjectPtr() );	// null pointer
 		require = true;
 	    }
-	    else
-	    {
-		pkgLine.push_back( (*it).rel.asString() );
-		deps->addLine( PMSelectable::S_NoInst, // use status NOInst
-			       pkgLine,
-			       i,		// the index
-			       PMObjectPtr() );	// null pointer	
-
-	    }
-	    
 	    ++it;
 	    i++;
 	}
 	if ( require )
 	{
-	    errorLabel1->setLabel( YCPString(PkgNames::LabelRequire1().str())  );
+	    
+	    errorLabel1->setLabel( YCPString(getLabelRequire1())  );
 	    errorLabel2->setLabel( YCPString(PkgNames::LabelRequire2().str()) );
 	    labelSet = true;
 	}
