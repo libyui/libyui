@@ -77,7 +77,13 @@ public slots:
      **/
     virtual QSize sizeHint() const;
 
+    
+    // Direct access to some states for menu actions
+    
+    void setInstallCurrentSourceRpm()	  { setInstallCurrentSourceRpm( true  ); }
+    void setDontInstallCurrentSourceRpm() { setInstallCurrentSourceRpm( false ); }
 
+    
     // No separate selectionChanged( PMPackagePtr ) signal:
     // Use YQPkgObjList::selectionChanged( PMObjectPtr ) instead
     // and dynamic_cast to PMPackagePtr if required.
@@ -86,9 +92,23 @@ public slots:
     
 protected:
 
+    /**
+     * Create context menu for source RPMs.
+     **/
+    void createSourceRpmContextMenu();
+    
+    /**
+     * Sets the currently selected item's source RPM status.
+     * Automatically selects the next item if 'selectNextItem' is 'true'.
+     **/
+    void setInstallCurrentSourceRpm( bool inst, bool selectNextItem = false );
+    
     // Data members
 
-    int _srpmStatusCol;
+    int			_srpmStatusCol;
+    QAction *		_actionInstallSourceRpm;
+    QAction *		_actionDontInstallSourceRpm;
+    QPopupMenu *	_sourceRpmContextMenu;
 };
 
 
@@ -140,6 +160,11 @@ public:
     void toggleSourceRpmStatus();
 
     /**
+     * Returns whether or not a source RPM is available for this package.
+     **/
+    bool hasSourceRpm() const { return _hasSourceRpm; }
+
+    /**
      * Comparison function used for sorting the list.
      * Returns:
      * -1 if this <  other
@@ -182,7 +207,7 @@ protected:
     // FIXME
     // Preliminary - those are PMObject attributes!
     bool		_installSourceRpm;
-    bool		_haveSourceRpm;
+    bool		_hasSourceRpm;
 };
 
 

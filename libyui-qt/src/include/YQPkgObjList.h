@@ -110,6 +110,11 @@ public slots:
      **/
     virtual void clear();
 
+    /**
+     * Update the internal actions: What actions are available for 'item'?
+     **/
+    virtual void updateActions( YQPkgObjListItem * item );
+
 
     // Direct access to some states for menu actions
 

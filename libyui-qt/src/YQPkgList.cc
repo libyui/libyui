@@ -19,7 +19,8 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 #include <qpixmap.h>
-#include <qpainter.h>
+#include <qaction.h>
+#include <qpopupmenu.h>
 
 #include <Y2PM.h>
 #include <y2pm/InstTarget.h>
@@ -54,11 +55,13 @@ YQPkgList::YQPkgList( QWidget *parent )
     addColumn( _( "Summary"	) );	_summaryCol	= numCol++;
     addColumn( _( "Size"	) );	_sizeCol	= numCol++;
     addColumn( _( "Source"	) );	_srpmStatusCol	= numCol++;
-    
+
     saveColumnWidths();
     setSorting( nameCol() );
     setColumnAlignment( sizeCol(), Qt::AlignRight );
     setAllColumnsShowFocus( true );
+
+    createSourceRpmContextMenu();
 }
 
 
@@ -76,7 +79,7 @@ YQPkgList::addPkgItem( PMPackagePtr pmPkg )
 	y2error( "Null PMPackage !" );
 	return;
     }
-    
+
     new YQPkgListItem( this, pmPkg );
 }
 
@@ -87,16 +90,29 @@ YQPkgList::pkgObjClicked( int 			button,
 			  int 			col,
 			  const QPoint & 	pos )
 {
-    if ( button == Qt::LeftButton )
+    if ( col == srpmStatusCol() )
     {
-	if ( col == srpmStatusCol() )
+	YQPkgListItem * item = dynamic_cast<YQPkgListItem *> (listViewItem);
+
+	if ( item )
 	{
-	    YQPkgListItem * item = dynamic_cast<YQPkgListItem *> (listViewItem);
-	
-	    if ( item )
+	    if ( button == Qt::LeftButton )
 	    {
 		if ( editable() && item->editable() )
 		    item->toggleSourceRpmStatus();
+		return;
+	    }
+	    else if ( button == Qt::RightButton )
+	    {
+		if ( editable() && item->editable() )
+		{
+		    _actionInstallSourceRpm->setEnabled( item->hasSourceRpm() );
+		    _actionDontInstallSourceRpm->setEnabled( item->hasSourceRpm() );
+
+		    if ( _sourceRpmContextMenu )
+			_sourceRpmContextMenu->popup( pos );
+		}
+
 		return;
 	    }
 	}
@@ -113,6 +129,47 @@ YQPkgList::sizeHint() const
 }
 
 
+void
+YQPkgList::createSourceRpmContextMenu()
+{
+    _actionInstallSourceRpm	= createAction( YQIconPool::pkgInstall(),  _( "&Install Source"	      ) );
+    _actionDontInstallSourceRpm = createAction( YQIconPool::pkgNoInst(),   _( "Do&n't Install Source" ) );
+
+    connect( _actionInstallSourceRpm,	  SIGNAL( activated() ), this, SLOT( setInstallCurrentSourceRpm()     ) );
+    connect( _actionDontInstallSourceRpm, SIGNAL( activated() ), this, SLOT( setDontInstallCurrentSourceRpm() ) );
+
+    _sourceRpmContextMenu = new QPopupMenu( this );
+
+    _actionInstallSourceRpm->addTo( _sourceRpmContextMenu );
+    _actionDontInstallSourceRpm->addTo( _sourceRpmContextMenu );
+}
+
+
+void
+YQPkgList::setInstallCurrentSourceRpm( bool installSourceRpm,
+				       bool selectNextItem )
+{
+    QListViewItem * listViewItem = selectedItem();
+
+    if ( ! listViewItem )
+	return;
+
+    YQPkgListItem * item = dynamic_cast<YQPkgListItem *> (listViewItem);
+
+    if ( item )
+    {
+	item->setInstallSourceRpm( installSourceRpm );
+
+	if ( selectNextItem && item->nextSibling() )
+	{
+	    item->setSelected( false );			// doesn't emit signals
+	    setSelected( item->nextSibling(), true );	// emits signals
+	}
+    }
+}
+
+
+
 
 
 
@@ -124,8 +181,8 @@ YQPkgListItem::YQPkgListItem( YQPkgList * pkgList, PMPackagePtr pmPkg )
 {
     CHECK_PTR( pmPkg );
     CHECK_PTR( pkgList );
-    
-    _haveSourceRpm	 = true;	// FIXME - get this from the package!
+
+    _hasSourceRpm	 = true;	// FIXME - get this from the package!
 
     setStatusIcon();
     setInstallSourceRpm( false ); // No other chance - RPM won't tell if a SRPM is installed
@@ -156,7 +213,7 @@ YQPkgListItem::setInstallSourceRpm( bool installSourceRpm )
 {
     _installSourceRpm = installSourceRpm;
 
-    if ( _haveSourceRpm )
+    if ( _hasSourceRpm )
     {
 	setPixmap( srpmStatusCol(),
 		   _installSourceRpm ? YQIconPool::pkgInstall() : YQIconPool::pkgNoInst() );
@@ -167,7 +224,7 @@ YQPkgListItem::setInstallSourceRpm( bool installSourceRpm )
 void
 YQPkgListItem::toggleSourceRpmStatus()
 {
-    if ( _haveSourceRpm )
+    if ( _hasSourceRpm )
 	setInstallSourceRpm( ! _installSourceRpm );
 }
 
@@ -226,7 +283,7 @@ YQPkgListItem::paintCell( QPainter *		painter,
 	QColorGroup cg = colorGroup;
 
 	cg.setColor( QColorGroup::Text, QColor( 0, 0, 0xC0 ) );		// Foreground
-	
+
 	if ( column == versionCol() )
 	    cg.setColor( QColorGroup::Base, QColor( 0xF0, 0xF0, 0xF0 ) );	// Background
 

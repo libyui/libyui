@@ -104,7 +104,7 @@ YQPkgObjList::pkgObjClicked( int		button,
 	{
 	    if ( editable() && item->editable() )
 	    {
-		// updateActions( item );	// TODO?
+		updateActions( item );
 
 		QPopupMenu * contextMenu =
 		    item->pmObj()->hasInstalledObj() ?
@@ -219,7 +219,6 @@ YQPkgObjList::createInstalledContextMenu()
     _actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
     _actionSetCurrentDelete->addTo( _installedContextMenu );
     _actionSetCurrentUpdate->addTo( _installedContextMenu );
-    _actionSetCurrentTaboo->addTo( _installedContextMenu );
     _actionSetCurrentAutoUpdate->addTo( _installedContextMenu );
     _actionSetCurrentAutoDelete->addTo( _installedContextMenu );
 }
@@ -244,6 +243,33 @@ YQPkgObjList::installedContextMenu()
     return _installedContextMenu;
 }
 
+
+void
+YQPkgObjList::updateActions( YQPkgObjListItem * item )
+{
+    PMObjectPtr pmObj = item->pmObj();
+    
+    if ( pmObj->hasInstalledObj() )
+    {
+	_actionSetCurrentInstall->setEnabled( false );
+	_actionSetCurrentDontInstall->setEnabled( false );
+	_actionSetCurrentTaboo->setEnabled( false);
+    
+	_actionSetCurrentKeepInstalled->setEnabled( true );
+	_actionSetCurrentDelete->setEnabled( true );
+	_actionSetCurrentUpdate->setEnabled( pmObj->hasCandidateObj() );
+    }
+    else
+    {
+	_actionSetCurrentInstall->setEnabled( pmObj->hasCandidateObj() );
+	_actionSetCurrentDontInstall->setEnabled( true );
+	_actionSetCurrentTaboo->setEnabled( true );
+    
+	_actionSetCurrentKeepInstalled->setEnabled( false);
+	_actionSetCurrentDelete->setEnabled( false );
+	_actionSetCurrentUpdate->setEnabled( false );
+    }
+}
 
 
 
@@ -373,7 +399,9 @@ YQPkgObjListItem::cycleStatus()
     {
 	switch ( oldStatus )
 	{
-	    case PMSelectable::S_NoInst:	newStatus = PMSelectable::S_Install;	break;
+	    case PMSelectable::S_NoInst:	newStatus = pmObj()->hasCandidateObj() ?
+						    PMSelectable::S_Install : PMSelectable::S_NoInst;
+						break;
 	    default:				newStatus = PMSelectable::S_NoInst;	break;
 
 		// Intentionally NOT cycling through YQPkgTaboo:

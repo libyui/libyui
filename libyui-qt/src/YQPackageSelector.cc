@@ -287,7 +287,7 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     CHECK_PTR( _pkgTechnicalDetailsView );
     _pkgTechnicalDetailsView->setMinimumSize( 0, 0 );
 
-    _detailsViews->addTab( _pkgTechnicalDetailsView, _( "&Technical data" ) );
+    _detailsViews->addTab( _pkgTechnicalDetailsView, _( "&Technical Data" ) );
 
     connect( _pkgList,			SIGNAL( selectionChanged    ( PMObjectPtr ) ),
 	     _pkgTechnicalDetailsView,	SLOT  ( showDetailsIfVisible( PMObjectPtr ) ) );
