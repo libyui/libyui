@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Mar 17 00:35:10 CET 2004 - nashif@suse.de
+
+- #if 0 not working hasSmallDecorations completely
+
+-------------------------------------------------------------------
 Tue Mar 16 18:05:46 CET 2004 - sh@suse.de
 
 - Minimal approach fix for bug #33584: Show license agreements
