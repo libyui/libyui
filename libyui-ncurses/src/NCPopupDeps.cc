@@ -403,7 +403,8 @@ bool NCPopupDeps::addDepsLine( NCPkgTable * table,
 		pkgLine.push_back( taboo );	
 	    }
 	    else if ( error.edition.asString() != ""
-		      &&  error.edition.asString() != "-" )
+		      &&  error.edition.asString() != "-"
+		      && objPtr->getSelectable()->status() == PMSelectable::S_KeepInstalled )
 	    {
 		string version = "(" + PkgNames::PkgVersion() + " " + error.edition.asString()
 		    + " " + PkgNames::NotAvailableText() + ")";
