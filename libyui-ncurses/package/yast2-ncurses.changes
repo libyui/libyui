@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Mar 11 14:57:32 CET 2003 - gs@suse.de
+
+- V 2.7.13
+- package installation: check dependencies at startup (bug #25011),
+  fixed typo in help text
+
+-------------------------------------------------------------------
 Fri Mar  7 13:02:04 CET 2003 - gs@suse.de
 
 - V 2.7.12
