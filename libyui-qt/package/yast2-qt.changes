@@ -1,4 +1,18 @@
 -------------------------------------------------------------------
+Mon Jan 27 17:10:32 CET 2003 - sh@suse.de
+
+- V 2.7.6
+- Added "rpm-devel" to "neededforbuild"
+- Support enabling/disabling for container widgets as well 
+- Show "auto changes" popup in package manager
+
+- YOU mode package manager changes:
+  - Show total download size
+  - Dropped "Packages" menu (pkgs are read-only there)
+  - Added "YOU Patches" menu instead 
+  - Addes "Show raw patch info" dialog
+
+-------------------------------------------------------------------
 Tue Jan 21 18:06:15 CET 2003 - sh@suse.de
 
 - V 2.7.5
