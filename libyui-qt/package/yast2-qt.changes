@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Oct  6 16:47:30 CEST 2004 - sh@suse.de
+
+- Dropped support for hardcoded images "suseheader" and "yast2"
+  Use path names and/or the wizard instead! 
+
+-------------------------------------------------------------------
 Fri Oct  1 13:46:37 CEST 2004 - sh@suse.de
 
 - Fixed bug #46598: YOU layout broken with 800x600 default size

@@ -346,8 +346,6 @@ qxembed.moc:				include/qxembed.h
 %.moc: include/%.h
 	$(MOC) $< -o $@
 
-EXTRA_DIST = yast2.xpm
-
 CLEANFILES = *.moc y2qt.kdoc y2ui.kdoc
 
 INCLUDES = -I$(srcdir)/include -I$(QTDIR)/include -I$(includedir) -I$(includedir)/yui

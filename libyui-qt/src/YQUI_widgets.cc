@@ -250,6 +250,7 @@ YWidget * YQUI::createProgressBar	( YWidget *		parent,
     return new YQProgressBar( (QWidget *) ( parent->widgetRep() ), opt, label, maxProgress, progress );
 }
 
+
 YWidget * YQUI::createImage		( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  YCPByteblock 		imagedata,
@@ -266,13 +267,6 @@ YWidget * YQUI::createImage		( YWidget *		parent,
     return new YQImage( (QWidget *) ( parent->widgetRep() ), opt, file_name );
 }
 
-YWidget * YQUI::createImage		( YWidget *		parent,
-					  YWidgetOpt & 		opt,
-					  ImageType 		img,
-					  YCPString 		default_text )
-{
-    return new YQImage( (QWidget *) ( parent->widgetRep() ), opt, img );
-}
 
 YWidget * YQUI::createIntField		( YWidget *		parent,
 					  YWidgetOpt &		opt,

@@ -27,58 +27,6 @@
 #include "utf8.h"
 #include "YQImage.h"
 
-// Images
-#include "yast2.xpm"
-
-
-#define DEFAULT_OEM_LOGO	"/usr/share/YaST2/images/oem_logo.png"
-
-
-YQImage::YQImage( QWidget * 		parent,
-		  const YWidgetOpt & 	opt,
-		  YUI::ImageType	img )
-    : QLabel( parent )
-    , YImage( opt )
-{
-    init( parent, opt );
-    _animated = false;
-    
-    QPixmap pixmap;
-    char * oem_logo;
-    
-    switch ( img )
-    {
-	case YUI::IT_SUSEHEADER:
-
-	    oem_logo = getenv( "YAST2_OEM_LOGO" );
-	    
-	    if ( ! oem_logo )
-	    {
-		oem_logo = DEFAULT_OEM_LOGO;
-	    }
-
-	    if ( access( oem_logo, R_OK ) == 0 )
-	    {
-		pixmap = QPixmap( QString( oem_logo ) );	// load file
-	    }
-	    
-	    if ( pixmap.isNull() )
-	    {	 
-		pixmap = QPixmap( ( const char ** ) yast2_xpm );	// use XPM data
-	    }
-	    break;
-
-	case YUI::IT_YAST2:
-	    pixmap = QPixmap( ( const char ** ) yast2_xpm );	// use XPM data
-	    break;
-
-	default:
-	    y2internal( "Internal error: Unknown image type %d", img );
-	    return; // Should not occur
-    }
-
-    yqSetPixmap( pixmap );
-}
 
 
 YQImage::YQImage( QWidget * 		parent,

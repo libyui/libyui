@@ -37,7 +37,6 @@ public:
     /**
      * Constructors
      */
-    YQImage( QWidget * parent, const YWidgetOpt & opt, YUI::ImageType img );
     YQImage( QWidget * parent, const YWidgetOpt & opt, const YCPByteblock & byteblock );
     YQImage( QWidget * parent, const YWidgetOpt & opt, const YCPString & file_name );
 

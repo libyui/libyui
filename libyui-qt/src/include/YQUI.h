@@ -366,7 +366,6 @@ protected:
     YWidget * createCheckBox		( YWidget * parent, YWidgetOpt & opt, const YCPString & label, bool checked);
     YWidget * createComboBox		( YWidget * parent, YWidgetOpt & opt, const YCPString & label);
     YWidget * createEmpty		( YWidget * parent, YWidgetOpt & opt);
-    YWidget * createImage		( YWidget * parent, YWidgetOpt & opt, ImageType    img, 	YCPString fallbackText );
     YWidget * createImage		( YWidget * parent, YWidgetOpt & opt, YCPByteblock imageData,	YCPString fallbackText );
     YWidget * createImage		( YWidget * parent, YWidgetOpt & opt, YCPString    fileName, 	YCPString fallbackText );
     YWidget * createIntField		( YWidget * parent, YWidgetOpt & opt, const YCPString & label, int minValue, int maxValue, int initialValue);

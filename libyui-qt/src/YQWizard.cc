@@ -602,6 +602,7 @@ void YQWizard::layoutHelpPanel()
     _helpBrowser->installEventFilter( this );
     _helpBrowser->setTextFormat( Qt::RichText );
     _helpBrowser->setMargin( 4 );
+    _helpBrowser->setResizePolicy( QScrollView::Manual );
 
     if ( highColorDisplay() )
     {
