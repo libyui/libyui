@@ -217,7 +217,7 @@ PackageSelector::PackageSelector( Y2NCursesUI * ui, YWidgetOpt & opt )
 	string floppyDevice = "/dev/fd0";
 
 	// the file popup
-	filePopup = new NCPopupFile( wpos( 1, 1), floppyDevice );
+	filePopup = new NCPopupFile( wpos( 1, 1), floppyDevice, this );
     }
 }
 

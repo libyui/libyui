@@ -758,6 +758,7 @@ public:
     static const NCstring LoadSel1Text();
     static const NCstring LoadSel2Text();
     static const NCstring LoadErr1Text();
+    static const NCstring LoadErr2Text();
     
 private:
     

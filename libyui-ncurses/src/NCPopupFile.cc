@@ -27,6 +27,7 @@
 #include "NCSpacing.h"
 #include "PkgNames.h"
 
+#include <y2pm/PMPackageImEx.h>
 #include "y2util/PathInfo.h"
 
 ///////////////////////////////////////////////////////////////////
@@ -35,7 +36,7 @@
 //	METHOD NAME : NCPopupFile::NCPopupFile
 //	METHOD TYPE : Constructor
 //
-NCPopupFile::NCPopupFile( const wpos at, string device )
+NCPopupFile::NCPopupFile( const wpos at, string device,  PackageSelector * pkger )
     : NCPopup( at, false )
     , headline ( 0 )
     , textLabel( 0 )
@@ -43,6 +44,7 @@ NCPopupFile::NCPopupFile( const wpos at, string device )
     , cancelButton( 0 )
     , fileName( 0 )
     , comboBox( 0 )
+    , packager( pkger )
     , pathName( "" )
     , mountFloppy( true )
     , floppyDevice( device )
@@ -144,10 +146,10 @@ void NCPopupFile::createLayout( )
 
 ///////////////////////////////////////////////////////////////////
 //
-//	METHOD NAME : NCPopupFile::showInfoPopup
+//	METHOD NAME : NCPopupFile::showFilePopup
 //	METHOD TYPE : NCursesEvent &
 //
-NCursesEvent & NCPopupFile::showInfoPopup( )
+NCursesEvent & NCPopupFile::showFilePopup( )
 {
     postevent = NCursesEvent();
     do {
@@ -196,20 +198,39 @@ NCursesEvent NCPopupFile::wHandleInput( int ch )
     return retEvent;
 }
 
-bool NCPopupFile::mountDevice( )
+bool NCPopupFile::mountDevice( string device, string errText )
 {
     bool mounted = false;
-    
-    int exitCode = system( string( "/bin/mount " + floppyDevice +
-				   " /media/floppy" + " >/dev/null 2>&1" ).c_str() );
-    if ( exitCode == 0 )
+    bool tryAgain = true;
+    while ( !mounted && tryAgain )
     {
-	NCMIL << floppyDevice << " mounted on /media/floppy" << endl;
-	mounted = true;
-    }
-    else
-    {
-	NCERR << "mount " << floppyDevice << " exit code: " << exitCode << endl;
+	int exitCode = system( string( "/bin/mount " + device +
+				       " /media/floppy" + " >/dev/null 2>&1" ).c_str() );
+	if ( exitCode == 0 )
+	{
+	    NCMIL << floppyDevice << " mounted on /media/floppy" << endl;
+	    mounted = true;
+	}
+	else
+	{
+	    NCERR << "mount " << floppyDevice << " exit code: " << exitCode << endl;
+	}
+
+	if ( !mounted )
+	{
+	    NCPopupInfo info1( wpos(2, 2),
+			       YCPString( PkgNames::ErrorLabel().str() ),
+			       YCPString( errText ),
+			       PkgNames::OKLabel().str(),
+			       PkgNames::CancelLabel().str() );
+	    info1.setNiceSize( 35, 10 );
+	    NCursesEvent event =info1.showInfoPopup();
+
+	    if ( event == NCursesEvent::cancel )
+	    {
+		tryAgain = false;
+	    }
+	}
     }
 
     return mounted;
@@ -231,52 +252,40 @@ void NCPopupFile::saveToFile()
 	okButton->setLabel( YCPString( PkgNames::SaveLabel().str() ) );
 	setDefaultPath();
     }
-    NCursesEvent event = showInfoPopup();
+    // show the save selection popup
+    NCursesEvent event = showFilePopup();
 
     if ( event == NCursesEvent::button )
     {
-	bool tryAgain = true;
-	bool mounted = false;
-	
-	// if the medium is a floppy mount the device first
-	if ( mountFloppy )
-	{
-	    while ( !mounted && tryAgain )
-	    {
-		mounted = mountDevice( );
-		if ( !mounted )
-		{
-		    NCPopupInfo info( wpos(2, 2),
-				      YCPString( PkgNames::ErrorLabel().str() ),
-				      YCPString( PkgNames::SaveErr1Text().str() ),
-				      PkgNames::OKLabel().str(),
-				      PkgNames::CancelLabel().str() );
-		    info.setNiceSize( 35, 10 );
-		    NCursesEvent event =info.showInfoPopup();
+	PMPackageImExPtr P( new PMPackageImEx );
 
-		    if ( event == NCursesEvent::cancel )
-		    {
-			tryAgain = false;
-		    }
-		}
+	// if the medium is a floppy mount the device
+	if ( !mountFloppy
+	     || mountDevice( floppyDevice, PkgNames::SaveErr1Text().str()) )
+	{
+	    // remember the current Package/SelectionManagers state.
+	    P->getPMState();
+
+	    // write package selection to file
+	    if ( ! P->doExport( pathName ) )
+	    {
+		NCPopupInfo info2( wpos(2, 2),
+				   YCPString( PkgNames::ErrorLabel().str() ),
+				   YCPString( PkgNames::SaveErr2Text().str() ) );
+		info2.setNiceSize( 35, 10 );
+		info2.showInfoPopup();
+		NCERR << "Error: could not write selection to: " << pathName << endl;	
+	    }
+	    else
+	    {
+		NCMIL << "Writing selection to: " << pathName << endl;	
 	    }
 	}
-	if ( !mountFloppy
-	     || (mountFloppy && mounted) )
-	{
-	    // FIXME: write selection to file
-	    // PathInfo pathInfo( pathName );
-	    // int ret = pathInfo.copy( "/tmp/testfile", pathName );
-	    // NCMIL << "Writing selection to: " << pathName << " returned: " << ret << endl;
-	    NCMIL << "Writing selection to: " << pathName << " NOT yet implemented" << endl;
-	}
-	
 	if ( mountFloppy )
 	{
-	    system( string( "/bin/umount /media/floppy >/dev/null 2>&1" ).c_str() ); 	    
+	    system( string( "/bin/umount /media/floppy >/dev/null 2>&1" ).c_str() );    
 	}
     }
-    
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -295,19 +304,53 @@ void NCPopupFile::loadFromFile()
 	okButton->setLabel( YCPString( PkgNames::LoadLabel().str() ) );
 	setDefaultPath();
     }
-    NCursesEvent event = showInfoPopup();
-
+    // show the load selection popup
+    NCursesEvent event = showFilePopup();
+  
     if ( event == NCursesEvent::button )
     {
-	NCPopupInfo info( wpos(2, 2),
-			  YCPString( PkgNames::NotifyLabel().str() ),
-			  YCPString( PkgNames::LoadSel1Text().str() ),
-			  PkgNames::OKLabel().str(),
-			  PkgNames::CancelLabel().str() );
-	info.setNiceSize( 30, 8 );
-	info.showInfoPopup();
+	PMPackageImExPtr P( new PMPackageImEx );
 
-	NCMIL << "Reading selection from: " << pathName << " NOT yet implemented" << endl;
+	// show popup "Really overwrite current selection?"
+	NCPopupInfo info1( wpos(2, 2),
+			   YCPString( PkgNames::NotifyLabel().str() ),
+			   YCPString( PkgNames::LoadSel1Text().str() ),
+			   PkgNames::OKLabel().str(),
+			   PkgNames::CancelLabel().str() );
+	info1.setNiceSize( 30, 8 );
+	NCursesEvent event = info1.showInfoPopup();
+
+	if ( event == NCursesEvent::button )
+	{
+	    if ( !mountFloppy
+		 || mountDevice( floppyDevice, PkgNames::LoadErr1Text().str()) )
+	    {
+		// read selection from file
+		if ( ! P->doImport( pathName) )
+		{
+		    NCPopupInfo info2( wpos(2, 2),
+				       YCPString( PkgNames::ErrorLabel().str() ),
+				       YCPString( PkgNames::LoadErr2Text().str() ) );
+		    info2.setNiceSize( 35, 10 );
+		    info2.showInfoPopup();
+		    NCERR << "Could not load selection from: " << pathName << endl;
+		}
+		else
+		{
+		    // restore Package/SelectionManagers state according to the
+		    P->setPMState();
+		    NCMIL << "Package selection loaded from: " << pathName << endl;
+		    // show package dependencies (in case dependency check in on)
+		    packager->showPackageDependencies(false);
+		    // always show selection dependencies
+		    packager->showSelectionDependencies();
+		}
+	    }
+	    if ( mountFloppy )
+	    {
+		system( string( "/bin/umount /media/floppy >/dev/null 2>&1" ).c_str() );    
+	    }
+	}
     }
 }
 

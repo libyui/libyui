@@ -1474,6 +1474,13 @@ const NCstring PkgNames::LoadSel2Text()
 const NCstring PkgNames::LoadErr1Text()
 {
     // text for an Error popup
+    static const NCstring value =  _( "<p>Could not mount the floppy. Check that the floppy is inserted in the drive.</p>" );
+    return value;
+}
+
+const NCstring PkgNames::LoadErr2Text()
+{
+    // text for an Error popup
     static const NCstring value =  _( "<p>Could not load the settings.<br>Check that the path name is correct and the floppy disk, if required, is inserted correctly./p>" );
     return value;
 }

@@ -56,6 +56,8 @@ private:
     NCTextEntry * fileName;
     NCComboBox * comboBox;
 
+    PackageSelector * packager;
+    
     string pathName;
     bool mountFloppy;
     string floppyDevice;
@@ -64,7 +66,6 @@ private:
     int vDim;
 
     void setDefaultPath();
-    bool mountDevice();
     
 protected:
 
@@ -74,7 +75,7 @@ protected:
     
 public:
     
-    NCPopupFile( const wpos at, string device );
+    NCPopupFile( const wpos at, string device, PackageSelector * pkger );
     
     virtual ~NCPopupFile();
 
@@ -82,7 +83,9 @@ public:
 
     void createLayout( );
 
-    NCursesEvent & showInfoPopup( );
+    NCursesEvent & showFilePopup( );
+
+    bool mountDevice( string device, string errText );
 
     void saveToFile();
     void loadFromFile();
