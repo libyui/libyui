@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Aug  9 18:51:05 CEST 2002 - sh@suse.de
+
+- V 2.6.6
+- Fixed table sorting with `opt(`keepSorting) 
+
+-------------------------------------------------------------------
 Sat Aug 03 15:17:56 CEST 2002 - arvin@suse.de
 
 - write qt warnings to y2log (bug #17161)
