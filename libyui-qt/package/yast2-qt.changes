@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Sep  9 18:46:35 CEST 2002 - sh@suse.de
+
+- Fixed minimumSize() hints for YQPkg* - works now in 640x480
+- Special icon for delete pkg conflict (tackat)
+- Brighter colors for over-long conflict lists ("999 more...")
+
+-------------------------------------------------------------------
 Mon Sep  9 02:20:37 CEST 2002 - sh@suse.de
 
 - V 2.6.15
