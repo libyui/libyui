@@ -311,14 +311,12 @@ void YQWizard::layoutStepsPanel()
 
     // Layouts for the buttons
 
-    QVBoxLayout * vbox = new QVBoxLayout( bottomGradient,
-					  0, 0 );	// margin, spacing
+    QVBoxLayout * vbox = new QVBoxLayout( bottomGradient, 0, 0 ); // parent, margin, spacing
     CHECK_PTR( vbox );
     vbox->addStretch( 99 );
 
 
-    QHBoxLayout * hbox = new QHBoxLayout( vbox,
-					  0 );		// spacing
+    QHBoxLayout * hbox = new QHBoxLayout( vbox, 0 );	// parent, spacing
     hbox->addStretch( 99 );
 
     _releaseNotesButton = new QPushButton( _( "Release Notes..." ), bottomGradient );
@@ -333,8 +331,7 @@ void YQWizard::layoutStepsPanel()
     hbox->addStretch( 99 );
     vbox->addStretch( 99 );
 
-    hbox = new QHBoxLayout( vbox,
-			    0 );		// spacing
+    hbox = new QHBoxLayout( vbox, 0 );	// parent, spacing
     hbox->addStretch( 99 );
 
     // Help button - intentionally without keyboard shortcut
@@ -657,68 +654,95 @@ void YQWizard::layoutHelpPanel()
 
 
 
-    if ( _stepsEnabled || _treeEnabled )
+    //
+    // Button box with bottom gradient
+    //
+
+
+    QLabel * buttonBox = new QLabel( vbox );
+    CHECK_PTR( buttonBox );
+
+    QPushButton * button;
+    QPixmap pixmap;
+
+    if ( _treeEnabled )
     {
-	// Bottom gradient
-
-	QLabel * buttonParent = new QLabel( vbox );
-	CHECK_PTR( buttonParent );
-	// buttonParent->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Minimum ) ); // hor/vert
-
-	QPushButton * button;
-	QPixmap pixmap;
-
-	if ( _treeEnabled )
-	{
-	    // "Tree" button - intentionally without keyboard shortcut
-	    button = new QPushButton( _( "Tree" ), buttonParent );
-	    CHECK_PTR( button );
+	// "Tree" button - intentionally without keyboard shortcut
+	button = new QPushButton( _( "Tree" ), buttonBox );
+	CHECK_PTR( button );
 
 #if USE_ICON_ON_HELP_BUTTON
-	    pixmap = QPixmap( PIXMAP_DIR "tree-button.png" );
+	pixmap = QPixmap( PIXMAP_DIR "tree-button.png" );
 #endif
-	}
-	else // if ( _stepsEnabled )
-	{
-	    // "Steps" button - intentionally without keyboard shortcut
-	    button = new QPushButton( _( "Steps" ), buttonParent );
-	    CHECK_PTR( button );
+    }
+    else
+	if ( _stepsEnabled )
+    {
+	// "Steps" button - intentionally without keyboard shortcut
+	button = new QPushButton( _( "Steps" ), buttonBox );
+	CHECK_PTR( button );
 
 #if USE_ICON_ON_HELP_BUTTON
-	    pixmap = QPixmap( PIXMAP_DIR "steps-button.png" );
+	pixmap = QPixmap( PIXMAP_DIR "steps-button.png" );
 #endif
-	}
-
-
-	if ( ! pixmap.isNull() )
-	    button->setPixmap( pixmap );
-
-	QGridLayout * grid = centerAtBottom( buttonParent, button, WORK_AREA_BOTTOM_MARGIN );
-	setBottomCroppedGradient( buttonParent, _bottomGradientPixmap, grid->sizeHint().height() );
-
-	if ( _bottomGradientPixmap.isNull() )
-	    buttonParent->setFixedHeight( button->sizeHint().height() + WORK_AREA_BOTTOM_MARGIN );
-
-
-	if ( _treeEnabled )
-	{
-	    connect( button, SIGNAL( clicked()	),
-		     this,   SLOT  ( showTree() ) );
-	}
-	else
-	{
-	    connect( button, SIGNAL( clicked()	 ),
-		     this,   SLOT  ( showSteps() ) );
-	}
     }
     else
     {
-	QWidget * bottomSpacer = addVSpacing( vbox, WORK_AREA_BOTTOM_MARGIN );
-	CHECK_PTR( bottomSpacer );
-	setBottomCroppedGradient( bottomSpacer, _bottomGradientPixmap, WORK_AREA_BOTTOM_MARGIN );
+	// Create a dummy button just to find out how high it would become
+	button = new QPushButton( "Dummy", buttonBox );
+	CHECK_PTR( button );
+    }
+
+
+    if ( ! pixmap.isNull() )
+	button->setPixmap( pixmap );
+
+    layoutSideBarButtonBox( buttonBox, button );
+
+    if ( _treeEnabled )
+    {
+	connect( button, SIGNAL( clicked()  ),
+		 this,   SLOT  ( showTree() ) );
+    }
+    else if ( _stepsEnabled )
+    {
+	connect( button, SIGNAL( clicked()   ),
+		 this,   SLOT  ( showSteps() ) );
+    }
+    else
+    {
+	// Hide the dummy button - the button box height is fixed now.
+	button->hide();
     }
 
     addGradientColumn( _helpPanel );
+}
+
+
+
+void YQWizard::layoutSideBarButtonBox( QWidget * parent, QPushButton * button )
+{
+    QVBoxLayout * vbox = new QVBoxLayout( parent, 0, 0 );	// parent, margin, spacing
+    CHECK_PTR( vbox );
+    vbox->addSpacing( BUTTON_BOX_TOP_MARGIN );
+    
+    QHBoxLayout * hbox = new QHBoxLayout( vbox, 0 );		// parent, spacing
+    CHECK_PTR( hbox );
+
+    hbox->addStretch( 99 );
+    hbox->addWidget( button );
+    hbox->addStretch( 99 );
+
+    vbox->addSpacing( WORK_AREA_BOTTOM_MARGIN );
+
+    // For whatever strange reason, parent->sizeHint() does not return anything
+    // meaningful yet - not even after vbox->activate() or parent->adjustSize()
+    int height = button->sizeHint().height() + BUTTON_BOX_TOP_MARGIN + WORK_AREA_BOTTOM_MARGIN;
+    
+    if ( ! _bottomGradientPixmap.isNull() )
+	setBottomCroppedGradient( parent, _bottomGradientPixmap, height );
+
+    parent->setFixedHeight( height );
 }
 
 
@@ -756,12 +780,12 @@ void YQWizard::layoutTreePanel()
 
     // Bottom gradient
 
-    QLabel * buttonParent = new QLabel( vbox );
-    CHECK_PTR( buttonParent );
+    QLabel * buttonBox = new QLabel( vbox );
+    CHECK_PTR( buttonBox );
 
 
     // "Help" button - intentionally without keyboard shortcut
-    QPushButton * button = new QPushButton( _( "Help" ), buttonParent );
+    QPushButton * button = new QPushButton( _( "Help" ), buttonBox );
     CHECK_PTR( button );
 
 #if USE_ICON_ON_HELP_BUTTON
@@ -771,11 +795,7 @@ void YQWizard::layoutTreePanel()
 	button->setPixmap( pixmap );
 #endif
 
-    QGridLayout * grid = centerAtBottom( buttonParent, button, WORK_AREA_BOTTOM_MARGIN );
-    setBottomCroppedGradient( buttonParent, _bottomGradientPixmap, grid->sizeHint().height() );
-
-    if ( _bottomGradientPixmap.isNull() )
-	buttonParent->setFixedHeight( button->sizeHint().height() + WORK_AREA_BOTTOM_MARGIN );
+    layoutSideBarButtonBox( buttonBox, button );
 
     connect( button, SIGNAL( clicked()	),
 	     this,   SLOT  ( showHelp() ) );
@@ -1059,8 +1079,7 @@ void YQWizard::layoutButtonBox( QWidget * parent )
     // another portion of that gradient as their backround pixmap, and it would
     // be very hard to cover all cases - resizing, hiding individual buttons, etc.
 
-    QVBoxLayout * vbox = new QVBoxLayout( buttonBox,
-					  0, 0 );	// margin, spacing
+    QVBoxLayout * vbox = new QVBoxLayout( buttonBox, 0, 0 );	// parent, margin, spacing
     CHECK_PTR( vbox );
 
     vbox->addSpacing( BUTTON_BOX_TOP_MARGIN );
@@ -1070,8 +1089,8 @@ void YQWizard::layoutButtonBox( QWidget * parent )
     // QHBoxLayout for the buttons
     //
 
-    QHBoxLayout * hbox = new QHBoxLayout( vbox,
-					  0 );		// spacing
+    QHBoxLayout * hbox = new QHBoxLayout( vbox, 0 );		// parent, spacing
+    CHECK_PTR( hbox );
 
     //
     // "Back" button
@@ -1151,8 +1170,6 @@ void YQWizard::layoutButtonBox( QWidget * parent )
 	setBottomCroppedGradient( buttonBox, _bottomGradientPixmap, buttonBox->sizeHint().height() );
     }
 
-    vbox->activate();
-    buttonBox->adjustSize();
     buttonBox->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
 }
 
@@ -1288,34 +1305,6 @@ QWidget * YQWizard::addGradientColumn( QWidget * parent, int width )
 
     return bottomGradient;
 }
-
-
-
-QGridLayout * YQWizard::centerAtBottom( QWidget * parent, QWidget * child, int margin )
-{
-    QGridLayout * grid = new QGridLayout( parent,
-					  2,		// rows
-					  3,		// columns
-					  margin );
-    CHECK_PTR( grid );
-
-    // Give as much space as possible to the (empty) top row
-    // -> Bottom-align the child widget
-    grid->setRowStretch( 0, 99 );
-    grid->setRowStretch( 1, 0  );
-
-    // Evenly distribute excess space between left and right column,
-    // don't resize the center column
-    // -> center the widget in the center column
-    grid->setColStretch( 0, 99 );
-    grid->setColStretch( 1, 0  );
-    grid->setColStretch( 2, 99 );
-
-    grid->addWidget( child, 1, 1 );	// Bottom row, center column
-
-    return grid;
-}
-
 
 
 void YQWizard::destroyButtons()

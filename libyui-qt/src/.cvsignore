@@ -7,3 +7,5 @@ Makefile.in
 y2qt.kdoc
 *.la
 qt
+*.bak
+*.auto

@@ -361,8 +361,9 @@ protected:
 
     // Layout functions
 
-    void layoutTitleBar	( QWidget * parent );
-    void layoutSideBar	( QWidget * parent );
+    void layoutTitleBar		( QWidget * parent );
+    void layoutSideBar		( QWidget * parent );
+    void layoutSideBarButtonBox	( QWidget * parent, QPushButton * button );
     void layoutStepsPanel();
     void layoutHelpPanel();
     void layoutTreePanel();
@@ -400,15 +401,6 @@ protected:
      * background pixmaps.
      **/
     QWidget * addGradientColumn( QWidget * parent, int width = 8 );
-
-    /**
-     * Add a grid layout to a parent widget that centers its (only) child at
-     * the parent's bottom, maintaining the specified margin from all edges
-     * (including the bottom).
-     *
-     * Returns the newly created grid layout.
-     **/
-    QGridLayout * centerAtBottom( QWidget * parent, QWidget * child, int margin );
 
     /**
      * Send a wizard event with the specified ID.
