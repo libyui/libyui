@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Mar 12 18:16:25 CET 2003 - sh@suse.de
+
+- Enable mounting floppy for pkg list import / export
+
+-------------------------------------------------------------------
 Mon Mar 10 18:57:03 CET 2003 - sh@suse.de
 
 - Fixed bug #25011: Force dependency check on startup in PkgMgr

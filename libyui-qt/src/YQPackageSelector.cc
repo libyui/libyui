@@ -56,6 +56,8 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
+#include "QY2FloppyMountDialog.h"
+
 #include "YQPackageSelector.h"
 #include "YQPkgChangesDialog.h"
 #include "YQPkgConflictDialog.h"
@@ -199,7 +201,7 @@ YQPackageSelector::YQPackageSelector( YUIQt * yuiqt, QWidget *parent, YWidgetOpt
     y2debug( "Floppy device: %s", (const char *) _floppyDevice );
     y2milestone( "PackageSelector init done" );
 
-    
+
 #if CHECK_DEPENDENCIES_ON_STARTUP
 
     if ( ! _youMode )
@@ -898,9 +900,23 @@ YQPackageSelector::checkDiskUsage()
 void
 YQPackageSelector::pkgExport()
 {
+    QY2FloppyMountDialog fileDialog( this,				// parent
+				      "user.sel",			// startWith
+				      "*.sel",				// filter
+				      _( "Save Package List" ),		// caption
+				      _floppyDevice,			// floppyDevice
+				      "/media/floppy",			// floppyMountPoint
+				      false );				// startWithFloppy
+
+    QString filename = fileDialog.askForSaveFileName();
+    
+#if 0
     QString filename = YUIQt::yuiqt()->askForSaveFileName( QString( "user.sel" ),	// startsWith
 							   QString( "*.sel" ),		// filter
 							   _( "Save Package List" ) );
+#endif
+
+    
     if ( ! filename.isEmpty() )
     {
 	y2milestone( "Exporting package list to %s", (const char *) filename );
@@ -929,6 +945,8 @@ YQPackageSelector::pkgExport()
 				  QMessageBox::NoButton,			// button1
 				  QMessageBox::NoButton );			// button2
 	}
+
+	fileDialog.unmount( true ); // manual call only necessary if verbose mode desired
     }
 }
 
@@ -936,11 +954,24 @@ YQPackageSelector::pkgExport()
 void
 YQPackageSelector::pkgImport()
 {
+    QY2FloppyMountDialog fileDialog( this,				// parent
+				      "user.sel",			// startWith
+				      "*.sel",				// filter
+				      _( "Load Package List" ),		// caption
+				      _floppyDevice,			// floppyDevice
+				      "/media/floppy",			// floppyMountPoint
+				      false );				// startWithFloppy
+
+    QString filename = fileDialog.askForExistingFile();
+    
+#if 0
     QString filename = 	QFileDialog::getOpenFileName( "user.sel",			// startsWith
 						      "*.sel",				// filter
 						      this,				// parent
 						      0,				// name
 						      _( "Load Package List" ) );	// caption
+#endif
+
     if ( ! filename.isEmpty() )
     {
 	y2milestone( "Importing package list from %s", (const char *) filename );
@@ -966,7 +997,9 @@ YQPackageSelector::pkgImport()
 				  QMessageBox::NoButton,			// button1
 				  QMessageBox::NoButton );			// button2
 	}
-    }
+	
+ 	fileDialog.unmount( true ); // manual call only necessary if verbose mode desired
+   }
 }
 
 

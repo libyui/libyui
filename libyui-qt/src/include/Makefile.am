@@ -69,9 +69,10 @@ pkginclude_HEADERS =				\
 	YQTree.h				\
 						\
 	QY2BarGraph.h				\
+	QY2CharValidator.h			\
 	QY2ComboTabWidget.h			\
 	QY2DiskUsageList.h			\
-	QY2CharValidator.h			\
+	QY2FloppyMountDialog.h			\
 	QY2ListView.h				\
 	QXEmbed.h				\
 						\
