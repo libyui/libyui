@@ -29,6 +29,7 @@
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQi18n.h"
+#include <qheader.h>
 
 using std::set;
 
@@ -130,7 +131,7 @@ YQPkgDiskUsageList::postPendingWarnings()
 QSize
 YQPkgDiskUsageList::sizeHint() const
 {
-    return QSize( 400, 100 );
+    return QSize( header()->headerWidth(), 100 );
 }
 
 
