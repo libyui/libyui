@@ -329,6 +329,11 @@ public:
      */
     static const NCstring SearchResults();
 
+   /**
+     *  The label for Filter: Installation Summary
+     */
+    static const NCstring InstSummary();
+    
     /**
      *  The label for Filter: Update problem
      */
@@ -435,7 +440,12 @@ public:
      *  The label of the Cancel/Ignore button
      */
     static const NCstring CancelIgnore();
-    
+
+   /**
+     *  The label of the Ignore All button
+     */
+    static const NCstring IgnoreAll();
+
     /**
      *  The label of the Solve button
      */

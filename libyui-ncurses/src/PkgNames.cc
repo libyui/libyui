@@ -511,6 +511,13 @@ const NCstring PkgNames::CancelIgnore()
     return value;
 }
 
+const NCstring PkgNames::IgnoreAll()
+{
+    // the label of a Cancel button
+    static const NCstring value = _("&Ignore all");
+    return value;
+}
+
 const NCstring PkgNames::SolveLabel()
 {
     // the label of a Cancel button
@@ -522,6 +529,13 @@ const NCstring PkgNames::SearchResults()
 {
     // the label for Filter: Search results 
     static const NCstring value = _("Search results");
+    return value;
+}
+
+const NCstring PkgNames::InstSummary()
+{
+    // the label for Filter: Installation summary
+    static const NCstring value = _("Inst. Summary");
     return value;
 }
 
