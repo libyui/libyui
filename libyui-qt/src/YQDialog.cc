@@ -38,8 +38,8 @@ YQDialog::YQDialog( const YWidgetOpt &	opt,
 		    QWidget *		qt_parent,
 		    bool		default_size )
     : QWidget( qt_parent,
-	       0,	// name
-	       default_size ? 0 : WType_Modal | WStyle_Dialog )
+	       0,						// name
+	       default_size ? 0 : WType_Modal | WStyle_Dialog )	// WFlags
     , YDialog( opt )
 {
     _userResized	= false;
@@ -71,8 +71,20 @@ YQDialog::YQDialog( const YWidgetOpt &	opt,
     }
 
     _qFrame = new QFrame ( this );
+    bool decorate = ! hasDefaultSize() && ! YQUI::ui()->haveWM();
+	
+    if ( hasSmallDecorations() )
+    {
+#if 0
+	// None of this works (yet). :-((
+	
+	clearWFlags( getWFlags() );
+	setWFlags( WStyle_Customize | WStyle_DialogBorder | WStyle_StaysOnTop );
+	// decorate = true;
+#endif
+    }
 
-    if ( ! hasDefaultSize() && ! YQUI::ui()->haveWM() )
+    if ( decorate )
     {
 	_qFrame->setFrameStyle ( QFrame::Box | QFrame::Raised );
 	_qFrame->setLineWidth(2);
