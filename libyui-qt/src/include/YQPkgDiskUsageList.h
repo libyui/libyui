@@ -70,9 +70,19 @@ public slots:
 
 protected:
 
+    /**
+     * Event handler for keyboard input - for debugging and testing.
+     * Changes the current item's percentage on the fly.
+     *
+     * Reimplemented from QListView / QWidget.
+     */
+    virtual void keyPressEvent( QKeyEvent * ev );
+
+    
     // Data members
 
-    QAsciiDict<YQPkgDiskUsageListItem> _items;
+    QAsciiDict<YQPkgDiskUsageListItem>  _items;
+    bool				_debug;
 };
 
 

@@ -35,6 +35,7 @@
 YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget *parent )
     : QY2DiskUsageList( parent, true )
 {
+    _debug = false;
     const std::set<PkgDuMaster::MountPoint>	du = Y2PM::packageManager().getDu().mountpoints();
     std::set<PkgDuMaster::MountPoint>::iterator it = du.begin();
 
@@ -85,12 +86,74 @@ void
 YQPkgDiskUsageList::fakeData()
 {
     YQPkgDiskUsageListItem * item;
-    
+
     item = new YQPkgDiskUsageListItem( this, YQPkgDuData( "/",     1024,  2 * FSize::GB, 1400 * FSize::MB ) ); item->updateData();
     item = new YQPkgDiskUsageListItem( this, YQPkgDuData( "/usr",  1024,  3 * FSize::GB, 1800 * FSize::MB ) ); item->updateData();
     item = new YQPkgDiskUsageListItem( this, YQPkgDuData( "/opt",  1024,  3 * FSize::GB, 2750 * FSize::MB ) ); item->updateData();
     item = new YQPkgDiskUsageListItem( this, YQPkgDuData( "/home", 1024, 30 * FSize::GB,   25 * FSize::GB ) ); item->updateData();
 }
+
+
+void
+YQPkgDiskUsageList::keyPressEvent( QKeyEvent *event )
+{
+
+    if ( event )
+    {
+	unsigned special_combo = ( Qt::ControlButton | Qt::ShiftButton | Qt::AltButton );
+
+	if ( ( event->state() & special_combo ) == special_combo )
+	{
+	    if ( event->key() == Qt::Key_Q )
+	    {
+		_debug = ! _debug;
+		y2milestone( "Debug mode %s", _debug ? "on" : "off" );
+	    }
+
+	}
+
+	if ( _debug && currentItem() )
+	{
+	    YQPkgDiskUsageListItem * item = dynamic_cast<YQPkgDiskUsageListItem *> ( currentItem() );
+
+	    if ( item )
+	    {
+		{
+		    int percent = item->usedPercent();
+
+		    switch ( event->ascii() )
+		    {
+			case '0':	percent	= 0;	break;
+			case '1':	percent	= 100;	break;
+			case '2':	percent	= 20;	break;
+			case '3':	percent	= 30;	break;
+			case '4':	percent	= 40;	break;
+			case '5':	percent	= 50;	break;
+			case '6':	percent	= 60;	break;
+			case '7':	percent	= 70;	break;
+			case '8':	percent	= 80;	break;
+			case '9':	percent	= 90;	break;
+			case '+':	percent += 2; 	break;
+			case '-':	percent--;	break;
+		    }
+
+		    if ( percent > 100 ) percent = 100;
+		    if ( percent < 0   ) percent = 0;
+		    YQPkgDuData du( item->duData() );
+
+		    if ( percent != item->usedPercent() )
+		    {
+			du._used = du.total() * percent / 100;
+			item->updateDuData( du );
+		    }
+		}
+	    }
+	}
+    }
+
+    QY2DiskUsageList::keyPressEvent( event );
+}
+
 
 
 

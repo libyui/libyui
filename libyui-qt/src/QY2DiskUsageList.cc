@@ -47,7 +47,7 @@ QY2DiskUsageList::QY2DiskUsageList( QWidget * parent, bool addStdColumns )
 #if 0
 	addColumn( _( "Device"		) );	_deviceNameCol		= numCol++;
 #endif
-	
+
 	setColumnAlignment( percentageCol(),	Qt::AlignRight );
 	setColumnAlignment( usedSizeCol(),	Qt::AlignRight );
 	setColumnAlignment( freeSizeCol(), 	Qt::AlignRight );
@@ -55,7 +55,7 @@ QY2DiskUsageList::QY2DiskUsageList( QWidget * parent, bool addStdColumns )
 
 	setSorting( percentageBarCol() );
     }
-    
+
     saveColumnWidths();
     setSelectionMode( QListView::NoSelection );
 }
@@ -96,7 +96,7 @@ QY2DiskUsageListItem::init( bool allFields )
 	percentageText.sprintf( "%d%%", usedPercent() );
 	setText( percentageCol(), percentageText );
     }
-    
+
     if ( usedSizeCol()		>= 0 ) setText( usedSizeCol(),		usedSize() 	);
     if ( freeSizeCol()		>= 0 ) setText( freeSizeCol(),		freeSize() 	);
 
@@ -135,7 +135,7 @@ QY2DiskUsageListItem::usedPercent() const
 
     if ( percent > 100 )
 	percent = 100;
-    
+
     return percent;
 }
 
@@ -177,7 +177,7 @@ QY2DiskUsageListItem::compare( QListViewItem *	otherListViewItem,
 	     col == percentageBarCol()   )
 	{
 	    // Intentionally reverting sort order: Fullest first
-	    
+
 	    if ( this->usedPercent() < other->usedPercent() ) 	return  1;
 	    if ( this->usedPercent() > other->usedPercent() ) 	return -1;
 	    return 0;
@@ -217,16 +217,17 @@ QY2DiskUsageListItem::paintCell( QPainter *		painter,
     {
 	QColor background = colorGroup.base();
 	painter->setBackgroundColor( background );
-	
-	QColor fillColor = Qt::blue;
-	
-	paintPercentageBar ( usedPercent(),
-			     painter,
-			     _diskUsageList->treeStepSize() * depth(),
-			     width,
-			     fillColor,
-			     background.dark( 115 ) );
-		
+
+	paintPercentageBar( usedPercent(),
+			    painter,
+			    _diskUsageList->treeStepSize() * depth(),
+			    width,
+			    interpolateColor( usedPercent(),
+					      60, 95,
+					      QColor( 0, 0x80, 0 ),	// Medium dark green
+					      QColor( 0xFF, 0, 0 ) ),	// Bright red
+			    background.dark( 115 ) );
+
     }
     else
     {
@@ -343,6 +344,61 @@ QY2DiskUsageListItem::contrastingColor( const QColor & desiredColor,
 	// try a little darker
 	return contrastColor.dark();
     }
+}
+
+
+QColor
+QY2DiskUsageListItem::interpolateColor( int 		val,
+					int 		minVal,
+					int 		maxVal,
+					const QColor & 	minColor,
+					const QColor & 	maxColor )
+{
+    int minH, maxH;
+    int minS, maxS;
+    int minV, maxV;
+
+    minColor.hsv( &minH, &minS, &minV );
+    maxColor.hsv( &maxH, &maxS, &maxV );
+
+    return QColor( interpolate( val, minVal, maxVal, minH, maxH ),
+		   interpolate( val, minVal, maxVal, minS, maxS ),
+		   interpolate( val, minVal, maxVal, minV, maxV ),
+		   QColor::Hsv );
+}
+
+
+int
+QY2DiskUsageListItem::interpolate( int from,
+				   int minFrom, int maxFrom,
+				   int minTo, 	int maxTo 	)
+{
+    if ( minFrom > maxFrom )
+    {
+	// Swap min/max values
+
+	int tmp = maxFrom;
+	maxFrom = minFrom;
+	minFrom = tmp;
+    }
+
+    long x = from - minFrom;
+    x *= maxTo - minTo;
+    x /= maxFrom - minFrom;
+    x += minTo;
+
+    if ( minTo < maxTo )
+    {
+	if ( x < minTo )	x = minTo;
+	if ( x > maxTo )	x = maxTo;
+    }
+    else
+    {
+	if ( x < maxTo )	x = maxTo;
+	if ( x > minTo )	x = minTo;
+    }
+    
+    return (int) x;
 }
 
 

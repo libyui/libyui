@@ -253,6 +253,28 @@ protected:
     QColor contrastingColor ( const QColor &	desiredColor,
 			      const QColor &	contrastColor );
 
+    /**
+     * Interpolate (in the HSV color space) a color between 'minColor' and
+     * 'maxColor' for a current value 'val' so that 'minVal' corresponds to
+     * 'minColor' and 'maxVal' to 'maxColor'.
+     *
+     * Returns the interpolated color.
+     **/
+    virtual QColor interpolateColor( int 		val,
+				     int 		minVal,
+				     int 		maxVal,
+				     const QColor & 	minColor,
+				     const QColor & 	maxColor );
+
+    /**
+     * Interpolate (translate) a value 'from' in the range between 'minFrom'
+     * and 'maxFrom'  to a range between 'minTo' and 'maxTo'.
+     **/
+    int interpolate( int from,
+		     int minFrom,	int maxFrom,
+		     int minTo, 	int maxTo 	);
+
+
     // Data members
 
     QY2DiskUsageList * _diskUsageList;
