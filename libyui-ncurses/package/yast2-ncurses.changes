@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Nov  7 13:30:02 CET 2002 - sh@suse.de
+
+- Fixed bug #19389: Frame widget shows keyboard shortcuts, but
+  can't handle any 
+
+-------------------------------------------------------------------
 Mon Oct 21 14:49:17 CEST 2002 - gs@suse.de
 
 - V 2.6.21

@@ -32,14 +32,13 @@ NCFrame::NCFrame( NCWidget * parent, YWidgetOpt & opt,
 		  const YCPString & nlabel )
     : YFrame( opt, nlabel )
     , NCWidget( parent )
-    , label( nlabel )
 {
   WIDDBG << endl;
   wstate = NC::WSdumb;
   framedim.Pos = wpos( 1 );
   framedim.Sze = wsze( 2 );
   hotlabel = &label;
-  setLabel( nlabel );
+  setLabel( getLabel() );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -100,8 +99,8 @@ void NCFrame::setSize( long newwidth, long newheight )
 //
 void NCFrame::setLabel( const YCPString & nlabel )
 {
-  label = NCstring( nlabel );
   YFrame::setLabel( nlabel );
+  label = NCstring( getLabel() );
   Redraw();
 }
 
