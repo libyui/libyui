@@ -561,7 +561,8 @@ YQPackageSelector::addMenus()
 	_pkgMenu->insertSeparator();
         QPopupMenu * submenu = _pkgList->addAllInListSubMenu( _pkgMenu );
 	CHECK_PTR( submenu );
-	
+
+	submenu->insertSeparator();
 	_pkgList->actionInstallListSourceRpms->addTo( submenu );
 	_pkgList->actionDontInstallListSourceRpms->addTo( submenu );
     }
