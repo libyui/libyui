@@ -464,15 +464,18 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
     // clear the package table
     packageList->itemsCleared ();
 
-    PMManager::PMSelectableVec::const_iterator listIt = Y2PM::packageManager().begin();
+    // get the package list and sort it
+    list<PMSelectablePtr> pkgList( Y2PM::packageManager().begin(), Y2PM::packageManager().end() );
+    pkgList.sort( sortByName );
 
     // fill the package table
+    list<PMSelectablePtr>::iterator listIt = pkgList.begin();
     PMPackagePtr pkg;
     string description = "";
     string provides = "";
     string requires = "";
     
-    while ( listIt != Y2PM::packageManager().end() )
+    while ( listIt != pkgList.end() )
     {
 	pkg = (*listIt)->theObject();
 
@@ -534,16 +537,20 @@ bool PackageSelector::fillPatchList( string filter )
     	return false;
     }
     
-    // clear the package table
+    // clear list of patches
     packageList->itemsCleared ();
 
-    PMManager::PMSelectableVec::const_iterator it = Y2PM::youPatchManager().begin();
+    // get the patch list and sort it
+    list<PMSelectablePtr> patchList( Y2PM::youPatchManager().begin(), Y2PM::youPatchManager().end() );
+    patchList.sort( sortByName );
 
-    while ( it != Y2PM::youPatchManager().end() )
+    list<PMSelectablePtr>::iterator listIt = patchList.begin(); 
+
+    while ( listIt != patchList.end() )
     {
-	PMYouPatchPtr	patchPtr  = ( *it)->theObject();
+	PMYouPatchPtr	patchPtr  = ( *listIt)->theObject();
 	checkPatch( patchPtr, filter );
-	++it;
+	++listIt;
     }
     
     if ( filter == "installable"
