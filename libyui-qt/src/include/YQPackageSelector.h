@@ -123,23 +123,22 @@ protected:
 
     // Data members
 
-    /**
-     * Pointer to the ui
-     */
-    YUIQt *yuiqt;
+    YUIQt *				_yuiqt;
+    bool				_youMode;
+    bool				_updateMode;
+    bool				_testMode;
 
-
-    QWidget			* _leftPane;
-    QY2ComboTabWidget		* _filters;
-    QProgressBar		* _diskSpace;
-    YQPkgList			* _pkgList;
-    QTabWidget			* _detailsViews;
-    YQPkgDescriptionView	* _pkgDescriptionView;
-    YQPkgTechnicalDetailsView	* _pkgTechnicalDetailsView;
-    QCheckBox			* _autoDependenciesCheckBox;
-    YQPkgRpmGroupTagsFilterView * _rpmGroupTagsFilterView;
-    YQPkgSelectionsFilterView	* _selectionsFilterView;
-    YQPkgSelList		* _selList;
+    QWidget *				_leftPane;
+    QY2ComboTabWidget * 		_filters;
+    QProgressBar *			_diskSpace;
+    YQPkgList *			 	_pkgList;
+    QTabWidget *			_detailsViews;
+    YQPkgDescriptionView *		_pkgDescriptionView;
+    YQPkgTechnicalDetailsView *		_pkgTechnicalDetailsView;
+    QCheckBox *			 	_autoDependenciesCheckBox;
+    YQPkgRpmGroupTagsFilterView *	_rpmGroupTagsFilterView;
+    YQPkgSelectionsFilterView *		_selectionsFilterView;
+    YQPkgSelList *			_selList;
 };
 
 #endif // YQPackageSelector_h
