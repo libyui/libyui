@@ -165,7 +165,10 @@ void YQUI::makeScreenShot( std::string stl_filename )
         int no = screenShotNo[ baseName ];
         fileName.sprintf( screenShotNameTemplate, baseName, no );
         y2debug( "screenshot: %s", (const char *) fileName );
+
+	_user_input_timer.blockSignals( true );
         fileName = askForSaveFileName( fileName, QString( "*.png" ) , "Save screen shot to..." );
+	_user_input_timer.blockSignals( false );
 
         if ( fileName.isEmpty() )
         {

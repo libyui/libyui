@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Oct 28 13:48:21 CEST 2004 - sh@suse.de
+
+- Fixed bug #43410: Timer signals close screen shot file selector 
+
+-------------------------------------------------------------------
 Mon Oct 25 17:04:43 CEST 2004 - sh@suse.de
 
 - Bumped version to 2.11.0 for 9.3 
