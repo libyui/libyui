@@ -24,15 +24,19 @@
 
 #include <rpc/types.h>		// MAXHOSTNAMELEN
 #include <unistd.h>
-#include <qsocketnotifier.h>
-#include <qmessagebox.h>
-#include <qtimer.h>
-#include <qfiledialog.h>
-#include <qvbox.h>
-#include <qwidgetstack.h>
+
 #include <qcursor.h>
+#include <qfiledialog.h>
+#include <qmessagebox.h>
+#include <qpixmap.h>
+#include <qsocketnotifier.h>
+#include <qtimer.h>
+#include <qvbox.h>
 #include <qwidgetlist.h>
+#include <qwidgetstack.h>
+
 #include <ycp/YCPTerm.h>
+
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
@@ -40,38 +44,7 @@
 #include "YUISymbols.h"
 
 #include "utf8.h"
-#include "YQAlignment.h"
-#include "YQBarGraph.h"
-#include "YQCheckBox.h"
-#include "YQComboBox.h"
-#include "YQColoredLabel.h"
 #include "YQDialog.h"
-#include "YQDownloadProgress.h"
-#include "YQEmpty.h"
-#include "YQFrame.h"
-#include "YQImage.h"
-#include "YQIntField.h"
-#include "YQLabel.h"
-#include "YQLogView.h"
-#include "YQMenuButton.h"
-#include "YQMultiLineEdit.h"
-#include "YQMultiSelectionBox.h"
-#include "YQPartitionSplitter.h"
-#include "YQProgressBar.h"
-#include "YQPackageSelector.h"
-#include "YQPushButton.h"
-#include "YQRadioButton.h"
-#include "YQRadioButtonGroup.h"
-#include "YQReplacePoint.h"
-#include "YQRichText.h"
-#include "YQSelectionBox.h"
-#include "YQSlider.h"
-#include "YQSpacing.h"
-#include "YQSplit.h"
-#include "YQSquash.h"
-#include "YQTable.h"
-#include "YQTextEntry.h"
-#include "YQTree.h"
 #include "YQi18n.h"
 #include "QXEmbed.h"
 
