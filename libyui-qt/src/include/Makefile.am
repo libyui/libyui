@@ -82,6 +82,7 @@ pkginclude_HEADERS =				\
 	noinst.xpm				\
 	noinst_disabled.xpm			\
 	normal_conflict.xpm			\
+	select_conflict.xpm			\
 	stop.xpm				\
 	taboo.xpm				\
 	taboo_disabled.xpm			\

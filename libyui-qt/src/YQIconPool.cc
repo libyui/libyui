@@ -42,6 +42,7 @@
 #include "update_disabled.xpm"
 
 #include "normal_conflict.xpm"
+#include "select_conflict.xpm"
 #include "unresolvable_conflict.xpm"
 
 #include "checklist_off.xpm"
@@ -79,7 +80,7 @@ QPixmap YQIconPool::severePkgConflict()		{ return iconPool()->cachedIcon( normal
 QPixmap YQIconPool::unresolvablePkgConflict()	{ return iconPool()->cachedIcon( unresolvable_conflict_xpm );	}
 QPixmap YQIconPool::deletePkgConflict()		{ return iconPool()->cachedIcon( normal_conflict_xpm );		}
 QPixmap YQIconPool::tabooPkgConflict()		{ return iconPool()->cachedIcon( normal_conflict_xpm );		}
-QPixmap YQIconPool::selectPkgConflict()		{ return iconPool()->cachedIcon( normal_conflict_xpm );		}
+QPixmap YQIconPool::selectPkgConflict()		{ return iconPool()->cachedIcon( select_conflict_xpm );		}
 
 
 YQIconPool * YQIconPool::iconPool()
