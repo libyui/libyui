@@ -206,11 +206,13 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus )
 	// update this list to show the status changes
 	updateTable();
 	
-	if ( tableType == T_Availables )
+	if ( tableType == T_Availables
+	     || tableType == T_Dependency )
 	{
 	    // additionally update the package list
 	    packager->updatePackageList();
 	}
+
 	if ( tableType != T_Dependency
 	     && tableType != T_Patches )
 	{
@@ -236,7 +238,7 @@ bool NCPkgTable::updateTable()
     unsigned int size = getNumLines();
     unsigned int index = 0;
     bool ret = true;
-    
+
     while ( index < size )
     {
     	// get the table line 
@@ -252,14 +254,19 @@ bool NCPkgTable::updateTable()
 	// get the object pointer
 	PMObjectPtr objPtr = getDataPointer( index );
 
-	if ( !cc || !objPtr )
+	if ( !cc )
 	{
 	    ret = false;
 	    break;
 	}
-
-	// set the new status (if status has changed) - use particular strategy
-	PMSelectable::UI_Status newstatus = statusStrategy->getPackageStatus( objPtr);
+	
+	PMSelectable::UI_Status newstatus = PMSelectable::S_NoInst;
+	if ( objPtr )
+	{
+	    // get the new status - use particular strategy
+	    newstatus = statusStrategy->getPackageStatus( objPtr);
+	}
+	// set new status (if status has changed)
 	if ( getStatus(index) != newstatus )
 	{
 	    cc->setStatus( newstatus );
@@ -416,7 +423,7 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 	    
 	    PMObjectPtr objPtr = getDataPointer(citem);
 
-	    if ( !objPtr || !packager )
+	    if ( !packager )
 		break;
 	    
 	    switch ( tableType )
@@ -431,6 +438,7 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 		    break;
 		case T_Dependency:
 		    // show the dependencies of this package
+		    NCMIL << "GET current item line: " <<  getCurrentItem() << endl;
 		    packager->showConcretelyDependency( getCurrentItem() );
 		    break;
 		default:
@@ -450,13 +458,7 @@ NCursesEvent NCPkgTable::wHandleInput( int key )
 	default: {
 	    // set the new status
 	    changeObjStatus( key );
-#if 0
-	    bool ok = statusStrategy->keyToStatus( key, getDataPointer(citem), newStat );
-	    if ( ok )
-	    {
-		changeStatus( newStat );
-	    }
-#endif
+
 	    ret = NCursesEvent::handled;
 	    break;
 	}
@@ -526,6 +528,10 @@ bool NCPkgTable::toggleSourceStatus( )
 bool NCPkgTable::toggleObjStatus( )
 {
     PMObjectPtr objPtr = getDataPointer( getCurrentItem() );
+
+    if ( !objPtr )
+	return false;
+    
     PMSelectable::UI_Status newStatus;
     
     bool ok = statusStrategy->toggleStatus( objPtr, newStatus );
@@ -546,6 +552,10 @@ bool NCPkgTable::toggleObjStatus( )
 bool NCPkgTable::changeObjStatus( int key )
 {
     PMObjectPtr objPtr = getDataPointer( getCurrentItem() );
+
+    if ( !objPtr )
+	return false; 
+
     PMSelectable::UI_Status newStatus;
 
     bool ok = statusStrategy->keyToStatus( key, objPtr, newStatus );
