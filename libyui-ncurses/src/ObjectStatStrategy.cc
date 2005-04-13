@@ -478,7 +478,8 @@ bool AvailableStatStrategy::setObjectStatus( PMSelectable::UI_Status newstatus, 
 	return false;
     }
 
-    ok = objPtr->getSelectable()->set_status( newstatus );
+//    ok = objPtr->getSelectable()->set_status( newstatus );
+    ok = objPtr->getSelectable()->set_status( PMSelectable::S_Update );
     if ( ok )
     {
 	// this package is the candidate now
@@ -508,7 +509,12 @@ PMSelectable::UI_Status AvailableStatStrategy::getPackageStatus( PMObjectPtr obj
     }
 
     PMSelectable::UI_Status status = objPtr->getSelectable()->status();
-    
+
+    if (objPtr->isCandidateObj())
+	retStatus = PMSelectable::S_KeepInstalled;
+    else if (objPtr->hasInstalledObj() && objPtr->edition() == objPtr->getInstalledObj()->edition())
+        retStatus = PMSelectable::S_Del;
+/*    
     if ( objPtr->hasInstalledObj()
 	 && objPtr->edition() == objPtr->getInstalledObj()->edition() )
     {
@@ -524,7 +530,7 @@ PMSelectable::UI_Status AvailableStatStrategy::getPackageStatus( PMObjectPtr obj
 	retStatus = status;
     }
     // else show S_NoInst
-	
+*/	
     return retStatus;
 }
 

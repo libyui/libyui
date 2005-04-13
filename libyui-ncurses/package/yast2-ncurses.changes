@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Apr 13 14:49:13 UTC 2005 - mlazar@suse.cz
+
+- fixed bug 75269 - Can't select different versions of available kernels packages
+
+-------------------------------------------------------------------
 Wed Mar 16 10:54:12 CET 2005 - mlazar@suse.cz
 
 - 2.12.1
