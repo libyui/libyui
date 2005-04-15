@@ -106,6 +106,6 @@ libpy2ncurses_la_SOURCES = $(liby2ncurses_la_SOURCES)	\
 INCLUDES = -I$(includedir) -I$(includedir)/yui -I$(includedir)/y2util/qt
 
 lang2encoding.cc:	lang2encoding.tab
-	lang2encoding.tab > lang2encoding.cc
+	./lang2encoding.tab > lang2encoding.cc
 
 EXTRA_DIST	= $(ydata_DATA)

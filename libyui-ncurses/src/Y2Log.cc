@@ -190,7 +190,7 @@ static Y2Loglinestreamset streamset;
 **
 **	DESCRIPTION :
 */
-ostream & Y2Log::get( unsigned which, unsigned level,
+ostream & get( unsigned which, unsigned level,
 		      const char * fil, const char * fnc, int lne )
 {
   if ( which > C_DBG )
@@ -206,7 +206,7 @@ ostream & Y2Log::get( unsigned which, unsigned level,
 **
 **	DESCRIPTION :
 */
-ostream & Y2Log::dbg_get( const char * dbg_class, unsigned level,
+ostream & dbg_get( const char * dbg_class, unsigned level,
 			  const char * fil, const char * fnc, int lne )
 {
   if ( !dbg_class )

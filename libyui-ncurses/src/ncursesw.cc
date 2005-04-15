@@ -569,17 +569,17 @@ NCursesPad::NCursesPad(int lines, int cols) : NCursesWindow() {
 //
 int NCursesWindow::box( const wrect & dim )
 {
-  wrect area( dim.intersectRelTo( area() ) );
-  if ( area.Sze > 0 ) {
-    hline( area.Pos.L,              area.Pos.C, area.Sze.W );
-    hline( area.Pos.L+area.Sze.H-1, area.Pos.C, area.Sze.W );
-    vline( area.Pos.L, area.Pos.C,              area.Sze.H );
-    vline( area.Pos.L, area.Pos.C+area.Sze.W-1, area.Sze.H );
+  wrect box_area ( dim.intersectRelTo( area() ) );
+  if ( box_area.Sze > 0 ) {
+    hline( box_area.Pos.L,              box_area.Pos.C, box_area.Sze.W );
+    hline( box_area.Pos.L+box_area.Sze.H-1, box_area.Pos.C, box_area.Sze.W );
+    vline( box_area.Pos.L, box_area.Pos.C,              box_area.Sze.H );
+    vline( box_area.Pos.L, box_area.Pos.C+box_area.Sze.W-1, box_area.Sze.H );
 
-    addch( area.Pos.L+area.Sze.H-1, area.Pos.C, ACS_LLCORNER );
-    addch( area.Pos.L, area.Pos.C+area.Sze.W-1, ACS_URCORNER );
-    addch( area.Pos.L+area.Sze.H-1, area.Pos.C+area.Sze.W-1, ACS_LRCORNER );
-    addch( area.Pos.L,              area.Pos.C, ACS_ULCORNER );
+    addch( box_area.Pos.L+box_area.Sze.H-1, box_area.Pos.C, ACS_LLCORNER );
+    addch( box_area.Pos.L, box_area.Pos.C+box_area.Sze.W-1, ACS_URCORNER );
+    addch( box_area.Pos.L+box_area.Sze.H-1, box_area.Pos.C+box_area.Sze.W-1, ACS_LRCORNER );
+    addch( box_area.Pos.L,              box_area.Pos.C, ACS_ULCORNER );
   }
 
   return OK;

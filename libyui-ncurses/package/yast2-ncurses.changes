@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Apr 15 13:40:34 CEST 2005 - visnov@suse.cz
+
+- gcc4 fixes
+- 2.12.2 
+
+-------------------------------------------------------------------
 Wed Apr 13 14:49:13 UTC 2005 - mlazar@suse.cz
 
 - fixed bug 75269 - Can't select different versions of available kernels packages

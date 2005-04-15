@@ -18,6 +18,8 @@
 /-*/
 #include <ycp/YCPString.h>
 
+#include <errno.h>
+
 #include "Y2Log.h"
 #include "NCstring_test.h"
 
