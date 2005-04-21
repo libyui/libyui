@@ -206,6 +206,15 @@ YQTree::setKeyboardFocus()
 }
 
 
+void YQTree::deleteAllItems()
+{
+    _listView->blockSignals( true );
+    _listView->clear();
+    YTree::deleteAllItems();
+    _listView->blockSignals( false );
+}
+
+
 /*============================================================================*/
 
 

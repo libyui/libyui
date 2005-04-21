@@ -213,4 +213,13 @@ void YQComboBox::textChanged( const QString & new_text )
 }
 
 
+void YQComboBox::deleteAllItems()
+{
+    _qt_combo_box->blockSignals( true );
+    _qt_combo_box->clear();
+    YSelectionWidget::deleteAllItems();
+    _qt_combo_box->blockSignals( false );
+}
+
+
 #include "YQComboBox.moc"

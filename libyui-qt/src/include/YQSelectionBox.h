@@ -93,6 +93,12 @@ public:
      **/
     bool eventFilter( QObject * obj, QEvent * ev );
 
+    /**
+     * Delete all items.
+     *
+     * Reimplemented from YSelectionWidget
+     */
+    virtual void deleteAllItems();
     
 protected slots:
 

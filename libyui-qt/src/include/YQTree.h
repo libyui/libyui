@@ -105,6 +105,13 @@ public:
      */
     YQTreeItem * findYQTreeItem( const YTreeItem * orig ) const;
 
+    /**
+     * Delete all items.
+     *
+     * Reimplemented from YTree
+     */
+    virtual void deleteAllItems();
+
 
 protected slots:
 

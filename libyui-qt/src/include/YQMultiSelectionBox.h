@@ -70,9 +70,9 @@ public:
     /**
      * Notification that a new item has been added.
      *
-     * Reimplemented from YMultiSelectionBox.
+     * Reimplemented from YSelectionWidget.
      */
-    virtual void itemAdded( const YCPString & itemText, bool selected );
+    virtual void itemAdded( const YCPString & itemText, int index, bool selected );
 
     /**
      * Returns the index of the item that currently has the keyboard focus.

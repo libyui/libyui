@@ -116,6 +116,12 @@ public:
      */
     virtual bool setKeyboardFocus();
 
+    /**
+     * Delete all items.
+     *
+     * Reimplemented from YSelectionWidget
+     */
+    virtual void deleteAllItems();
 
 protected slots:
 

@@ -116,7 +116,7 @@ YQMultiSelectionBox::setEnabling( bool enabled )
 
 
 void
-YQMultiSelectionBox::itemAdded( const YCPString & label, bool selected )
+YQMultiSelectionBox::itemAdded( const YCPString & label, int index, bool selected )
 {
     _qt_listview->blockSignals( true );
     
@@ -126,7 +126,7 @@ YQMultiSelectionBox::itemAdded( const YCPString & label, bool selected )
     {
 	item->setOn( true );
     }
-    
+
     _qt_listview->blockSignals( false );
 }
 
@@ -188,7 +188,7 @@ YQMultiSelectionBox::deleteAllItems()
 {
     _qt_listview->blockSignals( true );
     _qt_listview->clear();
-    YMultiSelectionBox::deleteAllItems();
+    YSelectionWidget::deleteAllItems();
     _qt_listview->blockSignals( false );
 }
 

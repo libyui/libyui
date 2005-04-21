@@ -223,4 +223,12 @@ void YQSelectionBox::returnDelayed()
 }
 
 
+void YQSelectionBox::deleteAllItems()
+{
+    _qt_listbox->blockSignals( true );
+    _qt_listbox->clear();
+    YSelectionWidget::deleteAllItems();
+    _qt_listbox->blockSignals( false );
+}
+
 #include "YQSelectionBox.moc"
