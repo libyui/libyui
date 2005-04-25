@@ -584,3 +584,17 @@ int NCComboBox::listPopup()
   return 0;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCComboBox::deleteAllItems
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : cleares the table and the lists holding
+//                    the values
+//
+void NCComboBox::deleteAllItems() {
+	YComboBox::deleteAllItems();
+	deflist.clear();
+	tUpdate();
+}

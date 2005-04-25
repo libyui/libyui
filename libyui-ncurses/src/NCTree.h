@@ -83,6 +83,8 @@ class NCTree : public YTree, public NCPadWidget {
         return YWidget::setKeyboardFocus();
       return true;
     }
+
+    void deleteAllItems();
 };
 
 ///////////////////////////////////////////////////////////////////

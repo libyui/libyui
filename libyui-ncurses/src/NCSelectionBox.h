@@ -83,6 +83,8 @@ class NCSelectionBox : public YSelectionBox, public NCPadWidget {
 
     string getLine(const int & index );
     void clearTable( ) { pad->ClearTable(); };
+
+    void deleteAllItems();
 };
 
 ///////////////////////////////////////////////////////////////////

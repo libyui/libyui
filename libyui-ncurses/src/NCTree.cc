@@ -407,3 +407,17 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
   return ret;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCTree::deleteAllItems
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : cleares the table and the lists holding
+//                    the values
+//
+void NCTree::deleteAllItems() {
+	YTree::deleteAllItems();
+	pad->ClearTable();
+	DrawPad();
+}

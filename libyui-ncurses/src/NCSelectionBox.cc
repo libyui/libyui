@@ -254,3 +254,16 @@ NCursesEvent NCSelectionBox::wHandleInput( wint_t key )
   return ret;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCSelectionBox::deleteAllItems
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : cleares the table and the lists holding
+//                    the values
+//
+void NCSelectionBox::deleteAllItems() {
+	YSelectionBox::deleteAllItems();
+	clearTable();
+}

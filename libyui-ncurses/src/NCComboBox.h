@@ -112,6 +112,8 @@ class NCComboBox : public YComboBox, public NCWidget {
     }
 
     unsigned int getListSize( ) { return deflist.size(); }
+
+    void deleteAllItems();
 };
 
 ///////////////////////////////////////////////////////////////////
