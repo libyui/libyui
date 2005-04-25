@@ -596,5 +596,5 @@ int NCComboBox::listPopup()
 void NCComboBox::deleteAllItems() {
 	YComboBox::deleteAllItems();
 	deflist.clear();
-	tUpdate();
+	setValue( YCPString( string("") ) );
 }
