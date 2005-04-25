@@ -419,5 +419,4 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 void NCTree::deleteAllItems() {
 	YTree::deleteAllItems();
 	pad->ClearTable();
-	DrawPad();
 }
