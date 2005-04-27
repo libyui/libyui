@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Apr 27 19:00:19 CEST 2005 - sh@suse.de
+
+- Added support for icons in selection box widget 
+
+-------------------------------------------------------------------
 Thu Apr 21 16:50:01 CEST 2005 - sh@suse.de
 
 - Merged selection_widget_cleanups branch to trunk:

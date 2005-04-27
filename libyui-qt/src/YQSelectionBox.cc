@@ -39,6 +39,8 @@ using std::max;
 #define MIN_WIDTH			80
 #define MIN_HEIGHT			80
 
+#define ICON_DIR			ICONDIR "/icons/22x22/apps/"
+
 
 YQSelectionBox::YQSelectionBox( QWidget *		parent,
 				const YWidgetOpt &	opt,
@@ -122,7 +124,34 @@ void YQSelectionBox::setEnabling( bool enabled )
 
 void YQSelectionBox::itemAdded( const YCPString & string, int index, bool selected )
 {
-    _qt_listbox->insertItem( fromUTF8(string->value() ) );
+    QPixmap icon;
+    
+    if ( hasIcons() )
+    {
+	QString iconName( itemIcon( index )->value().c_str() );
+	iconName.stripWhiteSpace();
+
+	if ( ! iconName.isEmpty() )
+	{
+	    if ( ! iconName.startsWith( "/" ) )
+		iconName.prepend( ICON_DIR );
+
+	    icon = QPixmap( iconName );
+
+	    if ( icon.isNull() )
+		y2error( "Can't load icon %s", (const char *) iconName );
+	}
+	    
+    }
+
+    if ( icon.isNull() )
+    {
+	_qt_listbox->insertItem( fromUTF8(string->value() ) );
+    }
+    else
+    {
+	_qt_listbox->insertItem( icon, fromUTF8(string->value() ) );
+    }
     
     if ( selected )
 	setCurrentItem( index );
