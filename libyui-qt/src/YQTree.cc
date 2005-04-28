@@ -34,6 +34,9 @@ using std::max;
 #include "utf8.h"
 #include "YQTree.h"
 
+#define ICON_DIR			ICONDIR "/icons/22x22/apps/"
+
+
 
 YQTree::YQTree( QWidget * 		parent,
 		const YWidgetOpt &	opt,
@@ -250,6 +253,26 @@ YQTreeItem::init( YQTree *	tree,
     _serialNo = serial;
     setText( 0, fromUTF8 ( _origItem->getText()->value() ) );
     setOpen( _origItem->isOpenByDefault() );
+
+    if ( tree->hasIcons() )
+    {
+	QString iconName = _origItem->iconName()->value().c_str();
+	iconName.stripWhiteSpace();
+
+	if ( ! iconName.isEmpty() )
+	{
+	    if ( ! iconName.startsWith( "/" ) )
+		iconName.prepend( ICON_DIR );
+
+	    QPixmap icon( iconName );
+
+	    if ( icon.isNull() )
+		y2error( "Can't load icon %s", (const char *) iconName );
+
+	    else
+		setPixmap( 0, icon );
+	}
+    }
 }
 
 
