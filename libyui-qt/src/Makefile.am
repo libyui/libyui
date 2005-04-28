@@ -10,7 +10,9 @@ AM_CXXFLAGS = -DY2LOG=\"ui-qt\"				\
 	-DQT_LOCALEDIR=\"$(QTDIR)/translations\"	\
 	-DICONDIR=\"${themedir}/current\"		\
 	-DTHEMEDIR=\"${themedir}/current\"		\
-	-DHELPIMAGEDIR=\"${imagedir}\"
+	-DHELPIMAGEDIR=\"${imagedir}\"			\
+	-fmessage-length=0
+
 
 MOC = $(QTDIR)/bin/moc
 
