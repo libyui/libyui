@@ -173,7 +173,7 @@ YTreeItem * NCPopupTree::addItem( YTreeItem * parentItem,
   if ( !filterTree )
     return 0;
 
-  return ( filterTree->addItem( parentItem, text, data, open ) );
+  return ( filterTree->addItem( parentItem, text, YCPString( "" ), data, open ) );
 }
 
  
