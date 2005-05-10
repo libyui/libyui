@@ -92,20 +92,22 @@ using std::string;
 #endif
 
 #if ENABLE_GRADIENTS
-#  define WORK_AREA_BOTTOM_MARGIN	10
-#  define WORK_AREA_RIGHT_MARGIN	10
+#  define WORK_AREA_BOTTOM_MARGIN	8
+#  define WORK_AREA_RIGHT_MARGIN	8
 #else
 #  define WORK_AREA_BOTTOM_MARGIN	8
 #  define WORK_AREA_RIGHT_MARGIN	6
 #endif
 
-#define BUTTON_BOX_TOP_MARGIN		14
+#define BUTTON_BOX_TOP_MARGIN		10
+#define ABORT_BUTTON_SPACING		10
 
 #define SEPARATOR_MARGIN		6
 #define STEPS_MARGIN			10
 #define STEPS_SPACING			2
 #define STEPS_HEADING_SPACING		8
 #define MENU_BAR_MARGIN			8
+#define MINIMIZE_SPACER			0
 
 #define USE_FIXED_STEP_FONTS		0
 #define STEPS_FONT_FAMILY		"Sans Serif"
@@ -164,7 +166,7 @@ YQWizard::YQWizard( QWidget *		parent,
     _dialogHeading	= 0;
     _contents		= 0;
     _backButton		= 0;
-    _backButtonSpacer	= 0;
+    _abortButtonSpacer	= 0;
     _abortButton	= 0;
     _nextButton		= 0;
 
@@ -984,7 +986,7 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
     QVBox * workArea = new QVBox( workAreaVBox );
     CHECK_PTR( workArea );
 
-#if ENABLE_GRADIENTS
+#if 0
     workArea->setFrameStyle( QFrame::Box | QFrame::Plain );
     workArea->setMargin( 4 );
 #else
@@ -1150,8 +1152,11 @@ void YQWizard::layoutButtonBox( QWidget * parent )
     // QHBoxLayout for the buttons
     //
 
-    QHBoxLayout * hbox = new QHBoxLayout( vbox, 0 );		// parent, spacing
+    QHBoxLayout * hbox = new QHBoxLayout( vbox, 2 );		// parent, spacing
     CHECK_PTR( hbox );
+
+    hbox->addStretch( 99 );	// very stretchable - right-align the buttons
+
 
     //
     // "Back" button
@@ -1165,22 +1170,41 @@ void YQWizard::layoutButtonBox( QWidget * parent )
     connect( _backButton,	SIGNAL( clicked()	),
 	     this,		SLOT  ( backClicked()	) );
 
-    _backButtonSpacer = new QSpacerItem( 0, 0,				// width, height
-					 QSizePolicy::Expanding,	// horizontal
-					 QSizePolicy::Minimum );	// vertical
-    CHECK_PTR( _backButtonSpacer );
-    hbox->addItem( _backButtonSpacer );
-
 
     if ( _backButton->text().isEmpty() )
     {
 	_backButton->hide();
-
-	// Minimize _backButtonSpacer
-	_backButtonSpacer->changeSize( 0, 0,				// width, height
-				       QSizePolicy::Minimum,		// horizontal
-				       QSizePolicy::Minimum );		// vertical
     }
+
+
+    //
+    // "Next" button
+    //
+
+    _nextButton	 = new YQWizardButton( this, dialog, buttonBox, _nextButtonLabel, _nextButtonId );
+    CHECK_PTR( _nextButton );
+
+    hbox->addWidget( (QWidget *) _nextButton->widgetRep() );
+    addChild( _nextButton );  // Enable shortcut checking for this button
+    connect( _nextButton,	SIGNAL( clicked()	),
+	     this,		SLOT  ( nextClicked()	) );
+
+
+    //
+    // Spacer between "Next" and "Abort"
+    //
+
+    _abortButtonSpacer = new QSpacerItem(
+#if MINIMIZE_SPACER
+					 _backButton->text().isEmpty() ? 0 : ABORT_BUTTON_SPACING,	// width
+#else
+					 ABORT_BUTTON_SPACING,
+#endif
+					 0,				// height
+					 QSizePolicy::Expanding,	// horizontal
+					 QSizePolicy::Minimum );	// vertical
+    CHECK_PTR( _abortButtonSpacer );
+    hbox->addItem( _abortButtonSpacer );
 
 
     //
@@ -1195,29 +1219,6 @@ void YQWizard::layoutButtonBox( QWidget * parent )
     connect( _abortButton,	SIGNAL( clicked()	),
 	     this,		SLOT  ( abortClicked()	) );
 
-
-    // Using spacer rather than addSpacing() since the default stretchability
-    // of a QSpacerItem is undefined, i.e. centering the middle button could
-    // not be guaranteed.
-
-    QSpacerItem * spacer = new QSpacerItem( 0, 0,			// width, height
-					    QSizePolicy::Expanding,	// horizontal
-					    QSizePolicy::Minimum );	// vertical
-    CHECK_PTR( spacer );
-    hbox->addItem( spacer );
-
-
-    //
-    // "Next" button
-    //
-
-    _nextButton	 = new YQWizardButton( this, dialog, buttonBox, _nextButtonLabel, _nextButtonId );
-    CHECK_PTR( _nextButton );
-
-    hbox->addWidget( (QWidget *) _nextButton->widgetRep() );
-    addChild( _nextButton );  // Enable shortcut checking for this button
-    connect( _nextButton,	SIGNAL( clicked()	),
-	     this,		SLOT  ( nextClicked()	) );
 
 
     //
@@ -1726,26 +1727,28 @@ void YQWizard::setButtonLabel( YQWizardButton * button, const QString & newLabel
 	{
 	    button->hide();
 
-	    if ( button == _backButton && _backButtonSpacer )
+	    if ( button == _backButton && _abortButtonSpacer )
 	    {
-		// Minimize _backButtonSpacer
+#if MINIMIZE_SPACER
+		// Minimize _abortButtonSpacer
 
-		_backButtonSpacer->changeSize( 0, 0,				// width, height
-					       QSizePolicy::Minimum,		// horizontal
-					       QSizePolicy::Minimum );		// vertical
+		_abortButtonSpacer->changeSize( 0, 0,				// width, height
+						QSizePolicy::Minimum,		// horizontal
+						QSizePolicy::Minimum );		// vertical
+#endif
 	    }
 	}
 	else
 	{
 	    button->show();
 
-	    if ( button == _backButton && _backButtonSpacer )
+	    if ( button == _backButton && _abortButtonSpacer )
 	    {
-		// Restore _backButtonSpacer to normal size
+		// Restore _abortButtonSpacer to normal size
 
-		_backButtonSpacer->changeSize( 0, 0,				// width, height
-					       QSizePolicy::Expanding,		// horizontal
-					       QSizePolicy::Minimum );		// vertical
+		_abortButtonSpacer->changeSize( ABORT_BUTTON_SPACING, 0,	// width, height
+						QSizePolicy::Expanding,		// horizontal
+						QSizePolicy::Minimum );		// vertical
 	    }
 	}
     }
