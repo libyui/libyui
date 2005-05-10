@@ -409,7 +409,7 @@ protected:
      * The bottom gradient widget is returned as a reference for other
      * background pixmaps.
      **/
-    QWidget * addGradientColumn( QWidget * parent, int width = 8 );
+    void addGradientColumn( QWidget * parent, int width = 8 );
 
     /**
      * Send a wizard event with the specified ID.

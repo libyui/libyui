@@ -82,12 +82,25 @@ using std::string;
 
 #define TEXTDOMAIN "packages-qt"
 
+#define ENABLE_GRADIENTS		1
+#define ENABLE_TITLEBAR			0
+
 #define USE_SEPARATOR			1
 
-#define BUTTON_BOX_TOP_MARGIN		14
-#define WORK_AREA_BOTTOM_MARGIN		10
+#if ! ENABLE_TITLEBAR
+#  define WORK_AREA_TOP_MARGIN		10
+#endif
 
-#define WORK_AREA_RIGHT_MARGIN		10
+#if ENABLE_GRADIENTS
+#  define WORK_AREA_BOTTOM_MARGIN	10
+#  define WORK_AREA_RIGHT_MARGIN	10
+#else
+#  define WORK_AREA_BOTTOM_MARGIN	8
+#  define WORK_AREA_RIGHT_MARGIN	6
+#endif
+
+#define BUTTON_BOX_TOP_MARGIN		14
+
 #define SEPARATOR_MARGIN		6
 #define STEPS_MARGIN			10
 #define STEPS_SPACING			2
@@ -168,7 +181,9 @@ YQWizard::YQWizard( QWidget *		parent,
 
     if ( ! runningEmbedded() )
     {
+#if ENABLE_GRADIENTS
 	loadGradientPixmaps();
+#endif
 
 	if ( _stepsEnabled )
 	    loadStepsIcons();
@@ -180,7 +195,18 @@ YQWizard::YQWizard( QWidget *		parent,
     //
 
     if ( ! runningEmbedded() )
+    {
+#if ENABLE_TITLEBAR
 	layoutTitleBar( this );
+#else
+	QWidget * spacer = addVSpacing( this, WORK_AREA_TOP_MARGIN );
+	CHECK_PTR( spacer );
+
+#    if ENABLE_GRADIENTS
+	spacer->setPaletteBackgroundColor( _gradientCenterColor );
+#    endif
+#endif
+    }
 
     QHBox * hBox = new QHBox( this );
     CHECK_PTR( hBox );
@@ -215,7 +241,11 @@ void YQWizard::layoutTitleBar( QWidget * parent )
 
     QHBox * titleBar = new QHBox( parent );
     CHECK_PTR( titleBar );
+
+#if ENABLE_GRADIENTS
     setGradient( titleBar, _titleBarGradientPixmap );
+#endif
+
     titleBar->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
 
     //
@@ -292,11 +322,17 @@ void YQWizard::layoutStepsPanel()
     CHECK_PTR( _stepsPanel );
 
 
+#if ENABLE_GRADIENTS
+#   if ENABLE_TITLEBAR
+
     // Top gradient
 
     QLabel * topGradient = new QLabel( _stepsPanel );
     CHECK_PTR( topGradient );
     setGradient( topGradient, _topGradientPixmap );
+
+#   endif
+#endif
 
 
     // Steps
@@ -305,25 +341,32 @@ void YQWizard::layoutStepsPanel()
 
     _stepsBox = new QVBox( _stepsPanel );
     CHECK_PTR( _stepsBox );
+#if ENABLE_GRADIENTS
     _stepsBox->setPaletteBackgroundColor( _gradientCenterColor );
+#endif
     _stepsBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred ) ); // hor/vert
 
     QWidget * stretch = addVStretch( _stepsPanel );
     CHECK_PTR( stretch );
+#if ENABLE_GRADIENTS
     stretch->setPaletteBackgroundColor( _gradientCenterColor );
+#endif
 
 
-    // Bottom gradient
+    // Steps panel bottom buttons ("Help", "Release Notes")
 
-    QLabel * bottomGradient = new QLabel( _stepsPanel );
-    CHECK_PTR( bottomGradient );
-    setGradient( bottomGradient, _bottomGradientPixmap );
+    QLabel * helpButtonBox = new QLabel( _stepsPanel );
+
+#if ENABLE_GRADIENTS
+    CHECK_PTR( helpButtonBox );
+    setGradient( helpButtonBox, _bottomGradientPixmap );
+#endif
 
 
 
     // Layouts for the buttons
 
-    QVBoxLayout * vbox = new QVBoxLayout( bottomGradient, 0, 0 ); // parent, margin, spacing
+    QVBoxLayout * vbox = new QVBoxLayout( helpButtonBox, 0, 0 ); // parent, margin, spacing
     CHECK_PTR( vbox );
     vbox->addStretch( 99 );
 
@@ -331,7 +374,7 @@ void YQWizard::layoutStepsPanel()
     QHBoxLayout * hbox = new QHBoxLayout( vbox, 0 );	// parent, spacing
     hbox->addStretch( 99 );
 
-    _releaseNotesButton = new QPushButton( _( "Release Notes..." ), bottomGradient );
+    _releaseNotesButton = new QPushButton( _( "Release Notes..." ), helpButtonBox );
     hbox->addWidget( _releaseNotesButton );
 
 
@@ -347,7 +390,7 @@ void YQWizard::layoutStepsPanel()
     hbox->addStretch( 99 );
 
     // Help button - intentionally without keyboard shortcut
-    _helpButton = new QPushButton( _( "Help" ), bottomGradient );
+    _helpButton = new QPushButton( _( "Help" ), helpButtonBox );
     CHECK_PTR( _helpButton );
 
     hbox->addWidget( _helpButton );
@@ -365,9 +408,6 @@ void YQWizard::layoutStepsPanel()
 
 
     vbox->addSpacing( WORK_AREA_BOTTOM_MARGIN );
-
-    if ( _bottomGradientPixmap.isNull() )
-	bottomGradient->setFixedHeight( _helpButton->sizeHint().height() + WORK_AREA_BOTTOM_MARGIN );
 }
 
 
@@ -435,7 +475,9 @@ void YQWizard::updateSteps()
     QWidget * stepsParent = new QWidget( _stepsBox );
     CHECK_PTR( stepsParent );
     stepsParent->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) ); // hor/vert
+#if ENABLE_GRADIENTS
     stepsParent->setPaletteBackgroundColor( _gradientCenterColor );
+#endif
 
     // Create a grid layout for the steps
 
@@ -753,8 +795,10 @@ void YQWizard::layoutSideBarButtonBox( QWidget * parent, QPushButton * button )
     // meaningful yet - not even after vbox->activate() or parent->adjustSize()
     int height = button->sizeHint().height() + BUTTON_BOX_TOP_MARGIN + WORK_AREA_BOTTOM_MARGIN;
 
+#if ENABLE_GRADIENTS
     if ( ! _bottomGradientPixmap.isNull() )
 	setBottomCroppedGradient( parent, _bottomGradientPixmap, height );
+#endif
 
     parent->setFixedHeight( height );
 }
@@ -940,10 +984,13 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
     QVBox * workArea = new QVBox( workAreaVBox );
     CHECK_PTR( workArea );
 
-    // workArea->setFrameStyle( QFrame::TabWidgetPanel | QFrame::Sunken );
-    // workArea->setFrameStyle( QFrame::Box | QFrame::Sunken );
+#if ENABLE_GRADIENTS
     workArea->setFrameStyle( QFrame::Box | QFrame::Plain );
     workArea->setMargin( 4 );
+#else
+    workArea->setFrameStyle( QFrame::Box | QFrame::Sunken );
+    // workArea->setFrameStyle( QFrame::TabWidgetPanel | QFrame::Sunken );
+#endif
 
 
     //
@@ -1179,10 +1226,10 @@ void YQWizard::layoutButtonBox( QWidget * parent )
 
     vbox->addSpacing( WORK_AREA_BOTTOM_MARGIN );
 
+#if ENABLE_GRADIENTS
     if ( ! runningEmbedded() )
-    {
 	setBottomCroppedGradient( buttonBox, _bottomGradientPixmap, buttonBox->sizeHint().height() );
-    }
+#endif
 
     buttonBox->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
 }
@@ -1191,6 +1238,7 @@ void YQWizard::layoutButtonBox( QWidget * parent )
 
 void YQWizard::loadGradientPixmaps()
 {
+#if ENABLE_GRADIENTS
     if ( highColorDisplay() )
     {
 	_topGradientPixmap	= QPixmap( PIXMAP_DIR "top-gradient.png"	);
@@ -1207,6 +1255,7 @@ void YQWizard::loadGradientPixmaps()
 	// stretchable part of the side bar.
 	_gradientCenterColor = paletteBackgroundColor();
     }
+#endif
 }
 
 
@@ -1234,18 +1283,22 @@ void YQWizard::loadStepsIcons()
 
 void YQWizard::setGradient( QWidget * widget, const QPixmap & pixmap )
 {
+#if ENABLE_GRADIENTS
     if ( widget && ! pixmap.isNull() )
     {
 	widget->setFixedHeight( pixmap.height() );
 	widget->setPaletteBackgroundPixmap( pixmap );
     }
+#endif
 }
 
 
 
 void YQWizard::setBottomCroppedGradient( QWidget * widget, const QPixmap & pixmap, int croppedHeight )
 {
+#if ENABLE_GRADIENTS
     setGradient( widget, bottomCropPixmap( pixmap, croppedHeight ) );
+#endif
 }
 
 
@@ -1253,6 +1306,8 @@ void YQWizard::setBottomCroppedGradient( QWidget * widget, const QPixmap & pixma
 QPixmap YQWizard::bottomCropPixmap( const QPixmap & full, int croppedHeight )
 {
     QPixmap pixmap;
+
+#if ENABLE_GRADIENTS
 
     if ( full.height() > croppedHeight )
     {
@@ -1266,6 +1321,7 @@ QPixmap YQWizard::bottomCropPixmap( const QPixmap & full, int croppedHeight )
     {
 	pixmap = full;
     }
+#endif
 
     return pixmap;
 }
@@ -1296,14 +1352,15 @@ QColor YQWizard::pixelColor( const QPixmap & pixmap, int x, int y )
 
 
 
-QWidget * YQWizard::addGradientColumn( QWidget * parent, int width )
+void YQWizard::addGradientColumn( QWidget * parent, int width )
 {
     if ( ! parent )
-	return 0;
+	return;
 
     QVBox * vbox = new QVBox( parent );
     CHECK_PTR( vbox );
 
+#if ENABLE_GRADIENTS
     QWidget * topGradient = addHSpacing( vbox, width );
     CHECK_PTR( topGradient );
     setGradient( topGradient, _topGradientPixmap );
@@ -1316,8 +1373,10 @@ QWidget * YQWizard::addGradientColumn( QWidget * parent, int width )
     QWidget * bottomGradient = new QWidget( vbox );
     CHECK_PTR( bottomGradient );
     setGradient( bottomGradient, _bottomGradientPixmap );
+#else
+    vbox->setFixedWidth( width );
+#endif
 
-    return bottomGradient;
 }
 
 
