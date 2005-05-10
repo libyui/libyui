@@ -112,7 +112,7 @@ using std::string;
 #define USE_FIXED_STEP_FONTS		0
 #define STEPS_FONT_FAMILY		"Sans Serif"
 #define STEPS_FONT_SIZE			11
-#define STEPS_HEADING_FONT_SIZE		13
+#define STEPS_HEADING_FONT_SIZE		11
 
 #define USE_ICON_ON_HELP_BUTTON		0
 
@@ -547,7 +547,15 @@ void YQWizard::updateSteps()
 	    font.setWeight( QFont::Bold );
 	    label->setFont( font );
 #else
-	    label->setFont( YQUI::ui()->headingFont() );
+	    QFont font = YQUI::ui()->currentFont();
+
+	    int size = font.pointSize();
+
+	    if ( size > 1 )
+		font.setPointSize( size + 2 );
+	    
+	    font.setBold( true );
+	    label->setFont( font );
 #endif
 
 	    step->setNameLabel( label );
