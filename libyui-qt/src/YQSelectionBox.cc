@@ -57,6 +57,9 @@ YQSelectionBox::YQSelectionBox( QWidget *		parent,
     _qt_label->setTextFormat( QLabel::PlainText );
     _qt_label->setFont( YQUI::ui()->currentFont() );
 
+    if ( _qt_label->text().isEmpty() )
+	_qt_label->hide();
+
     _qt_listbox = new QListBox( this );
     _qt_listbox->installEventFilter( this );
     _qt_listbox->setVariableHeight( false );
@@ -84,6 +87,18 @@ YQSelectionBox::YQSelectionBox( QWidget *		parent,
 void YQSelectionBox::setLabel( const YCPString & label )
 {
     _qt_label->setText( fromUTF8(label->value() ) );
+
+    if ( _qt_label->text().isEmpty() )
+    {
+	if ( _qt_label->isVisible() )
+	    _qt_label->hide();
+    }
+    else
+    {
+	if ( _qt_label->isHidden() )
+	    _qt_label->show();
+    }
+    
     YSelectionBox::setLabel( label );
 }
 
