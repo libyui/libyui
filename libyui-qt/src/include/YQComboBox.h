@@ -123,6 +123,14 @@ public:
      */
     virtual void deleteAllItems();
 
+    /**
+     * Specify the amount of characters which can be inserted.
+     *
+     * Reimplemented from @ref YTextEntry.
+     */
+    void setInputMaxLength( const YCPInteger & numberOfChars );
+
+
 protected slots:
 
     /**

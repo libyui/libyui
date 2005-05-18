@@ -38,6 +38,7 @@ YQMultiLineEdit::YQMultiLineEdit( QWidget * 		parent,
 				  const YCPString & 	initialText )
     : QVBox( parent )
     , YMultiLineEdit( opt, label )
+    , InputMaxLength( -1 )
 {
     setWidgetRep( this );
     setSpacing( YQWidgetSpacing );
@@ -132,10 +133,63 @@ bool YQMultiLineEdit::setKeyboardFocus()
 
 void YQMultiLineEdit::changed()
 {
+
+    // if we reached the maximum number of characters which can be inserted
+    if ( InputMaxLength >= 0 && InputMaxLength < _qt_textedit->length() ) {
+	int index, para;
+	_qt_textedit->getCursorPosition( &para, &index);
+	
+	QString text = _qt_textedit->text();
+	
+	int pos = 0; // current positon in text
+	int section =0; // section in text;
+	// iterate over the string
+	while ( pos != (int)text.length()+1 ) {
+	    // we reached the paragraph where the user entered
+	    // a character
+	    if ( section == para ) {
+		// remove that character
+		text.remove( pos+index-1, 1 );
+		break;
+	    }
+	    
+	    // new paragraph begins
+	    if ( text[pos] == '\n' ) {
+		section++;
+	    }
+	    pos++;
+	}
+	
+	_qt_textedit->setText( text );
+	
+	// user removed a paragraph
+	if ( index == 0 ) {
+	    --para;
+	    // the new index is the end of the previous paragraph
+	    index = _qt_textedit->paragraphLength(para) + 1;
+	}
+
+	// adjust to new cursor position before the removed character
+	_qt_textedit->setCursorPosition( para, index-1 );
+    }
+
     if ( getNotify() )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
+void YQMultiLineEdit::setInputMaxLength( const YCPInteger & numberOfChars)
+{
+    InputMaxLength = numberOfChars->asInteger()->value();
+    
+    QString text = _qt_textedit->text();
+
+    // truncate the text if appropriate
+    if ( InputMaxLength < (int)text.length() ) {
+	text.truncate( InputMaxLength );
+	_qt_textedit->setText(text);
+    }
+
+}
 
 #include "YQMultiLineEdit.moc"
 

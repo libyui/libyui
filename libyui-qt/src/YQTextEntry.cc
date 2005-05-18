@@ -168,6 +168,10 @@ void YQTextEntry::setValidChars( const YCPString & newValidChars )
     YTextEntry::setValidChars( newValidChars );
 }
 
+void YQTextEntry::setInputMaxLength( const YCPInteger & numberOfChars)
+{
+	_qt_lineedit->setMaxLength(numberOfChars->asInteger()->value());
+}
 
 bool YQTextEntry::setKeyboardFocus()
 {

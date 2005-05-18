@@ -22,6 +22,7 @@
 #include <qstring.h>
 #include <qlabel.h>
 #include <qcombobox.h>
+#include <qlineedit.h>
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
@@ -221,5 +222,9 @@ void YQComboBox::deleteAllItems()
     _qt_combo_box->blockSignals( false );
 }
 
+void YQComboBox::setInputMaxLength( const YCPInteger & numberOfChars)
+{
+	_qt_combo_box->lineEdit()->setMaxLength(numberOfChars->asInteger()->value());
+}
 
 #include "YQComboBox.moc"

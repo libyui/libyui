@@ -91,6 +91,12 @@ public:
      */
     int visibleLines() const { return DEFAULT_VISIBLE_LINES; }
 
+    /**
+     * Specify the amount of characters which can be inserted.
+     *
+     * Reimplemented from @ref YTextEntry.
+     */
+    void setInputMaxLength( const YCPInteger & numberOfChars );
 
 
 protected slots:
@@ -104,6 +110,10 @@ protected:
 
     QLabel *	_qt_label;
     QTextEdit *	_qt_textedit;
+
+    // specifies how much characters can be inserted. -1 for unlimited input
+    int InputMaxLength;
+ 
 };
 
 

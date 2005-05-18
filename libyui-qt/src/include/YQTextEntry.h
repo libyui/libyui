@@ -88,6 +88,13 @@ public:
     void setValidChars( const YCPString & validChars );
 
     /**
+     * Specify the amount of characters which can be inserted.
+     *
+     * Reimplemented from @ref YTextEntry.
+     */
+    void setInputMaxLength( const YCPInteger & numberOfChars );
+
+    /**
      * Accept the keyboard focus.
      */
     virtual bool setKeyboardFocus();
