@@ -61,6 +61,9 @@ class NCTextPad : public NCPad {
     void assertWidht ( unsigned minw );
     void assertHeight( unsigned minh );
 
+    // specifies how much characters can be inserted. -1 for unlimited input
+    int InputMaxLength;
+
   protected:
 
     virtual int setpos( const wpos & newpos );
@@ -79,6 +82,10 @@ class NCTextPad : public NCPad {
 
     void setText( const NCtext & ntext );
     wstring getText() const;
+
+    // limits  the input to numberOfChars characters and truncates the text
+    // if appropriate
+    void setInputMaxLength( int nr );
 };
 
 ///////////////////////////////////////////////////////////////////

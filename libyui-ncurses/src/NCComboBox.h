@@ -78,6 +78,9 @@ class NCComboBox : public YComboBox, public NCWidget {
 
     bool validKey( wint_t key ) const;
 
+    // specifies how much characters can be inserted. -1 for unlimited input
+    int InputMaxLength;
+
   public:
 
     NCComboBox( NCWidget * parent, const YWidgetOpt & opt,
@@ -114,6 +117,11 @@ class NCComboBox : public YComboBox, public NCWidget {
     unsigned int getListSize( ) { return deflist.size(); }
 
     void deleteAllItems();
+
+    // limits  the input to numberOfChars characters and truncates the text
+    // if appropriate
+    void setInputMaxLength( const YCPInteger & numberOfChars);
+
 };
 
 ///////////////////////////////////////////////////////////////////

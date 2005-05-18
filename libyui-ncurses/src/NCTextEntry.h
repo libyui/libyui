@@ -74,6 +74,9 @@ class NCTextEntry : public YTextEntry, public NCWidget {
     bool     bufferFull() const;
     unsigned maxCursor() const;
 
+    // specifies how much characters can be inserted. -1 for unlimited input
+    int InputMaxLength;
+
   protected:
 
     virtual const char * location() const { return "NCTextEntry"; }
@@ -116,6 +119,11 @@ class NCTextEntry : public YTextEntry, public NCWidget {
         return YWidget::setKeyboardFocus();
       return true;
     }
+
+    // limits  the input to numberOfChars characters and truncates the text
+    // if appropriate
+    void setInputMaxLength( const YCPInteger & numberOfChars);
+
 };
 
 ///////////////////////////////////////////////////////////////////

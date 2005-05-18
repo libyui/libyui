@@ -81,6 +81,10 @@ class NCMultiLineEdit : public YMultiLineEdit, public NCPadWidget {
         return YWidget::setKeyboardFocus();
       return true;
     }
+
+    // sets the maximum number of characters of the NCTextPad
+    void setInputMaxLength( const YCPInteger & numberOfChars);
+
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -155,7 +155,7 @@ NCursesEvent NCMultiLineEdit::wHandleInput( wint_t key )
   NCursesEvent ret;
   handleInput( key );
   if ( getNotify() )
-    ret = NCursesEvent::ValueChanged;
+      ret = NCursesEvent::ValueChanged;
   return ret;
 }
 
@@ -187,4 +187,10 @@ NCPad * NCMultiLineEdit::CreatePad()
 void NCMultiLineEdit::DrawPad()
 {
   pad->setText( ctext );
+}
+
+void NCMultiLineEdit::setInputMaxLength( const YCPInteger & numberOfChars )
+{
+    int nr = numberOfChars->asInteger()->value();
+    pad->setInputMaxLength(nr);
 }

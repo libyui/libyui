@@ -55,6 +55,7 @@ NCTextEntry::NCTextEntry( NCWidget * parent, const YWidgetOpt & opt,
     , curpos   ( 0 )
     , fldtype  ( PLAIN )
     , returnOnReturn_b( false )
+    , InputMaxLength( -1 )
 {
   WIDDBG << endl;
   if ( maxInputLength &&
@@ -67,6 +68,7 @@ NCTextEntry::NCTextEntry( NCWidget * parent, const YWidgetOpt & opt,
   setLabel( nlabel );
   hotlabel = &label;
   setText( ntext );
+
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -500,7 +502,10 @@ NCursesEvent NCTextEntry::wHandleInput( wint_t key )
    
    if ( (!is_special && KEY_MIN < key && KEY_MAX > key )
 	||
-	!iswprint( key ) )
+	!iswprint( key )
+	||
+	// if we are at limit of input
+	(InputMaxLength >= 0 && InputMaxLength <= (int)buffer.length()) )
    {
       update = false;
       beep   = true;
@@ -590,4 +595,20 @@ NCursesEvent NCTextEntry::wHandleInput( wint_t key )
 
   return ret;
 
+}
+
+
+void NCTextEntry::setInputMaxLength( const YCPInteger & numberOfChars)
+{
+    int nr = numberOfChars->asInteger()->value();
+
+    // if there is more text then the maximum number of chars,
+    // truncate the text and update the buffer
+    if ( nr >= 0 && (int)buffer.length() > nr ) {
+	buffer.erase( nr, maxCursor() - nr );
+	tUpdate();
+	curpos = buffer.length();
+    }
+  
+    InputMaxLength = nr;
 }

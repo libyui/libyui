@@ -32,6 +32,7 @@ NCTextPad::NCTextPad( int l, int c, const NCWidget & p )
     , lines( 1U, 0 )
     , cline( lines.begin() )
     , curson( false )
+    , InputMaxLength( -1 )
 {
   bkgd( p.widgetStyle().data );
 }
@@ -212,7 +213,7 @@ bool NCTextPad::handleInput( wint_t key )
   bool handled = true;
   bool beep    = false;
   bool update  = true;
-
+  
   cursorOff();
   switch ( key ) {
 
@@ -305,8 +306,14 @@ bool NCTextPad::handleInput( wint_t key )
     break;
 
   default:
-    beep = !insert( key );
-    break;
+      // if we are at limit of input
+      if ( InputMaxLength >= 0 && InputMaxLength < (int)getText().length() ) {
+	  beep = true;
+	  update = false;
+      } else {
+	  beep = !insert( key );
+      }
+      break;
   }
   cursorOn();
 
@@ -537,3 +544,13 @@ ostream & operator<<( ostream & STREAM, const NCTextPad & OBJ )
   return STREAM;
 }
 
+void NCTextPad::setInputMaxLength( int nr ) {
+    // if there is more text then the maximum number of chars,
+    // truncate the text and update the buffer
+    if ( nr >= 0 && nr < (int)getText().length() ) {
+	NCstring newtext = getText().substr( 0, nr );
+	setText( newtext );
+    }
+  
+    InputMaxLength = nr;	
+}

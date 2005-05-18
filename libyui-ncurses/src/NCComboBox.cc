@@ -43,6 +43,7 @@ NCComboBox::NCComboBox( NCWidget * parent, const YWidgetOpt & opt,
     , fldlength( 0 )
     , curpos( 0 )
     , index( -1 )
+    , InputMaxLength( -1 )
 {
   WIDDBG << endl;
   setLabel( nlabel );
@@ -535,14 +536,18 @@ NCursesEvent NCComboBox::wHandleInput( wint_t key )
        is_special = true;
        key -= 0xFFFF;
     }
-
+    
     if ( !mayedit || !validKey( key )
 	 ||
 	 ( !is_special && KEY_MIN < key && KEY_MAX > key )
 	 ||
-	 !iswprint( key ) ) {
-      update = false;
-      beep   = true;
+	 !iswprint( key )
+	 ||
+	 // if we are at limit of input
+	 (InputMaxLength >= 0 && InputMaxLength <= (int)buffer.length()) )
+    {
+	    update = false;
+	    beep   = true;
     } else {
       buffer.insert( curpos, 1, key );
       modified = true;
@@ -597,4 +602,20 @@ void NCComboBox::deleteAllItems() {
 	YComboBox::deleteAllItems();
 	deflist.clear();
 	setValue( YCPString( string("") ) );
+}
+
+
+void NCComboBox::setInputMaxLength( const YCPInteger & numberOfChars)
+{
+    int nr = numberOfChars->asInteger()->value();
+
+    // if there is more text then the maximum number of chars,
+    // truncate the text and update the buffer
+    if ( nr >= 0 && (int)buffer.length() > nr ) {
+	buffer.erase( nr, buffer.length() - nr );
+	tUpdate();
+	curpos = buffer.length();
+    }
+  
+    InputMaxLength;
 }
