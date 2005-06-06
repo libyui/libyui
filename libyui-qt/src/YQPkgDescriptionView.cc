@@ -88,7 +88,7 @@ YQPkgDescriptionView::showDetails( PMObjectPtr pmObj )
 
 	    if ( line.startsWith( "Authors:" ) )
 	    {
-		line = "<b>" + line + "</b>";
+		line = "<b>" + _( "Authors:" ) + "</b>";
 		auto_format = false;
 	    }
 
