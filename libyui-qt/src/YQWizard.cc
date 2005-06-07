@@ -1423,7 +1423,7 @@ void YQWizard::setDialogIcon( const char * iconName )
 {
     if ( _dialogIcon )
     {
-	if ( iconName )
+	if ( iconName && *iconName )
 	{
 	    QPixmap icon( iconName );
 
