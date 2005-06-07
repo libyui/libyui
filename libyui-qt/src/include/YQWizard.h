@@ -576,9 +576,9 @@ protected:
     QLabel *		    _dialogHeading;
     YQAlignment *	    _contents;
     YQWizardButton *	    _backButton;
-    YQWizardButton *	    _nextButton;
-    QSpacerItem *	    _abortButtonSpacer;
+    QSpacerItem *	    _backButtonSpacer;
     YQWizardButton *	    _abortButton;
+    YQWizardButton *	    _nextButton;
 
     QPtrList<YQWizard::Step> 	_stepsList;
     QDict<YQWizard::Step>	_stepsIDs;

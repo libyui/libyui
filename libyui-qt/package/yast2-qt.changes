@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jun  7 17:10:13 CEST 2005 - sh@suse.de
+
+- Reverted wizard button order
+  (postponed until changes can be done consistently)
+- V 2.12.3 
+
+-------------------------------------------------------------------
 Wed Apr 27 19:00:19 CEST 2005 - sh@suse.de
 
 - Added support for icons in selection box widget 
@@ -14,7 +21,7 @@ Thu Apr 21 16:50:01 CEST 2005 - sh@suse.de
 Wed Apr  6 18:44:24 CEST 2005 - visnov@suse.cz
 
 - gcc4 fixes (missing include and forward declaration fix)
-- V 2.12 
+- V 2.12.2 
 
 -------------------------------------------------------------------
 Tue Apr  5 14:38:04 CEST 2005 - sh@suse.de
