@@ -1258,7 +1258,7 @@ YQPackageSelector::reject()
 	 ( QMessageBox::warning( this, "",
 				 _( "Abandon all changes?" ),
 				 _( "&OK" ), _( "&Cancel" ), "",
-				 1, // defaultButtonNumber ( from 0 )
+				 1, // defaultButtonNumber (from 0)
 				 1 ) // escapeButtonNumber
 	   == 0 )	// Proceed upon button #0 ( OK )
 	 )
