@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Wed Jun 29 16:51:15 CEST 2005 - sh@suse.de
+
+- Support for `opt(`boldFont) for some widgets:
+  - Label
+  - ColoredLabel
+  - CheckBox
+  - RadioButton 
+
+-------------------------------------------------------------------
 Tue Jun  7 17:10:13 CEST 2005 - sh@suse.de
 
 - Reverted wizard button order

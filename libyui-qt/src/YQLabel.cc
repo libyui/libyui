@@ -38,7 +38,18 @@ YQLabel::YQLabel( QWidget * 		parent,
     setText( fromUTF8(text->value() ) );
     setIndent(0);
 
-    setFont( opt.isHeading.value() ? YQUI::ui()->headingFont() : YQUI::ui()->currentFont() );
+    if ( opt.isHeading.value() )
+    {
+	setFont( YQUI::ui()->headingFont() );
+	
+    }
+    else
+    {
+	setFont( opt.boldFont.value() ?
+		 YQUI::ui()->boldFont() :
+		 YQUI::ui()->currentFont() );
+    }
+		
 
     if ( opt.isOutputField.value() )
     {

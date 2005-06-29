@@ -49,7 +49,9 @@ YQCheckBox::YQCheckBox( QWidget *		parent,
     layout->addSpacing( SPACING );
     layout->addWidget( _qt_checkbox );
     layout->addSpacing( SPACING );
-    _qt_checkbox->setFont( YQUI::ui()->currentFont() );
+    _qt_checkbox->setFont( opt.boldFont.value() ?
+			   YQUI::ui()->boldFont() :
+			   YQUI::ui()->currentFont() );
     _qt_checkbox->setChecked( initiallyChecked );
 
     connect( _qt_checkbox, 	SIGNAL( stateChanged( int ) ),

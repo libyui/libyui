@@ -79,6 +79,11 @@ public:
     const QFont & currentFont();
 
     /**
+     * Returns the UI's default bold font.
+     **/
+    const QFont & boldFont();
+
+    /**
      * Returns the UI's heading font.
      **/
     const QFont & headingFont();
@@ -704,6 +709,11 @@ protected:
     QFont _current_font;
     bool _loaded_current_font;
 
+    /**
+     * Default bold font (cached)
+     **/
+    QFont _bold_font;
+    bool _loaded_bold_font;
 
     /**
      * Heading font (cached)

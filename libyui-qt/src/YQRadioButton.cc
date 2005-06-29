@@ -55,7 +55,9 @@ YQRadioButton::YQRadioButton( QWidget * 		parent,
     layout->addSpacing( SPACING );
     layout->addWidget( _qt_radiobutton );
     layout->addSpacing( SPACING );
-    _qt_radiobutton->setFont( YQUI::ui()->currentFont() );
+    _qt_radiobutton->setFont( opt.boldFont.value() ?
+			      YQUI::ui()->boldFont() :
+			      YQUI::ui()->currentFont() );
     _qt_radiobutton->setChecked( checked );
 
     connect ( _qt_radiobutton, SIGNAL ( toggled ( bool ) ),

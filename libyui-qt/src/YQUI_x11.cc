@@ -149,6 +149,19 @@ const QFont &YQUI::currentFont()
 }
 
 
+const QFont &YQUI::boldFont()
+{
+    if ( ! _loaded_bold_font )
+    {
+	_bold_font = currentFont();
+	_bold_font.setBold( true );
+	_loaded_bold_font = true;
+    }
+
+    return _bold_font;
+}
+
+
 const QFont &YQUI::headingFont()
 {
     /**

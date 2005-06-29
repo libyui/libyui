@@ -44,7 +44,9 @@ YQColoredLabel::YQColoredLabel( QWidget *		parent,
     setMargin( margin );
     setAlignment( AlignLeft | AlignVCenter );
 
-    setFont( YQUI::ui()->currentFont() );
+    setFont( opt.boldFont.value() ?
+	     YQUI::ui()->boldFont() :
+	     YQUI::ui()->currentFont() );
 
 }
 
