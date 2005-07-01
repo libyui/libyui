@@ -79,6 +79,7 @@ long YQUI::defaultSize(YUIDimension dim) const
 	return dim == YD_HORIZ ? qApp->desktop()->width() : qApp->desktop()->height();
 }
 
+
 QWidget* YQUI::mainWidget()
 {
     return _main_win;
@@ -439,6 +440,39 @@ void YQUI::loadPredefinedQtTranslations()
 	qApp->setReverseLayout( true );
     }
 }
+
+
+/**
+ * UI-specific conversion from logical layout spacing units (80x25)
+ * to device dependent units (640x480).
+ **/
+long YQUI::deviceUnits( YUIDimension dim, float size )
+{
+    if ( dim==YD_HORIZ )	size *= ( 640.0/80 );
+    else			size *= ( 480.0/25 );
+
+    return (long) ( size + 0.5 );
+}
+
+
+/**
+ * Default conversion from device dependent layout spacing units (640x480)
+ * to logical layout units (80x25).
+ *
+ * This default function assumes 80x25 units.
+ * Derived UIs may want to reimplement this.
+ **/
+float YQUI::layoutUnits( YUIDimension dim, long device_units )
+{
+    float size = (float) device_units;
+
+    if ( dim==YD_HORIZ )	size *= ( 80/640.0 );
+    else			size *= ( 25/480.0 );
+
+    return size;
+}
+
+
 
 
 // EOF

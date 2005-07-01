@@ -573,6 +573,24 @@ public:
      **/
     bool usingVisionImpairedPalette() const { return _usingVisionImpairedPalette; }
 
+    /**
+     * Convert logical layout spacing units into device dependent units.
+     * A default size dialog is assumed to be 80x25 layout spacing units
+     * and 640x480 device dependent spacing units.
+     *
+     * Reimplemented from YUI.
+     **/
+    virtual long deviceUnits( YUIDimension dim, float layout_units );
+
+    /**
+     * Convert device dependent units into logical layout spacing units.
+     * A default size dialog is assumed to be 80x25 layout spacing units
+     * and 640x480 device dependent spacing units.
+     *
+     * Reimplemented from YUI.
+     **/
+    virtual float layoutUnits( YUIDimension dim, long device_units );
+
     
 protected:
 

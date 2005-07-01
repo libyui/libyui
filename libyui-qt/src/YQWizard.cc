@@ -63,7 +63,7 @@
 #include "YQi18n.h"
 #include "YQUI.h"
 #include "YQDialog.h"
-#include "YQAlignment.h"
+#include "YQSplit.h"
 #include "YQReplacePoint.h"
 #include "YQEmpty.h"
 #include "YQLabel.h"
@@ -1099,7 +1099,7 @@ void YQWizard::layoutClientArea( QWidget * parent )
     //
 
     YWidgetOpt widgetOpt;
-    _contents = new YQAlignment( _clientArea, widgetOpt, YAlignCenter, YAlignCenter );
+    _contents = new YQSplit( _clientArea, widgetOpt, YD_VERT );
     CHECK_PTR( _contents );
 
     addChild( _contents );
