@@ -79,7 +79,7 @@ YQDumbTab::YQDumbTab( QWidget *			parent,
     //
 
     YWidgetOpt widgetOpt;
-    _contents = new YQAlignment( _clientArea, widgetOpt, YAlignCenter, YAlignCenter );
+    _contents = new YQAlignment( _clientArea, widgetOpt, YAlignUnchanged, YAlignUnchanged);
     CHECK_PTR( _contents );
 
     addChild( _contents );
