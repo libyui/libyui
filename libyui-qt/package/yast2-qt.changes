@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jul  5 11:31:55 CEST 2005 - sh@suse.de
+
+- Fixed alignment in YQDumbTab to properly promote stretchability
+- V 2.12.4 
+
+-------------------------------------------------------------------
 Wed Jun 29 16:51:15 CEST 2005 - sh@suse.de
 
 - Support for `opt(`boldFont) for some widgets:
