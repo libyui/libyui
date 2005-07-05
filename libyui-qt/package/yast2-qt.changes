@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jul  5 17:35:18 CEST 2005 - sh@suse.de
+
+- Added support for background pixmaps in YQAlignment
+- V 2.12.5 
+
+-------------------------------------------------------------------
 Tue Jul  5 11:31:55 CEST 2005 - sh@suse.de
 
 - Fixed alignment in YQDumbTab to properly promote stretchability

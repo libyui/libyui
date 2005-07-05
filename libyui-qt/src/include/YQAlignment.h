@@ -58,6 +58,13 @@ public:
      * Sets the size
      */
     void setSize( long newWidth, long newHeight );
+
+    /**
+     * Set the background pixmap.
+     * Reimplemented from YAlignment.
+     **/
+    virtual void setBackgroundPixmap( string px );
+    
 };
 
 
