@@ -49,6 +49,9 @@ YQComboBox::YQComboBox( QWidget * 		parent,
     _qt_label->setTextFormat( QLabel::PlainText );
     _qt_label->setFont( YQUI::ui()->currentFont() );
 
+    if ( _qt_label->text().isEmpty() )
+	_qt_label->hide();
+
     _qt_combo_box = new QComboBox( opt.isEditable.value(), this );
     _qt_combo_box->setFont( YQUI::ui()->currentFont() );
 
@@ -67,6 +70,18 @@ YQComboBox::YQComboBox( QWidget * 		parent,
 void YQComboBox::setLabel( const YCPString & label )
 {
     _qt_label->setText( fromUTF8(label->value() ) );
+    
+    if ( _qt_label->text().isEmpty() )
+    {
+	if ( _qt_label->isVisible() )
+	    _qt_label->hide();
+    }
+    else
+    {
+	if ( _qt_label->isHidden() )
+	    _qt_label->show();
+    }
+    
     YComboBox::setLabel( label );
 }
 
