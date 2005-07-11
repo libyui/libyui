@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jul 11 17:23:53 CEST 2005 - sh@suse.de
+
+- Fixed bug #95722: No items in NCurses MultiSelectionBox
+- V 2.12.5 
+
+-------------------------------------------------------------------
 Mon Jul 11 08:57:51 CEST 2005 - visnov@suse.cz
 
 - Fix build dependencies
