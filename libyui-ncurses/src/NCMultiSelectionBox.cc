@@ -116,7 +116,7 @@ void NCMultiSelectionBox::setCurrentItem( int index )
 //
 //	DESCRIPTION :
 //
-void NCMultiSelectionBox::itemAdded( const YCPString& str, bool selected )
+void NCMultiSelectionBox::itemAdded( const YCPString& str, int index, bool selected )
 {
   vector<NCTableCol*> Items( 2U, 0 );
   Items[0] = new NCTableTag( selected );

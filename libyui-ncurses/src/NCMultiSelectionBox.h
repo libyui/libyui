@@ -105,7 +105,7 @@ class NCMultiSelectionBox : public YMultiSelectionBox, public NCPadWidget {
     virtual NCPad * CreatePad();
     virtual void    wRecoded();
 
-    virtual void itemAdded( const YCPString& string, bool selected );
+    virtual void itemAdded( const YCPString & string, int index, bool selected );
     virtual void deleteAllItems();
 
     virtual bool itemIsSelected( int index ) { return isItemSelected( index ); }

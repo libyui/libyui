@@ -616,6 +616,7 @@ void NCComboBox::setInputMaxLength( const YCPInteger & numberOfChars)
 	tUpdate();
 	curpos = buffer.length();
     }
-  
+
     InputMaxLength;
+#warning FIXME: Either throw this out or do something properly with it!
 }
