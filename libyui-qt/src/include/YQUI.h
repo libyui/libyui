@@ -40,6 +40,7 @@ class QVBox;
 class QWidgetStack;
 class QCursor;
 class YEvent;
+class QY2Settings;
 using std::string;
 using std::vector;
 
@@ -350,6 +351,31 @@ protected:
      * etc.
      **/
     void loadPredefinedQtTranslations();
+
+    /**
+     * Set fonts according to the specified language.
+     *
+     * This is most important for some Asian languages that have overlaps in
+     * the Unicode table, like Japanese vs. Chinese.
+     **/
+    void setLangFonts( const YCPString & language );
+
+    /**
+     * Constructs a key for the language specific font file:
+     *     "font[lang]"
+     * for
+     *     font[de_DE] = "Sans Serif"
+     *     font[zh] = "ChineseSpecial, something"
+     *     font[ja_JP] = "JapaneseSpecial, something"
+     *     font = "Sans Serif"
+     **/
+    QString fontKey( const QString & lang );
+
+    /**
+     * Invalidate information about cached fonts so they will be reloaded upon
+     * their next usage  
+     **/
+    void setAllFontsDirty();
 
     /**
      * Determine good fonts based on defaultsize geometry and set
@@ -721,6 +747,17 @@ protected:
      */
     bool _do_exit_loop;
 
+
+    /**
+     * Font family or list of font families to use ("Sans Serif" etc.)
+     **/
+    QString _font_family;
+
+    /**
+     * Language-specific font settings
+     **/
+    QY2Settings	* _lang_fonts;
+    
     /**
      * Default font (cached)
      **/

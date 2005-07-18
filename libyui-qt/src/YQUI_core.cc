@@ -60,6 +60,8 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     , _main_win( NULL )
     , _main_dialog_id(0)
     , _do_exit_loop( false )
+    , _font_family( "Sans Serif" )
+    , _lang_fonts( 0 )
     , _loaded_current_font( false )
     , _loaded_bold_font( false )
     , _loaded_heading_font( false )
@@ -257,6 +259,9 @@ YQUI::~YQUI()
     y2debug("Closing down Qt UI.");
 
     normalCursor();
+
+    if ( _lang_fonts )
+	delete _lang_fonts;
 
 #if 0
     if ( ! runningEmbedded() && qApp )

@@ -17,13 +17,13 @@
 
 /-*/
 
-#define FORCE_UNICODE_FONT	0
 
 #include <qcursor.h>
 #include <qwidgetstack.h>
 #include <qvbox.h>
 #include <qwidgetlist.h>
 #include <qtextcodec.h>
+#include <qregexp.h>
 
 #include <X11/Xlib.h>
 
@@ -33,6 +33,7 @@
 #include "YQUI.h"
 #include "YEvent.h"
 #include "YQDialog.h"
+#include "QY2Settings.h"
 
 
 int YQUI::getDisplayWidth()
@@ -119,17 +120,11 @@ const QFont &YQUI::currentFont()
 
     if ( ! _loaded_current_font )
     {
-#if FORCE_UNICODE_FONT
-	_current_font = QFont( "Helvetica", 12 );
-	_current_font.setStyleHint( QFont::SansSerif, QFont::PreferBitmap );
-	_current_font.setRawName( "-gnu-unifont-medium-r-normal--16-160-75-75-p-80-iso10646-1" );
-	y2debug( "Loading default font: %s", (const char *) _current_font.rawName() );
-#else
 	if ( autoFonts() )
 	{
 	    pickAutoFonts();
 
-	    _current_font = QFont( "Sans Serif" );
+	    _current_font = QFont( _font_family );
 	    _current_font.setPixelSize( _auto_normal_font_size );
 	    _current_font.setWeight( QFont::Normal );
 
@@ -142,7 +137,7 @@ const QFont &YQUI::currentFont()
 	{
 	    _current_font = qApp->font();
 	}
-#endif
+	
 	_loaded_current_font = true;
     }
 
@@ -171,17 +166,11 @@ const QFont &YQUI::headingFont()
 
     if ( ! _loaded_heading_font )
     {
-#if FORCE_UNICODE_FONT
-	_heading_font = QFont( "Helvetica", 14, QFont::Bold );
-	_heading_font.setStyleHint( QFont::SansSerif, QFont::PreferBitmap );
-	_heading_font.setRawName( "-gnu-unifont-bold-r-normal--18-180-75-75-p-80-iso10646-1" );
-	y2debug( "Loading heading font: %s", (const char *) _heading_font.rawName() );
-#else
 	if ( autoFonts() )
 	{
 	    pickAutoFonts();
 
-	    _heading_font = QFont( "Sans Serif" );
+	    _heading_font = QFont( _font_family );
 	    _heading_font.setPixelSize( _auto_heading_font_size );
 	    _heading_font.setWeight( QFont::Bold );
 
@@ -190,14 +179,22 @@ const QFont &YQUI::headingFont()
 	}
 	else
 	{
-	    _heading_font = QFont( "Sans Serif", 14, QFont::Bold );
+	    _heading_font = QFont( _font_family, 14, QFont::Bold );
 	}
-#endif
 	_loaded_heading_font = true;
     }
 
     return _heading_font;
 }
+
+
+void YQUI::setAllFontsDirty()
+{
+    _loaded_current_font = false;
+    _loaded_heading_font = false;
+    _loaded_bold_font    = false;
+}
+
 
 
 void YQUI::pickAutoFonts()
@@ -442,6 +439,70 @@ void YQUI::loadPredefinedQtTranslations()
 }
 
 
+void YQUI::setLangFonts( const YCPString & language )
+{
+    QString old_font_family = _font_family;
+
+    if ( ! _lang_fonts )
+    {
+	_lang_fonts = new QY2Settings( LANG_FONTS_FILE );
+	CHECK_PTR( _lang_fonts );
+
+	if ( _lang_fonts->readError() )
+	    y2error( "Error reading %s", (const char *) _lang_fonts->fileName() );
+	else
+	    y2milestone( "%s read OK", (const char *) _lang_fonts->fileName() );
+    }
+
+    QString lang = language->value().c_str();
+    QString key;
+
+    if ( ! _lang_fonts->hasKey( fontKey( lang ) ) )	// "zh_CN.UTF8" etc.
+    {
+	lang.replace( QRegExp( "\\..*$" ), "" );	// Cut off trailing encoding (".UTF8")
+
+	if ( ! _lang_fonts->hasKey( fontKey( lang ) ) )
+	    lang.replace( QRegExp( "_.*$" ), "" );	// Cut off trailing country ("_CN")
+    }
+
+    if ( _lang_fonts->hasKey( fontKey( lang ) ) )
+    {
+	_font_family = _lang_fonts->get( fontKey( lang ), "Sans Serif" );
+	y2milestone( "%s = \"%s\"", (const char *) fontKey( lang ), (const char *) _font_family );
+    }
+    else
+    {
+	_font_family = _lang_fonts->get( fontKey( "" ), "Sans Serif" );
+	y2milestone( "Using fallback for %s: font = \"%s\"",
+		     (const char *) lang, (const char *) _font_family );
+    }
+
+    if ( _font_family != old_font_family && ! _font_family.isEmpty() )
+    {
+	setAllFontsDirty();
+	int size = qApp->font().pointSize();
+	QFont font( _font_family );
+	font.setPointSize( size );
+	qApp->setFont( font, true );	// font, informWidgets
+	y2milestone( "Reloading fonts - now using \"%s\"",
+		     (const char *) font.toString() );
+    }
+    else
+    {
+	y2debug( "No font change" );
+    }
+}
+
+
+QString YQUI::fontKey( const QString & lang )
+{
+    if ( lang.isEmpty() )
+	return "font";
+    else
+	return QString( "font[%1]").arg( lang );
+}
+
+
 /**
  * UI-specific conversion from logical layout spacing units (80x25)
  * to device dependent units (640x480).
@@ -471,7 +532,6 @@ float YQUI::layoutUnits( YUIDimension dim, long device_units )
 
     return size;
 }
-
 
 
 

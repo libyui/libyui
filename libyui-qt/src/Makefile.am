@@ -4,19 +4,25 @@
 
 SUBDIRS = include
 
-AM_CXXFLAGS = -DY2LOG=\"ui-qt\"				\
-	-DQT_THREAD_SUPPORT				\
-	-DLOCALEDIR=\"${localedir}\"			\
-	-DQT_LOCALEDIR=\"$(QTDIR)/translations\"	\
-	-DICONDIR=\"${themedir}/current\"		\
-	-DTHEMEDIR=\"${themedir}/current\"		\
-	-DHELPIMAGEDIR=\"${imagedir}\"			\
+AM_CXXFLAGS = -DY2LOG=\"ui-qt\"					\
+	-DQT_THREAD_SUPPORT					\
+	-DLOCALEDIR=\"${localedir}\"				\
+	-DQT_LOCALEDIR=\"$(QTDIR)/translations\"		\
+	-DICONDIR=\"${themedir}/current\"			\
+	-DTHEMEDIR=\"${themedir}/current\"			\
+	-DHELPIMAGEDIR=\"${imagedir}\"				\
+	-DLANG_FONTS_FILE=\"${lang_fontsdir}/lang_fonts\"	\
 	-fmessage-length=0
 
 
 MOC = $(QTDIR)/bin/moc
 
 serversdir = $(execcompdir)/servers
+
+lang_fontsdir=$(ydatadir)
+lang_fonts_DATA = lang_fonts
+
+EXTRA_DIST = $(lang_fonts_DATA)
 
 # plugin, libtool forces 'lib' prefix
 plugin_LTLIBRARIES = libpy2qt.la
@@ -117,10 +123,11 @@ liby2qt_la_SOURCES = 				\
 	QY2FloppyMountDialog.cc			\
 	QY2CharValidator.cc			\
 	QY2ListView.cc				\
+	QY2Settings.cc				\
 	QY2LayoutUtils.cc			\
 	qxembed.cc
 
-# Note: QY2LayoutUtils doesn't need any .moc file: No QObject, just functions.
+# Note: QY2LayoutUtils and QY2Settings don't need any .moc file: No QObjects
 
 
 # the plugin adds the liby2 component interface

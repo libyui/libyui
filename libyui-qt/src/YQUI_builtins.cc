@@ -56,6 +56,9 @@ YCPValue YQUI::setLanguage( const YCPTerm & term)
 {
     loadPredefinedQtTranslations();
 
+    if ( term->size() > 0 && term->value(0)->isString() )
+	setLangFonts( term->value(0)->asString() );
+
     return YCPVoid();   // OK (YCPNull() would mean error)
 }
 

@@ -1,0 +1,31 @@
+# Language specific fonts for yast2-qt
+#
+# Used upon UI::SetLanguage( lang )
+# Fallback strategy for a locale "xy_AB.UTF8":
+#
+#     font[xy_AB.UTF8] = ???
+#     font[xy_AB] = ???
+#     font[xy] = ???
+#     font = ???
+#
+# If none of those is found, "Sans Serif" is used.
+#
+# Don't enumerate all languages just for the fun of it,
+# better specify a reasonable default with
+#
+#     font = ???
+
+font = "Sans Serif"
+font[zh] = "Times, Sans Serif"
+font[ja] = "Dingbats, Sans Serif"
+
+
+# For debugging
+
+font[xy_AB.UTF8] = "xy_AB_UTF8, Sans Serif"
+font[xy_XY] = "xy_XY, Sans Serif"
+font[xy] = "xy, Sans Serif"
+
+font[times] = "Times"
+font[sans]  = "Sans Serif"
+font[helv]  = "Helvetica"
