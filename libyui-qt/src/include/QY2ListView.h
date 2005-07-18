@@ -483,6 +483,11 @@ public:
     QY2ListViewToolTip::QY2ListViewToolTip( QY2ListView * parent )
 	: QToolTip( parent->viewport() ), _listView( parent )  {}
 
+    /**
+     * Destructor (to make gcc 4.x happy)
+     **/
+    virtual ~QY2ListViewToolTip() {}
+
 
 protected:
 
