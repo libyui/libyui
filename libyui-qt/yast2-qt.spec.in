@@ -35,4 +35,6 @@ Obsoletes:	y2qt
 %verify(not md5 size mtime) /usr/X11R6/lib/X11/fonts/uni/fonts.dir
 /usr/X11R6/lib/X11/fonts/uni/newunifont.pcf.gz
 /usr/X11R6/lib/X11/fonts/uni/unifont.pcf.gz
+%dir @ydatadir@
+@ydatadir@/lang_fonts
 %doc @docdir@
