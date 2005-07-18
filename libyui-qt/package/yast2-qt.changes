@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jul 18 14:42:19 CEST 2005 - sh@suse.de
+
+- Enable font switching upon UI::SetLanguage()
+- V 2.12.6
+
+-------------------------------------------------------------------
 Tue Jul  5 17:35:18 CEST 2005 - sh@suse.de
 
 - Added support for background pixmaps in YQAlignment
