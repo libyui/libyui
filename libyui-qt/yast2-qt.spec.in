@@ -22,6 +22,8 @@ Obsoletes:	y2qt
 @BUILD-QT@
 
 @INSTALL@
+rm -f $RPM_BUILD_ROOT/@plugindir@/libpy2qt.la
+
 
 @CLEAN@
 
@@ -29,7 +31,6 @@ Obsoletes:	y2qt
 %defattr (-, root, root)
 @plugindir@/libpy2qt.so.*
 @plugindir@/libpy2qt.so
-@plugindir@/libpy2qt.la
 @imagedir@
 %dir /usr/X11R6/lib/X11/fonts/uni
 %verify(not md5 size mtime) /usr/X11R6/lib/X11/fonts/uni/fonts.dir

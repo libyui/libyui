@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jul 18 17:12:41 CEST 2005 - sh@suse.de
+
+- Removed @plugindir@/libpy2qt.la from file list in .spec file
+  (and removing it after "make install")
+
+-------------------------------------------------------------------
 Mon Jul 18 14:42:19 CEST 2005 - sh@suse.de
 
 - Enable font switching upon UI::SetLanguage()
