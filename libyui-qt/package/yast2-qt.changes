@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jul 20 10:46:59 CEST 2005 - jsrain@suse.cz
+
+- added libxml2(-devel) to neededforbuild
+- 2.12.7
+
+-------------------------------------------------------------------
 Mon Jul 18 17:12:41 CEST 2005 - sh@suse.de
 
 - Removed @plugindir@/libpy2qt.la from file list in .spec file
