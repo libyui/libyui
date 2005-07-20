@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jul 20 15:30:48 CEST 2005 - sh@suse.de
+
+- Prevent segfault if there is no steps heading in the side panel
+- V 2.12.8
+
+-------------------------------------------------------------------
 Wed Jul 20 10:46:59 CEST 2005 - jsrain@suse.cz
 
 - added libxml2(-devel) to neededforbuild

@@ -423,7 +423,7 @@ void YQWizard::addStep( const QString & text, const QString & id )
 	return;
     }
 
-    if ( _stepsList.last()->name() == text )
+    if ( _stepsList.last() && _stepsList.last()->name() == text )
     {
 	// Consecutive steps with the same name will be shown as one single step.
 	//
