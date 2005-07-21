@@ -63,7 +63,7 @@
 #include "YQi18n.h"
 #include "YQUI.h"
 #include "YQDialog.h"
-#include "YQSplit.h"
+#include "YQAlignment.h"
 #include "YQReplacePoint.h"
 #include "YQEmpty.h"
 #include "YQLabel.h"
@@ -1098,8 +1098,10 @@ void YQWizard::layoutClientArea( QWidget * parent )
     // HVCenter for wizard contents
     //
 
-    YWidgetOpt widgetOpt;
-    _contents = new YQSplit( _clientArea, widgetOpt, YD_VERT );
+    YWidgetOpt hvstretchOpt;
+    hvstretchOpt.isHStretchable.setValue( true );
+    hvstretchOpt.isVStretchable.setValue( true );
+    _contents = new YQAlignment( _clientArea, hvstretchOpt, YAlignCenter, YAlignCenter );
     CHECK_PTR( _contents );
 
     addChild( _contents );
@@ -1112,6 +1114,7 @@ void YQWizard::layoutClientArea( QWidget * parent )
     // Replace point for wizard contents
     //
 
+    YWidgetOpt widgetOpt;
     YQReplacePoint * replacePoint = new YQReplacePoint( _contents, widgetOpt );
     CHECK_PTR( replacePoint );
 

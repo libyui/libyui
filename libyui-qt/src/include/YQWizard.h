@@ -43,7 +43,7 @@ class QTextBrowser;
 class QToolButton;
 class QWidgetStack;
 
-class YQSplit;
+class YQAlignment;
 class YQReplacePoint;
 class YQWizardButton;
 class QY2ListView;
@@ -574,7 +574,7 @@ protected:
     QMenuBar *		        _menuBar;
     QLabel *		    _dialogIcon;
     QLabel *		    _dialogHeading;
-    YQSplit *	    	    _contents;
+    YQAlignment *    	    _contents;
     YQWizardButton *	    _backButton;
     QSpacerItem *	    _backButtonSpacer;
     YQWizardButton *	    _abortButton;
