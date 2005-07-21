@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Jul 21 13:54:11 CEST 2005 - sh@suse.de
+
+- Now using `opt(`hvstretch) to restore old YQWizard layout behaviour
+  (centering content by default)
+- V 2.12.9 
+
+-------------------------------------------------------------------
 Wed Jul 20 15:30:48 CEST 2005 - sh@suse.de
 
 - Prevent segfault if there is no steps heading in the side panel
