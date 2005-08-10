@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Aug 10 14:11:45 CEST 2005 - visnov@suse.cz
+
+- Don't crash on pressing Esc in AskForExistingDirectory (#96141) 
+
+-------------------------------------------------------------------
 Mon Jul 11 17:23:53 CEST 2005 - sh@suse.de
 
 - Fixed bug #95722: No items in NCurses MultiSelectionBox

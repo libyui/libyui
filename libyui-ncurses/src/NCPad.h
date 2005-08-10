@@ -33,6 +33,8 @@
 class NCSchrollCB {
 
   public:
+  
+    virtual ~NCSchrollCB () {}
 
     // callback
     virtual void HScroll( unsigned total, unsigned visible, unsigned start ) {}

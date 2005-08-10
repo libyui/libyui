@@ -18,6 +18,8 @@
 /-*/
 #include "Y2Log.h"
 
+#include "ycp/y2log.h"
+
 #include "NCAskForDirectory.h"
 
 #include "YDialog.h"
@@ -246,6 +248,10 @@ bool NCAskForExistingDirectory::postAgain( )
 	else if ( currentId->compare( PkgNames::DirList() ) == YO_EQUAL )
 	{
 	    unsigned int i = dirName->getListSize();
+	    
+	    if (postevent.result.isNull ())
+		return true;
+		
 	    // show the currently selected directory
 	    dirName->itemAdded( postevent.result->asString(),
 				i,
