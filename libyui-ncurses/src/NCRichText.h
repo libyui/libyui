@@ -57,6 +57,11 @@ class NCRichText : public YRichText, public NCPadWidget {
      **/
     static const wstring entityLookup( const std::wstring & val_r );
 
+    /**
+     * Lookup and replace all replacements for a character entity.
+     **/
+    static const wstring filterEntities( const std::wstring & text );
+
   private:
 
     NCstring text;

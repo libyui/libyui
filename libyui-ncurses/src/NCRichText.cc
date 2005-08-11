@@ -72,6 +72,37 @@ const wstring NCRichText::entityLookup( const std::wstring & val_r )
 }
 
 ///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCRichText::filterEntities
+//	METHOD TYPE : const wstring
+//
+//	DESCRIPTION : Filter out the known &...; entities, return
+//                    the text with entities replaced
+//
+const wstring NCRichText::filterEntities( const std::wstring & text )
+{
+    wstring txt = text;
+    // filter known '&..;'
+    for( wstring::size_type special = txt.find( L"&" );
+	special != wstring::npos;
+	special = txt.find( L"&", special+1 ) )
+	{
+	    wstring::size_type colon = txt.find( L";", special+1 );
+
+	    if ( colon == wstring::npos )
+    	        break;  // no ';'  -> no need to continue
+
+	    const wstring repl = entityLookup( txt.substr( special+1, colon-special-1 ) );
+	    if ( !repl.empty() )
+	    {
+		txt.replace( special, colon-special+1, repl );
+	    }
+	}
+    return txt;
+}
+
+///////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -460,7 +491,11 @@ void NCRichText::DrawHTMLPad()
 	      else
 	      {
 		  SkipPreTXT( wch );
-		  PadPlainTXT( swch, wch - swch );
+		  
+		  // resolve the entities even in PRE (#71718)
+		  wstring txt = filterEntities( wstring(swch, wch-swch) );
+
+		  PadPlainTXT( txt.c_str (), textWidth( txt ) );
 	      }
 	      break;
       }
@@ -546,22 +581,8 @@ inline void NCRichText::PadTXT( const wchar_t * osch, const unsigned olen )
 {
   wstring txt( osch, olen );
 
-  // filter known '&..;'
-  for( wstring::size_type special = txt.find( L"&" );
-       special != wstring::npos;
-       special = txt.find( L"&", special+1 ) )
-  {
-    wstring::size_type colon = txt.find( L";", special+1 );
+  txt = filterEntities (txt);
 
-    if ( colon == wstring::npos )
-      break;  // no ';'  -> no need to continue
-
-    const wstring repl = entityLookup( txt.substr( special+1, colon-special-1 ) );
-    if ( !repl.empty() )
-    {
-	txt.replace( special, colon-special+1, repl );
-    }
-  }
   size_t	len = textWidth( txt );
 
   if ( !atbol && cc + len > textwidth )
