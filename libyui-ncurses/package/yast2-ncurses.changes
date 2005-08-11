@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Aug 11 10:51:32 CEST 2005 - visnov@suse.cz
+
+- Resolve entities even in <pre> (#71718)
+- V 2.12.6 
+
+-------------------------------------------------------------------
 Wed Aug 10 14:11:45 CEST 2005 - visnov@suse.cz
 
 - Don't crash on pressing Esc in AskForExistingDirectory (#96141) 
