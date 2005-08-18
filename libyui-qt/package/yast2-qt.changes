@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Aug 18 18:09:47 CEST 2005 - sh@suse.de
+
+- V 2.12.10
+- Now using llunak's updated qxembed.{cc,h} to fix bug #46495:
+  Keyboard focus problems with YaST2 embedded into KControl 
+
+-------------------------------------------------------------------
 Thu Jul 21 13:54:11 CEST 2005 - sh@suse.de
 
 - Now using `opt(`hvstretch) to restore old YQWizard layout behaviour
