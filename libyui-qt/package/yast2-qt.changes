@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Aug 25 20:26:28 CEST 2005 - sh@suse.de
+
+- V 2.12.11 
+
+-------------------------------------------------------------------
 Thu Aug 25 17:26:04 CEST 2005 - mfabian@suse.de
 
 - Bugzilla #102978: Japanese TrueType fonts are not used in first
