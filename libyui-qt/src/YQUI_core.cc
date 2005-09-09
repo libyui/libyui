@@ -42,6 +42,7 @@
 #include "utf8.h"
 
 #include "YQDialog.h"
+#include "QY2Settings.h"
 
 
 #define BUSY_CURSOR_TIMEOUT	200	// milliseconds

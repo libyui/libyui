@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Fri Sep  9 16:43:24 CEST 2005 - sh@suse.de
+
+- Fixed bug #114072: custom package selection lost
+  No longer offering the user to delete his base selection in
+  dependency problem dialog if he set a selection to "taboo"
+  the base selection depends upon
+- V 2.12.12 
+
+-------------------------------------------------------------------
 Thu Aug 25 20:26:28 CEST 2005 - sh@suse.de
 
 - V 2.12.11 

@@ -33,6 +33,7 @@
 #include <y2pm/PkgDep.h>
 #include <y2pm/PMObject.h>
 #include <y2pm/PMPackageManager.h>
+#include <y2pm/PMSelection.h>
 
 #include "YQPkgConflictList.h"
 #include "YQPkgConflictDialog.h"
@@ -505,12 +506,12 @@ YQPkgConflict::dumpList( QListViewItem * 	parent,
 		// "somepackage requires otherpackage"
 		text =( _( "%1 requires %2" ) ).arg( pkg1.c_str() ).arg( pkg2.c_str() );
 		break;
-		
+
 	    case PkgDep::RelInfo::CONFLICT:
 		// "somepackage conflicts with otherpackage"
 		text = ( _( "%1 conflicts with %2" ) ).arg( pkg1.c_str() ).arg( pkg2.c_str() );
 		break;
-			
+
 	    case PkgDep::RelInfo::OBSOLETION:
 		// "somepackage obsoletes otherpackage"
 		text = ( _( "%1 obsoletes %2" ) ).arg( pkg1.c_str() ).arg( pkg2.c_str() );
@@ -669,6 +670,34 @@ YQPkgConflict::addDeleteReferersResolution( QY2CheckListItem * parent )
 {
     if ( _conflict.remove_referers.empty() )
 	return;
+
+    if ( ! _isPkg )	// this is about selections (rather than packages)
+    {
+	//
+	// Check if there is any base selection in the referrers list
+	//
+
+	list<PMSolvablePtr>::const_iterator it = _conflict.remove_referers.begin();
+
+	while ( it != _conflict.remove_referers.end() )
+	{
+	    PMSelectionPtr sel( *it );
+
+	    if ( sel && sel->isBase() )
+	    {
+		// If the referrers list contains a (the) base selection, we can't offer the
+		// user to delete all referrers (all dependent selections) - we NEED exactly
+		// one base selection.
+		// See also bug #114072.
+
+		y2warning( "Not offering the user to delete the base selection" );
+		return;
+	    }
+
+	    ++it;
+	}
+    }
+
 
     QString text;
 
@@ -897,7 +926,7 @@ YQPkgConflict::actionResetIgnoredConflicts( YQPkgConflictDialog * dialog )
 						    label,		// menu text
 						    ( QKeySequence ) 0,	// accel
 						    ( QObject * ) 0 ); 	// parent
-	
+
 	_actionResetIgnoredConflicts->setEnabled( ! _ignore.empty() );
     }
 
@@ -906,7 +935,7 @@ YQPkgConflict::actionResetIgnoredConflicts( YQPkgConflictDialog * dialog )
 	QObject::connect( _actionResetIgnoredConflicts,	SIGNAL( activated() ),
 			  dialog,			SLOT  ( resetIgnoredConflicts() ) );
     }
-	
+
     return _actionResetIgnoredConflicts;
 }
 
