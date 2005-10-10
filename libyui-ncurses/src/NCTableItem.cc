@@ -18,6 +18,7 @@
 /-*/
 #include "Y2Log.h"
 #include "NCTableItem.h"
+#include "stringutil.h"
 
 ///////////////////////////////////////////////////////////////////
 //

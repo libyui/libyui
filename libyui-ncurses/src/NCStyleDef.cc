@@ -534,7 +534,7 @@ class NCStyleDef {
 	w.bkgdset( a.textattr() );
 	w.box();
 	w.addstr( 0, 1, a.label.c_str(), len );
-	sprintf( buf, "%s/%s %c%c%c%c%c%c%c %c%3ld",
+	sprintf( buf, "%s/%s %c%c%c%c%c%c%c %c%3u",
 		 dumpColor( NCattribute::fg_color_of( ch ) ),
 		 dumpColor( NCattribute::bg_color_of( ch ) ),
 		 (ch&A_INVIS ?      'i' : '.'),

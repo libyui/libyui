@@ -32,4 +32,7 @@ extern unsigned split( const std::string          line_tv,
 		       const bool                 singlesep_bv = false );
 
 } // namespace strutil
+
+std::ostream & operator<<( std::ostream &, const std::wstring & );
+
 #endif // stringutil_h

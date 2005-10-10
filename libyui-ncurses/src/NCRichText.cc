@@ -20,6 +20,7 @@
 #include "Y2Log.h"
 #include "NCRichText.h"
 #include "YNCursesUI.h"
+#include "stringutil.h"
 
 #if 0
 #undef  DBG_CLASS

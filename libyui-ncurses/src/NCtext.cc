@@ -18,6 +18,7 @@
 /-*/
 #include "Y2Log.h"
 #include "NCtext.h"
+#include "stringutil.h"
 
 #include <wchar.h>		// wcwidth
 
