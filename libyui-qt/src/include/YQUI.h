@@ -234,7 +234,7 @@ public:
      * ("SuSE Linux", "SuSE Linux Enterprise Server", "United Linux", etc.)
      * as QString.
      **/
-    QString YQUI::productName() const;
+    QString productName() const;
 
 
 public slots:
@@ -581,7 +581,7 @@ public:
     /**
      * Returns a high-contrast color palette suitable for vision impaired users.
      **/
-    static QPalette YQUI::visionImpairedPalette();
+    static QPalette visionImpairedPalette();
 
     /**
      * Returns the normal color palette

@@ -214,7 +214,7 @@ void YQDumbTab::sendTabSelectedEvent( int index )
     }
     else
     {
-	y2error( "Tab index %d out of range (0..%u)", index, _tabs.size() );
+	y2error( "Tab index %d out of range (0..%Zu)", index, _tabs.size() );
     }
 }
 

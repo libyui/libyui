@@ -480,7 +480,7 @@ public:
     /**
      * Constructor.
      **/
-    QY2ListViewToolTip::QY2ListViewToolTip( QY2ListView * parent )
+    QY2ListViewToolTip( QY2ListView * parent )
 	: QToolTip( parent->viewport() ), _listView( parent )  {}
 
     /**

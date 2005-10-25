@@ -428,7 +428,7 @@ protected:
      * Returns 'true' if the application is running on a high-color display,
      * i.e., on an X visual with more than 8 bit depth.
      **/
-    bool YQWizard::highColorDisplay() const;
+    bool highColorDisplay() const;
 
 
     //
@@ -452,7 +452,7 @@ protected:
     /**
      * Return argument number 'argNo' from 'term' as QString.
      **/
-    QString YQWizard::qStringArg( const YCPTerm & term, int argNo );
+    QString qStringArg( const YCPTerm & term, int argNo );
 
     /**
      * Return argument number 'argNo' from 'term' as std::string.
@@ -467,7 +467,7 @@ protected:
     /**
      * Return argument as type 'any' (plain YCPValue)
      **/
-    YCPValue YQWizard::anyArg( const YCPTerm & term, int argNo );
+    YCPValue anyArg( const YCPTerm & term, int argNo );
 
     /**
      * Set a button's label.

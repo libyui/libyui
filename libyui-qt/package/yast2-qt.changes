@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Oct 25 11:40:55 CEST 2005 - sh@suse.de
+
+- V 2.13.1
+- Merged aj's patch to fix stricter gcc4 warnings 
+
+-------------------------------------------------------------------
 Fri Sep  9 16:43:24 CEST 2005 - sh@suse.de
 
 - Fixed bug #114072: custom package selection lost
