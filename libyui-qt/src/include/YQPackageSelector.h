@@ -51,6 +51,8 @@ class YQPkgRpmGroupTagsFilterView;
 class YQPkgSearchFilterView;
 class YQPkgSelList;
 class YQPkgSelectionsFilterView;
+class YQPkgInstSrcFilterView;
+class YQPkgInstSrcList;
 class YQPkgStatusFilterView;
 class YQPkgTechnicalDetailsView;
 class YQPkgUpdateProblemFilterView;
@@ -319,6 +321,8 @@ protected:
     YQPkgSearchFilterView *		_searchFilterView;
     YQPkgSelList *			_selList;
     YQPkgSelectionsFilterView *		_selectionsFilterView;
+    YQPkgInstSrcList *			_instSrcList;
+    YQPkgInstSrcFilterView *		_instSrcFilterView;
     YQPkgStatusFilterView *		_statusFilterView;
     YQPkgTechnicalDetailsView *		_pkgTechnicalDetailsView;
     YQPkgUpdateProblemFilterView *	_updateProblemFilterView;

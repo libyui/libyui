@@ -75,6 +75,8 @@
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgSelList.h"
 #include "YQPkgSelectionsFilterView.h"
+#include "YQPkgInstSrcFilterView.h"
+#include "YQPkgInstSrcList.h"
 #include "YQPkgStatusFilterView.h"
 #include "YQPkgTechnicalDetailsView.h"
 #include "YQPkgTextDialog.h"
@@ -128,6 +130,8 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     _selConflictDialog		= 0;
     _selList			= 0;
     _selectionsFilterView	= 0;
+    _instSrcList		= 0;
+    _instSrcFilterView		= 0;
     _statusFilterView		= 0;
     _updateProblemFilterView	= 0;
     _youPatchFilterView		= 0;
@@ -374,6 +378,21 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
 	connect( this,			SIGNAL( refresh()			),
 		 _langList, 		SLOT  ( updateToplevelItemStates() 	) );
+    }
+
+
+    //
+    // Inst source view
+    //
+
+    if ( ! _youMode )
+    {
+	_instSrcFilterView = new YQPkgInstSrcFilterView( parent );
+	CHECK_PTR( _instSrcFilterView );
+	_filters->addPage( _( "Installation Sources" ), _instSrcFilterView );
+
+	_instSrcList = _instSrcFilterView->instSrcList();
+	CHECK_PTR( _instSrcList );
     }
 
 
@@ -753,6 +772,7 @@ YQPackageSelector::makeConnections()
     connectFilter( _updateProblemFilterView,	_pkgList, false );
     connectFilter( _youPatchList, 		_pkgList );
     connectFilter( _selList, 			_pkgList );
+    connectFilter( _instSrcList,		_pkgList );
     connectFilter( _rpmGroupTagsFilterView, 	_pkgList, false );
     connectFilter( _langList, 			_pkgList );
     connectFilter( _statusFilterView, 		_pkgList, false );
