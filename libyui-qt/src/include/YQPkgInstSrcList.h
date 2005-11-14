@@ -25,6 +25,7 @@
 #include <QY2ListView.h>
 #include <y2pm/PMPackage.h>
 #include <y2pm/InstSrcManager.h>
+#include <y2pm/InstSrcDescr.h>
 
 
 class YQPkgInstSrcListItem;
@@ -177,6 +178,12 @@ public:
      * Returns the original object within the package manager backend.
      **/
     const InstSrcManager::ISrcId constInstSrcId() const { return _instSrcId; }
+
+    /**
+     * Returns the package manager backend's inst source description or 0
+     **/
+    constInstSrcDescrPtr instSrcDescr() const
+	{ return _instSrcId ? _instSrcId->descr() : 0; }
 
     /**
      * Returns the status of this inst source

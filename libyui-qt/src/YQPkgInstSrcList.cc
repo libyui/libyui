@@ -23,7 +23,6 @@
 #include <ycp/y2log.h>
 #include <Y2PM.h>
 #include <y2pm/InstSrc.h>
-#include <y2pm/InstSrcDescr.h>
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgInstSrcList.h"
@@ -41,12 +40,12 @@ YQPkgInstSrcList::YQPkgInstSrcList( QWidget * parent )
     _urlCol	= -1;
 
     int numCol = 0;
-    addColumn( ""		);	_statusCol	= numCol++;
 
     // Column headers for installation source list
 #if SHOW_NAME_COL
-    addColumn( _( "Name"	) );	_nameCol	= numCol++;
+    addColumn( ""		);	_statusCol	= numCol++;
 #endif
+    addColumn( _( "Name"	) );	_nameCol	= numCol++;
     addColumn( _( "URL"		) );	_urlCol		= numCol++;
 
     setAllColumnsShowFocus( true );
@@ -171,20 +170,18 @@ YQPkgInstSrcListItem::YQPkgInstSrcListItem( YQPkgInstSrcList *		instSrcList,
 	y2error( "Null instSrcId" );
 	return;
     }
-    
-    constInstSrcDescrPtr instSrcDescr = instSrcId->descr();
-    
-    if ( nameCol() > 0 )
-    {
-	// TODO
-    }
 
-    
-    QString url = "http://test.org/pub/";
-    
-    if ( urlCol() > 0 )
+    if ( instSrcDescr() )
     {
-	setText( urlCol(), instSrcDescr->url().asString( true, false, false ).c_str() );
+	if ( nameCol() > 0 )
+	{
+	    setText( nameCol(), instSrcDescr()->shortlabel().c_str() );
+	}
+    
+	if ( urlCol() > 0 )
+	{
+	    setText( urlCol(), instSrcDescr()->url().asString( true, false, false ).c_str() );
+	}
     }
 }
 
