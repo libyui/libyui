@@ -78,7 +78,7 @@ YQPkgInstSrcList::fillList()
     while ( it != activeSources.end() )
     {
 	InstSrcManager::ISrcId instSrcId = (*it);
-	
+
 	if ( instSrcId &&
 	     instSrcId->enabled() )	// should always be true if querying only enabled sources
 	{
@@ -108,12 +108,13 @@ YQPkgInstSrcList::filter()
 
     //
     // Collect matching selectables for all selected inst sources
-    // and store them in a set to avoid duplicates in the resulting list
+    // and store them in sets to avoid duplicates in the resulting list
     //
-    
-    set<PMSelectablePtr> matches;		// avoid duplicates in list
+
+    set<PMSelectablePtr> allMatches;
+    set<PMSelectablePtr> exactMatches;
     QListViewItem * item = firstChild();	// take multi selection into account
-    
+
     while ( item )
     {
 	if ( item->isSelected() )
@@ -128,31 +129,55 @@ YQPkgInstSrcList::filter()
 
 		while ( pkg_it != packages.end() )
 		{
-		    if ( (*pkg_it)->hasSelectable() ) // might not be in manager (incompatible arch)
-			matches.insert( (*pkg_it)->getSelectable() );
+		    if ( (*pkg_it)->hasSelectable() )	// might not be in manager (incompatible arch)
+		    {
+			PMSelectablePtr sel = (*pkg_it)->getSelectable();
+			allMatches.insert( sel );
+
+			if ( (*pkg_it) == sel->candidateObj() ||
+			     (*pkg_it) == sel->installedObj()   )
+			{
+			    exactMatches.insert( sel );
+			}
+		    }
 
 		    ++pkg_it;
 		}
 	    }
 	}
-	    
+
 	item = item->nextSibling();
     }
 
 
     //
-    // Send all members of the resulting set to the list
+    // Send all members of the resulting sets to the list
     // (emit a filterMatch signal for each one)
     //
 
-    set<PMSelectablePtr>::const_iterator sel_it = matches.begin();
+    set<PMSelectablePtr>::const_iterator sel_it = exactMatches.begin();
 
-    while ( sel_it != matches.end() )
+    while ( sel_it != exactMatches.end() )
     {
+	allMatches.erase( *sel_it );
 	emit filterMatch( (*sel_it)->theObject() );
 	++sel_it;
     }
+
     
+    //
+    // Send all leftovers to the package list with filterNearMatch
+    // to be displayed dimmed in the package list
+    //
+    
+    sel_it = allMatches.begin();
+    
+    while ( sel_it != allMatches.end() )
+    {
+	emit filterNearMatch( (*sel_it)->theObject() );
+	++sel_it;
+    }
+
 
     emit filterFinished();
 }
@@ -205,7 +230,7 @@ YQPkgInstSrcListItem::YQPkgInstSrcListItem( YQPkgInstSrcList *		instSrcList,
 	{
 	    setText( nameCol(), instSrcDescr()->shortlabel().c_str() );
 	}
-    
+
 	if ( urlCol() >= 0 )
 	{
 	    setText( urlCol(), instSrcDescr()->url().asString( true, false, false ).c_str() );

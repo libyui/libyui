@@ -784,6 +784,12 @@ YQPackageSelector::makeConnections()
 		 _pkgList,		SLOT  ( message( const QString & ) ) );
     }
 
+    if ( _instSrcList && _pkgList )
+    {
+	connect( _instSrcList, 		SIGNAL( filterNearMatch	 ( PMPackagePtr ) ), 
+		 _pkgList,		SLOT  ( addPkgItemDimmed ( PMPackagePtr ) ) );
+    }
+
     if ( _pkgList && _diskUsageList )
     {
 

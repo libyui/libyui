@@ -109,9 +109,16 @@ signals:
     void filterStart();
 
     /**
-     * Emitted during filtering for each pkg that matches the filter.
+     * Emitted during filtering for each pkg that matches the filter
+     * and the candidate package comes from the respective source
      **/
     void filterMatch( PMPackagePtr pkg );
+
+    /**
+     * Emitted during filtering for each pkg that matches the filter
+     * and the candidate package does not come from the respective source
+     **/
+    void filterNearMatch( PMPackagePtr pkg );
 
     /**
      * Emitted when filtering is finished.

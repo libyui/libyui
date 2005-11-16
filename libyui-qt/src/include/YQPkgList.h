@@ -78,6 +78,17 @@ public slots:
      * QListView).
      **/
     void addPkgItem( PMPackagePtr pmPkg );
+    
+    /**
+     * Add a pkg to the list, but display it dimmed (grey text foreground
+     * rather than normal black). 
+     **/
+    void addPkgItemDimmed( PMPackagePtr pmPkg );
+
+    /**
+     * Add a pkg to the list
+     **/
+    void addPkgItem( PMPackagePtr pmPkg, bool dimmed );
 
 
     /**
@@ -260,6 +271,17 @@ public:
      **/
     virtual QString toolTip( int column );
 
+    /**
+     * Returns true if this package is to be displayed dimmed,
+     * i.e. with grey text foreground rather than the normal black.
+     **/
+    bool isDimmed() const { return _dimmed; }
+
+    /**
+     * Set the 'dimmed' flag.
+     **/
+    void setDimmed( bool d = true ) { _dimmed = d; }
+
 
     // Columns
 
@@ -289,6 +311,7 @@ protected:
 
     YQPkgList *		_pkgList;
     PMPackagePtr	_pmPkg;
+    bool		_dimmed;
 };
 
 

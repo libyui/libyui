@@ -84,8 +84,20 @@ YQPkgList::~YQPkgList()
 }
 
 
+void YQPkgList::addPkgItem( PMPackagePtr pmPkg )
+{
+    addPkgItem( pmPkg, false );	
+}
+
+
+void YQPkgList::addPkgItemDimmed( PMPackagePtr pmPkg )
+{
+    addPkgItem( pmPkg, true );
+}
+
+
 void
-YQPkgList::addPkgItem( PMPackagePtr pmPkg )
+YQPkgList::addPkgItem( PMPackagePtr pmPkg, bool dimmed )
 {
     if ( ! pmPkg )
     {
@@ -93,7 +105,10 @@ YQPkgList::addPkgItem( PMPackagePtr pmPkg )
 	return;
     }
 
-    new YQPkgListItem( this, pmPkg );
+    YQPkgListItem * item = new YQPkgListItem( this, pmPkg );
+    CHECK_PTR( item );
+
+    item->setDimmed( dimmed );
 }
 
 
@@ -390,13 +405,13 @@ YQPkgListItem::YQPkgListItem( YQPkgList * pkgList, PMPackagePtr pmPkg )
     : YQPkgObjListItem( pkgList, pmPkg )
     , _pkgList( pkgList )
     , _pmPkg( pmPkg )
+    , _dimmed( false )
 {
     CHECK_PTR( pmPkg );
     CHECK_PTR( pkgList );
 
     setSourceRpmIcon();
 }
-
 
 
 YQPkgListItem::~YQPkgListItem()
@@ -610,37 +625,47 @@ YQPkgListItem::paintCell( QPainter *		painter,
 			  int			width,
 			  int			alignment )
 {
-    if ( installedIsNewer() )
+    if ( isDimmed() && ! YQUI::ui()->usingVisionImpairedPalette() )
     {
 	QColorGroup cg = colorGroup;
-
-	if ( ! YQUI::ui()->usingVisionImpairedPalette() )
-	{
-	    if ( column == instVersionCol() )
-		cg.setColor( QColorGroup::Base, QColor( 0xFF, 0x30, 0x30 ) );	// Background
-	    else
-		cg.setColor( QColorGroup::Text, QColor( 0xFF, 0, 0 ) );		// Foreground
-	}
-
-	QListViewItem::paintCell( painter, cg, column, width, alignment );
-    }
-    else if ( candidateIsNewer() )
-    {
-	QColorGroup cg = colorGroup;
-
-	if ( ! YQUI::ui()->usingVisionImpairedPalette() )
-	{
-	    cg.setColor( QColorGroup::Text, QColor( 0, 0, 0xC0 ) );		// Foreground
-
-	    if ( column == versionCol() )
-		cg.setColor( QColorGroup::Base, QColor( 0xF0, 0xF0, 0xF0 ) );	// Background
-	}
-
+	cg.setColor( QColorGroup::Text, QColor( 0xA0, 0xA0, 0xA0 ) );
+	
 	QListViewItem::paintCell( painter, cg, column, width, alignment );
     }
     else
     {
-	QListViewItem::paintCell( painter, colorGroup, column, width, alignment );
+	if ( installedIsNewer() )
+	{
+	    QColorGroup cg = colorGroup;
+
+	    if ( ! YQUI::ui()->usingVisionImpairedPalette() )
+	    {
+		if ( column == instVersionCol() )
+		    cg.setColor( QColorGroup::Base, QColor( 0xFF, 0x30, 0x30 ) );	// Background
+		else
+		    cg.setColor( QColorGroup::Text, QColor( 0xFF, 0, 0 ) );		// Foreground
+	    }
+
+	    QListViewItem::paintCell( painter, cg, column, width, alignment );
+	}
+	else if ( candidateIsNewer() )
+	{
+	    QColorGroup cg = colorGroup;
+
+	    if ( ! YQUI::ui()->usingVisionImpairedPalette() )
+	    {
+		cg.setColor( QColorGroup::Text, QColor( 0, 0, 0xC0 ) );		// Foreground
+
+		if ( column == versionCol() )
+		    cg.setColor( QColorGroup::Base, QColor( 0xF0, 0xF0, 0xF0 ) );	// Background
+	    }
+
+	    QListViewItem::paintCell( painter, cg, column, width, alignment );
+	}
+	else
+	{
+	    QListViewItem::paintCell( painter, colorGroup, column, width, alignment );
+	}
     }
 }
 
