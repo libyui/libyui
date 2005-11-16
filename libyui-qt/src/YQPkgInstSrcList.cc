@@ -23,11 +23,14 @@
 #include <ycp/y2log.h>
 #include <Y2PM.h>
 #include <y2pm/InstSrc.h>
+#include <y2pm/InstSrcData.h>
+#include <y2pm/PMSelectable.h>
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgInstSrcList.h"
 
-#define SHOW_NAME_COL	1
+using std::list;
+using std::set;
 
 
 YQPkgInstSrcList::YQPkgInstSrcList( QWidget * parent )
@@ -35,23 +38,20 @@ YQPkgInstSrcList::YQPkgInstSrcList( QWidget * parent )
 {
     y2debug( "Creating inst source list" );
 
-    _statusCol	= -1;
     _nameCol	= -1;
     _urlCol	= -1;
 
     int numCol = 0;
 
     // Column headers for installation source list
-#if SHOW_NAME_COL
-    addColumn( ""		);	_statusCol	= numCol++;
-#endif
     addColumn( _( "Name"	) );	_nameCol	= numCol++;
     addColumn( _( "URL"		) );	_urlCol		= numCol++;
 
     setAllColumnsShowFocus( true );
+    setSelectionMode( QListView::Extended );	// allow multi-selection with Ctrl-mouse
 
-    connect( this, 	SIGNAL( selectionChanged        ( QListViewItem * ) ),
-	     this, 	SLOT  ( filter()                                    ) );
+    connect( this, 	SIGNAL( selectionChanged() ),
+	     this, 	SLOT  ( filter()           ) );
 
     fillList();
     selectSomething();
@@ -105,25 +105,54 @@ YQPkgInstSrcList::filter()
 {
     emit filterStart();
 
-    if ( selection() )
+
+    //
+    // Collect matching selectables for all selected inst sources
+    // and store them in a set to avoid duplicates in the resulting list
+    //
+    
+    set<PMSelectablePtr> matches;		// avoid duplicates in list
+    QListViewItem * item = firstChild();	// take multi selection into account
+    
+    while ( item )
     {
-#if 0
-	PMLanguagePtr lang = selection()->pmLang();
-
-	if ( lang )
+	if ( item->isSelected() )
 	{
-	    PMLanguageManager::PkgSelectables selectables =
-		Y2PM::languageManager().getLangPackagesFor( lang );
+	    YQPkgInstSrcListItem * instSrcItem = dynamic_cast<YQPkgInstSrcListItem *> (item);
 
-	    PMLanguageManager::PkgSelectables::const_iterator it = selectables.begin();
-	    while ( it != selectables.end() )
+	    if ( instSrcItem )
 	    {
-		emit filterMatch( ( *it)->theObject() );
-		++it;
+		InstSrcManager::ISrcId instSrc = instSrcItem->instSrcId();
+		const list<PMPackagePtr> &packages = instSrc->data()->getPackages();
+		list<PMPackagePtr>::const_iterator pkg_it = packages.begin();
+
+		while ( pkg_it != packages.end() )
+		{
+		    if ( (*pkg_it)->hasSelectable() ) // might not be in manager (incompatible arch)
+			matches.insert( (*pkg_it)->getSelectable() );
+
+		    ++pkg_it;
+		}
 	    }
 	}
-#endif
+	    
+	item = item->nextSibling();
     }
+
+
+    //
+    // Send all members of the resulting set to the list
+    // (emit a filterMatch signal for each one)
+    //
+
+    set<PMSelectablePtr>::const_iterator sel_it = matches.begin();
+
+    while ( sel_it != matches.end() )
+    {
+	emit filterMatch( (*sel_it)->theObject() );
+	++sel_it;
+    }
+    
 
     emit filterFinished();
 }
@@ -163,7 +192,6 @@ YQPkgInstSrcListItem::YQPkgInstSrcListItem( YQPkgInstSrcList *		instSrcList,
     : QY2ListViewItem( instSrcList )
     , _instSrcList( instSrcList )
     , _instSrcId( instSrcId )
-    , _status( YQPkgInstSrcOff )
 {
     if ( ! instSrcId )
     {
@@ -173,12 +201,12 @@ YQPkgInstSrcListItem::YQPkgInstSrcListItem( YQPkgInstSrcList *		instSrcList,
 
     if ( instSrcDescr() )
     {
-	if ( nameCol() > 0 )
+	if ( nameCol() >= 0 )
 	{
 	    setText( nameCol(), instSrcDescr()->shortlabel().c_str() );
 	}
     
-	if ( urlCol() > 0 )
+	if ( urlCol() >= 0 )
 	{
 	    setText( urlCol(), instSrcDescr()->url().asString( true, false, false ).c_str() );
 	}
@@ -190,18 +218,6 @@ YQPkgInstSrcListItem::YQPkgInstSrcListItem( YQPkgInstSrcList *		instSrcList,
 YQPkgInstSrcListItem::~YQPkgInstSrcListItem()
 {
     // NOP
-}
-
-
-void
-YQPkgInstSrcListItem::setStatus( YQPkgInstSrcStatus newStatus )
-				
-{
-    // TODO
-    // TODO
-    // TODO
-    
-    _instSrcList->sendUpdatePackages();
 }
 
 

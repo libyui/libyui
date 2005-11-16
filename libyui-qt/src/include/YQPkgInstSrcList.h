@@ -31,14 +31,6 @@
 class YQPkgInstSrcListItem;
 
 
-typedef enum YQPkgInstSrcStatus
-{
-    YQPkgInstSrcOn,
-    YQPkgInstSrcOff,
-    YQPkgInstSRcDisabled
-};
-
-
 /**
  * @short Display a list of PMSelection objects.
  **/
@@ -92,7 +84,6 @@ public:
 
     // Column numbers
 
-    int statusCol()		const	{ return _statusCol;		}
     int nameCol()		const	{ return _nameCol;		}
     int urlCol()		const	{ return _urlCol;		}
 
@@ -142,7 +133,6 @@ private:
     // Data members
     //
 
-    int		_statusCol;
     int		_nameCol;
     int		_urlCol;
     
@@ -185,22 +175,9 @@ public:
     constInstSrcDescrPtr instSrcDescr() const
 	{ return _instSrcId ? _instSrcId->descr() : 0; }
 
-    /**
-     * Returns the status of this inst source
-     **/
-    YQPkgInstSrcStatus status() const { return _status; }
-    
-    /**
-     * Set the inst source status.
-     *
-     * Emits updatePackages signal for each status change.
-     **/
-    virtual void setStatus( YQPkgInstSrcStatus newStatus );
-
 
     // Columns
 
-    int statusCol()	const	{ return _instSrcList->statusCol();	}
     int nameCol()	const	{ return _instSrcList->nameCol();	}
     int urlCol()	const 	{ return _instSrcList->urlCol(); 	}
 
@@ -211,7 +188,6 @@ protected:
 
     YQPkgInstSrcList *		_instSrcList;
     InstSrcManager::ISrcId	_instSrcId;
-    YQPkgInstSrcStatus		_status;
 };
 
 
