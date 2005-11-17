@@ -76,7 +76,6 @@
 #include "YQPkgSelList.h"
 #include "YQPkgSelectionsFilterView.h"
 #include "YQPkgInstSrcFilterView.h"
-#include "YQPkgInstSrcList.h"
 #include "YQPkgStatusFilterView.h"
 #include "YQPkgTechnicalDetailsView.h"
 #include "YQPkgTextDialog.h"
@@ -130,7 +129,6 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     _selConflictDialog		= 0;
     _selList			= 0;
     _selectionsFilterView	= 0;
-    _instSrcList		= 0;
     _instSrcFilterView		= 0;
     _statusFilterView		= 0;
     _updateProblemFilterView	= 0;
@@ -390,10 +388,6 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	_instSrcFilterView = new YQPkgInstSrcFilterView( parent );
 	CHECK_PTR( _instSrcFilterView );
 	_filters->addPage( _( "Installation Sources" ), _instSrcFilterView );
-
-	_instSrcList = _instSrcFilterView->instSrcList();
-	CHECK_PTR( _instSrcList );
-	_instSrcList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding ) );// hor/vert
     }
 
 
@@ -563,7 +557,7 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 		 this,         			SLOT  ( manualResolvePackageDependencies() ) );
 
 
-	// Checkbox: Automatically check dependencie for every package status change?
+	// Checkbox: Automatically check dependencies for every package status change?
 	// Translators: Please keep this short!
 	_autoDependenciesCheckBox = new QCheckBox( _( "A&utocheck" ), button_box );
 	CHECK_PTR( _autoDependenciesCheckBox );
@@ -779,7 +773,7 @@ YQPackageSelector::makeConnections()
     connectFilter( _updateProblemFilterView,	_pkgList, false );
     connectFilter( _youPatchList, 		_pkgList );
     connectFilter( _selList, 			_pkgList );
-    connectFilter( _instSrcList,		_pkgList );
+    connectFilter( _instSrcFilterView,		_pkgList, false );
     connectFilter( _rpmGroupTagsFilterView, 	_pkgList, false );
     connectFilter( _langList, 			_pkgList );
     connectFilter( _statusFilterView, 		_pkgList, false );
@@ -791,9 +785,9 @@ YQPackageSelector::makeConnections()
 		 _pkgList,		SLOT  ( message( const QString & ) ) );
     }
 
-    if ( _instSrcList && _pkgList )
+    if ( _instSrcFilterView && _pkgList )
     {
-	connect( _instSrcList, 		SIGNAL( filterNearMatch	 ( PMPackagePtr ) ), 
+	connect( _instSrcFilterView,	SIGNAL( filterNearMatch	 ( PMPackagePtr ) ), 
 		 _pkgList,		SLOT  ( addPkgItemDimmed ( PMPackagePtr ) ) );
     }
 

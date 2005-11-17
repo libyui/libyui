@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Thu Nov 17 17:57:40 CET 2005 - sh@suse.de
+
+- V 2.13.2
+- Added secondary filter views to installation sources filter view:
+  - All Packages
+  - RPM groups
+  - Search
+   
+
+-------------------------------------------------------------------
 Wed Nov 16 14:57:56 CET 2005 - sh@suse.de
 
 - V 2.13.2

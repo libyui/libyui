@@ -259,6 +259,17 @@ YQPkgSearchFilterView::filter()
 
 
 bool
+YQPkgSearchFilterView::check( PMPackagePtr pkg )
+{
+    QRegExp regexp = _searchText->currentText();
+    regexp.setCaseSensitive( _caseSensitive->isChecked() );
+    regexp.setWildcard( _searchMode->currentItem() == UseWildcards );
+
+    return check( pkg, regexp );
+}
+
+
+bool
 YQPkgSearchFilterView::check( PMPackagePtr pkg, const QRegExp & regexp )
 {
     if ( ! pkg )

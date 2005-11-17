@@ -61,6 +61,12 @@ public:
      **/
     virtual QSize minimumSizeHint() const;
 
+    /**
+     * Check one package against the currently selected values.
+     * Returns true if the package matches, false if not.
+     **/
+    bool check( PMPackagePtr pkg );
+
 
 public slots:
 

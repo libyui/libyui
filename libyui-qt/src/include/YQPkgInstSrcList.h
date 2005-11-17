@@ -68,17 +68,10 @@ public slots:
     void filterIfVisible();
 
     /**
-     * Add an inst source to the list. Connect a filter's filterMatch() signal
-     * to this slot. Remember to connect filterStart() to clear()
-     * (inherited from QListView).
+     * Add an inst source to the list.
      **/
     void addInstSrc( InstSrcManager::ISrcId instSrcId );
     
-    /**
-     * Emit an updatePackages() signal.
-     **/
-    void sendUpdatePackages() { emit updatePackages(); }
-
     
 public:
 
@@ -95,12 +88,6 @@ public:
 
 
 signals:
-
-    /**
-     * Emitted when it's time to update displayed package information,
-     * e.g., package states.
-     **/
-    void updatePackages();
 
     /**
      * Emitted when the filtering starts. Use this to clear package lists
@@ -129,7 +116,7 @@ signals:
 protected slots:
 
     /**
-     * Fill the language list.
+     * Fill the list.
      **/
     void fillList();
 

@@ -56,7 +56,12 @@ public:
      **/
     YQPkgRpmGroupTag * selection() const;
 
-
+    /**
+     * Check if 'pkg' matches the selected RPM group.
+     * Returns true if there is a match, false otherwise or if 'pkg' is 0.
+     **/
+    bool check( PMPackagePtr pkg );
+    
 public slots:
 
     /**
@@ -109,13 +114,6 @@ protected:
      **/
     void cloneTree( YStringTreeItem *	parentRpmGroup,
 		    YQPkgRpmGroupTag *	parentClone = 0 );
-
-
-    /**
-     * Check if 'pkg' matches 'selectedRpmGroup'.
-     * Returns true if there is a match, false otherwise or if 'pkg' is 0.
-     **/
-    bool check( PMPackagePtr pkg );
 };
 
 
