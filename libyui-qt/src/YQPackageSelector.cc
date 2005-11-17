@@ -393,6 +393,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
 	_instSrcList = _instSrcFilterView->instSrcList();
 	CHECK_PTR( _instSrcList );
+	_instSrcList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding ) );// hor/vert
     }
 
 
@@ -433,18 +434,23 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 QWidget *
 YQPackageSelector::layoutRightPane( QWidget * parent )
 {
-    QSplitter * splitter = new QSplitter( QSplitter::Vertical, parent );
+    QVBox * right_pane_vbox = new QVBox( parent );
+    CHECK_PTR( right_pane_vbox );
+    right_pane_vbox->setMargin( MARGIN );
+    
+    QSplitter * splitter = new QSplitter( QSplitter::Vertical, right_pane_vbox );
     CHECK_PTR( splitter );
-    splitter->setMargin( MARGIN );
 
-    QVBox * vbox = new QVBox( splitter );
-    CHECK_PTR( vbox );
-    layoutPkgList( vbox );
-    addVSpacing( vbox, MARGIN );
+    QVBox * splitter_vbox = new QVBox( splitter );
+    CHECK_PTR( splitter_vbox );
+    layoutPkgList( splitter_vbox );
+    addVSpacing( splitter_vbox, MARGIN );
 
     layoutDetailsViews( splitter );
 
-    return splitter;
+    layoutButtons( right_pane_vbox );
+
+    return right_pane_vbox;
 }
 
 
@@ -535,9 +541,6 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 	connect( _pkgList,		SIGNAL( selectionChanged    ( PMObjectPtr ) ),
 		 _pkgVersionsView,	SLOT  ( showDetailsIfVisible( PMObjectPtr ) ) );
     }
-
-
-    layoutButtons( details_vbox );
 }
 
 
@@ -550,7 +553,9 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 
     if ( ! _youMode )
     {
-	_checkDependenciesButton = new QPushButton( _( "Check &Dependencies" ), button_box );
+	// Button: Dependency check
+        // Translators: Please keep this short!
+	_checkDependenciesButton = new QPushButton( _( "Chec&k" ), button_box );
 	CHECK_PTR( _checkDependenciesButton );
 	_checkDependenciesButton->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
 
@@ -558,6 +563,8 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 		 this,         			SLOT  ( manualResolvePackageDependencies() ) );
 
 
+	// Checkbox: Automatically check dependencie for every package status change?
+	// Translators: Please keep this short!
 	_autoDependenciesCheckBox = new QCheckBox( _( "A&utocheck" ), button_box );
 	CHECK_PTR( _autoDependenciesCheckBox );
 	_autoDependenciesCheckBox->setChecked( AUTO_CHECK_DEPENDENCIES_DEFAULT );
@@ -567,7 +574,7 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 
     QPushButton * cancel_button = new QPushButton( _( "&Cancel" ), button_box );
     CHECK_PTR( cancel_button );
-    cancel_button->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
+    cancel_button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
 
     connect( cancel_button, SIGNAL( clicked() ),
 	     this,          SLOT  ( reject()   ) );
@@ -575,12 +582,12 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 
     QPushButton * accept_button = new QPushButton( _( "&Accept" ), button_box );
     CHECK_PTR( accept_button );
-    accept_button->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
+    accept_button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
 
     connect( accept_button, SIGNAL( clicked() ),
 	     this,          SLOT  ( accept()   ) );
 
-    button_box->setMinimumHeight( button_box->sizeHint().height() );
+    button_box->setFixedHeight( button_box->sizeHint().height() );
 }
 
 
