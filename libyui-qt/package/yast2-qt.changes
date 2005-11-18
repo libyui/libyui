@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Nov 18 16:09:44 CET 2005 - sh@suse.de
+
+- V 2.13.3
+- Added new secondary filter view "summary" to inst src filter view 
+
+-------------------------------------------------------------------
 Thu Nov 17 17:57:40 CET 2005 - sh@suse.de
 
 - V 2.13.2

@@ -57,6 +57,11 @@ public:
      **/
     virtual QSize minimumSizeHint() const;
 
+    /**
+     * Check if pkg matches the filter criteria.
+     **/
+    bool check( PMPackagePtr pkg );
+
 
 public slots:
 
@@ -97,12 +102,7 @@ signals:
 protected:
 
     /**
-     * Check if pkg matches the filter criteria.
-     **/
-    bool check( PMPackagePtr pkg );
-
-    /**
-     *
+     * Add a check box
      **/
     QCheckBox * addStatusCheckBox( QWidget * 		parent,
 				   const QString & 	label,

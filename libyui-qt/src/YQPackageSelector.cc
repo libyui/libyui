@@ -98,8 +98,8 @@ using std::string;
 #define MIN_WIDTH			800
 #define MIN_HEIGHT			600
 
-#define SPACING			6	// between subwidgets
-#define MARGIN			4	// around the widget
+#define SPACING			6
+#define MARGIN			4
 
 
 

@@ -29,6 +29,7 @@ class YQPkgInstSrcList;
 class QY2ComboTabWidget;
 class YQPkgRpmGroupTagsFilterView;
 class YQPkgSearchFilterView;
+class YQPkgStatusFilterView;
 
 
 class YQPkgInstSrcFilterView : public QVBox
@@ -126,6 +127,7 @@ protected:
     QWidget *			    _allPackages;
     YQPkgRpmGroupTagsFilterView *   _rpmGroupTagsFilterView;
     YQPkgSearchFilterView *	    _searchFilterView;
+    YQPkgStatusFilterView *	    _statusFilterView;
 };
 
 

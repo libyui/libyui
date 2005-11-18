@@ -25,12 +25,15 @@
 #include <qsplitter.h>
 
 #include "QY2ComboTabWidget.h"
+#include "QY2LayoutUtils.h"
 #include "YQPkgInstSrcFilterView.h"
 #include "YQPkgInstSrcList.h"
 #include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQPkgSearchFilterView.h"
+#include "YQPkgStatusFilterView.h"
 #include "YQi18n.h"
 
+#define MARGIN			4
 
 
 YQPkgInstSrcFilterView::YQPkgInstSrcFilterView( QWidget * parent )
@@ -39,9 +42,13 @@ YQPkgInstSrcFilterView::YQPkgInstSrcFilterView( QWidget * parent )
     QSplitter * splitter = new QSplitter( QSplitter::Vertical, this );
     CHECK_PTR( splitter );
 
-    _instSrcList = new YQPkgInstSrcList( splitter );
+    QVBox * upper_vbox = new QVBox( splitter );
+    _instSrcList = new YQPkgInstSrcList( upper_vbox );
     CHECK_PTR( _instSrcList );
     _instSrcList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding ) );// hor/vert
+
+    addVSpacing( upper_vbox, MARGIN );
+    
 
     // Directly propagate signals filterStart() and filterFinished()
     // from primary filter to the outside
@@ -82,15 +89,27 @@ YQPkgInstSrcFilterView::~YQPkgInstSrcFilterView()
 QWidget *
 YQPkgInstSrcFilterView::layoutSecondaryFilters( QWidget * parent )
 {
-    _secondaryFilters = new QY2ComboTabWidget( _( "&Secondary Filter:" ), parent );
+    QVBox *vbox = new QVBox( parent );
+    CHECK_PTR( vbox );
+    addVSpacing( vbox, MARGIN );
+
+    // Translators: This is a combo box where the user can apply a secondary filter
+    // in addition to the primary filter by installation source - one of
+    // "all packages", "RPM groups", "search", "summary"
+    _secondaryFilters = new QY2ComboTabWidget( _( "&Secondary Filter:" ), vbox );
     CHECK_PTR( _secondaryFilters );
+
+    _secondaryFilters->setFrameStyle( QFrame::Plain );
+    _secondaryFilters->setLineWidth( 0 );
+    _secondaryFilters->setMidLineWidth( 0 );
+    _secondaryFilters->setMargin( 0 );
 
 
     //
     // All Packages
     //
 
-    _allPackages = new QWidget( parent );
+    _allPackages = new QWidget( vbox );
     CHECK_PTR( _allPackages );
     _secondaryFilters->addPage( _( "All Packages" ), _allPackages );
 
@@ -99,7 +118,7 @@ YQPkgInstSrcFilterView::layoutSecondaryFilters( QWidget * parent )
     // RPM Groups
     //
 
-    _rpmGroupTagsFilterView = new YQPkgRpmGroupTagsFilterView( parent );
+    _rpmGroupTagsFilterView = new YQPkgRpmGroupTagsFilterView( vbox );
     CHECK_PTR( _rpmGroupTagsFilterView );
     _secondaryFilters->addPage( _( "Package Groups" ), _rpmGroupTagsFilterView );
 
@@ -111,19 +130,32 @@ YQPkgInstSrcFilterView::layoutSecondaryFilters( QWidget * parent )
     // Package search view
     //
 
-    _searchFilterView = new YQPkgSearchFilterView( parent );
+    _searchFilterView = new YQPkgSearchFilterView( vbox );
     CHECK_PTR( _searchFilterView );
     _secondaryFilters->addPage( _( "Search" ), _searchFilterView );
     
     connect( _searchFilterView,	SIGNAL( filterStart() ),
 	     _instSrcList,	SLOT  ( filter()      ) );
 
-
     connect( _secondaryFilters, SIGNAL( currentChanged( QWidget * ) ),
 	     this, 		SLOT  ( filter()		  ) );
 
+
+    //
+    // Status change view
+    //
+
+    _statusFilterView = new YQPkgStatusFilterView( parent );
+    CHECK_PTR( _statusFilterView );
+    _secondaryFilters->addPage( _( "Installation Summary" ), _statusFilterView );
+
+    connect( _statusFilterView,	SIGNAL( filterStart() ),
+	     _instSrcList,	SLOT  ( filter()      ) );
+
+    
     return _secondaryFilters;
 }
+
 
 void YQPkgInstSrcFilterView::filter()
 {
@@ -165,6 +197,10 @@ YQPkgInstSrcFilterView::secondaryFilterMatch( PMPackagePtr pkg )
     else if ( _searchFilterView->isVisible() )
     {
 	return _searchFilterView->check( pkg );
+    }
+    else if ( _statusFilterView->isVisible() )
+    {
+	return _statusFilterView->check( pkg );
     }
     else
     {
