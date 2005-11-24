@@ -32,7 +32,6 @@ NCMultiLineEdit::NCMultiLineEdit( NCWidget * parent, const YWidgetOpt & opt,
 				  const YCPString & initialText )
     : YMultiLineEdit( opt, nlabel )
     , NCPadWidget( parent )
-    , pad( (NCTextPad *&)NCPadWidget::pad )
 {
   WIDDBG << endl;
   defsze = wsze( 5, 5 ) + 2;
@@ -120,8 +119,8 @@ void NCMultiLineEdit::setText( const YCPString & ntext )
 //
 YCPString NCMultiLineEdit::text()
 {
-  if ( pad ) {
-    ctext = NCstring( pad->getText() );
+  if ( myPad() ) {
+    ctext = NCstring( myPad()->getText() );
   }
   return ctext.YCPstr();
 }
@@ -186,11 +185,11 @@ NCPad * NCMultiLineEdit::CreatePad()
 //
 void NCMultiLineEdit::DrawPad()
 {
-  pad->setText( ctext );
+  myPad()->setText( ctext );
 }
 
 void NCMultiLineEdit::setInputMaxLength( const YCPInteger & numberOfChars )
 {
     int nr = numberOfChars->asInteger()->value();
-    pad->setInputMaxLength(nr);
+    myPad()->setInputMaxLength(nr);
 }

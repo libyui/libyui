@@ -232,14 +232,14 @@ void NCRichText::wRedraw()
   if ( !win )
     return;
 
-  bool initial = ( !pad || !pad->Destwin() );
+  bool initial = ( !myPad() || !myPad()->Destwin() );
 
   if ( !( plainText || anchors.empty() ) )
     arm( armed );
   NCPadWidget::wRedraw();
 
   if ( initial && autoScrollDown ) {
-    pad->ScrlTo( wpos( pad->maxy(), 0 ) );
+    myPad()->ScrlTo( wpos( myPad()->maxy(), 0 ) );
   }
   return;
 }
@@ -317,11 +317,11 @@ void NCRichText::DrawPad()
 {
   MDBG
     << "Start: plain mode " << plainText << endl
-    << "       padsize " << pad->size() << endl
+    << "       padsize " << myPad()->size() << endl
     << "       text length " << text.str().size() << endl;
 
-  pad->bkgdset( wStyle().richtext.plain );
-  pad->clear();
+  myPad()->bkgdset( wStyle().richtext.plain );
+  myPad()->clear();
 
   if ( plainText )
     DrawPlainPad();
@@ -349,7 +349,7 @@ void NCRichText::DrawPlainPad()
   cl = 0;
   for ( NCtext::const_iterator line = ftext.begin();
 	line != ftext.end(); ++line, ++cl ) {
-    pad->addwstr( cl, 0, (*line).str().c_str() );
+    myPad()->addwstr( cl, 0, (*line).str().c_str() );
   }
 }
 
@@ -376,7 +376,7 @@ void NCRichText::PadPlainTXT( const wchar_t * osch, const unsigned olen )
     const wchar_t * sch = wtxt.data();
     while ( *sch )
     {
-	pad->addwstr( sch, 1 );	// add one wide chararacter
+	myPad()->addwstr( sch, 1 );	// add one wide chararacter
 	cc += wcwidth(*sch);
 	
 	if ( *sch == L'\n' )
@@ -447,7 +447,7 @@ void NCRichText::DrawHTMLPad()
   cl = 0;
   cc = 0;
   cindent = 0;
-  pad->move( cl, cc );
+  myPad()->move( cl, cc );
   atbol = true;
 
   const wchar_t * wch = (wchar_t *)text.str().data(); 
@@ -468,7 +468,7 @@ void NCRichText::DrawHTMLPad()
 	      }
 	      else
 	      {
-		  pad->addwstr( wch, 1 );	// add one wide chararacter
+		  myPad()->addwstr( wch, 1 );	// add one wide chararacter
 		  ++cc;
 		  ++wch;
 	      }
@@ -525,10 +525,10 @@ void NCRichText::DrawHTMLPad()
 inline void NCRichText::PadNL()
 {
   cc = cindent;
-  if ( ++cl == (unsigned)pad->height() ) {
-    AdjustPad( wsze( pad->height() + defPadSze().H, textwidth ) );
+  if ( ++cl == (unsigned)myPad()->height() ) {
+    AdjustPad( wsze( myPad()->height() + defPadSze().H, textwidth ) );
   }
-  pad->move( cl, cc );
+  myPad()->move( cl, cc );
   atbol = true;
 }
 
@@ -565,7 +565,7 @@ inline void NCRichText::PadWS( const bool tab )
     }
     else
     {
-	pad->addwstr( L" " );
+	myPad()->addwstr( L" " );
 	++cc;
     }
 }
@@ -594,7 +594,7 @@ inline void NCRichText::PadTXT( const wchar_t * osch, const unsigned olen )
 
   while ( *sch )
   {
-      pad->addwstr( sch, 1 );	// add one wide chararacter
+      myPad()->addwstr( sch, 1 );	// add one wide chararacter
       cc += wcwidth(*sch);
       atbol = false;	// at begin of line = false
       if ( cc >= textwidth )
@@ -654,7 +654,7 @@ inline void NCRichText::PadSetAttr()
     case T_BOLD|T_IT|T_TT: nbg = style.BIT; break;
     }
   }
-  pad->bkgdset( nbg );
+  myPad()->bkgdset( nbg );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -673,7 +673,7 @@ void NCRichText::PadSetLevel()
 
   if ( atbol ) {
     cc = cindent;
-    pad->move( cl, cc );
+    myPad()->move( cl, cc );
   }
 }
 
@@ -911,7 +911,7 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
       }
       // outsent list tag:
       cc = (tag.size() < cc ? cc - tag.size() : 0 );
-      pad->move( cl, cc );
+      myPad()->move( cl, cc );
       PadTXT( tag.c_str(), tag.size() );
       atbol = true;
     }
@@ -966,7 +966,7 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 //
 void NCRichText::arm( unsigned i )
 {
-  if ( !pad ) {
+  if ( !myPad() ) {
     armed = i;
     return;
   }
@@ -974,18 +974,18 @@ void NCRichText::arm( unsigned i )
   if ( i == armed ) {
     if ( armed != Anchor::unset ) {
       // just redraw
-      anchors[armed].draw( *pad, wStyle().richtext.getArmed( GetState() ), 0 );
-      pad->update();
+      anchors[armed].draw( *myPad(), wStyle().richtext.getArmed( GetState() ), 0 );
+      myPad()->update();
     }
     return;
   }
   if ( armed != Anchor::unset ) {
-    anchors[armed].draw( *pad, wStyle().richtext.link, 0 );
+    anchors[armed].draw( *myPad(), wStyle().richtext.link, 0 );
     armed = Anchor::unset;
   }
   if ( i != Anchor::unset ) {
     armed = i;
-    anchors[armed].draw( *pad, wStyle().richtext.getArmed( GetState() ), 0 );
+    anchors[armed].draw( *myPad(), wStyle().richtext.getArmed( GetState() ), 0 );
   }
 
   if ( showLinkTarget ) {
@@ -994,7 +994,7 @@ void NCRichText::arm( unsigned i )
     else
       NCPadWidget::setLabel( NCstring() );
   } else {
-    pad->update();
+    myPad()->update();
   }
 }
 
@@ -1086,7 +1086,7 @@ bool NCRichText::handleInput( wint_t key )
 	handled = NCPadWidget::handleInput( KEY_UP );
       } else {
 	if ( !anchors[newarmed].within( vScrollFirstvisible, vScrollNextinvisible ) )
-	  pad->ScrlLine( anchors[newarmed].sline );
+	  myPad()->ScrlLine( anchors[newarmed].sline );
 	arm( newarmed );
       }
     }
@@ -1111,7 +1111,7 @@ bool NCRichText::handleInput( wint_t key )
 	handled = NCPadWidget::handleInput( KEY_DOWN );
       } else {
 	if ( !anchors[newarmed].within( vScrollFirstvisible, vScrollNextinvisible ) )
-	  pad->ScrlLine( anchors[newarmed].sline );
+	  myPad()->ScrlLine( anchors[newarmed].sline );
 	arm( newarmed );
       }
     }

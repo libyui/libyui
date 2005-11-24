@@ -37,7 +37,6 @@ NCTable::NCTable( NCWidget * parent, const YWidgetOpt & opt,
     : YTable( opt, head.size() )
     , NCPadWidget( parent )
     , immediate( opt.immediateMode.value() )
-    , pad( (NCTablePad *&)NCPadWidget::pad )
     , biglist( false )
 {
   WIDDBG << endl;
@@ -47,7 +46,7 @@ NCTable::NCTable( NCWidget * parent, const YWidgetOpt & opt,
   for ( unsigned i = 0; i < head.size(); ++i ) {
     headline[i] = NCstring( head[i] );
   }
-  hasHeadline = pad->SetHeadline( headline );
+  hasHeadline = myPad()->SetHeadline( headline );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -73,7 +72,7 @@ NCTable::~NCTable()
 //
 long NCTable::nicesize( YUIDimension dim )
 {
-  wsze sze = ( biglist ) ? pad->tableSize() + 2 : wGetDefsze();
+  wsze sze = ( biglist ) ? myPad()->tableSize() + 2 : wGetDefsze();
   return dim == YD_HORIZ ? sze.W : sze.H;
 }
 
@@ -119,7 +118,7 @@ void NCTable::setHeader( const vector<string> & head )
     for ( unsigned i = 0; i < head.size(); ++i ) {
 	headline[i] = NCstring( head[i] );
     }
-    hasHeadline = pad->SetHeadline( headline );
+    hasHeadline = myPad()->SetHeadline( headline );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -132,9 +131,9 @@ void NCTable::setHeader( const vector<string> & head )
 //
 int NCTable::getCurrentItem()
 {
-  if ( !pad->Lines() )
+  if ( !myPad()->Lines() )
     return -1;
-  return pad->CurPos().L;
+  return myPad()->CurPos().L;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -147,7 +146,7 @@ int NCTable::getCurrentItem()
 //
 void NCTable::setCurrentItem( int index )
 {
-  pad->ScrlLine( index );
+  myPad()->ScrlLine( index );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -160,7 +159,7 @@ void NCTable::setCurrentItem( int index )
 //
 bool NCTable::setItemByKey( int key )
 {
-  return pad->setItemByKey( key );
+  return myPad()->setItemByKey( key );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -178,7 +177,7 @@ void NCTable::itemAdded( vector<string> elements, int index )
     // use YCPString to enforce recoding from 'utf8'
     Items[i] = new NCTableCol( YCPString( elements[i] ) );
   }
-  pad->Append( Items );
+  myPad()->Append( Items );
   DrawPad();
 }
 
@@ -192,7 +191,7 @@ void NCTable::itemAdded( vector<string> elements, int index )
 //
 void NCTable::itemsCleared()
 {
-  pad->ClearTable();
+  myPad()->ClearTable();
   DrawPad();
 }
 
@@ -206,7 +205,7 @@ void NCTable::itemsCleared()
 //
 void NCTable::cellChanged( int index, int colnum, const YCPString & newtext )
 {
-  NCTableLine * cl = pad->ModifyLine( index );
+  NCTableLine * cl = myPad()->ModifyLine( index );
   if ( !cl ) {
     NCINT << "No such line: " << wpos( index, colnum ) << newtext->value() << endl;
   } else {

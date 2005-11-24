@@ -164,7 +164,7 @@ public:
     /**
      * Get number of lines ( list entries )
      */ 
-    unsigned int getNumLines( ) { return pad->Lines(); }
+    unsigned int getNumLines( ) { return myPad()->Lines(); }
 
    /**
      * Draws the file list (has to be called after the loop with

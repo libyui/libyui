@@ -31,7 +31,6 @@ NCSelectionBox::NCSelectionBox( NCWidget * parent, const YWidgetOpt & opt,
 				const YCPString & nlabel )
     : YSelectionBox( opt, nlabel )
     , NCPadWidget( parent )
-    , pad( (NCTablePad *&)NCPadWidget::pad )
     , biglist( false )
     , immediate( opt.immediateMode.value() )
 {
@@ -63,7 +62,7 @@ NCSelectionBox::~NCSelectionBox()
 //
 long NCSelectionBox::nicesize( YUIDimension dim )
 {
-  wsze sze = ( biglist ) ? pad->tableSize() + 2 : wGetDefsze();
+  wsze sze = ( biglist ) ? myPad()->tableSize() + 2 : wGetDefsze();
   if (dim == YD_HORIZ) {
     return sze.W > (int)(labelWidht()+2) ? sze.W : (labelWidht()+2);
   } else {
@@ -95,9 +94,9 @@ void NCSelectionBox::setSize( long newwidth, long newheight )
 //
 int NCSelectionBox::getCurrentItem()
 {
-  if ( !pad->Lines() )
+  if ( !myPad()->Lines() )
     return -1;
-  return pad->CurPos().L;
+  return myPad()->CurPos().L;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -110,7 +109,7 @@ int NCSelectionBox::getCurrentItem()
 //
 string NCSelectionBox::getLine( const int & index )
 {
-    NCTableLine * line = const_cast<NCTableLine*>(pad->GetLine(index));
+    NCTableLine * line = const_cast<NCTableLine*>(myPad()->GetLine(index));
     NCTableCol * value;
     string val;
     
@@ -141,7 +140,7 @@ string NCSelectionBox::getLine( const int & index )
 //
 void NCSelectionBox::setCurrentItem( int index )
 {
-  pad->ScrlLine( index );
+  myPad()->ScrlLine( index );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -156,10 +155,10 @@ void NCSelectionBox::itemAdded( const YCPString& str, int index, bool selected )
 {
   vector<NCTableCol*> Items( 1U, 0 );
   Items[0] = new NCTableCol( str );
-  pad->Append( Items );
+  myPad()->Append( Items );
   DrawPad();
   if ( selected )
-    pad->ScrlLine( pad->Lines() );
+    myPad()->ScrlLine( myPad()->Lines() );
 }
 
 ///////////////////////////////////////////////////////////////////

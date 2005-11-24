@@ -508,7 +508,7 @@ PMSelectable::UI_Status AvailableStatStrategy::getPackageStatus( PMObjectPtr obj
 	return retStatus;
     }
 
-    PMSelectable::UI_Status status = objPtr->getSelectable()->status();
+    // PMSelectable::UI_Status status = objPtr->getSelectable()->status();
 
     if (objPtr->isCandidateObj())
 	retStatus = PMSelectable::S_KeepInstalled;

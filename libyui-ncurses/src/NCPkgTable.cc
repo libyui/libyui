@@ -157,7 +157,7 @@ void NCPkgTable::addLine( PMSelectable::UI_Status stat,
 	// use YCPString to enforce recoding from 'utf8'
 	Items[i] = new NCTableCol( YCPString( elements[i-1] ) );
     }
-    pad->Append( Items );
+    myPad()->Append( Items );
     
     // don't call DrawPad(); for every line - is called once after the loop
   
@@ -350,7 +350,7 @@ bool NCPkgTable::updateTable()
     while ( index < size )
     {
     	// get the table line 
-	NCTableLine * cl = pad->ModifyLine( index );
+	NCTableLine * cl = myPad()->ModifyLine( index );
 	if ( !cl )
 	{
 	    ret = false;
@@ -824,7 +824,7 @@ PMObjectPtr NCPkgTable::getDataPointer( int index )
 NCPkgTableTag * NCPkgTable::getTag( const int & index )
 {
     // get the table line 
-    NCTableLine * cl = pad->ModifyLine( index );
+    NCTableLine * cl = myPad()->ModifyLine( index );
     if ( !cl )
 	return 0;
 
@@ -851,7 +851,7 @@ bool NCPkgTable::SourceInstall( bool install )
 	return false;
     }
     PMSelectablePtr selPtr = objPtr->getSelectable();
-    NCTableLine * currentLine = pad->ModifyLine( index );
+    NCTableLine * currentLine = myPad()->ModifyLine( index );
     
     if ( !selPtr  || !currentLine )
     {

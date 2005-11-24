@@ -42,7 +42,8 @@ class NCTree : public YTree, public NCPadWidget {
 
   protected:
 
-    NCTreePad *& pad;
+    virtual NCTreePad * myPad () const
+        { return dynamic_cast<NCTreePad*> ( NCPadWidget::myPad () ); }
 
     const NCTreeLine * getTreeLine( unsigned idx ) const;
     NCTreeLine *       modifyTreeLine( unsigned idx );

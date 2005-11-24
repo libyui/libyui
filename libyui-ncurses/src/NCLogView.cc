@@ -122,13 +122,13 @@ void NCLogView::wRedraw()
   if ( !win )
     return;
 
-  bool initial = ( !pad || !pad->Destwin() );
-  if ( pad )
-    pad->bkgd( listStyle().item.plain );
+  bool initial = ( !myPad() || !myPad()->Destwin() );
+  if ( myPad() )
+    myPad()->bkgd( listStyle().item.plain );
   NCPadWidget::wRedraw();
 
   if ( initial )
-    pad->ScrlTo( wpos( text.Lines(), 0 ) );
+    myPad()->ScrlTo( wpos( text.Lines(), 0 ) );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -203,9 +203,9 @@ void NCLogView::DrawPad()
     {
 	if ( skipLines == 0 )
 	{
-	    pad->move( cl++, 0 );
+	    myPad()->move( cl++, 0 );
 	    wstring cline = (*line).str();
-	    pad->addwstr( cline.c_str() ); 
+	    myPad()->addwstr( cline.c_str() ); 
 	}
 	else
 	{

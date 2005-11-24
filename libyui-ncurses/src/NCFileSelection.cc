@@ -314,7 +314,7 @@ void NCFileSelection::addLine( const vector<string> & elements,
 	// use YCPString to enforce recoding from 'utf8'
 	Items[i] = new NCTableCol( YCPString( elements[i-1] ), NCTableCol::PLAIN );
     }
-    pad->Append( Items );
+    myPad()->Append( Items );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -350,7 +350,7 @@ bool NCFileTable::createListEntry ( const NCFileInfo & fileInfo )
 	    data.reserve(6);
 	    data.push_back( fileInfo._name );
 	    char size_buf[50];
-	    sprintf( size_buf, "%d", fileInfo._size);
+	    sprintf( size_buf, "%ld", fileInfo._size);
 	    data.push_back( size_buf );
 	    data.push_back( fileInfo._perm );
 	    data.push_back( fileInfo._user );
@@ -436,7 +436,7 @@ NCFileInfo NCFileSelection::getFileInfo( int index )
 NCFileSelectionTag * NCFileSelection::getTag( const int & index )
 {
     // get the table line 
-    NCTableLine * cl = pad->ModifyLine( index );
+    NCTableLine * cl = myPad()->ModifyLine( index );
     if ( !cl )
 	return 0;
 

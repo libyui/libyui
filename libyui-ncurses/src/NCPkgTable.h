@@ -268,7 +268,7 @@ public:
      * Returns the number of lines in the table (the table size)
      * @return unsigned int
      */ 
-    unsigned int getNumLines( ) { return pad->Lines(); }
+    unsigned int getNumLines( ) { return myPad()->Lines(); }
 
     /**
      * Shows default list (packages of default RPM group or patch list)

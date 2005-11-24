@@ -46,7 +46,11 @@ class NCMultiLineEdit : public YMultiLineEdit, public NCPadWidget {
 
   protected:
 
-    NCTextPad *& pad;
+    /**
+     * Overload myPad to narrow the type
+     */
+    virtual NCTextPad * myPad () const
+        { return dynamic_cast<NCTextPad*> ( NCPadWidget::myPad () ); }
 
   protected:
 

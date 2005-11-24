@@ -83,7 +83,12 @@ class NCMultiSelectionBox : public YMultiSelectionBox, public NCPadWidget {
 
   protected:
 
-    NCTablePad *& pad;
+    /**
+     * Overload myPad to narrow the type
+     */
+    virtual NCTablePad * myPad () const
+        { return dynamic_cast<NCTablePad*> ( NCPadWidget::myPad () ); }
+
     NCTableTag * tagCell( int index );
     const NCTableTag * tagCell( int index ) const;
 
@@ -139,9 +144,9 @@ class NCMultiSelectionBox : public YMultiSelectionBox, public NCPadWidget {
     }
 
     // added by gs
-    unsigned int getNumLines( ) { return pad->Lines(); }
-    const NCTableLine * getLine( const int & index ) { return pad->GetLine(index); }
-    void clearItems() { return pad->ClearTable(); }
+    unsigned int getNumLines( ) { return myPad()->Lines(); }
+    const NCTableLine * getLine( const int & index ) { return myPad()->GetLine(index); }
+    void clearItems() { return myPad()->ClearTable(); }
 };
 
 ///////////////////////////////////////////////////////////////////

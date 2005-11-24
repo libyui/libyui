@@ -49,10 +49,16 @@ class NCPadWidget : public NCWidget, protected NCSchrollCB {
 
     wsze  minPadSze;
     bool  multidraw;
+    NCPad * pad;
 
   protected:
+  
+    /**
+     * Return the current pad. Make it virtual so descendant classes
+     * can narrow the return type.
+     */
+    virtual NCPad * myPad () const { return pad; }
 
-    NCPad * pad;
     bool    hasHeadline;
     bool    activeLabelOnly;
 

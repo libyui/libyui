@@ -46,7 +46,11 @@ class NCTable : public YTable, public NCPadWidget {
 
   protected:
 
-    NCTablePad *& pad;
+    /**
+     * Overload myPad to narrow the type
+     */
+    virtual NCTablePad * myPad () const
+        { return dynamic_cast<NCTablePad*> ( NCPadWidget::myPad () ); }
     bool          biglist;
 
   protected:
@@ -76,9 +80,9 @@ class NCTable : public YTable, public NCPadWidget {
     virtual void itemsCleared();
 
     void setBigList( const bool big ) { biglist = big; }
-    void SetSepChar( const chtype colSepchar )  { pad->SetSepChar( colSepchar ); }
-    void SetSepWidht( const unsigned sepwidth ) { pad->SetSepWidht( sepwidth ); }
-    void SetHotCol( const int hcol )            { pad->SetHotCol( hcol ); }
+    void SetSepChar( const chtype colSepchar )  { myPad()->SetSepChar( colSepchar ); }
+    void SetSepWidht( const unsigned sepwidth ) { myPad()->SetSepWidht( sepwidth ); }
+    void SetHotCol( const int hcol )            { myPad()->SetHotCol( hcol ); }
 
     virtual void itemAdded( vector<string> elements, int index );
 
@@ -102,7 +106,7 @@ class NCTable : public YTable, public NCPadWidget {
       return true;
     }
 
-    void stripHotkeys() { pad->stripHotkeys(); }
+    void stripHotkeys() { myPad()->stripHotkeys(); }
 };
 
 ///////////////////////////////////////////////////////////////////

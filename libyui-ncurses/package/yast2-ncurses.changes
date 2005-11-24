@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Nov 24 12:57:45 CET 2005 - visnov@suse.cz
+
+- Fix strict aliasing warnings
+- V 2.13.1 
+
+-------------------------------------------------------------------
 Mon Oct 10 16:41:42 CEST 2005 - visnov@suse.cz
 
 - Fix compilation for GCC 4.1

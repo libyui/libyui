@@ -185,7 +185,6 @@ NCTree::NCTree( NCWidget * parent, const YWidgetOpt & opt,
 		const YCPString & nlabel )
     : YTree( opt, nlabel )
     , NCPadWidget( parent )
-    , pad( (NCTreePad *&)NCPadWidget::pad )
 {
   WIDDBG << endl;
   setLabel( nlabel );
@@ -214,8 +213,8 @@ NCTree::~NCTree()
 //
 inline const NCTreeLine * NCTree::getTreeLine( unsigned idx ) const
 {
-  if ( pad ) {
-    return dynamic_cast<const NCTreeLine *>(pad->GetLine( idx ));
+  if ( myPad() ) {
+    return dynamic_cast<const NCTreeLine *>(myPad()->GetLine( idx ));
   }
   return 0;
 }
@@ -230,8 +229,8 @@ inline const NCTreeLine * NCTree::getTreeLine( unsigned idx ) const
 //
 inline NCTreeLine * NCTree::modifyTreeLine( unsigned idx )
 {
-  if ( pad ) {
-    return dynamic_cast<NCTreeLine *>(pad->ModifyLine( idx ));
+  if ( myPad() ) {
+    return dynamic_cast<NCTreeLine *>(myPad()->ModifyLine( idx ));
   }
   return 0;
 }
@@ -276,8 +275,8 @@ const YTreeItem * NCTree::getCurrentItem() const
 {
   const YTreeItem * yitem = 0;
 
-  if ( pad ) {
-    const NCTreeLine * cline = dynamic_cast<const NCTreeLine *>(pad->GetCurrentLine());
+  if ( myPad() ) {
+    const NCTreeLine * cline = dynamic_cast<const NCTreeLine *>(myPad()->GetCurrentLine());
     if ( cline ) {
       yitem = &cline->Yitem();
     }
@@ -296,13 +295,13 @@ const YTreeItem * NCTree::getCurrentItem() const
 //
 void NCTree::setCurrentItem( YTreeItem * it )
 {
-  if ( !pad )
+  if ( !myPad() )
     return;
-  for ( unsigned i = 0; i < pad->Lines(); ++i ) {
+  for ( unsigned i = 0; i < myPad()->Lines(); ++i ) {
     const NCTreeLine * cline = getTreeLine( i );
     if ( &cline->Yitem() == it ) {
       DDBG << "got " << it->getText()->value() << " at " << i << endl;
-      pad->ShowItem( cline );
+      myPad()->ShowItem( cline );
       break;
     }
   }
@@ -373,7 +372,7 @@ static void Dit( NCTreeLine * p, NCTreePad * pad, const YTreeItem * item )
 void NCTree::DrawPad()
 {
   for (  YTreeItemListIterator it = items.begin(); it < items.end(); ++it ) {
-    Dit( 0, pad, *it );
+    Dit( 0, myPad(), *it );
   }
   NCPadWidget::DrawPad();
 }
@@ -418,5 +417,5 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 //
 void NCTree::deleteAllItems() {
 	YTree::deleteAllItems();
-	pad->ClearTable();
+	myPad()->ClearTable();
 }

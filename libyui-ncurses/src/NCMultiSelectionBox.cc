@@ -32,7 +32,6 @@ NCMultiSelectionBox::NCMultiSelectionBox( NCWidget * parent, const YWidgetOpt & 
 					  const YCPString & nlabel )
     : YMultiSelectionBox( opt, nlabel )
     , NCPadWidget( parent )
-    , pad( (NCTablePad *&)NCPadWidget::pad )
 {
   WIDDBG << endl;
   InitPad();
@@ -90,9 +89,9 @@ void NCMultiSelectionBox::setSize( long newwidth, long newheight )
 //
 int NCMultiSelectionBox::getCurrentItem()
 {
-  if ( !pad->Lines() )
+  if ( !myPad()->Lines() )
     return -1;
-  return pad->CurPos().L;
+  return myPad()->CurPos().L;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -105,7 +104,7 @@ int NCMultiSelectionBox::getCurrentItem()
 //
 void NCMultiSelectionBox::setCurrentItem( int index )
 {
-  pad->ScrlLine( index );
+  myPad()->ScrlLine( index );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -121,7 +120,7 @@ void NCMultiSelectionBox::itemAdded( const YCPString& str, int index, bool selec
   vector<NCTableCol*> Items( 2U, 0 );
   Items[0] = new NCTableTag( selected );
   Items[1] = new NCTableCol( str, NCTableCol::PLAIN );
-  pad->Append( Items );
+  myPad()->Append( Items );
   DrawPad();
 }
 
@@ -135,7 +134,7 @@ void NCMultiSelectionBox::itemAdded( const YCPString& str, int index, bool selec
 //
 NCTableTag * NCMultiSelectionBox::tagCell( int index )
 {
-  NCTableLine * cl = pad->ModifyLine( index );
+  NCTableLine * cl = myPad()->ModifyLine( index );
   if ( !cl )
     return 0;
   return static_cast<NCTableTag *>(cl->GetCol( 0 ));
@@ -151,7 +150,7 @@ NCTableTag * NCMultiSelectionBox::tagCell( int index )
 //
 const NCTableTag * NCMultiSelectionBox::tagCell( int index ) const
 {
-  const NCTableLine * cl = pad->GetLine( index );
+  const NCTableLine * cl = myPad()->GetLine( index );
   if ( !cl )
     return 0;
   return static_cast<const NCTableTag *>(cl->GetCol( 0 ));
@@ -168,7 +167,7 @@ const NCTableTag * NCMultiSelectionBox::tagCell( int index ) const
 void NCMultiSelectionBox::deleteAllItems()
 {
   YMultiSelectionBox::deleteAllItems();
-  pad->ClearTable();
+  myPad()->ClearTable();
   DrawPad();
 }
 
@@ -317,14 +316,14 @@ NCursesEvent NCMultiSelectionBox::wHandleInput( wint_t key )
         setItemSelected( getCurrentItem(), true, false );
         valueChanged = true;
       }
-      pad->ScrlDown();
+      myPad()->ScrlDown();
       break;
     case '-':
       if ( itemIsSelected( getCurrentItem() ) ) {
         setItemSelected( getCurrentItem(), false, false );
         valueChanged = true;
       }
-      pad->ScrlDown();
+      myPad()->ScrlDown();
       break;
     }
   }

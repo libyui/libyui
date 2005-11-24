@@ -42,7 +42,12 @@ class NCSelectionBox : public YSelectionBox, public NCPadWidget {
 
   protected:
 
-    NCTablePad *& pad;
+    /**
+     * Overload myPad to narrow the type
+     */
+    virtual NCTablePad * myPad () const 
+	{ return dynamic_cast<NCTablePad*> ( NCPadWidget::myPad () ); }
+
     bool          biglist;
     bool          immediate;
     
@@ -82,7 +87,7 @@ class NCSelectionBox : public YSelectionBox, public NCPadWidget {
     }
 
     string getLine(const int & index );
-    void clearTable( ) { pad->ClearTable(); };
+    void clearTable( ) { myPad ()->ClearTable(); };
 
     void deleteAllItems();
 };
