@@ -18,7 +18,6 @@ runcurses_LDADD = ../src/liby2ncurses.la -lncurses -lpanel -lpthread \
 
 runcurses_LDFLAGS = -L$(libdir)			\
 	-Xlinker --whole-archive                \
-	$(plugindir)/libpy2stdio.la             \
 	../src/libpy2ncurses.la			\
 	-Xlinker --no-whole-archive
 
@@ -39,7 +38,6 @@ y2ncurses_LDADD = -lncurses -lpanel -lpthread -ly2 -lyui -lycp \
 
 y2ncurses_LDFLAGS = -static -L$(libdir)	\
 	-Xlinker --whole-archive		\
-	$(plugindir)/libpy2stdio.la		\
 	$(plugindir)/libpy2wfm.la		\
 	../src/libpy2ncurses.la			\
 	-Xlinker --no-whole-archive

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Dec 20 08:59:15 CET 2005 - visnov@suse.cz
+
+- Don't link against libpy2stdio
+- V 2.13.2 
+
+-------------------------------------------------------------------
 Thu Nov 24 12:57:45 CET 2005 - visnov@suse.cz
 
 - Fix strict aliasing warnings
