@@ -64,6 +64,9 @@ YQComboBox::YQComboBox( QWidget * 		parent,
 
     connect( _qt_combo_box,	SIGNAL( activated  ( const QString & ) ),
 	     this,		SLOT  ( textChanged( const QString & ) ) );
+    
+    connect( _qt_combo_box,	SIGNAL( textChanged( const QString & ) ),
+	     this,		SLOT  ( textChanged( const QString & ) ) );
 }
 
 
