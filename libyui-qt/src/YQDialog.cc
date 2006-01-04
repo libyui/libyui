@@ -528,6 +528,12 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 		YQUI::ui()->sendEvent( new YDebugEvent() );
 		return;
 	    }
+	    else if ( event->key() == Qt::Key_X )
+	    {
+		y2milestone( "Starting xterm" );
+		system( "/usr/bin/xterm" );
+		return;
+	    }
 	}
     }
 
