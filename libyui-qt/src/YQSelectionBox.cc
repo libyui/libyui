@@ -213,6 +213,16 @@ bool YQSelectionBox::eventFilter( QObject * obj, QEvent * ev )
 	    }
 	}
     }
+    else if ( ev->type() == QEvent::MouseButtonRelease )
+    {
+	QMouseEvent * mouseEvent = dynamic_cast<QMouseEvent *> (ev);
+
+	if ( mouseEvent && mouseEvent->button() == Qt::RightButton )
+	{
+	    y2milestone( "Right click in selecton box detected" );
+	    YQUI::ui()->maybeLeftHandedUser();
+	}
+    }
 
     return QWidget::eventFilter( obj, ev );
 }
@@ -274,5 +284,8 @@ void YQSelectionBox::deleteAllItems()
     YSelectionWidget::deleteAllItems();
     _qt_listbox->blockSignals( false );
 }
+
+
+
 
 #include "YQSelectionBox.moc"

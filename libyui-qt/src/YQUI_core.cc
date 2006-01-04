@@ -80,6 +80,8 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     _debug_embedding		= false;
     _running_embedded		= false;
     _usingVisionImpairedPalette	= false;
+    _leftHandedMouse		= false;
+    _askedForLeftHandedMouse	= false;
     screenShotNameTemplate 	= "";
 
     qInstallMsgHandler( qMessageHandler );
@@ -95,7 +97,7 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 
     loadPredefinedQtTranslations();
     _normalPalette = qApp->palette();
-    
+
     // Qt keeps track to a global QApplication in qApp.
     CHECK_PTR( qApp );
 
@@ -302,7 +304,7 @@ void YQUI::calcDefaultSize()
 	    if ( primaryScreenSize.width() >= 1024 && primaryScreenSize.height() >= 768  )
 	    {
 		// Scale down to 70% of screen size
-		
+
 		_default_size.setWidth ( max( (int) (availableSize.width()  * 0.7), 800 ) );
 		_default_size.setHeight( max( (int) (availableSize.height() * 0.7), 600 ) );
 	    }

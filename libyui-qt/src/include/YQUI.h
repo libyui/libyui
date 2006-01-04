@@ -258,17 +258,28 @@ public slots:
      * (Shift-F8)
      **/
     void askSaveLogs();
-    
+
     /**
      * Open dialog to configure logging.
      * (Shift-F7)
      **/
     void askConfigureLogging();
-    
+
     /**
      * Fun stuff (release dependent)
      **/
     void easterEgg();
+
+    /**
+     * A mouse click with the wrong mouse button was detected - e.g., a right
+     * click on a push button. The user might be left-handed, but his mouse
+     * might not (yet) be configured for left-handed use - e.g., during
+     * installation. Ask him if he would like his mouse temporarily configured
+     * as a left-handed mouse.
+     *
+     * This status can be queried with UI::GetDisplayInfo() ("LeftHandedMouse").
+     **/
+    void maybeLeftHandedUser();
 
 
 signals:
@@ -373,7 +384,7 @@ protected:
 
     /**
      * Invalidate information about cached fonts so they will be reloaded upon
-     * their next usage  
+     * their next usage
      **/
     void setAllFontsDirty();
 
@@ -577,7 +588,7 @@ public:
      * Initialize and set a textdomain for gettext()
      **/
     static void setTextdomain( const char * domain );
-    
+
     /**
      * Returns a high-contrast color palette suitable for vision impaired users.
      **/
@@ -592,7 +603,7 @@ public:
      * Toggle between the vision impaired and the normal color palette.
      **/
     void toggleVisionImpairedPalette();
-    
+
     /**
      * Returns 'true' if high-contrast colors for vision impaired users is in use.
      * This should be queried at other places before using custom colors.
@@ -617,7 +628,7 @@ public:
      **/
     virtual float layoutUnits( YUIDimension dim, long device_units );
 
-    
+
 protected:
 
     /**
@@ -645,6 +656,7 @@ protected:
     bool hasIconSupport()		{ return false; }	// not yet
     bool hasFullUtf8Support()		{ return true; 	}
     bool richTextSupportsTable()	{ return true; }
+    bool leftHandedMouse()		{ return _leftHandedMouse; }
 
 
     QMap<QString, int>	screenShotNo;
@@ -757,7 +769,7 @@ protected:
      * Language-specific font settings
      **/
     QY2Settings	* _lang_fonts;
-    
+
     /**
      * Default font (cached)
      **/
@@ -844,6 +856,16 @@ protected:
      * Flag: currently using special palette for vision impaired users?
      **/
     bool _usingVisionImpairedPalette;
+
+    /**
+     * Flag: Does the user want to use a left-handed mouse?
+     **/
+    bool _leftHandedMouse;
+
+    /**
+     * Flag: Was the user already asked if he wants to use a left-handed mouse?
+     **/
+    bool _askedForLeftHandedMouse;
 };
 
 

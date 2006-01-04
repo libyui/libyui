@@ -163,16 +163,30 @@ void YQGenericButton::activate()
 
 bool YQGenericButton::eventFilter( QObject * obj, QEvent * event )
 {
-    if ( event->type() == QEvent::FocusIn )
+    if ( event )
     {
-	_dialog->gettingFocus( this );
-	return false;	// event processed?
+	if ( event->type() == QEvent::FocusIn )
+	{
+	    _dialog->gettingFocus( this );
+	    return false;	// event processed?
+	}
+	else if ( event->type() == QEvent::FocusOut )
+	{
+	    _dialog->losingFocus( this );
+	    return false;	// event processed?
+	}
+	else if ( event->type() == QEvent::MouseButtonRelease )
+	{
+	    QMouseEvent * mouseEvent = dynamic_cast<QMouseEvent *> (event);
+
+	    if ( mouseEvent && mouseEvent->button() == Qt::RightButton )
+	    {
+		y2milestone( "Right click on button detected" );
+		YQUI::ui()->maybeLeftHandedUser();
+	    }
+	}
     }
-    else if ( event->type() == QEvent::FocusOut )
-    {
-	_dialog->losingFocus( this );
-	return false;	// event processed?
-    }
+    
     
     return QObject::eventFilter( obj, event );
 }

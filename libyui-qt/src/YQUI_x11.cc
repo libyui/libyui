@@ -15,6 +15,8 @@
   Author:     	Stefan Hundhammer <sh@suse.de>
   Maintainer: 	Stefan Hundhammer <sh@suse.de>
 
+  Textdomain "packages-qt"
+
 /-*/
 
 
@@ -24,6 +26,7 @@
 #include <qwidgetlist.h>
 #include <qtextcodec.h>
 #include <qregexp.h>
+#include <qmessagebox.h>
 
 #include <X11/Xlib.h>
 
@@ -33,6 +36,7 @@
 #include "YQUI.h"
 #include "YEvent.h"
 #include "YQDialog.h"
+#include "YQi18n.h"
 #include "QY2Settings.h"
 
 
@@ -137,7 +141,7 @@ const QFont &YQUI::currentFont()
 	{
 	    _current_font = qApp->font();
 	}
-	
+
 	_loaded_current_font = true;
     }
 
@@ -400,7 +404,7 @@ void YQUI::loadPredefinedQtTranslations()
     if ( language.length() > 2 )
 	language.remove( 2, language.length() - 2 );
     QString trans_file = QString( "qt_%1.qm").arg( language );
-    
+
 
     if ( path.isEmpty() )
     {
@@ -420,13 +424,13 @@ void YQUI::loadPredefinedQtTranslations()
     {
 	y2milestone( "Loaded translations for predefined Qt dialogs from %s/%s",
 		     (const char *) path, (const char *) trans_file );
-	
+
 	qApp->installTranslator( & _qtTranslations );
     }
 
 
-    // Force reverse layout for Arabic and Hebrew 
-    
+    // Force reverse layout for Arabic and Hebrew
+
     if ( ( language.startsWith( "ar" ) ||	// Arabic
 	   language.startsWith( "he" ) )	// Hebrew
 	 && ! reverseLayout() )
@@ -531,6 +535,47 @@ float YQUI::layoutUnits( YUIDimension dim, long device_units )
     else			size *= ( 25/480.0 );
 
     return size;
+}
+
+
+void YQUI::maybeLeftHandedUser()
+{
+    if ( _askedForLeftHandedMouse )
+	return;
+
+
+    QString message =
+	_( "You clicked the right mouse button "
+	   "where a left-click was expected."
+	   "\n"
+	   "Switch left and right mouse buttons?"
+	   );
+    int button = QMessageBox::question( 0,
+					// Popup dialog caption
+					_( "Switch mouse buttons?" ),
+					message,
+					QMessageBox::Yes | QMessageBox::Default,
+					QMessageBox::No,
+					QMessageBox::Cancel | QMessageBox::Escape );
+
+    if ( button == 0 )	// Yes
+    {
+
+	const char * command = 
+	    _leftHandedMouse ?
+	    "xmodmap -e \"pointer = 1 2 3\"":	// switch back to right-handed mouse
+	    "xmodmap -e \"pointer = 3 2 1\"";	// switch to left-handed mouse
+
+	_leftHandedMouse	 = ! _leftHandedMouse; 	// might be set repeatedly!
+	_askedForLeftHandedMouse = false;	// give the user a chance to switch back
+	y2milestone( "Switching mouse buttons: %s", command );
+	
+	system( command );
+    }
+    else if ( button == 1 )	// No
+    {
+	_askedForLeftHandedMouse = true;
+    }
 }
 
 

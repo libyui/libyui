@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Wed Jan  4 19:24:05 CET 2006 - sh@suse.de
+
+- V 2.13.5 
+- Implemented feature #3476: Left-handed mouse during installation
+
+  now asking the user if he wants his mouse buttons switched
+  if he clicks the right mouse button on a push button or in a
+  selection box
+
+-------------------------------------------------------------------
 Wed Jan  4 17:33:25 CET 2006 - sh@suse.de
 
 - Open xterm upon Ctrl-Shift-Alt-X hotkey (for debugging in inst-sys)
