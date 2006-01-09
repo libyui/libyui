@@ -59,6 +59,8 @@ class NCTableLine {
     void assertCol( unsigned idx );
 
     unsigned state;
+    
+    int index;
 
   protected:
 
@@ -69,8 +71,8 @@ class NCTableLine {
 
   public:
 
-    NCTableLine( unsigned cols, const unsigned s = S_NORMAL );
-    NCTableLine( vector<NCTableCol*> & nItems, const unsigned s = S_NORMAL );
+    NCTableLine( unsigned cols, int index = -1, const unsigned s = S_NORMAL );
+    NCTableLine( vector<NCTableCol*> & nItems, int index = -1, const unsigned s = S_NORMAL );
     virtual ~NCTableLine();
 
     unsigned Cols() const { return Items.size(); }
@@ -99,6 +101,7 @@ class NCTableLine {
     virtual bool isVisible() const  { return !isHidden(); }
     virtual bool isEnabeled() const { return isVisible() && !isDisabeled(); }
 
+    int getIndex () const { return index; }
   public:
 
     virtual int  handleInput( wint_t key ) { return 0; }

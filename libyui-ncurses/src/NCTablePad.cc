@@ -18,6 +18,7 @@
 /-*/
 #include "Y2Log.h"
 #include "NCTablePad.h"
+#include "NCPopupMenu.h"
 
 #if 0
 #undef  DBG_CLASS
@@ -91,6 +92,7 @@ void NCTablePad::SetLines( unsigned idx )
       delete Items[i];
     }
   }
+  
   Items.resize( idx, 0 );
   for( unsigned i = olines; i < Lines(); ++i ) {
     if ( !Items[i] )
@@ -380,6 +382,22 @@ bool NCTablePad::setItemByKey( int key )
   }
 
   return false;
+}
+
+static int column;
+
+static bool compare_column( NCTableLine* first, NCTableLine* second )
+{
+    return first->GetCol (column)->Label ().getText().begin()->str ()
+	< second->GetCol (column)->Label ().getText().begin()->str ();
+}
+
+void NCTablePad::setOrder( int col )
+{
+    column = col;
+    std::sort (Items.begin(), Items.end(), compare_column);
+    dirty = true;
+    update ();
 }
 
 ///////////////////////////////////////////////////////////////////

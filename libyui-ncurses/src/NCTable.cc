@@ -18,6 +18,8 @@
 /-*/
 #include "Y2Log.h"
 #include "NCTable.h"
+#include "NCPopupMenu.h"
+#include <yui/YMenuButton.h>
 
 #if 0
 #undef  DBG_CLASS
@@ -37,6 +39,7 @@ NCTable::NCTable( NCWidget * parent, const YWidgetOpt & opt,
     : YTable( opt, head.size() )
     , NCPadWidget( parent )
     , immediate( opt.immediateMode.value() )
+    , header (head)
     , biglist( false )
 {
   WIDDBG << endl;
@@ -114,6 +117,7 @@ void NCTable::setLabel( const YCPString & nlabel )
 //
 void NCTable::setHeader( const vector<string> & head )
 {
+    header = head;
     vector<NCstring> headline( head.size() );
     for ( unsigned i = 0; i < head.size(); ++i ) {
 	headline[i] = NCstring( head[i] );
@@ -133,7 +137,7 @@ int NCTable::getCurrentItem()
 {
   if ( !myPad()->Lines() )
     return -1;
-  return myPad()->CurPos().L;
+  return myPad()->GetLine( myPad()->CurPos().L )->getIndex ();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -177,7 +181,7 @@ void NCTable::itemAdded( vector<string> elements, int index )
     // use YCPString to enforce recoding from 'utf8'
     Items[i] = new NCTableCol( YCPString( elements[i] ) );
   }
-  myPad()->Append( Items );
+  myPad()->Append( Items, index );
   DrawPad();
 }
 
@@ -249,9 +253,35 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
   int citem  = getCurrentItem();
-
+  
   if ( ! handleInput( key ) ) {
     switch ( key ) {
+
+      case CTRL('o'):
+        {
+    	    // get the column
+	    wpos at( ScreenPos() + wpos( win->height()/2, 1) );
+    	    YMenu a(YCPString ("Menu"));
+
+	    int idx = 0;
+	    
+    	    for ( vector<string>::const_iterator it = header.begin ();
+        	it != header.end () ; it++ )
+    	    {
+		// strip the align mark
+		string col = (*it);
+		col.erase(0,1);
+        	a.addMenuItem ( new YMenuItem ( YCPString ( col ), &a, idx++ ) );
+    	    }
+
+    	    NCPopupMenu dialog( at, a );
+    	    int column = dialog.post();
+
+	    if( column != -1 )
+		myPad ()->setOrder (column);
+
+    	    return NCursesEvent::none;
+	}
     case KEY_SPACE:
     case KEY_RETURN:
       if ( getNotify() && citem != -1 )

@@ -43,6 +43,8 @@ class NCTable : public YTable, public NCPadWidget {
   private:
 
     bool immediate;
+    
+    vector<string> header;
 
   protected:
 

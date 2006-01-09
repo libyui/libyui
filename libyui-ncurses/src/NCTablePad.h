@@ -83,6 +83,8 @@ class NCTablePad : public NCPad {
 
     wsze tableSize() { return dirtyFormat ? UpdateFormat()
 					  : wsze( Lines(), ItemStyle.TableWidth() ); }
+					  
+    void setOrder( int column );
 
   public:
 
@@ -112,7 +114,7 @@ class NCTablePad : public NCPad {
     void     ClearTable()  { SetLines( 0 ); }
 
     void Append( NCTableLine * item )           { AddLine( Lines(), item ); }
-    void Append( vector<NCTableCol*> & nItems ) { AddLine( Lines(), new NCTableLine( nItems ) ); }
+    void Append( vector<NCTableCol*> & nItems, int index = -1 ) { AddLine( Lines(), new NCTableLine( nItems, index ) ); }
     void AddLine( unsigned idx, NCTableLine * item );
     void DelLine( unsigned idx );
 

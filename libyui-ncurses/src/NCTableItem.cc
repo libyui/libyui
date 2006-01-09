@@ -121,16 +121,18 @@ ostream & operator<<( ostream & STREAM, const NCTableCol & OBJ )
 //
 //	DESCRIPTION :
 //
-NCTableLine::NCTableLine( unsigned cols, const unsigned s )
+NCTableLine::NCTableLine( unsigned cols, int idx, const unsigned s )
     : Items( cols, (NCTableCol*)0 )
     , state ( s )
+    , index ( idx )
     , vstate( S_HIDDEN )
 {
 }
 
-NCTableLine::NCTableLine( vector<NCTableCol*> & nItems, const unsigned s )
+NCTableLine::NCTableLine( vector<NCTableCol*> & nItems, int idx, const unsigned s )
     : Items( nItems )
     , state ( s )
+    , index ( idx )
     , vstate( S_HIDDEN )
 {
 }
