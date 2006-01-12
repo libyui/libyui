@@ -531,7 +531,7 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    else if ( event->key() == Qt::Key_X )
 	    {
 		y2milestone( "Starting xterm" );
-		system( "/usr/bin/xterm" );
+		system( "/usr/bin/xterm &" );
 		return;
 	    }
 	}
