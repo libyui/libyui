@@ -37,7 +37,7 @@ NCFrame::NCFrame( NCWidget * parent, const YWidgetOpt & opt,
   wstate = NC::WSdumb;
   framedim.Pos = wpos( 1 );
   framedim.Sze = wsze( 2 );
-  setLabel( nlabel );
+  setLabel( getLabel() );
   hotlabel = &label;
 }
 
