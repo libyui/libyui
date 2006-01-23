@@ -552,7 +552,7 @@ void YQUI::maybeLeftHandedUser()
 	   );
     int button = QMessageBox::question( 0,
 					// Popup dialog caption
-					_( "Switch mouse buttons?" ),
+					_( "Unexpected Click" ),
 					message,
 					QMessageBox::Yes | QMessageBox::Default,
 					QMessageBox::No,
