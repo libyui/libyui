@@ -35,10 +35,11 @@
 //	DESCRIPTION :
 //
 NCTable::NCTable( NCWidget * parent, const YWidgetOpt & opt,
-		  vector<string> head )
+		  vector<string> head, bool sort )
     : YTable( opt, head.size() )
     , NCPadWidget( parent )
-    , immediate( opt.immediateMode.value() )
+    , immediate ( opt.immediateMode.value() )
+    , sortable (sort)
     , header (head)
     , biglist( false )
 {
@@ -137,7 +138,8 @@ int NCTable::getCurrentItem()
 {
   if ( !myPad()->Lines() )
     return -1;
-  return myPad()->GetLine( myPad()->CurPos().L )->getIndex ();
+  return sortable ? myPad()->GetLine( myPad()->CurPos().L )->getIndex ()
+    : myPad()->CurPos().L;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -259,6 +261,9 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
 
       case CTRL('o'):
         {
+	    if ( ! sortable ) 
+		break;
+
     	    // get the column
 	    wpos at( ScreenPos() + wpos( win->height()/2, 1) );
     	    YMenu a(YCPString ("Menu"));

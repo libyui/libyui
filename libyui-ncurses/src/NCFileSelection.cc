@@ -185,7 +185,7 @@ NCFileSelection::NCFileSelection( NCWidget * parent,
 				  const YWidgetOpt & opt,
 				  NCFileSelectionType type,
 				  const YCPString & iniDir )
-    : NCTable( parent, opt, vector<string> () )
+    : NCTable( parent, opt, vector<string> (), false )
       , startDir( iniDir->value() )
       , currentDir( iniDir->value() )
       , tableType( type )

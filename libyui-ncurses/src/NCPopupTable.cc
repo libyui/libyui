@@ -64,7 +64,7 @@ void NCPopupTable::createList( vector<string> & row )
   YWidgetOpt opt;
   opt.notifyMode.setValue( true );
 
-  sellist = new NCTable( this, opt, row );
+  sellist = new NCTable( this, opt, row, false );
   sellist->setBigList( true );
   sellist->SetSepChar( ' ' );
   sellist->SetSepWidht( 0 );

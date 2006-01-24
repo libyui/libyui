@@ -513,7 +513,7 @@ YWidget * YNCursesUI::createTable( YWidget * parent, YWidgetOpt & opt,
 {
   ONCREATE;
   return new NCTable( dynamic_cast<NCWidget *>( parent ), opt,
-		      header );
+		      header, true );
 }
 
 YWidget * YNCursesUI::createProgressBar( YWidget * parent, YWidgetOpt & opt,

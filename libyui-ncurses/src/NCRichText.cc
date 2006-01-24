@@ -805,6 +805,7 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
   }
 
   int leveltag = 0;
+  int headinglevel = 0;
 
   TOKEN token = T_UNKNOWN;
   switch ( value.length() ) {
@@ -818,9 +819,9 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
   case 2:
     if (      value == L"br" )		token = T_BR;
     else if ( value == L"em" )		token = T_IT;
-    else if ( value == L"h1" )		token = T_HEAD;
-    else if ( value == L"h2" )		token = T_HEAD;
-    else if ( value == L"h3" )		token = T_HEAD;
+    else if ( value == L"h1" )		{ token = T_HEAD; headinglevel = 1; }
+    else if ( value == L"h2" )		{ token = T_HEAD; headinglevel = 2; }
+    else if ( value == L"h3" )		{ token = T_HEAD; headinglevel = 3; }
     else if ( value == L"hr" )		token = T_IGNORE;
     else if ( value == L"li" )		token = T_LI;
     else if ( value == L"ol" )		{ token = T_LEVEL; leveltag = 1; }
@@ -881,6 +882,13 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
       Tattr |= token;
     PadSetAttr();
     PadBOL();
+
+    if ( headinglevel == 1 )
+	PadNL();
+
+    if ( headinglevel == 2 )
+	PadNL();
+
     break;
 
   case T_PAR:

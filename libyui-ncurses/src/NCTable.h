@@ -43,6 +43,7 @@ class NCTable : public YTable, public NCPadWidget {
   private:
 
     bool immediate;
+    bool sortable;
     
     vector<string> header;
 
@@ -72,7 +73,7 @@ class NCTable : public YTable, public NCPadWidget {
   public:
 
     NCTable( NCWidget * parent, const YWidgetOpt & opt,
-	     vector<string> header );
+	     vector<string> header, bool sort );
     virtual ~NCTable();
 
     bool bigList() const { return biglist; }

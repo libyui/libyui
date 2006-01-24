@@ -109,7 +109,7 @@ string NCPkgTableTag::statusToStr( PMSelectable::UI_Status stat ) const
 //	DESCRIPTION :
 //
 NCPkgTable::NCPkgTable( NCWidget * parent, const YWidgetOpt & opt )
-    : NCTable( parent, opt, vector<string> () )
+    : NCTable( parent, opt, vector<string> (), false )
       , packager ( 0 )
       , statusStrategy( new PackageStatStrategy )	// default strategy: packages
       , tableType ( T_Packages )			// default type: packages
