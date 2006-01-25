@@ -504,6 +504,10 @@ protected:
 					 const YCPString &	newPartLabel,
 					 const YCPString &	freeFieldLabel,
 					 const YCPString &	newPartFieldLabel );
+    
+    bool 	hasPatternSelector();
+    YWidget *	createPatternSelector	( YWidget *		parent,
+					  YWidgetOpt &		opt );
 
     bool	hasWizard();
     YWidget * 	createWizard		( YWidget * parent, YWidgetOpt & opt,

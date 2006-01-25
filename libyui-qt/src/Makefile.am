@@ -74,6 +74,7 @@ liby2qt_la_SOURCES = 				\
 	YQPackageSelectorBase.cc		\
 	YQPackageSelector.cc			\
 	YQPackageSelectorHelp.cc		\
+	YQPatternSelector.cc			\
 	YQPartitionSplitter.cc			\
 	YQPkgChangesDialog.cc			\
 	YQPkgConflictDialog.cc			\
@@ -164,6 +165,7 @@ BUILT_SOURCES =					\
 	YQMultiSelectionBox.moc			\
 	YQPackageSelectorBase.moc		\
 	YQPackageSelector.moc			\
+	YQPatternSelector.moc			\
 	YQPartitionSplitter.moc			\
 	YQPkgChangesDialog.moc			\
 	YQPkgConflictDialog.moc			\
@@ -244,6 +246,7 @@ YQMultiProgressMeter.o YQMultiProgressMeter.lo:			YQMultiProgressMeter.moc
 YQMultiSelectionBox.o YQMultiSelectionBox.lo:			YQMultiSelectionBox.moc
 YQPackageSelectorBase.o YQPackageSelectorBase.lo:		YQPackageSelectorBase.moc
 YQPackageSelector.o YQPackageSelector.lo:			YQPackageSelector.moc
+YQPatternSelector.o YQPatternSelector.lo:			YQPatternSelector.moc
 YQPartitionSplitter.o YQPartitionSplitter.lo:			YQPartitionSplitter.moc
 YQPkgChangesDialog.o YQPkgChangesDialog.lo:			YQPkgChangesDialog.moc
 YQPkgConflictDialog.o YQPkgConflictDialog.lo:			YQPkgConflictDialog.moc
@@ -322,6 +325,7 @@ YQMultiProgressMeter.moc:		include/YQMultiProgressMeter.h
 YQMultiSelectionBox.moc:		include/YQMultiSelectionBox.h
 YQPackageSelectorBase.moc:		include/YQPackageSelectorBase.h
 YQPackageSelector.moc:			include/YQPackageSelector.h
+YQPatternSelector.moc:			include/YQPatternSelector.h
 YQPartitionSplitter.moc:		include/YQPartitionSplitter.h
 YQPkgChangesDialog.moc:			include/YQPkgChangesDialog.h
 YQPkgConflictDialog.moc:		include/YQPkgConflictDialog.h

@@ -27,8 +27,8 @@
 #include "YQAlignment.h"
 #include "YQBarGraph.h"
 #include "YQCheckBox.h"
-#include "YQComboBox.h"
 #include "YQColoredLabel.h"
+#include "YQComboBox.h"
 #include "YQDate.h"
 #include "YQDialog.h"
 #include "YQDownloadProgress.h"
@@ -43,9 +43,10 @@
 #include "YQMultiLineEdit.h"
 #include "YQMultiProgressMeter.h"
 #include "YQMultiSelectionBox.h"
-#include "YQPartitionSplitter.h"
-#include "YQProgressBar.h"
 #include "YQPackageSelector.h"
+#include "YQPartitionSplitter.h"
+#include "YQPatternSelector.h"
+#include "YQProgressBar.h"
 #include "YQPushButton.h"
 #include "YQRadioButton.h"
 #include "YQRadioButtonGroup.h"
@@ -434,17 +435,17 @@ bool YQUI::hasPartitionSplitter()
 }
 
 YWidget * YQUI::createPartitionSplitter( YWidget *		parent,
-					  YWidgetOpt &		opt,
-					  int 			usedSize,
-					  int 			totalFreeSize,
-					  int 			newPartSize,
-					  int 			minNewPartSize,
-					  int 			minFreeSize,
-					  const YCPString &	usedLabel,
-					  const YCPString &	freeLabel,
-					  const YCPString &	newPartLabel,
-					  const YCPString &	freeFieldLabel,
-					  const YCPString &	newPartFieldLabel )
+					 YWidgetOpt &		opt,
+					 int 			usedSize,
+					 int 			totalFreeSize,
+					 int 			newPartSize,
+					 int 			minNewPartSize,
+					 int 			minFreeSize,
+					 const YCPString &	usedLabel,
+					 const YCPString &	freeLabel,
+					 const YCPString &	newPartLabel,
+					 const YCPString &	freeFieldLabel,
+					 const YCPString &	newPartFieldLabel )
 {
     return new YQPartitionSplitter( (QWidget *) ( parent->widgetRep() ),
 				    opt,
@@ -459,6 +460,22 @@ YWidget * YQUI::createPartitionSplitter( YWidget *		parent,
 				    freeFieldLabel,
 				    newPartFieldLabel );
 }
+
+
+
+bool YQUI::hasPatternSelector()
+{
+    return true;
+}
+
+
+YWidget * YQUI::createPatternSelector( YWidget *		parent,
+				       YWidgetOpt &		opt )
+{
+    return new YQPatternSelector( (QWidget *) ( parent->widgetRep() ),
+				  opt );
+}
+
 
 
 bool YQUI::hasWizard()
