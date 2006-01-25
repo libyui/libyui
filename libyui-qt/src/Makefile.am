@@ -71,6 +71,7 @@ liby2qt_la_SOURCES = 				\
 	YQMultiLineEdit.cc			\
 	YQMultiProgressMeter.cc			\
 	YQMultiSelectionBox.cc			\
+	YQPackageSelectorBase.cc		\
 	YQPackageSelector.cc			\
 	YQPackageSelectorHelp.cc		\
 	YQPartitionSplitter.cc			\
@@ -161,6 +162,7 @@ BUILT_SOURCES =					\
 	YQMultiLineEdit.moc			\
 	YQMultiProgressMeter.moc		\
 	YQMultiSelectionBox.moc			\
+	YQPackageSelectorBase.moc		\
 	YQPackageSelector.moc			\
 	YQPartitionSplitter.moc			\
 	YQPkgChangesDialog.moc			\
@@ -240,6 +242,7 @@ YQMenuButton.o YQMenuButton.lo:					YQMenuButton.moc
 YQMultiLineEdit.o YQMultiLineEdit.lo:				YQMultiLineEdit.moc
 YQMultiProgressMeter.o YQMultiProgressMeter.lo:			YQMultiProgressMeter.moc
 YQMultiSelectionBox.o YQMultiSelectionBox.lo:			YQMultiSelectionBox.moc
+YQPackageSelectorBase.o YQPackageSelectorBase.lo:		YQPackageSelectorBase.moc
 YQPackageSelector.o YQPackageSelector.lo:			YQPackageSelector.moc
 YQPartitionSplitter.o YQPartitionSplitter.lo:			YQPartitionSplitter.moc
 YQPkgChangesDialog.o YQPkgChangesDialog.lo:			YQPkgChangesDialog.moc
@@ -317,6 +320,7 @@ YQMenuButton.moc:			include/YQMenuButton.h
 YQMultiLineEdit.moc:			include/YQMultiLineEdit.h
 YQMultiProgressMeter.moc:		include/YQMultiProgressMeter.h
 YQMultiSelectionBox.moc:		include/YQMultiSelectionBox.h
+YQPackageSelectorBase.moc:		include/YQPackageSelectorBase.h
 YQPackageSelector.moc:			include/YQPackageSelector.h
 YQPartitionSplitter.moc:		include/YQPartitionSplitter.h
 YQPkgChangesDialog.moc:			include/YQPkgChangesDialog.h

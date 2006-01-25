@@ -21,8 +21,6 @@
 
 #define CHECK_DEPENDENCIES_ON_STARTUP	1
 #define DEPENDENCY_FEEDBACK_IF_OK	1
-#define SHOW_CHANGES_DIALOG		1
-#define FAKE_DISK_USAGE_IN_TEST_MODE	0
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT	false
 
 #include <qaction.h>
@@ -95,9 +93,6 @@
 using std::max;
 using std::string;
 
-#define MIN_WIDTH			800
-#define MIN_HEIGHT			600
-
 #define SPACING			6
 #define MARGIN			4
 
@@ -106,14 +101,10 @@ using std::string;
 YQPackageSelector::YQPackageSelector( QWidget * 		parent,
 				      const YWidgetOpt & 	opt,
 				      const YCPString & 	floppyDevice )
-    : QVBox( parent )
-    , YPackageSelector( opt )
+    : YQPackageSelectorBase( parent, opt )
     , _floppyDevice( floppyDevice->value().c_str() )
 {
-    setWidgetRep( this );
-
     _autoDependenciesCheckBox	= 0;
-    _checkDependenciesButton	= 0;
     _detailsViews		= 0;
     _diskUsageList		= 0;
     _filters			= 0;
@@ -138,29 +129,18 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     _searchMode	 = opt.searchMode.value();
     _testMode	 = opt.testMode.value();
     _updateMode	 = opt.updateMode.value();
-    _youMode	 = opt.youMode.value();
     _summaryMode = opt.summaryMode.value();
 
-    if ( _testMode )	fakeData();
+    _showChangesDialog = ! _youMode;
+
     if ( _youMode )	y2milestone( "YOU mode" );
     if ( _updateMode )	y2milestone( "Update mode" );
 
-
-    YQUI::setTextdomain( "packages-qt" );
-    setFont( YQUI::ui()->currentFont() );
-    YQUI::ui()->blockWmClose(); // Automatically undone after UI::RunPkgSelection()
-    _installedPkgs = Y2PM::instTarget().numPackages();
-
-    _pkgConflictDialog = new YQPkgConflictDialog( &( Y2PM::packageManager() ), this );
-    CHECK_PTR( _pkgConflictDialog );
 
     basicLayout();
     addMenus();		// Only after all widgets are created!
     makeConnections();
     emit loadData();
-
-    YQPkgConflict::loadIgnoredConflicts();
-    Y2PM::packageManager().SaveState();
 
     if ( _youMode )
     {
@@ -176,8 +156,6 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     }
     else
     {
-	Y2PM::selectionManager().SaveState();
-
 	if ( _filters )
 	{
 	    if ( _updateProblemFilterView )
@@ -205,16 +183,6 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
 	}
     }
 
-
-#if FAKE_DISK_USAGE_IN_TEST_MODE
-
-    if ( _testMode && _diskUsageList )
-    {
-	y2milestone( "Using fake disk usage data" );
-	_diskUsageList->clear();
-	_diskUsageList->fakeData();
-    }
-#endif
 
     if ( _diskUsageList )
 	_diskUsageList->updateDiskUsage();
@@ -323,9 +291,6 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	_selList = _selectionsFilterView->selList();
 	CHECK_PTR( _selList );
 
-	_selConflictDialog = new YQPkgConflictDialog( &( Y2PM::selectionManager() ), this );
-	CHECK_PTR( _selConflictDialog );
-
 	connect( _selList, 		SIGNAL( statusChanged()	               	),
 		 this,			SLOT  ( resolveSelectionDependencies()	) );
 
@@ -364,9 +329,6 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
 	_langList = _langFilterView->langList();
 	CHECK_PTR( _langList );
-
-	_selConflictDialog = new YQPkgConflictDialog( &( Y2PM::selectionManager() ), this );
-	CHECK_PTR( _selConflictDialog );
 
 	connect( _langList, 		SIGNAL( statusChanged()	               	),
 		 this,			SLOT  ( resolveSelectionDependencies()	) );
@@ -431,7 +393,7 @@ YQPackageSelector::layoutRightPane( QWidget * parent )
     QVBox * right_pane_vbox = new QVBox( parent );
     CHECK_PTR( right_pane_vbox );
     right_pane_vbox->setMargin( MARGIN );
-    
+
     QSplitter * splitter = new QSplitter( QSplitter::Vertical, right_pane_vbox );
     CHECK_PTR( splitter );
 
@@ -552,6 +514,7 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 	_checkDependenciesButton = new QPushButton( _( "Chec&k" ), button_box );
 	CHECK_PTR( _checkDependenciesButton );
 	_checkDependenciesButton->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
+	_normalButtonBackground = _checkDependenciesButton->paletteBackgroundColor();
 
 	connect( _checkDependenciesButton,	SIGNAL( clicked() ),
 		 this,         			SLOT  ( manualResolvePackageDependencies() ) );
@@ -770,6 +733,12 @@ YQPackageSelector::connectFilter( QWidget * filter,
 void
 YQPackageSelector::makeConnections()
 {
+    connect( this, SIGNAL( resolvingStarted()   ),
+	     this, SLOT  ( animateCheckButton() ) );
+
+    connect( this, SIGNAL( resolvingFinished()  ),
+	     this, SLOT  ( restoreCheckButton() ) );
+
     connectFilter( _updateProblemFilterView,	_pkgList, false );
     connectFilter( _youPatchList, 		_pkgList );
     connectFilter( _selList, 			_pkgList );
@@ -787,7 +756,7 @@ YQPackageSelector::makeConnections()
 
     if ( _instSrcFilterView && _pkgList )
     {
-	connect( _instSrcFilterView,	SIGNAL( filterNearMatch	 ( PMPackagePtr ) ), 
+	connect( _instSrcFilterView,	SIGNAL( filterNearMatch	 ( PMPackagePtr ) ),
 		 _pkgList,		SLOT  ( addPkgItemDimmed ( PMPackagePtr ) ) );
     }
 
@@ -869,14 +838,25 @@ YQPackageSelector::makeConnections()
 	connect( _youPatchMenu,	SIGNAL( aboutToShow()   ),
 		 _youPatchList, SLOT  ( updateActions() ) );
     }
+}
 
 
-    //
-    // Handle WM_CLOSE like "Cancel"
-    //
+void
+YQPackageSelector::animateCheckButton()
+{
+    if ( _checkDependenciesButton )
+    {
+	_checkDependenciesButton->setPaletteBackgroundColor( QColor( 0xE0, 0xE0, 0xF8 ) );
+	_checkDependenciesButton->repaint();
+    }
+}
 
-    connect( YQUI::ui(),	SIGNAL( wmClose() ),
-	     this,		SLOT  ( reject()   ) );
+
+void
+YQPackageSelector::restoreCheckButton()
+{
+    if ( _checkDependenciesButton )
+	_checkDependenciesButton->setPaletteBackgroundColor( _normalButtonBackground );
 }
 
 
@@ -916,79 +896,6 @@ YQPackageSelector::manualResolvePackageDependencies()
 #endif
 
     return result;
-}
-
-
-int
-YQPackageSelector::resolvePackageDependencies()
-{
-    if ( ! _pkgConflictDialog )
-    {
-	y2error( "No package conflict dialog existing" );
-	return QDialog::Accepted;
-    }
-
-
-    YQUI::ui()->busyCursor();
-
-    QColor oldBackground;
-
-    if ( _checkDependenciesButton )
-    {
-	oldBackground = _checkDependenciesButton->paletteBackgroundColor();
-	_checkDependenciesButton->setPaletteBackgroundColor( QColor( 0xE0, 0xE0, 0xF8 ) );
-	_checkDependenciesButton->repaint();
-    }
-
-    int result = _pkgConflictDialog->solveAndShowConflicts();
-
-    if ( _checkDependenciesButton )
-	_checkDependenciesButton->setPaletteBackgroundColor( oldBackground );
-
-    YQUI::ui()->normalCursor();
-
-    return result;
-}
-
-
-int
-YQPackageSelector::resolveSelectionDependencies()
-{
-    if ( _selConflictDialog )
-    {
-	y2debug( "Resolving selection dependencies" );
-	return _selConflictDialog->solveAndShowConflicts();
-    }
-    else
-	return QDialog::Accepted;
-}
-
-
-int
-YQPackageSelector::checkDiskUsage()
-{
-    if ( ! _diskUsageList )
-    {
-	y2warning( "No disk usage list existing, assuming disk usage is OK" );
-	return QDialog::Accepted;
-    }
-
-    if ( ! _diskUsageList->overflowWarning.inRange() )
-	return QDialog::Accepted;
-
-    QString msg =
-	// Translators: RichText ( HTML-like ) format
-	"<p><b>" + _( "Error: Out of disk space!" ) + "</b></p>"
-	+ _( "<p>"
-	     "You can choose to install anyway if you know what you are doing, "
-	     "but you risk getting a corrupted system that requires manual repairs. "
-	     "If you are not absolutely sure how to handle such a case, "
-	     "press <b>Cancel</b> now and deselect some packages."
-	     "</p>" );
-
-    return YQPkgDiskUsageWarningDialog::diskUsageWarning( msg,
-							  100, _( "C&ontinue Anyway" ), _( "&Cancel" ) );
-
 }
 
 
@@ -1097,29 +1004,6 @@ YQPackageSelector::pkgImport()
    }
 }
 
-
-void
-YQPackageSelector::showAutoPkgList()
-{
-    resolvePackageDependencies();
-
-    // Show which packages are installed/deleted automatically
-    QString msg =
-	"<p><b>"
-	// Dialog header
-	+ _( "Automatic Changes" )
-	+ "</b></p>"
-	// Detailed explanation ( automatic word wrap! )
-	+ "<p>"
-	+ _( "In addition to your manual selections, the following packages"
-	     " have been changed to resolve dependencies:" )
-	+ "<p>";
-
-    YQPkgChangesDialog::showChangesDialog( msg,
-					   _( "&OK" ),
-					   QString::null,	// rejectButtonLabel
-					   true );		// showIfEmpty
-}
 
 
 void
@@ -1231,200 +1115,6 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 					   _( "&OK" ),
 					   QString::null,	// rejectButtonLabel
 					   true );		// showIfEmpty
-}
-
-
-
-void
-YQPackageSelector::fakeData()
-{
-#if 0
-    y2warning( "*** Using fake data ***" );
-
-    if ( _youMode )
-    {
-	PMYouServer server( "dir:///8.1-patches" );
-	InstYou &you = Y2PM::youPatchManager().instYou();
-	you.settings()->setPatchServer( server );
-	you.settings()->setReloadPatches( false );
-        you.retrievePatchInfo();
-	Y2PM::youPatchManager().instYou().selectPatches( PMYouPatch::kind_recommended |
-							 PMYouPatch::kind_security     );
-	y2milestone( "Fake YOU patches initialized" );
-    }
-    else
-    {
-	InstSrcManager & MGR( Y2PM::instSrcManager() );
-
-	Url url( "dir:///8.1" );
-	InstSrcManager::ISrcIdList nids;
-	PMError err = MGR.scanMedia( nids, url );
-
-	if ( nids.size() )
-	{
-	    err = MGR.enableSource( *nids.begin() );
-	}
-
-	y2milestone( "Fake installation sources initialized" );
-    }
-#endif
-}
-
-
-void
-YQPackageSelector::reject()
-{
-    bool changes = Y2PM::packageManager().DiffState();
-
-    if ( _youMode )
-	changes |= Y2PM::youPatchManager().DiffState();
-    else
-	changes |= Y2PM::selectionManager().DiffState();
-
-    if ( ! changes ||
-	 ( QMessageBox::warning( this, "",
-				 _( "Abandon all changes?" ),
-				 _( "&OK" ), _( "&Cancel" ), "",
-				 1, // defaultButtonNumber (from 0)
-				 1 ) // escapeButtonNumber
-	   == 0 )	// Proceed upon button #0 ( OK )
-	 )
-    {
-	Y2PM::packageManager().RestoreState();
-
-	if ( _youMode )
-	    Y2PM::youPatchManager().RestoreState();
-	else
-	    Y2PM::selectionManager().RestoreState();
-
-	YQUI::ui()->sendEvent( new YCancelEvent() );
-    }
-}
-
-
-void
-YQPackageSelector::accept()
-{
-    if ( ! _youMode )
-    {
-	// Force final dependency resolving
-	if ( resolvePackageDependencies() == QDialog::Rejected )
-	    return;
-    }
-
-#if SHOW_CHANGES_DIALOG
-
-    if ( ! _youMode )
-    {
-	// Show which packages are installed/deleted automatically
-	QString msg =
-	    "<p><b>"
-	    // Dialog header
-	    + _( "Automatic Changes" )
-	    + "</b></p>"
-	    // Detailed explanation ( automatic word wrap! )
-	    + "<p>"
-	    + _( "In addition to your manual selections, the following packages"
-		 " have been changed to resolve dependencies:" )
-	    + "<p>";
-
-	if ( YQPkgChangesDialog::showChangesDialog( msg, _( "C&ontinue" ), _( "&Cancel" ) )
-	     == QDialog::Rejected )
-	    return;
-    }
-#endif
-
-    // Check disk usage
-    if ( checkDiskUsage() == QDialog::Rejected )
-	return;
-
-
-    Y2PM::packageManager().ClearSaveState();
-    YQPkgConflict::saveIgnoredConflicts();
-
-    if ( _youMode )
-	Y2PM::youPatchManager().ClearSaveState();
-    else
-	Y2PM::selectionManager().ClearSaveState();
-
-    YQUI::ui()->sendEvent( new YMenuEvent( YCPSymbol( "accept" ) ) );
-}
-
-
-void
-YQPackageSelector::notImplemented()
-{
-    QMessageBox::information( this, "",
-			      _( "Not implemented yet. Sorry." ),
-			      QMessageBox::Ok );
-}
-
-
-void
-YQPackageSelector::keyPressEvent( QKeyEvent * event )
-{
-    if ( event )
-    {
-	unsigned special_combo = ( Qt::ControlButton | Qt::ShiftButton | Qt::AltButton );
-
-	if ( ( event->state() & special_combo ) == special_combo )
-	{
-	    if ( event->key() == Qt::Key_A )
-	    {
-		showAutoPkgList();
-		event->accept();
-		return;
-	    }
-	}
-	else if ( event->key() == Qt::Key_F5 )	// No matter if Ctrl/Alt/Shift pressed
-	{
-	    YQUI::ui()->easterEgg();
-	    return;
-	}
-    }
-
-    QWidget::keyPressEvent( event );
-}
-
-
-long
-YQPackageSelector::nicesize( YUIDimension dim )
-{
-    if ( dim == YD_HORIZ )
-    {
-	int hintWidth = sizeHint().width();
-
-	return max( MIN_WIDTH, hintWidth );
-    }
-    else
-    {
-	int hintHeight = sizeHint().height();
-
-	return max( MIN_HEIGHT, hintHeight );
-    }
-}
-
-
-void
-YQPackageSelector::setSize( long newWidth, long newHeight )
-{
-    resize( newWidth, newHeight );
-}
-
-
-void
-YQPackageSelector::setEnabling( bool enabled )
-{
-    setEnabled( enabled );
-}
-
-
-bool
-YQPackageSelector::setKeyboardFocus()
-{
-    setFocus();
-
-    return true;
 }
 
 
