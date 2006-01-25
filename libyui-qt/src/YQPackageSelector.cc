@@ -24,24 +24,19 @@
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT	false
 
 #include <qaction.h>
-#include <qmap.h>
 #include <qapplication.h>
 #include <qcheckbox.h>
-#include <qcursor.h>
 #include <qdialog.h>
 #include <qfiledialog.h>
 #include <qhbox.h>
-#include <qhgroupbox.h>
 #include <qlabel.h>
+#include <qmap.h>
 #include <qmenubar.h>
 #include <qmessagebox.h>
-#include <qprogressbar.h>
 #include <qpushbutton.h>
 #include <qsplitter.h>
-#include <qstylefactory.h>
 #include <qtabwidget.h>
 #include <qtimer.h>
-#include <qvbox.h>
 
 #include <Y2PM.h>
 #include <y2pm/InstTarget.h>
