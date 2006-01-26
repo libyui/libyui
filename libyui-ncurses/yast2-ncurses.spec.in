@@ -1,8 +1,8 @@
 @HEADER-COMMENT@
 
-# neededforbuild  libpng curl curl-devel gpp libgpp libxcrypt libxcrypt-devel liby2util liby2util-devel openslp openslp-devel openssl openssl-devel pkgconfig popt popt-devel rpm-devel yast2-core yast2-core-devel yast2-devtools yast2-packagemanager yast2-packagemanager-devel doxygen pcre pcre-devel blocxx blocxx-devel libxml2 libxml2-devel 
 
 @HEADER@
+BuildRequires:	blocxx-devel curl-devel doxygen gcc-c++ libxcrypt-devel rpm-devel yast2-core-devel yast2-devtools yast2-packagemanager-devel
 
 Summary:	-
 Provides:	yast2_ui
