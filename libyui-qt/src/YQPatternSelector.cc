@@ -53,7 +53,7 @@ using std::max;
 using std::string;
 
 #define SPACING			6
-#define MARGIN			4
+#define MARGIN			6
 
 
 
@@ -148,14 +148,33 @@ YQPatternSelector::layoutRightPane( QWidget * parent )
     CHECK_PTR( splitter );
     splitter->setMargin( MARGIN );
 
-    _descriptionView = new YQPkgDescriptionView( splitter );
+
+    //
+    // Selection / Pattern description
+    //
+
+    QVBox * upper_vbox = new QVBox( splitter );
+    CHECK_PTR( upper_vbox );
+
+    _descriptionView = new YQPkgDescriptionView( upper_vbox );
     CHECK_PTR( _descriptionView );
 
-    _diskUsageList = new YQPkgDiskUsageList( splitter );
+    addVSpacing( upper_vbox, MARGIN );
+
+    
+    //
+    // Disk usage
+    //
+    
+    QVBox * lower_vbox = new QVBox( splitter );
+    CHECK_PTR( lower_vbox );
+    addVSpacing( lower_vbox, MARGIN );
+
+    _diskUsageList = new YQPkgDiskUsageList( lower_vbox );
     CHECK_PTR( _diskUsageList );
 
-    splitter->setResizeMode( _descriptionView, QSplitter::Stretch );
-    splitter->setResizeMode( _diskUsageList,   QSplitter::FollowSizeHint );
+    splitter->setResizeMode( upper_vbox, QSplitter::Stretch );
+    splitter->setResizeMode( lower_vbox, QSplitter::FollowSizeHint );
     
     return splitter;
 }
@@ -204,7 +223,7 @@ YQPatternSelector::makeConnections()
 
     if ( _diskUsageList )
     {
-	connect( _selectionsFilterView,	SIGNAL( updatePackages()  ),
+	connect( _selList,		SIGNAL( updatePackages()  ),
 		 _diskUsageList,	SLOT  ( updateDiskUsage() ) );
     }
 }
