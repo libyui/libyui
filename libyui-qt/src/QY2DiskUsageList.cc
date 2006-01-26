@@ -42,6 +42,8 @@ QY2DiskUsageList::QY2DiskUsageList( QWidget * parent, bool addStdColumns )
     {
 	int numCol = 0;
 	addColumn( _( "Name" 		) );	_nameCol 		= numCol++;
+
+	// Translators: Please keep this short!
 	addColumn( _( "Disk Usage" 	) );	_percentageBarCol	= numCol++;
 	addColumn( "" 			  );	_percentageCol		= numCol++;
 	addColumn( _( "Used" 		) );	_usedSizeCol		= numCol++;
@@ -115,7 +117,7 @@ QY2DiskUsageListItem::init( bool allFields )
 void
 QY2DiskUsageListItem::setText( int column, const FSize & size )
 {
-    QString sizeText = size.asString().c_str();
+    QString sizeText = size.form( 0, 1, true ).c_str();
     sizeText += " ";
     setText( column, sizeText );
 }
