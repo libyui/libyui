@@ -1,8 +1,8 @@
 @HEADER-COMMENT@
 
-# neededforbuild  curl curl-devel gpp libgpp libxcrypt libxcrypt-devel liby2util liby2util-devel openssl openssl-devel qt3-devel-packages rpm-devel yast2-core-devel-packages yast2-packagemanager yast2-packagemanager-devel libxml2 libxml2-devel
 
 @HEADER@
+BuildRequires:	curl-devel docbook-xsl-stylesheets doxygen libdrm-devel libjpeg-devel libxcrypt-devel libxslt perl-XML-Writer qt3-devel rpm-devel sgml-skel update-desktop-files yast2-devtools yast2-packagemanager-devel yast2-perl-bindings yast2-testsuite
 
 Summary:	-
 Provides:	yast2_ui
