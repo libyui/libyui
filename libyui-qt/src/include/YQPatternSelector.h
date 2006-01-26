@@ -33,6 +33,7 @@ class QPushButton;
 class YQPkgDescriptionView;
 class YQPkgSelList;
 class YQPkgSelectionsFilterView;
+class YQWizard;
 
 
 class YQPatternSelector : public YQPackageSelectorBase
@@ -63,6 +64,12 @@ protected:
     void	layoutButtons	( QWidget * parent );
 
     /**
+     * Find the wizard in the current dialog, if there is any.
+     * Returns 0 if there is none.
+     **/
+    YQWizard *	findWizard() const;
+
+    /**
      * Establish Qt signal / slot connections.
      **/
     void makeConnections();
@@ -71,11 +78,12 @@ protected:
     // Data members
 
 
-    QPushButton *			_detailsButton;
 
     YQPkgSelList *			_selList;
     YQPkgSelectionsFilterView *		_selectionsFilterView;
     YQPkgDescriptionView *		_descriptionView;
+
+    YQWizard *				_wizard;
 };
 
 

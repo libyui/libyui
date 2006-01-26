@@ -250,7 +250,29 @@ public:
      **/
     void deleteMenus();
 
+    signals:
 
+    /**
+     * Emitted when the "Back" or "Cancel" button is clicked.
+     **/
+    void backClicked();
+
+    /**
+     * Emitted when the "Abort" button is clicked.
+     **/
+    void abortClicked();
+
+    /**
+     * Emitted when the "Next" or "OK" button is clicked.
+     *
+     * Notice: As long as this signal is connected, the wizard will no longer
+     * send button events to the UI. Rather, the connected QObject has to take
+     * care to propatage those events.
+     * This is used in YQPatternSelector, for example. 
+     **/
+    void nextClicked();
+
+    
 public slots:
 
 
@@ -318,17 +340,17 @@ protected slots:
     /**
      * Internal notification that the "Back" button has been clicked.
      **/
-    void backClicked();
+    void slotBackClicked();
 
     /**
      * Internal notification that the "Abort" button has been clicked.
      **/
-    void abortClicked();
+    void slotAbortClicked();
 
     /**
      * Internal notification that the "Next" button has been clicked.
      **/
-    void nextClicked();
+    void slotNextClicked();
 
     /**
      * Propagate button clicked event of release notes button to the YCP
@@ -430,6 +452,19 @@ protected:
      **/
     bool highColorDisplay() const;
 
+    /**
+     * Notification that a signal is being connected.
+     *
+     * Reimplemented from QObject.
+     **/
+    void connectNotify ( const char * signal );
+
+    /**
+     * Notification that a signal is being disconnected.
+     *
+     * Reimplemented from QObject.
+     **/
+    void disconnectNotify ( const char * signal );
 
     //
     // Wizard command mini-parser
@@ -537,6 +572,7 @@ protected:
     bool	_protectNextButton;
     bool	_stepsDirty;
     bool	_runningEmbedded;
+    bool	_sendButtonEvents;
     Direction	_direction;
 
     QPixmap	_titleBarGradientPixmap;

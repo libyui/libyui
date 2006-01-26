@@ -167,6 +167,7 @@ YQWizard::YQWizard( QWidget *		parent,
     _backButtonSpacer	= 0;
     _abortButton	= 0;
     _nextButton		= 0;
+    _sendButtonEvents	= true;
 
     _stepsList.setAutoDelete( true );
     _stepsIDs.setAutoDelete( false );	// Only for one of both!
@@ -1174,8 +1175,8 @@ void YQWizard::layoutButtonBox( QWidget * parent )
 
     hbox->addWidget( (QWidget *) _backButton->widgetRep() );
     addChild( _backButton );  // Enable shortcut checking for this button
-    connect( _backButton,	SIGNAL( clicked()	),
-	     this,		SLOT  ( backClicked()	) );
+    connect( _backButton,	SIGNAL( clicked()		),
+	     this,		SLOT  ( slotBackClicked()	) );
 
     _backButtonSpacer = new QSpacerItem( 0, 0,				// width, height
 					 QSizePolicy::Expanding,	// horizontal
@@ -1204,8 +1205,8 @@ void YQWizard::layoutButtonBox( QWidget * parent )
 
     hbox->addWidget( (QWidget *) _abortButton->widgetRep() );
     addChild( _abortButton ); // Enable shortcut checking for this button
-    connect( _abortButton,	SIGNAL( clicked()	),
-	     this,		SLOT  ( abortClicked()	) );
+    connect( _abortButton,	SIGNAL( clicked()		),
+	     this,		SLOT  ( slotAbortClicked()	) );
 
 
     // Using spacer rather than addSpacing() since the default stretchability
@@ -1228,8 +1229,8 @@ void YQWizard::layoutButtonBox( QWidget * parent )
 
     hbox->addWidget( (QWidget *) _nextButton->widgetRep() );
     addChild( _nextButton );  // Enable shortcut checking for this button
-    connect( _nextButton,	SIGNAL( clicked()	),
-	     this,		SLOT  ( nextClicked()	) );
+    connect( _nextButton,	SIGNAL( clicked()		),
+	     this,		SLOT  ( slotNextClicked()	) );
 
 
     //
@@ -1421,6 +1422,25 @@ bool YQWizard::highColorDisplay() const
 }
 
 
+void YQWizard::connectNotify ( const char * signal )
+{
+    if ( QString( signal ).contains( "nextClicked()" ) )
+    {
+	y2debug( "nextClicked connected, no longer directly sending button events" );
+	_sendButtonEvents = false;
+    }
+}
+
+
+void YQWizard::disconnectNotify ( const char * signal )
+{
+    if ( QString( signal ).contains( "nextClicked()" ) )
+    {
+	y2debug( "nextClicked disconnected, directly sending button events again" );
+	_sendButtonEvents = true;
+    }
+}
+
 
 void YQWizard::setDialogIcon( const char * iconName )
 {
@@ -1507,22 +1527,33 @@ void YQWizard::addChild( YWidget * child )
 
 
 
-void YQWizard::backClicked()
+void YQWizard::slotBackClicked()
 {
-    sendEvent( _backButton->id() );
+    emit backClicked();
+
+    if ( _sendButtonEvents )
+	sendEvent( _backButton->id() );
+    
     _direction = YQWizard::Backward;
 }
 
 
-void YQWizard::abortClicked()
+void YQWizard::slotAbortClicked()
 {
-    sendEvent( _abortButton->id() );
+    emit abortClicked();
+    
+    if ( _sendButtonEvents )
+	sendEvent( _abortButton->id() );
 }
 
 
-void YQWizard::nextClicked()
+void YQWizard::slotNextClicked()
 {
-    sendEvent( _nextButton->id() );
+    emit nextClicked();
+    
+    if ( _sendButtonEvents )
+	sendEvent( _nextButton->id() );
+    
     _direction = YQWizard::Forward;
 }
 

@@ -42,6 +42,8 @@
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgSelList.h"
 #include "YQPkgSelectionsFilterView.h"
+#include "YQWizard.h"
+#include "YQDialog.h"
 
 #include "utf8.h"
 #include "YQUI.h"
@@ -61,10 +63,10 @@ YQPatternSelector::YQPatternSelector( QWidget *			parent,
 				      const YWidgetOpt &	opt )
     : YQPackageSelectorBase( parent, opt )
 {
-    _detailsButton		= 0;
     _selList			= 0;
     _selectionsFilterView	= 0;
     _descriptionView		= 0;
+    _wizard			= findWizard();
 
     basicLayout();
     makeConnections();
@@ -79,6 +81,21 @@ YQPatternSelector::YQPatternSelector( QWidget *			parent,
 }
 
 
+
+YQWizard *
+YQPatternSelector::findWizard() const
+{
+    YQWizard * wizard = 0;
+
+    YQDialog * dialog = dynamic_cast<YQDialog *> ( YUI::ui()->currentDialog() );
+
+    if ( dialog )
+	wizard = dialog->findWizard();
+
+    return wizard;
+}
+
+
 void
 YQPatternSelector::basicLayout()
 {
@@ -90,6 +107,9 @@ YQPatternSelector::basicLayout()
 
     outer_splitter->setResizeMode( left_pane,  QSplitter::Stretch );
     outer_splitter->setResizeMode( right_pane, QSplitter::FollowSizeHint );
+
+    if ( ! _wizard )
+	layoutButtons( this );
 }
 
 
@@ -116,23 +136,26 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
     connect( _selConflictDialog, SIGNAL( updatePackages()		),
 	     _selList,		 SLOT  ( updateToplevelItemStates()	) );
 
-    addVSpacing( vbox, MARGIN );
 
-    
-    //
-    // "Details" button
-    //
+    if ( _wizard )	// No button box - add "Details..." button here
+    {
+	//
+	// "Details" button
+	//
 
-    QHBox * hbox = new QHBox( vbox );
-    CHECK_PTR( hbox );
-    
-    _detailsButton = new QPushButton( _( "&Details..." ), hbox );
-    CHECK_PTR( _detailsButton );
+	addVSpacing( vbox, SPACING );
 
-    connect( _detailsButton,	SIGNAL( clicked() ),
-	     this,		SLOT  ( detailedPackageSelection() ) );
+	QHBox * hbox = new QHBox( vbox );
+	CHECK_PTR( hbox );
 
-    addHStretch( hbox );
+	QPushButton * details_button = new QPushButton( _( "&Details..." ), hbox );
+	CHECK_PTR( details_button );
+
+	connect( details_button, SIGNAL( clicked() ),
+		 this,		 SLOT  ( detailedPackageSelection() ) );
+
+	addHStretch( hbox );
+    }
 
 
     return vbox;
@@ -161,11 +184,11 @@ YQPatternSelector::layoutRightPane( QWidget * parent )
 
     addVSpacing( upper_vbox, MARGIN );
 
-    
+
     //
     // Disk usage
     //
-    
+
     QVBox * lower_vbox = new QVBox( splitter );
     CHECK_PTR( lower_vbox );
     addVSpacing( lower_vbox, MARGIN );
@@ -175,7 +198,7 @@ YQPatternSelector::layoutRightPane( QWidget * parent )
 
     splitter->setResizeMode( upper_vbox, QSplitter::Stretch );
     splitter->setResizeMode( lower_vbox, QSplitter::FollowSizeHint );
-    
+
     return splitter;
 }
 
@@ -186,7 +209,17 @@ YQPatternSelector::layoutButtons( QWidget * parent )
 {
     QHBox * button_box = new QHBox( parent );
     CHECK_PTR( button_box );
+    button_box->setMargin ( MARGIN  );
     button_box->setSpacing( SPACING );
+
+
+    QPushButton * details_button = new QPushButton( _( "&Details..." ), button_box );
+    CHECK_PTR( details_button );
+    details_button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
+
+    connect( details_button,	SIGNAL( clicked() ),
+	     this,		SLOT  ( detailedPackageSelection() ) );
+
 
     addHStretch( button_box );
 
@@ -225,6 +258,18 @@ YQPatternSelector::makeConnections()
     {
 	connect( _selList,		SIGNAL( updatePackages()  ),
 		 _diskUsageList,	SLOT  ( updateDiskUsage() ) );
+    }
+
+    if ( _wizard )
+    {
+	connect( _wizard, 	SIGNAL( nextClicked()	),
+		 this,		SLOT  ( accept()        ) );
+
+	connect( _wizard, 	SIGNAL( backClicked()	),
+		 this,		SLOT  ( reject()	) );
+
+	connect( _wizard, 	SIGNAL( abortClicked()	),
+		 this,		SLOT  ( reject()	) );
     }
 }
 
