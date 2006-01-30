@@ -39,9 +39,13 @@ class YQPkgSelList : public YQPkgObjList
 public:
 
     /**
-     * Constructor
+     * Constructor.
+     *
+     * Set 'autoFill' to 'false' if you don't want the list to be filled in the
+     * constructor. In that case, use fillList() (e.g., when connections are
+     * set up).
      **/
-    YQPkgSelList( QWidget * parent );
+    YQPkgSelList( QWidget * parent, bool autoFill = true );
 
     /**
      * Destructor
@@ -84,6 +88,11 @@ public slots:
      **/
     void applyChanges();
 
+    /**
+     * Fill the selection list.
+     **/
+    void fillList();
+
 public:
 
     /**
@@ -115,14 +124,6 @@ signals:
      * Emitted when filtering is finished.
      **/
     void filterFinished();
-
-
-protected slots:
-
-    /**
-     * Fill the selection list.
-     **/
-    void fillList();
 };
 
 

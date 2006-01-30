@@ -31,7 +31,7 @@
 using std::set;
 
 
-YQPkgSelList::YQPkgSelList( QWidget * parent )
+YQPkgSelList::YQPkgSelList( QWidget * parent, bool autoFill )
     : YQPkgObjList( parent )
 {
     y2debug( "Creating selection list" );
@@ -44,9 +44,12 @@ YQPkgSelList::YQPkgSelList( QWidget * parent )
     connect( this, 	SIGNAL( selectionChanged        ( QListViewItem * ) ),
 	     this, 	SLOT  ( filter()                                    ) );
 
-    fillList();
-    selectSomething();
-
+    if ( autoFill )
+    {
+	fillList();
+	selectSomething();
+    }
+    
     y2debug( "Creating selection list done" );
 }
 

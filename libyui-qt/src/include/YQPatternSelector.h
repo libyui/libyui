@@ -32,7 +32,6 @@ class QPushButton;
 
 class YQPkgSelDescriptionView;
 class YQPkgSelList;
-class YQPkgSelectionsFilterView;
 class YQWizard;
 
 
@@ -85,7 +84,6 @@ protected:
 
 
     YQPkgSelList *			_selList;
-    YQPkgSelectionsFilterView *		_selectionsFilterView;
     YQPkgSelDescriptionView *		_descriptionView;
 
     YQWizard *				_wizard;

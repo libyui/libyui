@@ -41,7 +41,6 @@
 #include "YQPkgSelDescriptionView.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgSelList.h"
-#include "YQPkgSelectionsFilterView.h"
 #include "YQWizard.h"
 #include "YQDialog.h"
 
@@ -64,7 +63,6 @@ YQPatternSelector::YQPatternSelector( QWidget *			parent,
     : YQPackageSelectorBase( parent, opt )
 {
     _selList			= 0;
-    _selectionsFilterView	= 0;
     _descriptionView		= 0;
     _wizard			= findWizard();
 
@@ -72,12 +70,13 @@ YQPatternSelector::YQPatternSelector( QWidget *			parent,
     makeConnections();
 
     if ( _selList )
-	_selList->filter();
+    {
+	_selList->fillList();
+	_selList->selectSomething();
+    }
 
     if ( _diskUsageList )
 	_diskUsageList->updateDiskUsage();
-
-    y2milestone( "PatternSelector init done" );
 }
 
 
@@ -124,10 +123,9 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
     // Selections (Patterns) list
     //
 
-    _selectionsFilterView = new YQPkgSelectionsFilterView( vbox );
-    CHECK_PTR( _selectionsFilterView );
-
-    _selList = _selectionsFilterView->selList();
+    _selList = new YQPkgSelList( vbox,
+				 false ); // no autoFill - need to connect to details view first
+    CHECK_PTR( _selList );
     _selList->header()->hide();
 
     connect( _selList,		 SIGNAL( statusChanged()		),
@@ -249,13 +247,9 @@ YQPatternSelector::makeConnections()
 
     if ( _selList && _descriptionView )
     {
+	y2milestone( "Connection set up" );
 	connect( _selList,		SIGNAL( selectionChanged( PMObjectPtr ) ),
 		 _descriptionView,	SLOT  ( showDetails	( PMObjectPtr ) ) );
-
-#if 0
-	connect( _selList,		SIGNAL( filterFinished()  ),
-		 _selList,		SLOT  ( selectSomething() ) );
-#endif
     }
 
 
