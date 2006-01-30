@@ -82,6 +82,7 @@ liby2qt_la_SOURCES = 				\
 	YQPkgDependenciesView.cc		\
 	YQPkgDescriptionDialog.cc		\
 	YQPkgDescriptionView.cc			\
+	YQPkgSelDescriptionView.cc		\
 	YQPkgDiskUsageList.cc			\
 	YQPkgDiskUsageWarningDialog.cc		\
 	YQPkgGenericDetailsView.cc		\
@@ -173,6 +174,7 @@ BUILT_SOURCES =					\
 	YQPkgDependenciesView.moc		\
 	YQPkgDescriptionDialog.moc		\
 	YQPkgDescriptionView.moc		\
+	YQPkgSelDescriptionView.moc		\
 	YQPkgDiskUsageList.moc			\
 	YQPkgDiskUsageWarningDialog.moc		\
 	YQPkgGenericDetailsView.moc		\
@@ -254,6 +256,7 @@ YQPkgConflictList.o YQPkgConflictList.lo:			YQPkgConflictList.moc
 YQPkgDependenciesView.o YQPkgDependenciesView.lo:		YQPkgDependenciesView.moc
 YQPkgDescriptionDialog.o YQPkgDescriptionDialog.lo:		YQPkgDescriptionDialog.moc
 YQPkgDescriptionView.o YQPkgDescriptionView.lo:			YQPkgDescriptionView.moc
+YQPkgSelDescriptionView.o YQPkgSelDescriptionView.lo:		YQPkgSelDescriptionView.moc
 YQPkgDiskUsageList.o YQPkgDiskUsageList.lo:			YQPkgDiskUsageList.moc
 YQPkgDiskUsageWarningDialog.o YQPkgDiskUsageWarningDialog.lo:	YQPkgDiskUsageWarningDialog.moc
 YQPkgGenericDetailsView.o YQPkgGenericDetailsView.lo:		YQPkgGenericDetailsView.moc
@@ -333,6 +336,7 @@ YQPkgConflictList.moc:			include/YQPkgConflictList.h
 YQPkgDependenciesView.moc:		include/YQPkgDependenciesView.h
 YQPkgDescriptionDialog.moc:		include/YQPkgDescriptionDialog.h
 YQPkgDescriptionView.moc:		include/YQPkgDescriptionView.h
+YQPkgSelDescriptionView.moc:		include/YQPkgSelDescriptionView.h
 YQPkgDiskUsageList.moc:			include/YQPkgDiskUsageList.h
 YQPkgDiskUsageWarningDialog.moc:	include/YQPkgDiskUsageWarningDialog.h
 YQPkgGenericDetailsView.moc:		include/YQPkgGenericDetailsView.h

@@ -38,7 +38,7 @@
 
 #include "YQPatternSelector.h"
 #include "YQPkgConflictDialog.h"
-#include "YQPkgDescriptionView.h"
+#include "YQPkgSelDescriptionView.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgSelList.h"
 #include "YQPkgSelectionsFilterView.h"
@@ -179,7 +179,7 @@ YQPatternSelector::layoutRightPane( QWidget * parent )
     QVBox * upper_vbox = new QVBox( splitter );
     CHECK_PTR( upper_vbox );
 
-    _descriptionView = new YQPkgDescriptionView( upper_vbox );
+    _descriptionView = new YQPkgSelDescriptionView( upper_vbox );
     CHECK_PTR( _descriptionView );
 
     addVSpacing( upper_vbox, MARGIN );
@@ -249,8 +249,13 @@ YQPatternSelector::makeConnections()
 
     if ( _selList && _descriptionView )
     {
-	connect( _selList,		SIGNAL( selectionChanged    ( PMObjectPtr ) ),
-		 _descriptionView,	SLOT  ( showDetailsIfVisible( PMObjectPtr ) ) );
+	connect( _selList,		SIGNAL( selectionChanged( PMObjectPtr ) ),
+		 _descriptionView,	SLOT  ( showDetails	( PMObjectPtr ) ) );
+
+#if 0
+	connect( _selList,		SIGNAL( filterFinished()  ),
+		 _selList,		SLOT  ( selectSomething() ) );
+#endif
     }
 
 
@@ -279,6 +284,13 @@ YQPatternSelector::detailedPackageSelection()
 {
     y2milestone( "\"Details..\" button clicked" );
     YQUI::ui()->sendEvent( new YMenuEvent( YCPSymbol( "details" ) ) );
+}
+
+
+void
+YQPatternSelector::debugTrace()
+{
+    y2warning( "debugTrace" );
 }
 
 

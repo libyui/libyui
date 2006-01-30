@@ -118,6 +118,12 @@ public slots:
 
     // slot clear() inherited from QTextEdit
 
+    /**
+     * Show details for the specified package.
+     * Reimplement this in derived classes.
+     **/
+    virtual void showDetails( PMObjectPtr pmObj ) = 0;
+
     
 protected slots:
 
@@ -125,15 +131,6 @@ protected slots:
      * Show data for the last package.
      **/
     void reload( QWidget * newCurrent );
-
-    
-protected:
-
-    /**
-     * Show details for the specified package.
-     * Reimplement this in derived classes.
-     **/
-    virtual void showDetails( PMObjectPtr pmObj ) = 0;
 
 
     // Data members

@@ -30,7 +30,7 @@
 
 class QPushButton;
 
-class YQPkgDescriptionView;
+class YQPkgSelDescriptionView;
 class YQPkgSelList;
 class YQPkgSelectionsFilterView;
 class YQWizard;
@@ -52,6 +52,11 @@ protected slots:
      * This will return from UI::RunPkgSelection() with `details .
      **/
     void detailedPackageSelection();
+
+    /**
+     * Debugging
+     **/
+    void debugTrace();
 
     
 protected:
@@ -81,7 +86,7 @@ protected:
 
     YQPkgSelList *			_selList;
     YQPkgSelectionsFilterView *		_selectionsFilterView;
-    YQPkgDescriptionView *		_descriptionView;
+    YQPkgSelDescriptionView *		_descriptionView;
 
     YQWizard *				_wizard;
 };

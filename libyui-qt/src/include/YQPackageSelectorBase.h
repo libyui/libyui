@@ -38,7 +38,7 @@ class YQPackageSelectorBase : public QVBox, public YPackageSelector
 {
     Q_OBJECT
 
-public:
+protected:
 
     /**
      * Constructor.
@@ -48,6 +48,9 @@ public:
      **/
     YQPackageSelectorBase( QWidget * parent, const YWidgetOpt & opt );
 
+    
+public:
+    
     /**
      * Inherited from YWidget: Sets the enabled state of the
      * widget. All new widgets are enabled per definition. Only
