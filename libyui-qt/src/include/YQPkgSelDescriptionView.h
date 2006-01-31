@@ -57,7 +57,7 @@ protected:
     /**
      * Format the heading in HTML
      **/
-    QString YQPkgSelDescriptionView::htmlHeading( PMObjectPtr pmObj );
+    QString htmlHeading( PMObjectPtr pmObj );
 };
 
 
