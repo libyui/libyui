@@ -22,6 +22,9 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
+#include <qheader.h>
+#include <qstyle.h>
+
 #include <Y2PM.h>
 #include <y2pm/PMPackageManager.h>
 #include "utf8.h"
@@ -29,7 +32,6 @@
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQi18n.h"
-#include <qheader.h>
 
 using std::set;
 
@@ -131,13 +133,9 @@ YQPkgDiskUsageList::postPendingWarnings()
 QSize
 YQPkgDiskUsageList::sizeHint() const
 {
-    int width = header()->headerWidth() + 2*frameWidth();
+    int width = header()->headerWidth()
+	+ style().pixelMetric( QStyle::PM_ScrollBarExtent, verticalScrollBar() );
 
-    // Found out by experiment:
-    width += 8;
-    // Neither the Qt docs nor the local Qt specialists could give any good
-    // explanation how to figure out that constant add-on from style() or whatever.
-    
     return QSize( width, 100 );
 }
 
