@@ -10,9 +10,11 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQPkgInstSrcFilterView.cc
+  File:		YQPkgInstSrcFilterView.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:	Stefan Hundhammer <sh@suse.de>
+
+  Textdomain	"packages-qt"
 
 /-*/
 
@@ -48,7 +50,7 @@ YQPkgInstSrcFilterView::YQPkgInstSrcFilterView( QWidget * parent )
     _instSrcList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding ) );// hor/vert
 
     addVSpacing( upper_vbox, MARGIN );
-    
+
 
     // Directly propagate signals filterStart() and filterFinished()
     // from primary filter to the outside
@@ -133,7 +135,7 @@ YQPkgInstSrcFilterView::layoutSecondaryFilters( QWidget * parent )
     _searchFilterView = new YQPkgSearchFilterView( vbox );
     CHECK_PTR( _searchFilterView );
     _secondaryFilters->addPage( _( "Search" ), _searchFilterView );
-    
+
     connect( _searchFilterView,	SIGNAL( filterStart() ),
 	     _instSrcList,	SLOT  ( filter()      ) );
 
@@ -152,7 +154,7 @@ YQPkgInstSrcFilterView::layoutSecondaryFilters( QWidget * parent )
     connect( _statusFilterView,	SIGNAL( filterStart() ),
 	     _instSrcList,	SLOT  ( filter()      ) );
 
-    
+
     return _secondaryFilters;
 }
 

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Feb  2 14:02:54 CET 2006 - sh@suse.de
+
+- Fixed bug #145189 (untranslated text): Added "Textdomain" 
+
+-------------------------------------------------------------------
 Tue Jan 31 11:20:19 CET 2006 - sh@suse.de
 
 - Fixed extra qualification 
