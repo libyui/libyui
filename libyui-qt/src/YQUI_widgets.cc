@@ -15,8 +15,6 @@
   Author:    	Stefan Hundhammer <sh@suse.de>
   Maintainer: 	Stefan Hundhammer <sh@suse.de>
 
-  Textdomain 	"packages-qt"
-
 /-*/
 
 #define y2log_component "qt-ui"
