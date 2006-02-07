@@ -183,15 +183,15 @@ public slots:
 
     // Direct access to some states for menu actions
 
-    void setCurrentInstall()	   { setCurrentStatus( Status::S_Install	     	); }
+    void setCurrentInstall()	   { setCurrentStatus( Status::S_Install	); }
     void setCurrentDontInstall()   { setCurrentStatus( Status::S_NoInst	     	); }
     void setCurrentKeepInstalled() { setCurrentStatus( Status::S_KeepInstalled	); }
     void setCurrentDelete()	   { setCurrentStatus( Status::S_Del	     	); }
     void setCurrentUpdate()	   { setCurrentStatus( Status::S_Update	     	); }
     void setCurrentTaboo()	   { setCurrentStatus( Status::S_Taboo	     	); }
-    void setCurrentProtected()	   { setCurrentStatus( Status::S_Protected		); }
+    void setCurrentProtected()	   { setCurrentStatus( Status::S_Protected	); }
 
-    void setListInstall()	   { setAllItemStatus( Status::S_Install		); }
+    void setListInstall()	   { setAllItemStatus( Status::S_Install	); }
     void setListDontInstall()	   { setAllItemStatus( Status::S_NoInst		); }
     void setListKeepInstalled()	   { setAllItemStatus( Status::S_KeepInstalled	); }
     void setListDelete()	   { setAllItemStatus( Status::S_Del		); }

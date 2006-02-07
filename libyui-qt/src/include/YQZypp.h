@@ -22,7 +22,11 @@
 #define YQZypp_h
 
 
-using zypp::ui
+#include <zypp/ui/Status.h>
+#include <zypp/ui/Selectable.h>
+
+using zypp::ui::Status;
+using zypp::ui::Selectable;
 
 
 
