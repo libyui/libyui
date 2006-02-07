@@ -23,7 +23,7 @@
 #define YQPkgVersionsView_h
 
 #include "QY2ListView.h"
-#include <zypp/Object.h>
+#include <zypp/ResObject.h>
 
 
 class QTabWidget;

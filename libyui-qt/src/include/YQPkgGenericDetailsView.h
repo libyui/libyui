@@ -23,7 +23,7 @@
 #define YQPkgGenericDetailsView_h
 
 #include <qtextbrowser.h>
-#include <zypp/Object.h>
+#include <zypp/ResObject.h>
 #include <y2util/Date.h>
 
 

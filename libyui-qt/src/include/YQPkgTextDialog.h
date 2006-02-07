@@ -23,7 +23,7 @@
 #define YQPkgTextDialog_h
 
 #include <qdialog.h>
-#include <zypp/Object.h>
+#include <zypp/ResObject.h>
 
 class QPushButton;
 class QTextBrowser;

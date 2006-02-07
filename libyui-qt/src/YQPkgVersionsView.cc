@@ -25,7 +25,7 @@
 #include <qheader.h>
 
 #include <zypp/ui/Selectable.h>
-#include <zypp/Object.h>
+#include <zypp/ResObject.h>
 
 #include "YQPkgVersionsView.h"
 #include "YQIconPool.h"

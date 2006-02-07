@@ -31,7 +31,7 @@
 #include <ycp/y2log.h>
 #include "YQZypp.h"
 #include <y2pm/PkgDep.h>
-#include <zypp/Object.h>
+#include <zypp/ResObject.h>
 #include <zypp/ui/ResPoolProxy.h>
 #include <zypp/Selection.h>
 
