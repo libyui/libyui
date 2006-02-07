@@ -357,7 +357,7 @@ public:
     void setEditable( bool editable = true ) { _editable = editable; }
 
     /**
-     * Returns the ( binary RPM ) package status
+     * Returns the (binary RPM) package status
      **/
     PMSelectable::UI_Status status() const;
 
