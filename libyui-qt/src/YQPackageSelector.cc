@@ -704,8 +704,8 @@ YQPackageSelector::connectFilter( QWidget * filter,
     connect( filter,	SIGNAL( filterStart() 	),
 	     pkgList, 	SLOT  ( clear() 	) );
 
-    connect( filter,	SIGNAL( filterMatch( zypp::Package::constPtr ) ),
-	     pkgList, 	SLOT  ( addPkgItem ( zypp::Package::constPtr ) ) );
+    connect( filter,	SIGNAL( filterMatch( zypp::ui::Selectable::Ptr, zypp::Package::constPtr ) ),
+	     pkgList, 	SLOT  ( addPkgItem ( zypp::ui::Selectable::Ptr, zypp::Package::constPtr ) ) );
 
     connect( filter, 	SIGNAL( filterFinished()  ),
 	     pkgList, 	SLOT  ( selectSomething() ) );

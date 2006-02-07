@@ -99,13 +99,15 @@ signals:
      * Emitted during filtering for each pkg that matches the filter
      * and the candidate package comes from the respective source
      **/
-    void filterMatch( zypp::Package::constPtr pkg );
+    void filterMatch( zypp::ui::Selectable::Ptr	selectable,
+		      zypp::Package::constPtr	pkg );
 
     /**
      * Emitted during filtering for each pkg that matches the filter
      * and the candidate package does not come from the respective source
      **/
-    void filterNearMatch( zypp::Package::constPtr pkg );
+    void filterNearMatch( zypp::ui::Selectable::Ptr	selectable,
+			  zypp::Package::constPtr	pkg );
 
     /**
      * Emitted when filtering is finished.

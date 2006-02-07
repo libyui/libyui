@@ -85,7 +85,7 @@ YQPkgObjList::addPkgObjItem( zypp::ui::Selectable::Ptr selectable, zypp::ResObje
 {
     if ( ! selectable )
     {
-	y2error( "Null zypp::Selectable!" );
+	y2error( "Null zypp::ui::Selectable!" );
 	return;
     }
 

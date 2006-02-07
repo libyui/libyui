@@ -160,7 +160,7 @@ YQPkgInstSrcList::filter()
     while ( sel_it != exactMatches.end() )
     {
 	allMatches.erase( *sel_it );
-	emit filterMatch( (*sel_it)->theObj() );
+	emit filterMatch( (*sel_it), (*sel_it)->theObj() );
 	++sel_it;
     }
 

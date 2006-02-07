@@ -110,7 +110,7 @@ YQPkgLangList::filter()
 	    PMLanguageManager::PkgSelectables::const_iterator it = selectables.begin();
 	    while ( it != selectables.end() )
 	    {
-		emit filterMatch( ( *it)->theObj() );
+		emit filterMatch( *it, (*it)->theObj() );
 		++it;
 	    }
 	}
@@ -121,15 +121,16 @@ YQPkgLangList::filter()
 
 
 void
-YQPkgLangList::addLangItem( PMLanguagePtr pmLang )
+YQPkgLangList::addLangItem( zypp::ui::Selectable::Ptr	selectable,
+			    PMLanguagePtr 		pmLang )
 {
-    if ( ! pmLang )
+    if ( ! selectable )
     {
-	y2error( "NULL PMLanguage!" );
+	y2error( "NULL zypp::ui::Selectable!" );
 	return;
     }
 
-    new YQPkgLangListItem( this, pmLang );
+    new YQPkgLangListItem( this, selectable, pmLang );
 }
 
 
@@ -149,8 +150,10 @@ YQPkgLangList::selection() const
 
 
 
-YQPkgLangListItem::YQPkgLangListItem( YQPkgLangList * langList, PMLanguagePtr lang )
-    : YQPkgObjListItem( langList, lang )
+YQPkgLangListItem::YQPkgLangListItem( YQPkgLangList * 		langList,
+				      zypp::ui::Selectable::Ptr	selectable,
+				      PMLanguagePtr 		lang )
+    : YQPkgObjListItem( langList, selectable, lang )
     , _langList( langList )
     , _pmLang( lang )
 {

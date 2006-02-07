@@ -65,7 +65,8 @@ public:
      * Check one package against the currently selected values.
      * Returns true if the package matches, false if not.
      **/
-    bool check( zypp::Package::constPtr pkg );
+    bool check( zypp::ui::Selectable::Ptr	selectable,
+		zypp::Package::constPtr 	pkg );
 
 
 public slots:
@@ -101,7 +102,8 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( zypp::Package::constPtr pkg );
+    void filterMatch( zypp::ui::Selectable::Ptr	selectable,
+		      zypp::Package::constPtr	pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -130,7 +132,9 @@ protected:
     /**
      * Check if pkg matches the search criteria.
      **/
-    bool check( zypp::Package::constPtr pkg, const QRegExp & regexp );
+    bool check( zypp::ui::Selectable::Ptr	selectable,
+		zypp::Package::constPtr 	pkg,
+		const QRegExp & 		regexp );
 
     /**
      * Check if a single pkg attribute matches the search criteria.

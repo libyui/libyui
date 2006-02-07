@@ -91,7 +91,7 @@ YQPkgList::~YQPkgList()
 void YQPkgList::addPkgItem( zypp::ui::Selectable::Ptr	selectable,
 			    zypp::Package::constPtr	zyppPkg )
 {
-    addPkgItem( selectable, zyppPkg, false );	
+    addPkgItem( selectable, zyppPkg, false );
 }
 
 
@@ -643,7 +643,7 @@ YQPkgListItem::paintCell( QPainter *		painter,
     {
 	QColorGroup cg = colorGroup;
 	cg.setColor( QColorGroup::Text, QColor( 0xA0, 0xA0, 0xA0 ) );
-	
+
 	QListViewItem::paintCell( painter, cg, column, width, alignment );
     }
     else

@@ -118,8 +118,8 @@ YQPkgRpmGroupTagsFilterView::filter()
 	    // entries for the same package!
 
 	    bool match =
-		check( selectable->candidateObj() ) ||
-		check( selectable->installedObj() );
+		check( selectable, selectable->candidateObj() ) ||
+		check( selectable, selectable->installedObj() );
 
 	    // If there is neither an installed nor a candidate package, check
 	    // any other instance.
@@ -127,7 +127,7 @@ YQPkgRpmGroupTagsFilterView::filter()
 	    if ( ! match			&&
 		 ! selectable->candidateObj()   &&
 		 ! selectable->installedObj()	  )
-		check( selectable->theObj() );
+		check( selectable, selectable->theObj() );
 
 	    ++it;
 	}
@@ -138,14 +138,15 @@ YQPkgRpmGroupTagsFilterView::filter()
 
 
 bool
-YQPkgRpmGroupTagsFilterView::check( zypp::Package::constPtr pkg )
+YQPkgRpmGroupTagsFilterView::check( zypp::ui::Selectable::Ptr	selectable,
+				    zypp::Package::constPtr	pkg )
 {
     if ( ! pkg || ! selection() )
 	return false;
 
     if ( selection()->rpmGroup() == 0 )	// Special case: All packages
     {
-	emit filterMatch( pkg );
+	emit filterMatch( selectable, pkg );
 	return true;
     }
 
@@ -158,7 +159,7 @@ YQPkgRpmGroupTagsFilterView::check( zypp::Package::constPtr pkg )
 
     if ( pkg->group_ptr()->isChildOf( selection()->rpmGroup() ) )
     {
-	emit filterMatch( pkg );
+	emit filterMatch( selectable, pkg );
 	return true;
     }
 

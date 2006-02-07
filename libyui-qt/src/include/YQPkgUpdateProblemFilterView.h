@@ -74,7 +74,8 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( zypp::Package::constPtr pkg );
+    void filterMatch( zypp::ui::Selectable::Ptr	selectable,
+		      zypp::Package::constPtr	pkg );
 
     /**
      * Emitted when filtering is finished.

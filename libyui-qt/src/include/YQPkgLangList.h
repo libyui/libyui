@@ -71,7 +71,8 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addLangItem( PMLanguagePtr lang );
+    void addLangItem( zypp::ui::Selectable::Ptr	selectable,
+		      PMLanguagePtr 		lang );
 
     /**
      * Emit an updatePackages() signal.
@@ -104,7 +105,8 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( zypp::Package::constPtr pkg );
+    void filterMatch( zypp::ui::Selectable::Ptr	selectable,
+		      zypp::Package::constPtr	pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -130,7 +132,9 @@ public:
      * Constructor. Creates a YQPkgLangList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgLangListItem( YQPkgLangList * pkgSelList, PMLanguagePtr lang );
+    YQPkgLangListItem( YQPkgLangList *			pkgSelList,
+		       zypp::ui::Selectable::Ptr	selectable,
+		       PMLanguagePtr			lang );
 
     /**
      * Destructor
@@ -140,12 +144,7 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    PMLanguagePtr pmLang() { return _pmLang; }
-
-    /**
-     * Returns the original object within the package manager backend.
-     **/
-    const PMLanguagePtr constPmLang() const { return _pmLang; }
+    PMLanguagePtr pmLang() const { return _pmLang; }
 
     /**
      * Set the selection status.

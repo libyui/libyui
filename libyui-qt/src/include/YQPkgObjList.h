@@ -133,7 +133,7 @@ public slots:
      * forgotten to implement!
      **/
     void addPkgObjItem( zypp::ui::Selectable::Ptr	selectable,
-			zypp::ResObject::constPtr 		zyppObj = 0 );
+			zypp::ResObject::constPtr 	zyppObj = 0 );
 
     /**
      * Add a purely passive list item that has a name and optional summary and

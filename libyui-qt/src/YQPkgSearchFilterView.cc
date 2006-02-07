@@ -259,18 +259,21 @@ YQPkgSearchFilterView::filter()
 
 
 bool
-YQPkgSearchFilterView::check( zypp::Package::constPtr pkg )
+YQPkgSearchFilterView::check(  zypp::ui::Selectable::Ptr	selectable,
+			       zypp::Package::constPtr 		pkg )
 {
     QRegExp regexp = _searchText->currentText();
     regexp.setCaseSensitive( _caseSensitive->isChecked() );
     regexp.setWildcard( _searchMode->currentItem() == UseWildcards );
 
-    return check( pkg, regexp );
+    return check( selectable, pkg, regexp );
 }
 
 
 bool
-YQPkgSearchFilterView::check( zypp::Package::constPtr pkg, const QRegExp & regexp )
+YQPkgSearchFilterView::check( zypp::ui::Selectable	selectable,
+			      zypp::Package::constPtr 	pkg,
+			      const QRegExp & 		regexp )
 {
     if ( ! pkg )
 	return false;
@@ -285,7 +288,7 @@ YQPkgSearchFilterView::check( zypp::Package::constPtr pkg, const QRegExp & regex
     if ( match )
     {
 	_matchCount++;
-	emit filterMatch( pkg );
+	emit filterMatch( selectable, pkg );
     }
 
     return match;

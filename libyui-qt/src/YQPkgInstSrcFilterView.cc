@@ -64,11 +64,11 @@ YQPkgInstSrcFilterView::YQPkgInstSrcFilterView( QWidget * parent )
 
     // Redirect filterMatch() and filterNearMatch() signals to secondary filter
 
-    connect( _instSrcList,	SIGNAL( filterMatch		( zypp::Package::constPtr ) ),
-	     this,		SLOT  ( primaryFilterMatch	( zypp::Package::constPtr ) ) );
+    connect( _instSrcList,	SIGNAL( filterMatch		( zypp::ui::Selectable::Ptr, zypp::Package::constPtr ) ),
+	     this,		SLOT  ( primaryFilterMatch	( zypp::ui::Selectable::Ptr, zypp::Package::constPtr ) ) );
 
-    connect( _instSrcList,	SIGNAL( filterNearMatch		( zypp::Package::constPtr ) ),
-	     this,		SLOT  ( primaryFilterNearMatch	( zypp::Package::constPtr ) ) );
+    connect( _instSrcList,	SIGNAL( filterNearMatch		( zypp::ui::Selectable::Ptr, zypp::Package::constPtr ) ),
+	     this,		SLOT  ( primaryFilterNearMatch	( zypp::ui::Selectable::Ptr, zypp::Package::constPtr ) ) );
 
 #if 0
     QWidget * secondary_filters =
@@ -171,14 +171,14 @@ void YQPkgInstSrcFilterView::filterIfVisible()
 }
 
 
-void YQPkgInstSrcFilterView::primaryFilterMatch( zypp::Package::constPtr pkg )
+void YQPkgInstSrcFilterView::primaryFilterMatch( zypp::ui::Selectable::Ptr, zypp::Package::constPtr pkg )
 {
     if ( secondaryFilterMatch( pkg ) )
 	emit filterMatch( pkg );
 }
 
 
-void YQPkgInstSrcFilterView::primaryFilterNearMatch( zypp::Package::constPtr pkg )
+void YQPkgInstSrcFilterView::primaryFilterNearMatch( zypp::ui::Selectable::Ptr, zypp::Package::constPtr pkg )
 {
     if ( secondaryFilterMatch( pkg ) )
 	emit filterNearMatch( pkg );
@@ -186,7 +186,7 @@ void YQPkgInstSrcFilterView::primaryFilterNearMatch( zypp::Package::constPtr pkg
 
 
 bool
-YQPkgInstSrcFilterView::secondaryFilterMatch( zypp::Package::constPtr pkg )
+YQPkgInstSrcFilterView::secondaryFilterMatch( zypp::ui::Selectable::Ptr, zypp::Package::constPtr pkg )
 {
     if ( _allPackages->isVisible() )
     {
