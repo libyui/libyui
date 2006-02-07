@@ -59,8 +59,6 @@ YQPkgDescriptionView::showDetails( zypp::ResObject::constPtr zyppObj )
     // y2debug( "Showing description for package %s", name.c_str() );
 
 
-    // Add all lines of the package description
-
     QString description = fromUTF8( zyppObj->description() );
 
     if ( ! description.contains( "<!-- DT:Rich -->" ) )

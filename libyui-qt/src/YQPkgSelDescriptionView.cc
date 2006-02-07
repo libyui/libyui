@@ -61,52 +61,12 @@ YQPkgSelDescriptionView::showDetails( zypp::ResObject::constPtr zyppObj )
     string name = zyppObj->name();
     // y2debug( "Showing description for package %s", name.c_str() );
 
+    QString description = fromUTF8( zyppObj->description() );
 
-    // Add all lines of the package description
+    if ( ! description.contains( "<!-- DT:Rich -->" ) )
+	description = simpleHtmlParagraphs( description );
 
-    bool auto_format  = true;
-    bool preformatted = false;
-    list<string> description = zyppObj->description();
-    list<string>::const_iterator it = description.begin();
-
-    if ( it != description.end()
-	 && *it == "<!-- DT:Rich -->" )	// Special doctype for preformatted HTML
-    {
-	preformatted = true;
-	++it;					// Discard doctype line
-    }
-
-
-    while ( it != description.end() )
-    {
-	QString line = fromUTF8( *it );
-
-	if ( preformatted )
-	{
-	    html_text += line + "\n";
-	}
-	else
-	{
-	    line = htmlEscape( line );
-
-	    if ( auto_format )
-	    {
-		if ( line.length() == 0 )	// Empty lines mean new paragraph
-		    html_text += "</p><p>";
-		else
-		    html_text += " " + line;
-	    }
-	    else
-	    {
-		html_text += line + "<br>";
-	    }
-	}
-
-	++it;
-    }
-
-    if ( ! preformatted )
-	html_text += "</p>";
+    html_text += description;
 
     setTextFormat( Qt::RichText );
     setText( html_text );
@@ -118,12 +78,12 @@ YQPkgSelDescriptionView::showDetails( zypp::ResObject::constPtr zyppObj )
 QString
 YQPkgSelDescriptionView::htmlHeading( zypp::ResObject::constPtr zyppObj )
 {
-    zypp::Selection::constPtr sel = zyppObj;
+    zypp::Selection::constPtr sel = zypp::dynamic_pointer_cast<const zypp::Selection>( zyppObj );
 
     if ( ! sel )
 	return YQPkgGenericDetailsView::htmlHeading( zyppObj );
     
-    QString summary = fromUTF8( sel->summary( Y2PM::getPreferredLocale() ) );
+    QString summary = fromUTF8( sel->summary() );
     bool useBigFont = ( summary.length() <= 40 );
 
     if ( summary.isEmpty() )
