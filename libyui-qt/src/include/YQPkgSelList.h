@@ -24,6 +24,7 @@
 
 #include <YQPkgObjList.h>
 #include <zypp/Selection.h>
+#include <zypp/Package.h>
 
 
 class YQPkgSelListItem;
@@ -75,7 +76,8 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addPkgSelItem( zypp::Selection::constPtr sel );
+    void addPkgSelItem( zypp::ui::Selectable::Ptr	selectable,
+			zypp::Selection::constPtr 	selection );
 
     /**
      * Emit an updatePackages() signal.
@@ -118,7 +120,8 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( zypp::Package::constPtr pkg );
+    void filterMatch( zypp::ui::Selectable::Ptr	selectable,
+		      zypp::Package::constPtr	pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -136,7 +139,9 @@ public:
      * Constructor. Creates a YQPkgSelList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgSelListItem( YQPkgSelList * pkgSelList, zypp::Selection::constPtr sel );
+    YQPkgSelListItem( YQPkgSelList * 		pkgSelList,
+		      zypp::ui::Selectable::Ptr	selectable,
+		      zypp::Selection::constPtr sel );
 
     /**
      * Destructor
@@ -146,12 +151,7 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    zypp::Selection::constPtr zyppSel() { return _zyppSel; }
-
-    /**
-     * Returns the original object within the package manager backend.
-     **/
-    const zypp::Selection::constPtr constPmSel() const { return _zyppSel; }
+    zypp::Selection::constPtr zyppSel() const { return _zyppSel; }
 
     /**
      * Set the selection status.
@@ -161,7 +161,6 @@ public:
      * status change.
      **/
     virtual void setStatus( zypp::ui::Status newStatus );
-
 
     /**
      * Comparison function used for sorting the list.
@@ -188,7 +187,7 @@ protected:
     // Data members
 
     YQPkgSelList	*	_pkgSelList;
-    zypp::Selection::constPtr		_zyppSel;
+    zypp::Selection::constPtr	_zyppSel;
 };
 
 

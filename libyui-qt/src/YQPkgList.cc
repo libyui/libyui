@@ -41,7 +41,11 @@ YQPkgList::YQPkgList( QWidget * parent )
     : YQPkgObjList( parent )
 {
     _srpmStatusCol	= -42;
+#ifdef MISSING
     int installedPkgs	= Y2PM::instTarget().numPackages();
+#else
+    int installedPkgs	= 0;
+#endif
 
     int numCol = 0;
     addColumn( "" );			_statusCol	= numCol++;
@@ -84,28 +88,32 @@ YQPkgList::~YQPkgList()
 }
 
 
-void YQPkgList::addPkgItem( zypp::Package::constPtr zyppPkg )
+void YQPkgList::addPkgItem( zypp::ui::Selectable::Ptr	selectable,
+			    zypp::Package::constPtr	zyppPkg )
 {
-    addPkgItem( zyppPkg, false );	
+    addPkgItem( selectable, zyppPkg, false );	
 }
 
 
-void YQPkgList::addPkgItemDimmed( zypp::Package::constPtr zyppPkg )
+void YQPkgList::addPkgItemDimmed( zypp::ui::Selectable::Ptr	selectable,
+				  zypp::Package::constPtr 	zyppPkg )
 {
-    addPkgItem( zyppPkg, true );
+    addPkgItem( selectable, zyppPkg, true );
 }
 
 
 void
-YQPkgList::addPkgItem( zypp::Package::constPtr zyppPkg, bool dimmed )
+YQPkgList::addPkgItem( zypp::ui::Selectable::Ptr	selectable,
+		       zypp::Package::constPtr 		zyppPkg,
+		       bool 				dimmed )
 {
-    if ( ! zyppPkg )
+    if ( ! selectable )
     {
-	y2error( "Null zypp::Package !" );
+	y2error( "NULL zypp::ui::Selectable!" );
 	return;
     }
 
-    YQPkgListItem * item = new YQPkgListItem( this, zyppPkg );
+    YQPkgListItem * item = new YQPkgListItem( this, selectable, zyppPkg );
     CHECK_PTR( item );
 
     item->setDimmed( dimmed );
@@ -283,22 +291,22 @@ void
 YQPkgList::createActions()
 {
     actionInstallSourceRpm		= createAction( _( "&Install Source" ),
-							statusIcon( S_Install, true ),
-							statusIcon( S_Install, false ) );
+							statusIcon( zypp::ui::S_Install, true ),
+							statusIcon( zypp::ui::S_Install, false ) );
 
     actionDontInstallSourceRpm		= createAction( _( "Do &Not Install Source" ),
-							statusIcon( S_NoInst, true ),
-							statusIcon( S_NoInst, false ) );
+							statusIcon( zypp::ui::S_NoInst, true ),
+							statusIcon( zypp::ui::S_NoInst, false ) );
 
     actionInstallListSourceRpms		= createAction( _( "&Install All Available Sources" ),
-							statusIcon( S_Install, true ),
-							statusIcon( S_Install, false ),
+							statusIcon( zypp::ui::S_Install, true ),
+							statusIcon( zypp::ui::S_Install, false ),
 							QString::null,		// key
 							true );			// enabled
 
     actionDontInstallListSourceRpms	= createAction( _( "Do &Not Install Any Sources" ),
-							statusIcon( S_NoInst, true ),
-							statusIcon( S_NoInst, false ),
+							statusIcon( zypp::ui::S_NoInst, true ),
+							statusIcon( zypp::ui::S_NoInst, false ),
 							QString::null,		// key
 							true );			// enabled
 
@@ -401,14 +409,16 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
 
 
 
-YQPkgListItem::YQPkgListItem( YQPkgList * pkgList, zypp::Package::constPtr zyppPkg )
-    : YQPkgObjListItem( pkgList, zyppPkg )
+YQPkgListItem::YQPkgListItem( YQPkgList * 		pkgList,
+			      zypp::ui::Selectable::Ptr	selectable,
+			      zypp::Package::constPtr 	zyppPkg )
+    : YQPkgObjListItem( pkgList, selectable, zyppPkg )
     , _pkgList( pkgList )
     , _zyppPkg( zyppPkg )
     , _dimmed( false )
 {
-    CHECK_PTR( zyppPkg );
-    CHECK_PTR( pkgList );
+    if ( ! _zyppPkg )
+	_zyppPkg = zypp::dynamic_pointer_cast<const zypp::Package>( selectable->theObj() );
 
     setSourceRpmIcon();
 }
@@ -431,23 +441,31 @@ YQPkgListItem::updateData()
 bool
 YQPkgListItem::hasSourceRpm() const
 {
-    if ( ! _selectable )
+    if ( ! selectable() )
 	return false;
 
-    return _selectable->providesSources();
+#ifdef MISSING
+    return selectable()->providesSources();
+#else
+    return false;
+#endif
 }
 
 
 bool
 YQPkgListItem::installSourceRpm() const
 {
-    if ( ! _selectable )
+    if ( ! selectable() )
 	return false;
 
-    if ( ! _selectable->providesSources() )
+#ifdef MISSING
+    if ( ! selectable()->providesSources() )
 	return false;
 
-    return _selectable->source_install();
+    return selectable()->source_install();
+#else
+    return false;
+#endif
 }
 
 
@@ -485,8 +503,10 @@ YQPkgListItem::setInstallSourceRpm( bool installSourceRpm )
 {
     if ( hasSourceRpm() )
     {
-	if ( _selectable )
-	    _selectable->set_source_install( installSourceRpm );
+#ifdef MISSING
+	if ( selectable() )
+	    selectable()->set_source_install( installSourceRpm );
+#endif
     }
 
     setSourceRpmIcon();
@@ -504,7 +524,7 @@ QString
 YQPkgListItem::toolTip( int col )
 {
     QString text;
-    QString name = _zyppObj->name().asString().c_str();
+    QString name = _zyppObj->name().c_str();
 
     if ( col == statusCol() )
     {
@@ -532,26 +552,26 @@ YQPkgListItem::toolTip( int col )
 	QString installed;
 	QString candidate;
 
-	if ( _zyppObj->hasInstalledObj() )
+	if ( selectable()->hasInstalledObj() )
 	{
-	    installed  = _zyppObj->getInstalledObj()->edition().asString().c_str();
+	    installed  = selectable()->installedObj()->edition().asString().c_str();
 	    installed += "-";
-	    installed +=  _zyppObj->getInstalledObj()->arch().asString().c_str();
+	    installed +=  selectable()->installedObj()->arch().asString().c_str();
 	    installed  = _( "Installed Version: %1" ).arg( installed );
 	}
 
-	if (  _zyppObj->hasCandidateObj() )
+	if (  selectable()->hasCandidateObj() )
 	{
-	    candidate  = _zyppObj->getCandidateObj()->edition().asString().c_str();
+	    candidate  = selectable()->candidateObj()->edition().asString().c_str();
 	    candidate += "-";
-	    candidate +=  _zyppObj->getCandidateObj()->arch().asString().c_str();
+	    candidate +=  selectable()->candidateObj()->arch().asString().c_str();
 	}
 
-	if ( _zyppObj->hasInstalledObj() )
+	if ( selectable()->hasInstalledObj() )
 	{
 	    text += installed + "\n";
 
-	    if ( _zyppObj->hasCandidateObj() )
+	    if ( selectable()->hasCandidateObj() )
 	    {
 		// Translators: This is the relation between two versions of one package
 		// if both versions are the same, e.g., both "1.2.3-42", "1.2.3-42"

@@ -77,18 +77,22 @@ public slots:
      * slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addPkgItem( zypp::Package::constPtr zyppPkg );
+    void addPkgItem( zypp::ui::Selectable::Ptr	selectable,
+		     zypp::Package::constPtr	zyppPkg	);
     
     /**
      * Add a pkg to the list, but display it dimmed (grey text foreground
      * rather than normal black). 
      **/
-    void addPkgItemDimmed( zypp::Package::constPtr zyppPkg );
+    void addPkgItemDimmed( zypp::ui::Selectable::Ptr	selectable,
+			   zypp::Package::constPtr 	zyppPkg );
 
     /**
      * Add a pkg to the list
      **/
-    void addPkgItem( zypp::Package::constPtr zyppPkg, bool dimmed );
+    void addPkgItem( zypp::ui::Selectable::Ptr	selectable,
+		     zypp::Package::constPtr	zyppPkg,
+		     bool 			dimmed );
 
 
     /**
@@ -197,7 +201,9 @@ public:
      * Constructor. Creates a YQPkgList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgListItem( YQPkgList * pkgList, zypp::Package::constPtr zyppPkg );
+    YQPkgListItem( YQPkgList *			pkgList,
+		   zypp::ui::Selectable::Ptr	selectable,
+		   zypp::Package::constPtr 	zyppPkg );
 
     /**
      * Destructor
@@ -212,12 +218,7 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    zypp::Package::constPtr zyppPkg() { return _zyppPkg; }
-
-    /**
-     * Returns the original object within the package manager backend.
-     **/
-    const zypp::Package::constPtr constPMPkg() const { return _zyppPkg; }
+    zypp::Package::constPtr zyppPkg() const { return _zyppPkg; }
 
     /**
      * Returns the source RPM package status:
@@ -309,9 +310,9 @@ protected:
 
     // Data members
 
-    YQPkgList *		_pkgList;
+    YQPkgList *			_pkgList;
     zypp::Package::constPtr	_zyppPkg;
-    bool		_dimmed;
+    bool			_dimmed;
 };
 
 

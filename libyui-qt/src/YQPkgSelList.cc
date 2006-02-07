@@ -66,22 +66,24 @@ YQPkgSelList::fillList()
     clear();
     y2debug( "Filling selection list" );
 
+#ifdef MISSING
     PMManager::SelectableVec::const_iterator it = Y2PM::selectionManager().begin();
 
     while ( it != Y2PM::selectionManager().end() )
     {
-	zypp::Selection::constPtr sel = ( *it)->theObj();
+	zypp::Selection::constPtr pkgSel = (*it)->theObj();
 
-	if ( sel )
+	if ( pkgSel )
 	{
-	    if ( sel->visible() && ! sel->isBase() )
+	    if ( pkgSel->visible() && ! pkgSel->isBase() )
 	    {
-		addPkgSelItem( sel );
+		addPkgSelItem( selectable, sel );
 	    }
 	}
 
 	++it;
     }
+#endif
 
     y2debug( "Selection list filled" );
 }
@@ -106,14 +108,16 @@ YQPkgSelList::filter()
 
 	if ( sel )
 	{
+#if 0
 	    set<Selectable::Ptr> slcList = sel->inspacks_ptrs();
 	    set<Selectable::Ptr>::const_iterator it = slcList.begin();
 
 	    while ( it != slcList.end() )
 	    {
-		emit filterMatch( ( *it)->theObj() );
+		emit filterMatch( (*it), (*it)->theObj() );
 		++it;
 	    }
+#endif
 	}
     }
 
@@ -122,15 +126,16 @@ YQPkgSelList::filter()
 
 
 void
-YQPkgSelList::addPkgSelItem( zypp::Selection::constPtr zyppSel )
+YQPkgSelList::addPkgSelItem( zypp::ui::Selectable::Ptr	selectable,
+			     zypp::Selection::constPtr	zyppSel )
 {
-    if ( ! zyppSel )
+    if ( ! selectable )
     {
-	y2error( "NULL zypp::Selection!" );
+	y2error( "NULL zypp::ui::Selectable!" );
 	return;
     }
 
-    new YQPkgSelListItem( this, zyppSel );
+    new YQPkgSelListItem( this, selectable, zyppSel );
 }
 
 
@@ -149,7 +154,9 @@ YQPkgSelList::selection() const
 void
 YQPkgSelList::applyChanges()
 {
+#ifdef MISSING
     Y2PM::selectionManager().activate( Y2PM::packageManager() );
+#endif
     emit updatePackages();
 }
 
@@ -158,14 +165,26 @@ YQPkgSelList::applyChanges()
 
 
 
-YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList * pkgSelList, zypp::Selection::constPtr pkgSel )
-    : YQPkgObjListItem( pkgSelList, pkgSel )
+YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList * 		pkgSelList,
+				    zypp::ui::Selectable::Ptr	selectable,
+				    zypp::Selection::constPtr 	pkgSel )
+    : YQPkgObjListItem( pkgSelList, selectable, pkgSel )
     , _pkgSelList( pkgSelList )
     , _zyppSel( pkgSel )
 {
+    if ( ! _zyppSel )
+	_zyppSel = zypp::dynamic_pointer_cast<const zypp::Selection>( selectable->theObj() );
+    
+#ifdef MISSING
     QString text = fromUTF8( _zyppSel->summary( Y2PM::getPreferredLocale() ) );
+#else
+    QString text = fromUTF8( _zyppSel->summary() );
+#endif
+
+    // You don't want to know why we need this.
     text.replace( QRegExp( "Graphical Basis System" ), "Graphical Base System" );
     text.replace( QRegExp( "Gnome" ), "GNOME" );
+    
     setText( summaryCol(), text );
 
     setStatusIcon();
