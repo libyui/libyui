@@ -188,16 +188,16 @@ YQPkgStatusFilterView::check( zypp::Package::Ptr pkg )
 
     switch ( pkg->getSelectable()->status() )
     {
-	case Selectable::S_AutoDel:		match = _showAutoDel->isChecked();		break;
-	case Selectable::S_AutoInstall:	match = _showAutoInstall->isChecked();		break;
-	case Selectable::S_AutoUpdate:	match = _showAutoUpdate->isChecked();		break;
-	case Selectable::S_Del:		match = _showDel->isChecked();			break;
-	case Selectable::S_Install:		match = _showInstall->isChecked();		break;
-	case Selectable::S_KeepInstalled:	match = _showKeepInstalled->isChecked();	break;
-	case Selectable::S_NoInst:		match = _showNoInst->isChecked();		break;
-	case Selectable::S_Protected:		match = _showProtected->isChecked();		break;
-	case Selectable::S_Taboo:		match = _showTaboo->isChecked();		break;
-	case Selectable::S_Update:		match = _showUpdate->isChecked();		break;
+	case Status::S_AutoDel:		match = _showAutoDel->isChecked();		break;
+	case Status::S_AutoInstall:	match = _showAutoInstall->isChecked();		break;
+	case Status::S_AutoUpdate:	match = _showAutoUpdate->isChecked();		break;
+	case Status::S_Del:		match = _showDel->isChecked();			break;
+	case Status::S_Install:		match = _showInstall->isChecked();		break;
+	case Status::S_KeepInstalled:	match = _showKeepInstalled->isChecked();	break;
+	case Status::S_NoInst:		match = _showNoInst->isChecked();		break;
+	case Status::S_Protected:		match = _showProtected->isChecked();		break;
+	case Status::S_Taboo:		match = _showTaboo->isChecked();		break;
+	case Status::S_Update:		match = _showUpdate->isChecked();		break;
 
 	    // Intentionally omitting 'default' branch so the compiler can
 	    // catch unhandled enum states

@@ -183,22 +183,22 @@ public slots:
 
     // Direct access to some states for menu actions
 
-    void setCurrentInstall()	   { setCurrentStatus( Selectable::S_Install	     	); }
-    void setCurrentDontInstall()   { setCurrentStatus( Selectable::S_NoInst	     	); }
-    void setCurrentKeepInstalled() { setCurrentStatus( Selectable::S_KeepInstalled	); }
-    void setCurrentDelete()	   { setCurrentStatus( Selectable::S_Del	     	); }
-    void setCurrentUpdate()	   { setCurrentStatus( Selectable::S_Update	     	); }
-    void setCurrentTaboo()	   { setCurrentStatus( Selectable::S_Taboo	     	); }
-    void setCurrentProtected()	   { setCurrentStatus( Selectable::S_Protected		); }
+    void setCurrentInstall()	   { setCurrentStatus( Status::S_Install	     	); }
+    void setCurrentDontInstall()   { setCurrentStatus( Status::S_NoInst	     	); }
+    void setCurrentKeepInstalled() { setCurrentStatus( Status::S_KeepInstalled	); }
+    void setCurrentDelete()	   { setCurrentStatus( Status::S_Del	     	); }
+    void setCurrentUpdate()	   { setCurrentStatus( Status::S_Update	     	); }
+    void setCurrentTaboo()	   { setCurrentStatus( Status::S_Taboo	     	); }
+    void setCurrentProtected()	   { setCurrentStatus( Status::S_Protected		); }
 
-    void setListInstall()	   { setAllItemStatus( Selectable::S_Install		); }
-    void setListDontInstall()	   { setAllItemStatus( Selectable::S_NoInst		); }
-    void setListKeepInstalled()	   { setAllItemStatus( Selectable::S_KeepInstalled	); }
-    void setListDelete()	   { setAllItemStatus( Selectable::S_Del		); }
-    void setListUpdate()	   { setAllItemStatus( Selectable::S_Update		); }
-    void setListUpdateForce()	   { setAllItemStatus( Selectable::S_Update, true  	); }
-    void setListTaboo()		   { setAllItemStatus( Selectable::S_Taboo		); }
-    void setListProtected()	   { setAllItemStatus( Selectable::S_Protected     	); }
+    void setListInstall()	   { setAllItemStatus( Status::S_Install		); }
+    void setListDontInstall()	   { setAllItemStatus( Status::S_NoInst		); }
+    void setListKeepInstalled()	   { setAllItemStatus( Status::S_KeepInstalled	); }
+    void setListDelete()	   { setAllItemStatus( Status::S_Del		); }
+    void setListUpdate()	   { setAllItemStatus( Status::S_Update		); }
+    void setListUpdateForce()	   { setAllItemStatus( Status::S_Update, true  	); }
+    void setListTaboo()		   { setAllItemStatus( Status::S_Taboo		); }
+    void setListProtected()	   { setAllItemStatus( Status::S_Protected     	); }
 
 
 protected slots:
