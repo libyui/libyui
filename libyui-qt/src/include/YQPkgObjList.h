@@ -24,7 +24,7 @@
 
 #include <qpixmap.h>
 #include <QY2ListView.h>
-#include <zypp/Object.h>
+#include <zypp/ResObject.h>
 #include <zypp/ui/Selectable.h>
 #include <y2util/FSize.h>
 
