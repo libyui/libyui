@@ -431,27 +431,23 @@ YQPkgListItem::updateData()
 bool
 YQPkgListItem::hasSourceRpm() const
 {
-    Selectable::Ptr sel = _zyppPkg->getSelectable();
-
-    if ( ! sel )
+    if ( ! _selectable )
 	return false;
 
-    return sel->providesSources();
+    return _selectable->providesSources();
 }
 
 
 bool
 YQPkgListItem::installSourceRpm() const
 {
-    Selectable::Ptr sel = _zyppPkg->getSelectable();
-
-    if ( ! sel )
+    if ( ! _selectable )
 	return false;
 
-    if ( ! sel->providesSources() )
+    if ( ! _selectable->providesSources() )
 	return false;
 
-    return sel->source_install();
+    return _selectable->source_install();
 }
 
 
@@ -489,10 +485,8 @@ YQPkgListItem::setInstallSourceRpm( bool installSourceRpm )
 {
     if ( hasSourceRpm() )
     {
-	Selectable::Ptr sel = _zyppPkg->getSelectable();
-
-	if ( sel )
-	    sel->set_source_install( installSourceRpm );
+	if ( _selectable )
+	    _selectable->set_source_install( installSourceRpm );
     }
 
     setSourceRpmIcon();

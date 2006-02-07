@@ -26,6 +26,7 @@
 #include <QY2ListView.h>
 #include <zypp/ResObject.h>
 #include <zypp/ui/Selectable.h>
+#include <zypp/ui/Status.h>
 #include <y2util/FSize.h>
 
 class YQPkgObjListItem;
@@ -123,11 +124,15 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      *
+     * 'zyppObj' has to be one of the objects of 'selectable'. If it is 0,
+     * selectable->theObject() will be used.  
+     *
      * Intentionally NOT named addItem() so the calling class cannot confuse
      * this method with overlaid methods of the same name that were simply
      * forgotten to implement!
      **/
-    void addPkgObjItem( zypp::ResObject::Ptr zyppObj );
+    void addPkgObjItem( zypp::ui::Selectable selectable,
+			zypp::ResObject::Ptr zyppObj = 0 );
 
     /**
      * Add a purely passive list item that has a name and optional summary and
@@ -183,22 +188,22 @@ public slots:
 
     // Direct access to some states for menu actions
 
-    void setCurrentInstall()	   { setCurrentStatus( S_Install	); }
-    void setCurrentDontInstall()   { setCurrentStatus( S_NoInst	     	); }
-    void setCurrentKeepInstalled() { setCurrentStatus( S_KeepInstalled	); }
-    void setCurrentDelete()	   { setCurrentStatus( S_Del	     	); }
-    void setCurrentUpdate()	   { setCurrentStatus( S_Update	     	); }
-    void setCurrentTaboo()	   { setCurrentStatus( S_Taboo	     	); }
-    void setCurrentProtected()	   { setCurrentStatus( S_Protected	); }
+    void setCurrentInstall()	   { setCurrentStatus( zypp::ui::S_Install		); }
+    void setCurrentDontInstall()   { setCurrentStatus( zypp::ui::S_NoInst	     	); }
+    void setCurrentKeepInstalled() { setCurrentStatus( zypp::ui::S_KeepInstalled	); }
+    void setCurrentDelete()	   { setCurrentStatus( zypp::ui::S_Del	     		); }
+    void setCurrentUpdate()	   { setCurrentStatus( zypp::ui::S_Update	     	); }
+    void setCurrentTaboo()	   { setCurrentStatus( zypp::ui::S_Taboo	     	); }
+    void setCurrentProtected()	   { setCurrentStatus( zypp::ui::S_Protected		); }
 
-    void setListInstall()	   { setAllItemStatus( S_Install	); }
-    void setListDontInstall()	   { setAllItemStatus( S_NoInst		); }
-    void setListKeepInstalled()	   { setAllItemStatus( S_KeepInstalled	); }
-    void setListDelete()	   { setAllItemStatus( S_Del		); }
-    void setListUpdate()	   { setAllItemStatus( S_Update		); }
-    void setListUpdateForce()	   { setAllItemStatus( S_Update, true  	); }
-    void setListTaboo()		   { setAllItemStatus( S_Taboo		); }
-    void setListProtected()	   { setAllItemStatus( S_Protected     	); }
+    void setListInstall()	   { setAllItemStatus( zypp::ui::S_Install		); }
+    void setListDontInstall()	   { setAllItemStatus( zypp::ui::S_NoInst		); }
+    void setListKeepInstalled()	   { setAllItemStatus( zypp::ui::S_KeepInstalled	); }
+    void setListDelete()	   { setAllItemStatus( zypp::ui::S_Del			); }
+    void setListUpdate()	   { setAllItemStatus( zypp::ui::S_Update		); }
+    void setListUpdateForce()	   { setAllItemStatus( zypp::ui::S_Update, true  	); }
+    void setListTaboo()		   { setAllItemStatus( zypp::ui::S_Taboo		); }
+    void setListProtected()	   { setAllItemStatus( zypp::ui::S_Protected     	); }
 
 
 protected slots:
@@ -324,15 +329,28 @@ class YQPkgObjListItem: public QY2ListViewItem
 public:
 
     /**
-     * Constructor. Creates a YQPkgObjList item that corresponds to the package
-     * manager object that 'pkg' refers to.
+     * Constructor. Creates a YQPkgObjList item that corresponds to the ZYPP selectable
+     * that 'selectable' refers to. 'zyppObj' has to be one object of 'selectable'.
+     * If it is 0, selectable->theObject() will be used.
      **/
-    YQPkgObjListItem( YQPkgObjList * pkgObjList, zypp::ResObject::Ptr zyppObj );
+    YQPkgObjListItem( YQPkgObjList *		pkgObjList,
+		      zypp::ui::Selectable::Ptr selectable,
+		      zypp::ResObject::Ptr	zyppObj = 0 );
 
     /**
      * Destructor
      **/
     virtual ~YQPkgObjListItem();
+
+    /**
+     * Returns the original selectable within the package manager backend.
+     **/
+    zypp::ui::Selectable::Ptr selectable() { return _selectable; }
+
+    /**
+     * Returns the original selectable within the package manager backend.
+     **/
+    const zypp::ui::Selectable::Ptr constSelectable() const { return _selectable; }
 
     /**
      * Returns the original object within the package manager backend.
@@ -493,6 +511,7 @@ protected:
     // Data members
 
     YQPkgObjList *		_pkgObjList;
+    zypp::ui::Selectable::Ptr	_selectable;
     zypp::ResObject::Ptr	_zyppObj;
     bool			_editable;
     bool			_candidateIsNewer;

@@ -81,15 +81,15 @@ YQPkgObjList::~YQPkgObjList()
 
 
 void
-YQPkgObjList::addPkgObjItem( zypp::ResObject::Ptr zyppObj )
+YQPkgObjList::addPkgObjItem( zypp::ui::Selectable::Ptr selectable, zypp::ResObject::Ptr zyppObj )
 {
-    if ( ! zyppObj )
+    if ( ! selectable )
     {
-	y2error( "Null zypp::ResObject!" );
+	y2error( "Null zypp::Selectable!" );
 	return;
     }
 
-    new YQPkgObjListItem( this, zyppObj );
+    new YQPkgObjListItem( this, selectable, zyppObj );
 }
 
 
@@ -177,13 +177,13 @@ YQPkgObjList::statusIcon( zypp::ui::Status status, bool enabled, bool bySelectio
     {
 	switch ( status )
 	{
-	    case S_Del:			icon = YQIconPool::pkgDel();		break;
-	    case S_Install:		icon = YQIconPool::pkgInstall();	break;
-	    case S_KeepInstalled:	icon = YQIconPool::pkgKeepInstalled();	break;
-	    case S_NoInst:		icon = YQIconPool::pkgNoInst();		break;
-	    case S_Protected:		icon = YQIconPool::pkgProtected();	break;
-	    case S_Taboo:		icon = YQIconPool::pkgTaboo();		break;
-	    case S_Update:		icon = YQIconPool::pkgUpdate();		break;
+	    case S_Del:			icon = YQIconPool::pkgDel();			break;
+	    case S_Install:		icon = YQIconPool::pkgInstall();		break;
+	    case S_KeepInstalled:	icon = YQIconPool::pkgKeepInstalled();		break;
+	    case S_NoInst:		icon = YQIconPool::pkgNoInst();			break;
+	    case S_Protected:		icon = YQIconPool::pkgProtected();		break;
+	    case S_Taboo:		icon = YQIconPool::pkgTaboo();			break;
+	    case S_Update:		icon = YQIconPool::pkgUpdate();			break;
 
 	    case S_AutoDel:		icon = bySelection ?
 						    YQIconPool::pkgSelAutoDel() :
@@ -206,13 +206,13 @@ YQPkgObjList::statusIcon( zypp::ui::Status status, bool enabled, bool bySelectio
     {
 	switch ( status )
 	{
-	    case S_Del:			icon = YQIconPool::disabledPkgDel();		break;
-	    case S_Install:		icon = YQIconPool::disabledPkgInstall();	break;
-	    case S_KeepInstalled:	icon = YQIconPool::disabledPkgKeepInstalled();	break;
-	    case S_NoInst:		icon = YQIconPool::disabledPkgNoInst();		break;
-	    case S_Protected:		icon = YQIconPool::disabledPkgProtected();	break;
-	    case S_Taboo:		icon = YQIconPool::disabledPkgTaboo();		break;
-	    case S_Update:		icon = YQIconPool::disabledPkgUpdate();		break;
+	    case S_Del:			icon = YQIconPool::disabledPkgDel();			break;
+	    case S_Install:		icon = YQIconPool::disabledPkgInstall();		break;
+	    case S_KeepInstalled:	icon = YQIconPool::disabledPkgKeepInstalled();		break;
+	    case S_NoInst:		icon = YQIconPool::disabledPkgNoInst();			break;
+	    case S_Protected:		icon = YQIconPool::disabledPkgProtected();		break;
+	    case S_Taboo:		icon = YQIconPool::disabledPkgTaboo();			break;
+	    case S_Update:		icon = YQIconPool::disabledPkgUpdate();			break;
 
 	    case S_AutoDel:		icon = bySelection ?
 						    YQIconPool::disabledPkgSelAutoDel() :
@@ -651,12 +651,18 @@ YQPkgObjList::message( const QString & text )
 
 
 
-YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList * pkgObjList, zypp::ResObject::Ptr pm_obj )
+YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList * pkgObjList,
+				    zypp::ui::Selectable::Ptr selectable,
+				    zypp::ResObject::Ptr zyppObj )
     : QY2ListViewItem( pkgObjList )
     , _pkgObjList( pkgObjList )
-    , _zyppObj( pm_obj )
+    , _selectable( selectable )
+    , _zyppObj( zyppObj )
     , _editable( true )
 {
+    if ( _zyppObj == 0 && _selectable )
+	_zyppObj = _selectable->theObject();
+
     init();
 }
 
@@ -676,13 +682,15 @@ YQPkgObjListItem::init()
     zypp::ResObject::Ptr candidate = _zyppObj->getCandidateObj();
     zypp::ResObject::Ptr installed = _zyppObj->getInstalledObj();
 
+#ifdef MISSING
     if ( candidate && installed && candidate->edition() != installed->edition() )
     {
-	if ( _zyppObj->getSelectable()->downgrade_condition() )
+	if ( _selectable->downgrade_condition() )
 	    _installedIsNewer = true;
 	else
 	    _candidateIsNewer = true;
     }
+#endif
 
 
     if ( nameCol()    >= 0 )	setText( nameCol(),	zyppObj()->name()		);
@@ -737,12 +745,10 @@ YQPkgObjListItem::setText( int column, const PkgEdition & edition )
 zypp::ui::Status
 YQPkgObjListItem::status() const
 {
-    Selectable::Ptr selectable = constZyppObj()->getSelectable();
-
-    if ( ! selectable )
+    if ( ! _selectable )
 	return S_NoInst;
 
-    return selectable->status();
+    return _selectable->status();
 }
 
 
@@ -751,7 +757,7 @@ YQPkgObjListItem::bySelection() const
 {
     bool bySel = false;
 
-    if ( _zyppObj->getSelectable() && _zyppObj->getSelectable()->by_appl() )
+    if ( _selectable()->by_appl() )
 	bySel = true;
 
     return bySel;
@@ -761,7 +767,7 @@ YQPkgObjListItem::bySelection() const
 void
 YQPkgObjListItem::setStatus( zypp::ui::Status newStatus )
 {
-    zyppObj()->getSelectable()->set_status( newStatus );
+    _selectable->set_status( newStatus );
     setStatusIcon();
 }
 
