@@ -94,7 +94,7 @@ YQPkgYouPatchList::fillList()
 	    switch ( _patchCategory )
 	    {
 		case InstallablePatches:
-		    if ( patch->installable() && status != Status::S_KeepInstalled )
+		    if ( patch->installable() && status != S_KeepInstalled )
 			addYouPatchItem( patch );
 		    break;
 
@@ -363,8 +363,8 @@ YQPkgYouPatchListItem::cycleStatus()
 {
     YQPkgObjListItem::cycleStatus();
 
-    if ( status() == Status::S_Del )	// Can't delete YOU patches
-	setStatus( Status::S_KeepInstalled );
+    if ( status() == S_Del )	// Can't delete YOU patches
+	setStatus( S_KeepInstalled );
 }
 
 

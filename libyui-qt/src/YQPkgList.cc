@@ -283,22 +283,22 @@ void
 YQPkgList::createActions()
 {
     actionInstallSourceRpm		= createAction( _( "&Install Source" ),
-							statusIcon( Status::S_Install, true ),
-							statusIcon( Status::S_Install, false ) );
+							statusIcon( S_Install, true ),
+							statusIcon( S_Install, false ) );
 
     actionDontInstallSourceRpm		= createAction( _( "Do &Not Install Source" ),
-							statusIcon( Status::S_NoInst, true ),
-							statusIcon( Status::S_NoInst, false ) );
+							statusIcon( S_NoInst, true ),
+							statusIcon( S_NoInst, false ) );
 
     actionInstallListSourceRpms		= createAction( _( "&Install All Available Sources" ),
-							statusIcon( Status::S_Install, true ),
-							statusIcon( Status::S_Install, false ),
+							statusIcon( S_Install, true ),
+							statusIcon( S_Install, false ),
 							QString::null,		// key
 							true );			// enabled
 
     actionDontInstallListSourceRpms	= createAction( _( "Do &Not Install Any Sources" ),
-							statusIcon( Status::S_NoInst, true ),
-							statusIcon( Status::S_NoInst, false ),
+							statusIcon( S_NoInst, true ),
+							statusIcon( S_NoInst, false ),
 							QString::null,		// key
 							true );			// enabled
 

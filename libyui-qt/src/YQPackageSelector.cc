@@ -1052,42 +1052,42 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 
 	    switch ( (*it)->status() )
 	    {
-		case Status::S_AutoDel:
-		case Status::S_NoInst:
-		case Status::S_Protected:
-		case Status::S_Taboo:
-		case Status::S_Del:
+		case S_AutoDel:
+		case S_NoInst:
+		case S_Protected:
+		case S_Taboo:
+		case S_Del:
 		    // Don't install the subpackage
 		    y2milestone( "Ignoring unwanted subpackage %s", (const char *) subPkgName );
 		    break;
 
-		case Status::S_AutoInstall:
-		case Status::S_Install:
-		case Status::S_KeepInstalled:
+		case S_AutoInstall:
+		case S_Install:
+		case S_KeepInstalled:
 
 		    // Install the subpackage, but don't try to update it
 
 		    if ( ! subPkg->installedObj() )
 		    {
-			subPkg->set_status( Status::S_Install );
+			subPkg->set_status( S_Install );
 			y2milestone( "Installing subpackage %s", (const char *) subPkgName );
 		    }
 		    break;
 
 
-		case Status::S_Update:
-		case Status::S_AutoUpdate:
+		case S_Update:
+		case S_AutoUpdate:
 
 		    // Install or update the subpackage
 
 		    if ( ! subPkg->installedObj() )
 		    {
-			subPkg->set_status( Status::S_Install );
+			subPkg->set_status( S_Install );
 			y2milestone( "Installing subpackage %s", (const char *) subPkgName );
 		    }
 		    else
 		    {
-			subPkg->set_status( Status::S_Update );
+			subPkg->set_status( S_Update );
 			y2milestone( "Updating subpackage %s", (const char *) subPkgName );
 		    }
 		    break;

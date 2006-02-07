@@ -177,23 +177,23 @@ YQPkgObjList::statusIcon( zypp::ui::Status status, bool enabled, bool bySelectio
     {
 	switch ( status )
 	{
-	    case Status::S_Del:			icon = YQIconPool::pkgDel();		break;
-	    case Status::S_Install:		icon = YQIconPool::pkgInstall();	break;
-	    case Status::S_KeepInstalled:	icon = YQIconPool::pkgKeepInstalled();	break;
-	    case Status::S_NoInst:		icon = YQIconPool::pkgNoInst();		break;
-	    case Status::S_Protected:		icon = YQIconPool::pkgProtected();	break;
-	    case Status::S_Taboo:		icon = YQIconPool::pkgTaboo();		break;
-	    case Status::S_Update:		icon = YQIconPool::pkgUpdate();		break;
+	    case S_Del:			icon = YQIconPool::pkgDel();		break;
+	    case S_Install:		icon = YQIconPool::pkgInstall();	break;
+	    case S_KeepInstalled:	icon = YQIconPool::pkgKeepInstalled();	break;
+	    case S_NoInst:		icon = YQIconPool::pkgNoInst();		break;
+	    case S_Protected:		icon = YQIconPool::pkgProtected();	break;
+	    case S_Taboo:		icon = YQIconPool::pkgTaboo();		break;
+	    case S_Update:		icon = YQIconPool::pkgUpdate();		break;
 
-	    case Status::S_AutoDel:		icon = bySelection ?
+	    case S_AutoDel:		icon = bySelection ?
 						    YQIconPool::pkgSelAutoDel() :
 						    YQIconPool::pkgAutoDel();		break;
 
-	    case Status::S_AutoInstall:		icon = bySelection ?
+	    case S_AutoInstall:		icon = bySelection ?
 						    YQIconPool::pkgSelAutoInstall() :
 						    YQIconPool::pkgAutoInstall();	break;
 
-	    case Status::S_AutoUpdate:		icon = bySelection ?
+	    case S_AutoUpdate:		icon = bySelection ?
 						    YQIconPool::pkgSelAutoUpdate() :
 						    YQIconPool::pkgAutoUpdate();	break;
 
@@ -206,23 +206,23 @@ YQPkgObjList::statusIcon( zypp::ui::Status status, bool enabled, bool bySelectio
     {
 	switch ( status )
 	{
-	    case Status::S_Del:			icon = YQIconPool::disabledPkgDel();		break;
-	    case Status::S_Install:		icon = YQIconPool::disabledPkgInstall();	break;
-	    case Status::S_KeepInstalled:	icon = YQIconPool::disabledPkgKeepInstalled();	break;
-	    case Status::S_NoInst:		icon = YQIconPool::disabledPkgNoInst();		break;
-	    case Status::S_Protected:		icon = YQIconPool::disabledPkgProtected();	break;
-	    case Status::S_Taboo:		icon = YQIconPool::disabledPkgTaboo();		break;
-	    case Status::S_Update:		icon = YQIconPool::disabledPkgUpdate();		break;
+	    case S_Del:			icon = YQIconPool::disabledPkgDel();		break;
+	    case S_Install:		icon = YQIconPool::disabledPkgInstall();	break;
+	    case S_KeepInstalled:	icon = YQIconPool::disabledPkgKeepInstalled();	break;
+	    case S_NoInst:		icon = YQIconPool::disabledPkgNoInst();		break;
+	    case S_Protected:		icon = YQIconPool::disabledPkgProtected();	break;
+	    case S_Taboo:		icon = YQIconPool::disabledPkgTaboo();		break;
+	    case S_Update:		icon = YQIconPool::disabledPkgUpdate();		break;
 
-	    case Status::S_AutoDel:		icon = bySelection ?
+	    case S_AutoDel:		icon = bySelection ?
 						    YQIconPool::disabledPkgSelAutoDel() :
 						    YQIconPool::disabledPkgAutoDel();		break;
 
-	    case Status::S_AutoInstall:		icon = bySelection ?
+	    case S_AutoInstall:		icon = bySelection ?
 						    YQIconPool::disabledPkgSelAutoInstall() :
 						    YQIconPool::disabledPkgAutoInstall();	break;
 
-	    case Status::S_AutoUpdate:		icon = bySelection ?
+	    case S_AutoUpdate:		icon = bySelection ?
 						    YQIconPool::disabledPkgSelAutoUpdate() :
 						    YQIconPool::disabledPkgAutoUpdate();	break;
 
@@ -240,16 +240,16 @@ YQPkgObjList::statusText( zypp::ui::Status status ) const
 {
     switch ( status )
     {
-	case Status::S_AutoDel:		return _( "Autodelete" );
-	case Status::S_AutoInstall:	return _( "Autoinstall" );
-	case Status::S_AutoUpdate:	return _( "Autoupdate" );
-	case Status::S_Del:		return _( "Delete" );
-	case Status::S_Install:		return _( "Install" );
-	case Status::S_KeepInstalled:	return _( "Keep" );
-	case Status::S_NoInst:		return _( "Do Not Install" );
-	case Status::S_Protected:	return _( "Protected -- Do Not Modify" );
-	case Status::S_Taboo:		return _( "Taboo -- Never Install" );
-	case Status::S_Update:		return _( "Update" );
+	case S_AutoDel:		return _( "Autodelete" );
+	case S_AutoInstall:	return _( "Autoinstall" );
+	case S_AutoUpdate:	return _( "Autoupdate" );
+	case S_Del:		return _( "Delete" );
+	case S_Install:		return _( "Install" );
+	case S_KeepInstalled:	return _( "Keep" );
+	case S_NoInst:		return _( "Do Not Install" );
+	case S_Protected:	return _( "Protected -- Do Not Modify" );
+	case S_Taboo:		return _( "Taboo -- Never Install" );
+	case S_Update:		return _( "Update" );
     }
 
     return QString::null;
@@ -301,7 +301,7 @@ YQPkgObjList::setAllItemStatus( zypp::ui::Status newStatus, bool force )
 
 	if ( item && item->editable() && newStatus != item->status() )
 	{
-	    if ( newStatus == Status::S_Update )
+	    if ( newStatus == S_Update )
 	    {
 		if ( item->candidateIsNewer() || force )
 		    item->setStatus( newStatus );
@@ -337,33 +337,33 @@ YQPkgObjList::selectNextItem()
 void
 YQPkgObjList::createActions()
 {
-    actionSetCurrentInstall		= createAction( Status::S_Install,		"[+]"		);
-    actionSetCurrentDontInstall		= createAction( Status::S_NoInst,		"[-]"		);
-    actionSetCurrentKeepInstalled	= createAction( Status::S_KeepInstalled,	"[<], [-]"	);
-    actionSetCurrentDelete		= createAction( Status::S_Del,			"[-]"		);
-    actionSetCurrentUpdate		= createAction( Status::S_Update,		"[>], [+]"	);
-    actionSetCurrentTaboo		= createAction( Status::S_Taboo,		"[!]"		);
-    actionSetCurrentProtected		= createAction( Status::S_Protected, 		"[*]" 		);
+    actionSetCurrentInstall		= createAction( S_Install,		"[+]"		);
+    actionSetCurrentDontInstall		= createAction( S_NoInst,		"[-]"		);
+    actionSetCurrentKeepInstalled	= createAction( S_KeepInstalled,	"[<], [-]"	);
+    actionSetCurrentDelete		= createAction( S_Del,			"[-]"		);
+    actionSetCurrentUpdate		= createAction( S_Update,		"[>], [+]"	);
+    actionSetCurrentTaboo		= createAction( S_Taboo,		"[!]"		);
+    actionSetCurrentProtected		= createAction( S_Protected, 		"[*]" 		);
 
-    actionSetListInstall		= createAction( Status::S_Install,		"", true );
-    actionSetListDontInstall		= createAction( Status::S_NoInst,		"", true );
-    actionSetListKeepInstalled		= createAction( Status::S_KeepInstalled,	"", true );
-    actionSetListDelete			= createAction( Status::S_Del,			"", true );
-    actionSetListProtected		= createAction( Status::S_Protected, 		"", true );
+    actionSetListInstall		= createAction( S_Install,		"", true );
+    actionSetListDontInstall		= createAction( S_NoInst,		"", true );
+    actionSetListKeepInstalled		= createAction( S_KeepInstalled,	"", true );
+    actionSetListDelete			= createAction( S_Del,			"", true );
+    actionSetListProtected		= createAction( S_Protected, 		"", true );
 
     actionSetListUpdate			= createAction( _( "Update if newer version available" ),
-							statusIcon( Status::S_Update, true ),
-							statusIcon( Status::S_Update, false ),
+							statusIcon( S_Update, true ),
+							statusIcon( S_Update, false ),
 							"",
 							true );
 
     actionSetListUpdateForce		= createAction( _( "Update unconditionally" ),
-							statusIcon( Status::S_Update, true ),
-							statusIcon( Status::S_Update, false ),
+							statusIcon( S_Update, true ),
+							statusIcon( S_Update, false ),
 							"",
 							true );
 
-    actionSetListTaboo			= createAction( Status::S_Taboo,		"", true );
+    actionSetListTaboo			= createAction( S_Taboo,		"", true );
 
     connect( actionSetCurrentInstall,	     SIGNAL( activated() ), this, SLOT( setCurrentInstall()	  ) );
     connect( actionSetCurrentDontInstall,    SIGNAL( activated() ), this, SLOT( setCurrentDontInstall()	  ) );
@@ -576,21 +576,21 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 
 			if ( installed )
 			{
-			    zypp::ui::Status newStatus = Status::S_KeepInstalled;
+			    zypp::ui::Status newStatus = S_KeepInstalled;
 
 			    if ( item->candidateIsNewer() )
-				newStatus = Status::S_Update;
+				newStatus = S_Update;
 
 			    setCurrentStatus( newStatus );
 			}
 			else
-			    setCurrentStatus( Status::S_Install );
+			    setCurrentStatus( S_Install );
 			selectNextItem();
 			event->accept();
 			return;
 
 		    case '-':	// Get rid of everything - don't install or delete
-			setCurrentStatus( installed ? Status::S_Del : Status::S_NoInst );
+			setCurrentStatus( installed ? S_Del : S_NoInst );
 			selectNextItem();
 			event->accept();
 			return;
@@ -598,7 +598,7 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 		    case '!':	// Taboo
 
 			if ( ! installed )
-			    setCurrentStatus( Status::S_Taboo );
+			    setCurrentStatus( S_Taboo );
 			selectNextItem();
 			event->accept();
 			return;
@@ -606,7 +606,7 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 		    case '*':	// Protected
 
 			if ( installed )
-			    setCurrentStatus( Status::S_Protected );
+			    setCurrentStatus( S_Protected );
 			selectNextItem();
 			event->accept();
 			return;
@@ -614,17 +614,17 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 		    case '>':	// Update what is worth to be updated
 
 			if ( installed && item->candidateIsNewer() )
-			    setCurrentStatus( Status::S_Update );
+			    setCurrentStatus( S_Update );
 			selectNextItem();
 			event->accept();
 			return;
 
 		    case '<':	// Revert update
 
-			if ( status == Status::S_Update ||
-			     status == Status::S_AutoUpdate )
+			if ( status == S_Update ||
+			     status == S_AutoUpdate )
 			{
-			    setCurrentStatus( Status::S_KeepInstalled );
+			    setCurrentStatus( S_KeepInstalled );
 			}
 			selectNextItem();
 			event->accept();
@@ -740,7 +740,7 @@ YQPkgObjListItem::status() const
     Selectable::Ptr selectable = constZyppObj()->getSelectable();
 
     if ( ! selectable )
-	return Status::S_NoInst;
+	return S_NoInst;
 
     return selectable->status();
 }
@@ -799,27 +799,27 @@ YQPkgObjListItem::cycleStatus()
     {
 	switch ( oldStatus )
 	{
-	    case Status::S_Protected:
+	    case S_Protected:
 		newStatus = zyppObj()->hasCandidateObj() ?
-		    Status::S_KeepInstalled: Status::S_NoInst;
+		    S_KeepInstalled: S_NoInst;
 		break;
 
-	    case Status::S_KeepInstalled:
+	    case S_KeepInstalled:
 		newStatus = zyppObj()->hasCandidateObj() ?
-		    Status::S_Update : Status::S_Del;
+		    S_Update : S_Del;
 		break;
 
-	    case Status::S_Update:
-		newStatus = Status::S_Del;
+	    case S_Update:
+		newStatus = S_Del;
 		showDelNotify = true;
 		break;
 
-	    case Status::S_Del:
-		newStatus = Status::S_KeepInstalled;
+	    case S_Del:
+		newStatus = S_KeepInstalled;
 		break;
 
 	    default:
-		newStatus = Status::S_KeepInstalled;
+		newStatus = S_KeepInstalled;
 		break;
 	}
     }
@@ -827,24 +827,24 @@ YQPkgObjListItem::cycleStatus()
     {
 	switch ( oldStatus )
 	{
-	    case Status::S_NoInst:
+	    case S_NoInst:
 		if ( zyppObj()->hasCandidateObj() )
 		{
-		    newStatus = Status::S_Install;
+		    newStatus = S_Install;
 		    showInsNotify = true;
 		}
 		else
 		{
-		    newStatus = Status::S_NoInst;
+		    newStatus = S_NoInst;
 		}
 		break;
 
-	    case Status::S_AutoInstall:
-		newStatus =  Status::S_Taboo;
+	    case S_AutoInstall:
+		newStatus =  S_Taboo;
 		break;
 
 	    default:
-		newStatus = Status::S_NoInst;
+		newStatus = S_NoInst;
 		break;
 	}
     }
@@ -869,14 +869,14 @@ YQPkgObjListItem::showNotifyTexts( zypp::ui::Status status )
 
     switch ( status )
     {
-	case Status::S_Install:
+	case S_Install:
 	    if ( _zyppObj->hasCandidateObj() )
 		text = _zyppObj->getCandidateObj()->insnotify();
 	    break;
 
-	case Status::S_NoInst:
-	case Status::S_Del:
-	case Status::S_Taboo:
+	case S_NoInst:
+	case S_Del:
+	case S_Taboo:
 	    if ( _zyppObj->hasCandidateObj() )
 		text = _zyppObj->getCandidateObj()->delnotify();
 	    break;
@@ -901,8 +901,8 @@ YQPkgObjListItem::showLicenseAgreement( zypp::ui::Status status )
 
     switch ( status )
     {
-	case Status::S_Install:
-	case Status::S_Update:
+	case S_Install:
+	case S_Update:
 	    if ( _zyppObj->hasCandidateObj() )
 	    {
 		pkg =  _zyppObj->getCandidateObj();
@@ -931,12 +931,12 @@ YQPkgObjListItem::showLicenseAgreement( zypp::ui::Status status )
 
 	    switch ( status )
 	    {
-		case Status::S_Install:
-		    setStatus( Status::S_Taboo );
+		case S_Install:
+		    setStatus( S_Taboo );
 		    break;
 
-		case Status::S_Protected:
-		    setStatus( Status::S_Del );
+		case S_Protected:
+		    setStatus( S_Del );
 		    break;
 
 		default: break;
@@ -964,9 +964,9 @@ YQPkgObjListItem::toolTip( int col )
 
 	switch ( status() )
 	{
-	    case Status::S_AutoDel:
-	    case Status::S_AutoInstall:
-	    case Status::S_AutoUpdate:
+	    case S_AutoDel:
+	    case S_AutoInstall:
+	    case S_AutoUpdate:
 
 		if ( bySelection() )
 		    // Translators: Additional hint what caused an auto-status
