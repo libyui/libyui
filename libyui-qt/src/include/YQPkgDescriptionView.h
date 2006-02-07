@@ -63,6 +63,11 @@ public:
 protected:
 
     /**
+     * Format a multi-line text into paragraphs
+     **/
+    QString simpleHtmlParagraphs( QString text );
+    
+    /**
      * Show information for a hyperlinked object,
      * e.g., a "pkg:somepkg" link to another package.
      **/

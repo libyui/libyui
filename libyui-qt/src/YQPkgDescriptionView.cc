@@ -61,59 +61,57 @@ YQPkgDescriptionView::showDetails( zypp::ResObject::constPtr zyppObj )
 
     // Add all lines of the package description
 
-    bool auto_format  = true;
-    bool preformatted = false;
-    list<string> description = zyppObj->description();
-    list<string>::const_iterator it = description.begin();
+    QString description = fromUTF8( zyppObj->description() );
 
-    if ( it != description.end()
-	 && *it == "<!-- DT:Rich -->" )	// Special doctype for preformatted HTML
+    if ( ! description.contains( "<!-- DT:Rich -->" ) )
+	description = simpleHtmlParagraphs( description );
+
+    html_text += description;
+
+
+    setTextFormat( Qt::RichText );
+    setText( html_text );
+    ensureVisible( 0, 0 );	// Otherwise hyperlinks will be centered
+}
+
+
+
+QString YQPkgDescriptionView::simpleHtmlParagraphs( QString text )
+{
+    bool foundAuthorsList = false;
+    QString html_text = "<p>";
+
+    QStringList lines = QStringList::split( '\n', text.simplifyWhiteSpace() );
+    QValueList<QString>::const_iterator it = lines.begin();
+
+    while ( it != lines.end() )
     {
-	preformatted = true;
-	++it;					// Discard doctype line
-    }
+	QString line = htmlEscape( *it );
 
-
-    while ( it != description.end() )
-    {
-	QString line = fromUTF8( *it );
-
-	if ( preformatted )
+	if ( line.startsWith( "Authors:" ) )
 	{
-	    html_text += line + "\n";
+	    line = "<b>" + line + "</b>";
+	    foundAuthorsList = true;
+	}
+
+	if ( foundAuthorsList )
+	{
+	    html_text += line + "<br>";
 	}
 	else
 	{
-	    line = htmlEscape( line );
-
-	    if ( line.startsWith( "Authors:" ) )
-	    {
-		line = "<b>" + line + "</b>";
-		auto_format = false;
-	    }
-
-	    if ( auto_format )
-	    {
-		if ( line.length() == 0 )	// Empty lines mean new paragraph
-		    html_text += "</p><p>";
-		else
-		    html_text += " " + line;
-	    }
+	    if ( line.length() == 0 )	// Empty lines mean new paragraph
+		html_text += "</p><p>";
 	    else
-	    {
-		html_text += line + "<br>";
-	    }
+		html_text += " " + line;
 	}
 
 	++it;
     }
 
-    if ( ! preformatted )
-	html_text += "</p>";
+    html_text += "</p>";
 
-    setTextFormat( Qt::RichText );
-    setText( html_text );
-    ensureVisible( 0, 0 );	// Otherwise hyperlinks will be centered
+    return html_text;
 }
 
 

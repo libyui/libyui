@@ -82,11 +82,12 @@ YQPkgYouPatchList::fillList()
     clear();
     y2debug( "Filling YOU patch list" );
 
+#ifdef MISSING
     PMManager::SelectableVec::const_iterator it = Y2PM::youPatchManager().begin();
 
     while ( it != Y2PM::youPatchManager().end() )
     {
-	zypp::Patch::Ptr		patch  = ( *it)->theObj();
+	zypp::Patch::constPtr	patch  = ( *it)->theObj();
 	zypp::ui::Status	status =( *it)->status();
 
 	if ( patch )
@@ -95,21 +96,22 @@ YQPkgYouPatchList::fillList()
 	    {
 		case InstallablePatches:
 		    if ( patch->installable() && status != S_KeepInstalled )
-			addYouPatchItem( patch );
+			addYouPatchItem( *it, patch );
 		    break;
 
 		case InstallableAndInstalledPatches:
 		    if ( patch->installable() )
-			addYouPatchItem( patch );
+			addYouPatchItem( *it, patch );
 		    break;
 
 		case AllPatches:
-		    addYouPatchItem( patch );
+		    addYouPatchItem( *it, patch );
 	    }
 	}
 
 	++it;
     }
+#endif
 
     if ( ! firstChild() )
 	message( _( "No patches available." ) );
@@ -146,10 +148,11 @@ YQPkgYouPatchList::filter()
 
     if ( selection() )
     {
-	zypp::Patch::Ptr patch = selection()->pmYouPatch();
+	zypp::Patch::constPtr patch = selection()->zyppPatch();
 
 	if ( patch )
 	{
+#ifdef MISSING
 	    //
 	    // Check for a pre-script
 	    //
@@ -200,6 +203,7 @@ YQPkgYouPatchList::filter()
                 // at the end of installation of a YOU patch
 		emit filterMatch( _( "[Post-Script]" ), fromUTF8( patch->postScript() ), -1 );
 	    }
+#endif
 	}
     }
 
@@ -208,15 +212,16 @@ YQPkgYouPatchList::filter()
 
 
 void
-YQPkgYouPatchList::addYouPatchItem( zypp::Patch::Ptr pmYouPatch )
+YQPkgYouPatchList::addYouPatchItem( zypp::ui::Selectable::Ptr	selectable,
+				    zypp::Patch::constPtr 	zyppPatch )
 {
-    if ( ! pmYouPatch )
+    if ( ! selectable )
     {
-	y2error( "NULL zypp::Patch!" );
+	y2error( "NULL zypp::ui::Selectable!" );
 	return;
     }
 
-    new YQPkgYouPatchListItem( this, pmYouPatch );
+    new YQPkgYouPatchListItem( this, selectable, zyppPatch );
 }
 
 
@@ -285,8 +290,10 @@ YQPkgYouPatchList::showRawPatchInfo()
 {
     if ( selection() )
     {
-	zypp::Patch::Ptr patch = selection()->pmYouPatch();
+	zypp::Patch::constPtr patch = selection()->zyppPatch();
+#ifdef MISSING
 	YQPkgTextDialog::showText( this, patch, Y2PM::youPatchManager().rawPatchInfo( patch ) );
+#endif
     }
 }
 
@@ -304,7 +311,7 @@ YQPkgYouPatchList::keyPressEvent( QKeyEvent * event )
 	    {
 		YQPkgYouPatchListItem * item = dynamic_cast<YQPkgYouPatchListItem *> (selectedListViewItem);
 
-		if ( item && item->zyppObj()->hasInstalledObj() )
+		if ( item && item->selectable()->hasInstalledObj() )
 		{
 		    y2warning( "Deleting patches is not supported" );
 		    return;
@@ -323,23 +330,30 @@ YQPkgYouPatchList::keyPressEvent( QKeyEvent * event )
 
 
 
-YQPkgYouPatchListItem::YQPkgYouPatchListItem( YQPkgYouPatchList * youPatchList, zypp::Patch::Ptr youPatch )
-    : YQPkgObjListItem( youPatchList, youPatch )
+YQPkgYouPatchListItem::YQPkgYouPatchListItem( YQPkgYouPatchList * 	youPatchList,
+					      zypp::ui::Selectable::Ptr	selectable,					      
+					      zypp::Patch::constPtr 	zyppPatch )
+    : YQPkgObjListItem( youPatchList, selectable, zyppPatch )
     , _youPatchList( youPatchList )
-    , _pmYouPatch( youPatch )
+    , _zyppPatch( zyppPatch )
 {
-    setText( kindCol(), _pmYouPatch->kindLabel() );
-    setStatusIcon();
+    if ( ! _zyppPatch )
+	_zyppPatch = zypp::dynamic_pointer_cast<const zypp::Patch>( selectable->theObj() );
 
-    switch ( _pmYouPatch->kind() )
+    setStatusIcon();
+#ifdef MISSING
+    setText( kindCol(), _zyppPatch->kindLabel() );
+
+    switch ( _zyppPatch->kind() )
     {
 	case zypp::Patch::kind_yast:		setTextColor( QColor( 0, 0, 0xC0 ) );	break;	// medium blue
-	case zypp::Patch::kind_security:		setTextColor( Qt::red );		break;
+	case zypp::Patch::kind_security:	setTextColor( Qt::red );		break;
 	case zypp::Patch::kind_recommended:	setTextColor( QColor( 0, 0, 0xC0 ) );	break;	// medium blue
-	case zypp::Patch::kind_optional:		break;
-	case zypp::Patch::kind_document:		break;
+	case zypp::Patch::kind_optional:	break;
+	case zypp::Patch::kind_document:	break;
 	default:				break;
     }
+#endif
 }
 
 
@@ -353,7 +367,9 @@ void
 YQPkgYouPatchListItem::setStatus( zypp::ui::Status newStatus )
 {
     YQPkgObjListItem::setStatus( newStatus );
+#ifdef MISSING
     Y2PM::youPatchManager().updatePackageStates();
+#endif
     _youPatchList->sendUpdatePackages();
 }
 
@@ -363,8 +379,8 @@ YQPkgYouPatchListItem::cycleStatus()
 {
     YQPkgObjListItem::cycleStatus();
 
-    if ( status() == S_Del )	// Can't delete YOU patches
-	setStatus( S_KeepInstalled );
+    if ( status() == zypp::ui::S_Del )	// Can't delete YOU patches
+	setStatus( zypp::ui::S_KeepInstalled );
 }
 
 
@@ -379,12 +395,14 @@ YQPkgYouPatchListItem::toolTip( int col )
     }
     else
     {
-	text = fromUTF8( _pmYouPatch->kindLabel().c_str() );
+#ifdef MISSING
+	text = fromUTF8( zyppPatch()->kindLabel().c_str() );
+#endif
 
 	if ( ! text.isEmpty() )
 	    text += "\n";
 
-	text += fromUTF8( _pmYouPatch->size().form().c_str() );
+	text += fromUTF8( zyppPatch()->size().asString().c_str() );
     }
 
     return text;
@@ -409,8 +427,10 @@ YQPkgYouPatchListItem::compare( QListViewItem * otherListViewItem,
     {
 	if ( col == kindCol() )
 	{
-	    if ( this->constzypp::Patch()->kind() < other->constzypp::Patch()->kind() ) return -1;
-	    if ( this->constzypp::Patch()->kind() > other->constzypp::Patch()->kind() ) return 1;
+#ifdef MISSING
+	    if ( this->zyppPatch()->kind() < other->zyppPatch()->kind() ) return -1;
+	    if ( this->zyppPatch()->kind() > other->zyppPatch()->kind() ) return 1;
+#endif
 	    return 0;
 	}
     }

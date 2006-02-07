@@ -24,6 +24,7 @@
 
 #include <YQPkgObjList.h>
 #include <y2pm/PMLanguage.h>
+#include <zypp/ui/Selectable.h>
 
 
 class YQPkgLangListItem;

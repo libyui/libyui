@@ -28,7 +28,6 @@
 #include <qmessagebox.h>
 
 #include "YQZypp.h"
-#include <y2pm/InstTarget.h>
 #include "utf8.h"
 
 #include "YQPkgList.h"
@@ -668,7 +667,7 @@ YQPkgListItem::paintCell( QPainter *		painter,
 
 	    if ( ! YQUI::ui()->usingVisionImpairedPalette() )
 	    {
-		cg.setColor( QColorGroup::Text, QColor( 0, 0, 0xC0 ) );		// Foreground
+		cg.setColor( QColorGroup::Text, QColor( 0, 0, 0xC0 ) );			// Foreground
 
 		if ( column == versionCol() )
 		    cg.setColor( QColorGroup::Base, QColor( 0xF0, 0xF0, 0xF0 ) );	// Background

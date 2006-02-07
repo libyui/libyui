@@ -24,6 +24,8 @@
 
 #include <YQPkgObjList.h>
 #include <zypp/Patch.h>
+#include <zypp/Package.h>
+#include <zypp/ui/Selectable.h>
 
 
 class QAction;
@@ -70,7 +72,8 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addYouPatchItem( zypp::Patch::Ptr sel );
+    void addYouPatchItem( zypp::ui::Selectable::Ptr	selectable,
+			  zypp::Patch::constPtr 	sel );
 
     /**
      * Emit an updatePackages() signal.
@@ -217,7 +220,9 @@ public:
      * Constructor. Creates a YQPkgYouPatchList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgYouPatchListItem( YQPkgYouPatchList * youPatchList, zypp::Patch::Ptr youPatch );
+    YQPkgYouPatchListItem( YQPkgYouPatchList * 		youPatchList,
+			   zypp::ui::Selectable::Ptr	selectable,
+			   zypp::Patch::constPtr 	zyppPatch );
 
     /**
      * Destructor
@@ -227,12 +232,7 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    zypp::Patch::Ptr pmYouPatch() { return _pmYouPatch; }
-
-    /**
-     * Returns the original object within the package manager backend.
-     **/
-    const zypp::Patch::Ptr constzypp::Patch() const { return _pmYouPatch; }
+    zypp::Patch::constPtr zyppPatch() const { return _zyppPatch; }
 
     /**
      * Set the patch status.
@@ -282,7 +282,7 @@ protected:
     // Data members
 
     YQPkgYouPatchList	*	_youPatchList;
-    zypp::Patch::Ptr		_pmYouPatch;
+    zypp::Patch::constPtr	_zyppPatch;
 };
 
 

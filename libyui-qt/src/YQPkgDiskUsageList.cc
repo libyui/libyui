@@ -59,6 +59,7 @@ YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget * parent, int thresholdPercent )
 {
     _debug 	= false;
 
+#ifdef MISSING
     const set<PkgDuMaster::MountPoint> du = Y2PM::packageManager().getDu().mountpoints();
     set<PkgDuMaster::MountPoint>::iterator it = du.begin();
 
@@ -75,6 +76,7 @@ YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget * parent, int thresholdPercent )
 
 	++it;
     }
+#endif
 }
 
 
@@ -84,6 +86,7 @@ YQPkgDiskUsageList::updateDiskUsage()
     runningOutWarning.clear();
     overflowWarning.clear();
 
+#ifdef MISSING
     const set<PkgDuMaster::MountPoint> 	du = Y2PM::packageManager().updateDu().mountpoints();
     set<PkgDuMaster::MountPoint>::iterator it = du.begin();
 
@@ -98,6 +101,7 @@ YQPkgDiskUsageList::updateDiskUsage()
 
 	++it;
     }
+#endif
 
     postPendingWarnings();
 }

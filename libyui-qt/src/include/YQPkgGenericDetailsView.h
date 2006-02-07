@@ -133,10 +133,12 @@ protected slots:
     void reload( QWidget * newCurrent );
 
 
+protected:
+    
     // Data members
 
-    QTabWidget	* 	_parentTab;
-    zypp::ResObject::constPtr		_zyppObj;
+    QTabWidget	* 		_parentTab;
+    zypp::ResObject::constPtr	_zyppObj;
 };
 
 
