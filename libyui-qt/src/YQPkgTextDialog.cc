@@ -30,7 +30,6 @@
 #include <qhbox.h>
 
 #include "YQPkgTextDialog.h"
-#include "YQPkgGenericDetailsView.h"
 
 #include "QY2LayoutUtils.h"
 #include "YQi18n.h"

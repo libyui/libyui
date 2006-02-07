@@ -57,7 +57,7 @@ protected:
      * In this case technical data, very much like "rpm -qi".
      * Overwritten from YQPkgGenericDetailsView.
      **/
-    virtual void showDetails( zypp::ui::Selectable selectable );
+    virtual void showDetails( zypp::ui::Selectable::Ptr selectable );
 
     /**
      * Returns a string containing a HTML table for technical details for one

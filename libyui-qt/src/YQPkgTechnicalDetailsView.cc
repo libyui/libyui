@@ -48,6 +48,8 @@ YQPkgTechnicalDetailsView::~YQPkgTechnicalDetailsView()
 void
 YQPkgTechnicalDetailsView::showDetails( zypp::ui::Selectable::Ptr selectable )
 {
+    _selectable = selectable;
+    
     if ( ! selectable )
     {
 	clear();
@@ -102,8 +104,12 @@ YQPkgTechnicalDetailsView::authorsListCell( zypp::Package::constPtr pkg ) const
 QString
 YQPkgTechnicalDetailsView::formatRpmGroup( zypp::Package::constPtr pkg ) const
 {
+#ifdef MISSING
     string group = Y2PM::packageManager().translatedRpmGroup( pkg->group_ptr() );
     return fromUTF8( group );
+#else
+    return "unknown"
+#endif
 }
 
 

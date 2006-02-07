@@ -48,6 +48,8 @@ YQPkgSelDescriptionView::~YQPkgSelDescriptionView()
 void
 YQPkgSelDescriptionView::showDetails( zypp::ui::Selectable::Ptr selectable )
 {
+    _selectable = selectable;
+    
     if ( ! selectable )
     {
 	clear();

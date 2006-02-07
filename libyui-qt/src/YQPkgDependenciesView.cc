@@ -45,6 +45,8 @@ YQPkgDependenciesView::~YQPkgDependenciesView()
 void
 YQPkgDependenciesView::showDetails( zypp::ui::Selectable::Ptr selectable )
 {
+    _selectable = selectable;
+    
     if ( ! selectable )
     {
 	clear();

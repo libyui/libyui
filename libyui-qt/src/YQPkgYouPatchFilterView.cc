@@ -55,21 +55,21 @@ YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
     _youPatchList		= new YQPkgYouPatchList( vbox );		CHECK_PTR( _youPatchList 	);
 
     addVSpacing( vbox, 4 );
-    
+
     QHBox * hbox 		= new QHBox( vbox ); CHECK_PTR( hbox );
     hbox->setSpacing( SPACING );
     QLabel * label		= new QLabel( _( "&Show Patch Category:" ), hbox );
-    
+
     _patchCategory		= new QComboBox( hbox );
     CHECK_PTR( _patchCategory );
-    
+
     _patchCategory->insertItem( _( "Installable Patches" ),			0 );
     _patchCategory->insertItem( _( "Installable and Installed Patches" ),	1 );
     _patchCategory->insertItem( _( "All Patches" ),				2 );
     _patchCategory->setCurrentItem( 0 );
     _patchCategory->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
     label->setBuddy( _patchCategory );
-    
+
     connect( _patchCategory, SIGNAL( activated( int ) ), this, SLOT( fillPatchList() ) );
     addVSpacing( vbox, 4 );
 
@@ -91,18 +91,18 @@ YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
     addVSpacing( vbox, 4 );
     hbox = new QHBox( vbox ); CHECK_PTR( hbox );
     addHStretch( hbox );
-    
+
     new QLabel( _( "Estimated Download Size:" ) + " ", hbox );
     _totalDownloadSize		= new QLabel( FSize(0).asString().c_str(), hbox );
     CHECK_PTR( _totalDownloadSize );
 
-    
+
     // Give the total download size a 3D look
-    
+
     _totalDownloadSize->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     _totalDownloadSize->setLineWidth(1);
     _totalDownloadSize->setMidLineWidth(2);
-    
+
 
     connect( _youPatchList,	SIGNAL( selectionChanged    ( zypp::ui::Selectable::Ptr ) ),
 	     _descriptionView,	SLOT  ( showDetailsIfVisible( zypp::ui::Selectable::Ptr ) ) );
@@ -133,7 +133,7 @@ void
 YQPkgYouPatchFilterView::fillPatchList()
 {
     YQPkgYouPatchList::PatchCategory category;
-    
+
     switch ( _patchCategory->currentItem() )
     {
 	case 0:		category = YQPkgYouPatchList::InstallablePatches;			break;
@@ -141,7 +141,7 @@ YQPkgYouPatchFilterView::fillPatchList()
 	case 2:		category = YQPkgYouPatchList::AllPatches;				break;
 	default:	category = YQPkgYouPatchList::InstallablePatches;			break;
     }
-    
+
     _youPatchList->setPatchCategory( category );
     _youPatchList->fillList();
     _youPatchList->selectSomething();
