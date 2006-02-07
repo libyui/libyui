@@ -248,8 +248,8 @@ YQPatternSelector::makeConnections()
     if ( _selList && _descriptionView )
     {
 	y2milestone( "Connection set up" );
-	connect( _selList,		SIGNAL( selectionChanged( zypp::ResObject::constPtr ) ),
-		 _descriptionView,	SLOT  ( showDetails	( zypp::ResObject::constPtr ) ) );
+	connect( _selList,		SIGNAL( selectionChanged( zypp::ui::Selectable::Ptr ) ),
+		 _descriptionView,	SLOT  ( showDetails	( zypp::ui::Selectable::Ptr ) ) );
     }
 
 

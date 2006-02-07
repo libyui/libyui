@@ -219,10 +219,10 @@ signals:
 
 
     /**
-     * Emitted when a zypp::ResObject is selected.
+     * Emitted when a zypp::ui::Selectable is selected.
      * May be called with a null poiner if no zypp::ResObject is selected.
      **/
-    void selectionChanged( zypp::ResObject::constPtr zyppObj );
+    void selectionChanged( zypp::ui::Selectable::Ptr selectable );
 
     /**
      * Emitted when the status of a zypp::ResObject is changed.

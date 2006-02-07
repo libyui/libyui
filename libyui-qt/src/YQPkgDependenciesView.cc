@@ -43,27 +43,21 @@ YQPkgDependenciesView::~YQPkgDependenciesView()
 
 
 void
-YQPkgDependenciesView::showDetails( zypp::ResObject::constPtr zyppObj )
+YQPkgDependenciesView::showDetails( zypp::ui::Selectable::Ptr selectable )
 {
-    _zyppObj = zyppObj;
-
-    if ( ! zyppObj )
+    if ( ! selectable )
     {
 	clear();
 	return;
     }
 
-    QString html_text = htmlHeading( zyppObj );
+    QString html_text = htmlHeading( selectable );
 
-    string name = zyppObj->name();
-    y2debug( "Showing technical details for zypp::ResObject %s", name.c_str() );
+    y2debug( "Showing technical details for zypp::ResObject %s", selectable->theObj()->name.c_str() );
 
-    zypp::Package::constPtr candidate = zyppObj->getCandidateObj();
-    zypp::Package::constPtr installed = zyppObj->getInstalledObj();
+    zypp::Package::constPtr candidate = selectable->candidateObj();
+    zypp::Package::constPtr installed = selectable->installedObj();
 
-#if 0
-    html_text += complexTable( installed, installed );
-#else
     if ( candidate && installed && candidate != installed )
     {
 	html_text += complexTable( installed, candidate );
@@ -76,7 +70,6 @@ YQPkgDependenciesView::showDetails( zypp::ResObject::constPtr zyppObj )
 	if ( installed )
 	    html_text += simpleTable( installed );
     }
-#endif
 
     setTextFormat( Qt::RichText );
     setText( html_text );

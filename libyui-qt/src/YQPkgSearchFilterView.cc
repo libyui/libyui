@@ -96,9 +96,12 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     _searchInName        = new QCheckBox( _( "&Name" 		), gbox ); CHECK_PTR( _searchInName        );
     _searchInSummary     = new QCheckBox( _( "Su&mmary" 	), gbox ); CHECK_PTR( _searchInSummary     );
     _searchInDescription = new QCheckBox( _( "Descr&iption"	), gbox ); CHECK_PTR( _searchInDescription );
+
+#ifdef MISSING
     addVStretch( gbox );
     _searchInProvides    = new QCheckBox( _( "&Provides" 	), gbox ); CHECK_PTR( _searchInProvides    );
     _searchInRequires    = new QCheckBox( _( "Re&quires" 	), gbox ); CHECK_PTR( _searchInRequires    );
+#endif
 
     _searchInName->setChecked( true );
     _searchInSummary->setChecked( true );
@@ -201,7 +204,11 @@ YQPkgSearchFilterView::filter()
 
 	QProgressDialog progress( _( "Searching..." ),			// text
 				  _( "&Cancel" ),			// cancelButtonLabel
+#ifdef MISSING
 				  Y2PM::packageManager().size(),	// totalSteps
+#else
+				  1000,
+#endif
 				  this, 0,				// parent, name
 				  true );				// modal
 	progress.setCaption( "" );
@@ -212,9 +219,10 @@ YQPkgSearchFilterView::filter()
 	regexp.setCaseSensitive( _caseSensitive->isChecked() );
 	regexp.setWildcard( _searchMode->currentItem() == UseWildcards );
 
-	int count = 0;
 	timer.start();
 
+#ifdef MISSING
+	int count = 0;
 	PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
 	while ( it != Y2PM::packageManager().end() && ! progress.wasCancelled() )
@@ -222,8 +230,8 @@ YQPkgSearchFilterView::filter()
 	    Selectable::Ptr selectable = *it;
 
 	    bool match =
-		check( selectable->candidateObj(), regexp ) ||
-		check( selectable->installedObj(), regexp );
+		check( selectable, selectable->candidateObj(), regexp ) ||
+		check( selectable, selectable->installedObj(), regexp );
 
 	    // If there is neither an installed nor a candidate package, check
 	    // any other instance.
@@ -231,7 +239,7 @@ YQPkgSearchFilterView::filter()
 	    if ( ! match                      &&
 		 ! selectable->candidateObj() &&
 		 ! selectable->installedObj()   )
-		check( selectable->theObj(), regexp );
+		check( selectable, selectable->theObj(), regexp );
 
 
 	    progress.setProgress( count++ );
@@ -249,6 +257,7 @@ YQPkgSearchFilterView::filter()
 
 	    ++it;
 	}
+#endif
 
 	if ( _matchCount == 0 )
 	    emit message( _( "No Results." ) );
@@ -259,8 +268,8 @@ YQPkgSearchFilterView::filter()
 
 
 bool
-YQPkgSearchFilterView::check(  zypp::ui::Selectable::Ptr	selectable,
-			       zypp::Package::constPtr 		pkg )
+YQPkgSearchFilterView::check( zypp::ui::Selectable::Ptr		selectable,
+			      zypp::Package::constPtr 		pkg )
 {
     QRegExp regexp = _searchText->currentText();
     regexp.setCaseSensitive( _caseSensitive->isChecked() );
@@ -271,7 +280,7 @@ YQPkgSearchFilterView::check(  zypp::ui::Selectable::Ptr	selectable,
 
 
 bool
-YQPkgSearchFilterView::check( zypp::ui::Selectable	selectable,
+YQPkgSearchFilterView::check( zypp::ui::Selectable::Ptr	selectable,
 			      zypp::Package::constPtr 	pkg,
 			      const QRegExp & 		regexp )
 {
@@ -282,8 +291,12 @@ YQPkgSearchFilterView::check( zypp::ui::Selectable	selectable,
 	( _searchInName->isChecked()        && check( pkg->name(),        regexp ) ) ||
 	( _searchInSummary->isChecked()     && check( pkg->summary(),     regexp ) ) ||
 	( _searchInDescription->isChecked() && check( pkg->description(), regexp ) ) ||
+#ifdef MISSING
 	( _searchInProvides->isChecked()    && check( pkg->provides(),    regexp ) ) ||
 	( _searchInRequires->isChecked()    && check( pkg->requires(),    regexp ) );
+#else
+    false ; 
+#endif
 
     if ( match )
     {
@@ -346,6 +359,7 @@ YQPkgSearchFilterView::check( const list<string> & strList, const QRegExp & rege
 }
 
 
+#ifdef MISSING
 bool
 YQPkgSearchFilterView::check( const PMSolvable::PkgRelList_type & relList, const QRegExp & regexp )
 {
@@ -365,6 +379,7 @@ YQPkgSearchFilterView::check( const PMSolvable::PkgRelList_type & relList, const
 
     return false;
 }
+#endif
 
 
 

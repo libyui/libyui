@@ -81,8 +81,8 @@ YQPkgDescriptionDialog::YQPkgDescriptionDialog( QWidget * parent, const QString 
     CHECK_PTR( _pkgDescription );
     _pkgDescription->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _pkgList,		SIGNAL( selectionChanged    ( zypp::ResObject::constPtr ) ),
-	     _pkgDescription,	SLOT  ( showDetailsIfVisible( zypp::ResObject::constPtr ) ) );
+    connect( _pkgList,		SIGNAL( selectionChanged    ( zypp::ui::Selectable::Ptr ) ),
+	     _pkgDescription,	SLOT  ( showDetailsIfVisible( zypp::ui::Selectable::Ptr ) ) );
 
 
     // Button box (to center the single button)
@@ -144,7 +144,7 @@ YQPkgDescriptionDialog::filter( const QString & qPkgName )
     YQPkgObjListItem * firstItem = dynamic_cast<YQPkgObjListItem *> ( _pkgList->firstChild() );
 
     if ( firstItem )
-	_pkgDescription->showDetailsIfVisible( firstItem->zyppObj() );
+	_pkgDescription->showDetailsIfVisible( firstItem->selectable() );
     else
 	_pkgDescription->clear();
 

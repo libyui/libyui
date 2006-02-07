@@ -30,6 +30,7 @@
 #include <qhbox.h>
 
 #include "YQPkgTextDialog.h"
+#include "YQPkgGenericDetailsView.h"
 
 #include "QY2LayoutUtils.h"
 #include "YQi18n.h"
@@ -38,7 +39,6 @@
 #define SPACING			6	// between subwidgets
 #define MARGIN			4	// around the widget
 
-using std::list;
 using std::string;
 
 
@@ -180,20 +180,14 @@ void YQPkgTextDialog::setText( const QString & text )
 
 void YQPkgTextDialog::setText( const string & text )
 {
-    setText( QString( text.c_str() ) );
+    setText( fromUTF8( text ) );
 }
 
 
-void YQPkgTextDialog::setText( const list<string> & text )
+void YQPkgTextDialog::setText( zypp::ui::Selectable::Ptr selectable,
+			       const string & 		 text )
 {
-    setText( htmlParagraphs( text ) );
-}
-
-
-void YQPkgTextDialog::setText( zypp::ResObject::constPtr zyppObj,
-			       const list<string> & text )
-{
-    setText( htmlHeading( zyppObj ) + htmlParagraphs( text ) );
+    setText( htmlHeading( selectable ) + htmlParagraphs( text ) );
 }
 
 
@@ -212,24 +206,11 @@ void YQPkgTextDialog::showText( QWidget * parent, const string & text )
 }
 
 
-void YQPkgTextDialog::showText( QWidget * parent, const list<string> & text )
+void YQPkgTextDialog::showText( QWidget * 			parent,
+				zypp::ui::Selectable::Ptr 	selectable,
+				const string & 			text )
 {
-    showText( parent, htmlParagraphs( text ) );
-}
-
-
-void YQPkgTextDialog::showText( QWidget * parent,
-				zypp::ResObject::constPtr zyppObj,
-				const list<string> & text )
-{
-    showText( parent, htmlHeading( zyppObj ) + htmlParagraphs( text ) );
-}
-
-void YQPkgTextDialog::showText( QWidget * parent,
-				zypp::ResObject::constPtr zyppObj,
-				const string & text )
-{
-    showText( parent, htmlHeading( zyppObj ) + QString::fromUtf8( text.c_str() ) );
+    showText( parent, htmlHeading( selectable ) + QString::fromUtf8( text.c_str() ) );
 }
 
 
@@ -256,62 +237,15 @@ bool YQPkgTextDialog::confirmText( QWidget * parent, const QString & text )
 }
 
 
-bool YQPkgTextDialog::confirmText( QWidget * parent,
-				   zypp::ResObject::constPtr zyppObj,
-				   const list<string> & text )
+bool YQPkgTextDialog::confirmText( QWidget * 			parent,
+				   zypp::ui::Selectable::Ptr 	selectable,
+				   const string	&	 	text )
 {
-    return confirmText( parent, htmlHeading( zyppObj ) + htmlParagraphs( text ) );
-}
-
-
-bool YQPkgTextDialog::confirmText( QWidget * parent,
-				   zypp::ResObject::constPtr zyppObj,
-				   const string & text )
-{
-    return confirmText( parent, htmlHeading( zyppObj ) + QString::fromUtf8( text.c_str() ) );
+    return confirmText( parent, htmlHeading( selectable ) + htmlParagraphs( text ) );
 }
 
 
 
-QString
-YQPkgTextDialog::htmlParagraphs( const list<string> & text )
-{
-    bool preformatted = false;
-    list<string>::const_iterator it = text.begin();
-    
-    if ( it != text.end()
-	 && *it == "<!-- DT:Rich -->" )	// Special doctype for preformatted HTML
-    {
-	preformatted = true;
-	++it;					// Discard doctype line
-    }
-
-    QString html = preformatted ? "" : "<p>";
-
-    while ( it != text.end() )
-    {
-	QString line = fromUTF8( *it );
-
-	if ( preformatted )
-	    html += line + "\n";
-	else
-	{
-	    line = htmlEscape( line );
-
-	    if ( line.length() == 0 )	// Empty lines mean new paragraph
-		html += "</p><p>";
-	    else
-		html += " " + line;
-	}
-
-	++it;
-    }
-
-    if ( ! preformatted )
-	html += "</p>";
-
-    return html;
-}
 
 
 QString
@@ -328,6 +262,25 @@ YQPkgTextDialog::htmlEscape( const QString & plainText )
 }
 
 
+
+QString
+YQPkgTextDialog::htmlParagraphs( const string & rawText )
+{
+    QString text = fromUTF8( rawText );
+
+    if ( text.contains( "<!-- DT:Rich -->" ) )	// Special doctype for preformatted HTML
+	return text;
+
+    text = htmlEscape( text );			// Escape '<', '>', '&'
+    text.replace( "\n\n", "</p><p>" );		// Empty lines mean new paragraph
+    text.prepend( "<p>"  );
+    text.append ( "</p>" );
+
+    return text;
+}
+
+
+
 QString
 YQPkgTextDialog::htmlHeading( const QString & text )
 {
@@ -341,8 +294,16 @@ YQPkgTextDialog::htmlHeading( const QString & text )
 
 
 QString
-YQPkgTextDialog::htmlHeading( zypp::ResObject::constPtr zyppObj )
+YQPkgTextDialog::htmlHeading( zypp::ui::Selectable::Ptr selectable )
 {
+    if ( ! selectable )
+	return "";
+    
+    zypp::ResObject::constPtr zyppObj = selectable->theObj();
+
+    if ( ! zyppObj )
+	return "";
+    
     QString summary = fromUTF8( zyppObj->summary() );
 
     QString html =

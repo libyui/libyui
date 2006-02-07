@@ -156,14 +156,14 @@ YQPkgObjList::selectionChangedInternal( QListViewItem * listViewItem )
 {
     YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (listViewItem);
 
-    emit selectionChanged( item ? item->zyppObj() : zypp::ResObject::constPtr() );
+    emit selectionChanged( item ? item->selectable() : zypp::ui::Selectable::Ptr() );
 }
 
 
 void
 YQPkgObjList::clear()
 {
-    emit selectionChanged( zypp::ResObject::constPtr() );
+    emit selectionChanged( zypp::ui::Selectable::Ptr() );
     QY2ListView::clear();
 }
 

@@ -43,23 +43,17 @@ YQPkgDescriptionView::~YQPkgDescriptionView()
 
 
 void
-YQPkgDescriptionView::showDetails( zypp::ResObject::constPtr zyppObj )
+YQPkgDescriptionView::showDetails( zypp::ui::Selectable::Ptr selectable )
 {
-    _zyppObj = zyppObj;
-
-    if ( ! zyppObj )
+    if ( ! selectable )
     {
 	clear();
 	return;
     }
 
-    QString html_text = htmlHeading( zyppObj );
+    QString html_text = htmlHeading( selectable );
 
-    string name = zyppObj->name();
-    // y2debug( "Showing description for package %s", name.c_str() );
-
-
-    QString description = fromUTF8( zyppObj->description() );
+    QString description = fromUTF8( selectable->theObj()->description() );
 
     if ( ! description.contains( "<!-- DT:Rich -->" ) )
 	description = simpleHtmlParagraphs( description );

@@ -36,7 +36,7 @@
 YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
     : QY2ListView( parent )
 {
-    _zyppObj		= 0;
+    _selectable		= 0;
     _parentTab		= dynamic_cast<QTabWidget *> (parent);
     _userCanSwitch 	= userCanSwitch;
 
@@ -76,39 +76,40 @@ YQPkgVersionsView::reload( QWidget * newCurrent )
 {
     if ( newCurrent == this )
     {
-	showDetailsIfVisible( _zyppObj );
+	showDetailsIfVisible( _selectable );
     }
 }
 
 
 void
-YQPkgVersionsView::showDetailsIfVisible( zypp::ResObject::constPtr zyppObj )
+YQPkgVersionsView::showDetailsIfVisible( zypp::ui::Selectable::Ptr selectable )
 {
-    _zyppObj = zyppObj;
+    _selectable = selectable;
 
     if ( _parentTab )		// Is this view embedded into a tab widget?
     {
 	if ( _parentTab->currentPage() == this )  // Is this page the topmost?
 	{
-	    showDetails( zyppObj );
+	    showDetails( selectable );
 	}
     }
     else	// No tab parent - simply show data unconditionally.
     {
-	showDetails( zyppObj );
+	showDetails( selectable );
     }
 }
 
 
 void
-YQPkgVersionsView::showDetails( zypp::ResObject::constPtr zyppObj )
+YQPkgVersionsView::showDetails( zypp::ui::Selectable::Ptr selectable )
 {
+    _selectable = selectable;
     clear();
 
-    if ( ! zyppObj )
+    if ( ! selectable )
 	return;
 
-    QY2CheckListItem * root = new QY2CheckListItem( this, zyppObj->name().asString().c_str(),
+    QY2CheckListItem * root = new QY2CheckListItem( this, selectable->theObj()->name().c_str(),
 						    QCheckListItem::Controller, true );
     CHECK_PTR( root );
     root->setOpen( true );
@@ -117,43 +118,38 @@ YQPkgVersionsView::showDetails( zypp::ResObject::constPtr zyppObj )
     root->setText( _summaryCol, fromUTF8( zyppObj->summary() ) );
 #endif
 
-    if ( ! zyppObj->getSelectable() )
-    {
-	y2error( "%s doesn't have a Selectable parent!", zyppObj->name().asString().c_str() );
-	return;
-    }
-
     bool installedIsAvailable = false;
-    Selectable::zypp::ResObjectList::const_iterator it = zyppObj->getSelectable()->av_begin();
+#ifdef MISSING
+    zypp::ui::Selectable::ResObjectList::const_iterator it = selectable->av_begin();
 
-    while ( it != zyppObj->getSelectable()->av_end() )
+    while ( it != selectable->av_end() )
     {
-	new YQPkgVersion( this, root, *it, _userCanSwitch );
+	new YQPkgVersion( this, root, selectable, *it, _userCanSwitch );
 
-	if ( zyppObj->getInstalledObj() &&
-	     zyppObj->getInstalledObj()->edition() == ( *it)->edition() )
+	if ( selectable->installedObj() &&
+	     selectable->installedObj()->edition() == ( *it)->edition() )
 	    installedIsAvailable = true;
 
 #if 0
 	// DEBUG
-	new YQPkgVersion( this, root, *it, _userCanSwitch );
-	new YQPkgVersion( this, root, *it, _userCanSwitch );
-	new YQPkgVersion( this, root, *it, _userCanSwitch );
+	new YQPkgVersion( this, root, selectable, *it, _userCanSwitch );
+	new YQPkgVersion( this, root, selectable, *it, _userCanSwitch );
+	new YQPkgVersion( this, root, selectable, *it, _userCanSwitch );
 	// DEBUG
 #endif
 	++it;
     }
+#endif
 
-
-    if ( zyppObj->hasInstalledObj() && ! installedIsAvailable )
-	new YQPkgVersion( this, root, zyppObj->getInstalledObj(), false );
+    if ( selectable->hasInstalledObj() && ! installedIsAvailable )
+	new YQPkgVersion( this, root, selectable, selectable->installedObj(), false );
 }
 
 
 void
 YQPkgVersionsView::checkForChangedCandidate()
 {
-    if ( ! firstChild() || ! _zyppObj )
+    if ( ! firstChild() || ! _selectable )
 	return;
 
     QListViewItem * item = firstChild()->firstChild();
@@ -166,17 +162,14 @@ YQPkgVersionsView::checkForChangedCandidate()
 	{
 	    zypp::ResObject::constPtr newCandidate = versionItem->zyppObj();
 
-	    if ( newCandidate != _zyppObj->getCandidateObj() )
+	    if ( newCandidate != _selectable->candidateObj() )
 	    {
-		Selectable::Ptr sel = newCandidate->getSelectable();
-
-		if ( sel )
-		{
-		    y2milestone( "Candidate changed" );
-		    sel->setUserCandidate( newCandidate );
-		    emit candidateChanged( newCandidate );
-		    return;
-		}
+		y2milestone( "Candidate changed" );
+#ifdef MISSING
+		selectable->setUserCandidate( newCandidate );
+#endif
+		emit candidateChanged( newCandidate );
+		return;
 	    }
 	}
 
@@ -196,25 +189,29 @@ YQPkgVersionsView::minimumSizeHint() const
 
 
 
-YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
-			    QY2CheckListItem * 	parent,
+YQPkgVersion::YQPkgVersion( YQPkgVersionsView *		pkgVersionList,
+			    QY2CheckListItem * 		parent,
+			    zypp::ui::Selectable::Ptr	selectable,
 			    zypp::ResObject::constPtr 	zyppObj,
-			    bool		enabled )
+			    bool			enabled )
     : QY2CheckListItem( parent, "",
 			enabled ?
 			QCheckListItem::RadioButton :
 			QCheckListItem::Controller )	// cheap way to make it read-only
     , _pkgVersionList( pkgVersionList )
+    , _selectable( selectable )
     , _zyppObj( zyppObj )
 {
     setText( versionCol(), zyppObj->edition().asString().c_str() );
     setText( archCol(),    zyppObj->arch().asString().c_str() );
+#ifdef MISSING
     setText( instSrcCol(), zyppObj->instSrcLabel().c_str() );
-    setOn( zyppObj->isCandidateObj() );
+#endif
+    setOn( _zyppObj == _selectable->installedObj() );
 
-    if ( zyppObj->hasInstalledObj() )
+    if ( _selectable->hasInstalledObj() )
     {
-	if ( zyppObj->edition() == zyppObj->getInstalledObj()->edition() )
+	if ( _zyppObj->edition() == _selectable->installedObj()->edition() )
 	{
 	    setPixmap( statusCol(), YQIconPool::pkgKeepInstalled() );
 	    setBackgroundColor( QColor( 0xF0, 0xF0, 0xF0 ) ); 	// light grey
@@ -235,7 +232,7 @@ YQPkgVersion::toolTip(int)
 {
     QString tip;
 
-    if ( _zyppObj->isInstalledObj() )
+    if ( _zyppObj == _selectable->installedObj() )
 	tip = _( "This version is installed in your system." );
 
     return tip;
@@ -258,8 +255,8 @@ YQPkgVersion::compare( QListViewItem *	otherListViewItem,
 
     if ( other )
     {
-	if ( this->constZyppObj()->edition() < other->constZyppObj()->edition() ) return -1;
-	if ( this->constZyppObj()->edition() > other->constZyppObj()->edition() ) return 1;
+	if ( this->zyppObj()->edition() < other->zyppObj()->edition() ) return -1;
+	if ( this->zyppObj()->edition() > other->zyppObj()->edition() ) return 1;
 	return 0;
     }
 

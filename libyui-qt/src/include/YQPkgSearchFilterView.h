@@ -146,10 +146,12 @@ protected:
      **/
     bool check( const list<string> & strList, const QRegExp & regexp );
 
+#ifdef MISSING
     /**
      * Check PkgRelList attribute ( PMSolvable::provides(), PMSolvable::requires(), ... )
      **/
     bool check( const PMSolvable::PkgRelList_type & relList, const QRegExp & regexp );
+#endif
 
     /**
      * Key press event: Execute search upon 'Return'

@@ -24,11 +24,11 @@
 
 #include <qdialog.h>
 #include <zypp/ResObject.h>
+#include "YQZypp.h"
 
 class QPushButton;
 class QTextBrowser;
 
-using std::list;
 using std::string;
 
 
@@ -48,7 +48,7 @@ public:
      * This does not pop up a dialog yet.
      * Use 'exec()' (inherited from QDialog).
      * Or, better yet, use the static confirmText() method.
-     * 
+     *
      **/
     YQPkgTextDialog( const QString & 	text,
 		     QWidget * 		parent,
@@ -80,22 +80,18 @@ public:
      **/
     static void showText( QWidget * parent, const QString & text );
     static void showText( QWidget * parent, const string & text );
-    static void showText( QWidget * parent, const list<string> & text );
 
     /**
      * Show a text with a headline identifying a zypp::ResObject (name+summary).
      **/
-    static void showText( QWidget * parent,
-			  zypp::ResObject::constPtr zyppObj,
-			  const list<string> & text );
-    static void showText( QWidget * parent,
-			  zypp::ResObject::constPtr zyppObj,
-			  const string & text );
+    static void showText( QWidget * 			parent,
+			  zypp::ui::Selectable::Ptr 	selectable,
+			  const string & 		text );
 
     /**
      * Let the user confirm a text. Returns "true" if the user clicked the
      * accept button, false if he clicked the reject button.
-     **/ 
+     **/
     static bool confirmText( QWidget * 	parent,
 			     const QString & 	text,
 			     const QString & 	acceptButtonLabel,
@@ -108,23 +104,20 @@ public:
     static bool confirmText( QWidget * parent, const QString & text );
 
     /**
-     * Let the use confirm a text with a headline identifying a zypp::ResObject
+     * Let the use confirm a text with a headline identifying a selectable
      * (name+summary) with buttons "Accept" and "Cancel".
      * Returns "true" if the user clicked "Accept", "false" on "Cancel".
      **/
-    static bool confirmText( QWidget * parent,
-			     zypp::ResObject::constPtr zyppObj,
-			     const list<string> & text );
-    
-    static bool confirmText( QWidget * parent,
-			     zypp::ResObject::constPtr zyppObj,
-			     const string & text );
-    
+    static bool confirmText( QWidget * 			parent,
+			     zypp::ui::Selectable::Ptr 	selectable,
+			     const string & 		text );
+
     /**
-     * Convert a string list into its HTML paragraphs ( empty lines delimit
-     * paragraphs ).
+     * Simple HTML formatting: Wrap paragraphs in <p>...</p>
+     * Paragraphs are delimited by empty lines.
+     * Return unformatted text if it contains "<!-- DT:Rich -->".
      **/
-    static QString htmlParagraphs( const list<string> & text );
+    static QString htmlParagraphs( const string & rawText );
 
     /**
      * Returns a uniform heading in HTML format.
@@ -132,10 +125,10 @@ public:
     static QString htmlHeading( const QString & text );
 
     /**
-     * Returns a uniform heading in HTML format for the specified package:
-     * Package name and summary
+     * Returns a uniform heading in HTML format for the specified selectable:
+     * name and summary
      **/
-    static QString htmlHeading( zypp::ResObject::constPtr zyppObj );
+    static QString htmlHeading( zypp::ui::Selectable::Ptr selectable );
 
     /**
      * Escapes characters special to HTML in a ( plain text ) string, such as:
@@ -155,13 +148,12 @@ public slots:
      **/
     void setText( const QString & text );
     void setText( const string & text );
-    void setText( const list<string> & text );
 
     /**
      * Show a text with a headline identifying a zypp::ResObject ( name+summary ).
      **/
-    void setText( zypp::ResObject::constPtr zyppObj,
-		  const list<string> & text );
+    void setText( zypp::ui::Selectable::Ptr selectable,
+		  const string & text );
 
 protected:
 

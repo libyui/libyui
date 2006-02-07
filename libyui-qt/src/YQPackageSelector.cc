@@ -447,8 +447,8 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     _detailsViews->addTab( _pkgDescriptionView, _( "D&escription" ) );
     _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _pkgList,			SIGNAL( selectionChanged    ( zypp::ResObject::constPtr ) ),
-	     _pkgDescriptionView,	SLOT  ( showDetailsIfVisible( zypp::ResObject::constPtr ) ) );
+    connect( _pkgList,			SIGNAL( selectionChanged    ( zypp::ui::Selectable::Ptr ) ),
+	     _pkgDescriptionView,	SLOT  ( showDetailsIfVisible( zypp::ui::Selectable::Ptr ) ) );
 
     //
     // Technical details
@@ -459,8 +459,8 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
     _detailsViews->addTab( _pkgTechnicalDetailsView, _( "&Technical Data" ) );
 
-    connect( _pkgList,			SIGNAL( selectionChanged    ( zypp::ResObject::constPtr ) ),
-	     _pkgTechnicalDetailsView,	SLOT  ( showDetailsIfVisible( zypp::ResObject::constPtr ) ) );
+    connect( _pkgList,			SIGNAL( selectionChanged    ( zypp::ui::Selectable::Ptr ) ),
+	     _pkgTechnicalDetailsView,	SLOT  ( showDetailsIfVisible( zypp::ui::Selectable::Ptr ) ) );
 
 
     //
@@ -473,8 +473,8 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     _detailsViews->addTab( _pkgDependenciesView, _( "Dependencies" ) );
     _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _pkgList,			SIGNAL( selectionChanged    ( zypp::ResObject::constPtr ) ),
-	     _pkgDependenciesView,	SLOT  ( showDetailsIfVisible( zypp::ResObject::constPtr ) ) );
+    connect( _pkgList,			SIGNAL( selectionChanged    ( zypp::ui::Selectable::Ptr ) ),
+	     _pkgDependenciesView,	SLOT  ( showDetailsIfVisible( zypp::ui::Selectable::Ptr ) ) );
 
 
     //
@@ -489,8 +489,8 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
 	_detailsViews->addTab( _pkgVersionsView, _( "&Versions" ) );
 
-	connect( _pkgList,		SIGNAL( selectionChanged    ( zypp::ResObject::constPtr ) ),
-		 _pkgVersionsView,	SLOT  ( showDetailsIfVisible( zypp::ResObject::constPtr ) ) );
+	connect( _pkgList,		SIGNAL( selectionChanged    ( zypp::ui::Selectable::Ptr ) ),
+		 _pkgVersionsView,	SLOT  ( showDetailsIfVisible( zypp::ui::Selectable::Ptr ) ) );
     }
 }
 

@@ -36,7 +36,9 @@ YQPkgRpmGroupTagsFilterView::YQPkgRpmGroupTagsFilterView( QWidget * parent )
 {
     addColumn( _( "Package Groups" ) );
     setRootIsDecorated( true );
+#ifdef MISSING
     cloneTree( Y2PM::packageManager().rpmGroupsTree()->root(), 0 );
+#endif
     new YQPkgRpmGroupTag( this, _( "zzz All" ), 0 );
 
     connect( this, SIGNAL( selectionChanged( QListViewItem * ) ),
@@ -103,6 +105,7 @@ YQPkgRpmGroupTagsFilterView::filter()
 
     if ( selection() )
     {
+#ifdef MISSING
 	PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
 	while ( it != Y2PM::packageManager().end() )
@@ -131,6 +134,7 @@ YQPkgRpmGroupTagsFilterView::filter()
 
 	    ++it;
 	}
+#endif
     }
 
     emit filterFinished();
@@ -150,7 +154,7 @@ YQPkgRpmGroupTagsFilterView::check( zypp::ui::Selectable::Ptr	selectable,
 	return true;
     }
 
-
+#ifdef MISSING
     if ( pkg->group_ptr() == 0 )
     {
 	y2error( "NULL pointer in group_ptr() for package %s", pkg->name().asString().c_str() );
@@ -162,6 +166,7 @@ YQPkgRpmGroupTagsFilterView::check( zypp::ui::Selectable::Ptr	selectable,
 	emit filterMatch( selectable, pkg );
 	return true;
     }
+#endif
 
     return false;
 }

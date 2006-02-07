@@ -46,22 +46,17 @@ YQPkgSelDescriptionView::~YQPkgSelDescriptionView()
 
 
 void
-YQPkgSelDescriptionView::showDetails( zypp::ResObject::constPtr zyppObj )
+YQPkgSelDescriptionView::showDetails( zypp::ui::Selectable::Ptr selectable )
 {
-    _zyppObj = zyppObj;
-
-    if ( ! zyppObj )
+    if ( ! selectable )
     {
 	clear();
 	return;
     }
 
-    QString html_text = htmlHeading( zyppObj );
+    QString html_text = htmlHeading( selectable );
 
-    string name = zyppObj->name();
-    // y2debug( "Showing description for package %s", name.c_str() );
-
-    QString description = fromUTF8( zyppObj->description() );
+    QString description = fromUTF8( selectable->theObj()->description() );
 
     if ( ! description.contains( "<!-- DT:Rich -->" ) )
 	description = simpleHtmlParagraphs( description );
@@ -76,12 +71,13 @@ YQPkgSelDescriptionView::showDetails( zypp::ResObject::constPtr zyppObj )
 
 
 QString
-YQPkgSelDescriptionView::htmlHeading( zypp::ResObject::constPtr zyppObj )
+YQPkgSelDescriptionView::htmlHeading( zypp::ui::Selectable::Ptr selectable )
 {
-    zypp::Selection::constPtr sel = zypp::dynamic_pointer_cast<const zypp::Selection>( zyppObj );
+    zypp::Selection::constPtr sel =
+	zypp::dynamic_pointer_cast<const zypp::Selection>( selectable->theObj );
 
     if ( ! sel )
-	return YQPkgGenericDetailsView::htmlHeading( zyppObj );
+	return YQPkgGenericDetailsView::htmlHeading( selectable );
     
     QString summary = fromUTF8( sel->summary() );
     bool useBigFont = ( summary.length() <= 40 );

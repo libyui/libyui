@@ -33,8 +33,8 @@ using std::string;
 YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
     : QTextBrowser( parent )
 {
-    _zyppObj = 0;
-    _parentTab = dynamic_cast<QTabWidget *> (parent);
+    _selectable = 0;
+    _parentTab  = dynamic_cast<QTabWidget *> (parent);
 
     if ( _parentTab )
     {
@@ -55,26 +55,26 @@ YQPkgGenericDetailsView::reload( QWidget * newCurrent )
 {
     if ( newCurrent == this )
     {
-	showDetailsIfVisible( _zyppObj );
+	showDetailsIfVisible( _selectable );
     }
 }
 
 
 void
-YQPkgGenericDetailsView::showDetailsIfVisible( zypp::ResObject::constPtr zyppObj )
+YQPkgGenericDetailsView::showDetailsIfVisible( zypp::ui::Selectable::Ptr selectable )
 {
-    _zyppObj = zyppObj;
+    _selectable = selectable;
 
     if ( _parentTab )		// Is this view embedded into a tab widget?
     {
 	if ( _parentTab->currentPage() == this )  // Is this page the topmost?
 	{
-	    showDetails( zyppObj );
+	    showDetails( selectable );
 	}
     }
     else	// No tab parent - simply show data unconditionally.
     {
-	showDetails( zyppObj );
+	showDetails( selectable );
     }
 }
 
@@ -87,8 +87,16 @@ YQPkgGenericDetailsView::minimumSizeHint() const
 
 
 QString
-YQPkgGenericDetailsView::htmlHeading( zypp::ResObject::constPtr zyppObj )
+YQPkgGenericDetailsView::htmlHeading( zypp::ui::Selectable::Ptr selectable )
 {
+    if ( ! selectable )
+	return "";
+    
+    zypp::ResObject::constPtr zyppObj = selectable->theObj();
+
+    if ( ! zyppObj )
+	return "";
+    
     QString summary = fromUTF8( zyppObj->summary() );
 
     QString html = "<table";
@@ -107,6 +115,7 @@ YQPkgGenericDetailsView::htmlHeading( zypp::ResObject::constPtr zyppObj )
 
     return html;
 }
+
 
 
 QString

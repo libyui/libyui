@@ -23,7 +23,7 @@
 #define YQPkgGenericDetailsView_h
 
 #include <qtextbrowser.h>
-#include <zypp/ResObject.h>
+#include <zypp/ui/Selectable.h>
 #include <y2util/Date.h>
 
 
@@ -62,10 +62,10 @@ public:
     virtual QSize minimumSizeHint() const;
 
     /**
-     * Returns a uniform heading in HTML format for the specified package:
-     * Package name and summary
+     * Returns a uniform heading in HTML format for the specified selectable:
+     * name and summary
      **/
-    static QString htmlHeading( zypp::ResObject::constPtr zyppObj );
+    static QString htmlHeading( zypp::ui::Selectable::Ptr selectable );
 
     /**
      * Escapes characters special to HTML in a ( plain text ) string, such as:
@@ -114,7 +114,7 @@ public slots:
      * Delayed ( optimized ) display if this is embedded into a QTabWidget
      * parent: In this case, wait until this page becomes visible.
      **/
-    void showDetailsIfVisible( zypp::ResObject::constPtr zyppObj );
+    void showDetailsIfVisible( zypp::ui::Selectable::Ptr selectable );
 
     // slot clear() inherited from QTextEdit
 
@@ -122,7 +122,7 @@ public slots:
      * Show details for the specified package.
      * Reimplement this in derived classes.
      **/
-    virtual void showDetails( zypp::ResObject::constPtr zyppObj ) = 0;
+    virtual void showDetails( zypp::ui::Selectable::Ptr selectable ) = 0;
 
     
 protected slots:
@@ -138,7 +138,7 @@ protected:
     // Data members
 
     QTabWidget	* 		_parentTab;
-    zypp::ResObject::constPtr	_zyppObj;
+    zypp::ui::Selectable::Ptr	_selectable;
 };
 
 
