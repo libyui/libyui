@@ -1052,18 +1052,18 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 
 	    switch ( (*it)->status() )
 	    {
-		case S_AutoDel:
-		case S_NoInst:
-		case S_Protected:
-		case S_Taboo:
-		case S_Del:
+		case zypp::ui::S_AutoDel:
+		case zypp::ui::S_NoInst:
+		case zypp::ui::S_Protected:
+		case zypp::ui::S_Taboo:
+		case zypp::ui::S_Del:
 		    // Don't install the subpackage
 		    y2milestone( "Ignoring unwanted subpackage %s", (const char *) subPkgName );
 		    break;
 
-		case S_AutoInstall:
-		case S_Install:
-		case S_KeepInstalled:
+		case zypp::ui::S_AutoInstall:
+		case zypp::ui::S_Install:
+		case zypp::ui::S_KeepInstalled:
 
 		    // Install the subpackage, but don't try to update it
 
@@ -1075,19 +1075,19 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 		    break;
 
 
-		case S_Update:
-		case S_AutoUpdate:
+		case zypp::ui::S_Update:
+		case zypp::ui::S_AutoUpdate:
 
 		    // Install or update the subpackage
 
 		    if ( ! subPkg->installedObj() )
 		    {
-			subPkg->set_status( S_Install );
+			subPkg->set_status( zypp::ui::S_Install );
 			y2milestone( "Installing subpackage %s", (const char *) subPkgName );
 		    }
 		    else
 		    {
-			subPkg->set_status( S_Update );
+			subPkg->set_status( zypp::ui::S_Update );
 			y2milestone( "Updating subpackage %s", (const char *) subPkgName );
 		    }
 		    break;

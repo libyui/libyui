@@ -95,7 +95,7 @@ YQPkgYouPatchList::fillList()
 	    switch ( _patchCategory )
 	    {
 		case InstallablePatches:
-		    if ( patch->installable() && status != S_KeepInstalled )
+		    if ( patch->installable() && status != zypp::ui::S_KeepInstalled )
 			addYouPatchItem( *it, patch );
 		    break;
 

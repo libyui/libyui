@@ -122,6 +122,8 @@ YQPkgDescriptionDialog::filter( const QString & qPkgName )
 
     // Search for pkgs with that name
 
+#ifdef MISSING
+    
     PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
     while ( it != Y2PM::packageManager().end() )
@@ -130,10 +132,11 @@ YQPkgDescriptionDialog::filter( const QString & qPkgName )
 	zypp::ResObject::constPtr zyppObj = selectable->theObj();
 
 	if ( zyppObj && zyppObj->name() == pkgName )
-	    _pkgList->addPkgItem( zyppObj );
+	    _pkgList->addPkgItem( selectable, zyppObj );
 
 	++it;
     }
+#endif
 
 
     // Display description of the first pkg with that name

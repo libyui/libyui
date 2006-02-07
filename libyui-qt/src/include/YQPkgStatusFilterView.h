@@ -25,6 +25,7 @@
 #include <qvbox.h>
 #include <qregexp.h>
 #include <zypp/Package.h>
+#include <zypp/ui/Selectable.h>
 
 
 class QComboBox;
@@ -60,7 +61,8 @@ public:
     /**
      * Check if pkg matches the filter criteria.
      **/
-    bool check( zypp::Package::constPtr pkg );
+    bool check( zypp::ui::Selectable::Ptr	selectable,
+		zypp::Package::constPtr 	pkg );
 
 
 public slots:

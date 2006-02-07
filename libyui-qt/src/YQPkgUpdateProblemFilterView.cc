@@ -78,15 +78,17 @@ YQPkgUpdateProblemFilterView::filter()
 {
     emit filterStart();
 
+#ifdef MISSING
     PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().updateBegin();
 
     while ( it != Y2PM::packageManager().updateEnd() )
     {
 	Selectable::Ptr selectable = *it;
-	emit filterMatch( ( *it)->theObj() );
+	emit filterMatch( *it, ( *it)->theObj() );
 
 	++it;
     }
+#endif
 
     emit filterFinished();
 }

@@ -65,14 +65,14 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     QGroupBox * gbox = new QGroupBox( 3, Qt::Horizontal, _( "Show packages with status" ), this );
     CHECK_PTR( gbox );
 
-    _showDel		= addStatusCheckBox( gbox, _( "Delete" ), YQIconPool::disabledPkgDel(),	   true );
-    _showInstall	= addStatusCheckBox( gbox, _( "Install" ), YQIconPool::disabledPkgInstall(),	   true );
-    _showUpdate		= addStatusCheckBox( gbox, _( "Update" ), YQIconPool::disabledPkgUpdate(),	   true );
-    _showAutoDel	= addStatusCheckBox( gbox, _( "Autodelete" ), YQIconPool::disabledPkgAutoDel(),	   true );
-    _showAutoInstall	= addStatusCheckBox( gbox, _( "Autoinstall" ), YQIconPool::disabledPkgAutoInstall(),   true );
-    _showAutoUpdate	= addStatusCheckBox( gbox, _( "Autoupdate" ), YQIconPool::disabledPkgAutoUpdate(),	   true );
-    _showTaboo		= addStatusCheckBox( gbox, _( "Taboo" ), YQIconPool::disabledPkgTaboo(),	   true );
-    _showProtected	= addStatusCheckBox( gbox, _( "Protected" ), YQIconPool::disabledPkgProtected(),	   true );
+    _showDel		= addStatusCheckBox( gbox, _( "Delete" ), 	YQIconPool::disabledPkgDel(),	   	true );
+    _showInstall	= addStatusCheckBox( gbox, _( "Install" ), 	YQIconPool::disabledPkgInstall(),	true );
+    _showUpdate		= addStatusCheckBox( gbox, _( "Update" ), 	YQIconPool::disabledPkgUpdate(),	true );
+    _showAutoDel	= addStatusCheckBox( gbox, _( "Autodelete" ), 	YQIconPool::disabledPkgAutoDel(),	true );
+    _showAutoInstall	= addStatusCheckBox( gbox, _( "Autoinstall" ), 	YQIconPool::disabledPkgAutoInstall(),   true );
+    _showAutoUpdate	= addStatusCheckBox( gbox, _( "Autoupdate" ), 	YQIconPool::disabledPkgAutoUpdate(),	true );
+    _showTaboo		= addStatusCheckBox( gbox, _( "Taboo" ), 	YQIconPool::disabledPkgTaboo(),	   	true );
+    _showProtected	= addStatusCheckBox( gbox, _( "Protected" ), 	YQIconPool::disabledPkgProtected(),	true );
 
     addVSpacing( gbox, 8 );
     addHStretch( gbox ); // For the other columns of the QGroupBox ( prevent wraparound )
@@ -153,6 +153,7 @@ YQPkgStatusFilterView::filter()
 {
     emit filterStart();
 
+#ifdef MISSING
     PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
     while ( it != Y2PM::packageManager().end() )
@@ -169,42 +170,44 @@ YQPkgStatusFilterView::filter()
 	if ( ! match			  &&
 	     ! selectable->candidateObj() &&
 	     ! selectable->installedObj()   )
-	    check( selectable->theObj() );
+	    check( selectable,  selectable->theObj() );
 
 	++it;
     }
+#endif
 
     emit filterFinished();
 }
 
 
 bool
-YQPkgStatusFilterView::check( zypp::Package::constPtr pkg )
+YQPkgStatusFilterView::check( zypp::ui::Selectable::Ptr	selectable,
+			      zypp::Package::constPtr 	pkg )
 {
     bool match = false;
 
     if ( ! pkg )
 	return false;
 
-    switch ( pkg->getSelectable()->status() )
+    switch ( selectable->status() )
     {
-	case S_AutoDel:		match = _showAutoDel->isChecked();		break;
-	case S_AutoInstall:	match = _showAutoInstall->isChecked();		break;
-	case S_AutoUpdate:	match = _showAutoUpdate->isChecked();		break;
-	case S_Del:		match = _showDel->isChecked();			break;
-	case S_Install:		match = _showInstall->isChecked();		break;
-	case S_KeepInstalled:	match = _showKeepInstalled->isChecked();	break;
-	case S_NoInst:		match = _showNoInst->isChecked();		break;
-	case S_Protected:		match = _showProtected->isChecked();		break;
-	case S_Taboo:		match = _showTaboo->isChecked();		break;
-	case S_Update:		match = _showUpdate->isChecked();		break;
+	case zypp::ui::S_AutoDel:	match = _showAutoDel->isChecked();		break;
+	case zypp::ui::S_AutoInstall:	match = _showAutoInstall->isChecked();		break;
+	case zypp::ui::S_AutoUpdate:	match = _showAutoUpdate->isChecked();		break;
+	case zypp::ui::S_Del:		match = _showDel->isChecked();			break;
+	case zypp::ui::S_Install:	match = _showInstall->isChecked();		break;
+	case zypp::ui::S_KeepInstalled:	match = _showKeepInstalled->isChecked();	break;
+	case zypp::ui::S_NoInst:	match = _showNoInst->isChecked();		break;
+	case zypp::ui::S_Protected:	match = _showProtected->isChecked();		break;
+	case zypp::ui::S_Taboo:		match = _showTaboo->isChecked();		break;
+	case zypp::ui::S_Update:	match = _showUpdate->isChecked();		break;
 
 	    // Intentionally omitting 'default' branch so the compiler can
 	    // catch unhandled enum states
     }
 
     if ( match )
-	emit filterMatch( pkg );
+	emit filterMatch( selectable, pkg );
 
     return match;
 }

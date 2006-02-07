@@ -282,8 +282,8 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
     PkgEdition edition;
 
     _resolutionsHeader	= 0;
-    _status		= S_NoInst;
-    _undo_status	= S_NoInst;
+    _status		= zypp::ui::S_NoInst;
+    _undo_status	= zypp::ui::S_NoInst;
     _zyppObj		= _conflict.solvable;
     _isPkg		= true;
     _canIgnore		= true;
@@ -384,7 +384,7 @@ YQPkgConflict::formatHeading()
 
 	    switch ( _status )
 	    {
-		case S_Taboo:
+		case zypp::ui::S_Taboo:
 
 		    if ( _isPkg )
 			// Package %1 is set to taboo, yet other packages require it
@@ -395,8 +395,8 @@ YQPkgConflict::formatHeading()
 		    icon = YQIconPool::tabooPkgConflict();
 		    break;
 
-                case S_AutoDel:
-                case S_Del:
+                case zypp::ui::S_AutoDel:
+                case zypp::ui::S_Del:
 		    if ( _isPkg )
 			// Package %1 is marked for deletion, yet other packages require it
 			text = ( _( "Deleting %1 breaks other packages" ) ).arg( _shortName );
@@ -563,49 +563,49 @@ YQPkgConflict::addUndoResolution( QY2CheckListItem * parent )
 
     switch ( _status )
     {
-	case S_Taboo:
+	case zypp::ui::S_Taboo:
 	    text = ( _( "Do Not Set %1 to Taboo" ) ).arg( _shortName );
 	    _undo_status = _zyppObj->hasInstalledObj() ?
-		S_KeepInstalled : S_NoInst;
+		zypp::ui::S_KeepInstalled : zypp::ui::S_NoInst;
 	    break;
 
-	case S_Protected:
+	case zypp::ui::S_Protected:
 	    text = ( _( "Do Not Set %1 to Protected" ) ).arg( _shortName );
 	    _undo_status = _zyppObj->hasInstalledObj() ?
-		S_KeepInstalled : S_NoInst;
+		zypp::ui::S_KeepInstalled : zypp::ui::S_NoInst;
 	    break;
 
-	case S_Del:
-	case S_AutoDel:
+	case zypp::ui::S_Del:
+	case zypp::ui::S_AutoDel:
 	    text = ( _( "Do Not Delete %1" ) ).arg( _shortName );
-	    _undo_status = S_KeepInstalled;
+	    _undo_status = zypp::ui::S_KeepInstalled;
 	    break;
 
-	case S_AutoUpdate:
-	case S_Update:
+	case zypp::ui::S_AutoUpdate:
+	case zypp::ui::S_Update:
 	    text = ( _( "Do Not Update %1" ) ).arg( _shortName );
-	    _undo_status = S_KeepInstalled;
+	    _undo_status = zypp::ui::S_KeepInstalled;
 	    break;
 
-	case S_AutoInstall:
-	case S_Install:
+	case zypp::ui::S_AutoInstall:
+	case zypp::ui::S_Install:
 	    text = ( _( "Do Not Install %1" ) ).arg( _shortName );
-	    _undo_status = S_NoInst;
+	    _undo_status = zypp::ui::S_NoInst;
 	    break;
 
-	case S_KeepInstalled:
+	case zypp::ui::S_KeepInstalled:
 	    if(!_conflict.is_downgrade_from.is_unspecified())
 	    {
 		// %1 package name, %2 version
 		text = ( _( "Downgrade %1 to Version %2" ) ).arg(
 		    _shortName+"-"+_conflict.is_downgrade_from.asString().c_str() ).arg(
 			_conflict.edition.asString().c_str());
-		_undo_status = S_Update;
+		_undo_status = zypp::ui::S_Update;
 		break;
 	    }
 	    else
 		return;	// shouldn't happen
-	case S_NoInst:		return;	// shouldn't happen
+	case zypp::ui::S_NoInst:		return;	// shouldn't happen
     }
 
     new YQPkgConflictResolution( parent, text, YQPkgConflictUndo );
@@ -1001,9 +1001,9 @@ YQPkgConflict::applyResolution()
 		    if ( res->zyppObj() && res->zyppObj()->getSelectable() )
 		    {
 			if ( res->zyppObj()->hasInstalledObj() )
-			    res->zyppObj()->getSelectable()->set_status( S_Update );
+			    res->zyppObj()->getSelectable()->set_status( zypp::ui::S_Update );
 			else
-			    res->zyppObj()->getSelectable()->set_status( S_Install );
+			    res->zyppObj()->getSelectable()->set_status( zypp::ui::S_Install );
 		    }
 		    return;
 	    }
@@ -1031,7 +1031,7 @@ YQPkgConflict::bruteForceDelete(PkgDep::SolvableList& solvablelist)
 	if ( pkg && pkg->getSelectable() )
 	{
 	    pkg->getSelectable()->set_status( pkg->hasInstalledObj() ?
-					      S_Del : S_NoInst );
+					      zypp::ui::S_Del : zypp::ui::S_NoInst );
 	}
 
 	++it;
