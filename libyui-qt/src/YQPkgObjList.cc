@@ -81,7 +81,7 @@ YQPkgObjList::~YQPkgObjList()
 
 
 void
-YQPkgObjList::addPkgObjItem( zypp::ui::Selectable::Ptr selectable, zypp::ResObject::Ptr zyppObj )
+YQPkgObjList::addPkgObjItem( zypp::ui::Selectable::Ptr selectable, zypp::ResObject::constPtr zyppObj )
 {
     if ( ! selectable )
     {
@@ -163,7 +163,7 @@ YQPkgObjList::selectionChangedInternal( QListViewItem * listViewItem )
 void
 YQPkgObjList::clear()
 {
-    emit selectionChanged( zypp::ResObject::Ptr() );
+    emit selectionChanged( zypp::ResObject::constPtr() );
     QY2ListView::clear();
 }
 
@@ -653,7 +653,7 @@ YQPkgObjList::message( const QString & text )
 
 YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList * pkgObjList,
 				    zypp::ui::Selectable::Ptr selectable,
-				    zypp::ResObject::Ptr zyppObj )
+				    zypp::ResObject::constPtr zyppObj )
     : QY2ListViewItem( pkgObjList )
     , _pkgObjList( pkgObjList )
     , _selectable( selectable )

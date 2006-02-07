@@ -447,8 +447,8 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     _detailsViews->addTab( _pkgDescriptionView, _( "D&escription" ) );
     _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _pkgList,			SIGNAL( selectionChanged    ( zypp::ResObject::Ptr ) ),
-	     _pkgDescriptionView,	SLOT  ( showDetailsIfVisible( zypp::ResObject::Ptr ) ) );
+    connect( _pkgList,			SIGNAL( selectionChanged    ( zypp::ResObject::constPtr ) ),
+	     _pkgDescriptionView,	SLOT  ( showDetailsIfVisible( zypp::ResObject::constPtr ) ) );
 
     //
     // Technical details
@@ -459,8 +459,8 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
     _detailsViews->addTab( _pkgTechnicalDetailsView, _( "&Technical Data" ) );
 
-    connect( _pkgList,			SIGNAL( selectionChanged    ( zypp::ResObject::Ptr ) ),
-	     _pkgTechnicalDetailsView,	SLOT  ( showDetailsIfVisible( zypp::ResObject::Ptr ) ) );
+    connect( _pkgList,			SIGNAL( selectionChanged    ( zypp::ResObject::constPtr ) ),
+	     _pkgTechnicalDetailsView,	SLOT  ( showDetailsIfVisible( zypp::ResObject::constPtr ) ) );
 
 
     //
@@ -473,8 +473,8 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     _detailsViews->addTab( _pkgDependenciesView, _( "Dependencies" ) );
     _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _pkgList,			SIGNAL( selectionChanged    ( zypp::ResObject::Ptr ) ),
-	     _pkgDependenciesView,	SLOT  ( showDetailsIfVisible( zypp::ResObject::Ptr ) ) );
+    connect( _pkgList,			SIGNAL( selectionChanged    ( zypp::ResObject::constPtr ) ),
+	     _pkgDependenciesView,	SLOT  ( showDetailsIfVisible( zypp::ResObject::constPtr ) ) );
 
 
     //
@@ -489,8 +489,8 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
 	_detailsViews->addTab( _pkgVersionsView, _( "&Versions" ) );
 
-	connect( _pkgList,		SIGNAL( selectionChanged    ( zypp::ResObject::Ptr ) ),
-		 _pkgVersionsView,	SLOT  ( showDetailsIfVisible( zypp::ResObject::Ptr ) ) );
+	connect( _pkgList,		SIGNAL( selectionChanged    ( zypp::ResObject::constPtr ) ),
+		 _pkgVersionsView,	SLOT  ( showDetailsIfVisible( zypp::ResObject::constPtr ) ) );
     }
 }
 
@@ -704,8 +704,8 @@ YQPackageSelector::connectFilter( QWidget * filter,
     connect( filter,	SIGNAL( filterStart() 	),
 	     pkgList, 	SLOT  ( clear() 	) );
 
-    connect( filter,	SIGNAL( filterMatch( zypp::Package::Ptr ) ),
-	     pkgList, 	SLOT  ( addPkgItem ( zypp::Package::Ptr ) ) );
+    connect( filter,	SIGNAL( filterMatch( zypp::Package::constPtr ) ),
+	     pkgList, 	SLOT  ( addPkgItem ( zypp::Package::constPtr ) ) );
 
     connect( filter, 	SIGNAL( filterFinished()  ),
 	     pkgList, 	SLOT  ( selectSomething() ) );
@@ -751,8 +751,8 @@ YQPackageSelector::makeConnections()
 
     if ( _instSrcFilterView && _pkgList )
     {
-	connect( _instSrcFilterView,	SIGNAL( filterNearMatch	 ( zypp::Package::Ptr ) ),
-		 _pkgList,		SLOT  ( addPkgItemDimmed ( zypp::Package::Ptr ) ) );
+	connect( _instSrcFilterView,	SIGNAL( filterNearMatch	 ( zypp::Package::constPtr ) ),
+		 _pkgList,		SLOT  ( addPkgItemDimmed ( zypp::Package::constPtr ) ) );
     }
 
     if ( _pkgList && _diskUsageList )
@@ -812,7 +812,7 @@ YQPackageSelector::makeConnections()
 
     if ( _pkgVersionsView && _pkgList )
     {
-	connect( _pkgVersionsView, 	SIGNAL( candidateChanged( zypp::ResObject::Ptr ) ),
+	connect( _pkgVersionsView, 	SIGNAL( candidateChanged( zypp::ResObject::constPtr ) ),
 		 _pkgList,		SLOT  ( updateToplevelItemData() ) );
     }
 

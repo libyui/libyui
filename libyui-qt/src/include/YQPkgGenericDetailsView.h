@@ -65,7 +65,7 @@ public:
      * Returns a uniform heading in HTML format for the specified package:
      * Package name and summary
      **/
-    static QString htmlHeading( zypp::ResObject::Ptr zyppObj );
+    static QString htmlHeading( zypp::ResObject::constPtr zyppObj );
 
     /**
      * Escapes characters special to HTML in a ( plain text ) string, such as:
@@ -114,7 +114,7 @@ public slots:
      * Delayed ( optimized ) display if this is embedded into a QTabWidget
      * parent: In this case, wait until this page becomes visible.
      **/
-    void showDetailsIfVisible( zypp::ResObject::Ptr zyppObj );
+    void showDetailsIfVisible( zypp::ResObject::constPtr zyppObj );
 
     // slot clear() inherited from QTextEdit
 
@@ -122,7 +122,7 @@ public slots:
      * Show details for the specified package.
      * Reimplement this in derived classes.
      **/
-    virtual void showDetails( zypp::ResObject::Ptr zyppObj ) = 0;
+    virtual void showDetails( zypp::ResObject::constPtr zyppObj ) = 0;
 
     
 protected slots:
@@ -136,7 +136,7 @@ protected slots:
     // Data members
 
     QTabWidget	* 	_parentTab;
-    zypp::ResObject::Ptr		_zyppObj;
+    zypp::ResObject::constPtr		_zyppObj;
 };
 
 

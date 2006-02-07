@@ -290,7 +290,7 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
 
     if ( _zyppObj )
     {
-	if ( ! zypp::Package::Ptr( _zyppObj ) )
+	if ( ! zypp::Package::constPtr( _zyppObj ) )
 	    _isPkg	= false;
 
 	name		= _zyppObj->name();
@@ -622,7 +622,7 @@ YQPkgConflict::addAlternativesList( QY2CheckListItem * parent )
 
     while ( it != _conflict.alternatives.end() )
     {
-	zypp::ResObject::Ptr pkg = ( *it ).solvable;
+	zypp::ResObject::constPtr pkg = ( *it ).solvable;
 
 	if ( pkg )
 	    new YQPkgConflictResolution( parent, pkg );
@@ -681,7 +681,7 @@ YQPkgConflict::addDeleteReferersResolution( QY2CheckListItem * parent )
 
 	while ( it != _conflict.remove_referers.end() )
 	{
-	    zypp::Selection::Ptr sel( *it );
+	    zypp::Selection::constPtr sel( *it );
 
 	    if ( sel && sel->isBase() )
 	    {
@@ -760,7 +760,7 @@ YQPkgConflict::dumpDeleteList( QListViewItem * parent, PkgDep::SolvableList& sol
 	    }
 	}
 
-	zypp::ResObject::Ptr pkg = ( *it );
+	zypp::ResObject::constPtr pkg = ( *it );
 
 	if ( pkg )
 	{
@@ -1026,7 +1026,7 @@ YQPkgConflict::bruteForceDelete(PkgDep::SolvableList& solvablelist)
 
     while ( it != solvablelist.end() )
     {
-	zypp::ResObject::Ptr pkg = ( *it );
+	zypp::ResObject::constPtr pkg = ( *it );
 
 	if ( pkg && pkg->getSelectable() )
 	{
@@ -1053,7 +1053,7 @@ YQPkgConflictResolution::YQPkgConflictResolution( QY2CheckListItem * 			parent,
 
 
 YQPkgConflictResolution::YQPkgConflictResolution( QY2CheckListItem *	parent,
-						  zypp::ResObject::Ptr		zyppObj )
+						  zypp::ResObject::constPtr		zyppObj )
     : QY2CheckListItem( parent, "", QCheckListItem::RadioButton, true )
     , _type( YQPkgConflictAlternative )
     , _zyppObj( zyppObj )

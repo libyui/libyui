@@ -259,7 +259,7 @@ YQPkgSearchFilterView::filter()
 
 
 bool
-YQPkgSearchFilterView::check( zypp::Package::Ptr pkg )
+YQPkgSearchFilterView::check( zypp::Package::constPtr pkg )
 {
     QRegExp regexp = _searchText->currentText();
     regexp.setCaseSensitive( _caseSensitive->isChecked() );
@@ -270,7 +270,7 @@ YQPkgSearchFilterView::check( zypp::Package::Ptr pkg )
 
 
 bool
-YQPkgSearchFilterView::check( zypp::Package::Ptr pkg, const QRegExp & regexp )
+YQPkgSearchFilterView::check( zypp::Package::constPtr pkg, const QRegExp & regexp )
 {
     if ( ! pkg )
 	return false;

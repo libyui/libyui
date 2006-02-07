@@ -75,7 +75,7 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addPkgSelItem( zypp::Selection::Ptr sel );
+    void addPkgSelItem( zypp::Selection::constPtr sel );
 
     /**
      * Emit an updatePackages() signal.
@@ -118,7 +118,7 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( zypp::Package::Ptr pkg );
+    void filterMatch( zypp::Package::constPtr pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -136,7 +136,7 @@ public:
      * Constructor. Creates a YQPkgSelList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgSelListItem( YQPkgSelList * pkgSelList, zypp::Selection::Ptr sel );
+    YQPkgSelListItem( YQPkgSelList * pkgSelList, zypp::Selection::constPtr sel );
 
     /**
      * Destructor
@@ -146,12 +146,12 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    zypp::Selection::Ptr zyppSel() { return _zyppSel; }
+    zypp::Selection::constPtr zyppSel() { return _zyppSel; }
 
     /**
      * Returns the original object within the package manager backend.
      **/
-    const zypp::Selection::Ptr constPmSel() const { return _zyppSel; }
+    const zypp::Selection::constPtr constPmSel() const { return _zyppSel; }
 
     /**
      * Set the selection status.
@@ -188,7 +188,7 @@ protected:
     // Data members
 
     YQPkgSelList	*	_pkgSelList;
-    zypp::Selection::Ptr		_zyppSel;
+    zypp::Selection::constPtr		_zyppSel;
 };
 
 

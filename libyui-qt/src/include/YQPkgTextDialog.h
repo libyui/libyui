@@ -86,10 +86,10 @@ public:
      * Show a text with a headline identifying a zypp::ResObject (name+summary).
      **/
     static void showText( QWidget * parent,
-			  zypp::ResObject::Ptr zyppObj,
+			  zypp::ResObject::constPtr zyppObj,
 			  const list<string> & text );
     static void showText( QWidget * parent,
-			  zypp::ResObject::Ptr zyppObj,
+			  zypp::ResObject::constPtr zyppObj,
 			  const string & text );
 
     /**
@@ -113,11 +113,11 @@ public:
      * Returns "true" if the user clicked "Accept", "false" on "Cancel".
      **/
     static bool confirmText( QWidget * parent,
-			     zypp::ResObject::Ptr zyppObj,
+			     zypp::ResObject::constPtr zyppObj,
 			     const list<string> & text );
     
     static bool confirmText( QWidget * parent,
-			     zypp::ResObject::Ptr zyppObj,
+			     zypp::ResObject::constPtr zyppObj,
 			     const string & text );
     
     /**
@@ -135,7 +135,7 @@ public:
      * Returns a uniform heading in HTML format for the specified package:
      * Package name and summary
      **/
-    static QString htmlHeading( zypp::ResObject::Ptr zyppObj );
+    static QString htmlHeading( zypp::ResObject::constPtr zyppObj );
 
     /**
      * Escapes characters special to HTML in a ( plain text ) string, such as:
@@ -160,7 +160,7 @@ public slots:
     /**
      * Show a text with a headline identifying a zypp::ResObject ( name+summary ).
      **/
-    void setText( zypp::ResObject::Ptr zyppObj,
+    void setText( zypp::ResObject::constPtr zyppObj,
 		  const list<string> & text );
 
 protected:

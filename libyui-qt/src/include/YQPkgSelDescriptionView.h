@@ -50,14 +50,14 @@ public:
      * In this case the package description.
      * Overwritten from YQPkgGenericDetailsView.
      **/
-    virtual void showDetails( zypp::ResObject::Ptr zyppObj );
+    virtual void showDetails( zypp::ResObject::constPtr zyppObj );
 
 protected:
 
     /**
      * Format the heading in HTML
      **/
-    QString htmlHeading( zypp::ResObject::Ptr zyppObj );
+    QString htmlHeading( zypp::ResObject::constPtr zyppObj );
 };
 
 

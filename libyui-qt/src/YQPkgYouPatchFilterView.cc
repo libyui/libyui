@@ -104,8 +104,8 @@ YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
     _totalDownloadSize->setMidLineWidth(2);
     
 
-    connect( _youPatchList,	SIGNAL( selectionChanged    ( zypp::ResObject::Ptr ) ),
-	     _descriptionView,	SLOT  ( showDetailsIfVisible( zypp::ResObject::Ptr ) ) );
+    connect( _youPatchList,	SIGNAL( selectionChanged    ( zypp::ResObject::constPtr ) ),
+	     _descriptionView,	SLOT  ( showDetailsIfVisible( zypp::ResObject::constPtr ) ) );
 
     connect( _youPatchList,	SIGNAL( statusChanged() 		),
 	     this,		SLOT  ( updateTotalDownloadSize() 	) );

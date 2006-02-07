@@ -81,8 +81,8 @@ YQPkgDescriptionDialog::YQPkgDescriptionDialog( QWidget * parent, const QString 
     CHECK_PTR( _pkgDescription );
     _pkgDescription->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _pkgList,		SIGNAL( selectionChanged    ( zypp::ResObject::Ptr ) ),
-	     _pkgDescription,	SLOT  ( showDetailsIfVisible( zypp::ResObject::Ptr ) ) );
+    connect( _pkgList,		SIGNAL( selectionChanged    ( zypp::ResObject::constPtr ) ),
+	     _pkgDescription,	SLOT  ( showDetailsIfVisible( zypp::ResObject::constPtr ) ) );
 
 
     // Button box (to center the single button)
@@ -127,7 +127,7 @@ YQPkgDescriptionDialog::filter( const QString & qPkgName )
     while ( it != Y2PM::packageManager().end() )
     {
 	Selectable::Ptr selectable = *it;
-	zypp::ResObject::Ptr zyppObj = selectable->theObj();
+	zypp::ResObject::constPtr zyppObj = selectable->theObj();
 
 	if ( zyppObj && zyppObj->name() == pkgName )
 	    _pkgList->addPkgItem( zyppObj );

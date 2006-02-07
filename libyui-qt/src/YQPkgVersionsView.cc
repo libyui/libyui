@@ -82,7 +82,7 @@ YQPkgVersionsView::reload( QWidget * newCurrent )
 
 
 void
-YQPkgVersionsView::showDetailsIfVisible( zypp::ResObject::Ptr zyppObj )
+YQPkgVersionsView::showDetailsIfVisible( zypp::ResObject::constPtr zyppObj )
 {
     _zyppObj = zyppObj;
 
@@ -101,7 +101,7 @@ YQPkgVersionsView::showDetailsIfVisible( zypp::ResObject::Ptr zyppObj )
 
 
 void
-YQPkgVersionsView::showDetails( zypp::ResObject::Ptr zyppObj )
+YQPkgVersionsView::showDetails( zypp::ResObject::constPtr zyppObj )
 {
     clear();
 
@@ -164,7 +164,7 @@ YQPkgVersionsView::checkForChangedCandidate()
 
 	if ( versionItem && versionItem->isOn() )
 	{
-	    zypp::ResObject::Ptr newCandidate = versionItem->zyppObj();
+	    zypp::ResObject::constPtr newCandidate = versionItem->zyppObj();
 
 	    if ( newCandidate != _zyppObj->getCandidateObj() )
 	    {
@@ -198,7 +198,7 @@ YQPkgVersionsView::minimumSizeHint() const
 
 YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
 			    QY2CheckListItem * 	parent,
-			    zypp::ResObject::Ptr 	zyppObj,
+			    zypp::ResObject::constPtr 	zyppObj,
 			    bool		enabled )
     : QY2CheckListItem( parent, "",
 			enabled ?

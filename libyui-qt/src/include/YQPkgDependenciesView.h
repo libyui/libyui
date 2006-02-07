@@ -58,13 +58,13 @@ protected:
      * In this case technical data, very much like "rpm -qi".
      * Overwritten from YQPkgGenericDetailsView.
      **/
-    virtual void showDetails( zypp::ResObject::Ptr zyppObj );
+    virtual void showDetails( zypp::ResObject::constPtr zyppObj );
 
     /**
      * Returns a string containing a HTML table for technical details for one
      * package.
      **/
-    QString simpleTable( zypp::Package::Ptr pkg );
+    QString simpleTable( zypp::Package::constPtr pkg );
 
 
     /**
@@ -72,8 +72,8 @@ protected:
      * package instances: The installed instance and an alternate instance.
      * ( usually the candidate instance ).
      **/
-    QString complexTable( zypp::Package::Ptr installedPkg,
-			  zypp::Package::Ptr candidatePkg );
+    QString complexTable( zypp::Package::constPtr installedPkg,
+			  zypp::Package::constPtr candidatePkg );
 
     /**
      * Make a HTML table cell from a PkgRelList.

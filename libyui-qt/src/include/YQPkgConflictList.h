@@ -324,7 +324,7 @@ protected:
 
     // Data members
 
-    zypp::ResObject::Ptr			_zyppObj;
+    zypp::ResObject::constPtr			_zyppObj;
     bool			_isPkg;
     QString			_shortName;	// Only pkg name ( no version )
     QString			_fullName;	// Name + edition
@@ -362,12 +362,12 @@ public:
      * Constructor for alternatives
      **/
     YQPkgConflictResolution( QY2CheckListItem *	parent,
-			     zypp::ResObject::Ptr	zyppObj );
+			     zypp::ResObject::constPtr	zyppObj );
 
     /**
      * Returns the corresponding zypp::ResObject.
      **/
-    zypp::ResObject::Ptr zyppObj() const { return _zyppObj; }
+    zypp::ResObject::constPtr zyppObj() const { return _zyppObj; }
 
     /**
      * Returns the type of this resolution.
@@ -385,7 +385,7 @@ protected:
     // Data members
 
     YQPkgConflictResolutionType	_type;
-    zypp::ResObject::Ptr			_zyppObj;
+    zypp::ResObject::constPtr			_zyppObj;
 };
 
 

@@ -179,7 +179,7 @@ YQPkgStatusFilterView::filter()
 
 
 bool
-YQPkgStatusFilterView::check( zypp::Package::Ptr pkg )
+YQPkgStatusFilterView::check( zypp::Package::constPtr pkg )
 {
     bool match = false;
 

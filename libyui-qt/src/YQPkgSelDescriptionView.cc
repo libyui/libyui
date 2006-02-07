@@ -46,7 +46,7 @@ YQPkgSelDescriptionView::~YQPkgSelDescriptionView()
 
 
 void
-YQPkgSelDescriptionView::showDetails( zypp::ResObject::Ptr zyppObj )
+YQPkgSelDescriptionView::showDetails( zypp::ResObject::constPtr zyppObj )
 {
     _zyppObj = zyppObj;
 
@@ -116,9 +116,9 @@ YQPkgSelDescriptionView::showDetails( zypp::ResObject::Ptr zyppObj )
 
 
 QString
-YQPkgSelDescriptionView::htmlHeading( zypp::ResObject::Ptr zyppObj )
+YQPkgSelDescriptionView::htmlHeading( zypp::ResObject::constPtr zyppObj )
 {
-    zypp::Selection::Ptr sel = zyppObj;
+    zypp::Selection::constPtr sel = zyppObj;
 
     if ( ! sel )
 	return YQPkgGenericDetailsView::htmlHeading( zyppObj );

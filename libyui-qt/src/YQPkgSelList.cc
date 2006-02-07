@@ -70,7 +70,7 @@ YQPkgSelList::fillList()
 
     while ( it != Y2PM::selectionManager().end() )
     {
-	zypp::Selection::Ptr sel = ( *it)->theObj();
+	zypp::Selection::constPtr sel = ( *it)->theObj();
 
 	if ( sel )
 	{
@@ -102,7 +102,7 @@ YQPkgSelList::filter()
 
     if ( selection() )
     {
-	zypp::Selection::Ptr sel = selection()->zyppSel();
+	zypp::Selection::constPtr sel = selection()->zyppSel();
 
 	if ( sel )
 	{
@@ -122,7 +122,7 @@ YQPkgSelList::filter()
 
 
 void
-YQPkgSelList::addPkgSelItem( zypp::Selection::Ptr zyppSel )
+YQPkgSelList::addPkgSelItem( zypp::Selection::constPtr zyppSel )
 {
     if ( ! zyppSel )
     {
@@ -158,7 +158,7 @@ YQPkgSelList::applyChanges()
 
 
 
-YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList * pkgSelList, zypp::Selection::Ptr pkgSel )
+YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList * pkgSelList, zypp::Selection::constPtr pkgSel )
     : YQPkgObjListItem( pkgSelList, pkgSel )
     , _pkgSelList( pkgSelList )
     , _zyppSel( pkgSel )

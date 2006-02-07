@@ -43,7 +43,7 @@ YQPkgDescriptionView::~YQPkgDescriptionView()
 
 
 void
-YQPkgDescriptionView::showDetails( zypp::ResObject::Ptr zyppObj )
+YQPkgDescriptionView::showDetails( zypp::ResObject::constPtr zyppObj )
 {
     _zyppObj = zyppObj;
 

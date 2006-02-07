@@ -61,7 +61,7 @@ YQPkgGenericDetailsView::reload( QWidget * newCurrent )
 
 
 void
-YQPkgGenericDetailsView::showDetailsIfVisible( zypp::ResObject::Ptr zyppObj )
+YQPkgGenericDetailsView::showDetailsIfVisible( zypp::ResObject::constPtr zyppObj )
 {
     _zyppObj = zyppObj;
 
@@ -87,7 +87,7 @@ YQPkgGenericDetailsView::minimumSizeHint() const
 
 
 QString
-YQPkgGenericDetailsView::htmlHeading( zypp::ResObject::Ptr zyppObj )
+YQPkgGenericDetailsView::htmlHeading( zypp::ResObject::constPtr zyppObj )
 {
     QString summary = fromUTF8( zyppObj->summary() );
 

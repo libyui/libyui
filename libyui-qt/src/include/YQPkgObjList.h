@@ -126,14 +126,14 @@ public slots:
      * QListView).
      *
      * 'zyppObj' has to be one of the objects of 'selectable'. If it is 0,
-     * selectable->theObject() will be used.  
+     * selectable->theObject() will be used.
      *
      * Intentionally NOT named addItem() so the calling class cannot confuse
      * this method with overlaid methods of the same name that were simply
      * forgotten to implement!
      **/
     void addPkgObjItem( zypp::ui::Selectable::Ptr	selectable,
-			zypp::ResObject::Ptr 		zyppObj = 0 );
+			zypp::ResObject::constPtr 		zyppObj = 0 );
 
     /**
      * Add a purely passive list item that has a name and optional summary and
@@ -336,7 +336,7 @@ public:
      **/
     YQPkgObjListItem( YQPkgObjList *		pkgObjList,
 		      zypp::ui::Selectable::Ptr selectable,
-		      zypp::ResObject::Ptr	zyppObj = 0 );
+		      zypp::ResObject::constPtr	zyppObj = 0 );
 
     /**
      * Destructor
@@ -501,12 +501,12 @@ protected:
 
     // Data members
 
-    YQPkgObjList *			_pkgObjList;
-    zypp::ui::Selectable::constPtr	_selectable;
-    zypp::ResObject::constPtr		_zyppObj;
-    bool				_editable;
-    bool				_candidateIsNewer;
-    bool				_installedIsNewer;
+    YQPkgObjList *		_pkgObjList;
+    zypp::ui::Selectable::Ptr	_selectable;
+    zypp::ResObject::constPtr	_zyppObj;
+    bool			_editable;
+    bool			_candidateIsNewer;
+    bool			_installedIsNewer;
 };
 
 

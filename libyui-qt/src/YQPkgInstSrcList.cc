@@ -124,8 +124,8 @@ YQPkgInstSrcList::filter()
 	    if ( instSrcItem )
 	    {
 		InstSrcManager::ISrcId instSrc = instSrcItem->instSrcId();
-		const list<zypp::Package::Ptr> &packages = instSrc->data()->getPackages();
-		list<zypp::Package::Ptr>::const_iterator pkg_it = packages.begin();
+		const list<zypp::Package::constPtr> &packages = instSrc->data()->getPackages();
+		list<zypp::Package::constPtr>::const_iterator pkg_it = packages.begin();
 
 		while ( pkg_it != packages.end() )
 		{

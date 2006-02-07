@@ -166,8 +166,8 @@ YQPkgYouPatchList::filter()
 	    // Add all packages
 	    //
 
-	    list<zypp::Package::Ptr> pkgList = patch->packages();
-	    list<zypp::Package::Ptr>::const_iterator it = pkgList.begin();
+	    list<zypp::Package::constPtr> pkgList = patch->packages();
+	    list<zypp::Package::constPtr>::const_iterator it = pkgList.begin();
 
 	    while ( it != pkgList.end() )
 	    {

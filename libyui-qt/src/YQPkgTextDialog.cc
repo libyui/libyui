@@ -190,7 +190,7 @@ void YQPkgTextDialog::setText( const list<string> & text )
 }
 
 
-void YQPkgTextDialog::setText( zypp::ResObject::Ptr zyppObj,
+void YQPkgTextDialog::setText( zypp::ResObject::constPtr zyppObj,
 			       const list<string> & text )
 {
     setText( htmlHeading( zyppObj ) + htmlParagraphs( text ) );
@@ -219,14 +219,14 @@ void YQPkgTextDialog::showText( QWidget * parent, const list<string> & text )
 
 
 void YQPkgTextDialog::showText( QWidget * parent,
-				zypp::ResObject::Ptr zyppObj,
+				zypp::ResObject::constPtr zyppObj,
 				const list<string> & text )
 {
     showText( parent, htmlHeading( zyppObj ) + htmlParagraphs( text ) );
 }
 
 void YQPkgTextDialog::showText( QWidget * parent,
-				zypp::ResObject::Ptr zyppObj,
+				zypp::ResObject::constPtr zyppObj,
 				const string & text )
 {
     showText( parent, htmlHeading( zyppObj ) + QString::fromUtf8( text.c_str() ) );
@@ -257,7 +257,7 @@ bool YQPkgTextDialog::confirmText( QWidget * parent, const QString & text )
 
 
 bool YQPkgTextDialog::confirmText( QWidget * parent,
-				   zypp::ResObject::Ptr zyppObj,
+				   zypp::ResObject::constPtr zyppObj,
 				   const list<string> & text )
 {
     return confirmText( parent, htmlHeading( zyppObj ) + htmlParagraphs( text ) );
@@ -265,7 +265,7 @@ bool YQPkgTextDialog::confirmText( QWidget * parent,
 
 
 bool YQPkgTextDialog::confirmText( QWidget * parent,
-				   zypp::ResObject::Ptr zyppObj,
+				   zypp::ResObject::constPtr zyppObj,
 				   const string & text )
 {
     return confirmText( parent, htmlHeading( zyppObj ) + QString::fromUtf8( text.c_str() ) );
@@ -341,7 +341,7 @@ YQPkgTextDialog::htmlHeading( const QString & text )
 
 
 QString
-YQPkgTextDialog::htmlHeading( zypp::ResObject::Ptr zyppObj )
+YQPkgTextDialog::htmlHeading( zypp::ResObject::constPtr zyppObj )
 {
     QString summary = fromUTF8( zyppObj->summary() );
 

@@ -77,7 +77,7 @@ public slots:
      * Delayed ( optimized ) display if this is embedded into a QTabWidget
      * parent: In this case, wait until this page becomes visible.
      **/
-    void showDetailsIfVisible( zypp::ResObject::Ptr zyppObj );
+    void showDetailsIfVisible( zypp::ResObject::constPtr zyppObj );
 
     // slot clear() inherited from QListView
 
@@ -93,7 +93,7 @@ signals:
     /**
      * Emitted when the user changes the
      **/
-    void candidateChanged( zypp::ResObject::Ptr newCandidate );
+    void candidateChanged( zypp::ResObject::constPtr newCandidate );
 
 
 protected slots:
@@ -109,13 +109,13 @@ protected:
     /**
      * Show details for the specified package.
      **/
-    void showDetails( zypp::ResObject::Ptr zyppObj );
+    void showDetails( zypp::ResObject::constPtr zyppObj );
 
 
     // Data members
 
     QTabWidget	* 	_parentTab;
-    zypp::ResObject::Ptr		_zyppObj;
+    zypp::ResObject::constPtr		_zyppObj;
     bool		_userCanSwitch;
 
     int 		_versionCol;
@@ -137,7 +137,7 @@ public:
      **/
     YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
 		  QY2CheckListItem * 	parent,
-		  zypp::ResObject::Ptr 		zyppObj,
+		  zypp::ResObject::constPtr 		zyppObj,
 		  bool			enabled = true );
 
     /**
@@ -148,12 +148,12 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    zypp::ResObject::Ptr zyppObj() { return _zyppObj; }
+    zypp::ResObject::constPtr zyppObj() { return _zyppObj; }
 
     /**
      * Returns the original object within the package manager backend.
      **/
-    const zypp::ResObject::Ptr constZyppObj() const { return _zyppObj; }
+    const zypp::ResObject::constPtr constZyppObj() const { return _zyppObj; }
 
     /**
      * Comparison function used for sorting the list.
@@ -190,7 +190,7 @@ protected:
     // Data members
 
     YQPkgVersionsView *	_pkgVersionList;
-    zypp::ResObject::Ptr		_zyppObj;
+    zypp::ResObject::constPtr		_zyppObj;
 };
 
 

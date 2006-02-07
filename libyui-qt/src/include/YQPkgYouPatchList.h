@@ -159,7 +159,7 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( zypp::Package::Ptr pkg );
+    void filterMatch( zypp::Package::constPtr pkg );
 
     /**
      * Emitted during filtering for non-pkg items:

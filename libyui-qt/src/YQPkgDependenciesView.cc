@@ -43,7 +43,7 @@ YQPkgDependenciesView::~YQPkgDependenciesView()
 
 
 void
-YQPkgDependenciesView::showDetails( zypp::ResObject::Ptr zyppObj )
+YQPkgDependenciesView::showDetails( zypp::ResObject::constPtr zyppObj )
 {
     _zyppObj = zyppObj;
 
@@ -58,8 +58,8 @@ YQPkgDependenciesView::showDetails( zypp::ResObject::Ptr zyppObj )
     string name = zyppObj->name();
     y2debug( "Showing technical details for zypp::ResObject %s", name.c_str() );
 
-    zypp::Package::Ptr candidate = zyppObj->getCandidateObj();
-    zypp::Package::Ptr installed = zyppObj->getInstalledObj();
+    zypp::Package::constPtr candidate = zyppObj->getCandidateObj();
+    zypp::Package::constPtr installed = zyppObj->getInstalledObj();
 
 #if 0
     html_text += complexTable( installed, installed );
@@ -84,7 +84,7 @@ YQPkgDependenciesView::showDetails( zypp::ResObject::Ptr zyppObj )
 
 
 QString
-YQPkgDependenciesView::simpleTable( zypp::Package::Ptr pkg )
+YQPkgDependenciesView::simpleTable( zypp::Package::constPtr pkg )
 {
     QString html = "<br>" +
 	table(
@@ -103,10 +103,10 @@ YQPkgDependenciesView::simpleTable( zypp::Package::Ptr pkg )
 
 
 QString
-YQPkgDependenciesView::complexTable( zypp::Package::Ptr installed, zypp::Package::Ptr candidate )
+YQPkgDependenciesView::complexTable( zypp::Package::constPtr installed, zypp::Package::constPtr candidate )
 {
-    zypp::Package::Ptr p1 = candidate;
-    zypp::Package::Ptr p2 = installed;
+    zypp::Package::constPtr p1 = candidate;
+    zypp::Package::constPtr p2 = installed;
 
     QString p1_header = _( "<b>Alternate Version</b>" );
     QString p2_header = _( "<b>Installed Version</b>" );

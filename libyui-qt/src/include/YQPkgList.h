@@ -77,18 +77,18 @@ public slots:
      * slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addPkgItem( zypp::Package::Ptr zyppPkg );
+    void addPkgItem( zypp::Package::constPtr zyppPkg );
     
     /**
      * Add a pkg to the list, but display it dimmed (grey text foreground
      * rather than normal black). 
      **/
-    void addPkgItemDimmed( zypp::Package::Ptr zyppPkg );
+    void addPkgItemDimmed( zypp::Package::constPtr zyppPkg );
 
     /**
      * Add a pkg to the list
      **/
-    void addPkgItem( zypp::Package::Ptr zyppPkg, bool dimmed );
+    void addPkgItem( zypp::Package::constPtr zyppPkg, bool dimmed );
 
 
     /**
@@ -129,9 +129,9 @@ public slots:
     void setDontInstallListSourceRpms()	  { setInstallListSourceRpms( false ); }
 
 
-    // No separate selectionChanged( zypp::Package::Ptr ) signal:
-    // Use YQPkgObjList::selectionChanged( zypp::ResObject::Ptr ) instead
-    // and dynamic_cast to zypp::Package::Ptr if required.
+    // No separate selectionChanged( zypp::Package::constPtr ) signal:
+    // Use YQPkgObjList::selectionChanged( zypp::ResObject::constPtr ) instead
+    // and dynamic_cast to zypp::Package::constPtr if required.
     // This saves duplicating a lot of code.
 
 
@@ -197,7 +197,7 @@ public:
      * Constructor. Creates a YQPkgList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgListItem( YQPkgList * pkgList, zypp::Package::Ptr zyppPkg );
+    YQPkgListItem( YQPkgList * pkgList, zypp::Package::constPtr zyppPkg );
 
     /**
      * Destructor
@@ -212,12 +212,12 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    zypp::Package::Ptr zyppPkg() { return _zyppPkg; }
+    zypp::Package::constPtr zyppPkg() { return _zyppPkg; }
 
     /**
      * Returns the original object within the package manager backend.
      **/
-    const zypp::Package::Ptr constPMPkg() const { return _zyppPkg; }
+    const zypp::Package::constPtr constPMPkg() const { return _zyppPkg; }
 
     /**
      * Returns the source RPM package status:
@@ -310,7 +310,7 @@ protected:
     // Data members
 
     YQPkgList *		_pkgList;
-    zypp::Package::Ptr	_zyppPkg;
+    zypp::Package::constPtr	_zyppPkg;
     bool		_dimmed;
 };
 

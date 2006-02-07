@@ -138,7 +138,7 @@ YQPkgRpmGroupTagsFilterView::filter()
 
 
 bool
-YQPkgRpmGroupTagsFilterView::check( zypp::Package::Ptr pkg )
+YQPkgRpmGroupTagsFilterView::check( zypp::Package::constPtr pkg )
 {
     if ( ! pkg || ! selection() )
 	return false;

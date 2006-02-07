@@ -84,20 +84,20 @@ YQPkgList::~YQPkgList()
 }
 
 
-void YQPkgList::addPkgItem( zypp::Package::Ptr zyppPkg )
+void YQPkgList::addPkgItem( zypp::Package::constPtr zyppPkg )
 {
     addPkgItem( zyppPkg, false );	
 }
 
 
-void YQPkgList::addPkgItemDimmed( zypp::Package::Ptr zyppPkg )
+void YQPkgList::addPkgItemDimmed( zypp::Package::constPtr zyppPkg )
 {
     addPkgItem( zyppPkg, true );
 }
 
 
 void
-YQPkgList::addPkgItem( zypp::Package::Ptr zyppPkg, bool dimmed )
+YQPkgList::addPkgItem( zypp::Package::constPtr zyppPkg, bool dimmed )
 {
     if ( ! zyppPkg )
     {
@@ -401,7 +401,7 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
 
 
 
-YQPkgListItem::YQPkgListItem( YQPkgList * pkgList, zypp::Package::Ptr zyppPkg )
+YQPkgListItem::YQPkgListItem( YQPkgList * pkgList, zypp::Package::constPtr zyppPkg )
     : YQPkgObjListItem( pkgList, zyppPkg )
     , _pkgList( pkgList )
     , _zyppPkg( zyppPkg )

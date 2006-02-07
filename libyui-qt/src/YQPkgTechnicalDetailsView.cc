@@ -46,7 +46,7 @@ YQPkgTechnicalDetailsView::~YQPkgTechnicalDetailsView()
 
 
 void
-YQPkgTechnicalDetailsView::showDetails( zypp::ResObject::Ptr zyppObj )
+YQPkgTechnicalDetailsView::showDetails( zypp::ResObject::constPtr zyppObj )
 {
     _zyppObj = zyppObj;
 
@@ -61,8 +61,8 @@ YQPkgTechnicalDetailsView::showDetails( zypp::ResObject::Ptr zyppObj )
     string name = zyppObj->name();
     y2debug( "Showing technical details for zypp::ResObject %s", name.c_str() );
 
-    zypp::Package::Ptr candidate = zyppObj->getCandidateObj();
-    zypp::Package::Ptr installed = zyppObj->getInstalledObj();
+    zypp::Package::constPtr candidate = zyppObj->getCandidateObj();
+    zypp::Package::constPtr installed = zyppObj->getInstalledObj();
 
 #if 0
     html_text += complexTable( installed, installed );
@@ -87,7 +87,7 @@ YQPkgTechnicalDetailsView::showDetails( zypp::ResObject::Ptr zyppObj )
 
 
 QString
-YQPkgTechnicalDetailsView::authorsListCell( zypp::Package::Ptr pkg ) const
+YQPkgTechnicalDetailsView::authorsListCell( zypp::Package::constPtr pkg ) const
 {
     QString html = "<td align=top>";
     QString line;
@@ -109,7 +109,7 @@ YQPkgTechnicalDetailsView::authorsListCell( zypp::Package::Ptr pkg ) const
 
 
 QString
-YQPkgTechnicalDetailsView::formatRpmGroup( zypp::Package::Ptr pkg ) const
+YQPkgTechnicalDetailsView::formatRpmGroup( zypp::Package::constPtr pkg ) const
 {
     string group = Y2PM::packageManager().translatedRpmGroup( pkg->group_ptr() );
     return fromUTF8( group );
@@ -117,7 +117,7 @@ YQPkgTechnicalDetailsView::formatRpmGroup( zypp::Package::Ptr pkg ) const
 
 
 QString
-YQPkgTechnicalDetailsView::simpleTable( zypp::Package::Ptr pkg )
+YQPkgTechnicalDetailsView::simpleTable( zypp::Package::constPtr pkg )
 {
     QString html = "<br>" +
 	table(
@@ -149,10 +149,10 @@ YQPkgTechnicalDetailsView::simpleTable( zypp::Package::Ptr pkg )
 
 
 QString
-YQPkgTechnicalDetailsView::complexTable( zypp::Package::Ptr installed, zypp::Package::Ptr candidate )
+YQPkgTechnicalDetailsView::complexTable( zypp::Package::constPtr installed, zypp::Package::constPtr candidate )
 {
-    zypp::Package::Ptr p1 = candidate;
-    zypp::Package::Ptr p2 = installed;
+    zypp::Package::constPtr p1 = candidate;
+    zypp::Package::constPtr p2 = installed;
 
     QString p1_header = _( "<b>Alternate Version</b>" );
     QString p2_header = _( "<b>Installed Version</b>" );

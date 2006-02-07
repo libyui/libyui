@@ -50,7 +50,7 @@ public:
      * In this case the package description.
      * Overwritten from YQPkgGenericDetailsView.
      **/
-    virtual void showDetails( zypp::ResObject::Ptr zyppObj );
+    virtual void showDetails( zypp::ResObject::constPtr zyppObj );
 
     /**
      * Get the document pointed to by a hyperlink.

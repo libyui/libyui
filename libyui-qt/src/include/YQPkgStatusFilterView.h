@@ -60,7 +60,7 @@ public:
     /**
      * Check if pkg matches the filter criteria.
      **/
-    bool check( zypp::Package::Ptr pkg );
+    bool check( zypp::Package::constPtr pkg );
 
 
 public slots:
@@ -91,7 +91,7 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( zypp::Package::Ptr pkg );
+    void filterMatch( zypp::Package::constPtr pkg );
 
     /**
      * Emitted when filtering is finished.
