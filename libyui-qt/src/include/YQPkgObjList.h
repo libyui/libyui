@@ -27,6 +27,7 @@
 #include <zypp/ResObject.h>
 #include <zypp/ui/Selectable.h>
 #include <zypp/ui/Status.h>
+#include <zypp/Edition.h>
 #include <y2util/FSize.h>
 
 class YQPkgObjListItem;
@@ -131,8 +132,8 @@ public slots:
      * this method with overlaid methods of the same name that were simply
      * forgotten to implement!
      **/
-    void addPkgObjItem( zypp::ui::Selectable selectable,
-			zypp::ResObject::Ptr zyppObj = 0 );
+    void addPkgObjItem( zypp::ui::Selectable::Ptr	selectable,
+			zypp::ResObject::Ptr 		zyppObj = 0 );
 
     /**
      * Add a purely passive list item that has a name and optional summary and
@@ -221,7 +222,7 @@ signals:
      * Emitted when a zypp::ResObject is selected.
      * May be called with a null poiner if no zypp::ResObject is selected.
      **/
-    void selectionChanged( zypp::ResObject::Ptr zyppObj );
+    void selectionChanged( zypp::ResObject::constPtr zyppObj );
 
     /**
      * Emitted when the status of a zypp::ResObject is changed.
@@ -345,22 +346,12 @@ public:
     /**
      * Returns the original selectable within the package manager backend.
      **/
-    zypp::ui::Selectable::Ptr selectable() { return _selectable; }
-
-    /**
-     * Returns the original selectable within the package manager backend.
-     **/
-    const zypp::ui::Selectable::Ptr constSelectable() const { return _selectable; }
+    zypp::ui::Selectable::Ptr selectable() const { return _selectable; }
 
     /**
      * Returns the original object within the package manager backend.
      **/
-    zypp::ResObject::Ptr zyppObj() { return _zyppObj; }
-
-    /**
-     * Returns the original object within the package manager backend.
-     **/
-    const zypp::ResObject::Ptr constZyppObj() const { return _zyppObj; }
+    zypp::ResObject::constPtr zyppObj() const { return _zyppObj; }
 
     /**
      * Return whether or not this items is editable, i.e. the user can change
@@ -431,9 +422,9 @@ public:
 	{ QListViewItem::setText( column, text ); }
 
     /**
-     * Set a column text via PkgEdition.
+     * Set a column text via Edition.
      **/
-    void setText( int column, const PkgEdition & edition );
+    void setText( int column, const zypp::Edition & edition );
 
     /**
      * Display this item's notify text (if there is any) that corresponds to
@@ -510,12 +501,12 @@ protected:
 
     // Data members
 
-    YQPkgObjList *		_pkgObjList;
-    zypp::ui::Selectable::Ptr	_selectable;
-    zypp::ResObject::Ptr	_zyppObj;
-    bool			_editable;
-    bool			_candidateIsNewer;
-    bool			_installedIsNewer;
+    YQPkgObjList *			_pkgObjList;
+    zypp::ui::Selectable::constPtr	_selectable;
+    zypp::ResObject::constPtr		_zyppObj;
+    bool				_editable;
+    bool				_candidateIsNewer;
+    bool				_installedIsNewer;
 };
 
 

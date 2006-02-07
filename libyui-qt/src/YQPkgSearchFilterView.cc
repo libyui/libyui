@@ -231,7 +231,7 @@ YQPkgSearchFilterView::filter()
 	    if ( ! match                      &&
 		 ! selectable->candidateObj() &&
 		 ! selectable->installedObj()   )
-		check( selectable->theObject(), regexp );
+		check( selectable->theObj(), regexp );
 
 
 	    progress.setProgress( count++ );

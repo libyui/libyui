@@ -83,7 +83,7 @@ YQPkgUpdateProblemFilterView::filter()
     while ( it != Y2PM::packageManager().updateEnd() )
     {
 	Selectable::Ptr selectable = *it;
-	emit filterMatch( ( *it)->theObject() );
+	emit filterMatch( ( *it)->theObj() );
 
 	++it;
     }

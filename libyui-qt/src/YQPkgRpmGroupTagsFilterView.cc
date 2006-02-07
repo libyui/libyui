@@ -127,7 +127,7 @@ YQPkgRpmGroupTagsFilterView::filter()
 	    if ( ! match			&&
 		 ! selectable->candidateObj()   &&
 		 ! selectable->installedObj()	  )
-		check( selectable->theObject() );
+		check( selectable->theObj() );
 
 	    ++it;
 	}

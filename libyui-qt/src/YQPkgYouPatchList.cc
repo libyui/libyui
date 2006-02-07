@@ -86,7 +86,7 @@ YQPkgYouPatchList::fillList()
 
     while ( it != Y2PM::youPatchManager().end() )
     {
-	zypp::Patch::Ptr		patch  = ( *it)->theObject();
+	zypp::Patch::Ptr		patch  = ( *it)->theObj();
 	zypp::ui::Status	status =( *it)->status();
 
 	if ( patch )

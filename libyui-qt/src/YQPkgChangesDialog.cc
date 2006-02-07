@@ -153,7 +153,7 @@ YQPkgChangesDialog::filter( bool byAuto, bool byApp, bool byUser )
 		 selectable->by_appl() && byApp  ||
 		 selectable->by_user() && byUser   )
 	    {
-		_pkgList->addPkgItem( selectable->theObject() );
+		_pkgList->addPkgItem( selectable->theObj() );
 	    }
 	}
 
@@ -183,7 +183,7 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, bool byAuto, bool byApp, boo
 		 selectable->by_user() && byUser   )
 	    {
 		if ( regexp.match( selectable->name().asString().c_str() ) >= 0 )
-		    _pkgList->addPkgItem( selectable->theObject() );
+		    _pkgList->addPkgItem( selectable->theObj() );
 	    }
 	}
 

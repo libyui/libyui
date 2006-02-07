@@ -73,7 +73,7 @@ YQPkgLangList::fillList()
 
     while ( it != Y2PM::languageManager().end() )
     {
-	PMLanguagePtr lang = ( *it)->theObject();
+	PMLanguagePtr lang = ( *it)->theObj();
 
 	if ( lang )
 	    addLangItem( lang );
@@ -110,7 +110,7 @@ YQPkgLangList::filter()
 	    PMLanguageManager::PkgSelectables::const_iterator it = selectables.begin();
 	    while ( it != selectables.end() )
 	    {
-		emit filterMatch( ( *it)->theObject() );
+		emit filterMatch( ( *it)->theObj() );
 		++it;
 	    }
 	}

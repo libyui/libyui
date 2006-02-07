@@ -127,7 +127,7 @@ YQPkgDescriptionDialog::filter( const QString & qPkgName )
     while ( it != Y2PM::packageManager().end() )
     {
 	Selectable::Ptr selectable = *it;
-	zypp::ResObject::Ptr zyppObj = selectable->theObject();
+	zypp::ResObject::Ptr zyppObj = selectable->theObj();
 
 	if ( zyppObj && zyppObj->name() == pkgName )
 	    _pkgList->addPkgItem( zyppObj );

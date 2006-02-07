@@ -70,7 +70,7 @@ YQPkgSelList::fillList()
 
     while ( it != Y2PM::selectionManager().end() )
     {
-	zypp::Selection::Ptr sel = ( *it)->theObject();
+	zypp::Selection::Ptr sel = ( *it)->theObj();
 
 	if ( sel )
 	{
@@ -111,7 +111,7 @@ YQPkgSelList::filter()
 
 	    while ( it != slcList.end() )
 	    {
-		emit filterMatch( ( *it)->theObject() );
+		emit filterMatch( ( *it)->theObj() );
 		++it;
 	    }
 	}
