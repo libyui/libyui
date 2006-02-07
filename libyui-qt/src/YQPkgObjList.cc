@@ -26,7 +26,11 @@
 #include <qaction.h>
 
 #include "YQZypp.h"
+
+#ifdef MISSING
 #include <y2pm/InstTarget.h>
+#endif
+
 #include <zypp/Package.h>
 #include "utf8.h"
 

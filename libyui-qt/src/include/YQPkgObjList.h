@@ -83,7 +83,7 @@ public:
      * Automatically selects the next item if 'selectNextItem' is 'true'.
      **/
     void setCurrentStatus( zypp::ui::Status	newStatus,
-			   bool				selectNextItem = false );
+			   bool			selectNextItem = false );
 
     /**
      * Sets the status of all ( toplevel ) list items to 'newStatus', if possible.
@@ -107,8 +107,8 @@ public:
      * 'auto-by-selection" rather than the default auto-icon.
      **/
     virtual QPixmap statusIcon( zypp::ui::Status status,
-				bool 			enabled     = true,
-				bool			bySelection = false );
+				bool 		enabled     = true,
+				bool		bySelection = false );
 
     /**
      * Returns a short ( one line ) descriptive text for a zypp::ResObject status.
@@ -183,22 +183,22 @@ public slots:
 
     // Direct access to some states for menu actions
 
-    void setCurrentInstall()	   { setCurrentStatus( Selectable::S_Install	     ); }
-    void setCurrentDontInstall()   { setCurrentStatus( Selectable::S_NoInst	     ); }
-    void setCurrentKeepInstalled() { setCurrentStatus( Selectable::S_KeepInstalled ); }
-    void setCurrentDelete()	   { setCurrentStatus( Selectable::S_Del	     ); }
-    void setCurrentUpdate()	   { setCurrentStatus( Selectable::S_Update	     ); }
-    void setCurrentTaboo()	   { setCurrentStatus( Selectable::S_Taboo	     ); }
-    void setCurrentProtected()	   { setCurrentStatus( Selectable::S_Protected     ); }
+    void setCurrentInstall()	   { setCurrentStatus( Selectable::S_Install	     	); }
+    void setCurrentDontInstall()   { setCurrentStatus( Selectable::S_NoInst	     	); }
+    void setCurrentKeepInstalled() { setCurrentStatus( Selectable::S_KeepInstalled	); }
+    void setCurrentDelete()	   { setCurrentStatus( Selectable::S_Del	     	); }
+    void setCurrentUpdate()	   { setCurrentStatus( Selectable::S_Update	     	); }
+    void setCurrentTaboo()	   { setCurrentStatus( Selectable::S_Taboo	     	); }
+    void setCurrentProtected()	   { setCurrentStatus( Selectable::S_Protected		); }
 
-    void setListInstall()	   { setAllItemStatus( Selectable::S_Install	     ); }
-    void setListDontInstall()	   { setAllItemStatus( Selectable::S_NoInst	     ); }
-    void setListKeepInstalled()	   { setAllItemStatus( Selectable::S_KeepInstalled ); }
-    void setListDelete()	   { setAllItemStatus( Selectable::S_Del	     ); }
-    void setListUpdate()	   { setAllItemStatus( Selectable::S_Update	     ); }
-    void setListUpdateForce()	   { setAllItemStatus( Selectable::S_Update, true  ); }
-    void setListTaboo()		   { setAllItemStatus( Selectable::S_Taboo	     ); }
-    void setListProtected()	   { setAllItemStatus( Selectable::S_Protected     ); }
+    void setListInstall()	   { setAllItemStatus( Selectable::S_Install		); }
+    void setListDontInstall()	   { setAllItemStatus( Selectable::S_NoInst		); }
+    void setListKeepInstalled()	   { setAllItemStatus( Selectable::S_KeepInstalled	); }
+    void setListDelete()	   { setAllItemStatus( Selectable::S_Del		); }
+    void setListUpdate()	   { setAllItemStatus( Selectable::S_Update		); }
+    void setListUpdateForce()	   { setAllItemStatus( Selectable::S_Update, true  	); }
+    void setListTaboo()		   { setAllItemStatus( Selectable::S_Taboo		); }
+    void setListProtected()	   { setAllItemStatus( Selectable::S_Protected     	); }
 
 
 protected slots:
@@ -268,8 +268,8 @@ protected:
      * 'key' is only a descriptive text, no true accelerator.
      **/
     QAction * createAction( zypp::ui::Status 	status,
-			    const QString &		key	= QString::null,
-			    bool 			enabled = false );
+			    const QString &	key	= QString::null,
+			    bool 		enabled = false );
 
     /**
      * Low-level: Create an action.
@@ -363,7 +363,7 @@ public:
 
     /**
      * Returns 'true' if this selectable's status is set by a selection
-     * ( rather than by the user or by the dependency solver ).
+     * (rather than by the user or by the dependency solver).
      **/
     bool bySelection() const;
 
@@ -492,11 +492,11 @@ protected:
 
     // Data members
 
-    YQPkgObjList *	_pkgObjList;
-    zypp::ResObject::Ptr		_zyppObj;
-    bool		_editable;
-    bool		_candidateIsNewer;
-    bool		_installedIsNewer;
+    YQPkgObjList *		_pkgObjList;
+    zypp::ResObject::Ptr	_zyppObj;
+    bool			_editable;
+    bool			_candidateIsNewer;
+    bool			_installedIsNewer;
 };
 
 
