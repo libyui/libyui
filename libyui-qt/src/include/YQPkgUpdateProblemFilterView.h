@@ -23,7 +23,7 @@
 #define YQPkgUpdateProblemFilterView_h
 
 #include <qtextbrowser.h>
-#include <y2pm/PMPackage.h>
+#include <zypp/Package.h>
 
 
 /**
@@ -74,7 +74,7 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( PMPackagePtr pkg );
+    void filterMatch( zypp::Package::Ptr pkg );
 
     /**
      * Emitted when filtering is finished.

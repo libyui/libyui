@@ -23,7 +23,7 @@
 #define YQPkgTextDialog_h
 
 #include <qdialog.h>
-#include <y2pm/PMObject.h>
+#include <zypp/Object.h>
 
 class QPushButton;
 class QTextBrowser;
@@ -83,13 +83,13 @@ public:
     static void showText( QWidget * parent, const list<string> & text );
 
     /**
-     * Show a text with a headline identifying a PMObject (name+summary).
+     * Show a text with a headline identifying a zypp::ResObject (name+summary).
      **/
     static void showText( QWidget * parent,
-			  PMObjectPtr pmObj,
+			  zypp::ResObject::Ptr zyppObj,
 			  const list<string> & text );
     static void showText( QWidget * parent,
-			  PMObjectPtr pmObj,
+			  zypp::ResObject::Ptr zyppObj,
 			  const string & text );
 
     /**
@@ -108,16 +108,16 @@ public:
     static bool confirmText( QWidget * parent, const QString & text );
 
     /**
-     * Let the use confirm a text with a headline identifying a PMObject
+     * Let the use confirm a text with a headline identifying a zypp::ResObject
      * (name+summary) with buttons "Accept" and "Cancel".
      * Returns "true" if the user clicked "Accept", "false" on "Cancel".
      **/
     static bool confirmText( QWidget * parent,
-			     PMObjectPtr pmObj,
+			     zypp::ResObject::Ptr zyppObj,
 			     const list<string> & text );
     
     static bool confirmText( QWidget * parent,
-			     PMObjectPtr pmObj,
+			     zypp::ResObject::Ptr zyppObj,
 			     const string & text );
     
     /**
@@ -135,7 +135,7 @@ public:
      * Returns a uniform heading in HTML format for the specified package:
      * Package name and summary
      **/
-    static QString htmlHeading( PMObjectPtr pmObj );
+    static QString htmlHeading( zypp::ResObject::Ptr zyppObj );
 
     /**
      * Escapes characters special to HTML in a ( plain text ) string, such as:
@@ -158,9 +158,9 @@ public slots:
     void setText( const list<string> & text );
 
     /**
-     * Show a text with a headline identifying a PMObject ( name+summary ).
+     * Show a text with a headline identifying a zypp::ResObject ( name+summary ).
      **/
-    void setText( PMObjectPtr pmObj,
+    void setText( zypp::ResObject::Ptr zyppObj,
 		  const list<string> & text );
 
 protected:

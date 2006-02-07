@@ -22,8 +22,8 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 #include <qregexp.h>
-#include <Y2PM.h>
-#include <y2pm/PMSelectionManager.h>
+#include "YQZypp.h"
+#include <zypp/ui/ResPoolProxy.h>
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgSelList.h"
@@ -66,11 +66,11 @@ YQPkgSelList::fillList()
     clear();
     y2debug( "Filling selection list" );
 
-    PMManager::PMSelectableVec::const_iterator it = Y2PM::selectionManager().begin();
+    PMManager::SelectableVec::const_iterator it = Y2PM::selectionManager().begin();
 
     while ( it != Y2PM::selectionManager().end() )
     {
-	PMSelectionPtr sel = ( *it)->theObject();
+	zypp::Selection::Ptr sel = ( *it)->theObject();
 
 	if ( sel )
 	{
@@ -102,12 +102,12 @@ YQPkgSelList::filter()
 
     if ( selection() )
     {
-	PMSelectionPtr sel = selection()->pmSel();
+	zypp::Selection::Ptr sel = selection()->zyppSel();
 
 	if ( sel )
 	{
-	    set<PMSelectablePtr> slcList = sel->inspacks_ptrs();
-	    set<PMSelectablePtr>::const_iterator it = slcList.begin();
+	    set<Selectable::Ptr> slcList = sel->inspacks_ptrs();
+	    set<Selectable::Ptr>::const_iterator it = slcList.begin();
 
 	    while ( it != slcList.end() )
 	    {
@@ -122,15 +122,15 @@ YQPkgSelList::filter()
 
 
 void
-YQPkgSelList::addPkgSelItem( PMSelectionPtr pmSel )
+YQPkgSelList::addPkgSelItem( zypp::Selection::Ptr zyppSel )
 {
-    if ( ! pmSel )
+    if ( ! zyppSel )
     {
-	y2error( "NULL PMSelection!" );
+	y2error( "NULL zypp::Selection!" );
 	return;
     }
 
-    new YQPkgSelListItem( this, pmSel );
+    new YQPkgSelListItem( this, zyppSel );
 }
 
 
@@ -158,12 +158,12 @@ YQPkgSelList::applyChanges()
 
 
 
-YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList * pkgSelList, PMSelectionPtr pkgSel )
+YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList * pkgSelList, zypp::Selection::Ptr pkgSel )
     : YQPkgObjListItem( pkgSelList, pkgSel )
     , _pkgSelList( pkgSelList )
-    , _pmSel( pkgSel )
+    , _zyppSel( pkgSel )
 {
-    QString text = fromUTF8( _pmSel->summary( Y2PM::getPreferredLocale() ) );
+    QString text = fromUTF8( _zyppSel->summary( Y2PM::getPreferredLocale() ) );
     text.replace( QRegExp( "Graphical Basis System" ), "Graphical Base System" );
     text.replace( QRegExp( "Gnome" ), "GNOME" );
     setText( summaryCol(), text );
@@ -180,7 +180,7 @@ YQPkgSelListItem::~YQPkgSelListItem()
 
 
 void
-YQPkgSelListItem::setStatus( PMSelectable::UI_Status newStatus )
+YQPkgSelListItem::setStatus( zypp::ui::Status newStatus )
 {
     YQPkgObjListItem::setStatus( newStatus );
     _pkgSelList->applyChanges();
@@ -202,10 +202,10 @@ YQPkgSelListItem::compare( QListViewItem *	otherListViewItem,
 {
     YQPkgSelListItem * other = ( YQPkgSelListItem * ) otherListViewItem;
 
-    if ( ! _pmSel || ! other || ! other->pmSel() )
+    if ( ! _zyppSel || ! other || ! other->zyppSel() )
 	return 0;
 
-    return _pmSel->order().compare( other->pmSel()->order() );
+    return _zyppSel->order().compare( other->zyppSel()->order() );
 }
 
 

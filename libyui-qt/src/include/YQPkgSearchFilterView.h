@@ -24,7 +24,7 @@
 
 #include <qvbox.h>
 #include <qregexp.h>
-#include <y2pm/PMPackage.h>
+#include <zypp/Package.h>
 
 
 class QComboBox;
@@ -65,7 +65,7 @@ public:
      * Check one package against the currently selected values.
      * Returns true if the package matches, false if not.
      **/
-    bool check( PMPackagePtr pkg );
+    bool check( zypp::Package::Ptr pkg );
 
 
 public slots:
@@ -101,7 +101,7 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( PMPackagePtr pkg );
+    void filterMatch( zypp::Package::Ptr pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -130,7 +130,7 @@ protected:
     /**
      * Check if pkg matches the search criteria.
      **/
-    bool check( PMPackagePtr pkg, const QRegExp & regexp );
+    bool check( zypp::Package::Ptr pkg, const QRegExp & regexp );
 
     /**
      * Check if a single pkg attribute matches the search criteria.

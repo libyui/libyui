@@ -22,8 +22,8 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include <Y2PM.h>
-#include <y2pm/PMPackageManager.h>
+#include "YQZypp.h"
+#include <zypp/ui/ResPoolProxy.h>
 
 #include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQi18n.h"
@@ -103,11 +103,11 @@ YQPkgRpmGroupTagsFilterView::filter()
 
     if ( selection() )
     {
-	PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
+	PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
 	while ( it != Y2PM::packageManager().end() )
 	{
-	    PMSelectablePtr selectable = *it;
+	    Selectable::Ptr selectable = *it;
 
 	    // Multiple instances of this package may or may not be in the same
 	    // RPM group, so let's check both the installed version (if there
@@ -138,7 +138,7 @@ YQPkgRpmGroupTagsFilterView::filter()
 
 
 bool
-YQPkgRpmGroupTagsFilterView::check( PMPackagePtr pkg )
+YQPkgRpmGroupTagsFilterView::check( zypp::Package::Ptr pkg )
 {
     if ( ! pkg || ! selection() )
 	return false;

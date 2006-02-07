@@ -23,7 +23,7 @@
 #define YQPkgRpmGroupTagsFilterView_h
 
 #include <qlistview.h>
-#include <y2pm/PMPackage.h>
+#include <zypp/Package.h>
 #include <y2util/YRpmGroupsTree.h>
 
 
@@ -60,7 +60,7 @@ public:
      * Check if 'pkg' matches the selected RPM group.
      * Returns true if there is a match, false otherwise or if 'pkg' is 0.
      **/
-    bool check( PMPackagePtr pkg );
+    bool check( zypp::Package::Ptr pkg );
     
 public slots:
 
@@ -97,7 +97,7 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( PMPackagePtr pkg );
+    void filterMatch( zypp::Package::Ptr pkg );
 
     /**
      * Emitted when filtering is finished.

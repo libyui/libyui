@@ -33,7 +33,7 @@ using std::string;
 YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
     : QTextBrowser( parent )
 {
-    _pmObj = 0;
+    _zyppObj = 0;
     _parentTab = dynamic_cast<QTabWidget *> (parent);
 
     if ( _parentTab )
@@ -55,26 +55,26 @@ YQPkgGenericDetailsView::reload( QWidget * newCurrent )
 {
     if ( newCurrent == this )
     {
-	showDetailsIfVisible( _pmObj );
+	showDetailsIfVisible( _zyppObj );
     }
 }
 
 
 void
-YQPkgGenericDetailsView::showDetailsIfVisible( PMObjectPtr pmObj )
+YQPkgGenericDetailsView::showDetailsIfVisible( zypp::ResObject::Ptr zyppObj )
 {
-    _pmObj = pmObj;
+    _zyppObj = zyppObj;
 
     if ( _parentTab )		// Is this view embedded into a tab widget?
     {
 	if ( _parentTab->currentPage() == this )  // Is this page the topmost?
 	{
-	    showDetails( pmObj );
+	    showDetails( zyppObj );
 	}
     }
     else	// No tab parent - simply show data unconditionally.
     {
-	showDetails( pmObj );
+	showDetails( zyppObj );
     }
 }
 
@@ -87,9 +87,9 @@ YQPkgGenericDetailsView::minimumSizeHint() const
 
 
 QString
-YQPkgGenericDetailsView::htmlHeading( PMObjectPtr pmObj )
+YQPkgGenericDetailsView::htmlHeading( zypp::ResObject::Ptr zyppObj )
 {
-    QString summary = fromUTF8( pmObj->summary() );
+    QString summary = fromUTF8( zyppObj->summary() );
 
     QString html = "<table";
 
@@ -97,7 +97,7 @@ YQPkgGenericDetailsView::htmlHeading( PMObjectPtr pmObj )
 	html += " bgcolor=#E0E0F8";
 
     html += "><tr><td><b>"
-	+ fromUTF8( pmObj->name() )
+	+ fromUTF8( zyppObj->name() )
 	+ "</b>";
 
     if ( ! summary.isEmpty() )

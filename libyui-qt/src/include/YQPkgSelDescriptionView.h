@@ -26,7 +26,7 @@
 
 
 /**
- * @short Display the description of a PMObject derived object along with its
+ * @short Display the description of a zypp::ResObject derived object along with its
  * name and summary.
  **/
 class YQPkgSelDescriptionView : public YQPkgDescriptionView
@@ -50,14 +50,14 @@ public:
      * In this case the package description.
      * Overwritten from YQPkgGenericDetailsView.
      **/
-    virtual void showDetails( PMObjectPtr pmObj );
+    virtual void showDetails( zypp::ResObject::Ptr zyppObj );
 
 protected:
 
     /**
      * Format the heading in HTML
      **/
-    QString htmlHeading( PMObjectPtr pmObj );
+    QString htmlHeading( zypp::ResObject::Ptr zyppObj );
 };
 
 

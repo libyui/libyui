@@ -21,8 +21,8 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include <Y2PM.h>
-#include <y2pm/PMPackageManager.h>
+#include "YQZypp.h"
+#include <zypp/ui/ResPoolProxy.h>
 
 #include "YQPkgTechnicalDetailsView.h"
 #include "YQi18n.h"
@@ -46,23 +46,23 @@ YQPkgTechnicalDetailsView::~YQPkgTechnicalDetailsView()
 
 
 void
-YQPkgTechnicalDetailsView::showDetails( PMObjectPtr pmObj )
+YQPkgTechnicalDetailsView::showDetails( zypp::ResObject::Ptr zyppObj )
 {
-    _pmObj = pmObj;
+    _zyppObj = zyppObj;
 
-    if ( ! pmObj )
+    if ( ! zyppObj )
     {
 	clear();
 	return;
     }
 
-    QString html_text = htmlHeading( pmObj );
+    QString html_text = htmlHeading( zyppObj );
 
-    string name = pmObj->name();
-    y2debug( "Showing technical details for PMObject %s", name.c_str() );
+    string name = zyppObj->name();
+    y2debug( "Showing technical details for zypp::ResObject %s", name.c_str() );
 
-    PMPackagePtr candidate = pmObj->getCandidateObj();
-    PMPackagePtr installed = pmObj->getInstalledObj();
+    zypp::Package::Ptr candidate = zyppObj->getCandidateObj();
+    zypp::Package::Ptr installed = zyppObj->getInstalledObj();
 
 #if 0
     html_text += complexTable( installed, installed );
@@ -87,7 +87,7 @@ YQPkgTechnicalDetailsView::showDetails( PMObjectPtr pmObj )
 
 
 QString
-YQPkgTechnicalDetailsView::authorsListCell( PMPackagePtr pkg ) const
+YQPkgTechnicalDetailsView::authorsListCell( zypp::Package::Ptr pkg ) const
 {
     QString html = "<td align=top>";
     QString line;
@@ -109,7 +109,7 @@ YQPkgTechnicalDetailsView::authorsListCell( PMPackagePtr pkg ) const
 
 
 QString
-YQPkgTechnicalDetailsView::formatRpmGroup( PMPackagePtr pkg ) const
+YQPkgTechnicalDetailsView::formatRpmGroup( zypp::Package::Ptr pkg ) const
 {
     string group = Y2PM::packageManager().translatedRpmGroup( pkg->group_ptr() );
     return fromUTF8( group );
@@ -117,7 +117,7 @@ YQPkgTechnicalDetailsView::formatRpmGroup( PMPackagePtr pkg ) const
 
 
 QString
-YQPkgTechnicalDetailsView::simpleTable( PMPackagePtr pkg )
+YQPkgTechnicalDetailsView::simpleTable( zypp::Package::Ptr pkg )
 {
     QString html = "<br>" +
 	table(
@@ -149,10 +149,10 @@ YQPkgTechnicalDetailsView::simpleTable( PMPackagePtr pkg )
 
 
 QString
-YQPkgTechnicalDetailsView::complexTable( PMPackagePtr installed, PMPackagePtr candidate )
+YQPkgTechnicalDetailsView::complexTable( zypp::Package::Ptr installed, zypp::Package::Ptr candidate )
 {
-    PMPackagePtr p1 = candidate;
-    PMPackagePtr p2 = installed;
+    zypp::Package::Ptr p1 = candidate;
+    zypp::Package::Ptr p2 = installed;
 
     QString p1_header = _( "<b>Alternate Version</b>" );
     QString p2_header = _( "<b>Installed Version</b>" );

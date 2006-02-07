@@ -25,8 +25,8 @@
 #include <qheader.h>
 #include <qstyle.h>
 
-#include <Y2PM.h>
-#include <y2pm/PMPackageManager.h>
+#include "YQZypp.h"
+#include <zypp/ui/ResPoolProxy.h>
 #include "utf8.h"
 
 #include "YQPkgDiskUsageList.h"

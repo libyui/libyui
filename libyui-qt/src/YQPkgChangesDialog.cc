@@ -29,8 +29,8 @@
 #include <qpushbutton.h>
 #include <qstyle.h>
 
-#include <Y2PM.h>
-#include <y2pm/PMPackageManager.h>
+#include "YQZypp.h"
+#include <zypp/ui/ResPoolProxy.h>
 #include "YQPkgChangesDialog.h"
 #include "YQPkgList.h"
 #include "QY2LayoutUtils.h"
@@ -141,11 +141,11 @@ YQPkgChangesDialog::filter( bool byAuto, bool byApp, bool byUser )
     YQUI::ui()->busyCursor();
     _pkgList->clear();
 
-    PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
+    PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
     while ( it != Y2PM::packageManager().end() )
     {
-	PMSelectablePtr selectable = *it;
+	Selectable::Ptr selectable = *it;
 
 	if ( selectable->to_modify() )
 	{
@@ -170,11 +170,11 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, bool byAuto, bool byApp, boo
     YQUI::ui()->busyCursor();
     _pkgList->clear();
 
-    PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
+    PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
     while ( it != Y2PM::packageManager().end() )
     {
-	PMSelectablePtr selectable = *it;
+	Selectable::Ptr selectable = *it;
 
 	if ( selectable->to_modify() )
 	{

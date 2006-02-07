@@ -23,14 +23,14 @@
 #define YQPkgYouPatchList_h
 
 #include <YQPkgObjList.h>
-#include <y2pm/PMYouPatch.h>
+#include <zypp/Patch.h>
 
 
 class QAction;
 class YQPkgYouPatchListItem;
 
 /**
- * @short Display a list of PMYouPatch objects.
+ * @short Display a list of zypp::Patch objects.
  **/
 class YQPkgYouPatchList : public YQPkgObjList
 {
@@ -70,7 +70,7 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addYouPatchItem( PMYouPatchPtr sel );
+    void addYouPatchItem( zypp::Patch::Ptr sel );
 
     /**
      * Emit an updatePackages() signal.
@@ -159,7 +159,7 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( PMPackagePtr pkg );
+    void filterMatch( zypp::Package::Ptr pkg );
 
     /**
      * Emitted during filtering for non-pkg items:
@@ -216,7 +216,7 @@ public:
      * Constructor. Creates a YQPkgYouPatchList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgYouPatchListItem( YQPkgYouPatchList * youPatchList, PMYouPatchPtr youPatch );
+    YQPkgYouPatchListItem( YQPkgYouPatchList * youPatchList, zypp::Patch::Ptr youPatch );
 
     /**
      * Destructor
@@ -226,12 +226,12 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    PMYouPatchPtr pmYouPatch() { return _pmYouPatch; }
+    zypp::Patch::Ptr pmYouPatch() { return _pmYouPatch; }
 
     /**
      * Returns the original object within the package manager backend.
      **/
-    const PMYouPatchPtr constPMYouPatch() const { return _pmYouPatch; }
+    const zypp::Patch::Ptr constzypp::Patch() const { return _pmYouPatch; }
 
     /**
      * Set the patch status.
@@ -239,7 +239,7 @@ public:
      * Reimplemented from YQPkgObjListItem:
      * Emit updatePackages signals after changing status.
      **/
-    virtual void setStatus( PMSelectable::UI_Status newStatus );
+    virtual void setStatus( zypp::ui::Status newStatus );
 
     /**
      * Cycle the package status to the next valid value.
@@ -281,7 +281,7 @@ protected:
     // Data members
 
     YQPkgYouPatchList	*	_youPatchList;
-    PMYouPatchPtr		_pmYouPatch;
+    zypp::Patch::Ptr		_pmYouPatch;
 };
 
 

@@ -29,11 +29,11 @@
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
-#include <Y2PM.h>
+#include "YQZypp.h"
 #include <y2pm/PkgDep.h>
-#include <y2pm/PMObject.h>
-#include <y2pm/PMPackageManager.h>
-#include <y2pm/PMSelection.h>
+#include <zypp/Object.h>
+#include <zypp/ui/ResPoolProxy.h>
+#include <zypp/Selection.h>
 
 #include "YQPkgConflictList.h"
 #include "YQPkgConflictDialog.h"
@@ -282,22 +282,22 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
     PkgEdition edition;
 
     _resolutionsHeader	= 0;
-    _status		= PMSelectable::S_NoInst;
-    _undo_status	= PMSelectable::S_NoInst;
-    _pmObj		= _conflict.solvable;
+    _status		= Selectable::S_NoInst;
+    _undo_status	= Selectable::S_NoInst;
+    _zyppObj		= _conflict.solvable;
     _isPkg		= true;
     _canIgnore		= true;
 
-    if ( _pmObj )
+    if ( _zyppObj )
     {
-	if ( ! PMPackagePtr( _pmObj ) )
+	if ( ! zypp::Package::Ptr( _zyppObj ) )
 	    _isPkg	= false;
 
-	name		= _pmObj->name();
-	edition		= _pmObj->edition();
+	name		= _zyppObj->name();
+	edition		= _zyppObj->edition();
 
-	if ( _pmObj->getSelectable() )
-	    _status	= _pmObj->getSelectable()->status();
+	if ( _zyppObj->getSelectable() )
+	    _status	= _zyppObj->getSelectable()->status();
     }
     else
     {
@@ -321,10 +321,10 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
     // DEBUG
     // DEBUG
 
-    if ( _pmObj )
+    if ( _zyppObj )
     {
 	for ( int i=0; i < 30; i++ )
-	    _conflict.remove_to_solve_conflict.push_back( _pmObj );
+	    _conflict.remove_to_solve_conflict.push_back( _zyppObj );
     }
 
     // DEBUG
@@ -351,7 +351,7 @@ YQPkgConflict::formatHeading()
     // text = ( _( "%1 conflict" ) ).arg( _shortName );
     text = ( _( "%1 conflict" ) ).arg( _fullName );
 
-    if ( ! _pmObj )
+    if ( ! _zyppObj )
     {
 	if ( needAlternative() )
 	{
@@ -384,7 +384,7 @@ YQPkgConflict::formatHeading()
 
 	    switch ( _status )
 	    {
-		case PMSelectable::S_Taboo:
+		case Selectable::S_Taboo:
 
 		    if ( _isPkg )
 			// Package %1 is set to taboo, yet other packages require it
@@ -395,8 +395,8 @@ YQPkgConflict::formatHeading()
 		    icon = YQIconPool::tabooPkgConflict();
 		    break;
 
-                case PMSelectable::S_AutoDel:
-                case PMSelectable::S_Del:
+                case Selectable::S_AutoDel:
+                case Selectable::S_Del:
 		    if ( _isPkg )
 			// Package %1 is marked for deletion, yet other packages require it
 			text = ( _( "Deleting %1 breaks other packages" ) ).arg( _shortName );
@@ -428,7 +428,7 @@ YQPkgConflict::dumpLists()
 {
 #if 0
     if ( _conflict.state_change_not_possible ||
-	 ! _pmObj )
+	 ! _zyppObj )
 #endif
     {
 	dumpList( this, _conflict.referers, LIST_SPLIT_THRESHOLD,
@@ -556,56 +556,56 @@ YQPkgConflict::addResolutionSuggestions()
 void
 YQPkgConflict::addUndoResolution( QY2CheckListItem * parent )
 {
-    if ( ! _pmObj )
+    if ( ! _zyppObj )
 	return;
 
     QString text;
 
     switch ( _status )
     {
-	case PMSelectable::S_Taboo:
+	case Selectable::S_Taboo:
 	    text = ( _( "Do Not Set %1 to Taboo" ) ).arg( _shortName );
-	    _undo_status = _pmObj->hasInstalledObj() ?
-		PMSelectable::S_KeepInstalled : PMSelectable::S_NoInst;
+	    _undo_status = _zyppObj->hasInstalledObj() ?
+		Selectable::S_KeepInstalled : Selectable::S_NoInst;
 	    break;
 
-	case PMSelectable::S_Protected:
+	case Selectable::S_Protected:
 	    text = ( _( "Do Not Set %1 to Protected" ) ).arg( _shortName );
-	    _undo_status = _pmObj->hasInstalledObj() ?
-		PMSelectable::S_KeepInstalled : PMSelectable::S_NoInst;
+	    _undo_status = _zyppObj->hasInstalledObj() ?
+		Selectable::S_KeepInstalled : Selectable::S_NoInst;
 	    break;
 
-	case PMSelectable::S_Del:
-	case PMSelectable::S_AutoDel:
+	case Selectable::S_Del:
+	case Selectable::S_AutoDel:
 	    text = ( _( "Do Not Delete %1" ) ).arg( _shortName );
-	    _undo_status = PMSelectable::S_KeepInstalled;
+	    _undo_status = Selectable::S_KeepInstalled;
 	    break;
 
-	case PMSelectable::S_AutoUpdate:
-	case PMSelectable::S_Update:
+	case Selectable::S_AutoUpdate:
+	case Selectable::S_Update:
 	    text = ( _( "Do Not Update %1" ) ).arg( _shortName );
-	    _undo_status = PMSelectable::S_KeepInstalled;
+	    _undo_status = Selectable::S_KeepInstalled;
 	    break;
 
-	case PMSelectable::S_AutoInstall:
-	case PMSelectable::S_Install:
+	case Selectable::S_AutoInstall:
+	case Selectable::S_Install:
 	    text = ( _( "Do Not Install %1" ) ).arg( _shortName );
-	    _undo_status = PMSelectable::S_NoInst;
+	    _undo_status = Selectable::S_NoInst;
 	    break;
 
-	case PMSelectable::S_KeepInstalled:
+	case Selectable::S_KeepInstalled:
 	    if(!_conflict.is_downgrade_from.is_unspecified())
 	    {
 		// %1 package name, %2 version
 		text = ( _( "Downgrade %1 to Version %2" ) ).arg(
 		    _shortName+"-"+_conflict.is_downgrade_from.asString().c_str() ).arg(
 			_conflict.edition.asString().c_str());
-		_undo_status = PMSelectable::S_Update;
+		_undo_status = Selectable::S_Update;
 		break;
 	    }
 	    else
 		return;	// shouldn't happen
-	case PMSelectable::S_NoInst:		return;	// shouldn't happen
+	case Selectable::S_NoInst:		return;	// shouldn't happen
     }
 
     new YQPkgConflictResolution( parent, text, YQPkgConflictUndo );
@@ -622,7 +622,7 @@ YQPkgConflict::addAlternativesList( QY2CheckListItem * parent )
 
     while ( it != _conflict.alternatives.end() )
     {
-	PMObjectPtr pkg = ( *it ).solvable;
+	zypp::ResObject::Ptr pkg = ( *it ).solvable;
 
 	if ( pkg )
 	    new YQPkgConflictResolution( parent, pkg );
@@ -681,7 +681,7 @@ YQPkgConflict::addDeleteReferersResolution( QY2CheckListItem * parent )
 
 	while ( it != _conflict.remove_referers.end() )
 	{
-	    PMSelectionPtr sel( *it );
+	    zypp::Selection::Ptr sel( *it );
 
 	    if ( sel && sel->isBase() )
 	    {
@@ -760,7 +760,7 @@ YQPkgConflict::dumpDeleteList( QListViewItem * parent, PkgDep::SolvableList& sol
 	    }
 	}
 
-	PMObjectPtr pkg = ( *it );
+	zypp::ResObject::Ptr pkg = ( *it );
 
 	if ( pkg )
 	{
@@ -981,8 +981,8 @@ YQPkgConflict::applyResolution()
 	    switch ( res->type() )
 	    {
 		case YQPkgConflictUndo:
-		    if ( _pmObj && _pmObj->getSelectable() )
-			_pmObj->getSelectable()->set_status( _undo_status );
+		    if ( _zyppObj && _zyppObj->getSelectable() )
+			_zyppObj->getSelectable()->set_status( _undo_status );
 		    return;
 
 		case YQPkgConflictIgnore:
@@ -998,12 +998,12 @@ YQPkgConflict::applyResolution()
 		    return;
 
 		case YQPkgConflictAlternative:
-		    if ( res->pmObj() && res->pmObj()->getSelectable() )
+		    if ( res->zyppObj() && res->zyppObj()->getSelectable() )
 		    {
-			if ( res->pmObj()->hasInstalledObj() )
-			    res->pmObj()->getSelectable()->set_status( PMSelectable::S_Update );
+			if ( res->zyppObj()->hasInstalledObj() )
+			    res->zyppObj()->getSelectable()->set_status( Selectable::S_Update );
 			else
-			    res->pmObj()->getSelectable()->set_status( PMSelectable::S_Install );
+			    res->zyppObj()->getSelectable()->set_status( Selectable::S_Install );
 		    }
 		    return;
 	    }
@@ -1026,12 +1026,12 @@ YQPkgConflict::bruteForceDelete(PkgDep::SolvableList& solvablelist)
 
     while ( it != solvablelist.end() )
     {
-	PMObjectPtr pkg = ( *it );
+	zypp::ResObject::Ptr pkg = ( *it );
 
 	if ( pkg && pkg->getSelectable() )
 	{
 	    pkg->getSelectable()->set_status( pkg->hasInstalledObj() ?
-					      PMSelectable::S_Del : PMSelectable::S_NoInst );
+					      Selectable::S_Del : Selectable::S_NoInst );
 	}
 
 	++it;
@@ -1053,12 +1053,12 @@ YQPkgConflictResolution::YQPkgConflictResolution( QY2CheckListItem * 			parent,
 
 
 YQPkgConflictResolution::YQPkgConflictResolution( QY2CheckListItem *	parent,
-						  PMObjectPtr		pmObj )
+						  zypp::ResObject::Ptr		zyppObj )
     : QY2CheckListItem( parent, "", QCheckListItem::RadioButton, true )
     , _type( YQPkgConflictAlternative )
-    , _pmObj( pmObj )
+    , _zyppObj( zyppObj )
 {
-    setText( 0, ( _( "Install %1" ) ).arg( _pmObj->name().asString().c_str() ) );
+    setText( 0, ( _( "Install %1" ) ).arg( _zyppObj->name().asString().c_str() ) );
 }
 
 

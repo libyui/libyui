@@ -21,8 +21,8 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include <Y2PM.h>
-#include <y2pm/PMManager.h>
+#include "YQZypp.h"
+#include <zypp/ui/ResPoolProxy.h>
 
 #include <qdatetime.h>
 #include "YQPkgDependenciesView.h"
@@ -43,23 +43,23 @@ YQPkgDependenciesView::~YQPkgDependenciesView()
 
 
 void
-YQPkgDependenciesView::showDetails( PMObjectPtr pmObj )
+YQPkgDependenciesView::showDetails( zypp::ResObject::Ptr zyppObj )
 {
-    _pmObj = pmObj;
+    _zyppObj = zyppObj;
 
-    if ( ! pmObj )
+    if ( ! zyppObj )
     {
 	clear();
 	return;
     }
 
-    QString html_text = htmlHeading( pmObj );
+    QString html_text = htmlHeading( zyppObj );
 
-    string name = pmObj->name();
-    y2debug( "Showing technical details for PMObject %s", name.c_str() );
+    string name = zyppObj->name();
+    y2debug( "Showing technical details for zypp::ResObject %s", name.c_str() );
 
-    PMPackagePtr candidate = pmObj->getCandidateObj();
-    PMPackagePtr installed = pmObj->getInstalledObj();
+    zypp::Package::Ptr candidate = zyppObj->getCandidateObj();
+    zypp::Package::Ptr installed = zyppObj->getInstalledObj();
 
 #if 0
     html_text += complexTable( installed, installed );
@@ -84,7 +84,7 @@ YQPkgDependenciesView::showDetails( PMObjectPtr pmObj )
 
 
 QString
-YQPkgDependenciesView::simpleTable( PMPackagePtr pkg )
+YQPkgDependenciesView::simpleTable( zypp::Package::Ptr pkg )
 {
     QString html = "<br>" +
 	table(
@@ -103,10 +103,10 @@ YQPkgDependenciesView::simpleTable( PMPackagePtr pkg )
 
 
 QString
-YQPkgDependenciesView::complexTable( PMPackagePtr installed, PMPackagePtr candidate )
+YQPkgDependenciesView::complexTable( zypp::Package::Ptr installed, zypp::Package::Ptr candidate )
 {
-    PMPackagePtr p1 = candidate;
-    PMPackagePtr p2 = installed;
+    zypp::Package::Ptr p1 = candidate;
+    zypp::Package::Ptr p2 = installed;
 
     QString p1_header = _( "<b>Alternate Version</b>" );
     QString p2_header = _( "<b>Installed Version</b>" );

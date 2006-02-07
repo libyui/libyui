@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <qmap.h>
 #include <y2pm/PkgDep.h>
-#include <y2pm/PMSelectable.h>
+#include <zypp/ui/Selectable.h>
 #include "QY2ListView.h"
 
 
@@ -324,12 +324,12 @@ protected:
 
     // Data members
 
-    PMObjectPtr			_pmObj;
+    zypp::ResObject::Ptr			_zyppObj;
     bool			_isPkg;
     QString			_shortName;	// Only pkg name ( no version )
     QString			_fullName;	// Name + edition
-    PMSelectable::UI_Status	_status;
-    PMSelectable::UI_Status	_undo_status;
+    zypp::ui::Status	_status;
+    zypp::ui::Status	_undo_status;
     bool			_canIgnore;
 
     QListViewItem *		_resolutionsHeader;
@@ -362,12 +362,12 @@ public:
      * Constructor for alternatives
      **/
     YQPkgConflictResolution( QY2CheckListItem *	parent,
-			     PMObjectPtr	pmObj );
+			     zypp::ResObject::Ptr	zyppObj );
 
     /**
-     * Returns the corresponding PMObject.
+     * Returns the corresponding zypp::ResObject.
      **/
-    PMObjectPtr pmObj() const { return _pmObj; }
+    zypp::ResObject::Ptr zyppObj() const { return _zyppObj; }
 
     /**
      * Returns the type of this resolution.
@@ -385,7 +385,7 @@ protected:
     // Data members
 
     YQPkgConflictResolutionType	_type;
-    PMObjectPtr			_pmObj;
+    zypp::ResObject::Ptr			_zyppObj;
 };
 
 

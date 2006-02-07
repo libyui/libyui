@@ -32,8 +32,8 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include <Y2PM.h>
-#include <y2pm/PMPackageManager.h>
+#include "YQZypp.h"
+#include <zypp/ui/ResPoolProxy.h>
 
 #include "YQPkgSearchFilterView.h"
 #include "QY2LayoutUtils.h"
@@ -215,11 +215,11 @@ YQPkgSearchFilterView::filter()
 	int count = 0;
 	timer.start();
 
-	PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
+	PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
 	while ( it != Y2PM::packageManager().end() && ! progress.wasCancelled() )
 	{
-	    PMSelectablePtr selectable = *it;
+	    Selectable::Ptr selectable = *it;
 
 	    bool match =
 		check( selectable->candidateObj(), regexp ) ||
@@ -259,7 +259,7 @@ YQPkgSearchFilterView::filter()
 
 
 bool
-YQPkgSearchFilterView::check( PMPackagePtr pkg )
+YQPkgSearchFilterView::check( zypp::Package::Ptr pkg )
 {
     QRegExp regexp = _searchText->currentText();
     regexp.setCaseSensitive( _caseSensitive->isChecked() );
@@ -270,7 +270,7 @@ YQPkgSearchFilterView::check( PMPackagePtr pkg )
 
 
 bool
-YQPkgSearchFilterView::check( PMPackagePtr pkg, const QRegExp & regexp )
+YQPkgSearchFilterView::check( zypp::Package::Ptr pkg, const QRegExp & regexp )
 {
     if ( ! pkg )
 	return false;

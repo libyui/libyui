@@ -21,8 +21,8 @@
 
 #include "qregexp.h"
 
-#include <Y2PM.h>
-#include <y2pm/PMSelection.h>
+#include "YQZypp.h"
+#include <zypp/Selection.h>
 
 #include "YQPkgSelDescriptionView.h"
 #include "YQUI.h"
@@ -46,19 +46,19 @@ YQPkgSelDescriptionView::~YQPkgSelDescriptionView()
 
 
 void
-YQPkgSelDescriptionView::showDetails( PMObjectPtr pmObj )
+YQPkgSelDescriptionView::showDetails( zypp::ResObject::Ptr zyppObj )
 {
-    _pmObj = pmObj;
+    _zyppObj = zyppObj;
 
-    if ( ! pmObj )
+    if ( ! zyppObj )
     {
 	clear();
 	return;
     }
 
-    QString html_text = htmlHeading( pmObj );
+    QString html_text = htmlHeading( zyppObj );
 
-    string name = pmObj->name();
+    string name = zyppObj->name();
     // y2debug( "Showing description for package %s", name.c_str() );
 
 
@@ -66,7 +66,7 @@ YQPkgSelDescriptionView::showDetails( PMObjectPtr pmObj )
 
     bool auto_format  = true;
     bool preformatted = false;
-    list<string> description = pmObj->description();
+    list<string> description = zyppObj->description();
     list<string>::const_iterator it = description.begin();
 
     if ( it != description.end()
@@ -116,18 +116,18 @@ YQPkgSelDescriptionView::showDetails( PMObjectPtr pmObj )
 
 
 QString
-YQPkgSelDescriptionView::htmlHeading( PMObjectPtr pmObj )
+YQPkgSelDescriptionView::htmlHeading( zypp::ResObject::Ptr zyppObj )
 {
-    PMSelectionPtr sel = pmObj;
+    zypp::Selection::Ptr sel = zyppObj;
 
     if ( ! sel )
-	return YQPkgGenericDetailsView::htmlHeading( pmObj );
+	return YQPkgGenericDetailsView::htmlHeading( zyppObj );
     
     QString summary = fromUTF8( sel->summary( Y2PM::getPreferredLocale() ) );
     bool useBigFont = ( summary.length() <= 40 );
 
     if ( summary.isEmpty() )
-	summary = fromUTF8( pmObj->name() );
+	summary = fromUTF8( zyppObj->name() );
 
     QString html = "<table";
 

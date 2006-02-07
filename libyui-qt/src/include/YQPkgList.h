@@ -23,14 +23,14 @@
 #define YQPkgList_h
 
 #include <YQPkgObjList.h>
-#include <y2pm/PMPackage.h>
+#include <zypp/Package.h>
 
 
 class YQPkgListItem;
 
 
 /**
- * @short Display a list of PMPackage objects.
+ * @short Display a list of zypp::Package objects.
  **/
 class YQPkgList : public YQPkgObjList
 {
@@ -77,18 +77,18 @@ public slots:
      * slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addPkgItem( PMPackagePtr pmPkg );
+    void addPkgItem( zypp::Package::Ptr zyppPkg );
     
     /**
      * Add a pkg to the list, but display it dimmed (grey text foreground
      * rather than normal black). 
      **/
-    void addPkgItemDimmed( PMPackagePtr pmPkg );
+    void addPkgItemDimmed( zypp::Package::Ptr zyppPkg );
 
     /**
      * Add a pkg to the list
      **/
-    void addPkgItem( PMPackagePtr pmPkg, bool dimmed );
+    void addPkgItem( zypp::Package::Ptr zyppPkg, bool dimmed );
 
 
     /**
@@ -129,9 +129,9 @@ public slots:
     void setDontInstallListSourceRpms()	  { setInstallListSourceRpms( false ); }
 
 
-    // No separate selectionChanged( PMPackagePtr ) signal:
-    // Use YQPkgObjList::selectionChanged( PMObjectPtr ) instead
-    // and dynamic_cast to PMPackagePtr if required.
+    // No separate selectionChanged( zypp::Package::Ptr ) signal:
+    // Use YQPkgObjList::selectionChanged( zypp::ResObject::Ptr ) instead
+    // and dynamic_cast to zypp::Package::Ptr if required.
     // This saves duplicating a lot of code.
 
 
@@ -197,7 +197,7 @@ public:
      * Constructor. Creates a YQPkgList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgListItem( YQPkgList * pkgList, PMPackagePtr pmPkg );
+    YQPkgListItem( YQPkgList * pkgList, zypp::Package::Ptr zyppPkg );
 
     /**
      * Destructor
@@ -212,12 +212,12 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    PMPackagePtr pmPkg() { return _pmPkg; }
+    zypp::Package::Ptr zyppPkg() { return _zyppPkg; }
 
     /**
      * Returns the original object within the package manager backend.
      **/
-    const PMPackagePtr constPMPkg() const { return _pmPkg; }
+    const zypp::Package::Ptr constPMPkg() const { return _zyppPkg; }
 
     /**
      * Returns the source RPM package status:
@@ -310,7 +310,7 @@ protected:
     // Data members
 
     YQPkgList *		_pkgList;
-    PMPackagePtr	_pmPkg;
+    zypp::Package::Ptr	_zyppPkg;
     bool		_dimmed;
 };
 

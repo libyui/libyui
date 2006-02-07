@@ -20,12 +20,12 @@
 
 #include <qmessagebox.h>
 
-#include <Y2PM.h>
+#include "YQZypp.h"
 #include <y2pm/InstTarget.h>
-#include <y2pm/PMManager.h>
-#include <y2pm/PMPackageManager.h>
-#include <y2pm/PMSelectionManager.h>
-#include <y2pm/PMYouPatchManager.h>
+#include <zypp/ui/ResPoolProxy.h>
+#include <zypp/ui/ResPoolProxy.h>
+#include <zypp/ui/ResPoolProxy.h>
+#include <zypp/ui/ResPoolProxy.h>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>

@@ -31,8 +31,8 @@
 #include <qstyle.h>
 #include <qvaluelist.h>
 
-#include <Y2PM.h>
-#include <y2pm/PMPackageManager.h>
+#include "YQZypp.h"
+#include <zypp/ui/ResPoolProxy.h>
 #include "YQPkgDescriptionDialog.h"
 #include "YQPkgDescriptionView.h"
 #include "YQPkgList.h"
@@ -81,8 +81,8 @@ YQPkgDescriptionDialog::YQPkgDescriptionDialog( QWidget * parent, const QString 
     CHECK_PTR( _pkgDescription );
     _pkgDescription->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _pkgList,		SIGNAL( selectionChanged    ( PMObjectPtr ) ),
-	     _pkgDescription,	SLOT  ( showDetailsIfVisible( PMObjectPtr ) ) );
+    connect( _pkgList,		SIGNAL( selectionChanged    ( zypp::ResObject::Ptr ) ),
+	     _pkgDescription,	SLOT  ( showDetailsIfVisible( zypp::ResObject::Ptr ) ) );
 
 
     // Button box (to center the single button)
@@ -122,15 +122,15 @@ YQPkgDescriptionDialog::filter( const QString & qPkgName )
 
     // Search for pkgs with that name
 
-    PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
+    PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
     while ( it != Y2PM::packageManager().end() )
     {
-	PMSelectablePtr selectable = *it;
-	PMObjectPtr pmObj = selectable->theObject();
+	Selectable::Ptr selectable = *it;
+	zypp::ResObject::Ptr zyppObj = selectable->theObject();
 
-	if ( pmObj && pmObj->name() == pkgName )
-	    _pkgList->addPkgItem( pmObj );
+	if ( zyppObj && zyppObj->name() == pkgName )
+	    _pkgList->addPkgItem( zyppObj );
 
 	++it;
     }
@@ -141,7 +141,7 @@ YQPkgDescriptionDialog::filter( const QString & qPkgName )
     YQPkgObjListItem * firstItem = dynamic_cast<YQPkgObjListItem *> ( _pkgList->firstChild() );
 
     if ( firstItem )
-	_pkgDescription->showDetailsIfVisible( firstItem->pmObj() );
+	_pkgDescription->showDetailsIfVisible( firstItem->zyppObj() );
     else
 	_pkgDescription->clear();
 

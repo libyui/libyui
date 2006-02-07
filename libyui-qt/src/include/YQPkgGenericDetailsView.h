@@ -23,7 +23,7 @@
 #define YQPkgGenericDetailsView_h
 
 #include <qtextbrowser.h>
-#include <y2pm/PMObject.h>
+#include <zypp/Object.h>
 #include <y2util/Date.h>
 
 
@@ -65,7 +65,7 @@ public:
      * Returns a uniform heading in HTML format for the specified package:
      * Package name and summary
      **/
-    static QString htmlHeading( PMObjectPtr pmObj );
+    static QString htmlHeading( zypp::ResObject::Ptr zyppObj );
 
     /**
      * Escapes characters special to HTML in a ( plain text ) string, such as:
@@ -114,7 +114,7 @@ public slots:
      * Delayed ( optimized ) display if this is embedded into a QTabWidget
      * parent: In this case, wait until this page becomes visible.
      **/
-    void showDetailsIfVisible( PMObjectPtr pmObj );
+    void showDetailsIfVisible( zypp::ResObject::Ptr zyppObj );
 
     // slot clear() inherited from QTextEdit
 
@@ -122,7 +122,7 @@ public slots:
      * Show details for the specified package.
      * Reimplement this in derived classes.
      **/
-    virtual void showDetails( PMObjectPtr pmObj ) = 0;
+    virtual void showDetails( zypp::ResObject::Ptr zyppObj ) = 0;
 
     
 protected slots:
@@ -136,7 +136,7 @@ protected slots:
     // Data members
 
     QTabWidget	* 	_parentTab;
-    PMObjectPtr		_pmObj;
+    zypp::ResObject::Ptr		_zyppObj;
 };
 
 

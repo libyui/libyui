@@ -23,7 +23,7 @@
 #define YQPkgSelectionsFilterView_h
 
 #include <qvbox.h>
-#include <y2pm/PMSelection.h>
+#include <zypp/Selection.h>
 
 
 class YQPkgSelList;

@@ -30,7 +30,7 @@ class YQPkgLangListItem;
 
 
 /**
- * @short Display a list of PMSelection objects.
+ * @short Display a list of zypp::Selection objects.
  **/
 class YQPkgLangList : public YQPkgObjList
 {
@@ -104,7 +104,7 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( PMPackagePtr pkg );
+    void filterMatch( zypp::Package::Ptr pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -154,7 +154,7 @@ public:
      * Activate selections and emit updatePackages signal for each
      * status change.
      **/
-    virtual void setStatus( PMSelectable::UI_Status newStatus );
+    virtual void setStatus( zypp::ui::Status newStatus );
 
 
     // Columns

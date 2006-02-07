@@ -20,8 +20,8 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include <Y2PM.h>
-#include <y2pm/PMManager.h>
+#include "YQZypp.h"
+#include <zypp/ui/ResPoolProxy.h>
 
 #include "YQPkgSelectionsFilterView.h"
 #include "YQPkgSelList.h"

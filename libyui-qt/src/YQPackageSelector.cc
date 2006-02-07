@@ -38,14 +38,14 @@
 #include <qtabwidget.h>
 #include <qtimer.h>
 
-#include <Y2PM.h>
+#include "YQZypp.h"
 #include <y2pm/InstTarget.h>
 #include <y2pm/InstYou.h>
-#include <y2pm/PMManager.h>
-#include <y2pm/PMPackageImEx.h>
-#include <y2pm/PMPackageManager.h>
-#include <y2pm/PMSelectionManager.h>
-#include <y2pm/PMYouPatchManager.h>
+#include <zypp/ui/ResPoolProxy.h>
+#include <y2pm/zypp::PackageImEx.h>
+#include <zypp/ui/ResPoolProxy.h>
+#include <zypp/ui/ResPoolProxy.h>
+#include <zypp/ui/ResPoolProxy.h>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
@@ -447,8 +447,8 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     _detailsViews->addTab( _pkgDescriptionView, _( "D&escription" ) );
     _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _pkgList,			SIGNAL( selectionChanged    ( PMObjectPtr ) ),
-	     _pkgDescriptionView,	SLOT  ( showDetailsIfVisible( PMObjectPtr ) ) );
+    connect( _pkgList,			SIGNAL( selectionChanged    ( zypp::ResObject::Ptr ) ),
+	     _pkgDescriptionView,	SLOT  ( showDetailsIfVisible( zypp::ResObject::Ptr ) ) );
 
     //
     // Technical details
@@ -459,8 +459,8 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
     _detailsViews->addTab( _pkgTechnicalDetailsView, _( "&Technical Data" ) );
 
-    connect( _pkgList,			SIGNAL( selectionChanged    ( PMObjectPtr ) ),
-	     _pkgTechnicalDetailsView,	SLOT  ( showDetailsIfVisible( PMObjectPtr ) ) );
+    connect( _pkgList,			SIGNAL( selectionChanged    ( zypp::ResObject::Ptr ) ),
+	     _pkgTechnicalDetailsView,	SLOT  ( showDetailsIfVisible( zypp::ResObject::Ptr ) ) );
 
 
     //
@@ -473,8 +473,8 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     _detailsViews->addTab( _pkgDependenciesView, _( "Dependencies" ) );
     _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _pkgList,			SIGNAL( selectionChanged    ( PMObjectPtr ) ),
-	     _pkgDependenciesView,	SLOT  ( showDetailsIfVisible( PMObjectPtr ) ) );
+    connect( _pkgList,			SIGNAL( selectionChanged    ( zypp::ResObject::Ptr ) ),
+	     _pkgDependenciesView,	SLOT  ( showDetailsIfVisible( zypp::ResObject::Ptr ) ) );
 
 
     //
@@ -489,8 +489,8 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
 	_detailsViews->addTab( _pkgVersionsView, _( "&Versions" ) );
 
-	connect( _pkgList,		SIGNAL( selectionChanged    ( PMObjectPtr ) ),
-		 _pkgVersionsView,	SLOT  ( showDetailsIfVisible( PMObjectPtr ) ) );
+	connect( _pkgList,		SIGNAL( selectionChanged    ( zypp::ResObject::Ptr ) ),
+		 _pkgVersionsView,	SLOT  ( showDetailsIfVisible( zypp::ResObject::Ptr ) ) );
     }
 }
 
@@ -704,8 +704,8 @@ YQPackageSelector::connectFilter( QWidget * filter,
     connect( filter,	SIGNAL( filterStart() 	),
 	     pkgList, 	SLOT  ( clear() 	) );
 
-    connect( filter,	SIGNAL( filterMatch( PMPackagePtr ) ),
-	     pkgList, 	SLOT  ( addPkgItem ( PMPackagePtr ) ) );
+    connect( filter,	SIGNAL( filterMatch( zypp::Package::Ptr ) ),
+	     pkgList, 	SLOT  ( addPkgItem ( zypp::Package::Ptr ) ) );
 
     connect( filter, 	SIGNAL( filterFinished()  ),
 	     pkgList, 	SLOT  ( selectSomething() ) );
@@ -751,8 +751,8 @@ YQPackageSelector::makeConnections()
 
     if ( _instSrcFilterView && _pkgList )
     {
-	connect( _instSrcFilterView,	SIGNAL( filterNearMatch	 ( PMPackagePtr ) ),
-		 _pkgList,		SLOT  ( addPkgItemDimmed ( PMPackagePtr ) ) );
+	connect( _instSrcFilterView,	SIGNAL( filterNearMatch	 ( zypp::Package::Ptr ) ),
+		 _pkgList,		SLOT  ( addPkgItemDimmed ( zypp::Package::Ptr ) ) );
     }
 
     if ( _pkgList && _diskUsageList )
@@ -812,7 +812,7 @@ YQPackageSelector::makeConnections()
 
     if ( _pkgVersionsView && _pkgList )
     {
-	connect( _pkgVersionsView, 	SIGNAL( candidateChanged( PMObjectPtr ) ),
+	connect( _pkgVersionsView, 	SIGNAL( candidateChanged( zypp::ResObject::Ptr ) ),
 		 _pkgList,		SLOT  ( updateToplevelItemData() ) );
     }
 
@@ -917,7 +917,7 @@ YQPackageSelector::pkgExport()
     if ( ! filename.isEmpty() )
     {
 	y2milestone( "Exporting package list to %s", (const char *) filename );
-	PMPackageImEx exporter;
+	zypp::PackageImEx exporter;
 	exporter.getPMState();
 
 	if ( exporter.doExport( Pathname( (const char *) filename ) ) )
@@ -930,7 +930,7 @@ YQPackageSelector::pkgExport()
 	{
 	    y2warning( "Error writing package list to %s", (const char *) filename );
 
-	    // PMPackageImEx::doExport() might have left over a partially written file.
+	    // zypp::PackageImEx::doExport() might have left over a partially written file.
 	    // Try to delete that. Don't care if it doesn't exist and unlink() fails.
 	    ( void ) unlink( (const char *) filename );
 
@@ -972,7 +972,7 @@ YQPackageSelector::pkgImport()
     if ( ! filename.isEmpty() )
     {
 	y2milestone( "Importing package list from %s", (const char *) filename );
-	PMPackageImEx importer;
+	zypp::PackageImEx importer;
 	importer.getPMState();
 
 	if ( importer.doImport( Pathname( (const char *) filename ) ) )
@@ -1020,9 +1020,9 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 {
     // Find all matching packages and put them into a QMap
 
-    QMap<QString, PMSelectablePtr> subPkgs;
+    QMap<QString, Selectable::Ptr> subPkgs;
 
-    for ( PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
+    for ( PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
 	  it != Y2PM::packageManager().end();
 	  ++it )
     {
@@ -1039,7 +1039,7 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 
     // Now go through all packages and look if there is a corresponding subpackage in the QMap
 
-    for ( PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
+    for ( PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
 	  it != Y2PM::packageManager().end();
 	  ++it )
     {
@@ -1047,47 +1047,47 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 
 	if ( subPkgs.contains( name + suffix ) )
 	{
-	    PMSelectablePtr subPkg = subPkgs[ name + suffix ];
+	    Selectable::Ptr subPkg = subPkgs[ name + suffix ];
 	    QString subPkgName;
 
 	    switch ( (*it)->status() )
 	    {
-		case PMSelectable::S_AutoDel:
-		case PMSelectable::S_NoInst:
-		case PMSelectable::S_Protected:
-		case PMSelectable::S_Taboo:
-		case PMSelectable::S_Del:
+		case Selectable::S_AutoDel:
+		case Selectable::S_NoInst:
+		case Selectable::S_Protected:
+		case Selectable::S_Taboo:
+		case Selectable::S_Del:
 		    // Don't install the subpackage
 		    y2milestone( "Ignoring unwanted subpackage %s", (const char *) subPkgName );
 		    break;
 
-		case PMSelectable::S_AutoInstall:
-		case PMSelectable::S_Install:
-		case PMSelectable::S_KeepInstalled:
+		case Selectable::S_AutoInstall:
+		case Selectable::S_Install:
+		case Selectable::S_KeepInstalled:
 
 		    // Install the subpackage, but don't try to update it
 
 		    if ( ! subPkg->installedObj() )
 		    {
-			subPkg->set_status( PMSelectable::S_Install );
+			subPkg->set_status( Selectable::S_Install );
 			y2milestone( "Installing subpackage %s", (const char *) subPkgName );
 		    }
 		    break;
 
 
-		case PMSelectable::S_Update:
-		case PMSelectable::S_AutoUpdate:
+		case Selectable::S_Update:
+		case Selectable::S_AutoUpdate:
 
 		    // Install or update the subpackage
 
 		    if ( ! subPkg->installedObj() )
 		    {
-			subPkg->set_status( PMSelectable::S_Install );
+			subPkg->set_status( Selectable::S_Install );
 			y2milestone( "Installing subpackage %s", (const char *) subPkgName );
 		    }
 		    else
 		    {
-			subPkg->set_status( PMSelectable::S_Update );
+			subPkg->set_status( Selectable::S_Update );
 			y2milestone( "Updating subpackage %s", (const char *) subPkgName );
 		    }
 		    break;

@@ -23,7 +23,7 @@
 #define YQPkgYouPatchFilterView_h
 
 #include <qvbox.h>
-#include <y2pm/PMSelection.h>
+#include <zypp/Selection.h>
 
 
 class YQPkgYouPatchList;
@@ -35,7 +35,7 @@ class QTabWidget;
 
 
 /**
- * @short Display a list of PMYouPatch objects and ( below ) details about the
+ * @short Display a list of zypp::Patch objects and ( below ) details about the
  * currently selected YOU patch.
  **/
 class YQPkgYouPatchFilterView : public QVBox

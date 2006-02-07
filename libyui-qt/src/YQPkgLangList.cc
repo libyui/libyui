@@ -22,8 +22,8 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 #include <qregexp.h>
-#include <Y2PM.h>
-#include <y2pm/PMLanguageManager.h>
+#include "YQZypp.h"
+#include <zypp/ui/ResPoolProxy.h>
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgLangList.h"
@@ -69,7 +69,7 @@ YQPkgLangList::fillList()
     clear();
     y2debug( "Filling language list" );
 
-    PMManager::PMSelectableVec::const_iterator it = Y2PM::languageManager().begin();
+    PMManager::SelectableVec::const_iterator it = Y2PM::languageManager().begin();
 
     while ( it != Y2PM::languageManager().end() )
     {
@@ -165,7 +165,7 @@ YQPkgLangListItem::~YQPkgLangListItem()
 
 
 void
-YQPkgLangListItem::setStatus( PMSelectable::UI_Status newStatus )
+YQPkgLangListItem::setStatus( zypp::ui::Status newStatus )
 {
     YQPkgObjListItem::setStatus( newStatus );
     _langList->sendUpdatePackages();

@@ -21,10 +21,10 @@
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
-#include <Y2PM.h>
+#include "YQZypp.h"
 #include <y2pm/InstSrc.h>
 #include <y2pm/InstSrcData.h>
-#include <y2pm/PMSelectable.h>
+#include <zypp/ui/Selectable.h>
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgInstSrcList.h"
@@ -111,8 +111,8 @@ YQPkgInstSrcList::filter()
     // and store them in sets to avoid duplicates in the resulting list
     //
 
-    set<PMSelectablePtr> allMatches;
-    set<PMSelectablePtr> exactMatches;
+    set<Selectable::Ptr> allMatches;
+    set<Selectable::Ptr> exactMatches;
     QListViewItem * item = firstChild();	// take multi selection into account
 
     while ( item )
@@ -124,14 +124,14 @@ YQPkgInstSrcList::filter()
 	    if ( instSrcItem )
 	    {
 		InstSrcManager::ISrcId instSrc = instSrcItem->instSrcId();
-		const list<PMPackagePtr> &packages = instSrc->data()->getPackages();
-		list<PMPackagePtr>::const_iterator pkg_it = packages.begin();
+		const list<zypp::Package::Ptr> &packages = instSrc->data()->getPackages();
+		list<zypp::Package::Ptr>::const_iterator pkg_it = packages.begin();
 
 		while ( pkg_it != packages.end() )
 		{
 		    if ( (*pkg_it)->hasSelectable() )	// might not be in manager (incompatible arch)
 		    {
-			PMSelectablePtr sel = (*pkg_it)->getSelectable();
+			Selectable::Ptr sel = (*pkg_it)->getSelectable();
 			allMatches.insert( sel );
 
 			if ( (*pkg_it) == sel->candidateObj() ||
@@ -155,7 +155,7 @@ YQPkgInstSrcList::filter()
     // (emit a filterMatch signal for each one)
     //
 
-    set<PMSelectablePtr>::const_iterator sel_it = exactMatches.begin();
+    set<Selectable::Ptr>::const_iterator sel_it = exactMatches.begin();
 
     while ( sel_it != exactMatches.end() )
     {

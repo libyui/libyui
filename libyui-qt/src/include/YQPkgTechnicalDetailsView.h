@@ -22,13 +22,13 @@
 #ifndef YQPkgTechnicalDetailsView_h
 #define YQPkgTechnicalDetailsView_h
 
-#include <y2pm/PMPackage.h>
+#include <zypp/Package.h>
 
 #include "YQPkgGenericDetailsView.h"
 
 
 /**
- * @short Display technical details ( very much like 'rpm -qi' ) for a PMPackage
+ * @short Display technical details ( very much like 'rpm -qi' ) for a zypp::Package
  * object - the installed instance, the candidate instance or both ( in two
  * columns ) if both exist. All other available instances are ignored.
  **/
@@ -53,17 +53,17 @@ public:
 protected:
 
     /**
-     * Show details for the specified PMObject:
+     * Show details for the specified zypp::ResObject:
      * In this case technical data, very much like "rpm -qi".
      * Overwritten from YQPkgGenericDetailsView.
      **/
-    virtual void showDetails( PMObjectPtr pmObj );
+    virtual void showDetails( zypp::ResObject::Ptr zyppObj );
 
     /**
      * Returns a string containing a HTML table for technical details for one
      * package.
      **/
-    QString simpleTable( PMPackagePtr pkg );
+    QString simpleTable( zypp::Package::Ptr pkg );
 
 
     /**
@@ -71,18 +71,18 @@ protected:
      * package instances: The installed instance and an alternate instance.
      * ( usually the candidate instance ).
      **/
-    QString complexTable( PMPackagePtr installedPkg,
-			  PMPackagePtr candidatePkg );
+    QString complexTable( zypp::Package::Ptr installedPkg,
+			  zypp::Package::Ptr candidatePkg );
 
     /**
      * Returns a string containing HTML code for a package's authors list.
      **/
-    QString authorsListCell( PMPackagePtr pkg ) const;
+    QString authorsListCell( zypp::Package::Ptr pkg ) const;
 
     /**
      * Format an RPM group. Retrieves the translated ( ! ) version.
      **/
-    QString formatRpmGroup( PMPackagePtr pkg ) const;
+    QString formatRpmGroup( zypp::Package::Ptr pkg ) const;
 
 
     // Data members

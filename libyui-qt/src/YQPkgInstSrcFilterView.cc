@@ -22,8 +22,8 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include <Y2PM.h>
-#include <y2pm/PMManager.h>
+#include "YQZypp.h"
+#include <zypp/ui/ResPoolProxy.h>
 #include <qsplitter.h>
 
 #include "QY2ComboTabWidget.h"
@@ -64,11 +64,11 @@ YQPkgInstSrcFilterView::YQPkgInstSrcFilterView( QWidget * parent )
 
     // Redirect filterMatch() and filterNearMatch() signals to secondary filter
 
-    connect( _instSrcList,	SIGNAL( filterMatch		( PMPackagePtr ) ),
-	     this,		SLOT  ( primaryFilterMatch	( PMPackagePtr ) ) );
+    connect( _instSrcList,	SIGNAL( filterMatch		( zypp::Package::Ptr ) ),
+	     this,		SLOT  ( primaryFilterMatch	( zypp::Package::Ptr ) ) );
 
-    connect( _instSrcList,	SIGNAL( filterNearMatch		( PMPackagePtr ) ),
-	     this,		SLOT  ( primaryFilterNearMatch	( PMPackagePtr ) ) );
+    connect( _instSrcList,	SIGNAL( filterNearMatch		( zypp::Package::Ptr ) ),
+	     this,		SLOT  ( primaryFilterNearMatch	( zypp::Package::Ptr ) ) );
 
 #if 0
     QWidget * secondary_filters =
@@ -171,14 +171,14 @@ void YQPkgInstSrcFilterView::filterIfVisible()
 }
 
 
-void YQPkgInstSrcFilterView::primaryFilterMatch( PMPackagePtr pkg )
+void YQPkgInstSrcFilterView::primaryFilterMatch( zypp::Package::Ptr pkg )
 {
     if ( secondaryFilterMatch( pkg ) )
 	emit filterMatch( pkg );
 }
 
 
-void YQPkgInstSrcFilterView::primaryFilterNearMatch( PMPackagePtr pkg )
+void YQPkgInstSrcFilterView::primaryFilterNearMatch( zypp::Package::Ptr pkg )
 {
     if ( secondaryFilterMatch( pkg ) )
 	emit filterNearMatch( pkg );
@@ -186,7 +186,7 @@ void YQPkgInstSrcFilterView::primaryFilterNearMatch( PMPackagePtr pkg )
 
 
 bool
-YQPkgInstSrcFilterView::secondaryFilterMatch( PMPackagePtr pkg )
+YQPkgInstSrcFilterView::secondaryFilterMatch( zypp::Package::Ptr pkg )
 {
     if ( _allPackages->isVisible() )
     {

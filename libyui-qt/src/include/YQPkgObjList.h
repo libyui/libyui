@@ -24,8 +24,8 @@
 
 #include <qpixmap.h>
 #include <QY2ListView.h>
-#include <y2pm/PMObject.h>
-#include <y2pm/PMSelectable.h>
+#include <zypp/Object.h>
+#include <zypp/ui/Selectable.h>
 #include <y2util/FSize.h>
 
 class YQPkgObjListItem;
@@ -35,7 +35,7 @@ using std::string;
 
 
 /**
- * @short Abstract base class to display a list of PMObjects.
+ * @short Abstract base class to display a list of zypp::ResObjects.
  * Handles most generic stuff like setting status etc.
  **/
 class YQPkgObjList : public QY2ListView
@@ -82,17 +82,17 @@ public:
      * Sets the currently selected item's status.
      * Automatically selects the next item if 'selectNextItem' is 'true'.
      **/
-    void setCurrentStatus( PMSelectable::UI_Status	newStatus,
+    void setCurrentStatus( zypp::ui::Status	newStatus,
 			   bool				selectNextItem = false );
 
     /**
      * Sets the status of all ( toplevel ) list items to 'newStatus', if possible.
      * Only one single statusChanged() signal is emitted.
      *
-     * 'force' overrides sensible defaults like setting only PMObjects to
+     * 'force' overrides sensible defaults like setting only zypp::ResObjects to
      * 'update' that really come with a newer version.
      **/
-    void setAllItemStatus( PMSelectable::UI_Status newStatus, bool force = false );
+    void setAllItemStatus( zypp::ui::Status newStatus, bool force = false );
 
     /**
      * Add a submenu "All in this list..." to 'menu'.
@@ -101,25 +101,25 @@ public:
     virtual QPopupMenu * addAllInListSubMenu( QPopupMenu * menu );
 
     /**
-     * Returns the suitable icon for a PMObject status - the regular icon if
+     * Returns the suitable icon for a zypp::ResObject status - the regular icon if
      * 'enabled' is 'true' or the insensitive icon if 'enabled' is 'false.
      * 'bySelection' is relevant only for auto-states: This uses the icon for
      * 'auto-by-selection" rather than the default auto-icon.
      **/
-    virtual QPixmap statusIcon( PMSelectable::UI_Status status,
+    virtual QPixmap statusIcon( zypp::ui::Status status,
 				bool 			enabled     = true,
 				bool			bySelection = false );
 
     /**
-     * Returns a short ( one line ) descriptive text for a PMObject status.
+     * Returns a short ( one line ) descriptive text for a zypp::ResObject status.
      **/
-    virtual QString statusText( PMSelectable::UI_Status status ) const;
+    virtual QString statusText( zypp::ui::Status status ) const;
 
 
 public slots:
 
     /**
-     * Add a PMObject to the list. Connect a filter's filterMatch() signal to
+     * Add a zypp::ResObject to the list. Connect a filter's filterMatch() signal to
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      *
@@ -127,7 +127,7 @@ public slots:
      * this method with overlaid methods of the same name that were simply
      * forgotten to implement!
      **/
-    void addPkgObjItem( PMObjectPtr pmObj );
+    void addPkgObjItem( zypp::ResObject::Ptr zyppObj );
 
     /**
      * Add a purely passive list item that has a name and optional summary and
@@ -171,7 +171,7 @@ public slots:
     void selectNextItem();
 
     /**
-     * Emit a statusChanged() signal for the specified PMObject.
+     * Emit a statusChanged() signal for the specified zypp::ResObject.
      **/
     void sendStatusChanged() { emit statusChanged(); }
 
@@ -183,22 +183,22 @@ public slots:
 
     // Direct access to some states for menu actions
 
-    void setCurrentInstall()	   { setCurrentStatus( PMSelectable::S_Install	     ); }
-    void setCurrentDontInstall()   { setCurrentStatus( PMSelectable::S_NoInst	     ); }
-    void setCurrentKeepInstalled() { setCurrentStatus( PMSelectable::S_KeepInstalled ); }
-    void setCurrentDelete()	   { setCurrentStatus( PMSelectable::S_Del	     ); }
-    void setCurrentUpdate()	   { setCurrentStatus( PMSelectable::S_Update	     ); }
-    void setCurrentTaboo()	   { setCurrentStatus( PMSelectable::S_Taboo	     ); }
-    void setCurrentProtected()	   { setCurrentStatus( PMSelectable::S_Protected     ); }
+    void setCurrentInstall()	   { setCurrentStatus( Selectable::S_Install	     ); }
+    void setCurrentDontInstall()   { setCurrentStatus( Selectable::S_NoInst	     ); }
+    void setCurrentKeepInstalled() { setCurrentStatus( Selectable::S_KeepInstalled ); }
+    void setCurrentDelete()	   { setCurrentStatus( Selectable::S_Del	     ); }
+    void setCurrentUpdate()	   { setCurrentStatus( Selectable::S_Update	     ); }
+    void setCurrentTaboo()	   { setCurrentStatus( Selectable::S_Taboo	     ); }
+    void setCurrentProtected()	   { setCurrentStatus( Selectable::S_Protected     ); }
 
-    void setListInstall()	   { setAllItemStatus( PMSelectable::S_Install	     ); }
-    void setListDontInstall()	   { setAllItemStatus( PMSelectable::S_NoInst	     ); }
-    void setListKeepInstalled()	   { setAllItemStatus( PMSelectable::S_KeepInstalled ); }
-    void setListDelete()	   { setAllItemStatus( PMSelectable::S_Del	     ); }
-    void setListUpdate()	   { setAllItemStatus( PMSelectable::S_Update	     ); }
-    void setListUpdateForce()	   { setAllItemStatus( PMSelectable::S_Update, true  ); }
-    void setListTaboo()		   { setAllItemStatus( PMSelectable::S_Taboo	     ); }
-    void setListProtected()	   { setAllItemStatus( PMSelectable::S_Protected     ); }
+    void setListInstall()	   { setAllItemStatus( Selectable::S_Install	     ); }
+    void setListDontInstall()	   { setAllItemStatus( Selectable::S_NoInst	     ); }
+    void setListKeepInstalled()	   { setAllItemStatus( Selectable::S_KeepInstalled ); }
+    void setListDelete()	   { setAllItemStatus( Selectable::S_Del	     ); }
+    void setListUpdate()	   { setAllItemStatus( Selectable::S_Update	     ); }
+    void setListUpdateForce()	   { setAllItemStatus( Selectable::S_Update, true  ); }
+    void setListTaboo()		   { setAllItemStatus( Selectable::S_Taboo	     ); }
+    void setListProtected()	   { setAllItemStatus( Selectable::S_Protected     ); }
 
 
 protected slots:
@@ -213,13 +213,13 @@ signals:
 
 
     /**
-     * Emitted when a PMObject is selected.
-     * May be called with a null poiner if no PMObject is selected.
+     * Emitted when a zypp::ResObject is selected.
+     * May be called with a null poiner if no zypp::ResObject is selected.
      **/
-    void selectionChanged( PMObjectPtr pmObj );
+    void selectionChanged( zypp::ResObject::Ptr zyppObj );
 
     /**
-     * Emitted when the status of a PMObject is changed.
+     * Emitted when the status of a zypp::ResObject is changed.
      **/
     void statusChanged();
 
@@ -263,11 +263,11 @@ protected:
     void createActions();
 
     /**
-     * Create an action based on a PMObject status - automatically retrieve the
+     * Create an action based on a zypp::ResObject status - automatically retrieve the
      * corresponding status icons ( both sensitive and insensitive ) and text.
      * 'key' is only a descriptive text, no true accelerator.
      **/
-    QAction * createAction( PMSelectable::UI_Status 	status,
+    QAction * createAction( zypp::ui::Status 	status,
 			    const QString &		key	= QString::null,
 			    bool 			enabled = false );
 
@@ -327,7 +327,7 @@ public:
      * Constructor. Creates a YQPkgObjList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgObjListItem( YQPkgObjList * pkgObjList, PMObjectPtr pmObj );
+    YQPkgObjListItem( YQPkgObjList * pkgObjList, zypp::ResObject::Ptr zyppObj );
 
     /**
      * Destructor
@@ -337,12 +337,12 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    PMObjectPtr pmObj() { return _pmObj; }
+    zypp::ResObject::Ptr zyppObj() { return _zyppObj; }
 
     /**
      * Returns the original object within the package manager backend.
      **/
-    const PMObjectPtr constPMObj() const { return _pmObj; }
+    const zypp::ResObject::Ptr constZyppObj() const { return _zyppObj; }
 
     /**
      * Return whether or not this items is editable, i.e. the user can change
@@ -359,7 +359,7 @@ public:
     /**
      * Returns the (binary RPM) package status
      **/
-    PMSelectable::UI_Status status() const;
+    zypp::ui::Status status() const;
 
     /**
      * Returns 'true' if this selectable's status is set by a selection
@@ -370,7 +370,7 @@ public:
     /**
      * Set the ( binary RPM ) package status
      **/
-    virtual void setStatus( PMSelectable::UI_Status newStatus );
+    virtual void setStatus( zypp::ui::Status newStatus );
 
     /**
      * Update this item's status.
@@ -421,7 +421,7 @@ public:
      * Display this item's notify text (if there is any) that corresponds to
      * the specified status (S_Install, S_Del) in a pop-up window.
      **/
-    void showNotifyTexts( PMSelectable::UI_Status status );
+    void showNotifyTexts( zypp::ui::Status status );
 
     /**
      * Display this item's license agreement (if there is any) that corresponds to
@@ -431,7 +431,7 @@ public:
      * The item's status may have changed to S_Taboo, S_Proteced or S_Del if
      * the user disagreed with the license.
      **/
-    bool showLicenseAgreement( PMSelectable::UI_Status status );
+    bool showLicenseAgreement( zypp::ui::Status status );
 
     /**
      * Comparison function used for sorting the list.
@@ -493,7 +493,7 @@ protected:
     // Data members
 
     YQPkgObjList *	_pkgObjList;
-    PMObjectPtr		_pmObj;
+    zypp::ResObject::Ptr		_zyppObj;
     bool		_editable;
     bool		_candidateIsNewer;
     bool		_installedIsNewer;

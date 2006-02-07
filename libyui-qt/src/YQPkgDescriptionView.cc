@@ -43,19 +43,19 @@ YQPkgDescriptionView::~YQPkgDescriptionView()
 
 
 void
-YQPkgDescriptionView::showDetails( PMObjectPtr pmObj )
+YQPkgDescriptionView::showDetails( zypp::ResObject::Ptr zyppObj )
 {
-    _pmObj = pmObj;
+    _zyppObj = zyppObj;
 
-    if ( ! pmObj )
+    if ( ! zyppObj )
     {
 	clear();
 	return;
     }
 
-    QString html_text = htmlHeading( pmObj );
+    QString html_text = htmlHeading( zyppObj );
 
-    string name = pmObj->name();
+    string name = zyppObj->name();
     // y2debug( "Showing description for package %s", name.c_str() );
 
 
@@ -63,7 +63,7 @@ YQPkgDescriptionView::showDetails( PMObjectPtr pmObj )
 
     bool auto_format  = true;
     bool preformatted = false;
-    list<string> description = pmObj->description();
+    list<string> description = zyppObj->description();
     list<string>::const_iterator it = description.begin();
 
     if ( it != description.end()

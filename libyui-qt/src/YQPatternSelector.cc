@@ -25,11 +25,11 @@
 #include <qpushbutton.h>
 #include <qsplitter.h>
 
-#include <Y2PM.h>
+#include "YQZypp.h"
 #include <y2pm/InstTarget.h>
-#include <y2pm/PMManager.h>
-#include <y2pm/PMPackageManager.h>
-#include <y2pm/PMSelectionManager.h>
+#include <zypp/ui/ResPoolProxy.h>
+#include <zypp/ui/ResPoolProxy.h>
+#include <zypp/ui/ResPoolProxy.h>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
@@ -248,8 +248,8 @@ YQPatternSelector::makeConnections()
     if ( _selList && _descriptionView )
     {
 	y2milestone( "Connection set up" );
-	connect( _selList,		SIGNAL( selectionChanged( PMObjectPtr ) ),
-		 _descriptionView,	SLOT  ( showDetails	( PMObjectPtr ) ) );
+	connect( _selList,		SIGNAL( selectionChanged( zypp::ResObject::Ptr ) ),
+		 _descriptionView,	SLOT  ( showDetails	( zypp::ResObject::Ptr ) ) );
     }
 
 

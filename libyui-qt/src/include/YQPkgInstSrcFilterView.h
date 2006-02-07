@@ -61,13 +61,13 @@ signals:
      * Emitted during filtering for each pkg that matches the filter
      * and the candidate package comes from the respective source
      **/
-    void filterMatch( PMPackagePtr pkg );
+    void filterMatch( zypp::Package::Ptr pkg );
 
     /**
      * Emitted during filtering for each pkg that matches the filter
      * and the candidate package does not come from the respective source
      **/
-    void filterNearMatch( PMPackagePtr pkg );
+    void filterNearMatch( zypp::Package::Ptr pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -98,13 +98,13 @@ protected slots:
      * Propagate a filter match from the primary filter
      * and appy any selected secondary filter(s) to it
      **/
-    void primaryFilterMatch( PMPackagePtr pkg );
+    void primaryFilterMatch( zypp::Package::Ptr pkg );
     
     /**
      * Propagate a filter near match from the primary filter
      * and appy any selected secondary filter(s) to it
      **/
-    void primaryFilterNearMatch( PMPackagePtr pkg );
+    void primaryFilterNearMatch( zypp::Package::Ptr pkg );
 
 
 protected:
@@ -117,7 +117,7 @@ protected:
     /**
      * Check if pkg matches the the currently selected secondary filter
      **/
-    bool secondaryFilterMatch( PMPackagePtr pkg );
+    bool secondaryFilterMatch( zypp::Package::Ptr pkg );
 
 
     // Data members

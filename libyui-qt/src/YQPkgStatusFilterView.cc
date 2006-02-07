@@ -27,8 +27,8 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include <Y2PM.h>
-#include <y2pm/PMPackageManager.h>
+#include "YQZypp.h"
+#include <zypp/ui/ResPoolProxy.h>
 
 #include "YQPkgStatusFilterView.h"
 #include "YQIconPool.h"
@@ -153,11 +153,11 @@ YQPkgStatusFilterView::filter()
 {
     emit filterStart();
 
-    PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
+    PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
     while ( it != Y2PM::packageManager().end() )
     {
-	PMSelectablePtr selectable = *it;
+	Selectable::Ptr selectable = *it;
 
 	bool match =
 	    check( selectable->candidateObj() ) ||
@@ -179,7 +179,7 @@ YQPkgStatusFilterView::filter()
 
 
 bool
-YQPkgStatusFilterView::check( PMPackagePtr pkg )
+YQPkgStatusFilterView::check( zypp::Package::Ptr pkg )
 {
     bool match = false;
 
@@ -188,16 +188,16 @@ YQPkgStatusFilterView::check( PMPackagePtr pkg )
 
     switch ( pkg->getSelectable()->status() )
     {
-	case PMSelectable::S_AutoDel:		match = _showAutoDel->isChecked();		break;
-	case PMSelectable::S_AutoInstall:	match = _showAutoInstall->isChecked();		break;
-	case PMSelectable::S_AutoUpdate:	match = _showAutoUpdate->isChecked();		break;
-	case PMSelectable::S_Del:		match = _showDel->isChecked();			break;
-	case PMSelectable::S_Install:		match = _showInstall->isChecked();		break;
-	case PMSelectable::S_KeepInstalled:	match = _showKeepInstalled->isChecked();	break;
-	case PMSelectable::S_NoInst:		match = _showNoInst->isChecked();		break;
-	case PMSelectable::S_Protected:		match = _showProtected->isChecked();		break;
-	case PMSelectable::S_Taboo:		match = _showTaboo->isChecked();		break;
-	case PMSelectable::S_Update:		match = _showUpdate->isChecked();		break;
+	case Selectable::S_AutoDel:		match = _showAutoDel->isChecked();		break;
+	case Selectable::S_AutoInstall:	match = _showAutoInstall->isChecked();		break;
+	case Selectable::S_AutoUpdate:	match = _showAutoUpdate->isChecked();		break;
+	case Selectable::S_Del:		match = _showDel->isChecked();			break;
+	case Selectable::S_Install:		match = _showInstall->isChecked();		break;
+	case Selectable::S_KeepInstalled:	match = _showKeepInstalled->isChecked();	break;
+	case Selectable::S_NoInst:		match = _showNoInst->isChecked();		break;
+	case Selectable::S_Protected:		match = _showProtected->isChecked();		break;
+	case Selectable::S_Taboo:		match = _showTaboo->isChecked();		break;
+	case Selectable::S_Update:		match = _showUpdate->isChecked();		break;
 
 	    // Intentionally omitting 'default' branch so the compiler can
 	    // catch unhandled enum states

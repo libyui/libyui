@@ -25,8 +25,8 @@
 #include <ycp/y2log.h>
 
 #include <unistd.h>
-#include <Y2PM.h>
-#include <y2pm/PMManager.h>
+#include "YQZypp.h"
+#include <zypp/ui/ResPoolProxy.h>
 
 #include <qaction.h>
 #include <qhbox.h>

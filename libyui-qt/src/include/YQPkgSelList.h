@@ -23,14 +23,14 @@
 #define YQPkgSelList_h
 
 #include <YQPkgObjList.h>
-#include <y2pm/PMSelection.h>
+#include <zypp/Selection.h>
 
 
 class YQPkgSelListItem;
 
 
 /**
- * @short Display a list of PMSelection objects.
+ * @short Display a list of zypp::Selection objects.
  **/
 class YQPkgSelList : public YQPkgObjList
 {
@@ -75,7 +75,7 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addPkgSelItem( PMSelectionPtr sel );
+    void addPkgSelItem( zypp::Selection::Ptr sel );
 
     /**
      * Emit an updatePackages() signal.
@@ -118,7 +118,7 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( PMPackagePtr pkg );
+    void filterMatch( zypp::Package::Ptr pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -136,7 +136,7 @@ public:
      * Constructor. Creates a YQPkgSelList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgSelListItem( YQPkgSelList * pkgSelList, PMSelectionPtr sel );
+    YQPkgSelListItem( YQPkgSelList * pkgSelList, zypp::Selection::Ptr sel );
 
     /**
      * Destructor
@@ -146,12 +146,12 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    PMSelectionPtr pmSel() { return _pmSel; }
+    zypp::Selection::Ptr zyppSel() { return _zyppSel; }
 
     /**
      * Returns the original object within the package manager backend.
      **/
-    const PMSelectionPtr constPmSel() const { return _pmSel; }
+    const zypp::Selection::Ptr constPmSel() const { return _zyppSel; }
 
     /**
      * Set the selection status.
@@ -160,7 +160,7 @@ public:
      * Activate selections and emit updatePackages signal for each
      * status change.
      **/
-    virtual void setStatus( PMSelectable::UI_Status newStatus );
+    virtual void setStatus( zypp::ui::Status newStatus );
 
 
     /**
@@ -171,7 +171,7 @@ public:
      * +1 if this >  other
      *
      * Reimplemented from QListViewItem:
-     * Sort by PMSelection::order() only.
+     * Sort by zypp::Selection::order() only.
      **/
     virtual int compare( QListViewItem *	other,
 			 int			col,
@@ -188,7 +188,7 @@ protected:
     // Data members
 
     YQPkgSelList	*	_pkgSelList;
-    PMSelectionPtr		_pmSel;
+    zypp::Selection::Ptr		_zyppSel;
 };
 
 

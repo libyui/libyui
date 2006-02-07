@@ -22,8 +22,8 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include <Y2PM.h>
-#include <y2pm/PMPackageManager.h>
+#include "YQZypp.h"
+#include <zypp/ui/ResPoolProxy.h>
 
 #include "YQPkgUpdateProblemFilterView.h"
 #include "YQi18n.h"
@@ -78,11 +78,11 @@ YQPkgUpdateProblemFilterView::filter()
 {
     emit filterStart();
 
-    PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().updateBegin();
+    PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().updateBegin();
 
     while ( it != Y2PM::packageManager().updateEnd() )
     {
-	PMSelectablePtr selectable = *it;
+	Selectable::Ptr selectable = *it;
 	emit filterMatch( ( *it)->theObject() );
 
 	++it;

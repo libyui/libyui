@@ -23,7 +23,7 @@
 #define YQPkgInstSrcList_h
 
 #include <QY2ListView.h>
-#include <y2pm/PMPackage.h>
+#include <zypp/Package.h>
 #include <y2pm/InstSrcManager.h>
 #include <y2pm/InstSrcDescr.h>
 
@@ -32,7 +32,7 @@ class YQPkgInstSrcListItem;
 
 
 /**
- * @short Display a list of PMSelection objects.
+ * @short Display a list of zypp::Selection objects.
  **/
 class YQPkgInstSrcList : public QY2ListView
 {
@@ -99,13 +99,13 @@ signals:
      * Emitted during filtering for each pkg that matches the filter
      * and the candidate package comes from the respective source
      **/
-    void filterMatch( PMPackagePtr pkg );
+    void filterMatch( zypp::Package::Ptr pkg );
 
     /**
      * Emitted during filtering for each pkg that matches the filter
      * and the candidate package does not come from the respective source
      **/
-    void filterNearMatch( PMPackagePtr pkg );
+    void filterNearMatch( zypp::Package::Ptr pkg );
 
     /**
      * Emitted when filtering is finished.

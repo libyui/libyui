@@ -24,8 +24,8 @@
 #include <qregexp.h>
 #include <qheader.h>
 
-#include <y2pm/PMSelectable.h>
-#include <y2pm/PMObject.h>
+#include <zypp/ui/Selectable.h>
+#include <zypp/Object.h>
 
 #include "YQPkgVersionsView.h"
 #include "YQIconPool.h"
@@ -36,7 +36,7 @@
 YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
     : QY2ListView( parent )
 {
-    _pmObj		= 0;
+    _zyppObj		= 0;
     _parentTab		= dynamic_cast<QTabWidget *> (parent);
     _userCanSwitch 	= userCanSwitch;
 
@@ -76,62 +76,62 @@ YQPkgVersionsView::reload( QWidget * newCurrent )
 {
     if ( newCurrent == this )
     {
-	showDetailsIfVisible( _pmObj );
+	showDetailsIfVisible( _zyppObj );
     }
 }
 
 
 void
-YQPkgVersionsView::showDetailsIfVisible( PMObjectPtr pmObj )
+YQPkgVersionsView::showDetailsIfVisible( zypp::ResObject::Ptr zyppObj )
 {
-    _pmObj = pmObj;
+    _zyppObj = zyppObj;
 
     if ( _parentTab )		// Is this view embedded into a tab widget?
     {
 	if ( _parentTab->currentPage() == this )  // Is this page the topmost?
 	{
-	    showDetails( pmObj );
+	    showDetails( zyppObj );
 	}
     }
     else	// No tab parent - simply show data unconditionally.
     {
-	showDetails( pmObj );
+	showDetails( zyppObj );
     }
 }
 
 
 void
-YQPkgVersionsView::showDetails( PMObjectPtr pmObj )
+YQPkgVersionsView::showDetails( zypp::ResObject::Ptr zyppObj )
 {
     clear();
 
-    if ( ! pmObj )
+    if ( ! zyppObj )
 	return;
 
-    QY2CheckListItem * root = new QY2CheckListItem( this, pmObj->name().asString().c_str(),
+    QY2CheckListItem * root = new QY2CheckListItem( this, zyppObj->name().asString().c_str(),
 						    QCheckListItem::Controller, true );
     CHECK_PTR( root );
     root->setOpen( true );
 
 #if 0
-    root->setText( _summaryCol, fromUTF8( pmObj->summary() ) );
+    root->setText( _summaryCol, fromUTF8( zyppObj->summary() ) );
 #endif
 
-    if ( ! pmObj->getSelectable() )
+    if ( ! zyppObj->getSelectable() )
     {
-	y2error( "%s doesn't have a PMSelectable parent!", pmObj->name().asString().c_str() );
+	y2error( "%s doesn't have a Selectable parent!", zyppObj->name().asString().c_str() );
 	return;
     }
 
     bool installedIsAvailable = false;
-    PMSelectable::PMObjectList::const_iterator it = pmObj->getSelectable()->av_begin();
+    Selectable::zypp::ResObjectList::const_iterator it = zyppObj->getSelectable()->av_begin();
 
-    while ( it != pmObj->getSelectable()->av_end() )
+    while ( it != zyppObj->getSelectable()->av_end() )
     {
 	new YQPkgVersion( this, root, *it, _userCanSwitch );
 
-	if ( pmObj->getInstalledObj() &&
-	     pmObj->getInstalledObj()->edition() == ( *it)->edition() )
+	if ( zyppObj->getInstalledObj() &&
+	     zyppObj->getInstalledObj()->edition() == ( *it)->edition() )
 	    installedIsAvailable = true;
 
 #if 0
@@ -145,15 +145,15 @@ YQPkgVersionsView::showDetails( PMObjectPtr pmObj )
     }
 
 
-    if ( pmObj->hasInstalledObj() && ! installedIsAvailable )
-	new YQPkgVersion( this, root, pmObj->getInstalledObj(), false );
+    if ( zyppObj->hasInstalledObj() && ! installedIsAvailable )
+	new YQPkgVersion( this, root, zyppObj->getInstalledObj(), false );
 }
 
 
 void
 YQPkgVersionsView::checkForChangedCandidate()
 {
-    if ( ! firstChild() || ! _pmObj )
+    if ( ! firstChild() || ! _zyppObj )
 	return;
 
     QListViewItem * item = firstChild()->firstChild();
@@ -164,11 +164,11 @@ YQPkgVersionsView::checkForChangedCandidate()
 
 	if ( versionItem && versionItem->isOn() )
 	{
-	    PMObjectPtr newCandidate = versionItem->pmObj();
+	    zypp::ResObject::Ptr newCandidate = versionItem->zyppObj();
 
-	    if ( newCandidate != _pmObj->getCandidateObj() )
+	    if ( newCandidate != _zyppObj->getCandidateObj() )
 	    {
-		PMSelectablePtr sel = newCandidate->getSelectable();
+		Selectable::Ptr sel = newCandidate->getSelectable();
 
 		if ( sel )
 		{
@@ -198,23 +198,23 @@ YQPkgVersionsView::minimumSizeHint() const
 
 YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
 			    QY2CheckListItem * 	parent,
-			    PMObjectPtr 	pmObj,
+			    zypp::ResObject::Ptr 	zyppObj,
 			    bool		enabled )
     : QY2CheckListItem( parent, "",
 			enabled ?
 			QCheckListItem::RadioButton :
 			QCheckListItem::Controller )	// cheap way to make it read-only
     , _pkgVersionList( pkgVersionList )
-    , _pmObj( pmObj )
+    , _zyppObj( zyppObj )
 {
-    setText( versionCol(), pmObj->edition().asString().c_str() );
-    setText( archCol(),    pmObj->arch().asString().c_str() );
-    setText( instSrcCol(), pmObj->instSrcLabel().c_str() );
-    setOn( pmObj->isCandidateObj() );
+    setText( versionCol(), zyppObj->edition().asString().c_str() );
+    setText( archCol(),    zyppObj->arch().asString().c_str() );
+    setText( instSrcCol(), zyppObj->instSrcLabel().c_str() );
+    setOn( zyppObj->isCandidateObj() );
 
-    if ( pmObj->hasInstalledObj() )
+    if ( zyppObj->hasInstalledObj() )
     {
-	if ( pmObj->edition() == pmObj->getInstalledObj()->edition() )
+	if ( zyppObj->edition() == zyppObj->getInstalledObj()->edition() )
 	{
 	    setPixmap( statusCol(), YQIconPool::pkgKeepInstalled() );
 	    setBackgroundColor( QColor( 0xF0, 0xF0, 0xF0 ) ); 	// light grey
@@ -235,7 +235,7 @@ YQPkgVersion::toolTip(int)
 {
     QString tip;
 
-    if ( _pmObj->isInstalledObj() )
+    if ( _zyppObj->isInstalledObj() )
 	tip = _( "This version is installed in your system." );
 
     return tip;
@@ -258,8 +258,8 @@ YQPkgVersion::compare( QListViewItem *	otherListViewItem,
 
     if ( other )
     {
-	if ( this->constPMObj()->edition() < other->constPMObj()->edition() ) return -1;
-	if ( this->constPMObj()->edition() > other->constPMObj()->edition() ) return 1;
+	if ( this->constZyppObj()->edition() < other->constZyppObj()->edition() ) return -1;
+	if ( this->constZyppObj()->edition() > other->constZyppObj()->edition() ) return 1;
 	return 0;
     }
 

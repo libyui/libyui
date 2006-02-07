@@ -190,10 +190,10 @@ void YQPkgTextDialog::setText( const list<string> & text )
 }
 
 
-void YQPkgTextDialog::setText( PMObjectPtr pmObj,
+void YQPkgTextDialog::setText( zypp::ResObject::Ptr zyppObj,
 			       const list<string> & text )
 {
-    setText( htmlHeading( pmObj ) + htmlParagraphs( text ) );
+    setText( htmlHeading( zyppObj ) + htmlParagraphs( text ) );
 }
 
 
@@ -219,17 +219,17 @@ void YQPkgTextDialog::showText( QWidget * parent, const list<string> & text )
 
 
 void YQPkgTextDialog::showText( QWidget * parent,
-				PMObjectPtr pmObj,
+				zypp::ResObject::Ptr zyppObj,
 				const list<string> & text )
 {
-    showText( parent, htmlHeading( pmObj ) + htmlParagraphs( text ) );
+    showText( parent, htmlHeading( zyppObj ) + htmlParagraphs( text ) );
 }
 
 void YQPkgTextDialog::showText( QWidget * parent,
-				PMObjectPtr pmObj,
+				zypp::ResObject::Ptr zyppObj,
 				const string & text )
 {
-    showText( parent, htmlHeading( pmObj ) + QString::fromUtf8( text.c_str() ) );
+    showText( parent, htmlHeading( zyppObj ) + QString::fromUtf8( text.c_str() ) );
 }
 
 
@@ -257,18 +257,18 @@ bool YQPkgTextDialog::confirmText( QWidget * parent, const QString & text )
 
 
 bool YQPkgTextDialog::confirmText( QWidget * parent,
-				   PMObjectPtr pmObj,
+				   zypp::ResObject::Ptr zyppObj,
 				   const list<string> & text )
 {
-    return confirmText( parent, htmlHeading( pmObj ) + htmlParagraphs( text ) );
+    return confirmText( parent, htmlHeading( zyppObj ) + htmlParagraphs( text ) );
 }
 
 
 bool YQPkgTextDialog::confirmText( QWidget * parent,
-				   PMObjectPtr pmObj,
+				   zypp::ResObject::Ptr zyppObj,
 				   const string & text )
 {
-    return confirmText( parent, htmlHeading( pmObj ) + QString::fromUtf8( text.c_str() ) );
+    return confirmText( parent, htmlHeading( zyppObj ) + QString::fromUtf8( text.c_str() ) );
 }
 
 
@@ -341,13 +341,13 @@ YQPkgTextDialog::htmlHeading( const QString & text )
 
 
 QString
-YQPkgTextDialog::htmlHeading( PMObjectPtr pmObj )
+YQPkgTextDialog::htmlHeading( zypp::ResObject::Ptr zyppObj )
 {
-    QString summary = fromUTF8( pmObj->summary() );
+    QString summary = fromUTF8( zyppObj->summary() );
 
     QString html =
 	"<table bgcolor=#E0E0F8><tr><td><b>"
-	+ fromUTF8( pmObj->name() )
+	+ fromUTF8( zyppObj->name() )
 	+ "</b>";
 
     if ( ! summary.isEmpty() )
