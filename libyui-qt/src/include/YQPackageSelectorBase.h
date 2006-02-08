@@ -86,14 +86,6 @@ public slots:
      int resolvePackageDependencies();
 
     /**
-     * Resolve selection dependencies (unconditionally).
-     * Can safely be called even if there is no selection conflict dialog.
-     *
-     * Returns QDialog::Accepted or QDialog::Rejected.
-     **/
-     int resolveSelectionDependencies();
-
-    /**
      * Check for disk overflow and post a warning dialog if necessary.
      * The user can choose to override this warning.
      *
@@ -159,7 +151,6 @@ protected:
     bool				_youMode;
     bool				_showChangesDialog;
     YQPkgConflictDialog *		_pkgConflictDialog;
-    YQPkgConflictDialog *		_selConflictDialog;
     YQPkgDiskUsageList *		_diskUsageList;
 };
 

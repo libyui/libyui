@@ -19,14 +19,13 @@
 /-*/
 
 
-#define IGNORE_WARNING_THRESHOLD	5
-
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
 #include <unistd.h>
 #include "YQZypp.h"
-#include <zypp/ResPoolProxy.h>
+#include <zypp/ZYppFactory.h>
+#include <zypp/Resolver.h>
 
 #include <qaction.h>
 #include <qhbox.h>
@@ -60,14 +59,9 @@
 #define SUPPRESS_BUSY_DIALOG_SECONDS	1.5
 
 
-YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
-					  QWidget * 	parent 		)
+YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     : QDialog( parent )
-    , _selectableManager( selectableManager )
 {
-    if ( ! _selectableManager )
-	y2error( "NULL selectable manager!" );
-
     _solveCount		= 0;
     _totalSolveTime	= 0.0;
 
@@ -122,17 +116,6 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
     addHStretch( buttonBox );
 
 
-    // "Ignore all" button
-
-    button = new QPushButton( _( "&Ignore All" ), buttonBox );
-    CHECK_PTR( button );
-
-    connect( button,  SIGNAL( clicked() ),
-	     this,    SLOT  ( ignoreAll() ) );
-
-    addHStretch( buttonBox );
-
-
     // "Expert" menu button
 
     button = new QPushButton( _( "&Expert" ), buttonBox );
@@ -149,8 +132,6 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
 
     _expertMenu->insertItem( _( "&Save This List to a File..." ),
 			     _conflictList, SLOT( askSaveToFile() ) );
-
-    YQPkgConflict::actionResetIgnoredConflicts()->addTo( _expertMenu );
 
 
     // "Cancel" button
@@ -191,7 +172,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
     // text is displayed several times) if some window manager chooses not to
     // honor the size hints (KDM for example uses double the height we
     // request).
-    
+
     QSize size = _busyPopup->sizeHint();
     QPixmap pixmap( 3 * size.width(), 3 * size.height() );
 
@@ -212,7 +193,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( PMManager * 	selectableManager,
     // pixmap with (maybe) a few pixels offset (bug #25647). Fast or
     // multiprocessor machines tend to have this problem.
     // So let's get rid of the label text and solely rely on the background
-    // pixmap. 
+    // pixmap.
     _busyPopup->setText( "" );
 
     // Make sure the newly emptied text doesn't cause the busy dialog to be
@@ -244,12 +225,6 @@ YQPkgConflictDialog::solveAndShowConflicts()
     int result = QDialog::Accepted;
     CHECK_PTR( _conflictList );
 
-    if ( ! _selectableManager )
-    {
-	y2error( "NULL selectable manager - can't resolve dependendies!" );
-	return result;
-    }
-
     YQUI::ui()->busyCursor();
 
     if ( isVisible() )
@@ -266,23 +241,21 @@ YQPkgConflictDialog::solveAndShowConflicts()
 
     // Initialize for next round of solving.
     _conflictList->clear();
-    PkgDep::ResultList		goodList;
-    PkgDep::ErrorResultList	badList;
 
     if ( _solveCount++ == 0 || averageSolveTime() > SUPPRESS_BUSY_DIALOG_SECONDS )
     {
 	YQDialog::center( _busyPopup, parentWidget() );
 	_busyPopup->show();
-	
+
 	// No _busyPopup->repaint() - that doesn't help anyway: Qt doesn't do
 	// any actual painting until the window is mapped. We just rely on the
 	// background pixmap we provided in the constructor.
-	
+
         // Make sure show() gets processed - usually, a window manager catches
         // the show() (XMap) events, positions and maybe resizes the window and
         // only then sends off an event that makes the window appear. This
         // event needs to be processed.
-	qApp->processEvents();	
+	qApp->processEvents();
     }
 
     y2debug( "Solving..." );
@@ -290,7 +263,10 @@ YQPkgConflictDialog::solveAndShowConflicts()
     solveTime.start();
 
     // Solve.
-    bool success = _selectableManager->solveInstall( goodList, badList );
+
+    zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
+
+    bool success = resolver->resolvePool();
 
     _totalSolveTime += solveTime.elapsed() / 1000.0;
 
@@ -319,72 +295,19 @@ YQPkgConflictDialog::solveAndShowConflicts()
 	y2debug( "Dependency conflict!" );
 	YQUI::ui()->busyCursor();
 
-	// Make the bad list human readable and fill the conflictList
-	// widget. During that process, filter out any conflicts the user
-	// previously chose to ignore.
-
-	_conflictList->fill( badList );
+	_conflictList->fill( resolver->problems() );
 	YQUI::ui()->normalCursor();
 
-	if ( _conflictList->isEmpty() ) // No conflicts?
+	if ( ! isVisible() )
 	{
-	    // Yes, this _can_ happen: The solver reported 'no success', yet
-	    // the conflict list is empty. The badList still contains all
-	    // ignored conflicts; the conflictList widget filters out the
-	    // ignored ones.
-
-	    if ( isVisible() )
-		accept();	// Pop down the dialog.
-	}
-	else // There are conflicts
-	{
-	    if ( ! isVisible() )
-	    {
-		// Pop up the dialog and run a local event loop.
-		result = exec();
-	    }
+	    // Pop up the dialog and run a local event loop.
+	    result = exec();
 	}
     }
 
     return result;	// QDialog::Accepted or QDialog::Rejected
 }
 
-
-void
-YQPkgConflictDialog::ignoreAll()
-{
-    CHECK_PTR( _conflictList );
-
-    if ( _conflictList->count() >= IGNORE_WARNING_THRESHOLD )
-    {
-	if ( QMessageBox::warning( this, "",
-			       _( "Ignoring so many dependency problems\n"
-				  "may result in an inconsistent system.\n"
-				  "\n"
-				  "Only do this if you know exactly what you are doing!"
-				  ),
-			       _( "&Ignore Anyway" ), _( "&Cancel" ), "",
-			       1, // defaultButtonNumber (from 0)
-			       1 ) // escapeButtonNumber
-	     == 1 )	// Proceed upon button #0 (OK)
-	    return;
-    }
-
-    _conflictList->ignoreAll();
-    solveAndShowConflicts();
-}
-
-
-void
-YQPkgConflictDialog::resetIgnoredConflicts()
-{
-    YQPkgConflict::resetIgnoredConflicts();
-
-    QMessageBox::information( this, "",
-			      _( "Dependency solver is now reset to original state --\n"
-				 "no conflicts ignored." ),
-			      QMessageBox::Ok );
-}
 
 
 double

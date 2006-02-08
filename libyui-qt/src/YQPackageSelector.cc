@@ -52,11 +52,8 @@
 
 #include "YQPackageSelector.h"
 #include "YQPkgChangesDialog.h"
-
-#ifdef FIXME
 #include "YQPkgConflictDialog.h"
 #include "YQPkgConflictList.h"
-#endif
 
 #ifdef FIXME
 #include "YQPkgDependenciesView.h"
@@ -124,7 +121,6 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     _pkgVersionsView		= 0;
     _rpmGroupTagsFilterView	= 0;
     _searchFilterView		= 0;
-    _selConflictDialog		= 0;
     _selList			= 0;
     _selectionsFilterView	= 0;
     _instSrcFilterView		= 0;
@@ -304,12 +300,10 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	CHECK_PTR( _selList );
 
 	connect( _selList, 		SIGNAL( statusChanged()	               	),
-		 this,			SLOT  ( resolveSelectionDependencies()	) );
+		 this,			SLOT  ( autoResolveDependencies() 	) );
 
-#ifdef FIXME
-	connect( _selConflictDialog,	SIGNAL( updatePackages()      		),
+	connect( _pkgConflictDialog,	SIGNAL( updatePackages()      		),
 		 _selList, 		SLOT  ( updateToplevelItemStates() 	) );
-#endif
 
 	connect( this,			SIGNAL( refresh()			),
 		 _selList, 		SLOT  ( updateToplevelItemStates() 	) );
@@ -348,10 +342,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	CHECK_PTR( _langList );
 
 	connect( _langList, 		SIGNAL( statusChanged()	               	),
-		 this,			SLOT  ( resolveSelectionDependencies()	) );
-
-	connect( _selConflictDialog,	SIGNAL( updatePackages()      		),
-		 _langList, 		SLOT  ( updateToplevelItemStates() 	) );
+		 this,			SLOT  ( autoResolveDependencies() 	) );
 
 	connect( this,			SIGNAL( refresh()			),
 		 _langList, 		SLOT  ( updateToplevelItemStates() 	) );
@@ -680,11 +671,6 @@ YQPackageSelector::addMenus()
     if ( ! _youMode )
 	_extrasMenu->insertItem( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), CTRL + Key_A );
 
-#ifdef FIXME
-    if ( ! _youMode && _pkgConflictDialog )
-	YQPkgConflict::actionResetIgnoredConflicts( _pkgConflictDialog )->addTo( _extrasMenu );
-#endif
-
     if ( _youMode && _youPatchList )
 	_youPatchList->actionShowRawPatchInfo->addTo( _extrasMenu );
 
@@ -815,42 +801,26 @@ YQPackageSelector::makeConnections()
     // Connect package conflict dialog
     //
 
-#ifdef FIXME
-    if ( _pkgConflictDialog && _pkgList )
+    if ( _pkgConflictDialog )
     {
-	connect( _pkgConflictDialog,	SIGNAL( updatePackages()      ),
-		 _pkgList, 		SLOT  ( updateToplevelItemStates() ) );
+	if (_pkgList )
+	{
+	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()      ),
+		     _pkgList, 			SLOT  ( updateToplevelItemStates() ) );
+	}
 
+	if ( _selList )
+	{
+	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()      ),
+		     _selList, 			SLOT  ( updateToplevelItemStates() ) );
+	}
+	
 	if ( _diskUsageList )
 	{
-	    connect( _pkgConflictDialog, SIGNAL( updatePackages()	   ),
-		     _diskUsageList,	 SLOT  ( updateDiskUsage()	   ) );
+	    connect( _pkgConflictDialog, 	SIGNAL( updatePackages()	   ),
+		     _diskUsageList,	 	SLOT  ( updateDiskUsage()	   ) );
 	}
     }
-#endif
-
-
-    //
-    // Connect selection conflict dialog
-    //
-
-    if ( _selConflictDialog && _selList )
-    {
-#ifdef FIXME
-	connect( _selConflictDialog,	SIGNAL( updatePackages()      	),
-		 _selList, 		SLOT  ( applyChanges() 		) );
-
-	connect( _selConflictDialog,	SIGNAL( updatePackages()      	),
-		 _selList, 		SLOT  ( updateToplevelItemStates() ) );
-
-	if ( _diskUsageList )
-	{
-	    connect( _selConflictDialog, SIGNAL( updatePackages()	   ),
-		     _diskUsageList,	 SLOT  ( updateDiskUsage()	   ) );
-	}
-#endif
-    }
-
 
 
     //

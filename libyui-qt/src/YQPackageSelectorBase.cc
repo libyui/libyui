@@ -30,11 +30,7 @@
 
 #include "YQPackageSelectorBase.h"
 #include "YQPkgChangesDialog.h"
-
-#ifdef FIXME
-#include "YQPkgConflictList.h"
-#endif
-
+#include "YQPkgConflictDialog.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQPkgTextDialog.h"
@@ -63,7 +59,6 @@ YQPackageSelectorBase::YQPackageSelectorBase( QWidget * 		parent,
 
     _showChangesDialog		= false;
     _pkgConflictDialog		= 0;
-    _selConflictDialog		= 0;
     _diskUsageList		= 0;
     _pkgConflictDialog 		= 0;
     _youMode	 		= opt.youMode.value();
@@ -72,18 +67,10 @@ YQPackageSelectorBase::YQPackageSelectorBase( QWidget * 		parent,
     setFont( YQUI::ui()->currentFont() );
     YQUI::ui()->blockWmClose(); // Automatically undone after UI::RunPkgSelection()
 
-#ifdef FIXME
-    _pkgConflictDialog = new YQPkgConflictDialog( &( Y2PM::packageManager() ), this );
+    _pkgConflictDialog = new YQPkgConflictDialog( this );
     CHECK_PTR( _pkgConflictDialog );
 
-    if ( ! _youMode )
-    {
-	_selConflictDialog = new YQPkgConflictDialog( &( Y2PM::selectionManager() ), this );
-	CHECK_PTR( _selConflictDialog );
-    }
-
-    YQPkgConflict::loadIgnoredConflicts();
-
+#ifdef FIXME
     Y2PM::packageManager().SaveState();
 
     if ( ! _youMode )
@@ -115,32 +102,12 @@ YQPackageSelectorBase::resolvePackageDependencies()
     YQUI::ui()->busyCursor();
     emit resolvingStarted();
 
-#ifdef FIXME
     int result = _pkgConflictDialog->solveAndShowConflicts();
-#else
-    int result = QDialog::Accepted;
-#endif
 
     emit resolvingFinished();
-
     YQUI::ui()->normalCursor();
 
     return result;
-}
-
-
-int
-YQPackageSelectorBase::resolveSelectionDependencies()
-{
-#ifdef FIXME
-    if ( _selConflictDialog )
-    {
-	y2debug( "Resolving selection dependencies" );
-	return _selConflictDialog->solveAndShowConflicts();
-    }
-    else
-#endif
-	return QDialog::Accepted;
 }
 
 
@@ -269,7 +236,6 @@ YQPackageSelectorBase::accept()
 
 #ifdef FIXME
     Y2PM::packageManager().ClearSaveState();
-    YQPkgConflict::saveIgnoredConflicts();
 
     if ( _youMode )
 	Y2PM::youPatchManager().ClearSaveState();

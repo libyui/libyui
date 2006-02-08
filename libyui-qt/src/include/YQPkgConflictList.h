@@ -25,29 +25,17 @@
 
 #include <stdio.h>
 #include <qmap.h>
-#include <y2pm/PkgDep.h>
-#include <zypp/ui/Selectable.h>
 #include "QY2ListView.h"
+
+#include <zypp/Resolver.h>
+#include <zypp/ResolverProblem.h>
+#include <zypp/ProblemSolution.h>
 
 
 class QAction;
 class YQPkgConflict;
-class YQPkgConflictAlternative;
 class YQPkgConflictResolution;
 class YQPkgConflictDialog;
-
-
-/**
- * Resolution types for conflicts
- **/
-typedef enum YQPkgConflictResolutionType
-{
-    YQPkgConflictUndo,
-    YQPkgConflictIgnore,
-    YQPkgConflictDeleteConflictors,
-    YQPkgConflictDeleteReferers,
-    YQPkgConflictAlternative
-};
 
 
 /**
@@ -70,14 +58,9 @@ public:
     virtual ~YQPkgConflictList();
 
     /**
-     * Fill the list with the specified bad list.
+     * Fill the list with the specified problems.
      **/
-    void fill( PkgDep::ErrorResultList & badList );
-
-    /**
-     * Check if the user choices are complete.
-     **/
-    bool choicesComplete();
+    void fill( zypp::ResolverProblemList problemList );
 
     /**
      * Check if the conflict list is empty.
@@ -113,18 +96,29 @@ public:
     /**
      * Save the conflict list in its current state to a file. Retains the
      * current 'expanded' state, i.e. writes only those entries that are
-     * currently open ( not collapsed ) in the tree.
+     * currently open (not collapsed) in the tree.
      *
-     * Posts error popups if 'interactive' is 'true' ( only log entries
-     * otherwise ).
+     * Posts error popups if 'interactive' is 'true' (only log entries
+     * otherwise).
      **/
     void saveToFile( const QString filename, bool interactive ) const;
 
+    /**
+     * Dump a multi-line text to a QListView as a sequence of separate items.
+     * If 'longText' has considerably more lines than 'splitThreshold', fold
+     * all lines from no. 'splitThreshold' on into a closed list item
+     * "More...".
+     * If 'header' is not empty, it will be added as the parent of the lines.
+     **/
+    static void dumpList( QListViewItem * 	parent,
+			  const QString &	longText,
+			  const QString & 	header = QString::null,
+			  int			splitThreshold = 5 );
 
 protected:
 
     /**
-     * ( Recursively ) save one item to file.
+     * (Recursively) save one item to file.
      **/
     void saveItemToFile( FILE * file, const QListViewItem * item ) const;
 
@@ -150,7 +144,7 @@ public:
      * Constructor.
      **/
     YQPkgConflict( YQPkgConflictList *		parentList,
-		   const PkgDep::ErrorResult &	errorResult );
+		   zypp::ResolverProblem_Ptr	problem );
 
     /**
      * Destructor.
@@ -158,87 +152,15 @@ public:
     virtual ~YQPkgConflict() {}
 
     /**
-     * Access the internal ErrorResult.
+     * Returns the corresponding ResolverProblem.
      **/
-    PkgDep::ErrorResult & errorResult() { return _conflict; }
+    zypp::ResolverProblem_Ptr problem() const { return _problem; }
 
     /**
-     * Returns if this conflict needs an alternative from a list.
+     * Returns the resolution the user selected
+     * or 0 if he didn't select one
      **/
-    bool needAlternative() { return ! _conflict.alternatives.empty(); }
-
-    /**
-     * Returns if this package collides with other packages.
-     **/
-    bool hasCollisions() { return ! _conflict.conflicts_with.empty(); }
-
-    /**
-     * Returns if this package has open ( unresolved ) requirements.
-     **/
-    bool hasOpenRequirements() { return ! _conflict.unresolvable.empty(); }
-
-    /**
-     * Apply the choices the user made.
-     **/
-    void applyResolution();
-
-
-    /**
-     * Check if this conflict with header should be ignored.
-     **/
-    bool isIgnored();
-
-    /**
-     * Ignore this conflict - i.e. add it to the ignore list.
-     **/
-    void ignore();
-
-    /**
-     * Check if a conflict with header ( first text line in list )
-     * 'conflictHeader is ignored.
-     **/
-    static bool isIgnored( const QString & conflictHeader );
-
-    /**
-     * Ignore a conflict with header ( first text line in list )
-     * 'conflictHeader'.
-     **/
-    static void ignore( const QString & conflictHeader );
-
-    /**
-     * Reset all ignored conflicts as if the user had never selected any
-     * conflict to ignore.
-     **/
-    static void resetIgnoredConflicts();
-    
-    /**
-     * Save all ignored conflicts to ( predefined ) file.
-     **/
-    static void saveIgnoredConflicts();
-
-    /**
-     * Load ignored conflicts from ( predefined ) file.
-     **/
-    static void loadIgnoredConflicts();
-
-    /**
-     * Returns 'true' if there are any ignored conflicts, 'false' otherwise.
-     **/
-    static bool haveIgnoredConflicts();
-
-    /**
-     * Returns a pointer to the one and only internal QAction that resets
-     * ignored dependency conflicts. If none exists yet, it will be created.
-     *
-     * 'dialog' is the conflict dialog this action is connected to.
-     **/
-    static QAction * actionResetIgnoredConflicts( YQPkgConflictDialog * dialog = 0 );
-
-    /**
-     * Update the enabled / disabled state of all internal QActions ( that are
-     * created yet - this method will not create any if they don't exist yet ).
-     **/
-    static void updateActions();
+    zypp::ProblemSolution_Ptr userSelectedResolution();
 
 
 protected:
@@ -249,65 +171,9 @@ protected:
     void formatHeading();
 
     /**
-     * Dump all relevant lists from the internal ErrorResult into the conflict
-     * list.
-     **/
-    void dumpLists();
-
-    /**
-     * Dump a list of package relations into the conflict list:
-     * Create a new list entry for each list entry.
-     * If 'header' is non-null, create a bracketing list item with text
-     * 'header' and insert the list items below that new item.
-     * Splits into a sublist at ( about ) 'splitThreshold' if this is > 1.
-     * Does nothing if the list is empty.
-     **/
-    void dumpList( QListViewItem * 		parent,
-		   PkgDep::RelInfoList & 	list,
-		   int				splitThreshold = -1,
-		   const QString & 		header	   = QString::null );
-
-    /**
      * Add suggestions how to resolve this conflict.
      **/
-    void addResolutionSuggestions();
-
-    /**
-     * Add resolution suggestion: Undo what caused this conflict
-     * ( i.e. don't remove, don't install, ... ).
-     **/
-    void addUndoResolution( QY2CheckListItem * parent );
-
-    /**
-     * Add a list of alternatives if there are any.
-     **/
-    void addAlternativesList( QY2CheckListItem * parent );
-
-    /**
-     * Add resolution suggestion: Delete all conflicting packages.
-     **/
-    void addDeleteConflictsResolution( QY2CheckListItem * parent );
-
-    /**
-     * Add brute force resolution suggestion: Delete all dependent packages.
-     **/
-    void addDeleteReferersResolution( QY2CheckListItem * parent );
- 
-    /**
-     * Add resolution suggestion: Ignore conflict, risk inconsistent system
-     **/
-    void addIgnoreResolution( QY2CheckListItem * parent );
-
-    /**
-     * Dump the specified list (remove_to_solve_conflict/remove_referers) into
-     * the conflict list.
-     **/
-    void dumpDeleteList( QListViewItem * parent, PkgDep::SolvableList& solvablelist );
-
-    /**
-     * Remove everything in the remove list.
-     **/
-    void bruteForceDelete(PkgDep::SolvableList& solvablelist);
+    void addSolutions();
 
     /**
      * Paint method. Reimplemented from @ref QListViewItem a different
@@ -324,25 +190,8 @@ protected:
 
     // Data members
 
-    zypp::ResObject::constPtr			_zyppObj;
-    bool			_isPkg;
-    QString			_shortName;	// Only pkg name ( no version )
-    QString			_fullName;	// Name + edition
-    zypp::ui::Status	_status;
-    zypp::ui::Status	_undo_status;
-    bool			_canIgnore;
-
-    QListViewItem *		_resolutionsHeader;
-    PkgDep::ErrorResult		_conflict;
-    YQPkgConflictList *		_parentList;
-
-
-    /**
-     * Conflicts that are to be ignored.
-     **/
-    static QMap<QString, bool> _ignore;
-
-    static QAction *		_actionResetIgnoredConflicts;
+    zypp::ResolverProblem_Ptr	_problem;
+    QY2CheckListItem *		_resolutionsHeader;
 };
 
 
@@ -352,40 +201,22 @@ class YQPkgConflictResolution: public QY2CheckListItem
 public:
 
     /**
-     * Constructor for generic resolutions ( not alternatives )
+     * Constructor
      **/
-    YQPkgConflictResolution( QY2CheckListItem *			parent,
-			     const QString & 			text,
-			     YQPkgConflictResolutionType	type );
+    YQPkgConflictResolution( QY2CheckListItem *		parent,
+			     zypp::ProblemSolution_Ptr	_solution );
 
     /**
-     * Constructor for alternatives
+     * Return the corresponding ProblemSolution.
      **/
-    YQPkgConflictResolution( QY2CheckListItem *	parent,
-			     zypp::ResObject::constPtr	zyppObj );
+    zypp::ProblemSolution_Ptr solution() const { return _solution; }
 
-    /**
-     * Returns the corresponding zypp::ResObject.
-     **/
-    zypp::ResObject::constPtr zyppObj() const { return _zyppObj; }
-
-    /**
-     * Returns the type of this resolution.
-     **/
-    YQPkgConflictResolutionType type() const { return _type; }
-
-
-    /**
-     * Returns the resolution type as string.
-     **/
-    const char * typeString() const;
 
 protected:
 
     // Data members
 
-    YQPkgConflictResolutionType	_type;
-    zypp::ResObject::constPtr			_zyppObj;
+    zypp::ProblemSolution_Ptr	_solution;
 };
 
 

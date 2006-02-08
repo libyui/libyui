@@ -41,7 +41,6 @@ class QMenuBar;
 
 class QY2ComboTabWidget;
 
-class YQPkgConflictDialog;
 class YQPkgDependenciesView;
 class YQPkgDescriptionView;
 class YQPkgDiskUsageList;

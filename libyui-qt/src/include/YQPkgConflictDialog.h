@@ -44,12 +44,8 @@ public:
     /**
      * Constructor. Does not pop up a dialog yet.
      * Use solveAndShowConflicts().
-     * 
-     * 'selectableManager' is one of &Y2PM::packageManager() or
-     * &Y2PM::selectionManager(). 
      **/
-    YQPkgConflictDialog( PMManager * 	selectableManager,
-			 QWidget *	parent );
+    YQPkgConflictDialog( QWidget * parent );
 
     /**
      * Destructor.
@@ -61,12 +57,6 @@ public:
      * Reserve a reasonable amount of space.
      **/
     virtual QSize sizeHint() const;
-
-    /**
-     * Returns the selectable manager used by this dialog to resolve
-     * dependencies. 
-     **/
-    PMManager * selectableManager() const { return _selectableManager; }
 
     /**
      * Returns the average time in seconds used for solving or 0 if solving
@@ -96,18 +86,6 @@ public slots:
      **/
     int solveAndShowConflicts();
 
-    /**
-     * Ignore all conflicts.
-     **/
-    void ignoreAll();
-
-    /**
-     * Reset all ignored conflicts as if the user had never selected any
-     * conflict to ignore.
-     **/
-    void resetIgnoredConflicts();
-
-
 signals:
 
     /**
@@ -118,7 +96,6 @@ signals:
 
 protected:
 
-    PMManager *		_selectableManager;
     YQPkgConflictList *	_conflictList;
     QPopupMenu *	_expertMenu;
     QLabel *		_busyPopup;

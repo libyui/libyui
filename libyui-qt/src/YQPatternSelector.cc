@@ -130,13 +130,6 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
     CHECK_PTR( _selList );
     _selList->header()->hide();
 
-    connect( _selList,		 SIGNAL( statusChanged()		),
-	     this,		 SLOT  ( resolveSelectionDependencies()	) );
-
-    connect( _selConflictDialog, SIGNAL( updatePackages()		),
-	     _selList,		 SLOT  ( updateToplevelItemStates()	) );
-
-
     if ( _wizard )	// No button box - add "Details..." button here
     {
 	//

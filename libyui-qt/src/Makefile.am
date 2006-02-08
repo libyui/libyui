@@ -77,6 +77,8 @@ liby2qt_la_SOURCES = 				\
 	YQPatternSelector.cc			\
 	YQPartitionSplitter.cc			\
 	YQPkgChangesDialog.cc			\
+	YQPkgConflictDialog.cc			\
+	YQPkgConflictList.cc			\
 	YQPkgDescriptionDialog.cc		\
 	YQPkgDescriptionView.cc			\
 	YQPkgSelDescriptionView.cc		\
@@ -126,8 +128,6 @@ liby2qt_la_SOURCES = 				\
 	qxembed.cc
 
 
-#	YQPkgConflictDialog.cc			\
-#	YQPkgConflictList.cc			\
 #	YQPkgDependenciesView.cc		\
 #	YQPkgInstSrcFilterView.cc		\
 #	YQPkgInstSrcList.cc			\
