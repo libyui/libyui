@@ -123,7 +123,7 @@ YQPkgYouPatchFilterView::~YQPkgYouPatchFilterView()
 void
 YQPkgYouPatchFilterView::updateTotalDownloadSize()
 {
-#ifdef MISSING
+#ifdef FIXME
     _totalDownloadSize->setText( Y2PM::youPatchManager().totalDownloadSize().asString().c_str() );
 #endif
 }

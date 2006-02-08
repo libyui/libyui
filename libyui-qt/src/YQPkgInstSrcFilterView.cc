@@ -171,22 +171,25 @@ void YQPkgInstSrcFilterView::filterIfVisible()
 }
 
 
-void YQPkgInstSrcFilterView::primaryFilterMatch( zypp::ui::Selectable::Ptr, zypp::Package::constPtr pkg )
+void YQPkgInstSrcFilterView::primaryFilterMatch( zypp::ui::Selectable::Ptr 	selectable,
+						 zypp::Package::constPtr 	pkg )
 {
-    if ( secondaryFilterMatch( pkg ) )
-	emit filterMatch( pkg );
+    if ( secondaryFilterMatch( selectable, pkg ) )
+	emit filterMatch( selectable, pkg );
 }
 
 
-void YQPkgInstSrcFilterView::primaryFilterNearMatch( zypp::ui::Selectable::Ptr, zypp::Package::constPtr pkg )
+void YQPkgInstSrcFilterView::primaryFilterNearMatch( zypp::ui::Selectable::Ptr	selectable,
+						     zypp::Package::constPtr 	pkg )
 {
-    if ( secondaryFilterMatch( pkg ) )
-	emit filterNearMatch( pkg );
+    if ( secondaryFilterMatch( selectable, pkg ) )
+	emit filterNearMatch( selectable, pkg );
 }
 
 
 bool
-YQPkgInstSrcFilterView::secondaryFilterMatch( zypp::ui::Selectable::Ptr, zypp::Package::constPtr pkg )
+YQPkgInstSrcFilterView::secondaryFilterMatch( zypp::ui::Selectable::Ptr	selectable,
+					      zypp::Package::constPtr 	pkg )
 {
     if ( _allPackages->isVisible() )
     {
@@ -194,15 +197,15 @@ YQPkgInstSrcFilterView::secondaryFilterMatch( zypp::ui::Selectable::Ptr, zypp::P
     }
     else if ( _rpmGroupTagsFilterView->isVisible() )
     {
-	return _rpmGroupTagsFilterView->check( pkg );
+	return _rpmGroupTagsFilterView->check( selectable, pkg );
     }
     else if ( _searchFilterView->isVisible() )
     {
-	return _searchFilterView->check( pkg );
+	return _searchFilterView->check( selectable, pkg );
     }
     else if ( _statusFilterView->isVisible() )
     {
-	return _statusFilterView->check( pkg );
+	return _statusFilterView->check( selectable, pkg );
     }
     else
     {

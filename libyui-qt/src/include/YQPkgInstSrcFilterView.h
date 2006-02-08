@@ -22,6 +22,7 @@
 #ifndef YQPkgInstSrcFilterView_h
 #define YQPkgInstSrcFilterView_h
 
+#include <zypp/Package.h>
 #include <qvbox.h>
 
 

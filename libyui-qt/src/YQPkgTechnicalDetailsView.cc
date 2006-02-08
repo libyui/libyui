@@ -104,7 +104,7 @@ YQPkgTechnicalDetailsView::authorsListCell( zypp::Package::constPtr pkg ) const
 QString
 YQPkgTechnicalDetailsView::formatRpmGroup( zypp::Package::constPtr pkg ) const
 {
-#ifdef MISSING
+#ifdef FIXME
     string group = Y2PM::packageManager().translatedRpmGroup( pkg->group_ptr() );
     return fromUTF8( group );
 #else

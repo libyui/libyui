@@ -122,7 +122,7 @@ YQPkgDescriptionDialog::filter( const QString & qPkgName )
 
     // Search for pkgs with that name
 
-#ifdef MISSING
+#ifdef FIXME
     
     PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
 

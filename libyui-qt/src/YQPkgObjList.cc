@@ -27,7 +27,7 @@
 
 #include "YQZypp.h"
 
-#ifdef MISSING
+#ifdef FIXME
 #include <y2pm/InstTarget.h>
 #endif
 
@@ -682,7 +682,7 @@ YQPkgObjListItem::init()
     const zypp::ResObject::constPtr candidate = selectable()->candidateObj();
     const zypp::ResObject::constPtr installed = selectable()->installedObj();
 
-#ifdef MISSING
+#ifdef FIXME
     if ( candidate && installed && candidate->edition() != installed->edition() )
     {
 	if ( selectable()->downgrade_condition() )
@@ -757,7 +757,7 @@ YQPkgObjListItem::bySelection() const
 {
     bool bySel = false;
 
-#ifdef MISSING
+#ifdef FIXME
     if ( selectable()->by_appl() )
 	bySel = true;
 #endif
@@ -878,7 +878,7 @@ YQPkgObjListItem::showNotifyTexts( zypp::ui::Status status )
     switch ( status )
     {
 	case zypp::ui::S_Install:
-#ifdef MISSING
+#ifdef FIXME
 	    if ( selectable()->hasCandidateObj() )
 		text = selectable()->candidateObj()->insnotify();
 #endif
@@ -887,7 +887,7 @@ YQPkgObjListItem::showNotifyTexts( zypp::ui::Status status )
 	case zypp::ui::S_NoInst:
 	case zypp::ui::S_Del:
 	case zypp::ui::S_Taboo:
-#ifdef MISSING
+#ifdef FIXME
 	    if ( selectable()->hasCandidateObj() )
 		text = selectable()->candidateObj()->delnotify();
 #endif
@@ -921,7 +921,7 @@ YQPkgObjListItem::showLicenseAgreement( zypp::ui::Status status )
 
 		if ( pkg )
 		{
-#ifdef MISSING
+#ifdef FIXME
 		    text = pkg->licenseToConfirm();
 		    confirmed = ! pkg->hasLicenseToConfirm ();
 #endif
@@ -960,7 +960,7 @@ YQPkgObjListItem::showLicenseAgreement( zypp::ui::Status status )
 	{
 	    if (pkg)
 	    {
-#ifdef MISSING
+#ifdef FIXME
 		pkg->markLicenseConfirmed ();
 #endif
 	    }

@@ -72,6 +72,7 @@ YQPkgInstSrcList::fillList()
     clear();
     y2debug( "Filling inst source list" );
 
+#ifdef FIXME
     InstSrcManager::ISrcIdList activeSources( Y2PM::instSrcManager().getSources( true ) ); // enabled only
     InstSrcManager::ISrcIdList::const_iterator it = activeSources.begin();
 
@@ -87,6 +88,7 @@ YQPkgInstSrcList::fillList()
 
 	++it;
     }
+#endif
 
     y2debug( "Inst source list filled" );
 }
@@ -123,6 +125,7 @@ YQPkgInstSrcList::filter()
 
 	    if ( instSrcItem )
 	    {
+#ifdef FIXME
 		InstSrcManager::ISrcId instSrc = instSrcItem->instSrcId();
 		const list<zypp::Package::constPtr> &packages = instSrc->data()->getPackages();
 		list<zypp::Package::constPtr>::const_iterator pkg_it = packages.begin();
@@ -143,6 +146,7 @@ YQPkgInstSrcList::filter()
 
 		    ++pkg_it;
 		}
+#endif
 	    }
 	}
 
@@ -155,6 +159,7 @@ YQPkgInstSrcList::filter()
     // (emit a filterMatch signal for each one)
     //
 
+#ifdef FIXME
     set<Selectable::Ptr>::const_iterator sel_it = exactMatches.begin();
 
     while ( sel_it != exactMatches.end() )
@@ -174,9 +179,10 @@ YQPkgInstSrcList::filter()
     
     while ( sel_it != allMatches.end() )
     {
-	emit filterNearMatch( (*sel_it)->theObj() );
+	emit filterNearMatch( *sel_it, (*sel_it)->theObj() );
 	++sel_it;
     }
+#endif
 
 
     emit filterFinished();

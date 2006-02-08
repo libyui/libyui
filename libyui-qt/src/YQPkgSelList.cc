@@ -66,7 +66,7 @@ YQPkgSelList::fillList()
     clear();
     y2debug( "Filling selection list" );
 
-#ifdef MISSING
+#ifdef FIXME
     PMManager::SelectableVec::const_iterator it = Y2PM::selectionManager().begin();
 
     while ( it != Y2PM::selectionManager().end() )
@@ -154,7 +154,7 @@ YQPkgSelList::selection() const
 void
 YQPkgSelList::applyChanges()
 {
-#ifdef MISSING
+#ifdef FIXME
     Y2PM::selectionManager().activate( Y2PM::packageManager() );
 #endif
     emit updatePackages();
@@ -175,7 +175,7 @@ YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList * 		pkgSelList,
     if ( ! _zyppSel )
 	_zyppSel = zypp::dynamic_pointer_cast<const zypp::Selection>( selectable->theObj() );
     
-#ifdef MISSING
+#ifdef FIXME
     QString text = fromUTF8( _zyppSel->summary( Y2PM::getPreferredLocale() ) );
 #else
     QString text = fromUTF8( _zyppSel->summary() );

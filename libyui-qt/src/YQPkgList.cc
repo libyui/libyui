@@ -40,7 +40,7 @@ YQPkgList::YQPkgList( QWidget * parent )
     : YQPkgObjList( parent )
 {
     _srpmStatusCol	= -42;
-#ifdef MISSING
+#ifdef FIXME
     int installedPkgs	= Y2PM::instTarget().numPackages();
 #else
     int installedPkgs	= 0;
@@ -443,7 +443,7 @@ YQPkgListItem::hasSourceRpm() const
     if ( ! selectable() )
 	return false;
 
-#ifdef MISSING
+#ifdef FIXME
     return selectable()->providesSources();
 #else
     return false;
@@ -457,7 +457,7 @@ YQPkgListItem::installSourceRpm() const
     if ( ! selectable() )
 	return false;
 
-#ifdef MISSING
+#ifdef FIXME
     if ( ! selectable()->providesSources() )
 	return false;
 
@@ -502,7 +502,7 @@ YQPkgListItem::setInstallSourceRpm( bool installSourceRpm )
 {
     if ( hasSourceRpm() )
     {
-#ifdef MISSING
+#ifdef FIXME
 	if ( selectable() )
 	    selectable()->set_source_install( installSourceRpm );
 #endif

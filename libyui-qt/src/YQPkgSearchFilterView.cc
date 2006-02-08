@@ -97,7 +97,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     _searchInSummary     = new QCheckBox( _( "Su&mmary" 	), gbox ); CHECK_PTR( _searchInSummary     );
     _searchInDescription = new QCheckBox( _( "Descr&iption"	), gbox ); CHECK_PTR( _searchInDescription );
 
-#ifdef MISSING
+#ifdef FIXME
     addVStretch( gbox );
     _searchInProvides    = new QCheckBox( _( "&Provides" 	), gbox ); CHECK_PTR( _searchInProvides    );
     _searchInRequires    = new QCheckBox( _( "Re&quires" 	), gbox ); CHECK_PTR( _searchInRequires    );
@@ -204,7 +204,7 @@ YQPkgSearchFilterView::filter()
 
 	QProgressDialog progress( _( "Searching..." ),			// text
 				  _( "&Cancel" ),			// cancelButtonLabel
-#ifdef MISSING
+#ifdef FIXME
 				  Y2PM::packageManager().size(),	// totalSteps
 #else
 				  1000,
@@ -221,7 +221,7 @@ YQPkgSearchFilterView::filter()
 
 	timer.start();
 
-#ifdef MISSING
+#ifdef FIXME
 	int count = 0;
 	PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
@@ -291,7 +291,7 @@ YQPkgSearchFilterView::check( zypp::ui::Selectable::Ptr	selectable,
 	( _searchInName->isChecked()        && check( pkg->name(),        regexp ) ) ||
 	( _searchInSummary->isChecked()     && check( pkg->summary(),     regexp ) ) ||
 	( _searchInDescription->isChecked() && check( pkg->description(), regexp ) ) ||
-#ifdef MISSING
+#ifdef FIXME
 	( _searchInProvides->isChecked()    && check( pkg->provides(),    regexp ) ) ||
 	( _searchInRequires->isChecked()    && check( pkg->requires(),    regexp ) );
 #else
@@ -359,7 +359,7 @@ YQPkgSearchFilterView::check( const list<string> & strList, const QRegExp & rege
 }
 
 
-#ifdef MISSING
+#ifdef FIXME
 bool
 YQPkgSearchFilterView::check( const PMSolvable::PkgRelList_type & relList, const QRegExp & regexp )
 {

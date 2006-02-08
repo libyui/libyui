@@ -751,8 +751,8 @@ YQPackageSelector::makeConnections()
 
     if ( _instSrcFilterView && _pkgList )
     {
-	connect( _instSrcFilterView,	SIGNAL( filterNearMatch	 ( zypp::Package::constPtr ) ),
-		 _pkgList,		SLOT  ( addPkgItemDimmed ( zypp::Package::constPtr ) ) );
+	connect( _instSrcFilterView,	SIGNAL( filterNearMatch	 ( zypp::ui::Selectable::Ptr, zypp::Package::constPtr ) ),
+		 _pkgList,		SLOT  ( addPkgItemDimmed ( zypp::ui::Selectable::Ptr, zypp::Package::constPtr ) ) );
     }
 
     if ( _pkgList && _diskUsageList )

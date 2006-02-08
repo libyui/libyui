@@ -146,7 +146,7 @@ protected:
      **/
     bool check( const list<string> & strList, const QRegExp & regexp );
 
-#ifdef MISSING
+#ifdef FIXME
     /**
      * Check PkgRelList attribute ( PMSolvable::provides(), PMSolvable::requires(), ... )
      **/

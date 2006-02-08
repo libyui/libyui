@@ -141,6 +141,7 @@ YQPkgChangesDialog::filter( bool byAuto, bool byApp, bool byUser )
     YQUI::ui()->busyCursor();
     _pkgList->clear();
 
+#ifdef FIXME
     PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
     while ( it != Y2PM::packageManager().end() )
@@ -153,12 +154,13 @@ YQPkgChangesDialog::filter( bool byAuto, bool byApp, bool byUser )
 		 selectable->by_appl() && byApp  ||
 		 selectable->by_user() && byUser   )
 	    {
-		_pkgList->addPkgItem( selectable->theObj() );
+		_pkgList->addPkgItem( selectable, selectable->theObj() );
 	    }
 	}
 
 	++it;
     }
+#endif
 
     YQUI::ui()->normalCursor();
 }
@@ -170,6 +172,7 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, bool byAuto, bool byApp, boo
     YQUI::ui()->busyCursor();
     _pkgList->clear();
 
+#ifdef FIXME
     PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
     while ( it != Y2PM::packageManager().end() )
@@ -183,12 +186,13 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, bool byAuto, bool byApp, boo
 		 selectable->by_user() && byUser   )
 	    {
 		if ( regexp.match( selectable->name().asString().c_str() ) >= 0 )
-		    _pkgList->addPkgItem( selectable->theObj() );
+		    _pkgList->addPkgItem( selectable, selectable->theObj() );
 	    }
 	}
 
 	++it;
     }
+#endif
 
     YQUI::ui()->normalCursor();
 }

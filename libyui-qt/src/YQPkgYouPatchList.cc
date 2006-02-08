@@ -82,7 +82,7 @@ YQPkgYouPatchList::fillList()
     clear();
     y2debug( "Filling YOU patch list" );
 
-#ifdef MISSING
+#ifdef FIXME
     PMManager::SelectableVec::const_iterator it = Y2PM::youPatchManager().begin();
 
     while ( it != Y2PM::youPatchManager().end() )
@@ -152,7 +152,7 @@ YQPkgYouPatchList::filter()
 
 	if ( patch )
 	{
-#ifdef MISSING
+#ifdef FIXME
 	    //
 	    // Check for a pre-script
 	    //
@@ -291,7 +291,7 @@ YQPkgYouPatchList::showRawPatchInfo()
     if ( selection() )
     {
 	zypp::Patch::constPtr patch = selection()->zyppPatch();
-#ifdef MISSING
+#ifdef FIXME
 	YQPkgTextDialog::showText( this, patch, Y2PM::youPatchManager().rawPatchInfo( patch ) );
 #endif
     }
@@ -341,7 +341,7 @@ YQPkgYouPatchListItem::YQPkgYouPatchListItem( YQPkgYouPatchList * 	youPatchList,
 	_zyppPatch = zypp::dynamic_pointer_cast<const zypp::Patch>( selectable->theObj() );
 
     setStatusIcon();
-#ifdef MISSING
+#ifdef FIXME
     setText( kindCol(), _zyppPatch->kindLabel() );
 
     switch ( _zyppPatch->kind() )
@@ -367,7 +367,7 @@ void
 YQPkgYouPatchListItem::setStatus( zypp::ui::Status newStatus )
 {
     YQPkgObjListItem::setStatus( newStatus );
-#ifdef MISSING
+#ifdef FIXME
     Y2PM::youPatchManager().updatePackageStates();
 #endif
     _youPatchList->sendUpdatePackages();
@@ -395,7 +395,7 @@ YQPkgYouPatchListItem::toolTip( int col )
     }
     else
     {
-#ifdef MISSING
+#ifdef FIXME
 	text = fromUTF8( zyppPatch()->kindLabel().c_str() );
 #endif
 
@@ -427,7 +427,7 @@ YQPkgYouPatchListItem::compare( QListViewItem * otherListViewItem,
     {
 	if ( col == kindCol() )
 	{
-#ifdef MISSING
+#ifdef FIXME
 	    if ( this->zyppPatch()->kind() < other->zyppPatch()->kind() ) return -1;
 	    if ( this->zyppPatch()->kind() > other->zyppPatch()->kind() ) return 1;
 #endif

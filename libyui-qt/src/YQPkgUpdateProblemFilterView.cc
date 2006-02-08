@@ -78,7 +78,7 @@ YQPkgUpdateProblemFilterView::filter()
 {
     emit filterStart();
 
-#ifdef MISSING
+#ifdef FIXME
     PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().updateBegin();
 
     while ( it != Y2PM::packageManager().updateEnd() )

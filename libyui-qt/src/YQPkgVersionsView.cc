@@ -119,7 +119,7 @@ YQPkgVersionsView::showDetails( zypp::ui::Selectable::Ptr selectable )
 #endif
 
     bool installedIsAvailable = false;
-#ifdef MISSING
+#ifdef FIXME
     zypp::ui::Selectable::ResObjectList::const_iterator it = selectable->av_begin();
 
     while ( it != selectable->av_end() )
@@ -165,7 +165,7 @@ YQPkgVersionsView::checkForChangedCandidate()
 	    if ( newCandidate != _selectable->candidateObj() )
 	    {
 		y2milestone( "Candidate changed" );
-#ifdef MISSING
+#ifdef FIXME
 		selectable->setUserCandidate( newCandidate );
 #endif
 		emit candidateChanged( newCandidate );
@@ -204,7 +204,7 @@ YQPkgVersion::YQPkgVersion( YQPkgVersionsView *		pkgVersionList,
 {
     setText( versionCol(), zyppObj->edition().asString().c_str() );
     setText( archCol(),    zyppObj->arch().asString().c_str() );
-#ifdef MISSING
+#ifdef FIXME
     setText( instSrcCol(), zyppObj->instSrcLabel().c_str() );
 #endif
     setOn( _zyppObj == _selectable->installedObj() );
