@@ -23,7 +23,8 @@
 #include <ycp/y2log.h>
 #include <qregexp.h>
 #include "YQZypp.h"
-#include <zypp/ui/ResPoolProxy.h>
+#include <zypp/ZYppFactory.h>
+#include <zypp/ResPoolProxy.h>
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgSelList.h"
@@ -49,7 +50,7 @@ YQPkgSelList::YQPkgSelList( QWidget * parent, bool autoFill )
 	fillList();
 	selectSomething();
     }
-    
+
     y2debug( "Creating selection list done" );
 }
 
@@ -66,24 +67,25 @@ YQPkgSelList::fillList()
     clear();
     y2debug( "Filling selection list" );
 
-#ifdef FIXME
-    PMManager::SelectableVec::const_iterator it = Y2PM::selectionManager().begin();
 
-    while ( it != Y2PM::selectionManager().end() )
+    zypp::ResPoolProxy proxy( zypp::getZYpp()->poolProxy() );
+    zypp::ResPoolProxy::const_iterator it = proxy.byKindBegin<zypp::Selection>();
+
+    while ( it != proxy.byKindEnd<zypp::Selection>() )
     {
-	zypp::Selection::constPtr pkgSel = (*it)->theObj();
+	zypp::Selection::constPtr zyppSel =
+	    zypp::dynamic_pointer_cast<const zypp::Selection>( (*it)->theObj() );
 
-	if ( pkgSel )
+	if ( zyppSel )
 	{
-	    if ( pkgSel->visible() && ! pkgSel->isBase() )
+	    if ( zyppSel->visible() && ! zyppSel->isBase() )
 	    {
-		addPkgSelItem( selectable, sel );
+		addPkgSelItem( *it, zyppSel );
 	    }
 	}
 
 	++it;
     }
-#endif
 
     y2debug( "Selection list filled" );
 }
@@ -108,16 +110,21 @@ YQPkgSelList::filter()
 
 	if ( sel )
 	{
-#if 0
-	    set<Selectable::Ptr> slcList = sel->inspacks_ptrs();
-	    set<Selectable::Ptr>::const_iterator it = slcList.begin();
+	    zypp::ResPoolProxy proxy( zypp::getZYpp()->poolProxy() );
+	    zypp::ResPoolProxy::const_iterator it = proxy.byKindBegin<zypp::Package>();
 
-	    while ( it != slcList.end() )
+	    while ( it != proxy.byKindEnd<zypp::Package>() )
 	    {
-		emit filterMatch( (*it), (*it)->theObj() );
+		zypp::Package::constPtr zyppPkg =
+		    zypp::dynamic_pointer_cast<const zypp::Package>( (*it)->theObj() );
+
+		if ( zyppPkg )
+		{
+		    emit filterMatch( *it, zyppPkg );
+		}
+
 		++it;
 	    }
-#endif
 	}
     }
 
@@ -174,7 +181,7 @@ YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList * 		pkgSelList,
 {
     if ( ! _zyppSel )
 	_zyppSel = zypp::dynamic_pointer_cast<const zypp::Selection>( selectable->theObj() );
-    
+
 #ifdef FIXME
     QString text = fromUTF8( _zyppSel->summary( Y2PM::getPreferredLocale() ) );
 #else
@@ -184,7 +191,7 @@ YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList * 		pkgSelList,
     // You don't want to know why we need this.
     text.replace( QRegExp( "Graphical Basis System" ), "Graphical Base System" );
     text.replace( QRegExp( "Gnome" ), "GNOME" );
-    
+
     setText( summaryCol(), text );
 
     setStatusIcon();
