@@ -76,7 +76,11 @@
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgSelList.h"
 #include "YQPkgSelectionsFilterView.h"
+
+#ifdef FIXME
 #include "YQPkgInstSrcFilterView.h"
+#endif
+
 #include "YQPkgStatusFilterView.h"
 #include "YQPkgTechnicalDetailsView.h"
 #include "YQPkgTextDialog.h"
@@ -770,7 +774,9 @@ YQPackageSelector::makeConnections()
     connectFilter( _updateProblemFilterView,	_pkgList, false );
     connectFilter( _youPatchList, 		_pkgList );
     connectFilter( _selList, 			_pkgList );
+#ifdef FIXME
     connectFilter( _instSrcFilterView,		_pkgList, false );
+#endif
     connectFilter( _rpmGroupTagsFilterView, 	_pkgList, false );
 #ifdef FIXME
     connectFilter( _langList, 			_pkgList );
@@ -784,11 +790,13 @@ YQPackageSelector::makeConnections()
 		 _pkgList,		SLOT  ( message( const QString & ) ) );
     }
 
+#ifdef FIXME
     if ( _instSrcFilterView && _pkgList )
     {
 	connect( _instSrcFilterView,	SIGNAL( filterNearMatch	 ( zypp::ui::Selectable::Ptr, zypp::Package::constPtr ) ),
 		 _pkgList,		SLOT  ( addPkgItemDimmed ( zypp::ui::Selectable::Ptr, zypp::Package::constPtr ) ) );
     }
+#endif
 
     if ( _pkgList && _diskUsageList )
     {
