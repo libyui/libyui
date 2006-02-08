@@ -63,7 +63,8 @@ protected:
      * Returns a string containing a HTML table for technical details for one
      * package.
      **/
-    QString simpleTable( zypp::Package::constPtr pkg );
+    QString simpleTable( zypp::ui::Selectable::Ptr	selectable,
+			 zypp::Package::constPtr 	pkg );
 
 
     /**
@@ -71,8 +72,9 @@ protected:
      * package instances: The installed instance and an alternate instance.
      * ( usually the candidate instance ).
      **/
-    QString complexTable( zypp::Package::constPtr installedPkg,
-			  zypp::Package::constPtr candidatePkg );
+    QString complexTable( zypp::ui::Selectable::Ptr	selectable,
+			  zypp::Package::constPtr 	installedPkg,
+			  zypp::Package::constPtr 	candidatePkg );
 
     /**
      * Returns a string containing HTML code for a package's authors list.

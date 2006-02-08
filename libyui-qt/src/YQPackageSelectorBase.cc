@@ -21,7 +21,6 @@
 #include <qmessagebox.h>
 
 #include "YQZypp.h"
-#include <y2pm/InstTarget.h>
 #include <zypp/ui/ResPoolProxy.h>
 #include <zypp/ui/ResPoolProxy.h>
 #include <zypp/ui/ResPoolProxy.h>
@@ -34,8 +33,11 @@
 
 #include "YQPackageSelectorBase.h"
 #include "YQPkgChangesDialog.h"
-#include "YQPkgConflictDialog.h"
+
+#ifdef FIXME
 #include "YQPkgConflictList.h"
+#endif
+
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
 
@@ -65,12 +67,14 @@ YQPackageSelectorBase::YQPackageSelectorBase( QWidget * 		parent,
     _pkgConflictDialog		= 0;
     _selConflictDialog		= 0;
     _diskUsageList		= 0;
+    _pkgConflictDialog 		= 0;
     _youMode	 		= opt.youMode.value();
 
     YQUI::setTextdomain( "packages-qt" );
     setFont( YQUI::ui()->currentFont() );
     YQUI::ui()->blockWmClose(); // Automatically undone after UI::RunPkgSelection()
 
+#ifdef FIXME
     _pkgConflictDialog = new YQPkgConflictDialog( &( Y2PM::packageManager() ), this );
     CHECK_PTR( _pkgConflictDialog );
 
@@ -81,10 +85,12 @@ YQPackageSelectorBase::YQPackageSelectorBase( QWidget * 		parent,
     }
 
     YQPkgConflict::loadIgnoredConflicts();
+
     Y2PM::packageManager().SaveState();
 
     if ( ! _youMode )
 	Y2PM::selectionManager().SaveState();
+#endif
 
     //
     // Handle WM_CLOSE like "Cancel"
@@ -111,7 +117,11 @@ YQPackageSelectorBase::resolvePackageDependencies()
     YQUI::ui()->busyCursor();
     emit resolvingStarted();
 
+#ifdef FIXME
     int result = _pkgConflictDialog->solveAndShowConflicts();
+#else
+    int result = QDialog::Accepted;
+#endif
 
     emit resolvingFinished();
 
@@ -124,12 +134,14 @@ YQPackageSelectorBase::resolvePackageDependencies()
 int
 YQPackageSelectorBase::resolveSelectionDependencies()
 {
+#ifdef FIXME
     if ( _selConflictDialog )
     {
 	y2debug( "Resolving selection dependencies" );
 	return _selConflictDialog->solveAndShowConflicts();
     }
     else
+#endif
 	return QDialog::Accepted;
 }
 
@@ -193,6 +205,7 @@ YQPackageSelectorBase::showAutoPkgList()
 void
 YQPackageSelectorBase::reject()
 {
+#ifdef FIXME
     bool changes = Y2PM::packageManager().DiffState();
 
     if ( _youMode )
@@ -218,6 +231,7 @@ YQPackageSelectorBase::reject()
 
 	YQUI::ui()->sendEvent( new YCancelEvent() );
     }
+#endif
 }
 
 
@@ -255,6 +269,7 @@ YQPackageSelectorBase::accept()
 	return;
 
 
+#ifdef FIXME
     Y2PM::packageManager().ClearSaveState();
     YQPkgConflict::saveIgnoredConflicts();
 
@@ -262,6 +277,7 @@ YQPackageSelectorBase::accept()
 	Y2PM::youPatchManager().ClearSaveState();
     else
 	Y2PM::selectionManager().ClearSaveState();
+#endif
 
     YQUI::ui()->sendEvent( new YMenuEvent( YCPSymbol( "accept" ) ) );
 }

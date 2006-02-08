@@ -49,7 +49,7 @@ void
 YQPkgTechnicalDetailsView::showDetails( zypp::ui::Selectable::Ptr selectable )
 {
     _selectable = selectable;
-    
+
     if ( ! selectable )
     {
 	clear();
@@ -58,20 +58,20 @@ YQPkgTechnicalDetailsView::showDetails( zypp::ui::Selectable::Ptr selectable )
 
     QString html_text = htmlHeading( selectable );
 
-    zypp::Package::constPtr candidate = selectable->candidateObj();
-    zypp::Package::constPtr installed = selectable->installedObj();
+    zypp::Package::constPtr candidate = zypp::dynamic_pointer_cast<const zypp::Package> ( selectable->candidateObj() );
+    zypp::Package::constPtr installed = zypp::dynamic_pointer_cast<const zypp::Package> ( selectable->installedObj() );
 
     if ( candidate && installed && candidate != installed )
     {
-	html_text += complexTable( installed, candidate );
+	html_text += complexTable( selectable, installed, candidate );
     }
     else
     {
 	if ( candidate )
-	    html_text += simpleTable( candidate );
+	    html_text += simpleTable( selectable, candidate );
 
 	if ( installed )
-	    html_text += simpleTable( installed );
+	    html_text += simpleTable( selectable, installed );
     }
 
     setTextFormat( Qt::RichText );
@@ -108,36 +108,43 @@ YQPkgTechnicalDetailsView::formatRpmGroup( zypp::Package::constPtr pkg ) const
     string group = Y2PM::packageManager().translatedRpmGroup( pkg->group_ptr() );
     return fromUTF8( group );
 #else
-    return "unknown"
+    return "unknown";
 #endif
 }
 
 
 QString
-YQPkgTechnicalDetailsView::simpleTable( zypp::Package::constPtr pkg )
+YQPkgTechnicalDetailsView::simpleTable( zypp::ui::Selectable::Ptr	selectable,
+					zypp::Package::constPtr 	pkg )
 {
     QString html = "<br>" +
 	table(
+#ifdef FIXME
 	       row( hcell( _( "Version:"	) ) + cell( pkg->version() + "-" + pkg->release() ) ) +
+#endif
 	       row( hcell( _( "Build Time:"	) ) + cell( pkg->buildtime()			  ) ) +
-	       ( pkg->isInstalledObj() ?
+	       ( pkg == selectable->installedObj() ?
 		 row( hcell( _( "Install Time:" ) ) + cell( pkg->installtime()			  ) )
 		 : "" ) +
 	       row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( pkg )		  ) ) +
 	       row( hcell( _( "License:"	) ) + cell( pkg->license()			  ) ) +
-	       row( hcell( _( "Installed Size:" ) ) + cell( pkg->size().form()			  ) ) +
+	       row( hcell( _( "Installed Size:" ) ) + cell( pkg->size().asString()		  ) ) +
 	       row( hcell( _youMode ? _( "Download Size:" ) : _( "Archive Size:" ) )
-		                                    + cell( pkg->archivesize().form()	  	  ) ) +
+		                                    + cell( pkg->archivesize().asString()	  ) ) +
 	       row( hcell( _( "Distribution:"	) ) + cell( pkg->distribution()			  ) ) +
 	       row( hcell( _( "Vendor:"		) ) + cell( pkg->vendor()			  ) ) +
 	       row( hcell( _( "Packager:"	) ) + cell( pkg->packager()			  ) ) +
+#ifdef FIXME
 	       row( hcell( _( "Architecture:"	) ) + cell( pkg->arch()				  ) ) +
+#endif
 	       row( hcell( _( "OS:"		) ) + cell( pkg->os()				  ) ) +
 	       row( hcell( _( "Build Host:"	) ) + cell( pkg->buildhost()			  ) ) +
 	       row( hcell( _( "URL:"		) ) + cell( pkg->url()				  ) ) +
+#ifdef FIXME
 	       row( hcell( _( "Source RPM:"	) ) + cell( pkg->sourceloc()			  ) ) +
 	       row( hcell( _( "Location:"	) ) + cell( pkg->location()			  ) ) +
 	       row( hcell( _( "Media No.:"	) ) + cell( pkg->medianr()			  ) ) +
+#endif
 	       row( hcell( _( "Authors:"	) ) + authorsListCell( pkg			  ) )
 	       );
 
@@ -146,7 +153,9 @@ YQPkgTechnicalDetailsView::simpleTable( zypp::Package::constPtr pkg )
 
 
 QString
-YQPkgTechnicalDetailsView::complexTable( zypp::Package::constPtr installed, zypp::Package::constPtr candidate )
+YQPkgTechnicalDetailsView::complexTable( zypp::ui::Selectable::Ptr	selectable,
+					 zypp::Package::constPtr 	installed,
+					 zypp::Package::constPtr 	candidate )
 {
     zypp::Package::constPtr p1 = candidate;
     zypp::Package::constPtr p2 = installed;
@@ -158,24 +167,30 @@ YQPkgTechnicalDetailsView::complexTable( zypp::Package::constPtr installed, zypp
 	table(
 	       row( hcell( QString( "" ) )	    + hcell( "<b>" + p1_header + "</b>"	    ) + hcell( "<b>" + p2_header + "</b>"     ) ) +
 
+#ifdef FIXME
 	       row( hcell( _( "Version:"	) ) + cell( p1->version() + "-" + p1->release() ) + cell( p2->version() + "-" + p2->release() ) ) +
+#endif
 	       row( hcell( _( "Build Time:"	) ) + cell( p1->buildtime()			) + cell( p2->buildtime()		      ) ) +
 	       row( hcell( _( "Install Time:"	) ) + cell( p1->installtime()			) + cell( p2->installtime()		      ) ) +
 	       row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( p1 )		) + cell( formatRpmGroup( p2 )		      ) ) +
 	       row( hcell( _( "License:"	) ) + cell( p1->license()			) + cell( p2->license()			      ) ) +
-	       row( hcell( _( "Installed Size:" ) ) + cell( p1->size().form()			) + cell( p2->size().form()		      ) ) +
+	       row( hcell( _( "Installed Size:" ) ) + cell( p1->size().asString()		) + cell( p2->size().asString()		      ) ) +
 	       row( hcell( _youMode ? _( "Download Size:"	) : _( "Archive Size:" ) )
-						    + cell( p1->archivesize().form()		) + cell( p2->archivesize().form()	      ) ) +
+						    + cell( p1->archivesize().asString()	) + cell( p2->archivesize().asString()	      ) ) +
 	       row( hcell( _( "Distribution:"	) ) + cell( p1->distribution()			) + cell( p2->distribution()		      ) ) +
 	       row( hcell( _( "Vendor:"		) ) + cell( p1->vendor()			) + cell( p2->vendor()			      ) ) +
 	       row( hcell( _( "Packager:"	) ) + cell( p1->packager()			) + cell( p2->packager()		      ) ) +
+#ifdef FIXME
 	       row( hcell( _( "Architecture:"	) ) + cell( p1->arch()				) + cell( p2->arch()			      ) ) +
+#endif
 	       row( hcell( _( "OS:"		) ) + cell( p1->os()				) + cell( p2->os()			      ) ) +
 	       row( hcell( _( "Build Host:"	) ) + cell( p1->buildhost()			) + cell( p2->buildhost()		      ) ) +
 	       row( hcell( _( "URL:"		) ) + cell( p1->url()				) + cell( p2->url()			      ) ) +
+#ifdef FIXME
 	       row( hcell( _( "Source RPM:"	) ) + cell( p1->sourceloc()			) + cell( p2->sourceloc()		      ) ) +
 	       row( hcell( _( "Location:"	) ) + cell( p1->location()			) + cell( p2->location()		      ) ) +
 	       row( hcell( _( "Media No.:"	) ) + cell( p1->medianr()			) + cell( p2->medianr()			      ) ) +
+#endif
 	       row( hcell( _( "Authors:"	) ) + authorsListCell( p1			) + authorsListCell( p2			      ) )
 	       );
 

@@ -34,7 +34,7 @@ libpy2qt_la_LIBADD =			\
 	-lyui				\
 	-L$(QTLIBDIR) -lqt-mt		\
 	-lX11 -lXext -lSM -lICE		\
-	-ly2pm
+	-lzypp
 
 liby2qt_la_LIBADD = $(libpy2qt_la_LIBADD)
 
@@ -77,9 +77,6 @@ liby2qt_la_SOURCES = 				\
 	YQPatternSelector.cc			\
 	YQPartitionSplitter.cc			\
 	YQPkgChangesDialog.cc			\
-	YQPkgConflictDialog.cc			\
-	YQPkgConflictList.cc			\
-	YQPkgDependenciesView.cc		\
 	YQPkgDescriptionDialog.cc		\
 	YQPkgDescriptionView.cc			\
 	YQPkgSelDescriptionView.cc		\
@@ -88,8 +85,6 @@ liby2qt_la_SOURCES = 				\
 	YQPkgGenericDetailsView.cc		\
 	YQPkgInstSrcFilterView.cc		\
 	YQPkgInstSrcList.cc			\
-	YQPkgLangFilterView.cc			\
-	YQPkgLangList.cc			\
 	YQPkgList.cc				\
 	YQPkgObjList.cc				\
 	YQPkgRpmGroupTagsFilterView.cc		\
@@ -131,6 +126,15 @@ liby2qt_la_SOURCES = 				\
 	QY2Settings.cc				\
 	QY2LayoutUtils.cc			\
 	qxembed.cc
+
+
+#	YQPkgConflictDialog.cc			\
+#	YQPkgConflictList.cc			\
+#	YQPkgDependenciesView.cc		\
+#	YQPkgLangFilterView.cc			\
+#	YQPkgLangList.cc			\
+#
+
 
 # Note: QY2LayoutUtils and QY2Settings don't need any .moc file: No QObjects
 

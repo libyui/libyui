@@ -39,10 +39,7 @@
 #include <qtimer.h>
 
 #include "YQZypp.h"
-#include <y2pm/InstTarget.h>
-#include <y2pm/InstYou.h>
 #include <zypp/ui/ResPoolProxy.h>
-#include <y2pm/zypp::PackageImEx.h>
 #include <zypp/ui/ResPoolProxy.h>
 #include <zypp/ui/ResPoolProxy.h>
 #include <zypp/ui/ResPoolProxy.h>
@@ -55,14 +52,25 @@
 
 #include "YQPackageSelector.h"
 #include "YQPkgChangesDialog.h"
+
+#ifdef FIXME
 #include "YQPkgConflictDialog.h"
 #include "YQPkgConflictList.h"
+#endif
+
+#ifdef FIXME
 #include "YQPkgDependenciesView.h"
+#endif
+
 #include "YQPkgDescriptionView.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
+
+#ifdef FIXME
 #include "YQPkgLangFilterView.h"
 #include "YQPkgLangList.h"
+#endif
+
 #include "YQPkgList.h"
 #include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQPkgSearchFilterView.h"
@@ -139,7 +147,9 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
 
     if ( _youMode )
     {
+#ifdef FIXME
 	Y2PM::youPatchManager().SaveState();
+#endif
 
 	if ( _filters && _youPatchFilterView && _youPatchList )
 	{
@@ -248,6 +258,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     if ( _updateMode )
     {
+#ifdef FIXME
 	if ( ! Y2PM::packageManager().updateEmpty()
 	     || _testMode )
 	{
@@ -255,6 +266,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	    CHECK_PTR( _updateProblemFilterView );
 	    _filters->addPage( _( "Update Problems" ), _updateProblemFilterView );
 	}
+#endif
     }
 
 
@@ -289,8 +301,10 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	connect( _selList, 		SIGNAL( statusChanged()	               	),
 		 this,			SLOT  ( resolveSelectionDependencies()	) );
 
+#ifdef FIXME
 	connect( _selConflictDialog,	SIGNAL( updatePackages()      		),
 		 _selList, 		SLOT  ( updateToplevelItemStates() 	) );
+#endif
 
 	connect( this,			SIGNAL( refresh()			),
 		 _selList, 		SLOT  ( updateToplevelItemStates() 	) );
@@ -318,6 +332,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     if ( ! _youMode )
     {
+#ifdef FIXME
 	_langFilterView = new YQPkgLangFilterView( parent );
 	CHECK_PTR( _langFilterView );
 	_filters->addPage( _( "Languages" ), _langFilterView );
@@ -333,6 +348,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
 	connect( this,			SIGNAL( refresh()			),
 		 _langList, 		SLOT  ( updateToplevelItemStates() 	) );
+#endif
     }
 
 
@@ -467,6 +483,7 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     // Dependencies
     //
 
+#ifdef FIXME
     _pkgDependenciesView = new YQPkgDependenciesView( _detailsViews );
     CHECK_PTR( _pkgDependenciesView );
 
@@ -475,6 +492,7 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
     connect( _pkgList,			SIGNAL( selectionChanged    ( zypp::ui::Selectable::Ptr ) ),
 	     _pkgDependenciesView,	SLOT  ( showDetailsIfVisible( zypp::ui::Selectable::Ptr ) ) );
+#endif
 
 
     //
@@ -572,10 +590,12 @@ YQPackageSelector::addMenus()
 
     if ( ! _youMode )
     {
+#ifdef FIXME
 	_fileMenu->insertItem( _( "&Import..." ),	this, SLOT( pkgImport() ) );
 	_fileMenu->insertItem( _( "&Export..." ),	this, SLOT( pkgExport() ) );
 
 	_fileMenu->insertSeparator();
+#endif
     }
 
     _fileMenu->insertItem( _( "E&xit -- Discard Changes" ), this, SLOT( reject() ) );
@@ -647,12 +667,15 @@ YQPackageSelector::addMenus()
     if ( ! _youMode )
 	_extrasMenu->insertItem( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), CTRL + Key_A );
 
+#ifdef FIXME
     if ( ! _youMode && _pkgConflictDialog )
 	YQPkgConflict::actionResetIgnoredConflicts( _pkgConflictDialog )->addTo( _extrasMenu );
+#endif
 
     if ( _youMode && _youPatchList )
 	_youPatchList->actionShowRawPatchInfo->addTo( _extrasMenu );
 
+#ifdef FIXME
     if ( ! _youMode )
 	// Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
 	_extrasMenu->insertItem( _( "Install All Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
@@ -660,6 +683,7 @@ YQPackageSelector::addMenus()
     if ( ! _youMode )
 	// Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
 	_extrasMenu->insertItem( _( "Install All Matching -de&buginfo Packages" ), this, SLOT( installDebugInfoPkgs() ) );
+#endif
 
     //
     // Help menu
@@ -739,7 +763,9 @@ YQPackageSelector::makeConnections()
     connectFilter( _selList, 			_pkgList );
     connectFilter( _instSrcFilterView,		_pkgList, false );
     connectFilter( _rpmGroupTagsFilterView, 	_pkgList, false );
+#ifdef FIXME
     connectFilter( _langList, 			_pkgList );
+#endif
     connectFilter( _statusFilterView, 		_pkgList, false );
     connectFilter( _searchFilterView, 		_pkgList, false );
 
@@ -772,6 +798,7 @@ YQPackageSelector::makeConnections()
     // Connect package conflict dialog
     //
 
+#ifdef FIXME
     if ( _pkgConflictDialog && _pkgList )
     {
 	connect( _pkgConflictDialog,	SIGNAL( updatePackages()      ),
@@ -783,6 +810,7 @@ YQPackageSelector::makeConnections()
 		     _diskUsageList,	 SLOT  ( updateDiskUsage()	   ) );
 	}
     }
+#endif
 
 
     //
@@ -791,6 +819,7 @@ YQPackageSelector::makeConnections()
 
     if ( _selConflictDialog && _selList )
     {
+#ifdef FIXME
 	connect( _selConflictDialog,	SIGNAL( updatePackages()      	),
 		 _selList, 		SLOT  ( applyChanges() 		) );
 
@@ -802,6 +831,7 @@ YQPackageSelector::makeConnections()
 	    connect( _selConflictDialog, SIGNAL( updatePackages()	   ),
 		     _diskUsageList,	 SLOT  ( updateDiskUsage()	   ) );
 	}
+#endif
     }
 
 
@@ -876,7 +906,11 @@ YQPackageSelector::manualResolvePackageDependencies()
 
     YQUI::ui()->busyCursor();
 
+#ifdef FIXME
     int result = _pkgConflictDialog->solveAndShowConflicts();
+#else
+    int result = QDialog::Accepted;
+#endif
 
     YQUI::ui()->normalCursor();
 
@@ -917,6 +951,7 @@ YQPackageSelector::pkgExport()
     if ( ! filename.isEmpty() )
     {
 	y2milestone( "Exporting package list to %s", (const char *) filename );
+#ifdef FIXME
 	zypp::PackageImEx exporter;
 	exporter.getPMState();
 
@@ -927,6 +962,7 @@ YQPackageSelector::pkgExport()
 	    autoResolveDependencies();
 	}
 	else	// Error
+#endif
 	{
 	    y2warning( "Error writing package list to %s", (const char *) filename );
 
@@ -972,6 +1008,7 @@ YQPackageSelector::pkgImport()
     if ( ! filename.isEmpty() )
     {
 	y2milestone( "Importing package list from %s", (const char *) filename );
+#ifdef FIXME
 	zypp::PackageImEx importer;
 	importer.getPMState();
 
@@ -983,6 +1020,7 @@ YQPackageSelector::pkgImport()
 	    emit refresh();
 	}
 	else // Error
+#endif
 	{
 	    y2warning( "Error reading package list from %s", (const char *) filename );
 
@@ -1022,6 +1060,7 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 
     QMap<QString, Selectable::Ptr> subPkgs;
 
+#ifdef FIXME
     for ( PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
 	  it != Y2PM::packageManager().end();
 	  ++it )
@@ -1097,6 +1136,7 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 	    }
 	}
     }
+#endif
 
 
     if ( _filters && _statusFilterView )

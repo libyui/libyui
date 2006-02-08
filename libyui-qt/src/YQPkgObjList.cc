@@ -873,24 +873,20 @@ YQPkgObjListItem::cycleStatus()
 void
 YQPkgObjListItem::showNotifyTexts( zypp::ui::Status status )
 {
-    list<string> text;
+    string text;
 
     switch ( status )
     {
 	case zypp::ui::S_Install:
-#ifdef FIXME
 	    if ( selectable()->hasCandidateObj() )
 		text = selectable()->candidateObj()->insnotify();
-#endif
 	    break;
 
 	case zypp::ui::S_NoInst:
 	case zypp::ui::S_Del:
 	case zypp::ui::S_Taboo:
-#ifdef FIXME
 	    if ( selectable()->hasCandidateObj() )
 		text = selectable()->candidateObj()->delnotify();
-#endif
 	    break;
 
 	default: break;
@@ -899,7 +895,7 @@ YQPkgObjListItem::showNotifyTexts( zypp::ui::Status status )
     if ( ! text.empty() )
     {
 	y2debug( "Showing notify text" );
-	YQPkgTextDialog::showText( _pkgObjList, zyppObj(), text );
+	YQPkgTextDialog::showText( _pkgObjList, selectable(), text );
     }
 }
 
@@ -908,7 +904,7 @@ bool
 YQPkgObjListItem::showLicenseAgreement( zypp::ui::Status status )
 {
     bool confirmed = true;
-    list<string> text;
+    string text;
     zypp::Package::constPtr pkg = 0;
 
     switch ( status )
@@ -921,10 +917,8 @@ YQPkgObjListItem::showLicenseAgreement( zypp::ui::Status status )
 
 		if ( pkg )
 		{
-#ifdef FIXME
 		    text = pkg->licenseToConfirm();
-		    confirmed = ! pkg->hasLicenseToConfirm ();
-#endif
+		    confirmed = ! text.empty();
 		}
 	    }
 	    break;
@@ -936,7 +930,7 @@ YQPkgObjListItem::showLicenseAgreement( zypp::ui::Status status )
     {
 	y2debug( "Showing license agreement" );
 	confirmed = confirmed
-	    || YQPkgTextDialog::confirmText( _pkgObjList, zyppObj(), text );
+	    || YQPkgTextDialog::confirmText( _pkgObjList, selectable(), text );
 
 	if ( ! confirmed )
 	{

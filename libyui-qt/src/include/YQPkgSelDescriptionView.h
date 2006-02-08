@@ -57,7 +57,7 @@ protected:
     /**
      * Format the heading in HTML
      **/
-    QString htmlHeading( zypp::ResObject::constPtr zyppObj );
+    QString htmlHeading( zypp::ui::Selectable::Ptr selectable );
 };
 
 

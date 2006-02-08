@@ -76,7 +76,7 @@ QString
 YQPkgSelDescriptionView::htmlHeading( zypp::ui::Selectable::Ptr selectable )
 {
     zypp::Selection::constPtr sel =
-	zypp::dynamic_pointer_cast<const zypp::Selection>( selectable->theObj );
+	zypp::dynamic_pointer_cast<const zypp::Selection>( selectable->theObj() );
 
     if ( ! sel )
 	return YQPkgGenericDetailsView::htmlHeading( selectable );
@@ -85,7 +85,7 @@ YQPkgSelDescriptionView::htmlHeading( zypp::ui::Selectable::Ptr selectable )
     bool useBigFont = ( summary.length() <= 40 );
 
     if ( summary.isEmpty() )
-	summary = fromUTF8( zyppObj->name() );
+	summary = fromUTF8( sel->name() );
 
     QString html = "<table";
 
