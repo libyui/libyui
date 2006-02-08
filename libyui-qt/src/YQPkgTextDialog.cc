@@ -205,6 +205,12 @@ void YQPkgTextDialog::showText( QWidget * parent, const string & text )
 }
 
 
+void YQPkgTextDialog::showText( QWidget * parent, const char * text )
+{
+    showText( parent, QString( text ) );
+}
+
+
 void YQPkgTextDialog::showText( QWidget * 			parent,
 				zypp::ui::Selectable::Ptr 	selectable,
 				const string & 			text )
@@ -233,6 +239,12 @@ bool YQPkgTextDialog::confirmText( QWidget * 		parent,
 bool YQPkgTextDialog::confirmText( QWidget * parent, const QString & text )
 {
     return confirmText( parent, text, _( "&Accept" ), _( "&Cancel" ) );
+}
+
+
+bool YQPkgTextDialog::confirmText( QWidget * parent, const char * text )
+{
+    return confirmText( parent, QString( text ) );
 }
 
 
@@ -297,12 +309,12 @@ YQPkgTextDialog::htmlHeading( zypp::ui::Selectable::Ptr selectable )
 {
     if ( ! selectable )
 	return "";
-    
+
     zypp::ResObject::constPtr zyppObj = selectable->theObj();
 
     if ( ! zyppObj )
 	return "";
-    
+
     QString summary = fromUTF8( zyppObj->summary() );
 
     QString html =

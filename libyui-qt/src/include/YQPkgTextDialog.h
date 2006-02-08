@@ -80,9 +80,10 @@ public:
      **/
     static void showText( QWidget * parent, const QString & text );
     static void showText( QWidget * parent, const string & text );
+    static void showText( QWidget * parent, const char * text );
 
     /**
-     * Show a text with a headline identifying a zypp::ResObject (name+summary).
+     * Show a text with a headline identifying a selectable (name+summary).
      **/
     static void showText( QWidget * 			parent,
 			  zypp::ui::Selectable::Ptr 	selectable,
@@ -102,6 +103,7 @@ public:
      * Returns "true" if the user clicked "Accept", "false" on "Cancel".
      **/
     static bool confirmText( QWidget * parent, const QString & text );
+    static bool confirmText( QWidget * parent, const char * text );
 
     /**
      * Let the use confirm a text with a headline identifying a selectable

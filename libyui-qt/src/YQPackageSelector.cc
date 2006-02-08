@@ -205,6 +205,7 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
 	QTimer::singleShot( 0, this, SLOT( resolvePackageDependencies() ) );
     }
 #endif
+	QTimer::singleShot( 0, this, SLOT( postBetaWarning() ) );
 }
 
 

@@ -77,6 +77,8 @@ YQPatternSelector::YQPatternSelector( QWidget *			parent,
 
     if ( _diskUsageList )
 	_diskUsageList->updateDiskUsage();
+    
+    QTimer::singleShot( 0, this, SLOT( postBetaWarning() ) );
 }
 
 

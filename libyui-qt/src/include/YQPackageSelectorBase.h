@@ -124,6 +124,12 @@ public slots:
      **/
     void notImplemented();
 
+    /**
+     * Post beta version warning dialog
+     **/
+    void postBetaWarning();
+
+    
 signals:
 
     /**
