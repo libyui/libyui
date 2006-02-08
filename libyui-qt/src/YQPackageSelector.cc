@@ -370,11 +370,9 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     // if ( ! _youMode )
     {
-#ifdef FIXME
 	_searchFilterView = new YQPkgSearchFilterView( parent );
 	CHECK_PTR( _searchFilterView );
 	_filters->addPage( _( "Search" ), _searchFilterView );
-#endif
     }
 
 
@@ -544,6 +542,7 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 	_autoDependenciesCheckBox->setChecked( AUTO_CHECK_DEPENDENCIES_DEFAULT );
     }
 
+#ifdef FIXME
     addHStretch( button_box );
 
     QPushButton * cancel_button = new QPushButton( _( "&Cancel" ), button_box );
@@ -552,6 +551,10 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 
     connect( cancel_button, SIGNAL( clicked() ),
 	     this,          SLOT  ( reject()   ) );
+#else
+    addHStretch( button_box );
+#warning "Yes, this sucks, but we don't have undo right now"
+#endif
 
 
     QPushButton * accept_button = new QPushButton( _( "&Accept" ), button_box );
@@ -621,8 +624,10 @@ YQPackageSelector::addMenus()
 	_pkgList->actionSetCurrentKeepInstalled->addTo( _pkgMenu );
 	_pkgList->actionSetCurrentDelete->addTo( _pkgMenu );
 	_pkgList->actionSetCurrentUpdate->addTo( _pkgMenu );
+#ifdef FIXME
 	_pkgList->actionSetCurrentTaboo->addTo( _pkgMenu );
 	_pkgList->actionSetCurrentProtected->addTo( _pkgMenu );
+#endif
 
 	_pkgMenu->insertSeparator();
 
@@ -653,7 +658,9 @@ YQPackageSelector::addMenus()
 	_youPatchList->actionSetCurrentDontInstall->addTo( _youPatchMenu );
 	_youPatchList->actionSetCurrentKeepInstalled->addTo( _youPatchMenu );
 	_youPatchList->actionSetCurrentUpdate->addTo( _youPatchMenu );
+#ifdef FIXME
 	_youPatchList->actionSetCurrentTaboo->addTo( _youPatchMenu );
+#endif
 
 	_youPatchMenu->insertSeparator();
         _youPatchList->addAllInListSubMenu( _youPatchMenu );
@@ -892,13 +899,7 @@ YQPackageSelector::manualResolvePackageDependencies()
     }
 
     YQUI::ui()->busyCursor();
-
-#ifdef FIXME
     int result = _pkgConflictDialog->solveAndShowConflicts();
-#else
-    int result = QDialog::Accepted;
-#endif
-
     YQUI::ui()->normalCursor();
 
 #if DEPENDENCY_FEEDBACK_IF_OK

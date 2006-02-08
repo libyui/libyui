@@ -124,8 +124,8 @@ void
 YQPkgConflictList::askSaveToFile() const
 {
     QString filename = YQUI::ui()->askForSaveFileName( "conflicts.txt",	// startsWith
-							   "*.txt",		// filter
-							   _( "Save Conflicts List" ) );
+						       "*.txt",		// filter
+						       _( "Save Conflicts List" ) );
     if ( ! filename.isEmpty() )
 	saveToFile( filename, true );
 }
