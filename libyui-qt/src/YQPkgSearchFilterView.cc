@@ -33,6 +33,7 @@
 #include <ycp/y2log.h>
 
 #include "YQZypp.h"
+#include <zypp/ZYppFactory.h>
 #include <zypp/ResPoolProxy.h>
 
 #include "YQPkgSearchFilterView.h"
@@ -221,11 +222,12 @@ YQPkgSearchFilterView::filter()
 
 	timer.start();
 
-#ifdef FIXME
-	int count = 0;
-	PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
-	while ( it != Y2PM::packageManager().end() && ! progress.wasCancelled() )
+	int count = 0;
+	zypp::ResPoolProxy proxy( zypp::getZYpp()->poolProxy() );
+	zypp::ResPoolProxy::const_iterator it = proxy.byKindBegin<zypp::Package>();
+
+	while ( it != proxy.byKindEnd<zypp::Package>() )
 	{
 	    Selectable::Ptr selectable = *it;
 
@@ -255,9 +257,9 @@ YQPkgSearchFilterView::filter()
 		timer.restart();
 	    }
 
+
 	    ++it;
 	}
-#endif
 
 	if ( _matchCount == 0 )
 	    emit message( _( "No Results." ) );
@@ -269,39 +271,44 @@ YQPkgSearchFilterView::filter()
 
 bool
 YQPkgSearchFilterView::check( zypp::ui::Selectable::Ptr		selectable,
-			      zypp::Package::constPtr 		pkg )
+			      zypp::ResObject::constPtr 	zyppObj )
 {
     QRegExp regexp = _searchText->currentText();
     regexp.setCaseSensitive( _caseSensitive->isChecked() );
     regexp.setWildcard( _searchMode->currentItem() == UseWildcards );
 
-    return check( selectable, pkg, regexp );
+    return check( selectable, zyppObj, regexp );
 }
 
 
 bool
 YQPkgSearchFilterView::check( zypp::ui::Selectable::Ptr	selectable,
-			      zypp::Package::constPtr 	pkg,
+			      zypp::ResObject::constPtr zyppObj,
 			      const QRegExp & 		regexp )
 {
-    if ( ! pkg )
+    if ( ! zyppObj )
 	return false;
 
     bool match =
-	( _searchInName->isChecked()        && check( pkg->name(),        regexp ) ) ||
-	( _searchInSummary->isChecked()     && check( pkg->summary(),     regexp ) ) ||
-	( _searchInDescription->isChecked() && check( pkg->description(), regexp ) ) ||
+	( _searchInName->isChecked()        && check( zyppObj->name(),        regexp ) ) ||
+	( _searchInSummary->isChecked()     && check( zyppObj->summary(),     regexp ) ) ||
+	( _searchInDescription->isChecked() && check( zyppObj->description(), regexp ) ) ||
 #ifdef FIXME
-	( _searchInProvides->isChecked()    && check( pkg->provides(),    regexp ) ) ||
-	( _searchInRequires->isChecked()    && check( pkg->requires(),    regexp ) );
+	( _searchInProvides->isChecked()    && check( zyppObj->provides(),    regexp ) ) ||
+	( _searchInRequires->isChecked()    && check( zyppObj->requires(),    regexp ) );
 #else
     false ; 
 #endif
 
     if ( match )
     {
-	_matchCount++;
-	emit filterMatch( selectable, pkg );
+	zypp::Package::constPtr zyppPkg = zypp::dynamic_pointer_cast<const zypp::Package>( zyppObj );
+
+	if ( zyppPkg )
+	{
+	    _matchCount++;
+	    emit filterMatch( selectable, zyppPkg );
+	}
     }
 
     return match;
@@ -339,23 +346,6 @@ YQPkgSearchFilterView::check( const string & attribute, const QRegExp & regexp )
     }
 
     return match;
-}
-
-
-bool
-YQPkgSearchFilterView::check( const list<string> & strList, const QRegExp & regexp )
-{
-    string text;
-    list<string>::const_iterator it = strList.begin();
-
-    while ( it != strList.end() )
-    {
-	if ( check( *it, regexp ) )
-	    return true;
-	++it;
-    }
-
-    return false;
 }
 
 

@@ -62,11 +62,11 @@ public:
     virtual QSize minimumSizeHint() const;
 
     /**
-     * Check one package against the currently selected values.
+     * Check one ResObject against the currently selected values.
      * Returns true if the package matches, false if not.
      **/
     bool check( zypp::ui::Selectable::Ptr	selectable,
-		zypp::Package::constPtr 	pkg );
+		zypp::ResObject::constPtr 	zyppObj );
 
 
 public slots:
@@ -133,18 +133,13 @@ protected:
      * Check if pkg matches the search criteria.
      **/
     bool check( zypp::ui::Selectable::Ptr	selectable,
-		zypp::Package::constPtr 	pkg,
+		zypp::ResObject::constPtr 	zyppObj,
 		const QRegExp & 		regexp );
 
     /**
      * Check if a single pkg attribute matches the search criteria.
      **/
     bool check( const string & attribute, const QRegExp & regexp );
-
-    /**
-     * Check multi-line attribute
-     **/
-    bool check( const list<string> & strList, const QRegExp & regexp );
 
 #ifdef FIXME
     /**
