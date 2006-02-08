@@ -22,8 +22,6 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 #include "YQZypp.h"
-#include <y2pm/InstSrc.h>
-#include <y2pm/InstSrcData.h>
 #include <zypp/ui/Selectable.h>
 #include "YQi18n.h"
 #include "utf8.h"
@@ -169,14 +167,14 @@ YQPkgInstSrcList::filter()
 	++sel_it;
     }
 
-    
+
     //
     // Send all leftovers to the package list with filterNearMatch
     // to be displayed dimmed in the package list
     //
-    
+
     sel_it = allMatches.begin();
-    
+
     while ( sel_it != allMatches.end() )
     {
 	emit filterNearMatch( *sel_it, (*sel_it)->theObj() );

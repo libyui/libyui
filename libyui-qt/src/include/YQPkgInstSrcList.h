@@ -24,8 +24,6 @@
 
 #include <QY2ListView.h>
 #include <zypp/Package.h>
-#include <y2pm/InstSrcManager.h>
-#include <y2pm/InstSrcDescr.h>
 
 
 class YQPkgInstSrcListItem;
