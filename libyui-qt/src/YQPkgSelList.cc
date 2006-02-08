@@ -50,6 +50,7 @@ YQPkgSelList::YQPkgSelList( QWidget * parent, bool autoFill )
 	fillList();
 	selectSomething();
     }
+    filter();
 
     y2debug( "Creating selection list done" );
 }
@@ -104,12 +105,23 @@ YQPkgSelList::filter()
 {
     emit filterStart();
 
+#ifdef FIXME
     if ( selection() )
     {
 	zypp::Selection::constPtr sel = selection()->zyppSel();
 
 	if ( sel )
 	{
+
+	    // FIXME
+	}
+    }
+#else
+    {
+	{
+#endif
+
+	    
 	    zypp::ResPoolProxy proxy( zypp::getZYpp()->poolProxy() );
 	    zypp::ResPoolProxy::const_iterator it = proxy.byKindBegin<zypp::Package>();
 

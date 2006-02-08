@@ -318,12 +318,14 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     // if ( ! _youMode )
     {
+#ifdef FIXME
 	_rpmGroupTagsFilterView = new YQPkgRpmGroupTagsFilterView( parent );
 	CHECK_PTR( _rpmGroupTagsFilterView );
 	_filters->addPage( _( "Package Groups" ), _rpmGroupTagsFilterView );
 
 	connect( this,    			SIGNAL( loadData() ),
 		 _rpmGroupTagsFilterView,	SLOT  ( filter()   ) );
+#endif
     }
 
 
@@ -359,9 +361,11 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     if ( ! _youMode )
     {
+#ifdef FIXME
 	_instSrcFilterView = new YQPkgInstSrcFilterView( parent );
 	CHECK_PTR( _instSrcFilterView );
 	_filters->addPage( _( "Installation Sources" ), _instSrcFilterView );
+#endif
     }
 
 
@@ -371,9 +375,11 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     // if ( ! _youMode )
     {
+#ifdef FIXME
 	_searchFilterView = new YQPkgSearchFilterView( parent );
 	CHECK_PTR( _searchFilterView );
 	_filters->addPage( _( "Search" ), _searchFilterView );
+#endif
     }
 
 
@@ -383,9 +389,11 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     // if ( ! _youMode )
     {
+#ifdef FIXME
 	_statusFilterView = new YQPkgStatusFilterView( parent );
 	CHECK_PTR( _statusFilterView );
 	_filters->addPage( _( "Installation Summary" ), _statusFilterView );
+#endif
     }
 
 
