@@ -30,7 +30,7 @@
 #include <qstyle.h>
 
 #include "YQZypp.h"
-#include <zypp/ui/ResPoolProxy.h>
+#include <zypp/ResPoolProxy.h>
 #include "YQPkgChangesDialog.h"
 #include "YQPkgList.h"
 #include "QY2LayoutUtils.h"

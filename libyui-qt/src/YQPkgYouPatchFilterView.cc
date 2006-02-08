@@ -28,8 +28,7 @@
 #include <qtabwidget.h>
 
 #include "YQZypp.h"
-#include <zypp/ui/ResPoolProxy.h>
-#include <zypp/ui/ResPoolProxy.h>
+#include <zypp/ResPoolProxy.h>
 #include <y2util/FSize.h>
 
 #include "YQPkgYouPatchFilterView.h"

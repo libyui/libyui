@@ -26,7 +26,7 @@
 #include <qstyle.h>
 
 #include "YQZypp.h"
-#include <zypp/ui/ResPoolProxy.h>
+#include <zypp/ResPoolProxy.h>
 #include "utf8.h"
 
 #include "YQPkgDiskUsageList.h"

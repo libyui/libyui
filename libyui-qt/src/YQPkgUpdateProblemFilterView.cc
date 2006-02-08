@@ -23,7 +23,7 @@
 #include <ycp/y2log.h>
 
 #include "YQZypp.h"
-#include <zypp/ui/ResPoolProxy.h>
+#include <zypp/ResPoolProxy.h>
 
 #include "YQPkgUpdateProblemFilterView.h"
 #include "YQi18n.h"

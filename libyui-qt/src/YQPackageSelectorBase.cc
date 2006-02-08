@@ -21,10 +21,7 @@
 #include <qmessagebox.h>
 
 #include "YQZypp.h"
-#include <zypp/ui/ResPoolProxy.h>
-#include <zypp/ui/ResPoolProxy.h>
-#include <zypp/ui/ResPoolProxy.h>
-#include <zypp/ui/ResPoolProxy.h>
+#include <zypp/ResPoolProxy.h>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>

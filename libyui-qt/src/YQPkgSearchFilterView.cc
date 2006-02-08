@@ -33,7 +33,7 @@
 #include <ycp/y2log.h>
 
 #include "YQZypp.h"
-#include <zypp/ui/ResPoolProxy.h>
+#include <zypp/ResPoolProxy.h>
 
 #include "YQPkgSearchFilterView.h"
 #include "QY2LayoutUtils.h"

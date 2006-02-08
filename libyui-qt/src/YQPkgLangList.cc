@@ -23,7 +23,7 @@
 #include <ycp/y2log.h>
 #include <qregexp.h>
 #include "YQZypp.h"
-#include <zypp/ui/ResPoolProxy.h>
+#include <zypp/ResPoolProxy.h>
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgLangList.h"

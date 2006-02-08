@@ -26,7 +26,7 @@
 
 #include <unistd.h>
 #include "YQZypp.h"
-#include <zypp/ui/ResPoolProxy.h>
+#include <zypp/ResPoolProxy.h>
 
 #include <qaction.h>
 #include <qhbox.h>

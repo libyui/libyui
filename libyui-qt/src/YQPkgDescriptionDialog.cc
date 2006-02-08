@@ -32,7 +32,7 @@
 #include <qvaluelist.h>
 
 #include "YQZypp.h"
-#include <zypp/ui/ResPoolProxy.h>
+#include <zypp/ResPoolProxy.h>
 #include "YQPkgDescriptionDialog.h"
 #include "YQPkgDescriptionView.h"
 #include "YQPkgList.h"
