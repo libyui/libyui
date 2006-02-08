@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Feb  8 16:19:11 CET 2006 - kkaempf@suse.de
+
+- Initial libzypp integration
+- V 2.13.11
+
+-------------------------------------------------------------------
 Fri Feb  3 11:11:09 CET 2006 - visnov@suse.cz
 
 - Temporary fix for build
