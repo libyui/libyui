@@ -2,7 +2,7 @@
 
 
 @HEADER@
-BuildRequires:	curl-devel docbook-xsl-stylesheets doxygen libdrm-devel libjpeg-devel libxcrypt-devel libxslt perl-XML-Writer qt3-devel rpm-devel sgml-skel update-desktop-files yast2-devtools yast2-packagemanager yast2-packagemanager-devel yast2-perl-bindings yast2-testsuite
+BuildRequires:	libzypp-devel curl-devel docbook-xsl-stylesheets doxygen libdrm-devel libjpeg-devel libxcrypt-devel libxslt perl-XML-Writer qt3-devel rpm-devel sgml-skel update-desktop-files yast2-devtools yast2-packagemanager yast2-packagemanager-devel yast2-perl-bindings yast2-testsuite
 
 Summary:	-
 Provides:	yast2_ui
