@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Feb  8 21:46:53 CET 2006 - sh@suse.de
+
+- ZYPP resolver integrated and working
+- "Search" view working in package selector
+- V 2.13.12 
+
+-------------------------------------------------------------------
 Wed Feb  8 16:19:11 CET 2006 - kkaempf@suse.de
 
 - Initial libzypp integration
