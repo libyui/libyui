@@ -382,11 +382,9 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     // if ( ! _youMode )
     {
-#ifdef FIXME
 	_statusFilterView = new YQPkgStatusFilterView( parent );
 	CHECK_PTR( _statusFilterView );
 	_filters->addPage( _( "Installation Summary" ), _statusFilterView );
-#endif
     }
 
 

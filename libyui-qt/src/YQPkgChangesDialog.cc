@@ -150,6 +150,9 @@ YQPkgChangesDialog::filter( bool byAuto, bool byApp, bool byUser )
 
 	if ( selectable->to_modify() )
 	{
+
+	    // s/ ->by_appl() / ->isModifiedBy( XY )  - see zypp::ResStatus.h
+
 	    if ( selectable->by_auto() && byAuto ||
 		 selectable->by_appl() && byApp  ||
 		 selectable->by_user() && byUser   )

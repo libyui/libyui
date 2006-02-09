@@ -62,7 +62,7 @@ public:
      * Check if pkg matches the filter criteria.
      **/
     bool check( zypp::ui::Selectable::Ptr	selectable,
-		zypp::Package::constPtr 	pkg );
+		zypp::ResObject::constPtr 	pkg );
 
 
 public slots:

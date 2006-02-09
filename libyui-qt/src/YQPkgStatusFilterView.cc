@@ -28,7 +28,10 @@
 #include <ycp/y2log.h>
 
 #include "YQZypp.h"
+#include <zypp/ZYppFactory.h>
 #include <zypp/ResPoolProxy.h>
+#include <zypp/ResObject.h>
+#include <zypp/Package.h>
 
 #include "YQPkgStatusFilterView.h"
 #include "YQIconPool.h"
@@ -153,16 +156,16 @@ YQPkgStatusFilterView::filter()
 {
     emit filterStart();
 
-#ifdef FIXME
-    PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
+    zypp::ResPoolProxy proxy( zypp::getZYpp()->poolProxy() );
+    zypp::ResPoolProxy::const_iterator it = proxy.byKindBegin<zypp::Package>();
 
-    while ( it != Y2PM::packageManager().end() )
+    while ( it != proxy.byKindEnd<zypp::Package>() )
     {
-	Selectable::Ptr selectable = *it;
+	zypp::ui::Selectable::Ptr selectable = *it;
 
 	bool match =
-	    check( selectable->candidateObj() ) ||
-	    check( selectable->installedObj() );
+	    check( selectable, selectable->candidateObj() ) ||
+	    check( selectable, selectable->installedObj() );
 
 	// If there is neither an installed nor a candidate package, check
 	// any other instance.
@@ -174,7 +177,6 @@ YQPkgStatusFilterView::filter()
 
 	++it;
     }
-#endif
 
     emit filterFinished();
 }
@@ -182,11 +184,11 @@ YQPkgStatusFilterView::filter()
 
 bool
 YQPkgStatusFilterView::check( zypp::ui::Selectable::Ptr	selectable,
-			      zypp::Package::constPtr 	pkg )
+			      zypp::ResObject::constPtr	zyppObj )
 {
     bool match = false;
 
-    if ( ! pkg )
+    if ( ! zyppObj )
 	return false;
 
     switch ( selectable->status() )
@@ -207,7 +209,12 @@ YQPkgStatusFilterView::check( zypp::ui::Selectable::Ptr	selectable,
     }
 
     if ( match )
-	emit filterMatch( selectable, pkg );
+    {
+	zypp::Package::constPtr zyppPkg = zypp::dynamic_pointer_cast<const zypp::Package>( zyppObj );
+
+	if ( zyppPkg )
+	    emit filterMatch( selectable, zyppPkg );
+    }
 
     return match;
 }

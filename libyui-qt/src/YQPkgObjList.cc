@@ -766,8 +766,11 @@ YQPkgObjListItem::bySelection() const
 {
     bool bySel = false;
 
-#ifdef FIXME
-    if ( selectable()->by_appl() )
+#if 0
+    // this is probably obsolete, solver sets all states now
+    // also for selections
+
+    if ( selectable()->isModifiedBy() )	// zypp::ResStatus.h
 	bySel = true;
 #endif
 
