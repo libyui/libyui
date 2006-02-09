@@ -39,9 +39,7 @@
 #include <qtimer.h>
 
 #include "YQZypp.h"
-#include <zypp/ResPoolProxy.h>
-#include <zypp/ResPoolProxy.h>
-#include <zypp/ResPoolProxy.h>
+#include <zypp/ZYppFactory.h>
 #include <zypp/ResPoolProxy.h>
 
 #define y2log_component "qt-pkg"
@@ -679,7 +677,6 @@ YQPackageSelector::addMenus()
     if ( _youMode && _youPatchList )
 	_youPatchList->actionShowRawPatchInfo->addTo( _extrasMenu );
 
-#ifdef FIXME
     if ( ! _youMode )
 	// Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
 	_extrasMenu->insertItem( _( "Install All Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
@@ -687,7 +684,6 @@ YQPackageSelector::addMenus()
     if ( ! _youMode )
 	// Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
 	_extrasMenu->insertItem( _( "Install All Matching -de&buginfo Packages" ), this, SLOT( installDebugInfoPkgs() ) );
-#endif
 
     //
     // Help menu
@@ -1046,12 +1042,12 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 
     QMap<QString, Selectable::Ptr> subPkgs;
 
-#ifdef FIXME
-    for ( PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
-	  it != Y2PM::packageManager().end();
-	  ++it )
+    zypp::ResPoolProxy proxy( zypp::getZYpp()->poolProxy() );
+    zypp::ResPoolProxy::const_iterator it = proxy.byKindBegin<zypp::Package>();
+
+    while ( it != proxy.byKindEnd<zypp::Package>() )
     {
-	QString name = (*it)->name().asString().c_str();
+	QString name = (*it)->name().c_str();
 
 	if ( name.endsWith( suffix ) )
 	{
@@ -1059,16 +1055,18 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 
 	    y2debug( "Found subpackage: %s", (const char *) name );
 	}
+
+	++it;
     }
 
 
     // Now go through all packages and look if there is a corresponding subpackage in the QMap
 
-    for ( PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
-	  it != Y2PM::packageManager().end();
-	  ++it )
+    it = proxy.byKindBegin<zypp::Package>();
+
+    while ( it != proxy.byKindEnd<zypp::Package>() )
     {
-	QString name = (*it)->name().asString().c_str();
+	QString name = (*it)->name().c_str();
 
 	if ( subPkgs.contains( name + suffix ) )
 	{
@@ -1094,7 +1092,7 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 
 		    if ( ! subPkg->installedObj() )
 		    {
-			subPkg->set_status( S_Install );
+			subPkg->set_status( zypp::ui::S_Install );
 			y2milestone( "Installing subpackage %s", (const char *) subPkgName );
 		    }
 		    break;
@@ -1121,8 +1119,8 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 		    // catch unhandled enum states
 	    }
 	}
+	++it;
     }
-#endif
 
 
     if ( _filters && _statusFilterView )
