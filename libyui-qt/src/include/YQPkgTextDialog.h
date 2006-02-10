@@ -85,9 +85,9 @@ public:
     /**
      * Show a text with a headline identifying a selectable (name+summary).
      **/
-    static void showText( QWidget * 			parent,
-			  ZyppSel 	selectable,
-			  const string & 		text );
+    static void showText( QWidget * 		parent,
+			  ZyppSel 		selectable,
+			  const string &	text );
 
     /**
      * Let the user confirm a text. Returns "true" if the user clicked the

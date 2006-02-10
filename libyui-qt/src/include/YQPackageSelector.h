@@ -66,7 +66,9 @@ class YQPackageSelector : public YQPackageSelectorBase
 
 public:
 
-    YQPackageSelector( QWidget * parent, const YWidgetOpt & opt, const YCPString & floppyDevice );
+    YQPackageSelector( QWidget *		parent,
+		       const YWidgetOpt & 	opt,
+		       const YCPString &	floppyDevice );
 
 
 public slots:

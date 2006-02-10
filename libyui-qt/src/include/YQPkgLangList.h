@@ -70,8 +70,8 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addLangItem( ZyppSel	selectable,
-		      PMLanguagePtr 		lang );
+    void addLangItem( ZyppSel		selectable,
+		      PMLanguagePtr 	lang );
 
     /**
      * Emit an updatePackages() signal.
@@ -131,9 +131,9 @@ public:
      * Constructor. Creates a YQPkgLangList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgLangListItem( YQPkgLangList *			pkgSelList,
-		       ZyppSel	selectable,
-		       PMLanguagePtr			lang );
+    YQPkgLangListItem( YQPkgLangList *	pkgSelList,
+		       ZyppSel		selectable,
+		       PMLanguagePtr	lang );
 
     /**
      * Destructor
@@ -164,8 +164,8 @@ protected:
 
     // Data members
 
-    YQPkgLangList	*	_langList;
-    PMLanguagePtr		_pmLang;
+    YQPkgLangList *	_langList;
+    PMLanguagePtr	_pmLang;
 };
 
 

@@ -75,8 +75,8 @@ public slots:
      * slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addPkgItem( ZyppSel	selectable,
-		     ZyppPkg	zyppPkg	);
+    void addPkgItem	( ZyppSel	selectable,
+			  ZyppPkg	zyppPkg	);
     
     /**
      * Add a pkg to the list, but display it dimmed (grey text foreground
@@ -88,9 +88,9 @@ public slots:
     /**
      * Add a pkg to the list
      **/
-    void addPkgItem( ZyppSel	selectable,
-		     ZyppPkg	zyppPkg,
-		     bool 			dimmed );
+    void addPkgItem	( ZyppSel	selectable,
+			  ZyppPkg	zyppPkg,
+			  bool 		dimmed );
 
 
     /**

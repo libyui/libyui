@@ -86,15 +86,15 @@ YQPkgList::~YQPkgList()
 }
 
 
-void YQPkgList::addPkgItem( ZyppSel	selectable,
-			    ZyppPkg	zyppPkg )
+void YQPkgList::addPkgItem( ZyppSel selectable,
+			    ZyppPkg zyppPkg )
 {
     addPkgItem( selectable, zyppPkg, false );
 }
 
 
-void YQPkgList::addPkgItemDimmed( ZyppSel	selectable,
-				  ZyppPkg 	zyppPkg )
+void YQPkgList::addPkgItemDimmed( ZyppSel selectable,
+				  ZyppPkg zyppPkg )
 {
     addPkgItem( selectable, zyppPkg, true );
 }
@@ -102,8 +102,8 @@ void YQPkgList::addPkgItemDimmed( ZyppSel	selectable,
 
 void
 YQPkgList::addPkgItem( ZyppSel	selectable,
-		       ZyppPkg 		zyppPkg,
-		       bool 				dimmed )
+		       ZyppPkg 	zyppPkg,
+		       bool 	dimmed )
 {
     if ( ! selectable )
     {

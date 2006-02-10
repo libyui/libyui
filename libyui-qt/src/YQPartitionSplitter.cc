@@ -147,8 +147,8 @@ void YQPartitionSplitter::setEnabling( bool enabled )
     _qt_freeFieldLabel->setEnabled	( enabled );
     _qt_newPartFieldLabel->setEnabled	( enabled );
     _qt_freeSizeSlider->setEnabled	( enabled );
-    _qt_freeSizeField->setEnabled		( enabled );
-    _qt_freeSizeField->setEnabled		( enabled );
+    _qt_freeSizeField->setEnabled	( enabled );
+    _qt_freeSizeField->setEnabled	( enabled );
     _qt_newPartSizeField->setEnabled	( enabled );
 }
 

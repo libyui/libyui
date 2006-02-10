@@ -148,10 +148,10 @@ protected:
 
     // Data members
 
-    bool				_youMode;
-    bool				_showChangesDialog;
-    YQPkgConflictDialog *		_pkgConflictDialog;
-    YQPkgDiskUsageList *		_diskUsageList;
+    bool			_youMode;
+    bool			_showChangesDialog;
+    YQPkgConflictDialog *	_pkgConflictDialog;
+    YQPkgDiskUsageList *	_diskUsageList;
 };
 
 

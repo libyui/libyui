@@ -87,7 +87,7 @@ protected:
 
     // Data members
 
-    bool	_youMode;
+    bool _youMode;
 };
 
 

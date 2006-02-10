@@ -75,8 +75,8 @@ public:
 
     // Column numbers
 
-    int nameCol()		const	{ return _nameCol;		}
-    int urlCol()		const	{ return _urlCol;		}
+    int nameCol()	const	{ return _nameCol;	}
+    int urlCol()	const	{ return _urlCol;	}
 
     
     /**

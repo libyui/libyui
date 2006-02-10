@@ -266,7 +266,7 @@ YQPkgSearchFilterView::filter()
 
 
 bool
-YQPkgSearchFilterView::check( ZyppSel		selectable,
+YQPkgSearchFilterView::check( ZyppSel	selectable,
 			      ZyppObj 	zyppObj )
 {
     QRegExp regexp = _searchText->currentText();
@@ -278,9 +278,9 @@ YQPkgSearchFilterView::check( ZyppSel		selectable,
 
 
 bool
-YQPkgSearchFilterView::check( ZyppSel	selectable,
-			      ZyppObj zyppObj,
-			      const QRegExp & 		regexp )
+YQPkgSearchFilterView::check( ZyppSel		selectable,
+			      ZyppObj		zyppObj,
+			      const QRegExp & 	regexp )
 {
     if ( ! zyppObj )
 	return false;
@@ -312,7 +312,8 @@ YQPkgSearchFilterView::check( ZyppSel	selectable,
 
 
 bool
-YQPkgSearchFilterView::check( const string & attribute, const QRegExp & regexp )
+YQPkgSearchFilterView::check( const string &	attribute,
+			      const QRegExp &	regexp )
 {
     QString att    	= fromUTF8( attribute );
     QString searchText	= _searchText->currentText();

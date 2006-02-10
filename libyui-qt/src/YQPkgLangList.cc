@@ -149,9 +149,9 @@ YQPkgLangList::selection() const
 
 
 
-YQPkgLangListItem::YQPkgLangListItem( YQPkgLangList * 		langList,
-				      ZyppSel	selectable,
-				      PMLanguagePtr 		lang )
+YQPkgLangListItem::YQPkgLangListItem( YQPkgLangList * 	langList,
+				      ZyppSel		selectable,
+				      PMLanguagePtr 	lang )
     : YQPkgObjListItem( langList, selectable, lang )
     , _langList( langList )
     , _pmLang( lang )

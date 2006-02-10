@@ -186,11 +186,11 @@ YQPkgVersionsView::minimumSizeHint() const
 
 
 
-YQPkgVersion::YQPkgVersion( YQPkgVersionsView *		pkgVersionList,
-			    QY2CheckListItem * 		parent,
-			    ZyppSel	selectable,
-			    ZyppObj 	zyppObj,
-			    bool			enabled )
+YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
+			    QY2CheckListItem * 	parent,
+			    ZyppSel		selectable,
+			    ZyppObj 		zyppObj,
+			    bool		enabled )
     : QY2CheckListItem( parent, "",
 			enabled ?
 			QCheckListItem::RadioButton :

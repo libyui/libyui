@@ -57,7 +57,7 @@ protected slots:
      **/
     void debugTrace();
 
-    
+
 protected:
 
     // Layout methods - create and layout widgets
@@ -83,10 +83,9 @@ protected:
 
 
 
-    YQPkgSelList *			_selList;
-    YQPkgSelDescriptionView *		_descriptionView;
-
-    YQWizard *				_wizard;
+    YQPkgSelList *		_selList;
+    YQPkgSelDescriptionView *	_descriptionView;
+    YQWizard *			_wizard;
 };
 
 
