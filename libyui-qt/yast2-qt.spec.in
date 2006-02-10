@@ -2,7 +2,7 @@
 
 
 @HEADER@
-BuildRequires:	dbus-1-devel boost-devel libzypp-devel curl-devel docbook-xsl-stylesheets doxygen libdrm-devel libjpeg-devel libxcrypt-devel libxslt perl-XML-Writer qt3-devel rpm-devel sgml-skel update-desktop-files yast2-devtools yast2-packagemanager yast2-packagemanager-devel yast2-perl-bindings yast2-testsuite
+BuildRequires:	dbus-1-devel boost-devel libzypp-devel curl-devel docbook-xsl-stylesheets doxygen libdrm-devel libjpeg-devel libxcrypt-devel libxslt perl-XML-Writer qt3-devel rpm-devel sgml-skel update-desktop-files yast2-devtools yast2-core-devel hal-devel
 
 Summary:	-
 Requires:	libzypp
