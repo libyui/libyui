@@ -27,8 +27,6 @@
 #include "utf8.h"
 #include "YQPkgSelList.h"
 
-using std::set;
-
 
 YQPkgSelList::YQPkgSelList( QWidget * parent, bool autoFill )
     : YQPkgObjList( parent )
@@ -67,10 +65,9 @@ YQPkgSelList::fillList()
     y2debug( "Filling selection list" );
 
 
-    zypp::ResPoolProxy proxy( zypp::getZYpp()->poolProxy() );
-    ZyppPoolIterator it = proxy.byKindBegin<zypp::Selection>();
-
-    while ( it != proxy.byKindEnd<zypp::Selection>() )
+    for ( ZyppPoolIterator it = zyppSelectionsBegin();
+	  it != zyppSelectionsEnd();
+	  ++it )
     {
 	ZyppSelection zyppSelection = tryCastToZyppSelection( (*it)->theObj() );
 
@@ -81,8 +78,10 @@ YQPkgSelList::fillList()
 		addPkgSelItem( *it, zyppSelection );
 	    }
 	}
-
-	++it;
+	else
+	{
+	    y2error( "Found non-Selection selectable" );
+	}
     }
 
     y2debug( "Selection list filled" );
@@ -119,10 +118,9 @@ YQPkgSelList::filter()
 #endif
 
 
-	    zypp::ResPoolProxy proxy( zypp::getZYpp()->poolProxy() );
-	    ZyppPoolIterator it = proxy.byKindBegin<zypp::Package>();
-
-	    while ( it != proxy.byKindEnd<zypp::Package>() )
+	    for ( ZyppPoolIterator it = zyppPkgBegin();
+		  it != zyppPkgEnd();
+		  ++it )
 	    {
 		ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
 
@@ -130,8 +128,6 @@ YQPkgSelList::filter()
 		{
 		    emit filterMatch( *it, zyppPkg );
 		}
-
-		++it;
 	    }
 	}
     }

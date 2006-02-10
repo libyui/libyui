@@ -67,13 +67,13 @@ YQPackageSelectorBase::YQPackageSelectorBase( QWidget * 		parent,
     _pkgConflictDialog = new YQPkgConflictDialog( this );
     CHECK_PTR( _pkgConflictDialog );
 
-#ifdef FIXME
-    Y2PM::packageManager().SaveState();
+
+    zyppPool().saveState<zypp::Package>();
 
     if ( ! _youMode )
-	Y2PM::selectionManager().SaveState();
-#endif
+	zyppPool().saveState<zypp::Selection>();
 
+    
     //
     // Handle WM_CLOSE like "Cancel"
     //
@@ -174,6 +174,9 @@ YQPackageSelectorBase::reject()
 	changes |= Y2PM::youPatchManager().DiffState();
     else
 	changes |= Y2PM::selectionManager().DiffState();
+#else
+    bool changes = true;
+#endif
 
     if ( ! changes ||
 	 ( QMessageBox::warning( this, "",
@@ -184,16 +187,15 @@ YQPackageSelectorBase::reject()
 	   == 0 )	// Proceed upon button #0 ( OK )
 	 )
     {
-	Y2PM::packageManager().RestoreState();
+	zyppPool().restoreState<zypp::Package>();
 
 	if ( _youMode )
-	    Y2PM::youPatchManager().RestoreState();
+	    zyppPool().restoreState<zypp::Patch>();
 	else
-	    Y2PM::selectionManager().RestoreState();
+	    zyppPool().restoreState<zypp::Selection>();
 
 	YQUI::ui()->sendEvent( new YCancelEvent() );
     }
-#endif
 }
 
 
@@ -229,16 +231,6 @@ YQPackageSelectorBase::accept()
     // Check disk usage
     if ( checkDiskUsage() == QDialog::Rejected )
 	return;
-
-
-#ifdef FIXME
-    Y2PM::packageManager().ClearSaveState();
-
-    if ( _youMode )
-	Y2PM::youPatchManager().ClearSaveState();
-    else
-	Y2PM::selectionManager().ClearSaveState();
-#endif
 
     YQUI::ui()->sendEvent( new YMenuEvent( YCPSymbol( "accept" ) ) );
 }

@@ -66,17 +66,17 @@ inline ZyppPool		zyppPool()		{ return zypp::getZYpp()->poolProxy();	}
 template<class T> ZyppPoolIterator zyppBegin()	{ return zyppPool().byKindBegin<T>();	}
 template<class T> ZyppPoolIterator zyppEnd()	{ return zyppPool().byKindEnd<T>();	}
 
-inline ZyppPoolIterator zyppPkgBegin()		{ return zyppBegin<ZyppPkg>();		}
-inline ZyppPoolIterator zyppPkgEnd()		{ return zyppEnd<ZyppPkg>();		}
+inline ZyppPoolIterator zyppPkgBegin()		{ return zyppBegin<zypp::Package>();	}
+inline ZyppPoolIterator zyppPkgEnd()		{ return zyppEnd<zypp::Package>();	}
 
-inline ZyppPoolIterator zyppSelectionsBegin()	{ return zyppBegin<ZyppSelection>();	}
-inline ZyppPoolIterator zyppSelectionsEnd()	{ return zyppEnd<ZyppSelection>();	}
+inline ZyppPoolIterator zyppSelectionsBegin()	{ return zyppBegin<zypp::Selection>();	}
+inline ZyppPoolIterator zyppSelectionsEnd()	{ return zyppEnd<zypp::Selection>();	}
 
-inline ZyppPoolIterator zyppPatternsBegin()	{ return zyppBegin<ZyppPattern>();	}
-inline ZyppPoolIterator zyppPatternsEnd()	{ return zyppEnd<ZyppPattern>();	}
+inline ZyppPoolIterator zyppPatternsBegin()	{ return zyppBegin<zypp::Pattern>();	}
+inline ZyppPoolIterator zyppPatternsEnd()	{ return zyppEnd<zypp::Pattern>();	}
 
-inline ZyppPoolIterator zyppPatchesBegin()	{ return zyppBegin<ZyppPatch>();	}
-inline ZyppPoolIterator zyppPatchesEnd()	{ return zyppEnd<ZyppPatch>();		}
+inline ZyppPoolIterator zyppPatchesBegin()	{ return zyppBegin<zypp::Patch>();	}
+inline ZyppPoolIterator zyppPatchesEnd()	{ return zyppEnd<zypp::Patch>();	}
 
 
 inline ZyppPkg		tryCastToZyppPkg( ZyppObj zyppObj )

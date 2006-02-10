@@ -150,10 +150,9 @@ YQPkgStatusFilterView::filter()
 {
     emit filterStart();
 
-    zypp::ResPoolProxy proxy( zypp::getZYpp()->poolProxy() );
-    ZyppPoolIterator it = proxy.byKindBegin<zypp::Package>();
-
-    while ( it != proxy.byKindEnd<zypp::Package>() )
+    for ( ZyppPoolIterator it = zyppPkgBegin();
+	  it != zyppPkgEnd();
+	  ++it )
     {
 	ZyppSel selectable = *it;
 
@@ -168,8 +167,6 @@ YQPkgStatusFilterView::filter()
 	     ! selectable->candidateObj() &&
 	     ! selectable->installedObj()   )
 	    check( selectable,  selectable->theObj() );
-
-	++it;
     }
 
     emit filterFinished();

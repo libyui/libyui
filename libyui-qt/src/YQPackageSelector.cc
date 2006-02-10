@@ -141,9 +141,7 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
 
     if ( _youMode )
     {
-#ifdef FIXME
-	Y2PM::youPatchManager().SaveState();
-#endif
+	zyppPool().saveState<zypp::Patch>();
 
 	if ( _filters && _youPatchFilterView && _youPatchList )
 	{
@@ -534,7 +532,6 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 	_autoDependenciesCheckBox->setChecked( AUTO_CHECK_DEPENDENCIES_DEFAULT );
     }
 
-#ifdef FIXME
     addHStretch( button_box );
 
     QPushButton * cancel_button = new QPushButton( _( "&Cancel" ), button_box );
@@ -543,9 +540,6 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 
     connect( cancel_button, SIGNAL( clicked() ),
 	     this,          SLOT  ( reject()   ) );
-#else
-    addHStretch( button_box );
-#endif
 
 
     QPushButton * accept_button = new QPushButton( _( "&Accept" ), button_box );
@@ -810,7 +804,7 @@ YQPackageSelector::makeConnections()
 	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()           ),
 		     _selList, 			SLOT  ( updateToplevelItemStates() ) );
 	}
-	
+
 	if ( _diskUsageList )
 	{
 	    connect( _pkgConflictDialog, 	SIGNAL( updatePackages()	   ),
@@ -1037,10 +1031,9 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 
     QMap<QString, ZyppSel> subPkgs;
 
-    zypp::ResPoolProxy proxy( zypp::getZYpp()->poolProxy() );
-    ZyppPoolIterator it = proxy.byKindBegin<zypp::Package>();
-
-    while ( it != proxy.byKindEnd<zypp::Package>() )
+    for ( ZyppPoolIterator it = zyppPkgBegin();
+	  it != zyppPkgEnd();
+	  ++it )
     {
 	QString name = (*it)->name().c_str();
 
@@ -1050,16 +1043,14 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 
 	    y2debug( "Found subpackage: %s", (const char *) name );
 	}
-
-	++it;
     }
 
 
     // Now go through all packages and look if there is a corresponding subpackage in the QMap
 
-    it = proxy.byKindBegin<zypp::Package>();
-
-    while ( it != proxy.byKindEnd<zypp::Package>() )
+    for ( ZyppPoolIterator it = zyppPkgBegin();
+	  it != zyppPkgEnd();
+	  ++it )
     {
 	QString name = (*it)->name().c_str();
 
@@ -1114,7 +1105,6 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 		    // catch unhandled enum states
 	    }
 	}
-	++it;
     }
 
 

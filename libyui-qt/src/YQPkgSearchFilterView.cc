@@ -220,10 +220,10 @@ YQPkgSearchFilterView::filter()
 
 
 	int count = 0;
-	zypp::ResPoolProxy proxy( zypp::getZYpp()->poolProxy() );
-	ZyppPoolIterator it = proxy.byKindBegin<zypp::Package>();
 
-	while ( it != proxy.byKindEnd<zypp::Package>() )
+	for ( ZyppPoolIterator it = zyppPkgBegin();
+	      it != zyppPkgEnd();
+	      ++it )
 	{
 	    ZyppSel selectable = *it;
 
@@ -252,9 +252,6 @@ YQPkgSearchFilterView::filter()
 		qApp->processEvents();
 		timer.restart();
 	    }
-
-
-	    ++it;
 	}
 
 	if ( _matchCount == 0 )
