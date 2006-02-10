@@ -24,9 +24,58 @@
 
 #include <zypp/ui/Status.h>
 #include <zypp/ui/Selectable.h>
+#include <zypp/ResObject.h>
+#include <zypp/Package.h>
+#include <zypp/Selection.h>
+#include <zypp/Pattern.h>
+#include <zypp/ZYppFactory.h>
+#include <zypp/ResPoolProxy.h>
 
-using zypp::ui::Status;
-using zypp::ui::Selectable;
+
+//
+// Typedefs to make those nested namespaces human-readable
+//
+
+typedef zypp::ui::Status			ZyppStatus;
+typedef zypp::ui::Selectable			ZyppSel;
+typedef zypp::ResObject::constPtr		ZyppObj;
+typedef zypp::Package::constPtr			ZyppPkg;
+typedef zypp::Selection::constPtr		ZyppSelection;
+typedef zypp::Pattern::constPtr			ZyppPattern;
+
+typedef zypp::ResPoolProxy			ZyppPool;
+typedef zypp::ResPoolProxy::const_iterator	ZyppPoolIterator;
+
+
+inline ZyppPool		zyppPool()		{ return zypp::getZYpp()->poolProxy();	}
+
+template<class T> ZyppPoolIterator zyppBegin()	{ return zyppPool().byKindBegin<T>();	}
+template<class T> ZyppPoolIterator zyppEnd()	{ return zyppPool().byKindEnd<T>();	}
+
+inline ZyppPoolIterator zyppPkgBegin()		{ return zyppBegin<ZyppPkg>();		}
+inline ZyppPoolIterator zyppPkgEnd()		{ return zyppEnd<ZyppPkg>();		}
+
+inline ZyppPoolIterator zyppSelectionsBegin()	{ return zyppBegin<ZyppSelection>();	}
+inline ZyppPoolIterator zyppSelectionsEnd()	{ return zyppEnd<ZyppSelection>();	}
+
+inline ZyppPoolIterator zyppPatternsBegin()	{ return zyppBegin<ZyppPattern>();	}
+inline ZyppPoolIterator zyppPatternsEnd()	{ return zyppEnd<ZyppPattern>();	}
+
+
+inline ZyppPkg		tryCastToZyppPkg( ZyppObj zyppObj )
+{
+    return zypp::dynamic_pointer_cast<const zypp::Package>( zyppObj );
+}
+
+inline ZyppSelection	tryCastToZyppSelection( ZyppObj zyppObj )
+{
+    return zypp::dynamic_pointer_cast<const zypp::Selection>( zyppObj );
+}
+
+inline ZyppPattern 	tryCastToZyppPattern( ZyppObj zyppObj )
+{
+    return zypp::dynamic_pointer_cast<const zypp::Pattern>( zyppObj );
+}
 
 
 
