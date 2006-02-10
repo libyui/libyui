@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Feb 10 20:26:15 CET 2006 - sh@suse.de
+
+- V 2.13.13
+- "Installation summary" filter view ported to ZYPP
+- Re-enabled "Cancel" button (saveState / restoreState) in PkgSel
+- Code cleanup 
+
+-------------------------------------------------------------------
 Wed Feb  8 21:46:53 CET 2006 - sh@suse.de
 
 - ZYPP resolver integrated and working
