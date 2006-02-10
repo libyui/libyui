@@ -26,7 +26,6 @@
 #include <qsplitter.h>
 
 #include "YQZypp.h"
-#include <y2pm/InstTarget.h>
 #include <zypp/ResPoolProxy.h>
 #include <zypp/ResPoolProxy.h>
 #include <zypp/ResPoolProxy.h>
