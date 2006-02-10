@@ -15,9 +15,10 @@ noinst_LTLIBRARIES = liby2ncurses.la
 libpy2ncurses_la_LDFLAGS = -version-info 2:0
 liby2ncurses_la_LDFLAGS = -version-info 2:0
 
+# -lzypp
 libpy2ncurses_la_LIBADD =		\
 	-lyui				\
-	-lncursesw -lpanelw -ly2pm
+	-lncursesw -lpanelw
 liby2ncurses_la_LIBADD = $(libpy2ncurses_la_LIBADD)
 
 liby2ncurses_la_SOURCES =				\
@@ -32,7 +33,6 @@ liby2ncurses_la_SOURCES =				\
 	lang2encoding.tab lang2encoding.cc		\
 	ncursesw.h ncursesw.cc				\
 	ncursesp.h ncursesp.cc				\
-	PackageSelector.h PackageSelector.cc		\
 	NCtypes.h NCtypes.cc				\
 	NCurses.h NCurses.cc				\
 	NCstyle.h NCstyle.cc				\
@@ -80,21 +80,8 @@ liby2ncurses_la_SOURCES =				\
 	NCPopupList.h NCPopupList.cc			\
 	NCPopupMenu.h NCPopupMenu.cc			\
 	NCPopupTextEntry.h NCPopupTextEntry.cc		\
-	NCPackageSelector.cc NCPackageSelector.h	\
-	NCPkgTable.cc NCPkgTable.h			\
-	NCPopupTree.cc NCPopupTree.h			\
-	NCPopupSearch.cc NCPopupSearch.h		\
-	NCPopupInfo.cc NCPopupInfo.h			\
-	NCPopupSelection.cc NCPopupSelection.h		\
-	NCPopupDeps.cc NCPopupDeps.h			\
-	NCPopupDiskspace.cc NCPopupDiskspace.h		\
-	NCPopupPkgDeps.cc NCPopupPkgDeps.h		\
-	NCPopupSelDeps.cc NCPopupSelDeps.h		\
-	NCPopupFile.cc NCPopupFile.h			\
-	NCPopupPkgTable.cc NCPopupPkgTable.h		\
-	NCPopupPkgDescr.cc NCPopupPkgDescr.h		\
-	PkgNames.cc PkgNames.h				\
-	ObjectStatStrategy.cc ObjectStatStrategy.h	\
+	NCPopupInfo.h NCPopupInfo.cc			\
+	PkgNames.h PkgNames.cc				\
 	NCstyle.braille.h NCstyle.mono.h		\
 	NCstyle.linux.h NCstyle.xterm.h
 

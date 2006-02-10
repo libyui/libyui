@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Feb 10 12:18:21 CET 2006 - mvidner@suse.cz
+
+- Ripped out all package related stuff: y2pm out, zypp not yet in (#149879)
+- 2.13.6
+
+-------------------------------------------------------------------
 Tue Jan 24 16:59:49 CET 2006 - visnov@suse.cz
 
 - Disable sorting in non-YTable (#143085) 
