@@ -55,8 +55,8 @@ YQPkgTechnicalDetailsView::showDetails( ZyppSel selectable )
 
     QString html_text = htmlHeading( selectable );
 
-    ZyppPkg candidate = zypp::dynamic_pointer_cast<const zypp::Package> ( selectable->candidateObj() );
-    ZyppPkg installed = zypp::dynamic_pointer_cast<const zypp::Package> ( selectable->installedObj() );
+    ZyppPkg candidate = tryCastToZyppPkg( selectable->candidateObj() );
+    ZyppPkg installed = tryCastToZyppPkg( selectable->installedObj() );
 
     if ( candidate && installed && candidate != installed )
     {

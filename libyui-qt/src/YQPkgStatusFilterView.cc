@@ -204,7 +204,7 @@ YQPkgStatusFilterView::check( ZyppSel	selectable,
 
     if ( match )
     {
-	ZyppPkg zyppPkg = zypp::dynamic_pointer_cast<const zypp::Package>( zyppObj );
+	ZyppPkg zyppPkg = tryCastToZyppPkg( zyppObj );
 
 	if ( zyppPkg )
 	    emit filterMatch( selectable, zyppPkg );

@@ -335,7 +335,7 @@ YQPkgYouPatchListItem::YQPkgYouPatchListItem( YQPkgYouPatchList * 	youPatchList,
     , _zyppPatch( zyppPatch )
 {
     if ( ! _zyppPatch )
-	_zyppPatch = zypp::dynamic_pointer_cast<const zypp::Patch>( selectable->theObj() );
+	_zyppPatch = tryCastToZyppPatch( selectable->theObj() );
 
     setStatusIcon();
 #ifdef FIXME

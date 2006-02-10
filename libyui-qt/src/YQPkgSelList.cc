@@ -72,8 +72,7 @@ YQPkgSelList::fillList()
 
     while ( it != proxy.byKindEnd<zypp::Selection>() )
     {
-	ZyppSelection zyppSelection =
-	    zypp::dynamic_pointer_cast<const zypp::Selection>( (*it)->theObj() );
+	ZyppSelection zyppSelection = tryCastToZyppSelection( (*it)->theObj() );
 
 	if ( zyppSelection )
 	{
@@ -125,8 +124,7 @@ YQPkgSelList::filter()
 
 	    while ( it != proxy.byKindEnd<zypp::Package>() )
 	    {
-		ZyppPkg zyppPkg =
-		    zypp::dynamic_pointer_cast<const zypp::Package>( (*it)->theObj() );
+		ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
 
 		if ( zyppPkg )
 		{
@@ -190,7 +188,7 @@ YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList *	pkgSelList,
     , _zyppSelection( zyppSelection )
 {
     if ( ! _zyppSelection )
-	_zyppSelection = zypp::dynamic_pointer_cast<const zypp::Selection>( selectable->theObj() );
+	_zyppSelection = tryCastToZyppSelection( selectable->theObj() );
 
 #ifdef FIXME
     QString text = fromUTF8( _zyppSelection->summary( Y2PM::getPreferredLocale() ) );

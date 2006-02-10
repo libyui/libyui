@@ -919,7 +919,7 @@ YQPkgObjListItem::showLicenseAgreement( ZyppStatus status )
 	case zypp::ui::S_Update:
 	    if ( selectable()->hasCandidateObj() )
 	    {
-		pkg = zypp::dynamic_pointer_cast<const zypp::Package>( selectable()->candidateObj() );
+		pkg = tryCastToZyppPkg( selectable()->candidateObj() );
 
 		if ( pkg )
 		{

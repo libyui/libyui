@@ -422,7 +422,7 @@ YQPkgListItem::YQPkgListItem( YQPkgList * 		pkgList,
     , _dimmed( false )
 {
     if ( ! _zyppPkg )
-	_zyppPkg = zypp::dynamic_pointer_cast<const zypp::Package>( selectable->theObj() );
+	_zyppPkg = tryCastToZyppPkg( selectable->theObj() );
 
     setSourceRpmIcon();
 }

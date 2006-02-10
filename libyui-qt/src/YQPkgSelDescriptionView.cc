@@ -72,8 +72,7 @@ YQPkgSelDescriptionView::showDetails( ZyppSel selectable )
 QString
 YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
 {
-    ZyppSelection sel =
-	zypp::dynamic_pointer_cast<const zypp::Selection>( selectable->theObj() );
+    ZyppSelection sel = tryCastToZyppSelection( selectable->theObj() );
 
     if ( ! sel )
 	return YQPkgGenericDetailsView::htmlHeading( selectable );
