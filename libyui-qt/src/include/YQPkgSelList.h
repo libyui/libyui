@@ -74,7 +74,7 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addPkgSelItem( ZyppSel	selectable,
+    void addPkgSelItem( ZyppSel		selectable,
 			ZyppSelection 	selection );
 
     /**
@@ -137,9 +137,9 @@ public:
      * Constructor. Creates a YQPkgSelList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgSelListItem( YQPkgSelList * 		pkgSelList,
-		      ZyppSel	selectable,
-		      ZyppSelection sel );
+    YQPkgSelListItem( YQPkgSelList * 	pkgSelList,
+		      ZyppSel		selectable,
+		      ZyppSelection 	zyppSelection );
 
     /**
      * Destructor
@@ -149,7 +149,7 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    ZyppSelection zyppSel() const { return _zyppSel; }
+    ZyppSelection zyppSelection() const { return _zyppSelection; }
 
     /**
      * Set the selection status.
@@ -184,8 +184,8 @@ protected:
 
     // Data members
 
-    YQPkgSelList	*	_pkgSelList;
-    ZyppSelection	_zyppSel;
+    YQPkgSelList *	_pkgSelList;
+    ZyppSelection	_zyppSelection;
 };
 
 

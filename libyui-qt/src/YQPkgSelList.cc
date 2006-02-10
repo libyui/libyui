@@ -40,8 +40,8 @@ YQPkgSelList::YQPkgSelList( QWidget * parent, bool autoFill )
     addColumn( _( "Selection" ) );	_summaryCol	= numCol++;
     setAllColumnsShowFocus( true );
 
-    connect( this, 	SIGNAL( selectionChanged        ( QListViewItem * ) ),
-	     this, 	SLOT  ( filter()                                    ) );
+    connect( this, SIGNAL( selectionChanged( QListViewItem * )	),
+	     this, SLOT  ( filter()				) );
 
     if ( autoFill )
     {
@@ -72,14 +72,14 @@ YQPkgSelList::fillList()
 
     while ( it != proxy.byKindEnd<zypp::Selection>() )
     {
-	ZyppSelection zyppSel =
+	ZyppSelection zyppSelection =
 	    zypp::dynamic_pointer_cast<const zypp::Selection>( (*it)->theObj() );
 
-	if ( zyppSel )
+	if ( zyppSelection )
 	{
-	    if ( zyppSel->visible() && ! zyppSel->isBase() )
+	    if ( zyppSelection->visible() && ! zyppSelection->isBase() )
 	    {
-		addPkgSelItem( *it, zyppSel );
+		addPkgSelItem( *it, zyppSelection );
 	    }
 	}
 
@@ -106,7 +106,7 @@ YQPkgSelList::filter()
 #ifdef FIXME
     if ( selection() )
     {
-	ZyppSelection sel = selection()->zyppSel();
+	ZyppSelection sel = selection()->zyppSelection();
 
 	if ( sel )
 	{
@@ -119,7 +119,7 @@ YQPkgSelList::filter()
 	{
 #endif
 
-	    
+
 	    zypp::ResPoolProxy proxy( zypp::getZYpp()->poolProxy() );
 	    ZyppPoolIterator it = proxy.byKindBegin<zypp::Package>();
 
@@ -143,8 +143,8 @@ YQPkgSelList::filter()
 
 
 void
-YQPkgSelList::addPkgSelItem( ZyppSel	selectable,
-			     ZyppSelection	zyppSel )
+YQPkgSelList::addPkgSelItem( ZyppSel		selectable,
+			     ZyppSelection	zyppSelection )
 {
     if ( ! selectable )
     {
@@ -152,7 +152,7 @@ YQPkgSelList::addPkgSelItem( ZyppSel	selectable,
 	return;
     }
 
-    new YQPkgSelListItem( this, selectable, zyppSel );
+    new YQPkgSelListItem( this, selectable, zyppSelection );
 }
 
 
@@ -182,20 +182,20 @@ YQPkgSelList::applyChanges()
 
 
 
-YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList * 		pkgSelList,
-				    ZyppSel	selectable,
-				    ZyppSelection 	pkgSel )
-    : YQPkgObjListItem( pkgSelList, selectable, pkgSel )
+YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList *	pkgSelList,
+				    ZyppSel		selectable,
+				    ZyppSelection	zyppSelection )
+    : YQPkgObjListItem( pkgSelList, selectable, zyppSelection )
     , _pkgSelList( pkgSelList )
-    , _zyppSel( pkgSel )
+    , _zyppSelection( zyppSelection )
 {
-    if ( ! _zyppSel )
-	_zyppSel = zypp::dynamic_pointer_cast<const zypp::Selection>( selectable->theObj() );
+    if ( ! _zyppSelection )
+	_zyppSelection = zypp::dynamic_pointer_cast<const zypp::Selection>( selectable->theObj() );
 
 #ifdef FIXME
-    QString text = fromUTF8( _zyppSel->summary( Y2PM::getPreferredLocale() ) );
+    QString text = fromUTF8( _zyppSelection->summary( Y2PM::getPreferredLocale() ) );
 #else
-    QString text = fromUTF8( _zyppSel->summary() );
+    QString text = fromUTF8( _zyppSelection->summary() );
 #endif
 
     // You don't want to know why we need this.
@@ -238,10 +238,10 @@ YQPkgSelListItem::compare( QListViewItem *	otherListViewItem,
 {
     YQPkgSelListItem * other = ( YQPkgSelListItem * ) otherListViewItem;
 
-    if ( ! _zyppSel || ! other || ! other->zyppSel() )
+    if ( ! _zyppSelection || ! other || ! other->zyppSelection() )
 	return 0;
 
-    return _zyppSel->order().compare( other->zyppSel()->order() );
+    return _zyppSelection->order().compare( other->zyppSelection()->order() );
 }
 
 
