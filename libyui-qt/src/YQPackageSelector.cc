@@ -1039,7 +1039,7 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 {
     // Find all matching packages and put them into a QMap
 
-    QMap<QString, Selectable::Ptr> subPkgs;
+    QMap<QString, zypp::ui::Selectable::Ptr> subPkgs;
 
     zypp::ResPoolProxy proxy( zypp::getZYpp()->poolProxy() );
     zypp::ResPoolProxy::const_iterator it = proxy.byKindBegin<zypp::Package>();
@@ -1069,7 +1069,7 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 
 	if ( subPkgs.contains( name + suffix ) )
 	{
-	    Selectable::Ptr subPkg = subPkgs[ name + suffix ];
+	    zypp::ui::Selectable::Ptr subPkg = subPkgs[ name + suffix ];
 	    QString subPkgName;
 
 	    switch ( (*it)->status() )

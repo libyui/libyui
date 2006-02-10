@@ -229,7 +229,7 @@ YQPkgSearchFilterView::filter()
 
 	while ( it != proxy.byKindEnd<zypp::Package>() )
 	{
-	    Selectable::Ptr selectable = *it;
+	    zypp::ui::Selectable::Ptr selectable = *it;
 
 	    bool match =
 		check( selectable, selectable->candidateObj(), regexp ) ||
