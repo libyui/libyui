@@ -174,23 +174,23 @@ YQPkgObjList::statusIcon( ZyppStatus status, bool enabled, bool bySelection )
     {
 	switch ( status )
 	{
-	    case zypp::ui::S_Del:		icon = YQIconPool::pkgDel();		break;
-	    case zypp::ui::S_Install:		icon = YQIconPool::pkgInstall();	break;
-	    case zypp::ui::S_KeepInstalled:	icon = YQIconPool::pkgKeepInstalled();	break;
-	    case zypp::ui::S_NoInst:		icon = YQIconPool::pkgNoInst();		break;
-	    case zypp::ui::S_Protected:		icon = YQIconPool::pkgProtected();	break;
-	    case zypp::ui::S_Taboo:		icon = YQIconPool::pkgTaboo();		break;
-	    case zypp::ui::S_Update:		icon = YQIconPool::pkgUpdate();		break;
+	    case S_Del:		icon = YQIconPool::pkgDel();		break;
+	    case S_Install:		icon = YQIconPool::pkgInstall();	break;
+	    case S_KeepInstalled:	icon = YQIconPool::pkgKeepInstalled();	break;
+	    case S_NoInst:		icon = YQIconPool::pkgNoInst();		break;
+	    case S_Protected:		icon = YQIconPool::pkgProtected();	break;
+	    case S_Taboo:		icon = YQIconPool::pkgTaboo();		break;
+	    case S_Update:		icon = YQIconPool::pkgUpdate();		break;
 
-	    case zypp::ui::S_AutoDel:		icon = bySelection ?
-						    YQIconPool::pkgSelAutoDel() :
-						    YQIconPool::pkgAutoDel();		break;
+	    case S_AutoDel:		icon = bySelection ?
+		 			    YQIconPool::pkgSelAutoDel() :
+		 			    YQIconPool::pkgAutoDel();		break;
 
-	    case zypp::ui::S_AutoInstall:	icon = bySelection ?
-						    YQIconPool::pkgSelAutoInstall() :
-						    YQIconPool::pkgAutoInstall();	break;
+	    case S_AutoInstall:	icon = bySelection ?
+		 			    YQIconPool::pkgSelAutoInstall() :
+		 			    YQIconPool::pkgAutoInstall();	break;
 
-	    case zypp::ui::S_AutoUpdate:	icon = bySelection ?
+	    case S_AutoUpdate:	icon = bySelection ?
 						    YQIconPool::pkgSelAutoUpdate() :
 						    YQIconPool::pkgAutoUpdate();	break;
 
@@ -203,23 +203,23 @@ YQPkgObjList::statusIcon( ZyppStatus status, bool enabled, bool bySelection )
     {
 	switch ( status )
 	{
-	    case zypp::ui::S_Del:		icon = YQIconPool::disabledPkgDel();		break;
-	    case zypp::ui::S_Install:		icon = YQIconPool::disabledPkgInstall();	break;
-	    case zypp::ui::S_KeepInstalled:	icon = YQIconPool::disabledPkgKeepInstalled();	break;
-	    case zypp::ui::S_NoInst:		icon = YQIconPool::disabledPkgNoInst();		break;
-	    case zypp::ui::S_Protected:		icon = YQIconPool::disabledPkgProtected();	break;
-	    case zypp::ui::S_Taboo:		icon = YQIconPool::disabledPkgTaboo();		break;
-	    case zypp::ui::S_Update:		icon = YQIconPool::disabledPkgUpdate();		break;
+	    case S_Del:		icon = YQIconPool::disabledPkgDel();		break;
+	    case S_Install:		icon = YQIconPool::disabledPkgInstall();	break;
+	    case S_KeepInstalled:	icon = YQIconPool::disabledPkgKeepInstalled();	break;
+	    case S_NoInst:		icon = YQIconPool::disabledPkgNoInst();		break;
+	    case S_Protected:		icon = YQIconPool::disabledPkgProtected();	break;
+	    case S_Taboo:		icon = YQIconPool::disabledPkgTaboo();		break;
+	    case S_Update:		icon = YQIconPool::disabledPkgUpdate();		break;
 
-	    case zypp::ui::S_AutoDel:		icon = bySelection ?
-						    YQIconPool::disabledPkgSelAutoDel() :
-						    YQIconPool::disabledPkgAutoDel();		break;
+	    case S_AutoDel:		icon = bySelection ?
+		 			    YQIconPool::disabledPkgSelAutoDel() :
+		 			    YQIconPool::disabledPkgAutoDel();		break;
 
-	    case zypp::ui::S_AutoInstall:	icon = bySelection ?
-						    YQIconPool::disabledPkgSelAutoInstall() :
-						    YQIconPool::disabledPkgAutoInstall();	break;
+	    case S_AutoInstall:	icon = bySelection ?
+		 			    YQIconPool::disabledPkgSelAutoInstall() :
+		 			    YQIconPool::disabledPkgAutoInstall();	break;
 
-	    case zypp::ui::S_AutoUpdate:	icon = bySelection ?
+	    case S_AutoUpdate:	icon = bySelection ?
 						    YQIconPool::disabledPkgSelAutoUpdate() :
 						    YQIconPool::disabledPkgAutoUpdate();	break;
 
