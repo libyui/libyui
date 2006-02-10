@@ -23,9 +23,6 @@
 #define YQPkgYouPatchList_h
 
 #include <YQPkgObjList.h>
-#include <zypp/Patch.h>
-#include <zypp/Package.h>
-#include <zypp/ui/Selectable.h>
 
 
 class QAction;
@@ -72,7 +69,7 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addYouPatchItem( zypp::ui::Selectable::Ptr	selectable,
+    void addYouPatchItem( ZyppSel	selectable,
 			  zypp::Patch::constPtr 	sel );
 
     /**
@@ -162,8 +159,8 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( zypp::ui::Selectable::Ptr	selectable,
-		      zypp::Package::constPtr	pkg );
+    void filterMatch( ZyppSel	selectable,
+		      ZyppPkg	pkg );
 
     /**
      * Emitted during filtering for non-pkg items:
@@ -221,7 +218,7 @@ public:
      * manager object that 'pkg' refers to.
      **/
     YQPkgYouPatchListItem( YQPkgYouPatchList * 		youPatchList,
-			   zypp::ui::Selectable::Ptr	selectable,
+			   ZyppSel	selectable,
 			   zypp::Patch::constPtr 	zyppPatch );
 
     /**
@@ -240,7 +237,7 @@ public:
      * Reimplemented from YQPkgObjListItem:
      * Emit updatePackages signals after changing status.
      **/
-    virtual void setStatus( zypp::ui::Status newStatus );
+    virtual void setStatus( ZyppStatus newStatus );
 
     /**
      * Cycle the package status to the next valid value.

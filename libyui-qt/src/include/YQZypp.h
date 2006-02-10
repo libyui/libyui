@@ -28,6 +28,7 @@
 #include <zypp/Package.h>
 #include <zypp/Selection.h>
 #include <zypp/Pattern.h>
+#include <zypp/Patch.h>
 #include <zypp/ZYppFactory.h>
 #include <zypp/ResPoolProxy.h>
 
@@ -37,11 +38,12 @@
 //
 
 typedef zypp::ui::Status			ZyppStatus;
-typedef zypp::ui::Selectable			ZyppSel;
+typedef zypp::ui::Selectable::Ptr		ZyppSel;
 typedef zypp::ResObject::constPtr		ZyppObj;
 typedef zypp::Package::constPtr			ZyppPkg;
 typedef zypp::Selection::constPtr		ZyppSelection;
 typedef zypp::Pattern::constPtr			ZyppPattern;
+typedef zypp::Patch::constPtr			ZyppPatch;
 
 typedef zypp::ResPoolProxy			ZyppPool;
 typedef zypp::ResPoolProxy::const_iterator	ZyppPoolIterator;
@@ -61,6 +63,9 @@ inline ZyppPoolIterator zyppSelectionsEnd()	{ return zyppEnd<ZyppSelection>();	}
 inline ZyppPoolIterator zyppPatternsBegin()	{ return zyppBegin<ZyppPattern>();	}
 inline ZyppPoolIterator zyppPatternsEnd()	{ return zyppEnd<ZyppPattern>();	}
 
+inline ZyppPoolIterator zyppPatchesBegin()	{ return zyppBegin<ZyppPatch>();	}
+inline ZyppPoolIterator zyppPatchesEnd()	{ return zyppEnd<ZyppPatch>();		}
+
 
 inline ZyppPkg		tryCastToZyppPkg( ZyppObj zyppObj )
 {
@@ -75,6 +80,11 @@ inline ZyppSelection	tryCastToZyppSelection( ZyppObj zyppObj )
 inline ZyppPattern 	tryCastToZyppPattern( ZyppObj zyppObj )
 {
     return zypp::dynamic_pointer_cast<const zypp::Pattern>( zyppObj );
+}
+
+inline ZyppPatch	tryCastToZyppPatch( ZyppObj zyppObj )
+{
+    return zypp::dynamic_pointer_cast<const zypp::Patch>( zyppObj );
 }
 
 

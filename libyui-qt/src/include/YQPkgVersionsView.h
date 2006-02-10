@@ -23,7 +23,7 @@
 #define YQPkgVersionsView_h
 
 #include "QY2ListView.h"
-#include <zypp/ResObject.h>
+#include "YQZypp.h"
 
 
 class QTabWidget;
@@ -77,7 +77,7 @@ public slots:
      * Delayed ( optimized ) display if this is embedded into a QTabWidget
      * parent: In this case, wait until this page becomes visible.
      **/
-    void showDetailsIfVisible( zypp::ui::Selectable::Ptr selectable );
+    void showDetailsIfVisible( ZyppSel selectable );
 
     // slot clear() inherited from QListView
 
@@ -93,7 +93,7 @@ signals:
     /**
      * Emitted when the user changes the
      **/
-    void candidateChanged( zypp::ResObject::constPtr newCandidate );
+    void candidateChanged( ZyppObj newCandidate );
 
 
 protected slots:
@@ -109,21 +109,21 @@ protected:
     /**
      * Show details for the specified package.
      **/
-    void showDetails( zypp::ui::Selectable::Ptr selectable );
+    void showDetails( ZyppSel selectable );
 
 
     // Data members
 
-    QTabWidget	*		_parentTab;
-    zypp::ui::Selectable::Ptr	_selectable;
-    bool			_userCanSwitch;
+    QTabWidget	*	_parentTab;
+    ZyppSel		_selectable;
+    bool		_userCanSwitch;
 
-    int 			_versionCol;
-    int				_instSrcCol;
-    int				_nameCol;
-    int				_summaryCol;
-    int				_statusCol;
-    int				_archCol;
+    int 		_versionCol;
+    int			_instSrcCol;
+    int			_nameCol;
+    int			_summaryCol;
+    int			_statusCol;
+    int			_archCol;
 };
 
 
@@ -135,11 +135,11 @@ public:
      * Constructor. Creates a YQPkgVersion item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgVersion( YQPkgVersionsView *		pkgVersionList,
-		  QY2CheckListItem * 		parent,
-		  zypp::ui::Selectable::Ptr	selectable,
-		  zypp::ResObject::constPtr 	zyppObj,
-		  bool				enabled = true );
+    YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
+		  QY2CheckListItem * 	parent,
+		  ZyppSel		selectable,
+		  ZyppObj 		zyppObj,
+		  bool			enabled = true );
 
     /**
      * Destructor
@@ -149,12 +149,12 @@ public:
     /**
      * Returns the original ZYPP object
      **/
-    zypp::ResObject::constPtr zyppObj() const { return _zyppObj; }
+    ZyppObj zyppObj() const { return _zyppObj; }
 
     /**
      * Returns the original ZYPP selectable
      **/
-    zypp::ui::Selectable::Ptr selectable() const { return _selectable; }
+    ZyppSel selectable() const { return _selectable; }
 
     /**
      * Comparison function used for sorting the list.
@@ -190,9 +190,9 @@ protected:
 
     // Data members
 
-    YQPkgVersionsView *			_pkgVersionList;
-    zypp::ui::Selectable::Ptr		_selectable;
-    zypp::ResObject::constPtr		_zyppObj;
+    YQPkgVersionsView *	_pkgVersionList;
+    ZyppSel		_selectable;
+    ZyppObj		_zyppObj;
 };
 
 

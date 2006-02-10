@@ -27,8 +27,6 @@
 #include <qsplitter.h>
 #include <qtabwidget.h>
 
-#include "YQZypp.h"
-#include <zypp/ResPoolProxy.h>
 #include <y2util/FSize.h>
 
 #include "YQPkgYouPatchFilterView.h"
@@ -103,8 +101,8 @@ YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
     _totalDownloadSize->setMidLineWidth(2);
 
 
-    connect( _youPatchList,	SIGNAL( selectionChanged    ( zypp::ui::Selectable::Ptr ) ),
-	     _descriptionView,	SLOT  ( showDetailsIfVisible( zypp::ui::Selectable::Ptr ) ) );
+    connect( _youPatchList,	SIGNAL( selectionChanged    ( ZyppSel ) ),
+	     _descriptionView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
     connect( _youPatchList,	SIGNAL( statusChanged() 		),
 	     this,		SLOT  ( updateTotalDownloadSize() 	) );

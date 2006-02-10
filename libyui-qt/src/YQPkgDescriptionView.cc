@@ -43,7 +43,7 @@ YQPkgDescriptionView::~YQPkgDescriptionView()
 
 
 void
-YQPkgDescriptionView::showDetails( zypp::ui::Selectable::Ptr selectable )
+YQPkgDescriptionView::showDetails( ZyppSel selectable )
 {
     _selectable = selectable;
     

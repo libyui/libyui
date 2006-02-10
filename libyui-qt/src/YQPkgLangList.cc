@@ -22,8 +22,7 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 #include <qregexp.h>
-#include "YQZypp.h"
-#include <zypp/ResPoolProxy.h>
+
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgLangList.h"
@@ -121,7 +120,7 @@ YQPkgLangList::filter()
 
 
 void
-YQPkgLangList::addLangItem( zypp::ui::Selectable::Ptr	selectable,
+YQPkgLangList::addLangItem( ZyppSel	selectable,
 			    PMLanguagePtr 		pmLang )
 {
     if ( ! selectable )
@@ -151,7 +150,7 @@ YQPkgLangList::selection() const
 
 
 YQPkgLangListItem::YQPkgLangListItem( YQPkgLangList * 		langList,
-				      zypp::ui::Selectable::Ptr	selectable,
+				      ZyppSel	selectable,
 				      PMLanguagePtr 		lang )
     : YQPkgObjListItem( langList, selectable, lang )
     , _langList( langList )
@@ -168,7 +167,7 @@ YQPkgLangListItem::~YQPkgLangListItem()
 
 
 void
-YQPkgLangListItem::setStatus( zypp::ui::Status newStatus )
+YQPkgLangListItem::setStatus( ZyppStatus newStatus )
 {
     YQPkgObjListItem::setStatus( newStatus );
     _langList->sendUpdatePackages();

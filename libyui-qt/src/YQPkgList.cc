@@ -27,7 +27,6 @@
 #include <qpopupmenu.h>
 #include <qmessagebox.h>
 
-#include "YQZypp.h"
 #include "utf8.h"
 
 #include "YQPkgList.h"
@@ -87,23 +86,23 @@ YQPkgList::~YQPkgList()
 }
 
 
-void YQPkgList::addPkgItem( zypp::ui::Selectable::Ptr	selectable,
-			    zypp::Package::constPtr	zyppPkg )
+void YQPkgList::addPkgItem( ZyppSel	selectable,
+			    ZyppPkg	zyppPkg )
 {
     addPkgItem( selectable, zyppPkg, false );
 }
 
 
-void YQPkgList::addPkgItemDimmed( zypp::ui::Selectable::Ptr	selectable,
-				  zypp::Package::constPtr 	zyppPkg )
+void YQPkgList::addPkgItemDimmed( ZyppSel	selectable,
+				  ZyppPkg 	zyppPkg )
 {
     addPkgItem( selectable, zyppPkg, true );
 }
 
 
 void
-YQPkgList::addPkgItem( zypp::ui::Selectable::Ptr	selectable,
-		       zypp::Package::constPtr 		zyppPkg,
+YQPkgList::addPkgItem( ZyppSel	selectable,
+		       ZyppPkg 		zyppPkg,
 		       bool 				dimmed )
 {
     if ( ! selectable )
@@ -415,8 +414,8 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
 
 
 YQPkgListItem::YQPkgListItem( YQPkgList * 		pkgList,
-			      zypp::ui::Selectable::Ptr	selectable,
-			      zypp::Package::constPtr 	zyppPkg )
+			      ZyppSel	selectable,
+			      ZyppPkg 	zyppPkg )
     : YQPkgObjListItem( pkgList, selectable, zyppPkg )
     , _pkgList( pkgList )
     , _zyppPkg( zyppPkg )

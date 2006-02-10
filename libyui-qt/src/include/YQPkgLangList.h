@@ -23,7 +23,6 @@
 #define YQPkgLangList_h
 
 #include <YQPkgObjList.h>
-#include <zypp/ui/Selectable.h>
 
 
 class YQPkgLangListItem;
@@ -71,7 +70,7 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addLangItem( zypp::ui::Selectable::Ptr	selectable,
+    void addLangItem( ZyppSel	selectable,
 		      PMLanguagePtr 		lang );
 
     /**
@@ -105,8 +104,8 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( zypp::ui::Selectable::Ptr	selectable,
-		      zypp::Package::constPtr	pkg );
+    void filterMatch( ZyppSel	selectable,
+		      ZyppPkg	pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -133,7 +132,7 @@ public:
      * manager object that 'pkg' refers to.
      **/
     YQPkgLangListItem( YQPkgLangList *			pkgSelList,
-		       zypp::ui::Selectable::Ptr	selectable,
+		       ZyppSel	selectable,
 		       PMLanguagePtr			lang );
 
     /**
@@ -153,7 +152,7 @@ public:
      * Activate selections and emit updatePackages signal for each
      * status change.
      **/
-    virtual void setStatus( zypp::ui::Status newStatus );
+    virtual void setStatus( ZyppStatus newStatus );
 
 
     // Columns

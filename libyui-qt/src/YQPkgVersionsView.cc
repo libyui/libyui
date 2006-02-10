@@ -24,9 +24,6 @@
 #include <qregexp.h>
 #include <qheader.h>
 
-#include <zypp/ui/Selectable.h>
-#include <zypp/ResObject.h>
-
 #include "YQPkgVersionsView.h"
 #include "YQIconPool.h"
 #include "YQi18n.h"
@@ -82,7 +79,7 @@ YQPkgVersionsView::reload( QWidget * newCurrent )
 
 
 void
-YQPkgVersionsView::showDetailsIfVisible( zypp::ui::Selectable::Ptr selectable )
+YQPkgVersionsView::showDetailsIfVisible( ZyppSel selectable )
 {
     _selectable = selectable;
 
@@ -101,7 +98,7 @@ YQPkgVersionsView::showDetailsIfVisible( zypp::ui::Selectable::Ptr selectable )
 
 
 void
-YQPkgVersionsView::showDetails( zypp::ui::Selectable::Ptr selectable )
+YQPkgVersionsView::showDetails( ZyppSel selectable )
 {
     _selectable = selectable;
     clear();
@@ -160,7 +157,7 @@ YQPkgVersionsView::checkForChangedCandidate()
 
 	if ( versionItem && versionItem->isOn() )
 	{
-	    zypp::ResObject::constPtr newCandidate = versionItem->zyppObj();
+	    ZyppObj newCandidate = versionItem->zyppObj();
 
 	    if ( newCandidate != _selectable->candidateObj() )
 	    {
@@ -191,8 +188,8 @@ YQPkgVersionsView::minimumSizeHint() const
 
 YQPkgVersion::YQPkgVersion( YQPkgVersionsView *		pkgVersionList,
 			    QY2CheckListItem * 		parent,
-			    zypp::ui::Selectable::Ptr	selectable,
-			    zypp::ResObject::constPtr 	zyppObj,
+			    ZyppSel	selectable,
+			    ZyppObj 	zyppObj,
 			    bool			enabled )
     : QY2CheckListItem( parent, "",
 			enabled ?

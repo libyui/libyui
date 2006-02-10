@@ -22,9 +22,9 @@
 #ifndef YQPkgSearchFilterView_h
 #define YQPkgSearchFilterView_h
 
+#include "YQZypp.h"
 #include <qvbox.h>
 #include <qregexp.h>
-#include <zypp/Package.h>
 
 
 class QComboBox;
@@ -65,8 +65,8 @@ public:
      * Check one ResObject against the currently selected values.
      * Returns true if the package matches, false if not.
      **/
-    bool check( zypp::ui::Selectable::Ptr	selectable,
-		zypp::ResObject::constPtr 	zyppObj );
+    bool check( ZyppSel	selectable,
+		ZyppObj 	zyppObj );
 
 
 public slots:
@@ -102,8 +102,8 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( zypp::ui::Selectable::Ptr	selectable,
-		      zypp::Package::constPtr	pkg );
+    void filterMatch( ZyppSel	selectable,
+		      ZyppPkg	pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -132,8 +132,8 @@ protected:
     /**
      * Check if pkg matches the search criteria.
      **/
-    bool check( zypp::ui::Selectable::Ptr	selectable,
-		zypp::ResObject::constPtr 	zyppObj,
+    bool check( ZyppSel	selectable,
+		ZyppObj 	zyppObj,
 		const QRegExp & 		regexp );
 
     /**

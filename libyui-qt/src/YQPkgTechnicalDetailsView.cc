@@ -21,9 +21,6 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include "YQZypp.h"
-#include <zypp/ResPoolProxy.h>
-
 #include "YQPkgTechnicalDetailsView.h"
 #include "YQi18n.h"
 #include "utf8.h"
@@ -46,7 +43,7 @@ YQPkgTechnicalDetailsView::~YQPkgTechnicalDetailsView()
 
 
 void
-YQPkgTechnicalDetailsView::showDetails( zypp::ui::Selectable::Ptr selectable )
+YQPkgTechnicalDetailsView::showDetails( ZyppSel selectable )
 {
     _selectable = selectable;
 
@@ -58,8 +55,8 @@ YQPkgTechnicalDetailsView::showDetails( zypp::ui::Selectable::Ptr selectable )
 
     QString html_text = htmlHeading( selectable );
 
-    zypp::Package::constPtr candidate = zypp::dynamic_pointer_cast<const zypp::Package> ( selectable->candidateObj() );
-    zypp::Package::constPtr installed = zypp::dynamic_pointer_cast<const zypp::Package> ( selectable->installedObj() );
+    ZyppPkg candidate = zypp::dynamic_pointer_cast<const zypp::Package> ( selectable->candidateObj() );
+    ZyppPkg installed = zypp::dynamic_pointer_cast<const zypp::Package> ( selectable->installedObj() );
 
     if ( candidate && installed && candidate != installed )
     {
@@ -80,7 +77,7 @@ YQPkgTechnicalDetailsView::showDetails( zypp::ui::Selectable::Ptr selectable )
 
 
 QString
-YQPkgTechnicalDetailsView::authorsListCell( zypp::Package::constPtr pkg ) const
+YQPkgTechnicalDetailsView::authorsListCell( ZyppPkg pkg ) const
 {
     QString html = "<td align=top>";
     QString line;
@@ -102,7 +99,7 @@ YQPkgTechnicalDetailsView::authorsListCell( zypp::Package::constPtr pkg ) const
 
 
 QString
-YQPkgTechnicalDetailsView::formatRpmGroup( zypp::Package::constPtr pkg ) const
+YQPkgTechnicalDetailsView::formatRpmGroup( ZyppPkg pkg ) const
 {
 #ifdef FIXME
     string group = Y2PM::packageManager().translatedRpmGroup( pkg->group_ptr() );
@@ -114,8 +111,8 @@ YQPkgTechnicalDetailsView::formatRpmGroup( zypp::Package::constPtr pkg ) const
 
 
 QString
-YQPkgTechnicalDetailsView::simpleTable( zypp::ui::Selectable::Ptr	selectable,
-					zypp::Package::constPtr 	pkg )
+YQPkgTechnicalDetailsView::simpleTable( ZyppSel	selectable,
+					ZyppPkg 	pkg )
 {
     QString html = "<br>" +
 	table(
@@ -153,12 +150,12 @@ YQPkgTechnicalDetailsView::simpleTable( zypp::ui::Selectable::Ptr	selectable,
 
 
 QString
-YQPkgTechnicalDetailsView::complexTable( zypp::ui::Selectable::Ptr	selectable,
-					 zypp::Package::constPtr 	installed,
-					 zypp::Package::constPtr 	candidate )
+YQPkgTechnicalDetailsView::complexTable( ZyppSel	selectable,
+					 ZyppPkg 	installed,
+					 ZyppPkg 	candidate )
 {
-    zypp::Package::constPtr p1 = candidate;
-    zypp::Package::constPtr p2 = installed;
+    ZyppPkg p1 = candidate;
+    ZyppPkg p2 = installed;
 
     QString p1_header = _( "<b>Alternate Version</b>" );
     QString p2_header = _( "<b>Installed Version</b>" );

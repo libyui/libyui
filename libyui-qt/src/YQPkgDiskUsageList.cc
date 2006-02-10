@@ -25,10 +25,7 @@
 #include <qheader.h>
 #include <qstyle.h>
 
-#include "YQZypp.h"
-#include <zypp/ResPoolProxy.h>
 #include "utf8.h"
-
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQi18n.h"
@@ -266,6 +263,8 @@ YQPkgDiskUsageListItem::name() const
 {
 #ifdef FIXME
     return fromUTF8( _duData.mountpoint().c_str() );
+#else
+    return QString();
 #endif
 }
 

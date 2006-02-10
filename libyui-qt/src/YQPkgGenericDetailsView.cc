@@ -61,7 +61,7 @@ YQPkgGenericDetailsView::reload( QWidget * newCurrent )
 
 
 void
-YQPkgGenericDetailsView::showDetailsIfVisible( zypp::ui::Selectable::Ptr selectable )
+YQPkgGenericDetailsView::showDetailsIfVisible( ZyppSel selectable )
 {
     _selectable = selectable;
 
@@ -87,12 +87,12 @@ YQPkgGenericDetailsView::minimumSizeHint() const
 
 
 QString
-YQPkgGenericDetailsView::htmlHeading( zypp::ui::Selectable::Ptr selectable )
+YQPkgGenericDetailsView::htmlHeading( ZyppSel selectable )
 {
     if ( ! selectable )
 	return "";
     
-    zypp::ResObject::constPtr zyppObj = selectable->theObj();
+    ZyppObj zyppObj = selectable->theObj();
 
     if ( ! zyppObj )
 	return "";

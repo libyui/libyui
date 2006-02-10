@@ -20,9 +20,6 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include "YQZypp.h"
-#include <zypp/ResPoolProxy.h>
-
 #include "YQPkgLangFilterView.h"
 #include "YQPkgLangList.h"
 #include "YQi18n.h"

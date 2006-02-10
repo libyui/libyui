@@ -22,7 +22,7 @@
 #ifndef YQPkgDependenciesView_h
 #define YQPkgDependenciesView_h
 
-#include <zypp/Package.h>
+#include "YQZypp.h"
 #include "YQPkgGenericDetailsView.h"
 
 using std::string;
@@ -58,13 +58,13 @@ protected:
      * In this case technical data, very much like "rpm -qi".
      * Overwritten from YQPkgGenericDetailsView.
      **/
-    virtual void showDetails( zypp::ui::Selectable::Ptr selectable );
+    virtual void showDetails( ZyppSel selectable );
 
     /**
      * Returns a string containing a HTML table for technical details for one
      * package.
      **/
-    QString simpleTable( zypp::Package::constPtr pkg );
+    QString simpleTable( ZyppPkg pkg );
 
 
     /**
@@ -72,8 +72,8 @@ protected:
      * package instances: The installed instance and an alternate instance.
      * ( usually the candidate instance ).
      **/
-    QString complexTable( zypp::Package::constPtr installedPkg,
-			  zypp::Package::constPtr candidatePkg );
+    QString complexTable( ZyppPkg installedPkg,
+			  ZyppPkg candidatePkg );
 
     /**
      * Make a HTML table cell from a PkgRelList.

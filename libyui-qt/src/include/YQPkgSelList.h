@@ -23,8 +23,6 @@
 #define YQPkgSelList_h
 
 #include <YQPkgObjList.h>
-#include <zypp/Selection.h>
-#include <zypp/Package.h>
 
 
 class YQPkgSelListItem;
@@ -76,8 +74,8 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addPkgSelItem( zypp::ui::Selectable::Ptr	selectable,
-			zypp::Selection::constPtr 	selection );
+    void addPkgSelItem( ZyppSel	selectable,
+			ZyppSelection 	selection );
 
     /**
      * Emit an updatePackages() signal.
@@ -120,8 +118,8 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( zypp::ui::Selectable::Ptr	selectable,
-		      zypp::Package::constPtr	pkg );
+    void filterMatch( ZyppSel	selectable,
+		      ZyppPkg	pkg );
 
     /**
      * Emitted when filtering is finished.
@@ -140,8 +138,8 @@ public:
      * manager object that 'pkg' refers to.
      **/
     YQPkgSelListItem( YQPkgSelList * 		pkgSelList,
-		      zypp::ui::Selectable::Ptr	selectable,
-		      zypp::Selection::constPtr sel );
+		      ZyppSel	selectable,
+		      ZyppSelection sel );
 
     /**
      * Destructor
@@ -151,7 +149,7 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    zypp::Selection::constPtr zyppSel() const { return _zyppSel; }
+    ZyppSelection zyppSel() const { return _zyppSel; }
 
     /**
      * Set the selection status.
@@ -160,7 +158,7 @@ public:
      * Activate selections and emit updatePackages signal for each
      * status change.
      **/
-    virtual void setStatus( zypp::ui::Status newStatus );
+    virtual void setStatus( ZyppStatus newStatus );
 
     /**
      * Comparison function used for sorting the list.
@@ -187,7 +185,7 @@ protected:
     // Data members
 
     YQPkgSelList	*	_pkgSelList;
-    zypp::Selection::constPtr	_zyppSel;
+    ZyppSelection	_zyppSel;
 };
 
 

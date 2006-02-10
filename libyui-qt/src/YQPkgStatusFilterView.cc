@@ -27,12 +27,6 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include "YQZypp.h"
-#include <zypp/ZYppFactory.h>
-#include <zypp/ResPoolProxy.h>
-#include <zypp/ResObject.h>
-#include <zypp/Package.h>
-
 #include "YQPkgStatusFilterView.h"
 #include "YQIconPool.h"
 #include "YQi18n.h"
@@ -157,11 +151,11 @@ YQPkgStatusFilterView::filter()
     emit filterStart();
 
     zypp::ResPoolProxy proxy( zypp::getZYpp()->poolProxy() );
-    zypp::ResPoolProxy::const_iterator it = proxy.byKindBegin<zypp::Package>();
+    ZyppPoolIterator it = proxy.byKindBegin<zypp::Package>();
 
     while ( it != proxy.byKindEnd<zypp::Package>() )
     {
-	zypp::ui::Selectable::Ptr selectable = *it;
+	ZyppSel selectable = *it;
 
 	bool match =
 	    check( selectable, selectable->candidateObj() ) ||
@@ -183,8 +177,8 @@ YQPkgStatusFilterView::filter()
 
 
 bool
-YQPkgStatusFilterView::check( zypp::ui::Selectable::Ptr	selectable,
-			      zypp::ResObject::constPtr	zyppObj )
+YQPkgStatusFilterView::check( ZyppSel	selectable,
+			      ZyppObj	zyppObj )
 {
     bool match = false;
 
@@ -210,7 +204,7 @@ YQPkgStatusFilterView::check( zypp::ui::Selectable::Ptr	selectable,
 
     if ( match )
     {
-	zypp::Package::constPtr zyppPkg = zypp::dynamic_pointer_cast<const zypp::Package>( zyppObj );
+	ZyppPkg zyppPkg = zypp::dynamic_pointer_cast<const zypp::Package>( zyppObj );
 
 	if ( zyppPkg )
 	    emit filterMatch( selectable, zyppPkg );

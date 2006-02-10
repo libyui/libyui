@@ -22,8 +22,6 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include <unistd.h>
-#include "YQZypp.h"
 #include <zypp/ZYppFactory.h>
 #include <zypp/Resolver.h>
 

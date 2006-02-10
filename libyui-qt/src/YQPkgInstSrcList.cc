@@ -21,8 +21,6 @@
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
-#include "YQZypp.h"
-#include <zypp/ui/Selectable.h>
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgInstSrcList.h"
@@ -125,8 +123,8 @@ YQPkgInstSrcList::filter()
 	    {
 #ifdef FIXME
 		InstSrcManager::ISrcId instSrc = instSrcItem->instSrcId();
-		const list<zypp::Package::constPtr> &packages = instSrc->data()->getPackages();
-		list<zypp::Package::constPtr>::const_iterator pkg_it = packages.begin();
+		const list<ZyppPkg> &packages = instSrc->data()->getPackages();
+		list<ZyppPkg>::const_iterator pkg_it = packages.begin();
 
 		while ( pkg_it != packages.end() )
 		{

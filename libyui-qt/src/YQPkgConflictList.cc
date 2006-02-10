@@ -29,12 +29,8 @@
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
-#include "YQZypp.h"
-#include <zypp/ZYppFactory.h>
-#include <zypp/Resolver.h>
-#include <zypp/ResolverProblem.h>
-#include <zypp/ProblemSolution.h>
 
+#include <zypp/ZYppFactory.h>
 #include "YQPkgConflictList.h"
 #include "YQPkgConflictDialog.h"
 #include "YQIconPool.h"

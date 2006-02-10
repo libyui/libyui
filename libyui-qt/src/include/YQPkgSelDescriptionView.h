@@ -50,14 +50,14 @@ public:
      * In this case the package description.
      * Overwritten from YQPkgGenericDetailsView.
      **/
-    virtual void showDetails( zypp::ui::Selectable::Ptr selectable );
+    virtual void showDetails( ZyppSel selectable );
 
 protected:
 
     /**
      * Format the heading in HTML
      **/
-    QString htmlHeading( zypp::ui::Selectable::Ptr selectable );
+    QString htmlHeading( ZyppSel selectable );
 };
 
 

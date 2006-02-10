@@ -24,9 +24,7 @@
 
 #include <qpixmap.h>
 #include <QY2ListView.h>
-#include <zypp/ResObject.h>
-#include <zypp/ui/Selectable.h>
-#include <zypp/ui/Status.h>
+#include "YQZypp.h"
 #include <zypp/Edition.h>
 #include <y2util/FSize.h>
 
@@ -84,7 +82,7 @@ public:
      * Sets the currently selected item's status.
      * Automatically selects the next item if 'selectNextItem' is 'true'.
      **/
-    void setCurrentStatus( zypp::ui::Status	newStatus,
+    void setCurrentStatus( ZyppStatus	newStatus,
 			   bool			selectNextItem = false );
 
     /**
@@ -94,7 +92,7 @@ public:
      * 'force' overrides sensible defaults like setting only zypp::ResObjects to
      * 'update' that really come with a newer version.
      **/
-    void setAllItemStatus( zypp::ui::Status newStatus, bool force = false );
+    void setAllItemStatus( ZyppStatus newStatus, bool force = false );
 
     /**
      * Add a submenu "All in this list..." to 'menu'.
@@ -108,14 +106,14 @@ public:
      * 'bySelection' is relevant only for auto-states: This uses the icon for
      * 'auto-by-selection" rather than the default auto-icon.
      **/
-    virtual QPixmap statusIcon( zypp::ui::Status status,
+    virtual QPixmap statusIcon( ZyppStatus status,
 				bool 		enabled     = true,
 				bool		bySelection = false );
 
     /**
      * Returns a short ( one line ) descriptive text for a zypp::ResObject status.
      **/
-    virtual QString statusText( zypp::ui::Status status ) const;
+    virtual QString statusText( ZyppStatus status ) const;
 
 
 public slots:
@@ -132,8 +130,8 @@ public slots:
      * this method with overlaid methods of the same name that were simply
      * forgotten to implement!
      **/
-    void addPkgObjItem( zypp::ui::Selectable::Ptr	selectable,
-			zypp::ResObject::constPtr 	zyppObj = 0 );
+    void addPkgObjItem( ZyppSel	selectable,
+			ZyppObj 	zyppObj = 0 );
 
     /**
      * Add a purely passive list item that has a name and optional summary and
@@ -222,7 +220,7 @@ signals:
      * Emitted when a zypp::ui::Selectable is selected.
      * May be called with a null poiner if no zypp::ResObject is selected.
      **/
-    void selectionChanged( zypp::ui::Selectable::Ptr selectable );
+    void selectionChanged( ZyppSel selectable );
 
     /**
      * Emitted when the status of a zypp::ResObject is changed.
@@ -273,7 +271,7 @@ protected:
      * corresponding status icons ( both sensitive and insensitive ) and text.
      * 'key' is only a descriptive text, no true accelerator.
      **/
-    QAction * createAction( zypp::ui::Status 	status,
+    QAction * createAction( ZyppStatus 	status,
 			    const QString &	key	= QString::null,
 			    bool 		enabled = false );
 
@@ -335,8 +333,8 @@ public:
      * If it is 0, selectable->theObject() will be used.
      **/
     YQPkgObjListItem( YQPkgObjList *		pkgObjList,
-		      zypp::ui::Selectable::Ptr selectable,
-		      zypp::ResObject::constPtr	zyppObj = 0 );
+		      ZyppSel selectable,
+		      ZyppObj	zyppObj = 0 );
 
     /**
      * Destructor
@@ -346,12 +344,12 @@ public:
     /**
      * Returns the original selectable within the package manager backend.
      **/
-    zypp::ui::Selectable::Ptr selectable() const { return _selectable; }
+    ZyppSel selectable() const { return _selectable; }
 
     /**
      * Returns the original object within the package manager backend.
      **/
-    zypp::ResObject::constPtr zyppObj() const { return _zyppObj; }
+    ZyppObj zyppObj() const { return _zyppObj; }
 
     /**
      * Return whether or not this items is editable, i.e. the user can change
@@ -368,7 +366,7 @@ public:
     /**
      * Returns the (binary RPM) package status
      **/
-    zypp::ui::Status status() const;
+    ZyppStatus status() const;
 
     /**
      * Returns 'true' if this selectable's status is set by a selection
@@ -379,7 +377,7 @@ public:
     /**
      * Set the ( binary RPM ) package status
      **/
-    virtual void setStatus( zypp::ui::Status newStatus );
+    virtual void setStatus( ZyppStatus newStatus );
 
     /**
      * Update this item's status.
@@ -430,7 +428,7 @@ public:
      * Display this item's notify text (if there is any) that corresponds to
      * the specified status (S_Install, S_Del) in a pop-up window.
      **/
-    void showNotifyTexts( zypp::ui::Status status );
+    void showNotifyTexts( ZyppStatus status );
 
     /**
      * Display this item's license agreement (if there is any) that corresponds to
@@ -440,7 +438,7 @@ public:
      * The item's status may have changed to S_Taboo, S_Proteced or S_Del if
      * the user disagreed with the license.
      **/
-    bool showLicenseAgreement( zypp::ui::Status status );
+    bool showLicenseAgreement( ZyppStatus status );
 
     /**
      * Comparison function used for sorting the list.
@@ -502,8 +500,8 @@ protected:
     // Data members
 
     YQPkgObjList *		_pkgObjList;
-    zypp::ui::Selectable::Ptr	_selectable;
-    zypp::ResObject::constPtr	_zyppObj;
+    ZyppSel	_selectable;
+    ZyppObj	_zyppObj;
     bool			_editable;
     bool			_candidateIsNewer;
     bool			_installedIsNewer;

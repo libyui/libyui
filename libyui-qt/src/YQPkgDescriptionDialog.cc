@@ -31,8 +31,6 @@
 #include <qstyle.h>
 #include <qvaluelist.h>
 
-#include "YQZypp.h"
-#include <zypp/ResPoolProxy.h>
 #include "YQPkgDescriptionDialog.h"
 #include "YQPkgDescriptionView.h"
 #include "YQPkgList.h"
@@ -81,8 +79,8 @@ YQPkgDescriptionDialog::YQPkgDescriptionDialog( QWidget * parent, const QString 
     CHECK_PTR( _pkgDescription );
     _pkgDescription->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _pkgList,		SIGNAL( selectionChanged    ( zypp::ui::Selectable::Ptr ) ),
-	     _pkgDescription,	SLOT  ( showDetailsIfVisible( zypp::ui::Selectable::Ptr ) ) );
+    connect( _pkgList,		SIGNAL( selectionChanged    ( ZyppSel ) ),
+	     _pkgDescription,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
 
     // Button box (to center the single button)
@@ -129,7 +127,7 @@ YQPkgDescriptionDialog::filter( const QString & qPkgName )
     while ( it != Y2PM::packageManager().end() )
     {
 	Selectable::Ptr selectable = *it;
-	zypp::ResObject::constPtr zyppObj = selectable->theObj();
+	ZyppObj zyppObj = selectable->theObj();
 
 	if ( zyppObj && zyppObj->name() == pkgName )
 	    _pkgList->addPkgItem( selectable, zyppObj );

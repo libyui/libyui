@@ -22,8 +22,8 @@
 #ifndef YQPkgInstSrcList_h
 #define YQPkgInstSrcList_h
 
+#include "YQZypp.h"
 #include <QY2ListView.h>
-#include <zypp/Package.h>
 
 
 class YQPkgInstSrcListItem;
@@ -97,15 +97,15 @@ signals:
      * Emitted during filtering for each pkg that matches the filter
      * and the candidate package comes from the respective source
      **/
-    void filterMatch( zypp::ui::Selectable::Ptr	selectable,
-		      zypp::Package::constPtr	pkg );
+    void filterMatch( ZyppSel	selectable,
+		      ZyppPkg	pkg );
 
     /**
      * Emitted during filtering for each pkg that matches the filter
      * and the candidate package does not come from the respective source
      **/
-    void filterNearMatch( zypp::ui::Selectable::Ptr	selectable,
-			  zypp::Package::constPtr	pkg );
+    void filterNearMatch( ZyppSel	selectable,
+			  ZyppPkg	pkg );
 
     /**
      * Emitted when filtering is finished.

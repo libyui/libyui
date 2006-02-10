@@ -25,9 +25,6 @@
 #include <qpopupmenu.h>
 #include <qaction.h>
 
-#include "YQZypp.h"
-#include <zypp/ResPoolProxy.h>
-
 #include "YQi18n.h"
 #include "utf8.h"
 
@@ -88,7 +85,7 @@ YQPkgYouPatchList::fillList()
     while ( it != Y2PM::youPatchManager().end() )
     {
 	zypp::Patch::constPtr	patch  = ( *it)->theObj();
-	zypp::ui::Status	status =( *it)->status();
+	ZyppStatus	status =( *it)->status();
 
 	if ( patch )
 	{
@@ -169,8 +166,8 @@ YQPkgYouPatchList::filter()
 	    // Add all packages
 	    //
 
-	    list<zypp::Package::constPtr> pkgList = patch->packages();
-	    list<zypp::Package::constPtr>::const_iterator it = pkgList.begin();
+	    list<ZyppPkg> pkgList = patch->packages();
+	    list<ZyppPkg>::const_iterator it = pkgList.begin();
 
 	    while ( it != pkgList.end() )
 	    {
@@ -212,7 +209,7 @@ YQPkgYouPatchList::filter()
 
 
 void
-YQPkgYouPatchList::addYouPatchItem( zypp::ui::Selectable::Ptr	selectable,
+YQPkgYouPatchList::addYouPatchItem( ZyppSel	selectable,
 				    zypp::Patch::constPtr 	zyppPatch )
 {
     if ( ! selectable )
@@ -331,7 +328,7 @@ YQPkgYouPatchList::keyPressEvent( QKeyEvent * event )
 
 
 YQPkgYouPatchListItem::YQPkgYouPatchListItem( YQPkgYouPatchList * 	youPatchList,
-					      zypp::ui::Selectable::Ptr	selectable,					      
+					      ZyppSel	selectable,					      
 					      zypp::Patch::constPtr 	zyppPatch )
     : YQPkgObjListItem( youPatchList, selectable, zyppPatch )
     , _youPatchList( youPatchList )
@@ -364,7 +361,7 @@ YQPkgYouPatchListItem::~YQPkgYouPatchListItem()
 
 
 void
-YQPkgYouPatchListItem::setStatus( zypp::ui::Status newStatus )
+YQPkgYouPatchListItem::setStatus( ZyppStatus newStatus )
 {
     YQPkgObjListItem::setStatus( newStatus );
 #ifdef FIXME

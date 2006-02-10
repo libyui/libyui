@@ -21,9 +21,6 @@
 
 #include "qregexp.h"
 
-#include "YQZypp.h"
-#include <zypp/Selection.h>
-
 #include "YQPkgSelDescriptionView.h"
 #include "YQUI.h"
 #include "YQi18n.h"
@@ -46,7 +43,7 @@ YQPkgSelDescriptionView::~YQPkgSelDescriptionView()
 
 
 void
-YQPkgSelDescriptionView::showDetails( zypp::ui::Selectable::Ptr selectable )
+YQPkgSelDescriptionView::showDetails( ZyppSel selectable )
 {
     _selectable = selectable;
     
@@ -73,9 +70,9 @@ YQPkgSelDescriptionView::showDetails( zypp::ui::Selectable::Ptr selectable )
 
 
 QString
-YQPkgSelDescriptionView::htmlHeading( zypp::ui::Selectable::Ptr selectable )
+YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
 {
-    zypp::Selection::constPtr sel =
+    ZyppSelection sel =
 	zypp::dynamic_pointer_cast<const zypp::Selection>( selectable->theObj() );
 
     if ( ! sel )

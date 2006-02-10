@@ -22,9 +22,6 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include "YQZypp.h"
-#include <zypp/ResPoolProxy.h>
-
 #include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQi18n.h"
 #include "utf8.h"
@@ -142,8 +139,8 @@ YQPkgRpmGroupTagsFilterView::filter()
 
 
 bool
-YQPkgRpmGroupTagsFilterView::check( zypp::ui::Selectable::Ptr	selectable,
-				    zypp::Package::constPtr	pkg )
+YQPkgRpmGroupTagsFilterView::check( ZyppSel	selectable,
+				    ZyppPkg	pkg )
 {
     if ( ! pkg || ! selection() )
 	return false;

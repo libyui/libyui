@@ -25,13 +25,10 @@
 #include <qpopupmenu.h>
 #include <qaction.h>
 
-#include "YQZypp.h"
-
 #ifdef FIXME
 #include <y2pm/InstTarget.h>
 #endif
 
-#include <zypp/Package.h>
 #include "utf8.h"
 
 #include "YQPkgObjList.h"
@@ -81,7 +78,7 @@ YQPkgObjList::~YQPkgObjList()
 
 
 void
-YQPkgObjList::addPkgObjItem( zypp::ui::Selectable::Ptr selectable, zypp::ResObject::constPtr zyppObj )
+YQPkgObjList::addPkgObjItem( ZyppSel selectable, ZyppObj zyppObj )
 {
     if ( ! selectable )
     {
@@ -156,20 +153,20 @@ YQPkgObjList::selectionChangedInternal( QListViewItem * listViewItem )
 {
     YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (listViewItem);
 
-    emit selectionChanged( item ? item->selectable() : zypp::ui::Selectable::Ptr() );
+    emit selectionChanged( item ? item->selectable() : ZyppSel() );
 }
 
 
 void
 YQPkgObjList::clear()
 {
-    emit selectionChanged( zypp::ui::Selectable::Ptr() );
+    emit selectionChanged( ZyppSel() );
     QY2ListView::clear();
 }
 
 
 QPixmap
-YQPkgObjList::statusIcon( zypp::ui::Status status, bool enabled, bool bySelection )
+YQPkgObjList::statusIcon( ZyppStatus status, bool enabled, bool bySelection )
 {
     QPixmap icon = YQIconPool::pkgNoInst();
 
@@ -236,7 +233,7 @@ YQPkgObjList::statusIcon( zypp::ui::Status status, bool enabled, bool bySelectio
 
 
 QString
-YQPkgObjList::statusText( zypp::ui::Status status ) const
+YQPkgObjList::statusText( ZyppStatus status ) const
 {
     switch ( status )
     {
@@ -257,7 +254,7 @@ YQPkgObjList::statusText( zypp::ui::Status status ) const
 
 
 void
-YQPkgObjList::setCurrentStatus( zypp::ui::Status	newStatus,
+YQPkgObjList::setCurrentStatus( ZyppStatus	newStatus,
 				bool			doSelectNextItem )
 {
     QListViewItem * listViewItem = selectedItem();
@@ -287,7 +284,7 @@ YQPkgObjList::setCurrentStatus( zypp::ui::Status	newStatus,
 
 
 void
-YQPkgObjList::setAllItemStatus( zypp::ui::Status newStatus, bool force )
+YQPkgObjList::setAllItemStatus( ZyppStatus newStatus, bool force )
 {
     if ( ! _editable )
 	return;
@@ -386,7 +383,7 @@ YQPkgObjList::createActions()
 
 
 QAction *
-YQPkgObjList::createAction( zypp::ui::Status status, const QString & key, bool enabled )
+YQPkgObjList::createAction( ZyppStatus status, const QString & key, bool enabled )
 {
     return createAction( statusText( status ),
 			 statusIcon( status, true ),
@@ -514,7 +511,7 @@ YQPkgObjList::updateActions( YQPkgObjListItem * item )
 {
     if ( item )
     {
-	zypp::ui::Selectable::Ptr selectable = item->selectable();
+	ZyppSel selectable = item->selectable();
 
 	if ( selectable->hasInstalledObj() )
 	{
@@ -567,7 +564,7 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 	    if ( item )
 	    {
 		bool installed = item->selectable()->hasInstalledObj();
-		zypp::ui::Status status = item->status();
+		ZyppStatus status = item->status();
 
 		switch( event->ascii() )
 		{
@@ -580,7 +577,7 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 
 			if ( installed )
 			{
-			    zypp::ui::Status newStatus = zypp::ui::S_KeepInstalled;
+			    ZyppStatus newStatus = zypp::ui::S_KeepInstalled;
 
 			    if ( item->candidateIsNewer() )
 				newStatus = zypp::ui::S_Update;
@@ -658,8 +655,8 @@ YQPkgObjList::message( const QString & text )
 
 
 YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList * pkgObjList,
-				    zypp::ui::Selectable::Ptr selectable,
-				    zypp::ResObject::constPtr zyppObj )
+				    ZyppSel selectable,
+				    ZyppObj zyppObj )
     : QY2ListViewItem( pkgObjList )
     , _pkgObjList( pkgObjList )
     , _selectable( selectable )
@@ -685,8 +682,8 @@ YQPkgObjListItem::init()
     _candidateIsNewer = false;
     _installedIsNewer = false;
 
-    const zypp::ResObject::constPtr candidate = selectable()->candidateObj();
-    const zypp::ResObject::constPtr installed = selectable()->installedObj();
+    const ZyppObj candidate = selectable()->candidateObj();
+    const ZyppObj installed = selectable()->installedObj();
 
 #ifdef FIXME
     if ( candidate && installed && candidate->edition() != installed->edition() )
@@ -748,7 +745,7 @@ YQPkgObjListItem::setText( int column, const zypp::Edition & edition )
 }
 
 
-zypp::ui::Status
+ZyppStatus
 YQPkgObjListItem::status() const
 {
     if ( ! selectable() )
@@ -779,7 +776,7 @@ YQPkgObjListItem::bySelection() const
 
 
 void
-YQPkgObjListItem::setStatus( zypp::ui::Status newStatus )
+YQPkgObjListItem::setStatus( ZyppStatus newStatus )
 {
     selectable()->set_status( newStatus );
     setStatusIcon();
@@ -810,8 +807,8 @@ YQPkgObjListItem::cycleStatus()
     if ( ! _editable || ! _pkgObjList->editable() )
 	return;
 
-    zypp::ui::Status oldStatus = status();
-    zypp::ui::Status newStatus = oldStatus;
+    ZyppStatus oldStatus = status();
+    ZyppStatus newStatus = oldStatus;
 
     if ( selectable()->hasInstalledObj() )
     {
@@ -880,7 +877,7 @@ YQPkgObjListItem::cycleStatus()
 
 
 void
-YQPkgObjListItem::showNotifyTexts( zypp::ui::Status status )
+YQPkgObjListItem::showNotifyTexts( ZyppStatus status )
 {
     string text;
 
@@ -910,11 +907,11 @@ YQPkgObjListItem::showNotifyTexts( zypp::ui::Status status )
 
 
 bool
-YQPkgObjListItem::showLicenseAgreement( zypp::ui::Status status )
+YQPkgObjListItem::showLicenseAgreement( ZyppStatus status )
 {
     bool confirmed = true;
     string text;
-    zypp::Package::constPtr pkg = 0;
+    ZyppPkg pkg = 0;
 
     switch ( status )
     {
@@ -1033,7 +1030,7 @@ YQPkgObjListItem::compare( QListViewItem *	otherListViewItem,
 	else if ( col == statusCol() )
 	{
 	    // Sorting by status depends on the numeric value of the
-	    // zypp::ui::Status enum, thus it is important to insert new
+	    // ZyppStatus enum, thus it is important to insert new
 	    // package states there where they make most sense. We want to show
 	    // dangerous or noteworthy states first - e.g., "taboo" which should
 	    // seldeom occur, but when it does, it is important.

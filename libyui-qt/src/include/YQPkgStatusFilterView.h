@@ -22,10 +22,9 @@
 #ifndef YQPkgStatusFilterView_h
 #define YQPkgStatusFilterView_h
 
+#include "YQZypp.h"
 #include <qvbox.h>
 #include <qregexp.h>
-#include <zypp/Package.h>
-#include <zypp/ui/Selectable.h>
 
 
 class QComboBox;
@@ -61,8 +60,8 @@ public:
     /**
      * Check if pkg matches the filter criteria.
      **/
-    bool check( zypp::ui::Selectable::Ptr	selectable,
-		zypp::ResObject::constPtr 	pkg );
+    bool check( ZyppSel	selectable,
+		ZyppObj 	pkg );
 
 
 public slots:
@@ -93,8 +92,8 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( zypp::ui::Selectable::Ptr	selectable,
-		      zypp::Package::constPtr	pkg );
+    void filterMatch( ZyppSel	selectable,
+		      ZyppPkg	pkg );
 
     /**
      * Emitted when filtering is finished.

@@ -183,7 +183,7 @@ void YQPkgTextDialog::setText( const string & text )
 }
 
 
-void YQPkgTextDialog::setText( zypp::ui::Selectable::Ptr selectable,
+void YQPkgTextDialog::setText( ZyppSel selectable,
 			       const string & 		 text )
 {
     setText( htmlHeading( selectable ) + htmlParagraphs( text ) );
@@ -212,7 +212,7 @@ void YQPkgTextDialog::showText( QWidget * parent, const char * text )
 
 
 void YQPkgTextDialog::showText( QWidget * 			parent,
-				zypp::ui::Selectable::Ptr 	selectable,
+				ZyppSel 	selectable,
 				const string & 			text )
 {
     showText( parent, htmlHeading( selectable ) + QString::fromUtf8( text.c_str() ) );
@@ -249,7 +249,7 @@ bool YQPkgTextDialog::confirmText( QWidget * parent, const char * text )
 
 
 bool YQPkgTextDialog::confirmText( QWidget * 			parent,
-				   zypp::ui::Selectable::Ptr 	selectable,
+				   ZyppSel 	selectable,
 				   const string	&	 	text )
 {
     return confirmText( parent, htmlHeading( selectable ) + htmlParagraphs( text ) );
@@ -305,12 +305,12 @@ YQPkgTextDialog::htmlHeading( const QString & text )
 
 
 QString
-YQPkgTextDialog::htmlHeading( zypp::ui::Selectable::Ptr selectable )
+YQPkgTextDialog::htmlHeading( ZyppSel selectable )
 {
     if ( ! selectable )
 	return "";
 
-    zypp::ResObject::constPtr zyppObj = selectable->theObj();
+    ZyppObj zyppObj = selectable->theObj();
 
     if ( ! zyppObj )
 	return "";

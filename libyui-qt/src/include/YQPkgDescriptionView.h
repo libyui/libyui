@@ -50,7 +50,7 @@ public:
      * In this case the package description.
      * Overwritten from YQPkgGenericDetailsView.
      **/
-    virtual void showDetails( zypp::ui::Selectable::Ptr selectable );
+    virtual void showDetails( ZyppSel selectable );
 
     /**
      * Get the document pointed to by a hyperlink.

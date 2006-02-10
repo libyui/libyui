@@ -38,10 +38,6 @@
 #include <qtabwidget.h>
 #include <qtimer.h>
 
-#include "YQZypp.h"
-#include <zypp/ZYppFactory.h>
-#include <zypp/ResPoolProxy.h>
-
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
@@ -461,8 +457,8 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     _detailsViews->addTab( _pkgDescriptionView, _( "D&escription" ) );
     _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _pkgList,			SIGNAL( selectionChanged    ( zypp::ui::Selectable::Ptr ) ),
-	     _pkgDescriptionView,	SLOT  ( showDetailsIfVisible( zypp::ui::Selectable::Ptr ) ) );
+    connect( _pkgList,			SIGNAL( selectionChanged    ( ZyppSel ) ),
+	     _pkgDescriptionView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
     //
     // Technical details
@@ -473,8 +469,8 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
     _detailsViews->addTab( _pkgTechnicalDetailsView, _( "&Technical Data" ) );
 
-    connect( _pkgList,			SIGNAL( selectionChanged    ( zypp::ui::Selectable::Ptr ) ),
-	     _pkgTechnicalDetailsView,	SLOT  ( showDetailsIfVisible( zypp::ui::Selectable::Ptr ) ) );
+    connect( _pkgList,			SIGNAL( selectionChanged    ( ZyppSel ) ),
+	     _pkgTechnicalDetailsView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
 
     //
@@ -488,8 +484,8 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     _detailsViews->addTab( _pkgDependenciesView, _( "Dependencies" ) );
     _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _pkgList,			SIGNAL( selectionChanged    ( zypp::ui::Selectable::Ptr ) ),
-	     _pkgDependenciesView,	SLOT  ( showDetailsIfVisible( zypp::ui::Selectable::Ptr ) ) );
+    connect( _pkgList,			SIGNAL( selectionChanged    ( ZyppSel ) ),
+	     _pkgDependenciesView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 #endif
 
 
@@ -505,8 +501,8 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
 	_detailsViews->addTab( _pkgVersionsView, _( "&Versions" ) );
 
-	connect( _pkgList,		SIGNAL( selectionChanged    ( zypp::ui::Selectable::Ptr ) ),
-		 _pkgVersionsView,	SLOT  ( showDetailsIfVisible( zypp::ui::Selectable::Ptr ) ) );
+	connect( _pkgList,		SIGNAL( selectionChanged    ( ZyppSel ) ),
+		 _pkgVersionsView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
     }
 }
 
@@ -727,8 +723,8 @@ YQPackageSelector::connectFilter( QWidget * filter,
     connect( filter,	SIGNAL( filterStart() 	),
 	     pkgList, 	SLOT  ( clear() 	) );
 
-    connect( filter,	SIGNAL( filterMatch( zypp::ui::Selectable::Ptr, zypp::Package::constPtr ) ),
-	     pkgList, 	SLOT  ( addPkgItem ( zypp::ui::Selectable::Ptr, zypp::Package::constPtr ) ) );
+    connect( filter,	SIGNAL( filterMatch( ZyppSel, ZyppPkg ) ),
+	     pkgList, 	SLOT  ( addPkgItem ( ZyppSel, ZyppPkg ) ) );
 
     connect( filter, 	SIGNAL( filterFinished()  ),
 	     pkgList, 	SLOT  ( selectSomething() ) );
@@ -779,8 +775,8 @@ YQPackageSelector::makeConnections()
 #ifdef FIXME
     if ( _instSrcFilterView && _pkgList )
     {
-	connect( _instSrcFilterView,	SIGNAL( filterNearMatch	 ( zypp::ui::Selectable::Ptr, zypp::Package::constPtr ) ),
-		 _pkgList,		SLOT  ( addPkgItemDimmed ( zypp::ui::Selectable::Ptr, zypp::Package::constPtr ) ) );
+	connect( _instSrcFilterView,	SIGNAL( filterNearMatch	 ( ZyppSel, ZyppPkg ) ),
+		 _pkgList,		SLOT  ( addPkgItemDimmed ( ZyppSel, ZyppPkg ) ) );
     }
 #endif
 
@@ -829,7 +825,7 @@ YQPackageSelector::makeConnections()
 
     if ( _pkgVersionsView && _pkgList )
     {
-	connect( _pkgVersionsView, 	SIGNAL( candidateChanged( zypp::ResObject::constPtr ) ),
+	connect( _pkgVersionsView, 	SIGNAL( candidateChanged( ZyppObj ) ),
 		 _pkgList,		SLOT  ( updateToplevelItemData() ) );
     }
 
@@ -1039,10 +1035,10 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 {
     // Find all matching packages and put them into a QMap
 
-    QMap<QString, zypp::ui::Selectable::Ptr> subPkgs;
+    QMap<QString, ZyppSel> subPkgs;
 
     zypp::ResPoolProxy proxy( zypp::getZYpp()->poolProxy() );
-    zypp::ResPoolProxy::const_iterator it = proxy.byKindBegin<zypp::Package>();
+    ZyppPoolIterator it = proxy.byKindBegin<zypp::Package>();
 
     while ( it != proxy.byKindEnd<zypp::Package>() )
     {
@@ -1069,7 +1065,7 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 
 	if ( subPkgs.contains( name + suffix ) )
 	{
-	    zypp::ui::Selectable::Ptr subPkg = subPkgs[ name + suffix ];
+	    ZyppSel subPkg = subPkgs[ name + suffix ];
 	    QString subPkgName;
 
 	    switch ( (*it)->status() )

@@ -21,9 +21,6 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include "YQZypp.h"
-#include <zypp/ResPoolProxy.h>
-
 #include <qdatetime.h>
 #include "YQPkgDependenciesView.h"
 #include "YQi18n.h"
@@ -43,7 +40,7 @@ YQPkgDependenciesView::~YQPkgDependenciesView()
 
 
 void
-YQPkgDependenciesView::showDetails( zypp::ui::Selectable::Ptr selectable )
+YQPkgDependenciesView::showDetails( ZyppSel selectable )
 {
     _selectable = selectable;
     
@@ -57,8 +54,8 @@ YQPkgDependenciesView::showDetails( zypp::ui::Selectable::Ptr selectable )
 
     y2debug( "Showing technical details for zypp::ResObject %s", selectable->theObj()->name.c_str() );
 
-    zypp::Package::constPtr candidate = selectable->candidateObj();
-    zypp::Package::constPtr installed = selectable->installedObj();
+    ZyppPkg candidate = selectable->candidateObj();
+    ZyppPkg installed = selectable->installedObj();
 
     if ( candidate && installed && candidate != installed )
     {
@@ -79,7 +76,7 @@ YQPkgDependenciesView::showDetails( zypp::ui::Selectable::Ptr selectable )
 
 
 QString
-YQPkgDependenciesView::simpleTable( zypp::Package::constPtr pkg )
+YQPkgDependenciesView::simpleTable( ZyppPkg pkg )
 {
     QString html = "<br>" +
 	table(
@@ -98,10 +95,10 @@ YQPkgDependenciesView::simpleTable( zypp::Package::constPtr pkg )
 
 
 QString
-YQPkgDependenciesView::complexTable( zypp::Package::constPtr installed, zypp::Package::constPtr candidate )
+YQPkgDependenciesView::complexTable( ZyppPkg installed, ZyppPkg candidate )
 {
-    zypp::Package::constPtr p1 = candidate;
-    zypp::Package::constPtr p2 = installed;
+    ZyppPkg p1 = candidate;
+    ZyppPkg p2 = installed;
 
     QString p1_header = _( "<b>Alternate Version</b>" );
     QString p2_header = _( "<b>Installed Version</b>" );

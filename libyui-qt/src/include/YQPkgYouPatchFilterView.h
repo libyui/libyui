@@ -22,8 +22,8 @@
 #ifndef YQPkgYouPatchFilterView_h
 #define YQPkgYouPatchFilterView_h
 
+#include "YQZypp.h"
 #include <qvbox.h>
-#include <zypp/Selection.h>
 
 
 class YQPkgYouPatchList;

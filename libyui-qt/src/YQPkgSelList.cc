@@ -22,9 +22,7 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 #include <qregexp.h>
-#include "YQZypp.h"
-#include <zypp/ZYppFactory.h>
-#include <zypp/ResPoolProxy.h>
+
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgSelList.h"
@@ -70,11 +68,11 @@ YQPkgSelList::fillList()
 
 
     zypp::ResPoolProxy proxy( zypp::getZYpp()->poolProxy() );
-    zypp::ResPoolProxy::const_iterator it = proxy.byKindBegin<zypp::Selection>();
+    ZyppPoolIterator it = proxy.byKindBegin<zypp::Selection>();
 
     while ( it != proxy.byKindEnd<zypp::Selection>() )
     {
-	zypp::Selection::constPtr zyppSel =
+	ZyppSelection zyppSel =
 	    zypp::dynamic_pointer_cast<const zypp::Selection>( (*it)->theObj() );
 
 	if ( zyppSel )
@@ -108,7 +106,7 @@ YQPkgSelList::filter()
 #ifdef FIXME
     if ( selection() )
     {
-	zypp::Selection::constPtr sel = selection()->zyppSel();
+	ZyppSelection sel = selection()->zyppSel();
 
 	if ( sel )
 	{
@@ -123,11 +121,11 @@ YQPkgSelList::filter()
 
 	    
 	    zypp::ResPoolProxy proxy( zypp::getZYpp()->poolProxy() );
-	    zypp::ResPoolProxy::const_iterator it = proxy.byKindBegin<zypp::Package>();
+	    ZyppPoolIterator it = proxy.byKindBegin<zypp::Package>();
 
 	    while ( it != proxy.byKindEnd<zypp::Package>() )
 	    {
-		zypp::Package::constPtr zyppPkg =
+		ZyppPkg zyppPkg =
 		    zypp::dynamic_pointer_cast<const zypp::Package>( (*it)->theObj() );
 
 		if ( zyppPkg )
@@ -145,8 +143,8 @@ YQPkgSelList::filter()
 
 
 void
-YQPkgSelList::addPkgSelItem( zypp::ui::Selectable::Ptr	selectable,
-			     zypp::Selection::constPtr	zyppSel )
+YQPkgSelList::addPkgSelItem( ZyppSel	selectable,
+			     ZyppSelection	zyppSel )
 {
     if ( ! selectable )
     {
@@ -185,8 +183,8 @@ YQPkgSelList::applyChanges()
 
 
 YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList * 		pkgSelList,
-				    zypp::ui::Selectable::Ptr	selectable,
-				    zypp::Selection::constPtr 	pkgSel )
+				    ZyppSel	selectable,
+				    ZyppSelection 	pkgSel )
     : YQPkgObjListItem( pkgSelList, selectable, pkgSel )
     , _pkgSelList( pkgSelList )
     , _zyppSel( pkgSel )
@@ -218,7 +216,7 @@ YQPkgSelListItem::~YQPkgSelListItem()
 
 
 void
-YQPkgSelListItem::setStatus( zypp::ui::Status newStatus )
+YQPkgSelListItem::setStatus( ZyppStatus newStatus )
 {
     YQPkgObjListItem::setStatus( newStatus );
     _pkgSelList->applyChanges();

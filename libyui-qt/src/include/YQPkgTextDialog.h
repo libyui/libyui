@@ -22,9 +22,9 @@
 #ifndef YQPkgTextDialog_h
 #define YQPkgTextDialog_h
 
+#include "YQZypp.h"
 #include <qdialog.h>
 #include <zypp/ResObject.h>
-#include "YQZypp.h"
 
 class QPushButton;
 class QTextBrowser;
@@ -86,7 +86,7 @@ public:
      * Show a text with a headline identifying a selectable (name+summary).
      **/
     static void showText( QWidget * 			parent,
-			  zypp::ui::Selectable::Ptr 	selectable,
+			  ZyppSel 	selectable,
 			  const string & 		text );
 
     /**
@@ -111,7 +111,7 @@ public:
      * Returns "true" if the user clicked "Accept", "false" on "Cancel".
      **/
     static bool confirmText( QWidget * 			parent,
-			     zypp::ui::Selectable::Ptr 	selectable,
+			     ZyppSel 	selectable,
 			     const string & 		text );
 
     /**
@@ -130,7 +130,7 @@ public:
      * Returns a uniform heading in HTML format for the specified selectable:
      * name and summary
      **/
-    static QString htmlHeading( zypp::ui::Selectable::Ptr selectable );
+    static QString htmlHeading( ZyppSel selectable );
 
     /**
      * Escapes characters special to HTML in a ( plain text ) string, such as:
@@ -154,7 +154,7 @@ public slots:
     /**
      * Show a text with a headline identifying a zypp::ResObject ( name+summary ).
      **/
-    void setText( zypp::ui::Selectable::Ptr selectable,
+    void setText( ZyppSel selectable,
 		  const string & text );
 
 protected:

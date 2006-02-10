@@ -22,9 +22,8 @@
 #ifndef YQPkgRpmGroupTagsFilterView_h
 #define YQPkgRpmGroupTagsFilterView_h
 
+#include "YQZypp.h"
 #include <qlistview.h>
-#include <zypp/Package.h>
-#include <zypp/ui/Selectable.h>
 #include <y2util/YRpmGroupsTree.h>
 
 
@@ -61,8 +60,8 @@ public:
      * Check if 'pkg' matches the selected RPM group.
      * Returns true if there is a match, false otherwise or if 'pkg' is 0.
      **/
-    bool check( zypp::ui::Selectable::Ptr	selectable,
-		zypp::Package::constPtr 	pkg );
+    bool check( ZyppSel	selectable,
+		ZyppPkg 	pkg );
     
 public slots:
 
@@ -99,8 +98,8 @@ signals:
     /**
      * Emitted during filtering for each pkg that matches the filter.
      **/
-    void filterMatch( zypp::ui::Selectable::Ptr	selectable,
-		      zypp::Package::constPtr	pkg );
+    void filterMatch( ZyppSel	selectable,
+		      ZyppPkg	pkg );
 
     /**
      * Emitted when filtering is finished.

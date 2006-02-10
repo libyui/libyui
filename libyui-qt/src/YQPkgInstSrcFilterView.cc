@@ -22,8 +22,6 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include "YQZypp.h"
-#include <zypp/ResPoolProxy.h>
 #include <qsplitter.h>
 
 #include "QY2ComboTabWidget.h"
@@ -64,11 +62,11 @@ YQPkgInstSrcFilterView::YQPkgInstSrcFilterView( QWidget * parent )
 
     // Redirect filterMatch() and filterNearMatch() signals to secondary filter
 
-    connect( _instSrcList,	SIGNAL( filterMatch		( zypp::ui::Selectable::Ptr, zypp::Package::constPtr ) ),
-	     this,		SLOT  ( primaryFilterMatch	( zypp::ui::Selectable::Ptr, zypp::Package::constPtr ) ) );
+    connect( _instSrcList,	SIGNAL( filterMatch		( ZyppSel, ZyppPkg ) ),
+	     this,		SLOT  ( primaryFilterMatch	( ZyppSel, ZyppPkg ) ) );
 
-    connect( _instSrcList,	SIGNAL( filterNearMatch		( zypp::ui::Selectable::Ptr, zypp::Package::constPtr ) ),
-	     this,		SLOT  ( primaryFilterNearMatch	( zypp::ui::Selectable::Ptr, zypp::Package::constPtr ) ) );
+    connect( _instSrcList,	SIGNAL( filterNearMatch		( ZyppSel, ZyppPkg ) ),
+	     this,		SLOT  ( primaryFilterNearMatch	( ZyppSel, ZyppPkg ) ) );
 
 #if 0
     QWidget * secondary_filters =
@@ -171,16 +169,16 @@ void YQPkgInstSrcFilterView::filterIfVisible()
 }
 
 
-void YQPkgInstSrcFilterView::primaryFilterMatch( zypp::ui::Selectable::Ptr 	selectable,
-						 zypp::Package::constPtr 	pkg )
+void YQPkgInstSrcFilterView::primaryFilterMatch( ZyppSel 	selectable,
+						 ZyppPkg 	pkg )
 {
     if ( secondaryFilterMatch( selectable, pkg ) )
 	emit filterMatch( selectable, pkg );
 }
 
 
-void YQPkgInstSrcFilterView::primaryFilterNearMatch( zypp::ui::Selectable::Ptr	selectable,
-						     zypp::Package::constPtr 	pkg )
+void YQPkgInstSrcFilterView::primaryFilterNearMatch( ZyppSel	selectable,
+						     ZyppPkg 	pkg )
 {
     if ( secondaryFilterMatch( selectable, pkg ) )
 	emit filterNearMatch( selectable, pkg );
@@ -188,8 +186,8 @@ void YQPkgInstSrcFilterView::primaryFilterNearMatch( zypp::ui::Selectable::Ptr	s
 
 
 bool
-YQPkgInstSrcFilterView::secondaryFilterMatch( zypp::ui::Selectable::Ptr	selectable,
-					      zypp::Package::constPtr 	pkg )
+YQPkgInstSrcFilterView::secondaryFilterMatch( ZyppSel	selectable,
+					      ZyppPkg 	pkg )
 {
     if ( _allPackages->isVisible() )
     {

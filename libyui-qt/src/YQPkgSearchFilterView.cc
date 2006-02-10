@@ -32,10 +32,6 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include "YQZypp.h"
-#include <zypp/ZYppFactory.h>
-#include <zypp/ResPoolProxy.h>
-
 #include "YQPkgSearchFilterView.h"
 #include "QY2LayoutUtils.h"
 #include "YQi18n.h"
@@ -225,11 +221,11 @@ YQPkgSearchFilterView::filter()
 
 	int count = 0;
 	zypp::ResPoolProxy proxy( zypp::getZYpp()->poolProxy() );
-	zypp::ResPoolProxy::const_iterator it = proxy.byKindBegin<zypp::Package>();
+	ZyppPoolIterator it = proxy.byKindBegin<zypp::Package>();
 
 	while ( it != proxy.byKindEnd<zypp::Package>() )
 	{
-	    zypp::ui::Selectable::Ptr selectable = *it;
+	    ZyppSel selectable = *it;
 
 	    bool match =
 		check( selectable, selectable->candidateObj(), regexp ) ||
@@ -270,8 +266,8 @@ YQPkgSearchFilterView::filter()
 
 
 bool
-YQPkgSearchFilterView::check( zypp::ui::Selectable::Ptr		selectable,
-			      zypp::ResObject::constPtr 	zyppObj )
+YQPkgSearchFilterView::check( ZyppSel		selectable,
+			      ZyppObj 	zyppObj )
 {
     QRegExp regexp = _searchText->currentText();
     regexp.setCaseSensitive( _caseSensitive->isChecked() );
@@ -282,8 +278,8 @@ YQPkgSearchFilterView::check( zypp::ui::Selectable::Ptr		selectable,
 
 
 bool
-YQPkgSearchFilterView::check( zypp::ui::Selectable::Ptr	selectable,
-			      zypp::ResObject::constPtr zyppObj,
+YQPkgSearchFilterView::check( ZyppSel	selectable,
+			      ZyppObj zyppObj,
 			      const QRegExp & 		regexp )
 {
     if ( ! zyppObj )
@@ -302,7 +298,7 @@ YQPkgSearchFilterView::check( zypp::ui::Selectable::Ptr	selectable,
 
     if ( match )
     {
-	zypp::Package::constPtr zyppPkg = zypp::dynamic_pointer_cast<const zypp::Package>( zyppObj );
+	ZyppPkg zyppPkg = zypp::dynamic_pointer_cast<const zypp::Package>( zyppObj );
 
 	if ( zyppPkg )
 	{

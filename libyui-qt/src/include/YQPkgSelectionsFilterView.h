@@ -22,8 +22,8 @@
 #ifndef YQPkgSelectionsFilterView_h
 #define YQPkgSelectionsFilterView_h
 
+#include "YQZypp.h"
 #include <qvbox.h>
-#include <zypp/Selection.h>
 
 
 class YQPkgSelList;
