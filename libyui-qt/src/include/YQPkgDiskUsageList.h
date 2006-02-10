@@ -23,11 +23,19 @@
 #define YQPkgDiskUsageList_h
 
 #include <QY2DiskUsageList.h>
-#include <y2pm/PkgDu.h>
 #include <qasciidict.h>
 
 class YQPkgDiskUsageListItem;
+#ifdef FIXME
 typedef PkgDuMaster::MountPoint YQPkgDuData;
+#else
+class YQPkgDuData
+{
+public:
+    YQPkgDuData() {};
+};
+#endif
+
 
 
 
@@ -144,11 +152,6 @@ public:
      * Destructor.
      **/
     virtual ~YQPkgDiskUsageList() {}
-
-    /**
-     * For debugging: Add some fake data.
-     **/
-    void fakeData();
 
     /**
      * Suggest reasonable default size.

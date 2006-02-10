@@ -549,7 +549,6 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 	     this,          SLOT  ( reject()   ) );
 #else
     addHStretch( button_box );
-#warning "Yes, this sucks, but we don't have undo right now"
 #endif
 
 

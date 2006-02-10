@@ -23,7 +23,6 @@
 #define YQPkgLangFilterView_h
 
 #include <qvbox.h>
-#include <y2pm/PMLanguage.h>
 
 
 class YQPkgLangList;

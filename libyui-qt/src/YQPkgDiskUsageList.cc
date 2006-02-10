@@ -145,18 +145,6 @@ YQPkgDiskUsageList::sizeHint() const
 
 
 void
-YQPkgDiskUsageList::fakeData()
-{
-    YQPkgDiskUsageListItem * item;
-
-    item = new YQPkgDiskUsageListItem( this, YQPkgDuData( "/",     1024,  2 * FSize::GB, 1400 * FSize::MB ) ); item->updateData();
-    item = new YQPkgDiskUsageListItem( this, YQPkgDuData( "/usr",  1024,  3 * FSize::GB, 1800 * FSize::MB ) ); item->updateData();
-    item = new YQPkgDiskUsageListItem( this, YQPkgDuData( "/opt",  1024,  3 * FSize::GB, 2750 * FSize::MB ) ); item->updateData();
-    item = new YQPkgDiskUsageListItem( this, YQPkgDuData( "/home", 1024, 30 * FSize::GB,   25 * FSize::GB ) ); item->updateData();
-}
-
-
-void
 YQPkgDiskUsageList::keyPressEvent( QKeyEvent * event )
 {
 
@@ -212,6 +200,7 @@ YQPkgDiskUsageList::keyPressEvent( QKeyEvent * event )
 		    }
 
 		    if ( percent < 0   ) percent = 0;
+#ifdef FIXME
 		    YQPkgDuData du( item->duData() );
 
 		    if ( percent != item->usedPercent() )
@@ -224,6 +213,7 @@ YQPkgDiskUsageList::keyPressEvent( QKeyEvent * event )
 			item->updateDuData( du );
 			postPendingWarnings();
 		    }
+#endif
 		}
 	    }
 	}
@@ -243,35 +233,49 @@ YQPkgDiskUsageListItem::YQPkgDiskUsageListItem( YQPkgDiskUsageList * 	parent,
 	, _duData( duData )
 	, _pkgDiskUsageList( parent )
 {
+#ifdef FIXME
     y2debug( "disk usage list entry for %s", duData.mountpoint().c_str() );
+#endif
 }
 
 
 FSize
 YQPkgDiskUsageListItem::usedSize() const
 {
+#ifdef FIXME
     return _duData.pkg_used();
+#else
+    return FSize(0);
+#endif
 }
 
 
 FSize
 YQPkgDiskUsageListItem::totalSize() const
 {
+#ifdef FIXME
     return _duData.total();
+#else
+    return FSize(0);
+#endif
 }
 
 
 QString
 YQPkgDiskUsageListItem::name() const
 {
+#ifdef FIXME
     return fromUTF8( _duData.mountpoint().c_str() );
+#endif
 }
 
 
 void
 YQPkgDiskUsageListItem::updateDuData( const YQPkgDuData & fromData )
 {
+#ifdef FIXME
     _duData.assignData( fromData );
+#endif
     updateData();
     checkRemainingDiskSpace();
 }
