@@ -187,22 +187,22 @@ public slots:
 
     // Direct access to some states for menu actions
 
-    void setCurrentInstall()	   { setCurrentStatus( zypp::ui::S_Install		); }
-    void setCurrentDontInstall()   { setCurrentStatus( zypp::ui::S_NoInst	     	); }
-    void setCurrentKeepInstalled() { setCurrentStatus( zypp::ui::S_KeepInstalled	); }
-    void setCurrentDelete()	   { setCurrentStatus( zypp::ui::S_Del	     		); }
-    void setCurrentUpdate()	   { setCurrentStatus( zypp::ui::S_Update	     	); }
-    void setCurrentTaboo()	   { setCurrentStatus( zypp::ui::S_Taboo	     	); }
-    void setCurrentProtected()	   { setCurrentStatus( zypp::ui::S_Protected		); }
+    void setCurrentInstall()	   { setCurrentStatus( S_Install	); }
+    void setCurrentDontInstall()   { setCurrentStatus( S_NoInst	     	); }
+    void setCurrentKeepInstalled() { setCurrentStatus( S_KeepInstalled	); }
+    void setCurrentDelete()	   { setCurrentStatus( S_Del	     	); }
+    void setCurrentUpdate()	   { setCurrentStatus( S_Update	     	); }
+    void setCurrentTaboo()	   { setCurrentStatus( S_Taboo	     	); }
+    void setCurrentProtected()	   { setCurrentStatus( S_Protected	); }
 
-    void setListInstall()	   { setAllItemStatus( zypp::ui::S_Install		); }
-    void setListDontInstall()	   { setAllItemStatus( zypp::ui::S_NoInst		); }
-    void setListKeepInstalled()	   { setAllItemStatus( zypp::ui::S_KeepInstalled	); }
-    void setListDelete()	   { setAllItemStatus( zypp::ui::S_Del			); }
-    void setListUpdate()	   { setAllItemStatus( zypp::ui::S_Update		); }
-    void setListUpdateForce()	   { setAllItemStatus( zypp::ui::S_Update, true  	); }
-    void setListTaboo()		   { setAllItemStatus( zypp::ui::S_Taboo		); }
-    void setListProtected()	   { setAllItemStatus( zypp::ui::S_Protected     	); }
+    void setListInstall()	   { setAllItemStatus( S_Install	); }
+    void setListDontInstall()	   { setAllItemStatus( S_NoInst		); }
+    void setListKeepInstalled()	   { setAllItemStatus( S_KeepInstalled	); }
+    void setListDelete()	   { setAllItemStatus( S_Del		); }
+    void setListUpdate()	   { setAllItemStatus( S_Update		); }
+    void setListUpdateForce()	   { setAllItemStatus( S_Update, true  	); }
+    void setListTaboo()		   { setAllItemStatus( S_Taboo		); }
+    void setListProtected()	   { setAllItemStatus( S_Protected     	); }
 
 
 protected slots:

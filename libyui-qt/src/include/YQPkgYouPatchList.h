@@ -70,7 +70,7 @@ public slots:
      * QListView).
      **/
     void addYouPatchItem( ZyppSel	selectable,
-			  zypp::Patch::constPtr 	sel );
+			  ZyppPatch 	zyppPatch );
 
     /**
      * Emit an updatePackages() signal.
@@ -217,9 +217,9 @@ public:
      * Constructor. Creates a YQPkgYouPatchList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgYouPatchListItem( YQPkgYouPatchList * 		youPatchList,
-			   ZyppSel	selectable,
-			   zypp::Patch::constPtr 	zyppPatch );
+    YQPkgYouPatchListItem( YQPkgYouPatchList * 	youPatchList,
+			   ZyppSel		selectable,
+			   ZyppPatch 		zyppPatch );
 
     /**
      * Destructor
@@ -229,7 +229,7 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    zypp::Patch::constPtr zyppPatch() const { return _zyppPatch; }
+    ZyppPatch zyppPatch() const { return _zyppPatch; }
 
     /**
      * Set the patch status.
@@ -278,8 +278,8 @@ protected:
 
     // Data members
 
-    YQPkgYouPatchList	*	_youPatchList;
-    zypp::Patch::constPtr	_zyppPatch;
+    YQPkgYouPatchList *	_youPatchList;
+    ZyppPatch		_zyppPatch;
 };
 
 

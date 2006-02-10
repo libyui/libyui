@@ -801,13 +801,13 @@ YQPackageSelector::makeConnections()
     {
 	if (_pkgList )
 	{
-	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()      ),
+	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()           ),
 		     _pkgList, 			SLOT  ( updateToplevelItemStates() ) );
 	}
 
 	if ( _selList )
 	{
-	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()      ),
+	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()           ),
 		     _selList, 			SLOT  ( updateToplevelItemStates() ) );
 	}
 	
@@ -826,7 +826,7 @@ YQPackageSelector::makeConnections()
     if ( _pkgVersionsView && _pkgList )
     {
 	connect( _pkgVersionsView, 	SIGNAL( candidateChanged( ZyppObj ) ),
-		 _pkgList,		SLOT  ( updateToplevelItemData() ) );
+		 _pkgList,		SLOT  ( updateToplevelItemData()    ) );
     }
 
 
@@ -1070,42 +1070,42 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 
 	    switch ( (*it)->status() )
 	    {
-		case zypp::ui::S_AutoDel:
-		case zypp::ui::S_NoInst:
-		case zypp::ui::S_Protected:
-		case zypp::ui::S_Taboo:
-		case zypp::ui::S_Del:
+		case S_AutoDel:
+		case S_NoInst:
+		case S_Protected:
+		case S_Taboo:
+		case S_Del:
 		    // Don't install the subpackage
 		    y2milestone( "Ignoring unwanted subpackage %s", (const char *) subPkgName );
 		    break;
 
-		case zypp::ui::S_AutoInstall:
-		case zypp::ui::S_Install:
-		case zypp::ui::S_KeepInstalled:
+		case S_AutoInstall:
+		case S_Install:
+		case S_KeepInstalled:
 
 		    // Install the subpackage, but don't try to update it
 
 		    if ( ! subPkg->installedObj() )
 		    {
-			subPkg->set_status( zypp::ui::S_Install );
+			subPkg->set_status( S_Install );
 			y2milestone( "Installing subpackage %s", (const char *) subPkgName );
 		    }
 		    break;
 
 
-		case zypp::ui::S_Update:
-		case zypp::ui::S_AutoUpdate:
+		case S_Update:
+		case S_AutoUpdate:
 
 		    // Install or update the subpackage
 
 		    if ( ! subPkg->installedObj() )
 		    {
-			subPkg->set_status( zypp::ui::S_Install );
+			subPkg->set_status( S_Install );
 			y2milestone( "Installing subpackage %s", (const char *) subPkgName );
 		    }
 		    else
 		    {
-			subPkg->set_status( zypp::ui::S_Update );
+			subPkg->set_status( S_Update );
 			y2milestone( "Updating subpackage %s", (const char *) subPkgName );
 		    }
 		    break;

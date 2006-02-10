@@ -84,7 +84,7 @@ YQPkgYouPatchList::fillList()
 
     while ( it != Y2PM::youPatchManager().end() )
     {
-	zypp::Patch::constPtr	patch  = ( *it)->theObj();
+	ZyppPatch	patch  = ( *it)->theObj();
 	ZyppStatus	status =( *it)->status();
 
 	if ( patch )
@@ -92,7 +92,7 @@ YQPkgYouPatchList::fillList()
 	    switch ( _patchCategory )
 	    {
 		case InstallablePatches:
-		    if ( patch->installable() && status != zypp::ui::S_KeepInstalled )
+		    if ( patch->installable() && status != S_KeepInstalled )
 			addYouPatchItem( *it, patch );
 		    break;
 
@@ -145,7 +145,7 @@ YQPkgYouPatchList::filter()
 
     if ( selection() )
     {
-	zypp::Patch::constPtr patch = selection()->zyppPatch();
+	ZyppPatch patch = selection()->zyppPatch();
 
 	if ( patch )
 	{
@@ -210,7 +210,7 @@ YQPkgYouPatchList::filter()
 
 void
 YQPkgYouPatchList::addYouPatchItem( ZyppSel	selectable,
-				    zypp::Patch::constPtr 	zyppPatch )
+				    ZyppPatch 	zyppPatch )
 {
     if ( ! selectable )
     {
@@ -287,7 +287,7 @@ YQPkgYouPatchList::showRawPatchInfo()
 {
     if ( selection() )
     {
-	zypp::Patch::constPtr patch = selection()->zyppPatch();
+	ZyppPatch patch = selection()->zyppPatch();
 #ifdef FIXME
 	YQPkgTextDialog::showText( this, patch, Y2PM::youPatchManager().rawPatchInfo( patch ) );
 #endif
@@ -328,8 +328,8 @@ YQPkgYouPatchList::keyPressEvent( QKeyEvent * event )
 
 
 YQPkgYouPatchListItem::YQPkgYouPatchListItem( YQPkgYouPatchList * 	youPatchList,
-					      ZyppSel	selectable,					      
-					      zypp::Patch::constPtr 	zyppPatch )
+					      ZyppSel			selectable,
+					      ZyppPatch 		zyppPatch )
     : YQPkgObjListItem( youPatchList, selectable, zyppPatch )
     , _youPatchList( youPatchList )
     , _zyppPatch( zyppPatch )
@@ -376,8 +376,8 @@ YQPkgYouPatchListItem::cycleStatus()
 {
     YQPkgObjListItem::cycleStatus();
 
-    if ( status() == zypp::ui::S_Del )	// Can't delete YOU patches
-	setStatus( zypp::ui::S_KeepInstalled );
+    if ( status() == S_Del )	// Can't delete YOU patches
+	setStatus( S_KeepInstalled );
 }
 
 

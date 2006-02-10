@@ -295,22 +295,22 @@ void
 YQPkgList::createActions()
 {
     actionInstallSourceRpm		= createAction( _( "&Install Source" ),
-							statusIcon( zypp::ui::S_Install, true ),
-							statusIcon( zypp::ui::S_Install, false ) );
+							statusIcon( S_Install, true ),
+							statusIcon( S_Install, false ) );
 
     actionDontInstallSourceRpm		= createAction( _( "Do &Not Install Source" ),
-							statusIcon( zypp::ui::S_NoInst, true ),
-							statusIcon( zypp::ui::S_NoInst, false ) );
+							statusIcon( S_NoInst, true ),
+							statusIcon( S_NoInst, false ) );
 
     actionInstallListSourceRpms		= createAction( _( "&Install All Available Sources" ),
-							statusIcon( zypp::ui::S_Install, true ),
-							statusIcon( zypp::ui::S_Install, false ),
+							statusIcon( S_Install, true ),
+							statusIcon( S_Install, false ),
 							QString::null,		// key
 							true );			// enabled
 
     actionDontInstallListSourceRpms	= createAction( _( "Do &Not Install Any Sources" ),
-							statusIcon( zypp::ui::S_NoInst, true ),
-							statusIcon( zypp::ui::S_NoInst, false ),
+							statusIcon( S_NoInst, true ),
+							statusIcon( S_NoInst, false ),
 							QString::null,		// key
 							true );			// enabled
 

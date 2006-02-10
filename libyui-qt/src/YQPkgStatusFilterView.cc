@@ -75,8 +75,8 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     addHStretch( gbox ); // For the other columns of the QGroupBox ( prevent wraparound )
     addHStretch( gbox );
 
-    _showKeepInstalled	= addStatusCheckBox( gbox, _( "Keep" ), YQIconPool::disabledPkgKeepInstalled(), false );
-    _showNoInst		= addStatusCheckBox( gbox, _( "Do not install" ), YQIconPool::disabledPkgNoInst(),	   false );
+    _showKeepInstalled	= addStatusCheckBox( gbox, _( "Keep" ), 	  YQIconPool::disabledPkgKeepInstalled(), false );
+    _showNoInst		= addStatusCheckBox( gbox, _( "Do not install" ), YQIconPool::disabledPkgNoInst(),	  false );
 
     addVStretch( this );
 
@@ -177,7 +177,7 @@ YQPkgStatusFilterView::filter()
 
 
 bool
-YQPkgStatusFilterView::check( ZyppSel	selectable,
+YQPkgStatusFilterView::check( ZyppSel	selectable, 
 			      ZyppObj	zyppObj )
 {
     bool match = false;
@@ -187,16 +187,16 @@ YQPkgStatusFilterView::check( ZyppSel	selectable,
 
     switch ( selectable->status() )
     {
-	case zypp::ui::S_AutoDel:	match = _showAutoDel->isChecked();		break;
-	case zypp::ui::S_AutoInstall:	match = _showAutoInstall->isChecked();		break;
-	case zypp::ui::S_AutoUpdate:	match = _showAutoUpdate->isChecked();		break;
-	case zypp::ui::S_Del:		match = _showDel->isChecked();			break;
-	case zypp::ui::S_Install:	match = _showInstall->isChecked();		break;
-	case zypp::ui::S_KeepInstalled:	match = _showKeepInstalled->isChecked();	break;
-	case zypp::ui::S_NoInst:	match = _showNoInst->isChecked();		break;
-	case zypp::ui::S_Protected:	match = _showProtected->isChecked();		break;
-	case zypp::ui::S_Taboo:		match = _showTaboo->isChecked();		break;
-	case zypp::ui::S_Update:	match = _showUpdate->isChecked();		break;
+	case S_AutoDel:		match = _showAutoDel->isChecked();		break;
+	case S_AutoInstall:	match = _showAutoInstall->isChecked();		break;
+	case S_AutoUpdate:	match = _showAutoUpdate->isChecked();		break;
+	case S_Del:		match = _showDel->isChecked();			break;
+	case S_Install:		match = _showInstall->isChecked();		break;
+	case S_KeepInstalled:	match = _showKeepInstalled->isChecked();	break;
+	case S_NoInst:		match = _showNoInst->isChecked();		break;
+	case S_Protected:	match = _showProtected->isChecked();		break;
+	case S_Taboo:		match = _showTaboo->isChecked();		break;
+	case S_Update:		match = _showUpdate->isChecked();		break;
 
 	    // Intentionally omitting 'default' branch so the compiler can
 	    // catch unhandled enum states
