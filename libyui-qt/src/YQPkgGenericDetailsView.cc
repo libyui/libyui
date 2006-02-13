@@ -91,12 +91,12 @@ YQPkgGenericDetailsView::htmlHeading( ZyppSel selectable )
 {
     if ( ! selectable )
 	return "";
-    
+
     ZyppObj zyppObj = selectable->theObj();
 
     if ( ! zyppObj )
 	return "";
-    
+
     QString summary = fromUTF8( zyppObj->summary() );
 
     QString html = "<table";
@@ -171,9 +171,9 @@ YQPkgGenericDetailsView::cell( int contents )
 
 
 QString
-YQPkgGenericDetailsView::cell( const Date & contents )
+YQPkgGenericDetailsView::cell( const zypp::Date & date )
 {
-    return cell( formatDate( contents ) );
+    return cell( ( (time_t) date == (time_t) 0 ? "" : date.asString() ) );
 }
 
 
@@ -188,30 +188,14 @@ QString
 YQPkgGenericDetailsView::hcell( QString contents )
 {
     QString html = "<td align=top";
-    
+
     if ( ! YQUI::ui()->usingVisionImpairedPalette() )
 	html += " bgcolor=#D0D0D0";
-    
+
     html += ">" + contents + "</td>";
 
     return html;
 }
-
-
-QString
-YQPkgGenericDetailsView::formatDate( const Date & weird_date )
-{
-    time_t seconds = weird_date;
-
-    if ( seconds == 0 ) // Special case: Don't display "1.1.1970 0:00"
-	return "";
-
-    QDateTime date;
-    date.setTime_t( seconds );
-
-    return date.toString( Qt::LocalDate );
-}
-
 
 
 #include "YQPkgGenericDetailsView.moc"

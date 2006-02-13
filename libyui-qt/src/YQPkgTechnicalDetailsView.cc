@@ -101,48 +101,44 @@ YQPkgTechnicalDetailsView::authorsListCell( ZyppPkg pkg ) const
 QString
 YQPkgTechnicalDetailsView::formatRpmGroup( ZyppPkg pkg ) const
 {
-#ifdef FIXME
-    string group = Y2PM::packageManager().translatedRpmGroup( pkg->group_ptr() );
-    return fromUTF8( group );
+#ifdef FIXME_todo_zypp
+    // TO DO: Translate RPM group
+    string group = Y2PM::packageManager().translatedRpmGroup( pkg->group() );
 #else
-    return "unknown";
+    string group = pkg->group();
 #endif
+    return fromUTF8( group );
 }
 
 
 QString
-YQPkgTechnicalDetailsView::simpleTable( ZyppSel	selectable,
-					ZyppPkg 	pkg )
+YQPkgTechnicalDetailsView::simpleTable( ZyppSel selectable,
+					ZyppPkg		pkg )
 {
     QString html = "<br>" +
 	table(
-#ifdef FIXME
-	       row( hcell( _( "Version:"	) ) + cell( pkg->version() + "-" + pkg->release() ) ) +
-#endif
-	       row( hcell( _( "Build Time:"	) ) + cell( pkg->buildtime()			  ) ) +
+	       row( hcell( _( "Version:"	) ) + cell( pkg->edition().asString()		) ) +
+	       row( hcell( _( "Build Time:"	) ) + cell( pkg->buildtime()			) ) +
 	       ( pkg == selectable->installedObj() ?
-		 row( hcell( _( "Install Time:" ) ) + cell( pkg->installtime()			  ) )
+		 row( hcell( _( "Install Time:" ) ) + cell( pkg->installtime()			) )
 		 : "" ) +
-	       row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( pkg )		  ) ) +
-	       row( hcell( _( "License:"	) ) + cell( pkg->license()			  ) ) +
-	       row( hcell( _( "Installed Size:" ) ) + cell( pkg->size().asString()		  ) ) +
+	       row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( pkg )		) ) +
+	       row( hcell( _( "License:"	) ) + cell( pkg->license()			) ) +
+	       row( hcell( _( "Installed Size:" ) ) + cell( pkg->size().asString()		) ) +
 	       row( hcell( _youMode ? _( "Download Size:" ) : _( "Archive Size:" ) )
-		                                    + cell( pkg->archivesize().asString()	  ) ) +
-	       row( hcell( _( "Distribution:"	) ) + cell( pkg->distribution()			  ) ) +
-	       row( hcell( _( "Vendor:"		) ) + cell( pkg->vendor()			  ) ) +
-	       row( hcell( _( "Packager:"	) ) + cell( pkg->packager()			  ) ) +
-#ifdef FIXME
-	       row( hcell( _( "Architecture:"	) ) + cell( pkg->arch()				  ) ) +
+						    + cell( pkg->archivesize().asString()	) ) +
+	       row( hcell( _( "Distribution:"	) ) + cell( pkg->distribution()			) ) +
+	       row( hcell( _( "Vendor:"		) ) + cell( pkg->vendor()			) ) +
+	       row( hcell( _( "Packager:"	) ) + cell( pkg->packager()			) ) +
+	       row( hcell( _( "Architecture:"	) ) + cell( pkg->arch().asString()		) ) +
+	       row( hcell( _( "OS:"		) ) + cell( pkg->os()				) ) +
+	       row( hcell( _( "Build Host:"	) ) + cell( pkg->buildhost()			) ) +
+	       row( hcell( _( "URL:"		) ) + cell( pkg->url()				) ) +
+#ifdef FIXME_missing_in_zypp
+	       row( hcell( _( "Source RPM:"	) ) + cell( pkg->sourceloc()			) ) +
 #endif
-	       row( hcell( _( "OS:"		) ) + cell( pkg->os()				  ) ) +
-	       row( hcell( _( "Build Host:"	) ) + cell( pkg->buildhost()			  ) ) +
-	       row( hcell( _( "URL:"		) ) + cell( pkg->url()				  ) ) +
-#ifdef FIXME
-	       row( hcell( _( "Source RPM:"	) ) + cell( pkg->sourceloc()			  ) ) +
-	       row( hcell( _( "Location:"	) ) + cell( pkg->location()			  ) ) +
-	       row( hcell( _( "Media No.:"	) ) + cell( pkg->medianr()			  ) ) +
-#endif
-	       row( hcell( _( "Authors:"	) ) + authorsListCell( pkg			  ) )
+	       row( hcell( _( "Media No.:"	) ) + cell( pkg->mediaId()			) ) +
+	       row( hcell( _( "Authors:"	) ) + authorsListCell( pkg			) )
 	       );
 
     return html;
@@ -151,8 +147,8 @@ YQPkgTechnicalDetailsView::simpleTable( ZyppSel	selectable,
 
 QString
 YQPkgTechnicalDetailsView::complexTable( ZyppSel	selectable,
-					 ZyppPkg 	installed,
-					 ZyppPkg 	candidate )
+					 ZyppPkg	installed,
+					 ZyppPkg	candidate )
 {
     ZyppPkg p1 = candidate;
     ZyppPkg p2 = installed;
@@ -164,31 +160,26 @@ YQPkgTechnicalDetailsView::complexTable( ZyppSel	selectable,
 	table(
 	       row( hcell( QString( "" ) )	    + hcell( "<b>" + p1_header + "</b>"	    ) + hcell( "<b>" + p2_header + "</b>"     ) ) +
 
-#ifdef FIXME
-	       row( hcell( _( "Version:"	) ) + cell( p1->version() + "-" + p1->release() ) + cell( p2->version() + "-" + p2->release() ) ) +
+	       row( hcell( _( "Version:"	) ) + cell( p1->edition().asString()		) + cell( p2->edition().asString()	) ) +
+	       row( hcell( _( "Build Time:"	) ) + cell( p1->buildtime()			) + cell( p2->buildtime()		) ) +
+	       row( hcell( _( "Install Time:"	) ) + cell( p1->installtime()			) + cell( p2->installtime()		) ) +
+	       row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( p1 )		) + cell( formatRpmGroup( p2 )		) ) +
+	       row( hcell( _( "License:"	) ) + cell( p1->license()			) + cell( p2->license()			) ) +
+	       row( hcell( _( "Installed Size:" ) ) + cell( p1->size().asString()		) + cell( p2->size().asString()		) ) +
+	       row( hcell( _youMode ? _( "Download Size:" ) : _( "Archive Size:" ) )
+						    + cell( p1->archivesize().asString()	) + cell( p2->archivesize().asString()	) ) +
+	       row( hcell( _( "Distribution:"	) ) + cell( p1->distribution()			) + cell( p2->distribution()		) ) +
+	       row( hcell( _( "Vendor:"		) ) + cell( p1->vendor()			) + cell( p2->vendor()			) ) +
+	       row( hcell( _( "Packager:"	) ) + cell( p1->packager()			) + cell( p2->packager()		) ) +
+	       row( hcell( _( "Architecture:"	) ) + cell( p1->arch().asString()		) + cell( p2->arch().asString()		) ) +
+	       row( hcell( _( "OS:"		) ) + cell( p1->os()				) + cell( p2->os()			) ) +
+	       row( hcell( _( "Build Host:"	) ) + cell( p1->buildhost()			) + cell( p2->buildhost()		) ) +
+	       row( hcell( _( "URL:"		) ) + cell( p1->url()				) + cell( p2->url()			) ) +
+#ifdef FIXME_missing_in_zypp
+	       row( hcell( _( "Source RPM:"	) ) + cell( p1->sourceloc()			) + cell( p2->sourceloc()		) ) +
 #endif
-	       row( hcell( _( "Build Time:"	) ) + cell( p1->buildtime()			) + cell( p2->buildtime()		      ) ) +
-	       row( hcell( _( "Install Time:"	) ) + cell( p1->installtime()			) + cell( p2->installtime()		      ) ) +
-	       row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( p1 )		) + cell( formatRpmGroup( p2 )		      ) ) +
-	       row( hcell( _( "License:"	) ) + cell( p1->license()			) + cell( p2->license()			      ) ) +
-	       row( hcell( _( "Installed Size:" ) ) + cell( p1->size().asString()		) + cell( p2->size().asString()		      ) ) +
-	       row( hcell( _youMode ? _( "Download Size:"	) : _( "Archive Size:" ) )
-						    + cell( p1->archivesize().asString()	) + cell( p2->archivesize().asString()	      ) ) +
-	       row( hcell( _( "Distribution:"	) ) + cell( p1->distribution()			) + cell( p2->distribution()		      ) ) +
-	       row( hcell( _( "Vendor:"		) ) + cell( p1->vendor()			) + cell( p2->vendor()			      ) ) +
-	       row( hcell( _( "Packager:"	) ) + cell( p1->packager()			) + cell( p2->packager()		      ) ) +
-#ifdef FIXME
-	       row( hcell( _( "Architecture:"	) ) + cell( p1->arch()				) + cell( p2->arch()			      ) ) +
-#endif
-	       row( hcell( _( "OS:"		) ) + cell( p1->os()				) + cell( p2->os()			      ) ) +
-	       row( hcell( _( "Build Host:"	) ) + cell( p1->buildhost()			) + cell( p2->buildhost()		      ) ) +
-	       row( hcell( _( "URL:"		) ) + cell( p1->url()				) + cell( p2->url()			      ) ) +
-#ifdef FIXME
-	       row( hcell( _( "Source RPM:"	) ) + cell( p1->sourceloc()			) + cell( p2->sourceloc()		      ) ) +
-	       row( hcell( _( "Location:"	) ) + cell( p1->location()			) + cell( p2->location()		      ) ) +
-	       row( hcell( _( "Media No.:"	) ) + cell( p1->medianr()			) + cell( p2->medianr()			      ) ) +
-#endif
-	       row( hcell( _( "Authors:"	) ) + authorsListCell( p1			) + authorsListCell( p2			      ) )
+	       row( hcell( _( "Media No.:"	) ) + cell( p1->mediaId()			) + cell( p2->mediaId()			) ) +
+	       row( hcell( _( "Authors:"	) ) + authorsListCell( p1			) + authorsListCell( p2			) )
 	       );
 
     return html;

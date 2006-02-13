@@ -24,7 +24,7 @@
 
 #include <qtextbrowser.h>
 #include <YQZypp.h>
-#include <y2util/Date.h>
+#include <zypp/Date.h>
 
 
 class QTabWidget;
@@ -93,18 +93,13 @@ public:
     static QString cell( QString contents		);
     static QString cell( int contents 			);
     static QString cell( const string & contents	);
-    static QString cell( const Date & date		);
+    static QString cell( const zypp::Date & date	);
 
     /**
      * Returns a string containing a HTML table cell with 'contents'
      * for table headers.
      **/
     static QString hcell( QString contents );
-
-    /**
-     * Format a date.
-     **/
-    static QString formatDate( const Date & date );
 
 
 public slots:
