@@ -101,33 +101,50 @@ YQPkgSelList::filter()
 {
     emit filterStart();
 
-#ifdef FIXME
-    if ( selection() )
+    if ( selection() )	// The seleted QListViewItem
     {
-	ZyppSelection sel = selection()->zyppSelection();
+	ZyppSelection zyppSelection = selection()->zyppSelection();
 
-	if ( sel )
+	if ( zyppSelection )
 	{
+	    set<string> wanted = zyppSelection->install_packages();
 
-	    // FIXME
-	}
-    }
+#ifdef FIXME_doesnt_work_yet
+	    // doesn't seem to work yet - no content
 #else
-    {
-	{
-#endif
+	    y2milestone( "Selection content START" );
 
+	    for ( set<string>::const_iterator it = wanted.begin();
+		  it != wanted.end();
+		  ++it )
+	    {
+		y2debug( "Selection contains %s", (*it).c_str() );
+	    }
+
+	    y2milestone( "Selection content END" );
+#endif
 
 	    for ( ZyppPoolIterator it = zyppPkgBegin();
 		  it != zyppPkgEnd();
 		  ++it )
 	    {
-		ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
+		string name = (*it)->theObj()->name();
 
-		if ( zyppPkg )
+		if ( contains( wanted, name ) )
 		{
-		    emit filterMatch( *it, zyppPkg );
+		    y2milestone( "Package %s is in selection", name.c_str() );
+
+		    ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
+
+		    if ( zyppPkg )
+		    {
+			emit filterMatch( *it, zyppPkg );
+		    }
 		}
+#if 0
+		else
+		    y2debug( "Package %s not in selection", name.c_str() );
+#endif
 	    }
 	}
     }
@@ -166,6 +183,7 @@ void
 YQPkgSelList::applyChanges()
 {
 #ifdef FIXME
+    // Select all packages of the currently selected selections
     Y2PM::selectionManager().activate( Y2PM::packageManager() );
 #endif
     emit updatePackages();
@@ -186,11 +204,7 @@ YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList *	pkgSelList,
     if ( ! _zyppSelection )
 	_zyppSelection = tryCastToZyppSelection( selectable->theObj() );
 
-#ifdef FIXME
-    QString text = fromUTF8( _zyppSelection->summary( Y2PM::getPreferredLocale() ) );
-#else
     QString text = fromUTF8( _zyppSelection->summary() );
-#endif
 
     // You don't want to know why we need this.
     text.replace( QRegExp( "Graphical Basis System" ), "Graphical Base System" );
