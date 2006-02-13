@@ -100,5 +100,10 @@ inline ZyppPatch	tryCastToZyppPatch( ZyppObj zyppObj )
 }
 
 
+template<typename T> bool contains( set<T> container, T search )
+{
+    return container.find( search ) != container.end();
+}
+
 
 #endif // YQZypp_h
