@@ -25,10 +25,6 @@
 #include <qpopupmenu.h>
 #include <qaction.h>
 
-#ifdef FIXME
-#include <y2pm/InstTarget.h>
-#endif
-
 #include "utf8.h"
 
 #include "YQPkgObjList.h"
