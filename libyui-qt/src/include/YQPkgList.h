@@ -67,6 +67,11 @@ public:
      **/
     virtual QPopupMenu * addAllInListSubMenu( QPopupMenu * menu );
 
+    /**
+     * Returns 'true' if there are any installed packages.
+     **/
+    static bool haveInstalledPkgs();
+
 
 public slots:
 

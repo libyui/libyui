@@ -39,11 +39,6 @@ YQPkgList::YQPkgList( QWidget * parent )
     : YQPkgObjList( parent )
 {
     _srpmStatusCol	= -42;
-#ifdef FIXME
-    int installedPkgs	= Y2PM::instTarget().numPackages();
-#else
-    int installedPkgs	= 0;
-#endif
 
     int numCol = 0;
     addColumn( "" );			_statusCol	= numCol++;
@@ -53,7 +48,7 @@ YQPkgList::YQPkgList( QWidget * parent )
     addColumn( _( "Summary" 	) );	_summaryCol	= numCol++;
     addColumn( _( "Size" 	) );	_sizeCol	= numCol++;
 
-    if ( installedPkgs > 0 )
+    if ( haveInstalledPkgs() )
     {
 	addColumn( _( "Avail. Ver." ) ); _versionCol	 = numCol++;
 	addColumn( _( "Inst. Ver."  ) ); _instVersionCol = numCol++;
@@ -115,6 +110,21 @@ YQPkgList::addPkgItem( ZyppSel	selectable,
     CHECK_PTR( item );
 
     item->setDimmed( dimmed );
+}
+
+
+bool
+YQPkgList::haveInstalledPkgs()
+{
+    for ( ZyppPoolIterator it = zyppPkgBegin();
+	  it != zyppPkgEnd();
+	  ++it )
+    {
+	if ( (*it)->installedObj() )
+	    return true;
+    }
+    
+    return false;
 }
 
 
