@@ -1,4 +1,20 @@
 -------------------------------------------------------------------
+Tue Feb 14 19:14:42 CET 2006 - sh@suse.de
+
+Package selector changes:
+
+- Display selections filter view only if there are any selections
+
+- Display packages that belong to a selection in selections filter
+
+- Propagate selection status change to corresponding packages
+
+- Display separate columns for installed and available package only
+  if there are any installed packages
+
+- "Technical Details" view now (almost) complete
+
+-------------------------------------------------------------------
 Tue Feb 14 11:25:02 CET 2006 - sh@suse.de
 
 - Applied mfabian's fix for bug #132577: SuSE Serif Italic font 
