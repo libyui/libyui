@@ -78,6 +78,38 @@ YQPkgDependenciesView::showDetails( ZyppSel selectable )
 QString
 YQPkgDependenciesView::simpleTable( ZyppPkg pkg )
 {
+    /************************
+
+    Resolvable::deps[Dep::REQUIRES]
+    Resolvable::deps[Dep::PROVIDES]
+
+    see libzypp/zypp/target/store/serialize.cc
+
+    zypp/Dependencies.c :
+
+    str << "Dependencies: [" << endl;
+    if ( ! obj[Dep::PROVIDES].empty() )
+      str << "PROVIDES:" << endl << obj[Dep::PROVIDES];
+    if ( ! obj[Dep::PREREQUIRES].empty() )
+      str << "PREREQUIRES:" << endl << obj[Dep::PREREQUIRES];
+    if ( ! obj[Dep::REQUIRES].empty() )
+      str << "REQUIRES:" << endl << obj[Dep::REQUIRES];
+    if ( ! obj[Dep::CONFLICTS].empty() )
+      str << "CONFLICTS:" << endl << obj[Dep::CONFLICTS];
+    if ( ! obj[Dep::OBSOLETES].empty() )
+      str << "OBSOLETES:" << endl << obj[Dep::OBSOLETES];
+    if ( ! obj[Dep::RECOMMENDS].empty() )
+      str << "RECOMMENDS:" << endl << obj[Dep::RECOMMENDS];
+    if ( ! obj[Dep::SUGGESTS].empty() )
+      str << "SUGGESTS:" << endl << obj[Dep::SUGGESTS];
+    if ( ! obj[Dep::FRESHENS].empty() )
+      str << "FRESHENS:" << endl << obj[Dep::FRESHENS];
+    if ( ! obj[Dep::ENHANCES].empty() )
+      str << "ENHANCES:" << endl << obj[Dep::ENHANCES];
+    return str << "]";
+
+
+    **************************/
     QString html = "<br>" +
 	table(
 	       row( hcell( _( "Version:" ) )	+ cell( pkg->version() + "-" + pkg->release() ) ) +
