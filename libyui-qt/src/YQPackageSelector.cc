@@ -284,21 +284,24 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     if ( ! _youMode )
     {
-	_selectionsFilterView = new YQPkgSelectionsFilterView( parent );
-	CHECK_PTR( _selectionsFilterView );
-	_filters->addPage( _( "Selections" ), _selectionsFilterView );
+	if ( ! zyppPool().empty<zypp::Selection>() )
+	{
+	    _selectionsFilterView = new YQPkgSelectionsFilterView( parent );
+	    CHECK_PTR( _selectionsFilterView );
+	    _filters->addPage( _( "Selections" ), _selectionsFilterView );
 
-	_selList = _selectionsFilterView->selList();
-	CHECK_PTR( _selList );
+	    _selList = _selectionsFilterView->selList();
+	    CHECK_PTR( _selList );
 
-	connect( _selList, 		SIGNAL( statusChanged()	               	),
-		 this,			SLOT  ( autoResolveDependencies() 	) );
+	    connect( _selList, 		 SIGNAL( statusChanged()	        ),
+		     this,		 SLOT  ( autoResolveDependencies() 	) );
 
-	connect( _pkgConflictDialog,	SIGNAL( updatePackages()      		),
-		 _selList, 		SLOT  ( updateToplevelItemStates() 	) );
+	    connect( _pkgConflictDialog, SIGNAL( updatePackages()      		),
+		     _selList,		 SLOT  ( updateToplevelItemStates() 	) );
 
-	connect( this,			SIGNAL( refresh()			),
-		 _selList, 		SLOT  ( updateToplevelItemStates() 	) );
+	    connect( this,		 SIGNAL( refresh()			),
+		     _selList, 		 SLOT  ( updateToplevelItemStates() 	) );
+	}
     }
 
 
