@@ -22,6 +22,9 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 #include <qregexp.h>
+#include <zypp/ZYppFactory.h>
+#include <zypp/Resolver.h>
+
 
 #include "YQi18n.h"
 #include "utf8.h"
@@ -179,17 +182,6 @@ YQPkgSelList::selection() const
 }
 
 
-void
-YQPkgSelList::applyChanges()
-{
-#ifdef FIXME
-    // Select all packages of the currently selected selections
-    Y2PM::selectionManager().activate( Y2PM::packageManager() );
-#endif
-    emit updatePackages();
-}
-
-
 
 
 
@@ -227,7 +219,30 @@ void
 YQPkgSelListItem::setStatus( ZyppStatus newStatus )
 {
     YQPkgObjListItem::setStatus( newStatus );
-    _pkgSelList->applyChanges();
+    applyChanges();
+
+    _pkgSelList->sendUpdatePackages();
+}
+
+
+void
+YQPkgSelListItem::applyChanges()
+{
+    if ( selectable()->unmodified() )
+	return;
+
+    bool install = selectable()->toInstall();
+    ZyppObj obj = install ?	// the other way round as mayb expected:
+	selectable()->candidateObj() :	// install the candidate,
+	selectable()->installedObj();	// remove the installed
+
+    if ( ! obj )
+	obj = selectable()->theObj();
+
+    bool success = zypp::getZYpp()->resolver()->transactResObject( obj, install );
+
+    if ( ! success )
+	y2warning( "Couldn't transact selection %s", obj->name().c_str() );
 }
 
 

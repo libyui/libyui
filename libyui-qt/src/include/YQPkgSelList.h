@@ -83,12 +83,6 @@ public slots:
     void sendUpdatePackages() { emit updatePackages(); }
 
     /**
-     * Activate current selections in the selection manager and emit an
-     * updatePackages() signal. 
-     **/
-    void applyChanges();
-
-    /**
      * Fill the selection list.
      **/
     void fillList();
@@ -182,6 +176,13 @@ public:
 
 protected:
 
+    /**
+     * Propagate changes in the selection status to the affected packages
+     * via the solver.
+     **/
+    void applyChanges();
+
+    
     // Data members
 
     YQPkgSelList *	_pkgSelList;
