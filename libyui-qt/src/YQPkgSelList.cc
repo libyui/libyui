@@ -112,21 +112,6 @@ YQPkgSelList::filter()
 	{
 	    set<string> wanted = zyppSelection->install_packages();
 
-#ifdef FIXME_doesnt_work_yet
-	    // doesn't seem to work yet - no content
-#else
-	    y2milestone( "Selection content START" );
-
-	    for ( set<string>::const_iterator it = wanted.begin();
-		  it != wanted.end();
-		  ++it )
-	    {
-		y2debug( "Selection contains %s", (*it).c_str() );
-	    }
-
-	    y2milestone( "Selection content END" );
-#endif
-
 	    for ( ZyppPoolIterator it = zyppPkgBegin();
 		  it != zyppPkgEnd();
 		  ++it )
@@ -135,8 +120,6 @@ YQPkgSelList::filter()
 
 		if ( contains( wanted, name ) )
 		{
-		    y2milestone( "Package %s is in selection", name.c_str() );
-
 		    ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
 
 		    if ( zyppPkg )
@@ -144,10 +127,6 @@ YQPkgSelList::filter()
 			emit filterMatch( *it, zyppPkg );
 		    }
 		}
-#if 0
-		else
-		    y2debug( "Package %s not in selection", name.c_str() );
-#endif
 	    }
 	}
     }
@@ -229,9 +208,21 @@ void
 YQPkgSelListItem::applyChanges()
 {
     if ( selectable()->unmodified() )
+    {
+	y2milestone( "Selection %s unmodified", selectable()->theObj()->name().c_str() ) ;
+#if 0
 	return;
+#endif
+    }
+
 
     bool install = selectable()->toInstall();
+
+#ifdef FIXME
+#else
+    install = true;
+#endif
+    
     ZyppObj obj = install ?	// the other way round as mayb expected:
 	selectable()->candidateObj() :	// install the candidate,
 	selectable()->installedObj();	// remove the installed
@@ -239,6 +230,9 @@ YQPkgSelListItem::applyChanges()
     if ( ! obj )
 	obj = selectable()->theObj();
 
+    y2debug( "Transacting selection %s with %s",
+	     obj->name().c_str(), install ? "install" : "delete" );
+    
     bool success = zypp::getZYpp()->resolver()->transactResObject( obj, install );
 
     if ( ! success )
