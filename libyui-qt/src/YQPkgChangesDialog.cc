@@ -29,6 +29,9 @@
 #include <qpushbutton.h>
 #include <qstyle.h>
 
+#include "YQZypp.h"
+#include <zypp/ResStatus.h>
+
 #include "YQPkgChangesDialog.h"
 #include "YQPkgList.h"
 #include "QY2LayoutUtils.h"
@@ -136,34 +139,7 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
 void
 YQPkgChangesDialog::filter( bool byAuto, bool byApp, bool byUser )
 {
-    YQUI::ui()->busyCursor();
-    _pkgList->clear();
-
-#ifdef FIXME
-    PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
-
-    while ( it != Y2PM::packageManager().end() )
-    {
-	Selectable::Ptr selectable = *it;
-
-	if ( selectable->to_modify() )
-	{
-
-	    // s/ ->by_appl() / ->isModifiedBy( XY )  - see zypp::ResStatus.h
-
-	    if ( selectable->by_auto() && byAuto ||
-		 selectable->by_appl() && byApp  ||
-		 selectable->by_user() && byUser   )
-	    {
-		_pkgList->addPkgItem( selectable, selectable->theObj() );
-	    }
-	}
-
-	++it;
-    }
-#endif
-
-    YQUI::ui()->normalCursor();
+    filter( QRegExp( "" ), byAuto, byApp, byUser );
 }
 
 
@@ -173,27 +149,26 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, bool byAuto, bool byApp, boo
     YQUI::ui()->busyCursor();
     _pkgList->clear();
 
-#ifdef FIXME
-    PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
-
-    while ( it != Y2PM::packageManager().end() )
+    for ( ZyppPoolIterator it = zyppPkgBegin();
+	  it != zyppPkgEnd();
+	  ++it )
     {
-	Selectable::Ptr selectable = *it;
+	ZyppSel selectable = *it;
 
-	if ( selectable->to_modify() )
+	if ( selectable->toModify() )
 	{
-	    if ( selectable->by_auto() && byAuto ||
-		 selectable->by_appl() && byApp  ||
-		 selectable->by_user() && byUser   )
+	    zypp::ResStatus::TransactByValue modifiedBy = selectable->modifiedBy();
+
+	    if ( ( modifiedBy == zypp::ResStatus::SOLVER     ) && byAuto ||
+		 ( modifiedBy == zypp::ResStatus::APPL_LOW ||
+		   modifiedBy == zypp::ResStatus::APPL_HIGH  ) && byApp  ||
+		 ( modifiedBy == zypp::ResStatus::USER       ) && byUser   )
 	    {
-		if ( regexp.match( selectable->name().asString().c_str() ) >= 0 )
-		    _pkgList->addPkgItem( selectable, selectable->theObj() );
+		if ( regexp.isEmpty() || regexp.search( selectable->name().c_str() ) >= 0 )
+		    _pkgList->addPkgItem( selectable, tryCastToZyppPkg( selectable->theObj() ) );
 	    }
 	}
-
-	++it;
     }
-#endif
 
     YQUI::ui()->normalCursor();
 }
