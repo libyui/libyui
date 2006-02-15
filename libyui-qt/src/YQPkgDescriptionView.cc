@@ -46,7 +46,7 @@ void
 YQPkgDescriptionView::showDetails( ZyppSel selectable )
 {
     _selectable = selectable;
-    
+
     if ( ! selectable )
     {
 	clear();
@@ -59,6 +59,8 @@ YQPkgDescriptionView::showDetails( ZyppSel selectable )
 
     if ( ! description.contains( "<!-- DT:Rich -->" ) )
 	description = simpleHtmlParagraphs( description );
+    else
+	y2debug( "Description for %s is preformatted in DT:Rich", selectable->theObj()->name().c_str() );
 
     html_text += description;
 
@@ -75,26 +77,28 @@ QString YQPkgDescriptionView::simpleHtmlParagraphs( QString text )
     bool foundAuthorsList = false;
     QString html_text = "<p>";
 
-    QStringList lines = QStringList::split( '\n', text.simplifyWhiteSpace() );
+    QStringList lines = QStringList::split( '\n', text,
+					    true ); // allowEmptyEntries
     QValueList<QString>::const_iterator it = lines.begin();
 
     while ( it != lines.end() )
     {
-	QString line = htmlEscape( *it );
+	QString line = htmlEscape( *it ).stripWhiteSpace();
 
 	if ( line.startsWith( "Authors:" ) )
 	{
-	    line = "<b>" + line + "</b>";
+	    line = "<p><b>" + line + "</b><ul>";
 	    foundAuthorsList = true;
 	}
 
 	if ( foundAuthorsList )
 	{
-	    html_text += line + "<br>";
+	    if ( ! line.startsWith( "-----" ) && ! line.isEmpty() )
+		html_text += "<li>" + line + "</li>";
 	}
 	else
 	{
-	    if ( line.length() == 0 )	// Empty lines mean new paragraph
+	    if ( line.isEmpty() )
 		html_text += "</p><p>";
 	    else
 		html_text += " " + line;
@@ -103,6 +107,9 @@ QString YQPkgDescriptionView::simpleHtmlParagraphs( QString text )
 	++it;
     }
 
+    if ( foundAuthorsList )
+	html_text += "</ul>";
+    
     html_text += "</p>";
 
     return html_text;
