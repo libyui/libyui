@@ -1,5 +1,7 @@
 -------------------------------------------------------------------
-Wed Feb 15 18:32:14 CET 2006 - sh@suse.de
+Wed Feb 15 19:08:14 CET 2006 - sh@suse.de
+
+- V 2.13.14
 
 - Fixed package description formatting 
 
@@ -8,6 +10,7 @@ Wed Feb 15 18:32:14 CET 2006 - sh@suse.de
 - Workaround for incomplete selections packages handling
 
 - Migrated pkg description popup (for hyperlinks) in PkgSel to ZYPP
+
 
 -------------------------------------------------------------------
 Tue Feb 14 19:14:42 CET 2006 - sh@suse.de
