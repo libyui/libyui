@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Wed Feb 15 18:32:14 CET 2006 - sh@suse.de
+
+- Fixed package description formatting 
+
+- Migrated "automatic changes" dialog in PkgSel to ZYPP
+
+- Workaround for incomplete selections packages handling
+
+-------------------------------------------------------------------
 Tue Feb 14 19:14:42 CET 2006 - sh@suse.de
 
 Package selector changes:
