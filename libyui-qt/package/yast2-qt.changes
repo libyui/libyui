@@ -7,6 +7,8 @@ Wed Feb 15 18:32:14 CET 2006 - sh@suse.de
 
 - Workaround for incomplete selections packages handling
 
+- Migrated pkg description popup (for hyperlinks) in PkgSel to ZYPP
+
 -------------------------------------------------------------------
 Tue Feb 14 19:14:42 CET 2006 - sh@suse.de
 

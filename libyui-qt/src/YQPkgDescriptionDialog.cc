@@ -120,21 +120,15 @@ YQPkgDescriptionDialog::filter( const QString & qPkgName )
 
     // Search for pkgs with that name
 
-#ifdef FIXME
-    
-    PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
-
-    while ( it != Y2PM::packageManager().end() )
+    for ( ZyppPoolIterator it = zyppPkgBegin();
+	  it != zyppPkgEnd();
+	  ++it )
     {
-	Selectable::Ptr selectable = *it;
-	ZyppObj zyppObj = selectable->theObj();
+	ZyppObj zyppObj = (*it)->theObj();
 
 	if ( zyppObj && zyppObj->name() == pkgName )
-	    _pkgList->addPkgItem( selectable, zyppObj );
-
-	++it;
+	    _pkgList->addPkgItem( *it, tryCastToZyppPkg( zyppObj ) );
     }
-#endif
 
 
     // Display description of the first pkg with that name
