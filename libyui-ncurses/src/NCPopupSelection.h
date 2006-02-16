@@ -34,8 +34,6 @@
 
 //#include <y2pm/PMError.h>
 #include <zypp/Selection.h>
-#include <zypp/Selection.h>
-#include <zypp/Package.h>
 #include <zypp/Package.h>
 //#include <y2pm/InstSrc.h>
 //#include <y2pm/InstSrcPtr.h>

@@ -76,9 +76,9 @@ class PackageSelector
 
     NCPopupDeps * depsPopup;	// the package dependeny popup
 
-#ifdef FIXME
     NCPopupSelection * selectionPopup; 	// the selections popup
 
+#ifdef FIXME
     NCPopupDiskspace * diskspacePopup;	// the popup showing the disk usage
 #endif
 

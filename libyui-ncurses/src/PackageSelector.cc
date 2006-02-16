@@ -28,7 +28,7 @@
 #include "NCSelectionBox.h"
 //#include "NCPopupTree.h"
 #include "NCMenuButton.h"
-//#include "NCPopupSelection.h"
+#include "NCPopupSelection.h"
 #include "NCPopupDeps.h"
 //#include "NCPopupDiskspace.h"
 //#include "NCPopupPkgTable.h"
@@ -89,8 +89,8 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
       , visibleInfo( YCPNull() )
       , filterPopup( 0 )
       , depsPopup( 0 )
-#ifdef FIXME
       , selectionPopup( 0 )
+#ifdef FIXME
       , diskspacePopup( 0 )
 #endif
       , searchPopup( 0 )
@@ -222,10 +222,10 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
 	Y2PM::selectionManager().SaveState();
 #endif
 
-#ifdef FIXME
 	// create the selections popup
 	selectionPopup = new NCPopupSelection( wpos( 1, 1 ), this );
 
+#ifdef FIXME
 	// create the filter popup
 	filterPopup = new NCPopupTree( wpos( 1, 1 ),  this );	 
 #endif
@@ -262,12 +262,10 @@ PackageSelector::~PackageSelector()
     {
 	delete filterPopup;
     }
-#ifdef FIXME
     if ( selectionPopup )
     {
 	delete selectionPopup;
     }
-#endif
     if ( depsPopup )
     {
 	delete depsPopup;	
@@ -414,11 +412,8 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, ZyppObj pkgPtr )
 //
 // Fills the package table with the list of packages of the given selection
 //
-bool PackageSelector::showSelPackages( const YCPString & label,  ZyppSelection sel )
+bool PackageSelector::showSelPackages( const YCPString & label,  ZyppSelection zyppSelection )
 {
-    ZyppPool slbList;
-    ZyppPoolIterator listIt;
-
     NCPkgTable * packageList = getPackageList();
     
     if ( !packageList )
@@ -430,27 +425,29 @@ bool PackageSelector::showSelPackages( const YCPString & label,  ZyppSelection s
     // clear the package table
     packageList->itemsCleared ();
     
-    if ( sel )
+    if ( zyppSelection )
     {
-	slbList = zyppPool ();
-    }
+	set<string> wanted = zyppSelection->install_packages();
+	set<string>::iterator not_found = wanted.end ();
 
-#ifdef FIXME
-    actually use the selection data!;
-    probably sel->install_packages (get-language);
-#else
-    // for now, all packages.
-    ZyppPoolIterator b = zyppPkgBegin ();
-    ZyppPoolIterator e = zyppPkgEnd ();
-    for ( listIt = b; listIt != e;  ++listIt )    
-    {
-	ZyppPkg zyppPkg = tryCastToZyppPkg( (*listIt)->theObj() );
-	if ( zyppPkg )
+	ZyppPoolIterator
+	    b = zyppPkgBegin(),
+	    e = zyppPkgEnd(),
+	    it;
+	for ( it = b; it != e; ++it )
 	{
-	    packageList->createListEntry( zyppPkg, *listIt );
-	}
+	    string name = (*it)->name(); // omitted theObj
+
+	    if ( wanted.find (name) != not_found )
+	    {
+		ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
+		if ( zyppPkg )
+		{
+		    packageList->createListEntry( zyppPkg, *it );
+		}
+            }
+        }
     }
-#endif
 
     // show the package table
     packageList->drawList();
@@ -1317,13 +1314,11 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
     }
     else if ( event.selection->compare( PkgNames::Selections() ) == YO_EQUAL )
     {
-#ifdef FIXME
 	if ( selectionPopup )
 	{
 	    // show the selection popup
 	    retEvent = selectionPopup->showSelectionPopup( );
 	}
-#endif
     }
 // patches
 #ifdef FIXME

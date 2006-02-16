@@ -17,7 +17,7 @@
 
 /-*/
 #include "Y2Log.h"
-//#include "NCPopupSelection.h"
+#include "NCPopupSelection.h"
 
 #include "YDialog.h"
 #include "NCSplit.h"
@@ -28,6 +28,11 @@
 
 #include "YQZypp.h"
 
+#ifdef FIXME
+#define LOCALE Y2PM::getPreferredLocale()
+#else
+#define LOCALE
+#endif
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -141,12 +146,18 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
     if ( postevent.detail == NCursesEvent::USERDEF )
     {
 	int index = sel->getCurrentItem();
-	ZyppSelection selPtr = sel->getDataPointer( index );
+	ZyppSelection selPtr = tryCastToZyppSelection (sel->getDataPointer( index ));
 	if ( selPtr )
 	{
 	    NCMIL << "Current selection: " << getCurrentLine() << endl;
+
 	    // activate the package solving
-	    Y2PM::selectionManager().activate( Y2PM::packageManager() );
+	    // http://svn.suse.de/trac/zypp/wiki/YaST-UI objects
+	    zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
+	    bool success = resolver->resolvePool();
+	    // problems will be dealt with when?
+	    NCMIL << "Selection resolved: " << success << endl;
+
 	    // show the package list
 	    packager->showSelPackages( getCurrentLine(), selPtr );
 	    packager->showDiskSpace();
@@ -170,9 +181,9 @@ string  NCPopupSelection::getCurrentLine( )
 	return "";
 
     int index = sel->getCurrentItem();
-    ZyppSelection selPtr = sel->getDataPointer(index);
+    ZyppSelection selPtr = tryCastToZyppSelection (sel->getDataPointer(index));
 
-    return ( selPtr?selPtr->summary(Y2PM::getPreferredLocale()):"" );
+    return ( selPtr?selPtr->summary(LOCALE):"" );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -246,13 +257,11 @@ bool NCPopupSelection::postAgain( )
 //
 // OrderFunc 
 //
-bool order( ZyppSelection ptr1, ZyppSelection ptr2 )
+bool order( ZyppSel slb1, ZyppSel slb2 )
 {
-    if ( ptr1->order() < ptr2->order() )
-    {
-	return true;
-    }
-    return false;
+    ZyppSelection ptr1 = tryCastToZyppSelection (slb1->theObj());
+    ZyppSelection ptr2 = tryCastToZyppSelection (slb2->theObj());
+    return ptr1->order() < ptr2->order();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -268,36 +277,38 @@ bool NCPopupSelection::fillSelectionList( NCPkgTable * sel )
     if ( !sel )
 	return false;
 
-    vector<string> pkgLine;
-    pkgLine.reserve(4);
-
-    list<ZyppSelection> selList;
-    list<ZyppSelection>::iterator listIt;
-    
-    PMManager::SelectableVec::const_iterator it;
-    
-    for (  it = Y2PM::selectionManager().begin(); it != Y2PM::selectionManager().end(); ++it )
+    // watch out, ZyppSelection is not ZyppSel (zypp::ui::Selectable::Ptr)
+    list<ZyppSel> slbList;
+    ZyppPoolIterator
+	b = zyppSelectionsBegin (),
+	e = zyppSelectionsEnd (),
+	i;
+    for ( i = b; i != e;  ++i )    
     {
-	ZyppSelection selPtr = (*it)->theObj();
+	ZyppSelection selPtr = tryCastToZyppSelection ((*i)->theObj());
 	if ( selPtr && selPtr->visible() && !selPtr->isBase() )
 	{
 	    NCMIL << "Add-on selection: " <<  selPtr->name() << ", initial status: "
-		  << selPtr->getSelectable()->status() << endl;
+		  << (*i)->status() << endl;
 
-	    selList.push_back( selPtr ); 
+	    slbList.push_back (*i);
 	}
     }
 
-    selList.sort( order );
+    slbList.sort( order );
     
-    for ( listIt = selList.begin(); listIt != selList.end(); ++listIt )
+    list<ZyppSel>::iterator listIt;
+    vector<string> pkgLine;
+    for ( listIt = slbList.begin(); listIt != slbList.end(); ++listIt )
     {
+	ZyppSelection selPtr = tryCastToZyppSelection ((*listIt)->theObj());
 	pkgLine.clear();
-	pkgLine.push_back( (*listIt)->summary(Y2PM::getPreferredLocale()) );	// the description
+	pkgLine.push_back( selPtr->summary(LOCALE) ); // the description
 
-	sel->addLine( (*listIt)->getSelectable()->status(),	// the status
+	sel->addLine( (*listIt)->status(),	// the status
 		      pkgLine,
-		      (*listIt) );		// ZyppSelection	
+		      selPtr, // ZyppSelection	
+		      (*listIt) ); // ZyppSel
     }
     
     return true;
