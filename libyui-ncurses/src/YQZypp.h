@@ -55,57 +55,8 @@ typedef zypp::Selection::constPtr		ZyppSelection;
 typedef zypp::Pattern::constPtr			ZyppPattern;
 typedef zypp::Patch::constPtr			ZyppPatch;
 
-#if 1
-typedef zypp::ResObject		ZyppObj_;
-typedef zypp::Package		ZyppPkg_;
-#else
-class ResObjectCompat;
-class ResObjectMixin
-{
-public:
-    typedef ResObjectCompat Self; // really
-    typedef zypp::ResTraits<Self> TraitsType;
-    typedef TraitsType::PtrType Ptr;
-    typedef TraitsType::constPtrType constPtr;
-
-    // missing methods
-    bool hasSelectable () const { return false; }
-    ZyppSel getSelectable () const { return 0; }
-    bool hasCandidateObj () const { return false; }
-    Ptr getCandidateObj () const { return 0; }
-    bool hasInstalledObj () const { return false; }
-    Ptr getInstalledObj () const { return 0; }
-};
-// fooling the compiler until I know how to fix
-DEFINE_PTR_TYPE(ResObjectCompat);
-class ResObjectCompat : public zypp::ResObject, public ResObjectMixin
-{
-public:
-    typedef ResObjectCompat Self;
-    typedef zypp::ResTraits<Self> TraitsType;
-    typedef TraitsType::PtrType Ptr;
-    typedef TraitsType::constPtrType constPtr;
-};
-typedef ResObjectCompat ZyppObj_;
-
-// fooling the compiler until I know how to fix
-DEFINE_PTR_TYPE(PackageCompat);
-class PackageCompat : public zypp::Package, public ResObjectMixin
-{
-public:
-    typedef PackageCompat Self;
-    typedef zypp::ResTraits<Self> TraitsType;
-    typedef TraitsType::PtrType Ptr;
-    typedef TraitsType::constPtrType constPtr;
-
-    // missing methods
-    bool hasLicenseToConfirm () const { return true; }
-    void markLicenseConfirmed () const {}
-};
-typedef PackageCompat ZyppPkg_;
-#endif
-typedef ZyppObj_::constPtr ZyppObj;
-typedef ZyppPkg_::constPtr ZyppPkg;
+typedef zypp::ResObject::constPtr ZyppObj;
+typedef zypp::Package::constPtr ZyppPkg;
 
 typedef zypp::ResPoolProxy			ZyppPool;
 typedef zypp::ResPoolProxy::const_iterator	ZyppPoolIterator;
@@ -131,7 +82,7 @@ inline ZyppPoolIterator zyppPatchesEnd()	{ return zyppEnd<zypp::Patch>();		}
 
 inline ZyppPkg		tryCastToZyppPkg( ZyppObj zyppObj )
 {
-    return zypp::dynamic_pointer_cast<const ZyppPkg_>( zyppObj );
+    return zypp::dynamic_pointer_cast<const zypp::Package>( zyppObj );
 }
 
 inline ZyppSelection	tryCastToZyppSelection( ZyppObj zyppObj )
