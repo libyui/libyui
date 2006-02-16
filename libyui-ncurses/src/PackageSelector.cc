@@ -82,6 +82,54 @@ bool ic_compare ( char c1, char c2 )
 
 ///////////////////////////////////////////////////////////////////
 //
+// detection whether the user has made any changes
+// the T parameter is either zypp::Pagkage or zypp::Selection (or zypp::Patch)
+//
+ 
+template <class T>
+void saveState ()
+{
+#ifdef FIXME
+    Y2PM::Manager<T>().SaveState();
+#endif
+}
+
+template <class T>
+void restoreState ()
+{
+#ifdef FIXME
+    Y2PM::Manager<T>().restoreState();
+#endif
+}
+
+template <class T>
+void clearSaveState ()
+{
+#ifdef FIXME
+    Y2PM::Manager<T>().clearSaveState();
+#endif
+}
+
+bool isDirty (const ZyppSel& slb)
+{
+#ifdef FIXME
+    return slb->isModifiedBy (zypp::ResStatus::USER);
+#else
+    return true;
+#endif
+}
+
+template <class T>
+bool diffState ()
+{
+    ZyppPoolIterator
+	b = zyppBegin<T>(),
+	e = zyppEnd<T>();
+    return find_if (b, e, isDirty) != e;
+}
+
+///////////////////////////////////////////////////////////////////
+//
 // Constructor
 //
 PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, string floppyDevice )
@@ -208,15 +256,11 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
 	}
     }
 
-#ifdef FIXME_PM
-    Y2PM::packageManager().SaveState();
-#endif
+    saveState<zypp::Package> ();
 
     if ( !youMode )
     {
-#ifdef FIXME_PM
-	Y2PM::selectionManager().SaveState();
-#endif
+	saveState<zypp::Selection> ();
 
 	// create the selections popup
 	selectionPopup = new NCPopupSelection( wpos( 1, 1 ), this );
@@ -238,9 +282,7 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
     }
     else
     {
-#ifdef FIXME_PATCHES
-	Y2PM::youPatchManager().SaveState();
-#endif
+	saveState<zypp::Patch> ();
     }
 }
 
@@ -1658,16 +1700,12 @@ bool PackageSelector::SelectionHandler( const NCursesEvent&  event )
 // 
 bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 {
-#ifdef FIXME
-    bool changes = Y2PM::packageManager().DiffState();
+    bool changes = diffState<zypp::Package> ();
 
     if ( youMode )
-	changes |= Y2PM::youPatchManager().DiffState();
+	changes |= diffState<zypp::Patch> ();
     else
-	changes |= Y2PM::selectionManager().DiffState();
-#else
-    bool changes = true;
-#endif
+	changes |= diffState<zypp::Selection> ();
 
     if (changes) {
 	// show a popup and ask the user
@@ -1684,14 +1722,12 @@ bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 	}
     }
 
-#ifdef FIXME
-    // restore the package/patch/selection states
-    Y2PM::packageManager().RestoreState();
+    restoreState<zypp::Package> ();
+
     if ( youMode )
-        Y2PM::youPatchManager().RestoreState();
+	restoreState<zypp::Patch> ();
     else
-        Y2PM::selectionManager().RestoreState();
-#endif
+	restoreState<zypp::Selection> ();
 
     NCMIL <<  "Cancel button pressed - leaving package selection" << endl;
     const_cast<NCursesEvent &>(event).result = YCPSymbol("cancel");
@@ -1756,14 +1792,13 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 
     if ( closeDialog )
     {
-#ifdef FIXME
 	// clear the saved states
-	Y2PM::packageManager().ClearSaveState();
+	clearSaveState<zypp::Package> ();
+
 	if ( youMode )
-	    Y2PM::youPatchManager().ClearSaveState();
+	    clearSaveState<zypp::Patch> ();
 	else
-	    Y2PM::selectionManager().ClearSaveState();
-#endif
+	    clearSaveState<zypp::Selection> ();
 
 	const_cast<NCursesEvent &>(event).result = YCPSymbol("accept"); 
 	NCMIL <<  "OK button pressed - leaving package selection, starting installation" << endl;
