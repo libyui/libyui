@@ -1,7 +1,10 @@
 -------------------------------------------------------------------
-Thu Feb 16 14:07:27 CET 2006 - mvidner@suse.cz
+Thu Feb 16 18:34:35 CET 2006 - mvidner@suse.cz
 
 - Added the selection list.
+- Most popups should work now, some with faked data though.
+- Show also medium ID and RPM group.
+- 2.13.7
 
 -------------------------------------------------------------------
 Wed Feb 15 18:32:35 CET 2006 - mvidner@suse.cz
