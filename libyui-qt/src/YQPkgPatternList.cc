@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQPkgSelList.cc
+  File:	      YQPkgPatternList.cc
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
@@ -28,17 +28,25 @@
 
 #include "YQi18n.h"
 #include "utf8.h"
-#include "YQPkgSelList.h"
+#include "YQPkgPatternList.h"
 
 
-YQPkgSelList::YQPkgSelList( QWidget * parent, bool autoFill )
+YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill )
     : YQPkgObjList( parent )
 {
-    y2debug( "Creating selection list" );
+    y2debug( "Creating pattern list" );
 
     int numCol = 0;
     addColumn( ""		);	_statusCol	= numCol++;
-    addColumn( _( "Selection" ) );	_summaryCol	= numCol++;
+
+    // Translators: "Pattern" refers to so-called "installation patterns",
+    // i.e., specific task-oriented groups of packages, like "everything that
+    // is needed to run a web server". The idea of patterns is that they also
+    // include the configuration workflow needed for that task, such of
+    // configuring the web server. For the scope of the package selector, this
+    // is only of little relevance, though.
+
+    addColumn( _( "Pattern" )	);	_summaryCol	= numCol++;
     setAllColumnsShowFocus( true );
 
     connect( this, SIGNAL( selectionChanged( QListViewItem * )	),
@@ -51,48 +59,45 @@ YQPkgSelList::YQPkgSelList( QWidget * parent, bool autoFill )
     }
     filter();
 
-    y2debug( "Creating selection list done" );
+    y2debug( "Creating pattern list done" );
 }
 
 
-YQPkgSelList::~YQPkgSelList()
+YQPkgPatternList::~YQPkgPatternList()
 {
     // NOP
 }
 
 
 void
-YQPkgSelList::fillList()
+YQPkgPatternList::fillList()
 {
     clear();
-    y2debug( "Filling selection list" );
+    y2debug( "Filling pattern list" );
 
 
-    for ( ZyppPoolIterator it = zyppSelectionsBegin();
-	  it != zyppSelectionsEnd();
+    for ( ZyppPoolIterator it = zyppPatternsBegin();
+	  it != zyppPatternsEnd();
 	  ++it )
     {
-	ZyppSelection zyppSelection = tryCastToZyppSelection( (*it)->theObj() );
+	ZyppPattern zyppPattern = tryCastToZyppPattern( (*it)->theObj() );
 
-	if ( zyppSelection )
+	if ( zyppPattern )
 	{
-	    if ( zyppSelection->visible() && ! zyppSelection->isBase() )
-	    {
-		addPkgSelItem( *it, zyppSelection );
-	    }
+	    addPkgSelItem( *it, zyppPattern );
 	}
 	else
 	{
-	    y2error( "Found non-Selection selectable" );
+	    y2error( "Found non-Pattern selectable" );
 	}
     }
 
-    y2debug( "Selection list filled" );
+    y2debug( "Pattern list filled" );
 }
 
 
 void
-YQPkgSelList::filterIfVisible()
+YQPkgPatternList::filterIfVisible()
 {
     if ( isVisible() )
 	filter();
@@ -100,17 +105,17 @@ YQPkgSelList::filterIfVisible()
 
 
 void
-YQPkgSelList::filter()
+YQPkgPatternList::filter()
 {
     emit filterStart();
 
     if ( selection() )	// The seleted QListViewItem
     {
-	ZyppSelection zyppSelection = selection()->zyppSelection();
+	ZyppPattern zyppPattern = selection()->zyppPattern();
 
-	if ( zyppSelection )
+	if ( zyppPattern )
 	{
-	    set<string> wanted = zyppSelection->install_packages();
+	    set<string> wanted = zyppPattern->install_packages();
 
 	    for ( ZyppPoolIterator it = zyppPkgBegin();
 		  it != zyppPkgEnd();
@@ -136,8 +141,8 @@ YQPkgSelList::filter()
 
 
 void
-YQPkgSelList::addPkgSelItem( ZyppSel		selectable,
-			     ZyppSelection	zyppSelection )
+YQPkgPatternList::addPkgSelItem( ZyppSel	selectable,
+				 ZyppPattern	zyppPattern )
 {
     if ( ! selectable )
     {
@@ -145,19 +150,19 @@ YQPkgSelList::addPkgSelItem( ZyppSel		selectable,
 	return;
     }
 
-    new YQPkgSelListItem( this, selectable, zyppSelection );
+    new YQPkgPatternListItem( this, selectable, zyppPattern );
 }
 
 
-YQPkgSelListItem *
-YQPkgSelList::selection() const
+YQPkgPatternListItem *
+YQPkgPatternList::selection() const
 {
     QListViewItem * item = selectedItem();
 
     if ( ! item )
 	return 0;
 
-    return dynamic_cast<YQPkgSelListItem *> (item);
+    return dynamic_cast<YQPkgPatternListItem *> (item);
 }
 
 
@@ -165,22 +170,17 @@ YQPkgSelList::selection() const
 
 
 
-YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList *	pkgSelList,
-				    ZyppSel		selectable,
-				    ZyppSelection	zyppSelection )
-    : YQPkgObjListItem( pkgSelList, selectable, zyppSelection )
+YQPkgPatternListItem::YQPkgPatternListItem( YQPkgPatternList *	pkgSelList,
+					    ZyppSel		selectable,
+					    ZyppPattern		zyppPattern )
+    : YQPkgObjListItem( pkgSelList, selectable, zyppPattern )
     , _pkgSelList( pkgSelList )
-    , _zyppSelection( zyppSelection )
+    , _zyppPattern( zyppPattern )
 {
-    if ( ! _zyppSelection )
-	_zyppSelection = tryCastToZyppSelection( selectable->theObj() );
+    if ( ! _zyppPattern )
+	_zyppPattern = tryCastToZyppPattern( selectable->theObj() );
 
-    QString text = fromUTF8( _zyppSelection->summary() );
-
-    // You don't want to know why we need this.
-    text.replace( QRegExp( "Graphical Basis System" ), "Graphical Base System" );
-    text.replace( QRegExp( "Gnome" ), "GNOME" );
-
+    QString text = fromUTF8( _zyppPattern->summary() );
     setText( summaryCol(), text );
 
     setStatusIcon();
@@ -188,14 +188,14 @@ YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList *	pkgSelList,
 
 
 
-YQPkgSelListItem::~YQPkgSelListItem()
+YQPkgPatternListItem::~YQPkgPatternListItem()
 {
     // NOP
 }
 
 
 void
-YQPkgSelListItem::setStatus( ZyppStatus newStatus )
+YQPkgPatternListItem::setStatus( ZyppStatus newStatus )
 {
     YQPkgObjListItem::setStatus( newStatus );
     applyChanges();
@@ -205,11 +205,11 @@ YQPkgSelListItem::setStatus( ZyppStatus newStatus )
 
 
 void
-YQPkgSelListItem::applyChanges()
+YQPkgPatternListItem::applyChanges()
 {
     if ( selectable()->unmodified() )
     {
-	y2milestone( "Selection %s unmodified", selectable()->theObj()->name().c_str() ) ;
+	y2milestone( "Pattern %s unmodified", selectable()->theObj()->name().c_str() ) ;
 #if 0
 	return;
 #endif
@@ -222,7 +222,7 @@ YQPkgSelListItem::applyChanges()
 #else
     install = true;
 #endif
-    
+
     ZyppObj obj = install ?	// the other way round as mayb expected:
 	selectable()->candidateObj() :	// install the candidate,
 	selectable()->installedObj();	// remove the installed
@@ -230,13 +230,13 @@ YQPkgSelListItem::applyChanges()
     if ( ! obj )
 	obj = selectable()->theObj();
 
-    y2debug( "Transacting selection %s with %s",
+    y2debug( "Transacting pattern %s with %s",
 	     obj->name().c_str(), install ? "install" : "delete" );
-    
+
     bool success = zypp::getZYpp()->resolver()->transactResObject( obj, install );
 
     if ( ! success )
-	y2warning( "Couldn't transact selection %s", obj->name().c_str() );
+	y2warning( "Couldn't transact pattern %s", obj->name().c_str() );
 }
 
 
@@ -249,18 +249,22 @@ YQPkgSelListItem::applyChanges()
  * +1 if this >	 other
  **/
 int
-YQPkgSelListItem::compare( QListViewItem *	otherListViewItem,
-			   int			col,
-			   bool			ascending ) const
+YQPkgPatternListItem::compare( QListViewItem *	otherListViewItem,
+			       int		col,
+			       bool		ascending ) const
 {
-    YQPkgSelListItem * other = ( YQPkgSelListItem * ) otherListViewItem;
+#ifdef FIXME
+    YQPkgPatternListItem * other = ( YQPkgPatternListItem * ) otherListViewItem;
 
-    if ( ! _zyppSelection || ! other || ! other->zyppSelection() )
+    if ( ! _zyppPattern || ! other || ! other->zyppPattern() )
 	return 0;
 
-    return _zyppSelection->order().compare( other->zyppSelection()->order() );
+    return _zyppPattern->order().compare( other->zyppPattern()->order() );
+#else
+    return YQPkgObjListItem::compare( otherListViewItem, col, ascending );
+#endif
 }
 
 
 
-#include "YQPkgSelList.moc"
+#include "YQPkgPatternList.moc"

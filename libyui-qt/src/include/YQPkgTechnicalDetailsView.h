@@ -26,7 +26,7 @@
 
 
 /**
- * @short Display technical details ( very much like 'rpm -qi' ) for a zypp::Package
+ * @short Display technical details (very much like 'rpm -qi') for a ZYPP
  * object - the installed instance, the candidate instance or both ( in two
  * columns ) if both exist. All other available instances are ignored.
  **/
@@ -39,7 +39,7 @@ public:
     /**
      * Constructor
      **/
-    YQPkgTechnicalDetailsView( QWidget * parent, bool youMode = false );
+    YQPkgTechnicalDetailsView( QWidget * parent );
 
 
     /**
@@ -83,11 +83,6 @@ protected:
      * Format an RPM group. Retrieves the translated ( ! ) version.
      **/
     QString formatRpmGroup( ZyppPkg pkg ) const;
-
-
-    // Data members
-
-    bool _youMode;
 };
 
 

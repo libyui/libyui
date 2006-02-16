@@ -29,9 +29,8 @@ using std::list;
 using std::string;
 
 
-YQPkgTechnicalDetailsView::YQPkgTechnicalDetailsView( QWidget * parent, bool youMode )
+YQPkgTechnicalDetailsView::YQPkgTechnicalDetailsView( QWidget * parent )
     : YQPkgGenericDetailsView( parent )
-    , _youMode( youMode )
 {
 }
 
@@ -125,8 +124,7 @@ YQPkgTechnicalDetailsView::simpleTable( ZyppSel selectable,
 	       row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( pkg )		) ) +
 	       row( hcell( _( "License:"	) ) + cell( pkg->license()			) ) +
 	       row( hcell( _( "Installed Size:" ) ) + cell( pkg->size().asString()		) ) +
-	       row( hcell( _youMode ? _( "Download Size:" ) : _( "Archive Size:" ) )
-						    + cell( pkg->archivesize().asString()	) ) +
+	       row( hcell( _( "Archive Size:"   ) ) + cell( pkg->archivesize().asString()	) ) +
 	       row( hcell( _( "Distribution:"	) ) + cell( pkg->distribution()			) ) +
 	       row( hcell( _( "Vendor:"		) ) + cell( pkg->vendor()			) ) +
 	       row( hcell( _( "Packager:"	) ) + cell( pkg->packager()			) ) +
@@ -166,8 +164,7 @@ YQPkgTechnicalDetailsView::complexTable( ZyppSel	selectable,
 	       row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( p1 )		) + cell( formatRpmGroup( p2 )		) ) +
 	       row( hcell( _( "License:"	) ) + cell( p1->license()			) + cell( p2->license()			) ) +
 	       row( hcell( _( "Installed Size:" ) ) + cell( p1->size().asString()		) + cell( p2->size().asString()		) ) +
-	       row( hcell( _youMode ? _( "Download Size:" ) : _( "Archive Size:" ) )
-						    + cell( p1->archivesize().asString()	) + cell( p2->archivesize().asString()	) ) +
+	       row( hcell( _( "Archive Size:"   ) ) + cell( p1->archivesize().asString()	) + cell( p2->archivesize().asString()	) ) +
 	       row( hcell( _( "Distribution:"	) ) + cell( p1->distribution()			) + cell( p2->distribution()		) ) +
 	       row( hcell( _( "Vendor:"		) ) + cell( p1->vendor()			) + cell( p2->vendor()			) ) +
 	       row( hcell( _( "Packager:"	) ) + cell( p1->packager()			) + cell( p2->packager()		) ) +

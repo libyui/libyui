@@ -71,26 +71,26 @@ liby2qt_la_SOURCES = 				\
 	YQMultiLineEdit.cc			\
 	YQMultiProgressMeter.cc			\
 	YQMultiSelectionBox.cc			\
-	YQPackageSelectorBase.cc		\
 	YQPackageSelector.cc			\
+	YQPackageSelectorBase.cc		\
 	YQPackageSelectorHelp.cc		\
-	YQPatternSelector.cc			\
 	YQPartitionSplitter.cc			\
+	YQPatternSelector.cc			\
 	YQPkgChangesDialog.cc			\
 	YQPkgConflictDialog.cc			\
 	YQPkgConflictList.cc			\
 	YQPkgDescriptionDialog.cc		\
 	YQPkgDescriptionView.cc			\
-	YQPkgSelDescriptionView.cc		\
 	YQPkgDiskUsageList.cc			\
 	YQPkgDiskUsageWarningDialog.cc		\
 	YQPkgGenericDetailsView.cc		\
 	YQPkgList.cc				\
 	YQPkgObjList.cc				\
+	YQPkgPatternList.cc			\
 	YQPkgRpmGroupTagsFilterView.cc		\
 	YQPkgSearchFilterView.cc		\
+	YQPkgSelDescriptionView.cc		\
 	YQPkgSelList.cc				\
-	YQPkgSelectionsFilterView.cc		\
 	YQPkgStatusFilterView.cc		\
 	YQPkgTechnicalDetailsView.cc		\
 	YQPkgTextDialog.cc			\
@@ -131,7 +131,6 @@ liby2qt_la_SOURCES = 				\
 #	YQPkgDependenciesView.cc		\
 #	YQPkgInstSrcFilterView.cc		\
 #	YQPkgInstSrcList.cc			\
-#	YQPkgLangFilterView.cc			\
 #	YQPkgLangList.cc			\
 #
 
@@ -168,30 +167,29 @@ BUILT_SOURCES =					\
 	YQMultiLineEdit.moc			\
 	YQMultiProgressMeter.moc		\
 	YQMultiSelectionBox.moc			\
-	YQPackageSelectorBase.moc		\
 	YQPackageSelector.moc			\
-	YQPatternSelector.moc			\
+	YQPackageSelectorBase.moc		\
 	YQPartitionSplitter.moc			\
+	YQPatternSelector.moc			\
 	YQPkgChangesDialog.moc			\
 	YQPkgConflictDialog.moc			\
 	YQPkgConflictList.moc			\
 	YQPkgDependenciesView.moc		\
 	YQPkgDescriptionDialog.moc		\
 	YQPkgDescriptionView.moc		\
-	YQPkgSelDescriptionView.moc		\
 	YQPkgDiskUsageList.moc			\
 	YQPkgDiskUsageWarningDialog.moc		\
 	YQPkgGenericDetailsView.moc		\
 	YQPkgInstSrcFilterView.moc		\
 	YQPkgInstSrcList.moc			\
-	YQPkgLangFilterView.moc			\
 	YQPkgLangList.moc			\
 	YQPkgList.moc				\
 	YQPkgObjList.moc			\
+	YQPkgPatternList.moc			\
 	YQPkgRpmGroupTagsFilterView.moc		\
 	YQPkgSearchFilterView.moc		\
+	YQPkgSelDescriptionView.moc		\
 	YQPkgSelList.moc			\
-	YQPkgSelectionsFilterView.moc		\
 	YQPkgStatusFilterView.moc		\
 	YQPkgTechnicalDetailsView.moc		\
 	YQPkgTextDialog.moc			\
@@ -250,30 +248,29 @@ YQMenuButton.o YQMenuButton.lo:					YQMenuButton.moc
 YQMultiLineEdit.o YQMultiLineEdit.lo:				YQMultiLineEdit.moc
 YQMultiProgressMeter.o YQMultiProgressMeter.lo:			YQMultiProgressMeter.moc
 YQMultiSelectionBox.o YQMultiSelectionBox.lo:			YQMultiSelectionBox.moc
-YQPackageSelectorBase.o YQPackageSelectorBase.lo:		YQPackageSelectorBase.moc
 YQPackageSelector.o YQPackageSelector.lo:			YQPackageSelector.moc
-YQPatternSelector.o YQPatternSelector.lo:			YQPatternSelector.moc
+YQPackageSelectorBase.o YQPackageSelectorBase.lo:		YQPackageSelectorBase.moc
 YQPartitionSplitter.o YQPartitionSplitter.lo:			YQPartitionSplitter.moc
+YQPatternSelector.o YQPatternSelector.lo:			YQPatternSelector.moc
 YQPkgChangesDialog.o YQPkgChangesDialog.lo:			YQPkgChangesDialog.moc
 YQPkgConflictDialog.o YQPkgConflictDialog.lo:			YQPkgConflictDialog.moc
 YQPkgConflictList.o YQPkgConflictList.lo:			YQPkgConflictList.moc
 YQPkgDependenciesView.o YQPkgDependenciesView.lo:		YQPkgDependenciesView.moc
 YQPkgDescriptionDialog.o YQPkgDescriptionDialog.lo:		YQPkgDescriptionDialog.moc
 YQPkgDescriptionView.o YQPkgDescriptionView.lo:			YQPkgDescriptionView.moc
-YQPkgSelDescriptionView.o YQPkgSelDescriptionView.lo:		YQPkgSelDescriptionView.moc
 YQPkgDiskUsageList.o YQPkgDiskUsageList.lo:			YQPkgDiskUsageList.moc
 YQPkgDiskUsageWarningDialog.o YQPkgDiskUsageWarningDialog.lo:	YQPkgDiskUsageWarningDialog.moc
 YQPkgGenericDetailsView.o YQPkgGenericDetailsView.lo:		YQPkgGenericDetailsView.moc
 YQPkgInstSrcFilterView.o YQPkgInstSrcFilterView.lo:		YQPkgInstSrcFilterView.moc
 YQPkgInstSrcList.o YQPkgInstSrcList.lo:				YQPkgInstSrcList.moc
-YQPkgLangFilterView.o YQPkgLangFilterView.lo:			YQPkgLangFilterView.moc
 YQPkgLangList.o YQPkgLangList.lo:				YQPkgLangList.moc
 YQPkgList.o YQPkgList.lo:					YQPkgList.moc
 YQPkgObjList.o YQPkgObjList.lo:					YQPkgObjList.moc
+YQPkgPatternList.o YQPkgPatternList.lo:				YQPkgPatternList.moc
 YQPkgRpmGroupTagsFilterView.o YQPkgRpmGroupTagsFilterView.lo:	YQPkgRpmGroupTagsFilterView.moc
 YQPkgSearchFilterView.o YQPkgSearchFilterView.lo:		YQPkgSearchFilterView.moc
+YQPkgSelDescriptionView.o YQPkgSelDescriptionView.lo:		YQPkgSelDescriptionView.moc
 YQPkgSelList.o YQPkgSelList.lo:					YQPkgSelList.moc
-YQPkgSelectionsFilterView.o YQPkgSelectionsFilterView.lo:	YQPkgSelectionsFilterView.moc
 YQPkgStatusFilterView.o YQPkgStatusFilterView.lo:		YQPkgStatusFilterView.moc
 YQPkgTechnicalDetailsView.o YQPkgTechnicalDetailsView.lo:	YQPkgTechnicalDetailsView.moc
 YQPkgTextDialog.o YQPkgTextDialog.lo:				YQPkgTextDialog.moc
@@ -330,30 +327,29 @@ YQMenuButton.moc:			include/YQMenuButton.h
 YQMultiLineEdit.moc:			include/YQMultiLineEdit.h
 YQMultiProgressMeter.moc:		include/YQMultiProgressMeter.h
 YQMultiSelectionBox.moc:		include/YQMultiSelectionBox.h
-YQPackageSelectorBase.moc:		include/YQPackageSelectorBase.h
 YQPackageSelector.moc:			include/YQPackageSelector.h
-YQPatternSelector.moc:			include/YQPatternSelector.h
+YQPackageSelectorBase.moc:		include/YQPackageSelectorBase.h
 YQPartitionSplitter.moc:		include/YQPartitionSplitter.h
+YQPatternSelector.moc:			include/YQPatternSelector.h
 YQPkgChangesDialog.moc:			include/YQPkgChangesDialog.h
 YQPkgConflictDialog.moc:		include/YQPkgConflictDialog.h
 YQPkgConflictList.moc:			include/YQPkgConflictList.h
 YQPkgDependenciesView.moc:		include/YQPkgDependenciesView.h
 YQPkgDescriptionDialog.moc:		include/YQPkgDescriptionDialog.h
 YQPkgDescriptionView.moc:		include/YQPkgDescriptionView.h
-YQPkgSelDescriptionView.moc:		include/YQPkgSelDescriptionView.h
 YQPkgDiskUsageList.moc:			include/YQPkgDiskUsageList.h
 YQPkgDiskUsageWarningDialog.moc:	include/YQPkgDiskUsageWarningDialog.h
 YQPkgGenericDetailsView.moc:		include/YQPkgGenericDetailsView.h
 YQPkgInstSrcFilterView.moc:		include/YQPkgInstSrcFilterView.h
 YQPkgInstSrcList.moc:			include/YQPkgInstSrcList.h
-YQPkgLangFilterView.moc:		include/YQPkgLangFilterView.h
 YQPkgLangList.moc:			include/YQPkgLangList.h
 YQPkgList.moc:				include/YQPkgList.h
 YQPkgObjList.moc:			include/YQPkgObjList.h
+YQPkgPatternList.moc:			include/YQPkgPatternList.h
 YQPkgRpmGroupTagsFilterView.moc:	include/YQPkgRpmGroupTagsFilterView.h
 YQPkgSearchFilterView.moc:		include/YQPkgSearchFilterView.h
+YQPkgSelDescriptionView.moc:		include/YQPkgSelDescriptionView.h
 YQPkgSelList.moc:			include/YQPkgSelList.h
-YQPkgSelectionsFilterView.moc:		include/YQPkgSelectionsFilterView.h
 YQPkgStatusFilterView.moc:		include/YQPkgStatusFilterView.h
 YQPkgTechnicalDetailsView.moc:		include/YQPkgTechnicalDetailsView.h
 YQPkgTextDialog.moc:			include/YQPkgTextDialog.h

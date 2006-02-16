@@ -22,6 +22,7 @@
 #define CHECK_DEPENDENCIES_ON_STARTUP	1
 #define DEPENDENCY_FEEDBACK_IF_OK	1
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT	false
+#define DISABLE_PKG_CHANGES_IN_YOU_MODE 0
 
 #include <qaction.h>
 #include <qapplication.h>
@@ -58,15 +59,14 @@
 #include "YQPkgDiskUsageWarningDialog.h"
 
 #ifdef FIXME
-#include "YQPkgLangFilterView.h"
 #include "YQPkgLangList.h"
 #endif
 
 #include "YQPkgList.h"
 #include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQPkgSearchFilterView.h"
+#include "YQPkgPatternList.h"
 #include "YQPkgSelList.h"
-#include "YQPkgSelectionsFilterView.h"
 
 #ifdef FIXME
 #include "YQPkgInstSrcFilterView.h"
@@ -106,8 +106,9 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     _detailsViews		= 0;
     _diskUsageList		= 0;
     _filters			= 0;
-    _langFilterView		= 0;
+    _instSrcFilterView		= 0;
     _langList			= 0;
+    _patternList		= 0;
     _pkgDependenciesView	= 0;
     _pkgDescriptionView		= 0;
     _pkgList			= 0;
@@ -116,8 +117,6 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     _rpmGroupTagsFilterView	= 0;
     _searchFilterView		= 0;
     _selList			= 0;
-    _selectionsFilterView	= 0;
-    _instSrcFilterView		= 0;
     _statusFilterView		= 0;
     _updateProblemFilterView	= 0;
     _youPatchFilterView		= 0;
@@ -139,7 +138,7 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     makeConnections();
     emit loadData();
 
-    if ( _youMode )
+    if ( _youPatchFilterView )
     {
 	zyppPool().saveState<zypp::Patch>();
 
@@ -151,33 +150,32 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
 	    _youPatchList->selectSomething();
 	}
     }
-    else
+    else if ( _updateProblemFilterView )
     {
-	if ( _filters )
-	{
-	    if ( _updateProblemFilterView )
-	    {
-		_filters->showPage( _updateProblemFilterView );
-		_updateProblemFilterView->filter();
+	_filters->showPage( _updateProblemFilterView );
+	_updateProblemFilterView->filter();
 
-	    }
-	    else if ( _searchMode && _searchFilterView )
-	    {
-		_filters->showPage( _searchFilterView );
-		_searchFilterView->filter();
-		QTimer::singleShot( 0, _searchFilterView, SLOT( setFocus() ) );
-	    }
-	    else if ( _summaryMode && _statusFilterView )
-	    {
-		_filters->showPage( _statusFilterView );
-		_statusFilterView->filter();
-	    }
-	    else if ( _selectionsFilterView && _selList )
-	    {
-		_filters->showPage( _selectionsFilterView );
-		_selList->filter();
-	    }
-	}
+    }
+    else if ( _searchMode && _searchFilterView )
+    {
+	_filters->showPage( _searchFilterView );
+	_searchFilterView->filter();
+	QTimer::singleShot( 0, _searchFilterView, SLOT( setFocus() ) );
+    }
+    else if ( _summaryMode && _statusFilterView )
+    {
+	_filters->showPage( _statusFilterView );
+	_statusFilterView->filter();
+    }
+    else if ( _patternList )
+    {
+	_filters->showPage( _patternList );
+	_patternList->filter();
+    }
+    else if ( _selList )
+    {
+	_filters->showPage( _selList );
+	_selList->filter();
     }
 
 
@@ -190,14 +188,12 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
 
 #if CHECK_DEPENDENCIES_ON_STARTUP
 
-    if ( ! _youMode )
-    {
-	// Fire up the first dependency check in the main loop.
-	// Don't do this right away - wait until all initializations are finished.
-	QTimer::singleShot( 0, this, SLOT( resolvePackageDependencies() ) );
-    }
+    // Fire up the first dependency check in the main loop.
+    // Don't do this right away - wait until all initializations are finished.
+    QTimer::singleShot( 0, this, SLOT( resolvePackageDependencies() ) );
 #endif
-	QTimer::singleShot( 0, this, SLOT( postBetaWarning() ) );
+
+    QTimer::singleShot( 1, this, SLOT( postBetaWarning() ) );
 }
 
 
@@ -264,14 +260,14 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
 
     //
-    // YOU patches view
+    // Patches view
     //
 
     if ( _youMode )
     {
 	_youPatchFilterView = new YQPkgYouPatchFilterView( parent );
 	CHECK_PTR( _youPatchFilterView );
-	_filters->addPage( _( "YOU Patches" ), _youPatchFilterView );
+	_filters->addPage( _( "Patches" ), _youPatchFilterView );
 
 	_youPatchList = _youPatchFilterView->youPatchList();
 	CHECK_PTR( _youPatchList );
@@ -279,29 +275,46 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
 
     //
+    // Patterns view
+    //
+
+    if ( ! zyppPool().empty<zypp::Pattern>() || _testMode )
+    {
+
+	_patternList = new YQPkgPatternList( this, true );
+	CHECK_PTR( _patternList );
+	_filters->addPage( _( "Patterns" ), _patternList );
+
+	connect( _patternList, 	 	SIGNAL( statusChanged()	        	),
+		 this,		 	SLOT  ( autoResolveDependencies() 	) );
+
+	connect( _pkgConflictDialog,	SIGNAL( updatePackages()      		),
+		 _patternList,		SLOT  ( updateToplevelItemStates() 	) );
+
+	connect( this,			SIGNAL( refresh()			),
+		 _patternList, 		SLOT  ( updateToplevelItemStates() 	) );
+    }
+
+
+    //
     // Selections view
     //
 
-    if ( ! _youMode )
+    if ( ! zyppPool().empty<zypp::Selection>() || _testMode )
     {
-	if ( ! zyppPool().empty<zypp::Selection>() )
-	{
-	    _selectionsFilterView = new YQPkgSelectionsFilterView( parent );
-	    CHECK_PTR( _selectionsFilterView );
-	    _filters->addPage( _( "Selections" ), _selectionsFilterView );
 
-	    _selList = _selectionsFilterView->selList();
-	    CHECK_PTR( _selList );
+	_selList = new YQPkgSelList( this, true );
+	CHECK_PTR( _selList );
+	_filters->addPage( _( "Selections" ), _selList );
 
-	    connect( _selList, 		 SIGNAL( statusChanged()	        ),
-		     this,		 SLOT  ( autoResolveDependencies() 	) );
+	connect( _selList, 	 	SIGNAL( statusChanged()	        ),
+		 this,		 	SLOT  ( autoResolveDependencies() 	) );
 
-	    connect( _pkgConflictDialog, SIGNAL( updatePackages()      		),
-		     _selList,		 SLOT  ( updateToplevelItemStates() 	) );
+	connect( _pkgConflictDialog,	SIGNAL( updatePackages()      		),
+		 _selList,		 SLOT  ( updateToplevelItemStates() 	) );
 
-	    connect( this,		 SIGNAL( refresh()			),
-		     _selList, 		 SLOT  ( updateToplevelItemStates() 	) );
-	}
+	connect( this,		 SIGNAL( refresh()			),
+		 _selList, 		 SLOT  ( updateToplevelItemStates() 	) );
     }
 
 
@@ -309,84 +322,66 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     // RPM group tags view
     //
 
-    // if ( ! _youMode )
-    {
 #ifdef FIXME
-	_rpmGroupTagsFilterView = new YQPkgRpmGroupTagsFilterView( parent );
-	CHECK_PTR( _rpmGroupTagsFilterView );
-	_filters->addPage( _( "Package Groups" ), _rpmGroupTagsFilterView );
+    _rpmGroupTagsFilterView = new YQPkgRpmGroupTagsFilterView( parent );
+    CHECK_PTR( _rpmGroupTagsFilterView );
+    _filters->addPage( _( "Package Groups" ), _rpmGroupTagsFilterView );
 
-	connect( this,    			SIGNAL( loadData() ),
-		 _rpmGroupTagsFilterView,	SLOT  ( filter()   ) );
+    connect( this,    			SIGNAL( loadData() ),
+	     _rpmGroupTagsFilterView,	SLOT  ( filter()   ) );
 #endif
-    }
 
 
     //
     // Languages view
     //
 
-    if ( ! _youMode )
-    {
 #ifdef FIXME
-	_langFilterView = new YQPkgLangFilterView( parent );
-	CHECK_PTR( _langFilterView );
-	_filters->addPage( _( "Languages" ), _langFilterView );
+    _langList = new YQPkgLangList( this, true );
+    CHECK_PTR( _langList );
+    _filters->addPage( _( "Languages" ), _langList );
 
-	_langList = _langFilterView->langList();
-	CHECK_PTR( _langList );
+    connect( _langList, 	SIGNAL( statusChanged()	               	),
+	     this,		SLOT  ( autoResolveDependencies() 	) );
 
-	connect( _langList, 		SIGNAL( statusChanged()	               	),
-		 this,			SLOT  ( autoResolveDependencies() 	) );
-
-	connect( this,			SIGNAL( refresh()			),
-		 _langList, 		SLOT  ( updateToplevelItemStates() 	) );
+    connect( this,		SIGNAL( refresh()			),
+	     _langList, 	SLOT  ( updateToplevelItemStates() 	) );
 #endif
-    }
 
 
     //
     // Inst source view
     //
 
-    if ( ! _youMode )
-    {
 #ifdef FIXME
-	_instSrcFilterView = new YQPkgInstSrcFilterView( parent );
-	CHECK_PTR( _instSrcFilterView );
-	_filters->addPage( _( "Installation Sources" ), _instSrcFilterView );
+    _instSrcFilterView = new YQPkgInstSrcFilterView( parent );
+    CHECK_PTR( _instSrcFilterView );
+    _filters->addPage( _( "Installation Sources" ), _instSrcFilterView );
 #endif
-    }
 
 
     //
     // Package search view
     //
 
-    // if ( ! _youMode )
-    {
-	_searchFilterView = new YQPkgSearchFilterView( parent );
-	CHECK_PTR( _searchFilterView );
-	_filters->addPage( _( "Search" ), _searchFilterView );
-    }
+    _searchFilterView = new YQPkgSearchFilterView( parent );
+    CHECK_PTR( _searchFilterView );
+    _filters->addPage( _( "Search" ), _searchFilterView );
 
 
     //
     // Status change view
     //
 
-    // if ( ! _youMode )
-    {
-	_statusFilterView = new YQPkgStatusFilterView( parent );
-	CHECK_PTR( _statusFilterView );
-	_filters->addPage( _( "Installation Summary" ), _statusFilterView );
-    }
+    _statusFilterView = new YQPkgStatusFilterView( parent );
+    CHECK_PTR( _statusFilterView );
+    _filters->addPage( _( "Installation Summary" ), _statusFilterView );
 
 
 #if 0
     // DEBUG
 
-    _filters->addPage( _( "Keywords" ), new QLabel( "Keywords\nfilter\n\nfor future use", 0 ) );
+    _filters->addPage( _( "Keywords"   ), new QLabel( "Keywords\nfilter\n\nfor future use", 0 ) );
     _filters->addPage( _( "MIME Types" ), new QLabel( "MIME Types\nfilter\n\nfor future use" , 0 ) );
 #endif
 
@@ -422,10 +417,10 @@ YQPackageSelector::layoutPkgList( QWidget * parent )
     _pkgList= new YQPkgList( parent );
     CHECK_PTR( _pkgList );
 
+#if DISABLE_PKG_CHANGES_IN_YOU_MODE
     if ( _youMode )
-    {
 	_pkgList->setEditable( false );
-    }
+#endif
 
     connect( _pkgList, 	SIGNAL( statusChanged()	          ),
 	     this,	SLOT  ( autoResolveDependencies() ) );
@@ -465,7 +460,7 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     // Technical details
     //
 
-    _pkgTechnicalDetailsView = new YQPkgTechnicalDetailsView( _detailsViews, _youMode );
+    _pkgTechnicalDetailsView = new YQPkgTechnicalDetailsView( _detailsViews );
     CHECK_PTR( _pkgTechnicalDetailsView );
 
     _detailsViews->addTab( _pkgTechnicalDetailsView, _( "&Technical Data" ) );
@@ -494,17 +489,14 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     // Versions
     //
 
-    // if ( ! _youMode )
-    {
-	_pkgVersionsView = new YQPkgVersionsView( _detailsViews,
-						  ! _youMode );	// userCanSwitchVersions
-	CHECK_PTR( _pkgVersionsView );
+    _pkgVersionsView = new YQPkgVersionsView( _detailsViews,
+					      true );	// userCanSwitchVersions
+    CHECK_PTR( _pkgVersionsView );
 
-	_detailsViews->addTab( _pkgVersionsView, _( "&Versions" ) );
+    _detailsViews->addTab( _pkgVersionsView, _( "&Versions" ) );
 
-	connect( _pkgList,		SIGNAL( selectionChanged    ( ZyppSel ) ),
-		 _pkgVersionsView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
-    }
+    connect( _pkgList,		SIGNAL( selectionChanged    ( ZyppSel ) ),
+	     _pkgVersionsView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 }
 
 
@@ -515,25 +507,22 @@ YQPackageSelector::layoutButtons( QWidget * parent )
     CHECK_PTR( button_box );
     button_box->setSpacing( SPACING );
 
-    if ( ! _youMode )
-    {
-	// Button: Dependency check
-        // Translators: Please keep this short!
-	_checkDependenciesButton = new QPushButton( _( "Chec&k" ), button_box );
-	CHECK_PTR( _checkDependenciesButton );
-	_checkDependenciesButton->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
-	_normalButtonBackground = _checkDependenciesButton->paletteBackgroundColor();
+    // Button: Dependency check
+    // Translators: Please keep this short!
+    _checkDependenciesButton = new QPushButton( _( "Chec&k" ), button_box );
+    CHECK_PTR( _checkDependenciesButton );
+    _checkDependenciesButton->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
+    _normalButtonBackground = _checkDependenciesButton->paletteBackgroundColor();
 
-	connect( _checkDependenciesButton,	SIGNAL( clicked() ),
-		 this,         			SLOT  ( manualResolvePackageDependencies() ) );
+    connect( _checkDependenciesButton,	SIGNAL( clicked() ),
+	     this,         		SLOT  ( manualResolvePackageDependencies() ) );
 
 
-	// Checkbox: Automatically check dependencies for every package status change?
-	// Translators: Please keep this short!
-	_autoDependenciesCheckBox = new QCheckBox( _( "A&utocheck" ), button_box );
-	CHECK_PTR( _autoDependenciesCheckBox );
-	_autoDependenciesCheckBox->setChecked( AUTO_CHECK_DEPENDENCIES_DEFAULT );
-    }
+    // Checkbox: Automatically check dependencies for every package status change?
+    // Translators: Please keep this short!
+    _autoDependenciesCheckBox = new QCheckBox( _( "A&utocheck" ), button_box );
+    CHECK_PTR( _autoDependenciesCheckBox );
+    _autoDependenciesCheckBox->setChecked( AUTO_CHECK_DEPENDENCIES_DEFAULT );
 
     addHStretch( button_box );
 
@@ -583,21 +572,18 @@ YQPackageSelector::addMenus()
     CHECK_PTR( _fileMenu );
     _menuBar->insertItem( _( "&File" ), _fileMenu );
 
-    if ( ! _youMode )
-    {
 #ifdef FIXME
-	_fileMenu->insertItem( _( "&Import..." ),	this, SLOT( pkgImport() ) );
-	_fileMenu->insertItem( _( "&Export..." ),	this, SLOT( pkgExport() ) );
+    _fileMenu->insertItem( _( "&Import..." ),	this, SLOT( pkgImport() ) );
+    _fileMenu->insertItem( _( "&Export..." ),	this, SLOT( pkgExport() ) );
 
-	_fileMenu->insertSeparator();
+    _fileMenu->insertSeparator();
 #endif
-    }
 
     _fileMenu->insertItem( _( "E&xit -- Discard Changes" ), this, SLOT( reject() ) );
-    _fileMenu->insertItem( _( "&Quit -- Save Changes" ), this, SLOT( accept() ) );
+    _fileMenu->insertItem( _( "&Quit -- Save Changes"    ), this, SLOT( accept() ) );
 
 
-    if ( _pkgList && ! _youMode )
+    if ( _pkgList )
     {
 	//
 	// Package menu
@@ -632,7 +618,7 @@ YQPackageSelector::addMenus()
     }
 
 
-    if ( _youMode && _youPatchList )
+    if ( _youPatchList )
     {
 	//
 	// YOU Patch menu
@@ -640,7 +626,7 @@ YQPackageSelector::addMenus()
 
 	_youPatchMenu = new QPopupMenu( _menuBar );
 	CHECK_PTR( _youPatchMenu );
-	_menuBar->insertItem( _( "&YOU Patch" ), _youPatchMenu );
+	_menuBar->insertItem( _( "&Patch" ), _youPatchMenu );
 
 	_youPatchList->actionSetCurrentInstall->addTo( _youPatchMenu );
 	_youPatchList->actionSetCurrentDontInstall->addTo( _youPatchMenu );
@@ -663,19 +649,17 @@ YQPackageSelector::addMenus()
     CHECK_PTR( _extrasMenu );
     _menuBar->insertItem( _( "&Extras" ), _extrasMenu );
 
-    if ( ! _youMode )
-	_extrasMenu->insertItem( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), CTRL + Key_A );
+    _extrasMenu->insertItem( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), CTRL + Key_A );
 
-    if ( _youMode && _youPatchList )
+    if ( _youPatchList )
 	_youPatchList->actionShowRawPatchInfo->addTo( _extrasMenu );
 
-    if ( ! _youMode )
-	// Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
-	_extrasMenu->insertItem( _( "Install All Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
+    // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
+    _extrasMenu->insertItem( _( "Install All Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
 
-    if ( ! _youMode )
-	// Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
-	_extrasMenu->insertItem( _( "Install All Matching -de&buginfo Packages" ), this, SLOT( installDebugInfoPkgs() ) );
+    // Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
+    _extrasMenu->insertItem( _( "Install All Matching -de&buginfo Packages" ), this, SLOT( installDebugInfoPkgs() ) );
+
 
     //
     // Help menu
@@ -752,6 +736,7 @@ YQPackageSelector::makeConnections()
 
     connectFilter( _updateProblemFilterView,	_pkgList, false );
     connectFilter( _youPatchList, 		_pkgList );
+    connectFilter( _patternList, 		_pkgList );
     connectFilter( _selList, 			_pkgList );
 #ifdef FIXME
     connectFilter( _instSrcFilterView,		_pkgList, false );
@@ -800,6 +785,12 @@ YQPackageSelector::makeConnections()
 	{
 	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()           ),
 		     _pkgList, 			SLOT  ( updateToplevelItemStates() ) );
+	}
+
+	if ( _patternList )
+	{
+	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()           ),
+		     _patternList, 		SLOT  ( updateToplevelItemStates() ) );
 	}
 
 	if ( _selList )
