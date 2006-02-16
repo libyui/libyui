@@ -185,10 +185,8 @@ void NCPackageSelector::showDefaultList()
 
 	if ( !youMode && packager )
 	{
-#ifdef FIXME
 	    // do an initial dependency solving in 'normal' and 'update' mode
 	    packager->showPackageDependencies( true );
-#endif
 	    // show the required diskspace
 	    packager->showDiskSpace();	    
 	}

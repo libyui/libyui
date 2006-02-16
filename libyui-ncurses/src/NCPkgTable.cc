@@ -486,6 +486,7 @@ void NCPkgTable::fillHeader( )
 	case T_Update: {
 #ifdef FIXME
 	    int installedPkgs = Y2PM::instTarget().numPackages();
+	    // see YQPkgList::haveInstalledPkgs
 #else
 	    int installedPkgs = 1;
 #endif

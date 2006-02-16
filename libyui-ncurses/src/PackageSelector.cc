@@ -1975,11 +1975,7 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	    // add the media nr
 	    text += PkgNames::MediaNo();
 	    char num[5];
-#ifdef FIXME
-	    int medianr = package->medianr();
-#else
-	    int medianr = 4242;
-#endif
+	    int medianr = package->mediaId ();
 	    sprintf( num, "%d", medianr );
 	    text += num;
 	    text += "<br>";	    
@@ -1992,12 +1988,7 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 
 	    // the rpm group
 	    text += PkgNames::RpmGroup();
-#ifdef FIXME
-	    string group = Y2PM::packageManager().translatedRpmGroup( package->group_ptr() );
-#else
-	    string group = "FAKED GROUP";
-#endif
-	    text += group;
+	    text += package->group ();
 	    text += "<br>";
 	}
 	
