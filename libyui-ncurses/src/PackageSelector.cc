@@ -30,10 +30,10 @@
 #include "NCMenuButton.h"
 #include "NCPopupSelection.h"
 #include "NCPopupDeps.h"
-//#include "NCPopupDiskspace.h"
-//#include "NCPopupPkgTable.h"
-//#include "NCPopupPkgDescr.h"
-//#include "NCPopupFile.h"
+#include "NCPopupDiskspace.h"
+#include "NCPopupPkgTable.h"
+#include "NCPopupPkgDescr.h"
+#include "NCPopupFile.h"
 #include "PackageSelector.h"
 #include "YSelectionBox.h"
 
@@ -90,13 +90,9 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
       , filterPopup( 0 )
       , depsPopup( 0 )
       , selectionPopup( 0 )
-#ifdef FIXME
       , diskspacePopup( 0 )
-#endif
       , searchPopup( 0 )
-#ifdef FIXME
       , filePopup( 0 )
-#endif
       , youMode( false )
       , updateMode( false )
       , autoCheck( true )
@@ -225,10 +221,8 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
 	// create the selections popup
 	selectionPopup = new NCPopupSelection( wpos( 1, 1 ), this );
 
-#ifdef FIXME
 	// create the filter popup
 	filterPopup = new NCPopupTree( wpos( 1, 1 ),  this );	 
-#endif
 
 	// create the search popup
 	searchPopup = new NCPopupSearch( wpos( 1, 1 ), this );
@@ -236,13 +230,11 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
 	// the dependency popups
 	depsPopup = new NCPopupDeps( wpos( 1, 1 ), this );
 
-#ifdef FIXME
 	// the disk space popup
 	diskspacePopup = new NCPopupDiskspace( wpos( 1, 1 ) );
 
 	// the file popup
 	filePopup = new NCPopupFile( wpos( 1, 1), floppyDevice, this );
-#endif
     }
     else
     {
@@ -270,7 +262,6 @@ PackageSelector::~PackageSelector()
     {
 	delete depsPopup;	
     }
-#ifdef FIXME
     if ( diskspacePopup )
     {
 	delete diskspacePopup;
@@ -279,7 +270,6 @@ PackageSelector::~PackageSelector()
     {
 	delete filePopup;
     }
-#endif
     if ( searchPopup )
     {
 	delete searchPopup;
@@ -769,9 +759,8 @@ bool PackageSelector::fillSummaryList( NCPkgTable::NCPkgTableListType type )
     // clear the package table
     packageList->itemsCleared ();
 
-#ifdef FIXME
     // get the package list and sort it
-    list<ZyppSel> pkgList( Y2PM::packageManager().begin(), Y2PM::packageManager().end() );
+    list<ZyppSel> pkgList( zyppPkgBegin (), zyppPkgEnd () );
     pkgList.sort( sortByName );
 
     // fill the package table
@@ -790,6 +779,7 @@ bool PackageSelector::fillSummaryList( NCPkgTable::NCPkgTableListType type )
     for ( listIt = pkgList.begin(); listIt != pkgList.end();  ++listIt )
     {
 	ZyppSel selectable = *listIt;
+	ZyppPkg pkg = tryCastToZyppPkg (selectable->theObj ());
 	// show all matching packages 
 	switch ( type )
 	{
@@ -797,14 +787,14 @@ bool PackageSelector::fillSummaryList( NCPkgTable::NCPkgTableListType type )
 		if ( selectable->status() != S_NoInst
 		     && selectable->status() != S_KeepInstalled )  
 		{
-		    packageList->createListEntry( (*listIt)->theObj() );
+		    packageList->createListEntry( pkg, selectable );
 		}
 		break;
 	    }
 	    case NCPkgTable::L_Installed: {
 		if ( selectable->status() == S_KeepInstalled ) 
 		{
-		    packageList->createListEntry( (*listIt)->theObj() ); 
+		    packageList->createListEntry( pkg, selectable );
 		}
 		break;
 	    }
@@ -812,7 +802,6 @@ bool PackageSelector::fillSummaryList( NCPkgTable::NCPkgTableListType type )
 		break;
 	}
     }
-#endif
 
     // show the package list
     packageList->drawList();
@@ -1483,7 +1472,6 @@ bool PackageSelector::PackageListHandler( const NCursesEvent&  event )
 // 
 bool PackageSelector::DiskinfoHandler( const NCursesEvent&  event )
 {
-#ifdef FIXME
     NCPkgTable * packageList = getPackageList();
      
     diskspacePopup->showInfoPopup();
@@ -1491,7 +1479,6 @@ bool PackageSelector::DiskinfoHandler( const NCursesEvent&  event )
     {
 	packageList->setKeyboardFocus();
     }
-#endif
     
     return true;
 }
@@ -1508,27 +1495,22 @@ bool PackageSelector::LinkHandler ( string link )
     // e.g. link is pkg://hp-officeJet
     string pkgName = link.substr(6);
     
-#ifdef FIXME
-    PMManager::SelectableVec::const_iterator listIt = Y2PM::packageManager().begin();
-
-    // fill the package table
-    ZyppPkg pkgPtr;
-    
-    // search for the package
-    while ( listIt != Y2PM::packageManager().end() )
+    ZyppPoolIterator
+	b = zyppPkgBegin(),
+	e = zyppPkgEnd(),
+	i;
+    for (i = b; i != e; ++i)
     {
-	pkgPtr = (*listIt)->theObj();
-	if ( pkgPtr->name().asString() == pkgName )
+	ZyppPkg pkgPtr = tryCastToZyppPkg ((*i)->theObj());
+	if ( pkgPtr && pkgPtr->name() == pkgName )
 	{
 	    NCERR << "Package " << pkgName << " found" << endl;
 	    // open popup with package info
 	    NCPopupPkgDescr popupDescr( wpos(1,1), this );
-	    popupDescr.showInfoPopup( pkgPtr );
+	    popupDescr.showInfoPopup( pkgPtr, *i );
 	    found = true;
 	}
-	++listIt;
     }
-#endif
 
     if ( !found )
     {
@@ -1635,7 +1617,6 @@ bool PackageSelector::YouHelpHandler( const NCursesEvent&  event )
 //
 bool PackageSelector::SelectionHandler( const NCursesEvent&  event )
 {
-#ifdef FIXME
     NCPkgTable * packageList = getPackageList();
     if ( event.selection.isNull()
 	 || !filePopup )
@@ -1658,7 +1639,6 @@ bool PackageSelector::SelectionHandler( const NCursesEvent&  event )
     {
 	packageList->setKeyboardFocus();
     }
-#endif
        
     return true;
 }
@@ -1732,7 +1712,6 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	    // in dependency popup because maybe he wants to change his choices
 	    closeDialog = false;
 	}
-#ifdef FIXME
 	// show the automatic changes list
 	NCPopupPkgTable autoChangePopup( wpos( 1, 1), this );
 	NCursesEvent input = autoChangePopup.showInfoPopup();
@@ -1742,10 +1721,8 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	    // user clicked on Cancel
 	    closeDialog = false;
 	}
-#endif
     }
 
-#ifdef FIXME
     if ( diskspacePopup )
     {
 	string message = "";
@@ -1769,7 +1746,6 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	    }
 	}
     }
-#endif
 
     if ( closeDialog )
     {
@@ -1931,9 +1907,8 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
     else if (  visibleInfo->compare( PkgNames::Files() ) == YO_EQUAL )
     {
 	string text = PkgNames::ListOfFiles();
-#ifdef FIXME
 	// the file list is available only for installed packages
-	ZyppPkg package = slbPtr->installedObj();
+	ZyppPkg package = tryCastToZyppPkg (slbPtr->installedObj());
 
 	if ( package )
 	{
@@ -1941,7 +1916,6 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	    list<string> fileList = package->filenames();
 	    text += createText( fileList, false ) ;
 	}
-#endif
 	
 	// get the widget id 
 	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );  

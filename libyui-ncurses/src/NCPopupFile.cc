@@ -17,7 +17,7 @@
 
 /-*/
 #include "Y2Log.h"
-//#include "NCPopupFile.h"
+#include "NCPopupFile.h"
 
 #include "NCTree.h"
 #include "NCFrame.h"
@@ -275,13 +275,14 @@ void NCPopupFile::saveToFile()
 
     if ( event == NCursesEvent::button )
     {
-	zypp::PackageImEx pkgExport;
-
 	NCPopupInfo saveInfo( wpos(5, 5),  YCPString( "" ),
 			      YCPString(PkgNames::Saving()) );
 	saveInfo.setNiceSize( 18, 4 );
 	saveInfo.popup();
 	bool mounted = false;
+
+#ifdef FIXME
+	zypp::PackageImEx pkgExport;
 
 	// if the medium is a floppy mount the device
 	if ( !mountFloppy
@@ -309,6 +310,7 @@ void NCPopupFile::saveToFile()
 	{
 	    unmount();
 	}
+#endif
 
 	saveInfo.popdown();
     }
@@ -337,8 +339,6 @@ void NCPopupFile::loadFromFile()
 
     if ( event == NCursesEvent::button )
     {
-	zypp::PackageImEx pkgImport;
-
 	// show popup "Really overwrite current selection?"
 	NCPopupInfo info1( wpos(2, 2),
 			   YCPString( PkgNames::NotifyLabel() ),
@@ -359,6 +359,9 @@ void NCPopupFile::loadFromFile()
 	    if ( !mountFloppy
 		 || (mounted = mountDevice( floppyDevice, PkgNames::LoadErr1Text())) )
 	    {
+#ifdef FIXME
+		zypp::PackageImEx pkgImport;
+
 		// read selection from file
 		if ( ! pkgImport.doImport( pathName) )
 		{
@@ -379,6 +382,7 @@ void NCPopupFile::loadFromFile()
 		    // always show selection dependencies
 		    packager->showSelectionDependencies();
 		}
+#endif
 	    }
 	    if ( mounted )
 	    {

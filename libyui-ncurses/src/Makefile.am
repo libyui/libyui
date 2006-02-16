@@ -93,14 +93,13 @@ liby2ncurses_la_SOURCES =				\
 	NCPopupDeps.cc NCPopupDeps.h                    \
 	NCPopupTree.cc NCPopupTree.h                    \
 	NCPopupSelection.cc NCPopupSelection.h          \
+	NCPopupDiskspace.cc NCPopupDiskspace.h          \
+	NCPopupFile.cc NCPopupFile.h                    \
+	NCPopupPkgTable.cc NCPopupPkgTable.h            \
+	NCPopupPkgDescr.cc NCPopupPkgDescr.h            \
 	NCstyle.braille.h NCstyle.mono.h		\
 	NCstyle.linux.h NCstyle.xterm.h
 
-#	NCPopupDiskspace.cc NCPopupDiskspace.h          \
-#	NCPopupFile.cc NCPopupFile.h                    \
-#	NCPopupPkgTable.cc NCPopupPkgTable.h            \
-#	NCPopupPkgDescr.cc NCPopupPkgDescr.h            \
-#
 
 libpy2ncurses_la_SOURCES = $(liby2ncurses_la_SOURCES)	\
 	Y2CCNCursesUI.cc Y2CCNCursesUI.h	\

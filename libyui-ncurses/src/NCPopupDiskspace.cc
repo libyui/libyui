@@ -31,7 +31,7 @@
 #include "YQZypp.h"
 //#include <y2pm/PkgDu.h>
 
-//#include "NCPopupDiskspace.h"
+#include "NCPopupDiskspace.h"
 
 using namespace std;
 
@@ -116,16 +116,16 @@ void NCPopupDiskspace::createLayout( const YCPString & headline )
 //
 void NCPopupDiskspace::fillPartitionTable()
 {
+    partitions->itemsCleared();		// clear table
+    
+#ifdef FIXME
     vector<string> pkgLine;
     pkgLine.reserve(5);
     int i = 0;
 
     const PkgDuMaster & duMaster =  Y2PM::packageManager().updateDu();        
-
     std::set<PkgDuMaster::MountPoint>::iterator it = duMaster.mountpoints().begin();
 
-    partitions->itemsCleared();		// clear table
-    
     while ( it != duMaster.mountpoints().end() )
     {
 	pkgLine.clear();
@@ -140,6 +140,7 @@ void NCPopupDiskspace::fillPartitionTable()
 	++it;
 	i++;
     }
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -154,6 +155,7 @@ string NCPopupDiskspace::checkDiskSpace()
 {
     string text = "";
     
+#ifdef FIXME
     const PkgDuMaster & duMaster =  Y2PM::packageManager().updateDu();        
 
     std::set<PkgDuMaster::MountPoint>::iterator it = duMaster.mountpoints().begin();
@@ -176,6 +178,9 @@ string NCPopupDiskspace::checkDiskSpace()
 	}
 	++it;
     }
+#else
+    text = "FAKED CHECK";
+#endif
     return text;
 }
 

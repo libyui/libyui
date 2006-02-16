@@ -32,7 +32,7 @@
 #include "YQZypp.h"
 //#include <y2pm/PkgDu.h>
 
-//#include "NCPopupPkgDescr.h"
+#include "NCPopupPkgDescr.h"
 #include "PackageSelector.h"
 
 using namespace std;
@@ -130,14 +130,14 @@ void NCPopupPkgDescr::createLayout( )
 //
 //	DESCRIPTION :
 //
-bool NCPopupPkgDescr::fillData( ZyppPkg & pkgPtr )
+bool NCPopupPkgDescr::fillData( ZyppPkg pkgPtr, ZyppSel slbPtr )
 {
     if ( !pkgPtr )
 	return false;
 
     pkgTable->itemsCleared();		// clear the table
 
-    pkgTable->createListEntry( pkgPtr );
+    pkgTable->createListEntry( pkgPtr, slbPtr );
 
     pkgTable->drawList();
 
@@ -156,11 +156,11 @@ bool NCPopupPkgDescr::fillData( ZyppPkg & pkgPtr )
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupPkgDescr::showInfoPopup( ZyppPkg & pkgPtr )
+NCursesEvent NCPopupPkgDescr::showInfoPopup( ZyppPkg pkgPtr, ZyppSel slbPtr )
 {
     postevent = NCursesEvent();
 
-    fillData( pkgPtr );
+    fillData( pkgPtr, slbPtr );
 
     do {
 	// show the popup

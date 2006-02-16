@@ -78,15 +78,11 @@ class PackageSelector
 
     NCPopupSelection * selectionPopup; 	// the selections popup
 
-#ifdef FIXME
     NCPopupDiskspace * diskspacePopup;	// the popup showing the disk usage
-#endif
 
     NCPopupSearch * searchPopup; 	// the package search popup
 
-#ifdef FIXME
     NCPopupFile * filePopup; 		// the save/load selection popup
-#endif
     
     bool youMode;			// YOU
     bool updateMode;			// Update
