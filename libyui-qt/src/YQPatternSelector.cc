@@ -34,6 +34,7 @@
 #include "YQPkgConflictDialog.h"
 #include "YQPkgSelDescriptionView.h"
 #include "YQPkgDiskUsageList.h"
+#include "YQPkgPatternList.h"
 #include "YQPkgSelList.h"
 #include "YQWizard.h"
 #include "YQDialog.h"
@@ -56,6 +57,7 @@ YQPatternSelector::YQPatternSelector( QWidget *			parent,
 				      const YWidgetOpt &	opt )
     : YQPackageSelectorBase( parent, opt )
 {
+    _patternList		= 0;
     _selList			= 0;
     _descriptionView		= 0;
     _wizard			= findWizard();
@@ -63,15 +65,27 @@ YQPatternSelector::YQPatternSelector( QWidget *			parent,
     basicLayout();
     makeConnections();
 
-    if ( _selList )
+    if ( _patternList )
+    {
+	_patternList->fillList();
+	_patternList->selectSomething();
+    }
+    else if ( _selList )
     {
 	_selList->fillList();
 	_selList->selectSomething();
     }
+    else
+    {
+	y2warning( "Neither patterns nor selections in ZyppPool - falling back to detailed selection" );
+	YQUI::ui()->sendEvent( new YMenuEvent( YCPSymbol( "details" ) ) );
+	return;
+    }
+
 
     if ( _diskUsageList )
 	_diskUsageList->updateDiskUsage();
-    
+
     QTimer::singleShot( 0, this, SLOT( postBetaWarning() ) );
 }
 
@@ -91,6 +105,7 @@ YQPatternSelector::findWizard() const
 }
 
 
+
 void
 YQPatternSelector::basicLayout()
 {
@@ -108,6 +123,7 @@ YQPatternSelector::basicLayout()
 }
 
 
+
 QWidget *
 YQPatternSelector::layoutLeftPane( QWidget * parent )
 {
@@ -115,14 +131,30 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
     CHECK_PTR( vbox );
     vbox->setMargin( MARGIN );
 
-    //
-    // Selections (Patterns) list
-    //
+    if ( ! zyppPool().empty<zypp::Pattern>() )
+    {
+	//
+	// Patterns list
+	//
 
-    _selList = new YQPkgSelList( vbox,
-				 false ); // no autoFill - need to connect to details view first
-    CHECK_PTR( _selList );
-    _selList->header()->hide();
+	_patternList = new YQPkgPatternList( vbox,
+					     false ); // no autoFill - need to connect to details view first
+	CHECK_PTR( _patternList );
+	_patternList->header()->hide();
+    }
+
+    if ( ! zyppPool().empty<zypp::Selection>() )
+    {
+	//
+	// Fallback: selections list
+	//
+
+	y2warning( "No patterns in ZyppPool - using selections instead" );
+	_selList = new YQPkgSelList( vbox,
+				     false ); // no autoFill - need to connect to details view first
+	CHECK_PTR( _selList );
+	_selList->header()->hide();
+    }
 
     if ( _wizard )	// No button box - add "Details..." button here
     {
@@ -147,7 +179,6 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
 
     return vbox;
 }
-
 
 
 
@@ -233,20 +264,39 @@ YQPatternSelector::layoutButtons( QWidget * parent )
 void
 YQPatternSelector::makeConnections()
 {
-
-    if ( _selList && _descriptionView )
+    if ( _patternList )
     {
-	y2milestone( "Connection set up" );
-	connect( _selList,		SIGNAL( selectionChanged( ZyppSel ) ),
-		 _descriptionView,	SLOT  ( showDetails	( ZyppSel ) ) );
+	if ( _descriptionView )
+	{
+	    connect( _patternList,	SIGNAL( selectionChanged( ZyppSel ) ),
+		     _descriptionView,	SLOT  ( showDetails	( ZyppSel ) ) );
+	}
+
+	if ( _diskUsageList )
+	{
+	    connect( _patternList,	SIGNAL( updatePackages()  ),
+		     _diskUsageList,	SLOT  ( updateDiskUsage() ) );
+	}
+
     }
 
-
-    if ( _diskUsageList )
+    if ( _selList )
     {
-	connect( _selList,		SIGNAL( updatePackages()  ),
-		 _diskUsageList,	SLOT  ( updateDiskUsage() ) );
+	if ( _descriptionView )
+	{
+	    connect( _selList,		SIGNAL( selectionChanged( ZyppSel ) ),
+		     _descriptionView,	SLOT  ( showDetails	( ZyppSel ) ) );
+	}
+
+	if ( _diskUsageList )
+	{
+	    connect( _selList,		SIGNAL( updatePackages()  ),
+		     _diskUsageList,	SLOT  ( updateDiskUsage() ) );
+	}
     }
+
+    y2milestone( "Connection set up" );
+
 
     if ( _wizard )
     {

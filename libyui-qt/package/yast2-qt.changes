@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Thu Feb 16 17:57:28 CET 2006 - sh@suse.de
+
+- V 2.13.15
+
+- Use patterns in PatternSelector if there are any,
+  but fall back to selections if there are none
+  (and fall back to detailed selection if there are no selections,
+  either) 
+
+-------------------------------------------------------------------
 Thu Feb 16 17:31:41 CET 2006 - sh@suse.de
 
 - First real pattern filter view 
