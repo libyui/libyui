@@ -5,6 +5,7 @@ Thu Feb 16 21:03:54 CET 2006 - mvidner@suse.cz
   just the deleted packages.
 - Prepare for detecting whether the user has made any changes
   upon abort.
+- 2.13.8
 
 -------------------------------------------------------------------
 Thu Feb 16 18:34:35 CET 2006 - mvidner@suse.cz
