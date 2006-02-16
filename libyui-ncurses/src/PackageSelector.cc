@@ -630,18 +630,25 @@ bool PackageSelector::fillUpdateList( )
     // clear the package table
     packageList->itemsCleared ();
 
-// no equivalent ???
-#ifdef FIXME
-    PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().updateBegin();
+    ZyppPoolIterator b = zyppPkgBegin ();
+    ZyppPoolIterator e = zyppPkgEnd ();
+    ZyppPoolIterator i;
 
-    while ( it != Y2PM::packageManager().updateEnd() )
+    // FIXME, how is an update problem defined?
+    // see packagemanager/src/pkg/PMPackageManager_update.cc _update_items
+    UIINT << "Update problems not defined!" << endl;
+
+    for (i = b; i != e; ++i)
     {
-	ZyppSel selectable = *it;
-	packageList->createListEntry( (*it)->theObj() );
-	    
-	++it;
+	ZyppSel slb = *i;
+	ZyppPkg pkg = tryCastToZyppPkg (slb->theObj ()); // ??
+
+	bool problematic = slb->toDelete();
+	if (problematic)
+	{
+	    packageList->createListEntry( pkg, slb );
+	}
     }
-#endif
 
     // show the list
     packageList->drawList();

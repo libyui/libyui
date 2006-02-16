@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Feb 16 21:00:48 CET 2006 - mvidner@suse.cz
+
+- Show something in the update problem list, for now
+  just the deleted packages.
+
+-------------------------------------------------------------------
 Thu Feb 16 18:34:35 CET 2006 - mvidner@suse.cz
 
 - Added the selection list.
