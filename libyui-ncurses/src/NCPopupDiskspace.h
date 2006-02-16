@@ -24,6 +24,7 @@
 #include <vector>
 #include <string>
 
+#include <y2util/FSize.h>
 #include "NCPopup.h"
 
 class NCTable;

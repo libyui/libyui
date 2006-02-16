@@ -66,11 +66,11 @@ public:
 
     virtual long nicesize(YUIDimension dim);
 
-    bool fillData( PMPackagePtr & pkgPtr );
+    bool fillData( ZyppPkg & pkgPtr );
 
     void createLayout( );
 
-    NCursesEvent showInfoPopup( PMPackagePtr & pkgPtr );
+    NCursesEvent showInfoPopup( ZyppPkg & pkgPtr );
 
 };
 

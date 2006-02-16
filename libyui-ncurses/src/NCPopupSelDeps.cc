@@ -31,7 +31,6 @@
 #include "NCPopupInfo.h"
 #include "ObjectStatStrategy.h"
 
-#include <y2pm/PMSelectionManager.h>
 
 using namespace std;
 
@@ -58,17 +57,6 @@ NCPopupSelDeps::NCPopupSelDeps( const wpos at, PackageSelector * pkger )
 NCPopupSelDeps::~NCPopupSelDeps()
 {
 
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupSelDeps::solveInstall
-//	METHOD TYPE : bool
-//
-bool NCPopupSelDeps::solveInstall( PkgDep::ResultList & goodList, PkgDep::ErrorResultList & badList )
-{
-    return Y2PM::selectionManager().solveInstall( goodList, badList );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -114,17 +102,4 @@ string NCPopupSelDeps::getLabelContinueRequ()
 string NCPopupSelDeps::getHeadline()
 {
     return PkgNames::SelectionDeps();
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupSelDeps::solveInstall
-//	METHOD TYPE : void
-//
-void NCPopupSelDeps::setDepsTableType()
-{
-    // set status strategy
-    ObjectStatStrategy * strategy =  new DependencyStatStrategy();
-    pkgs->setTableType( NCPkgTable::T_SelDependency, strategy );
 }

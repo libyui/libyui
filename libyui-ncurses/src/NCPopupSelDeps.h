@@ -26,11 +26,9 @@
 
 #include "NCPopupDeps.h"
 #include "NCLabel.h"
-#include "y2pm/PkgDep.h"
+//#include "y2pm/PkgDep.h"
 
-#include <Y2PM.h>
-#include <y2pm/RpmDb.h>
-#include <y2pm/PMManager.h>
+#include "YQZypp.h"
 
 
 ///////////////////////////////////////////////////////////////////
@@ -46,9 +44,6 @@ private:
     NCPopupSelDeps & operator=( const NCPopupSelDeps & );
     NCPopupSelDeps            ( const NCPopupSelDeps & );
     
-    // method to solve the dependencies
-    bool solveInstall( PkgDep::ResultList & goodList, PkgDep::ErrorResultList & badList );
-
     string getLabelRequire();
     string getLabelRequBy1();
     string getLabelRequBy2();    

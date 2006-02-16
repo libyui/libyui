@@ -17,7 +17,7 @@
 
 /-*/
 #include "Y2Log.h"
-#include "NCPopupFile.h"
+//#include "NCPopupFile.h"
 
 #include "NCTree.h"
 #include "NCFrame.h"
@@ -27,7 +27,7 @@
 #include "NCSpacing.h"
 #include "PkgNames.h"
 
-#include <y2pm/PMPackageImEx.h>
+//#include <y2pm/zypp::PackageImEx.h>
 #include "y2util/PathInfo.h"
 
 ///////////////////////////////////////////////////////////////////
@@ -275,7 +275,7 @@ void NCPopupFile::saveToFile()
 
     if ( event == NCursesEvent::button )
     {
-	PMPackageImEx pkgExport;
+	zypp::PackageImEx pkgExport;
 
 	NCPopupInfo saveInfo( wpos(5, 5),  YCPString( "" ),
 			      YCPString(PkgNames::Saving()) );
@@ -337,7 +337,7 @@ void NCPopupFile::loadFromFile()
 
     if ( event == NCursesEvent::button )
     {
-	PMPackageImEx pkgImport;
+	zypp::PackageImEx pkgImport;
 
 	// show popup "Really overwrite current selection?"
 	NCPopupInfo info1( wpos(2, 2),

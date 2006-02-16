@@ -1,4 +1,4 @@
-/*---------------------------------------------------------------------\
+/*-----------------------------------------------------------*- c++ -*-\
 |                                                                      |
 |                      __   __    ____ _____ ____                      |
 |                      \ \ / /_ _/ ___|_   _|___ \                     |
@@ -30,10 +30,8 @@
 #include <string>
 #include <utility>      // for STL pair
 
-#include <Y2PM.h>
-#include <y2pm/RpmDb.h>
-#include <y2pm/PMManager.h>
-#include <y2pm/PMSelectable.h>
+#include "YQZypp.h"
+#include <zypp/ui/Selectable.h>
 
 #include "ObjectStatStrategy.h"
 
@@ -51,16 +49,19 @@ class NCPkgTableTag : public NCTableCol {
 
   private:
 
-    PMSelectable::UI_Status status;
-    PMObjectPtr dataPointer;
-    
+    ZyppStatus status;
+    ZyppObj dataPointer;
+    // cannot get at it from dataPointer
+    ZyppSel selPointer;
+
     // returns the corresponding string value to given package status
-    string statusToStr( PMSelectable::UI_Status stat ) const;
+    string statusToStr( ZyppStatus stat ) const;
     
   public:
 
-    NCPkgTableTag( PMObjectPtr pkgPtr,
-		   PMSelectable::UI_Status stat = PMSelectable::S_NoInst );
+    NCPkgTableTag( ZyppObj pkgPtr,
+		   ZyppSel selPtr,
+		   ZyppStatus stat = S_NoInst );
 
     virtual ~NCPkgTableTag() {}
 
@@ -69,9 +70,10 @@ class NCPkgTableTag : public NCTableCol {
 			 NCTableLine::STATE linestate,
 			 unsigned colidx ) const; 
 
-    void setStatus( PMSelectable::UI_Status  stat ) 	{ status = stat; }
-    PMSelectable::UI_Status getStatus() const   { return status; }
-    PMObjectPtr getDataPointer() const		{ return dataPointer; }
+    void setStatus( ZyppStatus  stat ) 	{ status = stat; }
+    ZyppStatus getStatus() const   { return status; }
+    ZyppObj getDataPointer() const		{ return dataPointer; }
+    ZyppSel getSelPointer() const		{ return selPointer; }
 };
 
 /**
@@ -88,11 +90,8 @@ public:
 	T_Packages,
 	T_Availables,
 	T_Patches,
-	T_Dependency,
-	T_SelDependency,
 	T_Update,
 	T_PatchPkgs,
-	T_DepsPackages,
 	T_Selections,
 	T_Unknown
     };
@@ -145,11 +144,13 @@ public:
     * @param status The package status (first column of the table)
     * @param elements A vector<string> containing the package data
     * @param objPtr The pointer to the packagemanager object
-    * @eturn void
+    * @param objPtr The pointer to the selectable object
+    * @return void
     */
-    virtual void addLine( PMSelectable::UI_Status status,
+    virtual void addLine( ZyppStatus status,
 			  const vector<string> & elements,
-			  PMObjectPtr objPtr );
+			  ZyppObj objPtr,
+			  ZyppSel slbPtr );
 
    /**
      * Draws the package list (has to be called after the loop with addLine() calls)
@@ -198,11 +199,11 @@ public:
      * the currently selected package and updates the states
      * of all packages in the list
      * @param newstat The new status
-     * @param objPtr The pointer to the object to change 
+     * @param slbPtr The pointer to the object to change 
      * @return bool
      */
-    bool changeStatus( PMSelectable::UI_Status newstat,
-		       const PMObjectPtr & objPtr,
+    bool changeStatus( ZyppStatus newstat,
+		       const ZyppSel & slbPtr,
 		       bool singleChange );
     
     bool changeObjStatus( int key );
@@ -220,27 +221,29 @@ public:
     /**
      * Gets the currently displayed package status.
      * @param index The index in package table (the line)
-     * @return PMSelectable::UI_Status
+     * @return ZyppStatus
      */ 
-    PMSelectable::UI_Status getStatus( int index );
+    ZyppStatus getStatus( int index );
 
     /**
      * Gets the package status of an available  package.
      * @param objPtr The certain package 
-     * @return PMSelectable::UI_Status
+     * @return ZyppStatus
      */ 
-    PMSelectable::UI_Status getAvailableStatus( const PMObjectPtr & objPtr );
+    ZyppStatus getAvailableStatus( const ZyppSel & slbPtr );
     
+#ifdef FIXME
     /**
      * Toggles the installation of the source package.
      * @param install 
      * @return bool
      */ 
     bool SourceInstall( bool install );
+#endif
     
     /**
      * Sets the type of the table and the status strategy (which means call particular methods
-     * to set/get the status for different PMObjects (PMYouPatch, PMPackage or available PMPackage)
+     * to set/get the status for different zypp::ResObjects (zypp::Patch, zypp::Package or available zypp::Package)
      * @param type	The type (see enum NCPkgTableType)
      * @param strategy  The certain strategy (available strategies see ObjectStatStrategy.h).
      * 			Has to be allocated with new - is deleted by NCPkgTable.
@@ -260,9 +263,16 @@ public:
     /**
      * Gets the data pointer of a certain package.
      * @param index The index in package table (the line)
-     * @return PMObjectPtr
+     * @return ZyppObj
      */ 
-    PMObjectPtr getDataPointer( int index );
+    ZyppObj getDataPointer( int index );
+
+    /**
+     * Gets the selectable pointer of a certain package.
+     * @param index The index in package table (the line)
+     * @return ZyppSel
+     */ 
+    ZyppSel getSelPointer( int index );
 
    /**
      * Returns the number of lines in the table (the table size)
@@ -284,17 +294,18 @@ public:
 
     /**
      * Creates a line in the package table.
-     * @param pkgPtr The package pointer 
+     * @param pkgPtr The package pointer
+     * @param slbPtr The selectable pointer
      * @return bool
      */  
-   bool createListEntry ( PMPackagePtr pkgPtr );
+   bool createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr );
 
    /**
      * Creates a line in the YOU patch table.
      * @param pkgPtr The YOU patch pointer 
      * @return bool
      */  
-   bool createPatchEntry ( PMYouPatchPtr pkgPtr );
+   bool createPatchEntry ( ZyppPatch pkgPtr );
 
    /**
     * Creates a line in the table shwing an info text.

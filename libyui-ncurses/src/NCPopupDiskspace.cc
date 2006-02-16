@@ -28,11 +28,10 @@
 #include "NCPushButton.h"
 #include "NCTable.h"
 
-#include <Y2PM.h>
-#include <y2pm/PMPackageManager.h>
-#include <y2pm/PkgDu.h>
+#include "YQZypp.h"
+//#include <y2pm/PkgDu.h>
 
-#include "NCPopupDiskspace.h"
+//#include "NCPopupDiskspace.h"
 
 using namespace std;
 

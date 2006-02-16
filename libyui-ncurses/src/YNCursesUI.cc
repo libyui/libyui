@@ -58,8 +58,8 @@
 #include "NCTree.h"
 #include "NCLogView.h"
 #include "NCMultiLineEdit.h"
-//#include "NCPackageSelector.h"
-//#include "NCPkgTable.h"
+#include "NCPackageSelector.h"
+#include "NCPkgTable.h"
 #include "NCAskForDirectory.h"
 #include "NCAskForFile.h"
 #include "NCstring.h"
@@ -576,11 +576,8 @@ YWidget * YNCursesUI::createPackageSelector( YWidget * parent,
 					      const YCPString & floppyDevice )
 {
     ONCREATE;
-/*
     return new NCPackageSelector ( this, dynamic_cast<NCWidget *>(parent), opt,
 				   YD_HORIZ, floppyDevice->value() );
-*/
-    return NULL;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -594,7 +591,7 @@ YWidget * YNCursesUI::createPackageSelector( YWidget * parent,
 //
 YCPValue YNCursesUI::runPkgSelection(  YWidget * selector )
 {
-//    NCPackageSelector * ncSelector = 0;
+    NCPackageSelector * ncSelector = 0;
 
     YDialog *dialog = currentDialog();
 
@@ -604,7 +601,7 @@ YCPValue YNCursesUI::runPkgSelection(  YWidget * selector )
     }
     else
     {
-//	ncSelector = dynamic_cast<NCPackageSelector *>( selector );
+	ncSelector = dynamic_cast<NCPackageSelector *>( selector );
 
 	// debug: dump the widget tree
 	dialog->dumpDialogWidgetTree();
@@ -615,7 +612,6 @@ YCPValue YNCursesUI::runPkgSelection(  YWidget * selector )
     // start event loop
     NCursesEvent event = NCursesEvent::cancel;
 
-/*
     if ( ncSelector )
     {
 	ncSelector->showDefaultList();
@@ -630,7 +626,6 @@ YCPValue YNCursesUI::runPkgSelection(  YWidget * selector )
 	while ( event != NCursesEvent::cancel && result == true );
     }
     else
-*/
     {
 	UIERR << "No NCPackageSelector existing" << endl;
     }
@@ -659,14 +654,14 @@ YWidget * YNCursesUI::createPkgSpecial( YWidget *parent, YWidgetOpt &opt, const 
 
     YCPString pkgTable( "pkgTable" );
 
-/*
+
     if ( subwidget->compare( pkgTable ) == YO_EQUAL )
     {
 	NCDBG << "Creating a NCPkgTable" << endl;
 	return new NCPkgTable( dynamic_cast<NCWidget *>( parent ), opt );
     }
     else
-*/
+
     {
 	NCERR <<  "PkgSpecial( "  << subwidget->toString() << " )  not found - take default `Label" << endl;
 	return new NCLabel( dynamic_cast<NCWidget *>( parent ), opt, subwidget );

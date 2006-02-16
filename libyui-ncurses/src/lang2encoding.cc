@@ -7,9 +7,7 @@ std::string language2encoding( std::string lang )
 {
   using std::string;
   lang = ":" + lang + ":";
-  if ( string( ":ja:" ).find( lang ) != string::npos )
-    return "eucJP";
-  else if ( string( ":ca:da:de:en:es:fi:fr:gl:is:it:nl:no:pt:sv:" ).find( lang ) != string::npos )
+  if ( string( ":ca:da:de:en:es:fi:fr:gl:is:it:nl:no:pt:sv:" ).find( lang ) != string::npos )
     return "ISO-8859-1";
   else if ( string( ":lt:" ).find( lang ) != string::npos )
     return "ISO-8859-13";
@@ -23,6 +21,8 @@ std::string language2encoding( std::string lang )
     return "ISO-8859-8";
   else if ( string( ":tr:" ).find( lang ) != string::npos )
     return "ISO-8859-9";
+  else if ( string( ":ja:" ).find( lang ) != string::npos )
+    return "eucJP";
   return "";
 }
 //-----------------------------------------------------------------

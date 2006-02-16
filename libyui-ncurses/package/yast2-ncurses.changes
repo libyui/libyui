@@ -1,4 +1,30 @@
 -------------------------------------------------------------------
+-------------------------------------------------------------------
+Wed Feb 15 18:32:35 CET 2006 - mvidner@suse.cz
+
+- Show most package details.
+- Search works, except in dependencies.
+- 2.13.6.4
+
+-------------------------------------------------------------------
+Wed Feb 15 17:05:00 CET 2006 - mvidner@suse.cz
+
+- Dependency solver ported.
+- Reduced BuildReqs, libzypp-devel has them now.
+- 2.13.6.3
+
+-------------------------------------------------------------------
+Tue Feb 14 13:45:21 CET 2006 - mvidner@suse.cz
+
+- Minimal zypp support:
+  * One list with all packages.
+  * Can change status. No popups and no details.
+  * If there are package conflicts, they will be ignored by the UI
+    and the actual installation will fail (with a misleading popup,
+    but the logs have it right).
+- 2.13.6.2
+
+-------------------------------------------------------------------
 Fri Feb 10 12:18:21 CET 2006 - mvidner@suse.cz
 
 - Ripped out all package related stuff: y2pm out, zypp not yet in (#149879)

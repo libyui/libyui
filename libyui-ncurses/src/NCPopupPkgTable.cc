@@ -27,11 +27,11 @@
 #include "NCPushButton.h"
 #include "NCPkgTable.h"
 
-#include <Y2PM.h>
-#include <y2pm/PMPackageManager.h>
-#include <y2pm/PkgDu.h>
+#include "YQZypp.h"
+#include <zypp/ui/Selectable.h>
+//#include <y2pm/PkgDu.h>
 
-#include "NCPopupPkgTable.h"
+//#include "NCPopupPkgTable.h"
 
 using namespace std;
 
@@ -146,12 +146,12 @@ bool NCPopupPkgTable::fillAutoChanges( NCPkgTable * pkgTable )
 
     pkgTable->itemsCleared();		// clear the table
 
-    PMManager::PMSelectableVec::const_iterator it = Y2PM::packageManager().begin();
+    PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
 
     while ( it != Y2PM::packageManager().end() )
     {
-	PMSelectablePtr selectable = *it;
-	PMPackagePtr pkgPtr = (*it)->theObject();
+	ZyppSel selectable = *it;
+	ZyppPkg pkgPtr = (*it)->theObj();
 
 	// show all packages which are automatically selected for installation
 	if ( selectable->to_modify() && selectable->by_auto() )

@@ -29,11 +29,10 @@
 #include "NCPkgTable.h"
 #include "NCRichText.h"
 
-#include <Y2PM.h>
-#include <y2pm/PMPackageManager.h>
-#include <y2pm/PkgDu.h>
+#include "YQZypp.h"
+//#include <y2pm/PkgDu.h>
 
-#include "NCPopupPkgDescr.h"
+//#include "NCPopupPkgDescr.h"
 #include "PackageSelector.h"
 
 using namespace std;
@@ -131,7 +130,7 @@ void NCPopupPkgDescr::createLayout( )
 //
 //	DESCRIPTION :
 //
-bool NCPopupPkgDescr::fillData( PMPackagePtr & pkgPtr )
+bool NCPopupPkgDescr::fillData( ZyppPkg & pkgPtr )
 {
     if ( !pkgPtr )
 	return false;
@@ -157,7 +156,7 @@ bool NCPopupPkgDescr::fillData( PMPackagePtr & pkgPtr )
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupPkgDescr::showInfoPopup( PMPackagePtr & pkgPtr )
+NCursesEvent NCPopupPkgDescr::showInfoPopup( ZyppPkg & pkgPtr )
 {
     postevent = NCursesEvent();
 

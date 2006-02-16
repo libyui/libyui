@@ -32,13 +32,13 @@
 #include "PackageSelector.h"
 #include "NCPushButton.h"
 
-#include <y2pm/PMError.h>
-#include <y2pm/PMSelection.h>
-#include <y2pm/PMSelectionPtr.h>
-#include <y2pm/PMPackage.h>
-#include <y2pm/PMPackagePtr.h>
-#include <y2pm/InstSrc.h>
-#include <y2pm/InstSrcPtr.h>
+//#include <y2pm/PMError.h>
+#include <zypp/Selection.h>
+#include <zypp/Selection.h>
+#include <zypp/Package.h>
+#include <zypp/Package.h>
+//#include <y2pm/InstSrc.h>
+//#include <y2pm/InstSrcPtr.h>
 
 
 ///////////////////////////////////////////////////////////////////

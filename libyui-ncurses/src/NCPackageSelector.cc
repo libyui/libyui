@@ -99,7 +99,11 @@ NCPackageSelector::NCPackageSelector( YNCursesUI *ui,
 	    ObjectStatStrategy * strategy;
 	    if ( youMode )
 	    {
+#ifdef FIXME
 		strategy = new PatchStatStrategy();
+#else
+		strategy = 0;
+#endif
 		pkgList->setTableType( NCPkgTable::T_Patches, strategy );
 	    }
 	    else if ( updateMode )
@@ -181,14 +185,18 @@ void NCPackageSelector::showDefaultList()
 
 	if ( !youMode && packager )
 	{
+#ifdef FIXME
 	    // do an initial dependency solving in 'normal' and 'update' mode
 	    packager->showPackageDependencies( true );
+#endif
 	    // show the required diskspace
 	    packager->showDiskSpace();	    
 	}
 	if ( youMode && packager )
 	{
+#ifdef FIXME
 	    packager->showDownloadSize();
+#endif
 	}
     }
     else

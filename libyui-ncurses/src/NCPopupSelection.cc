@@ -17,7 +17,7 @@
 
 /-*/
 #include "Y2Log.h"
-#include "NCPopupSelection.h"
+//#include "NCPopupSelection.h"
 
 #include "YDialog.h"
 #include "NCSplit.h"
@@ -26,9 +26,7 @@
 #include "NCPkgTable.h"
 #include "ObjectStatStrategy.h"
 
-#include <Y2PM.h>
-#include <y2pm/RpmDb.h>
-#include <y2pm/PMSelectionManager.h>
+#include "YQZypp.h"
 
 
 ///////////////////////////////////////////////////////////////////
@@ -143,7 +141,7 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
     if ( postevent.detail == NCursesEvent::USERDEF )
     {
 	int index = sel->getCurrentItem();
-	PMSelectionPtr selPtr = sel->getDataPointer( index );
+	ZyppSelection selPtr = sel->getDataPointer( index );
 	if ( selPtr )
 	{
 	    NCMIL << "Current selection: " << getCurrentLine() << endl;
@@ -172,7 +170,7 @@ string  NCPopupSelection::getCurrentLine( )
 	return "";
 
     int index = sel->getCurrentItem();
-    PMSelectionPtr selPtr = sel->getDataPointer(index);
+    ZyppSelection selPtr = sel->getDataPointer(index);
 
     return ( selPtr?selPtr->summary(Y2PM::getPreferredLocale()):"" );
 }
@@ -248,7 +246,7 @@ bool NCPopupSelection::postAgain( )
 //
 // OrderFunc 
 //
-bool order( PMSelectionPtr ptr1, PMSelectionPtr ptr2 )
+bool order( ZyppSelection ptr1, ZyppSelection ptr2 )
 {
     if ( ptr1->order() < ptr2->order() )
     {
@@ -273,14 +271,14 @@ bool NCPopupSelection::fillSelectionList( NCPkgTable * sel )
     vector<string> pkgLine;
     pkgLine.reserve(4);
 
-    list<PMSelectionPtr> selList;
-    list<PMSelectionPtr>::iterator listIt;
+    list<ZyppSelection> selList;
+    list<ZyppSelection>::iterator listIt;
     
-    PMManager::PMSelectableVec::const_iterator it;
+    PMManager::SelectableVec::const_iterator it;
     
     for (  it = Y2PM::selectionManager().begin(); it != Y2PM::selectionManager().end(); ++it )
     {
-	PMSelectionPtr selPtr = (*it)->theObject();
+	ZyppSelection selPtr = (*it)->theObj();
 	if ( selPtr && selPtr->visible() && !selPtr->isBase() )
 	{
 	    NCMIL << "Add-on selection: " <<  selPtr->name() << ", initial status: "
@@ -299,7 +297,7 @@ bool NCPopupSelection::fillSelectionList( NCPkgTable * sel )
 
 	sel->addLine( (*listIt)->getSelectable()->status(),	// the status
 		      pkgLine,
-		      (*listIt) );		// PMSelectionPtr	
+		      (*listIt) );		// ZyppSelection	
     }
     
     return true;

@@ -37,7 +37,7 @@ function mkpair() {
 	awk '
 		{ e[$2]=e[$2]":"$1 }
 	END	{ for ( v in e ) printf "%-15s %s:\n", v, e[v] }
-	' | sort
+	' | LC_ALL=C sort
 }
 # ######################################################
 cattab | mkpair | {

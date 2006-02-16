@@ -26,8 +26,7 @@
 #include "PkgNames.h"
 #include "PackageSelector.h"
 
-#include <Y2PM.h>
-#include <y2pm/PMPackageManager.h>
+#include "YQZypp.h"
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -45,8 +44,10 @@ NCPopupTree::NCPopupTree( const wpos at, PackageSelector * pkg )
     // create the layout (the NCTree)
     createLayout( YCPString(PkgNames::RpmTreeLabel()) );
 
+#ifdef FIXME
     // clone the tree (fill the NCTree)
     cloneTree( Y2PM::packageManager().rpmGroupsTree()->root(), 0 ); 
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -265,5 +266,9 @@ void NCPopupTree::cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClo
 
 YStringTreeItem *  NCPopupTree::getDefaultGroup( )
 {
+#ifdef FIXME
     return Y2PM::packageManager().rpmGroupsTree()->root()->firstChild();
+#else
+    return 0;
+#endif
 }

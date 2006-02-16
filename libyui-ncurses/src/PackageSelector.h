@@ -30,17 +30,16 @@
 
 #include <y2util/YRpmGroupsTree.h>
 
-#include <y2pm/PMObject.h>
-#include <y2pm/PMSelectable.h>
-#include <y2pm/PMYouPatch.h>
+#include <zypp/ResObject.h>
+#include <zypp/ui/Selectable.h>
+#include <zypp/Patch.h>
 
 #include "NCPopupTree.h"
 #include "NCPkgTable.h"
 
 class NCPopupSelection;
 class LangCode;
-class NCPopupPkgDeps;
-class NCPopupSelDeps;
+class NCPopupDeps;
 class NCPopupDiskspace;
 class NCPopupSearch;
 class NCPopupFile;
@@ -75,26 +74,29 @@ class PackageSelector
 
     NCPopupTree * filterPopup;		// the rpm group tags popup
 
-    NCPopupPkgDeps * pkgDepsPopup;	// the package dependeny popup
+    NCPopupDeps * depsPopup;	// the package dependeny popup
 
-    NCPopupSelDeps * selDepsPopup;	// the selection dependency popup
-    
+#ifdef FIXME
     NCPopupSelection * selectionPopup; 	// the selections popup
 
     NCPopupDiskspace * diskspacePopup;	// the popup showing the disk usage
+#endif
 
     NCPopupSearch * searchPopup; 	// the package search popup
 
+#ifdef FIXME
     NCPopupFile * filePopup; 		// the save/load selection popup
+#endif
     
     bool youMode;			// YOU
     bool updateMode;			// Update
 
     bool autoCheck;			// flag for automatic dependency check on/off
     
+#ifdef FIXME
     // internal helper functions (format list of string) 
     string createRelLine( list<PkgRelation> info );
-
+#endif
     // internal use (copies tree items got from YPkgRpmGroupTagsFilterView)
     void cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone );
 
@@ -128,13 +130,23 @@ class PackageSelector
     */
     bool fillPackageList( const YCPString & label, YStringTreeItem * group );
 
+   /**
+    * Fills the package table
+    * Temporary while porting to zypp
+    * @param label (the label)
+    * @return bool
+    */
+    bool fillPackageListAll (const YCPString & label);
+
+#ifdef FIXME_PATCHES
   /**
     * Fills the package table with YOU patches matching the filter
     * @param filter
     * @return bool
     */
     bool fillPatchList( string filter,
-			PMYouPatch::Kind kind = PMYouPatch::kind_all);
+			zypp::Patch::Kind kind = zypp::Patch::kind_all);
+#endif
 
    /**
     * Fills the package table with packages with update problems
@@ -154,7 +166,7 @@ class PackageSelector
     * @param pkgPtr Show all available versions of this package 
     * @return bool
     */
-    bool fillAvailableList( NCPkgTable *table, PMObjectPtr pkgPtr );    
+    bool fillAvailableList( NCPkgTable *table, ZyppObj pkgPtr );    
 
    /**
     * Fills the list of packages belonging to the youPatch
@@ -162,7 +174,7 @@ class PackageSelector
     * @param youPatch Show all packages belonging to the patch 
     * @return bool
     */ 
-    bool fillPatchPackages ( NCPkgTable * pkgTable, PMObjectPtr youPatch );
+    bool fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj youPatch );
     
    /**
     * Fills the package table with packages matching the search expression
@@ -294,22 +306,8 @@ class PackageSelector
     * @param pkgPtr the data pointer
     * @return bool
     */
-    bool showPackageInformation ( PMObjectPtr pkgPtr );
+    bool showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr );
 
-  /**
-    * Shows the dependency of this package 
-    * @param index The line
-    * @return bool
-    */
-    bool showConcretelyPkgDependency ( int index );
-
-  /**
-    * Shows the dependency of this selection 
-    * @param index The line
-    * @return bool
-    */
-    bool showConcretelySelDependency ( int index );
-    
   /**
     * Checks and shows the dependencies
     * @param doit true: do the check, false: only check if auto check is on
@@ -321,12 +319,14 @@ class PackageSelector
     */
     void showSelectionDependencies ( );
     
+#ifdef FIXME
    /**
     * Gets the required patch info from you patch manager and shows it
     * @param pkgPtr the data pointer
     * @return bool
     */
-    bool showPatchInformation ( PMObjectPtr pkgPtr );
+    bool showPatchInformation ( ZyppObj pkgPtr );
+#endif
     
    /**
     * Sets the member variable to the currently visible information
@@ -340,7 +340,7 @@ class PackageSelector
     * @param selPtr The selection
     * @return bool
     */
-    bool showSelPackages( const YCPString & label, PMSelectionPtr selPtr );
+    bool showSelPackages( const YCPString & label, ZyppSelection selPtr );
 
    /**
     * Updates the status in list of packages
@@ -352,14 +352,14 @@ class PackageSelector
      * Returns true if there is a match, false otherwise or if 'pkg' is 0.
      * @return bool 
      **/
-    bool checkPackage( PMPackagePtr pkg, YStringTreeItem * rpmGroup );
+    bool checkPackage( ZyppPkg pkg, YStringTreeItem * rpmGroup );
 
     /**
      * Check if 'patch' matches the selected filter.
      * Returns true if there is a match, false otherwise or if 'patch' is 0.
      * @return bool
      **/ 
-    bool checkPatch(  PMYouPatchPtr patch, string filter, PMYouPatch::Kind kind );
+    bool checkPatch(  ZyppPatch patch, string filter, zypp::Patch::Kind kind );
 
    /**
     * Returns whether automatic dependency is on or off
@@ -376,9 +376,10 @@ class PackageSelector
 
    /**
      * Creates a text from a list of strings which may contain HTML tags
+     * @param t used to be list, now a single string. but what does it contain?
      * @return string	The text
      */
-    string createDescrText( list<string> info );
+    string createDescrText( zypp::Text t );
 
     /**
      * Used for package search
@@ -393,10 +394,13 @@ class PackageSelector
      */ 
     void showDiskSpace();
 
+#ifdef FIXME
     /**
      * Shows the total download size
      */ 
     void showDownloadSize();
+#endif
+
 };
 
 ///////////////////////////////////////////////////////////////////

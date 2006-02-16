@@ -23,11 +23,9 @@
 #include "NCi18n.h"
 
 #include "PackageSelector.h"
-#include <y2pm/PMSelectable.h>
-#include <Y2PM.h>
-#include <y2pm/PMPackageManager.h>
-#include <y2pm/PMYouPatchManager.h>
-#include <y2pm/InstTarget.h>
+#include <zypp/ui/Selectable.h>
+#include "YQZypp.h"
+//#include <y2pm/InstTarget.h>
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -37,10 +35,12 @@
 //
 //	DESCRIPTION :
 //
-NCPkgTableTag::NCPkgTableTag( PMObjectPtr objPtr, PMSelectable::UI_Status stat )
+NCPkgTableTag::NCPkgTableTag( ZyppObj objPtr, ZyppSel selPtr,
+			      ZyppStatus stat )
       : NCTableCol( NCstring( "    " ), SEPARATOR )
 	, status ( stat )
 	, dataPointer( objPtr )
+	, selPointer( selPtr )
 {
 
 }
@@ -68,30 +68,30 @@ void NCPkgTableTag::DrawAt( NCursesWindow & w, const wrect at,
 }
 
 
-string NCPkgTableTag::statusToStr( PMSelectable::UI_Status stat ) const
+string NCPkgTableTag::statusToStr( ZyppStatus stat ) const
 {
-     // convert PMSelectable::UI_Status to string
+     // convert ZyppStatus to string
     switch ( stat )
     {
-	case PMSelectable::S_NoInst:	// Is not installed and will not be installed
+	case S_NoInst:	// Is not installed and will not be installed
 	    return "    ";
-	case PMSelectable::S_KeepInstalled: 	// Is installed - keep this version
+	case S_KeepInstalled: 	// Is installed - keep this version
 	    return "  i ";
-	case PMSelectable::S_Install:	// Will be installed
+	case S_Install:	// Will be installed
 	    return "  + ";
-	case PMSelectable::S_Del:	// Will be deleted
+	case S_Del:	// Will be deleted
 	    return "  - ";
-	case PMSelectable::S_Update:	// Will be updated
+	case S_Update:	// Will be updated
 	    return "  > ";
-	case PMSelectable::S_AutoInstall: // Will be automatically installed
+	case S_AutoInstall: // Will be automatically installed
 	    return " a+ ";
-	case PMSelectable::S_AutoDel:	// Will be automatically deleted
+	case S_AutoDel:	// Will be automatically deleted
 	    return " a- ";
-	case PMSelectable::S_AutoUpdate: // Will be automatically updated
+	case S_AutoUpdate: // Will be automatically updated
 	    return " a> ";    
-	case PMSelectable::S_Taboo:	// Never install this 
+	case S_Taboo:	// Never install this 
 	    return " ---";
-	case PMSelectable::S_Protected:	// always keep installed version 
+	case S_Protected:	// always keep installed version 
 	    return " -i-";
 	default:
 	    return "####";
@@ -144,14 +144,15 @@ NCPkgTable::~NCPkgTable()
 //
 //	DESCRIPTION :
 //
-void NCPkgTable::addLine( PMSelectable::UI_Status stat,
+void NCPkgTable::addLine( ZyppStatus stat,
 			  const vector<string> & elements,
-			  PMObjectPtr objPtr )
+			  ZyppObj objPtr,
+			  ZyppSel slbPtr )
 {
     vector<NCTableCol*> Items( elements.size()+1, 0 );
     
-    // fill first column (containing the status information and the package pointer)
-    Items[0] = new NCPkgTableTag( objPtr, stat );
+    // fill first column (containing the status information and the package pointers)
+    Items[0] = new NCPkgTableTag( objPtr, slbPtr, stat );
 
     for ( unsigned i = 1; i < elements.size()+1; ++i ) {
 	// use YCPString to enforce recoding from 'utf8'
@@ -199,51 +200,53 @@ void NCPkgTable::cellChanged( int index, int colnum, const YCPString & newtext )
 //	DESCRIPTION : sets the new status in first column of the package table
 //		      and informs the package manager
 //
-bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
-			       const PMObjectPtr & objPtr,
+bool NCPkgTable::changeStatus( ZyppStatus newstatus,
+			       const ZyppSel & slbPtr,
 			       bool singleChange )
 {
-    if ( !packager || !objPtr || !objPtr->hasSelectable() )
+    if ( !packager || !slbPtr )
 	return false;
 
-    list<string> notify;
-    list<string> license;
+    zypp::Text notify;
+    zypp::License license;
     bool license_confirmed = true;
-    PMPackagePtr pkgPtr = NULL;
+    ZyppPkg pkgPtr = NULL;
     YCPString header( "" );
     bool ok = true;
 
     switch ( newstatus )
     {
-	case PMSelectable::S_Del:
-	case PMSelectable::S_NoInst:
-	case PMSelectable::S_Taboo:
-	    if ( objPtr->hasCandidateObj() )
+	case S_Del:
+	case S_NoInst:
+	case S_Taboo:
+	    if ( slbPtr->hasCandidateObj() )
 	    {
-		notify = objPtr->getCandidateObj()->delnotify();
+		notify = slbPtr->candidateObj()->delnotify();
 		header = YCPString(PkgNames::WarningLabel());
 	    }
 	break;
-	case PMSelectable::S_Install:
-	case PMSelectable::S_Update:
-	    if ( objPtr->hasCandidateObj() )
+	case S_Install:
+	case S_Update:
+	    if ( slbPtr->hasCandidateObj() )
 	    {	
-		notify = objPtr->getCandidateObj()->insnotify();
+		notify = slbPtr->candidateObj()->insnotify();
 		header = YCPString(PkgNames::NotifyLabel());
+#ifdef FIXME
 		// get license (available for packages only)  
-		pkgPtr = objPtr->getCandidateObj();
+		pkgPtr = slbPtr->candidateObj();
 		if ( pkgPtr )
 		{
 		    license = pkgPtr->licenseToConfirm();
 		    license_confirmed = ! pkgPtr->hasLicenseToConfirm();
 		}
+#endif
 	    }
 	    break;
 
 	default: break;
     }
 
-    string pkgName = objPtr->getSelectable()->name();
+    string pkgName = slbPtr->name();
 
     if ( !license.empty() )
     {
@@ -261,12 +264,12 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
 	    // make sure the package won't be installed
 	    switch ( newstatus )
 	    {
-		case PMSelectable::S_Install:
-		    newstatus = PMSelectable::S_Taboo;
+		case S_Install:
+		    newstatus = S_Taboo;
 		    break;
 		    
-		case PMSelectable::S_Update:
-		    newstatus = PMSelectable::S_Protected;
+		case S_Update:
+		    newstatus = S_Protected;
 		    break;
 
 		default:
@@ -276,7 +279,9 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
 	    ok = false;
 	} else {
 	    if (pkgPtr) {
+#ifdef FIXME
 		pkgPtr->markLicenseConfirmed();
+#endif
 	    }
 	}
     }
@@ -290,7 +295,7 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
     }
     
     // inform the package manager
-    ok = statusStrategy->setObjectStatus( newstatus, objPtr );
+    ok = statusStrategy->setObjectStatus( newstatus, slbPtr );
     
     if ( ok && singleChange )
     {
@@ -311,8 +316,10 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
 		break;
 	    
 	    case T_Patches:
+#ifdef FIXME
 		// show the download size for all selected patches
 		packager->showDownloadSize();
+#endif
 		break;
 		
 	    default:
@@ -321,9 +328,7 @@ bool NCPkgTable::changeStatus( PMSelectable::UI_Status newstatus,
         // update this list to show the status changes
 	updateTable();
 	
-	if ( tableType == T_Availables
-	     || tableType == T_Dependency
-	     || tableType == T_DepsPackages )
+	if ( tableType == T_Availables )
 	{
 	    // additionally update the package list
 	    packager->updatePackageList();
@@ -360,7 +365,7 @@ bool NCPkgTable::updateTable()
         // get first column (the column containing the status info)
 	NCPkgTableTag * cc = static_cast<NCPkgTableTag *>( cl->GetCol( 0 ) );
 	// get the object pointer
-	PMObjectPtr objPtr = getDataPointer( index );
+	ZyppSel slbPtr = getSelPointer( index );
 
 	if ( !cc )
 	{
@@ -368,11 +373,11 @@ bool NCPkgTable::updateTable()
 	    break;
 	}
 	
-	PMSelectable::UI_Status newstatus = PMSelectable::S_NoInst;
-	if ( objPtr )
+	ZyppStatus newstatus = S_NoInst;
+	if ( slbPtr )
 	{
 	    // get the new status - use particular strategy
-	    newstatus = statusStrategy->getPackageStatus( objPtr);
+	    newstatus = statusStrategy->getPackageStatus( slbPtr);
 	}
 	// set new status (if status has changed)
 	if ( getStatus(index) != newstatus )
@@ -391,9 +396,9 @@ bool NCPkgTable::updateTable()
 //
 // get status of a certain package in list of available packages
 //
-PMSelectable::UI_Status NCPkgTable::getAvailableStatus ( const PMObjectPtr & objPtr )
+ZyppStatus NCPkgTable::getAvailableStatus ( const ZyppSel & slbPtr )
 {
-    return ( statusStrategy->getPackageStatus( objPtr) );
+    return ( statusStrategy->getPackageStatus( slbPtr) );
 };
 
 
@@ -408,27 +413,32 @@ bool NCPkgTable::fillDefaultList( )
 {
     switch ( tableType )
     {
+#ifdef FIXME
 	case T_Patches: {
 	    packager->fillPatchList( "installable" );	// default: installable patches
 
 	    // set the visible info to long description 
 	    packager->setVisibleInfo ( PkgNames::PatchDescr() );
 	    // show the package description of the current item
-	    packager->showPatchInformation( getDataPointer( getCurrentItem() ) );
+	    showInformation ();
 	    break;
 	}
+#endif
 	case T_Update: {
+#ifdef FIXME
 	    if ( !Y2PM::packageManager().updateEmpty() )
+#endif
 	    {
 		packager->fillUpdateList();
 		// set the visible info to package description 
 		packager->setVisibleInfo ( PkgNames::PkgInfo() );
 		// show the package description of the current item
-		packager->showPackageInformation( getDataPointer( getCurrentItem() ) );	
+		showInformation ();
 		break;
 	    }
 	}
 	case T_Packages: {
+#ifdef FIXME
 	    YStringTreeItem * defaultGroup =  packager->getDefaultRpmGroup();
 
 	    if ( defaultGroup )
@@ -439,12 +449,19 @@ bool NCPkgTable::fillDefaultList( )
 		// set the visible info to package description 
 		packager->setVisibleInfo ( PkgNames::PkgInfo() );
 		// show the package description of the current item
-		packager->showPackageInformation( getDataPointer( getCurrentItem() ) );
+		showInformation ();
 	    }
 	    else
 	    {
 		NCERR << "No default RPM group available" << endl;
 	    }
+#else
+	    packager->fillPackageListAll (YCPString ("ALL ZYPP PKGS"));
+		// set the visible info to package description 
+		packager->setVisibleInfo ( PkgNames::PkgInfo() );
+		// show the package description of the current item
+		showInformation ();
+#endif
 	    break;
 	}
 	default:
@@ -467,7 +484,11 @@ void NCPkgTable::fillHeader( )
     {
 	case T_Packages:
 	case T_Update: {
+#ifdef FIXME
 	    int installedPkgs = Y2PM::instTarget().numPackages();
+#else
+	    int installedPkgs = 1;
+#endif
 	    if ( installedPkgs > 0 )
 	    {
 		header.reserve(7);
@@ -510,21 +531,6 @@ void NCPkgTable::fillHeader( )
 	    header.push_back( "L" + PkgNames::PkgSize() );
 	    break;
 	}
-	case T_Dependency: {
-	    header.reserve(6);
-	    header.push_back( "L" + PkgNames::PkgStatus() );
-	    header.push_back( "L" + PkgNames::PackageName() );
-	    header.push_back( "L" + PkgNames::DepsKind() );
-	    header.push_back( "L" + PkgNames::Comment() );
-	    break;
-	}
-	case T_SelDependency: {
-	    header.reserve(4);
-	    header.push_back( "L" + PkgNames::PkgStatus() );
-	    header.push_back( "L" + PkgNames::SelectionName() );
-	    header.push_back( "L" + PkgNames::DepsKind() );	
-	    break;
-	}
 	case T_Selections: {
 	    header.reserve(3);
 	    header.push_back( "L" + PkgNames::PkgStatus() );
@@ -556,26 +562,27 @@ void NCPkgTable::fillHeader( )
 // createListEntry
 //
 //
-bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr )
+bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 {
     vector<string> pkgLine;
     pkgLine.reserve(5);
 
-    if ( !pkgPtr || !pkgPtr->hasSelectable() )
+    if ( !pkgPtr || !slbPtr )
     {
 	NCERR << "No valid package available" << endl;
 	return false;
     }
     
     // add the package name
-    pkgLine.push_back( pkgPtr->getSelectable()->name() );	    
+    pkgLine.push_back( slbPtr->name() );	    
 
     string instVersion = "";
     string version = "";
-    PMSelectable::UI_Status status;
+    ZyppStatus status;
     
     switch( tableType )
     {
+#ifdef FIXME
 	case T_PatchPkgs: {
 	    if ( pkgPtr->hasInstalledObj() )
 	    {
@@ -601,48 +608,60 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr )
 
 	    break;
 	}
+#endif
 	case T_Availables: {
 	    version = pkgPtr->edition().asString();
 	    pkgLine.push_back( version );
-	    pkgLine.push_back( pkgPtr->instSrcLabel() ); // show the installation source
+	    // is alias the right string? id?
+	    pkgLine.push_back( pkgPtr->source().alias() ); // show the installation source
 
-	    status = getAvailableStatus( pkgPtr ); // the status of this certain package
+// artifact of getselectable faking
+	    status = getAvailableStatus( slbPtr ); // the status of this certain package
 	    
-	    FSize size = pkgPtr->size();     	// installed size
-	    pkgLine.push_back( size.form( 8 ) );  // format size
+	    zypp::ByteCount size = pkgPtr->size();     	// installed size
+	    pkgLine.push_back( size.asString( 8 ) );  // format size
 
 	    break;
 	}
-	default: {   
+	default: {
+	    // version() was edition.version. but what about edition.release?
+
 	    // if the package is installed, get the installed version 
-	    if ( pkgPtr->hasInstalledObj() )
+	    if ( slbPtr->hasInstalledObj() )
 	    {
-		instVersion = pkgPtr->getInstalledObj()->version();
+		instVersion = slbPtr->installedObj()->edition().version();
 
                 // if a candidate is available, get the candidate version
-		if ( pkgPtr->hasCandidateObj() )
+		if ( slbPtr->hasCandidateObj() )
 		{
-		    version = pkgPtr->getCandidateObj()->version();
+		    version = slbPtr->candidateObj()->edition().version();
 		}
 	    }
 	    else
 	    {
-		version = pkgPtr->version();
+		version = pkgPtr->edition().version();
 	    }
 	    pkgLine.push_back( version );	// the available version (the candidate)
 
-	    if ( Y2PM::instTarget().numPackages() > 0 )
+#ifdef FIXME
+	    int installedPkgs = Y2PM::instTarget().numPackages();
+#else
+	    int installedPkgs = 1;
+#endif
+	    if ( installedPkgs > 0 )
 	    {
 		pkgLine.push_back( instVersion );	// installed version
 	    }
 	    pkgLine.push_back( pkgPtr->summary() );  	// short description
 	    
-	    status = pkgPtr->getSelectable()->status(); // the package status
+	    status = slbPtr->status(); // the package status
 
-	    FSize size = pkgPtr->size();     		// installed size
-	    pkgLine.push_back( size.form( 8 ) );  	// format size
+	    zypp::ByteCount size = pkgPtr->size(); // installed size
+	    pkgLine.push_back( size.asString( 8 ) );  	// format size
 
-	    if ( pkgPtr->getSelectable()->source_install() )
+// Selectable does not have source_install
+#ifdef FIXME
+	    if ( slbPtr->source_install() )
 	    {
 		pkgLine.push_back( " x " );	
 	    }
@@ -650,12 +669,17 @@ bool NCPkgTable::createListEntry ( PMPackagePtr pkgPtr )
 	    {
 		pkgLine.push_back( "   " );	
 	    }
+#else
+	    pkgLine.push_back( " ? " );	
+#endif
 	}
     }
     
     addLine( status,	// the package status
 	     pkgLine, 	// the package data
-	     pkgPtr );	// the corresponding package pointer
+	     pkgPtr,	// the corresponding package pointer
+	     slbPtr
+	);
 
     return true;
 }
@@ -671,19 +695,21 @@ bool NCPkgTable::createInfoEntry ( string text )
     pkgLine.reserve(2);
 
     pkgLine.push_back( text );
-    addLine( PMSelectable::S_NoInst,	// use status NoInst
+    addLine( S_NoInst,	// use status NoInst
 	     pkgLine,
-	     PMObjectPtr() );	// null pointer
+	     ZyppObj(),
+	     ZyppSel());	// null pointer
     
     return true;
 }
 
+#ifdef FIXME
 ///////////////////////////////////////////////////////////////////
 //
 // createPatchEntry
 //
 //
-bool NCPkgTable::createPatchEntry ( PMYouPatchPtr patchPtr )
+bool NCPkgTable::createPatchEntry ( ZyppPatch patchPtr )
 {
     vector<string> pkgLine;
     pkgLine.reserve(5);
@@ -706,6 +732,7 @@ bool NCPkgTable::createPatchEntry ( PMYouPatchPtr patchPtr )
 
     return true;
 }
+#endif
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -714,7 +741,8 @@ bool NCPkgTable::createPatchEntry ( PMYouPatchPtr patchPtr )
 //
 bool NCPkgTable::showInformation ( )
 {
-    PMObjectPtr objPtr = getDataPointer( getCurrentItem() );
+    ZyppObj objPtr = getDataPointer( getCurrentItem() );
+    ZyppSel slbPtr = getSelPointer( getCurrentItem() );
 
     if ( !packager )
 	return false;
@@ -724,22 +752,14 @@ bool NCPkgTable::showInformation ( )
 	case T_Packages:
 	case T_Update:
 	    // show the required package info
-	    packager->showPackageInformation( objPtr );   
+	    packager->showPackageInformation( objPtr, slbPtr );
 	    break;
 	case T_Patches:
+#ifdef FIXME
 	    // show the patch info
-	    packager->showPatchInformation( objPtr );
+	    packager->showPatchInformation( objPtr, slbPtr );
+#endif
 	    break;
-	case T_Dependency:
-	    // show the dependencies of this package
-	    NCDBG << "GET current item line: " <<  getCurrentItem() << endl;
-	    packager->showConcretelyPkgDependency( getCurrentItem() );
-	    break;
-	case T_SelDependency:
-	    // show the dependencies of this selection
-	    NCDBG << "GET current item line: " <<  getCurrentItem() << endl;
-	    packager->showConcretelySelDependency( getCurrentItem() );
-	    break; 
 	default:
 	    break;
     }
@@ -801,24 +821,34 @@ NCursesEvent NCPkgTable::wHandleInput( wint_t key )
 //
 // Gets the status of the package of selected line
 //
-PMSelectable::UI_Status NCPkgTable::getStatus( int index )
+ZyppStatus NCPkgTable::getStatus( int index )
 {
     // get the tag 
     NCPkgTableTag * cc = getTag( index);
     if ( !cc )
-	return PMSelectable::S_NoInst;
+	return S_NoInst;
 
     return cc->getStatus();
 }
 
-PMObjectPtr NCPkgTable::getDataPointer( int index )
+ZyppObj NCPkgTable::getDataPointer( int index )
 {
     // get the tag 
     NCPkgTableTag *cc = getTag( index );
     if ( !cc )
-	return PMObjectPtr( );
+	return ZyppObj( );
 
     return cc->getDataPointer();
+}
+
+ZyppSel NCPkgTable::getSelPointer( int index )
+{
+    // get the tag 
+    NCPkgTableTag *cc = getTag( index );
+    if ( !cc )
+	return ZyppSel( );
+
+    return cc->getSelPointer();
 }
 
 NCPkgTableTag * NCPkgTable::getTag( const int & index )
@@ -834,6 +864,7 @@ NCPkgTableTag * NCPkgTable::getTag( const int & index )
     return cc;
 }
 
+#ifdef FIXME
 ///////////////////////////////////////////////////////////////////
 //
 // NCPkgTable::SourceInstall()
@@ -842,7 +873,7 @@ NCPkgTableTag * NCPkgTable::getTag( const int & index )
 bool NCPkgTable::SourceInstall( bool install )
 {
     int index =  getCurrentItem();
-    PMObjectPtr objPtr = getDataPointer( index );
+    ZyppObj objPtr = getDataPointer( index );
     bool ok;
     
     if ( !objPtr )
@@ -850,7 +881,7 @@ bool NCPkgTable::SourceInstall( bool install )
 	NCERR << "Invalid Pointer" << endl;
 	return false;
     }
-    PMSelectablePtr selPtr = objPtr->getSelectable();
+    ZyppSel selPtr = objPtr->getSelectable();
     NCTableLine * currentLine = myPad()->ModifyLine( index );
     
     if ( !selPtr  || !currentLine )
@@ -878,7 +909,8 @@ bool NCPkgTable::SourceInstall( bool install )
 	
     return true;
 }
-			       
+#endif
+
 ///////////////////////////////////////////////////////////////////
 //
 // NCPkgTable::toggleObjStatus()
@@ -886,18 +918,18 @@ bool NCPkgTable::SourceInstall( bool install )
 //
 bool NCPkgTable::toggleObjStatus( )
 {
-    PMObjectPtr objPtr = getDataPointer( getCurrentItem() );
+    ZyppSel slbPtr = getSelPointer( getCurrentItem() );
 
-    if ( !objPtr )
+    if ( !slbPtr )
 	return false;
     
-    PMSelectable::UI_Status newStatus;
+    ZyppStatus newStatus;
     
-    bool ok = statusStrategy->toggleStatus( objPtr, newStatus );
+    bool ok = statusStrategy->toggleStatus( slbPtr, newStatus );
 
     if ( ok )
     {
-	changeStatus( newStatus, objPtr, true );	
+	changeStatus( newStatus, slbPtr, true );	
     }
     
     return true;
@@ -910,19 +942,19 @@ bool NCPkgTable::toggleObjStatus( )
 //
 bool NCPkgTable::changeObjStatus( int key )
 {
-    PMObjectPtr objPtr = getDataPointer( getCurrentItem() );
+    ZyppSel slbPtr = getSelPointer( getCurrentItem() );
 
-    if ( !objPtr )
+    if ( !slbPtr )
     {
 	return false; 
     }
-    PMSelectable::UI_Status newStatus;
+    ZyppStatus newStatus;
 
-    bool ok = statusStrategy->keyToStatus( key, objPtr, newStatus );
+    bool ok = statusStrategy->keyToStatus( key, slbPtr, newStatus );
     
     if ( ok )
     {
-	changeStatus( newStatus, objPtr, true );
+	changeStatus( newStatus, slbPtr, true );
     }
     return true;
 }
@@ -934,51 +966,51 @@ bool NCPkgTable::changeObjStatus( int key )
 //
 bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 {
-    PMSelectable::UI_Status newStatus;
-    PMObjectPtr objPtr;
+    ZyppStatus newStatus;
+    ZyppSel slbPtr;
     unsigned int size = getNumLines();
     unsigned int index = 0;
 
     while ( index < size )
     {
 	// get the object pointer
-	objPtr = getDataPointer( index );
+	slbPtr = getSelPointer( index );
 	bool ok = false;
 	
-	if ( objPtr )
+	if ( slbPtr )
 	{
 	    switch ( type ) {
 		case A_Install: {
-		    if ( objPtr->getSelectable()->status() == PMSelectable::S_NoInst ) 
-			ok = statusStrategy->keyToStatus( '+', objPtr, newStatus );
+		    if ( slbPtr->status() == S_NoInst ) 
+			ok = statusStrategy->keyToStatus( '+', slbPtr, newStatus );
 		    break;
 		}
 		case A_DontInstall: {
-		    if ( objPtr->getSelectable()->status() == PMSelectable::S_Install
-			 ||  objPtr->getSelectable()->status() == PMSelectable::S_AutoInstall )
-			ok = statusStrategy->keyToStatus( '-', objPtr, newStatus );
+		    if ( slbPtr->status() == S_Install
+			 ||  slbPtr->status() == S_AutoInstall )
+			ok = statusStrategy->keyToStatus( '-', slbPtr, newStatus );
 		    break;
 		}
 		case A_Delete: {
-		    if ( objPtr->getSelectable()->status() == PMSelectable::S_KeepInstalled )
-			ok = statusStrategy->keyToStatus( '-', objPtr, newStatus );
+		    if ( slbPtr->status() == S_KeepInstalled )
+			ok = statusStrategy->keyToStatus( '-', slbPtr, newStatus );
 		    break;
 		}
 		case A_DontDelete: {
-		    if ( objPtr->getSelectable()->status() == PMSelectable::S_Del
-			 || objPtr->getSelectable()->status() == PMSelectable::S_AutoDel )
-			ok = statusStrategy->keyToStatus( '+', objPtr, newStatus );
+		    if ( slbPtr->status() == S_Del
+			 || slbPtr->status() == S_AutoDel )
+			ok = statusStrategy->keyToStatus( '+', slbPtr, newStatus );
 		    break;
 		}
 		case A_Update: {
-		    if ( objPtr->getSelectable()->status() == PMSelectable::S_KeepInstalled )
-			ok = statusStrategy->keyToStatus( '>', objPtr, newStatus );
+		    if ( slbPtr->status() == S_KeepInstalled )
+			ok = statusStrategy->keyToStatus( '>', slbPtr, newStatus );
 		    break;
 		}
 		case A_DontUpdate: {
-		    if ( objPtr->getSelectable()->status() == PMSelectable::S_Update
-			 || objPtr->getSelectable()->status() == PMSelectable::S_AutoUpdate )
-			ok = statusStrategy->keyToStatus( '-', objPtr, newStatus );
+		    if ( slbPtr->status() == S_Update
+			 || slbPtr->status() == S_AutoUpdate )
+			ok = statusStrategy->keyToStatus( '-', slbPtr, newStatus );
 		    break;
 		}
 		default:
@@ -988,7 +1020,7 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 	    if ( ok )
 	    {
 		changeStatus( newStatus,
-			      objPtr,
+			      slbPtr,
 			      false );	// do not do the updates with every change
 	    }
 	}
@@ -1004,8 +1036,3 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 
     return true;
 }
-
-
-
-
-

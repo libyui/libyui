@@ -21,11 +21,10 @@
 
 #include "NCTable.h"
 
-#include <Y2PM.h>
-#include <y2pm/PMYouPatchManager.h>
+#include "YQZypp.h"
 
-#include <y2pm/PMSelectable.h>
-#include <y2pm/PMObject.h>
+#include <zypp/ui/Selectable.h>
+#include <zypp/ResObject.h>
 
 
 //------------------------------------------------------------
@@ -52,16 +51,16 @@ ObjectStatStrategy::~ObjectStatStrategy()
 //
 // Gets status from package manager
 //
-PMSelectable::UI_Status ObjectStatStrategy::getPackageStatus( PMObjectPtr objPtr )
+ZyppStatus ObjectStatStrategy::getPackageStatus( ZyppSel slbPtr )
 {
-    if ( objPtr && objPtr->hasSelectable() )
+    if ( slbPtr )
     {
-	return objPtr->getSelectable()->status();
+	return slbPtr->status();
     }
     else
     {
 	NCERR << "Object pointer not valid" << endl;
-	return PMSelectable::S_NoInst;
+	return S_NoInst;
     }
 }
 
@@ -71,19 +70,19 @@ PMSelectable::UI_Status ObjectStatStrategy::getPackageStatus( PMObjectPtr objPtr
 //
 // Informs the package manager about the status change
 //
-bool ObjectStatStrategy::setObjectStatus( PMSelectable::UI_Status newstatus, PMObjectPtr objPtr )
+bool ObjectStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr )
 {
     bool ok = false;
     
-    if ( !objPtr || !objPtr->hasSelectable() )
+    if ( !slbPtr )
     {
 	NCERR << "Invalid package object" << endl;
 	return false;
     }
 
-    ok = objPtr->getSelectable()->set_status( newstatus );
+    ok = slbPtr->set_status( newstatus );
 
-    NCMIL << "Set status of: " <<  objPtr->getSelectable()->name() << " to: "
+    NCMIL << "Set status of: " <<  slbPtr->name() << " to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
     
     return ok;
@@ -96,43 +95,43 @@ bool ObjectStatStrategy::setObjectStatus( PMSelectable::UI_Status newstatus, PMO
 // Returns the corresponding status
 //
 bool ObjectStatStrategy::keyToStatus( const int & key,
-				      PMObjectPtr objPtr,
-				      PMSelectable::UI_Status & newStat )
+				      ZyppSel slbPtr,
+				      ZyppStatus & newStat )
 {
-    if ( !objPtr )
+    if ( !slbPtr )
 	return false;
     
     bool valid = true;
-    PMSelectable::UI_Status retStat = PMSelectable::S_NoInst;
-    PMSelectable::UI_Status oldStatus = getPackageStatus( objPtr );
+    ZyppStatus retStat = S_NoInst;
+    ZyppStatus oldStatus = getPackageStatus( slbPtr );
     
     // get the new status
     switch ( key )
     {
 	case '-':
-	    if ( oldStatus == PMSelectable::S_KeepInstalled 
-		 || oldStatus == PMSelectable::S_AutoDel   )
+	    if ( oldStatus == S_KeepInstalled 
+		 || oldStatus == S_AutoDel   )
 	    {
 		// if required, NCPkgTable::changeStatus() shows the delete notify
-		retStat = PMSelectable:: S_Del;
+		retStat = S_Del;
 	    }
-	    else if ( oldStatus == PMSelectable::S_AutoUpdate
-		      ||  oldStatus == PMSelectable::S_Update )
+	    else if ( oldStatus == S_AutoUpdate
+		      ||  oldStatus == S_Update )
 	    {
-		retStat =  PMSelectable::S_KeepInstalled;
+		retStat =  S_KeepInstalled;
 	    }
-	    else if ( oldStatus == PMSelectable::S_Install
-		      || oldStatus == PMSelectable::S_AutoInstall )
+	    else if ( oldStatus == S_Install
+		      || oldStatus == S_AutoInstall )
 	    {
-		retStat = PMSelectable::S_NoInst;	
+		retStat = S_NoInst;	
 	    }
-	    else if (  oldStatus == PMSelectable::S_Taboo )
+	    else if (  oldStatus == S_Taboo )
 	    {
-		retStat = PMSelectable::S_NoInst;
+		retStat = S_NoInst;
 	    }
-	    else if (  oldStatus == PMSelectable::S_Protected )
+	    else if (  oldStatus == S_Protected )
 	    {
-		retStat = PMSelectable::S_KeepInstalled;
+		retStat = S_KeepInstalled;
 	    }
 	    else
 	    {
@@ -140,20 +139,20 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 	    }
 	    break;
 	case '+':
-	    if ( oldStatus == PMSelectable::S_NoInst
-		 || oldStatus == PMSelectable::S_AutoInstall )
+	    if ( oldStatus == S_NoInst
+		 || oldStatus == S_AutoInstall )
 	    {
 		// if required, NCPkgTable::changeStatus() shows the notify message
-		retStat = PMSelectable::S_Install;
+		retStat = S_Install;
 	    }
-	    else if ( oldStatus ==  PMSelectable::S_Del
-		      || oldStatus == PMSelectable::S_AutoDel)
+	    else if ( oldStatus ==  S_Del
+		      || oldStatus == S_AutoDel)
 	    {
-		retStat = PMSelectable::S_KeepInstalled;
+		retStat = S_KeepInstalled;
 	    }
-	    else if ( oldStatus == PMSelectable::S_AutoUpdate )
+	    else if ( oldStatus == S_AutoUpdate )
 	    {
-		retStat = PMSelectable::S_Update;
+		retStat = S_Update;
 	    }
 	    else
 	    {
@@ -162,13 +161,13 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 	    
 	    break;
 	case '>':
-	    if ( oldStatus == PMSelectable::S_KeepInstalled
-		 ||  oldStatus == PMSelectable::S_Del
-		 ||  oldStatus == PMSelectable::S_AutoDel )
+	    if ( oldStatus == S_KeepInstalled
+		 ||  oldStatus == S_Del
+		 ||  oldStatus == S_AutoDel )
 	    {
-		if ( objPtr->hasCandidateObj() )
+		if ( slbPtr->hasCandidateObj() )
 		{
-		    retStat = PMSelectable::S_Update;
+		    retStat = S_Update;
 		}
 	    }
 	    else
@@ -177,15 +176,15 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 	    }
 	    break;
 	case '!':
-	    if ( oldStatus == PMSelectable::S_NoInst
-		 || oldStatus == PMSelectable::S_AutoInstall )
+	    if ( oldStatus == S_NoInst
+		 || oldStatus == S_AutoInstall )
 	    {
-		retStat = PMSelectable::S_Taboo;
+		retStat = S_Taboo;
 	    }
-	    else if  ( oldStatus == PMSelectable::S_KeepInstalled
-		       || oldStatus == PMSelectable::S_AutoUpdate )
+	    else if  ( oldStatus == S_KeepInstalled
+		       || oldStatus == S_AutoUpdate )
 	    {
-		retStat = PMSelectable::S_Protected;
+		retStat = S_Protected;
 	    }
 	    else
 	    {
@@ -210,55 +209,55 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 //
 // Returns the new status
 //
-bool ObjectStatStrategy::toggleStatus( PMObjectPtr objPtr,
-				       PMSelectable::UI_Status & newStat )
+bool ObjectStatStrategy::toggleStatus( ZyppSel slbPtr,
+				       ZyppStatus & newStat )
 {
-    if ( !objPtr )
+    if ( !slbPtr )
 	return false;
     
     bool ok = true;
     
-    PMSelectable::UI_Status oldStatus = getPackageStatus( objPtr ); 
-    PMSelectable::UI_Status newStatus = oldStatus;
+    ZyppStatus oldStatus = getPackageStatus( slbPtr ); 
+    ZyppStatus newStatus = oldStatus;
 
     switch ( oldStatus )
     {
-	case PMSelectable:: S_Del:
-	    newStatus = PMSelectable::S_KeepInstalled;
+	case S_Del:
+	    newStatus = S_KeepInstalled;
 	    break;
-	case PMSelectable::S_Install:
-	    newStatus =PMSelectable::S_NoInst ;
+	case S_Install:
+	    newStatus =S_NoInst ;
 	    break;
-	case PMSelectable::S_Update:
-	    newStatus = PMSelectable:: S_Del;
+	case S_Update:
+	    newStatus = S_Del;
 	    break;
-	case PMSelectable:: S_KeepInstalled:
-	    if ( objPtr->hasCandidateObj() )
+	case S_KeepInstalled:
+	    if ( slbPtr->hasCandidateObj() )
 	    {
-		newStatus = PMSelectable::S_Update;
+		newStatus = S_Update;
 	    }
 	    else
 	    {
-		newStatus = PMSelectable:: S_Del;
+		newStatus = S_Del;
 	    }
 	    break;
-	case PMSelectable::S_NoInst:
-	    newStatus = PMSelectable::S_Install ;
+	case S_NoInst:
+	    newStatus = S_Install ;
 	    break;
-	case PMSelectable::S_AutoInstall:
-	    newStatus = PMSelectable::S_NoInst;
+	case S_AutoInstall:
+	    newStatus = S_NoInst;
 	    break;
-	case PMSelectable::S_AutoDel:
-	    newStatus = PMSelectable:: S_KeepInstalled;
+	case S_AutoDel:
+	    newStatus = S_KeepInstalled;
 	    break;
-	case PMSelectable::S_AutoUpdate:
-	    newStatus = PMSelectable:: S_KeepInstalled;
+	case S_AutoUpdate:
+	    newStatus = S_KeepInstalled;
 	    break;
-	case PMSelectable::S_Taboo:
-	    newStatus = PMSelectable::S_NoInst;
+	case S_Taboo:
+	    newStatus = S_NoInst;
 	    break;
-	case PMSelectable::S_Protected:
-	    newStatus = PMSelectable::S_KeepInstalled;
+	case S_Protected:
+	    newStatus = S_KeepInstalled;
 	    break;
     }
 
@@ -282,6 +281,7 @@ PackageStatStrategy::PackageStatStrategy()
 
 
 
+#ifdef FIXME
 //------------------------------------------------------------
 // Class for strategies to get status for patches
 //------------------------------------------------------------
@@ -301,28 +301,28 @@ PatchStatStrategy::PatchStatStrategy()
 // Returns the corresponding status
 //
 bool PatchStatStrategy::keyToStatus( const int & key,
-				      PMObjectPtr objPtr,
-				      PMSelectable::UI_Status & newStat )
+				      ZyppSel slbPtr,
+				      ZyppStatus & newStat )
 {
-    if ( !objPtr )
+    if ( !slbPtr )
 	return false;
     
     bool valid = true;
-    PMSelectable::UI_Status retStat = PMSelectable::S_NoInst;
-    PMSelectable::UI_Status oldStatus = getPackageStatus( objPtr );
+    ZyppStatus retStat = S_NoInst;
+    ZyppStatus oldStatus = getPackageStatus( slbPtr );
     
     // get the new status
     switch ( key )
     {
 	case '-':
-	    if ( oldStatus == PMSelectable:: S_Install
-		 || oldStatus == PMSelectable:: S_AutoInstall )
+	    if ( oldStatus == S_Install
+		 || oldStatus == S_AutoInstall )
 	    {
-		retStat = PMSelectable::S_NoInst;	
+		retStat = S_NoInst;	
 	    }
-	    else if (  oldStatus == PMSelectable:: S_Update )
+	    else if (  oldStatus == S_Update )
 	    {
-		retStat = PMSelectable::S_KeepInstalled;
+		retStat = S_KeepInstalled;
 	    }
 	    else
 	    {
@@ -330,10 +330,10 @@ bool PatchStatStrategy::keyToStatus( const int & key,
 	    }
 	    break;
 	case '+':
-	    if ( oldStatus == PMSelectable::S_NoInst
-		 || oldStatus == PMSelectable::S_AutoInstall )
+	    if ( oldStatus == S_NoInst
+		 || oldStatus == S_AutoInstall )
 	    {
-		retStat = PMSelectable::S_Install;
+		retStat = S_Install;
 	    }
 	    else
 	    {
@@ -342,11 +342,11 @@ bool PatchStatStrategy::keyToStatus( const int & key,
 	    
 	    break;
 	case '>':
-	    if ( oldStatus == PMSelectable::S_KeepInstalled )
+	    if ( oldStatus == S_KeepInstalled )
 	    {
-		if ( objPtr->hasCandidateObj() )
+		if ( slbPtr->hasCandidateObj() )
 		{
-		    retStat = PMSelectable::S_Update;
+		    retStat = S_Update;
 		}
 	    }
 	    else
@@ -372,33 +372,33 @@ bool PatchStatStrategy::keyToStatus( const int & key,
 //
 // Returns the new status
 //
-bool PatchStatStrategy::toggleStatus( PMObjectPtr objPtr,
-				      PMSelectable::UI_Status & newStat )
+bool PatchStatStrategy::toggleStatus( ZyppSel slbPtr,
+				      ZyppStatus & newStat )
 {
-    if ( !objPtr )
+    if ( !slbPtr )
 	return false;
     
     bool ok = true;
     
-    PMSelectable::UI_Status oldStatus = getPackageStatus( objPtr ); 
-    PMSelectable::UI_Status newStatus = oldStatus;
+    ZyppStatus oldStatus = getPackageStatus( slbPtr ); 
+    ZyppStatus newStatus = oldStatus;
 
     switch ( oldStatus )
     {
-	case PMSelectable::S_Install:
-	    newStatus =PMSelectable::S_NoInst ;
+	case S_Install:
+	    newStatus =S_NoInst ;
 	    break;
-	case PMSelectable::S_Update:
-	    newStatus = PMSelectable:: S_KeepInstalled;
+	case S_Update:
+	    newStatus = S_KeepInstalled;
 	    break;
-	case PMSelectable::S_KeepInstalled:
-	    if ( objPtr->hasCandidateObj() )
+	case S_KeepInstalled:
+	    if ( slbPtr->hasCandidateObj() )
 	    {
-		newStatus = PMSelectable::S_Update;
+		newStatus = S_Update;
 	    }
 	    break;
-	case PMSelectable::S_NoInst:
-	    newStatus = PMSelectable::S_Install ;
+	case S_NoInst:
+	    newStatus = S_Install ;
 	    break;
 	default:
 	    newStatus = oldStatus;
@@ -416,18 +416,18 @@ bool PatchStatStrategy::toggleStatus( PMObjectPtr objPtr,
 // Inform the package manager about the status change
 // of the patch
 //
-bool PatchStatStrategy::setObjectStatus( PMSelectable::UI_Status newstatus, PMObjectPtr objPtr )
+bool PatchStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr )
 {
     bool ok = false;
 
-    if ( !objPtr || !objPtr->hasSelectable() )
+    if ( !slbPtr )
     {
 	NCERR << "Invalid patch object" << endl;
 	return false;
     }
 
-    ok = objPtr->getSelectable()->set_status( newstatus );
-    NCMIL << "Set status of: " << objPtr->getSelectable()->name() << " to: "
+    ok = slbPtr->set_status( newstatus );
+    NCMIL << "Set status of: " << slbPtr->name() << " to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
 
     // additionally inform the YOU patch manager about the status change
@@ -436,6 +436,7 @@ bool PatchStatStrategy::setObjectStatus( PMSelectable::UI_Status newstatus, PMOb
     
     return ok;
 }
+#endif
 
 //------------------------------------------------------------
 // Class for strategies for depndencies
@@ -469,24 +470,27 @@ AvailableStatStrategy::AvailableStatStrategy()
 //
 // Informs the package manager about the new status (sets the candidate)
 //
-bool AvailableStatStrategy::setObjectStatus( PMSelectable::UI_Status newstatus,  PMObjectPtr objPtr )
+bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbPtr )
 {
     bool ok = false;
 
-    if ( !objPtr || !objPtr->hasSelectable() )
+    if ( !slbPtr )
     {
 	return false;
     }
 
-//    ok = objPtr->getSelectable()->set_status( newstatus );
-    ok = objPtr->getSelectable()->set_status( PMSelectable::S_Update );
+//    ok = slbPtr->set_status( newstatus );
+    ok = slbPtr->set_status( S_Update );
     if ( ok )
     {
+// setUserCandidate has no replacement?
+#ifdef FIXME
 	// this package is the candidate now
-	bool ret = objPtr->getSelectable()->setUserCandidate( objPtr );
+	bool ret = slbPtr->setUserCandidate( slbPtr );
 	NCMIL << "Set user candidate returns: " <<  (ret?"true":"false") << endl;	
+#endif
     }
-    NCMIL << "Set status of: " << objPtr->getSelectable()->name() << "to: "
+    NCMIL << "Set status of: " << slbPtr->name() << "to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
     
     return ok;
@@ -499,34 +503,38 @@ bool AvailableStatStrategy::setObjectStatus( PMSelectable::UI_Status newstatus, 
 //
 // Returns the status of the certain package
 //
-PMSelectable::UI_Status AvailableStatStrategy::getPackageStatus( PMObjectPtr objPtr )
+ZyppStatus AvailableStatStrategy::getPackageStatus( ZyppSel slbPtr )
 {
-    PMSelectable::UI_Status retStatus = PMSelectable::S_NoInst;
+    ZyppStatus retStatus = S_NoInst;
 
-    if ( !objPtr || !objPtr->hasSelectable() )
+    if ( !slbPtr )
     {
 	return retStatus;
     }
 
-    // PMSelectable::UI_Status status = objPtr->getSelectable()->status();
+    // ZyppStatus status = slbPtr->status();
 
-    if (objPtr->isCandidateObj())
-	retStatus = PMSelectable::S_KeepInstalled;
-    else if (objPtr->hasInstalledObj() && objPtr->edition() == objPtr->getInstalledObj()->edition())
-        retStatus = PMSelectable::S_Del;
+#ifdef FIXME
+    if (slbPtr->isCandidateObj())
+	retStatus = S_KeepInstalled;
+    else if (slbPtr->hasInstalledObj() && slbPtr->edition() == slbPtr->getInstalledObj()->edition())
+        retStatus = S_Del;
+#else
+    retStatus = S_KeepInstalled;
+#endif
 /*    
-    if ( objPtr->hasInstalledObj()
-	 && objPtr->edition() == objPtr->getInstalledObj()->edition() )
+    if ( slbPtr->hasInstalledObj()
+	 && slbPtr->edition() == slbPtr->getInstalledObj()->edition() )
     {
 	// installed package: show status S_KeepInstalled or S_Delete
-	if ( status == PMSelectable::S_KeepInstalled
-	     || status == PMSelectable::S_Del )
+	if ( status == S_KeepInstalled
+	     || status == S_Del )
 	    retStatus = status;
     }
-    else if ( objPtr->isCandidateObj() )
+    else if ( slbPtr->isCandidateObj() )
     {
-	if ( status != PMSelectable::S_KeepInstalled
-	     && status != PMSelectable::S_Del )
+	if ( status != S_KeepInstalled
+	     && status != S_Del )
 	retStatus = status;
     }
     // else show S_NoInst
@@ -559,8 +567,8 @@ PatchPkgStatStrategy::PatchPkgStatStrategy()
 {
 }
 
-bool PatchPkgStatStrategy::setObjectStatus( PMSelectable::UI_Status newstatus,
-					     PMObjectPtr objPtr )
+bool PatchPkgStatStrategy::setObjectStatus( ZyppStatus newstatus,
+					     ZyppSel slbPtr )
 {
     // it is not possible to set the status of the packages belonging to a certain patch
     return false;

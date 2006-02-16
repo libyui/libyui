@@ -2,7 +2,8 @@
 
 
 @HEADER@
-BuildRequires:	blocxx-devel curl-devel doxygen gcc-c++ libxcrypt-devel rpm-devel yast2-core-devel yast2-devtools yast2-packagemanager-devel
+BuildRequires:	doxygen gcc-c++ yast2-core-devel yast2-devtools libzypp-devel
+BuildRequires:	libxcrypt-devel blocxx-devel
 
 Summary:	-
 Provides:	yast2_ui
@@ -25,6 +26,7 @@ Requires:	glibc-locale
 @BUILD@
 
 @INSTALL@
+rm $RPM_BUILD_ROOT/@plugindir@/libpy2ncurses.la
 
 @CLEAN@
 
@@ -32,7 +34,6 @@ Requires:	glibc-locale
 %defattr (-, root, root)
 @plugindir@/libpy2ncurses.so.*
 @plugindir@/libpy2ncurses.so
-@plugindir@/libpy2ncurses.la
 @ydatadir@/pkg_layout.ycp
 @ydatadir@/you_layout.ycp
 %doc @docdir@
