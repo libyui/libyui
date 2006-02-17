@@ -77,7 +77,7 @@ QString YQPkgDescriptionView::simpleHtmlParagraphs( QString text )
     bool foundAuthorsList = false;
     QString html_text = "<p>";
 
-    QStringList lines = QStringList::split( '\n', text,
+    QStringList lines = QStringList::split( '\n', text.stripWhiteSpace(),
 					    true ); // allowEmptyEntries
     QValueList<QString>::const_iterator it = lines.begin();
 

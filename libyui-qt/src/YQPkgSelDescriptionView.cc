@@ -21,6 +21,7 @@
 #include <ycp/y2log.h>
 
 #include <unistd.h>
+#include <qregexp.h>
 
 #include "YQPkgSelDescriptionView.h"
 #include "YQUI.h"
@@ -96,22 +97,27 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
 
     if ( icon )
     {
+	if ( icon.startsWith( "./" ) )
+	    icon.replace( QRegExp( "^\\./" ), "" );
+	    
 	if ( ! icon.endsWith( ".png", false ) &&
 	     ! icon.endsWith( ".jpg", false )   )
 	    icon += ".png";
+
+	QString origIconName = icon;
 
 	if ( ! icon.contains( "/" ) )		// no path at all
 	{
 	    // Look in icon directories:
 	    //
-	    //   /usr/share/YaST2/theme/current/icons/48x48/apps/
 	    //   /usr/share/YaST2/theme/current/icons/32x32/apps/
+	    //   /usr/share/YaST2/theme/current/icons/48x48/apps/
 
 	    QString iconBaseName = icon;
-	    icon = findIcon( QString( THEMEDIR ) + "/48X48/apps/" + iconBaseName );
+	    icon = findIcon( QString( THEMEDIR ) + "/icons/32x32/apps/" + iconBaseName );
 
 	    if ( icon.isEmpty() )
-		icon = findIcon( QString( THEMEDIR ) + "/32X32/apps/" + iconBaseName );
+		icon = findIcon( QString( THEMEDIR ) + "/icons/48x48/apps/" + iconBaseName );
 	}
 	else if ( ! icon.startsWith( "/" ) )	// relative path
 	{
@@ -124,11 +130,11 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
 
 	if ( pattern && icon.isEmpty() )
 	    y2warning( "No icon for pattern %s - icon name: %s",
-		       zyppObj->name().c_str(), pattern->icon().asString().c_str() );
+		       zyppObj->name().c_str(), (const char *) origIconName );
     }
 
 
-    QString html = "<table";
+    QString html = "<table width=100%";
 
     if ( ! YQUI::ui()->usingVisionImpairedPalette() )
 	html += " bgcolor=#C8C8F8";	// or #E0E0F8 (very light blueish grey)
@@ -163,6 +169,7 @@ YQPkgSelDescriptionView::findIcon( const QString & icon ) const
     }
     else
     {
+	y2debug( "No icon %s", (const char *) icon );
 	return "";
     }
 }
