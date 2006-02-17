@@ -6,6 +6,6 @@ SUBDIRS = autodocs
 
 htmldir = $(docdir)
 
-html_DATA = interface.txt richtext.txt
+html_DATA = richtext.txt
 
 EXTRA_DIST = $(html_DATA)
