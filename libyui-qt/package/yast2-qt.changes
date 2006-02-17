@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Feb 17 18:56:08 CET 2006 - sh@suse.de
+
+- Added pattern icons to pattern selector 
+
+-------------------------------------------------------------------
 Fri Feb 17 16:06:21 CET 2006 - sh@suse.de
 
 - Don't install and distribute autodocs (#151370) 
