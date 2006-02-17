@@ -58,6 +58,12 @@ protected:
      * Format the heading in HTML
      **/
     QString htmlHeading( ZyppSel selectable );
+
+    /**
+     * Check if 'icon' exists. Returns 'icon' if it exists and an empty string
+     * if it doesn't exist. 
+     **/
+    QString findIcon( const QString & icon ) const;
 };
 
 

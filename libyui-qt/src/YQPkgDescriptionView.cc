@@ -19,7 +19,7 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include "qregexp.h"
+#include <qregexp.h>
 #include "YQPkgDescriptionView.h"
 #include "YQPkgDescriptionDialog.h"
 #include "YQi18n.h"
