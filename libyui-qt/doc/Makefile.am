@@ -2,7 +2,8 @@
 # Makefile.am for qt/doc
 #
 
-SUBDIRS = autodocs
+# Intentionally omitting autodocs by default 
+# SUBDIRS = autodocs
 
 htmldir = $(docdir)
 
