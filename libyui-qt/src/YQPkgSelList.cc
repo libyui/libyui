@@ -31,7 +31,7 @@
 #include "YQPkgSelList.h"
 
 
-YQPkgSelList::YQPkgSelList( QWidget * parent, bool autoFill )
+YQPkgSelList::YQPkgSelList( QWidget * parent, bool autoFill, bool autoFilter )
     : YQPkgObjList( parent )
 {
     y2debug( "Creating selection list" );
@@ -41,15 +41,17 @@ YQPkgSelList::YQPkgSelList( QWidget * parent, bool autoFill )
     addColumn( _( "Selection" ) );	_summaryCol	= numCol++;
     setAllColumnsShowFocus( true );
 
-    connect( this, SIGNAL( selectionChanged( QListViewItem * )	),
-	     this, SLOT  ( filter()				) );
+    if ( autoFilter )
+    {
+	connect( this, SIGNAL( selectionChanged( QListViewItem * ) ),
+		 this, SLOT  ( filter()				   ) );
+    }
 
     if ( autoFill )
     {
 	fillList();
 	selectSomething();
     }
-    filter();
 
     y2debug( "Creating selection list done" );
 }

@@ -31,7 +31,7 @@
 #include "YQPkgPatternList.h"
 
 
-YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill )
+YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFilter )
     : YQPkgObjList( parent )
 {
     y2debug( "Creating pattern list" );
@@ -49,15 +49,17 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill )
     addColumn( _( "Pattern" )	);	_summaryCol	= numCol++;
     setAllColumnsShowFocus( true );
 
-    connect( this, SIGNAL( selectionChanged( QListViewItem * )	),
-	     this, SLOT  ( filter()				) );
+    if ( autoFilter )
+    {
+	connect( this, SIGNAL( selectionChanged( QListViewItem * ) ),
+		 this, SLOT  ( filter()				   ) );
+    }
 
     if ( autoFill )
     {
 	fillList();
 	selectSomething();
     }
-    filter();
 
     y2debug( "Creating pattern list done" );
 }

@@ -43,8 +43,11 @@ public:
      * Set 'autoFill' to 'false' if you don't want the list to be filled in the
      * constructor. In that case, use fillList() (e.g., when connections are
      * set up).
+     *
+     * Set 'autoFilter' to 'false' if there is no need to do (expensive)
+     * filtering because the 'filterMatch' signal is not connected anyway.
      **/
-    YQPkgSelList( QWidget * parent, bool autoFill = true );
+    YQPkgSelList( QWidget * parent, bool autoFill = true, bool autoFilter = true );
 
     /**
      * Destructor

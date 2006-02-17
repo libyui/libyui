@@ -138,12 +138,13 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
 	//
 
 	_patternList = new YQPkgPatternList( vbox,
-					     false ); // no autoFill - need to connect to details view first
+					     false,	// no autoFill - need to connect to details view first
+					     false );	// no autoFilter - filterMatch() is not connected
 	CHECK_PTR( _patternList );
 	_patternList->header()->hide();
     }
 
-    if ( ! zyppPool().empty<zypp::Selection>() )
+    if ( ! _patternList && zyppPool().empty<zypp::Selection>() )
     {
 	//
 	// Fallback: selections list
@@ -151,7 +152,8 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
 
 	y2warning( "No patterns in ZyppPool - using selections instead" );
 	_selList = new YQPkgSelList( vbox,
-				     false ); // no autoFill - need to connect to details view first
+				     false,	// no autoFill - need to connect to details view first
+				     false );	// no autoFilter - filterMatch() is not connected
 	CHECK_PTR( _selList );
 	_selList->header()->hide();
     }
