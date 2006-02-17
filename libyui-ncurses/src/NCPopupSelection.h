@@ -21,22 +21,11 @@
 
 #include <iosfwd>
 
-#include <vector>
 #include <string>
 
 #include "NCPopup.h"
-#include "NCTree.h"
-#include "NCLabel.h"
-#include "NCRichText.h"
-#include "NCMultiSelectionBox.h"
 #include "PackageSelector.h"
 #include "NCPushButton.h"
-
-//#include <y2pm/PMError.h>
-#include <zypp/Selection.h>
-#include <zypp/Package.h>
-//#include <y2pm/InstSrc.h>
-//#include <y2pm/InstSrcPtr.h>
 
 
 ///////////////////////////////////////////////////////////////////

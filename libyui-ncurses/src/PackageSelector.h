@@ -333,10 +333,10 @@ class PackageSelector
    /**
     * Fills the package table
     * @param label The selected selection (the label)
-    * @param selPtr The selection
+    * @param wanted which packages
     * @return bool
     */
-    bool showSelPackages( const YCPString & label, ZyppSelection selPtr );
+    bool showSelPackages( const YCPString & label, const set<string> & wanted );
 
    /**
     * Updates the status in list of packages

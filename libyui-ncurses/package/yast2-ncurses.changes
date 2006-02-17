@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Feb 17 11:29:30 CET 2006 - mvidner@suse.cz
+
+- If patterns are available, display them instead of selections.
+
+-------------------------------------------------------------------
 Thu Feb 16 21:03:54 CET 2006 - mvidner@suse.cz
 
 - Show something in the update problem list, for now

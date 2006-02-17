@@ -444,7 +444,7 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, ZyppObj pkgPtr )
 //
 // Fills the package table with the list of packages of the given selection
 //
-bool PackageSelector::showSelPackages( const YCPString & label,  ZyppSelection zyppSelection )
+bool PackageSelector::showSelPackages( const YCPString & label, const set<string> & wanted )
 {
     NCPkgTable * packageList = getPackageList();
     
@@ -457,28 +457,24 @@ bool PackageSelector::showSelPackages( const YCPString & label,  ZyppSelection z
     // clear the package table
     packageList->itemsCleared ();
     
-    if ( zyppSelection )
+    set<string>::iterator not_found = wanted.end ();
+
+    ZyppPoolIterator
+	b = zyppPkgBegin(),
+	e = zyppPkgEnd(),
+	it;
+    for ( it = b; it != e; ++it )
     {
-	set<string> wanted = zyppSelection->install_packages();
-	set<string>::iterator not_found = wanted.end ();
+	string name = (*it)->name(); // omitted theObj
 
-	ZyppPoolIterator
-	    b = zyppPkgBegin(),
-	    e = zyppPkgEnd(),
-	    it;
-	for ( it = b; it != e; ++it )
+	if ( wanted.find (name) != not_found )
 	{
-	    string name = (*it)->name(); // omitted theObj
-
-	    if ( wanted.find (name) != not_found )
+	    ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
+	    if ( zyppPkg )
 	    {
-		ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
-		if ( zyppPkg )
-		{
-		    packageList->createListEntry( zyppPkg, *it );
-		}
-            }
-        }
+		packageList->createListEntry( zyppPkg, *it );
+	    }
+	}
     }
 
     // show the package table
