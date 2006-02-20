@@ -71,18 +71,18 @@ public slots:
     virtual void clear();
 
     /**
-     * Update the status display of all toplevel list entries:
+     * Update the status display of all list entries:
      * Call QY2ListViewItem::updateStatus() for each item.
      * This is an expensive operation.
      **/
-    void updateToplevelItemStates();
+    void updateItemStates();
 
     /**
-     * Update the status display of all toplevel list entries:
+     * Update the status display of all list entries:
      * Call QY2ListViewItem::updateData() for each item.
      * This is an expensive operation.
      **/
-    void updateToplevelItemData();
+    void updateItemData();
 
     /**
      * Save the current column widths.

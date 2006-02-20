@@ -71,7 +71,7 @@ QY2ListView::clear()
 
 
 void
-QY2ListView::updateToplevelItemStates()
+QY2ListView::updateItemStates()
 {
     QListViewItemIterator it( this );
 
@@ -88,7 +88,7 @@ QY2ListView::updateToplevelItemStates()
 
 
 void
-QY2ListView::updateToplevelItemData()
+QY2ListView::updateItemData()
 {
     QListViewItemIterator it( this );
 

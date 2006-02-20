@@ -289,10 +289,10 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 		 this,		 	SLOT  ( autoResolveDependencies() 	) );
 
 	connect( _pkgConflictDialog,	SIGNAL( updatePackages()      		),
-		 _patternList,		SLOT  ( updateToplevelItemStates() 	) );
+		 _patternList,		SLOT  ( updateItemStates() 		) );
 
 	connect( this,			SIGNAL( refresh()			),
-		 _patternList, 		SLOT  ( updateToplevelItemStates() 	) );
+		 _patternList, 		SLOT  ( updateItemStates() 		) );
     }
 
 
@@ -307,14 +307,14 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	CHECK_PTR( _selList );
 	_filters->addPage( _( "Selections" ), _selList );
 
-	connect( _selList, 	 	SIGNAL( statusChanged()	        ),
+	connect( _selList, 	 	SIGNAL( statusChanged()	        	),
 		 this,		 	SLOT  ( autoResolveDependencies() 	) );
 
 	connect( _pkgConflictDialog,	SIGNAL( updatePackages()      		),
-		 _selList,		 SLOT  ( updateToplevelItemStates() 	) );
+		 _selList,		 SLOT  ( updateItemStates() 		) );
 
-	connect( this,		 SIGNAL( refresh()			),
-		 _selList, 		 SLOT  ( updateToplevelItemStates() 	) );
+	connect( this,		 SIGNAL( refresh()				),
+		 _selList, 		 SLOT  ( updateItemStates() 		) );
     }
 
 
@@ -345,7 +345,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	     this,		SLOT  ( autoResolveDependencies() 	) );
 
     connect( this,		SIGNAL( refresh()			),
-	     _langList, 	SLOT  ( updateToplevelItemStates() 	) );
+	     _langList, 	SLOT  ( updateItemStates() 		) );
 #endif
 
 
@@ -713,13 +713,13 @@ YQPackageSelector::connectFilter( QWidget * filter,
 
     if ( hasUpdateSignal )
     {
-	connect( filter, 		SIGNAL( updatePackages()           ),
-		 pkgList,		SLOT  ( updateToplevelItemStates() ) );
+	connect( filter, 		SIGNAL( updatePackages()   ),
+		 pkgList,		SLOT  ( updateItemStates() ) );
 
 	if ( _diskUsageList )
 	{
-	    connect( filter,		SIGNAL( updatePackages()	   ),
-		     _diskUsageList,	SLOT  ( updateDiskUsage()	   ) );
+	    connect( filter,		SIGNAL( updatePackages()  ),
+		     _diskUsageList,	SLOT  ( updateDiskUsage() ) );
 	}
     }
 }
@@ -783,26 +783,26 @@ YQPackageSelector::makeConnections()
     {
 	if (_pkgList )
 	{
-	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()           ),
-		     _pkgList, 			SLOT  ( updateToplevelItemStates() ) );
+	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()   ),
+		     _pkgList, 			SLOT  ( updateItemStates() ) );
 	}
 
 	if ( _patternList )
 	{
-	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()           ),
-		     _patternList, 		SLOT  ( updateToplevelItemStates() ) );
+	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()   ),
+		     _patternList, 		SLOT  ( updateItemStates() ) );
 	}
 
 	if ( _selList )
 	{
-	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()           ),
-		     _selList, 			SLOT  ( updateToplevelItemStates() ) );
+	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()   ),
+		     _selList, 			SLOT  ( updateItemStates() ) );
 	}
 
 	if ( _diskUsageList )
 	{
-	    connect( _pkgConflictDialog, 	SIGNAL( updatePackages()	   ),
-		     _diskUsageList,	 	SLOT  ( updateDiskUsage()	   ) );
+	    connect( _pkgConflictDialog, 	SIGNAL( updatePackages()   ),
+		     _diskUsageList,	 	SLOT  ( updateDiskUsage()  ) );
 	}
     }
 
@@ -814,7 +814,7 @@ YQPackageSelector::makeConnections()
     if ( _pkgVersionsView && _pkgList )
     {
 	connect( _pkgVersionsView, 	SIGNAL( candidateChanged( ZyppObj ) ),
-		 _pkgList,		SLOT  ( updateToplevelItemData()    ) );
+		 _pkgList,		SLOT  ( updateItemData()    ) );
     }
 
 
