@@ -86,7 +86,10 @@ YQPkgPatternList::fillList()
 
 	if ( zyppPattern )
 	{
-	    addPkgSelItem( *it, zyppPattern );
+	    if ( zyppPattern->userVisible() )
+		addPatternItem( *it, zyppPattern );
+	    else
+		y2debug( "Pattern %s is not user-visible", zyppPattern->name().c_str() );
 	}
 	else
 	{
@@ -143,8 +146,8 @@ YQPkgPatternList::filter()
 
 
 void
-YQPkgPatternList::addPkgSelItem( ZyppSel	selectable,
-				 ZyppPattern	zyppPattern )
+YQPkgPatternList::addPatternItem( ZyppSel	selectable,
+				  ZyppPattern	zyppPattern )
 {
     if ( ! selectable )
     {
@@ -172,11 +175,11 @@ YQPkgPatternList::selection() const
 
 
 
-YQPkgPatternListItem::YQPkgPatternListItem( YQPkgPatternList *	pkgSelList,
+YQPkgPatternListItem::YQPkgPatternListItem( YQPkgPatternList *	patternList,
 					    ZyppSel		selectable,
 					    ZyppPattern		zyppPattern )
-    : YQPkgObjListItem( pkgSelList, selectable, zyppPattern )
-    , _pkgSelList( pkgSelList )
+    : YQPkgObjListItem( patternList, selectable, zyppPattern )
+    , _patternList( patternList )
     , _zyppPattern( zyppPattern )
 {
     if ( ! _zyppPattern )
@@ -202,7 +205,7 @@ YQPkgPatternListItem::setStatus( ZyppStatus newStatus )
     YQPkgObjListItem::setStatus( newStatus );
     applyChanges();
 
-    _pkgSelList->sendUpdatePackages();
+    _patternList->sendUpdatePackages();
 }
 
 
@@ -255,16 +258,12 @@ YQPkgPatternListItem::compare( QListViewItem *	otherListViewItem,
 			       int		col,
 			       bool		ascending ) const
 {
-#ifdef FIXME
     YQPkgPatternListItem * other = ( YQPkgPatternListItem * ) otherListViewItem;
 
     if ( ! _zyppPattern || ! other || ! other->zyppPattern() )
-	return 0;
+	return QListViewItem::compare( otherListViewItem, col, ascending );
 
     return _zyppPattern->order().compare( other->zyppPattern()->order() );
-#else
-    return YQPkgObjListItem::compare( otherListViewItem, col, ascending );
-#endif
 }
 
 

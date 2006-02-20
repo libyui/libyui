@@ -77,8 +77,8 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addPkgSelItem( ZyppSel		selectable,
-			ZyppPattern 	pattern );
+    void addPatternItem( ZyppSel	selectable,
+			 ZyppPattern 	pattern );
 
     /**
      * Emit an updatePackages() signal.
@@ -134,7 +134,7 @@ public:
      * Constructor. Creates a YQPkgPatternList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgPatternListItem( YQPkgPatternList * 	pkgSelList,
+    YQPkgPatternListItem( YQPkgPatternList * 	patternList,
 			  ZyppSel		selectable,
 			  ZyppPattern 		zyppPattern );
 
@@ -173,8 +173,8 @@ public:
 
     // Columns
 
-    int statusCol()	const	{ return _pkgSelList->statusCol();	}
-    int summaryCol()	const	{ return _pkgSelList->summaryCol();	}
+    int statusCol()	const	{ return _patternList->statusCol();	}
+    int summaryCol()	const	{ return _patternList->summaryCol();	}
 
 
 protected:
@@ -188,7 +188,7 @@ protected:
 
     // Data members
 
-    YQPkgPatternList *	_pkgSelList;
+    YQPkgPatternList *	_patternList;
     ZyppPattern		_zyppPattern;
 };
 
