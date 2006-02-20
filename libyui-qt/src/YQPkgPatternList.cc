@@ -87,7 +87,10 @@ YQPkgPatternList::fillList()
 	if ( zyppPattern )
 	{
 	    if ( zyppPattern->userVisible() )
+	    {
+		y2debug( "Pattern %s is user-visible", zyppPattern->name().c_str() );
 		addPatternItem( *it, zyppPattern );
+	    }
 	    else
 		y2debug( "Pattern %s is not user-visible", zyppPattern->name().c_str() );
 	}
