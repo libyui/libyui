@@ -73,16 +73,16 @@ QY2ListView::clear()
 void
 QY2ListView::updateToplevelItemStates()
 {
-    QListViewItem * item = firstChild();
+    QListViewItemIterator it( this );
 
-    while ( item )
+    while ( *it )
     {
-	QY2ListViewItem * qy2_item = dynamic_cast<QY2ListViewItem *> (item);
+	QY2ListViewItem * item = dynamic_cast<QY2ListViewItem *> (*it);
 
-	if ( qy2_item )
-	    qy2_item->updateStatus();
-
-	item = item->nextSibling();
+	if ( item )
+	    item->updateStatus();
+	
+	++it;
     }
 }
 
@@ -90,16 +90,16 @@ QY2ListView::updateToplevelItemStates()
 void
 QY2ListView::updateToplevelItemData()
 {
-    QListViewItem * item = firstChild();
+    QListViewItemIterator it( this );
 
-    while ( item )
+    while ( *it )
     {
-	QY2ListViewItem * qy2_item = dynamic_cast<QY2ListViewItem *> (item);
+	QY2ListViewItem * item = dynamic_cast<QY2ListViewItem *> (*it);
 
-	if ( qy2_item )
-	    qy2_item->updateData();
-
-	item = item->nextSibling();
+	if ( item )
+	    item->updateData();
+	
+	++it;
     }
 }
 
