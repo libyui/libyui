@@ -328,13 +328,25 @@ class YQPkgObjListItem: public QY2ListViewItem
 public:
 
     /**
-     * Constructor. Creates a YQPkgObjList item that corresponds to the ZYPP selectable
-     * that 'selectable' refers to. 'zyppObj' has to be one object of 'selectable'.
-     * If it is 0, selectable->theObject() will be used.
+     * Constructor for root items: Creates a YQPkgObjList item that corresponds
+     * to the ZYPP selectable that 'selectable' refers to. 'zyppObj' has to be
+     * one object of 'selectable'.  If it is 0, selectable->theObject() will be
+     * used.
      **/
-    YQPkgObjListItem( YQPkgObjList *		pkgObjList,
-		      ZyppSel selectable,
-		      ZyppObj	zyppObj = 0 );
+    YQPkgObjListItem( YQPkgObjList *	pkgObjList,
+		      ZyppSel 		selectable,
+		      ZyppObj		zyppObj = 0 );
+
+protected:
+    /**
+     * Constructor for non-root items.
+     **/
+    YQPkgObjListItem( YQPkgObjList *	pkgObjList,
+		      QY2ListViewItem * parent,
+		      ZyppSel 		selectable,
+		      ZyppObj		zyppObj = 0 );
+
+public:
 
     /**
      * Destructor

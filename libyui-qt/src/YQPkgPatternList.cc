@@ -24,11 +24,15 @@
 #include <qregexp.h>
 #include <zypp/ZYppFactory.h>
 #include <zypp/Resolver.h>
-
+#include <qpainter.h>
 
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgPatternList.h"
+#include "YQUI.h"
+
+
+#define CATEGORY_BACKGROUND	QColor( 0xFF, 0xC0, 0x50 )
 
 
 YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFilter )
@@ -88,7 +92,6 @@ YQPkgPatternList::fillList()
 	{
 	    if ( zyppPattern->userVisible() )
 	    {
-		y2debug( "Pattern %s is user-visible", zyppPattern->name().c_str() );
 		addPatternItem( *it, zyppPattern );
 	    }
 	    else
@@ -101,6 +104,28 @@ YQPkgPatternList::fillList()
     }
 
     y2debug( "Pattern list filled" );
+}
+
+
+YQPkgPatternCategoryItem *
+YQPkgPatternList::category( const QString & categoryName )
+{
+    if ( categoryName.isEmpty() )
+	return 0;
+    
+    YQPkgPatternCategoryItem * cat = _categories[ categoryName ];
+
+    if ( ! cat )
+    {
+	y2debug( "New pattern category \"%s\"", (const char *) categoryName );
+	
+	cat = new YQPkgPatternCategoryItem( this, categoryName );
+	CHECK_PTR( cat );
+	_categories.insert( categoryName, cat );
+    }
+    
+    
+    return cat;
 }
 
 
@@ -158,7 +183,12 @@ YQPkgPatternList::addPatternItem( ZyppSel	selectable,
 	return;
     }
 
-    new YQPkgPatternListItem( this, selectable, zyppPattern );
+    YQPkgPatternCategoryItem * cat = category( zyppPattern->category() );
+
+    if ( cat )
+	new YQPkgPatternListItem( this, cat, selectable, zyppPattern );
+    else
+	new YQPkgPatternListItem( this, selectable, zyppPattern );
 }
 
 
@@ -185,11 +215,28 @@ YQPkgPatternListItem::YQPkgPatternListItem( YQPkgPatternList *	patternList,
     , _patternList( patternList )
     , _zyppPattern( zyppPattern )
 {
-    if ( ! _zyppPattern )
-	_zyppPattern = tryCastToZyppPattern( selectable->theObj() );
+    init();
+}
 
-    QString text = fromUTF8( _zyppPattern->summary() );
-    setText( summaryCol(), text );
+
+YQPkgPatternListItem::YQPkgPatternListItem( YQPkgPatternList *		patternList,
+					    YQPkgPatternCategoryItem *	parentCategory,
+					    ZyppSel			selectable,
+					    ZyppPattern			zyppPattern )
+    : YQPkgObjListItem( patternList, parentCategory, selectable, zyppPattern )
+    , _patternList( patternList )
+    , _zyppPattern( zyppPattern )
+{
+    init();
+    parentCategory->addPattern( _zyppPattern );
+}
+
+
+void
+YQPkgPatternListItem::init()
+{
+    if ( ! _zyppPattern )
+	_zyppPattern = tryCastToZyppPattern( selectable()->theObj() );
 
     setStatusIcon();
 }
@@ -261,12 +308,90 @@ YQPkgPatternListItem::compare( QListViewItem *	otherListViewItem,
 			       int		col,
 			       bool		ascending ) const
 {
-    YQPkgPatternListItem * other = ( YQPkgPatternListItem * ) otherListViewItem;
+    YQPkgPatternListItem * otherPatternListitem	 = dynamic_cast<YQPkgPatternListItem     *>(otherListViewItem);
+    YQPkgPatternCategoryItem * otherCategoryItem = dynamic_cast<YQPkgPatternCategoryItem *>(otherListViewItem);
 
-    if ( ! _zyppPattern || ! other || ! other->zyppPattern() )
-	return QListViewItem::compare( otherListViewItem, col, ascending );
+    if ( _zyppPattern && otherPatternListitem && otherPatternListitem->zyppPattern() )
+	return _zyppPattern->order().compare( otherPatternListitem->zyppPattern()->order() );
 
-    return _zyppPattern->order().compare( other->zyppPattern()->order() );
+    if ( _zyppPattern && otherCategoryItem && otherCategoryItem->firstPattern() )
+	return _zyppPattern->order().compare( otherCategoryItem->firstPattern()->order() );
+
+    return QListViewItem::compare( otherListViewItem, col, ascending );
+}
+
+
+
+
+
+
+YQPkgPatternCategoryItem::YQPkgPatternCategoryItem( YQPkgPatternList *	patternList,
+						    const QString &	category	)
+    : QY2ListViewItem( patternList )
+{
+    setText( patternList->summaryCol(), category );
+    setBackgroundColor( CATEGORY_BACKGROUND );
+    setOpen( true );
+}
+
+
+YQPkgPatternCategoryItem::~YQPkgPatternCategoryItem()
+{
+    // NOP
+}
+
+
+void
+YQPkgPatternCategoryItem::paintCell( QPainter *			painter,
+				     const QColorGroup &	colorGroup,
+				     int			column,
+				     int			width,
+				     int			alignment )
+{
+    painter->setFont( YQUI::ui()->headingFont() );
+    QY2ListViewItem::paintCell( painter, colorGroup, column, width, alignment );
+}
+
+
+
+void
+YQPkgPatternCategoryItem::addPattern( ZyppPattern pattern )
+{
+    if ( ! _firstPattern )
+    {
+	_firstPattern = pattern;
+    }
+    else
+    {
+	if ( _firstPattern->order().compare( pattern->order() ) < 0 )
+	    _firstPattern = pattern;
+    }
+}
+
+
+
+/**
+ * Comparison function used for sorting the list.
+ * Returns:
+ * -1 if this <	 other
+ *  0 if this == other
+ * +1 if this >	 other
+ **/
+int
+YQPkgPatternCategoryItem::compare( QListViewItem *	otherListViewItem,
+				   int			col,
+				   bool			ascending ) const
+{
+    YQPkgPatternListItem * otherPatternListitem	 = dynamic_cast<YQPkgPatternListItem     *>(otherListViewItem);
+    YQPkgPatternCategoryItem * otherCategoryItem = dynamic_cast<YQPkgPatternCategoryItem *>(otherListViewItem);
+
+    if ( _firstPattern && otherPatternListitem && otherPatternListitem->zyppPattern() )
+	return _firstPattern->order().compare( otherPatternListitem->zyppPattern()->order() );
+
+    if ( _firstPattern && otherCategoryItem && otherCategoryItem->firstPattern() )
+	return _firstPattern->order().compare( otherCategoryItem->firstPattern()->order() );
+
+    return QListViewItem::compare( otherListViewItem, col, ascending );
 }
 
 

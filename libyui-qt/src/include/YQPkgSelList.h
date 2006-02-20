@@ -131,8 +131,7 @@ class YQPkgSelListItem: public YQPkgObjListItem
 public:
 
     /**
-     * Constructor. Creates a YQPkgSelList item that corresponds to the package
-     * manager object that 'pkg' refers to.
+     * Constructor
      **/
     YQPkgSelListItem( YQPkgSelList * 	pkgSelList,
 		      ZyppSel		selectable,

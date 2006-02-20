@@ -658,9 +658,20 @@ YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList * pkgObjList,
     , _zyppObj( zyppObj )
     , _editable( true )
 {
-    if ( _zyppObj == 0 && _selectable )
-	_zyppObj = _selectable->theObj();
+    init();
+}
 
+
+YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList *	pkgObjList,
+				    QY2ListViewItem *	parent,
+				    ZyppSel 		selectable,
+				    ZyppObj 		zyppObj )
+    : QY2ListViewItem( parent )
+    , _pkgObjList( pkgObjList )
+    , _selectable( selectable )
+    , _zyppObj( zyppObj )
+    , _editable( true )
+{
     init();
 }
 
@@ -674,6 +685,10 @@ YQPkgObjListItem::~YQPkgObjListItem()
 void
 YQPkgObjListItem::init()
 {
+    if ( _zyppObj == 0 && _selectable )
+	_zyppObj = _selectable->theObj();
+    
+
     _candidateIsNewer = false;
     _installedIsNewer = false;
 

@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Feb 20 18:47:44 CET 2006 - sh@suse.de
+
+- V 2.13.17
+- Added pattern categories
+- Patterns now use their sort order field 
+
+-------------------------------------------------------------------
 Fri Feb 17 18:56:08 CET 2006 - sh@suse.de
 
 - Added pattern icons to pattern selector 

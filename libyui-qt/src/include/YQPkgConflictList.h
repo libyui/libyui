@@ -176,7 +176,7 @@ protected:
     void addSolutions();
 
     /**
-     * Paint method. Reimplemented from @ref QListViewItem a different
+     * Paint method. Reimplemented from @ref QListViewItem so a different
      * font can be used.
      *
      * Reimplemented from QY2ListViewItem.

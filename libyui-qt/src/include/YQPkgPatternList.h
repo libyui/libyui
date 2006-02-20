@@ -22,10 +22,12 @@
 #ifndef YQPkgPatternList_h
 #define YQPkgPatternList_h
 
-#include <YQPkgObjList.h>
+#include "YQPkgObjList.h"
+#include <qdict.h>
 
 
 class YQPkgPatternListItem;
+class YQPkgPatternCategoryItem;
 
 
 /**
@@ -122,6 +124,23 @@ signals:
      * Emitted when filtering is finished.
      **/
     void filterFinished();
+
+
+protected:
+
+    /**
+     * Returns the category item with the specified name. Creates such a
+     * category if it doesn't exist yet and categoryName is not empty. Returns
+     * 0 if categoryName is empty.
+     **/
+    YQPkgPatternCategoryItem * category( const QString & categoryName );
+
+
+    //
+    // Data members
+    //
+
+    QDict<YQPkgPatternCategoryItem> _categories;
 };
 
 
@@ -131,12 +150,19 @@ class YQPkgPatternListItem: public YQPkgObjListItem
 public:
 
     /**
-     * Constructor. Creates a YQPkgPatternList item that corresponds to the package
-     * manager object that 'pkg' refers to.
+     * Constructor for root items
      **/
-    YQPkgPatternListItem( YQPkgPatternList * 	patternList,
-			  ZyppSel		selectable,
-			  ZyppPattern 		zyppPattern );
+    YQPkgPatternListItem( YQPkgPatternList * 		patternList,
+			  ZyppSel			selectable,
+			  ZyppPattern 			zyppPattern );
+
+    /**
+     * Constructor for items that belong to a category
+     **/
+    YQPkgPatternListItem( YQPkgPatternList *		patternList,
+			  YQPkgPatternCategoryItem *	parentCategory,
+			  ZyppSel			selectable,
+			  ZyppPattern			zyppPattern );
 
     /**
      * Destructor
@@ -180,6 +206,11 @@ public:
 protected:
 
     /**
+     * Initialize things common to all constructors.
+     **/
+    void init();
+
+    /**
      * Propagate changes in the pattern status to the affected packages
      * via the solver.
      **/
@@ -190,6 +221,68 @@ protected:
 
     YQPkgPatternList *	_patternList;
     ZyppPattern		_zyppPattern;
+};
+
+
+
+class YQPkgPatternCategoryItem: public QY2ListViewItem
+{
+public:
+
+    /**
+     * Constructor
+     **/
+    YQPkgPatternCategoryItem( YQPkgPatternList *	patternList,
+			      const QString &		category	);
+
+    /**
+     * Destructor
+     **/
+    virtual ~YQPkgPatternCategoryItem();
+
+    /**
+     * Returns the first pattern. This should be the first in sort order.
+     **/
+    ZyppPattern firstPattern() const { return _firstPattern; }
+
+    /**
+     * Add a pattern to this category. This method sets firstPattern() if necessary.
+     **/
+    void addPattern( ZyppPattern pattern );
+
+    /**
+     * Comparison function used for sorting the list.
+     * Returns:
+     * -1 if this <  other
+     *	0 if this == other
+     * +1 if this >  other
+     *
+     * Reimplemented from QListViewItem:
+     * Sort by zypp::Pattern::order() only.
+     **/
+    virtual int compare( QListViewItem *	other,
+			 int			col,
+			 bool			ascending ) const;
+
+protected:
+
+    /**
+     * Paint method. Reimplemented from @ref QListViewItem so a different
+     * font can be used.
+     *
+     * Reimplemented from QY2ListViewItem.
+     **/
+    virtual void paintCell( QPainter *		painter,
+			    const QColorGroup &	colorGroup,
+			    int			column,
+			    int			width,
+			    int			alignment );
+
+    //
+    // Data members
+    //
+
+    ZyppPattern _firstPattern;
 };
 
 
