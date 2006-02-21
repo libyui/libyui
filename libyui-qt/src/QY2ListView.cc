@@ -55,10 +55,20 @@ QY2ListView::~QY2ListView()
 void
 QY2ListView::selectSomething()
 {
-    QListViewItem * item = firstChild();
+    QListViewItemIterator it( this );
 
-    if ( item )
-	setSelected( item, true ); // emits signal, too
+    while ( *it )
+    {
+	QY2ListViewItem * item = dynamic_cast<QY2ListViewItem *> (*it);
+
+	if ( item && item->isSelectable() )
+	{
+	    setSelected( item, true ); // emits signal, too
+	    return;
+	}
+	
+	++it;
+    }
 }
 
 
