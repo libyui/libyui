@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Feb 21 15:15:38 CET 2006 - mvidner@suse.cz
+
+- Do not package the doxygen documentation, it is only useful for the
+  maintainer (#151370).
+- 2.13.9
+
+-------------------------------------------------------------------
 Fri Feb 17 11:29:30 CET 2006 - mvidner@suse.cz
 
 - If patterns are available, display them instead of selections.
