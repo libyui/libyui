@@ -1,21 +1,23 @@
 #
 # Makefile.am for qt/doc/autodocs
 #
+# Parameters:
+#
+#   AUTODOCS_CC: Directories that the C++ autodocs is built from
+#                Optional - the default is $(srcdir)/../../src
+#   AUTODOCS_DEPS: dependencies of the docs, default is $(AUTODOCS_CC)/*.h
+#   AUTODOCS_PARAMS: more params for ydoxygen
+#
+# see also mvidner's post on yast2-announce on 2006-02-21
 
-htmldir = $(docdir)/autodocs
+# AUTODOCS_CC   = $(srcdir)/../../src/
 
-nodist_html_DATA = index.html $(wildcard *.html *.png) doxygen.css @RPMNAME@.tag
+AUTODOCS_DEPS = $(srcdir)/../../src/include/*.h
 
-CLEANFILES = 	$(html_DATA) 		\
-		$(wildcard *.html) 	\
-		$(wildcard *.png) 	\
-		$(wildcard *.tag) 	\
-		doxygen.log 		\
-		doxygen.conf 		\
-		doxygen.css 		\
-		installdox
-
-doxygen.css @RPMNAME@.tag: index.html
-
-index.html: $(srcdir)/../../src/include/*.h
-	@ybindir@/ydoxygen PROJECT_NAME=@RPMNAME@
+# Use this to enable generating autodocs:
+#
+# include $(top_srcdir)/autodocs-cc.ami
+#
+# and this to disable it:
+#
+include $(top_srcdir)/autodocs-cc-off.ami
