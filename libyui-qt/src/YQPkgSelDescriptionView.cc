@@ -144,7 +144,7 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
 	+ summary
 	+ ( useBigFont ? QString( "</h2>" ) : QString( "</b>" ) )
 	+ "</td></tr>"
-	+ "</table><br>";
+	+ "</table>";
 
     if ( ! icon.isEmpty() )
     {
