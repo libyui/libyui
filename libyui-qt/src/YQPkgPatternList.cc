@@ -52,6 +52,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     addColumn( _( "Pattern" )	);	_summaryCol	= numCol++;
     setAllColumnsShowFocus( true );
+    setTreeStepSize( 0 );
 
     if ( autoFilter )
     {
@@ -309,13 +310,14 @@ YQPkgPatternListItem::compare( QListViewItem *	otherListViewItem,
 			       bool		ascending ) const
 {
     YQPkgPatternListItem * otherPatternListitem	 = dynamic_cast<YQPkgPatternListItem     *>(otherListViewItem);
-    YQPkgPatternCategoryItem * otherCategoryItem = dynamic_cast<YQPkgPatternCategoryItem *>(otherListViewItem);
 
     if ( _zyppPattern && otherPatternListitem && otherPatternListitem->zyppPattern() )
 	return _zyppPattern->order().compare( otherPatternListitem->zyppPattern()->order() );
+    
+    YQPkgPatternCategoryItem * otherCategoryItem = dynamic_cast<YQPkgPatternCategoryItem *>(otherListViewItem);
 
-    if ( _zyppPattern && otherCategoryItem && otherCategoryItem->firstPattern() )
-	return _zyppPattern->order().compare( otherCategoryItem->firstPattern()->order() );
+    if ( otherCategoryItem )	// Patterns without category should always be sorted
+	return -1;		// before any category
 
     return QListViewItem::compare( otherListViewItem, col, ascending );
 }
@@ -332,6 +334,7 @@ YQPkgPatternCategoryItem::YQPkgPatternCategoryItem( YQPkgPatternList *	patternLi
     setText( patternList->summaryCol(), category );
     setBackgroundColor( CATEGORY_BACKGROUND );
     setOpen( true );
+    setSelectable( false );
 }
 
 
@@ -369,6 +372,16 @@ YQPkgPatternCategoryItem::addPattern( ZyppPattern pattern )
 }
 
 
+void
+YQPkgPatternCategoryItem::setOpen( bool )
+{
+    // Pattern categories should always remain open -
+    // suppress any attempt to close them
+    
+    QListViewItem::setOpen( true );
+}
+
+
 
 /**
  * Comparison function used for sorting the list.
@@ -382,14 +395,16 @@ YQPkgPatternCategoryItem::compare( QListViewItem *	otherListViewItem,
 				   int			col,
 				   bool			ascending ) const
 {
-    YQPkgPatternListItem * otherPatternListitem	 = dynamic_cast<YQPkgPatternListItem     *>(otherListViewItem);
     YQPkgPatternCategoryItem * otherCategoryItem = dynamic_cast<YQPkgPatternCategoryItem *>(otherListViewItem);
-
-    if ( _firstPattern && otherPatternListitem && otherPatternListitem->zyppPattern() )
-	return _firstPattern->order().compare( otherPatternListitem->zyppPattern()->order() );
-
+    
     if ( _firstPattern && otherCategoryItem && otherCategoryItem->firstPattern() )
 	return _firstPattern->order().compare( otherCategoryItem->firstPattern()->order() );
+
+
+    YQPkgPatternListItem * otherPatternListitem	 = dynamic_cast<YQPkgPatternListItem *>(otherListViewItem);
+    
+    if ( otherPatternListitem )	// Patterns without category should always be sorted
+	return 1;		// before any category
 
     return QListViewItem::compare( otherListViewItem, col, ascending );
 }

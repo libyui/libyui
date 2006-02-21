@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Feb 21 12:08:32 CET 2006 - sh@suse.de
+
+- sort category-less patterns before any category
+- no tree indentation for patterns
+- disable closing pattern categories
+- disable selecting pattern categories 
+
+-------------------------------------------------------------------
 Mon Feb 20 18:47:44 CET 2006 - sh@suse.de
 
 - V 2.13.17

@@ -264,6 +264,13 @@ public:
 			 int			col,
 			 bool			ascending ) const;
 
+    /*
+     * Open or close this subtree
+     *
+     * Reimplemented from QListViewItem to force categories open at all times
+     */
+    virtual void setOpen( bool open );
+    
 protected:
 
     /**
