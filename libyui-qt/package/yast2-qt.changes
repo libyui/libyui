@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Feb 21 16:39:02 CET 2006 - sh@suse.de
+
+- use new way to enable/disable autodocs by mvidner 
+
+-------------------------------------------------------------------
 Tue Feb 21 12:08:32 CET 2006 - sh@suse.de
 
 - sort category-less patterns before any category
