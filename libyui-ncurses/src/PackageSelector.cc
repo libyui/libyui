@@ -546,18 +546,16 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
 	    zypp::Text value = pkg->description();
 	    description = createDescrText( value );    
 	}
-#ifdef FIXME
 	if ( checkProvides )
 	{
-	    list<PkgRelation> value = pkg->provides();	
+	    zypp::CapSet value = pkg->dep (zypp::Dep::PROVIDES);
 	    provides = createRelLine( value );  
 	}
 	if ( checkRequires )
 	{
-	    list<PkgRelation> value = pkg->requires();	
+	    zypp::CapSet value = pkg->dep (zypp::Dep::REQUIRES);
 	    requires = createRelLine( value );    
 	}
-#endif
 	if ( ( checkName && match( pkg->name(), expr->value(), ignoreCase )) ||
 	     ( checkSummary && match( pkg->summary(), expr->value(), ignoreCase) ) ||
 	     ( checkDescr && match( description, expr->value(), ignoreCase) ) ||
@@ -2032,10 +2030,8 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	
 	// show Provides:
 	text += PkgNames::Provides();
-#ifdef FIXME
-	list<PkgRelation> provides = pkgPtr->provides();	// PMSolvable
+	zypp::CapSet provides = package->dep (zypp::Dep::PROVIDES);
 	text += createRelLine(provides);
-#endif
 	text += "<br>";
 
 	// show the authors
@@ -2071,29 +2067,29 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	text += pkgPtr->summary();		// the summary
 	text += "<br>";
 
-#ifdef FIXME
-	list<PkgRelation> relations;
-	
-        // show Requires:
-	text += "<b>Requires: </b>";
-	relations = pkgPtr->requires();
-
-	text += createRelLine(relations);
-	text += "<br>";
-
-	// show Required by:
-	text += "<b>Prerequires: </b>";
-	relations = pkgPtr->prerequires();
-
-	text += createRelLine(relations);
-	text += "<br>";
-
-	// show Conflicts:
-	text += "<b>Conflicts: </b>";
-	relations = pkgPtr->conflicts();
-
-	text += createRelLine(relations);
-#endif
+	// show the relations, all of them except provides which is above
+	zypp::Dep deptypes[] = {
+	    zypp::Dep::PREREQUIRES,
+	    zypp::Dep::REQUIRES,
+	    zypp::Dep::CONFLICTS,
+	    zypp::Dep::OBSOLETES,
+	    zypp::Dep::RECOMMENDS,
+	    zypp::Dep::SUGGESTS,
+	    zypp::Dep::FRESHENS,
+	    zypp::Dep::ENHANCES,
+	    zypp::Dep::SUPPLEMENTS,
+	};
+	for (size_t i = 0; i < sizeof (deptypes)/sizeof(deptypes[0]); ++i)
+	{
+	    zypp::Dep deptype = deptypes[i];
+	    zypp::CapSet relations = pkgPtr->dep (deptype);
+	    string relline = createRelLine (relations);
+	    if (!relline.empty ())
+	    {
+		text += "<b>" + deptype.asString () + ": </b>"
+		    + relline + "<br>";
+	    }
+	}
 	
         // show the package relations	
 	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
@@ -2204,21 +2200,23 @@ void PackageSelector::updatePackageList()
     }
 }
 
-#ifdef FIXME
 ///////////////////////////////////////////////////////////////////
 //
 // createProvides
 //
-string PackageSelector::createRelLine( list<PkgRelation> info )
+string PackageSelector::createRelLine( const zypp::CapSet & info )
 {
-    list<PkgRelation>::iterator it;
     string text = "";
-    unsigned int i;
+    zypp::CapSet::const_iterator
+	b = info.begin (),
+	e = info.end (),
+	it;
+    unsigned int i, n = info.size();
     
-    for ( i = 0, it = info.begin(); it != info.end(); ++it, i++ )
+    for ( it = b, i = 0; it != e; ++it, ++i )
     {
 	text = text + (*it).asString();
-	if ( i < info.size()-1 )
+	if ( i < n - 1 )
 	{
 	    text = text + ", ";
 	}
@@ -2226,7 +2224,6 @@ string PackageSelector::createRelLine( list<PkgRelation> info )
 
     return text;
 }
-#endif
 
 
 ///////////////////////////////////////////////////////////////////

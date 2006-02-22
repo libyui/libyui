@@ -89,10 +89,8 @@ class PackageSelector
 
     bool autoCheck;			// flag for automatic dependency check on/off
     
-#ifdef FIXME
     // internal helper functions (format list of string) 
-    string createRelLine( list<PkgRelation> info );
-#endif
+    string createRelLine( const zypp::CapSet & info );
     // internal use (copies tree items got from YPkgRpmGroupTagsFilterView)
     void cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone );
 
