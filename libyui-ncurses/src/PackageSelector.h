@@ -157,10 +157,10 @@ class PackageSelector
    /**
     * Fills the list of available packages
     * @param table  The table widget
-    * @param pkgPtr Show all available versions of this package 
+    * @param selectable Show all available versions of this package 
     * @return bool
     */
-    bool fillAvailableList( NCPkgTable *table, ZyppObj pkgPtr );    
+    bool fillAvailableList( NCPkgTable *table, ZyppSel selectable );
 
    /**
     * Fills the list of packages belonging to the youPatch

@@ -395,15 +395,13 @@ void PackageSelector::setVisibleInfo( const YCPValue & info )
 //
 // Fills the package table (on bottom ) with the list of available packages 
 //
-bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, ZyppObj pkgPtr )
+bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, ZyppSel selectable )
 {
     if ( !pkgTable )
     {
 	NCERR << "No table widget for available packages existing" << endl;
 	return false;
     }
-
-    ZyppSel selectable = 0;    	// FIXME get it!
 
     if ( !selectable )
     {
@@ -415,17 +413,16 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, ZyppObj pkgPtr )
     pkgTable->itemsCleared ();
 
     NCDBG << "Number of available packages: " << selectable->availableObjs() << endl;
-    
-#ifdef FIXME
-    std::list<ZyppObj>::const_iterator it = selectable->av_begin();
 
     // show all availables
-    while ( it != selectable->av_end() )
+    zypp::ui::Selectable::available_iterator
+	b = selectable->availableBegin (),
+	e = selectable->availableEnd (),
+	it;
+    for (it = b; it != e; ++it)
     {
-	pkgTable->createListEntry( (*it) );
-	++it;
+	pkgTable->createListEntry( tryCastToZyppPkg (*it), selectable );
     }
-#endif
 
     // show the package list
     pkgTable->drawList();
@@ -1174,10 +1171,7 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	    pkgAvail->setTableType( NCPkgTable::T_Availables, strategy );
 
 	    pkgAvail->fillHeader( );
-// here we need the jump ZyppObj->ZyppSel
-#ifdef FIXME
-	    fillAvailableList( pkgAvail, packageList->getDataPointer( packageList->getCurrentItem() ) );
-#endif
+	    fillAvailableList( pkgAvail, packageList->getSelPointer( packageList->getCurrentItem() ) );
 	}
     }
 // patches
@@ -2055,7 +2049,7 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	NCPkgTable * pkgAvail = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::AvailPkgs(), true));
 	if ( pkgAvail )
 	{
-	    fillAvailableList( pkgAvail, pkgPtr );
+	    fillAvailableList( pkgAvail, slbPtr );
 	}
     }
     else if (  visibleInfo->compare( PkgNames::Relations() ) == YO_EQUAL )
