@@ -146,23 +146,22 @@ bool NCPopupPkgTable::fillAutoChanges( NCPkgTable * pkgTable )
 
     pkgTable->itemsCleared();		// clear the table
 
-#ifdef FIXME
-    PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
-
-    while ( it != Y2PM::packageManager().end() )
+    ZyppPoolIterator
+	b = zyppPkgBegin(),
+	e = zyppPkgEnd(),
+	it;
+    for (it = b; it != e; ++it)
     {
-	ZyppSel selectable = *it;
-	ZyppPkg pkgPtr = (*it)->theObj();
+	ZyppSel slb = *it;
+	ZyppPkg pkgPtr = tryCastToZyppPkg (slb->theObj());
 
 	// show all packages which are automatically selected for installation
-	if ( selectable->to_modify() && selectable->by_auto() )
+	if ( slb->toModify() && ! slb->isModifiedBy (zypp::ResStatus::USER) )
 	{
 	    NCMIL << "The status of " << pkgPtr->name() << " has automatically changed" << endl;
-	    pkgTable->createListEntry( pkgPtr );
+	    pkgTable->createListEntry( pkgPtr, slb );
 	}
-	++it;
     }
-#endif
 
     pkgTable->drawList();
 

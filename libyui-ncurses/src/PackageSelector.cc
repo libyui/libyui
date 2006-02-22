@@ -2086,6 +2086,7 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	    string relline = createRelLine (relations);
 	    if (!relline.empty ())
 	    {
+		// FIXME: translate
 		text += "<b>" + deptype.asString () + ": </b>"
 		    + relline + "<br>";
 	    }
