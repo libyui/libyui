@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Feb 22 07:50:37 CET 2006 - mvidner@suse.cz
+
+- Fixed displaying the shortcut keys for wide characters (#148380, tiwai).
+
+-------------------------------------------------------------------
 Tue Feb 21 15:15:38 CET 2006 - mvidner@suse.cz
 
 - Do not package the doxygen documentation, it is only useful for the

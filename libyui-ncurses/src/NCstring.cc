@@ -438,9 +438,12 @@ void NCstring::getHotkey( ) const
     wstring::size_type tpos = wstr.find_first_of( L'&' );
     if ( tpos != wstring::npos && tpos != wstr.size()-1 )
     {
+	size_t realpos = 0, t;
+	for ( t = 0; t < tpos; t++ )
+	    realpos += wcwidth( wstr[t] );
 	wstr.erase( tpos, 1 );
 	hotk = wstr[tpos];
-	hotp = tpos;
+	hotp = realpos;
     }
 }
 
