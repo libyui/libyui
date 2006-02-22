@@ -86,7 +86,7 @@ public:
 			   bool			selectNextItem = false );
 
     /**
-     * Sets the status of all ( toplevel ) list items to 'newStatus', if possible.
+     * Sets the status of all (toplevel) list items to 'newStatus', if possible.
      * Only one single statusChanged() signal is emitted.
      *
      * 'force' overrides sensible defaults like setting only zypp::ResObjects to
@@ -268,7 +268,7 @@ protected:
 
     /**
      * Create an action based on a zypp::ResObject status - automatically retrieve the
-     * corresponding status icons ( both sensitive and insensitive ) and text.
+     * corresponding status icons (both sensitive and insensitive) and text.
      * 'key' is only a descriptive text, no true accelerator.
      **/
     QAction * createAction( ZyppStatus 	status,
@@ -467,8 +467,8 @@ public:
 
     /**
      * Calculate a numerical value to compare versions, based on version relations:
-     * - Installed newer than candidate ( red )
-     * - Candidate newer than installed ( blue ) - worthwhile updating
+     * - Installed newer than candidate (red)
+     * - Candidate newer than installed (blue) - worthwhile updating
      * - Installed
      * - Not installed, but candidate available
      **/

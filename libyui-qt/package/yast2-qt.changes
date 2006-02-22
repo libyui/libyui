@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Feb 22 18:10:14 CET 2006 - sh@suse.de
+
+- V 2.13.19
+- Removing patterns and selections now works as well as adding them 
+
+-------------------------------------------------------------------
 Tue Feb 21 16:39:02 CET 2006 - sh@suse.de
 
 - V 2.13.18

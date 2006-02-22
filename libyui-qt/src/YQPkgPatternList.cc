@@ -113,19 +113,19 @@ YQPkgPatternList::category( const QString & categoryName )
 {
     if ( categoryName.isEmpty() )
 	return 0;
-    
+
     YQPkgPatternCategoryItem * cat = _categories[ categoryName ];
 
     if ( ! cat )
     {
 	y2debug( "New pattern category \"%s\"", (const char *) categoryName );
-	
+
 	cat = new YQPkgPatternCategoryItem( this, categoryName );
 	CHECK_PTR( cat );
 	_categories.insert( categoryName, cat );
     }
-    
-    
+
+
     return cat;
 }
 
@@ -253,31 +253,46 @@ YQPkgPatternListItem::~YQPkgPatternListItem()
 void
 YQPkgPatternListItem::setStatus( ZyppStatus newStatus )
 {
-    YQPkgObjListItem::setStatus( newStatus );
-    applyChanges();
+    ZyppStatus oldStatus = selectable()->status();
 
-    _patternList->sendUpdatePackages();
+    YQPkgObjListItem::setStatus( newStatus );
+
+    if ( oldStatus != selectable()->status() )
+    {
+	applyChanges();
+
+	_patternList->updateItemStates();
+	_patternList->sendUpdatePackages();
+    }
 }
 
 
 void
 YQPkgPatternListItem::applyChanges()
 {
-    if ( selectable()->unmodified() )
+    bool install = true;
+
+    switch ( selectable()->status() )
     {
-	y2milestone( "Pattern %s unmodified", selectable()->theObj()->name().c_str() ) ;
-#if 0
-	return;
-#endif
+	case S_Del:
+	case S_AutoDel:
+	case S_NoInst:
+	case S_KeepInstalled:
+	case S_Taboo:
+	case S_Protected:
+	    install = false;
+	    break;
+
+	case S_Install:
+	case S_AutoInstall:
+	case S_Update:
+	case S_AutoUpdate:
+	    install = true;
+	    break;
+
+	    // Intentionally omitting 'default' branch so the compiler can
+	    // catch unhandled enum states
     }
-
-
-    bool install = selectable()->toInstall();
-
-#ifdef FIXME
-#else
-    install = true;
-#endif
 
     ZyppObj obj = install ?	// the other way round as mayb expected:
 	selectable()->candidateObj() :	// install the candidate,
@@ -313,7 +328,7 @@ YQPkgPatternListItem::compare( QListViewItem *	otherListViewItem,
 
     if ( _zyppPattern && otherPatternListitem && otherPatternListitem->zyppPattern() )
 	return _zyppPattern->order().compare( otherPatternListitem->zyppPattern()->order() );
-    
+
     YQPkgPatternCategoryItem * otherCategoryItem = dynamic_cast<YQPkgPatternCategoryItem *>(otherListViewItem);
 
     if ( otherCategoryItem )	// Patterns without category should always be sorted
@@ -377,7 +392,7 @@ YQPkgPatternCategoryItem::setOpen( bool )
 {
     // Pattern categories should always remain open -
     // suppress any attempt to close them
-    
+
     QListViewItem::setOpen( true );
 }
 
@@ -396,13 +411,13 @@ YQPkgPatternCategoryItem::compare( QListViewItem *	otherListViewItem,
 				   bool			ascending ) const
 {
     YQPkgPatternCategoryItem * otherCategoryItem = dynamic_cast<YQPkgPatternCategoryItem *>(otherListViewItem);
-    
+
     if ( _firstPattern && otherCategoryItem && otherCategoryItem->firstPattern() )
 	return _firstPattern->order().compare( otherCategoryItem->firstPattern()->order() );
 
 
     YQPkgPatternListItem * otherPatternListitem	 = dynamic_cast<YQPkgPatternListItem *>(otherListViewItem);
-    
+
     if ( otherPatternListitem )	// Patterns without category should always be sorted
 	return 1;		// before any category
 

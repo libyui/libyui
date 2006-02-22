@@ -199,32 +199,48 @@ YQPkgSelListItem::~YQPkgSelListItem()
 void
 YQPkgSelListItem::setStatus( ZyppStatus newStatus )
 {
-    YQPkgObjListItem::setStatus( newStatus );
-    applyChanges();
+    ZyppStatus oldStatus = selectable()->status();
 
-    _pkgSelList->sendUpdatePackages();
+    YQPkgObjListItem::setStatus( newStatus );
+
+    if ( oldStatus != selectable()->status() )
+    {
+	applyChanges();
+
+	_pkgSelList->updateItemStates();
+	_pkgSelList->sendUpdatePackages();
+    }
 }
 
 
 void
 YQPkgSelListItem::applyChanges()
 {
-    if ( selectable()->unmodified() )
+    bool install = true;
+
+    switch ( selectable()->status() )
     {
-	y2milestone( "Selection %s unmodified", selectable()->theObj()->name().c_str() ) ;
-#if 0
-	return;
-#endif
+	case S_Del:
+	case S_AutoDel:
+	case S_NoInst:
+	case S_KeepInstalled:
+	case S_Taboo:
+	case S_Protected:
+	    install = false;
+	    break;
+
+	case S_Install:
+	case S_AutoInstall:
+	case S_Update:
+	case S_AutoUpdate:
+	    install = true;
+	    break;
+
+	    // Intentionally omitting 'default' branch so the compiler can
+	    // catch unhandled enum states
     }
 
 
-    bool install = selectable()->toInstall();
-
-#ifdef FIXME
-#else
-    install = true;
-#endif
-    
     ZyppObj obj = install ?	// the other way round as mayb expected:
 	selectable()->candidateObj() :	// install the candidate,
 	selectable()->installedObj();	// remove the installed
@@ -234,7 +250,7 @@ YQPkgSelListItem::applyChanges()
 
     y2debug( "Transacting selection %s with %s",
 	     obj->name().c_str(), install ? "install" : "delete" );
-    
+
     bool success = zypp::getZYpp()->resolver()->transactResObject( obj, install );
 
     if ( ! success )
