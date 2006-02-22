@@ -144,6 +144,7 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
       , youMode( false )
       , updateMode( false )
       , autoCheck( true )
+      , _rpmGroupsTree (0)
 {
     // Fill the handler map
     eventHandlerMap[ PkgNames::Packages()->toString() ]	= &PackageSelector::PackageListHandler;
@@ -265,6 +266,19 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
 	// create the selections popup
 	selectionPopup = new NCPopupSelection( wpos( 1, 1 ), this );
 
+	_rpmGroupsTree = new YRpmGroupsTree ();
+	// get the rpm groups
+	ZyppPoolIterator b = zyppPkgBegin ();
+	ZyppPoolIterator e = zyppPkgEnd ();
+	ZyppPoolIterator i;
+	for ( i = b; i != e;  ++i )    
+	{
+	    ZyppPkg zyppPkg = tryCastToZyppPkg( (*i)->theObj() );
+	    if ( zyppPkg )
+	    {
+		_rpmGroupsTree->addRpmGroup (zyppPkg->group ());
+	    }
+	}
 	// create the filter popup
 	filterPopup = new NCPopupTree( wpos( 1, 1 ),  this );	 
 
@@ -284,6 +298,7 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
     {
 	saveState<zypp::Patch> ();
     }
+
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -315,6 +330,10 @@ PackageSelector::~PackageSelector()
     if ( searchPopup )
     {
 	delete searchPopup;
+    }
+    if ( _rpmGroupsTree )
+    {
+	delete _rpmGroupsTree;
     }
 }
 
@@ -876,9 +895,8 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
     // clear the package table
     packageList->itemsCleared ();
 
-#ifdef FIXME
     // get the package list and sort it
-    list<ZyppSel> pkgList( Y2PM::packageManager().begin(), Y2PM::packageManager().end() );
+    list<ZyppSel> pkgList( zyppPkgBegin (), zyppPkgEnd () );
     pkgList.sort( sortByName );
 
     // fill the package table
@@ -899,8 +917,8 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
 	// entries for the same package!
 	    
 	bool match =
-	    checkPackage( selectable->candidateObj(), rpmGroup ) ||  
-	    checkPackage( selectable->installedObj(), rpmGroup ); 
+	    checkPackage( selectable->candidateObj(), selectable, rpmGroup ) ||
+	    checkPackage( selectable->installedObj(), selectable, rpmGroup ); 
 
 	// If there is neither an installed nor a candidate package, check
 	// any other instance.  
@@ -908,59 +926,8 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
 	if ( ! match			&&
 	     ! selectable->installedObj()	&&
 	     ! selectable->candidateObj()     )
-	    checkPackage( selectable->theObj(), rpmGroup );
+	    checkPackage( selectable->theObj(), selectable, rpmGroup );
 
-    }
-#endif
-
-    // show the package list
-    packageList->drawList();
-    
-    if ( !label.isNull() )
-    {
-	// show the selected filter label
-	YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
-	if ( filterLabel )
-	{
-	    static_cast<NCLabel *>(filterLabel)->setLabel( label );
-	}
-    }
-
-    return true;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-// fillPackageListAll
-//
-// Fills the package table with the list of all packages,
-// whatever that means, main thing I can display _something_ with zypp.
-// To be removed when other fill* work.
-//
-bool PackageSelector::fillPackageListAll (const YCPString & label)
-{
-     NCPkgTable * packageList = getPackageList();
-     
-    if ( !packageList )
-    {
-	UIERR << "No valid NCPkgTable widget" << endl;
-    	return false;
-    }
-    
-    // clear the package table
-    packageList->itemsCleared ();
-
-    // for now, all packages.
-    ZyppPoolIterator b = zyppPkgBegin ();
-    ZyppPoolIterator e = zyppPkgEnd ();
-    ZyppPoolIterator i;
-    for ( i = b; i != e;  ++i )    
-    {
-	ZyppPkg zyppPkg = tryCastToZyppPkg( (*i)->theObj() );
-	if ( zyppPkg )
-	{
-	    packageList->createListEntry( zyppPkg, *i );
-	}
     }
 
     // show the package list
@@ -1003,17 +970,16 @@ bool PackageSelector::match ( string s1, string s2, bool ignoreCase )
     return ( pos != s1.end() );
 }
 
-// rpm group match
-#ifdef FIXME
 
 ///////////////////////////////////////////////////////////////////
 //
 // checkPackage
 //
 //
-bool PackageSelector::checkPackage( ZyppPkg pkg,
+bool PackageSelector::checkPackage( ZyppObj opkg, ZyppSel slb,
 				    YStringTreeItem * rpmGroup )
 {
+    ZyppPkg pkg = tryCastToZyppPkg (opkg);
     if ( ! pkg || ! rpmGroup )
 	return false;
 
@@ -1025,15 +991,11 @@ bool PackageSelector::checkPackage( ZyppPkg pkg,
     	return false;
     }
     
-    if ( pkg->group_ptr() == 0 )
+    string group_str = _rpmGroupsTree->rpmGroup (rpmGroup);
+    // is the requested rpm group a prefix of this package's group?
+    if ( pkg->group ().find (group_str) == 0 )
     {
-	NCERR <<  "NULL pointer in group_ptr()!" << endl;
-	return false;
-    }
-
-    if ( pkg->group_ptr()->isChildOf( rpmGroup ) )
-    {
-	packageList->createListEntry( pkg );
+	packageList->createListEntry( pkg, slb );
 	
 	return true;
     }
@@ -1042,7 +1004,7 @@ bool PackageSelector::checkPackage( ZyppPkg pkg,
 	return false;
     }
 }
-#endif
+
 
 // patches
 #ifdef FIXME

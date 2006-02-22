@@ -1,10 +1,12 @@
 -------------------------------------------------------------------
-Wed Feb 22 11:36:30 CET 2006 - mvidner@suse.cz
+Wed Feb 22 17:51:38 CET 2006 - mvidner@suse.cz
 
 - When exiting the package dialog, show packages which are
   automatically selected for installation (but see #152700).
+- Display the RPM group tree.
 - Display package relations, enable search in requires and provides.
 - Display the available versions of a package.
+- 2.13.10
 
 -------------------------------------------------------------------
 Wed Feb 22 07:50:37 CET 2006 - mvidner@suse.cz

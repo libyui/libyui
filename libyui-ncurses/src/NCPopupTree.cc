@@ -44,10 +44,8 @@ NCPopupTree::NCPopupTree( const wpos at, PackageSelector * pkg )
     // create the layout (the NCTree)
     createLayout( YCPString(PkgNames::RpmTreeLabel()) );
 
-#ifdef FIXME
     // clone the tree (fill the NCTree)
-    cloneTree( Y2PM::packageManager().rpmGroupsTree()->root(), 0 ); 
-#endif
+    cloneTree( pkg->rpmGroupsTree()->root(), 0 ); 
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -266,9 +264,5 @@ void NCPopupTree::cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClo
 
 YStringTreeItem *  NCPopupTree::getDefaultGroup( )
 {
-#ifdef FIXME
-    return Y2PM::packageManager().rpmGroupsTree()->root()->firstChild();
-#else
-    return 0;
-#endif
+    return packager->rpmGroupsTree()->root()->firstChild();
 }

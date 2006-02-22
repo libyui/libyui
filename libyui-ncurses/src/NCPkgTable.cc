@@ -438,7 +438,6 @@ bool NCPkgTable::fillDefaultList( )
 	    }
 	}
 	case T_Packages: {
-#ifdef FIXME
 	    YStringTreeItem * defaultGroup =  packager->getDefaultRpmGroup();
 
 	    if ( defaultGroup )
@@ -455,13 +454,6 @@ bool NCPkgTable::fillDefaultList( )
 	    {
 		NCERR << "No default RPM group available" << endl;
 	    }
-#else
-	    packager->fillPackageListAll (YCPString ("ALL ZYPP PKGS"));
-		// set the visible info to package description 
-		packager->setVisibleInfo ( PkgNames::PkgInfo() );
-		// show the package description of the current item
-		showInformation ();
-#endif
 	    break;
 	}
 	default:

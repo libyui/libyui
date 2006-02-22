@@ -88,6 +88,8 @@ class PackageSelector
     bool updateMode;			// Update
 
     bool autoCheck;			// flag for automatic dependency check on/off
+    YRpmGroupsTree * _rpmGroupsTree;	// rpm groups of the found packages
+
     
     // internal helper functions (format list of string) 
     string createRelLine( const zypp::CapSet & info );
@@ -123,14 +125,6 @@ class PackageSelector
     * @return bool
     */
     bool fillPackageList( const YCPString & label, YStringTreeItem * group );
-
-   /**
-    * Fills the package table
-    * Temporary while porting to zypp
-    * @param label (the label)
-    * @return bool
-    */
-    bool fillPackageListAll (const YCPString & label);
 
 #ifdef FIXME_PATCHES
   /**
@@ -193,7 +187,12 @@ class PackageSelector
     * @return YStringTreeItem *
     */
     YStringTreeItem * getDefaultRpmGroup() { return filterPopup->getDefaultGroup(); }
-    
+
+    /**
+     * @return the rpm groups
+     */
+    const YRpmGroupsTree * rpmGroupsTree () const { return _rpmGroupsTree; }
+
     /**
      * Handle the given event. For the given event (the widget-id
      * is contained in the event) the corresponding handler is executed.
@@ -346,7 +345,7 @@ class PackageSelector
      * Returns true if there is a match, false otherwise or if 'pkg' is 0.
      * @return bool 
      **/
-    bool checkPackage( ZyppPkg pkg, YStringTreeItem * rpmGroup );
+    bool checkPackage( ZyppObj pkg, ZyppSel slb, YStringTreeItem * rpmGroup );
 
     /**
      * Check if 'patch' matches the selected filter.

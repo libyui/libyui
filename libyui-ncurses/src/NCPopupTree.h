@@ -52,7 +52,7 @@ private:
     NCTree * filterTree;		// the YTree
     
     PackageSelector * packager;		// connection to the PackageSelector
-    
+
     // internal use (copies tree items got from YPkgRpmGroupTagsFilterView)
     void cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone );
 
