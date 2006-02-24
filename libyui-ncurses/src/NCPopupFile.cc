@@ -281,13 +281,13 @@ void NCPopupFile::saveToFile()
 	saveInfo.popup();
 	bool mounted = false;
 
-#ifdef FIXME
-	zypp::PackageImEx pkgExport;
-
 	// if the medium is a floppy mount the device
 	if ( !mountFloppy
 	     || (mounted = mountDevice( floppyDevice, PkgNames::SaveErr1Text()) ) )
 	{
+#ifdef FIXME
+	    zypp::PackageImEx pkgExport;
+
 	    // remember the current Package/SelectionManagers state.
 	    pkgExport.getPMState();
 
@@ -305,12 +305,12 @@ void NCPopupFile::saveToFile()
 	    {
 		NCMIL << "Writing selection to: " << pathName << endl;
 	    }
+#endif
 	}
 	if ( mounted )
 	{
 	    unmount();
 	}
-#endif
 
 	saveInfo.popdown();
     }
