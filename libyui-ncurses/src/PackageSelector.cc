@@ -83,49 +83,87 @@ bool ic_compare ( char c1, char c2 )
 ///////////////////////////////////////////////////////////////////
 //
 // detection whether the user has made any changes
-// the T parameter is either zypp::Pagkage or zypp::Selection (or zypp::Patch)
 //
  
-template <class T>
 void saveState ()
 {
-#ifdef FIXME
-    Y2PM::Manager<T>().SaveState();
-#endif
+    ZyppPool p = zyppPool ();
+
+    p.saveState<zypp::Package> ();
+    p.saveState<zypp::SrcPackage> ();
+    bool youMode = false;	// FIXME patches
+    if (youMode)
+    {
+	p.saveState<zypp::Patch> ();
+	// some future proofing
+	p.saveState<zypp::Message> ();
+	p.saveState<zypp::Script> ();
+
+    }
+    else
+    {
+	p.saveState<zypp::Selection> ();
+	p.saveState<zypp::Pattern> ();
+	p.saveState<zypp::Language> ();
+    }
 }
 
-template <class T>
 void restoreState ()
 {
-#ifdef FIXME
-    Y2PM::Manager<T>().restoreState();
-#endif
+    ZyppPool p = zyppPool ();
+
+    p.restoreState<zypp::Package> ();
+    p.restoreState<zypp::SrcPackage> ();
+    bool youMode = false;	// FIXME patches
+    if (youMode)
+    {
+	p.restoreState<zypp::Patch> ();
+	// some future proofing
+	p.restoreState<zypp::Message> ();
+	p.restoreState<zypp::Script> ();
+
+    }
+    else
+    {
+	p.restoreState<zypp::Selection> ();
+	p.restoreState<zypp::Pattern> ();
+	p.restoreState<zypp::Language> ();
+    }
 }
 
-template <class T>
-void clearSaveState ()
-{
-#ifdef FIXME
-    Y2PM::Manager<T>().clearSaveState();
-#endif
-}
-
-bool isDirty (const ZyppSel& slb)
-{
-#ifdef FIXME
-    return slb->isModifiedBy (zypp::ResStatus::USER);
-#else
-    return true;
-#endif
-}
-
-template <class T>
 bool diffState ()
 {
-    ZyppPoolIterator
-	b = zyppBegin<T>(),
-	e = zyppEnd<T>();
-    return find_if (b, e, isDirty) != e;
+    ZyppPool p = zyppPool ();
+
+    bool diff = false;
+
+    ostream & log = UIMIL;
+    log << "diffState" << endl;
+    diff = diff || p.diffState<zypp::Package> ();
+    log << diff << endl;
+    diff = diff || p.diffState<zypp::SrcPackage> ();
+    log << diff << endl;
+    bool youMode = false;	// FIXME patches
+    if (youMode)
+    {
+	diff = diff || p.diffState<zypp::Patch> ();
+	log << diff << endl;
+	// some future proofing
+	diff = diff || p.diffState<zypp::Message> ();
+	log << diff << endl;
+	diff = diff || p.diffState<zypp::Script> ();
+	log << diff << endl;
+    }
+    else
+    {
+	diff = diff || p.diffState<zypp::Selection> ();
+	log << diff << endl;
+	diff = diff || p.diffState<zypp::Pattern> ();
+	log << diff << endl;
+	diff = diff || p.diffState<zypp::Language> ();
+	log << diff << endl;
+    }
+    return diff;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -257,12 +295,10 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
 	}
     }
 
-    saveState<zypp::Package> ();
+    saveState ();
 
     if ( !youMode )
     {
-	saveState<zypp::Selection> ();
-
 	// create the selections popup
 	selectionPopup = new NCPopupSelection( wpos( 1, 1 ), this );
 
@@ -294,11 +330,6 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
 	// the file popup
 	filePopup = new NCPopupFile( wpos( 1, 1), floppyDevice, this );
     }
-    else
-    {
-	saveState<zypp::Patch> ();
-    }
-
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -1650,12 +1681,7 @@ bool PackageSelector::SelectionHandler( const NCursesEvent&  event )
 // 
 bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 {
-    bool changes = diffState<zypp::Package> ();
-
-    if ( youMode )
-	changes |= diffState<zypp::Patch> ();
-    else
-	changes |= diffState<zypp::Selection> ();
+    bool changes = diffState ();
 
     if (changes) {
 	// show a popup and ask the user
@@ -1672,12 +1698,7 @@ bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 	}
     }
 
-    restoreState<zypp::Package> ();
-
-    if ( youMode )
-	restoreState<zypp::Patch> ();
-    else
-	restoreState<zypp::Selection> ();
+    restoreState ();
 
     NCMIL <<  "Cancel button pressed - leaving package selection" << endl;
     const_cast<NCursesEvent &>(event).result = YCPSymbol("cancel");
@@ -1743,12 +1764,8 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
     if ( closeDialog )
     {
 	// clear the saved states
-	clearSaveState<zypp::Package> ();
-
-	if ( youMode )
-	    clearSaveState<zypp::Patch> ();
-	else
-	    clearSaveState<zypp::Selection> ();
+	// could free some memory?
+	// clearSaveState ();
 
 	const_cast<NCursesEvent &>(event).result = YCPSymbol("accept"); 
 	NCMIL <<  "OK button pressed - leaving package selection, starting installation" << endl;

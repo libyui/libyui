@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Feb 24 14:27:23 CET 2006 - hh@suse.cz
+
+- When canceling the package selection, ask for confirmation
+  only if the user has changed something (but see #152700).
+
+-------------------------------------------------------------------
 Wed Feb 22 17:51:38 CET 2006 - mvidner@suse.cz
 
 - When exiting the package dialog, show packages which are
