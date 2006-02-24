@@ -41,7 +41,7 @@ public:
      * @return UI_Status The new status of the given package
      *
      **/
-    virtual ZyppStatus getPackageStatus ( ZyppSel slbPtr );
+    virtual ZyppStatus getPackageStatus ( ZyppSel slbPtr, ZyppObj objPtr );
 
     /**
      * Informs the package manager about the new status.
@@ -64,6 +64,7 @@ public:
      */  
     virtual bool keyToStatus( const int & key,
 			      ZyppSel slbPtr,
+			      ZyppObj objPtr,
 			      ZyppStatus & newStat );
     
     /**
@@ -72,6 +73,7 @@ public:
      * @return bool
      */
     virtual bool toggleStatus( ZyppSel slbPtr,
+			       ZyppObj objPtr,
 			        ZyppStatus & newStat );
 };
 
@@ -197,7 +199,7 @@ public:
      * @return UI_Status The new status of the given package
      *
      **/
-    virtual ZyppStatus getPackageStatus ( ZyppSel  slbPtr );
+    virtual ZyppStatus getPackageStatus ( ZyppSel  slbPtr, ZyppObj objPtr );
 
     /**
      * Informs the package manager about the new status and

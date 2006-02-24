@@ -232,7 +232,8 @@ public:
      * @param objPtr The certain package 
      * @return ZyppStatus
      */ 
-    ZyppStatus getAvailableStatus( const ZyppSel & slbPtr );
+    ZyppStatus getAvailableStatus( const ZyppSel & slbPtr,
+				   const ZyppObj & objPtr );
     
 #ifdef FIXME
     /**

@@ -51,7 +51,8 @@ ObjectStatStrategy::~ObjectStatStrategy()
 //
 // Gets status from package manager
 //
-ZyppStatus ObjectStatStrategy::getPackageStatus( ZyppSel slbPtr )
+ZyppStatus ObjectStatStrategy::getPackageStatus( ZyppSel slbPtr,
+						 ZyppObj objPtr )
 {
     if ( slbPtr )
     {
@@ -96,6 +97,7 @@ bool ObjectStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, 
 //
 bool ObjectStatStrategy::keyToStatus( const int & key,
 				      ZyppSel slbPtr,
+				      ZyppObj objPtr,
 				      ZyppStatus & newStat )
 {
     if ( !slbPtr )
@@ -103,7 +105,7 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
     
     bool valid = true;
     ZyppStatus retStat = S_NoInst;
-    ZyppStatus oldStatus = getPackageStatus( slbPtr );
+    ZyppStatus oldStatus = getPackageStatus( slbPtr, objPtr );
     
     // get the new status
     switch ( key )
@@ -210,6 +212,7 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 // Returns the new status
 //
 bool ObjectStatStrategy::toggleStatus( ZyppSel slbPtr,
+				       ZyppObj objPtr,
 				       ZyppStatus & newStat )
 {
     if ( !slbPtr )
@@ -217,7 +220,7 @@ bool ObjectStatStrategy::toggleStatus( ZyppSel slbPtr,
     
     bool ok = true;
     
-    ZyppStatus oldStatus = getPackageStatus( slbPtr ); 
+    ZyppStatus oldStatus = getPackageStatus( slbPtr, objPtr ); 
     ZyppStatus newStatus = oldStatus;
 
     switch ( oldStatus )
@@ -309,7 +312,7 @@ bool PatchStatStrategy::keyToStatus( const int & key,
     
     bool valid = true;
     ZyppStatus retStat = S_NoInst;
-    ZyppStatus oldStatus = getPackageStatus( slbPtr );
+    ZyppStatus oldStatus = getPackageStatus( slbPtr, objPtr );
     
     // get the new status
     switch ( key )
@@ -380,7 +383,7 @@ bool PatchStatStrategy::toggleStatus( ZyppSel slbPtr,
     
     bool ok = true;
     
-    ZyppStatus oldStatus = getPackageStatus( slbPtr ); 
+    ZyppStatus oldStatus = getPackageStatus( slbPtr, objPtr ); 
     ZyppStatus newStatus = oldStatus;
 
     switch ( oldStatus )
@@ -480,7 +483,7 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
     }
 
 //    ok = slbPtr->set_status( newstatus );
-    ok = slbPtr->set_status( S_Update );
+    ok = slbPtr->set_status( S_Update ); // FIXME only works for installed
     if ( ok )
     {
 	// this package is the candidate now
@@ -491,7 +494,7 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
 #endif
 	NCMIL << "Set user candidate returns: " <<  (ret?"true":"false") << endl;	
     }
-    NCMIL << "Set status of: " << slbPtr->name() << "to: "
+    NCMIL << "Set status of: " << slbPtr->name() << " to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
     
     return ok;
@@ -504,25 +507,23 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
 //
 // Returns the status of the certain package
 //
-ZyppStatus AvailableStatStrategy::getPackageStatus( ZyppSel slbPtr )
+ZyppStatus AvailableStatStrategy::getPackageStatus( ZyppSel slbPtr,
+						    ZyppObj objPtr )
 {
     ZyppStatus retStatus = S_NoInst;
 
-    if ( !slbPtr )
+    if ( !slbPtr || ! objPtr )
     {
 	return retStatus;
     }
 
     // ZyppStatus status = slbPtr->status();
 
-#ifdef FIXME
-    if (slbPtr->isCandidateObj())
+    if (objPtr == slbPtr->candidateObj())
 	retStatus = S_KeepInstalled;
-    else if (slbPtr->hasInstalledObj() && slbPtr->edition() == slbPtr->getInstalledObj()->edition())
+    else if (slbPtr->hasInstalledObj() &&
+	     slbPtr->installedObj()->edition() == objPtr->edition() )
         retStatus = S_Del;
-#else
-    retStatus = S_KeepInstalled;
-#endif
 /*    
     if ( slbPtr->hasInstalledObj()
 	 && slbPtr->edition() == slbPtr->getInstalledObj()->edition() )

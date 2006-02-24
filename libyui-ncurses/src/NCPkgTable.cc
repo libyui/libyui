@@ -367,6 +367,7 @@ bool NCPkgTable::updateTable()
 	NCPkgTableTag * cc = static_cast<NCPkgTableTag *>( cl->GetCol( 0 ) );
 	// get the object pointer
 	ZyppSel slbPtr = getSelPointer( index );
+	ZyppObj objPtr = getDataPointer( index );
 
 	if ( !cc )
 	{
@@ -375,10 +376,10 @@ bool NCPkgTable::updateTable()
 	}
 	
 	ZyppStatus newstatus = S_NoInst;
-	if ( slbPtr )
+	if ( slbPtr && objPtr)
 	{
 	    // get the new status - use particular strategy
-	    newstatus = statusStrategy->getPackageStatus( slbPtr);
+	    newstatus = statusStrategy->getPackageStatus( slbPtr, objPtr );
 	}
 	// set new status (if status has changed)
 	if ( getStatus(index) != newstatus )
@@ -397,9 +398,10 @@ bool NCPkgTable::updateTable()
 //
 // get status of a certain package in list of available packages
 //
-ZyppStatus NCPkgTable::getAvailableStatus ( const ZyppSel & slbPtr )
+ZyppStatus NCPkgTable::getAvailableStatus ( const ZyppSel & slbPtr,
+					    const ZyppObj & objPtr )
 {
-    return ( statusStrategy->getPackageStatus( slbPtr) );
+    return ( statusStrategy->getPackageStatus( slbPtr, objPtr) );
 };
 
 
@@ -609,8 +611,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 	    // is alias the right string? id?
 	    pkgLine.push_back( pkgPtr->source().alias() ); // show the installation source
 
-// artifact of getselectable faking
-	    status = getAvailableStatus( slbPtr ); // the status of this certain package
+	    status = getAvailableStatus( slbPtr, pkgPtr ); // the status of this certain package
 	    
 	    zypp::ByteCount size = pkgPtr->size();     	// installed size
 	    pkgLine.push_back( size.asString( 8 ) );  // format size
@@ -920,7 +921,7 @@ bool NCPkgTable::toggleObjStatus( )
     
     ZyppStatus newStatus;
     
-    bool ok = statusStrategy->toggleStatus( slbPtr, newStatus );
+    bool ok = statusStrategy->toggleStatus( slbPtr, objPtr, newStatus );
 
     if ( ok )
     {
@@ -946,7 +947,7 @@ bool NCPkgTable::changeObjStatus( int key )
     }
     ZyppStatus newStatus;
 
-    bool ok = statusStrategy->keyToStatus( key, slbPtr, newStatus );
+    bool ok = statusStrategy->keyToStatus( key, slbPtr, objPtr, newStatus );
     
     if ( ok )
     {
@@ -978,35 +979,35 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 	    switch ( type ) {
 		case A_Install: {
 		    if ( slbPtr->status() == S_NoInst ) 
-			ok = statusStrategy->keyToStatus( '+', slbPtr, newStatus );
+			ok = statusStrategy->keyToStatus( '+', slbPtr, objPtr, newStatus );
 		    break;
 		}
 		case A_DontInstall: {
 		    if ( slbPtr->status() == S_Install
 			 ||  slbPtr->status() == S_AutoInstall )
-			ok = statusStrategy->keyToStatus( '-', slbPtr, newStatus );
+			ok = statusStrategy->keyToStatus( '-', slbPtr, objPtr, newStatus );
 		    break;
 		}
 		case A_Delete: {
 		    if ( slbPtr->status() == S_KeepInstalled )
-			ok = statusStrategy->keyToStatus( '-', slbPtr, newStatus );
+			ok = statusStrategy->keyToStatus( '-', slbPtr, objPtr, newStatus );
 		    break;
 		}
 		case A_DontDelete: {
 		    if ( slbPtr->status() == S_Del
 			 || slbPtr->status() == S_AutoDel )
-			ok = statusStrategy->keyToStatus( '+', slbPtr, newStatus );
+			ok = statusStrategy->keyToStatus( '+', slbPtr, objPtr, newStatus );
 		    break;
 		}
 		case A_Update: {
 		    if ( slbPtr->status() == S_KeepInstalled )
-			ok = statusStrategy->keyToStatus( '>', slbPtr, newStatus );
+			ok = statusStrategy->keyToStatus( '>', slbPtr, objPtr, newStatus );
 		    break;
 		}
 		case A_DontUpdate: {
 		    if ( slbPtr->status() == S_Update
 			 || slbPtr->status() == S_AutoUpdate )
-			ok = statusStrategy->keyToStatus( '-', slbPtr, newStatus );
+			ok = statusStrategy->keyToStatus( '-', slbPtr, objPtr, newStatus );
 		    break;
 		}
 		default:
