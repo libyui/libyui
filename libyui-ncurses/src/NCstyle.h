@@ -36,13 +36,11 @@ extern "C" {
 //	DESCRIPTION :
 //
 struct NCattribute {
-  static int _colors;
-  static int _pairs;
   //
   // available colors and color pairs
   //
-  inline static int colors()      { return _colors; }
-  inline static int color_pairs() { return _pairs; }
+  inline static int colors()      { return ::COLORS; }
+  inline static int color_pairs() { return ::COLOR_PAIRS; }
   //
   // color pair to chtype
   //
@@ -90,11 +88,6 @@ struct NCattribute {
     friend class NCurses;
 
     static void init_colors() {
-      // rxvt-unicode has a different number of colors, #153079
-      if ( _colors > COLOR_WHITE + 1 )
-	_colors = COLOR_WHITE + 1;
-      if ( _pairs > _colors * _colors )
-	_pairs = _colors * _colors;
       for ( short i = 1; i < color_pairs(); ++i )
 	::init_pair( i, fg_color_pair( i ), bg_color_pair( i ) );
     }

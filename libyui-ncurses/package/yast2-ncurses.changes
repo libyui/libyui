@@ -1,9 +1,4 @@
 -------------------------------------------------------------------
-Fri Feb 24 12:54:14 CET 2006 - mvidner@suse.cz
-
-- Fixed colors on rxvt-unicode (tiwai, #153079).
-
--------------------------------------------------------------------
 Wed Feb 22 17:51:38 CET 2006 - mvidner@suse.cz
 
 - When exiting the package dialog, show packages which are
