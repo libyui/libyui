@@ -28,6 +28,9 @@
 #include "NCstyle.linux.h"
 #include "NCstyle.xterm.h"
 
+int NCattribute::_colors = ::COLORS;
+int NCattribute::_pairs = ::COLOR_PAIRS;
+
 ///////////////////////////////////////////////////////////////////
 //
 //	CLASS NAME : NCstyle::Style
