@@ -67,13 +67,14 @@ YQPackageSelectorBase::YQPackageSelectorBase( QWidget * 		parent,
     _pkgConflictDialog = new YQPkgConflictDialog( this );
     CHECK_PTR( _pkgConflictDialog );
 
+    zyppPool().saveState<zypp::Package  >();
+    zyppPool().saveState<zypp::Pattern  >();
+    zyppPool().saveState<zypp::Selection>();
 
-    zyppPool().saveState<zypp::Package>();
+    if ( _youMode )
+	zyppPool().saveState<zypp::Patch>();
 
-    if ( ! _youMode )
-	zyppPool().saveState<zypp::Selection>();
 
-    
     //
     // Handle WM_CLOSE like "Cancel"
     //
@@ -167,16 +168,31 @@ YQPackageSelectorBase::showAutoPkgList()
 void
 YQPackageSelectorBase::reject()
 {
-#ifdef FIXME
-    bool changes = Y2PM::packageManager().DiffState();
+    bool changes =
+	zyppPool().diffState<zypp::Package  >()	||
+	zyppPool().diffState<zypp::Pattern  >()	||
+	zyppPool().diffState<zypp::Selection>();
 
-    if ( _youMode )
-	changes |= Y2PM::youPatchManager().DiffState();
-    else
-	changes |= Y2PM::selectionManager().DiffState();
-#else
-    bool changes = true;
+#if 1
+    // DEBUG
+    // DEBUG
+    // DEBUG
+    if ( changes )
+    {
+	if ( zyppPool().diffState<zypp::Package>() )
+	    y2milestone( "diffState() reports changed packages" );
+
+	if ( zyppPool().diffState<zypp::Pattern>() )
+	    y2milestone( "diffState() reports changed patterns" );
+
+	if ( zyppPool().diffState<zypp::Selection>() )
+	    y2milestone( "diffState() reports changed selections" );
+    }
+    // DEBUG
+    // DEBUG
+    // DEBUG
 #endif
+
 
     if ( ! changes ||
 	 ( QMessageBox::warning( this, "",
@@ -187,12 +203,12 @@ YQPackageSelectorBase::reject()
 	   == 0 )	// Proceed upon button #0 ( OK )
 	 )
     {
-	zyppPool().restoreState<zypp::Package>();
+	zyppPool().restoreState<zypp::Package  >();
+	zyppPool().restoreState<zypp::Pattern  >();
+	zyppPool().restoreState<zypp::Selection>();
 
 	if ( _youMode )
 	    zyppPool().restoreState<zypp::Patch>();
-	else
-	    zyppPool().restoreState<zypp::Selection>();
 
 	YQUI::ui()->sendEvent( new YCancelEvent() );
     }

@@ -140,8 +140,6 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
 
     if ( _youPatchFilterView )
     {
-	zyppPool().saveState<zypp::Patch>();
-
 	if ( _filters && _youPatchFilterView && _youPatchList )
 	{
 	    _filters->showPage( _youPatchFilterView );
