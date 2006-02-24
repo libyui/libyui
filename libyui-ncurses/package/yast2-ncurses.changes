@@ -1,6 +1,7 @@
 -------------------------------------------------------------------
-Fri Feb 24 14:27:23 CET 2006 - hh@suse.cz
+Fri Feb 24 16:12:21 CET 2006 - mvidner@suse.cz
 
+- Now one of the available package versions can be selected.
 - When canceling the package selection, ask for confirmation
   only if the user has changed something (but see #152700).
 

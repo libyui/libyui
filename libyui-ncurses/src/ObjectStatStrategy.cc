@@ -70,7 +70,7 @@ ZyppStatus ObjectStatStrategy::getPackageStatus( ZyppSel slbPtr )
 //
 // Informs the package manager about the status change
 //
-bool ObjectStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr )
+bool ObjectStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, ZyppObj objPtr )
 {
     bool ok = false;
     
@@ -470,7 +470,7 @@ AvailableStatStrategy::AvailableStatStrategy()
 //
 // Informs the package manager about the new status (sets the candidate)
 //
-bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbPtr )
+bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbPtr, ZyppObj objPtr )
 {
     bool ok = false;
 
@@ -483,12 +483,13 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
     ok = slbPtr->set_status( S_Update );
     if ( ok )
     {
-// setUserCandidate has no replacement?
-#ifdef FIXME
 	// this package is the candidate now
-	bool ret = slbPtr->setUserCandidate( slbPtr );
-	NCMIL << "Set user candidate returns: " <<  (ret?"true":"false") << endl;	
+	bool ret = slbPtr->setCandidate( objPtr );
+#ifdef FIXME_LIC
+	// the new candidate can have a different one
+	slbPtr->setLicenseConfirmed (false);
 #endif
+	NCMIL << "Set user candidate returns: " <<  (ret?"true":"false") << endl;	
     }
     NCMIL << "Set status of: " << slbPtr->name() << "to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
@@ -568,7 +569,7 @@ PatchPkgStatStrategy::PatchPkgStatStrategy()
 }
 
 bool PatchPkgStatStrategy::setObjectStatus( ZyppStatus newstatus,
-					     ZyppSel slbPtr )
+					     ZyppSel slbPtr, ZyppObj objPtr )
 {
     // it is not possible to set the status of the packages belonging to a certain patch
     return false;

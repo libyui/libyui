@@ -200,10 +200,12 @@ public:
      * of all packages in the list
      * @param newstat The new status
      * @param slbPtr The pointer to the object to change 
+     * @param objPtr is candidatePtr or what the user selected instead of it.
      * @return bool
      */
     bool changeStatus( ZyppStatus newstat,
 		       const ZyppSel & slbPtr,
+		       ZyppObj objPtr,
 		       bool singleChange );
     
     bool changeObjStatus( int key );

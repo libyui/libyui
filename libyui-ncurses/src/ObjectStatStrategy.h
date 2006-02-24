@@ -46,11 +46,13 @@ public:
     /**
      * Informs the package manager about the new status.
      * @param newStatus The new package status
-     * @param slbPtr  The object pointer (e.g. a package pointer)
+     * @param slbPtr  The selectable pointer (e.g. a package pointer)
+     * @param pkgPtr  The object pointer (used for candidate selection)
      * @return bool
      */ 
     virtual bool setObjectStatus ( ZyppStatus newstatus,
-				    ZyppSel slbPtr
+				   ZyppSel slbPtr,
+				   ZyppObj objPtr
 				    );
    /**
      * Returns the new status to the given key (respecting the old
@@ -127,7 +129,9 @@ public:
      * It is not possible to set the package status for packages belonging to a patch,
      * i.e. returns always false.
      */
-    virtual bool setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr );
+    virtual bool setObjectStatus( ZyppStatus newstatus,
+				  ZyppSel slbPtr,
+				  ZyppObj objPtr );
 
 };
 
@@ -170,7 +174,7 @@ public:
      * @param slbPtr  The object pointer (e.g. a package pointer)
      * @return bool
      */
-    virtual bool setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr );
+    virtual bool setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, ZyppObj objPtr );
 };
 #endif
 
@@ -200,10 +204,11 @@ public:
      * additionally sets the candidate object to the user chosen object.
      * @param newStatus The new package status
      * @param slbPtr  The package pointer
+     * @param pkgPtr  The object pointer (used for candidate selection)
      * @return bool
      */ 
     virtual bool setObjectStatus( ZyppStatus newstatus,
-				   ZyppSel slbPtr );
+				   ZyppSel slbPtr, ZyppObj objPtr );
 };
 
 #endif

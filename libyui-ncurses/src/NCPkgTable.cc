@@ -202,6 +202,8 @@ void NCPkgTable::cellChanged( int index, int colnum, const YCPString & newtext )
 //
 bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 			       const ZyppSel & slbPtr,
+    // objPtr is candidatePtr or what the user selected instead of it.
+			       ZyppObj objPtr,
 			       bool singleChange )
 {
     if ( !packager || !slbPtr )
@@ -219,27 +221,28 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	case S_Del:
 	case S_NoInst:
 	case S_Taboo:
-	    if ( slbPtr->hasCandidateObj() )
+	    if ( objPtr )
 	    {
-		notify = slbPtr->candidateObj()->delnotify();
+		notify = objPtr->delnotify();
 		header = YCPString(PkgNames::WarningLabel());
 	    }
 	break;
 	case S_Install:
 	case S_Update:
-	    if ( slbPtr->hasCandidateObj() )
+	    if ( objPtr )
 	    {	
-		notify = slbPtr->candidateObj()->insnotify();
+		notify = objPtr->insnotify();
 		header = YCPString(PkgNames::NotifyLabel());
-#ifdef FIXME
+
 		// get license (available for packages only)  
-		pkgPtr = slbPtr->candidateObj();
+		pkgPtr = tryCastToZyppPkg (objPtr);
 		if ( pkgPtr )
 		{
 		    license = pkgPtr->licenseToConfirm();
-		    license_confirmed = ! pkgPtr->hasLicenseToConfirm();
-		}
+#ifdef FIXME_LIC
+		    license_confirmed = slbPtr->isLicenceConfirmed();
 #endif
+		}
 	    }
 	    break;
 
@@ -278,11 +281,9 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    
 	    ok = false;
 	} else {
-	    if (pkgPtr) {
-#ifdef FIXME
-		pkgPtr->markLicenseConfirmed();
+#ifdef FIXME_LIC
+	    slbPtr->setLicenseConfirmed (true);
 #endif
-	    }
 	}
     }
 
@@ -295,7 +296,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
     }
     
     // inform the package manager
-    ok = statusStrategy->setObjectStatus( newstatus, slbPtr );
+    ok = statusStrategy->setObjectStatus( newstatus, slbPtr, objPtr );
     
     if ( ok && singleChange )
     {
@@ -912,6 +913,7 @@ bool NCPkgTable::SourceInstall( bool install )
 bool NCPkgTable::toggleObjStatus( )
 {
     ZyppSel slbPtr = getSelPointer( getCurrentItem() );
+    ZyppObj objPtr = getDataPointer( getCurrentItem() );
 
     if ( !slbPtr )
 	return false;
@@ -922,7 +924,7 @@ bool NCPkgTable::toggleObjStatus( )
 
     if ( ok )
     {
-	changeStatus( newStatus, slbPtr, true );	
+	changeStatus( newStatus, slbPtr, objPtr, true );
     }
     
     return true;
@@ -936,6 +938,7 @@ bool NCPkgTable::toggleObjStatus( )
 bool NCPkgTable::changeObjStatus( int key )
 {
     ZyppSel slbPtr = getSelPointer( getCurrentItem() );
+    ZyppObj objPtr = getDataPointer( getCurrentItem() );
 
     if ( !slbPtr )
     {
@@ -947,7 +950,7 @@ bool NCPkgTable::changeObjStatus( int key )
     
     if ( ok )
     {
-	changeStatus( newStatus, slbPtr, true );
+	changeStatus( newStatus, slbPtr, objPtr, true );
     }
     return true;
 }
@@ -960,14 +963,14 @@ bool NCPkgTable::changeObjStatus( int key )
 bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 {
     ZyppStatus newStatus;
-    ZyppSel slbPtr;
     unsigned int size = getNumLines();
     unsigned int index = 0;
 
     while ( index < size )
     {
 	// get the object pointer
-	slbPtr = getSelPointer( index );
+	ZyppSel slbPtr = getSelPointer( index );
+	ZyppObj objPtr = getDataPointer( index );
 	bool ok = false;
 	
 	if ( slbPtr )
@@ -1014,6 +1017,7 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 	    {
 		changeStatus( newStatus,
 			      slbPtr,
+			      objPtr,
 			      false );	// do not do the updates with every change
 	    }
 	}
