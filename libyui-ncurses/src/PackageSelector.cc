@@ -506,6 +506,10 @@ bool PackageSelector::showSelPackages( const YCPString & label, const set<string
     
     set<string>::iterator not_found = wanted.end ();
 
+    std::vector<ZyppSel> sorted;
+    sorted.reserve (wanted.size ());
+
+    // find the objects for the names
     ZyppPoolIterator
 	b = zyppPkgBegin(),
 	e = zyppPkgEnd(),
@@ -519,8 +523,23 @@ bool PackageSelector::showSelPackages( const YCPString & label, const set<string
 	    ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
 	    if ( zyppPkg )
 	    {
-		packageList->createListEntry( zyppPkg, *it );
+		sorted.push_back (*it);
 	    }
+	}
+    }
+
+    // sort it and insert it to the list
+    sort (sorted.begin (), sorted.end (), sortByName);
+    {
+	std::vector<ZyppSel>::iterator
+	    b = sorted.begin (),
+	    e = sorted.end (),
+	    it;
+	for ( it = b; it != e; ++it )
+	{
+	    ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
+	    // already know that it is valid
+	    packageList->createListEntry( zyppPkg, *it );
 	}
     }
 
