@@ -151,13 +151,6 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
 	{
 	    NCMIL << "Current selection: " << getCurrentLine() << endl;
 
-	    // activate the package solving
-	    // http://svn.suse.de/trac/zypp/wiki/YaST-UI objects
-	    zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
-	    bool success = resolver->resolvePool();
-	    // problems will be dealt with when?
-	    NCMIL << "Selection resolved: " << success << endl;
-
 	    // show the package list
 	    std::set<std::string> packages;
 	    ZyppSelection selPtr = tryCastToZyppSelection (objPtr);
