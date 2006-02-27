@@ -122,6 +122,7 @@ private:
     ObjectStatStrategy * statusStrategy; 	// particular methods to get the status
 
     NCPkgTableType tableType;	// the type (e.g. table of packages, patches)
+    bool haveInstalledVersion;	// for T_Packages and T_Update
     
     // returns the first column of line with 'index' (the tag)
     NCPkgTableTag * getTag ( const int & index );

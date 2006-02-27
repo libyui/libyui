@@ -113,6 +113,7 @@ NCPkgTable::NCPkgTable( NCWidget * parent, const YWidgetOpt & opt )
       , packager ( 0 )
       , statusStrategy( new PackageStatStrategy )	// default strategy: packages
       , tableType ( T_Packages )			// default type: packages
+      , haveInstalledVersion ( false )
 {
     fillHeader();
     
@@ -465,6 +466,18 @@ bool NCPkgTable::fillDefaultList( )
     return true;
 }
 
+
+///////////////////////////////////////////////////////////////////
+//
+// slbHasInstalledObj
+//
+// a helper to call a method
+//
+static bool slbHasInstalledObj (const ZyppSel & slb)
+{
+    return slb->hasInstalledObj ();
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 // fillHeader
@@ -479,33 +492,25 @@ void NCPkgTable::fillHeader( )
     {
 	case T_Packages:
 	case T_Update: {
-#ifdef FIXME
-	    int installedPkgs = Y2PM::instTarget().numPackages();
-	    // see YQPkgList::haveInstalledPkgs
-#else
-	    int installedPkgs = 1;
-#endif
-	    if ( installedPkgs > 0 )
+	    bool haveInstalledPkgs = find_if (zyppPkgBegin (), zyppPkgEnd (),
+					      slbHasInstalledObj) != zyppPkgEnd ();
+
+	    header.reserve(7);
+	    header.push_back( "L" + PkgNames::PkgStatus() );
+	    header.push_back( "L" + PkgNames::PkgName() );
+	    if ( haveInstalledPkgs > 0 )
 	    {
-		header.reserve(7);
-		header.push_back( "L" + PkgNames::PkgStatus() );
-		header.push_back( "L" + PkgNames::PkgName() );
 		header.push_back( "L" + PkgNames::PkgVersionNew() );
 		header.push_back( "L" + PkgNames::PkgVersionInst() );
-		header.push_back( "L" + PkgNames::PkgSummary() );
-		header.push_back( "L" + PkgNames::PkgSize() );
-		header.push_back( "L" + PkgNames::PkgSource() );	
+		haveInstalledVersion = true;
 	    }
 	    else
 	    {
-		header.reserve(6);
-		header.push_back( "L" + PkgNames::PkgStatus() );
-		header.push_back( "L" + PkgNames::PkgName() );
 		header.push_back( "L" + PkgNames::PkgVersion() );
-		header.push_back( "L" + PkgNames::PkgSummary() );
-		header.push_back( "L" + PkgNames::PkgSize() );
-		header.push_back( "L" + PkgNames::PkgSource() );
 	    }
+	    header.push_back( "L" + PkgNames::PkgSummary() );
+	    header.push_back( "L" + PkgNames::PkgSize() );
+	    header.push_back( "L" + PkgNames::PkgSource() );	
 	    break;
 	}
 	case T_PatchPkgs: {
@@ -638,12 +643,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 	    }
 	    pkgLine.push_back( version );	// the available version (the candidate)
 
-#ifdef FIXME
-	    int installedPkgs = Y2PM::instTarget().numPackages();
-#else
-	    int installedPkgs = 1;
-#endif
-	    if ( installedPkgs > 0 )
+	    if ( haveInstalledVersion )
 	    {
 		pkgLine.push_back( instVersion );	// installed version
 	    }
@@ -661,12 +661,10 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 		pkgLine.push_back( " x " );	
 	    }
 	    else
+#endif
 	    {
 		pkgLine.push_back( "   " );	
 	    }
-#else
-	    pkgLine.push_back( " ? " );	
-#endif
 	}
     }
     
