@@ -1,4 +1,16 @@
 -------------------------------------------------------------------
+Mon Feb 27 16:26:57 CET 2006 - mvidner@suse.cz
+
+- Sort packages in a selection.
+- No need to resolve the pool again before displaying the packages
+  in a selection.
+- Hid menu items of features that do not work:
+  SRPMs, Selection Load/Save.
+- Only show the Installed Version column if any packages are installed.
+- Do not show '?' in the Source column.
+- 2.13.11
+
+-------------------------------------------------------------------
 Fri Feb 24 17:08:09 CET 2006 - mvidner@suse.cz
 
 - Tried to allow selecting one of the available package versions.
