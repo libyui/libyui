@@ -42,10 +42,13 @@
 					     `item( `id("tabooOn"), 	_( "Taboo &Yes   [!]" ) ),
 					     // reset the status 'Taboo' 
 					     `item( `id("tabooOff"), 	_( "Taboo &No    [-]" ) ),
+/*
+ * source package handling does not work yet with zypp
 					     // install the source package (SRPM)
 					     `item( `id("sourceYes"), 	_( "&Install Sources (SRPM)" ) ),
 					     // don't install sources
 					     `item( `id("sourceNo"), 	_( "D&o Not Install Sources" ) ),
+*/
 					     // end: Actions menu, set status of all packages (title of a submenu)
 					     `menu( _( "All Listed &Packages" ),
 						    [
