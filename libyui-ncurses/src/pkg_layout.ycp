@@ -42,13 +42,13 @@
 					     `item( `id("tabooOn"), 	_( "Taboo &Yes   [!]" ) ),
 					     // reset the status 'Taboo' 
 					     `item( `id("tabooOff"), 	_( "Taboo &No    [-]" ) ),
-#ifdef FIXME
+/*#ifdef FIXME
 // source package handling does not work yet with zypp
 					     // install the source package (SRPM)
 					     `item( `id("sourceYes"), 	_( "&Install Sources (SRPM)" ) ),
 					     // don't install sources
 					     `item( `id("sourceNo"), 	_( "D&o Not Install Sources" ) ),
-#endif
+#endif*/
 					     // end: Actions menu, set status of all packages (title of a submenu)
 					     `menu( _( "All Listed &Packages" ),
 						    [
@@ -83,13 +83,16 @@
 										    // menu items of the Etc./Dependencies submenu
 										    [`item( `id("showdeps"), _( "    &Check Dependencies Now" ) ),
 										     `item( `id("autodeps"), _( "[X] &Automatic Dependency Check" ) ) ]
-										    ),
+										    )
+/*#ifdef FIXME
+									     ,
 									      // menu item of the Etc. menu
 									     `menu( _( "&Selections" ),
 										    // menu item of the Etc./Selections submenu
 										    [`item( `id("save"), _( "S&ave Selection" ) ),
 										     `item( `id("load"), _( "&Load Selection" ) ) ]
 										    )
+#endif*/
 									     ]
 									    )
 					     )

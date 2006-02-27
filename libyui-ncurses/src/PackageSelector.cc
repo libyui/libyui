@@ -1263,14 +1263,24 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 	if ( autoCheck )
 	{
 	    sprintf ( menu,
-		      "`MenuButton( \"%s\", [`menu( \"%s\", [`item( `id(\"showdeps\"), \"%s\" ), `item( `id(\"autodeps\"), \"%s\" ) ] ), `menu( \"%s\", [`item( `id(\"save\"), \"%s\" ), `item( `id(\"load\"), \"%s\" ) ] ) ] )",
+		      "`MenuButton( \"%s\", ["
+		      "`menu( \"%s\", [`item( `id(\"showdeps\"), \"%s\" ), `item( `id(\"autodeps\"), \"%s\" ) ] )"
+#ifdef FIXME
+		      ","
+		      "`menu( \"%s\", [`item( `id(\"save\"), \"%s\" ), `item( `id(\"load\"), \"%s\" ) ] )"
+#endif
+		      "] )",
 		      PkgNames::MenuEtc().c_str(),
 		      PkgNames::MenuDeps().c_str(),
 		      PkgNames::MenuCheckDeps().c_str(),
-		      PkgNames::MenuNoAutoDeps().c_str(),
+		      PkgNames::MenuNoAutoDeps().c_str()
+#ifdef FIXME
+		      ,
 		      PkgNames::MenuSel().c_str(),
 		      PkgNames::MenuSaveSel().c_str(),
-		      PkgNames::MenuLoadSel().c_str()  ); 
+		      PkgNames::MenuLoadSel().c_str()
+#endif
+		);
 
 
 	    Parser parser( menu );
@@ -1289,14 +1299,24 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 	else
 	{
 	    sprintf ( menu,
-		      "`MenuButton( \"%s\", [`menu( \"%s\", [`item( `id(\"showdeps\"), \"%s\" ), `item( `id(\"autodeps\"), \"%s\" ) ] ), `menu( \"%s\", [`item( `id(\"save\"), \"%s\" ), `item( `id(\"load\"), \"%s\" ) ] ) ] )",
+		      "`MenuButton( \"%s\", ["
+		      "`menu( \"%s\", [`item( `id(\"showdeps\"), \"%s\" ), `item( `id(\"autodeps\"), \"%s\" ) ] )"
+#ifdef FIXME
+		      ","
+		      "`menu( \"%s\", [`item( `id(\"save\"), \"%s\" ), `item( `id(\"load\"), \"%s\" ) ] )"
+#endif
+		      "] )",
 		      PkgNames::MenuEtc().c_str(),
 		      PkgNames::MenuDeps().c_str(),
 		      PkgNames::MenuCheckDeps().c_str(),
-		      PkgNames::MenuAutoDeps().c_str(),
+		      PkgNames::MenuAutoDeps().c_str()
+#ifdef FIXME
+		      ,
 		      PkgNames::MenuSel().c_str(),
 		      PkgNames::MenuSaveSel().c_str(),
-		      PkgNames::MenuLoadSel().c_str()  ); 
+		      PkgNames::MenuLoadSel().c_str()
+#endif
+		);
 
 
 	    Parser parser( menu );
