@@ -75,11 +75,11 @@ YQPatternSelector::YQPatternSelector( QWidget *			parent,
 	_selList->fillList();
 	_selList->selectSomething();
     }
-    else
+
+    if ( zyppPool().empty<zypp::Pattern  >() &&
+	 zyppPool().empty<zypp::Selection>()   )
     {
-	y2warning( "Neither patterns nor selections in ZyppPool - falling back to detailed selection" );
-	YQUI::ui()->sendEvent( new YMenuEvent( YCPSymbol( "details" ) ) );
-	return;
+	y2warning( "Neither patterns nor selections in ZyppPool" );
     }
 
 
@@ -144,11 +144,17 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
 	_patternList->header()->hide();
     }
 
-    if ( ! _patternList && zyppPool().empty<zypp::Selection>() )
+    if ( ! _patternList )
     {
 	//
 	// Fallback: selections list
 	//
+
+	/**
+	 * Create a selections list even if there are no selections, otherwise
+	 * the layout will look very weird. An empty selections list still
+	 * looks better than a lot of grey empty space.
+	 **/
 
 	y2warning( "No patterns in ZyppPool - using selections instead" );
 	_selList = new YQPkgSelList( vbox,
