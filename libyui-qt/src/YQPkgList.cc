@@ -244,9 +244,7 @@ YQPkgList::createNotInstalledContextMenu()
 
     actionSetCurrentInstall->addTo( _notInstalledContextMenu );
     actionSetCurrentDontInstall->addTo( _notInstalledContextMenu );
-#ifdef FIXME
     actionSetCurrentTaboo->addTo( _notInstalledContextMenu );
-#endif
 
     addAllInListSubMenu( _notInstalledContextMenu );
 
@@ -266,9 +264,7 @@ YQPkgList::createInstalledContextMenu()
     actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
     actionSetCurrentDelete->addTo( _installedContextMenu );
     actionSetCurrentUpdate->addTo( _installedContextMenu );
-#ifdef FIXME
     actionSetCurrentProtected->addTo( _installedContextMenu );
-#endif
 
     addAllInListSubMenu( _installedContextMenu );
 
@@ -290,10 +286,8 @@ YQPkgList::addAllInListSubMenu( QPopupMenu * menu )
     actionSetListDelete->addTo( submenu );
     actionSetListUpdate->addTo( submenu );
     actionSetListUpdateForce->addTo( submenu );
-#ifdef FIXME
     actionSetListTaboo->addTo( submenu );
     actionSetListProtected->addTo( submenu );
-#endif
 
     menu->insertItem( _( "&All in This List" ), submenu );
 

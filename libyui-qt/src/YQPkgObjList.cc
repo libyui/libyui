@@ -430,9 +430,7 @@ YQPkgObjList::createNotInstalledContextMenu()
 
     actionSetCurrentInstall->addTo( _notInstalledContextMenu );
     actionSetCurrentDontInstall->addTo( _notInstalledContextMenu );
-#ifdef FIXME
     actionSetCurrentTaboo->addTo( _notInstalledContextMenu );
-#endif
 
     addAllInListSubMenu( _notInstalledContextMenu );
 }
@@ -464,9 +462,7 @@ YQPkgObjList::addAllInListSubMenu( QPopupMenu * menu )
     actionSetListDelete->addTo( submenu );
     actionSetListUpdate->addTo( submenu );
     actionSetListUpdateForce->addTo( submenu );
-#ifdef FIXME
     actionSetListTaboo->addTo( submenu );
-#endif
 
     menu->insertItem( _( "&All in This List" ), submenu );
 
@@ -591,7 +587,6 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 			event->accept();
 			return;
 
-#ifdef FIXME
 		    case '!':	// Taboo
 
 			if ( ! installed )
@@ -607,7 +602,6 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 			selectNextItem();
 			event->accept();
 			return;
-#endif
 
 		    case '>':	// Update what is worth to be updated
 
@@ -687,7 +681,7 @@ YQPkgObjListItem::init()
 {
     if ( _zyppObj == 0 && _selectable )
 	_zyppObj = _selectable->theObj();
-    
+
 
     _candidateIsNewer = false;
     _installedIsNewer = false;

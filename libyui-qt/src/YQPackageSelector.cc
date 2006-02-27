@@ -596,10 +596,8 @@ YQPackageSelector::addMenus()
 	_pkgList->actionSetCurrentKeepInstalled->addTo( _pkgMenu );
 	_pkgList->actionSetCurrentDelete->addTo( _pkgMenu );
 	_pkgList->actionSetCurrentUpdate->addTo( _pkgMenu );
-#ifdef FIXME
 	_pkgList->actionSetCurrentTaboo->addTo( _pkgMenu );
 	_pkgList->actionSetCurrentProtected->addTo( _pkgMenu );
-#endif
 
 	_pkgMenu->insertSeparator();
 
@@ -630,9 +628,7 @@ YQPackageSelector::addMenus()
 	_youPatchList->actionSetCurrentDontInstall->addTo( _youPatchMenu );
 	_youPatchList->actionSetCurrentKeepInstalled->addTo( _youPatchMenu );
 	_youPatchList->actionSetCurrentUpdate->addTo( _youPatchMenu );
-#ifdef FIXME
 	_youPatchList->actionSetCurrentTaboo->addTo( _youPatchMenu );
-#endif
 
 	_youPatchMenu->insertSeparator();
         _youPatchList->addAllInListSubMenu( _youPatchMenu );
