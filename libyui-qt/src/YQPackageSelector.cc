@@ -67,11 +67,7 @@
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgPatternList.h"
 #include "YQPkgSelList.h"
-
-#ifdef FIXME
 #include "YQPkgInstSrcFilterView.h"
-#endif
-
 #include "YQPkgStatusFilterView.h"
 #include "YQPkgTechnicalDetailsView.h"
 #include "YQPkgTextDialog.h"
@@ -186,9 +182,12 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
 
 #if CHECK_DEPENDENCIES_ON_STARTUP
 
-    // Fire up the first dependency check in the main loop.
-    // Don't do this right away - wait until all initializations are finished.
-    QTimer::singleShot( 0, this, SLOT( resolvePackageDependencies() ) );
+    if ( ! _testMode )
+    {
+	// Fire up the first dependency check in the main loop.
+	// Don't do this right away - wait until all initializations are finished.
+	QTimer::singleShot( 0, this, SLOT( resolvePackageDependencies() ) );
+    }
 #endif
 }
 
@@ -349,11 +348,9 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     // Inst source view
     //
 
-#ifdef FIXME
     _instSrcFilterView = new YQPkgInstSrcFilterView( parent );
     CHECK_PTR( _instSrcFilterView );
     _filters->addPage( _( "Installation Sources" ), _instSrcFilterView );
-#endif
 
 
     //
@@ -730,9 +727,7 @@ YQPackageSelector::makeConnections()
     connectFilter( _youPatchList, 		_pkgList );
     connectFilter( _patternList, 		_pkgList );
     connectFilter( _selList, 			_pkgList );
-#ifdef FIXME
     connectFilter( _instSrcFilterView,		_pkgList, false );
-#endif
     connectFilter( _rpmGroupTagsFilterView, 	_pkgList, false );
 #ifdef FIXME
     connectFilter( _langList, 			_pkgList );
@@ -746,13 +741,11 @@ YQPackageSelector::makeConnections()
 		 _pkgList,		SLOT  ( message( const QString & ) ) );
     }
 
-#ifdef FIXME
     if ( _instSrcFilterView && _pkgList )
     {
 	connect( _instSrcFilterView,	SIGNAL( filterNearMatch	 ( ZyppSel, ZyppPkg ) ),
 		 _pkgList,		SLOT  ( addPkgItemDimmed ( ZyppSel, ZyppPkg ) ) );
     }
-#endif
 
     if ( _pkgList && _diskUsageList )
     {

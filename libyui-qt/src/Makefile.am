@@ -84,6 +84,8 @@ liby2qt_la_SOURCES = 				\
 	YQPkgDiskUsageList.cc			\
 	YQPkgDiskUsageWarningDialog.cc		\
 	YQPkgGenericDetailsView.cc		\
+	YQPkgInstSrcFilterView.cc		\
+	YQPkgInstSrcList.cc			\
 	YQPkgList.cc				\
 	YQPkgObjList.cc				\
 	YQPkgPatternList.cc			\
@@ -129,8 +131,6 @@ liby2qt_la_SOURCES = 				\
 
 
 #	YQPkgDependenciesView.cc		\
-#	YQPkgInstSrcFilterView.cc		\
-#	YQPkgInstSrcList.cc			\
 #	YQPkgLangList.cc			\
 #
 

@@ -114,6 +114,7 @@ YQPkgInstSrcFilterView::layoutSecondaryFilters( QWidget * parent )
     _secondaryFilters->addPage( _( "All Packages" ), _allPackages );
 
 
+#ifdef FIXME
     //
     // RPM Groups
     //
@@ -124,6 +125,7 @@ YQPkgInstSrcFilterView::layoutSecondaryFilters( QWidget * parent )
 
     connect( _rpmGroupTagsFilterView,	SIGNAL( filterStart() ),
 	     _instSrcList,		SLOT  ( filter()      ) );
+#endif
 
 
     //
@@ -193,10 +195,12 @@ YQPkgInstSrcFilterView::secondaryFilterMatch( ZyppSel	selectable,
     {
 	return true;
     }
+#ifdef FIXME
     else if ( _rpmGroupTagsFilterView->isVisible() )
     {
 	return _rpmGroupTagsFilterView->check( selectable, pkg );
     }
+#endif
     else if ( _searchFilterView->isVisible() )
     {
 	return _searchFilterView->check( selectable, pkg );

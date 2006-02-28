@@ -24,9 +24,11 @@
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgInstSrcList.h"
+#include <zypp/SourceManager.h>
 
 using std::list;
 using std::set;
+
 
 
 YQPkgInstSrcList::YQPkgInstSrcList( QWidget * parent )
@@ -68,23 +70,18 @@ YQPkgInstSrcList::fillList()
     clear();
     y2debug( "Filling inst source list" );
 
-#ifdef FIXME
-    InstSrcManager::ISrcIdList activeSources( Y2PM::instSrcManager().getSources( true ) ); // enabled only
-    InstSrcManager::ISrcIdList::const_iterator it = activeSources.begin();
+    zypp::SourceManager_Ptr sourceManager = zypp::SourceManager::sourceManager();
+    list<unsigned int> sources = sourceManager->allSources();
 
-    while ( it != activeSources.end() )
+    for ( list<unsigned int>::const_iterator it = sources.begin();
+	  it != sources.end();
+	  ++it )
     {
-	InstSrcManager::ISrcId instSrcId = (*it);
+	zypp::Source_Ref src = sourceManager->findSource( *it );
 
-	if ( instSrcId &&
-	     instSrcId->enabled() )	// should always be true if querying only enabled sources
-	{
-	    addInstSrc( instSrcId );
-	}
-
-	++it;
+	if ( src && src.enabled() )
+	    addInstSrc( src );
     }
-#endif
 
     y2debug( "Inst source list filled" );
 }
@@ -103,14 +100,12 @@ YQPkgInstSrcList::filter()
 {
     emit filterStart();
 
-
+    
     //
-    // Collect matching selectables for all selected inst sources
-    // and store them in sets to avoid duplicates in the resulting list
+    // Collect all packages on this inst source
     //
-
-    set<Selectable::Ptr> allMatches;
-    set<Selectable::Ptr> exactMatches;
+    
+    set<ZyppObj> currentSrcPkg;
     QListViewItem * item = firstChild();	// take multi selection into account
 
     while ( item )
@@ -121,28 +116,17 @@ YQPkgInstSrcList::filter()
 
 	    if ( instSrcItem )
 	    {
-#ifdef FIXME
-		InstSrcManager::ISrcId instSrc = instSrcItem->instSrcId();
-		const list<ZyppPkg> &packages = instSrc->data()->getPackages();
-		list<ZyppPkg>::const_iterator pkg_it = packages.begin();
+		zypp::ResStore::iterator pkg_it = instSrcItem->zyppSrc().resolvables().begin();
 
-		while ( pkg_it != packages.end() )
+		while ( pkg_it != instSrcItem->zyppSrc().resolvables().end() )
 		{
-		    if ( (*pkg_it)->hasSelectable() )	// might not be in manager (incompatible arch)
-		    {
-			Selectable::Ptr sel = (*pkg_it)->getSelectable();
-			allMatches.insert( sel );
+		    ZyppPkg pkg = tryCastToZyppPkg( *pkg_it );
 
-			if ( (*pkg_it) == sel->candidateObj() ||
-			     (*pkg_it) == sel->installedObj()   )
-			{
-			    exactMatches.insert( sel );
-			}
-		    }
+		    if ( pkg )
+			currentSrcPkg.insert( pkg );
 
 		    ++pkg_it;
 		}
-#endif
 	    }
 	}
 
@@ -151,17 +135,47 @@ YQPkgInstSrcList::filter()
 
 
     //
+    // Collect matching selectables for all selected inst sources
+    // and store them in sets to avoid duplicates in the resulting list
+    //
+    
+    set<ZyppSel> exactMatches;
+    set<ZyppSel> nearMatches;
+
+    for ( ZyppPoolIterator sel_it = zyppPkgBegin();
+	  sel_it != zyppPkgEnd();
+	  ++sel_it )
+    {
+	if ( contains( currentSrcPkg, (*sel_it)->candidateObj() ) ||
+	     contains( currentSrcPkg, (*sel_it)->installedObj() )   )
+	{
+	    exactMatches.insert( *sel_it );
+	}
+	else // Maybe one of the other available objects is on this inst src
+	{
+	    zypp::ui::Selectable::available_iterator pkg_it = (*sel_it)->availableBegin();
+	    
+	    while ( pkg_it != (*sel_it)->availableEnd() )
+	    {
+		if ( contains( currentSrcPkg, *pkg_it ) )
+		    nearMatches.insert( *sel_it );
+		    
+		++pkg_it;
+	    }
+	}
+    }
+
+
+    //
     // Send all members of the resulting sets to the list
     // (emit a filterMatch signal for each one)
     //
 
-#ifdef FIXME
-    set<Selectable::Ptr>::const_iterator sel_it = exactMatches.begin();
+    set<ZyppSel>::const_iterator sel_it = exactMatches.begin();
 
     while ( sel_it != exactMatches.end() )
     {
-	allMatches.erase( *sel_it );
-	emit filterMatch( (*sel_it), (*sel_it)->theObj() );
+	emit filterMatch( (*sel_it), tryCastToZyppPkg( (*sel_it)->theObj() ) );
 	++sel_it;
     }
 
@@ -171,30 +185,22 @@ YQPkgInstSrcList::filter()
     // to be displayed dimmed in the package list
     //
 
-    sel_it = allMatches.begin();
+    sel_it = nearMatches.begin();
 
-    while ( sel_it != allMatches.end() )
+    while ( sel_it != nearMatches.end() )
     {
-	emit filterNearMatch( *sel_it, (*sel_it)->theObj() );
+	emit filterNearMatch( *sel_it, tryCastToZyppPkg( (*sel_it)->theObj() ) );
 	++sel_it;
     }
-#endif
-
 
     emit filterFinished();
 }
 
 
 void
-YQPkgInstSrcList::addInstSrc( InstSrcManager::ISrcId instSrcId )
+YQPkgInstSrcList::addInstSrc( ZyppSrc src )
 {
-    if ( ! instSrcId )
-    {
-	y2error( "NULL instSrcId !" );
-	return;
-    }
-
-    new YQPkgInstSrcListItem( this, instSrcId );
+    new YQPkgInstSrcListItem( this, src );
 }
 
 
@@ -214,29 +220,29 @@ YQPkgInstSrcList::selection() const
 
 
 
-YQPkgInstSrcListItem::YQPkgInstSrcListItem( YQPkgInstSrcList *		instSrcList,
-					    InstSrcManager::ISrcId 	instSrcId )
+YQPkgInstSrcListItem::YQPkgInstSrcListItem( YQPkgInstSrcList *	instSrcList,
+					    ZyppSrc		src 		)
     : QY2ListViewItem( instSrcList )
     , _instSrcList( instSrcList )
-    , _instSrcId( instSrcId )
+    , _zyppSrc( src )
 {
-    if ( ! instSrcId )
+    if ( nameCol() >= 0 )
     {
-	y2error( "Null instSrcId" );
-	return;
+	string name;
+	ZyppProduct product = singleProduct();
+
+	if ( product )	// only if the source provides exactly one product
+	{		// (which is the most common case)
+	    name = product->displayName();
+	}
+
+	if ( ! name.empty() )
+	    setText( nameCol(), name.c_str() );
     }
 
-    if ( instSrcDescr() )
+    if ( urlCol() >= 0 )
     {
-	if ( nameCol() >= 0 )
-	{
-	    setText( nameCol(), instSrcDescr()->shortlabel().c_str() );
-	}
-
-	if ( urlCol() >= 0 )
-	{
-	    setText( urlCol(), instSrcDescr()->url().asString( true, false, false ).c_str() );
-	}
+	setText( urlCol(), src.url().asString().c_str() );
     }
 }
 
@@ -246,6 +252,49 @@ YQPkgInstSrcListItem::~YQPkgInstSrcListItem()
 {
     // NOP
 }
+
+
+ZyppProduct
+YQPkgInstSrcListItem::singleProduct()
+{
+    ZyppProduct product;
+
+    zypp::ResStore::iterator it = zyppSrc().resolvables().begin();
+
+    //
+    // Find the first product on this inst src
+    //
+
+    while ( it != zyppSrc().resolvables().end() && ! product )
+    {
+	product = zypp::dynamic_pointer_cast<zypp::Product>( *it );
+	++it;
+    }
+
+    //
+    // Check if there is another product on this inst src
+    //
+
+    while ( it != zyppSrc().resolvables().end() )
+    {
+	if ( zypp::dynamic_pointer_cast<zypp::Product>( *it ) )
+	{
+	    y2milestone( "Multiple products on installation source %s",
+			 zyppSrc().alias().c_str() );
+	    ZyppProduct null;
+	    return null;
+	}
+
+	++it;
+    }
+
+    if ( ! product )
+	y2milestone( "No product on installation source %s",
+		     zyppSrc().alias().c_str() );
+
+    return product;
+}
+
 
 
 #include "YQPkgInstSrcList.moc"

@@ -23,10 +23,15 @@
 #define YQPkgInstSrcList_h
 
 #include "YQZypp.h"
-#include <QY2ListView.h>
+#include "QY2ListView.h"
+#include <zypp/Source.h>
+#include <zypp/Product.h>
 
 
 class YQPkgInstSrcListItem;
+
+typedef zypp::Source_Ref	ZyppSrc;
+typedef zypp::Product::Ptr	ZyppProduct;
 
 
 /**
@@ -68,7 +73,7 @@ public slots:
     /**
      * Add an inst source to the list.
      **/
-    void addInstSrc( InstSrcManager::ISrcId instSrcId );
+    void addInstSrc( ZyppSrc src );
     
     
 public:
@@ -127,8 +132,8 @@ private:
     // Data members
     //
 
-    int		_nameCol;
-    int		_urlCol;
+    int	_nameCol;
+    int	_urlCol;
     
 };
 
@@ -141,7 +146,7 @@ public:
     /**
      * Constructor
      **/
-    YQPkgInstSrcListItem( YQPkgInstSrcList *parentList, InstSrcManager::ISrcId instSrcId );
+    YQPkgInstSrcListItem( YQPkgInstSrcList *parentList, ZyppSrc src );
 
     /**
      * Destructor
@@ -149,9 +154,9 @@ public:
     virtual ~YQPkgInstSrcListItem();
 
     /**
-     * Returns the original inst source ID within the package manager backend.
+     * Returns the ZYPP source this item corresponds to
      **/
-    InstSrcManager::ISrcId instSrcId() { return _instSrcId; }
+    ZyppSrc zyppSrc() const { return _zyppSrc; }
 
     /**
      * Returns the parent list
@@ -159,15 +164,10 @@ public:
     const YQPkgInstSrcList * instSrcList() const { return _instSrcList; }
 
     /**
-     * Returns the original object within the package manager backend.
+     * Returns the product on this source if it has one single product
+     * or 0 if there are no or multiple products.
      **/
-    const InstSrcManager::ISrcId constInstSrcId() const { return _instSrcId; }
-
-    /**
-     * Returns the package manager backend's inst source description or 0
-     **/
-    constInstSrcDescrPtr instSrcDescr() const
-	{ return _instSrcId ? _instSrcId->descr() : 0; }
+    ZyppProduct YQPkgInstSrcListItem::singleProduct();
 
 
     // Columns
@@ -175,13 +175,12 @@ public:
     int nameCol()	const	{ return _instSrcList->nameCol();	}
     int urlCol()	const 	{ return _instSrcList->urlCol(); 	}
 
-
 protected:
 
     // Data members
 
     YQPkgInstSrcList *		_instSrcList;
-    InstSrcManager::ISrcId	_instSrcId;
+    ZyppSrc			_zyppSrc;
 };
 
 
