@@ -4,6 +4,7 @@ Tue Feb 28 13:35:59 CET 2006 - sh@suse.de
 - Removed beta warning upon insistence of our project managers
   despite the fact that the package manager GUI is still broken
   beyond recognition
+- V 2.13.21
 
 -------------------------------------------------------------------
 Mon Feb 27 16:40:29 CET 2006 - sh@suse.de
