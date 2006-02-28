@@ -190,8 +190,6 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     // Don't do this right away - wait until all initializations are finished.
     QTimer::singleShot( 0, this, SLOT( resolvePackageDependencies() ) );
 #endif
-
-    QTimer::singleShot( 1, this, SLOT( postBetaWarning() ) );
 }
 
 

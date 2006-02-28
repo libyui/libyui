@@ -72,9 +72,7 @@ void
 YQPkgVersionsView::reload( QWidget * newCurrent )
 {
     if ( newCurrent == this )
-    {
 	showDetailsIfVisible( _selectable );
-    }
 }
 
 
@@ -86,9 +84,7 @@ YQPkgVersionsView::showDetailsIfVisible( ZyppSel selectable )
     if ( _parentTab )		// Is this view embedded into a tab widget?
     {
 	if ( _parentTab->currentPage() == this )  // Is this page the topmost?
-	{
 	    showDetails( selectable );
-	}
     }
     else	// No tab parent - simply show data unconditionally.
     {
@@ -124,7 +120,7 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 	new YQPkgVersion( this, root, selectable, *it, _userCanSwitch );
 
 	if ( selectable->installedObj() &&
-	     selectable->installedObj()->edition() == ( *it)->edition() )
+	     selectable->installedObj()->edition() == (*it)->edition() )
 	    installedIsAvailable = true;
 
 #if 0
@@ -229,7 +225,7 @@ YQPkgVersion::toolTip(int)
 {
     QString tip;
 
-    if ( _zyppObj == _selectable->installedObj() )
+    if ( zyppObj() == selectable()->installedObj() )
 	tip = _( "This version is installed in your system." );
 
     return tip;
@@ -253,7 +249,7 @@ YQPkgVersion::compare( QListViewItem *	otherListViewItem,
     if ( other )
     {
 	if ( this->zyppObj()->edition() < other->zyppObj()->edition() ) return -1;
-	if ( this->zyppObj()->edition() > other->zyppObj()->edition() ) return 1;
+	if ( this->zyppObj()->edition() > other->zyppObj()->edition() ) return  1;
 	return 0;
     }
 

@@ -329,25 +329,4 @@ YQPackageSelectorBase::setKeyboardFocus()
 }
 
 
-void
-YQPackageSelectorBase::postBetaWarning()
-{
-    YQPkgTextDialog::showText( this,
-			       "<h1>Warning</h1>"
-			       "<p>"
-			       "The package manager in this beta is not fully functional "
-			       "since we integrated a new package dependency resolver.  "
-			       "Selecting single packages, the resolver itself and conflict resolution "
-			       "should work."
-			       "</p><p>"
-			       "Everything else in the graphical frontend is currently not working. "
-			       "We are aware of that, and we are working on it."
-			       "</p><p>"
-			       "<b>Please only report bugs that you find in the resolver!</b>"
-			       "</p>"
-			       );
-}
-
-
-
 #include "YQPackageSelectorBase.moc"
