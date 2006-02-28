@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Feb 28 14:52:33 CET 2006 - sh@suse.de
+
+- YQPkgVersionsView migrated to ZYPP 
+
+-------------------------------------------------------------------
 Tue Feb 28 13:35:59 CET 2006 - sh@suse.de
 
 - Removed beta warning upon insistence of our project managers

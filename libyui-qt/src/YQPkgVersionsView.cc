@@ -19,6 +19,9 @@
 /-*/
 
 #define y2log_component "qt-pkg"
+
+#include <YQZypp.h>
+#include <zypp/Source.h>
 #include <ycp/y2log.h>
 #include <qtabwidget.h>
 #include <qregexp.h>
@@ -107,15 +110,11 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     CHECK_PTR( root );
     root->setOpen( true );
 
-#if 0
-    root->setText( _summaryCol, fromUTF8( zyppObj->summary() ) );
-#endif
-
     bool installedIsAvailable = false;
-#ifdef FIXME
-    zypp::ui::Selectable::ResObjectList::const_iterator it = selectable->av_begin();
 
-    while ( it != selectable->av_end() )
+    zypp::ui::Selectable::available_iterator it = selectable->availableBegin();
+
+    while ( it != selectable->availableEnd() )
     {
 	new YQPkgVersion( this, root, selectable, *it, _userCanSwitch );
 
@@ -132,7 +131,6 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 #endif
 	++it;
     }
-#endif
 
     if ( selectable->hasInstalledObj() && ! installedIsAvailable )
 	new YQPkgVersion( this, root, selectable, selectable->installedObj(), false );
@@ -158,9 +156,7 @@ YQPkgVersionsView::checkForChangedCandidate()
 	    if ( newCandidate != _selectable->candidateObj() )
 	    {
 		y2milestone( "Candidate changed" );
-#ifdef FIXME
-		selectable->setUserCandidate( newCandidate );
-#endif
+		_selectable->setCandidate( newCandidate );
 		emit candidateChanged( newCandidate );
 		return;
 	    }
@@ -197,9 +193,7 @@ YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
 {
     setText( versionCol(), zyppObj->edition().asString().c_str() );
     setText( archCol(),    zyppObj->arch().asString().c_str() );
-#ifdef FIXME
-    setText( instSrcCol(), zyppObj->instSrcLabel().c_str() );
-#endif
+    setText( instSrcCol(), zyppObj->source().alias().c_str() );
     setOn( _zyppObj == _selectable->installedObj() );
 
     if ( _selectable->hasInstalledObj() )

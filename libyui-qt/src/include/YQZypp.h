@@ -21,7 +21,7 @@
 #ifndef YQZypp_h
 #define YQZypp_h
 
-
+#include <set>
 #include <zypp/ui/Status.h>
 #include <zypp/ui/Selectable.h>
 #include <zypp/ResObject.h>
@@ -100,7 +100,7 @@ inline ZyppPatch	tryCastToZyppPatch( ZyppObj zyppObj )
 }
 
 
-template<typename T> bool contains( set<T> container, T search )
+template<typename T> bool contains( std::set<T> container, T search )
 {
     return container.find( search ) != container.end();
 }
