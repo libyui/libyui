@@ -139,7 +139,7 @@ YQPkgInstSrcList::filter()
 		 * so it doesn't matter if some selections, patterns, products,
 		 * patches or whatever end up in currentSrcPkg.
 		 */
-		currentSrcPkg.insert( currentSrcPkg.begin(),
+		currentSrcPkg.insert( currentSrcPkg.end(),
 				      instSrcItem->zyppSrc().resolvables().begin(),
 				      instSrcItem->zyppSrc().resolvables().end()  );
 	    }
