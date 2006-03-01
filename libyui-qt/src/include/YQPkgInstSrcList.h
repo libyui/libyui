@@ -167,7 +167,7 @@ public:
      * Returns the product on this source if it has one single product
      * or 0 if there are no or multiple products.
      **/
-    ZyppProduct YQPkgInstSrcListItem::singleProduct();
+    ZyppProduct singleProduct();
 
 
     // Columns

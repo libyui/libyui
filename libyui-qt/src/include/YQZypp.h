@@ -106,4 +106,10 @@ template<typename T> bool contains( std::set<T> container, T search )
 }
 
 
+template<typename T> bool bsearch( std::vector<T> sorted_vector, T search )
+{
+    return binary_search( sorted_vector.begin(), sorted_vector.end(), search);
+}
+
+
 #endif // YQZypp_h

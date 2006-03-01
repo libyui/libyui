@@ -21,13 +21,16 @@
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
+#include <qdatetime.h>
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgInstSrcList.h"
 #include <zypp/SourceManager.h>
+#include <algorithm>
 
 using std::list;
 using std::set;
+using std::vector;
 
 
 
@@ -49,7 +52,7 @@ YQPkgInstSrcList::YQPkgInstSrcList( QWidget * parent )
     setSelectionMode( QListView::Extended );	// allow multi-selection with Ctrl-mouse
 
     connect( this, 	SIGNAL( selectionChanged() ),
-	     this, 	SLOT  ( filter()           ) );
+	     this, 	SLOT  ( filterIfVisible()) );
 
     fillList();
     selectSomething();
@@ -100,12 +103,15 @@ YQPkgInstSrcList::filter()
 {
     emit filterStart();
 
-    
+    y2milestone( "Collecting packages on selected installation sources..." );
+    QTime stopWatch;
+    stopWatch.start();
+
     //
     // Collect all packages on this inst source
     //
-    
-    set<ZyppObj> currentSrcPkg;
+
+    vector<ZyppObj> currentSrcPkg;
     QListViewItem * item = firstChild();	// take multi selection into account
 
     while ( item )
@@ -116,29 +122,38 @@ YQPkgInstSrcList::filter()
 
 	    if ( instSrcItem )
 	    {
-		zypp::ResStore::iterator pkg_it = instSrcItem->zyppSrc().resolvables().begin();
-
-		while ( pkg_it != instSrcItem->zyppSrc().resolvables().end() )
-		{
-		    ZyppPkg pkg = tryCastToZyppPkg( *pkg_it );
-
-		    if ( pkg )
-			currentSrcPkg.insert( pkg );
-
-		    ++pkg_it;
-		}
+		/*
+		 * Insert all resolvables from this installation source to
+		 * currentSrcPkg.  It doesn't matter if there are resolvables
+		 * other than packages among them - they will be silently
+		 * ignored in the next step. Only resolvables that have a
+		 * corresponding package selectable will be used there anyway,
+		 * so it doesn't matter if some selections, patterns, products,
+		 * patches or whatever end up in currentSrcPkg.
+		 */
+		currentSrcPkg.insert( currentSrcPkg.begin(),
+				      instSrcItem->zyppSrc().resolvables().begin(),
+				      instSrcItem->zyppSrc().resolvables().end()  );
 	    }
 	}
 
 	item = item->nextSibling();
     }
 
+    std::sort  ( currentSrcPkg.begin(), currentSrcPkg.end() );
+    std::unique( currentSrcPkg.begin(), currentSrcPkg.end() );
+
+    y2milestone( "Collecting inst src packages done. Elapsed time: %f sec", stopWatch.elapsed() / 1000.0 );
+    stopWatch.restart();
 
     //
-    // Collect matching selectables for all selected inst sources
-    // and store them in sets to avoid duplicates in the resulting list
+    // Find the corresponding (package) selectables
+    // and store them in sets to avoid duplicates
     //
-    
+    // (more than one package of a selectable might be
+    // in one of the currently selected sources)
+    //
+
     set<ZyppSel> exactMatches;
     set<ZyppSel> nearMatches;
 
@@ -146,28 +161,30 @@ YQPkgInstSrcList::filter()
 	  sel_it != zyppPkgEnd();
 	  ++sel_it )
     {
-	if ( contains( currentSrcPkg, (*sel_it)->candidateObj() ) ||
-	     contains( currentSrcPkg, (*sel_it)->installedObj() )   )
+	if ( bsearch( currentSrcPkg, (*sel_it)->candidateObj() ) ||
+	     bsearch( currentSrcPkg, (*sel_it)->installedObj() )   )
 	{
 	    exactMatches.insert( *sel_it );
 	}
 	else // Maybe one of the other available objects is on this inst src
 	{
 	    zypp::ui::Selectable::available_iterator pkg_it = (*sel_it)->availableBegin();
-	    
+
 	    while ( pkg_it != (*sel_it)->availableEnd() )
 	    {
-		if ( contains( currentSrcPkg, *pkg_it ) )
+		if ( bsearch( currentSrcPkg, *pkg_it ) )
 		    nearMatches.insert( *sel_it );
-		    
+
 		++pkg_it;
 	    }
 	}
     }
 
+    y2milestone( "Found corresponding selectables. Elapsed time: %f sec", stopWatch.elapsed() / 1000.0 );
+    stopWatch.restart();
 
     //
-    // Send all members of the resulting sets to the list
+    // Send all exact matches to the list
     // (emit a filterMatch signal for each one)
     //
 
@@ -181,8 +198,8 @@ YQPkgInstSrcList::filter()
 
 
     //
-    // Send all leftovers to the package list with filterNearMatch
-    // to be displayed dimmed in the package list
+    // Send all near matches to the list
+    // (emit a filterNearMatch signal for each one)
     //
 
     sel_it = nearMatches.begin();
@@ -192,6 +209,8 @@ YQPkgInstSrcList::filter()
 	emit filterNearMatch( *sel_it, tryCastToZyppPkg( (*sel_it)->theObj() ) );
 	++sel_it;
     }
+
+    y2milestone( "Packages sent to package list. Elapsed time: %f sec", stopWatch.elapsed() / 1000.0 );
 
     emit filterFinished();
 }
