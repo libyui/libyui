@@ -107,11 +107,19 @@ YQPkgInstSrcList::filter()
     QTime stopWatch;
     stopWatch.start();
 
+
     //
     // Collect all packages on this inst source
     //
 
     vector<ZyppObj> currentSrcPkg;
+
+    /*
+     * Logically this should be a std::set, but it turns out that
+     * std::set::find() is much slower than expected. Using a sorted vector
+     * (and std::uniq) made this a lot faster - from 11 sec to 0.9 sec.
+     */
+
     QListViewItem * item = firstChild();	// take multi selection into account
 
     while ( item )
