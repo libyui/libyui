@@ -151,7 +151,8 @@ YQPkgInstSrcList::filter()
     std::sort  ( currentSrcPkg.begin(), currentSrcPkg.end() );
     std::unique( currentSrcPkg.begin(), currentSrcPkg.end() );
 
-    y2milestone( "Collecting inst src packages done. Elapsed time: %f sec", stopWatch.elapsed() / 1000.0 );
+    y2milestone( "Collecting %u inst src packages done. Elapsed time: %f sec",
+		 currentSrcPkg.size(), stopWatch.elapsed() / 1000.0 );
     stopWatch.restart();
 
     //
