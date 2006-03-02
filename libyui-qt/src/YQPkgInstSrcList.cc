@@ -169,8 +169,7 @@ YQPkgInstSrcList::filter()
 	  sel_it != zyppPkgEnd();
 	  ++sel_it )
     {
-	if ( bsearch( currentSrcPkg, (*sel_it)->candidateObj() ) ||
-	     bsearch( currentSrcPkg, (*sel_it)->installedObj() )   )
+	if ( bsearch( currentSrcPkg, (*sel_it)->candidateObj() ) )
 	{
 	    exactMatches.insert( *sel_it );
 	}
