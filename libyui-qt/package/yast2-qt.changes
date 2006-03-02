@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Mar  2 12:17:39 CET 2006 - sh@suse.de
+
+- Performance boost for "installation sources" filter view (factor 10) 
+- V 2.13.23
+
+-------------------------------------------------------------------
 Tue Feb 28 19:19:35 CET 2006 - sh@suse.de
 
 - Installation sources filter view migrated to ZYPP
