@@ -226,7 +226,7 @@ YQPkgInstSrcListItem::YQPkgInstSrcListItem( YQPkgInstSrcList *	instSrcList,
     if ( nameCol() >= 0 )
     {
 	string name;
-	ZyppProduct product = singleProduct();
+	ZyppProduct product = singleProduct( _zyppSrc );
 
 	if ( product )	// only if the source provides exactly one product
 	{		// (which is the most common case)
@@ -252,17 +252,17 @@ YQPkgInstSrcListItem::~YQPkgInstSrcListItem()
 
 
 ZyppProduct
-YQPkgInstSrcListItem::singleProduct()
+YQPkgInstSrcListItem::singleProduct( ZyppSrc zyppSrc )
 {
     ZyppProduct product;
 
-    zypp::ResStore::iterator it = zyppSrc().resolvables().begin();
+    zypp::ResStore::iterator it = zyppSrc.resolvables().begin();
 
     //
     // Find the first product on this inst src
     //
 
-    while ( it != zyppSrc().resolvables().end() && ! product )
+    while ( it != zyppSrc.resolvables().end() && ! product )
     {
 	product = zypp::dynamic_pointer_cast<zypp::Product>( *it );
 	++it;
@@ -272,12 +272,12 @@ YQPkgInstSrcListItem::singleProduct()
     // Check if there is another product on this inst src
     //
 
-    while ( it != zyppSrc().resolvables().end() )
+    while ( it != zyppSrc.resolvables().end() )
     {
 	if ( zypp::dynamic_pointer_cast<zypp::Product>( *it ) )
 	{
 	    y2milestone( "Multiple products on installation source %s",
-			 zyppSrc().alias().c_str() );
+			 zyppSrc.alias().c_str() );
 	    ZyppProduct null;
 	    return null;
 	}
@@ -287,7 +287,7 @@ YQPkgInstSrcListItem::singleProduct()
 
     if ( ! product )
 	y2milestone( "No product on installation source %s",
-		     zyppSrc().alias().c_str() );
+		     zyppSrc.alias().c_str() );
 
     return product;
 }

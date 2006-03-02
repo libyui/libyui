@@ -63,11 +63,12 @@ public:
     // Column numbers
 
     int versionCol()	const	{ return _versionCol;	}
+    int archCol()	const 	{ return _archCol; 	}
+    int productCol()	const	{ return _productCol;	}
     int instSrcCol()	const	{ return _instSrcCol;	}
     int nameCol()	const 	{ return _nameCol; 	}
     int summaryCol()	const 	{ return _summaryCol; 	}
     int statusCol()	const 	{ return _statusCol; 	}
-    int archCol()	const 	{ return _archCol; 	}
 
 
 public slots:
@@ -119,11 +120,12 @@ protected:
     bool		_userCanSwitch;
 
     int 		_versionCol;
+    int			_archCol;
+    int			_productCol;
     int			_instSrcCol;
     int			_nameCol;
     int			_summaryCol;
     int			_statusCol;
-    int			_archCol;
 };
 
 
@@ -181,6 +183,7 @@ public:
     // Columns
 
     int versionCol()		const	{ return _pkgVersionList->versionCol();	}
+    int productCol()		const	{ return _pkgVersionList->productCol();	}
     int instSrcCol()		const	{ return _pkgVersionList->instSrcCol();	}
     int statusCol()		const	{ return _pkgVersionList->statusCol();	}
     int archCol()		const	{ return _pkgVersionList->archCol();	}

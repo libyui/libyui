@@ -164,10 +164,10 @@ public:
     const YQPkgInstSrcList * instSrcList() const { return _instSrcList; }
 
     /**
-     * Returns the product on this source if it has one single product
+     * Returns the product on a source if it has one single product
      * or 0 if there are no or multiple products.
      **/
-    ZyppProduct singleProduct();
+    static ZyppProduct singleProduct( ZyppSrc src );
 
 
     // Columns

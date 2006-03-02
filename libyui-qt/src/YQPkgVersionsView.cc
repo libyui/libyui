@@ -28,6 +28,7 @@
 #include <qheader.h>
 
 #include "YQPkgVersionsView.h"
+#include "YQPkgInstSrcList.h"
 #include "YQIconPool.h"
 #include "YQi18n.h"
 #include "utf8.h"
@@ -40,12 +41,20 @@ YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
     _parentTab		= dynamic_cast<QTabWidget *> (parent);
     _userCanSwitch 	= userCanSwitch;
 
+    _versionCol	= -42;
+    _archCol	= -42;
+    _productCol	= -42;
+    _instSrcCol	= -42;
+    _statusCol	= -42;
+    _nameCol	= -42;
+    _summaryCol = -42;
 
     int numCol = 0;
     addColumn( _( "Version" 		) );	_versionCol	= numCol++;
     addColumn( _( "Arch." 		) );	_archCol	= numCol++;
+    addColumn( _( "Product"		) );	_productCol	= numCol++;
     addColumn( _( "Installation Source"	) );	_instSrcCol	= numCol++;
-    _statusCol	= _instSrcCol;
+    _statusCol	= _productCol;
 
     _nameCol	= _versionCol;
     _summaryCol = _instSrcCol;
@@ -191,10 +200,18 @@ YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
     , _selectable( selectable )
     , _zyppObj( zyppObj )
 {
-    setText( versionCol(), zyppObj->edition().asString().c_str() );
-    setText( archCol(),    zyppObj->arch().asString().c_str() );
-    setText( instSrcCol(), zyppObj->source().alias().c_str() );
     setOn( _zyppObj == _selectable->installedObj() );
+
+    if ( versionCol() >= 0 )	setText( versionCol(), zyppObj->edition().asString().c_str() );
+    if ( archCol()    >= 0 )	setText( archCol(),    zyppObj->arch().asString().c_str() );
+    if ( instSrcCol() >= 0 )	setText( instSrcCol(), zyppObj->source().alias().c_str() );
+    if ( productCol() >= 0 )
+    {
+	ZyppProduct product = YQPkgInstSrcListItem::singleProduct( zyppObj->source() );
+
+	if ( product )
+	    setText( productCol(), product->displayName() );
+    }
 
     if ( _selectable->hasInstalledObj() )
     {

@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Mar  2 18:37:06 CET 2006 - sh@suse.de
+
+- V 2.13.24
+- Display product name (if available) for package versions
+  in "versions" details view 
+
+-------------------------------------------------------------------
 Thu Mar  2 18:12:12 CET 2006 - sh@suse.de
 
 - Yet another performance boost for "installation sources"
