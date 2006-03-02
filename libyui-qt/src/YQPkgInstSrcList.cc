@@ -112,13 +112,8 @@ YQPkgInstSrcList::filter()
     // Collect all packages on this inst source
     //
 
-    vector<ZyppObj> currentSrcPkg;
-
-    /*
-     * Logically this should be a std::set, but it turns out that
-     * std::set::find() is much slower than expected. Using a sorted vector
-     * (and std::uniq) made this a lot faster - from 11 sec to 0.9 sec.
-     */
+    set<ZyppSel> exactMatches;
+    set<ZyppSel> nearMatches;
 
     QListViewItem * item = firstChild();	// take multi selection into account
 
@@ -130,66 +125,40 @@ YQPkgInstSrcList::filter()
 
 	    if ( instSrcItem )
 	    {
-		/*
-		 * Insert all resolvables from this installation source to
-		 * currentSrcPkg.  It doesn't matter if there are resolvables
-		 * other than packages among them - they will be silently
-		 * ignored in the next step. Only resolvables that have a
-		 * corresponding package selectable will be used there anyway,
-		 * so it doesn't matter if some selections, patterns, products,
-		 * patches or whatever end up in currentSrcPkg.
-		 */
-		currentSrcPkg.insert( currentSrcPkg.end(),
-				      instSrcItem->zyppSrc().resolvables().begin(),
-				      instSrcItem->zyppSrc().resolvables().end()  );
+		ZyppSrc currentSrc = instSrcItem->zyppSrc();
+
+		for ( ZyppPoolIterator sel_it = zyppPkgBegin();
+		      sel_it != zyppPkgEnd();
+		      ++sel_it )
+		{
+		    if ( (*sel_it)->candidateObj() &&
+			 (*sel_it)->candidateObj()->source() == currentSrc )
+		    {
+			exactMatches.insert( *sel_it );
+		    }
+		    else
+		    {
+			zypp::ui::Selectable::available_iterator pkg_it = (*sel_it)->availableBegin();
+
+			while ( pkg_it != (*sel_it)->availableEnd() )
+			{
+			    if ( (*pkg_it)->source() == currentSrc )
+				nearMatches.insert( *sel_it );
+
+			    ++pkg_it;
+			}
+		    }
+		}
+
 	    }
 	}
 
 	item = item->nextSibling();
     }
 
-    std::sort  ( currentSrcPkg.begin(), currentSrcPkg.end() );
-    std::unique( currentSrcPkg.begin(), currentSrcPkg.end() );
-
-    y2milestone( "Collecting %u inst src packages done. Elapsed time: %f sec",
-		 currentSrcPkg.size(), stopWatch.elapsed() / 1000.0 );
+    y2milestone( "Collecting inst src packages done. Elapsed time: %f sec", stopWatch.elapsed() / 1000.0 );
     stopWatch.restart();
 
-    //
-    // Find the corresponding (package) selectables
-    // and store them in sets to avoid duplicates
-    //
-    // (more than one package of a selectable might be
-    // in one of the currently selected sources)
-    //
-
-    set<ZyppSel> exactMatches;
-    set<ZyppSel> nearMatches;
-
-    for ( ZyppPoolIterator sel_it = zyppPkgBegin();
-	  sel_it != zyppPkgEnd();
-	  ++sel_it )
-    {
-	if ( bsearch( currentSrcPkg, (*sel_it)->candidateObj() ) )
-	{
-	    exactMatches.insert( *sel_it );
-	}
-	else // Maybe one of the other available objects is on this inst src
-	{
-	    zypp::ui::Selectable::available_iterator pkg_it = (*sel_it)->availableBegin();
-
-	    while ( pkg_it != (*sel_it)->availableEnd() )
-	    {
-		if ( bsearch( currentSrcPkg, *pkg_it ) )
-		    nearMatches.insert( *sel_it );
-
-		++pkg_it;
-	    }
-	}
-    }
-
-    y2milestone( "Found corresponding selectables. Elapsed time: %f sec", stopWatch.elapsed() / 1000.0 );
-    stopWatch.restart();
 
     //
     // Send all exact matches to the list
@@ -201,6 +170,7 @@ YQPkgInstSrcList::filter()
     while ( sel_it != exactMatches.end() )
     {
 	emit filterMatch( (*sel_it), tryCastToZyppPkg( (*sel_it)->theObj() ) );
+	nearMatches.erase( *sel_it );
 	++sel_it;
     }
 

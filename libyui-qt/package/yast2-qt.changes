@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Mar  2 18:12:12 CET 2006 - sh@suse.de
+
+- Yet another performance boost for "installation sources"
+  filter view (~120 millisec per click instead of ~1.2 sec) 
+
+-------------------------------------------------------------------
 Thu Mar  2 12:17:39 CET 2006 - sh@suse.de
 
 - Performance boost for "installation sources" filter view (factor 10) 
