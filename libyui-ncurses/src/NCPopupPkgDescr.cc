@@ -30,7 +30,6 @@
 #include "NCRichText.h"
 
 #include "YQZypp.h"
-//#include <y2pm/PkgDu.h>
 
 #include "NCPopupPkgDescr.h"
 #include "PackageSelector.h"

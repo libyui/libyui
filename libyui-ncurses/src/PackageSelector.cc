@@ -2272,22 +2272,46 @@ string PackageSelector::createText( list<string> info, bool oneline )
     return text;
 }
 
+static
+ostream & operator << (ostream & s, zypp::DiskUsageCounter::MountPoint mp)
+{
+    return s << mp.dir
+	     << " t:" << mp.total_size
+	     << " u:" << mp.used_size
+	     << " p:" << mp.pkg_size;
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 // showDiskSpace()
 //
 void PackageSelector::showDiskSpace()
 {
-#ifdef FIXME
-    const PkgDuMaster & duMaster =  Y2PM::packageManager().updateDu();
+    zypp::ZYpp::Ptr z = zypp::getZYpp();
+    zypp::DiskUsageCounter::MountPointSet du = z->diskUsage ();
+    zypp::DiskUsageCounter::MountPointSet::iterator
+	b = du.begin (),
+	e = du.end (),
+	it;
+    if (b == e)
+    {
+	// retry after detecting from the target
+	z->setPartitions(zypp::DiskUsageCounter::detectMountPoints ());
+	du = z->diskUsage();
+	b = du.begin ();
+	e = du.end ();
+    }
+
+    zypp::ByteCount diff = 0;
+    for (it = b; it != e; ++it)
+    {
+	UIMIL << *it << endl;
+	diff += (it->pkg_size - it->used_size) * 1024;
+    }
 
     // show pkg_diff, i.e. total difference of disk space (can be negative in installed system
     // if packages are deleted)
-    string diff = duMaster.pkg_diff().asString();
-#else
-    string diff = "FAKED DU";
-#endif
-    YCPString label( diff );
+    YCPString label( diff.asString () );
     
     // show the required diskspace
     YWidget * diskSpace = y2ui->widgetWithId( PkgNames::Diskspace(), true );

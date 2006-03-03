@@ -29,7 +29,6 @@
 
 #include "YQZypp.h"
 #include <zypp/ui/Selectable.h>
-//#include <y2pm/PkgDu.h>
 
 #include "NCPopupPkgTable.h"
 

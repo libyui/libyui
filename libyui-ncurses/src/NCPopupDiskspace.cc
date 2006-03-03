@@ -29,7 +29,6 @@
 #include "NCTable.h"
 
 #include "YQZypp.h"
-//#include <y2pm/PkgDu.h>
 
 #include "NCPopupDiskspace.h"
 
@@ -118,29 +117,47 @@ void NCPopupDiskspace::fillPartitionTable()
 {
     partitions->itemsCleared();		// clear table
     
-#ifdef FIXME
     vector<string> pkgLine;
     pkgLine.reserve(5);
     int i = 0;
 
-    const PkgDuMaster & duMaster =  Y2PM::packageManager().updateDu();        
-    std::set<PkgDuMaster::MountPoint>::iterator it = duMaster.mountpoints().begin();
-
-    while ( it != duMaster.mountpoints().end() )
+    zypp::ZYpp::Ptr z = zypp::getZYpp();
+    zypp::DiskUsageCounter::MountPointSet du = z->diskUsage ();
+    zypp::DiskUsageCounter::MountPointSet::iterator
+	b = du.begin (),
+	e = du.end (),
+	it;
+    if (b == e)
     {
-	pkgLine.clear();
-	pkgLine.push_back( (*it).mountpoint() );
+	// retry after detecting from the target
+	z->setPartitions(zypp::DiskUsageCounter::detectMountPoints ());
+	du = z->diskUsage();
+	b = du.begin ();
+	e = du.end ();
+    }
 
-	pkgLine.push_back( (*it).pkg_used().form(8) );
-	pkgLine.push_back( (*it).pkg_available().form(8) );
-	pkgLine.push_back( (*it).total().form(8) );	
-	pkgLine.push_back( usedPercent( (*it).pkg_used(), (*it).total() ) );
+    for (it = b; it != e; ++it)
+    {
+	if (it->readonly)
+	    continue;
+
+	pkgLine.clear();
+	pkgLine.push_back (it->dir);
+
+	zypp::ByteCount pkg_used (it->pkg_size * 1024);
+	pkgLine.push_back (pkg_used.asString (8));
+
+	zypp::ByteCount pkg_available ((it->total_size - it->pkg_size) * 1024);
+	pkgLine.push_back (pkg_available.asString (8));
+
+	zypp::ByteCount total (it->total_size * 1024);
+	pkgLine.push_back (total.asString (8));
+
+	pkgLine.push_back( usedPercent( it->pkg_size, it->total_size ) );
 	partitions->itemAdded( pkgLine, i );
 	
-	++it;
 	i++;
     }
-#endif
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -154,33 +171,40 @@ void NCPopupDiskspace::fillPartitionTable()
 string NCPopupDiskspace::checkDiskSpace()
 {
     string text = "";
-    
-#ifdef FIXME
-    const PkgDuMaster & duMaster =  Y2PM::packageManager().updateDu();        
 
-    std::set<PkgDuMaster::MountPoint>::iterator it = duMaster.mountpoints().begin();
-
-    while ( it != duMaster.mountpoints().end() )
+    zypp::ZYpp::Ptr z = zypp::getZYpp();
+    zypp::DiskUsageCounter::MountPointSet du = z->diskUsage ();
+    zypp::DiskUsageCounter::MountPointSet::iterator
+	b = du.begin (),
+	e = du.end (),
+	it;
+    if (b == e)
     {
-	if ( (*it).pkg_available() < (FSize)0 )
+	// retry after detecting from the target
+	z->setPartitions(zypp::DiskUsageCounter::detectMountPoints ());
+	du = z->diskUsage();
+	b = du.begin ();
+	e = du.end ();
+    }
+
+    for (it = b; it != e; ++it)
+    {
+	zypp::ByteCount pkg_available = (it->total_size - it->pkg_size) * 1024;
+	if ( pkg_available < 0 )
 	{
 	    text += "\"";
-	    text += (*it).mountpoint();
+	    text += it->dir;
 	    text += "\""; 
 	    text += " ";
 	    text += PkgNames::MoreText();
 	    text += " ";
-	    string available = (*it).pkg_available().asString();
-	    text += available.replace( 0, 1, " " );
+	    string available = pkg_available.asString();
+	    text += available.replace( 0, 1, " " ); // clear the minus sign??
 	    text += " ";
 	    text += PkgNames::MoreSpaceText();
 	    text += "<br>";
 	}
-	++it;
     }
-#else
-    text = "FAKED CHECK";
-#endif
     return text;
 }
 
