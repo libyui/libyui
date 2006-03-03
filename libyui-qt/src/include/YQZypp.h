@@ -100,13 +100,13 @@ inline ZyppPatch	tryCastToZyppPatch( ZyppObj zyppObj )
 }
 
 
-template<typename T> bool contains( std::set<T> container, T search )
+template<typename T> bool contains( const std::set<T> & container, T search )
 {
     return container.find( search ) != container.end();
 }
 
 
-template<typename T> bool bsearch( std::vector<T> sorted_vector, T search )
+template<typename T> bool bsearch( const std::vector<T> & sorted_vector, T search )
 {
     return binary_search( sorted_vector.begin(), sorted_vector.end(), search);
 }

@@ -156,10 +156,7 @@ YQPkgInstSrcList::filter()
 	item = item->nextSibling();
     }
 
-    y2milestone( "Collecting inst src packages done. Elapsed time: %f sec", stopWatch.elapsed() / 1000.0 );
-    stopWatch.restart();
-
-
+    
     //
     // Send all exact matches to the list
     // (emit a filterMatch signal for each one)
@@ -188,7 +185,7 @@ YQPkgInstSrcList::filter()
 	++sel_it;
     }
 
-    y2milestone( "Packages sent to package list. Elapsed time: %f sec", stopWatch.elapsed() / 1000.0 );
+    y2debug( "Packages sent to package list. Elapsed time: %f sec", stopWatch.elapsed() / 1000.0 );
 
     emit filterFinished();
 }

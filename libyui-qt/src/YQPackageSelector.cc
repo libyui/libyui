@@ -317,14 +317,12 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     // RPM group tags view
     //
 
-#ifdef FIXME
     _rpmGroupTagsFilterView = new YQPkgRpmGroupTagsFilterView( parent );
     CHECK_PTR( _rpmGroupTagsFilterView );
     _filters->addPage( _( "Package Groups" ), _rpmGroupTagsFilterView );
 
     connect( this,    			SIGNAL( loadData() ),
 	     _rpmGroupTagsFilterView,	SLOT  ( filter()   ) );
-#endif
 
 
     //

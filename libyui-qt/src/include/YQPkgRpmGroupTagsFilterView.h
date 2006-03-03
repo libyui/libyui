@@ -27,6 +27,8 @@
 #include <y2util/YRpmGroupsTree.h>
 
 
+using std::string;
+
 class YQPkgRpmGroupTag;
 
 
@@ -58,10 +60,17 @@ public:
 
     /**
      * Check if 'pkg' matches the selected RPM group.
-     * Returns true if there is a match, false otherwise or if 'pkg' is 0.
+     * Returns true if there is a match, false otherwise.
      **/
     bool check( ZyppSel	selectable,
-		ZyppPkg 	pkg );
+		ZyppPkg pkg );
+
+    /**
+     * Returns the (untranslated!) currently selected RPM group as string.
+     * Special case: "*" is returned if "zzz_All" is selected.
+     **/
+    const string & selectedRpmGroup() const { return _selectedRpmGroup; }
+
     
 public slots:
 
@@ -86,6 +95,12 @@ public slots:
      **/
     void selectSomething();
 
+    /**
+     * Returns the internal RPM groups tree and fills it
+     * if it doesn't exist yet.  
+     **/
+    static YRpmGroupsTree * rpmGroupsTree();
+
 
 signals:
 
@@ -107,7 +122,21 @@ signals:
     void filterFinished();
 
 
+protected slots:
+
+    /**
+     * Update _selectedRpmGroup and filter data
+     **/
+    void slotSelectionChanged( QListViewItem * newSelection );
+
+    
 protected:
+
+    /**
+     * Fill the internal RPM groups tree with RPM groups of all packages
+     * currently in the pool 
+     **/
+    static void fillRpmGroupsTree();
 
     /**
      * Recursively clone the RPM group tag tree for the QListView widget:
@@ -116,6 +145,14 @@ protected:
      **/
     void cloneTree( YStringTreeItem *	parentRpmGroup,
 		    YQPkgRpmGroupTag *	parentClone = 0 );
+
+    //
+    // Data members
+    //
+    
+    string _selectedRpmGroup;
+    
+    static YRpmGroupsTree * _rpmGroupsTree;
 };
 
 

@@ -28,18 +28,20 @@
 
 
 
+YRpmGroupsTree * YQPkgRpmGroupTagsFilterView::_rpmGroupsTree = 0;
+
+
 YQPkgRpmGroupTagsFilterView::YQPkgRpmGroupTagsFilterView( QWidget * parent )
     : QListView( parent )
 {
     addColumn( _( "Package Groups" ) );
     setRootIsDecorated( true );
-#ifdef FIXME
-    cloneTree( Y2PM::packageManager().rpmGroupsTree()->root(), 0 );
-#endif
+    cloneTree( rpmGroupsTree()->root(), 0 );
+
     new YQPkgRpmGroupTag( this, _( "zzz All" ), 0 );
 
-    connect( this, SIGNAL( selectionChanged( QListViewItem * ) ),
-	     this, SLOT  ( filter()                            ) );
+    connect( this, SIGNAL( selectionChanged     ( QListViewItem * ) ),
+	     this, SLOT  ( slotSelectionChanged	( QListViewItem * ) ) );
 
     selectSomething();
 }
@@ -47,9 +49,41 @@ YQPkgRpmGroupTagsFilterView::YQPkgRpmGroupTagsFilterView( QWidget * parent )
 
 YQPkgRpmGroupTagsFilterView::~YQPkgRpmGroupTagsFilterView()
 {
-    // NOP
 }
 
+
+YRpmGroupsTree *
+YQPkgRpmGroupTagsFilterView::rpmGroupsTree()
+{
+    if ( ! _rpmGroupsTree )
+    {
+	_rpmGroupsTree = new YRpmGroupsTree();
+	CHECK_PTR( _rpmGroupsTree );
+
+	fillRpmGroupsTree();
+    }
+
+    return _rpmGroupsTree;
+}
+
+
+void
+YQPkgRpmGroupTagsFilterView::fillRpmGroupsTree()
+{
+    y2debug( "Filling RPM groups tree" );
+
+    for ( ZyppPoolIterator it = zyppPkgBegin();
+	  it != zyppPkgEnd();
+	  ++it )
+    {
+	ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
+
+	if ( zyppPkg )
+	    rpmGroupsTree()->addRpmGroup( zyppPkg->group() );
+    }
+
+    y2debug( "Filling RPM groups tree done" );
+}
 
 
 void
@@ -81,9 +115,7 @@ YQPkgRpmGroupTagsFilterView::selectSomething()
     QListViewItem * item = firstChild();
 
     if ( item )
-    {
 	setSelected( item, true );
-    }
 }
 
 
@@ -99,15 +131,15 @@ void
 YQPkgRpmGroupTagsFilterView::filter()
 {
     emit filterStart();
-
+    // y2debug( "Filtering packages for RPM group \"%s\"", selectedRpmGroup().c_str() );
+    
     if ( selection() )
     {
-#ifdef FIXME
-	PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().begin();
-
-	while ( it != Y2PM::packageManager().end() )
+	for ( ZyppPoolIterator it = zyppPkgBegin();
+	      it != zyppPkgEnd();
+	      ++it )
 	{
-	    Selectable::Ptr selectable = *it;
+	    ZyppSel selectable = *it;
 
 	    // Multiple instances of this package may or may not be in the same
 	    // RPM group, so let's check both the installed version (if there
@@ -118,8 +150,8 @@ YQPkgRpmGroupTagsFilterView::filter()
 	    // entries for the same package!
 
 	    bool match =
-		check( selectable, selectable->candidateObj() ) ||
-		check( selectable, selectable->installedObj() );
+		check( selectable, tryCastToZyppPkg( selectable->candidateObj() ) ) ||
+		check( selectable, tryCastToZyppPkg( selectable->installedObj() ) );
 
 	    // If there is neither an installed nor a candidate package, check
 	    // any other instance.
@@ -127,43 +159,57 @@ YQPkgRpmGroupTagsFilterView::filter()
 	    if ( ! match			&&
 		 ! selectable->candidateObj()   &&
 		 ! selectable->installedObj()	  )
-		check( selectable, selectable->theObj() );
-
-	    ++it;
+		check( selectable, tryCastToZyppPkg( selectable->theObj() ) );
 	}
-#endif
     }
 
     emit filterFinished();
 }
 
 
+void
+YQPkgRpmGroupTagsFilterView::slotSelectionChanged( QListViewItem * newSelection )
+{
+    YQPkgRpmGroupTag * sel = dynamic_cast<YQPkgRpmGroupTag *>( newSelection );
+
+    if ( sel )
+    {
+	if ( sel->rpmGroup() )
+	    _selectedRpmGroup = rpmGroupsTree()->rpmGroup( sel->rpmGroup() );
+	else
+	    _selectedRpmGroup = "*";	// "zzz_All"
+    }
+    else
+    {
+	_selectedRpmGroup = "";
+    }
+
+    filter();
+}
+
+
 bool
 YQPkgRpmGroupTagsFilterView::check( ZyppSel	selectable,
-				    ZyppPkg	pkg )
+				    ZyppPkg	pkg		)
 {
     if ( ! pkg || ! selection() )
 	return false;
 
-    if ( selection()->rpmGroup() == 0 )	// Special case: All packages
+    if ( selection()->rpmGroup() == 0 )		// Special case: All packages
     {
 	emit filterMatch( selectable, pkg );
 	return true;
     }
 
-#ifdef FIXME
-    if ( pkg->group_ptr() == 0 )
-    {
-	y2error( "NULL pointer in group_ptr() for package %s", pkg->name().asString().c_str() );
+    if ( selectedRpmGroup().empty() )
 	return false;
-    }
-
-    if ( pkg->group_ptr()->isChildOf( selection()->rpmGroup() ) )
+    
+    if ( pkg->group() == selectedRpmGroup() ||			// full match?
+	 pkg->group().find( selectedRpmGroup() + "/" ) == 0 )	// starts with selected?
     {
 	emit filterMatch( selectable, pkg );
 	return true;
     }
-#endif
 
     return false;
 }

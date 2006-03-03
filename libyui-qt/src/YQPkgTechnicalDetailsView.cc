@@ -100,13 +100,22 @@ YQPkgTechnicalDetailsView::authorsListCell( ZyppPkg pkg ) const
 QString
 YQPkgTechnicalDetailsView::formatRpmGroup( ZyppPkg pkg ) const
 {
-#ifdef FIXME_todo_zypp
-    // TO DO: Translate RPM group
-    string group = Y2PM::packageManager().translatedRpmGroup( pkg->group() );
-#else
-    string group = pkg->group();
-#endif
-    return fromUTF8( group );
+    QStringList groups = QStringList::split( '/',	// delimiter
+					     fromUTF8( pkg->group() ),
+					     false );	// allow empties
+
+    // Translate group path components
+
+    QStringList translated;
+
+    for ( QValueList<QString>::const_iterator it = groups.begin();
+	  it != groups.end();
+	  ++it )
+    {
+	translated.append( QString::fromUtf8( dgettext( "rpm-groups", (*it).utf8() ) ) );
+    }
+
+    return translated.join( "/" );
 }
 
 
