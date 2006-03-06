@@ -64,27 +64,51 @@ protected:
      * Returns a string containing a HTML table for technical details for one
      * package.
      **/
-    QString simpleTable( ZyppPkg pkg );
+    QString simpleTable( ZyppObj pkg );
 
 
     /**
      * Returns a string containing a HTML table for technical details for two
      * package instances: The installed instance and an alternate instance.
-     * ( usually the candidate instance ).
+     * (usually the candidate instance).
      **/
-    QString complexTable( ZyppPkg installedPkg,
-			  ZyppPkg candidatePkg );
+    QString complexTable( ZyppObj installed,
+			  ZyppObj candidate );
 
     /**
-     * Make a HTML table cell from a PkgRelList.
+     * Format a zypp::CapSet (describing zypp::Dep::REQUIRES etc.)
+     * with a heading in HTML lines.
+     *
+     * Returns an empty string if capSet is empty.
      **/
-    static QString cell( const PMSolvable::PkgRelList_type & list );
+    static QString row( const QString &		heading,
+			const zypp::CapSet & 	capSet );
+
 
     /**
-     * Returns a string containing a HTML table cell with 'contents'.
+     * Format two zypp::CapSets (describing zypp::Dep::REQUIRES etc.)
+     * with a heading in HTML lines.
+     *
+     * Returns an empty string both capSets are empty.
      **/
-    static QString cell( const string & contents	)
-	{ return YQPkgGenericDetailsView::cell( contents ); }
+    static QString row( const QString & 	heading,
+			const zypp::CapSet & 	capSet1,
+			const zypp::CapSet & 	capSet2 );
+
+    /**
+     * Returns a string containing a HTML table row with 'contents'.
+     *
+     * Required here to avoid inheritance ambiguities.
+     **/
+    static QString row( const QString & contents )
+	{ return YQPkgGenericDetailsView::row( contents ); }
+    
+    /**
+     * Format a zypp::CapSet (describing zypp::Dep::REQUIRES etc.)
+     * in HTML lines, separated with <BR>.
+     * Returns an empty string if capSet is empty.
+     **/
+    static QString htmlLines( const zypp::CapSet & capSet );
 };
 
 

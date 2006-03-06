@@ -49,11 +49,7 @@
 #include "YQPkgChangesDialog.h"
 #include "YQPkgConflictDialog.h"
 #include "YQPkgConflictList.h"
-
-#ifdef FIXME
 #include "YQPkgDependenciesView.h"
-#endif
-
 #include "YQPkgDescriptionView.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
@@ -458,7 +454,6 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     // Dependencies
     //
 
-#ifdef FIXME
     _pkgDependenciesView = new YQPkgDependenciesView( _detailsViews );
     CHECK_PTR( _pkgDependenciesView );
 
@@ -467,7 +462,6 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
     connect( _pkgList,			SIGNAL( selectionChanged    ( ZyppSel ) ),
 	     _pkgDependenciesView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
-#endif
 
 
     //

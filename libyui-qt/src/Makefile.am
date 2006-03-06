@@ -79,6 +79,7 @@ liby2qt_la_SOURCES = 				\
 	YQPkgChangesDialog.cc			\
 	YQPkgConflictDialog.cc			\
 	YQPkgConflictList.cc			\
+	YQPkgDependenciesView.cc		\
 	YQPkgDescriptionDialog.cc		\
 	YQPkgDescriptionView.cc			\
 	YQPkgDiskUsageList.cc			\
@@ -131,8 +132,6 @@ liby2qt_la_SOURCES = 				\
 	qxembed.cc
 
 
-#	YQPkgDependenciesView.cc		\
-#
 
 
 # Note: QY2LayoutUtils and QY2Settings don't need any .moc file: No QObjects

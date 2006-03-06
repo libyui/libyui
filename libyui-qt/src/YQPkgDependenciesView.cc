@@ -43,7 +43,7 @@ void
 YQPkgDependenciesView::showDetails( ZyppSel selectable )
 {
     _selectable = selectable;
-    
+
     if ( ! selectable )
     {
 	clear();
@@ -52,10 +52,8 @@ YQPkgDependenciesView::showDetails( ZyppSel selectable )
 
     QString html_text = htmlHeading( selectable );
 
-    y2debug( "Showing technical details for zypp::ResObject %s", selectable->theObj()->name.c_str() );
-
-    ZyppPkg candidate = selectable->candidateObj();
-    ZyppPkg installed = selectable->installedObj();
+    ZyppObj candidate = selectable->candidateObj();
+    ZyppObj installed = selectable->installedObj();
 
     if ( candidate && installed && candidate != installed )
     {
@@ -76,75 +74,25 @@ YQPkgDependenciesView::showDetails( ZyppSel selectable )
 
 
 QString
-YQPkgDependenciesView::simpleTable( ZyppPkg pkg )
+YQPkgDependenciesView::simpleTable( ZyppObj pkg )
 {
-    /************************
-
-    Resolvable::deps[Dep::REQUIRES]
-    Resolvable::deps[Dep::PROVIDES]
-
-    see libzypp/zypp/target/store/serialize.cc
-
-    zypp/Dependencies.c :
-
-    str << "Dependencies: [" << endl;
-    if ( ! obj[Dep::PROVIDES].empty() )
-      str << "PROVIDES:" << endl << obj[Dep::PROVIDES];
-    if ( ! obj[Dep::PREREQUIRES].empty() )
-      str << "PREREQUIRES:" << endl << obj[Dep::PREREQUIRES];
-    if ( ! obj[Dep::REQUIRES].empty() )
-      str << "REQUIRES:" << endl << obj[Dep::REQUIRES];
-    if ( ! obj[Dep::CONFLICTS].empty() )
-      str << "CONFLICTS:" << endl << obj[Dep::CONFLICTS];
-    if ( ! obj[Dep::OBSOLETES].empty() )
-      str << "OBSOLETES:" << endl << obj[Dep::OBSOLETES];
-    if ( ! obj[Dep::RECOMMENDS].empty() )
-      str << "RECOMMENDS:" << endl << obj[Dep::RECOMMENDS];
-    if ( ! obj[Dep::SUGGESTS].empty() )
-      str << "SUGGESTS:" << endl << obj[Dep::SUGGESTS];
-    if ( ! obj[Dep::FRESHENS].empty() )
-      str << "FRESHENS:" << endl << obj[Dep::FRESHENS];
-    if ( ! obj[Dep::ENHANCES].empty() )
-      str << "ENHANCES:" << endl << obj[Dep::ENHANCES];
-    return str << "]";
-
-
-    **************************/
     QString html = "<br>" +
 	table(
-	       row( hcell( _( "Version:" ) )	+ cell( pkg->version() + "-" + pkg->release() ) ) +
-	       row( hcell( _( "Provides:" ) )	+ cell( pkg->provides()		) ) +
-	       row( hcell( _( "Requires:<br>(at run time)" ) )
-						+ cell( pkg->requires()		) ) +
-	       row( hcell( _( "Prerequires:<br>(at installation time)" ) )
-							+ cell( pkg->prerequires()	) ) +
-	       row( hcell( _( "Obsoletes:" ) )	+ cell( pkg->obsoletes()	) ) +
-	       row( hcell( _( "Conflicts:" ) )	+ cell( pkg->conflicts()	) )
-	       );
+	      row( hcell( _( "Version:" ) ) + cell( pkg->edition().asString()	) ) +
 
-    return html;
-}
+	      // Intentionally NOT translating the RPM depencency tags:
+	      // They make only sense to users who have some basic knowledge what they are anyway.
 
-
-QString
-YQPkgDependenciesView::complexTable( ZyppPkg installed, ZyppPkg candidate )
-{
-    ZyppPkg p1 = candidate;
-    ZyppPkg p2 = installed;
-
-    QString p1_header = _( "<b>Alternate Version</b>" );
-    QString p2_header = _( "<b>Installed Version</b>" );
-
-    QString html = "<br>" +
-	table(
-	      row( hcell( QString( "" ) )	    + hcell( "<b>" + p1_header + "</b>"	    ) + hcell( "<b>" + p2_header + "</b>"     ) ) +
-
-	      row( hcell( _( "Version:" ) ) + cell( p1->version() + "-" + p1->release() ) + cell( p2->version() + "-" + p2->release() ) ) +
-	      row( hcell( _( "Provides:" ) ) + cell( p1->provides()			) + cell( p2->provides()		      ) ) +
-	      row( hcell( _( "Requires:" ) ) + cell( p1->requires()			) + cell( p2->requires()		      ) ) +
-	      row( hcell( _( "Prerequires:" ) ) + cell( p1->prerequires()		) + cell( p2->prerequires()		      ) ) +
-	      row( hcell( _( "Obsoletes:" ) ) + cell( p1->obsoletes()			) + cell( p2->obsoletes()		      ) ) +
-	      row( hcell( _( "Conflicts:" ) ) + cell( p1->conflicts()			) + cell( p2->conflicts()		      ) )
+	      row( "Provides:",		pkg->dep( zypp::Dep::PROVIDES		) ) +
+	      row( "Prerequires:",	pkg->dep( zypp::Dep::PREREQUIRES	) ) +
+	      row( "Requires:",		pkg->dep( zypp::Dep::REQUIRES		) ) +
+	      row( "Conflicts:",	pkg->dep( zypp::Dep::CONFLICTS		) ) +
+	      row( "Obsoletes:",	pkg->dep( zypp::Dep::OBSOLETES		) ) +
+	      row( "Recommends:",	pkg->dep( zypp::Dep::RECOMMENDS		) ) +
+	      row( "Suggests:",		pkg->dep( zypp::Dep::SUGGESTS		) ) +
+	      row( "Freshens:",		pkg->dep( zypp::Dep::FRESHENS		) ) +
+	      row( "Enances:",		pkg->dep( zypp::Dep::ENHANCES		) ) +
+	      row( "Supplements:",	pkg->dep( zypp::Dep::SUPPLEMENTS	) )
 	      );
 
     return html;
@@ -152,22 +100,87 @@ YQPkgDependenciesView::complexTable( ZyppPkg installed, ZyppPkg candidate )
 
 
 QString
-YQPkgDependenciesView::cell( const PMSolvable::PkgRelList_type & list )
+YQPkgDependenciesView::complexTable( ZyppObj installed, ZyppObj candidate )
+{
+    ZyppObj p1 = candidate;
+    ZyppObj p2 = installed;
+
+    QString p1_header = _( "<b>Alternate Version</b>" );
+    QString p2_header = _( "<b>Installed Version</b>" );
+
+    QString html = "<br>" +
+	table(
+	      row( hcell( QString( "" ) ) + hcell( "<b>" + p1_header + "</b>"	    ) + hcell( "<b>" + p2_header + "</b>" ) ) +
+
+	      row( hcell( _( "Version:" ) ) + cell( p1->edition().asString()	) + cell( p2->edition().asString()	) ) +
+
+	      row( "Provides:",		p1->dep( zypp::Dep::PROVIDES	), p2->dep( zypp::Dep::PROVIDES		) ) +
+	      row( "Prerequires:",	p1->dep( zypp::Dep::PREREQUIRES	), p2->dep( zypp::Dep::PREREQUIRES	) ) +
+	      row( "Requires:",		p1->dep( zypp::Dep::REQUIRES	), p2->dep( zypp::Dep::REQUIRES		) ) +
+	      row( "Conflicts:",	p1->dep( zypp::Dep::CONFLICTS	), p2->dep( zypp::Dep::CONFLICTS	) ) +
+	      row( "Obsoletes:",	p1->dep( zypp::Dep::OBSOLETES	), p2->dep( zypp::Dep::OBSOLETES	) ) +
+	      row( "Recommends:",	p1->dep( zypp::Dep::RECOMMENDS	), p2->dep( zypp::Dep::RECOMMENDS	) ) +
+	      row( "Suggests:",		p1->dep( zypp::Dep::SUGGESTS	), p2->dep( zypp::Dep::SUGGESTS		) ) +
+	      row( "Freshens:",		p1->dep( zypp::Dep::FRESHENS	), p2->dep( zypp::Dep::FRESHENS		) ) +
+	      row( "Enances:",		p1->dep( zypp::Dep::ENHANCES	), p2->dep( zypp::Dep::ENHANCES		) ) +
+	      row( "Supplements:",	p1->dep( zypp::Dep::SUPPLEMENTS	), p2->dep( zypp::Dep::SUPPLEMENTS	) )
+	      );
+
+    return html;
+}
+
+
+QString
+YQPkgDependenciesView::row( const QString &		heading,
+			    const zypp::CapSet & 	capSet )
+{
+    QString content = htmlLines( capSet );
+
+    if ( content.isEmpty() )
+	return "";
+
+    return QString( "<tr>" ) +
+	hcell( heading ) +
+	"<td>" + content + "</td>"
+	+ "</tr>";
+}
+
+
+QString
+YQPkgDependenciesView::row( const QString & 		heading,
+			    const zypp::CapSet & 	capSet1,
+			    const zypp::CapSet & 	capSet2 )
+{
+    QString content1 = htmlLines( capSet1 );
+    QString content2 = htmlLines( capSet2 );
+
+    if ( content1.isEmpty() && content2.isEmpty() )
+	return "";
+
+    return  QString( "<tr>" ) +
+	hcell( heading ) +
+	QString( "<td>" ) + content1 + "</td>" +
+	QString( "<td>" ) + content2 + "</td>" +
+	"</tr>";
+}
+
+
+QString
+YQPkgDependenciesView::htmlLines( const zypp::CapSet & capSet )
 {
     QString html;
 
-    PMSolvable::PkgRelList_const_iterator it = list.begin();
-
-    while ( it != list.end() )
+    for ( zypp::CapSet::const_iterator it = capSet.begin();
+	  it != capSet.end();
+	  ++it )
     {
 	if ( ! html.isEmpty() )
 	    html += "<br>";
 
 	html += htmlEscape( ( *it).asString().c_str() );
-	++it;
     }
 
-    return "<td>" + html + "</td>";
+    return html;
 }
 
 

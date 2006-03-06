@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Mar  6 18:34:50 CET 2006 - sh@suse.de
+
+- V 2.13.26
+- Ported "dependencies" details view to ZYPP
+- No longer translating RPM tags "provides", ... 
+
+-------------------------------------------------------------------
 Mon Mar  6 14:31:56 CET 2006 - sh@suse.de
 
 - Ported "languages" filter view to ZYPP
