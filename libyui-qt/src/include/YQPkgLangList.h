@@ -71,7 +71,7 @@ public slots:
      * QListView).
      **/
     void addLangItem( ZyppSel		selectable,
-		      PMLanguagePtr 	lang );
+		      ZyppLang 	lang );
 
     /**
      * Emit an updatePackages() signal.
@@ -133,7 +133,7 @@ public:
      **/
     YQPkgLangListItem( YQPkgLangList *	pkgSelList,
 		       ZyppSel		selectable,
-		       PMLanguagePtr	lang );
+		       ZyppLang		lang		);
 
     /**
      * Destructor
@@ -143,7 +143,7 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    PMLanguagePtr pmLang() const { return _pmLang; }
+    ZyppLang zyppLang() const { return _zyppLang; }
 
     /**
      * Set the selection status.
@@ -165,7 +165,7 @@ protected:
     // Data members
 
     YQPkgLangList *	_langList;
-    PMLanguagePtr	_pmLang;
+    ZyppLang		_zyppLang;
 };
 
 

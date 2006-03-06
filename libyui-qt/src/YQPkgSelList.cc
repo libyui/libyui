@@ -143,7 +143,7 @@ YQPkgSelList::addPkgSelItem( ZyppSel		selectable,
 {
     if ( ! selectable )
     {
-	y2error( "NULL ZyppSelectable!" );
+	y2error( "NULL ZyppSel!" );
 	return;
     }
 

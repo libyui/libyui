@@ -57,11 +57,7 @@
 #include "YQPkgDescriptionView.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
-
-#ifdef FIXME
 #include "YQPkgLangList.h"
-#endif
-
 #include "YQPkgList.h"
 #include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQPkgSearchFilterView.h"
@@ -329,8 +325,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     // Languages view
     //
 
-#ifdef FIXME
-    _langList = new YQPkgLangList( this, true );
+    _langList = new YQPkgLangList( this );
     CHECK_PTR( _langList );
     _filters->addPage( _( "Languages" ), _langList );
 
@@ -339,7 +334,6 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     connect( this,		SIGNAL( refresh()			),
 	     _langList, 	SLOT  ( updateItemStates() 		) );
-#endif
 
 
     //
@@ -727,9 +721,7 @@ YQPackageSelector::makeConnections()
     connectFilter( _selList, 			_pkgList );
     connectFilter( _instSrcFilterView,		_pkgList, false );
     connectFilter( _rpmGroupTagsFilterView, 	_pkgList, false );
-#ifdef FIXME
     connectFilter( _langList, 			_pkgList );
-#endif
     connectFilter( _statusFilterView, 		_pkgList, false );
     connectFilter( _searchFilterView, 		_pkgList, false );
 

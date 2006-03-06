@@ -68,16 +68,17 @@ YQPkgLangList::fillList()
     clear();
     y2debug( "Filling language list" );
 
-    PMManager::SelectableVec::const_iterator it = Y2PM::languageManager().begin();
 
-    while ( it != Y2PM::languageManager().end() )
+    for ( ZyppPoolIterator it = zyppLangBegin();
+	  it != zyppLangEnd();
+	  ++it )
     {
-	PMLanguagePtr lang = ( *it)->theObj();
+	ZyppLang zyppLang = tryCastToZyppLang( (*it)->theObj() );
 
-	if ( lang )
-	    addLangItem( lang );
-
-	++it;
+	if ( zyppLang )
+	    addLangItem( *it, zyppLang );
+	else
+	    y2error( "Found non-Language selectable" );
     }
 
     y2debug( "Language list filled" );
@@ -99,19 +100,14 @@ YQPkgLangList::filter()
 
     if ( selection() )
     {
-	PMLanguagePtr lang = selection()->pmLang();
+	ZyppLang lang = selection()->zyppLang();
 
 	if ( lang )
 	{
-	    PMLanguageManager::PkgSelectables selectables =
-		Y2PM::languageManager().getLangPackagesFor( lang );
-
-	    PMLanguageManager::PkgSelectables::const_iterator it = selectables.begin();
-	    while ( it != selectables.end() )
-	    {
-		emit filterMatch( *it, (*it)->theObj() );
-		++it;
-	    }
+#ifdef FIXME_missing_in_zypp
+#else
+	    y2warning( "Missing: Get packages for a zypp::Language" );
+#endif
 	}
     }
 
@@ -121,15 +117,15 @@ YQPkgLangList::filter()
 
 void
 YQPkgLangList::addLangItem( ZyppSel	selectable,
-			    PMLanguagePtr 		pmLang )
+			    ZyppLang 	zyppLang )
 {
     if ( ! selectable )
     {
-	y2error( "NULL zypp::ui::Selectable!" );
+	y2error( "NULL ZyppSel!" );
 	return;
     }
 
-    new YQPkgLangListItem( this, selectable, pmLang );
+    new YQPkgLangListItem( this, selectable, zyppLang );
 }
 
 
@@ -151,10 +147,10 @@ YQPkgLangList::selection() const
 
 YQPkgLangListItem::YQPkgLangListItem( YQPkgLangList * 	langList,
 				      ZyppSel		selectable,
-				      PMLanguagePtr 	lang )
+				      ZyppLang 		lang 		)
     : YQPkgObjListItem( langList, selectable, lang )
     , _langList( langList )
-    , _pmLang( lang )
+    , _zyppLang( lang )
 {
 }
 

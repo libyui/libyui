@@ -86,6 +86,7 @@ liby2qt_la_SOURCES = 				\
 	YQPkgGenericDetailsView.cc		\
 	YQPkgInstSrcFilterView.cc		\
 	YQPkgInstSrcList.cc			\
+	YQPkgLangList.cc			\
 	YQPkgList.cc				\
 	YQPkgObjList.cc				\
 	YQPkgPatternList.cc			\
@@ -131,7 +132,6 @@ liby2qt_la_SOURCES = 				\
 
 
 #	YQPkgDependenciesView.cc		\
-#	YQPkgLangList.cc			\
 #
 
 
