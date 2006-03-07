@@ -66,7 +66,7 @@ public:
      * Returns true if the package matches, false if not.
      **/
     bool check( ZyppSel	selectable,
-		ZyppObj 	zyppObj );
+		ZyppObj zyppObj );
 
 
 public slots:
@@ -141,12 +141,12 @@ protected:
      **/
     bool check( const string & attribute, const QRegExp & regexp );
 
-#ifdef FIXME
     /**
-     * Check PkgRelList attribute ( PMSolvable::provides(), PMSolvable::requires(), ... )
+     * Check capability like
+     * zypp::Resolvable::dep( zypp::Dep::PROVIDES ),
+     * zypp::Resolvable::dep( zypp::Dep::REQUIRES )
      **/
-    bool check( const PMSolvable::PkgRelList_type & relList, const QRegExp & regexp );
-#endif
+    bool check( const zypp::CapSet & capSet, const QRegExp & regexp );
 
     /**
      * Key press event: Execute search upon 'Return'

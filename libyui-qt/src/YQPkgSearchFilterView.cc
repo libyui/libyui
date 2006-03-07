@@ -94,11 +94,11 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     _searchInSummary     = new QCheckBox( _( "Su&mmary" 	), gbox ); CHECK_PTR( _searchInSummary     );
     _searchInDescription = new QCheckBox( _( "Descr&iption"	), gbox ); CHECK_PTR( _searchInDescription );
 
-#ifdef FIXME
     addVStretch( gbox );
-    _searchInProvides    = new QCheckBox( _( "&Provides" 	), gbox ); CHECK_PTR( _searchInProvides    );
-    _searchInRequires    = new QCheckBox( _( "Re&quires" 	), gbox ); CHECK_PTR( _searchInRequires    );
-#endif
+
+    // Intentionally NOT marking RPM tags for translation
+    _searchInProvides    = new QCheckBox(  "RPM \"&Provides\""   , gbox ); CHECK_PTR( _searchInProvides    );
+    _searchInRequires    = new QCheckBox(  "RPM \"Re&quires\""   , gbox ); CHECK_PTR( _searchInRequires    );
 
     _searchInName->setChecked( true );
     _searchInSummary->setChecked( true );
@@ -286,12 +286,8 @@ YQPkgSearchFilterView::check( ZyppSel		selectable,
 	( _searchInName->isChecked()        && check( zyppObj->name(),        regexp ) ) ||
 	( _searchInSummary->isChecked()     && check( zyppObj->summary(),     regexp ) ) ||
 	( _searchInDescription->isChecked() && check( zyppObj->description(), regexp ) ) ||
-#ifdef FIXME
-	( _searchInProvides->isChecked()    && check( zyppObj->provides(),    regexp ) ) ||
-	( _searchInRequires->isChecked()    && check( zyppObj->requires(),    regexp ) );
-#else
-    false ; 
-#endif
+	( _searchInProvides->isChecked()    && check( zyppObj->dep( zypp::Dep::PROVIDES ), regexp ) ) ||
+	( _searchInRequires->isChecked()    && check( zyppObj->dep( zypp::Dep::REQUIRES ), regexp ) );
 
     if ( match )
     {
@@ -343,27 +339,22 @@ YQPkgSearchFilterView::check( const string &	attribute,
 }
 
 
-#ifdef FIXME
 bool
-YQPkgSearchFilterView::check( const PMSolvable::PkgRelList_type & relList, const QRegExp & regexp )
+YQPkgSearchFilterView::check( const zypp::CapSet & capSet, const QRegExp & regexp )
 {
-    string text;
-
-    PMSolvable::PkgRelList_const_iterator it = relList.begin();
-
-    while ( it != relList.end() )
+    for ( zypp::CapSet::const_iterator it = capSet.begin();
+	  it != capSet.end();
+	  ++it )
     {
-	if ( check( ( *it).asString(), regexp ) )
+	if ( check( ( *it).index(), regexp ) )
 	{
-	    // y2debug( "Match for %s", ( *it).asString().c_str() );
+	    // y2debug( "Match for %s", (*it).asString().c_str() );
 	    return true;
 	}
-	++it;
     }
 
     return false;
 }
-#endif
 
 
 
