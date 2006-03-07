@@ -157,10 +157,10 @@ YQPkgDependenciesView::row( const QString & 		heading,
     if ( content1.isEmpty() && content2.isEmpty() )
 	return "";
 
-    return  QString( "<tr>" ) +
+    return QString( "<tr>" ) +
 	hcell( heading ) +
-	QString( "<td>" ) + content1 + "</td>" +
-	QString( "<td>" ) + content2 + "</td>" +
+	"<td>" + content1 + "</td>" +
+	"<td>" + content2 + "</td>" +
 	"</tr>";
 }
 
