@@ -86,6 +86,11 @@ YQPackageSelectorBase::YQPackageSelectorBase( QWidget * 		parent,
 }
 
 
+YQPackageSelectorBase::~YQPackageSelectorBase()
+{
+    y2milestone( "Destroying PackageSelector" );
+}
+
 
 int
 YQPackageSelectorBase::resolvePackageDependencies()
@@ -173,10 +178,6 @@ YQPackageSelectorBase::reject()
 	zyppPool().diffState<zypp::Pattern  >()	||
 	zyppPool().diffState<zypp::Selection>();
 
-#if 1
-    // DEBUG
-    // DEBUG
-    // DEBUG
     if ( changes )
     {
 	if ( zyppPool().diffState<zypp::Package>() )
@@ -188,11 +189,6 @@ YQPackageSelectorBase::reject()
 	if ( zyppPool().diffState<zypp::Selection>() )
 	    y2milestone( "diffState() reports changed selections" );
     }
-    // DEBUG
-    // DEBUG
-    // DEBUG
-#endif
-
 
     if ( ! changes ||
 	 ( QMessageBox::warning( this, "",
@@ -210,6 +206,7 @@ YQPackageSelectorBase::reject()
 	if ( _youMode )
 	    zyppPool().restoreState<zypp::Patch>();
 
+	y2milestone( "Closing PackageSelector with \"Cancel\"" );
 	YQUI::ui()->sendEvent( new YCancelEvent() );
     }
 }
@@ -248,6 +245,7 @@ YQPackageSelectorBase::accept()
     if ( checkDiskUsage() == QDialog::Rejected )
 	return;
 
+    y2milestone( "Closing PackageSelector with \"Accept\"" );
     YQUI::ui()->sendEvent( new YMenuEvent( YCPSymbol( "accept" ) ) );
 }
 

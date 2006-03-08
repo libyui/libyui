@@ -41,12 +41,17 @@ class YQPackageSelectorBase : public QVBox, public YPackageSelector
 protected:
 
     /**
-     * Constructor.
+     * Constructor
      *
      * Will initialize package and selection managers and create conflict
      * dialogs. 
      **/
     YQPackageSelectorBase( QWidget * parent, const YWidgetOpt & opt );
+
+    /**
+     * Destructor
+     **/
+    virtual ~YQPackageSelectorBase();
 
     
 public:
