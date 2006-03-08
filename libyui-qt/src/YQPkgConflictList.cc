@@ -304,7 +304,7 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
     setOpen( true );
 
     formatHeading();
-    YQPkgConflictList::dumpList( this, _problem->details().c_str() );
+    YQPkgConflictList::dumpList( this, fromUTF8( _problem->details() ) );
 
     addSolutions();
 }
@@ -317,7 +317,7 @@ YQPkgConflict::formatHeading()
     QPixmap icon = YQIconPool::normalPkgConflict();
     setTextColor( BRIGHT_RED );
 
-    setText( 0, problem()->description().c_str() );
+    setText( 0, fromUTF8( problem()->description() ) );
     setPixmap( 0, icon );
 }
 
@@ -391,12 +391,12 @@ YQPkgConflict::userSelectedResolution()
 YQPkgConflictResolution::YQPkgConflictResolution( QY2CheckListItem * 		parent,
 						  zypp::ProblemSolution_Ptr	solution )
     : QY2CheckListItem( parent,
-			solution->description().c_str(),
+			fromUTF8( solution->description() ),
 			QCheckListItem::RadioButton,
 			true )
     , _solution( solution )
 {
-    YQPkgConflictList::dumpList( this, solution->details().c_str() );
+    YQPkgConflictList::dumpList( this, fromUTF8( solution->details() ) );
 }
 
 
