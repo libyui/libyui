@@ -180,7 +180,7 @@ YQPkgGenericDetailsView::cell( const zypp::Date & date )
 QString
 YQPkgGenericDetailsView::cell( const string & contents )
 {
-    return cell( QString::fromUtf8( contents.c_str() ) );
+    return cell( fromUTF8( contents ) );
 }
 
 

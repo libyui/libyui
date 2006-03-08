@@ -122,7 +122,6 @@ YQPackageSelector::help()
 
     html += "</ul>";
 
-
     YQPkgTextDialog::showText( this, html );
 }
 
@@ -243,7 +242,6 @@ YQPackageSelector::symbolHelp()
 
     html += "/<table>";
 
-
     YQPkgTextDialog::showText( this, html );
 }
 
@@ -337,7 +335,6 @@ YQPackageSelector::keyboardHelp()
 		     + goto_next );
 
     html += "/<table>";
-
 
     YQPkgTextDialog::showText( this, html );
 }

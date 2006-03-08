@@ -237,7 +237,7 @@ YQPkgRpmGroupTag::YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView * 	parentFilterV
     , _filterView( parentFilterView )
     , _rpmGroup( rpmGroup )
 {
-    setText( 0,  fromUTF8( _rpmGroup->value().translation().c_str() ) );
+    setText( 0,  fromUTF8( _rpmGroup->value().translation() ) );
 }
 
 
@@ -248,7 +248,7 @@ YQPkgRpmGroupTag::YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView * 	parentFilterV
     , _filterView( parentFilterView )
     , _rpmGroup( rpmGroup )
 {
-    setText( 0,  fromUTF8( _rpmGroup->value().translation().c_str() )  );
+    setText( 0,  fromUTF8( _rpmGroup->value().translation() )  );
 }
 
 
