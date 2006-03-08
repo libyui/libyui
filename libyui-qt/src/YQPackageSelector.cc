@@ -53,6 +53,7 @@
 #include "YQPkgDescriptionView.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
+#include "YQPkgFileListView.h"
 #include "YQPkgLangList.h"
 #include "YQPkgList.h"
 #include "YQPkgRpmGroupTagsFilterView.h"
@@ -99,6 +100,7 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     _patternList		= 0;
     _pkgDependenciesView	= 0;
     _pkgDescriptionView		= 0;
+    _pkgFileListView		= 0;
     _pkgList			= 0;
     _pkgTechnicalDetailsView	= 0;
     _pkgVersionsView		= 0;
@@ -411,6 +413,8 @@ YQPackageSelector::layoutPkgList( QWidget * parent )
 void
 YQPackageSelector::layoutDetailsViews( QWidget * parent )
 {
+    bool haveInstalledPkgs = YQPkgList::haveInstalledPkgs();
+
     QVBox * details_vbox = new QVBox( parent );
     CHECK_PTR( details_vbox );
     details_vbox->setMinimumSize( 0, 0 );
@@ -462,6 +466,34 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
     connect( _pkgList,			SIGNAL( selectionChanged    ( ZyppSel ) ),
 	     _pkgDependenciesView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
+
+
+    //
+    // File List
+    //
+
+    if ( haveInstalledPkgs )	// file list information is only available for installed pkgs
+    {
+	_pkgFileListView = new YQPkgFileListView( _detailsViews );
+	CHECK_PTR( _pkgFileListView );
+
+	_detailsViews->addTab( _pkgFileListView, _( "File List" ) );
+	_detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
+
+	connect( _pkgList,		SIGNAL( selectionChanged    ( ZyppSel ) ),
+		 _pkgFileListView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
+    }
+
+
+    //
+    // Change Log
+    //
+
+    if ( haveInstalledPkgs )	// change log information is only available for installed pkgs
+    {
+#ifdef FIXME
+#endif
+    }
 
 
     //

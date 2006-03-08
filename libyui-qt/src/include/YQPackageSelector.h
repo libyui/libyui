@@ -44,6 +44,7 @@ class QY2ComboTabWidget;
 class YQPkgDependenciesView;
 class YQPkgDescriptionView;
 class YQPkgDiskUsageList;
+class YQPkgFileListView;
 class YQPkgInstSrcFilterView;
 class YQPkgLangList;
 class YQPkgList;
@@ -242,6 +243,7 @@ protected:
     QY2ComboTabWidget *			_filters;
     YQPkgDependenciesView *		_pkgDependenciesView;
     YQPkgDescriptionView *		_pkgDescriptionView;
+    YQPkgFileListView *			_pkgFileListView;
     YQPkgInstSrcFilterView *		_instSrcFilterView;
     YQPkgLangList *			_langList;
     YQPkgList *				_pkgList;

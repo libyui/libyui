@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQPkgDescriptionView.h
+  File:	      YQPkgFileListView.h
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
@@ -19,17 +19,20 @@
 // -*- c++ -*-
 
 
-#ifndef YQPkgDescriptionView_h
-#define YQPkgDescriptionView_h
+#ifndef YQPkgFileListView_h
+#define YQPkgFileListView_h
 
 #include "YQPkgGenericDetailsView.h"
 
 
+using std::list;
+using std::string;
+
+
 /**
- * @short Display the description of a ZyppObj derived object along with its
- * name and summary.
+ * @short Display a pkg's file list
  **/
-class YQPkgDescriptionView : public YQPkgGenericDetailsView
+class YQPkgFileListView : public YQPkgGenericDetailsView
 {
     Q_OBJECT
 
@@ -38,12 +41,12 @@ public:
     /**
      * Constructor
      **/
-    YQPkgDescriptionView( QWidget * parent );
+    YQPkgFileListView( QWidget * parent );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgDescriptionView();
+    virtual ~YQPkgFileListView();
 
     /**
      * Show details for the specified package:
@@ -52,27 +55,13 @@ public:
      **/
     virtual void showDetails( ZyppSel selectable );
 
-    /**
-     * Get the document pointed to by a hyperlink.
-     *
-     * Reimplemented from QTextBrowser to avoid having an empty text each time
-     * the user clicks on a hyperlink.
-     **/
-    virtual void setSource( const QString & name );
-
 protected:
 
     /**
-     * Format a multi-line text into paragraphs
+     * Format a file list in HTML
      **/
-    QString simpleHtmlParagraphs( QString text );
-    
-    /**
-     * Show information for a hyperlinked object,
-     * e.g., a "pkg:somepkg" link to another package.
-     **/
-    void showLink( const QString & url );
+    QString formatFileList( const list<string> & fileList );
 };
 
 
-#endif // ifndef YQPkgDescriptionView_h
+#endif // ifndef YQPkgFileListView_h

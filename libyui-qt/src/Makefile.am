@@ -84,6 +84,7 @@ liby2qt_la_SOURCES = 				\
 	YQPkgDescriptionView.cc			\
 	YQPkgDiskUsageList.cc			\
 	YQPkgDiskUsageWarningDialog.cc		\
+	YQPkgFileListView.cc			\
 	YQPkgGenericDetailsView.cc		\
 	YQPkgInstSrcFilterView.cc		\
 	YQPkgInstSrcList.cc			\
@@ -178,6 +179,7 @@ BUILT_SOURCES =					\
 	YQPkgDescriptionView.moc		\
 	YQPkgDiskUsageList.moc			\
 	YQPkgDiskUsageWarningDialog.moc		\
+	YQPkgFileListView.moc			\
 	YQPkgGenericDetailsView.moc		\
 	YQPkgInstSrcFilterView.moc		\
 	YQPkgInstSrcList.moc			\
@@ -259,6 +261,7 @@ YQPkgDescriptionDialog.o YQPkgDescriptionDialog.lo:		YQPkgDescriptionDialog.moc
 YQPkgDescriptionView.o YQPkgDescriptionView.lo:			YQPkgDescriptionView.moc
 YQPkgDiskUsageList.o YQPkgDiskUsageList.lo:			YQPkgDiskUsageList.moc
 YQPkgDiskUsageWarningDialog.o YQPkgDiskUsageWarningDialog.lo:	YQPkgDiskUsageWarningDialog.moc
+YQPkgFileListView.o YQPkgFileListView.lo:			YQPkgFileListView.moc
 YQPkgGenericDetailsView.o YQPkgGenericDetailsView.lo:		YQPkgGenericDetailsView.moc
 YQPkgInstSrcFilterView.o YQPkgInstSrcFilterView.lo:		YQPkgInstSrcFilterView.moc
 YQPkgInstSrcList.o YQPkgInstSrcList.lo:				YQPkgInstSrcList.moc
@@ -338,6 +341,7 @@ YQPkgDescriptionDialog.moc:		include/YQPkgDescriptionDialog.h
 YQPkgDescriptionView.moc:		include/YQPkgDescriptionView.h
 YQPkgDiskUsageList.moc:			include/YQPkgDiskUsageList.h
 YQPkgDiskUsageWarningDialog.moc:	include/YQPkgDiskUsageWarningDialog.h
+YQPkgFileListView.moc:			include/YQPkgFileListView.h
 YQPkgGenericDetailsView.moc:		include/YQPkgGenericDetailsView.h
 YQPkgInstSrcFilterView.moc:		include/YQPkgInstSrcFilterView.h
 YQPkgInstSrcList.moc:			include/YQPkgInstSrcList.h
