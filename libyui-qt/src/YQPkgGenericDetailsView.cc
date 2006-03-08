@@ -87,7 +87,7 @@ YQPkgGenericDetailsView::minimumSizeHint() const
 
 
 QString
-YQPkgGenericDetailsView::htmlHeading( ZyppSel selectable )
+YQPkgGenericDetailsView::htmlHeading( ZyppSel selectable, bool showVersion )
 {
     if ( ! selectable )
 	return "";
@@ -107,6 +107,9 @@ YQPkgGenericDetailsView::htmlHeading( ZyppSel selectable )
     html += "><tr><td><b>"
 	+ fromUTF8( zyppObj->name() )
 	+ "</b>";
+
+    if ( showVersion )
+	html += QString( "<b>-" ) + zyppObj->edition().asString().c_str() + "</b>";
 
     if ( ! summary.isEmpty() )
 	html += " - " + summary;
@@ -156,7 +159,7 @@ QString
 YQPkgGenericDetailsView::cell( QString contents )
 {
     contents = htmlEscape( contents );
-    return "<td align=top>" + contents + "</td>";
+    return "<td valign=top>" + contents + "</td>";
 }
 
 
@@ -164,7 +167,7 @@ QString
 YQPkgGenericDetailsView::cell( int contents )
 {
     QString html;
-    html.sprintf( "<td align=top>%d</td>", contents );
+    html.sprintf( "<td valign=top>%d</td>", contents );
 
     return html;
 }
@@ -187,7 +190,7 @@ YQPkgGenericDetailsView::cell( const string & contents )
 QString
 YQPkgGenericDetailsView::hcell( QString contents )
 {
-    QString html = "<td align=top";
+    QString html = "<td valign=top";
 
     if ( ! YQUI::ui()->usingVisionImpairedPalette() )
 	html += " bgcolor=#D0D0D0";

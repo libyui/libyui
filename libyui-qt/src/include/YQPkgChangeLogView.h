@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQPkgFileListView.h
+  File:	      YQPkgChangeLogView.h
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
@@ -19,9 +19,10 @@
 // -*- c++ -*-
 
 
-#ifndef YQPkgFileListView_h
-#define YQPkgFileListView_h
+#ifndef YQPkgChangeLogView_h
+#define YQPkgChangeLogView_h
 
+#include <zypp/Changelog.h>
 #include "YQPkgGenericDetailsView.h"
 
 
@@ -32,7 +33,7 @@ using std::string;
 /**
  * @short Display a pkg's file list
  **/
-class YQPkgFileListView : public YQPkgGenericDetailsView
+class YQPkgChangeLogView : public YQPkgGenericDetailsView
 {
     Q_OBJECT
 
@@ -41,12 +42,12 @@ public:
     /**
      * Constructor
      **/
-    YQPkgFileListView( QWidget * parent );
+    YQPkgChangeLogView( QWidget * parent );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgFileListView();
+    virtual ~YQPkgChangeLogView();
 
     /**
      * Show details for the specified package:
@@ -58,10 +59,10 @@ public:
 protected:
 
     /**
-     * Format a file list in HTML
+     * Format a change log list in HTML
      **/
-    QString formatFileList( const list<string> & fileList ) const;
+    QString changeLogTable( const zypp::Changelog & changeLog ) const;
 };
 
 
-#endif // ifndef YQPkgFileListView_h
+#endif // ifndef YQPkgChangeLogView_h

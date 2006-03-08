@@ -64,8 +64,9 @@ public:
     /**
      * Returns a uniform heading in HTML format for the specified selectable:
      * name and summary
+     * or name, version and summary, if 'showVersion' is 'true'
      **/
-    static QString htmlHeading( ZyppSel selectable );
+    static QString htmlHeading( ZyppSel selectable, bool showVersion = false );
 
     /**
      * Escapes characters special to HTML in a ( plain text ) string, such as:

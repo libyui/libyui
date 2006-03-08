@@ -46,6 +46,7 @@
 #include "QY2LayoutUtils.h"
 
 #include "YQPackageSelector.h"
+#include "YQPkgChangeLogView.h"
 #include "YQPkgChangesDialog.h"
 #include "YQPkgConflictDialog.h"
 #include "YQPkgConflictList.h"
@@ -98,6 +99,7 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     _instSrcFilterView		= 0;
     _langList			= 0;
     _patternList		= 0;
+    _pkgChangeLogView		= 0;
     _pkgDependenciesView	= 0;
     _pkgDescriptionView		= 0;
     _pkgFileListView		= 0;
@@ -468,6 +470,21 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 	     _pkgDependenciesView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
 
+
+    //
+    // Versions
+    //
+
+    _pkgVersionsView = new YQPkgVersionsView( _detailsViews,
+					      true );	// userCanSwitchVersions
+    CHECK_PTR( _pkgVersionsView );
+
+    _detailsViews->addTab( _pkgVersionsView, _( "&Versions" ) );
+
+    connect( _pkgList,		SIGNAL( selectionChanged    ( ZyppSel ) ),
+	     _pkgVersionsView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
+
+    
     //
     // File List
     //
@@ -491,23 +508,15 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
     if ( haveInstalledPkgs )	// change log information is only available for installed pkgs
     {
-#ifdef FIXME
-#endif
+	_pkgChangeLogView = new YQPkgChangeLogView( _detailsViews );
+	CHECK_PTR( _pkgChangeLogView );
+
+	_detailsViews->addTab( _pkgChangeLogView, _( "Change Log" ) );
+	_detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
+
+	connect( _pkgList,		SIGNAL( selectionChanged    ( ZyppSel ) ),
+		 _pkgChangeLogView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
     }
-
-
-    //
-    // Versions
-    //
-
-    _pkgVersionsView = new YQPkgVersionsView( _detailsViews,
-					      true );	// userCanSwitchVersions
-    CHECK_PTR( _pkgVersionsView );
-
-    _detailsViews->addTab( _pkgVersionsView, _( "&Versions" ) );
-
-    connect( _pkgList,		SIGNAL( selectionChanged    ( ZyppSel ) ),
-	     _pkgVersionsView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 }
 
 

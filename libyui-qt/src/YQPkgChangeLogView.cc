@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:		YQPkgFileListView.cc
+  File:		YQPkgChangeLogView.cc
 
   Author:	Stefan Hundhammer <sh@suse.de>
 
@@ -22,29 +22,27 @@
 #include <ycp/y2log.h>
 
 #include <qregexp.h>
-#include "YQPkgFileListView.h"
+#include "YQPkgChangeLogView.h"
 #include "YQPkgDescriptionDialog.h"
 #include "YQi18n.h"
 #include "utf8.h"
 
 
-#define MAX_LINES 5000
 
-
-YQPkgFileListView::YQPkgFileListView( QWidget * parent )
+YQPkgChangeLogView::YQPkgChangeLogView( QWidget * parent )
     : YQPkgGenericDetailsView( parent )
 {
 }
 
 
-YQPkgFileListView::~YQPkgFileListView()
+YQPkgChangeLogView::~YQPkgChangeLogView()
 {
     // NOP
 }
 
 
 void
-YQPkgFileListView::showDetails( ZyppSel selectable )
+YQPkgChangeLogView::showDetails( ZyppSel selectable )
 {
     _selectable = selectable;
 
@@ -55,13 +53,13 @@ YQPkgFileListView::showDetails( ZyppSel selectable )
     }
 
     QString html = htmlHeading( selectable,
-				true ); // showVersion
+				true );	// showVersion
     
     ZyppPkg installed = tryCastToZyppPkg( selectable->installedObj() );
 
     if ( installed )
     {
-	html += formatFileList( installed->filenames() );
+	html += changeLogTable( installed->changelog() );
     }
     else
     {
@@ -74,37 +72,27 @@ YQPkgFileListView::showDetails( ZyppSel selectable )
 
 
 
-QString YQPkgFileListView::formatFileList( const list<string> & fileList ) const
+QString YQPkgChangeLogView::changeLogTable( const zypp::Changelog & changeLog ) const
 {
     QString html;
-    unsigned line_count = 0;
 
-    for ( list<string>::const_iterator it = fileList.begin();
-	  it != fileList.end() && line_count < MAX_LINES;
-	  ++it, ++line_count )
+    for ( zypp::Changelog::const_iterator it = changeLog.begin();
+	  it != changeLog.end();
+	  ++it )
     {
-	QString line = htmlEscape( fromUTF8( *it ) );
+	QString changes = htmlEscape( fromUTF8( (*it).text() ) );
+	changes.replace( "\n", "<br>" );
+	changes.replace( " ", "&nbsp;" );
 
-	if ( line.contains( "/bin/"  ) ||
-	     line.contains( "/sbin/" )	 )
-	{
-	    line = "<b>" + line + "</b>";
-	}
-
-	html += line + "<br>";
+	html += row(
+		    cell( (*it).date()   ) +
+		    cell( (*it).author() ) +
+		    "<td valign=top>" + changes + "</td>" // cell() calls htmlEscape() !
+		    );
     }
 
-    if ( fileList.size() > MAX_LINES )
-    {
-	html += "...<br>";
-	html += "...<br>";
-    }
-
-    // %1 is the total number of files in a file list
-    html += "<br>" + _( "%1 files total" ).arg( (unsigned long) fileList.size() );
-
-    return "<p>" + html + "</p>";
+    return html.isEmpty() ? "" : table( html );
 }
 
 
-#include "YQPkgFileListView.moc"
+#include "YQPkgChangeLogView.moc"

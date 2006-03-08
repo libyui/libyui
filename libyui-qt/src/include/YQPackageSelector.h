@@ -41,6 +41,7 @@ class QMenuBar;
 
 class QY2ComboTabWidget;
 
+class YQPkgChangeLogView;
 class YQPkgDependenciesView;
 class YQPkgDescriptionView;
 class YQPkgDiskUsageList;
@@ -241,6 +242,7 @@ protected:
     QPushButton *			_checkDependenciesButton;
     QTabWidget *			_detailsViews;
     QY2ComboTabWidget *			_filters;
+    YQPkgChangeLogView *		_pkgChangeLogView;
     YQPkgDependenciesView *		_pkgDependenciesView;
     YQPkgDescriptionView *		_pkgDescriptionView;
     YQPkgFileListView *			_pkgFileListView;
