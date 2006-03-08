@@ -79,8 +79,6 @@ public:
      * Show a text and wait until the user confirmed with 'OK'.
      **/
     static void showText( QWidget * parent, const QString & text );
-    static void showText( QWidget * parent, const string & text );
-    static void showText( QWidget * parent, const char * text );
 
     /**
      * Show a text with a headline identifying a selectable (name+summary).

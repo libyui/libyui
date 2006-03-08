@@ -199,23 +199,11 @@ void YQPkgTextDialog::showText( QWidget * parent, const QString & text )
 }
 
 
-void YQPkgTextDialog::showText( QWidget * parent, const string & text )
-{
-    showText( parent, QString( text.c_str() ) );
-}
-
-
-void YQPkgTextDialog::showText( QWidget * parent, const char * text )
-{
-    showText( parent, QString( text ) );
-}
-
-
-void YQPkgTextDialog::showText( QWidget * 			parent,
+void YQPkgTextDialog::showText( QWidget * 	parent,
 				ZyppSel 	selectable,
-				const string & 			text )
+				const string & 	text )
 {
-    showText( parent, htmlHeading( selectable ) + QString::fromUtf8( text.c_str() ) );
+    showText( parent, htmlHeading( selectable ) + fromUTF8( text ) );
 }
 
 
