@@ -41,10 +41,10 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     y2debug( "Creating patch list" );
 
     int numCol = 0;
-    addColumn( "" );					_statusCol	= numCol++;
-    addColumn( _( "YaST Online Update Patch"	) );	_summaryCol	= numCol++;
-    addColumn( _( "Kind" 			) );	_kindCol	= numCol++;
-    addColumn( _( "Size" 			) );	_sizeCol	= numCol++;
+    addColumn( "" );			_statusCol	= numCol++;
+    addColumn( _( "Patch"	) );	_summaryCol	= numCol++;
+    addColumn( _( "Kind" 	) );	_kindCol	= numCol++;
+    addColumn( _( "Size" 	) );	_sizeCol	= numCol++;
     setAllColumnsShowFocus( true );
     setColumnAlignment( sizeCol(), Qt::AlignRight );
 
@@ -55,6 +55,7 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     setSorting( kindCol() );
     selectSomething();
 
+#ifdef FIXME
     QString label = _( "Show &Raw Patch Info" );
     actionShowRawPatchInfo = new QAction( label,		// text
 					  label + "\tr",	// menu text
@@ -62,6 +63,7 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
 					  ( QObject * ) 0 );	// parent
 
     connect( actionShowRawPatchInfo, SIGNAL( activated() ), SLOT( showRawPatchInfo() ) );
+#endif
 
     y2debug( "Creating patch list done" );
 }
@@ -79,16 +81,16 @@ YQPkgPatchList::fillList()
     clear();
     y2debug( "Filling patch list" );
 
-#ifdef FIXME
-    PMManager::SelectableVec::const_iterator it = Y2PM::youPatchManager().begin();
 
-    while ( it != Y2PM::youPatchManager().end() )
+    for ( ZyppPoolIterator it = zyppPatchesBegin();
+	  it != zyppPatchesEnd();
+	  ++it )
     {
-	ZyppPatch	patch  = ( *it)->theObj();
-	ZyppStatus	status =( *it)->status();
+	ZyppPatch zyppPatch = tryCastToZyppPatch( (*it)->theObj() );
 
-	if ( patch )
+	if ( zyppPatch )
 	{
+#ifdef FIXME
 	    switch ( _patchCategory )
 	    {
 		case InstallablePatches:
@@ -104,11 +106,16 @@ YQPkgPatchList::fillList()
 		case AllPatches:
 		    addPatchItem( *it, patch );
 	    }
-	}
-
-	++it;
-    }
+#else
+	    addPatchItem( *it, zyppPatch);
 #endif
+	}
+	else
+	{
+	    y2error( "Found non-patch selectable" );
+	}
+    }
+
 
     if ( ! firstChild() )
 	message( _( "No patches available." ) );
@@ -210,11 +217,11 @@ YQPkgPatchList::filter()
 
 void
 YQPkgPatchList::addPatchItem( ZyppSel	selectable,
-				    ZyppPatch 	zyppPatch )
+			      ZyppPatch zyppPatch )
 {
     if ( ! selectable )
     {
-	y2error( "NULL zypp::ui::Selectable!" );
+	y2error( "NULL ZyppSel!" );
 	return;
     }
 
@@ -328,8 +335,8 @@ YQPkgPatchList::keyPressEvent( QKeyEvent * event )
 
 
 YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList * 	patchList,
-					      ZyppSel			selectable,
-					      ZyppPatch 		zyppPatch )
+					ZyppSel			selectable,
+					ZyppPatch 		zyppPatch )
     : YQPkgObjListItem( patchList, selectable, zyppPatch )
     , _patchList( patchList )
     , _zyppPatch( zyppPatch )
