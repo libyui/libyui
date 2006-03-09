@@ -44,9 +44,9 @@ YQPackageSelector::help()
 
     if ( _youMode )
     {
-	// Help specific to YOU ( YaST Online Update ) mode
+	// Help specific to patch mode
 
-	html += para( _( "In this dialog, select YOU (YaST Online Update) patches to download and install." ) );
+	html += para( _( "In this dialog, select patches to download and install." ) );
 	html += para( _( "The list on the left side contains available patches"
 			 " along with the respective patch kind (security, recommended, or optional)"
 			 " and the (estimated) download size." ) );
@@ -62,13 +62,13 @@ YQPackageSelector::help()
 	// affect the amount of visible packages in the package list and "details views" ( below the package list )
 	// that show details about the ( one ) currently selected package in the package list.
 
-	html += para( _( "In addition to \"YOU patches\", you can also select one of the other filter views"
+	html += para( _( "In addition to \"patches\", you can also select one of the other filter views"
 			 " from the <b>Filter</b> combo-box at the upper left:" ) );
 	html += "<ul>";
     }
     else // ! _youMode
     {
-	// Help specific to normal ( non-YOU ) mode
+	// Help specific to normal (non-patch) mode
 
 	html += para( _( "In this dialog, select which packages to install, update, or delete."
 			 " You can select individual packages or entire package \"selections\"." ) );

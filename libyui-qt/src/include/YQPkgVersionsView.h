@@ -44,7 +44,7 @@ public:
      * Constructor.
      *
      * 'userCanSwitchVersions' specifies whether or not the user is allowed to
-     * switch between package versions - e.g. in YOU mode, he can't.
+     * switch between package versions - e.g. in patch mode, he can't.
      **/
     YQPkgVersionsView( QWidget * parent, bool userCanSwitchVersions );
 

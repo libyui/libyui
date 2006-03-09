@@ -639,7 +639,7 @@ YQPackageSelector::addMenus()
     if ( _patchList )
     {
 	//
-	// YOU Patch menu
+	// Patch menu
 	//
 
 	_patchMenu = new QPopupMenu( _menuBar );

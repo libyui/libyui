@@ -36,7 +36,7 @@ class QTabWidget;
 
 /**
  * @short Display a list of zypp::Patch objects and ( below ) details about the
- * currently selected YOU patch.
+ * currently selected patch.
  **/
 class YQPkgPatchFilterView : public QVBox
 {
@@ -78,7 +78,7 @@ public slots:
 protected slots:
 
     /**
-     * Fill the YOU patch list with regard to the _patchCategory
+     * Fill the patch list with regard to the _patchCategory
      * combo box.
      **/
     void fillPatchList();

@@ -38,7 +38,7 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     : YQPkgObjList( parent )
     , _patchCategory( InstallablePatches )
 {
-    y2debug( "Creating YOU patch list" );
+    y2debug( "Creating patch list" );
 
     int numCol = 0;
     addColumn( "" );					_statusCol	= numCol++;
@@ -63,7 +63,7 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
 
     connect( actionShowRawPatchInfo, SIGNAL( activated() ), SLOT( showRawPatchInfo() ) );
 
-    y2debug( "Creating YOU patch list done" );
+    y2debug( "Creating patch list done" );
 }
 
 
@@ -77,7 +77,7 @@ void
 YQPkgPatchList::fillList()
 {
     clear();
-    y2debug( "Filling YOU patch list" );
+    y2debug( "Filling patch list" );
 
 #ifdef FIXME
     PMManager::SelectableVec::const_iterator it = Y2PM::youPatchManager().begin();
@@ -113,7 +113,7 @@ YQPkgPatchList::fillList()
     if ( ! firstChild() )
 	message( _( "No patches available." ) );
 
-    y2debug( "YOU patch list filled" );
+    y2debug( "patch list filled" );
 }
 
 
@@ -157,7 +157,7 @@ YQPkgPatchList::filter()
 	    if ( ! patch->preScript().empty() )
 	    {
 		// Translators: (Fixed) name for a script that is executed
-		// at the start of installation of a YOU patch
+		// at the start of installation of a patch
 		emit filterMatch( _( "[Pre-Script]" ), fromUTF8( patch->preScript() ), -1 );
 	    }
 
@@ -185,7 +185,7 @@ YQPkgPatchList::filter()
 	    for ( list<PMYouFile>::iterator it = files.begin(); it != files.end(); ++it )
 	    {
 		// Translators: (Fixed) name for an extra file (outside packages)
-                // that comes with a YOU patch
+                // that comes with a patch
 		emit filterMatch( _( "[File]" ), fromUTF8( (*it).name() ), (*it).size() );
 	    }
 
@@ -197,7 +197,7 @@ YQPkgPatchList::filter()
 	    if ( ! patch->postScript().empty() )
 	    {
 		// Translators: (Fixed) name for a script that is executed
-                // at the end of installation of a YOU patch
+                // at the end of installation of a patch
 		emit filterMatch( _( "[Post-Script]" ), fromUTF8( patch->postScript() ), -1 );
 	    }
 #endif
@@ -376,7 +376,7 @@ YQPkgPatchListItem::cycleStatus()
 {
     YQPkgObjListItem::cycleStatus();
 
-    if ( status() == S_Del )	// Can't delete YOU patches
+    if ( status() == S_Del )	// Can't delete patches
 	setStatus( S_KeepInstalled );
 }
 
