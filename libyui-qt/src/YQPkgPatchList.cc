@@ -331,7 +331,7 @@ YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList * 	youPatchList,
 					      ZyppSel			selectable,
 					      ZyppPatch 		zyppPatch )
     : YQPkgObjListItem( youPatchList, selectable, zyppPatch )
-    , _youPatchList( youPatchList )
+    , _patchList( youPatchList )
     , _zyppPatch( zyppPatch )
 {
     if ( ! _zyppPatch )
@@ -367,7 +367,7 @@ YQPkgPatchListItem::setStatus( ZyppStatus newStatus )
 #ifdef FIXME
     Y2PM::youPatchManager().updatePackageStates();
 #endif
-    _youPatchList->sendUpdatePackages();
+    _patchList->sendUpdatePackages();
 }
 
 

@@ -257,14 +257,14 @@ protected:
     YQPkgTechnicalDetailsView *		_pkgTechnicalDetailsView;
     YQPkgUpdateProblemFilterView *	_updateProblemFilterView;
     YQPkgVersionsView *			_pkgVersionsView;
-    YQPkgPatchFilterView *		_youPatchFilterView;
-    YQPkgPatchList *			_youPatchList;
+    YQPkgPatchFilterView *		_patchFilterView;
+    YQPkgPatchList *			_patchList;
 
     QMenuBar *				_menuBar;
     QPopupMenu *			_fileMenu;
     QPopupMenu *			_viewMenu;
     QPopupMenu *			_pkgMenu;
-    QPopupMenu *			_youPatchMenu;
+    QPopupMenu *			_patchMenu;
     QPopupMenu *			_extrasMenu;
     QPopupMenu *			_helpMenu;
 

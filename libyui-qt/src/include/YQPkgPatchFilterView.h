@@ -58,7 +58,7 @@ public:
     /**
      * Returns this view's selections list.
      **/
-    YQPkgPatchList * youPatchList() const { return _youPatchList; }
+    YQPkgPatchList * youPatchList() const { return _patchList; }
 
     /**
      * Reimplemented from QWidget:
@@ -90,7 +90,7 @@ protected:
     // Data members
 
     QSplitter *			_splitter;
-    YQPkgPatchList *		_youPatchList;
+    YQPkgPatchList *		_patchList;
     QComboBox *			_patchCategory;
     QTabWidget *		_detailsViews;
     YQPkgDescriptionView *	_descriptionView;

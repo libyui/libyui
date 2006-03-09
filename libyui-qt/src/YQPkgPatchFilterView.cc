@@ -49,7 +49,7 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
     _splitter			= new QSplitter( QSplitter::Vertical, this );	CHECK_PTR( _splitter 		);
 
     vbox			= new QVBox( _splitter );			CHECK_PTR( vbox			);
-    _youPatchList		= new YQPkgPatchList( vbox );		CHECK_PTR( _youPatchList 	);
+    _patchList		= new YQPkgPatchList( vbox );		CHECK_PTR( _patchList 	);
 
     addVSpacing( vbox, 4 );
 
@@ -101,10 +101,10 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
     _totalDownloadSize->setMidLineWidth(2);
 
 
-    connect( _youPatchList,	SIGNAL( selectionChanged    ( ZyppSel ) ),
+    connect( _patchList,	SIGNAL( selectionChanged    ( ZyppSel ) ),
 	     _descriptionView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
-    connect( _youPatchList,	SIGNAL( statusChanged() 		),
+    connect( _patchList,	SIGNAL( statusChanged() 		),
 	     this,		SLOT  ( updateTotalDownloadSize() 	) );
 
     updateTotalDownloadSize();
@@ -139,9 +139,9 @@ YQPkgPatchFilterView::fillPatchList()
 	default:	category = YQPkgPatchList::InstallablePatches;			break;
     }
 
-    _youPatchList->setPatchCategory( category );
-    _youPatchList->fillList();
-    _youPatchList->selectSomething();
+    _patchList->setPatchCategory( category );
+    _patchList->fillList();
+    _patchList->selectSomething();
 }
 
 

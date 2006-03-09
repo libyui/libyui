@@ -111,8 +111,8 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     _selList			= 0;
     _statusFilterView		= 0;
     _updateProblemFilterView	= 0;
-    _youPatchFilterView		= 0;
-    _youPatchList		= 0;
+    _patchFilterView		= 0;
+    _patchList		= 0;
 
     _searchMode	 = opt.searchMode.value();
     _testMode	 = opt.testMode.value();
@@ -130,14 +130,14 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     makeConnections();
     emit loadData();
 
-    if ( _youPatchFilterView )
+    if ( _patchFilterView )
     {
-	if ( _filters && _youPatchFilterView && _youPatchList )
+	if ( _filters && _patchFilterView && _patchList )
 	{
-	    _filters->showPage( _youPatchFilterView );
-	    _youPatchList->filter();
-	    _youPatchList->clearSelection();
-	    _youPatchList->selectSomething();
+	    _filters->showPage( _patchFilterView );
+	    _patchList->filter();
+	    _patchList->clearSelection();
+	    _patchList->selectSomething();
 	}
     }
     else if ( _updateProblemFilterView )
@@ -256,12 +256,12 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     if ( _youMode )
     {
-	_youPatchFilterView = new YQPkgPatchFilterView( parent );
-	CHECK_PTR( _youPatchFilterView );
-	_filters->addPage( _( "Patches" ), _youPatchFilterView );
+	_patchFilterView = new YQPkgPatchFilterView( parent );
+	CHECK_PTR( _patchFilterView );
+	_filters->addPage( _( "Patches" ), _patchFilterView );
 
-	_youPatchList = _youPatchFilterView->youPatchList();
-	CHECK_PTR( _youPatchList );
+	_patchList = _patchFilterView->youPatchList();
+	CHECK_PTR( _patchList );
     }
 
 
@@ -574,7 +574,7 @@ YQPackageSelector::layoutMenuBar( QWidget * parent )
     _fileMenu		= 0;
     _viewMenu		= 0;
     _pkgMenu 		= 0;
-    _youPatchMenu 	= 0;
+    _patchMenu 	= 0;
     _extrasMenu		= 0;
     _helpMenu 		= 0;
 
@@ -636,24 +636,24 @@ YQPackageSelector::addMenus()
     }
 
 
-    if ( _youPatchList )
+    if ( _patchList )
     {
 	//
 	// YOU Patch menu
 	//
 
-	_youPatchMenu = new QPopupMenu( _menuBar );
-	CHECK_PTR( _youPatchMenu );
-	_menuBar->insertItem( _( "&Patch" ), _youPatchMenu );
+	_patchMenu = new QPopupMenu( _menuBar );
+	CHECK_PTR( _patchMenu );
+	_menuBar->insertItem( _( "&Patch" ), _patchMenu );
 
-	_youPatchList->actionSetCurrentInstall->addTo( _youPatchMenu );
-	_youPatchList->actionSetCurrentDontInstall->addTo( _youPatchMenu );
-	_youPatchList->actionSetCurrentKeepInstalled->addTo( _youPatchMenu );
-	_youPatchList->actionSetCurrentUpdate->addTo( _youPatchMenu );
-	_youPatchList->actionSetCurrentTaboo->addTo( _youPatchMenu );
+	_patchList->actionSetCurrentInstall->addTo( _patchMenu );
+	_patchList->actionSetCurrentDontInstall->addTo( _patchMenu );
+	_patchList->actionSetCurrentKeepInstalled->addTo( _patchMenu );
+	_patchList->actionSetCurrentUpdate->addTo( _patchMenu );
+	_patchList->actionSetCurrentTaboo->addTo( _patchMenu );
 
-	_youPatchMenu->insertSeparator();
-        _youPatchList->addAllInListSubMenu( _youPatchMenu );
+	_patchMenu->insertSeparator();
+        _patchList->addAllInListSubMenu( _patchMenu );
     }
 
 
@@ -667,8 +667,8 @@ YQPackageSelector::addMenus()
 
     _extrasMenu->insertItem( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), CTRL + Key_A );
 
-    if ( _youPatchList )
-	_youPatchList->actionShowRawPatchInfo->addTo( _extrasMenu );
+    if ( _patchList )
+	_patchList->actionShowRawPatchInfo->addTo( _extrasMenu );
 
     // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
     _extrasMenu->insertItem( _( "Install All Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
@@ -751,7 +751,7 @@ YQPackageSelector::makeConnections()
 	     this, SLOT  ( restoreCheckButton() ) );
 
     connectFilter( _updateProblemFilterView,	_pkgList, false );
-    connectFilter( _youPatchList, 		_pkgList );
+    connectFilter( _patchList, 		_pkgList );
     connectFilter( _patternList, 		_pkgList );
     connectFilter( _selList, 			_pkgList );
     connectFilter( _instSrcFilterView,		_pkgList, false );
@@ -779,9 +779,9 @@ YQPackageSelector::makeConnections()
 		 _diskUsageList,	SLOT  ( updateDiskUsage() ) );
     }
 
-    if ( _pkgList && _youPatchList )
+    if ( _pkgList && _patchList )
     {
-	connect( _youPatchList, SIGNAL( filterMatch   ( const QString &, const QString &, FSize ) ),
+	connect( _patchList, SIGNAL( filterMatch   ( const QString &, const QString &, FSize ) ),
 		 _pkgList,	SLOT  ( addPassiveItem( const QString &, const QString &, FSize ) ) );
     }
 
@@ -839,10 +839,10 @@ YQPackageSelector::makeConnections()
 		 _pkgList, 	SLOT  ( updateActions() ) );
     }
 
-    if ( _youPatchMenu && _youPatchList )
+    if ( _patchMenu && _patchList )
     {
-	connect( _youPatchMenu,	SIGNAL( aboutToShow()   ),
-		 _youPatchList, SLOT  ( updateActions() ) );
+	connect( _patchMenu,	SIGNAL( aboutToShow()   ),
+		 _patchList, SLOT  ( updateActions() ) );
     }
 }
 

@@ -268,9 +268,9 @@ public:
 
     // Columns
 
-    int statusCol()	const	{ return _youPatchList->statusCol();	}
-    int summaryCol()	const	{ return _youPatchList->summaryCol();	}
-    int kindCol()	const	{ return _youPatchList->kindCol();	}
+    int statusCol()	const	{ return _patchList->statusCol();	}
+    int summaryCol()	const	{ return _patchList->summaryCol();	}
+    int kindCol()	const	{ return _patchList->kindCol();	}
 
 
 protected:
@@ -278,7 +278,7 @@ protected:
 
     // Data members
 
-    YQPkgPatchList *	_youPatchList;
+    YQPkgPatchList *	_patchList;
     ZyppPatch		_zyppPatch;
 };
 
