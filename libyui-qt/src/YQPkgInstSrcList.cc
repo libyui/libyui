@@ -74,9 +74,9 @@ YQPkgInstSrcList::fillList()
     y2debug( "Filling inst source list" );
 
     zypp::SourceManager_Ptr sourceManager = zypp::SourceManager::sourceManager();
-    list<unsigned int> sources = sourceManager->allSources();
+    list<zypp::SourceManager::SourceId> sources = sourceManager->allSources();
 
-    for ( list<unsigned int>::const_iterator it = sources.begin();
+    for ( list<zypp::SourceManager::SourceId>::const_iterator it = sources.begin();
 	  it != sources.end();
 	  ++it )
     {
