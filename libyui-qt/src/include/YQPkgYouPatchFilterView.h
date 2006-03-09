@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQPkgYouPatchFilterView.h
+  File:	      YQPkgPatchFilterView.h
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
@@ -19,14 +19,14 @@
 // -*- c++ -*-
 
 
-#ifndef YQPkgYouPatchFilterView_h
-#define YQPkgYouPatchFilterView_h
+#ifndef YQPkgPatchFilterView_h
+#define YQPkgPatchFilterView_h
 
 #include "YQZypp.h"
 #include <qvbox.h>
 
 
-class YQPkgYouPatchList;
+class YQPkgPatchList;
 class YQPkgDescriptionView;
 class QComboBox;
 class QLabel;
@@ -38,7 +38,7 @@ class QTabWidget;
  * @short Display a list of zypp::Patch objects and ( below ) details about the
  * currently selected YOU patch.
  **/
-class YQPkgYouPatchFilterView : public QVBox
+class YQPkgPatchFilterView : public QVBox
 {
     Q_OBJECT
 
@@ -47,18 +47,18 @@ public:
     /**
      * Constructor
      **/
-    YQPkgYouPatchFilterView( QWidget * parent );
+    YQPkgPatchFilterView( QWidget * parent );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgYouPatchFilterView();
+    virtual ~YQPkgPatchFilterView();
 
 
     /**
      * Returns this view's selections list.
      **/
-    YQPkgYouPatchList * youPatchList() const { return _youPatchList; }
+    YQPkgPatchList * youPatchList() const { return _youPatchList; }
 
     /**
      * Reimplemented from QWidget:
@@ -90,7 +90,7 @@ protected:
     // Data members
 
     QSplitter *			_splitter;
-    YQPkgYouPatchList *		_youPatchList;
+    YQPkgPatchList *		_youPatchList;
     QComboBox *			_patchCategory;
     QTabWidget *		_detailsViews;
     YQPkgDescriptionView *	_descriptionView;
@@ -99,4 +99,4 @@ protected:
 
 
 
-#endif // ifndef YQPkgYouPatchFilterView_h
+#endif // ifndef YQPkgPatchFilterView_h

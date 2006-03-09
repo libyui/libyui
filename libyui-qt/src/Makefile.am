@@ -102,8 +102,8 @@ liby2qt_la_SOURCES = 				\
 	YQPkgTextDialog.cc			\
 	YQPkgUpdateProblemFilterView.cc		\
 	YQPkgVersionsView.cc			\
-	YQPkgYouPatchFilterView.cc		\
-	YQPkgYouPatchList.cc			\
+	YQPkgPatchFilterView.cc		\
+	YQPkgPatchList.cc			\
 	YQProgressBar.cc			\
 	YQPushButton.cc				\
 	YQRadioButton.cc			\
@@ -198,8 +198,8 @@ BUILT_SOURCES =					\
 	YQPkgTextDialog.moc			\
 	YQPkgUpdateProblemFilterView.moc	\
 	YQPkgVersionsView.moc			\
-	YQPkgYouPatchFilterView.moc		\
-	YQPkgYouPatchList.moc			\
+	YQPkgPatchFilterView.moc		\
+	YQPkgPatchList.moc			\
 	YQProgressBar.moc			\
 	YQPushButton.moc			\
 	YQRadioButton.moc			\
@@ -281,8 +281,8 @@ YQPkgTechnicalDetailsView.o YQPkgTechnicalDetailsView.lo:	YQPkgTechnicalDetailsV
 YQPkgTextDialog.o YQPkgTextDialog.lo:				YQPkgTextDialog.moc
 YQPkgUpdateProblemFilterView.o YQPkgUpdateProblemFilterView.lo:	YQPkgUpdateProblemFilterView.moc
 YQPkgVersionsView.o YQPkgVersionsView.lo:			YQPkgVersionsView.moc
-YQPkgYouPatchFilterView.o YQPkgYouPatchFilterView.lo:		YQPkgYouPatchFilterView.moc
-YQPkgYouPatchList.o YQPkgYouPatchList.lo:			YQPkgYouPatchList.moc
+YQPkgPatchFilterView.o YQPkgPatchFilterView.lo:		YQPkgPatchFilterView.moc
+YQPkgPatchList.o YQPkgPatchList.lo:			YQPkgPatchList.moc
 YQProgressBar.o YQProgressBar.lo:				YQProgressBar.moc
 YQPushButton.o YQPushButton.lo:					YQPushButton.moc
 YQRadioButton.o YQRadioButton.lo:				YQRadioButton.moc
@@ -362,8 +362,8 @@ YQPkgTechnicalDetailsView.moc:		include/YQPkgTechnicalDetailsView.h
 YQPkgTextDialog.moc:			include/YQPkgTextDialog.h
 YQPkgUpdateProblemFilterView.moc:	include/YQPkgUpdateProblemFilterView.h
 YQPkgVersionsView.moc:			include/YQPkgVersionsView.h
-YQPkgYouPatchFilterView.moc:		include/YQPkgYouPatchFilterView.h
-YQPkgYouPatchList.moc:			include/YQPkgYouPatchList.h
+YQPkgPatchFilterView.moc:		include/YQPkgPatchFilterView.h
+YQPkgPatchList.moc:			include/YQPkgPatchList.h
 YQProgressBar.moc:			include/YQProgressBar.h
 YQPushButton.moc:			include/YQPushButton.h
 YQRadioButton.moc:			include/YQRadioButton.h

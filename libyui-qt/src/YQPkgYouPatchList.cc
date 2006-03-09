@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQPkgYouPatchList.cc
+  File:	      YQPkgPatchList.cc
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
@@ -28,13 +28,13 @@
 #include "YQi18n.h"
 #include "utf8.h"
 
-#include "YQPkgYouPatchList.h"
+#include "YQPkgPatchList.h"
 #include "YQPkgTextDialog.h"
 
 using std::list;
 
 
-YQPkgYouPatchList::YQPkgYouPatchList( QWidget * parent )
+YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     : YQPkgObjList( parent )
     , _patchCategory( InstallablePatches )
 {
@@ -67,14 +67,14 @@ YQPkgYouPatchList::YQPkgYouPatchList( QWidget * parent )
 }
 
 
-YQPkgYouPatchList::~YQPkgYouPatchList()
+YQPkgPatchList::~YQPkgPatchList()
 {
     // NOP
 }
 
 
 void
-YQPkgYouPatchList::fillList()
+YQPkgPatchList::fillList()
 {
     clear();
     y2debug( "Filling YOU patch list" );
@@ -119,7 +119,7 @@ YQPkgYouPatchList::fillList()
 
 
 void
-YQPkgYouPatchList::message( const QString & text )
+YQPkgPatchList::message( const QString & text )
 {
     QY2ListViewItem * item = new QY2ListViewItem( this );
     CHECK_PTR( item );
@@ -131,7 +131,7 @@ YQPkgYouPatchList::message( const QString & text )
 
 
 void
-YQPkgYouPatchList::filterIfVisible()
+YQPkgPatchList::filterIfVisible()
 {
     if ( isVisible() )
 	filter();
@@ -139,7 +139,7 @@ YQPkgYouPatchList::filterIfVisible()
 
 
 void
-YQPkgYouPatchList::filter()
+YQPkgPatchList::filter()
 {
     emit filterStart();
 
@@ -209,7 +209,7 @@ YQPkgYouPatchList::filter()
 
 
 void
-YQPkgYouPatchList::addYouPatchItem( ZyppSel	selectable,
+YQPkgPatchList::addYouPatchItem( ZyppSel	selectable,
 				    ZyppPatch 	zyppPatch )
 {
     if ( ! selectable )
@@ -218,24 +218,24 @@ YQPkgYouPatchList::addYouPatchItem( ZyppSel	selectable,
 	return;
     }
 
-    new YQPkgYouPatchListItem( this, selectable, zyppPatch );
+    new YQPkgPatchListItem( this, selectable, zyppPatch );
 }
 
 
-YQPkgYouPatchListItem *
-YQPkgYouPatchList::selection() const
+YQPkgPatchListItem *
+YQPkgPatchList::selection() const
 {
     QListViewItem * item = selectedItem();
 
     if ( ! item )
 	return 0;
 
-    return dynamic_cast<YQPkgYouPatchListItem *> (item);
+    return dynamic_cast<YQPkgPatchListItem *> (item);
 }
 
 
 void
-YQPkgYouPatchList::createNotInstalledContextMenu()
+YQPkgPatchList::createNotInstalledContextMenu()
 {
     _notInstalledContextMenu = new QPopupMenu( this );
     CHECK_PTR( _notInstalledContextMenu );
@@ -249,7 +249,7 @@ YQPkgYouPatchList::createNotInstalledContextMenu()
 
 
 void
-YQPkgYouPatchList::createInstalledContextMenu()
+YQPkgPatchList::createInstalledContextMenu()
 {
     _installedContextMenu = new QPopupMenu( this );
     CHECK_PTR( _installedContextMenu );
@@ -263,7 +263,7 @@ YQPkgYouPatchList::createInstalledContextMenu()
 
 
 QPopupMenu *
-YQPkgYouPatchList::addAllInListSubMenu( QPopupMenu * menu )
+YQPkgPatchList::addAllInListSubMenu( QPopupMenu * menu )
 {
     QPopupMenu * submenu = new QPopupMenu( menu );
     CHECK_PTR( submenu );
@@ -283,7 +283,7 @@ YQPkgYouPatchList::addAllInListSubMenu( QPopupMenu * menu )
 
 
 void
-YQPkgYouPatchList::showRawPatchInfo()
+YQPkgPatchList::showRawPatchInfo()
 {
     if ( selection() )
     {
@@ -296,7 +296,7 @@ YQPkgYouPatchList::showRawPatchInfo()
 
 
 void
-YQPkgYouPatchList::keyPressEvent( QKeyEvent * event )
+YQPkgPatchList::keyPressEvent( QKeyEvent * event )
 {
     if ( event )
     {
@@ -306,7 +306,7 @@ YQPkgYouPatchList::keyPressEvent( QKeyEvent * event )
 
 	    if ( selectedListViewItem )
 	    {
-		YQPkgYouPatchListItem * item = dynamic_cast<YQPkgYouPatchListItem *> (selectedListViewItem);
+		YQPkgPatchListItem * item = dynamic_cast<YQPkgPatchListItem *> (selectedListViewItem);
 
 		if ( item && item->selectable()->hasInstalledObj() )
 		{
@@ -327,7 +327,7 @@ YQPkgYouPatchList::keyPressEvent( QKeyEvent * event )
 
 
 
-YQPkgYouPatchListItem::YQPkgYouPatchListItem( YQPkgYouPatchList * 	youPatchList,
+YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList * 	youPatchList,
 					      ZyppSel			selectable,
 					      ZyppPatch 		zyppPatch )
     : YQPkgObjListItem( youPatchList, selectable, zyppPatch )
@@ -354,14 +354,14 @@ YQPkgYouPatchListItem::YQPkgYouPatchListItem( YQPkgYouPatchList * 	youPatchList,
 }
 
 
-YQPkgYouPatchListItem::~YQPkgYouPatchListItem()
+YQPkgPatchListItem::~YQPkgPatchListItem()
 {
     // NOP
 }
 
 
 void
-YQPkgYouPatchListItem::setStatus( ZyppStatus newStatus )
+YQPkgPatchListItem::setStatus( ZyppStatus newStatus )
 {
     YQPkgObjListItem::setStatus( newStatus );
 #ifdef FIXME
@@ -372,7 +372,7 @@ YQPkgYouPatchListItem::setStatus( ZyppStatus newStatus )
 
 
 void
-YQPkgYouPatchListItem::cycleStatus()
+YQPkgPatchListItem::cycleStatus()
 {
     YQPkgObjListItem::cycleStatus();
 
@@ -382,7 +382,7 @@ YQPkgYouPatchListItem::cycleStatus()
 
 
 QString
-YQPkgYouPatchListItem::toolTip( int col )
+YQPkgPatchListItem::toolTip( int col )
 {
     QString text;
 
@@ -414,11 +414,11 @@ YQPkgYouPatchListItem::toolTip( int col )
  * +1 if this >	 other
  **/
 int
-YQPkgYouPatchListItem::compare( QListViewItem * otherListViewItem,
+YQPkgPatchListItem::compare( QListViewItem * otherListViewItem,
 				int		col,
 				bool		ascending ) const
 {
-    YQPkgYouPatchListItem * other = dynamic_cast<YQPkgYouPatchListItem *> (otherListViewItem);
+    YQPkgPatchListItem * other = dynamic_cast<YQPkgPatchListItem *> (otherListViewItem);
 
     if ( other )
     {
@@ -436,4 +436,4 @@ YQPkgYouPatchListItem::compare( QListViewItem * otherListViewItem,
 
 
 
-#include "YQPkgYouPatchList.moc"
+#include "YQPkgPatchList.moc"

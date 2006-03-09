@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQPkgYouPatchList.h
+  File:	      YQPkgPatchList.h
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
@@ -19,19 +19,19 @@
 // -*- c++ -*-
 
 
-#ifndef YQPkgYouPatchList_h
-#define YQPkgYouPatchList_h
+#ifndef YQPkgPatchList_h
+#define YQPkgPatchList_h
 
 #include <YQPkgObjList.h>
 
 
 class QAction;
-class YQPkgYouPatchListItem;
+class YQPkgPatchListItem;
 
 /**
  * @short Display a list of zypp::Patch objects.
  **/
-class YQPkgYouPatchList : public YQPkgObjList
+class YQPkgPatchList : public YQPkgObjList
 {
     Q_OBJECT
 
@@ -40,12 +40,12 @@ public:
     /**
      * Constructor
      **/
-    YQPkgYouPatchList( QWidget * parent );
+    YQPkgPatchList( QWidget * parent );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgYouPatchList();
+    virtual ~YQPkgPatchList();
 
 
 public slots:
@@ -99,7 +99,7 @@ public:
     /**
      * Returns the currently selected item or 0 if there is none.
      **/
-    YQPkgYouPatchListItem * selection() const;
+    YQPkgPatchListItem * selection() const;
 
     /**
      * Returns the column for the patch kind
@@ -209,22 +209,22 @@ protected:
 
 
 
-class YQPkgYouPatchListItem: public YQPkgObjListItem
+class YQPkgPatchListItem: public YQPkgObjListItem
 {
 public:
 
     /**
-     * Constructor. Creates a YQPkgYouPatchList item that corresponds to the package
+     * Constructor. Creates a YQPkgPatchList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgYouPatchListItem( YQPkgYouPatchList * 	youPatchList,
+    YQPkgPatchListItem( YQPkgPatchList * 	youPatchList,
 			   ZyppSel		selectable,
 			   ZyppPatch 		zyppPatch );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgYouPatchListItem();
+    virtual ~YQPkgPatchListItem();
 
     /**
      * Returns the original object within the package manager backend.
@@ -278,9 +278,9 @@ protected:
 
     // Data members
 
-    YQPkgYouPatchList *	_youPatchList;
+    YQPkgPatchList *	_youPatchList;
     ZyppPatch		_zyppPatch;
 };
 
 
-#endif // ifndef YQPkgYouPatchList_h
+#endif // ifndef YQPkgPatchList_h

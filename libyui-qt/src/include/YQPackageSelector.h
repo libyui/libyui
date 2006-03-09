@@ -57,8 +57,8 @@ class YQPkgStatusFilterView;
 class YQPkgTechnicalDetailsView;
 class YQPkgUpdateProblemFilterView;
 class YQPkgVersionsView;
-class YQPkgYouPatchFilterView;
-class YQPkgYouPatchList;
+class YQPkgPatchFilterView;
+class YQPkgPatchList;
 
 
 class YQPackageSelector : public YQPackageSelectorBase
@@ -257,8 +257,8 @@ protected:
     YQPkgTechnicalDetailsView *		_pkgTechnicalDetailsView;
     YQPkgUpdateProblemFilterView *	_updateProblemFilterView;
     YQPkgVersionsView *			_pkgVersionsView;
-    YQPkgYouPatchFilterView *		_youPatchFilterView;
-    YQPkgYouPatchList *			_youPatchList;
+    YQPkgPatchFilterView *		_youPatchFilterView;
+    YQPkgPatchList *			_youPatchList;
 
     QMenuBar *				_menuBar;
     QPopupMenu *			_fileMenu;

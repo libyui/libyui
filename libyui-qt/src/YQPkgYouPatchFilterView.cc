@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQPkgYouPatchFilterView.cc
+  File:	      YQPkgPatchFilterView.cc
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
@@ -29,8 +29,8 @@
 
 #include <y2util/FSize.h>
 
-#include "YQPkgYouPatchFilterView.h"
-#include "YQPkgYouPatchList.h"
+#include "YQPkgPatchFilterView.h"
+#include "YQPkgPatchList.h"
 #include "YQPkgDescriptionView.h"
 #include "YQPkgSelList.h"
 #include "QY2LayoutUtils.h"
@@ -41,7 +41,7 @@
 #define MARGIN			4	// around the widget
 
 
-YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
+YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
     : QVBox( parent )
 {
     QVBox * vbox;
@@ -49,7 +49,7 @@ YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
     _splitter			= new QSplitter( QSplitter::Vertical, this );	CHECK_PTR( _splitter 		);
 
     vbox			= new QVBox( _splitter );			CHECK_PTR( vbox			);
-    _youPatchList		= new YQPkgYouPatchList( vbox );		CHECK_PTR( _youPatchList 	);
+    _youPatchList		= new YQPkgPatchList( vbox );		CHECK_PTR( _youPatchList 	);
 
     addVSpacing( vbox, 4 );
 
@@ -111,14 +111,14 @@ YQPkgYouPatchFilterView::YQPkgYouPatchFilterView( QWidget * parent )
 }
 
 
-YQPkgYouPatchFilterView::~YQPkgYouPatchFilterView()
+YQPkgPatchFilterView::~YQPkgPatchFilterView()
 {
     // NOP
 }
 
 
 void
-YQPkgYouPatchFilterView::updateTotalDownloadSize()
+YQPkgPatchFilterView::updateTotalDownloadSize()
 {
 #ifdef FIXME
     _totalDownloadSize->setText( Y2PM::youPatchManager().totalDownloadSize().asString().c_str() );
@@ -127,16 +127,16 @@ YQPkgYouPatchFilterView::updateTotalDownloadSize()
 
 
 void
-YQPkgYouPatchFilterView::fillPatchList()
+YQPkgPatchFilterView::fillPatchList()
 {
-    YQPkgYouPatchList::PatchCategory category;
+    YQPkgPatchList::PatchCategory category;
 
     switch ( _patchCategory->currentItem() )
     {
-	case 0:		category = YQPkgYouPatchList::InstallablePatches;			break;
-	case 1:		category = YQPkgYouPatchList::InstallableAndInstalledPatches;		break;
-	case 2:		category = YQPkgYouPatchList::AllPatches;				break;
-	default:	category = YQPkgYouPatchList::InstallablePatches;			break;
+	case 0:		category = YQPkgPatchList::InstallablePatches;			break;
+	case 1:		category = YQPkgPatchList::InstallableAndInstalledPatches;		break;
+	case 2:		category = YQPkgPatchList::AllPatches;				break;
+	default:	category = YQPkgPatchList::InstallablePatches;			break;
     }
 
     _youPatchList->setPatchCategory( category );
@@ -146,10 +146,10 @@ YQPkgYouPatchFilterView::fillPatchList()
 
 
 QSize
-YQPkgYouPatchFilterView::sizeHint() const
+YQPkgPatchFilterView::sizeHint() const
 {
     return QSize( 600, 350 );
 }
 
 
-#include "YQPkgYouPatchFilterView.moc"
+#include "YQPkgPatchFilterView.moc"

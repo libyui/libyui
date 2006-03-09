@@ -67,8 +67,8 @@
 #include "YQPkgTextDialog.h"
 #include "YQPkgUpdateProblemFilterView.h"
 #include "YQPkgVersionsView.h"
-#include "YQPkgYouPatchFilterView.h"
-#include "YQPkgYouPatchList.h"
+#include "YQPkgPatchFilterView.h"
+#include "YQPkgPatchList.h"
 
 #include "QY2ComboTabWidget.h"
 #include "YQDialog.h"
@@ -256,7 +256,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     if ( _youMode )
     {
-	_youPatchFilterView = new YQPkgYouPatchFilterView( parent );
+	_youPatchFilterView = new YQPkgPatchFilterView( parent );
 	CHECK_PTR( _youPatchFilterView );
 	_filters->addPage( _( "Patches" ), _youPatchFilterView );
 
