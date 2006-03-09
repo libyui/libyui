@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Mar  9 16:05:57 CET 2006 - sh@suse.de
+
+- Activate "patches" filter view in package selector
+  upon hotkey (F2) for debugging 
+
+-------------------------------------------------------------------
 Wed Mar  8 18:33:27 CET 2006 - sh@suse.de
 
 - V 2.13.28

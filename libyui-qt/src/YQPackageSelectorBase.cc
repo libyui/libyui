@@ -70,9 +70,7 @@ YQPackageSelectorBase::YQPackageSelectorBase( QWidget * 		parent,
     zyppPool().saveState<zypp::Package  >();
     zyppPool().saveState<zypp::Pattern  >();
     zyppPool().saveState<zypp::Selection>();
-
-    if ( _youMode )
-	zyppPool().saveState<zypp::Patch>();
+    zyppPool().saveState<zypp::Patch>    ();
 
 
     //
@@ -202,9 +200,7 @@ YQPackageSelectorBase::reject()
 	zyppPool().restoreState<zypp::Package  >();
 	zyppPool().restoreState<zypp::Pattern  >();
 	zyppPool().restoreState<zypp::Selection>();
-
-	if ( _youMode )
-	    zyppPool().restoreState<zypp::Patch>();
+	zyppPool().restoreState<zypp::Patch>    ();
 
 	y2milestone( "Closing PackageSelector with \"Cancel\"" );
 	YQUI::ui()->sendEvent( new YCancelEvent() );
@@ -215,12 +211,9 @@ YQPackageSelectorBase::reject()
 void
 YQPackageSelectorBase::accept()
 {
-    if ( ! _youMode )
-    {
-	// Force final dependency resolving
-	if ( resolvePackageDependencies() == QDialog::Rejected )
-	    return;
-    }
+    // Force final dependency resolving
+    if ( resolvePackageDependencies() == QDialog::Rejected )
+	return;
 
     if ( _showChangesDialog )
     {

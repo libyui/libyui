@@ -22,10 +22,10 @@
 #define CHECK_DEPENDENCIES_ON_STARTUP	1
 #define DEPENDENCY_FEEDBACK_IF_OK	1
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT	false
-#define DISABLE_PKG_CHANGES_IN_YOU_MODE 0
 
 #include <qaction.h>
 #include <qapplication.h>
+#include <qaccel.h>
 #include <qcheckbox.h>
 #include <qdialog.h>
 #include <qfiledialog.h>
@@ -55,20 +55,20 @@
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQPkgFileListView.h"
+#include "YQPkgInstSrcFilterView.h"
 #include "YQPkgLangList.h"
 #include "YQPkgList.h"
+#include "YQPkgPatchFilterView.h"
+#include "YQPkgPatchList.h"
+#include "YQPkgPatternList.h"
 #include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQPkgSearchFilterView.h"
-#include "YQPkgPatternList.h"
 #include "YQPkgSelList.h"
-#include "YQPkgInstSrcFilterView.h"
 #include "YQPkgStatusFilterView.h"
 #include "YQPkgTechnicalDetailsView.h"
 #include "YQPkgTextDialog.h"
 #include "YQPkgUpdateProblemFilterView.h"
 #include "YQPkgVersionsView.h"
-#include "YQPkgPatchFilterView.h"
-#include "YQPkgPatchList.h"
 
 #include "QY2ComboTabWidget.h"
 #include "YQDialog.h"
@@ -119,7 +119,9 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     _updateMode	 = opt.updateMode.value();
     _summaryMode = opt.summaryMode.value();
 
+#if 0
     _showChangesDialog = ! _youMode;
+#endif
 
     if ( _youMode )	y2milestone( "YOU mode" );
     if ( _updateMode )	y2milestone( "Update mode" );
@@ -255,14 +257,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     //
 
     if ( _youMode )
-    {
-	_patchFilterView = new YQPkgPatchFilterView( parent );
-	CHECK_PTR( _patchFilterView );
-	_filters->addPage( _( "Patches" ), _patchFilterView );
-
-	_patchList = _patchFilterView->patchList();
-	CHECK_PTR( _patchList );
-    }
+	addPatchFilterView( false ); // autoActivate
 
 
     //
@@ -271,8 +266,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     if ( ! zyppPool().empty<zypp::Pattern>() || _testMode )
     {
-
-	_patternList = new YQPkgPatternList( this, true );
+	_patternList = new YQPkgPatternList( parent, true );
 	CHECK_PTR( _patternList );
 	_filters->addPage( _( "Patterns" ), _patternList );
 
@@ -294,7 +288,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     if ( ! zyppPool().empty<zypp::Selection>() || _testMode )
     {
 
-	_selList = new YQPkgSelList( this, true );
+	_selList = new YQPkgSelList( parent, true );
 	CHECK_PTR( _selList );
 	_filters->addPage( _( "Selections" ), _selList );
 
@@ -325,7 +319,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     // Languages view
     //
 
-    _langList = new YQPkgLangList( this );
+    _langList = new YQPkgLangList( parent );
     CHECK_PTR( _langList );
     _filters->addPage( _( "Languages" ), _langList );
 
@@ -401,11 +395,6 @@ YQPackageSelector::layoutPkgList( QWidget * parent )
 {
     _pkgList= new YQPkgList( parent );
     CHECK_PTR( _pkgList );
-
-#if DISABLE_PKG_CHANGES_IN_YOU_MODE
-    if ( _youMode )
-	_pkgList->setEditable( false );
-#endif
 
     connect( _pkgList, 	SIGNAL( statusChanged()	          ),
 	     this,	SLOT  ( autoResolveDependencies() ) );
@@ -828,6 +817,15 @@ YQPackageSelector::makeConnections()
     }
 
 
+    //
+    // Hotkey to enable "patches" filter view on the fly
+    //
+
+    QAccel * accel = new QAccel( this );
+    CHECK_PTR( accel );
+    accel->connectItem( accel->insertItem( Key_F2 ),
+			this, SLOT( addPatchFilterViewAndActivate() ) );
+
 
     //
     // Update actions just before opening menus
@@ -900,6 +898,27 @@ YQPackageSelector::manualResolvePackageDependencies()
 #endif
 
     return result;
+}
+
+
+void
+YQPackageSelector::addPatchFilterView( bool autoActivate )
+{
+    if ( ! _patchFilterView )
+    {
+	_patchFilterView = new YQPkgPatchFilterView( this );
+	CHECK_PTR( _patchFilterView );
+	_filters->addPage( _( "Patches" ), _patchFilterView );
+
+	_patchList = _patchFilterView->patchList();
+	CHECK_PTR( _patchList );
+    }
+
+    if ( autoActivate )
+    {
+	y2milestone( "Activating patches filter view" );
+	_filters->showPage( _patchFilterView );
+    }
 }
 
 

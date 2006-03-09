@@ -161,6 +161,22 @@ protected slots:
      **/
     void restoreCheckButton();
 
+    /**
+     * Add the "Patches" filter view, if it is not already there,
+     * and activate it (make it the current filter view),
+     * if 'autoActivate' is 'true'. 
+     *
+     * For debugging, this can be invoked by the user with the F2 key.
+     **/
+    void addPatchFilterView( bool autoActivate = true );
+
+    /**
+     * Overloaded version of the above since Qt's "moc" cannot handle
+     * default arguments
+     **/
+    void addPatchFilterViewAndActivate()
+	{ addPatchFilterView( true ); }
+    
 
 protected:
 
@@ -203,7 +219,7 @@ protected:
     void connectFilter( QWidget *	filter,
 			QWidget *	pkgList,
 			bool		hasUpdateSignal = true );
-    
+
     /**
      * Return HTML code describing a symbol (an icon).
      **/

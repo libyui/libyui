@@ -92,6 +92,8 @@ liby2qt_la_SOURCES = 				\
 	YQPkgLangList.cc			\
 	YQPkgList.cc				\
 	YQPkgObjList.cc				\
+	YQPkgPatchFilterView.cc			\
+	YQPkgPatchList.cc			\
 	YQPkgPatternList.cc			\
 	YQPkgRpmGroupTagsFilterView.cc		\
 	YQPkgSearchFilterView.cc		\
@@ -102,8 +104,6 @@ liby2qt_la_SOURCES = 				\
 	YQPkgTextDialog.cc			\
 	YQPkgUpdateProblemFilterView.cc		\
 	YQPkgVersionsView.cc			\
-	YQPkgPatchFilterView.cc		\
-	YQPkgPatchList.cc			\
 	YQProgressBar.cc			\
 	YQPushButton.cc				\
 	YQRadioButton.cc			\
@@ -188,6 +188,8 @@ BUILT_SOURCES =					\
 	YQPkgLangList.moc			\
 	YQPkgList.moc				\
 	YQPkgObjList.moc			\
+	YQPkgPatchFilterView.moc		\
+	YQPkgPatchList.moc			\
 	YQPkgPatternList.moc			\
 	YQPkgRpmGroupTagsFilterView.moc		\
 	YQPkgSearchFilterView.moc		\
@@ -198,8 +200,6 @@ BUILT_SOURCES =					\
 	YQPkgTextDialog.moc			\
 	YQPkgUpdateProblemFilterView.moc	\
 	YQPkgVersionsView.moc			\
-	YQPkgPatchFilterView.moc		\
-	YQPkgPatchList.moc			\
 	YQProgressBar.moc			\
 	YQPushButton.moc			\
 	YQRadioButton.moc			\
@@ -271,6 +271,8 @@ YQPkgInstSrcList.o YQPkgInstSrcList.lo:				YQPkgInstSrcList.moc
 YQPkgLangList.o YQPkgLangList.lo:				YQPkgLangList.moc
 YQPkgList.o YQPkgList.lo:					YQPkgList.moc
 YQPkgObjList.o YQPkgObjList.lo:					YQPkgObjList.moc
+YQPkgPatchFilterView.o YQPkgPatchFilterView.lo:			YQPkgPatchFilterView.moc
+YQPkgPatchList.o YQPkgPatchList.lo:				YQPkgPatchList.moc
 YQPkgPatternList.o YQPkgPatternList.lo:				YQPkgPatternList.moc
 YQPkgRpmGroupTagsFilterView.o YQPkgRpmGroupTagsFilterView.lo:	YQPkgRpmGroupTagsFilterView.moc
 YQPkgSearchFilterView.o YQPkgSearchFilterView.lo:		YQPkgSearchFilterView.moc
@@ -281,8 +283,6 @@ YQPkgTechnicalDetailsView.o YQPkgTechnicalDetailsView.lo:	YQPkgTechnicalDetailsV
 YQPkgTextDialog.o YQPkgTextDialog.lo:				YQPkgTextDialog.moc
 YQPkgUpdateProblemFilterView.o YQPkgUpdateProblemFilterView.lo:	YQPkgUpdateProblemFilterView.moc
 YQPkgVersionsView.o YQPkgVersionsView.lo:			YQPkgVersionsView.moc
-YQPkgPatchFilterView.o YQPkgPatchFilterView.lo:		YQPkgPatchFilterView.moc
-YQPkgPatchList.o YQPkgPatchList.lo:			YQPkgPatchList.moc
 YQProgressBar.o YQProgressBar.lo:				YQProgressBar.moc
 YQPushButton.o YQPushButton.lo:					YQPushButton.moc
 YQRadioButton.o YQRadioButton.lo:				YQRadioButton.moc
@@ -352,6 +352,8 @@ YQPkgInstSrcList.moc:			include/YQPkgInstSrcList.h
 YQPkgLangList.moc:			include/YQPkgLangList.h
 YQPkgList.moc:				include/YQPkgList.h
 YQPkgObjList.moc:			include/YQPkgObjList.h
+YQPkgPatchFilterView.moc:		include/YQPkgPatchFilterView.h
+YQPkgPatchList.moc:			include/YQPkgPatchList.h
 YQPkgPatternList.moc:			include/YQPkgPatternList.h
 YQPkgRpmGroupTagsFilterView.moc:	include/YQPkgRpmGroupTagsFilterView.h
 YQPkgSearchFilterView.moc:		include/YQPkgSearchFilterView.h
@@ -362,8 +364,6 @@ YQPkgTechnicalDetailsView.moc:		include/YQPkgTechnicalDetailsView.h
 YQPkgTextDialog.moc:			include/YQPkgTextDialog.h
 YQPkgUpdateProblemFilterView.moc:	include/YQPkgUpdateProblemFilterView.h
 YQPkgVersionsView.moc:			include/YQPkgVersionsView.h
-YQPkgPatchFilterView.moc:		include/YQPkgPatchFilterView.h
-YQPkgPatchList.moc:			include/YQPkgPatchList.h
 YQProgressBar.moc:			include/YQProgressBar.h
 YQPushButton.moc:			include/YQPushButton.h
 YQRadioButton.moc:			include/YQRadioButton.h

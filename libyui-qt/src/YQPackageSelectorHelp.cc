@@ -44,7 +44,7 @@ YQPackageSelector::help()
 
     if ( _youMode )
     {
-	// Help specific to patch mode
+	// Help specific to online update mode
 
 	html += para( _( "In this dialog, select patches to download and install." ) );
 	html += para( _( "The list on the left side contains available patches"
@@ -68,7 +68,7 @@ YQPackageSelector::help()
     }
     else // ! _youMode
     {
-	// Help specific to normal (non-patch) mode
+	// Help specific to normal (non-online-update) mode
 
 	html += para( _( "In this dialog, select which packages to install, update, or delete."
 			 " You can select individual packages or entire package \"selections\"." ) );
