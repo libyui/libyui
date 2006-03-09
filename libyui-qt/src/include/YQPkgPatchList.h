@@ -69,7 +69,7 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addYouPatchItem( ZyppSel	selectable,
+    void addPatchItem( ZyppSel	selectable,
 			  ZyppPatch 	zyppPatch );
 
     /**

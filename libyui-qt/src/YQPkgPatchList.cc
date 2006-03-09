@@ -93,16 +93,16 @@ YQPkgPatchList::fillList()
 	    {
 		case InstallablePatches:
 		    if ( patch->installable() && status != S_KeepInstalled )
-			addYouPatchItem( *it, patch );
+			addPatchItem( *it, patch );
 		    break;
 
 		case InstallableAndInstalledPatches:
 		    if ( patch->installable() )
-			addYouPatchItem( *it, patch );
+			addPatchItem( *it, patch );
 		    break;
 
 		case AllPatches:
-		    addYouPatchItem( *it, patch );
+		    addPatchItem( *it, patch );
 	    }
 	}
 
@@ -209,7 +209,7 @@ YQPkgPatchList::filter()
 
 
 void
-YQPkgPatchList::addYouPatchItem( ZyppSel	selectable,
+YQPkgPatchList::addPatchItem( ZyppSel	selectable,
 				    ZyppPatch 	zyppPatch )
 {
     if ( ! selectable )
