@@ -94,19 +94,20 @@ YQPkgPatchList::fillList()
 	    switch ( _patchCategory )
 	    {
 		case InstallablePatches:
-		    if ( patch->installable() && status != S_KeepInstalled )
-			addPatchItem( *it, patch );
+		    if ( zyppPatch->installable() && status != S_KeepInstalled )
+			addPatchItem( *it, zyppPatch );
 		    break;
 
 		case InstallableAndInstalledPatches:
-		    if ( patch->installable() )
-			addPatchItem( *it, patch );
+		    if ( zyppPatch->installable() )
+			addPatchItem( *it, zyppPatch );
 		    break;
 
 		case AllPatches:
-		    addPatchItem( *it, patch );
+		    addPatchItem( *it, zyppPatch );
 	    }
 #else
+	    y2debug( "Found patch %s", zyppPatch->name().c_str() );
 	    addPatchItem( *it, zyppPatch);
 #endif
 	}
