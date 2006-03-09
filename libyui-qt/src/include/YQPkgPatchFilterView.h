@@ -58,7 +58,7 @@ public:
     /**
      * Returns this view's selections list.
      **/
-    YQPkgPatchList * youPatchList() const { return _patchList; }
+    YQPkgPatchList * patchList() const { return _patchList; }
 
     /**
      * Reimplemented from QWidget:

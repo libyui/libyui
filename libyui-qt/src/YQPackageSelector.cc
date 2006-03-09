@@ -260,7 +260,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	CHECK_PTR( _patchFilterView );
 	_filters->addPage( _( "Patches" ), _patchFilterView );
 
-	_patchList = _patchFilterView->youPatchList();
+	_patchList = _patchFilterView->patchList();
 	CHECK_PTR( _patchList );
     }
 

@@ -327,11 +327,11 @@ YQPkgPatchList::keyPressEvent( QKeyEvent * event )
 
 
 
-YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList * 	youPatchList,
+YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList * 	patchList,
 					      ZyppSel			selectable,
 					      ZyppPatch 		zyppPatch )
-    : YQPkgObjListItem( youPatchList, selectable, zyppPatch )
-    , _patchList( youPatchList )
+    : YQPkgObjListItem( patchList, selectable, zyppPatch )
+    , _patchList( patchList )
     , _zyppPatch( zyppPatch )
 {
     if ( ! _zyppPatch )
