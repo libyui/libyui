@@ -112,7 +112,7 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     _statusFilterView		= 0;
     _updateProblemFilterView	= 0;
     _patchFilterView		= 0;
-    _patchList		= 0;
+    _patchList			= 0;
 
     _searchMode	 = opt.searchMode.value();
     _testMode	 = opt.testMode.value();
@@ -138,8 +138,6 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
 	{
 	    _filters->showPage( _patchFilterView );
 	    _patchList->filter();
-	    _patchList->clearSelection();
-	    _patchList->selectSomething();
 	}
     }
     else if ( _updateProblemFilterView )
@@ -656,8 +654,10 @@ YQPackageSelector::addMenus()
 
     _extrasMenu->insertItem( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), CTRL + Key_A );
 
+#ifdef FIXME
     if ( _patchList )
 	_patchList->actionShowRawPatchInfo->addTo( _extrasMenu );
+#endif
 
     // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
     _extrasMenu->insertItem( _( "Install All Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
@@ -740,7 +740,6 @@ YQPackageSelector::makeConnections()
 	     this, SLOT  ( restoreCheckButton() ) );
 
     connectFilter( _updateProblemFilterView,	_pkgList, false );
-    connectFilter( _patchList, 		_pkgList );
     connectFilter( _patternList, 		_pkgList );
     connectFilter( _selList, 			_pkgList );
     connectFilter( _instSrcFilterView,		_pkgList, false );
@@ -768,11 +767,6 @@ YQPackageSelector::makeConnections()
 		 _diskUsageList,	SLOT  ( updateDiskUsage() ) );
     }
 
-    if ( _pkgList && _patchList )
-    {
-	connect( _patchList, SIGNAL( filterMatch   ( const QString &, const QString &, FSize ) ),
-		 _pkgList,	SLOT  ( addPassiveItem( const QString &, const QString &, FSize ) ) );
-    }
 
     //
     // Connect package conflict dialog
@@ -840,7 +834,7 @@ YQPackageSelector::makeConnections()
     if ( _patchMenu && _patchList )
     {
 	connect( _patchMenu,	SIGNAL( aboutToShow()   ),
-		 _patchList, SLOT  ( updateActions() ) );
+		 _patchList,	SLOT  ( updateActions() ) );
     }
 }
 
@@ -912,12 +906,21 @@ YQPackageSelector::addPatchFilterView( bool autoActivate )
 
 	_patchList = _patchFilterView->patchList();
 	CHECK_PTR( _patchList );
+
+	connectFilter( _patchList, _pkgList );
+	
+	if ( _pkgList && _patchList )
+	{
+	    connect( _patchList, SIGNAL( filterMatch   ( const QString &, const QString &, FSize ) ),
+		     _pkgList,   SLOT  ( addPassiveItem( const QString &, const QString &, FSize ) ) );
+	}
     }
 
     if ( autoActivate )
     {
 	y2milestone( "Activating patches filter view" );
 	_filters->showPage( _patchFilterView );
+	_patchList->filter();
     }
 }
 

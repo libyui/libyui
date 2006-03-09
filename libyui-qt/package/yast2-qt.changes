@@ -1,8 +1,9 @@
 -------------------------------------------------------------------
-Thu Mar  9 16:05:57 CET 2006 - sh@suse.de
+Thu Mar  9 18:28:55 CET 2006 - sh@suse.de
 
-- Activate "patches" filter view in package selector
-  upon hotkey (F2) for debugging 
+- V 2.13.29 
+- First (still crude) version of patches view for ZYPP
+- Activate "patches" filter view in package selector upon F2 key 
 
 -------------------------------------------------------------------
 Wed Mar  8 18:33:27 CET 2006 - sh@suse.de
