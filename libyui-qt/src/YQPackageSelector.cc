@@ -132,6 +132,9 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     makeConnections();
     emit loadData();
 
+    if ( _pkgList )
+	_pkgList->clear();
+
     if ( _patchFilterView )
     {
 	if ( _filters && _patchFilterView && _patchList )
@@ -255,7 +258,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     //
 
     if ( _youMode )
-	addPatchFilterView( false ); // autoActivate
+	addPatchFilterView( false ); // don't make this the active filter
 
 
     //
@@ -920,6 +923,7 @@ YQPackageSelector::addPatchFilterView( bool autoActivate )
     {
 	y2milestone( "Activating patches filter view" );
 	_filters->showPage( _patchFilterView );
+	_pkgList->clear();
 	_patchList->filter();
     }
 }
