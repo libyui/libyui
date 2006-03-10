@@ -22,7 +22,8 @@
 #ifndef YQPkgPatchList_h
 #define YQPkgPatchList_h
 
-#include <YQPkgObjList.h>
+#include "YQPkgObjList.h"
+#include "YQPkgSelMapper.h"
 
 
 class QAction;
@@ -280,6 +281,7 @@ protected:
 
     YQPkgPatchList *	_patchList;
     ZyppPatch		_zyppPatch;
+    YQPkgSelMapper	_selMapper;
 };
 
 

@@ -99,6 +99,7 @@ liby2qt_la_SOURCES = 				\
 	YQPkgSearchFilterView.cc		\
 	YQPkgSelDescriptionView.cc		\
 	YQPkgSelList.cc				\
+	YQPkgSelMapper.cc			\
 	YQPkgStatusFilterView.cc		\
 	YQPkgTechnicalDetailsView.cc		\
 	YQPkgTextDialog.cc			\

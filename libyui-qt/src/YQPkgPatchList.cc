@@ -157,56 +157,33 @@ YQPkgPatchList::filter()
 
 	if ( patch )
 	{
-#ifdef FIXME
-	    //
-	    // Check for a pre-script
-	    //
+	    y2debug( "Filtering for patch %s", patch->name().c_str() );
 
-	    if ( ! patch->preScript().empty() )
+#ifdef FIXME_PATCH_ATOMS_ARE_SCREWED
+	    
+	    for ( zypp::Patch::AtomList::iterator it = patch->atoms().begin();
+		  it != patch->atoms().end();
+		  ++it )
 	    {
-		// Translators: (Fixed) name for a script that is executed
-		// at the start of installation of a patch
-		emit filterMatch( _( "[Pre-Script]" ), fromUTF8( patch->preScript() ), -1 );
-	    }
+		y2debug( "Found patch atom" );
+		y2debug( "Patch atom name: %s", (*it)->name().c_str() );
+		
+		ZyppPkg pkg = tryCastToZyppPkg( *it );
 
+		if ( pkg )
+		{
+		    ZyppSel sel = findZyppSel( pkg );
 
-	    //
-	    // Add all packages
-	    //
-
-	    list<ZyppPkg> pkgList = patch->packages();
-	    list<ZyppPkg>::const_iterator it = pkgList.begin();
-
-	    while ( it != pkgList.end() )
-	    {
-		emit filterMatch( ( *it ) );
-		++it;
-	    }
-
-
-	    //
-	    // Check for extra files outside packages
-	    //
-
-	    list<PMYouFile> files = patch->files();
-
-	    for ( list<PMYouFile>::iterator it = files.begin(); it != files.end(); ++it )
-	    {
-		// Translators: (Fixed) name for an extra file (outside packages)
-                // that comes with a patch
-		emit filterMatch( _( "[File]" ), fromUTF8( (*it).name() ), (*it).size() );
-	    }
-
-
-	    //
-	    // Check for a post-script
-	    //
-
-	    if ( ! patch->postScript().empty() )
-	    {
-		// Translators: (Fixed) name for a script that is executed
-                // at the end of installation of a patch
-		emit filterMatch( _( "[Post-Script]" ), fromUTF8( patch->postScript() ), -1 );
+		    if ( sel )
+			emit filterMatch( sel, pkg );
+		}
+		else // No ZyppPkg - some other kind of object (script, message)
+		{
+		    string kind = (*it)->kind().asString();
+		    emit filterMatch( QString( "[%1]" ).arg( kind.c_str() ),
+				      fromUTF8( (*it)->name() ),
+				      -1 );	// size
+		}
 	    }
 #endif
 	}
