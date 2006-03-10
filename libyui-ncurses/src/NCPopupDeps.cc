@@ -131,7 +131,7 @@ void NCPopupDeps::createLayout( )
 
   // add the list containing packages with unresolved dependencies
   problemw = new NCProblemSelectionBox( vSplit, opt,
-					_("&Problems (UNTRANSLATED)"),
+					_("&Problems"),
 					this);
   vSplit->addChild( problemw );
 
@@ -142,7 +142,7 @@ void NCPopupDeps::createLayout( )
  
   // add the package list containing the dependencies
   solutionw = new NCSolutionSelectionBox ( vSplit, opt,
-					   _("P&ossible Solutions (UNTRANSLATED)"),
+					   _("P&ossible Solutions"),
 					   this);
   vSplit->addChild( solutionw );
   

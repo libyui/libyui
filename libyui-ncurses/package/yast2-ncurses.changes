@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Mar 10 10:30:38 CET 2006 - mvidner@suse.cz
+
+- Messages for the package conflict dialog marked for translation.
+
+-------------------------------------------------------------------
 Fri Mar  3 16:59:29 CET 2006 - mvidner@suse.cz
 
 - Disk usage display fixed (#152269).
