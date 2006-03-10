@@ -157,12 +157,12 @@ YQPkgPatchList::filter()
 
 	if ( patch )
 	{
-	    y2debug( "Filtering for patch %s", patch->name().c_str() );
-
-#ifdef FIXME_PATCH_ATOMS_ARE_SCREWED
+	    zypp::Patch::AtomList atomList = patch->atoms();
+	    y2debug( "Filtering for patch %s: %d atoms",
+		     patch->name().c_str(), atomList.size() );
 	    
-	    for ( zypp::Patch::AtomList::iterator it = patch->atoms().begin();
-		  it != patch->atoms().end();
+	    for ( zypp::Patch::AtomList::iterator it = atomList.begin();
+		  it != atomList.end();
 		  ++it )
 	    {
 		y2debug( "Found patch atom" );
@@ -185,7 +185,6 @@ YQPkgPatchList::filter()
 				      -1 );	// size
 		}
 	    }
-#endif
 	}
     }
 
