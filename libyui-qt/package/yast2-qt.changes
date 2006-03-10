@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Fri Mar 10 15:18:57 CET 2006 - sh@suse.de
+
+- V 2.13.30
+- Fixed bug #155799: Qt package selector does not recognize newer
+  packages as newer 
+- Display patch category in patches view
+
+
+-------------------------------------------------------------------
 Thu Mar  9 18:28:55 CET 2006 - sh@suse.de
 
 - V 2.13.29 

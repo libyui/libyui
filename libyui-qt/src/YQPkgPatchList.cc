@@ -43,7 +43,7 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     int numCol = 0;
     addColumn( "" );			_statusCol	= numCol++;
     addColumn( _( "Patch"	) );	_summaryCol	= numCol++;
-    addColumn( _( "Kind" 	) );	_kindCol	= numCol++;
+    addColumn( _( "Category" 	) );	_categoryCol	= numCol++;
     addColumn( _( "Size" 	) );	_sizeCol	= numCol++;
     setAllColumnsShowFocus( true );
     setColumnAlignment( sizeCol(), Qt::AlignRight );
@@ -52,7 +52,7 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
 	     this,	SLOT  ( filter()				    ) );
 
     fillList();
-    setSorting( kindCol() );
+    setSorting( categoryCol() );
     selectSomething();
 
 #ifdef FIXME
@@ -346,16 +346,17 @@ YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList * 	patchList,
 	_zyppPatch = tryCastToZyppPatch( selectable->theObj() );
 
     setStatusIcon();
+    setText( categoryCol(), _zyppPatch->category() );
+    
 #ifdef FIXME
-    setText( kindCol(), _zyppPatch->kindLabel() );
 
-    switch ( _zyppPatch->kind() )
+    switch ( _zyppPatch->category() )
     {
-	case zypp::Patch::kind_yast:		setTextColor( QColor( 0, 0, 0xC0 ) );	break;	// medium blue
-	case zypp::Patch::kind_security:	setTextColor( Qt::red );		break;
-	case zypp::Patch::kind_recommended:	setTextColor( QColor( 0, 0, 0xC0 ) );	break;	// medium blue
-	case zypp::Patch::kind_optional:	break;
-	case zypp::Patch::kind_document:	break;
+	case zypp::Patch::category_yast:	setTextColor( QColor( 0, 0, 0xC0 ) );	break;	// medium blue
+	case zypp::Patch::category_security:	setTextColor( Qt::red );		break;
+	case zypp::Patch::category_recommended:	setTextColor( QColor( 0, 0, 0xC0 ) );	break;	// medium blue
+	case zypp::Patch::category_optional:	break;
+	case zypp::Patch::category_document:	break;
 	default:				break;
     }
 #endif
@@ -372,8 +373,9 @@ void
 YQPkgPatchListItem::setStatus( ZyppStatus newStatus )
 {
     YQPkgObjListItem::setStatus( newStatus );
+    
 #ifdef FIXME
-    Y2PM::youPatchManager().updatePackageStates();
+    // Call the resolver on this object
 #endif
     _patchList->sendUpdatePackages();
 }
@@ -400,9 +402,7 @@ YQPkgPatchListItem::toolTip( int col )
     }
     else
     {
-#ifdef FIXME
-	text = fromUTF8( zyppPatch()->kindLabel().c_str() );
-#endif
+	text = fromUTF8( zyppPatch()->category() );
 
 	if ( ! text.isEmpty() )
 	    text += "\n";
@@ -430,12 +430,13 @@ YQPkgPatchListItem::compare( QListViewItem * otherListViewItem,
 
     if ( other )
     {
-	if ( col == kindCol() )
+	if ( col == categoryCol() )
 	{
 #ifdef FIXME
-	    if ( this->zyppPatch()->kind() < other->zyppPatch()->kind() ) return -1;
-	    if ( this->zyppPatch()->kind() > other->zyppPatch()->kind() ) return 1;
+	    // This used to be a numeric field, now doing simple string sorting
 #endif
+	    if ( this->zyppPatch()->category() < other->zyppPatch()->category() ) return -1;
+	    if ( this->zyppPatch()->category() > other->zyppPatch()->category() ) return  1;
 	    return 0;
 	}
     }

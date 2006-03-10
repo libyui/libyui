@@ -689,16 +689,13 @@ YQPkgObjListItem::init()
     const ZyppObj candidate = selectable()->candidateObj();
     const ZyppObj installed = selectable()->installedObj();
 
-#ifdef FIXME
-    if ( candidate && installed && candidate->edition() != installed->edition() )
+    if ( candidate && installed )
     {
-	if ( selectable()->downgrade_condition() )
+	if ( candidate->edition() < installed->edition() )	
 	    _installedIsNewer = true;
-	else
+	else if ( installed->edition() < candidate->edition() )	
 	    _candidateIsNewer = true;
     }
-#endif
-
 
     if ( nameCol()    >= 0 )	setText( nameCol(),	zyppObj()->name()	);
     if ( summaryCol() >= 0 )	setText( summaryCol(),	zyppObj()->summary()	);

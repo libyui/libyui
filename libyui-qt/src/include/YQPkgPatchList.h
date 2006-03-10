@@ -102,9 +102,9 @@ public:
     YQPkgPatchListItem * selection() const;
 
     /**
-     * Returns the column for the patch kind
+     * Returns the column for the patch category
      **/
-    int kindCol() const { return _kindCol; }
+    int categoryCol() const { return _categoryCol; }
 
     /**
      * Categories of patches to display in the list
@@ -203,7 +203,7 @@ protected:
 
     // Data members
 
-    int			_kindCol;
+    int			_categoryCol;
     PatchCategory	_patchCategory;
 };
 
@@ -270,7 +270,7 @@ public:
 
     int statusCol()	const	{ return _patchList->statusCol();	}
     int summaryCol()	const	{ return _patchList->summaryCol();	}
-    int kindCol()	const	{ return _patchList->kindCol();	}
+    int categoryCol()	const	{ return _patchList->categoryCol();	}
 
 
 protected:
