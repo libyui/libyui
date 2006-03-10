@@ -60,12 +60,6 @@ public:
      **/
     YQPkgPatchList * patchList() const { return _patchList; }
 
-    /**
-     * Reimplemented from QWidget:
-     * Reserve a reasonable amount of space.
-     **/
-    virtual QSize sizeHint() const;
-
     
 public slots:
 

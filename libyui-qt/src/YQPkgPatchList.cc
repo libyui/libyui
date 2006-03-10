@@ -345,9 +345,17 @@ YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList * 	patchList,
     if ( ! _zyppPatch )
 	_zyppPatch = tryCastToZyppPatch( selectable->theObj() );
 
+    if ( ! _zyppPatch )
+	return;
+
     setStatusIcon();
-    setText( categoryCol(), _zyppPatch->category() );
-    
+
+    if ( categoryCol() > -1 )
+	setText( categoryCol(), _zyppPatch->category() );
+
+    if ( summaryCol() > -1 && _zyppPatch->summary().empty() )
+	setText( summaryCol(), _zyppPatch->name() );		// use name as fallback
+
 #ifdef FIXME
 
     switch ( _zyppPatch->category() )
@@ -373,7 +381,7 @@ void
 YQPkgPatchListItem::setStatus( ZyppStatus newStatus )
 {
     YQPkgObjListItem::setStatus( newStatus );
-    
+
 #ifdef FIXME
     // Call the resolver on this object
 #endif

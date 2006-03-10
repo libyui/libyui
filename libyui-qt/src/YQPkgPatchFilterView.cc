@@ -55,6 +55,8 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
 
     QHBox * hbox 		= new QHBox( vbox ); CHECK_PTR( hbox );
     hbox->setSpacing( SPACING );
+    
+#ifdef FIXME
     QLabel * label		= new QLabel( _( "&Show Patch Category:" ), hbox );
 
     _patchCategory		= new QComboBox( hbox );
@@ -69,6 +71,9 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
 
     connect( _patchCategory, SIGNAL( activated( int ) ), this, SLOT( fillPatchList() ) );
     addVSpacing( vbox, 4 );
+#else
+    _patchCategory = 0;
+#endif
 
     vbox			= new QVBox( _splitter );			CHECK_PTR( vbox			);
     addVSpacing( vbox, 8 );
@@ -129,26 +134,21 @@ YQPkgPatchFilterView::updateTotalDownloadSize()
 void
 YQPkgPatchFilterView::fillPatchList()
 {
+#ifdef FIXME
     YQPkgPatchList::PatchCategory category;
 
     switch ( _patchCategory->currentItem() )
     {
 	case 0:		category = YQPkgPatchList::InstallablePatches;			break;
-	case 1:		category = YQPkgPatchList::InstallableAndInstalledPatches;		break;
+	case 1:		category = YQPkgPatchList::InstallableAndInstalledPatches;	break;
 	case 2:		category = YQPkgPatchList::AllPatches;				break;
 	default:	category = YQPkgPatchList::InstallablePatches;			break;
     }
 
     _patchList->setPatchCategory( category );
+#endif
     _patchList->fillList();
     _patchList->selectSomething();
-}
-
-
-QSize
-YQPkgPatchFilterView::sizeHint() const
-{
-    return QSize( 600, 350 );
 }
 
 

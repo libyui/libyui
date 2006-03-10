@@ -19,9 +19,10 @@
 
 /-*/
 
-#define CHECK_DEPENDENCIES_ON_STARTUP	1
-#define DEPENDENCY_FEEDBACK_IF_OK	1
-#define AUTO_CHECK_DEPENDENCIES_DEFAULT	false
+#define CHECK_DEPENDENCIES_ON_STARTUP			1
+#define DEPENDENCY_FEEDBACK_IF_OK			1
+#define AUTO_CHECK_DEPENDENCIES_DEFAULT			false
+#define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE	1
 
 #include <qaction.h>
 #include <qapplication.h>
@@ -119,10 +120,6 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     _updateMode	 = opt.updateMode.value();
     _summaryMode = opt.summaryMode.value();
 
-#if 0
-    _showChangesDialog = ! _youMode;
-#endif
-
     if ( _youMode )	y2milestone( "YOU mode" );
     if ( _updateMode )	y2milestone( "Update mode" );
 
@@ -135,7 +132,7 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     if ( _pkgList )
 	_pkgList->clear();
 
-    if ( _patchFilterView )
+    if ( _patchFilterView && _youMode )
     {
 	if ( _filters && _patchFilterView && _patchList )
 	{
@@ -257,7 +254,11 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     // Patches view
     //
 
-    if ( _youMode )
+    if ( _youMode
+#if ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE
+	 || ! zyppPool().empty<zypp::Patch>()
+#endif
+	 )
 	addPatchFilterView( false ); // don't make this the active filter
 
 
@@ -474,7 +475,7 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     connect( _pkgList,		SIGNAL( selectionChanged    ( ZyppSel ) ),
 	     _pkgVersionsView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
-    
+
     //
     // File List
     //
@@ -911,7 +912,7 @@ YQPackageSelector::addPatchFilterView( bool autoActivate )
 	CHECK_PTR( _patchList );
 
 	connectFilter( _patchList, _pkgList );
-	
+
 	if ( _pkgList && _patchList )
 	{
 	    connect( _patchList, SIGNAL( filterMatch   ( const QString &, const QString &, FSize ) ),
