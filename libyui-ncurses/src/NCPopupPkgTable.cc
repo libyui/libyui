@@ -155,7 +155,7 @@ bool NCPopupPkgTable::fillAutoChanges( NCPkgTable * pkgTable )
 	ZyppPkg pkgPtr = tryCastToZyppPkg (slb->theObj());
 
 	// show all packages which are automatically selected for installation
-	if ( slb->toModify() && ! slb->isModifiedBy (zypp::ResStatus::USER) )
+	if ( slb->toModify() && slb->modifiedBy () != zypp::ResStatus::USER )
 	{
 	    NCMIL << "The status of " << pkgPtr->name() << " has automatically changed" << endl;
 	    pkgTable->createListEntry( pkgPtr, slb );
