@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Mar 13 15:03:55 CET 2006 - mvidner@suse.cz
+
+- Added license confirmations (#151834).
+- Show the list of automatically changed packages (#152700#c1).
+- Show the list of update problems: Protected, Taboo, AutoDeleted.
+- 2.13.13
+
+-------------------------------------------------------------------
 Fri Mar 10 10:30:38 CET 2006 - mvidner@suse.cz
 
 - Messages for the package conflict dialog marked for translation.
