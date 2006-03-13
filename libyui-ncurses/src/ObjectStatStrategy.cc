@@ -488,10 +488,8 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
     {
 	// this package is the candidate now
 	bool ret = slbPtr->setCandidate( objPtr );
-#ifdef FIXME_LIC
 	// the new candidate can have a different one
-	slbPtr->setLicenseConfirmed (false);
-#endif
+	slbPtr->setLicenceConfirmed (false);
 	NCMIL << "Set user candidate returns: " <<  (ret?"true":"false") << endl;	
     }
     NCMIL << "Set status of: " << slbPtr->name() << " to: "

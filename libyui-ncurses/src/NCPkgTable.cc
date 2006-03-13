@@ -240,9 +240,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 		if ( pkgPtr )
 		{
 		    license = pkgPtr->licenseToConfirm();
-#ifdef FIXME_LIC
-		    license_confirmed = slbPtr->isLicenceConfirmed();
-#endif
+		    license_confirmed = slbPtr->hasLicenceConfirmed();
 		}
 	    }
 	    break;
@@ -282,9 +280,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    
 	    ok = false;
 	} else {
-#ifdef FIXME_LIC
-	    slbPtr->setLicenseConfirmed (true);
-#endif
+	    slbPtr->setLicenceConfirmed (true);
 	}
     }
 
