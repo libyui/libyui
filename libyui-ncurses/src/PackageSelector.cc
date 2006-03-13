@@ -745,10 +745,15 @@ bool PackageSelector::fillUpdateList( )
 	ZyppSel slb = *i;
 	ZyppPkg pkg = tryCastToZyppPkg (slb->theObj ()); // ??
 
-	bool problematic = slb->toDelete();
-	if (problematic)
-	{
-	    packageList->createListEntry( pkg, slb );
+	zypp::ui::Status st = slb->status ();
+	switch (st) {
+	    case S_Protected:
+	    case S_Taboo:
+	    case S_AutoDel:
+		packageList->createListEntry( pkg, slb );
+		break;
+	    default:
+		break;
 	}
     }
 
