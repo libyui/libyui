@@ -25,10 +25,13 @@
 #include <qheader.h>
 #include <qstyle.h>
 
+#include <zypp/ZYppFactory.h>
+
 #include "utf8.h"
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQi18n.h"
+
 
 using std::set;
 
@@ -50,30 +53,40 @@ using std::set;
 #define OVERFLOW_MB_PROXIMITY	300
 
 
+typedef zypp::DiskUsageCounter::MountPointSet 		ZyppDuSet;
+typedef zypp::DiskUsageCounter::MountPointSet::iterator ZyppDuSetIterator;
+
+
 
 YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget * parent, int thresholdPercent )
     : QY2DiskUsageList( parent, true )
 {
-    _debug 	= false;
+    _debug = false;
 
-#ifdef FIXME
-    const set<PkgDuMaster::MountPoint> du = Y2PM::packageManager().getDu().mountpoints();
-    set<PkgDuMaster::MountPoint>::iterator it = du.begin();
+    ZyppDuSet diskUsage = zypp::getZYpp()->diskUsage();
 
-    while ( it != du.end() )
+    if ( diskUsage.empty() )
     {
-	if ( thresholdPercent == 0 ||	// Slight optimization for the most common case
-	     it->pkg_u_percent() >= thresholdPercent )
+	zypp::getZYpp()->setPartitions( zypp::DiskUsageCounter::detectMountPoints() );
+	diskUsage = zypp::getZYpp()->diskUsage();
+    }
+
+
+    for ( ZyppDuSetIterator it = diskUsage.begin();
+	  it != diskUsage.end();
+	  ++it )
+    {
+	const ZyppPartitionDu & partitionDu = *it;
+
+	if ( ! partitionDu.readonly )
 	{
-	    YQPkgDiskUsageListItem * item = new YQPkgDiskUsageListItem( this, *it );
+	    YQPkgDiskUsageListItem * item = new YQPkgDiskUsageListItem( this, partitionDu );
 	    CHECK_PTR( item );
 	    item->updateData();
-	    _items.insert( it->mountpoint().c_str(), item );
+	    _items.insert( partitionDu.dir.c_str(), item );
 	}
-
-	++it;
     }
-#endif
+
 }
 
 
@@ -83,22 +96,20 @@ YQPkgDiskUsageList::updateDiskUsage()
     runningOutWarning.clear();
     overflowWarning.clear();
 
-#ifdef FIXME
-    const set<PkgDuMaster::MountPoint> 	du = Y2PM::packageManager().updateDu().mountpoints();
-    set<PkgDuMaster::MountPoint>::iterator it = du.begin();
+    ZyppDuSet diskUsage = zypp::getZYpp()->diskUsage();
 
-    while ( it != du.end() )
+    for ( ZyppDuSetIterator it = diskUsage.begin();
+	  it != diskUsage.end();
+	  ++it )
     {
-	YQPkgDiskUsageListItem * item = _items[ it->mountpoint().c_str() ];
+	const ZyppPartitionDu & partitionDu = *it;
+	YQPkgDiskUsageListItem * item = _items[ partitionDu.dir.c_str() ];
 
 	if ( item )
-	    item->updateDuData( *it );
+	    item->updateDuData( partitionDu );
 	else
-	    y2error( "No entry for mount point %s", it->mountpoint().c_str() );
-
-	++it;
+	    y2error( "No entry for mount point %s", partitionDu.dir.c_str() );
     }
-#endif
 
     postPendingWarnings();
 }
@@ -170,8 +181,7 @@ YQPkgDiskUsageList::keyPressEvent( QKeyEvent * event )
 
 		    switch ( event->ascii() )
 		    {
-			case '0':	percent	= 0;	break;
-			case '1':	percent	= 100;	break;
+			case '1':	percent	= 10;	break;
 			case '2':	percent	= 20;	break;
 			case '3':	percent	= 30;	break;
 			case '4':	percent	= 40;	break;
@@ -180,9 +190,9 @@ YQPkgDiskUsageList::keyPressEvent( QKeyEvent * event )
 			case '7':	percent	= 70;	break;
 			case '8':	percent	= 80;	break;
 			case '9':	percent	= 90;	break;
-			case 'o':	percent	= 120;	break;
-			case '+':	percent += 2; 	break;
-			case '-':	percent--;	break;
+			case '0':	percent	= 100;	break;
+			case '+':	percent += 3; 	break;
+			case '-':	percent -= 3;	break;
 
 			case 'w':
 			    // Only for testing, thus intentionally using no translations
@@ -196,21 +206,21 @@ YQPkgDiskUsageList::keyPressEvent( QKeyEvent * event )
 			    break;
 		    }
 
-		    if ( percent < 0   ) percent = 0;
-#ifdef FIXME
-		    YQPkgDuData du( item->duData() );
+		    if ( percent < 0   )
+			percent = 0;
+
+		    ZyppPartitionDu partitionDu( item->partitionDu() );
 
 		    if ( percent != item->usedPercent() )
 		    {
-			du._used = du.total() * percent / 100;
+			partitionDu.pkg_size = partitionDu.total_size * percent / 100;
 
 			runningOutWarning.clear();
 			overflowWarning.clear();
 
-			item->updateDuData( du );
+			item->updateDuData( partitionDu );
 			postPendingWarnings();
 		    }
-#endif
 		}
 	    }
 	}
@@ -225,56 +235,40 @@ YQPkgDiskUsageList::keyPressEvent( QKeyEvent * event )
 
 
 YQPkgDiskUsageListItem::YQPkgDiskUsageListItem( YQPkgDiskUsageList * 	parent,
-						YQPkgDuData		duData )
+						const ZyppPartitionDu &	partitionDu )
 	: QY2DiskUsageListItem( parent )
-	, _duData( duData )
+	, _partitionDu( partitionDu )
 	, _pkgDiskUsageList( parent )
 {
-#ifdef FIXME
-    y2debug( "disk usage list entry for %s", duData.mountpoint().c_str() );
-#endif
+    y2debug( "disk usage list entry for %s", partitionDu.dir.c_str() );
 }
 
 
 FSize
 YQPkgDiskUsageListItem::usedSize() const
 {
-#ifdef FIXME
-    return _duData.pkg_used();
-#else
-    return FSize(0);
-#endif
+    return FSize( _partitionDu.pkg_size, FSize::K );
 }
 
 
 FSize
 YQPkgDiskUsageListItem::totalSize() const
 {
-#ifdef FIXME
-    return _duData.total();
-#else
-    return FSize(0);
-#endif
+    return FSize( _partitionDu.total_size, FSize::K );
 }
 
 
 QString
 YQPkgDiskUsageListItem::name() const
 {
-#ifdef FIXME
-    return fromUTF8( _duData.mountpoint().c_str() );
-#else
-    return QString();
-#endif
+    return fromUTF8( _partitionDu.dir.c_str() );
 }
 
 
 void
-YQPkgDiskUsageListItem::updateDuData( const YQPkgDuData & fromData )
+YQPkgDiskUsageListItem::updateDuData( const ZyppPartitionDu & fromData )
 {
-#ifdef FIXME
-    _duData.assignData( fromData );
-#endif
+    _partitionDu = fromData;
     updateData();
     checkRemainingDiskSpace();
 }

@@ -22,27 +22,18 @@
 #ifndef YQPkgDiskUsageList_h
 #define YQPkgDiskUsageList_h
 
+#include <zypp/DiskUsageCounter.h>
 #include <QY2DiskUsageList.h>
 #include <qasciidict.h>
 
+typedef zypp::DiskUsageCounter::MountPoint ZyppPartitionDu;
 class YQPkgDiskUsageListItem;
-#ifdef FIXME
-typedef PkgDuMaster::MountPoint YQPkgDuData;
-#else
-class YQPkgDuData
-{
-public:
-    YQPkgDuData() {};
-};
-#endif
-
-
 
 
 /**
  * Helper class to manage warnings that are to be issued when a value enters a
- * predefined range, but repeated only when that value leaves a ( wider )
- * "proximity" range and then re-enters the ( narrower ) "inner" range.
+ * predefined range, but repeated only when that value leaves a (wider)
+ * "proximity" range and then re-enters the (narrower) "inner" range.
  *
  * Example: Disk space usage:
  *
@@ -56,7 +47,7 @@ public:
  *
  * A warning is to be posted when there is only 90% disk space left. After the
  * warning is displayed, there shall be no more warning until disk usage decreases
- * below 80% ( the proximity range ) and then later increases again to 90%.
+ * below 80% (the proximity range) and then later increases again to 90%.
  *
  * The net effect of all that is to avoid posting the warning over and over
  * again while the value changes back and forth around the boundary of the
@@ -213,7 +204,7 @@ public:
      * specified file system.
      **/
     YQPkgDiskUsageListItem( YQPkgDiskUsageList * 	parent,
-			    YQPkgDuData			duData );
+			    const ZyppPartitionDu &	partitionDu );
 
     /**
      * Destructor.
@@ -223,12 +214,12 @@ public:
     /**
      * Returns the corresponding disk usage data.
      **/
-    YQPkgDuData duData() const { return _duData; }
+    ZyppPartitionDu partitionDu() const { return _partitionDu; }
 
     /**
      * Update the disk usage data.
      **/
-    void updateDuData( const YQPkgDuData & fromData );
+    void updateDuData( const ZyppPartitionDu & fromData );
 
     /**
      * The currently used size of this partition.
@@ -270,7 +261,7 @@ protected:
 
     // Data members
 
-    YQPkgDuData 		_duData;
+    ZyppPartitionDu 		_partitionDu;
     YQPkgDiskUsageList *	_pkgDiskUsageList;
 };
 
