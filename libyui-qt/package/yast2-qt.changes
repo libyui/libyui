@@ -1,6 +1,7 @@
 -------------------------------------------------------------------
-Tue Mar 14 16:02:23 CET 2006 - sh@suse.de
+Tue Mar 14 18:12:15 CET 2006 - sh@suse.de
 
+- V 2.13.33 
 - Fixed yast2-qt part of bug #151834: third party licenses
   (Acrobat reader, flash player, ...) 
 
