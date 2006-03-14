@@ -25,6 +25,8 @@
 #include <qpopupmenu.h>
 #include <qaction.h>
 
+#include <zypp/ResStatus.h>
+
 #include "utf8.h"
 
 #include "YQPkgObjList.h"
@@ -762,17 +764,10 @@ YQPkgObjListItem::status() const
 bool
 YQPkgObjListItem::bySelection() const
 {
-    bool bySel = false;
+    zypp::ResStatus::TransactByValue modifiedBy = selectable()->modifiedBy();
 
-#if 0
-    // this is probably obsolete, solver sets all states now
-    // also for selections
-
-    if ( selectable()->isModifiedBy() )	// zypp::ResStatus.h
-	bySel = true;
-#endif
-
-    return bySel;
+    return ( modifiedBy == zypp::ResStatus::APPL_LOW ||
+	     modifiedBy == zypp::ResStatus::APPL_HIGH  );
 }
 
 
@@ -918,39 +913,26 @@ YQPkgObjListItem::showLicenseAgreement( ZyppStatus status )
     {
 	case S_Install:
 	case S_Update:
+	    
+	    if ( selectable()->hasLicenceConfirmed() )
+		return true;
+	    
 	    if ( selectable()->hasCandidateObj() )
 	    {
 		pkg = tryCastToZyppPkg( selectable()->candidateObj() );
 
 		if ( pkg )
-		{
 		    licenseText = pkg->licenseToConfirm();
-		    confirmed = licenseText.empty();
-
-#if 0
-		    // DEBUG
-		    // DEBUG
-		    // DEBUG
-		    if ( licenseText.empty() )
-			y2debug( "No license for pkg %s", pkg->name().c_str() );
-		    else
-			y2warning( "pkg %s has a license to confirm", pkg->name().c_str() );
-		    // DEBUG
-		    // DEBUG
-		    // DEBUG
-#endif
-		}
 	    }
 	    break;
 
 	default: return true;
     }
 
-    if ( ! licenseText.empty() && ! selectable()->hasLicenceConfirmed() )
+    if ( ! licenseText.empty() )
     {
 	y2debug( "Showing license agreement" );
-	confirmed = confirmed
-	    || YQPkgTextDialog::confirmText( _pkgObjList, selectable(), licenseText );
+	confirmed = YQPkgTextDialog::confirmText( _pkgObjList, selectable(), licenseText );
 
 	if ( confirmed )
 	{
