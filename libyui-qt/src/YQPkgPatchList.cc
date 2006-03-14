@@ -165,20 +165,22 @@ YQPkgPatchList::filter()
 		  it != atomList.end();
 		  ++it )
 	    {
-		y2debug( "Found patch atom" );
-		y2debug( "Patch atom name: %s", (*it)->name().c_str() );
 		
 		ZyppPkg pkg = tryCastToZyppPkg( *it );
 
 		if ( pkg )
 		{
-		    ZyppSel sel = findZyppSel( pkg );
+		    y2debug( "Found patch pkg: %s", (*it)->name().c_str() );
+		    
+		    ZyppSel sel = _selMapper.findZyppSel( pkg );
 
 		    if ( sel )
 			emit filterMatch( sel, pkg );
 		}
 		else // No ZyppPkg - some other kind of object (script, message)
 		{
+		    y2debug( "Found patch atom: %s", (*it)->name().c_str() );
+		    
 		    string kind = (*it)->kind().asString();
 		    emit filterMatch( QString( "[%1]" ).arg( kind.c_str() ),
 				      fromUTF8( (*it)->name() ),

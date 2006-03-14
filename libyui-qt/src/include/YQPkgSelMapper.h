@@ -25,32 +25,15 @@
 #include <map>
 
 
-/**
- * Find the corresponding ZyppSel to a ZyppPkg.
- * Returns 0 if there is no corresponding ZyppSel.
- *
- * WARNING: If there is no YQPkgSelMapper instantiated while this is called,
- * this will be very expensive!
- **/
-ZyppSel findZyppSel( ZyppPkg pkg );
-
 
 /**
- * Sentinel object that keeps a reference-counted cache attached while it
- * exists. Instantiating the first object of this class is expensive as this
- * will create the cache (a map from ZyppSel to ZyppPkg). While any one
- * instance of this class exists, the cache remains alive. When the last one is
- * destroyed, the cache is destroyed, too.
+ * Mapping from ZyppPkg to the correspoinding ZyppSel.
  *
- * Typical use: Instantiate an object of this class before doing a lot of
- * lookups with findZyppSel() and let it go out of scope when you are
- * done. Alternatively, you can add an object of this class to the members of
- * your class.
+ * All instances of this class share the same cache. The cache remains alive as
+ * long as any instance of this class exists.
  **/
 class YQPkgSelMapper
 {
-    friend ZyppSel findZyppSel( ZyppPkg pkg );
-
 public:
 
     /**
@@ -65,18 +48,28 @@ public:
     virtual ~YQPkgSelMapper();
 
     /**
+     * Find the corresponding ZyppSel to a ZyppPkg.
+     * Returns 0 if there is no corresponding ZyppSel.
+     **/
+
+    ZyppSel findZyppSel( ZyppPkg pkg );
+
+    /**
      * Reference count - indicates how many instances of this class are alive
      * right now.
      **/
     static int refCount() { return _refCount; }
 
     /**
-     * Rebuild the cache. This is expensive. Call this only when the ZyppPool
-     * has changed, i.e. after installation sources were added or removed.
+     * Rebuild the shared cache. This is expensive. Call this only when the
+     * ZyppPool has changed, i.e. after installation sources were added or
+     * removed. 
+     *
+     * Since the cache is shared, this affects all instances of this class.
      **/
     void rebuildCache();
 
-    
+
 protected:
 
     typedef std::map<ZyppPkg, ZyppSel>		Cache;

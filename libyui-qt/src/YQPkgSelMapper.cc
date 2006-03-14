@@ -23,22 +23,6 @@
 #include "YQPkgSelMapper.h"
 
 
-ZyppSel
-findZyppSel( ZyppPkg pkg )
-{
-    YQPkgSelMapper mapper; // This will build a cache, if there is none yet
-    ZyppSel sel;
-
-    YQPkgSelMapper::CacheIterator it = YQPkgSelMapper::_cache.find( pkg );
-
-    if ( it != YQPkgSelMapper::_cache.end() )
-	sel = it->second;
-    else
-	y2warning( "No selectable found for package %s", pkg->name().c_str() );
-
-    return sel;
-}
-
 
 int			YQPkgSelMapper::_refCount = 0;
 YQPkgSelMapper::Cache	YQPkgSelMapper::_cache;
@@ -49,7 +33,6 @@ YQPkgSelMapper::YQPkgSelMapper()
     if ( ++_refCount == 1 )
 	rebuildCache();
 }
-
 
 
 YQPkgSelMapper::~YQPkgSelMapper()
@@ -87,3 +70,21 @@ void YQPkgSelMapper::rebuildCache()
 
     y2debug( "Building pkg -> selectable cache done" );
 }
+
+
+ZyppSel
+YQPkgSelMapper::findZyppSel( ZyppPkg pkg )
+{
+    YQPkgSelMapper mapper; // This will build a cache, if there is none yet
+    ZyppSel sel;
+
+    YQPkgSelMapper::CacheIterator it = YQPkgSelMapper::_cache.find( pkg );
+
+    if ( it != YQPkgSelMapper::_cache.end() )
+	sel = it->second;
+    else
+	y2warning( "No selectable found for package %s", pkg->name().c_str() );
+
+    return sel;
+}
+

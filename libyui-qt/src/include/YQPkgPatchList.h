@@ -206,6 +206,7 @@ protected:
 
     int			_categoryCol;
     PatchCategory	_patchCategory;
+    YQPkgSelMapper	_selMapper;
 };
 
 
@@ -281,7 +282,6 @@ protected:
 
     YQPkgPatchList *	_patchList;
     ZyppPatch		_zyppPatch;
-    YQPkgSelMapper	_selMapper;
 };
 
 
