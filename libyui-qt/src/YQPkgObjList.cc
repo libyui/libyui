@@ -911,7 +911,7 @@ bool
 YQPkgObjListItem::showLicenseAgreement( ZyppStatus status )
 {
     bool confirmed = true;
-    string text;
+    string licenseText;
     ZyppPkg pkg = 0;
 
     switch ( status )
@@ -924,8 +924,13 @@ YQPkgObjListItem::showLicenseAgreement( ZyppStatus status )
 
 		if ( pkg )
 		{
-		    text = pkg->licenseToConfirm();
-		    confirmed = text.empty();
+		    licenseText = pkg->licenseToConfirm();
+		    confirmed = licenseText.empty();
+
+		    if ( licenseText.empty() )
+			y2debug( "No license for pkg %s", pkg->name().c_str() );
+		    else
+			y2warning( "pkg %s has a license to confirm", pkg->name().c_str() );
 		}
 	    }
 	    break;
@@ -933,11 +938,11 @@ YQPkgObjListItem::showLicenseAgreement( ZyppStatus status )
 	default: return true;
     }
 
-    if ( ! text.empty() )
+    if ( ! licenseText.empty() && ! selectable()->hasLicenceConfirmed() )
     {
 	y2debug( "Showing license agreement" );
 	confirmed = confirmed
-	    || YQPkgTextDialog::confirmText( _pkgObjList, selectable(), text );
+	    || YQPkgTextDialog::confirmText( _pkgObjList, selectable(), licenseText );
 
 	if ( confirmed )
 	{
