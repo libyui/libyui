@@ -927,10 +927,18 @@ YQPkgObjListItem::showLicenseAgreement( ZyppStatus status )
 		    licenseText = pkg->licenseToConfirm();
 		    confirmed = licenseText.empty();
 
+#if 0
+		    // DEBUG
+		    // DEBUG
+		    // DEBUG
 		    if ( licenseText.empty() )
 			y2debug( "No license for pkg %s", pkg->name().c_str() );
 		    else
 			y2warning( "pkg %s has a license to confirm", pkg->name().c_str() );
+		    // DEBUG
+		    // DEBUG
+		    // DEBUG
+#endif
 		}
 	    }
 	    break;
