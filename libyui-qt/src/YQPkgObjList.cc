@@ -939,7 +939,11 @@ YQPkgObjListItem::showLicenseAgreement( ZyppStatus status )
 	confirmed = confirmed
 	    || YQPkgTextDialog::confirmText( _pkgObjList, selectable(), text );
 
-	if ( ! confirmed )
+	if ( confirmed )
+	{
+	    selectable()->setLicenceConfirmed( true );
+	}
+	else
 	{
 	    // The user rejected the license agreement -
 	    // make sure the package gets unselected.
@@ -955,15 +959,6 @@ YQPkgObjListItem::showLicenseAgreement( ZyppStatus status )
 		    break;
 
 		default: break;
-	    }
-	}
-	else
-	{
-	    if (pkg)
-	    {
-#ifdef FIXME
-		pkg->markLicenseConfirmed ();
-#endif
 	    }
 	}
     }
