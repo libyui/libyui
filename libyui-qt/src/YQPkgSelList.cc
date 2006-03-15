@@ -40,6 +40,7 @@ YQPkgSelList::YQPkgSelList( QWidget * parent, bool autoFill, bool autoFilter )
     addColumn( ""		);	_statusCol	= numCol++;
     addColumn( _( "Selection" ) );	_summaryCol	= numCol++;
     setAllColumnsShowFocus( true );
+    setAutoApplyChanges( true );
 
     if ( autoFilter )
     {
@@ -193,68 +194,6 @@ YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList *	pkgSelList,
 YQPkgSelListItem::~YQPkgSelListItem()
 {
     // NOP
-}
-
-
-void
-YQPkgSelListItem::setStatus( ZyppStatus newStatus )
-{
-    ZyppStatus oldStatus = selectable()->status();
-
-    YQPkgObjListItem::setStatus( newStatus );
-
-    if ( oldStatus != selectable()->status() )
-    {
-	applyChanges();
-
-	_pkgSelList->updateItemStates();
-	_pkgSelList->sendUpdatePackages();
-    }
-}
-
-
-void
-YQPkgSelListItem::applyChanges()
-{
-    bool install = true;
-
-    switch ( selectable()->status() )
-    {
-	case S_Del:
-	case S_AutoDel:
-	case S_NoInst:
-	case S_KeepInstalled:
-	case S_Taboo:
-	case S_Protected:
-	    install = false;
-	    break;
-
-	case S_Install:
-	case S_AutoInstall:
-	case S_Update:
-	case S_AutoUpdate:
-	    install = true;
-	    break;
-
-	    // Intentionally omitting 'default' branch so the compiler can
-	    // catch unhandled enum states
-    }
-
-
-    ZyppObj obj = install ?	// the other way round as mayb expected:
-	selectable()->candidateObj() :	// install the candidate,
-	selectable()->installedObj();	// remove the installed
-
-    if ( ! obj )
-	obj = selectable()->theObj();
-
-    y2debug( "Transacting selection %s with %s",
-	     obj->name().c_str(), install ? "install" : "delete" );
-
-    bool success = zypp::getZYpp()->resolver()->transactResObject( obj, install );
-
-    if ( ! success )
-	y2warning( "Couldn't transact selection %s", obj->name().c_str() );
 }
 
 

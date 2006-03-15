@@ -83,11 +83,6 @@ public slots:
 			 ZyppPattern 	pattern );
 
     /**
-     * Emit an updatePackages() signal.
-     **/
-    void sendUpdatePackages() { emit updatePackages(); }
-
-    /**
      * Fill the pattern list.
      **/
     void fillList();
@@ -101,12 +96,6 @@ public:
 
 
 signals:
-
-    /**
-     * Emitted when it's time to update displayed package information,
-     * e.g., package states.
-     **/
-    void updatePackages();
 
     /**
      * Emitted when the filtering starts. Use this to clear package lists
@@ -175,15 +164,6 @@ public:
     ZyppPattern zyppPattern() const { return _zyppPattern; }
 
     /**
-     * Set the pattern status.
-     *
-     * Reimplemented from YQPkgObjListItem:
-     * Activate patterns and emit updatePackages signal for each
-     * status change.
-     **/
-    virtual void setStatus( ZyppStatus newStatus );
-
-    /**
      * Comparison function used for sorting the list.
      * Returns:
      * -1 if this <  other
@@ -209,12 +189,6 @@ protected:
      * Initialize things common to all constructors.
      **/
     void init();
-
-    /**
-     * Propagate changes in the pattern status to the affected packages
-     * via the solver.
-     **/
-    void applyChanges();
 
 
     // Data members
@@ -270,7 +244,7 @@ public:
      * Reimplemented from QListViewItem to force categories open at all times
      */
     virtual void setOpen( bool open );
-    
+
 protected:
 
     /**

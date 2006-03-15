@@ -81,11 +81,6 @@ public slots:
 			ZyppSelection 	selection );
 
     /**
-     * Emit an updatePackages() signal.
-     **/
-    void sendUpdatePackages() { emit updatePackages(); }
-
-    /**
      * Fill the selection list.
      **/
     void fillList();
@@ -99,12 +94,6 @@ public:
 
 
 signals:
-
-    /**
-     * Emitted when it's time to update displayed package information,
-     * e.g., package states.
-     **/
-    void updatePackages();
 
     /**
      * Emitted when the filtering starts. Use this to clear package lists
@@ -148,15 +137,6 @@ public:
     ZyppSelection zyppSelection() const { return _zyppSelection; }
 
     /**
-     * Set the selection status.
-     *
-     * Reimplemented from YQPkgObjListItem:
-     * Activate selections and emit updatePackages signal for each
-     * status change.
-     **/
-    virtual void setStatus( ZyppStatus newStatus );
-
-    /**
      * Comparison function used for sorting the list.
      * Returns:
      * -1 if this <  other
@@ -177,12 +157,6 @@ public:
 
 
 protected:
-
-    /**
-     * Propagate changes in the selection status to the affected packages
-     * via the solver.
-     **/
-    void applyChanges();
 
     
     // Data members

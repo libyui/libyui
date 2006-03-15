@@ -53,6 +53,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     addColumn( _( "Pattern" )	);	_summaryCol	= numCol++;
     setAllColumnsShowFocus( true );
     setTreeStepSize( 0 );
+    setAutoApplyChanges( true );
 
     if ( autoFilter )
     {
@@ -247,67 +248,6 @@ YQPkgPatternListItem::init()
 YQPkgPatternListItem::~YQPkgPatternListItem()
 {
     // NOP
-}
-
-
-void
-YQPkgPatternListItem::setStatus( ZyppStatus newStatus )
-{
-    ZyppStatus oldStatus = selectable()->status();
-
-    YQPkgObjListItem::setStatus( newStatus );
-
-    if ( oldStatus != selectable()->status() )
-    {
-	applyChanges();
-
-	_patternList->updateItemStates();
-	_patternList->sendUpdatePackages();
-    }
-}
-
-
-void
-YQPkgPatternListItem::applyChanges()
-{
-    bool install = true;
-
-    switch ( selectable()->status() )
-    {
-	case S_Del:
-	case S_AutoDel:
-	case S_NoInst:
-	case S_KeepInstalled:
-	case S_Taboo:
-	case S_Protected:
-	    install = false;
-	    break;
-
-	case S_Install:
-	case S_AutoInstall:
-	case S_Update:
-	case S_AutoUpdate:
-	    install = true;
-	    break;
-
-	    // Intentionally omitting 'default' branch so the compiler can
-	    // catch unhandled enum states
-    }
-
-    ZyppObj obj = install ?	// the other way round as mayb expected:
-	selectable()->candidateObj() :	// install the candidate,
-	selectable()->installedObj();	// remove the installed
-
-    if ( ! obj )
-	obj = selectable()->theObj();
-
-    y2debug( "Transacting pattern %s with %s",
-	     obj->name().c_str(), install ? "install" : "delete" );
-
-    bool success = zypp::getZYpp()->resolver()->transactResObject( obj, install );
-
-    if ( ! success )
-	y2warning( "Couldn't transact pattern %s", obj->name().c_str() );
 }
 
 

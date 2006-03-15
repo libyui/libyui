@@ -74,11 +74,6 @@ public slots:
 			  ZyppPatch 	zyppPatch );
 
     /**
-     * Emit an updatePackages() signal.
-     **/
-    void sendUpdatePackages() { emit updatePackages(); }
-
-    /**
      * Fill the selection list.
      **/
     void fillList();
@@ -144,12 +139,6 @@ public:
 
     
 signals:
-
-    /**
-     * Emitted when it's time to update displayed package information,
-     * e.g., package states.
-     **/
-    void updatePackages();
 
     /**
      * Emitted when the filtering starts. Use this to clear package lists
@@ -232,14 +221,6 @@ public:
      * Returns the original object within the package manager backend.
      **/
     ZyppPatch zyppPatch() const { return _zyppPatch; }
-
-    /**
-     * Set the patch status.
-     *
-     * Reimplemented from YQPkgObjListItem:
-     * Emit updatePackages signals after changing status.
-     **/
-    virtual void setStatus( ZyppStatus newStatus );
 
     /**
      * Cycle the package status to the next valid value.

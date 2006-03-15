@@ -73,11 +73,6 @@ public slots:
     void addLangItem( ZyppSel		selectable,
 		      ZyppLang 	lang );
 
-    /**
-     * Emit an updatePackages() signal.
-     **/
-    void sendUpdatePackages() { emit updatePackages(); }
-
     
 public:
 
@@ -88,12 +83,6 @@ public:
 
 
 signals:
-
-    /**
-     * Emitted when it's time to update displayed package information,
-     * e.g., package states.
-     **/
-    void updatePackages();
 
     /**
      * Emitted when the filtering starts. Use this to clear package lists
@@ -144,15 +133,6 @@ public:
      * Returns the original object within the package manager backend.
      **/
     ZyppLang zyppLang() const { return _zyppLang; }
-
-    /**
-     * Set the selection status.
-     *
-     * Reimplemented from YQPkgObjListItem:
-     * Activate selections and emit updatePackages signal for each
-     * status change.
-     **/
-    virtual void setStatus( ZyppStatus newStatus );
 
 
     // Columns

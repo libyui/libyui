@@ -74,6 +74,13 @@ public:
     bool editable() const { return _editable; }
 
     /**
+     * Returns 'true' if items should automatically call their applyChanges()
+     * method upon status change. By default this will trigger a dependency
+     * resolver run for the item's selectable.
+     **/
+    bool autoApplyChanges() const { return _autoApplyChanges; }
+
+    /**
      * Set the list's editable status.
      **/
     void setEditable( bool editable = true ) { _editable = editable; }
@@ -167,6 +174,11 @@ public slots:
      * this method, too, if the other one is reimplemented.
      **/
     virtual void updateActions();
+    
+    /**
+     * Emit an updatePackages() signal.
+     **/
+    void sendUpdatePackages() { emit updatePackages(); }
 
     /**
      * Select the next item, i.e. move the selection one item further down the
@@ -227,8 +239,20 @@ signals:
      **/
     void statusChanged();
 
+    /**
+     * Emitted when it's time to update displayed package information,
+     * e.g., package states.
+     **/
+    void updatePackages();
+
 
 protected:
+
+    /**
+     * Set the autoApplyChanges flag.
+     **/
+    void setAutoApplyChanges( bool autoApply )
+	{ _autoApplyChanges = autoApply; }
 
     /**
      * Event handler for keyboard input.
@@ -295,6 +319,7 @@ protected:
     int		_versionCol;
     int		_instVersionCol;
     bool	_editable;
+    bool	_autoApplyChanges;
 
 
     QPopupMenu *	_installedContextMenu;
@@ -387,9 +412,16 @@ public:
     bool bySelection() const;
 
     /**
-     * Set the ( binary RPM ) package status
+     * Set the (binary RPM) package status
      **/
     virtual void setStatus( ZyppStatus newStatus );
+
+    /**
+     * Apply changes. This default implementation performs a dependency
+     * resolver run on this item's selectable if the parent list's
+     * autoApplyChanges flag is set.
+     **/
+    virtual void applyChanges();
 
     /**
      * Update this item's status.

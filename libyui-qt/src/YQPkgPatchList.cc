@@ -50,6 +50,7 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     addColumn( _( "Size" 	) );	_sizeCol	= numCol++;
     setAllColumnsShowFocus( true );
     setColumnAlignment( sizeCol(), Qt::AlignRight );
+    setAutoApplyChanges( true );
 
     connect( this,	SIGNAL( selectionChanged	( QListViewItem * ) ),
 	     this,	SLOT  ( filter()				    ) );
@@ -360,18 +361,6 @@ YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList * 	patchList,
 YQPkgPatchListItem::~YQPkgPatchListItem()
 {
     // NOP
-}
-
-
-void
-YQPkgPatchListItem::setStatus( ZyppStatus newStatus )
-{
-    YQPkgObjListItem::setStatus( newStatus );
-
-#ifdef FIXME
-    // Call the resolver on this object
-#endif
-    _patchList->sendUpdatePackages();
 }
 
 

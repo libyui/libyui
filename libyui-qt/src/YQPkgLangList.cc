@@ -45,6 +45,7 @@ YQPkgLangList::YQPkgLangList( QWidget * parent )
     // Full (human readable) language / country name like "German (Austria)"
     addColumn( _( "Language" ) );	_summaryCol	= numCol++;
     setAllColumnsShowFocus( true );
+    setAutoApplyChanges( true );
 
     connect( this, 	SIGNAL( selectionChanged        ( QListViewItem * ) ),
 	     this, 	SLOT  ( filter()                                    ) );
@@ -161,13 +162,6 @@ YQPkgLangListItem::~YQPkgLangListItem()
     // NOP
 }
 
-
-void
-YQPkgLangListItem::setStatus( ZyppStatus newStatus )
-{
-    YQPkgObjListItem::setStatus( newStatus );
-    _langList->sendUpdatePackages();
-}
 
 
 #include "YQPkgLangList.moc"
