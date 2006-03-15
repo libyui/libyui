@@ -110,7 +110,6 @@ YQPkgPatchList::fillList()
 		    addPatchItem( *it, zyppPatch );
 	    }
 #else
-	    y2debug( "Found patch %s", zyppPatch->name().c_str() );
 	    addPatchItem( *it, zyppPatch);
 #endif
 	}
@@ -161,11 +160,11 @@ YQPkgPatchList::filter()
 	if ( patch )
 	{
 	    ZyppPatchContents patchContents( patch );
-	    
+
 	    zypp::Patch::AtomList atomList = patch->atoms();
 	    y2debug( "Filtering for patch %s: %d atoms",
 		     patch->name().c_str(), atomList.size() );
-	    
+
 	    for ( ZyppPatchContentsIterator it = patchContents.begin();
 		  it != patchContents.end();
 		  ++it )
@@ -175,8 +174,8 @@ YQPkgPatchList::filter()
 
 		if ( pkg )
 		{
-		    y2debug( "Found patch pkg: %s", (*it)->name().c_str() );
-		    
+		    // y2debug( "Found patch pkg: %s", (*it)->name().c_str() );
+
 		    ZyppSel sel = _selMapper.findZyppSel( pkg );
 
 		    if ( sel )
@@ -186,12 +185,14 @@ YQPkgPatchList::filter()
 		}
 		else // No ZyppPkg - some other kind of object (script, message)
 		{
-		    y2debug( "Found patch atom: %s", (*it)->name().c_str() );
-		    
-		    string kind = (*it)->kind().asString();
-		    emit filterMatch( QString( "[%1]" ).arg( kind.c_str() ),
-				      fromUTF8( (*it)->name() ),
-				      -1 );	// size
+		    if ( zypp::isKind<zypp::Script> ( *it ) )
+			emit filterMatch( _( "Script" ),  fromUTF8( (*it)->name() ), -1 );
+		    else
+		    {
+			y2debug( "Found atom of kind %s: %s",
+				 (*it)->kind().asString().c_str(),
+				 (*it)->name().c_str() );
+		    }
 		}
 	    }
 	}

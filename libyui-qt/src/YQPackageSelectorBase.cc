@@ -174,7 +174,8 @@ YQPackageSelectorBase::reject()
     bool changes =
 	zyppPool().diffState<zypp::Package  >()	||
 	zyppPool().diffState<zypp::Pattern  >()	||
-	zyppPool().diffState<zypp::Selection>();
+	zyppPool().diffState<zypp::Selection>() ||
+	zyppPool().diffState<zypp::Patch>();
 
     if ( changes )
     {
@@ -186,6 +187,9 @@ YQPackageSelectorBase::reject()
 
 	if ( zyppPool().diffState<zypp::Selection>() )
 	    y2milestone( "diffState() reports changed selections" );
+
+	if ( zyppPool().diffState<zypp::Patch>() )
+	    y2milestone( "diffState() reports changed patches" );
     }
 
     if ( ! changes ||
