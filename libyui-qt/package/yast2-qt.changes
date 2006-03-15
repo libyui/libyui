@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Mar 15 19:06:18 CET 2006 - sh@suse.de
+
+- V 2.13.34
+- Display patch content (packages and scripts)
+- Moved solving for single current item to base class 
+
+-------------------------------------------------------------------
 Tue Mar 14 18:12:15 CET 2006 - sh@suse.de
 
 - V 2.13.33 
