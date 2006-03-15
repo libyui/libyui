@@ -751,6 +751,7 @@ YQPackageSelector::makeConnections()
     connectFilter( _langList, 			_pkgList );
     connectFilter( _statusFilterView, 		_pkgList, false );
     connectFilter( _searchFilterView, 		_pkgList, false );
+    connectFilter( _patchList, 			_pkgList );
 
     if ( _searchFilterView && _pkgList )
     {
@@ -769,6 +770,12 @@ YQPackageSelector::makeConnections()
 
 	connect( _pkgList,		SIGNAL( statusChanged()   ),
 		 _diskUsageList,	SLOT  ( updateDiskUsage() ) );
+    }
+
+    if ( _pkgList && _patchList )
+    {
+	connect( _patchList, SIGNAL( filterMatch   ( const QString &, const QString &, FSize ) ),
+		 _pkgList,   SLOT  ( addPassiveItem( const QString &, const QString &, FSize ) ) );
     }
 
 
@@ -911,10 +918,10 @@ YQPackageSelector::addPatchFilterView( bool autoActivate )
 	_patchList = _patchFilterView->patchList();
 	CHECK_PTR( _patchList );
 
-	connectFilter( _patchList, _pkgList );
-
 	if ( _pkgList && _patchList )
 	{
+	    connectFilter( _patchList, _pkgList );
+
 	    connect( _patchList, SIGNAL( filterMatch   ( const QString &, const QString &, FSize ) ),
 		     _pkgList,   SLOT  ( addPassiveItem( const QString &, const QString &, FSize ) ) );
 	}

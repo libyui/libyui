@@ -24,6 +24,7 @@
 
 #include <qpopupmenu.h>
 #include <qaction.h>
+#include <zypp/ui/PatchContents.h>
 
 #include "YQi18n.h"
 #include "utf8.h"
@@ -31,6 +32,8 @@
 #include "YQPkgPatchList.h"
 #include "YQPkgTextDialog.h"
 
+typedef zypp::ui::PatchContents			ZyppPatchContents;
+typedef zypp::ui::PatchContents::const_iterator	ZyppPatchContentsIterator;
 using std::list;
 
 
@@ -157,15 +160,17 @@ YQPkgPatchList::filter()
 
 	if ( patch )
 	{
+	    ZyppPatchContents patchContents( patch );
+	    
 	    zypp::Patch::AtomList atomList = patch->atoms();
 	    y2debug( "Filtering for patch %s: %d atoms",
 		     patch->name().c_str(), atomList.size() );
 	    
-	    for ( zypp::Patch::AtomList::iterator it = atomList.begin();
-		  it != atomList.end();
+	    for ( ZyppPatchContentsIterator it = patchContents.begin();
+		  it != patchContents.end();
 		  ++it )
 	    {
-		
+
 		ZyppPkg pkg = tryCastToZyppPkg( *it );
 
 		if ( pkg )
@@ -176,6 +181,8 @@ YQPkgPatchList::filter()
 
 		    if ( sel )
 			emit filterMatch( sel, pkg );
+		    else
+			y2error( "No selectable for pkg %s",  (*it)->name().c_str() );
 		}
 		else // No ZyppPkg - some other kind of object (script, message)
 		{
