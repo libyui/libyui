@@ -288,11 +288,11 @@ YQPkgObjList::setAllItemStatus( ZyppStatus newStatus, bool force )
 	return;
 
     YQUI::ui()->busyCursor();
-    QListViewItem * listViewItem = firstChild();
+    QListViewItemIterator it( this );
 
-    while ( listViewItem )
+    while ( *it )
     {
-	YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (listViewItem);
+	YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (*it);
 
 	if ( item && item->editable() && newStatus != item->status() )
 	{
@@ -307,7 +307,7 @@ YQPkgObjList::setAllItemStatus( ZyppStatus newStatus, bool force )
 	    }
 	}
 
-	listViewItem = listViewItem->nextSibling();
+	++it;
     }
 
     YQUI::ui()->normalCursor();
