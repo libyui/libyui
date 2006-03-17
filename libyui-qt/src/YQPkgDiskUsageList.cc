@@ -148,7 +148,7 @@ YQPkgDiskUsageList::sizeHint() const
     int width = header()->headerWidth()
 	+ style().pixelMetric( QStyle::PM_ScrollBarExtent, verticalScrollBar() );
 
-    return QSize( width, 100 );
+    return QSize( width, 120 );
 }
 
 
