@@ -22,12 +22,26 @@
 #ifndef YQPkgPatchList_h
 #define YQPkgPatchList_h
 
+#include <string>
 #include "YQPkgObjList.h"
 #include "YQPkgSelMapper.h"
 
+using std::string;
 
-class QAction;
 class YQPkgPatchListItem;
+
+
+enum YQPkgPatchCategory	// This is also the sort order
+{
+    YQPkgYaSTPatch,
+    YQPkgSecurityPatch,
+    YQPkgRecommendedPatch,
+    YQPkgOptionalPatch,
+    YQPkgDocumentPatch,
+
+    YQPkgUnknownPatchCategory = 9999
+};
+
 
 /**
  * @short Display a list of zypp::Patch objects.
@@ -79,11 +93,6 @@ public slots:
     void fillList();
 
     /**
-     * Show the raw patch info for the currently selected patch in a popup dialog.
-     **/
-    void showRawPatchInfo();
-
-    /**
      * Display a one-line message in the list.
      * Reimplemented from YQPkgObjList.
      **/
@@ -103,27 +112,6 @@ public:
     int categoryCol() const { return _categoryCol; }
 
     /**
-     * Categories of patches to display in the list
-     **/
-    enum PatchCategory
-    {
-	InstallablePatches,
-	InstallableAndInstalledPatches,
-	AllPatches
-    };
-    
-    /**
-     * Return the patch category that is displayed in the list.
-     **/
-    PatchCategory patchCategory() const { return _patchCategory; }
-
-    /**
-     * Set the category of patches to be displayed in the list.
-     * This does NOT trigger redisplaying the list - use fillList() for that.
-     **/
-    void setPatchCategory( PatchCategory newCt ) { _patchCategory = newCt; }
-
-    /**
      * Add a submenu "All in this list..." to 'menu'.
      * Returns the newly created submenu.
      *
@@ -131,13 +119,7 @@ public:
      **/
     virtual QPopupMenu * addAllInListSubMenu( QPopupMenu * menu );
 
-    /**
-     * Action that shows the raw patch info for the currently selected patch in
-     * a popup dialog. 
-     **/
-    QAction * actionShowRawPatchInfo;
 
-    
 signals:
 
     /**
@@ -194,7 +176,6 @@ protected:
     // Data members
 
     int			_categoryCol;
-    PatchCategory	_patchCategory;
     YQPkgSelMapper	_selMapper;
 };
 
@@ -205,8 +186,8 @@ class YQPkgPatchListItem: public YQPkgObjListItem
 public:
 
     /**
-     * Constructor. Creates a YQPkgPatchList item that corresponds to the package
-     * manager object that 'pkg' refers to.
+     * Constructor. Creates a YQPkgPatchList item that corresponds to
+     * zyppPatch.
      **/
     YQPkgPatchListItem( YQPkgPatchList * 	patchList,
 			   ZyppSel		selectable,
@@ -218,9 +199,24 @@ public:
     virtual ~YQPkgPatchListItem();
 
     /**
-     * Returns the original object within the package manager backend.
+     * Returns the original zyppPatch object.
      **/
     ZyppPatch zyppPatch() const { return _zyppPatch; }
+
+    /**
+     * Maps a string patch category to the corresponding enum.
+     **/
+    static YQPkgPatchCategory patchCategory( QString category );
+
+    /**
+     * Converts a patch category to a user-readable (translated) string.
+     **/
+    static QString asString( YQPkgPatchCategory category );
+
+    /**
+     * Returns the category of this patch (security, recommended, ...).
+     **/
+    YQPkgPatchCategory patchCategory() const { return _patchCategory; }
 
     /**
      * Cycle the package status to the next valid value.
@@ -263,6 +259,7 @@ protected:
 
     YQPkgPatchList *	_patchList;
     ZyppPatch		_zyppPatch;
+    YQPkgPatchCategory	_patchCategory;
 };
 
 

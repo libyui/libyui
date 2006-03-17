@@ -39,7 +39,6 @@ using std::list;
 
 YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     : YQPkgObjList( parent )
-    , _patchCategory( InstallablePatches )
 {
     y2debug( "Creating patch list" );
 
@@ -55,19 +54,9 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     connect( this,	SIGNAL( selectionChanged	( QListViewItem * ) ),
 	     this,	SLOT  ( filter()				    ) );
 
-    fillList();
     setSorting( categoryCol() );
+    fillList();
     selectSomething();
-
-#ifdef FIXME
-    QString label = _( "Show &Raw Patch Info" );
-    actionShowRawPatchInfo = new QAction( label,		// text
-					  label + "\tr",	// menu text
-					  ( QKeySequence ) 0,	// accel
-					  ( QObject * ) 0 );	// parent
-
-    connect( actionShowRawPatchInfo, SIGNAL( activated() ), SLOT( showRawPatchInfo() ) );
-#endif
 
     y2debug( "Creating patch list done" );
 }
@@ -95,21 +84,7 @@ YQPkgPatchList::fillList()
 	if ( zyppPatch )
 	{
 #ifdef FIXME
-	    switch ( _patchCategory )
-	    {
-		case InstallablePatches:
-		    if ( zyppPatch->installable() && status != S_KeepInstalled )
-			addPatchItem( *it, zyppPatch );
-		    break;
-
-		case InstallableAndInstalledPatches:
-		    if ( zyppPatch->installable() )
-			addPatchItem( *it, zyppPatch );
-		    break;
-
-		case AllPatches:
-		    addPatchItem( *it, zyppPatch );
-	    }
+	    // filter for unneeded patches and patches that are already installed
 #else
 	    addPatchItem( *it, zyppPatch);
 #endif
@@ -278,19 +253,6 @@ YQPkgPatchList::addAllInListSubMenu( QPopupMenu * menu )
 
 
 void
-YQPkgPatchList::showRawPatchInfo()
-{
-    if ( selection() )
-    {
-	ZyppPatch patch = selection()->zyppPatch();
-#ifdef FIXME
-	YQPkgTextDialog::showText( this, patch, Y2PM::youPatchManager().rawPatchInfo( patch ) );
-#endif
-    }
-}
-
-
-void
 YQPkgPatchList::keyPressEvent( QKeyEvent * event )
 {
     if ( event )
@@ -309,10 +271,6 @@ YQPkgPatchList::keyPressEvent( QKeyEvent * event )
 		    return;
 		}
 	    }
-	}
-	else if ( event->ascii() == 'r' )
-	{
-	    showRawPatchInfo();
 	}
     }
 
@@ -336,31 +294,63 @@ YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList * 	patchList,
 	return;
 
     setStatusIcon();
+    _patchCategory = patchCategory( _zyppPatch->category() );
 
     if ( categoryCol() > -1 )
-	setText( categoryCol(), _zyppPatch->category() );
+	setText( categoryCol(), asString( _patchCategory ) );
 
     if ( summaryCol() > -1 && _zyppPatch->summary().empty() )
 	setText( summaryCol(), _zyppPatch->name() );		// use name as fallback
 
-#ifdef FIXME
-
-    switch ( _zyppPatch->category() )
+    switch ( _patchCategory )
     {
-	case zypp::Patch::category_yast:	setTextColor( QColor( 0, 0, 0xC0 ) );	break;	// medium blue
-	case zypp::Patch::category_security:	setTextColor( Qt::red );		break;
-	case zypp::Patch::category_recommended:	setTextColor( QColor( 0, 0, 0xC0 ) );	break;	// medium blue
-	case zypp::Patch::category_optional:	break;
-	case zypp::Patch::category_document:	break;
-	default:				break;
+	case YQPkgYaSTPatch:		setTextColor( QColor( 0, 0, 0xC0 ) );	break;	// medium blue
+	case YQPkgSecurityPatch:	setTextColor( Qt::red );		break;
+	case YQPkgRecommendedPatch:	setTextColor( QColor( 0, 0, 0xC0 ) );	break;	// medium blue
+	case YQPkgOptionalPatch:	break;
+	case YQPkgDocumentPatch:	break;
+	case YQPkgUnknownPatchCategory:	break;
     }
-#endif
 }
 
 
 YQPkgPatchListItem::~YQPkgPatchListItem()
 {
     // NOP
+}
+
+
+YQPkgPatchCategory
+YQPkgPatchListItem::patchCategory( QString category )
+{
+    category = category.lower();
+
+    if ( category == "yast"		) return YQPkgYaSTPatch;
+    if ( category == "security"		) return YQPkgSecurityPatch;
+    if ( category == "recommended"	) return YQPkgRecommendedPatch;
+    if ( category == "optional"		) return YQPkgOptionalPatch;
+    if ( category == "document"		) return YQPkgDocumentPatch;
+
+    y2warning( "Unknown patch category \"%s\"", (const char *) category );
+    return YQPkgUnknownPatchCategory;
+}
+
+
+QString
+YQPkgPatchListItem::asString( YQPkgPatchCategory category )
+{
+    switch ( category )
+    {
+	// Translators: These are patch categories
+	case YQPkgYaSTPatch:		return _( "YaST" 	);
+	case YQPkgSecurityPatch:	return _( "security"	);
+	case YQPkgRecommendedPatch:	return _( "recommended"	);
+	case YQPkgOptionalPatch:	return _( "optional"	);
+	case YQPkgDocumentPatch:	return _( "document"	);
+	case YQPkgUnknownPatchCategory:	return "";
+    }
+
+    return "";
 }
 
 
@@ -405,9 +395,9 @@ YQPkgPatchListItem::toolTip( int col )
  * +1 if this >	 other
  **/
 int
-YQPkgPatchListItem::compare( QListViewItem * otherListViewItem,
-				int		col,
-				bool		ascending ) const
+YQPkgPatchListItem::compare( QListViewItem *	otherListViewItem,
+			     int		col,
+			     bool		ascending ) const
 {
     YQPkgPatchListItem * other = dynamic_cast<YQPkgPatchListItem *> (otherListViewItem);
 
@@ -415,11 +405,8 @@ YQPkgPatchListItem::compare( QListViewItem * otherListViewItem,
     {
 	if ( col == categoryCol() )
 	{
-#ifdef FIXME
-	    // This used to be a numeric field, now doing simple string sorting
-#endif
-	    if ( this->zyppPatch()->category() < other->zyppPatch()->category() ) return -1;
-	    if ( this->zyppPatch()->category() > other->zyppPatch()->category() ) return  1;
+	    if ( this->patchCategory() < other->patchCategory() ) return -1;
+	    if ( this->patchCategory() > other->patchCategory() ) return  1;
 	    return 0;
 	}
     }
