@@ -702,7 +702,14 @@ YQPkgObjListItem::init()
 
     if ( nameCol()    >= 0 )	setText( nameCol(),	zyppObj()->name()	);
     if ( summaryCol() >= 0 )	setText( summaryCol(),	zyppObj()->summary()	);
-    if ( sizeCol()    >= 0 )	setText( sizeCol(),	zyppObj()->size().asString() + "  " );
+    
+    if ( sizeCol()    >= 0 )
+    {
+	zypp::ByteCount size = zyppObj()->size();
+
+	if ( size > 0L )
+	    setText( sizeCol(),	size.asString() + "  " );
+    }
 
     if ( instVersionCol() >= 0 )
     {
