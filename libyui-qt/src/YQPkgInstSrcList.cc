@@ -227,7 +227,7 @@ YQPkgInstSrcListItem::YQPkgInstSrcListItem( YQPkgInstSrcList *	instSrcList,
 
 	if ( product )	// only if the source provides exactly one product
 	{		// (which is the most common case)
-	    name = product->displayName();
+	    name = product->summary();
 	}
 
 	if ( ! name.empty() )

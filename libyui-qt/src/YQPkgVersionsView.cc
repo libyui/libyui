@@ -210,7 +210,7 @@ YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
 	ZyppProduct product = YQPkgInstSrcListItem::singleProduct( zyppObj->source() );
 
 	if ( product )
-	    setText( productCol(), product->displayName() );
+	    setText( productCol(), product->summary() );
     }
 
     if ( _selectable->hasInstalledObj() )

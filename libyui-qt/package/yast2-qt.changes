@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Mar 20 09:11:43 CET 2006 - visnov@suse.cz
+
+- V 2.13.35
+- adapt for latest libzypp
+
+-------------------------------------------------------------------
 Thu Mar 16 12:54:29 CET 2006 - sh@suse.de
 
 - Fixed bug #158576: 'install -> all in this list' does not work
