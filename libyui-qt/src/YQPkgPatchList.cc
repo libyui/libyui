@@ -74,7 +74,6 @@ YQPkgPatchList::fillList()
     clear();
     y2debug( "Filling patch list" );
 
-
     for ( ZyppPoolIterator it = zyppPatchesBegin();
 	  it != zyppPatchesEnd();
 	  ++it )
@@ -86,6 +85,7 @@ YQPkgPatchList::fillList()
 #ifdef FIXME
 	    // filter for unneeded patches and patches that are already installed
 #else
+	    // y2debug( "Found patch %s", zyppPatch->name() );
 	    addPatchItem( *it, zyppPatch);
 #endif
 	}
