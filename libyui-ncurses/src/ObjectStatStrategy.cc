@@ -284,7 +284,7 @@ PackageStatStrategy::PackageStatStrategy()
 
 
 
-#ifdef FIXME
+
 //------------------------------------------------------------
 // Class for strategies to get status for patches
 //------------------------------------------------------------
@@ -304,8 +304,9 @@ PatchStatStrategy::PatchStatStrategy()
 // Returns the corresponding status
 //
 bool PatchStatStrategy::keyToStatus( const int & key,
-				      ZyppSel slbPtr,
-				      ZyppStatus & newStat )
+				     ZyppSel slbPtr,
+				     ZyppObj objPtr,
+				     ZyppStatus & newStat )
 {
     if ( !slbPtr )
 	return false;
@@ -376,6 +377,7 @@ bool PatchStatStrategy::keyToStatus( const int & key,
 // Returns the new status
 //
 bool PatchStatStrategy::toggleStatus( ZyppSel slbPtr,
+				      ZyppObj objPtr,
 				      ZyppStatus & newStat )
 {
     if ( !slbPtr )
@@ -419,7 +421,7 @@ bool PatchStatStrategy::toggleStatus( ZyppSel slbPtr,
 // Inform the package manager about the status change
 // of the patch
 //
-bool PatchStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr )
+bool PatchStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, ZyppObj objPtr )
 {
     bool ok = false;
 
@@ -435,11 +437,12 @@ bool PatchStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr )
 
     // additionally inform the YOU patch manager about the status change
     // (which sets the correct status of the patch packages)
+#ifdef FIXME
     Y2PM::youPatchManager().updatePackageStates();
-    
+#endif
     return ok;
 }
-#endif
+
 
 //------------------------------------------------------------
 // Class for strategies for depndencies

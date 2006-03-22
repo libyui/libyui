@@ -99,11 +99,8 @@ NCPackageSelector::NCPackageSelector( YNCursesUI *ui,
 	    ObjectStatStrategy * strategy;
 	    if ( youMode )
 	    {
-#ifdef FIXME
 		strategy = new PatchStatStrategy();
-#else
-		strategy = 0;
-#endif
+
 		pkgList->setTableType( NCPkgTable::T_Patches, strategy );
 	    }
 	    else if ( updateMode )

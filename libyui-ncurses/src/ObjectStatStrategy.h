@@ -138,7 +138,7 @@ public:
 };
 
     
-#ifdef FIXME
+
 //------------------------------------------------------------
 // Class for strategies to handle status of patches
 //------------------------------------------------------------
@@ -160,6 +160,7 @@ public:
      */  
     virtual bool keyToStatus( const int & key,
 			      ZyppSel slbPtr,
+			      ZyppObj objPtr,
 			      ZyppStatus & newStat );
     
     /**
@@ -168,6 +169,7 @@ public:
      * @return bool
      */
     virtual bool toggleStatus( ZyppSel slbPtr,
+			       ZyppObj objPtr,
 			        ZyppStatus & newStat );
 
     /**
@@ -178,7 +180,7 @@ public:
      */
     virtual bool setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, ZyppObj objPtr );
 };
-#endif
+
 
 
 //------------------------------------------------------------

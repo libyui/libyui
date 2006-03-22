@@ -309,7 +309,7 @@ public:
      * @param pkgPtr The YOU patch pointer 
      * @return bool
      */  
-   bool createPatchEntry ( ZyppPatch pkgPtr );
+   bool createPatchEntry ( ZyppPatch pkgPtr,  ZyppSel slbPtr );
 
    /**
     * Creates a line in the table shwing an info text.

@@ -413,7 +413,6 @@ bool NCPkgTable::fillDefaultList( )
 {
     switch ( tableType )
     {
-#ifdef FIXME
 	case T_Patches: {
 	    packager->fillPatchList( "installable" );	// default: installable patches
 
@@ -423,7 +422,6 @@ bool NCPkgTable::fillDefaultList( )
 	    showInformation ();
 	    break;
 	}
-#endif
 	case T_Update: {
 #ifdef FIXME
 	    if ( !Y2PM::packageManager().updateEmpty() )
@@ -692,36 +690,36 @@ bool NCPkgTable::createInfoEntry ( string text )
     return true;
 }
 
-#ifdef FIXME
 ///////////////////////////////////////////////////////////////////
 //
 // createPatchEntry
 //
 //
-bool NCPkgTable::createPatchEntry ( ZyppPatch patchPtr )
+bool NCPkgTable::createPatchEntry ( ZyppPatch patchPtr, ZyppSel	selectable )
 {
     vector<string> pkgLine;
     pkgLine.reserve(5);
     
-    if ( !patchPtr || !patchPtr->hasSelectable() )
+    if ( !patchPtr || !selectable )
     {
 	NCERR << "No valid patch available" << endl;
 	return false;
     }
 
-    pkgLine.push_back( patchPtr->getSelectable()->name() );	 // name
-    pkgLine.push_back( patchPtr->kindLabel() ); // patch kind
+    pkgLine.push_back( selectable->name() );	// name
+    pkgLine.push_back( patchPtr->category() );  // patch kind
     pkgLine.push_back( patchPtr->summary() );  	// short description
-    FSize size = patchPtr->size();     		// installed size
-    pkgLine.push_back( size.form( 8 ) );
+    zypp::ByteCount size = patchPtr->size(); 	// installed size
+    pkgLine.push_back( size.asString( 8 ) );
+
     
-    addLine( patchPtr->getSelectable()->status(), //  get the status
+    addLine( selectable->status(), //  get the status
 	     pkgLine,
-	     patchPtr );	// the corresponding pointer
+	     patchPtr,
+	     selectable );	// the corresponding pointer
 
     return true;
 }
-#endif
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -744,10 +742,8 @@ bool NCPkgTable::showInformation ( )
 	    packager->showPackageInformation( objPtr, slbPtr );
 	    break;
 	case T_Patches:
-#ifdef FIXME
 	    // show the patch info
 	    packager->showPatchInformation( objPtr, slbPtr );
-#endif
 	    break;
 	default:
 	    break;
