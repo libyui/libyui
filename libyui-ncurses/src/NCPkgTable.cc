@@ -577,16 +577,15 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
     
     switch( tableType )
     {
-#ifdef FIXME
 	case T_PatchPkgs: {
-	    if ( pkgPtr->hasInstalledObj() )
+	    if ( slbPtr->hasInstalledObj() )
 	    {
-		instVersion = pkgPtr->getInstalledObj()->edition().asString();
+		instVersion = slbPtr->installedObj()->edition().version();
 	    }
 	    
 	    // in case of YOU patches: show the version of the package which
 	    // is contained in the patch
-	    version = pkgPtr->edition().asString();
+	    version = pkgPtr->edition().version();
    	    pkgLine.push_back( version );
 
 	    // if ( Y2PM::instTarget().numPackages() > 0 )
@@ -596,14 +595,13 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 
    	    pkgLine.push_back( pkgPtr->summary() );  	// short description
 	    
-	    status = pkgPtr->getSelectable()->status(); // the package status
+	    status = slbPtr->status(); // the package status
 	    
-	    FSize size = pkgPtr->size();     	// installed size
-	    pkgLine.push_back( size.form( 8 ) );  // format size
+	    zypp::ByteCount size = pkgPtr->size();     	// installed size
+	    pkgLine.push_back( size.asString( 8 ) );  // format size
 
 	    break;
 	}
-#endif
 	case T_Availables: {
 	    version = pkgPtr->edition().asString();
 	    pkgLine.push_back( version );

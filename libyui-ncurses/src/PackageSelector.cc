@@ -41,8 +41,14 @@
 #include <list>
 #include <string>
 
-#include "YQZypp.h"
+#include "YQZypp.h"			// tryCastToZyppPkg(), tryCastToZyppPatch()
+#include "NCPkgSelMapper.h"
 #include <zypp/ui/Selectable.h>
+#include <zypp/ui/PatchContents.h>
+
+typedef zypp::ui::PatchContents			ZyppPatchContents;
+typedef zypp::ui::PatchContents::const_iterator	ZyppPatchContentsIterator;
+
 #ifdef FIXME_PM
 //#include <y2pm/InstSrcManager.h>
 #endif
@@ -787,11 +793,33 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr 
 	return false;
     pkgTable->itemsCleared ();
      
-#ifdef FIXME
-    ZyppPatch patchPtr = objPtr;
+    ZyppPatch patchPtr  = tryCastToZyppPatch( objPtr ); 
+    
     if ( !patchPtr )
 	return false;
 
+    ZyppPatchContents patchContents( patchPtr );
+
+    zypp::Patch::AtomList atomList = patchPtr->atoms();
+    NCMIL <<  "Filtering for patch: " << patchPtr->name().c_str() << " number of atoms: " << atomList.size() << endl ;
+
+    for ( ZyppPatchContentsIterator it = patchContents.begin();
+	  it != patchContents.end();
+	  ++it )
+    {
+
+	ZyppPkg pkg = tryCastToZyppPkg( *it );
+
+	if ( pkg )
+	{
+	    NCDBG << "Patch package found: " <<  (*it)->name().c_str() << endl;
+            NCPkgSelMapper mapper;
+	    ZyppSel sel = mapper.findZyppSel( pkg );
+	    pkgTable->createListEntry( pkg, sel );
+	}
+    }
+
+#ifdef OLD_CODE
     list<ZyppPkg> packages = patchPtr->packages();
     string preScript = patchPtr->preScript();
     string postScript = patchPtr->postScript();
@@ -800,7 +828,7 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr 
     list<ZyppPkg>::const_iterator listIt;
     list<PMYouFile>::const_iterator fileIt;
     
-    NCDBG << "Number of patch packages: " << packages.size() << endl;
+    NCMIL << "Number of patch packages: " << packages.size() << endl;
 	
     for ( listIt = packages.begin(); listIt != packages.end();  ++listIt )    
     {
@@ -853,7 +881,6 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr 
 			   );
     }
 #endif
-    
     // show the list
     pkgTable->drawList();
     
@@ -1203,7 +1230,6 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	}
     }
 // patches
-#ifdef FIXME
     else if ( visibleInfo->compare( PkgNames::PatchPackages() ) == YO_EQUAL )
     {
         // show the package table
@@ -1230,7 +1256,6 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	    fillPatchPackages( patchPkgs, packageList->getDataPointer( packageList->getCurrentItem() ) );
 	}	
     }
-#endif
     else
     {
 	// show the rich text widget
