@@ -200,7 +200,7 @@ YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
     , _selectable( selectable )
     , _zyppObj( zyppObj )
 {
-    setOn( _zyppObj == _selectable->installedObj() );
+    setOn( _zyppObj == _selectable->candidateObj() );
 
     if ( versionCol() >= 0 )	setText( versionCol(), zyppObj->edition().asString().c_str() );
     if ( archCol()    >= 0 )	setText( archCol(),    zyppObj->arch().asString().c_str() );
