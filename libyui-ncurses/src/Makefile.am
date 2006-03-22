@@ -84,6 +84,7 @@ liby2ncurses_la_SOURCES =				\
 	NCPopupTextEntry.h NCPopupTextEntry.cc		\
 							\
 	YQZypp.h					\
+	NCPkgSelMapper.cc NCPkgSelMapper.h		\
 	NCPackageSelector.cc NCPackageSelector.h        \
 	NCPkgTable.cc NCPkgTable.h                      \
 	NCPopupSearch.cc NCPopupSearch.h                \
