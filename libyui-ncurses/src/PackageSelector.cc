@@ -80,91 +80,6 @@ bool ic_compare ( char c1, char c2 )
     return ( toupper( c1 ) == toupper( c2 ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// detection whether the user has made any changes
-//
- 
-void saveState ()
-{
-    ZyppPool p = zyppPool ();
-
-    p.saveState<zypp::Package> ();
-    p.saveState<zypp::SrcPackage> ();
-    bool youMode = false;	// FIXME patches
-    if (youMode)
-    {
-	p.saveState<zypp::Patch> ();
-	// some future proofing
-	p.saveState<zypp::Message> ();
-	p.saveState<zypp::Script> ();
-
-    }
-    else
-    {
-	p.saveState<zypp::Selection> ();
-	p.saveState<zypp::Pattern> ();
-	p.saveState<zypp::Language> ();
-    }
-}
-
-void restoreState ()
-{
-    ZyppPool p = zyppPool ();
-
-    p.restoreState<zypp::Package> ();
-    p.restoreState<zypp::SrcPackage> ();
-    bool youMode = false;	// FIXME patches
-    if (youMode)
-    {
-	p.restoreState<zypp::Patch> ();
-	// some future proofing
-	p.restoreState<zypp::Message> ();
-	p.restoreState<zypp::Script> ();
-
-    }
-    else
-    {
-	p.restoreState<zypp::Selection> ();
-	p.restoreState<zypp::Pattern> ();
-	p.restoreState<zypp::Language> ();
-    }
-}
-
-bool diffState ()
-{
-    ZyppPool p = zyppPool ();
-
-    bool diff = false;
-
-    ostream & log = UIMIL;
-    log << "diffState" << endl;
-    diff = diff || p.diffState<zypp::Package> ();
-    log << diff << endl;
-    diff = diff || p.diffState<zypp::SrcPackage> ();
-    log << diff << endl;
-    bool youMode = false;	// FIXME patches
-    if (youMode)
-    {
-	diff = diff || p.diffState<zypp::Patch> ();
-	log << diff << endl;
-	// some future proofing
-	diff = diff || p.diffState<zypp::Message> ();
-	log << diff << endl;
-	diff = diff || p.diffState<zypp::Script> ();
-	log << diff << endl;
-    }
-    else
-    {
-	diff = diff || p.diffState<zypp::Selection> ();
-	log << diff << endl;
-	diff = diff || p.diffState<zypp::Pattern> ();
-	log << diff << endl;
-	diff = diff || p.diffState<zypp::Language> ();
-	log << diff << endl;
-    }
-    return diff;
-}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -366,6 +281,92 @@ PackageSelector::~PackageSelector()
     {
 	delete _rpmGroupsTree;
     }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// detection whether the user has made any changes
+//
+ 
+void PackageSelector::saveState ()
+{
+    ZyppPool p = zyppPool ();
+
+    p.saveState<zypp::Package> ();
+    p.saveState<zypp::SrcPackage> ();
+    
+    if (youMode)
+    {
+	p.saveState<zypp::Patch> ();
+	// some future proofing
+	p.saveState<zypp::Message> ();
+	p.saveState<zypp::Script> ();
+
+    }
+    else
+    {
+	p.saveState<zypp::Selection> ();
+	p.saveState<zypp::Pattern> ();
+	p.saveState<zypp::Language> ();
+    }
+}
+
+void PackageSelector::restoreState ()
+{
+    ZyppPool p = zyppPool ();
+
+    p.restoreState<zypp::Package> ();
+    p.restoreState<zypp::SrcPackage> ();
+    
+    if (youMode)
+    {
+	p.restoreState<zypp::Patch> ();
+	// some future proofing
+	p.restoreState<zypp::Message> ();
+	p.restoreState<zypp::Script> ();
+
+    }
+    else
+    {
+	p.restoreState<zypp::Selection> ();
+	p.restoreState<zypp::Pattern> ();
+	p.restoreState<zypp::Language> ();
+    }
+}
+
+bool PackageSelector::diffState ()
+{
+    ZyppPool p = zyppPool ();
+
+    bool diff = false;
+
+    ostream & log = UIMIL;
+    log << "diffState" << endl;
+    diff = diff || p.diffState<zypp::Package> ();
+    log << diff << endl;
+    diff = diff || p.diffState<zypp::SrcPackage> ();
+    log << diff << endl;
+    
+    if (youMode)
+    {
+	diff = diff || p.diffState<zypp::Patch> ();
+	log << diff << endl;
+	// some future proofing
+	diff = diff || p.diffState<zypp::Message> ();
+	log << diff << endl;
+	diff = diff || p.diffState<zypp::Script> ();
+	log << diff << endl;
+    }
+    else
+    {
+	diff = diff || p.diffState<zypp::Selection> ();
+	log << diff << endl;
+	diff = diff || p.diffState<zypp::Pattern> ();
+	log << diff << endl;
+	diff = diff || p.diffState<zypp::Language> ();
+	log << diff << endl;
+    }
+    return diff;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -649,15 +650,13 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
     return true;
 }
 
-// no patches
-#ifdef FIXME
 ///////////////////////////////////////////////////////////////////
 //
 // fillPatchList
 //
 // Fills the package table with the list of YOU patches
 //
-bool PackageSelector::fillPatchList( string filter, zypp::Patch::Kind kind )
+bool PackageSelector::fillPatchList( string filter )
 {
     NCPkgTable * packageList = getPackageList();
      
@@ -670,17 +669,24 @@ bool PackageSelector::fillPatchList( string filter, zypp::Patch::Kind kind )
     // clear list of patches
     packageList->itemsCleared ();
 
+#ifdef FIXME
     // get the patch list and sort it
-    list<ZyppSel> patchList( Y2PM::youPatchManager().begin(), Y2PM::youPatchManager().end() );
+    list<ZyppSel> patchList( zyppPatchesBegin (), zyppPatchesEnd () );
     patchList.sort( sortByName );
-
     list<ZyppSel>::iterator listIt = patchList.begin(); 
-
-    while ( listIt != patchList.end() )
+#endif
+    
+    for ( ZyppPoolIterator listIt = zyppPatchesBegin();
+	  listIt != zyppPatchesEnd();
+	  ++listIt )
     {
-	ZyppPatch	patchPtr  = ( *listIt)->theObj();
-	checkPatch( patchPtr, filter, kind );
-	++listIt;
+	ZyppPatch patchPtr  = tryCastToZyppPatch( ( *listIt)->theObj() );
+
+	if ( patchPtr )
+	{
+	    checkPatch( patchPtr, *listIt, filter );
+	}
+		
     }
     
     if ( filter == "installable"
@@ -712,7 +718,7 @@ bool PackageSelector::fillPatchList( string filter, zypp::Patch::Kind kind )
     
     return true;
 }
-#endif
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -1062,36 +1068,40 @@ bool PackageSelector::checkPackage( ZyppObj opkg, ZyppSel slb,
 
 
 // patches
-#ifdef FIXME
+
 ///////////////////////////////////////////////////////////////////
 //
 // checkPatch
 //
 //
-bool PackageSelector::checkPatch( ZyppPatch patchPtr,
-				  string filter,
-				  zypp::Patch::Kind patchKind )
+bool PackageSelector::checkPatch( ZyppPatch 	patchPtr,
+				  ZyppSel	selectable,
+				  string 	filter )
+				   
 {
     NCPkgTable * packageList = getPackageList();
     
     if ( !packageList || !patchPtr
-	 || !patchPtr->hasSelectable() )
+	 || !selectable )
     {
 	UIERR << "Widget is not a valid NCPkgTable widget" << endl;
     	return false;
     }
 
     if ( filter == "all"
-	 || ( filter == "installed" && patchPtr->getSelectable()->status() == S_KeepInstalled )
-	 // show new installable patches
-	 || ( filter == "installable" && ( patchPtr->installable() &&
-					   patchPtr->getSelectable()->status() != S_KeepInstalled ) )
-	 || ( filter == "new" && ( patchPtr->getSelectable()->status() == S_Install ||
-				   patchPtr->getSelectable()->status() == S_NoInst ) )
- 	 || ( patchKind == patchPtr->kind() )
-	 )
+	 || ( filter == "installed" && selectable->status() == S_KeepInstalled )
+	 // FIXME installable ????? show new installable patches 
+	 || ( filter == "installable" && ( selectable->status() != S_KeepInstalled ) )
+	 || ( filter == "new" && ( selectable->status() == S_Install ||
+				   selectable->status() == S_NoInst ) )
+	 || ( filter == "security" && patchPtr->category() == "security" )
+	 || ( filter == "recommended" && patchPtr->category() == "recommended" )
+	 || ( filter == "optional" && patchPtr->category() == "optional" )
+	 || ( filter == "YaST2" && patchPtr->category() == "yast" )
+	 // FIXME add category document
+	 )	
     {
-	packageList->createPatchEntry( patchPtr );
+	packageList->createPatchEntry( patchPtr, selectable );
 	return true;
     }
     else
@@ -1099,7 +1109,7 @@ bool PackageSelector::checkPatch( ZyppPatch patchPtr,
 	return false;
     }
 }
-#endif
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -1147,15 +1157,16 @@ bool PackageSelector::SearchHandler( const NCursesEvent& event)
 //
 bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 {
-     NCPkgTable * packageList = getPackageList();
-     
+    NCPkgTable * packageList = getPackageList();
+
     if ( !packageList
 	 || event.selection.isNull()
 	 || visibleInfo.isNull() )
     {
+	NCERR << "*** InformationHandler RETURN false ***" << endl;
 	return false;
     }
-    
+        
     if ( visibleInfo->compare( event.selection ) == YO_EQUAL )
     {
 	// information selection has not changed
@@ -1384,18 +1395,17 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 	}
     }
 // patches
-#ifdef FIXME
     else if ( event.selection->compare( PkgNames::Recommended() ) ==  YO_EQUAL )
     {
-	fillPatchList( "", zypp::Patch::kind_recommended );	// patch kind
+	fillPatchList( "recommended" );	// patch kind
     }
     else if ( event.selection->compare( PkgNames::Security() )  ==  YO_EQUAL )
     {
-	fillPatchList( "", zypp::Patch::kind_security );		// patch kind
+	fillPatchList( "security" );		// patch kind
     }
     else if ( event.selection->compare( PkgNames::Optional() )  ==  YO_EQUAL )
     {
-	fillPatchList( "", zypp::Patch::kind_optional );		// patch kind
+	fillPatchList( "optional" );		// patch kind
     }
     else if (  event.selection->compare( PkgNames::YaST2Patches() ) ==  YO_EQUAL )
     {
@@ -1417,7 +1427,6 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
     {
 	fillPatchList( "new" );			// show new patches
     }
-#endif
     else if (  event.selection->compare( PkgNames::UpdateList() ) ==  YO_EQUAL )
     {
 	fillUpdateList();
@@ -1830,20 +1839,20 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 }
 
 
-#ifdef FIXME
+
 ///////////////////////////////////////////////////////////////////
 //
 // showPatchInformation
 //
 // Shows the patch information
 //
-bool PackageSelector::showPatchInformation ( ZyppObj objPtr )
+bool PackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectable )
 {
-    ZyppPatch patchPtr = objPtr;
+    ZyppPatch patchPtr = tryCastToZyppPatch( objPtr );
 
     if ( !patchPtr )
     {
-	NCERR << "Package not valid" << endl;
+	NCERR << "Patch not valid" << endl;
 	return false;
     }
 
@@ -1856,15 +1865,15 @@ bool PackageSelector::showPatchInformation ( ZyppObj objPtr )
     if (  visibleInfo->compare( PkgNames::PatchDescr() ) == YO_EQUAL )
     {
 	string descr;
-	FSize size = patchPtr->size(); 
+	
 	descr += PkgNames::Patch();
-	descr += patchPtr->getSelectable()->name();
+	descr += selectable->name();
 	descr += "&nbsp;";
 	descr += PkgNames::Size();
-	descr += size.form( 8 );
+	descr += patchPtr->size().asString( 8 );
 	descr += "<br>";
 	// get and format the patch description
-	list<string> value = patchPtr->description();
+	zypp::Text value = patchPtr->description();
 	descr += createDescrText( value );
 	
 	// show the description	
@@ -1886,7 +1895,7 @@ bool PackageSelector::showPatchInformation ( ZyppObj objPtr )
 
     return true;
 }
-#endif
+
 
 ///////////////////////////////////////////////////////////////////
 //

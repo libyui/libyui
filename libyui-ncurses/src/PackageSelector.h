@@ -126,16 +126,14 @@ class PackageSelector
     */
     bool fillPackageList( const YCPString & label, YStringTreeItem * group );
 
-#ifdef FIXME_PATCHES
+
   /**
     * Fills the package table with YOU patches matching the filter
     * @param filter
     * @return bool
     */
-    bool fillPatchList( string filter,
-			zypp::Patch::Kind kind = zypp::Patch::kind_all);
-#endif
-
+    bool fillPatchList( string filter );
+			
    /**
     * Fills the package table with packages with update problems
     * @return bool
@@ -312,14 +310,14 @@ class PackageSelector
     */
     void showSelectionDependencies ( );
     
-#ifdef FIXME
+
    /**
     * Gets the required patch info from you patch manager and shows it
     * @param pkgPtr the data pointer
     * @return bool
     */
-    bool showPatchInformation ( ZyppObj pkgPtr );
-#endif
+    bool showPatchInformation ( ZyppObj pkgPtr, ZyppSel slbPtr );
+
     
    /**
     * Sets the member variable to the currently visible information
@@ -351,9 +349,9 @@ class PackageSelector
      * Check if 'patch' matches the selected filter.
      * Returns true if there is a match, false otherwise or if 'patch' is 0.
      * @return bool
-     **/ 
-    bool checkPatch(  ZyppPatch patch, string filter, zypp::Patch::Kind kind );
-
+     **/
+    bool checkPatch( ZyppPatch patch, ZyppSel selectable, string filter );
+    
    /**
     * Returns whether automatic dependency is on or off
     * @return bool   
@@ -394,6 +392,12 @@ class PackageSelector
     void showDownloadSize();
 #endif
 
+    /**
+     * Check for changes
+     */
+    void saveState();
+    void restoreState();
+    bool diffState();
 };
 
 ///////////////////////////////////////////////////////////////////
