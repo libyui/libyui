@@ -839,7 +839,7 @@ YQPkgObjListItem::applyChanges()
     bool success = zypp::getZYpp()->resolver()->transactResObject( obj, install );
 
     if ( ! success )
-	y2warning( "Couldn't transact selection %s", obj->name().c_str() );
+	y2warning( "Couldn't transact %s", obj->name().c_str() );
 }
 
 

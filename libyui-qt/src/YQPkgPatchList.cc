@@ -85,7 +85,7 @@ YQPkgPatchList::fillList()
 #ifdef FIXME
 	    // filter for unneeded patches and patches that are already installed
 #else
-	    // y2debug( "Found patch %s", zyppPatch->name() );
+	    // y2debug( "Found patch %s", zyppPatch->name().c_str() );
 	    addPatchItem( *it, zyppPatch);
 #endif
 	}
