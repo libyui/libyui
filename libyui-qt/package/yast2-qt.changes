@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Mar 23 16:29:21 CET 2006 - sh@suse.de
+
+- V 2.13.38
+- Enable auto-solving for patches
+- Support for multi-arch patches: Prevent duplicate entries
+  in pkg list 
+
+-------------------------------------------------------------------
 Thu Mar 23 13:17:39 CET 2006 - sh@suse.de
 
 - Fall back to search view if no multiple sources 
