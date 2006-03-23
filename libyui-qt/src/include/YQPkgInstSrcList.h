@@ -53,6 +53,11 @@ public:
      **/
     virtual ~YQPkgInstSrcList();
 
+    /**
+     * Returns the number of enabled installation sources.
+     **/
+    static int countEnabledSources();
+
 
 public slots:
 

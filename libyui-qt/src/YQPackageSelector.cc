@@ -57,6 +57,7 @@
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQPkgFileListView.h"
 #include "YQPkgInstSrcFilterView.h"
+#include "YQPkgInstSrcList.h"
 #include "YQPkgLangList.h"
 #include "YQPkgList.h"
 #include "YQPkgPatchFilterView.h"
@@ -143,8 +144,18 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     }
     else if ( _instSrcFilterView && _instSourcesMode )
     {
-	_filters->showPage( _instSrcFilterView );
-	_instSrcFilterView->filter();
+	if ( YQPkgInstSrcList::countEnabledSources() > 1 )
+	{
+	    _filters->showPage( _instSrcFilterView );
+	    _instSrcFilterView->filter();
+	}
+	else if ( _searchFilterView )
+	{
+	    y2milestone( "No multiple inst sources - falling back to search mode" );
+	    _filters->showPage( _searchFilterView );
+	    _searchFilterView->filter();
+	    QTimer::singleShot( 0, _searchFilterView, SLOT( setFocus() ) );
+	}
     }
     else if ( _updateProblemFilterView )
     {

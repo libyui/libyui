@@ -90,6 +90,27 @@ YQPkgInstSrcList::fillList()
 }
 
 
+int
+YQPkgInstSrcList::countEnabledSources()
+{
+    int count = 0;
+    zypp::SourceManager_Ptr sourceManager = zypp::SourceManager::sourceManager();
+    list<zypp::SourceManager::SourceId> sources = sourceManager->allSources();
+
+    for ( list<zypp::SourceManager::SourceId>::const_iterator it = sources.begin();
+	  it != sources.end();
+	  ++it )
+    {
+	zypp::Source_Ref src = sourceManager->findSource( *it );
+
+	if ( src && src.enabled() )
+	    ++count;
+    }
+
+    return count;
+}
+
+
 void
 YQPkgInstSrcList::filterIfVisible()
 {
