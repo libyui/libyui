@@ -252,6 +252,7 @@ protected:
     bool				_testMode;
     bool				_updateMode;
     bool				_summaryMode;
+    bool				_instSourcesMode;
     QString				_floppyDevice;
 
     QCheckBox *				_autoDependenciesCheckBox;

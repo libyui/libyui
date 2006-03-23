@@ -115,10 +115,11 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     _patchFilterView		= 0;
     _patchList			= 0;
 
-    _searchMode	 = opt.searchMode.value();
-    _testMode	 = opt.testMode.value();
-    _updateMode	 = opt.updateMode.value();
-    _summaryMode = opt.summaryMode.value();
+    _searchMode	 	= opt.searchMode.value();
+    _testMode	 	= opt.testMode.value();
+    _updateMode	 	= opt.updateMode.value();
+    _summaryMode 	= opt.summaryMode.value();
+    _instSourcesMode	= opt.instSourcesMode.value();
 
     if ( _youMode )	y2milestone( "YOU mode" );
     if ( _updateMode )	y2milestone( "Update mode" );
@@ -139,6 +140,11 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
 	    _filters->showPage( _patchFilterView );
 	    _patchList->filter();
 	}
+    }
+    else if ( _instSrcFilterView && _instSourcesMode )
+    {
+	_filters->showPage( _instSrcFilterView );
+	_instSrcFilterView->filter();
     }
     else if ( _updateProblemFilterView )
     {
