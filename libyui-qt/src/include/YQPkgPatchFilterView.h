@@ -23,6 +23,7 @@
 #define YQPkgPatchFilterView_h
 
 #include "YQZypp.h"
+#include "YQPkgSelMapper.h"
 #include <qvbox.h>
 
 
@@ -89,6 +90,8 @@ protected:
     QTabWidget *		_detailsViews;
     YQPkgDescriptionView *	_descriptionView;
     QLabel *			_totalDownloadSize;
+    
+    YQPkgSelMapper		_selMapper;
 };
 
 

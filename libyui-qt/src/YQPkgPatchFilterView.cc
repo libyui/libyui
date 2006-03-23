@@ -26,8 +26,10 @@
 #include <qlabel.h>
 #include <qsplitter.h>
 #include <qtabwidget.h>
+#include <qdatetime.h>
 
 #include <y2util/FSize.h>
+#include <zypp/ui/PatchContents.h>
 
 #include "YQPkgPatchFilterView.h"
 #include "YQPkgPatchList.h"
@@ -36,6 +38,10 @@
 #include "QY2LayoutUtils.h"
 #include "YQi18n.h"
 
+typedef zypp::ui::PatchContents			ZyppPatchContents;
+typedef zypp::ui::PatchContents::const_iterator	ZyppPatchContentsIterator;
+
+using std::set;
 
 #define SPACING			6	// between subwidgets
 #define MARGIN			4	// around the widget
@@ -55,7 +61,7 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
 
     QHBox * hbox 		= new QHBox( vbox ); CHECK_PTR( hbox );
     hbox->setSpacing( SPACING );
-    
+
 #ifdef FIXME
     QLabel * label		= new QLabel( _( "&Show Patch Category:" ), hbox );
 
@@ -125,9 +131,78 @@ YQPkgPatchFilterView::~YQPkgPatchFilterView()
 void
 YQPkgPatchFilterView::updateTotalDownloadSize()
 {
-#ifdef FIXME
-    _totalDownloadSize->setText( Y2PM::youPatchManager().totalDownloadSize().asString().c_str() );
-#endif
+    set<ZyppSel> selectablesToInstall;
+    QTime calcTime;
+    calcTime.start();
+
+    for ( ZyppPoolIterator patches_it = zyppPatchesBegin();
+	  patches_it != zyppPatchesEnd();
+	  ++patches_it )
+    {
+	ZyppPatch patch = tryCastToZyppPatch( (*patches_it)->theObj() );
+
+	if ( patch )
+	{
+	    ZyppPatchContents patchContents( patch );
+
+	    for ( ZyppPatchContentsIterator contents_it = patchContents.begin();
+		  contents_it != patchContents.end();
+		  ++contents_it )
+	    {
+		ZyppPkg pkg = tryCastToZyppPkg( *contents_it );
+		ZyppSel sel;
+		
+		if ( pkg )
+		    sel = _selMapper.findZyppSel( pkg );
+		
+
+		if ( sel )
+		{
+		    switch ( sel->status() )
+		    {
+			case S_Install:
+			case S_AutoInstall:
+			case S_Update:
+			case S_AutoUpdate:
+			    // Insert the patch contents selectables into a set,
+			    // don't immediately sum up their sizes: The same
+			    // package could be in more than one patch, but of
+			    // course it will be downloaded only once.
+
+			    selectablesToInstall.insert( sel );
+			    break;
+
+			case S_Del:
+			case S_AutoDel:
+			case S_NoInst:
+			case S_KeepInstalled:
+			case S_Taboo:
+			case S_Protected:
+			    break;
+
+			    // intentionally omitting 'default' branch so the compiler can
+			    // catch unhandled enum states
+		    }
+
+		}
+	    }
+	}
+    }
+
+
+    FSize totalSize = 0;
+
+    for ( set<ZyppSel>::iterator it = selectablesToInstall.begin();
+	  it != selectablesToInstall.end();
+	  ++it )
+    {
+	if ( (*it)->candidateObj() )
+	    totalSize += (*it)->candidateObj()->size();
+    }
+
+    _totalDownloadSize->setText( totalSize.asString().c_str() );
+    
+    y2debug( "Calculated total download size in %d millisec", calcTime.elapsed() );
 }
 
 

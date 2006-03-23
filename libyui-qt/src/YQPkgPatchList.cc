@@ -142,7 +142,7 @@ YQPkgPatchList::filter()
 	    ZyppPatchContents patchContents( patch );
 
 	    zypp::Patch::AtomList atomList = patch->atoms();
-	    // y2debug( "Filtering for patch %s: %d atoms", patch->name().c_str(), atomList.size() );
+	    y2debug( "Filtering for patch %s: %d atoms", patch->name().c_str(), atomList.size() );
 
 	    for ( ZyppPatchContentsIterator it = patchContents.begin();
 		  it != patchContents.end();
