@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Mar 23 12:08:31 CET 2006 - sh@suse.de
+
+- V 2.13.37
+- Enable starting up package selector in inst sources mode: Use
+  `opt(`instSourcesMode) 
+
+-------------------------------------------------------------------
 Wed Mar 22 17:49:52 CET 2006 - sh@suse.de
 
 - V 2.13.36
