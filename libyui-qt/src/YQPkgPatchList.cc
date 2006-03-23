@@ -25,6 +25,7 @@
 #include <qpopupmenu.h>
 #include <qaction.h>
 #include <zypp/ui/PatchContents.h>
+#include <set>
 
 #include "YQi18n.h"
 #include "utf8.h"
@@ -34,7 +35,9 @@
 
 typedef zypp::ui::PatchContents			ZyppPatchContents;
 typedef zypp::ui::PatchContents::const_iterator	ZyppPatchContentsIterator;
+
 using std::list;
+using std::set;
 
 
 YQPkgPatchList::YQPkgPatchList( QWidget * parent )
@@ -128,6 +131,7 @@ void
 YQPkgPatchList::filter()
 {
     emit filterStart();
+    std::set<ZyppSel> patchSelectables;
 
     if ( selection() )
     {
@@ -138,24 +142,35 @@ YQPkgPatchList::filter()
 	    ZyppPatchContents patchContents( patch );
 
 	    zypp::Patch::AtomList atomList = patch->atoms();
-	    y2debug( "Filtering for patch %s: %d atoms",
-		     patch->name().c_str(), atomList.size() );
+	    // y2debug( "Filtering for patch %s: %d atoms", patch->name().c_str(), atomList.size() );
 
 	    for ( ZyppPatchContentsIterator it = patchContents.begin();
 		  it != patchContents.end();
 		  ++it )
 	    {
-
 		ZyppPkg pkg = tryCastToZyppPkg( *it );
 
 		if ( pkg )
 		{
-		    // y2debug( "Found patch pkg: %s", (*it)->name().c_str() );
+		    y2debug( "Found patch pkg: %s arch: %s", (*it)->name().c_str(), (*it)->arch().asString().c_str() );
 
 		    ZyppSel sel = _selMapper.findZyppSel( pkg );
 
 		    if ( sel )
-			emit filterMatch( sel, pkg );
+		    {
+			if ( contains( patchSelectables, sel ) )
+			{
+			    y2milestone( "Suppressing duplicate selectable %s-%s arch: %s",
+					 (*it)->name().c_str(),
+					 (*it)->edition().asString().c_str(),
+					 (*it)->arch().asString().c_str() );
+			}
+			else
+			{
+			    patchSelectables.insert( sel );
+			    emit filterMatch( sel, pkg );
+			}
+		    }
 		    else
 			y2error( "No selectable for pkg %s",  (*it)->name().c_str() );
 		}
@@ -165,7 +180,7 @@ YQPkgPatchList::filter()
 			emit filterMatch( _( "Script" ),  fromUTF8( (*it)->name() ), -1 );
 		    else
 		    {
-			y2debug( "Found atom of kind %s: %s",
+			y2debug( "Found unknown atom of kind %s: %s",
 				 (*it)->kind().asString().c_str(),
 				 (*it)->name().c_str() );
 		    }
