@@ -162,20 +162,14 @@ protected slots:
     void restoreCheckButton();
 
     /**
-     * Add the "Patches" filter view, if it is not already there,
-     * and activate it (make it the current filter view),
-     * if 'autoActivate' is 'true'. 
-     *
-     * For debugging, this can be invoked by the user with the F2 key.
+     * Add the "Patches" filter view, if it is not already there.
      **/
-    void addPatchFilterView( bool autoActivate = true );
+    void addPatchFilterView();
 
     /**
-     * Overloaded version of the above since Qt's "moc" cannot handle
-     * default arguments
+     * Add the "Patches" filter view upon hotkey (F2).
      **/
-    void addPatchFilterViewAndActivate()
-	{ addPatchFilterView( true ); }
+    void hotkeyInsertPatchFilterView();
     
 
 protected:
@@ -219,6 +213,11 @@ protected:
     void connectFilter( QWidget *	filter,
 			QWidget *	pkgList,
 			bool		hasUpdateSignal = true );
+
+    /**
+     * Connect the patch list. Caution: Possible bootstrap problem!
+     **/
+    void connectPatchList();
 
     /**
      * Return HTML code describing a symbol (an icon).

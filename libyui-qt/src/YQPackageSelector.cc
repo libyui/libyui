@@ -276,7 +276,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	 || ! zyppPool().empty<zypp::Patch>()
 #endif
 	 )
-	addPatchFilterView( false ); // don't make this the active filter
+	addPatchFilterView();
 
 
     //
@@ -315,9 +315,9 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 		 this,		 	SLOT  ( autoResolveDependencies() 	) );
 
 	connect( _pkgConflictDialog,	SIGNAL( updatePackages()      		),
-		 _selList,		 SLOT  ( updateItemStates() 		) );
+		 _selList,		SLOT  ( updateItemStates() 		) );
 
-	connect( this,		 SIGNAL( refresh()				),
+	connect( this,		 	SIGNAL( refresh()			),
 		 _selList, 		 SLOT  ( updateItemStates() 		) );
     }
 
@@ -768,7 +768,6 @@ YQPackageSelector::makeConnections()
     connectFilter( _langList, 			_pkgList );
     connectFilter( _statusFilterView, 		_pkgList, false );
     connectFilter( _searchFilterView, 		_pkgList, false );
-    connectFilter( _patchList, 			_pkgList );
 
     if ( _searchFilterView && _pkgList )
     {
@@ -789,11 +788,7 @@ YQPackageSelector::makeConnections()
 		 _diskUsageList,	SLOT  ( updateDiskUsage() ) );
     }
 
-    if ( _pkgList && _patchList )
-    {
-	connect( _patchList, SIGNAL( filterMatch   ( const QString &, const QString &, FSize ) ),
-		 _pkgList,   SLOT  ( addPassiveItem( const QString &, const QString &, FSize ) ) );
-    }
+    connectPatchList();
 
 
     //
@@ -846,7 +841,7 @@ YQPackageSelector::makeConnections()
     QAccel * accel = new QAccel( this );
     CHECK_PTR( accel );
     accel->connectItem( accel->insertItem( Key_F2 ),
-			this, SLOT( addPatchFilterViewAndActivate() ) );
+			this, SLOT( hotkeyInsertPatchFilterView() ) );
 
 
     //
@@ -924,7 +919,7 @@ YQPackageSelector::manualResolvePackageDependencies()
 
 
 void
-YQPackageSelector::addPatchFilterView( bool autoActivate )
+YQPackageSelector::addPatchFilterView()
 {
     if ( ! _patchFilterView )
     {
@@ -935,21 +930,47 @@ YQPackageSelector::addPatchFilterView( bool autoActivate )
 	_patchList = _patchFilterView->patchList();
 	CHECK_PTR( _patchList );
 
-	if ( _pkgList && _patchList )
-	{
-	    connectFilter( _patchList, _pkgList );
-
-	    connect( _patchList, SIGNAL( filterMatch   ( const QString &, const QString &, FSize ) ),
-		     _pkgList,   SLOT  ( addPassiveItem( const QString &, const QString &, FSize ) ) );
-	}
+	connectPatchList();
     }
+}
 
-    if ( autoActivate )
+
+void
+YQPackageSelector::hotkeyInsertPatchFilterView()
+{
+    y2milestone( "Activating patches filter view" );
+    
+    addPatchFilterView();
+    connectPatchList();
+
+    _filters->showPage( _patchFilterView );
+    _pkgList->clear();
+    _patchList->filter();
+}
+
+
+void
+YQPackageSelector::connectPatchList()
+{
+    if ( _pkgList && _patchList )
     {
-	y2milestone( "Activating patches filter view" );
-	_filters->showPage( _patchFilterView );
-	_pkgList->clear();
-	_patchList->filter();
+	connectFilter( _patchList, _pkgList );
+
+	connect( _patchList, SIGNAL( filterMatch   ( const QString &, const QString &, FSize ) ),
+		 _pkgList,   SLOT  ( addPassiveItem( const QString &, const QString &, FSize ) ) );
+
+	connect( _patchList, 		SIGNAL( statusChanged()	        	),
+		 this,		 	SLOT  ( autoResolveDependencies() 	) );
+
+	if ( _pkgConflictDialog )
+	{
+	    connect( _pkgConflictDialog,SIGNAL( updatePackages()      		),
+		     _patchList,	SLOT  ( updateItemStates() 		) );
+	}
+
+	connect( this,		 	SIGNAL( refresh()			),
+		 _patchList, 	 	SLOT  ( updateItemStates() 		) );
+	    
     }
 }
 
