@@ -25,15 +25,12 @@
 #include <zypp/ZYppFactory.h>
 #include <zypp/Resolver.h>
 
-#include <qaction.h>
 #include <qhbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
-#include <qmessagebox.h>
 #include <qpopupmenu.h>
 #include <qpushbutton.h>
 #include <qdatetime.h>
-#include <qtimer.h>
 #include <qpainter.h>
 
 #include "YQPkgConflictDialog.h"
