@@ -31,6 +31,10 @@
 
 #include "NCi18n.h"
 
+/*
+  Textdomain "packages"
+*/
+
 class NCProblemSelectionBox : public NCSelectionBox
 {
     typedef NCProblemSelectionBox Self;

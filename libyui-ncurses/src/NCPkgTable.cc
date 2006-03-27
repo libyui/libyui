@@ -27,6 +27,10 @@
 #include "YQZypp.h"
 //#include <y2pm/InstTarget.h>
 
+/*
+  Textdomain "packages"
+*/
+
 ///////////////////////////////////////////////////////////////////
 //
 //
