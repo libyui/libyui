@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Mar 27 15:00:00 CET 2006 - gs@suse.de
+
+- make YOU patch installation work
+- 2.13.14
+
+-------------------------------------------------------------------
 Mon Mar 13 15:03:55 CET 2006 - mvidner@suse.cz
 
 - Added license confirmations (#151834).
