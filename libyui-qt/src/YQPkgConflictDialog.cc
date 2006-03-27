@@ -304,6 +304,12 @@ YQPkgConflictDialog::solveAndShowConflicts()
 }
 
 
+void
+YQPkgConflictDialog::resetIgnoredDependencyProblems()
+{
+    zypp::getZYpp()->resolver()->undo();
+}
+
 
 double
 YQPkgConflictDialog::averageSolveTime() const

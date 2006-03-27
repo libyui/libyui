@@ -23,6 +23,7 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
+#include <qaction.h>
 #include "QY2LayoutUtils.h"
 
 #include "YQPackageSelectorBase.h"
@@ -66,6 +67,16 @@ YQPackageSelectorBase::YQPackageSelectorBase( QWidget * 		parent,
 
     _pkgConflictDialog = new YQPkgConflictDialog( this );
     CHECK_PTR( _pkgConflictDialog );
+
+    QString label = _( "Reset &Ignored Dependency Conflicts" );
+    _actionResetIgnoredDependencyProblems = new QAction( label,			// text
+							 label,			// menu text
+							 (QKeySequence) 0,	// accel
+							 this ); 		// parent
+    CHECK_PTR( _actionResetIgnoredDependencyProblems );
+
+    connect( _actionResetIgnoredDependencyProblems, SIGNAL( activated() ),
+	     this,				    SLOT  ( resetIgnoredDependencyProblems() ) );
 
     zyppPool().saveState<zypp::Package  >();
     zyppPool().saveState<zypp::Pattern  >();
@@ -253,6 +264,13 @@ YQPackageSelectorBase::notImplemented()
     QMessageBox::information( this, "",
 			      _( "Not implemented yet. Sorry." ),
 			      QMessageBox::Ok );
+}
+
+
+void
+YQPackageSelectorBase::resetIgnoredDependencyProblems()
+{
+    YQPkgConflictDialog::resetIgnoredDependencyProblems();
 }
 
 

@@ -582,7 +582,7 @@ YQPackageSelector::layoutMenuBar( QWidget * parent )
     _fileMenu		= 0;
     _viewMenu		= 0;
     _pkgMenu 		= 0;
-    _patchMenu 	= 0;
+    _patchMenu 		= 0;
     _extrasMenu		= 0;
     _helpMenu 		= 0;
 
@@ -674,6 +674,9 @@ YQPackageSelector::addMenus()
     _menuBar->insertItem( _( "&Extras" ), _extrasMenu );
 
     _extrasMenu->insertItem( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), CTRL + Key_A );
+
+    if ( _actionResetIgnoredDependencyProblems )
+	_actionResetIgnoredDependencyProblems->addTo( _extrasMenu );
 
 #ifdef FIXME
     if ( _patchList )
@@ -939,7 +942,7 @@ void
 YQPackageSelector::hotkeyInsertPatchFilterView()
 {
     y2milestone( "Activating patches filter view" );
-    
+
     addPatchFilterView();
     connectPatchList();
 
@@ -970,7 +973,7 @@ YQPackageSelector::connectPatchList()
 
 	connect( this,		 	SIGNAL( refresh()			),
 		 _patchList, 	 	SLOT  ( updateItemStates() 		) );
-	    
+
     }
 }
 

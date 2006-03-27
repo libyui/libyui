@@ -26,6 +26,7 @@
 
 
 class QY2ComboTabWidget;
+class QAction;
 
 class YQPkgConflictDialog;
 class YQPkgDiskUsageList;
@@ -136,6 +137,14 @@ signals:
     void resolvingFinished();
 
     
+protected slots:
+
+    /**
+     * Reset all previously ignored dependency problems.
+     **/
+    void resetIgnoredDependencyProblems();
+
+    
 protected:
 
     /**
@@ -152,6 +161,7 @@ protected:
     bool			_showChangesDialog;
     YQPkgConflictDialog *	_pkgConflictDialog;
     YQPkgDiskUsageList *	_diskUsageList;
+    QAction *			_actionResetIgnoredDependencyProblems;
 };
 
 

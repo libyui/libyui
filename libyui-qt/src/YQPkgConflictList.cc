@@ -19,7 +19,6 @@
 /-*/
 
 
-#include <qaction.h>
 #include <qpainter.h>
 #include <qpixmap.h>
 #include <qdatetime.h>
@@ -288,6 +287,7 @@ YQPkgConflictList::dumpList( QListViewItem * 	parent,
 	++it;
     }
 }
+
 
 
 
