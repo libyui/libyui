@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Mar 28 13:26:14 CEST 2006 - gs@suse.de
+
+- YOU patch installation: avoid duplicate entries in package list,
+			  show download size, show scripts
+- 2.13.15
+
+-------------------------------------------------------------------
 Mon Mar 27 15:00:00 CET 2006 - gs@suse.de
 
 - make YOU patch installation work
