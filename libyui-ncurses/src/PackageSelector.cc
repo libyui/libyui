@@ -832,7 +832,7 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr 
 		pkgLine.push_back( (*it)->name() );
 		pkgLine.push_back( "   " );	// versions empty
 		pkgLine.push_back( "   " );	
-		pkgLine.push_back( PkgNames::PostScript() );
+		pkgLine.push_back( PkgNames::Script() );
 	
 		pkgTable->addLine( S_NoInst,
 				   pkgLine,
