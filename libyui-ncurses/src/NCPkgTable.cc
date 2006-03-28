@@ -25,7 +25,6 @@
 #include "PackageSelector.h"
 #include <zypp/ui/Selectable.h>
 #include "YQZypp.h"
-//#include <y2pm/InstTarget.h>
 
 /*
   Textdomain "packages"
@@ -318,10 +317,8 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 		break;
 	    
 	    case T_Patches:
-#ifdef FIXME
 		// show the download size for all selected patches
 		packager->showDownloadSize();
-#endif
 		break;
 		
 	    default:

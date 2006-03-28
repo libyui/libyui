@@ -36,6 +36,7 @@
 
 #include "NCPopupTree.h"
 #include "NCPkgTable.h"
+#include "NCPkgSelMapper.h"
 
 class NCPopupSelection;
 class LangCode;
@@ -98,6 +99,9 @@ class PackageSelector
 
     // the package (patch) list 
     NCPkgTable * getPackageList();
+
+    // Mapping from ZyppPkg to the correspoinding ZyppSel.
+    NCPkgSelMapper selMapper;
     
   protected:
  
@@ -385,12 +389,10 @@ class PackageSelector
      */ 
     void showDiskSpace();
 
-#ifdef FIXME
     /**
      * Shows the total download size
      */ 
     void showDownloadSize();
-#endif
 
     /**
      * Check for changes

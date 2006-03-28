@@ -780,8 +780,15 @@ const string PkgNames::PreScript()
 
 const string PkgNames::PostScript()
 {
-    // a post script (included in aYOU patch)
+    // a post script (included in a YOU patch)
     static const string value = _( "Post-Script" );
+    return value;
+}
+
+const string PkgNames::Script()
+{
+    // a script (included in a YOU patch)
+    static const string value = _( "Script" );
     return value;
 }
 

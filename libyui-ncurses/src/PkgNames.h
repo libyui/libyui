@@ -442,7 +442,8 @@ public:
     static const string File();
     static const string PreScript();
     static const string PostScript();
-    
+    static const string Script(); 
+
    /**
      * text used in search popup
      */

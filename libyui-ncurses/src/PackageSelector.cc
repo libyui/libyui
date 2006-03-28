@@ -40,21 +40,14 @@
 #include <iomanip>
 #include <list>
 #include <string>
+#include <set>
 
-#include "YQZypp.h"			// tryCastToZyppPkg(), tryCastToZyppPatch()
-#include "NCPkgSelMapper.h"
+#include "YQZypp.h"		// tryCastToZyppPkg(), tryCastToZyppPatch()
 #include <zypp/ui/Selectable.h>
 #include <zypp/ui/PatchContents.h>
 
 typedef zypp::ui::PatchContents			ZyppPatchContents;
 typedef zypp::ui::PatchContents::const_iterator	ZyppPatchContentsIterator;
-
-#ifdef FIXME_PM
-//#include <y2pm/InstSrcManager.h>
-#endif
-#ifdef FIXME_PATCHES
-//#include <y2pm/InstYou.h>
-#endif
 
 #include <ycp/YCPString.h>
 #include <ycp/YCPVoid.h>
@@ -176,9 +169,6 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
     if ( opt.updateMode.value() )
 	updateMode = true;
 
-#ifdef FIXME_PM
-    NCDBG << "Number of packages: " << Y2PM::packageManager().size() << endl;
-#endif
 
     // read test source information
     if ( opt.testMode.value() )
@@ -792,7 +782,9 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr 
     if ( !pkgTable )
 	return false;
     pkgTable->itemsCleared ();
-     
+
+    std::set<ZyppSel> patchSelectables;
+      
     ZyppPatch patchPtr  = tryCastToZyppPatch( objPtr ); 
     
     if ( !patchPtr )
@@ -813,9 +805,47 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr 
 	if ( pkg )
 	{
 	    NCDBG << "Patch package found: " <<  (*it)->name().c_str() << endl;
-            NCPkgSelMapper mapper;
-	    ZyppSel sel = mapper.findZyppSel( pkg );
-	    pkgTable->createListEntry( pkg, sel );
+
+	    ZyppSel sel = selMapper.findZyppSel( pkg );
+
+	    if ( sel )
+		if ( contains( patchSelectables, sel ) )
+		{
+		    NCMIL << "Suppressing duplicate selectable: " << (*it)->name().c_str() << "-" <<
+			(*it)->edition().asString().c_str() << " " <<
+			(*it)->arch().asString().c_str() << endl;
+		}
+		else
+		{
+		    patchSelectables.insert( sel );
+		    pkgTable->createListEntry( pkg, sel );			    
+		}
+
+	}
+	else  // No ZyppPkg - some other kind of object (script, message)
+	{
+	    if ( zypp::isKind<zypp::Script> ( *it ) )
+	    {
+		vector<string> pkgLine;
+		pkgLine.reserve(4);
+
+		pkgLine.push_back( (*it)->name() );
+		pkgLine.push_back( "   " );	// versions empty
+		pkgLine.push_back( "   " );	
+		pkgLine.push_back( PkgNames::PostScript() );
+	
+		pkgTable->addLine( S_NoInst,
+				   pkgLine,
+				   ZyppObj(),
+				   ZyppSel()
+				   );
+	    }
+	    else
+	    {
+		y2debug( "Found unknown atom of kind %s: %s",
+			 (*it)->kind().asString().c_str(),
+			 (*it)->name().c_str() );
+	    }
 	}
     }
 
@@ -1117,7 +1147,8 @@ bool PackageSelector::checkPatch( ZyppPatch 	patchPtr,
 
     if ( filter == "all"
 	 || ( filter == "installed" && selectable->status() == S_KeepInstalled )
-	 // FIXME installable ????? show new installable patches 
+	 // FIXME Is filter installable correct? There was a method installable() before. Condition was:
+	 // ( patchPtr->installable() && patchPtr->getSelectable()->status() != PMSelectable::S_KeepInstalled )
 	 || ( filter == "installable" && ( selectable->status() != S_KeepInstalled ) )
 	 || ( filter == "new" && ( selectable->status() == S_Install ||
 				   selectable->status() == S_NoInst ) )
@@ -1125,7 +1156,7 @@ bool PackageSelector::checkPatch( ZyppPatch 	patchPtr,
 	 || ( filter == "recommended" && patchPtr->category() == "recommended" )
 	 || ( filter == "optional" && patchPtr->category() == "optional" )
 	 || ( filter == "YaST2" && patchPtr->category() == "yast" )
-	 // FIXME add category document
+
 	 )	
     {
 	packageList->createPatchEntry( patchPtr, selectable );
@@ -2360,15 +2391,82 @@ void PackageSelector::showDiskSpace()
     }
 }
 
-// patch
-#ifdef FIXME
+
 ///////////////////////////////////////////////////////////////////
 //
 // showDownloadSize()
 //
+// total download size of YOU patches
+//
 void PackageSelector::showDownloadSize()
 {
-    YCPString label( Y2PM::youPatchManager().totalDownloadSize().asString() );
+    set<ZyppSel> selectablesToInstall;
+
+    for ( ZyppPoolIterator patches_it = zyppPatchesBegin();
+	  patches_it != zyppPatchesEnd();
+	  ++patches_it )
+    {
+	ZyppPatch patch = tryCastToZyppPatch( (*patches_it)->theObj() );
+
+	if ( patch )
+	{
+	    ZyppPatchContents patchContents( patch );
+
+	    for ( ZyppPatchContentsIterator contents_it = patchContents.begin();
+		  contents_it != patchContents.end();
+		  ++contents_it )
+	    {
+		ZyppPkg pkg = tryCastToZyppPkg( *contents_it );
+		ZyppSel sel;
+		
+		if ( pkg )
+		    sel = selMapper.findZyppSel( pkg );
+		
+
+		if ( sel )
+		{
+		    switch ( sel->status() )
+		    {
+			case S_Install:
+			case S_AutoInstall:
+			case S_Update:
+			case S_AutoUpdate:
+			    // Insert the patch contents selectables into a set,
+			    // don't immediately sum up their sizes: The same
+			    // package could be in more than one patch, but of
+			    // course it will be downloaded only once.
+
+			    selectablesToInstall.insert( sel );
+			    break;
+
+			case S_Del:
+			case S_AutoDel:
+			case S_NoInst:
+			case S_KeepInstalled:
+			case S_Taboo:
+			case S_Protected:
+			    break;
+
+			    // intentionally omitting 'default' branch so the compiler can
+			    // catch unhandled enum states
+		    }
+
+		}
+	    }
+	}
+    }
+
+    FSize totalSize = 0;
+
+    for ( set<ZyppSel>::iterator it = selectablesToInstall.begin();
+	  it != selectablesToInstall.end();
+	  ++it )
+    {
+	if ( (*it)->candidateObj() )
+	    totalSize += (*it)->candidateObj()->size();
+    }
+
+    YCPString label( totalSize.asString() );
 
     // show the download size
     YWidget * diskSpace = y2ui->widgetWithId( PkgNames::Diskspace(), true );
@@ -2377,7 +2475,7 @@ void PackageSelector::showDownloadSize()
 	static_cast<NCLabel *>(diskSpace)->setLabel( label );
     }
 }
-#endif
+
 
 ///////////////////////////////////////////////////////////////////
 //
