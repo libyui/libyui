@@ -105,10 +105,50 @@ YQPkgLangList::filter()
 
 	if ( lang )
 	{
-#ifdef FIXME_missing_in_zypp
-#else
-	    y2warning( "Missing: Get packages for a zypp::Language" );
-#endif
+	    string currentLang = lang->name();
+
+	    //
+	    // Iterate over all selectables in pool
+	    //
+
+	    for ( ZyppPoolIterator it = zyppPkgBegin();
+		  it != zyppPkgEnd();
+		  ++it )
+	    {
+		ZyppObj zyppObj = (*it)->theObj();
+
+		if ( zyppObj )
+		{
+		    //
+		    // Iterate over all "freshens" dependencies of this object
+		    //
+		    
+		    zypp::CapSet freshens = zyppObj->dep( zypp::Dep::FRESHENS );
+
+		    for ( zypp::CapSet::const_iterator cap_it = freshens.begin();
+			  cap_it != freshens.end();
+			  ++cap_it )
+		    {
+			if ( (*cap_it).index() == currentLang )	// obj freshens this language
+			{
+			    ZyppPkg pkg = tryCastToZyppPkg( zyppObj );
+
+			    if ( pkg )
+			    {
+				y2debug( "Found pkg %s for lang %s",
+					 pkg->name().c_str(), currentLang.c_str() );
+				
+				emit filterMatch( *it, pkg );
+			    }
+			    else
+			    {
+				y2warning( "Found non-pkg obj %s for lang %s",
+					   pkg->name().c_str(), currentLang.c_str() );
+			    }
+			}
+		    }
+		}
+	    }
 	}
     }
 
