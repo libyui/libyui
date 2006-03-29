@@ -20,6 +20,7 @@
 /-*/
 
 #include <rpc/types.h>		// MAXHOSTNAMELEN
+#include <dlfcn.h>
 
 #include <qcursor.h>
 #include <qmessagebox.h>
@@ -94,7 +95,6 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     if ( ! runningEmbedded() )
 #endif
 	new QApplication( argc, argv );
-
     loadPredefinedQtTranslations();
     _normalPalette = qApp->palette();
 
@@ -186,6 +186,30 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     }
 
 
+    // Ugly hack as a workaround of bug #121872 (Segfault at program exit
+    // if no Qt style defined):
+    //
+    // Qt does not seem to be designed for use in plugin libs. It loads some
+    // add-on libs dynamically with dlopen() and unloads them at program exit
+    // (QGPluginManager). Unfortunately, since they all depend on the Qt master
+    // lib (libqt-mt) themselves, when they are unloading the last call to
+    // dlclose() for them causes the last reference to libqt-mt to vanish as
+    // well. Since libqt-mt is already in the process of destruction there is
+    // no more reference from the caller of libqt-mt, and the GLIBC decides
+    // that libqt-mt is not needed any more (zero references) and unmaps
+    // libqt-mt. When the static destructor of libqt-mt that triggered the
+    // cleanup in QGPluginManager returns, the code it is to return to is
+    // already unmapped, causing a segfault.
+    //
+    // Workaround: Keep one more reference to libqt-mt open - dlopen() it here
+    // and make sure there is no corresponding dlclose().
+
+    QString qt_lib_name = QString( QTLIBDIR "/libqt-mt.so.%1" ).arg( QT_VERSION >> 16 );;
+    void * qt_lib = dlopen( (const char *) qt_lib_name, RTLD_GLOBAL );
+    y2milestone( "Forcing %s open %s", (const char *) qt_lib_name,
+		 qt_lib ? "successful" : "failed" );
+
+
     //  Init other stuff
 
     qApp->setFont( currentFont() );
@@ -266,10 +290,8 @@ YQUI::~YQUI()
     if ( _lang_fonts )
 	delete _lang_fonts;
 
-#if 0
-    if ( ! runningEmbedded() && qApp )
-	delete qApp;
-#endif
+    // Intentionally NOT calling dlclose() to libqt-mt
+    // (see constructor for explanation)
 }
 
 

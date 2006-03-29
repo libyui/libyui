@@ -12,6 +12,7 @@ AM_CXXFLAGS = -DY2LOG=\"ui-qt\"					\
 	-DTHEMEDIR=\"${themedir}/current\"			\
 	-DHELPIMAGEDIR=\"${imagedir}\"				\
 	-DLANG_FONTS_FILE=\"${lang_fontsdir}/lang_fonts\"	\
+	-DQTLIBDIR=\"$(QTLIBDIR)\"				\
 	-fmessage-length=0
 
 
