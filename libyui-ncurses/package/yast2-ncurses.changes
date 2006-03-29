@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Mar 29 14:44:34 CEST 2006 - gs@suse.de
+
+- Show/set correct status information for packages in versions view 
+  (available packages)
+- 2.13.16
+
+-------------------------------------------------------------------
 Tue Mar 28 13:26:14 CEST 2006 - gs@suse.de
 
 - YOU patch installation: avoid duplicate entries in package list,
