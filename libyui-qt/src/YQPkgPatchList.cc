@@ -141,9 +141,6 @@ YQPkgPatchList::filter()
 	{
 	    ZyppPatchContents patchContents( patch );
 
-	    zypp::Patch::AtomList atomList = patch->atoms();
-	    y2debug( "Filtering for patch %s: %d atoms", patch->name().c_str(), atomList.size() );
-
 	    for ( ZyppPatchContentsIterator it = patchContents.begin();
 		  it != patchContents.end();
 		  ++it )
@@ -177,12 +174,21 @@ YQPkgPatchList::filter()
 		else // No ZyppPkg - some other kind of object (script, message)
 		{
 		    if ( zypp::isKind<zypp::Script> ( *it ) )
+		    {
+			y2debug( "Found patch script %s", (*it)->name().c_str() );
 			emit filterMatch( _( "Script" ),  fromUTF8( (*it)->name() ), -1 );
+		    }
+		    else if ( zypp::isKind<zypp::Message> ( *it ) )
+		    {
+			y2debug( "Found patch message %s (ignoring)", (*it)->name().c_str() );
+		    }
 		    else
 		    {
-			y2debug( "Found unknown atom of kind %s: %s",
+			y2error( "Found unknown object of kind %s in patch: %s-%s arch: %s",
 				 (*it)->kind().asString().c_str(),
-				 (*it)->name().c_str() );
+				 (*it)->name().c_str(),
+				 (*it)->edition().asString().c_str(),
+				 (*it)->arch().asString().c_str() );
 		    }
 		}
 	    }
