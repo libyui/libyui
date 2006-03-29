@@ -485,6 +485,7 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
 	return false;
     }
 
+#ifdef OLD_CODE
 //    ok = slbPtr->set_status( newstatus );
     ok = slbPtr->set_status( S_Update ); // FIXME only works for installed
     if ( ok )
@@ -495,6 +496,21 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
 	slbPtr->setLicenceConfirmed (false);
 	NCMIL << "Set user candidate returns: " <<  (ret?"true":"false") << endl;	
     }
+#endif
+
+    // this package is the candidate now
+    ok = slbPtr->setCandidate( objPtr );
+    NCMIL << "Set user candidate returns: " <<  (ok?"true":"false") << endl;	
+
+    if ( ok )
+    {
+	// set new package status
+	ok = slbPtr->set_status( newstatus );
+
+	// the new candidate can have a different one
+	slbPtr->setLicenceConfirmed (false);
+    }
+    
     NCMIL << "Set status of: " << slbPtr->name() << " to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
     
@@ -518,6 +534,7 @@ ZyppStatus AvailableStatStrategy::getPackageStatus( ZyppSel slbPtr,
 	return retStatus;
     }
 
+#ifdef OLD_CODE
     // ZyppStatus status = slbPtr->status();
 
     if (objPtr == slbPtr->candidateObj())
@@ -525,23 +542,28 @@ ZyppStatus AvailableStatStrategy::getPackageStatus( ZyppSel slbPtr,
     else if (slbPtr->hasInstalledObj() &&
 	     slbPtr->installedObj()->edition() == objPtr->edition() )
         retStatus = S_Del;
-/*    
-    if ( slbPtr->hasInstalledObj()
-	 && slbPtr->edition() == slbPtr->getInstalledObj()->edition() )
+#endif
+
+    ZyppStatus status = slbPtr->status();
+    NCDBG << "STATUS of " << slbPtr->name() << ": " <<  slbPtr->status() << endl;
+
+    if (slbPtr->hasInstalledObj() &&
+	slbPtr->installedObj()->edition() == objPtr->edition() )
     {
 	// installed package: show status S_KeepInstalled or S_Delete
 	if ( status == S_KeepInstalled
 	     || status == S_Del )
-	    retStatus = status;
+	    retStatus = status;	
+
     }
-    else if ( slbPtr->isCandidateObj() )
+    else if ( objPtr == slbPtr->candidateObj() )
     {
 	if ( status != S_KeepInstalled
-	     && status != S_Del )
-	retStatus = status;
+	     && status != S_Del  )
+	    retStatus = status;	
     }
     // else show S_NoInst
-*/	
+    
     return retStatus;
 }
 
