@@ -185,7 +185,7 @@ YQPkgPatternList::addPatternItem( ZyppSel	selectable,
 	return;
     }
 
-    YQPkgPatternCategoryItem * cat = category( zyppPattern->category() );
+    YQPkgPatternCategoryItem * cat = category( fromUTF8( zyppPattern->category() ) );
 
     if ( cat )
 	new YQPkgPatternListItem( this, cat, selectable, zyppPattern );
