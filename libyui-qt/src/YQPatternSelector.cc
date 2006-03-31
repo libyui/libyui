@@ -52,7 +52,6 @@ using std::string;
 #define MARGIN			6
 
 
-
 YQPatternSelector::YQPatternSelector( QWidget *			parent,
 				      const YWidgetOpt &	opt )
     : YQPackageSelectorBase( parent, opt )
@@ -113,8 +112,11 @@ YQPatternSelector::basicLayout()
     QWidget * left_pane	 = layoutLeftPane ( outer_splitter );
     QWidget * right_pane = layoutRightPane( outer_splitter );
 
-    outer_splitter->setResizeMode( left_pane,  QSplitter::Stretch );
-    outer_splitter->setResizeMode( right_pane, QSplitter::FollowSizeHint );
+    int left_pane_width = (int) ( 0.3 * YQUI::ui()->defaultSize( YD_HORIZ ) );
+    left_pane->resize( QSize( left_pane_width, left_pane->height() ) );
+    
+    outer_splitter->setResizeMode( left_pane,  QSplitter::KeepSize );
+    outer_splitter->setResizeMode( right_pane, QSplitter::Stretch  );
 
     if ( ! _wizard )
 	layoutButtons( this );
@@ -181,7 +183,6 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
 
 	addHStretch( hbox );
     }
-
 
     return vbox;
 }

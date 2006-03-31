@@ -25,6 +25,7 @@
 #include <zypp/ZYppFactory.h>
 #include <zypp/Resolver.h>
 #include <qpainter.h>
+#include <qheader.h>
 
 #include "YQi18n.h"
 #include "utf8.h"
@@ -51,6 +52,10 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     // is only of little relevance, though.
 
     addColumn( _( "Pattern" )	);	_summaryCol	= numCol++;
+
+    header()->setStretchEnabled( _statusCol , false );
+    header()->setStretchEnabled( _summaryCol, true  );
+    
     setAllColumnsShowFocus( true );
     setTreeStepSize( 0 );
     setAutoApplyChanges( true );

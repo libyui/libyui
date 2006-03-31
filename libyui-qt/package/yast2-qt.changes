@@ -1,7 +1,12 @@
 -------------------------------------------------------------------
-Fri Mar 31 18:34:56 CEST 2006 - sh@suse.de
+Fri Mar 31 22:02:38 CEST 2006 - sh@suse.de
 
 - V 2.13.44
+- Fixed bug #161860: Pattern selector layout out of proportion 
+
+-------------------------------------------------------------------
+Fri Mar 31 18:34:56 CEST 2006 - sh@suse.de
+
 - Fixed bug #152700: Automatic changes dialog displays garbage 
 
 -------------------------------------------------------------------
