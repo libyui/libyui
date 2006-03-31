@@ -31,12 +31,16 @@
 
 #include "YQZypp.h"
 #include <zypp/ResStatus.h>
+#include <zypp/ui/UserWantedPackages.h>
 
 #include "YQPkgChangesDialog.h"
 #include "YQPkgList.h"
 #include "QY2LayoutUtils.h"
 #include "YQi18n.h"
 #include "YQUI.h"
+
+using std::set;
+using std::string;
 
 
 #define SPACING			2	// between subwidgets
@@ -131,8 +135,6 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
 
 	addHStretch( hbox );
     }
-
-    filter();
 }
 
 
@@ -148,6 +150,11 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, bool byAuto, bool byApp, boo
 {
     YQUI::ui()->busyCursor();
     _pkgList->clear();
+
+    set<string> ignoredNames;
+    
+    if ( ! byUser || ! byApp )
+	ignoredNames = zypp::ui::userWantedPackageNames();
 
     for ( ZyppPoolIterator it = zyppPkgBegin();
 	  it != zyppPkgEnd();
@@ -165,7 +172,10 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, bool byAuto, bool byApp, boo
 		 ( modifiedBy == zypp::ResStatus::USER       ) && byUser   )
 	    {
 		if ( regexp.isEmpty() || regexp.search( selectable->name().c_str() ) >= 0 )
-		    _pkgList->addPkgItem( selectable, tryCastToZyppPkg( selectable->theObj() ) );
+		{
+		    if ( ! contains( ignoredNames, selectable->name() ) )
+			_pkgList->addPkgItem( selectable, tryCastToZyppPkg( selectable->theObj() ) );
+		}
 	    }
 	}
     }
