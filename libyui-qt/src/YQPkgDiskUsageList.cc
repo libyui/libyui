@@ -111,6 +111,7 @@ YQPkgDiskUsageList::updateDiskUsage()
 	    y2error( "No entry for mount point %s", partitionDu.dir.c_str() );
     }
 
+    sort();
     postPendingWarnings();
 }
 
@@ -148,7 +149,7 @@ YQPkgDiskUsageList::sizeHint() const
     int width = header()->headerWidth()
 	+ style().pixelMetric( QStyle::PM_ScrollBarExtent, verticalScrollBar() );
 
-    return QSize( width, 120 );
+    return QSize( width, 100 );
 }
 
 
