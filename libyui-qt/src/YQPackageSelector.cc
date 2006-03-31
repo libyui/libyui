@@ -228,15 +228,18 @@ YQPackageSelector::layoutLeftPane( QWidget * parent )
     CHECK_PTR( splitter );
     splitter->setMargin( MARGIN );
 
-    QVBox * vbox = new QVBox( splitter );
-    CHECK_PTR( vbox );
-    layoutFilters( vbox );
-    addVSpacing( vbox, MARGIN );
+    QVBox * upper_vbox = new QVBox( splitter );
+    CHECK_PTR( upper_vbox );
+    layoutFilters( upper_vbox );
+    addVSpacing( upper_vbox, MARGIN );
 
-    vbox = new QVBox( splitter );
-    addVSpacing( vbox, MARGIN );
-    _diskUsageList = new YQPkgDiskUsageList( vbox );
+    QVBox * lower_vbox = new QVBox( splitter );
+    addVSpacing( lower_vbox, MARGIN );
+    _diskUsageList = new YQPkgDiskUsageList( lower_vbox );
     CHECK_PTR( _diskUsageList );
+
+    splitter->setResizeMode( upper_vbox, QSplitter::Stretch );
+    splitter->setResizeMode( lower_vbox, QSplitter::FollowSizeHint );
 
     return splitter;
 }
@@ -340,7 +343,9 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     _langList = new YQPkgLangList( parent );
     CHECK_PTR( _langList );
+    
     _filters->addPage( _( "Languages" ), _langList );
+    _langList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored ) ); // hor/vert
 
     connect( _langList, 	SIGNAL( statusChanged()	               	),
 	     this,		SLOT  ( autoResolveDependencies() 	) );
