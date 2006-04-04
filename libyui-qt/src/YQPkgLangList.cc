@@ -45,7 +45,6 @@ YQPkgLangList::YQPkgLangList( QWidget * parent )
     // Full (human readable) language / country name like "German (Austria)"
     addColumn( _( "Language" ) );	_summaryCol	= numCol++;
     setAllColumnsShowFocus( true );
-    setAutoApplyChanges( true );
 
     connect( this, 	SIGNAL( selectionChanged        ( QListViewItem * ) ),
 	     this, 	SLOT  ( filter()                                    ) );
@@ -122,7 +121,7 @@ YQPkgLangList::filter()
 		    //
 		    // Iterate over all "freshens" dependencies of this object
 		    //
-		    
+
 		    zypp::CapSet freshens = zyppObj->dep( zypp::Dep::FRESHENS );
 
 		    for ( zypp::CapSet::const_iterator cap_it = freshens.begin();
@@ -137,7 +136,7 @@ YQPkgLangList::filter()
 			    {
 				y2debug( "Found pkg %s for lang %s",
 					 pkg->name().c_str(), currentLang.c_str() );
-				
+
 				emit filterMatch( *it, pkg );
 			    }
 			    else
@@ -201,6 +200,14 @@ YQPkgLangListItem::~YQPkgLangListItem()
 {
     // NOP
 }
+
+
+void
+YQPkgLangListItem::applyChanges()
+{
+    solveResKind<zypp::Language>();
+}
+
 
 
 

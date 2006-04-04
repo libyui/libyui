@@ -158,6 +158,14 @@ public:
 
 protected:
 
+    /**
+     * Propagate status changes in this list to other lists:
+     * Have the solver transact all selections.
+     *
+     * Reimplemented from YQPkgObjListItem.
+     **/
+    virtual void applyChanges();
+
     
     // Data members
 

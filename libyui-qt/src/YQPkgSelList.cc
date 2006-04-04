@@ -40,7 +40,6 @@ YQPkgSelList::YQPkgSelList( QWidget * parent, bool autoFill, bool autoFilter )
     addColumn( ""		);	_statusCol	= numCol++;
     addColumn( _( "Selection" ) );	_summaryCol	= numCol++;
     setAllColumnsShowFocus( true );
-    setAutoApplyChanges( true );
 
     if ( autoFilter )
     {
@@ -190,12 +189,17 @@ YQPkgSelListItem::YQPkgSelListItem( YQPkgSelList *	pkgSelList,
 }
 
 
-
 YQPkgSelListItem::~YQPkgSelListItem()
 {
     // NOP
 }
 
+
+void
+YQPkgSelListItem::applyChanges()
+{
+    solveResKind<zypp::Selection>();
+}
 
 
 /**

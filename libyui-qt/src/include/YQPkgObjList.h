@@ -74,13 +74,6 @@ public:
     bool editable() const { return _editable; }
 
     /**
-     * Returns 'true' if items should automatically call their applyChanges()
-     * method upon status change. By default this will trigger a dependency
-     * resolver run for the item's selectable.
-     **/
-    bool autoApplyChanges() const { return _autoApplyChanges; }
-
-    /**
      * Set the list's editable status.
      **/
     void setEditable( bool editable = true ) { _editable = editable; }
@@ -249,12 +242,6 @@ signals:
 protected:
 
     /**
-     * Set the autoApplyChanges flag.
-     **/
-    void setAutoApplyChanges( bool autoApply )
-	{ _autoApplyChanges = autoApply; }
-
-    /**
      * Event handler for keyboard input.
      * Only very special keys are processed here.
      *
@@ -319,7 +306,6 @@ protected:
     int		_versionCol;
     int		_instVersionCol;
     bool	_editable;
-    bool	_autoApplyChanges;
 
 
     QPopupMenu *	_installedContextMenu;
@@ -417,24 +403,12 @@ public:
     virtual void setStatus( ZyppStatus newStatus );
 
     /**
-     * Apply changes. This default implementation performs a dependency
-     * resolver run on this item's selectable if the parent list's
-     * autoApplyChanges flag is set.
-     **/
-    virtual void applyChanges();
-
-    /**
      * Update this item's status.
      * Triggered by QY2ListView::updateAllItemStates().
      * Overwritten from QY2ListViewItem.
      **/
     virtual void updateStatus();
-
-    /**
-     * Set a status icon according to the package's status.
-     **/
-    virtual void setStatusIcon();
-
+    
     /**
      * Cycle the package status to the next valid value.
      **/
@@ -451,32 +425,14 @@ public:
     bool installedIsNewer() const { return _installedIsNewer; }
 
     /**
-     * Set a column text via STL string.
-     * ( QListViewItem::setText() expects a QString! )
-     **/
-    void setText( int column, const string text );
-
-    /**
-     * Re-declare ordinary setText() method so the compiler doesn't get
-     * confused which one to use.
-     **/
-    void setText( int column, const QString & text )
-	{ QListViewItem::setText( column, text ); }
-
-    /**
-     * Set a column text via Edition.
-     **/
-    void setText( int column, const zypp::Edition & edition );
-
-    /**
      * Display this item's notify text (if there is any) that corresponds to
      * the specified status (S_Install, S_Del) in a pop-up window.
      **/
     void showNotifyTexts( ZyppStatus status );
 
     /**
-     * Display this item's license agreement (if there is any) that corresponds to
-     * the specified status (S_Install, S_Update) in a pop-up window.
+     * Display this item's license agreement (if there is any) that corresponds
+     * to the specified status (S_Install, S_Update) in a pop-up window.
      *
      * Returns 'true' if the user agreed to that license , 'false' otherwise.
      * The item's status may have changed to S_Taboo, S_Proteced or S_Del if
@@ -498,7 +454,9 @@ public:
 			 bool			ascending ) const;
 
     /**
-     * Calculate a numerical value to compare versions, based on version relations:
+     * Calculate a numerical value to compare versions, based on version
+     * relations:
+     *
      * - Installed newer than candidate (red)
      * - Candidate newer than installed (blue) - worthwhile updating
      * - Installed
@@ -539,18 +497,66 @@ protected:
      * Initialize internal data and set fields accordingly.
      **/
     void init();
+    
+    /**
+     * Set a status icon according to the package's status.
+     **/
+    virtual void setStatusIcon();
+
+    /**
+     * Apply changes hook. This is called each time the user changes the status
+     * of a list item manually (if the old status is different from the new
+     * one). Insert code to propagate changes to other objects here, for
+     * example to trigger a "small" solver run (Resolver::transactObjKind()
+     * etc.).
+     *
+     * This default implementation does nothing.
+     **/
+    virtual void applyChanges() {}
+
+    /**
+     * Set a column text via STL string.
+     * ( QListViewItem::setText() expects a QString! )
+     **/
+    void setText( int column, const string text );
+
+    /**
+     * Re-declare ordinary setText() method so the compiler doesn't get
+     * confused which one to use.
+     **/
+    void setText( int column, const QString & text )
+	{ QListViewItem::setText( column, text ); }
+
+    /**
+     * Set a column text via Edition.
+     **/
+    void setText( int column, const zypp::Edition & edition );
 
 
+    //
     // Data members
+    //
 
-    YQPkgObjList *		_pkgObjList;
-    ZyppSel	_selectable;
-    ZyppObj	_zyppObj;
-    bool			_editable;
-    bool			_candidateIsNewer;
-    bool			_installedIsNewer;
+    YQPkgObjList *	_pkgObjList;
+    ZyppSel		_selectable;
+    ZyppObj		_zyppObj;
+    bool		_editable;
+    bool		_candidateIsNewer;
+    bool		_installedIsNewer;
 };
 
+
+/**
+ * Do a solver run for all resolvables of one kind
+ * (zypp::Selection, zypp::Pattern, zypp::Langauge, zypp::Patch)
+ **/
+template<class ZyppKind_T> void solveResKind()
+{
+    zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
+
+    resolver->transactReset( zypp::ResStatus::SOLVER );
+    resolver->transactResKind( zypp::ResTraits<ZyppKind_T>::kind );
+}
 
 
 #endif // ifndef YQPkgObjList_h

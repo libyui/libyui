@@ -58,7 +58,6 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     
     setAllColumnsShowFocus( true );
     setTreeStepSize( 0 );
-    setAutoApplyChanges( true );
 
     if ( autoFilter )
     {
@@ -256,6 +255,13 @@ YQPkgPatternListItem::~YQPkgPatternListItem()
 }
 
 
+void
+YQPkgPatternListItem::applyChanges()
+{
+    solveResKind<zypp::Pattern>();
+}
+
+
 
 /**
  * Comparison function used for sorting the list.
@@ -340,7 +346,6 @@ YQPkgPatternCategoryItem::setOpen( bool )
 
     QListViewItem::setOpen( true );
 }
-
 
 
 /**

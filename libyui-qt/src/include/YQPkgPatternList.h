@@ -189,6 +189,14 @@ protected:
      * Initialize things common to all constructors.
      **/
     void init();
+    
+    /**
+     * Propagate status changes in this list to other lists:
+     * Have the solver transact all patterns.
+     *
+     * Reimplemented from YQPkgObjListItem.
+     **/
+    virtual void applyChanges();
 
 
     // Data members

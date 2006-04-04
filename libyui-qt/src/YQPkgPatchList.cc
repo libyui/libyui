@@ -52,7 +52,6 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     addColumn( _( "Size" 	) );	_sizeCol	= numCol++;
     setAllColumnsShowFocus( true );
     setColumnAlignment( sizeCol(), Qt::AlignRight );
-    setAutoApplyChanges( true );
 
     connect( this,	SIGNAL( selectionChanged	( QListViewItem * ) ),
 	     this,	SLOT  ( filter()				    ) );
@@ -405,6 +404,14 @@ YQPkgPatchListItem::toolTip( int col )
     }
 
     return text;
+}
+
+
+void
+YQPkgPatchListItem::applyChanges()
+{
+    solveResKind<zypp::Patch>();
+    solveResKind<zypp::Atom>();
 }
 
 

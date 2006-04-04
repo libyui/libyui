@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Apr  4 17:59:20 CEST 2006 - sh@suse.de
+
+- V 2.13.45
+- Fixed bug #161400: Switching between alternative patterns
+- Migrated from Resolver::transactResObject() to 
+  Resolver::transactResKind() for all higher-level YQPkg*Lists 
+
+-------------------------------------------------------------------
 Fri Mar 31 22:02:38 CEST 2006 - sh@suse.de
 
 - V 2.13.44

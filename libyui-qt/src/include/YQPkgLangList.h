@@ -132,15 +132,24 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    ZyppLang zyppLang() const { return _zyppLang; }
+    ZyppLang zyppLang() const	{ return _zyppLang; }
 
 
     // Columns
 
-    int statusCol()	const	{ return _langList->statusCol();	}
+    int statusCol()	const	{ return _langList->statusCol(); }
 
 
 protected:
+
+    /**
+     * Propagate status changes in this list to other lists:
+     * Have the solver transact all languages.
+     *
+     * Reimplemented from YQPkgObjListItem.
+     **/
+    virtual void applyChanges();
+
 
     // Data members
 

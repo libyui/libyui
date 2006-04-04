@@ -254,7 +254,15 @@ public:
 
 protected:
 
+    /**
+     * Propagate status changes in this list to other lists:
+     * Have the solver transact all patches.
+     *
+     * Reimplemented from YQPkgObjListItem.
+     **/
+    virtual void applyChanges();
 
+    
     // Data members
 
     YQPkgPatchList *	_patchList;
