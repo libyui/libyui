@@ -758,7 +758,12 @@ public:
      */
     static const string PkgSize();
 
-   /**
+    /**
+     *  Column header package architecture
+     */
+    static const string PkgArch();
+
+     /**
      *  Column header package source
      */
     static const string PkgSource();

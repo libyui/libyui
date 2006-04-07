@@ -1407,6 +1407,13 @@ const string PkgNames::PkgSize()
     return value;
 }
 
+const string PkgNames::PkgArch()
+{
+    // column header package architecture  (keep it short!)
+    static const string value = _( "Architecture" );
+    return value;
+}
+
 const string PkgNames::PkgSource()
 {
     // column header source RPM installation (keep it short!)
