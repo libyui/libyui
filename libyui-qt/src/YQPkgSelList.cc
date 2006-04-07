@@ -198,7 +198,7 @@ YQPkgSelListItem::~YQPkgSelListItem()
 void
 YQPkgSelListItem::applyChanges()
 {
-    solveResKind<zypp::Selection>();
+    solveResolvableCollections();
 }
 
 

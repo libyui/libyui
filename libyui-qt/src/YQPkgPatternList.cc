@@ -258,7 +258,7 @@ YQPkgPatternListItem::~YQPkgPatternListItem()
 void
 YQPkgPatternListItem::applyChanges()
 {
-    solveResKind<zypp::Pattern>();
+    solveResolvableCollections();
 }
 
 

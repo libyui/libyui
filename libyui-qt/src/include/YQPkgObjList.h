@@ -296,6 +296,7 @@ protected:
 			    const QString & 	key		= QString::null,
 			    bool 		enabled		= false );
 
+    
 
     // Data members
 
@@ -403,6 +404,11 @@ public:
     virtual void setStatus( ZyppStatus newStatus );
 
     /**
+     * Set a status icon according to the package's status.
+     **/
+    virtual void setStatusIcon();
+
+    /**
      * Update this item's status.
      * Triggered by QY2ListView::updateAllItemStates().
      * Overwritten from QY2ListViewItem.
@@ -431,14 +437,21 @@ public:
     void showNotifyTexts( ZyppStatus status );
 
     /**
-     * Display this item's license agreement (if there is any) that corresponds
-     * to the specified status (S_Install, S_Update) in a pop-up window.
+     * Display a selectable's license agreement (if there is any) that
+     * corresponds to its current status (S_Install, S_Update) in a pop-up
+     * window. 
      *
      * Returns 'true' if the user agreed to that license , 'false' otherwise.
      * The item's status may have changed to S_Taboo, S_Proteced or S_Del if
      * the user disagreed with the license.
      **/
-    bool showLicenseAgreement( ZyppStatus status );
+    static bool showLicenseAgreement( ZyppSel sel );
+    
+    /**
+     * Display this item's license agreement (if there is any) that corresponds
+     * to its current status (S_Install, S_Update) in a pop-up window.
+     **/
+    bool showLicenseAgreement();
 
     /**
      * Comparison function used for sorting the list.
@@ -499,11 +512,6 @@ protected:
     void init();
     
     /**
-     * Set a status icon according to the package's status.
-     **/
-    virtual void setStatusIcon();
-
-    /**
      * Apply changes hook. This is called each time the user changes the status
      * of a list item manually (if the old status is different from the new
      * one). Insert code to propagate changes to other objects here, for
@@ -513,6 +521,12 @@ protected:
      * This default implementation does nothing.
      **/
     virtual void applyChanges() {}
+
+    /**
+     * Do a "small" solver run for all "resolvable collections", i.e., for
+     * selections, patterns, languages, patches.
+     **/
+    void solveResolvableCollections();
 
     /**
      * Set a column text via STL string.
@@ -545,18 +559,6 @@ protected:
     bool		_installedIsNewer;
 };
 
-
-/**
- * Do a solver run for all resolvables of one kind
- * (zypp::Selection, zypp::Pattern, zypp::Langauge, zypp::Patch)
- **/
-template<class ZyppKind_T> void solveResKind()
-{
-    zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
-
-    resolver->transactReset( zypp::ResStatus::SOLVER );
-    resolver->transactResKind( zypp::ResTraits<ZyppKind_T>::kind );
-}
 
 
 #endif // ifndef YQPkgObjList_h

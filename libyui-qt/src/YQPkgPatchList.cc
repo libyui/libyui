@@ -410,8 +410,7 @@ YQPkgPatchListItem::toolTip( int col )
 void
 YQPkgPatchListItem::applyChanges()
 {
-    solveResKind<zypp::Patch>();
-    solveResKind<zypp::Atom>();
+    solveResolvableCollections();
 }
 
 

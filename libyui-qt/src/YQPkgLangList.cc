@@ -205,7 +205,7 @@ YQPkgLangListItem::~YQPkgLangListItem()
 void
 YQPkgLangListItem::applyChanges()
 {
-    solveResKind<zypp::Language>();
+    solveResolvableCollections();
 }
 
 

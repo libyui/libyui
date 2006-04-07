@@ -32,6 +32,7 @@
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQPkgTextDialog.h"
+#include "YQPkgObjList.h"
 
 #include "YQDialog.h"
 #include "utf8.h"
@@ -128,9 +129,6 @@ YQPackageSelectorBase::checkDiskUsage()
 {
     if ( ! _diskUsageList )
     {
-#if 1
-	y2warning( "No disk usage list existing, assuming disk usage is OK" );
-#endif
 	return QDialog::Accepted;
     }
 
@@ -226,9 +224,17 @@ YQPackageSelectorBase::reject()
 void
 YQPackageSelectorBase::accept()
 {
-    // Force final dependency resolving
-    if ( resolvePackageDependencies() == QDialog::Rejected )
-	return;
+    bool confirmedAllLicenses;
+
+    do
+    {
+	// Force final dependency resolving
+	if ( resolvePackageDependencies() == QDialog::Rejected )
+	    return;
+
+	confirmedAllLicenses = showPendingLicenseAgreements();
+
+    } while ( ! confirmedAllLicenses ); // Some packages will be set to S_TABOO - need another solver run
 
     if ( _showChangesDialog )
     {
@@ -255,6 +261,61 @@ YQPackageSelectorBase::accept()
 
     y2milestone( "Closing PackageSelector with \"Accept\"" );
     YQUI::ui()->sendEvent( new YMenuEvent( YCPSymbol( "accept" ) ) );
+}
+
+
+bool
+YQPackageSelectorBase::showPendingLicenseAgreements()
+{
+    y2milestone( "Showing all pending license agreements" );
+
+    bool allConfirmed = true;
+
+    for ( ZyppPoolIterator it = zyppPkgBegin();
+	  it != zyppPkgEnd();
+	  ++it )
+    {
+	ZyppSel sel = (*it);
+
+	switch ( sel->status() )
+	{
+	    case S_Install:
+	    case S_AutoInstall:
+	    case S_Update:
+	    case S_AutoUpdate:
+
+		if ( sel->candidateObj() )
+		{
+		    ZyppPkg pkg = tryCastToZyppPkg( sel->candidateObj() );
+
+		    if ( pkg )
+		    {
+			string licenseText = pkg->licenseToConfirm();
+
+			if ( ! licenseText.empty() )
+			{
+			    y2milestone( "Pkg %s has a license agreement", sel->name().c_str() );
+
+			    if( ! sel->hasLicenceConfirmed() )
+			    {
+				y2debug( "Showing license agreement for pkg %s", sel->name().c_str() );
+				allConfirmed = YQPkgObjListItem::showLicenseAgreement( sel ) && allConfirmed;
+			    }
+			    else
+			    {
+				y2milestone( "Pkg %s's  license is already confirmed", sel->name().c_str() );
+			    }
+			}
+		    }
+		}
+		break;
+
+	    default:
+		break;
+	}
+    }
+
+    return allConfirmed;
 }
 
 

@@ -45,7 +45,7 @@ protected:
      * Constructor
      *
      * Will initialize package and selection managers and create conflict
-     * dialogs. 
+     * dialogs.
      **/
     YQPackageSelectorBase( QWidget * parent, const YWidgetOpt & opt );
 
@@ -54,9 +54,9 @@ protected:
      **/
     virtual ~YQPackageSelectorBase();
 
-    
+
 public:
-    
+
     /**
      * Inherited from YWidget: Sets the enabled state of the
      * widget. All new widgets are enabled per definition. Only
@@ -89,7 +89,7 @@ public slots:
      *
      * Returns QDialog::Accepted or QDialog::Rejected.
      **/
-     int resolvePackageDependencies();
+    int resolvePackageDependencies();
 
     /**
      * Check for disk overflow and post a warning dialog if necessary.
@@ -122,7 +122,7 @@ public slots:
      **/
     void notImplemented();
 
-    
+
 signals:
 
     /**
@@ -136,7 +136,7 @@ signals:
      **/
     void resolvingFinished();
 
-    
+
 protected slots:
 
     /**
@@ -144,8 +144,18 @@ protected slots:
      **/
     void resetIgnoredDependencyProblems();
 
-    
+
 protected:
+
+    /**
+     * Show all license agreements the user has not confirmed yet
+     * (for all packages that will be installed).
+     *
+     * Returns 'true' if all licenses were confirmed, 'false' if one or more
+     * licenses were not confirmed (in which case some packages might be set to
+     * S_TABOO, which might require another resolver run).
+     **/
+    bool showPendingLicenseAgreements();
 
     /**
      * Event handler for keyboard input - for debugging and testing.

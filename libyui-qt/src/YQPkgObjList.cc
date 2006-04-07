@@ -263,10 +263,16 @@ YQPkgObjList::setCurrentStatus( ZyppStatus newStatus, bool doSelectNextItem )
     {
 	if ( newStatus != item->status() )
 	{
-	    if ( item->showLicenseAgreement( newStatus ) )
+	    item->setStatus( newStatus );
+
+	    if ( item->showLicenseAgreement() )
 	    {
 		item->showNotifyTexts( newStatus );
-		item->setStatus( newStatus );
+	    }
+	    else // License not confirmed?
+	    {
+		// Status is now S_Taboo or S_Del - update status icon
+		item->setStatusIcon();
 	    }
 
 	    emit statusChanged();
@@ -691,15 +697,15 @@ YQPkgObjListItem::init()
 
     if ( candidate && installed )
     {
-	if ( candidate->edition() < installed->edition() )	
+	if ( candidate->edition() < installed->edition() )
 	    _installedIsNewer = true;
-	else if ( installed->edition() < candidate->edition() )	
+	else if ( installed->edition() < candidate->edition() )
 	    _candidateIsNewer = true;
     }
 
     if ( nameCol()    >= 0 )	setText( nameCol(),	zyppObj()->name()	);
     if ( summaryCol() >= 0 )	setText( summaryCol(),	zyppObj()->summary()	);
-    
+
     if ( sizeCol()    >= 0 )
     {
 	zypp::ByteCount size = zyppObj()->size();
@@ -789,9 +795,25 @@ YQPkgObjListItem::setStatus( ZyppStatus newStatus )
 	_pkgObjList->updateItemStates();
 	_pkgObjList->sendUpdatePackages();
     }
-    
+
     setStatusIcon();
 }
+
+
+void
+YQPkgObjListItem::solveResolvableCollections()
+{
+    zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
+
+    resolver->transactReset( zypp::ResStatus::SOLVER );
+
+    resolver->transactResKind( zypp::ResTraits<zypp::Selection>::kind );
+    resolver->transactResKind( zypp::ResTraits<zypp::Pattern  >::kind );
+    resolver->transactResKind( zypp::ResTraits<zypp::Language >::kind );
+    resolver->transactResKind( zypp::ResTraits<zypp::Patch    >::kind );
+    resolver->transactResKind( zypp::ResTraits<zypp::Atom     >::kind );
+}
+
 
 
 void
@@ -876,10 +898,16 @@ YQPkgObjListItem::cycleStatus()
 
     if ( oldStatus != newStatus )
     {
-	if ( showLicenseAgreement( newStatus ) )
+	setStatus( newStatus );
+
+	if ( showLicenseAgreement() )
 	{
 	    showNotifyTexts( newStatus );
-	    setStatus( newStatus );
+	}
+	else // License not confirmed?
+	{
+	    // Status is now S_Taboo or S_Del - update status icon
+	    setStatusIcon();
 	}
 
 	_pkgObjList->sendStatusChanged();
@@ -918,23 +946,30 @@ YQPkgObjListItem::showNotifyTexts( ZyppStatus status )
 
 
 bool
-YQPkgObjListItem::showLicenseAgreement( ZyppStatus status )
+YQPkgObjListItem::showLicenseAgreement()
 {
-    bool confirmed = true;
-    string licenseText;
-    ZyppPkg pkg = 0;
+    return showLicenseAgreement( selectable() );
+}
 
-    switch ( status )
+
+bool
+YQPkgObjListItem::showLicenseAgreement( ZyppSel sel )
+{
+    string licenseText;
+
+    switch ( sel->status() )
     {
 	case S_Install:
+	case S_AutoInstall:
 	case S_Update:
-	    
-	    if ( selectable()->hasLicenceConfirmed() )
+	case S_AutoUpdate:
+
+	    if ( sel->hasLicenceConfirmed() )
 		return true;
-	    
-	    if ( selectable()->hasCandidateObj() )
+
+	    if ( sel->hasCandidateObj() )
 	    {
-		pkg = tryCastToZyppPkg( selectable()->candidateObj() );
+		ZyppPkg pkg = tryCastToZyppPkg( sel->candidateObj() );
 
 		if ( pkg )
 		    licenseText = pkg->licenseToConfirm();
@@ -944,32 +979,46 @@ YQPkgObjListItem::showLicenseAgreement( ZyppStatus status )
 	default: return true;
     }
 
-    if ( ! licenseText.empty() )
+    if ( licenseText.empty() )
+	return true;
+
+    y2debug( "Showing license agreement for %s", sel->name().c_str() );
+    bool confirmed = YQPkgTextDialog::confirmText( 0, sel, licenseText );
+
+    if ( confirmed )
     {
-	y2debug( "Showing license agreement" );
-	confirmed = YQPkgTextDialog::confirmText( _pkgObjList, selectable(), licenseText );
+	y2milestone( "User confirmed license agreement for %s", sel->name().c_str() );
+	sel->setLicenceConfirmed( true );
+    }
+    else
+    {
+	// The user rejected the license agreement -
+	// make sure the package gets unselected.
 
-	if ( confirmed )
+	switch ( sel->status() )
 	{
-	    selectable()->setLicenceConfirmed( true );
-	}
-	else
-	{
-	    // The user rejected the license agreement -
-	    // make sure the package gets unselected.
+	    case S_Install:
+	    case S_AutoInstall:
 
-	    switch ( status )
-	    {
-		case S_Install:
-		    setStatus( S_Taboo );
-		    break;
+		y2warning( "User rejected license agreement for %s - setting to TABOO",
+			   sel->name().c_str() );
 
-		case S_Protected:
-		    setStatus( S_Del );
-		    break;
+		sel->set_status( S_Taboo );
+		break;
 
-		default: break;
-	    }
+
+	    case S_Update:
+	    case S_AutoUpdate:
+
+		y2warning( "User rejected license agreement for %s  - setting to PROTECTED",
+			   sel->name().c_str() );
+
+		sel->set_status( S_Protected );
+		// S_Keep wouldn't be good enough: The next solver run might
+		// set it to S_AutoUpdate again
+		break;
+
+	    default: break;
 	}
     }
 

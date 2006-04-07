@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Fri Apr  7 19:10:30 CEST 2006 - sh@suse.de
+
+- v 2.13.45
+
+- Fixed bug #163827: Special package licenses not shown in weird cases 
+
+- Fixed inconsistent propagation of installation status of packages
+  that belong to selections, patterns, languages etc.
+
+-------------------------------------------------------------------
 Tue Apr  4 17:59:20 CEST 2006 - sh@suse.de
 
 - V 2.13.45
