@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fr Apr  7 08:05:46 CEST 2006 - gs@suse.de
+
+- solve pattern/selection dependencies correctly (bug #161400),
+  show architecture in versions view
+- 2.13.17
+
+-------------------------------------------------------------------
 Wed Mar 29 14:44:34 CEST 2006 - gs@suse.de
 
 - Show/set correct status information for packages in versions view 
