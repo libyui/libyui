@@ -505,7 +505,10 @@ void NCPkgTable::fillHeader( )
 	    }
 	    header.push_back( "L" + PkgNames::PkgSummary() );
 	    header.push_back( "L" + PkgNames::PkgSize() );
-	    header.push_back( "L" + PkgNames::PkgSource() );	
+// installation of source rpms is not possible
+#ifdef FIXME
+	    header.push_back( "L" + PkgNames::PkgSource() );
+#endif
 	    break;
 	}
 	case T_PatchPkgs: {
@@ -540,6 +543,7 @@ void NCPkgTable::fillHeader( )
 	    header.push_back( "L" + PkgNames::PkgVersion() );
 	    header.push_back( "L" + PkgNames::PkgInstSource() );
 	    header.push_back( "L" + PkgNames::PkgSize() );
+	    header.push_back( "L" + PkgNames::PkgArch() );
 	    break;
 	}
 	default: {
@@ -613,7 +617,8 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 	    
 	    zypp::ByteCount size = pkgPtr->size();     	// installed size
 	    pkgLine.push_back( size.asString( 8 ) );  // format size
-
+	    pkgLine.push_back( pkgPtr->arch().asString()); // architecture
+	    
 	    break;
 	}
 	default: {
