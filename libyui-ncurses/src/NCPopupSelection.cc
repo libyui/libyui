@@ -95,7 +95,7 @@ void NCPopupSelection::createLayout( const YCPString & label )
   sel = new NCPkgTable( split, opt );
   sel->setPackager( packager );
   // set status strategy
-  ObjectStatStrategy * strat = new PackageStatStrategy();
+  ObjectStatStrategy * strat = new SelectionStatStrategy();
   sel->setTableType( NCPkgTable::T_Selections, strat );
   sel->fillHeader();
   split->addChild( sel );
