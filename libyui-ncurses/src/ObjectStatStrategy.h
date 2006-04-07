@@ -23,6 +23,14 @@
 #include "YQZypp.h"
 #include <zypp/ui/Selectable.h>
 
+template<class ZyppKind_T> void solveResKind()
+{
+    zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
+
+    resolver->transactReset( zypp::ResStatus::SOLVER );
+    resolver->transactResKind( zypp::ResTraits<ZyppKind_T>::kind );
+}
+
 //------------------------------------------------------------
 // Abstract base class for strategies to get status for packages or patches 
 //------------------------------------------------------------
@@ -113,6 +121,30 @@ public:
     UpdateStatStrategy( );
     
     virtual ~UpdateStatStrategy() {}
+    
+};
+
+//------------------------------------------------------------
+// Class for strategies of selections
+//------------------------------------------------------------
+class SelectionStatStrategy : public ObjectStatStrategy
+{
+public:
+
+    SelectionStatStrategy( );
+    
+    virtual ~SelectionStatStrategy() {}
+
+    /**
+     * Sets the status of the selection
+     * @param newStatus The new selection status
+     * @param slbPtr  The selectable pointer
+     * @qparam objPtr The object (selection) pointer
+     * @return bool
+     */
+    virtual bool setObjectStatus( ZyppStatus newstatus,
+				  ZyppSel slbPtr,
+				  ZyppObj objPtr );
     
 };
 

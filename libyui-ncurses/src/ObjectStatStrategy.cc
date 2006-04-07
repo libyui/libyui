@@ -60,7 +60,7 @@ ZyppStatus ObjectStatStrategy::getPackageStatus( ZyppSel slbPtr,
     }
     else
     {
-	NCERR << "Object pointer not valid" << endl;
+	NCERR << "Selectable pointer not valid" << endl;
 	return S_NoInst;
     }
 }
@@ -435,14 +435,61 @@ bool PatchStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, Z
     NCMIL << "Set status of: " << slbPtr->name() << " to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
 
-    // additionally inform the YOU patch manager about the status change
-    // (which sets the correct status of the patch packages)
-#ifdef FIXME
-    Y2PM::youPatchManager().updatePackageStates();
-#endif
+    // solve patch + atoms
+    solveResKind<zypp::Patch>();
+    solveResKind<zypp::Atom>();
+    
     return ok;
 }
 
+//------------------------------------------------------------
+// Class for strategies for selections
+//------------------------------------------------------------
+
+//
+// Constructor
+//
+SelectionStatStrategy::SelectionStatStrategy()
+    : ObjectStatStrategy()
+{
+}
+
+/////////////////////////////////////////////////////////////////
+//
+// SelectionStatStrategy::setObjectStatus()	
+//
+// Inform the package manager about the status change
+// of the selection
+//
+bool SelectionStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, ZyppObj objPtr )
+{
+    bool ok = false;
+
+    if ( !slbPtr || !objPtr )
+    {
+	NCERR << "Invalid selection" << endl;
+	return false;
+    }
+
+    ok = slbPtr->set_status( newstatus );
+    NCMIL << "Set status of: " << slbPtr->name() << " to: "
+	  << newstatus << " returns: " << (ok?"true":"false") << endl;
+
+    // solve selections/patterns
+    ZyppSelection selPtr = tryCastToZyppSelection (objPtr);
+    ZyppPattern patPtr = tryCastToZyppPattern (objPtr);
+
+    if (selPtr)
+    {
+	solveResKind<zypp::Selection>();
+    }
+    else if (patPtr)
+    {
+	solveResKind<zypp::Pattern>();
+    }
+        
+    return ok;
+}
 
 //------------------------------------------------------------
 // Class for strategies for depndencies
@@ -480,7 +527,7 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
 {
     bool ok = false;
 
-    if ( !slbPtr )
+    if ( !slbPtr || !objPtr )
     {
 	return false;
     }
