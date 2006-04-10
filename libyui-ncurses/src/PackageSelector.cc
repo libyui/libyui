@@ -232,15 +232,16 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
 	// create the search popup
 	searchPopup = new NCPopupSearch( wpos( 1, 1 ), this );
 
-	// the dependency popups
-	depsPopup = new NCPopupDeps( wpos( 1, 1 ), this );
-
-	// the disk space popup
-	diskspacePopup = new NCPopupDiskspace( wpos( 1, 1 ) );
-
-	// the file popup
+        // the file popup
 	filePopup = new NCPopupFile( wpos( 1, 1), floppyDevice, this );
     }
+	
+    // the dependency popups
+    depsPopup = new NCPopupDeps( wpos( 1, 1 ), this );
+
+    // the disk space popup
+    diskspacePopup = new NCPopupDiskspace( wpos( 1, 1 ) );
+
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -291,20 +292,14 @@ void PackageSelector::saveState ()
     p.saveState<zypp::Package> ();
     p.saveState<zypp::SrcPackage> ();
     
-    if (youMode)
-    {
-	p.saveState<zypp::Patch> ();
-	// some future proofing
-	p.saveState<zypp::Message> ();
-	p.saveState<zypp::Script> ();
+    p.saveState<zypp::Patch> ();
+    // some future proofing
+    p.saveState<zypp::Message> ();
+    p.saveState<zypp::Script> ();
 
-    }
-    else
-    {
-	p.saveState<zypp::Selection> ();
-	p.saveState<zypp::Pattern> ();
-	p.saveState<zypp::Language> ();
-    }
+    p.saveState<zypp::Selection> ();
+    p.saveState<zypp::Pattern> ();
+    p.saveState<zypp::Language> ();
 }
 
 void PackageSelector::restoreState ()
@@ -314,20 +309,14 @@ void PackageSelector::restoreState ()
     p.restoreState<zypp::Package> ();
     p.restoreState<zypp::SrcPackage> ();
     
-    if (youMode)
-    {
-	p.restoreState<zypp::Patch> ();
-	// some future proofing
-	p.restoreState<zypp::Message> ();
-	p.restoreState<zypp::Script> ();
-
-    }
-    else
-    {
-	p.restoreState<zypp::Selection> ();
-	p.restoreState<zypp::Pattern> ();
-	p.restoreState<zypp::Language> ();
-    }
+    p.restoreState<zypp::Patch> ();
+    // some future proofing
+    p.restoreState<zypp::Message> ();
+    p.restoreState<zypp::Script> ();
+    
+    p.restoreState<zypp::Selection> ();
+    p.restoreState<zypp::Pattern> ();
+    p.restoreState<zypp::Language> ();
 }
 
 bool PackageSelector::diffState ()
@@ -343,25 +332,20 @@ bool PackageSelector::diffState ()
     diff = diff || p.diffState<zypp::SrcPackage> ();
     log << diff << endl;
     
-    if (youMode)
-    {
-	diff = diff || p.diffState<zypp::Patch> ();
-	log << diff << endl;
-	// some future proofing
-	diff = diff || p.diffState<zypp::Message> ();
-	log << diff << endl;
-	diff = diff || p.diffState<zypp::Script> ();
-	log << diff << endl;
-    }
-    else
-    {
-	diff = diff || p.diffState<zypp::Selection> ();
-	log << diff << endl;
-	diff = diff || p.diffState<zypp::Pattern> ();
-	log << diff << endl;
-	diff = diff || p.diffState<zypp::Language> ();
-	log << diff << endl;
-    }
+    diff = diff || p.diffState<zypp::Patch> ();
+    log << diff << endl;
+    // some future proofing
+    diff = diff || p.diffState<zypp::Message> ();
+    log << diff << endl;
+    diff = diff || p.diffState<zypp::Script> ();
+    log << diff << endl;
+    
+    diff = diff || p.diffState<zypp::Selection> ();
+    log << diff << endl;
+    diff = diff || p.diffState<zypp::Pattern> ();
+    log << diff << endl;
+    diff = diff || p.diffState<zypp::Language> ();
+    log << diff << endl;
     return diff;
 }
 
@@ -1612,8 +1596,11 @@ bool PackageSelector::PackageListHandler( const NCursesEvent&  event )
 bool PackageSelector::DiskinfoHandler( const NCursesEvent&  event )
 {
     NCPkgTable * packageList = getPackageList();
-     
-    diskspacePopup->showInfoPopup();
+
+    if ( diskspacePopup )
+    {
+	diskspacePopup->showInfoPopup();
+    }
     if ( packageList )
     {
 	packageList->setKeyboardFocus();
@@ -1825,25 +1812,25 @@ bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 {
     bool closeDialog = true;
-    
-    if ( !youMode )
-    {
-	// show the dependency popup
-	if ( showPackageDependencies( true ) )
-	{
-	    // don't leave the package installation if the user has clicked on Cancel
-	    // in dependency popup because maybe he wants to change his choices
-	    closeDialog = false;
-	}
-	// show the automatic changes list
-	NCPopupPkgTable autoChangePopup( wpos( 1, 1), this );
-	NCursesEvent input = autoChangePopup.showInfoPopup();
 
-	if ( input == NCursesEvent::cancel )
-	{
-	    // user clicked on Cancel
-	    closeDialog = false;
-	}
+
+    // check/show dependencies and automatic changes also if youMode == true
+
+    // show the dependency popup
+    if ( showPackageDependencies( true ) )
+    {
+	// don't leave the package installation if the user has clicked on Cancel
+	// in dependency popup because maybe he wants to change his choices
+	closeDialog = false;
+    }
+    // show the automatic changes list
+    NCPopupPkgTable autoChangePopup( wpos( 1, 1), this );
+    NCursesEvent input = autoChangePopup.showInfoPopup();
+
+    if ( input == NCursesEvent::cancel )
+    {
+	// user clicked on Cancel
+	closeDialog = false;
     }
 
     if ( diskspacePopup )
