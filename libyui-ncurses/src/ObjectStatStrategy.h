@@ -23,13 +23,7 @@
 #include "YQZypp.h"
 #include <zypp/ui/Selectable.h>
 
-template<class ZyppKind_T> void solveResKind()
-{
-    zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
 
-    resolver->transactReset( zypp::ResStatus::SOLVER );
-    resolver->transactResKind( zypp::ResTraits<ZyppKind_T>::kind );
-}
 
 //------------------------------------------------------------
 // Abstract base class for strategies to get status for packages or patches 
@@ -83,6 +77,13 @@ public:
     virtual bool toggleStatus( ZyppSel slbPtr,
 			       ZyppObj objPtr,
 			        ZyppStatus & newStat );
+     /**
+    * Do a "small" solver run for all "resolvable collections", i.e., for
+    * selections, patterns, languages, patches.
+    **/
+    void	solveResolvableCollections();
+
+ 
 };
 
 //------------------------------------------------------------

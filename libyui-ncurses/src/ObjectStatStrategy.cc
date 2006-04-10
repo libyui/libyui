@@ -269,6 +269,26 @@ bool ObjectStatStrategy::toggleStatus( ZyppSel slbPtr,
     return ok;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+// ObjectStatStrategy::solveResolvableCollections()
+//
+// Do a "small" solver run
+//
+void ObjectStatStrategy::solveResolvableCollections()
+{
+    zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
+
+    resolver->transactReset( zypp::ResStatus::SOLVER );
+
+    resolver->transactResKind( zypp::ResTraits<zypp::Selection>::kind );
+    resolver->transactResKind( zypp::ResTraits<zypp::Pattern  >::kind );
+    resolver->transactResKind( zypp::ResTraits<zypp::Language >::kind );
+    resolver->transactResKind( zypp::ResTraits<zypp::Patch    >::kind );
+    resolver->transactResKind( zypp::ResTraits<zypp::Atom     >::kind );
+}
+
+
 
 //------------------------------------------------------------
 // Class for strategies to get status for packages
@@ -435,9 +455,9 @@ bool PatchStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, Z
     NCMIL << "Set status of: " << slbPtr->name() << " to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
 
-    // solve patch + atoms
-    solveResKind<zypp::Patch>();
-    solveResKind<zypp::Atom>();
+    // do a solver run
+    solveResolvableCollections(); 
+
     
     return ok;
 }
@@ -475,19 +495,9 @@ bool SelectionStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPt
     NCMIL << "Set status of: " << slbPtr->name() << " to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
 
-    // solve selections/patterns
-    ZyppSelection selPtr = tryCastToZyppSelection (objPtr);
-    ZyppPattern patPtr = tryCastToZyppPattern (objPtr);
+    // do a solver run
+    solveResolvableCollections(); 
 
-    if (selPtr)
-    {
-	solveResKind<zypp::Selection>();
-    }
-    else if (patPtr)
-    {
-	solveResKind<zypp::Pattern>();
-    }
-        
     return ok;
 }
 
@@ -595,7 +605,8 @@ ZyppStatus AvailableStatStrategy::getPackageStatus( ZyppSel slbPtr,
     NCDBG << "STATUS of " << slbPtr->name() << ": " <<  slbPtr->status() << endl;
 
     if (slbPtr->hasInstalledObj() &&
-	slbPtr->installedObj()->edition() == objPtr->edition() )
+	slbPtr->installedObj()->edition() == objPtr->edition()  &&
+	slbPtr->installedObj()->arch() == objPtr->arch() )
     {
 	// installed package: show status S_KeepInstalled or S_Delete
 	if ( status == S_KeepInstalled
