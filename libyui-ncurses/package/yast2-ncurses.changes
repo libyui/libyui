@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Apr 10 14:57:05 CEST 2006 - gs@suse.de
+
+- Fixed inconsistent propagation of installation status of packages
+  that belong to selections, patterns, languages etc.
+- show/check dependencies also in YOU mode
+- 2.13.18
+
+-------------------------------------------------------------------
 Fr Apr  7 08:05:46 CEST 2006 - gs@suse.de
 
 - solve pattern/selection dependencies correctly (bug #161400),
