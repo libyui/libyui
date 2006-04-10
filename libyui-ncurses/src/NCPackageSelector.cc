@@ -189,9 +189,7 @@ void NCPackageSelector::showDefaultList()
 	}
 	if ( youMode && packager )
 	{
-#ifdef FIXME
 	    packager->showDownloadSize();
-#endif
 	}
     }
     else
