@@ -1812,17 +1812,23 @@ bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 {
     bool closeDialog = true;
-
+    bool confirmedAllLicenses = false;
 
     // check/show dependencies and automatic changes also if youMode == true
-
-    // show the dependency popup
-    if ( showPackageDependencies( true ) )
+    do
     {
-	// don't leave the package installation if the user has clicked on Cancel
-	// in dependency popup because maybe he wants to change his choices
-	closeDialog = false;
-    }
+	// show the dependency popup
+	if ( showPackageDependencies( true ) )
+	{
+	    // don't leave the package installation if the user has clicked on Cancel
+	    // in dependency popup because maybe he wants to change his choices
+	    closeDialog = false;
+	}
+
+	confirmedAllLicenses = showPendingLicenseAgreements();
+	
+    } while ( !confirmedAllLicenses && closeDialog );
+    
     // show the automatic changes list
     NCPopupPkgTable autoChangePopup( wpos( 1, 1), this );
     NCursesEvent input = autoChangePopup.showInfoPopup();
@@ -1879,6 +1885,64 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	// don't leave the dialog
 	return true;
     }
+}
+
+
+bool PackageSelector::showPendingLicenseAgreements()
+{
+    y2milestone( "Showing all pending license agreements" );
+
+    bool allConfirmed = true;
+
+    NCPkgTable * packageList = getPackageList();
+    if ( !packageList )
+	return false;
+    
+    for ( ZyppPoolIterator it = zyppPkgBegin();
+	  it != zyppPkgEnd();
+	  ++it )
+    {
+	ZyppSel sel = (*it);
+
+	switch ( sel->status() )
+	{
+	    case S_Install:
+	    case S_AutoInstall:
+	    case S_Update:
+	    case S_AutoUpdate:
+
+		if ( sel->candidateObj() )
+		{
+		    ZyppPkg pkg = tryCastToZyppPkg( sel->candidateObj() );
+
+		    if ( pkg )
+		    {
+			string licenseText = pkg->licenseToConfirm();
+
+			if ( ! licenseText.empty() )
+			{
+			    y2milestone( "Pkg %s has a license agreement", sel->name().c_str() );
+
+			    if( ! sel->hasLicenceConfirmed() )
+			    {
+				y2debug( "Showing license agreement for pkg %s", sel->name().c_str() );
+				allConfirmed = packageList->showLicenseAgreement( sel, licenseText ) && allConfirmed;
+			    }
+			    else
+			    {
+				y2milestone( "Pkg %s's  license is already confirmed", sel->name().c_str() );
+			    }
+			}
+		    }
+		}
+		break;
+
+	    default:
+		break;
+	}
+    }
+
+    return allConfirmed;
 }
 
 

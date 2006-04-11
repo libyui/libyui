@@ -400,6 +400,11 @@ class PackageSelector
     void saveState();
     void restoreState();
     bool diffState();
+
+   /**
+     * Check for license
+     */
+    bool showPendingLicenseAgreements(); 
 };
 
 ///////////////////////////////////////////////////////////////////

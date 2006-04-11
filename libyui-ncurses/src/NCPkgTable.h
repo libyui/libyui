@@ -323,6 +323,12 @@ public:
     * @return bool
     */     
    bool showInformation ( );
+
+   /**
+    * Show popup with license.
+    * @return bool
+    */   
+    bool showLicenseAgreement( ZyppSel & slbPtr , string licenseText );
 };
 
 ///////////////////////////////////////////////////////////////////
