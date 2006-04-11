@@ -13,7 +13,7 @@ Mon Apr 10 14:57:05 CEST 2006 - gs@suse.de
 - 2.13.18
 
 -------------------------------------------------------------------
-Fr Apr  7 08:05:46 CEST 2006 - gs@suse.de
+Fri Apr  7 08:05:46 CEST 2006 - gs@suse.de
 
 - solve pattern/selection dependencies correctly (bug #161400),
   show architecture in versions view
