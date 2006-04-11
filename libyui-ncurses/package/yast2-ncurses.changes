@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Apr 11 14:31:55 CEST 2006 - gs@suse.de
+
+- check for pending licenses (bug #163827)
+- 2.13.19
+
+-------------------------------------------------------------------
 Mon Apr 10 14:57:05 CEST 2006 - gs@suse.de
 
 - Fixed inconsistent propagation of installation status of packages
