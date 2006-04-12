@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Apr 12 12:21:10 CEST 2006 - gs@suse.de
+
+- also set status to Taboo in case of AutoInstall and to Protected
+  in case of AutoUpdate (bugfix for bugfix bug #163827)
+- 2.13.20
+
+-------------------------------------------------------------------
 Tue Apr 11 14:31:55 CEST 2006 - gs@suse.de
 
 - check for pending licenses (bug #163827)
