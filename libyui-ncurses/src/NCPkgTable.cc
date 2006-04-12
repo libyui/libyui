@@ -285,10 +285,12 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    switch ( newstatus )
 	    {
 		case S_Install:
+		case S_AutoInstall:
 		    newstatus = S_Taboo;
 		    break;
 		    
 		case S_Update:
+		case S_AutoUpdate:
 		    newstatus = S_Protected;
 		    break;
 
@@ -375,10 +377,12 @@ bool NCPkgTable::showLicenseAgreement( ZyppSel & slbPtr , string licenseText )
 	switch ( slbPtr->status() )
 	{
 	    case S_Install:
+	    case S_AutoInstall:
 		slbPtr->set_status( S_Taboo );
 		break;
 		    
 	    case S_Update:
+	    case S_AutoUpdate:
 		slbPtr->set_status(  S_Protected );
 		break;
 
