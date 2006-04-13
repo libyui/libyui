@@ -805,7 +805,7 @@ YQPkgObjListItem::solveResolvableCollections()
 {
     zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
 
-    resolver->transactReset( zypp::ResStatus::SOLVER );
+    resolver->transactReset( zypp::ResStatus::APPL_LOW );
 
     resolver->transactResKind( zypp::ResTraits<zypp::Selection>::kind );
     resolver->transactResKind( zypp::ResTraits<zypp::Pattern  >::kind );
