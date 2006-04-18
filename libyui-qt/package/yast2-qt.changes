@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Apr 18 17:39:43 CEST 2006 - sh@suse.de
+
+- V 2.13.48
+- Added infrastructure to fix bug #164869: Duplicate "Accept" button
+  in pattern selector
+
+-------------------------------------------------------------------
 Thu Apr 13 13:47:50 CEST 2006 - schubi@suse.de
 
 - Bug 164365 - build 906: Deselecting a selection, all packages are still selected

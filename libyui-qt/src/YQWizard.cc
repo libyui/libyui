@@ -1533,7 +1533,7 @@ void YQWizard::slotBackClicked()
 
     if ( _sendButtonEvents )
 	sendEvent( _backButton->id() );
-    
+
     _direction = YQWizard::Backward;
 }
 
@@ -1541,7 +1541,7 @@ void YQWizard::slotBackClicked()
 void YQWizard::slotAbortClicked()
 {
     emit abortClicked();
-    
+
     if ( _sendButtonEvents )
 	sendEvent( _abortButton->id() );
 }
@@ -1550,10 +1550,10 @@ void YQWizard::slotAbortClicked()
 void YQWizard::slotNextClicked()
 {
     emit nextClicked();
-    
+
     if ( _sendButtonEvents )
 	sendEvent( _nextButton->id() );
-    
+
     _direction = YQWizard::Forward;
 }
 
@@ -1868,6 +1868,12 @@ void YQWizard::retranslateInternalButtons()
 }
 
 
+void YQWizard::ping()
+{
+    y2debug( "YQWizard is active" );
+}
+
+
 bool YQWizard::isCommand( QString declaration, const YCPTerm & term )
 {
     declaration = declaration.simplifyWhiteSpace();
@@ -2053,6 +2059,7 @@ YCPValue YQWizard::command( const YCPTerm & cmd )
 												  anyArg   ( cmd, 1 )); return OK; }
     if ( isCommand( "HideReleaseNotesButton()"		     , cmd ) )	{ hideReleaseNotesButton();			return OK; }
     if ( isCommand( "RetranslateInternalButtons()"	     , cmd ) )	{ retranslateInternalButtons() ;		return OK; }
+    if ( isCommand( "Ping()"				     , cmd ) )	{ ping() ;					return OK; }
     y2error( "Undefined wizard command: %s", cmd->toString().c_str() );
     return YCPBoolean( false );
 

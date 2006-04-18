@@ -250,7 +250,7 @@ public:
      **/
     void deleteMenus();
 
-    signals:
+signals:
 
     /**
      * Emitted when the "Back" or "Cancel" button is clicked.
@@ -560,6 +560,11 @@ protected:
      * Hide an existing "Release Notes" button.
      **/
     void hideReleaseNotesButton();
+
+    /**
+     * NOP command just to check if a YQWizard is running
+     **/
+    void ping();
 
 
     //
