@@ -647,12 +647,12 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 	case T_PatchPkgs: {
 	    if ( slbPtr->hasInstalledObj() )
 	    {
-		instVersion = slbPtr->installedObj()->edition().version();
+		instVersion = slbPtr->installedObj()->edition().asString();
 	    }
 	    
 	    // in case of YOU patches: show the version of the package which
 	    // is contained in the patch
-	    version = pkgPtr->edition().version();
+	    version = pkgPtr->edition().asString();
    	    pkgLine.push_back( version );
 
 	    // if ( Y2PM::instTarget().numPackages() > 0 )
@@ -663,7 +663,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
    	    pkgLine.push_back( pkgPtr->summary() );  	// short description
 	    
 	    status = slbPtr->status(); // the package status
-	    
+	    NCMIL << "Status of " << slbPtr->name() << ": " << status << endl;
 	    zypp::ByteCount size = pkgPtr->size();     	// installed size
 	    pkgLine.push_back( size.asString( 8 ) );  // format size
 
