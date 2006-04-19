@@ -649,16 +649,12 @@ bool PackageSelector::fillPatchList( string filter )
     // clear list of patches
     packageList->itemsCleared ();
 
-#ifdef FIXME
     // get the patch list and sort it
     list<ZyppSel> patchList( zyppPatchesBegin (), zyppPatchesEnd () );
     patchList.sort( sortByName );
     list<ZyppSel>::iterator listIt = patchList.begin(); 
-#endif
-    
-    for ( ZyppPoolIterator listIt = zyppPatchesBegin();
-	  listIt != zyppPatchesEnd();
-	  ++listIt )
+
+    while ( listIt != patchList.end() )
     {
 	ZyppPatch patchPtr  = tryCastToZyppPatch( ( *listIt)->theObj() );
 
@@ -666,7 +662,7 @@ bool PackageSelector::fillPatchList( string filter )
 	{
 	    checkPatch( patchPtr, *listIt, filter );
 	}
-		
+	++listIt;		
     }
     
     if ( filter == "installable"
@@ -788,7 +784,7 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr 
 
 	if ( pkg )
 	{
-	    NCDBG << "Patch package found: " <<  (*it)->name().c_str() << endl;
+	    NCMIL << "Patch package found: " <<  (*it)->name().c_str() << endl;
 
 	    ZyppSel sel = selMapper.findZyppSel( pkg );
 
