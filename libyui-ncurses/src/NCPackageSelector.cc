@@ -180,16 +180,17 @@ void NCPackageSelector::showDefaultList()
 
 	pkgList->setKeyboardFocus();
 
-	if ( !youMode && packager )
+	if ( packager )
 	{
-	    // do an initial dependency solving in 'normal' and 'update' mode
+	    // always do an initial dependency solving
 	    packager->showPackageDependencies( true );
-	    // show the required diskspace
-	    packager->showDiskSpace();	    
-	}
-	if ( youMode && packager )
-	{
-	    packager->showDownloadSize();
+
+	    if ( youMode )
+		// show download size
+		packager->showDownloadSize();
+	    else
+	        // show the required diskspace
+		packager->showDiskSpace();	    
 	}
     }
     else
