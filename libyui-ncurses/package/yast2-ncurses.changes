@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Apr 19 12:38:55 CEST 2006 - gs@suse.de
+
+- set status of packages correctly (Bug 164365) 
+- do an initial solver run also in YOU mode
+- sort the list of patches, show edition of patch packages
+- 2.13.21
+
+-------------------------------------------------------------------
 Wed Apr 12 12:21:10 CEST 2006 - gs@suse.de
 
 - also set status to Taboo in case of AutoInstall and to Protected
