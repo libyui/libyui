@@ -1824,17 +1824,20 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	confirmedAllLicenses = showPendingLicenseAgreements();
 	
     } while ( !confirmedAllLicenses && closeDialog );
-    
-    // show the automatic changes list
-    NCPopupPkgTable autoChangePopup( wpos( 1, 1), this );
-    NCursesEvent input = autoChangePopup.showInfoPopup();
 
-    if ( input == NCursesEvent::cancel )
+    if ( !youMode )	// don't show automatic changes if YOU mode
     {
-	// user clicked on Cancel
-	closeDialog = false;
-    }
+	// show the automatic changes list
+	NCPopupPkgTable autoChangePopup( wpos( 1, 1), this );
+	NCursesEvent input = autoChangePopup.showInfoPopup();
 
+	if ( input == NCursesEvent::cancel )
+	{
+	    // user clicked on Cancel
+	    closeDialog = false;
+	}
+    }
+    
     if ( diskspacePopup )
     {
 	string message = "";
