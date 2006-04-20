@@ -173,14 +173,20 @@ YWidget * YQUI::createPackageSelector	( YWidget *		parent,
 {
     _auto_activate_dialogs = false;
     YWidget * w = 0;
-    try {
+    
+    try
+    {
 	w = new YQPackageSelector( (QWidget *) ( parent->widgetRep() ), opt, floppyDevice );
     }
-    catch (const std::exception & e) {
-	y2error( "Caught a std::exception: %s", e.what() );
+    catch (const std::exception & e)
+    {
+	y2error( "Caught std::exception: %s", e.what() );
+	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
     }
-    catch (...) {
-	y2error( "Caught an unspecified exception" );
+    catch (...)
+    {
+	y2error( "Caught unspecified exception." );
+	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
     }
     return w;
 }
@@ -481,14 +487,20 @@ YWidget * YQUI::createPatternSelector( YWidget *		parent,
 				       YWidgetOpt &		opt )
 {
     YWidget * w = 0;
-    try {
+    
+    try
+    {
 	w = new YQPatternSelector( (QWidget *) ( parent->widgetRep() ), opt );
     }
-    catch (const std::exception & e) {
-	y2error( "Caught a std::exception: %s", e.what() );
+    catch (const std::exception & e)
+    {
+	y2error( "Caught std::exception: %s", e.what() );
+	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
     }
-    catch (...) {
-	y2error( "Caught an unspecified exception" );
+    catch (...)
+    {
+	y2error( "Caught unspecified exception." );
+	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
     }
     return w;
 }
