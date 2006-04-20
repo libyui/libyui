@@ -26,6 +26,10 @@
 #include "YQi18n.h"
 #include "utf8.h"
 
+#include <zypp/ZYppFactory.h>
+#include <zypp/Resolver.h>
+
+using std::list;
 
 
 YQPkgUpdateProblemFilterView::YQPkgUpdateProblemFilterView( QWidget * parent )
@@ -75,19 +79,37 @@ YQPkgUpdateProblemFilterView::filter()
 {
     emit filterStart();
 
-#ifdef FIXME
-    PMManager::SelectableVec::const_iterator it = Y2PM::packageManager().updateBegin();
-
-    while ( it != Y2PM::packageManager().updateEnd() )
+    list<zypp::PoolItem_Ref> problemList = zypp::getZYpp()->resolver()->problematicUpdateItems();
+    
+    for ( list<zypp::PoolItem_Ref>::const_iterator it = problemList.begin();
+	  it != problemList.end();
+	  ++it )
     {
-	Selectable::Ptr selectable = *it;
-	emit filterMatch( *it, ( *it)->theObj() );
+	ZyppPkg pkg = tryCastToZyppPkg( (*it).resolvable() );
 
-	++it;
+	if ( pkg )
+	{
+	    ZyppSel sel = _selMapper.findZyppSel( pkg );
+
+	    if ( sel )
+	    {
+		y2milestone( "Problematic package: %s-%s",
+			     pkg->name().c_str(), pkg->edition().asString().c_str() );
+		
+		emit filterMatch( sel, pkg );
+	    }
+	}
+	
     }
-#endif
 
     emit filterFinished();
+}
+
+
+bool
+YQPkgUpdateProblemFilterView::haveProblematicPackages()
+{
+    return ! zypp::getZYpp()->resolver()->problematicUpdateItems().empty();
 }
 
 

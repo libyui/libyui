@@ -25,6 +25,7 @@
 
 #include "YQZypp.h"
 #include <qtextbrowser.h>
+#include "YQPkgSelMapper.h"
 
 
 /**
@@ -46,7 +47,13 @@ public:
      **/
     virtual ~YQPkgUpdateProblemFilterView();
 
+    /**
+     * Check if there are any problematic packages at all, i.e. if it is
+     * worthwhile to create this widget at all
+     **/
+    static bool haveProblematicPackages();
 
+    
 public slots:
 
     /**
@@ -83,6 +90,10 @@ signals:
      **/
     void filterFinished();
 
+    
+protected:
+    
+    YQPkgSelMapper _selMapper;
 };
 
 

@@ -258,15 +258,13 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     if ( _updateMode )
     {
-#ifdef FIXME
-	if ( ! Y2PM::packageManager().updateEmpty()
+	if ( YQPkgUpdateProblemFilterView::haveProblematicPackages()
 	     || _testMode )
 	{
 	    _updateProblemFilterView = new YQPkgUpdateProblemFilterView( parent );
 	    CHECK_PTR( _updateProblemFilterView );
 	    _filters->addPage( _( "Update Problems" ), _updateProblemFilterView );
 	}
-#endif
     }
 
 
@@ -343,7 +341,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
     _langList = new YQPkgLangList( parent );
     CHECK_PTR( _langList );
-    
+
     _filters->addPage( _( "Languages" ), _langList );
     _langList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored ) ); // hor/vert
 

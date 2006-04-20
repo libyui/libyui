@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Apr 20 18:18:14 CEST 2006 - sh@suse.de
+
+- V 2.13.50
+- Re-implemented list of problematic packages during update 
+
+-------------------------------------------------------------------
 Thu Apr 20 17:15:49 CEST 2006 - sh@suse.de
 
 - Ask for confirmation to abandon changes if a language is changed 
