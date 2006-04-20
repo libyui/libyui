@@ -32,10 +32,10 @@ libpy2qt_la_LDFLAGS = -version-info 2:0
 liby2qt_la_LDFLAGS = -version-info 2:0
 
 libpy2qt_la_LIBADD =			\
-	-lyui				\
+	-L$(libdir) -lyui		\
 	-L$(QTLIBDIR) -lqt-mt		\
 	-lX11 -lXext -lSM -lICE		\
-	-lzypp
+	${ZYPP_LIBS}
 
 liby2qt_la_LIBADD = $(libpy2qt_la_LIBADD)
 
@@ -398,4 +398,4 @@ qxembed.moc:				include/qxembed.h
 
 CLEANFILES = *.moc y2qt.kdoc y2ui.kdoc
 
-INCLUDES = -I$(srcdir)/include -I$(QTDIR)/include -I$(includedir) -I$(includedir)/yui
+INCLUDES = -I$(srcdir)/include -I$(QTDIR)/include -I$(includedir) -I$(includedir)/yui ${ZYPP_CFLAGS}
