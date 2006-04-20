@@ -576,8 +576,21 @@ YWidget * YNCursesUI::createPackageSelector( YWidget * parent,
 					      const YCPString & floppyDevice )
 {
     ONCREATE;
-    return new NCPackageSelector ( this, dynamic_cast<NCWidget *>(parent), opt,
+    YWidget * w = 0;
+    try
+    {
+	w = new NCPackageSelector (this, dynamic_cast<NCWidget *>(parent), opt,
 				   YD_HORIZ, floppyDevice->value() );
+    }
+    catch (const std::exception & e)
+    {
+	UIERR << "Caught a std::exception: " << e.what () << endl;
+    }
+    catch (...)
+    {
+	UIERR << "Caught an unspecified exception" << endl;
+    }
+    return w;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -614,16 +627,27 @@ YCPValue YNCursesUI::runPkgSelection(  YWidget * selector )
 
     if ( ncSelector )
     {
-	ncSelector->showDefaultList();
-	NCDialog * ncd = static_cast<NCDialog *>( dialog );
-
-	do
+	try
 	{
-	    event = ncd->userInput();
-	    result = ncSelector->handleEvent( event );
-	    NCDBG << "Result: " << (result?"true":"false") << endl;
+	    ncSelector->showDefaultList();
+	    NCDialog * ncd = static_cast<NCDialog *>( dialog );
+
+	    do
+	    {
+		event = ncd->userInput();
+		result = ncSelector->handleEvent( event );
+		NCDBG << "Result: " << (result?"true":"false") << endl;
+	    }
+	    while ( event != NCursesEvent::cancel && result == true );
 	}
-	while ( event != NCursesEvent::cancel && result == true );
+	catch (const std::exception & e)
+	{
+	    UIERR << "Caught a std::exception: " << e.what () << endl;
+	}
+	catch (...)
+	{
+	    UIERR << "Caught an unspecified exception" << endl;
+	}
     }
     else
     {
@@ -654,18 +678,30 @@ YWidget * YNCursesUI::createPkgSpecial( YWidget *parent, YWidgetOpt &opt, const 
 
     YCPString pkgTable( "pkgTable" );
 
-
+    YWidget * w = 0;
     if ( subwidget->compare( pkgTable ) == YO_EQUAL )
     {
 	NCDBG << "Creating a NCPkgTable" << endl;
-	return new NCPkgTable( dynamic_cast<NCWidget *>( parent ), opt );
+	try
+	{
+	    w = new NCPkgTable( dynamic_cast<NCWidget *>( parent ), opt );
+	}
+	catch (const std::exception & e)
+	{
+	    UIERR << "Caught a std::exception: " << e.what () << endl;
+	}
+	catch (...)
+	{
+	    UIERR << "Caught an unspecified exception" << endl;
+	}
     }
     else
 
     {
 	NCERR <<  "PkgSpecial( "  << subwidget->toString() << " )  not found - take default `Label" << endl;
-	return new NCLabel( dynamic_cast<NCWidget *>( parent ), opt, subwidget );
+	w = new NCLabel( dynamic_cast<NCWidget *>( parent ), opt, subwidget );
     }
+    return w;
 }
 
 ///////////////////////////////////////////////////////////////////

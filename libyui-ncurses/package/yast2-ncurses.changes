@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Apr 20 12:51:19 CEST 2006 - mvidner@suse.cz
+
+- Catch exceptions when calling package management code (#166278).
+- 2.13.22
+
+-------------------------------------------------------------------
 Wed Apr 19 12:38:55 CEST 2006 - gs@suse.de
 
 - set status of packages correctly (Bug 164365) 
