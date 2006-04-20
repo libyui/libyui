@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Apr 20 17:34:24 CEST 2006 - gs@suse.de
+
+- Don't show the "Automatic Changes" list in Online Update mode
+- 2.13.23 
+
+-------------------------------------------------------------------
 Thu Apr 20 12:51:19 CEST 2006 - mvidner@suse.cz
 
 - Catch exceptions when calling package management code (#166278).
