@@ -12,7 +12,6 @@ INCLUDES = -I../src -I$(includedir) -I$(includedir)/yui
 
 noinst_PROGRAMS = runcurses utf8test y2ncurses in_wch
 
-# -lzypp
 runcurses_SOURCES = runcurses.cc
 runcurses_LDADD = ../src/liby2ncurses.la -lncurses -lpanel -lpthread \
 	-ly2 -lyui -lycp -lutil

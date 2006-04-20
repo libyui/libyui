@@ -15,10 +15,9 @@ noinst_LTLIBRARIES = liby2ncurses.la
 libpy2ncurses_la_LDFLAGS = -version-info 2:0
 liby2ncurses_la_LDFLAGS = -version-info 2:0
 
-# -lzypp
 libpy2ncurses_la_LIBADD =		\
 	-lyui				\
-	-lzypp				\
+	${ZYPP_LIBS}			\
 	-lncursesw -lpanelw
 liby2ncurses_la_LIBADD = $(libpy2ncurses_la_LIBADD)
 
@@ -106,7 +105,7 @@ libpy2ncurses_la_SOURCES = $(liby2ncurses_la_SOURCES)	\
 	Y2CCNCursesUI.cc Y2CCNCursesUI.h	\
 	YNCursesComponent.h
 
-INCLUDES = -I$(includedir) -I$(includedir)/yui -I$(includedir)/y2util/qt
+INCLUDES = -I$(includedir) -I$(includedir)/yui -I$(includedir)/y2util/qt ${ZYPP_CFLAGS}
 
 lang2encoding.cc:	lang2encoding.tab
 	./lang2encoding.tab > lang2encoding.cc

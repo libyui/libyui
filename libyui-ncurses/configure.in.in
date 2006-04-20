@@ -8,5 +8,7 @@
 @YAST2-CHECKS-COMMON@
 @YAST2-CHECKS-PROGRAM@
 
+PKG_CHECK_MODULES([ZYPP], [libzypp])
+
 ## and generate the output
 @YAST2-OUTPUT@
