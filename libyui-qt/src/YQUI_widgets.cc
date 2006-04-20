@@ -172,7 +172,17 @@ YWidget * YQUI::createPackageSelector	( YWidget *		parent,
 					  const YCPString & 	floppyDevice )
 {
     _auto_activate_dialogs = false;
-    return new YQPackageSelector( (QWidget *) ( parent->widgetRep() ), opt, floppyDevice );
+    YWidget * w = 0;
+    try {
+	w = new YQPackageSelector( (QWidget *) ( parent->widgetRep() ), opt, floppyDevice );
+    }
+    catch (const std::exception & e) {
+	y2error( "Caught a std::exception: %s", e.what() );
+    }
+    catch (...) {
+	y2error( "Caught an unspecified exception" );
+    }
+    return w;
 }
 
 YWidget * YQUI::createPkgSpecial	( YWidget *		parent,
@@ -470,8 +480,17 @@ bool YQUI::hasPatternSelector()
 YWidget * YQUI::createPatternSelector( YWidget *		parent,
 				       YWidgetOpt &		opt )
 {
-    return new YQPatternSelector( (QWidget *) ( parent->widgetRep() ),
-				  opt );
+    YWidget * w = 0;
+    try {
+	w = new YQPatternSelector( (QWidget *) ( parent->widgetRep() ), opt );
+    }
+    catch (const std::exception & e) {
+	y2error( "Caught a std::exception: %s", e.what() );
+    }
+    catch (...) {
+	y2error( "Caught an unspecified exception" );
+    }
+    return w;
 }
 
 

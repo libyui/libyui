@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Apr 20 12:47:39 CEST 2006 - mvidner@suse.cz
+
+- Catch exceptions when calling package management code (#166278).
+- Adapted for libzypp in a nonstandard prefix.
+- 2.13.49
+
+-------------------------------------------------------------------
 Tue Apr 18 17:39:43 CEST 2006 - sh@suse.de
 
 - V 2.13.48

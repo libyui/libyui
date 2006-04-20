@@ -93,7 +93,16 @@ YCPValue YQUI::runPkgSelection( YWidget * packageSelector )
     _wm_close_blocked           = true;
     _auto_activate_dialogs      = false;
 
-    YCPValue input = evaluateUserInput();
+    YCPValue input = YCPVoid();
+    try {
+	input = evaluateUserInput();
+    }
+    catch (const std::exception & e) {
+	y2error( "Caught a std::exception: %s", e.what() );
+    }
+    catch (...) {
+	y2error( "Caught an unspecified exception" );
+    }
 
     _auto_activate_dialogs      = true;
     _wm_close_blocked           = false;
