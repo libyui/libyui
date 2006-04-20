@@ -21,7 +21,5 @@
 ./src/YQPkgTextDialog.cc
 ./src/YQPkgUpdateProblemFilterView.cc
 ./src/YQPkgVersionsView.cc
-./src/YQPkgYouPatchFilterView.cc
-./src/YQPkgYouPatchList.cc
 ./src/YQUI_builtins.cc
 ./src/YQWizard.cc
