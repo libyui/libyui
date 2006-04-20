@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Apr 20 17:15:49 CEST 2006 - sh@suse.de
+
+- Ask for confirmation to abandon changes if a language is changed 
+
+-------------------------------------------------------------------
 Thu Apr 20 12:47:39 CEST 2006 - mvidner@suse.cz
 
 - Catch exceptions when calling package management code (#166278).

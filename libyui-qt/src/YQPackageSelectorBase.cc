@@ -82,7 +82,8 @@ YQPackageSelectorBase::YQPackageSelectorBase( QWidget * 		parent,
     zyppPool().saveState<zypp::Package  >();
     zyppPool().saveState<zypp::Pattern  >();
     zyppPool().saveState<zypp::Selection>();
-    zyppPool().saveState<zypp::Patch>    ();
+    zyppPool().saveState<zypp::Language >();
+    zyppPool().saveState<zypp::Patch    >();
 
 
     //
@@ -184,7 +185,8 @@ YQPackageSelectorBase::reject()
 	zyppPool().diffState<zypp::Package  >()	||
 	zyppPool().diffState<zypp::Pattern  >()	||
 	zyppPool().diffState<zypp::Selection>() ||
-	zyppPool().diffState<zypp::Patch>();
+	zyppPool().diffState<zypp::Language >() ||
+	zyppPool().diffState<zypp::Patch    >();
 
     if ( changes )
     {
@@ -196,6 +198,9 @@ YQPackageSelectorBase::reject()
 
 	if ( zyppPool().diffState<zypp::Selection>() )
 	    y2milestone( "diffState() reports changed selections" );
+
+	if ( zyppPool().diffState<zypp::Language>() )
+	    y2milestone( "diffState() reports changed languates" );
 
 	if ( zyppPool().diffState<zypp::Patch>() )
 	    y2milestone( "diffState() reports changed patches" );
@@ -213,7 +218,8 @@ YQPackageSelectorBase::reject()
 	zyppPool().restoreState<zypp::Package  >();
 	zyppPool().restoreState<zypp::Pattern  >();
 	zyppPool().restoreState<zypp::Selection>();
-	zyppPool().restoreState<zypp::Patch>    ();
+	zyppPool().restoreState<zypp::Language >();
+	zyppPool().restoreState<zypp::Patch    >();
 
 	y2milestone( "Closing PackageSelector with \"Cancel\"" );
 	YQUI::ui()->sendEvent( new YCancelEvent() );
