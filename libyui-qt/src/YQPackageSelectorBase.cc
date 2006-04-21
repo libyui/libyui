@@ -200,7 +200,7 @@ YQPackageSelectorBase::reject()
 	    y2milestone( "diffState() reports changed selections" );
 
 	if ( zyppPool().diffState<zypp::Language>() )
-	    y2milestone( "diffState() reports changed languates" );
+	    y2milestone( "diffState() reports changed languages" );
 
 	if ( zyppPool().diffState<zypp::Patch>() )
 	    y2milestone( "diffState() reports changed patches" );

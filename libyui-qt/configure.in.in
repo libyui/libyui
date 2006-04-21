@@ -12,7 +12,5 @@
 ## special stuff
 AC_MIN_QT_VERSION(301,3.01)
 
-PKG_CHECK_MODULES([ZYPP], [libzypp])
-
 ## and generate the output
 @YAST2-OUTPUT@
