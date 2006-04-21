@@ -411,9 +411,12 @@ bool PatchStatStrategy::toggleStatus( ZyppSel slbPtr,
     switch ( oldStatus )
     {
 	case S_Install:
+	case S_AutoInstall:
 	    newStatus =S_NoInst ;
 	    break;
 	case S_Update:
+	case S_AutoUpdate:
+	case S_AutoDel:
 	    newStatus = S_KeepInstalled;
 	    break;
 	case S_KeepInstalled:
