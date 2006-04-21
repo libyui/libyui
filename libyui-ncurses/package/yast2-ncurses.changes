@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Apr 21 08:05:44 CEST 2006 - gs@suse.de
+
+- list of problematic update items added
+- handle Auto status for patches
+- 2.13.24 
+
+-------------------------------------------------------------------
 Thu Apr 20 17:34:24 CEST 2006 - gs@suse.de
 
 - Don't show the "Automatic Changes" list in Online Update mode
