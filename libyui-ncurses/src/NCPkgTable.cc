@@ -486,9 +486,7 @@ bool NCPkgTable::fillDefaultList( )
 	    break;
 	}
 	case T_Update: {
-#ifdef FIXME
-	    if ( !Y2PM::packageManager().updateEmpty() )
-#endif
+	    if ( ! zypp::getZYpp()->resolver()->problematicUpdateItems().empty() )
 	    {
 		packager->fillUpdateList();
 		// set the visible info to package description 

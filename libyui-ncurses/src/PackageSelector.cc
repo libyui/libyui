@@ -714,31 +714,28 @@ bool PackageSelector::fillUpdateList( )
     // clear the package table
     packageList->itemsCleared ();
 
-    ZyppPoolIterator b = zyppPkgBegin ();
-    ZyppPoolIterator e = zyppPkgEnd ();
-    ZyppPoolIterator i;
-
-    // FIXME, how is an update problem defined?
-    // see packagemanager/src/pkg/PMPackageManager_update.cc _update_items
-    UIINT << "Update problems not defined!" << endl;
-
-    for (i = b; i != e; ++i)
+    list<zypp::PoolItem_Ref> problemList = zypp::getZYpp()->resolver()->problematicUpdateItems();
+    
+    for ( list<zypp::PoolItem_Ref>::const_iterator it = problemList.begin();
+	  it != problemList.end();
+	  ++it )
     {
-	ZyppSel slb = *i;
-	ZyppPkg pkg = tryCastToZyppPkg (slb->theObj ()); // ??
+	ZyppPkg pkg = tryCastToZyppPkg( (*it).resolvable() );
 
-	zypp::ui::Status st = slb->status ();
-	switch (st) {
-	    case S_Protected:
-	    case S_Taboo:
-	    case S_AutoDel:
+	if ( pkg )
+	{
+	    ZyppSel slb = selMapper.findZyppSel( pkg );
+
+	    if ( slb )
+	    {
+		NCMIL << "Problematic package: " <<  pkg->name().c_str() << " " <<
+		    pkg->edition().asString().c_str() << endl;
 		packageList->createListEntry( pkg, slb );
-		break;
-	    default:
-		break;
+	    }
 	}
+	
     }
-
+    
     // show the list
     packageList->drawList();
     
