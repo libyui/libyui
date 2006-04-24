@@ -680,7 +680,8 @@ bool PackageSelector::fillPatchList( string filter )
     {
 	if ( filter == "installable" )
 	{
-	    static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::YOUPatches()) );
+	    // show common label "Online Update Patches"
+	    static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::Patches()) );
 	}
 	else if ( filter == "installed" )
 	{
