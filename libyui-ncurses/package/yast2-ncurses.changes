@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Apr 24 13:53:54 CEST 2006 - gs@suse.de
+
+- bugfix for list of problematic update items (add installed 
+  packages to SelMapper to show packages marked auto-delete)
+- Online Update: don't show label 'Installable Patches'
+- 2.13.25 
+
+-------------------------------------------------------------------
 Fri Apr 21 08:05:44 CEST 2006 - gs@suse.de
 
 - list of problematic update items added
