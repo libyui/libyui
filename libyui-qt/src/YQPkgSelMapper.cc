@@ -55,6 +55,18 @@ void YQPkgSelMapper::rebuildCache()
 	  ++sel_it )
     {
 	ZyppSel sel = *sel_it;
+
+	if ( sel->installedObj() )
+	{
+	    // The installed package (if there is any) may or may not be in the list
+	    // of available packages. Better make sure to insert it.
+
+	    ZyppPkg installedPkg = tryCastToZyppPkg( sel->installedObj() );
+
+	    if ( installedPkg )
+		_cache.insert( CachePair( installedPkg, sel ) );
+	}
+
 	zypp::ui::Selectable::available_iterator it = sel->availableBegin();
 
 	while ( it != sel->availableEnd() )

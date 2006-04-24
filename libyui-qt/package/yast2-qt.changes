@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Apr 24 13:22:50 CEST 2006 - sh@suse.de
+
+- V 2.13.51
+- Add installed pkg to SelMapper to fix "update problems" list
+  (required for pkgs that are not available and marked auto-delete) 
+
+-------------------------------------------------------------------
 Thu Apr 20 18:18:14 CEST 2006 - sh@suse.de
 
 - V 2.13.50
