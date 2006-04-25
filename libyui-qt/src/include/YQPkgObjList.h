@@ -399,9 +399,13 @@ public:
     bool bySelection() const;
 
     /**
-     * Set the (binary RPM) package status
+     * Set the (binary RPM) package status.
+     *
+     * If 'sendSignals' is 'true' (default), the parent list will be requested
+     * to send update signals. List operations might want to use this for
+     * optimizations to send the signals only once after all changes are done.
      **/
-    virtual void setStatus( ZyppStatus newStatus );
+    virtual void setStatus( ZyppStatus newStatus, bool sendSignals = true );
 
     /**
      * Set a status icon according to the package's status.

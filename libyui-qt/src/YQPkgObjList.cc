@@ -302,17 +302,22 @@ YQPkgObjList::setAllItemStatus( ZyppStatus newStatus, bool force )
 	    if ( newStatus == S_Update )
 	    {
 		if ( item->candidateIsNewer() || force )
-		    item->setStatus( newStatus );
+		    item->setStatus( newStatus,
+				     false );	// sendSignals
 	    }
 	    else
 	    {
-		item->setStatus( newStatus );
+		item->setStatus( newStatus,
+				 false );	// sendSignals
 	    }
 	}
 
 	++it;
     }
 
+    emit updateItemStates();
+    emit updatePackages();
+    
     YQUI::ui()->normalCursor();
     emit statusChanged();
 }
@@ -783,7 +788,7 @@ YQPkgObjListItem::bySelection() const
 
 
 void
-YQPkgObjListItem::setStatus( ZyppStatus newStatus )
+YQPkgObjListItem::setStatus( ZyppStatus newStatus, bool sendSignals )
 {
     ZyppStatus oldStatus = selectable()->status();
     selectable()->set_status( newStatus );
@@ -792,8 +797,11 @@ YQPkgObjListItem::setStatus( ZyppStatus newStatus )
     {
 	applyChanges();
 
-	_pkgObjList->updateItemStates();
-	_pkgObjList->sendUpdatePackages();
+	if ( sendSignals )
+	{
+	    _pkgObjList->updateItemStates();
+	    _pkgObjList->sendUpdatePackages();
+	}
     }
 
     setStatusIcon();
