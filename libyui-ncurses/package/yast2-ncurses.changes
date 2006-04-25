@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Apr 25 14:15:51 CEST 2006 - gs@suse.de
+
+- bugfix for #167565 - UI: deselecting one preselected pattern deselects
+  everything (add transactResKind( zypp::ResTraits<zypp::Product>::kind ) 
+- 2.13.26
+
+-------------------------------------------------------------------
 Mon Apr 24 13:53:54 CEST 2006 - gs@suse.de
 
 - bugfix for list of problematic update items (add installed 
