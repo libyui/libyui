@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Apr 25 13:44:39 CEST 2006 - schubi@suse.de
+
+- Bug 167565 - UI: deselecting one preselected pattern deselects everything
+  Added transactResKind( zypp::ResTraits<zypp::Product>::kind ) in solveResolvableCollections 
+
+-------------------------------------------------------------------
 Mon Apr 24 13:22:50 CEST 2006 - sh@suse.de
 
 - V 2.13.51
