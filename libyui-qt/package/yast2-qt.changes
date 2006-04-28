@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Apr 28 12:20:54 CEST 2006 - sh@suse.de
+
+- V 2.13.53
+- Disabled patches view in package selector (non-YOU-mode)
+  to avoid problems with kernel and ZYPP patches
+  (patches view is still available upon F2 keypress) 
+
+-------------------------------------------------------------------
 Tue Apr 25 14:33:53 CEST 2006 - sh@suse.de
 
 - Fixed bug #168904: Changing "all in this list" status in pkg lists

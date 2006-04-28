@@ -22,7 +22,7 @@
 #define CHECK_DEPENDENCIES_ON_STARTUP			1
 #define DEPENDENCY_FEEDBACK_IF_OK			1
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT			false
-#define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE	1
+#define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE	0
 
 #include <qaction.h>
 #include <qapplication.h>
@@ -944,14 +944,17 @@ YQPackageSelector::addPatchFilterView()
 void
 YQPackageSelector::hotkeyInsertPatchFilterView()
 {
-    y2milestone( "Activating patches filter view" );
+    if ( ! _patchFilterView )
+    {
+	y2milestone( "Activating patches filter view" );
 
-    addPatchFilterView();
-    connectPatchList();
+	addPatchFilterView();
+	connectPatchList();
 
-    _filters->showPage( _patchFilterView );
-    _pkgList->clear();
-    _patchList->filter();
+	_filters->showPage( _patchFilterView );
+	_pkgList->clear();
+	_patchList->filter();
+    }
 }
 
 
