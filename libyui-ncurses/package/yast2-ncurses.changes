@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed May  3 11:12:03 CEST 2006 - gs@suse.de
+
+- Online Update: show text "No patches available" if the patch list is empty 
+- 2.13.27
+
+-------------------------------------------------------------------
 Tue Apr 25 14:15:51 CEST 2006 - gs@suse.de
 
 - bugfix for #167565 - UI: deselecting one preselected pattern deselects
