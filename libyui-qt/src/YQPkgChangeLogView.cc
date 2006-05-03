@@ -63,7 +63,7 @@ YQPkgChangeLogView::showDetails( ZyppSel selectable )
     }
     else
     {
-	html += "<p><i>" + _( "Information only available for installed packages" ) + "</i></p>";
+	html += "<p><i>" + _( "Information only available for installed packages." ) + "</i></p>";
     }
 
     setTextFormat( Qt::RichText );
