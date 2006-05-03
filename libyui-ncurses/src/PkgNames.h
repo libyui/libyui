@@ -677,6 +677,11 @@ public:
      * Info line in empty patch list
      */
     static const string UpToDate();
+
+   /**
+     * Info line in empty patch list
+     */
+    static const string NoPatches();
     
    /**
      * bold text Package Group: (richtext) 

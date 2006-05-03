@@ -1000,6 +1000,13 @@ const string PkgNames::UpToDate()
     return value;
 }
 
+const string PkgNames::NoPatches()
+{
+    // info line is shown if YOU patch list is empty
+    static const string value = _( "No patches available" );
+    return value;
+}
+
 const string PkgNames::PreRequires()
 {
     // part of the package description

@@ -664,13 +664,13 @@ bool PackageSelector::fillPatchList( string filter )
 	}
 	++listIt;		
     }
-    
+
     if ( filter == "installable"
 	 && packageList->getNumLines() == 0 )
     {
-	packageList->createInfoEntry( PkgNames::UpToDate() );	
+	packageList->createInfoEntry( PkgNames::NoPatches() );	
     }
-    
+
     // show the patches
     packageList->drawList();
     
