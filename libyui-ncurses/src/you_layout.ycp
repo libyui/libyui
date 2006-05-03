@@ -27,7 +27,7 @@
 					      `item( `id("security"), _( "&Security" ) ),
 					      `item( `id("optional"), _( "&Optional" ) ),
 					      // end:
-					      `item( `id("yast2"), _( "&YaST2" ) )
+					      `item( `id("yast2"), _( "YaS&T2" ) )
 					      ]
 					      )),
 			 // label of the Online Update 'Actions' menu (keep it short)
