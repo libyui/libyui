@@ -62,8 +62,8 @@ YQPackageSelector::help()
 	// affect the amount of visible packages in the package list and "details views" ( below the package list )
 	// that show details about the ( one ) currently selected package in the package list.
 
-	html += para( _( "In addition to \"patches\", you can also select one of the other filter views"
-			 " from the <b>Filter</b> combo-box at the upper left:" ) );
+	html += para( _( "In addition to <b>Patches</b>, you can also select one of the other filter views"
+			 " from <b>Filter</b> at the upper left:" ) );
 	html += "<ul>";
     }
     else // ! _youMode
