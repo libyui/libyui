@@ -19,7 +19,7 @@
 			 `Left(`MenuButton( `opt(`key_F4), _( "&Filter" ),
 					    // menu items - keep them short and use unique hotkeys from begin: to end:
 					    // begin:
-					    [ `item( `id("installablepatches"), _( "&YOU Patches" ) ),
+					    [ `item( `id("installablepatches"), _( "&Patches" ) ),
 					      `item( `id("instpatches"), _( "Installed &Patches" ) ),
 					      `item( `id("allpatches"), _( "&All Patches" ) ),
 					      `item( `id("newpatches"), _( "&New Patches" ) ),

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu May  4 14:21:09 CEST 2006 - gs@suse.de
+
+- messages from proofread merged back
+- 2.13.28
+
+-------------------------------------------------------------------
 Wed May  3 11:12:03 CEST 2006 - gs@suse.de
 
 - Online Update: show text "No patches available" if the patch list is empty 
