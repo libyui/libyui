@@ -94,6 +94,7 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     : YQPackageSelectorBase( parent, opt )
     , _floppyDevice( floppyDevice->value().c_str() )
 {
+    _showChangesDialog		= true;
     _autoDependenciesCheckBox	= 0;
     _detailsViews		= 0;
     _diskUsageList		= 0;

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue May  9 14:36:44 CEST 2006 - sh@suse.de
+
+- Show "automatic changes" dialog upon "Accept" in package selector 
+
+-------------------------------------------------------------------
 Thu May  4 12:32:46 CEST 2006 - sh@suse.de
 
 - V 2.13.54
