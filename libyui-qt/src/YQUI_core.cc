@@ -601,16 +601,13 @@ void YQUI::easterEgg()
     y2milestone( "Starting easter egg..." );
 
 
-#if 0
-    system( "sudo dd if=/dev/urandom bs=1024 count=1024 of=/dev/fb0" );
-    sleep( 2 );
-#endif
-
     YQEasterBunny::layEgg();
     y2milestone( "Done." );
 
+#if 0
     // desktop()->repaint() has no effect - we need to do it the hard way.
     system( "/usr/X11R6/bin/xrefresh" );
+#endif
 }
 
 

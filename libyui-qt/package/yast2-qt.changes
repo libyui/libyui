@@ -1,8 +1,15 @@
 -------------------------------------------------------------------
+Tue May  9 16:15:03 CEST 2006 - sh@suse.de
+
+- Fixed bug #173122: Easter egg crashes the installation
+- V 2.13.56 
+
+-------------------------------------------------------------------
 Tue May  9 14:36:44 CEST 2006 - sh@suse.de
 
 - Fixed bug #173865: No "automatic changes" dialog upon "Accept" 
   in Qt package selector 
+- V 2.13.55
 
 -------------------------------------------------------------------
 Thu May  4 12:32:46 CEST 2006 - sh@suse.de
