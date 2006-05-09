@@ -228,7 +228,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    if ( objPtr )
 	    {
 		notify = objPtr->delnotify();
-		NCMIL << "DELETE message: " << notify << endl;
+		NCDBG << "DELETE message: " << notify << endl;
 		header = YCPString(PkgNames::WarningLabel());
 	    }
 	break;
@@ -237,7 +237,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    if ( objPtr )
 	    {	
 		notify = objPtr->insnotify();
-		NCMIL << "NOTIFY message: " << notify << endl;
+		NCDBG << "NOTIFY message: " << notify << endl;
 		header = YCPString(PkgNames::NotifyLabel());
 
 		// get license (available for packages only)  

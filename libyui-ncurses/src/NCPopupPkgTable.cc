@@ -29,6 +29,7 @@
 
 #include "YQZypp.h"
 #include <zypp/ui/Selectable.h>
+#include <zypp/ui/UserWantedPackages.h>
 
 #include "NCPopupPkgTable.h"
 
@@ -145,20 +146,30 @@ bool NCPopupPkgTable::fillAutoChanges( NCPkgTable * pkgTable )
 
     pkgTable->itemsCleared();		// clear the table
 
+    set<string> ignoredNames = zypp::ui::userWantedPackageNames();
+
+    for ( set<string>::iterator it = ignoredNames.begin(); it != ignoredNames.end(); ++it )
+	NCDBG << "Ignoring: " << *it << endl;
+	 
     ZyppPoolIterator
 	b = zyppPkgBegin(),
 	e = zyppPkgEnd(),
 	it;
+
     for (it = b; it != e; ++it)
     {
 	ZyppSel slb = *it;
-	ZyppPkg pkgPtr = tryCastToZyppPkg (slb->theObj());
 
 	// show all packages which are automatically selected for installation
 	if ( slb->toModify() && slb->modifiedBy () != zypp::ResStatus::USER )
 	{
-	    NCMIL << "The status of " << pkgPtr->name() << " has automatically changed" << endl;
-	    pkgTable->createListEntry( pkgPtr, slb );
+	    if ( ! contains( ignoredNames, slb->name() ) )
+	    {
+		ZyppPkg pkgPtr = tryCastToZyppPkg (slb->theObj());
+
+		NCMIL << "The status of " << pkgPtr->name() << " has automatically changed" << endl;
+		pkgTable->createListEntry( pkgPtr, slb );
+	    }
 	}
     }
 
