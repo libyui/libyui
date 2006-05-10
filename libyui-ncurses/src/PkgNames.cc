@@ -216,6 +216,12 @@ const YCPValue& PkgNames::ReplaceMenu ()
     static const YCPValue value = createIdValue ( "replacemenu" );
     return value;
 }
+// internal use
+const YCPValue& PkgNames::ReplaceFilter ()
+{
+    static const YCPValue value = createIdValue ( "replacefilter" );
+    return value;
+}
 
 // the search button
 const YCPValue& PkgNames::Search ()
@@ -235,6 +241,13 @@ const YCPValue& PkgNames::RpmGroups ()
 const YCPValue& PkgNames::Selections ()
 {
     static const YCPValue value = createIdValue ( "selections" );
+    return value;
+}
+
+// menu selection Patterns
+const YCPValue& PkgNames::Patterns ()
+{
+    static const YCPValue value = createIdValue ( "patterns" );
     return value;
 }
 
@@ -1136,6 +1149,62 @@ const string PkgNames::ShortDescr()
 {
     // part of the package description
     static const string value = _( "<b>Description: </b>" );
+    return value;
+}
+
+const string PkgNames::MenuFilter()
+{
+    // menu Filter
+    static const string value = _( "&Filter" );
+    return value;
+}
+
+const string PkgNames::MenuEntryRPMGroups()
+{
+    // menu entry Selections
+    static const string value = _( "&RPM Groups" );
+    return value;
+}
+
+const string PkgNames::MenuEntrySelections()
+{
+    // menu entry Selections
+    static const string value = _( "Se&lections" );
+    return value;
+}
+
+const string PkgNames::MenuEntryPatterns()
+{
+    // menu entry Patterns
+    static const string value = _( "Pa&tterns" );
+    return value;
+}
+
+const string PkgNames::MenuEntrySearch()
+{
+    // menu entry Search
+    static const string value = _( "&Search" );
+    return value;
+}
+
+const string PkgNames::MenuEntryInstPkg()
+{
+    // menu entry Installed Packages
+    static const string value = _( "Installed &Packages" );
+    return value;
+}
+
+const string PkgNames::MenuEntryInstSummary()
+{
+    // menu entry Installed Packages
+    static const string value = _( "&Installation Summary" );
+    return value;
+}
+
+const string PkgNames::MenuEntryUpdateList()
+{
+    // menu entry Update List
+    static const string value = _( "&Update List" );
     return value;
 }
 

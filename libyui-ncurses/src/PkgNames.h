@@ -188,7 +188,8 @@ public:
      *  Widget id of the menu item Selections
      */
     static const YCPValue& Selections ();
-
+    static const YCPValue& Patterns ();
+    
     /**
      *  Widget id of the menu item update list
      */
@@ -228,7 +229,8 @@ public:
      *  Widget id for internal use
      */
     static const YCPValue& ReplaceMenu ();
-
+    static const YCPValue& ReplaceFilter ();
+    
     /**
      *  Widget id of the button disk space
      */
@@ -829,6 +831,16 @@ public:
     static const string TabooText();
     static const string MoreSpaceText();
 
+    static const string MenuFilter();
+    static const string MenuEntryRPMGroups();
+    static const string MenuEntrySelections();
+    static const string MenuEntryPatterns();
+    static const string MenuEntrySearch();
+    static const string MenuEntryInstPkg();
+    static const string MenuEntryInstSummary();
+    static const string MenuEntryUpdateList();
+
+    
     /**
      * save/load selections
      */
