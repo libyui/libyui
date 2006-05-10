@@ -166,9 +166,11 @@ bool NCPopupPkgTable::fillAutoChanges( NCPkgTable * pkgTable )
 	    if ( ! contains( ignoredNames, slb->name() ) )
 	    {
 		ZyppPkg pkgPtr = tryCastToZyppPkg (slb->theObj());
-
-		NCMIL << "The status of " << pkgPtr->name() << " has automatically changed" << endl;
-		pkgTable->createListEntry( pkgPtr, slb );
+		if ( pkgPtr )
+		{
+		    NCMIL << "The status of " << pkgPtr->name() << " has automatically changed" << endl;
+		    pkgTable->createListEntry( pkgPtr, slb );
+		}
 	    }
 	}
     }
