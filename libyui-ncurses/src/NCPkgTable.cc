@@ -593,7 +593,7 @@ void NCPkgTable::fillHeader( )
 	case T_Selections: {
 	    header.reserve(3);
 	    header.push_back( "L" + PkgNames::PkgStatus() );
-	    header.push_back( "L" + PkgNames::SelectionName() );
+	    header.push_back( "L" + PkgNames::SelectionLabel() );
 	    break;
 	}
 	case T_Availables: {

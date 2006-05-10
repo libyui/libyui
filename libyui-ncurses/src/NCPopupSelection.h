@@ -55,8 +55,14 @@ protected:
     virtual NCursesEvent wHandleInput( wint_t ch );
     
 public:
+
+    enum SelType {
+	S_Selection,
+	S_Pattern,
+	S_Unknown
+    };
     
-    NCPopupSelection( const wpos at, PackageSelector * pkg );
+    NCPopupSelection( const wpos at, PackageSelector * pkg, SelType type );
     virtual ~NCPopupSelection();
 
     virtual long nicesize(YUIDimension dim);
@@ -68,7 +74,7 @@ public:
      * Fills the list with the available selections (and the status info)
      * @return bool
      */
-    bool fillSelectionList ( NCPkgTable * table );
+    bool fillSelectionList ( NCPkgTable * table, SelType type );
     
     /**
      * Shows the popup with the add ons (package categories).
@@ -76,6 +82,7 @@ public:
      */
     NCursesEvent & showSelectionPopup( );
 
+    
 };
 
 ///////////////////////////////////////////////////////////////////

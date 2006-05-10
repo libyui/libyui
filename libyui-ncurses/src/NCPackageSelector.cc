@@ -189,8 +189,12 @@ void NCPackageSelector::showDefaultList()
 		// show download size
 		packager->showDownloadSize();
 	    else
+	    {
 	        // show the required diskspace
-		packager->showDiskSpace();	    
+		packager->showDiskSpace();
+		// show appropriate filter menu entries
+		packager->createFilterMenu();
+	    }
 	}
     }
     else

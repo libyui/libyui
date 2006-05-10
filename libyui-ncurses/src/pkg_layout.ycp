@@ -15,17 +15,19 @@
     return `VBox( `VSpacing(0.3),
 		  `HBox( `HSpacing(0.3),
 			 // label of the Filter menu ( keep it short ) - filters out a set of packages
-			 `Left(`MenuButton( `opt(`key_F4), _( "&Filter" ),
-					    // begin: menu items of the filter menu
-					    // please note: use unique hotkeys until end:
-					    [`item( `id("groups"), 	_( "&RPM Groups" ) ),
-					     `item( `id("selections"), 	_( "Se&lections" ) ),
-					     `item( `id("search"), 	_( "&Search" ) ),
-					     `item( `id("installed"),	_( "Installed &Packages" ) ),
-					     `item( `id("whatif"), 	_( "&Installation Summary" ) ),
-					     // end: menu items of the filter menu
-					     `item( `id("updatelist"),	_( "&Update List" ) ) ]
-					    )),
+			 `Left(`ReplacePoint(`id(`replacefilter),`MenuButton( `opt(`key_F4), _( "&Filter" ),
+									    // begin: menu items of the filter menu
+									    // please note: use unique hotkeys until end:
+									    [`item( `id("groups"), 	_( "&RPM Groups" ) ),
+									     `item( `id("selections"), 	_( "Se&lections" ) ),
+									     `item( `id("search"), 	_( "&Search" ) ),
+									     `item( `id("installed"),	_( "Installed &Packages" ) ),
+									     `item( `id("whatif"), 	_( "&Installation Summary" ) ),
+									     // end: menu items of the filter menu
+									     `item( `id("updatelist"),	_( "&Update List" ) ) ]
+									    )
+					     )
+			       ),
 			 // label Actions menu ( keep it short ) - actions to change status of a package
 			 `Left(`MenuButton( `opt(`key_F5), _( "A&ctions" ),
 					    // Please note: add an appropriate number of whitespaces to get a well

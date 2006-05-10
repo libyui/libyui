@@ -78,6 +78,7 @@ class PackageSelector
     NCPopupDeps * depsPopup;	// the package dependeny popup
 
     NCPopupSelection * selectionPopup; 	// the selections popup
+    NCPopupSelection * patternPopup;    // the pattern popup
 
     NCPopupDiskspace * diskspacePopup;	// the popup showing the disk usage
 
@@ -104,7 +105,7 @@ class PackageSelector
     NCPkgSelMapper selMapper;
     
   protected:
- 
+
 
   public:
 
@@ -405,6 +406,9 @@ class PackageSelector
      * Check for license
      */
     bool showPendingLicenseAgreements(); 
+
+    void createFilterMenu();
+
 };
 
 ///////////////////////////////////////////////////////////////////

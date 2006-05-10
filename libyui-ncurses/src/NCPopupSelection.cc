@@ -42,7 +42,7 @@
 //
 //	DESCRIPTION :
 //
-NCPopupSelection::NCPopupSelection( const wpos at,  PackageSelector * pkg  )
+NCPopupSelection::NCPopupSelection( const wpos at,  PackageSelector * pkg, SelType type  )
     : NCPopup( at, false )
     , sel( 0 )
     , okButton( 0 )
@@ -50,7 +50,7 @@ NCPopupSelection::NCPopupSelection( const wpos at,  PackageSelector * pkg  )
 {
     createLayout( YCPString(PkgNames::SelectionLabel()) );
 
-    fillSelectionList( sel );
+    fillSelectionList( sel, type );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -275,49 +275,60 @@ bool order( ZyppSel slb1, ZyppSel slb2 )
 //
 //	DESCRIPTION :
 //
-bool NCPopupSelection::fillSelectionList( NCPkgTable * sel )
+bool NCPopupSelection::fillSelectionList( NCPkgTable * sel, SelType type  )
 {
     if ( !sel )
 	return false;
 
-    ZyppPoolIterator
-	i,
-	b = zyppPatternsBegin (),
-	e = zyppPatternsEnd ();
-    bool no_patterns = b == e;
-    if (no_patterns)
-    {
-	UIMIL << "No patterns" << endl;
-	b = zyppSelectionsBegin ();
-	e = zyppSelectionsEnd ();
-    }
-    // watch out, ZyppSelection is not ZyppSel (zypp::ui::Selectable::Ptr)
+    ZyppPoolIterator i, b, e;
     list<ZyppSel> slbList;
-    for ( i = b; i != e;  ++i )    
+  
+    switch ( type )
     {
-	ZyppObj resPtr = (*i)->theObj();
-	bool show;
-	if (no_patterns)
-	{
-	    ZyppSelection selPtr = tryCastToZyppSelection (resPtr);
-	    show = selPtr && selPtr->visible() && !selPtr->isBase();
-	}
-	else
-	{
-	    ZyppPattern patPtr = tryCastToZyppPattern (resPtr);
-	    show = patPtr && patPtr->userVisible ();
-	}
-	if (show)
-	{
-	    NCMIL << resPtr->kind () <<": " <<  resPtr->name()
-		  << ", initial status: " << (*i)->status() << endl;
+	case S_Selection:
+	    {
+		for ( i = zyppSelectionsBegin () ; i != zyppSelectionsEnd ();  ++i )
+		{
+		    ZyppObj resPtr = (*i)->theObj();	    
+		    bool show;
 
-	    slbList.push_back (*i);
-	}
+		    ZyppSelection selPtr = tryCastToZyppSelection (resPtr);
+		    show = selPtr && selPtr->visible() && !selPtr->isBase();
+		    if (show)
+		    {
+			NCMIL << resPtr->kind () <<": " <<  resPtr->name()
+			      << ", initial status: " << (*i)->status() << endl;
+
+			slbList.push_back (*i);
+		    }
+		}
+		slbList.sort( order );
+
+		break;
+	    }
+	case S_Pattern:
+	    {
+		for ( i = zyppPatternsBegin () ; i != zyppPatternsEnd ();  ++i )
+		{
+		    ZyppObj resPtr = (*i)->theObj();	    
+		    bool show;
+
+		    ZyppPattern patPtr = tryCastToZyppPattern (resPtr);
+		    show = patPtr && patPtr->userVisible ();
+
+		    if (show)
+		    {
+			NCMIL << resPtr->kind () <<": " <<  resPtr->name()
+			      << ", initial status: " << (*i)->status() << endl;
+
+			slbList.push_back (*i);
+		    }
+		}
+		break;
+	    }
+	default:
+	    NCERR << "Selecion type not handled: " << type << endl;
     }
-
-    if (no_patterns)
-	slbList.sort( order );
     
     list<ZyppSel>::iterator listIt;
     vector<string> pkgLine;

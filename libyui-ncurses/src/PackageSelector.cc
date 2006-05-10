@@ -90,6 +90,7 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
       , filterPopup( 0 )
       , depsPopup( 0 )
       , selectionPopup( 0 )
+      , patternPopup( 0 )
       , diskspacePopup( 0 )
       , searchPopup( 0 )
       , filePopup( 0 )
@@ -107,6 +108,7 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
     // Filter menu
     eventHandlerMap[ PkgNames::RpmGroups()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::Selections()->toString() ] = &PackageSelector::FilterHandler;
+    eventHandlerMap[ PkgNames::Patterns()->toString() ] = &PackageSelector::FilterHandler;    
     eventHandlerMap[ PkgNames::UpdateList()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::Installed()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::Whatif()->toString() ] = &PackageSelector::FilterHandler;
@@ -211,8 +213,10 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
     if ( !youMode )
     {
 	// create the selections popup
-	selectionPopup = new NCPopupSelection( wpos( 1, 1 ), this );
-
+	selectionPopup = new NCPopupSelection( wpos( 1, 1 ), this, NCPopupSelection::S_Selection );
+	// create the patterns popup
+	patternPopup =  new NCPopupSelection( wpos( 1, 1 ), this, NCPopupSelection::S_Pattern );
+	
 	_rpmGroupsTree = new YRpmGroupsTree ();
 	// get the rpm groups
 	ZyppPoolIterator b = zyppPkgBegin ();
@@ -258,6 +262,10 @@ PackageSelector::~PackageSelector()
     {
 	delete selectionPopup;
     }
+    if ( patternPopup )
+    {
+	delete patternPopup;
+    }
     if ( depsPopup )
     {
 	delete depsPopup;	
@@ -277,6 +285,90 @@ PackageSelector::~PackageSelector()
     if ( _rpmGroupsTree )
     {
 	delete _rpmGroupsTree;
+    }
+}
+
+void PackageSelector::createFilterMenu()
+{
+    bool selections;
+    bool patterns;
+	
+    // create the pattern popup	
+    if ( ! zyppPool().empty<zypp::Pattern>() )
+    {
+
+	patterns = true;
+    }
+    else
+    {
+	patterns = false;
+    }
+    // create the selections popup
+    if ( ! zyppPool().empty<zypp::Selection>() )
+    {
+
+	selections = true;
+    }
+    else
+    {
+	selections = false;
+    }
+	
+    if ( patterns && !selections )
+    {
+	// ReplaceWidget and show menu entry Patterns instead of Selections
+	char menu[1200];
+	sprintf ( menu,
+		  "`MenuButton( `opt(`key_F4), \"%s\", "
+		  "[`item( `id(\"groups\"), \"%s\" ), `item( `id(\"patterns\"), \"%s\" ), "
+		  " `item( `id(\"search\"), \"%s\" ), `item( `id(\"installed\"), \"%s\" ), "
+		  " `item( `id(\"whatif\"), \"%s\" ), `item( `id(\"updatelist\"), \"%s\" ) ] ) ",
+		  PkgNames::MenuFilter().c_str(),
+		  PkgNames::MenuEntryRPMGroups().c_str(),
+		  PkgNames::MenuEntryPatterns().c_str(),
+		  PkgNames::MenuEntrySearch().c_str(),
+		  PkgNames::MenuEntryInstPkg().c_str() ,
+		  PkgNames::MenuEntryInstSummary().c_str(),
+		  PkgNames::MenuEntryUpdateList().c_str()
+		  );
+
+	Parser parser( menu );
+	YCodePtr parsed_code = parser.parse ();
+	YCPValue layout = YCPNull ();
+	if (parsed_code != NULL)
+	    layout = parsed_code->evaluate();
+
+	y2ui->evaluateReplaceWidget( YCPSymbol("replacefilter"), layout->asTerm() ); 
+
+    }
+    else if ( patterns && selections )
+    {
+	// ReplaceWidget and show menu entries Patterns AND Selections
+	char menu[1200];
+	sprintf ( menu,
+		  "`MenuButton(`opt(`key_F4), \"%s\", "
+		  "[`item( `id(\"groups\"), \"%s\" ), `item( `id(\"patterns\"), \"%s\" ), "
+		  " `item( `id(\"selections\"), \"%s\" ), "
+		  " `item( `id(\"search\"), \"%s\" ), `item( `id(\"installed\"), \"%s\" ), "
+		  " `item( `id(\"whatif\"), \"%s\" ), `item( `id(\"updatelist\"), \"%s\" ) ] ) ",
+		  PkgNames::MenuFilter().c_str(),
+		  PkgNames::MenuEntryRPMGroups().c_str(),
+		  PkgNames::MenuEntryPatterns().c_str(),
+		  PkgNames::MenuEntrySelections().c_str(),
+		  PkgNames::MenuEntrySearch().c_str(),
+		  PkgNames::MenuEntryInstPkg().c_str() ,
+		  PkgNames::MenuEntryInstSummary().c_str(),
+		  PkgNames::MenuEntryUpdateList().c_str()
+		  );
+
+	Parser parser( menu );
+	YCodePtr parsed_code = parser.parse ();
+	YCPValue layout = YCPNull ();
+	if (parsed_code != NULL)
+	    layout = parsed_code->evaluate();
+
+	y2ui->evaluateReplaceWidget( YCPSymbol("replacefilter"), layout->asTerm() ); 
+
     }
 }
 
@@ -827,68 +919,6 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr 
 	}
     }
 
-#ifdef OLD_CODE
-    list<ZyppPkg> packages = patchPtr->packages();
-    string preScript = patchPtr->preScript();
-    string postScript = patchPtr->postScript();
-    list<PMYouFile> files = patchPtr->files();
-
-    list<ZyppPkg>::const_iterator listIt;
-    list<PMYouFile>::const_iterator fileIt;
-    
-    NCMIL << "Number of patch packages: " << packages.size() << endl;
-	
-    for ( listIt = packages.begin(); listIt != packages.end();  ++listIt )    
-    {
-	pkgTable->createListEntry( (*listIt) );
-    }
-    for ( fileIt = files.begin(); fileIt != files.end(); ++fileIt )
-    {
-	vector<string> pkgLine;
-	pkgLine.reserve(4);
-
-	pkgLine.push_back( fileIt->name() );
-	pkgLine.push_back( "   " );	// versions empty
-	pkgLine.push_back( "   " );	
-	pkgLine.push_back( PkgNames::File() );	// additional file
-	
-	pkgTable->addLine( S_NoInst,
-			   pkgLine,
-			   ZyppObj()
-			   );	
-    }
-
-    if ( preScript != "" )
-    {
-	vector<string> pkgLine;
-	pkgLine.reserve(4);
-
-	pkgLine.push_back( preScript ); 
-	pkgLine.push_back( "   " );	// versions empty
-	pkgLine.push_back( "   " );	
-	pkgLine.push_back( PkgNames::PreScript() );
-	
-	pkgTable->addLine( S_NoInst,
-			   pkgLine,
-			   ZyppObj()
-			   );
-    }
-    if ( postScript != "" )
-    {
-	vector<string> pkgLine;
-	pkgLine.reserve(4);
-
-	pkgLine.push_back(  postScript );
-	pkgLine.push_back( "   " );	// versions empty
-	pkgLine.push_back( "   " );	
-	pkgLine.push_back( PkgNames::PostScript() );
-	
-	pkgTable->addLine( S_NoInst,
-			   pkgLine,
-			   ZyppObj()
-			   );
-    }
-#endif
     // show the list
     pkgTable->drawList();
     
@@ -1428,6 +1458,14 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 	    retEvent = selectionPopup->showSelectionPopup( );
 	}
     }
+    else if ( event.selection->compare( PkgNames::Patterns() ) == YO_EQUAL )
+    {
+	if ( patternPopup )
+	{
+	    // show the selection popup
+	    retEvent = patternPopup->showSelectionPopup( );
+	}
+    } 
 // patches
     else if ( event.selection->compare( PkgNames::Recommended() ) ==  YO_EQUAL )
     {
