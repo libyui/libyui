@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed May 10 15:05:21 CEST 2006 - sh@suse.de
+
+- Set package to "update" or "install" if user selects a different
+  version in the "Versions" tab of the package selector
+  (workaround for bug #164487: can't downgrade using a patch)
+- V 2.13.57 
+
+-------------------------------------------------------------------
 Tue May  9 16:15:03 CEST 2006 - sh@suse.de
 
 - Fixed bug #173122: Easter egg crashes the installation

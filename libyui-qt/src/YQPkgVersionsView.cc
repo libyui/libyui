@@ -165,6 +165,46 @@ YQPkgVersionsView::checkForChangedCandidate()
 	    if ( newCandidate != _selectable->candidateObj() )
 	    {
 		y2milestone( "Candidate changed" );
+
+		// Change status of selectable
+
+		ZyppStatus status = _selectable->status();
+
+		if ( _selectable->installedObj() &&
+		     _selectable->installedObj()->edition() == newCandidate->edition() )
+		{
+		    // Switch back to the original instance -
+		    // the version that was previously installed
+		    status = S_KeepInstalled;
+		}
+		else
+		{
+		    switch ( status )
+		    {
+			case S_KeepInstalled:
+			case S_Protected:
+			case S_AutoDel:
+			case S_AutoUpdate:
+			case S_Del:
+			case S_Update:
+
+			    status = S_Update;
+			    break;
+
+			case S_NoInst:
+			case S_Taboo:
+			case S_Install:
+			case S_AutoInstall:
+			    status = S_Install;
+			    break;
+		    }
+		}
+
+		_selectable->set_status( status );
+
+
+		// Set candidate
+
 		_selectable->setCandidate( newCandidate );
 		emit candidateChanged( newCandidate );
 		return;
