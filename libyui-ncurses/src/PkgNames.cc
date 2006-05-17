@@ -66,6 +66,12 @@ const YCPValue& PkgNames::PatchPkgs ()
     return value;
 }
 
+const YCPValue& PkgNames::PatchPkgsVersions ()
+{
+    static const YCPValue value = createIdValue ( "pkgsversions" );
+    return value;
+}
+
 // the description section ( shown on bottom of the selection dialog )
 const YCPValue& PkgNames::Description ()
 {
@@ -486,6 +492,12 @@ const YCPValue& PkgNames::PatchPackages ()
 {
     static const YCPValue value = createIdValue ( "patchpackages" );
     return value;
+}
+
+const YCPValue& PkgNames::PatchPackagesVersions()
+{
+    static const YCPValue value = createIdValue ( "packagesversions" );
+    return value;  
 }
 
 // id information directory list

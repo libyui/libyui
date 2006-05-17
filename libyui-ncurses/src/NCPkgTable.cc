@@ -438,13 +438,25 @@ bool NCPkgTable::updateTable()
 	ZyppStatus newstatus = S_NoInst;
 	if ( slbPtr && objPtr)
 	{
-	    // get the new status - use particular strategy
-	    newstatus = statusStrategy->getPackageStatus( slbPtr, objPtr );
-	}
-	// set new status (if status has changed)
-	if ( getStatus(index) != newstatus )
-	{
-	    cc->setStatus( newstatus );
+	    if ( tableType == T_Availables )
+	    {
+		string isCandidate = "   ";
+		if ( objPtr == slbPtr->candidateObj() )
+		    isCandidate = " x ";
+
+		cl->AddCol( 2, new NCTableCol( isCandidate ) );
+	    }
+	    else
+	    {
+		// get the new status and replace old status
+		newstatus = statusStrategy->getPackageStatus( slbPtr, objPtr );
+	
+		// set new status (if status has changed)
+		if ( getStatus(index) != newstatus )
+		{
+		    cc->setStatus( newstatus );
+		}
+	    }
 	}
 	index++;
     }
@@ -453,17 +465,6 @@ bool NCPkgTable::updateTable()
 
     return ret;
 }
-
-///////////////////////////////////////////////////////////////////
-//
-// get status of a certain package in list of available packages
-//
-ZyppStatus NCPkgTable::getAvailableStatus ( const ZyppSel & slbPtr,
-					    const ZyppObj & objPtr )
-{
-    return ( statusStrategy->getPackageStatus( slbPtr, objPtr) );
-};
-
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -600,6 +601,7 @@ void NCPkgTable::fillHeader( )
 	    header.reserve(6);
 	    header.push_back( "L" + PkgNames::PkgStatus() );
 	    header.push_back( "L" + PkgNames::PkgName() );
+	    header.push_back( "L" + PkgNames::PkgStatus() );
 	    header.push_back( "L" + PkgNames::PkgVersion() );
 	    header.push_back( "L" + PkgNames::PkgInstSource() );
 	    header.push_back( "L" + PkgNames::PkgSize() );
@@ -625,7 +627,7 @@ void NCPkgTable::fillHeader( )
 bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 {
     vector<string> pkgLine;
-    pkgLine.reserve(5);
+    pkgLine.reserve(6);
 
     if ( !pkgPtr || !slbPtr )
     {
@@ -668,12 +670,26 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 	    break;
 	}
 	case T_Availables: {
+	    string isCandidate = "   ";
+	    if ( pkgPtr == slbPtr->candidateObj() )
+		isCandidate = " x ";
+	    pkgLine.push_back( isCandidate );
+	    
 	    version = pkgPtr->edition().asString();
 	    pkgLine.push_back( version );
 	    // is alias the right string? id?
 	    pkgLine.push_back( pkgPtr->source().alias() ); // show the installation source
 
-	    status = getAvailableStatus( slbPtr, pkgPtr ); // the status of this certain package
+	    // set package status either to S_NoInst or S_KeepInstalled
+	    status = S_NoInst;
+	    if ( slbPtr->hasInstalledObj() )
+	    {
+		if ( pkgPtr->edition() == slbPtr->installedObj()->edition()	&&
+		     pkgPtr->arch() == slbPtr->installedObj()->arch()	)
+		{
+		    status = S_KeepInstalled;
+		}
+	    }
 	    
 	    zypp::ByteCount size = pkgPtr->size();     	// installed size
 	    pkgLine.push_back( size.asString( 8 ) );  // format size

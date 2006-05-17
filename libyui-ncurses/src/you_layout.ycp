@@ -43,7 +43,8 @@
 			 `Left(`MenuButton( `opt(`key_F6), _( "&Information" ),
 					    // menu items
 					    [`item( `id("patchdescr"), _( "&Long Description" ) ),
-					     `item( `id("patchpackages"), _( "&Package List" ) )
+					     `item( `id("patchpackages"), _( "&Package List" ) ),
+					     `item( `id("packagesversions"), _("&Versions") )
 					     ]
 					    )),
 			 `HStretch()

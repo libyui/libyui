@@ -134,7 +134,8 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
     // YOU information 
     eventHandlerMap[ PkgNames::PatchDescr()->toString() ] = &PackageSelector::InformationHandler;
     eventHandlerMap[ PkgNames::PatchPackages()->toString() ] = &PackageSelector::InformationHandler;
-    
+    eventHandlerMap[ PkgNames::PatchPackagesVersions()->toString() ] = &PackageSelector::InformationHandler;
+
     // Action menu
     eventHandlerMap[ PkgNames::Toggle()->toString() ] 	= &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::Select()->toString() ] 	= &PackageSelector::StatusHandler;
@@ -317,8 +318,8 @@ void PackageSelector::createFilterMenu()
     if ( patterns && !selections )
     {
 	// ReplaceWidget and show menu entry Patterns instead of Selections
-	char menu[1200];
-	sprintf ( menu,
+	char menu[4000];
+	snprintf ( menu, sizeof(menu) - 1,
 		  "`MenuButton( `opt(`key_F4), \"%s\", "
 		  "[`item( `id(\"groups\"), \"%s\" ), `item( `id(\"patterns\"), \"%s\" ), "
 		  " `item( `id(\"search\"), \"%s\" ), `item( `id(\"installed\"), \"%s\" ), "
@@ -337,15 +338,15 @@ void PackageSelector::createFilterMenu()
 	YCPValue layout = YCPNull ();
 	if (parsed_code != NULL)
 	    layout = parsed_code->evaluate();
-
-	y2ui->evaluateReplaceWidget( YCPSymbol("replacefilter"), layout->asTerm() ); 
+	if ( !layout.isNull() )
+	    y2ui->evaluateReplaceWidget( YCPSymbol("replacefilter"), layout->asTerm() ); 
 
     }
     else if ( patterns && selections )
     {
 	// ReplaceWidget and show menu entries Patterns AND Selections
-	char menu[1200];
-	sprintf ( menu,
+	char menu[4000];
+	snprintf ( menu, sizeof(menu) - 1,
 		  "`MenuButton(`opt(`key_F4), \"%s\", "
 		  "[`item( `id(\"groups\"), \"%s\" ), `item( `id(\"patterns\"), \"%s\" ), "
 		  " `item( `id(\"selections\"), \"%s\" ), "
@@ -366,8 +367,8 @@ void PackageSelector::createFilterMenu()
 	YCPValue layout = YCPNull ();
 	if (parsed_code != NULL)
 	    layout = parsed_code->evaluate();
-
-	y2ui->evaluateReplaceWidget( YCPSymbol("replacefilter"), layout->asTerm() ); 
+	if ( !layout.isNull() )
+	    y2ui->evaluateReplaceWidget( YCPSymbol("replacefilter"), layout->asTerm() ); 
 
     }
 }
@@ -847,7 +848,7 @@ bool PackageSelector::fillUpdateList( )
 // fillPatchPackages
 //
 //
-bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr )
+bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr, bool versions )
 {
     if ( !pkgTable )
 	return false;
@@ -888,7 +889,23 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr 
 		else
 		{
 		    patchSelectables.insert( sel );
-		    pkgTable->createListEntry( pkg, sel );			    
+
+		    if ( versions )
+		    {
+			// show all availables
+			zypp::ui::Selectable::available_iterator
+			    b = sel->availableBegin (),
+			    e = sel->availableEnd (),
+			    it;
+			for (it = b; it != e; ++it)
+			{
+			    pkgTable->createListEntry( tryCastToZyppPkg (*it), sel );
+			}
+		    }
+		    else
+		    {
+			pkgTable->createListEntry( pkg, sel );
+		    }
 		}
 
 	}
@@ -1251,8 +1268,8 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	YCPValue layout = YCPNull ();
 	if (parsed_code != NULL)
 	    layout = parsed_code->evaluate();
-
-	y2ui->evaluateReplaceWidget( YCPSymbol("replaceinfo"), layout->asTerm() );
+	if (!layout.isNull() )
+	    y2ui->evaluateReplaceWidget( YCPSymbol("replaceinfo"), layout->asTerm() );
 
 	NCPkgTable * pkgAvail = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::AvailPkgs(), true));
 
@@ -1278,8 +1295,8 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	YCPValue layout = YCPNull ();
 	if (parsed_code != NULL)
 	    layout = parsed_code->evaluate();
-
-	y2ui->evaluateReplaceWidget( YCPSymbol ("replaceinfo"), layout->asTerm() );
+	if (!layout.isNull())
+	    y2ui->evaluateReplaceWidget( YCPSymbol ("replaceinfo"), layout->asTerm() );
 
 	NCPkgTable * patchPkgs = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::PatchPkgs(), true));
 
@@ -1295,6 +1312,32 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	    fillPatchPackages( patchPkgs, packageList->getDataPointer( packageList->getCurrentItem() ) );
 	}	
     }
+    else if  ( visibleInfo->compare( PkgNames::PatchPackagesVersions() ) == YO_EQUAL )
+    {
+        // show the package table
+	const char * tableLayout = "`PkgSpecial( `id(\"pkgsversions\"), `opt(`notify), \"pkgTable\" )"; 
+	Parser parser( tableLayout );
+	YCodePtr parsed_code = parser.parse ();
+	YCPValue layout = YCPNull ();
+	if (parsed_code != NULL)
+	    layout = parsed_code->evaluate();
+	if (!layout.isNull())
+	    y2ui->evaluateReplaceWidget( YCPSymbol ("replaceinfo"), layout->asTerm() );
+
+	NCPkgTable * patchPkgsVersions = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::PatchPkgsVersions(), true));
+
+	if ( patchPkgsVersions )
+	{
+	    // set the connection to the PackageSelector !!!!
+	    patchPkgsVersions->setPackager( this );
+	    // set status strategy
+	    ObjectStatStrategy * strategy = new AvailableStatStrategy();
+	    patchPkgsVersions->setTableType( NCPkgTable::T_Availables, strategy );
+
+	    patchPkgsVersions->fillHeader( );
+	    fillPatchPackages( patchPkgsVersions, packageList->getDataPointer( packageList->getCurrentItem() ), true );
+	}	
+    }	
     else
     {
 	// show the rich text widget
@@ -1304,8 +1347,8 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	YCPValue layout = YCPNull ();
 	if (parsed_code != NULL)
 	    layout = parsed_code->evaluate ();
-
-	y2ui->evaluateReplaceWidget( YCPSymbol ("replaceinfo"), layout->asTerm() );
+	if (!layout.isNull())
+	    y2ui->evaluateReplaceWidget( YCPSymbol ("replaceinfo"), layout->asTerm() );
     
 	packageList->showInformation( );
     }
@@ -1338,11 +1381,11 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
     }
     else if ( event.selection->compare( PkgNames::AutoDeps() ) == YO_EQUAL )
     {
-	char menu[600];
+	char menu[2000];
 	
 	if ( autoCheck )
 	{
-	    sprintf ( menu,
+	    snprintf ( menu, sizeof(menu) - 1,
 		      "`MenuButton( \"%s\", ["
 		      "`menu( \"%s\", [`item( `id(\"showdeps\"), \"%s\" ), `item( `id(\"autodeps\"), \"%s\" ) ] )"
 #ifdef FIXME
@@ -1378,7 +1421,7 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 	}
 	else
 	{
-	    sprintf ( menu,
+	    snprintf ( menu, sizeof(menu) - 1,
 		      "`MenuButton( \"%s\", ["
 		      "`menu( \"%s\", [`item( `id(\"showdeps\"), \"%s\" ), `item( `id(\"autodeps\"), \"%s\" ) ] )"
 #ifdef FIXME
@@ -2034,7 +2077,15 @@ bool PackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectable 
 	    fillPatchPackages ( patchPkgList, objPtr);
 	}
     }
-
+    else if (  visibleInfo->compare( PkgNames::PatchPackagesVersions() ) == YO_EQUAL )
+    {
+	NCPkgTable *patchPkgsVersions  = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::PatchPkgsVersions(), true));
+	if ( patchPkgsVersions )
+	{
+	    fillPatchPackages ( patchPkgsVersions, objPtr, true);
+	}
+    }
+    
     return true;
 }
 
@@ -2052,6 +2103,7 @@ bool PackageSelector::showPackageDependencies ( bool doit )
     if ( depsPopup
 	 && (doit || autoCheck) )
     {
+	NCMIL << "Checking dependencies" << endl;
 	cancel = depsPopup->showDependencies( );
     }
 

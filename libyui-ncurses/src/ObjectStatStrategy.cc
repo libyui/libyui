@@ -546,87 +546,57 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
 	return false;
     }
 
-#ifdef OLD_CODE
-//    ok = slbPtr->set_status( newstatus );
-    ok = slbPtr->set_status( S_Update ); // FIXME only works for installed
-    if ( ok )
+    ZyppObj newCandidate = objPtr;
+
+    if ( newCandidate != slbPtr->candidateObj() )
     {
-	// this package is the candidate now
-	bool ret = slbPtr->setCandidate( objPtr );
-	// the new candidate can have a different one
-	slbPtr->setLicenceConfirmed (false);
-	NCMIL << "Set user candidate returns: " <<  (ret?"true":"false") << endl;	
+	NCMIL << "CANDIDATE changed" << endl;
+
+	// Change status of selectable
+	ZyppStatus status = slbPtr->status();
+
+	if ( slbPtr->installedObj() &&
+	     slbPtr->installedObj()->edition() == newCandidate->edition() )
+	{
+	    // Switch back to the original instance -
+	    // the version that was previously installed
+	    status = S_KeepInstalled;
+	}
+	else
+	{
+	    switch ( status )
+	    {
+		case S_KeepInstalled:
+		case S_Protected:
+		case S_AutoDel:
+		case S_AutoUpdate:
+		case S_Del:
+		case S_Update:
+
+		    status = S_Update;
+		    break;
+
+		case S_NoInst:
+		case S_Taboo:
+		case S_Install:
+		case S_AutoInstall:
+		    status = S_Install;
+		    break;
+	    }
+	}
+
+	// Set status
+	ok = slbPtr->set_status( status );
+	NCMIL << "Set status of: " << slbPtr->name() << " to: "
+	  << status << " returns: " << (ok?"true":"false") << endl;
+  
+	// Set candidate
+	ok = slbPtr->setCandidate( newCandidate );
+	NCMIL << "Set user candidate returns: " <<  (ok?"true":"false") << endl;
+
     }
-#endif
 
-    // this package is the candidate now
-    ok = slbPtr->setCandidate( objPtr );
-    NCMIL << "Set user candidate returns: " <<  (ok?"true":"false") << endl;	
-
-    if ( ok )
-    {
-	// set new package status
-	ok = slbPtr->set_status( newstatus );
-
-	// the new candidate can have a different one
-	slbPtr->setLicenceConfirmed (false);
-    }
-    
-    NCMIL << "Set status of: " << slbPtr->name() << " to: "
-	  << newstatus << " returns: " << (ok?"true":"false") << endl;
-    
     return ok;
-}
-
-
-///////////////////////////////////////////////////////////////////
-//
-// AvailableStatStrategy::getStatus
-//
-// Returns the status of the certain package
-//
-ZyppStatus AvailableStatStrategy::getPackageStatus( ZyppSel slbPtr,
-						    ZyppObj objPtr )
-{
-    ZyppStatus retStatus = S_NoInst;
-
-    if ( !slbPtr || ! objPtr )
-    {
-	return retStatus;
-    }
-
-#ifdef OLD_CODE
-    // ZyppStatus status = slbPtr->status();
-
-    if (objPtr == slbPtr->candidateObj())
-	retStatus = S_KeepInstalled;
-    else if (slbPtr->hasInstalledObj() &&
-	     slbPtr->installedObj()->edition() == objPtr->edition() )
-        retStatus = S_Del;
-#endif
-
-    ZyppStatus status = slbPtr->status();
-    NCDBG << "STATUS of " << slbPtr->name() << ": " <<  slbPtr->status() << endl;
-
-    if (slbPtr->hasInstalledObj() &&
-	slbPtr->installedObj()->edition() == objPtr->edition()  &&
-	slbPtr->installedObj()->arch() == objPtr->arch() )
-    {
-	// installed package: show status S_KeepInstalled or S_Delete
-	if ( status == S_KeepInstalled
-	     || status == S_Del )
-	    retStatus = status;	
-
-    }
-    else if ( objPtr == slbPtr->candidateObj() )
-    {
-	if ( status != S_KeepInstalled
-	     && status != S_Del  )
-	    retStatus = status;	
-    }
-    // else show S_NoInst
-    
-    return retStatus;
 }
 
 //------------------------------------------------------------

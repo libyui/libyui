@@ -228,15 +228,6 @@ public:
     virtual ~AvailableStatStrategy() {}
 
     /**
-     * Gets the status information from the package manager - and
-     * returns the status for a certain package.
-     * @param slbPtr The package whose status to calculate.
-     * @return UI_Status The new status of the given package
-     *
-     **/
-    virtual ZyppStatus getPackageStatus ( ZyppSel  slbPtr, ZyppObj objPtr );
-
-    /**
      * Informs the package manager about the new status and
      * additionally sets the candidate object to the user chosen object.
      * @param newStatus The new package status

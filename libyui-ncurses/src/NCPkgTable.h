@@ -228,14 +228,6 @@ public:
      */ 
     ZyppStatus getStatus( int index );
 
-    /**
-     * Gets the package status of an available  package.
-     * @param objPtr The certain package 
-     * @return ZyppStatus
-     */ 
-    ZyppStatus getAvailableStatus( const ZyppSel & slbPtr,
-				   const ZyppObj & objPtr );
-    
 #ifdef FIXME
     /**
      * Toggles the installation of the source package.

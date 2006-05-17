@@ -49,6 +49,11 @@ public:
     static const YCPValue& PatchPkgs ();
 
     /**
+     *  Widget id of the list of patch packages verions
+     */
+    static const YCPValue& PatchPkgsVersions ();
+    
+    /**
      *	Widget id of the description section ( shown on bottom of the selection dialog )
      */
     static const YCPValue& Description ();
@@ -336,6 +341,11 @@ public:
      */
     static const YCPValue& PatchPackages ();
 
+   /**
+     *  Widget id information patch packages versions
+     */
+    static const YCPValue& PatchPackagesVersions ();
+    
     /**
      *  Widget id of the directory list
      */
