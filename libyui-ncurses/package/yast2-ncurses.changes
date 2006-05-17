@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Wed May 17 17:51:48 CEST 2006 - gs@suse.de
+
+- Package Installation/Online Update: Install correct package if the user 
+  requests a certain package version, i.e. changing the "candidate".
+  Add view 'Versions' to Online Update 'Information' menu.
+  (bug #164487)
+- 2.13.31 
+
+-------------------------------------------------------------------
 Wed May 10 14:16:52 CEST 2006 - gs@suse.de
 
 - Package Installation dialag: Create appropriate 'Filter' menu 
