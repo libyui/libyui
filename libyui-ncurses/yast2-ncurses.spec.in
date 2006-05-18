@@ -17,7 +17,7 @@ Obsoletes:	yast2-ui-ncurses-devel
 Provides:	y2curses
 Obsoletes:	y2curses
 Requires:	glibc-locale
-
+Requires:	libzypp >= 1.0.0
 %description
 -
 
