@@ -144,7 +144,7 @@ YQPkgTechnicalDetailsView::simpleTable( ZyppSel selectable,
 #ifdef FIXME_missing_in_zypp
 	       row( hcell( _( "Source RPM:"	) ) + cell( pkg->sourceloc()			) ) +
 #endif
-	       row( hcell( _( "Media No.:"	) ) + cell( pkg->mediaId()			) ) +
+	       row( hcell( _( "Media No.:"	) ) + cell( pkg->sourceMediaNr()		) ) +
 	       row( hcell( _( "Authors:"	) ) + authorsListCell( pkg			) )
 	       );
 
@@ -184,7 +184,7 @@ YQPkgTechnicalDetailsView::complexTable( ZyppSel	selectable,
 #ifdef FIXME_missing_in_zypp
 	       row( hcell( _( "Source RPM:"	) ) + cell( p1->sourceloc()			) + cell( p2->sourceloc()		) ) +
 #endif
-	       row( hcell( _( "Media No.:"	) ) + cell( p1->mediaId()			) + cell( p2->mediaId()			) ) +
+	       row( hcell( _( "Media No.:"	) ) + cell( p1->sourceMediaNr()			) + cell( p2->sourceMediaNr()		) ) +
 	       row( hcell( _( "Authors:"	) ) + authorsListCell( p1			) + authorsListCell( p2			) )
 	       );
 
