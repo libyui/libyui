@@ -545,7 +545,7 @@ class NCStyleDef {
 		 (ch&A_UNDERLINE ?  'u' : '.'),
 		 (ch&A_STANDOUT ?   's' : '.'),
 		 (ch&A_ALTCHARSET ? 'A' : '.'),
-		 ch&A_CHARTEXT
+		 (unsigned)(ch&A_CHARTEXT)
 		 );
 	w.addstr( 1, 1, buf, len );
 	SubWin::draw( true );
