@@ -2231,7 +2231,7 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	    // add the media nr
 	    text += PkgNames::MediaNo();
 	    char num[5];
-	    int medianr = package->mediaId ();
+	    int medianr = package->sourceMediaNr ();
 	    sprintf( num, "%d", medianr );
 	    text += num;
 	    text += "<br>";	    
