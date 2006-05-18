@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu May 18 10:48:27 CEST 2006 - kkaempf@suse.de
+
+- adapt to libzypp 1.0.0 api
+- require libzypp >= 1.0.0
+- 2.13.32
+
+-------------------------------------------------------------------
 Wed May 17 17:51:48 CEST 2006 - gs@suse.de
 
 - Package Installation/Online Update: Install correct package if the user 
