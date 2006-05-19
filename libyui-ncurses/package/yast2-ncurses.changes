@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri May 19 14:19:18 CEST 2006 - gs@suse.de
+
+- Package Installation: Sort the pattern list (bug #176603)
+- 2.13.33
+
+-------------------------------------------------------------------
 Thu May 18 10:48:27 CEST 2006 - kkaempf@suse.de
 
 - adapt to libzypp 1.0.0 api
