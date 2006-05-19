@@ -264,7 +264,10 @@ bool order( ZyppSel slb1, ZyppSel slb2 )
 {
     ZyppSelection ptr1 = tryCastToZyppSelection (slb1->theObj());
     ZyppSelection ptr2 = tryCastToZyppSelection (slb2->theObj());
-    return ptr1->order() < ptr2->order();
+    if ( !ptr1 || !ptr2 )
+	return false;
+    else
+	return ptr1->order() < ptr2->order();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -275,7 +278,10 @@ bool orderPattern( ZyppSel slb1, ZyppSel slb2 )
 {
     ZyppPattern ptr1 = tryCastToZyppPattern (slb1->theObj());
     ZyppPattern ptr2 = tryCastToZyppPattern (slb2->theObj());
-    return ptr1->order() < ptr2->order();
+    if ( !ptr1 || !ptr2 )
+	return false;
+    else
+	return ptr1->order() < ptr2->order();
 }
 
 ///////////////////////////////////////////////////////////////////
