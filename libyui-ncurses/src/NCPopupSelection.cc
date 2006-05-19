@@ -269,6 +269,17 @@ bool order( ZyppSel slb1, ZyppSel slb2 )
 
 ///////////////////////////////////////////////////////////////////
 //
+// OrderFuncPattern 
+//
+bool orderPattern( ZyppSel slb1, ZyppSel slb2 )
+{
+    ZyppPattern ptr1 = tryCastToZyppPattern (slb1->theObj());
+    ZyppPattern ptr2 = tryCastToZyppPattern (slb2->theObj());
+    return ptr1->order() < ptr2->order();
+}
+
+///////////////////////////////////////////////////////////////////
+//
 //
 //	METHOD NAME : NCPopupSelection::fillSelectionList
 //	METHOD TYPE : bool
@@ -282,7 +293,7 @@ bool NCPopupSelection::fillSelectionList( NCPkgTable * sel, SelType type  )
 
     ZyppPoolIterator i, b, e;
     list<ZyppSel> slbList;
-  
+    
     switch ( type )
     {
 	case S_Selection:
@@ -324,6 +335,7 @@ bool NCPopupSelection::fillSelectionList( NCPkgTable * sel, SelType type  )
 			slbList.push_back (*i);
 		    }
 		}
+		slbList.sort( orderPattern );
 		break;
 	    }
 	default:
