@@ -119,6 +119,9 @@ void NCComboBox::wCreate( const wrect & newrect )
 {
   NCWidget::wCreate( newrect );
 
+  if ( !win )
+     return;
+
   wrect lrect( 0, wsze::min( newrect.Sze,
 			     wsze( label.height(), newrect.Sze.W ) ) );
   wrect trect( 0, wsze( 1, newrect.Sze.W ) );
