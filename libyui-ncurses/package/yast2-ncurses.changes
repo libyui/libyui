@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon May 22 10:10:25 CEST 2006 - gs@suse.de
+
+- Check whether the window pointer is valid in ::wCreate
+  to prevent a segfault if the terminal is too small
+  (bug #175920) 
+- 2.13.34
+
+-------------------------------------------------------------------
 Fri May 19 14:19:18 CEST 2006 - gs@suse.de
 
 - Package Installation: Sort the pattern list (bug #176603)
