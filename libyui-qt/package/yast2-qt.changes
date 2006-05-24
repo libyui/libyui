@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed May 24 17:47:15 CEST 2006 - sh@suse.de
+
+- V 2.13.59
+- Added support for licenses for patches (bug #174476) 
+
+-------------------------------------------------------------------
 Thu May 18 10:51:01 CEST 2006 - kkaempf@suse.de
 
 - adapt to libzypp 1.0.0 api
