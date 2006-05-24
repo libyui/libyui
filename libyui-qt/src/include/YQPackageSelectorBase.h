@@ -23,6 +23,7 @@
 
 #include <qvbox.h>
 #include "YPackageSelector.h"
+#include "YQZypp.h"
 
 
 class QY2ComboTabWidget;
@@ -149,13 +150,22 @@ protected:
 
     /**
      * Show all license agreements the user has not confirmed yet
-     * (for all packages that will be installed).
+     * (for all packages that will be installed, and in YOU mode also for
+     * patches).
      *
      * Returns 'true' if all licenses were confirmed, 'false' if one or more
      * licenses were not confirmed (in which case some packages might be set to
      * S_TABOO, which might require another resolver run).
      **/
     bool showPendingLicenseAgreements();
+
+    /**
+     * Show all license agreements in a resolvable range. To be used with
+     * zyppPkgBegin() and zyppPkgEnd() or with zyppPatchesBegin() and
+     * zyppPatchesEnd().
+     **/
+    bool showPendingLicenseAgreements( ZyppPoolIterator begin,
+				       ZyppPoolIterator end );
 
     /**
      * Event handler for keyboard input - for debugging and testing.

@@ -317,7 +317,7 @@ YQPkgObjList::setAllItemStatus( ZyppStatus newStatus, bool force )
 
     emit updateItemStates();
     emit updatePackages();
-    
+
     YQUI::ui()->normalCursor();
     emit statusChanged();
 }
@@ -814,7 +814,7 @@ YQPkgObjListItem::solveResolvableCollections()
     zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
 
     resolver->transactReset( zypp::ResStatus::APPL_LOW );
-    
+
     resolver->transactResKind( zypp::ResTraits<zypp::Product  >::kind );
     resolver->transactResKind( zypp::ResTraits<zypp::Selection>::kind );
     resolver->transactResKind( zypp::ResTraits<zypp::Pattern  >::kind );
@@ -976,13 +976,8 @@ YQPkgObjListItem::showLicenseAgreement( ZyppSel sel )
 	    if ( sel->hasLicenceConfirmed() )
 		return true;
 
-	    if ( sel->hasCandidateObj() )
-	    {
-		ZyppPkg pkg = tryCastToZyppPkg( sel->candidateObj() );
-
-		if ( pkg )
-		    licenseText = pkg->licenseToConfirm();
-	    }
+	    if ( sel->candidateObj() )
+		licenseText = sel->candidateObj()->licenseToConfirm();
 	    break;
 
 	default: return true;

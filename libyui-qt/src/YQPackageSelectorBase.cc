@@ -277,9 +277,21 @@ YQPackageSelectorBase::showPendingLicenseAgreements()
 
     bool allConfirmed = true;
 
-    for ( ZyppPoolIterator it = zyppPkgBegin();
-	  it != zyppPkgEnd();
-	  ++it )
+    if ( _youMode )
+	allConfirmed = showPendingLicenseAgreements( zyppPatchesBegin(), zyppPatchesEnd() );
+
+    allConfirmed = showPendingLicenseAgreements( zyppPkgBegin(), zyppPkgEnd() ) && allConfirmed;
+
+    return allConfirmed;
+}
+
+
+bool
+YQPackageSelectorBase::showPendingLicenseAgreements( ZyppPoolIterator begin, ZyppPoolIterator end )
+{
+    bool allConfirmed = true;
+    
+    for ( ZyppPoolIterator it = begin; it != end; ++it )
     {
 	ZyppSel sel = (*it);
 
@@ -292,25 +304,20 @@ YQPackageSelectorBase::showPendingLicenseAgreements()
 
 		if ( sel->candidateObj() )
 		{
-		    ZyppPkg pkg = tryCastToZyppPkg( sel->candidateObj() );
+		    string licenseText = sel->candidateObj()->licenseToConfirm();
 
-		    if ( pkg )
+		    if ( ! licenseText.empty() )
 		    {
-			string licenseText = pkg->licenseToConfirm();
+			y2milestone( "Resolvable %s has a license agreement", sel->name().c_str() );
 
-			if ( ! licenseText.empty() )
+			if( ! sel->hasLicenceConfirmed() )
 			{
-			    y2milestone( "Pkg %s has a license agreement", sel->name().c_str() );
-
-			    if( ! sel->hasLicenceConfirmed() )
-			    {
-				y2debug( "Showing license agreement for pkg %s", sel->name().c_str() );
-				allConfirmed = YQPkgObjListItem::showLicenseAgreement( sel ) && allConfirmed;
-			    }
-			    else
-			    {
-				y2milestone( "Pkg %s's  license is already confirmed", sel->name().c_str() );
-			    }
+			    y2debug( "Showing license agreement for resolvable %s", sel->name().c_str() );
+			    allConfirmed = YQPkgObjListItem::showLicenseAgreement( sel ) && allConfirmed;
+			}
+			else
+			{
+			    y2milestone( "Resolvable %s's  license is already confirmed", sel->name().c_str() );
 			}
 		    }
 		}
