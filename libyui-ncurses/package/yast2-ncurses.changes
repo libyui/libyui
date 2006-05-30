@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue May 30 11:57:06 CEST 2006 - gs@suse.de
+
+- Added support for licenses for patches (bug #174476)
+- 2.13.35 
+
+-------------------------------------------------------------------
 Mon May 22 10:10:25 CEST 2006 - gs@suse.de
 
 - Check whether the window pointer is valid in ::wCreate
