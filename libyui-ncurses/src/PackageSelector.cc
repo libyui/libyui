@@ -1889,7 +1889,7 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
     bool closeDialog = true;
     bool confirmedAllLicenses = false;
 
-    // check/show dependencies and automatic changes also if youMode == true
+    // check/show dependencies also if youMode == true
     do
     {
 	// show the dependency popup
@@ -1965,20 +1965,25 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
     }
 }
 
-
 bool PackageSelector::showPendingLicenseAgreements()
+{
+    bool allConfirmed = true;
+
+    if ( youMode )
+	allConfirmed = showPendingLicenseAgreements( zyppPatchesBegin(), zyppPatchesEnd() );
+
+    allConfirmed = showPendingLicenseAgreements( zyppPkgBegin(), zyppPkgEnd() ) && allConfirmed;
+
+    return allConfirmed;
+}
+
+bool PackageSelector::showPendingLicenseAgreements( ZyppPoolIterator begin, ZyppPoolIterator end )
 {
     y2milestone( "Showing all pending license agreements" );
 
     bool allConfirmed = true;
 
-    NCPkgTable * packageList = getPackageList();
-    if ( !packageList )
-	return false;
-    
-    for ( ZyppPoolIterator it = zyppPkgBegin();
-	  it != zyppPkgEnd();
-	  ++it )
+    for ( ZyppPoolIterator it = begin; it != end; ++it )
     {
 	ZyppSel sel = (*it);
 
@@ -1991,25 +1996,19 @@ bool PackageSelector::showPendingLicenseAgreements()
 
 		if ( sel->candidateObj() )
 		{
-		    ZyppPkg pkg = tryCastToZyppPkg( sel->candidateObj() );
+		    string licenseText = sel->candidateObj()->licenseToConfirm();
 
-		    if ( pkg )
+		    if ( ! licenseText.empty() )
 		    {
-			string licenseText = pkg->licenseToConfirm();
+			y2milestone( "Package/Patch %s has a license agreement", sel->name().c_str() );
 
-			if ( ! licenseText.empty() )
+			if( ! sel->hasLicenceConfirmed() )
 			{
-			    y2milestone( "Pkg %s has a license agreement", sel->name().c_str() );
-
-			    if( ! sel->hasLicenceConfirmed() )
-			    {
-				y2debug( "Showing license agreement for pkg %s", sel->name().c_str() );
-				allConfirmed = packageList->showLicenseAgreement( sel, licenseText ) && allConfirmed;
-			    }
-			    else
-			    {
-				y2milestone( "Pkg %s's  license is already confirmed", sel->name().c_str() );
-			    }
+			    allConfirmed = showLicenseAgreement( sel, licenseText ) && allConfirmed;
+			}
+			else
+			{
+			    y2milestone( "Package/Patch %s's  license is already confirmed", sel->name().c_str() );
 			}
 		    }
 		}
@@ -2023,6 +2022,51 @@ bool PackageSelector::showPendingLicenseAgreements()
     return allConfirmed;
 }
 
+bool PackageSelector::showLicenseAgreement( ZyppSel & slbPtr , string licenseText )
+{
+    if ( !slbPtr )
+	return false;
+
+    bool license_confirmed = true;
+    bool ok = true;
+    string pkgName = slbPtr->name();
+
+    NCPopupInfo info( wpos( 1, 1),
+		      PkgNames::NotifyLabel(),
+		      YCPString( "<i>" + pkgName + "</i><br><br>" + createDescrText( licenseText ) ),
+		      PkgNames::AcceptLabel(),
+		      PkgNames::CancelLabel() );
+    license_confirmed = info.showInfoPopup( ) != NCursesEvent::cancel;
+
+
+    if ( !license_confirmed )
+    {
+	// make sure the package won't be installed
+	switch ( slbPtr->status() )
+	{
+	    case S_Install:
+	    case S_AutoInstall:
+		slbPtr->set_status( S_Taboo );
+		break;
+		    
+	    case S_Update:
+	    case S_AutoUpdate:
+		slbPtr->set_status(  S_Protected );
+		break;
+
+	    default:
+		break;
+	}
+	    
+	ok = false;
+    } else {
+	NCMIL << "User confirmed license agreement for " << pkgName << endl;
+	slbPtr->setLicenceConfirmed (true);
+	ok = true;
+    }
+
+    return ok;
+}
 
 
 ///////////////////////////////////////////////////////////////////

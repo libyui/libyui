@@ -239,27 +239,14 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 		notify = objPtr->insnotify();
 		NCDBG << "NOTIFY message: " << notify << endl;
 		header = YCPString(PkgNames::NotifyLabel());
-
-		// get license (available for packages only)  
-		pkgPtr = tryCastToZyppPkg (objPtr);
-		if ( pkgPtr )
-		{
-		    license = pkgPtr->licenseToConfirm();
-		    license_confirmed = slbPtr->hasLicenceConfirmed();
-		}
 	    }
-	    break;
 	case S_AutoInstall:
 	case S_AutoUpdate:
 	    if ( objPtr )
 	    {
-		// check license in case of S_AutoInstall/Update, too
-		pkgPtr = tryCastToZyppPkg (objPtr);
-		if ( pkgPtr )
-		{
-		    license = pkgPtr->licenseToConfirm();
-		    license_confirmed = slbPtr->hasLicenceConfirmed();
-		}
+		// check license of packages and patches in case of S_Install/S_Update/S_AutoInstall/S_AutoUpdate
+		license = objPtr->licenseToConfirm();
+		license_confirmed = slbPtr->hasLicenceConfirmed();
 	    }
 	    break;
 
@@ -270,12 +257,14 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 
     if ( !license.empty() )
     {
-	if (!license_confirmed) {
+	if (!license_confirmed)
+	{
 	    NCPopupInfo info( wpos( 1, 1),
-			  YCPString(_("End User License Agreement") ),
-			  YCPString( "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( license ) ),
-			  PkgNames::AcceptLabel(),
-			  PkgNames::CancelLabel() );
+			      PkgNames::NotifyLabel(),
+			      //YCPString(_("End User License Agreement") ),
+			      YCPString( "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( license ) ),
+			      PkgNames::AcceptLabel(),
+			      PkgNames::CancelLabel() );
 	    license_confirmed = info.showInfoPopup( ) != NCursesEvent::cancel;
 	}
 
@@ -300,6 +289,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    
 	    ok = false;
 	} else {
+	    NCMIL << "User confirmed license agreement for " << pkgName << endl;
 	    slbPtr->setLicenceConfirmed (true);
 	}
     }
@@ -349,51 +339,6 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    // additionally update the package list
 	    packager->updatePackageList();
 	}
-    }
-
-    return ok;
-}
-
-bool NCPkgTable::showLicenseAgreement( ZyppSel & slbPtr , string licenseText )
-{
-    if ( !packager || !slbPtr )
-	return false;
-
-    bool license_confirmed = true;
-    bool ok = true;
-    string pkgName = slbPtr->name();
-
-    NCPopupInfo info( wpos( 1, 1),
-		      YCPString(_("End User License Agreement") ),
-		      YCPString( "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( licenseText ) ),
-		      PkgNames::AcceptLabel(),
-		      PkgNames::CancelLabel() );
-    license_confirmed = info.showInfoPopup( ) != NCursesEvent::cancel;
-
-
-    if ( !license_confirmed )
-    {
-	// make sure the package won't be installed
-	switch ( slbPtr->status() )
-	{
-	    case S_Install:
-	    case S_AutoInstall:
-		slbPtr->set_status( S_Taboo );
-		break;
-		    
-	    case S_Update:
-	    case S_AutoUpdate:
-		slbPtr->set_status(  S_Protected );
-		break;
-
-	    default:
-		break;
-	}
-	    
-	ok = false;
-    } else {
-	slbPtr->setLicenceConfirmed (true);
-	ok = true;
     }
 
     return ok;

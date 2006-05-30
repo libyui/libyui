@@ -406,8 +406,15 @@ class PackageSelector
    /**
      * Check for license
      */
-    bool showPendingLicenseAgreements(); 
+    bool showPendingLicenseAgreements();
+    bool showPendingLicenseAgreements( ZyppPoolIterator begin, ZyppPoolIterator end );
 
+   /**
+    * Show popup with license.
+    * @return bool
+    */   
+    bool showLicenseAgreement( ZyppSel & slbPtr , string licenseText );
+    
     void createFilterMenu();
 
 };
