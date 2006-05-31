@@ -26,6 +26,7 @@
 #include <qwidgetlist.h>
 #include <qtextcodec.h>
 #include <qregexp.h>
+#include <qlocale.h>
 #include <qmessagebox.h>
 
 #include <X11/Xlib.h>
@@ -399,12 +400,10 @@ bool YQUI::showEventFilter( QObject * obj, QEvent * ev )
 void YQUI::loadPredefinedQtTranslations()
 {
     QString path = QT_LOCALEDIR;
-    QString language = QTextCodec::locale();
+    QString language = QLocale::system().name();
 
-    if ( language.length() > 2 )
-	language.remove( 2, language.length() - 2 );
-    QString trans_file = QString( "qt_%1.qm").arg( language );
-
+    QString trans_file = QString( "qt_%1.qm")
+              .arg( language.lower().replace('_','-') );
 
     if ( path.isEmpty() )
     {
@@ -414,6 +413,13 @@ void YQUI::loadPredefinedQtTranslations()
     }
 
     _qtTranslations.load( trans_file, path );
+
+    if ( _qtTranslations.isEmpty() )
+    {
+	// try fallback
+	trans_file = QString( "qt_%1.qm").arg( language.lower().left(2) );
+	_qtTranslations.load( trans_file, path );
+    }
 
     if ( _qtTranslations.isEmpty() )
     {
