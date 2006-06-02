@@ -429,6 +429,12 @@ bool PatchStatStrategy::toggleStatus( ZyppSel slbPtr,
 	case S_NoInst:
 	    newStatus = S_Install ;
 	    break;
+    	case S_Taboo:
+	    newStatus = S_NoInst;
+	    break;
+	case S_Protected:
+	    newStatus = S_KeepInstalled;
+	    break;
 	default:
 	    newStatus = oldStatus;
     }
