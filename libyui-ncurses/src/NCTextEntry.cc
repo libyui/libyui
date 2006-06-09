@@ -405,6 +405,8 @@ void NCTextEntry::tUpdate()
     else
 	twin->addch( ACS_CKBOARD );
   }
+  
+  Update();
 }
 
 ///////////////////////////////////////////////////////////////////

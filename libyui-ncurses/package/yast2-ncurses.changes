@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jun  9 14:36:07 CEST 2006 - visnov@suse.cz
+
+- Redraw the screen after updating the text entry value (#167609)
+- 2.13.37
+
+-------------------------------------------------------------------
 Fri Jun  2 17:21:59 CEST 2006 - gs@suse.de
 
 - Online Update: make resetting of status Taboo and Protected
