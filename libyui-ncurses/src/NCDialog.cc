@@ -1054,7 +1054,7 @@ void NCDialog::processInput( int timeout_millisec )
     // if there is no active widget and we are in timeout, handle properly
     // bug #182982
     if ( timeout_millisec > 0 ) {
-	sleep( timeout_millisec);
+	usleep( timeout_millisec);
         pendingEvent = NCursesEvent::timeout;
     }
 	
