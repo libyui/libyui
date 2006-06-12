@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Jun 12 17:16:39 CEST 2006 - visnov@suse.cz
+
+- If there is no active widget and we are running against timeout,
+  really timeout (#182982)
+- 2.13.38
+
+-------------------------------------------------------------------
 Fri Jun  9 14:36:07 CEST 2006 - visnov@suse.cz
 
 - Redraw the screen after updating the text entry value (#167609)
