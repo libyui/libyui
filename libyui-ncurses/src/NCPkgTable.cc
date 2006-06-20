@@ -532,8 +532,8 @@ void NCPkgTable::fillHeader( )
 	    header.push_back( "L" + PkgNames::PkgStatus() );
 	    header.push_back( "L" + PkgNames::PkgName() );
 	    header.push_back( "L" + PkgNames::PatchKind() );
-	    header.push_back( "L" + PkgNames::PkgSummary() );
-	    header.push_back( "L" + PkgNames::PkgSize() );
+	    // header.push_back( "L" + PkgNames::PkgSummary() );
+	    // header.push_back( "L" + PkgNames::PkgSize() );
 	    break;
 	}
 	case T_Selections: {
@@ -730,12 +730,14 @@ bool NCPkgTable::createPatchEntry ( ZyppPatch patchPtr, ZyppSel	selectable )
 	NCERR << "No valid patch available" << endl;
 	return false;
     }
-
-    pkgLine.push_back( selectable->name() );	// name
+    if ( !patchPtr->summary().empty() )
+	pkgLine.push_back( patchPtr->summary() );  	// short description
+    else
+	pkgLine.push_back( selectable->name() );	// name	
     pkgLine.push_back( patchPtr->category() );  // patch kind
-    pkgLine.push_back( patchPtr->summary() );  	// short description
-    zypp::ByteCount size = patchPtr->size(); 	// installed size
-    pkgLine.push_back( size.asString( 8 ) );
+
+    // zypp::ByteCount size = patchPtr->size();
+    // pkgLine.push_back( size.asString( 8 ) );
 
     
     addLine( selectable->status(), //  get the status
