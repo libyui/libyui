@@ -12,5 +12,23 @@
 ## special stuff
 AC_MIN_QT_VERSION(301,3.01)
 
+AC_MSG_CHECKING([X font directory])
+coresysconfdir=`pkg-config --print-errors --variable=sysconfdir yast2-core`
+if test -z "$coresysconfdir"; then
+   AC_MSG_ERROR([yast2-core.rpm does not specify sysconfdir, get a newer one])
+fi
+#argh hack
+if test "$coresysconfdir" = /usr/etc; then
+   coresysconfdir=/etc
+fi
+XVersion=$coresysconfdir/YaST2/XVersion
+
+Xfontsdir=`. $XVersion; echo $Xfontsdir`
+if test -z "$Xfontsdir"; then
+   AC_MSG_ERROR([$XVersion not found, get a newer yast2.rpm])
+fi
+AC_MSG_RESULT([$Xfontsdir])
+AC_SUBST(Xfontsdir)
+
 ## and generate the output
 @YAST2-OUTPUT@
