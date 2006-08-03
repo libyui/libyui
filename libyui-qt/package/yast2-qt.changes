@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-Wed Aug  2 15:58:33 CEST 2006 - mvidner@suse.cz
+Thu Aug  3 15:23:52 CEST 2006 - mvidner@suse.cz
 
 - Added a configure-time check for the X font directory.
 - 2.13.61
