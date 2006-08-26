@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Jun 20 14:49:52 CEST 2006 - gs@suse.de
+
+- Online Update: don't show the patch size (bug #186100);
+  show the patch summary, if available, else the name of the patch
+  (bug #186209).
+- 2.13.40   
+
+-------------------------------------------------------------------
 Mon Jun 12 17:46:25 CEST 2006 - mvidner@suse.cz
 
 - Fixed the previous fix not to pass milliseconds to usleep.

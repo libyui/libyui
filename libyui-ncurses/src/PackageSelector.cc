@@ -2098,8 +2098,9 @@ bool PackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectable 
 	descr += PkgNames::Patch();
 	descr += selectable->name();
 	descr += "&nbsp;";
-	descr += PkgNames::Size();
-	descr += patchPtr->size().asString( 8 );
+	// the patch size is not available
+        // descr += PkgNames::Size();
+	// descr += patchPtr->size().asString( 8 );
 	descr += "<br>";
 	// get and format the patch description
 	zypp::Text value = patchPtr->description();
