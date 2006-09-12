@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Sep 12 14:36:02 CEST 2006 - gs@suse.de
+
+- Package Installation: show details of package and pattern 
+  dependencies (bug #178494, bug #201745) 
+- 2.13.41
+
+-------------------------------------------------------------------
 Tue Jun 20 14:49:52 CEST 2006 - gs@suse.de
 
 - Online Update: don't show the patch size (bug #186100);
