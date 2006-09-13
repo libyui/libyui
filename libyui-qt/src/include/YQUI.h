@@ -236,7 +236,14 @@ public:
      **/
     QString productName() const;
 
+    /**
+     * Beep - activate the system (X11) bell.
+     *
+     * Reimplemented from YUI.
+     */
+    void beep();
 
+    
 public slots:
 
     /**
