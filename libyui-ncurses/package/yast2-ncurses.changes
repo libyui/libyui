@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Sep 13 16:42:39 CEST 2006 - sh@suse.de
+
+- Applied patch from Ricardo Cruz <rpmcruz@clix.pt>
+  for new UI::Beep() built-in 
+
+-------------------------------------------------------------------
 Tue Sep 12 14:36:02 CEST 2006 - gs@suse.de
 
 - Package Installation: show details of package and pattern 
