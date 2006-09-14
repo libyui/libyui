@@ -17,6 +17,7 @@ liby2ncurses_la_LDFLAGS = -version-info 2:0
 
 libpy2ncurses_la_LIBADD =		\
 	-lyui				\
+	${ZYPP_LIBS}			\
 	-lncursesw -lpanelw
 liby2ncurses_la_LIBADD = $(libpy2ncurses_la_LIBADD)
 
