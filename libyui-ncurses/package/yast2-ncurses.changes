@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Sep 14 14:40:07 CEST 2006 - gs@suse.de
+
+- Package Installation: default entry in filter menu is 'Patterns'
+- 2.13.42
+
+-------------------------------------------------------------------
 Thu Sep 14 11:17:50 CEST 2006 - kmachalkova@suse.cz
 
 - Adding ncursesw autoconf check to configure.in.in to ensure
