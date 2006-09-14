@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Sep 14 11:17:50 CEST 2006 - kmachalkova@suse.cz
+
+- Adding ncursesw autoconf check to configure.in.in to ensure
+  portability to other distros (#201705) 
+
+-------------------------------------------------------------------
 Thu Sep 14 10:59:56 CEST 2006 - gs@suse.de
 
 - Package Installation: search in the "provides" tag of the installed
