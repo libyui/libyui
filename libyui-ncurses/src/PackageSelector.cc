@@ -315,18 +315,18 @@ void PackageSelector::createFilterMenu()
 	selections = false;
     }
 	
-    if ( patterns && !selections )
+    if ( selections && !patterns )
     {
-	// ReplaceWidget and show menu entry Patterns instead of Selections
+	// ReplaceWidget and show menu entry Selections instead of Patterns
 	char menu[4000];
 	snprintf ( menu, sizeof(menu) - 1,
 		  "`MenuButton( `opt(`key_F4), \"%s\", "
-		  "[`item( `id(\"groups\"), \"%s\" ), `item( `id(\"patterns\"), \"%s\" ), "
+		  "[`item( `id(\"groups\"), \"%s\" ), `item( `id(\"selections\"), \"%s\" ), "
 		  " `item( `id(\"search\"), \"%s\" ), `item( `id(\"installed\"), \"%s\" ), "
 		  " `item( `id(\"whatif\"), \"%s\" ), `item( `id(\"updatelist\"), \"%s\" ) ] ) ",
 		  PkgNames::MenuFilter().c_str(),
 		  PkgNames::MenuEntryRPMGroups().c_str(),
-		  PkgNames::MenuEntryPatterns().c_str(),
+		  PkgNames::MenuEntrySelections().c_str(),
 		  PkgNames::MenuEntrySearch().c_str(),
 		  PkgNames::MenuEntryInstPkg().c_str() ,
 		  PkgNames::MenuEntryInstSummary().c_str(),

@@ -19,7 +19,7 @@
 									    // begin: menu items of the filter menu
 									    // please note: use unique hotkeys until end:
 									    [`item( `id("groups"), 	_( "&RPM Groups" ) ),
-									     `item( `id("selections"), 	_( "Se&lections" ) ),
+									     `item( `id("patterns"), 	_( "Pa&tterns" ) ),
 									     `item( `id("search"), 	_( "&Search" ) ),
 									     `item( `id("installed"),	_( "Installed &Packages" ) ),
 									     `item( `id("whatif"), 	_( "&Installation Summary" ) ),
