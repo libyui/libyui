@@ -679,34 +679,40 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
     
     while ( listIt != pkgList.end() )
     {
-	pkg = tryCastToZyppPkg ((*listIt)->theObj());
+	if ( (*listIt)->installedObj() )
+	   pkg = tryCastToZyppPkg ((*listIt)->installedObj());
+	else
+	   pkg = tryCastToZyppPkg ((*listIt)->theObj());
 
-	if ( checkDescr )
+	if ( pkg )
 	{
-	    zypp::Text value = pkg->description();
-	    description = createDescrText( value );    
-	}
-	if ( checkProvides )
-	{
-	    zypp::CapSet value = pkg->dep (zypp::Dep::PROVIDES);
-	    provides = createRelLine( value );  
-	}
-	if ( checkRequires )
-	{
-	    zypp::CapSet value = pkg->dep (zypp::Dep::REQUIRES);
-	    requires = createRelLine( value );    
-	}
-	if ( ( checkName && match( pkg->name(), expr->value(), ignoreCase )) ||
-	     ( checkSummary && match( pkg->summary(), expr->value(), ignoreCase) ) ||
-	     ( checkDescr && match( description, expr->value(), ignoreCase) ) ||
-	     ( checkProvides && match( provides, expr->value(), ignoreCase) ) ||
-	     ( checkRequires && match( requires,  expr->value(), ignoreCase) )
-	     )
-	{
-	    // search sucessful
-	    packageList->createListEntry( pkg, *listIt );
-	}
-	
+	    if ( checkDescr )
+	    {
+		zypp::Text value = pkg->description();
+		description = createDescrText( value );    
+	    }
+	    if ( checkProvides )
+	    {
+		zypp::CapSet value = pkg->dep (zypp::Dep::PROVIDES);
+		provides = createRelLine( value );
+	    }
+	    if ( checkRequires )
+	    {
+		zypp::CapSet value = pkg->dep (zypp::Dep::REQUIRES);
+		requires = createRelLine( value );    
+	    }
+	    if ( ( checkName && match( pkg->name(), expr->value(), ignoreCase )) ||
+		 ( checkSummary && match( pkg->summary(), expr->value(), ignoreCase) ) ||
+		 ( checkDescr && match( description, expr->value(), ignoreCase) ) ||
+		 ( checkProvides && match( provides, expr->value(), ignoreCase) ) ||
+		 ( checkRequires && match( requires,  expr->value(), ignoreCase) )
+		 )
+	    {
+		// search sucessful
+		packageList->createListEntry( pkg, *listIt );
+	    }
+	}	
+
 	++listIt;
     }
 
@@ -1097,7 +1103,7 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
 bool PackageSelector::match ( string s1, string s2, bool ignoreCase )
 {
     string::iterator pos;
-
+    
     if ( ignoreCase )
     {
 	pos = search( s1.begin(), s1.end(),
