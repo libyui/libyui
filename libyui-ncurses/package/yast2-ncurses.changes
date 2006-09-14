@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Sep 14 10:59:56 CEST 2006 - gs@suse.de
+
+- Package Installation: search in the "provides" tag of the installed
+  package (bug #180232) 
+
+-------------------------------------------------------------------
 Wed Sep 13 16:42:39 CEST 2006 - sh@suse.de
 
 - Applied patch from Ricardo Cruz <rpmcruz@clix.pt>
