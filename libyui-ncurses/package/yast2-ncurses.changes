@@ -3,6 +3,7 @@ Mon Sep 18 13:17:22 CEST 2006 - kmachalkova@suse.cz
 
 - Improved HTML parser in NCRichText (header, paragraph and list
   handling) (FaTE #3124) 
+- 2.13.43
 
 -------------------------------------------------------------------
 Thu Sep 14 14:40:07 CEST 2006 - gs@suse.de
