@@ -631,7 +631,7 @@ size_t NCRichText::textWidth( wstring wstr )
 //	METHOD NAME : NCRichText::PadSetAttr
 //	METHOD TYPE : void
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Set character attributes (e.g. color, font face...)
 //
 inline void NCRichText::PadSetAttr()
 {
@@ -869,6 +869,9 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
   case T_LEVEL:
     PadChangeLevel( endtag, leveltag );
     PadBOL();
+	// add new line after end of the list
+    if (endtag)
+      PadNL();
     break;
 
   case T_BR:
@@ -876,26 +879,29 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
     break;
 
   case T_HEAD:
-    if ( endtag )
+    if ( endtag ) 
       Tattr &= ~token;
     else
       Tattr |= token;
+
     PadSetAttr();
     PadBOL();
 
-    if ( headinglevel == 1 )
-	PadNL();
-
-    if ( headinglevel == 2 )
-	PadNL();
+    if ( headinglevel && endtag )
+	  PadNL();
 
     break;
 
   case T_PAR:
     PadBOL();
-    if ( !endtag && !cindent ) {
-      PadTXT( L"  ", 2 );
-    }
+    if ( !cindent ) {
+	  //if ( !endtag ) 
+	  if ( endtag ) 
+//	    PadTXT( L"  ", 2 );
+  //	  else
+		// add new line after closing tag (FaTE 3124)
+	    PadNL();
+	}	
     break;
 
   case T_LI:
