@@ -543,7 +543,7 @@ YQPackageSelector::layoutButtons( QWidget * parent )
     // Translators: Please keep this short!
     _checkDependenciesButton = new QPushButton( _( "Chec&k" ), button_box );
     CHECK_PTR( _checkDependenciesButton );
-    _checkDependenciesButton->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
+    _checkDependenciesButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
     _normalButtonBackground = _checkDependenciesButton->paletteBackgroundColor();
 
     connect( _checkDependenciesButton,	SIGNAL( clicked() ),
