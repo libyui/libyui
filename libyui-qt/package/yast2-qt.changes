@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Sep 22 16:59:31 CEST 2006 - sh@suse.de
+
+- Allow pattern categories to be collapsed 
+- V 2.13.62
+
+-------------------------------------------------------------------
 Wed Sep 13 16:42:01 CEST 2006 - sh@suse.de
 
 - Applied patch from Ricardo Cruz <rpmcruz@clix.pt>

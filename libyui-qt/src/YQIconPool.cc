@@ -48,6 +48,8 @@
 #include "icons/taboo_disabled.xpm"
 #include "icons/update.xpm"
 #include "icons/update_disabled.xpm"
+#include "icons/tree_plus.xpm"
+#include "icons/tree_minus.xpm"
 
 #include "icons/normal_conflict.xpm"
 #include "icons/select_conflict.xpm"
@@ -98,6 +100,9 @@ QPixmap YQIconPool::unresolvablePkgConflict()	{ return iconPool()->cachedIcon( u
 QPixmap YQIconPool::deletePkgConflict()		{ return iconPool()->cachedIcon( delete_conflict_xpm );		}
 QPixmap YQIconPool::tabooPkgConflict()		{ return iconPool()->cachedIcon( normal_conflict_xpm );		}
 QPixmap YQIconPool::selectPkgConflict()		{ return iconPool()->cachedIcon( select_conflict_xpm );		}
+
+QPixmap YQIconPool::treePlus()			{ return iconPool()->cachedIcon( tree_plus_xpm  );		}
+QPixmap YQIconPool::treeMinus()			{ return iconPool()->cachedIcon( tree_minus_xpm );		}
 
 
 YQIconPool * YQIconPool::iconPool()

@@ -30,6 +30,7 @@
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgPatternList.h"
+#include "YQIconPool.h"
 #include "YQUI.h"
 
 
@@ -210,6 +211,32 @@ YQPkgPatternList::selection() const
 }
 
 
+void
+YQPkgPatternList::pkgObjClicked( int			button,
+				 QListViewItem *	listViewItem,
+				 int			col,
+				 const QPoint &		pos )
+{
+    YQPkgPatternCategoryItem * categoryItem
+	= dynamic_cast<YQPkgPatternCategoryItem *> (listViewItem);
+
+    if ( categoryItem )
+    {
+	if ( button == Qt::LeftButton )
+	{
+	    if ( col == statusCol() )
+	    {
+		categoryItem->setOpen( ! categoryItem->isOpen() );
+	    }
+	}
+    }
+    else
+    {
+	YQPkgObjList::pkgObjClicked( button, listViewItem, col, pos );
+    }
+}
+
+
 
 
 
@@ -296,11 +323,12 @@ YQPkgPatternListItem::compare( QListViewItem *	otherListViewItem,
 YQPkgPatternCategoryItem::YQPkgPatternCategoryItem( YQPkgPatternList *	patternList,
 						    const QString &	category	)
     : QY2ListViewItem( patternList )
+    , _patternList( patternList )
 {
-    setText( patternList->summaryCol(), category );
+    setText( _patternList->summaryCol(), category );
     setBackgroundColor( CATEGORY_BACKGROUND );
     setOpen( true );
-    setSelectable( false );
+    setTreeIcon();
 }
 
 
@@ -339,13 +367,23 @@ YQPkgPatternCategoryItem::addPattern( ZyppPattern pattern )
 
 
 void
-YQPkgPatternCategoryItem::setOpen( bool )
+YQPkgPatternCategoryItem::setOpen( bool open )
 {
-    // Pattern categories should always remain open -
-    // suppress any attempt to close them
-
-    QListViewItem::setOpen( true );
+    QListViewItem::setOpen( open );
+    setTreeIcon();
 }
+
+
+void
+YQPkgPatternCategoryItem::setTreeIcon()
+{
+    setPixmap( _patternList->statusCol(),
+	       isOpen() ?
+	       YQIconPool::treeMinus() :
+	       YQIconPool::treePlus()   );
+    
+}
+
 
 
 /**
