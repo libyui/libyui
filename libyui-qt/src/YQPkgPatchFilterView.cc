@@ -52,10 +52,9 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
 {
     QVBox * vbox;
 
-    _splitter			= new QSplitter( QSplitter::Vertical, this );	CHECK_PTR( _splitter 		);
-
-    vbox			= new QVBox( _splitter );			CHECK_PTR( vbox			);
-    _patchList		= new YQPkgPatchList( vbox );		CHECK_PTR( _patchList 	);
+    _splitter			= new QSplitter( QSplitter::Vertical, this );	CHECK_PTR( _splitter 	);
+    vbox			= new QVBox( _splitter );			CHECK_PTR( vbox		);
+    _patchList			= new YQPkgPatchList( vbox );			CHECK_PTR( _patchList 	);
 
     addVSpacing( vbox, 4 );
 
