@@ -237,6 +237,28 @@ YQPkgPatternList::pkgObjClicked( int			button,
 }
 
 
+void
+YQPkgPatternList::selectSomething()
+{
+    QListViewItemIterator it( this );
+
+    while ( *it )
+    {
+	QY2ListViewItem * item = dynamic_cast<QY2ListViewItem *> (*it);
+	YQPkgPatternCategoryItem * categoryItem =
+	    dynamic_cast<YQPkgPatternCategoryItem *> (*it);
+
+	if ( item && item->isSelectable() && ! categoryItem )
+	{
+	    setSelected( item, true ); // emits signal, too
+	    return;
+	}
+	
+	++it;
+    }
+}
+
+
 
 
 

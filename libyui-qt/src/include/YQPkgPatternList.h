@@ -98,6 +98,13 @@ public slots:
 				int		col,
 				const QPoint &	pos );
 
+    /**
+     * Select the first selectable list entry that is not a pattern category.
+     *
+     * Reimplemented from QY2ListView.
+     **/
+    virtual void selectSomething();
+
     
 public:
 
