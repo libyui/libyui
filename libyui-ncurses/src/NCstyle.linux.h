@@ -84,6 +84,7 @@ inline void NCstyleInit_linux( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextLink, 15104 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 15104|A_BOLD );
   attrset->setAttr( NCstyle::RichTextActiveArmedlink, 8192|A_BOLD );
+  attrset->setAttr( NCstyle::RichTextVisitedLink, 59 );
   attrset->setAttr( NCstyle::RichTextB, 16128|A_BOLD );
   attrset->setAttr( NCstyle::RichTextI, 16128|A_BOLD );
   attrset->setAttr( NCstyle::RichTextT, 14592|A_BOLD );
@@ -146,6 +147,7 @@ inline void NCstyleInit_linux( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextLink, 15104 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 15104|A_BOLD );
   attrset->setAttr( NCstyle::RichTextActiveArmedlink, 8192|A_BOLD );
+  attrset->setAttr( NCstyle::RichTextVisitedLink, 59 );
   attrset->setAttr( NCstyle::RichTextB, 16128|A_BOLD );
   attrset->setAttr( NCstyle::RichTextI, 16128|A_BOLD );
   attrset->setAttr( NCstyle::RichTextT, 14592 );
@@ -208,6 +210,7 @@ inline void NCstyleInit_linux( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextLink, 15104 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 15104|A_BOLD );
   attrset->setAttr( NCstyle::RichTextActiveArmedlink, 8192|A_BOLD );
+  attrset->setAttr( NCstyle::RichTextVisitedLink, 59 );
   attrset->setAttr( NCstyle::RichTextB, 16128|A_BOLD );
   attrset->setAttr( NCstyle::RichTextI, 16128|A_BOLD );
   attrset->setAttr( NCstyle::RichTextT, 14592 );
@@ -270,6 +273,7 @@ inline void NCstyleInit_linux( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextLink, 15104 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 15104|A_BOLD );
   attrset->setAttr( NCstyle::RichTextActiveArmedlink, 8192|A_BOLD );
+  attrset->setAttr( NCstyle::RichTextVisitedLink, 59 );
   attrset->setAttr( NCstyle::RichTextB, 16128|A_BOLD );
   attrset->setAttr( NCstyle::RichTextI, 16128|A_BOLD );
   attrset->setAttr( NCstyle::RichTextT, 14592 );

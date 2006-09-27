@@ -84,6 +84,7 @@ inline void NCstyleInit_braille( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextLink, 8192 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 8192 );
   attrset->setAttr( NCstyle::RichTextActiveArmedlink, 8192 );
+  attrset->setAttr( NCstyle::RichTextVisitedLink, 0 );
   attrset->setAttr( NCstyle::RichTextB, 8192 );
   attrset->setAttr( NCstyle::RichTextI, 8192 );
   attrset->setAttr( NCstyle::RichTextT, 8192 );
@@ -146,6 +147,7 @@ inline void NCstyleInit_braille( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextLink, 8192 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 8192 );
   attrset->setAttr( NCstyle::RichTextActiveArmedlink, 8192 );
+  attrset->setAttr( NCstyle::RichTextVisitedLink, 0 );
   attrset->setAttr( NCstyle::RichTextB, 8192 );
   attrset->setAttr( NCstyle::RichTextI, 8192 );
   attrset->setAttr( NCstyle::RichTextT, 8192 );
@@ -208,6 +210,7 @@ inline void NCstyleInit_braille( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextLink, 8192 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 8192 );
   attrset->setAttr( NCstyle::RichTextActiveArmedlink, 8192 );
+  attrset->setAttr( NCstyle::RichTextVisitedLink, 0 );
   attrset->setAttr( NCstyle::RichTextB, 8192 );
   attrset->setAttr( NCstyle::RichTextI, 8192 );
   attrset->setAttr( NCstyle::RichTextT, 8192 );
@@ -270,6 +273,7 @@ inline void NCstyleInit_braille( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextLink, 8192 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 8192 );
   attrset->setAttr( NCstyle::RichTextActiveArmedlink, 8192 );
+  attrset->setAttr( NCstyle::RichTextVisitedLink, 0 );
   attrset->setAttr( NCstyle::RichTextB, 8192 );
   attrset->setAttr( NCstyle::RichTextI, 8192 );
   attrset->setAttr( NCstyle::RichTextT, 8192 );

@@ -869,7 +869,7 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
   case T_LEVEL:
     PadChangeLevel( endtag, leveltag );
     PadBOL();
-	// add new line after end of the list
+    // add new line after end of the list
     if (endtag)
       PadNL();
     break;
@@ -888,20 +888,17 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
     PadBOL();
 
     if ( headinglevel && endtag )
-	  PadNL();
+      PadNL();
 
     break;
 
   case T_PAR:
     PadBOL();
     if ( !cindent ) {
-	  //if ( !endtag ) 
-	  if ( endtag ) 
-//	    PadTXT( L"  ", 2 );
-  //	  else
-		// add new line after closing tag (FaTE 3124)
-	    PadNL();
-	}	
+      if ( endtag ) 
+	// add new line after closing tag (FaTE 3124)
+        PadNL();
+    }	
     break;
 
   case T_LI:
@@ -994,7 +991,7 @@ void NCRichText::arm( unsigned i )
     return;
   }
   if ( armed != Anchor::unset ) {
-    anchors[armed].draw( *myPad(), wStyle().richtext.link, 0 );
+    anchors[armed].draw( *myPad(), wStyle().richtext.link, (int) wStyle().richtext.visitedlink );
     armed = Anchor::unset;
   }
   if ( i != Anchor::unset ) {
@@ -1042,7 +1039,7 @@ void NCRichText::VScroll( unsigned total, unsigned visible, unsigned start )
     return; // <-- no links to check
 
   // Take care of hyperlinks: Check whether an armed link is visible.
-  // If not arm the first visible link on pake or none.
+  // If not arm the first visible link on page or none.
   vScrollFirstvisible  = start;
   vScrollNextinvisible = start+visible;
 
