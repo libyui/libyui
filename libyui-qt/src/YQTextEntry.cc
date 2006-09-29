@@ -293,7 +293,9 @@ bool YQRawLineEdit::x11Event( XEvent * event )
 		break;
 
 	    case LeaveNotify:
+	    case FocusOut:
 		_capsLockActive = false;
+		emit capsLockDeactivated();
 		break;
 
 	    default:
