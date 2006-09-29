@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Sep 29 17:53:59 CEST 2006 - sh@suse.de
+
+- V 2.13.63
+- Fixed bug #205059: CapsLock warning in password fields 
+
+-------------------------------------------------------------------
 Fri Sep 22 16:59:31 CEST 2006 - sh@suse.de
 
 - Allow pattern categories to be collapsed 
