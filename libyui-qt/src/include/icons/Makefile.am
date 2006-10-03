@@ -35,9 +35,12 @@ noinst_HEADERS =				\
 	stop.xpm				\
 	taboo.xpm				\
 	taboo_disabled.xpm			\
+	tree_minus.xpm				\
+	tree_plus.xpm				\
 	unresolvable_conflict.xpm		\
 	update.xpm				\
 	update_disabled.xpm
+#tree_plus and tree_minus added here to compile
 
 
 
@@ -62,7 +65,10 @@ helpimages_DATA =				\
 	sel_autoinstall.xpm			\
 	sel_autoupdate.xpm			\
 	taboo.xpm				\
+	tree_minus.xpm				\
+	tree_plus.xpm				\
 	update.xpm
+#tree_plus and tree_minus added here to compile
 
 EXTRA_DIST = $(helpimages_DATA)
 
