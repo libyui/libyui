@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Wed Oct  4 17:27:21 CEST 2006 - sh@suse.de
+
+- Fixed bug #208694: Allow deleting patches
+  (only the patch meta data will be deleted, packages will remain
+   the same!)
+
+- V 2.13.65 
+
+-------------------------------------------------------------------
 Tue Oct  3 13:58:43 CEST 2006 - jsrain@suse.cz
 
 - added missing files to Makefile.am

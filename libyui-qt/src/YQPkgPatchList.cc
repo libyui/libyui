@@ -33,6 +33,7 @@
 #include "YQPkgPatchList.h"
 #include "YQPkgTextDialog.h"
 
+
 typedef zypp::ui::PatchContents			ZyppPatchContents;
 typedef zypp::ui::PatchContents::const_iterator	ZyppPatchContentsIterator;
 
@@ -245,6 +246,11 @@ YQPkgPatchList::createInstalledContextMenu()
     CHECK_PTR( _installedContextMenu );
 
     actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
+
+#if ENABLE_DELETING_PATCHES
+    actionSetCurrentDelete->addTo( _installedContextMenu );
+#endif
+    
     actionSetCurrentUpdate->addTo( _installedContextMenu );
     actionSetCurrentProtected->addTo( _installedContextMenu );
 
@@ -261,6 +267,11 @@ YQPkgPatchList::addAllInListSubMenu( QPopupMenu * menu )
     actionSetListInstall->addTo( submenu );
     actionSetListDontInstall->addTo( submenu );
     actionSetListKeepInstalled->addTo( submenu );
+    
+#if ENABLE_DELETING_PATCHES
+    actionSetListDelete->addTo( submenu );
+#endif
+    
     actionSetListUpdate->addTo( submenu );
     actionSetListUpdateForce->addTo( submenu );
     actionSetListTaboo->addTo( submenu );
@@ -379,8 +390,10 @@ YQPkgPatchListItem::cycleStatus()
 {
     YQPkgObjListItem::cycleStatus();
 
+#if ! ENABLE_DELETING_PATCHES
     if ( status() == S_Del )	// Can't delete patches
 	setStatus( S_KeepInstalled );
+#endif
 }
 
 

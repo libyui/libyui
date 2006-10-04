@@ -661,6 +661,7 @@ YQPackageSelector::addMenus()
 	_patchList->actionSetCurrentInstall->addTo( _patchMenu );
 	_patchList->actionSetCurrentDontInstall->addTo( _patchMenu );
 	_patchList->actionSetCurrentKeepInstalled->addTo( _patchMenu );
+	_patchList->actionSetCurrentDelete->addTo( _patchMenu );
 	_patchList->actionSetCurrentUpdate->addTo( _patchMenu );
 	_patchList->actionSetCurrentTaboo->addTo( _patchMenu );
 

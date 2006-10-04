@@ -26,6 +26,8 @@
 #include "YQPkgObjList.h"
 #include "YQPkgSelMapper.h"
 
+#define ENABLE_DELETING_PATCHES	1
+
 using std::string;
 
 class YQPkgPatchListItem;
