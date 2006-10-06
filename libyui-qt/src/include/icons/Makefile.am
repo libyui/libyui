@@ -65,8 +65,6 @@ helpimages_DATA =				\
 	sel_autoinstall.xpm			\
 	sel_autoupdate.xpm			\
 	taboo.xpm				\
-	tree_minus.xpm				\
-	tree_plus.xpm				\
 	update.xpm
 #tree_plus and tree_minus added here to compile
 
