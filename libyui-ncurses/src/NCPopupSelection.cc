@@ -163,7 +163,9 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
 	    }
 
 	    packager->showSelPackages( getCurrentLine(), packages );
-	    packager->showDiskSpace();
+	    // showDiskSpace() moved to NCPkgTable.cc (show/check diskspace
+	    // on every status change)
+	    // packager->showDiskSpace();
 	}
     }
 

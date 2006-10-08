@@ -324,6 +324,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    case T_Selections:
 		// check/show dependencies of selections 
 		packager->showSelectionDependencies();
+		packager->showDiskSpace();
 		break;
 	    
 	    case T_Patches:
