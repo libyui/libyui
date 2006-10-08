@@ -32,9 +32,22 @@
 
 #include "NCPopupDiskspace.h"
 
+#include "NCi18n.h"
+
 using namespace std;
 
-///////////////////////////////////////////////////////////////////
+// set values as set in YQPkgDiskUsageList.cc
+#define MIN_FREE_MB_WARN	400
+#define MIN_FREE_MB_PROXIMITY	700
+
+#define MIN_PERCENT_WARN	90
+#define MIN_PERCENT_PROXIMITY	80
+
+#define OVERFLOW_MB_WARN	0
+#define OVERFLOW_MB_PROXIMITY	300
+
+
+ ///////////////////////////////////////////////////////////////////
 //
 //
 //	METHOD NAME : NCPopupDiskspace::NCPopupDiskspace
@@ -42,12 +55,20 @@ using namespace std;
 //
 //	DESCRIPTION :
 //
-NCPopupDiskspace::NCPopupDiskspace( const wpos at )
+NCPopupDiskspace::NCPopupDiskspace( const wpos at, bool testMode )
     : NCPopup( at, false )
       , partitions( 0 )
       , okButton( 0 )
+      , testmode( testMode )
 {
-    createLayout( YCPString(PkgNames::DiskspaceLabel()) );
+    createLayout( );
+
+    if ( testMode )
+    {
+	NCMIL << "TESTMODE Diskspace" << endl;
+	zypp::getZYpp()->setPartitions(zypp::DiskUsageCounter::detectMountPoints ());
+	testDiskUsage = zypp::getZYpp()->diskUsage();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -70,7 +91,7 @@ NCPopupDiskspace::~NCPopupDiskspace()
 //
 //	DESCRIPTION :
 //
-void NCPopupDiskspace::createLayout( const YCPString & headline )
+void NCPopupDiskspace::createLayout( )
 {
 
     YWidgetOpt opt;
@@ -81,7 +102,7 @@ void NCPopupDiskspace::createLayout( const YCPString & headline )
   
     // add the headline
     opt.isHeading.setValue( true );
-    NCLabel * head = new NCLabel( split, opt, headline );
+    head = new NCLabel( split, opt, YCPString( "" ) );
     split->addChild( head );
 
     vector<string> header;
@@ -208,6 +229,141 @@ string NCPopupDiskspace::checkDiskSpace()
     return text;
 }
 
+void NCPopupDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & partition )
+{
+    FSize usedSize ( partition.pkg_size, FSize::K );
+    FSize totalSize ( partition.total_size, FSize::K );
+    
+    int	percent = ( 100 * usedSize ) / totalSize;
+    int	free	= ( totalSize - usedSize ) / FSize::MB;
+
+    NCMIL <<  "Partition: " << partition.dir << "  Used percent: "
+	  << percent << "  Free: " << free << endl;
+    
+    if ( percent > MIN_PERCENT_WARN )
+    {
+	// Modern hard disks can be huge, so a warning based on percentage only
+	// can be misleading - check the absolute value, too.
+	if ( free < MIN_FREE_MB_PROXIMITY )
+	{
+	    runningOutWarning.enterProximity();
+	}
+	if ( free < MIN_FREE_MB_WARN )
+	{
+	    runningOutWarning.enterRange();
+	}
+    }
+
+    if ( free < MIN_FREE_MB_PROXIMITY )
+    {
+	if ( percent > MIN_PERCENT_PROXIMITY )
+	    runningOutWarning.enterProximity();
+    }
+
+    if ( free < OVERFLOW_MB_WARN )
+	overflowWarning.enterRange();
+
+    if ( free < OVERFLOW_MB_PROXIMITY )
+	overflowWarning.enterProximity();
+
+#ifdef TEST
+    NCMIL << "Overflow: " << "_inRange: " << (overflowWarning._inRange?"true":"false") << endl;
+    NCMIL << "Overflow: " << "_isClose: " << (overflowWarning._isClose?"true":"false") << endl;
+    NCMIL << "Overflow: " << "_hasBeenClose: " << (overflowWarning._hasBeenClose?"true":"false") << endl;
+    NCMIL << "Overflow: " << "_warningPosted: " << (overflowWarning._warningPosted?"true":"false") << endl;
+
+    NCMIL << "RunningOut: " << "_inRange: " << (runningOutWarning._inRange?"true":"false") << endl;
+    NCMIL << "RunningOut: " << "_isClose: " << (runningOutWarning._isClose?"true":"false") << endl;
+    NCMIL << "RunningOut: " << "_hasBeenClose: " << (runningOutWarning._hasBeenClose?"true":"false") << endl;
+    NCMIL << "RunningOut: " << "_warningPosted: " << (runningOutWarning._warningPosted?"true":"false") << endl;
+#endif
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPopupDiskspace::setDiskSpace
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : for testing only; called from PackageSelector
+//		      if running in testMode 
+//
+void NCPopupDiskspace::setDiskSpace( wint_t ch )
+{
+    // set diskspace values in ZyppDuSet testDiskSpace
+    for ( ZyppDuSetIterator it = testDiskUsage.begin();
+	  it != testDiskUsage.end();
+	  ++it )
+    {
+	const ZyppPartitionDu & partitionDu = *it;
+
+	FSize usedSize ( partitionDu.pkg_size, FSize::K );
+	FSize totalSize ( partitionDu.total_size, FSize::K );
+	int	percent = ( 100 * usedSize ) / totalSize;
+
+	if ( ch == '+' )
+	    percent += 3;
+	else if ( ch == '-' )
+	    percent -= 3;
+
+	if ( percent < 0   )
+	    percent = 0;
+		    
+	partitionDu.pkg_size = partitionDu.total_size * percent / 100;
+    }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPopupDiskspace::checkDiskSpaceRange
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCPopupDiskspace::checkDiskSpaceRange( )
+{
+    // see YQPkgDiskUsageList::updateDiskUsage()
+    runningOutWarning.clear();
+    overflowWarning.clear();
+    ZyppDuSet diskUsage;
+    
+    if ( testmode )
+	diskUsage = testDiskUsage;
+    else
+	diskUsage = zypp::getZYpp()->diskUsage();
+
+    for ( ZyppDuSetIterator it = diskUsage.begin();
+	  it != diskUsage.end();
+	  ++it )
+    {
+	checkRemainingDiskSpace( *it );
+    }
+
+     // see YQPkgDiskUsageList::postPendingWarnings()
+    if ( overflowWarning.needWarning() )
+    {
+	showInfoPopup( _( "Error: Out of disk space!" ) );
+
+	overflowWarning.warningPostedNotify();
+	runningOutWarning.warningPostedNotify(); // Suppress this ( now redundant ) other warning
+    }
+
+    if ( runningOutWarning.needWarning() )
+    {
+	showInfoPopup( _( "Warning: Disk space is running out!" ) );
+
+	runningOutWarning.warningPostedNotify();
+    }
+
+    if ( overflowWarning.leavingProximity() )
+	overflowWarning.clearHistory();
+
+    if ( runningOutWarning.leavingProximity() )
+	runningOutWarning.clearHistory();
+
+}
+
 string NCPopupDiskspace::usedPercent( FSize used, FSize total )
 {
     int percent = 0;
@@ -229,8 +385,11 @@ string NCPopupDiskspace::usedPercent( FSize used, FSize total )
 //
 //	DESCRIPTION :
 //
-void NCPopupDiskspace::showInfoPopup( )
+void NCPopupDiskspace::showInfoPopup( string headline )
 {
+    if ( head )
+	head->setLabel( YCPString( headline ) );
+    
     // update values in partition table
     fillPartitionTable();
     
@@ -279,7 +438,7 @@ NCursesEvent NCPopupDiskspace::wHandleInput( wint_t ch )
 
     if ( ch == KEY_RETURN )
 	return NCursesEvent::button;
-    
+
     return NCDialog::wHandleInput( ch );
 }
 
@@ -303,4 +462,75 @@ bool NCPopupDiskspace::postAgain()
     }
     return true;
 }
+
+
+
+
+NCPkgWarningRangeNotifier::NCPkgWarningRangeNotifier()
+{
+    clearHistory();
+}
+
+
+void
+NCPkgWarningRangeNotifier::clear()
+{
+    _inRange 		= false;
+    _hasBeenClose	= _isClose;
+    _isClose 		= false;
+}
+
+
+void
+NCPkgWarningRangeNotifier::clearHistory()
+{
+    clear();
+    _hasBeenClose  = false;
+    _warningPosted = false;
+}
+
+
+void
+NCPkgWarningRangeNotifier::enterRange()
+{
+    _inRange = true;
+    enterProximity();
+}
+
+
+void
+NCPkgWarningRangeNotifier::enterProximity()
+{
+    _isClose      = true;
+    _hasBeenClose = true;
+}
+
+
+void
+NCPkgWarningRangeNotifier::warningPostedNotify()
+{
+    _warningPosted = true;
+}
+
+
+bool
+NCPkgWarningRangeNotifier::inRange() const
+{
+    return _inRange;
+}
+
+
+bool
+NCPkgWarningRangeNotifier::leavingProximity() const
+{
+    return ! _isClose && ! _hasBeenClose;
+}
+
+
+bool
+NCPkgWarningRangeNotifier::needWarning() const
+{
+    return _inRange && ! _warningPosted;
+}
+
 

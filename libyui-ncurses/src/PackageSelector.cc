@@ -96,6 +96,7 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
       , filePopup( 0 )
       , youMode( false )
       , updateMode( false )
+      , testMode ( false )
       , autoCheck( true )
       , _rpmGroupsTree (0)
 {
@@ -172,42 +173,9 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
     if ( opt.updateMode.value() )
 	updateMode = true;
 
-
     // read test source information
     if ( opt.testMode.value() )
-    {
-#ifdef FIXME_PATCHES
-	if ( youMode )
-	{
-	    PMYouServer server( "dir:///8.1-patches" );
-            InstYou &you = Y2PM::youPatchManager().instYou();
-            you.settings()->setPatchServer( server );
-	    you.settings()->setReloadPatches( false );
-            you.retrievePatchInfo();
-	    you.selectPatches( zypp::Patch::kind_recommended |
-			       zypp::Patch::kind_security     );
-	    NCMIL <<  "Fake YOU patches initialized" << endl;	
-	}
-	else
-#endif
-	{
-#ifdef FIXME
-	    Y2PM y2pm;
-	    InstSrcManager& MGR = y2pm.instSrcManager();
-
-	    Url url( "dir:///space/instTest" );
-
-	    InstSrcManager::ISrcIdList nids;
-	    PMError err = MGR.scanMedia( nids, url );
-
-	    if ( nids.size() )
-	    {
-		err = MGR.enableSource( *nids.begin() );
-		NCMIL << "Fake source enabled: " << err << endl;
-	    }
-#endif
-	}
-    }
+	testMode = true;
 
     saveState ();
 
@@ -245,7 +213,7 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
     depsPopup = new NCPopupDeps( wpos( 1, 1 ), this );
 
     // the disk space popup
-    diskspacePopup = new NCPopupDiskspace( wpos( 1, 1 ) );
+    diskspacePopup = new NCPopupDiskspace( wpos( 1, 1 ), testMode );
 
 }
 
@@ -1597,15 +1565,24 @@ bool PackageSelector::StatusHandler( const NCursesEvent&  event )
     }
     else if ( event.selection->compare( PkgNames::Select() ) == YO_EQUAL )
     {
-	packageList->changeObjStatus( '+' );
+	if ( testMode )
+	    diskspacePopup->setDiskSpace( '+' );
+	else
+	    packageList->changeObjStatus( '+' );
     }
     else if ( event.selection->compare( PkgNames::Delete() ) == YO_EQUAL )
     {
-	packageList->changeObjStatus( '-' );
+	if ( testMode )
+	    diskspacePopup->setDiskSpace( '-' );
+	else
+	    packageList->changeObjStatus( '-' );
     }
     else if ( event.selection->compare( PkgNames::Update() ) == YO_EQUAL )
     {
-	packageList->changeObjStatus( '>' );
+	if ( testMode )
+	    diskspacePopup->checkDiskSpaceRange();
+	else
+	    packageList->changeObjStatus( '>' );
     }
     else if ( event.selection->compare( PkgNames::TabooOn() ) == YO_EQUAL )
     {
@@ -1680,7 +1657,7 @@ bool PackageSelector::DiskinfoHandler( const NCursesEvent&  event )
 
     if ( diskspacePopup )
     {
-	diskspacePopup->showInfoPopup();
+	diskspacePopup->showInfoPopup( PkgNames::DiskspaceLabel() );
     }
     if ( packageList )
     {
@@ -2578,6 +2555,10 @@ void PackageSelector::showDiskSpace()
     {
 	static_cast<NCLabel *>(diskSpace)->setLabel( label );
     }
+
+    // check whether required diskspace enters the warning range
+    if ( diskspacePopup )
+	diskspacePopup->checkDiskSpaceRange( );
 }
 
 
