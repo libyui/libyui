@@ -46,6 +46,9 @@ using namespace std;
 #define OVERFLOW_MB_WARN	0
 #define OVERFLOW_MB_PROXIMITY	300
 
+/*
+  Textdomain "packages"
+*/
 
  ///////////////////////////////////////////////////////////////////
 //
