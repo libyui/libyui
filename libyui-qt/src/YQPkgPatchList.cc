@@ -288,6 +288,7 @@ YQPkgPatchList::keyPressEvent( QKeyEvent * event )
 {
     if ( event )
     {
+#if ! ENABLE_DELETING_PATCHES
 	if ( event->ascii() == '-' )
 	{
 	    QListViewItem * selectedListViewItem = selectedItem();
@@ -303,6 +304,7 @@ YQPkgPatchList::keyPressEvent( QKeyEvent * event )
 		}
 	    }
 	}
+#endif
     }
 
     YQPkgObjList::keyPressEvent( event );
