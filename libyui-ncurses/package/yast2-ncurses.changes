@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Oct 10 10:02:32 CEST 2006 - gs@suse.de
+
+- Package Installation: Show low disk space warning similiar to 
+  QT version (FaTE #300548)
+- 2.13.45 
+
+-------------------------------------------------------------------
 Wed Sep 27 13:44:11 CEST 2006 - kmachalkova@suse.cz
 
 - Better displaying of visited hyperlinks in NCRichText (#144428)
