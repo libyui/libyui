@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Oct 11 11:30:57 CEST 2006 - gs@suse.de
+
+- Online Update: Allow deletion of patches (bug #208694) 
+  Package Installation: change status to delete if '-' is pressed, 
+  use % key to reset taboo status (bug #204072)
+- 2.13.46 
+
+-------------------------------------------------------------------
 Tue Oct 10 10:02:32 CEST 2006 - gs@suse.de
 
 - Package Installation: Show low disk space warning similiar to 
