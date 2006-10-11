@@ -106,38 +106,20 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
     bool valid = true;
     ZyppStatus retStat = S_NoInst;
     ZyppStatus oldStatus = getPackageStatus( slbPtr, objPtr );
+    bool installed = slbPtr->hasInstalledObj();
     
     // get the new status
     switch ( key )
     {
 	case '-':
-	    if ( oldStatus == S_KeepInstalled 
-		 || oldStatus == S_AutoDel   )
+	    if ( installed )	// installed package -> always set status to delete
 	    {
 		// if required, NCPkgTable::changeStatus() shows the delete notify
 		retStat = S_Del;
 	    }
-	    else if ( oldStatus == S_AutoUpdate
-		      ||  oldStatus == S_Update )
-	    {
-		retStat =  S_KeepInstalled;
-	    }
-	    else if ( oldStatus == S_Install
-		      || oldStatus == S_AutoInstall )
-	    {
-		retStat = S_NoInst;	
-	    }
-	    else if (  oldStatus == S_Taboo )
-	    {
-		retStat = S_NoInst;
-	    }
-	    else if (  oldStatus == S_Protected )
-	    {
-		retStat = S_KeepInstalled;
-	    }
 	    else
 	    {
-		valid = false;
+		retStat = S_NoInst;
 	    }
 	    break;
 	case '+':
@@ -160,7 +142,6 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 	    {
 		valid = false;
 	    }
-	    
 	    break;
 	case '>':
 	    if ( oldStatus == S_KeepInstalled
@@ -177,16 +158,24 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 		valid = false;
 	    }
 	    break;
-	case '!':
-	    if ( oldStatus == S_NoInst
-		 || oldStatus == S_AutoInstall )
+	case '!':	// set S_Taboo or S_Protected
+	    if ( !installed )
 	    {
 		retStat = S_Taboo;
 	    }
-	    else if  ( oldStatus == S_KeepInstalled
-		       || oldStatus == S_AutoUpdate )
+	    else
 	    {
 		retStat = S_Protected;
+	    }
+	    break;
+    	case '%':	// reset S_Taboo or S_Protected status 
+    	    if (  oldStatus == S_Taboo )
+	    {
+		retStat = S_NoInst;
+	    }
+	    else if (  oldStatus == S_Protected )
+	    {
+		retStat = S_KeepInstalled;
 	    }
 	    else
 	    {
@@ -318,6 +307,7 @@ PatchStatStrategy::PatchStatStrategy()
 {
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 // PatchStatStrategy::keyToStatus()
@@ -335,23 +325,19 @@ bool PatchStatStrategy::keyToStatus( const int & key,
     bool valid = true;
     ZyppStatus retStat = S_NoInst;
     ZyppStatus oldStatus = getPackageStatus( slbPtr, objPtr );
-    
+    bool installed = slbPtr->hasInstalledObj();
+	
     // get the new status
     switch ( key )
     {
 	case '-':
-	    if ( oldStatus == S_Install
-		 || oldStatus == S_AutoInstall )
+	    if ( installed )	// installed ->set status to delete
 	    {
-		retStat = S_NoInst;	
-	    }
-	    else if (  oldStatus == S_Update )
-	    {
-		retStat = S_KeepInstalled;
+		retStat = S_Del;
 	    }
 	    else
 	    {
-		valid = false;
+		retStat = S_NoInst;
 	    }
 	    break;
 	case '+':
@@ -360,6 +346,11 @@ bool PatchStatStrategy::keyToStatus( const int & key,
 	    {
 		retStat = S_Install;
 	    }
+   	    else if ( oldStatus ==  S_Del
+		      || oldStatus == S_AutoDel)
+	    {
+		retStat = S_KeepInstalled;
+	    } 
 	    else
 	    {
 		valid = false;
@@ -367,7 +358,9 @@ bool PatchStatStrategy::keyToStatus( const int & key,
 	    
 	    break;
 	case '>':
-	    if ( oldStatus == S_KeepInstalled )
+	    if ( oldStatus == S_KeepInstalled
+		 ||  oldStatus == S_Del
+		 ||  oldStatus == S_AutoDel )
 	    {
 		if ( slbPtr->hasCandidateObj() )
 		{
@@ -390,6 +383,7 @@ bool PatchStatStrategy::keyToStatus( const int & key,
     return valid;
 }
 
+#if EXTRA_PATCH_STRATEGY
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -443,6 +437,7 @@ bool PatchStatStrategy::toggleStatus( ZyppSel slbPtr,
     
     return ok;
 }
+#endif
 
 /////////////////////////////////////////////////////////////////
 //
@@ -468,7 +463,6 @@ bool PatchStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, Z
     // do a solver run
     solveResolvableCollections(); 
 
-    
     return ok;
 }
 

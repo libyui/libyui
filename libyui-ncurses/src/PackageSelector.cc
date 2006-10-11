@@ -1590,7 +1590,7 @@ bool PackageSelector::StatusHandler( const NCursesEvent&  event )
     }
     else if ( event.selection->compare( PkgNames::TabooOff() ) == YO_EQUAL )
     {
-	packageList->changeObjStatus( '-' );	
+	packageList->changeObjStatus( '%' );	
     } 
     else if ( event.selection->compare( PkgNames::SourceYes() ) == YO_EQUAL )
     {
