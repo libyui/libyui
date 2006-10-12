@@ -174,7 +174,7 @@ YQPkgStatusFilterView::filter()
 
 
 bool
-YQPkgStatusFilterView::check( ZyppSel	selectable, 
+YQPkgStatusFilterView::check( ZyppSel	selectable,
 			      ZyppObj	zyppObj )
 {
     bool match = false;
@@ -208,6 +208,64 @@ YQPkgStatusFilterView::check( ZyppSel	selectable,
     }
 
     return match;
+}
+
+
+
+void YQPkgStatusFilterView::clear()
+{
+    _showDel->setChecked( false );
+    _showInstall->setChecked( false );
+    _showUpdate->setChecked( false );
+    _showAutoDel->setChecked( false );
+    _showAutoInstall->setChecked( false );
+    _showAutoUpdate->setChecked( false );
+    _showTaboo->setChecked( false );
+    _showProtected->setChecked( false );
+    _showKeepInstalled->setChecked( false );
+    _showNoInst->setChecked( false );
+}
+
+
+void YQPkgStatusFilterView::showTransactions()
+{
+    showManualTransactions();
+    showAutoTransactions();
+}
+
+
+void YQPkgStatusFilterView::showManualTransactions()
+{
+    _showDel->setChecked( true );
+    _showInstall->setChecked( true );
+    _showUpdate->setChecked( true );
+}
+
+
+void YQPkgStatusFilterView::showAutoTransactions()
+{
+    _showAutoDel->setChecked( true );
+    _showAutoInstall->setChecked( true );
+    _showAutoUpdate->setChecked( true );
+}
+
+
+void YQPkgStatusFilterView::showLocks()
+{
+    _showTaboo->setChecked( true );
+    _showProtected->setChecked( true );
+}
+
+
+void YQPkgStatusFilterView::showInstalled()
+{
+    _showKeepInstalled->setChecked( true );
+}
+
+
+void YQPkgStatusFilterView::showNotInstalled()
+{
+    _showNoInst->setChecked( true );
 }
 
 

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct 12 17:32:16 CEST 2006 - sh@suse.de
+
+- Implemented feature #301222: Easy access to updating all packages
+- V 2.13.66 
+
+-------------------------------------------------------------------
 Wed Oct  4 17:27:21 CEST 2006 - sh@suse.de
 
 - Fixed bug #208694: Allow deleting patches

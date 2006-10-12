@@ -23,6 +23,7 @@
 #define DEPENDENCY_FEEDBACK_IF_OK			1
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT			false
 #define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE	0
+#define GLOBAL_UPDATE_CONFIRMATION_THRESHOLD		20
 
 #include <qaction.h>
 #include <qapplication.h>
@@ -645,6 +646,25 @@ YQPackageSelector::addMenus()
 	submenu->insertSeparator();
 	_pkgList->actionInstallListSourceRpms->addTo( submenu );
 	_pkgList->actionDontInstallListSourceRpms->addTo( submenu );
+
+
+	//
+	// Submenu for all packages
+	//
+
+	submenu = new QPopupMenu( _pkgMenu );
+	CHECK_PTR( submenu );
+
+	// Translators: Unlike the "all in this list" submenu, this submenu
+	// refers to all packages globally, not only to those that are
+	// currently visible in the packages list.
+	_pkgMenu->insertItem( _( "All Packages" ), submenu );
+
+	submenu->insertItem( _( "Update if newer version available" ),
+			     this, SLOT( globalUpdatePkg() ) );
+
+	submenu->insertItem( _( "Update unconditionally" ),
+			     this, SLOT( globalUpdatePkgForce() ) );
     }
 
 
@@ -1097,6 +1117,43 @@ YQPackageSelector::pkgImport()
    }
 }
 
+
+
+void
+YQPackageSelector::globalUpdatePkg( bool force )
+{
+    if ( ! _pkgList )
+	return;
+
+    int count = _pkgList->globalSetPkgStatus( S_Update, force,
+					      true ); // countOnly
+    y2milestone( "%d pkgs found for update", count );
+
+    if ( count >= GLOBAL_UPDATE_CONFIRMATION_THRESHOLD )
+    {
+	if ( QMessageBox::question( this, "",	// caption
+				    // Translators: %1 is the number of affected packages
+				    _( "%1 packages will be updated" ).arg( count ),
+				    _( "&Continue" ), _( "C&ancel" ),
+				    0,		// defaultButtonNumber (from 0)
+				    1 )		// escapeButtonNumber
+	     == 1 )	// "Cancel"?
+	{
+	    return;
+	}
+    }
+
+    (void) _pkgList->globalSetPkgStatus( S_Update, force,
+					 false ); // countOnly
+
+    if ( _statusFilterView )
+    {
+	_filters->showPage( _statusFilterView );
+	_statusFilterView->clear();
+	_statusFilterView->showTransactions();
+	_statusFilterView->filter();
+    }
+}
 
 
 void
