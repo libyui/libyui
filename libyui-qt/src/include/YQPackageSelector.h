@@ -185,6 +185,11 @@ protected slots:
      */
     void globalUpdatePkgForce() { globalUpdatePkg( true ); }
 
+    /**
+     * Show all products in a popup dialog.
+     **/
+    void showProducts();
+
 
 
 protected:

@@ -30,6 +30,7 @@
 #include <zypp/Pattern.h>
 #include <zypp/Language.h>
 #include <zypp/Patch.h>
+#include <zypp/Product.h>
 #include <zypp/ZYppFactory.h>
 #include <zypp/ResPoolProxy.h>
 
@@ -58,6 +59,7 @@ typedef zypp::Selection::constPtr		ZyppSelection;
 typedef zypp::Pattern::constPtr			ZyppPattern;
 typedef zypp::Language::constPtr		ZyppLang;
 typedef zypp::Patch::constPtr			ZyppPatch;
+typedef zypp::Product::constPtr			ZyppProduct;
 
 typedef zypp::ResPoolProxy			ZyppPool;
 typedef zypp::ResPoolProxy::const_iterator	ZyppPoolIterator;
@@ -83,6 +85,9 @@ inline ZyppPoolIterator zyppLangEnd()		{ return zyppEnd<zypp::Language>();	}
 inline ZyppPoolIterator zyppPatchesBegin()	{ return zyppBegin<zypp::Patch>();	}
 inline ZyppPoolIterator zyppPatchesEnd()	{ return zyppEnd<zypp::Patch>();	}
 
+inline ZyppPoolIterator zyppProductsBegin()	{ return zyppBegin<zypp::Product>();	}
+inline ZyppPoolIterator zyppProductsEnd()	{ return zyppEnd<zypp::Product>();	}
+
 
 inline ZyppPkg		tryCastToZyppPkg( ZyppObj zyppObj )
 {
@@ -107,6 +112,11 @@ inline ZyppLang		tryCastToZyppLang( ZyppObj zyppObj )
 inline ZyppPatch	tryCastToZyppPatch( ZyppObj zyppObj )
 {
     return zypp::dynamic_pointer_cast<const zypp::Patch>( zyppObj );
+}
+
+inline ZyppProduct	tryCastToZyppProduct( ZyppObj zyppObj )
+{
+    return zypp::dynamic_pointer_cast<const zypp::Product>( zyppObj );
 }
 
 

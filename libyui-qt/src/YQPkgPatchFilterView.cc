@@ -150,10 +150,9 @@ YQPkgPatchFilterView::updateTotalDownloadSize()
 	    {
 		ZyppPkg pkg = tryCastToZyppPkg( *contents_it );
 		ZyppSel sel;
-		
+
 		if ( pkg )
 		    sel = _selMapper.findZyppSel( pkg );
-		
 
 		if ( sel )
 		{
@@ -200,7 +199,7 @@ YQPkgPatchFilterView::updateTotalDownloadSize()
     }
 
     _totalDownloadSize->setText( totalSize.asString().c_str() );
-    
+
     y2debug( "Calculated total download size in %d millisec", calcTime.elapsed() );
 }
 

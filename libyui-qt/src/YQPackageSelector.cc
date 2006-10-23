@@ -710,6 +710,8 @@ YQPackageSelector::addMenus()
 	_patchList->actionShowRawPatchInfo->addTo( _extrasMenu );
 #endif
 
+    _extrasMenu->insertItem( _( "Show &Products" ), this, SLOT( showProducts() ) );
+
     // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
     _extrasMenu->insertItem( _( "Install All Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
 
@@ -1155,6 +1157,25 @@ YQPackageSelector::globalUpdatePkg( bool force )
     }
 }
 
+
+void
+YQPackageSelector::showProducts()
+{
+    for ( ZyppPoolIterator it = zyppProductsBegin();
+	  it != zyppProductsEnd();
+	  ++it )
+    {
+	ZyppObj zyppObj = (*it)->theObj();
+
+	if ( zyppObj )
+	{
+	    y2error( "Found product %s - %s",
+		     zyppObj->name().c_str(),
+		     zyppObj->summary().c_str() );
+	}
+    }
+
+}
 
 void
 YQPackageSelector::installDevelPkgs()

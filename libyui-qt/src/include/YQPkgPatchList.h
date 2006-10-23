@@ -82,15 +82,15 @@ public slots:
     void filterIfVisible();
 
     /**
-     * Add a selection to the list. Connect a filter's filterMatch() signal to
+     * Add a patch to the list. Connect a filter's filterMatch() signal to
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addPatchItem( ZyppSel	selectable,
-			  ZyppPatch 	zyppPatch );
+    void addPatchItem( ZyppSel   selectable,
+		       ZyppPatch zyppPatch );
 
     /**
-     * Fill the selection list.
+     * Fill the patch list.
      **/
     void fillList();
 
