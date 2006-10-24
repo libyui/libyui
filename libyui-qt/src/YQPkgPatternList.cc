@@ -26,6 +26,7 @@
 #include <zypp/Resolver.h>
 #include <qpainter.h>
 #include <qheader.h>
+#include <zypp/ui/PatternContents.h>
 
 #include "YQi18n.h"
 #include "utf8.h"
@@ -56,7 +57,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     header()->setStretchEnabled( _statusCol , false );
     header()->setStretchEnabled( _summaryCol, true  );
-    
+
     setAllColumnsShowFocus( true );
     setTreeStepSize( 0 );
 
@@ -155,7 +156,8 @@ YQPkgPatternList::filter()
 
 	if ( zyppPattern )
 	{
-	    set<string> wanted = zyppPattern->install_packages();
+	    zypp::ui::PatternContents patternContents( zyppPattern );
+	    set<string> wanted = patternContents.install_packages();
 
 	    for ( ZyppPoolIterator it = zyppPkgBegin();
 		  it != zyppPkgEnd();
@@ -253,7 +255,7 @@ YQPkgPatternList::selectSomething()
 	    setSelected( item, true ); // emits signal, too
 	    return;
 	}
-	
+
 	++it;
     }
 }
@@ -403,7 +405,7 @@ YQPkgPatternCategoryItem::setTreeIcon()
 	       isOpen() ?
 	       YQIconPool::treeMinus() :
 	       YQIconPool::treePlus()   );
-    
+
 }
 
 
