@@ -21,6 +21,7 @@ case "$x_includes" in
 esac
 AC_MSG_RESULT([$Xfontsdir])
 AC_SUBST(Xfontsdir)
+PKG_CHECK_MODULES([ZYPP], [libzypp])
 
 ## and generate the output
 @YAST2-OUTPUT@

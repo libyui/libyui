@@ -64,6 +64,7 @@
 #include "YQPkgPatchFilterView.h"
 #include "YQPkgPatchList.h"
 #include "YQPkgPatternList.h"
+#include "YQPkgProductDialog.h"
 #include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgSelList.h"
@@ -1161,20 +1162,7 @@ YQPackageSelector::globalUpdatePkg( bool force )
 void
 YQPackageSelector::showProducts()
 {
-    for ( ZyppPoolIterator it = zyppProductsBegin();
-	  it != zyppProductsEnd();
-	  ++it )
-    {
-	ZyppObj zyppObj = (*it)->theObj();
-
-	if ( zyppObj )
-	{
-	    y2error( "Found product %s - %s",
-		     zyppObj->name().c_str(),
-		     zyppObj->summary().c_str() );
-	}
-    }
-
+    YQPkgProductDialog::showProductDialog();
 }
 
 void

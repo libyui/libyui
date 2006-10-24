@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Oct 24 18:29:08 CEST 2006 - sh@suse.de
+
+- Implemented feature #120142: View installed products 
+- Implemented feature #301229: Fold hidden patterns into parents
+- V 2.13.67
+
+-------------------------------------------------------------------
 Thu Oct 12 17:32:16 CEST 2006 - sh@suse.de
 
 - Implemented feature #301222: Easy access to updating all packages
