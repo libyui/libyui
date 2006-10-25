@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Oct 25 17:35:07 CEST 2006 - sh@suse.de
+
+- Added support for resolver test case generation
+  (PackageSelector -> "Extras" menu)
+- V 2.13.68 
+
+-------------------------------------------------------------------
 Tue Oct 24 18:29:08 CEST 2006 - sh@suse.de
 
 - Implemented feature #120142: View installed products 
