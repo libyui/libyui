@@ -701,23 +701,32 @@ YQPackageSelector::addMenus()
     CHECK_PTR( _extrasMenu );
     _menuBar->insertItem( _( "&Extras" ), _extrasMenu );
 
-    _extrasMenu->insertItem( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), CTRL + Key_A );
-
-    if ( _actionResetIgnoredDependencyProblems )
-	_actionResetIgnoredDependencyProblems->addTo( _extrasMenu );
-
-#ifdef FIXME
-    if ( _patchList )
-	_patchList->actionShowRawPatchInfo->addTo( _extrasMenu );
-#endif
-
     _extrasMenu->insertItem( _( "Show &Products" ), this, SLOT( showProducts() ) );
 
+    _extrasMenu->insertItem( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), CTRL + Key_A );
+
+    _extrasMenu->insertSeparator();
+    
     // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
     _extrasMenu->insertItem( _( "Install All Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
 
     // Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
     _extrasMenu->insertItem( _( "Install All Matching -de&buginfo Packages" ), this, SLOT( installDebugInfoPkgs() ) );
+
+    _extrasMenu->insertSeparator();
+    
+    if ( _pkgConflictDialog )
+	_extrasMenu->insertItem( _( "Generate Dependency Resolver &Test Case" ),
+				    _pkgConflictDialog, SLOT( askCreateSolverTestCase() ) );
+			     
+    if ( _actionResetIgnoredDependencyProblems )
+	_actionResetIgnoredDependencyProblems->addTo( _extrasMenu );
+
+
+#ifdef FIXME
+    if ( _patchList )
+	_patchList->actionShowRawPatchInfo->addTo( _extrasMenu );
+#endif
 
 
     //

@@ -59,8 +59,6 @@ YQPkgDescriptionView::showDetails( ZyppSel selectable )
 
     if ( ! description.contains( "<!-- DT:Rich -->" ) )
 	description = simpleHtmlParagraphs( description );
-    else
-	y2debug( "Description for %s is preformatted in DT:Rich", selectable->theObj()->name().c_str() );
 
     html_text += description;
 
