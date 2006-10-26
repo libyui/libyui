@@ -1,8 +1,8 @@
 -------------------------------------------------------------------
 Wed Oct 25 17:35:07 CEST 2006 - sh@suse.de
 
-- Added support for resolver test case generation
-  (PackageSelector -> "Extras" menu)
+- Implemented feature #300756: Added support for resolver test 
+  case generation (PackageSelector -> "Extras" menu)
 - V 2.13.68 
 
 -------------------------------------------------------------------
