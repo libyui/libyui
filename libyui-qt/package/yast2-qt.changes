@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Oct 26 18:57:05 CEST 2006 - sh@suse.de
+
+- Fixed bug #162164: pattern detection does not work
+- Fixed bug #173488: Status satisfied for a patch is displayed like
+  uninstalled 
+- V 2.13.70
+
+-------------------------------------------------------------------
 Thu Oct 26 17:26:25 CEST 2006 - sh@suse.de
 
 - Fixed bug #183735 - YOU should display only relevant patches by

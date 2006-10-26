@@ -55,6 +55,12 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     addColumn( _( "Pattern" )	);	_summaryCol	= numCol++;
 
+    // Can use the same colum for "broken" and "satisfied":
+    // Both states are mutually exclusive
+    
+    _satisfiedIconCol	= _summaryCol;
+    _brokenIconCol	= _summaryCol;
+    
     header()->setStretchEnabled( _statusCol , false );
     header()->setStretchEnabled( _summaryCol, true  );
 

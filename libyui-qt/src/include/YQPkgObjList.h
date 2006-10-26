@@ -64,6 +64,8 @@ public:
     int sizeCol()		const	{ return _sizeCol;		}
     int versionCol()		const	{ return _versionCol;		}
     int instVersionCol()	const	{ return _instVersionCol;	}
+    int brokenIconCol()		const	{ return _brokenIconCol;	}
+    int satisfiedIconCol()	const	{ return _satisfiedIconCol;	}
 
     /**
      * Return whether or not items in this list are generally editable,
@@ -167,7 +169,7 @@ public slots:
      * this method, too, if the other one is reimplemented.
      **/
     virtual void updateActions();
-    
+
     /**
      * Emit an updatePackages() signal.
      **/
@@ -296,7 +298,7 @@ protected:
 			    const QString & 	key		= QString::null,
 			    bool 		enabled		= false );
 
-    
+
 
     // Data members
 
@@ -306,6 +308,8 @@ protected:
     int		_sizeCol;
     int		_versionCol;
     int		_instVersionCol;
+    int		_brokenIconCol;
+    int		_satisfiedIconCol;
     bool	_editable;
 
 
@@ -418,7 +422,7 @@ public:
      * Overwritten from QY2ListViewItem.
      **/
     virtual void updateStatus();
-    
+
     /**
      * Cycle the package status to the next valid value.
      **/
@@ -443,14 +447,14 @@ public:
     /**
      * Display a selectable's license agreement (if there is any) that
      * corresponds to its current status (S_Install, S_Update) in a pop-up
-     * window. 
+     * window.
      *
      * Returns 'true' if the user agreed to that license , 'false' otherwise.
      * The item's status may have changed to S_Taboo, S_Proteced or S_Del if
      * the user disagreed with the license.
      **/
     static bool showLicenseAgreement( ZyppSel sel );
-    
+
     /**
      * Display this item's license agreement (if there is any) that corresponds
      * to its current status (S_Install, S_Update) in a pop-up window.
@@ -506,6 +510,8 @@ public:
     int sizeCol()		const	{ return _pkgObjList->sizeCol();	}
     int versionCol()		const	{ return _pkgObjList->versionCol();	}
     int instVersionCol()	const	{ return _pkgObjList->instVersionCol(); }
+    int brokenIconCol()		const	{ return _pkgObjList->brokenIconCol();	}
+    int satisfiedIconCol()	const	{ return _pkgObjList->satisfiedIconCol(); }
 
 
 protected:
@@ -514,7 +520,7 @@ protected:
      * Initialize internal data and set fields accordingly.
      **/
     void init();
-    
+
     /**
      * Apply changes hook. This is called each time the user changes the status
      * of a list item manually (if the old status is different from the new

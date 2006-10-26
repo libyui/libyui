@@ -56,6 +56,13 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     addColumn( _( "Patch"	) );	_summaryCol	= numCol++;
     addColumn( _( "Category" 	) );	_categoryCol	= numCol++;
     addColumn( _( "Size" 	) );	_sizeCol	= numCol++;
+
+    // Can use the same colum for "broken" and "satisfied":
+    // Both states are mutually exclusive
+    
+    _satisfiedIconCol	= _summaryCol;
+    _brokenIconCol	= _summaryCol;
+    
     setAllColumnsShowFocus( true );
     setColumnAlignment( sizeCol(), Qt::AlignRight );
 

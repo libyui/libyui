@@ -53,6 +53,8 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
     _instVersionCol	= -42;
     _summaryCol		= -42;
     _sizeCol		= -42;
+    _brokenIconCol	= -42;
+    _satisfiedIconCol	= -42;
 
     createActions();
 
@@ -840,6 +842,82 @@ YQPkgObjListItem::setStatusIcon()
 	bool enabled = editable() && _pkgObjList->editable();
 	setPixmap( statusCol(), _pkgObjList->statusIcon( status(), enabled, bySelection() ) );
     }
+
+    //
+    // Set special icon for zyppObjs that are not marked as installed,
+    // but satisfied anyway (e.g. for patches or patterns where the user
+    // selected all required packages manually)
+    //
+
+    if ( brokenIconCol() >= 0 )
+    {
+	// Reset this icon now - it might be the same column as satisfiedIconCol()
+	setPixmap( brokenIconCol(), QPixmap() );
+    }
+
+    if ( satisfiedIconCol() >= 0 )
+    {
+	if ( ! _selectable->hasInstalledObj() &&
+	     _selectable->installedPoolItem().status().isSatisfied() )
+	{
+#warning FIXME: Use another icon
+	    setPixmap( satisfiedIconCol(), YQIconPool::pkgSelAutoInstall() );
+	}
+	else
+	{
+	    setPixmap( satisfiedIconCol(), QPixmap() );
+	}
+    }
+
+
+    //
+    // Set special icon for zyppObjs that are installed, but broken
+    // (dependencies no longer satisfied, e.g. for patches or patterns)
+    //
+
+    if ( brokenIconCol() >= 0 )
+    {
+	if ( _selectable->hasInstalledObj() )
+	{
+	    bool isBroken    = _selectable->installedPoolItem().status().isIncomplete();
+	    bool willBeFixed = false;
+
+	    switch ( status() )
+	    {
+		case S_KeepInstalled:
+		case S_Protected:
+
+		    willBeFixed = false;
+		    break;
+
+		case S_Update:
+		case S_AutoUpdate:
+		case S_Del:
+		case S_AutoDel:
+		case S_NoInst:
+
+		    willBeFixed = true;
+		    break;
+
+		case S_Install:
+		case S_AutoInstall:
+		case S_Taboo:
+
+		    y2error( "Expected uninstalled zyppObj" );
+		    break;
+	    }
+
+	    if ( isBroken && ! willBeFixed )
+	    {
+		setPixmap( brokenIconCol(), YQIconPool::warningSign() );
+	    
+		y2warning( "Broken object: %s - %s",
+			   _selectable->theObj()->name().c_str(),
+			   _selectable->theObj()->summary().c_str() );
+	    }
+	}
+    }
+
 }
 
 
