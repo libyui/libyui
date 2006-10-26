@@ -45,6 +45,7 @@ enum YQPkgPatchCategory	// This is also the sort order
 };
 
 
+
 /**
  * @short Display a list of zypp::Patch objects.
  **/
@@ -63,6 +64,14 @@ public:
      * Destructor
      **/
     virtual ~YQPkgPatchList();
+
+    
+    enum FilterCriteria
+    {
+	RelevantPatches,		// needed + broken
+	RelevantAndInstalledPatches,	// needed + broken + installed
+	AllPatches			// all
+    };
 
 
 public slots:
@@ -90,7 +99,7 @@ public slots:
 		       ZyppPatch zyppPatch );
 
     /**
-     * Fill the patch list.
+     * Fill the patch list according to filterCriteria().
      **/
     void fillList();
 
@@ -102,6 +111,16 @@ public slots:
 
 
 public:
+
+    /**
+     * Set the filter criteria for fillList().
+     **/
+    void setFilterCriteria( FilterCriteria filterCriteria );
+
+    /**
+     * Returns the current filter criteria.
+     **/
+    FilterCriteria filterCriteria() const { return _filterCriteria; }
 
     /**
      * Returns the currently selected item or 0 if there is none.
@@ -179,6 +198,7 @@ protected:
 
     int			_categoryCol;
     YQPkgSelMapper	_selMapper;
+    FilterCriteria	_filterCriteria;
 };
 
 

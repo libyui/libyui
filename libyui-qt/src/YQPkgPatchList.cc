@@ -34,6 +34,9 @@
 #include "YQPkgTextDialog.h"
 
 
+#define VERBOSE_PATCH_LIST	1
+
+
 typedef zypp::ui::PatchContents			ZyppPatchContents;
 typedef zypp::ui::PatchContents::const_iterator	ZyppPatchContentsIterator;
 
@@ -45,6 +48,8 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     : YQPkgObjList( parent )
 {
     y2debug( "Creating patch list" );
+
+    _filterCriteria = RelevantPatches;
 
     int numCol = 0;
     addColumn( "" );			_statusCol	= numCol++;
@@ -72,6 +77,13 @@ YQPkgPatchList::~YQPkgPatchList()
 
 
 void
+YQPkgPatchList::setFilterCriteria( FilterCriteria filterCriteria )
+{
+    _filterCriteria = filterCriteria;
+}
+
+
+void
 YQPkgPatchList::fillList()
 {
     clear();
@@ -81,16 +93,81 @@ YQPkgPatchList::fillList()
 	  it != zyppPatchesEnd();
 	  ++it )
     {
-	ZyppPatch zyppPatch = tryCastToZyppPatch( (*it)->theObj() );
+	ZyppSel   selectable = *it;
+	ZyppPatch zyppPatch = tryCastToZyppPatch( selectable->theObj() );
 
 	if ( zyppPatch )
 	{
-#ifdef FIXME
-	    // filter for unneeded patches and patches that are already installed
-#else
-	    // y2debug( "Found patch %s", zyppPatch->name().c_str() );
-	    addPatchItem( *it, zyppPatch);
+	    bool displayPatch = false;
+
+	    switch ( _filterCriteria )
+	    {
+		case RelevantPatches:			// needed + broken
+
+		    if ( selectable->hasInstalledObj() ) // installed?
+		    {
+			// display only if broken
+
+			if ( selectable->installedPoolItem().status().isIncomplete() )
+			{
+			    displayPatch = true;
+
+			    y2warning( "Installed patch is broken: %s - %s",
+				       zyppPatch->name().c_str(),
+				       zyppPatch->summary().c_str() );
+			}
+		    }
+		    else // not installed - display only if needed
+		    {
+			if ( selectable->candidatePoolItem().status().isNeeded() )
+			{
+			    displayPatch = true;
+			}
+			else
+			{
+			    y2milestone( "Patch not needed: %s - %s",
+					 zyppPatch->name().c_str(),
+					 zyppPatch->summary().c_str() );
+			}
+		    }
+		    break;
+
+		case RelevantAndInstalledPatches:	// needed + broken + installed
+
+		    if ( selectable->hasInstalledObj() ) // installed?
+		    {
+			displayPatch = true;
+		    }
+		    else // not installed - display only if needed
+		    {
+			if ( selectable->candidatePoolItem().status().isNeeded() )
+			{
+			    displayPatch = true;
+			}
+			else
+			{
+			    y2milestone( "Patch not needed: %s - %s",
+					 zyppPatch->name().c_str(),
+					 zyppPatch->summary().c_str() );
+			}
+		    }
+		    break;
+
+		case AllPatches:
+		    displayPatch = true;
+		    break;
+
+		// Intentionally omitting "default" so the compiler
+		// can catch unhandled enum values
+	    }
+
+	    if ( displayPatch )
+	    {
+#if VERBOSE_PATCH_LIST
+		y2debug( "Displaying patch %s - %s", zyppPatch->name().c_str(), zyppPatch->summary().c_str() );
 #endif
+		addPatchItem( *it, zyppPatch);
+	    }
 	}
 	else
 	{
@@ -250,7 +327,7 @@ YQPkgPatchList::createInstalledContextMenu()
 #if ENABLE_DELETING_PATCHES
     actionSetCurrentDelete->addTo( _installedContextMenu );
 #endif
-    
+
     actionSetCurrentUpdate->addTo( _installedContextMenu );
     actionSetCurrentProtected->addTo( _installedContextMenu );
 
@@ -267,11 +344,11 @@ YQPkgPatchList::addAllInListSubMenu( QPopupMenu * menu )
     actionSetListInstall->addTo( submenu );
     actionSetListDontInstall->addTo( submenu );
     actionSetListKeepInstalled->addTo( submenu );
-    
+
 #if ENABLE_DELETING_PATCHES
     actionSetListDelete->addTo( submenu );
 #endif
-    
+
     actionSetListUpdate->addTo( submenu );
     actionSetListUpdateForce->addTo( submenu );
     actionSetListTaboo->addTo( submenu );

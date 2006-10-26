@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Oct 26 17:26:25 CEST 2006 - sh@suse.de
+
+- Fixed bug #183735 - YOU should display only relevant patches by
+  default
+- V 2.13.69
+
+-------------------------------------------------------------------
 Wed Oct 25 17:35:07 CEST 2006 - sh@suse.de
 
 - Implemented feature #300756: Added support for resolver test 
