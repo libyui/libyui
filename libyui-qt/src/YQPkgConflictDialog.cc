@@ -358,8 +358,6 @@ YQPkgConflictDialog::askCreateSolverTestCase()
 					   QMessageBox::No,
 					   QMessageBox::Cancel | QMessageBox::Escape );
 
-	y2milestone( "Button #%d pressed", button_no );
-
 	if ( button_no & QMessageBox::Yes ) // really binary (not logical) '&' - QMessageBox::Default is still in there
 	    YQUI::ui()->askSaveLogs();
     }
