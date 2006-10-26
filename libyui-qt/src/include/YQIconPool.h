@@ -69,6 +69,8 @@ public:
 
     static QPixmap treePlus();
     static QPixmap treeMinus();
+    
+    static QPixmap warningSign();
 
 
 protected:
