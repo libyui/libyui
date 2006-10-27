@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Oct 27 13:43:42 CEST 2006 - sh@suse.de
+
+- Added missing icon to dist tarball 
+- V 2.13.71
+
+-------------------------------------------------------------------
 Thu Oct 26 18:57:05 CEST 2006 - sh@suse.de
 
 - Fixed bug #162164: pattern detection does not work
