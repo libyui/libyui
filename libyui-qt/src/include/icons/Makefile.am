@@ -39,7 +39,8 @@ noinst_HEADERS =				\
 	tree_plus.xpm				\
 	unresolvable_conflict.xpm		\
 	update.xpm				\
-	update_disabled.xpm
+	update_disabled.xpm			\
+	warning_sign.xpm
 #tree_plus and tree_minus added here to compile
 
 
