@@ -748,7 +748,7 @@ bool PackageSelector::fillPatchList( string filter )
 	if ( filter == "installable" )
 	{
 	    // show common label "Online Update Patches"
-	    static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::Patches()) );
+	    static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::YOUPatches()) );
 	}
 	else if ( filter == "installed" )
 	{
@@ -1136,6 +1136,7 @@ bool PackageSelector::checkPatch( ZyppPatch 	patchPtr,
 				   
 {
     NCPkgTable * packageList = getPackageList();
+    bool displayPatch = false;
     
     if ( !packageList || !patchPtr
 	 || !selectable )
@@ -1144,27 +1145,71 @@ bool PackageSelector::checkPatch( ZyppPatch 	patchPtr,
     	return false;
     }
 
-    if ( filter == "all"
-	 || ( filter == "installed" && selectable->status() == S_KeepInstalled )
-	 // FIXME Is filter installable correct? There was a method installable() before. Condition was:
-	 // ( patchPtr->installable() && patchPtr->getSelectable()->status() != PMSelectable::S_KeepInstalled )
-	 || ( filter == "installable" && ( selectable->status() != S_KeepInstalled ) )
-	 || ( filter == "new" && ( selectable->status() == S_Install ||
-				   selectable->status() == S_NoInst ) )
-	 || ( filter == "security" && patchPtr->category() == "security" )
-	 || ( filter == "recommended" && patchPtr->category() == "recommended" )
-	 || ( filter == "optional" && patchPtr->category() == "optional" )
-	 || ( filter == "YaST2" && patchPtr->category() == "yast" )
+    if ( filter == "all" )
+    {
+	displayPatch = true;
+    }
+    else if ( filter == "installed" )
+    {
+	if ( selectable->hasInstalledObj() )
+		displayPatch = true;
+    }
+    else if ( filter == "installable" )
+    {
+	if ( selectable->hasInstalledObj() ) // installed?
+	{
+	    // display only if broken
+	    if ( selectable->installedPoolItem().status().isIncomplete() )
+	    {
+		displayPatch = true;
+		NCMIL << "Installed patch is broken: " << patchPtr->name().c_str() << " - "
+		      << patchPtr->summary().c_str() << endl;
+	    }
+	}
+	else // not installed - display only if needed
+	{
+	    if ( selectable->candidatePoolItem().status().isNeeded() )
+	    {
+		displayPatch = true;
+	    }
+	    else
+	    {
+		NCMIL << "Patch not needed: " << patchPtr->name().c_str() << " - "
+		      << patchPtr->summary().c_str() << endl;
+	    }
+	}
+    }
+    else if ( filter == "new" )
+    {
+	    if ( !selectable->hasInstalledObj() )
+		displayPatch = true;
+    }
+    else if ( filter == "security" )
+    {
+	    if ( patchPtr->category() == "security" )
+    		displayPatch = true;
+    }
 
-	 )	
+    else if ( filter == "recommended" )
     {
+	    if ( patchPtr->category() == "recommended" )
+		displayPatch = true;
+    }
+    else if ( filter == "optional" )
+    {
+	    if (  patchPtr->category() == "optional" )
+			displayPatch = true;
+    }
+    else if ( filter == "YaST2" )
+    {
+	    if ( patchPtr->category() == "yast" )
+			displayPatch = true;
+    }
+    
+    if ( displayPatch )
 	packageList->createPatchEntry( patchPtr, selectable );
-	return true;
-    }
-    else
-    {
-	return false;
-    }
+
+    return displayPatch;
 }
 
 
@@ -2084,6 +2129,10 @@ bool PackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectable 
 	// the patch size is not available
         // descr += PkgNames::Size();
 	// descr += patchPtr->size().asString( 8 );
+	descr += "<b>";
+	descr += PkgNames::PatchKind();
+	descr += ": </b>";
+	descr += patchPtr->category();
 	descr += "<br>";
 	// get and format the patch description
 	zypp::Text value = patchPtr->description();
