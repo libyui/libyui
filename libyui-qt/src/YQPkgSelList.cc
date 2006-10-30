@@ -41,6 +41,9 @@ YQPkgSelList::YQPkgSelList( QWidget * parent, bool autoFill, bool autoFilter )
     addColumn( _( "Selection" ) );	_summaryCol	= numCol++;
     setAllColumnsShowFocus( true );
 
+    _satisfiedIconCol	= _summaryCol;
+    _brokenIconCol	= _summaryCol;
+    
     if ( autoFilter )
     {
 	connect( this, SIGNAL( selectionChanged( QListViewItem * ) ),

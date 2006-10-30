@@ -31,6 +31,7 @@ noinst_HEADERS =				\
 	sel_autoinstall_disabled.xpm		\
 	sel_autoupdate.xpm			\
 	sel_autoupdate_disabled.xpm		\
+	satisfied.xpm				\
 	select_conflict.xpm			\
 	stop.xpm				\
 	taboo.xpm				\

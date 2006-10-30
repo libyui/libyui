@@ -311,6 +311,7 @@ protected:
     int		_brokenIconCol;
     int		_satisfiedIconCol;
     bool	_editable;
+    bool	_debug;
 
 
     QPopupMenu *	_installedContextMenu;
@@ -439,6 +440,21 @@ public:
     bool installedIsNewer() const { return _installedIsNewer; }
 
     /**
+     * Check if this item is satisfied, even though it is not installed.
+     * This is useful for package collections, e.g., patterns and patches:
+     * 'true' is returned if all requirements are fulfilled, but the object
+     * itself is not installed.
+     **/
+    bool isSatisfied() const;
+
+    /**
+     * Check if this item is "broken": If it is installed, but any of its
+     * dependencies are no longer satisfied.
+     * This is useful for package collections, e.g., patterns and patches.
+     **/
+    bool isBroken() const;
+
+    /**
      * Display this item's notify text (if there is any) that corresponds to
      * the specified status (S_Install, S_Del) in a pop-up window.
      **/
@@ -500,6 +516,16 @@ public:
      * Reimplemented from QY2ListViewItem.
      **/
     virtual QString toolTip( int column );
+
+    
+    // Handle Debug isBroken and isSatisfied flags
+    
+    bool debugIsBroken()    const		{ return _debugIsBroken;		}
+    bool debugIsSatisfied() const		{ return _debugIsSatisfied;		}
+    void setDebugIsBroken   ( bool val = true )	{ _debugIsBroken = val;			}
+    void setDebugIsSatisfied( bool val = true ) { _debugIsSatisfied = val;		}
+    void toggleDebugIsBroken()			{ _debugIsBroken = ! _debugIsBroken;	}
+    void toggleDebugIsSatisfied()		{ _debugIsSatisfied = ! _debugIsSatisfied; }
 
 
     // Columns
@@ -564,9 +590,12 @@ protected:
     YQPkgObjList *	_pkgObjList;
     ZyppSel		_selectable;
     ZyppObj		_zyppObj;
-    bool		_editable;
-    bool		_candidateIsNewer;
-    bool		_installedIsNewer;
+    bool		_editable:1;
+    bool		_candidateIsNewer:1;
+    bool		_installedIsNewer:1;
+
+    bool		_debugIsBroken:1;
+    bool		_debugIsSatisfied:1;
 };
 
 

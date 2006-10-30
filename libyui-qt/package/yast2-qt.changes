@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Oct 30 18:11:50 CET 2006 - sh@suse.de
+
+- Consistent handling of isSatisfied and isBroken for bug #173488
+- Added real "isSatisfied" icon 
+- V 2.13.72
+
+-------------------------------------------------------------------
 Fri Oct 27 13:43:42 CEST 2006 - sh@suse.de
 
 - Added missing icon to dist tarball 

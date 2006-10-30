@@ -51,6 +51,7 @@
 #include "icons/tree_plus.xpm"
 #include "icons/tree_minus.xpm"
 #include "icons/warning_sign.xpm"
+#include "icons/satisfied.xpm"
 
 #include "icons/normal_conflict.xpm"
 #include "icons/select_conflict.xpm"
@@ -106,6 +107,7 @@ QPixmap YQIconPool::treePlus()			{ return iconPool()->cachedIcon( tree_plus_xpm 
 QPixmap YQIconPool::treeMinus()			{ return iconPool()->cachedIcon( tree_minus_xpm );		}
 
 QPixmap YQIconPool::warningSign()		{ return iconPool()->cachedIcon( warning_sign_xpm );		}
+QPixmap YQIconPool::pkgSatisfied()		{ return iconPool()->cachedIcon( satisfied_xpm );		}
 
 
 YQIconPool * YQIconPool::iconPool()

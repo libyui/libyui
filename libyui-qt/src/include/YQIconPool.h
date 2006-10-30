@@ -71,6 +71,7 @@ public:
     static QPixmap treeMinus();
     
     static QPixmap warningSign();
+    static QPixmap pkgSatisfied();
 
 
 protected:
