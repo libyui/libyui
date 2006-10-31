@@ -432,7 +432,7 @@ void NCurses::Refresh()
     UIMIL << "start refresh ..." << endl;
     SetTitle( myself->title_t );
     ::clearok( ::stdscr, true );
-    myself->stdpan->refresh();
+    myself->stdpan->noutrefresh();
     UIMIL << "done refresh ..." << endl;
   }
 }
