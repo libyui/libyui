@@ -140,6 +140,13 @@ public:
      **/
     virtual QPopupMenu * addAllInListSubMenu( QPopupMenu * menu );
 
+    /**
+     * Delayed initialization after the dialog is fully created.
+     *
+     * Reimplemented from QWidget.
+     **/
+    virtual void polish();
+
 
 signals:
 

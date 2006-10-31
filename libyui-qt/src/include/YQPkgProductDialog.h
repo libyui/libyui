@@ -52,9 +52,9 @@ public:
     virtual QSize sizeHint () const;
 
     /**
-     * Delayed initialization after the dialog is fully created
+     * Delayed initialization after the dialog is fully created.
      *
-     * Reimplemented from QWidget
+     * Reimplemented from QWidget.
      **/
     virtual void polish();
 

@@ -1,4 +1,18 @@
 -------------------------------------------------------------------
+Tue Oct 31 17:32:00 CET 2006 - sh@suse.de
+
+- Improved bugfix for bug #183735 (display only relevant patches
+  by default): Also display patches that are satisfied, but
+  not installed yet
+
+- Fixed bug #189134: Show description of initial patch / pkg
+
+- Override patch category tooltips with "Dependencies broken" or
+  "Dependencies satisfied" in patch list
+
+- V 2.13.73 
+
+-------------------------------------------------------------------
 Mon Oct 30 18:11:50 CET 2006 - sh@suse.de
 
 - Consistent handling of isSatisfied and isBroken for bug #173488

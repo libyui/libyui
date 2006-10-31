@@ -71,7 +71,6 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
 
     setSorting( categoryCol() );
     fillList();
-    selectSomething();
 
     y2debug( "Creating patch list done" );
 }
@@ -80,6 +79,18 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
 YQPkgPatchList::~YQPkgPatchList()
 {
     // NOP
+}
+
+
+void
+YQPkgPatchList::polish()
+{
+    // Delayed initialization after widget is fully created etc.
+
+    // Only now send selectionChanged() signal so attached details views also
+    // display something if their showDetailsIfVisible() slot is connected to
+    // selectionChanged() signals.
+    selectSomething();
 }
 
 
@@ -126,7 +137,10 @@ YQPkgPatchList::fillList()
 		    }
 		    else // not installed - display only if needed
 		    {
-			if ( selectable->candidatePoolItem().status().isNeeded() )
+			zypp::ResStatus candidateStatus = selectable->candidatePoolItem().status();
+			
+			if ( candidateStatus.isNeeded() ||
+			     candidateStatus.isSatisfied() )
 			{
 			    displayPatch = true;
 			}
@@ -147,7 +161,10 @@ YQPkgPatchList::fillList()
 		    }
 		    else // not installed - display only if needed
 		    {
-			if ( selectable->candidatePoolItem().status().isNeeded() )
+			zypp::ResStatus candidateStatus = selectable->candidatePoolItem().status();
+
+			if ( candidateStatus.isNeeded() ||
+			     candidateStatus.isSatisfied() )
 			{
 			    displayPatch = true;
 			}
@@ -494,12 +511,20 @@ YQPkgPatchListItem::toolTip( int col )
     }
     else
     {
-	text = fromUTF8( zyppPatch()->category() );
+	if (  ( col == brokenIconCol()    && isBroken()    ) ||
+	      ( col == satisfiedIconCol() && isSatisfied() )   )
+	{
+	    text = YQPkgObjListItem::toolTip( col );
+	}
+	else
+	{
+	    text = fromUTF8( zyppPatch()->category() );
 
-	if ( ! text.isEmpty() )
-	    text += "\n";
+	    if ( ! text.isEmpty() )
+		text += "\n";
 
-	text += fromUTF8( zyppPatch()->size().asString().c_str() );
+	    text += fromUTF8( zyppPatch()->size().asString().c_str() );
+	}
     }
 
     return text;
