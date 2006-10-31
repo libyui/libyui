@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Oct 31 16:43:37 CET 2006 - kmachalkova@suse.cz
+
+- (Temporary) fix for refreshing screen during the installation
+  (#199256)
+- Adjusted spec to require libzypp >=2.7.0 (zypp::ui::PatternContent)
+- 2.14.0
+
+-------------------------------------------------------------------
 Sun Oct 29 12:48:44 CET 2006 - gs@suse.de
 
 - Package Installation: Fold hidden patterns into parents (Fate #301229) 
