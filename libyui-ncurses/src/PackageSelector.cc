@@ -72,25 +72,6 @@ bool sortByName( ZyppSel ptr1, ZyppSel ptr2 )
 
 ///////////////////////////////////////////////////////////////////
 //
-// CompFunc for patch summary
-//
-bool sortBySummary( ZyppSel ptr1, ZyppSel ptr2 )
-{
-    ZyppPatch patch1 =  tryCastToZyppPatch( ptr1->theObj() );
-    ZyppPatch patch2 =  tryCastToZyppPatch( ptr2->theObj() );
-
-    if ( !patch1 || !patch2 )
-	return false;
-    
-    if ( patch1->summary() < patch2->summary() )
-    {
-	return true;
-    }
-    return false;
-}
-
-///////////////////////////////////////////////////////////////////
-//
 // ignore case compare  
 //
 bool ic_compare ( char c1, char c2 )
@@ -737,7 +718,7 @@ bool PackageSelector::fillPatchList( string filter )
 
     // get the patch list and sort it
     list<ZyppSel> patchList( zyppPatchesBegin (), zyppPatchesEnd () );
-    patchList.sort( sortBySummary );
+    patchList.sort( sortByName );
     list<ZyppSel>::iterator listIt = patchList.begin(); 
 
     while ( listIt != patchList.end() )
