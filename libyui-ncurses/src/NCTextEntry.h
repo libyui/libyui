@@ -124,6 +124,7 @@ class NCTextEntry : public YTextEntry, public NCWidget {
     // if appropriate
     void setInputMaxLength( const YCPInteger & numberOfChars);
 
+    void setCurPos( unsigned pos ) { curpos = pos; }
 };
 
 ///////////////////////////////////////////////////////////////////

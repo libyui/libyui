@@ -28,6 +28,7 @@
 #include "NCMultiSelectionBox.h"
 #include "NCPushButton.h"
 #include "NCPopupInfo.h"
+#include "NCTextEntry.h"
 
 #include "NCi18n.h"
 
@@ -83,6 +84,7 @@ NCPopupDeps::NCPopupDeps( const wpos at, PackageSelector * pkger )
       , solveButton( 0 )
       , solutionw( 0 )
       , head( 0 )
+      , details( 0 )
       , packager( pkger )
       , problemw( 0 )
 
@@ -138,12 +140,18 @@ void NCPopupDeps::createLayout( )
 					_("&Problems"),
 					this);
   vSplit->addChild( problemw );
-
-  vSplit->addChild( new NCSpacing( vSplit, opt, 0.2, false, true ) );
-
   opt.isHStretchable.setValue( true );
   opt.isHeading.setValue( false );
- 
+
+  //vSplit->addChild( new NCSpacing( vSplit, opt, 0.2, false, true ) );
+
+  details =  new NCTextEntry( vSplit, opt,
+			      YCPString( "" ), YCPString( "" ),
+			      200, 200 );
+
+  vSplit->addChild( details );
+  vSplit->addChild( new NCSpacing( vSplit, opt, 0.8, false, true ) );
+    
   // add the package list containing the dependencies
   solutionw = new NCSolutionSelectionBox ( vSplit, opt,
 					   _("P&ossible Solutions"),
@@ -266,7 +274,7 @@ bool NCPopupDeps::showSolutions( int index )
     
     unsigned int size = problems.size ();
     solutionw->clearItems ();
-
+    
     if ( index < 0 || (unsigned int)index >= size )
 	return false;
 
@@ -276,6 +284,9 @@ bool NCPopupDeps::showSolutions( int index )
     zypp::ResolverProblem_Ptr problem = problems[index].first;
     zypp::ProblemSolution_Ptr user_solution = problems[index].second;
 
+    details->setText( YCPString(problem->details()) );
+    details->setCurPos( 0 );
+    
     zypp::ProblemSolutionList solutions = problem->solutions ();
     zypp::ProblemSolutionList::iterator
 	bb = solutions.begin (),

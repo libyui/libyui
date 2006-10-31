@@ -335,7 +335,13 @@ public:
 				      const YCPString & encoding );
 
     virtual YCPValue setKeyboard ( );
-    
+
+    /**
+     * UI-specific beep() function.
+     * Beeps the system bell.
+    */
+    virtual void beep();
+
     /**
      *
      * Open a directory selection box and prompt the user for an existing directory.

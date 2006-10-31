@@ -923,6 +923,19 @@ bool YNCursesUI::want_colors()
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : YNCursesUI::beep()
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : beeps the system bell
+//
+void YNCursesUI::beep()
+{
+  ::beep();
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : YNCursesUI::askForSaveFileName()
 //	METHOD TYPE : YCPValue()
 //

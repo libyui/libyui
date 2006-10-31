@@ -96,6 +96,7 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
       , filePopup( 0 )
       , youMode( false )
       , updateMode( false )
+      , testMode ( false )
       , autoCheck( true )
       , _rpmGroupsTree (0)
 {
@@ -172,42 +173,9 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
     if ( opt.updateMode.value() )
 	updateMode = true;
 
-
     // read test source information
     if ( opt.testMode.value() )
-    {
-#ifdef FIXME_PATCHES
-	if ( youMode )
-	{
-	    PMYouServer server( "dir:///8.1-patches" );
-            InstYou &you = Y2PM::youPatchManager().instYou();
-            you.settings()->setPatchServer( server );
-	    you.settings()->setReloadPatches( false );
-            you.retrievePatchInfo();
-	    you.selectPatches( zypp::Patch::kind_recommended |
-			       zypp::Patch::kind_security     );
-	    NCMIL <<  "Fake YOU patches initialized" << endl;	
-	}
-	else
-#endif
-	{
-#ifdef FIXME
-	    Y2PM y2pm;
-	    InstSrcManager& MGR = y2pm.instSrcManager();
-
-	    Url url( "dir:///space/instTest" );
-
-	    InstSrcManager::ISrcIdList nids;
-	    PMError err = MGR.scanMedia( nids, url );
-
-	    if ( nids.size() )
-	    {
-		err = MGR.enableSource( *nids.begin() );
-		NCMIL << "Fake source enabled: " << err << endl;
-	    }
-#endif
-	}
-    }
+	testMode = true;
 
     saveState ();
 
@@ -245,7 +213,7 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
     depsPopup = new NCPopupDeps( wpos( 1, 1 ), this );
 
     // the disk space popup
-    diskspacePopup = new NCPopupDiskspace( wpos( 1, 1 ) );
+    diskspacePopup = new NCPopupDiskspace( wpos( 1, 1 ), testMode );
 
 }
 
@@ -315,18 +283,18 @@ void PackageSelector::createFilterMenu()
 	selections = false;
     }
 	
-    if ( patterns && !selections )
+    if ( selections && !patterns )
     {
-	// ReplaceWidget and show menu entry Patterns instead of Selections
+	// ReplaceWidget and show menu entry Selections instead of Patterns
 	char menu[4000];
 	snprintf ( menu, sizeof(menu) - 1,
 		  "`MenuButton( `opt(`key_F4), \"%s\", "
-		  "[`item( `id(\"groups\"), \"%s\" ), `item( `id(\"patterns\"), \"%s\" ), "
+		  "[`item( `id(\"groups\"), \"%s\" ), `item( `id(\"selections\"), \"%s\" ), "
 		  " `item( `id(\"search\"), \"%s\" ), `item( `id(\"installed\"), \"%s\" ), "
 		  " `item( `id(\"whatif\"), \"%s\" ), `item( `id(\"updatelist\"), \"%s\" ) ] ) ",
 		  PkgNames::MenuFilter().c_str(),
 		  PkgNames::MenuEntryRPMGroups().c_str(),
-		  PkgNames::MenuEntryPatterns().c_str(),
+		  PkgNames::MenuEntrySelections().c_str(),
 		  PkgNames::MenuEntrySearch().c_str(),
 		  PkgNames::MenuEntryInstPkg().c_str() ,
 		  PkgNames::MenuEntryInstSummary().c_str(),
@@ -679,34 +647,40 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
     
     while ( listIt != pkgList.end() )
     {
-	pkg = tryCastToZyppPkg ((*listIt)->theObj());
+	if ( (*listIt)->installedObj() )
+	   pkg = tryCastToZyppPkg ((*listIt)->installedObj());
+	else
+	   pkg = tryCastToZyppPkg ((*listIt)->theObj());
 
-	if ( checkDescr )
+	if ( pkg )
 	{
-	    zypp::Text value = pkg->description();
-	    description = createDescrText( value );    
-	}
-	if ( checkProvides )
-	{
-	    zypp::CapSet value = pkg->dep (zypp::Dep::PROVIDES);
-	    provides = createRelLine( value );  
-	}
-	if ( checkRequires )
-	{
-	    zypp::CapSet value = pkg->dep (zypp::Dep::REQUIRES);
-	    requires = createRelLine( value );    
-	}
-	if ( ( checkName && match( pkg->name(), expr->value(), ignoreCase )) ||
-	     ( checkSummary && match( pkg->summary(), expr->value(), ignoreCase) ) ||
-	     ( checkDescr && match( description, expr->value(), ignoreCase) ) ||
-	     ( checkProvides && match( provides, expr->value(), ignoreCase) ) ||
-	     ( checkRequires && match( requires,  expr->value(), ignoreCase) )
-	     )
-	{
-	    // search sucessful
-	    packageList->createListEntry( pkg, *listIt );
-	}
-	
+	    if ( checkDescr )
+	    {
+		zypp::Text value = pkg->description();
+		description = createDescrText( value );    
+	    }
+	    if ( checkProvides )
+	    {
+		zypp::CapSet value = pkg->dep (zypp::Dep::PROVIDES);
+		provides = createRelLine( value );
+	    }
+	    if ( checkRequires )
+	    {
+		zypp::CapSet value = pkg->dep (zypp::Dep::REQUIRES);
+		requires = createRelLine( value );    
+	    }
+	    if ( ( checkName && match( pkg->name(), expr->value(), ignoreCase )) ||
+		 ( checkSummary && match( pkg->summary(), expr->value(), ignoreCase) ) ||
+		 ( checkDescr && match( description, expr->value(), ignoreCase) ) ||
+		 ( checkProvides && match( provides, expr->value(), ignoreCase) ) ||
+		 ( checkRequires && match( requires,  expr->value(), ignoreCase) )
+		 )
+	    {
+		// search sucessful
+		packageList->createListEntry( pkg, *listIt );
+	    }
+	}	
+
 	++listIt;
     }
 
@@ -774,7 +748,7 @@ bool PackageSelector::fillPatchList( string filter )
 	if ( filter == "installable" )
 	{
 	    // show common label "Online Update Patches"
-	    static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::Patches()) );
+	    static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::YOUPatches()) );
 	}
 	else if ( filter == "installed" )
 	{
@@ -1097,7 +1071,7 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
 bool PackageSelector::match ( string s1, string s2, bool ignoreCase )
 {
     string::iterator pos;
-
+    
     if ( ignoreCase )
     {
 	pos = search( s1.begin(), s1.end(),
@@ -1162,6 +1136,7 @@ bool PackageSelector::checkPatch( ZyppPatch 	patchPtr,
 				   
 {
     NCPkgTable * packageList = getPackageList();
+    bool displayPatch = false;
     
     if ( !packageList || !patchPtr
 	 || !selectable )
@@ -1170,27 +1145,71 @@ bool PackageSelector::checkPatch( ZyppPatch 	patchPtr,
     	return false;
     }
 
-    if ( filter == "all"
-	 || ( filter == "installed" && selectable->status() == S_KeepInstalled )
-	 // FIXME Is filter installable correct? There was a method installable() before. Condition was:
-	 // ( patchPtr->installable() && patchPtr->getSelectable()->status() != PMSelectable::S_KeepInstalled )
-	 || ( filter == "installable" && ( selectable->status() != S_KeepInstalled ) )
-	 || ( filter == "new" && ( selectable->status() == S_Install ||
-				   selectable->status() == S_NoInst ) )
-	 || ( filter == "security" && patchPtr->category() == "security" )
-	 || ( filter == "recommended" && patchPtr->category() == "recommended" )
-	 || ( filter == "optional" && patchPtr->category() == "optional" )
-	 || ( filter == "YaST2" && patchPtr->category() == "yast" )
+    if ( filter == "all" )
+    {
+	displayPatch = true;
+    }
+    else if ( filter == "installed" )
+    {
+	if ( selectable->hasInstalledObj() )
+		displayPatch = true;
+    }
+    else if ( filter == "installable" )
+    {
+	if ( selectable->hasInstalledObj() ) // installed?
+	{
+	    // display only if broken
+	    if ( selectable->installedPoolItem().status().isIncomplete() )
+	    {
+		displayPatch = true;
+		NCMIL << "Installed patch is broken: " << patchPtr->name().c_str() << " - "
+		      << patchPtr->summary().c_str() << endl;
+	    }
+	}
+	else // not installed - display only if needed
+	{
+	    if ( selectable->candidatePoolItem().status().isNeeded() )
+	    {
+		displayPatch = true;
+	    }
+	    else
+	    {
+		NCMIL << "Patch not needed: " << patchPtr->name().c_str() << " - "
+		      << patchPtr->summary().c_str() << endl;
+	    }
+	}
+    }
+    else if ( filter == "new" )
+    {
+	    if ( !selectable->hasInstalledObj() )
+		displayPatch = true;
+    }
+    else if ( filter == "security" )
+    {
+	    if ( patchPtr->category() == "security" )
+    		displayPatch = true;
+    }
 
-	 )	
+    else if ( filter == "recommended" )
     {
+	    if ( patchPtr->category() == "recommended" )
+		displayPatch = true;
+    }
+    else if ( filter == "optional" )
+    {
+	    if (  patchPtr->category() == "optional" )
+			displayPatch = true;
+    }
+    else if ( filter == "YaST2" )
+    {
+	    if ( patchPtr->category() == "yast" )
+			displayPatch = true;
+    }
+    
+    if ( displayPatch )
 	packageList->createPatchEntry( patchPtr, selectable );
-	return true;
-    }
-    else
-    {
-	return false;
-    }
+
+    return displayPatch;
 }
 
 
@@ -1591,15 +1610,24 @@ bool PackageSelector::StatusHandler( const NCursesEvent&  event )
     }
     else if ( event.selection->compare( PkgNames::Select() ) == YO_EQUAL )
     {
-	packageList->changeObjStatus( '+' );
+	if ( testMode )
+	    diskspacePopup->setDiskSpace( '+' );
+	else
+	    packageList->changeObjStatus( '+' );
     }
     else if ( event.selection->compare( PkgNames::Delete() ) == YO_EQUAL )
     {
-	packageList->changeObjStatus( '-' );
+	if ( testMode )
+	    diskspacePopup->setDiskSpace( '-' );
+	else
+	    packageList->changeObjStatus( '-' );
     }
     else if ( event.selection->compare( PkgNames::Update() ) == YO_EQUAL )
     {
-	packageList->changeObjStatus( '>' );
+	if ( testMode )
+	    diskspacePopup->checkDiskSpaceRange();
+	else
+	    packageList->changeObjStatus( '>' );
     }
     else if ( event.selection->compare( PkgNames::TabooOn() ) == YO_EQUAL )
     {
@@ -1607,7 +1635,7 @@ bool PackageSelector::StatusHandler( const NCursesEvent&  event )
     }
     else if ( event.selection->compare( PkgNames::TabooOff() ) == YO_EQUAL )
     {
-	packageList->changeObjStatus( '-' );	
+	packageList->changeObjStatus( '%' );	
     } 
     else if ( event.selection->compare( PkgNames::SourceYes() ) == YO_EQUAL )
     {
@@ -1674,7 +1702,7 @@ bool PackageSelector::DiskinfoHandler( const NCursesEvent&  event )
 
     if ( diskspacePopup )
     {
-	diskspacePopup->showInfoPopup();
+	diskspacePopup->showInfoPopup( PkgNames::DiskspaceLabel() );
     }
     if ( packageList )
     {
@@ -2101,6 +2129,10 @@ bool PackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectable 
 	// the patch size is not available
         // descr += PkgNames::Size();
 	// descr += patchPtr->size().asString( 8 );
+	descr += "<b>";
+	descr += PkgNames::PatchKind();
+	descr += ": </b>";
+	descr += patchPtr->category();
 	descr += "<br>";
 	// get and format the patch description
 	zypp::Text value = patchPtr->description();
@@ -2572,6 +2604,10 @@ void PackageSelector::showDiskSpace()
     {
 	static_cast<NCLabel *>(diskSpace)->setLabel( label );
     }
+
+    // check whether required diskspace enters the warning range
+    if ( diskspacePopup )
+	diskspacePopup->checkDiskSpaceRange( );
 }
 
 

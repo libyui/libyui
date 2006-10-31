@@ -34,7 +34,7 @@ class NCPushButton;
 class NCSelectionBox;
 class NCMultiSelectionBox;
 class PackageSelector;
-
+class NCTextEntry;
 
 namespace PkgDep {
     class ErrorResult;
@@ -68,6 +68,8 @@ private:
     NCMultiSelectionBox * solutionw; // resolver problem solutions
 
     NCLabel * head;			// the headline
+
+    NCTextEntry *details;		// problem details
     
     PackageSelector * packager;		// connection to the package selector
     

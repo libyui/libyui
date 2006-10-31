@@ -25,6 +25,7 @@
 #include "PkgNames.h"
 #include "NCPkgTable.h"
 #include "ObjectStatStrategy.h"
+#include <zypp/ui/PatternContents.h>
 
 #include "YQZypp.h"
 
@@ -159,11 +160,14 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
 		packages = selPtr->install_packages ();
 	    else if (patPtr)
 	    {
-		packages = patPtr->install_packages ();
+		zypp::ui::PatternContents patternContents( patPtr );
+		packages = patternContents.install_packages();
 	    }
 
 	    packager->showSelPackages( getCurrentLine(), packages );
-	    packager->showDiskSpace();
+	    // showDiskSpace() moved to NCPkgTable.cc (show/check diskspace
+	    // on every status change)
+	    // packager->showDiskSpace();
 	}
     }
 

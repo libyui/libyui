@@ -222,6 +222,7 @@ class NCstyle {
       RichTextLink,
       RichTextArmedlink,
       RichTextActiveArmedlink,
+      RichTextVisitedLink,
       RichTextB,
       RichTextI,
       RichTextT,
@@ -299,6 +300,7 @@ class NCstyle {
       const chtype & link;
       const chtype & armedlink;
       const chtype & activearmedlink;
+      const chtype & visitedlink;
       const chtype & B;
       const chtype & I;
       const chtype & T;
@@ -308,12 +310,12 @@ class NCstyle {
       const chtype & BIT;
 
       StRichtext( const chtype & p, const chtype & tit,
-		  const chtype & l, const chtype & al, const chtype & aal,
+		  const chtype & l, const chtype & al, const chtype & aal, const chtype & vl,
 		  const chtype & b, const chtype & i, const chtype & t,
 		  const chtype & bi, const chtype & bt, const chtype & it,
 		  const chtype & bit )
 	: plain( p ), title( tit ),
-          link( l ), armedlink( al ), activearmedlink( aal ),
+          link( l ), armedlink( al ), activearmedlink( aal ), visitedlink( vl ),
 	  B( b ), I( i ), T( t ),
 	  BI( bi ), BT( bt ), IT( it ),
 	  BIT( bit )

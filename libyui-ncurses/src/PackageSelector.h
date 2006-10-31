@@ -88,7 +88,8 @@ class PackageSelector
     
     bool youMode;			// YOU
     bool updateMode;			// Update
-
+    bool testMode;			// testing
+    
     bool autoCheck;			// flag for automatic dependency check on/off
     YRpmGroupsTree * _rpmGroupsTree;	// rpm groups of the found packages
 

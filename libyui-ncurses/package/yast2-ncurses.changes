@@ -1,4 +1,71 @@
 -------------------------------------------------------------------
+Sun Oct 29 12:48:44 CET 2006 - gs@suse.de
+
+- Package Installation: Fold hidden patterns into parents (Fate #301229) 
+- Online Update: show list of installable (relevant) patches
+  (bug # 168758)
+- 2.13.47
+
+-------------------------------------------------------------------
+Wed Oct 11 11:30:57 CEST 2006 - gs@suse.de
+
+- Online Update: Allow deletion of patches (bug #208694) 
+  Package Installation: change status to delete if '-' is pressed, 
+  use % key to reset taboo status (bug #204072)
+- 2.13.46 
+
+-------------------------------------------------------------------
+Tue Oct 10 10:02:32 CEST 2006 - gs@suse.de
+
+- Package Installation: Show low disk space warning similiar to 
+  QT version (FaTE #300548)
+- 2.13.45 
+
+-------------------------------------------------------------------
+Wed Sep 27 13:44:11 CEST 2006 - kmachalkova@suse.cz
+
+- Better displaying of visited hyperlinks in NCRichText (#144428)
+- 2.13.44  
+
+-------------------------------------------------------------------
+Mon Sep 18 13:17:22 CEST 2006 - kmachalkova@suse.cz
+
+- Improved HTML parser in NCRichText (header, paragraph and list
+  handling) (FaTE #3124) 
+- 2.13.43
+
+-------------------------------------------------------------------
+Thu Sep 14 14:40:07 CEST 2006 - gs@suse.de
+
+- Package Installation: default entry in filter menu is 'Patterns'
+- 2.13.42
+
+-------------------------------------------------------------------
+Thu Sep 14 11:17:50 CEST 2006 - kmachalkova@suse.cz
+
+- Adding ncursesw autoconf check to configure.in.in to ensure
+  portability to other distros (#201705) 
+
+-------------------------------------------------------------------
+Thu Sep 14 10:59:56 CEST 2006 - gs@suse.de
+
+- Package Installation: search in the "provides" tag of the installed
+  package (bug #180232) 
+
+-------------------------------------------------------------------
+Wed Sep 13 16:42:39 CEST 2006 - sh@suse.de
+
+- Applied patch from Ricardo Cruz <rpmcruz@clix.pt>
+  for new UI::Beep() built-in 
+
+-------------------------------------------------------------------
+Tue Sep 12 14:36:02 CEST 2006 - gs@suse.de
+
+- Package Installation: show details of package and pattern 
+  dependencies (bug #178494, bug #201745) 
+- 2.13.41
+
+-------------------------------------------------------------------
 Tue Jun 20 14:49:52 CEST 2006 - gs@suse.de
 
 - Online Update: don't show the patch size (bug #186100);

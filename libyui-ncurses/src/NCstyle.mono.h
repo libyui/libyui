@@ -84,6 +84,7 @@ inline void NCstyleInit_mono( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextLink, 0 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 0 );
   attrset->setAttr( NCstyle::RichTextActiveArmedlink, 0|A_BOLD );
+  attrset->setAttr( NCstyle::RichTextVisitedLink, 0 );
   attrset->setAttr( NCstyle::RichTextB, 0|A_REVERSE );
   attrset->setAttr( NCstyle::RichTextI, 0|A_REVERSE );
   attrset->setAttr( NCstyle::RichTextT, 0|A_REVERSE );
@@ -146,6 +147,7 @@ inline void NCstyleInit_mono( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextLink, 0 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 0 );
   attrset->setAttr( NCstyle::RichTextActiveArmedlink, 0|A_BOLD );
+  attrset->setAttr( NCstyle::RichTextVisitedLink, 0 );
   attrset->setAttr( NCstyle::RichTextB, 0|A_REVERSE );
   attrset->setAttr( NCstyle::RichTextI, 0|A_REVERSE );
   attrset->setAttr( NCstyle::RichTextT, 0|A_REVERSE );
@@ -208,6 +210,7 @@ inline void NCstyleInit_mono( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextLink, 0 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 0 );
   attrset->setAttr( NCstyle::RichTextActiveArmedlink, 0|A_BOLD );
+  attrset->setAttr( NCstyle::RichTextVisitedLink, 0 );
   attrset->setAttr( NCstyle::RichTextB, 0|A_REVERSE );
   attrset->setAttr( NCstyle::RichTextI, 0|A_REVERSE );
   attrset->setAttr( NCstyle::RichTextT, 0|A_REVERSE );
@@ -270,6 +273,7 @@ inline void NCstyleInit_mono( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextLink, 0 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 0 );
   attrset->setAttr( NCstyle::RichTextActiveArmedlink, 0|A_BOLD );
+  attrset->setAttr( NCstyle::RichTextVisitedLink, 0 );
   attrset->setAttr( NCstyle::RichTextB, 0|A_REVERSE );
   attrset->setAttr( NCstyle::RichTextI, 0|A_REVERSE );
   attrset->setAttr( NCstyle::RichTextT, 0|A_REVERSE );

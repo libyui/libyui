@@ -762,6 +762,7 @@ void NCStyleDef::doshowset( SetType a, bool reset )
     PRT(RichTextLink);
     PRT(RichTextArmedlink);
     PRT(RichTextActiveArmedlink);
+    PRT(RichTextVisitedLink);
     PRT(RichTextB);
     PRT(RichTextI);
     PRT(RichTextT);

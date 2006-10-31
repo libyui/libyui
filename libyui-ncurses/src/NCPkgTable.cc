@@ -311,16 +311,20 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	{
 	    case T_Packages:
 	    case T_Update:
-	    case T_Availables:
 		// check/show dependencies of packages
 		packager->showPackageDependencies( false );	// only check if automatic check is ON
 		// show the required diskspace
 		packager->showDiskSpace();
 		break;
-		
+	    case T_Availables:
+		// check/show dependencies of packages
+		packager->showPackageDependencies( false );
+		// don't show diskspace (type T_Availables is also used in YOU mode)
+		break;
 	    case T_Selections:
 		// check/show dependencies of selections 
 		packager->showSelectionDependencies();
+		packager->showDiskSpace();
 		break;
 	    
 	    case T_Patches:

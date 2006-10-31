@@ -117,6 +117,7 @@ NCstyle::StDialog NCstyle::Style::initDialog()
 			       attr(RichTextLink),
 			       attr(RichTextArmedlink),
 			       attr(RichTextActiveArmedlink),
+			       attr(RichTextVisitedLink),
 			       attr(RichTextB),
 			       attr(RichTextI),
 			       attr(RichTextT),
@@ -262,6 +263,7 @@ string NCstyle::dumpName( NCstyle::STlocal a ) {
     PRT(RichTextLink);
     PRT(RichTextArmedlink);
     PRT(RichTextActiveArmedlink);
+    PRT(RichTextVisitedLink);
     PRT(RichTextB);
     PRT(RichTextI);
     PRT(RichTextT);
