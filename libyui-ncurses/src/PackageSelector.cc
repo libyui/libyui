@@ -36,6 +36,7 @@
 #include "NCPopupFile.h"
 #include "PackageSelector.h"
 #include "YSelectionBox.h"
+#include "NCi18n.h"
 
 #include <iomanip>
 #include <list>
@@ -1156,7 +1157,7 @@ bool PackageSelector::checkPatch( ZyppPatch 	patchPtr,
     }
     else if ( filter == "installable" )
     {
-	if ( selectable->hasInstalledObj() ) // installed?
+	if ( selectable->hasInstalledObj() ) // patch installed?
 	{
 	    // display only if broken
 	    if ( selectable->installedPoolItem().status().isIncomplete() )
@@ -1166,9 +1167,16 @@ bool PackageSelector::checkPatch( ZyppPatch 	patchPtr,
 		      << patchPtr->summary().c_str() << endl;
 	    }
 	}
-	else // not installed - display only if needed
+	else // patch not installed
 	{
-	    if ( selectable->candidatePoolItem().status().isNeeded() )
+	    zypp::ResStatus candidateStatus = selectable->candidatePoolItem().status();
+
+            // isNeeded(): this patch is relevant (contains updates for installed packages)
+	    // isSatisfied(): all packages are installed, therefore the isNeeded() flag
+	    // isn't set. BUT the patch meta data aren't installed and therefore it makes
+	    // sense to install the patch
+	    if ( candidateStatus.isNeeded() ||
+		 candidateStatus.isSatisfied() )
 	    {
 		displayPatch = true;
 	    }
@@ -2134,6 +2142,13 @@ bool PackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectable 
 	descr += ": </b>";
 	descr += patchPtr->category();
 	descr += "<br>";
+
+	if ( selectable->hasInstalledObj()
+	     && selectable->installedPoolItem().status().isIncomplete() )
+	{
+	    descr += _( "----- this patch is broken !!! -----" );
+	    descr += "<br>";
+	}
 	// get and format the patch description
 	zypp::Text value = patchPtr->description();
 	descr += createDescrText( value );
