@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Nov  2 14:32:53 CET 2006 - gs@suse.de
+
+- Online update: Improved list of relevant patches (bug #168758)
+- 2.13.49 
+
+-------------------------------------------------------------------
 Tue Oct 31 16:25:47 CET 2006 - kmachalkova@suse.cz
 
 - (Temporary) fix for refreshing screen during the installation
@@ -7,7 +13,7 @@ Tue Oct 31 16:25:47 CET 2006 - kmachalkova@suse.cz
 - 2.13.48 
 
 -------------------------------------------------------------------
-Sun Oct 29 12:48:44 CET 2006 - gs@suse.de
+Mon Oct 30 12:48:44 CET 2006 - gs@suse.de
 
 - Package Installation: Fold hidden patterns into parents (Fate #301229) 
 - Online Update: show list of installable (relevant) patches
