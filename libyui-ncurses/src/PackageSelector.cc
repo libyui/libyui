@@ -58,6 +58,10 @@ using namespace std;
 using std::string;
 using std::wstring;
 
+/*
+  Textdomain "packages"
+*/
+
 ///////////////////////////////////////////////////////////////////
 //
 // CompFunc 
