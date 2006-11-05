@@ -2119,7 +2119,7 @@ bool PackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectable 
 {
     ZyppPatch patchPtr = tryCastToZyppPatch( objPtr );
 
-    if ( !patchPtr )
+    if ( !patchPtr || !selectable )
     {
 	NCERR << "Patch not valid" << endl;
 	return false;
