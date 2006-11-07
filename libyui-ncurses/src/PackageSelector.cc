@@ -163,6 +163,7 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
     eventHandlerMap[ PkgNames::AutoDeps()->toString() ] = &PackageSelector::DependencyHandler;
     eventHandlerMap[ PkgNames::SaveSel()->toString() ] = &PackageSelector::SelectionHandler;
     eventHandlerMap[ PkgNames::LoadSel()->toString() ] = &PackageSelector::SelectionHandler;
+    eventHandlerMap[ PkgNames::Testcase()->toString() ] = &PackageSelector::TestcaseHandler;
     
     // Help menu
     eventHandlerMap[ PkgNames::GeneralHelp()->toString() ] = &PackageSelector::HelpHandler;
@@ -1761,6 +1762,26 @@ bool PackageSelector::LinkHandler ( string link )
     
     return found;
 }
+
+bool PackageSelector::TestcaseHandler ( const NCursesEvent&  event )
+{
+    string testCaseDir = "/var/log/YaST2/solverTestcase";
+
+    NCMIL << "Generating solver test case START" << endl;
+    bool success = zypp::getZYpp()->resolver()->createSolverTestcase( testCaseDir );
+    NCMIL <<  "Generating solver test case END" << endl;
+
+    if ( success )
+    {
+	NCPopupInfo info( wpos( 1, 1 ),
+			  YCPString( "" ),
+			  YCPString( _("Dependency resolver test case written to ") + "<br>" + testCaseDir ) );
+	info.setNiceSize( 40, 8 );
+	info.showInfoPopup( );	
+    }
+    return success;
+}
+
 
 ///////////////////////////////////////////////////////////////////
 //
