@@ -234,6 +234,12 @@ class PackageSelector
      */
     bool InformationHandler ( const NCursesEvent& event );
 
+     /**
+     * Generate test case /var/log/YaST2/solverTestcase
+     * @return bool
+     */
+    bool TestcaseHandler ( const NCursesEvent& event );
+
     /**
     * Handler function for "OK button pressed"
     * @param event The Ncurses event

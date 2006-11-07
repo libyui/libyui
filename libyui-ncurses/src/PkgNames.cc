@@ -528,6 +528,13 @@ const YCPValue& PkgNames::Details ()
     return value;
 }
 
+// id testcase
+const YCPValue& PkgNames::Testcase ()
+{
+    static const YCPValue value = createIdValue ( "testcase" );
+    return value;
+}
+
 //
 // internal use
 //

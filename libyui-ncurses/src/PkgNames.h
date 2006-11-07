@@ -367,6 +367,11 @@ public:
     static const YCPValue& Details ();
     
     /**
+     *  Widget id testcase
+     */
+    static const YCPValue& Testcase ();
+	
+    /**
      *  Internal use (id for the tree items)
      */
     static const YCPValue& Treeitem();

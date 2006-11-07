@@ -47,6 +47,11 @@
 					     `item( `id("packagesversions"), _("&Versions") )
 					     ]
 					    )),
+			  // label of the Online Update 'Etc' menu (keep it short)
+			 `Left(`MenuButton( `opt(`key_F7), _( "&Etc." ),
+					    [`item( `id("testcase"), 	_( "Generate Dependency Resolver &Test Case" ) )
+					     ]
+			       )),
 			 `HStretch()
 			 ),
 		  `VSpacing(0.3),
