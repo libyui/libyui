@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Nov  7 14:37:38 CET 2006 - gs@suse.de
+
+- Package Installation/Online Update: added support for resolver
+  test case generation, additional entry 'Etc.' menu (Fate #300756)
+- 2.14.2 
+
+-------------------------------------------------------------------
 Thu Nov  2 14:32:53 CET 2006 - gs@suse.de
 
 - Online update: Improved list of relevant patches (bug #168758)
