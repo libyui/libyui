@@ -26,6 +26,8 @@
 #include "YQPkgObjList.h"
 #include "YQPkgSelMapper.h"
 
+#define ENABLE_DELETING_PATCHES	1
+
 using std::string;
 
 class YQPkgPatchListItem;
@@ -41,6 +43,7 @@ enum YQPkgPatchCategory	// This is also the sort order
 
     YQPkgUnknownPatchCategory = 9999
 };
+
 
 
 /**
@@ -62,6 +65,14 @@ public:
      **/
     virtual ~YQPkgPatchList();
 
+    
+    enum FilterCriteria
+    {
+	RelevantPatches,		// needed + broken
+	RelevantAndInstalledPatches,	// needed + broken + installed
+	AllPatches			// all
+    };
+
 
 public slots:
 
@@ -80,15 +91,15 @@ public slots:
     void filterIfVisible();
 
     /**
-     * Add a selection to the list. Connect a filter's filterMatch() signal to
+     * Add a patch to the list. Connect a filter's filterMatch() signal to
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addPatchItem( ZyppSel	selectable,
-			  ZyppPatch 	zyppPatch );
+    void addPatchItem( ZyppSel   selectable,
+		       ZyppPatch zyppPatch );
 
     /**
-     * Fill the selection list.
+     * Fill the patch list according to filterCriteria().
      **/
     void fillList();
 
@@ -100,6 +111,16 @@ public slots:
 
 
 public:
+
+    /**
+     * Set the filter criteria for fillList().
+     **/
+    void setFilterCriteria( FilterCriteria filterCriteria );
+
+    /**
+     * Returns the current filter criteria.
+     **/
+    FilterCriteria filterCriteria() const { return _filterCriteria; }
 
     /**
      * Returns the currently selected item or 0 if there is none.
@@ -118,6 +139,13 @@ public:
      * Reimplemented from YQPkgObjList.
      **/
     virtual QPopupMenu * addAllInListSubMenu( QPopupMenu * menu );
+
+    /**
+     * Delayed initialization after the dialog is fully created.
+     *
+     * Reimplemented from QWidget.
+     **/
+    virtual void polish();
 
 
 signals:
@@ -177,6 +205,7 @@ protected:
 
     int			_categoryCol;
     YQPkgSelMapper	_selMapper;
+    FilterCriteria	_filterCriteria;
 };
 
 

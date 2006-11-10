@@ -33,6 +33,10 @@
 #include "YQPkgPatchList.h"
 #include "YQPkgTextDialog.h"
 
+
+#define VERBOSE_PATCH_LIST	1
+
+
 typedef zypp::ui::PatchContents			ZyppPatchContents;
 typedef zypp::ui::PatchContents::const_iterator	ZyppPatchContentsIterator;
 
@@ -45,11 +49,20 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
 {
     y2debug( "Creating patch list" );
 
+    _filterCriteria = RelevantPatches;
+
     int numCol = 0;
     addColumn( "" );			_statusCol	= numCol++;
     addColumn( _( "Patch"	) );	_summaryCol	= numCol++;
     addColumn( _( "Category" 	) );	_categoryCol	= numCol++;
     addColumn( _( "Size" 	) );	_sizeCol	= numCol++;
+
+    // Can use the same colum for "broken" and "satisfied":
+    // Both states are mutually exclusive
+    
+    _satisfiedIconCol	= _summaryCol;
+    _brokenIconCol	= _summaryCol;
+    
     setAllColumnsShowFocus( true );
     setColumnAlignment( sizeCol(), Qt::AlignRight );
 
@@ -58,7 +71,6 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
 
     setSorting( categoryCol() );
     fillList();
-    selectSomething();
 
     y2debug( "Creating patch list done" );
 }
@@ -67,6 +79,25 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
 YQPkgPatchList::~YQPkgPatchList()
 {
     // NOP
+}
+
+
+void
+YQPkgPatchList::polish()
+{
+    // Delayed initialization after widget is fully created etc.
+
+    // Only now send selectionChanged() signal so attached details views also
+    // display something if their showDetailsIfVisible() slot is connected to
+    // selectionChanged() signals.
+    selectSomething();
+}
+
+
+void
+YQPkgPatchList::setFilterCriteria( FilterCriteria filterCriteria )
+{
+    _filterCriteria = filterCriteria;
 }
 
 
@@ -80,16 +111,87 @@ YQPkgPatchList::fillList()
 	  it != zyppPatchesEnd();
 	  ++it )
     {
-	ZyppPatch zyppPatch = tryCastToZyppPatch( (*it)->theObj() );
+	ZyppSel   selectable = *it;
+	ZyppPatch zyppPatch = tryCastToZyppPatch( selectable->theObj() );
 
 	if ( zyppPatch )
 	{
-#ifdef FIXME
-	    // filter for unneeded patches and patches that are already installed
-#else
-	    // y2debug( "Found patch %s", zyppPatch->name().c_str() );
-	    addPatchItem( *it, zyppPatch);
+	    bool displayPatch = false;
+
+	    switch ( _filterCriteria )
+	    {
+		case RelevantPatches:			// needed + broken
+
+		    if ( selectable->hasInstalledObj() ) // installed?
+		    {
+			// display only if broken
+
+			if ( selectable->installedPoolItem().status().isIncomplete() )
+			{
+			    displayPatch = true;
+
+			    y2warning( "Installed patch is broken: %s - %s",
+				       zyppPatch->name().c_str(),
+				       zyppPatch->summary().c_str() );
+			}
+		    }
+		    else // not installed - display only if needed
+		    {
+			zypp::ResStatus candidateStatus = selectable->candidatePoolItem().status();
+			
+			if ( candidateStatus.isNeeded() ||
+			     candidateStatus.isSatisfied() )
+			{
+			    displayPatch = true;
+			}
+			else
+			{
+			    y2milestone( "Patch not needed: %s - %s",
+					 zyppPatch->name().c_str(),
+					 zyppPatch->summary().c_str() );
+			}
+		    }
+		    break;
+
+		case RelevantAndInstalledPatches:	// needed + broken + installed
+
+		    if ( selectable->hasInstalledObj() ) // installed?
+		    {
+			displayPatch = true;
+		    }
+		    else // not installed - display only if needed
+		    {
+			zypp::ResStatus candidateStatus = selectable->candidatePoolItem().status();
+
+			if ( candidateStatus.isNeeded() ||
+			     candidateStatus.isSatisfied() )
+			{
+			    displayPatch = true;
+			}
+			else
+			{
+			    y2milestone( "Patch not needed: %s - %s",
+					 zyppPatch->name().c_str(),
+					 zyppPatch->summary().c_str() );
+			}
+		    }
+		    break;
+
+		case AllPatches:
+		    displayPatch = true;
+		    break;
+
+		// Intentionally omitting "default" so the compiler
+		// can catch unhandled enum values
+	    }
+
+	    if ( displayPatch )
+	    {
+#if VERBOSE_PATCH_LIST
+		y2debug( "Displaying patch %s - %s", zyppPatch->name().c_str(), zyppPatch->summary().c_str() );
 #endif
+		addPatchItem( *it, zyppPatch);
+	    }
 	}
 	else
 	{
@@ -245,6 +347,11 @@ YQPkgPatchList::createInstalledContextMenu()
     CHECK_PTR( _installedContextMenu );
 
     actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
+
+#if ENABLE_DELETING_PATCHES
+    actionSetCurrentDelete->addTo( _installedContextMenu );
+#endif
+
     actionSetCurrentUpdate->addTo( _installedContextMenu );
     actionSetCurrentProtected->addTo( _installedContextMenu );
 
@@ -261,6 +368,11 @@ YQPkgPatchList::addAllInListSubMenu( QPopupMenu * menu )
     actionSetListInstall->addTo( submenu );
     actionSetListDontInstall->addTo( submenu );
     actionSetListKeepInstalled->addTo( submenu );
+
+#if ENABLE_DELETING_PATCHES
+    actionSetListDelete->addTo( submenu );
+#endif
+
     actionSetListUpdate->addTo( submenu );
     actionSetListUpdateForce->addTo( submenu );
     actionSetListTaboo->addTo( submenu );
@@ -277,6 +389,7 @@ YQPkgPatchList::keyPressEvent( QKeyEvent * event )
 {
     if ( event )
     {
+#if ! ENABLE_DELETING_PATCHES
 	if ( event->ascii() == '-' )
 	{
 	    QListViewItem * selectedListViewItem = selectedItem();
@@ -292,6 +405,7 @@ YQPkgPatchList::keyPressEvent( QKeyEvent * event )
 		}
 	    }
 	}
+#endif
     }
 
     YQPkgObjList::keyPressEvent( event );
@@ -379,8 +493,10 @@ YQPkgPatchListItem::cycleStatus()
 {
     YQPkgObjListItem::cycleStatus();
 
+#if ! ENABLE_DELETING_PATCHES
     if ( status() == S_Del )	// Can't delete patches
 	setStatus( S_KeepInstalled );
+#endif
 }
 
 
@@ -395,12 +511,20 @@ YQPkgPatchListItem::toolTip( int col )
     }
     else
     {
-	text = fromUTF8( zyppPatch()->category() );
+	if (  ( col == brokenIconCol()    && isBroken()    ) ||
+	      ( col == satisfiedIconCol() && isSatisfied() )   )
+	{
+	    text = YQPkgObjListItem::toolTip( col );
+	}
+	else
+	{
+	    text = fromUTF8( zyppPatch()->category() );
 
-	if ( ! text.isEmpty() )
-	    text += "\n";
+	    if ( ! text.isEmpty() )
+		text += "\n";
 
-	text += fromUTF8( zyppPatch()->size().asString().c_str() );
+	    text += fromUTF8( zyppPatch()->size().asString().c_str() );
+	}
     }
 
     return text;

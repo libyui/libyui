@@ -58,7 +58,7 @@ public:
 public slots:
 
     /**
-     * Select a list entry ( if there is any ).
+     * Select a list entry (if there is any).
      * Usually this will be the first list entry, but don't rely on that - this
      * might change without notice. Emits signal selectionChanged().
      **/

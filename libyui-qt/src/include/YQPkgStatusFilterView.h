@@ -81,6 +81,44 @@ public slots:
     void filterIfVisible();
 
 
+    /**
+     * Reset all check boxes (set them all to "off")
+     **/
+    void clear();
+    
+    /**
+     * Set up the check boxes so all pending transactions are displayed.
+     **/
+    void showTransactions();
+
+    /**
+     * Set up the check boxes so pending manual transactions (no "auto" states)
+     * are displayed.
+     **/
+    void showManualTransactions();
+    
+    /**
+     * Set up the check boxes so pending automatic transactions (the "auto" states)
+     * are displayed.
+     **/
+    void showAutoTransactions();
+
+    /**
+     * Set the check boxes for locked packages ("Taboo" and "Protected") to "on".
+     **/
+    void showLocks();
+
+    /**
+     * Set the check box for installed packages to "on".
+     **/
+    void showInstalled();
+
+    /**
+     * Set the check box for not installed packages to "on".
+     **/
+    void showNotInstalled();
+
+    
 signals:
 
     /**

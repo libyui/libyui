@@ -99,13 +99,13 @@ public slots:
 
     /**
      * Install any -devel package for packages that are installed or marked for
-     * installation 
+     * installation
      **/
     void installDevelPkgs();
 
     /**
      * Install any -debuginfo package for packages that are installed or marked
-     * for installation 
+     * for installation
      **/
     void installDebugInfoPkgs();
 
@@ -130,7 +130,7 @@ public slots:
      **/
     void keyboardHelp();
 
-    
+
 signals:
 
     /**
@@ -170,7 +170,27 @@ protected slots:
      * Add the "Patches" filter view upon hotkey (F2).
      **/
     void hotkeyInsertPatchFilterView();
-    
+
+    /**
+     * Set the status of all installed packages (all in the pool, not only
+     * those currently displayed in the package list) to "update", if there is
+     * a candidate package that is newer than the installed package.
+     */
+    void globalUpdatePkg() { globalUpdatePkg( false ); }
+
+    /**
+     * Set the status of all installed packages (all in the pool, not only
+     * those currently displayed in the package list) to "update", even if the
+     * candidate package is not newer than the installed package.
+     */
+    void globalUpdatePkgForce() { globalUpdatePkg( true ); }
+
+    /**
+     * Show all products in a popup dialog.
+     **/
+    void showProducts();
+
+
 
 protected:
 
@@ -220,13 +240,23 @@ protected:
     void connectPatchList();
 
     /**
+     * Set the status of all installed packages (all in the pool, not only
+     * those currently displayed in the package list) to "update" and switch to
+     * the "Installation Summary" view afterwards.
+     *
+     * 'force' indicates if this should also be done if the the candidate
+     * package is not newer than the installed package.
+     **/
+    void globalUpdatePkg( bool force );
+
+    /**
      * Return HTML code describing a symbol (an icon).
      **/
     QString symHelp( const QString & imgFileName,
 		     const QString & summary,
 		     const QString & explanation	);
 
-    
+
     /**
      * Return HTML code describing a key.
      **/
@@ -238,7 +268,7 @@ protected:
      * Basic HTML formatting: Embed text into <p> ... </p>
      **/
     static QString para( const QString & text );
-    
+
     /**
      * Basic HTML formatting: Embed text into <li> ... </li>
      **/

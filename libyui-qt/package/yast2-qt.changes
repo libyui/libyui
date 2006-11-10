@@ -1,4 +1,111 @@
 -------------------------------------------------------------------
+Fri Nov 10 13:39:07 CET 2006 - sh@suse.de
+
+- Merged SLE-10-SP1-Branch to trunk (r31627:34245)
+- V 2.14.1
+
+-------------------------------------------------------------------
+Tue Oct 31 17:32:00 CET 2006 - sh@suse.de
+
+- Improved bugfix for bug #183735 (display only relevant patches
+  by default): Also display patches that are satisfied, but
+  not installed yet
+
+- Fixed bug #189134: Show description of initial patch / pkg
+
+- Override patch category tooltips with "Dependencies broken" or
+  "Dependencies satisfied" in patch list
+
+- V 2.13.73 
+
+-------------------------------------------------------------------
+Mon Oct 30 18:11:50 CET 2006 - sh@suse.de
+
+- Consistent handling of isSatisfied and isBroken for bug #173488
+- Added real "isSatisfied" icon 
+- V 2.13.72
+
+-------------------------------------------------------------------
+Fri Oct 27 13:43:42 CEST 2006 - sh@suse.de
+
+- Added missing icon to dist tarball 
+- V 2.13.71
+
+-------------------------------------------------------------------
+Thu Oct 26 18:57:05 CEST 2006 - sh@suse.de
+
+- Fixed bug #162164: pattern detection does not work
+- Fixed bug #173488: Status satisfied for a patch is displayed like
+  uninstalled 
+- V 2.13.70
+
+-------------------------------------------------------------------
+Thu Oct 26 17:26:25 CEST 2006 - sh@suse.de
+
+- Fixed bug #183735 - YOU should display only relevant patches by
+  default
+- V 2.13.69
+
+-------------------------------------------------------------------
+Wed Oct 25 17:35:07 CEST 2006 - sh@suse.de
+
+- Implemented feature #300756: Added support for resolver test 
+  case generation (PackageSelector -> "Extras" menu)
+- V 2.13.68 
+
+-------------------------------------------------------------------
+Tue Oct 24 18:29:08 CEST 2006 - sh@suse.de
+
+- Implemented feature #120142: View installed products 
+- Implemented feature #301229: Fold hidden patterns into parents
+- V 2.13.67
+
+-------------------------------------------------------------------
+Thu Oct 12 17:32:16 CEST 2006 - sh@suse.de
+
+- Implemented feature #301222: Easy access to updating all packages
+- V 2.13.66 
+
+-------------------------------------------------------------------
+Wed Oct  4 17:27:21 CEST 2006 - sh@suse.de
+
+- Fixed bug #208694: Allow deleting patches
+  (only the patch meta data will be deleted, packages will remain
+   the same!)
+
+- V 2.13.65 
+
+-------------------------------------------------------------------
+Tue Oct  3 13:58:43 CEST 2006 - jsrain@suse.cz
+
+- added missing files to Makefile.am
+- 2.13.64
+
+-------------------------------------------------------------------
+Fri Sep 29 17:53:59 CEST 2006 - sh@suse.de
+
+- V 2.13.63
+- Fixed bug #205059: CapsLock warning in password fields 
+
+-------------------------------------------------------------------
+Fri Sep 22 16:59:31 CEST 2006 - sh@suse.de
+
+- Allow pattern categories to be collapsed 
+- V 2.13.62
+
+-------------------------------------------------------------------
+Wed Sep 13 16:42:01 CEST 2006 - sh@suse.de
+
+- Applied patch from Ricardo Cruz <rpmcruz@clix.pt>
+  for new UI::Beep() built-in
+
+-------------------------------------------------------------------
+Thu Aug  3 15:23:52 CEST 2006 - mvidner@suse.cz
+
+- Added a configure-time check for the X font directory.
+- 2.13.61
+
+-------------------------------------------------------------------
 Tue Jun 27 15:09:34 CEST 2006 - sh@suse.de
 
 - Fixed bug #188018: Patch description: Text in angle brackets 

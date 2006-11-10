@@ -87,6 +87,25 @@ public slots:
      **/
     void fillList();
 
+    /**
+     * Dispatcher slot for mouse click: cycle status depending on column.
+     * For pattern category items, emulate tree open / close behaviour.
+     *
+     * Reimplemented from YQPkgObjList.
+     **/
+    virtual void pkgObjClicked( int		button,
+				QListViewItem * item,
+				int		col,
+				const QPoint &	pos );
+
+    /**
+     * Select the first selectable list entry that is not a pattern category.
+     *
+     * Reimplemented from QY2ListView.
+     **/
+    virtual void selectSomething();
+
+    
 public:
 
     /**
@@ -252,9 +271,21 @@ public:
      * Reimplemented from QListViewItem to force categories open at all times
      */
     virtual void setOpen( bool open );
+    
 
 protected:
 
+    /**
+     * Set a suitable tree open/close icon depending on this category's
+     * open/close status.
+     *
+     * The default QListView plus/minus icons would require treeStepSize() to
+     * be set >0 and rootItemDecorated( true ), but that would look very ugly
+     * in this context, so the pattern categories paint their own tree open /
+     * close icons.
+     **/
+    void setTreeIcon( void );
+    
     /**
      * Paint method. Reimplemented from @ref QListViewItem so a different
      * font can be used.
@@ -271,7 +302,8 @@ protected:
     // Data members
     //
 
-    ZyppPattern _firstPattern;
+    YQPkgPatternList *	_patternList;
+    ZyppPattern		_firstPattern;
 };
 
 

@@ -128,7 +128,9 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 	new YQPkgVersion( this, root, selectable, *it, _userCanSwitch );
 
 	if ( selectable->installedObj() &&
-	     selectable->installedObj()->edition() == (*it)->edition() )
+	     selectable->installedObj()->edition() == (*it)->edition() &&
+	     selectable->installedObj()->arch()    == (*it)->arch()      )
+	    // FIXME: In future releases, also the vendor will make a difference
 	    installedIsAvailable = true;
 
 #if 0
@@ -255,7 +257,8 @@ YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
 
     if ( _selectable->hasInstalledObj() )
     {
-	if ( _zyppObj->edition() == _selectable->installedObj()->edition() )
+	if ( _zyppObj->edition() == _selectable->installedObj()->edition() &&
+	     _zyppObj->arch()    == _selectable->installedObj()->arch()      )
 	{
 	    setPixmap( statusCol(), YQIconPool::pkgKeepInstalled() );
 	    setBackgroundColor( QColor( 0xF0, 0xF0, 0xF0 ) ); 	// light grey

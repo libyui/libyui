@@ -26,10 +26,12 @@
 #include <zypp/Resolver.h>
 #include <qpainter.h>
 #include <qheader.h>
+#include <zypp/ui/PatternContents.h>
 
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgPatternList.h"
+#include "YQIconPool.h"
 #include "YQUI.h"
 
 
@@ -53,9 +55,15 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     addColumn( _( "Pattern" )	);	_summaryCol	= numCol++;
 
+    // Can use the same colum for "broken" and "satisfied":
+    // Both states are mutually exclusive
+    
+    _satisfiedIconCol	= _summaryCol;
+    _brokenIconCol	= _summaryCol;
+    
     header()->setStretchEnabled( _statusCol , false );
     header()->setStretchEnabled( _summaryCol, true  );
-    
+
     setAllColumnsShowFocus( true );
     setTreeStepSize( 0 );
 
@@ -154,7 +162,8 @@ YQPkgPatternList::filter()
 
 	if ( zyppPattern )
 	{
-	    set<string> wanted = zyppPattern->install_packages();
+	    zypp::ui::PatternContents patternContents( zyppPattern );
+	    set<string> wanted = patternContents.install_packages();
 
 	    for ( ZyppPoolIterator it = zyppPkgBegin();
 		  it != zyppPkgEnd();
@@ -207,6 +216,54 @@ YQPkgPatternList::selection() const
 	return 0;
 
     return dynamic_cast<YQPkgPatternListItem *> (item);
+}
+
+
+void
+YQPkgPatternList::pkgObjClicked( int			button,
+				 QListViewItem *	listViewItem,
+				 int			col,
+				 const QPoint &		pos )
+{
+    YQPkgPatternCategoryItem * categoryItem
+	= dynamic_cast<YQPkgPatternCategoryItem *> (listViewItem);
+
+    if ( categoryItem )
+    {
+	if ( button == Qt::LeftButton )
+	{
+	    if ( col == statusCol() )
+	    {
+		categoryItem->setOpen( ! categoryItem->isOpen() );
+	    }
+	}
+    }
+    else
+    {
+	YQPkgObjList::pkgObjClicked( button, listViewItem, col, pos );
+    }
+}
+
+
+void
+YQPkgPatternList::selectSomething()
+{
+    QListViewItemIterator it( this );
+
+    while ( *it )
+    {
+	QY2ListViewItem * item = dynamic_cast<QY2ListViewItem *> (*it);
+	YQPkgPatternCategoryItem * categoryItem =
+	    dynamic_cast<YQPkgPatternCategoryItem *> (*it);
+
+	if ( item && item->isSelectable() && ! categoryItem )
+	{
+	    setSelected( item, true ); // emits signal, too
+	    return;
+	}
+
+	++it;
+    }
 }
 
 
@@ -296,11 +353,12 @@ YQPkgPatternListItem::compare( QListViewItem *	otherListViewItem,
 YQPkgPatternCategoryItem::YQPkgPatternCategoryItem( YQPkgPatternList *	patternList,
 						    const QString &	category	)
     : QY2ListViewItem( patternList )
+    , _patternList( patternList )
 {
-    setText( patternList->summaryCol(), category );
+    setText( _patternList->summaryCol(), category );
     setBackgroundColor( CATEGORY_BACKGROUND );
     setOpen( true );
-    setSelectable( false );
+    setTreeIcon();
 }
 
 
@@ -339,13 +397,23 @@ YQPkgPatternCategoryItem::addPattern( ZyppPattern pattern )
 
 
 void
-YQPkgPatternCategoryItem::setOpen( bool )
+YQPkgPatternCategoryItem::setOpen( bool open )
 {
-    // Pattern categories should always remain open -
-    // suppress any attempt to close them
-
-    QListViewItem::setOpen( true );
+    QListViewItem::setOpen( open );
+    setTreeIcon();
 }
+
+
+void
+YQPkgPatternCategoryItem::setTreeIcon()
+{
+    setPixmap( _patternList->statusCol(),
+	       isOpen() ?
+	       YQIconPool::treeMinus() :
+	       YQIconPool::treePlus()   );
+
+}
+
 
 
 /**

@@ -31,7 +31,6 @@
 class YQPkgInstSrcListItem;
 
 typedef zypp::Source_Ref	ZyppSrc;
-typedef zypp::Product::Ptr	ZyppProduct;
 
 
 /**

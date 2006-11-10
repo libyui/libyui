@@ -123,7 +123,7 @@ YQPkgList::haveInstalledPkgs()
 	if ( (*it)->installedObj() )
 	    return true;
     }
-    
+
     return false;
 }
 
@@ -410,6 +410,83 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
 
     if ( file )
 	fclose( file );
+}
+
+
+int
+YQPkgList::globalSetPkgStatus( ZyppStatus newStatus, bool force, bool countOnly )
+{
+    YQUI::ui()->busyCursor();
+    int changedCount = 0;
+
+    for ( ZyppPoolIterator it = zyppPkgBegin();
+	  it != zyppPkgEnd();
+	  ++it )
+    {
+	ZyppSel	   selectable = *it;
+	ZyppStatus oldStatus  = selectable->status();
+
+	if ( newStatus != oldStatus )
+	{
+	    bool doChange = false;
+
+	    switch ( newStatus )
+	    {
+		case S_KeepInstalled:
+		case S_Del:
+		case S_AutoDel:
+		case S_Protected:
+		    doChange = selectable->hasInstalledObj();
+		    break;
+
+		case S_Update:
+		case S_AutoUpdate:
+
+		    if ( force )
+		    {
+			doChange = selectable->hasInstalledObj();
+		    }
+		    else // don't force - update only if useful (if candidate is newer)
+		    {
+			const ZyppObj candidate = selectable->candidateObj();
+			const ZyppObj installed = selectable->installedObj();
+
+			if ( candidate && installed )
+			{
+			    doChange = ( installed->edition() < candidate->edition() );
+			}
+		    }
+		    break;
+
+		case S_Install:
+		case S_AutoInstall:
+		case S_NoInst:
+		case S_Taboo:
+		    doChange = ! selectable->hasInstalledObj();
+		    break;
+	    }
+
+	    if ( doChange )
+	    {
+		if ( ! countOnly )
+		    selectable->set_status( newStatus );
+
+		changedCount++;
+		// y2milestone( "Updating %s", selectable->name().c_str() );
+	    }
+	}
+    }
+
+    if ( changedCount > 0 && ! countOnly )
+    {
+	emit updateItemStates();
+	emit updatePackages();
+	emit statusChanged();
+    }
+
+    YQUI::ui()->normalCursor();
+
+    return changedCount;
 }
 
 

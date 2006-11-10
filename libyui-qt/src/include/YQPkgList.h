@@ -72,6 +72,21 @@ public:
      **/
     static bool haveInstalledPkgs();
 
+    /**
+     * Set the status of all packages in the pool to a new value.
+     * This is not restricted to the current content of this package list.
+     * All selectables in the ZYPP pool are affected.
+     *
+     * 'force' indicates if it should be done even if it is not very useful,
+     * e.g., if packages should be updated even if there is no newer version.
+     *
+     * If 'countOnly' is 'true', the status is not actually changed, only the
+     * number of packages that would be affected is return.
+     *
+     * Return value: The number of status changes
+     **/
+    int globalSetPkgStatus( ZyppStatus newStatus, bool force, bool countOnly );
+
 
 public slots:
 
@@ -82,10 +97,10 @@ public slots:
      **/
     void addPkgItem	( ZyppSel	selectable,
 			  ZyppPkg	zyppPkg	);
-    
+
     /**
      * Add a pkg to the list, but display it dimmed (grey text foreground
-     * rather than normal black). 
+     * rather than normal black).
      **/
     void addPkgItemDimmed( ZyppSel	selectable,
 			   ZyppPkg 	zyppPkg );
@@ -148,7 +163,7 @@ protected:
      * Create ( additional ) actions for the context menus.
      **/
     void createActions();
-    
+
     /**
      * Create the context menu for items that are not installed.
      *

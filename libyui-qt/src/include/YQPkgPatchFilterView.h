@@ -86,7 +86,7 @@ protected:
 
     QSplitter *			_splitter;
     YQPkgPatchList *		_patchList;
-    QComboBox *			_patchCategory;
+    QComboBox *			_patchFilter;
     QTabWidget *		_detailsViews;
     YQPkgDescriptionView *	_descriptionView;
     QLabel *			_totalDownloadSize;

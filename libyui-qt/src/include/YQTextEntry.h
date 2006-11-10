@@ -23,6 +23,7 @@
 #define YQTextEntry_h
 
 #include <qvbox.h>
+#include <qlineedit.h>
 #include <ycp/YCPString.h>
 
 #include "YTextEntry.h"
@@ -32,6 +33,8 @@ class QString;
 class QLabel;
 class QLineEdit;
 class QY2CharValidator;
+class YQRawLineEdit;
+
 
 class YQTextEntry : public QVBox, public YTextEntry
 {
@@ -112,28 +115,79 @@ protected slots:
      */
     void changed( const QString & );
 
+    /**
+     * Display a warning that CapsLock is active:
+     * Replace the label with "CapsLock!"
+     **/
+    void displayCapsLockWarning();
+
+    /**
+     * Clear the CapsLock warning: Restore old label
+     **/
+    void clearCapsLockWarning();
+
+
+protected:
+
+    //
+    // Data members
+    //
+
+    QLabel *		_qt_label;
+    YQRawLineEdit *	_qt_lineEdit;
+    QY2CharValidator *	_validator;
+    bool		_shrinkable;
+    bool		_displayingCapsLockWarning;
+};
+
+
+/**
+ * Helper class that can obtain the CapsLock status, too.
+ * For some reason, Qt does not propagate that information from X11.
+ **/
+class YQRawLineEdit: public QLineEdit
+{
+    Q_OBJECT
+
+public:
+
+    /**
+     * Constructor
+     **/
+    YQRawLineEdit( QWidget * parent )
+	: QLineEdit( parent )
+	, _capsLockActive( false )
+	{}
+
+    /**
+     * Destructor
+     **/
+    virtual ~YQRawLineEdit() {};
+
+    /**
+     * Check if CapsLock is active
+     * (rather: was active at the time of the last key or focus event)
+     **/
+    bool isCapsLockActive() const { return _capsLockActive; }
+
+
+signals:
+    void capsLockActivated();
+    void capsLockDeactivated();
 
 protected:
 
     /**
-     * Pointer to the qt widget representing the label
-     */
-    QLabel * _qt_label;
-
-    /**
-     * Pointer to the qt widget representing the text entry
-     */
-    QLineEdit * _qt_lineedit;
-
-    /**
-     * Pointer to the validator object
+     * X11 raw event handler. Propagates all events to the Qt event handlers,
+     * but updates _capsLockActive for key events.
+     *
+     * Reimplemented from QWidget.
      **/
-    QY2CharValidator *	_validator;
+    bool x11Event( XEvent * event ) ;
 
-    /**
-     * true if the horizontal nice size should be very small
-     */
-    bool _shrinkable;
+private:
+
+    bool _capsLockActive;
 };
 
 #endif // YQTextEntry_h

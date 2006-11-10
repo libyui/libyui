@@ -64,6 +64,8 @@ public:
     int sizeCol()		const	{ return _sizeCol;		}
     int versionCol()		const	{ return _versionCol;		}
     int instVersionCol()	const	{ return _instVersionCol;	}
+    int brokenIconCol()		const	{ return _brokenIconCol;	}
+    int satisfiedIconCol()	const	{ return _satisfiedIconCol;	}
 
     /**
      * Return whether or not items in this list are generally editable,
@@ -167,7 +169,7 @@ public slots:
      * this method, too, if the other one is reimplemented.
      **/
     virtual void updateActions();
-    
+
     /**
      * Emit an updatePackages() signal.
      **/
@@ -296,7 +298,7 @@ protected:
 			    const QString & 	key		= QString::null,
 			    bool 		enabled		= false );
 
-    
+
 
     // Data members
 
@@ -306,7 +308,10 @@ protected:
     int		_sizeCol;
     int		_versionCol;
     int		_instVersionCol;
+    int		_brokenIconCol;
+    int		_satisfiedIconCol;
     bool	_editable;
+    bool	_debug;
 
 
     QPopupMenu *	_installedContextMenu;
@@ -418,7 +423,7 @@ public:
      * Overwritten from QY2ListViewItem.
      **/
     virtual void updateStatus();
-    
+
     /**
      * Cycle the package status to the next valid value.
      **/
@@ -435,6 +440,21 @@ public:
     bool installedIsNewer() const { return _installedIsNewer; }
 
     /**
+     * Check if this item is satisfied, even though it is not installed.
+     * This is useful for package collections, e.g., patterns and patches:
+     * 'true' is returned if all requirements are fulfilled, but the object
+     * itself is not installed.
+     **/
+    bool isSatisfied() const;
+
+    /**
+     * Check if this item is "broken": If it is installed, but any of its
+     * dependencies are no longer satisfied.
+     * This is useful for package collections, e.g., patterns and patches.
+     **/
+    bool isBroken() const;
+
+    /**
      * Display this item's notify text (if there is any) that corresponds to
      * the specified status (S_Install, S_Del) in a pop-up window.
      **/
@@ -443,14 +463,14 @@ public:
     /**
      * Display a selectable's license agreement (if there is any) that
      * corresponds to its current status (S_Install, S_Update) in a pop-up
-     * window. 
+     * window.
      *
      * Returns 'true' if the user agreed to that license , 'false' otherwise.
      * The item's status may have changed to S_Taboo, S_Proteced or S_Del if
      * the user disagreed with the license.
      **/
     static bool showLicenseAgreement( ZyppSel sel );
-    
+
     /**
      * Display this item's license agreement (if there is any) that corresponds
      * to its current status (S_Install, S_Update) in a pop-up window.
@@ -497,6 +517,16 @@ public:
      **/
     virtual QString toolTip( int column );
 
+    
+    // Handle Debug isBroken and isSatisfied flags
+    
+    bool debugIsBroken()    const		{ return _debugIsBroken;		}
+    bool debugIsSatisfied() const		{ return _debugIsSatisfied;		}
+    void setDebugIsBroken   ( bool val = true )	{ _debugIsBroken = val;			}
+    void setDebugIsSatisfied( bool val = true ) { _debugIsSatisfied = val;		}
+    void toggleDebugIsBroken()			{ _debugIsBroken = ! _debugIsBroken;	}
+    void toggleDebugIsSatisfied()		{ _debugIsSatisfied = ! _debugIsSatisfied; }
+
 
     // Columns
 
@@ -506,6 +536,8 @@ public:
     int sizeCol()		const	{ return _pkgObjList->sizeCol();	}
     int versionCol()		const	{ return _pkgObjList->versionCol();	}
     int instVersionCol()	const	{ return _pkgObjList->instVersionCol(); }
+    int brokenIconCol()		const	{ return _pkgObjList->brokenIconCol();	}
+    int satisfiedIconCol()	const	{ return _pkgObjList->satisfiedIconCol(); }
 
 
 protected:
@@ -514,7 +546,7 @@ protected:
      * Initialize internal data and set fields accordingly.
      **/
     void init();
-    
+
     /**
      * Apply changes hook. This is called each time the user changes the status
      * of a list item manually (if the old status is different from the new
@@ -558,9 +590,12 @@ protected:
     YQPkgObjList *	_pkgObjList;
     ZyppSel		_selectable;
     ZyppObj		_zyppObj;
-    bool		_editable;
-    bool		_candidateIsNewer;
-    bool		_installedIsNewer;
+    bool		_editable:1;
+    bool		_candidateIsNewer:1;
+    bool		_installedIsNewer:1;
+
+    bool		_debugIsBroken:1;
+    bool		_debugIsSatisfied:1;
 };
 
 

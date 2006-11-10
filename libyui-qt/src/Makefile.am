@@ -96,6 +96,8 @@ liby2qt_la_SOURCES = 				\
 	YQPkgPatchFilterView.cc			\
 	YQPkgPatchList.cc			\
 	YQPkgPatternList.cc			\
+	YQPkgProductDialog.cc			\
+	YQPkgProductList.cc			\
 	YQPkgRpmGroupTagsFilterView.cc		\
 	YQPkgSearchFilterView.cc		\
 	YQPkgSelDescriptionView.cc		\
@@ -193,6 +195,9 @@ BUILT_SOURCES =					\
 	YQPkgPatchFilterView.moc		\
 	YQPkgPatchList.moc			\
 	YQPkgPatternList.moc			\
+	YQPkgProductDialog.moc			\
+	YQPkgProductDialog.moc			\
+	YQPkgProductList.moc			\
 	YQPkgRpmGroupTagsFilterView.moc		\
 	YQPkgSearchFilterView.moc		\
 	YQPkgSelDescriptionView.moc		\
@@ -276,6 +281,8 @@ YQPkgObjList.o YQPkgObjList.lo:					YQPkgObjList.moc
 YQPkgPatchFilterView.o YQPkgPatchFilterView.lo:			YQPkgPatchFilterView.moc
 YQPkgPatchList.o YQPkgPatchList.lo:				YQPkgPatchList.moc
 YQPkgPatternList.o YQPkgPatternList.lo:				YQPkgPatternList.moc
+YQPkgProductDialog.o YQPkgProductDialog.lo:			YQPkgProductDialog.moc
+YQPkgProductList.o YQPkgProductList.lo:				YQPkgProductList.moc
 YQPkgRpmGroupTagsFilterView.o YQPkgRpmGroupTagsFilterView.lo:	YQPkgRpmGroupTagsFilterView.moc
 YQPkgSearchFilterView.o YQPkgSearchFilterView.lo:		YQPkgSearchFilterView.moc
 YQPkgSelDescriptionView.o YQPkgSelDescriptionView.lo:		YQPkgSelDescriptionView.moc
@@ -357,6 +364,8 @@ YQPkgObjList.moc:			include/YQPkgObjList.h
 YQPkgPatchFilterView.moc:		include/YQPkgPatchFilterView.h
 YQPkgPatchList.moc:			include/YQPkgPatchList.h
 YQPkgPatternList.moc:			include/YQPkgPatternList.h
+YQPkgProductDialog.moc:			include/YQPkgProductDialog.h
+YQPkgProductList.moc:			include/YQPkgProductList.h
 YQPkgRpmGroupTagsFilterView.moc:	include/YQPkgRpmGroupTagsFilterView.h
 YQPkgSearchFilterView.moc:		include/YQPkgSearchFilterView.h
 YQPkgSelDescriptionView.moc:		include/YQPkgSelDescriptionView.h

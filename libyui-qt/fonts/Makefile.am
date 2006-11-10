@@ -2,7 +2,7 @@
 # Makefile.am for qt/fonts
 #
 
-fontsdir = $(prefix)/X11R6/lib/X11/fonts/uni
+fontsdir = $(Xfontsdir)/uni
 
 fonts_DATA = fonts.dir		\
 	newunifont.pcf.gz	\

@@ -28,15 +28,21 @@ rm -f $RPM_BUILD_ROOT/@plugindir@/libpy2qt.la
 
 @CLEAN@
 
+%if 0%{?suse_version} <= 1010
+%define _xorg7fonts /usr/X11R6/lib/X11/fonts
+%else
+%define _xorg7fonts /usr/share/fonts
+%endif
+
 %files
 %defattr (-, root, root)
 @plugindir@/libpy2qt.so.*
 @plugindir@/libpy2qt.so
 @imagedir@
-%dir /usr/X11R6/lib/X11/fonts/uni
-%verify(not md5 size mtime) /usr/X11R6/lib/X11/fonts/uni/fonts.dir
-/usr/X11R6/lib/X11/fonts/uni/newunifont.pcf.gz
-/usr/X11R6/lib/X11/fonts/uni/unifont.pcf.gz
+%dir %{_xorg7fonts}/uni
+%verify(not md5 size mtime) %{_xorg7fonts}/uni/fonts.dir
+%{_xorg7fonts}/uni/newunifont.pcf.gz
+%{_xorg7fonts}/uni/unifont.pcf.gz
 %dir @ydatadir@
 @ydatadir@/lang_fonts
 %doc @docdir@

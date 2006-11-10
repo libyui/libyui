@@ -67,6 +67,12 @@ public:
     static QPixmap tabooPkgConflict();
     static QPixmap selectPkgConflict();
 
+    static QPixmap treePlus();
+    static QPixmap treeMinus();
+    
+    static QPixmap warningSign();
+    static QPixmap pkgSatisfied();
+
 
 protected:
 

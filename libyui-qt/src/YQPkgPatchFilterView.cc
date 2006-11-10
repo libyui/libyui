@@ -52,34 +52,29 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
 {
     QVBox * vbox;
 
-    _splitter			= new QSplitter( QSplitter::Vertical, this );	CHECK_PTR( _splitter 		);
-
-    vbox			= new QVBox( _splitter );			CHECK_PTR( vbox			);
-    _patchList		= new YQPkgPatchList( vbox );		CHECK_PTR( _patchList 	);
+    _splitter			= new QSplitter( QSplitter::Vertical, this );	CHECK_PTR( _splitter 	);
+    vbox			= new QVBox( _splitter );			CHECK_PTR( vbox		);
+    _patchList			= new YQPkgPatchList( vbox );			CHECK_PTR( _patchList 	);
 
     addVSpacing( vbox, 4 );
 
     QHBox * hbox 		= new QHBox( vbox ); CHECK_PTR( hbox );
     hbox->setSpacing( SPACING );
 
-#ifdef FIXME
     QLabel * label		= new QLabel( _( "&Show Patch Category:" ), hbox );
 
-    _patchCategory		= new QComboBox( hbox );
-    CHECK_PTR( _patchCategory );
+    _patchFilter		= new QComboBox( hbox );
+    CHECK_PTR( _patchFilter );
 
-    _patchCategory->insertItem( _( "Installable Patches" ),			0 );
-    _patchCategory->insertItem( _( "Installable and Installed Patches" ),	1 );
-    _patchCategory->insertItem( _( "All Patches" ),				2 );
-    _patchCategory->setCurrentItem( 0 );
-    _patchCategory->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
-    label->setBuddy( _patchCategory );
+    _patchFilter->insertItem( _( "Installable Patches" ),			0 );
+    _patchFilter->insertItem( _( "Installable and Installed Patches" ),	1 );
+    _patchFilter->insertItem( _( "All Patches" ),				2 );
+    _patchFilter->setCurrentItem( 0 );
+    _patchFilter->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
+    label->setBuddy( _patchFilter );
 
-    connect( _patchCategory, SIGNAL( activated( int ) ), this, SLOT( fillPatchList() ) );
+    connect( _patchFilter, SIGNAL( activated( int ) ), this, SLOT( fillPatchList() ) );
     addVSpacing( vbox, 4 );
-#else
-    _patchCategory = 0;
-#endif
 
     vbox			= new QVBox( _splitter );			CHECK_PTR( vbox			);
     addVSpacing( vbox, 8 );
@@ -151,10 +146,9 @@ YQPkgPatchFilterView::updateTotalDownloadSize()
 	    {
 		ZyppPkg pkg = tryCastToZyppPkg( *contents_it );
 		ZyppSel sel;
-		
+
 		if ( pkg )
 		    sel = _selMapper.findZyppSel( pkg );
-		
 
 		if ( sel )
 		{
@@ -201,7 +195,7 @@ YQPkgPatchFilterView::updateTotalDownloadSize()
     }
 
     _totalDownloadSize->setText( totalSize.asString().c_str() );
-    
+
     y2debug( "Calculated total download size in %d millisec", calcTime.elapsed() );
 }
 
@@ -209,19 +203,14 @@ YQPkgPatchFilterView::updateTotalDownloadSize()
 void
 YQPkgPatchFilterView::fillPatchList()
 {
-#ifdef FIXME
-    YQPkgPatchList::PatchCategory category;
-
-    switch ( _patchCategory->currentItem() )
+    switch ( _patchFilter->currentItem() )
     {
-	case 0:		category = YQPkgPatchList::InstallablePatches;			break;
-	case 1:		category = YQPkgPatchList::InstallableAndInstalledPatches;	break;
-	case 2:		category = YQPkgPatchList::AllPatches;				break;
-	default:	category = YQPkgPatchList::InstallablePatches;			break;
+	case 0:		_patchList->setFilterCriteria( YQPkgPatchList::RelevantPatches		   );	break;
+	case 1:		_patchList->setFilterCriteria( YQPkgPatchList::RelevantAndInstalledPatches );	break;
+	case 2:		_patchList->setFilterCriteria( YQPkgPatchList::AllPatches		   );	break;
+	default:	_patchList->setFilterCriteria( YQPkgPatchList::RelevantPatches		   );	break;
     }
 
-    _patchList->setPatchCategory( category );
-#endif
     _patchList->fillList();
     _patchList->selectSomething();
 }

@@ -23,6 +23,7 @@
 #define DEPENDENCY_FEEDBACK_IF_OK			1
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT			false
 #define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE	0
+#define GLOBAL_UPDATE_CONFIRMATION_THRESHOLD		20
 
 #include <qaction.h>
 #include <qapplication.h>
@@ -63,6 +64,7 @@
 #include "YQPkgPatchFilterView.h"
 #include "YQPkgPatchList.h"
 #include "YQPkgPatternList.h"
+#include "YQPkgProductDialog.h"
 #include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgSelList.h"
@@ -543,7 +545,7 @@ YQPackageSelector::layoutButtons( QWidget * parent )
     // Translators: Please keep this short!
     _checkDependenciesButton = new QPushButton( _( "Chec&k" ), button_box );
     CHECK_PTR( _checkDependenciesButton );
-    _checkDependenciesButton->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) ); // hor/vert
+    _checkDependenciesButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
     _normalButtonBackground = _checkDependenciesButton->paletteBackgroundColor();
 
     connect( _checkDependenciesButton,	SIGNAL( clicked() ),
@@ -645,6 +647,25 @@ YQPackageSelector::addMenus()
 	submenu->insertSeparator();
 	_pkgList->actionInstallListSourceRpms->addTo( submenu );
 	_pkgList->actionDontInstallListSourceRpms->addTo( submenu );
+
+
+	//
+	// Submenu for all packages
+	//
+
+	submenu = new QPopupMenu( _pkgMenu );
+	CHECK_PTR( submenu );
+
+	// Translators: Unlike the "all in this list" submenu, this submenu
+	// refers to all packages globally, not only to those that are
+	// currently visible in the packages list.
+	_pkgMenu->insertItem( _( "All Packages" ), submenu );
+
+	submenu->insertItem( _( "Update if newer version available" ),
+			     this, SLOT( globalUpdatePkg() ) );
+
+	submenu->insertItem( _( "Update unconditionally" ),
+			     this, SLOT( globalUpdatePkgForce() ) );
     }
 
 
@@ -661,6 +682,9 @@ YQPackageSelector::addMenus()
 	_patchList->actionSetCurrentInstall->addTo( _patchMenu );
 	_patchList->actionSetCurrentDontInstall->addTo( _patchMenu );
 	_patchList->actionSetCurrentKeepInstalled->addTo( _patchMenu );
+#if ENABLE_DELETING_PATCHES
+	_patchList->actionSetCurrentDelete->addTo( _patchMenu );
+#endif
 	_patchList->actionSetCurrentUpdate->addTo( _patchMenu );
 	_patchList->actionSetCurrentTaboo->addTo( _patchMenu );
 
@@ -677,21 +701,32 @@ YQPackageSelector::addMenus()
     CHECK_PTR( _extrasMenu );
     _menuBar->insertItem( _( "&Extras" ), _extrasMenu );
 
+    _extrasMenu->insertItem( _( "Show &Products" ), this, SLOT( showProducts() ) );
+
     _extrasMenu->insertItem( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), CTRL + Key_A );
 
-    if ( _actionResetIgnoredDependencyProblems )
-	_actionResetIgnoredDependencyProblems->addTo( _extrasMenu );
-
-#ifdef FIXME
-    if ( _patchList )
-	_patchList->actionShowRawPatchInfo->addTo( _extrasMenu );
-#endif
-
+    _extrasMenu->insertSeparator();
+    
     // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
     _extrasMenu->insertItem( _( "Install All Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
 
     // Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
     _extrasMenu->insertItem( _( "Install All Matching -de&buginfo Packages" ), this, SLOT( installDebugInfoPkgs() ) );
+
+    _extrasMenu->insertSeparator();
+    
+    if ( _pkgConflictDialog )
+	_extrasMenu->insertItem( _( "Generate Dependency Resolver &Test Case" ),
+				    _pkgConflictDialog, SLOT( askCreateSolverTestCase() ) );
+			     
+    if ( _actionResetIgnoredDependencyProblems )
+	_actionResetIgnoredDependencyProblems->addTo( _extrasMenu );
+
+
+#ifdef FIXME
+    if ( _patchList )
+	_patchList->actionShowRawPatchInfo->addTo( _extrasMenu );
+#endif
 
 
     //
@@ -1095,6 +1130,49 @@ YQPackageSelector::pkgImport()
 }
 
 
+
+void
+YQPackageSelector::globalUpdatePkg( bool force )
+{
+    if ( ! _pkgList )
+	return;
+
+    int count = _pkgList->globalSetPkgStatus( S_Update, force,
+					      true ); // countOnly
+    y2milestone( "%d pkgs found for update", count );
+
+    if ( count >= GLOBAL_UPDATE_CONFIRMATION_THRESHOLD )
+    {
+	if ( QMessageBox::question( this, "",	// caption
+				    // Translators: %1 is the number of affected packages
+				    _( "%1 packages will be updated" ).arg( count ),
+				    _( "&Continue" ), _( "C&ancel" ),
+				    0,		// defaultButtonNumber (from 0)
+				    1 )		// escapeButtonNumber
+	     == 1 )	// "Cancel"?
+	{
+	    return;
+	}
+    }
+
+    (void) _pkgList->globalSetPkgStatus( S_Update, force,
+					 false ); // countOnly
+
+    if ( _statusFilterView )
+    {
+	_filters->showPage( _statusFilterView );
+	_statusFilterView->clear();
+	_statusFilterView->showTransactions();
+	_statusFilterView->filter();
+    }
+}
+
+
+void
+YQPackageSelector::showProducts()
+{
+    YQPkgProductDialog::showProductDialog();
+}
 
 void
 YQPackageSelector::installDevelPkgs()

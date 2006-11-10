@@ -53,6 +53,9 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
     _instVersionCol	= -42;
     _summaryCol		= -42;
     _sizeCol		= -42;
+    _brokenIconCol	= -42;
+    _satisfiedIconCol	= -42;
+    _debug		= false;
 
     createActions();
 
@@ -557,6 +560,18 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 {
     if ( event )
     {
+	unsigned special_combo = ( Qt::ControlButton | Qt::ShiftButton | Qt::AltButton );
+
+	if ( ( event->state() & special_combo ) == special_combo )
+	{
+	    if ( event->key() == Qt::Key_Q )
+	    {
+		_debug= ! _debug;
+		y2milestone( "Debug mode %s", _debug ? "on" : "off" );
+	    }
+
+	}
+
 	QListViewItem * selectedListViewItem = selectedItem();
 
 	if ( selectedListViewItem )
@@ -632,6 +647,28 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 			selectNextItem();
 			event->accept();
 			return;
+
+		    case 'b':
+		    case 'B':	// Toggle debugIsBroken flag
+
+			if ( _debug )
+			{
+			    item->toggleDebugIsBroken();
+			    item->setStatusIcon();
+			}
+			event->accept();
+			break;
+
+		    case 's':
+		    case 'S':	// Toggle debugIsSatisfied flag
+
+			if ( _debug )
+			{
+			    item->toggleDebugIsSatisfied();
+			    item->setStatusIcon();
+			}
+			event->accept();
+			break;
 		}
 	    }
 	}
@@ -693,9 +730,10 @@ YQPkgObjListItem::init()
     if ( _zyppObj == 0 && _selectable )
 	_zyppObj = _selectable->theObj();
 
-
-    _candidateIsNewer = false;
-    _installedIsNewer = false;
+    _debugIsBroken	= false;
+    _debugIsSatisfied	= false;
+    _candidateIsNewer	= false;
+    _installedIsNewer 	= false;
 
     const ZyppObj candidate = selectable()->candidateObj();
     const ZyppObj installed = selectable()->installedObj();
@@ -840,6 +878,89 @@ YQPkgObjListItem::setStatusIcon()
 	bool enabled = editable() && _pkgObjList->editable();
 	setPixmap( statusCol(), _pkgObjList->statusIcon( status(), enabled, bySelection() ) );
     }
+
+
+    if ( brokenIconCol() >= 0 )
+    {
+	// Reset this icon now - it might be the same column as satisfiedIconCol()
+	setPixmap( brokenIconCol(), QPixmap() );
+    }
+
+    if ( satisfiedIconCol() >= 0 )
+    {
+	// Set special icon for zyppObjs that are not marked as installed,
+	// but satisfied anyway (e.g. for patches or patterns where the user
+	// selected all required packages manually)
+
+	setPixmap( satisfiedIconCol(), isSatisfied() ? YQIconPool::pkgSatisfied() : QPixmap() );
+    }
+
+
+
+    if ( brokenIconCol() >= 0 )
+    {
+	// Set special icon for zyppObjs that are installed, but broken
+	// (dependencies no longer satisfied, e.g. for patches or patterns)
+
+	if ( isBroken() )
+	{
+	    setPixmap( brokenIconCol(), YQIconPool::warningSign() );
+
+	    y2warning( "Broken object: %s - %s",
+		       _selectable->theObj()->name().c_str(),
+		       _selectable->theObj()->summary().c_str() );
+	}
+    }
+
+}
+
+
+bool
+YQPkgObjListItem::isSatisfied() const
+{
+    if ( _debugIsSatisfied )
+	return true;
+
+    if ( _selectable->hasInstalledObj() )
+	return false;
+
+    return _selectable->candidatePoolItem().status().isSatisfied();
+}
+
+
+bool YQPkgObjListItem::isBroken() const
+{
+    if ( _debugIsBroken )
+	return true;
+
+    if ( ! _selectable->hasInstalledObj() )
+	return false;		// can't be broken if not installed
+
+    switch ( status() )
+    {
+	case S_KeepInstalled:
+	case S_Protected:
+
+	    return _selectable->installedPoolItem().status().isIncomplete();
+
+	case S_Update:		// will be fixed by updating
+	case S_AutoUpdate:
+	case S_Del:		// will no longer be relevant after deleting
+	case S_AutoDel:
+
+	    return false;
+
+	case S_NoInst:		// should not happen - no installed obj
+	case S_Install:
+	case S_AutoInstall:
+	case S_Taboo:
+
+	    y2error( "Expected uninstalled zyppObj" );
+	    return false;
+    }
+
+    y2error( "Should never get here" );
+    return false;
 }
 
 
@@ -1056,6 +1177,24 @@ YQPkgObjListItem::toolTip( int col )
 	}
 
 	return tip;
+    }
+
+    if ( col == brokenIconCol() )
+    {
+	if ( isBroken() )
+	    // Translators: tool tip for patches / patterns that are installed,
+	    // but whose dependencies are broken (no longer satisfied)
+	    return _( "Dependencies broken" );
+    }
+    
+    // don't use "else if" here, it might be the same colum as another one!
+    
+    if ( col == satisfiedIconCol() )
+    {
+	if ( isSatisfied() )
+	    // Translators: tool tip for patches / patterns that are not installed,
+	    // but whose dependencies are satisfied
+	    return _( "All dependencies satisfied" );
     }
 
     return QString::null;

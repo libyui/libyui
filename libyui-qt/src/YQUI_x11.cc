@@ -91,6 +91,13 @@ QWidget* YQUI::mainWidget()
     return _main_win;
 };
 
+
+void YQUI::beep()
+{
+    qApp->beep();
+}
+
+
 void
 YQUI::busyCursor( void )
 {
