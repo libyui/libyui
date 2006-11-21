@@ -571,7 +571,7 @@ void YQUI::maybeLeftHandedUser()
 					QMessageBox::No,
 					QMessageBox::Cancel | QMessageBox::Escape );
 
-    if ( button == 0 )	// Yes
+    if ( button == QMessageBox::Yes )
     {
 
 	const char * command = 
