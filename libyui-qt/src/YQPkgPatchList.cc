@@ -59,10 +59,10 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
 
     // Can use the same colum for "broken" and "satisfied":
     // Both states are mutually exclusive
-    
+
     _satisfiedIconCol	= _summaryCol;
     _brokenIconCol	= _summaryCol;
-    
+
     setAllColumnsShowFocus( true );
     setColumnAlignment( sizeCol(), Qt::AlignRight );
 
@@ -120,7 +120,7 @@ YQPkgPatchList::fillList()
 
 	    switch ( _filterCriteria )
 	    {
-		case RelevantPatches:			// needed + broken
+		case RelevantPatches:	// needed + broken
 
 		    if ( selectable->hasInstalledObj() ) // installed?
 		    {
@@ -135,12 +135,13 @@ YQPkgPatchList::fillList()
 				       zyppPatch->summary().c_str() );
 			}
 		    }
-		    else // not installed - display only if needed
+
+		    if ( selectable->hasCandidateObj() )	// candidate available?
 		    {
 			zypp::ResStatus candidateStatus = selectable->candidatePoolItem().status();
-			
-			if ( candidateStatus.isNeeded() ||
-			     candidateStatus.isSatisfied() )
+
+			if ( candidateStatus.isNeeded() ||	// patch really needed?
+			     candidateStatus.isSatisfied() )	// pkgs already updated, but patch not installed?
 			{
 			    displayPatch = true;
 			}
