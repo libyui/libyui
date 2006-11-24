@@ -38,7 +38,7 @@
 
 
 typedef zypp::ui::PatchContents			ZyppPatchContents;
-typedef zypp::ui::PatchContents::const_iterator	ZyppPatchContentsIterator;
+typedef zypp::ui::PatchContents::const_iterator ZyppPatchContentsIterator;
 
 using std::list;
 using std::set;
@@ -54,8 +54,8 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     int numCol = 0;
     addColumn( "" );			_statusCol	= numCol++;
     addColumn( _( "Patch"	) );	_summaryCol	= numCol++;
-    addColumn( _( "Category" 	) );	_categoryCol	= numCol++;
-    addColumn( _( "Size" 	) );	_sizeCol	= numCol++;
+    addColumn( _( "Category"	) );	_categoryCol	= numCol++;
+    addColumn( _( "Size"	) );	_sizeCol	= numCol++;
 
     // Can use the same colum for "broken" and "satisfied":
     // Both states are mutually exclusive
@@ -111,7 +111,7 @@ YQPkgPatchList::fillList()
 	  it != zyppPatchesEnd();
 	  ++it )
     {
-	ZyppSel   selectable = *it;
+	ZyppSel	  selectable = *it;
 	ZyppPatch zyppPatch = tryCastToZyppPatch( selectable->theObj() );
 
 	if ( zyppPatch )
@@ -120,14 +120,15 @@ YQPkgPatchList::fillList()
 
 	    switch ( _filterCriteria )
 	    {
-		case RelevantPatches:	// needed + broken
+		case RelevantPatches:	// needed + broken + satisfied (but not installed)
 
 		    if ( selectable->hasInstalledObj() ) // installed?
 		    {
-			// display only if broken
-
-			if ( selectable->installedPoolItem().status().isIncomplete() )
+			if ( selectable->installedPoolItem().status().isIncomplete() ) // patch broken?
 			{
+			    // The patch is broken: It had been installed, but the user somehow
+			    // downgraded individual packages belonging to the patch to older versions.
+
 			    displayPatch = true;
 
 			    y2warning( "Installed patch is broken: %s - %s",
@@ -135,24 +136,51 @@ YQPkgPatchList::fillList()
 				       zyppPatch->summary().c_str() );
 			}
 		    }
-
-		    if ( selectable->hasCandidateObj() )	// candidate available?
+		    else // not installed
 		    {
-			zypp::ResStatus candidateStatus = selectable->candidatePoolItem().status();
+			if ( selectable->hasCandidateObj() &&
+			     selectable->candidatePoolItem().status().isSatisfied() )
+			{
+			    // This is a pretty exotic case, but still it might happen:
+			    //
+			    // The patch itelf is not installed, but it is satisfied because the
+			    // user updated all the packages belonging to the patch to the versions
+			    // the patch requires. All that is missing now is to get the patch meta
+			    // data onto the system. So let's display the patch to give the user
+			    // a chance to install it (if he so chooses).
 
-			if ( candidateStatus.isNeeded() ||	// patch really needed?
-			     candidateStatus.isSatisfied() )	// pkgs already updated, but patch not installed?
-			{
 			    displayPatch = true;
-			}
-			else
-			{
-			    y2milestone( "Patch not needed: %s - %s",
+
+			    y2milestone( "Patch satisfied, but not installed yet: %s - %s",
 					 zyppPatch->name().c_str(),
 					 zyppPatch->summary().c_str() );
 			}
 		    }
+
+		    if ( selectable->hasCandidateObj() )	// candidate available?
+		    {
+			// The most common case: There is a candidate patch, i.e. one that could be
+			// installed, but either no version of that patch is installed or there is a
+			// newer one to which the patch could be updated.
+
+			if ( selectable->candidatePoolItem().status().isNeeded() ) // patch really needed?
+			{
+			    // Patches are needed if any of the packages that belong to the patch
+			    // are installed on the system.
+
+			    displayPatch = true;
+			}
+			else
+			{
+			    // None of the packages that belong to the patch is installed on the system.
+
+			    y2debug( "Patch not needed: %s - %s",
+				     zyppPatch->name().c_str(),
+				     zyppPatch->summary().c_str() );
+			}
+		    }
 		    break;
+
 
 		case RelevantAndInstalledPatches:	// needed + broken + installed
 
@@ -177,6 +205,7 @@ YQPkgPatchList::fillList()
 			}
 		    }
 		    break;
+
 
 		case AllPatches:
 		    displayPatch = true;
@@ -415,9 +444,9 @@ YQPkgPatchList::keyPressEvent( QKeyEvent * event )
 
 
 
-YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList * 	patchList,
+YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList *	patchList,
 					ZyppSel			selectable,
-					ZyppPatch 		zyppPatch )
+					ZyppPatch		zyppPatch )
     : YQPkgObjListItem( patchList, selectable, zyppPatch )
     , _patchList( patchList )
     , _zyppPatch( zyppPatch )
@@ -444,7 +473,7 @@ YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList * 	patchList,
 	case YQPkgRecommendedPatch:	setTextColor( QColor( 0, 0, 0xC0 ) );	break;	// medium blue
 	case YQPkgOptionalPatch:	break;
 	case YQPkgDocumentPatch:	break;
-	case YQPkgUnknownPatchCategory:	break;
+	case YQPkgUnknownPatchCategory: break;
     }
 }
 
@@ -477,12 +506,12 @@ YQPkgPatchListItem::asString( YQPkgPatchCategory category )
     switch ( category )
     {
 	// Translators: These are patch categories
-	case YQPkgYaSTPatch:		return _( "YaST" 	);
+	case YQPkgYaSTPatch:		return _( "YaST"	);
 	case YQPkgSecurityPatch:	return _( "security"	);
-	case YQPkgRecommendedPatch:	return _( "recommended"	);
+	case YQPkgRecommendedPatch:	return _( "recommended" );
 	case YQPkgOptionalPatch:	return _( "optional"	);
 	case YQPkgDocumentPatch:	return _( "document"	);
-	case YQPkgUnknownPatchCategory:	return "";
+	case YQPkgUnknownPatchCategory: return "";
     }
 
     return "";
@@ -512,7 +541,7 @@ YQPkgPatchListItem::toolTip( int col )
     }
     else
     {
-	if (  ( col == brokenIconCol()    && isBroken()    ) ||
+	if (  ( col == brokenIconCol()	  && isBroken()	   ) ||
 	      ( col == satisfiedIconCol() && isSatisfied() )   )
 	{
 	    text = YQPkgObjListItem::toolTip( col );
