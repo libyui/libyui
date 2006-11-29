@@ -1,4 +1,18 @@
 -------------------------------------------------------------------
+Wed Nov 29 16:55:14 CET 2006 - kmachalkova@suse.cz
+
+- Display updated patches also in 'installable' view (not only in
+  'installed' one) (#223416) 
+- 2.14.4
+
+-------------------------------------------------------------------
+Fri Nov 24 16:00:42 CET 2006 - kmachalkova@suse.cz
+
+- Reverted fix for refreshing screen in installation (#199256)
+- More space for filter description in package selector (#222549)
+- 2.14.3
+
+-------------------------------------------------------------------
 Tue Nov  7 14:37:38 CET 2006 - gs@suse.de
 
 - Package Installation/Online Update: added support for resolver
