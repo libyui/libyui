@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Dec  1 15:56:54 CET 2006 - sh@suse.de
+
+- Merged 10.2 fixes (r34246:34581) back to SLE-10-SP1 branch
+- V 2.13.74
+
+-------------------------------------------------------------------
 Tue Oct 31 17:32:00 CET 2006 - sh@suse.de
 
 - Improved bugfix for bug #183735 (display only relevant patches
