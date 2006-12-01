@@ -1168,20 +1168,33 @@ bool PackageSelector::checkPatch( ZyppPatch 	patchPtr,
 	    if ( selectable->installedPoolItem().status().isIncomplete() )
 	    {
 		displayPatch = true;
-		NCMIL << "Installed patch is broken: " << patchPtr->name().c_str() << " - "
+		NCWAR << "Installed patch is broken: " << patchPtr->name().c_str() << " - "
 		      << patchPtr->summary().c_str() << endl;
 	    }
 	}
 	else // patch not installed
-	{
-	    zypp::ResStatus candidateStatus = selectable->candidatePoolItem().status();
+
+	{ 
+	    if (selectable->hasCandidateObj() && 
+		selectable->candidatePoolItem().status().isSatisfied() )
+	    {
+		//patch not installed, but it is satisfied (updated to the version patch requires)
+		//all that is missing are patch metadata, so let's display the patch
+		
+		displayPatch = true;
+
+		NCMIL << "Patch satisfied, but not installed yet: " << patchPtr->name().c_str() << " - "
+		      << patchPtr->summary().c_str() << endl;
+	    }
+	}
+
+	if (selectable->hasCandidateObj()) {
 
             // isNeeded(): this patch is relevant (contains updates for installed packages)
 	    // isSatisfied(): all packages are installed, therefore the isNeeded() flag
 	    // isn't set. BUT the patch meta data aren't installed and therefore it makes
 	    // sense to install the patch
-	    if ( candidateStatus.isNeeded() ||
-		 candidateStatus.isSatisfied() )
+	    if ( selectable->candidatePoolItem().status().isNeeded()) 
 	    {
 		displayPatch = true;
 	    }
