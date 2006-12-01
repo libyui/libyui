@@ -111,13 +111,13 @@
 			    ),
 		  // label text - keep it short
 		  `HBox( `HWeight(1, `HBox(`Label( _( "Filter: " ) ),
-					   `Label( `id("filter"), "........................." ),
+					   `Label( `id("filter"), "..............................." ),
 					   `HSpacing( 0.1 )
 					   )
 				  ),
 			 // label text - keep it short (use abbreviation if necessary)
 			 `HWeight(1, `HBox(`Label( _( "Required Disk Space: " ) ),
-					   `Label( `id("diskspace"), "         " ),
+					   `Label( `id("diskspace"), "        " ),
 					   `HSpacing( 0.1 )
 					   )
 				  )
