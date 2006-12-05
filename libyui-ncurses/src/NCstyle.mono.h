@@ -44,7 +44,7 @@ inline void NCstyleInit_mono( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::DialogPlain, 0|A_REVERSE|A_BOLD );
   attrset->setAttr( NCstyle::DialogLabel, 0|A_REVERSE|A_BOLD );
   attrset->setAttr( NCstyle::DialogData, 0|A_REVERSE );
-  attrset->setAttr( NCstyle::DialogHint, 0|A_REVERSE );
+  attrset->setAttr( NCstyle::DialogHint, 0|A_REVERSE|A_BOLD );
   attrset->setAttr( NCstyle::DialogScrl, 0|A_REVERSE|A_BOLD );
   attrset->setAttr( NCstyle::DialogActivePlain, 0 );
   attrset->setAttr( NCstyle::DialogActiveLabel, 0 );
