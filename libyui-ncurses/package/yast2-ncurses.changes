@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Dec  5 09:52:49 CET 2006 - kmachalkova@suse.cz
+
+- Use the same color palette - 8 colors - for all terminals (thanks
+  to tiwai) (#221614)
+- Highlight keyboard shortcuts in mono theme (#224892)
+- 2.15.0 
+
+-------------------------------------------------------------------
 Wed Nov 29 16:55:14 CET 2006 - kmachalkova@suse.cz
 
 - Display updated patches also in 'installable' view (not only in
