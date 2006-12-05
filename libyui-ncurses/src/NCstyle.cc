@@ -28,6 +28,11 @@
 #include "NCstyle.linux.h"
 #include "NCstyle.xterm.h"
 
+
+//initialize number of colors and color pairs
+int NCattribute::_colors = ::COLORS;
+int NCattribute::_pairs = ::COLOR_PAIRS;
+
 ///////////////////////////////////////////////////////////////////
 //
 //	CLASS NAME : NCstyle::Style
@@ -301,7 +306,7 @@ NCstyle::NCstyle( string term_t )
     if ( getenv( "Y2_BRAILLE" ) != NULL ) {
       styleName = "braille";
     } else {
-      if ( term_t == "xterm" )
+      if ( term_t == "xterm-256color" )
 	styleName = "xterm";
     }
   } else {
