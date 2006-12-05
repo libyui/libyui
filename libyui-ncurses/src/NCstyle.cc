@@ -306,7 +306,7 @@ NCstyle::NCstyle( string term_t )
     if ( getenv( "Y2_BRAILLE" ) != NULL ) {
       styleName = "braille";
     } else {
-      if ( term_t == "xterm-256color" )
+      if ( term_t == "xterm" )
 	styleName = "xterm";
     }
   } else {
