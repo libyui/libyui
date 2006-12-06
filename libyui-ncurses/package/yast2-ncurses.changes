@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Dec  5 10:33:13 CET 2006 - kmachalkova@suse.cz
+
+- Added RunInTerminal UI builtin for running external programs in 
+  the same terminal
+- 2.15.1 
+
+-------------------------------------------------------------------
 Tue Dec  5 09:52:49 CET 2006 - kmachalkova@suse.cz
 
 - Use the same color palette - 8 colors - for all terminals (thanks

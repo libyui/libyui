@@ -337,6 +337,14 @@ public:
     virtual YCPValue setKeyboard ( );
 
     /**
+     * UI-specific runInTerminal() function.
+     * Returns (integer) return code of external program it spawns 
+     * in the same terminal
+    */
+
+    virtual int runInTerminal ( const YCPString & module);
+
+    /**
      * UI-specific beep() function.
      * Beeps the system bell.
     */

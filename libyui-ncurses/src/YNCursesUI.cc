@@ -76,7 +76,7 @@ YNCursesUI::YNCursesUI( int argc, char **argv, bool with_threads, const char * m
     {
 	string language = getenv( "LANG" );
 	string encoding =  nl_langinfo( CODESET );
-	
+
         // setlocale ( LC_ALL, "" ) is called in WMFInterpreter::WFMInterpreter;
 
 	// Explicitly set LC_CTYPE so that it won't be changed if setenv( LANG ) is called elsewhere.
@@ -770,6 +770,40 @@ YCPValue YNCursesUI::setKeyboard()
     }
 
     return YCPVoid();
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : YNCursesUI::runInTerminal
+//	METHOD TYPE : YCPValue
+//
+//	DESCRIPTION:: Run external program supplied as string parameter
+// 		      in the same terminal
+//
+
+int YNCursesUI::runInTerminal( const YCPString & module )
+{ 
+    int ret;
+    string cmd = module->value();  
+
+    //Save tty modes and end ncurses mode temporarily
+    ::def_prog_mode();
+    ::endwin();
+
+    //Call external program
+    ret = system(cmd.c_str());
+
+    if ( ret != 0 )
+    {
+	NCERR << cmd << " returned:" << ret << endl;
+    }
+
+    //Resume tty modes and refresh the screen
+    ::reset_prog_mode();
+    ::refresh();
+
+    return ret;
 }
 
 ///////////////////////////////////////////////////////////////////
