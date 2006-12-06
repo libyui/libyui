@@ -19,6 +19,8 @@ Obsoletes:	y2curses
 Requires:	glibc-locale
 #zypp::ui::PatternContents
 Requires:	libzypp >= 2.7.0
+# UI builtins
+Requires:	yast2-core >= 2.13.32
 %description
 -
 
