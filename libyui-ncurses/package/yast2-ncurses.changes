@@ -3,7 +3,8 @@ Tue Dec 12 12:53:37 CET 2006 - gs@suse.de
 
 - Package Installation: add functionality 'Verify System' to Etc./
   Dependencies menu (Fate #301178)
-- Online Update: patch searching ability added (Fate #153197)
+- Online Update: patch searching ability added to Filter menu
+  (Fate #153197)
 - 2.13.55
 
 -------------------------------------------------------------------
