@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Dec 12 12:53:37 CET 2006 - gs@suse.de
+
+- Package Installation: add functionality 'Verify System' to Etc./
+  Dependencies menu (Fate #301178)
+- Online Update: patch searching ability added (Fate #153197)
+- 2.13.55
+
+-------------------------------------------------------------------
 Wed Dec  6 17:18:33 CET 2006 - kmachalkova@suse.cz
 
 - Added RunInTerminal UI builtin for running external programs in
