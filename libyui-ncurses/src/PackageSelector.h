@@ -187,6 +187,9 @@ class PackageSelector
 			 bool checkProvides,
 			 bool checkRequires );
 
+    bool fillPatchSearchList( const YCPString & expr );
+    
+    bool isYouMode() { return youMode; }
    /**
     * Gets default RPM group (the first group)
     * @return YStringTreeItem *
@@ -312,7 +315,7 @@ class PackageSelector
     */
     bool showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr );
 
-  /**
+    /**
     * Checks and shows the dependencies
     * @param doit true: do the check, false: only check if auto check is on
     */
