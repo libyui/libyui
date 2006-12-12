@@ -194,7 +194,12 @@ const YCPValue& PkgNames::ShowDeps ()
     static const YCPValue value = createIdValue ( "showdeps" );
     return value;
 }
-
+// the menu entry Etc./verify system
+const YCPValue& PkgNames::VerifySystem ()
+{
+    static const YCPValue value = createIdValue ( "verifysystem" );
+    return value;
+}
 // the menu entry Etc./auto check dep
 const YCPValue& PkgNames::AutoDeps ()
 {

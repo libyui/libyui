@@ -319,6 +319,11 @@ class PackageSelector
     bool showPackageDependencies ( bool doit );
 
     /**
+    * Verifies and shows the dependencies
+    */
+    bool verifyPackageDependencies ();
+    
+    /**
     * Checks and shows the selectiondependencies
     */
     void showSelectionDependencies ( );

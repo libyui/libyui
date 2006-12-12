@@ -84,7 +84,8 @@
 									    [`menu( _( "&Dependencies" ),
 										    // menu items of the Etc./Dependencies submenu
 										    [`item( `id("showdeps"), _( "    &Check Dependencies Now" ) ),
-										     `item( `id("autodeps"), _( "[X] &Automatic Dependency Check" ) ) ]
+										     `item( `id("autodeps"), _( "[X] &Automatic Dependency Check" ) ),
+										     `item( `id("verifysystem"), _( "    &Verify System" ) ) ]
 										    ),
 									     `item( `id("testcase"), 	_( "Generate Dependency Resolver &Test Case" ) )
 /*#ifdef FIXME
