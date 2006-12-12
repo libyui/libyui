@@ -209,14 +209,14 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
 	// create the filter popup
 	filterPopup = new NCPopupTree( wpos( 1, 1 ),  this );	 
 
-	// create the search popup
-	searchPopup = new NCPopupSearch( wpos( 1, 1 ), this );
-
         // the file popup
 	filePopup = new NCPopupFile( wpos( 1, 1), floppyDevice, this );
     }
+
+    // create the search popup
+    searchPopup = new NCPopupSearch( wpos( 1, 1 ), this );
 	
-    // the dependency popups
+    // the dependency popup
     depsPopup = new NCPopupDeps( wpos( 1, 1 ), this );
 
     // the disk space popup
@@ -703,6 +703,57 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
 
     return true;
 }
+
+///////////////////////////////////////////////////////////////////
+//
+// fillPatchSearchList
+//
+// Fills the patch list with search results
+//
+bool PackageSelector::fillPatchSearchList( const YCPString & expr )
+{
+   NCPkgTable * packageList = getPackageList();
+    
+    if ( !packageList
+       || expr.isNull() )
+    {
+      return false;
+    }
+
+    // clear the patch list
+    packageList->itemsCleared ();
+    // get the patch list and sort it
+    list<ZyppSel> patchList( zyppPatchesBegin (), zyppPatchesEnd () );
+    patchList.sort( sortByName );
+    list<ZyppSel>::iterator listIt = patchList.begin(); 
+
+    while ( listIt != patchList.end() )
+    {
+      ZyppPatch patchPtr  = tryCastToZyppPatch( ( *listIt)->theObj() );
+
+      if ( patchPtr )
+      {
+          if ( match( (*listIt)->name(), expr->value(), true ) )
+          {
+              // search sucessful
+              packageList->createPatchEntry( patchPtr, *listIt );
+          }
+      }
+      ++listIt;
+    }
+    // show the patch list with search result
+    packageList->drawList();
+    
+    // set filter label to 'Search'
+    YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
+    if ( filterLabel )
+    {
+	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::SearchResults()) );
+    }
+
+    return true;
+}
+
 
 ///////////////////////////////////////////////////////////////////
 //

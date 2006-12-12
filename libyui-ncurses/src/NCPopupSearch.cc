@@ -29,6 +29,8 @@
 #include "PkgNames.h"
 #include "PackageSelector.h"
 
+#include "NCi18n.h"
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -49,7 +51,10 @@ NCPopupSearch::NCPopupSearch( const wpos at, PackageSelector * pkger )
       , cancelButton( 0 )
       , packager( pkger )
 {
-    createLayout( YCPString(PkgNames::PackageSearch()) );
+    if ( !packager->isYouMode() )
+	createLayout( YCPString(PkgNames::PackageSearch()) );
+    else
+	createLayout( YCPString( _("Search for Patch Name") ) );	
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -105,42 +110,45 @@ void NCPopupSearch::createLayout( const YCPString & headline )
     vSplit2->addChild( new NCSpacing( vSplit, opt, 0.6, false, true ) );
     vSplit->addChild( frame0 );
 
-    // add the checkBox ignore case
-    NCSplit * hSplit2 = new NCSplit( vSplit, opt, YD_HORIZ );
-    vSplit->addChild( hSplit2 );
-    ignoreCase = new NCCheckBox( hSplit2, opt, YCPString(PkgNames::IgnoreCase()), true );
-    hSplit2->addChild( new NCSpacing( hSplit2, opt, 0.1, true, false ) );
-    hSplit2->addChild( ignoreCase );
+    if ( !packager->isYouMode() )
+    {
+	// add the checkBox ignore case
+	NCSplit * hSplit2 = new NCSplit( vSplit, opt, YD_HORIZ );
+	vSplit->addChild( hSplit2 );
+	ignoreCase = new NCCheckBox( hSplit2, opt, YCPString(PkgNames::IgnoreCase()), true );
+	hSplit2->addChild( new NCSpacing( hSplit2, opt, 0.1, true, false ) );
+	hSplit2->addChild( ignoreCase );
 
-    vSplit->addChild( new NCSpacing( vSplit, opt, 0.6, false, true ) );	// VSpacing
+	vSplit->addChild( new NCSpacing( vSplit, opt, 0.6, false, true ) );	// VSpacing
 
-    // add a frame containing the other check boxes
-    opt.isHStretchable.setValue( true );
-    opt.isVStretchable.setValue( true );
-    NCFrame * frame = new NCFrame( vSplit, opt, YCPString(PkgNames::SearchIn()) );
-    NCSplit * vSplit3 = new NCSplit( frame, opt, YD_VERT );
+	// add a frame containing the other check boxes
+	opt.isHStretchable.setValue( true );
+	opt.isVStretchable.setValue( true );
+	NCFrame * frame = new NCFrame( vSplit, opt, YCPString(PkgNames::SearchIn()) );
+	NCSplit * vSplit3 = new NCSplit( frame, opt, YD_VERT );
 
-    opt.isVStretchable.setValue( false );
-    checkName = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckName()), true );
-    checkSummary = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckSummary()), true );
-    checkDescr = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckDescr()), false );
-    checkProvides = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckProvides()), false );
-    checkRequires = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckRequires()), false );
+	opt.isVStretchable.setValue( false );
+	checkName = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckName()), true );
+	checkSummary = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckSummary()), true );
+	checkDescr = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckDescr()), false );
+	checkProvides = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckProvides()), false );
+	checkRequires = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckRequires()), false );
 
-    vSplit3->addChild( checkName );
-    vSplit3->addChild( checkSummary );
-    vSplit3->addChild( checkDescr );
-    vSplit3->addChild( checkProvides );
-    vSplit3->addChild( checkRequires );
+	vSplit3->addChild( checkName );
+	vSplit3->addChild( checkSummary );
+	vSplit3->addChild( checkDescr );
+	vSplit3->addChild( checkProvides );
+	vSplit3->addChild( checkRequires );
 
-    frame->addChild( vSplit3 );
-    vSplit->addChild( frame );
+	frame->addChild( vSplit3 );
+	vSplit->addChild( frame );
 
-    vSplit->addChild( new NCSpacing( vSplit, opt, 0.8, false, true ) );		// VSpacing
+	vSplit->addChild( new NCSpacing( vSplit, opt, 0.8, false, true ) );		// VSpacing
+    }
 
     NCSplit * hSplit3 = new NCSplit( vSplit, opt, YD_HORIZ );
     vSplit->addChild( hSplit3 );
-
+    
     // add the cancel and the ok button
     opt.key_Fxx.setValue( 10 );
     okButton = new NCPushButton( hSplit3, opt, YCPString(PkgNames::OKLabel()) );
@@ -157,6 +165,7 @@ void NCPopupSearch::createLayout( const YCPString & headline )
     hSplit3->addChild( new NCSpacing( hSplit3, opt, 0.4, true, false ) );
     hSplit3->addChild( cancelButton );
     hSplit3->addChild( new NCSpacing( hSplit3, opt, 0.2, true, false ) );
+    
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -217,11 +226,19 @@ YCPString  NCPopupSearch::getSearchExpression() const
 long NCPopupSearch::nicesize(YUIDimension dim)
 {
     long vdim;
-    if ( NCurses::lines() > 20 )
-	vdim = 20;
+
+    if ( !packager->isYouMode() )
+    {
+	if ( NCurses::lines() > 20 )
+	    vdim = 20;
+	else
+	    vdim = NCurses::lines()-4;
+    }
     else
-	vdim = NCurses::lines()-4;
-	
+    {
+	vdim = 10; 
+    }
+    
     return ( dim == YD_HORIZ ? NCurses::cols()/2 : vdim );
 }
 ///////////////////////////////////////////////////////////////////
@@ -277,15 +294,22 @@ bool NCPopupSearch::postAgain()
 	    filter =  postevent.result->asString();
 	}
 
-	// fill the package list with packages matching the search expression
-	packager->fillSearchList( filter,
-				  getCheckBoxValue( ignoreCase ),
-				  getCheckBoxValue( checkName ),
-				  getCheckBoxValue( checkSummary ),
-				  getCheckBoxValue( checkDescr ),
-				  getCheckBoxValue( checkProvides ),
-				  getCheckBoxValue( checkRequires )
-				  );
+	if ( !packager->isYouMode() )
+	{
+	    // fill the package list with packages matching the search expression
+	    packager->fillSearchList( filter,
+				      getCheckBoxValue( ignoreCase ),
+				      getCheckBoxValue( checkName ),
+				      getCheckBoxValue( checkSummary ),
+				      getCheckBoxValue( checkDescr ),
+				      getCheckBoxValue( checkProvides ),
+				      getCheckBoxValue( checkRequires )
+				      );
+	}
+	else
+	{
+	    packager->fillPatchSearchList( filter );
+	}
     }
 
     if ( postevent == NCursesEvent::button || postevent == NCursesEvent::cancel )
