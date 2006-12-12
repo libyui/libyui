@@ -53,6 +53,13 @@ class NCPopupDeps : public NCPopup {
     NCPopupDeps & operator=( const NCPopupDeps & );
     NCPopupDeps            ( const NCPopupDeps & );
 
+public:
+    enum NCPkgSolverAction {
+	S_Solve,
+	S_Verify,
+	S_Unknown
+    };
+    
 private:
 
     typedef std::vector<std::pair<
@@ -79,7 +86,7 @@ protected:
 
     NCSelectionBox * problemw;	// resolver problems
     
-    virtual bool postAgain();
+    virtual bool postAgain( NCPkgSolverAction action );
 
     virtual NCursesEvent wHandleInput( wint_t ch );
     
@@ -90,11 +97,11 @@ public:
 
     virtual long nicesize(YUIDimension dim);
 
-    NCursesEvent showDependencyPopup( );
+    NCursesEvent showDependencyPopup( NCPkgSolverAction action );
 
-    bool showDependencies( );
+    bool showDependencies( NCPkgSolverAction action );
     
-    bool solve( NCSelectionBox * problemw );
+    bool solve( NCSelectionBox * problemw,  NCPkgSolverAction action );
 
     bool showSolutions( int index );
     // for the currently selected problem, choose this solution

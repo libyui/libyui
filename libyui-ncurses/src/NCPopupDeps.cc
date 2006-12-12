@@ -189,7 +189,7 @@ void NCPopupDeps::createLayout( )
 //  showDependencies
 // 
 //
-bool NCPopupDeps::showDependencies( )
+bool NCPopupDeps::showDependencies( NCPkgSolverAction action )
 {
     if ( !problemw )
 	return true;
@@ -202,13 +202,13 @@ bool NCPopupDeps::showDependencies( )
 
     // evaluate the result and fill the list with packages
     // which have unresolved deps
-    bool success = solve (problemw);
+    bool success = solve (problemw, action );
 
     if (!success)
     {
 	// show first dependency
 	showSolutions( problemw->getCurrentItem() );
-	NCursesEvent input = showDependencyPopup();    // show the dependencies
+	NCursesEvent input = showDependencyPopup( action );    // show the dependencies
 
 	if ( input == NCursesEvent::cancel
 	     && input.detail != NCursesEvent::USERDEF )
@@ -222,7 +222,7 @@ bool NCPopupDeps::showDependencies( )
 }
 
 
-bool NCPopupDeps::solve( NCSelectionBox * problemw)
+bool NCPopupDeps::solve( NCSelectionBox * problemw, NCPkgSolverAction action )
 {
     if ( !problemw )
 	return false;
@@ -236,8 +236,20 @@ bool NCPopupDeps::solve( NCSelectionBox * problemw)
     info.popup();
     
     zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
-    bool success = resolver->resolvePool();
 
+    bool success = false;
+    switch ( action )
+    {
+	case S_Solve:
+	    success = resolver->resolvePool();
+	    break;
+	case S_Verify:
+	    success = resolver->verifySystem();
+	    break;
+	default:
+	    NCERR << "Unknown action for resolve" << endl;
+    }
+    
     info.popdown();
 
     if (success)
@@ -317,13 +329,13 @@ bool NCPopupDeps::showSolutions( int index )
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupDeps::showDependencyPopup( )
+NCursesEvent NCPopupDeps::showDependencyPopup( NCPkgSolverAction action )
 {
     postevent = NCursesEvent();
 
     do {
 	popupDialog();
-    } while ( postAgain() );
+    } while ( postAgain( action ) );
 
     popdownDialog();
 
@@ -368,7 +380,7 @@ NCursesEvent NCPopupDeps::wHandleInput( wint_t ch )
 //
 //	DESCRIPTION :
 //
-bool NCPopupDeps::postAgain()
+bool NCPopupDeps::postAgain( NCPkgSolverAction action )
 {
     if ( ! postevent.widget )
 	return false;
@@ -404,7 +416,7 @@ bool NCPopupDeps::postAgain()
 	resolver->applySolutions (solutions);
 
 	// and solve again
-	bool success = solve (problemw);
+	bool success = solve (problemw, action );
 
 	if ( !success )
 	{

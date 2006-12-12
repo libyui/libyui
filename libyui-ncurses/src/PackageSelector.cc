@@ -161,6 +161,7 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
     // Etc. menu
     eventHandlerMap[ PkgNames::ShowDeps()->toString() ] = &PackageSelector::DependencyHandler;
     eventHandlerMap[ PkgNames::AutoDeps()->toString() ] = &PackageSelector::DependencyHandler;
+    eventHandlerMap[ PkgNames::VerifySystem()->toString() ] = &PackageSelector::DependencyHandler;
     eventHandlerMap[ PkgNames::SaveSel()->toString() ] = &PackageSelector::SelectionHandler;
     eventHandlerMap[ PkgNames::LoadSel()->toString() ] = &PackageSelector::SelectionHandler;
     eventHandlerMap[ PkgNames::Testcase()->toString() ] = &PackageSelector::TestcaseHandler;
@@ -1424,6 +1425,12 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 	updatePackageList();
 	showDiskSpace();	
     }
+    else if ( event.selection->compare( PkgNames::VerifySystem() ) == YO_EQUAL )
+    {
+	verifyPackageDependencies();
+	updatePackageList();
+	showDiskSpace();
+    }
     else if ( event.selection->compare( PkgNames::AutoDeps() ) == YO_EQUAL )
     {
 	char menu[2000];
@@ -2234,9 +2241,19 @@ bool PackageSelector::showPackageDependencies ( bool doit )
 	 && (doit || autoCheck) )
     {
 	NCMIL << "Checking dependencies" << endl;
-	cancel = depsPopup->showDependencies( );
+	cancel = depsPopup->showDependencies( NCPopupDeps::S_Solve );
     }
 
+    return cancel;
+}
+
+bool PackageSelector::verifyPackageDependencies ()
+{
+    bool cancel = false;
+    if ( depsPopup )
+    {
+	cancel = depsPopup->showDependencies( NCPopupDeps::S_Verify );
+    }
     return cancel;
 }
 

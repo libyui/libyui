@@ -215,6 +215,11 @@ public:
      */
     static const YCPValue& ShowDeps ();
 
+    /**
+     *  Widget id of the Etc./Dependencies/verify system  menu item
+     */
+    static const YCPValue& VerifySystem ();
+
    /**
      *  Widget id of the Etc./Dependencies/Auto check menu item
      */
