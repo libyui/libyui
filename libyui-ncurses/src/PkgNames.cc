@@ -1268,6 +1268,21 @@ const string PkgNames::MenuAutoDeps()
     return value;
 }
 
+const string  PkgNames::MenuVerifySystem()
+{
+    // menu entry: verify system
+    // Please note: preserve the whitespaces at the beginning
+    static const string value = _( "    &Verify System" );
+    return value;
+}
+
+const string PkgNames::MenuTestCase()
+{
+    // menu entry: generate test case for solver
+    static const string value = _( "Generate Dependency Resolver &Test Case" );
+    return value;
+}
+
 const string PkgNames::MenuSel()
 {
     // submenu: selections
