@@ -843,6 +843,8 @@ public:
     static const string MenuCheckDeps();
     static const string MenuAutoDeps();
     static const string MenuNoAutoDeps();
+    static const string MenuVerifySystem();
+    static const string MenuTestCase();
     static const string MenuSel();
     static const string MenuSaveSel();	
     static const string MenuLoadSel();

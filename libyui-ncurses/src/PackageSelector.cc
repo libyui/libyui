@@ -1439,7 +1439,8 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 	{
 	    snprintf ( menu, sizeof(menu) - 1,
 		      "`MenuButton( \"%s\", ["
-		      "`menu( \"%s\", [`item( `id(\"showdeps\"), \"%s\" ), `item( `id(\"autodeps\"), \"%s\" ) ] )"
+		       "`menu( \"%s\", [`item( `id(\"showdeps\"), \"%s\" ), `item( `id(\"autodeps\"), \"%s\" ), `item ( `id(\"verifysystem\"), \"%s\" ) ] ),"
+		       "`item( `id(\"testcase\"), \"%s\" )"
 #ifdef FIXME
 		      ","
 		      "`menu( \"%s\", [`item( `id(\"save\"), \"%s\" ), `item( `id(\"load\"), \"%s\" ) ] )"
@@ -1448,7 +1449,9 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 		      PkgNames::MenuEtc().c_str(),
 		      PkgNames::MenuDeps().c_str(),
 		      PkgNames::MenuCheckDeps().c_str(),
-		      PkgNames::MenuNoAutoDeps().c_str()
+		      PkgNames::MenuNoAutoDeps().c_str(),
+		      PkgNames::MenuVerifySystem().c_str(),
+		      PkgNames::MenuTestCase().c_str()
 #ifdef FIXME
 		      ,
 		      PkgNames::MenuSel().c_str(),
@@ -1475,7 +1478,8 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 	{
 	    snprintf ( menu, sizeof(menu) - 1,
 		      "`MenuButton( \"%s\", ["
-		      "`menu( \"%s\", [`item( `id(\"showdeps\"), \"%s\" ), `item( `id(\"autodeps\"), \"%s\" ) ] )"
+		      "`menu( \"%s\", [`item( `id(\"showdeps\"), \"%s\" ), `item( `id(\"autodeps\"), \"%s\" ), `item ( `id(\"verifysystem\"), \"%s\" ) ] ),"
+		     "`item( `id(\"testcase\"), \"%s\" )"  
 #ifdef FIXME
 		      ","
 		      "`menu( \"%s\", [`item( `id(\"save\"), \"%s\" ), `item( `id(\"load\"), \"%s\" ) ] )"
@@ -1484,7 +1488,9 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 		      PkgNames::MenuEtc().c_str(),
 		      PkgNames::MenuDeps().c_str(),
 		      PkgNames::MenuCheckDeps().c_str(),
-		      PkgNames::MenuAutoDeps().c_str()
+		      PkgNames::MenuAutoDeps().c_str(),
+		      PkgNames::MenuVerifySystem().c_str(),
+		      PkgNames::MenuTestCase().c_str() 
 #ifdef FIXME
 		      ,
 		      PkgNames::MenuSel().c_str(),
