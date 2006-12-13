@@ -176,7 +176,7 @@ YWidget * YQUI::createPackageSelector	( YWidget *		parent,
     
     try
     {
-	w = new YQPackageSelector( (QWidget *) ( parent->widgetRep() ), opt, floppyDevice );
+	w = new YQPackageSelector( (QWidget *) ( parent->widgetRep() ), opt );
     }
     catch (const std::exception & e)
     {

@@ -25,6 +25,9 @@
 #define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE	0
 #define GLOBAL_UPDATE_CONFIRMATION_THRESHOLD		20
 
+#include <fstream>
+#include <boost/bind.hpp>
+
 #include <qaction.h>
 #include <qapplication.h>
 #include <qaccel.h>
@@ -44,7 +47,6 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include "QY2FloppyMountDialog.h"
 #include "QY2LayoutUtils.h"
 
 #include "YQPackageSelector.h"
@@ -73,6 +75,7 @@
 #include "YQPkgTextDialog.h"
 #include "YQPkgUpdateProblemFilterView.h"
 #include "YQPkgVersionsView.h"
+#include "zypp/SysContent.h"
 
 #include "QY2ComboTabWidget.h"
 #include "YQDialog.h"
@@ -85,16 +88,15 @@
 using std::max;
 using std::string;
 
-#define SPACING			6
-#define MARGIN			4
+#define SPACING				6
+#define MARGIN				4
+#define DEFAULT_EXPORT_FILE_NAME	"user-packages.xml"
 
 
 
-YQPackageSelector::YQPackageSelector( QWidget * 		parent,
-				      const YWidgetOpt & 	opt,
-				      const YCPString & 	floppyDevice )
+YQPackageSelector::YQPackageSelector( QWidget *			parent,
+				      const YWidgetOpt &	opt )
     : YQPackageSelectorBase( parent, opt )
-    , _floppyDevice( floppyDevice->value().c_str() )
 {
     _showChangesDialog		= true;
     _autoDependenciesCheckBox	= 0;
@@ -119,10 +121,10 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     _patchFilterView		= 0;
     _patchList			= 0;
 
-    _searchMode	 	= opt.searchMode.value();
-    _testMode	 	= opt.testMode.value();
-    _updateMode	 	= opt.updateMode.value();
-    _summaryMode 	= opt.summaryMode.value();
+    _searchMode		= opt.searchMode.value();
+    _testMode		= opt.testMode.value();
+    _updateMode		= opt.updateMode.value();
+    _summaryMode	= opt.summaryMode.value();
     _instSourcesMode	= opt.instSourcesMode.value();
 
     if ( _youMode )	y2milestone( "YOU mode" );
@@ -192,7 +194,6 @@ YQPackageSelector::YQPackageSelector( QWidget * 		parent,
     if ( _diskUsageList )
 	_diskUsageList->updateDiskUsage();
 
-    y2debug( "Floppy device: %s", (const char *) _floppyDevice );
     y2milestone( "PackageSelector init done" );
 
 
@@ -216,7 +217,7 @@ YQPackageSelector::basicLayout()
     QSplitter * outer_splitter = new QSplitter( QSplitter::Horizontal, this );
     CHECK_PTR( outer_splitter );
 
-    QWidget * left_pane  = layoutLeftPane ( outer_splitter );
+    QWidget * left_pane	 = layoutLeftPane ( outer_splitter );
     QWidget * right_pane = layoutRightPane( outer_splitter );
 
     outer_splitter->setResizeMode( left_pane,  QSplitter::FollowSizeHint );
@@ -293,14 +294,14 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	CHECK_PTR( _patternList );
 	_filters->addPage( _( "Patterns" ), _patternList );
 
-	connect( _patternList, 	 	SIGNAL( statusChanged()	        	),
-		 this,		 	SLOT  ( autoResolveDependencies() 	) );
+	connect( _patternList,		SIGNAL( statusChanged()			),
+		 this,			SLOT  ( autoResolveDependencies()	) );
 
-	connect( _pkgConflictDialog,	SIGNAL( updatePackages()      		),
-		 _patternList,		SLOT  ( updateItemStates() 		) );
+	connect( _pkgConflictDialog,	SIGNAL( updatePackages()		),
+		 _patternList,		SLOT  ( updateItemStates()		) );
 
 	connect( this,			SIGNAL( refresh()			),
-		 _patternList, 		SLOT  ( updateItemStates() 		) );
+		 _patternList,		SLOT  ( updateItemStates()		) );
     }
 
 
@@ -315,14 +316,14 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	CHECK_PTR( _selList );
 	_filters->addPage( _( "Selections" ), _selList );
 
-	connect( _selList, 	 	SIGNAL( statusChanged()	        	),
-		 this,		 	SLOT  ( autoResolveDependencies() 	) );
+	connect( _selList,		SIGNAL( statusChanged()			),
+		 this,			SLOT  ( autoResolveDependencies()	) );
 
-	connect( _pkgConflictDialog,	SIGNAL( updatePackages()      		),
-		 _selList,		SLOT  ( updateItemStates() 		) );
+	connect( _pkgConflictDialog,	SIGNAL( updatePackages()		),
+		 _selList,		SLOT  ( updateItemStates()		) );
 
-	connect( this,		 	SIGNAL( refresh()			),
-		 _selList, 		 SLOT  ( updateItemStates() 		) );
+	connect( this,			SIGNAL( refresh()			),
+		 _selList,		 SLOT  ( updateItemStates()		) );
     }
 
 
@@ -334,7 +335,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     CHECK_PTR( _rpmGroupTagsFilterView );
     _filters->addPage( _( "Package Groups" ), _rpmGroupTagsFilterView );
 
-    connect( this,    			SIGNAL( loadData() ),
+    connect( this,			SIGNAL( loadData() ),
 	     _rpmGroupTagsFilterView,	SLOT  ( filter()   ) );
 
 
@@ -348,11 +349,11 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     _filters->addPage( _( "Languages" ), _langList );
     _langList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored ) ); // hor/vert
 
-    connect( _langList, 	SIGNAL( statusChanged()	               	),
-	     this,		SLOT  ( autoResolveDependencies() 	) );
+    connect( _langList,		SIGNAL( statusChanged()			),
+	     this,		SLOT  ( autoResolveDependencies()	) );
 
     connect( this,		SIGNAL( refresh()			),
-	     _langList, 	SLOT  ( updateItemStates() 		) );
+	     _langList,		SLOT  ( updateItemStates()		) );
 
 
     //
@@ -421,7 +422,7 @@ YQPackageSelector::layoutPkgList( QWidget * parent )
     _pkgList= new YQPkgList( parent );
     CHECK_PTR( _pkgList );
 
-    connect( _pkgList, 	SIGNAL( statusChanged()	          ),
+    connect( _pkgList,	SIGNAL( statusChanged()		  ),
 	     this,	SLOT  ( autoResolveDependencies() ) );
 }
 
@@ -549,7 +550,7 @@ YQPackageSelector::layoutButtons( QWidget * parent )
     _normalButtonBackground = _checkDependenciesButton->paletteBackgroundColor();
 
     connect( _checkDependenciesButton,	SIGNAL( clicked() ),
-	     this,         		SLOT  ( manualResolvePackageDependencies() ) );
+	     this,			SLOT  ( manualResolvePackageDependencies() ) );
 
 
     // Checkbox: Automatically check dependencies for every package status change?
@@ -565,7 +566,7 @@ YQPackageSelector::layoutButtons( QWidget * parent )
     cancel_button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
 
     connect( cancel_button, SIGNAL( clicked() ),
-	     this,          SLOT  ( reject()   ) );
+	     this,	    SLOT  ( reject()   ) );
 
 
     QPushButton * accept_button = new QPushButton( _( "&Accept" ), button_box );
@@ -573,7 +574,7 @@ YQPackageSelector::layoutButtons( QWidget * parent )
     accept_button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
 
     connect( accept_button, SIGNAL( clicked() ),
-	     this,          SLOT  ( accept()   ) );
+	     this,	    SLOT  ( accept()   ) );
 
     button_box->setFixedHeight( button_box->sizeHint().height() );
 }
@@ -587,10 +588,10 @@ YQPackageSelector::layoutMenuBar( QWidget * parent )
 
     _fileMenu		= 0;
     _viewMenu		= 0;
-    _pkgMenu 		= 0;
-    _patchMenu 		= 0;
+    _pkgMenu		= 0;
+    _patchMenu		= 0;
     _extrasMenu		= 0;
-    _helpMenu 		= 0;
+    _helpMenu		= 0;
 
 }
 
@@ -606,15 +607,13 @@ YQPackageSelector::addMenus()
     CHECK_PTR( _fileMenu );
     _menuBar->insertItem( _( "&File" ), _fileMenu );
 
-#ifdef FIXME
     _fileMenu->insertItem( _( "&Import..." ),	this, SLOT( pkgImport() ) );
     _fileMenu->insertItem( _( "&Export..." ),	this, SLOT( pkgExport() ) );
 
     _fileMenu->insertSeparator();
-#endif
 
     _fileMenu->insertItem( _( "E&xit -- Discard Changes" ), this, SLOT( reject() ) );
-    _fileMenu->insertItem( _( "&Quit -- Save Changes"    ), this, SLOT( accept() ) );
+    _fileMenu->insertItem( _( "&Quit -- Save Changes"	 ), this, SLOT( accept() ) );
 
 
     if ( _pkgList )
@@ -641,7 +640,7 @@ YQPackageSelector::addMenus()
 	_pkgList->actionDontInstallSourceRpm->addTo( _pkgMenu );
 
 	_pkgMenu->insertSeparator();
-        QPopupMenu * submenu = _pkgList->addAllInListSubMenu( _pkgMenu );
+	QPopupMenu * submenu = _pkgList->addAllInListSubMenu( _pkgMenu );
 	CHECK_PTR( submenu );
 
 	submenu->insertSeparator();
@@ -689,7 +688,7 @@ YQPackageSelector::addMenus()
 	_patchList->actionSetCurrentTaboo->addTo( _patchMenu );
 
 	_patchMenu->insertSeparator();
-        _patchList->addAllInListSubMenu( _patchMenu );
+	_patchList->addAllInListSubMenu( _patchMenu );
     }
 
 
@@ -706,7 +705,7 @@ YQPackageSelector::addMenus()
     _extrasMenu->insertItem( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), CTRL + Key_A );
 
     _extrasMenu->insertSeparator();
-    
+
     // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
     _extrasMenu->insertItem( _( "Install All Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
 
@@ -714,11 +713,11 @@ YQPackageSelector::addMenus()
     _extrasMenu->insertItem( _( "Install All Matching -de&buginfo Packages" ), this, SLOT( installDebugInfoPkgs() ) );
 
     _extrasMenu->insertSeparator();
-    
+
     if ( _pkgConflictDialog )
 	_extrasMenu->insertItem( _( "Generate Dependency Resolver &Test Case" ),
 				    _pkgConflictDialog, SLOT( askCreateSolverTestCase() ) );
-			     
+
     if ( _actionResetIgnoredDependencyProblems )
 	_actionResetIgnoredDependencyProblems->addTo( _extrasMenu );
 
@@ -742,13 +741,13 @@ YQPackageSelector::addMenus()
     // to a separate source file YQPackageSelectorHelp.cc
 
     // Menu entry for help overview
-    _helpMenu->insertItem( _( "&Overview" ), this, SLOT( help() 	), Key_F1         );
+    _helpMenu->insertItem( _( "&Overview" ), this, SLOT( help()		), Key_F1	  );
 
     // Menu entry for help about used symbols ( icons )
-    _helpMenu->insertItem( _( "&Symbols" ), this, SLOT( symbolHelp() 	), SHIFT + Key_F1 );
+    _helpMenu->insertItem( _( "&Symbols" ), this, SLOT( symbolHelp()	), SHIFT + Key_F1 );
 
     // Menu entry for keyboard help
-    _helpMenu->insertItem( _( "&Keys" ), this, SLOT( keyboardHelp() )                 );
+    _helpMenu->insertItem( _( "&Keys" ), this, SLOT( keyboardHelp() )		      );
 }
 
 
@@ -763,25 +762,25 @@ YQPackageSelector::connectFilter( QWidget * filter,
     if ( _filters )
     {
 	connect( _filters,	SIGNAL( currentChanged(QWidget *) ),
-		 filter,	SLOT  ( filterIfVisible()            ) );
+		 filter,	SLOT  ( filterIfVisible()	     ) );
     }
 
     connect( this,	SIGNAL( refresh()	  ),
 	     filter,	SLOT  ( filterIfVisible() ) );
 
-    connect( filter,	SIGNAL( filterStart() 	),
-	     pkgList, 	SLOT  ( clear() 	) );
+    connect( filter,	SIGNAL( filterStart()	),
+	     pkgList,	SLOT  ( clear()		) );
 
     connect( filter,	SIGNAL( filterMatch( ZyppSel, ZyppPkg ) ),
-	     pkgList, 	SLOT  ( addPkgItem ( ZyppSel, ZyppPkg ) ) );
+	     pkgList,	SLOT  ( addPkgItem ( ZyppSel, ZyppPkg ) ) );
 
-    connect( filter, 	SIGNAL( filterFinished()  ),
-	     pkgList, 	SLOT  ( selectSomething() ) );
+    connect( filter,	SIGNAL( filterFinished()  ),
+	     pkgList,	SLOT  ( selectSomething() ) );
 
 
     if ( hasUpdateSignal )
     {
-	connect( filter, 		SIGNAL( updatePackages()   ),
+	connect( filter,		SIGNAL( updatePackages()   ),
 		 pkgList,		SLOT  ( updateItemStates() ) );
 
 	if ( _diskUsageList )
@@ -796,24 +795,24 @@ YQPackageSelector::connectFilter( QWidget * filter,
 void
 YQPackageSelector::makeConnections()
 {
-    connect( this, SIGNAL( resolvingStarted()   ),
-	     this, SLOT  ( animateCheckButton() ) );
+    connect( this, SIGNAL( resolvingStarted()	),
+	     this, SLOT	 ( animateCheckButton() ) );
 
-    connect( this, SIGNAL( resolvingFinished()  ),
-	     this, SLOT  ( restoreCheckButton() ) );
+    connect( this, SIGNAL( resolvingFinished()	),
+	     this, SLOT	 ( restoreCheckButton() ) );
 
     connectFilter( _updateProblemFilterView,	_pkgList, false );
-    connectFilter( _patternList, 		_pkgList );
-    connectFilter( _selList, 			_pkgList );
+    connectFilter( _patternList,		_pkgList );
+    connectFilter( _selList,			_pkgList );
     connectFilter( _instSrcFilterView,		_pkgList, false );
-    connectFilter( _rpmGroupTagsFilterView, 	_pkgList, false );
-    connectFilter( _langList, 			_pkgList );
-    connectFilter( _statusFilterView, 		_pkgList, false );
-    connectFilter( _searchFilterView, 		_pkgList, false );
+    connectFilter( _rpmGroupTagsFilterView,	_pkgList, false );
+    connectFilter( _langList,			_pkgList );
+    connectFilter( _statusFilterView,		_pkgList, false );
+    connectFilter( _searchFilterView,		_pkgList, false );
 
     if ( _searchFilterView && _pkgList )
     {
-	connect( _searchFilterView, 	SIGNAL( message( const QString & ) ),
+	connect( _searchFilterView,	SIGNAL( message( const QString & ) ),
 		 _pkgList,		SLOT  ( message( const QString & ) ) );
     }
 
@@ -826,7 +825,7 @@ YQPackageSelector::makeConnections()
     if ( _pkgList && _diskUsageList )
     {
 
-	connect( _pkgList,		SIGNAL( statusChanged()   ),
+	connect( _pkgList,		SIGNAL( statusChanged()	  ),
 		 _diskUsageList,	SLOT  ( updateDiskUsage() ) );
     }
 
@@ -842,25 +841,25 @@ YQPackageSelector::makeConnections()
 	if (_pkgList )
 	{
 	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()   ),
-		     _pkgList, 			SLOT  ( updateItemStates() ) );
+		     _pkgList,			SLOT  ( updateItemStates() ) );
 	}
 
 	if ( _patternList )
 	{
 	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()   ),
-		     _patternList, 		SLOT  ( updateItemStates() ) );
+		     _patternList,		SLOT  ( updateItemStates() ) );
 	}
 
 	if ( _selList )
 	{
 	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()   ),
-		     _selList, 			SLOT  ( updateItemStates() ) );
+		     _selList,			SLOT  ( updateItemStates() ) );
 	}
 
 	if ( _diskUsageList )
 	{
-	    connect( _pkgConflictDialog, 	SIGNAL( updatePackages()   ),
-		     _diskUsageList,	 	SLOT  ( updateDiskUsage()  ) );
+	    connect( _pkgConflictDialog,	SIGNAL( updatePackages()   ),
+		     _diskUsageList,		SLOT  ( updateDiskUsage()  ) );
 	}
     }
 
@@ -871,7 +870,7 @@ YQPackageSelector::makeConnections()
 
     if ( _pkgVersionsView && _pkgList )
     {
-	connect( _pkgVersionsView, 	SIGNAL( candidateChanged( ZyppObj ) ),
+	connect( _pkgVersionsView,	SIGNAL( candidateChanged( ZyppObj ) ),
 		 _pkgList,		SLOT  ( updateItemData()    ) );
     }
 
@@ -892,13 +891,13 @@ YQPackageSelector::makeConnections()
 
     if ( _pkgMenu && _pkgList )
     {
-	connect( _pkgMenu, 	SIGNAL( aboutToShow()   ),
-		 _pkgList, 	SLOT  ( updateActions() ) );
+	connect( _pkgMenu,	SIGNAL( aboutToShow()	),
+		 _pkgList,	SLOT  ( updateActions() ) );
     }
 
     if ( _patchMenu && _patchList )
     {
-	connect( _patchMenu,	SIGNAL( aboutToShow()   ),
+	connect( _patchMenu,	SIGNAL( aboutToShow()	),
 		 _patchList,	SLOT  ( updateActions() ) );
     }
 }
@@ -1004,17 +1003,17 @@ YQPackageSelector::connectPatchList()
 	connect( _patchList, SIGNAL( filterMatch   ( const QString &, const QString &, FSize ) ),
 		 _pkgList,   SLOT  ( addPassiveItem( const QString &, const QString &, FSize ) ) );
 
-	connect( _patchList, 		SIGNAL( statusChanged()	        	),
-		 this,		 	SLOT  ( autoResolveDependencies() 	) );
+	connect( _patchList,		SIGNAL( statusChanged()			),
+		 this,			SLOT  ( autoResolveDependencies()	) );
 
 	if ( _pkgConflictDialog )
 	{
-	    connect( _pkgConflictDialog,SIGNAL( updatePackages()      		),
-		     _patchList,	SLOT  ( updateItemStates() 		) );
+	    connect( _pkgConflictDialog,SIGNAL( updatePackages()		),
+		     _patchList,	SLOT  ( updateItemStates()		) );
 	}
 
-	connect( this,		 	SIGNAL( refresh()			),
-		 _patchList, 	 	SLOT  ( updateItemStates() 		) );
+	connect( this,			SIGNAL( refresh()			),
+		 _patchList,		SLOT  ( updateItemStates()		) );
 
     }
 }
@@ -1023,44 +1022,43 @@ YQPackageSelector::connectPatchList()
 void
 YQPackageSelector::pkgExport()
 {
-    QY2FloppyMountDialog fileDialog( this,				// parent
-				      "user.sel",			// startWith
-				      "*.sel;;*",			// filter
-				      _( "Save Package List" ),		// caption
-				      _floppyDevice,			// floppyDevice
-				      "/media/floppy",			// floppyMountPoint
-				      false );				// startWithFloppy
-
-    QString filename = fileDialog.askForSaveFileName();
-
-#if 0
-    QString filename = YQUI::ui()->askForSaveFileName( QString( "user.sel" ),	// startsWith
-							   QString( "*.sel;;*" ),	// filter
-							   _( "Save Package List" ) );
-#endif
-
+    QString filename = YQUI::ui()->askForSaveFileName( QString( DEFAULT_EXPORT_FILE_NAME ),	// startsWith
+						       QString( "*.xml;;*" ),			// filter
+						       _( "Save Package List" ) );
 
     if ( ! filename.isEmpty() )
     {
 	y2milestone( "Exporting package list to %s", (const char *) filename );
-#ifdef FIXME
-	zypp::PackageImEx exporter;
-	exporter.getPMState();
 
-	if ( exporter.doExport( Pathname( (const char *) filename ) ) )
+	zypp::syscontent::Writer writer;
+	const zypp::ResPool & pool = zypp::getZYpp()->pool();
+
+	// The ZYPP obfuscated C++ contest proudly presents:
+	
+	for_each( pool.begin(), pool.end(),
+		  boost::bind( &zypp::syscontent::Writer::addIf,
+			       boost::ref( writer ),
+			       _1 ) );
+	// Yuck. What a mess.
+	//
+	// Does anybody seriously believe this kind of thing is easier to read,
+	// let alone use? Get real. This is an argument in favour of all C++
+	// haters. And it's one that is really hard to counter.
+	//
+	// -sh 2006-12-13
+
+	try
 	{
-	    // Success
-
-	    autoResolveDependencies();
+	    std::ofstream exportFile( fromUTF8( filename ) );
+	    exportFile << writer;
 	}
-	else	// Error
-#endif
+	catch ( std::exception & exception )
 	{
 	    y2warning( "Error writing package list to %s", (const char *) filename );
 
-	    // zypp::PackageImEx::doExport() might have left over a partially written file.
+	    // The export might have left over a partially written file.
 	    // Try to delete that. Don't care if it doesn't exist and unlink() fails.
-	    ( void ) unlink( (const char *) filename );
+	    (void) unlink( (const char *) filename );
 
 	    // Post error popup
 	    QMessageBox::warning( this,						// parent
@@ -1070,8 +1068,6 @@ YQPackageSelector::pkgExport()
 				  QMessageBox::NoButton,			// button1
 				  QMessageBox::NoButton );			// button2
 	}
-
-	fileDialog.unmount( true ); // manual call only necessary if verbose mode desired
     }
 }
 
@@ -1079,40 +1075,24 @@ YQPackageSelector::pkgExport()
 void
 YQPackageSelector::pkgImport()
 {
-    QY2FloppyMountDialog fileDialog( this,				// parent
-				      "user.sel",			// startWith
-				      "*.sel;;*",			// filter
-				      _( "Load Package List" ),		// caption
-				      _floppyDevice,			// floppyDevice
-				      "/media/floppy",			// floppyMountPoint
-				      false );				// startWithFloppy
-
-    QString filename = fileDialog.askForExistingFile();
-
-#if 0
-    QString filename = 	QFileDialog::getOpenFileName( "user.sel",			// startsWith
-						      "*.sel;;*",			// filter
+    QString filename =	QFileDialog::getOpenFileName( DEFAULT_EXPORT_FILE_NAME,		// startsWith
+						      "*.xml+;;*",			// filter
 						      this,				// parent
 						      0,				// name
 						      _( "Load Package List" ) );	// caption
-#endif
 
     if ( ! filename.isEmpty() )
     {
 	y2milestone( "Importing package list from %s", (const char *) filename );
-#ifdef FIXME
-	zypp::PackageImEx importer;
-	importer.getPMState();
 
-	if ( importer.doImport( Pathname( (const char *) filename ) ) )
+	try
 	{
-	    // Success
-
-	    importer.setPMState();
-	    emit refresh();
+	    std::ifstream importFile( fromUTF8( filename ) );
+	    zypp::syscontent::Reader reader( importFile );
+	    
+#warning FIXME put syscontent::Reader content back into pool
 	}
-	else // Error
-#endif
+	catch ( const zypp::Exception & exception )
 	{
 	    y2warning( "Error reading package list from %s", (const char *) filename );
 
@@ -1125,8 +1105,8 @@ YQPackageSelector::pkgImport()
 				  QMessageBox::NoButton );			// button2
 	}
 
- 	fileDialog.unmount( true ); // manual call only necessary if verbose mode desired
-   }
+	emit refresh();
+    }
 }
 
 

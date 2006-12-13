@@ -68,8 +68,7 @@ class YQPackageSelector : public YQPackageSelectorBase
 public:
 
     YQPackageSelector( QWidget *		parent,
-		       const YWidgetOpt & 	opt,
-		       const YCPString &	floppyDevice );
+		       const YWidgetOpt & 	opt   );
 
 
 public slots:
@@ -282,7 +281,6 @@ protected:
     bool				_updateMode;
     bool				_summaryMode;
     bool				_instSourcesMode;
-    QString				_floppyDevice;
 
     QCheckBox *				_autoDependenciesCheckBox;
     QPushButton *			_checkDependenciesButton;
