@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jan  4 18:48:34 CET 2007 - sh@suse.de
+
+- Implemented feature #300729: Saving of patterns and packages
+- V 2.13.75 
+
+-------------------------------------------------------------------
 Fri Dec  1 15:56:54 CET 2006 - sh@suse.de
 
 - Merged 10.2 fixes (r34246:34581) back to SLE-10-SP1 branch

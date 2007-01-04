@@ -87,6 +87,8 @@
 
 using std::max;
 using std::string;
+using std::map;
+using std::pair;
 
 #define SPACING				6
 #define MARGIN				4
@@ -1028,13 +1030,11 @@ YQPackageSelector::pkgExport()
 
     if ( ! filename.isEmpty() )
     {
-	y2milestone( "Exporting package list to %s", (const char *) filename );
-
 	zypp::syscontent::Writer writer;
 	const zypp::ResPool & pool = zypp::getZYpp()->pool();
 
 	// The ZYPP obfuscated C++ contest proudly presents:
-	
+
 	for_each( pool.begin(), pool.end(),
 		  boost::bind( &zypp::syscontent::Writer::addIf,
 			       boost::ref( writer ),
@@ -1050,20 +1050,23 @@ YQPackageSelector::pkgExport()
 	try
 	{
 	    std::ofstream exportFile( fromUTF8( filename ) );
+	    exportFile.exceptions( std::ios_base::badbit | std::ios_base::failbit );
 	    exportFile << writer;
+
+	    y2milestone( "Package list exported to %s", (const char *) filename );
 	}
 	catch ( std::exception & exception )
 	{
-	    y2warning( "Error writing package list to %s", (const char *) filename );
+	    y2warning( "Error exporting package list to %s", (const char *) filename );
 
 	    // The export might have left over a partially written file.
-	    // Try to delete that. Don't care if it doesn't exist and unlink() fails.
+	    // Try to delete it. Don't care if it doesn't exist and unlink() fails.
 	    (void) unlink( (const char *) filename );
 
 	    // Post error popup
 	    QMessageBox::warning( this,						// parent
 				  _( "Error" ),					// caption
-				  _( "Error writing package list to %1" ).arg( filename ),
+				  _( "Error exporting package list to %1" ).arg( filename ),
 				  QMessageBox::Ok | QMessageBox::Default,	// button0
 				  QMessageBox::NoButton,			// button1
 				  QMessageBox::NoButton );			// button2
@@ -1089,8 +1092,68 @@ YQPackageSelector::pkgImport()
 	{
 	    std::ifstream importFile( fromUTF8( filename ) );
 	    zypp::syscontent::Reader reader( importFile );
-	    
-#warning FIXME put syscontent::Reader content back into pool
+
+	    //
+	    // Put reader contents into maps
+	    //
+
+	    typedef zypp::syscontent::Reader::Entry	ZyppReaderEntry;
+	    typedef std::pair<string, ZyppReaderEntry>	ImportMapPair;
+
+	    map<string, ZyppReaderEntry> importPkg;
+	    map<string, ZyppReaderEntry> importPatterns;
+
+	    for ( zypp::syscontent::Reader::const_iterator it = reader.begin();
+		  it != reader.end();
+		  ++ it )
+	    {
+		string kind = it->kind();
+
+		if      ( kind == "package" ) 	importPkg.insert     ( ImportMapPair( it->name(), *it ) );
+		else if ( kind == "pattern" )	importPatterns.insert( ImportMapPair( it->name(), *it ) );
+	    }
+
+	    y2debug( "Found %u packages and %u patterns in %s",
+		     importPkg.size(),
+		     importPatterns.size(),
+		     (const char *) filename );
+
+
+	    //
+	    // Set status of all patterns and packages according to import map
+	    //
+
+	    for ( ZyppPoolIterator it = zyppPatternsBegin();
+		  it != zyppPatternsEnd();
+		  ++it )
+	    {
+		ZyppSel selectable = *it;
+		importSelectable( *it, importPatterns.find( selectable->name() ) != importPatterns.end(), "pattern" );
+	    }
+
+	    for ( ZyppPoolIterator it = zyppPkgBegin();
+		  it != zyppPkgEnd();
+		  ++it )
+	    {
+		ZyppSel selectable = *it;
+		importSelectable( *it, importPkg.find( selectable->name() ) != importPkg.end(), "package" );
+	    }
+
+
+	    //
+	    // Display result
+	    //
+
+	    emit refresh();
+
+	    if ( _statusFilterView )
+	    {
+		// Switch to "Installation Summary" filter view
+
+		_filters->showPage( _statusFilterView );
+		_statusFilterView->filter();
+	    }
+
 	}
 	catch ( const zypp::Exception & exception )
 	{
@@ -1104,11 +1167,87 @@ YQPackageSelector::pkgImport()
 				  QMessageBox::NoButton,			// button1
 				  QMessageBox::NoButton );			// button2
 	}
-
-	emit refresh();
     }
 }
 
+
+void
+YQPackageSelector::importSelectable( ZyppSel		selectable,
+				     bool		isWanted,
+				     const char * 	kind )
+{
+    ZyppStatus oldStatus = selectable->status();
+    ZyppStatus newStatus = oldStatus;
+
+    if ( isWanted )
+    {
+	//
+	// Make sure this selectable does not get installed
+	//
+
+	switch ( oldStatus )
+	{
+	    case S_Install:
+	    case S_AutoInstall:
+	    case S_KeepInstalled:
+	    case S_Protected:
+	    case S_Update:
+	    case S_AutoUpdate:
+		newStatus = oldStatus;
+		break;
+
+	    case S_Del:
+	    case S_AutoDel:
+		newStatus = S_KeepInstalled;
+		y2debug( "Keeping %s %s", kind, selectable->name().c_str() );
+		break;
+
+	    case S_NoInst:
+	    case S_Taboo:
+
+		if ( selectable->hasCandidateObj() )
+		{
+		    newStatus = S_Install;
+		    y2debug( "Adding %s %s", kind, selectable->name().c_str() );
+		}
+		else
+		{
+		    y2debug( "Can't add %s %s: No candidate",
+			     kind, selectable->name().c_str() );
+		}
+		break;
+	}
+    }
+    else // ! isWanted
+    {
+	//
+	// Make sure this selectable does not get installed
+	//
+
+	switch ( oldStatus )
+	{
+	    case S_Install:
+	    case S_AutoInstall:
+	    case S_KeepInstalled:
+	    case S_Protected:
+	    case S_Update:
+	    case S_AutoUpdate:
+		newStatus = S_Del;
+		y2debug( "Deleting %s %s", kind, selectable->name().c_str() );
+		break;
+
+	    case S_Del:
+	    case S_AutoDel:
+	    case S_NoInst:
+	    case S_Taboo:
+		newStatus = oldStatus;
+		break;
+	}
+    }
+
+    if ( oldStatus != newStatus )
+	selectable->set_status( newStatus );
+}
 
 
 void
