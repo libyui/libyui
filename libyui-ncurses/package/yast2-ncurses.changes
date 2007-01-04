@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Thu Jan  4 11:26:58 CET 2007 - kmachalkova@suse.cz
+
+- Added functionality to update list of pkgs if newer version is
+  available (#227043)
+- Improved switching between states of pkgs (install->don't install 
+  update->don't update) (partly #204072)
+- 2.13.56
+
+-------------------------------------------------------------------
 Tue Dec 12 12:53:37 CET 2006 - gs@suse.de
 
 - Package Installation: add functionality 'Verify System' to Etc./

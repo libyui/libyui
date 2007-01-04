@@ -155,6 +155,7 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
     eventHandlerMap[ PkgNames::DontInstall()->toString() ] = &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::DeleteAll()->toString() ] = &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::DontDelete()->toString() ] = &PackageSelector::StatusHandler;
+    eventHandlerMap[ PkgNames::UpdateNewer()->toString() ] = &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::UpdateAll()->toString() ] = &PackageSelector::StatusHandler;
     eventHandlerMap[ PkgNames::DontUpdate()->toString() ] = &PackageSelector::StatusHandler;
     
@@ -1754,6 +1755,10 @@ bool PackageSelector::StatusHandler( const NCursesEvent&  event )
     else if ( event.selection->compare( PkgNames::DontDelete() ) == YO_EQUAL )
     {
 	packageList->changeListObjStatus( NCPkgTable::A_DontDelete );
+    }
+    else if ( event.selection->compare( PkgNames::UpdateNewer() ) == YO_EQUAL )
+    {
+	packageList->changeListObjStatus( NCPkgTable::A_UpdateNewer );
     }
     else if ( event.selection->compare( PkgNames::UpdateAll() ) == YO_EQUAL )
     {

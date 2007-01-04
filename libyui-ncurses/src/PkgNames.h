@@ -118,7 +118,12 @@ public:
      * Widget id of the menu item Action/All packages/Select all
      */
     static const YCPValue& DontInstall ();
-    
+
+    /**
+     * Widget id of the menu item Action/All packages/Update if newer version available
+     */
+    static const YCPValue& UpdateNewer();
+
     /**
      * Widget id of the menu item Action/All packages/Update all
      */

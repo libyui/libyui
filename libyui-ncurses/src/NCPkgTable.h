@@ -101,6 +101,7 @@ public:
 	A_DontInstall,
 	A_Delete,
 	A_DontDelete,
+	A_UpdateNewer,
 	A_Update,
 	A_DontUpdate,
 	A_Unknown

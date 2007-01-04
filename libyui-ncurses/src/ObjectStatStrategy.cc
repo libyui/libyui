@@ -158,6 +158,20 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 		valid = false;
 	    }
 	    break;
+	//this is the case for 'going back' i.e. S_Install -> S_NoInst, S_Update -> S_KeepInstalled  
+	//not for S_Del, since '+' key does this
+	case '<':
+	    if ( oldStatus == S_Install
+		 || oldStatus == S_AutoInstall )
+	    {
+		retStat = S_NoInst;
+	    }
+	    else if ( oldStatus == S_Update 
+		      || oldStatus == S_AutoUpdate )
+	    {
+		retStat = S_KeepInstalled;
+	    }
+	    break;
 	case '!':	// set S_Taboo or S_Protected
 	    if ( !installed )
 	    {
