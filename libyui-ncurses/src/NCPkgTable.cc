@@ -1006,7 +1006,7 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 		case A_DontInstall: {
 		    if ( slbPtr->status() == S_Install
 			 ||  slbPtr->status() == S_AutoInstall )
-			ok = statusStrategy->keyToStatus( '-', slbPtr, objPtr, newStatus );
+			ok = statusStrategy->keyToStatus( '<', slbPtr, objPtr, newStatus );
 		    break;
 		}
 		case A_Delete: {
@@ -1020,6 +1020,13 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 			ok = statusStrategy->keyToStatus( '+', slbPtr, objPtr, newStatus );
 		    break;
 		}
+		case A_UpdateNewer: {
+		    if ( slbPtr->status() == S_KeepInstalled && slbPtr->hasCandidateObj() ) {
+		        if ( slbPtr->installedObj()->edition() < slbPtr->candidateObj()->edition() ) 
+			    ok = statusStrategy->keyToStatus( '>', slbPtr, objPtr, newStatus );
+		    }
+		    break;
+		}
 		case A_Update: {
 		    if ( slbPtr->status() == S_KeepInstalled )
 			ok = statusStrategy->keyToStatus( '>', slbPtr, objPtr, newStatus );
@@ -1028,7 +1035,7 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 		case A_DontUpdate: {
 		    if ( slbPtr->status() == S_Update
 			 || slbPtr->status() == S_AutoUpdate )
-			ok = statusStrategy->keyToStatus( '-', slbPtr, objPtr, newStatus );
+			ok = statusStrategy->keyToStatus( '<', slbPtr, objPtr, newStatus );
 		    break;
 		}
 		default:

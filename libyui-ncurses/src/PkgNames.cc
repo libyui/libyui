@@ -121,6 +121,13 @@ const YCPValue& PkgNames::Update ()
     return value;
 }
 
+// the menu entry Action/update if newer version available 
+const YCPValue& PkgNames::UpdateNewer ()
+{
+    static const YCPValue value = createIdValue ( "updnewer" );
+    return value;
+}
+
 // the menu entry Action/update all
 const YCPValue& PkgNames::UpdateAll ()
 {
@@ -128,7 +135,7 @@ const YCPValue& PkgNames::UpdateAll ()
     return value;
 }
 
-// the menu entry Action/update all
+// the menu entry Action/do not update all
 const YCPValue& PkgNames::DontUpdate ()
 {
     static const YCPValue value = createIdValue ( "dontupd" );
