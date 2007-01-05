@@ -146,9 +146,7 @@ bool YQCheckBox::setKeyboardFocus()
 
 void YQCheckBox::stateChanged( int newState )
 {
-    int oldState = _qt_checkbox->state();
-
-    y2milestone( "old: %d; new: %d", oldState, newState );
+    // y2milestone( "new state: %d", newState );
     
     if ( getNotify() )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );

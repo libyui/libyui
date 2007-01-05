@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Jan  5 20:58:46 CET 2007 - sh@suse.de
+
+- Added CheckBoxFrame widget for feature #5673 
+
+-------------------------------------------------------------------
 Thu Jan  4 18:48:34 CET 2007 - sh@suse.de
 
 - Implemented feature #300729: Saving of patterns and packages

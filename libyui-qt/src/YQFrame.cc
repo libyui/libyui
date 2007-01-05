@@ -55,7 +55,6 @@ YQFrame::setSize( long newWidth, long newHeight )
 
     if ( numChildren() > 0 )
 	YContainerWidget::child(0)->setSize( newChildWidth, newChildHeight );
-
 }
 
 
@@ -88,7 +87,7 @@ long YQFrame::nicesize( YUIDimension dim )
 void
 YQFrame::childAdded( YWidget * child )
 {
-    ( (QWidget *) child->widgetRep() )->move ( frameWidth(), fontMetrics().height() );
+    ( (QWidget *) child->widgetRep() )->move( frameWidth(), fontMetrics().height() );
 }
 
 
