@@ -27,6 +27,7 @@
 #include "YCheckBoxFrame.h"
 
 class QWidget;
+class QCheckBox;
 
 class YQCheckBoxFrame : public QGroupBox, public YCheckBoxFrame
 {
@@ -97,6 +98,30 @@ protected:
      * does nothing.
      */
     void childAdded( YWidget * child );
+
+    /**
+     * Prevent standard QGroupBox behaviour to always enable or disable all
+     * children according to its check box's status (can't be inverted or left
+     * to the application).
+     *
+     * This is a nasty hack, but it prevents oversights from the Qt designers.
+     * Their view on how that check box should affect the frame content appears
+     * to be somewhat bit limiting.
+     **/
+    void preventQGroupBoxAutoEnablement();
+
+    /**
+     * Reimplemented from QGroupBox to prevent QGroupBox from disabling
+     * children according to the check box status as the children are inserted.
+     **/
+    virtual void childEvent( QChildEvent * );
+
+
+    //
+    // Data members
+    //
+
+    QCheckBox * _checkBox;
 };
 
 

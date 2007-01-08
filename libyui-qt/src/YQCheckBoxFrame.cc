@@ -20,6 +20,7 @@
 
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
+#include <qcheckbox.h>
 #include "YQUI.h"
 #include "YEvent.h"
 #include "utf8.h"
@@ -42,23 +43,25 @@ YQCheckBoxFrame::YQCheckBoxFrame( QWidget * 		parent,
     QGroupBox::setCheckable( true );
     setFont( YQUI::ui()->currentFont() );
     setWidgetRep ( this );
-
-    connect( this, SIGNAL( toggled     ( bool ) ),
-	     this, SLOT  ( stateChanged( bool ) ) );
-    
-    setChecked( initialValue );
+    preventQGroupBoxAutoEnablement();
+    QFrame::setEnabled( ! opt.isDisabled.value() );
+			   
+    setValue( initialValue );
 }
 
 
 bool YQCheckBoxFrame::getValue()
 {
-    return isChecked();
+    return _checkBox ? _checkBox->isChecked() : QGroupBox::isChecked();
 }
 
 
 void YQCheckBoxFrame::setValue( bool newValue )
 {
-    setChecked( newValue );
+    if ( _checkBox )
+	_checkBox->setChecked( newValue );
+    else
+	setChecked( newValue );
 }
 
 
@@ -74,6 +77,62 @@ void YQCheckBoxFrame::setEnabling( bool enabled )
 	setChildrenEnabling( false );
 	QFrame::setEnabled( true );
     }
+}
+
+
+void YQCheckBoxFrame::preventQGroupBoxAutoEnablement()
+{
+    /*
+     * This is a nasty hack. But it is necessary because QGroupBox handles its
+     * internal check box too nearsightedly: It forces all children to be
+     * enabled or disabled depending on the status of the check box. The
+     * behaviour cannot be inverted or suppressed.
+     *
+     * In some cases, however, it makes sense to let the application decide to
+     * handle that differently. Since the YaST2 UI is a toolkit, we leave this
+     * decision up to the application rather than forcing any specific behaviour.
+     */
+
+    // Find the check box in the child hierarchy (as a direct child)
+
+    _checkBox = dynamic_cast<QCheckBox *>( QObject::child( 0,		// objName
+							   "QCheckBox",	// inheritsClass
+							   false ) );	// recursive
+
+    if ( ! _checkBox )
+    {
+	y2warning( "Can't find QCheckBox child" );
+
+	connect( this, SIGNAL( toggled     ( bool ) ),
+		 this, SLOT  ( stateChanged( bool ) ) );
+
+	return;
+    }
+
+    // Disconnect all signals to this object.
+    //
+    // In particular, disconnect the connection from the check box's
+    // 'toggled()' signal to this object's parent class's (private)
+    // setChildrenEnabled() method.
+
+    disconnect( _checkBox,	// sender
+		0,		// signal
+		this,		// receiver
+		0 );		// slot (private method in parent class)
+
+    // Connect the check box directly to this class.
+
+    connect( _checkBox, SIGNAL( toggled     ( bool ) ),
+	     this,	SLOT  ( stateChanged( bool ) ) );
+}
+
+
+void YQCheckBoxFrame::childEvent( QChildEvent * )
+{
+    // Reimplemented to prevent the parent class disabling child widgets
+    // according to its default policy.
+
+    // y2debug( "ChildEvent" );
 }
 
 
@@ -125,10 +184,9 @@ YQCheckBoxFrame::childAdded( YWidget * child )
 
 void YQCheckBoxFrame::stateChanged( bool newState )
 {
-    // y2milestone( "new state: %d", newState );
-    setChecked( newState );
+    y2debug( "new state: %d", newState );
     handleChildrenEnablement( newState );
-    
+
     if ( getNotify() )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
