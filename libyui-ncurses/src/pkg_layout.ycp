@@ -88,6 +88,13 @@
 										     `item( `id("autodeps"), _( "[X] &Automatic Dependency Check" ) ),
 										     `item( `id("verifysystem"), _( "    &Verify System" ) ) ]
 										    ),
+									      // menu item - list of all packages in the system
+									      `menu(  _("All &Packages List"),
+										    // action on list of all packages-export to xml file
+										    [`item( `id("export"),  _("&Export to File") ),
+										    // action on list of all packages-import from xml file
+										     `item( `id("import"), _("&Import from File") ) ]
+										    ), 
 									     `item( `id("testcase"), 	_( "Generate Dependency Resolver &Test Case" ) )
 /*#ifdef FIXME
 									     ,
@@ -103,7 +110,6 @@
 					     )
 			       ),
 			 `HSpacing(0.3)
-					   
 			 ),
 		  `VSpacing(0.3),
 		  `VWeight( 50, `HBox(`HSpacing(0.3),

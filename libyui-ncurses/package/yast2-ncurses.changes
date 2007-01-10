@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Jan 10 16:04:37 CET 2007 - kmachalkova@suse.cz
+
+- Added functionality to export/import list of all packages and 
+  patterns to xml file (FaTE #300729)
+- 2.13.57 
+
+-------------------------------------------------------------------
 Thu Jan  4 11:26:58 CET 2007 - kmachalkova@suse.cz
 
 - Added functionality to update list of pkgs if newer version is

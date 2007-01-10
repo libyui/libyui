@@ -214,6 +214,20 @@ const YCPValue& PkgNames::AutoDeps ()
     return value;
 }
 
+// the menu entry Etc./Package list/Export to file
+const YCPValue& PkgNames::ExportToFile () 
+{
+	static const YCPValue value = createIdValue ( "export" );
+        return value;
+}
+
+// the menu entry Etc./Package list/Import from file
+const YCPValue& PkgNames::ImportFromFile () 
+{
+	static const YCPValue value = createIdValue ("import");
+	return value;
+}
+
 // the menu entry Etc./Save selection
 const YCPValue& PkgNames::SaveSel  ()
 {

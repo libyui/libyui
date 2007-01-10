@@ -230,6 +230,16 @@ public:
      */
     static const YCPValue& AutoDeps ();
 
+   /**
+     *  Widget id of the Etc./Package List/Export menu item
+     */
+    static const YCPValue& ExportToFile ();
+
+   /**
+     *  Widget id of the Etc./Package List/Import menu item
+     */
+    static const YCPValue& ImportFromFile ();
+
     /**
      *  Widget id of the Etc./Selections menu item
      */
