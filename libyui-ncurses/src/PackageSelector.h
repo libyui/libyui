@@ -244,6 +244,12 @@ class PackageSelector
     bool TestcaseHandler ( const NCursesEvent& event );
 
     /**
+     * Export/Import list of all packages and patterns to/from file
+     *
+     */
+    bool FileHandler ( const NCursesEvent& event );
+
+    /**
     * Handler function for "OK button pressed"
     * @param event The Ncurses event
     * @return bool 
@@ -372,7 +378,18 @@ class PackageSelector
      * @return bool
      **/
     bool checkPatch( ZyppPatch patch, ZyppSel selectable, string filter );
-    
+   
+   /**
+    * Set status of a selectable according to its presence   
+    * in the list imported from xml file (zypp::syscontent::Reader)
+    * 
+    * @param selectable a selectable
+    * @param isWanted   should be installed or not
+    * @param kind "package" or "pattern" 	
+    * @return void	
+    **/
+    void importSelectable ( ZyppSel selectable, bool isWanted, const char* kind );
+ 
    /**
     * Returns whether automatic dependency is on or off
     * @return bool   

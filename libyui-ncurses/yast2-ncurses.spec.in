@@ -17,8 +17,8 @@ Obsoletes:	yast2-ui-ncurses-devel
 Provides:	y2curses
 Obsoletes:	y2curses
 Requires:	glibc-locale
-#zypp::ui::PatternContents
-Requires:	libzypp >= 2.7.0
+#zypp::syscontent::Reader/Writer
+Requires:	libzypp >= 2.10.0
 # UI builtins
 Requires:	yast2-core >= 2.15.1
 %description
