@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Jan 12 14:21:51 CET 2007 - gs@suse.de
+
+- CheckBoxFrame widget added (Fate #5673) 
+
+-------------------------------------------------------------------
 Wed Jan 10 17:46:18 CET 2007 - kmachalkova@suse.cz
 
 - Added functionality to export/import list of all packages and
