@@ -38,6 +38,7 @@
 #include "NCEmpty.h"
 #include "NCSpacing.h"
 #include "NCFrame.h"
+#include "NCCheckBoxFrame.h"
 #include "NCImage.h"
 #include "NCLabel.h"
 #include "NCProgressBar.h"
@@ -373,6 +374,14 @@ YContainerWidget * YNCursesUI::createFrame( YWidget * parent, YWidgetOpt & opt,
   ONCREATE;
   return new NCFrame( dynamic_cast<NCWidget *>( parent ), opt,
 		      label );
+}
+
+YContainerWidget * YNCursesUI::createCheckBoxFrame( YWidget * parent, YWidgetOpt & opt,
+						    const YCPString & label, bool checked )
+{
+  ONCREATE;
+  return new NCCheckBoxFrame( dynamic_cast<NCWidget *>( parent ), opt,
+			      label, checked );
 }
 
 ///////////////////////////////////////////////////////////////////

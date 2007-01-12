@@ -144,6 +144,9 @@ public:
     virtual YContainerWidget * createFrame( YWidget * parent, YWidgetOpt & opt,
 					    const YCPString & label );
 
+    virtual YContainerWidget * createCheckBoxFrame( YWidget * parent, YWidgetOpt & opt,
+						    const YCPString & label,
+						    bool checked );
     //
     // Widget creation functions - leaf widgets
     //
