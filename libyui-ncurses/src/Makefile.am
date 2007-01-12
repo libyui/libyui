@@ -50,6 +50,7 @@ liby2ncurses_la_SOURCES =				\
 	NCSquash.h NCSquash.cc				\
 	NCAlignment.h NCAlignment.cc			\
 	NCFrame.h NCFrame.cc				\
+	NCCheckBoxFrame.h NCCheckBoxFrame.cc		\
 	NCSplit.h NCSplit.cc				\
 	NCReplacePoint.h NCReplacePoint.cc		\
 	NCRadioButtonGroup.h NCRadioButtonGroup.cc	\
