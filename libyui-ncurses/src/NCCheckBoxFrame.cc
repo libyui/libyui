@@ -43,8 +43,12 @@ NCCheckBoxFrame::NCCheckBoxFrame( NCWidget * parent, const YWidgetOpt & opt,
   setLabel( getLabel() );
   hotlabel = &label;
 
-  setValue( checked );
-  // don't call setEnabling( getValue() ); here (widgets not yet created!)		
+  if ( invertAutoEnable() )
+      setValue( false );
+  else
+      setValue( checked );
+
+// don't call setEnabling( getValue() ) here (widgets are not yet created!)		
 }
 
 ///////////////////////////////////////////////////////////////////
