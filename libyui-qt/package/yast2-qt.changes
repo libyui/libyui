@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jan 15 17:09:03 CET 2007 - sh@suse.de
+
+- Added Qt-UI support for feature #301178: verify installed system
+- V 2.13.77 
+
+-------------------------------------------------------------------
 Mon Jan 15 11:28:24 CET 2007 - sh@suse.de
 
 - Added Requires: yast2-core >= 2.13.33 to spec file 

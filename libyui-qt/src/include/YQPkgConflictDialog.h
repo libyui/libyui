@@ -92,6 +92,16 @@ public slots:
     int solveAndShowConflicts();
 
     /**
+     * Run the package dependency solver for the currently installed system
+     * plus the packages that are marked for installation (or update or...) and
+     * open the conflict dialog if there are any conflicts.
+     * Returns only when the conflict dialog is closed.
+     *
+     * Returns QDialog::Accepted or QDialog::Rejected.
+     **/
+    int verifySystem();
+
+    /**
      * Mini-wizard to generate solver test case:
      *
      *   - Inform user what this is all about
@@ -113,6 +123,22 @@ signals:
 
 
 protected:
+
+    /**
+     * Initialize solving: Post "busy" popup etc.
+     **/ 
+    void prepareSolving();
+
+    /**
+     * Process the result of solving: Post conflict dialog, if neccessary.
+     * 'success' is the return value of the preceding solver call.
+     * Returns either QDialog::Accepted or QDialog::Rejected.
+     **/
+    int  processSolverResult( bool success );
+    
+    //
+    // Data members
+    //
 
     YQPkgConflictList *	_conflictList;
     QPopupMenu *	_expertMenu;

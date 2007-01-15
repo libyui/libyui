@@ -126,6 +126,31 @@ YQPackageSelectorBase::resolvePackageDependencies()
 
 
 int
+YQPackageSelectorBase::verifySystem()
+{
+    if ( ! _pkgConflictDialog )
+    {
+	y2error( "No package conflict dialog existing" );
+	return QDialog::Accepted;
+    }
+
+
+    YQUI::ui()->busyCursor();
+    int result = _pkgConflictDialog->verifySystem();
+    YQUI::ui()->normalCursor();
+    
+    if ( result == QDialog::Accepted )
+    {
+	QMessageBox::information( this, "",
+				  _( "System dependencies verify OK." ),
+				  QMessageBox::Ok );
+    }
+
+    return result;
+}
+
+
+int
 YQPackageSelectorBase::checkDiskUsage()
 {
     if ( ! _diskUsageList )

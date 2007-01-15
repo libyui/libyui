@@ -702,9 +702,9 @@ YQPackageSelector::addMenus()
     CHECK_PTR( _extrasMenu );
     _menuBar->insertItem( _( "&Extras" ), _extrasMenu );
 
-    _extrasMenu->insertItem( _( "Show &Products" ), this, SLOT( showProducts() ) );
-
+    _extrasMenu->insertItem( _( "Show &Products" 		  ), this, SLOT( showProducts()    ) );
     _extrasMenu->insertItem( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), CTRL + Key_A );
+    _extrasMenu->insertItem( _( "&Verify System"                  ), this, SLOT( verifySystem()    ) );
 
     _extrasMenu->insertSeparator();
 

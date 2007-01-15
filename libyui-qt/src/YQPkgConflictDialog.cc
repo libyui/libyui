@@ -218,9 +218,46 @@ YQPkgConflictDialog::sizeHint() const
 int
 YQPkgConflictDialog::solveAndShowConflicts()
 {
-    int result = QDialog::Accepted;
-    CHECK_PTR( _conflictList );
+    prepareSolving();
 
+    y2debug( "Solving..." );
+    QTime solveTime;
+    solveTime.start();
+
+    // Solve.
+
+    bool success = zypp::getZYpp()->resolver()->resolvePool();
+
+    _totalSolveTime += solveTime.elapsed() / 1000.0;
+
+    y2debug( "Solving done in %f s - average: %f s",
+	     solveTime.elapsed() / 1000.0, averageSolveTime() );
+
+    return processSolverResult( success );
+}
+
+
+int
+YQPkgConflictDialog::verifySystem()
+{
+    prepareSolving();
+
+    y2debug( "Verifying system..." );
+    QTime solveTime;
+    solveTime.start();
+
+    bool success = zypp::getZYpp()->resolver()->verifySystem( true ); // considerNewHardware
+
+    y2debug( "System verified in %f s", solveTime.elapsed() / 1000.0 );
+
+    return processSolverResult( success );
+}
+
+
+void
+YQPkgConflictDialog::prepareSolving()
+{
+    CHECK_PTR( _conflictList );
     YQUI::ui()->busyCursor();
 
     if ( isVisible() )
@@ -253,31 +290,21 @@ YQPkgConflictDialog::solveAndShowConflicts()
         // event needs to be processed.
 	qApp->processEvents();
     }
+}
 
-    y2debug( "Solving..." );
-    QTime solveTime;
-    solveTime.start();
 
-    // Solve.
-
-    zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
-
-    bool success = resolver->resolvePool();
-
-    _totalSolveTime += solveTime.elapsed() / 1000.0;
-
-    y2debug( "Solving done in %f s - average: %f s",
-	     solveTime.elapsed() / 1000.0, averageSolveTime() );
-
+int
+YQPkgConflictDialog::processSolverResult( bool success )
+{
     if ( _busyPopup->isVisible() )
 	_busyPopup->hide();
-
 
     // Package states may have changed: The solver may have set packages to
     // autoInstall or autoUpdate. Make those changes known.
     emit updatePackages();
 
     YQUI::ui()->normalCursor();
+    int result = QDialog::Accepted;
 
     if ( success )	// Solving went without any complaints?
     {
@@ -291,7 +318,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
 	y2debug( "Dependency conflict!" );
 	YQUI::ui()->busyCursor();
 
-	_conflictList->fill( resolver->problems() );
+	_conflictList->fill( zypp::getZYpp()->resolver()->problems() );
 	YQUI::ui()->normalCursor();
 
 	if ( ! isVisible() )
