@@ -1,9 +1,9 @@
 -------------------------------------------------------------------
 Tue Jan 16 13:02:35 CET 2007 - gs@suse.de
 
-- Update spec file: Requires: yast2-core >= 2.13.33, libzypp >= 2.12.1
+- Spec file: Requires: yast2-core >= 2.13.33, libzypp >= 2.12.1
 - Improve CheckBoxFrame widget (related to Fate #5673)
-- Add arguments to verifySystem() call (related to Fate #301178)
+- Add argument to verifySystem() call (related to Fate #301178)
 - 2.13.59
 
 -------------------------------------------------------------------
