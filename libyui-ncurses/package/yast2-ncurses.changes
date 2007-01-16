@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jan 16 13:18:17 CET 2007 - gs@suse.de
+
+- Spec file: Requires: libzypp >= 2.12.1
+- Improve CheckBoxFrame widget (related to Fate #5673)
+- Add argument to verifySystem() call (related to Fate #301178) 
+
+-------------------------------------------------------------------
 Fri Jan 12 14:21:51 CET 2007 - gs@suse.de
 
 - CheckBoxFrame widget added (Fate #5673) 
