@@ -38,13 +38,15 @@ NCCheckBoxFrame::NCCheckBoxFrame( NCWidget * parent, const YWidgetOpt & opt,
   framedim.Pos = wpos( 1 );
   framedim.Sze = wsze( 2 );
 
-  checkBox = new NCCheckBox( parent, opt, nlabel, checked );
-
   setLabel( getLabel() );
   hotlabel = &label;
 
-  setValue( checked );
-  // don't call setEnabling( getValue() ); here (widgets not yet created!)		
+  if ( invertAutoEnable() )
+      setValue( !checked );
+  else
+      setValue( checked );
+
+// don't call setEnabling( getValue() ) here (widgets are not yet created!)		
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -181,43 +183,20 @@ void NCCheckBoxFrame::wRedraw()
   win->bkgdset( style.plain );
   win->printw( 0, 1, "[ ] " );
 
-  if ( getValue() == true )
-      win->printw( 0, 2, "%c", 'x' );
+  if ( !invertAutoEnable() )
+  {
+      if ( getValue() )
+	  win->printw( 0, 2, "%c", 'x' );
+      else
+	  win->printw( 0, 2, "%c", ' ' );
+  }
   else
-      win->printw( 0, 2, "%c", ' ' ); 
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBoxFrame::getValue()
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
-bool NCCheckBoxFrame::getValue()
-{
-    YCPValue retVal = YCPBoolean ( false );
-    
-    if ( checkBox )
-	retVal = checkBox->getValue();
-    
-    return retVal->asBoolean()->value();
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBoxFrame::setValue()
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
-void NCCheckBoxFrame::setValue( bool newValue )
-{
-    
-    if ( checkBox )
-	checkBox->setValue( YCPBoolean( newValue ) );
+  {
+      if ( getValue() )
+	  win->printw( 0, 2, "%c", ' ' );
+      else
+	  win->printw( 0, 2, "%c", 'x' );
+  }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -236,7 +215,7 @@ NCursesEvent NCCheckBoxFrame::wHandleInput( wint_t key )
        key == KEY_RETURN ||
        key == KEY_HOTKEY )
   {
-      if ( getValue() == true )		// checked
+      if ( getValue() == true )		// enabled
       {
 	  setValue( false );
       }
