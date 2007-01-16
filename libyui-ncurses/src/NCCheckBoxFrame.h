@@ -43,6 +43,7 @@ class NCCheckBoxFrame : public YCheckBoxFrame, public NCWidget {
   private:
 
     NClabel label;
+    bool isEnabled;
     
   protected:
 
@@ -51,8 +52,6 @@ class NCCheckBoxFrame : public YCheckBoxFrame, public NCWidget {
     virtual const char * location() const { return "NCCheckBoxFrame"; }
 
     virtual void wRedraw();
-
-    NCCheckBox * checkBox;
 
   public:
 
@@ -67,9 +66,9 @@ class NCCheckBoxFrame : public YCheckBoxFrame, public NCWidget {
 
     virtual void setEnabling( bool do_bv );
 
-    virtual bool getValue();
+    virtual bool getValue() { return isEnabled; }
     
-    virtual void setValue( bool checked );
+    virtual void setValue( bool enable ) { isEnabled = enable; }
 
     virtual bool setKeyboardFocus();
 
