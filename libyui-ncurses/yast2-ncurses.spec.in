@@ -18,7 +18,7 @@ Provides:	y2curses
 Obsoletes:	y2curses
 Requires:	glibc-locale
 #zypp::syscontent::Reader/Writer
-Requires:	libzypp >= 2.10.0
+Requires:	libzypp >= 2.12.1
 # UI builtins
 Requires:	yast2-core >= 2.13.33
 %description
