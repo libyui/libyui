@@ -477,6 +477,7 @@ void NCTextPad::setText( const NCtext & ntext )
 
     unsigned cc = 0;
     for (wstring::const_iterator c = line->str().begin(); c!=line->str().end(); c++) {
+	//replace tabs for right arrows (#66104)
 	if (*c == 9) { // horizontal tabulation
 	    wch[0] = 8677; // U+21E5 RIGHTWARDS ARROW TO BAR (rightward tab)
 	} else {
@@ -521,6 +522,10 @@ wstring NCTextPad::getText() const
     for ( unsigned c = 0; c < (*cgetl); ++c ) {
       myself->in_wchar( l, c, &cchar );
       getcchar( &cchar, wch, &attr, &colorpair, NULL );
+
+      //replace right arrow back for horizontal tab - see setText method above (#142509)
+      if (wch[0] == 8677) 
+          wch[0] = 9; 	
       ret += wch[0];
     }
     ret += L"\n";

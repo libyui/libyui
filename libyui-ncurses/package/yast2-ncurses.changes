@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Jan 17 16:27:05 CET 2007 - kmachalkova@suse.cz
+
+- Substitute right arrows back for tab characters when querying
+  content of MultiLineEdit widget (mostly) (#142509)
+- 2.15.5
+ 
+-------------------------------------------------------------------
 Tue Jan 16 13:18:17 CET 2007 - gs@suse.de
 
 - Spec file: Requires: libzypp >= 2.12.1
