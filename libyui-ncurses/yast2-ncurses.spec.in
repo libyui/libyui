@@ -17,9 +17,9 @@ Obsoletes:	yast2-ui-ncurses-devel
 Provides:	y2curses
 Obsoletes:	y2curses
 Requires:	glibc-locale
-#zypp::syscontent::Reader/Writer
+#Resolver::verifySystem
 Requires:	libzypp >= 2.12.1
-# UI builtins
+# UI builtins (CheckBoxFrame)
 Requires:	yast2-core >= 2.13.33
 %description
 -
