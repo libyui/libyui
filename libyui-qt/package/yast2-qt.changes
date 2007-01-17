@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Jan 17 18:51:15 CET 2007 - sh@suse.de
+
+- Fixed bug #218669: Broken UTF8 chars in pkg to text file export 
+- Fixed bug #227409: Add installed packages to text file export 
+- Fixed bug #229368: comparison with string literal
+
+-------------------------------------------------------------------
 Mon Jan 15 17:09:03 CET 2007 - sh@suse.de
 
 - Added Qt-UI support for feature #301178: verify installed system
