@@ -27,7 +27,7 @@
 
 inline QString _( const char * msgid )
 {
-	return msgid == "" ? "" : QString::fromUtf8( gettext(msgid ) );
+	return ( !msgid || !*msgid ) ? "" : QString::fromUtf8( gettext(msgid ) );
 }
 
 inline QString _( const char * msgid1, const char * msgid2, unsigned long int n )
