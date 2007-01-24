@@ -25,6 +25,7 @@
 #include "YQAlignment.h"
 #include "YQBarGraph.h"
 #include "YQCheckBox.h"
+#include "YQCheckBoxFrame.h"
 #include "YQColoredLabel.h"
 #include "YQComboBox.h"
 #include "YQDate.h"
@@ -89,6 +90,14 @@ YContainerWidget * YQUI::createFrame	( YWidget *		parent,
 					  const YCPString & 	label )
 {
     return new YQFrame ( ( (QWidget *) parent->widgetRep() ), opt, label );
+}
+
+YContainerWidget * YQUI::createCheckBoxFrame	( YWidget *		parent,
+						  YWidgetOpt & 		opt,
+						  const YCPString & 	label,
+						  bool			initialValue )
+{
+    return new YQCheckBoxFrame ( ( (QWidget *) parent->widgetRep() ), opt, label, initialValue );
 }
 
 YContainerWidget * YQUI::createSplit	( YWidget *		parent,
@@ -176,7 +185,7 @@ YWidget * YQUI::createPackageSelector	( YWidget *		parent,
     
     try
     {
-	w = new YQPackageSelector( (QWidget *) ( parent->widgetRep() ), opt, floppyDevice );
+	w = new YQPackageSelector( (QWidget *) ( parent->widgetRep() ), opt );
     }
     catch (const std::exception & e)
     {

@@ -417,6 +417,7 @@ protected:
 
     YContainerWidget * createAlignment		( YWidget * parent, YWidgetOpt & opt, YAlignmentType horAlign, YAlignmentType vertAlign );
     YContainerWidget * createFrame		( YWidget * parent, YWidgetOpt & opt, const YCPString & label );
+    YContainerWidget * createCheckBoxFrame	( YWidget * parent, YWidgetOpt & opt, const YCPString & label, bool checked );
     YContainerWidget * createRadioButtonGroup	( YWidget * parent, YWidgetOpt & opt);
     YContainerWidget * createReplacePoint	( YWidget * parent, YWidgetOpt & opt);
     YContainerWidget * createSplit		( YWidget * parent, YWidgetOpt & opt, YUIDimension dimension);

@@ -43,7 +43,7 @@ liby2qt_la_LIBADD = $(libpy2qt_la_LIBADD)
 
 # the basic library has the pure y2qt sources
 
-liby2qt_la_SOURCES = 				\
+liby2qt_la_SOURCES =				\
 	YQUI_core.cc				\
 	YQUI_widgets.cc				\
 	YQUI_builtins.cc			\
@@ -54,6 +54,7 @@ liby2qt_la_SOURCES = 				\
 	YQAlignment.cc				\
 	YQBarGraph.cc				\
 	YQCheckBox.cc				\
+	YQCheckBoxFrame.cc			\
 	YQColoredLabel.cc			\
 	YQComboBox.cc				\
 	YQDate.cc				\
@@ -156,6 +157,7 @@ BUILT_SOURCES =					\
 	YQAlignment.moc				\
 	YQBarGraph.moc				\
 	YQCheckBox.moc				\
+	YQCheckBoxFrame.moc			\
 	YQColoredLabel.moc			\
 	YQComboBox.moc				\
 	YQDialog.moc				\
@@ -241,6 +243,7 @@ YQUI_x11.o YQUI_x11.lo:						YQUI.moc
 YQAlignment.o YQAlignment.lo:   				YQAlignment.moc
 YQBarGraph.o YQBarGraph.lo:   					YQBarGraph.moc
 YQCheckBox.o YQCheckBox.lo:					YQCheckBox.moc
+YQCheckBoxFrame.o YQCheckBoxFrame.lo:				YQCheckBoxFrame.moc
 YQColoredLabel.o YQColoredLabel.lo:				YQColoredLabel.moc
 YQComboBox.o YQComboBox.lo:					YQComboBox.moc
 YQDate.o YQDate.lo:						YQDate.moc
@@ -325,6 +328,7 @@ YQUI.moc:				include/YQUI.h
 YQAlignment.moc:			include/YQAlignment.h
 YQBarGraph.moc:				include/YQBarGraph.h
 YQCheckBox.moc:				include/YQCheckBox.h
+YQCheckBoxFrame.moc:			include/YQCheckBoxFrame.h
 YQColoredLabel.moc:			include/YQColoredLabel.h
 YQComboBox.moc:				include/YQComboBox.h
 YQDialog.moc: 				include/YQDialog.h

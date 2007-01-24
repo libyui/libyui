@@ -93,6 +93,13 @@ public slots:
     int resolvePackageDependencies();
 
     /**
+     * Verifies dependencies of the currently installed system.
+     *
+     * Returns QDialog::Accepted or QDialog::Rejected.
+     **/
+    int verifySystem();
+
+    /**
      * Check for disk overflow and post a warning dialog if necessary.
      * The user can choose to override this warning.
      *

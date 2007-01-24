@@ -383,7 +383,28 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
     }
 
 
+    //
+    // Write header
+    //
+
+    // Format the header line with QString::sprintf() because plain stdio
+    // fprintf() is not UTF-8 aware - it will count multi-byte characters
+    // wrong, so the formatting will be broken.
+
+    QString header;
+    header.sprintf( "# %-18s %-30s | %10s | %-16s | %-16s\n\n",
+		    (const char *) _( "Status"      ).utf8(),
+		    (const char *) _( "Package"     ).utf8(),
+		    (const char *) _( "Size"        ).utf8(),
+		    (const char *) _( "Avail. Ver." ).utf8(),
+		    (const char *) _( "Inst. Ver."  ).utf8()
+		    );
+    fputs( (const char *) header.utf8(), file );
+
+
+    //
     // Write all items
+    //
 
     const QListViewItem * item = firstChild();
 
@@ -393,12 +414,19 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
 
 	if ( pkg )
 	{
+	    QString candVersion = pkg->text( versionCol()     );
+	    QString instVersion = pkg->text( instVersionCol() );
+
+	    if ( candVersion.isEmpty() ) candVersion = "---";
+	    if ( instVersion.isEmpty() ) instVersion = "---";
+
 	    QString status = "[" + statusText( pkg->status() ) + "]";
-	    fprintf( file, "%-16s %-30s | %-16s | %10s\n",
-		     (const char *) status,
-		     (const char *) pkg->text( nameCol()    ),
-		     (const char *) pkg->text( versionCol() ),
-		     (const char *) pkg->text( sizeCol()    )
+	    fprintf( file, "%-20s %-30s | %10s | %-16s | %-16s\n",
+		     (const char *) status.utf8(),
+		     (const char *) pkg->text( nameCol()   ),
+		     (const char *) pkg->text( sizeCol()   ),
+		     (const char *) candVersion,
+		     (const char *) instVersion
 		     );
 	}
 

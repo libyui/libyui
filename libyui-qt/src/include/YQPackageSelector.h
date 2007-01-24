@@ -68,8 +68,7 @@ class YQPackageSelector : public YQPackageSelectorBase
 public:
 
     YQPackageSelector( QWidget *		parent,
-		       const YWidgetOpt & 	opt,
-		       const YCPString &	floppyDevice );
+		       const YWidgetOpt & 	opt   );
 
 
 public slots:
@@ -250,6 +249,17 @@ protected:
     void globalUpdatePkg( bool force );
 
     /**
+     * Import one selectable: Set its status according to 'isWanted'
+     * based on its old status.
+     * 'kind' is 'package' or 'pattern' (used only for debug logging).
+     **/
+    void importSelectable( ZyppSel	selectable,
+			   bool		isWanted,
+			   const char * kind );
+
+    
+
+    /**
      * Return HTML code describing a symbol (an icon).
      **/
     QString symHelp( const QString & imgFileName,
@@ -282,7 +292,6 @@ protected:
     bool				_updateMode;
     bool				_summaryMode;
     bool				_instSourcesMode;
-    QString				_floppyDevice;
 
     QCheckBox *				_autoDependenciesCheckBox;
     QPushButton *			_checkDependenciesButton;

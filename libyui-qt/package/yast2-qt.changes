@@ -1,4 +1,17 @@
 -------------------------------------------------------------------
+Wed Jan 24 14:53:55 CET 2007 - sh@suse.de
+
+- Merged SLE10-SP1 branch changes back to trunk:
+  - Fixed bug #218669: Broken UTF8 chars in pkg to text file export
+  - Fixed bug #227409: Add installed packages to text file export
+  - Fixed bug #229368: comparison with string literal
+  - Added Qt-UI support for feature #301178: verify installed system
+  - Added CheckBoxFrame widget for feature #5673
+  - Implemented feature #300729: Saving of patterns and packages
+
+- V 2.14.4
+
+-------------------------------------------------------------------
 Thu Nov 23 16:50:28 CET 2006 - sh@suse.de
 
 - Fixed bug #223416: Updated patches not visible in default view 
