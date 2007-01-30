@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jan 30 17:55:40 CET 2007 - sh@suse.de
+
+- Fixed bug #232522: Added inst src URL to pkg versions view 
+
+-------------------------------------------------------------------
 Tue Jan 30 16:47:19 CET 2007 - sh@suse.de
 
 - Fixed bug #152997: Install progress icons 
