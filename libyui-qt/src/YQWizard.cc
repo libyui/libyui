@@ -1278,10 +1278,19 @@ void YQWizard::loadStepsIcons()
     _stepCurrentIcon	= YQIconPool::stepCurrent();
     _stepToDoIcon	= YQIconPool::stepToDo();
     _stepDoneIcon	= YQIconPool::stepDone();
-    
-    _stepCurrentColor	= paletteForegroundColor();
-    _stepToDoColor	= paletteForegroundColor();
-    _stepDoneColor	= paletteForegroundColor();
+
+    if ( highColorDisplay() )
+    {
+	_stepCurrentColor       = pixelColor( QPixmap( PIXMAP_DIR "color-step-current.png" ), 0, 0 );
+	_stepToDoColor          = pixelColor( QPixmap( PIXMAP_DIR "color-step-todo.png"    ), 0, 0 );
+	_stepDoneColor          = pixelColor( QPixmap( PIXMAP_DIR "color-step-done.png"    ), 0, 0 );
+    }
+    else
+    {
+	_stepCurrentColor       = paletteForegroundColor();
+	_stepToDoColor          = paletteForegroundColor();
+	_stepDoneColor          = paletteForegroundColor();
+    }
 }
 
 
