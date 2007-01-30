@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jan 30 16:47:19 CET 2007 - sh@suse.de
+
+- Fixed bug #152997: Install progress icons 
+
+-------------------------------------------------------------------
 Wed Jan 17 18:51:15 CET 2007 - sh@suse.de
 
 - Fixed bug #218669: Broken UTF8 chars in pkg to text file export 

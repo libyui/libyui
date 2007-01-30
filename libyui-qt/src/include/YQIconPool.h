@@ -73,6 +73,10 @@ public:
     static QPixmap warningSign();
     static QPixmap pkgSatisfied();
 
+    static QPixmap stepCurrent();
+    static QPixmap stepToDo();
+    static QPixmap stepDone();
+
 
 protected:
 
