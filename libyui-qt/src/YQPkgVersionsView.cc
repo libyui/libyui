@@ -44,6 +44,7 @@ YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
     _versionCol	= -42;
     _archCol	= -42;
     _productCol	= -42;
+    _urlCol	= -42;
     _instSrcCol	= -42;
     _statusCol	= -42;
     _nameCol	= -42;
@@ -54,6 +55,7 @@ YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
     addColumn( _( "Arch." 		) );	_archCol	= numCol++;
     addColumn( _( "Product"		) );	_productCol	= numCol++;
     addColumn( _( "Installation Source"	) );	_instSrcCol	= numCol++;
+    addColumn( _( "URL"			) );	_urlCol		= numCol++;
     _statusCol	= _productCol;
 
     _nameCol	= _versionCol;
@@ -253,6 +255,10 @@ YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
 
 	if ( product )
 	    setText( productCol(), product->summary() );
+    }
+    if ( urlCol() >= 0 )
+    {
+	setText( urlCol(), zyppObj->source().url().asString().c_str() );
     }
 
     if ( _selectable->hasInstalledObj() )

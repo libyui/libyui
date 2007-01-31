@@ -61,6 +61,9 @@
 #include "icons/checklist_off.xpm"
 #include "icons/checklist_on.xpm"
 
+#include "icons/step_current.xpm"
+#include "icons/step_todo.xpm"
+#include "icons/step_done.xpm"
 
 
 YQIconPool * YQIconPool::_iconPool = 0;
@@ -108,6 +111,10 @@ QPixmap YQIconPool::treeMinus()			{ return iconPool()->cachedIcon( tree_minus_xp
 
 QPixmap YQIconPool::warningSign()		{ return iconPool()->cachedIcon( warning_sign_xpm );		}
 QPixmap YQIconPool::pkgSatisfied()		{ return iconPool()->cachedIcon( satisfied_xpm );		}
+
+QPixmap YQIconPool::stepCurrent()		{ return iconPool()->cachedIcon( step_current_xpm );		}
+QPixmap YQIconPool::stepToDo()			{ return iconPool()->cachedIcon( step_todo_xpm );		}
+QPixmap YQIconPool::stepDone()			{ return iconPool()->cachedIcon( step_done_xpm );		}
 
 
 YQIconPool * YQIconPool::iconPool()

@@ -25,14 +25,17 @@ noinst_HEADERS =				\
 	normal_conflict.xpm			\
 	protected.xpm				\
 	protected_disabled.xpm			\
+	satisfied.xpm				\
 	sel_autodel.xpm				\
 	sel_autodel_disabled.xpm		\
 	sel_autoinstall.xpm			\
 	sel_autoinstall_disabled.xpm		\
 	sel_autoupdate.xpm			\
 	sel_autoupdate_disabled.xpm		\
-	satisfied.xpm				\
 	select_conflict.xpm			\
+	step_current.xpm			\
+	step_done.xpm				\
+	step_todo.xpm				\
 	stop.xpm				\
 	taboo.xpm				\
 	taboo_disabled.xpm			\
@@ -42,8 +45,6 @@ noinst_HEADERS =				\
 	update.xpm				\
 	update_disabled.xpm			\
 	warning_sign.xpm
-#tree_plus and tree_minus added here to compile
-
 
 
 # Those icons are used at runtime by the online help system.
@@ -68,31 +69,7 @@ helpimages_DATA =				\
 	sel_autoupdate.xpm			\
 	taboo.xpm				\
 	update.xpm
-#tree_plus and tree_minus added here to compile
 
 EXTRA_DIST = $(helpimages_DATA)
 
 CLEANFILES = y2qt.kdoc
-
-#<INSTALL-HEADER-TARGET>
-
-# Automatically inserted by insert_install_target
-# DO NOT REMOVE THE TAGS!
-
-# Install header files only if different to version already installed -
-# prevent unnecessary installations to keep make dependency changes
-# and thus rebuilds for dependent packages as low as possible.
-
-###	install-pkgincludeHEADERS: $(pkginclude_HEADERS)
-###		@$(NORMAL_INSTALL)
-###		$(mkinstalldirs) $(DESTDIR)$(pkgincludedir)
-###		@list='$(pkginclude_HEADERS)';							\
-###		for p in $$list; do								\
-###			if test -f "$$p"; then d= ; else d="$(srcdir)/"; fi; 			\
-###			if ! cmp -s $$d$$p $(DESTDIR)$(pkgincludedir)/$$p; then			\
-###				echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgincludedir)/$$p";	\
-###				$(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgincludedir)/$$p;		\
-###		  	fi									\
-###		done
-
-#</INSTALL-HEADER-TARGET>

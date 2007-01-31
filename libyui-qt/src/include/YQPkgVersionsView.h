@@ -65,6 +65,7 @@ public:
     int versionCol()	const	{ return _versionCol;	}
     int archCol()	const 	{ return _archCol; 	}
     int productCol()	const	{ return _productCol;	}
+    int urlCol()	const	{ return _urlCol;	}
     int instSrcCol()	const	{ return _instSrcCol;	}
     int nameCol()	const 	{ return _nameCol; 	}
     int summaryCol()	const 	{ return _summaryCol; 	}
@@ -122,6 +123,7 @@ protected:
     int 		_versionCol;
     int			_archCol;
     int			_productCol;
+    int			_urlCol;
     int			_instSrcCol;
     int			_nameCol;
     int			_summaryCol;
@@ -184,6 +186,7 @@ public:
 
     int versionCol()		const	{ return _pkgVersionList->versionCol();	}
     int productCol()		const	{ return _pkgVersionList->productCol();	}
+    int urlCol()		const	{ return _pkgVersionList->urlCol();	}
     int instSrcCol()		const	{ return _pkgVersionList->instSrcCol();	}
     int statusCol()		const	{ return _pkgVersionList->statusCol();	}
     int archCol()		const	{ return _pkgVersionList->archCol();	}

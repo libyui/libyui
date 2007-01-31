@@ -68,6 +68,7 @@
 #include "YQEmpty.h"
 #include "YQLabel.h"
 #include "YQWizardButton.h"
+#include "YQIconPool.h"
 #include "QY2LayoutUtils.h"
 #include "YEvent.h"
 
@@ -1274,22 +1275,22 @@ void YQWizard::loadGradientPixmaps()
 
 void YQWizard::loadStepsIcons()
 {
+    _stepCurrentIcon	= YQIconPool::stepCurrent();
+    _stepToDoIcon	= YQIconPool::stepToDo();
+    _stepDoneIcon	= YQIconPool::stepDone();
+
     if ( highColorDisplay() )
     {
-	_stepCurrentColor	= pixelColor( QPixmap( PIXMAP_DIR "color-step-current.png" ), 0, 0 );
-	_stepToDoColor		= pixelColor( QPixmap( PIXMAP_DIR "color-step-todo.png"	   ), 0, 0 );
-	_stepDoneColor		= pixelColor( QPixmap( PIXMAP_DIR "color-step-done.png"	   ), 0, 0 );
+	_stepCurrentColor       = pixelColor( QPixmap( PIXMAP_DIR "color-step-current.png" ), 0, 0 );
+	_stepToDoColor          = pixelColor( QPixmap( PIXMAP_DIR "color-step-todo.png"    ), 0, 0 );
+	_stepDoneColor          = pixelColor( QPixmap( PIXMAP_DIR "color-step-done.png"    ), 0, 0 );
     }
     else
     {
-	_stepCurrentColor	= paletteForegroundColor();
-	_stepToDoColor		= paletteForegroundColor();
-	_stepDoneColor		= paletteForegroundColor();
+	_stepCurrentColor       = paletteForegroundColor();
+	_stepToDoColor          = paletteForegroundColor();
+	_stepDoneColor          = paletteForegroundColor();
     }
-
-    _stepCurrentIcon	= QPixmap( PIXMAP_DIR "step-current.png" );
-    _stepToDoIcon	= QPixmap( PIXMAP_DIR "step-todo.png"	 );
-    _stepDoneIcon	= QPixmap( PIXMAP_DIR "step-done.png"	 );
 }
 
 

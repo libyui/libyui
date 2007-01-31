@@ -201,7 +201,7 @@ YQPackageSelector::YQPackageSelector( QWidget *			parent,
 
 #if CHECK_DEPENDENCIES_ON_STARTUP
 
-    if ( ! _testMode )
+    if ( ! _testMode && ! _youMode )
     {
 	// Fire up the first dependency check in the main loop.
 	// Don't do this right away - wait until all initializations are finished.
