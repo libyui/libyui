@@ -3,6 +3,7 @@ Wed Jan 31 14:00:35 CET 2007 - sh@suse.de
 
 - Fixed bug #187322: Ignore solver errors in patch mode
   at first solver run
+- V 2.13.79
 
 -------------------------------------------------------------------
 Tue Jan 30 17:55:40 CET 2007 - sh@suse.de
