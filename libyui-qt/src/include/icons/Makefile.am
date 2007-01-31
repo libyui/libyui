@@ -69,7 +69,6 @@ helpimages_DATA =				\
 	sel_autoupdate.xpm			\
 	taboo.xpm				\
 	update.xpm
-#tree_plus and tree_minus added here to compile
 
 EXTRA_DIST = $(helpimages_DATA)
 
