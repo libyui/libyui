@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Feb  1 14:00:40 CET 2007 - sh@suse.de
+
+- Fixed bug #239829: Show patch name (ID) in patches list
+- V 2.13.80 
+
+-------------------------------------------------------------------
 Wed Jan 31 14:00:35 CET 2007 - sh@suse.de
 
 - Fixed bug #187322: Ignore solver errors in patch mode
