@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Feb  1 14:32:27 CET 2007 - gs@suse.de
+
+- Online Update: Show patch name (ID) in patches list (bug #239829)
+- 2.13.61 
+
+-------------------------------------------------------------------
 Wed Jan 17 16:23:42 CET 2007 - kmachalkova@suse.cz
 
 - Substitute right arrows back for tab characters when querying
