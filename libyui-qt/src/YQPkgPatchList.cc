@@ -53,7 +53,8 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
 
     int numCol = 0;
     addColumn( "" );			_statusCol	= numCol++;
-    addColumn( _( "Patch"	) );	_summaryCol	= numCol++;
+    addColumn( _( "Patch"	) );	_nameCol	= numCol++;
+    addColumn( _( "Summary" 	) );	_summaryCol	= numCol++;
     addColumn( _( "Category"	) );	_categoryCol	= numCol++;
     addColumn( _( "Size"	) );	_sizeCol	= numCol++;
 

@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Feb  1 14:37:29 CET 2007 - sh@suse.de
+
+- Merged SLE10-SP1 branch changes back to trunk:
+  - Fixed bug #239829: Show patch name (ID) in patches list
+
+- V 2.15.6
+
+-------------------------------------------------------------------
 Wed Jan 31 14:22:26 CET 2007 - sh@suse.de
 
 - Merged SLE10-SP1 branch changes back to trunk:
