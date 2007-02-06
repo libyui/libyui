@@ -16,8 +16,8 @@ AC_MSG_CHECKING([X font directory])
 #ugh, /etc/YaST2/XVersion is in yast2.rpm which is only built after us
 #so let's hardcode, like in the spec file anyway
 case "$x_includes" in
-     *X11R6*) Xfontsdir=/usr/X11R6/lib/X11/fonts ;;
-     *) Xfontsdir=/usr/share/fonts ;;
+     *X11R6*) Xfontsdir=$prefix/X11R6/lib/X11/fonts ;;
+     *) Xfontsdir=$prefix/share/fonts ;;
 esac
 AC_MSG_RESULT([$Xfontsdir])
 AC_SUBST(Xfontsdir)

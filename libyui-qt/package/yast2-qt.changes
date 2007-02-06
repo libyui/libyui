@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Feb  6 17:38:34 CET 2007 - mvidner@suse.cz
+
+- Prefixized font patch check.
+
+-------------------------------------------------------------------
 Thu Feb  1 14:37:29 CET 2007 - sh@suse.de
 
 - Merged SLE10-SP1 branch changes back to trunk:
