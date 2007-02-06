@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Feb  6 17:38:34 CET 2007 - mvidner@suse.cz
+
+- Prefixized font patch check.
+
+-------------------------------------------------------------------
 Thu Feb  1 14:00:40 CET 2007 - sh@suse.de
 
 - Fixed bug #239829: Show patch name (ID) in patches list
