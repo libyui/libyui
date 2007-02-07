@@ -218,6 +218,7 @@ void NCComboBox::setCurrentItem( int nindex )
       break;
     }
   }
+  Redraw();
 }
 
 
