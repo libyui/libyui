@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Feb  6 16:47:59 CET 2007 - kmachalkova@suse.cz
+
+- Correct setting of current item in ComboBox widget (#233593)
+
+-------------------------------------------------------------------
 Thu Feb  1 14:55:33 CET 2007 - gs@suse.de
 
 - Online Update: Show patch name (ID) in patches list (bug #239829)
