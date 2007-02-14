@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Feb 14 15:23:17 CET 2007 - kmachalkova@suse.cz
+
+- Use generic xterm/vt100 termifo in case required terminfo is missing 
+  (#235954) 
+- Removed obsolete initscr() code
+- 2.13.62
+
+-------------------------------------------------------------------
 Tue Feb  6 16:52:02 CET 2007 - kmachalkova@suse.cz
 
 - Correct setting of current item in ComboBox widget (#233593) 

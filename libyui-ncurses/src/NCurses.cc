@@ -39,6 +39,7 @@ extern "C" {
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <fnmatch.h>
 }
 
 /*
@@ -166,6 +167,9 @@ NCurses::~NCurses()
 {
   UIMIL << "Shutdown NCurses..." << endl;
   myself = 0;
+
+  //restore env. variable - might have been changed by NCurses::init()
+  setenv("TERM", envTerm.c_str(), 1);
   delete styleset;
   delete stdpan;
   if ( title_w )
@@ -223,8 +227,29 @@ void NCurses::init()
       }
       if ( fdi && fdo ) {
 	theTerm = newterm( 0, fdo, fdi );
-	if ( theTerm == NULL )
-	  throw NCursesError( "newterm() failed" );
+
+	//initialization failed
+	if ( theTerm == NULL ) {
+	  //bug #235954: workaround missing terminfos in inst-sys
+	  //let's close the first term
+	  ::endwin();
+
+	  string fallbackTerm = "";
+	  //try generic xterm for xterm-like terminals, otherwise use vt100
+	  if (! fnmatch("xterm*", envTerm.c_str(), 0))
+	    fallbackTerm = "xterm";
+	  else
+	    fallbackTerm = "vt100";
+
+	  UIWAR << "newterm() failed, using generic " << fallbackTerm << " as a fallback" << endl;
+	  //overwrite environment variable
+	  setenv("TERM", fallbackTerm.c_str(), 1);
+	  //.. and try again
+	  theTerm = newterm(0, fdo, fdi);
+
+	  if (theTerm == NULL)
+	    throw NCursesError( "fallback newterm() failed" );
+	}
 	if ( set_term( theTerm ) == NULL )
 	  throw NCursesError( "set_term() failed" );
 	myTerm = mytty;
@@ -244,12 +269,6 @@ void NCurses::init()
     // redirect stdout to log
     close(1);
     open(log.c_str(), O_APPEND | O_CREAT);
-  }
-
-  if ( !theTerm ) {
-    UIMIL << "no term so fall back to initscr" << endl;
-    if ( ::initscr() == NULL )
-      throw NCursesError( "initscr() failed" );
   }
 
   UIMIL << "have color = " << ::has_colors()  << endl;
