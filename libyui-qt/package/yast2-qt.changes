@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Feb 15 16:46:24 CET 2007 - sh@suse.de
+
+- Fixed bug #148469: Exclude -debuginfo and -devel pkgs on demand
+- V 2.15.7
+
+-------------------------------------------------------------------
 Tue Feb  6 17:38:34 CET 2007 - mvidner@suse.cz
 
 - Prefixized font patch check.

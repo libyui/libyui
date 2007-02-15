@@ -341,7 +341,8 @@ YQPkgPatchList::addPatchItem( ZyppSel	selectable,
 	return;
     }
 
-    new YQPkgPatchListItem( this, selectable, zyppPatch );
+    YQPkgPatchListItem * item = new YQPkgPatchListItem( this, selectable, zyppPatch );
+    applyExcludeRules( item );
 }
 
 

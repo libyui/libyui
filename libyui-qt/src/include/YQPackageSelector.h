@@ -26,7 +26,7 @@
 #include <ycp/YCPString.h>
 
 #include "YQPackageSelectorBase.h"
-
+#include "YQPkgObjList.h"
 
 class QCheckBox;
 class QComboBox;
@@ -59,7 +59,6 @@ class YQPkgUpdateProblemFilterView;
 class YQPkgVersionsView;
 class YQPkgPatchFilterView;
 class YQPkgPatchList;
-
 
 class YQPackageSelector : public YQPackageSelectorBase
 {
@@ -113,6 +112,13 @@ public slots:
      * installed or marked for installation
      **/
     void installSubPkgs( const QString suffix );
+
+    /**
+     * Enable or disable the package exclude rules (show or suppress -debuginfo
+     * or -devel packages) according to the current menu settings and apply the
+     * exclude rules.
+     **/
+    void pkgExcludeRulesChanged( int menuItemID );
 
     /**
      * Display (generic) online help.
@@ -257,7 +263,7 @@ protected:
 			   bool		isWanted,
 			   const char * kind );
 
-    
+
 
     /**
      * Return HTML code describing a symbol (an icon).
@@ -322,6 +328,12 @@ protected:
     QPopupMenu *			_patchMenu;
     QPopupMenu *			_extrasMenu;
     QPopupMenu *			_helpMenu;
+
+    int					_viewShowDevelID;
+    int					_viewShowDebugInfoID;
+
+    YQPkgObjList::ExcludeRule *		_excludeDevelPkgs;
+    YQPkgObjList::ExcludeRule *		_excludeDebugInfoPkgs;
 
     QColor				_normalButtonBackground;
 };

@@ -150,7 +150,8 @@ YQPkgSelList::addPkgSelItem( ZyppSel		selectable,
 	return;
     }
 
-    new YQPkgSelListItem( this, selectable, zyppSelection );
+    YQPkgSelListItem * item = new YQPkgSelListItem( this, selectable, zyppSelection );
+    applyExcludeRules( item );
 }
 
 

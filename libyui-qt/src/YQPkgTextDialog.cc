@@ -236,9 +236,9 @@ bool YQPkgTextDialog::confirmText( QWidget * parent, const char * text )
 }
 
 
-bool YQPkgTextDialog::confirmText( QWidget * 			parent,
-				   ZyppSel 	selectable,
-				   const string	&	 	text )
+bool YQPkgTextDialog::confirmText( QWidget * 		parent,
+				   ZyppSel 		selectable,
+				   const string	&	text )
 {
     return confirmText( parent, htmlHeading( selectable ) + htmlParagraphs( text ) );
 }

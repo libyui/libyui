@@ -122,6 +122,8 @@ YQPackageSelector::YQPackageSelector( QWidget *			parent,
     _updateProblemFilterView	= 0;
     _patchFilterView		= 0;
     _patchList			= 0;
+    _excludeDevelPkgs		= 0;
+    _excludeDebugInfoPkgs	= 0;
 
     _searchMode		= opt.searchMode.value();
     _testMode		= opt.testMode.value();
@@ -621,6 +623,31 @@ YQPackageSelector::addMenus()
     if ( _pkgList )
     {
 	//
+	// View menu
+	//
+
+	_viewMenu = new QPopupMenu( _menuBar );
+	CHECK_PTR( _viewMenu );
+	_menuBar->insertItem( _( "&View" ), _viewMenu );
+
+        // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
+	_viewShowDevelID = _viewMenu->insertItem( _( "Show -de&vel Packages" ),
+						       this, SLOT( pkgExcludeRulesChanged( int ) ), Key_F7 );
+	_viewMenu->setItemChecked( _viewShowDevelID, true );
+	_excludeDevelPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-devel$" ), _pkgList->nameCol() );
+	CHECK_PTR( _excludeDevelPkgs );
+	_excludeDevelPkgs->enable( false );
+
+	// Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
+	_viewShowDebugInfoID = _viewMenu->insertItem( _( "Show -&debuginfo Packages" ),
+						       this, SLOT( pkgExcludeRulesChanged( int ) ), Key_F8 );
+	_viewMenu->setItemChecked( _viewShowDebugInfoID, true );
+	_excludeDebugInfoPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-debuginfo$" ), _pkgList->nameCol() );
+	CHECK_PTR( _excludeDebugInfoPkgs );
+	_excludeDebugInfoPkgs->enable( false );
+
+
+	//
 	// Package menu
 	//
 
@@ -778,6 +805,9 @@ YQPackageSelector::connectFilter( QWidget * filter,
 
     connect( filter,	SIGNAL( filterFinished()  ),
 	     pkgList,	SLOT  ( selectSomething() ) );
+
+    connect( filter,	SIGNAL( filterFinished()       ),
+	     pkgList,	SLOT  ( logExcludeStatistics() ) );
 
 
     if ( hasUpdateSignal )
@@ -1308,6 +1338,24 @@ YQPackageSelector::installDebugInfoPkgs()
 
 
 void
+YQPackageSelector::pkgExcludeRulesChanged( int menuItemID )
+{
+    if ( _viewMenu && _pkgList )
+    {
+	_viewMenu->setItemChecked( menuItemID, ! _viewMenu->isItemChecked( menuItemID ) );
+
+	if ( _excludeDevelPkgs )
+	    _excludeDevelPkgs->enable( ! _viewMenu->isItemChecked( _viewShowDevelID ) );
+
+	if ( _excludeDebugInfoPkgs )
+	    _excludeDebugInfoPkgs->enable( ! _viewMenu->isItemChecked( _viewShowDebugInfoID ) );
+
+	_pkgList->applyExcludeRules();
+    }
+}
+
+
+void
 YQPackageSelector::installSubPkgs( const QString suffix )
 {
     // Find all matching packages and put them into a QMap
@@ -1339,8 +1387,8 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 
 	if ( subPkgs.contains( name + suffix ) )
 	{
-	    ZyppSel subPkg = subPkgs[ name + suffix ];
-	    QString subPkgName;
+	    QString subPkgName( name + suffix );
+	    ZyppSel subPkg = subPkgs[ subPkgName ];
 
 	    switch ( (*it)->status() )
 	    {

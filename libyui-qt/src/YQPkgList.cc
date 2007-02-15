@@ -110,6 +110,7 @@ YQPkgList::addPkgItem( ZyppSel	selectable,
     CHECK_PTR( item );
 
     item->setDimmed( dimmed );
+    applyExcludeRules( item );
 }
 
 

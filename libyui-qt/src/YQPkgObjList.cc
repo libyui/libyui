@@ -37,6 +37,9 @@ using std::list;
 using std::string;
 
 
+#define VERBOSE_EXCLUDE_RULES 0
+
+
 YQPkgObjList::YQPkgObjList( QWidget * parent )
     : QY2ListView( parent )
     , _editable( true )
@@ -57,6 +60,8 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
     _satisfiedIconCol	= -42;
     _debug		= false;
 
+    _excludedItems = new YQPkgObjList::ExcludedItems( this );
+
     createActions();
 
     connect( this,	SIGNAL( columnClicked		( int, QListViewItem *, int, const QPoint & ) ),
@@ -72,7 +77,8 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
 
 YQPkgObjList::~YQPkgObjList()
 {
-    // NOP
+    if ( _excludedItems )
+	delete _excludedItems;
 }
 
 
@@ -85,7 +91,8 @@ YQPkgObjList::addPkgObjItem( ZyppSel selectable, ZyppObj zyppObj )
 	return;
     }
 
-    new YQPkgObjListItem( this, selectable, zyppObj );
+    YQPkgObjListItem * item = new YQPkgObjListItem( this, selectable, zyppObj );
+    applyExcludeRules( item );
 }
 
 
@@ -160,6 +167,8 @@ void
 YQPkgObjList::clear()
 {
     emit selectionChanged( ZyppSel() );
+
+    _excludedItems->clear();
     QY2ListView::clear();
 }
 
@@ -689,6 +698,151 @@ YQPkgObjList::message( const QString & text )
 }
 
 
+void
+YQPkgObjList::addExcludeRule( YQPkgObjList::ExcludeRule * rule )
+{
+    _excludeRules.push_back( rule );
+}
+
+
+void
+YQPkgObjList::applyExcludeRules()
+{
+    // y2debug( "Applying exclude rules" );
+    QListViewItemIterator listView_it( this );
+
+    while ( *listView_it )
+    {
+	QListViewItem * current_item = *listView_it;
+
+	// Advance iterator now so it remains valid even if there are changes
+	// to the QListView, e.g., if the current item is excluded and thus
+	// removed from the QListView
+	++listView_it;
+
+	applyExcludeRules( current_item );
+    }
+
+    ExcludedItems::iterator excluded_it = _excludedItems->begin();
+
+    while ( excluded_it != _excludedItems->end() )
+    {
+	QListViewItem * current_item = (*excluded_it).first;
+
+	// Advance iterator now so it remains valid even if there are changes
+	// to the excluded items, e.g., if the current item is un-excluded and thus
+	// removed from the excluded items
+	++excluded_it;
+
+	applyExcludeRules( current_item );
+    }
+
+    logExcludeStatistics();
+}
+
+
+void
+YQPkgObjList::logExcludeStatistics()
+{
+    if ( _excludedItems->size() > 0 )
+    {
+	y2milestone( "%d packages excluded", _excludedItems->size() );
+
+	for ( ExcludeRuleList::iterator rule_it = _excludeRules.begin();
+	      rule_it != _excludeRules.end();
+	      ++rule_it )
+	{
+	    ExcludeRule * rule = *rule_it;
+
+	    if ( rule->isEnabled() )
+	    {
+		y2milestone( "Active exclude rule: \"%s\"",
+			     rule->regexp().pattern().ascii() );
+	    }
+	}
+    }
+}
+
+
+void
+YQPkgObjList::applyExcludeRules( QListViewItem * listViewItem )
+{
+    YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *>( listViewItem );
+
+    if ( item )
+    {
+	bool exclude = false;
+	ExcludeRule * matchingRule = 0;
+
+	for ( ExcludeRuleList::iterator rule_it = _excludeRules.begin();
+	      rule_it != _excludeRules.end() && ! exclude;
+	      ++rule_it )
+	{
+	    ExcludeRule * rule = *rule_it;
+
+	    if ( rule->match( item ) )
+	    {
+		exclude = true;
+		matchingRule = rule;
+	    }
+	}
+
+	if ( exclude != item->isExcluded() )	// change exclude status?
+	{
+	    this->exclude( item, exclude );
+
+#if VERBOSE_EXCLUDE_RULES
+	    if ( exclude )
+	    {
+		y2debug( "Rule %s matches: Excluding %s",
+			 matchingRule->regexp().pattern().ascii(),
+			 item->zyppObj()->name().c_str() );
+	    }
+	    else
+	    {
+		y2debug( "Un-excluding %s", item->zyppObj()->name().c_str() );
+	    }
+#endif
+	}
+    }
+}
+
+
+void
+YQPkgObjList::exclude( YQPkgObjListItem * item, bool exclude )
+{
+    if ( exclude == item->isExcluded() )
+	return;
+
+    item->setExcluded( exclude );
+
+    if ( exclude )
+    {
+	QListViewItem * parentItem = item->parent();
+
+	if ( parentItem )
+	    parentItem->takeItem( item );
+	else
+	    QListView::takeItem( item );
+
+	_excludedItems->add( item, parentItem );
+    }
+    else // un-exclude
+    {
+	if ( _excludedItems->contains( item ) )
+	{
+	    QListViewItem * oldParent = _excludedItems->oldParentItem( item );
+	    _excludedItems->remove( item );
+
+	    if ( oldParent )
+		oldParent->insertItem( item );
+	    else
+		QListView::insertItem( item );
+	}
+    }
+}
+
+
 
 
 YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList * pkgObjList,
@@ -699,6 +853,7 @@ YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList * pkgObjList,
     , _selectable( selectable )
     , _zyppObj( zyppObj )
     , _editable( true )
+    , _excluded( false )
 {
     init();
 }
@@ -713,6 +868,7 @@ YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList *	pkgObjList,
     , _selectable( selectable )
     , _zyppObj( zyppObj )
     , _editable( true )
+    , _excluded( false )
 {
     init();
 }
@@ -894,8 +1050,6 @@ YQPkgObjListItem::setStatusIcon()
 
 	setPixmap( satisfiedIconCol(), isSatisfied() ? YQIconPool::pkgSatisfied() : QPixmap() );
     }
-
-
 
     if ( brokenIconCol() >= 0 )
     {
@@ -1186,9 +1340,9 @@ YQPkgObjListItem::toolTip( int col )
 	    // but whose dependencies are broken (no longer satisfied)
 	    return _( "Dependencies broken" );
     }
-    
+
     // don't use "else if" here, it might be the same colum as another one!
-    
+
     if ( col == satisfiedIconCol() )
     {
 	if ( isSatisfied() )
@@ -1275,6 +1429,132 @@ YQPkgObjListItem::versionPoints() const
     if ( selectable()->hasCandidateObj() )	points += 1;
 
     return points;
+}
+
+
+void
+YQPkgObjListItem::setExcluded( bool excl )
+{
+    _excluded = excl;
+}
+
+
+
+
+YQPkgObjList::ExcludeRule::ExcludeRule( YQPkgObjList *	parent,
+					const QRegExp &	regexp,
+					int		column )
+    : _parent( parent )
+    , _regexp( regexp )
+    , _column( column )
+    , _enabled( true )
+{
+    _parent->addExcludeRule( this );
+}
+
+
+void
+YQPkgObjList::ExcludeRule::enable( bool enable )
+{
+    _enabled = enable;
+
+#if VERBOSE_EXCLUDE_RULES
+    y2debug( "%s exclude rule %s",
+	     enable ? "Enabling" : "Disabling",
+	     _regexp.pattern().ascii() );
+#endif
+}
+
+
+void
+YQPkgObjList::ExcludeRule::setRegexp( const QRegExp & regexp )
+{
+    _regexp = regexp;
+}
+
+
+void
+YQPkgObjList::ExcludeRule::setColumn( int column )
+{
+    _column = column;
+}
+
+
+bool
+YQPkgObjList::ExcludeRule::match( QListViewItem * item )
+{
+    if ( ! _enabled )
+	return false;
+
+    QString text = item->text( _column );
+
+    if ( text.isEmpty() )
+	return false;
+
+    return _regexp.exactMatch( text );
+}
+
+
+
+
+
+
+YQPkgObjList::ExcludedItems::ExcludedItems( YQPkgObjList * parent )
+    : _pkgObjList( parent )
+{
+}
+
+
+YQPkgObjList::ExcludedItems::~ExcludedItems()
+{
+    clear();
+}
+
+
+void YQPkgObjList::ExcludedItems::add( QListViewItem * item, QListViewItem * oldParent )
+{
+    _excludeMap.insert( ItemPair( item, oldParent ) );
+}
+
+
+void YQPkgObjList::ExcludedItems::remove( QListViewItem * item )
+{
+    ItemMap::iterator it = _excludeMap.find( item );
+
+    if ( it != _excludeMap.end() )
+    {
+	_excludeMap.erase( it );
+    }
+}
+
+
+void YQPkgObjList::ExcludedItems::clear()
+{
+    for ( ItemMap::iterator it = _excludeMap.begin();
+	  it != _excludeMap.end();
+	  ++it )
+    {
+	delete it->first;
+    }
+
+    _excludeMap.clear();
+}
+
+
+bool YQPkgObjList::ExcludedItems::contains( QListViewItem * item )
+{
+    return ( _excludeMap.find( item ) != _excludeMap.end() );
+}
+
+
+QListViewItem * YQPkgObjList::ExcludedItems::oldParentItem( QListViewItem * item )
+{
+    ItemMap::iterator it = _excludeMap.find( item );
+
+    if ( it == _excludeMap.end() )
+	return 0;
+
+    return it->second;
 }
 
 

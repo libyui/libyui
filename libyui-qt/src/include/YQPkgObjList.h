@@ -23,6 +23,9 @@
 #define YQPkgObjList_h
 
 #include <qpixmap.h>
+#include <qregexp.h>
+#include <map>
+#include <list>
 #include <QY2ListView.h>
 #include "YQZypp.h"
 #include <zypp/Edition.h>
@@ -32,6 +35,7 @@ class YQPkgObjListItem;
 class QAction;
 class QPopupMenu;
 using std::string;
+using std::list;
 
 
 /**
@@ -103,27 +107,52 @@ public:
     virtual QPopupMenu * addAllInListSubMenu( QPopupMenu * menu );
 
     /**
-     * Returns the suitable icon for a zypp::ResObject status - the regular icon if
-     * 'enabled' is 'true' or the insensitive icon if 'enabled' is 'false.
-     * 'bySelection' is relevant only for auto-states: This uses the icon for
-     * 'auto-by-selection" rather than the default auto-icon.
+     * Returns the suitable icon for a zypp::ResObject status - the regular
+     * icon if 'enabled' is 'true' or the insensitive icon if 'enabled' is
+     * 'false.  'bySelection' is relevant only for auto-states: This uses the
+     * icon for 'auto-by-selection" rather than the default auto-icon.
      **/
     virtual QPixmap statusIcon( ZyppStatus status,
 				bool 		enabled     = true,
 				bool		bySelection = false );
 
     /**
-     * Returns a short ( one line ) descriptive text for a zypp::ResObject status.
+     * Returns a short (one line) descriptive text for a zypp::ResObject status.
      **/
     virtual QString statusText( ZyppStatus status ) const;
+
+
+    class ExcludeRule;
+
+    /**
+     * Add an exclude rule to this list.
+     **/
+    void addExcludeRule( YQPkgObjList::ExcludeRule * rule );
+
+    /**
+     * Apply all exclude rules of this list to all items,
+     * including those that are currently excluded.
+     **/
+    void applyExcludeRules();
+
+    /**
+     * Apply all exclude rules of this list to one item.
+     **/
+    void applyExcludeRules( QListViewItem * );
+
+    /**
+     * Exclude or include an item, i.e. remove it from the visible items
+     * and add it to the internal exclude list or vice versa.
+     **/
+    void exclude( YQPkgObjListItem * item, bool exclude );
 
 
 public slots:
 
     /**
-     * Add a zypp::ResObject to the list. Connect a filter's filterMatch() signal to
-     * this slot. Remember to connect filterStart() to clear() (inherited from
-     * QListView).
+     * Add a zypp::ResObject to the list. Connect a filter's filterMatch()
+     * signal to this slot. Remember to connect filterStart() to clear()
+     * (inherited from QListView).
      *
      * 'zyppObj' has to be one of the objects of 'selectable'. If it is 0,
      * selectable->theObject() will be used.
@@ -133,7 +162,7 @@ public slots:
      * forgotten to implement!
      **/
     void addPkgObjItem( ZyppSel	selectable,
-			ZyppObj 	zyppObj = 0 );
+			ZyppObj zyppObj = 0 );
 
     /**
      * Add a purely passive list item that has a name and optional summary and
@@ -191,6 +220,11 @@ public slots:
      **/
     virtual void message( const QString & text );
 
+    /**
+     * Write statistics about excluded items to the log, if there are any.
+     **/
+    void logExcludeStatistics();
+    
 
     // Direct access to some states for menu actions
 
@@ -280,9 +314,9 @@ protected:
     void createActions();
 
     /**
-     * Create an action based on a zypp::ResObject status - automatically retrieve the
-     * corresponding status icons (both sensitive and insensitive) and text.
-     * 'key' is only a descriptive text, no true accelerator.
+     * Create an action based on a zypp::ResObject status - automatically
+     * retrieve the corresponding status icons (both sensitive and insensitive)
+     * and text.  'key' is only a descriptive text, no true accelerator.
      **/
     QAction * createAction( ZyppStatus 	status,
 			    const QString &	key	= QString::null,
@@ -298,7 +332,7 @@ protected:
 			    const QString & 	key		= QString::null,
 			    bool 		enabled		= false );
 
-
+    class ExcludedItems;
 
     // Data members
 
@@ -313,6 +347,10 @@ protected:
     bool	_editable;
     bool	_debug;
 
+    typedef list<ExcludeRule *> ExcludeRuleList;
+    
+    ExcludeRuleList	_excludeRules;
+    ExcludedItems *	_excludedItems;
 
     QPopupMenu *	_installedContextMenu;
     QPopupMenu *	_notInstalledContextMenu;
@@ -336,6 +374,10 @@ public:
     QAction *		actionSetListUpdateForce;
     QAction *		actionSetListTaboo;
     QAction *		actionSetListProtected;
+
+
+public:
+
 };
 
 
@@ -517,9 +559,21 @@ public:
      **/
     virtual QString toolTip( int column );
 
-    
+    /**
+     * Returns 'true' if this item is excluded.
+     **/
+    bool isExcluded() const { return _excluded; }
+
+    /**
+     * Set this item's exclude flag.
+     * Note that this is just a marker. It is the caller's responsibility
+     * to add or remove it from exclude lists etc.
+     **/
+    void setExcluded( bool exclude = true );
+
+
     // Handle Debug isBroken and isSatisfied flags
-    
+
     bool debugIsBroken()    const		{ return _debugIsBroken;		}
     bool debugIsSatisfied() const		{ return _debugIsSatisfied;		}
     void setDebugIsBroken   ( bool val = true )	{ _debugIsBroken = val;			}
@@ -596,8 +650,156 @@ protected:
 
     bool		_debugIsBroken:1;
     bool		_debugIsSatisfied:1;
+    bool		_excluded:1;
 };
 
+
+
+class YQPkgObjList::ExcludeRule
+{
+public:
+
+    /**
+     * Constructor: Creates a new exclude rule with a regular expression
+     * to check against the text of the specified column of each list
+     * entry.
+     *
+     * The parent YQPkgObjList will assume ownership of this exclude rule
+     * and destroy it when the parent is destroyed.
+     **/
+    ExcludeRule( YQPkgObjList *		parent,
+		 const QRegExp &	regexp,
+		 int			column = 0 );
+
+    
+    // Intentionally omitting virtual destructor:
+    // No allocated objects, no other virtual methods,
+    // no need to have a vtable for each instance of this class.
+    //
+    // virtual ~ExcludeRule();
+
+    /**
+     * Enable or disable this exclude rule.
+     * New exclude rules are enabled by default.
+     **/
+    void enable( bool enable = true );
+
+    /**
+     * Returns 'true' if this exclude rule is enabled,
+     * 'false' otherwise.
+     **/
+    bool isEnabled() const { return _enabled; }
+
+    /**
+     * Change the regular expression after creation.
+     **/
+    void setRegexp( const QRegExp & regexp );
+
+    /**
+     * Returns the regexp.
+     **/
+    QRegExp regexp() const { return _regexp; };
+
+    /**
+     * Change the column number to check against after creation.
+     **/
+    void setColumn( int column = 0 );
+
+    /**
+     * Returns the column number.
+     **/
+    int column() const { return _column; }
+
+    /**
+     * Returns this exclude rule's parent YQPkgObjList.
+     **/
+    YQPkgObjList * parent() const { return _parent; }
+
+    /**
+     * Check a list item against this exclude rule. 
+     * Returns 'true' if the item matches this exclude rule,
+     * i.e. if it should be excluded.
+     **/
+    bool match( QListViewItem * item );
+
+private:
+
+    YQPkgObjList *	_parent;
+    QRegExp		_regexp;
+    int			_column;
+    bool 		_enabled;
+};
+
+
+class YQPkgObjList::ExcludedItems
+{
+public:
+
+    typedef std::map <QListViewItem *, QListViewItem *> ItemMap;
+    typedef std::pair<QListViewItem *, QListViewItem *> ItemPair;
+    typedef ItemMap::iterator				iterator;
+
+    /**
+     * Constructor
+     **/
+    ExcludedItems( YQPkgObjList * parent );
+
+    /**
+     * Destructor
+     **/
+    virtual ~ExcludedItems();
+
+    /**
+     * Add a list item to the excluded items and transfer ownership to this
+     * class.
+     *
+     * oldParent is the previous parent item of this item
+     * or 0 if it was a root item.
+     **/
+    void add( QListViewItem * item, QListViewItem * oldParent );
+
+    /**
+     * Remove a list item from the excluded items and transfer ownership back
+     * to the caller.
+     **/
+    void remove( QListViewItem * item );
+
+    /**
+     * Clear the excluded items. Delete all items still excluded.
+     **/
+    void clear();
+
+    /**
+     * Returns 'true' if the specified item is in the excluded items.
+     **/
+    bool contains( QListViewItem * item );
+
+    /**
+     * Returns the old parent of this item so it can be reparented
+     * or 0 if it was a root item.
+     **/
+    QListViewItem * oldParentItem( QListViewItem * item );
+
+    /**
+     * Returns the number of items
+     **/
+    int size() const { return (int) _excludeMap.size(); }
+
+    /**
+     * Returns an iterator that points to the first excluded item.
+     **/
+    iterator begin() { return _excludeMap.begin(); }
+
+    /**
+     * Returns an iterator that points after the last excluded item.
+     **/
+    iterator end()   { return _excludeMap.end(); }
+
+private:
+
+    ItemMap		_excludeMap;
+    YQPkgObjList * 	_pkgObjList;
+};
 
 
 #endif // ifndef YQPkgObjList_h

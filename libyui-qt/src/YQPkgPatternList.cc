@@ -199,11 +199,14 @@ YQPkgPatternList::addPatternItem( ZyppSel	selectable,
     }
 
     YQPkgPatternCategoryItem * cat = category( fromUTF8( zyppPattern->category() ) );
+    YQPkgPatternListItem * item = 0;
 
     if ( cat )
-	new YQPkgPatternListItem( this, cat, selectable, zyppPattern );
+	item = new YQPkgPatternListItem( this, cat, selectable, zyppPattern );
     else
-	new YQPkgPatternListItem( this, selectable, zyppPattern );
+	item = new YQPkgPatternListItem( this, selectable, zyppPattern );
+
+    applyExcludeRules( item );
 }
 
 
