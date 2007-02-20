@@ -2545,9 +2545,22 @@ bool PackageSelector::showPackageDependencies ( bool doit )
 bool PackageSelector::verifyPackageDependencies ()
 {
     bool cancel = false;
+    NCMIL << "Verifying system" << endl;
     if ( depsPopup )
     {
+	saveState();
+	//call the solver (with S_Verify it displays no popup)
 	cancel = depsPopup->showDependencies( NCPopupDeps::S_Verify );
+        //display the popup with automatic changes
+	NCPopupPkgTable autoChangePopup( wpos( 1, 1), this );
+        NCursesEvent input = autoChangePopup.showInfoPopup();
+
+        if ( input == NCursesEvent::cancel )
+        {
+            // user clicked on Cancel
+	    restoreState();
+            cancel = true;
+        }
     }
     return cancel;
 }

@@ -23,6 +23,7 @@
 #include "NCSplit.h"
 #include "NCSpacing.h"
 #include "PkgNames.h"
+#include "PackageSelector.h"
 #include "NCLabel.h"
 #include "NCPushButton.h"
 #include "NCPkgTable.h"
@@ -146,10 +147,26 @@ bool NCPopupPkgTable::fillAutoChanges( NCPkgTable * pkgTable )
 
     pkgTable->itemsCleared();		// clear the table
 
-    set<string> ignoredNames = zypp::ui::userWantedPackageNames();
+    set<string> ignoredNames; 
+    set<string> userWantedNames = zypp::ui::userWantedPackageNames();
+    //these are the packages already selected for autoinstallation in previous 'verify system' run
+    set<string> verifiedNames = packager->getVerifiedPkgs();
+
+    //initialize storage for the new set
+    insert_iterator< set<string> > result (ignoredNames, ignoredNames.begin());
+    
+    if(!verifiedNames.empty())
+    { 
+	//if we have some leftovers from previous run, do the union of the sets
+	set_union(userWantedNames.begin(), userWantedNames.end(),
+	           verifiedNames.begin(), verifiedNames.end(), result ); 	
+    }
+    else
+	//else just take userWanted stuff
+	ignoredNames = userWantedNames;
 
     for ( set<string>::iterator it = ignoredNames.begin(); it != ignoredNames.end(); ++it )
-	NCDBG << "Ignoring: " << *it << endl;
+	NCMIL << "Ignoring: " << *it << endl;
 	 
     ZyppPoolIterator
 	b = zyppPkgBegin(),
@@ -170,6 +187,8 @@ bool NCPopupPkgTable::fillAutoChanges( NCPkgTable * pkgTable )
 		{
 		    NCMIL << "The status of " << pkgPtr->name() << " has automatically changed" << endl;
 		    pkgTable->createListEntry( pkgPtr, slb );
+		    //also add to 'already verified' set
+		    packager->insertVerifiedPkg( pkgPtr->name() );
 		}
 	    }
 	}
@@ -266,6 +285,9 @@ bool NCPopupPkgTable::postAgain()
     if ( !currentId.isNull()
 	 && currentId->compare( PkgNames::Cancel() ) == YO_EQUAL )
     {
+	//user hit cancel - discard set of changes (if not empty)
+	packager->clearVerifiedPkgs();
+
 	// close the dialog
 	postevent = NCursesEvent::cancel;
     }
