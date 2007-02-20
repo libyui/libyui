@@ -104,7 +104,9 @@ class PackageSelector
 
     // Mapping from ZyppPkg to the correspoinding ZyppSel.
     NCPkgSelMapper selMapper;
-    
+
+    set<string> verified_pkgs;
+
   protected:
 
 
@@ -448,6 +450,36 @@ class PackageSelector
     bool showLicenseAgreement( ZyppSel & slbPtr , string licenseText );
     
     void createFilterMenu();
+
+   /**
+    * Get list of packages already selected for automatic changes
+    * (usually via 'verify system' call)
+    * @return std::set <string>
+    */
+    set <string> getVerifiedPkgs() 
+    {
+	return verified_pkgs;
+    }
+
+    /**
+     * Insert package name into the list of already selected for automatic changes
+     * @param pkgname Package name
+     */
+    void insertVerifiedPkg( string pkgname ) {
+	verified_pkgs.insert( pkgname);
+    }
+
+    /**
+     * Empty the set of packages selected for automatic changes
+     * @return void
+     */
+    void clearVerifiedPkgs() {
+	if ( !verified_pkgs.empty() )
+	{
+	    NCMIL << "Discarding auto-dependency changes" << endl
+	    verified_pkgs.clear();
+	}
+    }
 
 };
 
