@@ -57,6 +57,7 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     addColumn( _( "Summary" 	) );	_summaryCol	= numCol++;
     addColumn( _( "Category"	) );	_categoryCol	= numCol++;
     addColumn( _( "Size"	) );	_sizeCol	= numCol++;
+    addColumn( _( "Version"	) );	_versionCol	= numCol++;
 
     // Can use the same colum for "broken" and "satisfied":
     // Both states are mutually exclusive

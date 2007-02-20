@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Feb 20 15:01:04 CET 2007 - sh@suse.de
+
+- Fixed bug #239829 (again): Show patch version in patches list
+- V 2.13.81
+
+-------------------------------------------------------------------
 Tue Feb  6 17:38:34 CET 2007 - mvidner@suse.cz
 
 - Prefixized font patch check.
