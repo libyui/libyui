@@ -1,8 +1,14 @@
 -------------------------------------------------------------------
+Tue Feb 20 15:02:11 CET 2007 - sh@suse.de
+
+- Fixed bug #239829 (again): Show patch version in patches list
+- V 2.15.1
+
+-------------------------------------------------------------------
 Thu Feb 15 16:46:24 CET 2007 - sh@suse.de
 
 - Fixed bug #148469: Exclude -debuginfo and -devel pkgs on demand
-- V 2.15.7
+- V 2.14.7
 
 -------------------------------------------------------------------
 Tue Feb  6 17:38:34 CET 2007 - mvidner@suse.cz
@@ -15,7 +21,7 @@ Thu Feb  1 14:37:29 CET 2007 - sh@suse.de
 - Merged SLE10-SP1 branch changes back to trunk:
   - Fixed bug #239829: Show patch name (ID) in patches list
 
-- V 2.15.6
+- V 2.14.6
 
 -------------------------------------------------------------------
 Wed Jan 31 14:22:26 CET 2007 - sh@suse.de
@@ -26,7 +32,7 @@ Wed Jan 31 14:22:26 CET 2007 - sh@suse.de
   - Fixed bug #232522: Added inst src URL to pkg versions view
   - Fixed bug #152997: Install progress icons
 
-- V 2.15.5 
+- V 2.14.5 
 
 -------------------------------------------------------------------
 Wed Jan 24 14:53:55 CET 2007 - sh@suse.de
