@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Wed Feb 21 12:57:20 CET 2007 - kmachalkova@suse.cz
+
+- Show 'automatic changes' popup when any pkgs are selected for 
+  installation by 'verify system' call (#239750) 
+- Remember pkgs already marked for automatic installation by 'verify
+  system' and do not show them in 'automatic changes' popup again
+- 2.13.63
+
+-------------------------------------------------------------------
 Wed Feb 14 15:23:17 CET 2007 - kmachalkova@suse.cz
 
 - Use generic xterm/vt100 termifo in case required terminfo is missing 
