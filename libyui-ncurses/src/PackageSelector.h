@@ -476,7 +476,7 @@ class PackageSelector
     void clearVerifiedPkgs() {
 	if ( !verified_pkgs.empty() )
 	{
-	    NCMIL << "Discarding auto-dependency changes" << endl
+	    NCMIL << "Discarding auto-dependency changes" << endl;
 	    verified_pkgs.clear();
 	}
     }
