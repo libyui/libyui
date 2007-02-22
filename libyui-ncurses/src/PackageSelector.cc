@@ -2481,6 +2481,9 @@ bool PackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectable 
 	descr += PkgNames::PatchKind();
 	descr += ": </b>";
 	descr += patchPtr->category();
+	descr += "&nbsp;";
+	descr += PkgNames::Version();
+	descr += patchPtr->edition().asString();
 	descr += "<br>";
 
 	if ( selectable->hasInstalledObj()
