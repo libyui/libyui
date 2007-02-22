@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Feb 22 12:23:09 CET 2007 - gs@suse.de
+
+- Online Update: Add column with patch version and show the version in 
+  the description window (bug #239829)
+- 2.13.64 
+
+-------------------------------------------------------------------
 Wed Feb 21 12:57:20 CET 2007 - kmachalkova@suse.cz
 
 - Show 'automatic changes' popup when any pkgs are selected for 
