@@ -537,6 +537,7 @@ void NCPkgTable::fillHeader( )
 	    header.push_back( "L" + PkgNames::PkgName() );
 	    header.push_back( "L" + PkgNames::PkgSummary() );
 	    header.push_back( "L" + PkgNames::PatchKind() );
+	    header.push_back( "L" + PkgNames::PkgVersion() );
 	    // header.push_back( "L" + PkgNames::PkgSize() );
 	    break;
 	}
@@ -743,7 +744,8 @@ bool NCPkgTable::createPatchEntry ( ZyppPatch patchPtr, ZyppSel	selectable )
 	pkgLine.push_back( selectable->name() );	// name	
 
     pkgLine.push_back( patchPtr->category() );  // patch kind
-
+    pkgLine.push_back( patchPtr->edition().asString() ); // patch version
+    
     // zypp::ByteCount size = patchPtr->size();
     // pkgLine.push_back( size.asString( 8 ) );
 
