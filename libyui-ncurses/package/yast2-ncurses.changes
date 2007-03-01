@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Mar  1 14:15:17 CET 2007 - gs@suse.de
+
+- Replace &product; in RichText widget correctly (bug #247845)
+- 2.13.65
+
+-------------------------------------------------------------------
 Thu Feb 22 12:23:09 CET 2007 - gs@suse.de
 
 - Online Update: Add column with patch version and show the version in 
