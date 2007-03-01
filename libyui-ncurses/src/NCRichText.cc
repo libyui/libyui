@@ -95,7 +95,8 @@ const wstring NCRichText::filterEntities( const std::wstring & text )
     	        break;  // no ';'  -> no need to continue
 
 	    const wstring repl = entityLookup( txt.substr( special+1, colon-special-1 ) );
-	    if ( !repl.empty() )
+	    if ( !repl.empty()
+		 || txt.substr( special+1, colon-special-1 ) == L"product" )	// always replace &product; 
 	    {
 		txt.replace( special, colon-special+1, repl );
 	    }
