@@ -684,8 +684,9 @@ const string PkgNames::IgnAllLabel()
 
 const string PkgNames::SolveLabel()
 {
-    // the label of the Solve button
-    static const string value = _( "&Solve" );
+    // the label of the Solve button - 'try again' implies that user
+    // has to make some action (#213602)
+    static const string value = _( "&OK -- Try Again" );
     return value;
 }
 
@@ -1433,7 +1434,7 @@ const string PkgNames::HelpOnStatus1()
 const string PkgNames::HelpOnStatus2()
 {
     // part 1 of help text package status
-    static const string value = _( "<p>By default, the package dependencies are checked with every status change. You will be informed about package conflicts and additionally required packages will be selected (the menu item <i>Etc.</i>/<i>Dependencies</i> offers different settings).</p>" );
+    static const string value = _( "<p>By default, the package dependencies are checked with every status change. You will be informed about package conflicts and additionally required packages will be selected (the menu item <i>Etc.</i>/<i>Dependencies</i> offers different settings). To resolve conflict, select one of the offered solution and press 'OK -- Try Again'.</p>" );
     return value;
 }
 

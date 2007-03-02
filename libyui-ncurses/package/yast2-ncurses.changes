@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Mar  2 11:11:50 CET 2007 - kmachalkova@suse.cz
+
+- Replaced 'Solve' label with 'OK -- Try again' in pkg manager (to 
+  be compatible with Qt), enhanced help text (#213602)
+- 2.15.10
+
+-------------------------------------------------------------------
 Thu Mar  1 14:30:28 CET 2007 - gs@suse.de
 
 - Replace &product; in RichText widget correctly (bug #247845) 
