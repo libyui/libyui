@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Mar  6 09:59:22 CET 2007 - kmachalkova@suse.cz
+
+- initscr() code is back - needed for running yast clients from
+  scripts with no terminal associated (#248864)
+- 2.13.66 
+
+-------------------------------------------------------------------
 Thu Mar  1 14:15:17 CET 2007 - gs@suse.de
 
 - Replace &product; in RichText widget correctly (bug #247845)
