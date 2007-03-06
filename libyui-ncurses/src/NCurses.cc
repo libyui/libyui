@@ -271,6 +271,12 @@ void NCurses::init()
     open(log.c_str(), O_APPEND | O_CREAT);
   }
 
+  if ( !theTerm ) {
+    UIMIL << "no term so fall back to initscr" << endl;
+    if ( ::initscr() == NULL )
+      throw NCursesError( "initscr() failed" );
+  }
+
   UIMIL << "have color = " << ::has_colors()  << endl;
   if ( want_colors() && ::has_colors() ) {
     if ( ::start_color() != OK )
