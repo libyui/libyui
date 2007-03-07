@@ -434,16 +434,17 @@ bool NCTreePad::handleInput( wint_t key )
   case KEY_PPAGE:
   case KEY_DOWN:
   case KEY_NPAGE:
+  //handle these in compatible way with other widgets (#251180)
+  //jump to the first/last item
+  case KEY_HOME:
+  case KEY_END:
+  //scroll horizontally
+  case KEY_RIGHT:
+  case KEY_LEFT:
     handled = NCPad::handleInput( key );
     break;
 
-  case KEY_HOME:
-    handled = NCPad::handleInput( KEY_LEFT );
-    break;
-  case KEY_END:
-    handled = NCPad::handleInput( KEY_RIGHT );
-    break;
-
+  //use these for toggling pack/unpack the tree
   case '+':
   case '-':
   case KEY_IC:
@@ -454,22 +455,6 @@ bool NCTreePad::handleInput( wint_t key )
       UpdateFormat();
       setpos( wpos( citem.L, srect.Pos.C ) );
     }
-    break;
-
-  case KEY_RIGHT:
-    if ( visItems[citem.L]->handleInput( KEY_IC ) ) {
-      UpdateFormat();
-      setpos( wpos( citem.L, srect.Pos.C ) );
-    } else
-      setpos( wpos( citem.L+1, srect.Pos.C ) );
-    break;
-
-  case KEY_LEFT:
-    if ( visItems[citem.L]->handleInput( KEY_DC ) ) {
-      UpdateFormat();
-      setpos( wpos( citem.L, srect.Pos.C ) );
-    } else
-      setpos( wpos( citem.L-1, srect.Pos.C ) );
     break;
 
   default:
