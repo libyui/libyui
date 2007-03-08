@@ -924,6 +924,24 @@ wint_t NCDialog::getch( int timeout_millisec )
   return got;
 }
 
+bool NCDialog::flushTypeahead()
+{
+    // Don't throw away keys from the input buffer after a ValueChanged or
+    // SelectionChanged event but save them e.g. for input in TextEntry,
+    // MultiLineEdit or to scroll in lists ( bug #245476 )
+    if ( eventReason == YEvent::ValueChanged ||
+	 eventReason == YEvent::SelectionChanged )
+    {
+	IODBG << "DON't flush input buffer - reason: " << eventReason << endl;
+	return false;
+    }
+    else
+    {
+	IODBG << "Flush input buffer" << endl;
+	return true;
+    }
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -939,9 +957,11 @@ void NCDialog::idleInput()
     ::flushinp();
     return;
   }
-
+  IODBG << "idle+ " << this << endl;
   if ( !active ) {
-    ::flushinp();
+      if ( flushTypeahead() ) {
+	::flushinp();
+      }
     doUpdate();
   } else {
     IODBG << "idle+ " << this << endl;
@@ -979,6 +999,7 @@ NCursesEvent NCDialog::pollInput()
   }
 
   NCursesEvent returnEvent = pendingEvent;
+  eventReason = returnEvent.reason;
   pendingEvent = NCursesEvent::none;
 
   IODBG << "poll- " << this << '(' << returnEvent << ')' << endl;
@@ -996,7 +1017,9 @@ NCursesEvent NCDialog::pollInput()
 NCursesEvent NCDialog::userInput( int timeout_millisec )
 {
   IODBG << "user+ " << this << endl;
-  ::flushinp();
+  if ( flushTypeahead() ) {
+      ::flushinp();
+  }
 
   if ( !pan ) {
     NCINT << DLOC << " called for uninitialized " << this << endl;
@@ -1006,6 +1029,7 @@ NCursesEvent NCDialog::userInput( int timeout_millisec )
   processInput( timeout_millisec );
 
   NCursesEvent returnEvent = pendingEvent;
+  eventReason = returnEvent.reason;
   pendingEvent = NCursesEvent::none;
 
   IODBG << "user- " << this << '(' << returnEvent << ')' << endl;

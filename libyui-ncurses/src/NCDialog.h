@@ -69,6 +69,7 @@ class NCDialog : public YDialog, public NCWidget {
     NCWidget *const wActive;
 
     NCursesEvent pendingEvent;
+    YEvent::EventReason eventReason;
 
     NCPopupInfo *helpPopup;
 
@@ -106,6 +107,8 @@ class NCDialog : public YDialog, public NCWidget {
     bool describeFunctionKeys( string & helpText );
 
     wint_t getinput();		// get the input (respect terminal encoding)
+
+    bool flushTypeahead();
     
   protected:
 
