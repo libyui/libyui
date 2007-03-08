@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Mar  8 11:09:24 CET 2007 - gs@suse.de
+
+- Don't throw away keys from the input buffer after a ValueChanged or
+  SelectionChanged event but save them e.g. for input in TextEntry,
+  MultiLineEdit or to scroll in lists ( bug #245476 )
+
+-------------------------------------------------------------------
 Wed Mar  7 15:19:44 CET 2007 - kmachalkova@suse.cz
 
 - Tree widget: handle arrows and HOME/END keys in compatible way 
