@@ -37,7 +37,8 @@ using std::list;
 using std::string;
 
 
-#define VERBOSE_EXCLUDE_RULES 0
+#define VERBOSE_EXCLUDE_RULES	0
+#define EXTRA_SOLVE_COLLECTIONS	0
 
 
 YQPkgObjList::YQPkgObjList( QWidget * parent )
@@ -1005,6 +1006,7 @@ YQPkgObjListItem::setStatus( ZyppStatus newStatus, bool sendSignals )
 void
 YQPkgObjListItem::solveResolvableCollections()
 {
+#if EXTRA_SOLVE_COLLECTIONS
     zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
 
     resolver->transactReset( zypp::ResStatus::APPL_LOW );
@@ -1015,6 +1017,7 @@ YQPkgObjListItem::solveResolvableCollections()
     resolver->transactResKind( zypp::ResTraits<zypp::Language >::kind );
     resolver->transactResKind( zypp::ResTraits<zypp::Patch    >::kind );
     resolver->transactResKind( zypp::ResTraits<zypp::Atom     >::kind );
+#endif
 }
 
 

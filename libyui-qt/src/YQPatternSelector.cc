@@ -44,6 +44,7 @@
 #include "YEvent.h"
 #include "YQi18n.h"
 
+#define ALWAYS_SOLVE_IMMEDIATELY 1
 
 using std::max;
 using std::string;
@@ -273,6 +274,11 @@ YQPatternSelector::makeConnections()
 {
     if ( _patternList )
     {
+#if ALWAYS_SOLVE_IMMEDIATELY
+	connect( _patternList,		SIGNAL( statusChanged()		),
+		 this,			SLOT  ( resolveDependencies()	) );
+#endif
+
 	if ( _descriptionView )
 	{
 	    connect( _patternList,	SIGNAL( selectionChanged( ZyppSel ) ),
@@ -289,6 +295,11 @@ YQPatternSelector::makeConnections()
 
     if ( _selList )
     {
+#if ALWAYS_SOLVE_IMMEDIATELY
+	connect( _selList,		SIGNAL( statusChanged()		),
+		 this,			SLOT  ( resolveDependencies()	) );
+#endif
+
 	if ( _descriptionView )
 	{
 	    connect( _selList,		SIGNAL( selectionChanged( ZyppSel ) ),

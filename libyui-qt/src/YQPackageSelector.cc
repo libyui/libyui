@@ -21,7 +21,7 @@
 
 #define CHECK_DEPENDENCIES_ON_STARTUP			1
 #define DEPENDENCY_FEEDBACK_IF_OK			1
-#define AUTO_CHECK_DEPENDENCIES_DEFAULT			false
+#define AUTO_CHECK_DEPENDENCIES_DEFAULT			true
 #define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE	0
 #define GLOBAL_UPDATE_CONFIRMATION_THRESHOLD		20
 
@@ -93,6 +93,7 @@ using std::pair;
 #define SPACING				6
 #define MARGIN				4
 #define DEFAULT_EXPORT_FILE_NAME	"user-packages.xml"
+#define FAST_SOLVER			1
 
 
 
@@ -862,6 +863,7 @@ YQPackageSelector::makeConnections()
     }
 
     connectPatchList();
+
 
 
     //
