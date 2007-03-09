@@ -208,7 +208,7 @@ YQPackageSelector::YQPackageSelector( QWidget *			parent,
     {
 	// Fire up the first dependency check in the main loop.
 	// Don't do this right away - wait until all initializations are finished.
-	QTimer::singleShot( 0, this, SLOT( resolvePackageDependencies() ) );
+	QTimer::singleShot( 0, this, SLOT( resolveDependencies() ) );
     }
 #endif
 }
@@ -302,11 +302,14 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	connect( _patternList,		SIGNAL( statusChanged()			),
 		 this,			SLOT  ( autoResolveDependencies()	) );
 
-	connect( _pkgConflictDialog,	SIGNAL( updatePackages()		),
-		 _patternList,		SLOT  ( updateItemStates()		) );
-
 	connect( this,			SIGNAL( refresh()			),
 		 _patternList,		SLOT  ( updateItemStates()		) );
+
+	if ( _pkgConflictDialog )
+	{
+	    connect( _pkgConflictDialog, SIGNAL( updatePackages()		),
+		     _patternList,	 SLOT  ( updateItemStates()		) );
+	}
     }
 
 
@@ -324,11 +327,14 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	connect( _selList,		SIGNAL( statusChanged()			),
 		 this,			SLOT  ( autoResolveDependencies()	) );
 
-	connect( _pkgConflictDialog,	SIGNAL( updatePackages()		),
-		 _selList,		SLOT  ( updateItemStates()		) );
-
 	connect( this,			SIGNAL( refresh()			),
 		 _selList,		 SLOT  ( updateItemStates()		) );
+
+	if ( _pkgConflictDialog )
+	{
+	    connect( _pkgConflictDialog, SIGNAL( updatePackages()		),
+		     _selList,		 SLOT  ( updateItemStates()		) );
+	}
     }
 
 
@@ -962,7 +968,7 @@ YQPackageSelector::autoResolveDependencies()
     if ( _autoDependenciesCheckBox && ! _autoDependenciesCheckBox->isChecked() )
 	return;
 
-    resolvePackageDependencies();
+    resolveDependencies();
 }
 
 

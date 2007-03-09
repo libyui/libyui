@@ -86,11 +86,11 @@ public:
 public slots:
 
     /**
-     * Resolve package dependencies (unconditionally).
+     * Resolve dependencies (unconditionally) for all resolvables.
      *
      * Returns QDialog::Accepted or QDialog::Rejected.
      **/
-    int resolvePackageDependencies();
+    int resolveDependencies();
 
     /**
      * Verifies dependencies of the currently installed system.

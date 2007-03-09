@@ -104,7 +104,7 @@ YQPackageSelectorBase::~YQPackageSelectorBase()
 
 
 int
-YQPackageSelectorBase::resolvePackageDependencies()
+YQPackageSelectorBase::resolveDependencies()
 {
     if ( ! _pkgConflictDialog )
     {
@@ -181,7 +181,7 @@ YQPackageSelectorBase::checkDiskUsage()
 void
 YQPackageSelectorBase::showAutoPkgList()
 {
-    resolvePackageDependencies();
+    resolveDependencies();
 
     // Show which packages are installed/deleted automatically
     QString msg =
@@ -260,7 +260,7 @@ YQPackageSelectorBase::accept()
     do
     {
 	// Force final dependency resolving
-	if ( resolvePackageDependencies() == QDialog::Rejected )
+	if ( resolveDependencies() == QDialog::Rejected )
 	    return;
 
 	confirmedAllLicenses = showPendingLicenseAgreements();

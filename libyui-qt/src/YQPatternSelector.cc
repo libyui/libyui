@@ -115,7 +115,7 @@ YQPatternSelector::basicLayout()
 
     int left_pane_width = (int) ( 0.3 * YQUI::ui()->defaultSize( YD_HORIZ ) );
     left_pane->resize( QSize( left_pane_width, left_pane->height() ) );
-    
+
     outer_splitter->setResizeMode( left_pane,  QSplitter::KeepSize );
     outer_splitter->setResizeMode( right_pane, QSplitter::Stretch  );
 
@@ -277,6 +277,12 @@ YQPatternSelector::makeConnections()
 #if ALWAYS_SOLVE_IMMEDIATELY
 	connect( _patternList,		SIGNAL( statusChanged()		),
 		 this,			SLOT  ( resolveDependencies()	) );
+
+	if ( _pkgConflictDialog )
+	{
+	    connect( _pkgConflictDialog, SIGNAL( updatePackages()	),
+		     _patternList,	 SLOT  ( updateItemStates()	) );
+	}
 #endif
 
 	if ( _descriptionView )
@@ -298,6 +304,13 @@ YQPatternSelector::makeConnections()
 #if ALWAYS_SOLVE_IMMEDIATELY
 	connect( _selList,		SIGNAL( statusChanged()		),
 		 this,			SLOT  ( resolveDependencies()	) );
+
+	if ( _pkgConflictDialog )
+	{
+	    connect( _pkgConflictDialog, SIGNAL( updatePackages()	),
+		     _selList,		 SLOT  ( updateItemStates()	) );
+	}
+
 #endif
 
 	if ( _descriptionView )
