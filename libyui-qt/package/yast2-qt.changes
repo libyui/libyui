@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Fri Mar  9 15:36:01 CET 2007 - sh@suse.de
+
+- PackageSelector/PatternSelector no longer use zypp::transactResKind()
+  to emulate what a real solver run might do, now always does a real
+  solver run which is no longer painfully slow with recent
+  solver improvements.
+- Auto-solving on by default in PackageSelector
+- V 2.15.2 
+
+-------------------------------------------------------------------
 Tue Feb 20 15:02:11 CET 2007 - sh@suse.de
 
 - Fixed bug #239829 (again): Show patch version in patches list
