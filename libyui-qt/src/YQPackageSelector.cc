@@ -641,7 +641,7 @@ YQPackageSelector::addMenus()
 	_viewShowDevelID = _viewMenu->insertItem( _( "Show -de&vel Packages" ),
 						       this, SLOT( pkgExcludeRulesChanged( int ) ), Key_F7 );
 	_viewMenu->setItemChecked( _viewShowDevelID, true );
-	_excludeDevelPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-devel$" ), _pkgList->nameCol() );
+	_excludeDevelPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-devel(-\\d+bit)?$" ), _pkgList->nameCol() );
 	CHECK_PTR( _excludeDevelPkgs );
 	_excludeDevelPkgs->enable( false );
 
@@ -1151,7 +1151,7 @@ YQPackageSelector::pkgImport()
 		else if ( kind == "pattern" )	importPatterns.insert( ImportMapPair( it->name(), *it ) );
 	    }
 
-	    y2debug( "Found %u packages and %u patterns in %s",
+	    y2debug( "Found %zu packages and %zu patterns in %s",
 		     importPkg.size(),
 		     importPatterns.size(),
 		     (const char *) filename );
