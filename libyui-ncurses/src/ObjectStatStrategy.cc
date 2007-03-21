@@ -248,10 +248,19 @@ bool ObjectStatStrategy::toggleStatus( ZyppSel slbPtr,
 	    }
 	    break;
 	case S_NoInst:
-	    newStatus = S_Install ;
+	    if ( slbPtr->hasCandidateObj() )
+            {
+	        newStatus = S_Install;
+            }
+	    else
+	    {
+		NCWAR << "No candidate object for " << slbPtr->theObj()->name().c_str() << endl;
+		newStatus = S_NoInst;
+            }	
 	    break;
 	case S_AutoInstall:
-	    newStatus = S_NoInst;
+	    //Correct transition is S_Taboo -> #254816
+	    newStatus = S_Taboo;
 	    break;
 	case S_AutoDel:
 	    newStatus = S_KeepInstalled;

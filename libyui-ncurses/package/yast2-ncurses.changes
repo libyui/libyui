@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Mar 21 17:19:57 CET 2007 - kmachalkova@suse.cz
+
+- Correct pkg/pattern/patch state transition from S_AutoInstall to  
+  S_Taboo on toggle with SPACE key (#254816)
+- Do not set state to S_Install if no candidate is available
+- 2.15.13
+
+-------------------------------------------------------------------
 Thu Mar  8 11:09:24 CET 2007 - gs@suse.de
 
 - Don't throw away keys from the input buffer after a ValueChanged or
