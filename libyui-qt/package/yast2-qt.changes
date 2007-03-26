@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Mar 26 14:11:50 CEST 2007 - sh@suse.de
+
+- Fixed bug #251215: "Save screenshot to" not translated 
+
+-------------------------------------------------------------------
 Fri Mar  9 15:36:01 CET 2007 - sh@suse.de
 
 - PackageSelector/PatternSelector no longer use zypp::transactResKind()
