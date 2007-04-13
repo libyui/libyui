@@ -2,7 +2,7 @@
 # Makefile.am for qt/src
 #
 
-SUBDIRS = include
+SUBDIRS = pkg
 
 AM_CXXFLAGS = -DY2LOG=\"ui-qt\"					\
 	-DQT_THREAD_SUPPORT					\
@@ -27,27 +27,34 @@ EXTRA_DIST = $(lang_fonts_DATA)
 
 # plugin, libtool forces 'lib' prefix
 plugin_LTLIBRARIES = libpy2qt.la
-noinst_LTLIBRARIES = liby2qt.la
 libpy2qt_la_LDFLAGS = -version-info 2:0
-liby2qt_la_LDFLAGS = -version-info 2:0
 
 libpy2qt_la_LIBADD =			\
 	-L$(libdir) -lyui		\
 	-L$(QTLIBDIR) -lqt-mt		\
-	-lX11 -lXext -lSM -lICE		\
-	${ZYPP_LIBS}
+	-lX11 -lXext -lSM -lICE
 
-liby2qt_la_LIBADD = $(libpy2qt_la_LIBADD)
+# libpy2qt_la_LIBADD =			\
+# 	-Lpkg -ly2qt_pkg		\
+# 	-L$(libdir) -lyui		\
+# 	-L$(QTLIBDIR) -lqt-mt		\
+# 	-lX11 -lXext -lSM -lICE
 
-# Make library, component plugin, and linkable object
+# noinst_LTLIBRARIES = liby2qt.la
+# liby2qt_la_LDFLAGS = -version-info 2:0
+# liby2qt_la_LIBADD = $(libpy2qt_la_LIBADD)
 
-# the basic library has the pure y2qt sources
 
-liby2qt_la_SOURCES =				\
+noinst_HEADERS = $(wildcard *.h)
+
+libpy2qt_la_SOURCES =				\
+	Y2CCQt.cc				\
+						\
 	YQUI_core.cc				\
 	YQUI_widgets.cc				\
 	YQUI_builtins.cc			\
 	YQUI_x11.cc				\
+	YQPackageSelectorPlugin.cc		\
 						\
 	YQIconPool.cc				\
 						\
@@ -73,42 +80,7 @@ liby2qt_la_SOURCES =				\
 	YQMultiLineEdit.cc			\
 	YQMultiProgressMeter.cc			\
 	YQMultiSelectionBox.cc			\
-	YQPackageSelector.cc			\
-	YQPackageSelectorBase.cc		\
-	YQPackageSelectorHelp.cc		\
 	YQPartitionSplitter.cc			\
-	YQPatternSelector.cc			\
-	YQPkgChangeLogView.cc			\
-	YQPkgChangesDialog.cc			\
-	YQPkgConflictDialog.cc			\
-	YQPkgConflictList.cc			\
-	YQPkgDependenciesView.cc		\
-	YQPkgDescriptionDialog.cc		\
-	YQPkgDescriptionView.cc			\
-	YQPkgDiskUsageList.cc			\
-	YQPkgDiskUsageWarningDialog.cc		\
-	YQPkgFileListView.cc			\
-	YQPkgGenericDetailsView.cc		\
-	YQPkgInstSrcFilterView.cc		\
-	YQPkgInstSrcList.cc			\
-	YQPkgLangList.cc			\
-	YQPkgList.cc				\
-	YQPkgObjList.cc				\
-	YQPkgPatchFilterView.cc			\
-	YQPkgPatchList.cc			\
-	YQPkgPatternList.cc			\
-	YQPkgProductDialog.cc			\
-	YQPkgProductList.cc			\
-	YQPkgRpmGroupTagsFilterView.cc		\
-	YQPkgSearchFilterView.cc		\
-	YQPkgSelDescriptionView.cc		\
-	YQPkgSelList.cc				\
-	YQPkgSelMapper.cc			\
-	YQPkgStatusFilterView.cc		\
-	YQPkgTechnicalDetailsView.cc		\
-	YQPkgTextDialog.cc			\
-	YQPkgUpdateProblemFilterView.cc		\
-	YQPkgVersionsView.cc			\
 	YQProgressBar.cc			\
 	YQPushButton.cc				\
 	YQRadioButton.cc			\
@@ -145,10 +117,10 @@ liby2qt_la_SOURCES =				\
 
 
 # the plugin adds the liby2 component interface
-
-libpy2qt_la_SOURCES =				\
-	$(liby2qt_la_SOURCES)			\
-	Y2CCQt.cc
+#
+# libpy2qt_la_SOURCES =				\
+#	$(liby2qt_la_SOURCES)			\
+#	Y2CCQt.cc
 
 
 BUILT_SOURCES =					\
@@ -174,41 +146,7 @@ BUILT_SOURCES =					\
 	YQMultiLineEdit.moc			\
 	YQMultiProgressMeter.moc		\
 	YQMultiSelectionBox.moc			\
-	YQPackageSelector.moc			\
-	YQPackageSelectorBase.moc		\
 	YQPartitionSplitter.moc			\
-	YQPatternSelector.moc			\
-	YQPkgChangeLogView.moc			\
-	YQPkgChangesDialog.moc			\
-	YQPkgConflictDialog.moc			\
-	YQPkgConflictList.moc			\
-	YQPkgDependenciesView.moc		\
-	YQPkgDescriptionDialog.moc		\
-	YQPkgDescriptionView.moc		\
-	YQPkgDiskUsageList.moc			\
-	YQPkgDiskUsageWarningDialog.moc		\
-	YQPkgFileListView.moc			\
-	YQPkgGenericDetailsView.moc		\
-	YQPkgInstSrcFilterView.moc		\
-	YQPkgInstSrcList.moc			\
-	YQPkgLangList.moc			\
-	YQPkgList.moc				\
-	YQPkgObjList.moc			\
-	YQPkgPatchFilterView.moc		\
-	YQPkgPatchList.moc			\
-	YQPkgPatternList.moc			\
-	YQPkgProductDialog.moc			\
-	YQPkgProductDialog.moc			\
-	YQPkgProductList.moc			\
-	YQPkgRpmGroupTagsFilterView.moc		\
-	YQPkgSearchFilterView.moc		\
-	YQPkgSelDescriptionView.moc		\
-	YQPkgSelList.moc			\
-	YQPkgStatusFilterView.moc		\
-	YQPkgTechnicalDetailsView.moc		\
-	YQPkgTextDialog.moc			\
-	YQPkgUpdateProblemFilterView.moc	\
-	YQPkgVersionsView.moc			\
 	YQProgressBar.moc			\
 	YQPushButton.moc			\
 	YQRadioButton.moc			\
@@ -261,40 +199,7 @@ YQMenuButton.o YQMenuButton.lo:					YQMenuButton.moc
 YQMultiLineEdit.o YQMultiLineEdit.lo:				YQMultiLineEdit.moc
 YQMultiProgressMeter.o YQMultiProgressMeter.lo:			YQMultiProgressMeter.moc
 YQMultiSelectionBox.o YQMultiSelectionBox.lo:			YQMultiSelectionBox.moc
-YQPackageSelector.o YQPackageSelector.lo:			YQPackageSelector.moc
-YQPackageSelectorBase.o YQPackageSelectorBase.lo:		YQPackageSelectorBase.moc
 YQPartitionSplitter.o YQPartitionSplitter.lo:			YQPartitionSplitter.moc
-YQPatternSelector.o YQPatternSelector.lo:			YQPatternSelector.moc
-YQPkgChangeLogView.o YQPkgChangeLogView.lo:			YQPkgChangeLogView.moc
-YQPkgChangesDialog.o YQPkgChangesDialog.lo:			YQPkgChangesDialog.moc
-YQPkgConflictDialog.o YQPkgConflictDialog.lo:			YQPkgConflictDialog.moc
-YQPkgConflictList.o YQPkgConflictList.lo:			YQPkgConflictList.moc
-YQPkgDependenciesView.o YQPkgDependenciesView.lo:		YQPkgDependenciesView.moc
-YQPkgDescriptionDialog.o YQPkgDescriptionDialog.lo:		YQPkgDescriptionDialog.moc
-YQPkgDescriptionView.o YQPkgDescriptionView.lo:			YQPkgDescriptionView.moc
-YQPkgDiskUsageList.o YQPkgDiskUsageList.lo:			YQPkgDiskUsageList.moc
-YQPkgDiskUsageWarningDialog.o YQPkgDiskUsageWarningDialog.lo:	YQPkgDiskUsageWarningDialog.moc
-YQPkgFileListView.o YQPkgFileListView.lo:			YQPkgFileListView.moc
-YQPkgGenericDetailsView.o YQPkgGenericDetailsView.lo:		YQPkgGenericDetailsView.moc
-YQPkgInstSrcFilterView.o YQPkgInstSrcFilterView.lo:		YQPkgInstSrcFilterView.moc
-YQPkgInstSrcList.o YQPkgInstSrcList.lo:				YQPkgInstSrcList.moc
-YQPkgLangList.o YQPkgLangList.lo:				YQPkgLangList.moc
-YQPkgList.o YQPkgList.lo:					YQPkgList.moc
-YQPkgObjList.o YQPkgObjList.lo:					YQPkgObjList.moc
-YQPkgPatchFilterView.o YQPkgPatchFilterView.lo:			YQPkgPatchFilterView.moc
-YQPkgPatchList.o YQPkgPatchList.lo:				YQPkgPatchList.moc
-YQPkgPatternList.o YQPkgPatternList.lo:				YQPkgPatternList.moc
-YQPkgProductDialog.o YQPkgProductDialog.lo:			YQPkgProductDialog.moc
-YQPkgProductList.o YQPkgProductList.lo:				YQPkgProductList.moc
-YQPkgRpmGroupTagsFilterView.o YQPkgRpmGroupTagsFilterView.lo:	YQPkgRpmGroupTagsFilterView.moc
-YQPkgSearchFilterView.o YQPkgSearchFilterView.lo:		YQPkgSearchFilterView.moc
-YQPkgSelDescriptionView.o YQPkgSelDescriptionView.lo:		YQPkgSelDescriptionView.moc
-YQPkgSelList.o YQPkgSelList.lo:					YQPkgSelList.moc
-YQPkgStatusFilterView.o YQPkgStatusFilterView.lo:		YQPkgStatusFilterView.moc
-YQPkgTechnicalDetailsView.o YQPkgTechnicalDetailsView.lo:	YQPkgTechnicalDetailsView.moc
-YQPkgTextDialog.o YQPkgTextDialog.lo:				YQPkgTextDialog.moc
-YQPkgUpdateProblemFilterView.o YQPkgUpdateProblemFilterView.lo:	YQPkgUpdateProblemFilterView.moc
-YQPkgVersionsView.o YQPkgVersionsView.lo:			YQPkgVersionsView.moc
 YQProgressBar.o YQProgressBar.lo:				YQProgressBar.moc
 YQPushButton.o YQPushButton.lo:					YQPushButton.moc
 YQRadioButton.o YQRadioButton.lo:				YQRadioButton.moc
@@ -323,92 +228,59 @@ qxembed.o qxembed.lo:						qxembed.moc
 
 
 
-YQUI.moc:				include/YQUI.h
+YQUI.moc:				YQUI.h
 
-YQAlignment.moc:			include/YQAlignment.h
-YQBarGraph.moc:				include/YQBarGraph.h
-YQCheckBox.moc:				include/YQCheckBox.h
-YQCheckBoxFrame.moc:			include/YQCheckBoxFrame.h
-YQColoredLabel.moc:			include/YQColoredLabel.h
-YQComboBox.moc:				include/YQComboBox.h
-YQDialog.moc: 				include/YQDialog.h
-YQDownloadProgress.moc:			include/YQDownloadProgress.h
-YQDumbTab.moc:				include/YQDumbTab.h
-YQEmpty.moc:				include/YQEmpty.h
-YQFrame.moc:				include/YQFrame.h
-YQGenericButton.moc:			include/YQGenericButton.h
-YQImage.moc:				include/YQImage.h
-YQIntField.moc:				include/YQIntField.h
-YQLabel.moc:				include/YQLabel.h
-YQLogView.moc:				include/YQLogView.h
-YQMenuButton.moc:			include/YQMenuButton.h
-YQMultiLineEdit.moc:			include/YQMultiLineEdit.h
-YQMultiProgressMeter.moc:		include/YQMultiProgressMeter.h
-YQMultiSelectionBox.moc:		include/YQMultiSelectionBox.h
-YQPackageSelector.moc:			include/YQPackageSelector.h
-YQPackageSelectorBase.moc:		include/YQPackageSelectorBase.h
-YQPartitionSplitter.moc:		include/YQPartitionSplitter.h
-YQPatternSelector.moc:			include/YQPatternSelector.h
-YQPkgChangeLogView.moc:			include/YQPkgChangeLogView.h
-YQPkgChangesDialog.moc:			include/YQPkgChangesDialog.h
-YQPkgConflictDialog.moc:		include/YQPkgConflictDialog.h
-YQPkgConflictList.moc:			include/YQPkgConflictList.h
-YQPkgDependenciesView.moc:		include/YQPkgDependenciesView.h
-YQPkgDescriptionDialog.moc:		include/YQPkgDescriptionDialog.h
-YQPkgDescriptionView.moc:		include/YQPkgDescriptionView.h
-YQPkgDiskUsageList.moc:			include/YQPkgDiskUsageList.h
-YQPkgDiskUsageWarningDialog.moc:	include/YQPkgDiskUsageWarningDialog.h
-YQPkgFileListView.moc:			include/YQPkgFileListView.h
-YQPkgGenericDetailsView.moc:		include/YQPkgGenericDetailsView.h
-YQPkgInstSrcFilterView.moc:		include/YQPkgInstSrcFilterView.h
-YQPkgInstSrcList.moc:			include/YQPkgInstSrcList.h
-YQPkgLangList.moc:			include/YQPkgLangList.h
-YQPkgList.moc:				include/YQPkgList.h
-YQPkgObjList.moc:			include/YQPkgObjList.h
-YQPkgPatchFilterView.moc:		include/YQPkgPatchFilterView.h
-YQPkgPatchList.moc:			include/YQPkgPatchList.h
-YQPkgPatternList.moc:			include/YQPkgPatternList.h
-YQPkgProductDialog.moc:			include/YQPkgProductDialog.h
-YQPkgProductList.moc:			include/YQPkgProductList.h
-YQPkgRpmGroupTagsFilterView.moc:	include/YQPkgRpmGroupTagsFilterView.h
-YQPkgSearchFilterView.moc:		include/YQPkgSearchFilterView.h
-YQPkgSelDescriptionView.moc:		include/YQPkgSelDescriptionView.h
-YQPkgSelList.moc:			include/YQPkgSelList.h
-YQPkgStatusFilterView.moc:		include/YQPkgStatusFilterView.h
-YQPkgTechnicalDetailsView.moc:		include/YQPkgTechnicalDetailsView.h
-YQPkgTextDialog.moc:			include/YQPkgTextDialog.h
-YQPkgUpdateProblemFilterView.moc:	include/YQPkgUpdateProblemFilterView.h
-YQPkgVersionsView.moc:			include/YQPkgVersionsView.h
-YQProgressBar.moc:			include/YQProgressBar.h
-YQPushButton.moc:			include/YQPushButton.h
-YQRadioButton.moc:			include/YQRadioButton.h
-YQRadioButtonGroup.moc:      		include/YQRadioButtonGroup.h
-YQReplacePoint.moc:			include/YQReplacePoint.h
-YQRichText.moc:				include/YQRichText.h
-YQSelectionBox.moc:			include/YQSelectionBox.h
-YQSlider.moc:				include/YQSlider.h
-YQSpacing.moc:				include/YQSpacing.h
-YQSplit.moc:				include/YQSplit.h
-YQSquash.moc:				include/YQSquash.h
-YQTable.moc:				include/YQTable.h
-YQTextEntry.moc:			include/YQTextEntry.h
-YQTree.moc:				include/YQTree.h
-YQWizard.moc:				include/YQWizard.h
-YQWizardButton.moc:			include/YQWizardButton.h
+YQAlignment.moc:			YQAlignment.h
+YQBarGraph.moc:				YQBarGraph.h
+YQCheckBox.moc:				YQCheckBox.h
+YQCheckBoxFrame.moc:			YQCheckBoxFrame.h
+YQColoredLabel.moc:			YQColoredLabel.h
+YQComboBox.moc:				YQComboBox.h
+YQDialog.moc: 				YQDialog.h
+YQDownloadProgress.moc:			YQDownloadProgress.h
+YQDumbTab.moc:				YQDumbTab.h
+YQEmpty.moc:				YQEmpty.h
+YQFrame.moc:				YQFrame.h
+YQGenericButton.moc:			YQGenericButton.h
+YQImage.moc:				YQImage.h
+YQIntField.moc:				YQIntField.h
+YQLabel.moc:				YQLabel.h
+YQLogView.moc:				YQLogView.h
+YQMenuButton.moc:			YQMenuButton.h
+YQMultiLineEdit.moc:			YQMultiLineEdit.h
+YQMultiProgressMeter.moc:		YQMultiProgressMeter.h
+YQMultiSelectionBox.moc:		YQMultiSelectionBox.h
+YQPartitionSplitter.moc:		YQPartitionSplitter.h
+YQProgressBar.moc:			YQProgressBar.h
+YQPushButton.moc:			YQPushButton.h
+YQRadioButton.moc:			YQRadioButton.h
+YQRadioButtonGroup.moc:      		YQRadioButtonGroup.h
+YQReplacePoint.moc:			YQReplacePoint.h
+YQRichText.moc:				YQRichText.h
+YQSelectionBox.moc:			YQSelectionBox.h
+YQSlider.moc:				YQSlider.h
+YQSpacing.moc:				YQSpacing.h
+YQSplit.moc:				YQSplit.h
+YQSquash.moc:				YQSquash.h
+YQTable.moc:				YQTable.h
+YQTextEntry.moc:			YQTextEntry.h
+YQTree.moc:				YQTree.h
+YQWizard.moc:				YQWizard.h
+YQWizardButton.moc:			YQWizardButton.h
 
-QY2BarGraph.moc:			include/QY2BarGraph.h
-QY2ComboTabWidget.cc:			include/QY2ComboTabWidget.h
-QY2DiskUsageList.cc:			include/QY2DiskUsageList.h
-QY2FloppyMountDialog.cc:		include/QY2FloppyMountDialog.h
-QY2CharValidator.moc:			include/QY2CharValidator.h
-QY2ListView.moc:			include/QY2ListView.h
+QY2BarGraph.moc:			QY2BarGraph.h
+QY2ComboTabWidget.moc:			QY2ComboTabWidget.h
+QY2DiskUsageList.moc:			QY2DiskUsageList.h
+QY2FloppyMountDialog.moc:		QY2FloppyMountDialog.h
+QY2CharValidator.moc:			QY2CharValidator.h
+QY2ListView.moc:			QY2ListView.h
 
-qxembed.moc:				include/qxembed.h
+qxembed.moc:				qxembed.h
 
 
-%.moc: include/%.h
+%.moc: %.h
 	$(MOC) $< -o $@
 
-CLEANFILES = *.moc y2qt.kdoc y2ui.kdoc
+CLEANFILES = *.moc
 
-INCLUDES = -I$(srcdir)/include -I$(QTDIR)/include -I$(includedir) -I$(includedir)/yui ${ZYPP_CFLAGS}
+INCLUDES = -I$(srcdir)/pkg -I$(QTDIR)/include -I$(includedir) -I$(includedir)/yui

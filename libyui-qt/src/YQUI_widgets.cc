@@ -42,6 +42,7 @@
 #include "YQMultiLineEdit.h"
 #include "YQMultiProgressMeter.h"
 #include "YQMultiSelectionBox.h"
+#include "YQPackageSelectorPlugin.h"
 #include "YQPackageSelector.h"
 #include "YQPartitionSplitter.h"
 #include "YQPatternSelector.h"
@@ -181,23 +182,25 @@ YWidget * YQUI::createPackageSelector	( YWidget *		parent,
 					  const YCPString & 	floppyDevice )
 {
     _auto_activate_dialogs = false;
-    YWidget * w = 0;
-    
-    try
+    YWidget * packageSelector = 0;
+    static YQPackageSelectorPlugin * plugin = 0;
+
+    if ( ! plugin )
     {
-	w = new YQPackageSelector( (QWidget *) ( parent->widgetRep() ), opt );
+	plugin = new YQPackageSelectorPlugin();
+
+	// This is a deliberate memory leak: If an application requires a
+	// PackageSelector, it is a package selection application by
+	// definition. In this case, the qt_pkg plugin is intentionally kept
+	// open to avoid repeated start-up cost of the plugin and libzypp.
     }
-    catch (const std::exception & e)
+
+    if ( plugin )
     {
-	y2error( "Caught std::exception: %s", e.what() );
-	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
+	packageSelector = plugin->createPackageSelector( parent, opt );
     }
-    catch (...)
-    {
-	y2error( "Caught unspecified exception." );
-	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
-    }
-    return w;
+
+    return packageSelector;
 }
 
 YWidget * YQUI::createPkgSpecial	( YWidget *		parent,
@@ -496,7 +499,7 @@ YWidget * YQUI::createPatternSelector( YWidget *		parent,
 				       YWidgetOpt &		opt )
 {
     YWidget * w = 0;
-    
+
     try
     {
 	w = new YQPatternSelector( (QWidget *) ( parent->widgetRep() ), opt );

@@ -1,4 +1,18 @@
 -------------------------------------------------------------------
+Fri Apr 13 17:50:18 CEST 2007 - sh@suse.de
+
+Merged mod-ui branch changes back to trunk (r37143:37466):
+
+- Reorganized source directory layout:
+  - Header files now in same directory as .cc files
+  - Moved package selection related sources to separate subdir src/pkg
+
+- Load package selection stuff upon demand as plugin
+  (saves 2 MB VmRSS if no PackageSelector needed)
+
+- V 2.15.3 
+
+-------------------------------------------------------------------
 Mon Mar 26 14:11:50 CEST 2007 - sh@suse.de
 
 - Fixed bug #251215: "Save screenshot to" not translated 
