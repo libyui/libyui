@@ -9,6 +9,7 @@ Merged mod-ui branch changes back to trunk (r37143:37466):
 
 - Load package selection stuff upon demand as plugin
   (saves 2 MB VmRSS if no PackageSelector needed)
+  [see also Fate #302119]
 
 - V 2.15.3 
 
