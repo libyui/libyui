@@ -25,6 +25,7 @@ Obsoletes:	y2qt
 
 @INSTALL@
 rm -f $RPM_BUILD_ROOT/@plugindir@/libpy2qt.la
+rm -f $RPM_BUILD_ROOT/@plugindir@/libpy2qt_pkg.la
 
 
 @CLEAN@
