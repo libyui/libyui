@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Apr 16 15:44:13 CEST 2007 - sh@suse.de
+
+- Added qt_pkg plugins to file list 
+- V 2.15.4
+
+-------------------------------------------------------------------
 Fri Apr 13 17:50:18 CEST 2007 - sh@suse.de
 
 Merged mod-ui branch changes back to trunk (r37143:37466):
