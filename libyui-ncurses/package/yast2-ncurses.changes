@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Apr 19 14:12:15 CEST 2007 - kmachalkova@suse.cz
+
+- Package selector: added filter for languages (zypp::Language) - 
+  beta version (FaTE #301810 - part I)
+  
+-------------------------------------------------------------------
 Thu Apr 19 10:34:58 CEST 2007 - gs@suse.de
 
 - Inform the user that all dependencies/the system are/is OK after
