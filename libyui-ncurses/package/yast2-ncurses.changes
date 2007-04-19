@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Apr 19 14:37:04 CEST 2007 - gs@suse.de
+
+- Enable/disable the RadioButtons in a RadioButtonGroup correctly
+  (bug #168770)
+- ncurses-devel added to BuildRequires
+- 2.15.14
+
+-------------------------------------------------------------------
 Thu Apr 19 14:12:15 CEST 2007 - kmachalkova@suse.cz
 
 - Package selector: added filter for languages (zypp::Language) - 
