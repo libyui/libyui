@@ -2605,8 +2605,9 @@ bool PackageSelector::verifyPackageDependencies ()
 	    restoreState();
             cancel = true;
         }
-	if ( ok && input == NCursesEvent::button )	// dependencies OK and no automatic changes
+	if ( ok && input == NCursesEvent::button )
 	{
+	    // dependencies OK, no automatic changes/the user has accepted the changes
 	    info.showInfoPopup();
 	}
     }
