@@ -189,7 +189,7 @@ void NCPopupDeps::createLayout( )
 //  showDependencies
 // 
 //
-bool NCPopupDeps::showDependencies( NCPkgSolverAction action )
+bool NCPopupDeps::showDependencies( NCPkgSolverAction action, bool * ok )
 {
     if ( !problemw )
 	return true;
@@ -203,7 +203,8 @@ bool NCPopupDeps::showDependencies( NCPkgSolverAction action )
     // evaluate the result and fill the list with packages
     // which have unresolved deps
     bool success = solve (problemw, action );
-
+    *ok = success;
+    
     if (!success)
     {
 	// show first dependency

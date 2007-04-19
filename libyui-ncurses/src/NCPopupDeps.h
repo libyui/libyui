@@ -99,7 +99,7 @@ public:
 
     NCursesEvent showDependencyPopup( NCPkgSolverAction action );
 
-    bool showDependencies( NCPkgSolverAction action );
+    bool showDependencies( NCPkgSolverAction action, bool * ok );
     
     bool solve( NCSelectionBox * problemw,  NCPkgSolverAction action );
 

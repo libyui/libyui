@@ -1553,10 +1553,24 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 	return false;
     }
 
+    NCPopupInfo info( wpos(10, 10),  YCPString( "" ),
+		      YCPString(_( "All package dependencies are OK." )),
+		      PkgNames::OKLabel() );
+    info.setNiceSize( 30, 5 );
+    
     if ( event.selection->compare( PkgNames::ShowDeps() ) == YO_EQUAL )
     {
-	// show the dependency popup
-	showPackageDependencies( true ); 	// do the check
+	bool ok = false;
+
+	if ( depsPopup )
+	{
+	    NCMIL << "Checking dependencies" << endl;
+	    depsPopup->showDependencies( NCPopupDeps::S_Solve, &ok );
+	}
+
+	if ( ok )		
+	    info.showInfoPopup();
+
 	// update the package list and the disk space info
 	updatePackageList();
 	showDiskSpace();	
@@ -2533,13 +2547,14 @@ bool PackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectable 
 //
 bool PackageSelector::showPackageDependencies ( bool doit )
 {
+    bool ok = false;
     bool cancel = false;
     
     if ( depsPopup
 	 && (doit || autoCheck) )
     {
 	NCMIL << "Checking dependencies" << endl;
-	cancel = depsPopup->showDependencies( NCPopupDeps::S_Solve );
+	cancel = depsPopup->showDependencies( NCPopupDeps::S_Solve, &ok );
     }
 
     return cancel;
@@ -2547,13 +2562,21 @@ bool PackageSelector::showPackageDependencies ( bool doit )
 
 bool PackageSelector::verifyPackageDependencies ()
 {
+    bool ok = false;
     bool cancel = false;
+    
+    NCPopupInfo info( wpos(10, 10),  YCPString( "" ),
+		      YCPString(_( "System dependencies verify OK." )),
+		      PkgNames::OKLabel() );
+    info.setNiceSize( 30, 5 );
+    
     NCMIL << "Verifying system" << endl;
+
     if ( depsPopup )
     {
 	saveState();
 	//call the solver (with S_Verify it displays no popup)
-	cancel = depsPopup->showDependencies( NCPopupDeps::S_Verify );
+	cancel = depsPopup->showDependencies( NCPopupDeps::S_Verify, &ok );
         //display the popup with automatic changes
 	NCPopupPkgTable autoChangePopup( wpos( 1, 1), this );
         NCursesEvent input = autoChangePopup.showInfoPopup();
@@ -2564,6 +2587,10 @@ bool PackageSelector::verifyPackageDependencies ()
 	    restoreState();
             cancel = true;
         }
+	if ( ok && input == NCursesEvent::button )	// dependencies OK and no automatic changes
+	{
+	    info.showInfoPopup();
+	}
     }
     return cancel;
 }
