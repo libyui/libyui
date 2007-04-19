@@ -106,7 +106,8 @@ void NCRadioButtonGroup::focusNextButton( )
 	focusId = 0;
 
     NCRadioButton * button = dynamic_cast<NCRadioButton*>(buttonlist[focusId]);
-    button->setKeyboardFocus();    
+    if ( button )
+	button->setKeyboardFocus();    
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -125,5 +126,18 @@ void NCRadioButtonGroup::focusPrevButton()
 	focusId = buttonlist.size() -1;
 	
     NCRadioButton * button = dynamic_cast<NCRadioButton*>(buttonlist[focusId]);
-    button->setKeyboardFocus();
+    if ( button )
+	button->setKeyboardFocus();
+}
+
+void NCRadioButtonGroup::setEnabling( bool do_bv )
+{
+    NCRadioButton * button;
+
+    for ( unsigned int i = 0; i < buttonlist.size(); i++ )
+    {
+	button = dynamic_cast<NCRadioButton*>(buttonlist[i]);
+	if ( button )
+	    button->setEnabling( enabled=do_bv );
+    }
 }
