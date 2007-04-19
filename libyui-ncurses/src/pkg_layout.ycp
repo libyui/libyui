@@ -20,6 +20,7 @@
 									    // please note: use unique hotkeys until end:
 									    [`item( `id("groups"), 	_( "&RPM Groups" ) ),
 									     `item( `id("patterns"), 	_( "Pa&tterns" ) ),
+									     `item( `id("languages"),   _( "&Languages" ) ),
 									     `item( `id("search"), 	_( "&Search" ) ),
 									     `item( `id("installed"),	_( "Installed &Packages" ) ),
 									     `item( `id("whatif"), 	_( "&Installation Summary" ) ),

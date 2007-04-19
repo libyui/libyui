@@ -199,6 +199,7 @@ public:
      */
     static const YCPValue& Selections ();
     static const YCPValue& Patterns ();
+    static const YCPValue& Languages ();
     
     /**
      *  Widget id of the menu item update list
@@ -410,6 +411,11 @@ public:
      *  The label of the package selections popup
      */
     static const string SelectionLabel();
+
+   /**
+     *  The label of the language selections popup
+     */
+    static const string LanguageLabel();
 
    /**
      *  The label Filter: YOU Patches
@@ -830,6 +836,9 @@ public:
      */
     static const string PkgStatus();
 
+    static const string LangCode();
+    static const string LangName();
+
     static const string Partition();
     static const string UsedSpace();
     static const string FreeSpace();
@@ -870,6 +879,7 @@ public:
 
     static const string MenuFilter();
     static const string MenuEntryRPMGroups();
+    static const string MenuEntryLanguages();
     static const string MenuEntrySelections();
     static const string MenuEntryPatterns();
     static const string MenuEntrySearch();

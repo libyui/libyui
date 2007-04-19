@@ -80,6 +80,8 @@ class PackageSelector
     NCPopupSelection * selectionPopup; 	// the selections popup
     NCPopupSelection * patternPopup;    // the pattern popup
 
+    NCPopupSelection * languagePopup;	// language popup
+
     NCPopupDiskspace * diskspacePopup;	// the popup showing the disk usage
 
     NCPopupSearch * searchPopup; 	// the package search popup

@@ -547,6 +547,13 @@ void NCPkgTable::fillHeader( )
 	    header.push_back( "L" + PkgNames::SelectionLabel() );
 	    break;
 	}
+	case T_Languages: {
+	    header.reserve(4);
+	    header.push_back( "L" + PkgNames::PkgStatus() );
+	    header.push_back( "L" + PkgNames::LangCode() );
+	    header.push_back( "L" + PkgNames::LangName() );
+	    break;
+	}
 	case T_Availables: {
 	    header.reserve(6);
 	    header.push_back( "L" + PkgNames::PkgStatus() );

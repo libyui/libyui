@@ -106,6 +106,7 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
       , depsPopup( 0 )
       , selectionPopup( 0 )
       , patternPopup( 0 )
+      , languagePopup( 0 )
       , diskspacePopup( 0 )
       , searchPopup( 0 )
       , filePopup( 0 )
@@ -125,6 +126,7 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
     eventHandlerMap[ PkgNames::RpmGroups()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::Selections()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::Patterns()->toString() ] = &PackageSelector::FilterHandler;    
+    eventHandlerMap[ PkgNames::Languages()->toString() ] = &PackageSelector::FilterHandler;    
     eventHandlerMap[ PkgNames::UpdateList()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::Installed()->toString() ] = &PackageSelector::FilterHandler;
     eventHandlerMap[ PkgNames::Whatif()->toString() ] = &PackageSelector::FilterHandler;
@@ -219,6 +221,10 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
 		_rpmGroupsTree->addRpmGroup (zyppPkg->group ());
 	    }
 	}
+
+	// create language popup
+	languagePopup = new NCPopupSelection( wpos( 1,1 ), this, NCPopupSelection::S_Language );
+
 	// create the filter popup
 	filterPopup = new NCPopupTree( wpos( 1, 1 ),  this );	 
 
@@ -254,6 +260,10 @@ PackageSelector::~PackageSelector()
     if ( patternPopup )
     {
 	delete patternPopup;
+    }
+    if ( languagePopup )
+    {
+	delete languagePopup;
     }
     if ( depsPopup )
     {
@@ -1716,7 +1726,15 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 	    // show the selection popup
 	    retEvent = patternPopup->showSelectionPopup( );
 	}
-    } 
+    }
+    else if ( event.selection->compare( PkgNames::Languages() ) == YO_EQUAL )
+    {
+	if ( languagePopup )
+	{
+	    // show the selection popup
+	    retEvent = languagePopup->showSelectionPopup( );
+	}
+    }
 // patches
     else if ( event.selection->compare( PkgNames::Recommended() ) ==  YO_EQUAL )
     {

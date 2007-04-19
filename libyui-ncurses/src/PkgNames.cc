@@ -283,6 +283,12 @@ const YCPValue& PkgNames::Patterns ()
     return value;
 }
 
+// menu selection Languages
+const YCPValue& PkgNames::Languages ()
+{
+    static const YCPValue value = createIdValue ( "languages" );
+    return value;
+}
 // menu selection Installation Summary
 const YCPValue& PkgNames::Whatif ()
 {
@@ -606,6 +612,13 @@ const string PkgNames::SelectionLabel()
 {
    // the label of the selections
     static const string value = _( "Package Categories" );
+    return value;  
+}
+
+const string PkgNames::LanguageLabel()
+{
+   // the label of language table
+    static const string value = _( "Available Languages" );
     return value;  
 }
 
@@ -1207,15 +1220,22 @@ const string PkgNames::MenuFilter()
 
 const string PkgNames::MenuEntryRPMGroups()
 {
-    // menu entry Selections
+    // menu entry RpmGroups
     static const string value = _( "&RPM Groups" );
+    return value;
+}
+
+const string PkgNames::MenuEntryLanguages()
+{
+    // menu entry Languages
+    static const string value = _( "&Languages" );
     return value;
 }
 
 const string PkgNames::MenuEntrySelections()
 {
     // menu entry Selections
-    static const string value = _( "Se&lections" );
+    static const string value = _( "S&elections" );
     return value;
 }
 
@@ -1583,6 +1603,18 @@ const string PkgNames::PkgStatus()
 {
     // column header status
     static const string value =  string("     ");
+    return value;
+}
+
+const string PkgNames::LangCode()
+{
+    static const string value = _("Code");
+    return value;
+}
+
+const string PkgNames::LangName()
+{
+    static const string value = _("Language");
     return value;
 }
 

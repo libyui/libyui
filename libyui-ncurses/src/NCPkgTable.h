@@ -93,6 +93,7 @@ public:
 	T_Update,
 	T_PatchPkgs,
 	T_Selections,
+	T_Languages,
 	T_Unknown
     };
 

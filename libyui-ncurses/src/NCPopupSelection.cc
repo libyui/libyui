@@ -48,8 +48,23 @@ NCPopupSelection::NCPopupSelection( const wpos at,  PackageSelector * pkg, SelTy
     , sel( 0 )
     , okButton( 0 )
     , packager( pkg )
+    , type( type )
 {
-    createLayout( YCPString(PkgNames::SelectionLabel()) );
+  switch ( type ) 
+  {   
+    case S_Pattern:
+    case S_Selection: {
+        createLayout( YCPString(PkgNames::SelectionLabel()) );
+	break;
+    }
+    case S_Language: {
+        createLayout( YCPString(PkgNames::LanguageLabel()) );
+	break;
+    }
+    default:
+	break;
+  }
+
 
     fillSelectionList( sel, type );
 }
@@ -88,8 +103,8 @@ void NCPopupSelection::createLayout( const YCPString & label )
 
   //the headline
   opt.isHeading.setValue( true );
-
-  NCLabel * head = new NCLabel( split, opt, PkgNames::SelectionLabel() );
+  
+  NCLabel * head = new NCLabel( split, opt, label );
   split->addChild( head );
 
   // add the selection list
@@ -97,7 +112,23 @@ void NCPopupSelection::createLayout( const YCPString & label )
   sel->setPackager( packager );
   // set status strategy
   ObjectStatStrategy * strat = new SelectionStatStrategy();
-  sel->setTableType( NCPkgTable::T_Selections, strat );
+
+  switch (type) {
+      case S_Pattern:
+      case S_Selection: {
+  	  sel->setTableType( NCPkgTable::T_Selections, strat );
+	  break;
+      }
+      case S_Language: {
+	  sel->setTableType( NCPkgTable::T_Languages, strat );
+	  break;
+      }
+      default: {
+	  NCERR << "Unknown selection type" << endl; 	  
+	  break;
+      }
+  }
+
   sel->fillHeader();
   split->addChild( sel );
 
@@ -156,12 +187,47 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
 	    std::set<std::string> packages;
 	    ZyppSelection selPtr = tryCastToZyppSelection (objPtr);
 	    ZyppPattern patPtr = tryCastToZyppPattern (objPtr);
+	    ZyppLang langPtr = tryCastToZyppLang (objPtr);
 	    if (selPtr)
 		packages = selPtr->install_packages ();
 	    else if (patPtr)
 	    {
 		zypp::ui::PatternContents patternContents( patPtr );
 		packages = patternContents.install_packages();
+	    }
+	    else if (langPtr)
+	    {
+		string currentLang = langPtr->name();
+
+		for ( ZyppPoolIterator it = zyppPkgBegin(); it != zyppPkgEnd(); ++it )
+                {
+                    ZyppObj zyppObj = (*it)->theObj();
+
+                    if ( zyppObj )
+                    {
+		       //find all 'freshens' dependencies of this object
+                       zypp::CapSet freshens = zyppObj->dep( zypp::Dep::FRESHENS );
+
+                       for ( zypp::CapSet::const_iterator cap_it = freshens.begin();
+                          cap_it != freshens.end();
+                          ++cap_it )
+                        {
+                            if ( (*cap_it).index() == currentLang ) // obj freshens this language
+                            {
+                                ZyppPkg pkg = tryCastToZyppPkg( zyppObj );
+
+                                if ( pkg )
+                                {
+                                    NCDBG <<  "Found pkg " << pkg->name().c_str() << "for lang "
+                                    << currentLang.c_str() << endl;
+
+				    packages.insert( pkg->name() );
+ 	                        }
+                            }
+                        }
+                    }
+                }
+	
 	    }
 
 	    packager->showSelPackages( getCurrentLine(), packages );
@@ -290,6 +356,20 @@ bool orderPattern( ZyppSel slb1, ZyppSel slb2 )
 
 ///////////////////////////////////////////////////////////////////
 //
+// OrderFuncLang 
+//
+bool orderLang( ZyppSel slb1, ZyppSel slb2 )
+{
+    ZyppLang ptr1 = tryCastToZyppLang (slb1->theObj());
+    ZyppLang ptr2 = tryCastToZyppLang (slb2->theObj());
+    if ( !ptr1 || !ptr2 )
+	return false;
+    else
+	return ptr1->name() < ptr2->name();
+}
+
+///////////////////////////////////////////////////////////////////
+//
 //
 //	METHOD NAME : NCPopupSelection::fillSelectionList
 //	METHOD TYPE : bool
@@ -348,6 +428,22 @@ bool NCPopupSelection::fillSelectionList( NCPkgTable * sel, SelType type  )
 		slbList.sort( orderPattern );
 		break;
 	    }
+        case S_Language:
+	    {
+		for (i = zyppLangBegin (); i != zyppLangEnd (); ++i )
+	        {
+		    ZyppObj resPtr = (*i)->theObj();
+
+		    ZyppLang langPtr = tryCastToZyppLang (resPtr);
+
+		    NCMIL << resPtr->kind () <<": " <<  resPtr->name()
+		    << ", initial status: " << (*i)->status() << endl;
+		    slbList.push_back (*i);
+
+		} 
+		slbList.sort( orderLang );
+		break;
+	    }
 	default:
 	    NCERR << "Selecion type not handled: " << type << endl;
     }
@@ -358,7 +454,21 @@ bool NCPopupSelection::fillSelectionList( NCPkgTable * sel, SelType type  )
     {
 	ZyppObj resPtr = (*listIt)->theObj();
 	pkgLine.clear();
-	pkgLine.push_back( resPtr->summary(LOCALE) ); // the description
+
+	switch (type) {
+	    case S_Pattern:
+	    case S_Selection: {
+		pkgLine.push_back( resPtr->summary(LOCALE) ); // the description
+		break;	
+	    }
+	    case S_Language: {
+		pkgLine.push_back( resPtr->name() );
+		pkgLine.push_back( resPtr->summary(LOCALE) );
+		break;
+	    }
+	    default:
+		break;
+	}
 
 	sel->addLine( (*listIt)->status(),	// the status
 		      pkgLine,
