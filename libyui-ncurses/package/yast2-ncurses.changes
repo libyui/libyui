@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Apr 19 10:34:58 CEST 2007 - gs@suse.de
+
+- Inform the user that all dependencies/the system are/is OK after
+  a check from 'Etc.' menu (bug #249281)
+
+-------------------------------------------------------------------
 Wed Mar 21 17:19:57 CET 2007 - kmachalkova@suse.cz
 
 - Correct pkg/pattern/patch state transition from S_AutoInstall to  
