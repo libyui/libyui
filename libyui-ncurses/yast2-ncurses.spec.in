@@ -3,7 +3,7 @@
 
 @HEADER@
 BuildRequires:	doxygen gcc-c++ yast2-core-devel yast2-devtools libzypp-devel
-BuildRequires:	libxcrypt-devel blocxx-devel
+BuildRequires:	libxcrypt-devel blocxx-devel ncurses-devel
 
 Summary:	-
 Provides:	yast2_ui
