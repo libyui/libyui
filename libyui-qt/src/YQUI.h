@@ -41,6 +41,7 @@ class QWidgetStack;
 class QCursor;
 class YEvent;
 class QY2Settings;
+class YQPackageSelectorPlugin;
 using std::string;
 using std::vector;
 
@@ -243,7 +244,7 @@ public:
      */
     void beep();
 
-    
+
 public slots:
 
     /**
@@ -512,7 +513,7 @@ protected:
 					 const YCPString &	newPartLabel,
 					 const YCPString &	freeFieldLabel,
 					 const YCPString &	newPartFieldLabel );
-    
+
     bool 	hasPatternSelector();
     YWidget *	createPatternSelector	( YWidget *		parent,
 					  YWidgetOpt &		opt );
@@ -639,6 +640,12 @@ public:
      * Reimplemented from YUI.
      **/
     virtual float layoutUnits( YUIDimension dim, long device_units );
+
+    /**
+     * Returns the package selector plugin singleton of this UI or creates it
+     * (including loading the plugin lib) if it does not exist yet.
+     **/
+    YQPackageSelectorPlugin * packageSelectorPlugin();
 
 
 protected:

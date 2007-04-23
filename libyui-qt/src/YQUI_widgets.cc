@@ -177,12 +177,9 @@ YWidget * YQUI::createRichText		( YWidget *		parent,
     return new YQRichText( (QWidget *) ( parent->widgetRep() ), opt, text);
 }
 
-YWidget * YQUI::createPackageSelector	( YWidget *		parent,
-					  YWidgetOpt & 		opt,
-					  const YCPString & 	floppyDevice )
+
+YQPackageSelectorPlugin * YQUI::packageSelectorPlugin()
 {
-    _auto_activate_dialogs = false;
-    YWidget * packageSelector = 0;
     static YQPackageSelectorPlugin * plugin = 0;
 
     if ( ! plugin )
@@ -195,6 +192,19 @@ YWidget * YQUI::createPackageSelector	( YWidget *		parent,
 	// open to avoid repeated start-up cost of the plugin and libzypp.
     }
 
+    return plugin;
+}
+
+
+YWidget * YQUI::createPackageSelector	( YWidget *		parent,
+					  YWidgetOpt & 		opt,
+					  const YCPString & 	floppyDevice )
+{
+    _auto_activate_dialogs = false;
+    YWidget * packageSelector = 0;
+
+    YQPackageSelectorPlugin * plugin = packageSelectorPlugin();
+    
     if ( plugin )
     {
 	packageSelector = plugin->createPackageSelector( parent, opt );
@@ -203,6 +213,7 @@ YWidget * YQUI::createPackageSelector	( YWidget *		parent,
     return packageSelector;
 }
 
+
 YWidget * YQUI::createPkgSpecial	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
 					  const YCPString & 	subwidget )
@@ -210,6 +221,7 @@ YWidget * YQUI::createPkgSpecial	( YWidget *		parent,
     y2error( "The Qt UI does not support PkgSpecial subwidgets!" );
     return 0;
 }
+
 
 YWidget * YQUI::createPushButton	( YWidget *		parent,
 					  YWidgetOpt & 		opt,
@@ -498,23 +510,15 @@ bool YQUI::hasPatternSelector()
 YWidget * YQUI::createPatternSelector( YWidget *		parent,
 				       YWidgetOpt &		opt )
 {
-    YWidget * w = 0;
+    YWidget * patternSelector = 0;
+    YQPackageSelectorPlugin * plugin = packageSelectorPlugin();
 
-    try
+    if ( plugin )
     {
-	w = new YQPatternSelector( (QWidget *) ( parent->widgetRep() ), opt );
+	patternSelector = plugin->createPatternSelector( parent, opt );
     }
-    catch (const std::exception & e)
-    {
-	y2error( "Caught std::exception: %s", e.what() );
-	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
-    }
-    catch (...)
-    {
-	y2error( "Caught unspecified exception." );
-	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
-    }
-    return w;
+    
+    return patternSelector;
 }
 
 

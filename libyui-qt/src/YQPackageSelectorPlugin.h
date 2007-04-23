@@ -51,6 +51,15 @@ public:
      **/
     virtual YWidget * createPackageSelector( YWidget * 		parent,
 					     YWidgetOpt &	opt );
+    
+    /**
+     * Create a pattern selector.
+     *
+     * This might return 0 if the plugin lib could not be loaded or if the
+     * appropriate symbol could not be located in the plugin lib. 
+     **/
+    virtual YWidget * createPatternSelector( YWidget * 		parent,
+					     YWidgetOpt &	opt );
 };
 
 

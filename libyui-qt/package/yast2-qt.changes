@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Apr 23 15:33:26 CEST 2007 - sh@suse.de
+
+- Load qt_pkg plugin for PatternSelector widget, too 
+- V 2.15.5
+
+-------------------------------------------------------------------
 Mon Apr 16 15:44:13 CEST 2007 - sh@suse.de
 
 - Added qt_pkg plugins to file list 

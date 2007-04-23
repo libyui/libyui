@@ -22,6 +22,7 @@
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 #include "YQPackageSelector.h"
+#include "YQPatternSelector.h"
 
 #define PLUGIN_BASE_NAME "qt_pkg"
 
@@ -69,3 +70,32 @@ YQPackageSelectorPlugin::createPackageSelector( YWidget *	parent,
     
     return packageSelector;
 }
+
+
+YWidget *
+YQPackageSelectorPlugin::createPatternSelector( YWidget *	parent,
+						YWidgetOpt &	opt )
+{
+    if ( error() )
+	return 0;
+    
+    YWidget * patternSelector = 0;
+    
+    try
+    {
+	patternSelector = new YQPatternSelector( (QWidget *) ( parent->widgetRep() ), opt );
+    }
+    catch (const std::exception & e)
+    {
+	y2error( "Caught std::exception: %s", e.what() );
+	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
+    }
+    catch (...)
+    {
+	y2error( "Caught unspecified exception." );
+	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
+    }
+    
+    return patternSelector;
+}
+
