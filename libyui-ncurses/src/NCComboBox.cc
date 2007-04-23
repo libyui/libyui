@@ -253,6 +253,7 @@ void NCComboBox::setValue( const YCPString & ntext )
   index = -1;
   setDefsze();
   tUpdate();
+  Redraw();
 }
 
 ///////////////////////////////////////////////////////////////////

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Apr 23 16:24:39 CEST 2007 - kmachalkova@suse.cz
+
+- Really correct setting of current item in ComboBox widget :-)
+  consider also `opt(`editable) combos (#233593)
+
+-------------------------------------------------------------------
 Thu Apr 19 14:37:04 CEST 2007 - gs@suse.de
 
 - Enable/disable the RadioButtons in a RadioButtonGroup correctly
