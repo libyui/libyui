@@ -19,6 +19,7 @@
 #include <climits>
 
 #include "Y2Log.h"
+#include "tnode.h"
 #include "NCWidget.h"
 #include "YWidget.h"
 #include "YContainerWidget.h"
@@ -428,16 +429,32 @@ void NCWidget::setEnabling( bool do_bv )
 {
   WIDDBG << DLOC << this << ' ' << do_bv << ' ' << wstate << endl;
 
-  if ( wstate == NC::WSdumb )
-    return;
+  tnode<NCWidget*> *c = this;
 
-  if ( do_bv && wstate == NC::WSdisabeled ) {
-    SetState( NC::WSnormal );
+  //If widget has kids ([HV]Boxes, alignments,...), disable all of 
+  //them recursively (#256707)
+  if (c->HasChildren()) {
+    WIDMIL <<  this << "setEnabling children recursively" << endl;
+    for ( c = this->Next();
+	c && c->IsDescendantOf( this );
+	c = c->Next() ) {
+      if ( c->Value()->GetState() != NC::WSdumb )
+        c->Value()->setEnabling( do_bv );
+    }
   }
-  else if ( !do_bv && wstate != NC::WSdisabeled ) {
-    if ( wstate == NC::WSactive )
-      grabRelease( 0 );
-    SetState( NC::WSdisabeled );
+
+  else {
+    if ( wstate == NC::WSdumb )
+      return;
+
+    if ( do_bv && wstate == NC::WSdisabeled ) {
+      SetState( NC::WSnormal );
+    }
+    else if ( !do_bv && wstate != NC::WSdisabeled ) {
+      if ( wstate == NC::WSactive )
+        grabRelease( 0 );
+      SetState( NC::WSdisabeled );
+    }
   }
 }
 

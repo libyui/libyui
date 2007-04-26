@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Apr 26 13:21:37 CEST 2007 - kmachalkova@suse.cz
+
+- For containter (Box) and alignment (Left, Right,...) widgets
+  enable/disable all the children recursively (#256707)
+- 2.15.15
+
+-------------------------------------------------------------------
 Mon Apr 23 16:24:39 CEST 2007 - kmachalkova@suse.cz
 
 - Really correct setting of current item in ComboBox widget :-)

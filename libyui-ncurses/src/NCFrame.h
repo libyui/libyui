@@ -62,7 +62,9 @@ class NCFrame : public YFrame, public NCWidget {
 
     virtual void setLabel( const YCPString & nlabel );
 
-    virtual void setEnabling( bool do_bv );
+    //virtual void setEnabling( bool do_bv );
+    //Use setEnabling() from the parent, it should work out (#256707) :-)
+    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
 
 };
 
