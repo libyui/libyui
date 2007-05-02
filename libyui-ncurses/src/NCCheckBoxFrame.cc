@@ -46,7 +46,7 @@ NCCheckBoxFrame::NCCheckBoxFrame( NCWidget * parent, const YWidgetOpt & opt,
   else
       setValue( checked );
 
-// don't call setEnabling( getValue() ) here (widgets are not yet created!)		
+  // setEnabling(); is called in wRedraw()		
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -126,11 +126,16 @@ void NCCheckBoxFrame::setLabel( const YCPString & nlabel )
 void NCCheckBoxFrame::setEnabling( bool do_bv )
 {
   enabled = do_bv; // in YWidget
+
   for ( tnode<NCWidget*> * c = this->Next();
 	c && c->IsDescendantOf( this );
 	c = c->Next() ) {
     if ( c->Value()->GetState() != NC::WSdumb )
+    {
       c->Value()->setEnabling( enabled );
+      // explicitely set the state (needed for first run - bug #268352)
+      c->Value()->SetState(enabled?NC::WSnormal:NC::WSdisabeled, true);
+    }
   }
 }
 
@@ -197,6 +202,8 @@ void NCCheckBoxFrame::wRedraw()
       else
 	  win->printw( 0, 2, "%c", 'x' );
   }
+
+  setEnabling( getValue() );
 }
 
 ///////////////////////////////////////////////////////////////////
