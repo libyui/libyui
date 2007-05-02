@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed May  2 14:44:09 CEST 2007 - gs@suse.de
+
+- Disable child widgets of a NCCheckBoxFrame correctly (bug #268352)  
+
+-------------------------------------------------------------------
 Thu Apr 26 13:21:37 CEST 2007 - kmachalkova@suse.cz
 
 - For containter (Box) and alignment (Left, Right,...) widgets
