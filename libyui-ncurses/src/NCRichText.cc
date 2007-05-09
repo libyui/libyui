@@ -50,18 +50,21 @@ std::map<std::wstring, std::wstring> NCRichText::_charentity;
 const wstring NCRichText::entityLookup( const std::wstring & val_r )
 {
   //strip leading '#', if any
-  wstring s = val_r.substr(val_r.find(L"#",0) + 1 );
-  wchar_t *endptr;
+  wstring::size_type hash = val_r.find( L"#", 0 );
   wstring ascii = L""; 
-  //and try to convert to int
-  long int c = std::wcstol(s.c_str(), &endptr, 0);
 
-  //conversion succeeded 
-  if (s.c_str() != endptr) {
-     // convert to char
-     std::wostringstream ws;
-     ws << char(c);
-     ascii = ws.str();
+  if ( hash != wstring::npos ) {
+    wstring s = val_r.substr( hash + 1 );
+    wchar_t *endptr;
+    //and try to convert to int
+    long int c = std::wcstol(s.c_str(), &endptr, 0);
+
+    //conversion succeeded 
+    if (s.c_str() != endptr) {
+      std::wostringstream ws;
+      ws << char(c);
+      ascii = ws.str();
+    }
   }
 
   #define REP(l,r) _charentity[l] = r
