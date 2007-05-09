@@ -17,6 +17,7 @@
 
 /-*/
 #include "Y2Log.h"
+#include "NCurses.h"
 #include "NCPkgTable.h"
 #include "NCTable.h"
 #include "NCPopupInfo.h"
@@ -219,6 +220,8 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
     ZyppPkg pkgPtr = NULL;
     YCPString header( "" );
     bool ok = true;
+    int cols = NCurses::cols();
+    int lines = NCurses::lines();
 
     switch ( newstatus )
     {
@@ -259,12 +262,13 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
     {
 	if (!license_confirmed)
 	{
-	    NCPopupInfo info( wpos( 1, 1),
+	    NCPopupInfo info( wpos( (lines * 10)/100, (cols * 10) /100),
 			      PkgNames::NotifyLabel(),
 			      //YCPString(_("End User License Agreement") ),
 			      YCPString( "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( license ) ),
 			      PkgNames::AcceptLabel(),
 			      PkgNames::CancelLabel() );
+	    info.setNiceSize( (NCurses::cols() * 80)/100, (NCurses::lines()*80)/100);
 	    license_confirmed = info.showInfoPopup( ) != NCursesEvent::cancel;
 	}
 
@@ -296,9 +300,10 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 
     if ( ok && !notify.empty() )
     {
-	NCPopupInfo info( wpos( 1, 1),
+	NCPopupInfo info( wpos( (lines * 35)/100, (cols * 25)/100),
 			  header,
 			  YCPString( "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( notify ) ) );
+	info.setNiceSize( (NCurses::cols() * 50)/100, (NCurses::lines() * 30)/100);
 	info.showInfoPopup( );
     }
     
