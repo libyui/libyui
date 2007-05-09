@@ -45,6 +45,7 @@
 #include "YQPackageSelector.h"
 #include "YQPartitionSplitter.h"
 #include "YQPatternSelector.h"
+#include "YQSimplePatchSelector.h"
 #include "YQProgressBar.h"
 #include "YQPushButton.h"
 #include "YQRadioButton.h"
@@ -500,6 +501,35 @@ YWidget * YQUI::createPatternSelector( YWidget *		parent,
     try
     {
 	w = new YQPatternSelector( (QWidget *) ( parent->widgetRep() ), opt );
+    }
+    catch (const std::exception & e)
+    {
+	y2error( "Caught std::exception: %s", e.what() );
+	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
+    }
+    catch (...)
+    {
+	y2error( "Caught unspecified exception." );
+	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
+    }
+    return w;
+}
+
+
+bool YQUI::hasSimplePatchSelector()
+{
+    return true;
+}
+
+
+YWidget * YQUI::createSimplePatchSelector( YWidget *	parent,
+					   YWidgetOpt &	opt )
+{
+    YWidget * w = 0;
+    
+    try
+    {
+	w = new YQSimplePatchSelector( (QWidget *) ( parent->widgetRep() ), opt );
     }
     catch (const std::exception & e)
     {

@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Wed May  9 15:18:04 CEST 2007 - sh@suse.de
+
+- Added SimplePatchSelector widget (requested by hmuelle)
+  for move-to-sp1 patch as a workaround to zen-updater limitations:
+  zen-updater can't handle dependency problems, and a simpler UI
+  than a full-fledged PackageSelector is required by PM
+- V 2.13.82
+
+-------------------------------------------------------------------
 Tue Feb 20 15:01:04 CET 2007 - sh@suse.de
 
 - Fixed bug #239829 (again): Show patch version in patches list
