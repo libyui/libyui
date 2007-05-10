@@ -60,6 +60,14 @@ public:
      **/
     virtual YWidget * createPatternSelector( YWidget * 		parent,
 					     YWidgetOpt &	opt );
+    /**
+     * Create a simple patch selector.
+     *
+     * This might return 0 if the plugin lib could not be loaded or if the
+     * appropriate symbol could not be located in the plugin lib. 
+     **/
+    virtual YWidget * createSimplePatchSelector( YWidget * 	parent,
+						 YWidgetOpt &	opt );
 };
 
 

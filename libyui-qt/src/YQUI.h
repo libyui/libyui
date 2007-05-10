@@ -518,6 +518,10 @@ protected:
     YWidget *	createPatternSelector	( YWidget *		parent,
 					  YWidgetOpt &		opt );
 
+    bool 	hasSimplePatchSelector();
+    YWidget *	createSimplePatchSelector( YWidget *		parent,
+					  YWidgetOpt &		opt );
+
     bool	hasWizard();
     YWidget * 	createWizard		( YWidget * parent, YWidgetOpt & opt,
 					  const YCPValue & backButtonId,	const YCPString & backButtonLabel,

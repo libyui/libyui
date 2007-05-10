@@ -23,6 +23,7 @@
 #include <ycp/y2log.h>
 #include "YQPackageSelector.h"
 #include "YQPatternSelector.h"
+#include "YQSimplePatchSelector.h"
 
 #define PLUGIN_BASE_NAME "qt_pkg"
 
@@ -97,5 +98,33 @@ YQPackageSelectorPlugin::createPatternSelector( YWidget *	parent,
     }
     
     return patternSelector;
+}
+
+
+YWidget *
+YQPackageSelectorPlugin::createSimplePatchSelector( YWidget *		parent,
+						    YWidgetOpt &	opt )
+{
+    if ( error() )
+	return 0;
+    
+    YWidget * simplePatchSelector = 0;
+    
+    try
+    {
+	simplePatchSelector = new YQSimplePatchSelector( (QWidget *) ( parent->widgetRep() ), opt );
+    }
+    catch (const std::exception & e)
+    {
+	y2error( "Caught std::exception: %s", e.what() );
+	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
+    }
+    catch (...)
+    {
+	y2error( "Caught unspecified exception." );
+	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
+    }
+    
+    return simplePatchSelector;
 }
 

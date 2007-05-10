@@ -35,6 +35,7 @@ libpy2qt_pkg_la_SOURCES =			\
 	YQPackageSelectorBase.cc		\
 	YQPackageSelectorHelp.cc		\
 	YQPatternSelector.cc			\
+	YQSimplePatchSelector.cc		\
 						\
 	YQPkgChangeLogView.cc			\
 	YQPkgChangesDialog.cc			\
@@ -73,6 +74,7 @@ BUILT_SOURCES =					\
 	YQPackageSelector.moc			\
 	YQPackageSelectorBase.moc		\
 	YQPatternSelector.moc			\
+	YQSimplePatchSelector.moc		\
 	YQPkgChangeLogView.moc			\
 	YQPkgChangesDialog.moc			\
 	YQPkgConflictDialog.moc			\
@@ -109,6 +111,7 @@ BUILT_SOURCES =					\
 YQPackageSelector.o YQPackageSelector.lo:			YQPackageSelector.moc
 YQPackageSelectorBase.o YQPackageSelectorBase.lo:		YQPackageSelectorBase.moc
 YQPatternSelector.o YQPatternSelector.lo:			YQPatternSelector.moc
+YQSimplePatchSelector.o YQSimplePatchSelector.lo:		YQSimplePatchSelector.moc
 
 YQPkgChangeLogView.o YQPkgChangeLogView.lo:			YQPkgChangeLogView.moc
 YQPkgChangesDialog.o YQPkgChangesDialog.lo:			YQPkgChangesDialog.moc
@@ -145,6 +148,8 @@ YQPkgVersionsView.o YQPkgVersionsView.lo:			YQPkgVersionsView.moc
 YQPackageSelector.moc:			YQPackageSelector.h
 YQPackageSelectorBase.moc:		YQPackageSelectorBase.h
 YQPatternSelector.moc:			YQPatternSelector.h
+YQSimplePatchSelector.moc:		YQSimplePatchSelector.h
+
 YQPkgChangeLogView.moc:			YQPkgChangeLogView.h
 YQPkgChangesDialog.moc:			YQPkgChangesDialog.h
 YQPkgConflictDialog.moc:		YQPkgConflictDialog.h

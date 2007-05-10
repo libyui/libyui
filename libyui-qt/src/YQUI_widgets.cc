@@ -46,6 +46,7 @@
 #include "YQPackageSelector.h"
 #include "YQPartitionSplitter.h"
 #include "YQPatternSelector.h"
+#include "YQSimplePatchSelector.h"
 #include "YQProgressBar.h"
 #include "YQPushButton.h"
 #include "YQRadioButton.h"
@@ -204,7 +205,7 @@ YWidget * YQUI::createPackageSelector	( YWidget *		parent,
     YWidget * packageSelector = 0;
 
     YQPackageSelectorPlugin * plugin = packageSelectorPlugin();
-    
+
     if ( plugin )
     {
 	packageSelector = plugin->createPackageSelector( parent, opt );
@@ -507,8 +508,8 @@ bool YQUI::hasPatternSelector()
 }
 
 
-YWidget * YQUI::createPatternSelector( YWidget *		parent,
-				       YWidgetOpt &		opt )
+YWidget * YQUI::createPatternSelector( YWidget *	parent,
+				       YWidgetOpt &	opt )
 {
     YWidget * patternSelector = 0;
     YQPackageSelectorPlugin * plugin = packageSelectorPlugin();
@@ -517,8 +518,29 @@ YWidget * YQUI::createPatternSelector( YWidget *		parent,
     {
 	patternSelector = plugin->createPatternSelector( parent, opt );
     }
-    
+
     return patternSelector;
+}
+
+
+bool YQUI::hasSimplePatchSelector()
+{
+    return true;
+}
+
+
+YWidget * YQUI::createSimplePatchSelector( YWidget *	parent,
+					   YWidgetOpt &	opt )
+{
+    YWidget * simplePatchSelector = 0;
+    YQPackageSelectorPlugin * plugin = packageSelectorPlugin();
+
+    if ( plugin )
+    {
+	simplePatchSelector = plugin->createSimplePatchSelector( parent, opt );
+    }
+
+    return simplePatchSelector;
 }
 
 

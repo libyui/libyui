@@ -43,6 +43,8 @@ typedef zypp::ui::PatchContents::const_iterator	ZyppPatchContentsIterator;
 
 using std::set;
 
+#define ENABLE_TOTAL_DOWNLOAD_SIZE	0
+
 #define SPACING			6	// between subwidgets
 #define MARGIN			4	// around the widget
 
@@ -87,6 +89,8 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
     _descriptionView->setMinimumSize( 0, 0 );
     _detailsViews->addTab( _descriptionView, _( "Patch Description" ) );
 
+    
+#if ENABLE_TOTAL_DOWNLOAD_SIZE
     //
     // HBox for total download size
     //
@@ -105,6 +109,7 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
     _totalDownloadSize->setFrameStyle( QFrame::Panel | QFrame::Sunken );
     _totalDownloadSize->setLineWidth(1);
     _totalDownloadSize->setMidLineWidth(2);
+#endif
 
 
     connect( _patchList,	SIGNAL( selectionChanged    ( ZyppSel ) ),
@@ -194,7 +199,9 @@ YQPkgPatchFilterView::updateTotalDownloadSize()
 	    totalSize += (*it)->candidateObj()->size();
     }
 
+#if ENABLE_TOTAL_DOWNLOAD_SIZE
     _totalDownloadSize->setText( totalSize.asString().c_str() );
+#endif
 
     y2debug( "Calculated total download size in %d millisec", calcTime.elapsed() );
 }
