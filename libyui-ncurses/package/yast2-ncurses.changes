@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Thu May 10 10:09:11 CEST 2007 - kmachalkova@suse.cz
+
+- Replace &#xy; elements in richtext by their ascii character 
+  equivalents (#269919)
+- Calculate license agreement & notify text popup size and position 
+  relatively to the current screen size (#269918)
+- 2.15.16
+ 
+-------------------------------------------------------------------
 Wed May  2 14:44:09 CEST 2007 - gs@suse.de
 
 - Disable child widgets of a NCCheckBoxFrame correctly (bug #268352)  
