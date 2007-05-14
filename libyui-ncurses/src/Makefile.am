@@ -2,26 +2,26 @@
 # Makefile.am for ncurses/src
 #
 
-ydata_DATA = pkg_layout.ycp	\
-	you_layout.ycp
+SUBDIRS = pkg
 
-# plugin, libtool forces 'lib' prefix
 AM_CXXFLAGS = -DY2LOG=\"ui-ncurses\" -DLOCALEDIR=\"${localedir}\"
 AM_LDFLAGS = -L$(libdir)
 
+# plugin, libtool forces 'lib' prefix
 plugin_LTLIBRARIES = libpy2ncurses.la
-noinst_LTLIBRARIES = liby2ncurses.la
+#noinst_LTLIBRARIES = liby2ncurses.la
 
 libpy2ncurses_la_LDFLAGS = -version-info 2:0
-liby2ncurses_la_LDFLAGS = -version-info 2:0
+#liby2ncurses_la_LDFLAGS = -version-info 2:0
 
 libpy2ncurses_la_LIBADD =		\
+	-L$(libdir)			\
+	-Lpkg -lpy2ncurses_pkg		\
 	-lyui				\
-	${ZYPP_LIBS}			\
 	-lncursesw -lpanelw
-liby2ncurses_la_LIBADD = $(libpy2ncurses_la_LIBADD)
+#liby2ncurses_la_LIBADD = $(libpy2ncurses_la_LIBADD)
 
-liby2ncurses_la_SOURCES =				\
+libpy2ncurses_la_SOURCES =				\
 	stdutil.h					\
 	NCi18n.h					\
 	Y2Log.h Y2Log.cc				\
@@ -33,7 +33,6 @@ liby2ncurses_la_SOURCES =				\
 	lang2encoding.tab lang2encoding.cc		\
 	ncursesw.h ncursesw.cc				\
 	ncursesp.h ncursesp.cc				\
-	PackageSelector.h PackageSelector.cc		\
 	NCtypes.h NCtypes.cc				\
 	NCurses.h NCurses.cc				\
 	NCstyle.h NCstyle.cc				\
@@ -82,33 +81,20 @@ liby2ncurses_la_SOURCES =				\
 	NCPopupList.h NCPopupList.cc			\
 	NCPopupMenu.h NCPopupMenu.cc			\
 	NCPopupTextEntry.h NCPopupTextEntry.cc		\
+	NCPopupInfo.h NCPopupInfo.cc			\
 							\
-	YQZypp.h					\
-	NCPkgSelMapper.cc NCPkgSelMapper.h		\
-	NCPackageSelector.cc NCPackageSelector.h        \
-	NCPkgTable.cc NCPkgTable.h                      \
-	NCPopupSearch.cc NCPopupSearch.h                \
-	NCPopupInfo.cc NCPopupInfo.h                    \
-	PkgNames.h PkgNames.cc				\
-	ObjectStatStrategy.cc ObjectStatStrategy.h      \
-	NCPopupDeps.cc NCPopupDeps.h                    \
-	NCPopupTree.cc NCPopupTree.h                    \
-	NCPopupSelection.cc NCPopupSelection.h          \
-	NCPopupDiskspace.cc NCPopupDiskspace.h          \
-	NCPopupFile.cc NCPopupFile.h                    \
-	NCPopupPkgTable.cc NCPopupPkgTable.h            \
-	NCPopupPkgDescr.cc NCPopupPkgDescr.h            \
 	NCstyle.braille.h NCstyle.mono.h		\
-	NCstyle.linux.h NCstyle.xterm.h
-
-
-libpy2ncurses_la_SOURCES = $(liby2ncurses_la_SOURCES)	\
-	Y2CCNCursesUI.cc Y2CCNCursesUI.h	\
+	NCstyle.linux.h NCstyle.xterm.h			\
+							\
+	Y2CCNCursesUI.cc Y2CCNCursesUI.h		\
 	YNCursesComponent.h
 
-INCLUDES = -I$(includedir) -I$(includedir)/yui -I$(includedir)/y2util/qt ${ZYPP_CFLAGS}
+#libpy2ncurses_la_SOURCES = $(liby2ncurses_la_SOURCES)	\
+#	Y2CCNCursesUI.cc Y2CCNCursesUI.h	\
+#	YNCursesComponent.h
+
+INCLUDES = -I$(srcdir)/pkg -I$(includedir) -I$(includedir)/yui -I$(includedir)/y2util/qt ${ZYPP_CFLAGS}
 
 lang2encoding.cc:	lang2encoding.tab
 	./lang2encoding.tab > lang2encoding.cc
 
-EXTRA_DIST	= $(ydata_DATA)

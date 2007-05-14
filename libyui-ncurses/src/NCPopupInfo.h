@@ -30,7 +30,7 @@
 #include "NCRichText.h"
 #include "NCCheckBox.h"
 #include "NCPushButton.h"
-#include "PkgNames.h"
+#include "NCi18n.h"
 
 class YCPValue;
 
@@ -66,7 +66,8 @@ public:
     NCPopupInfo( const wpos at,
 		 const YCPString & headline,
 		 const YCPString & text,
-		 string okButtonLabel = PkgNames::OKLabel(),
+		 // the label of an OK button
+		 string okButtonLabel = _( "&OK" ),
 		 string cancelButtonLabel = "" );
     
     virtual ~NCPopupInfo();

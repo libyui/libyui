@@ -20,10 +20,10 @@
 
 #include "NCAskForFile.h"
 
+#include <ycp/YCPTerm.h>
 #include "YDialog.h"
 #include "NCSplit.h"
 #include "NCSpacing.h"
-#include "PkgNames.h"
 #include "NCFrame.h"
 #include "NCi18n.h"
 
@@ -36,6 +36,16 @@
 /*
   Textdomain "packages"
 */
+
+namespace
+{
+    const YCPTerm idOk( "ok" );
+    const YCPTerm idCancel( "cancel" );
+    const YCPTerm idDirList( "dirlist" );
+    const YCPTerm idFileList( "filelist" );
+    const YCPTerm idDirName( "dirname" );
+    const YCPTerm idDetails( "details" );
+}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -151,7 +161,7 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
     dirName = new NCComboBox( frame, opt, YCPString(_( "Selected Directory:" )) );
     frame->addChild( dirName );
 
-    dirName->setId( PkgNames::DirName() );
+    dirName->setId( YCPString(idDirName->name()) );
 
     vSplit->addChild( new NCSpacing( vSplit, opt, 0.6, false, true ) );
 
@@ -162,7 +172,7 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
     split->addChild( hSplit );
     // label for checkbox
     detailed = new NCCheckBox( hSplit, opt, YCPString( _( "&Detailed View" ) ), false );
-    detailed->setId( PkgNames::Details() );
+    detailed->setId( YCPString( idDetails->name()) );
     hSplit->addChild( new NCSpacing( hSplit, opt, 0.1, true, false ) );
     hSplit->addChild( detailed );
 
@@ -172,12 +182,12 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
     // add the list of directories
     opt.keyEvents.setValue( true );
     dirList = new NCDirectoryTable( hSplit1, opt, NCFileSelection::T_Overview, YCPString(startDir) );
-    dirList->setId( PkgNames::DirList() );
+    dirList->setId( YCPString(idDirList->name()) );
     hSplit1->addChild( dirList );
     
     // add the list of files
     fileList = new NCFileTable( hSplit1, opt, NCFileSelection::T_Overview, filter, YCPString(startDir) );
-    fileList->setId( PkgNames::FileList() );
+    fileList->setId( YCPString(idFileList->name()) );
     hSplit1->addChild( fileList );
 
     split->addChild( hSplit1 );
@@ -212,8 +222,9 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
 
     // add the OK button
     opt.key_Fxx.setValue( 10 );
-    okButton = new NCPushButton( hSplit3, opt, YCPString(PkgNames::OKLabel()) );
-    okButton->setId( PkgNames::OkButton() );
+    // the label of the OK button
+    okButton = new NCPushButton( hSplit3, opt, YCPString(_( "&OK" )) );
+    okButton->setId( YCPString(idOk->name()) );
 
     hSplit3->addChild( okButton );
 
@@ -221,8 +232,9 @@ void NCAskForFile::createLayout( const YCPString & iniDir,
       
     // add the Cancel button
     opt.key_Fxx.setValue( 9 );
-    cancelButton = new NCPushButton( hSplit3, opt, PkgNames::CancelLabel() );
-    cancelButton->setId( PkgNames::Cancel() );
+    // the label of the Cancel button
+    cancelButton = new NCPushButton( hSplit3, opt, YCPString(_( "&Cancel" )) );
+    cancelButton->setId( YCPString(idCancel->name()) );
 
     hSplit3->addChild( cancelButton );
     hSplit3->addChild( new NCSpacing( hSplit3, opt, 0.2, true, false ) );  
@@ -337,14 +349,14 @@ bool NCAskForFile::postAgain( )
 
     if ( !currentId.isNull() )
     {
-	if ( currentId->compare( PkgNames::OkButton () ) == YO_EQUAL )
+	if ( currentId->compare( YCPString(idOk->name()) ) == YO_EQUAL )
 	{
 	    postevent.result = YCPString( dirList->getCurrentDir() + "/"
 					 + getFileName() );
 	    // return false means: close the popup
 	    return false;
 	}
-	else if ( currentId->compare( PkgNames::DirList() ) == YO_EQUAL
+	else if ( currentId->compare( YCPString(idDirList->name()) ) == YO_EQUAL
 		  && !postevent.result.isNull() )
 	{
 	    unsigned int i = dirName->getListSize();
@@ -361,14 +373,14 @@ bool NCAskForFile::postAgain( )
 		updateFileList();
 	    }
 	}
-	else if ( currentId->compare( PkgNames::DirName() ) == YO_EQUAL )
+	else if ( currentId->compare( YCPString(idDirName->name()) ) == YO_EQUAL )
 	{
 	    dirList->setStartDir( dirName->getValue() );
 	    dirList->fillList();
 
 	    updateFileList();
 	}
-	else if ( currentId->compare( PkgNames::Details() ) == YO_EQUAL )
+	else if ( currentId->compare( YCPString(idDetails->name()) ) == YO_EQUAL )
 	{
 	    bool details = getCheckBoxValue( detailed );
 	    if ( details )
@@ -384,7 +396,7 @@ bool NCAskForFile::postAgain( )
 	    fileList->fillList();
 	    dirList->fillList();
 	}
-	else if ( currentId->compare( PkgNames::FileList() ) == YO_EQUAL )
+	else if ( currentId->compare( YCPString(idFileList->name()) ) == YO_EQUAL )
 	{
 	    if ( !postevent.result.isNull() )
 	    {

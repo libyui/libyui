@@ -22,7 +22,6 @@
 #include "NCPopupInfo.h"
 #include "NCMenuButton.h"
 #include "YShortcut.h"
-#include "PkgNames.h"
 #include "NCi18n.h"
 
 #include "ncursesw.h"

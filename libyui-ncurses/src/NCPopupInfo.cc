@@ -24,8 +24,12 @@
 #include "YDialog.h"
 #include "NCSplit.h"
 #include "NCSpacing.h"
-#include "PkgNames.h"
 
+namespace
+{
+    const YCPTerm idOk( "ok" );
+    const YCPTerm idCancel( "cancel" );
+}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -105,7 +109,7 @@ void NCPopupInfo::createLayout( const YCPString & headline,
       opt.key_Fxx.setValue( 10 );
       // add the OK button
       okButton = new NCPushButton( hSplit, opt, YCPString(okButtonLabel) );
-      okButton->setId( PkgNames::OkButton() );
+      okButton->setId( YCPString(idOk->name()) );
   
       hSplit->addChild( okButton );
   }
@@ -117,7 +121,7 @@ void NCPopupInfo::createLayout( const YCPString & headline,
       opt.key_Fxx.setValue( 9 );
       // add the Cancel button
       cancelButton = new NCPushButton( hSplit, opt, YCPString(cancelButtonLabel) );
-      cancelButton->setId( PkgNames::Cancel() );
+      cancelButton->setId( YCPString(idCancel->name()) );
       hSplit->addChild( cancelButton );
       
       hSplit->addChild( new NCSpacing( hSplit, opt, 0.4, true, false ) ); 
@@ -218,7 +222,7 @@ bool NCPopupInfo::postAgain()
 	YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
 
 	if ( !currentId.isNull()
-	     && currentId->compare( PkgNames::Cancel() ) == YO_EQUAL )
+	     && currentId->compare( YCPString(idCancel->name()) ) == YO_EQUAL )
 	{
 	    // close the dialog 
 	    postevent = NCursesEvent::cancel;

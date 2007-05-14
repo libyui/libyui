@@ -59,7 +59,7 @@
 #include "NCTree.h"
 #include "NCLogView.h"
 #include "NCMultiLineEdit.h"
-#include "NCPackageSelector.h"
+#include "NCPackageSelectorStart.h"
 #include "NCPkgTable.h"
 #include "NCAskForDirectory.h"
 #include "NCAskForFile.h"
@@ -591,8 +591,8 @@ YWidget * YNCursesUI::createPackageSelector( YWidget * parent,
     YWidget * w = 0;
     try
     {
-	w = new NCPackageSelector (this, dynamic_cast<NCWidget *>(parent), opt,
-				   YD_HORIZ, floppyDevice->value() );
+	w = new NCPackageSelectorStart (this, dynamic_cast<NCWidget *>(parent), opt,
+					YD_HORIZ, floppyDevice->value() );
     }
     catch (const std::exception & e)
     {
@@ -616,7 +616,7 @@ YWidget * YNCursesUI::createPackageSelector( YWidget * parent,
 //
 YCPValue YNCursesUI::runPkgSelection(  YWidget * selector )
 {
-    NCPackageSelector * ncSelector = 0;
+    NCPackageSelectorStart * ncSelector = 0;
 
     YDialog *dialog = currentDialog();
 
@@ -626,7 +626,7 @@ YCPValue YNCursesUI::runPkgSelection(  YWidget * selector )
     }
     else
     {
-	ncSelector = dynamic_cast<NCPackageSelector *>( selector );
+	ncSelector = dynamic_cast<NCPackageSelectorStart *>( selector );
 
 	// debug: dump the widget tree
 	dialog->dumpDialogWidgetTree();
