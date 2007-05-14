@@ -10,14 +10,14 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPackageSelector.h
+   File:       NCPackageSelectorStart.h
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#ifndef NCPackageSelector_h
-#define NCPackageSelector_h
+#ifndef NCPackageSelectorStart_h
+#define NCPackageSelectorStart_h
 
 #include <iosfwd>
 
@@ -25,7 +25,7 @@
 #include "YPackageSelector.h"
 #include "YSplit.h"
 #include "NCSplit.h"
-#include "PackageSelector.h"
+#include "NCPackageSelector.h"
 #include "NCPopupTable.h"
 
 
@@ -36,13 +36,13 @@ class NCPkgTable;
 /**
  * @short the package selector widget
  */
-class NCPackageSelector : public NCSplit
+class NCPackageSelectorStart : public NCSplit
 {
 
-  friend std::ostream & operator<<( std::ostream & STREAM, const NCPackageSelector & OBJ );
+  friend std::ostream & operator<<( std::ostream & STREAM, const NCPackageSelectorStart & OBJ );
 
-  NCPackageSelector & operator=( const NCPackageSelector & );
-  NCPackageSelector            ( const NCPackageSelector & );
+  NCPackageSelectorStart & operator=( const NCPackageSelectorStart & );
+  NCPackageSelectorStart            ( const NCPackageSelectorStart & );
 
   private:
    
@@ -50,7 +50,7 @@ class NCPackageSelector : public NCSplit
     
     NCPkgTable * pkgList;		// the package table widget
     
-    PackageSelector *packager;		// packager object contains the data and handles events
+    NCPackageSelector *packager;	// packager object contains the data and handles events
 
     bool youMode;
     bool updateMode;
@@ -58,7 +58,7 @@ class NCPackageSelector : public NCSplit
   protected:
 
     virtual const char * location() const {
-      return dimension() == YD_HORIZ ? "NC(H)PackageSelector" : "NC(V)PackageSelector" ;
+      return dimension() == YD_HORIZ ? "NC(H)PackageSelectorStart" : "NC(V)PackageSelectorStart" ;
     }
     
   public:
@@ -67,14 +67,14 @@ class NCPackageSelector : public NCSplit
      * Constructor
      * creates the widget tree of the package selector
      */
-    NCPackageSelector( YNCursesUI *ui, NCWidget * parent,
-		       const YWidgetOpt & opt, YUIDimension dimension,
-		       string floppyDevice );
+    NCPackageSelectorStart( YNCursesUI *ui, NCWidget * parent,
+			    const YWidgetOpt & opt, YUIDimension dimension,
+			    string floppyDevice );
 
     /**
      * Destructor
      */
-    virtual ~NCPackageSelector();
+    virtual ~NCPackageSelectorStart();
 
     virtual long nicesize( YUIDimension dim ) { return NCSplit::nicesize( dim ); }
     virtual void setSize( long newwidth, long newheight );
@@ -88,7 +88,7 @@ class NCPackageSelector : public NCSplit
 
     /**
      * Pass the event to the handleEvent method of the member variable
-     * PackageSelector packager.
+     * NCPackageSelector packager.
      * @param event The NCursesEvent
      * @return bool
      */
@@ -111,4 +111,4 @@ class NCPackageSelector : public NCSplit
 
 ///////////////////////////////////////////////////////////////////
 
-#endif // NCPackageSelector_h
+#endif // NCPackageSelectorStart_h

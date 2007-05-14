@@ -10,14 +10,14 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPopupDeps.h
+   File:       NCPkgPopupDeps.h
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#ifndef NCPopupDeps_h
-#define NCPopupDeps_h
+#ifndef NCPkgPopupDeps_h
+#define NCPkgPopupDeps_h
 
 #include <iosfwd>
 
@@ -28,12 +28,12 @@
 #include "NCLabel.h"
 #include <zypp/Resolver.h>
 
-#include "YQZypp.h"
+#include "NCZypp.h"
 
 class NCPushButton;
 class NCSelectionBox;
 class NCMultiSelectionBox;
-class PackageSelector;
+class NCPackageSelector;
 class NCTextEntry;
 
 namespace PkgDep {
@@ -44,14 +44,14 @@ namespace PkgDep {
 
 ///////////////////////////////////////////////////////////////////
 //
-//	CLASS NAME : NCPopupDeps
+//	CLASS NAME : NCPkgPopupDeps
 //
 //	DESCRIPTION :
 //
-class NCPopupDeps : public NCPopup {
+class NCPkgPopupDeps : public NCPopup {
 
-    NCPopupDeps & operator=( const NCPopupDeps & );
-    NCPopupDeps            ( const NCPopupDeps & );
+    NCPkgPopupDeps & operator=( const NCPkgPopupDeps & );
+    NCPkgPopupDeps            ( const NCPkgPopupDeps & );
 
 public:
     enum NCPkgSolverAction {
@@ -78,7 +78,7 @@ private:
 
     NCTextEntry *details;		// problem details
     
-    PackageSelector * packager;		// connection to the package selector
+    NCPackageSelector * packager;	// connection to the package selector
     
     void createLayout();
     
@@ -92,8 +92,8 @@ protected:
     
 public:
 
-    NCPopupDeps( const wpos at, PackageSelector * pkger );
-    virtual ~NCPopupDeps();
+    NCPkgPopupDeps( const wpos at, NCPackageSelector * pkger );
+    virtual ~NCPkgPopupDeps();
 
     virtual long nicesize(YUIDimension dim);
 
@@ -111,4 +111,4 @@ public:
 ///////////////////////////////////////////////////////////////////
 
 
-#endif // NCPopupDeps_h
+#endif // NCPkgPopupDeps_h

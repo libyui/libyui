@@ -10,14 +10,14 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPopupPkgTable.h
+   File:       NCPkgPopupTable.h
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#ifndef NCPopupPkgTable_h
-#define NCPopupPkgTable_h
+#ifndef NCPkgPopupTablek_h
+#define NCPkgPopupTable_h
 
 #include <iosfwd>
 
@@ -29,26 +29,26 @@
 
 class NCPkgTable;
 class NCPushButton;
-class PackageSelector;
+class NCPackageSelector;
 
 
 ///////////////////////////////////////////////////////////////////
 //
-//	CLASS NAME : NCPopupPkgTable
+//	CLASS NAME : NCPkgPopupTable
 //
 //	DESCRIPTION :
 //
-class NCPopupPkgTable : public NCPopup {
+class NCPkgPopupTable : public NCPopup {
 
-    NCPopupPkgTable & operator=( const NCPopupPkgTable & );
-    NCPopupPkgTable            ( const NCPopupPkgTable & );
+    NCPkgPopupTable & operator=( const NCPkgPopupTable & );
+    NCPkgPopupTable            ( const NCPkgPopupTable & );
 
 private:
 
     NCPkgTable * pkgTable;
     NCPushButton * okButton;
     NCPushButton * cancelButton;
-    PackageSelector * packager;
+    NCPackageSelector * packager;
 
 protected:
 
@@ -58,9 +58,9 @@ protected:
     
 public:
     
-    NCPopupPkgTable( const wpos at, PackageSelector * pkger );
+    NCPkgPopupTable( const wpos at, NCPackageSelector * pkger );
     
-    virtual ~NCPopupPkgTable();
+    virtual ~NCPkgPopupTable();
 
     virtual long nicesize(YUIDimension dim);
 
@@ -75,4 +75,4 @@ public:
 ///////////////////////////////////////////////////////////////////
 
 
-#endif // NCPopupPkgTable_h
+#endif // NCPkgPopupTable_h

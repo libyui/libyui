@@ -10,14 +10,14 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPopupSearch.cc
+   File:       NCPkgPopupSearch.cc
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #include "Y2Log.h"
-#include "NCPopupSearch.h"
+#include "NCPkgPopupSearch.h"
 
 #include "NCTree.h"
 #include "YMenuButton.h"
@@ -26,8 +26,8 @@
 #include "NCSpacing.h"
 #include "NCFrame.h"
 
-#include "PkgNames.h"
-#include "PackageSelector.h"
+#include "NCPkgNames.h"
+#include "NCPackageSelector.h"
 
 #include "NCi18n.h"
 
@@ -38,12 +38,12 @@
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupSearch::NCPopupSearch
+//	METHOD NAME : NCPkgPopupSearch::NCPkgPopupSearch
 //	METHOD TYPE : Constructor
 //
 //	DESCRIPTION :
 //
-NCPopupSearch::NCPopupSearch( const wpos at, PackageSelector * pkger )
+NCPkgPopupSearch::NCPkgPopupSearch( const wpos at, NCPackageSelector * pkger )
     : NCPopup( at, false )
       , searchExpr( 0 )
       , ignoreCase( 0 )
@@ -56,7 +56,7 @@ NCPopupSearch::NCPopupSearch( const wpos at, PackageSelector * pkger )
       , packager( pkger )
 {
     if ( !packager->isYouMode() )
-	createLayout( YCPString(PkgNames::PackageSearch()) );
+	createLayout( YCPString(NCPkgNames::PackageSearch()) );
     else
 	createLayout( YCPString( _("Search for Patch Name") ) );	
 }
@@ -64,24 +64,24 @@ NCPopupSearch::NCPopupSearch( const wpos at, PackageSelector * pkger )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupSearch::~NCPopupSearch
+//	METHOD NAME : NCPkgPopupSearch::~NCPkgPopupSearch
 //	METHOD TYPE : Destructor
 //
 //	DESCRIPTION :
 //
-NCPopupSearch::~NCPopupSearch()
+NCPkgPopupSearch::~NCPkgPopupSearch()
 {
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupSearch::createLayout
+//	METHOD NAME : NCPkgPopupSearch::createLayout
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCPopupSearch::createLayout( const YCPString & headline )
+void NCPkgPopupSearch::createLayout( const YCPString & headline )
 {
     YWidgetOpt opt;
 
@@ -105,9 +105,9 @@ void NCPopupSearch::createLayout( const YCPString & headline )
     NCSplit * vSplit2 = new NCSplit( frame0, opt, YD_VERT );
 
     opt.isEditable.setValue( true );
-    searchExpr = new NCComboBox( frame0, opt, YCPString(PkgNames::SearchPhrase()) );
+    searchExpr = new NCComboBox( frame0, opt, YCPString(NCPkgNames::SearchPhrase()) );
     frame0->addChild( searchExpr );
-    searchExpr->setId( PkgNames::SearchBox() );
+    searchExpr->setId( NCPkgNames::SearchBox() );
     searchExpr->itemAdded( YCPString( "" ), 	// set initial value
 			   0,		// index
 			   false );	// not selected
@@ -119,7 +119,7 @@ void NCPopupSearch::createLayout( const YCPString & headline )
 	// add the checkBox ignore case
 	NCSplit * hSplit2 = new NCSplit( vSplit, opt, YD_HORIZ );
 	vSplit->addChild( hSplit2 );
-	ignoreCase = new NCCheckBox( hSplit2, opt, YCPString(PkgNames::IgnoreCase()), true );
+	ignoreCase = new NCCheckBox( hSplit2, opt, YCPString(NCPkgNames::IgnoreCase()), true );
 	hSplit2->addChild( new NCSpacing( hSplit2, opt, 0.1, true, false ) );
 	hSplit2->addChild( ignoreCase );
 
@@ -128,15 +128,15 @@ void NCPopupSearch::createLayout( const YCPString & headline )
 	// add a frame containing the other check boxes
 	opt.isHStretchable.setValue( true );
 	opt.isVStretchable.setValue( true );
-	NCFrame * frame = new NCFrame( vSplit, opt, YCPString(PkgNames::SearchIn()) );
+	NCFrame * frame = new NCFrame( vSplit, opt, YCPString(NCPkgNames::SearchIn()) );
 	NCSplit * vSplit3 = new NCSplit( frame, opt, YD_VERT );
 
 	opt.isVStretchable.setValue( false );
-	checkName = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckName()), true );
-	checkSummary = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckSummary()), true );
-	checkDescr = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckDescr()), false );
-	checkProvides = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckProvides()), false );
-	checkRequires = new NCCheckBox( vSplit3, opt, YCPString(PkgNames::CheckRequires()), false );
+	checkName = new NCCheckBox( vSplit3, opt, YCPString(NCPkgNames::CheckName()), true );
+	checkSummary = new NCCheckBox( vSplit3, opt, YCPString(NCPkgNames::CheckSummary()), true );
+	checkDescr = new NCCheckBox( vSplit3, opt, YCPString(NCPkgNames::CheckDescr()), false );
+	checkProvides = new NCCheckBox( vSplit3, opt, YCPString(NCPkgNames::CheckProvides()), false );
+	checkRequires = new NCCheckBox( vSplit3, opt, YCPString(NCPkgNames::CheckRequires()), false );
 
 	vSplit3->addChild( checkName );
 	vSplit3->addChild( checkSummary );
@@ -155,13 +155,13 @@ void NCPopupSearch::createLayout( const YCPString & headline )
     
     // add the cancel and the ok button
     opt.key_Fxx.setValue( 10 );
-    okButton = new NCPushButton( hSplit3, opt, YCPString(PkgNames::OKLabel()) );
-    okButton->setId( PkgNames::OkButton () );
+    okButton = new NCPushButton( hSplit3, opt, YCPString(NCPkgNames::OKLabel()) );
+    okButton->setId( NCPkgNames::OkButton () );
 
     opt.key_Fxx.setValue( 9 );
     opt.isVStretchable.setValue( false );
-    cancelButton = new NCPushButton( hSplit3, opt, YCPString(PkgNames::CancelLabel()) );
-    cancelButton->setId( PkgNames::Cancel () );
+    cancelButton = new NCPushButton( hSplit3, opt, YCPString(NCPkgNames::CancelLabel()) );
+    cancelButton->setId( NCPkgNames::Cancel () );
 
     opt.isHStretchable.setValue( true );
     hSplit3->addChild( new NCSpacing( hSplit3, opt, 0.2, true, false ) );
@@ -175,12 +175,12 @@ void NCPopupSearch::createLayout( const YCPString & headline )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupSearch::showSearchPopup
+//	METHOD NAME : NCPkgPopupSearch::showSearchPopup
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-NCursesEvent & NCPopupSearch::showSearchPopup( )
+NCursesEvent & NCPkgPopupSearch::showSearchPopup( )
 {
     postevent = NCursesEvent();
     do {
@@ -200,7 +200,7 @@ NCursesEvent & NCPopupSearch::showSearchPopup( )
 //
 //	DESCRIPTION :
 //
-YCPString  NCPopupSearch::getSearchExpression() const
+YCPString  NCPkgPopupSearch::getSearchExpression() const
 {
     YCPString value = YCPNull();
     unsigned int i = 0;
@@ -222,12 +222,12 @@ YCPString  NCPopupSearch::getSearchExpression() const
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupSearch::niceSize
+//	METHOD NAME : NCPkgPopupSearch::niceSize
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-long NCPopupSearch::nicesize(YUIDimension dim)
+long NCPkgPopupSearch::nicesize(YUIDimension dim)
 {
     long vdim;
 
@@ -253,7 +253,7 @@ long NCPopupSearch::nicesize(YUIDimension dim)
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupSearch::wHandleInput( wint_t ch )
+NCursesEvent NCPkgPopupSearch::wHandleInput( wint_t ch )
 {
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;
@@ -268,12 +268,12 @@ NCursesEvent NCPopupSearch::wHandleInput( wint_t ch )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupSearch::postAgain
+//	METHOD NAME : NCPkgPopupSearch::postAgain
 //	METHOD TYPE : bool
 //
 //	DESCRIPTION :
 //
-bool NCPopupSearch::postAgain()
+bool NCPkgPopupSearch::postAgain()
 {
     if ( ! postevent.widget )
 	return false;
@@ -283,7 +283,7 @@ bool NCPopupSearch::postAgain()
     YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
 
     if ( !currentId.isNull() &&
-	 currentId->compare( PkgNames::Cancel () ) == YO_EQUAL )
+	 currentId->compare( NCPkgNames::Cancel () ) == YO_EQUAL )
     {
 	postevent = NCursesEvent::cancel;
     }
@@ -324,7 +324,7 @@ bool NCPopupSearch::postAgain()
     return true;
 }
 
-bool NCPopupSearch::getCheckBoxValue( NCCheckBox * checkBox )
+bool NCPkgPopupSearch::getCheckBoxValue( NCCheckBox * checkBox )
 {
     YCPValue value = YCPNull();
 

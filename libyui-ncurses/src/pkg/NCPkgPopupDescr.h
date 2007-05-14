@@ -10,14 +10,14 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPopupPkgDescr.h
+   File:       NCPkgPopupDescr.h
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#ifndef NCPopupPkgDescr_h
-#define NCPopupPkgDescr_h
+#ifndef NCPkgPopupDescr_h
+#define NCPkgPopupDescr_h
 
 #include <iosfwd>
 
@@ -29,19 +29,18 @@
 class NCPkgTable;
 class NCPushButton;
 class NCRichText;
-class PackageSelector;
 
 
 ///////////////////////////////////////////////////////////////////
 //
-//	CLASS NAME : NCPopupPkgDescr
+//	CLASS NAME : NCPkgPopupDescr
 //
 //	DESCRIPTION :
 //
-class NCPopupPkgDescr : public NCPopup {
+class NCPkgPopupDescr : public NCPopup {
 
-    NCPopupPkgDescr & operator=( const NCPopupPkgDescr & );
-    NCPopupPkgDescr            ( const NCPopupPkgDescr & );
+    NCPkgPopupDescr & operator=( const NCPkgPopupDescr & );
+    NCPkgPopupDescr            ( const NCPkgPopupDescr & );
 
 private:
 
@@ -50,7 +49,7 @@ private:
     NCRichText *descrText;
     NCLabel *headline;
     
-    PackageSelector * packager;
+    NCPackageSelector * packager;
 
 protected:
 
@@ -60,9 +59,9 @@ protected:
     
 public:
     
-    NCPopupPkgDescr( const wpos at, PackageSelector * pkger );
+    NCPkgPopupDescr( const wpos at, NCPackageSelector * pkger );
     
-    virtual ~NCPopupPkgDescr();
+    virtual ~NCPkgPopupDescr();
 
     virtual long nicesize(YUIDimension dim);
 
@@ -77,4 +76,4 @@ public:
 ///////////////////////////////////////////////////////////////////
 
 
-#endif // NCPopupPkgDescr_h
+#endif // NCPkgPopupDescr_h

@@ -10,14 +10,14 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPopupTree.h
+   File:       NCPkgPopupTree.h
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#ifndef NCPopupTree_h
-#define NCPopupTree_h
+#ifndef NCPkgPopupTree_h
+#define NCPkgPopupTree_h
 
 #include <iosfwd>
 
@@ -33,25 +33,25 @@
 
 class NCTree;
 class YCPValue;
-class PackageSelector;
+class NCPackageSelector;
 
 
 ///////////////////////////////////////////////////////////////////
 //
-//	CLASS NAME : NCPopupTree
+//	CLASS NAME : NCPkgPopupTree
 //
 //	DESCRIPTION :
 //
-class NCPopupTree : public NCPopup {
+class NCPkgPopupTree : public NCPopup {
 
-    NCPopupTree & operator=( const NCPopupTree & );
-    NCPopupTree            ( const NCPopupTree & );
+    NCPkgPopupTree & operator=( const NCPkgPopupTree & );
+    NCPkgPopupTree            ( const NCPkgPopupTree & );
 
 private:
 
     NCTree * filterTree;		// the YTree
     
-    PackageSelector * packager;		// connection to the PackageSelector
+    NCPackageSelector * packager;		// connection to the PackageSelector
 
     // internal use (copies tree items got from YPkgRpmGroupTagsFilterView)
     void cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone );
@@ -68,8 +68,8 @@ protected:
     
 public:
     
-    NCPopupTree( const wpos at, PackageSelector * packager );
-    virtual ~NCPopupTree();
+    NCPkgPopupTree( const wpos at, NCPackageSelector * packager );
+    virtual ~NCPkgPopupTree();
 
     virtual long nicesize(YUIDimension dim);
 
@@ -89,4 +89,4 @@ public:
 ///////////////////////////////////////////////////////////////////
 
 
-#endif // NCPopupTree_h
+#endif // NCPkgPopupTree_h

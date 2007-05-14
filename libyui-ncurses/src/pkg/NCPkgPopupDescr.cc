@@ -10,7 +10,7 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPopupPkgDescr.cc
+   File:       NCPkgPopupDescr.cc
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
@@ -23,28 +23,28 @@
 #include "YDialog.h"
 #include "NCSplit.h"
 #include "NCSpacing.h"
-#include "PkgNames.h"
+#include "NCPkgNames.h"
 #include "NCLabel.h"
 #include "NCPushButton.h"
 #include "NCPkgTable.h"
 #include "NCRichText.h"
 
-#include "YQZypp.h"
+#include "NCZypp.h"
 
-#include "NCPopupPkgDescr.h"
-#include "PackageSelector.h"
+#include "NCPkgPopupDescr.h"
+#include "NCPackageSelector.h"
 
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupPkgDescr::NCPopupPkgDescr
+//	METHOD NAME : NCPkgPopupDescr::NCPkgPopupDescr
 //	METHOD TYPE : Constructor
 //
 //	DESCRIPTION :
 //
-NCPopupPkgDescr::NCPopupPkgDescr( const wpos at, PackageSelector * pkger )
+NCPkgPopupDescr::NCPkgPopupDescr( const wpos at, NCPackageSelector * pkger )
     : NCPopup( at, false )
       , pkgTable( 0 )
       , okButton( 0 )
@@ -57,24 +57,24 @@ NCPopupPkgDescr::NCPopupPkgDescr( const wpos at, PackageSelector * pkger )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupPkgDescr::~NCPopupPkgDescr
+//	METHOD NAME : NCPkgPopupDescr::~NCPkgPopupDescr
 //	METHOD TYPE : Destructor
 //
 //	DESCRIPTION :
 //
-NCPopupPkgDescr::~NCPopupPkgDescr()
+NCPkgPopupDescr::~NCPkgPopupDescr()
 {
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupPkgDescr::createLayout
+//	METHOD NAME : NCPkgPopupDescr::createLayout
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCPopupPkgDescr::createLayout( )
+void NCPkgPopupDescr::createLayout( )
 {
     YWidgetOpt opt;
 
@@ -107,15 +107,15 @@ void NCPopupPkgDescr::createLayout( )
     split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
     
     opt.isHStretchable.setValue( false );
-    NCLabel * helplb = new NCLabel( split, opt, YCPString(PkgNames::DepsHelpLine()) );
+    NCLabel * helplb = new NCLabel( split, opt, YCPString(NCPkgNames::DepsHelpLine()) );
     split->addChild( helplb );
   
     split->addChild( new NCSpacing( split, opt, 0.6, false, true ) ); 
 
     // add the OK button
     opt.key_Fxx.setValue( 10 );
-    okButton = new NCPushButton( split, opt, YCPString(PkgNames::OKLabel()) );
-    okButton->setId( PkgNames::OkButton() );
+    okButton = new NCPushButton( split, opt, YCPString(NCPkgNames::OKLabel()) );
+    okButton->setId( NCPkgNames::OkButton() );
 
     split->addChild( okButton );
 
@@ -124,12 +124,12 @@ void NCPopupPkgDescr::createLayout( )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupPkgDescr::fillData
+//	METHOD NAME : NCPkgPopupDescr::fillData
 //	METHOD TYPE : bool
 //
 //	DESCRIPTION :
 //
-bool NCPopupPkgDescr::fillData( ZyppPkg pkgPtr, ZyppSel slbPtr )
+bool NCPkgPopupDescr::fillData( ZyppPkg pkgPtr, ZyppSel slbPtr )
 {
     if ( !pkgPtr )
 	return false;
@@ -150,12 +150,12 @@ bool NCPopupPkgDescr::fillData( ZyppPkg pkgPtr, ZyppSel slbPtr )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupPkgDescr::showInfoPopup
+//	METHOD NAME : NCPkgPopupDescr::showInfoPopup
 //	METHOD TYPE : NCursesEvent event
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupPkgDescr::showInfoPopup( ZyppPkg pkgPtr, ZyppSel slbPtr )
+NCursesEvent NCPkgPopupDescr::showInfoPopup( ZyppPkg pkgPtr, ZyppSel slbPtr )
 {
     postevent = NCursesEvent();
 
@@ -174,13 +174,13 @@ NCursesEvent NCPopupPkgDescr::showInfoPopup( ZyppPkg pkgPtr, ZyppSel slbPtr )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupPkgDescr::niceSize
+//	METHOD NAME : NCPkgPopupDescr::niceSize
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
 
-long NCPopupPkgDescr::nicesize(YUIDimension dim)
+long NCPkgPopupDescr::nicesize(YUIDimension dim)
 {
     long vdim;
     if ( NCurses::lines() > 17 )
@@ -199,7 +199,7 @@ long NCPopupPkgDescr::nicesize(YUIDimension dim)
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupPkgDescr::wHandleInput( wint_t ch )
+NCursesEvent NCPkgPopupDescr::wHandleInput( wint_t ch )
 {
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;
@@ -213,12 +213,12 @@ NCursesEvent NCPopupPkgDescr::wHandleInput( wint_t ch )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupPkgDescr::postAgain
+//	METHOD NAME : NCPkgPopupDescr::postAgain
 //	METHOD TYPE : bool
 //
 //	DESCRIPTION :
 //
-bool NCPopupPkgDescr::postAgain()
+bool NCPkgPopupDescr::postAgain()
 {
     if ( ! postevent.widget )
 	return false;
@@ -226,7 +226,7 @@ bool NCPopupPkgDescr::postAgain()
     YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
 
     if ( !currentId.isNull()
-	 && currentId->compare( PkgNames::Cancel() ) == YO_EQUAL )
+	 && currentId->compare( NCPkgNames::Cancel() ) == YO_EQUAL )
     {
 	// close the dialog
 	postevent = NCursesEvent::cancel;

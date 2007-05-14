@@ -10,20 +10,20 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPopupDeps.cc
+   File:       NCPkgPopupDeps.cc
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #include "Y2Log.h"
-#include "NCPopupDeps.h"
+#include "NCPkgPopupDeps.h"
 
 #include "NCTree.h"
 #include "YDialog.h"
 #include "NCSplit.h"
 #include "NCSpacing.h"
-#include "PkgNames.h"
+#include "NCPkgNames.h"
 #include "NCSelectionBox.h"
 #include "NCMultiSelectionBox.h"
 #include "NCPushButton.h"
@@ -42,12 +42,12 @@ class NCProblemSelectionBox : public NCSelectionBox
     NCProblemSelectionBox (const Self &); // prohibit copying
     Self & operator= (const Self &); // prohibit assignment
 
-    NCPopupDeps * depsPopup;	// to notify about changes
+    NCPkgPopupDeps * depsPopup;	// to notify about changes
 protected:
     virtual NCursesEvent wHandleInput( wint_t ch );
 public:
     NCProblemSelectionBox (NCWidget * parent, const YWidgetOpt & opt,
-			   const YCPString & label, NCPopupDeps * aDepsPopup)
+			   const YCPString & label, NCPkgPopupDeps * aDepsPopup)
 	: NCSelectionBox (parent, opt, label), depsPopup (aDepsPopup) {}
     virtual ~NCProblemSelectionBox () {}
 };
@@ -58,12 +58,12 @@ class NCSolutionSelectionBox : public NCMultiSelectionBox
     NCSolutionSelectionBox (const Self &); // prohibit copying
     Self & operator= (const Self &); // prohibit assignment
 
-    NCPopupDeps * depsPopup;
+    NCPkgPopupDeps * depsPopup;
 protected:
     virtual NCursesEvent wHandleInput( wint_t ch );
 public:
     NCSolutionSelectionBox (NCWidget * parent, const YWidgetOpt & opt,
-			    const YCPString & label, NCPopupDeps * aDepsPopup)
+			    const YCPString & label, NCPkgPopupDeps * aDepsPopup)
 	: NCMultiSelectionBox (parent, opt, label), depsPopup (aDepsPopup) {}
     virtual ~NCSolutionSelectionBox () {}
 };
@@ -73,12 +73,12 @@ using namespace std;
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupDeps::NCPopupDeps
+//	METHOD NAME : NCPkgPopupDeps::NCPkgPopupDeps
 //	METHOD TYPE : Constructor
 //
 //	DESCRIPTION :
 //
-NCPopupDeps::NCPopupDeps( const wpos at, PackageSelector * pkger )
+NCPkgPopupDeps::NCPkgPopupDeps( const wpos at, NCPackageSelector * pkger )
     : NCPopup( at, false )
       , cancelButton( 0 )
       , solveButton( 0 )
@@ -95,12 +95,12 @@ NCPopupDeps::NCPopupDeps( const wpos at, PackageSelector * pkger )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupDeps::~NCPopupDeps
+//	METHOD NAME : NCPkgPopupDeps::~NCPkgPopupDeps
 //	METHOD TYPE : Destructor
 //
 //	DESCRIPTION :
 //
-NCPopupDeps::~NCPopupDeps()
+NCPkgPopupDeps::~NCPkgPopupDeps()
 {
 }
 
@@ -112,7 +112,7 @@ NCPopupDeps::~NCPopupDeps()
 //
 //	DESCRIPTION :
 //
-void NCPopupDeps::createLayout( )
+void NCPkgPopupDeps::createLayout( )
 {
 
   YWidgetOpt opt;
@@ -170,16 +170,16 @@ void NCPopupDeps::createLayout( )
 
   // add the solve button
   opt.key_Fxx.setValue( 10 );
-  solveButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::SolveLabel()) );
-  solveButton->setId( PkgNames::Solve () );
+  solveButton = new NCPushButton( hSplit, opt, YCPString(NCPkgNames::SolveLabel()) );
+  solveButton->setId( NCPkgNames::Solve () );
   hSplit->addChild( solveButton );
 
   hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
 
   // add the cancel button
   opt.key_Fxx.setValue( 9 );
-  cancelButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::CancelLabel()) );
-  cancelButton->setId( PkgNames::Cancel () );
+  cancelButton = new NCPushButton( hSplit, opt, YCPString(NCPkgNames::CancelLabel()) );
+  cancelButton->setId( NCPkgNames::Cancel () );
   hSplit->addChild( cancelButton );
 
 }
@@ -189,7 +189,7 @@ void NCPopupDeps::createLayout( )
 //  showDependencies
 // 
 //
-bool NCPopupDeps::showDependencies( NCPkgSolverAction action, bool * ok )
+bool NCPkgPopupDeps::showDependencies( NCPkgSolverAction action, bool * ok )
 {
     if ( !problemw )
 	return true;
@@ -198,7 +198,7 @@ bool NCPopupDeps::showDependencies( NCPkgSolverAction action, bool * ok )
     
     // set headline and table type
     if ( head )
-	head->setLabel( YCPString(PkgNames::PackageDeps()) );
+	head->setLabel( YCPString(NCPkgNames::PackageDeps()) );
 
     // evaluate the result and fill the list with packages
     // which have unresolved deps
@@ -223,7 +223,7 @@ bool NCPopupDeps::showDependencies( NCPkgSolverAction action, bool * ok )
 }
 
 
-bool NCPopupDeps::solve( NCSelectionBox * problemw, NCPkgSolverAction action )
+bool NCPkgPopupDeps::solve( NCSelectionBox * problemw, NCPkgSolverAction action )
 {
     if ( !problemw )
 	return false;
@@ -231,8 +231,8 @@ bool NCPopupDeps::solve( NCSelectionBox * problemw, NCPkgSolverAction action )
     NCDBG << "Solving..." << endl ;
 
     NCPopupInfo info( wpos(10, 10),  YCPString( "" ),
-		      YCPString(PkgNames::Solving()),
-		      PkgNames::OKLabel() );
+		      YCPString(NCPkgNames::Solving()),
+		      NCPkgNames::OKLabel() );
     info.setNiceSize( 18, 4 );
     info.popup();
     
@@ -280,7 +280,7 @@ bool NCPopupDeps::solve( NCSelectionBox * problemw, NCPkgSolverAction action )
     return false;
 }
 
-bool NCPopupDeps::showSolutions( int index )
+bool NCPkgPopupDeps::showSolutions( int index )
 {
     if (!solutionw)
 	return false;
@@ -325,12 +325,12 @@ bool NCPopupDeps::showSolutions( int index )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupDeps::showDependencyPopup
+//	METHOD NAME : NCPkgPopupDeps::showDependencyPopup
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupDeps::showDependencyPopup( NCPkgSolverAction action )
+NCursesEvent NCPkgPopupDeps::showDependencyPopup( NCPkgSolverAction action )
 {
     postevent = NCursesEvent();
 
@@ -346,13 +346,13 @@ NCursesEvent NCPopupDeps::showDependencyPopup( NCPkgSolverAction action )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupDeps::niceSize
+//	METHOD NAME : NCPkgPopupDeps::niceSize
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
 
-long NCPopupDeps::nicesize(YUIDimension dim)
+long NCPkgPopupDeps::nicesize(YUIDimension dim)
 {
     return ( dim == YD_HORIZ ? NCurses::cols()-15 : NCurses::lines()-5 );
 }
@@ -365,7 +365,7 @@ long NCPopupDeps::nicesize(YUIDimension dim)
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupDeps::wHandleInput( wint_t ch )
+NCursesEvent NCPkgPopupDeps::wHandleInput( wint_t ch )
 {
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;
@@ -376,12 +376,12 @@ NCursesEvent NCPopupDeps::wHandleInput( wint_t ch )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupDeps::postAgain
+//	METHOD NAME : NCPkgPopupDeps::postAgain
 //	METHOD TYPE : bool
 //
 //	DESCRIPTION :
 //
-bool NCPopupDeps::postAgain( NCPkgSolverAction action )
+bool NCPkgPopupDeps::postAgain( NCPkgSolverAction action )
 {
     if ( ! postevent.widget )
 	return false;
@@ -391,12 +391,12 @@ bool NCPopupDeps::postAgain( NCPkgSolverAction action )
     if ( currentId.isNull() )
 	return false;
     
-    if ( currentId->compare( PkgNames::Cancel () ) == YO_EQUAL )
+    if ( currentId->compare( NCPkgNames::Cancel () ) == YO_EQUAL )
     {
 	// close the dialog 
 	postevent = NCursesEvent::cancel;
     }
-    else if ( currentId->compare( PkgNames::Solve () ) == YO_EQUAL )
+    else if ( currentId->compare( NCPkgNames::Solve () ) == YO_EQUAL )
     {
 	// apply the solution here
 	zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
@@ -443,12 +443,12 @@ bool NCPopupDeps::postAgain( NCPkgSolverAction action )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupDeps::setSolution
+//	METHOD NAME : NCPkgPopupDeps::setSolution
 //	METHOD TYPE : bool
 //
 //	DESCRIPTION :
 //
-void NCPopupDeps::setSolution (int index)
+void NCPkgPopupDeps::setSolution (int index)
 {
     // we must search the list :( bad design here
     // but the solution list is short

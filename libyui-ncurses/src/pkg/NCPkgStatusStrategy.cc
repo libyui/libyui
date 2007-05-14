@@ -10,18 +10,18 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       ObjectStatStrategy.cc
+   File:       NCPkgStatusStrategy.cc
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #include "Y2Log.h"
-#include "ObjectStatStrategy.h"
+#include "NCPkgStatusStrategy.h"
 
 #include "NCTable.h"
 
-#include "YQZypp.h"
+#include "NCZypp.h"
 
 #include <zypp/ui/Selectable.h>
 #include <zypp/ResObject.h>
@@ -34,24 +34,24 @@
 //
 // Constructor
 //
-ObjectStatStrategy::ObjectStatStrategy()
+NCPkgStatusStrategy::NCPkgStatusStrategy()
 {
 }
 
 //
 // Destructor - must be defined here (because it is pure virtual)
 //
-ObjectStatStrategy::~ObjectStatStrategy()
+NCPkgStatusStrategy::~NCPkgStatusStrategy()
 {
 }
 
 ///////////////////////////////////////////////////////////////////
 //
-// ObjectStatStrategy::getPackageStatus()
+// NCPkgStatusStrategy::getPackageStatus()
 //
 // Gets status from package manager
 //
-ZyppStatus ObjectStatStrategy::getPackageStatus( ZyppSel slbPtr,
+ZyppStatus NCPkgStatusStrategy::getPackageStatus( ZyppSel slbPtr,
 						 ZyppObj objPtr )
 {
     if ( slbPtr )
@@ -67,11 +67,11 @@ ZyppStatus ObjectStatStrategy::getPackageStatus( ZyppSel slbPtr,
 
 /////////////////////////////////////////////////////////////////
 //
-// ObjectStatStrategy::setObjectStatus()	
+// NCPkgStatusStrategy::setObjectStatus()	
 //
 // Informs the package manager about the status change
 //
-bool ObjectStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, ZyppObj objPtr )
+bool NCPkgStatusStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, ZyppObj objPtr )
 {
     bool ok = false;
     
@@ -91,11 +91,11 @@ bool ObjectStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, 
 
 ///////////////////////////////////////////////////////////////////
 //
-// ObjectStatStrategy::keyToStatus()
+// NCPkgStatusStrategy::keyToStatus()
 //
 // Returns the corresponding status
 //
-bool ObjectStatStrategy::keyToStatus( const int & key,
+bool NCPkgStatusStrategy::keyToStatus( const int & key,
 				      ZyppSel slbPtr,
 				      ZyppObj objPtr,
 				      ZyppStatus & newStat )
@@ -210,11 +210,11 @@ bool ObjectStatStrategy::keyToStatus( const int & key,
 
 ///////////////////////////////////////////////////////////////////
 //
-// ObjectStatStrategy::toggleStatus()
+// NCPkgStatusStrategy::toggleStatus()
 //
 // Returns the new status
 //
-bool ObjectStatStrategy::toggleStatus( ZyppSel slbPtr,
+bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
 				       ZyppObj objPtr,
 				       ZyppStatus & newStat )
 {
@@ -283,11 +283,11 @@ bool ObjectStatStrategy::toggleStatus( ZyppSel slbPtr,
 
 ///////////////////////////////////////////////////////////////////
 //
-// ObjectStatStrategy::solveResolvableCollections()
+// NCPkgStatusStrategy::solveResolvableCollections()
 //
 // Do a "small" solver run
 //
-void ObjectStatStrategy::solveResolvableCollections()
+void NCPkgStatusStrategy::solveResolvableCollections()
 {
     zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
 
@@ -311,7 +311,7 @@ void ObjectStatStrategy::solveResolvableCollections()
 // Constructor
 //
 PackageStatStrategy::PackageStatStrategy()
-    : ObjectStatStrategy()
+    : NCPkgStatusStrategy()
 {
 }
 
@@ -326,7 +326,7 @@ PackageStatStrategy::PackageStatStrategy()
 // Constructor
 //
 PatchStatStrategy::PatchStatStrategy()
-    : ObjectStatStrategy()
+    : NCPkgStatusStrategy()
 {
 }
 
@@ -497,7 +497,7 @@ bool PatchStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, Z
 // Constructor
 //
 SelectionStatStrategy::SelectionStatStrategy()
-    : ObjectStatStrategy()
+    : NCPkgStatusStrategy()
 {
 }
 
@@ -536,7 +536,7 @@ bool SelectionStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPt
 // Constructor
 //
 DependencyStatStrategy::DependencyStatStrategy()
-    : ObjectStatStrategy()
+    : NCPkgStatusStrategy()
 {
 }
 
@@ -548,7 +548,7 @@ DependencyStatStrategy::DependencyStatStrategy()
 // Constructor
 //
 AvailableStatStrategy::AvailableStatStrategy()
-    : ObjectStatStrategy()
+    : NCPkgStatusStrategy()
 {
 }
 
@@ -630,7 +630,7 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
 // Constructor
 //
 UpdateStatStrategy::UpdateStatStrategy()
-    : ObjectStatStrategy()
+    : NCPkgStatusStrategy()
 {
 }
 
@@ -643,7 +643,7 @@ UpdateStatStrategy::UpdateStatStrategy()
 // Constructor
 //
 PatchPkgStatStrategy::PatchPkgStatStrategy()
-    : ObjectStatStrategy()
+    : NCPkgStatusStrategy()
 {
 }
 

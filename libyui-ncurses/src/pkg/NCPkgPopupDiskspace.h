@@ -10,14 +10,14 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPopupDiskspace.h
+   File:       NCPkgPopupDiskspace.h
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#ifndef NCPopupDiskspace_h
-#define NCPopupDiskspace_h
+#ifndef NCPkgPopupDiskspace_h
+#define NCPkgPopupDiskspace_h
 
 #include <iosfwd>
 
@@ -132,14 +132,14 @@ protected:
 
 ///////////////////////////////////////////////////////////////////
 //
-//	CLASS NAME : NCPopupDiskspace
+//	CLASS NAME : NCPkgPopupDiskspace
 //
 //	DESCRIPTION :
 //
-class NCPopupDiskspace : public NCPopup {
+class NCPkgPopupDiskspace : public NCPopup {
 
-    NCPopupDiskspace & operator=( const NCPopupDiskspace & );
-    NCPopupDiskspace            ( const NCPopupDiskspace & );
+    NCPkgPopupDiskspace & operator=( const NCPkgPopupDiskspace & );
+    NCPkgPopupDiskspace            ( const NCPkgPopupDiskspace & );
 
 private:
 
@@ -169,9 +169,9 @@ protected:
     
 public:
     
-    NCPopupDiskspace( const wpos at, bool testSpaceMode );
+    NCPkgPopupDiskspace( const wpos at, bool testSpaceMode );
     
-    virtual ~NCPopupDiskspace();
+    virtual ~NCPkgPopupDiskspace();
 
     virtual long nicesize(YUIDimension dim);
 
@@ -197,4 +197,4 @@ public:
 ///////////////////////////////////////////////////////////////////
 
 
-#endif // NCPopupDiskspace_h
+#endif // NCPkgPopupDiskspace_h

@@ -10,31 +10,29 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       PackageSelector.cc
+   File:       NCPackageSelector.cc
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
 #include "NCurses.h"
 #include "NCPushButton.h"
 #include "NCTable.h"
 #include "NCPkgTable.h"
 #include "NCRichText.h"
 #include "NCLabel.h"
-#include "NCPopupSearch.h"
+#include "NCPkgPopupSearch.h"
 #include "NCPopupInfo.h"
 #include "NCSelectionBox.h"
-//#include "NCPopupTree.h"
 #include "NCMenuButton.h"
-#include "NCPopupSelection.h"
-#include "NCPopupDeps.h"
-#include "NCPopupDiskspace.h"
-#include "NCPopupPkgTable.h"
-#include "NCPopupPkgDescr.h"
-#include "NCPopupFile.h"
-#include "PackageSelector.h"
+#include "NCPkgPopupSelection.h"
+#include "NCPkgPopupDeps.h"
+#include "NCPkgPopupDiskspace.h"
+#include "NCPkgPopupTable.h"
+#include "NCPkgPopupDescr.h"
+#include "NCPkgPopupFile.h"
+#include "NCPackageSelector.h"
 #include "YSelectionBox.h"
 #include "YNCursesUI.h"
 #include "NCi18n.h"
@@ -46,7 +44,7 @@
 #include <string>
 #include <set>
 
-#include "YQZypp.h"		// tryCastToZyppPkg(), tryCastToZyppPatch()
+#include "NCZypp.h"		// tryCastToZyppPkg(), tryCastToZyppPatch()
 #include <zypp/ui/Selectable.h>
 #include <zypp/ui/PatchContents.h>
 #include <zypp/SysContent.h>
@@ -99,7 +97,7 @@ bool ic_compare ( char c1, char c2 )
 //
 // Constructor
 //
-PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, string floppyDevice )
+NCPackageSelector::NCPackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, string floppyDevice )
     : y2ui( ui )
       , visibleInfo( YCPNull() )
       , filterPopup( 0 )
@@ -117,77 +115,77 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
       , _rpmGroupsTree (0)
 {
     // Fill the handler map
-    eventHandlerMap[ PkgNames::Packages()->toString() ]	= &PackageSelector::PackageListHandler;
-    eventHandlerMap[ PkgNames::Cancel()->toString() ] 	= &PackageSelector::CancelHandler;
-    eventHandlerMap[ PkgNames::OkButton()->toString() ]	= &PackageSelector::OkButtonHandler;
-    eventHandlerMap[ PkgNames::Search()->toString() ] 	= &PackageSelector::SearchHandler;
-    eventHandlerMap[ PkgNames::Diskinfo()->toString() ] = &PackageSelector::DiskinfoHandler;
+    eventHandlerMap[ NCPkgNames::Packages()->toString() ]	= &NCPackageSelector::PackageListHandler;
+    eventHandlerMap[ NCPkgNames::Cancel()->toString() ] 	= &NCPackageSelector::CancelHandler;
+    eventHandlerMap[ NCPkgNames::OkButton()->toString() ]	= &NCPackageSelector::OkButtonHandler;
+    eventHandlerMap[ NCPkgNames::Search()->toString() ] 	= &NCPackageSelector::SearchHandler;
+    eventHandlerMap[ NCPkgNames::Diskinfo()->toString() ] = &NCPackageSelector::DiskinfoHandler;
     // Filter menu
-    eventHandlerMap[ PkgNames::RpmGroups()->toString() ] = &PackageSelector::FilterHandler;
-    eventHandlerMap[ PkgNames::Selections()->toString() ] = &PackageSelector::FilterHandler;
-    eventHandlerMap[ PkgNames::Patterns()->toString() ] = &PackageSelector::FilterHandler;    
-    eventHandlerMap[ PkgNames::Languages()->toString() ] = &PackageSelector::FilterHandler;    
-    eventHandlerMap[ PkgNames::UpdateList()->toString() ] = &PackageSelector::FilterHandler;
-    eventHandlerMap[ PkgNames::Installed()->toString() ] = &PackageSelector::FilterHandler;
-    eventHandlerMap[ PkgNames::Whatif()->toString() ] = &PackageSelector::FilterHandler;
+    eventHandlerMap[ NCPkgNames::RpmGroups()->toString() ] = &NCPackageSelector::FilterHandler;
+    eventHandlerMap[ NCPkgNames::Selections()->toString() ] = &NCPackageSelector::FilterHandler;
+    eventHandlerMap[ NCPkgNames::Patterns()->toString() ] = &NCPackageSelector::FilterHandler;    
+    eventHandlerMap[ NCPkgNames::Languages()->toString() ] = &NCPackageSelector::FilterHandler;    
+    eventHandlerMap[ NCPkgNames::UpdateList()->toString() ] = &NCPackageSelector::FilterHandler;
+    eventHandlerMap[ NCPkgNames::Installed()->toString() ] = &NCPackageSelector::FilterHandler;
+    eventHandlerMap[ NCPkgNames::Whatif()->toString() ] = &NCPackageSelector::FilterHandler;
 
     // YOU filter
-    eventHandlerMap[ PkgNames::Recommended()->toString() ] = &PackageSelector::FilterHandler;
-    eventHandlerMap[ PkgNames::Security()->toString() ] = &PackageSelector::FilterHandler;
-    eventHandlerMap[ PkgNames::Optional()->toString() ] = &PackageSelector::FilterHandler;
-    eventHandlerMap[ PkgNames::InstalledPatches()->toString() ] = &PackageSelector::FilterHandler;
-    eventHandlerMap[ PkgNames::AllPatches()->toString() ] = &PackageSelector::FilterHandler; 
-    eventHandlerMap[ PkgNames::NewPatches()->toString() ] = &PackageSelector::FilterHandler;
-    eventHandlerMap[ PkgNames::InstalledPatches()->toString() ] = &PackageSelector::FilterHandler;
-    eventHandlerMap[ PkgNames::InstallablePatches()->toString() ] = &PackageSelector::FilterHandler;    
-    eventHandlerMap[ PkgNames::YaST2Patches()->toString() ] = &PackageSelector::FilterHandler;
+    eventHandlerMap[ NCPkgNames::Recommended()->toString() ] = &NCPackageSelector::FilterHandler;
+    eventHandlerMap[ NCPkgNames::Security()->toString() ] = &NCPackageSelector::FilterHandler;
+    eventHandlerMap[ NCPkgNames::Optional()->toString() ] = &NCPackageSelector::FilterHandler;
+    eventHandlerMap[ NCPkgNames::InstalledPatches()->toString() ] = &NCPackageSelector::FilterHandler;
+    eventHandlerMap[ NCPkgNames::AllPatches()->toString() ] = &NCPackageSelector::FilterHandler; 
+    eventHandlerMap[ NCPkgNames::NewPatches()->toString() ] = &NCPackageSelector::FilterHandler;
+    eventHandlerMap[ NCPkgNames::InstalledPatches()->toString() ] = &NCPackageSelector::FilterHandler;
+    eventHandlerMap[ NCPkgNames::InstallablePatches()->toString() ] = &NCPackageSelector::FilterHandler;    
+    eventHandlerMap[ NCPkgNames::YaST2Patches()->toString() ] = &NCPackageSelector::FilterHandler;
 
     // Information menu
-    eventHandlerMap[ PkgNames::Files()->toString() ]   	= &PackageSelector::InformationHandler;
-    eventHandlerMap[ PkgNames::PkgInfo()->toString() ] 	= &PackageSelector::InformationHandler;
-    eventHandlerMap[ PkgNames::LongDescr()->toString() ]= &PackageSelector::InformationHandler;
-    eventHandlerMap[ PkgNames::Versions()->toString() ] = &PackageSelector::InformationHandler;
-    eventHandlerMap[ PkgNames::Relations()->toString() ] = &PackageSelector::InformationHandler;
+    eventHandlerMap[ NCPkgNames::Files()->toString() ]   	= &NCPackageSelector::InformationHandler;
+    eventHandlerMap[ NCPkgNames::PkgInfo()->toString() ] 	= &NCPackageSelector::InformationHandler;
+    eventHandlerMap[ NCPkgNames::LongDescr()->toString() ]= &NCPackageSelector::InformationHandler;
+    eventHandlerMap[ NCPkgNames::Versions()->toString() ] = &NCPackageSelector::InformationHandler;
+    eventHandlerMap[ NCPkgNames::Relations()->toString() ] = &NCPackageSelector::InformationHandler;
 
     // YOU information 
-    eventHandlerMap[ PkgNames::PatchDescr()->toString() ] = &PackageSelector::InformationHandler;
-    eventHandlerMap[ PkgNames::PatchPackages()->toString() ] = &PackageSelector::InformationHandler;
-    eventHandlerMap[ PkgNames::PatchPackagesVersions()->toString() ] = &PackageSelector::InformationHandler;
+    eventHandlerMap[ NCPkgNames::PatchDescr()->toString() ] = &NCPackageSelector::InformationHandler;
+    eventHandlerMap[ NCPkgNames::PatchPackages()->toString() ] = &NCPackageSelector::InformationHandler;
+    eventHandlerMap[ NCPkgNames::PatchPackagesVersions()->toString() ] = &NCPackageSelector::InformationHandler;
 
     // Action menu
-    eventHandlerMap[ PkgNames::Toggle()->toString() ] 	= &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::Select()->toString() ] 	= &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::Delete()->toString() ] 	= &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::Update()->toString() ] 	= &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::TabooOn()->toString() ]	= &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::TabooOff()->toString() ]	= &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::SourceYes()->toString() ] = &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::SourceNo()->toString() ] = &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::InstallAll()->toString() ] = &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::DontInstall()->toString() ] = &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::DeleteAll()->toString() ] = &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::DontDelete()->toString() ] = &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::UpdateNewer()->toString() ] = &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::UpdateAll()->toString() ] = &PackageSelector::StatusHandler;
-    eventHandlerMap[ PkgNames::DontUpdate()->toString() ] = &PackageSelector::StatusHandler;
+    eventHandlerMap[ NCPkgNames::Toggle()->toString() ] 	= &NCPackageSelector::StatusHandler;
+    eventHandlerMap[ NCPkgNames::Select()->toString() ] 	= &NCPackageSelector::StatusHandler;
+    eventHandlerMap[ NCPkgNames::Delete()->toString() ] 	= &NCPackageSelector::StatusHandler;
+    eventHandlerMap[ NCPkgNames::Update()->toString() ] 	= &NCPackageSelector::StatusHandler;
+    eventHandlerMap[ NCPkgNames::TabooOn()->toString() ]	= &NCPackageSelector::StatusHandler;
+    eventHandlerMap[ NCPkgNames::TabooOff()->toString() ]	= &NCPackageSelector::StatusHandler;
+    eventHandlerMap[ NCPkgNames::SourceYes()->toString() ] = &NCPackageSelector::StatusHandler;
+    eventHandlerMap[ NCPkgNames::SourceNo()->toString() ] = &NCPackageSelector::StatusHandler;
+    eventHandlerMap[ NCPkgNames::InstallAll()->toString() ] = &NCPackageSelector::StatusHandler;
+    eventHandlerMap[ NCPkgNames::DontInstall()->toString() ] = &NCPackageSelector::StatusHandler;
+    eventHandlerMap[ NCPkgNames::DeleteAll()->toString() ] = &NCPackageSelector::StatusHandler;
+    eventHandlerMap[ NCPkgNames::DontDelete()->toString() ] = &NCPackageSelector::StatusHandler;
+    eventHandlerMap[ NCPkgNames::UpdateNewer()->toString() ] = &NCPackageSelector::StatusHandler;
+    eventHandlerMap[ NCPkgNames::UpdateAll()->toString() ] = &NCPackageSelector::StatusHandler;
+    eventHandlerMap[ NCPkgNames::DontUpdate()->toString() ] = &NCPackageSelector::StatusHandler;
     
     // Etc. menu
-    eventHandlerMap[ PkgNames::ShowDeps()->toString() ] = &PackageSelector::DependencyHandler;
-    eventHandlerMap[ PkgNames::AutoDeps()->toString() ] = &PackageSelector::DependencyHandler;
-    eventHandlerMap[ PkgNames::VerifySystem()->toString() ] = &PackageSelector::DependencyHandler;
-    eventHandlerMap[ PkgNames::ExportToFile()->toString() ] = &PackageSelector::FileHandler;
-    eventHandlerMap[ PkgNames::ImportFromFile()->toString() ] = &PackageSelector::FileHandler;
-    eventHandlerMap[ PkgNames::SaveSel()->toString() ] = &PackageSelector::SelectionHandler;
-    eventHandlerMap[ PkgNames::LoadSel()->toString() ] = &PackageSelector::SelectionHandler;
-    eventHandlerMap[ PkgNames::Testcase()->toString() ] = &PackageSelector::TestcaseHandler;
+    eventHandlerMap[ NCPkgNames::ShowDeps()->toString() ] = &NCPackageSelector::DependencyHandler;
+    eventHandlerMap[ NCPkgNames::AutoDeps()->toString() ] = &NCPackageSelector::DependencyHandler;
+    eventHandlerMap[ NCPkgNames::VerifySystem()->toString() ] = &NCPackageSelector::DependencyHandler;
+    eventHandlerMap[ NCPkgNames::ExportToFile()->toString() ] = &NCPackageSelector::FileHandler;
+    eventHandlerMap[ NCPkgNames::ImportFromFile()->toString() ] = &NCPackageSelector::FileHandler;
+    eventHandlerMap[ NCPkgNames::SaveSel()->toString() ] = &NCPackageSelector::SelectionHandler;
+    eventHandlerMap[ NCPkgNames::LoadSel()->toString() ] = &NCPackageSelector::SelectionHandler;
+    eventHandlerMap[ NCPkgNames::Testcase()->toString() ] = &NCPackageSelector::TestcaseHandler;
     
     // Help menu
-    eventHandlerMap[ PkgNames::GeneralHelp()->toString() ] = &PackageSelector::HelpHandler;
-    eventHandlerMap[ PkgNames::StatusHelp()->toString() ]  = &PackageSelector::HelpHandler;
-    eventHandlerMap[ PkgNames::FilterHelp()->toString() ]  = &PackageSelector::HelpHandler;
-    eventHandlerMap[ PkgNames::UpdateHelp()->toString() ] = &PackageSelector::HelpHandler;
-    eventHandlerMap[ PkgNames::SearchHelp()->toString() ] = &PackageSelector::HelpHandler;
-    eventHandlerMap[ PkgNames::PatchHelp()->toString() ]  = &PackageSelector::YouHelpHandler;
+    eventHandlerMap[ NCPkgNames::GeneralHelp()->toString() ] = &NCPackageSelector::HelpHandler;
+    eventHandlerMap[ NCPkgNames::StatusHelp()->toString() ]  = &NCPackageSelector::HelpHandler;
+    eventHandlerMap[ NCPkgNames::FilterHelp()->toString() ]  = &NCPackageSelector::HelpHandler;
+    eventHandlerMap[ NCPkgNames::UpdateHelp()->toString() ] = &NCPackageSelector::HelpHandler;
+    eventHandlerMap[ NCPkgNames::SearchHelp()->toString() ] = &NCPackageSelector::HelpHandler;
+    eventHandlerMap[ NCPkgNames::PatchHelp()->toString() ]  = &NCPackageSelector::YouHelpHandler;
 
     if ( opt.youMode.value() )
 	youMode = true;
@@ -204,9 +202,9 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
     if ( !youMode )
     {
 	// create the selections popup
-	selectionPopup = new NCPopupSelection( wpos( 1, 1 ), this, NCPopupSelection::S_Selection );
+	selectionPopup = new NCPkgPopupSelection( wpos( 1, 1 ), this, NCPkgPopupSelection::S_Selection );
 	// create the patterns popup
-	patternPopup =  new NCPopupSelection( wpos( 1, 1 ), this, NCPopupSelection::S_Pattern );
+	patternPopup =  new NCPkgPopupSelection( wpos( 1, 1 ), this, NCPkgPopupSelection::S_Pattern );
 	
 	_rpmGroupsTree = new YRpmGroupsTree ();
 	// get the rpm groups
@@ -223,23 +221,23 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
 	}
 
 	// create language popup
-	languagePopup = new NCPopupSelection( wpos( 1,1 ), this, NCPopupSelection::S_Language );
+	languagePopup = new NCPkgPopupSelection( wpos( 1,1 ), this, NCPkgPopupSelection::S_Language );
 
 	// create the filter popup
-	filterPopup = new NCPopupTree( wpos( 1, 1 ),  this );	 
+	filterPopup = new NCPkgPopupTree( wpos( 1, 1 ),  this );	 
 
         // the file popup
-	filePopup = new NCPopupFile( wpos( 1, 1), floppyDevice, this );
+	filePopup = new NCPkgPopupFile( wpos( 1, 1), floppyDevice, this );
     }
 
     // create the search popup
-    searchPopup = new NCPopupSearch( wpos( 1, 1 ), this );
+    searchPopup = new NCPkgPopupSearch( wpos( 1, 1 ), this );
 	
     // the dependency popup
-    depsPopup = new NCPopupDeps( wpos( 1, 1 ), this );
+    depsPopup = new NCPkgPopupDeps( wpos( 1, 1 ), this );
 
     // the disk space popup
-    diskspacePopup = new NCPopupDiskspace( wpos( 1, 1 ), testMode );
+    diskspacePopup = new NCPkgPopupDiskspace( wpos( 1, 1 ), testMode );
 
 }
 
@@ -247,7 +245,7 @@ PackageSelector::PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, strin
 //
 // Destructor
 //
-PackageSelector::~PackageSelector()
+NCPackageSelector::~NCPackageSelector()
 {
     if ( filterPopup )
     {
@@ -287,7 +285,7 @@ PackageSelector::~PackageSelector()
     }
 }
 
-void PackageSelector::createFilterMenu()
+void NCPackageSelector::createFilterMenu()
 {
     bool selections;
     bool patterns;
@@ -322,13 +320,13 @@ void PackageSelector::createFilterMenu()
 		  "[`item( `id(\"groups\"), \"%s\" ), `item( `id(\"selections\"), \"%s\" ), "
 		  " `item( `id(\"search\"), \"%s\" ), `item( `id(\"installed\"), \"%s\" ), "
 		  " `item( `id(\"whatif\"), \"%s\" ), `item( `id(\"updatelist\"), \"%s\" ) ] ) ",
-		  PkgNames::MenuFilter().c_str(),
-		  PkgNames::MenuEntryRPMGroups().c_str(),
-		  PkgNames::MenuEntrySelections().c_str(),
-		  PkgNames::MenuEntrySearch().c_str(),
-		  PkgNames::MenuEntryInstPkg().c_str() ,
-		  PkgNames::MenuEntryInstSummary().c_str(),
-		  PkgNames::MenuEntryUpdateList().c_str()
+		  NCPkgNames::MenuFilter().c_str(),
+		  NCPkgNames::MenuEntryRPMGroups().c_str(),
+		  NCPkgNames::MenuEntrySelections().c_str(),
+		  NCPkgNames::MenuEntrySearch().c_str(),
+		  NCPkgNames::MenuEntryInstPkg().c_str() ,
+		  NCPkgNames::MenuEntryInstSummary().c_str(),
+		  NCPkgNames::MenuEntryUpdateList().c_str()
 		  );
 
 	Parser parser( menu );
@@ -350,14 +348,14 @@ void PackageSelector::createFilterMenu()
 		  " `item( `id(\"selections\"), \"%s\" ), "
 		  " `item( `id(\"search\"), \"%s\" ), `item( `id(\"installed\"), \"%s\" ), "
 		  " `item( `id(\"whatif\"), \"%s\" ), `item( `id(\"updatelist\"), \"%s\" ) ] ) ",
-		  PkgNames::MenuFilter().c_str(),
-		  PkgNames::MenuEntryRPMGroups().c_str(),
-		  PkgNames::MenuEntryPatterns().c_str(),
-		  PkgNames::MenuEntrySelections().c_str(),
-		  PkgNames::MenuEntrySearch().c_str(),
-		  PkgNames::MenuEntryInstPkg().c_str() ,
-		  PkgNames::MenuEntryInstSummary().c_str(),
-		  PkgNames::MenuEntryUpdateList().c_str()
+		  NCPkgNames::MenuFilter().c_str(),
+		  NCPkgNames::MenuEntryRPMGroups().c_str(),
+		  NCPkgNames::MenuEntryPatterns().c_str(),
+		  NCPkgNames::MenuEntrySelections().c_str(),
+		  NCPkgNames::MenuEntrySearch().c_str(),
+		  NCPkgNames::MenuEntryInstPkg().c_str() ,
+		  NCPkgNames::MenuEntryInstSummary().c_str(),
+		  NCPkgNames::MenuEntryUpdateList().c_str()
 		  );
 
 	Parser parser( menu );
@@ -376,7 +374,7 @@ void PackageSelector::createFilterMenu()
 // detection whether the user has made any changes
 //
  
-void PackageSelector::saveState ()
+void NCPackageSelector::saveState ()
 {
     ZyppPool p = zyppPool ();
 
@@ -393,7 +391,7 @@ void PackageSelector::saveState ()
     p.saveState<zypp::Language> ();
 }
 
-void PackageSelector::restoreState ()
+void NCPackageSelector::restoreState ()
 {
     ZyppPool p = zyppPool ();
 
@@ -410,7 +408,7 @@ void PackageSelector::restoreState ()
     p.restoreState<zypp::Language> ();
 }
 
-bool PackageSelector::diffState ()
+bool NCPackageSelector::diffState ()
 {
     ZyppPool p = zyppPool ();
 
@@ -446,7 +444,7 @@ bool PackageSelector::diffState ()
 //
 // Handle event, calls corresponding handler-function
 //
-bool PackageSelector::handleEvent ( const NCursesEvent&   event )
+bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
 {
     bool retVal = false;
     YCPValue currentId = YCPNull();
@@ -506,7 +504,7 @@ bool PackageSelector::handleEvent ( const NCursesEvent&   event )
 //
 // currently displayed package information
 //
-void PackageSelector::setVisibleInfo( const YCPValue & info )
+void NCPackageSelector::setVisibleInfo( const YCPValue & info )
 {
     visibleInfo = info;
 }
@@ -517,7 +515,7 @@ void PackageSelector::setVisibleInfo( const YCPValue & info )
 //
 // Fills the package table (on bottom ) with the list of available packages 
 //
-bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, ZyppSel selectable )
+bool NCPackageSelector::fillAvailableList( NCPkgTable * pkgTable, ZyppSel selectable )
 {
     if ( !pkgTable )
     {
@@ -563,7 +561,7 @@ bool PackageSelector::fillAvailableList( NCPkgTable * pkgTable, ZyppSel selectab
 //
 // Fills the package table with the list of packages of the given selection
 //
-bool PackageSelector::showSelPackages( const YCPString & label, const set<string> & wanted )
+bool NCPackageSelector::showSelPackages( const YCPString & label, const set<string> & wanted )
 {
     NCPkgTable * packageList = getPackageList();
     
@@ -623,7 +621,7 @@ bool PackageSelector::showSelPackages( const YCPString & label, const set<string
 	NCDBG << "Filter: " << label->toString() << endl;
 
         // show the selected filter label
-	YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
+	YWidget * filterLabel = y2ui->widgetWithId( NCPkgNames::Filter(), true );
 	if ( filterLabel )
 	{
 	    static_cast<NCLabel *>(filterLabel)->setLabel( label );
@@ -640,7 +638,7 @@ bool PackageSelector::showSelPackages( const YCPString & label, const set<string
 //
 // Fills the package table
 //
-bool PackageSelector::fillSearchList( const YCPString & expr,
+bool NCPackageSelector::fillSearchList( const YCPString & expr,
 				      bool ignoreCase,
 				      bool checkName,
 				      bool checkSummary,
@@ -718,10 +716,10 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
     packageList->drawList();
     
     // set filter label to 'Search'
-    YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
+    YWidget * filterLabel = y2ui->widgetWithId( NCPkgNames::Filter(), true );
     if ( filterLabel )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::SearchResults()) );
+	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(NCPkgNames::SearchResults()) );
     }
 
     return true;
@@ -733,7 +731,7 @@ bool PackageSelector::fillSearchList( const YCPString & expr,
 //
 // Fills the patch list with search results
 //
-bool PackageSelector::fillPatchSearchList( const YCPString & expr )
+bool NCPackageSelector::fillPatchSearchList( const YCPString & expr )
 {
    NCPkgTable * packageList = getPackageList();
     
@@ -768,10 +766,10 @@ bool PackageSelector::fillPatchSearchList( const YCPString & expr )
     packageList->drawList();
     
     // set filter label to 'Search'
-    YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
+    YWidget * filterLabel = y2ui->widgetWithId( NCPkgNames::Filter(), true );
     if ( filterLabel )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::SearchResults()) );
+	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(NCPkgNames::SearchResults()) );
     }
 
     return true;
@@ -784,7 +782,7 @@ bool PackageSelector::fillPatchSearchList( const YCPString & expr )
 //
 // Fills the package table with the list of YOU patches
 //
-bool PackageSelector::fillPatchList( string filter )
+bool NCPackageSelector::fillPatchList( string filter )
 {
     NCPkgTable * packageList = getPackageList();
      
@@ -816,28 +814,28 @@ bool PackageSelector::fillPatchList( string filter )
     if ( filter == "installable"
 	 && packageList->getNumLines() == 0 )
     {
-	packageList->createInfoEntry( PkgNames::NoPatches() );	
+	packageList->createInfoEntry( NCPkgNames::NoPatches() );	
     }
 
     // show the patches
     packageList->drawList();
     
     // show the selected filter label
-    YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
+    YWidget * filterLabel = y2ui->widgetWithId( NCPkgNames::Filter(), true );
     if ( filterLabel )
     {
 	if ( filter == "installable" )
 	{
 	    // show common label "Online Update Patches"
-	    static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::YOUPatches()) );
+	    static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(NCPkgNames::YOUPatches()) );
 	}
 	else if ( filter == "installed" )
 	{
-  	    static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::InstPatches()) );  
+  	    static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(NCPkgNames::InstPatches()) );  
 	}
 	else
 	{
-	    static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::Patches()) );  
+	    static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(NCPkgNames::Patches()) );  
 	}
     }
     
@@ -850,7 +848,7 @@ bool PackageSelector::fillPatchList( string filter )
 // fillUpdateList
 //
 //
-bool PackageSelector::fillUpdateList( )
+bool NCPackageSelector::fillUpdateList( )
 {
     NCPkgTable * packageList = getPackageList();
     
@@ -889,10 +887,10 @@ bool PackageSelector::fillUpdateList( )
     packageList->drawList();
     
     // show the selected filter label
-    YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
+    YWidget * filterLabel = y2ui->widgetWithId( NCPkgNames::Filter(), true );
     if ( filterLabel )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(PkgNames::UpdateProblem()) );
+	static_cast<NCLabel *>(filterLabel)->setLabel( YCPString(NCPkgNames::UpdateProblem()) );
     }
     
     return true;
@@ -903,7 +901,7 @@ bool PackageSelector::fillUpdateList( )
 // fillPatchPackages
 //
 //
-bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr, bool versions )
+bool NCPackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr, bool versions )
 {
     if ( !pkgTable )
 	return false;
@@ -974,7 +972,7 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr,
 		pkgLine.push_back( (*it)->name() );
 		pkgLine.push_back( "   " );	// versions empty
 		pkgLine.push_back( "   " );	
-		pkgLine.push_back( PkgNames::Script() );
+		pkgLine.push_back( NCPkgNames::Script() );
 	
 		pkgTable->addLine( S_NoInst,
 				   pkgLine,
@@ -1003,7 +1001,7 @@ bool PackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr,
 //
 // Shows the installation summary or lists all installed packages.
 //
-bool PackageSelector::fillSummaryList( NCPkgTable::NCPkgTableListType type )
+bool NCPackageSelector::fillSummaryList( NCPkgTable::NCPkgTableListType type )
 {
     NCPkgTable * packageList = getPackageList();
      
@@ -1064,10 +1062,10 @@ bool PackageSelector::fillSummaryList( NCPkgTable::NCPkgTableListType type )
     packageList->drawList();
     
     // show the selected filter label
-    YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
+    YWidget * filterLabel = y2ui->widgetWithId( NCPkgNames::Filter(), true );
     if ( filterLabel )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( PkgNames::InstSummary() );
+	static_cast<NCLabel *>(filterLabel)->setLabel( NCPkgNames::InstSummary() );
     }
 
     return true;
@@ -1080,7 +1078,7 @@ bool PackageSelector::fillSummaryList( NCPkgTable::NCPkgTableListType type )
 // Fills the package table with the list of packages matching
 // the selected filter
 //
-bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem * rpmGroup )
+bool NCPackageSelector::fillPackageList( const YCPString & label, YStringTreeItem * rpmGroup )
 {
      NCPkgTable * packageList = getPackageList();
      
@@ -1134,7 +1132,7 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
     if ( !label.isNull() )
     {
 	// show the selected filter label
-	YWidget * filterLabel = y2ui->widgetWithId( PkgNames::Filter(), true );
+	YWidget * filterLabel = y2ui->widgetWithId( NCPkgNames::Filter(), true );
 	if ( filterLabel )
 	{
 	    static_cast<NCLabel *>(filterLabel)->setLabel( label );
@@ -1149,7 +1147,7 @@ bool PackageSelector::fillPackageList( const YCPString & label, YStringTreeItem 
 // match
 //
 
-bool PackageSelector::match ( string s1, string s2, bool ignoreCase )
+bool NCPackageSelector::match ( string s1, string s2, bool ignoreCase )
 {
     string::iterator pos;
     
@@ -1174,7 +1172,7 @@ bool PackageSelector::match ( string s1, string s2, bool ignoreCase )
 // checkPackage
 //
 //
-bool PackageSelector::checkPackage( ZyppObj opkg, ZyppSel slb,
+bool NCPackageSelector::checkPackage( ZyppObj opkg, ZyppSel slb,
 				    YStringTreeItem * rpmGroup )
 {
     ZyppPkg pkg = tryCastToZyppPkg (opkg);
@@ -1211,7 +1209,7 @@ bool PackageSelector::checkPackage( ZyppObj opkg, ZyppSel slb,
 // checkPatch
 //
 //
-bool PackageSelector::checkPatch( ZyppPatch 	patchPtr,
+bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
 				  ZyppSel	selectable,
 				  string 	filter )
 				   
@@ -1313,7 +1311,7 @@ bool PackageSelector::checkPatch( ZyppPatch 	patchPtr,
     return displayPatch;
 }
 
-void PackageSelector::importSelectable( ZyppSel selectable, bool isWanted, const char* kind )
+void NCPackageSelector::importSelectable( ZyppSel selectable, bool isWanted, const char* kind )
 {
     ZyppStatus oldStatus = selectable->status();
     ZyppStatus newStatus = oldStatus;
@@ -1392,7 +1390,7 @@ void PackageSelector::importSelectable( ZyppSel selectable, bool isWanted, const
 //
 // Opens popup for package search and asks the package manager
 //
-bool PackageSelector::SearchHandler( const NCursesEvent& event)
+bool NCPackageSelector::SearchHandler( const NCursesEvent& event)
 {
     NCPkgTable * packageList = getPackageList();
     
@@ -1430,7 +1428,7 @@ bool PackageSelector::SearchHandler( const NCursesEvent& event)
 // replaces the currently active package information widget
 // ( e.g. by the list of available packages ).
 //
-bool PackageSelector::InformationHandler( const NCursesEvent&  event )
+bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
 {
     NCPkgTable * packageList = getPackageList();
 
@@ -1451,7 +1449,7 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
     // set visibleInfo
     visibleInfo = event.selection;
 
-    if ( visibleInfo->compare( PkgNames::Versions() ) == YO_EQUAL )
+    if ( visibleInfo->compare( NCPkgNames::Versions() ) == YO_EQUAL )
     {
 	// show the package table
 	const char * tableLayout = "`PkgSpecial( `id(\"availpkgs\"), `opt(`notify), \"pkgTable\" )"; 
@@ -1463,14 +1461,14 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	if (!layout.isNull() )
 	    y2ui->evaluateReplaceWidget( YCPSymbol("replaceinfo"), layout->asTerm() );
 
-	NCPkgTable * pkgAvail = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::AvailPkgs(), true));
+	NCPkgTable * pkgAvail = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(NCPkgNames::AvailPkgs(), true));
 
 	if ( pkgAvail )
 	{
-	    // set the connection to the PackageSelector !!!!
+	    // set the connection to the NCPackageSelector !!!!
 	    pkgAvail->setPackager( this );
 	    // set status strategy
-	    ObjectStatStrategy * strategy = new AvailableStatStrategy();
+	    NCPkgStatusStrategy * strategy = new AvailableStatStrategy();
 	    pkgAvail->setTableType( NCPkgTable::T_Availables, strategy );
 
 	    pkgAvail->fillHeader( );
@@ -1478,7 +1476,7 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	}
     }
 // patches
-    else if ( visibleInfo->compare( PkgNames::PatchPackages() ) == YO_EQUAL )
+    else if ( visibleInfo->compare( NCPkgNames::PatchPackages() ) == YO_EQUAL )
     {
         // show the package table
 	const char * tableLayout = "`PkgSpecial( `id(\"patchpkgs\"), `opt(`notify), \"pkgTable\" )"; 
@@ -1490,21 +1488,21 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	if (!layout.isNull())
 	    y2ui->evaluateReplaceWidget( YCPSymbol ("replaceinfo"), layout->asTerm() );
 
-	NCPkgTable * patchPkgs = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::PatchPkgs(), true));
+	NCPkgTable * patchPkgs = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(NCPkgNames::PatchPkgs(), true));
 
 	if ( patchPkgs )
 	{
-	    // set the connection to the PackageSelector !!!!
+	    // set the connection to the NCPackageSelector !!!!
 	    patchPkgs->setPackager( this );
 	    // set status strategy
-	    ObjectStatStrategy * strategy = new PatchPkgStatStrategy();
+	    NCPkgStatusStrategy * strategy = new PatchPkgStatStrategy();
 	    patchPkgs->setTableType( NCPkgTable::T_PatchPkgs, strategy );
 
 	    patchPkgs->fillHeader( );
 	    fillPatchPackages( patchPkgs, packageList->getDataPointer( packageList->getCurrentItem() ) );
 	}	
     }
-    else if  ( visibleInfo->compare( PkgNames::PatchPackagesVersions() ) == YO_EQUAL )
+    else if  ( visibleInfo->compare( NCPkgNames::PatchPackagesVersions() ) == YO_EQUAL )
     {
         // show the package table
 	const char * tableLayout = "`PkgSpecial( `id(\"pkgsversions\"), `opt(`notify), \"pkgTable\" )"; 
@@ -1516,14 +1514,14 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 	if (!layout.isNull())
 	    y2ui->evaluateReplaceWidget( YCPSymbol ("replaceinfo"), layout->asTerm() );
 
-	NCPkgTable * patchPkgsVersions = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::PatchPkgsVersions(), true));
+	NCPkgTable * patchPkgsVersions = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(NCPkgNames::PatchPkgsVersions(), true));
 
 	if ( patchPkgsVersions )
 	{
-	    // set the connection to the PackageSelector !!!!
+	    // set the connection to the NCPackageSelector !!!!
 	    patchPkgsVersions->setPackager( this );
 	    // set status strategy
-	    ObjectStatStrategy * strategy = new AvailableStatStrategy();
+	    NCPkgStatusStrategy * strategy = new AvailableStatStrategy();
 	    patchPkgsVersions->setTableType( NCPkgTable::T_Availables, strategy );
 
 	    patchPkgsVersions->fillHeader( );
@@ -1556,7 +1554,7 @@ bool PackageSelector::InformationHandler( const NCursesEvent&  event )
 // Dependency Handler
 //
 //
-bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
+bool NCPackageSelector::DependencyHandler( const NCursesEvent&  event )
 {
     if ( event.selection.isNull() )
     {
@@ -1565,17 +1563,17 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 
     NCPopupInfo info( wpos(10, 10),  YCPString( "" ),
 		      YCPString(_( "All package dependencies are OK." )),
-		      PkgNames::OKLabel() );
+		      NCPkgNames::OKLabel() );
     info.setNiceSize( 30, 5 );
     
-    if ( event.selection->compare( PkgNames::ShowDeps() ) == YO_EQUAL )
+    if ( event.selection->compare( NCPkgNames::ShowDeps() ) == YO_EQUAL )
     {
 	bool ok = false;
 
 	if ( depsPopup )
 	{
 	    NCMIL << "Checking dependencies" << endl;
-	    depsPopup->showDependencies( NCPopupDeps::S_Solve, &ok );
+	    depsPopup->showDependencies( NCPkgPopupDeps::S_Solve, &ok );
 	}
 
 	if ( ok )		
@@ -1585,13 +1583,13 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 	updatePackageList();
 	showDiskSpace();	
     }
-    else if ( event.selection->compare( PkgNames::VerifySystem() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::VerifySystem() ) == YO_EQUAL )
     {
 	verifyPackageDependencies();
 	updatePackageList();
 	showDiskSpace();
     }
-    else if ( event.selection->compare( PkgNames::AutoDeps() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::AutoDeps() ) == YO_EQUAL )
     {
 	char menu[2000];
 	
@@ -1606,17 +1604,17 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 		      "`menu( \"%s\", [`item( `id(\"save\"), \"%s\" ), `item( `id(\"load\"), \"%s\" ) ] )"
 #endif
 		      "] )",
-		      PkgNames::MenuEtc().c_str(),
-		      PkgNames::MenuDeps().c_str(),
-		      PkgNames::MenuCheckDeps().c_str(),
-		      PkgNames::MenuNoAutoDeps().c_str(),
-		      PkgNames::MenuVerifySystem().c_str(),
-		      PkgNames::MenuTestCase().c_str()
+		      NCPkgNames::MenuEtc().c_str(),
+		      NCPkgNames::MenuDeps().c_str(),
+		      NCPkgNames::MenuCheckDeps().c_str(),
+		      NCPkgNames::MenuNoAutoDeps().c_str(),
+		      NCPkgNames::MenuVerifySystem().c_str(),
+		      NCPkgNames::MenuTestCase().c_str()
 #ifdef FIXME
 		      ,
-		      PkgNames::MenuSel().c_str(),
-		      PkgNames::MenuSaveSel().c_str(),
-		      PkgNames::MenuLoadSel().c_str()
+		      NCPkgNames::MenuSel().c_str(),
+		      NCPkgNames::MenuSaveSel().c_str(),
+		      NCPkgNames::MenuLoadSel().c_str()
 #endif
 		);
 
@@ -1645,17 +1643,17 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 		      "`menu( \"%s\", [`item( `id(\"save\"), \"%s\" ), `item( `id(\"load\"), \"%s\" ) ] )"
 #endif
 		      "] )",
-		      PkgNames::MenuEtc().c_str(),
-		      PkgNames::MenuDeps().c_str(),
-		      PkgNames::MenuCheckDeps().c_str(),
-		      PkgNames::MenuAutoDeps().c_str(),
-		      PkgNames::MenuVerifySystem().c_str(),
-		      PkgNames::MenuTestCase().c_str() 
+		      NCPkgNames::MenuEtc().c_str(),
+		      NCPkgNames::MenuDeps().c_str(),
+		      NCPkgNames::MenuCheckDeps().c_str(),
+		      NCPkgNames::MenuAutoDeps().c_str(),
+		      NCPkgNames::MenuVerifySystem().c_str(),
+		      NCPkgNames::MenuTestCase().c_str() 
 #ifdef FIXME
 		      ,
-		      PkgNames::MenuSel().c_str(),
-		      PkgNames::MenuSaveSel().c_str(),
-		      PkgNames::MenuLoadSel().c_str()
+		      NCPkgNames::MenuSel().c_str(),
+		      NCPkgNames::MenuSaveSel().c_str(),
+		      NCPkgNames::MenuLoadSel().c_str()
 #endif
 		);
 
@@ -1692,7 +1690,7 @@ bool PackageSelector::DependencyHandler( const NCursesEvent&  event )
 // Opens the popup with rpm group tree, selections ... and display the
 // corresponding package list
 //
-bool PackageSelector::FilterHandler( const NCursesEvent&  event )
+bool NCPackageSelector::FilterHandler( const NCursesEvent&  event )
 {
     NCursesEvent retEvent;
     NCPkgTable * packageList = getPackageList();
@@ -1703,7 +1701,7 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 	return false;
     }
 
-    if ( event.selection->compare( PkgNames::RpmGroups() ) == YO_EQUAL )
+    if ( event.selection->compare( NCPkgNames::RpmGroups() ) == YO_EQUAL )
     {
 	if ( filterPopup )
 	{
@@ -1711,7 +1709,7 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 	    retEvent = filterPopup->showFilterPopup( );
 	}
     }
-    else if ( event.selection->compare( PkgNames::Selections() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::Selections() ) == YO_EQUAL )
     {
 	if ( selectionPopup )
 	{
@@ -1719,7 +1717,7 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 	    retEvent = selectionPopup->showSelectionPopup( );
 	}
     }
-    else if ( event.selection->compare( PkgNames::Patterns() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::Patterns() ) == YO_EQUAL )
     {
 	if ( patternPopup )
 	{
@@ -1727,7 +1725,7 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 	    retEvent = patternPopup->showSelectionPopup( );
 	}
     }
-    else if ( event.selection->compare( PkgNames::Languages() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::Languages() ) == YO_EQUAL )
     {
 	if ( languagePopup )
 	{
@@ -1736,47 +1734,47 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 	}
     }
 // patches
-    else if ( event.selection->compare( PkgNames::Recommended() ) ==  YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::Recommended() ) ==  YO_EQUAL )
     {
 	fillPatchList( "recommended" );	// patch kind
     }
-    else if ( event.selection->compare( PkgNames::Security() )  ==  YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::Security() )  ==  YO_EQUAL )
     {
 	fillPatchList( "security" );		// patch kind
     }
-    else if ( event.selection->compare( PkgNames::Optional() )  ==  YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::Optional() )  ==  YO_EQUAL )
     {
 	fillPatchList( "optional" );		// patch kind
     }
-    else if (  event.selection->compare( PkgNames::YaST2Patches() ) ==  YO_EQUAL )
+    else if (  event.selection->compare( NCPkgNames::YaST2Patches() ) ==  YO_EQUAL )
     {
 	fillPatchList( "YaST2" );		// patch kind
     } 
-    else if ( event.selection->compare( PkgNames::AllPatches() )  ==  YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::AllPatches() )  ==  YO_EQUAL )
     {
 	fillPatchList( "all" );			// show all patches
     }
-    else if (  event.selection->compare( PkgNames::InstalledPatches() ) ==  YO_EQUAL )
+    else if (  event.selection->compare( NCPkgNames::InstalledPatches() ) ==  YO_EQUAL )
     {
 	fillPatchList( "installed" );		// show installed patches
     }
-    else if (  event.selection->compare( PkgNames::InstallablePatches() ) ==  YO_EQUAL )
+    else if (  event.selection->compare( NCPkgNames::InstallablePatches() ) ==  YO_EQUAL )
     {
 	fillPatchList( "installable" );		// show installed patches
     }
-    else if (  event.selection->compare( PkgNames::NewPatches() ) ==  YO_EQUAL )
+    else if (  event.selection->compare( NCPkgNames::NewPatches() ) ==  YO_EQUAL )
     {
 	fillPatchList( "new" );			// show new patches
     }
-    else if (  event.selection->compare( PkgNames::UpdateList() ) ==  YO_EQUAL )
+    else if (  event.selection->compare( NCPkgNames::UpdateList() ) ==  YO_EQUAL )
     {
 	fillUpdateList();
     }
-    else if (  event.selection->compare( PkgNames::Whatif() ) ==  YO_EQUAL )
+    else if (  event.selection->compare( NCPkgNames::Whatif() ) ==  YO_EQUAL )
     {
 	fillSummaryList( NCPkgTable::L_Changes );
     }
-    else if (  event.selection->compare( PkgNames::Installed() ) ==  YO_EQUAL )
+    else if (  event.selection->compare( NCPkgNames::Installed() ) ==  YO_EQUAL )
     {
 	fillSummaryList( NCPkgTable::L_Installed );
     }
@@ -1794,7 +1792,7 @@ bool PackageSelector::FilterHandler( const NCursesEvent&  event )
 //
 // Sets the package status
 //
-bool PackageSelector::StatusHandler( const NCursesEvent&  event )
+bool NCPackageSelector::StatusHandler( const NCursesEvent&  event )
 {
     NCPkgTable * packageList = getPackageList();
      
@@ -1811,76 +1809,76 @@ bool PackageSelector::StatusHandler( const NCursesEvent&  event )
     }
 
     // call the corresponding method of NCPkgTable
-    if ( event.selection->compare( PkgNames::Toggle() ) == YO_EQUAL )
+    if ( event.selection->compare( NCPkgNames::Toggle() ) == YO_EQUAL )
     {
 	packageList->toggleObjStatus( );
     }
-    else if ( event.selection->compare( PkgNames::Select() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::Select() ) == YO_EQUAL )
     {
 	if ( testMode )
 	    diskspacePopup->setDiskSpace( '+' );
 	else
 	    packageList->changeObjStatus( '+' );
     }
-    else if ( event.selection->compare( PkgNames::Delete() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::Delete() ) == YO_EQUAL )
     {
 	if ( testMode )
 	    diskspacePopup->setDiskSpace( '-' );
 	else
 	    packageList->changeObjStatus( '-' );
     }
-    else if ( event.selection->compare( PkgNames::Update() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::Update() ) == YO_EQUAL )
     {
 	if ( testMode )
 	    diskspacePopup->checkDiskSpaceRange();
 	else
 	    packageList->changeObjStatus( '>' );
     }
-    else if ( event.selection->compare( PkgNames::TabooOn() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::TabooOn() ) == YO_EQUAL )
     {
 	packageList->changeObjStatus( '!' );	
     }
-    else if ( event.selection->compare( PkgNames::TabooOff() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::TabooOff() ) == YO_EQUAL )
     {
 	packageList->changeObjStatus( '%' );	
     } 
-    else if ( event.selection->compare( PkgNames::SourceYes() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::SourceYes() ) == YO_EQUAL )
     {
 #ifdef FIXME
 	packageList->SourceInstall( true );	
 #endif
     }
-    else if ( event.selection->compare( PkgNames::SourceNo() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::SourceNo() ) == YO_EQUAL )
     {
 #ifdef FIXME
 	packageList->SourceInstall( false );	
 #endif
     }	
-    else if ( event.selection->compare( PkgNames::InstallAll() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::InstallAll() ) == YO_EQUAL )
     {
 	packageList->changeListObjStatus( NCPkgTable::A_Install );
     }
-    else if ( event.selection->compare( PkgNames::DontInstall() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::DontInstall() ) == YO_EQUAL )
     {
 	packageList->changeListObjStatus( NCPkgTable::A_DontInstall );
     }
-        else if ( event.selection->compare( PkgNames::DeleteAll() ) == YO_EQUAL )
+        else if ( event.selection->compare( NCPkgNames::DeleteAll() ) == YO_EQUAL )
     {
 	packageList->changeListObjStatus( NCPkgTable::A_Delete );
     }
-    else if ( event.selection->compare( PkgNames::DontDelete() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::DontDelete() ) == YO_EQUAL )
     {
 	packageList->changeListObjStatus( NCPkgTable::A_DontDelete );
     }
-    else if ( event.selection->compare( PkgNames::UpdateNewer() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::UpdateNewer() ) == YO_EQUAL )
     {
 	packageList->changeListObjStatus( NCPkgTable::A_UpdateNewer );
     }
-    else if ( event.selection->compare( PkgNames::UpdateAll() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::UpdateAll() ) == YO_EQUAL )
     {
 	packageList->changeListObjStatus( NCPkgTable::A_Update );
     }
-    else if ( event.selection->compare( PkgNames::DontUpdate() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::DontUpdate() ) == YO_EQUAL )
     {
 	packageList->changeListObjStatus( NCPkgTable::A_DontUpdate );
     }
@@ -1896,7 +1894,7 @@ bool PackageSelector::StatusHandler( const NCursesEvent&  event )
 //
 // Handles actions not directly related to the package list.
 // 
-bool PackageSelector::PackageListHandler( const NCursesEvent&  event )
+bool NCPackageSelector::PackageListHandler( const NCursesEvent&  event )
 {
     return true;
 }
@@ -1907,13 +1905,13 @@ bool PackageSelector::PackageListHandler( const NCursesEvent&  event )
 //
 // Opens a popup with disk space information.
 // 
-bool PackageSelector::DiskinfoHandler( const NCursesEvent&  event )
+bool NCPackageSelector::DiskinfoHandler( const NCursesEvent&  event )
 {
     NCPkgTable * packageList = getPackageList();
 
     if ( diskspacePopup )
     {
-	diskspacePopup->showInfoPopup( PkgNames::DiskspaceLabel() );
+	diskspacePopup->showInfoPopup( NCPkgNames::DiskspaceLabel() );
     }
     if ( packageList )
     {
@@ -1929,7 +1927,7 @@ bool PackageSelector::DiskinfoHandler( const NCursesEvent&  event )
 //
 // Handles hyperlinks in package description.
 //
-bool PackageSelector::LinkHandler ( string link )
+bool NCPackageSelector::LinkHandler ( string link )
 {
     bool found = false;
     // e.g. link is pkg://hp-officeJet
@@ -1946,7 +1944,7 @@ bool PackageSelector::LinkHandler ( string link )
 	{
 	    NCERR << "Package " << pkgName << " found" << endl;
 	    // open popup with package info
-	    NCPopupPkgDescr popupDescr( wpos(1,1), this );
+	    NCPkgPopupDescr popupDescr( wpos(1,1), this );
 	    popupDescr.showInfoPopup( pkgPtr, *i );
 	    found = true;
 	}
@@ -1967,7 +1965,7 @@ bool PackageSelector::LinkHandler ( string link )
 // 
 // generate solver testcase 
 //
-bool PackageSelector::TestcaseHandler ( const NCursesEvent&  event )
+bool NCPackageSelector::TestcaseHandler ( const NCursesEvent&  event )
 {
     string testCaseDir = "/var/log/YaST2/solverTestcase";
 
@@ -1992,7 +1990,7 @@ bool PackageSelector::TestcaseHandler ( const NCursesEvent&  event )
 // 
 // export/import all packages and patterns list to/from file
 //
-bool PackageSelector::FileHandler( const NCursesEvent& event )
+bool NCPackageSelector::FileHandler( const NCursesEvent& event )
 {
     if ( event.selection.isNull() )
     {
@@ -2000,7 +1998,7 @@ bool PackageSelector::FileHandler( const NCursesEvent& event )
     }
 
     //Export package list into file	
-    if ( event.selection->compare( PkgNames::ExportToFile() ) == YO_EQUAL ) 
+    if ( event.selection->compare( NCPkgNames::ExportToFile() ) == YO_EQUAL ) 
     {
  	//Ask for file to save into
  	YCPValue filename = YNCursesUI::ui()->askForSaveFileName( YCPString(DEFAULT_EXPORT_FILE_NAME), 
@@ -2037,9 +2035,9 @@ bool PackageSelector::FileHandler( const NCursesEvent& event )
 
 		//present error popup to the user
 		NCPopupInfo errorMsg ( wpos( 2, 2 ),
-				YCPString( PkgNames::ErrorLabel()),
+				YCPString( NCPkgNames::ErrorLabel()),
 				YCPString( _("Error exporting list of packages and patterns to ") + filename->toString() ),
-				PkgNames::OKLabel(),
+				NCPkgNames::OKLabel(),
 				"");
 		NCursesEvent input = errorMsg.showInfoPopup();
 
@@ -2050,7 +2048,7 @@ bool PackageSelector::FileHandler( const NCursesEvent& event )
     }
 
     //Import package list from file
-    else if ( event.selection->compare( PkgNames::ImportFromFile() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::ImportFromFile() ) == YO_EQUAL )
     {
 	//ask for file to open
  	YCPValue filename = YNCursesUI::ui()->askForExistingFile( YCPString(DEFAULT_EXPORT_FILE_NAME),
@@ -2119,9 +2117,9 @@ bool PackageSelector::FileHandler( const NCursesEvent& event )
 		NCWAR << "Error importing list of packages and patterns from" << filename->toString() << endl;
 
 		NCPopupInfo errorMsg ( wpos( 2, 2 ),
-				YCPString( PkgNames::ErrorLabel()),
+				YCPString( NCPkgNames::ErrorLabel()),
 				YCPString( _("Error importing list of packages and patterns from ") + filename->toString() ),
-				PkgNames::OKLabel(),
+				NCPkgNames::OKLabel(),
 				"");
 		NCursesEvent input = errorMsg.showInfoPopup();
 
@@ -2136,46 +2134,46 @@ bool PackageSelector::FileHandler( const NCursesEvent& event )
 // 
 // Show the help popup
 //
-bool PackageSelector::HelpHandler( const NCursesEvent&  event )
+bool NCPackageSelector::HelpHandler( const NCursesEvent&  event )
 {
     NCPkgTable * packageList = getPackageList();
     string text = "";
-    YCPString headline = YCPString(PkgNames::PackageHelp());
+    YCPString headline = YCPString(NCPkgNames::PackageHelp());
     
     if ( event.selection.isNull() )
     {
 	return false;
     }
     
-    if ( event.selection->compare( PkgNames::GeneralHelp() ) == YO_EQUAL )
+    if ( event.selection->compare( NCPkgNames::GeneralHelp() ) == YO_EQUAL )
     {
-	text += PkgNames::HelpPkgInst1();
-	text += PkgNames::HelpPkgInst12();
-	text += PkgNames::HelpPkgInst13();
-	text += PkgNames::HelpPkgInst2();
-	text += PkgNames::HelpPkgInst3();
-	text += PkgNames::HelpPkgInst4();
-	text += PkgNames::HelpPkgInst5();
-	text += PkgNames::HelpPkgInst6();
+	text += NCPkgNames::HelpPkgInst1();
+	text += NCPkgNames::HelpPkgInst12();
+	text += NCPkgNames::HelpPkgInst13();
+	text += NCPkgNames::HelpPkgInst2();
+	text += NCPkgNames::HelpPkgInst3();
+	text += NCPkgNames::HelpPkgInst4();
+	text += NCPkgNames::HelpPkgInst5();
+	text += NCPkgNames::HelpPkgInst6();
     }
-    else if ( event.selection->compare( PkgNames::StatusHelp() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::StatusHelp() ) == YO_EQUAL )
     {
-	text += PkgNames::HelpOnStatus1();
-	text += PkgNames::HelpOnStatus2();
-	text += PkgNames::HelpOnStatus3();
-	text += PkgNames::HelpOnStatus4();
-	text += PkgNames::HelpOnStatus5();
-	text += PkgNames::HelpOnStatus6();
-	text += PkgNames::HelpOnStatus7();
+	text += NCPkgNames::HelpOnStatus1();
+	text += NCPkgNames::HelpOnStatus2();
+	text += NCPkgNames::HelpOnStatus3();
+	text += NCPkgNames::HelpOnStatus4();
+	text += NCPkgNames::HelpOnStatus5();
+	text += NCPkgNames::HelpOnStatus6();
+	text += NCPkgNames::HelpOnStatus7();
     }
-    else if ( event.selection->compare( PkgNames::UpdateHelp() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::UpdateHelp() ) == YO_EQUAL )
     {
-	text += PkgNames::HelpOnUpdate();
+	text += NCPkgNames::HelpOnUpdate();
     }
-    else if ( event.selection->compare( PkgNames::SearchHelp() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::SearchHelp() ) == YO_EQUAL )
     {
-	headline = YCPString(PkgNames::SearchHeadline());
-	text += PkgNames::HelpOnSearch();
+	headline = YCPString(NCPkgNames::SearchHeadline());
+	text += NCPkgNames::HelpOnSearch();
     }
     
     // open the popup with the help text
@@ -2197,17 +2195,17 @@ bool PackageSelector::HelpHandler( const NCursesEvent&  event )
 // 
 // Show the Online Update Help
 //
-bool PackageSelector::YouHelpHandler( const NCursesEvent&  event )
+bool NCPackageSelector::YouHelpHandler( const NCursesEvent&  event )
 {
     NCPkgTable * packageList = getPackageList();
     string text  = "";
 
-    text += PkgNames::YouHelp1();
-    text += PkgNames::YouHelp2();
-    text += PkgNames::YouHelp3();
+    text += NCPkgNames::YouHelp1();
+    text += NCPkgNames::YouHelp2();
+    text += NCPkgNames::YouHelp3();
 
     // open the popup with the help text
-    NCPopupInfo youHelp( wpos( 1, 1 ), YCPString(PkgNames::YouHelp()), YCPString(text) );
+    NCPopupInfo youHelp( wpos( 1, 1 ), YCPString(NCPkgNames::YouHelp()), YCPString(text) );
     youHelp.showInfoPopup( );
 
     if ( packageList )
@@ -2224,7 +2222,7 @@ bool PackageSelector::YouHelpHandler( const NCursesEvent&  event )
 // 
 // Save/Load selections
 //
-bool PackageSelector::SelectionHandler( const NCursesEvent&  event )
+bool NCPackageSelector::SelectionHandler( const NCursesEvent&  event )
 {
     NCPkgTable * packageList = getPackageList();
     if ( event.selection.isNull()
@@ -2233,11 +2231,11 @@ bool PackageSelector::SelectionHandler( const NCursesEvent&  event )
 	return false;
     }
     
-    if ( event.selection->compare( PkgNames::SaveSel() ) == YO_EQUAL )
+    if ( event.selection->compare( NCPkgNames::SaveSel() ) == YO_EQUAL )
     {
 	filePopup->saveToFile();
     }
-    else if ( event.selection->compare( PkgNames::LoadSel() ) == YO_EQUAL )
+    else if ( event.selection->compare( NCPkgNames::LoadSel() ) == YO_EQUAL )
     {
 	filePopup->loadFromFile();
 	updatePackageList();
@@ -2258,17 +2256,17 @@ bool PackageSelector::SelectionHandler( const NCursesEvent&  event )
 //
 // Cancel button handler.
 // 
-bool PackageSelector::CancelHandler( const NCursesEvent&  event )
+bool NCPackageSelector::CancelHandler( const NCursesEvent&  event )
 {
     bool changes = diffState ();
 
     if (changes) {
 	// show a popup and ask the user
 	NCPopupInfo cancelMsg( wpos( 2, 2 ),
-			   YCPString( PkgNames::NotifyLabel() ),
-			   YCPString( PkgNames::CancelText() ),
-			   PkgNames::OKLabel(),
-			   PkgNames::CancelLabel() );
+			   YCPString( NCPkgNames::NotifyLabel() ),
+			   YCPString( NCPkgNames::CancelText() ),
+			   NCPkgNames::OKLabel(),
+			   NCPkgNames::CancelLabel() );
 	cancelMsg.setNiceSize( 35, 8 ); 
 	NCursesEvent input = cancelMsg.showInfoPopup( );
 	if ( input == NCursesEvent::cancel ) {
@@ -2292,7 +2290,7 @@ bool PackageSelector::CancelHandler( const NCursesEvent&  event )
 //
 // OK button handler.
 // 
-bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
+bool NCPackageSelector::OkButtonHandler( const NCursesEvent&  event )
 {
     bool closeDialog = true;
     bool confirmedAllLicenses = false;
@@ -2315,7 +2313,7 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
     if ( !youMode )	// don't show automatic changes if YOU mode
     {
 	// show the automatic changes list
-	NCPopupPkgTable autoChangePopup( wpos( 1, 1), this );
+	NCPkgPopupTable autoChangePopup( wpos( 1, 1), this );
 	NCursesEvent input = autoChangePopup.showInfoPopup();
 
 	if ( input == NCursesEvent::cancel )
@@ -2333,10 +2331,10 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	{
 	    // open the popup e.g. with the text "/usr needs 50 MB more disk space"
 	    NCPopupInfo spaceMsg( wpos( 2, 2 ),
-				  YCPString( PkgNames::ErrorLabel() ),
-				  YCPString( PkgNames::DiskSpaceError() + "<br>" + message ),
-				  PkgNames::OKLabel(),
-				  PkgNames::CancelLabel() );
+				  YCPString( NCPkgNames::ErrorLabel() ),
+				  YCPString( NCPkgNames::DiskSpaceError() + "<br>" + message ),
+				  NCPkgNames::OKLabel(),
+				  NCPkgNames::CancelLabel() );
 	    
 	    spaceMsg.setNiceSize( 50, 10 ); 
 	    NCursesEvent input = spaceMsg.showInfoPopup( );
@@ -2373,7 +2371,7 @@ bool PackageSelector::OkButtonHandler( const NCursesEvent&  event )
     }
 }
 
-bool PackageSelector::showPendingLicenseAgreements()
+bool NCPackageSelector::showPendingLicenseAgreements()
 {
     bool allConfirmed = true;
 
@@ -2385,7 +2383,7 @@ bool PackageSelector::showPendingLicenseAgreements()
     return allConfirmed;
 }
 
-bool PackageSelector::showPendingLicenseAgreements( ZyppPoolIterator begin, ZyppPoolIterator end )
+bool NCPackageSelector::showPendingLicenseAgreements( ZyppPoolIterator begin, ZyppPoolIterator end )
 {
     y2milestone( "Showing all pending license agreements" );
 
@@ -2430,7 +2428,7 @@ bool PackageSelector::showPendingLicenseAgreements( ZyppPoolIterator begin, Zypp
     return allConfirmed;
 }
 
-bool PackageSelector::showLicenseAgreement( ZyppSel & slbPtr , string licenseText )
+bool NCPackageSelector::showLicenseAgreement( ZyppSel & slbPtr , string licenseText )
 {
     if ( !slbPtr )
 	return false;
@@ -2440,10 +2438,10 @@ bool PackageSelector::showLicenseAgreement( ZyppSel & slbPtr , string licenseTex
     string pkgName = slbPtr->name();
 
     NCPopupInfo info( wpos( 1, 1),
-		      PkgNames::NotifyLabel(),
+		      NCPkgNames::NotifyLabel(),
 		      YCPString( "<i>" + pkgName + "</i><br><br>" + createDescrText( licenseText ) ),
-		      PkgNames::AcceptLabel(),
-		      PkgNames::CancelLabel() );
+		      NCPkgNames::AcceptLabel(),
+		      NCPkgNames::CancelLabel() );
     license_confirmed = info.showInfoPopup( ) != NCursesEvent::cancel;
 
 
@@ -2483,7 +2481,7 @@ bool PackageSelector::showLicenseAgreement( ZyppSel & slbPtr , string licenseTex
 //
 // Shows the patch information
 //
-bool PackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectable )
+bool NCPackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectable )
 {
     ZyppPatch patchPtr = tryCastToZyppPatch( objPtr );
 
@@ -2499,22 +2497,22 @@ bool PackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectable 
 	return false;	
     }    
 
-    if (  visibleInfo->compare( PkgNames::PatchDescr() ) == YO_EQUAL )
+    if (  visibleInfo->compare( NCPkgNames::PatchDescr() ) == YO_EQUAL )
     {
 	string descr;
 	
-	descr += PkgNames::Patch();
+	descr += NCPkgNames::Patch();
 	descr += selectable->name();
 	descr += "&nbsp;";
 	// the patch size is not available
-        // descr += PkgNames::Size();
+        // descr += NCPkgNames::Size();
 	// descr += patchPtr->size().asString( 8 );
 	descr += "<b>";
-	descr += PkgNames::PatchKind();
+	descr += NCPkgNames::PatchKind();
 	descr += ": </b>";
 	descr += patchPtr->category();
 	descr += "&nbsp;";
-	descr += PkgNames::Version();
+	descr += NCPkgNames::Version();
 	descr += patchPtr->edition().asString();
 	descr += "<br>";
 
@@ -2529,24 +2527,24 @@ bool PackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectable 
 	descr += createDescrText( value );
 	
 	// show the description	
-	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
+	YWidget * descrInfo = y2ui->widgetWithId( NCPkgNames::Description(), true );
 	
 	if ( descrInfo )
 	{
 	    static_cast<NCRichText *>(descrInfo)->setText( YCPString( descr ) );
 	}	
     }
-    else if (  visibleInfo->compare( PkgNames::PatchPackages() ) == YO_EQUAL )
+    else if (  visibleInfo->compare( NCPkgNames::PatchPackages() ) == YO_EQUAL )
     {
-	NCPkgTable *patchPkgList  = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::PatchPkgs(), true));
+	NCPkgTable *patchPkgList  = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(NCPkgNames::PatchPkgs(), true));
 	if ( patchPkgList )
 	{
 	    fillPatchPackages ( patchPkgList, objPtr);
 	}
     }
-    else if (  visibleInfo->compare( PkgNames::PatchPackagesVersions() ) == YO_EQUAL )
+    else if (  visibleInfo->compare( NCPkgNames::PatchPackagesVersions() ) == YO_EQUAL )
     {
-	NCPkgTable *patchPkgsVersions  = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::PatchPkgsVersions(), true));
+	NCPkgTable *patchPkgsVersions  = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(NCPkgNames::PatchPkgsVersions(), true));
 	if ( patchPkgsVersions )
 	{
 	    fillPatchPackages ( patchPkgsVersions, objPtr, true);
@@ -2563,7 +2561,7 @@ bool PackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectable 
 //
 // Checks and shows the dependencies
 //
-bool PackageSelector::showPackageDependencies ( bool doit )
+bool NCPackageSelector::showPackageDependencies ( bool doit )
 {
     bool ok = false;
     bool cancel = false;
@@ -2572,20 +2570,20 @@ bool PackageSelector::showPackageDependencies ( bool doit )
 	 && (doit || autoCheck) )
     {
 	NCMIL << "Checking dependencies" << endl;
-	cancel = depsPopup->showDependencies( NCPopupDeps::S_Solve, &ok );
+	cancel = depsPopup->showDependencies( NCPkgPopupDeps::S_Solve, &ok );
     }
 
     return cancel;
 }
 
-bool PackageSelector::verifyPackageDependencies ()
+bool NCPackageSelector::verifyPackageDependencies ()
 {
     bool ok = false;
     bool cancel = false;
     
     NCPopupInfo info( wpos(10, 10),  YCPString( "" ),
 		      YCPString(_( "System dependencies verify OK." )),
-		      PkgNames::OKLabel() );
+		      NCPkgNames::OKLabel() );
     info.setNiceSize( 30, 5 );
     
     NCMIL << "Verifying system" << endl;
@@ -2594,9 +2592,9 @@ bool PackageSelector::verifyPackageDependencies ()
     {
 	saveState();
 	//call the solver (with S_Verify it displays no popup)
-	cancel = depsPopup->showDependencies( NCPopupDeps::S_Verify, &ok );
+	cancel = depsPopup->showDependencies( NCPkgPopupDeps::S_Verify, &ok );
         //display the popup with automatic changes
-	NCPopupPkgTable autoChangePopup( wpos( 1, 1), this );
+	NCPkgPopupTable autoChangePopup( wpos( 1, 1), this );
         NCursesEvent input = autoChangePopup.showInfoPopup();
 
         if ( input == NCursesEvent::cancel )
@@ -2620,7 +2618,7 @@ bool PackageSelector::verifyPackageDependencies ()
 //
 // Checks and shows the dependencies
 //
-void PackageSelector::showSelectionDependencies ( )
+void NCPackageSelector::showSelectionDependencies ( )
 {
     showPackageDependencies (true);
 }
@@ -2631,7 +2629,7 @@ void PackageSelector::showSelectionDependencies ( )
 //
 // Shows the package information
 //
-bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
+bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 {
     if ( !pkgPtr )
     {
@@ -2650,23 +2648,23 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	return false;	
     }
 
-    if ( visibleInfo->compare( PkgNames::LongDescr() ) == YO_EQUAL )
+    if ( visibleInfo->compare( NCPkgNames::LongDescr() ) == YO_EQUAL )
     {
 	// ask the package manager for the description of this package
 	zypp::Text value = pkgPtr->description();
 	string descr = createDescrText( value );
 
         // show the description	
-	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
+	YWidget * descrInfo = y2ui->widgetWithId( NCPkgNames::Description(), true );
 	
 	if ( descrInfo )
 	{
 	    static_cast<NCRichText *>(descrInfo)->setText( YCPString(descr) );
 	}
     }
-    else if (  visibleInfo->compare( PkgNames::Files() ) == YO_EQUAL )
+    else if (  visibleInfo->compare( NCPkgNames::Files() ) == YO_EQUAL )
     {
-	string text = PkgNames::ListOfFiles();
+	string text = NCPkgNames::ListOfFiles();
 	// the file list is available only for installed packages
 	ZyppPkg package = tryCastToZyppPkg (slbPtr->installedObj());
 
@@ -2678,13 +2676,13 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	}
 	
 	// get the widget id 
-	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );  
+	YWidget * descrInfo = y2ui->widgetWithId( NCPkgNames::Description(), true );  
 	if ( descrInfo  )
 	{
 	    static_cast<NCRichText *>(descrInfo)->setText( YCPString(text) );
 	}	
     }
-    else if ( visibleInfo->compare( PkgNames::PkgInfo() ) == YO_EQUAL )
+    else if ( visibleInfo->compare( NCPkgNames::PkgInfo() ) == YO_EQUAL )
     {
 	string instVersion = "";
 	string version = "";
@@ -2714,18 +2712,18 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	    version += pkgPtr->edition().release(); 
 	}
 	
-	text += PkgNames::Version();
+	text += NCPkgNames::Version();
 	text +=  version;
 	if ( instVersion != "" )
 	{
 	    text += "  ";
-	    text += PkgNames::InstVersion();
+	    text += NCPkgNames::InstVersion();
 	    text += instVersion;
 	}
 	text +=  "  ";
 	
 	// show the size
-	text += PkgNames::Size();
+	text += NCPkgNames::Size();
 	text += pkgPtr->size().asString();
 	text +=  "  ";
 	
@@ -2733,7 +2731,7 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	if ( package )
 	{
 	    // add the media nr
-	    text += PkgNames::MediaNo();
+	    text += NCPkgNames::MediaNo();
 	    char num[5];
 	    int medianr = package->sourceMediaNr ();
 	    sprintf( num, "%d", medianr );
@@ -2741,19 +2739,19 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	    text += "<br>";	    
 
 	    // the license
-	    text += PkgNames::License();
+	    text += NCPkgNames::License();
 	    text += package->license();
 	    text += "  ";
 	    text += "<br>";
 
 	    // the rpm group
-	    text += PkgNames::RpmGroup();
+	    text += NCPkgNames::RpmGroup();
 	    text += package->group ();
 	    text += "<br>";
 	}
 	
 	// show Provides:
-	text += PkgNames::Provides();
+	text += NCPkgNames::Provides();
 	zypp::CapSet provides = package->dep (zypp::Dep::PROVIDES);
 	text += createRelLine(provides);
 	text += "<br>";
@@ -2761,28 +2759,28 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	// show the authors
 	if ( package )
 	{
-	    text += PkgNames::Authors();
+	    text += NCPkgNames::Authors();
 	    list<string> authors = package->authors(); // zypp::Package	
 	    text += createText( authors, true );
 	}
 	
         // show the description	
-	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
+	YWidget * descrInfo = y2ui->widgetWithId( NCPkgNames::Description(), true );
 
 	if ( descrInfo )
 	{
 	    static_cast<NCRichText *>(descrInfo)->setText( YCPString(text) );
 	}
     }
-    else if (  visibleInfo->compare( PkgNames::Versions() ) == YO_EQUAL )
+    else if (  visibleInfo->compare( NCPkgNames::Versions() ) == YO_EQUAL )
     {
-	NCPkgTable * pkgAvail = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(PkgNames::AvailPkgs(), true));
+	NCPkgTable * pkgAvail = dynamic_cast<NCPkgTable *>(y2ui->widgetWithId(NCPkgNames::AvailPkgs(), true));
 	if ( pkgAvail )
 	{
 	    fillAvailableList( pkgAvail, slbPtr );
 	}
     }
-    else if (  visibleInfo->compare( PkgNames::Relations() ) == YO_EQUAL )
+    else if (  visibleInfo->compare( NCPkgNames::Relations() ) == YO_EQUAL )
     {
 	string text = "";
 	text += slbPtr->name();
@@ -2817,7 +2815,7 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 	}
 	
         // show the package relations	
-	YWidget * descrInfo = y2ui->widgetWithId( PkgNames::Description(), true );
+	YWidget * descrInfo = y2ui->widgetWithId( NCPkgNames::Description(), true );
 	
 	if ( descrInfo )
 	{
@@ -2836,7 +2834,7 @@ bool PackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr )
 //
 #define DOCTYPETAG "<!-- DT:Rich -->"
 
-string PackageSelector::createDescrText( zypp::Text value )
+string NCPackageSelector::createDescrText( zypp::Text value )
 {
     string html_text = "";
     
@@ -2915,7 +2913,7 @@ string PackageSelector::createDescrText( zypp::Text value )
 //
 // updatePackageList
 //
-void PackageSelector::updatePackageList()
+void NCPackageSelector::updatePackageList()
 {
     NCPkgTable * packageList = getPackageList();
 
@@ -2929,7 +2927,7 @@ void PackageSelector::updatePackageList()
 //
 // createProvides
 //
-string PackageSelector::createRelLine( const zypp::CapSet & info )
+string NCPackageSelector::createRelLine( const zypp::CapSet & info )
 {
     string text = "";
     zypp::CapSet::const_iterator
@@ -2955,7 +2953,7 @@ string PackageSelector::createRelLine( const zypp::CapSet & info )
 //
 // createText
 //
-string PackageSelector::createText( list<string> info, bool oneline )
+string NCPackageSelector::createText( list<string> info, bool oneline )
 {
     list<string>::iterator it;
     string text = "";
@@ -2997,7 +2995,7 @@ ostream & operator << (ostream & s, zypp::DiskUsageCounter::MountPoint mp)
 //
 // showDiskSpace()
 //
-void PackageSelector::showDiskSpace()
+void NCPackageSelector::showDiskSpace()
 {
     zypp::ZYpp::Ptr z = zypp::getZYpp();
     zypp::DiskUsageCounter::MountPointSet du = z->diskUsage ();
@@ -3026,7 +3024,7 @@ void PackageSelector::showDiskSpace()
     YCPString label( diff.asString () );
     
     // show the required diskspace
-    YWidget * diskSpace = y2ui->widgetWithId( PkgNames::Diskspace(), true );
+    YWidget * diskSpace = y2ui->widgetWithId( NCPkgNames::Diskspace(), true );
     if ( diskSpace )
     {
 	static_cast<NCLabel *>(diskSpace)->setLabel( label );
@@ -3044,7 +3042,7 @@ void PackageSelector::showDiskSpace()
 //
 // total download size of YOU patches
 //
-void PackageSelector::showDownloadSize()
+void NCPackageSelector::showDownloadSize()
 {
     set<ZyppSel> selectablesToInstall;
 
@@ -3115,7 +3113,7 @@ void PackageSelector::showDownloadSize()
     YCPString label( totalSize.asString() );
 
     // show the download size
-    YWidget * diskSpace = y2ui->widgetWithId( PkgNames::Diskspace(), true );
+    YWidget * diskSpace = y2ui->widgetWithId( NCPkgNames::Diskspace(), true );
     if ( diskSpace )
     {
 	static_cast<NCLabel *>(diskSpace)->setLabel( label );
@@ -3127,9 +3125,9 @@ void PackageSelector::showDownloadSize()
 //
 // getPackageList()
 //
-NCPkgTable * PackageSelector::getPackageList()
+NCPkgTable * NCPackageSelector::getPackageList()
 {
-	YWidget * packages = y2ui->widgetWithId( PkgNames::Packages(), true );
+	YWidget * packages = y2ui->widgetWithId( NCPkgNames::Packages(), true );
 	
 	return ( dynamic_cast<NCPkgTable *>(packages) );
 }

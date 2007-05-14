@@ -10,14 +10,14 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       PkgNames.h
+   File:       NCPkgNames.h
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#ifndef PkgNames_h
-#define PkgNames_h
+#ifndef NCPkgNames_h
+#define NCPkgNames_h
 
 #include "NCstring.h"
 #include <string>
@@ -29,7 +29,7 @@ class YCPValue;
 // Class to make available globally used names in package selection dialog,
 // such as widget ids, text which has to be translated and so on
 
-class PkgNames
+class NCPkgNames
 {
 public:
     
@@ -909,7 +909,7 @@ public:
 private:
     
     // Need no object of this class: hide default constructor
-    PkgNames();
+    NCPkgNames();
 
     /**
      *  Create an id value with ` at the beginning
@@ -921,7 +921,7 @@ private:
 
 ///////////////////////////////////////////////////////////////////
 
-#endif // PkgNames_h
+#endif // NCPkgNames_h
 
 
 

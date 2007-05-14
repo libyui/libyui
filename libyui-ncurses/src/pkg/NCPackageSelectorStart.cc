@@ -10,7 +10,7 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPackageSelector.cc
+   File:       NCPackageSelectorStart.cc
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
@@ -18,11 +18,11 @@
 /-*/
 #include "Y2Log.h"
 #include "NCurses.h"
-#include "NCPackageSelector.h"
+#include "NCPackageSelectorStart.h"
 #include "NCPushButton.h"
 #include "NCPkgTable.h"
 #include "NCLabel.h"
-#include "PkgNames.h"
+#include "NCPkgNames.h"
 #include "NCi18n.h"
 
 #include <libintl.h>
@@ -35,15 +35,15 @@
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPackageSelector::NCPackageSelector
+//	METHOD NAME : NCPackageSelectorStart::NCPackageSelectorStart
 //	METHOD TYPE : Constructor
 //
 //	DESCRIPTION :
 //
-NCPackageSelector::NCPackageSelector( YNCursesUI *ui,
-				      NCWidget * parent,
-				      const YWidgetOpt & opt, YUIDimension dimension,
-				      string floppyDevice )
+NCPackageSelectorStart::NCPackageSelectorStart( YNCursesUI *ui,
+						NCWidget * parent,
+						const YWidgetOpt & opt, YUIDimension dimension,
+						string floppyDevice )
     : NCSplit( parent, opt, dimension )
       , widgetRoot( 0 )
       , packager( 0 )
@@ -80,7 +80,7 @@ NCPackageSelector::NCPackageSelector( YNCursesUI *ui,
 
     // create the PackageSelector (creation with 'new' is required because initialization
     // in the list of member variables causes problems with untranslated messages)
-    packager = new PackageSelector( ui, opt, floppyDevice );
+    packager = new NCPackageSelector( ui, opt, floppyDevice );
 
     if ( widgetRoot )
     {
@@ -90,13 +90,13 @@ NCPackageSelector::NCPackageSelector( YNCursesUI *ui,
 	NCDBG <<  "Widget tree of NCPackageSelector created" << endl;
 
 	// get the widget ID of the package table
-	YWidget * pkg = ui->widgetWithId( widgetRoot, PkgNames::Packages(), true );
+	YWidget * pkg = ui->widgetWithId( widgetRoot, NCPkgNames::Packages(), true );
 	pkgList = dynamic_cast<NCPkgTable *>(pkg);
 
 	if ( pkgList )
 	{
 	    // set the type of the table
-	    ObjectStatStrategy * strategy;
+	    NCPkgStatusStrategy * strategy;
 	    if ( youMode )
 	    {
 		strategy = new PatchStatStrategy();
@@ -134,12 +134,12 @@ NCPackageSelector::NCPackageSelector( YNCursesUI *ui,
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPackageSelector::~NCPackageSelector
+//	METHOD NAME : NCPackageSelectorStart::~NCPackageSelectorStart
 //	METHOD TYPE : Destructor
 //
 //	DESCRIPTION :
 //
-NCPackageSelector::~NCPackageSelector()
+NCPackageSelectorStart::~NCPackageSelectorStart()
 {
     if ( packager )
     {
@@ -150,12 +150,12 @@ NCPackageSelector::~NCPackageSelector()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPackageSelector::setSize
+//	METHOD NAME : NCPackageSelectorStart::setSize
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCPackageSelector::setSize( long newwidth, long newheight )
+void NCPackageSelectorStart::setSize( long newwidth, long newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
   NCSplit::setSize( newwidth, newheight );
@@ -164,13 +164,13 @@ void NCPackageSelector::setSize( long newwidth, long newheight )
 
 ///////////////////////////////////////////////////////////////////
 //
-//      METHOD NAME : NCPackageSelector::showDefaultList
+//      METHOD NAME : NCPackageSelectorStart::showDefaultList
 //      METHOD TYPE : void
 //
 //      DESCRIPTION : fill up the package table with default data
 //		     
 //
-void NCPackageSelector::showDefaultList()
+void NCPackageSelectorStart::showDefaultList()
 {
     // fill the package table with packages belonging to the default filter
     if ( pkgList )
@@ -205,13 +205,13 @@ void NCPackageSelector::showDefaultList()
 
 ///////////////////////////////////////////////////////////////////
 //
-//      METHOD NAME : NCPackageSelector::handleEvent
+//      METHOD NAME : NCPackageSelectorStart::handleEvent
 //      METHOD TYPE : bool
 //
 //      DESCRIPTION : passes the event to the handleEvent method
 //		      of the member variable PackageSelector packager
 //
-bool NCPackageSelector::handleEvent ( const NCursesEvent & event )
+bool NCPackageSelectorStart::handleEvent ( const NCursesEvent & event )
 {
     if ( !packager )
 	return false;
@@ -226,8 +226,8 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent & event )
 // 
 // Read a layout file (containing a YCPTerm)
 //
-YCPTerm NCPackageSelector::readLayoutFile( YNCursesUI *ui,
-					   const char * layoutFilename )
+YCPTerm NCPackageSelectorStart::readLayoutFile( YNCursesUI *ui,
+						const char * layoutFilename )
 {
     YCPTerm   pkgLayout = YCPNull();
     

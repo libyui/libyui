@@ -21,11 +21,12 @@
 #include "NCPkgTable.h"
 #include "NCTable.h"
 #include "NCPopupInfo.h"
+#include "NCPkgNames.h"
 #include "NCi18n.h"
 
-#include "PackageSelector.h"
+#include "NCPackageSelector.h"
 #include <zypp/ui/Selectable.h>
-#include "YQZypp.h"
+#include "NCZypp.h"
 
 /*
   Textdomain "packages"
@@ -232,7 +233,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    {
 		notify = objPtr->delnotify();
 		NCDBG << "DELETE message: " << notify << endl;
-		header = YCPString(PkgNames::WarningLabel());
+		header = YCPString(NCPkgNames::WarningLabel());
 	    }
 	break;
 	case S_Install:
@@ -241,7 +242,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    {	
 		notify = objPtr->insnotify();
 		NCDBG << "NOTIFY message: " << notify << endl;
-		header = YCPString(PkgNames::NotifyLabel());
+		header = YCPString(NCPkgNames::NotifyLabel());
 	    }
 	case S_AutoInstall:
 	case S_AutoUpdate:
@@ -263,11 +264,11 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	if (!license_confirmed)
 	{
 	    NCPopupInfo info( wpos( (lines * 10)/100, (cols * 10) /100),
-			      PkgNames::NotifyLabel(),
+			      NCPkgNames::NotifyLabel(),
 			      //YCPString(_("End User License Agreement") ),
 			      YCPString( "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( license ) ),
-			      PkgNames::AcceptLabel(),
-			      PkgNames::CancelLabel() );
+			      NCPkgNames::AcceptLabel(),
+			      NCPkgNames::CancelLabel() );
 	    info.setNiceSize( (NCurses::cols() * 80)/100, (NCurses::lines()*80)/100);
 	    license_confirmed = info.showInfoPopup( ) != NCursesEvent::cancel;
 	}
@@ -435,7 +436,7 @@ bool NCPkgTable::fillDefaultList( )
 	    packager->fillPatchList( "installable" );	// default: installable patches
 
 	    // set the visible info to long description 
-	    packager->setVisibleInfo ( PkgNames::PatchDescr() );
+	    packager->setVisibleInfo ( NCPkgNames::PatchDescr() );
 	    // show the package description of the current item
 	    showInformation ();
 	    break;
@@ -445,7 +446,7 @@ bool NCPkgTable::fillDefaultList( )
 	    {
 		packager->fillUpdateList();
 		// set the visible info to package description 
-		packager->setVisibleInfo ( PkgNames::PkgInfo() );
+		packager->setVisibleInfo ( NCPkgNames::PkgInfo() );
 		// show the package description of the current item
 		showInformation ();
 		break;
@@ -460,7 +461,7 @@ bool NCPkgTable::fillDefaultList( )
 					    defaultGroup );
 		
 		// set the visible info to package description 
-		packager->setVisibleInfo ( PkgNames::PkgInfo() );
+		packager->setVisibleInfo ( NCPkgNames::PkgInfo() );
 		// show the package description of the current item
 		showInformation ();
 	    }
@@ -506,75 +507,75 @@ void NCPkgTable::fillHeader( )
 					      slbHasInstalledObj) != zyppPkgEnd ();
 
 	    header.reserve(7);
-	    header.push_back( "L" + PkgNames::PkgStatus() );
-	    header.push_back( "L" + PkgNames::PkgName() );
+	    header.push_back( "L" + NCPkgNames::PkgStatus() );
+	    header.push_back( "L" + NCPkgNames::PkgName() );
 	    if ( haveInstalledPkgs > 0 )
 	    {
-		header.push_back( "L" + PkgNames::PkgVersionNew() );
-		header.push_back( "L" + PkgNames::PkgVersionInst() );
+		header.push_back( "L" + NCPkgNames::PkgVersionNew() );
+		header.push_back( "L" + NCPkgNames::PkgVersionInst() );
 		haveInstalledVersion = true;
 	    }
 	    else
 	    {
-		header.push_back( "L" + PkgNames::PkgVersion() );
+		header.push_back( "L" + NCPkgNames::PkgVersion() );
 	    }
-	    header.push_back( "L" + PkgNames::PkgSummary() );
-	    header.push_back( "L" + PkgNames::PkgSize() );
+	    header.push_back( "L" + NCPkgNames::PkgSummary() );
+	    header.push_back( "L" + NCPkgNames::PkgSize() );
 // installation of source rpms is not possible
 #ifdef FIXME
-	    header.push_back( "L" + PkgNames::PkgSource() );
+	    header.push_back( "L" + NCPkgNames::PkgSource() );
 #endif
 	    break;
 	}
 	case T_PatchPkgs: {
 	    header.reserve(7);
-	    header.push_back( "L" + PkgNames::PkgStatus() );
-	    header.push_back( "L" + PkgNames::PkgName() );
-	    header.push_back( "L" + PkgNames::PkgVersionNew() );
-	    header.push_back( "L" + PkgNames::PkgVersionInst() );
-	    header.push_back( "L" + PkgNames::PkgSummary() );
-	    header.push_back( "L" + PkgNames::PkgSize() );
+	    header.push_back( "L" + NCPkgNames::PkgStatus() );
+	    header.push_back( "L" + NCPkgNames::PkgName() );
+	    header.push_back( "L" + NCPkgNames::PkgVersionNew() );
+	    header.push_back( "L" + NCPkgNames::PkgVersionInst() );
+	    header.push_back( "L" + NCPkgNames::PkgSummary() );
+	    header.push_back( "L" + NCPkgNames::PkgSize() );
 	    break;
 	}
 	case T_Patches: {
 	    header.reserve(6);
-	    header.push_back( "L" + PkgNames::PkgStatus() );
-	    header.push_back( "L" + PkgNames::PkgName() );
-	    header.push_back( "L" + PkgNames::PkgSummary() );
-	    header.push_back( "L" + PkgNames::PatchKind() );
-	    header.push_back( "L" + PkgNames::PkgVersion() );
-	    // header.push_back( "L" + PkgNames::PkgSize() );
+	    header.push_back( "L" + NCPkgNames::PkgStatus() );
+	    header.push_back( "L" + NCPkgNames::PkgName() );
+	    header.push_back( "L" + NCPkgNames::PkgSummary() );
+	    header.push_back( "L" + NCPkgNames::PatchKind() );
+	    header.push_back( "L" + NCPkgNames::PkgVersion() );
+	    // header.push_back( "L" + NCPkgNames::PkgSize() );
 	    break;
 	}
 	case T_Selections: {
 	    header.reserve(3);
-	    header.push_back( "L" + PkgNames::PkgStatus() );
-	    header.push_back( "L" + PkgNames::SelectionLabel() );
+	    header.push_back( "L" + NCPkgNames::PkgStatus() );
+	    header.push_back( "L" + NCPkgNames::SelectionLabel() );
 	    break;
 	}
 	case T_Languages: {
 	    header.reserve(4);
-	    header.push_back( "L" + PkgNames::PkgStatus() );
-	    header.push_back( "L" + PkgNames::LangCode() );
-	    header.push_back( "L" + PkgNames::LangName() );
+	    header.push_back( "L" + NCPkgNames::PkgStatus() );
+	    header.push_back( "L" + NCPkgNames::LangCode() );
+	    header.push_back( "L" + NCPkgNames::LangName() );
 	    break;
 	}
 	case T_Availables: {
 	    header.reserve(6);
-	    header.push_back( "L" + PkgNames::PkgStatus() );
-	    header.push_back( "L" + PkgNames::PkgName() );
-	    header.push_back( "L" + PkgNames::PkgStatus() );
-	    header.push_back( "L" + PkgNames::PkgVersion() );
-	    header.push_back( "L" + PkgNames::PkgInstSource() );
-	    header.push_back( "L" + PkgNames::PkgSize() );
-	    header.push_back( "L" + PkgNames::PkgArch() );
+	    header.push_back( "L" + NCPkgNames::PkgStatus() );
+	    header.push_back( "L" + NCPkgNames::PkgName() );
+	    header.push_back( "L" + NCPkgNames::PkgStatus() );
+	    header.push_back( "L" + NCPkgNames::PkgVersion() );
+	    header.push_back( "L" + NCPkgNames::PkgInstSource() );
+	    header.push_back( "L" + NCPkgNames::PkgSize() );
+	    header.push_back( "L" + NCPkgNames::PkgArch() );
 	    break;
 	}
 	default: {
 	    header.reserve(4);
-	    header.push_back( "L" + PkgNames::PkgStatus() );
-	    header.push_back( "L" + PkgNames::PkgName() );
-	    header.push_back( "L" + PkgNames::PkgSummary() );
+	    header.push_back( "L" + NCPkgNames::PkgStatus() );
+	    header.push_back( "L" + NCPkgNames::PkgName() );
+	    header.push_back( "L" + NCPkgNames::PkgSummary() );
 	    break;
 	}
     }

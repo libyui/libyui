@@ -10,24 +10,24 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPopupSelection.cc
+   File:       NCPkgPopupSelection.cc
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #include "Y2Log.h"
-#include "NCPopupSelection.h"
+#include "NCPkgPopupSelection.h"
 
 #include "YDialog.h"
 #include "NCSplit.h"
 #include "NCSpacing.h"
-#include "PkgNames.h"
+#include "NCPkgNames.h"
 #include "NCPkgTable.h"
-#include "ObjectStatStrategy.h"
+#include "NCPkgStatusStrategy.h"
 #include <zypp/ui/PatternContents.h>
 
-#include "YQZypp.h"
+#include "NCZypp.h"
 
 #ifdef FIXME
 #define LOCALE Y2PM::getPreferredLocale()
@@ -38,12 +38,12 @@
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupSelection::NCPopupSelection
+//	METHOD NAME : NCPkgPopupSelection::NCPkgPopupSelection
 //	METHOD TYPE : Constructor
 //
 //	DESCRIPTION :
 //
-NCPopupSelection::NCPopupSelection( const wpos at,  PackageSelector * pkg, SelType type  )
+NCPkgPopupSelection::NCPkgPopupSelection( const wpos at,  NCPackageSelector * pkg, SelType type  )
     : NCPopup( at, false )
     , sel( 0 )
     , okButton( 0 )
@@ -54,11 +54,11 @@ NCPopupSelection::NCPopupSelection( const wpos at,  PackageSelector * pkg, SelTy
   {   
     case S_Pattern:
     case S_Selection: {
-        createLayout( YCPString(PkgNames::SelectionLabel()) );
+        createLayout( YCPString(NCPkgNames::SelectionLabel()) );
 	break;
     }
     case S_Language: {
-        createLayout( YCPString(PkgNames::LanguageLabel()) );
+        createLayout( YCPString(NCPkgNames::LanguageLabel()) );
 	break;
     }
     default:
@@ -72,12 +72,12 @@ NCPopupSelection::NCPopupSelection( const wpos at,  PackageSelector * pkg, SelTy
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupSelection::~NCPopupSelection
+//	METHOD NAME : NCPkgPopupSelection::~NCPkgPopupSelection
 //	METHOD TYPE : Destructor
 //
 //	DESCRIPTION :
 //
-NCPopupSelection::~NCPopupSelection()
+NCPkgPopupSelection::~NCPkgPopupSelection()
 {
 
 }
@@ -85,12 +85,12 @@ NCPopupSelection::~NCPopupSelection()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupSelection::createLayout
+//	METHOD NAME : NCPkgPopupSelection::createLayout
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCPopupSelection::createLayout( const YCPString & label )
+void NCPkgPopupSelection::createLayout( const YCPString & label )
 {
 
   YWidgetOpt opt;
@@ -111,7 +111,7 @@ void NCPopupSelection::createLayout( const YCPString & label )
   sel = new NCPkgTable( split, opt );
   sel->setPackager( packager );
   // set status strategy
-  ObjectStatStrategy * strat = new SelectionStatStrategy();
+  NCPkgStatusStrategy * strat = new SelectionStatStrategy();
 
   switch (type) {
       case S_Pattern:
@@ -134,15 +134,15 @@ void NCPopupSelection::createLayout( const YCPString & label )
 
   opt.notifyMode.setValue( true );
 
-  NCLabel * help = new NCLabel( split, opt, YCPString(PkgNames::DepsHelpLine()) );
+  NCLabel * help = new NCLabel( split, opt, YCPString(NCPkgNames::DepsHelpLine()) );
   split->addChild( help );
 
   split->addChild( new NCSpacing( split, opt, 0.4, false, true ) );
 
   // add an OK button
   opt.key_Fxx.setValue( 10 );
-  okButton = new NCPushButton( split, opt, YCPString(PkgNames::OKLabel()) );
-  okButton->setId( PkgNames::OkButton () );
+  okButton = new NCPushButton( split, opt, YCPString(NCPkgNames::OKLabel()) );
+  okButton->setId( NCPkgNames::OkButton () );
 
   split->addChild( okButton );
 
@@ -154,7 +154,7 @@ void NCPopupSelection::createLayout( const YCPString & label )
 // NCursesEvent & showSelectionPopup ()
 //
 //
-NCursesEvent & NCPopupSelection::showSelectionPopup( )
+NCursesEvent & NCPkgPopupSelection::showSelectionPopup( )
 {
     postevent = NCursesEvent();
 
@@ -248,7 +248,7 @@ NCursesEvent & NCPopupSelection::showSelectionPopup( )
 // returns the currently selected list item (may be "really" selected
 // or not)
 //
-string  NCPopupSelection::getCurrentLine( )
+string  NCPkgPopupSelection::getCurrentLine( )
 {
     if ( !sel )
 	return "";
@@ -262,13 +262,13 @@ string  NCPopupSelection::getCurrentLine( )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupSelection::niceSize
+//	METHOD NAME : NCPkgPopupSelection::niceSize
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
 
-long NCPopupSelection::nicesize(YUIDimension dim)
+long NCPkgPopupSelection::nicesize(YUIDimension dim)
 {
     long vdim;
     if ( NCurses::lines() > 20 )
@@ -287,7 +287,7 @@ long NCPopupSelection::nicesize(YUIDimension dim)
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupSelection::wHandleInput( wint_t ch )
+NCursesEvent NCPkgPopupSelection::wHandleInput( wint_t ch )
 {
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;
@@ -298,12 +298,12 @@ NCursesEvent NCPopupSelection::wHandleInput( wint_t ch )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupSelection::postAgain
+//	METHOD NAME : NCPkgPopupSelection::postAgain
 //	METHOD TYPE : bool
 //
 //	DESCRIPTION :
 //
-bool NCPopupSelection::postAgain( )
+bool NCPkgPopupSelection::postAgain( )
 {
     if( !postevent.widget )
 	return false;
@@ -313,7 +313,7 @@ bool NCPopupSelection::postAgain( )
     YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
 
     if ( !currentId.isNull()
-	 && currentId->compare( PkgNames::OkButton () ) == YO_EQUAL )
+	 && currentId->compare( NCPkgNames::OkButton () ) == YO_EQUAL )
     {
 	postevent.detail = NCursesEvent::USERDEF ;
 	// return false means: close the popup
@@ -371,12 +371,12 @@ bool orderLang( ZyppSel slb1, ZyppSel slb2 )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupSelection::fillSelectionList
+//	METHOD NAME : NCPkgPopupSelection::fillSelectionList
 //	METHOD TYPE : bool
 //
 //	DESCRIPTION :
 //
-bool NCPopupSelection::fillSelectionList( NCPkgTable * sel, SelType type  )
+bool NCPkgPopupSelection::fillSelectionList( NCPkgTable * sel, SelType type  )
 {
     if ( !sel )
 	return false;

@@ -10,19 +10,20 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       PackageSelector.h
+   File:       NCPackageSelector.h
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#ifndef PackageSelector_h
-#define PackageSelector_h
+#ifndef NCPackageSelector_h
+#define NCPackageSelector_h
 
 #include <iosfwd>
+#include "Y2Log.h"
 
 #include "YNCursesUI.h"
-#include "PkgNames.h"
+#include "NCPkgNames.h"
 
 #include <map>          
 #include <string>
@@ -34,35 +35,36 @@
 #include <zypp/ui/Selectable.h>
 #include <zypp/Patch.h>
 
-#include "NCPopupTree.h"
+#include "NCPkgPopupTree.h"
 #include "NCPkgTable.h"
 #include "NCPkgSelMapper.h"
 
-class NCPopupSelection;
+class NCPkgPopupSelection;
 class LangCode;
-class NCPopupDeps;
-class NCPopupDiskspace;
-class NCPopupSearch;
-class NCPopupFile;
+class NCPkgPopupDeps;
+class NCPkgPopupDiskspace;
+class NCPkgPopupSearch;
+class NCPkgPopupFile;
+
 
 ///////////////////////////////////////////////////////////////////
 //
-//	CLASS NAME : PackageSelector
+//	CLASS NAME : NCPackageSelector
 //
 //	DESCRIPTION : holds the data and handles events
 //
-class PackageSelector
+class NCPackageSelector
 {
 
-  friend std::ostream & operator<<( std::ostream & STREAM, const PackageSelector & OBJ );
+  friend std::ostream & operator<<( std::ostream & STREAM, const NCPackageSelector & OBJ );
 
-  PackageSelector & operator=( const PackageSelector & );
-  PackageSelector            ( const PackageSelector & );
+  NCPackageSelector & operator=( const NCPackageSelector & );
+  NCPackageSelector            ( const NCPackageSelector & );
 
   private:
 
     // typedef for the pointer to handler member function
-    typedef bool (PackageSelector::* tHandlerFctPtr) ( const NCursesEvent& event );
+    typedef bool (NCPackageSelector::* tHandlerFctPtr) ( const NCursesEvent& event );
 
     // typedef for the internal map: key=nameId, value=handler-fct-ptr
     typedef std::map<std::string, tHandlerFctPtr> tHandlerMap;
@@ -73,20 +75,19 @@ class PackageSelector
 
     YCPValue visibleInfo;		// visible package info (description, file list, ...)
 
-    NCPopupTree * filterPopup;		// the rpm group tags popup
+    NCPkgPopupTree * filterPopup;	// the rpm group tags popup
 
-    NCPopupDeps * depsPopup;	// the package dependeny popup
+    NCPkgPopupDeps * depsPopup;		// the package dependeny popup
 
-    NCPopupSelection * selectionPopup; 	// the selections popup
-    NCPopupSelection * patternPopup;    // the pattern popup
+    NCPkgPopupSelection * selectionPopup;	// the selections popup
+    NCPkgPopupSelection * patternPopup;    	// the pattern popup
+    NCPkgPopupSelection * languagePopup;	// language popup
 
-    NCPopupSelection * languagePopup;	// language popup
+    NCPkgPopupDiskspace * diskspacePopup;	// the popup showing the disk usage
 
-    NCPopupDiskspace * diskspacePopup;	// the popup showing the disk usage
+    NCPkgPopupSearch * searchPopup; 	// the package search popup
 
-    NCPopupSearch * searchPopup; 	// the package search popup
-
-    NCPopupFile * filePopup; 		// the save/load selection popup
+    NCPkgPopupFile * filePopup;		// the save/load selection popup
     
     bool youMode;			// YOU
     bool updateMode;			// Update
@@ -121,12 +122,12 @@ class PackageSelector
      * @param opt The widget options
      * @param floppyDevice The floppy device
      */
-    PackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, string floppyDevice );
+    NCPackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, string floppyDevice );
 
     /**
      * Destructor
      */ 
-    virtual ~PackageSelector();
+    virtual ~NCPackageSelector();
     
    /**
     * Fills the package table
@@ -487,4 +488,4 @@ class PackageSelector
 
 ///////////////////////////////////////////////////////////////////
 
-#endif // PackageSelector_h
+#endif // NCPackageSelector_h

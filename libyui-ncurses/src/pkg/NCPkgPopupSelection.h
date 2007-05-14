@@ -10,41 +10,41 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPopupSelection.h
+   File:       NCPkgPopupSelection.h
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#ifndef NCPopupSelection_h
-#define NCPopupSelection_h
+#ifndef NCPkgPopupSelection_h
+#define NCPkgPopupSelection_h
 
 #include <iosfwd>
 
 #include <string>
 
 #include "NCPopup.h"
-#include "PackageSelector.h"
 #include "NCPushButton.h"
+#include "NCPackageSelector.h"
 
 
 ///////////////////////////////////////////////////////////////////
 //
-//	CLASS NAME : NCPopupSelection
+//	CLASS NAME : NCPkgPopupSelection
 //
 //	DESCRIPTION :
 //
-class NCPopupSelection : public NCPopup {
+class NCPkgPopupSelection : public NCPopup {
 
-    NCPopupSelection & operator=( const NCPopupSelection & );
-    NCPopupSelection            ( const NCPopupSelection & );
+    NCPkgPopupSelection & operator=( const NCPkgPopupSelection & );
+    NCPkgPopupSelection            ( const NCPkgPopupSelection & );
 
 private:
 
     NCPkgTable *sel;			// selection list
     NCPushButton * okButton;
 
-    PackageSelector * packager;		// connection to the PackageSelector,
+    NCPackageSelector * packager;		// connection to the PackageSelector,
 
 protected:
 
@@ -63,8 +63,8 @@ public:
 	S_Unknown
     };
     
-    NCPopupSelection( const wpos at, PackageSelector * pkg, SelType type );
-    virtual ~NCPopupSelection();
+    NCPkgPopupSelection( const wpos at, NCPackageSelector * pkg, SelType type );
+    virtual ~NCPkgPopupSelection();
 
     virtual long nicesize(YUIDimension dim);
 
@@ -91,4 +91,4 @@ private:
 ///////////////////////////////////////////////////////////////////
 
 
-#endif // NCPopupSelection_h
+#endif // NCPkgPopupSelection_h

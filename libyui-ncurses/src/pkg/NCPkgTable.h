@@ -24,19 +24,17 @@
 #include "NCPadWidget.h"
 #include "NCTablePad.h"
 #include "NCTable.h"
-#include "PkgNames.h"
 
 #include <map>          
 #include <string>
 #include <utility>      // for STL pair
 
-#include "YQZypp.h"
 #include <zypp/ui/Selectable.h>
 
-#include "ObjectStatStrategy.h"
+#include "NCPkgStatusStrategy.h"
 
 
-class PackageSelector;
+class NCPackageSelector;
 
 
 /**
@@ -119,9 +117,9 @@ private:
     NCPkgTable & operator=( const NCPkgTable & );
     NCPkgTable            ( const NCPkgTable & );
     
-    PackageSelector * packager;		// connection to the PackageSelector,
+    NCPackageSelector * packager;		// connection to the PackageSelector,
 
-    ObjectStatStrategy * statusStrategy; 	// particular methods to get the status
+    NCPkgStatusStrategy * statusStrategy; 	// particular methods to get the status
 
     NCPkgTableType tableType;	// the type (e.g. table of packages, patches)
     bool haveInstalledVersion;	// for T_Packages and T_Update
@@ -195,7 +193,7 @@ public:
      * @param pkg The PackageSelector pointer
      * @return void
      */
-    void setPackager( PackageSelector * pkg ) { packager = pkg; }
+    void setPackager( NCPackageSelector * pkg ) { packager = pkg; }
 
     /**
      * Informs the package manager about the status change of
@@ -243,11 +241,11 @@ public:
      * Sets the type of the table and the status strategy (which means call particular methods
      * to set/get the status for different zypp::ResObjects (zypp::Patch, zypp::Package or available zypp::Package)
      * @param type	The type (see enum NCPkgTableType)
-     * @param strategy  The certain strategy (available strategies see ObjectStatStrategy.h).
+     * @param strategy  The certain strategy (available strategies see NCPkgStatusStrategy.h).
      * 			Has to be allocated with new - is deleted by NCPkgTable.
      * @return bool
      */
-    bool setTableType( NCPkgTableType type, ObjectStatStrategy * strategy ) {
+    bool setTableType( NCPkgTableType type, NCPkgStatusStrategy * strategy ) {
 	if ( !strategy )
 	    return false;
 	

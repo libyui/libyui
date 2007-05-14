@@ -10,17 +10,17 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       ObjectStatStrategy.h
+   File:       NCPkgStatusStrategy.h
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
    
 /-*/
-#ifndef ObjectStatStrategy_h
-#define ObjectStatStrategy_h
+#ifndef NCPkgStatusStrategy_h
+#define NCPkgStatusStrategy_h
 
-#include "YQZypp.h"
+#include "NCZypp.h"
 #include <zypp/ui/Selectable.h>
 
 #define EXTRA_PATCH_STRATEGY	0
@@ -28,14 +28,14 @@
 //------------------------------------------------------------
 // Abstract base class for strategies to get status for packages or patches 
 //------------------------------------------------------------
-class ObjectStatStrategy
+class NCPkgStatusStrategy
 {
 
 public:
     
-    ObjectStatStrategy( );
+    NCPkgStatusStrategy( );
     
-    virtual ~ObjectStatStrategy() = 0; 
+    virtual ~NCPkgStatusStrategy() = 0; 
 
     /**
      * Gets the status information from the package manager.
@@ -89,7 +89,7 @@ public:
 //------------------------------------------------------------
 // Class for strategies to handle status of packages
 //------------------------------------------------------------
-class PackageStatStrategy : public ObjectStatStrategy
+class PackageStatStrategy : public NCPkgStatusStrategy
 {
 public:
 
@@ -102,7 +102,7 @@ public:
 //------------------------------------------------------------
 // Class for strategies to handle dependencies
 //------------------------------------------------------------
-class DependencyStatStrategy : public ObjectStatStrategy
+class DependencyStatStrategy : public NCPkgStatusStrategy
 {
 public:
 
@@ -115,7 +115,7 @@ public:
 //------------------------------------------------------------
 // Class for strategies of update
 //------------------------------------------------------------
-class UpdateStatStrategy : public ObjectStatStrategy
+class UpdateStatStrategy : public NCPkgStatusStrategy
 {
 public:
 
@@ -128,7 +128,7 @@ public:
 //------------------------------------------------------------
 // Class for strategies of selections
 //------------------------------------------------------------
-class SelectionStatStrategy : public ObjectStatStrategy
+class SelectionStatStrategy : public NCPkgStatusStrategy
 {
 public:
 
@@ -152,7 +152,7 @@ public:
 //------------------------------------------------------------
 // Class for strategies to handle status of packages belonging to a patch
 //------------------------------------------------------------
-class PatchPkgStatStrategy : public ObjectStatStrategy
+class PatchPkgStatStrategy : public NCPkgStatusStrategy
 {
 public:
 
@@ -175,7 +175,7 @@ public:
 //------------------------------------------------------------
 // Class for strategies to handle status of patches
 //------------------------------------------------------------
-class PatchStatStrategy : public ObjectStatStrategy
+class PatchStatStrategy : public NCPkgStatusStrategy
 {
 public:
 
@@ -221,7 +221,7 @@ public:
 //------------------------------------------------------------
 // Class for strategies to handle status of available packages
 //------------------------------------------------------------
-class AvailableStatStrategy : public ObjectStatStrategy
+class AvailableStatStrategy : public NCPkgStatusStrategy
 {
 public:
     

@@ -10,7 +10,7 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPopupPkgTable.cc
+   File:       NCPkgPopupTable.cc
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
@@ -22,29 +22,29 @@
 #include "YDialog.h"
 #include "NCSplit.h"
 #include "NCSpacing.h"
-#include "PkgNames.h"
-#include "PackageSelector.h"
+#include "NCPkgNames.h"
+#include "NCPackageSelector.h"
 #include "NCLabel.h"
 #include "NCPushButton.h"
 #include "NCPkgTable.h"
 
-#include "YQZypp.h"
+#include "NCZypp.h"
 #include <zypp/ui/Selectable.h>
 #include <zypp/ui/UserWantedPackages.h>
 
-#include "NCPopupPkgTable.h"
+#include "NCPkgPopupTable.h"
 
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupPkgTable::NCPopupPkgTable
+//	METHOD NAME : NCPkgPopupTable::NCPkgPopupTable
 //	METHOD TYPE : Constructor
 //
 //	DESCRIPTION :
 //
-NCPopupPkgTable::NCPopupPkgTable( const wpos at, PackageSelector * pkger )
+NCPkgPopupTable::NCPkgPopupTable( const wpos at, NCPackageSelector * pkger )
     : NCPopup( at, false )
       , pkgTable( 0 )
       , okButton( 0 )
@@ -57,24 +57,24 @@ NCPopupPkgTable::NCPopupPkgTable( const wpos at, PackageSelector * pkger )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupPkgTable::~NCPopupPkgTable
+//	METHOD NAME : NCPkgPopupTable::~NCPkgPopupTable
 //	METHOD TYPE : Destructor
 //
 //	DESCRIPTION :
 //
-NCPopupPkgTable::~NCPopupPkgTable()
+NCPkgPopupTable::~NCPkgPopupTable()
 {
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupPkgTable::createLayout
+//	METHOD NAME : NCPkgPopupTable::createLayout
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCPopupPkgTable::createLayout( )
+void NCPkgPopupTable::createLayout( )
 {
     YWidgetOpt opt;
 
@@ -86,15 +86,15 @@ void NCPopupPkgTable::createLayout( )
 
     // add the headline
     opt.isHeading.setValue( true );
-    NCLabel * head = new NCLabel( split, opt, YCPString(PkgNames::AutoChangeLabel()) );
+    NCLabel * head = new NCLabel( split, opt, YCPString(NCPkgNames::AutoChangeLabel()) );
     split->addChild( head );
 
     split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
 
     opt.isHeading.setValue( false );
-    NCLabel * lb1 = new NCLabel( split, opt, YCPString(PkgNames::AutoChangeText1()) );
+    NCLabel * lb1 = new NCLabel( split, opt, YCPString(NCPkgNames::AutoChangeText1()) );
     split->addChild( lb1 );
-    NCLabel * lb2 = new NCLabel( split, opt, YCPString(PkgNames::AutoChangeText2()) );
+    NCLabel * lb2 = new NCLabel( split, opt, YCPString(NCPkgNames::AutoChangeText2()) );
     split->addChild( lb2 );
     
     // add the package table (use default type T_Packages)
@@ -114,16 +114,16 @@ void NCPopupPkgTable::createLayout( )
 
     // add the OK button
     opt.key_Fxx.setValue( 10 );
-    okButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::OKLabel()) );
-    okButton->setId( PkgNames::OkButton() );
+    okButton = new NCPushButton( hSplit, opt, YCPString(NCPkgNames::OKLabel()) );
+    okButton->setId( NCPkgNames::OkButton() );
 
     hSplit->addChild( okButton );
     hSplit->addChild( new NCSpacing( hSplit, opt, 0.4, true, false ) );
 
     // add the Cancel button
     opt.key_Fxx.setValue( 9 );
-    cancelButton = new NCPushButton( hSplit, opt, YCPString(PkgNames::CancelLabel()) );
-    cancelButton->setId( PkgNames::Cancel() );
+    cancelButton = new NCPushButton( hSplit, opt, YCPString(NCPkgNames::CancelLabel()) );
+    cancelButton->setId( NCPkgNames::Cancel() );
 
     hSplit->addChild( cancelButton );
     hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
@@ -135,12 +135,12 @@ void NCPopupPkgTable::createLayout( )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupPkgTable::fillAutoChanges
+//	METHOD NAME : NCPkgPopupTable::fillAutoChanges
 //	METHOD TYPE : bool
 //
 //	DESCRIPTION :
 //
-bool NCPopupPkgTable::fillAutoChanges( NCPkgTable * pkgTable )
+bool NCPkgPopupTable::fillAutoChanges( NCPkgTable * pkgTable )
 {
     if ( !pkgTable )
 	return false;
@@ -209,12 +209,12 @@ bool NCPopupPkgTable::fillAutoChanges( NCPkgTable * pkgTable )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupPkgTable::showInfoPopup
+//	METHOD NAME : NCPkgPopupTable::showInfoPopup
 //	METHOD TYPE : NCursesEvent event
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupPkgTable::showInfoPopup( )
+NCursesEvent NCPkgPopupTable::showInfoPopup( )
 {
     postevent = NCursesEvent();
 
@@ -237,13 +237,13 @@ NCursesEvent NCPopupPkgTable::showInfoPopup( )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupPkgTable::niceSize
+//	METHOD NAME : NCPkgPopupTable::niceSize
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
 
-long NCPopupPkgTable::nicesize(YUIDimension dim)
+long NCPkgPopupTable::nicesize(YUIDimension dim)
 {
     return ( dim == YD_HORIZ ? NCurses::cols()-15 : NCurses::lines()-5 );
 }
@@ -256,7 +256,7 @@ long NCPopupPkgTable::nicesize(YUIDimension dim)
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupPkgTable::wHandleInput( wint_t ch )
+NCursesEvent NCPkgPopupTable::wHandleInput( wint_t ch )
 {
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;
@@ -270,12 +270,12 @@ NCursesEvent NCPopupPkgTable::wHandleInput( wint_t ch )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupPkgTable::postAgain
+//	METHOD NAME : NCPkgPopupTable::postAgain
 //	METHOD TYPE : bool
 //
 //	DESCRIPTION :
 //
-bool NCPopupPkgTable::postAgain()
+bool NCPkgPopupTable::postAgain()
 {
     if ( ! postevent.widget )
 	return false;
@@ -283,7 +283,7 @@ bool NCPopupPkgTable::postAgain()
     YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
 
     if ( !currentId.isNull()
-	 && currentId->compare( PkgNames::Cancel() ) == YO_EQUAL )
+	 && currentId->compare( NCPkgNames::Cancel() ) == YO_EQUAL )
     {
 	//user hit cancel - discard set of changes (if not empty)
 	packager->clearVerifiedPkgs();

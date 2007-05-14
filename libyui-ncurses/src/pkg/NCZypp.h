@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:		YQZypp.h
+  File:		NCZypp.h
 
   Author:	Stefan Hundhammer <sh@suse.de>
 
@@ -18,8 +18,8 @@
 
 // -*- c++ -*-
 
-#ifndef YQZypp_h
-#define YQZypp_h
+#ifndef NCZypp_h
+#define NCZypp_h
 
 #include <set>
 #include <zypp/ui/Status.h>
@@ -122,4 +122,4 @@ template<typename T> bool bsearch( const std::vector<T> & sorted_vector, T searc
 }
 
 
-#endif // YQZypp_h
+#endif // NCZypp_h

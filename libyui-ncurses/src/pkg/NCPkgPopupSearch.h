@@ -10,14 +10,14 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPopupSearch.h
+   File:       NCPkgPopupSearch.h
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#ifndef NCPopupSearch_h
-#define NCPopupSearch_h
+#ifndef NCPkgPopupSearch_h
+#define NCPkgPopupSearch_h
 
 #include <iosfwd>
 
@@ -33,18 +33,18 @@ using namespace std;
 #include "NCPushButton.h"
 
 class YCPValue;
-class PackageSelector;
+class NCPackageSelector;
 
 ///////////////////////////////////////////////////////////////////
 //
-//	CLASS NAME : NCPopupSearch
+//	CLASS NAME : NCPkgPopupSearch
 //
 //	DESCRIPTION :
 //
-class NCPopupSearch : public NCPopup {
+class NCPkgPopupSearch : public NCPopup {
 
-    NCPopupSearch & operator=( const NCPopupSearch & );
-    NCPopupSearch            ( const NCPopupSearch & );
+    NCPkgPopupSearch & operator=( const NCPkgPopupSearch & );
+    NCPkgPopupSearch            ( const NCPkgPopupSearch & );
 
 private:
 
@@ -59,7 +59,7 @@ private:
     NCPushButton * cancelButton;
     NCPushButton * okButton;
 
-    PackageSelector * packager;		// connection to the package selector
+    NCPackageSelector * packager;		// connection to the package selector
 
     bool getCheckBoxValue( NCCheckBox * checkBox );
     
@@ -73,8 +73,8 @@ protected:
     
 public:
     
-    NCPopupSearch( const wpos at, PackageSelector *pkger );
-    virtual ~NCPopupSearch();
+    NCPkgPopupSearch( const wpos at, NCPackageSelector *pkger );
+    virtual ~NCPkgPopupSearch();
 
     virtual long nicesize(YUIDimension dim);
 
@@ -87,4 +87,4 @@ public:
 ///////////////////////////////////////////////////////////////////
 
 
-#endif // NCPopupSearch_h
+#endif // NCPkgPopupSearch_h

@@ -10,14 +10,14 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPopupFile.h
+   File:       NCPkgPopupFile.h
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#ifndef NCPopupFile_h
-#define NCPopupFile_h
+#ifndef NCPkgPopupFile_h
+#define NCPkgPopupFile_h
 
 #include <iosfwd>
 
@@ -30,22 +30,21 @@
 #include "NCTextEntry.h"
 #include "NCPushButton.h"
 #include "NCComboBox.h"
-#include "PackageSelector.h"
 
-#include "PkgNames.h"
 
 class YCPValue;
+class NCPackageSelector;
 
 ///////////////////////////////////////////////////////////////////
 //
-//	CLASS NAME : NCPopupFile
+//	CLASS NAME : NCPkgPopupFile
 //
 //	DESCRIPTION :
 //
-class NCPopupFile : public NCPopup {
+class NCPkgPopupFile : public NCPopup {
 
-    NCPopupFile & operator=( const NCPopupFile & );
-    NCPopupFile            ( const NCPopupFile & );
+    NCPkgPopupFile & operator=( const NCPkgPopupFile & );
+    NCPkgPopupFile            ( const NCPkgPopupFile & );
 
 private:
 
@@ -56,7 +55,7 @@ private:
     NCTextEntry * fileName;
     NCComboBox * comboBox;
 
-    PackageSelector * packager;
+    NCPackageSelector * packager;
     
     string pathName;
     bool mountFloppy;
@@ -75,9 +74,9 @@ protected:
     
 public:
     
-    NCPopupFile( const wpos at, string device, PackageSelector * pkger );
+    NCPkgPopupFile( const wpos at, string device, NCPackageSelector * pkger );
     
-    virtual ~NCPopupFile();
+    virtual ~NCPkgPopupFile();
 
     virtual long nicesize(YUIDimension dim);
 
@@ -96,4 +95,4 @@ public:
 ///////////////////////////////////////////////////////////////////
 
 
-#endif // NCPopupFile_h
+#endif // NCPkgPopupFile_h

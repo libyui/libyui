@@ -10,39 +10,39 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPopupTree.cc
+   File:       NCPkgPopupTree.cc
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #include "Y2Log.h"
-#include "NCPopupTree.h"
+#include "NCPkgPopupTree.h"
 
 #include "NCTree.h"
 #include "YMenuButton.h"
 #include "YDialog.h"
 #include "NCSplit.h"
-#include "PkgNames.h"
-#include "PackageSelector.h"
+#include "NCPkgNames.h"
+#include "NCPackageSelector.h"
 
-#include "YQZypp.h"
+#include "NCZypp.h"
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupTree::NCPopupTree
+//	METHOD NAME : NCPkgPopupTree::NCPkgPopupTree
 //	METHOD TYPE : Constructor
 //
 //	DESCRIPTION :
 //
-NCPopupTree::NCPopupTree( const wpos at, PackageSelector * pkg )
+NCPkgPopupTree::NCPkgPopupTree( const wpos at, NCPackageSelector * pkg )
     : NCPopup( at, false )
     , filterTree( 0 )
     , packager ( pkg )
 {
     // create the layout (the NCTree)
-    createLayout( YCPString(PkgNames::RpmTreeLabel()) );
+    createLayout( YCPString(NCPkgNames::RpmTreeLabel()) );
 
     // clone the tree (fill the NCTree)
     cloneTree( pkg->rpmGroupsTree()->root(), 0 ); 
@@ -51,24 +51,24 @@ NCPopupTree::NCPopupTree( const wpos at, PackageSelector * pkg )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupTree::~NCPopupTree
+//	METHOD NAME : NCPkgPopupTree::~NCPkgPopupTree
 //	METHOD TYPE : Destructor
 //
 //	DESCRIPTION :
 //
-NCPopupTree::~NCPopupTree()
+NCPkgPopupTree::~NCPkgPopupTree()
 {
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupTree::createList
+//	METHOD NAME : NCPkgPopupTree::createList
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCPopupTree::createLayout( const YCPString & label )
+void NCPkgPopupTree::createLayout( const YCPString & label )
 {
 
   YWidgetOpt opt;
@@ -88,12 +88,12 @@ void NCPopupTree::createLayout( const YCPString & label )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupTree::showFilterPopup
+//	METHOD NAME : NCPkgPopupTree::showFilterPopup
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupTree::showFilterPopup( )
+NCursesEvent NCPkgPopupTree::showFilterPopup( )
 {
     postevent = NCursesEvent();
     
@@ -139,13 +139,13 @@ NCursesEvent NCPopupTree::showFilterPopup( )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupTree::niceSize
+//	METHOD NAME : NCPkgPopupTree::niceSize
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
 
-long NCPopupTree::nicesize(YUIDimension dim)
+long NCPkgPopupTree::nicesize(YUIDimension dim)
 {
     long vdim;
     if ( NCurses::lines() > 20 )
@@ -159,12 +159,12 @@ long NCPopupTree::nicesize(YUIDimension dim)
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupTree::addItem
+//	METHOD NAME : NCPkgPopupTree::addItem
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-YTreeItem * NCPopupTree::addItem( YTreeItem * parentItem,
+YTreeItem * NCPkgPopupTree::addItem( YTreeItem * parentItem,
 				  const YCPString & text,
 				  void * data,
 				  bool  open )
@@ -181,12 +181,12 @@ YTreeItem * NCPopupTree::addItem( YTreeItem * parentItem,
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupTree::wHandleHotkey
+//	METHOD NAME : NCPkgPopupTree::wHandleHotkey
 //	METHOD TYPE : NCursesEvent
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupTree::wHandleHotkey( wint_t key )
+NCursesEvent NCPkgPopupTree::wHandleHotkey( wint_t key )
 {
 
     return NCursesEvent::none;
@@ -200,7 +200,7 @@ NCursesEvent NCPopupTree::wHandleHotkey( wint_t key )
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupTree::wHandleInput( wint_t ch )
+NCursesEvent NCPkgPopupTree::wHandleInput( wint_t ch )
 {
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;
@@ -211,12 +211,12 @@ NCursesEvent NCPopupTree::wHandleInput( wint_t ch )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupTree::postAgain
+//	METHOD NAME : NCPkgPopupTree::postAgain
 //	METHOD TYPE : bool
 //
 //	DESCRIPTION :
 //
-bool NCPopupTree::postAgain()
+bool NCPkgPopupTree::postAgain()
 {
     postevent.detail = NCursesEvent::NODETAIL;
 
@@ -242,7 +242,7 @@ bool NCPopupTree::postAgain()
 // Adds all tree items got from YPkgRpmGroupTagsFilterView to
 // the filter popup tree
 //
-void NCPopupTree::cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone )
+void NCPkgPopupTree::cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone )
 {
     // 	methods of YStringTreeItem see ../libyui/src/include/TreeItem.h:  SortedTreeItem
     YStringTreeItem * child = parentOrig->firstChild();
@@ -262,7 +262,7 @@ void NCPopupTree::cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClo
     }
 }
 
-YStringTreeItem *  NCPopupTree::getDefaultGroup( )
+YStringTreeItem *  NCPkgPopupTree::getDefaultGroup( )
 {
     return packager->rpmGroupsTree()->root()->firstChild();
 }

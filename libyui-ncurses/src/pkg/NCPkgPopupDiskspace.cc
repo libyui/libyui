@@ -10,7 +10,7 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCPopupDiskspace.cc
+   File:       NCPkgPopupDiskspace.cc
 
    Author:     Gabriele Strattner <gs@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
@@ -23,14 +23,14 @@
 #include "YDialog.h"
 #include "NCSplit.h"
 #include "NCSpacing.h"
-#include "PkgNames.h"
+#include "NCPkgNames.h"
 #include "NCLabel.h"
 #include "NCPushButton.h"
 #include "NCTable.h"
 
-#include "YQZypp.h"
+#include "NCZypp.h"
 
-#include "NCPopupDiskspace.h"
+#include "NCPkgPopupDiskspace.h"
 
 #include "NCi18n.h"
 
@@ -53,12 +53,12 @@ using namespace std;
  ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupDiskspace::NCPopupDiskspace
+//	METHOD NAME : NCPkgPopupDiskspace::NCPkgPopupDiskspace
 //	METHOD TYPE : Constructor
 //
 //	DESCRIPTION :
 //
-NCPopupDiskspace::NCPopupDiskspace( const wpos at, bool testMode )
+NCPkgPopupDiskspace::NCPkgPopupDiskspace( const wpos at, bool testMode )
     : NCPopup( at, false )
       , partitions( 0 )
       , okButton( 0 )
@@ -77,24 +77,24 @@ NCPopupDiskspace::NCPopupDiskspace( const wpos at, bool testMode )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupDiskspace::~NCPopupDiskspace
+//	METHOD NAME : NCPkgPopupDiskspace::~NCPkgPopupDiskspace
 //	METHOD TYPE : Destructor
 //
 //	DESCRIPTION :
 //
-NCPopupDiskspace::~NCPopupDiskspace()
+NCPkgPopupDiskspace::~NCPkgPopupDiskspace()
 {
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupDiskspace::createLayout
+//	METHOD NAME : NCPkgPopupDiskspace::createLayout
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCPopupDiskspace::createLayout( )
+void NCPkgPopupDiskspace::createLayout( )
 {
 
     YWidgetOpt opt;
@@ -110,10 +110,10 @@ void NCPopupDiskspace::createLayout( )
 
     vector<string> header;
     header.reserve(5);
-    header.push_back( "L" + PkgNames::Partition() );
-    header.push_back( "L" + PkgNames::UsedSpace() );
-    header.push_back( "L" + PkgNames::FreeSpace() );
-    header.push_back( "L" + PkgNames::TotalSpace() );
+    header.push_back( "L" + NCPkgNames::Partition() );
+    header.push_back( "L" + NCPkgNames::UsedSpace() );
+    header.push_back( "L" + NCPkgNames::FreeSpace() );
+    header.push_back( "L" + NCPkgNames::TotalSpace() );
     header.push_back( "L%   ");
     
     // add the partition table 
@@ -123,8 +123,8 @@ void NCPopupDiskspace::createLayout( )
 
     // add the ok button
     opt.key_Fxx.setValue( 10 );
-    okButton = new NCPushButton( split, opt, YCPString(PkgNames::OKLabel()) );
-    okButton->setId( PkgNames::OkButton () );
+    okButton = new NCPushButton( split, opt, YCPString(NCPkgNames::OKLabel()) );
+    okButton->setId( NCPkgNames::OkButton () );
   
     split->addChild( okButton );
 }
@@ -132,12 +132,12 @@ void NCPopupDiskspace::createLayout( )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupDiskspace::fillPartitionTable
+//	METHOD NAME : NCPkgPopupDiskspace::fillPartitionTable
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCPopupDiskspace::fillPartitionTable()
+void NCPkgPopupDiskspace::fillPartitionTable()
 {
     partitions->itemsCleared();		// clear table
     
@@ -187,12 +187,12 @@ void NCPopupDiskspace::fillPartitionTable()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupDiskspace::checkDiskSpace
+//	METHOD NAME : NCPkgPopupDiskspace::checkDiskSpace
 //	METHOD TYPE : string
 //
 //	DESCRIPTION :
 //
-string NCPopupDiskspace::checkDiskSpace()
+string NCPkgPopupDiskspace::checkDiskSpace()
 {
     string text = "";
 
@@ -220,19 +220,19 @@ string NCPopupDiskspace::checkDiskSpace()
 	    text += it->dir;
 	    text += "\""; 
 	    text += " ";
-	    text += PkgNames::MoreText();
+	    text += NCPkgNames::MoreText();
 	    text += " ";
 	    string available = pkg_available.asString();
 	    text += available.replace( 0, 1, " " ); // clear the minus sign??
 	    text += " ";
-	    text += PkgNames::MoreSpaceText();
+	    text += NCPkgNames::MoreSpaceText();
 	    text += "<br>";
 	}
     }
     return text;
 }
 
-void NCPopupDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & partition )
+void NCPkgPopupDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & partition )
 {
     FSize usedSize ( partition.pkg_size, FSize::K );
     FSize totalSize ( partition.total_size, FSize::K );
@@ -285,13 +285,13 @@ void NCPopupDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & partitio
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupDiskspace::setDiskSpace
+//	METHOD NAME : NCPkgPopupDiskspace::setDiskSpace
 //	METHOD TYPE : void
 //
 //	DESCRIPTION : for testing only; called from PackageSelector
 //		      if running in testMode 
 //
-void NCPopupDiskspace::setDiskSpace( wint_t ch )
+void NCPkgPopupDiskspace::setDiskSpace( wint_t ch )
 {
     // set diskspace values in ZyppDuSet testDiskSpace
     for ( ZyppDuSetIterator it = testDiskUsage.begin();
@@ -319,12 +319,12 @@ void NCPopupDiskspace::setDiskSpace( wint_t ch )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupDiskspace::checkDiskSpaceRange
+//	METHOD NAME : NCPkgPopupDiskspace::checkDiskSpaceRange
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCPopupDiskspace::checkDiskSpaceRange( )
+void NCPkgPopupDiskspace::checkDiskSpaceRange( )
 {
     // see YQPkgDiskUsageList::updateDiskUsage()
     runningOutWarning.clear();
@@ -367,7 +367,7 @@ void NCPopupDiskspace::checkDiskSpaceRange( )
 
 }
 
-string NCPopupDiskspace::usedPercent( FSize used, FSize total )
+string NCPkgPopupDiskspace::usedPercent( FSize used, FSize total )
 {
     int percent = 0;
     char percentStr[10];
@@ -383,12 +383,12 @@ string NCPopupDiskspace::usedPercent( FSize used, FSize total )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupDiskspace::showInfoPopup
+//	METHOD NAME : NCPkgPopupDiskspace::showInfoPopup
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCPopupDiskspace::showInfoPopup( string headline )
+void NCPkgPopupDiskspace::showInfoPopup( string headline )
 {
     if ( head )
 	head->setLabel( YCPString( headline ) );
@@ -409,13 +409,13 @@ void NCPopupDiskspace::showInfoPopup( string headline )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupDiskspace::niceSize
+//	METHOD NAME : NCPkgPopupDiskspace::niceSize
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
 
-long NCPopupDiskspace::nicesize(YUIDimension dim)
+long NCPkgPopupDiskspace::nicesize(YUIDimension dim)
 {
     long vdim;
     if ( NCurses::lines() > 15 )
@@ -434,7 +434,7 @@ long NCPopupDiskspace::nicesize(YUIDimension dim)
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCPopupDiskspace::wHandleInput( wint_t ch )
+NCursesEvent NCPkgPopupDiskspace::wHandleInput( wint_t ch )
 {
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;
@@ -448,12 +448,12 @@ NCursesEvent NCPopupDiskspace::wHandleInput( wint_t ch )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPopupDiskspace::postAgain
+//	METHOD NAME : NCPkgPopupDiskspace::postAgain
 //	METHOD TYPE : bool
 //
 //	DESCRIPTION :
 //
-bool NCPopupDiskspace::postAgain()
+bool NCPkgPopupDiskspace::postAgain()
 {
     if ( ! postevent.widget )
 	return false;

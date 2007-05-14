@@ -21,7 +21,7 @@
 #ifndef NCPkgSelMapper_h
 #define NCPkgSelMapper_h
 
-#include "YQZypp.h"
+#include "NCZypp.h"
 #include <map>
 
 
