@@ -8,24 +8,25 @@ AUTOMAKE_OPTIONS = dejagnu
 
 PACKAGE = ncurses
 
-INCLUDES = -I../src -I$(includedir) -I$(includedir)/yui
+INCLUDES = -I../src -I$(includedir) -I$(includedir)/yui -I../src/pkg
 
 noinst_PROGRAMS = runcurses utf8test y2ncurses in_wch
 
 runcurses_SOURCES = runcurses.cc
-runcurses_LDADD = ../src/liby2ncurses.la -lncurses -lpanel -lpthread \
-	-ly2 -lyui -lycp -lutil
+runcurses_LDADD = ../src/libpy2ncurses.la ../src/pkg/libpy2ncurses_pkg.la \
+	-lncurses -lpanel -lpthread -ly2 -lyui -lycp -lutil
 
 runcurses_LDFLAGS = -L$(libdir)			\
 	-Xlinker --whole-archive                \
 	../src/libpy2ncurses.la			\
+	../src/pkg/libpy2ncurses_pkg.la 	\
 	-Xlinker --no-whole-archive
 
 utf8test_SOURCES = utf8test.cc			\
 		NCstring_test.h NCstring_test.cc
 
-utf8test_LDADD = ../src/liby2ncurses.la -lncursesw -lpanelw -lpthread \
-	-ly2 -lyui -lycp -lutil
+utf8test_LDADD = ../src/libpy2ncurses.la ../src/pkg/libpy2ncurses_pkg.la \
+	-lncursesw -lpanelw -lpthread -ly2 -lyui -lycp -lutil
 
 in_wch_SOURCES = in_wch.cc
 
@@ -40,6 +41,7 @@ y2ncurses_LDFLAGS = -static -L$(libdir)	\
 	-Xlinker --whole-archive		\
 	$(plugindir)/libpy2wfm.la		\
 	../src/libpy2ncurses.la			\
+	../src/pkg/libpy2ncurses_pkg.la		\
 	-Xlinker --no-whole-archive
 
 clean-local:
