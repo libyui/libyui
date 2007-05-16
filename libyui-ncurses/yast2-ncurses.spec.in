@@ -30,6 +30,7 @@ Requires:	yast2-core >= 2.15.2
 
 @INSTALL@
 rm $RPM_BUILD_ROOT/@plugindir@/libpy2ncurses.la
+rm $RPM_BUILD_ROOT/@plugindir@/libpy2ncurses_pkg.la
 
 @CLEAN@
 
@@ -37,6 +38,8 @@ rm $RPM_BUILD_ROOT/@plugindir@/libpy2ncurses.la
 %defattr (-, root, root)
 @plugindir@/libpy2ncurses.so.*
 @plugindir@/libpy2ncurses.so
+@plugindir@/libpy2ncurses_pkg.so.*
+@plugindir@/libpy2ncurses_pkg.so
 @ydatadir@/pkg_layout.ycp
 @ydatadir@/you_layout.ycp
 %doc @docdir@
