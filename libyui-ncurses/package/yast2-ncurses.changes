@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed May 16 13:15:56 CEST 2007 - gs@suse.de
+
+- Move all files related to package installation to subdir 'pkg'
+  and create a separate library libpy2ncurses_pkg (not yet loaded
+  as a plugin).
+
+-------------------------------------------------------------------
 Thu May 10 10:09:11 CEST 2007 - kmachalkova@suse.cz
 
 - Replace &#xy; elements in richtext by their ascii character 
