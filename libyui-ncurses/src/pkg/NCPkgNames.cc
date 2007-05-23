@@ -659,6 +659,13 @@ const string NCPkgNames::OKLabel()
     return value;
 }
 
+const string NCPkgNames::YesLabel()
+{
+    // the label of the Yes button
+    static const string value = _( "&Yes" );
+    return value;
+}
+
 const string NCPkgNames::AcceptLabel()
 {
     // the label of an Accept button
@@ -685,6 +692,13 @@ const string NCPkgNames::CancelLabel()
     // Please note: use unique hot keys for the buttons from 'begin:' to 'end:'
     // begin: the label of the Cancel button
     static const string value = _( "&Cancel" );
+    return value;
+}
+
+const string NCPkgNames::NoLabel()
+{
+    // the label of the No button
+    static const string value = _( "&No" );
     return value;
 }
 
@@ -1803,7 +1817,7 @@ const string NCPkgNames::LoadedText()
 const string NCPkgNames::CancelText()
 {
     // text for a Notify popup
-    static const string value =  _( "<p>All your choices will be lost when exiting with Cancel.<br>Really exit?</p>" );
+    static const string value =  _( "<p>All changes in package, patch or pattern selection will be lost.<br>Really exit?</p>" );
     return value;
 }
 

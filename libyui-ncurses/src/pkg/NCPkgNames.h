@@ -547,6 +547,11 @@ public:
      */
     static const string OKLabel();
 
+    /**
+     *  The label of the Yes button
+     */
+    static const string YesLabel();
+
    /**
      *  The label of the Accept button
      */
@@ -556,6 +561,11 @@ public:
      *  The label of the Cancel button
      */
     static const string CancelLabel();
+
+    /**
+     *  The label of the No button
+     */
+    static const string NoLabel();
     
     /**
      *  The label of the Cancel/Ignore button

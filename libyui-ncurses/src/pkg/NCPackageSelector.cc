@@ -2221,9 +2221,9 @@ bool NCPackageSelector::CancelHandler( const NCursesEvent&  event )
 	NCPopupInfo cancelMsg( wpos( 2, 2 ),
 			   YCPString( NCPkgNames::NotifyLabel() ),
 			   YCPString( NCPkgNames::CancelText() ),
-			   NCPkgNames::OKLabel(),
-			   NCPkgNames::CancelLabel() );
-	cancelMsg.setNiceSize( 35, 8 ); 
+			   NCPkgNames::YesLabel(),
+			   NCPkgNames::NoLabel() );
+	cancelMsg.setNiceSize( 45, 8 ); 
 	NCursesEvent input = cancelMsg.showInfoPopup( );
 	if ( input == NCursesEvent::cancel ) {
 	    // don't leave the package installation dialog
