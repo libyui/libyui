@@ -87,8 +87,6 @@ class NCPackageSelector
 
     NCPkgPopupSearch * searchPopup; 	// the package search popup
 
-    NCPkgPopupFile * filePopup;		// the save/load selection popup
-    
     bool youMode;			// YOU
     bool updateMode;			// Update
     bool testMode;			// testing
@@ -228,14 +226,7 @@ class NCPackageSelector
     */
     bool DependencyHandler( const NCursesEvent&  event );
 
-   /**
-    * Handler function for menu selection "Etc./Selections"
-    * @param event The Ncurses event
-    * @return bool
-    */
-    bool SelectionHandler( const NCursesEvent&  event );
-    
-    /**
+     /**
      * Handler function for the "Information" menu
      * @param event The Ncurses event
      * @return bool

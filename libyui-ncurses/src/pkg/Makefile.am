@@ -27,7 +27,6 @@ libpy2ncurses_pkg_la_SOURCES =			\
 	NCPkgStatusStrategy.h NCPkgStatusStrategy.cc	\
 	NCPkgPopupDeps.h NCPkgPopupDeps.cc		\
 	NCPkgPopupDiskspace.h NCPkgPopupDiskspace.cc	\
-	NCPkgPopupFile.h NCPkgPopupFile.cc		\
 	NCPkgPopupDescr.h NCPkgPopupDescr.cc		\
 	NCPkgPopupTable.h NCPkgPopupTable.cc		\
 	NCPkgPopupSearch.h NCPkgPopupSearch.cc		\

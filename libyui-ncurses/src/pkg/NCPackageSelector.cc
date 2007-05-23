@@ -31,7 +31,6 @@
 #include "NCPkgPopupDiskspace.h"
 #include "NCPkgPopupTable.h"
 #include "NCPkgPopupDescr.h"
-#include "NCPkgPopupFile.h"
 #include "NCPackageSelector.h"
 #include "YSelectionBox.h"
 #include "YNCursesUI.h"
@@ -107,7 +106,6 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, s
       , languagePopup( 0 )
       , diskspacePopup( 0 )
       , searchPopup( 0 )
-      , filePopup( 0 )
       , youMode( false )
       , updateMode( false )
       , testMode ( false )
@@ -175,8 +173,6 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, s
     eventHandlerMap[ NCPkgNames::VerifySystem()->toString() ] = &NCPackageSelector::DependencyHandler;
     eventHandlerMap[ NCPkgNames::ExportToFile()->toString() ] = &NCPackageSelector::FileHandler;
     eventHandlerMap[ NCPkgNames::ImportFromFile()->toString() ] = &NCPackageSelector::FileHandler;
-    eventHandlerMap[ NCPkgNames::SaveSel()->toString() ] = &NCPackageSelector::SelectionHandler;
-    eventHandlerMap[ NCPkgNames::LoadSel()->toString() ] = &NCPackageSelector::SelectionHandler;
     eventHandlerMap[ NCPkgNames::Testcase()->toString() ] = &NCPackageSelector::TestcaseHandler;
     
     // Help menu
@@ -226,8 +222,6 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, s
 	// create the filter popup
 	filterPopup = new NCPkgPopupTree( wpos( 1, 1 ),  this );	 
 
-        // the file popup
-	filePopup = new NCPkgPopupFile( wpos( 1, 1), floppyDevice, this );
     }
 
     // create the search popup
@@ -270,10 +264,6 @@ NCPackageSelector::~NCPackageSelector()
     if ( diskspacePopup )
     {
 	delete diskspacePopup;
-    }
-    if ( filePopup )
-    {
-	delete filePopup;
     }
     if ( searchPopup )
     {
@@ -2207,40 +2197,6 @@ bool NCPackageSelector::YouHelpHandler( const NCursesEvent&  event )
     // open the popup with the help text
     NCPopupInfo youHelp( wpos( 1, 1 ), YCPString(NCPkgNames::YouHelp()), YCPString(text) );
     youHelp.showInfoPopup( );
-
-    if ( packageList )
-    {
-	packageList->setKeyboardFocus();
-    }
-       
-    return true;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-// SelectionHandler
-// 
-// Save/Load selections
-//
-bool NCPackageSelector::SelectionHandler( const NCursesEvent&  event )
-{
-    NCPkgTable * packageList = getPackageList();
-    if ( event.selection.isNull()
-	 || !filePopup )
-    {
-	return false;
-    }
-    
-    if ( event.selection->compare( NCPkgNames::SaveSel() ) == YO_EQUAL )
-    {
-	filePopup->saveToFile();
-    }
-    else if ( event.selection->compare( NCPkgNames::LoadSel() ) == YO_EQUAL )
-    {
-	filePopup->loadFromFile();
-	updatePackageList();
-	showDiskSpace();
-    }
 
     if ( packageList )
     {
