@@ -236,8 +236,12 @@ void NCPkgPopupDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & parti
 {
     FSize usedSize ( partition.pkg_size, FSize::K );
     FSize totalSize ( partition.total_size, FSize::K );
-    
-    int	percent = ( 100 * usedSize ) / totalSize;
+
+    int percent = 0;
+
+    if ( totalSize != 0 )
+	percent = ( 100 * usedSize ) / totalSize;
+
     int	free	= ( totalSize - usedSize ) / FSize::MB;
 
     NCMIL <<  "Partition: " << partition.dir << "  Used percent: "
@@ -293,6 +297,8 @@ void NCPkgPopupDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & parti
 //
 void NCPkgPopupDiskspace::setDiskSpace( wint_t ch )
 {
+    int percent = 0;
+    
     // set diskspace values in ZyppDuSet testDiskSpace
     for ( ZyppDuSetIterator it = testDiskUsage.begin();
 	  it != testDiskUsage.end();
@@ -302,7 +308,9 @@ void NCPkgPopupDiskspace::setDiskSpace( wint_t ch )
 
 	FSize usedSize ( partitionDu.pkg_size, FSize::K );
 	FSize totalSize ( partitionDu.total_size, FSize::K );
-	int	percent = ( 100 * usedSize ) / totalSize;
+
+	if ( totalSize != 0 )
+	    percent = ( 100 * usedSize ) / totalSize;
 
 	if ( ch == '+' )
 	    percent += 3;

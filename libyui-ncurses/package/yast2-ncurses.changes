@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed May 23 13:54:16 CEST 2007 - gs@suse.de
+
+- Package Installation: check the partition size to prevent
+  division by zero during disk space calculation (bug #270836)
+
+-------------------------------------------------------------------
 Wed May 16 13:15:56 CEST 2007 - gs@suse.de
 
 - Move all files related to package installation to subdir 'pkg'
