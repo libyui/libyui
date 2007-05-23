@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed May 23 11:40:29 CEST 2007 - gs@suse.de
+
+- Package Installation: check the partition size to prevent 
+  division by zero during disk space calculation (bug #270836)
+- 2.13.67  
+
+-------------------------------------------------------------------
 Tue Mar  6 09:59:22 CET 2007 - kmachalkova@suse.cz
 
 - initscr() code is back - needed for running yast clients from
