@@ -350,7 +350,7 @@ bool NCFileTable::createListEntry ( const NCFileInfo & fileInfo )
 	    data.reserve(6);
 	    data.push_back( fileInfo._name );
 	    char size_buf[50];
-	    sprintf( size_buf, "%ld", fileInfo._size);
+	    sprintf( size_buf, "%lld", fileInfo._size);
 	    data.push_back( size_buf );
 	    data.push_back( fileInfo._perm );
 	    data.push_back( fileInfo._user );
