@@ -879,9 +879,9 @@ public:
     static const string MenuNoAutoDeps();
     static const string MenuVerifySystem();
     static const string MenuTestCase();
-    static const string MenuSel();
-    static const string MenuSaveSel();	
-    static const string MenuLoadSel();
+    static const string MenuList();
+    static const string MenuExportList();	
+    static const string MenuImportList();
 
     static const string MoreText();
     static const string TabooText();

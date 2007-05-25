@@ -1589,23 +1589,18 @@ bool NCPackageSelector::DependencyHandler( const NCursesEvent&  event )
 		      "`MenuButton( \"%s\", ["
 		       "`menu( \"%s\", [`item( `id(\"showdeps\"), \"%s\" ), `item( `id(\"autodeps\"), \"%s\" ), `item ( `id(\"verifysystem\"), \"%s\" ) ] ),"
 		       "`item( `id(\"testcase\"), \"%s\" )"
-#ifdef FIXME
 		      ","
-		      "`menu( \"%s\", [`item( `id(\"save\"), \"%s\" ), `item( `id(\"load\"), \"%s\" ) ] )"
-#endif
+		      "`menu( \"%s\", [`item( `id(\"export\"), \"%s\" ), `item( `id(\"import\"), \"%s\" ) ] )"
 		      "] )",
 		      NCPkgNames::MenuEtc().c_str(),
 		      NCPkgNames::MenuDeps().c_str(),
 		      NCPkgNames::MenuCheckDeps().c_str(),
 		      NCPkgNames::MenuNoAutoDeps().c_str(),
 		      NCPkgNames::MenuVerifySystem().c_str(),
-		      NCPkgNames::MenuTestCase().c_str()
-#ifdef FIXME
-		      ,
-		      NCPkgNames::MenuSel().c_str(),
-		      NCPkgNames::MenuSaveSel().c_str(),
-		      NCPkgNames::MenuLoadSel().c_str()
-#endif
+		      NCPkgNames::MenuTestCase().c_str(),
+		      NCPkgNames::MenuList().c_str(),
+		      NCPkgNames::MenuExportList().c_str(),
+		      NCPkgNames::MenuImportList().c_str()
 		);
 
 
@@ -1628,23 +1623,18 @@ bool NCPackageSelector::DependencyHandler( const NCursesEvent&  event )
 		      "`MenuButton( \"%s\", ["
 		      "`menu( \"%s\", [`item( `id(\"showdeps\"), \"%s\" ), `item( `id(\"autodeps\"), \"%s\" ), `item ( `id(\"verifysystem\"), \"%s\" ) ] ),"
 		     "`item( `id(\"testcase\"), \"%s\" )"  
-#ifdef FIXME
 		      ","
-		      "`menu( \"%s\", [`item( `id(\"save\"), \"%s\" ), `item( `id(\"load\"), \"%s\" ) ] )"
-#endif
+		      "`menu( \"%s\", [`item( `id(\"export\"), \"%s\" ), `item( `id(\"import\"), \"%s\" ) ] )"
 		      "] )",
 		      NCPkgNames::MenuEtc().c_str(),
 		      NCPkgNames::MenuDeps().c_str(),
 		      NCPkgNames::MenuCheckDeps().c_str(),
 		      NCPkgNames::MenuAutoDeps().c_str(),
 		      NCPkgNames::MenuVerifySystem().c_str(),
-		      NCPkgNames::MenuTestCase().c_str() 
-#ifdef FIXME
-		      ,
-		      NCPkgNames::MenuSel().c_str(),
-		      NCPkgNames::MenuSaveSel().c_str(),
-		      NCPkgNames::MenuLoadSel().c_str()
-#endif
+		      NCPkgNames::MenuTestCase().c_str(),
+		      NCPkgNames::MenuList().c_str(),
+		      NCPkgNames::MenuExportList().c_str(),
+		      NCPkgNames::MenuImportList().c_str()
 		);
 
 

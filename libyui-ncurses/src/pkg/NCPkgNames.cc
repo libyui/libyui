@@ -1339,24 +1339,24 @@ const string NCPkgNames::MenuTestCase()
     return value;
 }
 
-const string NCPkgNames::MenuSel()
+const string NCPkgNames::MenuList()
 {
     // submenu: selections
-    static const string value = _( "&Selections" );
+    static const string value = _( "All &Packages List" );
     return value;
 }
 
-const string NCPkgNames::MenuSaveSel()
+const string NCPkgNames::MenuExportList()
 {
     // menu entry
-    static const string value = _( "S&ave Selection" );
+    static const string value = _( "&Export to File" );
     return value;
 }
 
-const string NCPkgNames::MenuLoadSel()
+const string NCPkgNames::MenuImportList()
 {
     // last menu entry of the Etc. menu
-    static const string value = _( "&Load Selection" );
+    static const string value = _( "&Import from File" );
     return value;
 }
 
