@@ -12,4 +12,3 @@
 ./src/pkg/NCPkgPopupDeps.cc
 ./src/pkg/NCPackageSelector.cc
 ./src/pkg/you_layout.ycp
-
