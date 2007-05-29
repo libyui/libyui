@@ -1,6 +1,15 @@
-./src/PkgNames.cc
 ./src/NCFileSelection.cc
 ./src/NCAskForDirectory.cc
 ./src/NCAskForFile.cc
 ./src/NCurses.cc
 ./src/NCDialog.cc
+./src/NCPopupInfo.h
+pkg/NCPkgTable.cc
+pkg/pkg_layout.ycp
+pkg/NCPkgPopupDiskspace.cc
+pkg/NCPkgNames.cc
+pkg/NCPkgPopupSearch.cc
+pkg/NCPkgPopupDeps.cc
+pkg/NCPackageSelector.cc
+pkg/you_layout.ycp
+
