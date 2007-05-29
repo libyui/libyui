@@ -230,7 +230,7 @@ bool NCPkgPopupDeps::solve( NCSelectionBox * problemw, NCPkgSolverAction action 
 
     NCDBG << "Solving..." << endl ;
 
-    NCPopupInfo info( wpos(10, 10),  YCPString( "" ),
+    NCPopupInfo info( wpos( (NCurses::lines()-4)/2, (NCurses::cols()-18)/2),  YCPString( "" ),
 		      YCPString(NCPkgNames::Solving()),
 		      NCPkgNames::OKLabel() );
     info.setNiceSize( 18, 4 );

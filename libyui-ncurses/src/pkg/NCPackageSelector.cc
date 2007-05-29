@@ -228,10 +228,10 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, s
     searchPopup = new NCPkgPopupSearch( wpos( 1, 1 ), this );
 	
     // the dependency popup
-    depsPopup = new NCPkgPopupDeps( wpos( 1, 1 ), this );
+    depsPopup = new NCPkgPopupDeps( wpos( 3, 8 ), this );
 
     // the disk space popup
-    diskspacePopup = new NCPkgPopupDiskspace( wpos( 1, 1 ), testMode );
+    diskspacePopup = new NCPkgPopupDiskspace( wpos( (NCurses::lines() - 15)/2, NCurses::cols()/6  ), testMode );
 
 }
 
@@ -1551,10 +1551,10 @@ bool NCPackageSelector::DependencyHandler( const NCursesEvent&  event )
 	return false;
     }
 
-    NCPopupInfo info( wpos(10, 10),  YCPString( "" ),
+    NCPopupInfo info( wpos( (NCurses::lines()-5)/2, (NCurses::cols()-35)/2 ),  YCPString( "" ),
 		      YCPString(_( "All package dependencies are OK." )),
 		      NCPkgNames::OKLabel() );
-    info.setNiceSize( 30, 5 );
+    info.setNiceSize( 35, 5 );
     
     if ( event.selection->compare( NCPkgNames::ShowDeps() ) == YO_EQUAL )
     {
@@ -1955,7 +1955,7 @@ bool NCPackageSelector::TestcaseHandler ( const NCursesEvent&  event )
 
     if ( success )
     {
-	NCPopupInfo info( wpos( 1, 1 ),
+	NCPopupInfo info( wpos( (NCurses::lines()-8)/2, (NCurses::cols()-40)/2 ),
 			  YCPString( "" ),
 			  YCPString( _("Dependency resolver test case written to ") + "<br>" + testCaseDir ) );
 	info.setNiceSize( 40, 8 );
@@ -2014,11 +2014,12 @@ bool NCPackageSelector::FileHandler( const NCursesEvent& event )
 		(void) unlink( filename->asString()->value_cstr() );
 
 		//present error popup to the user
-		NCPopupInfo errorMsg ( wpos( 2, 2 ),
+		NCPopupInfo errorMsg ( wpos( (NCurses::lines()-5)/2, (NCurses::cols()-40)/2 ),
 				YCPString( NCPkgNames::ErrorLabel()),
 				YCPString( _("Error exporting list of packages and patterns to ") + filename->toString() ),
 				NCPkgNames::OKLabel(),
 				"");
+	        errorMsg.setNiceSize(40,5);
 		NCursesEvent input = errorMsg.showInfoPopup();
 
 	    }
@@ -2096,11 +2097,12 @@ bool NCPackageSelector::FileHandler( const NCursesEvent& event )
 	    {
 		NCWAR << "Error importing list of packages and patterns from" << filename->toString() << endl;
 
-		NCPopupInfo errorMsg ( wpos( 2, 2 ),
+		NCPopupInfo errorMsg ( wpos( (NCurses::lines()-5)/2, (NCurses::cols()-40)/2) ,
 				YCPString( NCPkgNames::ErrorLabel()),
 				YCPString( _("Error importing list of packages and patterns from ") + filename->toString() ),
 				NCPkgNames::OKLabel(),
 				"");
+	        errorMsg.setNiceSize(40,5);
 		NCursesEvent input = errorMsg.showInfoPopup();
 
 	    }
@@ -2157,7 +2159,7 @@ bool NCPackageSelector::HelpHandler( const NCursesEvent&  event )
     }
     
     // open the popup with the help text
-    NCPopupInfo pkgHelp( wpos( 1, 1 ), headline, YCPString( text ) );
+    NCPopupInfo pkgHelp( wpos( (NCurses::lines()*8)/100, (NCurses::cols()*18)/100 ), headline, YCPString( text ) );
     pkgHelp.setNiceSize( (NCurses::cols()*65)/100, (NCurses::lines()*85)/100 );
     pkgHelp.showInfoPopup( );
 
@@ -2185,7 +2187,8 @@ bool NCPackageSelector::YouHelpHandler( const NCursesEvent&  event )
     text += NCPkgNames::YouHelp3();
 
     // open the popup with the help text
-    NCPopupInfo youHelp( wpos( 1, 1 ), YCPString(NCPkgNames::YouHelp()), YCPString(text) );
+    NCPopupInfo youHelp( wpos( NCurses::lines()/3, NCurses::cols()/6 ), YCPString(NCPkgNames::YouHelp()), YCPString(text) );
+    youHelp.setNiceSize( (NCurses::cols()*2)/3, NCurses::lines()/3 );
     youHelp.showInfoPopup( );
 
     if ( packageList )
@@ -2208,7 +2211,7 @@ bool NCPackageSelector::CancelHandler( const NCursesEvent&  event )
 
     if (changes) {
 	// show a popup and ask the user
-	NCPopupInfo cancelMsg( wpos( 2, 2 ),
+	NCPopupInfo cancelMsg( wpos( (NCurses::lines()-8)/2, (NCurses::cols()-45)/2 ),
 			   YCPString( NCPkgNames::NotifyLabel() ),
 			   YCPString( NCPkgNames::CancelText() ),
 			   NCPkgNames::YesLabel(),
@@ -2259,7 +2262,7 @@ bool NCPackageSelector::OkButtonHandler( const NCursesEvent&  event )
     if ( !youMode )	// don't show automatic changes if YOU mode
     {
 	// show the automatic changes list
-	NCPkgPopupTable autoChangePopup( wpos( 1, 1), this );
+	NCPkgPopupTable autoChangePopup( wpos( 3, 8), this );
 	NCursesEvent input = autoChangePopup.showInfoPopup();
 
 	if ( input == NCursesEvent::cancel )
@@ -2276,7 +2279,7 @@ bool NCPackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	if ( message != "" )
 	{
 	    // open the popup e.g. with the text "/usr needs 50 MB more disk space"
-	    NCPopupInfo spaceMsg( wpos( 2, 2 ),
+	    NCPopupInfo spaceMsg( wpos( (NCurses::lines()-10)/2, (NCurses::cols()-50)/2 ),
 				  YCPString( NCPkgNames::ErrorLabel() ),
 				  YCPString( NCPkgNames::DiskSpaceError() + "<br>" + message ),
 				  NCPkgNames::OKLabel(),
@@ -2383,11 +2386,12 @@ bool NCPackageSelector::showLicenseAgreement( ZyppSel & slbPtr , string licenseT
     bool ok = true;
     string pkgName = slbPtr->name();
 
-    NCPopupInfo info( wpos( 1, 1),
+    NCPopupInfo info( wpos( NCurses::lines()/10, (NCurses::cols()/10),
 		      NCPkgNames::NotifyLabel(),
 		      YCPString( "<i>" + pkgName + "</i><br><br>" + createDescrText( licenseText ) ),
 		      NCPkgNames::AcceptLabel(),
 		      NCPkgNames::CancelLabel() );
+    info.setNiceSize( (NCurses::cols() * 80)/100, (NCurses::lines()*80)/100);
     license_confirmed = info.showInfoPopup( ) != NCursesEvent::cancel;
 
 
@@ -2527,7 +2531,7 @@ bool NCPackageSelector::verifyPackageDependencies ()
     bool ok = false;
     bool cancel = false;
     
-    NCPopupInfo info( wpos(10, 10),  YCPString( "" ),
+    NCPopupInfo info( wpos( (NCurses::lines()-5)/2, (NCurses::cols()-30)/2 ),  YCPString( "" ),
 		      YCPString(_( "System dependencies verify OK." )),
 		      NCPkgNames::OKLabel() );
     info.setNiceSize( 30, 5 );
@@ -2540,7 +2544,7 @@ bool NCPackageSelector::verifyPackageDependencies ()
 	//call the solver (with S_Verify it displays no popup)
 	cancel = depsPopup->showDependencies( NCPkgPopupDeps::S_Verify, &ok );
         //display the popup with automatic changes
-	NCPkgPopupTable autoChangePopup( wpos( 1, 1), this );
+	NCPkgPopupTable autoChangePopup( wpos( 3, 8 ), this );
         NCursesEvent input = autoChangePopup.showInfoPopup();
 
         if ( input == NCursesEvent::cancel )

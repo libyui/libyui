@@ -1195,7 +1195,7 @@ void NCDialog::processInput( int timeout_millisec )
 		 helpIntro =  _( "<p>Press <b>F1</b> or <b>ESC</b> to close this dialog.</p>" );
 	     }
 		 
-	     helpPopup = new NCPopupInfo( wpos(1,1),
+	     helpPopup = new NCPopupInfo( wpos( NCurses::lines()/3, NCurses::cols()/3 ),
 					   // headline of the text mode help
 					  _( "Text Mode Navigation" ),
 					  YCPString( helpIntro +
@@ -1203,6 +1203,8 @@ void NCDialog::processInput( int timeout_millisec )
 						     helpText
 						     ),
 					  "" );
+	    helpPopup->setNiceSize( NCurses::cols()/3, NCurses::lines()/3 );
+	     
 	 }
 	 if ( helpPopup )
 	 {
