@@ -32,6 +32,11 @@
 #include "NCPushButton.h"
 #include "NCi18n.h"
 
+
+/*
+  Textdomain "packages"
+*/
+
 class YCPValue;
 
 ///////////////////////////////////////////////////////////////////
