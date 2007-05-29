@@ -4,12 +4,12 @@
 ./src/NCurses.cc
 ./src/NCDialog.cc
 ./src/NCPopupInfo.h
-pkg/NCPkgTable.cc
-pkg/pkg_layout.ycp
-pkg/NCPkgPopupDiskspace.cc
-pkg/NCPkgNames.cc
-pkg/NCPkgPopupSearch.cc
-pkg/NCPkgPopupDeps.cc
-pkg/NCPackageSelector.cc
-pkg/you_layout.ycp
+./src/pkg/NCPkgTable.cc
+./src/pkg/pkg_layout.ycp
+./src/pkg/NCPkgPopupDiskspace.cc
+./src/pkg/NCPkgNames.cc
+./src/pkg/NCPkgPopupSearch.cc
+./src/pkg/NCPkgPopupDeps.cc
+./src/pkg/NCPackageSelector.cc
+./src/pkg/you_layout.ycp
 
