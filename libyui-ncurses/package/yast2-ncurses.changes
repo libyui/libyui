@@ -1,4 +1,17 @@
 -------------------------------------------------------------------
+Tue May 29 13:03:07 CEST 2007 - kmachalkova@suse.cz
+
+- Removed obsolete save/load selection stuff + related NCPkgPopupFile 
+  class - replaced by save/load pkgs & patterns (FaTE #300729) 
+- Improved usability of cancel dialog in pkg manager (#274774)
+- Fix disappearing 'Etc./All Packages List' submenu after unchecking 
+  AutoDependency Check
+- Place all popup dialogs in pkg manager to the centre of the screen 
+  and calculate their size relatively to the screen size (if applicable) 
+  (#275610)
+- 2.15.17
+
+-------------------------------------------------------------------
 Wed May 23 13:54:16 CEST 2007 - gs@suse.de
 
 - Package Installation: check the partition size to prevent

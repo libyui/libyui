@@ -2386,7 +2386,7 @@ bool NCPackageSelector::showLicenseAgreement( ZyppSel & slbPtr , string licenseT
     bool ok = true;
     string pkgName = slbPtr->name();
 
-    NCPopupInfo info( wpos( NCurses::lines()/10, (NCurses::cols()/10),
+    NCPopupInfo info( wpos( NCurses::lines()/10, NCurses::cols()/10),
 		      NCPkgNames::NotifyLabel(),
 		      YCPString( "<i>" + pkgName + "</i><br><br>" + createDescrText( licenseText ) ),
 		      NCPkgNames::AcceptLabel(),
