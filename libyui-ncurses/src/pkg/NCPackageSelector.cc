@@ -96,7 +96,7 @@ bool ic_compare ( char c1, char c2 )
 //
 // Constructor
 //
-NCPackageSelector::NCPackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, string floppyDevice )
+NCPackageSelector::NCPackageSelector( YNCursesUI * ui, const YWidgetOpt & opt )
     : y2ui( ui )
       , visibleInfo( YCPNull() )
       , filterPopup( 0 )

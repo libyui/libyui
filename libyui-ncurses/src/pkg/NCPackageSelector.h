@@ -118,9 +118,8 @@ class NCPackageSelector
      * data needed for the package selection.
      * @param ui The NCurses UI
      * @param opt The widget options
-     * @param floppyDevice The floppy device
      */
-    NCPackageSelector( YNCursesUI * ui, const YWidgetOpt & opt, string floppyDevice );
+    NCPackageSelector( YNCursesUI * ui, const YWidgetOpt & opt );
 
     /**
      * Destructor
