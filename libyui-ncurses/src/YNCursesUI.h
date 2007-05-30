@@ -29,6 +29,7 @@
 
 class YUI;
 class NCDialog;
+class NCPackageSelectorPlugin;
 
 /**
  * @short YaST2 Component: NCursesUI user interface
@@ -406,7 +407,12 @@ public:
     virtual YCPValue askForSaveFileName	( const YCPString & startWith,
 					  const YCPString & filter,
 					  const YCPString & headline );
-
+    
+    /**
+     * Returns the package selector plugin singleton of this UI or creates it
+     * (including loading the plugin lib) if it does not exist yet.
+     **/
+    NCPackageSelectorPlugin * packageSelectorPlugin();
     
     /**
      * UI-specific redrawScreen method.

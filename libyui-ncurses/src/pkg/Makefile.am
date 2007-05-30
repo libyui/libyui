@@ -17,24 +17,32 @@ libpy2ncurses_pkg_la_LIBADD =			\
 	-L$(libdir) -lyui			\
 	${ZYPP_LIBS}
 
-noinst_HEADERS = $(wildcard *.h)
+noinst_HEADERS = $(wildcard *.h)		\
+	NCPackageSelector.h		\
+	NCPkgSelMapper.h		\
+	NCPkgStatusStrategy.h		\
+	NCPkgPopupDeps.h		\
+	NCPkgPopupDiskspace.h		\
+	NCPkgPopupDescr.h		\
+	NCPkgPopupTable.h		\
+	NCPkgPopupSearch.h		\
+	NCPkgPopupSelection.h		\
+	NCPkgPopupTree.h		\
+	NCPkgNames.h			\
+	NCZypp.h
 
 libpy2ncurses_pkg_la_SOURCES =			\
-	NCPackageSelector.h NCPackageSelector.cc		\
-	NCPackageSelectorStart.h NCPackageSelectorStart.cc	\
-							\
-	NCPkgSelMapper.h NCPkgSelMapper.cc		\
-	NCPkgStatusStrategy.h NCPkgStatusStrategy.cc	\
-	NCPkgPopupDeps.h NCPkgPopupDeps.cc		\
-	NCPkgPopupDiskspace.h NCPkgPopupDiskspace.cc	\
-	NCPkgPopupDescr.h NCPkgPopupDescr.cc		\
-	NCPkgPopupTable.h NCPkgPopupTable.cc		\
-	NCPkgPopupSearch.h NCPkgPopupSearch.cc		\
-	NCPkgPopupSelection.h NCPkgPopupSelection.cc	\
-	NCPkgPopupTree.h NCPkgPopupTree.cc		\
-	NCPkgTable.h NCPkgTable.cc			\
-	NCPkgNames.h NCPkgNames.cc			\
-	NCZypp.h
+	NCPackageSelector.cc		\
+	NCPkgSelMapper.cc		\
+	NCPkgStatusStrategy.cc		\
+	NCPkgPopupDeps.cc		\
+	NCPkgPopupDiskspace.cc		\
+	NCPkgPopupDescr.cc		\
+	NCPkgPopupTable.cc		\
+	NCPkgPopupSearch.cc		\
+	NCPkgPopupSelection.cc		\
+	NCPkgPopupTree.cc		\
+	NCPkgNames.cc
 
 
 INCLUDES = -I$(srcdir)/.. -I$(includedir) -I$(includedir)/yui ${ZYPP_CFLAGS}

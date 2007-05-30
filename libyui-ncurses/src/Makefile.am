@@ -16,84 +16,154 @@ libpy2ncurses_la_LDFLAGS = -version-info 2:0
 
 libpy2ncurses_la_LIBADD =		\
 	-L$(libdir)			\
-	-Lpkg -lpy2ncurses_pkg		\
 	-lyui				\
 	-lncursesw -lpanelw
+
+#libpy2ncurses_la_LIBADD =		\
+#	-L$(libdir)			\
+#	-Lpkg -lpy2ncurses_pkg		\
+#	-lyui				\
+#	-lncursesw -lpanelw
 #liby2ncurses_la_LIBADD = $(libpy2ncurses_la_LIBADD)
 
-libpy2ncurses_la_SOURCES =				\
-	stdutil.h					\
-	NCi18n.h					\
-	Y2Log.h Y2Log.cc				\
-	tnode.h	position.h position.cc			\
-	YNCursesUI.cc YNCursesUI.h			\
-	NCtext.h NCtext.cc				\
-	NCstring.h NCstring.cc				\
-	stringutil.h stringutil.cc			\
-	lang2encoding.tab lang2encoding.cc		\
-	ncursesw.h ncursesw.cc				\
-	ncursesp.h ncursesp.cc				\
-	NCtypes.h NCtypes.cc				\
-	NCurses.h NCurses.cc				\
-	NCstyle.h NCstyle.cc				\
-	NCStyleDef.h NCStyleDef.cc			\
-	NCTableItem.h NCTableItem.cc			\
-	NCPad.h NCPad.cc				\
-	NCTreePad.h NCTreePad.cc			\
-	NCTablePad.h NCTablePad.cc			\
-	NCTextPad.h NCTextPad.cc			\
-	NCWidget.h NCWidget.cc				\
-	NCDialog.h NCDialog.cc				\
-	NCEmpty.h NCEmpty.cc				\
-	NCSpacing.h NCSpacing.cc			\
-	NCSquash.h NCSquash.cc				\
-	NCAlignment.h NCAlignment.cc			\
-	NCFrame.h NCFrame.cc				\
-	NCCheckBoxFrame.h NCCheckBoxFrame.cc		\
-	NCSplit.h NCSplit.cc				\
-	NCReplacePoint.h NCReplacePoint.cc		\
-	NCRadioButtonGroup.h NCRadioButtonGroup.cc	\
-							\
-	NCImage.h NCImage.cc				\
-	NCCheckBox.h NCCheckBox.cc			\
-	NCLabel.h NCLabel.cc				\
-	NCProgressBar.h NCProgressBar.cc		\
-	NCMenuButton.h NCMenuButton.cc			\
-	NCPushButton.h NCPushButton.cc			\
-	NCRadioButton.h NCRadioButton.cc		\
-	NCTextEntry.h NCTextEntry.cc			\
-	NCIntField.h NCIntField.cc			\
-	NCComboBox.h NCComboBox.cc			\
-	NCPadWidget.h NCPadWidget.cc			\
-	NCRichText.h NCRichText.cc			\
-	NCSelectionBox.h NCSelectionBox.cc		\
-	NCMultiSelectionBox.h NCMultiSelectionBox.cc	\
-	NCTable.h NCTable.cc				\
-	NCTree.h NCTree.cc				\
-	NCLogView.h NCLogView.cc			\
-	NCMultiLineEdit.h NCMultiLineEdit.cc		\
-	NCFileSelection.h NCFileSelection.cc		\
-	NCAskForDirectory.h NCAskForDirectory.cc	\
-	NCAskForFile.h NCAskForFile.cc			\
-							\
-	NCPopup.h NCPopup.cc				\
-	NCPopupTable.h NCPopupTable.cc			\
-	NCPopupList.h NCPopupList.cc			\
-	NCPopupMenu.h NCPopupMenu.cc			\
-	NCPopupTextEntry.h NCPopupTextEntry.cc		\
-	NCPopupInfo.h NCPopupInfo.cc			\
-							\
-	NCstyle.braille.h NCstyle.mono.h		\
-	NCstyle.linux.h NCstyle.xterm.h			\
-							\
-	Y2CCNCursesUI.cc Y2CCNCursesUI.h		\
+noinst_HEADERS = 		\
+	stdutil.h           	\
+	NCi18n.h		\
+	Y2Log.h			\
+	tnode.h			\
+	position.h		\
+	YNCursesUI.h		\
+	NCPackageSelectorPlugin.h	\
+	NCPackageSelectorStart.h	\
+	NCPkgTable.h		\
+	NCtext.h		\
+	NCstring.h		\
+	stringutil.h		\
+	ncursesw.h		\
+	ncursesp.h		\
+	NCtypes.h		\
+	NCurses.h		\
+	NCstyle.h		\
+	NCStyleDef.h		\
+	NCTableItem.h       	\
+	NCPad.h     		\
+	NCTreePad.h     	\
+	NCTablePad.h        	\
+	NCTextPad.h     	\
+	NCWidget.h      	\
+	NCDialog.h      	\
+	NCEmpty.h       	\
+	NCSpacing.h     	\
+	NCSquash.h      	\
+	NCAlignment.h       	\
+	NCFrame.h       	\
+	NCCheckBoxFrame.h       \
+	NCSplit.h       	\
+	NCReplacePoint.h        \
+	NCRadioButtonGroup.h	\
+	NCImage.h       	\
+	NCCheckBox.h        	\
+	NCLabel.h       	\
+	NCProgressBar.h     	\
+	NCMenuButton.h      	\
+	NCPushButton.h      	\
+	NCRadioButton.h     	\
+	NCTextEntry.h       	\
+	NCIntField.h        	\
+	NCComboBox.h        	\
+	NCPadWidget.h       	\
+	NCRichText.h        	\
+	NCSelectionBox.h        \
+	NCMultiSelectionBox.h	\
+	NCTable.h       	\
+	NCTree.h        	\
+	NCLogView.h     	\
+	NCMultiLineEdit.h       \
+	NCFileSelection.h       \
+	NCAskForDirectory.h     \
+	NCAskForFile.h      	\
+	NCPopup.h       	\
+	NCPopupTable.h      	\
+	NCPopupList.h       	\
+	NCPopupMenu.h       	\
+	NCPopupTextEntry.h      \
+	NCPopupInfo.h       	\
+	NCstyle.braille.h NCstyle.mono.h	\
+	NCstyle.linux.h NCstyle.xterm.h		\
+	Y2CCNCursesUI.h				\
 	YNCursesComponent.h
+
+libpy2ncurses_la_SOURCES =		\
+	Y2Log.cc			\
+	position.cc			\
+	YNCursesUI.cc			\
+					\
+	NCPackageSelectorPlugin.cc	\
+	NCPackageSelectorStart.cc 	\
+	NCPkgTable.cc			\
+					\
+	NCtext.cc			\
+	NCstring.cc			\
+	stringutil.cc			\
+	lang2encoding.tab lang2encoding.cc	\
+	ncursesw.cc			\
+	ncursesp.cc			\
+	NCtypes.cc			\
+	NCurses.cc			\
+	NCstyle.cc			\
+	NCStyleDef.cc			\
+	NCTableItem.cc			\
+	NCPad.cc			\
+	NCTreePad.cc			\
+	NCTablePad.cc			\
+	NCTextPad.cc			\
+	NCWidget.cc			\
+	NCDialog.cc			\
+	NCEmpty.cc			\
+	NCSpacing.cc			\
+	NCSquash.cc			\
+	NCAlignment.cc			\
+	NCFrame.cc			\
+	NCCheckBoxFrame.cc		\
+	NCSplit.cc			\
+	NCReplacePoint.cc		\
+	NCRadioButtonGroup.cc		\
+	NCImage.cc			\
+	NCCheckBox.cc			\
+	NCLabel.cc			\
+	NCProgressBar.cc		\
+	NCMenuButton.cc			\
+	NCPushButton.cc			\
+	NCRadioButton.cc		\
+	NCTextEntry.cc			\
+	NCIntField.cc			\
+	NCComboBox.cc			\
+	NCPadWidget.cc			\
+	NCRichText.cc			\
+	NCSelectionBox.cc		\
+	NCMultiSelectionBox.cc		\
+	NCTable.cc			\
+	NCTree.cc			\
+	NCLogView.cc			\
+	NCMultiLineEdit.cc		\
+	NCFileSelection.cc		\
+	NCAskForDirectory.cc		\
+	NCAskForFile.cc			\
+					\
+	NCPopup.cc			\
+	NCPopupTable.cc			\
+	NCPopupList.cc			\
+	NCPopupMenu.cc			\
+	NCPopupTextEntry.cc		\
+	NCPopupInfo.cc			\
+					\
+	Y2CCNCursesUI.cc
 
 #libpy2ncurses_la_SOURCES = $(liby2ncurses_la_SOURCES)	\
 #	Y2CCNCursesUI.cc Y2CCNCursesUI.h	\
 #	YNCursesComponent.h
 
-INCLUDES = -I$(srcdir)/pkg -I$(includedir) -I$(includedir)/yui -I$(includedir)/y2util/qt ${ZYPP_CFLAGS}
+INCLUDES = -I$(srcdir)/pkg -I$(includedir) -I$(includedir)/yui -I$(includedir)/y2util/qt
 
 lang2encoding.cc:	lang2encoding.tab
 	./lang2encoding.tab > lang2encoding.cc

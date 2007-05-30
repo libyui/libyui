@@ -59,8 +59,8 @@
 #include "NCTree.h"
 #include "NCLogView.h"
 #include "NCMultiLineEdit.h"
+#include "NCPackageSelectorPlugin.h"
 #include "NCPackageSelectorStart.h"
-#include "NCPkgTable.h"
 #include "NCAskForDirectory.h"
 #include "NCAskForFile.h"
 #include "NCstring.h"
@@ -573,6 +573,30 @@ YWidget * YNCursesUI::createIntField( YWidget * parent, YWidgetOpt & opt,
 //
 ///////////////////////////////////////////////////////////////////
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : YNCursesUI::packageSelectorPlugin()
+//	METHOD TYPE : NCPackageSelectorPlugin
+//
+//	DESCRIPTION : Create the package selector plugin
+//
+NCPackageSelectorPlugin * YNCursesUI::packageSelectorPlugin()
+{
+    static NCPackageSelectorPlugin * plugin = 0;
+
+    if ( ! plugin )
+    {
+	plugin = new NCPackageSelectorPlugin();
+
+	// This is a deliberate memory leak: If an application requires a
+	// PackageSelector, it is a package selection application by
+	// definition. In this case, the ncurses_pkg plugin is intentionally
+	// kept open to avoid repeated start-up cost of the plugin and libzypp.
+    }
+
+    return plugin;
+}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -580,99 +604,23 @@ YWidget * YNCursesUI::createIntField( YWidget * parent, YWidgetOpt & opt,
 //	METHOD NAME : YNCursesUI::createPackageSelector
 //	METHOD TYPE : YWidget
 //
-//	DESCRIPTION : Reads the layout term of the package selection dialog
-// 		      and creates the widget tree.
+//	DESCRIPTION : Calls NCPackageSelectorPlugin::createPackageSelector
 //
 YWidget * YNCursesUI::createPackageSelector( YWidget * parent,
-					      YWidgetOpt & opt,
-					      const YCPString & floppyDevice )
+					     YWidgetOpt & opt,
+					     const YCPString & floppyDevice )
 {
     ONCREATE;
     YWidget * w = 0;
-    try
+
+    NCPackageSelectorPlugin * plugin = packageSelectorPlugin();
+
+    if ( plugin )
     {
-	w = new NCPackageSelectorStart (this, dynamic_cast<NCWidget *>(parent), opt,
-					YD_HORIZ, floppyDevice->value() );
+	w = plugin->createPackageSelector( parent, opt );
     }
-    catch (const std::exception & e)
-    {
-	UIERR << "Caught a std::exception: " << e.what () << endl;
-    }
-    catch (...)
-    {
-	UIERR << "Caught an unspecified exception" << endl;
-    }
+
     return w;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YNCursesUI::runPkgSelection
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Implementation of UI builtin RunPkgSelection() which
-//		      has to be called after OpenDialog( `PackageSelector() ).
-//
-YCPValue YNCursesUI::runPkgSelection(  YWidget * selector )
-{
-    NCPackageSelectorStart * ncSelector = 0;
-
-    YDialog *dialog = currentDialog();
-
-    if (!dialog)
-    {
-	UIERR << "ERROR package selection: No dialog existing." << endl;
-    }
-    else
-    {
-	ncSelector = dynamic_cast<NCPackageSelectorStart *>( selector );
-
-	// debug: dump the widget tree
-	dialog->dumpDialogWidgetTree();
-    }
-
-    bool result = true;
-
-    // start event loop
-    NCursesEvent event = NCursesEvent::cancel;
-
-    if ( ncSelector )
-    {
-	try
-	{
-	    ncSelector->showDefaultList();
-	    NCDialog * ncd = static_cast<NCDialog *>( dialog );
-
-	    do
-	    {
-		event = ncd->userInput();
-		result = ncSelector->handleEvent( event );
-		NCDBG << "Result: " << (result?"true":"false") << endl;
-	    }
-	    while ( event != NCursesEvent::cancel && result == true );
-	}
-	catch (const std::exception & e)
-	{
-	    UIERR << "Caught a std::exception: " << e.what () << endl;
-	}
-	catch (...)
-	{
-	    UIERR << "Caught an unspecified exception" << endl;
-	}
-    }
-    else
-    {
-	UIERR << "No NCPackageSelector existing" << endl;
-    }
-
-    if ( !event.result.isNull() )
-    {
-	UIMIL << "Return value: " << event.result->toString() << endl;
-	return event.result;
-    }
-    else
-	return YCPVoid();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -687,35 +635,57 @@ YCPValue YNCursesUI::runPkgSelection(  YWidget * selector )
 YWidget * YNCursesUI::createPkgSpecial( YWidget *parent, YWidgetOpt &opt, const YCPString &subwidget )
 {
     ONCREATE;
-
-    YCPString pkgTable( "pkgTable" );
-
     YWidget * w = 0;
-    if ( subwidget->compare( pkgTable ) == YO_EQUAL )
-    {
-	NCDBG << "Creating a NCPkgTable" << endl;
-	try
-	{
-	    w = new NCPkgTable( dynamic_cast<NCWidget *>( parent ), opt );
-	}
-	catch (const std::exception & e)
-	{
-	    UIERR << "Caught a std::exception: " << e.what () << endl;
-	}
-	catch (...)
-	{
-	    UIERR << "Caught an unspecified exception" << endl;
-	}
-    }
-    else
+    
+    NCPackageSelectorPlugin * plugin = packageSelectorPlugin();
 
+    if ( plugin )
     {
-	NCERR <<  "PkgSpecial( "  << subwidget->toString() << " )  not found - take default `Label" << endl;
-	w = new NCLabel( dynamic_cast<NCWidget *>( parent ), opt, subwidget );
+	w = plugin->createPkgSpecial( parent, opt, subwidget );
     }
+    
     return w;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : YNCursesUI::runPkgSelection
+//	METHOD TYPE : YCPValue
+//
+//	DESCRIPTION : Implementation of UI builtin RunPkgSelection() which
+//		      has to be called after OpenDialog( `PackageSelector() ).
+//
+YCPValue YNCursesUI::runPkgSelection( YWidget * selector )
+{
+    YCPValue result = YCPVoid();
+    
+    YDialog *dialog = YUI::currentDialog();
+    NCPackageSelectorPlugin * plugin = packageSelectorPlugin();
+    
+    if ( !dialog )
+    {
+	UIERR << "ERROR package selection: No dialog rexisting." << endl;
+	return YCPVoid();
+    }
+    if ( !selector )
+    {
+	UIERR << "ERROR package selection: No package selector existing." << endl;
+	return YCPVoid();
+    }
+    
+    // debug: dump the widget tree
+    dialog->dumpDialogWidgetTree();	
+
+    if ( plugin )
+    {
+	result = plugin->runPkgSelection( dialog, selector );
+    }
+
+    return result;
+}
+
+    
 ///////////////////////////////////////////////////////////////////
 //
 //
