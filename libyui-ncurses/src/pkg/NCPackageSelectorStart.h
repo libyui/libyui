@@ -67,9 +67,8 @@ class NCPackageSelectorStart : public NCSplit
      * Constructor
      * creates the widget tree of the package selector
      */
-    NCPackageSelectorStart( YNCursesUI *ui, NCWidget * parent,
-			    const YWidgetOpt & opt, YUIDimension dimension,
-			    string floppyDevice );
+    NCPackageSelectorStart( NCWidget * parent,
+			    const YWidgetOpt & opt, YUIDimension dimension );
 
     /**
      * Destructor
@@ -105,7 +104,7 @@ class NCPackageSelectorStart : public NCSplit
     * @param layoutFilename The filename
     * @return YCPTerm
     */
-    YCPTerm readLayoutFile( YNCursesUI *ui, const char * layoutFilename );
+    YCPTerm readLayoutFile( const char * layoutFilename );
 
 };
 

@@ -40,16 +40,17 @@
 //
 //	DESCRIPTION :
 //
-NCPackageSelectorStart::NCPackageSelectorStart( YNCursesUI *ui,
-						NCWidget * parent,
-						const YWidgetOpt & opt, YUIDimension dimension,
-						string floppyDevice )
+NCPackageSelectorStart::NCPackageSelectorStart( NCWidget * parent,
+						const YWidgetOpt & opt,
+						YUIDimension dimension )
     : NCSplit( parent, opt, dimension )
       , widgetRoot( 0 )
       , packager( 0 )
       , youMode ( false )
       , updateMode ( false )
 {
+    YNCursesUI * ui = YNCursesUI::ui();
+    
     // set the textdomain
     setTextdomain( "packages" );
     
@@ -64,14 +65,14 @@ NCPackageSelectorStart::NCPackageSelectorStart( YNCursesUI *ui,
     YCPTerm pkgLayout = YCPNull();
     if ( youMode )
     {
-	pkgLayout = readLayoutFile( ui, "/usr/share/YaST2/data/you_layout.ycp" );
+	pkgLayout = readLayoutFile( "/usr/share/YaST2/data/you_layout.ycp" );
     }
     else
     { 
-	pkgLayout = readLayoutFile( ui, "/usr/share/YaST2/data/pkg_layout.ycp" );
+	pkgLayout = readLayoutFile( "/usr/share/YaST2/data/pkg_layout.ycp" );
     }
 
-    if ( ! pkgLayout.isNull() )
+    if ( ! pkgLayout.isNull() && ui )
     {
 	YWidgetOpt childrenOpt( opt );
 	widgetRoot = (YContainerWidget *)ui->createWidgetTree( dynamic_cast<YWidget *>(parent),
@@ -80,7 +81,7 @@ NCPackageSelectorStart::NCPackageSelectorStart( YNCursesUI *ui,
 
     // create the PackageSelector (creation with 'new' is required because initialization
     // in the list of member variables causes problems with untranslated messages)
-    packager = new NCPackageSelector( ui, opt, floppyDevice );
+    packager = new NCPackageSelector( ui, opt );
 
     if ( widgetRoot )
     {
@@ -226,8 +227,7 @@ bool NCPackageSelectorStart::handleEvent ( const NCursesEvent & event )
 // 
 // Read a layout file (containing a YCPTerm)
 //
-YCPTerm NCPackageSelectorStart::readLayoutFile( YNCursesUI *ui,
-						const char * layoutFilename )
+YCPTerm NCPackageSelectorStart::readLayoutFile( const char * layoutFilename )
 {
     YCPTerm   pkgLayout = YCPNull();
     
