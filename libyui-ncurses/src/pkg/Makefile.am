@@ -17,7 +17,7 @@ libpy2ncurses_pkg_la_LIBADD =			\
 	-L$(libdir) -lyui			\
 	${ZYPP_LIBS}
 
-noinst_HEADERS = $(wildcard *.h)		\
+noinst_HEADERS =			\
 	NCPackageSelector.h		\
 	NCPkgSelMapper.h		\
 	NCPkgStatusStrategy.h		\
@@ -31,7 +31,7 @@ noinst_HEADERS = $(wildcard *.h)		\
 	NCPkgNames.h			\
 	NCZypp.h
 
-libpy2ncurses_pkg_la_SOURCES =			\
+libpy2ncurses_pkg_la_SOURCES =		\
 	NCPackageSelector.cc		\
 	NCPkgSelMapper.cc		\
 	NCPkgStatusStrategy.cc		\
