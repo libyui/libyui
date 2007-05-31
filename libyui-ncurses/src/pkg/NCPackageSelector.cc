@@ -1484,8 +1484,8 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
 	{
 	    // set the connection to the NCPackageSelector !!!!
 	    patchPkgs->setPackager( this );
-	    // set status strategy
-	    NCPkgStatusStrategy * strategy = new PatchPkgStatStrategy();
+	    // set status strategy - don't set extra strategy, use 'normal' package strategy
+	    NCPkgStatusStrategy * strategy = new PackageStatStrategy();
 	    patchPkgs->setTableType( NCPkgTable::T_PatchPkgs, strategy );
 
 	    patchPkgs->fillHeader( );

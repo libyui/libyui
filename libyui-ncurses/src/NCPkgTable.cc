@@ -316,6 +316,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	switch ( tableType )
 	{
 	    case T_Packages:
+	    case T_PatchPkgs:
 	    case T_Update:
 		// check/show dependencies of packages
 		packager->showPackageDependencies( false );	// only check if automatic check is ON
