@@ -35,7 +35,7 @@ class NCPackageSelectorPlugin: public YPackageSelectorPlugin
 public:
 
     /**
-     * Constructor: Load the plugin library for the Qt package selector.
+     * Constructor: Load the plugin library for the NCurses package selector.
      **/
     NCPackageSelectorPlugin();
 
