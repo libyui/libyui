@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu May 31 11:00:22 CEST 2007 - gs@suse.de
+
+- Load library libpy2ncurses_pkg as plugin 
+
+-------------------------------------------------------------------
 Tue May 29 13:03:07 CEST 2007 - kmachalkova@suse.cz
 
 - Removed obsolete save/load selection stuff + related NCPkgPopupFile 
