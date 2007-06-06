@@ -609,19 +609,24 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
     switch( tableType )
     {
 	case T_PatchPkgs: {
+    	    // if the package is installed, get the installed version 
 	    if ( slbPtr->hasInstalledObj() )
 	    {
 		instVersion = slbPtr->installedObj()->edition().asString();
 	    }
-	    
-	    // in case of YOU patches: show the version of the package which
-	    // is contained in the patch
-	    version = pkgPtr->edition().asString();
+            // if a candidate is available, get the candidate version
+	    if ( slbPtr->hasCandidateObj() )
+	    {
+		version = slbPtr->candidateObj()->edition().asString();
+	    }
+	    else
+	    {
+		version = pkgPtr->edition().asString();
+	    }
    	    pkgLine.push_back( version );
 
-	    // if ( Y2PM::instTarget().numPackages() > 0 )
-	    // doesn't make sense for YOU mode because there are always installed packages
-	    // -> show installed version or empty column
+	    // in case of YOU there are always installed packages 
+	    // => always add installed version (or empty column)
 	    pkgLine.push_back( instVersion );
 
    	    pkgLine.push_back( pkgPtr->summary() );  	// short description
