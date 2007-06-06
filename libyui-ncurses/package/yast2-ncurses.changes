@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Jun  6 13:18:39 CEST 2007 - gs@suse.de
+
+- Online Update/Package Installation: allow status change and show
+  correct version of patch packages, add installed packages to the
+  list of package versions, replace obsolete transactResKind() by
+  resolvePool()
+
+-------------------------------------------------------------------
 Thu May 31 11:00:22 CEST 2007 - gs@suse.de
 
 - Load library libpy2ncurses_pkg as plugin 
