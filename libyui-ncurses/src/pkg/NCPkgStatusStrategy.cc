@@ -290,7 +290,10 @@ bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
 void NCPkgStatusStrategy::solveResolvableCollections()
 {
     zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
-
+    //  transactReskind() is obsolete -> use resolvePool()
+    resolver->resolvePool();
+    
+#if 0
     resolver->transactReset( zypp::ResStatus::APPL_LOW );
 
     resolver->transactResKind( zypp::ResTraits<zypp::Product>::kind );
@@ -299,6 +302,7 @@ void NCPkgStatusStrategy::solveResolvableCollections()
     resolver->transactResKind( zypp::ResTraits<zypp::Language >::kind );
     resolver->transactResKind( zypp::ResTraits<zypp::Patch    >::kind );
     resolver->transactResKind( zypp::ResTraits<zypp::Atom     >::kind );
+#endif
 }
 
 
@@ -522,8 +526,8 @@ bool SelectionStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPt
     NCMIL << "Set status of: " << slbPtr->name() << " to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
 
-    // do a solver run
-    solveResolvableCollections(); 
+    // do a solver run -> solver runs in NCPkgTable::changeStatus()
+    // solveResolvableCollections();
 
     return ok;
 }
