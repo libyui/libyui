@@ -507,6 +507,8 @@ void NCPackageSelector::setVisibleInfo( const YCPValue & info )
 //
 bool NCPackageSelector::fillAvailableList( NCPkgTable * pkgTable, ZyppSel selectable )
 {
+    bool addInstalled = true;
+    
     if ( !pkgTable )
     {
 	NCERR << "No table widget for available packages existing" << endl;
@@ -518,7 +520,7 @@ bool NCPackageSelector::fillAvailableList( NCPkgTable * pkgTable, ZyppSel select
 	NCERR << "Package pointer not valid" << endl;
 	return false;
     }
-    
+
     // clear the package table
     pkgTable->itemsCleared ();
 
@@ -531,9 +533,20 @@ bool NCPackageSelector::fillAvailableList( NCPkgTable * pkgTable, ZyppSel select
 	it;
     for (it = b; it != e; ++it)
     {
+	if ( selectable->installedObj() &&
+	     selectable->installedObj()->edition() == (*it)->edition() &&
+	     selectable->installedObj()->arch()    == (*it)->arch()      )
+	    // FIXME: In future releases, also the vendor will make a difference
+	{
+	    addInstalled = false;
+	}
 	pkgTable->createListEntry( tryCastToZyppPkg (*it), selectable );
     }
-
+    if ( selectable->hasInstalledObj() && addInstalled )
+    {
+	pkgTable->createListEntry( tryCastToZyppPkg (selectable->installedObj()), selectable );
+    }
+    
     // show the package list
     pkgTable->drawList();
     
@@ -893,12 +906,12 @@ bool NCPackageSelector::fillUpdateList( )
 //
 bool NCPackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPtr, bool versions )
 {
-    if ( !pkgTable )
+    if ( !pkgTable || !objPtr )
 	return false;
+
     pkgTable->itemsCleared ();
 
     std::set<ZyppSel> patchSelectables;
-      
     ZyppPatch patchPtr  = tryCastToZyppPatch( objPtr ); 
     
     if ( !patchPtr )
@@ -913,16 +926,15 @@ bool NCPackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPt
 	  it != patchContents.end();
 	  ++it )
     {
-
 	ZyppPkg pkg = tryCastToZyppPkg( *it );
 
 	if ( pkg )
 	{
 	    NCMIL << "Patch package found: " <<  (*it)->name().c_str() << endl;
-
 	    ZyppSel sel = selMapper.findZyppSel( pkg );
 
 	    if ( sel )
+	    {
 		if ( contains( patchSelectables, sel ) )
 		{
 		    NCMIL << "Suppressing duplicate selectable: " << (*it)->name().c_str() << "-" <<
@@ -932,25 +944,32 @@ bool NCPackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPt
 		else
 		{
 		    patchSelectables.insert( sel );
+		    NCDBG << (*it)->name().c_str() << ": Version: " <<  pkg->edition().asString() << endl;
 
-		    if ( versions )
+		    pkgTable->createListEntry( pkg, sel );
+
+		    if ( versions )	// additionally show all availables
 		    {
-			// show all availables
 			zypp::ui::Selectable::available_iterator
 			    b = sel->availableBegin (),
 			    e = sel->availableEnd (),
 			    it;
 			for (it = b; it != e; ++it)
 			{
-			    pkgTable->createListEntry( tryCastToZyppPkg (*it), sel );
+			    ZyppPkg pkgAvail =  tryCastToZyppPkg (*it);
+			    if ( pkgAvail )
+			    {
+				if ( pkg->edition() != pkgAvail->edition() ||
+				     pkg->arch() != pkgAvail->arch() )
+				{
+				    pkgTable->createListEntry( pkgAvail, sel );
+				}
+			    }
 			}
-		    }
-		    else
-		    {
-			pkgTable->createListEntry( pkg, sel );
-		    }
-		}
 
+		    } // if ( versions )
+		}
+	    }
 	}
 	else  // No ZyppPkg - some other kind of object (script, message)
 	{
