@@ -4,7 +4,7 @@
 ./src/NCurses.cc
 ./src/NCDialog.cc
 ./src/NCPopupInfo.h
-./src/pkg/NCPkgTable.cc
+./src/NCPkgTable.cc
 ./src/pkg/pkg_layout.ycp
 ./src/pkg/NCPkgPopupDiskspace.cc
 ./src/pkg/NCPkgNames.cc
