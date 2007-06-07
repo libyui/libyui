@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Jun  7 17:48:20 CEST 2007 - kmachalkova@suse.cz
+
+- Do not add extra vertical space to CheckBoxFrame widget (expand 
+  only horizontally so that check box fits in)
+- 2.15.18
+
+-------------------------------------------------------------------
 Wed Jun  6 13:18:39 CEST 2007 - gs@suse.de
 
 - Online Update/Package Installation: allow status change and show
