@@ -19,8 +19,8 @@ Obsoletes:	y2curses
 Requires:	glibc-locale
 #Resolver::verifySystem 
 Requires:	libzypp >= 2.12.1
-# UI builtins (CheckBoxFrame)
-Requires:	yast2-core >= 2.15.2
+#UI plugins - YPackageSelectorPlugin.h
+Requires:	yast2-core >= 2.15.6
 %description
 -
 
