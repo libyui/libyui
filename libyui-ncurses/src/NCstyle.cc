@@ -18,6 +18,7 @@
 /-*/
 
 #include <fstream>
+#include "fnmatch.h"
 
 #include "Y2Log.h"
 #include "NCurses.h"
@@ -27,6 +28,7 @@
 #include "NCstyle.braille.h"
 #include "NCstyle.linux.h"
 #include "NCstyle.xterm.h"
+#include "NCstyle.rxvt.h"
 
 
 //initialize number of colors and color pairs
@@ -308,6 +310,8 @@ NCstyle::NCstyle( string term_t )
     } else {
       if ( term_t == "xterm" )
 	styleName = "xterm";
+      else if ( ! fnmatch("rxvt*", term_t.c_str(), 0)) 
+	styleName = "rxvt";
     }
   } else {
     styleName = "mono";
@@ -319,6 +323,7 @@ NCstyle::NCstyle( string term_t )
 #define IF_STYLE_INIT(n) if ( styleName == #n ) { NCstyleInit_##n( styleSet ); }
   IF_STYLE_INIT(linux)
   else IF_STYLE_INIT(xterm)
+  else IF_STYLE_INIT(rxvt)
   else IF_STYLE_INIT(mono)
   else IF_STYLE_INIT(braille)
   else NCstyleInit_linux( styleSet );
@@ -352,7 +357,12 @@ void NCstyle::nextStyle()
     if ( term == "xterm") {
       styleName = "xterm";
       NCstyleInit_xterm( styleSet );
-    } else {
+    }
+    else if ( term == "rxvt") {
+      styleName = "rxvt";
+      NCstyleInit_rxvt( styleSet );
+    }
+    else {
       styleName = "linux";
       NCstyleInit_linux( styleSet );
     }

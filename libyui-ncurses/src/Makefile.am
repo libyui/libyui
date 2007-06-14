@@ -90,6 +90,7 @@ noinst_HEADERS = 		\
 	NCPopupInfo.h       	\
 	NCstyle.braille.h NCstyle.mono.h	\
 	NCstyle.linux.h NCstyle.xterm.h		\
+	NCstyle.rxvt.h				\
 	Y2CCNCursesUI.h				\
 	YNCursesComponent.h
 
