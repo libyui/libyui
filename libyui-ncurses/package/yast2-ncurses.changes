@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Jun 14 16:41:04 CEST 2007 - kmachalkova@suse.cz
+
+- Use environment variable Y2NCURSES_COLOR_THEME to set color theme
+  of UI (FaTE #301893)
+- Added new rxvt theme (for rxvt-style terminals)
+- 2.15.19  
+
+-------------------------------------------------------------------
 Thu Jun  7 17:48:20 CEST 2007 - kmachalkova@suse.cz
 
 - Do not add extra vertical space to CheckBoxFrame widget (expand 
