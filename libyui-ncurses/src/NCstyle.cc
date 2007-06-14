@@ -315,7 +315,7 @@ NCstyle::NCstyle( string term_t )
         if ( getenv( "Y2_BRAILLE" ) != NULL ) {
           styleName = "braille";
         } else {
-          if ( term_t == "xterm" )
+          if ( ! fnmatch("xterm*", term_t.c_str(), 0) )
             styleName = "xterm";
           else if ( ! fnmatch("rxvt*", term_t.c_str(), 0)) 
             styleName = "rxvt";
