@@ -304,17 +304,25 @@ NCstyle::NCstyle( string term_t )
     , styleSet( MaxStyleSet )
     , fakestyle_e( MaxStyleSet )
 {
-  if ( NCattribute::colors() ) {
-    if ( getenv( "Y2_BRAILLE" ) != NULL ) {
-      styleName = "braille";
-    } else {
-      if ( term_t == "xterm" )
-	styleName = "xterm";
-      else if ( ! fnmatch("rxvt*", term_t.c_str(), 0)) 
-	styleName = "rxvt";
-    }
-  } else {
-    styleName = "mono";
+  char *user_defined_style = getenv( "Y2NCURSES_COLOR_THEME" );
+
+  if ( user_defined_style && *user_defined_style ) {
+      styleName = user_defined_style;
+      UIMIL << "User-defined style found: " << styleName.c_str() << endl;
+  }
+  else {
+      if ( NCattribute::colors() ) {
+        if ( getenv( "Y2_BRAILLE" ) != NULL ) {
+          styleName = "braille";
+        } else {
+          if ( term_t == "xterm" )
+            styleName = "xterm";
+          else if ( ! fnmatch("rxvt*", term_t.c_str(), 0)) 
+            styleName = "rxvt";
+        }
+      } else {
+        styleName = "mono";
+      }
   }
 
   UIMIL << "Init " << term_t << " using " << (NCattribute::colors() ? "color" : "bw" )
