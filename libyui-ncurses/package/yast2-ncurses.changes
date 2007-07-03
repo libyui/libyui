@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Jun 21 17:38:48 CEST 2007 - adrian@suse.de
+
+- fix changelog entry order
+
+-------------------------------------------------------------------
 Thu Jun 14 16:41:04 CEST 2007 - kmachalkova@suse.cz
 
 - Use environment variable Y2NCURSES_COLOR_THEME to set color theme
@@ -1334,12 +1339,6 @@ Fri Nov 29 16:20:29 CET 2002 - gs@suse.de
 - improvements for package installation dialog
 
 -------------------------------------------------------------------
-Thu Nov 14 20:56:17 CET 2002 - ma@suse.de
-
-- V 2.7.2
-- Fixed bug that inhibits logging on big-endian architectures.
-
--------------------------------------------------------------------
 Tue Nov 26 15:36:02 CET 2002 - gs@suse.de
 
 - V 2.6.24
@@ -1347,13 +1346,19 @@ Tue Nov 26 15:36:02 CET 2002 - gs@suse.de
   (preserve newlines)
 
 -------------------------------------------------------------------
+Thu Nov 14 20:56:17 CET 2002 - ma@suse.de
+
+- V 2.7.2
+- Fixed bug that inhibits logging on big-endian architectures.
+
+-------------------------------------------------------------------
 Thu Nov 14 19:34:31 CET 2002 - ma@suse.de
 
 - V 2.6.23
 - Fixed bug that inhibits logging on big-endian architectures.
 
--------------------------------------------------------------------
 
+------------------------------------------------------------------
 Wed Nov 13 12:35:21 CET 2002 - gs@suse.de
 
 - V 2.6.22
