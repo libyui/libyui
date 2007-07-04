@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jul  4 14:40:23 CEST 2007 - gs@suse.de
+
+- adapted to libzypp-3.10 
+- 2.15.20
+
+-------------------------------------------------------------------
 Thu Jun 14 16:41:04 CEST 2007 - kmachalkova@suse.cz
 
 - Use environment variable Y2NCURSES_COLOR_THEME to set color theme
