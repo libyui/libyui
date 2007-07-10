@@ -256,7 +256,7 @@ YQPkgConflictList::dumpList( QListViewItem * 	parent,
 	parent->setOpen( true );
     }
 
-    QStringList lines = QStringList::split( '\n', longText.simplifyWhiteSpace(),
+    QStringList lines = QStringList::split( '\n', longText,
 					    true );		// allowEmptyEntries
     QValueList<QString>::const_iterator it = lines.begin();
 

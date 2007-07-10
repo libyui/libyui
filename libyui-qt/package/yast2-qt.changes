@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jul 10 11:55:26 CEST 2007 - sh@suse.de
+
+- Don't over-simplify whitespace (replacing newlines with blanks)
+  in dependency problem reports
+- V 2.15.6
+
+-------------------------------------------------------------------
 Mon Apr 23 15:33:26 CEST 2007 - sh@suse.de
 
 - Load qt_pkg plugin for PatternSelector widget, too 
