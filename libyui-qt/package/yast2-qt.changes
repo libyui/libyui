@@ -1199,11 +1199,6 @@ Mon Mar 22 16:46:18 CET 2004 - sh@suse.de
   Restored old button order 
 
 -------------------------------------------------------------------
-Sun Apr  4 22:19:57 CEST 2004 - adrian@suse.de
-
-- the old (bad) qxembed solution is back .. :/
-
--------------------------------------------------------------------
 Wed Mar 17 15:07:36 CET 2004 - sh@suse.de
 
 - Fixed bug #35645: Wizard layout looks strange
@@ -2234,15 +2229,15 @@ Thu Apr  5 19:52:11 CEST 2001 - sh@suse.de
 - V 2.3.7
 
 -------------------------------------------------------------------
-Thu Mar 29 09:25:54 CEST 2001 - kkaempf@suse.de
-
-- dont install lib, only plugin is needed
-
--------------------------------------------------------------------
 Thu Mar 29 14:33:53 CEST 2001 - sh@suse.de
 
 - moved shared libs from /usr/lib/YaST2/lib to /usr/lib
 - V 2.3.5
+
+-------------------------------------------------------------------
+Thu Mar 29 09:25:54 CEST 2001 - kkaempf@suse.de
+
+- dont install lib, only plugin is needed
 
 -------------------------------------------------------------------
 Tue Mar 27 15:56:27 CEST 2001 - kkaempf@suse.de
