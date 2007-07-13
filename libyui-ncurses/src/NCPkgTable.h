@@ -92,6 +92,7 @@ public:
 	T_PatchPkgs,
 	T_Selections,
 	T_Languages,
+	T_Repos,
 	T_Unknown
     };
 

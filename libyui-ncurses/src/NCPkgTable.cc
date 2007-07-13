@@ -561,6 +561,12 @@ void NCPkgTable::fillHeader( )
 	    header.push_back( "L" + NCPkgNames::LangName() );
 	    break;
 	}
+	case T_Repos: {
+	    header.reserve(3);
+	    header.push_back( "L" + NCPkgNames::PkgName() );
+	    header.push_back( "L" + NCPkgNames::RepoURL() );
+	    break;
+	}
 	case T_Availables: {
 	    header.reserve(6);
 	    header.push_back( "L" + NCPkgNames::PkgStatus() );

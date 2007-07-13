@@ -82,6 +82,7 @@ class NCPackageSelector
     NCPkgPopupSelection * selectionPopup;	// the selections popup
     NCPkgPopupSelection * patternPopup;    	// the pattern popup
     NCPkgPopupSelection * languagePopup;	// language popup
+    NCPkgPopupSelection * repoPopup;
 
     NCPkgPopupDiskspace * diskspacePopup;	// the popup showing the disk usage
 

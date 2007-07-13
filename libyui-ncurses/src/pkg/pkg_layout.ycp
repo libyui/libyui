@@ -18,9 +18,10 @@
 			 `Left(`ReplacePoint(`id(`replacefilter),`MenuButton( `opt(`key_F4), _( "&Filter" ),
 									    // begin: menu items of the filter menu
 									    // please note: use unique hotkeys until end:
-									    [`item( `id("groups"), 	_( "&RPM Groups" ) ),
+									    [`item( `id("groups"), 	_( "RPM &Groups" ) ),
 									     `item( `id("patterns"), 	_( "Pa&tterns" ) ),
 									     `item( `id("languages"),   _( "&Languages" ) ),
+									     `item( `id("repos"),       _( "&Repositories") ),
 									     `item( `id("search"), 	_( "&Search" ) ),
 									     `item( `id("installed"),	_( "Installed &Packages" ) ),
 									     `item( `id("whatif"), 	_( "&Installation Summary" ) ),

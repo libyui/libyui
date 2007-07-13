@@ -200,6 +200,7 @@ public:
     static const YCPValue& Selections ();
     static const YCPValue& Patterns ();
     static const YCPValue& Languages ();
+    static const YCPValue& Repositories ();
     
     /**
      *  Widget id of the menu item update list
@@ -417,6 +418,10 @@ public:
      */
     static const string LanguageLabel();
 
+   /**
+     *  The label of the repositories selections popup
+     */
+    static const string RepoLabel();
    /**
      *  The label Filter: YOU Patches
      */
@@ -849,6 +854,8 @@ public:
     static const string LangCode();
     static const string LangName();
 
+    static const string RepoURL();
+
     static const string Partition();
     static const string UsedSpace();
     static const string FreeSpace();
@@ -890,6 +897,7 @@ public:
     static const string MenuFilter();
     static const string MenuEntryRPMGroups();
     static const string MenuEntryLanguages();
+    static const string MenuEntryRepos();
     static const string MenuEntrySelections();
     static const string MenuEntryPatterns();
     static const string MenuEntrySearch();

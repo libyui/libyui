@@ -104,6 +104,7 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, const YWidgetOpt & opt )
       , selectionPopup( 0 )
       , patternPopup( 0 )
       , languagePopup( 0 )
+      , repoPopup( 0 )
       , diskspacePopup( 0 )
       , searchPopup( 0 )
       , youMode( false )
@@ -123,6 +124,7 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, const YWidgetOpt & opt )
     eventHandlerMap[ NCPkgNames::Selections()->toString() ] = &NCPackageSelector::FilterHandler;
     eventHandlerMap[ NCPkgNames::Patterns()->toString() ] = &NCPackageSelector::FilterHandler;    
     eventHandlerMap[ NCPkgNames::Languages()->toString() ] = &NCPackageSelector::FilterHandler;    
+    eventHandlerMap[ NCPkgNames::Repositories()->toString() ] = &NCPackageSelector::FilterHandler;    
     eventHandlerMap[ NCPkgNames::UpdateList()->toString() ] = &NCPackageSelector::FilterHandler;
     eventHandlerMap[ NCPkgNames::Installed()->toString() ] = &NCPackageSelector::FilterHandler;
     eventHandlerMap[ NCPkgNames::Whatif()->toString() ] = &NCPackageSelector::FilterHandler;
@@ -219,6 +221,8 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, const YWidgetOpt & opt )
 	// create language popup
 	languagePopup = new NCPkgPopupSelection( wpos( 1,1 ), this, NCPkgPopupSelection::S_Language );
 
+        repoPopup = new NCPkgPopupSelection ( wpos( 1,1), this, NCPkgPopupSelection::S_Repo);
+
 	// create the filter popup
 	filterPopup = new NCPkgPopupTree( wpos( 1, 1 ),  this );	 
 
@@ -256,6 +260,10 @@ NCPackageSelector::~NCPackageSelector()
     if ( languagePopup )
     {
 	delete languagePopup;
+    }
+    if ( repoPopup )
+    {
+	delete repoPopup;
     }
     if ( depsPopup )
     {
@@ -1732,6 +1740,15 @@ bool NCPackageSelector::FilterHandler( const NCursesEvent&  event )
 	    retEvent = languagePopup->showSelectionPopup( );
 	}
     }
+    else if ( event.selection->compare( NCPkgNames::Repositories() ) == YO_EQUAL )
+    {
+	if ( repoPopup )
+	{
+	    // show the selection popup
+	    retEvent = repoPopup->showSelectionPopup( );
+	}
+    }
+
 // patches
     else if ( event.selection->compare( NCPkgNames::Recommended() ) ==  YO_EQUAL )
     {

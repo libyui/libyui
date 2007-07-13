@@ -289,6 +289,13 @@ const YCPValue& NCPkgNames::Languages ()
     static const YCPValue value = createIdValue ( "languages" );
     return value;
 }
+
+const YCPValue& NCPkgNames::Repositories () 
+{
+    static const YCPValue value = createIdValue ( "repos");
+    return value;
+}
+
 // menu selection Installation Summary
 const YCPValue& NCPkgNames::Whatif ()
 {
@@ -619,6 +626,13 @@ const string NCPkgNames::LanguageLabel()
 {
    // the label of language table
     static const string value = _( "Available Languages" );
+    return value;  
+}
+
+const string NCPkgNames::RepoLabel()
+{
+   // the label of language table
+    static const string value = _( "Available Repositories" );
     return value;  
 }
 
@@ -1235,7 +1249,7 @@ const string NCPkgNames::MenuFilter()
 const string NCPkgNames::MenuEntryRPMGroups()
 {
     // menu entry RpmGroups
-    static const string value = _( "&RPM Groups" );
+    static const string value = _( "RPM &Groups" );
     return value;
 }
 
@@ -1250,6 +1264,13 @@ const string NCPkgNames::MenuEntrySelections()
 {
     // menu entry Selections
     static const string value = _( "S&elections" );
+    return value;
+}
+
+const string NCPkgNames::MenuEntryRepos()
+{
+    // menu entry Repositories
+    static const string value = _( "&Repositories" );
     return value;
 }
 
@@ -1630,6 +1651,13 @@ const string NCPkgNames::LangName()
 {
     static const string value = _("Language");
     return value;
+}
+
+const string NCPkgNames::RepoURL()
+{
+    static const string value = _("URL");
+    return value;
+
 }
 
 const string NCPkgNames::Partition()
