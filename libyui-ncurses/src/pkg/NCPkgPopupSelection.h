@@ -60,7 +60,6 @@ public:
 	S_Selection,
 	S_Pattern,
 	S_Language,
-	S_Repo,
 	S_Unknown
     };
     

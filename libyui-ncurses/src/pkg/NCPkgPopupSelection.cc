@@ -61,9 +61,6 @@ NCPkgPopupSelection::NCPkgPopupSelection( const wpos at,  NCPackageSelector * pk
         createLayout( YCPString(NCPkgNames::LanguageLabel()) );
 	break;
     }
-    case S_Repo: {
-	createLayout (YCPString(NCPkgNames::RepoLabel()) );
-    }
     default:
 	break;
   }
@@ -126,9 +123,6 @@ void NCPkgPopupSelection::createLayout( const YCPString & label )
 	  sel->setTableType( NCPkgTable::T_Languages, strat );
 	  break;
       }
-      case S_Repo: {
-	  sel->setTableType( NCPkgTable::T_Repos, strat );
-      }
       default: {
 	  NCERR << "Unknown selection type" << endl; 	  
 	  break;
@@ -140,13 +134,9 @@ void NCPkgPopupSelection::createLayout( const YCPString & label )
 
   opt.notifyMode.setValue( true );
 
-  //Do not show status help line for repositories
-  //it doesn't make sense to add/delete/update those
-  if (type != S_Repo)
-  {
-      NCLabel * help = new NCLabel( split, opt, YCPString(NCPkgNames::DepsHelpLine()) );
-      split->addChild( help );
-  }
+  
+  NCLabel * help = new NCLabel( split, opt, YCPString(NCPkgNames::DepsHelpLine()) );
+  split->addChild( help );
 
   split->addChild( new NCSpacing( split, opt, 0.4, false, true ) );
 

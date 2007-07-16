@@ -27,6 +27,7 @@
 #include "NCSelectionBox.h"
 #include "NCMenuButton.h"
 #include "NCPkgPopupSelection.h"
+#include "NCPkgPopupRepo.h"
 #include "NCPkgPopupDeps.h"
 #include "NCPkgPopupDiskspace.h"
 #include "NCPkgPopupTable.h"
@@ -221,7 +222,7 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, const YWidgetOpt & opt )
 	// create language popup
 	languagePopup = new NCPkgPopupSelection( wpos( 1,1 ), this, NCPkgPopupSelection::S_Language );
 
-        repoPopup = new NCPkgPopupSelection ( wpos( 1,1), this, NCPkgPopupSelection::S_Repo);
+        repoPopup = new NCPkgPopupRepo( wpos( 1,1), this );
 
 	// create the filter popup
 	filterPopup = new NCPkgPopupTree( wpos( 1, 1 ),  this );	 
@@ -1745,7 +1746,7 @@ bool NCPackageSelector::FilterHandler( const NCursesEvent&  event )
 	if ( repoPopup )
 	{
 	    // show the selection popup
-	    retEvent = repoPopup->showSelectionPopup( );
+	    retEvent = repoPopup->showRepoPopup( );
 	}
     }
 

@@ -25,6 +25,7 @@ noinst_HEADERS =			\
 	NCPkgPopupDiskspace.h		\
 	NCPkgPopupDescr.h		\
 	NCPkgPopupTable.h		\
+	NCPkgPopupRepo.h		\
 	NCPkgPopupSearch.h		\
 	NCPkgPopupSelection.h		\
 	NCPkgPopupTree.h		\
@@ -39,6 +40,7 @@ libpy2ncurses_pkg_la_SOURCES =		\
 	NCPkgPopupDiskspace.cc		\
 	NCPkgPopupDescr.cc		\
 	NCPkgPopupTable.cc		\
+	NCPkgPopupRepo.cc		\
 	NCPkgPopupSearch.cc		\
 	NCPkgPopupSelection.cc		\
 	NCPkgPopupTree.cc		\

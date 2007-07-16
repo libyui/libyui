@@ -40,6 +40,7 @@
 #include "NCPkgSelMapper.h"
 
 class NCPkgPopupSelection;
+class NCPkgPopupRepo;
 class LangCode;
 class NCPkgPopupDeps;
 class NCPkgPopupDiskspace;
@@ -82,7 +83,7 @@ class NCPackageSelector
     NCPkgPopupSelection * selectionPopup;	// the selections popup
     NCPkgPopupSelection * patternPopup;    	// the pattern popup
     NCPkgPopupSelection * languagePopup;	// language popup
-    NCPkgPopupSelection * repoPopup;
+    NCPkgPopupRepo * repoPopup;
 
     NCPkgPopupDiskspace * diskspacePopup;	// the popup showing the disk usage
 
