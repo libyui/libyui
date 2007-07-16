@@ -6,6 +6,11 @@ Tue Jul 10 11:55:26 CEST 2007 - sh@suse.de
 - V 2.15.6
 
 -------------------------------------------------------------------
+Thu Jun 21 17:40:44 CEST 2007 - adrian@suse.de
+
+- fix changelog entry order
+
+-------------------------------------------------------------------
 Mon Apr 23 15:33:26 CEST 2007 - sh@suse.de
 
 - Load qt_pkg plugin for PatternSelector widget, too 
@@ -1153,6 +1158,11 @@ Mon Apr  5 18:41:36 CEST 2004 - sh@suse.de
 - V 2.9.18
 - Honor environment variable KCMYAST2_CALL for KControl embedding
   (no wizard decorations, suppress wizard help) 
+
+-------------------------------------------------------------------
+Sun Apr  4 22:19:57 CEST 2004 - adrian@suse.de
+
+- the old (bad) qxembed solution is back .. :/
 
 -------------------------------------------------------------------
 Fri Apr  2 16:24:00 CEST 2004 - sh@suse.de
