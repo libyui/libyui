@@ -134,6 +134,7 @@ void NCPkgPopupSelection::createLayout( const YCPString & label )
 
   opt.notifyMode.setValue( true );
 
+  
   NCLabel * help = new NCLabel( split, opt, YCPString(NCPkgNames::DepsHelpLine()) );
   split->addChild( help );
 
@@ -444,6 +445,7 @@ bool NCPkgPopupSelection::fillSelectionList( NCPkgTable * sel, SelType type  )
 		slbList.sort( orderLang );
 		break;
 	    }
+        
 	default:
 	    NCERR << "Selecion type not handled: " << type << endl;
     }
