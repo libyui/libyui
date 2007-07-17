@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jul 17 09:51:36 CEST 2007 - kmachalkova@suse.cz
+
+- Require new libzypp (>= 3.11.8) 
+- Correct svn merge from refactoring branch
+
+-------------------------------------------------------------------
 Mon Jul 16 17:12:46 CEST 2007 - mvidner@suse.cz
 
 - fixed changelog duplicates
