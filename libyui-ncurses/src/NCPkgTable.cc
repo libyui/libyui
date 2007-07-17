@@ -646,8 +646,8 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 	    
 	    version = pkgPtr->edition().asString();
 	    pkgLine.push_back( version );
-	    // is alias the right string? id?
-	    pkgLine.push_back( pkgPtr->source().alias() ); // show the installation source
+	    // show the repository (the installation source)
+	    pkgLine.push_back( pkgPtr->repository().info().alias() );
 
 	    // set package status either to S_NoInst or S_KeepInstalled
 	    status = S_NoInst;

@@ -2720,7 +2720,7 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
 	    // add the media nr
 	    text += NCPkgNames::MediaNo();
 	    char num[5];
-	    int medianr = package->sourceMediaNr ();
+	    int medianr = package->mediaNr ();
 	    sprintf( num, "%d", medianr );
 	    text += num;
 	    text += "<br>";	    
