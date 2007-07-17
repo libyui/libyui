@@ -5,17 +5,17 @@ Tue Jul 17 10:12:25 CEST 2007 - kmachalkova@suse.cz
 - Changes from libzypp refactoring branches merges back to trunk 
 
 -------------------------------------------------------------------
-Fri Jul  6 14:03:15 CEST 2007 - ma@suse.de
-
-- Adapt to new libzypp. Installation sources were replaced by
-  repositories.
-- V 2.15.7
-
--------------------------------------------------------------------
 Tue Jul 10 11:55:26 CEST 2007 - sh@suse.de
 
 - Don't over-simplify whitespace (replacing newlines with blanks)
   in dependency problem reports
+- V 2.15.7
+
+-------------------------------------------------------------------
+Fri Jul  6 14:03:15 CEST 2007 - ma@suse.de
+
+- Adapt to new libzypp. Installation sources were replaced by
+  repositories.
 - V 2.15.6
 
 -------------------------------------------------------------------
