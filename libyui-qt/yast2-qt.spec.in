@@ -6,7 +6,7 @@ BuildRequires:	dbus-1-devel boost-devel libzypp-devel curl-devel docbook-xsl-sty
 
 Summary:	-
 BuildRequires:	yast2-core-devel >= 2.15.6
-Requires:	libzypp >= 2.13.0
+Requires:	libzypp >= 3.11.8
 Provides:	yast2_ui
 Provides:	y2base:/var/lib/YaST2/servers/qt
 Provides:	y2base:/usr/lib/YaST2/servers/qt

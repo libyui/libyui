@@ -25,7 +25,7 @@
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgInstSrcList.h"
-#include <zypp/SourceManager.h>
+#include <zypp/RepoManager.h>
 #include <algorithm>
 
 using std::list;
@@ -37,7 +37,7 @@ using std::vector;
 YQPkgInstSrcList::YQPkgInstSrcList( QWidget * parent )
     : QY2ListView( parent )
 {
-    y2debug( "Creating inst source list" );
+    y2debug( "Creating repository list" );
 
     _nameCol	= -1;
     _urlCol	= -1;
@@ -57,7 +57,7 @@ YQPkgInstSrcList::YQPkgInstSrcList( QWidget * parent )
     fillList();
     selectSomething();
 
-    y2debug( "Creating inst source list done" );
+    y2debug( "Creating repository list done" );
 }
 
 
@@ -71,43 +71,23 @@ void
 YQPkgInstSrcList::fillList()
 {
     clear();
-    y2debug( "Filling inst source list" );
+    y2debug( "Filling repository list" );
 
-    zypp::SourceManager_Ptr sourceManager = zypp::SourceManager::sourceManager();
-    list<zypp::SourceManager::SourceId> sources = sourceManager->allSources();
-
-    for ( list<zypp::SourceManager::SourceId>::const_iterator it = sources.begin();
-	  it != sources.end();
+    for ( ZyppRepositoryIterator it = ZyppRepositoriesBegin();
+	  it != ZyppRepositoriesEnd();
 	  ++it )
     {
-	zypp::Source_Ref src = sourceManager->findSource( *it );
-
-	if ( src && src.enabled() )
-	    addInstSrc( src );
+      addInstSrc( *it );
     }
 
-    y2debug( "Inst source list filled" );
+    y2debug( "Inst repository filled" );
 }
 
 
 int
 YQPkgInstSrcList::countEnabledSources()
 {
-    int count = 0;
-    zypp::SourceManager_Ptr sourceManager = zypp::SourceManager::sourceManager();
-    list<zypp::SourceManager::SourceId> sources = sourceManager->allSources();
-
-    for ( list<zypp::SourceManager::SourceId>::const_iterator it = sources.begin();
-	  it != sources.end();
-	  ++it )
-    {
-	zypp::Source_Ref src = sourceManager->findSource( *it );
-
-	if ( src && src.enabled() )
-	    ++count;
-    }
-
-    return count;
+    return zyppPool().knownRepositoriesSize();
 }
 
 
@@ -124,13 +104,13 @@ YQPkgInstSrcList::filter()
 {
     emit filterStart();
 
-    y2milestone( "Collecting packages on selected installation sources..." );
+    y2milestone( "Collecting packages in selected repositories..." );
     QTime stopWatch;
     stopWatch.start();
 
 
     //
-    // Collect all packages on this inst source
+    // Collect all packages on this repository
     //
 
     set<ZyppSel> exactMatches;
@@ -153,7 +133,7 @@ YQPkgInstSrcList::filter()
 		      ++sel_it )
 		{
 		    if ( (*sel_it)->candidateObj() &&
-			 (*sel_it)->candidateObj()->source() == currentSrc )
+			 (*sel_it)->candidateObj()->repository() == currentSrc )
 		    {
 			exactMatches.insert( *sel_it );
 		    }
@@ -163,7 +143,7 @@ YQPkgInstSrcList::filter()
 
 			while ( pkg_it != (*sel_it)->availableEnd() )
 			{
-			    if ( (*pkg_it)->source() == currentSrc )
+			    if ( (*pkg_it)->repository() == currentSrc )
 				nearMatches.insert( *sel_it );
 
 			    ++pkg_it;
@@ -177,7 +157,7 @@ YQPkgInstSrcList::filter()
 	item = item->nextSibling();
     }
 
-    
+
     //
     // Send all exact matches to the list
     // (emit a filterMatch signal for each one)
@@ -257,7 +237,12 @@ YQPkgInstSrcListItem::YQPkgInstSrcListItem( YQPkgInstSrcList *	instSrcList,
 
     if ( urlCol() >= 0 )
     {
-	setText( urlCol(), src.url().asString().c_str() );
+        zypp::Url srcUrl;
+	if ( ! src.info().baseUrlsEmpty() )
+	{
+	  srcUrl = *src.info().baseUrlsBegin();
+	}
+	setText( urlCol(), srcUrl.asString().c_str() );
     }
 }
 
@@ -277,7 +262,7 @@ YQPkgInstSrcListItem::singleProduct( ZyppSrc zyppSrc )
     zypp::ResStore::iterator it = zyppSrc.resolvables().begin();
 
     //
-    // Find the first product on this inst src
+    // Find the first product on this repository
     //
 
     while ( it != zyppSrc.resolvables().end() && ! product )
@@ -287,15 +272,15 @@ YQPkgInstSrcListItem::singleProduct( ZyppSrc zyppSrc )
     }
 
     //
-    // Check if there is another product on this inst src
+    // Check if there is another product on this repository
     //
 
     while ( it != zyppSrc.resolvables().end() )
     {
 	if ( zypp::dynamic_pointer_cast<zypp::Product>( *it ) )
 	{
-	    y2milestone( "Multiple products on installation source %s",
-			 zyppSrc.alias().c_str() );
+	    y2milestone( "Multiple products in repository %s",
+			 zyppSrc.info().alias().c_str() );
 	    ZyppProduct null;
 	    return null;
 	}
@@ -304,8 +289,8 @@ YQPkgInstSrcListItem::singleProduct( ZyppSrc zyppSrc )
     }
 
     if ( ! product )
-	y2milestone( "No product on installation source %s",
-		     zyppSrc.alias().c_str() );
+	y2milestone( "No product in repository %s",
+		     zyppSrc.info().alias().c_str() );
 
     return product;
 }

@@ -161,7 +161,7 @@ YQPackageSelector::YQPackageSelector( QWidget *			parent,
 	}
 	else if ( _searchFilterView )
 	{
-	    y2milestone( "No multiple inst sources - falling back to search mode" );
+	    y2milestone( "No multiple repositories - falling back to search mode" );
 	    _filters->showPage( _searchFilterView );
 	    _searchFilterView->filter();
 	    QTimer::singleShot( 0, _searchFilterView, SLOT( setFocus() ) );
@@ -368,12 +368,12 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
 
     //
-    // Inst source view
+    // Repository view
     //
 
     _instSrcFilterView = new YQPkgInstSrcFilterView( parent );
     CHECK_PTR( _instSrcFilterView );
-    _filters->addPage( _( "Installation Sources" ), _instSrcFilterView );
+    _filters->addPage( _( "Repositories" ), _instSrcFilterView );
 
 
     //

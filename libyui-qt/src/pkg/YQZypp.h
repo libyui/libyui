@@ -35,16 +35,16 @@
 #include <zypp/ResPoolProxy.h>
 
 
-using zypp::ui::S_Protected;           
-using zypp::ui::S_Taboo;               
-using zypp::ui::S_Del;                 
-using zypp::ui::S_Update;              
-using zypp::ui::S_Install;             
-using zypp::ui::S_AutoDel;             
-using zypp::ui::S_AutoUpdate;          
-using zypp::ui::S_AutoInstall;         
-using zypp::ui::S_KeepInstalled;       
-using zypp::ui::S_NoInst;              
+using zypp::ui::S_Protected;
+using zypp::ui::S_Taboo;
+using zypp::ui::S_Del;
+using zypp::ui::S_Update;
+using zypp::ui::S_Install;
+using zypp::ui::S_AutoDel;
+using zypp::ui::S_AutoUpdate;
+using zypp::ui::S_AutoInstall;
+using zypp::ui::S_KeepInstalled;
+using zypp::ui::S_NoInst;
 
 
 //
@@ -63,7 +63,7 @@ typedef zypp::Product::constPtr			ZyppProduct;
 
 typedef zypp::ResPoolProxy			ZyppPool;
 typedef zypp::ResPoolProxy::const_iterator	ZyppPoolIterator;
-
+typedef zypp::ResPoolProxy::repository_iterator	ZyppRepositoryIterator;
 
 inline ZyppPool		zyppPool()		{ return zypp::getZYpp()->poolProxy();	}
 
@@ -88,6 +88,8 @@ inline ZyppPoolIterator zyppPatchesEnd()	{ return zyppEnd<zypp::Patch>();	}
 inline ZyppPoolIterator zyppProductsBegin()	{ return zyppBegin<zypp::Product>();	}
 inline ZyppPoolIterator zyppProductsEnd()	{ return zyppEnd<zypp::Product>();	}
 
+inline ZyppRepositoryIterator ZyppRepositoriesBegin() { return zyppPool().knownRepositoriesBegin(); }
+inline ZyppRepositoryIterator ZyppRepositoriesEnd()   { return zyppPool().knownRepositoriesEnd(); }
 
 inline ZyppPkg		tryCastToZyppPkg( ZyppObj zyppObj )
 {

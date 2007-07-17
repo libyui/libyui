@@ -133,7 +133,7 @@ YQPkgTechnicalDetailsView::simpleTable( ZyppSel selectable,
 	       row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( pkg )		) ) +
 	       row( hcell( _( "License:"	) ) + cell( pkg->license()			) ) +
 	       row( hcell( _( "Installed Size:" ) ) + cell( pkg->size().asString()		) ) +
-	       row( hcell( _( "Archive Size:"   ) ) + cell( pkg->archivesize().asString()	) ) +
+	       row( hcell( _( "Download Size:"  ) ) + cell( pkg->downloadSize().asString()	) ) +
 	       row( hcell( _( "Distribution:"	) ) + cell( pkg->distribution()			) ) +
 	       row( hcell( _( "Vendor:"		) ) + cell( pkg->vendor()			) ) +
 	       row( hcell( _( "Packager:"	) ) + cell( pkg->packager()			) ) +
@@ -144,7 +144,7 @@ YQPkgTechnicalDetailsView::simpleTable( ZyppSel selectable,
 #ifdef FIXME_missing_in_zypp
 	       row( hcell( _( "Source RPM:"	) ) + cell( pkg->sourceloc()			) ) +
 #endif
-	       row( hcell( _( "Media No.:"	) ) + cell( pkg->sourceMediaNr()		) ) +
+	       row( hcell( _( "Media No.:"	) ) + cell( pkg->mediaNr()			) ) +
 	       row( hcell( _( "Authors:"	) ) + authorsListCell( pkg			) )
 	       );
 
@@ -173,7 +173,7 @@ YQPkgTechnicalDetailsView::complexTable( ZyppSel	selectable,
 	       row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( p1 )		) + cell( formatRpmGroup( p2 )		) ) +
 	       row( hcell( _( "License:"	) ) + cell( p1->license()			) + cell( p2->license()			) ) +
 	       row( hcell( _( "Installed Size:" ) ) + cell( p1->size().asString()		) + cell( p2->size().asString()		) ) +
-	       row( hcell( _( "Archive Size:"   ) ) + cell( p1->archivesize().asString()	) + cell( p2->archivesize().asString()	) ) +
+	       row( hcell( _( "Download Size:"  ) ) + cell( p1->downloadSize().asString()	) + cell( p2->downloadSize().asString()	) ) +
 	       row( hcell( _( "Distribution:"	) ) + cell( p1->distribution()			) + cell( p2->distribution()		) ) +
 	       row( hcell( _( "Vendor:"		) ) + cell( p1->vendor()			) + cell( p2->vendor()			) ) +
 	       row( hcell( _( "Packager:"	) ) + cell( p1->packager()			) + cell( p2->packager()		) ) +
@@ -184,7 +184,7 @@ YQPkgTechnicalDetailsView::complexTable( ZyppSel	selectable,
 #ifdef FIXME_missing_in_zypp
 	       row( hcell( _( "Source RPM:"	) ) + cell( p1->sourceloc()			) + cell( p2->sourceloc()		) ) +
 #endif
-	       row( hcell( _( "Media No.:"	) ) + cell( p1->sourceMediaNr()			) + cell( p2->sourceMediaNr()		) ) +
+	       row( hcell( _( "Media No.:"	) ) + cell( p1->mediaNr()			) + cell( p2->mediaNr()			) ) +
 	       row( hcell( _( "Authors:"	) ) + authorsListCell( p1			) + authorsListCell( p2			) )
 	       );
 

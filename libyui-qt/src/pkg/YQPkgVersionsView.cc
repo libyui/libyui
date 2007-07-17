@@ -21,7 +21,7 @@
 #define y2log_component "qt-pkg"
 
 #include <YQZypp.h>
-#include <zypp/Source.h>
+#include <zypp/Repository.h>
 #include <ycp/y2log.h>
 #include <qtabwidget.h>
 #include <qregexp.h>
@@ -51,11 +51,11 @@ YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
     _summaryCol = -42;
 
     int numCol = 0;
-    addColumn( _( "Version" 		) );	_versionCol	= numCol++;
-    addColumn( _( "Arch." 		) );	_archCol	= numCol++;
-    addColumn( _( "Product"		) );	_productCol	= numCol++;
-    addColumn( _( "Installation Source"	) );	_instSrcCol	= numCol++;
-    addColumn( _( "URL"			) );	_urlCol		= numCol++;
+    addColumn( _( "Version" 	) );	_versionCol	= numCol++;
+    addColumn( _( "Arch." 	) );	_archCol	= numCol++;
+    addColumn( _( "Product"	) );	_productCol	= numCol++;
+    addColumn( _( "Repository"	) );	_instSrcCol	= numCol++;
+    addColumn( _( "URL"		) );	_urlCol		= numCol++;
     _statusCol	= _productCol;
 
     _nameCol	= _versionCol;
@@ -248,17 +248,22 @@ YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
 
     if ( versionCol() >= 0 )	setText( versionCol(), zyppObj->edition().asString().c_str() );
     if ( archCol()    >= 0 )	setText( archCol(),    zyppObj->arch().asString().c_str() );
-    if ( instSrcCol() >= 0 )	setText( instSrcCol(), zyppObj->source().alias().c_str() );
+    if ( instSrcCol() >= 0 )	setText( instSrcCol(), zyppObj->repository().info().alias().c_str() );
     if ( productCol() >= 0 )
     {
-	ZyppProduct product = YQPkgInstSrcListItem::singleProduct( zyppObj->source() );
+	ZyppProduct product = YQPkgInstSrcListItem::singleProduct( zyppObj->repository() );
 
 	if ( product )
 	    setText( productCol(), product->summary() );
     }
     if ( urlCol() >= 0 )
     {
-	setText( urlCol(), zyppObj->source().url().asString().c_str() );
+        zypp::Url srcUrl;
+	if ( ! zyppObj->repository().info().baseUrlsEmpty() )
+	{
+	  srcUrl = *zyppObj->repository().info().baseUrlsBegin();
+	}
+	setText( urlCol(), srcUrl.asString().c_str() );
     }
 
     if ( _selectable->hasInstalledObj() )

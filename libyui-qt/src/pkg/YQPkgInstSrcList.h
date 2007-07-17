@@ -24,13 +24,13 @@
 
 #include "YQZypp.h"
 #include "QY2ListView.h"
-#include <zypp/Source.h>
+#include <zypp/Repository.h>
 #include <zypp/Product.h>
 
 
 class YQPkgInstSrcListItem;
 
-typedef zypp::Source_Ref	ZyppSrc;
+typedef zypp::Repository	ZyppSrc;
 
 
 /**
@@ -78,8 +78,8 @@ public slots:
      * Add an inst source to the list.
      **/
     void addInstSrc( ZyppSrc src );
-    
-    
+
+
 public:
 
     // Column numbers
@@ -87,7 +87,7 @@ public:
     int nameCol()	const	{ return _nameCol;	}
     int urlCol()	const	{ return _urlCol;	}
 
-    
+
     /**
      * Returns the currently selected item or 0 if there is none.
      **/
@@ -138,7 +138,7 @@ private:
 
     int	_nameCol;
     int	_urlCol;
-    
+
 };
 
 

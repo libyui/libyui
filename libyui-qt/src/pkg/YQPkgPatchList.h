@@ -65,7 +65,7 @@ public:
      **/
     virtual ~YQPkgPatchList();
 
-    
+
     enum FilterCriteria
     {
 	RelevantPatches,		// needed + broken
@@ -291,7 +291,7 @@ protected:
      **/
     virtual void applyChanges();
 
-    
+
     // Data members
 
     YQPkgPatchList *	_patchList;
