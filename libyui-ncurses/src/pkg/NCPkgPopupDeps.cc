@@ -154,7 +154,7 @@ void NCPkgPopupDeps::createLayout( )
     
   // add the package list containing the dependencies
   solutionw = new NCSolutionSelectionBox ( vSplit, opt,
-					   _("P&ossible Solutions"),
+					   _("Possible &Solutions"),
 					   this);
   vSplit->addChild( solutionw );
   
