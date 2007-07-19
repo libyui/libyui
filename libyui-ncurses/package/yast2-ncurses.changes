@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Thu Jul 19 13:24:01 CEST 2007 - kmachalkova@suse.cz
+
+- Make repositories list popup work (FaTE #301810 - part II) -
+  show repositories (and their products), show packages for selected
+  repository
+- Added dejagnu to BuildRequires (needed to run testsuite during pkg
+  build)
+- 2.15.21
+  
+-------------------------------------------------------------------
 Tue Jul 17 09:51:36 CEST 2007 - kmachalkova@suse.cz
 
 - Require new libzypp (>= 3.11.8) 
