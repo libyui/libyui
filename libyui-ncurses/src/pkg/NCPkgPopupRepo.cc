@@ -419,7 +419,7 @@ NCursesEvent & NCPkgPopupRepo::showRepoPopup()
 	int index = repolist->getCurrentItem();
 	ZyppRepo repo = repolist->getRepo( index );
 
-        NCMIL << "Selected repository " << repo.info().alias().c_str << endl;
+        NCMIL << "Selected repository " << repo.info().alias().c_str() << endl;
 
 	//and show associated packages to the user
         packager->fillRepoFilterList( repo );

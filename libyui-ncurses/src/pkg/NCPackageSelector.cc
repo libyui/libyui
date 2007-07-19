@@ -1170,7 +1170,7 @@ bool NCPackageSelector::fillPackageList( const YCPString & label, YStringTreeIte
 
 bool NCPackageSelector::fillRepoFilterList( ZyppRepo repo) 
 {
-    NCMIL << "Collecting packages in selected repository"
+    NCMIL << "Collecting packages in selected repository" << endl;
 
     NCPkgTable *pkgList = getPackageList();
     //clean the pkg table first
