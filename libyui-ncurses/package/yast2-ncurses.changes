@@ -6,6 +6,7 @@ Thu Jul 19 13:24:01 CEST 2007 - kmachalkova@suse.cz
   repository
 - Added dejagnu to BuildRequires (needed to run testsuite during pkg
   build)
+- Changed kbd shortcut to prevent duplicates (bug #289771) - by gs
 - 2.15.21
   
 -------------------------------------------------------------------
