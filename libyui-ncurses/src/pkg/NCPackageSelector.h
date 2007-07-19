@@ -193,7 +193,11 @@ class NCPackageSelector
 
     bool fillPatchSearchList( const YCPString & expr );
 
-    bool fillRepoFilterList ( ZyppRepo repoPtr );
+    /**
+      *Fills the package table with packages from selected repository
+      *@param repo zypp::Repository
+      */
+    bool fillRepoFilterList ( ZyppRepo repo );
     
     bool isYouMode() { return youMode; }
    /**

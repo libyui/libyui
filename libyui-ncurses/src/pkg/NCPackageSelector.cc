@@ -222,6 +222,7 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, const YWidgetOpt & opt )
 	// create language popup
 	languagePopup = new NCPkgPopupSelection( wpos( 1,1 ), this, NCPkgPopupSelection::S_Language );
 
+        // create repositories popup
         repoPopup = new NCPkgPopupRepo( wpos( 1,1), this );
 
 	// create the filter popup
@@ -1160,32 +1161,44 @@ bool NCPackageSelector::fillPackageList( const YCPString & label, YStringTreeIte
     return true;
 }
 
-bool NCPackageSelector::fillRepoFilterList( ZyppRepo repoPtr) 
+///////////////////////////////////////////////////////////////////
+//
+// fillRepoFilterList
+//
+// Fills the package table with packages from selected repository
+//
+
+bool NCPackageSelector::fillRepoFilterList( ZyppRepo repo) 
 {
-    NCMIL << "Collecting package in selected repository"
+    NCMIL << "Collecting packages in selected repository"
 
     NCPkgTable *pkgList = getPackageList();
+    //clean the pkg table first
     pkgList->itemsCleared ();
 
+    //sets to store matching packages
     set <ZyppSel> exactMatch;
     set <ZyppSel> nearMatch;
     
+    //iterate through the package pool
     for ( ZyppPoolIterator it = zyppPkgBegin();
           it != zyppPkgEnd();
           ++it )
     {
+	//we have candidate object in this repository
         if ( (*it)->candidateObj() &&
-             (*it)->candidateObj()->repository() == repoPtr )
+             (*it)->candidateObj()->repository() == repo )
         {
             exactMatch.insert( *it );
         }
+	//something else (?)
         else
         {
             zypp::ui::Selectable::available_iterator pkg_it = (*it)->availableBegin();
     
             while ( pkg_it != (*it)->availableEnd() )
             {
-                if ( (*pkg_it)->repository() == repoPtr )
+                if ( (*pkg_it)->repository() == repo )
                     nearMatch.insert( *it );
     
                 ++pkg_it;
@@ -1194,6 +1207,7 @@ bool NCPackageSelector::fillRepoFilterList( ZyppRepo repoPtr)
     
       }
 
+    //finally create pkg table list entries
     set<ZyppSel>::const_iterator e_it = exactMatch.begin();
     while ( e_it != exactMatch.end() )
     {
@@ -1203,7 +1217,6 @@ bool NCPackageSelector::fillRepoFilterList( ZyppRepo repoPtr)
     }
     
     set<ZyppSel>::const_iterator n_it = nearMatch.begin();
-
     while ( n_it != nearMatch.end() )
     {
         ZyppPkg pkg = tryCastToZyppPkg( (*n_it)->theObj() );
@@ -1211,6 +1224,7 @@ bool NCPackageSelector::fillRepoFilterList( ZyppRepo repoPtr)
 	n_it++;
     }
 
+    //and show the whole stuff to the user
     pkgList->drawList();
 
     return true;
