@@ -192,6 +192,8 @@ class NCPackageSelector
 			 bool checkRequires );
 
     bool fillPatchSearchList( const YCPString & expr );
+
+    bool fillRepoFilterList ( ZyppRepo repoPtr );
     
     bool isYouMode() { return youMode; }
    /**

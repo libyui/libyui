@@ -1160,6 +1160,63 @@ bool NCPackageSelector::fillPackageList( const YCPString & label, YStringTreeIte
     return true;
 }
 
+bool NCPackageSelector::fillRepoFilterList( ZyppRepo repoPtr) 
+{
+    NCMIL << "Collecting package in selected repository"
+
+    NCPkgTable *pkgList = getPackageList();
+    pkgList->itemsCleared ();
+
+    set <ZyppSel> exactMatch;
+    set <ZyppSel> nearMatch;
+    
+    for ( ZyppPoolIterator it = zyppPkgBegin();
+          it != zyppPkgEnd();
+          ++it )
+    {
+        if ( (*it)->candidateObj() &&
+             (*it)->candidateObj()->repository() == repoPtr )
+        {
+            exactMatch.insert( *it );
+        }
+        else
+        {
+            zypp::ui::Selectable::available_iterator pkg_it = (*it)->availableBegin();
+    
+            while ( pkg_it != (*it)->availableEnd() )
+            {
+                if ( (*pkg_it)->repository() == repoPtr )
+                    nearMatch.insert( *it );
+    
+                ++pkg_it;
+            }
+        }
+    
+      }
+
+    set<ZyppSel>::const_iterator e_it = exactMatch.begin();
+    while ( e_it != exactMatch.end() )
+    {
+        ZyppPkg pkg = tryCastToZyppPkg( (*e_it)->theObj() );
+        pkgList->createListEntry ( pkg, *e_it);
+	e_it++;
+    }
+    
+    set<ZyppSel>::const_iterator n_it = nearMatch.begin();
+
+    while ( n_it != nearMatch.end() )
+    {
+        ZyppPkg pkg = tryCastToZyppPkg( (*n_it)->theObj() );
+        pkgList->createListEntry ( pkg, *n_it);
+	n_it++;
+    }
+
+    pkgList->drawList();
+
+    return true;
+
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 // match

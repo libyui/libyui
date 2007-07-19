@@ -26,6 +26,73 @@
 
 #include "NCZypp.h"
 
+NCPkgRepoTag::NCPkgRepoTag ( ZyppRepo repoPtr)
+    : NCTableCol (NCstring(" "), SEPARATOR)
+      , repo (repoPtr)
+{
+
+}
+
+NCPkgRepoTable::NCPkgRepoTable( NCWidget *parent, const YWidgetOpt & opt)
+    :NCTable( parent, opt, vector<string> (), false )
+{
+   fillHeader();
+}
+
+void NCPkgRepoTable::fillHeader() 
+{
+    vector <string> header;
+
+    header.reserve(3);
+    header.push_back( "L" );
+    header.push_back( "L" + NCPkgNames::PkgName() );
+    header.push_back( "L" + NCPkgNames::RepoURL() );
+
+    setHeader( header);
+}
+
+void NCPkgRepoTable::addLine ( ZyppRepo r, const vector <string> & cols )
+{
+    vector <NCTableCol*> items ( cols.size() + 1, 0);
+
+    items[0] = new NCPkgRepoTag ( r );
+
+
+    for ( unsigned i = 1; i < cols.size() + 1; ++i ) {
+        items[i] = new NCTableCol( YCPString( cols[i - 1] ) );
+    }
+
+    myPad()->Append( items);
+}
+
+NCPkgRepoTag* NCPkgRepoTable::getTag (const int & index )
+{
+   NCTableLine *line = myPad()->ModifyLine( index );
+
+   if ( !line )
+   {
+	return 0;
+   }
+
+   NCPkgRepoTag *tag = static_cast<NCPkgRepoTag *>( line->GetCol( 0 ) );
+
+   return tag;
+}
+
+ZyppRepo NCPkgRepoTable::getRepo( int index )
+{
+    NCPkgRepoTag *t = getTag( index );
+
+    if ( !t )
+    {
+	return ZyppRepo( );
+    }
+    else 
+    {
+	 return t->getRepo();
+    }
+}
+
 NCPkgPopupRepo::NCPkgPopupRepo (const wpos at, NCPackageSelector *pkg) 
     : NCPopup (at, false)
     , repolist( 0 )
@@ -34,7 +101,7 @@ NCPkgPopupRepo::NCPkgPopupRepo (const wpos at, NCPackageSelector *pkg)
 {
     createLayout( YCPString( NCPkgNames::RepoLabel()) );
 
-//    fillRepoList( );
+    fillRepoList( );
 }
 
 NCPkgPopupRepo::~NCPkgPopupRepo()
@@ -58,8 +125,7 @@ void NCPkgPopupRepo::createLayout( const YCPString & label)
     NCLabel * head = new NCLabel( split, opt, label );
     split->addChild( head );
 
-    repolist = new NCTable( split, opt, vector <string> (), false);
-    fillHeader();
+    repolist = new NCPkgRepoTable( split, opt );
     split->addChild( repolist);
     
     split->addChild ( new NCSpacing( split, opt, 0.4, false, true) );
@@ -73,15 +139,70 @@ void NCPkgPopupRepo::createLayout( const YCPString & label)
     split->addChild ( new NCSpacing( split, opt, 0.4, false, true) );
 }
 
-void NCPkgPopupRepo::fillHeader() 
+bool NCPkgPopupRepo::fillRepoList()
 {
-    vector <string> header;
+    NCMIL << "Filling repository list" << endl;
 
-    header.reserve(3);
-    header.push_back( "L" + NCPkgNames::PkgName() );
-    header.push_back( "L" + NCPkgNames::RepoURL() );
+    vector <string> oneLine;
+    for ( ZyppRepositoryIterator it = ZyppRepositoriesBegin();
+	  it != ZyppRepositoriesEnd(); 
+          ++it)
+    {
+	oneLine.clear();
+	
+	ZyppProduct product = findProductForRepo( (*it) );
+        string name = "";
 
-    repolist->setHeader( header);
+        if ( product ) 
+	{
+	    name = product->summary();
+        }        
+      	oneLine.push_back( name ); 
+
+        zypp::Url srcUrl;
+        if ( ! (*it).info().baseUrlsEmpty() )
+           srcUrl = *(*it).info().baseUrlsBegin();
+
+	oneLine.push_back( srcUrl.asString() );
+        repolist->addLine( (*it), oneLine);    
+    }
+    
+    return true;
+}
+
+ZyppProduct NCPkgPopupRepo::findProductForRepo( ZyppRepo repo)
+{
+
+    ZyppProduct product;
+
+    zypp::ResStore::iterator it = repo.resolvables().begin();
+
+    while( it != repo.resolvables().end() && !product )
+    {
+        product = zypp::dynamic_pointer_cast<zypp::Product>( *it );
+        it++;
+    }
+
+    while ( it != repo.resolvables().end() )
+    {
+        if ( zypp::dynamic_pointer_cast<zypp::Product>( *it ) )
+        {
+            NCMIL << "Multiple products in repository " <<
+                     repo.info().alias().c_str() << endl;
+            ZyppProduct null;
+            return null;
+        }
+
+        ++it;
+    }
+
+   if ( !product )
+   {
+	NCMIL << "No product in repository " <<
+                 repo.info().alias().c_str() << endl;
+   } 
+
+   return product;
 }
 
 long NCPkgPopupRepo::nicesize(YUIDimension dim)
@@ -126,6 +247,8 @@ bool NCPkgPopupRepo::postAgain()
     return true;
 }
 
+
+
 NCursesEvent & NCPkgPopupRepo::showRepoPopup()
 {
     postevent = NCursesEvent();
@@ -139,5 +262,16 @@ NCursesEvent & NCPkgPopupRepo::showRepoPopup()
 
     popdownDialog();
 
+    if ( postevent.detail == NCursesEvent::USERDEF )
+    {
+
+	int index = repolist->getCurrentItem();
+	ZyppRepo repo = repolist->getRepo( index );
+
+        NCMIL << "Selected repository " << repo.info().alias().c_str << endl;
+
+        packager->fillRepoFilterList( repo );
+
+    }
     return postevent;
 }

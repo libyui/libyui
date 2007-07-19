@@ -25,14 +25,56 @@
 #include <string>
 #include <algorithm>
 
+#include "NCPadWidget.h"
 #include "NCPopup.h"
 #include "NCPushButton.h"
 #include "NCTable.h"
+#include "NCTablePad.h"
 #include "NCPackageSelector.h"
 
 class NCPopup;
 class NCPushButton;
 class NCPackageSelector;
+
+class NCPkgRepoTag : public NCTableCol
+{
+
+private:
+
+    ZyppRepo repo;
+
+public:
+
+    NCPkgRepoTag ( ZyppRepo repo);
+
+    virtual ~NCPkgRepoTag() {};
+
+    ZyppRepo getRepo() const		{ return repo; } 	
+
+};
+
+class NCPkgRepoTable : public NCTable
+{
+private:
+
+    NCPkgRepoTable & operator=( const NCPkgRepoTable & );
+    NCPkgRepoTable            ( const NCPkgRepoTable & );
+
+public:
+
+    NCPkgRepoTable (NCWidget *parent, const YWidgetOpt & opt);
+
+    virtual ~NCPkgRepoTable() {};
+
+    virtual void addLine( ZyppRepo r, const vector<string> & cols );
+
+    void fillHeader();
+
+    NCPkgRepoTag * getTag ( const int & index );
+
+    ZyppRepo getRepo( int index );
+
+};
 
 class NCPkgPopupRepo : public NCPopup {
 
@@ -40,7 +82,7 @@ class NCPkgPopupRepo : public NCPopup {
     NCPkgPopupRepo	      ( const NCPkgPopupRepo &);
 
 private:
-    NCTable *repolist;
+    NCPkgRepoTable *repolist;
     NCPushButton *okButton;
     NCPackageSelector *packager;
 
@@ -58,13 +100,13 @@ public:
 
     virtual ~NCPkgPopupRepo();
 
+    ZyppProduct findProductForRepo (ZyppRepo repo);
+
     virtual long nicesize( YUIDimension dim );
 
     void createLayout( const YCPString & label );    
 
-//    bool fillRepoList( );
-
-    void fillHeader();
+    bool fillRepoList( );
 
     NCursesEvent & showRepoPopup();
 };
