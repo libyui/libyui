@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:		YQPkgInstSrcFilterView.cc
+  File:		YQPkgRepoFilterView.cc
 
   Author:	Stefan Hundhammer <sh@suse.de>
 
@@ -26,8 +26,8 @@
 
 #include "QY2ComboTabWidget.h"
 #include "QY2LayoutUtils.h"
-#include "YQPkgInstSrcFilterView.h"
-#include "YQPkgInstSrcList.h"
+#include "YQPkgRepoFilterView.h"
+#include "YQPkgRepoList.h"
 #include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQPkgSearchFilterView.h"
 #include "YQPkgStatusFilterView.h"
@@ -36,16 +36,16 @@
 #define MARGIN			4
 
 
-YQPkgInstSrcFilterView::YQPkgInstSrcFilterView( QWidget * parent )
+YQPkgRepoFilterView::YQPkgRepoFilterView( QWidget * parent )
     : QVBox( parent )
 {
     QSplitter * splitter = new QSplitter( QSplitter::Vertical, this );
     CHECK_PTR( splitter );
 
     QVBox * upper_vbox = new QVBox( splitter );
-    _instSrcList = new YQPkgInstSrcList( upper_vbox );
-    CHECK_PTR( _instSrcList );
-    _instSrcList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding ) );// hor/vert
+    _repoList = new YQPkgRepoList( upper_vbox );
+    CHECK_PTR( _repoList );
+    _repoList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding ) );// hor/vert
 
     addVSpacing( upper_vbox, MARGIN );
 
@@ -53,19 +53,19 @@ YQPkgInstSrcFilterView::YQPkgInstSrcFilterView( QWidget * parent )
     // Directly propagate signals filterStart() and filterFinished()
     // from primary filter to the outside
 
-    connect( _instSrcList,	SIGNAL( filterStart() ),
+    connect( _repoList,	SIGNAL( filterStart() ),
 	     this,		SIGNAL( filterStart() ) );
 
-    connect( _instSrcList,	SIGNAL( filterFinished() ),
+    connect( _repoList,	SIGNAL( filterFinished() ),
 	     this, 		SIGNAL( filterFinished() ) );
 
 
     // Redirect filterMatch() and filterNearMatch() signals to secondary filter
 
-    connect( _instSrcList,	SIGNAL( filterMatch		( ZyppSel, ZyppPkg ) ),
+    connect( _repoList,	SIGNAL( filterMatch		( ZyppSel, ZyppPkg ) ),
 	     this,		SLOT  ( primaryFilterMatch	( ZyppSel, ZyppPkg ) ) );
 
-    connect( _instSrcList,	SIGNAL( filterNearMatch		( ZyppSel, ZyppPkg ) ),
+    connect( _repoList,	SIGNAL( filterNearMatch		( ZyppSel, ZyppPkg ) ),
 	     this,		SLOT  ( primaryFilterNearMatch	( ZyppSel, ZyppPkg ) ) );
 
 #if 0
@@ -74,20 +74,20 @@ YQPkgInstSrcFilterView::YQPkgInstSrcFilterView( QWidget * parent )
     layoutSecondaryFilters( splitter );
 
 #if 0
-    splitter->setResizeMode( _instSrcList,	QSplitter::Stretch        );
+    splitter->setResizeMode( _repoList,	QSplitter::Stretch        );
     splitter->setResizeMode( secondary_filters, QSplitter::FollowSizeHint );
 #endif
 }
 
 
-YQPkgInstSrcFilterView::~YQPkgInstSrcFilterView()
+YQPkgRepoFilterView::~YQPkgRepoFilterView()
 {
     // NOP
 }
 
 
 QWidget *
-YQPkgInstSrcFilterView::layoutSecondaryFilters( QWidget * parent )
+YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
 {
     QVBox *vbox = new QVBox( parent );
     CHECK_PTR( vbox );
@@ -123,7 +123,7 @@ YQPkgInstSrcFilterView::layoutSecondaryFilters( QWidget * parent )
     _secondaryFilters->addPage( _( "Package Groups" ), _rpmGroupTagsFilterView );
 
     connect( _rpmGroupTagsFilterView,	SIGNAL( filterStart() ),
-	     _instSrcList,		SLOT  ( filter()      ) );
+	     _repoList,		SLOT  ( filter()      ) );
 
 
     //
@@ -135,7 +135,7 @@ YQPkgInstSrcFilterView::layoutSecondaryFilters( QWidget * parent )
     _secondaryFilters->addPage( _( "Search" ), _searchFilterView );
 
     connect( _searchFilterView,	SIGNAL( filterStart() ),
-	     _instSrcList,	SLOT  ( filter()      ) );
+	     _repoList,	SLOT  ( filter()      ) );
 
     connect( _secondaryFilters, SIGNAL( currentChanged( QWidget * ) ),
 	     this, 		SLOT  ( filter()		  ) );
@@ -150,26 +150,26 @@ YQPkgInstSrcFilterView::layoutSecondaryFilters( QWidget * parent )
     _secondaryFilters->addPage( _( "Installation Summary" ), _statusFilterView );
 
     connect( _statusFilterView,	SIGNAL( filterStart() ),
-	     _instSrcList,	SLOT  ( filter()      ) );
+	     _repoList,	SLOT  ( filter()      ) );
 
 
     return _secondaryFilters;
 }
 
 
-void YQPkgInstSrcFilterView::filter()
+void YQPkgRepoFilterView::filter()
 {
-    _instSrcList->filter();
+    _repoList->filter();
 }
 
 
-void YQPkgInstSrcFilterView::filterIfVisible()
+void YQPkgRepoFilterView::filterIfVisible()
 {
-    _instSrcList->filterIfVisible();
+    _repoList->filterIfVisible();
 }
 
 
-void YQPkgInstSrcFilterView::primaryFilterMatch( ZyppSel 	selectable,
+void YQPkgRepoFilterView::primaryFilterMatch( ZyppSel 	selectable,
 						 ZyppPkg 	pkg )
 {
     if ( secondaryFilterMatch( selectable, pkg ) )
@@ -177,7 +177,7 @@ void YQPkgInstSrcFilterView::primaryFilterMatch( ZyppSel 	selectable,
 }
 
 
-void YQPkgInstSrcFilterView::primaryFilterNearMatch( ZyppSel	selectable,
+void YQPkgRepoFilterView::primaryFilterNearMatch( ZyppSel	selectable,
 						     ZyppPkg 	pkg )
 {
     if ( secondaryFilterMatch( selectable, pkg ) )
@@ -186,7 +186,7 @@ void YQPkgInstSrcFilterView::primaryFilterNearMatch( ZyppSel	selectable,
 
 
 bool
-YQPkgInstSrcFilterView::secondaryFilterMatch( ZyppSel	selectable,
+YQPkgRepoFilterView::secondaryFilterMatch( ZyppSel	selectable,
 					      ZyppPkg 	pkg )
 {
     if ( _allPackages->isVisible() )
@@ -216,4 +216,4 @@ YQPkgInstSrcFilterView::secondaryFilterMatch( ZyppSel	selectable,
 
 
 
-#include "YQPkgInstSrcFilterView.moc"
+#include "YQPkgRepoFilterView.moc"

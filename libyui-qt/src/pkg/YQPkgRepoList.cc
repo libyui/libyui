@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQPkgInstSrcList.cc
+  File:	      YQPkgRepoList.cc
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
@@ -24,7 +24,7 @@
 #include <qdatetime.h>
 #include "YQi18n.h"
 #include "utf8.h"
-#include "YQPkgInstSrcList.h"
+#include "YQPkgRepoList.h"
 #include <zypp/RepoManager.h>
 #include <algorithm>
 
@@ -34,7 +34,7 @@ using std::vector;
 
 
 
-YQPkgInstSrcList::YQPkgInstSrcList( QWidget * parent )
+YQPkgRepoList::YQPkgRepoList( QWidget * parent )
     : QY2ListView( parent )
 {
     y2debug( "Creating repository list" );
@@ -61,14 +61,14 @@ YQPkgInstSrcList::YQPkgInstSrcList( QWidget * parent )
 }
 
 
-YQPkgInstSrcList::~YQPkgInstSrcList()
+YQPkgRepoList::~YQPkgRepoList()
 {
     // NOP
 }
 
 
 void
-YQPkgInstSrcList::fillList()
+YQPkgRepoList::fillList()
 {
     clear();
     y2debug( "Filling repository list" );
@@ -77,7 +77,7 @@ YQPkgInstSrcList::fillList()
 	  it != ZyppRepositoriesEnd();
 	  ++it )
     {
-      addInstSrc( *it );
+      addRepo( *it );
     }
 
     y2debug( "Inst repository filled" );
@@ -85,14 +85,14 @@ YQPkgInstSrcList::fillList()
 
 
 int
-YQPkgInstSrcList::countEnabledSources()
+YQPkgRepoList::countEnabledSources()
 {
     return zyppPool().knownRepositoriesSize();
 }
 
 
 void
-YQPkgInstSrcList::filterIfVisible()
+YQPkgRepoList::filterIfVisible()
 {
     if ( isVisible() )
 	filter();
@@ -100,7 +100,7 @@ YQPkgInstSrcList::filterIfVisible()
 
 
 void
-YQPkgInstSrcList::filter()
+YQPkgRepoList::filter()
 {
     emit filterStart();
 
@@ -122,11 +122,11 @@ YQPkgInstSrcList::filter()
     {
 	if ( item->isSelected() )
 	{
-	    YQPkgInstSrcListItem * instSrcItem = dynamic_cast<YQPkgInstSrcListItem *> (item);
+	    YQPkgRepoListItem * repoItem = dynamic_cast<YQPkgRepoListItem *> (item);
 
-	    if ( instSrcItem )
+	    if ( repoItem )
 	    {
-		ZyppSrc currentSrc = instSrcItem->zyppSrc();
+		ZyppRepo currentSrc = repoItem->zyppSrc();
 
 		for ( ZyppPoolIterator sel_it = zyppPkgBegin();
 		      sel_it != zyppPkgEnd();
@@ -193,21 +193,21 @@ YQPkgInstSrcList::filter()
 
 
 void
-YQPkgInstSrcList::addInstSrc( ZyppSrc src )
+YQPkgRepoList::addRepo( ZyppRepo src )
 {
-    new YQPkgInstSrcListItem( this, src );
+    new YQPkgRepoListItem( this, src );
 }
 
 
-YQPkgInstSrcListItem *
-YQPkgInstSrcList::selection() const
+YQPkgRepoListItem *
+YQPkgRepoList::selection() const
 {
     QListViewItem * item = selectedItem();
 
     if ( ! item )
 	return 0;
 
-    return dynamic_cast<YQPkgInstSrcListItem *> (item);
+    return dynamic_cast<YQPkgRepoListItem *> (item);
 }
 
 
@@ -215,10 +215,10 @@ YQPkgInstSrcList::selection() const
 
 
 
-YQPkgInstSrcListItem::YQPkgInstSrcListItem( YQPkgInstSrcList *	instSrcList,
-					    ZyppSrc		src 		)
-    : QY2ListViewItem( instSrcList )
-    , _instSrcList( instSrcList )
+YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
+					    ZyppRepo		src 		)
+    : QY2ListViewItem( repoList )
+    , _repoList( repoList )
     , _zyppSrc( src )
 {
     if ( nameCol() >= 0 )
@@ -248,14 +248,14 @@ YQPkgInstSrcListItem::YQPkgInstSrcListItem( YQPkgInstSrcList *	instSrcList,
 
 
 
-YQPkgInstSrcListItem::~YQPkgInstSrcListItem()
+YQPkgRepoListItem::~YQPkgRepoListItem()
 {
     // NOP
 }
 
 
 ZyppProduct
-YQPkgInstSrcListItem::singleProduct( ZyppSrc zyppSrc )
+YQPkgRepoListItem::singleProduct( ZyppRepo zyppSrc )
 {
     ZyppProduct product;
 
@@ -297,4 +297,4 @@ YQPkgInstSrcListItem::singleProduct( ZyppSrc zyppSrc )
 
 
 
-#include "YQPkgInstSrcList.moc"
+#include "YQPkgRepoList.moc"

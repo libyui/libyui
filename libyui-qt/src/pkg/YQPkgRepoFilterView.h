@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQPkgInstSrcFilterView.h
+  File:	      YQPkgRepoFilterView.h
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
@@ -19,21 +19,21 @@
 // -*- c++ -*-
 
 
-#ifndef YQPkgInstSrcFilterView_h
-#define YQPkgInstSrcFilterView_h
+#ifndef YQPkgRepoFilterView_h
+#define YQPkgRepoFilterView_h
 
 #include "YQZypp.h"
 #include <qvbox.h>
 
 
-class YQPkgInstSrcList;
+class YQPkgRepoList;
 class QY2ComboTabWidget;
 class YQPkgRpmGroupTagsFilterView;
 class YQPkgSearchFilterView;
 class YQPkgStatusFilterView;
 
 
-class YQPkgInstSrcFilterView : public QVBox
+class YQPkgRepoFilterView : public QVBox
 {
     Q_OBJECT
 
@@ -42,12 +42,12 @@ public:
     /**
      * Constructor
      **/
-    YQPkgInstSrcFilterView( QWidget * parent );
+    YQPkgRepoFilterView( QWidget * parent );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgInstSrcFilterView();
+    virtual ~YQPkgRepoFilterView();
 
     
 signals:
@@ -128,7 +128,7 @@ protected:
 
     // Data members
 
-    YQPkgInstSrcList *		_instSrcList;
+    YQPkgRepoList *		_repoList;
     QY2ComboTabWidget *		_secondaryFilters;
     QWidget *			    _allPackages;
     YQPkgRpmGroupTagsFilterView *   _rpmGroupTagsFilterView;
@@ -138,4 +138,4 @@ protected:
 
 
 
-#endif // ifndef YQPkgInstSrcFilterView_h
+#endif // ifndef YQPkgRepoFilterView_h

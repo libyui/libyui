@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQPkgInstSrcList.h
+  File:	      YQPkgRepoList.h
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
@@ -19,8 +19,8 @@
 // -*- c++ -*-
 
 
-#ifndef YQPkgInstSrcList_h
-#define YQPkgInstSrcList_h
+#ifndef YQPkgRepoList_h
+#define YQPkgRepoList_h
 
 #include "YQZypp.h"
 #include "QY2ListView.h"
@@ -28,15 +28,15 @@
 #include <zypp/Product.h>
 
 
-class YQPkgInstSrcListItem;
+class YQPkgRepoListItem;
 
-typedef zypp::Repository	ZyppSrc;
+typedef zypp::Repository	ZyppRepo;
 
 
 /**
  * @short Display a list of zypp::Selection objects.
  **/
-class YQPkgInstSrcList : public QY2ListView
+class YQPkgRepoList : public QY2ListView
 {
     Q_OBJECT
 
@@ -45,12 +45,12 @@ public:
     /**
      * Constructor
      **/
-    YQPkgInstSrcList( QWidget * parent );
+    YQPkgRepoList( QWidget * parent );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgInstSrcList();
+    virtual ~YQPkgRepoList();
 
     /**
      * Returns the number of enabled installation sources.
@@ -77,7 +77,7 @@ public slots:
     /**
      * Add an inst source to the list.
      **/
-    void addInstSrc( ZyppSrc src );
+    void addRepo( ZyppRepo src );
 
 
 public:
@@ -91,7 +91,7 @@ public:
     /**
      * Returns the currently selected item or 0 if there is none.
      **/
-    YQPkgInstSrcListItem * selection() const;
+    YQPkgRepoListItem * selection() const;
 
 
 signals:
@@ -143,49 +143,49 @@ private:
 
 
 
-class YQPkgInstSrcListItem: public QY2ListViewItem
+class YQPkgRepoListItem: public QY2ListViewItem
 {
 public:
 
     /**
      * Constructor
      **/
-    YQPkgInstSrcListItem( YQPkgInstSrcList *parentList, ZyppSrc src );
+    YQPkgRepoListItem( YQPkgRepoList *parentList, ZyppRepo src );
 
     /**
      * Destructor
      **/
-    virtual ~YQPkgInstSrcListItem();
+    virtual ~YQPkgRepoListItem();
 
     /**
      * Returns the ZYPP source this item corresponds to
      **/
-    ZyppSrc zyppSrc() const { return _zyppSrc; }
+    ZyppRepo zyppSrc() const { return _zyppSrc; }
 
     /**
      * Returns the parent list
      **/
-    const YQPkgInstSrcList * instSrcList() const { return _instSrcList; }
+    const YQPkgRepoList * repoList() const { return _repoList; }
 
     /**
      * Returns the product on a source if it has one single product
      * or 0 if there are no or multiple products.
      **/
-    static ZyppProduct singleProduct( ZyppSrc src );
+    static ZyppProduct singleProduct( ZyppRepo src );
 
 
     // Columns
 
-    int nameCol()	const	{ return _instSrcList->nameCol();	}
-    int urlCol()	const 	{ return _instSrcList->urlCol(); 	}
+    int nameCol()	const	{ return _repoList->nameCol();	}
+    int urlCol()	const 	{ return _repoList->urlCol(); 	}
 
 protected:
 
     // Data members
 
-    YQPkgInstSrcList *		_instSrcList;
-    ZyppSrc			_zyppSrc;
+    YQPkgRepoList *		_repoList;
+    ZyppRepo			_zyppSrc;
 };
 
 
-#endif // ifndef YQPkgInstSrcList_h
+#endif // ifndef YQPkgRepoList_h

@@ -28,7 +28,7 @@
 #include <qheader.h>
 
 #include "YQPkgVersionsView.h"
-#include "YQPkgInstSrcList.h"
+#include "YQPkgRepoList.h"
 #include "YQIconPool.h"
 #include "YQi18n.h"
 #include "utf8.h"
@@ -45,7 +45,7 @@ YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
     _archCol	= -42;
     _productCol	= -42;
     _urlCol	= -42;
-    _instSrcCol	= -42;
+    _repoCol	= -42;
     _statusCol	= -42;
     _nameCol	= -42;
     _summaryCol = -42;
@@ -54,12 +54,12 @@ YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
     addColumn( _( "Version" 	) );	_versionCol	= numCol++;
     addColumn( _( "Arch." 	) );	_archCol	= numCol++;
     addColumn( _( "Product"	) );	_productCol	= numCol++;
-    addColumn( _( "Repository"	) );	_instSrcCol	= numCol++;
+    addColumn( _( "Repository"	) );	_repoCol	= numCol++;
     addColumn( _( "URL"		) );	_urlCol		= numCol++;
     _statusCol	= _productCol;
 
     _nameCol	= _versionCol;
-    _summaryCol = _instSrcCol;
+    _summaryCol = _repoCol;
 
     // saveColumnWidths();	// Minimize column widths
     // header()->hide();
@@ -248,10 +248,10 @@ YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
 
     if ( versionCol() >= 0 )	setText( versionCol(), zyppObj->edition().asString().c_str() );
     if ( archCol()    >= 0 )	setText( archCol(),    zyppObj->arch().asString().c_str() );
-    if ( instSrcCol() >= 0 )	setText( instSrcCol(), zyppObj->repository().info().alias().c_str() );
+    if ( repoCol() >= 0 )	setText( repoCol(), zyppObj->repository().info().alias().c_str() );
     if ( productCol() >= 0 )
     {
-	ZyppProduct product = YQPkgInstSrcListItem::singleProduct( zyppObj->repository() );
+	ZyppProduct product = YQPkgRepoListItem::singleProduct( zyppObj->repository() );
 
 	if ( product )
 	    setText( productCol(), product->summary() );

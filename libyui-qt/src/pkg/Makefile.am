@@ -48,8 +48,8 @@ libpy2qt_pkg_la_SOURCES =			\
 	YQPkgDiskUsageWarningDialog.cc		\
 	YQPkgFileListView.cc			\
 	YQPkgGenericDetailsView.cc		\
-	YQPkgInstSrcFilterView.cc		\
-	YQPkgInstSrcList.cc			\
+	YQPkgRepoFilterView.cc		\
+	YQPkgRepoList.cc			\
 	YQPkgLangList.cc			\
 	YQPkgList.cc				\
 	YQPkgObjList.cc				\
@@ -86,8 +86,8 @@ BUILT_SOURCES =					\
 	YQPkgDiskUsageWarningDialog.moc		\
 	YQPkgFileListView.moc			\
 	YQPkgGenericDetailsView.moc		\
-	YQPkgInstSrcFilterView.moc		\
-	YQPkgInstSrcList.moc			\
+	YQPkgRepoFilterView.moc		\
+	YQPkgRepoList.moc			\
 	YQPkgLangList.moc			\
 	YQPkgList.moc				\
 	YQPkgObjList.moc			\
@@ -124,8 +124,8 @@ YQPkgDiskUsageList.o YQPkgDiskUsageList.lo:			YQPkgDiskUsageList.moc
 YQPkgDiskUsageWarningDialog.o YQPkgDiskUsageWarningDialog.lo:	YQPkgDiskUsageWarningDialog.moc
 YQPkgFileListView.o YQPkgFileListView.lo:			YQPkgFileListView.moc
 YQPkgGenericDetailsView.o YQPkgGenericDetailsView.lo:		YQPkgGenericDetailsView.moc
-YQPkgInstSrcFilterView.o YQPkgInstSrcFilterView.lo:		YQPkgInstSrcFilterView.moc
-YQPkgInstSrcList.o YQPkgInstSrcList.lo:				YQPkgInstSrcList.moc
+YQPkgRepoFilterView.o YQPkgRepoFilterView.lo:		YQPkgRepoFilterView.moc
+YQPkgRepoList.o YQPkgRepoList.lo:				YQPkgRepoList.moc
 YQPkgLangList.o YQPkgLangList.lo:				YQPkgLangList.moc
 YQPkgList.o YQPkgList.lo:					YQPkgList.moc
 YQPkgObjList.o YQPkgObjList.lo:					YQPkgObjList.moc
@@ -161,8 +161,8 @@ YQPkgDiskUsageList.moc:			YQPkgDiskUsageList.h
 YQPkgDiskUsageWarningDialog.moc:	YQPkgDiskUsageWarningDialog.h
 YQPkgFileListView.moc:			YQPkgFileListView.h
 YQPkgGenericDetailsView.moc:		YQPkgGenericDetailsView.h
-YQPkgInstSrcFilterView.moc:		YQPkgInstSrcFilterView.h
-YQPkgInstSrcList.moc:			YQPkgInstSrcList.h
+YQPkgRepoFilterView.moc:		YQPkgRepoFilterView.h
+YQPkgRepoList.moc:			YQPkgRepoList.h
 YQPkgLangList.moc:			YQPkgLangList.h
 YQPkgList.moc:				YQPkgList.h
 YQPkgObjList.moc:			YQPkgObjList.h

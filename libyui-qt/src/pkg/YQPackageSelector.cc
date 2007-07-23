@@ -59,8 +59,8 @@
 #include "YQPkgDiskUsageList.h"
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQPkgFileListView.h"
-#include "YQPkgInstSrcFilterView.h"
-#include "YQPkgInstSrcList.h"
+#include "YQPkgRepoFilterView.h"
+#include "YQPkgRepoList.h"
 #include "YQPkgLangList.h"
 #include "YQPkgList.h"
 #include "YQPkgPatchFilterView.h"
@@ -106,7 +106,7 @@ YQPackageSelector::YQPackageSelector( QWidget *			parent,
     _detailsViews		= 0;
     _diskUsageList		= 0;
     _filters			= 0;
-    _instSrcFilterView		= 0;
+    _repoFilterView		= 0;
     _langList			= 0;
     _patternList		= 0;
     _pkgChangeLogView		= 0;
@@ -152,12 +152,12 @@ YQPackageSelector::YQPackageSelector( QWidget *			parent,
 	    _patchList->filter();
 	}
     }
-    else if ( _instSrcFilterView && _instSourcesMode )
+    else if ( _repoFilterView && _instSourcesMode )
     {
-	if ( YQPkgInstSrcList::countEnabledSources() > 1 )
+	if ( YQPkgRepoList::countEnabledSources() > 1 )
 	{
-	    _filters->showPage( _instSrcFilterView );
-	    _instSrcFilterView->filter();
+	    _filters->showPage( _repoFilterView );
+	    _repoFilterView->filter();
 	}
 	else if ( _searchFilterView )
 	{
@@ -371,9 +371,9 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     // Repository view
     //
 
-    _instSrcFilterView = new YQPkgInstSrcFilterView( parent );
-    CHECK_PTR( _instSrcFilterView );
-    _filters->addPage( _( "Repositories" ), _instSrcFilterView );
+    _repoFilterView = new YQPkgRepoFilterView( parent );
+    CHECK_PTR( _repoFilterView );
+    _filters->addPage( _( "Repositories" ), _repoFilterView );
 
 
     //
@@ -843,7 +843,7 @@ YQPackageSelector::makeConnections()
     connectFilter( _updateProblemFilterView,	_pkgList, false );
     connectFilter( _patternList,		_pkgList );
     connectFilter( _selList,			_pkgList );
-    connectFilter( _instSrcFilterView,		_pkgList, false );
+    connectFilter( _repoFilterView,		_pkgList, false );
     connectFilter( _rpmGroupTagsFilterView,	_pkgList, false );
     connectFilter( _langList,			_pkgList );
     connectFilter( _statusFilterView,		_pkgList, false );
@@ -855,9 +855,9 @@ YQPackageSelector::makeConnections()
 		 _pkgList,		SLOT  ( message( const QString & ) ) );
     }
 
-    if ( _instSrcFilterView && _pkgList )
+    if ( _repoFilterView && _pkgList )
     {
-	connect( _instSrcFilterView,	SIGNAL( filterNearMatch	 ( ZyppSel, ZyppPkg ) ),
+	connect( _repoFilterView,	SIGNAL( filterNearMatch	 ( ZyppSel, ZyppPkg ) ),
 		 _pkgList,		SLOT  ( addPkgItemDimmed ( ZyppSel, ZyppPkg ) ) );
     }
 

@@ -46,7 +46,7 @@ class YQPkgDependenciesView;
 class YQPkgDescriptionView;
 class YQPkgDiskUsageList;
 class YQPkgFileListView;
-class YQPkgInstSrcFilterView;
+class YQPkgRepoFilterView;
 class YQPkgLangList;
 class YQPkgList;
 class YQPkgPatternList;
@@ -307,7 +307,7 @@ protected:
     YQPkgDependenciesView *		_pkgDependenciesView;
     YQPkgDescriptionView *		_pkgDescriptionView;
     YQPkgFileListView *			_pkgFileListView;
-    YQPkgInstSrcFilterView *		_instSrcFilterView;
+    YQPkgRepoFilterView *		_repoFilterView;
     YQPkgLangList *			_langList;
     YQPkgList *				_pkgList;
     YQPkgPatternList *			_patternList;
