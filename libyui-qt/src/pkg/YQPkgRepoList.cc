@@ -44,7 +44,7 @@ YQPkgRepoList::YQPkgRepoList( QWidget * parent )
 
     int numCol = 0;
 
-    // Column headers for installation source list
+    // Column headers for repository list
     addColumn( _( "Name"	) );	_nameCol	= numCol++;
     addColumn( _( "URL"		) );	_urlCol		= numCol++;
 
@@ -85,7 +85,7 @@ YQPkgRepoList::fillList()
 
 
 int
-YQPkgRepoList::countEnabledSources()
+YQPkgRepoList::countEnabledRepositories()
 {
     return zyppPool().knownRepositoriesSize();
 }
@@ -126,14 +126,14 @@ YQPkgRepoList::filter()
 
 	    if ( repoItem )
 	    {
-		ZyppRepo currentSrc = repoItem->zyppSrc();
+		ZyppRepo currentRepo = repoItem->zyppRepo();
 
 		for ( ZyppPoolIterator sel_it = zyppPkgBegin();
 		      sel_it != zyppPkgEnd();
 		      ++sel_it )
 		{
 		    if ( (*sel_it)->candidateObj() &&
-			 (*sel_it)->candidateObj()->repository() == currentSrc )
+			 (*sel_it)->candidateObj()->repository() == currentRepo )
 		    {
 			exactMatches.insert( *sel_it );
 		    }
@@ -143,7 +143,7 @@ YQPkgRepoList::filter()
 
 			while ( pkg_it != (*sel_it)->availableEnd() )
 			{
-			    if ( (*pkg_it)->repository() == currentSrc )
+			    if ( (*pkg_it)->repository() == currentRepo )
 				nearMatches.insert( *sel_it );
 
 			    ++pkg_it;
@@ -193,9 +193,9 @@ YQPkgRepoList::filter()
 
 
 void
-YQPkgRepoList::addRepo( ZyppRepo src )
+YQPkgRepoList::addRepo( ZyppRepo repo )
 {
-    new YQPkgRepoListItem( this, src );
+    new YQPkgRepoListItem( this, repo );
 }
 
 
@@ -216,17 +216,17 @@ YQPkgRepoList::selection() const
 
 
 YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
-					    ZyppRepo		src 		)
+					    ZyppRepo		repo 		)
     : QY2ListViewItem( repoList )
     , _repoList( repoList )
-    , _zyppSrc( src )
+    , _zyppRepo( repo )
 {
     if ( nameCol() >= 0 )
     {
 	string name;
-	ZyppProduct product = singleProduct( _zyppSrc );
+	ZyppProduct product = singleProduct( _zyppRepo );
 
-	if ( product )	// only if the source provides exactly one product
+	if ( product )	// only if the repository provides exactly one product
 	{		// (which is the most common case)
 	    name = product->summary();
 	}
@@ -237,12 +237,12 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
 
     if ( urlCol() >= 0 )
     {
-        zypp::Url srcUrl;
-	if ( ! src.info().baseUrlsEmpty() )
+        zypp::Url repoUrl;
+	if ( ! repo.info().baseUrlsEmpty() )
 	{
-	  srcUrl = *src.info().baseUrlsBegin();
+	  repoUrl = *repo.info().baseUrlsBegin();
 	}
-	setText( urlCol(), srcUrl.asString().c_str() );
+	setText( urlCol(), repoUrl.asString().c_str() );
     }
 }
 
@@ -255,17 +255,17 @@ YQPkgRepoListItem::~YQPkgRepoListItem()
 
 
 ZyppProduct
-YQPkgRepoListItem::singleProduct( ZyppRepo zyppSrc )
+YQPkgRepoListItem::singleProduct( ZyppRepo zyppRepo )
 {
     ZyppProduct product;
 
-    zypp::ResStore::iterator it = zyppSrc.resolvables().begin();
+    zypp::ResStore::iterator it = zyppRepo.resolvables().begin();
 
     //
     // Find the first product on this repository
     //
 
-    while ( it != zyppSrc.resolvables().end() && ! product )
+    while ( it != zyppRepo.resolvables().end() && ! product )
     {
 	product = zypp::dynamic_pointer_cast<zypp::Product>( *it );
 	++it;
@@ -275,12 +275,12 @@ YQPkgRepoListItem::singleProduct( ZyppRepo zyppSrc )
     // Check if there is another product on this repository
     //
 
-    while ( it != zyppSrc.resolvables().end() )
+    while ( it != zyppRepo.resolvables().end() )
     {
 	if ( zypp::dynamic_pointer_cast<zypp::Product>( *it ) )
 	{
 	    y2milestone( "Multiple products in repository %s",
-			 zyppSrc.info().alias().c_str() );
+			 zyppRepo.info().alias().c_str() );
 	    ZyppProduct null;
 	    return null;
 	}
@@ -290,7 +290,7 @@ YQPkgRepoListItem::singleProduct( ZyppRepo zyppSrc )
 
     if ( ! product )
 	y2milestone( "No product in repository %s",
-		     zyppSrc.info().alias().c_str() );
+		     zyppRepo.info().alias().c_str() );
 
     return product;
 }

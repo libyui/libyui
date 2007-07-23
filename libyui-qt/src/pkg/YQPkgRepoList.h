@@ -53,9 +53,9 @@ public:
     virtual ~YQPkgRepoList();
 
     /**
-     * Returns the number of enabled installation sources.
+     * Returns the number of enabled repositories.
      **/
-    static int countEnabledSources();
+    static int countEnabledRepositories();
 
 
 public slots:
@@ -75,9 +75,9 @@ public slots:
     void filterIfVisible();
 
     /**
-     * Add an inst source to the list.
+     * Add a repository to the list.
      **/
-    void addRepo( ZyppRepo src );
+    void addRepo( ZyppRepo repo );
 
 
 public:
@@ -104,14 +104,14 @@ signals:
 
     /**
      * Emitted during filtering for each pkg that matches the filter
-     * and the candidate package comes from the respective source
+     * and the candidate package comes from the respective repository
      **/
     void filterMatch( ZyppSel	selectable,
 		      ZyppPkg	pkg );
 
     /**
      * Emitted during filtering for each pkg that matches the filter
-     * and the candidate package does not come from the respective source
+     * and the candidate package does not come from the respective repository
      **/
     void filterNearMatch( ZyppSel	selectable,
 			  ZyppPkg	pkg );
@@ -150,7 +150,7 @@ public:
     /**
      * Constructor
      **/
-    YQPkgRepoListItem( YQPkgRepoList *parentList, ZyppRepo src );
+    YQPkgRepoListItem( YQPkgRepoList *parentList, ZyppRepo repo );
 
     /**
      * Destructor
@@ -158,9 +158,9 @@ public:
     virtual ~YQPkgRepoListItem();
 
     /**
-     * Returns the ZYPP source this item corresponds to
+     * Returns the ZYPP repository this item corresponds to
      **/
-    ZyppRepo zyppSrc() const { return _zyppSrc; }
+    ZyppRepo zyppRepo() const { return _zyppRepo; }
 
     /**
      * Returns the parent list
@@ -168,10 +168,10 @@ public:
     const YQPkgRepoList * repoList() const { return _repoList; }
 
     /**
-     * Returns the product on a source if it has one single product
+     * Returns the product on a repository if it has one single product
      * or 0 if there are no or multiple products.
      **/
-    static ZyppProduct singleProduct( ZyppRepo src );
+    static ZyppProduct singleProduct( ZyppRepo repo );
 
 
     // Columns
@@ -184,7 +184,7 @@ protected:
     // Data members
 
     YQPkgRepoList *		_repoList;
-    ZyppRepo			_zyppSrc;
+    ZyppRepo			_zyppRepo;
 };
 
 

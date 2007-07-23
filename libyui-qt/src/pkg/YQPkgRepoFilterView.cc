@@ -94,7 +94,7 @@ YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
     addVSpacing( vbox, MARGIN );
 
     // Translators: This is a combo box where the user can apply a secondary filter
-    // in addition to the primary filter by installation source - one of
+    // in addition to the primary filter by repository - one of
     // "all packages", "RPM groups", "search", "summary"
     _secondaryFilters = new QY2ComboTabWidget( _( "&Secondary Filter:" ), vbox );
     CHECK_PTR( _secondaryFilters );

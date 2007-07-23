@@ -258,12 +258,12 @@ YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
     }
     if ( urlCol() >= 0 )
     {
-        zypp::Url srcUrl;
+        zypp::Url repoUrl;
 	if ( ! zyppObj->repository().info().baseUrlsEmpty() )
 	{
-	  srcUrl = *zyppObj->repository().info().baseUrlsBegin();
+	  repoUrl = *zyppObj->repository().info().baseUrlsBegin();
 	}
-	setText( urlCol(), srcUrl.asString().c_str() );
+	setText( urlCol(), repoUrl.asString().c_str() );
     }
 
     if ( _selectable->hasInstalledObj() )

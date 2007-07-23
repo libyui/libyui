@@ -154,7 +154,7 @@ YQPackageSelector::YQPackageSelector( QWidget *			parent,
     }
     else if ( _repoFilterView && _instSourcesMode )
     {
-	if ( YQPkgRepoList::countEnabledSources() > 1 )
+	if ( YQPkgRepoList::countEnabledRepositories() > 1 )
 	{
 	    _filters->showPage( _repoFilterView );
 	    _repoFilterView->filter();

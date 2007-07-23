@@ -60,14 +60,14 @@ signals:
 
     /**
      * Emitted during filtering for each pkg that matches the filter
-     * and the candidate package comes from the respective source
+     * and the candidate package comes from the respective repository
      **/
     void filterMatch( ZyppSel	selectable,
 		      ZyppPkg	pkg );
 
     /**
      * Emitted during filtering for each pkg that matches the filter
-     * and the candidate package does not come from the respective source
+     * and the candidate package does not come from the respective repository
      **/
     void filterNearMatch( ZyppSel	selectable,
 			  ZyppPkg	pkg );
