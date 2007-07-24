@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jul 24 10:59:06 CEST 2007 - sh@suse.de
+
+- Fixed bug #285915: Can't cancel package search
+- Consistent naming scheme: inst source -> repository 
+
+-------------------------------------------------------------------
 Tue Jul 17 10:12:25 CEST 2007 - kmachalkova@suse.cz
 
 - Require new libzypp (>= 3.11.8)

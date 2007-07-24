@@ -222,7 +222,7 @@ YQPkgSearchFilterView::filter()
 	int count = 0;
 
 	for ( ZyppPoolIterator it = zyppPkgBegin();
-	      it != zyppPkgEnd();
+	      it != zyppPkgEnd() && ! progress.wasCancelled();
 	      ++it )
 	{
 	    ZyppSel selectable = *it;
