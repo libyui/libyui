@@ -17,7 +17,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQAlignment_h
 #define YQAlignment_h

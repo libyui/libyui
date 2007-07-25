@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQMenuButton_h
 #define YQMenuButton_h

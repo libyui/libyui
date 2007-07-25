@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 
 #ifndef YQPkgObjList_h

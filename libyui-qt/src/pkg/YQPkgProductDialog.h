@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 
 #ifndef YQPkgProductDialog_h

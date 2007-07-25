@@ -17,7 +17,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQSquash_h
 #define YQSquash_h

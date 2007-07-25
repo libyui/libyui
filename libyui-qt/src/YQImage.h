@@ -17,7 +17,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQImage_h
 #define YQImage_h

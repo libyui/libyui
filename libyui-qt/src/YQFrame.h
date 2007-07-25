@@ -17,7 +17,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQFrame_h
 #define YQFrame_h

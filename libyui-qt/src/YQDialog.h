@@ -17,7 +17,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQDialog_h
 #define YQDialog_h

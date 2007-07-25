@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #include "YFrameBuffer.h"
 

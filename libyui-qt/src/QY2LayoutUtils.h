@@ -18,7 +18,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef QY2LayoutUtils_h
 #define QY2LayoutUtils_h

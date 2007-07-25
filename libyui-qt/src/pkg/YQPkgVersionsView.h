@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 
 #ifndef YQPkgVersionsView_h

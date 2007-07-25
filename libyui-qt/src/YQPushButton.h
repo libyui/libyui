@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQPushButton_h
 #define YQPushButton_h

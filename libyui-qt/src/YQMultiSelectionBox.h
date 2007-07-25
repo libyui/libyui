@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQMultiSelectionBox_h
 #define YQMultiSelectionBox_h

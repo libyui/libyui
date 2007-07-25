@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQi18n_h
 #define YQi18n_h

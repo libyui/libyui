@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQWizardButton_h
 #define YQWizardButton_h

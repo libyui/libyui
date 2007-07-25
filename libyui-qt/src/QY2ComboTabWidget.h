@@ -18,7 +18,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 
 #ifndef QY2ComboTabWidget_h

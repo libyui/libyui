@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQSimplePatchSelector_h
 #define YQSimplePatchSelector_h

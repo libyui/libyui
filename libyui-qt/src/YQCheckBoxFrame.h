@@ -17,7 +17,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQCheckBoxFrame_h
 #define YQCheckBoxFrame_h

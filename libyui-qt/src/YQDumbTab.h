@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQDumbTab_h
 #define YQDumbTab_h

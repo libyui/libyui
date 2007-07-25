@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQPartitionSplitter_h
 #define YQPartitionSplitter_h

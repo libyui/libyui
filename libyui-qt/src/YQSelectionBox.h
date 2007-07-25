@@ -17,7 +17,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQSelectionBox_h
 #define YQSelectionBox_h

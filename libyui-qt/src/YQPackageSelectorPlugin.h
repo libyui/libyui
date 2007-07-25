@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQPackageSelectorPlugin_h
 #define YQPackageSelectorPlugin_h

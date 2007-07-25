@@ -17,7 +17,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQReplacePoint_h
 #define YQReplacePoint_h

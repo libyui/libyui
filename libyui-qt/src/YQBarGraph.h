@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQBarGraph_h
 #define YQBarGraph_h

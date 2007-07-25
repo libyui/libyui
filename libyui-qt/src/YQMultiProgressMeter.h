@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQMultiProgressMeter_h
 #define YQMultiProgressMeter_h

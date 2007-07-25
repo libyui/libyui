@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQPatternSelector_h
 #define YQPatternSelector_h

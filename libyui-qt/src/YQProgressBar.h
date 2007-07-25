@@ -17,7 +17,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQProgressBar_h
 #define YQProgressBar_h

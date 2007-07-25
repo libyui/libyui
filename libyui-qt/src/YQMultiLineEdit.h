@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQMultiLineEdit_h
 #define YQMultiLineEdit_h

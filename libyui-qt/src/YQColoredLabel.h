@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQColoredLabel_h
 #define YQColoredLabel_h

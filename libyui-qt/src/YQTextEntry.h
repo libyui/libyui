@@ -17,7 +17,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQTextEntry_h
 #define YQTextEntry_h

@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQDownloadProgress_h
 #define YQDownloadProgress_h

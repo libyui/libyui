@@ -16,7 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
 
 #ifndef YQGenericButton_h
 #define YQGenericButton_h
