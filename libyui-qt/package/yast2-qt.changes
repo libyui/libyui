@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Aug  2 17:34:26 CEST 2007 - sh@suse.de
+
+- V 2.17.8
+- Fate #302052: Restrict patches view to show only update stack
+  patches if there are any 
+
+-------------------------------------------------------------------
 Tue Jul 24 10:59:06 CEST 2007 - sh@suse.de
 
 - Fixed bug #285915: Can't cancel package search

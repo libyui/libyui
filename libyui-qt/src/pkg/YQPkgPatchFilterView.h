@@ -91,6 +91,7 @@ protected:
     QLabel *			_totalDownloadSize;
     
     YQPkgSelMapper		_selMapper;
+    bool 			_haveUpdateStackPatches;
 };
 
 

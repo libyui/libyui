@@ -34,7 +34,8 @@
 #include "YQPkgTextDialog.h"
 
 
-#define VERBOSE_PATCH_LIST	1
+#define VERBOSE_PATCH_LIST			1
+#define DEBUG_SHOW_ALL_UPDATE_STACK_PATCHES	0
 
 
 typedef zypp::ui::PatchContents			ZyppPatchContents;
@@ -72,7 +73,6 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
 	     this,	SLOT  ( filter()				    ) );
 
     setSorting( categoryCol() );
-    fillList();
 
     y2debug( "Creating patch list done" );
 }
@@ -122,6 +122,35 @@ YQPkgPatchList::fillList()
 
 	    switch ( _filterCriteria )
 	    {
+		case UpdateStackPatches:
+
+		    if ( zyppPatch->affects_pkg_manager() )
+		    {
+#if DEBUG_SHOW_ALL_UPDATE_STACK_PATCHES
+			displayPatch = true;
+#endif
+			if ( selectable->hasCandidateObj() &&
+			     selectable->candidatePoolItem().status().isNeeded() )
+			{
+			    displayPatch = true;
+
+			    y2milestone( "Found YaST patch that should be installed: %s - %s",
+					 zyppPatch->name().c_str(),
+					 zyppPatch->summary().c_str() );
+			}
+
+			if ( selectable->hasInstalledObj() &&
+			     selectable->installedPoolItem().status().isIncomplete() ) // patch broken?
+			{
+			    displayPatch = true;
+
+			    y2warning( "Installed YaST patch is broken: %s - %s",
+				       zyppPatch->name().c_str(),
+				       zyppPatch->summary().c_str() );
+			}
+		    }
+		    break;
+
 		case RelevantPatches:	// needed + broken + satisfied (but not installed)
 
 		    if ( selectable->hasInstalledObj() ) // installed?
@@ -344,6 +373,34 @@ YQPkgPatchList::addPatchItem( ZyppSel	selectable,
 
     YQPkgPatchListItem * item = new YQPkgPatchListItem( this, selectable, zyppPatch );
     applyExcludeRules( item );
+}
+
+
+bool
+YQPkgPatchList::haveUpdateStackPatches()
+{
+    for ( ZyppPoolIterator it = zyppPatchesBegin();
+	  it != zyppPatchesEnd();
+	  ++it )
+    {
+	ZyppSel selectable = *it;
+	ZyppPatch zyppPatch = tryCastToZyppPatch( selectable->theObj() );
+
+	if ( zyppPatch && zyppPatch->affects_pkg_manager() )
+	{
+#if DEBUG_SHOW_ALL_UPDATE_STACK_PATCHES
+	    return true;
+#else
+	    if ( selectable->hasCandidateObj() &&
+		 selectable->candidatePoolItem().status().isNeeded() )
+	    {
+		return true;
+	    }
+#endif
+	}
+    }
+
+    return false;
 }
 
 

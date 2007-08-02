@@ -53,6 +53,7 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
     : QVBox( parent )
 {
     QVBox * vbox;
+    _haveUpdateStackPatches	= YQPkgPatchList::haveUpdateStackPatches();
 
     _splitter			= new QSplitter( QSplitter::Vertical, this );	CHECK_PTR( _splitter 	);
     vbox			= new QVBox( _splitter );			CHECK_PTR( vbox		);
@@ -68,9 +69,15 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
     _patchFilter		= new QComboBox( hbox );
     CHECK_PTR( _patchFilter );
 
-    _patchFilter->insertItem( _( "Installable Patches" ),			0 );
-    _patchFilter->insertItem( _( "Installable and Installed Patches" ),	1 );
-    _patchFilter->insertItem( _( "All Patches" ),				2 );
+    int index = 0;
+    
+    if ( _haveUpdateStackPatches )
+	// Translators: This is about patches that patch the update engine (libzypp, YaST) itself
+	_patchFilter->insertItem( _( "Update Stack Patches" ),			index++ );
+	
+    _patchFilter->insertItem( _( "Installable Patches" ),			index++ );
+    _patchFilter->insertItem( _( "Installable and Installed Patches" 	),	index++ );
+    _patchFilter->insertItem( _( "All Patches" ),				index++ );
     _patchFilter->setCurrentItem( 0 );
     _patchFilter->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
     label->setBuddy( _patchFilter );
@@ -118,6 +125,7 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
     connect( _patchList,	SIGNAL( statusChanged() 		),
 	     this,		SLOT  ( updateTotalDownloadSize() 	) );
 
+    fillPatchList();
     updateTotalDownloadSize();
 }
 
@@ -210,8 +218,14 @@ YQPkgPatchFilterView::updateTotalDownloadSize()
 void
 YQPkgPatchFilterView::fillPatchList()
 {
-    switch ( _patchFilter->currentItem() )
+    int currentIndex = _patchFilter->currentItem();
+
+    if ( _haveUpdateStackPatches )
+	currentIndex--;
+    
+    switch ( currentIndex )
     {
+	case -1:	_patchList->setFilterCriteria( YQPkgPatchList::UpdateStackPatches          );	break;
 	case 0:		_patchList->setFilterCriteria( YQPkgPatchList::RelevantPatches		   );	break;
 	case 1:		_patchList->setFilterCriteria( YQPkgPatchList::RelevantAndInstalledPatches );	break;
 	case 2:		_patchList->setFilterCriteria( YQPkgPatchList::AllPatches		   );	break;

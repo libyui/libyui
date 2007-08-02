@@ -67,6 +67,7 @@ public:
 
     enum FilterCriteria
     {
+	UpdateStackPatches,		// zypp or YaST2
 	RelevantPatches,		// needed + broken
 	RelevantAndInstalledPatches,	// needed + broken + installed
 	AllPatches			// all
@@ -110,6 +111,12 @@ public slots:
 
 
 public:
+
+    /**
+     * Return 'true' if there is any patch for the update stack in the pool
+     * that is not installed yet or that could be updated.
+     **/
+    static bool haveUpdateStackPatches();
 
     /**
      * Set the filter criteria for fillList().
