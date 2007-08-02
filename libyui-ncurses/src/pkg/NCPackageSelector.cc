@@ -1227,6 +1227,17 @@ bool NCPackageSelector::fillRepoFilterList( ZyppRepo repo)
     //and show the whole stuff to the user
     pkgList->drawList();
 
+    YWidget * filterLabel = y2ui->widgetWithId( NCPkgNames::Filter(), true );
+    
+    if ( repoPopup && filterLabel )
+    {
+	ZyppProduct product = repoPopup->findProductForRepo( repo );
+	if ( product )
+	{
+	    static_cast<NCLabel *>(filterLabel)->setLabel( product->summary() ); 
+	}
+    }
+    
     return true;
 
 }
