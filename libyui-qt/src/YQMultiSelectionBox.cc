@@ -56,6 +56,7 @@ YQMultiSelectionBox::YQMultiSelectionBox( QWidget *		parent,
     _qt_listview->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
     _qt_listview->addColumn( "" );	// QListView doesn't have one single column by default!
     _qt_listview->setSorting( 0, false );
+    _qt_listview->header()->setStretchEnabled( true );
     _qt_listview->header()->hide();
     _qt_label->setBuddy( _qt_listview );
 

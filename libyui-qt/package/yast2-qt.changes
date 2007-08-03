@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Aug  3 12:42:01 CEST 2007 - sh@suse.de
+
+- Fixed bug #295485: Text cut off in MultiSelectionBox
+  (in repository names in that bug) 
+- V 2.17.9
+
+-------------------------------------------------------------------
 Thu Aug  2 17:34:26 CEST 2007 - sh@suse.de
 
 - V 2.17.8
