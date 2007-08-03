@@ -18,15 +18,16 @@
 
 /-*/
 
+#include <algorithm>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 #include <qdatetime.h>
-#include "YQi18n.h"
-#include "utf8.h"
-#include "YQPkgRepoList.h"
 #include <zypp/RepoManager.h>
-#include <algorithm>
+
+#include "YQPkgRepoList.h"
+#include "utf8.h"
+#include "YQi18n.h"
 
 using std::list;
 using std::set;
