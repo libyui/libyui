@@ -226,6 +226,7 @@ bool YQPkgTextDialog::confirmText( QWidget * 		parent,
 
 bool YQPkgTextDialog::confirmText( QWidget * parent, const QString & text )
 {
+    // Translators: "Accept" here refers to licenses or similar
     return confirmText( parent, text, _( "&Accept" ), _( "&Cancel" ) );
 }
 
