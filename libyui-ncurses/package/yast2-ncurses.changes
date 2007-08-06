@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Mon Aug  6 19:09:59 CEST 2007 - kmachalkova@suse.cz
+
+- Added text referring to whereabouts of the license text to lic.
+  agreement popup (FaTE #302018)
+- Show Filter: <product summary> after filling the repository list 
+  - by gs
+- 2.15.22
+
+-------------------------------------------------------------------
 Thu Jul 19 13:24:01 CEST 2007 - kmachalkova@suse.cz
 
 - Make repositories list popup work (FaTE #301810 - part II) -
