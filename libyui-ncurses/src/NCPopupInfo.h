@@ -73,7 +73,8 @@ public:
 		 const YCPString & text,
 		 // the label of an OK button
 		 string okButtonLabel = _( "&OK" ),
-		 string cancelButtonLabel = "" );
+		 string cancelButtonLabel = "",
+		 string printLicenseText = "" );
     
     virtual ~NCPopupInfo();
 
@@ -82,7 +83,8 @@ public:
     void createLayout( const YCPString & headline,
 		       const YCPString & text,
 		       string okButtonLabel,
-		       string cancelButtonLabel );
+		       string cancelButtonLabel, 
+		       string printLicenseText );
 
     NCursesEvent & showInfoPopup( );
 

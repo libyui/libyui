@@ -878,6 +878,7 @@ public:
     static const string ConflictText();
     static const string NoConflictText();
     static const string NotAvailableText();
+    static const string PrintLicenseText();
 
     static const string MenuEtc();
     static const string MenuDeps();

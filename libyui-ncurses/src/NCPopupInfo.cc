@@ -43,7 +43,8 @@ NCPopupInfo::NCPopupInfo( const wpos at,
 			  const YCPString & headline,
 			  const YCPString & text,
 			  string okButtonLabel,
-			  string cancelButtonLabel )
+			  string cancelButtonLabel,
+			  string printLicenseText )
     : NCPopup( at, false )
       , helpText( 0 )
       , okButton( 0 )
@@ -52,7 +53,7 @@ NCPopupInfo::NCPopupInfo( const wpos at,
       , vDim( 20 )
       , visible ( false )
 {
-    createLayout( headline, text, okButtonLabel, cancelButtonLabel );
+    createLayout( headline, text, okButtonLabel, cancelButtonLabel, printLicenseText );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -78,7 +79,8 @@ NCPopupInfo::~NCPopupInfo()
 void NCPopupInfo::createLayout( const YCPString & headline,
 				const YCPString & text,
 				string okButtonLabel,
-				string cancelButtonLabel )
+				string cancelButtonLabel,
+			        string printLicenseText )
 {
 
   YWidgetOpt opt;
@@ -95,6 +97,14 @@ void NCPopupInfo::createLayout( const YCPString & headline,
   // add the rich text widget 
   helpText = new NCRichText( split, opt, text );
   split->addChild( helpText );
+
+  if (printLicenseText != "" ) 
+  { 
+      NCLabel *printLabel = new NCLabel (split, opt, printLicenseText );
+      split->addChild( new NCSpacing( split, opt, 1, false, true ) ); 
+      split->addChild( printLabel );
+      split->addChild( new NCSpacing( split, opt, 1, false, true ) ); 
+  }  
 
   NCSplit * hSplit = new NCSplit( split, opt, YD_HORIZ );
   split->addChild( hSplit );
@@ -126,6 +136,7 @@ void NCPopupInfo::createLayout( const YCPString & headline,
       
       hSplit->addChild( new NCSpacing( hSplit, opt, 0.4, true, false ) ); 
   }
+  split->addChild( new NCSpacing( split, opt, 0.5, false, true ) ); 
   
 }
 
