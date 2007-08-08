@@ -23,8 +23,10 @@
 
 #include "YQZypp.h"
 #include <qdialog.h>
+#include <qlabel.h>
 #include <zypp/ResObject.h>
 
+class QLabel;
 class QPushButton;
 class QTextBrowser;
 
@@ -52,7 +54,8 @@ public:
     YQPkgTextDialog( const QString & 	text,
 		     QWidget * 		parent,
 		     const QString & 	acceptButtonLabel,
-		     const QString & 	rejectButtonLabel );
+		     const QString & 	rejectButtonLabel,
+		     const QString &	printLicenseText = "" );
     /**
      * Constructor.
      *
@@ -93,7 +96,8 @@ public:
     static bool confirmText( QWidget * 	parent,
 			     const QString & 	text,
 			     const QString & 	acceptButtonLabel,
-			     const QString & 	rejectButtonLabel );
+			     const QString & 	rejectButtonLabel,
+			     const QString &	printLicenseText );
 
     /**
      * Let the use confirm a text with buttons "Accept" and "Cancel".
@@ -162,7 +166,8 @@ protected:
     void buildDialog( const QString & 	text,
 		      QWidget * 	parent,
 		      const QString & 	acceptButtonLabel,
-		      const QString & 	rejectButtonLabel = "" );
+		      const QString & 	rejectButtonLabel = "",
+		      const QString &   printLicenseText = "" );
     /**
      * Grab [Return] press events and close dialog.
      * Inherited from QObject.

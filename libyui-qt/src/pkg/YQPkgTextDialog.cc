@@ -52,10 +52,11 @@ YQPkgTextDialog::YQPkgTextDialog( const QString & text, QWidget * parent )
 YQPkgTextDialog::YQPkgTextDialog( const QString & 	text,
 				  QWidget * 		parent,
 				  const QString & 	acceptButtonLabel,
-				  const QString & 	rejectButtonLabel )
+				  const QString & 	rejectButtonLabel,
+				  const QString &	printLicenseText )
     : QDialog( parent )
 {
-    buildDialog( text, parent, acceptButtonLabel, rejectButtonLabel );
+    buildDialog( text, parent, acceptButtonLabel, rejectButtonLabel, printLicenseText );
 }
 
 
@@ -68,7 +69,8 @@ YQPkgTextDialog::~YQPkgTextDialog()
 void YQPkgTextDialog::buildDialog( const QString & 	text,
 				   QWidget * 		parent,
 				   const QString & 	acceptButtonLabel,
-				   const QString & 	rejectButtonLabel )
+				   const QString & 	rejectButtonLabel,
+				   const QString &	printLicenseText )
 {
     // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );
@@ -92,6 +94,14 @@ void YQPkgTextDialog::buildDialog( const QString & 	text,
     _textBrowser->setTextFormat( Qt::RichText );
     _textBrowser->installEventFilter( this );
 
+    if ( ! printLicenseText.isEmpty() )
+    {
+	QLabel * printLabel = new QLabel( printLicenseText, this);
+	CHECK_PTR( printLabel);
+        printLabel->setAlignment( AlignHCenter );
+	layout->addWidget( printLabel );
+//	layout->addSpacing(8);
+    }
 
     // Button box
 
@@ -210,12 +220,14 @@ void YQPkgTextDialog::showText( QWidget * 	parent,
 bool YQPkgTextDialog::confirmText( QWidget * 		parent,
 				   const QString & 	text,
 				   const QString & 	acceptButtonLabel,
-				   const QString & 	rejectButtonLabel )
+				   const QString & 	rejectButtonLabel,
+				   const QString &	printLicenseText )
 {
     YQPkgTextDialog * dia = new YQPkgTextDialog( text,
 						 parent,
 						 acceptButtonLabel,
-						 rejectButtonLabel );
+						 rejectButtonLabel,
+					         printLicenseText );
     CHECK_PTR( dia );
     bool confirmed = ( dia->exec() == QDialog::Accepted );
     delete dia;
@@ -226,8 +238,9 @@ bool YQPkgTextDialog::confirmText( QWidget * 		parent,
 
 bool YQPkgTextDialog::confirmText( QWidget * parent, const QString & text )
 {
+    const QString printText = _("If you would like to print this license, check the EULA.txt file on the first media");
     // Translators: "Accept" here refers to licenses or similar
-    return confirmText( parent, text, _( "&Accept" ), _( "&Cancel" ) );
+    return confirmText( parent, text, _( "&Accept" ), _( "&Cancel" ), printText );
 }
 
 
