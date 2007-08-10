@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Aug 10 11:34:06 CEST 2007 - kmachalkova@suse.cz
+
+- Removed redefinition of '<<' DiskUsageCounter operator, it is now
+  defined directly in libzypp  
+
+-------------------------------------------------------------------
 Mon Aug  6 19:09:59 CEST 2007 - kmachalkova@suse.cz
 
 - Added text referring to whereabouts of the license text to lic.

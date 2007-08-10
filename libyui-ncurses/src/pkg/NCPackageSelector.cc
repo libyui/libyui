@@ -3052,15 +3052,6 @@ string NCPackageSelector::createText( list<string> info, bool oneline )
     return text;
 }
 
-static
-ostream & operator << (ostream & s, zypp::DiskUsageCounter::MountPoint mp)
-{
-    return s << mp.dir
-	     << " t:" << mp.total_size
-	     << " u:" << mp.used_size
-	     << " p:" << mp.pkg_size;
-}
-
 ///////////////////////////////////////////////////////////////////
 //
 // showDiskSpace()
