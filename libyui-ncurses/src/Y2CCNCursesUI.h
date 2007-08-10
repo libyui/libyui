@@ -24,6 +24,7 @@
 
 #include "YNCursesComponent.h"
 #include <iosfwd>
+#include <yui/Y2CCUI.h>
 
 #include "ycp/y2log.h"
 
@@ -34,13 +35,13 @@
  * such a component - returns a newly created component of this
  * type. The Y2CCNCursesUI can create components with the name "ncursesui".
  */
-class Y2CCNcursesUI : public Y2ComponentCreator
+class Y2CCNcursesUI : public Y2CCUI
 {
 public:
    /**
     * Creates a NCursesUI component creator
     */
-    Y2CCNcursesUI() : Y2ComponentCreator(Y2ComponentBroker::BUILTIN) { };
+    Y2CCNcursesUI() : Y2CCUI() { };
 
    /**
     * Returns true, since the NCursesUI component is a
@@ -59,8 +60,13 @@ public:
     {
         y2milestone( "Creating %s component", name );
         if (!strcmp(name, "ncurses") ) {
-            Y2Component* r = new YNCursesComponent();
-            return r;
+	    Y2Component* ret = YUIComponent::uiComponent ();
+	    if (!ret || ret->name () != name)
+	    {
+		y2debug ("UI component is %s, creating %s", ret? ret->name().c_str() : "NULL", name);
+		ret = new YNCursesComponent();
+	    }
+            return ret;
         }
         else return 0;
     }

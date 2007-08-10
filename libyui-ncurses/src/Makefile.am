@@ -5,7 +5,6 @@
 SUBDIRS = pkg
 
 AM_CXXFLAGS = -DY2LOG=\"ui-ncurses\" -DLOCALEDIR=\"${localedir}\"
-AM_LDFLAGS = -L$(libdir)
 
 # plugin, libtool forces 'lib' prefix
 plugin_LTLIBRARIES = libpy2ncurses.la
@@ -15,14 +14,14 @@ libpy2ncurses_la_LDFLAGS = -version-info 2:0
 #liby2ncurses_la_LDFLAGS = -version-info 2:0
 
 libpy2ncurses_la_LIBADD =		\
-	-L$(libdir)			\
-	-lyui				\
+	-L$(plugindir)			\
+	-lpy2UI				\
 	-lncursesw -lpanelw
 
 #libpy2ncurses_la_LIBADD =		\
 #	-L$(libdir)			\
 #	-Lpkg -lpy2ncurses_pkg		\
-#	-lyui				\
+#	-lpy2UI				\
 #	-lncursesw -lpanelw
 #liby2ncurses_la_LIBADD = $(libpy2ncurses_la_LIBADD)
 
@@ -164,7 +163,7 @@ libpy2ncurses_la_SOURCES =		\
 #	Y2CCNCursesUI.cc Y2CCNCursesUI.h	\
 #	YNCursesComponent.h
 
-INCLUDES = -I$(srcdir)/pkg -I$(includedir) -I$(includedir)/yui -I$(includedir)/y2util/qt
+INCLUDES = -I$(srcdir)/pkg -I$(includedir) -I$(includedir)/yui -I$(includedir)/y2util/qt ${ZYPP_CFLAGS}
 
 lang2encoding.cc:	lang2encoding.tab
 	./lang2encoding.tab > lang2encoding.cc

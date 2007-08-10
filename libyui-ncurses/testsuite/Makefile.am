@@ -14,7 +14,7 @@ noinst_PROGRAMS = runcurses utf8test y2ncurses in_wch
 
 runcurses_SOURCES = runcurses.cc
 runcurses_LDADD = ../src/libpy2ncurses.la ../src/pkg/libpy2ncurses_pkg.la \
-	-lncurses -lpanel -lpthread -ly2 -lyui -lycp -lutil
+	-lncurses -lpanel -lpthread -ly2 -L$(plugindir) -lpy2UI -lycp -lutil
 
 runcurses_LDFLAGS = -L$(libdir)			\
 	-Xlinker --whole-archive                \
@@ -26,15 +26,15 @@ utf8test_SOURCES = utf8test.cc			\
 		NCstring_test.h NCstring_test.cc
 
 utf8test_LDADD = ../src/libpy2ncurses.la ../src/pkg/libpy2ncurses_pkg.la \
-	-lncursesw -lpanelw -lpthread -ly2 -lyui -lycp -lutil
+	-lncursesw -lpanelw -lpthread -ly2 -L$(plugindir) -lpy2UI -lycp -lutil
 
 in_wch_SOURCES = in_wch.cc
 
-#in_wch_LDADD = -lncursesw -lpanelw -lpthread -ly2 -lyui -lycp -lutil
+#in_wch_LDADD = -lncursesw -lpanelw -lpthread -ly2 -lpy2UI -lycp -lutil
 in_wch_LDADD = -lncursesw
 
 y2ncurses_SOURCES = y2ncurses.cc
-y2ncurses_LDADD = -lncurses -lpanel -lpthread -ly2 -lyui -lycp \
+y2ncurses_LDADD = -lncurses -lpanel -lpthread -ly2 -L$(plugindir) -lpy2UI -lycp \
 	-lutil
 
 y2ncurses_LDFLAGS = -static -L$(libdir)	\

@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Aug 10 17:44:45 CEST 2007 - mvidner@suse.cz
+
+- Finished integrating Feature #120292, UI as a namespace callable
+  from yast2-*-bindings.
+- 2.15.23
+
+-------------------------------------------------------------------
 Fri Aug 10 11:34:06 CEST 2007 - kmachalkova@suse.cz
 
 - Removed redefinition of '<<' DiskUsageCounter operator, it is now
@@ -12,6 +19,13 @@ Mon Aug  6 19:09:59 CEST 2007 - kmachalkova@suse.cz
 - Show Filter: <product summary> after filling the repository list 
   - by gs
 - 2.15.22
+
+-------------------------------------------------------------------
+Mon Aug  6 13:56:58 CEST 2007 - mvidner@suse.cz
+
+- Adapted to changes in yast2-core needed for making UI callable from
+  yast2-*-bindings.
+- 2.15.21.1
 
 -------------------------------------------------------------------
 Thu Jul 19 13:24:01 CEST 2007 - kmachalkova@suse.cz
