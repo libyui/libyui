@@ -1,9 +1,23 @@
 -------------------------------------------------------------------
+Fri Aug 10 17:53:20 CEST 2007 - mvidner@suse.cz
+
+- Finished integrating Feature #120292, UI as a namespace callable
+  from yast2-*-bindings.
+- 2.15.11
+
+-------------------------------------------------------------------
 Wed Aug  8 09:27:30 CEST 2007 - kmachalkova@suse.cz
 
 - Added text referring to whereabouts of the license text to 
   license agreement popup (FaTE #302018) 
 - V 2.15.10
+
+-------------------------------------------------------------------
+Mon Aug  6 13:55:08 CEST 2007 - mvidner@suse.cz
+
+- Adapted to changes in yast2-core needed for making UI callable from
+  yast2-*-bindings.
+- 2.15.7.1
 
 -------------------------------------------------------------------
 Fri Aug  3 12:42:01 CEST 2007 - sh@suse.de

@@ -23,7 +23,7 @@ plugin_LTLIBRARIES = libpy2qt_pkg.la
 libpy2qt_pkg_la_LDFLAGS = -version-info 2:0
 
 libpy2qt_pkg_la_LIBADD =			\
-	-L$(libdir) -lyui			\
+	-L$(plugindir) -lpy2UI			\
 	-L$(QTLIBDIR) -lqt-mt			\
 	-lX11 -lXext -lSM -lICE			\
 	${ZYPP_LIBS}

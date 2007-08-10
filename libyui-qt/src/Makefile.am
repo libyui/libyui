@@ -30,13 +30,13 @@ plugin_LTLIBRARIES = libpy2qt.la
 libpy2qt_la_LDFLAGS = -version-info 2:0
 
 libpy2qt_la_LIBADD =			\
-	-L$(libdir) -lyui		\
+	-L$(plugindir) -lpy2UI		\
 	-L$(QTLIBDIR) -lqt-mt		\
 	-lX11 -lXext -lSM -lICE
 
 # libpy2qt_la_LIBADD =			\
 # 	-Lpkg -ly2qt_pkg		\
-# 	-L$(libdir) -lyui		\
+# 	-L$(libdir) -lpy2UI		\
 # 	-L$(QTLIBDIR) -lqt-mt		\
 # 	-lX11 -lXext -lSM -lICE
 
@@ -283,4 +283,4 @@ qxembed.moc:				qxembed.h
 
 CLEANFILES = *.moc
 
-INCLUDES = -I$(srcdir)/pkg -I$(QTDIR)/include -I$(includedir) -I$(includedir)/yui
+INCLUDES = -I$(srcdir)/pkg -I$(QTDIR)/include -I$(includedir) -I$(includedir)/yui ${ZYPP_CFLAGS}

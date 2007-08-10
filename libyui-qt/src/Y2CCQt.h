@@ -23,6 +23,7 @@
 #define _Y2CCQt_h
 
 #include "YQUIComponent.h"
+#include <yui/Y2CCUI.h>
 
 /**
  * @short Y2ComponentCreator that can create Qt user interfaces
@@ -31,13 +32,13 @@
  * such a component - returns a newly created component of this
  * type. The Y2CCQt can create components with the name "qt".
  */
-class Y2CCQt : public Y2ComponentCreator
+class Y2CCQt : public Y2CCUI
 {
 public:
     /**
      * Creates a Qt component creator
      */
-    Y2CCQt() : Y2ComponentCreator(Y2ComponentBroker::BUILTIN) { };
+    Y2CCQt() : Y2CCUI() { };
 
     /**
      * Returns true, since the qt component is a
@@ -51,7 +52,14 @@ public:
     Y2Component *create(const char * name) const
     {
 	if (!strcmp(name, "qt") )
-	    return new YQUIComponent();
+	{
+	    Y2Component* ret = YUIComponent::uiComponent ();
+    	    if (!ret || ret->name () != name)
+    	    {
+		ret = new YQUIComponent();
+	    }
+	    return ret;
+	}
 	else
 	    return 0;
     }
