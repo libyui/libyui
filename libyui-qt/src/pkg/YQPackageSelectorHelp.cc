@@ -111,7 +111,7 @@ YQPackageSelector::help()
 
     html += listItem( para( _( "<b>Installation Summary</b> by default shows the changes to your system -- what packages"
 			       " will be installed, deleted, or updated." ) ) +
-		      para( _( "It is generally a good idea to use <b>Check Dependencies</b> then switch to"
+		      para( _( "It is generally a good idea to use <b>Check Dependencies</b> and then switch to"
 			       " <b>Installation Summary</b> before clicking <b>Accept</b>. This way you can see"
 			       " all changes that will be made to your system." ) ) +
 		      para( _( "You can also explicitly select what packages with what status to see here;"
@@ -221,7 +221,7 @@ YQPackageSelector::symbolHelp()
 		     // Translators: Package status short ( ! ) description
 		     _( "Autoinstall" ) + bySelection,
 		     // Translators: Automatic word-wrapping.
-		     _( "This package will be installed automatically because it is contained in a"
+		     _( "This package will be installed automatically, because it is contained in a"
 			" predefined software selection (e.g., \"Multimedia\", \"Development\")." ) );
 
     html += symHelp( "sel_autoupdate.xpm",

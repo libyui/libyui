@@ -392,8 +392,8 @@ YQPkgConflictDialog::askCreateSolverTestCase()
     {
 	QMessageBox::warning( 0,					// parent
 			      _( "Error" ),				// caption
-			      _( "<p><b>Error</b> creating dependency resolver test case</p>"
-				 "<p>Please check disk space and permissions for <tt>%1</tt></p>" ).arg( testCaseDir ),
+			      _( "<p><b>Error</b> while creating a dependency resolver test case</p>"
+				 "<p>Please check the disk space and permissions for <tt>%1</tt></p>" ).arg( testCaseDir ),
 			      QMessageBox::Ok | QMessageBox::Default,
 			      QMessageBox::NoButton,
 			      QMessageBox::NoButton );
