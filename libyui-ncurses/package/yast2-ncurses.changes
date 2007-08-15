@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Aug 15 12:50:03 CEST 2007 - jsuchome@suse.cz
+
+- messages from proofread merged back
+- 2.15.24 
+
+-------------------------------------------------------------------
 Fri Aug 10 17:44:45 CEST 2007 - mvidner@suse.cz
 
 - Finished integrating Feature #120292, UI as a namespace callable

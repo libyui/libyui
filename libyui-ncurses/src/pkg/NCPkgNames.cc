@@ -1496,7 +1496,7 @@ const string NCPkgNames::HelpOnStatus1()
 const string NCPkgNames::HelpOnStatus2()
 {
     // part 1 of help text package status
-    static const string value = _( "<p>By default, the package dependencies are checked with every status change. You will be informed about package conflicts and additionally required packages will be selected (the menu item <i>Etc.</i>/<i>Dependencies</i> offers different settings). To resolve conflict, select one of the offered solution and press 'OK -- Try Again'.</p>" );
+    static const string value = _( "<p>By default, the package dependencies are checked with every status change. You will be informed about package conflicts and additionally required packages will be selected (the menu item <i>Etc.</i>/<i>Dependencies</i> offers different settings). To resolve the conflict, select one of the offered solution and press 'OK -- Try Again'.</p>" );
     return value;
 }
 
