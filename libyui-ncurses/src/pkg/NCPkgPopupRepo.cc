@@ -249,14 +249,15 @@ bool NCPkgPopupRepo::fillRepoList()
     {
 	oneLine.clear();
 
-	// let's find some product for this repository	
-	ZyppProduct product = findProductForRepo( (*it) );
-        string name = "";
+	// let's find some product for this repository
+        // but not now :) bug #296782	
+	//ZyppProduct product = findProductForRepo( (*it) );
+        //if ( product ) 
+	//{
+	//  name = product->summary();
+        //}        
+        string name = (*it).info().name();
 
-        if ( product ) 
-	{
-	    name = product->summary();
-        }        
       	oneLine.push_back( name ); 
 
 	//and URL as well
