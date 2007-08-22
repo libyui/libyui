@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Wed Aug 22 17:17:40 CEST 2007 - kmachalkova@suse.cz
+
+- Correct setValue for CheckBoxFrame (added missing Redraw() call) 
+  (#301370)
+- Display repository name instead of product name in package
+  selector (#296782)
+- 2.15.25 
+
+-------------------------------------------------------------------
 Wed Aug 15 12:50:03 CEST 2007 - jsuchome@suse.cz
 
 - messages from proofread merged back
