@@ -67,8 +67,10 @@ class NCCheckBoxFrame : public YCheckBoxFrame, public NCWidget {
     virtual void setEnabling( bool do_bv );
 
     virtual bool getValue() { return isEnabled; }
-    
-    virtual void setValue( bool enable ) { isEnabled = enable; }
+   
+    //Do not forget to call Redraw(), so that UI::ChangeWidget works
+    //correctly - #301370 
+    virtual void setValue( bool enable ) { isEnabled = enable; Redraw();}
 
     virtual bool setKeyboardFocus();
 

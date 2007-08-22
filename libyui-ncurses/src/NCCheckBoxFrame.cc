@@ -233,7 +233,8 @@ NCursesEvent NCCheckBoxFrame::wHandleInput( wint_t key )
       {
 	  setValue( true );
       }
-      Redraw();
+      //No need to call Redraw() here, it is already done
+      //in setValue
       
       if ( getNotify() )
 	  ret = NCursesEvent::ValueChanged;
