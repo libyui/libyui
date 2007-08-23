@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Aug 23 13:25:08 CEST 2007 - kmachalkova@suse.cz
+
+- Display repository name instead of product name in package selector
+  (#296782) 
+
+-------------------------------------------------------------------
 Wed Aug 15 13:02:44 CEST 2007 - jsuchome@suse.cz
 
 - Messages back from proofreading 
