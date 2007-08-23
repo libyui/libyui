@@ -224,13 +224,13 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
 {
     if ( nameCol() >= 0 )
     {
-	string name;
-	ZyppProduct product = singleProduct( _zyppRepo );
+	string name = repo.info().name();
+	//ZyppProduct product = singleProduct( _zyppRepo );
 
-	if ( product )	// only if the repository provides exactly one product
-	{		// (which is the most common case)
-	    name = product->summary();
-	}
+	//if ( product )	// only if the repository provides exactly one product
+	//{		// (which is the most common case)
+	//    name = product->summary();
+	//}
 
 	if ( ! name.empty() )
 	    setText( nameCol(), name.c_str() );
