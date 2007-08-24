@@ -209,8 +209,6 @@ void NCurses::init()
   
   if ( title_line() && ::ripoffline( 1, ripinit ) != OK )
       throw NCursesError( "ripoffline() failed" );
-
-  string log = get_log_filename();
   
   UIMIL << "isatty(stdin)" << (isatty(0) ? "yes" : "no") << endl;
   if (isatty( 0 )) {
@@ -256,21 +254,15 @@ void NCurses::init()
       }
     }
   }
+ 
+  //FIXME: Enable these with multithread support
+  //duplicate stdout and stderr before redirecting them to log
+  //so that they can be regenerated before system() call
+  //stdout_save = dup(1);
+  //stderr_save = dup(2);
 
-  UIMIL << "isatty(stderr)" << (isatty(2) ? "yes" : "no") << endl;
-  if (isatty(2) && theTerm) {
-    // redirect stderr to log
-    close(2);
-    open(log.c_str(), O_APPEND | O_CREAT);
-  }
-
-  UIMIL << "isatty(stdout)" << (isatty(1) ? "yes" : "no") << endl;
-  if (isatty(1) && theTerm) {
-    // redirect stdout to log
-    close(1);
-    open(log.c_str(), O_APPEND | O_CREAT);
-  }
-
+  RedirectToLog();
+  
   if ( !theTerm ) {
     UIMIL << "no term so fall back to initscr" << endl;
     if ( ::initscr() == NULL )
@@ -571,6 +563,31 @@ void NCurses::ForgetDlg( NCDialog * dlg_r )
   }
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCurses::RedirectToLog
+//	METHOD TYPE : void
+//
+void NCurses::RedirectToLog()
+{
+  string log = get_log_filename();
+  
+  UIMIL << "isatty(stderr)" << (isatty(2) ? "yes" : "no") << endl;
+  if (isatty(2) && theTerm) {
+    // redirect stderr to log
+    close(2);
+    open(log.c_str(), O_APPEND | O_CREAT);
+  }
+
+  UIMIL << "isatty(stdout)" << (isatty(1) ? "yes" : "no") << endl;
+  if (isatty(1) && theTerm) {
+    // redirect stdout to log
+    close(1);
+    open(log.c_str(), O_APPEND | O_CREAT);
+  }
+
+}
 ///////////////////////////////////////////////////////////////////
 //
 //

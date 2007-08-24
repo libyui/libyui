@@ -773,6 +773,12 @@ int YNCursesUI::runInTerminal( const YCPString & module )
     ::def_prog_mode();
     ::endwin();
 
+    //FIXME: Enable these with multithread support
+    //Regenerate saved stdout and stderr, so that app called
+    //via system() can use them and draw something to the terminal
+    //dup2(NCurses::stdout_save, 1);
+    //dup2(NCurses::stderr_save, 2);
+
     //Call external program
     ret = system(cmd.c_str());
 
@@ -780,6 +786,10 @@ int YNCursesUI::runInTerminal( const YCPString & module )
     {
 	NCERR << cmd << " returned:" << ret << endl;
     }
+
+    //FIXME: Enable these with multithread support
+    //Redirect stdout and stderr to y2log again
+    //NCurses::RedirectToLog();
 
     //Resume tty modes and refresh the screen
     ::reset_prog_mode();
