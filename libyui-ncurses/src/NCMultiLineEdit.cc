@@ -34,7 +34,7 @@ NCMultiLineEdit::NCMultiLineEdit( NCWidget * parent, const YWidgetOpt & opt,
     , NCPadWidget( parent )
 {
   WIDDBG << endl;
-  defsze = wsze( 5, 5 ) + 2;
+  defsze = wsze( 5, 5 ) + wsze(0,2);
   setLabel( nlabel );
   setText( initialText );
 }
