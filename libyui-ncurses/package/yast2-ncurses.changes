@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Aug 24 14:18:24 CEST 2007 - kmachalkova@suse.cz
+
+- Smaller (vertical) default size of MultiLineEdit widget (partly 
+  #292282)
+- Redirecting stdout/stderr to log is now separate function
+- 2.15.26
+
+-------------------------------------------------------------------
 Wed Aug 22 17:17:40 CEST 2007 - kmachalkova@suse.cz
 
 - Correct setValue for CheckBoxFrame (added missing Redraw() call) 
