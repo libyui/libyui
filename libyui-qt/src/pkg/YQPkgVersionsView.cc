@@ -248,7 +248,7 @@ YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
 
     if ( versionCol() >= 0 )	setText( versionCol(), zyppObj->edition().asString().c_str() );
     if ( archCol()    >= 0 )	setText( archCol(),    zyppObj->arch().asString().c_str() );
-    if ( repoCol() >= 0 )	setText( repoCol(), zyppObj->repository().info().alias().c_str() );
+    if ( repoCol() >= 0 )	setText( repoCol(),    zyppObj->repository().info().name().c_str() );
     if ( productCol() >= 0 )
     {
 	ZyppProduct product = YQPkgRepoListItem::singleProduct( zyppObj->repository() );

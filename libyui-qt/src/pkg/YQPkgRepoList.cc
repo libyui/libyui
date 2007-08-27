@@ -33,6 +33,7 @@ using std::list;
 using std::set;
 using std::vector;
 
+#define SHOW_SINGLE_PRODUCT	0
 
 
 YQPkgRepoList::YQPkgRepoList( QWidget * parent )
@@ -225,12 +226,15 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
     if ( nameCol() >= 0 )
     {
 	string name = repo.info().name();
-	//ZyppProduct product = singleProduct( _zyppRepo );
 
-	//if ( product )	// only if the repository provides exactly one product
-	//{		// (which is the most common case)
-	//    name = product->summary();
-	//}
+#if SHOW_SINGLE_PRODUCT
+	ZyppProduct product = singleProduct( _zyppRepo );
+
+	if ( product )	// only if the repository provides exactly one product
+	{		// (which is the most common case)
+	    name = product->summary();
+	}
+#endif
 
 	if ( ! name.empty() )
 	    setText( nameCol(), name.c_str() );
@@ -281,7 +285,7 @@ YQPkgRepoListItem::singleProduct( ZyppRepo zyppRepo )
 	if ( zypp::dynamic_pointer_cast<zypp::Product>( *it ) )
 	{
 	    y2milestone( "Multiple products in repository %s",
-			 zyppRepo.info().alias().c_str() );
+			 zyppRepo.info().name().c_str() );
 	    ZyppProduct null;
 	    return null;
 	}
@@ -291,7 +295,7 @@ YQPkgRepoListItem::singleProduct( ZyppRepo zyppRepo )
 
     if ( ! product )
 	y2milestone( "No product in repository %s",
-		     zyppRepo.info().alias().c_str() );
+		     zyppRepo.info().name().c_str() );
 
     return product;
 }

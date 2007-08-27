@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Aug 27 16:14:15 CEST 2007 - sh@suse.de
+
+- Fixed bug #297637: Repository names not shown in Package Manager 
+- V 2.15.13
+
+-------------------------------------------------------------------
 Thu Aug 23 13:25:08 CEST 2007 - kmachalkova@suse.cz
 
 - Display repository name instead of product name in package selector
