@@ -1,10 +1,17 @@
 -------------------------------------------------------------------
+Wed Aug 29 14:38:24 CEST 2007 - tgoettlicher@suse.de
+
+- wizard shows titlebar depending on existence of title-bar-gradient.png
+- r40568
+
+-------------------------------------------------------------------
 Mon Aug 27 16:14:15 CEST 2007 - sh@suse.de
 
 - Fixed bug #297637: Repository names not shown in Package Manager 
 - V 2.15.14
 
 -------------------------------------------------------------------
+>>>>>>> .r40568
 Thu Aug 23 13:25:08 CEST 2007 - kmachalkova@suse.cz
 
 - Display repository name instead of product name in package selector
