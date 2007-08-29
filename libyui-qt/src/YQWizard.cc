@@ -84,13 +84,10 @@ using std::string;
 #define TEXTDOMAIN "packages-qt"
 
 #define ENABLE_GRADIENTS		1
-#define ENABLE_TITLEBAR			0
 
 #define USE_SEPARATOR			1
 
-#if ! ENABLE_TITLEBAR
-#  define WORK_AREA_TOP_MARGIN		10
-#endif
+#define WORK_AREA_TOP_MARGIN		10
 
 #if ENABLE_GRADIENTS
 #  define WORK_AREA_BOTTOM_MARGIN	8
@@ -198,16 +195,19 @@ YQWizard::YQWizard( QWidget *		parent,
 
     if ( ! runningEmbedded() )
     {
-#if ENABLE_TITLEBAR
-	layoutTitleBar( this );
-#else
-	QWidget * spacer = addVSpacing( this, WORK_AREA_TOP_MARGIN );
-	CHECK_PTR( spacer );
+	if ( ! _titleBarGradientPixmap.isNull() )
+	{
+		layoutTitleBar( this );
+	}
+	else
+	{
+		QWidget * spacer = addVSpacing( this, WORK_AREA_TOP_MARGIN );
+		CHECK_PTR( spacer );
 
-#    if ENABLE_GRADIENTS
-	spacer->setPaletteBackgroundColor( _gradientCenterColor );
-#    endif
-#endif
+#		if ENABLE_GRADIENTS
+			spacer->setPaletteBackgroundColor( _gradientTopColor );
+#	  	endif
+	}
     }
 
     QHBox * hBox = new QHBox( this );
@@ -325,15 +325,14 @@ void YQWizard::layoutStepsPanel()
 
 
 #if ENABLE_GRADIENTS
-#   if ENABLE_TITLEBAR
+    if ( !_titleBarGradientPixmap.isNull() )
+    {
+	// Top gradient
 
-    // Top gradient
-
-    QLabel * topGradient = new QLabel( _stepsPanel );
-    CHECK_PTR( topGradient );
-    setGradient( topGradient, _topGradientPixmap );
-
-#   endif
+	QLabel * topGradient = new QLabel( _stepsPanel );
+	CHECK_PTR( topGradient );
+	setGradient( topGradient, _topGradientPixmap );
+    }
 #endif
 
 
@@ -705,6 +704,13 @@ void YQWizard::layoutHelpPanel()
     _helpBrowser->setTextFormat( Qt::RichText );
     _helpBrowser->setMargin( 4 );
     _helpBrowser->setResizePolicy( QScrollView::Manual );
+
+
+    // Set help browser text color
+    QPixmap fgPixmap = QPixmap( PIXMAP_DIR "help-text-color.png" );
+    if (! fgPixmap.isNull() )
+	_helpBrowser->setPaletteForegroundColor( pixelColor( fgPixmap, 0, 0, paletteForegroundColor() ) );
+
 
     if ( highColorDisplay() )
     {
@@ -1258,7 +1264,8 @@ void YQWizard::loadGradientPixmaps()
 	_topGradientPixmap	= QPixmap( PIXMAP_DIR "top-gradient.png"	);
 	_bottomGradientPixmap	= QPixmap( PIXMAP_DIR "bottom-gradient.png"	);
 	_titleBarGradientPixmap = QPixmap( PIXMAP_DIR "title-bar-gradient.png"	);
-	_gradientCenterColor = pixelColor( _bottomGradientPixmap, 0, 0 );
+	_gradientCenterColor	= pixelColor( _bottomGradientPixmap, 0, 0, paletteBackgroundColor() );
+	_gradientTopColor	= pixelColor( _topGradientPixmap, 0, 0 , paletteBackgroundColor() );
     }
     else // 8 bit display or worse - don't use gradients
     {
@@ -1268,6 +1275,7 @@ void YQWizard::loadGradientPixmaps()
 	// Use deault widget background (some shade of grey) for the center
 	// stretchable part of the side bar.
 	_gradientCenterColor = paletteBackgroundColor();
+	_gradientTopColor = paletteBackgroundColor();
     }
 #endif
 }
@@ -1281,9 +1289,9 @@ void YQWizard::loadStepsIcons()
 
     if ( highColorDisplay() )
     {
-	_stepCurrentColor       = pixelColor( QPixmap( PIXMAP_DIR "color-step-current.png" ), 0, 0 );
-	_stepToDoColor          = pixelColor( QPixmap( PIXMAP_DIR "color-step-todo.png"    ), 0, 0 );
-	_stepDoneColor          = pixelColor( QPixmap( PIXMAP_DIR "color-step-done.png"    ), 0, 0 );
+	_stepCurrentColor       = pixelColor( QPixmap( PIXMAP_DIR "color-step-current.png" ), 0, 0, paletteForegroundColor() );
+	_stepToDoColor          = pixelColor( QPixmap( PIXMAP_DIR "color-step-todo.png"    ), 0, 0, paletteForegroundColor() );
+	_stepDoneColor          = pixelColor( QPixmap( PIXMAP_DIR "color-step-done.png"    ), 0, 0, paletteForegroundColor() );
     }
     else
     {
@@ -1342,8 +1350,11 @@ QPixmap YQWizard::bottomCropPixmap( const QPixmap & full, int croppedHeight )
 
 
 
-QColor YQWizard::pixelColor( const QPixmap & pixmap, int x, int y )
+QColor YQWizard::pixelColor( const QPixmap & pixmap, int x, int y, const QColor & defaultColor )
 {
+    if ( pixmap.isNull() )
+	return defaultColor;
+
     // QPixmap doesn't allow direct access to pixel values (which makes some
     // sense since this requires a round-trip to the X server - pixmaps are X
     // server resources), so we need to convert the QPixmap to a QImage to get
@@ -1351,6 +1362,7 @@ QColor YQWizard::pixelColor( const QPixmap & pixmap, int x, int y )
     // some performance if we only convert the part we really need - so let's
     // cut out a tiny portion of the original pixmap and convert only that tiny
     // portion.
+
 
     QPixmap tiny( 1, 1 );
 

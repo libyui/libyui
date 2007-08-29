@@ -329,9 +329,10 @@ public slots:
 
     /**
      * Return the color of pixel( x, y ) of a pixmap.
+     * If pixmap is null defaultColor is returned.
      * This is a _very_ expensive operation!
      **/
-    static QColor pixelColor( const QPixmap & pixmap, int x, int y );
+    static QColor pixelColor( const QPixmap & pixmap, int x, int y, const QColor & defaultColor );
 
 
 protected slots:
@@ -582,6 +583,7 @@ protected:
     QPixmap	_titleBarGradientPixmap;
     QPixmap	_topGradientPixmap;
     QColor	_gradientCenterColor;
+    QColor	_gradientTopColor;
     QPixmap	_bottomGradientPixmap;
 
     QPixmap	_stepCurrentIcon;
