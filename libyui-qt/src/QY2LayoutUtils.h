@@ -45,5 +45,10 @@ QWidget * addVSpacing( QWidget * parent, int height = 8 );
  **/
 QWidget * addHSpacing( QWidget * parent, int width = 8 );
 
+/**
+ * Limit a QSize to what is available on the same screen as 'widget'.
+ **/
+QSize limitToScreenSize( const QWidget * widget, const QSize & desiredSize );
+QSize limitToScreenSize( const QWidget * widget, int width, int height );
 
 #endif // ifndef QY2LayoutUtils_h

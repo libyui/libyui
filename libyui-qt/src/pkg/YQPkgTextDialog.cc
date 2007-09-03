@@ -141,13 +141,15 @@ void YQPkgTextDialog::buildDialog( const QString & 	text,
     {
 	_rejectButton = 0;
     }
+
+    updateGeometry();
 }
 
 
 QSize
 YQPkgTextDialog::sizeHint() const
 {
-    return QSize( 500, 450 );
+    return limitToScreenSize( this, 500, 450 );
 }
 
 

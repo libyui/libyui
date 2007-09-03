@@ -207,11 +207,7 @@ YQPkgConflictDialog::~YQPkgConflictDialog()
 QSize
 YQPkgConflictDialog::sizeHint() const
 {
-    QSize size( 550, 450 );
-    QRect available = qApp->desktop()->availableGeometry( (QWidget *) this );
-    size = size.boundedTo( QSize( available.width(), available.height() ) );
-
-    return size;
+    return limitToScreenSize( this, 550, 450 );
 }
 
 

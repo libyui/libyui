@@ -194,11 +194,7 @@ YQPkgChangesDialog::isEmpty() const
 QSize
 YQPkgChangesDialog::sizeHint() const
 {
-    QRect available = qApp->desktop()->availableGeometry( (QWidget *) this );
-    QSize size = QDialog::sizeHint();
-    size = size.boundedTo( QSize( available.width(), available.height() ) );
-
-    return size;
+    return limitToScreenSize( this, QDialog::sizeHint() );
 }
 
 
