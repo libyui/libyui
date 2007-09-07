@@ -236,8 +236,9 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 		header = YCPString(NCPkgNames::WarningLabel());
 	    }
 	break;
+        //display notify msg only if we mark pkg for installation
+        //disregard update, to be consistent with Qt (#308410)
 	case S_Install:
-	case S_Update:
 	    if ( objPtr )
 	    {	
 		notify = objPtr->insnotify();

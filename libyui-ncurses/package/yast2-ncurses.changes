@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Sep  7 17:15:00 CEST 2007 - kmachalkova@suse.cz
+
+- Display install notify message only if package is marked for 
+  installation, disregard update (#308410)    	
+- 2.15.27
+
+-------------------------------------------------------------------
 Fri Aug 24 14:18:24 CEST 2007 - kmachalkova@suse.cz
 
 - Smaller (vertical) default size of MultiLineEdit widget (partly 
