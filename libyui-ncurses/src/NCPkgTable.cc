@@ -245,6 +245,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 		NCDBG << "NOTIFY message: " << notify << endl;
 		header = YCPString(NCPkgNames::NotifyLabel());
 	    }
+	case S_Update:
 	case S_AutoInstall:
 	case S_AutoUpdate:
 	    if ( objPtr )
