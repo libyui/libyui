@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Sep 11 15:09:47 CEST 2007 - gs@suse.de
+
+- Package installation: check the partition size to prevent
+  division by zero during disk space calculation (bug #303700)
+- 2.14.5
+
+-------------------------------------------------------------------
 Wed Nov 29 16:55:14 CET 2006 - kmachalkova@suse.cz
 
 - Display updated patches also in 'installable' view (not only in
