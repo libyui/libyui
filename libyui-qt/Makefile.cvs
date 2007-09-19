@@ -4,8 +4,10 @@
 
 LIB = $(shell y2tool get-lib)
 
+PREFIX = /usr
+
 configure: all
-	./configure --libdir=/usr/$(LIB) --with-qt-dir=/usr/lib/qt3 --with-qt-libdir=/usr/lib/qt3/$(LIB)
+	./configure --prefix=$(PREFIX) --libdir=$(PREFIX)/$(LIB) --with-qt-dir=/usr/lib/qt3 --with-qt-libdir=/usr/lib/qt3/$(LIB)
 
 all:
 	y2tool y2autoconf
