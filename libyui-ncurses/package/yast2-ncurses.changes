@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Oct 23 15:18:39 CEST 2007 - kmachalkova@suse.cz
+
+- Added missing includes to compile with gcc 4.3
+- Removed sources of gcc 4.3 operator priority warnings  
+
+-------------------------------------------------------------------
 Fri Sep  7 17:15:00 CEST 2007 - kmachalkova@suse.cz
 
 - Display install notify message only if package is marked for 
