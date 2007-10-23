@@ -21,6 +21,7 @@
 #include <string>
 #include <sys/time.h>
 #include <unistd.h>
+#include <langinfo.h>
 
 #include "Y2Log.h"
 #include <YEvent.h>

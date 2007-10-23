@@ -18,6 +18,8 @@
 
 #include <stdio.h>
 #include <errno.h>
+#include <langinfo.h>
+#include <libintl.h>
 
 #include <ycp/y2log.h>
 

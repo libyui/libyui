@@ -19,6 +19,7 @@
 #include <ycp/YCPString.h>
 
 #include <errno.h>
+#include <iconv.h>
 
 #include "Y2Log.h"
 #include "NCstring.h"

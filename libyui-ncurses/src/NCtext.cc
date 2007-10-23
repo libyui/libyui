@@ -21,6 +21,7 @@
 #include "stringutil.h"
 
 #include <wchar.h>		// wcwidth
+#include <langinfo.h>
 
 ///////////////////////////////////////////////////////////////////
 

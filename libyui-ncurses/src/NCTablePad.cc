@@ -20,6 +20,8 @@
 #include "NCTablePad.h"
 #include "NCPopupMenu.h"
 
+#include <limits.h>
+
 #if 0
 #undef  DBG_CLASS
 #define DBG_CLASS "_NCTablePad_"
