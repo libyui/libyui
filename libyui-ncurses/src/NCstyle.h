@@ -75,13 +75,13 @@ struct NCattribute {
   inline static chtype getChar    ( chtype a )              { return a & char_mask;  }
   inline static chtype getNonChar ( chtype a )              { return a & ~char_mask;  }
 
-  inline static void   setStyle   ( chtype & a, chtype ch ) { a = a & ~style_mask | ch & style_mask; }
-  inline static void   setColor   ( chtype & a, chtype ch ) { if ( colors() ) a = a & ~color_mask | ch & color_mask; }
-  inline static void   setChar    ( chtype & a, chtype ch ) { a = a & ~char_mask  | ch & char_mask;  }
+  inline static void   setStyle   ( chtype & a, chtype ch ) { a = (a & ~style_mask) | (ch & style_mask); }
+  inline static void   setColor   ( chtype & a, chtype ch ) { if ( colors() ) a = (a & ~color_mask) | (ch & color_mask); }
+  inline static void   setChar    ( chtype & a, chtype ch ) { a = (a & ~char_mask) | (ch & char_mask);  }
 
-  inline static void   addStyle   ( chtype & a, chtype ch ) { a = a | ch & style_mask; }
+  inline static void   addStyle   ( chtype & a, chtype ch ) { a = a | (ch & style_mask); }
   inline static void   delStyle   ( chtype & a, chtype ch ) { a = a & ~(ch & style_mask); }
-  inline static void   toggleStyle( chtype & a, chtype ch ) { setStyle( a, a & ~ch | (a ^ ch) & ch ); }
+  inline static void   toggleStyle( chtype & a, chtype ch ) { setStyle( a, (a & ~ch) | ((a ^ ch) & ch )); }
 
   inline static void   addAlt     ( chtype & a ) { a |= A_ALTCHARSET; }
   inline static void   delAlt     ( chtype & a ) { a &= ~A_ALTCHARSET; }

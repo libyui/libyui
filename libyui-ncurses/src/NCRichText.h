@@ -142,7 +142,7 @@ class NCRichText : public YRichText, public NCPadWidget {
 	  if (    sline == unset || scol == unset
 	       || eline == unset || ecol == unset  )
 	    return false;
-	  if (    eline == sline && ecol <= scol
+	  if (   ( eline == sline && ecol <= scol )
 	       || eline < sline )
 	    return false;
 	  return true;
