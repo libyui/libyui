@@ -2,7 +2,8 @@
 Tue Oct 23 15:18:39 CEST 2007 - kmachalkova@suse.cz
 
 - Added missing includes to compile with gcc 4.3
-- Removed sources of gcc 4.3 operator priority warnings  
+- Removed sources of gcc 4.3 operator priority warnings 
+- 2.16.0
 
 -------------------------------------------------------------------
 Fri Sep  7 17:15:00 CEST 2007 - kmachalkova@suse.cz
