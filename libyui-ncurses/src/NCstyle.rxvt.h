@@ -79,7 +79,11 @@ inline void NCstyleInit_rxvt( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::ListActiveSelLabel, 7936 );
   attrset->setAttr( NCstyle::ListActiveSelData, 7936|A_BOLD );
   attrset->setAttr( NCstyle::ListActiveSelHint, 6144|A_BOLD );
-  attrset->setAttr( NCstyle::RichTextPlain, 0 );
+  attrset->setAttr( NCstyle::RichTextPlain, 1792 );
+  //Need to set foreground color explicitely, otherwise urxvt will display
+  //black font on black background. This solution sucks, but cannot find 
+  //any better (#336060)
+  attrset->setFg  ( NCstyle::RichTextPlain, 7 );
   attrset->setAttr( NCstyle::RichTextTitle, 512 );
   attrset->setAttr( NCstyle::RichTextLink, 768 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 768|A_BOLD );
@@ -143,6 +147,7 @@ inline void NCstyleInit_rxvt( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::ListActiveSelData, 0|A_BOLD );
   attrset->setAttr( NCstyle::ListActiveSelHint, 0|A_BOLD );
   attrset->setAttr( NCstyle::RichTextPlain, 0 );
+  attrset->setFg  ( NCstyle::RichTextPlain, 7 );
   attrset->setAttr( NCstyle::RichTextTitle, 15360|A_BOLD );
   attrset->setAttr( NCstyle::RichTextLink, 768 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 768|A_BOLD );
@@ -206,6 +211,7 @@ inline void NCstyleInit_rxvt( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::ListActiveSelData, 0|A_BOLD );
   attrset->setAttr( NCstyle::ListActiveSelHint, 0|A_BOLD );
   attrset->setAttr( NCstyle::RichTextPlain, 0 );
+  attrset->setFg  ( NCstyle::RichTextPlain, 7 );
   attrset->setAttr( NCstyle::RichTextTitle, 15360|A_BOLD );
   attrset->setAttr( NCstyle::RichTextLink, 768 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 768|A_BOLD );
@@ -269,6 +275,7 @@ inline void NCstyleInit_rxvt( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::ListActiveSelData, 1536|A_BOLD );
   attrset->setAttr( NCstyle::ListActiveSelHint, 1536|A_BOLD );
   attrset->setAttr( NCstyle::RichTextPlain, 0 );
+  attrset->setFg  ( NCstyle::RichTextPlain, 7 );
   attrset->setAttr( NCstyle::RichTextTitle, 15360|A_BOLD );
   attrset->setAttr( NCstyle::RichTextLink, 768 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 768|A_BOLD );
