@@ -1,0 +1,11 @@
+Makefile
+Makefile.in
+*.lo
+.deps
+*.moc
+.libs
+y2qt.kdoc
+*.la
+qt
+*.bak
+*.auto
