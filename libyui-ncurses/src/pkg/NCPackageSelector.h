@@ -205,12 +205,6 @@ class NCPackageSelector
       *@param repo zypp::Repository
       */
     bool fillRepoFilterList ( ZyppRepo repo );
-
-    /**
-      *Fills the package table with packages from selected repository
-      *@param repo zypp::Repository
-      */
-    bool fillRepoFilterList ( ZyppRepo repo );
     
     bool isYouMode() { return youMode; }
    /**

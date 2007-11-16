@@ -175,4 +175,3 @@ public:
     NCursesEvent & showRepoPopup();
 };
 #endif
->>>>>>> .merge-right.r42142

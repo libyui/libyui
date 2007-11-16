@@ -82,7 +82,7 @@ void NCPopupInfo::createLayout( const string & headline,
 				const string & text,
 				string okButtonLabel,
 				string cancelButtonLabel,
-			        string printLicenseText )
+			 	string printLicenseText )
 {
   // the vertical split is the (only) child of the dialog
   NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
@@ -133,7 +133,6 @@ void NCPopupInfo::createLayout( const string & headline,
       
       new NCSpacing( hSplit, YD_HORIZ, true, 0.4 ); 
   }
-  split->addChild( new NCSpacing( split, opt, 0.5, false, true ) ); 
   
 }
 

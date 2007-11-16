@@ -421,4 +421,3 @@ NCursesEvent & NCPkgPopupRepo::showRepoPopup()
     }
     return postevent;
 }
->>>>>>> .merge-right.r42142
