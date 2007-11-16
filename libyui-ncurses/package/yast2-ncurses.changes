@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Nov 16 20:23:03 CET 2007 - kmachalkova@suse.cz
+
+- The Great Merge [tm] - merged mod-ui branch into the trunk
+- 2.16.2 
+
+-------------------------------------------------------------------
 Tue Oct 30 13:52:59 CET 2007 - kmachalkova@suse.cz
 
 - Explicitely set foreground (font) color to white for rxvt theme
