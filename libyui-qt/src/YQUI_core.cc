@@ -18,6 +18,7 @@
 
 #include <rpc/types.h>		// MAXHOSTNAMELEN
 #include <dlfcn.h>
+#include <libintl.h>
 
 #include <qcursor.h>
 #include <qmessagebox.h>
