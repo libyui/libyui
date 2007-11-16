@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Nov 16 16:36:13 CET 2007 - sh@suse.de
+
+- Merged mod-ui branch to trunk
+- V 2.16.1
+
+-------------------------------------------------------------------
 Mon Sep  3 18:13:36 CEST 2007 - sh@suse.de
 
 - Limit pkg popups to screen size even with substandard resolutions
