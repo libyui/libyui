@@ -28,9 +28,9 @@
 //
 //	DESCRIPTION :
 //
-NCMultiSelectionBox::NCMultiSelectionBox( NCWidget * parent, const YWidgetOpt & opt,
-					  const YCPString & nlabel )
-    : YMultiSelectionBox( opt, nlabel )
+NCMultiSelectionBox::NCMultiSelectionBox( YWidget * parent,
+					  const string & nlabel )
+    : YMultiSelectionBox( parent, nlabel )
     , NCPadWidget( parent )
 {
   WIDDBG << endl;
@@ -54,15 +54,41 @@ NCMultiSelectionBox::~NCMultiSelectionBox()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCMultiSelectionBox::nicesize
-//	METHOD TYPE : long
+//	METHOD NAME : NCMultiSelectionBox::preferredWidth
+//	METHOD TYPE : void
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Set preferred width
 //
-long NCMultiSelectionBox::nicesize( YUIDimension dim )
+int NCMultiSelectionBox::preferredWidth()
 {
-  wsze sze = wsze::max( defsze, wsze( 0, labelWidht()+2 ) );
-  return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
+    return wGetDefsze().W;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCMultiSelectionBox::preferredHeight
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : Set preferred height
+//
+int NCMultiSelectionBox::preferredHeight()
+{
+    return wGetDefsze().H;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCMultiSelectionBox::setEnabled
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : Set widget state (enabled/disabled)
+//
+void NCMultiSelectionBox::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YMultiSelectionBox::setEnabled( do_bv );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -71,27 +97,29 @@ long NCMultiSelectionBox::nicesize( YUIDimension dim )
 //	METHOD NAME : NCMultiSelectionBox::setSize
 //	METHOD TYPE : void
 //
-//	DESCRIPTION :
+//	DESCRIPTION : nc
 //
-void NCMultiSelectionBox::setSize( long newwidth, long newheight )
+void NCMultiSelectionBox::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YMultiSelectionBox::setSize( newwidth, newheight );
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCMultiSelectionBox::getCurrentItem
-//	METHOD TYPE : int
+//	METHOD NAME : NCMultiSelectionBox::currentItem
+//	METHOD TYPE : YItem *
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Return pointer to current MsB item
 //
-int NCMultiSelectionBox::getCurrentItem()
+YItem * NCMultiSelectionBox::currentItem()
 {
-  if ( !myPad()->Lines() )
-    return -1;
-  return myPad()->CurPos().L;
+    if ( !myPad()->Lines() )
+	return 0; 
+
+    int index = myPad()->CurPos().L;
+
+    return itemAt( index );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -100,28 +128,26 @@ int NCMultiSelectionBox::getCurrentItem()
 //	METHOD NAME : NCMultiSelectionBox::setCurrentItem
 //	METHOD TYPE : void
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Highlight current item
 //
-void NCMultiSelectionBox::setCurrentItem( int index )
+void NCMultiSelectionBox::setCurrentItem( YItem * item )
 {
-  myPad()->ScrlLine( index );
+    myPad()->ScrlLine( item->index() );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCMultiSelectionBox::itemAdded
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
-void NCMultiSelectionBox::itemAdded( const YCPString& str, int index, bool selected )
+void NCMultiSelectionBox::addItem( YItem * item )
 {
-  vector<NCTableCol*> Items( 2U, 0 );
-  Items[0] = new NCTableTag( selected );
-  Items[1] = new NCTableCol( str, NCTableCol::PLAIN );
-  myPad()->Append( Items );
-  DrawPad();
+    vector<NCTableCol*> Items( 2U, 0 );
+    if ( item )
+    {
+	YMultiSelectionBox::addItem( item );
+	Items[0] = new NCTableTag( item, item->selected() );
+	//Do not set style to NCTableCol::PLAIN here, otherwise current
+        //item will not be highlighted if cursor is not over the widget 
+	Items[1] = new NCTableCol( item->label() );
+	myPad()->Append( Items );
+	DrawPad();	
+    }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -130,7 +156,8 @@ void NCMultiSelectionBox::itemAdded( const YCPString& str, int index, bool selec
 //	METHOD NAME : NCMultiSelectionBox::tagCell
 //	METHOD TYPE : NCTableTag *
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Return pointer to current line tag
+//		      (holds state and yitem pointer)
 //
 NCTableTag * NCMultiSelectionBox::tagCell( int index )
 {
@@ -146,7 +173,7 @@ NCTableTag * NCMultiSelectionBox::tagCell( int index )
 //	METHOD NAME : NCMultiSelectionBox::tagCell
 //	METHOD TYPE : const NCTableTag *
 //
-//	DESCRIPTION :
+//	DESCRIPTION : dtto
 //
 const NCTableTag * NCMultiSelectionBox::tagCell( int index ) const
 {
@@ -162,7 +189,7 @@ const NCTableTag * NCMultiSelectionBox::tagCell( int index ) const
 //	METHOD NAME : NCMultiSelectionBox::deleteAllItems
 //	METHOD TYPE : void
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Clear the MsB
 //
 void NCMultiSelectionBox::deleteAllItems()
 {
@@ -177,50 +204,54 @@ void NCMultiSelectionBox::deleteAllItems()
 //	METHOD NAME : NCMultiSelectionBox::isItemSelected
 //	METHOD TYPE : bool
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Return item status (selected/deselected)
 //
-bool NCMultiSelectionBox::isItemSelected( int index ) const
+bool NCMultiSelectionBox::isItemSelected( YItem *item ) 
 {
-  const NCTableTag * citem = tagCell( index );
-  return citem ? citem->Selected() : false;
+  return item->selected();
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCMultiSelectionBox::setAllItemsSelected
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
-void NCMultiSelectionBox::setAllItemsSelected( bool val )
-{
-  for ( int i = 0; setItemSelected( i, val, false ); ++i )
-    ;
-  DrawPad();
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCMultiSelectionBox::setItemSelected
+//	METHOD NAME : NCMultiSelectionBox::selectItem
 //	METHOD TYPE : bool
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Mark item as selected
 //
-bool NCMultiSelectionBox::setItemSelected( int index, bool val, bool update )
+void NCMultiSelectionBox::selectItem( YItem *yitem, bool selected )
 {
-  NCTableTag * citem = tagCell( index );
-  if ( !citem )
-    return false;
+  YMultiSelectionBox::selectItem ( yitem, selected );
 
-  if ( citem->Selected() != val ) {
-    citem->SetSelected( val );
-    if ( update )
-      DrawPad();
-  }
+  //retrieve pointer to the line tag associated with this item
+  NCTableTag * tag = (NCTableTag *)yitem->data(); 
+  YUI_CHECK_PTR( tag );
 
-  return true;
+  tag->SetSelected( selected );
+
+  DrawPad();
+
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCMultiSelectionBox::selectItem
+//	METHOD TYPE : bool
+//
+//	DESCRIPTION : Mark all items as deselected
+//
+void NCMultiSelectionBox::deselectAllItems()
+{
+  YMultiSelectionBox::deselectAllItems();
+
+  for ( unsigned int i = 0; i < getNumLines(); i++)
+  {
+     NCTableTag *t = tagCell( i );
+     t->SetSelected( false );
+  }  
+  DrawPad();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -229,31 +260,25 @@ bool NCMultiSelectionBox::setItemSelected( int index, bool val, bool update )
 //	METHOD NAME : NCMultiSelectionBox::toggleCurrentItem
 //	METHOD TYPE : void
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Toggle item from selected -> deselected
+//		      and vice versa
 //
 void NCMultiSelectionBox::toggleCurrentItem()
 {
-  int index = getCurrentItem();
-  if ( index == -1 )
-    return;
+  YItem *it = currentItem();
+  selectItem( it, !( it->selected()) );
 
-  NCTableTag * citem = tagCell( index );
-  if ( !citem )
-    return;
-
-  citem->SetSelected( !citem->Selected() );
-  DrawPad();
 }
 
-///////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////
 //
 //
 //	METHOD NAME : NCMultiSelectionBox::setLabel
 //	METHOD TYPE : void
 //
-//	DESCRIPTION :
+//	DESCRIPTION :  nc
 //
-void NCMultiSelectionBox::setLabel( const YCPString & nlabel )
+void NCMultiSelectionBox::setLabel( const string & nlabel )
 {
   YMultiSelectionBox::setLabel( nlabel );
   NCPadWidget::setLabel( NCstring( nlabel ) );
@@ -265,7 +290,7 @@ void NCMultiSelectionBox::setLabel( const YCPString & nlabel )
 //	METHOD NAME : NCMultiSelectionBox::CreatePad
 //	METHOD TYPE : NCPad *
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Create empty MsB pad
 //
 NCPad * NCMultiSelectionBox::CreatePad()
 {
@@ -295,16 +320,19 @@ void NCMultiSelectionBox::wRecoded()
 //	METHOD NAME : NCMultiSelectionBox::wHandleInput
 //	METHOD TYPE : NCursesEvent
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Handle input :)
+//		      (those keys that are not caught by NCPad)
 //
 NCursesEvent NCMultiSelectionBox::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
   bool valueChanged = false;
-  int oldCurrentItem = getCurrentItem();
+  YItem *oldCurrentItem = currentItem();
 
   if ( ! handleInput( key ) )
   {
+    YItem *citem = currentItem();
+
     switch ( key ) {
     case KEY_SPACE:
     case KEY_RETURN:
@@ -312,15 +340,15 @@ NCursesEvent NCMultiSelectionBox::wHandleInput( wint_t key )
       valueChanged = true;
       break;
     case '+':
-      if ( !itemIsSelected( getCurrentItem() ) ) {
-        setItemSelected( getCurrentItem(), true, false );
+      if ( !isItemSelected( citem ) ) {
+	selectItem( citem, true );
         valueChanged = true;
       }
       myPad()->ScrlDown();
       break;
     case '-':
-      if ( itemIsSelected( getCurrentItem() ) ) {
-        setItemSelected( getCurrentItem(), false, false );
+      if ( isItemSelected( citem ) ) {
+	selectItem( citem, false);
         valueChanged = true;
       }
       myPad()->ScrlDown();
@@ -328,11 +356,11 @@ NCursesEvent NCMultiSelectionBox::wHandleInput( wint_t key )
     }
   }
 
-  if ( getNotify() )
+  if ( notify() )
   {
     if ( valueChanged )
       ret = NCursesEvent::ValueChanged;
-    else if ( oldCurrentItem != getCurrentItem() )
+    else if ( oldCurrentItem != currentItem() )
       ret = NCursesEvent::SelectionChanged;
   }
 

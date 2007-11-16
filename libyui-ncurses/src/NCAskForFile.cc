@@ -20,9 +20,10 @@
 
 #include "NCAskForFile.h"
 
-#include <ycp/YCPTerm.h>
 #include "YDialog.h"
-#include "NCSplit.h"
+#include "YWidgetID.h"
+
+#include "NCLayoutBox.h"
 #include "NCSpacing.h"
 #include "NCFrame.h"
 #include "NCi18n.h"
@@ -39,12 +40,12 @@
 
 namespace
 {
-    const YCPTerm idOk( "ok" );
-    const YCPTerm idCancel( "cancel" );
-    const YCPTerm idDirList( "dirlist" );
-    const YCPTerm idFileList( "filelist" );
-    const YCPTerm idDirName( "dirname" );
-    const YCPTerm idDetails( "details" );
+    const string idOk( "ok" );
+    const string idCancel( "cancel" );
+    const string idDirList( "dirlist" );
+    const string idFileList( "filelist" );
+    const string idDirName( "dirname" );
+    const string idDetails( "details" );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -126,119 +127,120 @@ string NCAskForFile::checkIniDir( string iniDir )
 //
 //	DESCRIPTION :
 //
-void NCAskForFile::createLayout( const YCPString & iniDir,
-				 const YCPString & filter,
-				 const YCPString & headline,
+void NCAskForFile::createLayout( const string & iniDir,
+				 const string & filter,
+				 const string & headline,
 				 bool edit )
 {
-    YWidgetOpt opt;
     string startDir;
     
-    startDir = checkIniDir( iniDir->value() );
+    startDir = checkIniDir( iniDir );
     
     // the vertical split is the (only) child of the dialog
-    NCSplit * split = new NCSplit( this, opt, YD_VERT );
-    addChild( split );
+    NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
 
-    opt.notifyMode.setValue( false );
+    new NCLabel( split, headline, true, false ); // isHeading = true
 
-    //the headline
-    opt.isHeading.setValue( true );
+    NCFrame * frame = new NCFrame( split, "" );
 
-    NCLabel * head = new NCLabel( split, opt, headline );
-    split->addChild( head );
-
-    split->addChild( new NCSpacing( split, opt, 0.4, false, true ) );
-
-    opt.isHStretchable.setValue( true );
-
-    NCFrame * frame = new NCFrame( split, opt, YCPString("" ) );
-    NCSplit * vSplit = new NCSplit( frame, opt, YD_VERT );
-
-    opt.isEditable.setValue( false );
-    opt.notifyMode.setValue( true );
     // label for text field showing the selected dir
-    dirName = new NCComboBox( frame, opt, YCPString(_( "Selected Directory:" )) );
-    frame->addChild( dirName );
-
-    dirName->setId( YCPString(idDirName->name()) );
-
-    vSplit->addChild( new NCSpacing( vSplit, opt, 0.6, false, true ) );
-
-    split->addChild( frame );
+    dirName = new NCComboBox( frame, _( "Selected Directory:" ), false );  // editable = false;
+    dirName->setNotify( true );
+    dirName->setStretchable( YD_HORIZ, true );
+ 
+    YStringWidgetID * dirID = new YStringWidgetID( idDirName );
+    dirName->setId( dirID );
 
     // add the checkBox detailed
-    NCSplit * hSplit = new NCSplit( split, opt, YD_HORIZ );
-    split->addChild( hSplit );
+    NCLayoutBox * hSplit = new NCLayoutBox( split, YD_HORIZ );
+
     // label for checkbox
-    detailed = new NCCheckBox( hSplit, opt, YCPString( _( "&Detailed View" ) ), false );
-    detailed->setId( YCPString( idDetails->name()) );
-    hSplit->addChild( new NCSpacing( hSplit, opt, 0.1, true, false ) );
-    hSplit->addChild( detailed );
+    detailed = new NCCheckBox( hSplit, _( "&Detailed View" ), false );
+    YStringWidgetID * detailsID = new YStringWidgetID( idDetails );
+    detailed->setId( detailsID );
+    detailed->setNotify( true );
 
     // HBox for the lists
-    NCSplit * hSplit1 = new NCSplit( split, opt, YD_HORIZ );
+    NCLayoutBox * hSplit1 = new NCLayoutBox( split, YD_HORIZ );
 
+    // create table header for table type T_Overview
+    YTableHeader * dirHeader = new YTableHeader();
+    dirHeader->addColumn( " " );
+    dirHeader->addColumn( _("Directory name") );
+    
     // add the list of directories
-    opt.keyEvents.setValue( true );
-    dirList = new NCDirectoryTable( hSplit1, opt, NCFileSelection::T_Overview, YCPString(startDir) );
-    dirList->setId( YCPString(idDirList->name()) );
-    hSplit1->addChild( dirList );
+    dirList = new NCDirectoryTable( hSplit1,
+				    dirHeader,
+				    NCFileSelection::T_Overview,
+				    YCPString(startDir) );
+    dirList->setSendKeyEvents( true );
+    
+    YStringWidgetID * dirListID = new YStringWidgetID( idDirList );
+    dirList->setId( dirListID );
+
+    // create table header for table type T_Overview
+    YTableHeader * fileHeader = new YTableHeader();
+    fileHeader->addColumn( " " );
+    fileHeader->addColumn( _("File name") );
     
     // add the list of files
-    fileList = new NCFileTable( hSplit1, opt, NCFileSelection::T_Overview, filter, YCPString(startDir) );
-    fileList->setId( YCPString(idFileList->name()) );
-    hSplit1->addChild( fileList );
+    fileList = new NCFileTable( hSplit1,
+				fileHeader,
+				NCFileSelection::T_Overview,
+				filter,
+				YCPString(startDir) );
 
-    split->addChild( hSplit1 );
-    opt.notifyMode.setValue( false );
-    opt.keyEvents.setValue( false );
-
-    NCSplit * hSplit2 = new NCSplit( split, opt, YD_HORIZ );
+    fileList->setSendKeyEvents( true );
+    YStringWidgetID * dirFileID = new YStringWidgetID( idFileList );
+    fileList->setId( dirFileID );
+    
+    NCLayoutBox * hSplit2 = new NCLayoutBox( split, YD_HORIZ );
+    
+    // opt.isEditable.setValue( edit );
+    // NCInputField doesn't support mode 'not editable' any longer
+    // -> an InputField IS editable
     
     // add the text entry for the file name
-    opt.isEditable.setValue( edit );
-    fileName = new NCTextEntry( hSplit2, opt,
+    fileName = new NCInputField( hSplit2,
 				// label for text field showing the filename
-			       YCPString(_( "&File name:" )),
-			       YCPString( iniFileName ),
-			       100, 50 );
-    hSplit2->addChild( fileName );
+			       _( "&File name:" ),
+				 false,		// passWordMode = false
+				 100,
+				 50 );
+    fileName->setValue( iniFileName );
+    
     // label for text field showing the filter (e.g. *.bak)
-    NCComboBox * extension = new NCComboBox( hSplit2, opt, YCPString(_( "Filter:" )) );
-    hSplit2->addChild( extension );
-    extension->itemAdded( filter,
-			  0,		 // index
-			  true );	 // selected
-    split->addChild( hSplit2 );
+    NCComboBox * extension = new NCComboBox( hSplit2, _( "Filter:" ), false );	// editable = false
+    extension->setStretchable( YD_HORIZ, true );
+    extension->addItem( filter,
+			true );	 // selected
 
-    split->addChild( new NCSpacing( split, opt, 0.8, false, true ) );
+    new NCSpacing( split, YD_VERT, false, 1.0 );
 
     // HBox for the buttons
-    NCSplit * hSplit3 = new NCSplit( split, opt, YD_HORIZ );
-    split->addChild( hSplit3 ); 
-    opt.isHStretchable.setValue( true );
-    hSplit3->addChild( new NCSpacing( hSplit3, opt, 0.2, true, false ) );
+    NCLayoutBox * hSplit3 = new NCLayoutBox( split, YD_HORIZ );
+
+    new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );	// stretchable = true
 
     // add the OK button
-    opt.key_Fxx.setValue( 10 );
-    // the label of the OK button
-    okButton = new NCPushButton( hSplit3, opt, YCPString(_( "&OK" )) );
-    okButton->setId( YCPString(idOk->name()) );
+    okButton = new NCPushButton( hSplit3, _( "&OK" ) );
+    okButton->setFunctionKey( 10 );
+    okButton->setStretchable( YD_HORIZ, true );
+    
+    YStringWidgetID * okID = new YStringWidgetID( idOk );
+    okButton->setId( okID );
 
-    hSplit3->addChild( okButton );
+    new NCSpacing( hSplit3, YD_HORIZ, true, 0.4 );
 
-    hSplit3->addChild( new NCSpacing( hSplit3, opt, 0.4, true, false ) );
-      
     // add the Cancel button
-    opt.key_Fxx.setValue( 9 );
-    // the label of the Cancel button
-    cancelButton = new NCPushButton( hSplit3, opt, YCPString(_( "&Cancel" )) );
-    cancelButton->setId( YCPString(idCancel->name()) );
+    cancelButton = new NCPushButton( hSplit3, _( "&Cancel" ) );
+    cancelButton->setFunctionKey( 9 );
+    cancelButton->setStretchable( YD_HORIZ, true );
+    
+    YStringWidgetID * cancelID = new YStringWidgetID( idCancel );
+    cancelButton->setId( cancelID );
 
-    hSplit3->addChild( cancelButton );
-    hSplit3->addChild( new NCSpacing( hSplit3, opt, 0.2, true, false ) );  
-  
+    new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );  
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -257,8 +259,7 @@ NCursesEvent & NCAskForFile::showDirPopup( )
     fileList->fillList();
     dirList->setKeyboardFocus();
 
-    dirName->itemAdded( YCPString( dirList->getCurrentDir() ), 
-			0,		 // index
+    dirName->addItem( dirList->getCurrentDir(), 
 			true );		 // selected
     
     // event loop
@@ -271,17 +272,14 @@ NCursesEvent & NCAskForFile::showDirPopup( )
     return postevent;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCAskForFile::niceSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
-long NCAskForFile::nicesize(YUIDimension dim)
+int NCAskForFile::preferredWidth()
 {
-    return ( dim == YD_HORIZ ? NCurses::cols()-10 : NCurses::lines()-4 );
+    return  NCurses::cols()-10;
+}
+
+int NCAskForFile::preferredHeight()
+{
+    return NCurses::lines()-4;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -315,7 +313,7 @@ void NCAskForFile::updateFileList()
     fileList->fillList( );
     if ( iniFileName == "" )
 	// show the currently selected file
-	fileName->setText( fileList->getCurrentFile() );  
+	fileName->setValue( fileList->getCurrentFile() );  
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -341,29 +339,26 @@ bool NCAskForFile::postAgain( )
     else if ( postevent.keySymbol == "CursorRight" )
     {
 	fileList->setKeyboardFocus();
-	fileName->setText( fileList->getCurrentFile() ); 
+	fileName->setValue( fileList->getCurrentFile() ); 
 	return true;
     }
 
-    YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
+    YWidgetID * currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
 
-    if ( !currentId.isNull() )
+    if ( currentId )
     {
-	if ( currentId->compare( YCPString(idOk->name()) ) == YO_EQUAL )
+	if ( currentId->toString() == idOk )
 	{
-	    postevent.result = YCPString( dirList->getCurrentDir() + "/"
-					 + getFileName() );
+	    postevent.result = dirList->getCurrentDir() + "/" + getFileName();
 	    // return false means: close the popup
 	    return false;
 	}
-	else if ( currentId->compare( YCPString(idDirList->name()) ) == YO_EQUAL
-		  && !postevent.result.isNull() )
+	else if ( ( currentId->toString() == idDirList ) &&
+		  ( postevent.result != "" ) 		)
 	{
-	    unsigned int i = dirName->getListSize();
 	    // show the currently selected directory
-	    dirName->itemAdded( postevent.result->asString(),
-				i,
-				true );
+	    dirName->addItem( postevent.result,
+			      true );
 	    updateFileList();
 	    
 	    if ( postevent.reason == YEvent::Activated )
@@ -373,14 +368,14 @@ bool NCAskForFile::postAgain( )
 		updateFileList();
 	    }
 	}
-	else if ( currentId->compare( YCPString(idDirName->name()) ) == YO_EQUAL )
+	else if ( currentId->toString() == idDirName )
 	{
-	    dirList->setStartDir( dirName->getValue() );
+	    dirList->setStartDir( dirName->text() );
 	    dirList->fillList();
 
 	    updateFileList();
 	}
-	else if ( currentId->compare( YCPString(idDetails->name()) ) == YO_EQUAL )
+	else if ( currentId->toString() == idDetails )
 	{
 	    bool details = getCheckBoxValue( detailed );
 	    if ( details )
@@ -396,23 +391,23 @@ bool NCAskForFile::postAgain( )
 	    fileList->fillList();
 	    dirList->fillList();
 	}
-	else if ( currentId->compare( YCPString(idFileList->name()) ) == YO_EQUAL )
+	else if ( currentId->toString() == idFileList )
 	{
-	    if ( !postevent.result.isNull() )
+	    if ( postevent.result != "" )
 	    {
-		fileName->setText( postevent.result->asString() );
+		fileName->setValue( postevent.result );
 	    }
 	}
 	else
 	{
-	    postevent.result = YCPNull();
+	    postevent.result = "";
 	    return false;
 	}
     }
 
     if (postevent == NCursesEvent::cancel)
     {
-	postevent.result = YCPNull();	
+	postevent.result = "";	
 	return false;
     }
     
@@ -429,17 +424,10 @@ bool NCAskForFile::postAgain( )
 //
 bool NCAskForFile::getCheckBoxValue( NCCheckBox * checkBox )
 {
-    YCPValue value = YCPNull();
-
     if ( checkBox )
     {
-	value = checkBox->getValue();
-
 	// return whether the option is selected or not
-	if ( !value.isNull() )
-	{
-	    return ( value->asBoolean()->toString() == "true" ? true : false );
-	}
+	return ( checkBox->isChecked() );
     }
 
     return false;
@@ -459,9 +447,9 @@ NCAskForExistingFile::NCAskForExistingFile( const wpos at,
 					    const YCPString & headline )
     : NCAskForFile( at, iniDir, filter, headline )
 {
-    createLayout( iniDir,
-		  filter,
-		  headline,
+    createLayout( iniDir->value(),
+		  filter->value(),
+		  headline->value(),
 		  false );	// file name is not editable
 }
 
@@ -475,10 +463,10 @@ NCAskForExistingFile::NCAskForExistingFile( const wpos at,
 //
 string NCAskForExistingFile::getFileName()
 {
-    if ( fileName->getText()->value() == "" )
+    if ( fileName->value() == "" )
 	return fileList->getCurrentFile();
     else
-	return fileName->getText()->value();
+	return fileName->value();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -495,9 +483,9 @@ NCAskForSaveFileName::NCAskForSaveFileName( const wpos at,
 					    const YCPString & headline )
     : NCAskForFile( at, iniDir, filter, headline )
 {
-    createLayout( iniDir,
-		  filter,
-		  headline,
+    createLayout( iniDir->value(),
+		  filter->value(),
+		  headline->value(),
 		  true );	// file name is editable
 }
 
@@ -511,5 +499,5 @@ NCAskForSaveFileName::NCAskForSaveFileName( const wpos at,
 //
 string NCAskForSaveFileName::getFileName()
 {
-    return fileName->getText()->value();
+    return fileName->value();
 }

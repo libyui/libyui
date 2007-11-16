@@ -1,0 +1,67 @@
+
+DONE - all UI examples work correctly/no known problems
+----
+NCTree
+NCMuliSelectionBox
+NCIntField
+NCInputField
+NCPushBUtton
+NCAlignment
+NCMultiLineEdit
+NCAskForDirectory/NCAskForFile
+
+
+almost DONE - all UI examples work (correctly or only with minor problems)/
+-----------   some further checks/tests required
+
+NCRichText
+- hyperlink doesn't work
+
+NCMenuButton
+- all examples work correctly - but ChangeWidget has to be tested
+  (rebuildTree is a NOP so far)
+
+NCTable
+- examples work correctly - but check whether setting the header works
+  in any case, TO DO: enable code with NCPopupMenu (sorting)
+
+NCComboBox/NCSelectionBox
+- all examples work - but check whether the index is set correctly in any case
+
+
+TESTED - all UI examples tested/unsolved problems existing
+------
+EVENTs (class NCursesEvent, example Events.ycp)
+- example works correctly except of problem with NCPopupInfo on F1 
+  (y2base terminates if popup is open and a timout event is sent)
+
+
+
+MORE tests required
+-------------------
+ENCODING correct (UTF-8 encoding/NCstring) ??? - both for input(e.g. NCInputField) 
+and text output;
+test ChangeWidget for every widget
+
+
+NOT yet PORTED:
+---------------
+NCDialog: 	not ported at all because YDialog isn't ported yet
+
+PackageSelector:
+At the moment works with existing code, i.e. still reads the ycp layout
+file and therefore uses YCP widget ids internally to get the menu selection
+and button ids. 
+
+FIXME:
+- NCPkgPopupTree::cloneTree() doesn't build the tree correctly
+- fix NCPkgPopupDeps::showSolutions()
+
+TODO:
+- create layout with widget factory and get rid of the YCP ids,
+
+
+
+
+
+

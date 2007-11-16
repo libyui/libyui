@@ -47,13 +47,22 @@ class NCReplacePoint : public YReplacePoint, public NCWidget {
 
   public:
 
-    NCReplacePoint( NCWidget * parent, const YWidgetOpt & opt );
+    NCReplacePoint( YWidget * parent );
     virtual ~NCReplacePoint();
 
-    virtual long nicesize( YUIDimension dim ) { return YReplacePoint::nicesize( dim ); }
-    virtual void setSize( long newwidth, long newheight );
+    //virtual long nicesize( YUIDimension dim ) { return YReplacePoint::nicesize( dim ); }
+    virtual int preferredWidth() { return YReplacePoint::preferredWidth(); }
+    virtual int preferredHeight() { return YReplacePoint::preferredHeight(); }
+    
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    //virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    virtual void setEnabled( bool do_bv );
 };
 
 ///////////////////////////////////////////////////////////////////

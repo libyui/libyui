@@ -22,7 +22,7 @@
 #include <iosfwd>
 
 #include "NCPopup.h"
-#include "NCTextEntry.h"
+#include "NCInputField.h"
 
 
 ///////////////////////////////////////////////////////////////////
@@ -38,23 +38,26 @@ class NCPopupTextEntry : public NCPopup {
 
   private:
 
-    NCTextEntry * wtext;
+    NCInputField * wtext;
 
     virtual bool postAgain();
 
   public:
 
     NCPopupTextEntry( const wpos at,
-		      const YCPString & label,
-		      const YCPString & text,
+		      const string & label,
+		      const string & text,
 		      unsigned maxInput  = 0,
 		      unsigned maxFld    = 0,
-		      NCTextEntry::FTYPE t = NCTextEntry::PLAIN );
+		      NCInputField::FTYPE t = NCInputField::PLAIN );
 
     virtual ~NCPopupTextEntry();
 
-    void setText( const YCPString & ntext ) { wtext->setText( ntext ); }
-    YCPString getText()                     { return wtext->getText(); }
+    void   setValue( const string & ntext ) { wtext->setValue( ntext ); }
+    string value() { return wtext->value(); }
+    
+    //void setText( const YCPString & ntext ) { wtext->setText( ntext ); }
+    //YCPString getText()                     { return wtext->getText(); }
 };
 
 ///////////////////////////////////////////////////////////////////

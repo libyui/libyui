@@ -26,6 +26,7 @@ using namespace std;
 
 #include "YComboBox.h"
 #include "NCWidget.h"
+#include "YItem.h"
 
 class NCComboBox;
 
@@ -46,7 +47,7 @@ class NCComboBox : public YComboBox, public NCWidget {
 
     bool     mayedit;
     NClabel  label;
-    NCstring text;
+    NCstring privText;
     wstring   buffer;
     bool     modified;
     NCursesWindow * lwin;
@@ -58,8 +59,8 @@ class NCComboBox : public YComboBox, public NCWidget {
 
     NCstring validChars;
 
-    list<YCPString> deflist;
-    int             index;
+    list<string> deflist;
+    int  index;
 
     void setDefsze();
     void tUpdate();
@@ -83,31 +84,38 @@ class NCComboBox : public YComboBox, public NCWidget {
 
   public:
 
-    NCComboBox( NCWidget * parent, const YWidgetOpt & opt,
-		const YCPString & label );
+    NCComboBox( YWidget * parent,
+		const string & label,
+		bool editable );
     virtual ~NCComboBox();
 
-    virtual void itemAdded( const YCPString & string,
-			    int index,
-			    bool selected );
+    virtual void addItem ( YItem * item );
+    void addItem( const string & label, bool selected );
+    
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+    
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
-    virtual long nicesize( YUIDimension dim );
-    virtual void setSize( long newwidth, long newheight );
+    virtual void setLabel( const string & nlabel );
 
-    virtual void setLabel( const YCPString & nlabel );
+    virtual void setText( const string & ntext );
+    virtual string text();
 
-    virtual void setValue( const YCPString & ntext );
-    virtual YCPString getValue() const;
-
-    virtual void setValidChars( const YCPString & validchars );
+    virtual void setValidChars( const string & validchars );
 
     virtual int getCurrentItem() const;
     virtual void setCurrentItem( int index );
 
     virtual NCursesEvent wHandleInput( wint_t key );
 
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
-
+    virtual void setEnabled( bool do_bv );
+    
     virtual bool setKeyboardFocus() {
       if ( !grabFocus() )
         return YWidget::setKeyboardFocus();
@@ -120,7 +128,7 @@ class NCComboBox : public YComboBox, public NCWidget {
 
     // limits  the input to numberOfChars characters and truncates the text
     // if appropriate
-    void setInputMaxLength( const YCPInteger & numberOfChars);
+    void setInputMaxLength( int  nr );
 
 };
 

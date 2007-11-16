@@ -32,7 +32,6 @@ using namespace std;
 #include "NCCheckBox.h"
 #include "NCPushButton.h"
 
-class YCPValue;
 class NCPackageSelector;
 
 ///////////////////////////////////////////////////////////////////
@@ -65,7 +64,7 @@ private:
     
 protected:
 
-    YCPString getSearchExpression() const;
+    string getSearchExpression() const;
 
     virtual bool postAgain();
 
@@ -78,7 +77,7 @@ public:
 
     virtual long nicesize(YUIDimension dim);
 
-    void createLayout( const YCPString & headline );
+    void createLayout( const string & headline );
 
     NCursesEvent & showSearchPopup( );
     

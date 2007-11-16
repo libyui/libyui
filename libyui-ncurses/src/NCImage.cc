@@ -28,9 +28,8 @@
 //
 //	DESCRIPTION :
 //
-NCImage::NCImage( NCWidget * parent, const YWidgetOpt & opt,
-		  YCPString defaulttext )
-    : YImage( opt )
+NCImage::NCImage( YWidget * parent, string defaulttext, bool animated )
+    : YImage( parent, defaulttext, animated ) 
     , NCWidget( parent )
     , label( defaulttext )
 {
@@ -66,6 +65,22 @@ long NCImage::nicesize( YUIDimension dim )
   return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
 }
 
+int NCImage::preferredWidth()
+{
+     return wGetDefsze().W;
+}
+
+int NCImage::preferredHeight()
+{
+    return wGetDefsze().H;
+}
+
+void NCImage::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YImage::setEnabled( do_bv );
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -74,8 +89,7 @@ long NCImage::nicesize( YUIDimension dim )
 //
 //	DESCRIPTION :
 //
-void NCImage::setSize( long newwidth, long newheight )
+void NCImage::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YImage::setSize( newwidth, newheight );
 }

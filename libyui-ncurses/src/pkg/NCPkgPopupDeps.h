@@ -34,7 +34,7 @@ class NCPushButton;
 class NCSelectionBox;
 class NCMultiSelectionBox;
 class NCPackageSelector;
-class NCTextEntry;
+class NCInputField;
 
 namespace PkgDep {
     class ErrorResult;
@@ -76,7 +76,7 @@ private:
 
     NCLabel * head;			// the headline
 
-    NCTextEntry *details;		// problem details
+    NCInputField *details;		// problem details
     
     NCPackageSelector * packager;	// connection to the package selector
     
@@ -95,7 +95,8 @@ public:
     NCPkgPopupDeps( const wpos at, NCPackageSelector * pkger );
     virtual ~NCPkgPopupDeps();
 
-    virtual long nicesize(YUIDimension dim);
+    virtual int preferredWidth();
+    virtual int preferredHeight();
 
     NCursesEvent showDependencyPopup( NCPkgSolverAction action );
 

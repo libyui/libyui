@@ -28,16 +28,16 @@
 //
 //	DESCRIPTION :
 //
-NCFrame::NCFrame( NCWidget * parent, const YWidgetOpt & opt,
-		  const YCPString & nlabel )
-    : YFrame( opt, nlabel )
+NCFrame::NCFrame( YWidget * parent, const string & nlabel )
+    : YFrame( parent, nlabel )
     , NCWidget( parent )
 {
   WIDDBG << endl;
   wstate = NC::WSdumb;
   framedim.Pos = wpos( 1 );
   framedim.Sze = wsze( 2 );
-  setLabel( getLabel() );
+  //setLabel( getLabel() );
+  setLabel( YFrame::label() );
   hotlabel = &label;
 }
 
@@ -64,13 +64,34 @@ NCFrame::~NCFrame()
 //
 long NCFrame::nicesize( YUIDimension dim )
 {
-  defsze = wsze( YContainerWidget::child(0)->nicesize( YD_VERT ),
-		 YContainerWidget::child(0)->nicesize( YD_HORIZ ) );
+    //defsze = wsze( YContainerWidget::child(0)->nicesize( YD_VERT ),
+    //		     YContainerWidget::child(0)->nicesize( YD_HORIZ ) );
+  defsze = wsze( firstChild()->preferredWidth(),
+		 firstChild()->preferredHeight() );
+    
   if ( label.width() > (unsigned)defsze.W )
     defsze.W = label.width();
   defsze += framedim.Sze;
 
   return dim == YD_HORIZ ? defsze.W : defsze.H;
+}
+
+int NCFrame::preferredWidth()
+{
+    defsze.W = firstChild()->preferredWidth();
+    
+    if ( label.width() > (unsigned)defsze.W )
+	defsze.W = label.width();
+    defsze.W += framedim.Sze.W;
+  
+    return defsze.W;
+}
+
+int NCFrame::preferredHeight()
+{
+    defsze.H = firstChild()->preferredHeight() + framedim.Sze.H;
+    
+    return defsze.H;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -81,12 +102,12 @@ long NCFrame::nicesize( YUIDimension dim )
 //
 //	DESCRIPTION :
 //
-void NCFrame::setSize( long newwidth, long newheight )
+void NCFrame::setSize( int newwidth, int newheight )
 {
   wsze csze( newheight, newwidth );
   wRelocate( wpos( 0 ), csze );
   csze = wsze::max( 0, csze - framedim.Sze );
-  YContainerWidget::child(0)->setSize( csze.W, csze.H );
+  firstChild()->setSize( csze.W, csze.H );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -97,12 +118,20 @@ void NCFrame::setSize( long newwidth, long newheight )
 //
 //	DESCRIPTION :
 //
-void NCFrame::setLabel( const YCPString & nlabel )
+void NCFrame::setLabel( const string & nlabel )
 {
   YFrame::setLabel( nlabel );
-  label = NCstring( getLabel() );
+  //label = NCstring( getLabel() );
+  label = NCstring( YFrame::label() );
   label.stripHotkey();
   Redraw();
+}
+
+void NCFrame::setEnabled( bool do_bv )
+{
+    //Use setEnabled() from the parent, it should work out (#256707) :-)
+    NCWidget::setEnabled( do_bv );
+    YFrame::setEnabled( do_bv );
 }
 
 ///////////////////////////////////////////////////////////////////

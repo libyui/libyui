@@ -42,6 +42,8 @@ public:
 			    bool 	 with_threads,
 			    const char * macro_file )
     {
+	// FIXME
+	with_threads = false;
 	return new YNCursesUI( argc, argv, with_threads, macro_file );
     }
 

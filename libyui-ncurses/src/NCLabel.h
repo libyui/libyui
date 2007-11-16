@@ -52,15 +52,28 @@ class NCLabel : public YLabel, public NCWidget {
 
   public:
 
-    NCLabel( NCWidget * parent, const YWidgetOpt & opt,
-	     const YCPString & text );
+    NCLabel( YWidget * parent,
+	     const string & text,
+	     bool isHeading = false,
+	     bool isOutputField = false );
+    
     virtual ~NCLabel();
 
     virtual long nicesize( YUIDimension dim );
-    virtual void setSize( long newwidth, long newheight );
 
-    virtual void setLabel( const YCPString & nlabel );
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
+
+    virtual void setText( const string & nlabel );
+    
+    virtual void setEnabled( bool do_bv ); 
+
+    virtual int preferredWidth();
+    virtual int preferredHeight();
 };
 
 ///////////////////////////////////////////////////////////////////

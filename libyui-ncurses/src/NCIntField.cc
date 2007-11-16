@@ -36,14 +36,13 @@ const unsigned NCIntField::taglen = 2; // "^v"
 //
 //	DESCRIPTION :
 //
-NCIntField::NCIntField( NCWidget * parent, const YWidgetOpt & opt,
-			const YCPString & nlabel,
+NCIntField::NCIntField( YWidget * parent,
+			const string & nlabel,
 			int minV, int maxV,
 			int initialV )
-    : YIntField( opt, nlabel,
+    : YIntField( parent, nlabel,
 		 minV <= maxV ? minV : maxV,
-		 maxV >= minV ? maxV : minV,
-		 initialV )
+		 maxV >= minV ? maxV : minV )
     , NCWidget( parent )
     , lwin( 0 )
     , twin( 0 )
@@ -79,14 +78,41 @@ NCIntField::~NCIntField()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCIntField::nicesize
-//	METHOD TYPE : long
+//	METHOD NAME : NCIntField::preferredWidth
+//	METHOD TYPE : int
 //
 //	DESCRIPTION :
 //
-long NCIntField::nicesize( YUIDimension dim )
+int NCIntField::preferredWidth()
 {
-  return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
+     return wGetDefsze().W;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCIntField::preferredHeight
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int NCIntField::preferredHeight()
+{
+    return wGetDefsze().H;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCIntField::setEnabled
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCIntField::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YIntField::setEnabled( do_bv );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -97,10 +123,9 @@ long NCIntField::nicesize( YUIDimension dim )
 //
 //	DESCRIPTION :
 //
-void NCIntField::setSize( long newwidth, long newheight )
+void NCIntField::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YIntField::setSize( newwidth, newheight );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -179,7 +204,7 @@ void NCIntField::wDelete()
 //
 //	DESCRIPTION :
 //
-void NCIntField::setLabel( const YCPString & nlabel )
+void NCIntField::setLabel( const string & nlabel )
 {
   label = NCstring( nlabel );
   label.stripHotkey();
@@ -196,16 +221,11 @@ void NCIntField::setLabel( const YCPString & nlabel )
 //
 //	DESCRIPTION :
 //
-void NCIntField::setValue( int newValue )
+void NCIntField::setValueInternal( int newValue )
 {
-  if ( newValue < minValue() )
-    cvalue = minValue();
-  else if ( newValue > maxValue() )
-    cvalue = maxValue();
-  else
-    cvalue = newValue;
-
-  YIntField::setValue( cvalue );
+  // checking newValue is done by YIntField
+  // -> no checks required
+  cvalue = newValue;
   tUpdate();
 }
 
@@ -375,7 +395,7 @@ NCursesEvent NCIntField::wHandleInput( wint_t key )
   if ( beep )
     ::beep();
 
-  if ( getNotify() && ovlue != cvalue )
+  if ( notify() && ovlue != cvalue )
     ret = NCursesEvent::ValueChanged;
 
   return ret;
@@ -399,21 +419,25 @@ int NCIntField::enterPopup( wchar_t first )
 		+ "," + numstring( maxValue() ) + "]" );
 
   string text( 1, (char )first);
-  NCPopupTextEntry dialog( at, label, text, vlen, 0,
-			   NCTextEntry::NUMBER );
-
-  while ( dialog.post() != -1 ) {
+  NCPopupTextEntry * dialog = new NCPopupTextEntry( at, label, text, vlen, 0,
+						    NCInputField::NUMBER );
+  YUI_CHECK_NEW( dialog );
+  
+  while ( dialog->post() != -1 ) {
       
-    int nval = atoi( dialog.getText()->value().c_str() );
+    int nval = atoi( dialog->value().c_str() );
     if ( nval < minValue() ) {
-      dialog.setText( numstring( minValue() ) );
+      dialog->setValue( numstring( minValue() ) );
     } else if ( maxValue() < nval ) {
-      dialog.setText( numstring( maxValue() ) );
+      dialog->setValue( numstring( maxValue() ) );
     } else {
       setValue( nval );
       break;
     }
     ::beep();
   }
+
+  YDialog::deleteTopmostDialog();
+
   return 0;
 }

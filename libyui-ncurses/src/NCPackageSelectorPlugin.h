@@ -52,8 +52,8 @@ public:
      * This might return 0 if the plugin lib could not be loaded or if the
      * appropriate symbol could not be located in the plugin lib. 
      **/
-    virtual YWidget * createPackageSelector( YWidget *		parent,
-					     YWidgetOpt &	opt );
+    virtual YPackageSelector * createPackageSelector( YWidget *		parent,
+						      long		modeFlags );
 
     /**
      * Fills the PackageSelector widget (runs the package selection).
@@ -65,8 +65,7 @@ public:
      * Create a special widget
      */
     virtual YWidget * createPkgSpecial( YWidget *parent,
-					YWidgetOpt &opt,
-					const YCPString &subwidget );
+					const string &subwidget );
 };
 
 

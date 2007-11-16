@@ -20,7 +20,9 @@
 
 #include "YMenuButton.h"
 #include "YDialog.h"
-#include "NCSplit.h"
+#include "YWidgetID.h"
+
+#include "NCLayoutBox.h"
 #include "NCSpacing.h"
 #include "NCPkgNames.h"
 #include "NCPackageSelector.h"
@@ -29,6 +31,8 @@
 #include "NCPkgTable.h"
 
 #include "NCZypp.h"
+#include "NCi18n.h"
+
 #include <zypp/ui/Selectable.h>
 #include <zypp/ui/UserWantedPackages.h>
 
@@ -79,56 +83,61 @@ void NCPkgPopupTable::createLayout( )
     YWidgetOpt opt;
 
     // the vertical split is the (only) child of the dialog
-    NCSplit * split = new NCSplit( this, opt, YD_VERT );
-    addChild( split );
+    NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
 
-    split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
+    // addChild() is obsolete (handled by new libyui)
 
-    // add the headline
-    opt.isHeading.setValue( true );
-    NCLabel * head = new NCLabel( split, opt, YCPString(NCPkgNames::AutoChangeLabel()) );
-    split->addChild( head );
+    //split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
+    new NCSpacing( split, YD_VERT, false, 0.6 );	// stretchable = false
 
-    split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
+    // the headline of the popup containing a list with packages with status changes
+    new NCLabel( split, _( "Automatic Changes" ), true, false );	// isHeading = true
 
-    opt.isHeading.setValue( false );
-    NCLabel * lb1 = new NCLabel( split, opt, YCPString(NCPkgNames::AutoChangeText1()) );
-    split->addChild( lb1 );
-    NCLabel * lb2 = new NCLabel( split, opt, YCPString(NCPkgNames::AutoChangeText2()) );
-    split->addChild( lb2 );
+    //split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
+    new NCSpacing( split, YD_VERT, false, 0.6 );
     
+    //NCLabel * lb1 = new NCLabel( split, opt, YCPString(NCPkgNames::AutoChangeText1()) );
+    // text part1 of popup with automatic changes (it's a label; text continous) 
+    new NCLabel( split, _( "In addition to your manual selections, the following" ), false, false );
+    
+    //NCLabel * lb2 = new NCLabel( split, opt, YCPString(NCPkgNames::AutoChangeText2()) );
+    // text part2 of popup with automatic changes
+    new NCLabel( split, _( "packages have been changed to resolve dependencies:" ), false, false );
+
+    YTableHeader * tableHeader = new YTableHeader();
     // add the package table (use default type T_Packages)
-    pkgTable = new NCPkgTable( split, opt );
+    pkgTable = new NCPkgTable( split, tableHeader );
     pkgTable->setPackager( packager );
     pkgTable->fillHeader();
-
-    split->addChild( pkgTable );
-
+    
     // HBox for the buttons
-    NCSplit * hSplit = new NCSplit( split, opt, YD_HORIZ );
-    split->addChild( hSplit );
+    NCLayoutBox * hSplit = new NCLayoutBox( split, YD_HORIZ );
 
     opt.isHStretchable.setValue( true );
 
-    hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
+    //hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
+    new NCSpacing( hSplit, YD_HORIZ, true, 0.2 );	// stretchable = true
 
     // add the OK button
     opt.key_Fxx.setValue( 10 );
-    okButton = new NCPushButton( hSplit, opt, YCPString(NCPkgNames::OKLabel()) );
-    okButton->setId( NCPkgNames::OkButton() );
+    okButton = new NCPushButton( hSplit, NCPkgNames::OKLabel() );
+    YStringWidgetID * okID = new YStringWidgetID( "ok" );
+    okButton->setId( okID );
 
-    hSplit->addChild( okButton );
-    hSplit->addChild( new NCSpacing( hSplit, opt, 0.4, true, false ) );
+    //hSplit->addChild( new NCSpacing( hSplit, opt, 0.4, true, false ) );
+    new NCSpacing( hSplit, YD_HORIZ, true, 0.4 );
 
     // add the Cancel button
     opt.key_Fxx.setValue( 9 );
-    cancelButton = new NCPushButton( hSplit, opt, YCPString(NCPkgNames::CancelLabel()) );
-    cancelButton->setId( NCPkgNames::Cancel() );
+    cancelButton = new NCPushButton( hSplit, NCPkgNames::CancelLabel() );
+    YStringWidgetID * cancelID = new YStringWidgetID( "cancel" );
+    cancelButton->setId( cancelID );
 
-    hSplit->addChild( cancelButton );
-    hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
+    //hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
+    new NCSpacing( hSplit, YD_HORIZ, true, 0.2 );
 
-    split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
+    //split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
+    new NCSpacing( split, YD_VERT, false, 0.6 );
 }
 
 
@@ -180,7 +189,7 @@ bool NCPkgPopupTable::fillAutoChanges( NCPkgTable * pkgTable )
 	// show all packages which are automatically selected for installation
 	if ( slb->toModify() && slb->modifiedBy () != zypp::ResStatus::USER )
 	{
-	    if ( ! contains( ignoredNames, slb->name() ) )
+	    if ( ! inContainer( ignoredNames, slb->name() ) )
 	    {
 		ZyppPkg pkgPtr = tryCastToZyppPkg (slb->theObj());
 		if ( pkgPtr )
@@ -237,7 +246,7 @@ NCursesEvent NCPkgPopupTable::showInfoPopup( )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPkgPopupTable::niceSize
+//	METHOD NAME : NCPkgPopupTable::niceSizex
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
@@ -280,10 +289,10 @@ bool NCPkgPopupTable::postAgain()
     if ( ! postevent.widget )
 	return false;
 
-    YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
-
-    if ( !currentId.isNull()
-	 && currentId->compare( NCPkgNames::Cancel() ) == YO_EQUAL )
+    // YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
+    YWidgetID * currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
+    if ( currentId
+	 && currentId->toString() == "cancel" )
     {
 	//user hit cancel - discard set of changes (if not empty)
 	packager->clearVerifiedPkgs();

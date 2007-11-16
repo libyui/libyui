@@ -48,29 +48,36 @@ class NCRadioButton : public YRadioButton, public NCWidget {
 
     virtual const char * location() const { return "NCRadioButton"; }
 
-    virtual void setValue( const bool & checked );
+    // virtual void setValue( const bool & checked );
 
     virtual void wRedraw();
 
   public:
 
-    NCRadioButton( NCWidget * parent, const YWidgetOpt & opt,
-		   YRadioButtonGroup * rbg,
-		   const YCPString & label,
+    NCRadioButton( YWidget * parent,
+		   const string & label,
 		   bool checked );
+    
     virtual ~NCRadioButton();
 
-    virtual long nicesize( YUIDimension dim );
-    virtual void setSize( long newwidth, long newheight );
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+    
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const YCPString & nlabel );
-    virtual void setValue( const YCPBoolean & newval );
+    virtual void setLabel( const string & nlabel );
 
-    virtual YCPBoolean getValue();
+    virtual void setValue ( bool newval );
+    virtual bool value() { return checked; }
 
     virtual NCursesEvent wHandleInput( wint_t key );
 
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    virtual void setEnabled( bool do_bv );
 
     virtual bool setKeyboardFocus() {
       if ( !grabFocus() )

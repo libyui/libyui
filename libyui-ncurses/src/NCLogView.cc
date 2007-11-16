@@ -27,11 +27,11 @@
 //
 //	DESCRIPTION :
 //
-NCLogView::NCLogView( NCWidget * parent, const YWidgetOpt & opt,
-		      const YCPString & nlabel,
+NCLogView::NCLogView( YWidget * parent,
+		      const string & nlabel,
 		      int visibleLines,
 		      int maxLines )
-    : YLogView( opt, nlabel, visibleLines, maxLines )
+    : YLogView( parent, nlabel, visibleLines, maxLines )
     , NCPadWidget( parent )
 {
   WIDDBG << endl;
@@ -52,18 +52,21 @@ NCLogView::~NCLogView()
   WIDDBG << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLogView::nicesize
-//	METHOD TYPE : long
-//
-//	DESCRIPTION :
-//
-long NCLogView::nicesize( YUIDimension dim )
+int NCLogView::preferredWidth()
 {
-  defsze.W = ( 5 > labelWidht() ? 5 : labelWidht() ) + 2;
-  return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
+    defsze.W = ( 5 > labelWidht() ? 5 : labelWidht() ) + 2;
+    return wGetDefsze().W;
+}
+
+int NCLogView::preferredHeight()
+{
+    return wGetDefsze().H;
+}
+
+void NCLogView::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YLogView::setEnabled( do_bv );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -74,10 +77,9 @@ long NCLogView::nicesize( YUIDimension dim )
 //
 //	DESCRIPTION :
 //
-void NCLogView::setSize( long newwidth, long newheight )
+void NCLogView::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YLogView::setSize( newwidth, newheight );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -88,7 +90,7 @@ void NCLogView::setSize( long newwidth, long newheight )
 //
 //	DESCRIPTION :
 //
-void NCLogView::setLabel( const YCPString & nlabel )
+void NCLogView::setLabel( const string & nlabel )
 {
   YLogView::setLabel( nlabel );
   NCPadWidget::setLabel( NCstring( nlabel ) );
@@ -97,12 +99,12 @@ void NCLogView::setLabel( const YCPString & nlabel )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCLogView::setLogText
+//	METHOD NAME : NCLogView::displayLogText
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCLogView::setLogText( const YCPString & ntext )
+void NCLogView::displayLogText( const string & ntext )
 {
   DelPad();
   text = NCtext( NCstring(ntext), Columns() );

@@ -25,11 +25,18 @@
 
 #include <Y2.h>
 #include "YUI.h"
+
+#include "NCApplication.h"
+
 #include "NCurses.h"
 
 class YUI;
 class NCDialog;
 class NCPackageSelectorPlugin;
+class NCWidgetFactory;
+class NCOptionalWidgetFactory;
+class YSingleChildContainerWidget;
+
 
 /**
  * @short YaST2 Component: NCursesUI user interface
@@ -51,6 +58,30 @@ public:
 
 
   protected:
+    /**
+     * Create the widget factory that provides all the createXY() methods for
+     * standard (mandatory, i.e. non-optional) widgets.
+     *
+     * Reimplemented from YUI.
+     **/
+    virtual YWidgetFactory * createWidgetFactory();
+
+    /**
+     * Create the widget factory that provides all the createXY() methods for
+     * optional ("special") widgets and the corresponding hasXYWidget()
+     * methods. 
+     *
+     * Reimplemented from YUI.
+     **/
+    virtual YOptionalWidgetFactory * createOptionalWidgetFactory();
+
+    /*
+     * Create the YApplication object that provides global methods.
+     *
+     * Reimplemented from YUI.
+     **/
+    virtual YApplication * createApplication();
+    
 
     virtual bool want_colors();
     virtual void init_title();
@@ -105,221 +136,10 @@ public:
     */
     virtual void closeDialog( YDialog * dialog );
 
-    //
-    // Widget creation functions - container widgets
-    //
-
-    /**
-     * Creates a split
-    */
-    virtual YContainerWidget * createSplit( YWidget * parent, YWidgetOpt & opt,
-					    YUIDimension dimension );
-
-    /**
-     * Creates a replace point.
-    */
-    virtual YContainerWidget * createReplacePoint( YWidget * parent, YWidgetOpt & opt );
-
-    /**
-     * Creates an alignment widget
-    */
-    virtual YContainerWidget * createAlignment( YWidget * parent, YWidgetOpt & opt,
-						YAlignmentType halign,
-						YAlignmentType valign);
-
-    /**
-     * Creates a squash widget
-    */
-    virtual YContainerWidget * createSquash( YWidget * parent, YWidgetOpt & opt,
-					     bool hsquash,
-					     bool vsquash );
-
-    /**
-     * Creates a radio button group.
-    */
-    virtual YContainerWidget * createRadioButtonGroup( YWidget * parent, YWidgetOpt & opt );
-
-    /**
-     * Creates a frame widget
-    */
-    virtual YContainerWidget * createFrame( YWidget * parent, YWidgetOpt & opt,
-					    const YCPString & label );
-
-    virtual YContainerWidget * createCheckBoxFrame( YWidget * parent, YWidgetOpt & opt,
-						    const YCPString & label,
-						    bool checked );
-    //
-    // Widget creation functions - leaf widgets
-    //
-
-    /**
-     * Creates an empty widget
-    */
-    virtual YWidget * createEmpty( YWidget * parent, YWidgetOpt & opt );
-
-    /**
-     * Creates a spacing widget
-    */
-    virtual YWidget * createSpacing( YWidget * parent, YWidgetOpt & opt,
-				     float size,
-				     bool horizontal,
-				     bool vertical );
-
-    /**
-     * Creates a label.
-     * @param text Initial text of the label
-     * @param heading true if the label is a Heading()
-     * @param output_field true if the label should look like an output field (3D look)
-    */
-    virtual YWidget * createLabel( YWidget * parent, YWidgetOpt & opt,
-				   const YCPString & text );
-
-    /**
-     * Creates a rich text widget
-     * @param text Initial text of the label
-    */
-    virtual YWidget * createRichText( YWidget * parent, YWidgetOpt & opt,
-				      const YCPString & text );
-
-    /**
-     * Creates a log view widget
-     * @param label label above the log view
-     * @param visibleLines default number of vislible lines
-     * @param maxLines number of lines to store (use 0 for "all")
-    */
-    virtual YWidget * createLogView( YWidget * parent, YWidgetOpt & opt,
-				     const YCPString & label,
-				     int visibleLines,
-				     int maxLines );
-
-    /**
-     * Creates a MultiLineEdit widget
-     * @param label label above the edit field
-     * @param text initial contents of the edit field
-    */
-    virtual YWidget * createMultiLineEdit( YWidget * parent, YWidgetOpt & opt,
-					   const YCPString & label,
-					   const YCPString & text);
-
-    /**
-     * Creates a push button.
-     * @param label Label of the button
-     * @param default_button true if the button should be the dialogs default button
-    */
-    virtual YWidget * createPushButton( YWidget * parent, YWidgetOpt & opt,
-					const YCPString & label );
-
-    /**
-     * Creates a menu button.
-     * @param label Label of the button
-     */
-    virtual YWidget * createMenuButton( YWidget * parent, YWidgetOpt & opt,
-					const YCPString & label );
-
-    /**
-     * Creates a radio button and inserts it into a radio button group
-     * @param label Label of the radio button
-     * @param rbg the radio button group the new button will belong to
-    */
-    virtual YWidget * createRadioButton( YWidget * parent, YWidgetOpt & opt,
-					 YRadioButtonGroup * rbg,
-					 const YCPString & label,
-					 bool checked );
-
-    /**
-     * Creates a check box
-     * @param label Label of the checkbox
-     * @param true if it is checked
-    */
-    virtual YWidget * createCheckBox( YWidget * parent, YWidgetOpt & opt,
-				      const YCPString & label,
-				      bool checked );
-
-    /**
-     * Creates a text entry or password entry field.
-    */
-    virtual YWidget * createTextEntry( YWidget * parent, YWidgetOpt & opt,
-				       const YCPString & label,
-				       const YCPString & text );
-
-    /**
-     * Creates a selection box
-    */
-    virtual YWidget * createSelectionBox( YWidget * parent, YWidgetOpt & opt,
-					  const YCPString & label );
-
-    /**
-     * Creates a multi selection box
-     */
-    virtual YWidget * createMultiSelectionBox( YWidget *parent, YWidgetOpt & opt,
-					       const YCPString & label );
-
-    /**
-     * Creates a combo box
-    */
-    virtual YWidget * createComboBox( YWidget * parent, YWidgetOpt & opt,
-				      const YCPString & label );
-
-    /**
-     * Creates a tree
-     */
-    virtual YWidget * createTree( YWidget * parent, YWidgetOpt & opt,
-				  const YCPString & label );
-
-    /**
-     * Creates a table widget
-     */
-    virtual YWidget * createTable( YWidget * parent, YWidgetOpt & opt,
-				   vector<string> header );
-
-    /**
-     * Creates a progress bar
-     */
-    virtual YWidget * createProgressBar( YWidget * parent, YWidgetOpt & opt,
-					 const YCPString & label,
-					 const YCPInteger & maxprogress,
-					 const YCPInteger & progress);
-
-    /**
-     * Creates an image widget from a YCP byteblock
-     */
-    virtual YWidget * createImage( YWidget * parent, YWidgetOpt & opt,
-				   YCPByteblock imagedata,
-				   YCPString defaulttext);
-
-    /**
-     * Creates an image widget from a YCP byteblock
-     */
-    virtual YWidget * createImage( YWidget * parent, YWidgetOpt & opt,
-				   YCPString filename,
-				   YCPString defaulttext);
-
-    /**
-     * Creates an IntField widget.
-     */
-    virtual YWidget * createIntField( YWidget * parent, YWidgetOpt & opt,
-				      const YCPString & label,
-				      int minValue, int maxValue,
-				      int initialValue );
-
-    /**
-     * Creates the PackageSelector widget (i.e. a widget tree).
-     */
-    virtual YWidget * createPackageSelector( YWidget *parent,
-					     YWidgetOpt &opt,
-					     const YCPString & floppyDevice );
-
     /**
      * Fills the PackageSelector widget.
      */
     virtual YCPValue runPkgSelection( YWidget * packageSelector );
-    
-    /**
-     * Creates a special subwidget used for Package Selection (which doesn't exist in QT-UI).
-     */
-    virtual YWidget * createPkgSpecial( YWidget *parent,
-					YWidgetOpt &opt,
-					const YCPString &subwidget );
     
     /**
      * UI-specific setLanguage() function.

@@ -30,17 +30,28 @@
 //
 //	DESCRIPTION :
 //
-NCPopupMenu::NCPopupMenu( const wpos at, YMenuItem & menuitem )
+NCPopupMenu::NCPopupMenu( const wpos at, YItemIterator begin, YItemIterator end )
     : NCPopupTable( at )
-    , menu( menuitem )
+      , itemsMap()
 {
   vector<string> row( 2 );
   createList( row );
-  for ( YMenuItemListIterator entry = menu.itemList().begin();
- 	entry != menu.itemList().end(); ++entry ) {
-    row[0] = (*entry)->getLabel()->value();
-    row[1] = (*entry)->hasChildren() ? "..." : "";
-    addItem( (*entry)->getId(), row );
+  YMenuItem * startItem = dynamic_cast<YMenuItem *> (*begin);
+  YUI_CHECK_PTR( startItem );
+  
+  for ( YItemIterator it = begin; it != end; ++it )
+  {
+    YMenuItem * item = dynamic_cast<YMenuItem *> (*it);
+    YUI_CHECK_PTR( item );
+    
+    row[0] = item->label();
+    row[1] = item->hasChildren() ? "..." : "";
+    
+    YTableItem *tableItem = new YTableItem( row[0], row[1] );
+    NCMIL << "Add to map: TableItem: " << tableItem << " Menu item: " << item << endl;
+
+    addItem( tableItem );
+    itemsMap[tableItem] = item;
   }
   stripHotkeys();
 }
@@ -55,6 +66,7 @@ NCPopupMenu::NCPopupMenu( const wpos at, YMenuItem & menuitem )
 //
 NCPopupMenu::~NCPopupMenu()
 {
+    itemsMap.clear();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -70,9 +82,16 @@ NCursesEvent NCPopupMenu::wHandleInput( wint_t ch )
   NCursesEvent ret;
   switch ( ch ) {
   case KEY_RIGHT:
-    if ( menu.itemList()[getCurrentItem()]->hasChildren() )
-      ret = NCursesEvent::button;
-    break;
+      {
+	  NCMIL << "CurrentItem: " << getCurrentItem() << endl;
+	  YTableItem * tableItem = dynamic_cast<YTableItem *>( getCurrentItemPointer() );
+	  NCMIL << "TableItem: " << tableItem << endl;
+	  YMenuItem * item = itemsMap[ tableItem ];
+	  NCMIL << "MenuItem: " << item << endl;
+	  if ( item && item->hasChildren() )
+	      ret = NCursesEvent::button;
+	  break;
+      }
   case KEY_LEFT:
     ret = NCursesEvent::cancel;
     ret.detail = NCursesEvent::CONTINUE;
@@ -98,22 +117,33 @@ bool NCPopupMenu::postAgain()
   bool again = false;
   int  selection = ( postevent == NCursesEvent::button ) ? getCurrentItem()
                                                          : -1;
-
-  if ( selection != -1 ) {
-    if ( menu.itemList()[selection]->hasChildren() ) {
+  NCMIL << "Index: " << selection << endl;
+  YTableItem * tableItem = dynamic_cast<YTableItem *>( getCurrentItemPointer() );
+  if ( tableItem )
+      NCMIL << "Table item: " << tableItem->label() << endl;
+  YMenuItem * item = itemsMap[ tableItem ];
+	  
+  if ( !item )
+      return true;
+  NCMIL << "Menu item: " << item->label() << endl;
+  if ( selection != -1 )
+  {
+    if ( item->hasChildren() ) {
       // post submenu
       wpos at( ScreenPos() + wpos( selection, inparent.Sze.W - 1 ) );
-      NCPopupMenu dialog( at, *menu.itemList()[selection] );
-      again = (dialog.post( &postevent ) == NCursesEvent::CONTINUE);
+      NCPopupMenu * dialog = new NCPopupMenu( at,
+					      item->childrenBegin(),
+					      item->childrenEnd() );
+      YUI_CHECK_NEW( dialog );
+      
+      again = (dialog->post( &postevent ) == NCursesEvent::CONTINUE);
+      if ( !again )
+	  YDialog::deleteTopmostDialog();
     } else {
       // store selection
-      postevent.detail = menu.itemList()[selection]->getIndex();
+      //postevent.detail = menu.itemList()[selection]->getIndex();
+      postevent.detail = item->index();
     }
   }
   return again;
 }
-
-//void itemAdded(const YCPString & string, int index, bool selected)
-//{
-//    return;
-//}

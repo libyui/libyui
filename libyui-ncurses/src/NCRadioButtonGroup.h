@@ -41,7 +41,7 @@ class NCRadioButtonGroup : public YRadioButtonGroup, public NCWidget {
   NCRadioButtonGroup            ( const NCRadioButtonGroup & );
 
   private:
-    unsigned int focusId;
+    int focusId;
     
   protected:
 
@@ -49,17 +49,24 @@ class NCRadioButtonGroup : public YRadioButtonGroup, public NCWidget {
 
   public:
 
-    NCRadioButtonGroup( NCWidget * parent, const YWidgetOpt & opt );
+    NCRadioButtonGroup( YWidget * parent );
     virtual ~NCRadioButtonGroup();
 
-    virtual long nicesize( YUIDimension dim ) { return YRadioButtonGroup::nicesize( dim ); }
-    virtual void setSize( long newwidth, long newheight );
+    virtual int preferredWidth() { return YRadioButtonGroup::preferredWidth(); }
+    virtual int preferredHeight() { return YRadioButtonGroup::preferredHeight(); }
+    
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
     virtual void addRadioButton(YRadioButton *button);
     virtual void removeRadioButton(YRadioButton *button);
 
-    virtual void setEnabling( bool do_bv );
-
+    virtual void setEnabled( bool do_bv );
+    
     void focusNextButton( );
     void focusPrevButton( );
 

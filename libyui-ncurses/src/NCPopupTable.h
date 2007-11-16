@@ -26,9 +26,10 @@
 using namespace std;
 
 #include "NCPopup.h"
+#include "YTableItem.h"
 
 class NCTable;
-class YCPValue;
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -44,16 +45,17 @@ class NCPopupTable : public NCPopup {
   private:
 
     NCTable * sellist;
-
+    
   protected:
 
     void createList( vector<string> & row );
 
-    void addItem( const YCPValue & id, vector<string> & row );
+    void addItem( YItem *yitem );
 
     void setCurrentItem( int index );
     int  getCurrentItem() const;
-
+    YItem * getCurrentItemPointer( ) const;
+    
     virtual NCursesEvent wHandleHotkey( wint_t ch );
 
   protected:

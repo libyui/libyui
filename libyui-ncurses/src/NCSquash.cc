@@ -28,9 +28,9 @@
 //
 //	DESCRIPTION :
 //
-NCSquash::NCSquash( NCWidget * parent, const YWidgetOpt & opt,
+NCSquash::NCSquash( YWidget * parent,
 		    bool hsquash, bool vsquash )
-    : YSquash( opt, hsquash, vsquash )
+    : YSquash( parent, hsquash, vsquash )
     , NCWidget( parent )
 {
   WIDDBG << endl;
@@ -58,8 +58,14 @@ NCSquash::~NCSquash()
 //
 //	DESCRIPTION :
 //
-void NCSquash::setSize( long newwidth, long newheight )
+void NCSquash::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
   YSquash::setSize( newwidth, newheight );
+}
+
+void NCSquash::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YSquash::setEnabled( do_bv );
 }

@@ -21,7 +21,10 @@
 
 #include "YMenuButton.h"
 #include "YDialog.h"
-#include "NCSplit.h"
+#include "YWidgetID.h"
+#include "YTypes.h"
+
+#include "NCLayoutBox.h"
 #include "NCSpacing.h"
 #include "NCPkgNames.h"
 #include "NCLabel.h"
@@ -96,37 +99,29 @@ NCPkgPopupDiskspace::~NCPkgPopupDiskspace()
 //
 void NCPkgPopupDiskspace::createLayout( )
 {
-
-    YWidgetOpt opt;
-
     // the vertical split is the (only) child of the dialog
-    NCSplit * split = new NCSplit( this, opt, YD_VERT );
-    addChild( split );
-  
-    // add the headline
-    opt.isHeading.setValue( true );
-    head = new NCLabel( split, opt, YCPString( "" ) );
-    split->addChild( head );
+    NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
 
-    vector<string> header;
-    header.reserve(5);
-    header.push_back( "L" + NCPkgNames::Partition() );
-    header.push_back( "L" + NCPkgNames::UsedSpace() );
-    header.push_back( "L" + NCPkgNames::FreeSpace() );
-    header.push_back( "L" + NCPkgNames::TotalSpace() );
-    header.push_back( "L%   ");
+    // addChild() is obsolete (handled by new libyui)
     
-    // add the partition table 
-    partitions = new NCTable( split, opt, header, false );
+    head = new NCLabel( split, "", true, false );	// isHeading = true
 
-    split->addChild( partitions );
+    YTableHeader * tableHeader = new YTableHeader();
+    tableHeader->addColumn( NCPkgNames::Partition(), YAlignBegin );
+    tableHeader->addColumn( NCPkgNames::UsedSpace(), YAlignBegin );
+    tableHeader->addColumn( NCPkgNames::FreeSpace(), YAlignBegin );
+    tableHeader->addColumn( NCPkgNames::TotalSpace(), YAlignBegin );
+    tableHeader->addColumn( "% ", YAlignBegin );
+
+    // add the partition table 
+    partitions = new NCTable( split, tableHeader );
 
     // add the ok button
-    opt.key_Fxx.setValue( 10 );
-    okButton = new NCPushButton( split, opt, YCPString(NCPkgNames::OKLabel()) );
-    okButton->setId( NCPkgNames::OkButton () );
-  
-    split->addChild( okButton );
+    okButton = new NCPushButton( split, NCPkgNames::OKLabel() );
+    YStringWidgetID * okID = new YStringWidgetID( "ok" );
+    okButton->setFunctionKey( 10 );
+    okButton->setId( okID );
+
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -139,10 +134,9 @@ void NCPkgPopupDiskspace::createLayout( )
 //
 void NCPkgPopupDiskspace::fillPartitionTable()
 {
-    partitions->itemsCleared();		// clear table
-    
-    vector<string> pkgLine;
-    pkgLine.reserve(5);
+    partitions->deleteAllItems();		// clear table
+
+    YTableItem * newItem;
     int i = 0;
 
     zypp::ZYpp::Ptr z = zypp::getZYpp();
@@ -165,20 +159,19 @@ void NCPkgPopupDiskspace::fillPartitionTable()
 	if (it->readonly)
 	    continue;
 
-	pkgLine.clear();
-	pkgLine.push_back (it->dir);
-
 	zypp::ByteCount pkg_used (it->pkg_size * 1024);
-	pkgLine.push_back (pkg_used.asString (8));
 
 	zypp::ByteCount pkg_available ((it->total_size - it->pkg_size) * 1024);
-	pkgLine.push_back (pkg_available.asString (8));
 
 	zypp::ByteCount total (it->total_size * 1024);
-	pkgLine.push_back (total.asString (8));
 
-	pkgLine.push_back( usedPercent( it->pkg_size, it->total_size ) );
-	partitions->itemAdded( pkgLine, i );
+	newItem = new YTableItem( it->dir,
+				  pkg_used.asString (8),
+				  pkg_available.asString (8),
+				  total.asString (8),
+				  usedPercent( it->pkg_size, it->total_size ) );
+
+        partitions->addItem( newItem );
 	
 	i++;
     }
@@ -399,7 +392,7 @@ string NCPkgPopupDiskspace::usedPercent( FSize used, FSize total )
 void NCPkgPopupDiskspace::showInfoPopup( string headline )
 {
     if ( head )
-	head->setLabel( YCPString( headline ) );
+	head->setLabel( headline );
     
     // update values in partition table
     fillPartitionTable();
@@ -413,25 +406,29 @@ void NCPkgPopupDiskspace::showInfoPopup( string headline )
     popdownDialog();
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPkgPopupDiskspace::preferredWidth
+//	METHOD TYPE : int
+//
+int NCPkgPopupDiskspace::preferredWidth()
+{
+    return NCurses::cols()*2/3;
+}
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPkgPopupDiskspace::niceSize
-//	METHOD TYPE : void
+//	METHOD NAME : NCPkgPopupDiskspace::preferredHeight
+//	METHOD TYPE : int
 //
-//	DESCRIPTION :
-//
-
-long NCPkgPopupDiskspace::nicesize(YUIDimension dim)
+int NCPkgPopupDiskspace::preferredHeight()
 {
-    long vdim;
     if ( NCurses::lines() > 15 )
-	vdim = 15;
+	return 15;
     else
-	vdim = NCurses::lines()-4;
-	
-    return ( dim == YD_HORIZ ? NCurses::cols()*2/3 : vdim );
+	return NCurses::lines()-4;
 }
 
 ///////////////////////////////////////////////////////////////////

@@ -19,6 +19,10 @@
 #include "Y2Log.h"
 #include "NCTree.h"
 
+#include "YTreeItem.h"
+#include "YSelectionWidget.h"
+
+
 ///////////////////////////////////////////////////////////////////
 //
 //	CLASS NAME : NCTableLine
@@ -60,13 +64,14 @@ class NCTreeLine : public NCTableLine {
 	} else {
 	  parent->fchild = this;
 	}
-	if ( !parent->yitem.isOpenByDefault() ) {
+	// FIXME ??? was yitem.isOpenByDefault()
+	if ( !parent->yitem.isOpen() ) {
 	  SetState( S_HIDDEN );
 	}
       }
 
       Append( new NCTableCol( YCPString( string( prefixLen(), ' ' )
-					 + yitem.getText()->value() ) ) );
+					 + yitem.label() ) ) );
     }
 
     virtual ~NCTreeLine() { delete [] prefix; }
@@ -181,9 +186,8 @@ class NCTreeLine : public NCTableLine {
 //
 //	DESCRIPTION :
 //
-NCTree::NCTree( NCWidget * parent, const YWidgetOpt & opt,
-		const YCPString & nlabel )
-    : YTree( opt, nlabel )
+NCTree::NCTree( YWidget * parent, const string & nlabel )
+    : YTree( parent, nlabel )
     , NCPadWidget( parent )
 {
   WIDDBG << endl;
@@ -209,7 +213,7 @@ NCTree::~NCTree()
 //	METHOD NAME : NCTree::getTreeLine
 //	METHOD TYPE : const NCTreeLine *
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Return pointer to tree line  at given index
 //
 inline const NCTreeLine * NCTree::getTreeLine( unsigned idx ) const
 {
@@ -225,7 +229,7 @@ inline const NCTreeLine * NCTree::getTreeLine( unsigned idx ) const
 //	METHOD NAME : NCTree::modifyTreeLine
 //	METHOD TYPE : NCTreeLine *
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Modify tree line at given index
 //
 inline NCTreeLine * NCTree::modifyTreeLine( unsigned idx )
 {
@@ -238,15 +242,43 @@ inline NCTreeLine * NCTree::modifyTreeLine( unsigned idx )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTree::nicesize
-//	METHOD TYPE : long
+//	METHOD NAME : NCTree::preferredWidth
+//	METHOD TYPE : int
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Set preferred width
 //
-long NCTree::nicesize( YUIDimension dim )
+int NCTree::preferredWidth()
 {
-  wsze sze = wsze::max( defsze, wsze( 0, labelWidht()+2 ) );
-  return dim == YD_HORIZ ? sze.W : sze.H;
+    wsze sze = wsze::max( defsze, wsze( 0, labelWidht()+2 ) ); 
+    return sze.W; 
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCTree::preferredHeight
+//	METHOD TYPE : int
+//
+//	DESCRIPTION : Set preferred height
+//
+int NCTree::preferredHeight()
+{
+    wsze sze = wsze::max( defsze, wsze( 0, labelWidht()+2 ) );
+    return sze.H;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCTree::setEnabled
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : Enable/disable widget
+//
+void NCTree::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YWidget::setEnabled( do_bv );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -257,10 +289,9 @@ long NCTree::nicesize( YUIDimension dim )
 //
 //	DESCRIPTION :
 //
-void NCTree::setSize( long newwidth, long newheight )
+void NCTree::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YTree::setSize( newwidth, newheight );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -269,8 +300,9 @@ void NCTree::setSize( long newwidth, long newheight )
 //	METHOD NAME : NCTree::getCurrentItem
 //	METHOD TYPE : int
 //
-//	DESCRIPTION :
-//
+//	DESCRIPTION : Return YTreeItem pointer for a current line
+//		      (under the cursor)
+// 
 const YTreeItem * NCTree::getCurrentItem() const
 {
   const YTreeItem * yitem = 0;
@@ -281,30 +313,63 @@ const YTreeItem * NCTree::getCurrentItem() const
       yitem = &cline->Yitem();
     }
   }
-  DDBG << "-> " << (yitem?yitem->getText()->value().c_str():"noitem") << endl;
+  DDBG << "-> " << (yitem?yitem->label().c_str():"noitem") << endl;
   return yitem;
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTree::setCurrentItem
+//	METHOD NAME : NCTree::selectItem
 //	METHOD TYPE : void
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Set current item (under the cursor) to selected
 //
-void NCTree::setCurrentItem( YTreeItem * it )
+void NCTree::selectItem( YItem *item, bool selected )
 {
-  if ( !myPad() )
-    return;
-  for ( unsigned i = 0; i < myPad()->Lines(); ++i ) {
-    const NCTreeLine * cline = getTreeLine( i );
-    if ( &cline->Yitem() == it ) {
-      DDBG << "got " << it->getText()->value() << " at " << i << endl;
-      myPad()->ShowItem( cline );
-      break;
+    if ( !myPad() )
+	return;
+
+    YTreeItem * treeItem =  dynamic_cast<YTreeItem *> (item);
+    YUI_CHECK_PTR( treeItem );
+
+    const YTreeItem *citem = getCurrentItem();
+    
+    if ( !selected && ( treeItem == citem ))
+    {
+	YTree::deselectAllItems();
     }
-  }
+    else
+    {
+	//retrieve position of item
+	int at = treeItem->index();
+
+	YTree::selectItem( treeItem, selected );
+	//this highlights selected item, possibly unpacks the tree
+	//should it be in currently hidden branch
+	myPad()->ShowItem( getTreeLine (at) );
+    }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCTree::selectItem
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : Set current item (at given index) to selected
+//		      (overloaded for convenience) 
+//
+void NCTree::selectItem( int index )
+{
+    YItem * item = YTree::itemAt( index );
+
+    if ( item )
+    {
+	selectItem( item, true);
+    }
+    else
+	YUI_THROW( YUIException( "Can't find selected item" ) );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -315,7 +380,7 @@ void NCTree::setCurrentItem( YTreeItem * it )
 //
 //	DESCRIPTION :
 //
-void NCTree::setLabel( const YCPString & nlabel )
+void NCTree::setLabel( const string & nlabel )
 {
   YTree::setLabel( nlabel );
   NCPadWidget::setLabel( NCstring( nlabel ) );
@@ -341,7 +406,7 @@ void NCTree::rebuildTree()
 //	METHOD NAME : NCTree::CreatePad
 //	METHOD TYPE : NCPad *
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Creates empty pad
 //
 NCPad * NCTree::CreatePad()
 {
@@ -354,26 +419,52 @@ NCPad * NCTree::CreatePad()
 ///////////////////////////////////////////////////////////////////
 //
 //
+//	METHOD NAME : NCTree::Dit
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : Creates tree lines and appends them to TreePad
+//		      (called recursively for each child of an item)
+//
+void NCTree::Dit( NCTreeLine * p, NCTreePad * pad, YTreeItem * item )
+{
+    //static index counter
+    static int idx = 0;
+    //set item index explicitely, it is set to -1 by default
+    //which makes selecting items painful
+    item->setIndex( idx++ );
+
+    NCTreeLine * c = new NCTreeLine( p, *item );
+
+    pad->Append( c );
+
+    // iterate over children
+    for ( YItemIterator it = item->childrenBegin();  it < item->childrenEnd(); ++it )
+    {
+	Dit( c, pad, (YTreeItem *)(*it) );
+    }
+}
+///////////////////////////////////////////////////////////////////
+//
+//
 //	METHOD NAME : NCTree::DrawPad
 //	METHOD TYPE : void
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Fills TreePad with lines (uses Dit to create them)
 //
-static void Dit( NCTreeLine * p, NCTreePad * pad, const YTreeItem * item )
-{
-  NCTreeLine * c = new NCTreeLine( p, *item );
-  pad->Append( c );
-  for ( YTreeItemListConstIterator it = item->itemList().begin();
-	it < item->itemList().end(); ++it ) {
-    Dit( c, pad, *it );
-  }
-}
-
 void NCTree::DrawPad()
 {
-  for (  YTreeItemListIterator it = items.begin(); it < items.end(); ++it ) {
-    Dit( 0, myPad(), *it );
+  if ( !myPad() )
+  {
+      NCERR << "PadWidget not valid" << endl;
+      return;
   }
+
+  // YItemIterator iterates over the toplevel items
+  for ( YItemIterator it = itemsBegin(); it < itemsEnd(); ++it )
+  {
+      Dit( 0, myPad(), (YTreeItem *)(*it) );
+  }
+   
   NCPadWidget::DrawPad();
 }
 
@@ -389,20 +480,30 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 {
   NCursesEvent ret = NCursesEvent::none;
   const YTreeItem * oldCurrentItem = getCurrentItem();
+
   if ( ! handleInput( key ) )
   {
     switch ( key ) {
-      case KEY_SPACE:
+      case KEY_SPACE:		// KEY_SPACE is handled in NCTreeLine::handleInput
       case KEY_RETURN:
-        if ( getNotify() )
+        if ( notify() )
+	{
 	  return NCursesEvent::Activated;
+	}
       break;
     }
   }
-  
-  if ( getNotify() && oldCurrentItem != getCurrentItem() )
-      ret = NCursesEvent::SelectionChanged;
 
+  const YItem * currentItem = getCurrentItem();
+  YUI_CHECK_PTR( currentItem );
+  YTree::selectItem( const_cast<YItem *>(currentItem), true );
+   
+  NCDBG << "Old item: " << oldCurrentItem->label() << " Current: " << currentItem->label() << endl;
+  if ( notify() && (oldCurrentItem != currentItem) ) 
+      ret = NCursesEvent::SelectionChanged;
+  
+
+  NCDBG << "Notify: " << (notify()?"true":"false") <<  " Return event: " << ret << endl;
   return ret;
 }
 

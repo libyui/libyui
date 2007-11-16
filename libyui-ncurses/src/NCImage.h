@@ -49,12 +49,22 @@ class NCImage : public YImage, public NCWidget {
 
   public:
 
-    NCImage( NCWidget * parent, const YWidgetOpt & opt, YCPString defaulttext );
+    NCImage( YWidget * parent, string defaulttext, bool animated = false );
     virtual ~NCImage();
 
     virtual long nicesize( YUIDimension dim );
-    virtual void setSize( long newwidth, long newheight );
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+    
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
+    //virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    virtual void setEnabled( bool do_bv );
 };
 
 ///////////////////////////////////////////////////////////////////

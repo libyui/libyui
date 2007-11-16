@@ -25,6 +25,7 @@
 
 #include "Y2Log.h"
 #include <YEvent.h>
+#include "YDialog.h"
 
 #include <ycp/y2log.h>
 #include <ycp/Parser.h>
@@ -33,38 +34,13 @@
 #include <ycp/YCPMap.h>
 #include <yui/YUI.h>
 
-#include "NCDialog.h"
-#include "NCAlignment.h"
-#include "NCCheckBox.h"
-#include "NCEmpty.h"
-#include "NCSpacing.h"
-#include "NCFrame.h"
-#include "NCCheckBoxFrame.h"
-#include "NCImage.h"
-#include "NCLabel.h"
-#include "NCProgressBar.h"
-#include "NCPushButton.h"
-#include "NCMenuButton.h"
-#include "NCRadioButton.h"
-#include "NCRadioButtonGroup.h"
-#include "NCReplacePoint.h"
-#include "NCRichText.h"
-#include "NCSelectionBox.h"
-#include "NCMultiSelectionBox.h"
-#include "NCSplit.h"
-#include "NCSquash.h"
-#include "NCTable.h"
-#include "NCTextEntry.h"
-#include "NCIntField.h"
-#include "NCComboBox.h"
-#include "NCTree.h"
-#include "NCLogView.h"
-#include "NCMultiLineEdit.h"
-#include "NCPackageSelectorPlugin.h"
 #include "NCPackageSelectorStart.h"
 #include "NCAskForDirectory.h"
 #include "NCAskForFile.h"
 #include "NCstring.h"
+#include "NCWidgetFactory.h"
+#include "NCOptionalWidgetFactory.h"
+#include "NCPackageSelectorPlugin.h"
 
 extern string language2encoding( string lang );
 
@@ -100,7 +76,7 @@ YNCursesUI::YNCursesUI( int argc, char **argv, bool with_threads, const char * m
 	NCurses::init();
     }
     catch ( NCursesError & err ) {
-	UIINT << err << endl;
+	UIMIL << err << endl;
 	::endwin();
 	abort();
     }
@@ -119,18 +95,34 @@ YNCursesUI::~YNCursesUI()
 
 YNCursesUI * YNCursesUI::_ui = 0;
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : Recode
-**	FUNCTION TYPE : int
-**
-**	DESCRIPTION :
-*/
-int Recode( const string & str, const string & from,
-	    const string & to, string & outstr )
+YWidgetFactory *
+YNCursesUI::createWidgetFactory()
 {
-  return YUI::Recode( str, from, to, outstr );
+    NCWidgetFactory * factory = new NCWidgetFactory();
+    YUI_CHECK_NEW( factory );
+    
+    return factory;
+}
+
+
+
+YOptionalWidgetFactory *
+YNCursesUI::createOptionalWidgetFactory()
+{
+    NCOptionalWidgetFactory * factory = new NCOptionalWidgetFactory();
+    YUI_CHECK_NEW( factory );
+    
+    return factory;
+}
+
+
+YApplication *
+YNCursesUI::createApplication()
+{
+    NCApplication * app = new NCApplication();
+    YUI_CHECK_NEW( app );
+
+    return app;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -143,7 +135,7 @@ int Recode( const string & str, const string & from,
 //
 void YNCursesUI::idleLoop( int fd_ycp )
 {
-  NCDialog * ncd = static_cast<NCDialog *>( currentDialog() );
+  NCDialog * ncd = static_cast<NCDialog *>( YDialog::currentDialog() );
 
   int    timeout = 5;
   struct timeval tv;
@@ -177,10 +169,21 @@ struct NCtoY2Event : public NCursesEvent {
 
   friend ostream & operator<<( std::ostream & STREAM, const NCtoY2Event & OBJ ) {
     STREAM << static_cast<const NCursesEvent &>(OBJ);
+#if 0
     if ( OBJ.selection.isNull() ) {
       STREAM << "(-)";
     } else {
       STREAM << "(" << OBJ.selection->valuetype() << ")";
+    }
+#endif
+    if ( !OBJ.selection )
+    {
+	STREAM << "(-)";
+    }
+    else
+    {
+	// FIXME: check this - was valuetype() see above
+	STREAM << "(" << OBJ.selection->label() << ")";
     }
     return STREAM << " for " << OBJ.widget;
   }
@@ -210,7 +213,10 @@ struct NCtoY2Event : public NCursesEvent {
 		  return 0;
 	      
 	  case menu:
-	      return new YMenuEvent( selection );
+	      if ( selection )
+		  return new YMenuEvent( selection );
+	      else
+		  return 0;
 	    
 	  case cancel:
 	      return new YCancelEvent();
@@ -251,7 +257,7 @@ struct NCtoY2Event : public NCursesEvent {
 //
 YEvent * YNCursesUI::userInput( unsigned long timeout_millisec )
 {
-  NCDialog * ncd = static_cast<NCDialog *>( currentDialog() );
+  NCDialog * ncd = static_cast<NCDialog *>( YDialog::currentDialog() );
   if ( !ncd ) {
     UIERR << "No current NCDialog " << endl;
     return 0;
@@ -278,7 +284,7 @@ YEvent * YNCursesUI::userInput( unsigned long timeout_millisec )
 //
 YEvent * YNCursesUI::pollInput()
 {
-  NCDialog * ncd = static_cast<NCDialog *>( currentDialog() );
+  NCDialog * ncd = static_cast<NCDialog *>( YDialog::currentDialog() );
   if ( !ncd ) {
     UIERR << "No current NCDialog " << endl;
     return 0;
@@ -306,7 +312,9 @@ YDialog * YNCursesUI::createDialog( YWidgetOpt & opt )
   UIDBG << "Flush input buffer - new dialog" << endl;
   ::flushinp();
 
+  NCMIL << "Calling createDialog()" << endl;
   NCDialog * dialog = new NCDialog( opt );
+
   UIDBG << dialog << endl;
   return dialog;
 }
@@ -315,7 +323,10 @@ void YNCursesUI::showDialog( YDialog * dialog ) {
   NCDialog * dlg = dynamic_cast<NCDialog *>( dialog );
   UIDBG << dlg << endl;
   if ( dlg )
+  {
     dlg->showDialog();
+    dlg->dumpWidgetTree();
+  }
 }
 
 void YNCursesUI::closeDialog( YDialog * dialog ) {
@@ -325,254 +336,16 @@ void YNCursesUI::closeDialog( YDialog * dialog ) {
     dlg->closeDialog();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// Widget creation functions - container widgets
-//
-///////////////////////////////////////////////////////////////////
+#define ONCREATE WIDDBG << endl
+//#define ONCREATE
 
-//#define ONCREATE WIDDBG << endl
-#define ONCREATE
-
-YContainerWidget * YNCursesUI::createSplit( YWidget * parent, YWidgetOpt & opt,
-					     YUIDimension dimension )
-{
-  ONCREATE;
-  return new NCSplit( dynamic_cast<NCWidget *>( parent ), opt,
-		      dimension );
-}
-
-YContainerWidget * YNCursesUI::createReplacePoint( YWidget * parent, YWidgetOpt & opt )
-{
-  ONCREATE;
-  return new NCReplacePoint( dynamic_cast<NCWidget *>( parent ), opt );
-}
-
-YContainerWidget * YNCursesUI::createAlignment( YWidget * parent, YWidgetOpt & opt,
-						 YAlignmentType halign,
-						 YAlignmentType valign )
-{
-  ONCREATE;
-  return new NCAlignment( dynamic_cast<NCWidget *>( parent ), opt,
-			  halign, valign );
-}
-
-YContainerWidget * YNCursesUI::createSquash( YWidget * parent, YWidgetOpt & opt,
-					      bool hsquash,
-					      bool vsquash )
-{
-  ONCREATE;
-  return new NCSquash( dynamic_cast<NCWidget *>( parent ), opt,
-		       hsquash, vsquash );
-}
-
-YContainerWidget * YNCursesUI::createRadioButtonGroup( YWidget * parent, YWidgetOpt & opt )
-{
-  ONCREATE;
-  return new NCRadioButtonGroup( dynamic_cast<NCWidget *>( parent ), opt );
-}
-
-YContainerWidget * YNCursesUI::createFrame( YWidget * parent, YWidgetOpt & opt,
-					     const YCPString & label )
-{
-  ONCREATE;
-  return new NCFrame( dynamic_cast<NCWidget *>( parent ), opt,
-		      label );
-}
-
-YContainerWidget * YNCursesUI::createCheckBoxFrame( YWidget * parent, YWidgetOpt & opt,
-						    const YCPString & label, bool checked )
-{
-  ONCREATE;
-  return new NCCheckBoxFrame( dynamic_cast<NCWidget *>( parent ), opt,
-			      label, checked );
-}
-
-///////////////////////////////////////////////////////////////////
-//
-// Widget creation functions - leaf widgets
-//
-///////////////////////////////////////////////////////////////////
-
-YWidget * YNCursesUI::createEmpty( YWidget * parent, YWidgetOpt & opt )
-{
-  ONCREATE;
-  return new NCEmpty( dynamic_cast<NCWidget *>( parent ), opt );
-}
-
-
-YWidget * YNCursesUI::createSpacing( YWidget * parent, YWidgetOpt & opt,
-				      float size,
-				      bool horizontal, bool vertical )
-{
-  ONCREATE;
-  return new NCSpacing( dynamic_cast<NCWidget *>( parent ), opt,
-			size, horizontal, vertical );
-}
-
-YWidget * YNCursesUI::createLabel( YWidget * parent, YWidgetOpt & opt,
-				    const YCPString & text )
-{
-  ONCREATE;
-  return new NCLabel( dynamic_cast<NCWidget *>( parent ), opt,
-		      text );
-}
-
-YWidget * YNCursesUI::createRichText( YWidget * parent, YWidgetOpt & opt,
-				       const YCPString & text )
-{
-  ONCREATE;
-  return new NCRichText( dynamic_cast<NCWidget *>( parent ), opt,
-			 text );
-}
-
-YWidget * YNCursesUI::createLogView( YWidget * parent, YWidgetOpt & opt,
-				      const YCPString & label,
-				      int visibleLines,
-				      int maxLines )
-{
-  ONCREATE;
-  return new NCLogView( dynamic_cast<NCWidget *>( parent ), opt,
-			label, visibleLines, maxLines );
-}
-
-YWidget * YNCursesUI::createPushButton( YWidget * parent, YWidgetOpt & opt,
-					 const YCPString & label )
-{
-  ONCREATE;
-  return new NCPushButton( dynamic_cast<NCWidget *>( parent ), opt,
-			   label );
-}
-
-YWidget * YNCursesUI::createMenuButton( YWidget * parent, YWidgetOpt & opt,
-					 const YCPString & label )
-{
-  ONCREATE;
-  return new NCMenuButton( dynamic_cast<NCWidget *>( parent ), opt,
-			   label );
-}
-
-YWidget * YNCursesUI::createRadioButton( YWidget * parent, YWidgetOpt & opt,
-					  YRadioButtonGroup * rbg,
-					  const YCPString & label,
-					  bool checked )
-{
-  ONCREATE;
-  return new NCRadioButton( dynamic_cast<NCWidget *>( parent ), opt,
-			    rbg, label, checked );
-}
-
-YWidget * YNCursesUI::createCheckBox( YWidget * parent, YWidgetOpt & opt,
-				       const YCPString & label,
-				       bool checked )
-{
-  ONCREATE;
-  return new NCCheckBox( dynamic_cast<NCWidget *>( parent ), opt,
-			 label, checked );
-}
-
-YWidget * YNCursesUI::createTextEntry( YWidget * parent, YWidgetOpt & opt,
-					const YCPString & label,
-					const YCPString & text )
-{
-  ONCREATE;
-  return new NCTextEntry( dynamic_cast<NCWidget *>( parent ), opt,
-			  label, text );
-}
-
-YWidget *YNCursesUI::createMultiLineEdit( YWidget * parent, YWidgetOpt & opt,
-					   const YCPString & label,
-					   const YCPString & initialText )
-{
-  ONCREATE;
-  return new NCMultiLineEdit( dynamic_cast<NCWidget *>( parent ), opt,
-			      label, initialText );
-}
-
-YWidget * YNCursesUI::createSelectionBox( YWidget * parent, YWidgetOpt & opt,
-					   const YCPString & label )
-{
-  ONCREATE;
-  return new NCSelectionBox( dynamic_cast<NCWidget *>( parent ), opt,
-			     label );
-}
-
-YWidget * YNCursesUI::createMultiSelectionBox( YWidget *parent, YWidgetOpt & opt,
-						const YCPString & label )
-{
-  ONCREATE;
-  return new NCMultiSelectionBox( dynamic_cast<NCWidget *>( parent ), opt,
-				  label );
-}
-
-YWidget * YNCursesUI::createComboBox( YWidget * parent, YWidgetOpt & opt,
-				       const YCPString & label )
-{
-  ONCREATE;
-  return new NCComboBox( dynamic_cast<NCWidget *>( parent ), opt,
-			 label );
-}
-
-YWidget * YNCursesUI::createTree( YWidget * parent, YWidgetOpt & opt,
-				   const YCPString & label )
-{
-  ONCREATE;
-  return new NCTree( dynamic_cast<NCWidget *>( parent ), opt,
-		     label );
-}
-
-YWidget * YNCursesUI::createTable( YWidget * parent, YWidgetOpt & opt,
-				    vector<string> header )
-{
-  ONCREATE;
-  return new NCTable( dynamic_cast<NCWidget *>( parent ), opt,
-		      header, true );
-}
-
-YWidget * YNCursesUI::createProgressBar( YWidget * parent, YWidgetOpt & opt,
-					  const YCPString & label,
-					  const YCPInteger & maxprogress,
-					  const YCPInteger & progress )
-{
-  ONCREATE;
-  return new NCProgressBar( dynamic_cast<NCWidget *>( parent ), opt,
-			    label, maxprogress, progress );
-}
-
-YWidget * YNCursesUI::createImage( YWidget * parent, YWidgetOpt & opt,
-				    YCPByteblock /* not used */,
-				    YCPString defaulttext )
-{
-  ONCREATE;
-  return new NCImage( dynamic_cast<NCWidget *>( parent ), opt,
-		      defaulttext );
-}
-
-YWidget * YNCursesUI::createImage( YWidget * parent, YWidgetOpt & opt,
-				    YCPString /* not used */,
-				    YCPString defaulttext )
-{
-  ONCREATE;
-  return new NCImage( dynamic_cast<NCWidget *>( parent ), opt,
-		      defaulttext );
-}
-
-
-YWidget * YNCursesUI::createIntField( YWidget * parent, YWidgetOpt & opt,
-				       const YCPString & label,
-				       int minValue, int maxValue,
-				       int initialValue )
-{
-  ONCREATE;
-  return new NCIntField( dynamic_cast<NCWidget *>( parent ), opt,
-			 label, minValue, maxValue, initialValue );
-}
 
 ///////////////////////////////////////////////////////////////////
 //
 // package selection
 //
 ///////////////////////////////////////////////////////////////////
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -599,54 +372,6 @@ NCPackageSelectorPlugin * YNCursesUI::packageSelectorPlugin()
     return plugin;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YNCursesUI::createPackageSelector
-//	METHOD TYPE : YWidget
-//
-//	DESCRIPTION : Calls NCPackageSelectorPlugin::createPackageSelector
-//
-YWidget * YNCursesUI::createPackageSelector( YWidget * parent,
-					     YWidgetOpt & opt,
-					     const YCPString & floppyDevice )
-{
-    ONCREATE;
-    YWidget * w = 0;
-
-    NCPackageSelectorPlugin * plugin = packageSelectorPlugin();
-
-    if ( plugin )
-    {
-	w = plugin->createPackageSelector( parent, opt );
-    }
-
-    return w;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YNCursesUI::createPkgSpecial
-//	METHOD TYPE : YWidget
-//
-//	DESCRIPTION : creates special widgets used for the package selection
-//		      dialog (which do not have a corresponding widget in qt-ui)
-//
-YWidget * YNCursesUI::createPkgSpecial( YWidget *parent, YWidgetOpt &opt, const YCPString &subwidget )
-{
-    ONCREATE;
-    YWidget * w = 0;
-    
-    NCPackageSelectorPlugin * plugin = packageSelectorPlugin();
-
-    if ( plugin )
-    {
-	w = plugin->createPkgSpecial( parent, opt, subwidget );
-    }
-    
-    return w;
-}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -661,7 +386,7 @@ YCPValue YNCursesUI::runPkgSelection( YWidget * selector )
 {
     YCPValue result = YCPVoid();
     
-    YDialog *dialog = YUI::currentDialog();
+    YDialog *dialog = YDialog::currentDialog();
     NCPackageSelectorPlugin * plugin = packageSelectorPlugin();
     
     if ( !dialog )
@@ -674,7 +399,8 @@ YCPValue YNCursesUI::runPkgSelection( YWidget * selector )
 	UIERR << "ERROR package selection: No package selector existing." << endl;
 	return YCPVoid();
     }
-    
+    // FIXME - remove debug logging
+    NCMIL << "Dump current dialog in YNCursesUI::runPkgSelection" << endl;
     // debug: dump the widget tree
     dialog->dumpDialogWidgetTree();	
 
@@ -972,14 +698,16 @@ YCPValue YNCursesUI::askForSaveFileName( const YCPString & startDir,
 					  const YCPString & filter,
 					  const YCPString & headline )
 {
-    NCAskForSaveFileName filePopup( wpos( 1, 1 ), startDir, filter, headline );
+    NCAskForSaveFileName * filePopup = new NCAskForSaveFileName( wpos( 1, 1 ), startDir, filter, headline );
+    YUI_CHECK_NEW( filePopup );
     
-    NCursesEvent retEvent = filePopup.showDirPopup( );
+    NCursesEvent retEvent = filePopup->showDirPopup( );
+    YDialog::deleteTopmostDialog();
 
-    if ( !retEvent.result.isNull() )
+    if ( retEvent.result != "" )
     {
-	NCMIL << "Returning: " <<  retEvent.result->toString() << endl;
-	return retEvent.result;
+	NCMIL << "Returning: " <<  retEvent.result << endl;
+	return YCPString( retEvent.result );
     }
     else
 	return YCPVoid(); // nothing selected -> return 'nil'  
@@ -997,14 +725,16 @@ YCPValue YNCursesUI::askForExistingFile( const YCPString & startDir,
 					  const YCPString & filter,
 					  const YCPString & headline )
 {
-    NCAskForExistingFile filePopup( wpos( 1, 1 ), startDir, filter, headline );
+    NCAskForExistingFile * filePopup = new NCAskForExistingFile( wpos( 1, 1 ), startDir, filter, headline );
+    YUI_CHECK_NEW( filePopup );
     
-    NCursesEvent retEvent = filePopup.showDirPopup( );
+    NCursesEvent retEvent = filePopup->showDirPopup( );
+    YDialog::deleteTopmostDialog();
 
-    if ( !retEvent.result.isNull() )
+    if ( retEvent.result != "" )
     {
-	NCMIL << "Returning: " <<  retEvent.result->toString() << endl;
-	return retEvent.result;
+	NCMIL << "Returning: " <<  retEvent.result << endl;
+	return YCPString( retEvent.result );
     }
     else
 	return YCPVoid(); // nothing selected -> return 'nil'  
@@ -1021,14 +751,16 @@ YCPValue YNCursesUI::askForExistingFile( const YCPString & startDir,
 YCPValue YNCursesUI::askForExistingDirectory( const YCPString & startDir,
 					       const YCPString & headline )
 {
-    NCAskForExistingDirectory dirPopup( wpos( 1, 1 ), startDir, headline );
+    NCAskForExistingDirectory * dirPopup = new NCAskForExistingDirectory( wpos( 1, 1 ), startDir, headline );
+    YUI_CHECK_NEW( dirPopup );
     
-    NCursesEvent retEvent = dirPopup.showDirPopup( );
+    NCursesEvent retEvent = dirPopup->showDirPopup( );
+    YDialog::deleteTopmostDialog();
 
-    if ( !retEvent.result.isNull() )
+    if ( retEvent.result != "" )
     {
-	NCMIL << "Returning: " <<  retEvent.result->toString() << endl;
-	return retEvent.result;
+	NCMIL << "Returning: " <<  retEvent.result << endl;
+	return YCPString( retEvent.result );
     }
     else
 	return YCPVoid(); // nothing selected -> return 'nil'

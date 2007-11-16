@@ -49,22 +49,33 @@ class NCMenuButton : public YMenuButton, public NCWidget {
 
     virtual void wRedraw();
 
-    virtual void createMenu();
     NCursesEvent postMenu();
 
   public:
 
-    NCMenuButton( NCWidget * parent, const YWidgetOpt & opt,
-		  YCPString label );
+    NCMenuButton( YWidget * parent,
+		  string label );
     virtual ~NCMenuButton();
 
-    virtual long nicesize( YUIDimension dim );
-    virtual void setSize( long newwidth, long newheight );
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+
+    virtual void rebuildMenuTree();
+    
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
     virtual NCursesEvent wHandleInput( wint_t key );
 
-    virtual void setLabel( const YCPString & nlabel );
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    virtual void setLabel( const string & nlabel );
+
+    virtual void setEnabled( bool do_bv );
+
+    YMenuItem * findItem( int selection ) { return findMenuItem( selection ); }
 
     virtual bool setKeyboardFocus() {
       if ( !grabFocus() )

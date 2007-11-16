@@ -70,7 +70,9 @@ public:
     /**
      * Set the default size
      */
-    virtual long nicesize(YUIDimension dim);
+    
+    virtual int preferredWidth();
+    virtual int preferredHeight();
     
     /**
      * Create layout of file directory selection popup

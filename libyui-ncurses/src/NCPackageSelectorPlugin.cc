@@ -54,14 +54,13 @@ NCPackageSelectorPlugin::~NCPackageSelectorPlugin()
 //                    term of the package selection dialog, creates the widget
 //		      tree and creates the NCPackageSelector.
 //
-YWidget * NCPackageSelectorPlugin::createPackageSelector( YWidget * parent,
-							  YWidgetOpt & opt )
+YPackageSelector * NCPackageSelectorPlugin::createPackageSelector( YWidget * parent,
+								   long modeFlags )
 {
     YWidget * w = 0;
     try
     {
-	w = new NCPackageSelectorStart ( dynamic_cast<NCWidget *>(parent), opt,
-					 YD_HORIZ );
+	w = new NCPackageSelectorStart ( parent, modeFlags, YD_HORIZ );
     }
     catch (const std::exception & e)
     {
@@ -71,7 +70,15 @@ YWidget * NCPackageSelectorPlugin::createPackageSelector( YWidget * parent,
     {
 	UIERR << "Caught an unspecified exception" << endl;
     }
-    return w;
+
+    // FIXME - remove debug logging
+    YDialog::currentDialog()->dumpWidgetTree();
+    NCWidget * firstChild = dynamic_cast<NCWidget *>(YDialog::currentDialog()->firstChild());
+    if ( firstChild )
+	NCMIL << "FIRST child: " << firstChild << endl;
+    NCMIL << "Selector: " << w << endl;
+    // FIXME ???
+    return (YPackageSelector *)(w);
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -83,19 +90,17 @@ YWidget * NCPackageSelectorPlugin::createPackageSelector( YWidget * parent,
 //	DESCRIPTION : creates special widgets used for the package selection
 //		      dialog (which do not have a corresponding widget in qt-ui)
 //
-YWidget * NCPackageSelectorPlugin::createPkgSpecial( YWidget *parent,
-						     YWidgetOpt &opt,
-						     const YCPString &subwidget )
+YWidget * NCPackageSelectorPlugin::createPkgSpecial( YWidget *parent, const string &subwidget )
 {
-    YCPString pkgTable( "pkgTable" );
-
     YWidget * w = 0;
-    if ( subwidget->compare( pkgTable ) == YO_EQUAL )
+    YTableHeader * tableHeader = new YTableHeader();
+    
+    if ( subwidget == "pkgTable" )
     {
 	NCDBG << "Creating a NCPkgTable" << endl;
 	try
 	{
-	    w = new NCPkgTable( dynamic_cast<NCWidget *>( parent ), opt );
+	    w = new NCPkgTable( parent, tableHeader );
 	}
 	catch (const std::exception & e)
 	{
@@ -108,8 +113,8 @@ YWidget * NCPackageSelectorPlugin::createPkgSpecial( YWidget *parent,
     }
     else
     {
-	NCERR <<  "PkgSpecial( "  << subwidget->toString() << " )  not found - take default `Label" << endl;
-	w = new NCLabel( dynamic_cast<NCWidget *>( parent ), opt, subwidget );
+	NCERR <<  "PkgSpecial( "  << subwidget << " )  not found - take default `Label" << endl;
+	w = new NCLabel( parent, subwidget, false, false );
     }
 
     return w;
@@ -129,6 +134,8 @@ YCPValue NCPackageSelectorPlugin::runPkgSelection(  YDialog * dialog,
 {
     NCPackageSelectorStart * ncSelector = 0;
 
+    NCMIL << "Calling runPkgSelection()" << endl;
+    
     if ( !dialog )
     {
 	UIERR << "ERROR package selection: No dialog existing." << endl;
@@ -176,10 +183,12 @@ YCPValue NCPackageSelectorPlugin::runPkgSelection(  YDialog * dialog,
 	UIERR << "No NCPackageSelectorStart existing" << endl;
     }
 
-    if ( !event.result.isNull() )
+    YDialog::deleteTopmostDialog();
+
+    if ( event.result != "" )
     {
-	UIMIL << "Return value: " << event.result->toString() << endl;
-	return event.result;
+	NCMIL << "Return value: " << event.result << endl;
+	return YCPSymbol( event.result );
     }
     else
 	return YCPVoid();

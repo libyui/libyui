@@ -49,13 +49,25 @@ class NCSpacing : public YSpacing, public NCWidget {
 
   public:
 
-    NCSpacing( NCWidget * parent, const YWidgetOpt & opt,
-               float size, bool horizontal, bool vertical );
+    NCSpacing( YWidget * parent,
+	       YUIDimension dim,
+	       bool stretchable = false,
+	       YLayoutSize_t layoutUnits = 0.0 );
+    
     virtual ~NCSpacing();
 
-    virtual void setSize( long newwidth, long newheight );
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    virtual int preferredWidth()  { return YSpacing::preferredWidth(); }
+    virtual int preferredHeight() { return YSpacing::preferredHeight(); }
+    
+    //virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    virtual void setEnabled( bool do_bv ); 
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -28,15 +28,14 @@
 //
 //	DESCRIPTION :
 //
-NCProgressBar::NCProgressBar( NCWidget * parent, const YWidgetOpt & opt,
-			      const YCPString & nlabel,
-			      const YCPInteger & maxprogress,
-			      const YCPInteger & progress )
-    : YProgressBar( opt, nlabel, maxprogress, progress )
+NCProgressBar::NCProgressBar( YWidget * parent,
+			      const string & nlabel,
+			      int maxValue )
+    : YProgressBar( parent, nlabel, maxValue )
     , NCWidget( parent )
     , label( nlabel )
-    , maxval( maxprogress->value() )
-    , cval( progress->value() )
+    , maxval( maxValue )
+    , cval( 0 )
     , lwin( 0 )
     , twin( 0 )
 {
@@ -45,7 +44,8 @@ NCProgressBar::NCProgressBar( NCWidget * parent, const YWidgetOpt & opt,
     maxval = 1;
   hotlabel = &label;
   setLabel( nlabel );
-  setProgress( progress );
+  // initial progress isn't an argument any longer 
+  //setProgress( progress );
   wstate = NC::WSdumb;
 }
 
@@ -77,6 +77,22 @@ long NCProgressBar::nicesize( YUIDimension dim )
   return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
 }
 
+int NCProgressBar::preferredWidth()
+{
+     return wGetDefsze().W;
+}
+
+int NCProgressBar::preferredHeight()
+{
+    return wGetDefsze().H;
+}
+
+void NCProgressBar::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YProgressBar::setEnabled( do_bv );
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -85,10 +101,9 @@ long NCProgressBar::nicesize( YUIDimension dim )
 //
 //	DESCRIPTION :
 //
-void NCProgressBar::setSize( long newwidth, long newheight )
+void NCProgressBar::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YProgressBar::setSize( newwidth, newheight );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -164,7 +179,7 @@ void NCProgressBar::wDelete()
 //
 //	DESCRIPTION :
 //
-void NCProgressBar::setLabel( const YCPString & nlabel )
+void NCProgressBar::setLabel( const string & nlabel )
 {
   label = NCstring( nlabel );
   setDefsze();
@@ -175,20 +190,20 @@ void NCProgressBar::setLabel( const YCPString & nlabel )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCProgressBar::setProgress
+//	METHOD NAME : NCProgressBar::setValue
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCProgressBar::setProgress( const YCPInteger & nval )
+void NCProgressBar::setValue( int newValue )
 {
-  cval = nval->value();
+  cval = newValue;
   if ( cval < 0 )
     cval = 0;
   else if ( cval > maxval )
     cval = maxval;
   Redraw();
-  YProgressBar::setProgress( nval );
+  YProgressBar::setValue( newValue );
 }
 
 ///////////////////////////////////////////////////////////////////

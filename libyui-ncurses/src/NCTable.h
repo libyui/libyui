@@ -22,6 +22,7 @@
 #include <iosfwd>
 
 #include "YTable.h"
+
 #include "NCPadWidget.h"
 #include "NCTablePad.h"
 
@@ -42,10 +43,7 @@ class NCTable : public YTable, public NCPadWidget {
 
   private:
 
-    bool immediate;
-    bool sortable;
-    
-    vector<string> header;
+    vector<NCstring> _header;
 
   protected:
 
@@ -62,7 +60,8 @@ class NCTable : public YTable, public NCPadWidget {
 
     virtual NCPad * CreatePad();
 
-    virtual void cellChanged( int index, int colnum, const YCPString & newtext );
+    virtual void cellChanged( int index, int colnum, const string & newtext );
+    virtual void cellChanged( const YTableCell *cell );
     
 
   protected:
@@ -72,37 +71,50 @@ class NCTable : public YTable, public NCPadWidget {
 
   public:
 
-    NCTable( NCWidget * parent, const YWidgetOpt & opt,
-	     vector<string> header, bool sort );
+    NCTable( YWidget * parent, YTableHeader *header );
+
     virtual ~NCTable();
 
     bool bigList() const { return biglist; }
 
-    bool isImmediate() const { return immediate; }	// addey by gs
-    void setHeader( const vector<string> & head ); 	// added by gs
-    virtual void itemsCleared();
+    void setHeader( int col, const string & text ); 	// added by gs
+    void setHeader ( vector<string> header );
+    virtual void setAlignment ( int col, YAlignmentType al );
 
     void setBigList( const bool big ) { biglist = big; }
     void SetSepChar( const chtype colSepchar )  { myPad()->SetSepChar( colSepchar ); }
     void SetSepWidht( const unsigned sepwidth ) { myPad()->SetSepWidht( sepwidth ); }
     void SetHotCol( const int hcol )            { myPad()->SetHotCol( hcol ); }
 
-    virtual void itemAdded( vector<string> elements, int index );
+    virtual void addItem( YItem *yitem );
+    virtual void deleteAllItems( );
 
-    virtual long nicesize( YUIDimension dim );
-    virtual void setSize( long newwidth, long newheight );
-
-    virtual void setLabel( const YCPString & nlabel );
-
-    virtual int  getCurrentItem();
+    virtual int getCurrentItem();
+    YItem * getCurrentItemPointer();
+    
     virtual void setCurrentItem( int index );
+    virtual void selectItem( YItem *yitem, bool selected );
+    void selectCurrentItem(); 
+    virtual void deselectAllItems();
+
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+    
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
+    virtual void setLabel( const YCPString & nlabel );
+    virtual void setEnabled( bool do_bv );
 
     bool setItemByKey( int key );
 
     virtual NCursesEvent wHandleInput( wint_t key );
 
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
-
+    //virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    
     virtual bool setKeyboardFocus() {
       if ( !grabFocus() )
         return YWidget::setKeyboardFocus();

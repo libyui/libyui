@@ -28,10 +28,10 @@
 //
 //	DESCRIPTION :
 //
-NCRadioButtonGroup::NCRadioButtonGroup( NCWidget * parent, const YWidgetOpt & opt )
-    : YRadioButtonGroup( opt )
+NCRadioButtonGroup::NCRadioButtonGroup( YWidget * parent )
+    : YRadioButtonGroup( parent )
     , NCWidget( parent )
-    , focusId( 0 )
+    , focusId( 1 )
 {
   WIDDBG << endl;
   wstate = NC::WSdumb;
@@ -58,7 +58,7 @@ NCRadioButtonGroup::~NCRadioButtonGroup()
 //
 //	DESCRIPTION :
 //
-void NCRadioButtonGroup::setSize( long newwidth, long newheight )
+void NCRadioButtonGroup::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
   YRadioButtonGroup::setSize( newwidth, newheight );
@@ -100,14 +100,27 @@ void NCRadioButtonGroup::removeRadioButton( YRadioButton *button )
 //
 void NCRadioButtonGroup::focusNextButton( )
 {
-    if ( focusId < buttonlist.size() -1 )
+    int n = 0;
+    
+    if ( focusId < radioButtonsCount() )
 	focusId++;
-    else if ( focusId == buttonlist.size() -1 )
+    else if ( focusId == radioButtonsCount() )
 	focusId = 0;
 
-    NCRadioButton * button = dynamic_cast<NCRadioButton*>(buttonlist[focusId]);
-    if ( button )
-	button->setKeyboardFocus();    
+    for ( YRadioButtonListConstIterator it = radioButtonsBegin();
+	  it != radioButtonsEnd();
+	  ++it )
+    {
+	n++;
+	if ( n == focusId )
+	{
+	    NCRadioButton * radioButton = dynamic_cast<NCRadioButton *> (*it);
+	    if ( radioButton )
+	    {
+		radioButton->setKeyboardFocus();
+	    }
+	}
+    }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -120,24 +133,41 @@ void NCRadioButtonGroup::focusNextButton( )
 //
 void NCRadioButtonGroup::focusPrevButton()
 {
+    int n = 0;
+    
     if ( focusId > 0 )
 	focusId--;
     else if ( focusId == 0 )
-	focusId = buttonlist.size() -1;
-	
-    NCRadioButton * button = dynamic_cast<NCRadioButton*>(buttonlist[focusId]);
-    if ( button )
-	button->setKeyboardFocus();
+	focusId = radioButtonsCount() -1;
+
+    for ( YRadioButtonListConstIterator it = radioButtonsBegin();
+	  it != radioButtonsEnd();
+	  ++it )
+    {
+	n++;
+	if ( n == focusId )
+	{
+	    NCRadioButton * radioButton = dynamic_cast<NCRadioButton *> (*it);
+	    if ( radioButton )
+	    {
+		radioButton->setKeyboardFocus();
+	    }
+	}
+    }
 }
 
-void NCRadioButtonGroup::setEnabling( bool do_bv )
+void NCRadioButtonGroup::setEnabled( bool do_bv )
 {
-    NCRadioButton * button;
-
-    for ( unsigned int i = 0; i < buttonlist.size(); i++ )
+    for ( YRadioButtonListConstIterator it = radioButtonsBegin();
+	  it != radioButtonsEnd();
+	  ++it )
     {
-	button = dynamic_cast<NCRadioButton*>(buttonlist[i]);
-	if ( button )
-	    button->setEnabling( enabled=do_bv );
+	NCRadioButton * radioButton = dynamic_cast<NCRadioButton *> (*it);
+	if ( radioButton )
+	{
+	    radioButton->setEnabled( do_bv );
+	}
     }
+
+    YRadioButtonGroup::setEnabled( do_bv );
 }

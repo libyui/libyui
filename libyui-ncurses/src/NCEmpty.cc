@@ -28,8 +28,8 @@
 //
 //	DESCRIPTION :
 //
-NCEmpty::NCEmpty( NCWidget * parent, const YWidgetOpt & opt )
-    : YEmpty( opt )
+NCEmpty::NCEmpty( YWidget * parent )
+    : YEmpty( parent )
     , NCWidget( parent )
 {
   WIDDBG << endl;
@@ -57,8 +57,13 @@ NCEmpty::~NCEmpty()
 //
 //	DESCRIPTION :
 //
-void NCEmpty::setSize( long newwidth, long newheight )
+void NCEmpty::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YEmpty::setSize( newwidth, newheight );
+}
+
+void NCEmpty::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YEmpty::setEnabled( do_bv );
 }

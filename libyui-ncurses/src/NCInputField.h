@@ -10,34 +10,34 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCTextEntry.h
+   File:       NCInputField.h
 
    Author:     Michael Andres <ma@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#ifndef NCTextEntry_h
-#define NCTextEntry_h
+#ifndef NCInputField_h
+#define NCInputField_h
 
 #include <iosfwd>
 
-#include "YTextEntry.h"
+#include "YInputField.h"
 #include "NCWidget.h"
 
-class NCTextEntry;
+class NCInputField;
 
 ///////////////////////////////////////////////////////////////////
 //
-//	CLASS NAME : NCTextEntry
+//	CLASS NAME : NCInputField
 //
 //	DESCRIPTION :
 //
-class NCTextEntry : public YTextEntry, public NCWidget {
+class NCInputField : public YInputField, public NCWidget {
 
-  friend std::ostream & operator<<( std::ostream & STREAM, const NCTextEntry & OBJ );
+  friend std::ostream & operator<<( std::ostream & STREAM, const NCInputField & OBJ );
 
-  NCTextEntry & operator=( const NCTextEntry & );
-  NCTextEntry            ( const NCTextEntry & );
+  NCInputField & operator=( const NCInputField & );
+  NCInputField            ( const NCInputField & );
 
   public:
 
@@ -48,7 +48,6 @@ class NCTextEntry : public YTextEntry, public NCWidget {
 
   private:
     
-    bool     mayedit;
     bool     passwd;
     NClabel  label;
     wstring   buffer;
@@ -79,7 +78,7 @@ class NCTextEntry : public YTextEntry, public NCWidget {
 
   protected:
 
-    virtual const char * location() const { return "NCTextEntry"; }
+    virtual const char * location() const { return "NCInputField"; }
 
     virtual void wCreate( const wrect & newrect );
     virtual void wDelete();
@@ -90,29 +89,37 @@ class NCTextEntry : public YTextEntry, public NCWidget {
 
   public:
 
-    NCTextEntry( NCWidget * parent, const YWidgetOpt & opt,
-		 const YCPString & label,
-		 const YCPString & text,
-		 unsigned maxInput = 0,
-		 unsigned maxFld   = 0 );
-    virtual ~NCTextEntry();
+    NCInputField( YWidget * parent,
+		  const string & label,
+		  bool passwordMode = false,
+		  unsigned maxInput = 0,
+		  unsigned maxFld   = 0
+		  );
+    virtual ~NCInputField();
 
     void setFldtype( FTYPE t )           { fldtype = t; }
     void setReturnOnReturn( bool on_br ) { returnOnReturn_b = on_br; }
 
-    virtual long nicesize( YUIDimension dim );
-    virtual void setSize( long newwidth, long newheight );
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+    
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const YCPString & nlabel );
+    virtual void setLabel( const string & nlabel );
 
-    virtual void setText( const YCPString & ntext );
-    virtual YCPString getText();
-
-    virtual void setValidChars( const YCPString & validchars );
+    virtual void setValue( const std::string & ntext );
+    virtual string value();
+    
+    virtual void setValidChars( const string & validchars );
 
     virtual NCursesEvent wHandleInput( wint_t key );
 
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    virtual void setEnabled( bool do_bv );
 
     virtual bool setKeyboardFocus() {
       if ( !grabFocus() )
@@ -122,11 +129,11 @@ class NCTextEntry : public YTextEntry, public NCWidget {
 
     // limits  the input to numberOfChars characters and truncates the text
     // if appropriate
-    void setInputMaxLength( const YCPInteger & numberOfChars);
+    void setInputMaxLength( int numberOfChars );
 
     void setCurPos( unsigned pos ) { curpos = pos; }
 };
 
 ///////////////////////////////////////////////////////////////////
 
-#endif // NCTextEntry_h
+#endif // NCInputField_h

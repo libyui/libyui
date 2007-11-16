@@ -25,8 +25,7 @@
 using namespace std;
 
 #include "NCPopupTable.h"
-
-class YMenuItem;
+#include "NCMenuButton.h"
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -41,8 +40,8 @@ class NCPopupMenu : public NCPopupTable {
 
   private:
 
-    YMenuItem & menu;
-
+    std::map<YTableItem *, YMenuItem *> itemsMap;
+    
   protected:
 
     virtual NCursesEvent wHandleInput( wint_t ch );
@@ -50,11 +49,11 @@ class NCPopupMenu : public NCPopupTable {
 
   public:
 
-    NCPopupMenu( const wpos at, YMenuItem & menuitem );
+    NCPopupMenu( const wpos at,
+		 YItemIterator begin,
+		 YItemIterator end);
+
     virtual ~NCPopupMenu();
-//    virtual void itemAdded( const YCPString & string,
-//			    int index,
-//			    bool selected );
 
 };
 

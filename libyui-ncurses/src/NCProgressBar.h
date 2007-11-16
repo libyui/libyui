@@ -63,20 +63,28 @@ class NCProgressBar : public YProgressBar, public NCWidget {
 
   public:
 
-    NCProgressBar( NCWidget * parent, const YWidgetOpt & opt,
-		   const YCPString & label,
-		   const YCPInteger & maxprogress,
-		   const YCPInteger & progress );
+    NCProgressBar( YWidget * parent,
+		   const string & label,
+		   int maxValue = 100 );
     virtual ~NCProgressBar();
 
     virtual long nicesize( YUIDimension dim );
-    virtual void setSize( long newwidth, long newheight );
 
-    virtual void setLabel( const YCPString & nlabel );
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+    
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setProgress( const YCPInteger & nval );
+    virtual void setLabel( const string & nlabel );
 
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    virtual void setValue( int newValue );
+
+    virtual void setEnabled( bool do_bv );
 };
 
 ///////////////////////////////////////////////////////////////////

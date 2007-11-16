@@ -113,8 +113,8 @@ string NCPkgTableTag::statusToStr( ZyppStatus stat ) const
 //
 //	DESCRIPTION :
 //
-NCPkgTable::NCPkgTable( NCWidget * parent, const YWidgetOpt & opt )
-    : NCTable( parent, opt, vector<string> (), false )
+NCPkgTable::NCPkgTable( YWidget * parent, YTableHeader * tableHeader )
+    : NCTable( parent, tableHeader )
       , packager ( 0 )
       , statusStrategy( new PackageStatStrategy )	// default strategy: packages
       , tableType ( T_Packages )			// default type: packages
@@ -173,14 +173,14 @@ void NCPkgTable::addLine( ZyppStatus stat,
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPkgTable::itemsCleared
+//	METHOD NAME : NCPkgTable::deleteAllItems
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
 void NCPkgTable::itemsCleared()
 {
-    return NCTable::itemsCleared();  
+    return NCTable::deleteAllItems();  
 }
 
 
@@ -192,7 +192,7 @@ void NCPkgTable::itemsCleared()
 //
 //	DESCRIPTION :
 //
-void NCPkgTable::cellChanged( int index, int colnum, const YCPString & newtext )
+void NCPkgTable::cellChanged( int index, int colnum, const string & newtext )
 {
     return NCTable::cellChanged( index, colnum, newtext );
 }
@@ -219,7 +219,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
     zypp::License license;
     bool license_confirmed = true;
     ZyppPkg pkgPtr = NULL;
-    YCPString header( "" );
+    string header;
     bool ok = true;
     int cols = NCurses::cols();
     int lines = NCurses::lines();
@@ -233,7 +233,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    {
 		notify = objPtr->delnotify();
 		NCDBG << "DELETE message: " << notify << endl;
-		header = YCPString(NCPkgNames::WarningLabel());
+		header = NCPkgNames::WarningLabel();
 	    }
 	break;
         //display notify msg only if we mark pkg for installation
@@ -243,7 +243,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    {	
 		notify = objPtr->insnotify();
 		NCDBG << "NOTIFY message: " << notify << endl;
-		header = YCPString(NCPkgNames::NotifyLabel());
+		header = NCPkgNames::NotifyLabel();
 	    }
 	case S_Update:
 	case S_AutoInstall:
@@ -265,15 +265,19 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
     {
 	if (!license_confirmed)
 	{
-	    NCPopupInfo info( wpos( (lines * 10)/100, (cols * 10) /100),
-			      NCPkgNames::NotifyLabel(),
-			      //YCPString(_("End User License Agreement") ),
-			      YCPString( "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( license ) ),
-			      NCPkgNames::AcceptLabel(),
-			      NCPkgNames::CancelLabel(), 
-			      NCPkgNames::PrintLicenseText());
-	    info.setNiceSize( (NCurses::cols() * 80)/100, (NCurses::lines()*80)/100);
-	    license_confirmed = info.showInfoPopup( ) != NCursesEvent::cancel;
+	    NCPopupInfo * info = new NCPopupInfo( wpos( (lines * 10)/100, (cols * 10) /100),
+						  NCPkgNames::NotifyLabel(),
+						  string( _("End User License Agreement") + 
+						  "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( license ) ),
+						  NCPkgNames::AcceptLabel(),
+						  NCPkgNames::CancelLabel(),
+						  NCPkgNames::PrintLicenseText()
+						  );
+	    info->setNiceSize( (NCurses::cols() * 80)/100, (NCurses::lines()*80)/100);
+	    license_confirmed = info->showInfoPopup( ) != NCursesEvent::cancel;
+
+	    YDialog::deleteTopmostDialog(); 
+
 	}
 
 	if ( !license_confirmed )
@@ -304,11 +308,14 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 
     if ( ok && !notify.empty() )
     {
-	NCPopupInfo info( wpos( (lines * 35)/100, (cols * 25)/100),
-			  header,
-			  YCPString( "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( notify ) ) );
-	info.setNiceSize( (NCurses::cols() * 50)/100, (NCurses::lines() * 30)/100);
-	info.showInfoPopup( );
+	NCPopupInfo * info = new NCPopupInfo( wpos( (lines * 35)/100, (cols * 25)/100),
+					      header,
+					      "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( notify )
+					      );
+	info->setNiceSize( (NCurses::cols() * 50)/100, (NCurses::lines() * 30)/100);
+	info->showInfoPopup( );
+
+	YDialog::deleteTopmostDialog();
     }
     
     // inform the package manager
@@ -434,13 +441,20 @@ bool NCPkgTable::updateTable()
 //
 bool NCPkgTable::fillDefaultList( )
 {
+    if ( !packager &&
+	packager->getDefaultRpmGroup() )
+    {
+	NCERR << "No package selector existing" << endl;
+	return false;
+    }
     switch ( tableType )
     {
 	case T_Patches: {
 	    packager->fillPatchList( "installable" );	// default: installable patches
 
 	    // set the visible info to long description 
-	    packager->setVisibleInfo ( NCPkgNames::PatchDescr() );
+	    packager->setVisibleInfo ( NCPkgNames::PatchDescr()->toString() );
+
 	    // show the package description of the current item
 	    showInformation ();
 	    break;
@@ -450,7 +464,7 @@ bool NCPkgTable::fillDefaultList( )
 	    {
 		packager->fillUpdateList();
 		// set the visible info to package description 
-		packager->setVisibleInfo ( NCPkgNames::PkgInfo() );
+		packager->setVisibleInfo ( NCPkgNames::PkgInfo()->toString() );
 		// show the package description of the current item
 		showInformation ();
 		break;
@@ -461,11 +475,12 @@ bool NCPkgTable::fillDefaultList( )
 
 	    if ( defaultGroup )
 	    {
+		NCMIL << "default RPM group: " << defaultGroup->value().translation() << endl;
 		packager->fillPackageList ( YCPString( defaultGroup->value().translation()),
 					    defaultGroup );
 		
 		// set the visible info to package description 
-		packager->setVisibleInfo ( NCPkgNames::PkgInfo() );
+		packager->setVisibleInfo ( NCPkgNames::PkgInfo()->toString() );
 		// show the package description of the current item
 		showInformation ();
 	    }
@@ -649,6 +664,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 	    
 	    version = pkgPtr->edition().asString();
 	    pkgLine.push_back( version );
+
 	    // show the repository (the installation source)
 	    pkgLine.push_back( pkgPtr->repository().info().alias() );
 

@@ -28,14 +28,14 @@
 //
 //	DESCRIPTION :
 //
-NCLabel::NCLabel( NCWidget * parent, const YWidgetOpt & opt,
-		  const YCPString & nlabel )
-    : YLabel( opt, nlabel )
+NCLabel::NCLabel( YWidget * parent, const string & nlabel,
+		  bool isHeading, bool isOutputField )
+    : YLabel( parent, nlabel, isHeading, isOutputField )
     , NCWidget( parent )
-    , heading( opt.isHeading.value() )
+    , heading( isHeading )
 {
   WIDDBG << endl;
-  setLabel( nlabel );
+  setText( nlabel );
   hotlabel = &label;
   wstate = NC::WSdumb;
 }
@@ -66,6 +66,22 @@ long NCLabel::nicesize( YUIDimension dim )
   return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
 }
 
+int NCLabel::preferredWidth()
+{
+    return wGetDefsze().W;
+}
+
+int NCLabel::preferredHeight()
+{
+    return wGetDefsze().H;
+}
+
+void NCLabel::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YLabel::setEnabled( do_bv );
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -74,26 +90,25 @@ long NCLabel::nicesize( YUIDimension dim )
 //
 //	DESCRIPTION :
 //
-void NCLabel::setSize( long newwidth, long newheight )
+void NCLabel::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YLabel::setSize( newwidth, newheight );
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCLabel::setLabel
+//	METHOD NAME : NCLabel::setText
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCLabel::setLabel( const YCPString & nlabel )
+void NCLabel::setText( const string & nlabel )
 {
   label  = NCstring( nlabel );
   NCDBG << "LABEL: " << NCstring(nlabel) << " Longest line: " << label.width()<< endl;
   defsze = label.size();
-  YLabel::setLabel( nlabel );
+  YLabel::setText( nlabel );
   Redraw();
 }
 

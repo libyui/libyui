@@ -26,7 +26,9 @@
 using namespace std;
 
 #include <YCP.h>
-#include "YEvent.h"
+#include <YEvent.h>
+#include <YWidget.h>
+#include <YMenuItem.h>
 
 #include <curses.h>	/* curses.h: #define  NCURSES_CH_T cchar_t */
 #include <wchar.h>
@@ -87,9 +89,9 @@ class NCursesEvent {
 
     Type       type;
     NCWidget * widget;
-    YCPValue   selection;	// used for MenuEvent (the menu selection)
+    YMenuItem * selection;	// used for MenuEvent (the menu selection)
 
-    YCPValue  	result;		// can be used for any result
+    string  	result;		// can be used for any (string) result
     
     string	keySymbol;	// used for KeyEvent (symbol pressed key)
     
@@ -100,8 +102,8 @@ class NCursesEvent {
     NCursesEvent( Type t = none, YEvent::EventReason r = YEvent::UnknownReason )
       : type     ( t )
       , widget   ( 0 )
-      , selection( YCPNull() )
-      , result   ( YCPNull() )
+      , selection( 0 )
+      , result   ( "" )
       , detail   ( NODETAIL )
       , reason   ( r )
     {}

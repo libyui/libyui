@@ -10,7 +10,7 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCTextEntry.cc
+   File:       NCInputField.cc
 
    Author:     Michael Andres <ma@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
@@ -20,32 +20,31 @@
 
 #include "Y2Log.h"
 #include "NCurses.h"
-#include "NCTextEntry.h"
+#include "NCInputField.h"
 
 #include <wctype.h>		// iswalnum()
 
 #if 0
 #undef  DBG_CLASS
-#define DBG_CLASS "_NCTextEntry_"
+#define DBG_CLASS "_NCInputField_"
 #endif
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTextEntry::NCTextEntry
+//	METHOD NAME : NCInputField::NCInputField
 //	METHOD TYPE : Constructor
 //
 //	DESCRIPTION :
 //
-NCTextEntry::NCTextEntry( NCWidget * parent, const YWidgetOpt & opt,
-			  const YCPString & nlabel,
-			  const YCPString & ntext,
-			  unsigned maxInput,
-			  unsigned maxFld )
-    : YTextEntry( opt, nlabel )
+NCInputField::NCInputField( YWidget * parent,
+			    const string & nlabel,
+			    bool passwordMode,
+			    unsigned maxInput,
+			    unsigned maxFld )
+    : YInputField( parent, nlabel, passwordMode )
     , NCWidget( parent )
-    , mayedit( true )
-    , passwd( opt.passwordMode.value() )
+    , passwd( passwordMode )
     , lwin( 0 )
     , twin( 0 )
     , maxFldLength  ( maxFld )
@@ -62,24 +61,21 @@ NCTextEntry::NCTextEntry( NCWidget * parent, const YWidgetOpt & opt,
        ( !maxFldLength || maxFldLength > maxInputLength ) ) {
      maxFldLength = maxInputLength;
   }
-  if ( opt.isEditable.defined() )
-      mayedit = opt.isEditable.value();
-
   setLabel( nlabel );
   hotlabel = &label;
-  setText( ntext );
-
+  // initial text isn't an argument any longer
+  //setText( ntext );
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTextEntry::~NCTextEntry
+//	METHOD NAME : NCInputField::~NCInputField
 //	METHOD TYPE : Destructor
 //
 //	DESCRIPTION :
 //
-NCTextEntry::~NCTextEntry()
+NCInputField::~NCInputField()
 {
   delete lwin;
   delete twin;
@@ -89,39 +85,65 @@ NCTextEntry::~NCTextEntry()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTextEntry::nicesize
-//	METHOD TYPE : long
+//	METHOD NAME : NCInputField::preferredWidth
+//	METHOD TYPE : int
 //
 //	DESCRIPTION :
 //
-long NCTextEntry::nicesize( YUIDimension dim )
+int NCInputField::preferredWidth()
 {
-  return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
+    return wGetDefsze().W;
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTextEntry::setSize
+//	METHOD NAME : NCInputField::preferredHeight
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int NCInputField::preferredHeight()
+{
+    return wGetDefsze().H;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCInputField::setEnabled
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCTextEntry::setSize( long newwidth, long newheight )
+void NCInputField::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YInputField::setEnabled( do_bv );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCInputField::setSize
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCInputField::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YTextEntry::setSize( newwidth, newheight );
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTextEntry::setDefsze
+//	METHOD NAME : NCInputField::setDefsze
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCTextEntry::setDefsze()
+void NCInputField::setDefsze()
 {
   unsigned defwidth = maxFldLength ? maxFldLength : 5;
   if ( label.width() > defwidth )
@@ -132,12 +154,12 @@ void NCTextEntry::setDefsze()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTextEntry::wCreate
+//	METHOD NAME : NCInputField::wCreate
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCTextEntry::wCreate( const wrect & newrect )
+void NCInputField::wCreate( const wrect & newrect )
 {
   NCWidget::wCreate( newrect );
 
@@ -168,12 +190,12 @@ void NCTextEntry::wCreate( const wrect & newrect )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTextEntry::wDelete
+//	METHOD NAME : NCInputField::wDelete
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCTextEntry::wDelete()
+void NCInputField::wDelete()
 {
   delete lwin;
   delete twin;
@@ -185,16 +207,16 @@ void NCTextEntry::wDelete()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTextEntry::setLabel
+//	METHOD NAME : NCInputField::setLabel
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCTextEntry::setLabel( const YCPString & nlabel )
+void NCInputField::setLabel( const string & nlabel )
 {
   label  = NCstring( nlabel );
   label.stripHotkey();
-  YTextEntry::setLabel( nlabel );
+  YInputField::setLabel( nlabel );
   setDefsze();
   Redraw();
 }
@@ -202,12 +224,12 @@ void NCTextEntry::setLabel( const YCPString & nlabel )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTextEntry::setText
+//	METHOD NAME : NCInputField::setValue
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCTextEntry::setText( const YCPString & ntext )
+void NCInputField::setValue( const std::string & ntext )
 {
   buffer = NCstring( ntext ).str();
   if ( maxInputLength && buffer.length() > maxInputLength ) {
@@ -221,42 +243,41 @@ void NCTextEntry::setText( const YCPString & ntext )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTextEntry::getText
-//	METHOD TYPE : YCPString
-//
-//	DESCRIPTION :
-//
-YCPString NCTextEntry::getText()
-    
-{
-  NCstring text( buffer );
-
-  return text.YCPstr();
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTextEntry::setValidChars
+//	METHOD NAME : NCInputField::value
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCTextEntry::setValidChars( const YCPString & validchars )
+string NCInputField::value( )
 {
-  validChars = validchars;
-  YTextEntry::setValidChars( validchars );
+    NCstring text ( buffer );
+
+    return text.Str();
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTextEntry::validKey
+//	METHOD NAME : NCInputField::setValidChars
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCInputField::setValidChars( const string & validchars )
+{
+  validChars = NCstring( validchars );
+  YInputField::setValidChars( validchars );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCInputField::validKey
 //	METHOD TYPE : bool
 //
 //	DESCRIPTION :
 //
-bool NCTextEntry::validKey( wint_t key ) const
+bool NCInputField::validKey( wint_t key ) const
 {
   // private: NCstring validChars;  
   const wstring vwch( validChars.str() );
@@ -273,12 +294,12 @@ bool NCTextEntry::validKey( wint_t key ) const
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTextEntry::wRedraw
+//	METHOD NAME : NCInputField::wRedraw
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCTextEntry::wRedraw()
+void NCInputField::wRedraw()
 {
   if ( !win )
     return;
@@ -294,12 +315,12 @@ void NCTextEntry::wRedraw()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTextEntry::bufferFull
+//	METHOD NAME : NCInputField::bufferFull
 //	METHOD TYPE : bool
 //
 //	DESCRIPTION :
 //
-inline bool NCTextEntry::bufferFull() const
+inline bool NCInputField::bufferFull() const
 {
   return( maxInputLength && buffer.length() == maxInputLength );
 }
@@ -307,12 +328,12 @@ inline bool NCTextEntry::bufferFull() const
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTextEntry::maxCursor
+//	METHOD NAME : NCInputField::maxCursor
 //	METHOD TYPE : unsigned
 //
 //	DESCRIPTION :
 //
-inline unsigned NCTextEntry::maxCursor() const
+inline unsigned NCInputField::maxCursor() const
 {
   return( bufferFull() ? buffer.length() - 1 : buffer.length() );
 }
@@ -320,12 +341,12 @@ inline unsigned NCTextEntry::maxCursor() const
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTextEntry::tUpdate
+//	METHOD NAME : NCInputField::tUpdate
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCTextEntry::tUpdate()
+void NCInputField::tUpdate()
 {
   if ( !win )
     return;
@@ -412,21 +433,16 @@ void NCTextEntry::tUpdate()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTextEntry::wHandleInput
+//	METHOD NAME : NCInputField::wHandleInput
 //	METHOD TYPE : NCursesEvent
 //
 //	DESCRIPTION :
 //
-NCursesEvent NCTextEntry::wHandleInput( wint_t key )
+NCursesEvent NCInputField::wHandleInput( wint_t key )
 {
-  NCursesEvent ret;
+  NCursesEvent ret = NCursesEvent::none;
   bool   beep   = false;
   bool   update = true;
-
-  if ( !mayedit )
-  {
-      return NCursesEvent::none;
-  }
 
   switch ( key ) {
 
@@ -489,7 +505,7 @@ NCursesEvent NCTextEntry::wHandleInput( wint_t key )
     break;
 
   case KEY_RETURN:
-    if ( getNotify() || returnOnReturn_b )
+    if ( notify() || returnOnReturn_b )
       ret = NCursesEvent::Activated;
     break;
 
@@ -591,7 +607,7 @@ NCursesEvent NCTextEntry::wHandleInput( wint_t key )
 
   if ( update ) {
     tUpdate();
-    if ( getNotify() )
+    if ( notify() )
       ret = NCursesEvent::ValueChanged;
   }
 
@@ -603,9 +619,9 @@ NCursesEvent NCTextEntry::wHandleInput( wint_t key )
 }
 
 
-void NCTextEntry::setInputMaxLength( const YCPInteger & numberOfChars)
+void NCInputField::setInputMaxLength( int numberOfChars)
 {
-    int nr = numberOfChars->asInteger()->value();
+    int nr = numberOfChars;
 
     // if there is more text then the maximum number of chars,
     // truncate the text and update the buffer
@@ -616,4 +632,6 @@ void NCTextEntry::setInputMaxLength( const YCPInteger & numberOfChars)
     }
   
     InputMaxLength = nr;
+
+    YInputField::setInputMaxLength( numberOfChars );        
 }

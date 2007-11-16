@@ -49,7 +49,6 @@ class NCSelectionBox : public YSelectionBox, public NCPadWidget {
 	{ return dynamic_cast<NCTablePad*> ( NCPadWidget::myPad () ); }
 
     bool          biglist;
-    bool          immediate;
     
   protected:
 
@@ -60,25 +59,36 @@ class NCSelectionBox : public YSelectionBox, public NCPadWidget {
 
   public:
 
-    NCSelectionBox( NCWidget * parent, const YWidgetOpt & opt,
-		    const YCPString & label );
+    NCSelectionBox( YWidget * parent, const string & label );
     virtual ~NCSelectionBox();
 
     bool bigList() const { return biglist; }
     void setBigList( const bool big ) { biglist = big; }
 
-    virtual void itemAdded( const YCPString& string, int index, bool selected );
-    virtual long nicesize( YUIDimension dim );
-    virtual void setSize( long newwidth, long newheight );
+    virtual void addItem( YItem *item );
+    virtual void addItem( const string & itemLabel, bool selected = false );
+    
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+    
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const YCPString & nlabel );
+    virtual void setLabel( const string & nlabel );
 
     virtual int getCurrentItem();
     virtual void setCurrentItem( int index );
 
+    virtual void selectItem( YItem *item, bool selected );
+    virtual void selectItem( int index );
+    
     virtual NCursesEvent wHandleInput( wint_t key );
 
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    virtual void setEnabled( bool do_bv );
 
     virtual bool setKeyboardFocus() {
       if ( !grabFocus() )

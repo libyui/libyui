@@ -24,10 +24,10 @@
 #include "YWidget.h"
 #include "YContainerWidget.h"
 
-#if 0
+//#if 0
 #undef  DBG_CLASS
 #define DBG_CLASS "_NCWidget_"
-#endif
+//#endif
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -37,6 +37,27 @@
 //
 //	DESCRIPTION :
 //
+NCWidget::NCWidget( YWidget * parent )
+    : tnode<NCWidget*>( this )
+    , magic( YWIDGET_MAGIC )
+    , grabedBy( 0 )
+    , win( 0 )
+    , defsze( 11, 45 )
+    , framedim( 0, 0 )
+    , inparent( -1, -1 )
+    , noUpdates( false )
+    , skipNoDimWin( true )
+    , wstate( NC::WSnormal )
+    , hotlabel( 0 )
+{
+  NCWidget * myparent = dynamic_cast<NCWidget *> (parent);
+    
+  if ( myparent ) {
+    ReparentTo( *myparent );
+  }
+  WIDDBG <<  "CCC " << this << " parent " << myparent << endl;
+}
+
 NCWidget::NCWidget( NCWidget * myparent )
     : tnode<NCWidget*>( this )
     , magic( YWIDGET_MAGIC )
@@ -49,7 +70,6 @@ NCWidget::NCWidget( NCWidget * myparent )
     , skipNoDimWin( true )
     , wstate( NC::WSnormal )
     , hotlabel( 0 )
-    , hotfkey( 0 )
 {
   if ( myparent ) {
     ReparentTo( *myparent );
@@ -188,7 +208,9 @@ void NCWidget::Update()
 NCursesWindow * NCWidget::ParentWin()
 {
   if ( !Parent() )
+  {
     return 0;
+  }
 
   return Parent()->Value()->win;
 }
@@ -210,7 +232,7 @@ void NCWidget::wMoveChildTo( NCWidget & child, const wpos & newpos )
   }
   catch ( NCursesError & err ) {
     NCINT << DLOC << child << " -> " << newpos << " in " << this << endl;
-    NCINT << err << endl;
+    NCERR << err << endl;
     ::endwin();
     abort();
   }
@@ -240,7 +262,7 @@ void NCWidget::wRelocate( const wrect & newrect )
   }
   catch ( NCursesError & err ) {
     NCINT << *this << endl;
-    NCINT << err << endl;
+    NCERR << err << endl;
     ::endwin();
     abort();
   }
@@ -299,6 +321,9 @@ void NCWidget::wCreate( const wrect & newrect )
   if ( win )
     throw NCError( "wCreate: already have win" );
 
+  if ( !Parent() )
+    throw NCError( "wCreate: got no parent" );
+      
   inparent = newrect;
 
   if ( skipNoDimWin && inparent.Sze == wsze(0,0) ) {
@@ -350,8 +375,10 @@ void NCWidget::wCreate( const wrect & newrect )
     }
   }
   else
-    win = new NCursesWindow( inparent.Sze.H, inparent.Sze.W,
+  {
+      win = new NCursesWindow( inparent.Sze.H, inparent.Sze.W,
 			     inparent.Pos.L, inparent.Pos.C );
+  }
 
   WIDDBG << "cw- " << this << ' ' << inparent << endl;
 }
@@ -420,12 +447,12 @@ void NCWidget::SetState( const NC::WState newstate, const bool force )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCWidget::setEnabling
+//	METHOD NAME : NCWidget::setEnabled
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCWidget::setEnabling( bool do_bv )
+void NCWidget::setEnabled( bool do_bv )
 {
   WIDDBG << DLOC << this << ' ' << do_bv << ' ' << wstate << endl;
 
@@ -434,12 +461,12 @@ void NCWidget::setEnabling( bool do_bv )
   //If widget has kids ([HV]Boxes, alignments,...), disable all of 
   //them recursively (#256707)
   if (c->HasChildren()) {
-    WIDMIL <<  this << "setEnabling children recursively" << endl;
+    WIDMIL <<  this << "setEnabled children recursively" << endl;
     for ( c = this->Next();
 	c && c->IsDescendantOf( this );
 	c = c->Next() ) {
       if ( c->Value()->GetState() != NC::WSdumb )
-        c->Value()->setEnabling( do_bv );
+        c->Value()->setEnabled( do_bv );
     }
   }
 
@@ -561,29 +588,19 @@ bool NCWidget::HasHotkey( int key ) const
 //
 bool NCWidget::HasFunctionHotkey( int key ) const
 {
-    if ( key < 0 || (hotfkey == 0) )
-	return false;
+    const YWidget * w = dynamic_cast<const YWidget *>( this );
 
-    return( key == hotfkey ) ;
-}
-
-int NCWidget::GetFunctionHotkey() const
-{
-    return hotfkey;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//	METHOD NAME : NCWidget::setFunctionHotkey
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
-void NCWidget::setFunctionHotkey( const YWidgetOpt & opt )
-{
-    if ( opt.key_Fxx.value() > 0 )
+    if ( w )
     {
-	hotfkey = KEY_F( (int) opt.key_Fxx.value() );
+	if ( key < 0 || ( ! w->hasFunctionKey() ) )
+	    return false;
+
+	return( key == KEY_F( w->functionKey() ) );
+    }
+    else
+    {
+	NCERR << "No YWidget" << endl;
+	return false;
     }
 }
 

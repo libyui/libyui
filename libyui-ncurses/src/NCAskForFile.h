@@ -30,7 +30,7 @@
 #include "NCPushButton.h"
 #include "NCComboBox.h"
 #include "NCCheckBox.h"
-#include "NCTextEntry.h"
+#include "NCInputField.h"
 
 
 ///////////////////////////////////////////////////////////////////
@@ -59,7 +59,7 @@ private:
 protected:
 
     NCFileTable *fileList;		// the file list
-    NCTextEntry *fileName;
+    NCInputField *fileName;
 
     virtual bool postAgain();
 
@@ -81,8 +81,9 @@ public:
     /**
      * Set the default size
      */
-    virtual long nicesize(YUIDimension dim);
-    
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+
     /**
      * Create layout of file selection popup
      * @param YCPString The initial start directory
@@ -91,9 +92,9 @@ public:
      * @param bool	File name field editable?
      * @return void
      */
-    void createLayout( const YCPString & iniDir,
-		       const YCPString & filter,
-		       const YCPString & headline,
+    void createLayout( const string & iniDir,
+		       const string & filter,
+		       const string & headline,
 		       bool  editable );
 
     /**

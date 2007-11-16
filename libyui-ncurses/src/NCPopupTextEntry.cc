@@ -28,22 +28,26 @@
 //	DESCRIPTION :
 //
 NCPopupTextEntry::NCPopupTextEntry( const wpos at,
-				    const YCPString & label,
-				    const YCPString & text,
+				    const string & label,
+				    const string & text,
 				    unsigned maxInput,
 				    unsigned maxFld,
-				    NCTextEntry::FTYPE t )
+				    NCInputField::FTYPE t )
     : NCPopup( at )
     , wtext( 0 )
 {
-  YWidgetOpt opt;
-  //opt.notifyMode.setValue( true );
-  wtext = new NCTextEntry( this, opt,
-			   label, text,
-			   maxInput, maxFld );
+  wtext = new NCInputField( this, 
+			    label,
+			    false,	    // passwordMode = false
+			    maxInput,
+			    maxFld
+			    );
+  YUI_CHECK_NEW( wtext );
+  
+  wtext->setValue( text );
   wtext->setFldtype( t );
   wtext->setReturnOnReturn( true );
-  addChild( wtext );
+
 }
 
 ///////////////////////////////////////////////////////////////////

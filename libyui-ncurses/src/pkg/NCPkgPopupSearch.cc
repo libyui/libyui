@@ -22,12 +22,14 @@
 #include "NCTree.h"
 #include "YMenuButton.h"
 #include "YDialog.h"
-#include "NCSplit.h"
+#include "NCLayoutBox.h"
 #include "NCSpacing.h"
 #include "NCFrame.h"
 
 #include "NCPkgNames.h"
 #include "NCPackageSelector.h"
+
+#include "YWidgetID.h"
 
 #include "NCi18n.h"
 
@@ -56,9 +58,9 @@ NCPkgPopupSearch::NCPkgPopupSearch( const wpos at, NCPackageSelector * pkger )
       , packager( pkger )
 {
     if ( !packager->isYouMode() )
-	createLayout( YCPString(NCPkgNames::PackageSearch()) );
+	createLayout( _( "Package Search" ) );
     else
-	createLayout( YCPString( _("Search for Patch Name") ) );	
+	createLayout( _("Search for Patch Name") );	
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -81,94 +83,83 @@ NCPkgPopupSearch::~NCPkgPopupSearch()
 //
 //	DESCRIPTION :
 //
-void NCPkgPopupSearch::createLayout( const YCPString & headline )
+void NCPkgPopupSearch::createLayout( const string & headline )
 {
-    YWidgetOpt opt;
-
     // vertical split is the (only) child of the dialog
-    NCSplit * vSplit = new NCSplit( this, opt, YD_VERT );
-    addChild( vSplit );
+    NCLayoutBox * vSplit = new NCLayoutBox( this, YD_VERT );
 
-    vSplit->addChild( new NCSpacing( vSplit, opt, 0.8, false, true ) );
+    // addChild() is obsolete
 
-    // add the headline
-    opt.isHeading.setValue( true );
-    NCLabel * head = new NCLabel( vSplit, opt, headline );
-    vSplit->addChild( head );
+    new NCSpacing( vSplit, YD_VERT, false, 0.8 );	// stretchable = false
 
-    vSplit->addChild( new NCSpacing( vSplit, opt, 0.6, false, true ) );
+    new NCLabel( vSplit, headline, true, false );	// isHeading = true
+
+    new NCSpacing( vSplit, YD_VERT, false, 0.6 );
+
+    NCFrame * frame0 = new NCFrame( vSplit, "" );
 
     // add the input field (a editable combo box)
-    opt.isHStretchable.setValue( true );
+    searchExpr = new NCComboBox( frame0,
+				 NCPkgNames::SearchPhrase(),
+				 true );	// editable = true
 
-    NCFrame * frame0 = new NCFrame( vSplit, opt, YCPString("" ) );
-    NCSplit * vSplit2 = new NCSplit( frame0, opt, YD_VERT );
+    YStringWidgetID * searchID = new YStringWidgetID ("search_box" );
+    searchExpr->setId( searchID );
+    searchExpr->setStretchable( YD_HORIZ, true );
 
-    opt.isEditable.setValue( true );
-    searchExpr = new NCComboBox( frame0, opt, YCPString(NCPkgNames::SearchPhrase()) );
-    frame0->addChild( searchExpr );
-    searchExpr->setId( NCPkgNames::SearchBox() );
-    searchExpr->itemAdded( YCPString( "" ), 	// set initial value
-			   0,		// index
-			   false );	// not selected
-    vSplit2->addChild( new NCSpacing( vSplit, opt, 0.6, false, true ) );
-    vSplit->addChild( frame0 );
+    searchExpr->addItem( new YTableItem() );
 
+    new NCSpacing( vSplit, YD_VERT, false, 0.6 );
+    
     if ( !packager->isYouMode() )
     {
 	// add the checkBox ignore case
-	NCSplit * hSplit2 = new NCSplit( vSplit, opt, YD_HORIZ );
-	vSplit->addChild( hSplit2 );
-	ignoreCase = new NCCheckBox( hSplit2, opt, YCPString(NCPkgNames::IgnoreCase()), true );
-	hSplit2->addChild( new NCSpacing( hSplit2, opt, 0.1, true, false ) );
-	hSplit2->addChild( ignoreCase );
+	NCLayoutBox * hSplit2 = new NCLayoutBox( vSplit, YD_HORIZ );
+	new NCSpacing( hSplit2, YD_HORIZ, true, 0.1 );
 
-	vSplit->addChild( new NCSpacing( vSplit, opt, 0.6, false, true ) );	// VSpacing
+	ignoreCase = new NCCheckBox( hSplit2, NCPkgNames::IgnoreCase(), true );  // checked = true
+	new NCSpacing( vSplit, YD_VERT, false, 0.6 );
+	
+	// label of a frame in search popup (without hotkey)
+	NCFrame * frame = new NCFrame( vSplit, _( " Search in " ) );
+	NCLayoutBox * vSplit3 = new NCLayoutBox( frame, YD_VERT );
 
-	// add a frame containing the other check boxes
-	opt.isHStretchable.setValue( true );
-	opt.isVStretchable.setValue( true );
-	NCFrame * frame = new NCFrame( vSplit, opt, YCPString(NCPkgNames::SearchIn()) );
-	NCSplit * vSplit3 = new NCSplit( frame, opt, YD_VERT );
+	checkName = new NCCheckBox( vSplit3, NCPkgNames::CheckName(), true );
+	checkName->setStretchable(YD_HORIZ, true );
+	
+	checkSummary = new NCCheckBox( vSplit3, NCPkgNames::CheckSummary(), true );
+	checkSummary->setStretchable(YD_HORIZ, true );
+	
+	checkDescr = new NCCheckBox( vSplit3, NCPkgNames::CheckDescr(), false );
+	checkDescr->setStretchable(YD_HORIZ, true );
+	
+	checkProvides = new NCCheckBox( vSplit3, NCPkgNames::CheckProvides(), false );
+	checkProvides->setStretchable(YD_HORIZ, true );
+	
+	checkRequires = new NCCheckBox( vSplit3, NCPkgNames::CheckRequires(), false );
+	checkRequires->setStretchable(YD_HORIZ, true );
 
-	opt.isVStretchable.setValue( false );
-	checkName = new NCCheckBox( vSplit3, opt, YCPString(NCPkgNames::CheckName()), true );
-	checkSummary = new NCCheckBox( vSplit3, opt, YCPString(NCPkgNames::CheckSummary()), true );
-	checkDescr = new NCCheckBox( vSplit3, opt, YCPString(NCPkgNames::CheckDescr()), false );
-	checkProvides = new NCCheckBox( vSplit3, opt, YCPString(NCPkgNames::CheckProvides()), false );
-	checkRequires = new NCCheckBox( vSplit3, opt, YCPString(NCPkgNames::CheckRequires()), false );
-
-	vSplit3->addChild( checkName );
-	vSplit3->addChild( checkSummary );
-	vSplit3->addChild( checkDescr );
-	vSplit3->addChild( checkProvides );
-	vSplit3->addChild( checkRequires );
-
-	frame->addChild( vSplit3 );
-	vSplit->addChild( frame );
-
-	vSplit->addChild( new NCSpacing( vSplit, opt, 0.8, false, true ) );		// VSpacing
+	new NCSpacing( vSplit, YD_VERT, false, 0.8 );
     }
 
-    NCSplit * hSplit3 = new NCSplit( vSplit, opt, YD_HORIZ );
-    vSplit->addChild( hSplit3 );
-    
+    NCLayoutBox * hSplit3 = new NCLayoutBox( vSplit, YD_HORIZ );
+
+    new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );	
+
     // add the cancel and the ok button
-    opt.key_Fxx.setValue( 10 );
-    okButton = new NCPushButton( hSplit3, opt, YCPString(NCPkgNames::OKLabel()) );
-    okButton->setId( NCPkgNames::OkButton () );
+    okButton = new NCPushButton( hSplit3, NCPkgNames::OKLabel() );
+    YStringWidgetID  * okID = new YStringWidgetID("ok");
+    okButton->setId( okID );
+    okButton->setFunctionKey( 10 );
 
-    opt.key_Fxx.setValue( 9 );
-    opt.isVStretchable.setValue( false );
-    cancelButton = new NCPushButton( hSplit3, opt, YCPString(NCPkgNames::CancelLabel()) );
-    cancelButton->setId( NCPkgNames::Cancel () );
+    new NCSpacing( hSplit3, YD_HORIZ, true, 0.4 );
 
-    opt.isHStretchable.setValue( true );
-    hSplit3->addChild( new NCSpacing( hSplit3, opt, 0.2, true, false ) );
-    hSplit3->addChild( okButton );
-    hSplit3->addChild( new NCSpacing( hSplit3, opt, 0.4, true, false ) );
-    hSplit3->addChild( cancelButton );
-    hSplit3->addChild( new NCSpacing( hSplit3, opt, 0.2, true, false ) );
+    cancelButton = new NCPushButton( hSplit3, NCPkgNames::CancelLabel() );
+    YStringWidgetID  * cancelID = new YStringWidgetID("cancel");
+    cancelButton->setId( cancelID );
+    cancelButton->setFunctionKey( 9 );
+    
+    new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );
     
 }
 
@@ -200,20 +191,24 @@ NCursesEvent & NCPkgPopupSearch::showSearchPopup( )
 //
 //	DESCRIPTION :
 //
-YCPString  NCPkgPopupSearch::getSearchExpression() const
+string  NCPkgPopupSearch::getSearchExpression() const
 {
-    YCPString value = YCPNull();
+    string value;
     unsigned int i = 0;
 
     if ( searchExpr )
     {
 	// get the expression and store it in combo box list
-	value = searchExpr->getValue();
-	i = searchExpr->getListSize();
+	// value = searchExpr->getValue();
 
+	value = searchExpr->text();
+	i = searchExpr->getListSize();
+#if 0
 	searchExpr->itemAdded( value,	// the search expression
 			       i,	// index
 			       true );	// selected
+#endif
+	searchExpr->addItem( value, true );
     }
 
     return value;
@@ -278,25 +273,21 @@ bool NCPkgPopupSearch::postAgain()
     if ( ! postevent.widget )
 	return false;
 
-    postevent.result = YCPNull();
+    postevent.result = "";
 
-    YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
+    YWidgetID * currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
 
-    if ( !currentId.isNull() &&
-	 currentId->compare( NCPkgNames::Cancel () ) == YO_EQUAL )
+    if ( currentId &&
+	 currentId->toString() == "cancel" )
     {
 	postevent = NCursesEvent::cancel;
     }
     else if ( postevent == NCursesEvent::button )
     {
-	YCPString filter( "" );
-
 	// get the search expression
 	postevent.result =  getSearchExpression();
-	if ( !postevent.result.isNull() )
-	{
-	    filter =  postevent.result->asString();
-	}
+
+	string filter =  postevent.result;
 
 	if ( !packager->isYouMode() )
 	{
@@ -326,17 +317,18 @@ bool NCPkgPopupSearch::postAgain()
 
 bool NCPkgPopupSearch::getCheckBoxValue( NCCheckBox * checkBox )
 {
-    YCPValue value = YCPNull();
-
+    //YCPValue value = YCPNull();
+    YCheckBoxState value = YCheckBox_off;
+    
     if ( checkBox )
     {
-	value = checkBox->getValue();
+	value = checkBox->value();
 
 	// return whether the option is selected or not
-	if ( !value.isNull() )
-	{
-	    return ( value->asBoolean()->toString() == "true" ? true : false );
-	}
+	//if ( !value.isNull() )
+	// return ( value->asBoolean()->toString() == "true" ? true : false );
+
+	return ( value == YCheckBox_on ? true : false );
     }
 
     return false;

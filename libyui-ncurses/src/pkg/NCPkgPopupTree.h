@@ -32,9 +32,8 @@
 #include <y2util/YRpmGroupsTree.h>
 
 class NCTree;
-class YCPValue;
 class NCPackageSelector;
-
+class NCRpmGroupItem;
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -53,8 +52,8 @@ private:
     
     NCPackageSelector * packager;		// connection to the PackageSelector
 
-    // internal use (copies tree items got from YPkgRpmGroupTagsFilterView)
-    void cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone );
+    // internal use (copies tree items)
+    void cloneTree( YStringTreeItem * parentOrig, NCRpmGroupItem * parentClone );
 
 protected:
 
@@ -71,19 +70,15 @@ public:
     NCPkgPopupTree( const wpos at, NCPackageSelector * packager );
     virtual ~NCPkgPopupTree();
 
-    virtual long nicesize(YUIDimension dim);
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+    
+    void createLayout( const string & label );
 
-    void createLayout( const YCPString & label );
-
-    YTreeItem * addItem( YTreeItem * 		parentItem,
-			 const YCPString & 	text,
-			 void * 		data,
-			 bool  			open );
+    void addItem( YTreeItem * newItem );
 
     NCursesEvent showFilterPopup( );
 
-    YStringTreeItem * getDefaultGroup( );
-    
 };
 
 ///////////////////////////////////////////////////////////////////

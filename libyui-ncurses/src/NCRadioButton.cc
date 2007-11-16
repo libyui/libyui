@@ -31,11 +31,10 @@
 //
 //	DESCRIPTION :
 //
-NCRadioButton::NCRadioButton( NCWidget * parent, const YWidgetOpt & opt,
-			      YRadioButtonGroup * rbg,
-			      const YCPString & nlabel,
+NCRadioButton::NCRadioButton( YWidget * parent,
+			      const string & nlabel,
 			      bool check )
-    : YRadioButton( opt, nlabel, rbg )
+    : YRadioButton( parent, nlabel )
     , NCWidget( parent )
     , checked( false )
 {
@@ -58,17 +57,20 @@ NCRadioButton::~NCRadioButton()
   WIDDBG << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRadioButton::nicesize
-//	METHOD TYPE : long
-//
-//	DESCRIPTION :
-//
-long NCRadioButton::nicesize( YUIDimension dim )
+int NCRadioButton::preferredWidth()
 {
-  return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
+    return wGetDefsze().W;
+}
+
+int NCRadioButton::preferredHeight()
+{
+    return wGetDefsze().H;
+}
+
+void NCRadioButton::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YRadioButton::setEnabled( do_bv );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -79,10 +81,9 @@ long NCRadioButton::nicesize( YUIDimension dim )
 //
 //	DESCRIPTION :
 //
-void NCRadioButton::setSize( long newwidth, long newheight )
+void NCRadioButton::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YRadioButton::setSize( newwidth, newheight );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -93,7 +94,7 @@ void NCRadioButton::setSize( long newwidth, long newheight )
 //
 //	DESCRIPTION :
 //
-void NCRadioButton::setLabel( const YCPString & nlabel )
+void NCRadioButton::setLabel( const string & nlabel )
 {
   label  = NCstring( nlabel );
   label.stripHotkey();
@@ -110,20 +111,7 @@ void NCRadioButton::setLabel( const YCPString & nlabel )
 //
 //	DESCRIPTION :
 //
-void NCRadioButton::setValue( const YCPBoolean & newval )
-{
-  setValue( newval->value() );
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRadioButton::setValue
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
-void NCRadioButton::setValue( const bool & newval )
+void NCRadioButton::setValue( bool newval )
 {
   if ( newval != checked ) {
     checked = newval;
@@ -132,19 +120,6 @@ void NCRadioButton::setValue( const bool & newval )
     }
     Redraw();
   }
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRadioButton::getValue
-//	METHOD TYPE : YCPBoolean
-//
-//	DESCRIPTION :
-//
-YCPBoolean NCRadioButton::getValue()
-{
-  return YCPBoolean( checked );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -187,7 +162,7 @@ NCursesEvent NCRadioButton::wHandleInput( wint_t key )
   case KEY_SPACE:
   case KEY_RETURN:
     setValue( true );
-    if ( getNotify() && oldChecked != checked )
+    if ( notify() && oldChecked != checked )
       ret = NCursesEvent::ValueChanged;
     break;
   case KEY_UP:

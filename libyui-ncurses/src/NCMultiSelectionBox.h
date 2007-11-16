@@ -40,14 +40,19 @@ class NCTableTag : public NCTableCol {
 
   private:
 
+    YItem *yitem; 
     bool selected;
 
   public:
 
-    NCTableTag( const bool sel = false )
+    NCTableTag( YItem *item, const bool sel = false )
       : NCTableCol( NCstring( "[ ]" ), SEPARATOR )
+      , yitem (item)
       , selected( sel )
-    {}
+    {
+        //store pointer to this tag in Yitem data
+	yitem->setData( this );
+    }
     virtual ~NCTableTag() {}
 
     virtual void SetLabel( const NCstring & ) { /*NOOP*/; }
@@ -65,6 +70,7 @@ class NCTableTag : public NCTableCol {
 
     void SetSelected( const bool sel ) { selected = sel; }
     bool Selected() const              { return selected; }
+    YItem *origItem() { return yitem; }
 };
 
 
@@ -92,9 +98,7 @@ class NCMultiSelectionBox : public YMultiSelectionBox, public NCPadWidget {
     NCTableTag * tagCell( int index );
     const NCTableTag * tagCell( int index ) const;
 
-    bool isItemSelected( int index ) const;
-    bool setItemSelected( int index, bool val, bool update = true );
-    void setAllItemsSelected( bool val );
+    bool isItemSelected( YItem *item );
 
     void toggleCurrentItem();
 
@@ -102,7 +106,7 @@ class NCMultiSelectionBox : public YMultiSelectionBox, public NCPadWidget {
 
     virtual void startMultipleChanges() { startMultidraw(); }
     virtual void doneMultipleChanges()  { stopMultidraw(); }
-
+    
   protected:
 
     virtual const char * location() const { return "NCMultiSelectionBox"; }
@@ -110,32 +114,38 @@ class NCMultiSelectionBox : public YMultiSelectionBox, public NCPadWidget {
     virtual NCPad * CreatePad();
     virtual void    wRecoded();
 
-    virtual void itemAdded( const YCPString & string, int index, bool selected );
+    virtual void addItem( YItem * item );
+    
     virtual void deleteAllItems();
 
-    virtual bool itemIsSelected( int index ) { return isItemSelected( index ); }
-    virtual void selectItem( int index )  { setItemSelected( index, true ); }
-    virtual void deselectItem( int index ){ setItemSelected( index, false ); }
-    virtual void selectAllItems()         { setAllItemsSelected( true ); }
-    virtual void deselectAllItems()       { setAllItemsSelected( false ); }
+    virtual void selectItem( YItem * item, bool selected );
+    
+    virtual void deselectAllItems();      
 
+    
   public:
 
-    NCMultiSelectionBox( NCWidget * parent, const YWidgetOpt & opt,
-			 const YCPString & label );
+    NCMultiSelectionBox( YWidget * parent, const string & label );
     virtual ~NCMultiSelectionBox();
 
-    virtual long nicesize( YUIDimension dim );
-    virtual void setSize( long newwidth, long newheight );
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+    
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const YCPString & nlabel );
+    virtual void setLabel( const string & nlabel );
 
-    virtual int getCurrentItem();
-    virtual void setCurrentItem( int index );
+    virtual YItem * currentItem();
+    virtual void setCurrentItem( YItem * item );
 
     virtual NCursesEvent wHandleInput( wint_t key );
 
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    virtual void setEnabled( bool do_bv );
 
     virtual bool setKeyboardFocus() {
       if ( !grabFocus() )

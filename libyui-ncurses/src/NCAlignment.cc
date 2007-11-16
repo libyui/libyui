@@ -28,10 +28,10 @@
 //
 //	DESCRIPTION :
 //
-NCAlignment::NCAlignment( NCWidget * parent, const YWidgetOpt & opt,
+NCAlignment::NCAlignment( YWidget * parent,
 			  YAlignmentType halign,
 			  YAlignmentType valign )
-    : YAlignment( opt, halign, valign )
+    : YAlignment( parent, halign, valign )
     , NCWidget( parent )
 {
   WIDDBG << endl;
@@ -59,10 +59,24 @@ NCAlignment::~NCAlignment()
 //
 //	DESCRIPTION :
 //
-void NCAlignment::setSize( long newwidth, long newheight )
+void NCAlignment::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YAlignment::setSize( newwidth, newheight );
+  YAlignment::setSize( newwidth, newheight);
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCAlignment::setEnabled
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCAlignment::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YAlignment::setEnabled( do_bv );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -73,7 +87,7 @@ void NCAlignment::setSize( long newwidth, long newheight )
 //
 //	DESCRIPTION :
 //
-void NCAlignment::moveChild( YWidget * child, long newx, long newy )
+void NCAlignment::moveChild( YWidget * child, int newx, int newy )
 {
   NCWidget * cw = dynamic_cast<NCWidget*>(child);
 

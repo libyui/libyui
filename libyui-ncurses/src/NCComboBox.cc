@@ -31,12 +31,12 @@
 //
 //	DESCRIPTION :
 //
-NCComboBox::NCComboBox( NCWidget * parent, const YWidgetOpt & opt,
-			const YCPString & nlabel )
-    : YComboBox( opt, nlabel )
+NCComboBox::NCComboBox( YWidget * parent, const string & nlabel,
+			bool editable )
+    : YComboBox( parent, nlabel, editable )
     , NCWidget( parent )
-    , mayedit( opt.isEditable.value() )
-    , text( "" )
+    , mayedit( editable )
+    , privText( "" )
     , lwin( 0 )
     , twin( 0 )
     , fldstart ( 0 )
@@ -48,7 +48,7 @@ NCComboBox::NCComboBox( NCWidget * parent, const YWidgetOpt & opt,
   WIDDBG << endl;
   setLabel( nlabel );
   hotlabel = &label;
-  setValue( YCPString( string("") ) );
+  setText( "" );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -69,14 +69,41 @@ NCComboBox::~NCComboBox()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCComboBox::nicesize
-//	METHOD TYPE : long
+//	METHOD NAME : NCComboBox::preferredWidth
+//	METHOD TYPE : int
 //
 //	DESCRIPTION :
 //
-long NCComboBox::nicesize( YUIDimension dim )
+int NCComboBox::preferredWidth()
 {
-  return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
+    return wGetDefsze().W;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCComboBox::preferredHeight
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int NCComboBox::preferredHeight()
+{
+    return wGetDefsze().H;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCComboBox::setEnabled
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCComboBox::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YComboBox::setEnabled( do_bv );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -87,10 +114,9 @@ long NCComboBox::nicesize( YUIDimension dim )
 //
 //	DESCRIPTION :
 //
-void NCComboBox::setSize( long newwidth, long newheight )
+void NCComboBox::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YComboBox::setSize( newwidth, newheight );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -162,20 +188,45 @@ void NCComboBox::wDelete()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCComboBox::itemAdded
+//	METHOD NAME : NCComboBox::addItem
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCComboBox::itemAdded( const YCPString & ntext,
-			    int idx,
-			    bool selected )
+void NCComboBox::addItem( YItem * item )
 {
-  deflist.push_back( ntext );
-  if ( selected || index == -1 ) {
-    setValue( ntext );
-    index = idx;
-  }
+    if ( item )
+    {
+	YComboBox::addItem( item );
+
+	deflist.push_back( item->label() );
+	if ( item->selected() || index == -1 )
+	{
+	    setText( item->label() );
+	}
+    }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCComboBox::addItem
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCComboBox::addItem( const string & label, bool selected )
+{
+    YItem * newItem = new YItem( label, selected );
+    YUI_CHECK_NEW( newItem );
+    
+    YComboBox::addItem( newItem );
+
+    deflist.push_back( label );
+    if ( selected || index == -1 )
+    {
+	setText( label );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -186,7 +237,7 @@ void NCComboBox::itemAdded( const YCPString & ntext,
 //
 //	DESCRIPTION :
 //
-void NCComboBox::setLabel( const YCPString & nlabel )
+void NCComboBox::setLabel( const string & nlabel )
 {
   label = NCstring( nlabel );
   label.stripHotkey();
@@ -206,14 +257,14 @@ void NCComboBox::setLabel( const YCPString & nlabel )
 void NCComboBox::setCurrentItem( int nindex )
 {
   int idx = 0;
-  list<YCPString>::const_iterator entry;
+  list<string>::iterator entry;
   for ( entry = deflist.begin(); entry != deflist.end(); ++entry, ++idx ) {
     if ( idx == nindex ) {
-      string strip( (*entry)->value() );
+      string strip = *entry;
       string::size_type h = strip.find( '&' );
       if ( h != string::npos )
 	strip.erase( h, 1 );
-      setValue( YCPString( strip ) );
+      setText( strip );
       index = idx;
       break;
     }
@@ -235,18 +286,19 @@ int NCComboBox::getCurrentItem() const
   return index;
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCComboBox::setValue
+//	METHOD NAME : NCComboBox::setText
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCComboBox::setValue( const YCPString & ntext )
+void NCComboBox::setText( const string & ntext )
 {
-  text     = ntext;
-  buffer   = text.str();
+  privText = NCstring( ntext );
+  buffer   = privText.str();
   modified = false;
   fldstart = 0;
   curpos   = mayedit ? buffer.length() : 0;
@@ -259,27 +311,27 @@ void NCComboBox::setValue( const YCPString & ntext )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCComboBox::getValue
-//	METHOD TYPE : YCPString
+//	METHOD NAME : NCComboBox::text
+//	METHOD TYPE : string
 //
 //	DESCRIPTION :
 //
-YCPString NCComboBox::getValue() const
+string NCComboBox::text()
 {
-  if ( modified )
-    return NCstring( buffer ).YCPstr();
+    if ( modified )
+	return NCstring( buffer ).Str();
 
-  if ( index != -1 ) {
-    int idx = 0;
-    list<YCPString>::const_iterator entry;
-    for ( entry = deflist.begin(); entry != deflist.end(); ++entry, ++idx ) {
-      if ( idx == index ) {
-	return *entry;
-      }
+    if ( index != -1 ) {
+	int idx = 0;
+	list<string>::const_iterator entry;
+	for ( entry = deflist.begin(); entry != deflist.end(); ++entry, ++idx ) {
+	    if ( idx == index ) {
+		return *entry;
+	    }
+	}
     }
-  }
 
-  return text.YCPstr();
+    return privText.Str();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -290,9 +342,9 @@ YCPString NCComboBox::getValue() const
 //
 //	DESCRIPTION :
 //
-void NCComboBox::setValidChars( const YCPString & validchars )
+void NCComboBox::setValidChars( const string & validchars )
 {
-  validChars = validchars;
+  validChars = NCstring( validchars );
   YComboBox::setValidChars( validchars );
 }
 
@@ -329,10 +381,10 @@ bool NCComboBox::validKey( wint_t key ) const
 void NCComboBox::wRecoded()
 {
   if ( modified ) {
-    text     = NCstring( buffer );
+    privText = NCstring( buffer );
     modified = false;
   }
-  buffer = text.str();
+  buffer = privText.str();
   wRedraw();
 }
 
@@ -567,7 +619,7 @@ NCursesEvent NCComboBox::wHandleInput( wint_t key )
   if ( beep )
     ::beep();
 
-  if ( getNotify() && oval != buffer )
+  if ( notify() && oval != buffer )
     ret = NCursesEvent::ValueChanged;
 
   return ret;
@@ -586,11 +638,14 @@ int NCComboBox::listPopup()
 {
   if (!deflist.empty()) {
     wpos        at( ScreenPos() + wpos( win->height(), -1 ) );
-    NCPopupList dialog( at, YCPString(""), deflist, index );
-    int         idx = dialog.post();
+    NCPopupList * dialog = new NCPopupList( at, "", deflist, index );
+    YUI_CHECK_NEW( dialog );
+    int         idx = dialog->post();
     if ( idx != -1 )
       setCurrentItem( idx );
+    YDialog::deleteTopmostDialog();
   }
+  
   return 0;
 }
 
@@ -606,14 +661,12 @@ int NCComboBox::listPopup()
 void NCComboBox::deleteAllItems() {
 	YComboBox::deleteAllItems();
 	deflist.clear();
-	setValue( YCPString( string("") ) );
+	setText( "" );
 }
 
 
-void NCComboBox::setInputMaxLength( const YCPInteger & numberOfChars)
+void NCComboBox::setInputMaxLength( int nr)
 {
-    int nr = numberOfChars->asInteger()->value();
-
     // if there is more text then the maximum number of chars,
     // truncate the text and update the buffer
     if ( nr >= 0 && (int)buffer.length() > nr ) {
@@ -621,7 +674,4 @@ void NCComboBox::setInputMaxLength( const YCPInteger & numberOfChars)
 	tUpdate();
 	curpos = buffer.length();
     }
-
-    InputMaxLength;
-#warning FIXME: Either throw this out or do something properly with it!
 }

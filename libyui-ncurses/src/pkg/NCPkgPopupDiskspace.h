@@ -173,8 +173,9 @@ public:
     
     virtual ~NCPkgPopupDiskspace();
 
-    virtual long nicesize(YUIDimension dim);
-
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+    
     void fillPartitionTable();
 
     string checkDiskSpace();

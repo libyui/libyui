@@ -26,7 +26,6 @@ using namespace std;
 
 #include "NCPopupTable.h"
 
-class YCPString;
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -46,11 +45,12 @@ class NCPopupList : public NCPopupTable {
   public:
 
     NCPopupList( const wpos at,
-		 const YCPString & label,
-		 const list<YCPString> & deflist,
+		 const string & label,
+		 const list<string> & deflist,
 		 int index = 0 );
     virtual ~NCPopupList();
 
+    void createEntries( const list<string> & deflist, int index );
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -180,7 +180,7 @@ class NCScrollbar {
 				 p.L, p.C,
 				 'r' );
       }
-      catch ( NCursesException err ) {
+      catch ( NCursesException & err ) {
 	WIDINT << "NCScrollbar: " << err.message
 	  << ": at " << p << " len " << len << " in " << par << endl;
 	return;
@@ -213,6 +213,21 @@ class NCScrollbar {
 //	DESCRIPTION :
 //
 NCPadWidget::NCPadWidget( NCWidget * myparent )
+    : NCWidget( myparent )
+    , padwin( 0 )
+    , hsb   ( 0 )
+    , vsb   ( 0 )
+    , multidraw( false )
+    , pad   ( 0 )
+    , hasHeadline( false )
+    , activeLabelOnly( false )
+{
+  WIDDBG << endl;
+  hotlabel = &label;
+  defsze = wsze( 3, 10 ) + 2;
+}
+
+NCPadWidget::NCPadWidget( YWidget * myparent )
     : NCWidget( myparent )
     , padwin( 0 )
     , hsb   ( 0 )

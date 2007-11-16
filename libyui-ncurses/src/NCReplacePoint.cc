@@ -28,8 +28,8 @@
 //
 //	DESCRIPTION :
 //
-NCReplacePoint::NCReplacePoint( NCWidget * parent, const YWidgetOpt & opt )
-    : YReplacePoint( opt )
+NCReplacePoint::NCReplacePoint( YWidget * parent )
+    : YReplacePoint( parent )
     , NCWidget( parent )
 {
   WIDDBG << endl;
@@ -57,8 +57,14 @@ NCReplacePoint::~NCReplacePoint()
 //
 //	DESCRIPTION :
 //
-void NCReplacePoint::setSize( long newwidth, long newheight )
+void NCReplacePoint::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YReplacePoint::setSize( newwidth, newheight );
+  YReplacePoint::setSize( newwidth, newheight);
+}
+
+void NCReplacePoint::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YReplacePoint::setEnabled( do_bv );
 }

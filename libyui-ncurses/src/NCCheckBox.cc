@@ -35,13 +35,13 @@ unsigned char NCCheckBox::statetag[3] = { '?', ' ', 'x' };
 //
 //	DESCRIPTION :
 //
-NCCheckBox::NCCheckBox( NCWidget * parent, const YWidgetOpt & opt,
-			const YCPString & nlabel,
-			bool check )
-    : YCheckBox( opt, nlabel )
+NCCheckBox::NCCheckBox( YWidget * parent,
+			const string & nlabel,
+			bool checked )
+    : YCheckBox( parent, nlabel )
     , NCWidget( parent )
     , tristate( false )
-    , checkstate( check ? S_ON : S_OFF )
+    , checkstate( checked ? S_ON : S_OFF )
 {
   WIDDBG << endl;
   setLabel( nlabel );
@@ -74,6 +74,22 @@ long NCCheckBox::nicesize( YUIDimension dim )
   return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
 }
 
+int NCCheckBox::preferredWidth()
+{
+    return wGetDefsze().W;
+}
+
+int NCCheckBox::preferredHeight()
+{
+    return wGetDefsze().H;
+}
+
+void NCCheckBox::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YCheckBox::setEnabled( do_bv );
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -82,10 +98,9 @@ long NCCheckBox::nicesize( YUIDimension dim )
 //
 //	DESCRIPTION :
 //
-void NCCheckBox::setSize( long newwidth, long newheight )
+void NCCheckBox::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YCheckBox::setSize( newwidth, newheight );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -94,9 +109,9 @@ void NCCheckBox::setSize( long newwidth, long newheight )
 //	METHOD NAME : NCCheckBox::setLabel
 //	METHOD TYPE : void
 //
-//	DESCRIPTION :
+//	DESCRIPTION : set label
 //
-void NCCheckBox::setLabel( const YCPString & nlabel )
+void NCCheckBox::setLabel( const string & nlabel )
 {
   label  = NCstring( nlabel );
   label.stripHotkey();
@@ -113,6 +128,28 @@ void NCCheckBox::setLabel( const YCPString & nlabel )
 //
 //	DESCRIPTION :
 //
+void NCCheckBox::setValue( YCheckBoxState state )
+{
+    switch ( state )
+    {
+	case YCheckBox_on:
+	    checkstate = S_ON;
+	    tristate = false;
+	    break;
+
+	case YCheckBox_off:
+	    checkstate = S_OFF;
+	    tristate = false;
+	    break;
+
+	case YCheckBox_dont_care:
+	    tristate = true;
+	    checkstate = S_DC;
+	    break;
+    }
+}
+
+#if 0
 void NCCheckBox::setValue( const YCPValue & newval )
 {
   if ( newval->isBoolean() ) {
@@ -126,20 +163,34 @@ void NCCheckBox::setValue( const YCPValue & newval )
   Redraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBox::getValue
-//	METHOD TYPE : YCPBoolean
-//
-//	DESCRIPTION :
-//
+
+// replaced by value()
 YCPValue NCCheckBox::getValue()
 {
   if ( checkstate == S_DC )
     return YCPVoid();
 
   return YCPBoolean( checkstate == S_ON );
+}
+#endif
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCCheckBox::value
+//	METHOD TYPE : YCheckBoxState
+//
+//	DESCRIPTION :
+//
+YCheckBoxState NCCheckBox::value()
+{
+    if ( checkstate == S_DC )
+	return YCheckBox_dont_care;
+
+    if ( checkstate == S_ON )
+	return YCheckBox_on;
+    else
+	return YCheckBox_off;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -190,7 +241,7 @@ NCursesEvent NCCheckBox::wHandleInput( wint_t key )
       break;
     }
     Redraw();
-    if ( getNotify() )
+    if ( notify() )
       ret = NCursesEvent::ValueChanged;
     break;
   }

@@ -30,6 +30,7 @@
 #include <utility>      // for STL pair
 
 #include <y2util/YRpmGroupsTree.h>
+#include "YWidgetID.h"
 
 #include <zypp/ResObject.h>
 #include <zypp/ui/Selectable.h>
@@ -46,6 +47,7 @@ class NCPkgPopupDeps;
 class NCPkgPopupDiskspace;
 class NCPkgPopupSearch;
 class NCPkgPopupFile;
+class YNCursesUI;
 
 
 ///////////////////////////////////////////////////////////////////
@@ -74,8 +76,8 @@ class NCPackageSelector
     
     YNCursesUI * y2ui;			// the UI
 
-    YCPValue visibleInfo;		// visible package info (description, file list, ...)
-
+    YWidget * widgetRoot;		// the root of the widget tree of the layout
+    
     NCPkgPopupTree * filterPopup;	// the rpm group tags popup
 
     NCPkgPopupDeps * depsPopup;		// the package dependeny popup
@@ -96,6 +98,7 @@ class NCPackageSelector
     bool autoCheck;			// flag for automatic dependency check on/off
     YRpmGroupsTree * _rpmGroupsTree;	// rpm groups of the found packages
 
+    string visibleInfo;		// visible package info (description, file list, ...)
     
     // internal helper functions (format list of string) 
     string createRelLine( const zypp::CapSet & info );
@@ -112,6 +115,8 @@ class NCPackageSelector
 
   protected:
 
+    string getButtonId( YWidget *button );
+    string getMenuId( YMenuItem *menu );
 
   public:
 
@@ -121,12 +126,14 @@ class NCPackageSelector
      * @param ui The NCurses UI
      * @param opt The widget options
      */
-    NCPackageSelector( YNCursesUI * ui, const YWidgetOpt & opt );
+    NCPackageSelector( YNCursesUI * ui, YWidget * wRoot, long modeFlags );
 
     /**
      * Destructor
      */ 
     virtual ~NCPackageSelector();
+
+    void createPopups();
     
    /**
     * Fills the package table
@@ -183,7 +190,7 @@ class NCPackageSelector
     * @param checkRequires Check in Requires (true or false)
     * @return bool
     */ 
-    bool fillSearchList( const YCPString & expr,
+    bool fillSearchList( const string & expr,
 			 bool ignoreCase,
 			 bool checkName,
 			 bool checkSummary,
@@ -191,7 +198,13 @@ class NCPackageSelector
 			 bool checkProvides,
 			 bool checkRequires );
 
-    bool fillPatchSearchList( const YCPString & expr );
+    bool fillPatchSearchList( const string & expr );
+
+    /**
+      *Fills the package table with packages from selected repository
+      *@param repo zypp::Repository
+      */
+    bool fillRepoFilterList ( ZyppRepo repo );
 
     /**
       *Fills the package table with packages from selected repository
@@ -204,7 +217,7 @@ class NCPackageSelector
     * Gets default RPM group (the first group)
     * @return YStringTreeItem *
     */
-    YStringTreeItem * getDefaultRpmGroup() { return filterPopup->getDefaultGroup(); }
+    YStringTreeItem * getDefaultRpmGroup();
 
     /**
      * @return the rpm groups
@@ -353,7 +366,7 @@ class NCPackageSelector
     * Sets the member variable to the currently visible information
     * @param info
     */
-    void setVisibleInfo( const YCPValue & info );
+    void setVisibleInfo( string info );
 
    /**
     * Fills the package table

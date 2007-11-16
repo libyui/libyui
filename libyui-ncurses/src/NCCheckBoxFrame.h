@@ -55,17 +55,26 @@ class NCCheckBoxFrame : public YCheckBoxFrame, public NCWidget {
 
   public:
 
-    NCCheckBoxFrame( NCWidget * parent, const YWidgetOpt & opt,
-		     const YCPString & label, bool checked );
+    NCCheckBoxFrame( YWidget * parent, const string & label,
+		     bool checked );
     virtual ~NCCheckBoxFrame();
 
     virtual long nicesize( YUIDimension dim );
-    virtual void setSize( long newwidth, long newheight );
 
-    virtual void setLabel( const YCPString & nlabel );
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setEnabling( bool do_bv );
+    virtual void setLabel( const string & nlabel );
 
+    //virtual void setEnabling( bool do_bv );
+    virtual void setEnabled( bool do_bv );
+    
     virtual bool getValue() { return isEnabled; }
    
     //Do not forget to call Redraw(), so that UI::ChangeWidget works
@@ -74,6 +83,7 @@ class NCCheckBoxFrame : public YCheckBoxFrame, public NCWidget {
 
     virtual bool setKeyboardFocus();
 
+    virtual bool value();
 
     virtual NCursesEvent wHandleInput( wint_t key );
 };

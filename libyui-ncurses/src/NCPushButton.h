@@ -51,18 +51,25 @@ class NCPushButton : public YPushButton, public NCWidget {
 
   public:
 
-    NCPushButton( NCWidget * parent, const YWidgetOpt & opt,
-		  YCPString label );
+    NCPushButton( YWidget * parent, const string & label );
     virtual ~NCPushButton();
 
-    virtual long nicesize( YUIDimension dim );
-    virtual void setSize( long newwidth, long newheight );
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+    
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
     virtual NCursesEvent wHandleInput( wint_t key );
 
-    virtual void setLabel( const YCPString & nlabel );
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    virtual void setLabel( const string & nlabel );
 
+    virtual void setEnabled( bool do_bv );
+    
     virtual bool setKeyboardFocus() {
       if ( !grabFocus() )
         return YWidget::setKeyboardFocus();

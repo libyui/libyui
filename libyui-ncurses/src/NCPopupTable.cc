@@ -59,18 +59,19 @@ NCPopupTable::~NCPopupTable()
 void NCPopupTable::createList( vector<string> & row )
 {
   if ( sellist )
-    return;
+    return ;
 
-  YWidgetOpt opt;
-  opt.notifyMode.setValue( true );
-
-  sellist = new NCTable( this, opt, row, false );
+  YTableHeader * tableHeader = new YTableHeader();
+  // sellist =  new NCTable( this, row.size() );
+  sellist = new NCTable( this, tableHeader );
+  YUI_CHECK_NEW( sellist );
+  
   sellist->setBigList( true );
   sellist->SetSepChar( ' ' );
   sellist->SetSepWidht( 0 );
   sellist->SetHotCol( 0 );
+  sellist->setNotify( true );
 
-  addChild( sellist );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -81,12 +82,12 @@ void NCPopupTable::createList( vector<string> & row )
 //
 //	DESCRIPTION :
 //
-void NCPopupTable::addItem( const YCPValue & id, vector<string> & row )
+void NCPopupTable::addItem( YItem *yitem )
 {
-  if ( !sellist )
+  if ( !yitem )
     return;
 
-  sellist->addItem( id, row );
+  sellist->addItem( yitem );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -121,6 +122,14 @@ int NCPopupTable::getCurrentItem() const
   return sellist->getCurrentItem();
 }
 
+YItem * NCPopupTable::getCurrentItemPointer( ) const
+{
+    if ( !sellist )
+	return 0;
+    
+    return sellist->getCurrentItemPointer( );
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -147,9 +156,11 @@ NCursesEvent NCPopupTable::wHandleHotkey( wint_t key )
 //
 bool NCPopupTable::postAgain()
 {
-  postevent.detail = (postevent == NCursesEvent::button) ? sellist->getCurrentItem()
-							 : NCursesEvent::NODETAIL;
-  return false;
+    if ( sellist ) {
+	postevent.detail = (postevent == NCursesEvent::button) ?
+	    sellist->getCurrentItem() : NCursesEvent::NODETAIL;
+    }
+    return false;
 }
 
 void NCPopupTable::stripHotkeys()

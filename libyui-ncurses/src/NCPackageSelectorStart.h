@@ -23,20 +23,20 @@
 
 #include "YNCursesUI.h"
 #include "YPackageSelector.h"
-#include "YSplit.h"
-#include "NCSplit.h"
+#include "YLayoutBox.h"
+#include "NCLayoutBox.h"
 #include "NCPackageSelector.h"
 #include "NCPopupTable.h"
 
 
 
 class NCPkgTable;
-
+class NCPackageSelector;
 
 /**
  * @short the package selector widget
  */
-class NCPackageSelectorStart : public NCSplit
+class NCPackageSelectorStart : public NCLayoutBox
 {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCPackageSelectorStart & OBJ );
@@ -46,7 +46,7 @@ class NCPackageSelectorStart : public NCSplit
 
   private:
    
-    YContainerWidget * widgetRoot; 	// root of the widget tree of the package selection dialog
+    YWidget * widgetRoot; 	// root of the widget tree of the package selection dialog
     
     NCPkgTable * pkgList;		// the package table widget
     
@@ -58,7 +58,7 @@ class NCPackageSelectorStart : public NCSplit
   protected:
 
     virtual const char * location() const {
-      return dimension() == YD_HORIZ ? "NC(H)PackageSelectorStart" : "NC(V)PackageSelectorStart" ;
+      return primary() == YD_HORIZ ? "NC(H)PackageSelectorStart" : "NC(V)PackageSelectorStart" ;
     }
     
   public:
@@ -67,16 +67,24 @@ class NCPackageSelectorStart : public NCSplit
      * Constructor
      * creates the widget tree of the package selector
      */
-    NCPackageSelectorStart( NCWidget * parent,
-			    const YWidgetOpt & opt, YUIDimension dimension );
+    NCPackageSelectorStart( YWidget * 	parent,
+			    long 	modeFlags,
+			    YUIDimension dimension );
 
     /**
      * Destructor
      */
     virtual ~NCPackageSelectorStart();
 
-    virtual long nicesize( YUIDimension dim ) { return NCSplit::nicesize( dim ); }
-    virtual void setSize( long newwidth, long newheight );
+    virtual int preferredWidth() { return NCLayoutBox::preferredWidth(); }
+    virtual int preferredHeight() { return NCLayoutBox::preferredHeight(); }
+ 
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
     /**
      * Fills the package table with packages belonging to the  
@@ -96,7 +104,7 @@ class NCPackageSelectorStart : public NCSplit
     /**
      * Returns the root of the widget tree.
      */
-    YContainerWidget * root( ) const { return widgetRoot; };
+    YWidget * root( ) const { return widgetRoot; };
 
         
    /**

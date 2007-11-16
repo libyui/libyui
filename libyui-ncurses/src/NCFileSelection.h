@@ -131,8 +131,8 @@ public:
    /**
     * Constructor
     */
-    NCFileSelection( NCWidget * parent,
-		     const YWidgetOpt & opt,
+    NCFileSelection( YWidget * parent,
+		     YTableHeader * tableHeader,
 		     NCFileSelectionType type,
 		     const YCPString & iniDir );
 
@@ -175,7 +175,7 @@ public:
    /**
     * Clears the package list
     */
-    virtual void itemsCleared();
+    virtual void deleteAllItems();
 
     /**
      * Fills the header of the table
@@ -224,8 +224,8 @@ public:
   /**
     * Constructor
     */
-    NCFileTable( NCWidget * parent,
-		 const YWidgetOpt & opt,
+    NCFileTable( YWidget * parent,
+		 YTableHeader * tableHeader,
 		 NCFileSelectionType type,
 		 const YCPString & filter,
 		 const YCPString & iniDir );
@@ -260,8 +260,8 @@ public:
   /**
     * Constructor
     */
-    NCDirectoryTable( NCWidget * parent,
-		      const YWidgetOpt & opt,
+    NCDirectoryTable( YWidget * parent,
+		      YTableHeader * tableHeader,
 		      NCFileSelectionType type,
 		      const YCPString & iniDir );
 

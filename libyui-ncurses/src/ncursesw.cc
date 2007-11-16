@@ -277,6 +277,8 @@ NCursesWindow::NCursesWindow(int lines, int cols, int begin_y, int begin_x)
     if ( cols + begin_x > NCursesWindow::cols() ) 
 	cols = NCursesWindow::cols() - begin_x;
     
+    WIDDBG << "Lines: " << lines << " Cols: " << cols << " y: " << begin_y << " x: " << begin_x << endl;
+    
     w = ::newwin(lines, cols, begin_y, begin_x);
     if (w == 0) {
 	err_handler("Cannot construct window");
@@ -328,7 +330,7 @@ NCursesWindow::NCursesWindow(NCursesWindow& win, int l, int c,
     // Friendly enough, this also works for pads.
     w = ::derwin(win.w, l, c, begin_y, begin_x);
     if (w == 0) {
-      //WIDERR << "Throw " << wpos(begin_y, begin_x) << wsze(l, c) << endl;
+      WIDERR << "Throw " << wpos(begin_y, begin_x) << wsze(l, c) << endl;
       err_handler("Cannot construct subwindow");
     }
     //WIDMIL << "created " << wpos(begin_y, begin_x) << wsze(l, c) << endl;

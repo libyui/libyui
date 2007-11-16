@@ -21,14 +21,16 @@
 
 #include "NCTree.h"
 #include "YDialog.h"
-#include "NCSplit.h"
+#include "NCLayoutBox.h"
 #include "NCSpacing.h"
 #include "NCPkgNames.h"
 #include "NCSelectionBox.h"
 #include "NCMultiSelectionBox.h"
 #include "NCPushButton.h"
 #include "NCPopupInfo.h"
-#include "NCTextEntry.h"
+#include "NCInputField.h"
+
+#include "YWidgetID.h"
 
 #include "NCi18n.h"
 
@@ -43,12 +45,16 @@ class NCProblemSelectionBox : public NCSelectionBox
     Self & operator= (const Self &); // prohibit assignment
 
     NCPkgPopupDeps * depsPopup;	// to notify about changes
+
 protected:
     virtual NCursesEvent wHandleInput( wint_t ch );
+    
 public:
-    NCProblemSelectionBox (NCWidget * parent, const YWidgetOpt & opt,
-			   const YCPString & label, NCPkgPopupDeps * aDepsPopup)
-	: NCSelectionBox (parent, opt, label), depsPopup (aDepsPopup) {}
+    NCProblemSelectionBox (YWidget * parent, const string & label,
+			   NCPkgPopupDeps * aDepsPopup)
+	: NCSelectionBox( parent, label),
+	  depsPopup (aDepsPopup) {}
+
     virtual ~NCProblemSelectionBox () {}
 };
 
@@ -59,12 +65,16 @@ class NCSolutionSelectionBox : public NCMultiSelectionBox
     Self & operator= (const Self &); // prohibit assignment
 
     NCPkgPopupDeps * depsPopup;
+
 protected:
     virtual NCursesEvent wHandleInput( wint_t ch );
+    
 public:
-    NCSolutionSelectionBox (NCWidget * parent, const YWidgetOpt & opt,
-			    const YCPString & label, NCPkgPopupDeps * aDepsPopup)
-	: NCMultiSelectionBox (parent, opt, label), depsPopup (aDepsPopup) {}
+    NCSolutionSelectionBox (YWidget * parent, const string & label,
+			    NCPkgPopupDeps * aDepsPopup)
+	: NCMultiSelectionBox( parent, label)
+	, depsPopup (aDepsPopup) {}
+
     virtual ~NCSolutionSelectionBox () {}
 };
 
@@ -118,70 +128,68 @@ void NCPkgPopupDeps::createLayout( )
   YWidgetOpt opt;
 
   // vertical split is the (only) child of the dialog
-  NCSplit * vSplit = new NCSplit( this, opt, YD_VERT );
-  addChild( vSplit );
+  NCLayoutBox * vSplit = new NCLayoutBox( this, YD_VERT );
 
+  // addChild( ) is obsolete (handled by new libyui)
+  // FIXME
   // opt.vWeight.setValue( 40 );
 
   opt.notifyMode.setValue( true );
 
-  vSplit->addChild( new NCSpacing( vSplit, opt, 0.8, false, true ) );
+  new NCSpacing( vSplit, YD_VERT, true, 0.8 );
 
-  // add the headline
-  opt.isHeading.setValue( true );
+  head = new NCLabel( vSplit, "", true, false );	// isHeading = true
 
-  head = new NCLabel( vSplit, opt, YCPString("") );
-  vSplit->addChild( head );
-
-  vSplit->addChild( new NCSpacing( vSplit, opt, 0.4, false, true ) );
+  //vSplit->addChild( new NCSpacing( vSplit, opt, 0.4, false, true ) );
+  new NCSpacing( vSplit, YD_VERT, true, 0.4 );
 
   // add the list containing packages with unresolved dependencies
-  problemw = new NCProblemSelectionBox( vSplit, opt,
-					_("&Problems"),
-					this);
-  vSplit->addChild( problemw );
+  problemw = new NCProblemSelectionBox( vSplit, _("&Problems"),	this);
+
   opt.isHStretchable.setValue( true );
-  opt.isHeading.setValue( false );
 
   //vSplit->addChild( new NCSpacing( vSplit, opt, 0.2, false, true ) );
+  new NCSpacing( vSplit, YD_VERT, true, 0.2 );	// stretchable = true
 
-  details =  new NCTextEntry( vSplit, opt,
-			      YCPString( "" ), YCPString( "" ),
-			      200, 200 );
-
-  vSplit->addChild( details );
-  vSplit->addChild( new NCSpacing( vSplit, opt, 0.8, false, true ) );
-    
+  details =  new NCInputField( vSplit,
+			       "",
+			       false );		// passwordMode = false
+  details->setInputMaxLength( 200 );
+  // FIXME
+  //details->setMaxFld( 200 );
+  
+  //vSplit->addChild( new NCSpacing( vSplit, opt, 0.8, false, true ) );
+  new NCSpacing( vSplit, YD_VERT, true, 0.8 );	// stretchable = true
+  
   // add the package list containing the dependencies
-  solutionw = new NCSolutionSelectionBox ( vSplit, opt,
-					   _("Possible &Solutions"),
-					   this);
-  vSplit->addChild( solutionw );
+  solutionw = new NCSolutionSelectionBox ( vSplit, _("Possible &Solutions"), this);
   
   opt.isHStretchable.setValue( false );
-  opt.isHeading.setValue( true );
   
-  vSplit->addChild( new NCSpacing( vSplit, opt, 0.6, false, true ) );
+  //vSplit->addChild( new NCSpacing( vSplit, opt, 0.6, false, true ) );
+  new NCSpacing( vSplit, YD_VERT, false, 0.6 );	// stretchable = false
   
-  NCSplit * hSplit = new NCSplit( vSplit, opt, YD_HORIZ );
-  vSplit->addChild( hSplit );
+  NCLayoutBox * hSplit = new NCLayoutBox( vSplit, YD_HORIZ );
 
   opt.isHStretchable.setValue( true );
 
   // add the solve button
   opt.key_Fxx.setValue( 10 );
-  solveButton = new NCPushButton( hSplit, opt, YCPString(NCPkgNames::SolveLabel()) );
-  solveButton->setId( NCPkgNames::Solve () );
-  hSplit->addChild( solveButton );
+  solveButton = new NCPushButton( hSplit, NCPkgNames::SolveLabel() );
+  //solveButton->setId( NCPkgNames::Solve () );
+  YStringWidgetID  * solveID = new YStringWidgetID("solve");
+  solveButton->setId( solveID );
 
-  hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
+  //hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
+  new NCSpacing( hSplit, YD_HORIZ, true, 0.2 ); 	// stretchable = true
 
   // add the cancel button
   opt.key_Fxx.setValue( 9 );
-  cancelButton = new NCPushButton( hSplit, opt, YCPString(NCPkgNames::CancelLabel()) );
-  cancelButton->setId( NCPkgNames::Cancel () );
-  hSplit->addChild( cancelButton );
-
+  cancelButton = new NCPushButton( hSplit, NCPkgNames::CancelLabel() );
+  // cancelButton->setId( NCPkgNames::Cancel () );
+  YStringWidgetID  * cancelID = new YStringWidgetID("cancel");
+  cancelButton->setId( cancelID );
+  
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -198,7 +206,7 @@ bool NCPkgPopupDeps::showDependencies( NCPkgSolverAction action, bool * ok )
     
     // set headline and table type
     if ( head )
-	head->setLabel( YCPString(NCPkgNames::PackageDeps()) );
+	head->setLabel( NCPkgNames::PackageDeps() );
 
     // evaluate the result and fill the list with packages
     // which have unresolved deps
@@ -228,13 +236,15 @@ bool NCPkgPopupDeps::solve( NCSelectionBox * problemw, NCPkgSolverAction action 
     if ( !problemw )
 	return false;
 
-    NCDBG << "Solving..." << endl ;
+    NCDBG << "Solving..." << endl;
 
-    NCPopupInfo info( wpos( (NCurses::lines()-4)/2, (NCurses::cols()-18)/2),  YCPString( "" ),
-		      YCPString(NCPkgNames::Solving()),
-		      NCPkgNames::OKLabel() );
-    info.setNiceSize( 18, 4 );
-    info.popup();
+    NCPopupInfo * info = new NCPopupInfo( wpos( (NCurses::lines()-4)/2, (NCurses::cols()-18)/2 ),
+					  "",
+					  NCPkgNames::Solving(),
+					  NCPkgNames::OKLabel()
+					  );
+    info->setNiceSize( 18, 4 );
+    info->popup();
     
     zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
 
@@ -251,8 +261,10 @@ bool NCPkgPopupDeps::solve( NCSelectionBox * problemw, NCPkgSolverAction action 
 	    NCERR << "Unknown action for resolve" << endl;
     }
     
-    info.popdown();
+    info->popdown();
 
+    YDialog::deleteTopmostDialog();
+    
     if (success)
 	return true;
 
@@ -274,7 +286,8 @@ bool NCPkgPopupDeps::solve( NCSelectionBox * problemw, NCPkgSolverAction action 
 
 	// no solution yet
 	problems.push_back (make_pair (*i, zypp::ProblemSolution_Ptr ()));
-	problemw->itemAdded ((*i)->description (), idx, false /*selected*/);
+	//problemw->itemAdded ((*i)->description (), idx, false /*selected*/);
+	problemw->addItem( (*i)->description(), false );	// selected: false
     }
 
     return false;
@@ -297,7 +310,7 @@ bool NCPkgPopupDeps::showSolutions( int index )
     zypp::ResolverProblem_Ptr problem = problems[index].first;
     zypp::ProblemSolution_Ptr user_solution = problems[index].second;
 
-    details->setText( YCPString(problem->details()) );
+    details->setValue( problem->details() );
     details->setCurPos( 0 );
     
     zypp::ProblemSolutionList solutions = problem->solutions ();
@@ -346,15 +359,27 @@ NCursesEvent NCPkgPopupDeps::showDependencyPopup( NCPkgSolverAction action )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPkgPopupDeps::niceSize
-//	METHOD TYPE : void
+//	METHOD NAME : NCPkgPopupDeps::preferredWidth
+//	METHOD TYPE : int
 //
 //	DESCRIPTION :
 //
-
-long NCPkgPopupDeps::nicesize(YUIDimension dim)
+int NCPkgPopupDeps::preferredWidth()
 {
-    return ( dim == YD_HORIZ ? NCurses::cols()-15 : NCurses::lines()-5 );
+    return NCurses::cols()-15;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPkgPopupDeps::preferredHeight
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int NCPkgPopupDeps::preferredHeight()
+{
+    return NCurses::lines()-5;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -386,17 +411,17 @@ bool NCPkgPopupDeps::postAgain( NCPkgSolverAction action )
     if ( ! postevent.widget )
 	return false;
 
-    YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
-
-    if ( currentId.isNull() )
+    // YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
+    YWidgetID * currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
+    if ( !currentId )
 	return false;
     
-    if ( currentId->compare( NCPkgNames::Cancel () ) == YO_EQUAL )
+    if ( currentId->toString() == "cancel" )
     {
 	// close the dialog 
 	postevent = NCursesEvent::cancel;
     }
-    else if ( currentId->compare( NCPkgNames::Solve () ) == YO_EQUAL )
+    else if ( currentId->toString() == "solve" )
     {
 	// apply the solution here
 	zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
@@ -527,13 +552,13 @@ NCursesEvent NCSolutionSelectionBox::wHandleInput( wint_t key )
 	case KEY_RETURN: {
 	    // act like a radio button
 	    // make sure that only one item is selected
-	    int cur = getCurrentItem ();
-	    bool on = itemIsSelected (cur);
+	    YItem *cur = currentItem ();
+	    bool on = isItemSelected( cur );
 	    if (on)
 	    {
 		deselectAllItems ();
-		selectItem (cur);
-		depsPopup->setSolution (cur);
+		selectItem (cur, true);
+		depsPopup->setSolution ( cur->index() );
 	    }
 	    break;	
 	}

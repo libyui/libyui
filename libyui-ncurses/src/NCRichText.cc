@@ -23,6 +23,10 @@
 #include "stringutil.h"
 #include <sstream>
 
+#include "YMenuItem.h"
+
+#include "YWidgetID.h"
+
 #if 0
 #undef  DBG_CLASS
 #define DBG_CLASS "_NCRichText_"
@@ -166,18 +170,18 @@ void NCRichText::Anchor::draw( NCPad & pad, const chtype attr, int color )
 //
 //	DESCRIPTION :
 //
-NCRichText::NCRichText( NCWidget * parent, const YWidgetOpt & opt,
-			const YCPString & ntext )
-    : YRichText( opt, ntext )
+NCRichText::NCRichText( YWidget * parent, const string & ntext,
+			bool plainTextMode )
+    : YRichText( parent, ntext, plainTextMode )
     , NCPadWidget( parent )
     , text( ntext )
-    , plainText( opt.plainTextMode.value() )
+    , plainText( plainTextMode )
     , preTag( false )
     , Tattr( 0 )
 {
   WIDDBG << endl;
   activeLabelOnly = true;
-  setText( ntext );
+  setValue( ntext );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -193,17 +197,20 @@ NCRichText::~NCRichText()
   WIDDBG << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::nicesize
-//	METHOD TYPE : long
-//
-//	DESCRIPTION :
-//
-long NCRichText::nicesize( YUIDimension dim )
+int NCRichText::preferredWidth()
 {
-  return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
+    return wGetDefsze().W;
+}
+
+int NCRichText::preferredHeight()
+{
+    return wGetDefsze().H;
+}
+
+void NCRichText::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YRichText::setEnabled( do_bv );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -214,10 +221,9 @@ long NCRichText::nicesize( YUIDimension dim )
 //
 //	DESCRIPTION :
 //
-void NCRichText::setSize( long newwidth, long newheight )
+void NCRichText::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YRichText::setSize( newwidth, newheight );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -237,16 +243,16 @@ void NCRichText::setLabel( const YCPString & nlabel )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCRichText::setText
+//	METHOD NAME : NCRichText::setValue
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCRichText::setText( const YCPString & ntext )
+void NCRichText::setValue( const string & ntext )
 {
   DelPad();
-  text = ntext;
-  YRichText::setText( ntext );
+  text = NCstring( ntext );
+  YRichText::setValue( ntext );
   Redraw();
 }
 
@@ -269,7 +275,7 @@ void NCRichText::wRedraw()
     arm( armed );
   NCPadWidget::wRedraw();
 
-  if ( initial && autoScrollDown ) {
+  if ( initial && autoScrollDown () ) {
     myPad()->ScrlTo( wpos( myPad()->maxy(), 0 ) );
   }
   return;
@@ -311,7 +317,7 @@ NCursesEvent NCRichText::wHandleInput( wint_t key )
 	string ycpstr;
 	NCstring::RecodeFromWchar( anchors[armed].target, "UTF-8", &ycpstr );
 	NCMIL << "LINK: " << ycpstr << endl;
-	ret.selection = YCPString( ycpstr );
+	ret.selection = new YMenuItem( ycpstr );
       }
       break;
     }

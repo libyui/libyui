@@ -47,15 +47,22 @@ class NCAlignment : public YAlignment, public NCWidget {
 
   public:
 
-    NCAlignment( NCWidget * parent, const YWidgetOpt & opt,
-		 YAlignmentType halign, YAlignmentType valign );
+    NCAlignment( YWidget * parent, YAlignmentType halign, YAlignmentType valign );
     virtual ~NCAlignment();
 
-    virtual long nicesize( YUIDimension dim ) { return YAlignment::nicesize( dim ); }
-    virtual void setSize( long newwidth, long newheight );
+    virtual int preferredWidth() { return YAlignment::preferredWidth(); }
+    virtual int preferredHeight() { return YAlignment::preferredHeight(); }
+    
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
-    virtual void moveChild( YWidget * child, long newx, long newy );
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    virtual void moveChild( YWidget * child, int newx, int newy );
+
+    virtual void setEnabled( bool do_bv );
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -40,6 +40,9 @@ class NCTree : public YTree, public NCPadWidget {
   NCTree & operator=( const NCTree & );
   NCTree            ( const NCTree & );
 
+  private:
+    void Dit( NCTreeLine * p, NCTreePad * pad, YTreeItem * item );
+    
   protected:
 
     virtual NCTreePad * myPad () const
@@ -54,7 +57,7 @@ class NCTree : public YTree, public NCPadWidget {
 
     virtual NCPad * CreatePad();
     virtual void    DrawPad();
-
+     
   protected:
 
     virtual void startMultipleChanges() { startMultidraw(); }
@@ -62,22 +65,30 @@ class NCTree : public YTree, public NCPadWidget {
 
   public:
 
-    NCTree( NCWidget * parent, const YWidgetOpt & opt,
-	    const YCPString & label );
+    NCTree( YWidget * parent, const string & label );
     virtual ~NCTree();
 
-    virtual long nicesize( YUIDimension dim );
-    virtual void setSize( long newwidth, long newheight );
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+    
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const YCPString & nlabel );
+    virtual void setLabel( const string & nlabel );
     virtual void rebuildTree();
 
     virtual const YTreeItem * getCurrentItem() const;
-    virtual void setCurrentItem( YTreeItem * it );
 
+    virtual void selectItem( YItem *item, bool selected );
+    virtual void selectItem( int index );
+    
     virtual NCursesEvent wHandleInput( wint_t key );
 
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    virtual void setEnabled( bool do_bv ); 
 
     virtual bool setKeyboardFocus() {
       if ( !grabFocus() )

@@ -105,12 +105,15 @@ class NCPadWidget : public NCWidget, protected NCSchrollCB {
   public:
 
     NCPadWidget( NCWidget * myparent = 0 );
+    NCPadWidget( YWidget * parent );
+    
     virtual ~NCPadWidget();
 
     size_t Columns( ) { return minPadSze.W; }
     void setLabel( const NClabel & nlabel );
 
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( do_bv ); }
+    virtual void setEnabled( bool do_bv ) { NCWidget::setEnabled( do_bv ); }
+
 };
 
 ///////////////////////////////////////////////////////////////////

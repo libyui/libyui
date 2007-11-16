@@ -31,6 +31,8 @@
 #include <ycp/YCPVoid.h>
 #include <ycp/Parser.h>
 
+#include "YPackageSelector.h"
+#include "YCPDialogParser.h"
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -40,10 +42,10 @@
 //
 //	DESCRIPTION :
 //
-NCPackageSelectorStart::NCPackageSelectorStart( NCWidget * parent,
-						const YWidgetOpt & opt,
+NCPackageSelectorStart::NCPackageSelectorStart( YWidget * parent,
+						long modeFlags,
 						YUIDimension dimension )
-    : NCSplit( parent, opt, dimension )
+    : NCLayoutBox( parent, dimension )
       , widgetRoot( 0 )
       , packager( 0 )
       , youMode ( false )
@@ -54,11 +56,11 @@ NCPackageSelectorStart::NCPackageSelectorStart( NCWidget * parent,
     // set the textdomain
     setTextdomain( "packages" );
     
-    // get the mode (the mode is also available in PackageSelector via const YWidgetOpt & opt)
-    if ( opt.youMode.value() )
+    // get the mode (the mode is also available in PackageSelector via modeFlags)
+    if ( modeFlags & YPkg_OnlineUpdateMode )
 	youMode = true;
 
-    if ( opt.updateMode.value() )
+    if ( modeFlags & YPkg_UpdateMode )
 	updateMode = true;
     
     // Read the layout file and create the widget tree
@@ -70,32 +72,38 @@ NCPackageSelectorStart::NCPackageSelectorStart( NCWidget * parent,
     else
     { 
 	pkgLayout = readLayoutFile( "/usr/share/YaST2/data/pkg_layout.ycp" );
+	//pkgLayout = readLayoutFile( "/usr/share/YaST2/data/test_layout.ycp" );
     }
 
     if ( ! pkgLayout.isNull() && ui )
     {
-	YWidgetOpt childrenOpt( opt );
-	widgetRoot = (YContainerWidget *)ui->createWidgetTree( dynamic_cast<YWidget *>(parent),
-							       childrenOpt, 0, pkgLayout );
+	// widgetRoot = (YContainerWidget *)ui->createWidgetTree( dynamic_cast<YWidget *>(parent),
+	//						       childrenOpt, 0, pkgLayout );
+
+	widgetRoot = YCPDialogParser::parseWidgetTreeTerm( this,
+							   pkgLayout );
     }
 
     // create the PackageSelector (creation with 'new' is required because initialization
     // in the list of member variables causes problems with untranslated messages)
-    packager = new NCPackageSelector( ui, opt );
 
     if ( widgetRoot )
     {
-	this->addChild( widgetRoot );
-	widgetRoot->setParent( this );
-	
-	NCDBG <<  "Widget tree of NCPackageSelector created" << endl;
+	NCMIL <<  "Widget tree of NCPackageSelector created" << endl;
+
+	packager = new NCPackageSelector( ui, widgetRoot, modeFlags );
+
+	// child handling is done by libyui now
+	//this->addChild( widgetRoot );
+	//widgetRoot->setParent( this );
 
 	// get the widget ID of the package table
-	YWidget * pkg = ui->widgetWithId( widgetRoot, NCPkgNames::Packages(), true );
+	YWidget * pkg = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Packages() );
 	pkgList = dynamic_cast<NCPkgTable *>(pkg);
 
 	if ( pkgList )
 	{
+	    NCMIL << "Set package table type" << endl;
 	    // set the type of the table
 	    NCPkgStatusStrategy * strategy;
 	    if ( youMode )
@@ -156,10 +164,10 @@ NCPackageSelectorStart::~NCPackageSelectorStart()
 //
 //	DESCRIPTION :
 //
-void NCPackageSelectorStart::setSize( long newwidth, long newheight )
+void NCPackageSelectorStart::setSize( int newwidth, int newheight )
 {
-  wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  NCSplit::setSize( newwidth, newheight );
+    wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
+    YLayoutBox::setSize( newwidth, newheight );
 }
 
 
@@ -176,6 +184,11 @@ void NCPackageSelectorStart::showDefaultList()
     // fill the package table with packages belonging to the default filter
     if ( pkgList )
     {
+	if ( packager )
+	{
+	    packager->createPopups();
+	}
+	
 	// fill the list with packages (or patches)
 	pkgList->fillDefaultList( );
 

@@ -10,57 +10,66 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCSplit.h
+   File:       NCLayoutBox.h
 
    Author:     Michael Andres <ma@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#ifndef NCSplit_h
-#define NCSplit_h
+#ifndef NCLayoutBox_h
+#define NCLayoutBox_h
 
 #include <iosfwd>
 
-#include "YSplit.h"
+#include "YLayoutBox.h"
 #include "NCWidget.h"
 
-class NCSplit;
+class NCLayoutBox;
 
 ///////////////////////////////////////////////////////////////////
 //
-//	CLASS NAME : NCSplit
+//	CLASS NAME : NCLayoutBox
 //
 //	DESCRIPTION :
 //
-class NCSplit : public YSplit, public NCWidget {
+class NCLayoutBox : public YLayoutBox, public NCWidget {
 
-  friend std::ostream & operator<<( std::ostream & STREAM, const NCSplit & OBJ );
+  friend std::ostream & operator<<( std::ostream & STREAM, const NCLayoutBox & OBJ );
 
-  NCSplit & operator=( const NCSplit & );
-  NCSplit            ( const NCSplit & );
+  NCLayoutBox & operator=( const NCLayoutBox & );
+  NCLayoutBox            ( const NCLayoutBox & );
 
   private:
 
   protected:
 
     virtual const char * location() const {
-      return dimension() == YD_HORIZ ? "NC(H)Split" : "NC(V)Split" ;
+      return primary() == YD_HORIZ ? "NC(H)LayoutBox" : "NC(V)LayoutBox" ;
     }
 
   public:
 
-    NCSplit( NCWidget * parent, const YWidgetOpt & opt,
-	     YUIDimension dimension );
-    virtual ~NCSplit();
+    NCLayoutBox( YWidget * parent, YUIDimension dimension );
+    virtual ~NCLayoutBox();
 
-    virtual long nicesize( YUIDimension dim ) { return YSplit::nicesize( dim ); }
-    virtual void setSize( long newwidth, long newheight );
+    //virtual long nicesize( YUIDimension dim ) { return YLayoutBox::nicesize( dim ); }
 
-    virtual void moveChild( YWidget * child, long newx, long newy );
+    virtual int preferredWidth() { return YLayoutBox::preferredWidth(); }
+    virtual int preferredHeight() { return YLayoutBox::preferredHeight(); }
+    
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    virtual void moveChild( YWidget * child, int newx, int newy );
+
+    //virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    virtual void setEnabled( bool do_bv ); 
 };
 
 ///////////////////////////////////////////////////////////////////
 
-#endif // NCSplit_h
+#endif // NCLayoutBox_h

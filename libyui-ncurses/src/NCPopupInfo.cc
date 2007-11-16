@@ -22,13 +22,15 @@
 #include "NCTree.h"
 #include "YMenuButton.h"
 #include "YDialog.h"
-#include "NCSplit.h"
+#include "NCLayoutBox.h"
 #include "NCSpacing.h"
+
+#include "YWidgetID.h"
 
 namespace
 {
-    const YCPTerm idOk( "ok" );
-    const YCPTerm idCancel( "cancel" );
+    const string idOk( "ok" );
+    const string idCancel( "cancel" );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -40,8 +42,8 @@ namespace
 //	DESCRIPTION :
 //
 NCPopupInfo::NCPopupInfo( const wpos at,
-			  const YCPString & headline,
-			  const YCPString & text,
+			  const string & headline,
+			  const string & text,
 			  string okButtonLabel,
 			  string cancelButtonLabel,
 			  string printLicenseText )
@@ -76,65 +78,60 @@ NCPopupInfo::~NCPopupInfo()
 //
 //	DESCRIPTION :
 //
-void NCPopupInfo::createLayout( const YCPString & headline,
-				const YCPString & text,
+void NCPopupInfo::createLayout( const string & headline,
+				const string & text,
 				string okButtonLabel,
 				string cancelButtonLabel,
 			        string printLicenseText )
 {
-
-  YWidgetOpt opt;
-
   // the vertical split is the (only) child of the dialog
-  NCSplit * split = new NCSplit( this, opt, YD_VERT );
-  addChild( split );
+  NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
+
+  // addChild() is obsolete (handled by new libyui)
   
   // add the headline
-  opt.isHeading.setValue( true );
-  NCLabel * head = new NCLabel( split, opt, headline );
-  split->addChild( head );
+  new NCLabel( split, headline, true, false ); // isHeading = true
   
   // add the rich text widget 
-  helpText = new NCRichText( split, opt, text );
-  split->addChild( helpText );
+  helpText = new NCRichText( split, text );
 
   if (printLicenseText != "" ) 
   { 
-      NCLabel *printLabel = new NCLabel (split, opt, printLicenseText );
-      split->addChild( new NCSpacing( split, opt, 1, false, true ) ); 
-      split->addChild( printLabel );
-      split->addChild( new NCSpacing( split, opt, 1, false, true ) ); 
+      new NCSpacing( split, YD_VERT, false, 1 ); 
+      new NCLabel (split, printLicenseText );
+      new NCSpacing( split, YD_VERT, false, 1 ); 
   }  
 
-  NCSplit * hSplit = new NCSplit( split, opt, YD_HORIZ );
-  split->addChild( hSplit );
+
+  NCLayoutBox * hSplit = new NCLayoutBox( split, YD_HORIZ );
+
   if ( okButtonLabel != "" && cancelButtonLabel != "" )
   {
-      opt.isHStretchable.setValue( true );
-      hSplit->addChild( new NCSpacing( hSplit, opt, 0.4, true, false ) ); 
+      new NCSpacing( hSplit, YD_HORIZ, true, 0.4 ); // stretchable = true
   }
 
   if ( okButtonLabel != "" )
   {
-      opt.key_Fxx.setValue( 10 );
       // add the OK button
-      okButton = new NCPushButton( hSplit, opt, YCPString(okButtonLabel) );
-      okButton->setId( YCPString(idOk->name()) );
-  
-      hSplit->addChild( okButton );
+      okButton = new NCPushButton( hSplit, okButtonLabel );
+      okButton->setFunctionKey( 10 );
+      
+      YStringWidgetID * okID = new YStringWidgetID (idOk );
+      okButton->setId( okID );
   }
   
   if ( cancelButtonLabel != "" )
   {
-      hSplit->addChild( new NCSpacing( hSplit, opt, 0.4, true, false ) );
+      new NCSpacing( hSplit, YD_HORIZ, true, 0.4 );
       
-      opt.key_Fxx.setValue( 9 );
       // add the Cancel button
-      cancelButton = new NCPushButton( hSplit, opt, YCPString(cancelButtonLabel) );
-      cancelButton->setId( YCPString(idCancel->name()) );
-      hSplit->addChild( cancelButton );
+      cancelButton = new NCPushButton( hSplit, cancelButtonLabel );
+      cancelButton->setFunctionKey( 9 );
+	  
+      YStringWidgetID * cancelID = new YStringWidgetID( idCancel );
+      cancelButton->setId( cancelID );
       
-      hSplit->addChild( new NCSpacing( hSplit, opt, 0.4, true, false ) ); 
+      new NCSpacing( hSplit, YD_HORIZ, true, 0.4 ); 
   }
   split->addChild( new NCSpacing( split, opt, 0.5, false, true ) ); 
   
@@ -174,16 +171,7 @@ void NCPopupInfo::popdown()
 	closeDialog();
 	visible = false;
 }
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupInfo::niceSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
-
+#if 0
 long NCPopupInfo::nicesize(YUIDimension dim)
 {
     long vertDim = vDim;
@@ -194,6 +182,41 @@ long NCPopupInfo::nicesize(YUIDimension dim)
     if ( hDim >= NCurses::cols() )
 	horDim = NCurses::cols()-10;
     return ( dim == YD_HORIZ ? horDim : vertDim );
+}
+#endif
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPopupInfo::preferredWidth
+//	METHOD TYPE : int
+//
+//	DESCRIPTION : returns preferred horizontal size
+//
+int NCPopupInfo::preferredWidth()
+{
+    int horDim = hDim;
+
+    if ( hDim >= NCurses::cols() )
+	horDim = NCurses::cols()-10;
+
+    return horDim;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPopupInfo::preferredHeight
+//	METHOD TYPE : int
+//
+//	DESCRIPTION : returns preferred vertical size
+//
+int NCPopupInfo::preferredHeight()
+{
+    int vertDim = vDim;
+    if ( vDim >= NCurses::lines() )
+	vertDim = NCurses::lines()-5;
+
+    return vertDim;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -230,11 +253,12 @@ bool NCPopupInfo::postAgain()
 
     if ( okButton && cancelButton )
     {
-	YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
+	YWidgetID * currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
 
-	if ( !currentId.isNull()
-	     && currentId->compare( YCPString(idCancel->name()) ) == YO_EQUAL )
+	if ( currentId
+	     && currentId->toString() == idCancel )
 	{
+	    NCMIL << "Cancel button pressed" << endl;
 	    // close the dialog 
 	    postevent = NCursesEvent::cancel;
 	}

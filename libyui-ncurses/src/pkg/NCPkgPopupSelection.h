@@ -66,10 +66,10 @@ public:
     NCPkgPopupSelection( const wpos at, NCPackageSelector * pkg, SelType type );
     virtual ~NCPkgPopupSelection();
 
-    virtual long nicesize(YUIDimension dim);
-
+    virtual int preferredWidth();
+    virtual int preferredHeight();
     
-    void createLayout( const YCPString & label );
+    void createLayout( const string & label );
 
     /**
      * Fills the list with the available selections (and the status info)

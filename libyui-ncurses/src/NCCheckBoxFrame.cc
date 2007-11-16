@@ -28,9 +28,9 @@
 //
 //	DESCRIPTION :
 //
-NCCheckBoxFrame::NCCheckBoxFrame( NCWidget * parent, const YWidgetOpt & opt,
-				  const YCPString & nlabel, bool checked )
-    : YCheckBoxFrame( opt, nlabel )
+NCCheckBoxFrame::NCCheckBoxFrame( YWidget * parent, const string & nlabel,
+				  bool checked )
+    : YCheckBoxFrame( parent, nlabel, checked )
     , NCWidget( parent )
 {
   WIDDBG << endl;
@@ -38,7 +38,8 @@ NCCheckBoxFrame::NCCheckBoxFrame( NCWidget * parent, const YWidgetOpt & opt,
   framedim.Pos = wpos( 1 );
   framedim.Sze = wsze( 2 );
 
-  setLabel( getLabel() );
+  //setLabel( getLabel() );
+  setLabel( YCheckBoxFrame::label() );
   hotlabel = &label;
 
   if ( invertAutoEnable() )
@@ -46,7 +47,7 @@ NCCheckBoxFrame::NCCheckBoxFrame( NCWidget * parent, const YWidgetOpt & opt,
   else
       setValue( checked );
 
-  // setEnabling(); is called in wRedraw()		
+  // setEnabled(); is called in wRedraw()		
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -75,13 +76,33 @@ long NCCheckBoxFrame::nicesize( YUIDimension dim )
   //space to add - keep vertical dim, add horizontal space
   //for checkbox
   wpair plussize = wpair(0,4);
-  defsze = wsze( YContainerWidget::child(0)->nicesize( YD_VERT ),
-		 YContainerWidget::child(0)->nicesize( YD_HORIZ ) );
+  //defsze = wsze( YContainerWidget::child(0)->nicesize( YD_VERT ),
+  //		   YContainerWidget::child(0)->nicesize( YD_HORIZ ) );
+  defsze = wsze( firstChild()->preferredWidth(),
+		 firstChild()->preferredHeight() );
   if ( label.width() > (unsigned)defsze.W )
     defsze.W = label.width();
   defsze += framedim.Sze + plussize;	
 
   return dim == YD_HORIZ ? defsze.W : defsze.H;
+}
+
+int NCCheckBoxFrame::preferredWidth()
+{
+    defsze.W = firstChild()->preferredWidth();
+    
+    if ( label.width() > (unsigned)defsze.W )
+	defsze.W = label.width();
+    defsze.W += framedim.Sze.W + 4;	// add space for checkbox
+  
+    return defsze.W;
+}
+
+int NCCheckBoxFrame::preferredHeight()
+{
+    defsze.H = firstChild()->preferredHeight() + framedim.Sze.H;
+    
+    return defsze.H;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -92,12 +113,12 @@ long NCCheckBoxFrame::nicesize( YUIDimension dim )
 //
 //	DESCRIPTION :
 //
-void NCCheckBoxFrame::setSize( long newwidth, long newheight )
+void NCCheckBoxFrame::setSize( int newwidth, int newheight )
 {
   wsze csze( newheight, newwidth );
   wRelocate( wpos( 0 ), csze );
   csze = wsze::max( 0, csze - framedim.Sze );
-  YContainerWidget::child(0)->setSize( csze.W, csze.H );
+  firstChild()->setSize( csze.W, csze.H );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -108,11 +129,11 @@ void NCCheckBoxFrame::setSize( long newwidth, long newheight )
 //
 //	DESCRIPTION :
 //
-void NCCheckBoxFrame::setLabel( const YCPString & nlabel )
+void NCCheckBoxFrame::setLabel( const string & nlabel )
 {
   YCheckBoxFrame::setLabel( nlabel );
   
-  label = NCstring( getLabel() );
+  label = NCstring( YCheckBoxFrame::label() );
   label.stripHotkey();
 
   Redraw();
@@ -121,23 +142,23 @@ void NCCheckBoxFrame::setLabel( const YCPString & nlabel )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCCheckBoxFrame::setEnabling
+//	METHOD NAME : NCCheckBoxFrame::setEnabled
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCCheckBoxFrame::setEnabling( bool do_bv )
+void NCCheckBoxFrame::setEnabled( bool do_bv )
 {
-  enabled = do_bv; // in YWidget
+  YWidget::setEnabled( do_bv );
 
   for ( tnode<NCWidget*> * c = this->Next();
 	c && c->IsDescendantOf( this );
 	c = c->Next() ) {
     if ( c->Value()->GetState() != NC::WSdumb )
     {
-      c->Value()->setEnabling( enabled );
+      c->Value()->setEnabled( do_bv );
       // explicitely set the state (needed for first run - bug #268352)
-      c->Value()->SetState(enabled?NC::WSnormal:NC::WSdisabeled, true);
+      c->Value()->SetState(do_bv?NC::WSnormal:NC::WSdisabeled, true);
     }
   }
 }
@@ -206,7 +227,7 @@ void NCCheckBoxFrame::wRedraw()
 	  win->printw( 0, 2, "%c", 'x' );
   }
 
-  setEnabling( getValue() );
+  setEnabled( getValue() );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -236,10 +257,10 @@ NCursesEvent NCCheckBoxFrame::wHandleInput( wint_t key )
       //No need to call Redraw() here, it is already done
       //in setValue
       
-      if ( getNotify() )
+      if ( notify() )
 	  ret = NCursesEvent::ValueChanged;
       else
-	  setEnabling( getValue() );
+	  setEnabled( getValue() );
   }
   
   return ret;
@@ -258,4 +279,9 @@ bool NCCheckBoxFrame::setKeyboardFocus()
     if ( !grabFocus() )
 	return YWidget::setKeyboardFocus();
     return true;
+}
+
+bool NCCheckBoxFrame::value()
+{
+    return getValue();
 }

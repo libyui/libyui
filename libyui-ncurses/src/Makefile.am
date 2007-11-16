@@ -11,7 +11,6 @@ plugin_LTLIBRARIES = libpy2ncurses.la
 #noinst_LTLIBRARIES = liby2ncurses.la
 
 libpy2ncurses_la_LDFLAGS = -version-info 2:0
-#liby2ncurses_la_LDFLAGS = -version-info 2:0
 
 libpy2ncurses_la_LIBADD =		\
 	-L$(plugindir)			\
@@ -32,6 +31,10 @@ noinst_HEADERS = 		\
 	tnode.h			\
 	position.h		\
 	YNCursesUI.h		\
+	NCApplication.h		\
+	NCWidgetFactory.h	\
+	NCOptionalWidgetFactory.h	\
+				\
 	NCPackageSelectorPlugin.h	\
 	NCPackageSelectorStart.h	\
 	NCPkgTable.h		\
@@ -57,7 +60,7 @@ noinst_HEADERS = 		\
 	NCAlignment.h       	\
 	NCFrame.h       	\
 	NCCheckBoxFrame.h       \
-	NCSplit.h       	\
+	NCLayoutBox.h		\
 	NCReplacePoint.h        \
 	NCRadioButtonGroup.h	\
 	NCImage.h       	\
@@ -67,7 +70,7 @@ noinst_HEADERS = 		\
 	NCMenuButton.h      	\
 	NCPushButton.h      	\
 	NCRadioButton.h     	\
-	NCTextEntry.h       	\
+	NCInputField.h       	\
 	NCIntField.h        	\
 	NCComboBox.h        	\
 	NCPadWidget.h       	\
@@ -79,14 +82,14 @@ noinst_HEADERS = 		\
 	NCLogView.h     	\
 	NCMultiLineEdit.h       \
 	NCFileSelection.h       \
-	NCAskForDirectory.h     \
-	NCAskForFile.h      	\
 	NCPopup.h       	\
 	NCPopupTable.h      	\
 	NCPopupList.h       	\
 	NCPopupMenu.h       	\
 	NCPopupTextEntry.h      \
 	NCPopupInfo.h       	\
+	NCAskForDirectory.h     \
+	NCAskForFile.h		\
 	NCstyle.braille.h NCstyle.mono.h	\
 	NCstyle.linux.h NCstyle.xterm.h		\
 	NCstyle.rxvt.h				\
@@ -97,6 +100,9 @@ libpy2ncurses_la_SOURCES =		\
 	Y2Log.cc			\
 	position.cc			\
 	YNCursesUI.cc			\
+	NCApplication.cc		\
+	NCWidgetFactory.cc		\
+	NCOptionalWidgetFactory.cc	\
 					\
 	NCPackageSelectorPlugin.cc	\
 	NCPackageSelectorStart.cc 	\
@@ -125,7 +131,7 @@ libpy2ncurses_la_SOURCES =		\
 	NCAlignment.cc			\
 	NCFrame.cc			\
 	NCCheckBoxFrame.cc		\
-	NCSplit.cc			\
+	NCLayoutBox.cc			\
 	NCReplacePoint.cc		\
 	NCRadioButtonGroup.cc		\
 	NCImage.cc			\
@@ -135,7 +141,7 @@ libpy2ncurses_la_SOURCES =		\
 	NCMenuButton.cc			\
 	NCPushButton.cc			\
 	NCRadioButton.cc		\
-	NCTextEntry.cc			\
+	NCInputField.cc			\
 	NCIntField.cc			\
 	NCComboBox.cc			\
 	NCPadWidget.cc			\
@@ -147,8 +153,6 @@ libpy2ncurses_la_SOURCES =		\
 	NCLogView.cc			\
 	NCMultiLineEdit.cc		\
 	NCFileSelection.cc		\
-	NCAskForDirectory.cc		\
-	NCAskForFile.cc			\
 					\
 	NCPopup.cc			\
 	NCPopupTable.cc			\
@@ -156,8 +160,11 @@ libpy2ncurses_la_SOURCES =		\
 	NCPopupMenu.cc			\
 	NCPopupTextEntry.cc		\
 	NCPopupInfo.cc			\
+	NCAskForDirectory.cc		\
+	NCAskForFile.cc			\
 					\
 	Y2CCNCursesUI.cc
+
 
 #libpy2ncurses_la_SOURCES = $(liby2ncurses_la_SOURCES)	\
 #	Y2CCNCursesUI.cc Y2CCNCursesUI.h	\

@@ -22,9 +22,10 @@
 
 #include "NCAskForDirectory.h"
 
-#include <ycp/YCPTerm.h>
+#include "YWidgetID.h"
 #include "YDialog.h"
-#include "NCSplit.h"
+#include "YTypes.h"
+#include "NCLayoutBox.h"
 #include "NCSpacing.h"
 #include "NCFrame.h"
 #include "NCi18n.h"
@@ -40,11 +41,11 @@
 
 namespace
 {
-    const YCPTerm idOk( "ok" );
-    const YCPTerm idCancel( "cancel" );
-    const YCPTerm idDirList( "dirlist" );
-    const YCPTerm idDirName( "dirname" );
-    const YCPTerm idDetails( "details" );
+    const string idOk( "ok" );
+    const string idCancel( "cancel" );
+    const string idDirList( "dirlist" );
+    const string idDirName( "dirname" );
+    const string idDetails( "details" );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -93,82 +94,71 @@ NCAskForExistingDirectory::~NCAskForExistingDirectory()
 void NCAskForExistingDirectory::createLayout( const YCPString & iniDir,
 					      const YCPString & headline )
 {
-
-    YWidgetOpt opt;
-
     // the vertical split is the (only) child of the dialog
-    NCSplit * split = new NCSplit( this, opt, YD_VERT );
-    addChild( split );
+    NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
 
-    opt.notifyMode.setValue( false );
+    // the headline
+    new NCLabel( split, headline->value(), true, false );	// isHeading = true
 
-    //the headline
-    opt.isHeading.setValue( true );
-
-    NCLabel * head = new NCLabel( split, opt, headline );
-    split->addChild( head );
-
-    split->addChild( new NCSpacing( split, opt, 0.4, false, true ) );
-
-    opt.isHStretchable.setValue( true );
-
-    NCFrame * frame = new NCFrame( split, opt, YCPString("" ) );
-    NCSplit * vSplit = new NCSplit( frame, opt, YD_VERT );
-
-    opt.isEditable.setValue( false );
-    opt.notifyMode.setValue( true );
+    NCFrame * frame = new NCFrame( split, "" );
+    
     // label for text field showing the selected dir
-    dirName = new NCComboBox( frame, opt, YCPString(_( "Selected Directory:" )) );
-    frame->addChild( dirName );
+    dirName = new NCComboBox( frame, _( "Selected Directory:" ), false ); // editable = false
+    dirName->setNotify( true );
+    dirName->setStretchable( YD_HORIZ, true );
 
-    dirName->setId( YCPString(idDirName->name()) );
-
-    vSplit->addChild( new NCSpacing( vSplit, opt, 0.6, false, true ) );
-
-    split->addChild( frame );
+    YStringWidgetID * dirID = new YStringWidgetID( idDirName );
+    dirName->setId( dirID );
 
     // add the checkBox detailed
-    NCSplit * hSplit = new NCSplit( split, opt, YD_HORIZ );
-    split->addChild( hSplit );
+    NCLayoutBox * hSplit = new NCLayoutBox( split, YD_HORIZ );
+
     // label for checkbox 
-    detailed = new NCCheckBox( hSplit, opt, YCPString(_( "&Detailed View" )), false );
-    detailed->setId( YCPString(idDetails->name()) );
+    detailed = new NCCheckBox( hSplit, _( "&Detailed View" ), false );
+    YStringWidgetID * detailsID = new YStringWidgetID( idDetails );
+    detailed->setId( detailsID );
+    detailed->setNotify( true );
     
-    hSplit->addChild( new NCSpacing( hSplit, opt, 0.1, true, false ) );
-    hSplit->addChild( detailed );
+    // create table header for table type T_Overview
+    YTableHeader * tableHeader = new YTableHeader();
+    tableHeader->addColumn( " ", YAlignBegin );
+    tableHeader->addColumn( _( "Directory Name" ), YAlignBegin );
     
     // add the list of directories
-    dirList = new NCDirectoryTable( split, opt, NCFileTable::T_Overview, iniDir );
+    dirList = new NCDirectoryTable( split,
+				    tableHeader,
+				    NCFileTable::T_Overview,
+				    iniDir );
 
-    dirList->setId( YCPString(idDirList->name()) );
-    split->addChild( dirList );
+    YStringWidgetID * dirListID = new YStringWidgetID( idDirList );
+    dirList->setId( dirListID );
 
-    split->addChild( new NCSpacing( split, opt, 0.4, false, true ) );
+    new NCSpacing( split, YD_VERT, false, 1.0 );
 
     // HBox for the buttons
-    NCSplit * hSplit1 = new NCSplit( split, opt, YD_HORIZ );
-    split->addChild( hSplit1 ); 
-    opt.isHStretchable.setValue( true );
-    hSplit1->addChild( new NCSpacing( hSplit1, opt, 0.2, true, false ) );
+    NCLayoutBox * hSplit1 = new NCLayoutBox( split, YD_HORIZ );
+
+    new NCSpacing( hSplit1, YD_HORIZ, true, 0.2 );	// stretchable = true
 
     // add the OK button
-    opt.key_Fxx.setValue( 10 );
-    // the label of an OK button
-    okButton = new NCPushButton( hSplit1, opt, YCPString(_( "&OK" )) );
-    okButton->setId( YCPString(idOk->name()) );
+    okButton = new NCPushButton( hSplit1, _( "&OK" ) );
+    okButton->setFunctionKey( 10 );
+    okButton->setStretchable( YD_HORIZ, true );
+    
+    YStringWidgetID * okID = new YStringWidgetID ( idOk );
+    okButton->setId( okID );
 
-    hSplit1->addChild( okButton );
-
-    hSplit1->addChild( new NCSpacing( hSplit1, opt, 0.4, true, false ) );
+    new NCSpacing( hSplit1, YD_HORIZ, true, 0.4 );
       
     // add the Cancel button
-    opt.key_Fxx.setValue( 9 );
-    // the label of the Cancel button
-    cancelButton = new NCPushButton( hSplit1, opt, YCPString(_( "&Cancel" )) );
-    cancelButton->setId( YCPString(idCancel->name()) );
+    cancelButton = new NCPushButton( hSplit1, _( "&Cancel" ) );
+    cancelButton->setFunctionKey( 9 );
+    cancelButton->setStretchable( YD_HORIZ, true);
+    
+    YStringWidgetID * cancelID = new YStringWidgetID (idCancel );
+    cancelButton->setId( cancelID );
 
-    hSplit1->addChild( cancelButton );
-    hSplit1->addChild( new NCSpacing( hSplit1, opt, 0.2, true, false ) );  
+    new NCSpacing( hSplit1, YD_HORIZ, true, 0.2 );  
   
 }
 
@@ -187,9 +177,8 @@ NCursesEvent & NCAskForExistingDirectory::showDirPopup( )
     dirList->fillList( );
     dirList->setKeyboardFocus();
 
-    dirName->itemAdded( YCPString( dirList->getCurrentDir() ),
-			0,		// index
-			true );		// selected
+    dirName->addItem( dirList->getCurrentDir(),
+		      true );		// selected
     
     // event loop
     do {
@@ -202,20 +191,16 @@ NCursesEvent & NCAskForExistingDirectory::showDirPopup( )
     return postevent;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCAskForExistingDirectory::niceSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
-
-
-long NCAskForExistingDirectory::nicesize(YUIDimension dim)
+int NCAskForExistingDirectory::preferredWidth()
 {
-    return ( dim == YD_HORIZ ? NCurses::cols()-10 : NCurses::lines()-4 );
+    return NCurses::cols()-10;
 }
+
+int NCAskForExistingDirectory::preferredHeight()
+{
+    return NCurses::lines()-4;
+}
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -248,40 +233,41 @@ bool NCAskForExistingDirectory::postAgain( )
 
     postevent.detail = NCursesEvent::NODETAIL;
 
-    YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
+    YWidgetID * currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
 
-    if ( !currentId.isNull() )
+    if ( currentId )
     {
-	if ( currentId->compare( YCPString(idOk->name()) ) == YO_EQUAL )
+	if ( currentId->toString() == idOk )
 	{
-	    postevent.result = YCPString( dirList->getCurrentDir() );
+	    postevent.result = dirList->getCurrentDir();
 	    // return false means: close the popup
 	    return false;
 	}
-	else if ( currentId->compare( YCPString(idDirList->name()) ) == YO_EQUAL )
+	else if ( currentId->toString() == idDirList )
 	{
 	    unsigned int i = dirName->getListSize();
 	    
-	    if (postevent.result.isNull ())
+	    if ( postevent.result == "" )
 		return true;
 		
-	    // show the currently selected directory
-	    dirName->itemAdded( postevent.result->asString(),
-				i,
-				true );
+            // show the currently selected directory
+	    NCDBG << "Add item: " <<  postevent.result << endl;
 
+	    dirName->addItem( postevent.result,
+			      true );
+	    
 	    if ( postevent.reason == YEvent::Activated )
 	    {
 		// fill the directory list
 		dirList->fillList();
 	    }
 	}
-	else if ( currentId->compare( YCPString(idDirName->name()) ) == YO_EQUAL )
+	else if ( currentId->toString() == idDirName )
 	{
-	    dirList->setStartDir( dirName->getValue() );
+	    dirList->setStartDir( dirName->value() );
 	    dirList->fillList();
 	}
-	else if ( currentId->compare( YCPString(idDetails->name()) ) == YO_EQUAL )
+	else if ( currentId->toString() == idDetails )
 	{
 	    bool details = getCheckBoxValue( detailed );
 	    if ( details )
@@ -296,14 +282,14 @@ bool NCAskForExistingDirectory::postAgain( )
 	}
 	else
 	{
-	    postevent.result = YCPNull();
+	    postevent.result = "";
 	    return false;
 	}
     }
 
     if (postevent == NCursesEvent::cancel)
     {
-	postevent.result = YCPNull();	
+	postevent.result = "";	
 	return false;
     }
     
@@ -314,17 +300,10 @@ bool NCAskForExistingDirectory::postAgain( )
 
 bool NCAskForExistingDirectory::getCheckBoxValue( NCCheckBox * checkBox )
 {
-    YCPValue value = YCPNull();
-
     if ( checkBox )
     {
-	value = checkBox->getValue();
-
 	// return whether the option is selected or not
-	if ( !value.isNull() )
-	{
-	    return ( value->asBoolean()->toString() == "true" ? true : false );
-	}
+	return ( checkBox->isChecked() );
     }
 
     return false;

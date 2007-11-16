@@ -136,8 +136,16 @@ class NCDialog : public YDialog, public NCWidget {
     NCursesEvent userInput( int timeout_millisec = -1 );
     NCursesEvent pollInput();
 
-    virtual long nicesize( YUIDimension dim );
-    virtual void setSize( long newwidth, long newheight );
+    //virtual long nicesize( YUIDimension dim );
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+    
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
   protected:
 
@@ -165,8 +173,9 @@ class NCDialog : public YDialog, public NCWidget {
       return dlgstyle ? *dlgstyle : NCurses::style()[NCstyle::DefaultStyle];
     }
 
-    virtual void setEnabling( bool do_bv ) { /*NOP*/ }
-
+    //virtual void setEnabling( bool do_bv ) { /*NOP*/ }
+    virtual void setEnabled( bool do_bv ) { /*NOP*/ };
+    
   private:
 
     friend class NCurses;

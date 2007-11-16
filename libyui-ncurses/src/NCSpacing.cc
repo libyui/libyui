@@ -28,12 +28,15 @@
 //
 //	DESCRIPTION :
 //
-NCSpacing::NCSpacing( NCWidget * parent, const YWidgetOpt & opt,
-		      float size, bool horizontal, bool vertical )
-    : YSpacing( opt, size, horizontal, vertical )
+NCSpacing::NCSpacing( YWidget * parent,
+		      YUIDimension dim,
+		      bool stretchable,
+		      YLayoutSize_t layoutUnits )
+    : YSpacing( parent, dim, stretchable, layoutUnits )
     , NCWidget( parent )
 {
   WIDDBG << endl;
+#if 0
   if ( horizontal && vertical ) {
     l = "NC(B)Spacing";
   }
@@ -46,6 +49,15 @@ NCSpacing::NCSpacing( NCWidget * parent, const YWidgetOpt & opt,
   else {
     l = "NC(N)Spacing";
   }
+#endif
+  
+  if ( dim == YD_VERT )
+     l = "NC(V)Spacing";
+  else if ( dim == YD_HORIZ )
+      l = "NC(H)Spacing";
+  else
+      l = "NC(N)Spacing";
+  
   wstate = NC::WSdumb;
   skipNoDimWin = true;
 }
@@ -71,9 +83,13 @@ NCSpacing::~NCSpacing()
 //
 //	DESCRIPTION :
 //
-void NCSpacing::setSize( long newwidth, long newheight )
+void NCSpacing::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YSpacing::setSize( newwidth, newheight );
 }
 
+void NCSpacing::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YSpacing::setEnabled( do_bv );
+}

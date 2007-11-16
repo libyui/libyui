@@ -37,7 +37,6 @@
   Textdomain "packages"
 */
 
-class YCPValue;
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -69,8 +68,8 @@ protected:
 public:
     
     NCPopupInfo( const wpos at,
-		 const YCPString & headline,
-		 const YCPString & text,
+		 const string & headline,
+		 const string & text,
 		 // the label of an OK button
 		 string okButtonLabel = _( "&OK" ),
 		 string cancelButtonLabel = "",
@@ -78,10 +77,11 @@ public:
     
     virtual ~NCPopupInfo();
 
-    virtual long nicesize(YUIDimension dim);
-
-    void createLayout( const YCPString & headline,
-		       const YCPString & text,
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+    
+    void createLayout( const string & headline,
+		       const string & text,
 		       string okButtonLabel,
 		       string cancelButtonLabel, 
 		       string printLicenseText );

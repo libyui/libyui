@@ -26,6 +26,7 @@ using namespace std;
 
 #include "position.h"
 #include "NCWidget.h"
+#include "YTableItem.h"
 
 class NCTableStyle;
 class NCTableCol;
@@ -62,6 +63,8 @@ class NCTableLine {
     
     int index;
 
+    YTableItem *yitem;
+
   protected:
 
     mutable STATE vstate;
@@ -73,6 +76,8 @@ class NCTableLine {
 
     NCTableLine( unsigned cols, int index = -1, const unsigned s = S_NORMAL );
     NCTableLine( vector<NCTableCol*> & nItems, int index = -1, const unsigned s = S_NORMAL );
+    void setOrigItem( YTableItem *it);
+    YTableItem *origItem() const { return yitem; }
     virtual ~NCTableLine();
 
     unsigned Cols() const { return Items.size(); }

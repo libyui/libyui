@@ -18,6 +18,7 @@
 /-*/
 #include "Y2Log.h"
 #include "NCPopupList.h"
+#include "YTableItem.h"
 
 #include <ycp/YCPString.h>
 
@@ -30,19 +31,12 @@
 //	DESCRIPTION :
 //
 NCPopupList::NCPopupList( const wpos at,
-			  const YCPString & label,
-			  const list<YCPString> & deflist,
+			  const string & label,
+			  const list<string> & deflist,
 			  int index )
     : NCPopupTable( at )
 {
-  vector<string> row( 1 );
-  createList( row );
-  for ( list<YCPString>::const_iterator entry = deflist.begin();
-	entry != deflist.end(); ++entry ) {
-    row[0] = (*entry)->value();
-    addItem( YCPNull(), row );
-  }
-  setCurrentItem( index );
+    createEntries( deflist, index);
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -55,6 +49,19 @@ NCPopupList::NCPopupList( const wpos at,
 //
 NCPopupList::~NCPopupList()
 {
+
+}
+
+void NCPopupList::createEntries( const list<string> & deflist, int index )
+{
+    vector<string> row( 1 );
+    createList( row );
+    for ( list<string>::const_iterator entry = deflist.begin();
+	  entry != deflist.end(); ++entry ) {
+        YItem *item = new YTableItem( (*entry ));
+	addItem( item );
+    }
+    setCurrentItem( index );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -69,3 +76,4 @@ bool NCPopupList::postAgain()
 {
   return NCPopupTable::postAgain();
 }
+

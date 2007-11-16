@@ -20,7 +20,7 @@
 #include "NCPkgPopupRepo.h"
 
 #include "YDialog.h"
-#include "NCSplit.h"
+#include "NCLayoutBox.h"
 #include "NCSpacing.h"
 #include "NCPkgNames.h"
 
@@ -51,8 +51,8 @@ NCPkgRepoTag::NCPkgRepoTag ( ZyppRepo repoPtr)
 //	DESCRIPTION :
 //
 
-NCPkgRepoTable::NCPkgRepoTable( NCWidget *parent, const YWidgetOpt & opt)
-    :NCTable( parent, opt, vector<string> (), false )
+NCPkgRepoTable::NCPkgRepoTable( YWidget *parent, YTableHeader *tableHeader )
+    :NCTable( parent, tableHeader )
 {
    fillHeader();
 }
@@ -164,7 +164,7 @@ NCPkgPopupRepo::NCPkgPopupRepo (const wpos at, NCPackageSelector *pkg)
     , okButton( 0 )
     , packager( pkg )
 {
-    createLayout( YCPString( NCPkgNames::RepoLabel()) );
+    createLayout(  NCPkgNames::RepoLabel() );
 
     fillRepoList( );
 }
@@ -193,37 +193,30 @@ NCPkgPopupRepo::~NCPkgPopupRepo()
 // 		      (header label, NCPkgRepoTable, OK button)
 //
 
-void NCPkgPopupRepo::createLayout( const YCPString & label) 
+void NCPkgPopupRepo::createLayout( const string & label) 
 {
-    YWidgetOpt opt;
 
     // the vertical split is the (only) child of the dialog
-    NCSplit * split = new NCSplit( this, opt, YD_VERT );
-    addChild( split );
-
-    opt.notifyMode.setValue( false );
+    NCLayoutBox * split = new NCLayoutBox( this,  YD_VERT );
 
     //the headline
-    opt.isHeading.setValue( true );
+    new NCLabel( split, label, true, false );
 
-    NCLabel * head = new NCLabel( split, opt, label );
-    split->addChild( head );
-   
     // the repositories table
-    repolist = new NCPkgRepoTable( split, opt );
-    split->addChild( repolist);
+    YTableHeader *tableHeader = new YTableHeader();
+    repolist = new NCPkgRepoTable( split, tableHeader );
     
-    split->addChild ( new NCSpacing( split, opt, 0.4, false, true) );
-
-    opt.key_Fxx.setValue( 10 );
+    new NCSpacing( split, YD_VERT, false, 0.4 );
 
     //the cute button
-    okButton = new NCPushButton( split, opt, YCPString(NCPkgNames::OKLabel()) );
-    okButton->setId( NCPkgNames::OkButton () );
+    okButton = new NCPushButton( split, NCPkgNames::OKLabel() );
+    YStringWidgetID  * okID = new YStringWidgetID("ok");
 
-    split->addChild( okButton );
+    okButton->setId( okID );
+    okButton->setFunctionKey(10);
 
-    split->addChild ( new NCSpacing( split, opt, 0.4, false, true) );
+    new NCSpacing( split, YD_VERT, false, 0.4 );
+
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -374,10 +367,10 @@ bool NCPkgPopupRepo::postAgain()
 
     postevent.detail = NCursesEvent::NODETAIL;
 
-    YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
+    YWidgetID *currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
 
-    if ( !currentId.isNull()
-         && currentId->compare( NCPkgNames::OkButton () ) == YO_EQUAL )
+    if ( currentId
+         && currentId->toString() == "ok" )
     {
         postevent.detail = NCursesEvent::USERDEF ;
         // return false means: close the popup
@@ -428,3 +421,4 @@ NCursesEvent & NCPkgPopupRepo::showRepoPopup()
     }
     return postevent;
 }
+>>>>>>> .merge-right.r42142

@@ -135,7 +135,7 @@ public:
    /**
     * Constructor
     */
-    NCPkgTable( NCWidget * parent, const YWidgetOpt & opt );
+    NCPkgTable( YWidget * parent, YTableHeader * tableHeader );
 
     virtual ~NCPkgTable();
 
@@ -170,7 +170,7 @@ public:
     * @param newtext The new text
     * @eturn void
     */
-    virtual void cellChanged( int index, int colnum, const YCPString & newtext );
+    virtual void cellChanged( int index, int colnum, const string & newtext );
 
    /**
     * Returns the contents of a certain cell in table

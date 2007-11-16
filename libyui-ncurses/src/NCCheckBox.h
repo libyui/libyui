@@ -63,23 +63,33 @@ class NCCheckBox : public YCheckBox, public NCWidget {
 
   public:
 
-    NCCheckBox( NCWidget * parent, const YWidgetOpt & opt,
-		const YCPString & label,
+    NCCheckBox( YWidget * parent,
+		const string & label,
 		bool checked );
     virtual ~NCCheckBox();
 
     virtual long nicesize( YUIDimension dim );
-    virtual void setSize( long newwidth, long newheight );
 
-    virtual void setLabel( const YCPString & nlabel );
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+    
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setValue( const YCPValue & newval );
-    virtual YCPValue getValue();
+    virtual void setLabel( const string & nlabel );
+
+    virtual void setValue( YCheckBoxState state );
+    
+    virtual YCheckBoxState value();
 
     virtual NCursesEvent wHandleInput( wint_t key );
 
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
-
+    virtual void setEnabled( bool do_bv );
+    
     virtual bool setKeyboardFocus() {
       if ( !grabFocus() )
 	return YWidget::setKeyboardFocus();

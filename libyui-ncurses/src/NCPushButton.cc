@@ -28,18 +28,14 @@
 //
 //	DESCRIPTION :
 //
-NCPushButton::NCPushButton( NCWidget * parent, const YWidgetOpt & opt,
-			    YCPString nlabel )
-    : YPushButton( opt, nlabel )
+NCPushButton::NCPushButton( YWidget * parent, const string & nlabel )
+    : YPushButton( parent, nlabel )
     , NCWidget( parent )
 {
   WIDDBG << endl;
+  setWidgetRep(this);
   setLabel( nlabel );
   hotlabel = &label;
-  if ( opt.isDefaultButton.value() )
-    setKeyboardFocus();
-
-  setFunctionHotkey( opt );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -58,14 +54,43 @@ NCPushButton::~NCPushButton()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPushButton::nicesize
-//	METHOD TYPE : long
+//	METHOD NAME : NCPushButton::preferredWidth
+//	METHOD TYPE : int
 //
 //	DESCRIPTION :
 //
-long NCPushButton::nicesize( YUIDimension dim )
+int NCPushButton::preferredWidth()
 {
-  return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
+    wsze defsize = wGetDefsze();
+    int width = defsize.W;
+    return wGetDefsze().W;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPushButton::preferredHeight
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int NCPushButton::preferredHeight()
+{
+    return wGetDefsze().H;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPushButton::setEnabled
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCPushButton::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YPushButton::setEnabled( do_bv );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -76,10 +101,11 @@ long NCPushButton::nicesize( YUIDimension dim )
 //
 //	DESCRIPTION :
 //
-void NCPushButton::setSize( long newwidth, long newheight )
+void NCPushButton::setSize( int newwidth, int newheight )
 {
-  wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YPushButton::setSize( newwidth, newheight );
+    wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
+    if ( isDefaultButton() )
+	setKeyboardFocus(); 
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -110,7 +136,7 @@ NCursesEvent NCPushButton::wHandleInput( wint_t key )
 //
 //	DESCRIPTION :
 //
-void NCPushButton::setLabel( const YCPString & nlabel )
+void NCPushButton::setLabel( const string & nlabel )
 {
   label = NCstring( nlabel );
   label.stripHotkey();
@@ -131,7 +157,6 @@ void NCPushButton::wRedraw()
 {
   if ( !win )
     return;
-
 
   const NCstyle::StWidget & style( widgetStyle() );
   win->bkgd( style.plain );

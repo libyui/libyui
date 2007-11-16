@@ -10,7 +10,7 @@
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-   File:       NCWeight.cc
+   File:       NCLayoutBox.cc
 
    Author:     Michael Andres <ma@suse.de>
    Maintainer: Michael Andres <ma@suse.de>
@@ -18,18 +18,19 @@
 /-*/
 #include "Y2Log.h"
 #include "NCurses.h"
-#include "NCWeight.h"
+#include "NCLayoutBox.h"
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCWeight::NCWeight
+//	METHOD NAME : NCLayoutBox::NCLayoutBox
 //	METHOD TYPE : Constructor
 //
 //	DESCRIPTION :
 //
-NCWeight::NCWeight( NCWidget * parent, YUIDimension dim, long weight )
-    : YWeight( dim, weight )
+NCLayoutBox::NCLayoutBox( YWidget * parent,
+			  YUIDimension dimension )
+    : YLayoutBox( parent, dimension )
     , NCWidget( parent )
 {
   WIDDBG << endl;
@@ -39,12 +40,12 @@ NCWeight::NCWeight( NCWidget * parent, YUIDimension dim, long weight )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCWeight::~NCWeight
+//	METHOD NAME : NCLayoutBox::~NCLayoutBox
 //	METHOD TYPE : Destructor
 //
 //	DESCRIPTION :
 //
-NCWeight::~NCWeight()
+NCLayoutBox::~NCLayoutBox()
 {
   WIDDBG << endl;
 }
@@ -52,13 +53,40 @@ NCWeight::~NCWeight()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCWeight::setSize
+//	METHOD NAME : NCLayoutBox::setSize
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCWeight::setSize( long newwidth, long newheight )
+void NCLayoutBox::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YWeight::setSize( newwidth, newheight );
+  YLayoutBox::setSize( newwidth, newheight );
 }
+
+void NCLayoutBox::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YLayoutBox::setEnabled( do_bv );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCLayoutBox::moveChild
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCLayoutBox::moveChild( YWidget * child, int newx, int newy )
+{
+  NCWidget * cw = dynamic_cast<NCWidget*>(child);
+
+  if ( ! ( cw && IsParentOf( *cw ) ) ) {
+    NCINT << DLOC << cw << " is not my child" << endl;
+    return;
+  }
+
+  wMoveChildTo( *cw, wpos( newy, newx ) );
+}
+

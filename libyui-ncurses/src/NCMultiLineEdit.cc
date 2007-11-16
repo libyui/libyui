@@ -27,16 +27,15 @@
 //
 //	DESCRIPTION :
 //
-NCMultiLineEdit::NCMultiLineEdit( NCWidget * parent, const YWidgetOpt & opt,
-				  const YCPString & nlabel,
-				  const YCPString & initialText )
-    : YMultiLineEdit( opt, nlabel )
+NCMultiLineEdit::NCMultiLineEdit( YWidget * parent, const string & nlabel )
+    : YMultiLineEdit( parent, nlabel )
     , NCPadWidget( parent )
 {
   WIDDBG << endl;
   defsze = wsze( 5, 5 ) + wsze(0,2);
   setLabel( nlabel );
-  setText( initialText );
+  // initial text isn't an argument any longer
+  //setText( initialText );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -55,15 +54,43 @@ NCMultiLineEdit::~NCMultiLineEdit()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCMultiLineEdit::nicesize
-//	METHOD TYPE : long
+//	METHOD NAME : NCMultiLineEdit::preferredWidth
+//	METHOD TYPE : int
 //
 //	DESCRIPTION :
 //
-long NCMultiLineEdit::nicesize( YUIDimension dim )
+int NCMultiLineEdit::preferredWidth()
 {
-  defsze.W = ( 5 > labelWidht() ? 5 : labelWidht() ) + 2;
-  return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
+    defsze.W = ( 5 > labelWidht() ? 5 : labelWidht() ) + 2;
+    return wGetDefsze().W;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCMultiLineEdit::preferredHeight
+//	METHOD TYPE : int
+//
+//	DESCRIPTION :
+//
+int NCMultiLineEdit::preferredHeight()
+{
+    return wGetDefsze().H;
+    //return YMultiLineEdit::defaultVisibleLines();
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCMultiLineEdit::setEnabled
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCMultiLineEdit::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YMultiLineEdit::setEnabled( do_bv );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -74,10 +101,9 @@ long NCMultiLineEdit::nicesize( YUIDimension dim )
 //
 //	DESCRIPTION :
 //
-void NCMultiLineEdit::setSize( long newwidth, long newheight )
+void NCMultiLineEdit::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YMultiLineEdit::setSize( newwidth, newheight );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -88,7 +114,7 @@ void NCMultiLineEdit::setSize( long newwidth, long newheight )
 //
 //	DESCRIPTION :
 //
-void NCMultiLineEdit::setLabel( const YCPString & nlabel )
+void NCMultiLineEdit::setLabel( const string & nlabel )
 {
   YMultiLineEdit::setLabel( nlabel );
   NCPadWidget::setLabel( NCstring( nlabel ) );
@@ -97,18 +123,19 @@ void NCMultiLineEdit::setLabel( const YCPString & nlabel )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCMultiLineEdit::setText
+//	METHOD NAME : NCMultiLineEdit::setValue
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCMultiLineEdit::setText( const YCPString & ntext )
+void NCMultiLineEdit::setValue( const string & ntext )
 {
   DelPad();
-  ctext = ntext;
+  ctext = NCstring( ntext );
   Redraw();
 }
 
+#if 0
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -124,6 +151,24 @@ YCPString NCMultiLineEdit::text()
   }
   return ctext.YCPstr();
 }
+#endif
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCMultiLineEdit::value
+//	METHOD TYPE : string
+//
+//	DESCRIPTION :
+//
+string NCMultiLineEdit::value()
+{
+  if ( myPad() ) {
+    ctext = NCstring( myPad()->getText() );
+  }
+  return ctext.Str();
+}
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -153,7 +198,7 @@ NCursesEvent NCMultiLineEdit::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
   handleInput( key );
-  if ( getNotify() )
+  if ( notify() )
       ret = NCursesEvent::ValueChanged;
   return ret;
 }

@@ -80,7 +80,7 @@ public:
       * @param opt Widget options
       */
 
-    NCPkgRepoTable (NCWidget *parent, const YWidgetOpt & opt);
+    NCPkgRepoTable  ( YWidget *parent, YTableHeader *tableHeader);
 
     virtual ~NCPkgRepoTable() {};
 
@@ -157,7 +157,7 @@ public:
       * @param label Header label 
       */
 
-    void createLayout( const YCPString & label );    
+    void createLayout( const string & label );    
 
     /**
       * Add items to the repository list (assoc.
@@ -175,3 +175,4 @@ public:
     NCursesEvent & showRepoPopup();
 };
 #endif
+>>>>>>> .merge-right.r42142

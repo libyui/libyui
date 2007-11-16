@@ -67,6 +67,7 @@ NCDialog::NCDialog( const YWidgetOpt & opt )
     , ncdopts    ( DEFAULT )
     , popedpos   ( -1 )
 {
+  NCMIL << "NCDialog(opt) derived from YDialog(opt)" << endl; 
   _init( opt );
 }
 
@@ -88,6 +89,7 @@ NCDialog::NCDialog( const YWidgetOpt & opt, const wpos at, const bool boxed )
     , ncdopts    ( boxed ? POPUP : POPUP|NOBOX )
     , popedpos   ( at )
 {
+    NCMIL << "NCDialog(opt, at, boxed) derived from YDialog(opt)" << endl;
     _init( opt );
 }
 
@@ -120,7 +122,6 @@ void NCDialog::_init( const YWidgetOpt & opt )
   dlgstyle = &NCurses::style()[mystyleset];
 
   helpPopup = 0;
-
   WIDDBG << "+++ " << this << endl;
 }
 
@@ -183,30 +184,33 @@ NCDialog::~NCDialog()
 
   if ( helpPopup )
   {
-      delete helpPopup;
+      YDialog::deleteTopmostDialog();
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCDialog::nicesize
-//	METHOD TYPE : long
-//
-//	DESCRIPTION :
-//
-long NCDialog::nicesize( YUIDimension dim )
+int NCDialog::preferredWidth()
 {
-  if ( hasDefaultSize() || !numChildren() ) {
-    return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
-  }
+    if ( hasDefaultSize() || !childrenCount() )
+	return  wGetDefsze().W;
+    wsze csze( firstChild()->preferredHeight(),
+	       firstChild()->preferredWidth() );
+    csze = wsze::min( wGetDefsze(),
+		      wsze::max( csze, wsze( 1 ) ) );
 
-  wsze csze( child( 0 )->nicesize( YD_VERT ),
-	     child( 0 )->nicesize( YD_HORIZ ) );
-  csze = wsze::min( wGetDefsze(),
-		    wsze::max( csze, wsze( 1 ) ) );
+    return csze.W;
+}
 
-  return dim == YD_HORIZ ? csze.W : csze.H;
+int NCDialog::preferredHeight()
+{
+    if ( hasDefaultSize() || !childrenCount() ) {
+	return wGetDefsze().H;
+    }
+    wsze csze( firstChild()->preferredHeight(),
+	       firstChild()->preferredWidth() );
+    csze = wsze::min( wGetDefsze(),
+		      wsze::max( csze, wsze( 1 ) ) );
+
+    return csze.H;  
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -217,9 +221,10 @@ long NCDialog::nicesize( YUIDimension dim )
 //
 //	DESCRIPTION :
 //
-void NCDialog::setSize( long newwidth, long newheight )
+void NCDialog::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
+  NCMIL << "setSize() called: width: " << newwidth << "   height: " << newheight << endl;
   YDialog::setSize( newwidth, newheight );
 }
 
@@ -233,7 +238,9 @@ void NCDialog::setSize( long newwidth, long newheight )
 //
 void NCDialog::initDialog()
 {
-  if ( !pan ) {
+    NCMIL << "initDialog()" << endl;
+    if ( !pan ) {
+	NCMIL << "setInitialSize() called!" << endl; 
     setInitialSize();
   }
 }
@@ -248,12 +255,19 @@ void NCDialog::initDialog()
 //
 void NCDialog::showDialog()
 {
+    NCMIL << "SHOW" << endl;
+    dumpWidgetTree();
   IODBG << "sd+ " << this << endl;
   if ( pan && pan->hidden() ) {
     getVisible();
     doUpdate();
-    DumpOn( NCDBG, " " );
+    DumpOn( NCMIL, " " );
   }
+  else if ( !pan )
+  {
+      NCMIL << "no pan" << endl;
+  }
+
   activate( true );
   IODBG << "sd- " << this << endl;
 }
@@ -288,7 +302,7 @@ void NCDialog::closeDialog()
 //
 void NCDialog::activate( const bool newactive )
 {
-  if ( active != newactive || pan->hidden()) {
+  if ( active != newactive || ( pan && pan->hidden()) ) {
     active = newactive;
     if ( pan ) {
       pan->show(); // not getVisible() because wRedraw() follows.
@@ -1162,6 +1176,8 @@ void NCDialog::processInput( int timeout_millisec )
 	if ( helpPopup )
 	{
 	    helpPopup->popdown();
+	    YDialog::deleteTopmostDialog();
+	    helpPopup = 0;
 	}
 	else
 	{
@@ -1198,16 +1214,15 @@ void NCDialog::processInput( int timeout_millisec )
 	     helpPopup = new NCPopupInfo( wpos( NCurses::lines()/3, NCurses::cols()/3 ),
 					   // headline of the text mode help
 					  _( "Text Mode Navigation" ),
-					  YCPString( helpIntro +
-						     _( "<p>Function key bindings:</p>" ) +
-						     helpText
-						     ),
+					  helpIntro + _( "<p>Function key bindings:</p>" )
+					  + helpText,
 					  "" );
-	    helpPopup->setNiceSize( NCurses::cols()/3, NCurses::lines()/3 );
-	     
 	 }
+	 
 	 if ( helpPopup )
 	 {
+	     helpPopup->setNiceSize( NCurses::cols()/3, NCurses::lines()/3 );
+
 	     if ( !helpPopup->isVisible() )
 	     {
 		 helpPopup->popup();
@@ -1215,7 +1230,8 @@ void NCDialog::processInput( int timeout_millisec )
 	     else
 	     {
 		 helpPopup->popdown();
-		 delete helpPopup;
+		 // don't call 'delete' for helpPopup use deleteTopmostDialog() instead 
+		 YDialog::deleteTopmostDialog();
 		 helpPopup = 0;
 		 pendingEvent = getHotkeyEvent( ch );
 	     }
@@ -1373,31 +1389,22 @@ bool NCDialog::describeFunctionKeys( string & helpText )
 
     for ( tnode<NCWidget*> * c = this->Next(); c; c = c->Next() )
     {
-	int fkey =  c->Value()->GetFunctionHotkey( );
-	if ( fkey != 0 )
+	YWidget * w = dynamic_cast<YWidget *> (c->Value() );
+
+	if ( w && w->hasFunctionKey() )
 	{
-	    YWidget * w = dynamic_cast<YWidget *> (c->Value() );
+	    // Retrieve the widget's "shortcut property" that describes
+	    // whatever it is - regardless of widget type (PushButton, ...)
+	    //YCPSymbol propertyName( w->shortcutProperty() );
+	    //YCPValue  propertyValue = w->queryWidget( propertyName );
+	    // Get rid of unwanted '&' shortcut markers
+	    //string desc = YShortcut::cleanShortcutString(  propertyValue->asString()->value() );
 
-	    if ( w )
+	    if ( w->functionKey() == 1 )
 	    {
-		// Retrieve the widget's "shortcut property" that describes
-		// whatever it is - regardless of widget type (PushButton, ...)
-		YCPSymbol propertyName( w->shortcutProperty() );
-		YCPValue  propertyValue = w->queryWidget( propertyName );
-
-		// Get rid of unwanted '&' shortcut markers
-		string desc = YShortcut::cleanShortcutString(  propertyValue->asString()->value() );
-		int no =  fkey - KEY_F(1) + 1;
-		if ( no == 1 )
-		{
-		    hasF1 = true;
-		}
-		fkeys[ no ] = desc;
+		hasF1 = true;
 	    }
-	    else
-	    {
-		NCERR << "Dynamic cast to YWidget * failed for" << c->Value() << endl;
-	    }
+	    fkeys[ w->functionKey() ] = w->debugLabel();
 	}
     }
     // create the text with sorted F-keys

@@ -22,11 +22,51 @@
 #include "NCTree.h"
 #include "YMenuButton.h"
 #include "YDialog.h"
-#include "NCSplit.h"
+#include "YTreeItem.h"
+#include "NCLayoutBox.h"
 #include "NCPkgNames.h"
 #include "NCPackageSelector.h"
 
 #include "NCZypp.h"
+
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	CLASS NAME  :	NCRpmGroupItem
+//	
+//	DESCRIPTION :	class derived from YTreeItem with additional
+//			property to store the original rpm group item
+//
+//
+class NCRpmGroupItem : public YTreeItem {
+
+private:
+    YStringTreeItem * rpmGroupItem;
+
+public:
+
+    NCRpmGroupItem( YTreeItem * 	parent,
+		    const string & 	label,
+		    YStringTreeItem * origItem )
+	: YTreeItem( parent, label ),
+	  rpmGroupItem( origItem )
+	{
+	    
+	}
+
+    NCRpmGroupItem( const string & 	label,
+		    YStringTreeItem * origItem )
+	: YTreeItem( label ),
+	  rpmGroupItem( origItem )
+	{
+	    
+	}
+
+    YStringTreeItem * getOrigItem() const { return rpmGroupItem; }
+
+};
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -42,10 +82,13 @@ NCPkgPopupTree::NCPkgPopupTree( const wpos at, NCPackageSelector * pkg )
     , packager ( pkg )
 {
     // create the layout (the NCTree)
-    createLayout( YCPString(NCPkgNames::RpmTreeLabel()) );
+    createLayout( NCPkgNames::RpmTreeLabel() );
 
-    // clone the tree (fill the NCTree)
-    cloneTree( pkg->rpmGroupsTree()->root(), 0 ); 
+    if ( pkg->rpmGroupsTree() )
+    {
+	// clone the tree (fill the NCTree)
+	cloneTree( pkg->rpmGroupsTree()->root(), 0 );
+    }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -68,21 +111,18 @@ NCPkgPopupTree::~NCPkgPopupTree()
 //
 //	DESCRIPTION :
 //
-void NCPkgPopupTree::createLayout( const YCPString & label )
+void NCPkgPopupTree::createLayout( const string & label )
 {
-
-  YWidgetOpt opt;
-  opt.notifyMode.setValue( true );
-  opt.vWeight.setValue( 70 );
-
   // the vertical split is the (only) child of the dialog
-  NCSplit * split = new NCSplit( this, opt, YD_VERT );
-  addChild( split );
+  NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
+
+  // addChild() is obsolete
 
   // create the tree 
-  filterTree = new NCTree( split, opt, label );
-  split->addChild( filterTree );
-
+  filterTree = new NCTree( split, label );
+  YUI_CHECK_NEW( filterTree );
+  
+  filterTree->setNotify( true );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -107,6 +147,8 @@ NCursesEvent NCPkgPopupTree::showFilterPopup( )
     if ( !packager || !filterTree )
 	return postevent;
 
+    YStringTreeItem * origItem;
+
     // get the currently selected rpm group and show the package list
     if ( postevent.detail == NCursesEvent::USERDEF )
     {
@@ -114,22 +156,27 @@ NCursesEvent NCPkgPopupTree::showFilterPopup( )
 
 	if ( item )
 	{
-	    // get the data pointer
-	    YStringTreeItem * origItem = (YStringTreeItem *) (item->data());
+	    const NCRpmGroupItem * rpmGroupItem = dynamic_cast<const NCRpmGroupItem *>(item);
 
-	    if ( origItem )
+	    if ( rpmGroupItem )
 	    {
-		string label =  origItem->value().translation();
+		// get the original rpm group item (YStringTreeItem)
+		origItem = rpmGroupItem->getOrigItem();
+		
+		if ( origItem )
+		{
+		    string label =  origItem->value().translation();
 
-		// fill the package list 
-		packager->fillPackageList( YCPString( label ), origItem ); 
+		    // fill the package list 
+		    packager->fillPackageList( YCPString( label ), origItem ); 
 
-		NCMIL << "Selected RPM group: " << label << endl;
+		    NCMIL << "Selected RPM group: " << label << endl;
+		}
 	    }
 	}
 	else
 	{
-	    NCERR << "No RPM group tree existing" << endl;	
+	    NCERR << "Current item not valid" << endl;	
 	}
     }
     
@@ -139,21 +186,29 @@ NCursesEvent NCPkgPopupTree::showFilterPopup( )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPkgPopupTree::niceSize
-//	METHOD TYPE : void
+//	METHOD NAME : NCPkgPopupTree::preferredWidth
+//	METHOD TYPE : int
 //
-//	DESCRIPTION :
-//
-
-long NCPkgPopupTree::nicesize(YUIDimension dim)
+int NCPkgPopupTree::preferredWidth()
 {
-    long vdim;
+    return NCurses::cols()/2;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPkgPopupTree::preferredHeight
+//	METHOD TYPE : int
+//
+int NCPkgPopupTree::preferredHeight()
+{
+    int vdim;
     if ( NCurses::lines() > 20 )
 	vdim = 20;
     else
 	vdim = NCurses::lines()-4;
-	
-    return ( dim == YD_HORIZ ? NCurses::cols()/2 : vdim );
+
+    return vdim;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -164,18 +219,17 @@ long NCPkgPopupTree::nicesize(YUIDimension dim)
 //
 //	DESCRIPTION :
 //
-YTreeItem * NCPkgPopupTree::addItem( YTreeItem * parentItem,
-				  const YCPString & text,
-				  void * data,
-				  bool  open )
+void NCPkgPopupTree::addItem( YTreeItem * newItem )
 {
   if ( !filterTree )
-    return 0;
+  {
+      NCERR << "ERROR: rpm groups tree not available" << endl;
+      return;
+  }
 
-  return ( filterTree->addItem( parentItem, text, YCPString( "" ), data, open ) );
+  filterTree->addItem( newItem );
+
 }
-
- 
 
 			   
 ///////////////////////////////////////////////////////////////////
@@ -242,27 +296,33 @@ bool NCPkgPopupTree::postAgain()
 // Adds all tree items got from YPkgRpmGroupTagsFilterView to
 // the filter popup tree
 //
-void NCPkgPopupTree::cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone )
+void NCPkgPopupTree::cloneTree( YStringTreeItem * parentOrig, NCRpmGroupItem * parentClone )
 {
-    // 	methods of YStringTreeItem see ../libyui/src/include/TreeItem.h:  SortedTreeItem
     YStringTreeItem * child = parentOrig->firstChild();
-    YTreeItem *	clone;
+    NCRpmGroupItem  * clone;
     
     while ( child )
     {
-	NCDBG << "TRANSLATION: " << child->value().translation() << endl;
-	clone = addItem( parentClone,
-			 YCPString( child->value().translation() ),
-			 child,
-			 false );
+	NCDBG << "Rpm group (translated): " << child->value().translation() << endl;
+
+	if ( parentClone )
+	{
+	    NCMIL << "with Parent: " <<  child->value().translation() << endl;
+	    clone = new NCRpmGroupItem( parentClone, child->value().translation(), child );
+	}
+	else
+	{
+	    NCMIL << "WITHOUT Parent: " <<  child->value().translation() << endl;
+	    clone = new NCRpmGroupItem( child->value().translation(), child );
+	}
+
+	addItem( clone );
+	
+	// plain tree is build
+	clone = parentClone;
 
 	cloneTree( child, clone );
-
 	child = child->next();
     }
 }
 
-YStringTreeItem *  NCPkgPopupTree::getDefaultGroup( )
-{
-    return packager->rpmGroupsTree()->root()->firstChild();
-}

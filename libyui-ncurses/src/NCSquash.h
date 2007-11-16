@@ -47,14 +47,22 @@ class NCSquash : public YSquash, public NCWidget {
 
   public:
 
-    NCSquash( NCWidget * parent, const YWidgetOpt & opt,
-	      bool hsquash, bool vsquash );
+    NCSquash( YWidget * parent, bool hsquash, bool vsquash );
     virtual ~NCSquash();
 
-    virtual long nicesize( YUIDimension dim ) { return YSquash::nicesize( dim ); }
-    virtual void setSize( long newwidth, long newheight );
+    //virtual long nicesize( YUIDimension dim ) { return YSquash::nicesize( dim ); }
+    virtual int preferredWidth() { return YSquash::preferredWidth(); }
+    virtual int preferredHeight() { return YSquash::preferredHeight(); }
+    
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    //virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    virtual void setEnabled( bool do_bv );
 };
 
 ///////////////////////////////////////////////////////////////////

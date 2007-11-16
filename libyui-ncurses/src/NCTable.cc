@@ -20,6 +20,7 @@
 #include "NCTable.h"
 #include "NCPopupMenu.h"
 #include <yui/YMenuButton.h>
+#include "YTypes.h"
 
 #if 0
 #undef  DBG_CLASS
@@ -34,26 +35,31 @@
 //
 //	DESCRIPTION :
 //
-NCTable::NCTable( NCWidget * parent, const YWidgetOpt & opt,
-		  vector<string> head, bool sort )
-    : YTable( opt, head.size() )
+NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader )
+      : YTable( parent, tableHeader )
     , NCPadWidget( parent )
-    , immediate ( opt.immediateMode.value() )
-    , sortable (sort)
-    , header (head)
     , biglist( false )
 {
   WIDDBG << endl;
+
   InitPad();
-  // !!! head is UTF8 encoded, thus should be vector<YCPstring>
-  vector<NCstring> headline( head.size() );
-  for ( unsigned i = 0; i < head.size(); ++i ) {
-    headline[i] = NCstring( head[i] );
+  // !!! head is UTF8 encoded, thus should be vector<NCstring>
+  _header.assign( columns(), NCstring("") );
+
+  for ( int col = 0; col < columns(); col++ )
+  {
+      if ( hasColumn( col ) )
+      {
+	  // set aligmant first
+	  setAlignment( col, alignment( col ) );
+	  // and then append header
+	  _header[ col ] +=  NCstring( header( col ) ) ;
+      }
   }
-  hasHeadline = myPad()->SetHeadline( headline );
+  hasHeadline = myPad()->SetHeadline( _header );
 }
 
-///////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
 //
 //
 //	METHOD NAME : NCTable::~NCTable
@@ -61,6 +67,7 @@ NCTable::NCTable( NCWidget * parent, const YWidgetOpt & opt,
 //
 //	DESCRIPTION :
 //
+
 NCTable::~NCTable()
 {
   WIDDBG << endl;
@@ -69,15 +76,309 @@ NCTable::~NCTable()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTable::nicesize
-//	METHOD TYPE : long
+//	METHOD NAME : NCTable::cellChanged
+//	METHOD TYPE : void
 //
-//	DESCRIPTION :
-//
-long NCTable::nicesize( YUIDimension dim )
+//	DESCRIPTION : Change individual cell of a table line (to newtext)
+//		      provided for backwards compatibility
+//	
+
+void NCTable::cellChanged( int index, int colnum, const string & newtext )
 {
-  wsze sze = ( biglist ) ? myPad()->tableSize() + 2 : wGetDefsze();
-  return dim == YD_HORIZ ? sze.W : sze.H;
+  NCTableLine * cl = myPad()->ModifyLine( index );
+  if ( !cl ) {
+    NCINT << "No such line: " << wpos( index, colnum ) << newtext << endl;
+  } else {
+    NCTableCol * cc = cl->GetCol( colnum );
+    if ( !cc ) {
+      NCINT << "No such colnum: " << wpos( index, colnum ) << newtext << endl;
+    } else {
+      // use NCtring to enforce recoding from 'utf8'
+      cc->SetLabel( NCstring( newtext ) );
+      DrawPad();
+    }
+  }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCTable::cellChanged
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : Change individual cell of a table line (to newtext)
+//
+
+void NCTable::cellChanged( const YTableCell *cell ) 
+{
+
+    cellChanged( cell->itemIndex(), cell->column(), cell->label() );
+
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCTable::setHeader
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : Set i-th table column header to 'text'
+//
+
+void NCTable::setHeader( int col, const string & text )
+{
+    _header[ col ] +=  NCstring( text ) ;
+
+    hasHeadline = myPad()->SetHeadline( _header );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCTable::setHeader
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : Set table header all at once
+//		      (left here for backwards compatibility sake)
+//
+
+void NCTable::setHeader( vector<string> head )
+{
+    _header.assign( head.size(), NCstring("") );
+    for (unsigned int i = 0; i < head.size(); i++) {
+        setHeader( i,  head[i]  );
+    }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCTable::setAlignment
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : Set alignment of i-th table column (left, right, 
+//	              center). Create temp. header consisting of single
+//		      letter - setHeader will append the rest		     
+//		      
+ 
+void NCTable::setAlignment ( int col, YAlignmentType al )
+{
+    string s;
+    switch ( al )
+    {
+         case YAlignUnchanged:   s = 'L' ;    break;
+	     
+         case YAlignBegin:       s = 'L' ;    break;
+         case YAlignCenter:      s = 'C' ;    break; 
+         case YAlignEnd:         s = 'R' ;    break;
+    }
+    
+    _header[ col ] = NCstring( s ); 
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCTable::addItem
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : Append item (as pointed to by 'yitem') to a table
+//		      (create new table line consisting of individual cells)
+//
+
+void NCTable::addItem( YItem *yitem )
+{
+  //static counter - to remember last inserted item
+  static int idx = 0;
+  
+  YTableItem *item = dynamic_cast<YTableItem *>(yitem);
+  YUI_CHECK_PTR(item);
+  YTable::addItem( item );
+
+  vector<NCTableCol*> Items( item->cellCount() );
+  unsigned int i = 0;
+  //Iterate over cells to create columns
+  for (  YTableCellIterator it = item->cellsBegin();
+	it != item->cellsEnd();
+	++it ){
+    Items[i] = new NCTableCol( NCstring( (*it)->label() ) );
+    i++;
+  }
+
+  //Insert @idx
+  NCTableLine *newline = new NCTableLine( Items, idx++ );
+  YUI_CHECK_PTR(newline);
+  newline->setOrigItem( item );
+
+  myPad()->Append( newline );
+
+  if (item->selected() )
+  {
+    setCurrentItem(  myPad()->Lines() ) ;    
+  }
+
+  //Do not forget to redraw whole stuff at the end
+  DrawPad();
+
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCTable::deleteAllItems
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : Clear the table (in terms of YTable and visually)
+//
+
+void NCTable::deleteAllItems()
+{
+  myPad()->ClearTable();
+  DrawPad();
+  YTable::deleteAllItems();
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCTable::getCurrentItem
+//	METHOD TYPE : int
+//
+//	DESCRIPTION : Return index of currently selected table item
+//
+
+int NCTable::getCurrentItem()
+{
+  if ( !myPad()->Lines() )
+    return -1;
+  return keepSorting() ? myPad()->GetLine( myPad()->CurPos().L )->getIndex ()
+    : myPad()->CurPos().L;
+
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCTable::getCurrentItemPointer
+//	METHOD TYPE : YItem *
+//
+//	DESCRIPTION : Return origin pointer of currently selected table item
+//
+
+YItem * NCTable::getCurrentItemPointer()
+{
+    const NCTableLine *cline = myPad()->GetLine( myPad()->CurPos().L );
+    return cline->origItem();
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCTable::setCurrentItem
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : Highlight item at 'index' 
+//
+
+void NCTable::setCurrentItem( int index )
+{
+  myPad()->ScrlLine( index );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCTable::selectItem
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : Mark table item (as pointed to by 'yitem') as selected
+//
+
+void NCTable::selectItem( YItem *yitem, bool selected )
+{ 
+  YTableItem *item = dynamic_cast<YTableItem *>(yitem);
+  YUI_CHECK_PTR(item);
+
+  NCTableLine *line = (NCTableLine *)item->data();
+  YUI_CHECK_PTR(line);
+
+  const NCTableLine *current_line = myPad()->GetLine( myPad()->CurPos().L ); 
+  YUI_CHECK_PTR(current_line);
+
+  if ( !selected && ( line == current_line ) ) 
+  {
+    deselectAllItems();
+  }
+  else 
+  {
+    //first highlight only, then select
+    setCurrentItem( line->getIndex() );
+    YTable::selectItem( item, selected);
+  } 
+
+  //and redraw
+  DrawPad();
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCTable::selectCurrentItem
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : Mark currently highlighted table item as selected
+//
+
+void NCTable::selectCurrentItem()
+{
+  const NCTableLine *cline = myPad()->GetLine( myPad()->CurPos().L );
+  YTable::selectItem( cline->origItem() );
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCTable::deselectAllItems
+//	METHOD TYPE : void
+//
+// 	DESCRIPTION : Mark all items as deselected
+//
+
+void NCTable::deselectAllItems()
+{
+  setCurrentItem( -1 );
+  YTable::deselectAllItems();	
+  DrawPad();
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCTable::preferredWidth
+//	METHOD TYPE : int
+//
+// 	DESCRIPTION : return preferred size 
+//
+
+int NCTable::preferredWidth()
+{
+    wsze sze = ( biglist ) ? myPad()->tableSize() + 2 : wGetDefsze();
+    return sze.W; 
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCTable::preferredHeight
+//	METHOD TYPE : int
+//
+// 	DESCRIPTION : return preferred size 
+//
+
+int NCTable::preferredHeight()
+{
+    wsze sze = ( biglist ) ? myPad()->tableSize() + 2 : wGetDefsze();
+    return sze.H;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -86,12 +387,12 @@ long NCTable::nicesize( YUIDimension dim )
 //	METHOD NAME : NCTable::setSize
 //	METHOD TYPE : void
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Set new size of the widget
 //
-void NCTable::setSize( long newwidth, long newheight )
+
+void NCTable::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YTable::setSize( newwidth, newheight );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -102,6 +403,7 @@ void NCTable::setSize( long newwidth, long newheight )
 //
 //	DESCRIPTION :
 //
+
 void NCTable::setLabel( const YCPString & nlabel )
 {
   // not implemented: YTable::setLabel( nlabel );
@@ -111,49 +413,18 @@ void NCTable::setLabel( const YCPString & nlabel )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTable::setHeader
+//	METHOD NAME : NCTable::setEnabled
 //	METHOD TYPE : void
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Set widget state (enabled vs. disabled)
 //
-void NCTable::setHeader( const vector<string> & head )
+
+void NCTable::setEnabled( bool do_bv )
 {
-    header = head;
-    vector<NCstring> headline( head.size() );
-    for ( unsigned i = 0; i < head.size(); ++i ) {
-	headline[i] = NCstring( head[i] );
-    }
-    hasHeadline = myPad()->SetHeadline( headline );
+    NCWidget::setEnabled( do_bv );
+    YTable::setEnabled( do_bv );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::getCurrentItem
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
-int NCTable::getCurrentItem()
-{
-  if ( !myPad()->Lines() )
-    return -1;
-  return sortable ? myPad()->GetLine( myPad()->CurPos().L )->getIndex ()
-    : myPad()->CurPos().L;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::setCurrentItem
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
-void NCTable::setCurrentItem( int index )
-{
-  myPad()->ScrlLine( index );
-}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -168,63 +439,7 @@ bool NCTable::setItemByKey( int key )
   return myPad()->setItemByKey( key );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::itemAdded
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
-void NCTable::itemAdded( vector<string> elements, int index )
-{
-  vector<NCTableCol*> Items( elements.size(), 0 );
-  for ( unsigned i = 0; i < elements.size(); ++i ) {
-    // use YCPString to enforce recoding from 'utf8'
-    Items[i] = new NCTableCol( YCPString( elements[i] ) );
-  }
-  myPad()->Append( Items, index );
-  DrawPad();
-}
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::itemsCleared
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
-void NCTable::itemsCleared()
-{
-  myPad()->ClearTable();
-  DrawPad();
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::cellChanged
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
-void NCTable::cellChanged( int index, int colnum, const YCPString & newtext )
-{
-  NCTableLine * cl = myPad()->ModifyLine( index );
-  if ( !cl ) {
-    NCINT << "No such line: " << wpos( index, colnum ) << newtext->value() << endl;
-  } else {
-    NCTableCol * cc = cl->GetCol( colnum );
-    if ( !cc ) {
-      NCINT << "No such colnum: " << wpos( index, colnum ) << newtext->value() << endl;
-    } else {
-      // use YCPString to enforce recoding from 'utf8'
-      cc->SetLabel( NCstring( newtext ) );
-      DrawPad();
-    }
-  }
-}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -232,7 +447,7 @@ void NCTable::cellChanged( int index, int colnum, const YCPString & newtext )
 //	METHOD NAME : NCTable::CreatePad
 //	METHOD TYPE : NCPad *
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Create new NCTablePad, set its background
 //
 NCPad * NCTable::CreatePad()
 {
@@ -249,7 +464,9 @@ NCPad * NCTable::CreatePad()
 //	METHOD NAME : NCTable::wHandleInput
 //	METHOD TYPE : NCursesEvent
 //
-//	DESCRIPTION :
+//	DESCRIPTION : Handle 'special' keys i.e those not handled
+//		      by parent NCPad class (space, return). Set 
+//		      items to selected, if appropriate
 //
 NCursesEvent NCTable::wHandleInput( wint_t key )
 {
@@ -259,7 +476,8 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
   if ( ! handleInput( key ) ) {
     switch ( key ) {
 
-      case CTRL('o'):
+   /*FIXME: once YMenuButton is ported
+        case CTRL('o'):
         {
 	    if ( ! sortable ) 
 		break;
@@ -286,17 +504,21 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
 		myPad ()->setOrder (column);
 
     	    return NCursesEvent::none;
-	}
+	}*/
     case KEY_SPACE:
     case KEY_RETURN:
-      if ( getNotify() && citem != -1 )
+      if ( notify() && citem != -1 )
 	return NCursesEvent::Activated;
       break;
     }
   }
 
-  if ( getNotify() && immediate && citem != getCurrentItem() )
+  selectCurrentItem();
+
+  if ( notify() && immediateMode() && citem != getCurrentItem() )
+  {
     ret = NCursesEvent::SelectionChanged;
+  }
 
   return ret;
 }

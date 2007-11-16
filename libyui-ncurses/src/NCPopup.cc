@@ -34,6 +34,7 @@ YWidgetOpt NCPopup::wopt;
 NCPopup::NCPopup( const wpos at, const bool boxed )
     : NCDialog( wopt, at, boxed )
 {
+
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -94,3 +95,17 @@ NCursesEvent NCPopup::wHandleInput( wint_t ch )
   return NCDialog::wHandleInput( ch );
 }
 
+int NCPopup::post( NCursesEvent * returnevent )
+{
+    postevent = NCursesEvent();
+    do {
+	popupDialog();
+    } while ( postAgain() );
+    popdownDialog();
+    if ( returnevent )
+	*returnevent = postevent;
+
+    NCMIL << "Return event.detail:  " << postevent.detail << endl;
+    
+    return postevent.detail;
+}

@@ -20,7 +20,7 @@
 #include "NCPkgPopupSelection.h"
 
 #include "YDialog.h"
-#include "NCSplit.h"
+#include "NCLayoutBox.h"
 #include "NCSpacing.h"
 #include "NCPkgNames.h"
 #include "NCPkgTable.h"
@@ -28,6 +28,7 @@
 #include <zypp/ui/PatternContents.h>
 
 #include "NCZypp.h"
+#include "NCi18n.h"
 
 #ifdef FIXME
 #define LOCALE Y2PM::getPreferredLocale()
@@ -54,11 +55,11 @@ NCPkgPopupSelection::NCPkgPopupSelection( const wpos at,  NCPackageSelector * pk
   {   
     case S_Pattern:
     case S_Selection: {
-        createLayout( YCPString(NCPkgNames::SelectionLabel()) );
+        createLayout( NCPkgNames::SelectionLabel() );
 	break;
     }
     case S_Language: {
-        createLayout( YCPString(NCPkgNames::LanguageLabel()) );
+        createLayout( NCPkgNames::LanguageLabel() );
 	break;
     }
     default:
@@ -90,26 +91,20 @@ NCPkgPopupSelection::~NCPkgPopupSelection()
 //
 //	DESCRIPTION :
 //
-void NCPkgPopupSelection::createLayout( const YCPString & label )
+void NCPkgPopupSelection::createLayout( const string & label )
 {
-
-  YWidgetOpt opt;
-
   // the vertical split is the (only) child of the dialog
-  NCSplit * split = new NCSplit( this, opt, YD_VERT );
-  addChild( split );
+  NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
 
-  opt.notifyMode.setValue( false );
+  // addChild( ) is obsolete (handled by new libyui)
 
-  //the headline
-  opt.isHeading.setValue( true );
+  new NCLabel( split, label, true, false );	// isHeading = true
+  YTableHeader * tableHeader = new YTableHeader();
   
-  NCLabel * head = new NCLabel( split, opt, label );
-  split->addChild( head );
-
   // add the selection list
-  sel = new NCPkgTable( split, opt );
+  sel = new NCPkgTable( split, tableHeader );
   sel->setPackager( packager );
+
   // set status strategy
   NCPkgStatusStrategy * strat = new SelectionStatStrategy();
 
@@ -130,24 +125,20 @@ void NCPkgPopupSelection::createLayout( const YCPString & label )
   }
 
   sel->fillHeader();
-  split->addChild( sel );
 
-  opt.notifyMode.setValue( true );
+  // a help line for the selction/pattern/language popup
+  new NCLabel( split,  _( " [+] Select    [-] Delete    [>] Update " ), false, false );
 
+  new NCSpacing( split, YD_VERT, false, 0.4 );
   
-  NCLabel * help = new NCLabel( split, opt, YCPString(NCPkgNames::DepsHelpLine()) );
-  split->addChild( help );
-
-  split->addChild( new NCSpacing( split, opt, 0.4, false, true ) );
-
   // add an OK button
-  opt.key_Fxx.setValue( 10 );
-  okButton = new NCPushButton( split, opt, YCPString(NCPkgNames::OKLabel()) );
-  okButton->setId( NCPkgNames::OkButton () );
+  okButton = new NCPushButton( split, NCPkgNames::OKLabel() );
+  YStringWidgetID  * okID = new YStringWidgetID("ok");
 
-  split->addChild( okButton );
-
-  split->addChild( new NCSpacing( split, opt, 0.4, false, true ) );
+  okButton->setId( okID );
+  okButton->setFunctionKey(10);
+  
+  new NCSpacing( split, YD_VERT, false, 0.4 );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -263,22 +254,28 @@ string  NCPkgPopupSelection::getCurrentLine( )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPkgPopupSelection::niceSize
-//	METHOD TYPE : void
+//	METHOD NAME : NCPkgPopupSelection::preferredWidth
+//	METHOD TYPE : int
 //
-//	DESCRIPTION :
-//
-
-long NCPkgPopupSelection::nicesize(YUIDimension dim)
+int NCPkgPopupSelection::preferredWidth()
 {
-    long vdim;
-    if ( NCurses::lines() > 20 )
-	vdim = 20;
-    else
-	vdim = NCurses::lines()-4;
-	
-    return ( dim == YD_HORIZ ? NCurses::cols()*2/3 : vdim );
+    return NCurses::cols()*2/3;
 }
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPkgPopupSelection::preferredHeight
+//	METHOD TYPE : int
+//
+int NCPkgPopupSelection::preferredHeight()
+{
+    if ( NCurses::lines() > 20 )
+	return 20;
+    else
+	return NCurses::lines()-4;
+}
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -311,10 +308,10 @@ bool NCPkgPopupSelection::postAgain( )
 
     postevent.detail = NCursesEvent::NODETAIL;
 
-    YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
+    YWidgetID * currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
 
-    if ( !currentId.isNull()
-	 && currentId->compare( NCPkgNames::OkButton () ) == YO_EQUAL )
+    if ( currentId
+	 && currentId->toString() == "ok" )
     {
 	postevent.detail = NCursesEvent::USERDEF ;
 	// return false means: close the popup

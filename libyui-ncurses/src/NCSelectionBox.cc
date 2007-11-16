@@ -27,12 +27,10 @@
 //
 //	DESCRIPTION :
 //
-NCSelectionBox::NCSelectionBox( NCWidget * parent, const YWidgetOpt & opt,
-				const YCPString & nlabel )
-    : YSelectionBox( opt, nlabel )
+NCSelectionBox::NCSelectionBox( YWidget * parent, const string & nlabel )
+    : YSelectionBox( parent, nlabel )
     , NCPadWidget( parent )
     , biglist( false )
-    , immediate( opt.immediateMode.value() )
 {
   WIDDBG << endl;
   InitPad();
@@ -52,22 +50,16 @@ NCSelectionBox::~NCSelectionBox()
   WIDDBG << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSelectionBox::nicesize
-//	METHOD TYPE : long
-//
-//	DESCRIPTION :
-//
-long NCSelectionBox::nicesize( YUIDimension dim )
+int NCSelectionBox::preferredWidth()
 {
-  wsze sze = ( biglist ) ? myPad()->tableSize() + 2 : wGetDefsze();
-  if (dim == YD_HORIZ) {
-    return sze.W > (int)(labelWidht()+2) ? sze.W : (labelWidht()+2);
-  } else {
+    wsze sze = ( biglist ) ? myPad()->tableSize() + 2 : wGetDefsze();
+    return sze.W > (int)(labelWidht()+2) ? sze.W : (labelWidht()+2); 
+}
+
+int NCSelectionBox::preferredHeight()
+{
+    wsze sze = ( biglist ) ? myPad()->tableSize() + 2 : wGetDefsze();
     return sze.H;
-  }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -78,10 +70,15 @@ long NCSelectionBox::nicesize( YUIDimension dim )
 //
 //	DESCRIPTION :
 //
-void NCSelectionBox::setSize( long newwidth, long newheight )
+void NCSelectionBox::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YSelectionBox::setSize( newwidth, newheight );
+}
+
+void NCSelectionBox::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YSelectionBox::setEnabled( do_bv );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -96,6 +93,7 @@ int NCSelectionBox::getCurrentItem()
 {
   if ( !myPad()->Lines() )
     return -1;
+  NCDBG << "Current pos: " << myPad()->CurPos().L << endl;
   return myPad()->CurPos().L;
 }
 
@@ -146,19 +144,62 @@ void NCSelectionBox::setCurrentItem( int index )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCSelectionBox::itemAdded
+//	METHOD NAME : NCSelectionBox::selectItem
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCSelectionBox::itemAdded( const YCPString& str, int index, bool selected )
+void NCSelectionBox::selectItem( YItem *item, bool selected )
 {
-  vector<NCTableCol*> Items( 1U, 0 );
-  Items[0] = new NCTableCol( str );
-  myPad()->Append( Items );
-  DrawPad();
-  if ( selected )
-    myPad()->ScrlLine( myPad()->Lines() );
+    YSelectionBox::selectItem( item, selected );
+
+    myPad()->ScrlLine( selected ? item->index() : -1 );
+}
+
+void NCSelectionBox::selectItem( int index )
+{
+    YSelectionBox::deselectAllItems();
+
+    if ( hasItems() && index >= 0 )
+    {
+	YItem * item = YSelectionBox::itemAt( index );
+
+	if ( item )
+	{
+	    NCDBG << "selectItem:  " << item->label().c_str() << endl;
+	    item->setSelected( true );
+	}
+	else
+	    YUI_THROW( YUIException( "Can't find selected item" ) );
+    }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCSelectionBox::addItem
+//	METHOD TYPE : void
+//
+//	DESCRIPTION :
+//
+void NCSelectionBox::addItem( YItem * item )
+{
+    vector<NCTableCol*> Items( 1U, 0 );
+
+    if ( item )
+    {
+	YSelectionBox::addItem ( item );
+	Items[0] = new NCTableCol( item->label() );
+	myPad()->Append( Items );
+	DrawPad();
+	if ( item->selected() )
+	    myPad()->ScrlLine( myPad()->Lines() );
+    }
+}
+
+void NCSelectionBox::addItem( const string & description, bool selected )
+{
+    YSelectionWidget::addItem( description, selected );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -169,7 +210,7 @@ void NCSelectionBox::itemAdded( const YCPString& str, int index, bool selected )
 //
 //	DESCRIPTION :
 //
-void NCSelectionBox::setLabel( const YCPString & nlabel )
+void NCSelectionBox::setLabel( const string & nlabel )
 {
   YSelectionBox::setLabel( nlabel );
   NCPadWidget::setLabel( NCstring( nlabel ) );
@@ -217,8 +258,8 @@ NCursesEvent NCSelectionBox::wHandleInput( wint_t key )
 {
   NCursesEvent ret = NCursesEvent::none;
 
-  int citem = getCurrentItem();
-
+  int oldItem = getCurrentItem();
+  
   // handle key event first
   if ( sendKeyEvents() &&
        (key == KEY_LEFT || key == KEY_RIGHT))
@@ -238,15 +279,19 @@ NCursesEvent NCSelectionBox::wHandleInput( wint_t key )
   // call handleInput of NCPad
   handleInput( key );
 
+  int citem = getCurrentItem();
+  selectItem( citem );
+  
   switch ( key ) {
       case KEY_SPACE:
       case KEY_RETURN:
-	  if ( getNotify() && citem != -1 )
+	  if ( notify() && citem != -1 )
+	  {
 	      return NCursesEvent::Activated;
+	  }
 	  break;
   }
-
-  if ( getNotify() && immediate && citem != getCurrentItem() ) {
+  if ( notify() && immediateMode() && oldItem != citem ) {
     ret = NCursesEvent::SelectionChanged;
   }
 
@@ -265,4 +310,5 @@ NCursesEvent NCSelectionBox::wHandleInput( wint_t key )
 void NCSelectionBox::deleteAllItems() {
 	YSelectionBox::deleteAllItems();
 	clearTable();
+	DrawPad();
 }

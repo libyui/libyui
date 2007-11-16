@@ -21,7 +21,9 @@
 
 #include "YMenuButton.h"
 #include "YDialog.h"
-#include "NCSplit.h"
+#include "YWidgetID.h"
+
+#include "NCLayoutBox.h"
 #include "NCSpacing.h"
 #include "NCPkgNames.h"
 #include "NCLabel.h"
@@ -30,6 +32,7 @@
 #include "NCRichText.h"
 
 #include "NCZypp.h"
+#include "NCi18n.h"
 
 #include "NCPkgPopupDescr.h"
 #include "NCPackageSelector.h"
@@ -79,46 +82,48 @@ void NCPkgPopupDescr::createLayout( )
     YWidgetOpt opt;
 
     // the vertical split is the (only) child of the dialog
-    NCSplit * split = new NCSplit( this, opt, YD_VERT );
-    addChild( split );
+    NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
 
-    split->addChild( new NCSpacing( split, opt, 0.8, false, true ) );
+    // addChild() is obsolete (handled by new libyui )
 
-    // add the headline
-    opt.isHeading.setValue( true );
-    headline = new NCLabel( split, opt, YCPString( "" ) );
-    split->addChild( headline );
+    //split->addChild( new NCSpacing( split, opt, 0.8, false, true ) );
+    new NCSpacing( split, YD_VERT, false, 0.8 );	// stretchable = false
 
-    split->addChild( new NCSpacing( split, opt, 0.4, false, true ) );
+    headline = new NCLabel( split, "", true, false );		// isHeading = true
+    //split->addChild( new NCSpacing( split, opt, 0.4, false, true ) );
+    new NCSpacing( split, YD_VERT, false, 0.4 ); 
 
     // add the rich text widget for the package description
     opt.isVStretchable.setValue( true );
-    descrText = new NCRichText( split, opt, YCPString( "" ) );
-    split->addChild( descrText );
+    descrText = new NCRichText( split, "" );
 
-    split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
+    //split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
+    new NCSpacing( split, YD_VERT, true, 0.6 );	// stretchable = true
 
+    YTableHeader * tableHeader = new YTableHeader();
+    
     // add the package table (use default type T_Packages)
-    pkgTable = new NCPkgTable( split, opt );
+    pkgTable = new NCPkgTable( split, tableHeader );
     pkgTable->setPackager( packager );
     pkgTable->fillHeader();
 
-    split->addChild( pkgTable );
-    split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
-    
+    //split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
+    new NCSpacing( split, YD_VERT, true, 0.6 );
+
     opt.isHStretchable.setValue( false );
-    NCLabel * helplb = new NCLabel( split, opt, YCPString(NCPkgNames::DepsHelpLine()) );
-    split->addChild( helplb );
+    //NCLabel * helplb = new NCLabel( split, opt, YCPString(NCPkgNames::DepsHelpLine()) );
+    // a help line for the dependency popup
+    new NCLabel( split, _( " [+] Select    [-] Delete    [>] Update " ), false, false );
   
-    split->addChild( new NCSpacing( split, opt, 0.6, false, true ) ); 
+    //split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
+    new NCSpacing( split, YD_VERT, false, 0.6 );	// stretchable = false
 
     // add the OK button
     opt.key_Fxx.setValue( 10 );
-    okButton = new NCPushButton( split, opt, YCPString(NCPkgNames::OKLabel()) );
-    okButton->setId( NCPkgNames::OkButton() );
-
-    split->addChild( okButton );
-
+    okButton = new NCPushButton( split, NCPkgNames::OKLabel() );
+    YStringWidgetID * okID = new YStringWidgetID( "ok" );
+    okButton->setId( okID );
+    
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -140,9 +145,9 @@ bool NCPkgPopupDescr::fillData( ZyppPkg pkgPtr, ZyppSel slbPtr )
 
     pkgTable->drawList();
 
-    headline->setLabel( YCPString(pkgPtr->summary()) );
+    headline->setLabel( pkgPtr->summary() );
 
-    descrText->setText( YCPString(packager->createDescrText(pkgPtr->description())) );
+    descrText->setText( packager->createDescrText(pkgPtr->description()) );
 
     return true;
 }
@@ -217,16 +222,17 @@ NCursesEvent NCPkgPopupDescr::wHandleInput( wint_t ch )
 //	METHOD TYPE : bool
 //
 //	DESCRIPTION :
-//
+//x
 bool NCPkgPopupDescr::postAgain()
 {
     if ( ! postevent.widget )
 	return false;
 
-    YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
+    // YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
+    YWidgetID * currentId = dynamic_cast<YWidget *>(postevent.widget)->id();
 
-    if ( !currentId.isNull()
-	 && currentId->compare( NCPkgNames::Cancel() ) == YO_EQUAL )
+    if ( currentId
+	 && currentId->toString() == "cancel" )
     {
 	// close the dialog
 	postevent = NCursesEvent::cancel;

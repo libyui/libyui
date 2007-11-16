@@ -199,20 +199,27 @@ class NCRichText : public YRichText, public NCPadWidget {
 
   public:
 
-    NCRichText( NCWidget * parent, const YWidgetOpt & opt,
-		const YCPString & text );
+    NCRichText( YWidget * parent, const string & text,
+		bool plainTextMode = false );
     virtual ~NCRichText();
 
-    virtual long nicesize( YUIDimension dim );
-    virtual void setSize( long newwidth, long newheight );
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+    
+    /**
+     * Set the new size of the widget.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual void setSize( int newWidth, int newHeight );
 
     virtual void setLabel( const YCPString & nlabel );
 
     virtual NCursesEvent wHandleInput( wint_t key );
 
-    virtual void setText( const YCPString & ntext );
-
-    virtual void setEnabling( bool do_bv ) { NCWidget::setEnabling( enabled=do_bv ); }
+    virtual void setValue( const string & ntext );
+    
+    virtual void setEnabled( bool do_bv );
 
     virtual bool setKeyboardFocus() {
       if ( !grabFocus() )

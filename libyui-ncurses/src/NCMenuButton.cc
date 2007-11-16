@@ -21,6 +21,8 @@
 #include "NCMenuButton.h"
 #include "NCPopupMenu.h"
 
+#include "YWidgetID.h"
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -29,18 +31,14 @@
 //
 //	DESCRIPTION :
 //
-NCMenuButton::NCMenuButton( NCWidget * parent, const YWidgetOpt & opt,
-			    YCPString nlabel )
-    : YMenuButton( opt, nlabel )
+NCMenuButton::NCMenuButton( YWidget * parent,
+			    string nlabel )
+    : YMenuButton( parent, nlabel )
     , NCWidget( parent )
 {
   WIDDBG << endl;
   setLabel( nlabel );
   hotlabel = &label;
-  if ( opt.isDefaultButton.value() )
-    setKeyboardFocus();
-
-  setFunctionHotkey( opt );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -56,17 +54,20 @@ NCMenuButton::~NCMenuButton()
   WIDDBG << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCMenuButton::nicesize
-//	METHOD TYPE : long
-//
-//	DESCRIPTION :
-//
-long NCMenuButton::nicesize( YUIDimension dim )
+int NCMenuButton::preferredWidth()
 {
-  return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
+    return wGetDefsze().W;
+}
+
+int NCMenuButton::preferredHeight()
+{
+    return wGetDefsze().H;
+}
+
+void NCMenuButton::setEnabled( bool do_bv )
+{
+    NCWidget::setEnabled( do_bv );
+    YMenuButton::setEnabled( do_bv );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -77,10 +78,9 @@ long NCMenuButton::nicesize( YUIDimension dim )
 //
 //	DESCRIPTION :
 //
-void NCMenuButton::setSize( long newwidth, long newheight )
+void NCMenuButton::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YMenuButton::setSize( newwidth, newheight );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -113,7 +113,7 @@ NCursesEvent NCMenuButton::wHandleInput( wint_t key )
 //
 //	DESCRIPTION :
 //
-void NCMenuButton::setLabel( const YCPString & nlabel )
+void NCMenuButton::setLabel( const string & nlabel )
 {
   label = NCstring( nlabel );
   label.stripHotkey();
@@ -151,18 +151,25 @@ void NCMenuButton::wRedraw()
   win->addch( 0, win->maxx()-1, ACS_DARROW );
 }
 
+#if 0
+void NCMenuButton::createMenu()
+{
+  YMenu * toplevel = getToplevelMenu();
+  setEnabled( toplevel && toplevel->hasChildren() );
+}
+#endif
+
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCMenuButton::createMenu
+//	METHOD NAME : NCMenuButton::rebuildMenuTree
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCMenuButton::createMenu()
+void NCMenuButton::rebuildMenuTree()
 {
-  YMenu * toplevel = getToplevelMenu();
-  setEnabling( toplevel && toplevel->hasChildren() );
+    // NOP
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -176,14 +183,26 @@ void NCMenuButton::createMenu()
 NCursesEvent NCMenuButton::postMenu()
 {
   wpos at( ScreenPos() + wpos( win->height(), 0 ) );
-  NCPopupMenu dialog( at, *getToplevelMenu() );
-  int selection = dialog.post();
+  NCPopupMenu * dialog = new NCPopupMenu( at,
+					  itemsBegin(),
+					  itemsEnd() );
+  YUI_CHECK_NEW( dialog );
+  
+  int selection = dialog->post();
 
-  if ( selection < 0 )
+  if ( selection < 0 ) {
+    YDialog::deleteTopmostDialog();  
     return NCursesEvent::none;
-
+  }
+  
   NCursesEvent ret = NCursesEvent::menu;
-  ret.selection    = indexToId( selection );
+  // FIXME - check this
+  // YStringWidgetID * selectionID = new YStringWidgetID( findMenuItem( selection )->label() );
+  // ret.selection    = selectionID;
+
+  ret.selection = findMenuItem( selection );
+  
+  YDialog::deleteTopmostDialog();
 
   return ret;
 }

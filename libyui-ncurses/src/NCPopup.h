@@ -29,7 +29,7 @@
 //
 //	DESCRIPTION :
 //
-class NCPopup : protected NCDialog {
+class NCPopup : public NCDialog {
 
   NCPopup & operator=( const NCPopup & );
   NCPopup            ( const NCPopup & );
@@ -60,16 +60,7 @@ class NCPopup : protected NCDialog {
 
   public:
 
-    int post( NCursesEvent * returnevent = 0 ) {
-      postevent = NCursesEvent();
-      do {
-	popupDialog();
-      } while ( postAgain() );
-      popdownDialog();
-      if ( returnevent )
-	*returnevent = postevent;
-      return postevent.detail;
-    }
+    int post( NCursesEvent * returnevent = 0 ); 
 
 };
 

@@ -137,6 +137,11 @@ NCTableLine::NCTableLine( vector<NCTableCol*> & nItems, int idx, const unsigned 
 {
 }
 
+void NCTableLine::setOrigItem (YTableItem *it)
+{
+    yitem = it;
+    yitem->setData (this) ;
+}
 ///////////////////////////////////////////////////////////////////
 //
 //

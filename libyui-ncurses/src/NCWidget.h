@@ -123,13 +123,11 @@ class NCWidget : public tnode<NCWidget*>, protected NCursesError {
   protected:
 
     NClabel * hotlabel;
-    int hotfkey;
-
-    virtual void setFunctionHotkey( const YWidgetOpt & opt );
 
   public:
 
-    NCWidget( NCWidget * myparent = 0 );
+    NCWidget( NCWidget * myparent );
+    NCWidget( YWidget * parent = 0 );
     virtual ~NCWidget();
 
     bool isValid() const 	{ return magic == YWIDGET_MAGIC; }
@@ -155,17 +153,16 @@ class NCWidget : public tnode<NCWidget*>, protected NCursesError {
 
     /**
      * Pure virtual to make shure every widget implements it. Necessary to make
-     * shure that UI requests via YWidget::setEnabling perform, and behave the
-     * same way as direct calls to NCWidget::setEnabling.
+     * shure that UI requests via YWidget::setEnabled perform, and behave the
+     * same way as direct calls to NCWidget::setEnabled.
      *
      * Defaut implementation is provided, and for most derived widgets it's ok
      * to simply use it.
      **/
-    virtual void setEnabling( bool do_bv ) = 0;
+    virtual void setEnabled( bool do_bv ) = 0;
 
     virtual bool HasHotkey( int key ) const;
     virtual bool HasFunctionHotkey( int key ) const;
-    virtual int  GetFunctionHotkey() const;
 
     virtual NCursesEvent wHandleHotkey( wint_t key );
     virtual NCursesEvent wHandleInput( wint_t key );

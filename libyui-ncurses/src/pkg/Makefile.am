@@ -12,8 +12,8 @@ AM_CXXFLAGS = -DY2LOG=\"ui-ncurses\"	-DLOCALEDIR=\"${localedir}\"
 plugin_LTLIBRARIES = libpy2ncurses_pkg.la
 libpy2ncurses_pkg_la_LDFLAGS = -version-info 2:0
 
-libpy2ncurses_pkg_la_LIBADD =			\
-	-L$(plugindir) -lpy2UI			\
+libpy2ncurses_pkg_la_LIBADD =		\
+	-L$(plugindir) -lpy2UI		\
 	${ZYPP_LIBS}
 
 noinst_HEADERS =			\

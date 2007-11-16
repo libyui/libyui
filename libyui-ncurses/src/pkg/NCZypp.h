@@ -124,7 +124,7 @@ inline ZyppProduct	tryCastToZyppProduct( ZyppObj zyppObj )
     return zypp::dynamic_pointer_cast<const zypp::Product>( zyppObj );
 }
 
-template<typename T> bool contains( const std::set<T> & container, T search )
+template<typename T> bool inContainer( const std::set<T> & container, T search )
 {
     return container.find( search ) != container.end();
 }

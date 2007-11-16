@@ -181,11 +181,11 @@ void NCFileSelectionTag::DrawAt( NCursesWindow & w, const wrect at,
 //
 //	DESCRIPTION :
 //
-NCFileSelection::NCFileSelection( NCWidget * parent,
-				  const YWidgetOpt & opt,
+NCFileSelection::NCFileSelection( YWidget * parent,
+				  YTableHeader * tableHeader,
 				  NCFileSelectionType type,
 				  const YCPString & iniDir )
-    : NCTable( parent, opt, vector<string> (), false )
+    : NCTable( parent, tableHeader )
       , startDir( iniDir->value() )
       , currentDir( iniDir->value() )
       , tableType( type )
@@ -245,7 +245,7 @@ NCFileSelection::~NCFileSelection()
 string  NCFileSelection::getCurrentLine( )
 {
     int index = getCurrentItem();
-    
+
     if ( index != -1 )
     {
 	NCFileInfo info = getFileInfo( index );
@@ -268,7 +268,7 @@ string  NCFileSelection::getCurrentLine( )
 void NCFileSelection::setCurrentDir()
 {
     string selected = getCurrentLine();
-
+    NCMIL << "Current line: " << selected << endl;
     if ( selected != ".." )
     {
 	if ( startDir != "/" )
@@ -311,8 +311,8 @@ void NCFileSelection::addLine( const vector<string> & elements,
     Items[0] = new NCFileSelectionTag( info );
 
     for ( unsigned i = 1; i < elements.size()+1; ++i ) {
-	// use YCPString to enforce recoding from 'utf8'
-	Items[i] = new NCTableCol( YCPString( elements[i-1] ), NCTableCol::PLAIN );
+	// use NCstring to enforce recoding from 'utf8'
+	Items[i] = new NCTableCol( NCstring( elements[i-1] ), NCTableCol::PLAIN );
     }
     myPad()->Append( Items );
 }
@@ -320,14 +320,14 @@ void NCFileSelection::addLine( const vector<string> & elements,
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCFileSelection::itemsCleared
+//	METHOD NAME : NCFileSelection::deleteAllItems
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCFileSelection::itemsCleared()
+void NCFileSelection::deleteAllItems()
 {
-    return NCTable::itemsCleared();  
+    return NCTable::deleteAllItems();  
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -457,14 +457,14 @@ NCFileSelectionTag * NCFileSelection::getTag( const int & index )
 //
 //	DESCRIPTION :
 //
-NCFileTable::NCFileTable( NCWidget * parent,
-			  const YWidgetOpt & opt,
+NCFileTable::NCFileTable( YWidget * parent,
+			  YTableHeader * tableHeader,
 			  NCFileSelectionType type,
 			  const YCPString & filter,
 			  const YCPString & iniDir )
-    : NCFileSelection( parent, opt, type, iniDir )
+    : NCFileSelection( parent, tableHeader, type, iniDir )
 {
-    fillHeader();
+    //fillHeader();
 
     string filterStr = filter->value();
     const string delims( " \t" );
@@ -611,7 +611,7 @@ NCursesEvent NCFileTable::wHandleInput( wint_t key )
 	case KEY_NPAGE:
 	case KEY_END: {
 	    ret = NCursesEvent::SelectionChanged;
-	    ret.result = YCPString( currentFile );
+	    ret.result = currentFile;
 	    break;
 	}
 	default:
@@ -644,7 +644,7 @@ bool NCFileTable::fillList ( )
     
     if ( ( diskDir = opendir( currentDir.c_str() ) ) )
     {
-	itemsCleared();
+	deleteAllItems();
 	while ( ( entry = readdir( diskDir ) ) )
 	{
 	    string entryName = entry->d_name;
@@ -717,13 +717,13 @@ bool NCFileTable::fillList ( )
 //
 //	DESCRIPTION :
 //
-NCDirectoryTable::NCDirectoryTable( NCWidget * parent,
-				    const YWidgetOpt & opt,
+NCDirectoryTable::NCDirectoryTable( YWidget * parent,
+				    YTableHeader * tableHeader,
 				    NCFileSelectionType type,
 				    const YCPString & iniDir )
-    : NCFileSelection( parent, opt, type, iniDir )
+    : NCFileSelection( parent, tableHeader, type, iniDir )
 {
-    fillHeader();    
+    //fillHeader();    
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -787,7 +787,7 @@ bool NCDirectoryTable::fillList ( )
     
     if ( ( diskDir = opendir( currentDir.c_str() ) ) )
     {
-	itemsCleared();
+	deleteAllItems();
 	while ( ( entry = readdir( diskDir ) ) )
 	{
 	    string entryName = entry->d_name;
@@ -873,7 +873,7 @@ NCursesEvent NCDirectoryTable::wHandleInput( wint_t key )
 	    {
 		setCurrentDir();
 		ret = NCursesEvent::SelectionChanged;
-		ret.result = YCPString( currentDir );
+		ret.result = currentDir;
 	    }
 	    break;
 	}
@@ -882,14 +882,14 @@ NCursesEvent NCDirectoryTable::wHandleInput( wint_t key )
 	case KEY_END: {
 	    	setCurrentDir();
 		ret = NCursesEvent::SelectionChanged;
-		ret.result = YCPString( currentDir );
+		ret.result = currentDir;
 		break;
 	}
 	case KEY_RETURN:
 	case KEY_SPACE: {
 	    setCurrentDir();
 	    ret = NCursesEvent::Activated;
-	    ret.result = YCPString( currentDir );
+	    ret.result = currentDir;
 	    break;
 	}
 	default:
