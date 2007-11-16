@@ -37,6 +37,10 @@
 #include "NCPkgPopupDescr.h"
 #include "NCPackageSelector.h"
 
+/*
+  Textdomain "packages"
+*/
+
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////

@@ -38,6 +38,10 @@
 
 #include "NCPkgPopupTable.h"
 
+/*
+  Textdomain "packages"
+*/
+
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////
