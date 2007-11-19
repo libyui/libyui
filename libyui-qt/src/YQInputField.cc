@@ -115,8 +115,10 @@ void YQInputField::setEnabled( bool enabled )
 
 int YQInputField::preferredWidth()
 {
-    int minSize	  = shrinkable() ? 20 : 200;
-    int hintWidth = _caption->isShown() ? _caption->sizeHint().width() : 0;
+    int minSize	  = shrinkable() ? 30 : 200;
+    int hintWidth = _caption->isShown()
+	? _caption->sizeHint().width() + 2 * YQWidgetMargin
+	: 0;
 
     return max( minSize, hintWidth );
 }
