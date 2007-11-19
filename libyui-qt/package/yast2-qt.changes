@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Nov 19 13:44:00 CET 2007 - tgoettlicher@suse.de
+
+- fixed ignored arch selection in package selector (#304966)
+- V 2.16.2
+
+-------------------------------------------------------------------
 Fri Nov 16 16:36:13 CET 2007 - sh@suse.de
 
 - Merged mod-ui branch to trunk
