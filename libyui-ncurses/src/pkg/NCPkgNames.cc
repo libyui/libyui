@@ -1572,8 +1572,8 @@ const string NCPkgNames::PkgVersion()
 
 const string NCPkgNames::PkgInstSource()
 {
-    // column header installation source e.g. SuSE 9.0 Professional (keep it short!)
-    static const string value = _( "Installation Source" );
+    // column header - repository of the package (e.g. openSUSE 10.3)
+    static const string value = _( "Repository" );
     return value;
 }
 

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Nov 19 18:14:17 CET 2007 - kmachalkova@suse.cz
+
+- Unified terminology: repositories vs. inst.sources (FaTE #302970)
+
+-------------------------------------------------------------------
 Fri Nov 16 20:23:03 CET 2007 - kmachalkova@suse.cz
 
 - The Great Merge [tm] - merged mod-ui branch into the trunk
