@@ -177,6 +177,7 @@ YQPkgVersionsView::checkForChangedCandidate()
 		ZyppStatus status = _selectable->status();
 
 		if ( _selectable->installedObj() &&
+		     _selectable->installedObj()->arch()    == newCandidate->arch() &&
 		     _selectable->installedObj()->edition() == newCandidate->edition() )
 		{
 		    // Switch back to the original instance -
