@@ -24,6 +24,7 @@
 #include "YDumbTab.h"
 
 class QTabBar;
+class QPaintEvent;
 
 
 class YQDumbTab : public QWidget, public YDumbTab
@@ -98,6 +99,14 @@ public:
      **/
     virtual void setSize( int newWidth, int newHeight );
 
+protected:
+
+    /**
+     * Draw widget content.
+     *
+     * Reimplemented from QWidget.
+     **/
+    virtual void paintEvent( QPaintEvent * );
 
 public slots:
 

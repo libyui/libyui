@@ -20,8 +20,12 @@
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 #include <qtabbar.h>
+#include <qevent.h>
+#include <qpainter.h>
+#include <qdrawutil.h>
 #include <algorithm>
 
+#include "YQSignalBlocker.h"
 #include "QY2LayoutUtils.h"
 #include "utf8.h"
 #include "YQUI.h"
@@ -29,7 +33,8 @@
 #include "YQAlignment.h"
 #include "YEvent.h"
 
-#define YQDumbTabSpacing	4
+#define YQDumbTabSpacing	2
+#define YQDumbTabFrameMargin	4
 
 
 YQDumbTab::YQDumbTab( YWidget *	parent )
@@ -64,6 +69,7 @@ YQDumbTab::~YQDumbTab()
 void
 YQDumbTab::addItem( YItem * item )
 {
+    YQSignalBlocker sigBlocker( _tabBar );
     YDumbTab::addItem( item );
     
     QTab * tab = new QTab( fromUTF8( item->label() ) );
@@ -79,6 +85,8 @@ YQDumbTab::addItem( YItem * item )
 void
 YQDumbTab::selectItem( YItem * item, bool selected )
 {
+    YQSignalBlocker sigBlocker( _tabBar );
+    
     if ( selected )
     {
 	// Don't try to suppress any signals sent here with a YQSignalBlocker,
@@ -157,10 +165,32 @@ YQDumbTab::preferredHeight()
 
 
 void
+YQDumbTab::paintEvent( QPaintEvent * event )
+{
+    QPainter painter( this );
+
+    int x_offset 	= 0;
+    int y_offset 	= _tabBar->height() + YQDumbTabSpacing;
+    int frameHeight	= height() - y_offset;
+    int frameWidth   	= width();
+
+    qDrawWinPanel( &painter,
+		   x_offset, y_offset,
+		   frameWidth, frameHeight,
+		   colorGroup(),
+		   false,			// sunken
+		   (const QBrush *) 0 );	// brush - don't fill interior
+}
+
+
+void
 YQDumbTab::setSize( int newWidth, int newHeight )
 {
     QWidget::resize( newWidth, newHeight );
     int remainingHeight = newHeight;
+    int remainingWidth  = newWidth;
+    int x_offset	= 0;
+    int y_offset	= 0;
 
     //
     // _tabBar (fixed height)
@@ -180,19 +210,33 @@ YQDumbTab::setSize( int newWidth, int newHeight )
 	// Spacing between tabBar and client area
 	//
 	
-	if ( remainingHeight >= YQDumbTabSpacing )
-	    remainingHeight -= YQDumbTabSpacing;
-	else
+	remainingHeight -= YQDumbTabSpacing;
+	y_offset = newHeight - remainingHeight;
+
+	//
+	// 3D border
+	//
+	
+	remainingHeight -= 2 * YQDumbTabFrameMargin;
+	remainingWidth  -= 2 * YQDumbTabFrameMargin;
+	x_offset += YQDumbTabFrameMargin;
+	y_offset += YQDumbTabFrameMargin;
+
+	if ( remainingHeight < 0 ) 
 	    remainingHeight = 0;
+	
+	if ( remainingWidth < 0 )
+	    remainingWidth = 0;
 
 	//
 	// Client area
 	//
+
 	
-	firstChild()->setSize( newWidth, remainingHeight );
+	firstChild()->setSize( remainingWidth, remainingHeight );
 
 	QWidget * qChild = (QWidget *) firstChild()->widgetRep();
-	qChild->move( 0, newHeight - remainingHeight );
+	qChild->move( x_offset, y_offset );
     }
 }
 
