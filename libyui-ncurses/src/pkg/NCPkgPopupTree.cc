@@ -307,19 +307,16 @@ void NCPkgPopupTree::cloneTree( YStringTreeItem * parentOrig, NCRpmGroupItem * p
 
 	if ( parentClone )
 	{
-	    NCMIL << "with Parent: " <<  child->value().translation() << endl;
+	    // YTreeItems which have a parent will automatically register
+	    // this item with the parent item.
 	    clone = new NCRpmGroupItem( parentClone, child->value().translation(), child );
 	}
 	else
 	{
-	    NCMIL << "WITHOUT Parent: " <<  child->value().translation() << endl;
 	    clone = new NCRpmGroupItem( child->value().translation(), child );
+	    // use addItem() only for the toplevel items
+	    addItem( clone );
 	}
-
-	addItem( clone );
-	
-	// plain tree is build
-	clone = parentClone;
 
 	cloneTree( child, clone );
 	child = child->next();
