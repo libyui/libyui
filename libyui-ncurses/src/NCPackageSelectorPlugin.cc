@@ -160,7 +160,7 @@ YCPValue NCPackageSelectorPlugin::runPkgSelection(  YDialog * dialog,
 	{
 	    ncSelector->showDefaultList();
 	    NCDialog * ncd = static_cast<NCDialog *>( dialog );
-
+	    NCMIL << "NCDialog: " << ncd << endl;
 	    do
 	    {
 		event = ncd->userInput();

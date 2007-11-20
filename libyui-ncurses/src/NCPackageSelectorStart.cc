@@ -20,6 +20,7 @@
 #include "NCurses.h"
 #include "NCPackageSelectorStart.h"
 #include "NCPushButton.h"
+#include "NCSpacing.h"
 #include "NCPkgTable.h"
 #include "NCLabel.h"
 #include "NCPkgNames.h"
@@ -62,83 +63,30 @@ NCPackageSelectorStart::NCPackageSelectorStart( YWidget * parent,
 
     if ( modeFlags & YPkg_UpdateMode )
 	updateMode = true;
-    
-    // Read the layout file and create the widget tree
-    YCPTerm pkgLayout = YCPNull();
+
+    // NEW NEW
+    packager = new NCPackageSelector( ui, widgetRoot, modeFlags );
+
+    NCPkgTable::NCPkgTableType type;
+
     if ( youMode )
-    {
-	pkgLayout = readLayoutFile( "/usr/share/YaST2/data/you_layout.ycp" );
-    }
+	type = NCPkgTable::T_Patches;
+    else if ( updateMode )
+	type = NCPkgTable::T_Update;
     else
-    { 
-	pkgLayout = readLayoutFile( "/usr/share/YaST2/data/pkg_layout.ycp" );
-	//pkgLayout = readLayoutFile( "/usr/share/YaST2/data/test_layout.ycp" );
-    }
+	type = NCPkgTable::T_Packages;
 
-    if ( ! pkgLayout.isNull() && ui )
+    if ( packager )
     {
-	// widgetRoot = (YContainerWidget *)ui->createWidgetTree( dynamic_cast<YWidget *>(parent),
-	//						       childrenOpt, 0, pkgLayout );
-
-	widgetRoot = YCPDialogParser::parseWidgetTreeTerm( this,
-							   pkgLayout );
+	if ( !youMode )
+	    packager->createPkgLayout( this, type );
+	else
+	    packager->createYouLayout( this, type );
     }
-
-    // create the PackageSelector (creation with 'new' is required because initialization
-    // in the list of member variables causes problems with untranslated messages)
-
-    if ( widgetRoot )
-    {
-	NCMIL <<  "Widget tree of NCPackageSelector created" << endl;
-
-	packager = new NCPackageSelector( ui, widgetRoot, modeFlags );
-
-	// child handling is done by libyui now
-	//this->addChild( widgetRoot );
-	//widgetRoot->setParent( this );
-
-	// get the widget ID of the package table
-	YWidget * pkg = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Packages() );
-	pkgList = dynamic_cast<NCPkgTable *>(pkg);
-
-	if ( pkgList )
-	{
-	    NCMIL << "Set package table type" << endl;
-	    // set the type of the table
-	    NCPkgStatusStrategy * strategy;
-	    if ( youMode )
-	    {
-		strategy = new PatchStatStrategy();
-
-		pkgList->setTableType( NCPkgTable::T_Patches, strategy );
-	    }
-	    else if ( updateMode )
-	    {
-		strategy = new UpdateStatStrategy();
-		pkgList->setTableType( NCPkgTable::T_Update, strategy );
-	    }
-	    else
-	    {
-		strategy = new PackageStatStrategy();
-		pkgList->setTableType( NCPkgTable::T_Packages, strategy );
-	    }
-
-            // set the pointer to the packager object
-	    pkgList->setPackager( packager );
-
-	    // fill the table header
-	    pkgList->fillHeader( );
-	}
-    }
-    else
-    {
-	NCERR << "ERROR: could not create the NCPackageSelector" << endl;
-    }
-
+    
     WIDDBG << endl;
     wstate = NC::WSdumb;
 }
-
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -182,38 +130,29 @@ void NCPackageSelectorStart::setSize( int newwidth, int newheight )
 void NCPackageSelectorStart::showDefaultList()
 {
     // fill the package table with packages belonging to the default filter
-    if ( pkgList )
+
+    if ( packager )
     {
-	if ( packager )
+	// create the NCPkgPoups
+	packager->createPopups();
+	// fill package list with packages belonging to default RPM group
+	packager->fillDefaultList();
+
+         // always do an initial dependency solving
+	packager->showPackageDependencies( true );
+
+	if ( youMode )
 	{
-	    packager->createPopups();
+	    // FIXME - show download size
+	    // packager->showDownloadSize();
 	}
-	
-	// fill the list with packages (or patches)
-	pkgList->fillDefaultList( );
-
-	pkgList->setKeyboardFocus();
-
-	if ( packager )
+	else
 	{
-	    // always do an initial dependency solving
-	    packager->showPackageDependencies( true );
-
-	    if ( youMode )
-		// show download size
-		packager->showDownloadSize();
-	    else
-	    {
-	        // show the required diskspace
-		packager->showDiskSpace();
-		// show appropriate filter menu entries
-		packager->createFilterMenu();
-	    }
+	    // FIXME - show the required diskspace
+	    // packager->showDiskSpace();
+	    // FIXME - show appropriate filter menu entries
+	    // packager->createFilterMenu();
 	}
-    }
-    else
-    {
-	NCERR << "Package table does not exist" << endl;
     }
 }
 
@@ -233,54 +172,4 @@ bool NCPackageSelectorStart::handleEvent ( const NCursesEvent & event )
     return packager->handleEvent( event );
 }
 
-
-///////////////////////////////////////////////////////////////////
-//
-// readLayoutFile
-// 
-// Read a layout file (containing a YCPTerm)
-//
-YCPTerm NCPackageSelectorStart::readLayoutFile( const char * layoutFilename )
-{
-    YCPTerm   pkgLayout = YCPNull();
-    
-    FILE * layoutFile = fopen( layoutFilename, "r" );
-
-    if ( ! layoutFile )
-    {
-	NCERR << "Can't open layout file " << layoutFilename << endl;
-    }
-    else
-    {
-	NCMIL <<  "Loading layout file " << layoutFilename << endl;
-    
-	Parser parser( layoutFile, layoutFilename );
-	YCodePtr parsed_code = parser.parse ();
-	YCPValue layout = YCPNull ();
-
-	if ( parsed_code != NULL )
-	    layout = parsed_code->evaluate ();
-
-	if ( layout.isNull() )
-	{
-	    NCERR << "Error parsing layout file - layout reading aborted" << endl;
-	}
-	else
-	{
-	    if ( !layout->isTerm() )
-	    {
-		NCERR << "Error evaluating layout file - layout must be a term" << endl;	
-	    }
-	    else
-	    {
-		pkgLayout = layout->asTerm();
-		NCDBG <<  "LAYOUT TERM: " << layout->toString() << endl; 
-	    }
-	}
-	
-	fclose( layoutFile );
-    }
-    
-    return pkgLayout;
-}
 

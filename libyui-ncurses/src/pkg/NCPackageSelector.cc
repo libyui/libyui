@@ -17,9 +17,12 @@
 
 /-*/
 #include "NCurses.h"
+#include "NCWidgetFactory.h"
 #include "NCPushButton.h"
+#include "NCMenuButton.h"
 #include "NCTable.h"
 #include "NCPkgTable.h"
+#include "NCSpacing.h"
 #include "NCRichText.h"
 #include "NCLabel.h"
 #include "NCPkgPopupSearch.h"
@@ -33,6 +36,7 @@
 #include "NCPkgPopupTable.h"
 #include "NCPkgPopupDescr.h"
 #include "NCPackageSelector.h"
+#include "NCLayoutBox.h"
 #include "YSelectionBox.h"
 #include "YNCursesUI.h"
 #include "NCi18n.h"
@@ -498,57 +502,30 @@ string NCPackageSelector::getMenuId( YMenuItem *menuItem )
 bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
 {
     bool retVal = false;
-    string currentId = "";
+
+    // TODO: handle hyperlinks 
+    // string currentId = "";
+    // if (currentId->asString()->value().substr(0, 4) == "pkg:" )
 
     if ( event == NCursesEvent::handled )
 	return false;
     
-    // Get the id of the widget which is affected
+    // Call the appropriate handler
     if ( event == NCursesEvent::button )
     {
-	YWidget * widget =  dynamic_cast<YWidget *>(event.widget);
-	if ( widget )
-	    currentId = getButtonId( widget );
+	if ( event.widget == okButton )
+	    retVal = OkButtonHandler( event );
+	else if ( event.widget == cancelButton )
+	    retVal = CancelHandler( event );
+	    
     }
     else if ( event == NCursesEvent::menu )
     {
-	currentId = getMenuId(event.selection);
-    }
-    
-    // Find the handler-function for the given widget-nameId
-    if ( currentId != "" )
-    {
-	UIMIL <<  "Selected widget id: " << currentId << endl;
-	// remove '"' at begin and end of cuurentId
-	string linkId = currentId.substr(1,currentId.substr().length()-2);
-	// hyperlink 
-        //if ( currentId->isString()
-	//     && currentId->asString()->value().substr(0, 4) == "pkg:" )
-	if ( linkId.substr(0,4) == "pkg:" )
-	{
-	    //LinkHandler( currentId->asString()->value() );
-	    LinkHandler( linkId );
-	    return true;
-	}
-	
-	tHandlerMap::iterator it = eventHandlerMap.find ( currentId );
-    
-	if (it != eventHandlerMap.end())    // if currentId found in map
-	{ 
-	    tHandlerFctPtr pFct = (*it).second;
-	    retVal = (this->*pFct) ( event );    // call handler
-	}
-	else
-	{
-	    UIERR <<  "Unhandled event for widget-Id: " << currentId << endl;
+	if ( event.widget == filterMenu )
+	    retVal = FilterHandler( event );
+	else if ( event.widget == actionMenu )
+	    retVal = StatusHandler( event );
 	    
-	    // return true means: don't leave the event loop in runPkgSelection  
-	    retVal = true;
-	}
-    }
-    else
-    {
-	UIERR << "Unknown event or id not valid" << endl;
     }
 
     return retVal;
@@ -691,11 +668,9 @@ bool NCPackageSelector::showSelPackages( const YCPString & label, const set<stri
 	NCDBG << "Filter: " << label->toString() << endl;
 
         // show the selected filter label
-	// YWidget * filterLabel = y2ui->widgetWithId( NCPkgNames::Filter(), true );
-	YWidget * filterLabel = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Filter() );
 	if ( filterLabel )
 	{
-	    static_cast<NCLabel *>(filterLabel)->setLabel( label->toString() );
+	    filterLabel->setLabel( label->toString() );
 	}
     }
    
@@ -786,11 +761,9 @@ bool NCPackageSelector::fillSearchList( const string & expr,
     packageList->drawList();
     
     // set filter label to 'Search'
-    // YWidget * filterLabel = y2ui->widgetWithId( NCPkgNames::Filter(), true );
-    YWidget * filterLabel = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Filter() );
     if ( filterLabel )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( NCPkgNames::SearchResults() );
+	filterLabel->setText( NCPkgNames::SearchResults() );
     }
 
     return true;
@@ -836,12 +809,9 @@ bool NCPackageSelector::fillPatchSearchList( const string & expr )
     packageList->drawList();
     
     // set filter label to 'Search'
-    //YWidget * filterLabel = y2ui->widgetWithId( NCPkgNames::Filter(), true );
-    YWidget * filterLabel = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Filter() );
-    
     if ( filterLabel )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( NCPkgNames::SearchResults() );
+	filterLabel->setLabel( NCPkgNames::SearchResults() );
     }
 
     return true;
@@ -893,22 +863,20 @@ bool NCPackageSelector::fillPatchList( string filter )
     packageList->drawList();
     
     // show the selected filter label
-    YWidget * filterLabel = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Filter() );
-    
     if ( filterLabel )
     {
 	if ( filter == "installable" )
 	{
 	    // show common label "Online Update Patches"
-	    static_cast<NCLabel *>(filterLabel)->setLabel( NCPkgNames::YOUPatches() );
+	    filterLabel->setLabel( NCPkgNames::YOUPatches() );
 	}
 	else if ( filter == "installed" )
 	{
-  	    static_cast<NCLabel *>(filterLabel)->setLabel( NCPkgNames::InstPatches() );  
+  	    filterLabel->setLabel( NCPkgNames::InstPatches() );  
 	}
 	else
 	{
-	    static_cast<NCLabel *>(filterLabel)->setLabel( NCPkgNames::Patches() );  
+	    filterLabel->setLabel( NCPkgNames::Patches() );  
 	}
     }
     
@@ -960,10 +928,9 @@ bool NCPackageSelector::fillUpdateList( )
     packageList->drawList();
     
     // show the selected filter label
-    YWidget * filterLabel = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Filter() );
     if ( filterLabel )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( NCPkgNames::UpdateProblem() );
+	filterLabel->setLabel( NCPkgNames::UpdateProblem() );
     }
     
     return true;
@@ -1141,10 +1108,9 @@ bool NCPackageSelector::fillSummaryList( NCPkgTable::NCPkgTableListType type )
     packageList->drawList();
     
     // show the selected filter label
-    YWidget * filterLabel = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Filter() );
     if ( filterLabel )
     {
-	static_cast<NCLabel *>(filterLabel)->setLabel( NCPkgNames::InstSummary() );
+	filterLabel->setLabel( NCPkgNames::InstSummary() );
     }
 
     return true;
@@ -1207,14 +1173,15 @@ bool NCPackageSelector::fillPackageList( const YCPString & label, YStringTreeIte
 
     // show the package list
     packageList->drawList();
-    
+
+    NCMIL << "Fill package list" << endl;
+
     if ( !label.isNull() )
     {
 	// show the selected filter label
-	YWidget * filterLabel = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Filter() );
 	if ( filterLabel )
 	{
-	    static_cast<NCLabel *>(filterLabel)->setLabel( label->toString() );
+	   filterLabel->setText( label->toString() );
 	}
     }
 
@@ -1287,14 +1254,12 @@ bool NCPackageSelector::fillRepoFilterList( ZyppRepo repo)
     //and show the whole stuff to the user
     pkgList->drawList();
 
-    YWidget * filterLabel = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Filter() );
-    
     if ( repoPopup && filterLabel )
     {
 	ZyppProduct product = repoPopup->findProductForRepo( repo );
 	if ( product )
 	{
-	    static_cast<NCLabel *>(filterLabel)->setLabel( product->summary() ); 
+	    filterLabel->setLabel( product->summary() ); 
 	}
     }
     
@@ -1858,10 +1823,10 @@ bool NCPackageSelector::FilterHandler( const NCursesEvent&  event )
     {
 	return false;
     }
+
     string selId = getMenuId( event.selection );
-    
-    // if ( event.selection->compare( NCPkgNames::RpmGroups() ) == YO_EQUAL )
-    if ( selId == NCPkgNames::RpmGroups()->toString() )
+
+    if ( event.selection == groupsItem )
     {
 	if ( filterPopup )
 	{
@@ -1870,8 +1835,7 @@ bool NCPackageSelector::FilterHandler( const NCursesEvent&  event )
 	    retEvent = filterPopup->showFilterPopup( );
 	}
     }
-    // else if ( event.selection->compare( NCPkgNames::Selections() ) == YO_EQUAL )
-    else if ( selId == NCPkgNames::Selections()->toString() )
+    else if ( event.selection == patternsItem )
     {
 	if ( selectionPopup )
 	{
@@ -1879,8 +1843,7 @@ bool NCPackageSelector::FilterHandler( const NCursesEvent&  event )
 	    retEvent = selectionPopup->showSelectionPopup( );
 	}
     }
-    // else if ( event.selection->compare( NCPkgNames::Patterns() ) == YO_EQUAL )
-    else if ( selId ==  NCPkgNames::Patterns()->toString() )
+    else if ( event.selection == patternsItem )
     {
 	if ( patternPopup )
 	{
@@ -1888,8 +1851,7 @@ bool NCPackageSelector::FilterHandler( const NCursesEvent&  event )
 	    retEvent = patternPopup->showSelectionPopup( );
 	}
     }
-    // else if ( event.selection->compare( NCPkgNames::Languages() ) == YO_EQUAL )
-    else if ( selId == NCPkgNames::Languages()->toString() )
+    else if ( event.selection == languagesItem )
     {
 	if ( languagePopup )
 	{
@@ -1897,13 +1859,18 @@ bool NCPackageSelector::FilterHandler( const NCursesEvent&  event )
 	    retEvent = languagePopup->showSelectionPopup( );
 	}
     }
-    else if ( selId == NCPkgNames::Repositories()->toString() ) 
+    else if ( event.selection == reposItem ) 
     {
        if ( repoPopup )
        {
            // show the selection popup
            retEvent = repoPopup->showRepoPopup( );
        }
+    }
+    else if ( event.selection == searchItem ) 
+    {
+        // start package search
+	SearchHandler( event );
     }
 // patches
     // else if ( event.selection->compare( NCPkgNames::Recommended() ) ==  YO_EQUAL )
@@ -2735,11 +2702,9 @@ bool NCPackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectabl
 	descr += createDescrText( value );
 	
 	// show the description	
-	YWidget * descrInfo = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Description() );
-	
-	if ( descrInfo )
+	if ( infoText )
 	{
-	    static_cast<NCRichText *>(descrInfo)->setText( descr );
+	    infoText->setText( descr );
 	}	
     }
     // else if (  visibleInfo->compare( NCPkgNames::PatchPackages() ) == YO_EQUAL )
@@ -2857,7 +2822,8 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
 	NCERR << "Selectable not valid" << endl;
 	return false;
     }
-    
+
+    NCMIL << "SHOW package info " << visibleInfo << endl;
     // if ( visibleInfo->compare( NCPkgNames::LongDescr() ) == YO_EQUAL )
     if ( visibleInfo ==  NCPkgNames::LongDescr()->toString() )
     {
@@ -2978,11 +2944,9 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
 	}
 	
         // show the description	
-	YWidget * descrInfo = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Description() );
-
-	if ( descrInfo )
+	if ( infoText )
 	{
-	    static_cast<NCRichText *>(descrInfo)->setText( text );
+	    infoText->setText( text );
 	}
     }
     // else if (  visibleInfo->compare( NCPkgNames::Versions() ) == YO_EQUAL )
@@ -3334,7 +3298,141 @@ void NCPackageSelector::showDownloadSize()
 //
 NCPkgTable * NCPackageSelector::getPackageList()
 {
-	YWidget * packages = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Packages() );
+    //YWidget * packages = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Packages() );
 	
-	return ( dynamic_cast<NCPkgTable *>(packages) );
+    //return ( dynamic_cast<NCPkgTable *>(packages) );
+    return pkgList;
+}
+
+void NCPackageSelector::createYouLayout( YWidget * selector, NCPkgTable::NCPkgTableType type )
+{
+    // TODO
+}
+
+void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTableType type )
+{
+     // the vertical split is the (only) child of the dialog
+    NCLayoutBox * split = dynamic_cast<NCLayoutBox *>(YUI::widgetFactory()->createLayoutBox( selector, YD_VERT ));
+
+    NCLayoutBox * hSplit = new NCLayoutBox( split, YD_HORIZ );
+
+    filterMenu = new NCMenuButton( hSplit, _("&Filter") );
+    filterMenu->setFunctionKey( 4 );
+    
+    YItemCollection itemCollection;
+    groupsItem = new YMenuItem( _("RPM &Groups") );
+    itemCollection.push_back( groupsItem );
+    patternsItem = new YMenuItem( _("Pa&tterns") );
+    itemCollection.push_back( patternsItem );
+    languagesItem = new YMenuItem( _("&Languages") );
+    itemCollection.push_back( languagesItem );
+    reposItem =  new YMenuItem( _("&Repositories" ) );
+    itemCollection.push_back( reposItem );
+    searchItem =  new YMenuItem( _("&Search" ) );
+    itemCollection.push_back( searchItem );
+    
+    filterMenu->addItems( itemCollection );
+    
+    YTableHeader * tableHeader = new YTableHeader();
+
+     // add the package table (use default type T_Packages)
+    pkgList = new NCPkgTable( split, tableHeader );
+    YUI_CHECK_NEW( pkgList );
+    
+    NCPkgStatusStrategy * strategy;
+    switch ( type )
+    {
+	case NCPkgTable::T_Patches:
+	    strategy = new PatchStatStrategy();
+	    pkgList->setTableType( NCPkgTable::T_Patches, strategy );
+	case NCPkgTable::T_Update:
+	    strategy = new UpdateStatStrategy();
+	    pkgList->setTableType( NCPkgTable::T_Update, strategy );
+	default:
+	    strategy = new PackageStatStrategy();
+	    pkgList->setTableType( NCPkgTable::T_Packages, strategy );
+    }
+    // set the pointer to the packager object
+    pkgList->setPackager( this );
+    
+    // HBox for the buttons
+    NCLayoutBox * hSplit2 = new NCLayoutBox( split, YD_HORIZ );
+
+    filterLabel = new NCLabel ( hSplit2, "...." );
+    diskSpaceLabel = new NCLabel ( hSplit2, _("Required Disk Space: ") );
+
+    NCLayoutBox * vSplit = new NCLayoutBox( split, YD_VERT );
+    infoText = new NCRichText( vSplit, " " );
+
+    NCLayoutBox * hSplit3 = new NCLayoutBox( vSplit, YD_HORIZ );
+    
+    //new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );	// stretchable = true
+
+    // add the OK button
+    okButton = new NCPushButton( hSplit3, NCPkgNames::OKLabel() );
+    YStringWidgetID * okID = new YStringWidgetID( "ok" );
+    okButton->setId( okID );
+
+    // add the Cancel button
+    cancelButton = new NCPushButton( hSplit3, NCPkgNames::CancelLabel() );
+    YStringWidgetID * cancelID = new YStringWidgetID( "cancel" );
+    cancelButton->setId( cancelID );
+}
+
+bool NCPackageSelector::fillDefaultList( )
+{
+    if ( !pkgList )
+	return false;
+
+    NCMIL << "Fill list: " << pkgList << endl;
+    switch ( pkgList->getTableType() )
+    {
+	case NCPkgTable::T_Patches: {
+	    fillPatchList( "installable" );	// default: installable patches
+
+	    // set the visible info to long description 
+	    setVisibleInfo ( NCPkgNames::PatchDescr()->toString() );
+
+	    // show the package description of the current item
+	    pkgList->showInformation ();
+	    break;
+	}
+	case NCPkgTable::T_Update: {
+	    if ( ! zypp::getZYpp()->resolver()->problematicUpdateItems().empty() )
+	    {
+		fillUpdateList();
+		// set the visible info to package description 
+		setVisibleInfo ( NCPkgNames::PkgInfo()->toString() );
+		// show the package description of the current item
+		pkgList->showInformation ();
+		break;
+	    }
+	}
+	case NCPkgTable::T_Packages: {
+	    YStringTreeItem * defaultGroup = getDefaultRpmGroup();
+
+	    if ( defaultGroup )
+	    {
+		NCMIL << "default RPM group: " << defaultGroup->value().translation() << endl;
+		fillPackageList ( YCPString( defaultGroup->value().translation()),
+					    defaultGroup );
+		
+		// set the visible info to package description 
+		setVisibleInfo ( NCPkgNames::PkgInfo()->toString() );
+		// show the package description of the current item
+		pkgList->showInformation ();
+	    }
+	    else
+	    {
+		NCERR << "No default RPM group available" << endl;
+	    }
+	    break;
+	}
+	default:
+	    break;
+    }
+
+    pkgList->setKeyboardFocus();
+
+    return true;
 }

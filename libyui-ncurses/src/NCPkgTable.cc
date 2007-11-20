@@ -808,7 +808,7 @@ bool NCPkgTable::showInformation ( )
 
     if ( !packager )
 	return false;
-	    
+    NCMIL << "SHOW info" << endl;
     switch ( tableType )
     {
 	case T_Packages:

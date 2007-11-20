@@ -256,6 +256,8 @@ public:
 	return true;
     }
 
+    NCPkgTableType getTableType() { return tableType; }
+    
     /**
      * Gets the data pointer of a certain package.
      * @param index The index in package table (the line)

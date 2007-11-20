@@ -29,9 +29,9 @@
 #include "NCPopupTable.h"
 
 
-
 class NCPkgTable;
 class NCPackageSelector;
+class NCPushButton;
 
 /**
  * @short the package selector widget
@@ -47,8 +47,6 @@ class NCPackageSelectorStart : public NCLayoutBox
   private:
    
     YWidget * widgetRoot; 	// root of the widget tree of the package selection dialog
-    
-    NCPkgTable * pkgList;		// the package table widget
     
     NCPackageSelector *packager;	// packager object contains the data and handles events
 
@@ -107,13 +105,6 @@ class NCPackageSelectorStart : public NCLayoutBox
     YWidget * root( ) const { return widgetRoot; };
 
         
-   /**
-    * Helper function; reads a file containing a YCP term
-    * @param layoutFilename The filename
-    * @return YCPTerm
-    */
-    YCPTerm readLayoutFile( const char * layoutFilename );
-
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -47,8 +47,9 @@ class NCPkgPopupDeps;
 class NCPkgPopupDiskspace;
 class NCPkgPopupSearch;
 class NCPkgPopupFile;
+class NCPushButton;
 class YNCursesUI;
-
+class NCMenuButton;
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -98,6 +99,35 @@ class NCPackageSelector
     bool autoCheck;			// flag for automatic dependency check on/off
     YRpmGroupsTree * _rpmGroupsTree;	// rpm groups of the found packages
 
+    // the package table
+    NCPkgTable * pkgList;
+    // filter menu and items
+    NCMenuButton * filterMenu;
+    YMenuItem * groupsItem;
+    YMenuItem * patternsItem;
+    YMenuItem * languagesItem;
+    YMenuItem * reposItem;
+    YMenuItem * searchItem;
+    YMenuItem * whatifItem;
+    // action menu and items
+    NCMenuButton * actionMenu;
+    YMenuItem * toggleItem;
+    YMenuItem * selectItem;
+
+    // information menu and items
+    NCMenuButton * infoMenu;
+    YMenuItem * pkgInfo;
+
+    // labels
+    NCLabel * filterLabel;
+    NCLabel * diskSpaceLabel;
+
+    // info text
+    NCRichText * infoText;
+    
+    NCPushButton * okButton;
+    NCPushButton * cancelButton;
+    
     string visibleInfo;		// visible package info (description, file list, ...)
     
     // internal helper functions (format list of string) 
@@ -105,7 +135,7 @@ class NCPackageSelector
     // internal use (copies tree items got from YPkgRpmGroupTagsFilterView)
     void cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone );
 
-    // the package (patch) list 
+    // returns the package table widget 
     NCPkgTable * getPackageList();
 
     // Mapping from ZyppPkg to the correspoinding ZyppSel.
@@ -133,7 +163,20 @@ class NCPackageSelector
      */ 
     virtual ~NCPackageSelector();
 
+    /**
+    * Create all NCPkgPopus
+    * @return void
+    */
     void createPopups();
+
+   /**
+    * Create layout for the PackageSelector
+    * @param parent Parent is PackageSelectorStart
+    * @param type   The package table type	
+    * @return void
+    */
+    void createPkgLayout( YWidget * parent, NCPkgTable::NCPkgTableType type );
+    void createYouLayout( YWidget * parent, NCPkgTable::NCPkgTableType type ); 	
     
    /**
     * Fills the package table
@@ -200,6 +243,8 @@ class NCPackageSelector
 
     bool fillPatchSearchList( const string & expr );
 
+    bool fillDefaultList();
+    
     /**
       *Fills the package table with packages from selected repository
       *@param repo zypp::Repository
