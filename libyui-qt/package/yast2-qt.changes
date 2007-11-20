@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Nov 20 18:03:00 CET 2007 - sh@suse.de
+
+- Prevent self-generated events in YQDumbTab
+- Fixed cut-off YQInputField labels 
+- V 2.16.3
+
+-------------------------------------------------------------------
 Mon Nov 19 13:44:00 CET 2007 - tgoettlicher@suse.de
 
 - fixed ignored arch selection in package selector (#304966)
