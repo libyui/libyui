@@ -124,7 +124,7 @@ public:
 							  int maxValue = 100 );
     
     virtual NCRichText *	createRichText		( YWidget * parent,
-							  const string & text,
+							  const string & text = string(),
 							  bool plainTextMode = false );
 
     virtual NCIntField *	createIntField		( YWidget * parent,
