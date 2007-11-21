@@ -111,13 +111,25 @@ class NCPackageSelector
     YMenuItem * searchItem;
     YMenuItem * installedItem;
     YMenuItem * whatifItem;
-    YMenuItem * updateItem;
+    YMenuItem * updatelistItem;
     
     // action menu and items
     NCMenuButton * actionMenu;
     YMenuItem * toggleItem;
     YMenuItem * selectItem;
-
+    YMenuItem * deleteItem;
+    YMenuItem * updateItem;
+    YMenuItem * tabooItem;
+    YMenuItem * notabooItem;
+    YMenuItem * allItem;
+    YMenuItem * selallItem;
+    YMenuItem * delallItem;
+    YMenuItem * deselallItem;
+    YMenuItem * dontdelItem;
+    YMenuItem * updnewerItem;
+    YMenuItem * updallItem;
+    YMenuItem * dontupdItem;
+    
     // information menu and items
     NCMenuButton * infoMenu;
     YMenuItem * pkginfoItem;
@@ -127,17 +139,20 @@ class NCPackageSelector
     YMenuItem * relationsItem;
 
     // information menu and items YOU
-    NCMenuButton * youinfoMenu;
     YMenuItem * patchdescrItem;
-    YMenuItem * pkgsItem;
+    YMenuItem * patchpkgsItem;
     YMenuItem * pkgversionsItem;
     
     // labels
     NCLabel * filterLabel;
     NCLabel * diskspaceLabel;
 
-    // info text
-    NCRichText * infoText;
+    // information about packages
+    NCRichText * infoText;	// short/longdecsription, filelist
+    NCPkgTable * pkgAvail;	// available packages
+    // information about patches
+    NCPkgTable * patchPkgs;	// pakages belonging to a patch
+    NCPkgTable * patchPkgsVersions;	// versions of packages above 
     
     NCPushButton * okButton;
     NCPushButton * cancelButton;
@@ -339,14 +354,6 @@ class NCPackageSelector
     */
     bool DiskinfoHandler ( const NCursesEvent& event );
     
-    /**
-     * Handler function for the package list which handles events not directly
-     * related to the list. Most events are handled in NCPkgTable itself.
-     * @param event The Ncurses event
-     * @return bool
-     */ 
-    bool PackageListHandler( const NCursesEvent&  event );
-
     /**
      * Handler function for the "Filter" menu
      * @param event The Ncurses event
