@@ -79,6 +79,12 @@ YQDumbTab::addItem( YItem * item )
     tab->setIdentifier( item->index() );
     _tabBar->addTab( tab );
     item->setData( tab );
+
+    if ( item->selected() )
+    {
+	YQSignalBlocker sigBlocker( _tabBar );
+	_tabBar->setCurrentTab( tab );
+    }
 }
 
 
@@ -131,6 +137,7 @@ YQDumbTab::slotSelected( int index )
 {
     YItem * item = itemAt( index );
     YUI_CHECK_PTR( item );
+
 
     YQUI::ui()->sendEvent( new YMenuEvent( item ) );
 }
