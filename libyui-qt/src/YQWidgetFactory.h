@@ -93,7 +93,7 @@ public:
     virtual YQTree *		createTree		( YWidget * parent, const string & label );
     virtual YQTable *		createTable		( YWidget * parent, YTableHeader * header );
     virtual YQProgressBar *	createProgressBar	( YWidget * parent, const string & label, int maxValue = 100 );
-    virtual YQRichText *	createRichText		( YWidget * parent, const string & text, bool plainTextMode = false );
+    virtual YQRichText *	createRichText		( YWidget * parent, const string & text = string(), bool plainTextMode = false );
 
     //
     // Less Common Leaf Widgets
