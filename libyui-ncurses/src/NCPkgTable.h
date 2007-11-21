@@ -279,12 +279,6 @@ public:
     unsigned int getNumLines( ) { return myPad()->Lines(); }
 
     /**
-     * Shows default list (packages of default RPM group or patch list)
-     * @return bool
-     */  
-    bool fillDefaultList( );
-
-    /**
      * Fills the header of the table
      * @return void
      */  
