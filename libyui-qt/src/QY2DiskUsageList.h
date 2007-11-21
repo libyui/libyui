@@ -23,7 +23,7 @@
 #define QY2DiskUsageList_h
 
 #include <QY2ListView.h>
-#include <y2util/FSize.h>
+#include <FSize.h>
 #include <qcolor.h>
 
 

@@ -27,7 +27,7 @@
 #include <QY2ListView.h>
 #include "YQZypp.h"
 #include <zypp/Edition.h>
-#include <y2util/FSize.h>
+#include <FSize.h>
 
 class YQPkgObjListItem;
 class QAction;

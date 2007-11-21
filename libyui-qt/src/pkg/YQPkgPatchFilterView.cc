@@ -28,7 +28,7 @@
 #include <qtabwidget.h>
 #include <qdatetime.h>
 
-#include <y2util/FSize.h>
+#include <FSize.h>
 #include <zypp/ui/PatchContents.h>
 
 #include "YQPkgPatchFilterView.h"
