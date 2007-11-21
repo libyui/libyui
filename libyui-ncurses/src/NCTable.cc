@@ -268,7 +268,10 @@ int NCTable::getCurrentItem()
 YItem * NCTable::getCurrentItemPointer()
 {
     const NCTableLine *cline = myPad()->GetLine( myPad()->CurPos().L );
-    return cline->origItem();
+    if ( cline )
+	return cline->origItem();
+    else
+	return 0;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -332,7 +335,8 @@ void NCTable::selectItem( YItem *yitem, bool selected )
 void NCTable::selectCurrentItem()
 {
   const NCTableLine *cline = myPad()->GetLine( myPad()->CurPos().L );
-  YTable::selectItem( cline->origItem() );
+  if ( cline )
+      YTable::selectItem( cline->origItem() );
 }
 
 ///////////////////////////////////////////////////////////////////
