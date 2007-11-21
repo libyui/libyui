@@ -36,8 +36,6 @@ NCPopupMenu::NCPopupMenu( const wpos at, YItemIterator begin, YItemIterator end 
 {
   vector<string> row( 2 );
   createList( row );
-  YMenuItem * startItem = dynamic_cast<YMenuItem *> (*begin);
-  YUI_CHECK_PTR( startItem );
   
   for ( YItemIterator it = begin; it != end; ++it )
   {
@@ -124,7 +122,7 @@ bool NCPopupMenu::postAgain()
   YMenuItem * item = itemsMap[ tableItem ];
 	  
   if ( !item )
-      return true;
+      return false;
   NCMIL << "Menu item: " << item->label() << endl;
   if ( selection != -1 )
   {
