@@ -101,6 +101,7 @@ class NCPackageSelector
 
     // the package table
     NCPkgTable * pkgList;
+
     // filter menu and items
     NCMenuButton * filterMenu;
     YMenuItem * groupsItem;
@@ -108,7 +109,10 @@ class NCPackageSelector
     YMenuItem * languagesItem;
     YMenuItem * reposItem;
     YMenuItem * searchItem;
+    YMenuItem * installedItem;
     YMenuItem * whatifItem;
+    YMenuItem * updateItem;
+    
     // action menu and items
     NCMenuButton * actionMenu;
     YMenuItem * toggleItem;
@@ -116,11 +120,21 @@ class NCPackageSelector
 
     // information menu and items
     NCMenuButton * infoMenu;
-    YMenuItem * pkgInfo;
+    YMenuItem * pkginfoItem;
+    YMenuItem * longdescrItem;
+    YMenuItem * versionsItem;
+    YMenuItem * filesItem;
+    YMenuItem * relationsItem;
 
+    // information menu and items YOU
+    NCMenuButton * youinfoMenu;
+    YMenuItem * patchdescrItem;
+    YMenuItem * pkgsItem;
+    YMenuItem * pkgversionsItem;
+    
     // labels
     NCLabel * filterLabel;
-    NCLabel * diskSpaceLabel;
+    NCLabel * diskspaceLabel;
 
     // info text
     NCRichText * infoText;
@@ -128,7 +142,7 @@ class NCPackageSelector
     NCPushButton * okButton;
     NCPushButton * cancelButton;
     
-    string visibleInfo;		// visible package info (description, file list, ...)
+    YMenuItem * visibleInfo;		// current visible package info (description, file list, ...)
     
     // internal helper functions (format list of string) 
     string createRelLine( const zypp::CapSet & info );
@@ -405,7 +419,7 @@ class NCPackageSelector
     * Sets the member variable to the currently visible information
     * @param info
     */
-    void setVisibleInfo( string info );
+    void setVisibleInfo( YMenuItem * info );
 
    /**
     * Fills the package table

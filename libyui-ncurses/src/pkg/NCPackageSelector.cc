@@ -38,6 +38,7 @@
 #include "NCPackageSelector.h"
 #include "NCLayoutBox.h"
 #include "YSelectionBox.h"
+#include "YAlignment.h"
 #include "YNCursesUI.h"
 #include "NCi18n.h"
 
@@ -125,20 +126,11 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, YWidget * wRoot, long mod
       , _rpmGroupsTree (0)
 {
     // Fill the handler map
-    eventHandlerMap[ NCPkgNames::Packages()->toString() ]	= &NCPackageSelector::PackageListHandler;
-    eventHandlerMap[ NCPkgNames::Cancel()->toString() ] 	= &NCPackageSelector::CancelHandler;
-    eventHandlerMap[ NCPkgNames::OkButton()->toString() ]	= &NCPackageSelector::OkButtonHandler;
+
     eventHandlerMap[ NCPkgNames::Search()->toString() ] 	= &NCPackageSelector::SearchHandler;
     eventHandlerMap[ NCPkgNames::Diskinfo()->toString() ] = &NCPackageSelector::DiskinfoHandler;
     // Filter menu
-    eventHandlerMap[ NCPkgNames::RpmGroups()->toString() ] = &NCPackageSelector::FilterHandler;
-    eventHandlerMap[ NCPkgNames::Selections()->toString() ] = &NCPackageSelector::FilterHandler;
-    eventHandlerMap[ NCPkgNames::Patterns()->toString() ] = &NCPackageSelector::FilterHandler;    
-    eventHandlerMap[ NCPkgNames::Languages()->toString() ] = &NCPackageSelector::FilterHandler;    
-    eventHandlerMap[ NCPkgNames::Repositories()->toString() ] = &NCPackageSelector::FilterHandler;    
-    eventHandlerMap[ NCPkgNames::UpdateList()->toString() ] = &NCPackageSelector::FilterHandler;
-    eventHandlerMap[ NCPkgNames::Installed()->toString() ] = &NCPackageSelector::FilterHandler;
-    eventHandlerMap[ NCPkgNames::Whatif()->toString() ] = &NCPackageSelector::FilterHandler;
+    // eventHandlerMap[ NCPkgNames::Selections()->toString() ] = &NCPackageSelector::FilterHandler;
 
     // YOU filter
     eventHandlerMap[ NCPkgNames::Recommended()->toString() ] = &NCPackageSelector::FilterHandler;
@@ -525,6 +517,8 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
 	    retVal = FilterHandler( event );
 	else if ( event.widget == actionMenu )
 	    retVal = StatusHandler( event );
+	else if ( event.widget == infoMenu )
+	    retVal = InformationHandler( event );
 	    
     }
 
@@ -538,7 +532,7 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
 //
 // currently displayed package information
 //
-void NCPackageSelector::setVisibleInfo( string info )
+void NCPackageSelector::setVisibleInfo( YMenuItem * info )
 {
     visibleInfo = info;
 }
@@ -1563,7 +1557,10 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
 	NCERR << "*** InformationHandler RETURN false ***" << endl;
 	return false;
     }
-    string info = getMenuId( event.selection );
+
+    YMenuItem * info = event.selection;
+
+    NCMIL << "Visible info: " << visibleInfo << " new info: " << info << endl;
 
     if ( visibleInfo == info )
     {
@@ -1574,8 +1571,9 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
     // set visibleInfo
     visibleInfo = info;
 
+    
     //if ( visibleInfo->compare( NCPkgNames::Versions() ) == YO_EQUAL )
-    if ( visibleInfo == NCPkgNames::Versions()->toString() )
+    if ( visibleInfo == versionsItem )
     {
 	// show the package table
 	const char * tableLayout = "`PkgSpecial( `id(\"availpkgs\"), `opt(`notify), \"pkgTable\" )"; 
@@ -1603,7 +1601,7 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
     }
 // patches
     //else if ( visibleInfo->compare( NCPkgNames::PatchPackages() ) == YO_EQUAL )
-    else if ( visibleInfo == NCPkgNames::PatchPackages()->toString() )
+    else if ( visibleInfo == pkgsItem )
     {
         // show the package table
 	const char * tableLayout = "`PkgSpecial( `id(\"patchpkgs\"), `opt(`notify), \"pkgTable\" )"; 
@@ -1630,7 +1628,7 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
 	}	
     }
     // else if  ( visibleInfo->compare( NCPkgNames::PatchPackagesVersions() ) == YO_EQUAL )
-    else if ( visibleInfo == NCPkgNames::PatchPackagesVersions()->toString() ) 
+    else if ( visibleInfo == pkgversionsItem ) 
     {
         // show the package table
 	const char * tableLayout = "`PkgSpecial( `id(\"pkgsversions\"), `opt(`notify), \"pkgTable\" )"; 
@@ -1658,6 +1656,7 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
     }	
     else
     {
+#if 0
 	// show the rich text widget
 	const char * textLayout = "`RichText( `id(\"description\"), \" \")"; 
 	Parser parser( textLayout );
@@ -1667,7 +1666,7 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
 	    layout = parsed_code->evaluate ();
 	if (!layout.isNull())
 	    y2ui->evaluateReplaceWidget( YCPSymbol ("replaceinfo"), layout->asTerm() );
-    
+#endif
 	packageList->showInformation( );
     }
 
@@ -1833,14 +1832,6 @@ bool NCPackageSelector::FilterHandler( const NCursesEvent&  event )
 	    NCMIL << "Showing RPM groups" << endl;
 	    // show the filter popup (fills the package list) 
 	    retEvent = filterPopup->showFilterPopup( );
-	}
-    }
-    else if ( event.selection == patternsItem )
-    {
-	if ( selectionPopup )
-	{
-	    // show the selection popup
-	    retEvent = selectionPopup->showSelectionPopup( );
 	}
     }
     else if ( event.selection == patternsItem )
@@ -2672,7 +2663,7 @@ bool NCPackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectabl
     }
 
     // if (  visibleInfo->compare( NCPkgNames::PatchDescr() ) == YO_EQUAL )
-    if ( visibleInfo == NCPkgNames::PatchDescr()->toString() ) 
+    if ( visibleInfo == patchdescrItem ) 
     {
 	string descr;
 	
@@ -2708,7 +2699,7 @@ bool NCPackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectabl
 	}	
     }
     // else if (  visibleInfo->compare( NCPkgNames::PatchPackages() ) == YO_EQUAL )
-    else if ( visibleInfo == NCPkgNames::PatchPackages()->toString() )
+    else if ( visibleInfo == pkgsItem )
     {
 	NCPkgTable *patchPkgList  = dynamic_cast<NCPkgTable *>(YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::PatchPkgs()));
 	if ( patchPkgList )
@@ -2717,7 +2708,7 @@ bool NCPackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectabl
 	}
     }
     // else if (  visibleInfo->compare( NCPkgNames::PatchPackagesVersions() ) == YO_EQUAL )
-    else if ( visibleInfo ==  NCPkgNames::PatchPackagesVersions()->toString() )
+    else if ( visibleInfo ==  pkgversionsItem )
     {
 	NCPkgTable *patchPkgsVersions  = dynamic_cast<NCPkgTable *>(YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::PatchPkgsVersions()));
 	if ( patchPkgsVersions )
@@ -2824,23 +2815,20 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
     }
 
     NCMIL << "SHOW package info " << visibleInfo << endl;
-    // if ( visibleInfo->compare( NCPkgNames::LongDescr() ) == YO_EQUAL )
-    if ( visibleInfo ==  NCPkgNames::LongDescr()->toString() )
+
+    if ( visibleInfo == longdescrItem )
     {
 	// ask the package manager for the description of this package
 	zypp::Text value = pkgPtr->description();
 	string descr = createDescrText( value );
 
         // show the description	
-	YWidget * descrInfo = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Description() );
-	
-	if ( descrInfo )
+	if ( infoText )
 	{
-	    static_cast<NCRichText *>(descrInfo)->setText( descr );
+	    infoText->setText( descr );
 	}
     }
-    // else if (  visibleInfo->compare( NCPkgNames::Files() ) == YO_EQUAL )
-    else if ( visibleInfo ==  NCPkgNames::Files()->toString() )
+    else if ( visibleInfo == filesItem )
     {
 	string text = NCPkgNames::ListOfFiles();
 	// the file list is available only for installed packages
@@ -2854,14 +2842,12 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
 	}
 	
 	// get the widget id 
-	YWidget * descrInfo = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Description() );  
-	if ( descrInfo  )
+	if ( infoText )
 	{
-	    static_cast<NCRichText *>(descrInfo)->setText( text );
+	    infoText->setText( text );
 	}	
     }
-    // else if ( visibleInfo->compare( NCPkgNames::PkgInfo() ) == YO_EQUAL )
-    else if ( visibleInfo ==  NCPkgNames::PkgInfo()->toString() )
+    else if ( visibleInfo == pkginfoItem )
     {
 	string instVersion = "";
 	string version = "";
@@ -2949,8 +2935,8 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
 	    infoText->setText( text );
 	}
     }
-    // else if (  visibleInfo->compare( NCPkgNames::Versions() ) == YO_EQUAL )
-    else if ( visibleInfo ==  NCPkgNames::Versions()->toString() )
+    // FIXME
+    else if ( visibleInfo == versionsItem )
     {
 	NCPkgTable * pkgAvail = dynamic_cast<NCPkgTable *>(YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::AvailPkgs()));
 	if ( pkgAvail )
@@ -2958,8 +2944,7 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
 	    fillAvailableList( pkgAvail, slbPtr );
 	}
     }
-    // else if (  visibleInfo->compare( NCPkgNames::Relations() ) == YO_EQUAL )
-    else if ( visibleInfo == NCPkgNames::Relations()->toString() )
+    else if ( visibleInfo == relationsItem )
     {
 	string text = "";
 	text += slbPtr->name();
@@ -2994,11 +2979,9 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
 	}
 	
         // show the package relations	
-	YWidget * descrInfo = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Description() );
-	
-	if ( descrInfo )
+	if ( infoText )
 	{
-	    static_cast<NCRichText *>(descrInfo)->setText( text );
+	    infoText->setText( text );
 	}
     }
  
@@ -3192,13 +3175,9 @@ void NCPackageSelector::showDiskSpace()
 
     // show pkg_diff, i.e. total difference of disk space (can be negative in installed system
     // if packages are deleted)
-    YCPString label( diff.asString () );
-    
-    // show the required diskspace
-    YWidget * diskSpace = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Diskspace() );
-    if ( diskSpace )
+    if ( diskspaceLabel )
     {
-	static_cast<NCLabel *>(diskSpace)->setLabel( label->toString() );
+	diskspaceLabel->setText( diff.asString() );
     }
 
     // check whether required diskspace enters the warning range
@@ -3281,13 +3260,10 @@ void NCPackageSelector::showDownloadSize()
 	    totalSize += (*it)->candidateObj()->size();
     }
 
-    YCPString label( totalSize.asString() );
-
     // show the download size
-    YWidget * diskSpace = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Diskspace() );
-    if ( diskSpace )
+    if ( diskspaceLabel )
     {
-	static_cast<NCLabel *>(diskSpace)->setLabel( label->toString() );
+	diskspaceLabel->setText( totalSize.asString() );
     }
 }
 
@@ -3298,17 +3274,20 @@ void NCPackageSelector::showDownloadSize()
 //
 NCPkgTable * NCPackageSelector::getPackageList()
 {
-    //YWidget * packages = YCPDialogParser::findWidgetWithId( widgetRoot, NCPkgNames::Packages() );
-	
-    //return ( dynamic_cast<NCPkgTable *>(packages) );
     return pkgList;
 }
 
+//
+// Create layout for Online Update
+//
 void NCPackageSelector::createYouLayout( YWidget * selector, NCPkgTable::NCPkgTableType type )
 {
     // TODO
 }
 
+//
+// Create layout for Package Selector
+//
 void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTableType type )
 {
      // the vertical split is the (only) child of the dialog
@@ -3316,30 +3295,63 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
 
     NCLayoutBox * hSplit = new NCLayoutBox( split, YD_HORIZ );
 
-    filterMenu = new NCMenuButton( hSplit, _("&Filter") );
+    YAlignment * left = YUI::widgetFactory()->createLeft( hSplit );
+			
+    // label of the filter menu ( keep it short ) - filters out a set of packages
+    filterMenu = new NCMenuButton( left, _("&Filter") );
     filterMenu->setFunctionKey( 4 );
-    
-    YItemCollection itemCollection;
+    // begin: menu items of the filter menu
+    // please note: use unique hotkeys until end:  
     groupsItem = new YMenuItem( _("RPM &Groups") );
-    itemCollection.push_back( groupsItem );
     patternsItem = new YMenuItem( _("Pa&tterns") );
-    itemCollection.push_back( patternsItem );
     languagesItem = new YMenuItem( _("&Languages") );
-    itemCollection.push_back( languagesItem );
     reposItem =  new YMenuItem( _("&Repositories" ) );
-    itemCollection.push_back( reposItem );
     searchItem =  new YMenuItem( _("&Search" ) );
+    installedItem = new YMenuItem( _( "Installed &Packages" ) );
+    whatifItem = new YMenuItem(	_( "&Installation Summary" ) );
+    // end: menu items of the filter menu
+    updateItem = new YMenuItem(	_( "&Update List" ) );
+
+    YItemCollection itemCollection;
+    itemCollection.push_back( groupsItem );
+    itemCollection.push_back( patternsItem );
+    itemCollection.push_back( languagesItem );
+    itemCollection.push_back( reposItem );
     itemCollection.push_back( searchItem );
+    itemCollection.push_back( installedItem );
+    itemCollection.push_back( whatifItem );
+    itemCollection.push_back( updateItem );
     
     filterMenu->addItems( itemCollection );
+
+    YAlignment * left2 = YUI::widgetFactory()->createLeft( hSplit );
+
+    // label Information menu ( keep it short! )
+    infoMenu = new NCMenuButton( left2, _( "&Information" ) );
     
+    pkginfoItem = new YMenuItem( _( "&Package Info" ) );
+    longdescrItem = new YMenuItem( _( "&Long Description" ) );
+    versionsItem = new YMenuItem( _( "&Versions" ) );
+    filesItem = new YMenuItem( _( "&File List" ) );
+    relationsItem = new YMenuItem( _( "Package &Relations" ) );
+
+    YItemCollection itemCollection2;
+    itemCollection2.push_back( pkginfoItem );
+    itemCollection2.push_back( longdescrItem );
+    itemCollection2.push_back( versionsItem );
+    itemCollection2.push_back( filesItem );
+    itemCollection2.push_back( relationsItem );
+
+    infoMenu->addItems( itemCollection2 );
+
+    // add the package table 
     YTableHeader * tableHeader = new YTableHeader();
 
-     // add the package table (use default type T_Packages)
     pkgList = new NCPkgTable( split, tableHeader );
     YUI_CHECK_NEW( pkgList );
     
     NCPkgStatusStrategy * strategy;
+    // set the table type
     switch ( type )
     {
 	case NCPkgTable::T_Patches:
@@ -3355,30 +3367,42 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     // set the pointer to the packager object
     pkgList->setPackager( this );
     
-    // HBox for the buttons
+    // HBox for Filter and Disk Space (both in additional HBoxes )
     NCLayoutBox * hSplit2 = new NCLayoutBox( split, YD_HORIZ );
 
-    filterLabel = new NCLabel ( hSplit2, "...." );
-    diskSpaceLabel = new NCLabel ( hSplit2, _("Required Disk Space: ") );
+    NCLayoutBox * hSplit3 = new NCLayoutBox( hSplit2, YD_HORIZ );
+    // label text - keep it short
+    new NCLabel( hSplit3,  _( "Filter: " ) );
+    filterLabel = new NCLabel ( hSplit3, "...." );
+
+    new NCSpacing( hSplit2, YD_HORIZ, false, 5.0 );
+
+    NCLayoutBox * hSplit4 = new NCLayoutBox( hSplit2, YD_HORIZ );
+    // label text - keep it short (use abbreviation if necessary)
+    new NCLabel( hSplit4,   _( "Required Disk Space: " ) );
+    diskspaceLabel = new NCLabel ( hSplit4, "   " );
 
     NCLayoutBox * vSplit = new NCLayoutBox( split, YD_VERT );
     infoText = new NCRichText( vSplit, " " );
 
-    NCLayoutBox * hSplit3 = new NCLayoutBox( vSplit, YD_HORIZ );
+    NCLayoutBox * hSplit5 = new NCLayoutBox( vSplit, YD_HORIZ );
     
     //new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );	// stretchable = true
 
     // add the OK button
-    okButton = new NCPushButton( hSplit3, NCPkgNames::OKLabel() );
+    okButton = new NCPushButton( hSplit5, NCPkgNames::OKLabel() );
     YStringWidgetID * okID = new YStringWidgetID( "ok" );
     okButton->setId( okID );
 
     // add the Cancel button
-    cancelButton = new NCPushButton( hSplit3, NCPkgNames::CancelLabel() );
+    cancelButton = new NCPushButton( hSplit5, NCPkgNames::CancelLabel() );
     YStringWidgetID * cancelID = new YStringWidgetID( "cancel" );
     cancelButton->setId( cancelID );
 }
 
+//
+// Fill package list with packages of default RPM group/update list or installable patches
+//
 bool NCPackageSelector::fillDefaultList( )
 {
     if ( !pkgList )
@@ -3391,7 +3415,7 @@ bool NCPackageSelector::fillDefaultList( )
 	    fillPatchList( "installable" );	// default: installable patches
 
 	    // set the visible info to long description 
-	    setVisibleInfo ( NCPkgNames::PatchDescr()->toString() );
+	    setVisibleInfo ( longdescrItem );
 
 	    // show the package description of the current item
 	    pkgList->showInformation ();
@@ -3402,7 +3426,7 @@ bool NCPackageSelector::fillDefaultList( )
 	    {
 		fillUpdateList();
 		// set the visible info to package description 
-		setVisibleInfo ( NCPkgNames::PkgInfo()->toString() );
+		setVisibleInfo ( pkginfoItem );
 		// show the package description of the current item
 		pkgList->showInformation ();
 		break;
@@ -3418,7 +3442,7 @@ bool NCPackageSelector::fillDefaultList( )
 					    defaultGroup );
 		
 		// set the visible info to package description 
-		setVisibleInfo ( NCPkgNames::PkgInfo()->toString() );
+		setVisibleInfo ( pkginfoItem );
 		// show the package description of the current item
 		pkgList->showInformation ();
 	    }
