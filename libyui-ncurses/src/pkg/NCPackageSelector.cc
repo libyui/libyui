@@ -124,6 +124,51 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, YWidget * wRoot, long mod
       , testMode ( false )
       , autoCheck( true )
       , _rpmGroupsTree (0)
+      , pkgList ( 0 )
+      , filterMenu( 0 )
+      , groupsItem( 0 )
+      , patternsItem( 0 )
+      , languagesItem( 0 )
+      , reposItem( 0 )
+      , searchItem( 0 )
+      , installedItem( 0 )
+      , whatifItem( 0 )
+      , updatelistItem( 0 )
+      , actionMenu( 0 )
+      , toggleItem( 0 )
+      , selectItem( 0 )
+      , deleteItem( 0 )
+      , updateItem( 0 )
+      , tabooItem( 0 )
+      , notabooItem( 0 )
+      , allItem( 0 )
+      , selallItem( 0 )
+      , delallItem( 0 )
+      , deselallItem( 0 )
+      , dontdelItem( 0 )
+      , updnewerItem( 0 )
+      , updallItem( 0 )
+      , dontupdItem( 0 )
+      , infoMenu( 0 )
+      , pkginfoItem( 0 )
+      , longdescrItem( 0 )
+      , versionsItem( 0 )
+      , filesItem( 0 )
+      , relationsItem( 0 )
+      , patchdescrItem( 0 )
+      , patchpkgsItem( 0 )
+      , pkgversionsItem( 0 )
+      , filterLabel( 0 )
+      , diskspaceLabel( 0 )
+      , infoText( 0 )
+      , replacePoint( 0 )
+      , versionsList( 0 )
+      , patchPkgs( 0 )
+      , patchPkgsVersions( 0 )
+      , okButton( 0 )
+      , cancelButton( 0 )
+      , visibleInfo( 0 )	
+
 {
     // FIXME - remove this code when everthiong is handled by handleEvent() !
     //         (the eventHandlerMap is obsolete)
@@ -132,7 +177,7 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, YWidget * wRoot, long mod
     eventHandlerMap[ NCPkgNames::Search()->toString() ]   = &NCPackageSelector::SearchHandler;
     eventHandlerMap[ NCPkgNames::Diskinfo()->toString() ] = &NCPackageSelector::DiskinfoHandler;
 
-    // Filter menu
+    // Filter - add selectionsItem, if really needed
     // eventHandlerMap[ NCPkgNames::Selections()->toString() ] = &NCPackageSelector::FilterHandler;
 
     // YOU filter
@@ -1805,6 +1850,8 @@ bool NCPackageSelector::FilterHandler( const NCursesEvent&  event )
 	    retEvent = filterPopup->showFilterPopup( );
 	}
     }
+    // FIXME - add selectionsItem if really needed
+    // else if ( event.selection == selectionsItem )
     else if ( event.selection == patternsItem )
     {
 	if ( patternPopup )
@@ -1835,42 +1882,35 @@ bool NCPackageSelector::FilterHandler( const NCursesEvent&  event )
 	SearchHandler( event );
     }
 // patches
-    // else if ( event.selection->compare( NCPkgNames::Recommended() ) ==  YO_EQUAL )
+// FIXME - compare event.selection with YMenuItem (see above)
     else if ( selId == NCPkgNames::Recommended()->toString() )
     {
 	fillPatchList( "recommended" );	// patch kind
     }
-    // else if ( event.selection->compare( NCPkgNames::Security() )  ==  YO_EQUAL )
     else if ( selId == NCPkgNames::Security()->toString() )
     {
 	fillPatchList( "security" );		// patch kind
     }
-    // else if ( event.selection->compare( NCPkgNames::Optional() )  ==  YO_EQUAL )
     else if ( selId ==  NCPkgNames::Optional()->toString() )
     {
 	fillPatchList( "optional" );		// patch kind
     }
-    // else if (  event.selection->compare( NCPkgNames::YaST2Patches() ) ==  YO_EQUAL )
     else if ( selId ==  NCPkgNames::YaST2Patches()->toString() )
     {
 	fillPatchList( "YaST2" );		// patch kind
     } 
-    // else if ( event.selection->compare( NCPkgNames::AllPatches() )  ==  YO_EQUAL )
     else if ( selId ==  NCPkgNames::AllPatches()->toString() )
     {
 	fillPatchList( "all" );			// show all patches
     }
-    // else if (  event.selection->compare( NCPkgNames::InstalledPatches() ) ==  YO_EQUAL )
     else if ( selId == NCPkgNames::InstalledPatches()->toString() )
     {
 	fillPatchList( "installed" );		// show installed patches
     }
-    // else if (  event.selection->compare( NCPkgNames::InstallablePatches() ) ==  YO_EQUAL )
     else if ( selId == NCPkgNames::InstallablePatches()->toString() )
     {
 	fillPatchList( "installable" );		// show installed patches
     }
-    // else if (  event.selection->compare( NCPkgNames::NewPatches() ) ==  YO_EQUAL )
     else if ( selId == NCPkgNames::NewPatches()->toString() )
     {
 	fillPatchList( "new" );			// show new patches
@@ -1932,7 +1972,6 @@ bool NCPackageSelector::StatusHandler( const NCursesEvent&  event )
 	else
 	    packageList->changeObjStatus( '+' );
     }
-    // else if ( event.selection->compare( NCPkgNames::Delete() ) == YO_EQUAL )
     else if ( event.selection == deleteItem )
     {
 	if ( testMode )
@@ -1940,7 +1979,6 @@ bool NCPackageSelector::StatusHandler( const NCursesEvent&  event )
 	else
 	    packageList->changeObjStatus( '-' );
     }
-    // else if ( event.selection->compare( NCPkgNames::Update() ) == YO_EQUAL )
     else if ( event.selection == updateItem )
     {
 	if ( testMode )
@@ -2109,7 +2147,6 @@ bool NCPackageSelector::FileHandler( const NCursesEvent& event )
     string selId = getMenuId( event.selection );
     
     //Export package list into file	
-    // if ( event.selection->compare( NCPkgNames::ExportToFile() ) == YO_EQUAL )
     if ( selId == NCPkgNames::ExportToFile()->toString() )
     {
  	//Ask for file to save into
@@ -2163,7 +2200,6 @@ bool NCPackageSelector::FileHandler( const NCursesEvent& event )
     }
 
     //Import package list from file
-    // else if ( event.selection->compare( NCPkgNames::ImportFromFile() ) == YO_EQUAL )
     else if ( selId ==  NCPkgNames::ImportFromFile()->toString() )
     {
 	//ask for file to open
@@ -2266,7 +2302,6 @@ bool NCPackageSelector::HelpHandler( const NCursesEvent&  event )
 
     string selId = getMenuId( event.selection );
     
-    // if ( event.selection->compare( NCPkgNames::GeneralHelp() ) == YO_EQUAL )
     if ( selId ==  NCPkgNames::GeneralHelp()->toString() )
     {
 	text += NCPkgNames::HelpPkgInst1();
@@ -2278,7 +2313,6 @@ bool NCPackageSelector::HelpHandler( const NCursesEvent&  event )
 	text += NCPkgNames::HelpPkgInst5();
 	text += NCPkgNames::HelpPkgInst6();
     }
-    // else if ( event.selection->compare( NCPkgNames::StatusHelp() ) == YO_EQUAL )
     else if ( selId == NCPkgNames::StatusHelp()->toString() )
     {
 	text += NCPkgNames::HelpOnStatus1();
@@ -2289,12 +2323,10 @@ bool NCPackageSelector::HelpHandler( const NCursesEvent&  event )
 	text += NCPkgNames::HelpOnStatus6();
 	text += NCPkgNames::HelpOnStatus7();
     }
-    // else if ( event.selection->compare( NCPkgNames::UpdateHelp() ) == YO_EQUAL )
     else if ( selId == NCPkgNames::UpdateHelp()->toString() )
     {
 	text += NCPkgNames::HelpOnUpdate();
     }
-    // else if ( event.selection->compare( NCPkgNames::SearchHelp() ) == YO_EQUAL )
     else if ( selId == NCPkgNames::SearchHelp()->toString() )
     {
 	headline = NCPkgNames::SearchHeadline();
@@ -3232,12 +3264,13 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
      // the vertical split is the (only) child of the dialog
     YLayoutBox * split = YUI::widgetFactory()->createVBox( selector );
 
-    NCLayoutBox * hSplit = new NCLayoutBox( split, YD_HORIZ );
+    YLayoutBox * hSplit = YUI::widgetFactory()->createHBox( split );
 
     YAlignment * left1 = YUI::widgetFactory()->createLeft( hSplit );
 			
     // label of the filter menu ( keep it short ) - filters out a set of packages
     filterMenu = new NCMenuButton( left1, _("&Filter") );
+    YUI_CHECK_NEW( filterMenu );
     filterMenu->setFunctionKey( 4 );
 
     // begin: menu items of the filter menu
@@ -3267,6 +3300,7 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
 
     // label Actions menu ( keep it short ) - actions to change status of a package
     actionMenu = new NCMenuButton( left2,  _( "A&ctions" ) );
+    YUI_CHECK_NEW( actionMenu );
     actionMenu->setFunctionKey( 5 );
 
     // Please note: add an appropriate number of whitespaces to get a well
@@ -3307,7 +3341,9 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
 
     // label Information menu ( keep it short! )
     infoMenu = new NCMenuButton( left3, _( "&Information" ) );
+    YUI_CHECK_NEW( infoMenu );
     infoMenu->setFunctionKey( 6 );
+
     // begin: menu items of the info menu
     // please note: use unique hotkeys until end:
     pkginfoItem = new YMenuItem( _( "&Package Info" ) );
@@ -3349,37 +3385,37 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     pkgList->setPackager( this );
     
     // HBox for Filter and Disk Space (both in additional HBoxes )
-    NCLayoutBox * hSplit2 = new NCLayoutBox( split, YD_HORIZ );
+    YLayoutBox * hSplit2 = YUI::widgetFactory()->createHBox( split );
 
-    NCLayoutBox * hSplit3 = new NCLayoutBox( hSplit2, YD_HORIZ );
+    YLayoutBox * hSplit3 = YUI::widgetFactory()->createHBox( hSplit2 );
     // label text - keep it short
     new NCLabel( hSplit3,  _( "Filter: " ) );
-    filterLabel = new NCLabel ( hSplit3, "...." );
+    filterLabel = new NCLabel ( hSplit3, "....................................." );
+    YUI_CHECK_NEW( filterLabel );
+    
+    new NCSpacing( hSplit2, YD_HORIZ, true, 0.5 );
 
-    new NCEmpty( hSplit2 );
-
-    NCLayoutBox * hSplit4 = new NCLayoutBox( hSplit2, YD_HORIZ );
+    YLayoutBox * hSplit4 = YUI::widgetFactory()->createHBox( hSplit2 );
     // label text - keep it short (use abbreviation if necessary)
     new NCLabel( hSplit4,   _( "Required Disk Space: " ) );
     diskspaceLabel = new NCLabel ( hSplit4, "   " );
+    YUI_CHECK_NEW( diskspaceLabel );
 
-    NCLayoutBox * vSplit = new NCLayoutBox( split, YD_VERT );
+    YLayoutBox * vSplit = YUI::widgetFactory()->createVBox( split );
     replacePoint = new NCReplacePoint( vSplit );
     infoText = new NCRichText( replacePoint, " " );
 
-    NCLayoutBox * hSplit5 = new NCLayoutBox( vSplit, YD_HORIZ );
+    YLayoutBox * hSplit5 = YUI::widgetFactory()->createHBox( vSplit );
     
-    //new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );	// stretchable = true
-
-    // add the OK button
-    okButton = new NCPushButton( hSplit5, NCPkgNames::OKLabel() );
-    YStringWidgetID * okID = new YStringWidgetID( "ok" );
-    okButton->setId( okID );
-
     // add the Cancel button
-    cancelButton = new NCPushButton( hSplit5, NCPkgNames::CancelLabel() );
-    YStringWidgetID * cancelID = new YStringWidgetID( "cancel" );
-    cancelButton->setId( cancelID );
+    cancelButton = new NCPushButton( hSplit5, _( "&Cancel" ) );
+    YUI_CHECK_NEW( cancelButton );
+    cancelButton->setFunctionKey( 9 );
+    // add the OK button
+    okButton = new NCPushButton( hSplit5, _( "&Accept" ) );
+    YUI_CHECK_NEW( okButton );
+    okButton->setFunctionKey( 10 );
+    
 }
 
 //
