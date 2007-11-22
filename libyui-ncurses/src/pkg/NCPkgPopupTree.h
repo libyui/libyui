@@ -29,7 +29,7 @@
 #include "NCLabel.h"
 #include "NCRichText.h"
 
-#include <y2util/YRpmGroupsTree.h>
+#include <YRpmGroupsTree.h>
 
 class NCTree;
 class NCPackageSelector;

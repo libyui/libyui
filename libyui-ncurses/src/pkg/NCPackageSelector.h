@@ -29,7 +29,7 @@
 #include <string>
 #include <utility>      // for STL pair
 
-#include <y2util/YRpmGroupsTree.h>
+#include <YRpmGroupsTree.h>
 #include "YWidgetID.h"
 
 #include <zypp/ResObject.h>
