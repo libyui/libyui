@@ -143,8 +143,8 @@ void NCPackageSelectorStart::showDefaultList()
 
 	if ( youMode )
 	{
-	    // FIXME - show download size
-	    // packager->showDownloadSize();
+	    // show download size
+	    packager->showDownloadSize();
 	}
 	else
 	{
