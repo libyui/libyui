@@ -81,18 +81,13 @@ YQDumbTab::addItem( YItem * item )
     item->setData( tab );
 
     if ( item->selected() )
-    {
-	YQSignalBlocker sigBlocker( _tabBar );
 	_tabBar->setCurrentTab( tab );
-    }
 }
 
 
 void
 YQDumbTab::selectItem( YItem * item, bool selected )
 {
-    YQSignalBlocker sigBlocker( _tabBar );
-    
     if ( selected )
     {
 	// Don't try to suppress any signals sent here with a YQSignalBlocker,
@@ -137,6 +132,7 @@ YQDumbTab::slotSelected( int index )
 {
     YItem * item = itemAt( index );
     YUI_CHECK_PTR( item );
+    y2debug( "Tab [%s] selected", item->label().c_str() );
 
 
     YQUI::ui()->sendEvent( new YMenuEvent( item ) );

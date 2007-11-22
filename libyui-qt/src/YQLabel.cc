@@ -22,6 +22,7 @@
 
 #include "utf8.h"
 #include "YQUI.h"
+#include "YQApplication.h"
 #include "YQLabel.h"
 
 
@@ -40,7 +41,7 @@ YQLabel::YQLabel( YWidget * 		parent,
 
     if ( isHeading )
     {
-	setFont( YQUI::ui()->headingFont() );
+	setFont( YQUI::yqApp()->headingFont() );
     }
     else if ( isOutputField )
     {
@@ -70,8 +71,8 @@ void YQLabel::setText( const string & newText )
 void YQLabel::setUseBoldFont( bool useBold )
 {
     setFont( useBold ?
-	     YQUI::ui()->boldFont() :
-	     YQUI::ui()->currentFont() );
+	     YQUI::yqApp()->boldFont() :
+	     YQUI::yqApp()->currentFont() );
     
     YLabel::setUseBoldFont( useBold );
 }

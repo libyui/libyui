@@ -24,6 +24,7 @@
 
 #include "utf8.h"
 #include "YQUI.h"
+#include "YQApplication.h"
 #include "YEvent.h"
 #include "YQRadioButton.h"
 #include "YRadioButtonGroup.h"
@@ -69,8 +70,8 @@ void
 YQRadioButton::setUseBoldFont( bool useBold )
 {
     _qt_radioButton->setFont( useBold ?
-			      YQUI::ui()->boldFont() :
-			      YQUI::ui()->currentFont() );
+			      YQUI::yqApp()->boldFont() :
+			      YQUI::yqApp()->currentFont() );
     
     YRadioButton::setUseBoldFont( useBold );
 }

@@ -22,7 +22,7 @@
 
 #include "YQZypp.h"
 #include <qlistview.h>
-#include <y2util/YRpmGroupsTree.h>
+#include <YRpmGroupsTree.h>
 
 
 using std::string;

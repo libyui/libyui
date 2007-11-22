@@ -23,6 +23,7 @@
 #include <ycp/y2log.h>
 
 #include "utf8.h"
+#include "YQApplication.h"
 #include "YQUI.h"
 #include "YEvent.h"
 #include "YQCheckBox.h"
@@ -109,8 +110,8 @@ void YQCheckBox::setLabel( const string & label )
 void YQCheckBox::setUseBoldFont( bool useBold )
 {
     _qt_checkBox->setFont( useBold ?
-			   YQUI::ui()->boldFont() :
-			   YQUI::ui()->currentFont() );
+			   YQUI::yqApp()->boldFont() :
+			   YQUI::yqApp()->currentFont() );
     
     YCheckBox::setUseBoldFont( useBold );
 }

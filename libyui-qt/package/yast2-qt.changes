@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Nov 22 21:13:01 CET 2007 - sh@suse.de
+
+- Moved setLanguage() and font handling from YQUI to YQApplication 
+
+-------------------------------------------------------------------
 Tue Nov 20 18:03:00 CET 2007 - sh@suse.de
 
 - Prevent self-generated events in YQDumbTab

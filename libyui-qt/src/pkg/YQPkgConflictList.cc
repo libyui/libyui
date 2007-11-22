@@ -34,6 +34,7 @@
 #include "YQPkgConflictDialog.h"
 #include "YQIconPool.h"
 
+#include "YQApplication.h"
 #include "YQUI.h"
 #include "YQi18n.h"
 #include "utf8.h"
@@ -353,7 +354,7 @@ YQPkgConflict::paintCell( QPainter *		painter,
 			  int			width,
 			  int			alignment )
 {
-    painter->setFont( YQUI::ui()->headingFont() );
+    painter->setFont( YQUI::yqApp()->headingFont() );
     QY2ListViewItem::paintCell( painter, colorGroup, column, width, alignment );
 }
 

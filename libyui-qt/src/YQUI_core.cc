@@ -60,17 +60,11 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     , _main_win( NULL )
     , _main_dialog_id(0)
     , _do_exit_loop( false )
-    , _font_family( "Sans Serif" )
-    , _lang_fonts( 0 )
-    , _loaded_current_font( false )
-    , _loaded_bold_font( false )
-    , _loaded_heading_font( false )
-    , _auto_fonts( false )
-    , _auto_normal_font_size( -1 )
-    , _auto_heading_font_size( -1 )
     , _wm_close_blocked( false )
     , _auto_activate_dialogs( true )
 {
+    y2debug( "YQUI constructor start" );
+
     _ui				= this;
     _fatal_error		= false;
     _have_wm			= true;
@@ -83,8 +77,9 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 
     qInstallMsgHandler( qMessageHandler );
 
+    y2debug( "Creating QApplication" );
     new QApplication( argc, argv );
-    loadPredefinedQtTranslations();
+
     _normalPalette = qApp->palette();
 
     // Qt keeps track to a global QApplication in qApp.
@@ -183,7 +178,7 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 
     //  Init other stuff
 
-    qApp->setFont( currentFont() );
+    qApp->setFont( yqApp()->currentFont() );
     busyCursor();
 
     connect( & _user_input_timer,	SIGNAL( timeout()          ),
@@ -195,7 +190,17 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     if ( macro_file )
 	playMacro( macro_file );
 
+
     topmostConstructorHasFinished();
+
+    y2debug( "YQUI constructor end" );
+}
+
+
+YQApplication *
+YQUI::yqApp()
+{
+    return static_cast<YQApplication *>( app() );
 }
 
 
@@ -217,8 +222,8 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 	    if      ( opt == QString( "-no-wm"	 	) )	_have_wm 			= false;
 	    else if ( opt == QString( "-fullscreen"	) )	_fullscreen 			= true;
 	    else if ( opt == QString( "-noborder" 	) )	_decorate_toplevel_window	= false;
-	    else if ( opt == QString( "-auto-font"	) )	_auto_fonts			= true;
-	    else if ( opt == QString( "-auto-fonts"	) )	_auto_fonts			= true;
+	    else if ( opt == QString( "-auto-font"	) )	yqApp()->setAutoFonts( true );
+	    else if ( opt == QString( "-auto-fonts"	) )	yqApp()->setAutoFonts( true );
 	    // --macro is handled by YUI_component
 	    else if ( opt == QString( "-help"  ) )
 	    {
@@ -245,7 +250,6 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
     }
 
     // Qt handles command line option "-reverse" for Arabic / Hebrew
-    YUI::_reverseLayout = QApplication::reverseLayout();
 }
 
 
@@ -255,9 +259,6 @@ YQUI::~YQUI()
     y2debug("Closing down Qt UI.");
 
     normalCursor();
-
-    if ( _lang_fonts )
-	delete _lang_fonts;
 
     // Intentionally NOT calling dlclose() to libqt-mt
     // (see constructor for explanation)
@@ -294,7 +295,6 @@ YQUI::createApplication()
 
     return app;
 }
-
 
 
 void YQUI::calcDefaultSize()

@@ -21,9 +21,7 @@
 
 #include <qapplication.h>
 #include <qmap.h>
-#include <qfont.h>
 #include <qtimer.h>
-#include <qtranslator.h>
 #include <vector>
 
 #include "YSimpleEventHandler.h"
@@ -41,6 +39,7 @@ class YEvent;
 class YQOptionalWidgetFactory;
 class YQPackageSelectorPlugin;
 class YQWidgetFactory;
+class YQApplication;
 
 using std::string;
 using std::vector;
@@ -98,20 +97,15 @@ protected:
 public:
 
     /**
-     * Returns the UI's default font.
+     * Return the global YApplication object as YQApplication.
+     *
+     * This will create the Y(Q)Application upon the first call and return a
+     * pointer to the one and only (singleton) Y(Q)Application upon each
+     * subsequent call.  This may throw exceptions if the Y(Q)Application
+     * cannot be created.
      **/
-    const QFont & currentFont();
-
-    /**
-     * Returns the UI's default bold font.
-     **/
-    const QFont & boldFont();
-
-    /**
-     * Returns the UI's heading font.
-     **/
-    const QFont & headingFont();
-
+    static YQApplication * yqApp();
+    
     /**
      * Widget event handlers (slots) call this when an event occured that
      * should be the answer to a UserInput() / PollInput() (etc.) call.
@@ -381,54 +375,6 @@ protected:
      **/
     bool showEventFilter( QObject * obj, QEvent * ev );
 
-    /**
-     * Load translations for Qt's predefined dialogs like file selection box
-     * etc.
-     **/
-    void loadPredefinedQtTranslations();
-
-    /**
-     * Set fonts according to the specified language.
-     *
-     * This is most important for some Asian languages that have overlaps in
-     * the Unicode table, like Japanese vs. Chinese.
-     **/
-    void setLangFonts( const YCPString & language );
-
-    /**
-     * Constructs a key for the language specific font file:
-     *     "font[lang]"
-     * for
-     *     font[de_DE] = "Sans Serif"
-     *     font[zh] = "ChineseSpecial, something"
-     *     font[ja_JP] = "JapaneseSpecial, something"
-     *     font = "Sans Serif"
-     **/
-    QString fontKey( const QString & lang );
-
-    /**
-     * Invalidate information about cached fonts so they will be reloaded upon
-     * their next usage
-     **/
-    void setAllFontsDirty();
-
-    /**
-     * Determine good fonts based on defaultsize geometry and set
-     * _auto_normal_font_size and _auto_heading_font_size accordingly.
-     * Caches the values, so it's safe to call this repeatedly.
-     **/
-    void pickAutoFonts();
-
-    /**
-     * Returns 'true' if the UI  automatically picks fonts, disregarding Qt
-     * standard settings.
-     *
-     * This makes sense in the installation system where
-     * the display DPI cannot reliably be retrieved and thus Qt uses random
-     * font sizes based on that random DPI.
-     **/
-    bool autoFonts() const { return _auto_fonts; }
-
 
 public:
 
@@ -552,13 +498,6 @@ public:
 protected:
 
     /**
-     * Sets the X input method according to the locale.
-     * [Reimplemented from YUI]
-     **/
-    YCPValue setLanguage( const YCPTerm & term );
-
-
-    /**
      * Display capabilities.
      * [Reimplemented from YUI]
      * See UI builtin GetDisplayInfo() doc for details.
@@ -674,42 +613,6 @@ protected:
      **/
     bool _do_exit_loop;
 
-
-    /**
-     * Font family or list of font families to use ("Sans Serif" etc.)
-     **/
-    QString _font_family;
-
-    /**
-     * Language-specific font settings
-     **/
-    QY2Settings	* _lang_fonts;
-
-    /**
-     * Default font (cached)
-     **/
-    QFont _current_font;
-    bool _loaded_current_font;
-
-    /**
-     * Default bold font (cached)
-     **/
-    QFont _bold_font;
-    bool _loaded_bold_font;
-
-    /**
-     * Heading font (cached)
-     **/
-    QFont _heading_font;
-    bool _loaded_heading_font;
-
-    /**
-     * For auto fonts
-     **/
-    bool _auto_fonts;
-    int  _auto_normal_font_size;
-    int  _auto_heading_font_size;
-
     /**
      * Window manager close events blocked?
      **/
@@ -745,11 +648,6 @@ protected:
      * The handler for the single pending event this UI keeps track of
      **/
     YSimpleEventHandler _event_handler;
-
-    /**
-     * Translator for the predefined Qt dialogs
-     **/
-    QTranslator _qtTranslations;
 
     /**
      * Saved normal palette

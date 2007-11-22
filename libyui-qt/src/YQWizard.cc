@@ -63,6 +63,7 @@
 #include "utf8.h"
 #include "YQi18n.h"
 #include "YQUI.h"
+#include "YQApplication.h"
 #include "YQDialog.h"
 #include "YQAlignment.h"
 #include "YQReplacePoint.h"
@@ -533,7 +534,7 @@ void YQWizard::updateSteps()
 	    font.setWeight( QFont::Bold );
 	    label->setFont( font );
 #else
-	    QFont font = YQUI::ui()->currentFont();
+	    QFont font = YQUI::yqApp()->currentFont();
 
 	    int size = font.pointSize();
 
@@ -573,7 +574,7 @@ void YQWizard::updateSteps()
 #if USE_FIXED_STEP_FONTS
 	    nameLabel->setFont( QFont( STEPS_FONT_FAMILY, STEPS_FONT_SIZE ) );
 #else
-	    nameLabel->setFont( YQUI::ui()->currentFont() );
+	    nameLabel->setFont( YQUI::yqApp()->currentFont() );
 #endif
 
 	    step->setNameLabel( nameLabel );
@@ -1030,7 +1031,7 @@ void YQWizard::layoutWorkArea( QHBox * parentHBox )
 
     _dialogHeading = new QLabel( headingHBox );
     YUI_CHECK_NEW( _dialogHeading );
-    _dialogHeading->setFont( YQUI::ui()->headingFont() );
+    _dialogHeading->setFont( YQUI::yqApp()->headingFont() );
     _dialogHeading->setAlignment( Qt::AlignLeft | Qt::WordBreak );
     _dialogHeading->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
 

@@ -36,6 +36,7 @@
 
 #include "YQDialog.h"
 #include "utf8.h"
+#include "YQApplication.h"
 #include "YQUI.h"
 #include "YEvent.h"
 #include "YQi18n.h"
@@ -58,7 +59,7 @@ YQPackageSelectorBase::YQPackageSelectorBase( YWidget * parent,
     _pkgConflictDialog 		= 0;
 
     YQUI::setTextdomain( "packages-qt" );
-    setFont( YQUI::ui()->currentFont() );
+    setFont( YQUI::yqApp()->currentFont() );
     YQUI::ui()->blockWmClose(); // Automatically undone after UI::RunPkgSelection()
 
     _pkgConflictDialog = new YQPkgConflictDialog( this );
