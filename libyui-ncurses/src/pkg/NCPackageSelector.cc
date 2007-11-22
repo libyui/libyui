@@ -125,9 +125,11 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, YWidget * wRoot, long mod
       , autoCheck( true )
       , _rpmGroupsTree (0)
 {
+    // FIXME - remove this code when everthiong is handled by handleEvent() !
+    //         (the eventHandlerMap is obsolete)
+    
     // Fill the handler map
-
-    eventHandlerMap[ NCPkgNames::Search()->toString() ] 	= &NCPackageSelector::SearchHandler;
+    eventHandlerMap[ NCPkgNames::Search()->toString() ]   = &NCPackageSelector::SearchHandler;
     eventHandlerMap[ NCPkgNames::Diskinfo()->toString() ] = &NCPackageSelector::DiskinfoHandler;
 
     // Filter menu
@@ -144,13 +146,9 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, YWidget * wRoot, long mod
     eventHandlerMap[ NCPkgNames::InstallablePatches()->toString() ] = &NCPackageSelector::FilterHandler;    
     eventHandlerMap[ NCPkgNames::YaST2Patches()->toString() ] = &NCPackageSelector::FilterHandler;
 
-    // Information menu
+    // Information menu -> DONE
 
-    // YOU information 
-    eventHandlerMap[ NCPkgNames::PatchDescr()->toString() ] = &NCPackageSelector::InformationHandler;
-    eventHandlerMap[ NCPkgNames::PatchPackages()->toString() ] = &NCPackageSelector::InformationHandler;
-    eventHandlerMap[ NCPkgNames::PatchPackagesVersions()->toString() ] = &NCPackageSelector::InformationHandler;
-    // Action menu
+    // Action menu -> DONE
     
     // Etc. menu
     eventHandlerMap[ NCPkgNames::ShowDeps()->toString() ] = &NCPackageSelector::DependencyHandler;
@@ -221,7 +219,7 @@ NCPackageSelector::~NCPackageSelector()
 //
 // 	Don't create the popups any longer in constructur because the current dialog
 // 	wouldn't be the PackageSelector dialog then but a PopupDialog and
-// 	NCPackageSelectorPlugin:: runPkgSelection wouldn't find the selector widget.
+// 	NCPackageSelectorPlugin::runPkgSelection wouldn't find the selector widget.
 // 	Call NCPackageSelector::createPopups() instead after the PackageSelector dialog
 // 	is created (see NCPackageSelectorStart::showDefaultList()).
 //
@@ -1551,99 +1549,101 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
     // set visibleInfo
     visibleInfo = info;
 
+    if ( infoText )
+    {
+	// RichText widget remains in place
+	if ( ( visibleInfo == longdescrItem ) ||
+	     ( visibleInfo == filesItem ) ||
+	     ( visibleInfo == pkginfoItem ) )
+	{
+	    packageList->showInformation( ); 
+	    return true;
+	}
+    }
+	     
+    // delete current child of the ReplacePoint
+    YWidget * replaceChild = replacePoint->firstChild();
+
+    if ( replaceChild )
+    {
+	delete replaceChild;
+	// reset all info widgets
+	infoText = 0;
+	versionsList = 0;
+	patchPkgs = 0;
+	patchPkgsVersions = 0;
+    }
+    
     if ( visibleInfo == versionsItem )
     {
-	// show the package table
-	const char * tableLayout = "`PkgSpecial( `id(\"availpkgs\"), `opt(`notify), \"pkgTable\" )"; 
-	Parser parser( tableLayout );
-	YCodePtr parsed_code = parser.parse ();
-	YCPValue layout = YCPNull ();
-	if (parsed_code != NULL)
-	    layout = parsed_code->evaluate();
-	if (!layout.isNull() )
-	    y2ui->evaluateReplaceWidget( YCPSymbol("replaceinfo"), layout->asTerm() );
+	// show a package table with all available package versions
+	YTableHeader * tableHeader = new YTableHeader();
+	versionsList = new NCPkgTable( replacePoint, tableHeader );
+	YDialog::currentDialog()->setInitialSize();
 
-	if ( pkgAvail )
+	if ( versionsList )
 	{
 	    // set the connection to the NCPackageSelector !!!!
-	    pkgAvail->setPackager( this );
+	    versionsList->setPackager( this );
 	    // set status strategy
 	    NCPkgStatusStrategy * strategy = new AvailableStatStrategy();
-	    pkgAvail->setTableType( NCPkgTable::T_Availables, strategy );
+	    versionsList->setTableType( NCPkgTable::T_Availables, strategy );
+	    versionsList->fillHeader( );
 
-	    pkgAvail->fillHeader( );
-	    fillAvailableList( pkgAvail, packageList->getSelPointer( packageList->getCurrentItem() ) );
+	    fillAvailableList( versionsList, packageList->getSelPointer( packageList->getCurrentItem() ) );
 	}
     }
 // patches
     else if ( visibleInfo == patchpkgsItem )
     {
-        // show the package table
-	const char * tableLayout = "`PkgSpecial( `id(\"patchpkgs\"), `opt(`notify), \"pkgTable\" )"; 
-	Parser parser( tableLayout );
-	YCodePtr parsed_code = parser.parse ();
-	YCPValue layout = YCPNull ();
-	if (parsed_code != NULL)
-	    layout = parsed_code->evaluate();
-	if (!layout.isNull())
-	    y2ui->evaluateReplaceWidget( YCPSymbol ("replaceinfo"), layout->asTerm() );
-
+	// show a package table with packages belonging to a patch
+	YTableHeader * tableHeader = new YTableHeader();
+	patchPkgs =  new NCPkgTable( replacePoint, tableHeader );
+	YDialog::currentDialog()->setInitialSize();
+	
 	if ( patchPkgs )
 	{
-	    // set the connection to the NCPackageSelector !!!!
+	   // set the connection to the NCPackageSelector !!!!
 	    patchPkgs->setPackager( this );
 	    // set status strategy - don't set extra strategy, use 'normal' package strategy
 	    NCPkgStatusStrategy * strategy = new PackageStatStrategy();
 	    patchPkgs->setTableType( NCPkgTable::T_PatchPkgs, strategy );
-
 	    patchPkgs->fillHeader( );
+
 	    fillPatchPackages( patchPkgs, packageList->getDataPointer( packageList->getCurrentItem() ) );
-	}	
+	}
     }
     else if ( visibleInfo == pkgversionsItem ) 
     {
-        // show the package table
-	const char * tableLayout = "`PkgSpecial( `id(\"pkgsversions\"), `opt(`notify), \"pkgTable\" )"; 
-	Parser parser( tableLayout );
-	YCodePtr parsed_code = parser.parse ();
-	YCPValue layout = YCPNull ();
-	if (parsed_code != NULL)
-	    layout = parsed_code->evaluate();
-	if (!layout.isNull())
-	    y2ui->evaluateReplaceWidget( YCPSymbol ("replaceinfo"), layout->asTerm() );
+	// show a package table with versions of the packages beloning to a patch
+	YTableHeader * tableHeader = new YTableHeader();
+	patchPkgsVersions =  new NCPkgTable( replacePoint, tableHeader );
+	YDialog::currentDialog()->setInitialSize();
 
 	if ( patchPkgsVersions )
 	{
-	    // set the connection to the NCPackageSelector !!!!
 	    patchPkgsVersions->setPackager( this );
-	    // set status strategy
+	    // set status strategy and table type
 	    NCPkgStatusStrategy * strategy = new AvailableStatStrategy();
 	    patchPkgsVersions->setTableType( NCPkgTable::T_Availables, strategy );
 
 	    patchPkgsVersions->fillHeader( );
+	    
 	    fillPatchPackages( patchPkgsVersions, packageList->getDataPointer( packageList->getCurrentItem() ), true );
-	}	
+	}
     }	
     else
     {
-// FIXME
-#if 0
-	// show the rich text widget
-	const char * textLayout = "`RichText( `id(\"description\"), \" \")"; 
-	Parser parser( textLayout );
-	YCodePtr parsed_code = parser.parse ();
-	YCPValue layout = YCPNull ();
-	if (parsed_code != NULL)
-	    layout = parsed_code->evaluate ();
-	if (!layout.isNull())
-	    y2ui->evaluateReplaceWidget( YCPSymbol ("replaceinfo"), layout->asTerm() );
-#endif
+	// show the rich text widget	
+	infoText = new NCRichText( replacePoint, " ");
+	YDialog::currentDialog()->setInitialSize();
+
 	packageList->showInformation( );
     }
 
     packageList->setKeyboardFocus();
 
-    UIMIL << "Change package info to: " << visibleInfo << endl;
+    UIMIL << "Change package info to: " << visibleInfo->label() << endl;
     return true;
 }
 
@@ -2639,7 +2639,7 @@ bool NCPackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectabl
 	// show the description	
 	if ( infoText )
 	{
-	    infoText->setText( descr );
+	    infoText->setValue( descr );
 	}	
     }
     // else if (  visibleInfo->compare( NCPkgNames::PatchPackages() ) == YO_EQUAL )
@@ -2761,11 +2761,12 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
 	// ask the package manager for the description of this package
 	zypp::Text value = pkgPtr->description();
 	string descr = createDescrText( value );
-
+	NCMIL << "Description: " << descr << endl;
+	
         // show the description	
 	if ( infoText )
 	{
-	    infoText->setText( descr );
+	    infoText->setValue( descr );
 	}
     }
     else if ( visibleInfo == filesItem )
@@ -2784,7 +2785,7 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
 	// get the widget id 
 	if ( infoText )
 	{
-	    infoText->setText( text );
+	    infoText->setValue( text );
 	}	
     }
     else if ( visibleInfo == pkginfoItem )
@@ -2872,14 +2873,14 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
         // show the description	
 	if ( infoText )
 	{
-	    infoText->setText( text );
+	    infoText->setValue( text );
 	}
     }
     else if ( visibleInfo == versionsItem )
     {
-	if ( pkgAvail )
+	if ( versionsList )
 	{
-	    fillAvailableList( pkgAvail, slbPtr );
+	    fillAvailableList( versionsList, slbPtr );
 	}
     }
     else if ( visibleInfo == relationsItem )
@@ -2919,7 +2920,7 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
         // show the package relations	
 	if ( infoText )
 	{
-	    infoText->setText( text );
+	    infoText->setValue( text );
 	}
     }
  
@@ -3229,7 +3230,7 @@ void NCPackageSelector::createYouLayout( YWidget * selector, NCPkgTable::NCPkgTa
 void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTableType type )
 {
      // the vertical split is the (only) child of the dialog
-    NCLayoutBox * split = dynamic_cast<NCLayoutBox *>(YUI::widgetFactory()->createLayoutBox( selector, YD_VERT ));
+    YLayoutBox * split = YUI::widgetFactory()->createVBox( selector );
 
     NCLayoutBox * hSplit = new NCLayoutBox( split, YD_HORIZ );
 
@@ -3363,7 +3364,8 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     diskspaceLabel = new NCLabel ( hSplit4, "   " );
 
     NCLayoutBox * vSplit = new NCLayoutBox( split, YD_VERT );
-    infoText = new NCRichText( vSplit, " " );
+    replacePoint = new NCReplacePoint( vSplit );
+    infoText = new NCRichText( replacePoint, " " );
 
     NCLayoutBox * hSplit5 = new NCLayoutBox( vSplit, YD_HORIZ );
     
