@@ -32,3 +32,15 @@ NCApplication::~NCApplication()
 }
 
 
+void
+NCApplication::setLanguage( const string & language,
+			    const string & encoding )
+{
+    YApplication::setLanguage( language, encoding );
+    Refresh();
+    
+    NCDBG << "Language: " << language << " Encoding: " << ((encoding!="")?encoding:"NOT SET") << endl;
+  
+}
+
+

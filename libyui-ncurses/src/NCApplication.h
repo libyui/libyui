@@ -41,6 +41,22 @@ protected:
      * Destructor.
      **/
     virtual ~NCApplication();
+
+public:
+    
+    /**
+     * Set language and encoding for the locale environment ($LANG).
+     *
+     * 'language' is the ISO short code ("de_DE", "en_US", ...).
+     *
+     * 'encoding' an (optional) encoding ("utf8", ...) that will be appended if
+     *  present.
+     *
+     * Reimplemented from YApplication.
+     **/
+    virtual void setLanguage( const string & language,
+			      const string & encoding = string() );
+    
 };
 
 

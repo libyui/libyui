@@ -142,13 +142,6 @@ public:
     virtual YCPValue runPkgSelection( YWidget * packageSelector );
     
     /**
-     * UI-specific setLanguage() function.
-     * Returns YCPVoid() if OK and YCPNull() on error.
-     * This default implementation does nothing.
-    */
-    virtual YCPValue setLanguage( const YCPTerm & term );
-
-    /**
      * UI-specific setConsoleFont() function.
      * Returns YCPVoid() if OK and YCPNull() on error.
     */
@@ -255,10 +248,6 @@ public:
     virtual bool hasIconSupport()            { return false; }
     
     virtual bool hasFullUtf8Support();
-
-  private:
-
-    bool setLanguage( string lang );
 };
 
 #endif // YNCursesUI_h

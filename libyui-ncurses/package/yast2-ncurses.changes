@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Nov 22 21:12:05 CET 2007 - sh@suse.de
+
+- Moved setLanguage() from YUI to YApplication 
+
+-------------------------------------------------------------------
 Mon Nov 19 18:14:17 CET 2007 - kmachalkova@suse.cz
 
 - Unified terminology: repositories vs. inst.sources (FaTE #302970)

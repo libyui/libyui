@@ -66,10 +66,10 @@ YNCursesUI::YNCursesUI( int argc, char **argv, bool with_threads, const char * m
 	NCMIL << "setenv LC_CTYPE: " << locale << " encoding: " << encoding << endl;
 	
         // The encoding of a terminal (xterm, konsole usw. ) can never change; the encoding
-	// of "real" console is changed in setConsoleFont(). 
+	// of the "real" console is changed in setConsoleFont(). 
 	NCstring::setTerminalEncoding( encoding );
   
-	setLanguage( language );
+	app()->setLanguage( language, encoding );
     }
 
     try {
@@ -412,52 +412,6 @@ YCPValue YNCursesUI::runPkgSelection( YWidget * selector )
     return result;
 }
 
-    
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YNCursesUI::setLanguage
-//	METHOD TYPE : YCPValue
-//
-//	DESCRIPTION :
-//
-YCPValue YNCursesUI::setLanguage( const YCPTerm & term )
-{
-   if ( term->size() == 1 && term->value(0)->isString() ) {
-     setLanguage( term->value(0)->asString()->value() );
-     return YCPVoid();
-   }
-   return YCPNull();
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YNCursesUI::setLanguage
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION : Expect lang to be 'language[_country][.encoding]'
-//
-//		      From version 9.0 on (UTF-8 support) setLanguage()
-//		      don't have to look for the correct encoding.
-//
-bool YNCursesUI::setLanguage( string lang )
-{
-  string encoding;
-  string language = lang;
-
-  string::size_type pos = language.find( '.' );
-  if ( pos != string::npos )
-  {
-    encoding = language.substr( pos+1 );
-    language.erase( pos );
-  }
-
-  Refresh();
-  NCDBG << "Language: " << language << " Encoding: " << ((encoding!="")?encoding:"NOT SET") << endl;
-  
-  return true;
-}
 
 ///////////////////////////////////////////////////////////////////
 //
