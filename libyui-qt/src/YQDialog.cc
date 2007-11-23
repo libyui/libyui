@@ -44,7 +44,7 @@ YQDialog::YQDialog( const YWidgetOpt &	opt,
 		    bool		default_size )
     : QWidget( qt_parent,
 	       0,						// name
-	       default_size ? 0 : WType_Modal | WStyle_Dialog )	// WFlags
+	       default_size ? 0 : WStyle_Customize | WStyle_DialogBorder | WType_Modal | WStyle_Dialog )	// WFlags
     , YDialog( opt )
 {
     _userResized	= false;
