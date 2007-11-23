@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Nov 23 15:55:31 CET 2007 - tgoettlicher@suse.de
+
+- fixed unneeded help icon in "please wait" window (#202818) 
+
+-------------------------------------------------------------------
 Thu Nov 22 21:13:01 CET 2007 - sh@suse.de
 
 - Moved setLanguage() and font handling from YQUI to YQApplication 
