@@ -95,8 +95,16 @@ YQMultiSelectionBox::addItem( YItem * yItem )
 
     YUI_CHECK_NEW( msbItem );
 
+    // Take care of the item's check box
+    
     if ( yItem->selected() )
 	 msbItem->setOn( true );
+
+    
+    // Take care of the QListView's keyboard focus
+    
+    if ( ! _qt_listView->selectedItem() )
+	_qt_listView->setSelected( msbItem, true );
 }
 
 
@@ -143,6 +151,28 @@ YQMultiSelectionBox::deleteAllItems()
 YItem *
 YQMultiSelectionBox::currentItem()
 {
+    // QListView::currentItem() is very similar, but not exactly the same as
+    // QListView::selectedItem(), and it is NOT to be confused with an item's
+    // "selected" state in a YQMultiSelectionBox (the item's check box):
+    //
+    // QListView::currentItem() is the item that currently has the keyboard
+    // focus. By default, it is displayed with a faint dotted outline.
+    //
+    // QListView::selectedItem() is the item that is selected in the QListView
+    // widget. It is displayed a very visible with inverted colors (typically
+    // blue backround). If there is a selected item, it is also the current
+    // item. if there is no selected item, there might still be a current item,
+    // though.
+    //
+    // The Y(Q)MultiSelectionBox item's "selected" state is completely
+    // independent of all this: It only depends on the item's check
+    // box. QListView::selectedItem() and QListView::currentItem() are just
+    // mechanisms for keyboard navigation to show the user which item's check
+    // box will be toggled when he hits the space bar.
+    //
+    // For the purpose of this function, QListView::currentItem() is the
+    // minimum requirement.
+    
     QListViewItem * currentQItem = _qt_listView->currentItem();
 
     if ( currentQItem )
@@ -160,12 +190,28 @@ YQMultiSelectionBox::currentItem()
 void
 YQMultiSelectionBox::setCurrentItem( YItem * yItem )
 {
-    YQSignalBlocker sigBlocker( _qt_listView );
+    // See also explanations about QListView::currentItem() vs.
+    // QListView::selectedItem() above
+    //
+    // This function uses QListView::selectedItem() for better visibility.
+    // This implicitly also changes QListView::currentItem().
     
-    YQMultiSelectionBoxItem * msbItem = findItem( yItem );
+    YQSignalBlocker sigBlocker( _qt_listView );
 
-    if ( msbItem )
-	_qt_listView->setCurrentItem( msbItem );
+    if ( ! yItem )
+    {
+	_qt_listView->clearSelection();
+    }
+    else
+    {
+	YQMultiSelectionBoxItem * msbItem = findItem( yItem );
+
+	if ( msbItem )
+	    _qt_listView->setSelected( msbItem, true );
+
+	// This does NOT change the item's check box!
+	// (see explanations in YQMultiSelectionBox::currentItem() avove)
+    }
 }
 
 
