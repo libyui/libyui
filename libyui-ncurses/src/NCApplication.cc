@@ -17,6 +17,8 @@
 /-*/
 
 
+#include "Y2Log.h"
+#include "NCurses.h"
 #include "NCApplication.h"
 
 
@@ -37,7 +39,7 @@ NCApplication::setLanguage( const string & language,
 			    const string & encoding )
 {
     YApplication::setLanguage( language, encoding );
-    Refresh();
+    NCurses::Refresh();
     
     NCDBG << "Language: " << language << " Encoding: " << ((encoding!="")?encoding:"NOT SET") << endl;
   
