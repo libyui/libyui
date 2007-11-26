@@ -19,8 +19,8 @@ Obsoletes:	y2curses
 Requires:	glibc-locale
 #adapted to libzypp 3.11 refactoring
 Requires:	libzypp >= 3.11.8
-#UI plugins - YPackageSelectorPlugin.h
-Requires:	yast2-core >= 2.15.6
+#FSize.h and YRpmGroupsTree.h moved to libyui
+Requires:	yast2-core >= 2.16.8
 %description
 -
 
