@@ -89,6 +89,8 @@ YNCursesUI::YNCursesUI( int argc, char **argv, bool with_threads, const char * m
 
 YNCursesUI::~YNCursesUI()
 {
+    //delete left-over dialogs (if any)
+    YDialog::deleteAllDialogs();
     y2milestone ("Stop YNCursesUI");
 }
 
