@@ -577,14 +577,14 @@ void NCurses::RedirectToLog()
   if (isatty(2) && theTerm) {
     // redirect stderr to log
     close(2);
-    open(log.c_str(), O_APPEND | O_CREAT);
+    open(log.c_str(), O_APPEND | O_CREAT, 0666);
   }
 
   UIMIL << "isatty(stdout)" << (isatty(1) ? "yes" : "no") << endl;
   if (isatty(1) && theTerm) {
     // redirect stdout to log
     close(1);
-    open(log.c_str(), O_APPEND | O_CREAT);
+    open(log.c_str(), O_APPEND | O_CREAT, 0666);
   }
 
 }

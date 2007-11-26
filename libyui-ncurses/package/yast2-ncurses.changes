@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Nov 26 10:26:45 CET 2007 - mvidner@suse.cz
+
+- Added missing mode for open(O_CREAT) fixing compilation with glibc-2.7.
+
+-------------------------------------------------------------------
 Thu Nov 22 21:12:05 CET 2007 - sh@suse.de
 
 - Moved setLanguage() from YUI to YApplication 
