@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Nov 26 12:09:03 CET 2007 - tgoettlicher@suse.de
+
+- Prevent changed size of partition widget when packageselector's
+  window size is changed
+
+-------------------------------------------------------------------
 Fri Nov 23 15:55:31 CET 2007 - tgoettlicher@suse.de
 
 - fixed unneeded help icon in "please wait" window (#202818) 
