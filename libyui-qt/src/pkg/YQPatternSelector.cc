@@ -222,7 +222,7 @@ YQPatternSelector::layoutRightPane( QWidget * parent )
     CHECK_PTR( _diskUsageList );
 
     splitter->setResizeMode( upper_vbox, QSplitter::Stretch );
-    splitter->setResizeMode( lower_vbox, QSplitter::FollowSizeHint );
+    splitter->setResizeMode( lower_vbox, QSplitter::KeepSize );
 
     return splitter;
 }
