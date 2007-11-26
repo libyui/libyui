@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Mon Nov 26 14:24:19 CET 2007 - kmachalkova@suse.cz
+
+- First version of YCP-less package selector (gs)
+- Fixed includes (FSize.h and YRpmGroupsTree.h now in libyui) (sh)
+- Delete any leftover dialogs in YNCursesUI destructor
+- Require new yast2-core
+- 2.16.3
+
+-------------------------------------------------------------------
 Mon Nov 26 10:26:45 CET 2007 - mvidner@suse.cz
 
 - Added missing mode for open(O_CREAT) fixing compilation with glibc-2.7.
