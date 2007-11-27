@@ -50,7 +50,7 @@ class NCPkgPopupFile;
 class NCPushButton;
 class YNCursesUI;
 class NCMenuButton;
-class NCReplacePoint;
+class YReplacePoint;
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -145,12 +145,12 @@ class NCPackageSelector
     YMenuItem * pkgversionsItem;
     
     // labels
-    NCLabel * filterLabel;
-    NCLabel * diskspaceLabel;
+    YLabel * filterLabel;
+    YLabel * diskspaceLabel;
 
     // information about packages
     NCRichText * infoText;	// short/longdecsription, filelist
-    NCReplacePoint * replacePoint; // replace point for info text
+    YReplacePoint * replacePoint; // replace point for info text
     
     NCPkgTable * versionsList;	// list of available package versions
     // information about patches

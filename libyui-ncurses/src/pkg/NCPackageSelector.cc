@@ -1575,7 +1575,8 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
     NCPkgTable * packageList = getPackageList();
 
     if ( !packageList
-	 || !event.selection )
+	 || !event.selection
+	 || !replacePoint )
     {
 	NCERR << "*** InformationHandler RETURN false ***" << endl;
 	return false;
@@ -1624,10 +1625,14 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
 	// show a package table with all available package versions
 	YTableHeader * tableHeader = new YTableHeader();
 	versionsList = new NCPkgTable( replacePoint, tableHeader );
-	YDialog::currentDialog()->setInitialSize();
+        // YDialog::currentDialog()->setInitialSize(); -> doesn't work
+	// call versionsList->setSize() and versionsList->Redraw() instead
 
 	if ( versionsList )
 	{
+	    versionsList->setSize( versionsList->preferredWidth(), versionsList->preferredHeight());
+	    versionsList->Redraw();
+
 	    // set the connection to the NCPackageSelector !!!!
 	    versionsList->setPackager( this );
 	    // set status strategy
@@ -1644,11 +1649,13 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
 	// show a package table with packages belonging to a patch
 	YTableHeader * tableHeader = new YTableHeader();
 	patchPkgs =  new NCPkgTable( replacePoint, tableHeader );
-	YDialog::currentDialog()->setInitialSize();
-	
+
 	if ( patchPkgs )
 	{
-	   // set the connection to the NCPackageSelector !!!!
+	    patchPkgs->setSize( patchPkgs->preferredWidth(), patchPkgs->preferredHeight() );
+	    patchPkgs->Redraw();
+	
+	    // set the connection to the NCPackageSelector !!!!
 	    patchPkgs->setPackager( this );
 	    // set status strategy - don't set extra strategy, use 'normal' package strategy
 	    NCPkgStatusStrategy * strategy = new PackageStatStrategy();
@@ -1663,10 +1670,12 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
 	// show a package table with versions of the packages beloning to a patch
 	YTableHeader * tableHeader = new YTableHeader();
 	patchPkgsVersions =  new NCPkgTable( replacePoint, tableHeader );
-	YDialog::currentDialog()->setInitialSize();
 
 	if ( patchPkgsVersions )
 	{
+	    patchPkgsVersions->setSize( patchPkgsVersions->preferredWidth(), patchPkgsVersions->preferredHeight() );
+	    patchPkgsVersions->Redraw();
+
 	    patchPkgsVersions->setPackager( this );
 	    // set status strategy and table type
 	    NCPkgStatusStrategy * strategy = new AvailableStatStrategy();
@@ -1681,9 +1690,14 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
     {
 	// show the rich text widget	
 	infoText = new NCRichText( replacePoint, " ");
-	YDialog::currentDialog()->setInitialSize();
 
-	packageList->showInformation( );
+	if ( infoText )
+	{
+	    infoText->setSize( infoText->preferredWidth(), infoText->preferredHeight() );
+	    infoText->Redraw();
+
+	    packageList->showInformation( );
+	}
     }
 
     packageList->setKeyboardFocus();
@@ -2793,7 +2807,7 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
 	// ask the package manager for the description of this package
 	zypp::Text value = pkgPtr->description();
 	string descr = createDescrText( value );
-	NCMIL << "Description: " << descr << endl;
+	NCDBG << "Description: " << descr << endl;
 	
         // show the description	
 	if ( infoText )
@@ -3390,27 +3404,28 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     YLayoutBox * hSplit3 = YUI::widgetFactory()->createHBox( hSplit2 );
     // label text - keep it short
     new NCLabel( hSplit3,  _( "Filter: " ) );
-    filterLabel = new NCLabel ( hSplit3, "....................................." );
-    YUI_CHECK_NEW( filterLabel );
+    filterLabel = YUI::widgetFactory()->createLabel ( hSplit3, "....................................." );
     
     new NCSpacing( hSplit2, YD_HORIZ, true, 0.5 );
 
     YLayoutBox * hSplit4 = YUI::widgetFactory()->createHBox( hSplit2 );
     // label text - keep it short (use abbreviation if necessary)
     new NCLabel( hSplit4,   _( "Required Disk Space: " ) );
-    diskspaceLabel = new NCLabel ( hSplit4, "   " );
-    YUI_CHECK_NEW( diskspaceLabel );
+    diskspaceLabel = YUI::widgetFactory()->createLabel ( hSplit4, "   " );
 
     YLayoutBox * vSplit = YUI::widgetFactory()->createVBox( split );
-    replacePoint = new NCReplacePoint( vSplit );
+    replacePoint = YUI::widgetFactory()->createReplacePoint( vSplit );
+    
     infoText = new NCRichText( replacePoint, " " );
-
+    YUI_CHECK_NEW( infoText );
+    
     YLayoutBox * hSplit5 = YUI::widgetFactory()->createHBox( vSplit );
     
     // add the Cancel button
     cancelButton = new NCPushButton( hSplit5, _( "&Cancel" ) );
     YUI_CHECK_NEW( cancelButton );
     cancelButton->setFunctionKey( 9 );
+
     // add the OK button
     okButton = new NCPushButton( hSplit5, _( "&Accept" ) );
     YUI_CHECK_NEW( okButton );
