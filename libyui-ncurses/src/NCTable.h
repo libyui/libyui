@@ -71,14 +71,13 @@ class NCTable : public YTable, public NCPadWidget {
 
   public:
 
-    NCTable( YWidget * parent, YTableHeader *header );
+    NCTable( YWidget * parent, YTableHeader *tableHeader );
 
     virtual ~NCTable();
 
     bool bigList() const { return biglist; }
 
-    void setHeader( int col, const string & text ); 	// added by gs
-    void setHeader ( vector<string> header );
+    void setHeader ( vector <string> head );
     virtual void setAlignment ( int col, YAlignmentType al );
 
     void setBigList( const bool big ) { biglist = big; }

@@ -22,6 +22,7 @@
 #include <yui/YMenuButton.h>
 #include "YTypes.h"
 
+
 #if 0
 #undef  DBG_CLASS
 #define DBG_CLASS "_NCTable_"
@@ -44,16 +45,16 @@ NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader )
 
   InitPad();
   // !!! head is UTF8 encoded, thus should be vector<NCstring>
-  _header.assign( columns(), NCstring("") );
+  _header.assign( tableHeader->columns(), NCstring("") );
 
-  for ( int col = 0; col < columns(); col++ )
+  for ( int col = 0; col < tableHeader->columns(); col++ )
   {
       if ( hasColumn( col ) )
       {
 	  // set aligmant first
 	  setAlignment( col, alignment( col ) );
 	  // and then append header
-	  _header[ col ] +=  NCstring( header( col ) ) ;
+	  _header[ col ] +=  NCstring( tableHeader->header( col ) ) ;
       }
   }
   hasHeadline = myPad()->SetHeadline( _header );
@@ -122,32 +123,22 @@ void NCTable::cellChanged( const YTableCell *cell )
 //	METHOD NAME : NCTable::setHeader
 //	METHOD TYPE : void
 //
-//	DESCRIPTION : Set i-th table column header to 'text'
-//
-
-void NCTable::setHeader( int col, const string & text )
-{
-    _header[ col ] +=  NCstring( text ) ;
-
-    hasHeadline = myPad()->SetHeadline( _header );
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::setHeader
-//	METHOD TYPE : void
-//
 //	DESCRIPTION : Set table header all at once
-//		      (left here for backwards compatibility sake)
 //
 
 void NCTable::setHeader( vector<string> head )
 {
     _header.assign( head.size(), NCstring("") );
-    for (unsigned int i = 0; i < head.size(); i++) {
-        setHeader( i,  head[i]  );
+    YTableHeader *th = new YTableHeader();
+
+    for (unsigned int i = 0; i < head.size(); i++) 
+    {
+	th->addColumn( head[ i ] );
+        _header[ i ] +=  NCstring( head[ i ] ) ;
     }
+
+    hasHeadline = myPad()->SetHeadline( _header );
+    YTable::setTableHeader( th ); 
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -480,40 +471,44 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
   if ( ! handleInput( key ) ) {
     switch ( key ) {
 
-   /*FIXME: once YMenuButton is ported
         case CTRL('o'):
         {
-	    if ( ! sortable ) 
-		break;
-
     	    // get the column
 	    wpos at( ScreenPos() + wpos( win->height()/2, 1) );
-    	    YMenu a(YCPString ("Menu"));
 
-	    int idx = 0;
-	    
-    	    for ( vector<string>::const_iterator it = header.begin ();
-        	it != header.end () ; it++ )
+            YItemCollection ic;
+	    ic.reserve( _header.size() );
+	    unsigned int i = 0;
+
+    	    for ( vector<NCstring>::const_iterator it = _header.begin ();
+        	it != _header.end() ; it++, i++ )
     	    {
 		// strip the align mark
-		string col = (*it);
+		string col = (*it).Str();
 		col.erase(0,1);
-        	a.addMenuItem ( new YMenuItem ( YCPString ( col ), &a, idx++ ) );
+
+        	YMenuItem *item = new YMenuItem ( col ) ;
+		//need to set index explicitly, MenuItem inherits from TreeItem
+		//and these don't have indexes set
+		item->setIndex( i );
+		ic.push_back( item );
     	    }
 
-    	    NCPopupMenu dialog( at, a );
-    	    int column = dialog.post();
+    	    NCPopupMenu *dialog = new NCPopupMenu( at, ic.begin(), ic.end() );
+    	    int column = dialog->post();
 
 	    if( column != -1 )
 		myPad ()->setOrder (column);
 
+	    //remove the popup
+	    YDialog::deleteTopmostDialog();	
     	    return NCursesEvent::none;
-	}*/
-    case KEY_SPACE:
-    case KEY_RETURN:
-      if ( notify() && citem != -1 )
-	return NCursesEvent::Activated;
-      break;
+	}
+        case KEY_SPACE:
+        case KEY_RETURN:
+          if ( notify() && citem != -1 )
+            return NCursesEvent::Activated;
+          break;
     }
   }
 

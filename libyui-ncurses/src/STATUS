@@ -9,6 +9,7 @@ NCPushBUtton
 NCAlignment
 NCMultiLineEdit
 NCAskForDirectory/NCAskForFile
+NCTable
 
 
 almost DONE - all UI examples work (correctly or only with minor problems)/
@@ -20,10 +21,6 @@ NCRichText
 NCMenuButton
 - all examples work correctly - but ChangeWidget has to be tested
   (rebuildTree is a NOP so far)
-
-NCTable
-- examples work correctly - but check whether setting the header works
-  in any case, TO DO: enable code with NCPopupMenu (sorting)
 
 NCComboBox/NCSelectionBox
 - all examples work - but check whether the index is set correctly in any case
