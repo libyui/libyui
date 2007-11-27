@@ -76,7 +76,7 @@ public:
      *
      * Reimplemented from YWidget.
      **/
-    void setLabel( const string & label );
+    virtual void setLabel( const string & label );
 
     /**
      * Show this button as the dialog's default button. The button never calls
@@ -113,7 +113,7 @@ public:
     virtual void setIcon( const string & iconName );
 
     /**
-     * Returns the button's text ( label ) - useful for log messages etc.
+     * Returns the button's text (label) - useful for log messages etc.
      **/
     QString text() const;
     

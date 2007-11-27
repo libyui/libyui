@@ -20,13 +20,14 @@
 #ifndef YQWizard_h
 #define YQWizard_h
 
-#include "YWizard.h"
 #include <qvbox.h>
 #include <qpixmap.h>
 #include <qptrlist.h>
 #include <qstringlist.h>
 #include <qdict.h>
 #include "QY2ListView.h"
+#include <YWizard.h>
+#include "YQWizardButton.h"
 
 #include <string>
 #include <vector>
@@ -41,10 +42,10 @@ class QSpacerItem;
 class QTextBrowser;
 class QToolButton;
 class QWidgetStack;
+class YReplacePoint;
 
 class YQAlignment;
 class YQReplacePoint;
-class YQWizardButton;
 class QY2ListView;
 
 
@@ -61,9 +62,9 @@ public:
      * Constructor.
      **/
     YQWizard( YWidget * 	parent,
-	      YWidgetID *	backButtonId,	const string & backButtonLabel,
-	      YWidgetID *	abortButtonId,	const string & abortButtonLabel,
-	      YWidgetID *	nextButtonId,	const string & nextButtonLabel,
+	      const string &	backButtonLabel,
+	      const string & 	abortButtonLabel,
+	      const string & 	nextButtonLabel,
 	      YWizardMode	wizardMode = YWizardMode_Standard );
 
     /**
@@ -71,6 +72,12 @@ public:
      **/
     virtual ~YQWizard();
 
+    /**
+     * Returns a descriptive label of this dialog instance for debugging.
+     *
+     * Reimplemented from YWidget.
+     **/
+    virtual string debugLabel();
 
     enum Direction { Forward, Backward };
 
@@ -81,21 +88,229 @@ public:
      **/
     Direction direction() const { return _direction; }
 
-    /**
-     * Generic direct access to implementation-specific functions.
-     * See YQWizard.cc for details.
-     *
-     * Returns 'true' on success, 'false' on failure.
-     * Reimplemented from YWizard.
-     **/
-    virtual YCPValue command( const YCPTerm & command );
+    //
+    // Wizard basics
+    //
 
     /**
-     * Returns a descriptive label of this dialog instance for debugging.
+     * Return internal widgets.
      *
-     * Reimplemented from YWidget.
+     * Implemented from YWizard.
      **/
-    virtual string debugLabel();
+    virtual YQWizardButton * backButton()  const { return _backButton;  }
+    virtual YQWizardButton * abortButton() const { return _abortButton; }
+    virtual YQWizardButton * nextButton()  const { return _nextButton;  }
+
+    virtual YReplacePoint * contentsReplacePoint() const { return _contentsReplacePoint; }
+
+    /**
+     * Set the label of one of the wizard buttons (backButton(), abortButton(),
+     * nextButton() ) if that button is non-null. 
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void setButtonLabel( YPushButton * button, const string & newLabel );
+    
+    /**
+     * Set the help text.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void setHelpText( const string & helpText );
+
+    /**
+     * Set the dialog icon. An empty icon name clears the current icon.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void setDialogIcon( const string & iconName );
+
+    /**
+     * Set the dialog heading.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void setDialogHeading( const string & headingText );
+
+
+    //
+    // Steps handling
+    //
+
+    /**
+     * Add a step for the steps panel on the side bar.
+     * This only adds the step to the internal list of steps.
+     * The display is only updated upon calling updateSteps().
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void addStep( const string & text, const string & id );
+
+    /**
+     * Add a step heading for the steps panel on the side bar.
+     * This only adds the heading to the internal list of steps.
+     * The display is only updated upon calling updateSteps().
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void addStepHeading( const string & text );
+
+    /**
+     * Delete all steps and step headings from the internal lists.
+     * The display is only updated upon calling updateSteps().
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void deleteSteps();
+
+    /**
+     * Set the current step. This also triggers updateSteps() if necessary.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void setCurrentStep( const string & id );
+
+    /**
+     * Update the steps display: Reflect the internal steps and heading lists
+     * in the layout.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void updateSteps();
+
+
+    //
+    // Tree handling
+    //
+
+    /**
+     * Add a tree item. If "parentID" is an empty string, it will be a root
+     * item. 'text' is the text that will be displayed in the tree, 'id' the ID
+     * with which this newly created item can be referenced - and that will be
+     * returned when the user clicks on a tree item.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void addTreeItem( const string & parentID,
+			      const string & text,
+			      const string & id	);
+
+    /**
+     * Select the tree item with the specified ID, if such an item exists.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void selectTreeItem( const string & id );
+
+    /**
+     * Returns the current tree selection or an empty string if nothing is
+     * selected or there is no tree.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual string currentTreeSelection();
+
+    /**
+     * Delete all tree items.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void deleteTreeItems();
+
+
+    //
+    // Menu handling
+    //
+
+    /**
+     * Add a menu to the menu bar. If the menu bar is not visible yet, it will
+     * be made visible. 'text' is the user-visible text for the menu bar
+     * (including keyboard shortcuts marked with '&'), 'id' is the menu ID for
+     * later addMenuEntry() etc. calls.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void addMenu( const string & text,
+			  const string & id );
+
+    /**
+     * Add a submenu to the menu with ID 'parentMenuID'.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void addSubMenu( const string & parentMenuID,
+			     const string & text,
+			     const string & id );
+
+    /**
+     * Add a menu entry to the menu with ID 'parentMenuID'. 'id' is what will
+     * be returned by UI::UserInput() etc. when a user activates this menu entry.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void addMenuEntry( const string & parentMenuID,
+			       const string & text,
+			       const string & id );
+
+    /**
+     * Add a menu separator to a menu.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void addMenuSeparator( const string & parentMenuID );
+
+    /**
+     * Delete all menus and hide the menu bar.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void deleteMenus();
+
+
+    //
+    // Misc
+    //
+
+    /**
+     * Show a "Release Notes" button above the "Help" button in the steps panel
+     * with the specified label that will return the specified id to
+     * UI::UserInput() when clicked.
+     *
+     * The button (or the wizard) will assume ownership of the id and delete it
+     * in the destructor.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void showReleaseNotesButton( const string & label,
+					 const string & id );
+
+    /**
+     * Hide an existing "Release Notes" button.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void hideReleaseNotesButton();
+
+    /**
+     * Retranslate internal buttons that are not accessible from the outside:
+     * - [Help]
+     * - [Steps]
+     * - [Tree]
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void retranslateInternalButtons();
+
+    /**
+     * Event filter.
+     *
+     * Reimplemented from QWidget.
+     **/
+    virtual bool eventFilter( QObject * obj, QEvent * ev );
+
+    //
+    // Geometry management
+    //
 
     /**
      * Preferred width of the widget.
@@ -118,139 +333,6 @@ public:
      **/
     virtual void setSize( int newWidth, int newHeight );
 
-    /**
-     * Event filter - inherited from QWidget.
-     **/
-    virtual bool eventFilter( QObject * obj, QEvent * ev );
-
-    /**
-     * Set a dialog icon. 0 is a valid value - it clears the current icon.
-     **/
-    void setDialogIcon( const char * iconName );
-
-    /**
-     * Set a dialog heading. 0 is a valid value - it clears the old text.
-     **/
-    void setDialogHeading( const QString & headingText );
-
-    /**
-     * Returns 'true' if this wizard was created with steps enabled, i.e. the
-     * side bar has a "steps" view.
-     **/
-    bool stepsEnabled() const { return _stepsEnabled; }
-
-    /**
-     * Add a step for the steps panel on the side bar.
-     * This only adds the step to the internal list of steps.
-     * The display is only updated upon calling updateSteps().
-     **/
-    void addStep( const QString & text, const QString & id );
-
-    /**
-     * Add a step heading for the steps panel on the side bar.
-     * This only adds the heading to the internal list of steps.
-     * The display is only updated upon calling updateSteps().
-     **/
-    void addStepHeading( const QString & text );
-
-    /**
-     * Delete all steps and step headings from the internal lists.
-     * The display is only updated upon calling updateSteps().
-     **/
-    void deleteSteps();
-
-    /**
-     * Set the current step. This also triggers updateSteps() if necessary.
-     **/
-    void setCurrentStep( const QString & id );
-
-    /**
-     * Update the steps display: Reflect the internal steps and heading lists
-     * in the layout.
-     **/
-    void updateSteps();
-
-    /**
-     * Returns 'true' if this wizard was created with a selection tree enabled,
-     * i.e. the side bar has a tree selection.
-     **/
-    bool treeEnabled() const { return _treeEnabled; }
-
-    /**
-     * Returns the wizard's "Next" (or "Accept") button.
-     **/
-    YQWizardButton * nextButton() const  { return _nextButton; }
-
-    /**
-     * Returns the wizard's "Back" button.
-     **/
-    YQWizardButton * backButton() const  { return _backButton; }
-
-    /**
-     * Returns the wizard's "Abort" button.
-     **/
-    YQWizardButton * abortButton() const { return _abortButton; }
-
-
-    /**
-     * Set wizard command verbosity
-     **/
-    void setVerboseCommands( bool verbose ) { _verboseCommands = verbose; }
-
-    /**
-     * Add a tree item. If "parentID" is an empty string, it will be a root
-     * item. 'text' is the text that will be displayed in the tree, 'id' the ID
-     * with which this newly created item can be referenced - and that will be
-     * returned when the user clicks on a tree item.
-     **/
-    void addTreeItem( const QString & parentID,
-		      const QString & text,
-		      const QString & id	);
-
-    /**
-     * Select the tree item with the specified ID, if such an item exists.
-     **/
-    void selectTreeItem( const QString & id );
-
-    /**
-     * Delete all tree items.
-     **/
-    void deleteTreeItems();
-
-
-    /**
-     * Add a menu to the menu bar. If the menu bar is not visible yet, it will
-     * be made visible. 'text' is the user-visible text for the menu bar
-     * (including keyboard shortcuts marked with '&'), 'id' is the menu ID for
-     * later addMenuEntry() etc. calls.
-     **/
-    void addMenu( const QString & text,
-		  const QString & id );
-
-    /**
-     * Add a submenu to the menu with ID 'parentMenuID'.
-     **/
-    void addSubMenu( const QString & parentMenuID,
-		     const QString & text,
-		     const QString & id );
-
-    /**
-     * Add a menu entry to the menu with ID 'parentMenuID'. 'id' is what will
-     * be returned by UI::UserInput() etc. when a user activates this menu entry.
-     **/
-    void addMenuEntry( const QString & parentMenuID,
-		       const QString & text,
-		       const QString & id );
-
-    /**
-     * Add a menu separator to a menu.
-     **/
-    void addMenuSeparator( const QString & parentMenuID );
-
-    /**
-     * Delete all menus and hide the menu bar.
-     **/
-    void deleteMenus();
 
 signals:
 
@@ -270,17 +352,12 @@ signals:
      * Notice: As long as this signal is connected, the wizard will no longer
      * send button events to the UI. Rather, the connected QObject has to take
      * care to propagate those events.
-     * This is used in YQPatternSelector, for example. 
+     * This is used in YQPatternSelector, for example.
      **/
     void nextClicked();
 
-    
-public slots:
 
-    /**
-     * Set the help text. 0 is a valid value - it clears the old text.
-     **/
-    void setHelpText( QString helpText );
+public slots:
 
     /**
      * Adapt the size of the client area (the ReplacePoint(`id(`contents)) to
@@ -355,7 +432,7 @@ protected slots:
     void slotNextClicked();
 
     /**
-     * Propagate button clicked event of release notes button to the YCP
+     * Propagate button clicked event of release notes button to the
      * application.
      **/
     void releaseNotesClicked();
@@ -381,14 +458,6 @@ protected slots:
      **/
     void sendMenuEvent( int numID );
 
-
-    /**
-     * Retranslate internal buttons that are not accessible from the outside:
-     * - [Help]
-     * - [Steps]
-     * - [Tree]
-     **/
-    void retranslateInternalButtons();
 
 protected:
 
@@ -438,8 +507,7 @@ protected:
     /**
      * Send a wizard event with the specified ID.
      **/
-    void sendEvent( YCPValue id );
-    void sendEvent( YWidgetID * id );
+    void sendEvent( const string & id );
 
     /**
      * Returns 'true' if the application is running on a high-color display,
@@ -461,53 +529,10 @@ protected:
      **/
     void disconnectNotify ( const char * signal );
 
-    //
-    // Wizard command mini-parser
-    //
-
-    /**
-     * Check if 'term' matches wizard command 'declaration'.
-     * 'declaration' is a function prototype like this:
-     *
-     *		myFunction ( string, boolean, string )
-     *
-     * Void functions are declared without any parameters:
-     *
-     *		myFunction ()
-     *
-     * Function names must be unique. They cannot be overloaded.
-     **/
-    bool isCommand( QString declaration, const YCPTerm & term );
-
-    /**
-     * Return argument number 'argNo' from 'term' as QString.
-     **/
-    QString qStringArg( const YCPTerm & term, int argNo );
-
-    /**
-     * Return argument number 'argNo' from 'term' as std::string.
-     **/
-    std::string stringArg( const YCPTerm & term, int argNo );
-
-    /**
-     * Return argument number 'argNo' from 'term' as bool.
-     **/
-    bool boolArg( const YCPTerm & term, int argNo );
-
-    /**
-     * Return argument as type 'any' (plain YCPValue)
-     **/
-    YCPValue anyArg( const YCPTerm & term, int argNo );
-
     /**
      * Set a button's label.
      **/
     void setButtonLabel( YQWizardButton * button, const QString & newLabel );
-
-    /**
-     * Set a button's ID.
-     **/
-    void setButtonID( YQWizardButton * button, const YCPValue & id );
 
     /**
      * Enable or disable a button.
@@ -534,41 +559,19 @@ protected:
      * found at all.
      * Returns the item or 0 if no such item found.
      **/
-    YQWizard::TreeItem * findTreeItem( const QString & id );
-
-    /**
-     * Returns the current tree selection or an empty string if nothing is
-     * selected or there is no tree.
-     *
-     * Reimplemented from YWizard.
-     **/
-    YCPString currentTreeSelection();
-
-    /**
-     * Show a "Release Notes" button above the "Help" button in the steps panel
-     * with the specified label that will return the specified id to
-     * UI::UserInput() when clicked.
-     **/
-    void showReleaseNotesButton( string label, const YCPValue & id );
-
-    /**
-     * Hide an existing "Release Notes" button.
-     **/
-    void hideReleaseNotesButton();
-
-    /**
-     * NOP command just to check if a YQWizard is running
-     **/
-    void ping();
+    YQWizard::TreeItem * findTreeItem( const string & id );
 
 
     //
     // Data members
     //
 
+    string	_backButtonLabel;
+    string	_abortButtonLabel;
+    string	_nextButtonLabel;
+    
     bool	_stepsEnabled;
     bool	_treeEnabled;
-    bool	_verboseCommands;
     bool	_protectNextButton;
     bool	_stepsDirty;
     bool	_sendButtonEvents;
@@ -596,7 +599,7 @@ protected:
     QVBox *			_stepsBox;
     QGridLayout *		    _stepsGrid;
     QPushButton *		_releaseNotesButton;
-    YCPValue			_releaseNotesButtonId;
+    string			    _releaseNotesButtonId;
     QPushButton *		_helpButton;
     QHBox *		    _helpPanel;
     QTextBrowser *		_helpBrowser;
@@ -615,12 +618,13 @@ protected:
     QSpacerItem *	    _backButtonSpacer;
     YQWizardButton *	    _abortButton;
     YQWizardButton *	    _nextButton;
+    YReplacePoint *	_contentsReplacePoint;
 
     QPtrList<YQWizard::Step> 	_stepsList;
     QDict<YQWizard::Step>	_stepsIDs;
     QDict<YQWizard::TreeItem>	_treeIDs;
     QDict<QPopupMenu>		_menuIDs;
-    vector<QString>		_menuEntryIDs;
+    vector<string>		_menuEntryIDs;
 
 
 protected:

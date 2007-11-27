@@ -30,8 +30,7 @@
 
 YQWizardButton::YQWizardButton( YQWizard *	wizard,
 				QWidget *	buttonParent,
-				const string &	label,
-				YWidgetID *	id )
+				const string &	label )
     : YQGenericButton( wizard, label )
     , _wizard( wizard )
 {
@@ -40,9 +39,6 @@ YQWizardButton::YQWizardButton( YQWizard *	wizard,
     
     setQPushButton( button );
     setWidgetRep( button );
-
-    if ( id )
-	setId( id );
 
     connect( button, SIGNAL( clicked() ),
 	     this,   SIGNAL( clicked() ) );

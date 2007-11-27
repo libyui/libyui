@@ -22,23 +22,10 @@
 #include "YQWizard.h"
 #define y2log_component "qt-wizard"
 #include <ycp/y2log.h>
-#include "YCPValueWidgetID.h"
 
 // For the command parser
 
 #include <string>
-
-#include <ycp/YCPBoolean.h>
-#include <ycp/YCPCode.h>
-#include <ycp/YCPInteger.h>
-#include "ycp/YCPInteger.h"
-#include <ycp/YCPList.h>
-#include <ycp/YCPMap.h>
-#include <ycp/YCPString.h>
-#include <ycp/YCPSymbol.h>
-#include <ycp/YCPTerm.h>
-#include <ycp/YCPValue.h>
-#include <ycp/YCPVoid.h>
 #include <YShortcut.h>
 
 #include <qhbox.h>
@@ -117,25 +104,26 @@ using std::string;
 #define USE_ICON_ON_HELP_BUTTON		0
 
 
-YQWizard::YQWizard( YWidget *	parent,
-		    YWidgetID * backButtonId,	const string & backButtonLabel,
-		    YWidgetID * abortButtonId,	const string & abortButtonLabel,
-		    YWidgetID * nextButtonId,	const string & nextButtonLabel,
-		    YWizardMode wizardMode )
+YQWizard::YQWizard( YWidget *		parent,
+		    const string & 	backButtonLabel,
+		    const string & 	abortButtonLabel,
+		    const string & 	nextButtonLabel,
+		    YWizardMode 	wizardMode )
     : QVBox( (QWidget *) parent->widgetRep() )
     , YWizard( parent,
-	       backButtonId,	backButtonLabel,
-	       abortButtonId,	abortButtonLabel,
-	       nextButtonId,	nextButtonLabel,
+	       backButtonLabel,
+	       abortButtonLabel,
+	       nextButtonLabel,
 	       wizardMode )
+    , _backButtonLabel( backButtonLabel )
+    , _abortButtonLabel( abortButtonLabel )
+    , _nextButtonLabel( nextButtonLabel )
 {
     setWidgetRep( this );
 
     _stepsEnabled = (wizardMode == YWizardMode_Steps);
     _treeEnabled  = (wizardMode == YWizardMode_Tree);
 
-    _verboseCommands	= false;
-    _protectNextButton	= false;
     _stepsDirty		= false;
     _direction		= YQWizard::Forward;
 
@@ -162,6 +150,7 @@ YQWizard::YQWizard( YWidget *	parent,
     _abortButton	= 0;
     _nextButton		= 0;
     _sendButtonEvents	= true;
+    _contentsReplacePoint = 0;
 
     _stepsList.setAutoDelete( true );
     _stepsIDs.setAutoDelete( false );	// Only for one of both!
@@ -401,14 +390,16 @@ void YQWizard::layoutStepsPanel()
 
 
 
-void YQWizard::addStep( const QString & text, const QString & id )
+void YQWizard::addStep( const string & text, const string & id )
 {
-    if ( _stepsIDs[ id ] )
+    QString qId = fromUTF8( id );
+    
+    if ( _stepsIDs[ qId ] )
     {
 	y2error( "Step ID \"%s\" (\"%s\") already used for \"%s\"",
-		 (const char *) id,
-		 (const char *) text,
-		 (const char *) _stepsIDs[ id ]->name() );
+		 id.c_str(),
+		 text.c_str(),
+		 (const char *) _stepsIDs[ qId ]->name() );
 	return;
     }
 
@@ -420,20 +411,20 @@ void YQWizard::addStep( const QString & text, const QString & id )
 	// sufficient to check the last step of the list. If the texts are the
 	// same, the other with the same text needs to get another (additional)
 	// ID to make sure setCurrentStep() works as it should.
-	_stepsList.last()->addID( id );
+	_stepsList.last()->addID( qId );
     }
     else
     {
-	_stepsList.append( new YQWizard::Step( text, id ) );
+	_stepsList.append( new YQWizard::Step( fromUTF8( text ), qId ) );
 	_stepsDirty = true;
     }
 
-    _stepsIDs.insert( id, _stepsList.last() );
+    _stepsIDs.insert( qId, _stepsList.last() );
 }
 
 
 
-void YQWizard::addStepHeading( const QString & text )
+void YQWizard::addStepHeading( const string & text )
 {
     _stepsList.append( new YQWizard::StepHeading( text ) );
     _stepsDirty = true;
@@ -646,7 +637,7 @@ void YQWizard::setStepStatus( YQWizard::Step * step, const QPixmap & icon, const
 }
 
 
-void YQWizard::setCurrentStep( const QString & id )
+void YQWizard::setCurrentStep( const string & id )
 {
     _currentStepID = id;
     updateStepStates();
@@ -870,8 +861,10 @@ void YQWizard::layoutTreePanel()
 
 
 
-void YQWizard::addTreeItem( const QString & parentID, const QString & text, const QString & id )
+void YQWizard::addTreeItem( const string & parentID, const string & text, const string & id )
 {
+    QString qId = fromUTF8( id );
+    
     if ( ! _tree )
     {
 	y2error( "YQWizard widget not created with `opt(`treeEnabled) !" );
@@ -881,24 +874,24 @@ void YQWizard::addTreeItem( const QString & parentID, const QString & text, cons
     YQWizard::TreeItem * item	= 0;
     YQWizard::TreeItem * parent = 0;
 
-    if ( ! parentID.isEmpty() )
+    if ( ! parentID.empty() )
     {
 	parent = findTreeItem( parentID );
     }
 
     if ( parent )
     {
-	item = new YQWizard::TreeItem( parent, text, id );
+	item = new YQWizard::TreeItem( parent, fromUTF8( text ), qId );
 	YUI_CHECK_NEW( item );
     }
     else
     {
-	item = new YQWizard::TreeItem( _tree, text, id );
+	item = new YQWizard::TreeItem( _tree, fromUTF8( text ), qId );
 	YUI_CHECK_NEW( item );
     }
 
-    if ( ! id.isEmpty() )
-	_treeIDs.insert( id, item );
+    if ( ! qId.isEmpty() )
+	_treeIDs.insert( qId, item );
 }
 
 
@@ -913,16 +906,16 @@ void YQWizard::deleteTreeItems()
 
 
 
-YQWizard::TreeItem * YQWizard::findTreeItem( const QString & id )
+YQWizard::TreeItem * YQWizard::findTreeItem( const string & id )
 {
-    if ( id.isEmpty() )
+    if ( id.empty() )
 	return 0;
 
-    return _treeIDs[ id ];
+    return _treeIDs[ fromUTF8( id ) ];
 }
 
 
-void YQWizard::selectTreeItem( const QString & id )
+void YQWizard::selectTreeItem( const string & id )
 {
     if ( _tree )
     {
@@ -946,7 +939,7 @@ void YQWizard::sendTreeEvent( QListViewItem * listViewItem )
 	YQWizard::TreeItem * item = dynamic_cast<YQWizard::TreeItem *> ( listViewItem );
 
 	if ( item && ! item->id().isEmpty() )
-	    sendEvent( YCPString( toUTF8( item->id() ) ) );
+	    sendEvent( toUTF8( item->id() ) );
     }
 }
 
@@ -958,7 +951,7 @@ void YQWizard::treeSelectionChanged()
 }
 
 
-YCPString YQWizard::currentTreeSelection()
+string YQWizard::currentTreeSelection()
 {
     if ( _tree )
     {
@@ -969,13 +962,12 @@ YCPString YQWizard::currentTreeSelection()
 	    YQWizard::TreeItem * item = dynamic_cast<YQWizard::TreeItem *> (sel);
 
 	    if ( item && ! item->id().isEmpty() )
-		return YCPString( (const char *) item->id() );
+		return toUTF8( item->id() );
 	}
     }
 
-    return YCPString( "" );
+    return string();
 }
-
 
 
 
@@ -1105,16 +1097,14 @@ void YQWizard::layoutClientArea( QWidget * parent )
     // Replace point for wizard contents
     //
 
-    YReplacePoint * replacePoint = YUI::widgetFactory()->createReplacePoint( _contents );
-    replacePoint->setId( new YCPValueWidgetID( YCPSymbol( YWizardContentsReplacePointID ) ) ); // `id(`contents)
-
+    _contentsReplacePoint = YUI::widgetFactory()->createReplacePoint( _contents );
 
     //
     // Initial YEmpty widget contents of replace point
     //
 
-    YUI::widgetFactory()->createEmpty( replacePoint );
-    replacePoint->showChild();
+    YUI::widgetFactory()->createEmpty( _contentsReplacePoint );
+    _contentsReplacePoint->showChild();
 }
 
 
@@ -1151,7 +1141,7 @@ void YQWizard::layoutButtonBox( QWidget * parent )
     // "Back" button
     //
 
-    _backButton	 = new YQWizardButton( this, buttonBox, backButtonLabel(), backButtonId() );
+    _backButton	 = new YQWizardButton( this, buttonBox, _backButtonLabel );
     YUI_CHECK_NEW( _backButton );
 
     hbox->addWidget( (QWidget *) _backButton->widgetRep() );
@@ -1180,7 +1170,7 @@ void YQWizard::layoutButtonBox( QWidget * parent )
     // "Abort" button
     //
 
-    _abortButton = new YQWizardButton( this, buttonBox, abortButtonLabel(), abortButtonId() );
+    _abortButton = new YQWizardButton( this, buttonBox, _abortButtonLabel );
     YUI_CHECK_NEW( _abortButton );
 
     hbox->addWidget( (QWidget *) _abortButton->widgetRep() );
@@ -1203,7 +1193,7 @@ void YQWizard::layoutButtonBox( QWidget * parent )
     // "Next" button
     //
 
-    _nextButton	 = new YQWizardButton( this, buttonBox, nextButtonLabel(), nextButtonId() );
+    _nextButton	 = new YQWizardButton( this, buttonBox, _nextButtonLabel );
     YUI_CHECK_NEW( _nextButton );
 
     hbox->addWidget( (QWidget *) _nextButton->widgetRep() );
@@ -1425,16 +1415,16 @@ void YQWizard::disconnectNotify ( const char * signal )
 }
 
 
-void YQWizard::setDialogIcon( const char * iconName )
+void YQWizard::setDialogIcon( const string & iconName )
 {
     if ( _dialogIcon )
     {
-	if ( iconName && *iconName )
+	if ( ! iconName.empty() )
 	{
-	    QPixmap icon( iconName );
+	    QPixmap icon( iconName.c_str() );
 
 	    if ( icon.isNull() )
-		y2warning( "Couldn't load dialog icon \"%s\"", iconName );
+		y2warning( "Couldn't load dialog icon \"%s\"", iconName.c_str() );
 	    else
 	    {
 		_dialogIcon->setPixmap( icon );
@@ -1450,12 +1440,12 @@ void YQWizard::setDialogIcon( const char * iconName )
 }
 
 
-void YQWizard::setDialogHeading( const QString & headingText )
+void YQWizard::setDialogHeading( const string & headingText )
 {
     if ( _dialogHeading )
     {
-	if ( headingText )
-	    _dialogHeading->setText( headingText );
+	if ( ! headingText.empty() )
+	    _dialogHeading->setText( fromUTF8( headingText ) );
 	else
 	    _dialogHeading->clear();
     }
@@ -1480,14 +1470,15 @@ string YQWizard::debugLabel()
     return "untitled YQWizard";
 }
 
-void YQWizard::setHelpText( QString helpText )
+void YQWizard::setHelpText( const string & helpText )
 {
     if ( _helpBrowser )
     {
-	if ( helpText )
+	if ( ! helpText.empty() )
 	{
-	    helpText.replace( "&product;", YQUI::ui()->productName() );
-	    _helpBrowser->setText( helpText );
+	    QString qHelpText = fromUTF8( helpText );
+	    qHelpText.replace( "&product;", YQUI::ui()->productName() );
+	    _helpBrowser->setText( qHelpText );
 	}
 	else
 	    _helpBrowser->clear();
@@ -1500,7 +1491,7 @@ void YQWizard::slotBackClicked()
     emit backClicked();
 
     if ( _sendButtonEvents )
-	sendEvent( _backButton->id() );
+	YQUI::ui()->sendEvent( new YWidgetEvent( _backButton, YEvent::Activated ) );
 
     _direction = YQWizard::Backward;
 }
@@ -1511,7 +1502,7 @@ void YQWizard::slotAbortClicked()
     emit abortClicked();
 
     if ( _sendButtonEvents )
-	sendEvent( _abortButton->id() );
+	YQUI::ui()->sendEvent( new YWidgetEvent( _abortButton, YEvent::Activated ) );
 }
 
 
@@ -1520,7 +1511,7 @@ void YQWizard::slotNextClicked()
     emit nextClicked();
 
     if ( _sendButtonEvents )
-	sendEvent( _nextButton->id() );
+	YQUI::ui()->sendEvent( new YWidgetEvent( _nextButton, YEvent::Activated ) );
 
     _direction = YQWizard::Forward;
 }
@@ -1537,7 +1528,9 @@ void YQWizard::showHelp()
 
 void YQWizard::releaseNotesClicked()
 {
-    if ( ! _releaseNotesButtonId.isNull() )
+    YQUI::ui()->sendEvent( new YWidgetEvent( _nextButton, YEvent::Activated ) );
+	
+    if ( ! _releaseNotesButtonId.empty() )
     {
 	y2milestone( "Release Notes button clicked" );
 	sendEvent( _releaseNotesButtonId );
@@ -1564,16 +1557,16 @@ void YQWizard::showTree()
 
 
 
-void YQWizard::addMenu( const QString & text,
-			const QString & id )
+void YQWizard::addMenu( const string & text,
+			const string & id )
 {
     if ( _menuBar )
     {
 	QPopupMenu * menu = new QPopupMenu( _menuBar );
 	YUI_CHECK_NEW( menu );
 
-	_menuIDs.insert( id, menu );
-	_menuBar->insertItem( text, menu );
+	_menuIDs.insert( fromUTF8( id ), menu );
+	_menuBar->insertItem( fromUTF8( text ), menu );
 
 	connect( menu, SIGNAL( activated    ( int ) ),
 		 this, SLOT  ( sendMenuEvent( int ) ) );
@@ -1587,35 +1580,35 @@ void YQWizard::addMenu( const QString & text,
 }
 
 
-void YQWizard::addSubMenu( const QString & parentMenuID,
-			   const QString & text,
-			   const QString & id )
+void YQWizard::addSubMenu( const string & parentMenuID,
+			   const string & text,
+			   const string & id )
 {
-    QPopupMenu * parentMenu = _menuIDs[ parentMenuID ];
+    QPopupMenu * parentMenu = _menuIDs[ fromUTF8( parentMenuID ) ];
 
     if ( parentMenu )
     {
 	QPopupMenu * menu = new QPopupMenu( _menuBar );
 	YUI_CHECK_NEW( menu );
 
-	_menuIDs.insert( id, menu );
-	parentMenu->insertItem( text, menu );
+	_menuIDs.insert( fromUTF8( id ), menu );
+	parentMenu->insertItem( fromUTF8( text ), menu );
 
 	connect( menu, SIGNAL( activated    ( int ) ),
 		 this, SLOT  ( sendMenuEvent( int ) ) );
     }
     else
     {
-	y2error( "Can't find menu with ID %s", (const char *) parentMenuID );
+	y2error( "Can't find menu with ID %s", parentMenuID.c_str() );
     }
 }
 
 
-void YQWizard::addMenuEntry( const QString & parentMenuID,
-			     const QString & text,
-			     const QString & idString )
+void YQWizard::addMenuEntry( const string & parentMenuID,
+			     const string & text,
+			     const string & idString )
 {
-    QPopupMenu * parentMenu = _menuIDs[ parentMenuID ];
+    QPopupMenu * parentMenu = _menuIDs[ fromUTF8( parentMenuID ) ];
 
     if ( parentMenu )
     {
@@ -1625,14 +1618,14 @@ void YQWizard::addMenuEntry( const QString & parentMenuID,
     }
     else
     {
-	y2error( "Can't find menu with ID %s", (const char *) parentMenuID );
+	y2error( "Can't find menu with ID %s", parentMenuID.c_str() );
     }
 }
 
 
-void YQWizard::addMenuSeparator( const QString & parentMenuID )
+void YQWizard::addMenuSeparator( const string & parentMenuID )
 {
-    QPopupMenu * parentMenu = _menuIDs[ parentMenuID ];
+    QPopupMenu * parentMenu = _menuIDs[ fromUTF8( parentMenuID ) ];
 
     if ( parentMenu )
     {
@@ -1640,7 +1633,7 @@ void YQWizard::addMenuSeparator( const QString & parentMenuID )
     }
     else
     {
-	y2error( "Can't find menu with ID %s", (const char *) parentMenuID );
+	y2error( "Can't find menu with ID %s", parentMenuID.c_str() );
     }
 }
 
@@ -1661,7 +1654,7 @@ void YQWizard::sendMenuEvent( int numID )
 {
     if ( numID >= 0 && numID < (int) _menuEntryIDs.size() )
     {
-	sendEvent( YCPString( toUTF8( _menuEntryIDs[ numID ] ) ) );
+	sendEvent( toUTF8( _menuEntryIDs[ numID ] ) );
     }
     else
     {
@@ -1670,33 +1663,10 @@ void YQWizard::sendMenuEvent( int numID )
 }
 
 
-void YQWizard::sendEvent( YWidgetID * rawId )
+void YQWizard::sendEvent( const string & id )
 {
-    if ( rawId )
-    {
-	YCPValueWidgetID * id = dynamic_cast<YCPValueWidgetID *> (rawId );
-
-	if ( id )
-	    sendEvent( id->value() );
-    }
-}
-
-
-void YQWizard::sendEvent( YCPValue id )
-{
-    // Wizard events are sent as menu events - the semantics are similar.
-    //
-    // Widget events wouldn't do since they use their widget's ID as the ID to
-    // return (which would be inappropriate since that would be the ID of the
-    // wizard widget). Another type of event (WizardEvent) could be introduced,
-    // but it would add little more information (if any) than MenuEvent.
-    //
-    // YQPackageSelector uses the same approach. After all, one widget that can
-    // return multiple IDs is roughly the semantics of MenuEvents.
-
     YQUI::ui()->sendEvent( new YMenuEvent( id ) );
 }
-
 
 
 int YQWizard::preferredWidth()
@@ -1740,18 +1710,20 @@ bool YQWizard::eventFilter( QObject * obj, QEvent * ev )
 }
 
 
-void YQWizard::setButtonLabel( YQWizardButton * button, const QString & newLabel )
+void YQWizard::setButtonLabel( YPushButton * button, const string & newLabel )
 {
-    if ( button )
+    button->setLabel( newLabel );
+    YDialog::currentDialog()->checkShortcuts();
+
+    YQWizardButton * wizardButton = dynamic_cast<YQWizardButton *> (button);
+    
+    if ( wizardButton )
     {
-	button->setLabel( newLabel );
-	YDialog::currentDialog()->checkShortcuts();
-
-	if ( newLabel.isEmpty() )
+	if ( newLabel.empty() )
 	{
-	    button->hide();
+	    wizardButton->hide();
 
-	    if ( button == _backButton && _backButtonSpacer )
+	    if ( wizardButton == _backButton && _backButtonSpacer )
 	    {
 		// Minimize _backButtonSpacer
 
@@ -1762,7 +1734,7 @@ void YQWizard::setButtonLabel( YQWizardButton * button, const QString & newLabel
 	}
 	else
 	{
-	    button->show();
+	    wizardButton->show();
 
 	    if ( button == _backButton && _backButtonSpacer )
 	    {
@@ -1777,47 +1749,21 @@ void YQWizard::setButtonLabel( YQWizardButton * button, const QString & newLabel
 }
 
 
-void YQWizard::setButtonID( YQWizardButton * button, const YCPValue & id )
-{
-    if ( button )
-    {
-	button->setId( new YCPValueWidgetID( id ) );
-    }
-}
-
-
-void YQWizard::enableButton( YQWizardButton * button, bool enabled )
-{
-    if ( button == _nextButton && _protectNextButton && ! enabled )
-	return;
-
-    if ( button )
-	button->setEnabled( enabled );
-}
-
-
-void YQWizard::setButtonFocus( YQWizardButton * button )
-{
-    if ( button )
-	button->setKeyboardFocus();
-}
-
-
-void YQWizard::showReleaseNotesButton( string label, const YCPValue & id )
+void YQWizard::showReleaseNotesButton( const string & label, const string & id )
 {
     if ( ! _releaseNotesButton )
     {
 	y2error( "NULL Release Notes button" );
+	
 	if ( ! _stepsBox )
 	    y2error( "This works only if there is a \"steps\" panel!" );
 
 	return;
     }
 
-    label = YShortcut::cleanShortcutString( label );	// no way to check the shortcut, so strip it
-    _releaseNotesButton->setText( fromUTF8( label ) );
+    // no way to check the shortcut, so strip it
+    _releaseNotesButton->setText( fromUTF8( YShortcut::cleanShortcutString( label ) ) );
     _releaseNotesButtonId = id;
-
 
     if ( _releaseNotesButton->isHidden() )
 	_releaseNotesButton->show();
@@ -1847,205 +1793,6 @@ void YQWizard::retranslateInternalButtons()
     if ( _treeButton )
 	// "Tree" button - intentionally without keyboard shortcut
 	_treeButton->setText( _( "Tree" ) );
-}
-
-
-void YQWizard::ping()
-{
-    y2debug( "YQWizard is active" );
-}
-
-
-bool YQWizard::isCommand( QString declaration, const YCPTerm & term )
-{
-    declaration = declaration.simplifyWhiteSpace();
-
-    // Check command name
-
-    QString command = declaration;
-    command.remove( QRegExp( "\\s*\\(.*$" ) );	// remove arguments
-
-    if ( term->name().c_str() != command )
-	return false;
-
-    //
-    // Check arguments
-    //
-
-    QString arg_decl = declaration;
-    arg_decl.remove( QRegExp( "^.*\\(" ) );	// remove "command ("
-    arg_decl.remove( QRegExp( "\\).*$" ) );	// remove ")"
-
-    QStringList argDeclList = QStringList::split( ",", arg_decl );
-
-    //
-    // Check number of arguments
-    //
-
-    if ( argDeclList.size() != (unsigned) term->size() )
-    {
-	y2error( "Bad arguments for wizard command %s : %s",
-		 (const char *) declaration, term->toString().c_str() );
-	return false;
-    }
-
-
-    //
-    // Check each individual argument
-    //
-
-    bool ok = true;
-
-    for ( unsigned i=0; i < argDeclList.size() && ok; i++ )
-    {
-	QString wanted = argDeclList[ i ].stripWhiteSpace();
-	YCPValue seen  = term->value( i );
-
-	if	( wanted == "string"	)	ok = seen->isString();
-	else if ( wanted == "boolean"	)	ok = seen->isBoolean();
-	else if ( wanted == "bool"	)	ok = seen->isBoolean();
-	else if ( wanted == "list"	)	ok = seen->isList();
-	else if ( wanted == "map"	)	ok = seen->isMap();
-	else if ( wanted == "integer"	)	ok = seen->isInteger();
-	else if ( wanted == "int"	)	ok = seen->isInteger();
-	else if ( wanted == "any"	)	ok = true;
-	else
-	{
-	    y2error( "Bad declaration for wizard command %s : Unknown type \"%s\"",
-		     (const char *) declaration, (const char *) wanted );
-	}
-    }
-
-    if ( ! ok )
-    {
-	y2error( "Bad arguments for wizard command %s : %s",
-		 (const char *) declaration, term->toString().c_str() );
-    }
-
-    if ( ok && _verboseCommands )
-    {
-	// Intentionally logging as milestone because a YCP app just explicitly
-	// requested this log level
-	y2milestone( "Recognized wizard command %s : %s",
-		     (const char *) declaration, term->toString().c_str() );
-    }
-
-    return ok;
-}
-
-
-QString YQWizard::qStringArg( const YCPTerm & term, int argNo )
-{
-    return fromUTF8( stringArg( term, argNo ).c_str() );
-}
-
-
-string YQWizard::stringArg( const YCPTerm & term, int argNo )
-{
-    if ( term->size() > argNo )
-    {
-	YCPValue arg( term->value( argNo ) );
-
-	if ( arg->isString() )
-	    return arg->asString()->value();
-    }
-
-    y2error( "Couldn't convert arg #%d of '%s' to string", argNo, term->toString().c_str() );
-    return "";
-}
-
-
-bool YQWizard::boolArg( const YCPTerm & term, int argNo )
-{
-    if ( term->size() > argNo )
-    {
-	YCPValue arg( term->value( argNo ) );
-
-	if ( arg->isBoolean() )
-	    return arg->asBoolean()->value();
-    }
-
-    y2error( "Couldn't convert arg #%d of '%s' to bool", argNo, term->toString().c_str() );
-    return false;
-}
-
-
-YCPValue YQWizard::anyArg( const YCPTerm & term, int argNo )
-{
-    if ( term->size() > argNo )
-    {
-	return term->value( argNo );
-    }
-
-    return YCPVoid();
-}
-
-
-
-YCPValue YQWizard::command( const YCPTerm & cmd )
-{
-#define OK YCPBoolean( true );
-
-
-    if ( isCommand( "SetHelpText	  ( string )", cmd ) )	{ setHelpText	( qStringArg( cmd, 0 ) );		return OK; }
-    if ( isCommand( "SetDialogIcon	  ( string )", cmd ) )	{ setDialogIcon ( qStringArg( cmd, 0 ) );		return OK; }
-    if ( isCommand( "SetDialogHeading	  ( string )", cmd ) )	{ setDialogHeading( qStringArg( cmd, 0 ) );		return OK; }
-
-    if ( isCommand( "SetCurrentStep	  ( string )", cmd ) )	{ setCurrentStep( qStringArg( cmd, 0 ) );		return OK; }
-    if ( isCommand( "AddStep ( string, string )"     , cmd ) )	{ addStep( qStringArg( cmd, 0 ), qStringArg( cmd, 1 )); return OK; }
-    if ( isCommand( "AddStepHeading	  ( string )", cmd ) )	{ addStepHeading( qStringArg( cmd, 0 ) );		return OK; }
-    if ( isCommand( "DeleteSteps()"		     , cmd ) )	{ deleteSteps();					return OK; }
-    if ( isCommand( "UpdateSteps()"		     , cmd ) )	{ updateSteps();					return OK; }
-
-    if ( isCommand( "SetAbortButtonLabel  ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) ); return OK; }
-    if ( isCommand( "SetBackButtonLabel	  ( string )", cmd ) )	{ setButtonLabel( _backButton,	qStringArg( cmd, 0 ) ); return OK; }
-    if ( isCommand( "SetNextButtonLabel	  ( string )", cmd ) )	{ setButtonLabel( _nextButton,	qStringArg( cmd, 0 ) ); return OK; }
-    if ( isCommand( "SetCancelButtonLabel ( string )", cmd ) )	{ setButtonLabel( _abortButton, qStringArg( cmd, 0 ) ); return OK; }
-    if ( isCommand( "SetAcceptButtonLabel ( string )", cmd ) )	{ setButtonLabel( _nextButton,	qStringArg( cmd, 0 ) ); return OK; }
-
-    if ( isCommand( "SetAbortButtonID	  ( any )"   , cmd ) )	{ setButtonID( _abortButton,	anyArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "SetBackButtonID	  ( any )"   , cmd ) )	{ setButtonID( _backButton,	anyArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "SetNextButtonID	  ( any )"   , cmd ) )	{ setButtonID( _nextButton,	anyArg( cmd, 0 ) );	return OK; }
-
-    if ( isCommand( "EnableBackButton	  ( bool )"  , cmd ) )	{ enableButton( _backButton,	boolArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "EnableNextButton	  ( bool )"  , cmd ) )	{ enableButton( _nextButton,	boolArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "EnableAbortButton	  ( bool )"  , cmd ) )	{ enableButton( _abortButton,	boolArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "ProtectNextButton	  ( bool )"  , cmd ) )	{ _protectNextButton = boolArg( cmd, 0 );		return OK; }
-
-    if ( isCommand( "SetFocusToNextButton ()"	     , cmd ) )	{ setButtonFocus( _nextButton );			return OK; }
-    if ( isCommand( "SetFocusToBackButton ()"	     , cmd ) )	{ setButtonFocus( _backButton );			return OK; }
-
-
-    if ( isCommand( "SetVerboseCommands	  ( bool )"  , cmd ) )	{ setVerboseCommands( boolArg( cmd, 0 ) );		return OK; }
-
-    if ( isCommand( "DeleteTreeItems()"		     , cmd ) )	{ deleteTreeItems();					return OK; }
-    if ( isCommand( "SelectTreeItem( string )"	     , cmd ) )	{ selectTreeItem( qStringArg( cmd, 0 ) );		return OK; }
-    if ( isCommand( "AddTreeItem( string, string, string )", cmd ) )	{ addTreeItem	( qStringArg( cmd, 0 ),
-											  qStringArg( cmd, 1 ),
-											  qStringArg( cmd, 2 )	);	return OK; }
-
-    if ( isCommand( "AddMenu	  ( string, string )"	      , cmd ) ) { addMenu	( qStringArg( cmd, 0 ),
-											  qStringArg( cmd, 1 ) );	return OK; }
-
-    if ( isCommand( "AddSubMenu	  ( string, string, string )" , cmd ) ) { addSubMenu	( qStringArg( cmd, 0 ),
-											  qStringArg( cmd, 1 ),
-											  qStringArg( cmd, 2 ) );	return OK; }
-
-    if ( isCommand( "AddMenuEntry ( string, string, string )" , cmd ) ) { addMenuEntry	( qStringArg( cmd, 0 ),
-											  qStringArg( cmd, 1 ),
-											  qStringArg( cmd, 2 ) );	return OK; }
-
-    if ( isCommand( "AddMenuSeparator ( string )"	     , cmd ) )	{ addMenuSeparator( qStringArg( cmd, 0 ) );	return OK; }
-    if ( isCommand( "DeleteMenus ()"			     , cmd ) )	{ deleteMenus();				return OK; }
-    if ( isCommand( "ShowReleaseNotesButton( string, any )"  , cmd ) )	{ showReleaseNotesButton( stringArg( cmd, 0 ),
-												  anyArg   ( cmd, 1 )); return OK; }
-    if ( isCommand( "HideReleaseNotesButton()"		     , cmd ) )	{ hideReleaseNotesButton();			return OK; }
-    if ( isCommand( "RetranslateInternalButtons()"	     , cmd ) )	{ retranslateInternalButtons() ;		return OK; }
-    if ( isCommand( "Ping()"				     , cmd ) )	{ ping() ;					return OK; }
-    y2error( "Undefined wizard command: %s", cmd->toString().c_str() );
-    return YCPBoolean( false );
-
-#undef OK
 }
 
 

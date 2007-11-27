@@ -26,7 +26,6 @@
 using std::string;
 class YQDialog;
 class YQWizard;
-class YWidgetID;
 
 
 class YQWizardButton : public YQGenericButton
@@ -39,8 +38,7 @@ public:
      **/
     YQWizardButton( YQWizard *		wizard,
 		    QWidget *		buttonParent,
-		    const string &	label,
-		    YWidgetID *		id = 0 );
+		    const string &	label );
 
     /**
      * Destructor.

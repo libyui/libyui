@@ -47,16 +47,16 @@ bool YQOptionalWidgetFactory::hasWizard()
 }
 
 YQWizard *
-YQOptionalWidgetFactory::createWizard( YWidget *   parent,
-				       YWidgetID * backButtonId,	const string & backButtonLabel,
-				       YWidgetID * abortButtonId,	const string & abortButtonLabel,
-				       YWidgetID * nextButtonId,	const string & nextButtonLabel,
-				       YWizardMode wizardMode )
+YQOptionalWidgetFactory::createWizard( YWidget *   	parent,
+				       const string & 	backButtonLabel,
+				       const string & 	abortButtonLabel,
+				       const string & 	nextButtonLabel,
+				       YWizardMode 	wizardMode )
 {
     YQWizard * wizard = new YQWizard( parent,
-				      backButtonId, 	backButtonLabel,
-				      abortButtonId,	abortButtonLabel,
-				      nextButtonId,	nextButtonLabel,
+				      backButtonLabel,
+				      abortButtonLabel,
+				      nextButtonLabel,
 				      wizardMode );
     YUI_CHECK_NEW( wizard );
 
