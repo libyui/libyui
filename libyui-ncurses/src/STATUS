@@ -10,13 +10,11 @@ NCAlignment
 NCMultiLineEdit
 NCAskForDirectory/NCAskForFile
 NCTable
+NCRichText
 
 
 almost DONE - all UI examples work (correctly or only with minor problems)/
 -----------   some further checks/tests required
-
-NCRichText
-- hyperlink doesn't work
 
 NCMenuButton
 - all examples work correctly - but ChangeWidget has to be tested
