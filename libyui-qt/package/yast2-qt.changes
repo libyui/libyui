@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Nov 27 11:39:21 CET 2007 - tgoettlicher@suse.de
+
+- V 2.16.4
+
+-------------------------------------------------------------------
 Mon Nov 26 12:09:03 CET 2007 - tgoettlicher@suse.de
 
 - Prevent changed size of partition widget when packageselector's
