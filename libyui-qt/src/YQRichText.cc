@@ -133,7 +133,7 @@ void YQRichText::setAutoScrollDown( bool newAutoScrollDown )
 void YQRichText::linkClicked( const QString & url )
 {
     // y2debug( "Selected hyperlink \"%s\"", (const char *) url );
-    YQUI::ui()->sendEvent( new YMenuEvent( YCPString( (const char *) url ) ) );
+    YQUI::ui()->sendEvent( new YMenuEvent( toUTF8( url ) ) );
 }
 
 
