@@ -1609,9 +1609,12 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
 	     
     // delete current child of the ReplacePoint
     YWidget * replaceChild = replacePoint->firstChild();
-
+    wrect oldSize;
+    
     if ( replaceChild )
     {
+	oldSize = dynamic_cast<NCWidget *>(replaceChild)->wGetSize();
+	
 	delete replaceChild;
 	// reset all info widgets
 	infoText = 0;
@@ -1619,7 +1622,7 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
 	patchPkgs = 0;
 	patchPkgsVersions = 0;
     }
-    
+
     if ( visibleInfo == versionsItem )
     {
 	// show a package table with all available package versions
@@ -1630,7 +1633,7 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
 
 	if ( versionsList )
 	{
-	    versionsList->setSize( versionsList->preferredWidth(), versionsList->preferredHeight());
+	    versionsList->setSize( oldSize.Sze.W, oldSize.Sze.H );
 	    versionsList->Redraw();
 
 	    // set the connection to the NCPackageSelector !!!!
@@ -1673,7 +1676,7 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
 
 	if ( patchPkgsVersions )
 	{
-	    patchPkgsVersions->setSize( patchPkgsVersions->preferredWidth(), patchPkgsVersions->preferredHeight() );
+	    patchPkgsVersions->setSize( oldSize.Sze.W, oldSize.Sze.H );
 	    patchPkgsVersions->Redraw();
 
 	    patchPkgsVersions->setPackager( this );
@@ -1693,7 +1696,7 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
 
 	if ( infoText )
 	{
-	    infoText->setSize( infoText->preferredWidth(), infoText->preferredHeight() );
+	    infoText->setSize( oldSize.Sze.W, oldSize.Sze.H );
 	    infoText->Redraw();
 
 	    packageList->showInformation( );

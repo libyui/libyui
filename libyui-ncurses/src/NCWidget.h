@@ -143,7 +143,8 @@ class NCWidget : public tnode<NCWidget*>, protected NCursesError {
     const NCstyle::StList   & listStyle()   const { return wStyle().getList( GetState() ); }
 
     wsze wGetDefsze() const { return defsze; }
-
+    wrect wGetSize() const { return inparent; }
+    
     void Update();
     void Redraw( const bool sub = false );
     void Recoded();
