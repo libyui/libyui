@@ -158,6 +158,16 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, YWidget * wRoot, long mod
       , patchdescrItem( 0 )
       , patchpkgsItem( 0 )
       , pkgversionsItem( 0 )
+      , etcMenu( 0 )
+      , depsItem( 0 )
+      , showdepsItem( 0 )
+      , autodepsItem( 0 )
+      , noautodepsItem( 0 )
+      , verifyItem( 0 )
+      , allpksItem( 0 )
+      , exportItem( 0 )
+      , importItem( 0 )
+      , testcaseItem( 0 )
       , filterLabel( 0 )
       , diskspaceLabel( 0 )
       , infoText( 0 )
@@ -542,6 +552,15 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
 	    retVal = StatusHandler( event );
 	else if ( event.widget == infoMenu )
 	    retVal = InformationHandler( event );
+	else if ( event.widget == etcMenu )
+	{
+	    if ( event.selection == testcaseItem )
+		retVal = TestcaseHandler( event );
+	    else if ( (event.selection == exportItem) || (event.selection == importItem) )
+		retVal = FileHandler( event );
+	    else
+		retVal = DependencyHandler( event );
+	}
 	    
     }
 
@@ -1726,9 +1745,7 @@ bool NCPackageSelector::DependencyHandler( const NCursesEvent&  event )
 					  NCPkgNames::OKLabel() );
     info->setNiceSize( 35, 5 );
 
-    string selId = getMenuId( event.selection );
-
-    if ( selId == NCPkgNames::ShowDeps()->toString() )
+    if ( event.selection == showdepsItem )
     {
 	bool ok = false;
 
@@ -1748,83 +1765,33 @@ bool NCPackageSelector::DependencyHandler( const NCursesEvent&  event )
 	updatePackageList();
 	showDiskSpace();	
     }
-    else if ( selId == NCPkgNames::VerifySystem()->toString() )
+    else if ( event.selection == verifyItem )
     {
 	verifyPackageDependencies();
 	updatePackageList();
 	showDiskSpace();
     }
-    else if ( selId ==  NCPkgNames::AutoDeps()->toString() )
+    else if ( event.selection == autodepsItem )
     {
-	char menu[2000];
-	
+	// FIXME
 	if ( autoCheck )
 	{
-	    snprintf ( menu, sizeof(menu) - 1,
-		      "`MenuButton( \"%s\", ["
-		       "`menu( \"%s\", [`item( `id(\"showdeps\"), \"%s\" ), `item( `id(\"autodeps\"), \"%s\" ), `item ( `id(\"verifysystem\"), \"%s\" ) ] ),"
-		       "`item( `id(\"testcase\"), \"%s\" )"
-		      ","
-		      "`menu( \"%s\", [`item( `id(\"export\"), \"%s\" ), `item( `id(\"import\"), \"%s\" ) ] )"
-		      "] )",
-		      NCPkgNames::MenuEtc().c_str(),
-		      NCPkgNames::MenuDeps().c_str(),
-		      NCPkgNames::MenuCheckDeps().c_str(),
-		      NCPkgNames::MenuNoAutoDeps().c_str(),
-		      NCPkgNames::MenuVerifySystem().c_str(),
-		      NCPkgNames::MenuTestCase().c_str(),
-		      NCPkgNames::MenuList().c_str(),
-		      NCPkgNames::MenuExportList().c_str(),
-		      NCPkgNames::MenuImportList().c_str()
-		);
+	    if ( autodepsItem )
+		delete autodepsItem;
 
+	    // menu entry: dependency check off
+	    noautodepsItem = new YMenuItem( depsItem,  _( "[X] &Automatic Dependency Check" ) );
 
-	    Parser parser( menu );
-	    YCodePtr parsed_code = parser.parse ();
-	    YCPValue layout = YCPNull ();
-	    
-	    if ( parsed_code != NULL )
-		layout = parsed_code->evaluate();
-
-	    if ( !layout.isNull() )
-	    {
-		y2ui->evaluateReplaceWidget( YCPSymbol ("replacemenu"), layout->asTerm() );
-		autoCheck = false;
-	    }
+	    autoCheck = false;
 	}
 	else
 	{
-	    snprintf ( menu, sizeof(menu) - 1,
-		      "`MenuButton( \"%s\", ["
-		      "`menu( \"%s\", [`item( `id(\"showdeps\"), \"%s\" ), `item( `id(\"autodeps\"), \"%s\" ), `item ( `id(\"verifysystem\"), \"%s\" ) ] ),"
-		     "`item( `id(\"testcase\"), \"%s\" )"  
-		      ","
-		      "`menu( \"%s\", [`item( `id(\"export\"), \"%s\" ), `item( `id(\"import\"), \"%s\" ) ] )"
-		      "] )",
-		      NCPkgNames::MenuEtc().c_str(),
-		      NCPkgNames::MenuDeps().c_str(),
-		      NCPkgNames::MenuCheckDeps().c_str(),
-		      NCPkgNames::MenuAutoDeps().c_str(),
-		      NCPkgNames::MenuVerifySystem().c_str(),
-		      NCPkgNames::MenuTestCase().c_str(),
-		      NCPkgNames::MenuList().c_str(),
-		      NCPkgNames::MenuExportList().c_str(),
-		      NCPkgNames::MenuImportList().c_str()
-		);
+	    if ( noautodepsItem )
+		delete noautodepsItem;
 
-
-	    Parser parser( menu );
-	    YCodePtr parsed_code = parser.parse ();
-	    YCPValue layout = YCPNull ();
-	    
-	    if ( parsed_code != NULL )
-		layout = parsed_code->evaluate();
-
-	    if ( !layout.isNull() )
-	    {
-		y2ui->evaluateReplaceWidget( YCPSymbol ("replacemenu"), layout->asTerm() );	
-		autoCheck = true;
-	    }
+            // menu entry: dependency check off
+	    autodepsItem = new YMenuItem( depsItem, _( "[ ] &Automatic Dependency Check" ) );
+	    autoCheck = true;
 	}
     }
 
@@ -3378,6 +3345,31 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     itemCollection3.push_back( relationsItem );
     infoMenu->addItems( itemCollection3 );
 
+    YAlignment * left4 = YUI::widgetFactory()->createLeft( hSplit );
+
+    // label Etc. menu ( keep it short! )
+    etcMenu = new NCMenuButton( left4,  _( "&Etc." ) );
+    YUI_CHECK_NEW( etcMenu );
+    etcMenu->setFunctionKey( 7 );
+
+    // menu item of the Etc. menu - package dependency check
+    depsItem = new YMenuItem( _( "&Dependencies" ) );
+    // menu items of the Etc./Dependencies submenu
+    showdepsItem = new YMenuItem( depsItem, _( "    &Check Dependencies Now" ) );
+    autodepsItem = new YMenuItem( depsItem, _( "[X] &Automatic Dependency Check" ) );
+    verifyItem =   new YMenuItem( depsItem, _( "    &Verify System" ) );
+    // menu item - list of all packages in the system
+    allpksItem = new YMenuItem( _("All &Packages List" ) );
+    exportItem = new YMenuItem( allpksItem, _("&Export to File") );
+    importItem = new YMenuItem( allpksItem, _("&Import from File") );
+    testcaseItem = new YMenuItem( _( "Generate Dependency Resolver &Test Case" ) );
+    
+    YItemCollection itemCollection4;
+    itemCollection4.push_back( depsItem );
+    itemCollection4.push_back( allpksItem );
+    itemCollection4.push_back( testcaseItem );
+    etcMenu->addItems( itemCollection4 );
+    
     // add the package table 
     YTableHeader * tableHeader = new YTableHeader();
 

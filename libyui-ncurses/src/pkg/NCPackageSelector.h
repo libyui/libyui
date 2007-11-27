@@ -143,6 +143,19 @@ class NCPackageSelector
     YMenuItem * patchdescrItem;
     YMenuItem * patchpkgsItem;
     YMenuItem * pkgversionsItem;
+
+    // etc menu and items
+    NCMenuButton * etcMenu;
+    YMenuItem * depsItem;
+    YMenuItem * showdepsItem;
+    YMenuItem * autodepsItem;
+    YMenuItem * noautodepsItem;
+    YMenuItem * verifyItem;
+    YMenuItem * allpksItem;
+    YMenuItem * exportItem;
+    YMenuItem * importItem ;
+    YMenuItem * testcaseItem;
+    
     
     // labels
     YLabel * filterLabel;

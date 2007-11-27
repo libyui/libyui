@@ -30,14 +30,15 @@ TESTED - all UI examples tested/unsolved problems existing
 ------
 EVENTs (class NCursesEvent, example Events.ycp)
 - example works correctly except of problem with NCPopupInfo on F1 
-  (y2base terminates if popup is open and a timout event is sent)
+  (strange things happen: 1. when a timout event is sent,
+                          2. if F1 or ESC is pressed again )
 
 
 
 MORE tests required
 -------------------
 ENCODING correct (UTF-8 encoding/NCstring) ??? - both for input(e.g. NCInputField) 
-and text output;
+and text output, setLanguage() moved
 test ChangeWidget for every widget
 
 
@@ -46,18 +47,22 @@ NOT yet PORTED:
 NCDialog: 	not ported at all because YDialog isn't ported yet
 
 PackageSelector:
-At the moment works with existing code, i.e. still reads the ycp layout
-file and therefore uses YCP widget ids internally to get the menu selection
-and button ids. 
+- layout is created with the widget factory or creating the NCWidgets
 
 FIXME:
-- NCPkgPopupTree::cloneTree() doesn't build the tree correctly
 - fix NCPkgPopupDeps::showSolutions()
 
 TODO:
-- create layout with widget factory and get rid of the YCP ids,
+- create YOU layout
 
-
+TESTED:
+- Filter menu works
+- Actions menu works
+- Information menu works
+- Etc menu works except of replacing the menu item autocheck on/off and FileHandler
+- handle hyperlinks ("pkg:") -> see handleEvent( ) 
+- "Solving ..." popup in NCPkgPopupDeps() is shown correctly
+ 
 
 
 
