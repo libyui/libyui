@@ -250,15 +250,23 @@ NCursesEvent NCPkgPopupTable::showInfoPopup( )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCPkgPopupTable::niceSizex
-//	METHOD TYPE : void
+//	METHOD NAME : NCPkgPopupTable::preferredWidth
+//	METHOD TYPE : int
 //
-//	DESCRIPTION :
-//
-
-long NCPkgPopupTable::nicesize(YUIDimension dim)
+int NCPkgPopupTable::preferredWidth()
 {
-    return ( dim == YD_HORIZ ? NCurses::cols()-15 : NCurses::lines()-5 );
+    return NCurses::cols()-15;
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPkgPopupTable::preferredHeight
+//	METHOD TYPE : int
+//
+int NCPkgPopupTable::preferredHeight()
+{
+    return NCurses::lines()-5;
 }
 
 ///////////////////////////////////////////////////////////////////

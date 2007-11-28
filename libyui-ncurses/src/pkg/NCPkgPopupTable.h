@@ -62,8 +62,9 @@ public:
     
     virtual ~NCPkgPopupTable();
 
-    virtual long nicesize(YUIDimension dim);
-
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+    
     bool fillAutoChanges( NCPkgTable * pkgTable );
 
     void createLayout( );
