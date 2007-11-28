@@ -52,15 +52,16 @@ FIXME:
 
 TODO:
 - create YOU layout
+- test hyperlinks ("pkg:") 
 
 TESTED:
 - Filter menu works
 - Actions menu works
 - Information menu works
-- Etc menu works except of replacing the menu item autocheck on/off and FileHandler
-- handle hyperlinks ("pkg:") -> see handleEvent( ) 
+- Etc menu works except of replacing the menu item autocheck on/off
 - "Solving ..." popup in NCPkgPopupDeps() is shown correctly
- 
+- "Automatic changes" popup OK 
+- "License agreement" popup OK
 
 
 

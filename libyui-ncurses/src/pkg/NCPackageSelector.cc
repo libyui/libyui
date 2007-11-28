@@ -205,13 +205,7 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, YWidget * wRoot, long mod
 
     // Action menu -> DONE
     
-    // Etc. menu
-    eventHandlerMap[ NCPkgNames::ShowDeps()->toString() ] = &NCPackageSelector::DependencyHandler;
-    eventHandlerMap[ NCPkgNames::AutoDeps()->toString() ] = &NCPackageSelector::DependencyHandler;
-    eventHandlerMap[ NCPkgNames::VerifySystem()->toString() ] = &NCPackageSelector::DependencyHandler;
-    eventHandlerMap[ NCPkgNames::ExportToFile()->toString() ] = &NCPackageSelector::FileHandler;
-    eventHandlerMap[ NCPkgNames::ImportFromFile()->toString() ] = &NCPackageSelector::FileHandler;
-    eventHandlerMap[ NCPkgNames::Testcase()->toString() ] = &NCPackageSelector::TestcaseHandler;
+    // Etc. menu -> DONE
     
     // Help menu
     eventHandlerMap[ NCPkgNames::GeneralHelp()->toString() ] = &NCPackageSelector::HelpHandler;
@@ -528,10 +522,6 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
 {
     bool retVal = false;
 
-    // TODO: handle hyperlinks 
-    // string currentId = "";
-    // if (currentId->asString()->value().substr(0, 4) == "pkg:" )
-
     if ( event == NCursesEvent::handled )
 	return false;
     
@@ -547,20 +537,29 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
     else if ( event == NCursesEvent::menu )
     {
 	if ( event.widget == filterMenu )
+	    // filter out packages/patches
 	    retVal = FilterHandler( event );
 	else if ( event.widget == actionMenu )
+	    // change package/patch status
 	    retVal = StatusHandler( event );
 	else if ( event.widget == infoMenu )
+	    // show package/patch information
 	    retVal = InformationHandler( event );
 	else if ( event.widget == etcMenu )
 	{
 	    if ( event.selection == testcaseItem )
+		// generate testcase
 		retVal = TestcaseHandler( event );
 	    else if ( (event.selection == exportItem) || (event.selection == importItem) )
+		// import/export file list
 		retVal = FileHandler( event );
 	    else
+		// check package dependencies
 		retVal = DependencyHandler( event );
 	}
+	else if ( event.selection->label().substr(0,4) == "pkg:" )
+	    // handle hyper links
+	    retVal = LinkHandler( event.selection->label() );
 	    
     }
 
@@ -2128,10 +2127,8 @@ bool NCPackageSelector::FileHandler( const NCursesEvent& event )
  	return false;
     }
 
-    string selId = getMenuId( event.selection );
-    
     //Export package list into file	
-    if ( selId == NCPkgNames::ExportToFile()->toString() )
+    if ( event.selection == exportItem )
     {
  	//Ask for file to save into
  	YCPValue filename = YNCursesUI::ui()->askForSaveFileName( YCPString(DEFAULT_EXPORT_FILE_NAME), 
@@ -2184,7 +2181,7 @@ bool NCPackageSelector::FileHandler( const NCursesEvent& event )
     }
 
     //Import package list from file
-    else if ( selId ==  NCPkgNames::ImportFromFile()->toString() )
+    else if ( event.selection == importItem )
     {
 	//ask for file to open
  	YCPValue filename = YNCursesUI::ui()->askForExistingFile( YCPString(DEFAULT_EXPORT_FILE_NAME),
