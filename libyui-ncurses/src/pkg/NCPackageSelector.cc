@@ -1772,26 +1772,17 @@ bool NCPackageSelector::DependencyHandler( const NCursesEvent&  event )
     }
     else if ( event.selection == autodepsItem )
     {
-	// FIXME
-	if ( autoCheck )
-	{
-	    if ( autodepsItem )
-		delete autodepsItem;
+	etcMenu->deleteAllItems();
 
-	    // menu entry: dependency check off
-	    noautodepsItem = new YMenuItem( depsItem,  _( "[X] &Automatic Dependency Check" ) );
+	autoCheck = false;	// reset autoCheck and create new items
+	createEtcMenu();
+    }
+    else if ( event.selection == noautodepsItem )
+    {
+	etcMenu->deleteAllItems();
 
-	    autoCheck = false;
-	}
-	else
-	{
-	    if ( noautodepsItem )
-		delete noautodepsItem;
-
-            // menu entry: dependency check off
-	    autodepsItem = new YMenuItem( depsItem, _( "[ ] &Automatic Dependency Check" ) );
-	    autoCheck = true;
-	}
+	autoCheck = true;	// set autoCheck and create new items
+	createEtcMenu();
     }
 
     NCPkgTable * packageList = getPackageList();
@@ -3348,24 +3339,8 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     etcMenu = new NCMenuButton( left4,  _( "&Etc." ) );
     YUI_CHECK_NEW( etcMenu );
     etcMenu->setFunctionKey( 7 );
-
-    // menu item of the Etc. menu - package dependency check
-    depsItem = new YMenuItem( _( "&Dependencies" ) );
-    // menu items of the Etc./Dependencies submenu
-    showdepsItem = new YMenuItem( depsItem, _( "    &Check Dependencies Now" ) );
-    autodepsItem = new YMenuItem( depsItem, _( "[X] &Automatic Dependency Check" ) );
-    verifyItem =   new YMenuItem( depsItem, _( "    &Verify System" ) );
-    // menu item - list of all packages in the system
-    allpksItem = new YMenuItem( _("All &Packages List" ) );
-    exportItem = new YMenuItem( allpksItem, _("&Export to File") );
-    importItem = new YMenuItem( allpksItem, _("&Import from File") );
-    testcaseItem = new YMenuItem( _( "Generate Dependency Resolver &Test Case" ) );
-    
-    YItemCollection itemCollection4;
-    itemCollection4.push_back( depsItem );
-    itemCollection4.push_back( allpksItem );
-    itemCollection4.push_back( testcaseItem );
-    etcMenu->addItems( itemCollection4 );
+    // add items to Etc. menu
+    createEtcMenu();
     
     // add the package table 
     YTableHeader * tableHeader = new YTableHeader();
@@ -3423,6 +3398,33 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     YUI_CHECK_NEW( okButton );
     okButton->setFunctionKey( 10 );
     
+}
+
+void NCPackageSelector::createEtcMenu( )
+{
+     // menu item of the Etc. menu - package dependency check
+    depsItem = new YMenuItem( _( "&Dependencies" ) );
+    // menu items of the Etc./Dependencies submenu
+    showdepsItem = new YMenuItem( depsItem, _( "    &Check Dependencies Now" ) );
+    if ( autoCheck )
+	// menu entry: dependency check off
+	autodepsItem = new YMenuItem( depsItem, _( "[X] &Automatic Dependency Check" ) );
+    else
+	// menu entry: dependency check on
+	noautodepsItem = new YMenuItem( depsItem, _( "[ ] &Automatic Dependency Check" ) );
+    
+    verifyItem =   new YMenuItem( depsItem, _( "    &Verify System" ) );
+    // menu item - list of all packages in the system
+    allpksItem = new YMenuItem( _("All &Packages List" ) );
+    exportItem = new YMenuItem( allpksItem, _("&Export to File") );
+    importItem = new YMenuItem( allpksItem, _("&Import from File") );
+    testcaseItem = new YMenuItem( _( "Generate Dependency Resolver &Test Case" ) );
+    
+    YItemCollection itemCollection4;
+    itemCollection4.push_back( depsItem );
+    itemCollection4.push_back( allpksItem );
+    itemCollection4.push_back( testcaseItem );
+    etcMenu->addItems( itemCollection4 );  
 }
 
 //

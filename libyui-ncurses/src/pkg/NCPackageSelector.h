@@ -221,8 +221,17 @@ class NCPackageSelector
     * @return void
     */
     void createPkgLayout( YWidget * parent, NCPkgTable::NCPkgTableType type );
+    void createEtcMenu();
+
+    /**
+    * Create layout for the Online Update
+    * @param parent Parent is PackageSelectorStart
+    * @param type   The package table type	
+    * @return void
+    */
     void createYouLayout( YWidget * parent, NCPkgTable::NCPkgTableType type ); 	
-    
+
+
    /**
     * Fills the package table
     * @param label The selected RPM group (the label)
