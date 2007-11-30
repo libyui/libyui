@@ -485,6 +485,8 @@ void YQUI::userInputTimeout()
 }
 
 
+#warning obsolete
+#if 0
 YDialog * YQUI::createDialog( YWidgetOpt & opt )
 {
     bool has_defaultsize = opt.hasDefaultSize.value();
@@ -510,6 +512,7 @@ YDialog * YQUI::createDialog( YWidgetOpt & opt )
 
     return dialog;
 }
+#endif
 
 
 void YQUI::showDialog( YDialog * dialog )
@@ -522,7 +525,7 @@ void YQUI::showDialog( YDialog * dialog )
 	return;
     }
 
-    if ( dialog->hasDefaultSize() )
+    if ( dialog->dialogType() == YMainDialog )
     {
 	_widget_stack->addWidget  ( qw, ++_main_dialog_id );
 	_widget_stack->raiseWidget( qw ); // maybe this is not necessary (?)
@@ -559,7 +562,7 @@ void YQUI::closeDialog( YDialog * dialog )
 	return;
     }
 
-    if ( dialog->hasDefaultSize() )
+    if ( dialog->dialogType() == YMainDialog )
     {
 	_widget_stack->removeWidget( qw );
 
@@ -579,6 +582,8 @@ void YQUI::closeDialog( YDialog * dialog )
     {
 	qw->hide();
 
+#warning FIXME
+#if 0
 	// Clean up the popup stack. libyui guarantees that a dialog will be
 	// deleted after closeDialog() so it is safe to pop that dialog from
 	// the popup stack here.
@@ -587,6 +592,7 @@ void YQUI::closeDialog( YDialog * dialog )
 	    _popup_stack.pop_back();
 	else
 	    y2error( "Popup dialog stack corrupted!" );
+#endif
     }
 }
 

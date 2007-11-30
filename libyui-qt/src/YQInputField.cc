@@ -14,7 +14,7 @@
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
-  textdomain "packages-qt"
+  Textdomain "packages-qt"
 
 /-*/
 

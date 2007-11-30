@@ -38,14 +38,22 @@
 // like "Above", "Below" etc. that clash with some Qt headers.
 #include <X11/Xlib.h>
 
+#define YQMainDialogWFlags	0
 
-YQDialog::YQDialog( const YWidgetOpt &	opt,
-		    QWidget *		qt_parent,
-		    bool		default_size )
-    : QWidget( qt_parent,
-	       0,						// name
-	       default_size ? 0 : WStyle_Customize | WStyle_DialogBorder | WType_Modal | WStyle_Dialog )	// WFlags
-    , YDialog( opt )
+#define YQPopupDialogWFlags 		\
+    ( WStyle_Customize 		|	\
+      WStyle_Dialog		|	\
+      WType_Modal 		|	\
+      WStyle_DialogBorder	 )
+
+
+YQDialog::YQDialog( QWidget *		qParent,
+		    YDialogType 	dialogType,
+		    YDialogColorMode	colorMode )
+    : QWidget( qParent,
+	       0, // name
+	       dialogType == YMainDialog ? YQMainDialogWFlags : YQPopupDialogWFlags )
+    , YDialog( dialogType, colorMode )
 {
     _userResized	= false;
     _focusButton	= 0;
@@ -53,16 +61,16 @@ YQDialog::YQDialog( const YWidgetOpt &	opt,
 
 
     setWidgetRep( this );
-    setCaption( hasDefaultSize() ? "YaST2" : "" );
+    setCaption( dialogType == YMainDialog ? "YaST2" : "" );
     setFocusPolicy( QWidget::StrongFocus );
 
-    if ( hasWarnColor() || hasInfoColor() )
+    if ( colorMode != YDialogNormalColor )
     {
 	QColor normalBackground     ( 0, 128, 0 );
 	QColor inputFieldBackground ( 0,  96, 0 );
 	QColor text = white;
 
-	if ( hasInfoColor() )
+	if ( colorMode == YDialogInfoColor )
 	{
 	    normalBackground = QColor ( 238, 232, 170 ); // PaleGoldenrod
 	}
@@ -73,31 +81,6 @@ YQDialog::YQDialog( const YWidgetOpt &	opt,
 	normalColors.setColor( QColorGroup::Base, inputFieldBackground );
 	warnPalette.setNormal( normalColors );
 	setPalette( warnPalette );
-    }
-
-    _qFrame = new QFrame ( this );
-    bool decorate = ! hasDefaultSize() && ! YQUI::ui()->haveWM();
-
-#if 0
-    if ( hasSmallDecorations() )
-    {
-	// None of this works (yet). :-((
-
-	clearWFlags( getWFlags() );
-	setWFlags( WStyle_Customize | WStyle_DialogBorder | WStyle_StaysOnTop );
-	// decorate = true;
-    }
-#endif
-
-    if ( decorate )
-    {
-	_qFrame->setFrameStyle ( QFrame::Box | QFrame::Raised );
-	_qFrame->setLineWidth(2);
-	_qFrame->setMidLineWidth(3);
-    }
-    else
-    {
-	_qFrame->setFrameStyle ( QFrame::NoFrame );
     }
 }
 
@@ -111,7 +94,7 @@ int YQDialog::preferredWidth()
 {
     int preferredWidth;
 
-    if ( hasDefaultSize() )
+    if ( dialogType() == YMainDialog )
     {
 	if ( userResized() )
 	    preferredWidth = _userSize.width();
@@ -120,7 +103,7 @@ int YQDialog::preferredWidth()
     }
     else
     {
-	preferredWidth = YDialog::preferredWidth() + 2 * decorationWidth();
+	preferredWidth = YDialog::preferredWidth();
     }
 
     int screenWidth = qApp->desktop()->width();
@@ -139,7 +122,7 @@ int YQDialog::preferredHeight()
 {
     int preferredHeight;
 
-    if ( hasDefaultSize() )
+    if ( dialogType() == YMainDialog )
     {
 	if ( userResized() )
 	    preferredHeight = _userSize.height();
@@ -148,7 +131,7 @@ int YQDialog::preferredHeight()
     }
     else
     {
-	preferredHeight = YDialog::preferredHeight() + 2 * decorationWidth();
+	preferredHeight = YDialog::preferredHeight();
     }
 
     int screenHeight = qApp->desktop()->height();
@@ -163,19 +146,10 @@ int YQDialog::preferredHeight()
 }
 
 
-int YQDialog::decorationWidth()
-{
-    if ( ! hasDefaultSize() && _qFrame )
-	return _qFrame->frameWidth();
-    else
-	return 0;
-}
-
-
 void YQDialog::setEnabled( bool enabled )
 {
     QWidget::setEnabled( enabled );
-    YWidget::setEnabled( enabled );
+    YDialog::setEnabled( enabled );
 }
 
 
@@ -189,15 +163,8 @@ void YQDialog::setSize( int newWidth, int newHeight )
 
     if ( hasChildren() )
     {
-	firstChild()->setSize( newWidth  - 2 * decorationWidth(),
-			       newHeight - 2 * decorationWidth() );
-
-	QWidget * qChild = (QWidget *) firstChild()->widgetRep();
-	qChild->move( decorationWidth(), decorationWidth() );
+	firstChild()->setSize( newWidth, newHeight );
     }
-
-    if ( _qFrame )
-	_qFrame->resize( newWidth, newHeight );
 
     resize( newWidth, newHeight );
 }
@@ -619,9 +586,9 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 
 void YQDialog::closeEvent( QCloseEvent * event )
 {
-    // The window manager "close window" button ( and menu, e.g. Alt-F4 ) will be
+    // The window manager "close window" button (and WM menu, e.g. Alt-F4) will be
     // handled just like the user had clicked on the `id`( `cancel ) button in
-    // that dialog. It's up to the YCP application to handle this ( if desired ).
+    // that dialog. It's up to the YCP application to handle this (if desired).
 
     y2debug( "Ignoring window manager close button." );
     event->ignore();
@@ -654,10 +621,8 @@ void YQDialog::focusInEvent( QFocusEvent * event )
 void
 YQDialog::show()
 {
-    if ( ! hasDefaultSize() && qApp->mainWidget()->isVisible() )
-	    center( this, qApp->mainWidget() );
-    else if ( isCentered() )
-	center( this, qApp->desktop() );
+    if ( ! dialogType() == YMainDialog && qApp->mainWidget()->isVisible() )
+	center( this, qApp->mainWidget() );
 
     QWidget::show();
 }

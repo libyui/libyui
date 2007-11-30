@@ -26,7 +26,6 @@
 
 class YQGenericButton;
 class YQWizard;
-class QFrame;
 
 
 class YQDialog : public QWidget, public YDialog
@@ -35,17 +34,27 @@ class YQDialog : public QWidget, public YDialog
 
 public:
     /**
-     * Constructor: Constructor.
+     * Constructor.
+     *
+     * 'dialogType' is one of YMainDialog or YPopupDialog.
+     *
+     * 'colorMode' can be set to YDialogWarnColor to use very bright "warning"
+     * colors or YDialogInfoColor to use more prominent, yet not quite as
+     * bright as "warning" colors. Use both only very rarely.
      **/
-    YQDialog( const YWidgetOpt &	opt,
-	      QWidget *			qt_parent	= 0,
-	      bool			default_size	= false );
+    YQDialog( QWidget *		qParent,
+	      YDialogType 	dialogType,
+	      YDialogColorMode	colorMode = YDialogNormalColor );
+
+protected:
 
     /**
-     * Destructor: Cleans up.
+     * Destructor.
+     * Don't delete a dialog directly, use YDialog::deleteTopmostDialog().
      **/
-    ~YQDialog();
+    virtual ~YQDialog();
 
+public:
     /**
      * Makes this dialog	 active or inactive
      **/
@@ -84,12 +93,6 @@ public:
      * Reimplemented from YWidget.
      **/
     virtual void setSize( int newWidth, int newHeight );
-
-    /**
-     * Returns the size of (artificial) window manager decorations, depending
-     * on the value of YDialog::isDecorated().
-     **/
-    int decorationWidth();
 
     /**
      * Return this dialog's (first) default button or 0 if none
@@ -227,8 +230,6 @@ protected:
     //
     // Data members
     //
-
-    QFrame *		_qFrame;
 
     bool  		_userResized;
     QSize 		_userSize;

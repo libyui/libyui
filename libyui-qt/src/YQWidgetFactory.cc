@@ -47,19 +47,14 @@ YQWidgetFactory::~YQWidgetFactory()
 //
 
 YQDialog *
-YQWidgetFactory::createMainDialog()
+YQWidgetFactory::createDialog( YDialogType dialogType, YDialogColorMode colorMode )
 {
-    return 0; // FIXME: TO DO
+    QWidget * qParent = 0;
+    YQDialog * dialog = new YQDialog( qParent, dialogType, colorMode );
+    YUI_CHECK_NEW( dialog );
+
+    return dialog;
 }
-
-
-
-YQDialog *
-YQWidgetFactory::createPopupDialog()
-{
-    return 0; // FIXME: TO DO
-}
-
 
 
 

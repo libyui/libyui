@@ -340,13 +340,6 @@ protected:
     YEvent * pollInput();
 
     /**
-     * Create a dialog.
-     *
-     * Reimplemented from YUI.
-     **/
-    YDialog * createDialog( YWidgetOpt & opt );
-
-    /**
      * Show and activate a dialog.
      *
      * Reimplemented from YUI.

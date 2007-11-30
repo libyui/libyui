@@ -70,14 +70,13 @@ public:
     // Dialogs
     //
 
-    virtual YQDialog *		createMainDialog();
-    virtual YQDialog *		createPopupDialog();
+    virtual YQDialog *		createDialog		( YDialogType dialogType, YDialogColorMode colorMode = YDialogNormalColor );
 
     //
     // Layout Boxes
     //
 
-    virtual YQLayoutBox *	createLayoutBox( YWidget * parent, YUIDimension dim );
+    virtual YQLayoutBox *	createLayoutBox		( YWidget * parent, YUIDimension dim );
 
     //
     // Common Leaf Widgets
