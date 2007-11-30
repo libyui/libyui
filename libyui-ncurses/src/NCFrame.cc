@@ -64,8 +64,6 @@ NCFrame::~NCFrame()
 //
 long NCFrame::nicesize( YUIDimension dim )
 {
-    //defsze = wsze( YContainerWidget::child(0)->nicesize( YD_VERT ),
-    //		     YContainerWidget::child(0)->nicesize( YD_HORIZ ) );
   defsze = wsze( firstChild()->preferredWidth(),
 		 firstChild()->preferredHeight() );
     
