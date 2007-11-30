@@ -76,8 +76,6 @@ long NCCheckBoxFrame::nicesize( YUIDimension dim )
   //space to add - keep vertical dim, add horizontal space
   //for checkbox
   wpair plussize = wpair(0,4);
-  //defsze = wsze( YContainerWidget::child(0)->nicesize( YD_VERT ),
-  //		   YContainerWidget::child(0)->nicesize( YD_HORIZ ) );
   defsze = wsze( firstChild()->preferredWidth(),
 		 firstChild()->preferredHeight() );
   if ( label.width() > (unsigned)defsze.W )
