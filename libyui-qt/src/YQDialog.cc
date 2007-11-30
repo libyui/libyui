@@ -208,6 +208,9 @@ YQDialog::findDefaultButton()
 
     _defaultButton = findDefaultButton( childrenBegin(), childrenEnd() );
 
+    YDialog::setDefaultButton( 0 ); // prevent complaints about multiple default buttons
+    YDialog::setDefaultButton( _defaultButton );
+
     return _defaultButton;
 }
 
@@ -314,6 +317,13 @@ YQDialog::ensureOnlyOneDefaultButton()
 	_defaultButton = wizardDefaultButton( wizard );
     }
 
+    if ( _defaultButton )
+    {
+	YDialog::setDefaultButton( 0 ); // prevent complaints about multiple default buttons
+	YDialog::setDefaultButton( _defaultButton );
+    }
+
+    
     YQGenericButton * def  = _focusButton ? _focusButton : _defaultButton;
 
     if ( def )
@@ -422,6 +432,10 @@ YQDialog::setDefaultButton( YQGenericButton * newDefaultButton )
 	if ( _defaultButton && ! _focusButton )
 	    _defaultButton->showAsDefault( true );
     }
+
+    
+    YDialog::setDefaultButton( 0 ); // prevent complaints about multiple default buttons
+    YDialog::setDefaultButton( _defaultButton );
 }
 
 

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Nov 30 17:20:49 CET 2007 - sh@suse.de
+
+- Migrated YQDialog to mod-ui
+- V 2.16.6 
+
+-------------------------------------------------------------------
 Tue Nov 27 19:08:00 CET 2007 - sh@suse.de
 
 - Moved all YCP related code out of YQWizard
