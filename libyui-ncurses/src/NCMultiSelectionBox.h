@@ -102,17 +102,12 @@ class NCMultiSelectionBox : public YMultiSelectionBox, public NCPadWidget {
 
     void toggleCurrentItem();
 
-  protected:
+  public:
 
     virtual void startMultipleChanges() { startMultidraw(); }
     virtual void doneMultipleChanges()  { stopMultidraw(); }
     
-  protected:
-
     virtual const char * location() const { return "NCMultiSelectionBox"; }
-
-    virtual NCPad * CreatePad();
-    virtual void    wRecoded();
 
     virtual void addItem( YItem * item );
     
@@ -121,6 +116,11 @@ class NCMultiSelectionBox : public YMultiSelectionBox, public NCPadWidget {
     virtual void selectItem( YItem * item, bool selected );
     
     virtual void deselectAllItems();      
+
+  protected:
+    
+    virtual NCPad * CreatePad();
+    virtual void    wRecoded();
 
     
   public:
