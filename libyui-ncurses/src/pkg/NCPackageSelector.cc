@@ -3111,8 +3111,6 @@ void NCPackageSelector::showDiskSpace()
     zypp::ByteCount diff = 0;
     for (it = b; it != e; ++it)
     {
-#warning gcc complains here - disabled milestone logging for now
-	// UIMIL << *it << endl;
 	diff += (it->pkg_size - it->used_size) * 1024;
     }
 
