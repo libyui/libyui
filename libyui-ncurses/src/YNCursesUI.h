@@ -122,11 +122,6 @@ public:
     virtual YEvent * pollInput();
 
     /**
-     * Inherited from YUIInterpreter. Creates a dialog.
-    */
-    virtual YDialog * createDialog( YWidgetOpt & opt );
-
-    /**
      * Inherited from YUIInterpreter. Shows and activates a dialog
     */
     virtual void showDialog( YDialog * dialog );

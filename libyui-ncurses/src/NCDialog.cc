@@ -57,8 +57,9 @@ static bool hiddenMenu()
 //
 //	DESCRIPTION :
 //
-NCDialog::NCDialog( const YWidgetOpt & opt )
-    : YDialog    ( opt )
+NCDialog::NCDialog( YDialogType 	dialogType,
+		    YDialogColorMode	colorMode )
+    : YDialog    ( dialogType, colorMode )
     , pan        ( 0 )
     , dlgstyle   ( 0 )
     , inMultiDraw_i( 0 )
@@ -67,8 +68,8 @@ NCDialog::NCDialog( const YWidgetOpt & opt )
     , ncdopts    ( DEFAULT )
     , popedpos   ( -1 )
 {
-  NCMIL << "NCDialog(opt) derived from YDialog(opt)" << endl; 
-  _init( opt );
+  NCMIL << "NCDialog() derived from YDialog()" << endl; 
+  _init();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -79,8 +80,8 @@ NCDialog::NCDialog( const YWidgetOpt & opt )
 //
 //	DESCRIPTION :
 //
-NCDialog::NCDialog( const YWidgetOpt & opt, const wpos at, const bool boxed )
-    : YDialog    ( opt )
+NCDialog::NCDialog( YDialogType dialogType, const wpos at, const bool boxed )
+    : YDialog    ( dialogType, YDialogNormalColor )
     , pan        ( 0 )
     , dlgstyle   ( 0 )
     , inMultiDraw_i( 0 )
@@ -89,8 +90,8 @@ NCDialog::NCDialog( const YWidgetOpt & opt, const wpos at, const bool boxed )
     , ncdopts    ( boxed ? POPUP : POPUP|NOBOX )
     , popedpos   ( at )
 {
-    NCMIL << "NCDialog(opt, at, boxed) derived from YDialog(opt)" << endl;
-    _init( opt );
+    NCMIL << "NCDialog(type, at, boxed) derived from YDialog(opt)" << endl;
+    _init();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -101,7 +102,7 @@ NCDialog::NCDialog( const YWidgetOpt & opt, const wpos at, const bool boxed )
 //
 //	DESCRIPTION : Constructor helper
 //
-void NCDialog::_init( const YWidgetOpt & opt )
+void NCDialog::_init()
 {
   NCurses::RememberDlg( this );
 
@@ -110,9 +111,9 @@ void NCDialog::_init( const YWidgetOpt & opt )
   _init_size();
 
   wstate = NC::WSdumb;
-  if ( opt.hasWarnColor.value() ) {
+  if ( colorMode() == YDialogWarnColor ) {
     mystyleset = NCstyle::WarnStyle;
-  } else if ( opt.hasInfoColor.value() ) {
+  } else if ( colorMode() == YDialogInfoColor ) {
     mystyleset = NCstyle::InfoStyle;
   } else if ( isPopup() ) {
     mystyleset = NCstyle::PopupStyle;
@@ -190,7 +191,7 @@ NCDialog::~NCDialog()
 
 int NCDialog::preferredWidth()
 {
-    if ( hasDefaultSize() || !childrenCount() )
+    if ( dialogType() == YMainDialog || ! hasChildren() )
 	return  wGetDefsze().W;
     wsze csze( firstChild()->preferredHeight(),
 	       firstChild()->preferredWidth() );
@@ -202,7 +203,7 @@ int NCDialog::preferredWidth()
 
 int NCDialog::preferredHeight()
 {
-    if ( hasDefaultSize() || !childrenCount() ) {
+    if ( dialogType() == YMainDialog || ! hasChildren() ) {
 	return wGetDefsze().H;
     }
     wsze csze( firstChild()->preferredHeight(),

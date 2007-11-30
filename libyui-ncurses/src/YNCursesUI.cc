@@ -309,18 +309,6 @@ YEvent * YNCursesUI::pollInput()
 //
 ///////////////////////////////////////////////////////////////////
 
-YDialog * YNCursesUI::createDialog( YWidgetOpt & opt )
-{
-  UIDBG << "Flush input buffer - new dialog" << endl;
-  ::flushinp();
-
-  NCMIL << "Calling createDialog()" << endl;
-  NCDialog * dialog = new NCDialog( opt );
-
-  UIDBG << dialog << endl;
-  return dialog;
-}
-
 void YNCursesUI::showDialog( YDialog * dialog ) {
   NCDialog * dlg = dynamic_cast<NCDialog *>( dialog );
   UIDBG << dlg << endl;

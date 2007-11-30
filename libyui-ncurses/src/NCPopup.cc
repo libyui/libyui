@@ -19,9 +19,6 @@
 #include "Y2Log.h"
 #include "NCPopup.h"
 
-///////////////////////////////////////////////////////////////////
-
-YWidgetOpt NCPopup::wopt;
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -32,7 +29,7 @@ YWidgetOpt NCPopup::wopt;
 //	DESCRIPTION :
 //
 NCPopup::NCPopup( const wpos at, const bool boxed )
-    : NCDialog( wopt, at, boxed )
+    : NCDialog( YPopupDialog, at, boxed )
 {
 
 }

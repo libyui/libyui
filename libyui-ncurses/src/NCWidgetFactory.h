@@ -71,21 +71,18 @@ public:
     // Dialogs
     //
 
-    virtual NCDialog *		createMainDialog();
-    virtual NCDialog *		createPopupDialog();
+    virtual NCDialog *		createDialog		( YDialogType dialogType, YDialogColorMode colorMode = YDialogNormalColor );
 
     //
     // Layout Boxes
     //
 
-    virtual NCLayoutBox *   createLayoutBox( YWidget * parent, YUIDimension dim );
+    virtual NCLayoutBox *   	createLayoutBox		( YWidget * parent, YUIDimension dim );
 
-   /**
-     * Creates a push button.
-     * @param label Label of the button
-     * @param default_button true if the button should be the dialogs default button
-    */
-    
+    //
+    // Common Leaf Widgets
+    //
+
     virtual NCPushButton *	createPushButton    	( YWidget * parent,
 							  const string & label );
     
@@ -139,7 +136,6 @@ public:
     /**
      * Creates a MultiLineEdit widget
      * @param label label above the edit field
-     * @param text initial contents of the edit field
     */
     virtual NCMultiLineEdit *	createMultiLineEdit	( YWidget * parent,
 							  const string & label );
@@ -154,7 +150,7 @@ public:
      * Creates a log view widget
      * @param label label above the log view
      * @param visibleLines default number of vislible lines
-     * @param maxLines number of lines to store (use 0 for "all")
+     * @param storedLines number of lines to store (use 0 for "all")
     */
     virtual NCLogView *		createLogView		( YWidget * parent,
 							  const string & label,

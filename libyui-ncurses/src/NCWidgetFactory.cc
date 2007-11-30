@@ -12,7 +12,8 @@
 
   File:         NCWidgetFactory.cc
 
-  Author:       Stefan Hundhammer <sh@suse.de>
+  Authors:	Stefan Hundhammer <sh@suse.de>
+		Gabriele Mohr <gs@suse.de>
 
 /-*/
 
@@ -45,21 +46,16 @@ NCWidgetFactory::~NCWidgetFactory()
 //
 
 NCDialog *
-NCWidgetFactory::createMainDialog()
+NCWidgetFactory::createDialog( YDialogType dialogType, YDialogColorMode colorMode )
 {
-    return 0; // FIXME: TO DO
+    UIDBG << "Flush input buffer - new dialog" << endl;
+    ::flushinp();
+
+    NCDialog * dialog = new NCDialog( dialogType, colorMode );
+    YUI_CHECK_NEW( dialog );
+
+    return dialog;
 }
-
-
-
-NCDialog *
-NCWidgetFactory::createPopupDialog()
-{
-    return 0; // FIXME: TO DO
-}
-
-
-
 
 
 //

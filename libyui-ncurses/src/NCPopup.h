@@ -34,10 +34,6 @@ class NCPopup : public NCDialog {
   NCPopup & operator=( const NCPopup & );
   NCPopup            ( const NCPopup & );
 
-  private:
-
-    static YWidgetOpt wopt;
-
   protected:
 
     NCursesEvent postevent;

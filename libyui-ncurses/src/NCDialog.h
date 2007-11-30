@@ -49,8 +49,7 @@ class NCDialog : public YDialog, public NCWidget {
     NCWidget & GetNormal( NCWidget & startwith, SeekDir Direction );
     void       Activate( SeekDir Direction );
 
-    void _init( const YWidgetOpt & opt );
-
+    void _init();
     void _init_size();
 
   protected:
@@ -122,7 +121,8 @@ class NCDialog : public YDialog, public NCWidget {
 
   public:
 
-    NCDialog( const YWidgetOpt & opt );
+    NCDialog( YDialogType 	dialogType,
+	      YDialogColorMode	colorMode = YDialogNormalColor );
     virtual ~NCDialog();
 
     void showDialog();
@@ -162,7 +162,7 @@ class NCDialog : public YDialog, public NCWidget {
     bool       hshaddow;
     bool       vshaddow;
 
-    NCDialog( const YWidgetOpt & opt, const wpos at, const bool boxed = true );
+    NCDialog( YDialogType dialogType, const wpos at, const bool boxed = true );
 
     bool isPopup() const { return  (ncdopts & POPUP); }
     bool isBoxed() const { return !(ncdopts & NOBOX); }
