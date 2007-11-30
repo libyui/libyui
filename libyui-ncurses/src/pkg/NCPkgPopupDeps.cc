@@ -299,14 +299,15 @@ bool NCPkgPopupDeps::showSolutions( int index )
 	return false;
     
     unsigned int size = problems.size ();
-    solutionw->clearItems ();
     
     if ( index < 0 || (unsigned int)index >= size )
 	return false;
 
-    YCPList items;
-
-
+    solutionw->startMultipleChanges();
+#warning FIXME: is this necessary if the next step is deleteAllItems()?
+    solutionw->clearItems ();
+    solutionw->deleteAllItems();
+    
     zypp::ResolverProblem_Ptr problem = problems[index].first;
     zypp::ProblemSolution_Ptr user_solution = problems[index].second;
 
@@ -322,15 +323,14 @@ bool NCPkgPopupDeps::showSolutions( int index )
 	UIMIL << " SOL  " << (*ii)->description () << endl;
 	UIMIL << " :    " << (*ii)->details () << endl;
 
-	YCPList termargs;
-	termargs->add (YCPString ((*ii)->description ())); // label
-	termargs->add (YCPBoolean (user_solution == *ii)); // selected
+	solutionw->addItem( new YItem ( (*ii)->description(),		// label
+					(user_solution == *ii) ) );	// selected
+	
 	UIMIL << "usr: " << user_solution << " cur: " << *ii << endl;
-
-	items->add (YCPTerm (YUISymbol_item, termargs));
     }
-    solutionw->changeWidget (YCPSymbol (YUIProperty_Items),
-			     items);    
+    
+    solutionw->doneMultipleChanges();
+    
     return true;
 }
 
