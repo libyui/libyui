@@ -62,7 +62,6 @@ NCPushButton::~NCPushButton()
 int NCPushButton::preferredWidth()
 {
     wsze defsize = wGetDefsze();
-    int width = defsize.W;
     return wGetDefsze().W;
 }
 
