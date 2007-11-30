@@ -245,8 +245,6 @@ bool NCAskForExistingDirectory::postAgain( )
 	}
 	else if ( currentId->toString() == idDirList )
 	{
-	    unsigned int i = dirName->getListSize();
-	    
 	    if ( postevent.result == "" )
 		return true;
 		
