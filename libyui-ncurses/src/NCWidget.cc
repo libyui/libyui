@@ -22,7 +22,6 @@
 #include "tnode.h"
 #include "NCWidget.h"
 #include "YWidget.h"
-#include "YContainerWidget.h"
 
 //#if 0
 #undef  DBG_CLASS
