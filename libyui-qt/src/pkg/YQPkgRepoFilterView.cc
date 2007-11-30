@@ -95,7 +95,11 @@ YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
 
     // Translators: This is a combo box where the user can apply a secondary filter
     // in addition to the primary filter by repository - one of
-    // "all packages", "RPM groups", "search", "summary"
+    // "All packages", "RPM groups", "search", "summary"
+    //
+    // And yes, the colon really belongs there since this is one of the very
+    // few cases where a combo box label is left to the combo box rather than
+    // above it.
     _secondaryFilters = new QY2ComboTabWidget( _( "&Secondary Filter:" ), vbox );
     CHECK_PTR( _secondaryFilters );
 

@@ -354,7 +354,7 @@ YQPkgConflictDialog::askCreateSolverTestCase()
     QString heading = QString( "<h2>%1</h2>" ).arg( _( "Create Dependency Resolver Test Case" ) );
 
     QString msg =
-	_( "<p>Use this to generate extensive logs to help tracking down bugs in the dependency resolver."
+	_( "<p>Use this to generate extensive logs to help tracking down bugs in the dependency resolver. "
 	   "The logs will be stored in directory <br><tt>%1</tt></p>" ).arg( testCaseDir );
 
     int button_no = QMessageBox::information( 0,			// parent
