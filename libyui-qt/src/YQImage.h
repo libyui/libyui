@@ -62,6 +62,11 @@ public:
     virtual void setAutoScale( bool autoScale = true );
 
     /**
+      * if false, the image will be displayed in gray
+      */
+    virtual void setEnabled( bool enabled );
+
+    /**
      * Preferred width of the widget.
      *
      * Reimplemented from YWidget.

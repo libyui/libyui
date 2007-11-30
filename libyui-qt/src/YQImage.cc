@@ -20,6 +20,7 @@
 #include <unistd.h>
 #include <qpixmap.h>
 #include <qmovie.h>
+#include <qiconset.h>
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
@@ -163,5 +164,17 @@ void YQImage::setSize( int newWidth, int newHeight )
     resize( newWidth, newHeight );
 }
 
+void YQImage::setEnabled( bool enable )
+{
+   if (enable)
+      setImage( imageFileName(), animated() );
+   else {
+      // Trigger image re-display
+      QPixmap pixmap( fromUTF8( imageFileName() ) );
+      QIconSet icon(pixmap);
+      icon.setIconSize( QIconSet::Large, pixmap.size());
+      QLabel::setPixmap( icon.pixmap( QIconSet::Large, QIconSet::Disabled, QIconSet::Off ) );
+   }
+}
 
 #include "YQImage.moc"
