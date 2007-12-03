@@ -103,8 +103,6 @@ void NCPushButton::setEnabled( bool do_bv )
 void NCPushButton::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-    if ( isDefaultButton() )
-	setKeyboardFocus(); 
 }
 
 ///////////////////////////////////////////////////////////////////
