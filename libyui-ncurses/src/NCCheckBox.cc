@@ -61,19 +61,6 @@ NCCheckBox::~NCCheckBox()
   WIDDBG << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBox::nicesize
-//	METHOD TYPE : long
-//
-//	DESCRIPTION :
-//
-long NCCheckBox::nicesize( YUIDimension dim )
-{
-  return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
-}
-
 int NCCheckBox::preferredWidth()
 {
     return wGetDefsze().W;
@@ -147,6 +134,7 @@ void NCCheckBox::setValue( YCheckBoxState state )
 	    checkstate = S_DC;
 	    break;
     }
+    Redraw();
 }
 
 #if 0

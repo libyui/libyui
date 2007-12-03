@@ -68,8 +68,6 @@ class NCCheckBox : public YCheckBox, public NCWidget {
 		bool checked );
     virtual ~NCCheckBox();
 
-    virtual long nicesize( YUIDimension dim );
-
     virtual int preferredWidth();
     virtual int preferredHeight();
     
