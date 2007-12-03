@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Mon Dec  3 15:33:53 CET 2007 - kmachalkova@suse.cz
+
+- Further changes to package selector (gs)
+- NCDialog adapted to new YDialog (sh)
+- Correct setValue for CheckBox (do not forget to redraw)
+- Do not set focus to default button each time dialog size is 
+  recalculated (#343870)
+- 2.16.4 
+
+-------------------------------------------------------------------
 Mon Nov 26 14:24:19 CET 2007 - kmachalkova@suse.cz
 
 - First version of YCP-less package selector (gs)
