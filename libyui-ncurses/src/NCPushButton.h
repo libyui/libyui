@@ -67,6 +67,8 @@ class NCPushButton : public YPushButton, public NCWidget {
     virtual NCursesEvent wHandleInput( wint_t key );
 
     virtual void setLabel( const string & nlabel );
+ 
+    virtual void setDefaultButton( bool def);    
 
     virtual void setEnabled( bool do_bv );
     
@@ -75,6 +77,7 @@ class NCPushButton : public YPushButton, public NCWidget {
         return YWidget::setKeyboardFocus();
       return true;
     }
+
 };
 
 ///////////////////////////////////////////////////////////////////

@@ -17,6 +17,8 @@
 
 /-*/
 #include "Y2Log.h"
+#include "YDialog.h"
+#include "NCDialog.h"
 #include "NCurses.h"
 #include "NCPushButton.h"
 
@@ -140,6 +142,33 @@ void NCPushButton::setLabel( const string & nlabel )
   defsze = wsze( label.height(), label.width() + 2 );
   YPushButton::setLabel( nlabel );
   Redraw();
+}
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCPushButton::setDefaultButton
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : Mark this button as default within current dialog
+//
+void NCPushButton::setDefaultButton( bool def )
+{
+  YDialog *ydialog = findDialog();
+  NCDialog *dlg = 0;
+
+  if (ydialog)
+  {
+     dlg = dynamic_cast<NCDialog *> (ydialog);
+     YUI_CHECK_PTR( dlg );
+  }
+
+  YPushButton::setDefaultButton( def );
+
+  //if this is the default button, let's focus it
+  if (dlg && def)
+    dlg->setDefaultButton( this );
+ 
 }
 
 ///////////////////////////////////////////////////////////////////
