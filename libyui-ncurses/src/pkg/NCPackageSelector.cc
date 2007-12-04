@@ -2556,8 +2556,7 @@ bool NCPackageSelector::showLicenseAgreement( ZyppSel & slbPtr , string licenseT
 					   "<i>" + pkgName + "</i><br><br>"
 					   + createDescrText( licenseText ),
 					   NCPkgNames::AcceptLabel(),
-					   NCPkgNames::CancelLabel(),
-					   NCPkgNames::PrintLicenseText() );
+					   NCPkgNames::CancelLabel() );
 
     info->setNiceSize( (NCurses::cols() * 80)/100, (NCurses::lines()*80)/100);
     license_confirmed = info->showInfoPopup( ) != NCursesEvent::cancel;

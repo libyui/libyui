@@ -45,8 +45,7 @@ NCPopupInfo::NCPopupInfo( const wpos at,
 			  const string & headline,
 			  const string & text,
 			  string okButtonLabel,
-			  string cancelButtonLabel,
-			  string printLicenseText )
+			  string cancelButtonLabel )
     : NCPopup( at, false )
       , helpText( 0 )
       , okButton( 0 )
@@ -55,7 +54,7 @@ NCPopupInfo::NCPopupInfo( const wpos at,
       , vDim( 20 )
       , visible ( false )
 {
-    createLayout( headline, text, okButtonLabel, cancelButtonLabel, printLicenseText );
+    createLayout( headline, text, okButtonLabel, cancelButtonLabel );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -81,8 +80,7 @@ NCPopupInfo::~NCPopupInfo()
 void NCPopupInfo::createLayout( const string & headline,
 				const string & text,
 				string okButtonLabel,
-				string cancelButtonLabel,
-			 	string printLicenseText )
+				string cancelButtonLabel )
 {
   // the vertical split is the (only) child of the dialog
   NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
@@ -94,14 +92,6 @@ void NCPopupInfo::createLayout( const string & headline,
   
   // add the rich text widget 
   helpText = new NCRichText( split, text );
-
-  if (printLicenseText != "" ) 
-  { 
-      new NCSpacing( split, YD_VERT, false, 1 ); 
-      new NCLabel (split, printLicenseText );
-      new NCSpacing( split, YD_VERT, false, 1 ); 
-  }  
-
 
   NCLayoutBox * hSplit = new NCLayoutBox( split, YD_HORIZ );
 

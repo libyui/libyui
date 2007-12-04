@@ -72,8 +72,7 @@ public:
 		 const string & text,
 		 // the label of an OK button
 		 string okButtonLabel = _( "&OK" ),
-		 string cancelButtonLabel = "",
-		 string printLicenseText = "" );
+		 string cancelButtonLabel = "" );
     
     virtual ~NCPopupInfo();
 
@@ -83,8 +82,7 @@ public:
     void createLayout( const string & headline,
 		       const string & text,
 		       string okButtonLabel,
-		       string cancelButtonLabel, 
-		       string printLicenseText );
+		       string cancelButtonLabel );
 
     NCursesEvent & showInfoPopup( );
 

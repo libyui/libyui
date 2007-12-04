@@ -270,8 +270,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 						  string( _("End User License Agreement") + 
 						  "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( license ) ),
 						  NCPkgNames::AcceptLabel(),
-						  NCPkgNames::CancelLabel(),
-						  NCPkgNames::PrintLicenseText()
+						  NCPkgNames::CancelLabel()
 						  );
 	    info->setNiceSize( (NCurses::cols() * 80)/100, (NCurses::lines()*80)/100);
 	    license_confirmed = info->showInfoPopup( ) != NCursesEvent::cancel;

@@ -1211,13 +1211,6 @@ const string NCPkgNames::NoConflictText()
     return value;
 }
 
-const string NCPkgNames::PrintLicenseText()
-{
-    //zzZZzz
-    static const string value = _( "If you would like to print this license,\ncheck the EULA.txt file on the first media" );
-    return value;
-}
-
 const string NCPkgNames::ContinueRequ()
 {
      // label continues the part required by ...
