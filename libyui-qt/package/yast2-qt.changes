@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Dec  4 14:57:50 CET 2007 - tgoettlicher@suse.de
+
+- fixed popup windows without decorations (#345825)
+
+-------------------------------------------------------------------
 Fri Nov 30 17:20:49 CET 2007 - sh@suse.de
 
 - Migrated YQDialog to mod-ui
