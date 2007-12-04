@@ -142,7 +142,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     // Busy popup
 
     _busyPopup = new QLabel( "   " + _( "Checking Dependencies..." ) + "   ", parent, 0,
-			     WStyle_Customize | WStyle_DialogBorder | WStyle_Dialog );
+			     WStyle_Customize | WStyle_DialogBorder | WStyle_Dialog | WStyle_Title  );
 
     CHECK_PTR( _busyPopup );
     _busyPopup->setCaption( "" );

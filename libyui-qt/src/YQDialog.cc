@@ -40,11 +40,12 @@
 
 #define YQMainDialogWFlags	0
 
-#define YQPopupDialogWFlags 		\
-    ( WStyle_Customize 		|	\
-      WStyle_Dialog		|	\
-      WType_Modal 		|	\
-      WStyle_DialogBorder	 )
+#define YQPopupDialogWFlags             \
+    ( WStyle_Customize          |       \
+      WStyle_Dialog             |       \
+      WType_Modal               |       \
+      WStyle_Title              |       \
+      WStyle_DialogBorder        )
 
 
 YQDialog::YQDialog( QWidget *		qParent,
