@@ -41,10 +41,13 @@ YQMainWinDock::mainWinDock()
 
 
 YQMainWinDock::YQMainWinDock()
-    : QWidget( 0, 0, Qt::WType_TopLevel )  // parent, name, WFlags
+    : QWidget( 0, 0,		 // parent, name
+	       YQUI::ui()->noBorder() ?
+	       Qt::WStyle_Customize | Qt::WStyle_NoBorder :
+	       Qt::WType_TopLevel ) 
 {
     setCaption( "YaST2" );
-    
+
     setFocusPolicy( QWidget::StrongFocus );
 
     resize( YQUI::ui()->defaultSize( YD_HORIZ ),

@@ -131,10 +131,15 @@ public:
     YEvent * pendingEvent() const { return _event_handler.pendingEvent(); }
 
     /**
-     * Returns 'true' if defaultsize windows should use the full screen.
+     * Return 'true' if defaultsize windows should use the full screen.
      **/
     bool fullscreen() const { return _fullscreen; }
 
+    /**
+     * Return 'true' if defaultsize windows should not get window manager
+     * borders / frames. 
+     **/
+    bool noBorder() const { return _noborder; }
     /**
      * Returns 'true' if the UI had a fatal error that requires the application
      * to abort.
@@ -487,6 +492,11 @@ protected:
      * Use the entire available screen
      **/
     bool _fullscreen;
+
+    /**
+     * No window border for the main window
+     **/
+    bool _noborder;
 
     /**
      * Container for the widget stack. QWidgetStack cannot handle a WFlags

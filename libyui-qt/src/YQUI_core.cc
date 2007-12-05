@@ -203,7 +203,8 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 	    if ( opt.startsWith( "--" ) )
 		opt.remove(0, 1);
 
-	    if      ( opt == QString( "-fullscreen"	) )	_fullscreen = true;
+	    if      ( opt == QString( "-fullscreen"	) )	_fullscreen 	= true;
+	    else if ( opt == QString( "-noborder" 	) )	_noborder	= true;
 	    else if ( opt == QString( "-auto-font"	) )	yqApp()->setAutoFonts( true );
 	    else if ( opt == QString( "-auto-fonts"	) )	yqApp()->setAutoFonts( true );
 	    // --macro is handled by YUI_component
