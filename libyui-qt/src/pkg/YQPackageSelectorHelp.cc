@@ -139,38 +139,38 @@ YQPackageSelector::symbolHelp()
     html += "<table border=1>";
 
     html += symHelp( "noinst.xpm",
-		     // Translators: Package status short ( ! ) description
+		     // Translators: Package status short (!) description
 		     _( "Do not install" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is not installed and it will not be installed." ) );
 
     html += symHelp( "install.xpm",
-		     // Translators: Package status short ( ! ) description
+		     // Translators: Package status short (!) description
 		     _( "Install" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package will be installed. It is not installed yet." ) );
 
     html += symHelp( "keepinstalled.xpm",
-		     // Translators: Package status short ( ! ) description
+		     // Translators: Package status short (!) description
 		     _( "Keep" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is already installed. Leave it untouched." ) );
 
     html += symHelp( "update.xpm",
-		     // Translators: Package status short ( ! ) description
+		     // Translators: Package status short (!) description
 		     _( "Update" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is already installed. Update it or reinstall it"
 			" (if the versions are the same)." ) );
 
     html += symHelp( "del.xpm",
-		     // Translators: Package status short ( ! ) description
+		     // Translators: Package status short (!) description
 		     _( "Delete" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is already installed. Delete it." ) );
 
     html += symHelp( "taboo.xpm",
-		     // Translators: Package status short ( ! ) description
+		     // Translators: Package status short (!) description
 		     _( "Taboo" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is not installed and should not be installed under any circumstances, "
@@ -180,7 +180,7 @@ YQPackageSelector::symbolHelp()
 		     + _( "Packages set to \"taboo\" are treated as if they did not exist on any installation media." ) );
 
     html += symHelp( "protected.xpm",
-		     // Translators: Package status short ( ! ) description
+		     // Translators: Package status short (!) description
 		     _( "Protected" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is installed and should not be modified, "
@@ -191,7 +191,7 @@ YQPackageSelector::symbolHelp()
 			  " that may come with the distribution." ) );
 
     html += symHelp( "autoinstall.xpm",
-		     // Translators: Package status short ( ! ) description
+		     // Translators: Package status short (!) description
 		     _( "Autoinstall" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package will be installed automatically because some other package needs it." )
@@ -199,14 +199,14 @@ YQPackageSelector::symbolHelp()
 		     + _( "<b>Hint:</b> You may have to use \"taboo\" to get rid of such a package." ) );
 
     html += symHelp( "autoupdate.xpm",
-		     // Translators: Package status short ( ! ) description
+		     // Translators: Package status short (!) description
 		     _( "Autoupdate" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is already installed, but some other package"
 			" needs a newer version, so it will automatically be updated." ) );
 
     html += symHelp( "autodel.xpm",
-		     // Translators: Package status short ( ! ) description
+		     // Translators: Package status short (!) description
 		     _( "Autodelete" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is already installed, but package dependencies require that it is deleted." )
@@ -218,14 +218,14 @@ YQPackageSelector::symbolHelp()
     QString bySelection = " " + _( "(by&nbsp;selection)" );
 
     html += symHelp( "sel_autoinstall.xpm",
-		     // Translators: Package status short ( ! ) description
+		     // Translators: Package status short (!) description
 		     _( "Autoinstall" ) + bySelection,
 		     // Translators: Automatic word-wrapping.
 		     _( "This package will be installed automatically because it is contained in a"
 			" predefined software selection (e.g., \"Multimedia\", \"Development\")." ) );
 
     html += symHelp( "sel_autoupdate.xpm",
-		     // Translators: Package status short ( ! ) description
+		     // Translators: Package status short (!) description
 		     _( "Autoupdate" ) + bySelection,
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is already installed, but there is a newer version."
@@ -234,7 +234,7 @@ YQPackageSelector::symbolHelp()
 			" automatically be updated." ) );
 
     html += symHelp( "sel_autodel.xpm",
-		     // Translators: Package status short ( ! ) description
+		     // Translators: Package status short (!) description
 		     _( "Autodelete" ) + bySelection,
 		     // Translators: Automatic word-wrapping.
 		     _( "This package is already installed, but some predefined software selection"
@@ -276,7 +276,7 @@ YQPackageSelector::keyboardHelp()
     html += "<table border=1>";
 
     html += keyHelp( "+",
-		     // Translators: Keyboard action short ( ! ) description
+		     // Translators: Keyboard action short (!) description
 		     _( "Add" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "Get this package. Install it if it is not installed yet."
@@ -285,7 +285,7 @@ YQPackageSelector::keyboardHelp()
 		     + goto_next );
 
     html += keyHelp( "-",
-		     // Translators: Keyboard action short ( ! ) description
+		     // Translators: Keyboard action short (!) description
 		     _( "Remove" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "Get rid of this package. Mark it as \"do not install\" "
@@ -293,7 +293,7 @@ YQPackageSelector::keyboardHelp()
 		     + goto_next );
 
     html += keyHelp( "&gt;",
-		     // Translators: Keyboard action short ( ! ) description
+		     // Translators: Keyboard action short (!) description
 		     _( "Update" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "Update this package if it is installed and there is a newer version."
@@ -302,7 +302,7 @@ YQPackageSelector::keyboardHelp()
 
 
     html += keyHelp( "&lt;",
-		     // Translators: Keyboard action short ( ! ) description
+		     // Translators: Keyboard action short (!) description
 		     _( "Undo Update" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "Undo the effect of \">\" above: Set package to \"keep\""
@@ -310,7 +310,7 @@ YQPackageSelector::keyboardHelp()
 		     + goto_next );
 
     html += keyHelp( "!",
-		     // Translators: Keyboard action short ( ! ) description
+		     // Translators: Keyboard action short (!) description
 		     _( "Taboo" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "Set this package to \"taboo\" if it is not installed:"
@@ -322,7 +322,7 @@ YQPackageSelector::keyboardHelp()
 		     + goto_next );
 
     html += keyHelp( "*",
-		     // Translators: Keyboard action short ( ! ) description
+		     // Translators: Keyboard action short (!) description
 		     _( "Protect" ),
 		     // Translators: Automatic word-wrapping.
 		     _( "Set this package to \"protected\" if it is installed:"
