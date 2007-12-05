@@ -111,7 +111,7 @@ public:
     static void dumpList( QListViewItem * 	parent,
 			  const QString &	longText,
 			  const QString & 	header = QString::null,
-			  int			splitThreshold = 5 );
+			  int			splitThreshold = 3 );
 
 protected:
 

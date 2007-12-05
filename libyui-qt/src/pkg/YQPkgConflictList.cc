@@ -341,7 +341,10 @@ YQPkgConflict::addSolutions()
 
     while ( it != solutions.end() )
     {
-	new YQPkgConflictResolution( _resolutionsHeader, *it );
+	YQPkgConflictResolution * solution = new YQPkgConflictResolution( _resolutionsHeader, *it );
+	CHECK_PTR( solution );
+	solution->setOpen(true);
+
 	++it;
     }
 }
