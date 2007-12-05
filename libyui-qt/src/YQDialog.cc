@@ -620,34 +620,6 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 }
 
 
-#if 0
-void
-YQDialog::showEvent( QShowEvent * event )
-{
-    y2debug( "Showing dialog %p", this );
-    // y2debug( "Size: %d x %d", size().width(), size().height() );
-
-    QWidget::showEvent( event );
-}
-#endif
-
-
-#if 0
-void
-YQDialog::paintEvent( QPaintEvent * event )
-{
-    if ( event )
-    {
-	QRect rect = event->rect();
-	y2debug( "Repainting dialog %p: rect (%d, %d) w: %d h: %d",
-		 this, rect.x(), rect.y(), rect.width(), rect.height() );
-    }
-
-    QWidget::paintEvent( event );
-}
-#endif
-
-
 void
 YQDialog::closeEvent( QCloseEvent * event )
 {
@@ -666,7 +638,7 @@ YQDialog::focusInEvent( QFocusEvent * event )
 {
 
     // The dialog itself doesn't need or want the keyboard focus, but obviously
-    // ( since Qt 2.3? ) it needs QFocusPolicy::StrongFocus for the default
+    // (since Qt 2.3?) it needs QFocusPolicy::StrongFocus for the default
     // button mechanism to work. So let's accept the focus and give it to some
     // child widget.
 

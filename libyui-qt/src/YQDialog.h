@@ -212,11 +212,6 @@ protected:
     virtual void focusInEvent	( QFocusEvent	* event );
     virtual void resizeEvent	( QResizeEvent	* event );
 
-#if 0
-    virtual void showEvent	( QShowEvent	* event );
-    virtual void paintEvent	( QPaintEvent	* event );
-#endif
-
 
     //
     // Data members
