@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Dec  5 20:41:15 CET 2007 - sh@suse.de
+
+- Moved main dialog handling out of YQUI and into a new class
+  YQMainWinDock
+- Don't proactively grab keyboard focus any longer (bug #246934)
+- V 2.16.7 
+
+-------------------------------------------------------------------
 Wed Dec  5 11:13:05 CET 2007 - tgoettlicher@suse.de
 
 - Changed conflict dialog to better fit to sat solver's output 
