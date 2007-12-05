@@ -284,8 +284,6 @@ YQWidgetFactory::createMultiSelectionBox( YWidget * parent, const string & label
 YQPackageSelector *
 YQWidgetFactory::createPackageSelector( YWidget * parent, long modeFlags )
 {
-    YQUI::ui()->setAutoActivateDialogs( false );
-
     YQPackageSelectorPlugin * plugin = YQUI::ui()->packageSelectorPlugin();
 
     if ( plugin )

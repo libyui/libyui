@@ -58,7 +58,6 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     , YUI( with_threads )
     , _main_win( NULL )
     , _do_exit_loop( false )
-    , _auto_activate_dialogs( true )
 {
     y2debug( "YQUI constructor start" );
 

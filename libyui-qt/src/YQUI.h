@@ -189,17 +189,6 @@ public:
     void internalError( const char * msg );
 
     /**
-     * Check if dialogs are to be activated automatically
-     **/
-    bool autoActivateDialogs() const { return _auto_activate_dialogs; }
-
-    /**
-     * Change automatic dialog activation
-     **/
-    void setAutoActivateDialogs( bool activate )
-	{ _auto_activate_dialogs = activate; }
-
-    /**
      * Block (or unblock) events. If events are blocked, any event sent
      * should be ignored until events are unblocked again.
      *
@@ -529,12 +518,6 @@ protected:
      * after enter_loop.
      **/
     bool _do_exit_loop;
-
-    /**
-     * Force new dialogs to the foreground and grab the keyboard focus?
-     * (Only if running without a window manager)
-     **/
-    bool _auto_activate_dialogs;
 
     /**
      * Global reference to the UI
