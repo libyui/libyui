@@ -79,8 +79,7 @@ YQUI::glyph( const YCPSymbol & glyphSymbol )
 YCPValue YQUI::runPkgSelection( YWidget * packageSelector )
 {
     y2milestone( "Running package selection..." );
-    _wm_close_blocked           = true;
-    _auto_activate_dialogs      = false;
+    _auto_activate_dialogs = false;
 
     YCPValue input = YCPVoid();
 
@@ -99,8 +98,7 @@ YCPValue YQUI::runPkgSelection( YWidget * packageSelector )
 	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
     }
 
-    _auto_activate_dialogs      = true;
-    _wm_close_blocked           = false;
+    _auto_activate_dialogs = true;
     y2milestone( "Package selection done - returning %s", input->toString().c_str() );
 
     return input;
