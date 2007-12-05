@@ -17,10 +17,14 @@
 /-*/
 
 
+#define y2log_component "qt-ui"
+#include <ycp/y2log.h>
+
 #include "YQWidgetFactory.h"
 #include "YQUI.h"
 #include "YUIException.h"
 #include "YQPackageSelectorPlugin.h"
+#include "YQMainWinDock.h"
 
 #include <string>
 
@@ -49,8 +53,7 @@ YQWidgetFactory::~YQWidgetFactory()
 YQDialog *
 YQWidgetFactory::createDialog( YDialogType dialogType, YDialogColorMode colorMode )
 {
-    QWidget * qParent = 0;
-    YQDialog * dialog = new YQDialog( qParent, dialogType, colorMode );
+    YQDialog * dialog = new YQDialog( dialogType, colorMode );
     YUI_CHECK_NEW( dialog );
 
     return dialog;
@@ -218,7 +221,7 @@ YQWidgetFactory::createIntField( YWidget * parent, const string & label, int min
 {
     YQIntField * intField = new YQIntField( parent, label, minVal, maxVal, initialVal );
     YUI_CHECK_NEW( intField );
-    
+
     return intField;
 }
 
