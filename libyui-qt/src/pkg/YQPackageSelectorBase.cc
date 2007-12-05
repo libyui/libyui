@@ -60,7 +60,6 @@ YQPackageSelectorBase::YQPackageSelectorBase( YWidget * parent,
 
     YQUI::setTextdomain( "packages-qt" );
     setFont( YQUI::yqApp()->currentFont() );
-    YQUI::ui()->blockWmClose(); // Automatically undone after UI::RunPkgSelection()
 
     _pkgConflictDialog = new YQPkgConflictDialog( this );
     CHECK_PTR( _pkgConflictDialog );
@@ -82,12 +81,8 @@ YQPackageSelectorBase::YQPackageSelectorBase( YWidget * parent,
     zyppPool().saveState<zypp::Patch    >();
 
 
-    //
-    // Handle WM_CLOSE like "Cancel"
-    //
-
-    connect( YQUI::ui(),	SIGNAL( wmClose() ),
-	     this,		SLOT  ( reject()   ) );
+    // Install event handler to handle WM_CLOSE like "Cancel"
+    topLevelWidget()->installEventFilter( this );
 
     y2milestone( "PackageSelectorBase init done" );
 }
@@ -385,14 +380,23 @@ YQPackageSelectorBase::keyPressEvent( QKeyEvent * event )
 		return;
 	    }
 	}
-	else if ( event->key() == Qt::Key_F5 )	// No matter if Ctrl/Alt/Shift pressed
-	{
-	    YQUI::ui()->easterEgg();
-	    return;
-	}
     }
 
     QWidget::keyPressEvent( event );
+}
+
+
+bool YQPackageSelectorBase::eventFilter( QObject * obj, QEvent * event )
+{
+    if ( event->type() == QEvent::Close )
+    {
+	// Handle WM_CLOSE like "Cancel"
+	reject();
+
+	return true;	// Stop processing this event
+    }
+
+    return false;	// Don't stop processing this event
 }
 
 
