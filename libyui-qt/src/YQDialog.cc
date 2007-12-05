@@ -46,8 +46,10 @@
     ( Qt::WStyle_Customize 	|	\
       Qt::WStyle_Dialog		|	\
       Qt::WShowModal 		|	\
-      WStyle_Title              |       \
+      Qt::WType_Modal		|	\
       Qt::WStyle_DialogBorder	 )
+
+
 
 
 YQDialog::YQDialog( YDialogType 	dialogType,
@@ -62,7 +64,7 @@ YQDialog::YQDialog( YDialogType 	dialogType,
     _defaultButton	= 0;
 
     setWidgetRep( this );
-    setCaption( dialogType == YMainDialog ? "YaST2*" : "" );
+    setCaption( "YaST2" );
     setFocusPolicy( QWidget::StrongFocus );
 
     if ( colorMode != YDialogNormalColor )
