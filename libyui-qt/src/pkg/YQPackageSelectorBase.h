@@ -91,7 +91,14 @@ public:
      **/
     virtual bool setKeyboardFocus();
 
+    /**
+     * Event filter to handle WM_CLOSE like "Cancel"
+     *
+     * Reimplemented from QObject.
+     **/
+    virtual bool eventFilter( QObject * obj, QEvent * event );
 
+    
 public slots:
 
     /**
