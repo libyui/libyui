@@ -86,12 +86,6 @@ int YQUI::defaultSize(YUIDimension dim) const
 }
 
 
-QWidget* YQUI::mainWidget()
-{
-    return _main_win;
-};
-
-
 void YQUI::beep()
 {
     qApp->beep();

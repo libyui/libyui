@@ -371,11 +371,6 @@ public:
 				const QString & headline );
 
     /**
-     * main widget
-     **/
-    QWidget* mainWidget();
-
-    /**
      * Initialize and set a textdomain for gettext()
      **/
     static void setTextdomain( const char * domain );
