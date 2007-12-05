@@ -42,8 +42,7 @@ public:
      * colors or YDialogInfoColor to use more prominent, yet not quite as
      * bright as "warning" colors. Use both only very rarely.
      **/
-    YQDialog( QWidget *		qParent,
-	      YDialogType 	dialogType,
+    YQDialog( YDialogType	dialogType,
 	      YDialogColorMode	colorMode = YDialogNormalColor );
 
 protected:
@@ -100,7 +99,7 @@ public:
     YQGenericButton * findDefaultButton();
 
     /**
-     * Returns whether or not the user has resized this dialog.
+     * Return 'true' if the user resized this dialog.
      **/
     bool userResized() { return _userResized; }
 
@@ -175,6 +174,13 @@ public:
 protected:
 
     /**
+     * Choose a parent widget for a dialog of the specified type:
+     * Either the main window dock (if this is a YMainDialog and the dock
+     * currently accepts child dialogs) or 0.
+     **/
+    static QWidget * chooseParent( YDialogType dialogType );
+    
+    /**
      * Return the (first) default button between 'begin' and 'end'
      * or 0 if there is none.
      **/
@@ -198,44 +204,29 @@ protected:
 					   YWidgetListConstIterator end );
 
     /**
-     * Event handler for keyboard input.
-     * Only very special keys are processed here.
+     * Qt event handlers.
      *
-     * Inherited from QWidget.
+     * All reimplemented from QWidget.
      **/
-    void keyPressEvent( QKeyEvent * e );
+    virtual void keyPressEvent	( QKeyEvent	* event );
+    virtual void focusInEvent	( QFocusEvent	* event );
+    virtual void resizeEvent	( QResizeEvent	* event );
 
-
-    /**
-     * Event handler for focusIn event.
-     *
-     * Inherited from QWidget.
-     **/
-    void focusInEvent( QFocusEvent * event );
-
-    /**
-     * Event handler for window resize.
-     *
-     * Inherited from QWidget.
-     **/
-    void resizeEvent ( QResizeEvent * ev );
-
-
-    /**
-     * Inherited from QWidget: Called when the dialog is shown.
-     **/
-    void show();
+#if 0
+    virtual void showEvent	( QShowEvent	* event );
+    virtual void paintEvent	( QPaintEvent	* event );
+#endif
 
 
     //
     // Data members
     //
 
-    bool  		_userResized;
-    QSize 		_userSize;
+    bool		_userResized;
+    QSize		_userSize;
 
-    YQGenericButton * 	_focusButton;
-    YQGenericButton * 	_defaultButton;
+    YQGenericButton *	_focusButton;
+    YQGenericButton *	_defaultButton;
 };
 
 

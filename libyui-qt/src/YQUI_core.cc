@@ -38,7 +38,6 @@
 #include "YQOptionalWidgetFactory.h"
 #include "YEvent.h"
 #include "YUISymbols.h"
-#include "YQEBunny.h"
 #include "utf8.h"
 
 #include "YQDialog.h"
@@ -58,18 +57,14 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     : QObject()
     , YUI( with_threads )
     , _main_win( NULL )
-    , _main_dialog_id(0)
     , _do_exit_loop( false )
-    , _wm_close_blocked( false )
     , _auto_activate_dialogs( true )
 {
     y2debug( "YQUI constructor start" );
 
     _ui				= this;
     _fatal_error		= false;
-    _have_wm			= true;
     _fullscreen			= false;
-    _decorate_toplevel_window	= true;
     _usingVisionImpairedPalette	= false;
     _leftHandedMouse		= false;
     _askedForLeftHandedMouse	= false;
@@ -85,7 +80,6 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     // Qt keeps track to a global QApplication in qApp.
     CHECK_PTR( qApp );
 
-    qApp->installEventFilter( this );
     processCommandLineArgs( argc, argv );
     calcDefaultSize();
 
@@ -95,30 +89,21 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     // We have to use something else than QWidgetStack since QWidgetStack
     // doesn't accept a WFlags arg which we badly need here.
 
-    WFlags wflags = WType_TopLevel;
-
-    if ( ! _decorate_toplevel_window )
-    {
-	y2debug( "Suppressing WM decorations for toplevel window" );
-	wflags |= WStyle_Customize | WStyle_NoBorder;
-    }
-
     // if we have a window already, delete it
     if (_main_win)
 	delete _main_win;
 
-    _main_win = new QVBox( 0, 0, wflags ); // parent, name, wflags
+    _main_win = new QVBox( 0, 0, WType_TopLevel ); // parent, name, wflags
 
 
-    // Create widget stack for `opt(`defaultsize) dialogs
-
-    _widget_stack = new QWidgetStack( _main_win );
+#if 0
+    // still needed?
     _widget_stack->setFocusPolicy( QWidget::StrongFocus );
-    qApp->setMainWidget( _main_win );
-    _main_win->installEventFilter( this );
+#endif
+    
     _main_win->resize( _default_size );
 
-    if ( _fullscreen || ! _have_wm )
+    if ( _fullscreen )
 	_main_win->move( 0, 0 );
 
 
@@ -219,9 +204,7 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 	    if ( opt.startsWith( "--" ) )
 		opt.remove(0, 1);
 
-	    if      ( opt == QString( "-no-wm"	 	) )	_have_wm 			= false;
-	    else if ( opt == QString( "-fullscreen"	) )	_fullscreen 			= true;
-	    else if ( opt == QString( "-noborder" 	) )	_decorate_toplevel_window	= false;
+	    if      ( opt == QString( "-fullscreen"	) )	_fullscreen = true;
 	    else if ( opt == QString( "-auto-font"	) )	yqApp()->setAutoFonts( true );
 	    else if ( opt == QString( "-auto-fonts"	) )	yqApp()->setAutoFonts( true );
 	    // --macro is handled by YUI_component
@@ -231,7 +214,6 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 			 "Command line options for the YaST2 Qt UI:\n"
 			 "\n"
 			 "--nothreads   run without additional UI threads\n"
-			 "--no-wm       assume no window manager is running\n"
 			 "--fullscreen  use full screen for `opt(`defaultsize) dialogs\n"
 			 "--noborder    no window manager border for `opt(`defaultsize) dialogs\n"
 			 "--auto-fonts	automatically pick fonts, disregard Qt standard settings\n"
@@ -309,10 +291,11 @@ void YQUI::calcDefaultSize()
         y2milestone( "-fullscreen: using %dx%d for `opt(`defaultsize)",
 		     _default_size.width(), _default_size.height() );
     }
-    else if ( _have_wm )
+    else
     {
 	// Get _default_size via -geometry command line option (if set)
 
+	// FIXME there must be a better and simpler way to do this
 	QWidget * dummy = new QWidget();
 	dummy->hide();
 	qApp->setMainWidget( dummy );
@@ -342,11 +325,6 @@ void YQUI::calcDefaultSize()
 			 _default_size.width(), _default_size.height() );
 	}
     }
-    else	// ! _have_wm
-    {
-	_default_size = primaryScreenSize;
-    }
-
 
     y2milestone( "Default size: %dx%d", _default_size.width(), _default_size.height() );
 }
@@ -421,7 +399,9 @@ YEvent * YQUI::userInput( unsigned long timeout_millisec )
 	if ( timeout_millisec > 0 )
 	    _user_input_timer.start( timeout_millisec, true ); // single shot
 
+#if 0
 	dialog->activate( true );
+#endif
 
 	if ( qApp->focusWidget() )
 	    qApp->focusWidget()->setFocus();
@@ -436,7 +416,9 @@ YEvent * YQUI::userInput( unsigned long timeout_millisec )
 
 	_do_exit_loop = false;
 	event = _event_handler.consumePendingEvent();
+#if 0
 	dialog->activate( false );
+#endif
 
 	// Display a busy cursor, but only if there is no other activity within
 	// BUSY_CURSOR_TIMEOUT milliseconds (avoid cursor flicker)
@@ -464,10 +446,14 @@ YEvent * YQUI::pollInput()
 
 	if ( dialog )
 	{
+#if 0
 	    dialog->activate( true );
+#endif
 	    qApp->processEvents();
 	    event = _event_handler.consumePendingEvent();
+#if 0
 	    dialog->activate( false );
+#endif
 	}
     }
 
@@ -485,66 +471,15 @@ void YQUI::userInputTimeout()
 }
 
 
-#warning obsolete
-#if 0
-YDialog * YQUI::createDialog( YWidgetOpt & opt )
-{
-    bool has_defaultsize = opt.hasDefaultSize.value();
-    QWidget * qt_parent = _main_win;
-
-    // Popup dialogs get the topmost other popup dialog as their parent since
-    // some window managers (e.g., fvwm2 as used in the inst-sys) otherwise
-    // tend to confuse the stacking order of popup dialogs.
-    //
-    // This _popup_stack handling would be better placed in showDialog(), but we
-    // need the parent here for QWidget creation. libyui guarantees that each
-    // createDialog() will be followed by showDialog() for the same dialog
-    // without any chance for other dialogs to get in between.
-
-    if ( ! has_defaultsize && ! _popup_stack.empty() )
-	qt_parent = _popup_stack.back();
-
-    YQDialog * dialog = new YQDialog( opt, qt_parent, has_defaultsize );
-    CHECK_PTR( dialog );
-
-    if ( ! has_defaultsize )
-	_popup_stack.push_back( (QWidget *) dialog->widgetRep() );
-
-    return dialog;
-}
-#endif
-
-
 void YQUI::showDialog( YDialog * dialog )
 {
     QWidget * qw = (QWidget *) dialog->widgetRep();
-
-    if ( ! qw )
-    {
-	y2error( "No widgetRep() for dialog" );
-	return;
-    }
-
-    if ( dialog->dialogType() == YMainDialog )
-    {
-	_widget_stack->addWidget  ( qw, ++_main_dialog_id );
-	_widget_stack->raiseWidget( qw ); // maybe this is not necessary (?)
-
-	if ( ! _main_win->isVisible() )
-	{
-	    // y2milestone( "Showing main window" );
-	    _main_win->resize( _default_size );
-
-	    if ( ! _have_wm )
-		_main_win->move( 0, 0 );
-
-	    _main_win->show();
-	    qw->setFocus();
-	}
-    }
-    else	// non-defaultsize dialog
+    
+    if ( qw )
     {
 	qw->show();
+	qw->raise();
+	qw->update();
     }
 
     ( (YQDialog *) dialog)->ensureOnlyOneDefaultButton();
@@ -554,61 +489,6 @@ void YQUI::showDialog( YDialog * dialog )
 
 void YQUI::closeDialog( YDialog * dialog )
 {
-    QWidget * qw = (QWidget *) dialog->widgetRep();
-
-    if ( ! qw )
-    {
-	y2error( "No widgetRep() for dialog" );
-	return;
-    }
-
-    if ( dialog->dialogType() == YMainDialog )
-    {
-	_widget_stack->removeWidget( qw );
-
-	if ( --_main_dialog_id < 1 )	// nothing left on the stack
-	{
-	    // y2milestone( "Hiding main window" );
-	    _main_win->hide();
-	    _main_dialog_id = 0;	// this should not be necessary - but better be safe than sorry
-	}
-	else
-	{
-	    // FIXME: This is anti-social behaviour - do this only in the inst-sys
-	    _widget_stack->raiseWidget( _main_dialog_id );
-	}
-    }
-    else	// non-defaultsize dialog
-    {
-	qw->hide();
-
-#warning FIXME
-#if 0
-	// Clean up the popup stack. libyui guarantees that a dialog will be
-	// deleted after closeDialog() so it is safe to pop that dialog from
-	// the popup stack here.
-
-	if ( ! _popup_stack.empty() && _popup_stack.back() == qw )
-	    _popup_stack.pop_back();
-	else
-	    y2error( "Popup dialog stack corrupted!" );
-#endif
-    }
-}
-
-
-void YQUI::easterEgg()
-{
-    y2milestone( "Starting easter egg..." );
-
-
-    YQEasterBunny::layEgg();
-    y2milestone( "Done." );
-
-#if 0
-    // desktop()->repaint() has no effect - we need to do it the hard way.
-    system( "/usr/X11R6/bin/xrefresh" );
-#endif
 }
 
 

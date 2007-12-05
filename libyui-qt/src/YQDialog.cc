@@ -22,7 +22,6 @@
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 #include <qpushbutton.h>
-#include <qframe.h>
 #include <qmessagebox.h>
 
 #include "YQUI.h"
@@ -32,26 +31,28 @@
 #include "YQGenericButton.h"
 #include "YQWizardButton.h"
 #include "YQWizard.h"
+#include "YQMainWinDock.h"
 
 // Include low-level X headers AFTER Qt headers:
 // X.h pollutes the global namespace (!!!) with pretty useless #defines
 // like "Above", "Below" etc. that clash with some Qt headers.
 #include <X11/Xlib.h>
 
+
 #define YQMainDialogWFlags	0
 
-#define YQPopupDialogWFlags             \
-    ( WStyle_Customize          |       \
-      WStyle_Dialog             |       \
-      WType_Modal               |       \
+
+#define YQPopupDialogWFlags 		\
+    ( Qt::WStyle_Customize 	|	\
+      Qt::WStyle_Dialog		|	\
+      Qt::WShowModal 		|	\
       WStyle_Title              |       \
-      WStyle_DialogBorder        )
+      Qt::WStyle_DialogBorder	 )
 
 
-YQDialog::YQDialog( QWidget *		qParent,
-		    YDialogType 	dialogType,
+YQDialog::YQDialog( YDialogType 	dialogType,
 		    YDialogColorMode	colorMode )
-    : QWidget( qParent,
+    : QWidget( chooseParent( dialogType ),
 	       0, // name
 	       dialogType == YMainDialog ? YQMainDialogWFlags : YQPopupDialogWFlags )
     , YDialog( dialogType, colorMode )
@@ -60,9 +61,8 @@ YQDialog::YQDialog( QWidget *		qParent,
     _focusButton	= 0;
     _defaultButton	= 0;
 
-
     setWidgetRep( this );
-    setCaption( dialogType == YMainDialog ? "YaST2" : "" );
+    setCaption( dialogType == YMainDialog ? "YaST2*" : "" );
     setFocusPolicy( QWidget::StrongFocus );
 
     if ( colorMode != YDialogNormalColor )
@@ -83,15 +83,42 @@ YQDialog::YQDialog( QWidget *		qParent,
 	warnPalette.setNormal( normalColors );
 	setPalette( warnPalette );
     }
+
+    if ( dialogType == YMainDialog &&
+	 QWidget::parent() != YQMainWinDock::mainWinDock() )
+    {
+	setWFlags( YQPopupDialogWFlags );
+    }
 }
 
 
 YQDialog::~YQDialog()
 {
+    if ( dialogType() == YMainDialog )
+    {
+	YQMainWinDock::mainWinDock()->remove( (QWidget *) widgetRep() );
+    }
 }
 
 
-int YQDialog::preferredWidth()
+QWidget *
+YQDialog::chooseParent( YDialogType dialogType )
+{
+    QWidget * parent = 0;
+    
+    if ( dialogType == YMainDialog &&
+	 YQMainWinDock::mainWinDock()->couldDock() )
+    {
+	y2debug( "Adding dialog to mainWinDock" );
+	parent = YQMainWinDock::mainWinDock();
+    }
+    
+    return parent;
+}
+
+
+int
+YQDialog::preferredWidth()
 {
     int preferredWidth;
 
@@ -119,7 +146,8 @@ int YQDialog::preferredWidth()
 }
 
 
-int YQDialog::preferredHeight()
+int
+YQDialog::preferredHeight()
 {
     int preferredHeight;
 
@@ -147,15 +175,19 @@ int YQDialog::preferredHeight()
 }
 
 
-void YQDialog::setEnabled( bool enabled )
+void
+YQDialog::setEnabled( bool enabled )
 {
     QWidget::setEnabled( enabled );
     YDialog::setEnabled( enabled );
 }
 
 
-void YQDialog::setSize( int newWidth, int newHeight )
+void
+YQDialog::setSize( int newWidth, int newHeight )
 {
+    // y2debug( "Resizing dialog to %d x %d", newWidth, newHeight );
+
     if ( newWidth > qApp->desktop()->width() )
 	newWidth = qApp->desktop()->width();
 
@@ -171,19 +203,11 @@ void YQDialog::setSize( int newWidth, int newHeight )
 }
 
 
-
-void YQDialog::activate( bool active )
+void
+YQDialog::activate( bool active )
 {
     if ( active )
     {
-	if ( ! YQUI::ui()->haveWM() )
-	{
-	    if ( YQUI::ui()->autoActivateDialogs() )
-		setActiveWindow();
-	    else
-		y2milestone( "Auto-activating dialog window turned off" );
-	}
-
 	ensureOnlyOneDefaultButton();
     }
 }
@@ -194,9 +218,12 @@ YQDialog::resizeEvent( QResizeEvent * event )
 {
     if ( event )
     {
+	// y2debug( "Resize event: %d x %d", event->size().width(), event->size().height() );
 	setSize ( event->size().width(), event->size().height() );
-	_userSize    = event->size();
-	_userResized = true;
+	_userSize = event->size();
+
+	if ( QWidget::parent() )
+	    _userResized = true;
     }
 }
 
@@ -324,7 +351,7 @@ YQDialog::ensureOnlyOneDefaultButton()
 	YDialog::setDefaultButton( _defaultButton );
     }
 
-    
+
     YQGenericButton * def  = _focusButton ? _focusButton : _defaultButton;
 
     if ( def )
@@ -342,7 +369,6 @@ YQDialog::findWizard() const
 YQWizard *
 YQDialog::findWizard( YWidgetListConstIterator begin,
 		      YWidgetListConstIterator end ) const
-
 {
     for ( YWidgetListConstIterator it = begin; it != end; ++it )
     {
@@ -434,7 +460,7 @@ YQDialog::setDefaultButton( YQGenericButton * newDefaultButton )
 	    _defaultButton->showAsDefault( true );
     }
 
-    
+
     YDialog::setDefaultButton( 0 ); // prevent complaints about multiple default buttons
     YDialog::setDefaultButton( _defaultButton );
 }
@@ -521,11 +547,6 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    YQUI::ui()->makeScreenShot( "" );
 	    return;
 	}
-	else if ( event->key() == Qt::Key_F5 )		// No matter if Ctrl/Alt/Shift pressed
-	{
-	    YQUI::ui()->easterEgg();
-	    return;
-	}
 	else if ( event->key()   == Qt::Key_F4 &&	// Shift-F4: toggle colors for vision impaired users
 		  event->state() == Qt::ShiftButton )
 	{
@@ -599,19 +620,49 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 }
 
 
-void YQDialog::closeEvent( QCloseEvent * event )
+#if 0
+void
+YQDialog::showEvent( QShowEvent * event )
+{
+    y2debug( "Showing dialog %p", this );
+    // y2debug( "Size: %d x %d", size().width(), size().height() );
+
+    QWidget::showEvent( event );
+}
+#endif
+
+
+#if 0
+void
+YQDialog::paintEvent( QPaintEvent * event )
+{
+    if ( event )
+    {
+	QRect rect = event->rect();
+	y2debug( "Repainting dialog %p: rect (%d, %d) w: %d h: %d",
+		 this, rect.x(), rect.y(), rect.width(), rect.height() );
+    }
+
+    QWidget::paintEvent( event );
+}
+#endif
+
+
+void
+YQDialog::closeEvent( QCloseEvent * event )
 {
     // The window manager "close window" button (and WM menu, e.g. Alt-F4) will be
     // handled just like the user had clicked on the `id`( `cancel ) button in
     // that dialog. It's up to the YCP application to handle this (if desired).
 
-    y2debug( "Ignoring window manager close button." );
+    y2milestone( "Caught window manager close event - returning with YCancelEvent" );
     event->ignore();
     YQUI::ui()->sendEvent( new YCancelEvent() );
 }
 
 
-void YQDialog::focusInEvent( QFocusEvent * event )
+void
+YQDialog::focusInEvent( QFocusEvent * event )
 {
 
     // The dialog itself doesn't need or want the keyboard focus, but obviously
@@ -634,28 +685,10 @@ void YQDialog::focusInEvent( QFocusEvent * event )
 
 
 void
-YQDialog::show()
-{
-    if ( ! dialogType() == YMainDialog && qApp->mainWidget()->isVisible() )
-	center( this, qApp->mainWidget() );
-
-    QWidget::show();
-}
-
-
-void
 YQDialog::center( QWidget * dialog, QWidget * parent )
 {
-    if ( ! dialog )
+    if ( ! dialog || ! parent )
 	return;
-
-    if ( ! parent )
-    {
-	if ( dialog == qApp->mainWidget() )
-	    parent = qApp->desktop();
-	else
-	    parent = qApp->mainWidget();
-    }
 
     QPoint pos( ( parent->width()  - dialog->width()  ) / 2,
 		( parent->height() - dialog->height() ) / 2 );

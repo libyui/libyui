@@ -19,7 +19,6 @@
 
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
-#include <qwidgetstack.h>
 #include <qtimer.h>
 
 #include <YDialog.h>
@@ -35,22 +34,24 @@ YQMainWinDock::mainWinDock()
     static YQMainWinDock * mainWinDock = 0;
     
     if ( ! mainWinDock )
-    {
 	mainWinDock = new YQMainWinDock();
-	mainWinDock->show();
-    }
 
     return mainWinDock;
 }
 
 
 YQMainWinDock::YQMainWinDock()
-    : QVBox()
+    : QWidget( 0, 0, Qt::WType_TopLevel )  // parent, name, WFlags
 {
-    _qWidgetStack = new QWidgetStack( this );
+    setCaption( "YaST2" );
     
+    setFocusPolicy( QWidget::StrongFocus );
+
     resize( YQUI::ui()->defaultSize( YD_HORIZ ),
 	    YQUI::ui()->defaultSize( YD_VERT  ) );
+
+    y2debug( "MainWinDock initial size: %d x %d",
+	     size().width(), size().height() );
 }
 
 
@@ -61,16 +62,58 @@ YQMainWinDock::~YQMainWinDock()
 
 
 void
+YQMainWinDock::childEvent( QChildEvent * event )
+{
+    if ( event )
+    {
+	QWidget * widget = dynamic_cast<QWidget *> ( event->child() );
+
+	if ( widget && event->inserted() )
+	{
+	    add( widget );
+	}
+    }
+    
+    QWidget::childEvent( event );
+}
+
+
+void
+YQMainWinDock::resizeEvent( QResizeEvent * event )
+{
+    if ( event )
+    {
+	resize( event->size() );
+	resizeVisibleChild();
+    }
+}
+
+
+void
+YQMainWinDock::resizeVisibleChild()
+{
+    if ( ! _widgetStack.empty() )
+    {
+	QWidget * dialog = _widgetStack.back();
+
+	if ( dialog->size() != size() )
+	{
+	    // y2debug( "Resizing child dialog %p to %d x %d", dialog, size().width(), size().height() );
+	    dialog->resize( size() );
+	}
+    }
+}
+
+
+void
 YQMainWinDock::show()
 {
-    y2debug( "Showing" );
-    
     QWidget::show();
     
     if ( ! _widgetStack.empty() )
     {
 	QWidget * dialog = _widgetStack.back();
-	dialog->raise();
+	dialog->raise();  
 	
 	if ( ! dialog->isShown() )
 	    dialog->show();
@@ -83,27 +126,15 @@ YQMainWinDock::add( QWidget * dialog )
 {
     YUI_CHECK_PTR( dialog );
 
-#if 0
-    if ( dialog->parent() )
-    {
-	y2error( "Dialog already has a parent" );
-	return;
-    }
-#endif
-
     if ( ! dialog->isShown() )
 	dialog->show();
-    
+
+    y2debug( "Adding dialog %p to mainWinDock", dialog );
     _widgetStack.push_back( dialog );
-    _qWidgetStack->addWidget( dialog );
-    _qWidgetStack->raiseWidget( dialog );
+    resizeVisibleChild();
     
     if ( ! isShown() )
 	show();
-
-#if 0
-    QTimer::singleShot( 3*1000, this, SLOT( showCurrentDialog() ) );
-#endif
 }
 
 
@@ -114,9 +145,6 @@ YQMainWinDock::showCurrentDialog()
     {
 	QWidget * dialog = _widgetStack.back();
 	y2debug( "Showing dialog %p", dialog );
-#if 0
-	_qWidgetStack->raiseWidget( dialog );
-#endif
 	dialog->raise();
 	update();
     }
@@ -138,9 +166,8 @@ YQMainWinDock::remove( QWidget * dialog )
 	// The topmost dialog is to be removed
 
 	_widgetStack.pop_back();
-	_qWidgetStack->removeWidget( dialog );
 
-	y2debug( "removing dialog %p", dialog );
+	y2debug( "Removing dialog %p from mainWinDock", dialog );
     }
     else // The less common (but more generic) case: Remove any dialog
     {
@@ -150,18 +177,18 @@ YQMainWinDock::remove( QWidget * dialog )
 	    return;
 
 	y2warning( "Found dialog somewhere in the middle of the widget stack" );
-
+	y2debug( "Removing dialog %p from mainWinDock", dialog );
+	
 	_widgetStack.erase( pos );
-	_qWidgetStack->removeWidget( dialog );
-
-	y2debug( "removing dialog %p", dialog );
     }
 
-    if ( _widgetStack.empty() )
-	hide();
+    if ( _widgetStack.empty() )		// No more main dialog?
+	hide();				// -> hide dock
     else
     {
-	_qWidgetStack->raiseWidget( _widgetStack.back() );
+	dialog = _widgetStack.back();	// Get the next dialog from the stack
+	dialog->raise();		// and raise it
+	resizeVisibleChild();
     }
 }
 
@@ -214,7 +241,7 @@ YQMainWinDock::closeEvent( QCloseEvent * event )
     // handled just like the user had clicked on the `id`( `cancel ) button in
     // that dialog. It's up to the YCP application to handle this (if desired).
 
-    y2debug( "Caught window manager close event - returning with YCancelEvent" );
+    y2milestone( "Caught window manager close event - returning with YCancelEvent" );
     event->ignore();
     YQUI::ui()->sendEvent( new YCancelEvent() );
 }

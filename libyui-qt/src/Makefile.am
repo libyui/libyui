@@ -71,7 +71,6 @@ libpy2qt_la_SOURCES =				\
 	YQDialog.cc				\
 	YQDownloadProgress.cc			\
 	YQDumbTab.cc				\
-	YQEBunny.cc				\
 	YQEmpty.cc				\
 	YQFrame.cc				\
 	YQGenericButton.cc			\
@@ -81,6 +80,7 @@ libpy2qt_la_SOURCES =				\
 	YQLabel.cc				\
 	YQLayoutBox.cc				\
 	YQLogView.cc				\
+	YQMainWinDock.cc			\
 	YQMenuButton.cc				\
 	YQMultiLineEdit.cc			\
 	YQMultiProgressMeter.cc			\
@@ -145,6 +145,7 @@ BUILT_SOURCES =					\
 	YQLabel.moc				\
 	YQLayoutBox.moc				\
 	YQLogView.moc				\
+	YQMainWinDock.moc			\
 	YQMenuButton.moc			\
 	YQMultiLineEdit.moc			\
 	YQMultiProgressMeter.moc		\
@@ -196,6 +197,7 @@ YQIntField.o YQIntField.lo:					YQIntField.moc
 YQLabel.o YQLabel.lo:						YQLabel.moc
 YQLayoutBox.o YQLayoutBox.lo:					YQLayoutBox.moc
 YQLogView.o YQLogView.lo:					YQLogView.moc
+YQMainWinDock.o YQMainWinDock.lo:				YQMainWinDock.moc
 YQMenuButton.o YQMenuButton.lo:					YQMenuButton.moc
 YQMultiLineEdit.o YQMultiLineEdit.lo:				YQMultiLineEdit.moc
 YQMultiProgressMeter.o YQMultiProgressMeter.lo:			YQMultiProgressMeter.moc
@@ -245,6 +247,7 @@ YQIntField.moc:				YQIntField.h
 YQLabel.moc:				YQLabel.h
 YQLayoutBox.moc:			YQLayoutBox.h
 YQLogView.moc:				YQLogView.h
+YQMainWinDock.moc:			YQMainWinDock.h
 YQMenuButton.moc:			YQMenuButton.h
 YQMultiLineEdit.moc:			YQMultiLineEdit.h
 YQMultiProgressMeter.moc:		YQMultiProgressMeter.h

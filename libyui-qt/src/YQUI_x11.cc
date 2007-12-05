@@ -82,10 +82,7 @@ int YQUI::getDefaultHeight()
 
 int YQUI::defaultSize(YUIDimension dim) const
 {
-    if ( haveWM() )
-	return dim == YD_HORIZ ? _default_size.width() : _default_size.height();
-    else
-	return dim == YD_HORIZ ? qApp->desktop()->width() : qApp->desktop()->height();
+    return dim == YD_HORIZ ? _default_size.width() : _default_size.height();
 }
 
 
@@ -181,81 +178,6 @@ bool YQUI::close()
 {
     sendEvent( new YCancelEvent() );
     return true;
-}
-
-
-bool YQUI::eventFilter( QObject * obj, QEvent * ev )
-{
-    if ( ev->type() == QEvent::Close )
-    {
-	// Handle WM_CLOSE - but only if it comes from a dialog that is managed by the UI,
-	// not from an independent Qt dialog (such as the package selector popups)
-
-	QWidget * objDialog = 0;
-
-	if ( obj && obj->isWidgetType() )
-	{
-	    objDialog = (QWidget *) obj;
-	    objDialog = objDialog->topLevelWidget();
-	}
-
-	if ( objDialog &&
-	     ( objDialog == mainWidget() ||
-	       objDialog == (QObject *) YDialog::currentDialog()->widgetRep() ) )
-	{
-	    emit wmClose();
-
-	    if ( ! _wm_close_blocked )
-	    {
-		// Don't simply close the application window, return from UserInput()
-		// with `id(`cancel) and let the YCP application decide how to handle
-		// that (e.g., ask for confirmation).
-
-		y2debug( "Caught window close event - returning with `cancel" );
-		sendEvent( new YCancelEvent() );
-	    }
-
-	    return true;	// Event processed
-	}
-    }
-    else if ( ev->type() == QEvent::Show )
-    {
-	if ( obj == _main_win )
-	{
-	    if ( _main_dialog_id > 0 )
-	    {
-		// Work around QWidgetStack bug: The last raiseWidget() call
-		// (from closeDialog() ) might have failed if the widget was
-		// invisible at that time, e.g., because the user had switched to
-		// some other virtual desktop (bugzilla bug #11310)
-
-		_widget_stack->raiseWidget( _main_dialog_id );
-	    }
-	}
-	else
-	{
-	    return showEventFilter( obj, ev );
-	}
-    }
-
-    return false;	// Don't stop event processing
-}
-
-
-bool YQUI::showEventFilter( QObject * obj, QEvent * ev )
-{
-    if ( ! haveWM() )
-    {
-	// Make sure newly opened windows get the keyboard focus even without a
-	// window manager. Otherwise the app might be unusable without a mouse.
-
-	QWidget * widget = dynamic_cast<QWidget *> (obj);
-
-	if ( widget )
-	    widget->setActiveWindow();
-    }
-
-    return false;	// Don't stop event processing
 }
 
 

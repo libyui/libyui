@@ -131,22 +131,9 @@ public:
     YEvent * pendingEvent() const { return _event_handler.pendingEvent(); }
 
     /**
-     * Returns 'false" if the "--no-wm" was specified on the command line, i.e.
-     * we should assume no window manager is running.
-     **/
-    bool haveWM() const { return _have_wm; }
-
-    /**
      * Returns 'true' if defaultsize windows should use the full screen.
      **/
     bool fullscreen() const { return _fullscreen; }
-
-    /**
-     * Returns 'false' if toplevel (defaultsize) windows should not get window
-     * manager decorations, i.e. "--noborder" was specified on the command
-     * line.
-     **/
-    bool decorateToplevelWindow() const { return _decorate_toplevel_window; }
 
     /**
      * Returns 'true' if the UI had a fatal error that requires the application
@@ -200,17 +187,6 @@ public:
      * Reimplemented from YUI.
      **/
     void internalError( const char * msg );
-
-
-    /**
-     * Block WM_CLOSE events for the main window.
-     **/
-    void blockWmClose()		{ _wm_close_blocked = true;  }
-
-    /**
-     * Unblock WM_CLOSE events for the main window.
-     **/
-    void unblockWmClose()	{ _wm_close_blocked = false; }
 
     /**
      * Check if dialogs are to be activated automatically
@@ -284,11 +260,6 @@ public slots:
     void askConfigureLogging();
 
     /**
-     * Fun stuff (release dependent)
-     **/
-    void easterEgg();
-
-    /**
      * A mouse click with the wrong mouse button was detected - e.g., a right
      * click on a push button. The user might be left-handed, but his mouse
      * might not (yet) be configured for left-handed use - e.g., during
@@ -298,13 +269,6 @@ public slots:
      * This status can be queried with UI::GetDisplayInfo() ("LeftHandedMouse").
      **/
     void maybeLeftHandedUser();
-
-
-signals:
-    /**
-     * Emitted upon WM_CLOSE
-     **/
-    void wmClose();
 
 
 protected:
@@ -352,21 +316,6 @@ protected:
      * Reimplemented from YUI.
      **/
     void closeDialog( YDialog * dialog );
-
-    /**
-     * Grab show events and work around QWidgetStack bug.
-     *
-     * Reimplemented from QObject.
-     **/
-    bool eventFilter( QObject * obj, QEvent * ev );
-
-    /**
-     * Make all UI windows usable without a mouse - even predefined Qt dialogs
-     * that don't know the UI's dialogs' activate() magic.
-     *
-     * Reimplemented from QObject.
-     **/
-    bool showEventFilter( QObject * obj, QEvent * ev );
 
 
 public:
@@ -551,19 +500,9 @@ protected:
     //
 
     /**
-     * Assume presence of a window manager
-     **/
-    bool _have_wm;
-
-    /**
      * Use the entire available screen
      **/
     bool _fullscreen;
-
-    /**
-     * Decorate the toplevel window
-     **/
-    bool _decorate_toplevel_window;
 
     /**
      * Container for the widget stack. QWidgetStack cannot handle a WFlags
@@ -571,21 +510,6 @@ protected:
      * at least handles all the sizeHint and resize stuff.
      **/
     QVBox * _main_win;
-
-    /**
-     * Stack for the Qt widgets inside the main window.
-     **/
-    QWidgetStack * _widget_stack;
-
-    /**
-     * Stack to keep track of the stacking order of popup dialogs.
-     **/
-    vector<QWidget *> _popup_stack;
-
-    /**
-     * Numeric ID for defaultsize dialogs for the widget stack
-     **/
-    int _main_dialog_id;
 
     /**
      * Size for `opt(`defaultsize) dialogs.
@@ -605,11 +529,6 @@ protected:
      * after enter_loop.
      **/
     bool _do_exit_loop;
-
-    /**
-     * Window manager close events blocked?
-     **/
-    bool _wm_close_blocked;
 
     /**
      * Force new dialogs to the foreground and grab the keyboard focus?

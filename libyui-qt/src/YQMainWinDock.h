@@ -21,7 +21,7 @@
 #define YQMainWinDock_h
 
 #include <deque>
-#include <qvbox.h>
+#include <qwidget.h>
 
 class QWidgetStack;
 
@@ -42,7 +42,7 @@ class QWidgetStack;
  * This widget can swallow an arbitrary number of main dialogs as they are
  * opened as long as there is no popup dialog in between.
  **/
-class YQMainWinDock : public QVBox
+class YQMainWinDock : public QWidget
 {
     Q_OBJECT
 
@@ -103,7 +103,8 @@ public:
      * Reimplemented from QWidget.
      **/
     virtual void closeEvent( QCloseEvent * event );
-    
+
+
 protected:
     /**
      * Constructor.
@@ -118,14 +119,35 @@ protected:
      **/
     virtual ~YQMainWinDock();
 
+protected:
+
     /**
      * Paint event.
      *
-     * Reimplemented from YWidget.
+     * Reimplemented from QWidget.
      **/
     virtual void paintEvent( QPaintEvent * event );
 
-    
+    /**
+     * Child inserted/removed event.
+     *
+     * Reimplemented from QObject.
+     **/
+    virtual void childEvent( QChildEvent * event );
+
+    /**
+     * Resize event.
+     *
+     * Reimplemented from QWidget.
+     **/
+    virtual void resizeEvent( QResizeEvent * event );
+
+    /**
+     * Resize the visible child to the current size of the dock.
+     **/
+    void resizeVisibleChild();
+
+
 protected slots:
 
     /**
@@ -137,7 +159,7 @@ protected slots:
 private:
 
     typedef std::deque<QWidget *> YQWidgetStack;
-    
+
     /**
      * Return an iterator to the specified dialog in the internal
      * widgetstack or _widgetStack::end() if not found.
@@ -145,8 +167,7 @@ private:
     YQWidgetStack::iterator findInStack( QWidget * dialog );
 
 
-    YQWidgetStack 	_widgetStack;
-    QWidgetStack *	_qWidgetStack;
+    YQWidgetStack _widgetStack;
 };
 
 
