@@ -470,6 +470,7 @@ void YQUI::userInputTimeout()
 }
 
 
+#warning FIXME Move this to Y(Q)Dialog (and rename it to ::finalize()?)
 void YQUI::showDialog( YDialog * dialog )
 {
     QWidget * qw = (QWidget *) dialog->widgetRep();
