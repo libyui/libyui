@@ -398,10 +398,6 @@ YEvent * YQUI::userInput( unsigned long timeout_millisec )
 	if ( timeout_millisec > 0 )
 	    _user_input_timer.start( timeout_millisec, true ); // single shot
 
-#if 0
-	dialog->activate( true );
-#endif
-
 	if ( qApp->focusWidget() )
 	    qApp->focusWidget()->setFocus();
 
@@ -415,9 +411,6 @@ YEvent * YQUI::userInput( unsigned long timeout_millisec )
 
 	_do_exit_loop = false;
 	event = _event_handler.consumePendingEvent();
-#if 0
-	dialog->activate( false );
-#endif
 
 	// Display a busy cursor, but only if there is no other activity within
 	// BUSY_CURSOR_TIMEOUT milliseconds (avoid cursor flicker)
@@ -445,14 +438,8 @@ YEvent * YQUI::pollInput()
 
 	if ( dialog )
 	{
-#if 0
-	    dialog->activate( true );
-#endif
 	    qApp->processEvents();
 	    event = _event_handler.consumePendingEvent();
-#if 0
-	    dialog->activate( false );
-#endif
 	}
     }
 
