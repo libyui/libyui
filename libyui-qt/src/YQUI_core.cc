@@ -67,6 +67,7 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     _usingVisionImpairedPalette	= false;
     _leftHandedMouse		= false;
     _askedForLeftHandedMouse	= false;
+    _noborder                   = false;
     screenShotNameTemplate 	= "";
 
     qInstallMsgHandler( qMessageHandler );
