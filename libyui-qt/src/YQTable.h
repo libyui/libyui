@@ -20,8 +20,6 @@
 #define YQTable_h
 
 #include <qvbox.h>
-#include <ycp/YCPString.h>
-
 #include "YTable.h"
 
 

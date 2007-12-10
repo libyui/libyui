@@ -26,9 +26,6 @@
 #include <qvbox.h>
 #include <qwidgetstack.h>
 
-#include <ycp/YCPTerm.h>
-#include <ycp/YCPCode.h>
-
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 

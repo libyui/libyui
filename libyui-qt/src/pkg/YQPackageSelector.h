@@ -22,7 +22,6 @@
 
 #include <qvbox.h>
 #include <qcolor.h>
-#include <ycp/YCPString.h>
 
 #include "YQPackageSelectorBase.h"
 #include "YQPkgObjList.h"
