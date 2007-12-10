@@ -79,6 +79,7 @@
 
 #include "QY2ComboTabWidget.h"
 #include "YQDialog.h"
+#include "YQApplication.h"
 #include "utf8.h"
 #include "YQUI.h"
 #include "YEvent.h"
@@ -1057,9 +1058,9 @@ YQPackageSelector::connectPatchList()
 void
 YQPackageSelector::pkgExport()
 {
-    QString filename = YQUI::ui()->askForSaveFileName( QString( DEFAULT_EXPORT_FILE_NAME ),	// startsWith
-						       QString( "*.xml;;*" ),			// filter
-						       _( "Save Package List" ) );
+    QString filename = YQApplication::askForSaveFileName( QString( DEFAULT_EXPORT_FILE_NAME ),	// startsWith
+							  QString( "*.xml;;*" ),		// filter
+							  _( "Save Package List" ) );
 
     if ( ! filename.isEmpty() )
     {

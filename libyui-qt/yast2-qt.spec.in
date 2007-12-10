@@ -5,8 +5,8 @@
 BuildRequires:	dbus-1-devel boost-devel libzypp-devel curl-devel docbook-xsl-stylesheets doxygen libdrm-devel libjpeg-devel libxcrypt-devel libxslt perl-XML-Writer qt3-devel rpm-devel sgml-skel update-desktop-files yast2-devtools yast2-core-devel hal-devel
 
 Summary:	-
-BuildRequires:	yast2-core-devel >= 2.16.11
-Requires:	yast2-core >= 2.16.11
+BuildRequires:	yast2-core-devel >= 2.16.15
+Requires:	yast2-core >= 2.16.15
 Requires:	libzypp >= 3.11.8
 Provides:	yast2_ui
 Provides:	y2base:/var/lib/YaST2/servers/qt

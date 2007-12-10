@@ -124,6 +124,72 @@ public:
      **/
     void setAutoFonts( bool useAutoFonts );
 
+    /**
+     * Open a directory selection box and prompt the user for an existing
+     * directory.
+     *
+     * 'startDir' is the initial directory that is displayed.
+     *
+     * 'headline' is an explanatory text for the directory selection box.
+     * Graphical UIs may omit that if no window manager is running.
+     *
+     * Returns the selected directory name
+     * or an empty string if the user canceled the operation.
+     *
+     * Implemented from YApplication.
+     **/
+    virtual string askForExistingDirectory( const string & startDir,
+					    const string & headline );
+
+    /**
+     * Open a file selection box and prompt the user for an existing file.
+     *
+     * 'startWith' is the initial directory or file.
+     *
+     * 'filter' is one or more blank-separated file patterns, e.g.
+     * "*.png *.jpg"
+     *
+     * 'headline' is an explanatory text for the file selection box.
+     * Graphical UIs may omit that if no window manager is running.
+     *
+     * Returns the selected file name
+     * or an empty string if the user canceled the operation.
+     *
+     * Implemented from YApplication.
+     **/
+    virtual string askForExistingFile( const string & startWith,
+				       const string & filter,
+				       const string & headline );
+
+    /**
+     * Open a file selection box and prompt the user for a file to save data
+     * to.  Automatically asks for confirmation if the user selects an existing
+     * file.
+     *
+     * 'startWith' is the initial directory or file.
+     *
+     * 'filter' is one or more blank-separated file patterns, e.g.
+     * "*.png *.jpg"
+     *
+     * 'headline' is an explanatory text for the file selection box.
+     * Graphical UIs may omit that if no window manager is running.
+     *
+     * Returns the selected file name
+     * or an empty string if the user canceled the operation.
+     *
+     * Implemented from YApplication.
+     **/
+    virtual string askForSaveFileName( const string & startWith,
+				       const string & filter,
+				       const string & headline );
+    /**
+     * Lower-level version that works with QStrings and does not change
+     * the mouse cursor.
+     **/
+    static QString askForSaveFileName( const QString & startWith,
+				       const QString & filter,
+				       const QString & headline );
+
     
 protected:
 

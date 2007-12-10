@@ -25,11 +25,12 @@
 #include <unistd.h>
 
 #include <qcursor.h>
-#include <qfiledialog.h>
-#include <qmessagebox.h>
 #include <qpixmap.h>
 #include <qinputdialog.h>
+#include <qmessagebox.h>
+#include <qfiledialog.h>
 #include <qvbox.h>
+#include <qdir.h>
 
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
@@ -40,6 +41,7 @@
 #include "YUISymbols.h"
 #include "YQDialog.h"
 #include "YQSignalBlocker.h"
+#include "YQApplication.h"
 
 #include "utf8.h"
 #include "YQi18n.h"
@@ -172,7 +174,9 @@ void YQUI::makeScreenShot( std::string stl_filename )
 	{
 	    YQSignalBlocker sigBlocker( &_user_input_timer );
 
-	    fileName = askForSaveFileName( fileName, QString( "*.png" ) , _( "Save screen shot to..." ) );
+	    fileName = YQApplication::askForSaveFileName( fileName,
+							  QString( "*.png" ) ,
+							  _( "Save screen shot to..." ) );
 	}
 
         if ( fileName.isEmpty() )
@@ -220,9 +224,9 @@ void YQUI::makeScreenShot( std::string stl_filename )
 
 void YQUI::askSaveLogs()
 {
-    QString fileName = askForSaveFileName( "/tmp/y2logs.tgz",			// startWith
-					   "*.tgz *.tar.gz",			// filter
-					   "Save y2logs to..." );		// headline
+    QString fileName = YQApplication::askForSaveFileName( QString( "/tmp/y2logs.tgz" ),	 	// startWith
+							  QString( "*.tgz *.tar.gz"  ),		// filter
+							  QString( "Save y2logs to..."  ) );	// headline
 
     if ( ! fileName.isEmpty() )
     {
@@ -354,117 +358,6 @@ void YQUI::askPlayMacro()
     }
 }
 
-
-
-YCPValue YQUI::askForExistingDirectory( const YCPString & startDir,
-                                         const YCPString & headline )
-{
-    normalCursor();
-
-    QString dir_name =
-        QFileDialog::getExistingDirectory( fromUTF8( startDir->value() ),
-                                           _main_win,                           // parent
-                                           "dir_selector",                      // name
-                                           fromUTF8( headline->value() ) );     // caption
-    busyCursor();
-
-    if ( dir_name.isEmpty() )   // this includes dir_name.isNull()
-        return YCPVoid();       // nothing selected -> return 'nil'
-
-    return YCPString( toUTF8( dir_name ) );
-}
-
-
-YCPValue YQUI::askForExistingFile( const YCPString & startWith,
-				   const YCPString & filter,
-				   const YCPString & headline )
-{
-    normalCursor();
-
-    QString file_name =
-        QFileDialog::getOpenFileName( fromUTF8( startWith->value() ),
-                                      fromUTF8( filter->value() ),
-                                      _main_win,                        // parent
-                                      "file_selector",                  // name
-                                      fromUTF8( headline->value() ) );  // caption
-    busyCursor();
-
-    if ( file_name.isEmpty() )  // this includes file_name.isNull()
-        return YCPVoid();       // nothing selected -> return 'nil'
-
-    return YCPString( toUTF8( file_name ) );
-}
-
-
-YCPValue YQUI::askForSaveFileName( const YCPString & startWith,
-				   const YCPString & filter,
-				   const YCPString & headline )
-{
-    normalCursor();
-
-    QString file_name = askForSaveFileName( fromUTF8( startWith->value() ),
-                                            fromUTF8( filter->value() ),
-                                            fromUTF8( headline->value() ) );
-    busyCursor();
-
-    if ( file_name.isEmpty() )          // this includes file_name.isNull()
-        return YCPVoid();               // nothing selected -> return 'nil'
-
-    return YCPString( toUTF8( file_name ) );
-}
-
-
-
-QString YQUI::askForSaveFileName( const QString & startWith,
-				  const QString & filter,
-				  const QString & headline )
-{
-    QString file_name;
-    bool try_again = false;
-
-    do
-    {
-        // Leave the mouse cursor alone - this function might be called from
-        // some other widget, not only from UI::AskForSaveFileName().
-
-        file_name = QFileDialog::getSaveFileName( startWith,
-                                                  filter,
-                                                  _main_win,            // parent
-                                                  "file_selector",      // name
-                                                  headline );           // caption
-
-        if ( file_name.isEmpty() )      // this includes file_name.isNull()
-            return QString::null;
-
-
-        if ( access( (const char *) file_name, F_OK ) == 0 )    // file exists?
-        {
-            QString msg;
-
-            if ( access( (const char *) file_name, W_OK ) == 0 )
-            {
-                // Confirm if the user wishes to overwrite an existing file
-                msg = ( _( "%1 exists! Really overwrite?" ) ).arg( file_name );
-            }
-            else
-            {
-                // Confirm if the user wishes to overwrite a write-protected file %1
-                msg = ( _( "%1 exists and is write-protected!\nReally overwrite?" ) ).arg( file_name );
-            }
-
-            int button_no = QMessageBox::information( _main_win,
-                                                      // Window title for confirmation dialog
-                                                      _( "Confirm"   ),
-                                                      msg,
-                                                      _( "C&ontinue" ),
-                                                      _( "&Cancel"   ) );
-            try_again = ( button_no != 0 );
-        }
-
-    } while ( try_again );
-
-    return file_name;
-}
 
 
 // EOF

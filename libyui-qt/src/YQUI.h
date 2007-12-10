@@ -315,67 +315,6 @@ protected:
 public:
 
     /**
-     *
-     * Open a directory selection box and prompt the user for an existing directory.
-     * [Reimplemented from YUI]
-     *
-     * 'startDir' is the initial directory that is displayed.
-     *
-     * 'headline' is an explanatory text for the directory selection box.
-     * Graphical UIs may omit that if no window manager is running.
-     *
-     * Returns the selected directory name
-     * or 'nil' (YCPVoid() ) if the user canceled the operation.
-     **/
-    YCPValue askForExistingDirectory ( const YCPString & startDir,
-				       const YCPString & headline );
-
-    /**
-     * Open a file selection box and prompt the user for an existing file.
-     * [Reimplemented from YUI]
-     *
-     * 'startWith' is the initial directory or file.
-     *
-     * 'filter' is one or more blank-separated file patterns, e.g. "*.png *.jpg"
-     *
-     * 'headline' is an explanatory text for the file selection box.
-     * Graphical UIs may omit that if no window manager is running.
-     *
-     * Returns the selected file name
-     * or 'nil' (YCPVoid() ) if the user canceled the operation.
-     **/
-    YCPValue askForExistingFile	( const YCPString & startWith,
-				  const YCPString & filter,
-				  const YCPString & headline );
-
-    /**
-     * Open a file selection box and prompt the user for a file to save data to.
-     * Automatically asks for confirmation if the user selects an existing file.
-     * [Reimplemented from YUI]
-     *
-     * 'startWith' is the initial directory or file.
-     *
-     * 'filter' is one or more blank-separated file patterns, e.g. "*.png *.jpg"
-     *
-     * 'headline' is an explanatory text for the file selection box.
-     * Graphical UIs may omit that if no window manager is running.
-     *
-     * Returns the selected file name
-     * or 'nil' (YCPVoid() ) if the user canceled the operation.
-     **/
-    YCPValue askForSaveFileName	( const YCPString & startWith,
-				  const YCPString & filter,
-				  const YCPString & headline );
-
-    /**
-     * Lower-level version that works with QStrings and does not change
-     * the mouse cursor.
-     **/
-    QString askForSaveFileName( const QString & startWith,
-				const QString & filter,
-				const QString & headline );
-
-    /**
      * Initialize and set a textdomain for gettext()
      **/
     static void setTextdomain( const char * domain );

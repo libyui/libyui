@@ -10,19 +10,26 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQApplication.cc
+  File:		YQApplication.cc
 
-  Author:     Stefan Hundhammer <sh@suse.de>
+  Author:	Stefan Hundhammer <sh@suse.de>
 
+  Textdomain	"packages-qt"
 /-*/
 
 
+#include <unistd.h>	// access()
 #include <qapp.h>
 #include <qlocale.h>
 #include <qregexp.h>
+#include <qfiledialog.h>
+#include <qmessagebox.h>
 
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
+
+#include "utf8.h"
+#include "YQi18n.h"
 
 #include "YQApplication.h"
 
@@ -40,10 +47,10 @@ YQApplication::YQApplication()
     , _autoHeadingFontSize( -1 )
 {
     y2debug( "YQApplication constructor start" );
-    
+
     setIconBasePath( ICONDIR "/icons/22x22/apps/" );
     loadPredefinedQtTranslations();
-    
+
     y2debug( "YQApplication constructor end" );
 }
 
@@ -78,7 +85,7 @@ YQApplication::loadPredefinedQtTranslations()
     QString language = QLocale::system().name();
 
     QString transFile = QString( "qt_%1.qm")
-              .arg( language.lower().replace('_','-') );
+	      .arg( language.lower().replace('_','-') );
 
     if ( path.isEmpty() )
     {
@@ -89,7 +96,7 @@ YQApplication::loadPredefinedQtTranslations()
 
     if ( ! _qtTranslations )
 	_qtTranslations = new QTranslator();
-    
+
     _qtTranslations->load( transFile, path );
 
     if ( _qtTranslations->isEmpty() )
@@ -144,17 +151,17 @@ YQApplication::setLangFonts( const string & language, const string & encoding )
     }
 
     QString lang = language.c_str();
-    
+
     if ( ! encoding.empty() )
 	lang += QString( "." ) + encoding.c_str();
-    
+
     QString key;
 
     if ( ! _langFonts->hasKey( fontKey( lang ) ) )	// Try with encoding ("zh_CN.UTF8" etc.)
     {
 	lang = language.c_str();			// Try without encoding ("zh_CN")
 
-	if ( ! _langFonts->hasKey( fontKey( lang ) ) )	
+	if ( ! _langFonts->hasKey( fontKey( lang ) ) )
 	    lang.replace( QRegExp( "_.*$" ), "" );	// Cut off trailing country ("_CN")
     }
 
@@ -296,7 +303,7 @@ YQApplication::deleteFonts()
 
     _currentFont = 0;
     _headingFont = 0;
-    _boldFont    = 0;
+    _boldFont	 = 0;
 }
 
 
@@ -320,55 +327,174 @@ YQApplication::pickAutoFonts()
 #endif
     int x = 800;
     int y = 600;
-	
 
-    int normal  = 10;
-    int heading	= 12;
+
+    int normal	= 10;
+    int heading = 12;
 
     if ( x >= 800 && y >= 600 )
     {
 	normal	= 10;
-	heading	= 12;
+	heading = 12;
     }
 
     if ( x >= 1024 && y >= 768 )
     {
 	normal	= 12;
-	heading	= 14;
+	heading = 14;
     }
 
     if ( x >= 1280 && y >= 1024 )
     {
 	normal	= 14;
-	heading	= 18;
+	heading = 18;
     }
 
     if ( x >= 1400 )
     {
 	normal	= 16;
-	heading	= 20;
+	heading = 20;
     }
 
     if ( x >= 1600 )
     {
 	normal	= 18;
-	heading	= 24;
+	heading = 24;
     }
 
     if ( x >= 2048 )	// Sounds futuristic? Just wait one or two years...
     {
 	normal	= 20;
-	heading	= 28;
+	heading = 28;
     }
 
-    _autoNormalFontSize  = normal;
+    _autoNormalFontSize	 = normal;
     _autoHeadingFontSize = heading;
 
     y2milestone( "Selecting auto fonts - normal: %d, heading: %d (bold)",
 		 _autoNormalFontSize, _autoHeadingFontSize );
 }
 
-    
+
+string
+YQApplication::askForExistingDirectory( const string & startDir,
+					const string & headline )
+{
+#if 0
+    normalCursor();
+#endif
+
+    QString dirName =
+	QFileDialog::getExistingDirectory( fromUTF8( startDir ),
+					   0,				// parent
+					   "dir_selector",		// name
+					   fromUTF8( headline ) );	// caption
+#if 0
+    busyCursor();
+#endif
+
+    return toUTF8( dirName );
+}
+
+
+string
+YQApplication::askForExistingFile( const string & startWith,
+				   const string & filter,
+				   const string & headline )
+{
+#if 0
+    normalCursor();
+#endif
+
+    QString fileName =
+	QFileDialog::getOpenFileName( fromUTF8( startWith ),
+				      fromUTF8( filter ),
+				      0,			// parent
+				      "file_selector",		// name
+				      fromUTF8( headline ) );	// caption
+
+#if 0
+    busyCursor();
+#endif
+
+    return toUTF8( fileName );
+}
+
+
+string
+YQApplication::askForSaveFileName( const string & startWith,
+				   const string & filter,
+				   const string & headline )
+{
+#if 0
+    normalCursor();
+#endif
+
+    QString fileName = askForSaveFileName( fromUTF8( startWith ),
+					   fromUTF8( filter ),
+					   fromUTF8( headline ) );
+#if 0
+    busyCursor();
+#endif
+
+    return toUTF8( fileName );
+}
+
+
+
+QString
+YQApplication::askForSaveFileName( const QString & startWith,
+				   const QString & filter,
+				   const QString & headline )
+{
+    QString fileName;
+    bool tryAgain = false;
+
+    do
+    {
+	// Leave the mouse cursor alone - this function might be called from
+	// some other widget, not only from UI::AskForSaveFileName().
+
+	fileName = QFileDialog::getSaveFileName( startWith,
+						  filter,
+						  0,			// parent
+						  "file_selector",	// name
+						  headline );		// caption
+
+	if ( fileName.isEmpty() )	// this includes fileName.isNull()
+	    return QString::null;
+
+
+	if ( access( (const char *) fileName, F_OK ) == 0 )	// file exists?
+	{
+	    QString msg;
+
+	    if ( access( (const char *) fileName, W_OK ) == 0 )
+	    {
+		// Confirm if the user wishes to overwrite an existing file
+		msg = ( _( "%1 exists! Really overwrite?" ) ).arg( fileName );
+	    }
+	    else
+	    {
+		// Confirm if the user wishes to overwrite a write-protected file %1
+		msg = ( _( "%1 exists and is write-protected!\nReally overwrite?" ) ).arg( fileName );
+	    }
+
+	    int buttonNo = QMessageBox::information( 0,	// parent widget
+						     // Translators: Window title for confirmation dialog
+						     _( "Confirm"   ),
+						     msg,
+						     _( "C&ontinue" ),
+						     _( "&Cancel"   ) );
+	    tryAgain = ( buttonNo != 0 );
+	}
+
+    } while ( tryAgain );
+
+    return fileName;
+}
+
+
 
 
 #include "YQApplication.moc"

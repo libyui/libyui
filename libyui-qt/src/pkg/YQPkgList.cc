@@ -33,6 +33,7 @@
 #include "YQUI.h"
 #include "YQi18n.h"
 #include "YQIconPool.h"
+#include "YQApplication.h"
 
 
 YQPkgList::YQPkgList( QWidget * parent )
@@ -350,9 +351,9 @@ YQPkgList::updateActions( YQPkgObjListItem * pkgObjListItem )
 void
 YQPkgList::askExportList() const
 {
-    QString filename = YQUI::ui()->askForSaveFileName( "pkglist.txt",	// startsWith
-							   "*.txt",		// filter
-							   _( "Export Package List" ) );
+    QString filename = YQApplication::askForSaveFileName( "pkglist.txt",	// startsWith
+							  "*.txt",		// filter
+							  _( "Export Package List" ) );
     if ( ! filename.isEmpty() )
 	exportList( filename, true );
 }

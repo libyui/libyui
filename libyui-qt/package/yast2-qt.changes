@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Mon Dec 10 18:39:34 CET 2007 - sh@suse.de
+
+- Moved file and directory dialogs from YQUI to YQApplication:
+  - askForExistingDirectory()
+  - askForExistingFile()
+  - askForSaveFile()
+- V 2.16.8  
+
+-------------------------------------------------------------------
 Wed Dec  5 20:41:15 CET 2007 - sh@suse.de
 
 - Moved main dialog handling out of YQUI and into a new class
