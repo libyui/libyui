@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Mon Dec 10 18:40:37 CET 2007 - sh@suse.de
+
+Moved file and directory dialogs from NCursesUI to NCApplication:
+  - askForExistingDirectory()
+  - askForExistingFile()
+  - askForSaveFile()
+- Added requires and buildRequires for yast2-core-2.16.15 to .spec
+- 2.16.6 
+
+-------------------------------------------------------------------
 Tue Dec  4 17:00:16 CET 2007 - kmachalkova@suse.cz
 
 - Removed reference to printing license text (#327542)

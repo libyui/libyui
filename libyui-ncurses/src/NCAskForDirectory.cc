@@ -57,8 +57,8 @@ namespace
 //	DESCRIPTION :
 //
 NCAskForExistingDirectory::NCAskForExistingDirectory( const wpos at,
-						      const YCPString & iniDir,
-						      const YCPString & headline )
+						      const string & iniDir,
+						      const string & headline )
     : NCPopup( at, true )
     , okButton( 0 )
     , cancelButton( 0 )
@@ -91,14 +91,14 @@ NCAskForExistingDirectory::~NCAskForExistingDirectory()
 //
 //	DESCRIPTION :
 //
-void NCAskForExistingDirectory::createLayout( const YCPString & iniDir,
-					      const YCPString & headline )
+void NCAskForExistingDirectory::createLayout( const string & iniDir,
+					      const string & headline )
 {
     // the vertical split is the (only) child of the dialog
     NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
 
     // the headline
-    new NCLabel( split, headline->value(), true, false );	// isHeading = true
+    new NCLabel( split, headline, true, false );	// isHeading = true
 
     NCFrame * frame = new NCFrame( split, "" );
     
@@ -107,6 +107,7 @@ void NCAskForExistingDirectory::createLayout( const YCPString & iniDir,
     dirName->setNotify( true );
     dirName->setStretchable( YD_HORIZ, true );
 
+#warning is this widget ID really needed?
     YStringWidgetID * dirID = new YStringWidgetID( idDirName );
     dirName->setId( dirID );
 
@@ -115,6 +116,7 @@ void NCAskForExistingDirectory::createLayout( const YCPString & iniDir,
 
     // label for checkbox 
     detailed = new NCCheckBox( hSplit, _( "&Detailed View" ), false );
+#warning is this widget ID really needed?
     YStringWidgetID * detailsID = new YStringWidgetID( idDetails );
     detailed->setId( detailsID );
     detailed->setNotify( true );
@@ -130,6 +132,7 @@ void NCAskForExistingDirectory::createLayout( const YCPString & iniDir,
 				    NCFileTable::T_Overview,
 				    iniDir );
 
+#warning is this widget ID really needed?
     YStringWidgetID * dirListID = new YStringWidgetID( idDirList );
     dirList->setId( dirListID );
 
@@ -145,6 +148,7 @@ void NCAskForExistingDirectory::createLayout( const YCPString & iniDir,
     okButton->setFunctionKey( 10 );
     okButton->setStretchable( YD_HORIZ, true );
     
+#warning is this widget ID really needed?
     YStringWidgetID * okID = new YStringWidgetID ( idOk );
     okButton->setId( okID );
 
@@ -155,6 +159,7 @@ void NCAskForExistingDirectory::createLayout( const YCPString & iniDir,
     cancelButton->setFunctionKey( 9 );
     cancelButton->setStretchable( YD_HORIZ, true);
     
+#warning is this widget ID really needed?
     YStringWidgetID * cancelID = new YStringWidgetID (idCancel );
     cancelButton->setId( cancelID );
 
@@ -233,6 +238,7 @@ bool NCAskForExistingDirectory::postAgain( )
 
     postevent.detail = NCursesEvent::NODETAIL;
 
+#warning compare widget pointers here, not IDs
     YWidgetID * currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
 
     if ( currentId )

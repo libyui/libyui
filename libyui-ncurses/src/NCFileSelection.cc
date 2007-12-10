@@ -184,22 +184,22 @@ void NCFileSelectionTag::DrawAt( NCursesWindow & w, const wrect at,
 NCFileSelection::NCFileSelection( YWidget * parent,
 				  YTableHeader * tableHeader,
 				  NCFileSelectionType type,
-				  const YCPString & iniDir )
+				  const string & iniDir )
     : NCTable( parent, tableHeader )
-      , startDir( iniDir->value() )
-      , currentDir( iniDir->value() )
+      , startDir( iniDir )
+      , currentDir( iniDir )
       , tableType( type )
 {
     SetSepChar( ' ' );
     setTextdomain( "packages" );
 
     struct stat64 statInfo;
-    if ( !iniDir->value().empty() )
+    if ( !iniDir.empty() )
     {
-	stat64( iniDir->value().c_str(), &statInfo );
+	stat64( iniDir.c_str(), &statInfo );
     }
     
-    if ( iniDir->value().empty()
+    if ( iniDir.empty()
 	 || !S_ISDIR(statInfo.st_mode) )
     {
 	char wDir[PATH_MAX+1];		// <limits.h>
@@ -460,13 +460,13 @@ NCFileSelectionTag * NCFileSelection::getTag( const int & index )
 NCFileTable::NCFileTable( YWidget * parent,
 			  YTableHeader * tableHeader,
 			  NCFileSelectionType type,
-			  const YCPString & filter,
-			  const YCPString & iniDir )
+			  const string & filter,
+			  const string & iniDir )
     : NCFileSelection( parent, tableHeader, type, iniDir )
 {
     //fillHeader();
 
-    string filterStr = filter->value();
+    string filterStr = filter;
     const string delims( " \t" );
     string::size_type begin, end;
 
@@ -720,7 +720,7 @@ bool NCFileTable::fillList ( )
 NCDirectoryTable::NCDirectoryTable( YWidget * parent,
 				    YTableHeader * tableHeader,
 				    NCFileSelectionType type,
-				    const YCPString & iniDir )
+				    const string & iniDir )
     : NCFileSelection( parent, tableHeader, type, iniDir )
 {
     //fillHeader();    

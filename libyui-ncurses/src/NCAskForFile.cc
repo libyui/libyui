@@ -57,9 +57,9 @@ namespace
 //	DESCRIPTION :
 //
 NCAskForFile::NCAskForFile( const wpos at,
-			    const YCPString & iniDir,
-			    const YCPString & filter,
-			    const YCPString & headline )
+			    const string & iniDir,
+			    const string & filter,
+			    const string & headline )
     : NCPopup( at, true )
     , okButton( 0 )
     , cancelButton( 0 )
@@ -172,7 +172,7 @@ void NCAskForFile::createLayout( const string & iniDir,
     dirList = new NCDirectoryTable( hSplit1,
 				    dirHeader,
 				    NCFileSelection::T_Overview,
-				    YCPString(startDir) );
+				    startDir );
     dirList->setSendKeyEvents( true );
     
     YStringWidgetID * dirListID = new YStringWidgetID( idDirList );
@@ -188,7 +188,7 @@ void NCAskForFile::createLayout( const string & iniDir,
 				fileHeader,
 				NCFileSelection::T_Overview,
 				filter,
-				YCPString(startDir) );
+				startDir );
 
     fileList->setSendKeyEvents( true );
     YStringWidgetID * dirFileID = new YStringWidgetID( idFileList );
@@ -442,14 +442,14 @@ bool NCAskForFile::getCheckBoxValue( NCCheckBox * checkBox )
 //	DESCRIPTION :
 //
 NCAskForExistingFile::NCAskForExistingFile( const wpos at,
-					    const YCPString & iniDir,
-					    const YCPString & filter,
-					    const YCPString & headline )
+					    const string & iniDir,
+					    const string & filter,
+					    const string & headline )
     : NCAskForFile( at, iniDir, filter, headline )
 {
-    createLayout( iniDir->value(),
-		  filter->value(),
-		  headline->value(),
+    createLayout( iniDir,
+		  filter,
+		  headline,
 		  false );	// file name is not editable
 }
 
@@ -478,14 +478,14 @@ string NCAskForExistingFile::getFileName()
 //	DESCRIPTION :
 //
 NCAskForSaveFileName::NCAskForSaveFileName( const wpos at,
-					    const YCPString & iniDir,
-					    const YCPString & filter,
-					    const YCPString & headline )
+					    const string & iniDir,
+					    const string & filter,
+					    const string & headline )
     : NCAskForFile( at, iniDir, filter, headline )
 {
-    createLayout( iniDir->value(),
-		  filter->value(),
-		  headline->value(),
+    createLayout( iniDir,
+		  filter,
+		  headline,
 		  true );	// file name is editable
 }
 

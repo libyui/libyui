@@ -72,9 +72,9 @@ protected:
 public:
     
     NCAskForFile( const wpos at,
-		  const YCPString & startDir,
-		  const YCPString & filter,
-		  const YCPString & headline );
+		  const string & startDir,
+		  const string & filter,
+		  const string & headline );
 
     virtual ~NCAskForFile() = 0;
 
@@ -86,9 +86,9 @@ public:
 
     /**
      * Create layout of file selection popup
-     * @param YCPString The initial start directory
-     * @param YCPString The filter (show files matching this pattern) 
-     * @param YCPString The headline of the popup
+     * @param string The initial start directory
+     * @param string The filter (show files matching this pattern) 
+     * @param string The headline of the popup
      * @param bool	File name field editable?
      * @return void
      */
@@ -125,9 +125,9 @@ class NCAskForExistingFile : public NCAskForFile {
 public:
 
     NCAskForExistingFile( const wpos at,
-			  const YCPString & startDir,
-			  const YCPString & filter,
-			  const YCPString & headline );
+			  const string & startDir,
+			  const string & filter,
+			  const string & headline );
 
     virtual ~NCAskForExistingFile() {}
 
@@ -150,9 +150,9 @@ class NCAskForSaveFileName : public NCAskForFile {
 public:
 
     NCAskForSaveFileName( const wpos at,
-			  const YCPString & startDir,
-			  const YCPString & filter,
-			  const YCPString & headline );
+			  const string & startDir,
+			  const string & filter,
+			  const string & headline );
 
     virtual ~NCAskForSaveFileName() {}
 

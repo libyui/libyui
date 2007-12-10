@@ -20,6 +20,8 @@
 #include "Y2Log.h"
 #include "NCurses.h"
 #include "NCApplication.h"
+#include "NCAskForDirectory.h"
+#include "NCAskForFile.h"
 
 
 NCApplication::NCApplication()
@@ -45,4 +47,50 @@ NCApplication::setLanguage( const string & language,
   
 }
 
+
+string
+NCApplication::askForSaveFileName( const string & startDir,
+				   const string & filter,
+				   const string & headline )
+{
+    NCAskForSaveFileName * filePopup = new NCAskForSaveFileName( wpos( 1, 1 ), startDir, filter, headline );
+    YUI_CHECK_NEW( filePopup );
+    
+    NCursesEvent retEvent = filePopup->showDirPopup( );
+    YDialog::deleteTopmostDialog();
+
+    NCMIL << "Returning: " <<  retEvent.result << endl;
+    return retEvent.result;
+}
+
+
+string
+NCApplication::askForExistingFile( const string & startDir,
+				   const string & filter,
+				   const string & headline )
+{
+    NCAskForExistingFile * filePopup = new NCAskForExistingFile( wpos( 1, 1 ), startDir, filter, headline );
+    YUI_CHECK_NEW( filePopup );
+    
+    NCursesEvent retEvent = filePopup->showDirPopup( );
+    YDialog::deleteTopmostDialog();
+
+    NCMIL << "Returning: " <<  retEvent.result << endl;
+    return retEvent.result;
+}
+
+
+string
+NCApplication::askForExistingDirectory( const string & startDir,
+					const string & headline )
+{
+    NCAskForExistingDirectory * dirPopup = new NCAskForExistingDirectory( wpos( 1, 1 ), startDir, headline );
+    YUI_CHECK_NEW( dirPopup );
+    
+    NCursesEvent retEvent = dirPopup->showDirPopup( );
+    YDialog::deleteTopmostDialog();
+
+    NCMIL << "Returning: " <<  retEvent.result << endl;
+    return retEvent.result;
+}
 

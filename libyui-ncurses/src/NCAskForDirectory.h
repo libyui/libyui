@@ -62,8 +62,8 @@ protected:
 public:
     
     NCAskForExistingDirectory( const wpos at,
-			       const YCPString & startDir,
-			       const YCPString & headline );
+			       const string & startDir,
+			       const string & headline );
 
     virtual ~NCAskForExistingDirectory();
 
@@ -76,12 +76,12 @@ public:
     
     /**
      * Create layout of file directory selection popup
-     * @param YCPString The initial start directory
-     * @param YCPString The headline of the popup
+     * @param string The initial start directory
+     * @param string The headline of the popup
      * @return void
      */
-    void createLayout( const YCPString & iniDir,
-		       const YCPString & headline );
+    void createLayout( const string & iniDir,
+		       const string & headline );
 
     /**
      * Shows the popup with the list of directories.

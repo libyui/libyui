@@ -35,8 +35,6 @@
 #include <yui/YUI.h>
 
 #include "NCPackageSelectorStart.h"
-#include "NCAskForDirectory.h"
-#include "NCAskForFile.h"
 #include "NCstring.h"
 #include "NCWidgetFactory.h"
 #include "NCOptionalWidgetFactory.h"
@@ -628,86 +626,6 @@ bool YNCursesUI::want_colors()
 void YNCursesUI::beep()
 {
   ::beep();
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YNCursesUI::askForSaveFileName()
-//	METHOD TYPE : YCPValue()
-//
-//	DESCRIPTION :
-//
-YCPValue YNCursesUI::askForSaveFileName( const YCPString & startDir,
-					  const YCPString & filter,
-					  const YCPString & headline )
-{
-    NCAskForSaveFileName * filePopup = new NCAskForSaveFileName( wpos( 1, 1 ), startDir, filter, headline );
-    YUI_CHECK_NEW( filePopup );
-    
-    NCursesEvent retEvent = filePopup->showDirPopup( );
-    YDialog::deleteTopmostDialog();
-
-    if ( retEvent.result != "" )
-    {
-	NCMIL << "Returning: " <<  retEvent.result << endl;
-	return YCPString( retEvent.result );
-    }
-    else
-	return YCPVoid(); // nothing selected -> return 'nil'  
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YNCursesUI::askForExistingFile()
-//	METHOD TYPE : YCPValue
-//
-//	DESCRIPTION :
-//
-YCPValue YNCursesUI::askForExistingFile( const YCPString & startDir,
-					  const YCPString & filter,
-					  const YCPString & headline )
-{
-    NCAskForExistingFile * filePopup = new NCAskForExistingFile( wpos( 1, 1 ), startDir, filter, headline );
-    YUI_CHECK_NEW( filePopup );
-    
-    NCursesEvent retEvent = filePopup->showDirPopup( );
-    YDialog::deleteTopmostDialog();
-
-    if ( retEvent.result != "" )
-    {
-	NCMIL << "Returning: " <<  retEvent.result << endl;
-	return YCPString( retEvent.result );
-    }
-    else
-	return YCPVoid(); // nothing selected -> return 'nil'  
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YNCursesUI::askForExistingDirectory()
-//	METHOD TYPE : YCPValue
-//
-//	DESCRIPTION :
-//
-YCPValue YNCursesUI::askForExistingDirectory( const YCPString & startDir,
-					       const YCPString & headline )
-{
-    NCAskForExistingDirectory * dirPopup = new NCAskForExistingDirectory( wpos( 1, 1 ), startDir, headline );
-    YUI_CHECK_NEW( dirPopup );
-    
-    NCursesEvent retEvent = dirPopup->showDirPopup( );
-    YDialog::deleteTopmostDialog();
-
-    if ( retEvent.result != "" )
-    {
-	NCMIL << "Returning: " <<  retEvent.result << endl;
-	return YCPString( retEvent.result );
-    }
-    else
-	return YCPVoid(); // nothing selected -> return 'nil'
 }
 
 

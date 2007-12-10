@@ -134,7 +134,7 @@ public:
     NCFileSelection( YWidget * parent,
 		     YTableHeader * tableHeader,
 		     NCFileSelectionType type,
-		     const YCPString & iniDir );
+		     const string & iniDir );
 
     virtual ~NCFileSelection();
 
@@ -205,9 +205,9 @@ public:
     /**
      * Set the start directory
      */
-    void setStartDir( const YCPString & start ) {
-	currentDir = start->value();
-	startDir = start->value();
+    void setStartDir( const string & start ) {
+	currentDir = start;
+	startDir = start;
     }
 	
 };
@@ -227,13 +227,13 @@ public:
     NCFileTable( YWidget * parent,
 		 YTableHeader * tableHeader,
 		 NCFileSelectionType type,
-		 const YCPString & filter,
-		 const YCPString & iniDir );
+		 const string & filter,
+		 const string & iniDir );
 
     virtual ~NCFileTable(){}
 
-    void setCurrentFile( const YCPString & file ) {
-	currentFile = file->value();
+    void setCurrentFile( const string & file ) {
+	currentFile = file;
     }
 
     bool filterMatch( const string & fileName );
@@ -263,7 +263,7 @@ public:
     NCDirectoryTable( YWidget * parent,
 		      YTableHeader * tableHeader,
 		      NCFileSelectionType type,
-		      const YCPString & iniDir );
+		      const string & iniDir );
 
     virtual ~NCDirectoryTable(){}
 

@@ -96,7 +96,8 @@ doesn't work corretcly if called from NCDialog
 
 NCAskForDirectory/NCAskForFile
 ------------------------------
-ComboBox entries are added twice
+- ComboBox entries are added twice
+- Don't use widget IDs; compare widget pointers instead
 
 
 NCMultiLineEdit
