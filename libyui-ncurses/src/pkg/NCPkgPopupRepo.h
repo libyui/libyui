@@ -36,7 +36,7 @@ class NCPopup;
 class NCPushButton;
 class NCPackageSelector;
 
-class NCPkgRepoTag : public NCTableCol
+class NCPkgRepoTag : public YTableCell
 {
 
 private:
@@ -53,7 +53,9 @@ public:
 
     NCPkgRepoTag ( ZyppRepo repo);
 
-    virtual ~NCPkgRepoTag() {};
+    //Nikdy, ale opravdu nikdy nenechavej v odvozene tride virtualni
+    //destruktor, kdyz ani v puvodni neni, Bublino!
+    ~NCPkgRepoTag() { NCINT << "au!!!!" << endl; };
 
     /*
      * Get repository reference from the line tag
@@ -149,7 +151,9 @@ public:
 
     ZyppProduct findProductForRepo (ZyppRepo repo);
 
-    virtual long nicesize( YUIDimension dim );
+    virtual int preferredWidth();
+
+    virtual int preferredHeight();
 
     /**
       * Create visual layout of the popup window

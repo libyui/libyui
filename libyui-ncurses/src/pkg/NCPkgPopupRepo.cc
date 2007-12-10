@@ -36,8 +36,9 @@
 //
 
 NCPkgRepoTag::NCPkgRepoTag ( ZyppRepo repoPtr)
-    : NCTableCol (NCstring(" "), SEPARATOR)
-      , repo (repoPtr)
+    : YTableCell(string(" "))
+    //: NCTableCol (NCstring(" "), SEPARATOR)
+    , repo (repoPtr)
 {
 
 }
@@ -89,17 +90,22 @@ void NCPkgRepoTable::fillHeader()
 
 void NCPkgRepoTable::addLine ( ZyppRepo r, const vector <string> & cols )
 {
-    vector <NCTableCol*> items ( cols.size() + 1, 0);
+    //use default ctor, add cell in the next step 
+    YTableItem *tabItem = new YTableItem();	
 
     //place tag (with repo reference) to the 0th column
-    items[0] = new NCPkgRepoTag ( r );
+    tabItem->addCell( new NCPkgRepoTag ( r ) );
 
     // and append the rest (name, URL and stuff)
     for ( unsigned i = 1; i < cols.size() + 1; ++i ) {
-        items[i] = new NCTableCol( YCPString( cols[i - 1] ) );
+	tabItem->addCell( cols[ i-1 ]);
     }
 
-    myPad()->Append( items);
+    // this is NCTable::addItem( tabItem );
+    //it actually appends the line to the table
+    addItem( tabItem );   
+
+
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -115,13 +121,16 @@ void NCPkgRepoTable::addLine ( ZyppRepo r, const vector <string> & cols )
 NCPkgRepoTag* NCPkgRepoTable::getTag (const int & index )
 {
    NCTableLine *line = myPad()->ModifyLine( index );
-
    if ( !line )
    {
 	return 0;
    }
+
+   YTableItem *it = dynamic_cast<YTableItem*> (line->origItem() );
+
    //get actual repo tag from 0th column of the table
-   NCPkgRepoTag *tag = static_cast<NCPkgRepoTag *>( line->GetCol( 0 ) );
+   YTableCell *tcell = it->cell(0);
+   NCPkgRepoTag *tag = static_cast<NCPkgRepoTag *>( tcell );
 
    return tag;
 }
@@ -205,6 +214,7 @@ void NCPkgPopupRepo::createLayout( const string & label)
     // the repositories table
     YTableHeader *tableHeader = new YTableHeader();
     repolist = new NCPkgRepoTable( split, tableHeader );
+    repolist->fillHeader();
     
     new NCSpacing( split, YD_VERT, false, 0.4 );
 
@@ -323,15 +333,17 @@ ZyppProduct NCPkgPopupRepo::findProductForRepo( ZyppRepo repo)
 //	DESCRIPTION : default boring setting nice size
 //
 
-long NCPkgPopupRepo::nicesize(YUIDimension dim)
+int NCPkgPopupRepo::preferredWidth()
 {
-    long vdim;
-    if ( NCurses::lines() > 20 )
-        vdim = 20;
-    else
-        vdim = NCurses::lines()-4;
+    return NCurses::cols()*2/3;
+}
 
-    return ( dim == YD_HORIZ ? NCurses::cols()*2/3 : vdim );
+int NCPkgPopupRepo::preferredHeight()
+{
+    if ( NCurses::lines() > 20 )
+	return 20;
+    else
+	return NCurses::lines()-4;
 }
 
 ///////////////////////////////////////////////////////////////////
