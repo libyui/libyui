@@ -316,6 +316,7 @@ QY2ListView::setSortByInsertionSequence( bool sortByInsertionSequence )
 {
     _sortByInsertionSequence = sortByInsertionSequence;
     sort();
+    header()->setClickEnabled( ! _sortByInsertionSequence );
 }
 
 
