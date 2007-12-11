@@ -813,9 +813,8 @@ int YNCursesUI::runInTerminal( const YCPString & module )
 	NCERR << cmd << " returned:" << ret << endl;
     }
 
-    //FIXME: Enable these with multithread support
     //Redirect stdout and stderr to y2log again
-    //NCurses::RedirectToLog();
+    NCurses::RedirectToLog();
 
     //Resume tty modes and refresh the screen
     ::reset_prog_mode();
