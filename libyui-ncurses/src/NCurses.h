@@ -173,6 +173,9 @@ class NCurses {
     NCurses();
     virtual ~NCurses();
 
+    int stdout_save;
+    int stderr_save;
+
     static int cols()  { return ::COLS; }
     static int lines() { return ::LINES; }
 
@@ -194,6 +197,7 @@ class NCurses {
     // actually not for public use
     static void ForgetDlg( NCDialog * dlg_r );
     static void RememberDlg( NCDialog * dlg_r );
+    void RedirectToLog();
     static void ResizeEvent();
   private:
     static set<NCDialog*> _knownDlgs;
