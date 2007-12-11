@@ -403,7 +403,7 @@ void YQWizard::addStep( const string & text, const string & id )
 	return;
     }
 
-    if ( _stepsList.last() && _stepsList.last()->name() == text )
+    if ( _stepsList.last() && _stepsList.last()->name() == fromUTF8( text ) )
     {
 	// Consecutive steps with the same name will be shown as one single step.
 	//
@@ -426,7 +426,7 @@ void YQWizard::addStep( const string & text, const string & id )
 
 void YQWizard::addStepHeading( const string & text )
 {
-    _stepsList.append( new YQWizard::StepHeading( text ) );
+    _stepsList.append( new YQWizard::StepHeading( fromUTF8( text ) ) );
     _stepsDirty = true;
 }
 
