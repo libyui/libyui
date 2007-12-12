@@ -24,6 +24,6 @@
 // the Y2ComponentBroker, so that will be able to find it.
 // This all happens before main() is called!
 
-Y2CCQt g_y2ccqt4;
+Y2CCQt g_y2ccqt;
 
 

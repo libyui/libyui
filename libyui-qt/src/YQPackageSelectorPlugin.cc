@@ -26,7 +26,7 @@
 #include "pkg/YQSimplePatchSelector.h"
 #include "YUIException.h"
 
-#define PLUGIN_BASE_NAME "qt4_pkg"
+#define PLUGIN_BASE_NAME "qt_pkg"
 
 
 YQPackageSelectorPlugin::YQPackageSelectorPlugin()
