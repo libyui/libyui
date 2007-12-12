@@ -18,15 +18,15 @@
 
 /-*/
 
-
-#include <qcursor.h>
-#include <qwidgetstack.h>
-#include <qvbox.h>
-#include <qwidgetlist.h>
-#include <qtextcodec.h>
-#include <qregexp.h>
-#include <qlocale.h>
-#include <qmessagebox.h>
+#include <QEvent>
+#include <QCursor>
+#include <QWidget>
+#include <QTextCodec>
+#include <QRegExp>
+#include <QLocale>
+#include <QMessageBox>
+#include <QColorGroup>
+#include <QDesktopWidget>
 
 
 #define y2log_component "qt-ui"
@@ -58,13 +58,13 @@ int YQUI::getDisplayHeight()
 
 int YQUI::getDisplayDepth()
 {
-    return QColor::numBitPlanes();
+    return qApp->desktop()->depth();
 }
 
 
 long YQUI::getDisplayColors()
 {
-    return 1L << QColor::numBitPlanes();
+    return 1L << qApp->desktop()->depth();
 }
 
 
@@ -91,19 +91,24 @@ void YQUI::beep()
     qApp->beep();
 }
 
+void
+YQUI_Ui::slotBusyCursor()
+{
+    YQUI::ui()->busyCursor();
+}
 
 void
 YQUI::busyCursor( void )
 {
-    qApp->setOverrideCursor( Qt::busyCursor );
+    qApp->setOverrideCursor( Qt::BusyCursor );
 }
 
 
 void
 YQUI::normalCursor( void )
 {
-    if ( _busy_cursor_timer.isActive() )
-	_busy_cursor_timer.stop();
+    if ( _busy_cursor_timer->isActive() )
+	_busy_cursor_timer->stop();
 
     while ( qApp->overrideCursor() )
 	qApp->restoreOverrideCursor();
@@ -114,15 +119,13 @@ void YQUI::toggleVisionImpairedPalette()
 {
     if ( _usingVisionImpairedPalette )
     {
-	qApp->setPalette( normalPalette(),
-			  true );  // informWidgets
+	qApp->setPalette( normalPalette());  // informWidgets
 
 	_usingVisionImpairedPalette = false;
     }
     else
     {
-	qApp->setPalette( visionImpairedPalette(),
-			  true );  // informWidgets
+	qApp->setPalette( visionImpairedPalette() );  // informWidgets
 
 	_usingVisionImpairedPalette = true;
     }
@@ -132,37 +135,33 @@ void YQUI::toggleVisionImpairedPalette()
 QPalette YQUI::visionImpairedPalette()
 {
     const QColor dark  ( 0x20, 0x20, 0x20 );
+    QPalette pal;
 
-    QColorGroup activeCg;	// for the active window (the one with the keyboard focus)
+    // for the active window (the one with the keyboard focus)
+    pal.setColor( QPalette::Active, QPalette::Background,		Qt::black 	);
+    pal.setColor( QPalette::Active, QPalette::Foreground,		Qt::cyan	);
+    pal.setColor( QPalette::Active, QPalette::Text,		Qt::cyan	);
+    pal.setColor( QPalette::Active, QPalette::Base,		dark		);
+    pal.setColor( QPalette::Active, QPalette::Button,		dark		);
+    pal.setColor( QPalette::Active, QPalette::ButtonText,		Qt::green	);
+    pal.setColor( QPalette::Active, QPalette::Highlight,		Qt::yellow	);
+    pal.setColor( QPalette::Active, QPalette::HighlightedText,	Qt::black	);
 
-    activeCg.setColor( QColorGroup::Background,		Qt::black 	);
-    activeCg.setColor( QColorGroup::Foreground,		Qt::cyan	);
-    activeCg.setColor( QColorGroup::Text,		Qt::cyan	);
-    activeCg.setColor( QColorGroup::Base,		dark		);
-    activeCg.setColor( QColorGroup::Button,		dark		);
-    activeCg.setColor( QColorGroup::ButtonText,		Qt::green	);
-    activeCg.setColor( QColorGroup::Highlight,		Qt::yellow	);
-    activeCg.setColor( QColorGroup::HighlightedText,	Qt::black	);
+    // for other windows (those that don't have the keyboard focus)
+    pal.setColor( QPalette::Inactive, QPalette::Background,	Qt::black 	);
+    pal.setColor( QPalette::Inactive, QPalette::Foreground,	Qt::cyan	);
+    pal.setColor( QPalette::Inactive, QPalette::Text,		Qt::cyan	);
+    pal.setColor( QPalette::Inactive, QPalette::Base,		dark		);
+    pal.setColor( QPalette::Inactive, QPalette::Button,		dark		);
+    pal.setColor( QPalette::Inactive, QPalette::ButtonText,	Qt::green	);
 
-    QColorGroup inactiveCg;	// for other windows (those that don't have the keyboard focus)
-
-    inactiveCg.setColor( QColorGroup::Background,	Qt::black 	);
-    inactiveCg.setColor( QColorGroup::Foreground,	Qt::cyan	);
-    inactiveCg.setColor( QColorGroup::Text,		Qt::cyan	);
-    inactiveCg.setColor( QColorGroup::Base,		dark		);
-    inactiveCg.setColor( QColorGroup::Button,		dark		);
-    inactiveCg.setColor( QColorGroup::ButtonText,	Qt::green	);
-
-    QColorGroup disabledCg;	// for disabled widgets
-
-    disabledCg.setColor( QColorGroup::Background,	Qt::black 	);
-    disabledCg.setColor( QColorGroup::Foreground,	Qt::gray	);
-    disabledCg.setColor( QColorGroup::Text,		Qt::gray	);
-    disabledCg.setColor( QColorGroup::Base,		dark		);
-    disabledCg.setColor( QColorGroup::Button,		dark		);
-    disabledCg.setColor( QColorGroup::ButtonText,	Qt::gray	);
-
-    QPalette pal( activeCg, disabledCg, inactiveCg );
+    // for disabled widgets
+    pal.setColor( QPalette::Disabled, QPalette::Background,	Qt::black 	);
+    pal.setColor( QPalette::Disabled, QPalette::Foreground,	Qt::gray	);
+    pal.setColor( QPalette::Disabled, QPalette::Text,		Qt::gray	);
+    pal.setColor( QPalette::Disabled, QPalette::Base,		dark		);
+    pal.setColor( QPalette::Disabled, QPalette::Button,		dark		);
+    pal.setColor( QPalette::Disabled, QPalette::ButtonText,	Qt::gray	);
 
     return pal;
 }
@@ -229,7 +228,7 @@ void YQUI::maybeLeftHandedUser()
     if ( button == QMessageBox::Yes )
     {
 
-	const char * command = 
+	const char * command =
 	    _leftHandedMouse ?
 	    "xmodmap -e \"pointer = 1 2 3\"":	// switch back to right-handed mouse
 	    "xmodmap -e \"pointer = 3 2 1\"";	// switch to left-handed mouse
@@ -237,7 +236,7 @@ void YQUI::maybeLeftHandedUser()
 	_leftHandedMouse	 = ! _leftHandedMouse; 	// might be set repeatedly!
 	_askedForLeftHandedMouse = false;	// give the user a chance to switch back
 	y2milestone( "Switching mouse buttons: %s", command );
-	
+
 	system( command );
     }
     else if ( button == 1 )	// No

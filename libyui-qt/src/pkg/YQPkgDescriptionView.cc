@@ -19,7 +19,8 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include <qregexp.h>
+#include <QRegExp>
+#include <QList>
 #include "YQPkgDescriptionView.h"
 #include "YQPkgDescriptionDialog.h"
 #include "YQi18n.h"
@@ -32,7 +33,7 @@ using std::string;
 YQPkgDescriptionView::YQPkgDescriptionView( QWidget * parent )
     : YQPkgGenericDetailsView( parent )
 {
-    setMimeSourceFactory( 0 );
+    //FIXME setMimeSourceFactory( 0 );
 }
 
 
@@ -63,9 +64,8 @@ YQPkgDescriptionView::showDetails( ZyppSel selectable )
     html_text += description;
 
 
-    setTextFormat( Qt::RichText );
-    setText( html_text );
-    ensureVisible( 0, 0 );	// Otherwise hyperlinks will be centered
+    setHtml( html_text );
+    //FIXME ensureVisible( 0, 0 );	// Otherwise hyperlinks will be centered
 }
 
 
@@ -75,13 +75,12 @@ QString YQPkgDescriptionView::simpleHtmlParagraphs( QString text )
     bool foundAuthorsList = false;
     QString html_text = "<p>";
 
-    QStringList lines = QStringList::split( '\n', text.stripWhiteSpace(),
-					    true ); // allowEmptyEntries
-    QValueList<QString>::const_iterator it = lines.begin();
+    QStringList lines = text.trimmed().split( '\n', QString::KeepEmptyParts );
+    QStringList::const_iterator it = lines.begin();
 
     while ( it != lines.end() )
     {
-	QString line = htmlEscape( *it ).stripWhiteSpace();
+	QString line = htmlEscape( *it ).trimmed();
 
 	if ( line.startsWith( "Authors:" ) )
 	{
@@ -115,26 +114,24 @@ QString YQPkgDescriptionView::simpleHtmlParagraphs( QString text )
 
 
 void
-YQPkgDescriptionView::showLink( const QString & url )
+YQPkgDescriptionView::showLink( const QUrl & url )
 {
-    if ( url.startsWith( "pkg:" ) )
+    if ( url.scheme() == "pkg" )
     {
-	QString pkgName = url;
-	pkgName.remove( QRegExp( "^pkg:/*" ) );	// Remove leading protocol and slashes
-	pkgName.remove( QRegExp( "/*$" ) );	// Remove trailing slashes
-	y2milestone( "Hyperlinking to package '%s'", (const char *) pkgName );
+	QString pkgName = url.authority();
+	y2milestone( "Hyperlinking to package '%s'", qPrintable(pkgName) );
 	YQPkgDescriptionDialog::showDescriptionDialog( pkgName );
     }
     else
     {
 	y2error( "Protocol not supported - can't follow hyperlink '%s'",
-		 (const char *) url );
+		 qPrintable(url.toString()) );
     }
 }
 
 
 void
-YQPkgDescriptionView::setSource( const QString & url )
+YQPkgDescriptionView::setSource( const QUrl & url )
 {
     showLink( url );
 }

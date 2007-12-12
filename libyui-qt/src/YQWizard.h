@@ -20,12 +20,14 @@
 #ifndef YQWizard_h
 #define YQWizard_h
 
-#include <qvbox.h>
+#include <string>
 #include <qpixmap.h>
-#include <qptrlist.h>
 #include <qstringlist.h>
-#include <qdict.h>
 #include "QY2ListView.h"
+#include <QGridLayout>
+#include <qlabel.h>
+#include <QMenu>
+#include <qevent.h>
 #include <YWizard.h>
 #include "YQWizardButton.h"
 
@@ -33,23 +35,21 @@
 #include <vector>
 
 class QGridLayout;
-class QHBox;
+class QFrame;
 class QLabel;
 class QMenuBar;
-class QPopupMenu;
 class QPushButton;
 class QSpacerItem;
-class QTextBrowser;
 class QToolButton;
-class QWidgetStack;
+class QStackedWidget;
 class YReplacePoint;
-
+class QTreeWidgetItem;
 class YQAlignment;
 class YQReplacePoint;
 class QY2ListView;
 
 
-class YQWizard : public QVBox, public YWizard
+class YQWizard : public QFrame, public YWizard
 {
     Q_OBJECT
 
@@ -208,7 +208,7 @@ public:
      *
      * Implemented from YWizard.
      **/
-    virtual string currentTreeSelection();
+    virtual std::string currentTreeSelection();
 
     /**
      * Delete all tree items.
@@ -385,35 +385,6 @@ public slots:
      **/
     void showTree();
 
-    /**
-     * Set a widget's background pixmap to a gradient pixmap and set the
-     * widget's height (fixed) to that pixmap's height.
-     **/
-    static void setGradient( QWidget * widget, const QPixmap & pixmap );
-
-    /**
-     * Set a widget's background to the lower portion (the bottom
-     * 'croppedHeight' pixels) of a pixmap and set the widget's height (fixed)
-     * to that 'croppedHeight'.
-     **/
-    static void setBottomCroppedGradient( QWidget * widget,
-					  const QPixmap & pixmap,
-					  int croppedHeight );
-
-    /**
-     * Bottom-crop a pixmap: Return a pixmap with the bottom 'croppedHeight'
-     * pixels.
-     **/
-    static QPixmap bottomCropPixmap( const QPixmap & pixmap, int croppedHeight );
-
-    /**
-     * Return the color of pixel( x, y ) of a pixmap.
-     * If pixmap is null defaultColor is returned.
-     * This is a _very_ expensive operation!
-     **/
-    static QColor pixelColor( const QPixmap & pixmap, int x, int y, const QColor & defaultColor );
-
-
 protected slots:
 
     /**
@@ -442,7 +413,7 @@ protected slots:
      * tree item.
      * If the item has an ID, that ID will be returned to UI::UserInput().
      **/
-    void sendTreeEvent( QListViewItem * item );
+    void sendTreeEvent( QTreeWidgetItem * item );
 
     /**
      * Internal notification that the tree selection has changed.
@@ -464,25 +435,13 @@ protected:
     // Layout functions
 
     void layoutTitleBar		( QWidget * parent );
-    void layoutSideBar		( QWidget * parent );
+    QLayout *layoutSideBar		( QWidget * parent );
     void layoutSideBarButtonBox	( QWidget * parent, QPushButton * button );
     void layoutStepsPanel();
-    void layoutHelpPanel();
     void layoutTreePanel();
-    void layoutWorkArea	( QHBox * parentHBox );
+    QWidget *layoutWorkArea	( QWidget * parent );
     void layoutClientArea( QWidget * parent );
-    void layoutButtonBox( QWidget * parent );
-
-
-    /**
-     * Load gradient pixmaps
-     **/
-    void loadGradientPixmaps();
-
-    /**
-     * Load step status icons
-     **/
-    void loadStepsIcons();
+    QLayout *layoutButtonBox( QWidget * parent );
 
     /**
      * Destroy the button box's buttons
@@ -495,25 +454,9 @@ protected:
     void updateStepStates();
 
     /**
-     * Add a (left or right) margin of the specified width to a widget,
-     * consisting of a fixed height top gradient , a flexible center part (in
-     * the gradient center color) and a fixed height bottom gradient.
-     *
-     * The bottom gradient widget is returned as a reference for other
-     * background pixmaps.
-     **/
-    void addGradientColumn( QWidget * parent, int width = 8 );
-
-    /**
      * Send a wizard event with the specified ID.
      **/
     void sendEvent( const string & id );
-
-    /**
-     * Returns 'true' if the application is running on a high-color display,
-     * i.e., on an X visual with more than 8 bit depth.
-     **/
-    bool highColorDisplay() const;
 
     /**
      * Notification that a signal is being connected.
@@ -545,11 +488,6 @@ protected:
     void setButtonFocus( YQWizardButton * button );
 
     /**
-     * Set text color and status icon for one wizard step
-     **/
-    void setStepStatus( YQWizard::Step * step, const QPixmap & icon, const QColor & color );
-
-    /**
      * Find a step with the specified ID. Returns 0 if there is no such step.
      **/
     YQWizard::Step * findStep( const QString & id );
@@ -577,53 +515,34 @@ protected:
     bool	_sendButtonEvents;
     Direction	_direction;
 
-    QPixmap	_titleBarGradientPixmap;
-    QPixmap	_topGradientPixmap;
-    QColor	_gradientCenterColor;
-    QColor	_gradientTopColor;
-    QPixmap	_bottomGradientPixmap;
-
-    QPixmap	_stepCurrentIcon;
-    QPixmap	_stepToDoIcon;
-    QPixmap	_stepDoneIcon;
-
-    QColor	_stepCurrentColor;
-    QColor	_stepToDoColor;
-    QColor	_stepDoneColor;
-
     QString	_currentStepID;
+    QString     _qHelpText;
 
 
-    QWidgetStack *	_sideBar;
-    QVBox *		    _stepsPanel;
-    QVBox *			_stepsBox;
-    QGridLayout *		    _stepsGrid;
-    QPushButton *		_releaseNotesButton;
-    string			    _releaseNotesButtonId;
-    QPushButton *		_helpButton;
-    QHBox *		    _helpPanel;
-    QTextBrowser *		_helpBrowser;
+    QStackedWidget *	_sideBar;
+    QWidget     *       _stepsPanel;
+    QPushButton *	_releaseNotesButton;
+    string		 _releaseNotesButtonId;
+    QPushButton *	_helpButton;
     QPushButton *		_stepsButton;
     QPushButton *		_treeButton;
-    QHBox *		    _treePanel;
+    QFrame *		    _treePanel;
     QY2ListView *		_tree;
 
-    QVBox *		_clientArea;
-    QWidget *		    _menuBarBox;
+    QWidget *		_clientArea;
     QMenuBar *		        _menuBar;
     QLabel *		    _dialogIcon;
     QLabel *		    _dialogHeading;
     YQAlignment *    	    _contents;
     YQWizardButton *	    _backButton;
-    QSpacerItem *	    _backButtonSpacer;
     YQWizardButton *	    _abortButton;
     YQWizardButton *	    _nextButton;
     YReplacePoint *	_contentsReplacePoint;
 
-    QPtrList<YQWizard::Step> 	_stepsList;
-    QDict<YQWizard::Step>	_stepsIDs;
-    QDict<YQWizard::TreeItem>	_treeIDs;
-    QDict<QPopupMenu>		_menuIDs;
+    QList<YQWizard::Step*> 	_stepsList;
+    QHash<QString,YQWizard::Step*>	_stepsIDs;
+    QHash<QString,YQWizard::TreeItem*>	_treeIDs;
+    QHash<QString,QMenu*>		_menuIDs;
     vector<string>		_menuEntryIDs;
 
 
@@ -642,14 +561,17 @@ protected:
 	    , _nameLabel(0)
 	    , _enabled( true )
 	    , _idList( id )
+	    , _status( Unset )
 	{}
 
 	/**
 	 * Destructor. Intentionally not deleting the widgets.
 	 **/
-	virtual ~Step() {}
+	virtual ~Step();
 
 	virtual bool isHeading() const { return false; }
+
+	enum Status { Unset, Todo, Current, Done };
 
 	QString  name()		const { return _name;		}
 	QLabel * statusLabel()	const { return _statusLabel;	}
@@ -657,11 +579,18 @@ protected:
 	bool	 isEnabled() 	const { return _enabled;	}
 	const QStringList & id() const { return _idList;	}
 	void addID( const QString & id ) { _idList.append( id ); }
-	virtual bool hasID( const QString & id ) { return _idList.find( id ) != _idList.end(); }
+	virtual bool hasID( const QString & id ) { return _idList.indexOf( id ) != -1; }
 
 	void setStatusLabel( QLabel * label )	{ _statusLabel = label; }
 	void setNameLabel  ( QLabel * label )	{ _nameLabel   = label; }
 	void setEnabled( bool enabled )		{ _enabled = enabled; }
+	
+	void deleteLabels();
+
+	/**
+	 * Set text color and status icon for one wizard step
+	 **/
+	void setStatus( Status s );
 
     protected:
 
@@ -670,6 +599,10 @@ protected:
 	QLabel *	_nameLabel;
 	bool		_enabled;
 	QStringList	_idList;
+	Status          _status;
+
+    private:
+	Q_DISABLE_COPY(Step);
     };
 
 
@@ -687,6 +620,9 @@ protected:
 	virtual ~StepHeading() {}
 	virtual bool isHeading() const { return true; }
 	virtual bool hasID( const QString & id ) { return false; }
+
+    private:
+	Q_DISABLE_COPY(StepHeading);
     };
 
 
@@ -710,7 +646,8 @@ protected:
 	    , _id( id )
 	    {}
 
-	QString text() const { return QListViewItem::text(0); }
+        virtual QString text(int index) const { return QTreeWidgetItem::text(index); } 
+	QString text() const { return QTreeWidgetItem::text(0); }
 	QString id()   const { return _id; }
 
     private:

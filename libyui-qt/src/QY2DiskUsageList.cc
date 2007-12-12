@@ -21,11 +21,129 @@
 
 /-*/
 
-
 #include "QY2DiskUsageList.h"
 #include "YQi18n.h"
-#include "qpainter.h"
+#include <QPainter>
+#include <QItemDelegate>
+#include <QDebug>
 
+/**
+ * Stolen from KDirStat::KDirTreeView with the author's permission.
+ **/
+QColor
+contrastingColor( const QColor & desiredColor,
+					const QColor & contrastColor )
+{
+    if ( desiredColor != contrastColor )
+    {
+	return desiredColor;
+    }
+
+    if ( contrastColor != contrastColor.light() )
+    {
+	// try a little lighter
+	return contrastColor.light();
+    }
+    else
+    {
+	// try a little darker
+	return contrastColor.dark();
+    }
+}
+
+/**
+ * Interpolate ( translate ) a value 'from' in the range between 'minFrom'
+ * and 'maxFrom'  to a range between 'minTo' and 'maxTo'.
+ **/
+static int
+interpolate( int from,
+				   int minFrom, int maxFrom,
+				   int minTo, 	int maxTo 	)
+{
+    if ( minFrom > maxFrom )
+    {
+	// Swap min/max values
+
+	int tmp = maxFrom;
+	maxFrom = minFrom;
+	minFrom = tmp;
+    }
+
+    long x = from - minFrom;
+    x *= maxTo - minTo;
+    x /= maxFrom - minFrom;
+    x += minTo;
+
+    if ( minTo < maxTo )
+    {
+	if ( x < minTo )	x = minTo;
+	if ( x > maxTo )	x = maxTo;
+    }
+    else
+    {
+	if ( x < maxTo )	x = maxTo;
+	if ( x > minTo )	x = minTo;
+    }
+
+    return (int) x;
+}
+
+/**
+ * Interpolate ( in the HSV color space ) a color between 'minColor' and
+ * 'maxColor' for a current value 'val' so that 'minVal' corresponds to
+ * 'minColor' and 'maxVal' to 'maxColor'.
+ *
+ * Returns the interpolated color.
+ **/
+static QColor
+interpolateColor( int 		val,
+					int 		minVal,
+					int 		maxVal,
+					const QColor & 	minColor,
+					const QColor & 	maxColor )
+{
+    int minH, maxH;
+    int minS, maxS;
+    int minV, maxV;
+
+    minColor.getHsv( &minH, &minS, &minV );
+    maxColor.getHsv( &maxH, &maxS, &maxV );
+
+    return QColor::fromHsv( interpolate( val, minVal, maxVal, minH, maxH ),
+		   interpolate( val, minVal, maxVal, minS, maxS ),
+		   interpolate( val, minVal, maxVal, minV, maxV ) );
+}
+
+
+class QY2DiskUsagePercentageItem : public QItemDelegate
+{
+    QY2DiskUsageList *_view;
+
+public:
+    QY2DiskUsagePercentageItem( QY2DiskUsageList *parent ) : QItemDelegate( parent ), _view( parent ) {
+    }
+
+    virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+    {
+        painter->save();
+        QColor background = option.palette.color(QPalette::Window);
+        painter->setBackground( background );
+
+        QY2DiskUsageListItem *item = dynamic_cast<QY2DiskUsageListItem *>(_view->itemFromIndex(index));
+        if ( item )
+        {
+          item->paintPercentageBar( item->usedPercent(),
+                                    painter,
+                                    option,
+                                    interpolateColor( item->usedPercent(),
+                                    60, 95,
+                                    QColor( 0, 0x80, 0 ),	// Medium dark green
+                                    QColor( 0xFF, 0, 0 ) ),	// Bright red
+                                    background.dark( 115 ) );
+        }
+        painter->restore();
+    }
+};
 
 QY2DiskUsageList::QY2DiskUsageList( QWidget * parent, bool addStdColumns )
     : QY2ListView( parent )
@@ -38,31 +156,35 @@ QY2DiskUsageList::QY2DiskUsageList( QWidget * parent, bool addStdColumns )
     _totalSizeCol	= -42;
     _deviceNameCol	= -42;
 
+    QStringList columnLabels;
     if ( addStdColumns )
     {
-	int numCol = 0;
-	addColumn( _( "Name" 		) );	_nameCol 		= numCol++;
-
-	// Translators: Please keep this short!
-	addColumn( _( "Disk Usage" 	) );	_percentageBarCol	= numCol++;
-	addColumn( "" 			  );	_percentageCol		= numCol++;
-	addColumn( _( "Used" 		) );	_usedSizeCol		= numCol++;
-	addColumn( _( "Free" 		) );	_freeSizeCol		= numCol++;
-	addColumn( _( "Total" 		) );	_totalSizeCol		= numCol++;
+        int numCol = 0;
+        columnLabels << _( "Name" 		);	_nameCol 		= numCol++;
+        // Translators: Please keep this short!
+        columnLabels <<  _("Disk Usage");	_percentageBarCol	= numCol++;
+        columnLabels << ""; _percentageCol = numCol++;
+        setItemDelegateForColumn( _percentageBarCol, new QY2DiskUsagePercentageItem( this ) );
+        columnLabels << _("Used"); _usedSizeCol		= numCol++;
+        columnLabels << _( "Free"); _freeSizeCol		= numCol++;
+        columnLabels << _("Total"); _totalSizeCol		= numCol++;
 #if 0
-	addColumn( _( "Device" 		) );	_deviceNameCol		= numCol++;
+        addColumn( _( "Device" 		) );	_deviceNameCol		= numCol++;
 #endif
+        // needed?
+        setColumnCount(numCol);
+        setHeaderLabels(columnLabels);
 
-	setColumnAlignment( percentageCol(),	Qt::AlignRight );
-	setColumnAlignment( usedSizeCol(),	Qt::AlignRight );
-	setColumnAlignment( freeSizeCol(), 	Qt::AlignRight );
-	setColumnAlignment( totalSizeCol(), 	Qt::AlignRight );
-
-	setSorting( percentageBarCol() );
+        //FIXME
+//         setTextAlignment( percentageCol(), Qt::AlignRight );
+//         setTextAlignment( usedSizeCol(), Qt::AlignRight );
+//         setTextAlignment( freeSizeCol(), Qt::AlignRight );
+//         setTextAlignment( totalSizeCol(), Qt::AlignRight );
+        sortItems( percentageBarCol(), Qt::AscendingOrder );
     }
 
     saveColumnWidths();
-    setSelectionMode( QListView::NoSelection );
+    setSelectionMode(QAbstractItemView::NoSelection);
 }
 
 
@@ -71,8 +193,13 @@ QY2DiskUsageList::~QY2DiskUsageList()
 }
 
 
+void QY2DiskUsageList::drawRow( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    // Intentionally bypassing the direct parent class method, use the grandparent's:
+    // Don't let QY2ListViewItem::_textColor / _backgroundColor interfere with our colors.
 
-
+    QTreeWidget::drawRow( painter, option, index );
+}
 
 
 QY2DiskUsageListItem::QY2DiskUsageListItem( QY2DiskUsageList * parent )
@@ -160,18 +287,14 @@ QY2DiskUsageListItem::updateData()
 
 
 /**
- * Comparison function used for sorting the list.
- * Returns:
- * -1 if this <	 other
- *  0 if this == other
- * +1 if this >	 other
- **/
-int
-QY2DiskUsageListItem::compare( QListViewItem *	otherListViewItem,
-			       int		col,
-			       bool		ascending ) const
+     * Comparison function used for sorting the list.
+     * Reimplemented from QTreeWidgetItem
+     **/
+bool 
+QY2DiskUsageListItem::operator<( const QTreeWidgetItem & otherListViewItem ) const
 {
-    QY2DiskUsageListItem * other = dynamic_cast<QY2DiskUsageListItem *> (otherListViewItem);
+    const QY2DiskUsageListItem * other = dynamic_cast<const QY2DiskUsageListItem *> (&otherListViewItem);
+    int col = treeWidget()->sortColumn();
 
     if ( other )
     {
@@ -179,72 +302,24 @@ QY2DiskUsageListItem::compare( QListViewItem *	otherListViewItem,
 	     col == percentageBarCol()   )
 	{
 	    // Intentionally reverting sort order: Fullest first
-
-	    if ( this->usedPercent() < other->usedPercent() ) 	return  1;
-	    if ( this->usedPercent() > other->usedPercent() ) 	return -1;
-	    return 0;
+            return ( this->usedPercent() < other->usedPercent() );
 	}
 	else if ( col == usedSizeCol() )
 	{
-	    if ( this->usedSize() < other->usedSize() ) 	return -1;
-	    if ( this->usedSize() > other->usedSize() ) 	return  1;
-	    return 0;
+	    return ( this->usedSize() < other->usedSize() );
 	}
 	else if ( col == freeSizeCol() )
 	{
-	    if ( this->freeSize() < other->freeSize() ) 	return -1;
-	    if ( this->freeSize() > other->freeSize() ) 	return  1;
-	    return 0;
+	    return ( this->freeSize() < other->freeSize() );
 	}
 	else if ( col == totalSizeCol() )
 	{
-	    if ( this->totalSize() < other->totalSize() ) 	return -1;
-	    if ( this->totalSize() > other->totalSize() ) 	return  1;
-	    return 0;
+	    return ( this->totalSize() < other->totalSize() );
 	}
     }
 
-    return QY2ListViewItem::compare( otherListViewItem, col, ascending );
+    return QY2ListViewItem::operator<( otherListViewItem );
 }
-
-
-void
-QY2DiskUsageListItem::paintCell( QPainter *		painter,
-				 const QColorGroup &	colorGroup,
-				 int			column,
-				 int			width,
-				 int			alignment )
-{
-    if ( column == percentageBarCol() )
-    {
-	QColor background = colorGroup.base();
-	painter->setBackgroundColor( background );
-
-	paintPercentageBar( usedPercent(),
-			    painter,
-			    _diskUsageList->treeStepSize() * depth(),
-			    width,
-			    interpolateColor( usedPercent(),
-					      60, 95,
-					      QColor( 0, 0x80, 0 ),	// Medium dark green
-					      QColor( 0xFF, 0, 0 ) ),	// Bright red
-			    background.dark( 115 ) );
-
-    }
-    else
-    {
-	QColorGroup cg( colorGroup );
-
-	if ( usedSize() > totalSize() )
-	    cg.setColor( QColorGroup::Text, Qt::red );		// Set red text foreground
-
-	// Intentionally bypassing the direct parent class method, use the grandparent's:
-	// Don't let QY2ListViewItem::_textColor / _backgroundColor interfere with our colors.
-
-	QListViewItem::paintCell( painter, cg, column, width, alignment );
-    }
-}
-
 
 /**
  * Stolen from KDirStat::KDirTreeView with the author's permission.
@@ -252,40 +327,40 @@ QY2DiskUsageListItem::paintCell( QPainter *		painter,
 void
 QY2DiskUsageListItem::paintPercentageBar( float			percent,
 					  QPainter *		painter,
-					  int			indent,
-					  int			width,
+					  QStyleOptionViewItem option,
 					  const QColor &	fillColor,
 					  const QColor &	barBackground )
 {
-    if ( percent > 100.0 )	percent = 100.0;
-    if ( percent < 0.0   )	percent = 0.0;
-    int penWidth = 2;
-    int extraMargin = 3;
-    int x = _diskUsageList->itemMargin();
-    int y = extraMargin;
-    int w = width    - 2 * _diskUsageList->itemMargin();
-    int h = height() - 2 * extraMargin;
-    int fillWidth;
+     if ( percent > 100.0 )	percent = 100.0;
+     if ( percent < 0.0   )	percent = 0.0;
+     int penWidth = 2;
+     int extraMargin = 3;
+     int x = option.rect.left(); /*FIXME _diskUsageList->itemMargin(); */
+     int y = option.rect.top() + extraMargin;
+     int w = option.rect.width()    - 2; /*FIXME * _diskUsageList->horizontalOffset(); */
+     int h = option.rect.height() - 2; /*FIXME * extraMargin; */
+     int fillWidth;
 
-    painter->eraseRect( 0, 0, width, height() );
-    w -= indent;
-    x += indent;
+     painter->eraseRect( option.rect );
+     int indent=0;
+     w -= indent;
+     x += indent;
 
-    if ( w > 0 )
-    {
-	QPen pen( painter->pen() );
-	pen.setWidth(0);
-	painter->setPen( pen );
-	painter->setBrush( NoBrush );
-	fillWidth = (int) ( ( w - 2 * penWidth ) * percent / 100.0 );
+     if ( w > 0 )
+     {
+ 	QPen pen( painter->pen() );
+ 	pen.setWidth(0);
+ 	painter->setPen( pen );
+ 	painter->setBrush( Qt::NoBrush );
+ 	fillWidth = (int) ( ( w - 2 * penWidth ) * percent / 100.0 );
 
 
-	// Fill bar background.
+ 	// Fill bar background.
 
-	painter->fillRect( x + penWidth, y + penWidth,
-			   w - 2 * penWidth + 1, h - 2 * penWidth + 1,
-			   barBackground );
-	/*
+ 	painter->fillRect( x + penWidth, y + penWidth,
+ 			   w - 2 * penWidth + 1, h - 2 * penWidth + 1,
+ 			   barBackground );
+ 	/*
 	 * Notice: The Xlib XDrawRectangle() function always fills one
 	 * pixel less than specified. Altough this is very likely just a
 	 * plain old bug, it is documented that way. Obviously, Qt just
@@ -308,110 +383,32 @@ QY2DiskUsageListItem::paintPercentageBar( float			percent,
 	// Draw 3D shadows.
 
 	pen.setColor( contrastingColor ( Qt::black,
-					 painter->backgroundColor() ) );
+					 painter->background().color() ) );
 	painter->setPen( pen );
 	painter->drawLine( x, y, x+w, y );
 	painter->drawLine( x, y, x, y+h );
 
 	pen.setColor( contrastingColor( barBackground.dark(),
-					painter->backgroundColor() ) );
+					painter->background().color() ) );
 	painter->setPen( pen );
 	painter->drawLine( x+1, y+1, x+w-1, y+1 );
 	painter->drawLine( x+1, y+1, x+1, y+h-1 );
 
 	pen.setColor( contrastingColor( barBackground.light(),
-					painter->backgroundColor() ) );
+					painter->background().color() ) );
 	painter->setPen( pen );
 	painter->drawLine( x+1, y+h, x+w, y+h );
 	painter->drawLine( x+w, y, x+w, y+h );
 
 	pen.setColor( contrastingColor( Qt::white,
-					painter->backgroundColor() ) );
+					painter->background().color() ) );
 	painter->setPen( pen );
 	painter->drawLine( x+2, y+h-1, x+w-1, y+h-1 );
 	painter->drawLine( x+w-1, y+1, x+w-1, y+h-1 );
-    }
+   }
 }
 
 
-/**
- * Stolen from KDirStat::KDirTreeView with the author's permission.
- **/
-QColor
-QY2DiskUsageListItem::contrastingColor( const QColor & desiredColor,
-					const QColor & contrastColor )
-{
-    if ( desiredColor != contrastColor )
-    {
-	return desiredColor;
-    }
-
-    if ( contrastColor != contrastColor.light() )
-    {
-	// try a little lighter
-	return contrastColor.light();
-    }
-    else
-    {
-	// try a little darker
-	return contrastColor.dark();
-    }
-}
-
-
-QColor
-QY2DiskUsageListItem::interpolateColor( int 		val,
-					int 		minVal,
-					int 		maxVal,
-					const QColor & 	minColor,
-					const QColor & 	maxColor )
-{
-    int minH, maxH;
-    int minS, maxS;
-    int minV, maxV;
-
-    minColor.hsv( &minH, &minS, &minV );
-    maxColor.hsv( &maxH, &maxS, &maxV );
-
-    return QColor( interpolate( val, minVal, maxVal, minH, maxH ),
-		   interpolate( val, minVal, maxVal, minS, maxS ),
-		   interpolate( val, minVal, maxVal, minV, maxV ),
-		   QColor::Hsv );
-}
-
-
-int
-QY2DiskUsageListItem::interpolate( int from,
-				   int minFrom, int maxFrom,
-				   int minTo, 	int maxTo 	)
-{
-    if ( minFrom > maxFrom )
-    {
-	// Swap min/max values
-
-	int tmp = maxFrom;
-	maxFrom = minFrom;
-	minFrom = tmp;
-    }
-
-    long x = from - minFrom;
-    x *= maxTo - minTo;
-    x /= maxFrom - minFrom;
-    x += minTo;
-
-    if ( minTo < maxTo )
-    {
-	if ( x < minTo )	x = minTo;
-	if ( x > maxTo )	x = maxTo;
-    }
-    else
-    {
-	if ( x < maxTo )	x = maxTo;
-	if ( x > minTo )	x = minTo;
-    }
-
-    return (int) x;
-}
 
 
 

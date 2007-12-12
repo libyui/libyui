@@ -22,11 +22,11 @@
 #ifndef QY2Settings_h
 #define QY2Settings_h
 
-#include <qstring.h>
-#include <qmap.h>
-#include <qdict.h>
-#include <qstringlist.h>
-#include <qtextstream.h>
+#include <QString>
+#include <QMap>
+#include <QHash>
+#include <QStringList>
+#include <QTextStream>
 
 /**
  * Utility class that handles program settings in .ini file format:
@@ -215,7 +215,7 @@ protected:
 
 	QString _name;
     };
-    
+
 
 
     /**
@@ -234,7 +234,7 @@ protected:
      **/
     void saveSection( QTextStream & stream, Section * section );
 
-    
+
     //
     // Data members
     //
@@ -247,9 +247,9 @@ protected:
     bool		_dirty;
 
     Section *		_defaultSection;
-    QDict<Section>	_sections;
-    
-    typedef QDictIterator<Section>	SectionIterator;
+    QMap<QString, Section*>	_sections;
+
+    typedef QMapIterator<QString, Section*>	SectionIterator;
 };
 
 #endif // QY2Settings_h

@@ -20,8 +20,10 @@
 #ifndef YQPkgObjList_h
 #define YQPkgObjList_h
 
-#include <qpixmap.h>
-#include <qregexp.h>
+#include <QPixmap>
+#include <QRegExp>
+#include <QMenu>
+#include <QEvent>
 #include <map>
 #include <list>
 #include <QY2ListView.h>
@@ -31,7 +33,7 @@
 
 class YQPkgObjListItem;
 class QAction;
-class QPopupMenu;
+class QMenu;
 using std::string;
 using std::list;
 
@@ -55,6 +57,8 @@ protected:
      **/
     virtual ~YQPkgObjList();
 
+    // avoiding warning about virtuals
+    using QTreeWidget::currentItemChanged;
 
 public:
 
@@ -102,7 +106,7 @@ public:
      * Add a submenu "All in this list..." to 'menu'.
      * Returns the newly created submenu.
      **/
-    virtual QPopupMenu * addAllInListSubMenu( QPopupMenu * menu );
+    virtual QMenu * addAllInListSubMenu( QMenu * menu );
 
     /**
      * Returns the suitable icon for a zypp::ResObject status - the regular
@@ -136,7 +140,7 @@ public:
     /**
      * Apply all exclude rules of this list to one item.
      **/
-    void applyExcludeRules( QListViewItem * );
+    void applyExcludeRules( QTreeWidgetItem * );
 
     /**
      * Exclude or include an item, i.e. remove it from the visible items
@@ -174,20 +178,15 @@ public slots:
      * Dispatcher slot for mouse click: cycle status depending on column.
      **/
     virtual void pkgObjClicked( int		button,
-				QListViewItem * item,
+				QTreeWidgetItem * item,
 				int		col,
 				const QPoint &	pos );
 
     /**
      * Reimplemented from QY2ListView:
-     * Emit selectionChanged() signal after clearing the list.
+     * Emit currentItemChanged() signal after clearing the list.
      **/
     virtual void clear();
-
-    /**
-     * Update the internal actions: What actions are available for 'item'?
-     **/
-    virtual void updateActions( YQPkgObjListItem * item );
 
     /**
      * Update the internal actions for the currently selected item ( if any ).
@@ -195,7 +194,7 @@ public slots:
      * selected item as argument, so there is normally no need to reimplement
      * this method, too, if the other one is reimplemented.
      **/
-    virtual void updateActions();
+    virtual void updateActions( YQPkgObjListItem * item = 0);
 
     /**
      * Emit an updatePackages() signal.
@@ -249,8 +248,7 @@ protected slots:
     /**
      * Dispatcher slot for selection change - internal only.
      **/
-    virtual void selectionChangedInternal( QListViewItem * item );
-
+    virtual void currentItemChangedInternal( QTreeWidgetItem * item );
 
 signals:
 
@@ -259,7 +257,7 @@ signals:
      * Emitted when a zypp::ui::Selectable is selected.
      * May be called with a null poiner if no zypp::ResObject is selected.
      **/
-    void selectionChanged( ZyppSel selectable );
+    void currentItemChanged( ZyppSel selectable );
 
     /**
      * Emitted when the status of a zypp::ResObject is changed.
@@ -287,13 +285,13 @@ protected:
      * Returns the context menu for items that are not installed.
      * Creates the menu upon the first call.
      **/
-    virtual QPopupMenu * installedContextMenu();
+    virtual QMenu * installedContextMenu();
 
     /**
      * Returns the context menu for items that are installed.
      * Creates the menu upon the first call.
      **/
-    virtual QPopupMenu * notInstalledContextMenu();
+    virtual QMenu * notInstalledContextMenu();
 
     /**
      * Create the context menu for items that are not installed.
@@ -350,8 +348,8 @@ protected:
     ExcludeRuleList	_excludeRules;
     ExcludedItems *	_excludedItems;
 
-    QPopupMenu *	_installedContextMenu;
-    QPopupMenu *	_notInstalledContextMenu;
+    QMenu *	_installedContextMenu;
+    QMenu *	_notInstalledContextMenu;
 
 
 public:
@@ -518,17 +516,9 @@ public:
     bool showLicenseAgreement();
 
     /**
-     * Comparison function used for sorting the list.
-     * Returns:
-     * -1 if this <  other
-     *	0 if this == other
-     * +1 if this >  other
-     *
-     * Reimplemented from QListViewItem
-     **/
-    virtual int compare( QListViewItem *	other,
-			 int			col,
-			 bool			ascending ) const;
+     * sorting function
+     */
+    virtual bool operator< ( const QTreeWidgetItem & other ) const;
 
     /**
      * Calculate a numerical value to compare versions, based on version
@@ -627,7 +617,7 @@ protected:
      * confused which one to use.
      **/
     void setText( int column, const QString & text )
-	{ QListViewItem::setText( column, text ); }
+	{ QTreeWidgetItem::setText( column, text ); }
 
     /**
      * Set a column text via Edition.
@@ -718,7 +708,7 @@ public:
      * Returns 'true' if the item matches this exclude rule,
      * i.e. if it should be excluded.
      **/
-    bool match( QListViewItem * item );
+    bool match( QTreeWidgetItem * item );
 
 private:
 
@@ -733,8 +723,8 @@ class YQPkgObjList::ExcludedItems
 {
 public:
 
-    typedef std::map <QListViewItem *, QListViewItem *> ItemMap;
-    typedef std::pair<QListViewItem *, QListViewItem *> ItemPair;
+    typedef std::map <QTreeWidgetItem *, QTreeWidgetItem *> ItemMap;
+    typedef std::pair<QTreeWidgetItem *, QTreeWidgetItem *> ItemPair;
     typedef ItemMap::iterator				iterator;
 
     /**
@@ -754,13 +744,13 @@ public:
      * oldParent is the previous parent item of this item
      * or 0 if it was a root item.
      **/
-    void add( QListViewItem * item, QListViewItem * oldParent );
+    void add( QTreeWidgetItem * item, QTreeWidgetItem * oldParent );
 
     /**
      * Remove a list item from the excluded items and transfer ownership back
      * to the caller.
      **/
-    void remove( QListViewItem * item );
+    void remove( QTreeWidgetItem * item );
 
     /**
      * Clear the excluded items. Delete all items still excluded.
@@ -770,13 +760,13 @@ public:
     /**
      * Returns 'true' if the specified item is in the excluded items.
      **/
-    bool contains( QListViewItem * item );
+    bool contains( QTreeWidgetItem * item );
 
     /**
      * Returns the old parent of this item so it can be reparented
      * or 0 if it was a root item.
      **/
-    QListViewItem * oldParentItem( QListViewItem * item );
+    QTreeWidgetItem * oldParentItem( QTreeWidgetItem * item );
 
     /**
      * Returns the number of items
@@ -794,6 +784,7 @@ public:
     iterator end()   { return _excludeMap.end(); }
 
 private:
+    void updateActions();
 
     ItemMap		_excludeMap;
     YQPkgObjList * 	_pkgObjList;

@@ -21,7 +21,8 @@
 #define YQPkgTextDialog_h
 
 #include "YQZypp.h"
-#include <qdialog.h>
+#include <QDialog>
+#include <QEvent>
 #include <zypp/ResObject.h>
 
 class QPushButton;

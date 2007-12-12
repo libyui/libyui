@@ -18,7 +18,7 @@
 
 
 #include <qcheckbox.h>
-#include <qlayout.h>
+#include <QBoxLayout>
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
@@ -35,24 +35,14 @@
 YQCheckBox::YQCheckBox( YWidget *	parent,
 			const string & 	label,
 			bool 		checked )
-    : QGroupBox( (QWidget *) parent->widgetRep() )
+    : QCheckBox( fromUTF8( label ), (QWidget *) parent->widgetRep() )
     , YCheckBox( parent, label )
 {
     setWidgetRep( this );
-    setFrameStyle( NoFrame );
 
-    QBoxLayout * layout = new QBoxLayout( this, QBoxLayout::LeftToRight );
+    QCheckBox::setChecked( checked );
 
-    _qt_checkBox = new QCheckBox( fromUTF8( label ), this );
-    YUI_CHECK_NEW( _qt_checkBox );
-    
-    layout->addSpacing( SPACING );
-    layout->addWidget( _qt_checkBox );
-    layout->addSpacing( SPACING );
-
-    _qt_checkBox->setChecked( checked );
-
-    connect( _qt_checkBox, 	SIGNAL( stateChanged( int ) ),
+    connect( this, 	SIGNAL( stateChanged( int ) ),
 	     this, 		SLOT  ( stateChanged( int ) ) );
 }
 
@@ -66,11 +56,11 @@ YQCheckBox::~YQCheckBox()
 YCheckBoxState
 YQCheckBox::value()
 {
-    switch ( _qt_checkBox->state() )
+    switch ( checkState() )
     {
-	case QButton::On:	return YCheckBox_on;
-	case QButton::Off:	return YCheckBox_off;
-	case QButton::NoChange:	return YCheckBox_dont_care;
+        case Qt::Checked:          return YCheckBox_on;
+	case Qt::Unchecked:	   return YCheckBox_off;
+	case Qt::PartiallyChecked: return YCheckBox_dont_care;
     }
 
     return YCheckBox_off;
@@ -83,18 +73,18 @@ YQCheckBox::setValue( YCheckBoxState newValue )
     switch ( newValue )
     {
 	case YCheckBox_on:
-	    _qt_checkBox->setChecked( true );
-	    _qt_checkBox->setTristate( false );
+            QCheckBox::setChecked( true );
+	    setTristate( false );
 	    break;
 
 	case YCheckBox_off:
-	    _qt_checkBox->setChecked( false );
-	    _qt_checkBox->setTristate( false );
+	    QCheckBox::setChecked( false );
+	    setTristate( false );
 	    break;
 
 	case YCheckBox_dont_care:
-	    _qt_checkBox->setTristate( true );
-	    _qt_checkBox->setNoChange();
+	    QCheckBox::setTristate( true );
+	    setCheckState(Qt::PartiallyChecked);
 	    break;
     }
 }
@@ -102,50 +92,49 @@ YQCheckBox::setValue( YCheckBoxState newValue )
 
 void YQCheckBox::setLabel( const string & label )
 {
-    _qt_checkBox->setText( fromUTF8( label ) );
+    setText( fromUTF8( label ) );
     YCheckBox::setLabel( label );
 }
 
 
 void YQCheckBox::setUseBoldFont( bool useBold )
 {
-    _qt_checkBox->setFont( useBold ?
+    setFont( useBold ?
 			   YQUI::yqApp()->boldFont() :
 			   YQUI::yqApp()->currentFont() );
-    
+
     YCheckBox::setUseBoldFont( useBold );
 }
 
 
 void YQCheckBox::setEnabled( bool enabled )
 {
-    _qt_checkBox->setEnabled( enabled );
+    QCheckBox::setEnabled( enabled );
     YWidget::setEnabled( enabled );
 }
 
 
 int YQCheckBox::preferredWidth()
 {
-    return 2*SPACING + _qt_checkBox->sizeHint().width();
+    return 2*SPACING + sizeHint().width();
 }
 
 
 int YQCheckBox::preferredHeight()
 {
-    return _qt_checkBox->sizeHint().height();
+    return sizeHint().height();
 }
 
 
 void YQCheckBox::setSize( int newWidth, int newHeight )
 {
-    _qt_checkBox->resize( newWidth - 2*SPACING, newHeight );
     resize( newWidth, newHeight );
 }
 
 
 bool YQCheckBox::setKeyboardFocus()
 {
-    _qt_checkBox->setFocus();
+    setFocus();
 
     return true;
 }
@@ -154,7 +143,7 @@ bool YQCheckBox::setKeyboardFocus()
 void YQCheckBox::stateChanged( int newState )
 {
     // y2milestone( "new state: %d", newState );
-    
+
     if ( notify() )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }

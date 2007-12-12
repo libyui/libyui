@@ -18,14 +18,14 @@
 
 /-*/
 
-
 #include <algorithm>
-#include <qdatetime.h>
+#include <QDateTime>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 #include <zypp/RepoManager.h>
 
+#include <QTreeWidget>
 #include "YQPkgRepoList.h"
 #include "YQi18n.h"
 #include "utf8.h"
@@ -45,19 +45,20 @@ YQPkgRepoList::YQPkgRepoList( QWidget * parent )
     _urlCol	= -1;
 
     int numCol = 0;
-
+#if FIXME
     // Column headers for repository list
     addColumn( _( "Name"	) );	_nameCol	= numCol++;
     addColumn( _( "URL"		) );	_urlCol		= numCol++;
 
     setAllColumnsShowFocus( true );
-    setSelectionMode( QListView::Extended );	// allow multi-selection with Ctrl-mouse
+    setSelectionMode( Q3ListView::Extended );	// allow multi-selection with Ctrl-mouse
 
-    connect( this, 	SIGNAL( selectionChanged() ),
+    connect( this, 	SIGNAL( currentItemChanged() ),
 	     this, 	SLOT  ( filterIfVisible()) );
 
     fillList();
     selectSomething();
+#endif
 
     y2debug( "Creating repository list done" );
 }
@@ -104,6 +105,7 @@ YQPkgRepoList::filterIfVisible()
 void
 YQPkgRepoList::filter()
 {
+#if FIXME
     emit filterStart();
 
     y2milestone( "Collecting packages in selected repositories..." );
@@ -118,7 +120,7 @@ YQPkgRepoList::filter()
     set<ZyppSel> exactMatches;
     set<ZyppSel> nearMatches;
 
-    QListViewItem * item = firstChild();	// take multi selection into account
+    Q3ListViewItem * item = firstChild();	// take multi selection into account
 
     while ( item )
     {
@@ -191,6 +193,7 @@ YQPkgRepoList::filter()
     y2debug( "Packages sent to package list. Elapsed time: %f sec", stopWatch.elapsed() / 1000.0 );
 
     emit filterFinished();
+#endif
 }
 
 
@@ -204,12 +207,16 @@ YQPkgRepoList::addRepo( ZyppRepo repo )
 YQPkgRepoListItem *
 YQPkgRepoList::selection() const
 {
-    QListViewItem * item = selectedItem();
+#if FIXME
+    Q3ListViewItem * item = selectedItem();
 
     if ( ! item )
 	return 0;
 
     return dynamic_cast<YQPkgRepoListItem *> (item);
+#else
+    return 0;
+#endif
 }
 
 
@@ -243,7 +250,7 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
     if ( urlCol() >= 0 )
     {
         zypp::Url repoUrl;
-	
+
 	if ( ! repo.info().baseUrlsEmpty() )
 	    repoUrl = *repo.info().baseUrlsBegin();
 

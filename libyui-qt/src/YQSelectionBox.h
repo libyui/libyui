@@ -20,20 +20,20 @@
 #ifndef YQSelectionBox_h
 #define YQSelectionBox_h
 
-#include <qvbox.h>
-#include <qtimer.h>
+#include <QFrame>
+#include <QTimer>
 
 #include "YSelectionBox.h"
 
 class YQWidgetCaption;
-class QListBox;
-class QListBoxItem;
+class QListWidget;
+class QListWidgetItem;
 
 
-class YQSelectionBox : public QVBox, public YSelectionBox
+class YQSelectionBox : public QFrame, public YSelectionBox
 {
     Q_OBJECT
-    
+
 public:
 
     /**
@@ -54,7 +54,7 @@ public:
     virtual void setLabel( const string & label );
 
     /**
-     * Add an item. 
+     * Add an item.
      *
      * Reimplemented from YSelectionWidget.
      **/
@@ -80,7 +80,7 @@ public:
      * Reimplemented from YSelectionWidget.
      **/
     virtual void deleteAllItems();
-    
+
     /**
      * Set enabled/disabled state.
      *
@@ -123,33 +123,33 @@ public:
      **/
     virtual bool eventFilter( QObject * obj, QEvent * ev );
 
-    
+
 protected slots:
 
     /**
      * Notification that an item has been selected.
      * This is only relevant if `opt(`notify ) is set.
      **/
-    void slotSelected( int index );
+    void slotSelectionChanged();
 
     /**
      * Notification that an item has been activated (double clicked).
      **/
-    void slotActivated( QListBoxItem * item );
+    void slotActivated( QListWidgetItem * item );
 
     /**
      * Return after some millseconds delay - collect multiple events.
      * This is only relevant if `opt( `notify ) is set.
      **/
     void returnDelayed();
-    
+
     /**
      * Return immediately.
      * This is only relevant if `opt( `notify ) is set.
      **/
     void returnImmediately();
 
-    
+
 protected:
 
     /**
@@ -157,13 +157,13 @@ protected:
      **/
     void selectItem( int index );
 
-    
+
     //
     // Data members
     //
 
     YQWidgetCaption *	_caption;
-    QListBox *		_qt_listBox;
+    QListWidget *		_qt_listBox;
     QTimer 		_timer;
 };
 

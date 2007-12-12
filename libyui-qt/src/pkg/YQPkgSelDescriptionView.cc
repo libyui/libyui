@@ -16,12 +16,11 @@
 
 /-*/
 
-
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
 #include <unistd.h>
-#include <qregexp.h>
+#include <QRegExp>
 
 #include "YQPkgSelDescriptionView.h"
 #include "YQUI.h"
@@ -64,9 +63,8 @@ YQPkgSelDescriptionView::showDetails( ZyppSel selectable )
 
     html_text += description;
 
-    setTextFormat( Qt::RichText );
-    setText( html_text );
-    ensureVisible( 0, 0 );	// Otherwise hyperlinks will be centered
+    setHtml( html_text );
+    //FIXME ensureVisible( 0, 0 );	// Otherwise hyperlinks will be centered
 }
 
 
@@ -95,13 +93,13 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
 	icon.replace( ' ', '_' );
     }
 
-    if ( icon )
+    if ( ! icon.isEmpty() )
     {
 	if ( icon.startsWith( "./" ) )
 	    icon.replace( QRegExp( "^\\./" ), "" );
 	    
-	if ( ! icon.endsWith( ".png", false ) &&
-	     ! icon.endsWith( ".jpg", false )   )
+	if ( ! icon.endsWith( ".png", Qt::CaseInsensitive ) &&
+	     ! icon.endsWith( ".jpg", Qt::CaseInsensitive )   )
 	    icon += ".png";
 
 	QString origIconName = icon;
@@ -130,7 +128,7 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
 
 	if ( pattern && icon.isEmpty() )
 	    y2warning( "No icon for pattern %s - icon name: %s",
-		       zyppObj->name().c_str(), (const char *) origIconName );
+		       zyppObj->name().c_str(), qPrintable(origIconName) );
     }
 
 
@@ -162,14 +160,14 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
 QString
 YQPkgSelDescriptionView::findIcon( const QString & icon ) const
 {
-    if ( access( icon, R_OK ) == 0 )
+    if ( access( qPrintable(icon), R_OK ) == 0 )
     {
-	y2debug( "Found icon %s", (const char *) icon );
+	y2debug( "Found icon %s", qPrintable(icon) );
 	return icon;
     }
     else
     {
-	y2debug( "No icon %s", (const char *) icon );
+	y2debug( "No icon %s", qPrintable(icon) );
 	return "";
     }
 }

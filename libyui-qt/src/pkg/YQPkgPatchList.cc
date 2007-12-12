@@ -18,12 +18,12 @@
 
 /-*/
 
-
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include <qpopupmenu.h>
-#include <qaction.h>
+#include <QMenu>
+#include <QAction>
+#include <QEvent>
 #include <zypp/ui/PatchContents.h>
 #include <set>
 
@@ -34,8 +34,7 @@
 #include "YQPkgTextDialog.h"
 
 
-#define VERBOSE_PATCH_LIST			1
-#define DEBUG_SHOW_ALL_UPDATE_STACK_PATCHES	0
+#define VERBOSE_PATCH_LIST	1
 
 
 typedef zypp::ui::PatchContents			ZyppPatchContents;
@@ -53,12 +52,15 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     _filterCriteria = RelevantPatches;
 
     int numCol = 0;
-    addColumn( "" );			_statusCol	= numCol++;
-    addColumn( _( "Patch"	) );	_nameCol	= numCol++;
-    addColumn( _( "Summary" 	) );	_summaryCol	= numCol++;
-    addColumn( _( "Category"	) );	_categoryCol	= numCol++;
-    addColumn( _( "Size"	) );	_sizeCol	= numCol++;
-    addColumn( _( "Version"	) );	_versionCol	= numCol++;
+
+    QStringList headers;
+
+    headers << "";			_statusCol	= numCol++;
+    headers <<  _( "Patch"	);	_nameCol	= numCol++;
+    headers << _( "Summary" 	);	_summaryCol	= numCol++;
+    headers << _( "Category"	);	_categoryCol	= numCol++;
+    headers << _( "Size"	);	_sizeCol	= numCol++;
+    headers << _( "Version"	);	_versionCol	= numCol++;
 
     // Can use the same colum for "broken" and "satisfied":
     // Both states are mutually exclusive
@@ -66,13 +68,16 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     _satisfiedIconCol	= _summaryCol;
     _brokenIconCol	= _summaryCol;
 
-    setAllColumnsShowFocus( true );
-    setColumnAlignment( sizeCol(), Qt::AlignRight );
+    setHeaderLabels(headers);
 
-    connect( this,	SIGNAL( selectionChanged	( QListViewItem * ) ),
+    setAllColumnsShowFocus( true );
+    //FIXME setColumnAlignment( sizeCol(), Qt::AlignRight );
+
+    connect( this,	SIGNAL( currentItemChanged	( QTreeWidgetItem * ) ),
 	     this,	SLOT  ( filter()				    ) );
 
-    setSorting( categoryCol() );
+    sortItems( categoryCol(), Qt::AscendingOrder );
+    fillList();
 
     y2debug( "Creating patch list done" );
 }
@@ -89,9 +94,9 @@ YQPkgPatchList::polish()
 {
     // Delayed initialization after widget is fully created etc.
 
-    // Only now send selectionChanged() signal so attached details views also
+    // Only now send currentItemChanged() signal so attached details views also
     // display something if their showDetailsIfVisible() slot is connected to
-    // selectionChanged() signals.
+    // currentItemChanged() signals.
     selectSomething();
 }
 
@@ -122,35 +127,6 @@ YQPkgPatchList::fillList()
 
 	    switch ( _filterCriteria )
 	    {
-		case UpdateStackPatches:
-
-		    if ( zyppPatch->affects_pkg_manager() )
-		    {
-#if DEBUG_SHOW_ALL_UPDATE_STACK_PATCHES
-			displayPatch = true;
-#endif
-			if ( selectable->hasCandidateObj() &&
-			     selectable->candidatePoolItem().status().isNeeded() )
-			{
-			    displayPatch = true;
-
-			    y2milestone( "Found YaST patch that should be installed: %s - %s",
-					 zyppPatch->name().c_str(),
-					 zyppPatch->summary().c_str() );
-			}
-
-			if ( selectable->hasInstalledObj() &&
-			     selectable->installedPoolItem().status().isIncomplete() ) // patch broken?
-			{
-			    displayPatch = true;
-
-			    y2warning( "Installed YaST patch is broken: %s - %s",
-				       zyppPatch->name().c_str(),
-				       zyppPatch->summary().c_str() );
-			}
-		    }
-		    break;
-
 		case RelevantPatches:	// needed + broken + satisfied (but not installed)
 
 		    if ( selectable->hasInstalledObj() ) // installed?
@@ -260,9 +236,10 @@ YQPkgPatchList::fillList()
 	}
     }
 
-
+#if FIXME
     if ( ! firstChild() )
 	message( _( "No patches available." ) );
+#endif
 
     y2debug( "patch list filled" );
 }
@@ -273,7 +250,7 @@ void
 YQPkgPatchList::message( const QString & text )
 {
     QY2ListViewItem * item = new QY2ListViewItem( this );
-    CHECK_PTR( item );
+    Q_CHECK_PTR( item );
 
     item->setText( 1, text );
     item->setBackgroundColor( QColor( 0xE0, 0xE0, 0xF8 ) );
@@ -376,55 +353,31 @@ YQPkgPatchList::addPatchItem( ZyppSel	selectable,
 }
 
 
-bool
-YQPkgPatchList::haveUpdateStackPatches()
-{
-    for ( ZyppPoolIterator it = zyppPatchesBegin();
-	  it != zyppPatchesEnd();
-	  ++it )
-    {
-	ZyppSel selectable = *it;
-	ZyppPatch zyppPatch = tryCastToZyppPatch( selectable->theObj() );
-
-	if ( zyppPatch && zyppPatch->affects_pkg_manager() )
-	{
-#if DEBUG_SHOW_ALL_UPDATE_STACK_PATCHES
-	    return true;
-#else
-	    if ( selectable->hasCandidateObj() &&
-		 selectable->candidatePoolItem().status().isNeeded() )
-	    {
-		return true;
-	    }
-#endif
-	}
-    }
-
-    return false;
-}
-
-
 YQPkgPatchListItem *
 YQPkgPatchList::selection() const
 {
-    QListViewItem * item = selectedItem();
+#if FIXME
+    QTreeWidgetItem * item = selectedItem();
 
     if ( ! item )
 	return 0;
 
     return dynamic_cast<YQPkgPatchListItem *> (item);
+#else
+    return 0;
+#endif
 }
 
 
 void
 YQPkgPatchList::createNotInstalledContextMenu()
 {
-    _notInstalledContextMenu = new QPopupMenu( this );
-    CHECK_PTR( _notInstalledContextMenu );
+    _notInstalledContextMenu = new QMenu( this );
+    Q_CHECK_PTR( _notInstalledContextMenu );
 
-    actionSetCurrentInstall->addTo( _notInstalledContextMenu );
-    actionSetCurrentDontInstall->addTo( _notInstalledContextMenu );
-    actionSetCurrentTaboo->addTo( _notInstalledContextMenu );
+    _notInstalledContextMenu->addAction(actionSetCurrentInstall);
+    _notInstalledContextMenu->addAction(actionSetCurrentDontInstall);
+    _notInstalledContextMenu->addAction(actionSetCurrentTaboo);
 
     addAllInListSubMenu( _notInstalledContextMenu );
 }
@@ -433,42 +386,43 @@ YQPkgPatchList::createNotInstalledContextMenu()
 void
 YQPkgPatchList::createInstalledContextMenu()
 {
-    _installedContextMenu = new QPopupMenu( this );
-    CHECK_PTR( _installedContextMenu );
+    _installedContextMenu = new QMenu( this );
+    Q_CHECK_PTR( _installedContextMenu );
 
-    actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
+    _installedContextMenu->addAction(actionSetCurrentKeepInstalled);
 
 #if ENABLE_DELETING_PATCHES
-    actionSetCurrentDelete->addTo( _installedContextMenu );
+    _installedContextMenu->addAction(actionSetCurrentDelete);
 #endif
 
-    actionSetCurrentUpdate->addTo( _installedContextMenu );
-    actionSetCurrentProtected->addTo( _installedContextMenu );
+    _installedContextMenu->addAction(actionSetCurrentUpdate);
+    _installedContextMenu->addAction(actionSetCurrentProtected);
 
     addAllInListSubMenu( _installedContextMenu );
 }
 
 
-QPopupMenu *
-YQPkgPatchList::addAllInListSubMenu( QPopupMenu * menu )
+QMenu *
+YQPkgPatchList::addAllInListSubMenu( QMenu * menu )
 {
-    QPopupMenu * submenu = new QPopupMenu( menu );
-    CHECK_PTR( submenu );
+    QMenu * submenu = new QMenu( menu );
+    Q_CHECK_PTR( submenu );
 
-    actionSetListInstall->addTo( submenu );
-    actionSetListDontInstall->addTo( submenu );
-    actionSetListKeepInstalled->addTo( submenu );
+    submenu->addAction(actionSetListInstall);
+    submenu->addAction(actionSetListDontInstall);
+    submenu->addAction(actionSetListKeepInstalled);
 
 #if ENABLE_DELETING_PATCHES
-    actionSetListDelete->addTo( submenu );
+    submenu->addAction(actionSetListDelete);
 #endif
 
-    actionSetListUpdate->addTo( submenu );
-    actionSetListUpdateForce->addTo( submenu );
-    actionSetListTaboo->addTo( submenu );
-    actionSetListProtected->addTo( submenu );
+    submenu->addAction(actionSetListUpdate);
+    submenu->addAction(actionSetListUpdateForce);
+    submenu->addAction(actionSetListTaboo);
+    submenu->addAction(actionSetListProtected);
 
-    menu->insertItem( _( "&All in This List" ), submenu );
+    QAction *action = menu->addMenu(submenu);
+    action->setText(_( "&All in This List" ));
 
     return submenu;
 }
@@ -482,7 +436,7 @@ YQPkgPatchList::keyPressEvent( QKeyEvent * event )
 #if ! ENABLE_DELETING_PATCHES
 	if ( event->ascii() == '-' )
 	{
-	    QListViewItem * selectedListViewItem = selectedItem();
+	    QTreeWidgetItem * selectedListViewItem = currentItem();
 
 	    if ( selectedListViewItem )
 	    {
@@ -545,9 +499,16 @@ YQPkgPatchListItem::~YQPkgPatchListItem()
 
 
 YQPkgPatchCategory
+YQPkgPatchListItem::patchCategory( const string & category )
+{
+    return patchCategory( fromUTF8( category ) );
+}
+
+
+YQPkgPatchCategory
 YQPkgPatchListItem::patchCategory( QString category )
 {
-    category = category.lower();
+    category = category.toLower();
 
     if ( category == "yast"		) return YQPkgYaSTPatch;
     if ( category == "security"		) return YQPkgSecurityPatch;
@@ -555,7 +516,7 @@ YQPkgPatchListItem::patchCategory( QString category )
     if ( category == "optional"		) return YQPkgOptionalPatch;
     if ( category == "document"		) return YQPkgDocumentPatch;
 
-    y2warning( "Unknown patch category \"%s\"", (const char *) category );
+    y2warning( "Unknown patch category \"%s\"", qPrintable(category) );
     return YQPkgUnknownPatchCategory;
 }
 
@@ -628,30 +589,18 @@ YQPkgPatchListItem::applyChanges()
 }
 
 
-/**
- * Comparison function used for sorting the list.
- * Returns:
- * -1 if this <	 other
- *  0 if this == other
- * +1 if this >	 other
- **/
-int
-YQPkgPatchListItem::compare( QListViewItem *	otherListViewItem,
-			     int		col,
-			     bool		ascending ) const
+bool YQPkgPatchListItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
 {
-    YQPkgPatchListItem * other = dynamic_cast<YQPkgPatchListItem *> (otherListViewItem);
-
+    const YQPkgPatchListItem * other = dynamic_cast<const YQPkgPatchListItem *> (&otherListViewItem);
+    int col = treeWidget()->sortColumn();
     if ( other )
     {
 	if ( col == categoryCol() )
 	{
-	    if ( this->patchCategory() < other->patchCategory() ) return -1;
-	    if ( this->patchCategory() > other->patchCategory() ) return  1;
-	    return 0;
+	    return ( this->patchCategory() < other->patchCategory() );
 	}
     }
-    return YQPkgObjListItem::compare( otherListViewItem, col, ascending );
+    return YQPkgObjListItem::operator<( otherListViewItem );
 }
 
 

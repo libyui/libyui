@@ -20,8 +20,8 @@
 #ifndef YQTree_h
 #define YQTree_h
 
-#include <qvbox.h>
-#include <qlistview.h>
+#include <QFrame>
+#include <QTreeWidget>
 
 #include "YTree.h"
 
@@ -30,7 +30,7 @@ class YQWidgetCaption;
 class YQTreeItem;
 
 
-class YQTree : public QVBox, public YTree
+class YQTree : public QFrame, public YTree
 {
     Q_OBJECT
 
@@ -45,7 +45,7 @@ public:
      * Destructor.
      **/
     virtual ~YQTree();
-    
+
     /**
      * Change the label text.
      *
@@ -125,14 +125,14 @@ protected slots:
      *
      * This will trigger a 'SelectionChanged' event if 'notify' is set.
      **/
-    void slotSelected( QListViewItem * item );
+    void slotSelectionChanged ( );
 
     /**
      * Propagate a double click or pressing the space key on a tree item.
-     * 
+     *
      * This will trigger an 'Activated' event if 'notify' is set.
      **/
-    void slotActivated( QListViewItem * item);
+    void slotActivated( QTreeWidgetItem * item);
 
 
 protected:
@@ -145,8 +145,8 @@ protected:
     /**
      * Open the branch of 'item' recursively to its toplevel item.
      **/
-    void openBranch( QListViewItem * item );
-    
+    void openBranch( QTreeWidgetItem * item );
+
     /**
      * Build a tree of items that will be displayed (YQTreeItems) from the
      * original items between iterators 'begin' and 'end' as child items of
@@ -161,12 +161,12 @@ protected:
     //
 
     YQWidgetCaption *	_caption;
-    QListView * 	_qt_listView;
+    QTreeWidget * 	_qt_listView;
     int			_nextSerialNo;
 };
 
 
-class YQTreeItem: public QListViewItem
+class YQTreeItem: public QTreeWidgetItem
 {
 public:
 
@@ -174,7 +174,7 @@ public:
      * Constructor for a top level item.
      **/
     YQTreeItem( YQTree	*	tree,
-		QListView *	parent,
+		QTreeWidget *	parent,
 		YTreeItem *	origItem,
 		int		serial	);
 
@@ -194,7 +194,7 @@ public:
     /**
      * Open this item.
      *
-     * Reimplemented from QListViewItem.
+     * Reimplemented from QTreeWidgetItem.
      **/
     virtual void setOpen( bool open );
 
@@ -214,11 +214,11 @@ protected:
     /**
      * Sort key of this item.
      *
-     * Reimplemented from QListViewItem.
+     * Reimplemented from QTreeWidgetItem.
      **/
     QString key( int column, bool ascending ) const;
 
-    
+
     //
     // Data members
     //

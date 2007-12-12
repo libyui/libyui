@@ -26,24 +26,29 @@
 #include "YQUI.h"
 #include "YQTimeField.h"
 #include "YQWidgetCaption.h"
-
+#include <QVBoxLayout>
 
 
 YQTimeField::YQTimeField( YWidget * parent, const string & label )
-    : QVBox( (QWidget *) parent->widgetRep() )
+    : QFrame( (QWidget *) parent->widgetRep() )
     , YTimeField( parent, label )
 {
     setWidgetRep( this );
-    setSpacing( YQWidgetSpacing );
-    setMargin ( YQWidgetMargin );
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    setLayout( layout );
+
+    layout->setSpacing( YQWidgetSpacing );
+    layout->setMargin ( YQWidgetMargin );
 
     _caption = new YQWidgetCaption( this, fromUTF8( label ) );
     YUI_CHECK_NEW( _caption );
+    layout->addWidget( _caption );
 
     _qt_timeEdit = new QTimeEdit( this );
     YUI_CHECK_NEW( _qt_timeEdit );
+    _qt_timeEdit->setDisplayFormat( "hh:mm:ss");
+    layout->addWidget( _qt_timeEdit );
 
-    _qt_timeEdit->setAutoAdvance( true );
     _caption->setBuddy( _qt_timeEdit );
 }
 
@@ -75,7 +80,7 @@ void YQTimeField::setLabel( const string & newLabel )
 
 void YQTimeField::setEnabled( bool enabled )
 {
-    QVBox::setEnabled( enabled );
+    QFrame::setEnabled( enabled );
     YWidget::setEnabled( enabled );
 }
 

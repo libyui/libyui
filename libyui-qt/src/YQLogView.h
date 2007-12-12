@@ -20,20 +20,20 @@
 #ifndef YQLogView_h
 #define YQLogView_h
 
-#include <qvbox.h>
+#include <QFrame>
+#include <QTextEdit>
 
 #include "YLogView.h"
 
 class YQWidgetCaption;
-class QMultiLineEdit;
 
 
-class YQLogView : public QVBox, public YLogView
+class YQLogView : public QFrame, public YLogView
 {
     Q_OBJECT
-    
+
 public:
-    
+
     /**
      * Constructor
      **/
@@ -73,7 +73,7 @@ public:
      * Reimplemented from YWidget.
      **/
     virtual void setEnabled( bool enabled );
-    
+
     /**
      * Preferred width of the widget.
      *
@@ -104,7 +104,7 @@ public:
 protected:
 
     YQWidgetCaption *	_caption;
-    QMultiLineEdit *	_qt_text;
+    QTextEdit *	_qt_text;
 };
 
 

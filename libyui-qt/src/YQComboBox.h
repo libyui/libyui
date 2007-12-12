@@ -20,7 +20,7 @@
 #ifndef YQComboBox_h
 #define YQComboBox_h
 
-#include <qvbox.h>
+#include <QFrame>
 #include "YComboBox.h"
 
 class YQWidgetCaption;
@@ -28,7 +28,7 @@ class QComboBox;
 class QY2CharValidator;
 
 
-class YQComboBox : public QVBox, public YComboBox
+class YQComboBox : public QFrame, public YComboBox
 {
     Q_OBJECT
 
@@ -81,7 +81,7 @@ public:
 
     /**
      * Returns 'true' if the given text is valid according to the current
-     * setting of ValidChars. 
+     * setting of ValidChars.
      **/
     bool isValidText( const QString & txt ) const;
 
@@ -132,11 +132,11 @@ protected slots:
      * 'editable' option is set ).
      * This is only interesting if the `notify option is set.
      **/
-    void textChanged( const QString &new_text );
+    void textChanged( QString );
 
-    
+
 protected:
-    
+
     /**
      * Return this ComboBox's current value as text.
      *

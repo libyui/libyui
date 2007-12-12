@@ -18,11 +18,12 @@
 
 /-*/
 
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qgroupbox.h>
+#include <QCheckBox>
+#include <QLabel>
+#include <QLayout>
+#include <QPushButton>
+#include <QGroupBox>
+#include <QPixmap>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
@@ -40,17 +41,20 @@
 
 
 YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
-    : QVBox( parent )
+    : QWidget( parent )
 {
-    setMargin( MARGIN );
-    setSpacing( SPACING );
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    setLayout(layout);
+ 
+    layout->setMargin( MARGIN );
+    layout->setSpacing( SPACING );
 
-    addVStretch( this );
+    layout->addStretch();
 
 #if 0
     // Headline
     QLabel * label = new QLabel( _( "Changes Overview" ), this );
-    CHECK_PTR( label );
+    Q_CHECK_PTR( label );
     label->setFont( YQUI::ui()->headingFont() );
 #endif
 
@@ -59,8 +63,10 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     // Packages with what status to show
     //
 
-    QGroupBox * gbox = new QGroupBox( 3, Qt::Horizontal, _( "Show packages with status" ), this );
-    CHECK_PTR( gbox );
+    QGroupBox * gbox = new QGroupBox( _( "Show packages with status" ), this );
+    Q_CHECK_PTR( gbox );
+    QHBoxLayout *hlayout = new QHBoxLayout;
+    gbox->setLayout(hlayout);
 
     _showDel		= addStatusCheckBox( gbox, _( "Delete" ), 	YQIconPool::disabledPkgDel(),	   	true );
     _showInstall	= addStatusCheckBox( gbox, _( "Install" ), 	YQIconPool::disabledPkgInstall(),	true );
@@ -71,32 +77,43 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     _showTaboo		= addStatusCheckBox( gbox, _( "Taboo" ), 	YQIconPool::disabledPkgTaboo(),	   	true );
     _showProtected	= addStatusCheckBox( gbox, _( "Protected" ), 	YQIconPool::disabledPkgProtected(),	true );
 
-    addVSpacing( gbox, 8 );
-    addHStretch( gbox ); // For the other columns of the QGroupBox ( prevent wraparound )
-    addHStretch( gbox );
+    hlayout->addWidget(_showDel);
+    hlayout->addWidget(_showInstall);
+    hlayout->addWidget(_showUpdate);
+    hlayout->addWidget(_showAutoDel);
+    hlayout->addWidget(_showAutoInstall);
+    hlayout->addWidget(_showAutoUpdate);
+    hlayout->addWidget(_showTaboo);
+    hlayout->addWidget(_showProtected);
+
+    hlayout->addSpacing( 8 );
+    hlayout->addStretch(); // For the other columns of the QGroupBox ( prevent wraparound )
+    hlayout->addStretch();
 
     _showKeepInstalled	= addStatusCheckBox( gbox, _( "Keep" ), 	  YQIconPool::disabledPkgKeepInstalled(), false );
     _showNoInst		= addStatusCheckBox( gbox, _( "Do not install" ), YQIconPool::disabledPkgNoInst(),	  false );
 
-    addVStretch( this );
+    layout->addStretch();
 
 
     // Box for refresh button
-    QHBox * hbox = new QHBox( this );
-    CHECK_PTR( hbox );
+    hlayout = new QHBoxLayout();
+    layout->addLayout(hlayout);
 
-    addHStretch( hbox );
+    hlayout->addStretch();
 
     // Refresh button
-    _refreshButton = new QPushButton( _( "&Refresh List" ), hbox );
-    CHECK_PTR( _refreshButton );
-    addHStretch( hbox );
+    _refreshButton = new QPushButton( _( "&Refresh List" ), this );
+    Q_CHECK_PTR( _refreshButton );
+    hlayout->addWidget(_refreshButton);
+
+    hlayout->addStretch();
 
     connect( _refreshButton,	SIGNAL( clicked() ),
 	     this,		SLOT  ( filter()  ) );
 
     for ( int i=0; i < 6; i++ )
-	addVStretch( this );
+	layout->addStretch();
 }
 
 
@@ -114,11 +131,11 @@ YQPkgStatusFilterView::addStatusCheckBox( QWidget *		parent,
 					  bool			initiallyChecked )
 {
     QCheckBox * checkBox = new QCheckBox( text, parent );
-    CHECK_PTR( checkBox );
+    Q_CHECK_PTR( checkBox );
     checkBox->setChecked( initiallyChecked );
 
     QLabel * label = new QLabel( parent );
-    CHECK_PTR( label );
+    Q_CHECK_PTR( label );
     label->setPixmap( icon );
 
     addHStretch( parent );

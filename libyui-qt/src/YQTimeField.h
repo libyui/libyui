@@ -20,14 +20,14 @@
 #ifndef YQTimeField_h
 #define YQTimeField_h
 
-#include <qvbox.h>
+#include <QFrame>
 #include "YTimeField.h"
 
 class YQWidgetCaption;
 class QTimeEdit;
 
 
-class YQTimeField : public QVBox, public YTimeField
+class YQTimeField : public QFrame, public YTimeField
 {
     Q_OBJECT
 

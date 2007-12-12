@@ -20,8 +20,9 @@
 #ifndef YQPackageSelector_h
 #define YQPackageSelector_h
 
-#include <qvbox.h>
-#include <qcolor.h>
+#include <QColor>
+#include <QLabel>
+#include <QMenu>
 
 #include "YQPackageSelectorBase.h"
 #include "YQPkgObjList.h"
@@ -29,12 +30,12 @@
 class QCheckBox;
 class QComboBox;
 class QLabel;
-class QListView;
+class QListWidget;
 class QProgressBar;
 class QPushButton;
 class QSplitter;
 class QTabWidget;
-class QPopupMenu;
+class QMenu;
 class QMenuBar;
 
 class QY2ComboTabWidget;
@@ -115,7 +116,7 @@ public slots:
      * or -devel packages) according to the current menu settings and apply the
      * exclude rules.
      **/
-    void pkgExcludeRulesChanged( int menuItemID );
+    void pkgExcludeRulesChanged();
 
     /**
      * Display (generic) online help.
@@ -200,13 +201,13 @@ protected:
 
     void basicLayout();
 
-    QWidget *	layoutLeftPane		( QWidget * parent );
-    QWidget *	layoutRightPane		( QWidget * parent );
-    void	layoutFilters		( QWidget * parent );
-    void 	layoutPkgList		( QWidget * parent );
-    void 	layoutDetailsViews	( QWidget * parent );
-    void 	layoutButtons		( QWidget * parent );
-    void 	layoutMenuBar		( QWidget * parent );
+    QWidget *	layoutLeftPane		( QWidget *parent );
+    QWidget *	layoutRightPane		( QWidget *parent );
+    void	layoutFilters		( QWidget *parent );
+    void 	layoutPkgList		( QWidget *parent );
+    void 	layoutDetailsViews	( QWidget *parent );
+    void 	layoutButtons		( QWidget *parent );
+    void 	layoutMenuBar		( QWidget *parent );
 
     /**
      * Establish Qt signal / slot connections.
@@ -313,15 +314,15 @@ protected:
     YQPkgPatchList *			_patchList;
 
     QMenuBar *				_menuBar;
-    QPopupMenu *			_fileMenu;
-    QPopupMenu *			_viewMenu;
-    QPopupMenu *			_pkgMenu;
-    QPopupMenu *			_patchMenu;
-    QPopupMenu *			_extrasMenu;
-    QPopupMenu *			_helpMenu;
+    QMenu *			_fileMenu;
+    QMenu *			_viewMenu;
+    QMenu *			_pkgMenu;
+    QMenu *			_patchMenu;
+    QMenu *			_extrasMenu;
+    QMenu *			_helpMenu;
 
-    int					_viewShowDevelID;
-    int					_viewShowDebugInfoID;
+    QAction *_showDevelAction;
+    QAction *_showDebugAction;
 
     YQPkgObjList::ExcludeRule *		_excludeDevelPkgs;
     YQPkgObjList::ExcludeRule *		_excludeDebugInfoPkgs;

@@ -20,8 +20,9 @@
 #define YQUI_h
 
 #include <qapplication.h>
-#include <qmap.h>
-#include <qtimer.h>
+#include <QMap>
+#include <QTimer>
+#include <QPalette>
 #include <vector>
 
 #include "YSimpleEventHandler.h"
@@ -31,23 +32,26 @@
 #define YQWidgetSpacing	4
 #define YQButtonBorder	3
 
+class QY2Styler;
 class QCursor;
-class QVBox;
-class QWidgetStack;
+class QFrame;
+class QStackedWidget;
 class QY2Settings;
 class YEvent;
 class YQOptionalWidgetFactory;
 class YQPackageSelectorPlugin;
 class YQWidgetFactory;
 class YQApplication;
+class YQUI_Ui;
 
 using std::string;
 using std::vector;
 
 
-class YQUI: public QObject, public YUI
+class YQUI: public YUI
 {
-    Q_OBJECT
+    friend class YQUI_Ui;
+
 public:
 
     /**
@@ -105,7 +109,7 @@ public:
      * cannot be created.
      **/
     static YQApplication * yqApp();
-    
+
     /**
      * Widget event handlers (slots) call this when an event occured that
      * should be the answer to a UserInput() / PollInput() (etc.) call.
@@ -199,16 +203,14 @@ public:
      *
      * Reimplemented from YUI.
      **/
-    virtual void blockEvents( bool block = true )
-	{ _event_handler.blockEvents( block ); }
+    virtual void blockEvents( bool block = true );
 
     /**
      * Returns 'true' if events are currently blocked.
      *
      * Reimplemented from YUI.
      **/
-    virtual bool eventsBlocked() const
-	{ return _event_handler.eventsBlocked(); }
+    virtual bool eventsBlocked() const;
 
     /**
      * Returns the current product name
@@ -223,16 +225,6 @@ public:
      * Reimplemented from YUI.
      **/
     void beep();
-
-
-public slots:
-
-    /**
-     * Show hourglass cursor.
-     *
-     * Reimplemented from YUI.
-     **/
-    void busyCursor();
 
     /**
      * Show pointer cursor.
@@ -364,6 +356,12 @@ public:
      **/
     YQPackageSelectorPlugin * packageSelectorPlugin();
 
+    /**
+     * Show hourglass cursor.
+     *
+     * Reimplemented from YUI.
+     **/
+    virtual void busyCursor();
 
 protected:
 
@@ -391,24 +389,10 @@ protected:
     QMap<QString, int>	screenShotNo;
     QString		screenShotNameTemplate;
 
-
-protected slots:
-
     /**
      * Application shutdown
      **/
     bool close();
-
-    /**
-     * Timeout during TimeoutUserInput() / WaitForEvent()
-     **/
-    void userInputTimeout();
-
-    /**
-     * Sets @ref #leave_idle_loop to true.
-     **/
-    void leaveIdleLoop( int );
-
 
 protected:
 
@@ -422,6 +406,14 @@ protected:
      **/
     void calcDefaultSize();
 
+    void init_ui();
+
+    /**
+     * Timeout during TimeoutUserInput() / WaitForEvent()
+     **/
+    void userInputTimeout();
+
+    void leaveIdleLoop();
 
     //
     // Data members
@@ -442,19 +434,12 @@ protected:
      * argument, so this needs to be embedded into something else - and a QVBox
      * at least handles all the sizeHint and resize stuff.
      **/
-    QVBox * _main_win;
+    QWidget * _main_win;
 
     /**
      * Size for `opt(`defaultsize) dialogs.
      **/
     QSize _default_size;
-
-    /**
-     * A flag used during the idle loop. If it is set to true,
-     * the idle loop is left. This happens, if the ycp-ui-communication
-     * pipe to the ui gets readable.
-     **/
-    bool _leave_idle_loop;
 
     /**
      * This flag is set during @ref #userInput in order to tell
@@ -463,7 +448,15 @@ protected:
      **/
     bool _do_exit_loop;
 
+    bool _leave_idle_loop;
+
     /**
+     * Event loop object. Required since a YaST2 UI needs to react to commands
+     * from the YCP command stream as well as to X11 / Qt events.
+     **/
+    QEventLoop * _eventLoop;
+
+    /*
      * Global reference to the UI
      **/
     static YQUI * _ui;
@@ -476,17 +469,19 @@ protected:
     /**
      * Timer for TimeoutUserInput() / WaitForEvent().
      **/
-    QTimer _user_input_timer;
+    QTimer *_user_input_timer;
 
     /**
      * Timer for delayed busy cursor
      **/
-    QTimer _busy_cursor_timer;
+    QTimer *_busy_cursor_timer;
 
     /**
      * The handler for the single pending event this UI keeps track of
      **/
     YSimpleEventHandler _event_handler;
+
+    int blocked_level;
 
     /**
      * Saved normal palette
@@ -507,7 +502,41 @@ protected:
      * Flag: Was the user already asked if he wants to use a left-handed mouse?
      **/
     bool _askedForLeftHandedMouse;
+
+    bool _ui_inited;
+    int _ui_argc;
+    char **_ui_argv;
+
+    /*
+     * Reads the style sheet, parses some comments and passes it to qapp
+     */ 
+    QY2Styler *_styler;
+
+    YQUI_Ui *_qobject;
 };
 
+class YQUI_Ui : public QObject
+{
+    Q_OBJECT
+
+public:
+    YQUI_Ui();
+
+public slots:
+
+    /**
+     * Show hourglass cursor.
+     *
+     * Reimplemented from YUI.
+     **/
+    void slotBusyCursor();
+
+    /**
+     * Timeout during TimeoutUserInput() / WaitForEvent()
+     **/
+    void slotUserInputTimeout();
+
+    void slotLeaveIdleLoop();
+};
 
 #endif // YQUI_h

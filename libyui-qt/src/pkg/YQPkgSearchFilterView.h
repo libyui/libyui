@@ -21,8 +21,9 @@
 #define YQPkgSearchFilterView_h
 
 #include "YQZypp.h"
-#include <qvbox.h>
-#include <qregexp.h>
+#include <QWidget>
+#include <QRegExp>
+#include <QEvent>
 
 
 class QComboBox;
@@ -37,7 +38,7 @@ using std::string;
 /**
  * @short Filter view for searching within packages
  **/
-class YQPkgSearchFilterView : public QVBox
+class YQPkgSearchFilterView : public QWidget
 {
     Q_OBJECT
 
@@ -117,7 +118,7 @@ signals:
 protected:
 
     // Caution: Enum order must match corresponding message strings in combo box!
-    typedef enum SearchMode
+    enum SearchMode
     {
 	Contains = 0,
 	BeginsWith,

@@ -22,8 +22,8 @@
 
 #include "QY2Settings.h"
 
-#include <qfile.h>
-#include <qregexp.h>
+#include <QFile>
+#include <QRegExp>
 
 #include <iostream>
 
@@ -36,8 +36,6 @@ QY2Settings::QY2Settings( const QString & fileName, AccessMode accessMode )
     : _fileName( fileName )
     , _accessMode( accessMode )
 {
-    _sections.setAutoDelete( true );
-
     if ( _accessMode == ReadOnly || _accessMode == ReadWrite )
 	load();
     else
@@ -47,7 +45,7 @@ QY2Settings::QY2Settings( const QString & fileName, AccessMode accessMode )
 void QY2Settings::initSections()
 {
     _defaultSection = new Section( "" );
-    CHECK_PTR( _defaultSection );
+    Q_CHECK_PTR( _defaultSection );
 
     _currentSection = _defaultSection;
     _sections.insert( "", _defaultSection );
@@ -89,14 +87,14 @@ QStringList QY2Settings::sections( bool includeUnnamed ) const
     QStringList sectionList;
     SectionIterator it( _sections );
 
-    while ( *it )
+    while ( it.hasNext() )
     {
-	QString sectionName = (*it)->name();
+	QString sectionName = (it.value())->name();
 
 	if ( includeUnnamed || ! sectionName.isEmpty() )
 	    sectionList.append( sectionName );
 
-	++it;
+	it.next();
     }
 
     return sectionList;
@@ -112,7 +110,7 @@ QString QY2Settings::get( const QString & key, const QString & fallback ) const
     if ( it == _currentSection->constEnd() )
 	return fallback;
 
-    return it.data();
+    return it.value();
 }
 
 
@@ -154,10 +152,10 @@ bool QY2Settings::load()
     
     QFile file( _fileName );
 
-    if ( ! file.open( IO_ReadOnly ) )
+    if ( ! file.open( QIODevice::ReadOnly ) )
     {
-	cerr << "Can't load settings from " << _fileName
-	     << ": " << file.errorString()
+	cerr << "Can't load settings from " << qPrintable(_fileName)
+	     << ": " << qPrintable(file.errorString())
 	     << endl;
 	
 	_readError = true;
@@ -166,13 +164,13 @@ bool QY2Settings::load()
     }
     
     QTextStream str( &file );
-    str.setEncoding( QTextStream::UnicodeUTF8 );
+    str.setAutoDetectUnicode(true);
     QString line;
     int lineCount = 0;
 
     while ( ! file.atEnd() )
     {
-	line = str.readLine().stripWhiteSpace();
+	line = str.readLine().trimmed();
 	lineCount++;
 	
 	
@@ -200,8 +198,8 @@ bool QY2Settings::load()
 	{
 	    // key=value pair
 
-	    QString key   = line.section( "=", 0, 0 ).stripWhiteSpace();
-	    QString value = line.section( "=", 1, 1 ).stripWhiteSpace();
+	    QString key   = line.section( "=", 0, 0 ).trimmed();
+	    QString value = line.section( "=", 1, 1 ).trimmed();
 
 	    value.replace( QRegExp( "^\"" ), "" );	// strip leading "
 	    value.replace( QRegExp( "\"$" ), "" );	// strip trailing "
@@ -213,7 +211,7 @@ bool QY2Settings::load()
 	else
 	{
 	    qWarning( "%s:%d: Syntax error: %s",
-		      (const char *) _fileName, lineCount, (const char *) line );
+		      qPrintable( _fileName), lineCount, qPrintable(line) );
 	}
     }
 
@@ -230,17 +228,17 @@ bool QY2Settings::save()
 
     QFile file( _fileName );
 
-    if ( ! file.open( IO_WriteOnly ) )
+    if ( ! file.open( QIODevice::WriteOnly ) )
     {
-	cerr << "Can't save settings to " << _fileName
-	     << ": " << file.errorString()
+	cerr << "Can't save settings to " << qPrintable(_fileName)
+	     << ": " << qPrintable(file.errorString())
 	     << endl;
 	
 	return false;
     }
     
     QTextStream str( &file );
-    str.setEncoding( QTextStream::UnicodeUTF8 );
+    str.setAutoDetectUnicode(true);
 
     // The default section must be saved first since it doesn't have a section
     // name that could be used for a headline
@@ -248,11 +246,11 @@ bool QY2Settings::save()
     
     SectionIterator sectIt( _sections );
     
-    while ( *sectIt )
+    while ( sectIt.hasNext() )
     {
-	if ( *sectIt != _defaultSection )
-	    saveSection( str, *sectIt );
-	++sectIt;
+	if ( sectIt.value() != _defaultSection )
+	    saveSection( str, sectIt.value() );
+	    sectIt.next();
     }
 
     _dirty = false;
@@ -274,7 +272,7 @@ void QY2Settings::saveSection( QTextStream & str, Section * sect )
 	  it != sect->end();
 	  ++it )
     {
-	QString value = it.data();
+	QString value = it.value();
 	value.replace( "\"", "\\\"" );	// Escape embedded " with \"
 
 	str << it.key() << "= \"" << value << "\"" << endl;
@@ -299,7 +297,7 @@ void QY2Settings::addSection( const QString & sectionName )
 	return;
 
     _currentSection = new Section( sectionName );
-    CHECK_PTR( _currentSection );
+    Q_CHECK_PTR( _currentSection );
 
     _sections.insert( sectionName, _currentSection );
     _dirty = true;

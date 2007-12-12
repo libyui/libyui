@@ -21,6 +21,7 @@
 #include <ycp/y2log.h>
 
 #include <qdatetimeedit.h>
+#include <QVBoxLayout>
 
 #include "utf8.h"
 #include "YQUI.h"
@@ -29,21 +30,26 @@
 
 
 YQDateField::YQDateField( YWidget * parent, const string & label )
-    : QVBox( (QWidget *) parent->widgetRep() )
+    : QFrame( (QWidget *) parent->widgetRep() )
     , YDateField( parent, label )
 {
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    setLayout( layout );
+
     setWidgetRep( this );
-    setSpacing( YQWidgetSpacing );
-    setMargin ( YQWidgetMargin  );
+    layout->setSpacing( YQWidgetSpacing );
+    layout->setMargin ( YQWidgetMargin  );
 
     _caption = new YQWidgetCaption( this, fromUTF8( label ) );
     YUI_CHECK_NEW( _caption );
+    layout->addWidget( _caption );
 
     _qt_dateEdit = new QDateEdit( this );
     YUI_CHECK_NEW( _qt_dateEdit );
+    layout->addWidget( _qt_dateEdit );
 
-    _qt_dateEdit->setAutoAdvance( true );
-    _qt_dateEdit->setOrder( QDateEdit::DMY );
+    //_qt_dateEdit->setAutoAdvance( true );
+    _qt_dateEdit->setDisplayFormat( "dd.MM.yyyy" );
     _caption->setBuddy( _qt_dateEdit );
 }
 
@@ -76,7 +82,7 @@ void YQDateField::setLabel( const string & newLabel )
 
 void YQDateField::setEnabled( bool enabled )
 {
-    QVBox::setEnabled( enabled );
+    QFrame::setEnabled( enabled );
     YWidget::setEnabled( enabled );
 }
 

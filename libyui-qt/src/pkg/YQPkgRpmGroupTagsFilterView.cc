@@ -32,16 +32,16 @@ YRpmGroupsTree * YQPkgRpmGroupTagsFilterView::_rpmGroupsTree = 0;
 
 
 YQPkgRpmGroupTagsFilterView::YQPkgRpmGroupTagsFilterView( QWidget * parent )
-    : QListView( parent )
+    : QTreeWidget( parent )
 {
-    addColumn( _( "Package Groups" ) );
+    setHeaderLabels( QStringList(_( "Package Groups" )) );
     setRootIsDecorated( true );
     cloneTree( rpmGroupsTree()->root(), 0 );
 
     new YQPkgRpmGroupTag( this, _( "zzz All" ), 0 );
 
-    connect( this, SIGNAL( selectionChanged     ( QListViewItem * ) ),
-	     this, SLOT  ( slotSelectionChanged	( QListViewItem * ) ) );
+    connect( this, SIGNAL( currentItemChanged     ( QTreeWidgetItem *, QTreeWidgetItem * ) ),
+	     this, SLOT  ( slotSelectionChanged	( QTreeWidgetItem * ) ) );
 
     selectSomething();
 }
@@ -58,7 +58,7 @@ YQPkgRpmGroupTagsFilterView::rpmGroupsTree()
     if ( ! _rpmGroupsTree )
     {
 	_rpmGroupsTree = new YRpmGroupsTree();
-	CHECK_PTR( _rpmGroupsTree );
+	Q_CHECK_PTR( _rpmGroupsTree );
 
 	fillRpmGroupsTree();
     }
@@ -100,9 +100,9 @@ YQPkgRpmGroupTagsFilterView::cloneTree( YStringTreeItem * 	parentRpmGroup,
 	else
 	    clone = new YQPkgRpmGroupTag( this, child );
 
-	CHECK_PTR( clone );
-	clone->setOpen( clone->depth() < 1 );
-
+	Q_CHECK_PTR( clone );
+	//FIXME clone->setExpanded( clone->depth() < 1 );
+        clone->setExpanded( true );
 	cloneTree( child, clone );
 	child = child->next();
     }
@@ -112,10 +112,11 @@ YQPkgRpmGroupTagsFilterView::cloneTree( YStringTreeItem * 	parentRpmGroup,
 void
 YQPkgRpmGroupTagsFilterView::selectSomething()
 {
-    QListViewItem * item = firstChild();
-
-    if ( item )
-	setSelected( item, true );
+// FIXME
+//     QTreeWidgetItem * item = children().first();
+// 
+//     if ( item )
+// 	setCurrentItem(item);
 }
 
 
@@ -168,7 +169,7 @@ YQPkgRpmGroupTagsFilterView::filter()
 
 
 void
-YQPkgRpmGroupTagsFilterView::slotSelectionChanged( QListViewItem * newSelection )
+YQPkgRpmGroupTagsFilterView::slotSelectionChanged( QTreeWidgetItem * newSelection )
 {
     YQPkgRpmGroupTag * sel = dynamic_cast<YQPkgRpmGroupTag *>( newSelection );
 
@@ -218,12 +219,12 @@ YQPkgRpmGroupTagsFilterView::check( ZyppSel	selectable,
 YQPkgRpmGroupTag *
 YQPkgRpmGroupTagsFilterView::selection() const
 {
-    QListViewItem * item = selectedItem();
+    QTreeWidgetItem * item = currentItem();
 
     if ( ! item )
 	return 0;
 
-    return dynamic_cast<YQPkgRpmGroupTag *> ( selectedItem() );
+    return dynamic_cast<YQPkgRpmGroupTag *> ( item );
 }
 
 
@@ -233,7 +234,7 @@ YQPkgRpmGroupTagsFilterView::selection() const
 
 YQPkgRpmGroupTag::YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView * 	parentFilterView,
 				    YStringTreeItem *			rpmGroup	)
-    : QListViewItem( parentFilterView )
+    : QTreeWidgetItem( parentFilterView )
     , _filterView( parentFilterView )
     , _rpmGroup( rpmGroup )
 {
@@ -244,7 +245,7 @@ YQPkgRpmGroupTag::YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView * 	parentFilterV
 YQPkgRpmGroupTag::YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView * 	parentFilterView,
 				    YQPkgRpmGroupTag * 			parentGroupTag,
 				    YStringTreeItem *	 		rpmGroup	)
-    : QListViewItem( parentGroupTag )
+    : QTreeWidgetItem( parentGroupTag )
     , _filterView( parentFilterView )
     , _rpmGroup( rpmGroup )
 {
@@ -255,7 +256,7 @@ YQPkgRpmGroupTag::YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView * 	parentFilterV
 YQPkgRpmGroupTag::YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView * 	parentFilterView,
 				    const QString &			rpmGroupName,
 				    YStringTreeItem *			rpmGroup	)
-    : QListViewItem( parentFilterView )
+    : QTreeWidgetItem( parentFilterView )
     , _filterView( parentFilterView )
     , _rpmGroup( rpmGroup )
 {

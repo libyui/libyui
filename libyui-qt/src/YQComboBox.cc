@@ -34,26 +34,32 @@
 #include "YQComboBox.h"
 #include "YQSignalBlocker.h"
 #include "YQWidgetCaption.h"
-
+#include <QVBoxLayout>
 
 
 YQComboBox::YQComboBox( YWidget * 	parent,
 			const string &	label,
 			bool		editable )
-    : QVBox( (QWidget *) parent->widgetRep() )
+    : QFrame( (QWidget *) parent->widgetRep() )
     , YComboBox( parent, label, editable )
     , _validator(0)
 {
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    setLayout( layout );
+
     setWidgetRep( this );
-    setSpacing( YQWidgetSpacing );
-    setMargin ( YQWidgetMargin  );
+    layout->setSpacing( YQWidgetSpacing );
+    layout->setMargin ( YQWidgetMargin  );
 
     _caption = new YQWidgetCaption( this, label );
     YUI_CHECK_NEW( _caption );
-    
-    _qt_comboBox = new QComboBox( editable, this );
+    layout->addWidget( _caption );
+
+    _qt_comboBox = new QComboBox(this);
+    _qt_comboBox->setEditable(editable);
     YUI_CHECK_NEW( _caption );
-    
+    layout->addWidget( _qt_comboBox );
+
     _caption->setBuddy( _qt_comboBox );
 
 #if SEND_SELECTION_CHANGED_EVENT
@@ -61,11 +67,11 @@ YQComboBox::YQComboBox( YWidget * 	parent,
 	     this,		SLOT  ( slotSelected(int) ) );
 #endif
 
-    connect( _qt_comboBox,	SIGNAL( activated  ( const QString & ) ),
-	     this,		SLOT  ( textChanged( const QString & ) ) );
+    connect( _qt_comboBox,	SIGNAL( activated  ( QString ) ),
+	     this,		SLOT  ( textChanged( QString ) ) );
 
-    connect( _qt_comboBox,	SIGNAL( textChanged( const QString & ) ),
-	     this,		SLOT  ( textChanged( const QString & ) ) );
+    connect( _qt_comboBox,	SIGNAL( editTextChanged( QString ) ),
+	     this,		SLOT  ( textChanged( QString ) ) );
 }
 
 
@@ -88,7 +94,7 @@ void YQComboBox::setText( const string & newValue )
     if ( isValidText( text ) )
     {
 	YQSignalBlocker sigBlocker( _qt_comboBox );
-	_qt_comboBox->setCurrentText( text );
+	_qt_comboBox->setItemText(_qt_comboBox->currentIndex(), text );
     }
     else
     {
@@ -101,21 +107,21 @@ void YQComboBox::setText( const string & newValue )
 void YQComboBox::addItem( YItem * item )
 {
     YComboBox::addItem( item );
-    QPixmap icon;
-    
+    QIcon icon;
+
     if ( item->hasIconName() )
     {
 	string iconName = iconFullPath( item );
-	icon = QPixmap( iconName.c_str() );
+	icon = QIcon( iconName.c_str() );
 
 	if ( icon.isNull() )
 	    y2warning( "Can't load icon %s", iconName.c_str() );
     }
 
     if ( icon.isNull() )
-	_qt_comboBox->insertItem( fromUTF8( item->label() ) );
+	_qt_comboBox->insertItem( -1, fromUTF8( item->label() ) );
     else
-	_qt_comboBox->insertItem( icon, fromUTF8( item->label() ) );
+	_qt_comboBox->insertItem( -1, icon, fromUTF8( item->label() ) );
 
     if ( item->selected() )
     {
@@ -128,7 +134,7 @@ void YQComboBox::addItem( YItem * item )
 void YQComboBox::deleteAllItems()
 {
     YQSignalBlocker sigBlocker( _qt_comboBox );
-    
+
     _qt_comboBox->clear();
     YComboBox::deleteAllItems();
 }
@@ -143,7 +149,7 @@ void YQComboBox::setLabel( const string & label )
 
 void YQComboBox::setValidChars( const string & newValidChars )
 {
-    if ( ! _qt_comboBox->editable() )
+    if ( ! _qt_comboBox->isEditable() )
     {
 	y2warning( "Setting ValidChars is useless on a combo box that isn't editable! (%s)",
 		   debugLabel().c_str() );
@@ -166,10 +172,10 @@ void YQComboBox::setValidChars( const string & newValidChars )
     if ( ! isValidText( _qt_comboBox->currentText() ) )
     {
 	y2error( "Old value \"%s\" of %s \"%s\" invalid according to ValidChars \"%s\" - deleting",
-		 (const char *) _qt_comboBox->currentText(),
+		 qPrintable(_qt_comboBox->currentText()),
 		 widgetClass(), debugLabel().c_str(),
 		 newValidChars.c_str() );
-	_qt_comboBox->setCurrentText( "" );
+	_qt_comboBox->setItemText(_qt_comboBox->currentIndex(), "");
     }
 
     YComboBox::setValidChars( newValidChars );
@@ -202,7 +208,7 @@ void YQComboBox::slotSelected( int i )
 }
 
 
-void YQComboBox::textChanged( const QString & new_text )
+void YQComboBox::textChanged( QString )
 {
     if ( notify() )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );

@@ -20,7 +20,7 @@
 #ifndef YQPkgProductDialog_h
 #define YQPkgProductDialog_h
 
-#include <qdialog.h>
+#include <QDialog>
 
 
 class QTabWidget;

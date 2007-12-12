@@ -20,7 +20,7 @@
 #ifndef YQProgressBar_h
 #define YQProgressBar_h
 
-#include <qvbox.h>
+#include <QFrame>
 #include "YProgressBar.h"
 
 
@@ -28,7 +28,7 @@ class QString;
 class YQWidgetCaption;
 class QProgressBar;
 
-class YQProgressBar : public QVBox, public YProgressBar
+class YQProgressBar : public QFrame, public YProgressBar
 {
     Q_OBJECT
 
@@ -43,7 +43,7 @@ public:
      * Destructor.
      **/
     virtual ~YQProgressBar();
-    
+
     /**
      * Set the label (the caption above the progress bar).
      *
@@ -57,7 +57,7 @@ public:
      * Reimplemented from YProgressBar.
      **/
     virtual void setValue( int newValue );
-    
+
     /**
      * Set enabled/disabled state.
      *
@@ -91,7 +91,7 @@ public:
      **/
     virtual bool setKeyboardFocus();
 
-    
+
 protected:
 
     YQWidgetCaption *	_caption;

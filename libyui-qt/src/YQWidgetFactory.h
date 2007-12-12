@@ -38,7 +38,7 @@
 #include "YQMenuButton.h"
 #include "YQMultiLineEdit.h"
 #include "YQMultiSelectionBox.h"
-#include "YQPackageSelector.h"
+#include "pkg/YQPackageSelector.h"
 #include "YQProgressBar.h"
 #include "YQPushButton.h"
 #include "YQRadioButton.h"

@@ -21,6 +21,7 @@
 #include <ycp/y2log.h>
 
 #include <qevent.h>
+#include <QPointF>
 
 #include "YQUI.h"
 #include "YQMultiProgressMeter.h"
@@ -84,8 +85,8 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 
     QPainter painter( this );
 
-    if ( ! event->erased() )
-	painter.eraseRect( event->rect() );
+//     if ( ! event->erased() )
+// 	   painter.eraseRect( event->rect() );
 
     int totalLength 	= horizontal() ? width() : height();
     int thickness 	= horizontal() ? height() : width();
@@ -254,34 +255,32 @@ void YQMultiProgressMeter::drawSegment( int segment,
     {
 	if ( fillStart < length )
 	{
-	    QPointArray points( 4 );
-	    int p=0;
-    
-	    points.setPoint( p++, offset + fillStart,	border + fillHeight );
-	    points.setPoint( p++, offset + fillStart, 	border + thickness - fillHeight );
-	    points.setPoint( p++, offset + length, 	border + thickness - indent );
-	    points.setPoint( p++, offset + length, 	border + indent );
+            static const QPointF points[4] = 
+              { QPointF( offset + fillStart,	border + fillHeight ),
+	        QPointF( offset + fillStart, 	border + thickness - fillHeight ),
+	        QPointF( offset + length, 	border + thickness - indent ),
+	        QPointF( offset + length, 	border + indent )
+              };
 
-	    painter.setBrush( palette().active().highlight() );
-	    painter.setPen( NoPen );
-	    painter.drawConvexPolygon( points );
+	    painter.setBrush( palette().highlight() );
+	    painter.setPen( Qt::NoPen );
+	    painter.drawConvexPolygon( points, 4 );
 	}
     }
     else	// horizontal - fill from left to right like a normal progress bar
     {
 	if ( fillStart > 0 )
 	{
-	    QPointArray points( 4 );
-	    int p=0;
-    
-	    points.setPoint( p++, offset, 		border + thickness );
-	    points.setPoint( p++, offset, 		border );
-	    points.setPoint( p++, offset + fillStart,	border + fillHeight );
-	    points.setPoint( p++, offset + fillStart, 	border + thickness - fillHeight );
+            static const QPointF points[4] =
+              { QPointF( offset, 		border + thickness ),
+	        QPointF( offset, 		border ),
+	        QPointF( offset + fillStart,	border + fillHeight ),
+	        QPointF( offset + fillStart, 	border + thickness - fillHeight )
+              };
 
-	    painter.setBrush( palette().active().highlight() );
-	    painter.setPen( NoPen );
-	    painter.drawConvexPolygon( points );
+	    painter.setBrush( palette().highlight() );
+	    painter.setPen( Qt::NoPen );
+	    painter.drawConvexPolygon( points, 4 );
 	}
     }
 
@@ -290,13 +289,13 @@ void YQMultiProgressMeter::drawSegment( int segment,
     // Draw outline
     //
 
-    const QColor & dark  = palette().active().dark();
-    const QColor & light = palette().active().light();
+    const QBrush & dark  = palette().dark();
+    const QBrush & light = palette().light();
 
     // Draw arrow base (left)
 
-    painter.setPen( dark );
-    painter.setPen( SolidLine );
+    painter.setBrush( dark );
+    painter.setPen( Qt::SolidLine );
     painter.drawLine( offset, border,
 		      offset, border + thickness );
 
@@ -308,7 +307,7 @@ void YQMultiProgressMeter::drawSegment( int segment,
 
     // Draw arrow point (right)
 
-    painter.setPen( light );
+    painter.setBrush( light );
     painter.drawLine( offset + length - 1, border + indent,
 		      offset + length - 1, border + thickness - indent );
 
@@ -327,36 +326,35 @@ void YQMultiProgressMeter::drawMarkers( QPainter & painter, int offset, int thic
 
     offset -= spacing() / 2 + 1; 	// integer division rounds down!
 
-    const QColor & color = palette().active().foreground();
-    painter.setPen( color );
-    painter.setPen( SolidLine );
+    const QBrush & color = palette().foreground();
     painter.setBrush( color );
     // painter.setBrush( NoBrush );
-    
+
 
     // Draw upper marker triangle
 
     int tri = triThickness();
-    QPointArray points( 3 );
+      
+    static const QPointF points[3] = 
+     { QPointF( offset - tri+1,	margin() ),		// top left (base)
+       QPointF( offset,		margin() + tri-1 ),	// lower center (point)
+       QPointF( offset + tri-1, 	margin() )		// top right (base)
+     };
 
-    int p=0;
-    points.setPoint( p++, offset - tri+1,	margin() );		// top left (base)
-    points.setPoint( p++, offset,		margin() + tri-1 );	// lower center (point)
-    points.setPoint( p++, offset + tri-1, 	margin() );		// top right (base)
-
-    painter.drawConvexPolygon( points );
+    painter.drawConvexPolygon( points, 3 );
 
 
     // Draw lower marker triangle
 
     int pointOffset = margin() + tri + thickness + 2 * triSpacing();
 
-    p=0;
-    points.setPoint( p++, offset,		pointOffset );		// top center (point)
-    points.setPoint( p++, offset + tri-1, 	pointOffset + tri-1 );	// top right (base)
-    points.setPoint( p++, offset - tri+1,	pointOffset + tri-1 );	// bottom left (base)
+    static const QPointF points2[3] =
+     { QPointF( offset,		pointOffset ),		// top center (point)
+       QPointF( offset + tri-1,	pointOffset + tri-1 ),	// top right (base)
+       QPointF( offset - tri+1,	pointOffset + tri-1 )	// bottom left (base)
+     };
 
-    painter.drawConvexPolygon( points );
+    painter.drawConvexPolygon( points2, 3 );
 }
 
 

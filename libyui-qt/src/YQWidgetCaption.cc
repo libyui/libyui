@@ -24,11 +24,11 @@
 #include "utf8.h"
 
 
-YQWidgetCaption::YQWidgetCaption( QWidget * parent, 
+YQWidgetCaption::YQWidgetCaption( QWidget * parent,
 				  const string &  text )
     : QLabel( fromUTF8( text ), parent )
 {
-    setTextFormat( QLabel::PlainText );
+    setTextFormat( Qt::PlainText );
     handleVisibility( text );
 }
 
@@ -36,7 +36,7 @@ YQWidgetCaption::YQWidgetCaption( QWidget * parent,
 YQWidgetCaption::YQWidgetCaption( QWidget * parent, const QString & text )
     : QLabel( text, parent )
 {
-    setTextFormat( QLabel::PlainText );
+    setTextFormat( Qt::PlainText );
     handleVisibility( text );
 }
 
@@ -76,12 +76,12 @@ void YQWidgetCaption::handleVisibility( bool textIsEmpty )
 {
     if ( textIsEmpty )
     {
-	if ( isShown() )
+	if ( !isHidden() )
 	    hide();
     }
     else
     {
-	if ( ! isShown() )
+	if ( isHidden() )
 	    show();
     }
 }

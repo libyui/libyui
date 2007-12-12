@@ -20,7 +20,7 @@
 #include "YQUI.h"
 #include "YUIException.h"
 #include "YQPackageSelectorPlugin.h"
-
+#include "YQWizard.h"
 
 #define THROW_UNSUPPORTED( WIDGET_TYPE ) \
     YUI_THROW( YUIUnsupportedWidgetException( WIDGET_TYPE ) );	\
@@ -46,7 +46,7 @@ bool YQOptionalWidgetFactory::hasWizard()
     return true;
 }
 
-YQWizard *
+YWizard *
 YQOptionalWidgetFactory::createWizard( YWidget *   	parent,
 				       const string & 	backButtonLabel,
 				       const string & 	abortButtonLabel,

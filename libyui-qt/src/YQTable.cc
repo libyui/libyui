@@ -16,7 +16,9 @@
 
 /-*/
 
-#include <qheader.h>
+#include <QHeaderView>
+#include <QVBoxLayout>
+#include <QString>
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
@@ -31,14 +33,19 @@
 
 
 YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader )
-    : QVBox( (QWidget *) parent->widgetRep() )
+    : QFrame( (QWidget *) parent->widgetRep() )
     , YTable( parent, tableHeader )
 {
     setWidgetRep( this );
-    setMargin( YQWidgetMargin );
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    layout->setSpacing( 0 );
+    setLayout( layout );
+
+    layout->setMargin( YQWidgetMargin );
 
     _qt_listView = new QY2ListView( this );
     YUI_CHECK_NEW( _qt_listView );
+    layout->addWidget( _qt_listView );
     _qt_listView->setAllColumnsShowFocus( true );
 
 
@@ -46,38 +53,40 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader )
     // Add columns
     //
 
+    QStringList headers;
+    _qt_listView->setColumnCount(columns());
     for ( int i=0; i < columns(); i++ )
     {
-	_qt_listView->addColumn( fromUTF8( header( i ) ) );
+        headers << QString::fromUtf8(header(i).c_str());
 
-	int qt_alignment = Qt::Left;
+	int qt_alignment = Qt::AlignLeft;
 
 	switch ( alignment( i ) )
 	{
 	    case YAlignBegin:	qt_alignment = Qt::AlignLeft;	break;
 	    case YAlignCenter:	qt_alignment = Qt::AlignCenter;	break;
 	    case YAlignEnd:	qt_alignment = Qt::AlignRight;	break;
-		
+
 	    case YAlignUnchanged: break;
 	}
 
-	_qt_listView->setColumnAlignment( i, qt_alignment );
+	//FIXME _qt_listView->setColumnAlignment( i, qt_alignment );
 	// _qt_listView->adjustColumn( column );
     }
-
+    _qt_listView->setHeaderLabels( headers );
 
     //
     // Connect signals and slots
     //
 
-    connect( _qt_listView, 	SIGNAL( doubleClicked    ( QListViewItem * ) ),
-	     this, 		SLOT  ( slotActivated	 ( QListViewItem * ) ) );
+    connect( _qt_listView, 	SIGNAL( itemDoubleClicked    ( QTreeWidgetItem *, int ) ),
+	     this, 		SLOT  ( slotActivated	 ( QTreeWidgetItem * ) ) );
 
-    connect( _qt_listView, 	SIGNAL( spacePressed     ( QListViewItem * ) ),
-	     this, 		SLOT  ( slotActivated	 ( QListViewItem * ) ) );
+    connect( _qt_listView, 	SIGNAL( itemActivated    ( QTreeWidgetItem *, int ) ),
+	     this, 		SLOT  ( slotActivated	 ( QTreeWidgetItem * ) ) );
 
-    connect( _qt_listView, 	SIGNAL( selectionChanged ( QListViewItem * ) ),
-	     this, 		SLOT  ( slotSelected	 ( QListViewItem * ) ) );
+    connect( _qt_listView, 	SIGNAL( currentItemChanged ( QTreeWidgetItem *, QTreeWidgetItem * ) ),
+	     this, 		SLOT  ( slotSelected	 ( QTreeWidgetItem * ) ) );
 }
 
 
@@ -109,7 +118,7 @@ YQTable::addItem( YItem * yitem )
     if ( item->selected() )
     {
 	YQSignalBlocker sigBlocker( _qt_listView );
-	_qt_listView->setSelected( clone, true );
+	clone->setSelected(true);
     }
 }
 
@@ -125,13 +134,14 @@ YQTable::selectItem( YItem * yitem, bool selected )
     YQTableListViewItem * clone = (YQTableListViewItem *) item->data();
     YUI_CHECK_PTR( clone );
 
-    if ( ! selected && clone == _qt_listView->selectedItem() )
+    //FIXME selected first
+    if ( ! selected && clone == _qt_listView->currentItem() )
     {
 	deselectAllItems();
     }
     else
     {
-	_qt_listView->setSelected( clone, true );
+	clone->setSelected( true );
 	YTable::selectItem( item, selected );
     }
 }
@@ -169,7 +179,7 @@ YQTable::cellChanged( const YTableCell * cell )
 
 
 void
-YQTable::selectOrigItem( QListViewItem * listViewItem )
+YQTable::selectOrigItem( QTreeWidgetItem * listViewItem )
 {
     if ( listViewItem )
     {
@@ -182,7 +192,7 @@ YQTable::selectOrigItem( QListViewItem * listViewItem )
 
 
 void
-YQTable::slotSelected( QListViewItem * listViewItem  )
+YQTable::slotSelected( QTreeWidgetItem * listViewItem  )
 {
     selectOrigItem( listViewItem );
 
@@ -199,7 +209,7 @@ YQTable::slotSelected( QListViewItem * listViewItem  )
 
 
 void
-YQTable::slotActivated( QListViewItem * listViewItem )
+YQTable::slotActivated( QTreeWidgetItem * listViewItem )
 {
     selectOrigItem( listViewItem );
 
@@ -212,7 +222,7 @@ void
 YQTable::setEnabled( bool enabled )
 {
     _qt_listView->setEnabled( enabled );
-    _qt_listView->triggerUpdate();
+    //FIXME _qt_listView->triggerUpdate();
     YWidget::setEnabled( enabled );
 }
 
@@ -311,13 +321,13 @@ YQTableListViewItem::updateCell( const YTableCell * cell )
 	if ( icon.isNull() )
 	    y2warning( "Can't load icon %s", iconName.c_str() );
 	else
-	    setPixmap( column, icon );
+	    setData( column, Qt::DecorationRole, icon );
     }
     else // No pixmap name
     {
-	if ( pixmap( column ) ) // Was there a pixmap before?
+	if ( ! data( column, Qt::DecorationRole ).isNull() ) // Was there a pixmap before?
 	{
-	    setPixmap( column, QPixmap() ); // Set empty pixmap
+	    setData( column, Qt::DecorationRole, QPixmap() ); // Set empty pixmap
 	}
     }
 }

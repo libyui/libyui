@@ -36,17 +36,19 @@ YQPkgLangList::YQPkgLangList( QWidget * parent )
     y2debug( "Creating language list" );
 
     int numCol = 0;
-    addColumn( ""		);	_statusCol	= numCol++;
+    QStringList headers;
+    headers <<  "";	_statusCol	= numCol++;
 
     // Translators: Table column heading for language ISO code like "de_DE", "en_US"
     // Please keep this short to avoid stretching the column too wide!
-    addColumn( _( "Code"	) );	_nameCol	= numCol++;
+    headers <<  _( "Code"	);	_nameCol	= numCol++;
 
     // Full (human readable) language / country name like "German (Austria)"
-    addColumn( _( "Language" ) );	_summaryCol	= numCol++;
+    headers <<  _( "Language");	_summaryCol	= numCol++;
     setAllColumnsShowFocus( true );
+    setHeaderLabels(headers);
 
-    connect( this, 	SIGNAL( selectionChanged        ( QListViewItem * ) ),
+    connect( this, 	SIGNAL( currentItemChanged        ( QTreeWidgetItem *, QTreeWidgetItem * ) ),
 	     this, 	SLOT  ( filter()                                    ) );
 
     fillList();
@@ -172,12 +174,16 @@ YQPkgLangList::addLangItem( ZyppSel	selectable,
 YQPkgLangListItem *
 YQPkgLangList::selection() const
 {
-    QListViewItem * item = selectedItem();
+#if FIXME
+    Q3ListViewItem * item = selectedItem();
 
     if ( ! item )
 	return 0;
 
     return dynamic_cast<YQPkgLangListItem *> (item);
+#else
+    return 0;
+#endif
 }
 
 

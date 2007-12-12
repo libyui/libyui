@@ -1,0 +1,60 @@
+@HEADER-COMMENT@
+
+
+@HEADER@
+BuildRequires:	dbus-1-devel boost-devel libzypp-devel curl-devel docbook-xsl-stylesheets doxygen libdrm-devel libjpeg-devel libxcrypt-devel libxslt perl-XML-Writer libqt4-devel rpm-devel sgml-skel update-desktop-files yast2-devtools hal-devel
+
+Summary:	-
+BuildRequires:  yast2-core-devel >= 2.16.15
+Requires:       yast2-core >= 2.16.15
+Requires:	libzypp >= 3.11.8
+Provides:	yast2_ui
+Provides:	y2base:/usr/lib/YaST2/servers/qt
+Provides:	y2base:/usr/lib/YaST2/plugin/libpy2qt.so.2
+Provides:	yast2-ui-qt yast2-ui-qt-devel
+Obsoletes:	yast2-ui-qt yast2-ui-qt-devel
+Provides:	y2qt
+Obsoletes:	y2qt
+
+%description
+-
+
+%prep
+%setup
+
+%build
+mkdir build
+cd build
+export CFLAGS="$RPM_OPT_FLAGS"
+export CXXFLAGS="$CFLAGS"
+cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} \
+      -DLIB=%{_lib} \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_SKIP_RPATH=1 \
+      ..
+make %{?jobs:-j %jobs} VERBOSE=1
+
+%install
+cd build
+make install DESTDIR=$RPM_BUILD_ROOT
+cd ..
+
+%clean
+rm -rf "$RPM_BUILD_ROOT"
+
+
+%if 0%{?suse_version} <= 1010
+%define _xorg7fonts /usr/X11R6/lib/X11/fonts
+%else
+%define _xorg7fonts /usr/share/fonts
+%endif
+
+%files
+%defattr (-, root, root)
+%_libdir/YaST2/plugin/libpy2qt4.so.*
+%_libdir/YaST2/plugin/libpy2qt4.so
+%_libdir/YaST2/plugin/libpy2qt4_pkg.so.*
+%_libdir/YaST2/plugin/libpy2qt4_pkg.so
+%_prefix/share/YaST2/theme
+
+%changelog

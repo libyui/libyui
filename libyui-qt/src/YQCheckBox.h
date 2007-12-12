@@ -20,18 +20,15 @@
 #ifndef YQCheckBox_h
 #define YQCheckBox_h
 
-#include <qgroupbox.h>
+#include <QCheckBox>
 #include "YCheckBox.h"
 
-
-class QCheckBox;
-
-class YQCheckBox : public QGroupBox, public YCheckBox
+class YQCheckBox : public QCheckBox, public YCheckBox
 {
     Q_OBJECT
 
 public:
-    
+
     /**
      * Constructor.
      **/
@@ -56,7 +53,7 @@ public:
      * Reimplemented from YCheckBox.
      **/
     virtual YCheckBoxState value();
-	
+
     /**
      * Set the CheckBox value (on/off/don't care).
      *
@@ -113,7 +110,7 @@ public:
      **/
     virtual bool setKeyboardFocus();
 
-    
+
 private slots:
 
     /**
@@ -121,10 +118,6 @@ private slots:
      **/
     void stateChanged ( int newState );
 
-    
-protected:
-    
-    QCheckBox * _qt_checkBox;
 };
 
 #endif // YQCheckBox_h

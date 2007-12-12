@@ -21,7 +21,7 @@
 #define YQPkgRpmGroupTagsFilterView_h
 
 #include "YQZypp.h"
-#include <qlistview.h>
+#include <QTreeWidget>
 #include <YRpmGroupsTree.h>
 
 
@@ -35,7 +35,7 @@ class YQPkgRpmGroupTag;
  * signals if any group tag is selected so a package list can be filled or
  * updated.
  **/
-class YQPkgRpmGroupTagsFilterView : public QListView
+class YQPkgRpmGroupTagsFilterView : public QTreeWidget
 {
     Q_OBJECT
 
@@ -69,7 +69,7 @@ public:
      **/
     const string & selectedRpmGroup() const { return _selectedRpmGroup; }
 
-    
+
 public slots:
 
     /**
@@ -89,13 +89,13 @@ public slots:
     /**
      * Select a list entry (if there is any).
      * Usually this will be the first list entry, but don't rely on that - this
-     * might change without notice. Emits signal selectionChanged().
+     * might change without notice. Emits signal currentItemChanged().
      **/
     void selectSomething();
 
     /**
      * Returns the internal RPM groups tree and fills it
-     * if it doesn't exist yet.  
+     * if it doesn't exist yet.
      **/
     static YRpmGroupsTree * rpmGroupsTree();
 
@@ -125,14 +125,14 @@ protected slots:
     /**
      * Update _selectedRpmGroup and filter data
      **/
-    void slotSelectionChanged( QListViewItem * newSelection );
+    void slotSelectionChanged( QTreeWidgetItem * newSelection );
 
-    
+
 protected:
 
     /**
      * Fill the internal RPM groups tree with RPM groups of all packages
-     * currently in the pool 
+     * currently in the pool
      **/
     static void fillRpmGroupsTree();
 
@@ -147,15 +147,15 @@ protected:
     //
     // Data members
     //
-    
+
     string _selectedRpmGroup;
-    
+
     static YRpmGroupsTree * _rpmGroupsTree;
 };
 
 
 
-class YQPkgRpmGroupTag: public QListViewItem
+class YQPkgRpmGroupTag: public QTreeWidgetItem
 {
 public:
 

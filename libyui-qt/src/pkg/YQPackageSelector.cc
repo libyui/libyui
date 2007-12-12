@@ -28,21 +28,23 @@
 #include <fstream>
 #include <boost/bind.hpp>
 
-#include <qaction.h>
-#include <qapplication.h>
-#include <qaccel.h>
-#include <qcheckbox.h>
-#include <qdialog.h>
-#include <qfiledialog.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qmap.h>
-#include <qmenubar.h>
-#include <qmessagebox.h>
-#include <qpushbutton.h>
-#include <qsplitter.h>
-#include <qtabwidget.h>
-#include <qtimer.h>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QAction>
+#include <QShortcut>
+#include <QApplication>
+#include <QCheckBox>
+#include <QDialog>
+#include <QFileDialog>
+#include <QLabel>
+#include <QMap>
+#include <QMenuBar>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QSplitter>
+#include <QTabWidget>
+#include <QTimer>
+#include <QMenu>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
@@ -205,6 +207,7 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
 	// Fire up the first dependency check in the main loop.
 	// Don't do this right away - wait until all initializations are finished.
 	QTimer::singleShot( 0, this, SLOT( resolveDependencies() ) );
+  
     }
 #endif
 }
@@ -213,49 +216,60 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
 void
 YQPackageSelector::basicLayout()
 {
-    layoutMenuBar( this );
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    setLayout(layout);
+    layoutMenuBar(this);
 
-    QSplitter * outer_splitter = new QSplitter( QSplitter::Horizontal, this );
-    CHECK_PTR( outer_splitter );
+    QSplitter * outer_splitter = new QSplitter( Qt::Horizontal, this );
+    Q_CHECK_PTR( outer_splitter );
+
+    layout->addWidget(outer_splitter);
 
     QWidget * left_pane	 = layoutLeftPane ( outer_splitter );
+
     QWidget * right_pane = layoutRightPane( outer_splitter );
 
-    outer_splitter->setResizeMode( left_pane,  QSplitter::KeepSize );
-    outer_splitter->setResizeMode( right_pane, QSplitter::Stretch );
+    outer_splitter->setStretchFactor(outer_splitter->indexOf(left_pane), 0);
+    outer_splitter->setStretchFactor(outer_splitter->indexOf(right_pane), 1);
 }
 
 
 QWidget *
-YQPackageSelector::layoutLeftPane( QWidget * parent )
+YQPackageSelector::layoutLeftPane( QWidget *parent )
 {
-    QSplitter * splitter = new QSplitter( QSplitter::Vertical, parent );
-    CHECK_PTR( splitter );
-    splitter->setMargin( MARGIN );
+    QSplitter * splitter = new QSplitter( Qt::Vertical, parent );
+    Q_CHECK_PTR( splitter );
 
-    QVBox * upper_vbox = new QVBox( splitter );
-    CHECK_PTR( upper_vbox );
+    QWidget * upper_vbox = new QWidget( splitter );
+    QVBoxLayout *layout = new QVBoxLayout(upper_vbox);
+    upper_vbox->setLayout(layout);
+    
+    Q_CHECK_PTR( upper_vbox );
     layoutFilters( upper_vbox );
     addVSpacing( upper_vbox, MARGIN );
 
-    QVBox * lower_vbox = new QVBox( splitter );
+    QWidget * lower_vbox = new QWidget( splitter );
+    layout = new QVBoxLayout(lower_vbox);
+    lower_vbox->setLayout(layout);
+
     addVSpacing( lower_vbox, MARGIN );
     _diskUsageList = new YQPkgDiskUsageList( lower_vbox );
-    CHECK_PTR( _diskUsageList );
+    Q_CHECK_PTR( _diskUsageList );
+    layout->addWidget(_diskUsageList);
 
-    splitter->setResizeMode( upper_vbox, QSplitter::Stretch );
-    splitter->setResizeMode( lower_vbox, QSplitter::KeepSize );
-
+    splitter->setStretchFactor(splitter->indexOf(upper_vbox), 0);
+    splitter->setStretchFactor(splitter->indexOf(lower_vbox), 1);
+    
     return splitter;
 }
 
 
 void
-YQPackageSelector::layoutFilters( QWidget * parent )
+YQPackageSelector::layoutFilters( QWidget *parent )
 {
     _filters = new QY2ComboTabWidget( _( "Fi&lter:" ), parent );
-    CHECK_PTR( _filters );
-
+    Q_CHECK_PTR( _filters );
+    parent->layout()->addWidget(_filters);
 
     //
     // Update problem view
@@ -266,8 +280,8 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 	if ( YQPkgUpdateProblemFilterView::haveProblematicPackages()
 	     || testMode() )
 	{
-	    _updateProblemFilterView = new YQPkgUpdateProblemFilterView( parent );
-	    CHECK_PTR( _updateProblemFilterView );
+	    _updateProblemFilterView = new YQPkgUpdateProblemFilterView( parent);
+	    Q_CHECK_PTR( _updateProblemFilterView );
 	    _filters->addPage( _( "Update Problems" ), _updateProblemFilterView );
 	}
     }
@@ -292,7 +306,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     if ( ! zyppPool().empty<zypp::Pattern>() || testMode() )
     {
 	_patternList = new YQPkgPatternList( parent, true );
-	CHECK_PTR( _patternList );
+	Q_CHECK_PTR( _patternList );
 	_filters->addPage( _( "Patterns" ), _patternList );
 
 	connect( _patternList,		SIGNAL( statusChanged()			),
@@ -317,7 +331,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     {
 
 	_selList = new YQPkgSelList( parent, true );
-	CHECK_PTR( _selList );
+	Q_CHECK_PTR( _selList );
 	_filters->addPage( _( "Selections" ), _selList );
 
 	connect( _selList,		SIGNAL( statusChanged()			),
@@ -339,7 +353,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     //
 
     _rpmGroupTagsFilterView = new YQPkgRpmGroupTagsFilterView( parent );
-    CHECK_PTR( _rpmGroupTagsFilterView );
+    Q_CHECK_PTR( _rpmGroupTagsFilterView );
     _filters->addPage( _( "Package Groups" ), _rpmGroupTagsFilterView );
 
     connect( this,			SIGNAL( loadData() ),
@@ -351,7 +365,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     //
 
     _langList = new YQPkgLangList( parent );
-    CHECK_PTR( _langList );
+    Q_CHECK_PTR( _langList );
 
     _filters->addPage( _( "Languages" ), _langList );
     _langList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored ) ); // hor/vert
@@ -368,7 +382,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     //
 
     _repoFilterView = new YQPkgRepoFilterView( parent );
-    CHECK_PTR( _repoFilterView );
+    Q_CHECK_PTR( _repoFilterView );
     _filters->addPage( _( "Repositories" ), _repoFilterView );
 
 
@@ -377,7 +391,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     //
 
     _searchFilterView = new YQPkgSearchFilterView( parent );
-    CHECK_PTR( _searchFilterView );
+    Q_CHECK_PTR( _searchFilterView );
     _filters->addPage( _( "Search" ), _searchFilterView );
 
 
@@ -386,7 +400,7 @@ YQPackageSelector::layoutFilters( QWidget * parent )
     //
 
     _statusFilterView = new YQPkgStatusFilterView( parent );
-    CHECK_PTR( _statusFilterView );
+    Q_CHECK_PTR( _statusFilterView );
     _filters->addPage( _( "Installation Summary" ), _statusFilterView );
 
 
@@ -401,33 +415,40 @@ YQPackageSelector::layoutFilters( QWidget * parent )
 
 
 QWidget *
-YQPackageSelector::layoutRightPane( QWidget * parent )
+YQPackageSelector::layoutRightPane( QWidget *parent )
 {
-    QVBox * right_pane_vbox = new QVBox( parent );
-    CHECK_PTR( right_pane_vbox );
-    right_pane_vbox->setMargin( MARGIN );
+    QWidget * right_pane_vbox = new QWidget( parent );
+    
+    QVBoxLayout *layout = new QVBoxLayout(right_pane_vbox);
+    right_pane_vbox->setLayout(layout);
 
-    QSplitter * splitter = new QSplitter( QSplitter::Vertical, right_pane_vbox );
-    CHECK_PTR( splitter );
+    Q_CHECK_PTR( right_pane_vbox );
 
-    QVBox * splitter_vbox = new QVBox( splitter );
-    CHECK_PTR( splitter_vbox );
-    layoutPkgList( splitter_vbox );
-    addVSpacing( splitter_vbox, MARGIN );
+    layout->setMargin( MARGIN );
+    
+
+    QSplitter * splitter = new QSplitter( Qt::Vertical, right_pane_vbox );
+    Q_CHECK_PTR( splitter );
+    layout->addWidget(splitter);
+
+    Q_CHECK_PTR( splitter );
+    layoutPkgList( splitter );
+
+    addVSpacing( splitter, MARGIN );
 
     layoutDetailsViews( splitter );
 
-    layoutButtons( right_pane_vbox );
+    layoutButtons( splitter );
 
     return right_pane_vbox;
 }
 
 
 void
-YQPackageSelector::layoutPkgList( QWidget * parent )
+YQPackageSelector::layoutPkgList( QWidget *parent )
 {
     _pkgList= new YQPkgList( parent );
-    CHECK_PTR( _pkgList );
+    Q_CHECK_PTR( _pkgList );
 
     connect( _pkgList,	SIGNAL( statusChanged()		  ),
 	     this,	SLOT  ( autoResolveDependencies() ) );
@@ -435,19 +456,24 @@ YQPackageSelector::layoutPkgList( QWidget * parent )
 
 
 void
-YQPackageSelector::layoutDetailsViews( QWidget * parent )
+YQPackageSelector::layoutDetailsViews( QWidget *parent )
 {
     bool haveInstalledPkgs = YQPkgList::haveInstalledPkgs();
 
-    QVBox * details_vbox = new QVBox( parent );
-    CHECK_PTR( details_vbox );
-    details_vbox->setMinimumSize( 0, 0 );
+    QWidget * details_vbox = new QWidget( parent );
+    Q_CHECK_PTR( details_vbox );
+
+    QVBoxLayout *layout = new QVBoxLayout(details_vbox);
+    details_vbox->setLayout(layout);
+    //details_vbox->setMinimumSize( 0, 0 );
 
     addVSpacing( details_vbox, 8 );
 
     _detailsViews = new QTabWidget( details_vbox );
-    CHECK_PTR( _detailsViews );
-    _detailsViews->setMargin( MARGIN );
+    layout->addWidget(_detailsViews);
+
+    Q_CHECK_PTR( _detailsViews );
+    //FIXME _detailsViews->setMargin( MARGIN );
 
     // _detailsViews->setTabPosition( QTabWidget::Bottom );
 
@@ -457,12 +483,12 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     //
 
     _pkgDescriptionView = new YQPkgDescriptionView( _detailsViews );
-    CHECK_PTR( _pkgDescriptionView );
+    Q_CHECK_PTR( _pkgDescriptionView );
 
     _detailsViews->addTab( _pkgDescriptionView, _( "D&escription" ) );
     _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _pkgList,			SIGNAL( selectionChanged    ( ZyppSel ) ),
+    connect( _pkgList,			SIGNAL( currentItemChanged    ( ZyppSel ) ),
 	     _pkgDescriptionView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
     //
@@ -470,11 +496,11 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     //
 
     _pkgTechnicalDetailsView = new YQPkgTechnicalDetailsView( _detailsViews );
-    CHECK_PTR( _pkgTechnicalDetailsView );
+    Q_CHECK_PTR( _pkgTechnicalDetailsView );
 
     _detailsViews->addTab( _pkgTechnicalDetailsView, _( "&Technical Data" ) );
 
-    connect( _pkgList,			SIGNAL( selectionChanged    ( ZyppSel ) ),
+    connect( _pkgList,			SIGNAL( currentItemChanged    ( ZyppSel ) ),
 	     _pkgTechnicalDetailsView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
 
@@ -483,12 +509,12 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     //
 
     _pkgDependenciesView = new YQPkgDependenciesView( _detailsViews );
-    CHECK_PTR( _pkgDependenciesView );
+    Q_CHECK_PTR( _pkgDependenciesView );
 
     _detailsViews->addTab( _pkgDependenciesView, _( "Dependencies" ) );
     _detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-    connect( _pkgList,			SIGNAL( selectionChanged    ( ZyppSel ) ),
+    connect( _pkgList,			SIGNAL( currentItemChanged    ( ZyppSel ) ),
 	     _pkgDependenciesView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
 
@@ -499,11 +525,11 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
 
     _pkgVersionsView = new YQPkgVersionsView( _detailsViews,
 					      true );	// userCanSwitchVersions
-    CHECK_PTR( _pkgVersionsView );
+    Q_CHECK_PTR( _pkgVersionsView );
 
     _detailsViews->addTab( _pkgVersionsView, _( "&Versions" ) );
 
-    connect( _pkgList,		SIGNAL( selectionChanged    ( ZyppSel ) ),
+    connect( _pkgList,		SIGNAL( currentItemChanged    ( ZyppSel ) ),
 	     _pkgVersionsView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
 
@@ -514,12 +540,12 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     if ( haveInstalledPkgs )	// file list information is only available for installed pkgs
     {
 	_pkgFileListView = new YQPkgFileListView( _detailsViews );
-	CHECK_PTR( _pkgFileListView );
+	Q_CHECK_PTR( _pkgFileListView );
 
 	_detailsViews->addTab( _pkgFileListView, _( "File List" ) );
 	_detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-	connect( _pkgList,		SIGNAL( selectionChanged    ( ZyppSel ) ),
+	connect( _pkgList,		SIGNAL( currentItemChanged    ( ZyppSel ) ),
 		 _pkgFileListView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
     }
 
@@ -531,30 +557,36 @@ YQPackageSelector::layoutDetailsViews( QWidget * parent )
     if ( haveInstalledPkgs )	// change log information is only available for installed pkgs
     {
 	_pkgChangeLogView = new YQPkgChangeLogView( _detailsViews );
-	CHECK_PTR( _pkgChangeLogView );
+	Q_CHECK_PTR( _pkgChangeLogView );
 
 	_detailsViews->addTab( _pkgChangeLogView, _( "Change Log" ) );
 	_detailsViews->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) ); // hor/vert
 
-	connect( _pkgList,		SIGNAL( selectionChanged    ( ZyppSel ) ),
+	connect( _pkgList,		SIGNAL( currentItemChanged    ( ZyppSel ) ),
 		 _pkgChangeLogView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
     }
 }
 
 
 void
-YQPackageSelector::layoutButtons( QWidget * parent )
+YQPackageSelector::layoutButtons( QWidget *parent )
 {
-    QHBox * button_box = new QHBox( parent );
-    CHECK_PTR( button_box );
-    button_box->setSpacing( SPACING );
+    QWidget * button_box = new QWidget( parent );
+    Q_CHECK_PTR( button_box );
+
+    QHBoxLayout *layout = new QHBoxLayout(button_box);
+    button_box->setLayout(layout);
+
+    layout->setSpacing( SPACING );
 
     // Button: Dependency check
     // Translators: Please keep this short!
     _checkDependenciesButton = new QPushButton( _( "Chec&k" ), button_box );
-    CHECK_PTR( _checkDependenciesButton );
+    layout->addWidget(_checkDependenciesButton);
+
+    Q_CHECK_PTR( _checkDependenciesButton );
     _checkDependenciesButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
-    _normalButtonBackground = _checkDependenciesButton->paletteBackgroundColor();
+    _normalButtonBackground = _checkDependenciesButton->palette().color(QPalette::Background);;
 
     connect( _checkDependenciesButton,	SIGNAL( clicked() ),
 	     this,			SLOT  ( manualResolvePackageDependencies() ) );
@@ -563,13 +595,17 @@ YQPackageSelector::layoutButtons( QWidget * parent )
     // Checkbox: Automatically check dependencies for every package status change?
     // Translators: Please keep this short!
     _autoDependenciesCheckBox = new QCheckBox( _( "A&utocheck" ), button_box );
-    CHECK_PTR( _autoDependenciesCheckBox );
+    Q_CHECK_PTR( _autoDependenciesCheckBox );
+    layout->addWidget(_autoDependenciesCheckBox);
+
     _autoDependenciesCheckBox->setChecked( AUTO_CHECK_DEPENDENCIES_DEFAULT );
 
     addHStretch( button_box );
 
     QPushButton * cancel_button = new QPushButton( _( "&Cancel" ), button_box );
-    CHECK_PTR( cancel_button );
+    Q_CHECK_PTR( cancel_button );
+    layout->addWidget(cancel_button);
+
     cancel_button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
 
     connect( cancel_button, SIGNAL( clicked() ),
@@ -577,7 +613,8 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 
 
     QPushButton * accept_button = new QPushButton( _( "&Accept" ), button_box );
-    CHECK_PTR( accept_button );
+    Q_CHECK_PTR( accept_button );
+    layout->addWidget(accept_button);
     accept_button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
 
     connect( accept_button, SIGNAL( clicked() ),
@@ -588,10 +625,12 @@ YQPackageSelector::layoutButtons( QWidget * parent )
 
 
 void
-YQPackageSelector::layoutMenuBar( QWidget * parent )
+YQPackageSelector::layoutMenuBar( QWidget *parent )
 {
     _menuBar = new QMenuBar( parent );
-    CHECK_PTR( _menuBar );
+    Q_CHECK_PTR( _menuBar );
+
+    parent->layout()->addWidget(_menuBar);
 
     _fileMenu		= 0;
     _viewMenu		= 0;
@@ -610,17 +649,18 @@ YQPackageSelector::addMenus()
     // File menu
     //
 
-    _fileMenu = new QPopupMenu( _menuBar );
-    CHECK_PTR( _fileMenu );
-    _menuBar->insertItem( _( "&File" ), _fileMenu );
+    _fileMenu = new QMenu( _menuBar );
+    Q_CHECK_PTR( _fileMenu );
+    QAction *action = _menuBar->addMenu( _fileMenu );
+    action->setText(( "&File" ));
 
-    _fileMenu->insertItem( _( "&Import..." ),	this, SLOT( pkgImport() ) );
-    _fileMenu->insertItem( _( "&Export..." ),	this, SLOT( pkgExport() ) );
+    _fileMenu->addAction( _( "&Import..." ),	this, SLOT( pkgImport() ) );
+    _fileMenu->addAction( _( "&Export..." ),	this, SLOT( pkgExport() ) );
 
-    _fileMenu->insertSeparator();
+    _fileMenu->addSeparator();
 
-    _fileMenu->insertItem( _( "E&xit -- Discard Changes" ), this, SLOT( reject() ) );
-    _fileMenu->insertItem( _( "&Quit -- Save Changes"	 ), this, SLOT( accept() ) );
+    _fileMenu->addAction( _( "E&xit -- Discard Changes" ), this, SLOT( reject() ) );
+    _fileMenu->addAction( _( "&Quit -- Save Changes"	 ), this, SLOT( accept() ) );
 
 
     if ( _pkgList )
@@ -629,24 +669,25 @@ YQPackageSelector::addMenus()
 	// View menu
 	//
 
-	_viewMenu = new QPopupMenu( _menuBar );
-	CHECK_PTR( _viewMenu );
-	_menuBar->insertItem( _( "&View" ), _viewMenu );
+	_viewMenu = new QMenu( _menuBar );
+	Q_CHECK_PTR( _viewMenu );
+	QAction *action = _menuBar->addMenu( _viewMenu );
+  action->setText(_( "&View" ));
 
         // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
-	_viewShowDevelID = _viewMenu->insertItem( _( "Show -de&vel Packages" ),
-						       this, SLOT( pkgExcludeRulesChanged( int ) ), Key_F7 );
-	_viewMenu->setItemChecked( _viewShowDevelID, true );
+	_showDevelAction = _viewMenu->addAction( _( "Show -de&vel Packages" ),
+						       this, SLOT( pkgExcludeRulesChanged() ), Qt::Key_F7 );
+   _showDevelAction->setChecked(true);
 	_excludeDevelPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-devel(-\\d+bit)?$" ), _pkgList->nameCol() );
-	CHECK_PTR( _excludeDevelPkgs );
+	Q_CHECK_PTR( _excludeDevelPkgs );
 	_excludeDevelPkgs->enable( false );
 
 	// Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
-	_viewShowDebugInfoID = _viewMenu->insertItem( _( "Show -&debuginfo Packages" ),
-						       this, SLOT( pkgExcludeRulesChanged( int ) ), Key_F8 );
-	_viewMenu->setItemChecked( _viewShowDebugInfoID, true );
+	_showDebugAction = _viewMenu->addAction( _( "Show -&debuginfo Packages" ),
+						       this, SLOT( pkgExcludeRulesChanged() ), Qt::Key_F8 );
+	_showDebugAction->setChecked(true);
 	_excludeDebugInfoPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-debuginfo$" ), _pkgList->nameCol() );
-	CHECK_PTR( _excludeDebugInfoPkgs );
+	Q_CHECK_PTR( _excludeDebugInfoPkgs );
 	_excludeDebugInfoPkgs->enable( false );
 
 
@@ -654,48 +695,49 @@ YQPackageSelector::addMenus()
 	// Package menu
 	//
 
-	_pkgMenu = new QPopupMenu( _menuBar );
-	CHECK_PTR( _pkgMenu );
-	_menuBar->insertItem( _( "&Package" ), _pkgMenu );
+	_pkgMenu = new QMenu( _menuBar );
+	Q_CHECK_PTR( _pkgMenu );
+	action = _menuBar->addMenu( _pkgMenu );
+  action->setText(_( "&Package" ));
 
-	_pkgList->actionSetCurrentInstall->addTo( _pkgMenu );
-	_pkgList->actionSetCurrentDontInstall->addTo( _pkgMenu );
-	_pkgList->actionSetCurrentKeepInstalled->addTo( _pkgMenu );
-	_pkgList->actionSetCurrentDelete->addTo( _pkgMenu );
-	_pkgList->actionSetCurrentUpdate->addTo( _pkgMenu );
-	_pkgList->actionSetCurrentTaboo->addTo( _pkgMenu );
-	_pkgList->actionSetCurrentProtected->addTo( _pkgMenu );
+    _pkgMenu->addAction(_pkgList->actionSetCurrentInstall);
+    _pkgMenu->addAction(_pkgList->actionSetCurrentDontInstall);
+    _pkgMenu->addAction(_pkgList->actionSetCurrentKeepInstalled);
+    _pkgMenu->addAction(_pkgList->actionSetCurrentDelete);
+    _pkgMenu->addAction(_pkgList->actionSetCurrentUpdate);
+    _pkgMenu->addAction(_pkgList->actionSetCurrentTaboo);
 
-	_pkgMenu->insertSeparator();
+	_pkgMenu->addSeparator();
 
-	_pkgList->actionInstallSourceRpm->addTo( _pkgMenu );
-	_pkgList->actionDontInstallSourceRpm->addTo( _pkgMenu );
+  _pkgMenu->addAction(_pkgList->actionInstallSourceRpm);
+  _pkgMenu->addAction(_pkgList->actionDontInstallSourceRpm);
 
-	_pkgMenu->insertSeparator();
-	QPopupMenu * submenu = _pkgList->addAllInListSubMenu( _pkgMenu );
-	CHECK_PTR( submenu );
+	_pkgMenu->addSeparator();
+	QMenu * submenu = _pkgList->addAllInListSubMenu( _pkgMenu );
+	Q_CHECK_PTR( submenu );
 
-	submenu->insertSeparator();
-	_pkgList->actionInstallListSourceRpms->addTo( submenu );
-	_pkgList->actionDontInstallListSourceRpms->addTo( submenu );
-
+	submenu->addSeparator();
+    
+    _pkgMenu->addAction(_pkgList->actionInstallListSourceRpms);
+    _pkgMenu->addAction(_pkgList->actionDontInstallListSourceRpms);
 
 	//
 	// Submenu for all packages
 	//
 
-	submenu = new QPopupMenu( _pkgMenu );
-	CHECK_PTR( submenu );
+	submenu = new QMenu( _pkgMenu );
+	Q_CHECK_PTR( submenu );
 
 	// Translators: Unlike the "all in this list" submenu, this submenu
 	// refers to all packages globally, not only to those that are
 	// currently visible in the packages list.
-	_pkgMenu->insertItem( _( "All Packages" ), submenu );
+	action = _pkgMenu->addMenu( submenu );
+  action->setText(_( "All Packages" ));
 
-	submenu->insertItem( _( "Update if newer version available" ),
+	submenu->addAction( _( "Update if newer version available" ),
 			     this, SLOT( globalUpdatePkg() ) );
 
-	submenu->insertItem( _( "Update unconditionally" ),
+	submenu->addAction( _( "Update unconditionally" ),
 			     this, SLOT( globalUpdatePkgForce() ) );
     }
 
@@ -706,20 +748,22 @@ YQPackageSelector::addMenus()
 	// Patch menu
 	//
 
-	_patchMenu = new QPopupMenu( _menuBar );
-	CHECK_PTR( _patchMenu );
-	_menuBar->insertItem( _( "&Patch" ), _patchMenu );
+	_patchMenu = new QMenu( _menuBar );
+	Q_CHECK_PTR( _patchMenu );
+	action = _menuBar->addMenu( _patchMenu );
+  action->setText(_( "&Patch" ));
 
-	_patchList->actionSetCurrentInstall->addTo( _patchMenu );
-	_patchList->actionSetCurrentDontInstall->addTo( _patchMenu );
-	_patchList->actionSetCurrentKeepInstalled->addTo( _patchMenu );
+      _patchMenu->addAction(_patchList->actionSetCurrentInstall);
+      _patchMenu->addAction(_patchList->actionSetCurrentDontInstall);
+      _patchMenu->addAction(_patchList->actionSetCurrentKeepInstalled);
+
 #if ENABLE_DELETING_PATCHES
-	_patchList->actionSetCurrentDelete->addTo( _patchMenu );
+      _patchMenu->addAction(_patchList->actionSetCurrentDelete);
 #endif
-	_patchList->actionSetCurrentUpdate->addTo( _patchMenu );
-	_patchList->actionSetCurrentTaboo->addTo( _patchMenu );
+      _patchMenu->addAction(_patchList->actionSetCurrentUpdate);
+      _patchMenu->addAction(_patchList->actionSetCurrentTaboo);
 
-	_patchMenu->insertSeparator();
+	_patchMenu->addSeparator();
 	_patchList->addAllInListSubMenu( _patchMenu );
     }
 
@@ -728,35 +772,36 @@ YQPackageSelector::addMenus()
     // Extras menu
     //
 
-    _extrasMenu = new QPopupMenu( _menuBar );
-    CHECK_PTR( _extrasMenu );
-    _menuBar->insertItem( _( "&Extras" ), _extrasMenu );
+    _extrasMenu = new QMenu( _menuBar );
+    Q_CHECK_PTR( _extrasMenu );
+    action = _menuBar->addMenu( _extrasMenu );
+    action->setText(_( "&Extras" ));
 
-    _extrasMenu->insertItem( _( "Show &Products" 		  ), this, SLOT( showProducts()    ) );
-    _extrasMenu->insertItem( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), CTRL + Key_A );
-    _extrasMenu->insertItem( _( "&Verify System"                  ), this, SLOT( verifySystem()    ) );
+    _extrasMenu->addAction( _( "Show &Products" 		  ), this, SLOT( showProducts()    ) );
+    _extrasMenu->addAction( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), Qt::CTRL + Qt::Key_A );
+    _extrasMenu->addAction( _( "&Verify System"                  ), this, SLOT( verifySystem()    ) );
 
-    _extrasMenu->insertSeparator();
+    _extrasMenu->addSeparator();
 
     // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
-    _extrasMenu->insertItem( _( "Install All Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
+    _extrasMenu->addAction( _( "Install All Matching -&devel Packages" ), this, SLOT( installDevelPkgs() ) );
 
     // Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
-    _extrasMenu->insertItem( _( "Install All Matching -de&buginfo Packages" ), this, SLOT( installDebugInfoPkgs() ) );
+    _extrasMenu->addAction( _( "Install All Matching -de&buginfo Packages" ), this, SLOT( installDebugInfoPkgs() ) );
 
-    _extrasMenu->insertSeparator();
+    _extrasMenu->addSeparator();
 
     if ( _pkgConflictDialog )
-	_extrasMenu->insertItem( _( "Generate Dependency Resolver &Test Case" ),
+	_extrasMenu->addAction( _( "Generate Dependency Resolver &Test Case" ),
 				    _pkgConflictDialog, SLOT( askCreateSolverTestCase() ) );
 
     if ( _actionResetIgnoredDependencyProblems )
-	_actionResetIgnoredDependencyProblems->addTo( _extrasMenu );
+	_extrasMenu->addAction(_actionResetIgnoredDependencyProblems);
 
 
 #ifdef FIXME
     if ( _patchList )
-	_patchList->actionShowRawPatchInfo->addTo( _extrasMenu );
+	_extrasMenu->addAction(_patchList->actionShowRawPatchInfo);
 #endif
 
 
@@ -764,22 +809,23 @@ YQPackageSelector::addMenus()
     // Help menu
     //
 
-    _helpMenu = new QPopupMenu( _menuBar );
-    CHECK_PTR( _helpMenu );
-    _menuBar->insertSeparator();
-    _menuBar->insertItem( _( "&Help" ), _helpMenu );
+    _helpMenu = new QMenu( _menuBar );
+    Q_CHECK_PTR( _helpMenu );
+    _menuBar->addSeparator();
+    action = _menuBar->addMenu( _helpMenu );
+    action->setText(_( "&Help" ));
 
     // Note: The help functions and their texts are moved out
     // to a separate source file YQPackageSelectorHelp.cc
 
     // Menu entry for help overview
-    _helpMenu->insertItem( _( "&Overview" ), this, SLOT( help()		), Key_F1	  );
+    _helpMenu->addAction( _( "&Overview" ), this, SLOT( help()		), Qt::Key_F1 );
 
     // Menu entry for help about used symbols ( icons )
-    _helpMenu->insertItem( _( "&Symbols" ), this, SLOT( symbolHelp()	), SHIFT + Key_F1 );
+    _helpMenu->addAction( _( "&Symbols" ), this, SLOT( symbolHelp()	), Qt::SHIFT + Qt::Key_F1 );
 
     // Menu entry for keyboard help
-    _helpMenu->insertItem( _( "&Keys" ), this, SLOT( keyboardHelp() )		      );
+    _helpMenu->addAction( _( "&Keys" ), this, SLOT( keyboardHelp() )		      );
 }
 
 
@@ -915,11 +961,8 @@ YQPackageSelector::makeConnections()
     // Hotkey to enable "patches" filter view on the fly
     //
 
-    QAccel * accel = new QAccel( this );
-    CHECK_PTR( accel );
-    accel->connectItem( accel->insertItem( Key_F2 ),
-			this, SLOT( hotkeyInsertPatchFilterView() ) );
-
+    QShortcut * accel = new QShortcut( Qt::Key_F2, this, SLOT( hotkeyInsertPatchFilterView() ) );
+    Q_CHECK_PTR( accel );
 
     //
     // Update actions just before opening menus
@@ -944,7 +987,9 @@ YQPackageSelector::animateCheckButton()
 {
     if ( _checkDependenciesButton )
     {
-	_checkDependenciesButton->setPaletteBackgroundColor( QColor( 0xE0, 0xE0, 0xF8 ) );
+      QPalette p = _checkDependenciesButton->palette();
+      p.setColor(QPalette::Background, QColor( 0xE0, 0xE0, 0xF8 ));
+	_checkDependenciesButton->setPalette(p);
 	_checkDependenciesButton->repaint();
     }
 }
@@ -954,7 +999,11 @@ void
 YQPackageSelector::restoreCheckButton()
 {
     if ( _checkDependenciesButton )
-	_checkDependenciesButton->setPaletteBackgroundColor( _normalButtonBackground );
+    {
+        QPalette p = _checkDependenciesButton->palette();
+        p.setColor(QPalette::Background, _normalButtonBackground);
+        _checkDependenciesButton->setPalette(p);
+    }
 }
 
 
@@ -1001,11 +1050,11 @@ YQPackageSelector::addPatchFilterView()
     if ( ! _patchFilterView )
     {
 	_patchFilterView = new YQPkgPatchFilterView( this );
-	CHECK_PTR( _patchFilterView );
+	Q_CHECK_PTR( _patchFilterView );
 	_filters->addPage( _( "Patches" ), _patchFilterView );
 
 	_patchList = _patchFilterView->patchList();
-	CHECK_PTR( _patchList );
+	Q_CHECK_PTR( _patchList );
 
 	connectPatchList();
     }
@@ -1087,23 +1136,23 @@ YQPackageSelector::pkgExport()
 	    exportFile.exceptions( std::ios_base::badbit | std::ios_base::failbit );
 	    exportFile << writer;
 
-	    y2milestone( "Package list exported to %s", (const char *) filename );
+	    y2milestone( "Package list exported to %s", qPrintable(filename) );
 	}
 	catch ( std::exception & exception )
 	{
-	    y2warning( "Error exporting package list to %s", (const char *) filename );
+	    y2warning( "Error exporting package list to %s", qPrintable(filename) );
 
 	    // The export might have left over a partially written file.
 	    // Try to delete it. Don't care if it doesn't exist and unlink() fails.
-	    (void) unlink( (const char *) filename );
+	    QFile::remove(filename);
 
 	    // Post error popup
 	    QMessageBox::warning( this,						// parent
 				  _( "Error" ),					// caption
 				  _( "Error exporting package list to %1" ).arg( filename ),
 				  QMessageBox::Ok | QMessageBox::Default,	// button0
-				  QMessageBox::NoButton,			// button1
-				  QMessageBox::NoButton );			// button2
+				  Qt::NoButton,			// button1
+				  Qt::NoButton );			// button2
 	}
     }
 }
@@ -1112,15 +1161,13 @@ YQPackageSelector::pkgExport()
 void
 YQPackageSelector::pkgImport()
 {
-    QString filename =	QFileDialog::getOpenFileName( DEFAULT_EXPORT_FILE_NAME,		// startsWith
-						      "*.xml+;;*",			// filter
-						      this,				// parent
-						      0,				// name
-						      _( "Load Package List" ) );	// caption
+    QString filename =	QFileDialog::getOpenFileName( this, _( "Load Package List" ), DEFAULT_EXPORT_FILE_NAME,		// startsWi
+    "*.xml+;;*"// filter
+    );
 
     if ( ! filename.isEmpty() )
     {
-	y2milestone( "Importing package list from %s", (const char *) filename );
+	y2milestone( "Importing package list from %s", qPrintable(filename) );
 
 	try
 	{
@@ -1150,7 +1197,7 @@ YQPackageSelector::pkgImport()
 	    y2debug( "Found %zu packages and %zu patterns in %s",
 		     importPkg.size(),
 		     importPatterns.size(),
-		     (const char *) filename );
+		     qPrintable(filename) );
 
 
 	    //
@@ -1191,7 +1238,7 @@ YQPackageSelector::pkgImport()
 	}
 	catch ( const zypp::Exception & exception )
 	{
-	    y2warning( "Error reading package list from %s", (const char *) filename );
+	    y2warning( "Error reading package list from %s", qPrintable(filename) );
 
 	    // Post error popup
 	    QMessageBox::warning( this,						// parent
@@ -1342,17 +1389,20 @@ YQPackageSelector::installDebugInfoPkgs()
 
 
 void
-YQPackageSelector::pkgExcludeRulesChanged( int menuItemID )
+YQPackageSelector::pkgExcludeRulesChanged()
 {
+    QAction *action = dynamic_cast<QAction *>(QObject::sender());
+
     if ( _viewMenu && _pkgList )
     {
-	_viewMenu->setItemChecked( menuItemID, ! _viewMenu->isItemChecked( menuItemID ) );
+        //action->setChecked();
+	//_viewMenu->setItemChecked( menuItemID, ! _viewMenu->isItemChecked( menuItemID ) );
 
 	if ( _excludeDevelPkgs )
-	    _excludeDevelPkgs->enable( ! _viewMenu->isItemChecked( _viewShowDevelID ) );
+	    _excludeDevelPkgs->enable( ! _showDevelAction->isChecked() );
 
 	if ( _excludeDebugInfoPkgs )
-	    _excludeDebugInfoPkgs->enable( ! _viewMenu->isItemChecked( _viewShowDebugInfoID ) );
+	    _excludeDebugInfoPkgs->enable( ! _showDebugAction->isChecked() );
 
 	_pkgList->applyExcludeRules();
     }
@@ -1376,7 +1426,7 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 	{
 	    subPkgs[ name ] = *it;
 
-	    y2debug( "Found subpackage: %s", (const char *) name );
+	    y2debug( "Found subpackage: %s", qPrintable(name) );
 	}
     }
 
@@ -1402,7 +1452,7 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 		case S_Taboo:
 		case S_Del:
 		    // Don't install the subpackage
-		    y2milestone( "Ignoring unwanted subpackage %s", (const char *) subPkgName );
+		    y2milestone( "Ignoring unwanted subpackage %s", qPrintable(subPkgName) );
 		    break;
 
 		case S_AutoInstall:
@@ -1414,7 +1464,7 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 		    if ( ! subPkg->installedObj() )
 		    {
 			subPkg->set_status( S_Install );
-			y2milestone( "Installing subpackage %s", (const char *) subPkgName );
+			y2milestone( "Installing subpackage %s", qPrintable(subPkgName) );
 		    }
 		    break;
 
@@ -1427,12 +1477,12 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 		    if ( ! subPkg->installedObj() )
 		    {
 			subPkg->set_status( S_Install );
-			y2milestone( "Installing subpackage %s", (const char *) subPkgName );
+			y2milestone( "Installing subpackage %s", qPrintable(subPkgName) );
 		    }
 		    else
 		    {
 			subPkg->set_status( S_Update );
-			y2milestone( "Updating subpackage %s", (const char *) subPkgName );
+			y2milestone( "Updating subpackage %s", qPrintable(subPkgName) );
 		    }
 		    break;
 

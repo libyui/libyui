@@ -20,8 +20,7 @@
 #ifndef YQPatternSelector_h
 #define YQPatternSelector_h
 
-#include <qvbox.h>
-#include <qcolor.h>
+#include <QColor>
 
 #include "YQPackageSelectorBase.h"
 

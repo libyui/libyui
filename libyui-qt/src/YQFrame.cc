@@ -21,6 +21,7 @@
 #include <ycp/y2log.h>
 #include "YQUI.h"
 #include "utf8.h"
+//Added by qt3to4:
 
 using std::max;
 
@@ -57,13 +58,13 @@ YQFrame::setSize( int newWidth, int newHeight )
 
     if ( hasChildren() )
     {
-	int newChildWidth  = max ( 0, newWidth  - 2 * frameWidth() - 1 );
-	int newChildHeight = max ( 0, newHeight - frameWidth() - fontMetrics().height() - 1 );
+	int newChildWidth  = max ( 0, newWidth  - 2 * 11 - 1 );
+	int newChildHeight = max ( 0, newHeight - 11 - fontMetrics().height() - 1 );
 
 	firstChild()->setSize( newChildWidth, newChildHeight );
-	
+
 	QWidget * qChild = (QWidget *) firstChild()->widgetRep();
-	qChild->move( frameWidth(), fontMetrics().height() );
+	qChild->move( 11, fontMetrics().height() );
     }
 }
 
@@ -82,18 +83,19 @@ int YQFrame::preferredWidth()
     int childPreferredWidth = hasChildren() ? firstChild()->preferredWidth() : 0;
 
     preferredWidth = max( childPreferredWidth,
-			  (10 + fontMetrics().width( title() ) ) );
-    preferredWidth += 2*frameWidth() + 1;
+                         (10 + fontMetrics().width( title() ) ) );
+    preferredWidth += 2*11 + 1;
 
-    return preferredWidth;
+   return preferredWidth;
+
 }
 
 
 int YQFrame::preferredHeight()
 {
     int preferredHeight = hasChildren() ? firstChild()->preferredHeight() : 0;
-    preferredHeight += frameWidth() + fontMetrics().height() + 1;
-    
+    preferredHeight += 11 + fontMetrics().height() + 1;
+
     return preferredHeight;
 }
 

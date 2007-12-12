@@ -16,11 +16,11 @@
 
 /-*/
 
-
 #include <limits.h>
-#include <qstring.h>
-#include <qlabel.h>
-#include <qheader.h>
+#include <QString>
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QHeaderView>
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
@@ -39,30 +39,36 @@ using std::max;
 
 YQMultiSelectionBox::YQMultiSelectionBox( YWidget *		parent,
 					  const string &	label )
-    : QVBox( (QWidget *) parent->widgetRep() )
+    : QFrame( (QWidget *) parent->widgetRep() )
     , YMultiSelectionBox( parent, label )
 {
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    setLayout( layout );
+
     setWidgetRep( this );
 
-    setSpacing( YQWidgetSpacing );
-    setMargin( YQWidgetMargin );
+    layout->setSpacing( YQWidgetSpacing );
+    layout->setMargin( YQWidgetMargin );
 
     _caption = new YQWidgetCaption( this, label );
     YUI_CHECK_NEW( _caption );
+    layout->addWidget( _caption );
 
-    _qt_listView = new QListView( this );
+    _qt_listView = new QTreeWidget( this );
     YUI_CHECK_NEW( _qt_listView );
+    layout->addWidget( _qt_listView );
 
     _qt_listView->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
-    _qt_listView->addColumn( "" );	// QListView doesn't have one single column by default!
-    _qt_listView->setSorting( 0, false );
-    _qt_listView->header()->setStretchEnabled( true );
+    _qt_listView->setHeaderLabel("");	// QListView doesn't have one single column by default!
+    _qt_listView->sortItems( 0, Qt::AscendingOrder );
+    //FIXME _qt_listView->header()->setStretchEnabled( true );
     _qt_listView->header()->hide();
+    _qt_listView->setRootIsDecorated ( false );
     _caption->setBuddy( _qt_listView );
 
     // Very small default size if specified
 
-    connect( _qt_listView,	SIGNAL( selectionChanged() 	),
+    connect( _qt_listView,	SIGNAL( itemSelectionChanged() 	),
 	     this, 	  	SLOT  ( slotSelected() 		) );
 
     connect( this,		SIGNAL( valueChanged()		),
@@ -90,21 +96,20 @@ YQMultiSelectionBox::addItem( YItem * yItem )
     YQSignalBlocker sigBlocker( _qt_listView );
     YMultiSelectionBox::addItem( yItem ); // will also check for NULL
 
-    YQMultiSelectionBoxItem * msbItem =
-	new YQMultiSelectionBoxItem( this, _qt_listView, yItem );
+    YQMultiSelectionBoxItem * msbItem = new YQMultiSelectionBoxItem( this, _qt_listView, yItem );
 
     YUI_CHECK_NEW( msbItem );
 
     // Take care of the item's check box
 
     if ( yItem->selected() )
-	 msbItem->setOn( true );
+      msbItem->setCheckState(0, Qt::Checked);
 
 
     // Take care of the QListView's keyboard focus
 
-    if ( ! _qt_listView->selectedItem() )
-	_qt_listView->setSelected( msbItem, true );
+    if ( ! _qt_listView->currentItem() )
+      msbItem->setSelected(true);
 }
 
 
@@ -114,7 +119,7 @@ void YQMultiSelectionBox::selectItem( YItem * yItem, bool selected )
     YQMultiSelectionBoxItem * msbItem = findItem( yItem );
 
     if ( msbItem )
-	msbItem->setOn( selected );
+      msbItem->setCheckState( 1, selected ? Qt::Checked : Qt::Unchecked );
 }
 
 
@@ -124,16 +129,16 @@ YQMultiSelectionBox::deselectAllItems()
     YQSignalBlocker sigBlocker( _qt_listView );
     YMultiSelectionBox::deselectAllItems();
 
-    QListViewItemIterator it( _qt_listView );
+    QTreeWidgetItemIterator it( _qt_listView );
 
     while ( *it )
     {
-	YQMultiSelectionBoxItem * item = dynamic_cast<YQMultiSelectionBoxItem *> (*it);
+      YQMultiSelectionBoxItem * item = dynamic_cast<YQMultiSelectionBoxItem *> (*it);
 
-	if ( item )
-	    item->setOn( false );
+      if ( item )
+        item->setCheckState(0, Qt::Checked);
 
-	++it;
+      ++it;
     }
 }
 
@@ -173,7 +178,7 @@ YQMultiSelectionBox::currentItem()
     // For the purpose of this function, QListView::currentItem() is the
     // minimum requirement.
 
-    QListViewItem * currentQItem = _qt_listView->currentItem();
+    QTreeWidgetItem * currentQItem = _qt_listView->currentItem();
 
     if ( currentQItem )
     {
@@ -207,7 +212,7 @@ YQMultiSelectionBox::setCurrentItem( YItem * yItem )
 	YQMultiSelectionBoxItem * msbItem = findItem( yItem );
 
 	if ( msbItem )
-	    _qt_listView->setSelected( msbItem, true );
+	    msbItem->setSelected(true);
 
 	// This does NOT change the item's check box!
 	// (see explanations in YQMultiSelectionBox::currentItem() avove)
@@ -220,15 +225,15 @@ YQMultiSelectionBox::setEnabled( bool enabled )
 {
     _caption->setEnabled( enabled );
     _qt_listView->setEnabled( enabled );
-    _qt_listView->triggerUpdate();
+    //_qt_listView->triggerUpdate();
     YWidget::setEnabled( enabled );
 }
 
 
 int YQMultiSelectionBox::preferredWidth()
 {
-    int hintWidth = _caption->isShown() ?
-	_caption->sizeHint().width() + frameWidth() : 0;
+    int hintWidth = (!_caption->isHidden()) ?
+                     _caption->sizeHint().width() + frameWidth() : 0;
 
     return max( 80, hintWidth );
 }
@@ -236,7 +241,7 @@ int YQMultiSelectionBox::preferredWidth()
 
 int YQMultiSelectionBox::preferredHeight()
 {
-    int hintHeight	 = _caption->isShown() ? _caption->sizeHint().height() : 0;
+    int hintHeight	 = (!_caption->isHidden()) ? _caption->sizeHint().height() : 0;
     int visibleLines	 = shrinkable() ? SHRINKABLE_VISIBLE_LINES : DEFAULT_VISIBLE_LINES;
     hintHeight 		+= visibleLines * _qt_listView->fontMetrics().lineSpacing();
     hintHeight		+= _qt_listView->frameWidth() * 2;
@@ -295,8 +300,7 @@ YQMultiSelectionBoxItem *
 YQMultiSelectionBox::findItem( YItem * wantedItem )
 {
     // FIXME: Don't search through all items, use the YItem::data() pointer instead
-
-    QListViewItemIterator it( _qt_listView );
+    QTreeWidgetItemIterator it( _qt_listView );
 
     while ( *it )
     {
@@ -320,24 +324,27 @@ int YQMultiSelectionBoxItem::_item_count = 0;
 
 
 YQMultiSelectionBoxItem::YQMultiSelectionBoxItem( YQMultiSelectionBox *	parent,
-						  QListView * 		listView,
+						  QTreeWidget * 		listView,
 						  YItem *		yItem )
-    : QCheckListItem( listView, fromUTF8( yItem->label() ), QCheckListItem::CheckBox )
+    : QTreeWidgetItem( listView )
     , _yItem( yItem )
     , _multiSelectionBox( parent )
 {
     YUI_CHECK_PTR( yItem );
-
+    setFlags( Qt::ItemIsUserCheckable | Qt::ItemIsEnabled );
+    setCheckState( 0, Qt::Unchecked );
+    setText(0, fromUTF8( yItem->label() ));
     _serial = _item_count++;
 }
-
 
 void
 YQMultiSelectionBoxItem::stateChange( bool newState )
 {
     _yItem->setSelected( newState );
     _multiSelectionBox->sendValueChanged();
-    QCheckListItem::stateChange( newState );
+    //QTreeWidgetItem::stateChange( newState );
+    // FIXME checked or selected state?
+    QTreeWidgetItem::setCheckState( 0, newState ? Qt::Checked : Qt::Unchecked );
 }
 
 

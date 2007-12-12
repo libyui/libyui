@@ -39,7 +39,7 @@ YQPkgUpdateProblemFilterView::YQPkgUpdateProblemFilterView( QWidget * parent )
 <br>\n\
 <h2>Update Problem</h2>\n\
 <p>\n\
-<font color=blue>\n\
+<font color='blue'>\n\
 The packages in this list cannot be updated automatically.\n\
 </font>\n\
 </p>\n\
@@ -56,8 +56,7 @@ The safest course of action is to delete them.\n\
 </p>\
 " );
 
-    setTextFormat( Qt::RichText );
-    setText( html );
+    setHtml( html );
 }
 
 

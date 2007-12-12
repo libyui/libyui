@@ -20,6 +20,9 @@
 #include <qpushbutton.h>
 #include <qsize.h>
 #include <qevent.h>
+//Added by qt3to4:
+#include <qpixmap.h>
+#include <qevent.h>
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
@@ -65,6 +68,11 @@ YQGenericButton::~YQGenericButton()
     }
 }
 
+void
+YQGenericButton::forgetDialog()
+{
+   _dialog = 0;
+}
 
 YQDialog *
 YQGenericButton::dialog()
@@ -127,7 +135,7 @@ void YQGenericButton::setIcon( const string & iconName )
 
     if ( qIconName.isEmpty() )
     {
-	_qPushButton->setIconSet( QIconSet() );
+	_qPushButton->setIcon( QIcon() );
 	return;
     }
 
@@ -135,9 +143,9 @@ void YQGenericButton::setIcon( const string & iconName )
     QPixmap icon( qIconName );
 
     if ( icon.isNull() )
-	y2warning( "Can't load icon '%s'", (const char *) qIconName );
+	y2warning( "Can't load icon '%s'", qPrintable(qIconName) );
     else
-	_qPushButton->setIconSet( icon );
+	_qPushButton->setIcon( icon );
 }
 
 
@@ -146,7 +154,7 @@ void YQGenericButton::setLabel( const QString & label )
     if ( _qPushButton )
 	_qPushButton->setText( label );
     else
-	y2error( "NULL button '%s'", (const char *) label );
+	y2error( "NULL button '%s'", qPrintable(label) );
 
     YPushButton::setLabel( toUTF8( label ) );
 }

@@ -19,10 +19,12 @@
 /-*/
 
 
-#include <qhbox.h>
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qwidgetstack.h>
+#include <QComboBox>
+#include <QLabel>
+#include <QStackedWidget>
+#include <QHBoxLayout>
+
+#include <QFrame>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
@@ -38,34 +40,39 @@
 QY2ComboTabWidget::QY2ComboTabWidget( const QString &	label,
 				      QWidget *		parent,
 				      const char *	name )
-    : QVBox( parent, name )
+    : QWidget(parent)
 {
-    setFrameStyle( QFrame::Panel | QFrame::Raised );
-    setLineWidth(2);
-    setMidLineWidth(2);
-    setSpacing( SPACING );
-    setMargin ( MARGIN  );
+    QVBoxLayout *vbox = new QVBoxLayout(this);
+    setLayout(vbox);
 
-    
-    QHBox * hbox = new QHBox( this );
-    CHECK_PTR( hbox );
+    QHBoxLayout *hbox = new QHBoxLayout(this);
+    Q_CHECK_PTR( hbox );
+//     hbox->setFrameStyle( QFrame::Panel | QFrame::Raised );
+//     hbox->setLineWidth(2);
+//     hbox->setMidLineWidth(2);
     hbox->setSpacing( SPACING );
-    hbox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
+    hbox->setMargin ( MARGIN  );
+
+    vbox->addLayout(hbox);
+    //this->setSpacing( SPACING );
+    this->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
     
 
-    combo_label = new QLabel( label, hbox );
-    CHECK_PTR( combo_label );
+    combo_label = new QLabel(label);
+    hbox->addWidget(combo_label);
+    Q_CHECK_PTR( combo_label );
     
-    combo_box = new QComboBox( hbox );
-    CHECK_PTR( combo_box );
-    
+    combo_box = new QComboBox( this );
+    Q_CHECK_PTR( combo_box );
+    hbox->addWidget(combo_box);
     combo_label->setBuddy( combo_box );
     combo_box->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
     connect( combo_box, SIGNAL( activated( int ) ),
 	     this,	SLOT  ( showPage ( int ) ) );
     
-    widget_stack = new QWidgetStack( this );
-    CHECK_PTR( widget_stack );
+    widget_stack = new QStackedWidget( this );
+    Q_CHECK_PTR( widget_stack );
+    vbox->addWidget(widget_stack);
 }
 
 
@@ -80,11 +87,11 @@ void
 QY2ComboTabWidget::addPage( const QString & page_label, QWidget * new_page )
 {
     pages.insert( combo_box->count(), new_page );
-    combo_box->insertItem( page_label );
+    combo_box->addItem( page_label );
     widget_stack->addWidget( new_page );
 
-    if ( ! widget_stack->visibleWidget() )
-	widget_stack->raiseWidget( new_page );
+    if ( ! widget_stack->currentWidget() )
+	widget_stack->setCurrentWidget( new_page );
 }
 
 
@@ -95,7 +102,7 @@ QY2ComboTabWidget::showPage( int index )
 
     if ( page )
     {
-	widget_stack->raiseWidget( page );
+	widget_stack->setCurrentWidget( page );
 	// y2debug( "Changing current page" );
 	emit currentChanged( page );
     }
@@ -110,9 +117,9 @@ QY2ComboTabWidget::showPage( int index )
 void
 QY2ComboTabWidget::showPage( QWidget * page )
 {
-    widget_stack->raiseWidget( page );
+    widget_stack->setCurrentWidget( page );
 
-    if ( page == pages[ combo_box->currentItem() ] )
+    if ( page == pages[ combo_box->currentIndex() ] )
     {
 	// Shortcut: If the requested page is the one that belongs to the item
 	// currently selected in the combo box, don't bother searching the
@@ -123,17 +130,17 @@ QY2ComboTabWidget::showPage( QWidget * page )
     
     // Search the dict for this page
     
-    QIntDictIterator<QWidget> it( pages );
+    QHashIterator<int, QWidget *> it( pages );
 
-    while ( it.current() )
+    while ( it.hasNext() )
     {
-	if ( page == it.current() )
+	if ( page == it.value() )
 	{
-	    combo_box->setCurrentItem( it.currentKey() );
+	    combo_box->setCurrentIndex( it.key() );
 	    return;
 	}
 
-	++it;
+	it.next();
     }
 
     // If we come this far, that page isn't present in the dict.

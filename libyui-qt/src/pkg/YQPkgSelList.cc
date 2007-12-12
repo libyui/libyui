@@ -37,16 +37,18 @@ YQPkgSelList::YQPkgSelList( QWidget * parent, bool autoFill, bool autoFilter )
     y2debug( "Creating selection list" );
 
     int numCol = 0;
+#if FIXME
     addColumn( ""		);	_statusCol	= numCol++;
     addColumn( _( "Selection" ) );	_summaryCol	= numCol++;
     setAllColumnsShowFocus( true );
+#endif
 
     _satisfiedIconCol	= _summaryCol;
     _brokenIconCol	= _summaryCol;
-    
+
     if ( autoFilter )
     {
-	connect( this, SIGNAL( selectionChanged( QListViewItem * ) ),
+	connect( this, SIGNAL( currentItemChanged( QTreeWidgetItem * ) ),
 		 this, SLOT  ( filter()				   ) );
     }
 
@@ -158,12 +160,16 @@ YQPkgSelList::addPkgSelItem( ZyppSel		selectable,
 YQPkgSelListItem *
 YQPkgSelList::selection() const
 {
-    QListViewItem * item = selectedItem();
+#if FIXME
+    QTreeWidgetItem * item = selectedItem();
 
     if ( ! item )
 	return 0;
 
     return dynamic_cast<YQPkgSelListItem *> (item);
+#else
+    return 0;
+#endif
 }
 
 
@@ -214,7 +220,7 @@ YQPkgSelListItem::applyChanges()
  * +1 if this >	 other
  **/
 int
-YQPkgSelListItem::compare( QListViewItem *	otherListViewItem,
+YQPkgSelListItem::compare( QTreeWidgetItem *	otherListViewItem,
 			   int			col,
 			   bool			ascending ) const
 {

@@ -20,6 +20,7 @@
 #ifndef YQPkgDescriptionView_h
 #define YQPkgDescriptionView_h
 
+#include <QUrl>
 #include "YQPkgGenericDetailsView.h"
 
 
@@ -56,7 +57,7 @@ public:
      * Reimplemented from QTextBrowser to avoid having an empty text each time
      * the user clicks on a hyperlink.
      **/
-    virtual void setSource( const QString & name );
+    virtual void setSource( const QUrl & name );
 
 protected:
 
@@ -69,7 +70,7 @@ protected:
      * Show information for a hyperlinked object,
      * e.g., a "pkg:somepkg" link to another package.
      **/
-    void showLink( const QString & url );
+    void showLink( const QUrl & url );
 };
 
 

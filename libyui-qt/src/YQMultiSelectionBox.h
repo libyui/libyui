@@ -20,8 +20,9 @@
 #ifndef YQMultiSelectionBox_h
 #define YQMultiSelectionBox_h
 
-#include <qvbox.h>
-#include <qlistview.h>
+#include <QFrame>
+#include <QColorGroup>
+#include <QTreeWidget>
 
 #include "YMultiSelectionBox.h"
 
@@ -29,7 +30,7 @@ class YQWidgetCaption;
 class YQMultiSelectionBoxItem;
 
 
-class YQMultiSelectionBox : public QVBox, public YMultiSelectionBox
+class YQMultiSelectionBox : public QFrame, public YMultiSelectionBox
 {
     Q_OBJECT
 
@@ -44,7 +45,7 @@ public:
      * Destructor.
      **/
     ~YQMultiSelectionBox();
-	
+
     /**
      * Change the label text.
      *
@@ -53,7 +54,7 @@ public:
     virtual void setLabel( const string & label );
 
     /**
-     * Add an item. 
+     * Add an item.
      *
      * Reimplemented from YSelectionWidget.
      **/
@@ -79,7 +80,7 @@ public:
      * Reimplemented from YSelectionWidget.
      **/
     virtual void deleteAllItems();
-    
+
     /**
      * Return the the item that currently has the keyboard focus
      * or 0 if no item currently has the keyboard focus.
@@ -140,41 +141,41 @@ signals:
      * Emitted upon when an item changes its state.
      **/
     void valueChanged();
-    
+
 
 protected slots:
     /**
      * Send SelectionChanged event if `opt(`notify) is set.
      **/
     void slotSelected();
-    
+
     /**
      * Send ValueChanged event if `opt(`notify) is set.
      **/
     void slotValueChanged();
 
-    
+
 protected:
     /**
      * Find the counterpart of 'item'. Return 0 if there is none.
      **/
     YQMultiSelectionBoxItem * findItem( YItem * item );
 
-    
+
     YQWidgetCaption *	_caption;
-    QListView * 	_qt_listView;
+    QTreeWidget * 	_qt_listView;
 };
 
 
 
-class YQMultiSelectionBoxItem: public QCheckListItem
+class YQMultiSelectionBoxItem: public QTreeWidgetItem
 {
 public:
     /**
      * Constructor.
      **/
     YQMultiSelectionBoxItem( YQMultiSelectionBox * 	parent,
-			     QListView * 		listView,
+			     QTreeWidget * 		listView,
 			     YItem *			yItem );
 
     /**
@@ -187,7 +188,7 @@ public:
      **/
     YItem * yItem() const { return _yItem; }
 
-    
+
 protected:
 
     /**
@@ -202,8 +203,8 @@ protected:
      * Returns the sort key for any column.
      * In this case, maintain item creation order.
      *
-     * Reimplemented from QListViewItem.
-     **/ 
+     * Reimplemented from QTreeWidgetItem
+     **/
     virtual QString key ( int	column,
 			  bool	ascending ) const;
 
@@ -214,7 +215,7 @@ protected:
     YItem *			_yItem;
     int 			_serial;
     YQMultiSelectionBox * 	_multiSelectionBox;
-    
+
 
     /**
      * The next serial number to use

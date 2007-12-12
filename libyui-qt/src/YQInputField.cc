@@ -33,6 +33,7 @@ using std::max;
 #include "YQi18n.h"
 #include "YQSignalBlocker.h"
 #include "YQWidgetCaption.h"
+#include <QVBoxLayout>
 
 // Include low-level X headers AFTER Qt headers:
 // X.h pollutes the global namespace (!!!) with pretty useless #defines
@@ -48,21 +49,26 @@ using std::string;
 YQInputField::YQInputField( YWidget * 		parent,
 			    const string &	label,
 			    bool		passwordMode )
-    : QVBox( (QWidget *) parent->widgetRep() )
+    : QFrame( (QWidget *) parent->widgetRep() )
     , YInputField( parent, label, passwordMode )
     , _validator(0)
     , _displayingCapsLockWarning( false )
 {
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    setLayout( layout );
+
     setWidgetRep( this );
 
-    setSpacing( YQWidgetSpacing );
-    setMargin( YQWidgetMargin );
+    layout->setSpacing( YQWidgetSpacing );
+    layout->setMargin( YQWidgetMargin );
 
     _caption = new YQWidgetCaption( this, label );
     YUI_CHECK_NEW( _caption );
-    
+    layout->addWidget( _caption );
+
     _qt_lineEdit = new YQRawLineEdit( this );
     YUI_CHECK_NEW( _qt_lineEdit );
+    layout->addWidget( _qt_lineEdit );
 
     _caption->setBuddy( _qt_lineEdit );
 
@@ -116,7 +122,7 @@ void YQInputField::setEnabled( bool enabled )
 int YQInputField::preferredWidth()
 {
     int minSize	  = shrinkable() ? 30 : 200;
-    int hintWidth = _caption->isShown()
+    int hintWidth = !_caption->isHidden()
 	? _caption->sizeHint().width() + 2 * YQWidgetMargin
 	: 0;
 
@@ -173,7 +179,7 @@ void YQInputField::setValidChars( const string & newValidChars )
     if ( ! isValidText( _qt_lineEdit->text() ) )
     {
 	y2error( "Old value \"%s\" of %s \"%s\" invalid according to ValidChars \"%s\" - deleting",
-		 (const char *) _qt_lineEdit->text(),
+		 qPrintable(_qt_lineEdit->text()),
 		 widgetClass(), debugLabel().c_str(),
 		 newValidChars.c_str() );
 	_qt_lineEdit->setText( "" );

@@ -20,7 +20,7 @@
 #ifndef YQPkgGenericDetailsView_h
 #define YQPkgGenericDetailsView_h
 
-#include <qtextbrowser.h>
+#include <QTextBrowser>
 #include <YQZypp.h>
 #include <zypp/Date.h>
 
@@ -125,6 +125,7 @@ protected slots:
      * Show data for the last package.
      **/
     void reload( QWidget * newCurrent );
+    virtual void reload() { QTextBrowser::reload(); }
 
 
 protected:

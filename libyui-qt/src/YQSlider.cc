@@ -16,11 +16,10 @@
 
 /-*/
 
-
-#include <qslider.h>
-#include <qspinbox.h>
-#include <qlabel.h>
-#include <qvbox.h>
+#include <QSlider>
+#include <QSpinBox>
+#include <QLabel>
+#include <QVBoxLayout>
 
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
@@ -40,47 +39,62 @@ YQSlider::YQSlider( YWidget *		parent,
 		    int 		initialValue,
 		    bool		reverseLayout )
 
-    : QVBox( (QWidget *) parent->widgetRep() )
+    : QFrame( (QWidget *) parent->widgetRep() )
     , YSlider( parent, label, minValue, maxValue )
 {
     setWidgetRep( this );
 
-    setSpacing( YQWidgetSpacing );
-    setMargin ( YQWidgetMargin );
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    setLayout( layout );
 
-    _caption = new YQWidgetCaption( this, toUTF8( label ) );
+    layout->setSpacing( YQWidgetSpacing );
+    layout->setMargin ( YQWidgetMargin );
+
+    _caption = new YQWidgetCaption( this, label );
     YUI_CHECK_NEW( _caption );
-    
-    _hbox = new QHBox( this );
+    layout->addWidget( _caption );
+
+    _hbox = new QFrame( this );
     YUI_CHECK_NEW( _hbox );
-    
-    _hbox->setSpacing( YQWidgetSpacing );
+    layout->addWidget( _hbox );
+
+    layout = new QVBoxLayout( _hbox );
+    _hbox->setLayout( layout );
+
+    layout->setMargin ( YQWidgetMargin );
+    layout->setSpacing( YQWidgetSpacing );
 
     if ( reverseLayout )
     {
-	_qt_spinBox = new QSpinBox( minValue, maxValue,
-				    1, // step
-				    _hbox );
+        _qt_spinBox = new QSpinBox( _hbox );
+        _qt_spinBox->setMinimum(minValue);
+        _qt_spinBox->setMaximum(maxValue);
+        _qt_spinBox->setSingleStep(1);
+	layout->addWidget( _qt_spinBox );
     }
     else
     {
 	_caption->setAlignment( Qt::AlignRight );
     }
-    
-    _qt_slider = new QSlider( minValue, maxValue,
-			      1, // pageStep
-			      initialValue,
-			      QSlider::Horizontal, _hbox );
+
+    _qt_slider = new QSlider( Qt::Horizontal, _hbox );
+    _qt_slider->setMinimum(minValue);
+    _qt_slider->setMaximum(maxValue);
+    _qt_slider->setPageStep(1);
     YUI_CHECK_NEW( _qt_slider );
+    layout->addWidget( _qt_slider );
 
     if ( ! reverseLayout )
     {
-	_qt_spinBox = new QSpinBox( minValue, maxValue,
-				    1, // step
-				    _hbox );
+        _qt_spinBox = new QSpinBox( _hbox );
+        _qt_spinBox->setMinimum(minValue);
+        _qt_spinBox->setMaximum(maxValue);
+        _qt_spinBox->setSingleStep(1);
+      
+	layout->addWidget( _qt_spinBox );
     }
     YUI_CHECK_NEW( _qt_spinBox );
-    
+
     _qt_spinBox->setValue( initialValue );
     _caption->setBuddy( _qt_spinBox );
 
@@ -125,7 +139,7 @@ YQSlider::valueChangedSlot( int newValue )
 {
     if ( notify() )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
-    
+
     emit valueChanged( newValue );
 }
 
@@ -143,8 +157,8 @@ YQSlider::setEnabled( bool enabled )
 int
 YQSlider::preferredWidth()
 {
-    int hintWidth = _caption->isShown() ? _caption->sizeHint().width() : 0;
-    
+    int hintWidth = !_caption->isHidden() ? _caption->sizeHint().width() : 0;
+
     // Arbitrary value - there is no really good default
     return max( 200, hintWidth );
 }

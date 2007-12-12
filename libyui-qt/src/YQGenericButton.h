@@ -37,6 +37,8 @@ using std::string;
  **/
 class YQGenericButton : public QWidget, public YPushButton
 {
+    friend class YQDialog;
+
     Q_OBJECT
     
 protected:
@@ -156,7 +158,8 @@ protected:
      **/
     YQDialog * dialog();
 
-
+    void forgetDialog();
+ 
 private:
     
     YQDialog *		_dialog;

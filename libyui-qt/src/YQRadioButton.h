@@ -20,16 +20,13 @@
 #ifndef YQRadioButton_h
 #define YQRadioButton_h
 
-#include <qgroupbox.h>
 #include "YRadioButton.h"
+#include <QRadioButton>
 
-
-
-class QRadioButton;
 using std::string;
 
 
-class YQRadioButton : public QGroupBox, public YRadioButton
+class YQRadioButton : public QRadioButton, public YRadioButton
 {
     Q_OBJECT
 
@@ -104,12 +101,6 @@ public:
      **/
     virtual bool setKeyboardFocus();
 
-    /**
-     * Return the actual qt button. Used by YQButtonGroup.
-     **/
-    QRadioButton * getQtButton();
-
-
 protected slots:
     /**
      * Triggered when the RadioButton is toggled.
@@ -121,10 +112,6 @@ protected slots:
      **/
     bool eventFilter( QObject * obj, QEvent * event );
 
-
-protected:
-
-    QRadioButton * _qt_radioButton;
 };
 
 #endif // YQRadioButton_h

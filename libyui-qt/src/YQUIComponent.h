@@ -19,6 +19,9 @@
 #ifndef YQUIComponent_h
 #define YQUIComponent_h
 
+#define y2log_component "qt-ui"
+#include <ycp/y2log.h>
+
 #include <YUIComponent.h>
 #include "YQUI.h"
 
@@ -44,7 +47,7 @@ public:
      *
      * Reimplemented from YUIComponent.
      **/
-    virtual string name() const { return "qt"; }
+    virtual string name() const { return "qt4"; }
 
 };
 

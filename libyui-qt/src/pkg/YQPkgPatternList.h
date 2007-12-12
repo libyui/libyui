@@ -21,7 +21,7 @@
 #define YQPkgPatternList_h
 
 #include "YQPkgObjList.h"
-#include <qdict.h>
+#include <QMap>
 
 
 class YQPkgPatternListItem;
@@ -54,6 +54,13 @@ public:
      **/
     virtual ~YQPkgPatternList();
 
+    /**
+     * Paint method. Reimplemented from @ref QTreeWidget so a different
+     * font can be used.
+     *
+     * Reimplemented from QY2ListViewItem.
+     **/
+    virtual void drawRow ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
 
 public slots:
 
@@ -92,7 +99,7 @@ public slots:
      * Reimplemented from YQPkgObjList.
      **/
     virtual void pkgObjClicked( int		button,
-				QListViewItem * item,
+				QTreeWidgetItem * item,
 				int		col,
 				const QPoint &	pos );
 
@@ -131,7 +138,6 @@ signals:
      **/
     void filterFinished();
 
-
 protected:
 
     /**
@@ -146,7 +152,7 @@ protected:
     // Data members
     //
 
-    QDict<YQPkgPatternCategoryItem> _categories;
+    QMap<QString, YQPkgPatternCategoryItem*> _categories;
 };
 
 
@@ -181,24 +187,14 @@ public:
     ZyppPattern zyppPattern() const { return _zyppPattern; }
 
     /**
-     * Comparison function used for sorting the list.
-     * Returns:
-     * -1 if this <  other
-     *	0 if this == other
-     * +1 if this >  other
-     *
-     * Reimplemented from QListViewItem:
-     * Sort by zypp::Pattern::order() only.
-     **/
-    virtual int compare( QListViewItem *	other,
-			 int			col,
-			 bool			ascending ) const;
+     * sorting function
+     */
+    virtual bool operator< ( const QTreeWidgetItem & other ) const;
 
     // Columns
 
     int statusCol()	const	{ return _patternList->statusCol();	}
     int summaryCol()	const	{ return _patternList->summaryCol();	}
-
 
 protected:
 
@@ -250,18 +246,9 @@ public:
     void addPattern( ZyppPattern pattern );
 
     /**
-     * Comparison function used for sorting the list.
-     * Returns:
-     * -1 if this <  other
-     *	0 if this == other
-     * +1 if this >  other
-     *
-     * Reimplemented from QListViewItem:
-     * Sort by zypp::Pattern::order() only.
-     **/
-    virtual int compare( QListViewItem *	other,
-			 int			col,
-			 bool			ascending ) const;
+     * sorting function
+     */
+    virtual bool operator< ( const QTreeWidgetItem & other ) const;
 
     /*
      * Open or close this subtree
@@ -283,19 +270,6 @@ protected:
      * close icons.
      **/
     void setTreeIcon( void );
-    
-    /**
-     * Paint method. Reimplemented from @ref QListViewItem so a different
-     * font can be used.
-     *
-     * Reimplemented from QY2ListViewItem.
-     **/
-    virtual void paintCell( QPainter *		painter,
-			    const QColorGroup &	colorGroup,
-			    int			column,
-			    int			width,
-			    int			alignment );
-
     //
     // Data members
     //

@@ -64,6 +64,12 @@ public:
     int deviceNameCol()		const	{ return _deviceNameCol;	}
 
 
+    virtual void drawRow ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
+    // make it public
+    QTreeWidgetItem * itemFromIndex ( const QModelIndex & index ) const
+    { return QY2ListView::itemFromIndex(index); }
+
 protected:
 
     int _nameCol;
@@ -177,7 +183,7 @@ public:
      * confused which one to use.
      **/
     void setText( int column, const QString & text )
-	{ QListViewItem::setText( column, text ); }
+	{ QTreeWidgetItem::setText( column, text ); }
 
     /**
      * Set a column text via FSize.
@@ -186,16 +192,9 @@ public:
 
     /**
      * Comparison function used for sorting the list.
-     * Returns:
-     * -1 if this <  other
-     *	0 if this == other
-     * +1 if this >  other
-     *
-     * Reimplemented from QY2ListViewItem.
+     * Reimplemented from QTreeWidgetItem
      **/
-    virtual int compare( QListViewItem *	other,
-			 int			col,
-			 bool			ascending ) const;
+    virtual bool operator< ( const QTreeWidgetItem & other ) const;
 
     // Columns
 
@@ -221,12 +220,13 @@ protected:
      *
      * Reimplemented from QY2ListViewItem.
      **/
-    virtual void paintCell( QPainter *		painter,
+    /*virtual void paintCell( QPainter *		painter,
 			    const QColorGroup & colorGroup,
 			    int			column,
 			    int			width,
 			    int			alignment );
-
+    */
+    public:
     /**
      * Paint a percentage bar into a @ref QListViewItem cell.
      * 'width' is the width of the entire cell.
@@ -236,39 +236,11 @@ protected:
      **/
     void paintPercentageBar( float		percent,
 			     QPainter *		painter,
-			     int		indent,
-			     int		width,
+			     QStyleOptionViewItem option,
 			     const QColor &	fillColor,
 			     const QColor &	barBackground	);
 
-    /**
-     * Return a color that contrasts to 'contrastColor'.
-     *
-     * Stolen from KDirStat::KDirTreeView with the author's permission.
-     **/
-    QColor contrastingColor ( const QColor &	desiredColor,
-			      const QColor &	contrastColor );
-
-    /**
-     * Interpolate ( in the HSV color space ) a color between 'minColor' and
-     * 'maxColor' for a current value 'val' so that 'minVal' corresponds to
-     * 'minColor' and 'maxVal' to 'maxColor'.
-     *
-     * Returns the interpolated color.
-     **/
-    virtual QColor interpolateColor( int 		val,
-				     int 		minVal,
-				     int 		maxVal,
-				     const QColor & 	minColor,
-				     const QColor & 	maxColor );
-
-    /**
-     * Interpolate ( translate ) a value 'from' in the range between 'minFrom'
-     * and 'maxFrom'  to a range between 'minTo' and 'maxTo'.
-     **/
-    int interpolate( int from,
-		     int minFrom,	int maxFrom,
-		     int minTo, 	int maxTo 	);
+    protected:
 
 
     //

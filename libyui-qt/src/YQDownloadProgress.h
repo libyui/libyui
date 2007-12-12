@@ -20,14 +20,14 @@
 #ifndef YQDownloadProgress_h
 #define YQDownloadProgress_h
 
-#include <qvbox.h>
+#include <QFrame>
 #include "YDownloadProgress.h"
 
 class YQWidgetCaption;
 class QProgressBar;
 
 
-class YQDownloadProgress : public QVBox, public YDownloadProgress
+class YQDownloadProgress : public QFrame, public YDownloadProgress
 {
     Q_OBJECT
 
@@ -48,7 +48,7 @@ public:
 
     /**
      * Set the label (the text above the progress bar).
-     * 
+     *
      * Reimplemented from YDownloadProgress.
      **/
     virtual void setLabel( const string & label );
@@ -59,7 +59,7 @@ public:
      * Reimplemented from YDownloadProgress.
      **/
     virtual void setFilename( const string & filename );
-    
+
     /**
      * Change the expected file size.
      *

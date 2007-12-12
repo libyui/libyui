@@ -20,9 +20,9 @@
 #ifndef YQFrame_h
 #define YQFrame_h
 
-#include <qgroupbox.h>
 
 #include "YFrame.h"
+#include <QGroupBox>
 
 class QWidget;
 

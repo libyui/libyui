@@ -18,16 +18,16 @@
 
 /-*/
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qradiobutton.h>
-#include <qvbuttongroup.h>
-#include <qvgroupbox.h>
-#include <qprogressdialog.h>
-#include <qdatetime.h>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QLabel>
+#include <QLayout>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QGroupBox>
+#include <QProgressDialog>
+#include <QDateTime>
+#include <QKeyEvent>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
@@ -48,63 +48,74 @@ using std::string;
 
 
 YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
-    : QVBox( parent )
+    : QWidget( parent )
 {
+    QVBoxLayout *layout = new QVBoxLayout;
+    setLayout(layout);
     _matchCount = 0;
-    setMargin( MARGIN );
-    setSpacing( SPACING );
+    layout->setMargin( MARGIN );
+    layout->setSpacing( SPACING );
 
-    addVStretch( this );
+    layout->addStretch();
 
     // Headline
     QLabel * label = new QLabel( _( "Searc&h:" ), this );
-    CHECK_PTR( label );
+    Q_CHECK_PTR( label );
+    layout->addWidget(label);
     label->setFont( YQUI::yqApp()->headingFont() );
 
     // Input field ( combo box ) for search text
     _searchText = new QComboBox( this );
-    CHECK_PTR( _searchText );
+    Q_CHECK_PTR( _searchText );
+    layout->addWidget(_searchText);
     _searchText->setEditable( true );
     label->setBuddy( _searchText );
 
 
     // Box for search button
-    QHBox * hbox = new QHBox( this );
-    CHECK_PTR( hbox );
-
-    addHStretch( hbox );
+    QHBoxLayout * hbox = new QHBoxLayout( this );
+    Q_CHECK_PTR( hbox );
+    layout->addLayout(hbox);
+    hbox->addStretch();
 
     // Search button
-    _searchButton = new QPushButton( _( "&Search" ), hbox );
-    CHECK_PTR( _searchButton );
+    _searchButton = new QPushButton( _( "&Search" ), this );
+    Q_CHECK_PTR( _searchButton );
+    hbox->addWidget(_searchButton);
 
     connect( _searchButton, SIGNAL( clicked() ),
              this,          SLOT  ( filter()  ) );
 
-    addVStretch( this );
+    layout->addStretch();
 
     //
     // Where to search
     //
+    
+    QGroupBox * gbox = new QGroupBox( _( "Search in" ), this );
+    Q_CHECK_PTR( gbox );
+    QVBoxLayout *vlayout = new QVBoxLayout;
+    gbox->setLayout(vlayout);
 
-    QVGroupBox * gbox = new QVGroupBox( _( "Search in" ), this );
-    CHECK_PTR( gbox );
+    _searchInName        = new QCheckBox( _( "&Name" 		), gbox ); Q_CHECK_PTR( _searchInName        );
+    vlayout->addWidget(_searchInName);
+    _searchInSummary     = new QCheckBox( _( "Su&mmary" 	), gbox ); Q_CHECK_PTR( _searchInSummary     );
+    vlayout->addWidget(_searchInSummary);
+    _searchInDescription = new QCheckBox( _( "Descr&iption"	), gbox ); Q_CHECK_PTR( _searchInDescription );
+    vlayout->addWidget(_searchInDescription);
 
-
-    _searchInName        = new QCheckBox( _( "&Name" 		), gbox ); CHECK_PTR( _searchInName        );
-    _searchInSummary     = new QCheckBox( _( "Su&mmary" 	), gbox ); CHECK_PTR( _searchInSummary     );
-    _searchInDescription = new QCheckBox( _( "Descr&iption"	), gbox ); CHECK_PTR( _searchInDescription );
-
-    addVStretch( gbox );
+    vlayout->addStretch();
 
     // Intentionally NOT marking RPM tags for translation
-    _searchInProvides    = new QCheckBox(  "RPM \"&Provides\""   , gbox ); CHECK_PTR( _searchInProvides    );
-    _searchInRequires    = new QCheckBox(  "RPM \"Re&quires\""   , gbox ); CHECK_PTR( _searchInRequires    );
+    _searchInProvides    = new QCheckBox(  "RPM \"&Provides\""   , gbox ); Q_CHECK_PTR( _searchInProvides    );
+    vlayout->addWidget(_searchInProvides);
+    _searchInRequires    = new QCheckBox(  "RPM \"Re&quires\""   , gbox ); Q_CHECK_PTR( _searchInRequires    );
+    vlayout->addWidget(_searchInRequires);
 
     _searchInName->setChecked( true );
     _searchInSummary->setChecked( true );
 
-    addVStretch( this );
+    layout->addStretch();
 
 
     //
@@ -112,31 +123,35 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     //
 
     label = new QLabel( _( "Search &Mode:" ), this );
-    CHECK_PTR( label );
+    Q_CHECK_PTR( label );
+    layout->addWidget(label);
 
     _searchMode = new QComboBox( this );
-    CHECK_PTR( _searchMode );
+    Q_CHECK_PTR( _searchMode );
+    layout->addWidget(_searchMode);
+
     _searchMode->setEditable( false );
 
     label->setBuddy( _searchMode );
 
     // Caution: combo box items must be inserted in the same order as enum SearchMode!
-    _searchMode->insertItem( _( "Contains"		 ) );
-    _searchMode->insertItem( _( "Begins with"		 ) );
-    _searchMode->insertItem( _( "Exact Match"		 ) );
-    _searchMode->insertItem( _( "Use Wild Cards" 	 ) );
-    _searchMode->insertItem( _( "Use Regular Expression" ) );
+    _searchMode->addItem( _( "Contains"		 ) );
+    _searchMode->addItem( _( "Begins with"		 ) );
+    _searchMode->addItem( _( "Exact Match"		 ) );
+    _searchMode->addItem( _( "Use Wild Cards" 	 ) );
+    _searchMode->addItem( _( "Use Regular Expression" ) );
 
-    _searchMode->setCurrentItem( Contains );
+    _searchMode->setCurrentIndex( Contains );
 
 
-    addVStretch( this );
+    layout->addStretch();
 
     _caseSensitive = new QCheckBox( _( "Case Sensiti&ve" ), this );
-    CHECK_PTR( _caseSensitive );
+    Q_CHECK_PTR( _caseSensitive );
+    layout->addWidget(_caseSensitive);
 
     for ( int i=0; i < 6; i++ )
-	addVStretch( this );
+      layout->addStretch();
 }
 
 
@@ -151,7 +166,7 @@ YQPkgSearchFilterView::keyPressEvent( QKeyEvent * event )
 {
     if ( event )
     {
-	if ( event->state() == 0 )	// No Ctrl / Alt / Shift etc. pressed
+	if ( event->modifiers() == Qt::NoModifier )	// No Ctrl / Alt / Shift etc. pressed
 	{
 	    if ( event->key() == Qt::Key_Return ||
 		 event->key() == Qt::Key_Enter    )
@@ -163,7 +178,7 @@ YQPkgSearchFilterView::keyPressEvent( QKeyEvent * event )
 
     }
 
-    QVBox::keyPressEvent( event );
+    QWidget::keyPressEvent( event );
 }
 
 
@@ -202,20 +217,17 @@ YQPkgSearchFilterView::filter()
 
 	QProgressDialog progress( _( "Searching..." ),			// text
 				  _( "&Cancel" ),			// cancelButtonLabel
-#ifdef FIXME
-				  Y2PM::packageManager().size(),	// totalSteps
-#else
+          0,
 				  1000,
-#endif
-				  this, 0,				// parent, name
-				  true );				// modal
-	progress.setCaption( "" );
+				  this			// parent
+				  );
+	progress.setWindowTitle( "" );
 	progress.setMinimumDuration( 2000 ); // millisec
 	QTime timer;
 
-	QRegExp regexp = _searchText->currentText();
-	regexp.setCaseSensitive( _caseSensitive->isChecked() );
-	regexp.setWildcard( _searchMode->currentItem() == UseWildcards );
+	QRegExp regexp( _searchText->currentText() );
+	regexp.setCaseSensitivity( _caseSensitive->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive );
+  regexp.setPatternSyntax( (_searchMode->currentIndex() == UseWildcards) ? QRegExp::Wildcard : QRegExp::RegExp);
 
 	timer.start();
 
@@ -223,7 +235,7 @@ YQPkgSearchFilterView::filter()
 	int count = 0;
 
 	for ( ZyppPoolIterator it = zyppPkgBegin();
-	      it != zyppPkgEnd() && ! progress.wasCancelled();
+	      it != zyppPkgEnd() && ! progress.wasCanceled();
 	      ++it )
 	{
 	    ZyppSel selectable = *it;
@@ -241,7 +253,7 @@ YQPkgSearchFilterView::filter()
 		check( selectable, selectable->theObj(), regexp );
 
 
-	    progress.setProgress( count++ );
+	    progress.setValue( count++ );
 
 	    if ( timer.elapsed() > 300 ) // milisec
 	    {
@@ -267,10 +279,9 @@ bool
 YQPkgSearchFilterView::check( ZyppSel	selectable,
 			      ZyppObj 	zyppObj )
 {
-    QRegExp regexp = _searchText->currentText();
-    regexp.setCaseSensitive( _caseSensitive->isChecked() );
-    regexp.setWildcard( _searchMode->currentItem() == UseWildcards );
-
+    QRegExp regexp( _searchText->currentText() );
+    regexp.setCaseSensitivity( _caseSensitive->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive );
+    regexp.setPatternSyntax( (_searchMode->currentIndex() == UseWildcards) ? QRegExp::Wildcard : QRegExp::RegExp);
     return check( selectable, zyppObj, regexp );
 }
 
@@ -313,10 +324,10 @@ YQPkgSearchFilterView::check( const string &	attribute,
     QString searchText	= _searchText->currentText();
     bool match		= false;
 
-    switch ( _searchMode->currentItem() )
+    switch ( _searchMode->currentIndex() )
     {
 	case Contains:
-	    match = att.contains( searchText, _caseSensitive->isChecked() );
+	    match = att.contains( searchText, _caseSensitive->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive);
 	    break;
 
 	case BeginsWith:

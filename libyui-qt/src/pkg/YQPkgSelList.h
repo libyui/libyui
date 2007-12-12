@@ -144,7 +144,7 @@ public:
      * Reimplemented from QListViewItem:
      * Sort by zypp::Selection::order() only.
      **/
-    virtual int compare( QListViewItem *	other,
+    virtual int compare( QTreeWidgetItem *	other,
 			 int			col,
 			 bool			ascending ) const;
 

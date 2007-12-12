@@ -18,11 +18,11 @@
 
 /-*/
 
-#include <qapplication.h>
-#include <qhbox.h>
-#include <qheader.h>
-#include <qpushbutton.h>
-#include <qsplitter.h>
+#include <QApplication>
+#include <QBoxLayout>
+#include <QHeaderView>
+#include <QPushButton>
+#include <QSplitter>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
@@ -93,25 +93,31 @@ YQSimplePatchSelector::findWizard() const
 void
 YQSimplePatchSelector::basicLayout()
 {
-    QSplitter * splitter = new QSplitter( QSplitter::Vertical, this );
-    CHECK_PTR( splitter );
-    splitter->setMargin( MARGIN );
+    QSplitter * splitter = new QSplitter( Qt::Vertical, this );
+    Q_CHECK_PTR( splitter );
 
     //
     // PatchFilterView
     //
 
-    QVBox * upper_vbox = new QVBox( splitter );
-    CHECK_PTR( upper_vbox );
-    splitter->setResizeMode( upper_vbox, QSplitter::Stretch );
+    QBoxLayout *layout = new QVBoxLayout;
+    layout->setMargin( MARGIN );
+    QWidget * upper_vbox = new QWidget( splitter );
+    Q_CHECK_PTR( upper_vbox );
+    upper_vbox->setLayout(layout);
+    splitter->addWidget(upper_vbox);
+
+
+    splitter->setStretchFactor( 0, 1 );
 
     _patchFilterView = new YQPkgPatchFilterView( upper_vbox );
-    CHECK_PTR( _patchFilterView );
-    
+    Q_CHECK_PTR( _patchFilterView );
+    layout->addWidget(_patchFilterView);
+
     _patchList = _patchFilterView->patchList();
-    CHECK_PTR( _patchList );
+    Q_CHECK_PTR( _patchList );
     
-    addVSpacing( upper_vbox, MARGIN );
+    //addVSpacing( upper_vbox, MARGIN );
 
     //
     // Disk Usage
@@ -119,12 +125,16 @@ YQSimplePatchSelector::basicLayout()
 
 
 #if SHOW_DISK_USAGE
-    QVBox * lower_vbox = new QVBox( splitter );
-    CHECK_PTR( lower_vbox );
-    addVSpacing( lower_vbox, MARGIN );
+    layout = new QVBoxLayout;
+    QWidget * lower_vbox = new QWidget( splitter );
+    lower_vbox->setLayout(layout);
+
+    Q_CHECK_PTR( lower_vbox );
+    //addVSpacing( lower_vbox, MARGIN );
 
     _diskUsageList = new YQPkgDiskUsageList( lower_vbox );
-    CHECK_PTR( _diskUsageList );
+    Q_CHECK_PTR( _diskUsageList );
+    layout->addWidget(_diskUsageList);
     
     splitter->setResizeMode( lower_vbox, QSplitter::FollowSizeHint );
 #endif
@@ -140,18 +150,19 @@ YQSimplePatchSelector::basicLayout()
 	// "Details" button
 	//
 
-	addVSpacing( this, SPACING );
-
-	QHBox * hbox = new QHBox( this );
-	CHECK_PTR( hbox );
-
+	//addVSpacing( this, SPACING );
+        layout = new QHBoxLayout;
+        QWidget * hbox = new QWidget( this );
+	Q_CHECK_PTR( hbox );
+        hbox->setLayout(layout);
 	QPushButton * details_button = new QPushButton( _( "&Details..." ), hbox );
-	CHECK_PTR( details_button );
+        layout->addWidget(details_button);
+	Q_CHECK_PTR( details_button );
 
 	connect( details_button, SIGNAL( clicked() ),
 		 this,		 SLOT  ( detailedPackageSelection() ) );
 
-	addHStretch( hbox );
+	//addHStretch( hbox );
     }
     else // ! _wizard
     {
@@ -163,24 +174,28 @@ YQSimplePatchSelector::basicLayout()
 void
 YQSimplePatchSelector::layoutButtons( QWidget * parent )
 {
-    QHBox * button_box = new QHBox( parent );
-    CHECK_PTR( button_box );
-    button_box->setMargin ( MARGIN  );
-    button_box->setSpacing( SPACING );
+    QWidget * button_box = new QWidget( parent );
+    QHBoxLayout *layout = new QHBoxLayout;
+    Q_CHECK_PTR( button_box );
+    button_box->setLayout(layout);
+    layout->setMargin ( MARGIN  );
+    layout->setSpacing( SPACING );
 
 
     QPushButton * details_button = new QPushButton( _( "&Details..." ), button_box );
-    CHECK_PTR( details_button );
+    Q_CHECK_PTR( details_button );
+    layout->addWidget(details_button);
     details_button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
 
     connect( details_button,	SIGNAL( clicked() ),
 	     this,		SLOT  ( detailedPackageSelection() ) );
 
 
-    addHStretch( button_box );
+    layout->addStretch();
 
     QPushButton * cancel_button = new QPushButton( _( "&Cancel" ), button_box );
-    CHECK_PTR( cancel_button );
+    Q_CHECK_PTR( cancel_button );
+    layout->addWidget(cancel_button);
     cancel_button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
 
     connect( cancel_button, SIGNAL( clicked() ),
@@ -188,7 +203,8 @@ YQSimplePatchSelector::layoutButtons( QWidget * parent )
 
 
     QPushButton * accept_button = new QPushButton( _( "&Accept" ), button_box );
-    CHECK_PTR( accept_button );
+    Q_CHECK_PTR( accept_button );
+    layout->addWidget(accept_button);
     accept_button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
 
     connect( accept_button, SIGNAL( clicked() ),

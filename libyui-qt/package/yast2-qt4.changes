@@ -1,0 +1,75 @@
+-------------------------------------------------------------------
+Tue Dec 11 16:34:56 CET 2007 - sh@suse.de
+
+- Fixed bug #346129: Too many wizard steps if UTF-8 chars used
+
+-------------------------------------------------------------------
+Tue Dec 11 10:01:18 CET 2007 - coolo@suse.de
+
+- make timeout events work
+
+-------------------------------------------------------------------
+Mon Dec 10 18:39:34 CET 2007 - sh@suse.de
+
+- Moved file and directory dialogs from YQUI to YQApplication:
+  - askForExistingDirectory()
+  - askForExistingFile()
+  - askForSaveFile()
+- V 2.16.8
+
+-------------------------------------------------------------------
+Fri Dec  7 16:07:05 CET 2007 - coolo@suse.de
+
+- update to SVN: fixing various porting issues 
+
+-------------------------------------------------------------------
+Wed Dec  5 20:41:15 CET 2007 - sh@suse.de
+
+- Moved main dialog handling out of YQUI and into a new class
+  YQMainWinDock
+- Don't proactively grab keyboard focus any longer (bug #246934)
+- V 2.16.7
+
+-------------------------------------------------------------------
+Wed Dec  5 11:13:05 CET 2007 - tgoettlicher@suse.de
+
+- Changed conflict dialog to better fit to sat solver's output
+
+-------------------------------------------------------------------
+Tue Dec  4 14:57:50 CET 2007 - tgoettlicher@suse.de
+
+- Fixed popup windows without decorations (#345825)
+
+-------------------------------------------------------------------
+Mon Dec  3 22:01:29 CET 2007 - coolo@suse.de
+
+- make it build again
+
+-------------------------------------------------------------------
+Fri Nov 30 17:20:49 CET 2007 - sh@suse.de
+
+- Migrated YQDialog to mod-ui
+- V 2.16.6 
+
+-------------------------------------------------------------------
+Tue Nov 27 19:08:00 CET 2007 - sh@suse.de
+
+- Moved all YCP related code out of YQWizard
+- V 2.16.5 
+
+-------------------------------------------------------------------
+Tue Nov 27 11:39:21 CET 2007 - tgoettlicher@suse.de
+
+- V 2.16.4
+
+-------------------------------------------------------------------
+Mon Nov 26 12:09:03 CET 2007 - tgoettlicher@suse.de
+
+- Prevent changed size of partition widget when packageselector's
+  window size is changed
+
+-------------------------------------------------------------------
+Mon Nov 26 11:46:18 CET 2007 - coolo@suse.de
+
+- initial package
+

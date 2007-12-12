@@ -22,10 +22,11 @@
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
-#include <qpixmap.h>
-#include <qaction.h>
-#include <qpopupmenu.h>
-#include <qmessagebox.h>
+#include <QPixmap>
+#include <QAction>
+#include <QMenu>
+#include <QMessageBox>
+#include <QFile>
 
 #include "utf8.h"
 
@@ -42,36 +43,40 @@ YQPkgList::YQPkgList( QWidget * parent )
     _srpmStatusCol	= -42;
 
     int numCol = 0;
-    addColumn( "" );			_statusCol	= numCol++;
-    // _statusCol = numCol;
-    addColumn( _( "Package" 	) );	_nameCol	= numCol++;
+    QStringList headers;
 
-    addColumn( _( "Summary" 	) );	_summaryCol	= numCol++;
-    addColumn( _( "Size" 	) );	_sizeCol	= numCol++;
+    
+    headers <<  "";			_statusCol	= numCol++;
+    // _statusCol = numCol;
+    headers <<  _( "Package" 	);	_nameCol	= numCol++;
+
+    headers <<  _( "Summary" 	);	_summaryCol	= numCol++;
+    headers <<  _( "Size" 	);	_sizeCol	= numCol++;
 
     if ( haveInstalledPkgs() )
     {
-	addColumn( _( "Avail. Ver." ) ); _versionCol	 = numCol++;
-	addColumn( _( "Inst. Ver."  ) ); _instVersionCol = numCol++;
+	headers << _( "Avail. Ver." ); _versionCol	 = numCol++;
+	headers <<  _( "Inst. Ver."  ); _instVersionCol = numCol++;
     }
     else
     {
-	addColumn( _( "Version"	) );	_versionCol	= numCol++;
+	headers <<   _( "Version"	);	_versionCol	= numCol++;
 	_instVersionCol = -1;
     }
 
 #if SOURCE_RPM_DISABLED
 #warning Selecting source RPMs disabled!
 #else
-    addColumn( _( "Source" ) );		_srpmStatusCol	= numCol++;
+    headers <<  _( "Source" );		_srpmStatusCol	= numCol++;
 #endif
-
+    setHeaderLabels(headers);
     saveColumnWidths();
-    setSorting( nameCol() );
-    setColumnAlignment( sizeCol(), Qt::AlignRight );
+    //FIXME sort( nameCol() );
+    //FIXME setColumnAlignment( sizeCol(), Qt::AlignRight );
     setAllColumnsShowFocus( true );
 
     createActions();
+
     createSourceRpmContextMenu();
 }
 
@@ -108,7 +113,7 @@ YQPkgList::addPkgItem( ZyppSel	selectable,
     }
 
     YQPkgListItem * item = new YQPkgListItem( this, selectable, zyppPkg );
-    CHECK_PTR( item );
+    Q_CHECK_PTR( item );
 
     item->setDimmed( dimmed );
     applyExcludeRules( item );
@@ -132,7 +137,7 @@ YQPkgList::haveInstalledPkgs()
 
 void
 YQPkgList::pkgObjClicked( int			button,
-			  QListViewItem *	listViewItem,
+			  QTreeWidgetItem *	listViewItem,
 			  int			col,
 			  const QPoint &	pos )
 {
@@ -177,17 +182,18 @@ YQPkgList::sizeHint() const
 void
 YQPkgList::createSourceRpmContextMenu()
 {
-    _sourceRpmContextMenu = new QPopupMenu( this );
+    _sourceRpmContextMenu = new QMenu( this );
 
-    actionInstallSourceRpm->addTo( _sourceRpmContextMenu );
-    actionDontInstallSourceRpm->addTo( _sourceRpmContextMenu );
+    _sourceRpmContextMenu->addAction(actionInstallSourceRpm);
+    _sourceRpmContextMenu->addAction(actionDontInstallSourceRpm);
 
-    QPopupMenu * submenu = new QPopupMenu( _sourceRpmContextMenu );
-    CHECK_PTR( submenu );
-    _sourceRpmContextMenu->insertItem( _( "&All in This List" ), submenu );
+    QMenu * submenu = new QMenu( _sourceRpmContextMenu );
+    Q_CHECK_PTR( submenu );
+    QAction *action = _sourceRpmContextMenu->addMenu( submenu );
+    action->setText(_( "&All in This List" ));
 
-    actionInstallListSourceRpms->addTo( submenu );
-    actionDontInstallListSourceRpms->addTo( submenu );
+    submenu->addAction(actionInstallListSourceRpms);
+    submenu->addAction(actionDontInstallListSourceRpms);
 }
 
 
@@ -195,7 +201,8 @@ void
 YQPkgList::setInstallCurrentSourceRpm( bool installSourceRpm,
 				       bool selectNextItem )
 {
-    QListViewItem * listViewItem = selectedItem();
+#if FIXME
+    QTreeWidgetItem * listViewItem = selectedItem();
 
     if ( ! listViewItem )
 	return;
@@ -212,6 +219,7 @@ YQPkgList::setInstallCurrentSourceRpm( bool installSourceRpm,
 	    setSelected( item->nextSibling(), true );	// emits signals
 	}
     }
+#endif
 }
 
 
@@ -221,7 +229,8 @@ YQPkgList::setInstallListSourceRpms( bool installSourceRpm )
     if ( ! _editable )
 	return;
 
-    QListViewItem * listViewItem = firstChild();
+#if FIXME
+    QTreeWidgetItem * listViewItem = firstChild();
 
     while ( listViewItem )
     {
@@ -234,6 +243,7 @@ YQPkgList::setInstallListSourceRpms( bool installSourceRpm )
 
 	listViewItem = listViewItem->nextSibling();
     }
+#endif
 }
 
 
@@ -241,18 +251,18 @@ YQPkgList::setInstallListSourceRpms( bool installSourceRpm )
 void
 YQPkgList::createNotInstalledContextMenu()
 {
-    _notInstalledContextMenu = new QPopupMenu( this );
-    CHECK_PTR( _notInstalledContextMenu );
+    _notInstalledContextMenu = new QMenu( this );
+    Q_CHECK_PTR( _notInstalledContextMenu );
 
-    actionSetCurrentInstall->addTo( _notInstalledContextMenu );
-    actionSetCurrentDontInstall->addTo( _notInstalledContextMenu );
-    actionSetCurrentTaboo->addTo( _notInstalledContextMenu );
+    _notInstalledContextMenu->addAction(actionSetCurrentInstall);
+    _notInstalledContextMenu->addAction(actionSetCurrentDontInstall);
+    _notInstalledContextMenu->addAction(actionSetCurrentTaboo);
 
     addAllInListSubMenu( _notInstalledContextMenu );
 
 
-    _notInstalledContextMenu->insertSeparator();
-    _notInstalledContextMenu->insertItem( _( "Export This List to &Text File..." ),
+    _notInstalledContextMenu->addSeparator();
+    _notInstalledContextMenu->addAction( _( "Export This List to &Text File..." ),
 					  this, SLOT( askExportList() ) );
 }
 
@@ -260,38 +270,40 @@ YQPkgList::createNotInstalledContextMenu()
 void
 YQPkgList::createInstalledContextMenu()
 {
-    _installedContextMenu = new QPopupMenu( this );
-    CHECK_PTR( _installedContextMenu );
+    _installedContextMenu = new QMenu( this );
+    Q_CHECK_PTR( _installedContextMenu );
 
-    actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
-    actionSetCurrentDelete->addTo( _installedContextMenu );
-    actionSetCurrentUpdate->addTo( _installedContextMenu );
-    actionSetCurrentProtected->addTo( _installedContextMenu );
+    _installedContextMenu->addAction(actionSetCurrentKeepInstalled);
+    _installedContextMenu->addAction(actionSetCurrentDelete);
+    _installedContextMenu->addAction(actionSetCurrentUpdate);
+    _installedContextMenu->addAction(actionSetCurrentProtected);
 
     addAllInListSubMenu( _installedContextMenu );
 
-    _installedContextMenu->insertSeparator();
-    _installedContextMenu->insertItem( _( "Export This List to &Text File..." ),
+    _installedContextMenu->addSeparator();
+    _installedContextMenu->addAction( _( "Export This List to &Text File..." ),
 				       this, SLOT( askExportList() ) );
 }
 
 
-QPopupMenu *
-YQPkgList::addAllInListSubMenu( QPopupMenu * menu )
+QMenu *
+YQPkgList::addAllInListSubMenu( QMenu * menu )
 {
-    QPopupMenu * submenu = new QPopupMenu( menu );
-    CHECK_PTR( submenu );
+    QMenu * submenu = new QMenu( menu );
+    Q_CHECK_PTR( submenu );
 
-    actionSetListInstall->addTo( submenu );
-    actionSetListDontInstall->addTo( submenu );
-    actionSetListKeepInstalled->addTo( submenu );
-    actionSetListDelete->addTo( submenu );
-    actionSetListUpdate->addTo( submenu );
-    actionSetListUpdateForce->addTo( submenu );
-    actionSetListTaboo->addTo( submenu );
-    actionSetListProtected->addTo( submenu );
+    submenu->addAction(actionSetListInstall);
+    submenu->addAction(actionSetListDontInstall);
+    submenu->addAction(actionSetListKeepInstalled);
+    submenu->addAction(actionSetListDelete);
+    submenu->addAction(actionSetListDelete);
+    submenu->addAction(actionSetListUpdate);
+    submenu->addAction(actionSetListUpdateForce);
+    submenu->addAction(actionSetListTaboo);
+    submenu->addAction(actionSetListProtected);
 
-    menu->insertItem( _( "&All in This List" ), submenu );
+    QAction *action = menu->addMenu( submenu );
+    action->setText(_( "&All in This List" ));
 
     return submenu;
 }
@@ -364,11 +376,12 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
 {
     // Open file
 
-    FILE * file = fopen( (const char *) filename, "w" );
+    QFile file(filename);
+    file.open(QIODevice::WriteOnly);
 
-    if ( ! file )
+    if ( file.error() != QFile::NoError )
     {
-	y2error( "Can't open file %s", (const char *) filename );
+	y2error( "Can't open file %s", qPrintable(filename) );
 
 	if ( interactive )
 	{
@@ -395,20 +408,21 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
 
     QString header;
     header.sprintf( "# %-18s %-30s | %10s | %-16s | %-16s\n\n",
-		    (const char *) _( "Status"      ).utf8(),
-		    (const char *) _( "Package"     ).utf8(),
-		    (const char *) _( "Size"        ).utf8(),
-		    (const char *) _( "Avail. Ver." ).utf8(),
-		    (const char *) _( "Inst. Ver."  ).utf8()
+		    (const char *) _( "Status"      ).toUtf8(),
+		    (const char *) _( "Package"     ).toUtf8(),
+		    (const char *) _( "Size"        ).toUtf8(),
+		    (const char *) _( "Avail. Ver." ).toUtf8(),
+		    (const char *) _( "Inst. Ver."  ).toUtf8()
 		    );
-    fputs( (const char *) header.utf8(), file );
+    file.write(header.toUtf8());
 
 
     //
     // Write all items
     //
 
-    const QListViewItem * item = firstChild();
+#if FIXME
+    const QTreeWidgetItem * item = firstChild();
 
     while ( item )
     {
@@ -423,23 +437,25 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
 	    if ( instVersion.isEmpty() ) instVersion = "---";
 
 	    QString status = "[" + statusText( pkg->status() ) + "]";
-	    fprintf( file, "%-20s %-30s | %10s | %-16s | %-16s\n",
-		     (const char *) status.utf8(),
+      QString format;
+	    format.sprintf("%-20s %-30s | %10s | %-16s | %-16s\n",
+		     (const char *) status.toUtf8(),
 		     (const char *) pkg->text( nameCol()   ),
 		     (const char *) pkg->text( sizeCol()   ),
 		     (const char *) candVersion,
 		     (const char *) instVersion
 		     );
+      file.write(format.toUtf8());
 	}
 
 	item = item->nextSibling();
     }
 
-
+#endif
     // Clean up
 
-    if ( file )
-	fclose( file );
+    if ( file.isOpen() )
+      file.close();
 }
 
 
@@ -608,8 +624,7 @@ YQPkgListItem::setSourceRpmIcon()
 		YQIconPool::disabledPkgNoInst();
 	}
     }
-
-    setPixmap( srpmStatusCol(), icon );
+    setData( srpmStatusCol(), Qt::DecorationRole, icon );
 }
 
 
@@ -714,21 +729,12 @@ YQPkgListItem::toolTip( int col )
 
 
 
-/**
- * Comparison function used for sorting the list.
- * Returns:
- * -1 if this <	 other
- *  0 if this == other
- * +1 if this >	 other
- **/
-int
-YQPkgListItem::compare( QListViewItem *		otherListViewItem,
-			int			col,
-			bool			ascending ) const
+bool YQPkgListItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
 {
+    int col = treeWidget()->sortColumn();
     if ( col == srpmStatusCol() )
     {
-	YQPkgListItem * other = dynamic_cast<YQPkgListItem *> (otherListViewItem);
+	const YQPkgListItem * other = dynamic_cast<const YQPkgListItem *> (&otherListViewItem);
 
 	if ( other )
 	{
@@ -736,17 +742,15 @@ YQPkgListItem::compare( QListViewItem *		otherListViewItem,
 	    int otherPoints = ( other->hasSourceRpm() ? 1 : 0 ) + ( other->installSourceRpm() ? 1 : 0 );
 
 	    // Intentionally inverting order: Pkgs with source RPMs are more interesting than without.
-	    if ( thisPoints > otherPoints ) return -1;
-	    if ( thisPoints < otherPoints ) return  1;
-	    return 0;
+	    return ( thisPoints < otherPoints );
 	}
     }
 
     // Fallback: Use parent class method
-    return YQPkgObjListItem::compare( otherListViewItem, col, ascending );
+    return YQPkgObjListItem::operator<( otherListViewItem );
 }
 
-
+#if 0
 void
 YQPkgListItem::paintCell( QPainter *		painter,
 			  const QColorGroup &	colorGroup,
@@ -754,12 +758,13 @@ YQPkgListItem::paintCell( QPainter *		painter,
 			  int			width,
 			  int			alignment )
 {
+#if FIXME
     if ( isDimmed() && ! YQUI::ui()->usingVisionImpairedPalette() )
     {
 	QColorGroup cg = colorGroup;
 	cg.setColor( QColorGroup::Text, QColor( 0xA0, 0xA0, 0xA0 ) );
 
-	QListViewItem::paintCell( painter, cg, column, width, alignment );
+	QTreeWidgetItem::paintCell( painter, cg, column, width, alignment );
     }
     else
     {
@@ -775,7 +780,7 @@ YQPkgListItem::paintCell( QPainter *		painter,
 		    cg.setColor( QColorGroup::Text, QColor( 0xFF, 0, 0 ) );		// Foreground
 	    }
 
-	    QListViewItem::paintCell( painter, cg, column, width, alignment );
+	    QTreeWidgetItem::paintCell( painter, cg, column, width, alignment );
 	}
 	else if ( candidateIsNewer() )
 	{
@@ -789,15 +794,16 @@ YQPkgListItem::paintCell( QPainter *		painter,
 		    cg.setColor( QColorGroup::Base, QColor( 0xF0, 0xF0, 0xF0 ) );	// Background
 	    }
 
-	    QListViewItem::paintCell( painter, cg, column, width, alignment );
+	    QTreeWidgetItem::paintCell( painter, cg, column, width, alignment );
 	}
 	else
 	{
-	    QListViewItem::paintCell( painter, colorGroup, column, width, alignment );
+	    QTreeWidgetItem::paintCell( painter, colorGroup, column, width, alignment );
 	}
     }
+#endif
 }
-
+#endif
 
 
 #include "YQPkgList.moc"

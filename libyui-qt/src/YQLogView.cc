@@ -19,7 +19,8 @@
 
 #include <qlabel.h>
 #include <qstyle.h>
-#include <qmultilineedit.h>
+#include <QVBoxLayout>
+#include <QScrollBar>
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
@@ -35,19 +36,23 @@ YQLogView::YQLogView( YWidget * 	parent,
 		      const string &	label,
 		      int 		visibleLines,
 		      int 		maxLines )
-    : QVBox( (QWidget *) parent->widgetRep() )
+    : QFrame( (QWidget *) parent->widgetRep() )
     , YLogView( parent, label, visibleLines, maxLines )
 {
     setWidgetRep( this );
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    setLayout( layout );
 
-    setSpacing( YQWidgetSpacing );
-    setMargin( YQWidgetMargin );
+    layout->setSpacing( YQWidgetSpacing );
+    layout->setMargin( YQWidgetMargin );
 
     _caption = new YQWidgetCaption( this, label );
     YUI_CHECK_NEW( _caption );
+    layout->addWidget( _caption );
 
-    _qt_text = new QMultiLineEdit( this );
+    _qt_text = new QTextEdit( this );
     YUI_CHECK_NEW( _qt_text );
+    layout->addWidget( _qt_text );
 
     _qt_text->setReadOnly( true );
     _qt_text->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
@@ -66,7 +71,8 @@ void
 YQLogView::displayLogText( const string & text )
 {
     _qt_text->setText( fromUTF8( text ) );
-    _qt_text->scrollToBottom();
+    QScrollBar *sb = _qt_text->verticalScrollBar();
+    sb->setValue( sb->maximum() );
 }
 
 
@@ -99,10 +105,10 @@ int
 YQLogView::preferredHeight()
 {
     int hintHeight 	 = visibleLines() * _qt_text->fontMetrics().lineSpacing();
-    hintHeight		+= _qt_text->style().scrollBarExtent().height();
+    hintHeight		+= _qt_text->style()->pixelMetric( QStyle::PM_ScrollBarExtent );
     hintHeight		+= _qt_text->frameWidth() * 2;
 
-    if ( _caption->isShown() )
+    if ( !_caption->isHidden() )
 	hintHeight	+=  _caption->sizeHint().height();
 
     return max( 80, hintHeight );

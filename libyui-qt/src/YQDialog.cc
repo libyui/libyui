@@ -23,6 +23,7 @@
 #include <ycp/y2log.h>
 #include <qpushbutton.h>
 #include <qmessagebox.h>
+#include <QDesktopWidget>
 
 #include "YQUI.h"
 #include "YQi18n.h"
@@ -38,40 +39,31 @@
 // like "Above", "Below" etc. that clash with some Qt headers.
 #include <X11/Xlib.h>
 
+#define YQMainDialogWFlags	Qt::Widget
 
-#define YQMainDialogWFlags	0
-
-
-#define YQPopupDialogWFlags 		\
-    ( Qt::WStyle_Customize 	|	\
-      Qt::WStyle_Dialog		|	\
-      Qt::WShowModal 		|	\
-      Qt::WType_Modal		|	\
-      Qt::WStyle_DialogBorder	 )
-
-
+#define YQPopupDialogWFlags     Qt::Dialog
 
 
 YQDialog::YQDialog( YDialogType 	dialogType,
 		    YDialogColorMode	colorMode )
     : QWidget( chooseParent( dialogType ),
-	       0, // name
 	       dialogType == YMainDialog ? YQMainDialogWFlags : YQPopupDialogWFlags )
     , YDialog( dialogType, colorMode )
 {
+    setWidgetRep( this );
+
     _userResized	= false;
     _focusButton	= 0;
     _defaultButton	= 0;
 
-    setWidgetRep( this );
-    setCaption( "YaST2" );
-    setFocusPolicy( QWidget::StrongFocus );
+    setWindowTitle( "YaST2" );
+    setFocusPolicy( Qt::StrongFocus );
 
     if ( colorMode != YDialogNormalColor )
     {
 	QColor normalBackground     ( 0, 128, 0 );
-	QColor inputFieldBackground ( 0,  96, 0 );
-	QColor text = white;
+	QColor inputFieldBackground ( 0xbb,  0xff, 0xbb );
+	QColor text = Qt::white;
 
 	if ( colorMode == YDialogInfoColor )
 	{
@@ -79,17 +71,20 @@ YQDialog::YQDialog( YDialogType 	dialogType,
 	}
 
 	QPalette warnPalette( normalBackground );
-	QColorGroup normalColors = warnPalette.normal();
-	normalColors.setColor( QColorGroup::Text, text );
-	normalColors.setColor( QColorGroup::Base, inputFieldBackground );
-	warnPalette.setNormal( normalColors );
+	warnPalette.setColor( QPalette::Text, text );
+	warnPalette.setColor( QPalette::Base, inputFieldBackground );
 	setPalette( warnPalette );
     }
 
     if ( dialogType == YMainDialog &&
 	 QWidget::parent() != YQMainWinDock::mainWinDock() )
     {
-	setWFlags( YQPopupDialogWFlags );
+	setWindowFlags( YQPopupDialogWFlags );
+    }
+
+    if ( QWidget::parent() == YQMainWinDock::mainWinDock() )
+    {
+        YQMainWinDock::mainWinDock()->add( this );
     }
 }
 
@@ -98,8 +93,12 @@ YQDialog::~YQDialog()
 {
     if ( dialogType() == YMainDialog )
     {
-	YQMainWinDock::mainWinDock()->remove( (QWidget *) widgetRep() );
+	YQMainWinDock::mainWinDock()->remove( this );
     }
+    if ( _defaultButton )
+       _defaultButton->forgetDialog();
+    if ( _focusButton )
+       _focusButton->forgetDialog();
 }
 
 
@@ -107,14 +106,14 @@ QWidget *
 YQDialog::chooseParent( YDialogType dialogType )
 {
     QWidget * parent = 0;
-    
+
     if ( dialogType == YMainDialog &&
 	 YQMainWinDock::mainWinDock()->couldDock() )
     {
 	y2debug( "Adding dialog to mainWinDock" );
 	parent = YQMainWinDock::mainWinDock();
     }
-    
+
     return parent;
 }
 
@@ -198,6 +197,7 @@ YQDialog::setSize( int newWidth, int newHeight )
 
     if ( hasChildren() )
     {
+        ( ( QWidget* )firstChild()->widgetRep() )->show();
 	firstChild()->setSize( newWidth, newHeight );
     }
 
@@ -309,9 +309,9 @@ YQDialog::ensureOnlyOneDefaultButton( YWidgetListConstIterator begin,
 		if ( _defaultButton && button != _defaultButton )
 		{
 		    y2error( "Too many default buttons: [%s]",
-			     (const char *) button->text() );
+			     qPrintable(button->text()) );
 		    y2error( "Using old default button: [%s]",
-			     (const char *) _defaultButton->text() );
+			     qPrintable(_defaultButton->text()) );
 		}
 		else
 		{
@@ -431,7 +431,7 @@ YQDialog::wizardDefaultButton( YQWizard * wizard ) const
 
 
 void
-YQDialog::setDefaultButton( YQGenericButton * newDefaultButton )
+YQDialog::setDefaultButton( YPushButton * newDefaultButton )
 {
     if ( _defaultButton	  &&
 	 newDefaultButton &&
@@ -445,18 +445,18 @@ YQDialog::setDefaultButton( YQGenericButton * newDefaultButton )
 	else
 	{
 	    y2error( "Too many `opt(`default) PushButtons: [%s]",
-		     (const char *) newDefaultButton->text() );
+		     newDefaultButton->label().c_str() );
 	    newDefaultButton->setDefaultButton( false );
 	    return;
 	}
     }
 
-    _defaultButton = newDefaultButton;
+    _defaultButton = dynamic_cast<YQGenericButton*>(newDefaultButton);
 
     if ( _defaultButton )
     {
 	_defaultButton->setDefaultButton( true );
-	y2debug( "New default button: [%s]", (const char *) _defaultButton->text() );
+	y2debug( "New default button: [%s]", qPrintable(_defaultButton->text()) );
 
 	if ( _defaultButton && ! _focusButton )
 	    _defaultButton->showAsDefault( true );
@@ -477,7 +477,7 @@ YQDialog::activateDefaultButton( bool warn )
 	 _focusButton->isEnabled() &&
 	 _focusButton->isShownAsDefault() )
     {
-	y2debug( "Activating focus button: [%s]", (const char *) _focusButton->text() );
+	y2debug( "Activating focus button: [%s]", qPrintable(_focusButton->text()) );
 	_focusButton->activate();
 	return true;
     }
@@ -491,7 +491,7 @@ YQDialog::activateDefaultButton( bool warn )
 	 _defaultButton->isEnabled() 	&&
 	 _defaultButton->isShownAsDefault() )
     {
-	y2debug( "Activating default button: [%s]", (const char *) _defaultButton->text() );
+	y2debug( "Activating default button: [%s]", qPrintable(_defaultButton->text()) );
 	_defaultButton->activate();
 	return true;
     }
@@ -550,7 +550,7 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    return;
 	}
 	else if ( event->key()   == Qt::Key_F4 &&	// Shift-F4: toggle colors for vision impaired users
-		  event->state() == Qt::ShiftButton )
+		  event->modifiers() & Qt::ShiftModifier )
 	{
 	    YQUI::ui()->toggleVisionImpairedPalette();
 
@@ -568,18 +568,18 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    return;
 	}
 	else if ( event->key()   == Qt::Key_F7 &&	// Shift-F7: toggle y2debug logging
-		  event->state() == Qt::ShiftButton )
+		  event->modifiers() == Qt::ShiftModifier )
 	{
 	    YQUI::ui()->askConfigureLogging();
 	    return;
 	}
 	else if ( event->key()   == Qt::Key_F8 &&	// Shift-F8: save y2logs
-		  event->state() == Qt::ShiftButton )
+		  event->modifiers() & Qt::ShiftModifier )
 	{
 	    YQUI::ui()->askSaveLogs();
 	    return;
 	}
-	else if ( event->state() == 0 )			// No Ctrl / Alt / Shift etc. pressed
+	else if ( event->modifiers() & Qt::NoModifier )			// No Ctrl / Alt / Shift etc. pressed
 	{
 	    if ( event->key() == Qt::Key_Return ||
 		 event->key() == Qt::Key_Enter    )
@@ -588,7 +588,7 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 		return;
 	    }
 	}
-	else if ( event->state() == ( Qt::ControlButton | Qt::ShiftButton | Qt::AltButton ) )
+	else if ( event->modifiers() & ( Qt::ControlModifier | Qt::ShiftModifier | Qt::AltModifier ) )
 	{
 	    // Qt-UI special keys - all with Ctrl-Shift-Alt
 
@@ -644,7 +644,7 @@ YQDialog::focusInEvent( QFocusEvent * event )
     // button mechanism to work. So let's accept the focus and give it to some
     // child widget.
 
-    if ( event->reason() == QFocusEvent::Tab )
+    if ( event->reason() == Qt::TabFocusReason )
     {
 	focusNextPrevChild( true );
     }
@@ -662,10 +662,10 @@ void
 YQDialog::center( QWidget * dialog, QWidget * parent )
 {
     if ( ! dialog || ! parent )
-	return;
+        return;
 
     QPoint pos( ( parent->width()  - dialog->width()  ) / 2,
-		( parent->height() - dialog->height() ) / 2 );
+                ( parent->height() - dialog->height() ) / 2 );
 
     pos += parent->mapToGlobal( QPoint( 0, 0 ) );
     pos = dialog->mapToParent( dialog->mapFromGlobal( pos ) );

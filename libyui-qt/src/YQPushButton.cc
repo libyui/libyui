@@ -35,7 +35,7 @@ YQPushButton::YQPushButton( YWidget *		parent,
     setWidgetRep( this );
 
     QPushButton * button = new QPushButton( fromUTF8( label ), this );
-    CHECK_PTR( button );
+    Q_CHECK_PTR( button );
 
     setQPushButton( button );
     

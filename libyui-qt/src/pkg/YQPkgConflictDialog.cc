@@ -18,21 +18,23 @@
 
 /-*/
 
-
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
 #include <zypp/ZYppFactory.h>
 #include <zypp/Resolver.h>
 
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpopupmenu.h>
-#include <qpushbutton.h>
-#include <qdatetime.h>
-#include <qpainter.h>
-#include <qmessagebox.h>
+#include <QLabel>
+#include <QKeyEvent>
+#include <QLayout>
+#include <QMenu>
+#include <QPushButton>
+#include <QDateTime>
+#include <QPainter>
+#include <QMessageBox>
+#include <QDesktopWidget>
+#include <QPixmap>
+#include <QBoxLayout>
 
 #include "YQPkgConflictDialog.h"
 #include "YQPkgConflictList.h"
@@ -69,7 +71,7 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     // or may not be visible, depending on whether or not there is a window
     // manager running (and configured to show any dialog titles).
 
-    setCaption( _( "Warning" ) );
+    setWindowTitle( _( "Warning" ) );
 
     // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );
@@ -77,13 +79,16 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
     // Layout for the dialog (can't simply insert a QVbox)
 
-    QVBoxLayout * layout = new QVBoxLayout( this, MARGIN, SPACING );
-    CHECK_PTR( layout );
+    QVBoxLayout * layout = new QVBoxLayout( this );
+    layout->setMargin(MARGIN);
+    layout->setSpacing(SPACING);
+
+    Q_CHECK_PTR( layout );
 
     // Conflict list
 
     _conflictList = new YQPkgConflictList( this );
-    CHECK_PTR( _conflictList );
+    Q_CHECK_PTR( _conflictList );
     layout->addWidget( _conflictList );
     layout->addSpacing(8);
 
@@ -92,48 +97,50 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
 
     // Button box
-
-    QHBox * buttonBox	= new QHBox( this );
-    CHECK_PTR( buttonBox );
+    QHBoxLayout * buttonBox = new QHBoxLayout();
+    Q_CHECK_PTR( buttonBox );
     buttonBox->setSpacing( SPACING );
     buttonBox->setMargin ( MARGIN  );
-    layout->addWidget( buttonBox );
-
+    layout->addLayout( buttonBox );
 
     // "OK" button
 
-    QPushButton * button = new QPushButton( _( "&OK -- Try Again" ), buttonBox );
-    CHECK_PTR( button );
+    QPushButton * button = new QPushButton( _( "&OK -- Try Again" ), this);
+    buttonBox->addWidget(button);
+    Q_CHECK_PTR( button );
     button->setDefault( true );
 
     connect( button, SIGNAL( clicked() ),
 	     this,   SLOT  ( solveAndShowConflicts() ) );
 
-    addHStretch( buttonBox );
+    // FIXME addHStretch( buttonBox );
 
 
     // "Expert" menu button
 
-    button = new QPushButton( _( "&Expert" ), buttonBox );
-    CHECK_PTR( button );
+    button = new QPushButton( _( "&Expert" ), this );
+    buttonBox->addWidget(button);
 
-    addHStretch( buttonBox );
+    Q_CHECK_PTR( button );
+
+    //FIXME addHStretch( buttonBox );
 
 
     // "Expert" menu
 
-    _expertMenu = new QPopupMenu( button );
-    CHECK_PTR( _expertMenu );
-    button->setPopup( _expertMenu );
+    _expertMenu = new QMenu( button );
+    Q_CHECK_PTR( _expertMenu );
+    button->setMenu( _expertMenu );
 
-    _expertMenu->insertItem( _( "&Save This List to a File..." ),
+    _expertMenu->addAction( _( "&Save This List to a File..." ),
 			     _conflictList, SLOT( askSaveToFile() ) );
 
 
     // "Cancel" button
 
-    button = new QPushButton( _( "&Cancel" ), buttonBox );
-    CHECK_PTR( button );
+    button = new QPushButton( _( "&Cancel" ), this);
+    buttonBox->addWidget(button);
+    Q_CHECK_PTR( button );
 
     connect( button, SIGNAL( clicked() ),
 	     this,   SLOT  ( reject()  ) );
@@ -141,11 +148,14 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
     // Busy popup
 
-    _busyPopup = new QLabel( "   " + _( "Checking Dependencies..." ) + "   ", parent, 0,
-			     WStyle_Customize | WStyle_DialogBorder | WStyle_Dialog | WStyle_Title  );
+    _busyPopup = new QLabel( "   " + _( "Checking Dependencies..." ) + "   ", parent, 0
+#ifdef FIXME
+			     , WStyle_Customize | WStyle_DialogBorder | WStyle_Dialog | WStyle_Title
+#endif
+			     );
+    Q_CHECK_PTR( _busyPopup );
 
-    CHECK_PTR( _busyPopup );
-    _busyPopup->setCaption( "" );
+    _busyPopup->setWindowTitle( "" );
     _busyPopup->resize( _busyPopup->sizeHint() );
     YQDialog::center( _busyPopup, parent );
 
@@ -174,16 +184,16 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     QPixmap pixmap( 3 * size.width(), 3 * size.height() );
 
     // Clear the pixmap with the widget's normal background color.
-    pixmap.fill( _busyPopup->paletteBackgroundColor() );
+    //FIXME pixmap.fill( _busyPopup->paletteBackgroundColor() );
 
     // Render the text - aligned top and left because otherwise it will of
     // course be centered inside the pixmap which is usually much larger than
     // the popup, thus the text would be cut off.
     QPainter painter( &pixmap );
-    painter.drawText( pixmap.rect(), AlignLeft | AlignTop, _busyPopup->text() );
+    painter.drawText( pixmap.rect(), Qt::AlignLeft | Qt::AlignTop, _busyPopup->text() );
     painter.end();
 
-    _busyPopup->setPaletteBackgroundPixmap( pixmap );
+    //FIXME _busyPopup->setPaletteBackgroundPixmap( pixmap );
 
     // If the application manages to render the true contents of the label we
     // just misused so badly, the real label will interfere with the background
@@ -254,7 +264,7 @@ YQPkgConflictDialog::verifySystem()
 void
 YQPkgConflictDialog::prepareSolving()
 {
-    CHECK_PTR( _conflictList );
+    Q_CHECK_PTR( _conflictList );
     YQUI::ui()->busyCursor();
 
     if ( isVisible() )
@@ -367,7 +377,7 @@ YQPkgConflictDialog::askCreateSolverTestCase()
 	return;
 
     y2milestone( "Generating solver test case START" );
-    bool success = zypp::getZYpp()->resolver()->createSolverTestcase( testCaseDir.ascii() );
+    bool success = zypp::getZYpp()->resolver()->createSolverTestcase( qPrintable(testCaseDir) );
     y2milestone( "Generating solver test case END" );
 
     if ( success )

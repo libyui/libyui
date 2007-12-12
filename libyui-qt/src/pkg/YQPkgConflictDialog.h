@@ -20,12 +20,14 @@
 #ifndef YQPkgConflictDialog_h
 #define YQPkgConflictDialog_h
 
-#include <qdialog.h>
+#include <QDialog>
+#include <QMenu>
+#include <QLabel>
 
 class YQPkgConflictList;
 class PMManager;
 class QPushButton;
-class QPopupMenu;
+class QMenu;
 class QLabel;
 
 
@@ -149,7 +151,7 @@ protected:
     //
 
     YQPkgConflictList *	_conflictList;
-    QPopupMenu *	_expertMenu;
+    QMenu *	_expertMenu;
     QLabel *		_busyPopup;
 
     double		_totalSolveTime;

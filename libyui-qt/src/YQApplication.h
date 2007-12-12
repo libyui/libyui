@@ -20,8 +20,8 @@
 #ifndef YQApplication_h
 #define YQApplication_h
 
-#include <qobject.h>
-#include <qtranslator.h>
+#include <Qt/qobject.h>
+#include <Qt/qtranslator.h>
 #include <qfont.h>
 
 #include "QY2Settings.h"
@@ -31,11 +31,11 @@
 class YQApplication: public QObject, public YApplication
 {
     Q_OBJECT
-    
+
 protected:
 
     friend class YQUI;
-    
+
     /**
      * Constructor.
      *
@@ -48,9 +48,9 @@ protected:
      **/
     virtual ~YQApplication();
 
-    
+
 public:
-    
+
     /**
      * Set language and encoding for the locale environment ($LANG).
      *
@@ -66,7 +66,7 @@ public:
      **/
     virtual void setLanguage( const string & language,
 			      const string & encoding = string() );
-    
+
     /**
      * Load translations for Qt's predefined dialogs like file selection box
      * etc.
@@ -208,9 +208,9 @@ protected:
     //
     // Data members
     //
-    
+
     // Fonts
-    
+
     QFont * _currentFont;
     QFont * _headingFont;
     QFont * _boldFont;
@@ -237,7 +237,7 @@ protected:
     int  _autoNormalFontSize;
     int  _autoHeadingFontSize;
 
-    
+
 };
 
 

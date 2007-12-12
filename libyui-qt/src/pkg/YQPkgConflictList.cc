@@ -18,11 +18,11 @@
 
 /-*/
 
-
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qdatetime.h>
-#include <qmessagebox.h>
+#include <QPainter>
+#include <QPixmap>
+#include <QDateTime>
+#include <QMessageBox>
+#include <QList>
 
 #include <errno.h>
 
@@ -58,7 +58,8 @@ using std::string;
 YQPkgConflictList::YQPkgConflictList( QWidget * parent )
     : QY2ListView( parent )
 {
-    addColumn( _( "Dependency Conflict" ) );
+
+    setHeaderLabel( _( "Dependency Conflict" ) );
     setRootIsDecorated( true );
     setSortByInsertionSequence( true );
 }
@@ -82,7 +83,7 @@ YQPkgConflictList::fill( zypp::ResolverProblemList problemList )
     while ( it != problemList.end() )
     {
 	YQPkgConflict * conflict = new YQPkgConflict( this, *it );
-	CHECK_PTR( conflict );
+	Q_CHECK_PTR( conflict );
 
 	++it;
     }
@@ -94,9 +95,10 @@ YQPkgConflictList::applyResolutions()
 {
     zypp::ProblemSolutionList userChoices;
 
-    QListViewItem * child = firstChild();
+    int count=0;
+    QTreeWidgetItem * child;
 
-    while ( child )
+    while ( (child = topLevelItem(count)) )
     {
 	YQPkgConflict * conflict = dynamic_cast<YQPkgConflict *> (child);
 
@@ -108,7 +110,7 @@ YQPkgConflictList::applyResolutions()
 		userChoices.push_back( userChoice );
 	}
 
-	child = child->nextSibling();
+	count++;
     }
 
     zypp::getZYpp()->resolver()->applySolutions( userChoices );
@@ -132,12 +134,11 @@ void
 YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 {
     // Open file
-
-    FILE * file = fopen( (const char *) filename, "w" );
-
-    if ( ! file )
+    QFile file(filename);
+  
+    if ( ! file.open(QIODevice::WriteOnly) )
     {
-	y2error( "Can't open file %s", (const char *) filename );
+	y2error( "Can't open file %s", qPrintable(filename) );
 
 	if ( interactive )
 	{
@@ -160,72 +161,73 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
     header += QDateTime::currentDateTime().toString( "yyyy-MM-dd hh:mm:ss" );
     header += " ####\n\n";
 
-    fputs( (const char *) header, file );
+   file.write(header.toUtf8());
 
 
     // Recursively write all items
+    int count=0;
+    const QTreeWidgetItem * item;
 
-    const QListViewItem * item = firstChild();
-
-    while ( item )
+    while ( (item = topLevelItem(count)) )
     {
 	saveItemToFile( file, item );
-	item = item->nextSibling();
+	count++;
     }
 
 
     // Write footer
 
-    fprintf( file, "\n#### YaST2 conflicts list END ###\n" );
+    file.write("\n#### YaST2 conflicts list END ###\n" );
 
 
     // Clean up
 
-    if ( file )
-	fclose( file );
+    if ( file.isOpen() )
+	file.close();
 }
 
 
 void
-YQPkgConflictList::saveItemToFile( FILE * 			file,
-				   const QListViewItem * 	item ) const
+YQPkgConflictList::saveItemToFile( QFile 			&file,
+				   const QTreeWidgetItem * 	item ) const
 {
-    if ( ! item || ! file )
+#if FIXME
+    if ( ! item || ! file.isOpen() )
 	return;
 
     // Write indentation
-
     for ( int level = 0; level < item->depth(); level++ )
-	fprintf( file, "    " );
-
+	file.write( "    " );
 
     // Write item
 
-    const QCheckListItem * checkListItem = dynamic_cast<const QCheckListItem *> (item);
+    const QTreeWidgetItem * checkListItem = dynamic_cast<const QTreeWidgetItem *> (item);
 
     if ( checkListItem )
     {
 	switch ( checkListItem->type() )
 	{
-	    case QCheckListItem::CheckBox:
-		fprintf( file, "[%c] ", checkListItem->isOn() ? 'x' : ' ' );
+    QString buffer;
+	    case Q3CheckListItem::CheckBox:
+		buffer.sprintf( "[%c] ", checkListItem->( checkState(0) == Qt::Checked ) ? 'x' : ' ' );
 		break;
-	    case QCheckListItem::RadioButton:
-		fprintf( file, "(%c) ", checkListItem->isOn() ? 'x' : ' ' );
+	    case Q3CheckListItem::RadioButton:
+		sbuffer.sprintf( "(%c) ", checkListItem->( checkState(0) == Qt::Checked ) ? 'x' : ' ' );
 		break;
 	    default:
 		break;
 	}
+    file.write(buffer.toUtf8());
     }
 
-    fprintf( file, "%s\n", (const char *) item->text(0) );
+    buffer.sprintf("%s\n", qPrintable(item->text(0)) );
+    file.write(buffer.toUtf8());
 
-
-    if ( item->isOpen() )
+    if ( item->isExpanded() )
     {
 	// Recursively write children
 
-	const QListViewItem * child = item->firstChild();
+	const QTreeWidgetItem * child = item->firstChild();
 
 	while ( child )
 	{
@@ -233,11 +235,12 @@ YQPkgConflictList::saveItemToFile( FILE * 			file,
 	    child = child->nextSibling();
 	}
     }
+#endif
 }
 
 
 void
-YQPkgConflictList::dumpList( QListViewItem * 	parent,
+YQPkgConflictList::dumpList( QTreeWidgetItem * 	parent,
 			     const QString &	longText,
 			     const QString & 	header,
 			     int		splitThreshold )
@@ -251,18 +254,19 @@ YQPkgConflictList::dumpList( QListViewItem * 	parent,
     if ( longText.isEmpty() )
 	return;
 
+#if FIXME
     if ( ! header.isEmpty() )
     {
 	parent = new QY2ListViewItem( parent, header );
-	CHECK_PTR( parent );
-	parent->setOpen( true );
+	Q_CHECK_PTR( parent );
+	parent->setExpanded( true );
     }
 
     QStringList lines = QStringList::split( '\n', longText,
 					    true );		// allowEmptyEntries
-    QValueList<QString>::const_iterator it = lines.begin();
+    QList<QString>::const_iterator it = lines.begin();
 
-    bool doSplit	= splitThreshold > 1 && lines.size() > (unsigned) splitThreshold + 3;
+    bool doSplit	= splitThreshold > 1 && lines.size() > splitThreshold + 3;
     bool didSplit	= false;
     int  count		= 0;
 
@@ -288,6 +292,7 @@ YQPkgConflictList::dumpList( QListViewItem * 	parent,
 	new QY2ListViewItem( parent, *it );
 	++it;
     }
+#endif
 }
 
 
@@ -303,7 +308,9 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
     , _resolutionsHeader( 0 )
 {
     setBackgroundColor( LIGHT_BLUE );
-    setOpen( true );
+#if FIXME
+    setExpanded( true );
+#endif
 
     formatHeading();
     YQPkgConflictList::dumpList( this, fromUTF8( _problem->details() ) );
@@ -319,8 +326,10 @@ YQPkgConflict::formatHeading()
     QPixmap icon = YQIconPool::normalPkgConflict();
     setTextColor( BRIGHT_RED );
 
-    setText( 0, fromUTF8( problem()->description() ) );
-    setPixmap( 0, icon );
+#if FIXME
+    setText( 0, Qt::DisplayRole, fromUTF8( problem()->description() ) );
+#endif
+    setData( 0, Qt::DecorationRole, icon );
 }
 
 
@@ -330,10 +339,11 @@ YQPkgConflict::addSolutions()
     _resolutionsHeader = new QY2CheckListItem( this,
 					       // Heading for the choices
 					       // how to resolve this conflict
-					       _( "Conflict Resolution:" ),
-					       QCheckListItem::Controller );
-    CHECK_PTR( _resolutionsHeader );
-    _resolutionsHeader->setOpen( true );
+					       _( "Conflict Resolution:" ) );
+    Q_CHECK_PTR( _resolutionsHeader );
+#if FIXME
+    _resolutionsHeader->setExpanded( true );
+#endif
     _resolutionsHeader->setBackgroundColor( LIGHT_GREY );
 
     zypp::ProblemSolutionList solutions = problem()->solutions();
@@ -342,36 +352,40 @@ YQPkgConflict::addSolutions()
     while ( it != solutions.end() )
     {
 	YQPkgConflictResolution * solution = new YQPkgConflictResolution( _resolutionsHeader, *it );
-	CHECK_PTR( solution );
-	solution->setOpen(true);
+	Q_CHECK_PTR( solution );
+	//FIXME solution->setExpanded(true);
 
 	++it;
     }
 }
 
 
-void
-YQPkgConflict::paintCell( QPainter *		painter,
-			  const QColorGroup &	colorGroup,
-			  int			column,
-			  int			width,
-			  int			alignment )
-{
-    painter->setFont( YQUI::yqApp()->headingFont() );
-    QY2ListViewItem::paintCell( painter, colorGroup, column, width, alignment );
-}
+// void
+// YQPkgConflict::paintCell( QPainter *		painter,
+// 			  const QColorGroup &	colorGroup,
+// 			  int			column,
+// 			  int			width,
+// 			  int			alignment )
+// {
+//     painter->setFont( YQUI::yqApp()->headingFont() );
+// #if FIXME
+//     QY2ListViewItem::paintCell( painter, colorGroup, column, width, alignment );
+// #endif
+// }
 
 
 zypp::ProblemSolution_Ptr
 YQPkgConflict::userSelectedResolution()
 {
-    QListViewItem * item = _resolutionsHeader->firstChild();
+    int count = 0;
+    QTreeWidgetItem * item;
 
-    while ( item )
+#if FIXME
+    while ( item = _resolutionsHeader->topLevelItem(count) )
     {
 	YQPkgConflictResolution * res = dynamic_cast<YQPkgConflictResolution *> (item);
 
-	if ( res && res->isOn() )
+	if ( res && res->( checkState(0) == Qt::Checked ) )
 	{
 	    zypp::ProblemSolution_Ptr solution = res->solution();
 
@@ -381,9 +395,10 @@ YQPkgConflict::userSelectedResolution()
 	    return solution;
 	}
 
-	item = item->nextSibling();
+	count++;
     }
 
+#endif
     return zypp::ProblemSolution_Ptr();		// Null pointer
 }
 
@@ -395,10 +410,10 @@ YQPkgConflict::userSelectedResolution()
 YQPkgConflictResolution::YQPkgConflictResolution( QY2CheckListItem * 		parent,
 						  zypp::ProblemSolution_Ptr	solution )
     : QY2CheckListItem( parent,
-			fromUTF8( solution->description() ),
-			QCheckListItem::RadioButton )
-    , _solution( solution )
+			fromUTF8( solution->description() ) )
+			/*, Q3CheckListItem::RadioButton) */
 {
+    _solution = solution;
     YQPkgConflictList::dumpList( this, fromUTF8( solution->details() ) );
 }
 

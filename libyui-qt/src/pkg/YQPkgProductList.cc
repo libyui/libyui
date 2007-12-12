@@ -38,6 +38,7 @@ YQPkgProductList::YQPkgProductList( QWidget * parent )
     y2debug( "Creating product list" );
 
     int numCol = 0;
+#if FIXME
     addColumn( "" );			_statusCol	= numCol++;
     addColumn( _( "Product"	) );	_nameCol	= numCol++;
     addColumn( _( "Summary"	) );	_summaryCol	= numCol++;
@@ -49,6 +50,7 @@ YQPkgProductList::YQPkgProductList( QWidget * parent )
     setSorting( nameCol() );
     fillList();
     selectSomething();
+#endif
 
     y2debug( "Creating product list done" );
 }

@@ -19,10 +19,9 @@
 #ifndef YQRadioButtonGroup_h
 #define YQRadioButtonGroup_h
 
-#include <qwidget.h>
+#include <QWidget>
 #include "YRadioButtonGroup.h"
 
-class QButtonGroup;
 
 class YQRadioButtonGroup : public QWidget, public YRadioButtonGroup
 {

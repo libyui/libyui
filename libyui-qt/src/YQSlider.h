@@ -20,16 +20,15 @@
 #ifndef YQSlider_h
 #define YQSlider_h
 
-#include <qhbox.h>
+#include <QFrame>
 #include "YSlider.h"
 
 
 class YQWidgetCaption;
 class QSlider;
 class QSpinBox;
-class QHBox;
 
-class YQSlider : public QVBox, public YSlider
+class YQSlider : public QFrame, public YSlider
 {
     Q_OBJECT
 
@@ -72,7 +71,7 @@ protected:
     virtual void setValueInternal( int val );
 
 public:
-    
+
     /**
      * Set the label (the caption above the input field).
      *
@@ -86,7 +85,7 @@ public:
      * Reimplemented from YWidget.
      **/
     virtual void setEnabled( bool enabled );
-    
+
     /**
      * Preferred width of the widget.
      *
@@ -113,7 +112,7 @@ public:
      **/
     virtual bool setKeyboardFocus();
 
-    
+
 public slots:
     /**
      * Slot for "value changed". This will send a ValueChanged event if
@@ -121,14 +120,6 @@ public slots:
      **/
     void valueChangedSlot( int newValue );
 
-    /**
-     * Slot for setting the value.
-     * This is needed separately from setValue() to avoid infinite loops via
-     * ChangeWidget().
-     **/
-    void setValueSlot( int newValue );
-
-    
 signals:
 
     /**
@@ -142,7 +133,7 @@ protected:
     YQWidgetCaption *	_caption;
     QSlider *		_qt_slider;
     QSpinBox *		_qt_spinBox;
-    QHBox *		_hbox;
+    QFrame *		_hbox;
 };
 
 

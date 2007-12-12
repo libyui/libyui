@@ -22,7 +22,9 @@
 
 #include <zypp/DiskUsageCounter.h>
 #include <QY2DiskUsageList.h>
-#include <qasciidict.h>
+#include <QKeyEvent>
+#include <QMap>
+#include <QByteArray>
 
 typedef zypp::DiskUsageCounter::MountPoint ZyppPartitionDu;
 class YQPkgDiskUsageListItem;
@@ -187,7 +189,7 @@ protected:
 
     // Data members
 
-    QAsciiDict<YQPkgDiskUsageListItem>  _items;
+    QMap<QString, YQPkgDiskUsageListItem*>  _items;
     bool				_debug;
 };
 

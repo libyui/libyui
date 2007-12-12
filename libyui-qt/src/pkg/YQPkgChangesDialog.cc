@@ -18,16 +18,16 @@
 
 /-*/
 
-
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include <qapplication.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qstyle.h>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QLabel>
+#include <QLayout>
+#include <QPushButton>
+#include <QStyle>
+#include <QBoxLayout>
 
 #include "YQZypp.h"
 #include <zypp/ResStatus.h>
@@ -54,7 +54,7 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
     : QDialog( parent )
 {
     // Dialog title
-    setCaption( _( "Changed Packages" ) );
+    setWindowTitle( _( "Changed Packages" ) );
 
     // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );
@@ -64,37 +64,43 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
 
     // Layout for the dialog ( can't simply insert a QVBox )
 
-    QVBoxLayout * layout = new QVBoxLayout( this, MARGIN, SPACING );
-    CHECK_PTR( layout );
-
+    QVBoxLayout * layout = new QVBoxLayout( this );
+    Q_CHECK_PTR( layout );
+    layout->setMargin(MARGIN);
+    layout->setSpacing(SPACING);
+    setLayout(layout);
 
     // HBox for icon and message
 
-    QHBox * hbox = new QHBox( this );
-    CHECK_PTR( hbox );
-    layout->addWidget( hbox );
+    QHBoxLayout * hbox = new QHBoxLayout( this );
+    Q_CHECK_PTR( hbox );
+    layout->addLayout( hbox );
 
 
     // Icon
 
-    addHSpacing( hbox );
-    QLabel * iconLabel = new QLabel( hbox );
-    CHECK_PTR( iconLabel );
+    hbox->addSpacing(SPACING);
+    QLabel * iconLabel = new QLabel( this );
+    Q_CHECK_PTR( iconLabel );
+    hbox->addWidget(iconLabel);
+#ifdef FIXME
     iconLabel->setPixmap( QApplication::style().stylePixmap( QStyle::SP_MessageBoxInformation ) );
+#endif
     iconLabel->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) ); // hor/vert
-    addHSpacing( hbox );
+    hbox->addSpacing(SPACING);
 
     // Label for the message
 
-    QLabel * label = new QLabel( message, hbox );
-    CHECK_PTR( label );
+    QLabel * label = new QLabel( message, this );
+    Q_CHECK_PTR( label );
+    hbox->addWidget(label);
     label->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
 
 
     // Pkg list
 
     _pkgList = new YQPkgList( this );
-    CHECK_PTR( _pkgList );
+    Q_CHECK_PTR( _pkgList );
     _pkgList->setEditable( false );
 
     layout->addWidget( _pkgList );
@@ -102,38 +108,39 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
 
     // Button box
 
-    hbox = new QHBox( this );
-    CHECK_PTR( hbox );
+    hbox = new QHBoxLayout( this );
+    Q_CHECK_PTR( hbox );
     hbox->setSpacing( SPACING );
     hbox->setMargin ( MARGIN  );
-    layout->addWidget( hbox );
+    layout->addLayout( hbox );
 
-    addHStretch( hbox );
+    hbox->addStretch();
 
 
     // Accept button - usually "OK" or "Continue"
 
-    QPushButton * button = new QPushButton( acceptButtonLabel, hbox );
-    CHECK_PTR( button );
+    QPushButton * button = new QPushButton( acceptButtonLabel, this );
+    Q_CHECK_PTR( button );
+    layout->addWidget( button );
     button->setDefault( true );
 
     connect( button,	SIGNAL( clicked() ),
 	     this,      SLOT  ( accept()  ) );
 
-    addHStretch( hbox );
+    hbox->addStretch();
 
 
     if ( ! rejectButtonLabel.isEmpty() )
     {
 	// Reject button ( if desired ) - usually "Cancel"
 
-	button = new QPushButton( rejectButtonLabel, hbox );
-	CHECK_PTR( button );
-
+	button = new QPushButton( rejectButtonLabel, this );
+	Q_CHECK_PTR( button );
+  hbox->addWidget(button);
 	connect( button,	SIGNAL( clicked() ),
 		 this,      	SLOT  ( reject()  ) );
 
-	addHStretch( hbox );
+	hbox->addStretch();
     }
 }
 
@@ -166,12 +173,12 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, bool byAuto, bool byApp, boo
 	{
 	    zypp::ResStatus::TransactByValue modifiedBy = selectable->modifiedBy();
 
-	    if ( ( modifiedBy == zypp::ResStatus::SOLVER     ) && byAuto ||
-		 ( modifiedBy == zypp::ResStatus::APPL_LOW ||
-		   modifiedBy == zypp::ResStatus::APPL_HIGH  ) && byApp  ||
-		 ( modifiedBy == zypp::ResStatus::USER       ) && byUser   )
+	    if ( ( ( modifiedBy == zypp::ResStatus::SOLVER     ) && byAuto ) ||
+		 ( ( modifiedBy == zypp::ResStatus::APPL_LOW ||
+		   modifiedBy == zypp::ResStatus::APPL_HIGH  ) && byApp ) ||
+		 ( ( modifiedBy == zypp::ResStatus::USER       ) && byUser )  )
 	    {
-		if ( regexp.isEmpty() || regexp.search( selectable->name().c_str() ) >= 0 )
+		if ( regexp.isEmpty() || regexp.indexIn( selectable->name().c_str() ) >= 0 )
 		{
 		    if ( ! contains( ignoredNames, selectable->name() ) )
 			_pkgList->addPkgItem( selectable, tryCastToZyppPkg( selectable->theObj() ) );
@@ -187,7 +194,7 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, bool byAuto, bool byApp, boo
 bool
 YQPkgChangesDialog::isEmpty() const
 {
-    return _pkgList->firstChild() == 0;
+    return _pkgList->topLevelItemCount() == 0;
 }
 
 

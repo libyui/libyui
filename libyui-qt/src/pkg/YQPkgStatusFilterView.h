@@ -21,8 +21,9 @@
 #define YQPkgStatusFilterView_h
 
 #include "YQZypp.h"
-#include <qvbox.h>
-#include <qregexp.h>
+#include <QWidget>
+#include <QRegExp>
+#include <QPixmap>
 
 
 class QComboBox;
@@ -33,7 +34,7 @@ class QPushButton;
 /**
  * @short Filter view for packages that made problems during update
  **/
-class YQPkgStatusFilterView : public QVBox
+class YQPkgStatusFilterView : public QWidget
 {
     Q_OBJECT
 

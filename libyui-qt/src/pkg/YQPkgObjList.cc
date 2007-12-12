@@ -20,10 +20,12 @@
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
-#include <qpixmap.h>
-#include <qheader.h>
-#include <qpopupmenu.h>
-#include <qaction.h>
+#include <QPixmap>
+#include <QHeaderView>
+#include <QMenu>
+#include <QAction>
+//Added by qt3to4:
+#include <qevent.h>
 
 #include "utf8.h"
 
@@ -45,7 +47,22 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
     : QY2ListView( parent )
     , _editable( true )
     , _installedContextMenu(0)
-    , _notInstalledContextMenu(0)
+    , _notInstalledContextMenu(0),
+    actionSetCurrentInstall(0L),
+    actionSetCurrentDontInstall(0L),
+    actionSetCurrentKeepInstalled(0L),
+    actionSetCurrentDelete(0L),
+    actionSetCurrentUpdate(0L),
+    actionSetCurrentTaboo(0L),
+    actionSetCurrentProtected(0L),
+    actionSetListInstall(0L),
+    actionSetListDontInstall(0L),
+    actionSetListKeepInstalled(0L),
+    actionSetListDelete(0L),
+    actionSetListUpdate(0L),
+    actionSetListUpdateForce(0L),
+    actionSetListTaboo(0L),
+    actionSetListProtected(0L)
 {
     // This class does not add any columns. This is the main reason why this is
     // an abstract base class: It doesn't know which columns are desired and in
@@ -65,14 +82,14 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
 
     createActions();
 
-    connect( this,	SIGNAL( columnClicked		( int, QListViewItem *, int, const QPoint & ) ),
-	     this,	SLOT  ( pkgObjClicked		( int, QListViewItem *, int, const QPoint & ) ) );
+    connect( this,	SIGNAL( columnClicked		( int, QTreeWidgetItem *, int, const QPoint & ) ),
+	     this,	SLOT  ( pkgObjClicked		( int, QTreeWidgetItem *, int, const QPoint & ) ) );
 
-    connect( this,	SIGNAL( columnDoubleClicked	( int, QListViewItem *, int, const QPoint & ) ),
-	     this,	SLOT  ( pkgObjClicked		( int, QListViewItem *, int, const QPoint & ) ) );
+    connect( this,	SIGNAL( columnDoubleClicked	( int, QTreeWidgetItem *, int, const QPoint & ) ),
+	     this,	SLOT  ( pkgObjClicked		( int, QTreeWidgetItem *, int, const QPoint & ) ) );
 
-    connect( this,	SIGNAL( selectionChanged	( QListViewItem * ) ),
-	     this,	SLOT  ( selectionChangedInternal( QListViewItem * ) ) );
+    connect( this,	SIGNAL( currentItemChanged	( QTreeWidgetItem *, QTreeWidgetItem * ) ),
+	     this,	SLOT  ( currentItemChangedInternal( QTreeWidgetItem * ) ) );
 }
 
 
@@ -120,7 +137,7 @@ YQPkgObjList::addPassiveItem( const QString & 	name,
 
 void
 YQPkgObjList::pkgObjClicked( int		button,
-			     QListViewItem *	listViewItem,
+			     QTreeWidgetItem *	listViewItem,
 			     int		col,
 			     const QPoint &	pos )
 {
@@ -143,7 +160,7 @@ YQPkgObjList::pkgObjClicked( int		button,
 	    {
 		updateActions( item );
 
-		QPopupMenu * contextMenu =
+		QMenu * contextMenu =
 		    item->selectable()->hasInstalledObj() ?
 		    installedContextMenu() : notInstalledContextMenu();
 
@@ -156,18 +173,18 @@ YQPkgObjList::pkgObjClicked( int		button,
 
 
 void
-YQPkgObjList::selectionChangedInternal( QListViewItem * listViewItem )
+YQPkgObjList::currentItemChangedInternal( QTreeWidgetItem * listViewItem )
 {
     YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (listViewItem);
 
-    emit selectionChanged( item ? item->selectable() : ZyppSel() );
+    emit currentItemChanged( item ? item->selectable() : ZyppSel() );
 }
 
 
 void
 YQPkgObjList::clear()
 {
-    emit selectionChanged( ZyppSel() );
+    emit currentItemChanged( ZyppSel() );
 
     _excludedItems->clear();
     QY2ListView::clear();
@@ -265,7 +282,7 @@ YQPkgObjList::statusText( ZyppStatus status ) const
 void
 YQPkgObjList::setCurrentStatus( ZyppStatus newStatus, bool doSelectNextItem )
 {
-    QListViewItem * listViewItem = selectedItem();
+    QTreeWidgetItem * listViewItem = currentItem();
 
     if ( ! listViewItem )
 	return;
@@ -304,7 +321,7 @@ YQPkgObjList::setAllItemStatus( ZyppStatus newStatus, bool force )
 	return;
 
     YQUI::ui()->busyCursor();
-    QListViewItemIterator it( this );
+    QTreeWidgetItemIterator it( this );
 
     while ( *it )
     {
@@ -339,13 +356,16 @@ YQPkgObjList::setAllItemStatus( ZyppStatus newStatus, bool force )
 void
 YQPkgObjList::selectNextItem()
 {
-    QListViewItem * item = selectedItem();
+    QTreeWidgetItemIterator it(this);
+    QTreeWidgetItem * item;
 
-    if ( item && item->nextSibling() )
+    while ( (item = *it) != NULL )
     {
-	item->setSelected( false );			// Doesn't emit signals
-	ensureItemVisible( item->nextSibling() );	// Scroll if necessary
-	setSelected( item->nextSibling(), true );	// Emits signals
+        ++it;
+	//item->setSelected( false );			// Doesn't emit signals
+	scrollToItem( *it );	// Scroll if necessary
+	setCurrentItem( *it );	// Emits signals
+        
     }
 }
 
@@ -425,22 +445,19 @@ YQPkgObjList::createAction( const QString &	text,
 	label += "\t" + key;
 
 
-    QIconSet iconSet ( icon );
+    QIcon iconSet ( icon );
 
     if ( ! insensitiveIcon.isNull() )
     {
-	iconSet.setPixmap( insensitiveIcon,
-			   QIconSet::Automatic,
-			   QIconSet::Disabled );
+	iconSet.addPixmap( insensitiveIcon,
+			   QIcon::Disabled );
     }
 
     QAction * action = new QAction( label,	// text
-				    iconSet,	// icon set
-				    label,	// menu text
-				    0,		// accel key
 				    this );	// parent
-    CHECK_PTR( action );
+    Q_CHECK_PTR( action );
     action->setEnabled( enabled );
+    action->setIcon( iconSet );
 
     return action;
 }
@@ -449,12 +466,12 @@ YQPkgObjList::createAction( const QString &	text,
 void
 YQPkgObjList::createNotInstalledContextMenu()
 {
-    _notInstalledContextMenu = new QPopupMenu( this );
-    CHECK_PTR( _notInstalledContextMenu );
+    _notInstalledContextMenu = new QMenu( this );
+    Q_CHECK_PTR( _notInstalledContextMenu );
 
-    actionSetCurrentInstall->addTo( _notInstalledContextMenu );
-    actionSetCurrentDontInstall->addTo( _notInstalledContextMenu );
-    actionSetCurrentTaboo->addTo( _notInstalledContextMenu );
+    _notInstalledContextMenu->addAction(actionSetCurrentInstall);
+    _notInstalledContextMenu->addAction(actionSetCurrentDontInstall);
+    _notInstalledContextMenu->addAction(actionSetCurrentTaboo);
 
     addAllInListSubMenu( _notInstalledContextMenu );
 }
@@ -463,38 +480,39 @@ YQPkgObjList::createNotInstalledContextMenu()
 void
 YQPkgObjList::createInstalledContextMenu()
 {
-    _installedContextMenu = new QPopupMenu( this );
-    CHECK_PTR( _installedContextMenu );
+    _installedContextMenu = new QMenu( this );
+    Q_CHECK_PTR( _installedContextMenu );
 
-    actionSetCurrentKeepInstalled->addTo( _installedContextMenu );
-    actionSetCurrentDelete->addTo( _installedContextMenu );
-    actionSetCurrentUpdate->addTo( _installedContextMenu );
+    _installedContextMenu->addAction(actionSetCurrentKeepInstalled);
+    _installedContextMenu->addAction(actionSetCurrentDelete);
+    _installedContextMenu->addAction(actionSetCurrentUpdate);
 
     addAllInListSubMenu( _installedContextMenu );
 }
 
 
-QPopupMenu *
-YQPkgObjList::addAllInListSubMenu( QPopupMenu * menu )
+QMenu *
+YQPkgObjList::addAllInListSubMenu( QMenu * menu )
 {
-    QPopupMenu * submenu = new QPopupMenu( menu );
-    CHECK_PTR( submenu );
+    QMenu * submenu = new QMenu( menu );
+    Q_CHECK_PTR( submenu );
 
-    actionSetListInstall->addTo( submenu );
-    actionSetListDontInstall->addTo( submenu );
-    actionSetListKeepInstalled->addTo( submenu );
-    actionSetListDelete->addTo( submenu );
-    actionSetListUpdate->addTo( submenu );
-    actionSetListUpdateForce->addTo( submenu );
-    actionSetListTaboo->addTo( submenu );
+    submenu->addAction(actionSetListInstall);
+    submenu->addAction(actionSetListDontInstall);
+    submenu->addAction(actionSetListKeepInstalled);
+    submenu->addAction(actionSetListDelete);
+    submenu->addAction(actionSetListUpdate);
+    submenu->addAction(actionSetListUpdateForce);
+    submenu->addAction(actionSetListTaboo);
 
-    menu->insertItem( _( "&All in This List" ), submenu );
+    QAction *action = menu->addMenu( submenu );
+    action->setText(_( "&All in This List" ));
 
     return submenu;
 }
 
 
-QPopupMenu *
+QMenu *
 YQPkgObjList::notInstalledContextMenu()
 {
     if ( ! _notInstalledContextMenu )
@@ -504,7 +522,7 @@ YQPkgObjList::notInstalledContextMenu()
 }
 
 
-QPopupMenu *
+QMenu *
 YQPkgObjList::installedContextMenu()
 {
     if ( ! _installedContextMenu )
@@ -515,15 +533,11 @@ YQPkgObjList::installedContextMenu()
 
 
 void
-YQPkgObjList::updateActions()
-{
-    updateActions( dynamic_cast<YQPkgObjListItem *> ( selectedItem() ) );
-}
-
-
-void
 YQPkgObjList::updateActions( YQPkgObjListItem * item )
 {
+    if ( !item)
+      item = dynamic_cast<YQPkgObjListItem *> ( currentItem() );
+
     if ( item )
     {
 	ZyppSel selectable = item->selectable();
@@ -570,9 +584,9 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 {
     if ( event )
     {
-	unsigned special_combo = ( Qt::ControlButton | Qt::ShiftButton | Qt::AltButton );
+	int special_combo = ( Qt::ControlModifier | Qt::ShiftModifier | Qt::AltModifier );
 
-	if ( ( event->state() & special_combo ) == special_combo )
+	if ( ( event->modifiers() & special_combo ) == special_combo )
 	{
 	    if ( event->key() == Qt::Key_Q )
 	    {
@@ -581,8 +595,7 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 	    }
 
 	}
-
-	QListViewItem * selectedListViewItem = selectedItem();
+	QTreeWidgetItem * selectedListViewItem = currentItem();
 
 	if ( selectedListViewItem )
 	{
@@ -593,14 +606,14 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 		bool installed = item->selectable()->hasInstalledObj();
 		ZyppStatus status = item->status();
 
-		switch( event->ascii() )
+		switch( event->key() )
 		{
 		    case Qt::Key_Space:		// Cycle
 			item->cycleStatus();
 			event->accept();
 			return;
 
-		    case '+':	// Grab everything - install or update
+		    case Qt::Key_Plus:	// Grab everything - install or update
 
 			if ( installed )
 			{
@@ -617,13 +630,13 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 			event->accept();
 			return;
 
-		    case '-':	// Get rid of everything - don't install or delete
+		    case Qt::Key_Minus:	// Get rid of everything - don't install or delete
 			setCurrentStatus( installed ? S_Del : S_NoInst );
 			selectNextItem();
 			event->accept();
 			return;
 
-		    case '!':	// Taboo
+		    case Qt::Key_Exclam:	// Taboo
 
 			if ( ! installed )
 			    setCurrentStatus( S_Taboo );
@@ -631,7 +644,7 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 			event->accept();
 			return;
 
-		    case '*':	// Protected
+		    case Qt::Key_Asterisk:	// Protected
 
 			if ( installed )
 			    setCurrentStatus( S_Protected );
@@ -639,7 +652,7 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 			event->accept();
 			return;
 
-		    case '>':	// Update what is worth to be updated
+		    case Qt::Key_Greater:	// Update what is worth to be updated
 
 			if ( installed && item->candidateIsNewer() )
 			    setCurrentStatus( S_Update );
@@ -647,7 +660,7 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 			event->accept();
 			return;
 
-		    case '<':	// Revert update
+		    case Qt::Key_Less:	// Revert update
 
 			if ( status == S_Update ||
 			     status == S_AutoUpdate )
@@ -658,8 +671,7 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 			event->accept();
 			return;
 
-		    case 'b':
-		    case 'B':	// Toggle debugIsBroken flag
+		    case Qt::Key_B:	// Toggle debugIsBroken flag
 
 			if ( _debug )
 			{
@@ -669,8 +681,7 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 			event->accept();
 			break;
 
-		    case 's':
-		    case 'S':	// Toggle debugIsSatisfied flag
+		    case Qt::Key_S:	// Toggle debugIsSatisfied flag
 
 			if ( _debug )
 			{
@@ -683,8 +694,7 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 	    }
 	}
     }
-
-    QListView::keyPressEvent( event );
+    QY2ListView::keyPressEvent( event );
 }
 
 
@@ -692,7 +702,7 @@ void
 YQPkgObjList::message( const QString & text )
 {
     QY2ListViewItem * item = new QY2ListViewItem( this );
-    CHECK_PTR( item );
+    Q_CHECK_PTR( item );
 
     item->setText( nameCol() >= 0 ? nameCol() : 0, text );
     item->setBackgroundColor( QColor( 0xE0, 0xE0, 0xF8 ) );
@@ -710,11 +720,11 @@ void
 YQPkgObjList::applyExcludeRules()
 {
     // y2debug( "Applying exclude rules" );
-    QListViewItemIterator listView_it( this );
+    QTreeWidgetItemIterator listView_it( this );
 
     while ( *listView_it )
     {
-	QListViewItem * current_item = *listView_it;
+	QTreeWidgetItem * current_item = *listView_it;
 
 	// Advance iterator now so it remains valid even if there are changes
 	// to the QListView, e.g., if the current item is excluded and thus
@@ -728,7 +738,7 @@ YQPkgObjList::applyExcludeRules()
 
     while ( excluded_it != _excludedItems->end() )
     {
-	QListViewItem * current_item = (*excluded_it).first;
+	QTreeWidgetItem * current_item = (*excluded_it).first;
 
 	// Advance iterator now so it remains valid even if there are changes
 	// to the excluded items, e.g., if the current item is un-excluded and thus
@@ -758,7 +768,7 @@ YQPkgObjList::logExcludeStatistics()
 	    if ( rule->isEnabled() )
 	    {
 		y2milestone( "Active exclude rule: \"%s\"",
-			     rule->regexp().pattern().ascii() );
+			     qPrintable(rule->regexp().pattern()) );
 	    }
 	}
     }
@@ -766,7 +776,7 @@ YQPkgObjList::logExcludeStatistics()
 
 
 void
-YQPkgObjList::applyExcludeRules( QListViewItem * listViewItem )
+YQPkgObjList::applyExcludeRules( QTreeWidgetItem * listViewItem )
 {
     YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *>( listViewItem );
 
@@ -812,6 +822,7 @@ YQPkgObjList::applyExcludeRules( QListViewItem * listViewItem )
 void
 YQPkgObjList::exclude( YQPkgObjListItem * item, bool exclude )
 {
+#if FIXME
     if ( exclude == item->isExcluded() )
 	return;
 
@@ -819,12 +830,12 @@ YQPkgObjList::exclude( YQPkgObjListItem * item, bool exclude )
 
     if ( exclude )
     {
-	QListViewItem * parentItem = item->parent();
+	QTreeWidgetItem * parentItem = item->parent();
 
 	if ( parentItem )
 	    parentItem->takeItem( item );
 	else
-	    QListView::takeItem( item );
+	    QTreeWidget::takeItem( item );
 
 	_excludedItems->add( item, parentItem );
     }
@@ -832,15 +843,16 @@ YQPkgObjList::exclude( YQPkgObjListItem * item, bool exclude )
     {
 	if ( _excludedItems->contains( item ) )
 	{
-	    QListViewItem * oldParent = _excludedItems->oldParentItem( item );
+	    QTreeWidgetItem * oldParent = _excludedItems->oldParentItem( item );
 	    _excludedItems->remove( item );
 
 	    if ( oldParent )
 		oldParent->insertItem( item );
 	    else
-		QListView::insertItem( item );
+		QTreeWidget::insertItem( item );
 	}
     }
+#endif
 }
 
 
@@ -948,7 +960,7 @@ YQPkgObjListItem::updateData()
 void
 YQPkgObjListItem::setText( int column, const string text )
 {
-    QListViewItem::setText( column, fromUTF8( text.c_str() ) );
+    QTreeWidgetItem::setText( column, fromUTF8( text.c_str() ) );
 }
 
 
@@ -1035,14 +1047,14 @@ YQPkgObjListItem::setStatusIcon()
     if ( statusCol() >= 0 )
     {
 	bool enabled = editable() && _pkgObjList->editable();
-	setPixmap( statusCol(), _pkgObjList->statusIcon( status(), enabled, bySelection() ) );
+        setData( statusCol(), Qt::DecorationRole, _pkgObjList->statusIcon( status(), enabled, bySelection() ) );
     }
 
 
     if ( brokenIconCol() >= 0 )
     {
 	// Reset this icon now - it might be the same column as satisfiedIconCol()
-	setPixmap( brokenIconCol(), QPixmap() );
+        setData( brokenIconCol(), Qt::DecorationRole, QPixmap() );
     }
 
     if ( satisfiedIconCol() >= 0 )
@@ -1051,7 +1063,7 @@ YQPkgObjListItem::setStatusIcon()
 	// but satisfied anyway (e.g. for patches or patterns where the user
 	// selected all required packages manually)
 
-	setPixmap( satisfiedIconCol(), isSatisfied() ? YQIconPool::pkgSatisfied() : QPixmap() );
+        setData( satisfiedIconCol(), Qt::DecorationRole, isSatisfied() ? YQIconPool::pkgSatisfied() : QPixmap() );
     }
 
     if ( brokenIconCol() >= 0 )
@@ -1061,14 +1073,12 @@ YQPkgObjListItem::setStatusIcon()
 
 	if ( isBroken() )
 	{
-	    setPixmap( brokenIconCol(), YQIconPool::warningSign() );
-
+            setData( brokenIconCol(), Qt::DecorationRole, YQIconPool::warningSign() );
 	    y2warning( "Broken object: %s - %s",
 		       _selectable->theObj()->name().c_str(),
 		       _selectable->theObj()->summary().c_str() );
 	}
     }
-
 }
 
 
@@ -1358,29 +1368,19 @@ YQPkgObjListItem::toolTip( int col )
 }
 
 
-/**
- * Comparison function used for sorting the list.
- * Returns:
- * -1 if this <	 other
- *  0 if this == other
- * +1 if this >	 other
- **/
-int
-YQPkgObjListItem::compare( QListViewItem *	otherListViewItem,
-			   int			col,
-			   bool			ascending ) const
+
+bool YQPkgObjListItem::operator<( const QTreeWidgetItem & otherListViewItem ) const
 {
-    YQPkgObjListItem * other = dynamic_cast<YQPkgObjListItem *> (otherListViewItem);
+    const YQPkgObjListItem * other = dynamic_cast<const YQPkgObjListItem *> (&otherListViewItem);
+    int col = treeWidget()->sortColumn();
 
     if ( other )
     {
 	if ( col == sizeCol() )
 	{
 	    // Numeric sort by size
-
-	    if ( this->zyppObj()->size() < other->zyppObj()->size() ) return -1;
-	    if ( this->zyppObj()->size() > other->zyppObj()->size() ) return 1;
-	    return 0;
+    
+	    return ( this->zyppObj()->size() < other->zyppObj()->size() );
 	}
 	else if ( col == statusCol() )
 	{
@@ -1390,9 +1390,7 @@ YQPkgObjListItem::compare( QListViewItem *	otherListViewItem,
 	    // dangerous or noteworthy states first - e.g., "taboo" which should
 	    // seldeom occur, but when it does, it is important.
 
-	    if ( this->status() < other->status() ) return -1;
-	    if ( this->status() > other->status() ) return 1;
-	    return 0;
+	    return ( this->status() < other->status() );
 	}
 	else if ( col == instVersionCol() ||
 		  col == versionCol() )
@@ -1410,14 +1408,13 @@ YQPkgObjListItem::compare( QListViewItem *	otherListViewItem,
 	    int thisPoints  = this->versionPoints();
 	    int otherPoints = other->versionPoints();
 
-	    if ( thisPoints > otherPoints ) return -1;
-	    if ( thisPoints < otherPoints ) return  1;
-	    return QY2ListViewItem::compare( otherListViewItem, col, ascending );
+	    return ( thisPoints < otherPoints );
+	    return QY2ListViewItem::operator<( otherListViewItem );
 	}
     }
 
     // Fallback: Use parent class method
-    return QY2ListViewItem::compare( otherListViewItem, col, ascending );
+    return QY2ListViewItem::operator<( otherListViewItem );
 }
 
 
@@ -1484,7 +1481,7 @@ YQPkgObjList::ExcludeRule::setColumn( int column )
 
 
 bool
-YQPkgObjList::ExcludeRule::match( QListViewItem * item )
+YQPkgObjList::ExcludeRule::match( QTreeWidgetItem * item )
 {
     if ( ! _enabled )
 	return false;
@@ -1514,13 +1511,13 @@ YQPkgObjList::ExcludedItems::~ExcludedItems()
 }
 
 
-void YQPkgObjList::ExcludedItems::add( QListViewItem * item, QListViewItem * oldParent )
+void YQPkgObjList::ExcludedItems::add( QTreeWidgetItem * item, QTreeWidgetItem * oldParent )
 {
     _excludeMap.insert( ItemPair( item, oldParent ) );
 }
 
 
-void YQPkgObjList::ExcludedItems::remove( QListViewItem * item )
+void YQPkgObjList::ExcludedItems::remove( QTreeWidgetItem * item )
 {
     ItemMap::iterator it = _excludeMap.find( item );
 
@@ -1544,13 +1541,13 @@ void YQPkgObjList::ExcludedItems::clear()
 }
 
 
-bool YQPkgObjList::ExcludedItems::contains( QListViewItem * item )
+bool YQPkgObjList::ExcludedItems::contains( QTreeWidgetItem * item )
 {
     return ( _excludeMap.find( item ) != _excludeMap.end() );
 }
 
 
-QListViewItem * YQPkgObjList::ExcludedItems::oldParentItem( QListViewItem * item )
+QTreeWidgetItem * YQPkgObjList::ExcludedItems::oldParentItem( QTreeWidgetItem * item )
 {
     ItemMap::iterator it = _excludeMap.find( item );
 

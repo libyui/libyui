@@ -99,15 +99,6 @@ public:
      **/
     virtual void setSize( int newWidth, int newHeight );
 
-protected:
-
-    /**
-     * Draw widget content.
-     *
-     * Reimplemented from QWidget.
-     **/
-    virtual void paintEvent( QPaintEvent * );
-
 public slots:
 
     /**

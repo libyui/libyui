@@ -16,9 +16,9 @@
 
 /-*/
 
-
 #include <qradiobutton.h>
-#include <qlayout.h>
+#include <QMouseEvent>
+#include <QBoxLayout>
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
@@ -44,69 +44,60 @@ using std::string;
 YQRadioButton::YQRadioButton( YWidget * 	parent,
 			      const string & 	label,
 			      bool 		checked )
-    : QGroupBox( (QWidget *) (parent->widgetRep() ) )
+    : QRadioButton( fromUTF8( label ), ( QWidget *) (parent->widgetRep() ) )
     , YRadioButton( parent, label )
 {
     setWidgetRep( this );
-    setFrameStyle( NoFrame );
 
-    QBoxLayout * layout = new QBoxLayout( this, QBoxLayout::LeftToRight );
-
-    _qt_radioButton = new QRadioButton( fromUTF8( label ), this );
-    
-    layout->addSpacing( SPACING );
-    layout->addWidget( _qt_radioButton );
-    layout->addSpacing( SPACING );
-    _qt_radioButton->setChecked( checked );
+    setChecked( checked );
 
     installEventFilter(this);
 
-    connect ( _qt_radioButton,	SIGNAL( toggled ( bool ) ),
-	      this,		SLOT  ( changed ( bool ) ) );
+    connect ( this,     SIGNAL( toggled ( bool ) ),
+	      this,	SLOT  ( changed ( bool ) ) );
 }
 
 
 void
 YQRadioButton::setUseBoldFont( bool useBold )
 {
-    _qt_radioButton->setFont( useBold ?
-			      YQUI::yqApp()->boldFont() :
-			      YQUI::yqApp()->currentFont() );
-    
+    setFont( useBold ?
+             YQUI::yqApp()->boldFont() :
+             YQUI::yqApp()->currentFont() );
+
     YRadioButton::setUseBoldFont( useBold );
 }
 
 
 int YQRadioButton::preferredWidth()
 {
-    return 2 * SPACING + _qt_radioButton->sizeHint().width();
+    return sizeHint().width();
 }
 
 
 int YQRadioButton::preferredHeight()
 {
-    return _qt_radioButton->sizeHint().height();
+    return sizeHint().height();
 }
 
 
 void YQRadioButton::setSize( int newWidth, int newHeight )
 {
-    _qt_radioButton->resize( newWidth - 2*SPACING, newHeight );
     resize( newWidth, newHeight );
 }
 
 
 bool YQRadioButton::value()
 {
-    return _qt_radioButton->isChecked();
+    return isChecked();
 }
 
 
 void YQRadioButton::setValue( bool newValue )
 {
-    YQSignalBlocker sigBlocker( _qt_radioButton );
+    YQSignalBlocker sigBlocker( this );
 
-    _qt_radioButton->setChecked( newValue );
+    setChecked( newValue );
 
     if ( newValue )
     {
@@ -120,27 +111,21 @@ void YQRadioButton::setValue( bool newValue )
 
 void YQRadioButton::setLabel( const string & label )
 {
-    _qt_radioButton->setText( fromUTF8( label ) );
+    setText( fromUTF8( label ) );
     YRadioButton::setLabel( label );
 }
 
 
 void YQRadioButton::setEnabled( bool enabled )
 {
-    _qt_radioButton->setEnabled( enabled );
+    QRadioButton::setEnabled( enabled );
     YWidget::setEnabled( enabled );
-}
-
-
-QRadioButton * YQRadioButton::getQtButton()
-{
-    return _qt_radioButton;
 }
 
 
 bool YQRadioButton::setKeyboardFocus()
 {
-    _qt_radioButton->setFocus();
+    setFocus();
 
     return true;
 }

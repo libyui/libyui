@@ -21,6 +21,7 @@
 
 #include <qapplication.h>
 #include <qwidget.h>
+#include <QDesktopWidget>
 #include "QY2LayoutUtils.h"
 
 
@@ -45,7 +46,7 @@ QWidget * addHStretch( QWidget * parent )
 QWidget * addVSpacing( QWidget * parent, int height )
 {
     QWidget * spacer = new QWidget( parent );
-    CHECK_PTR( spacer );
+    Q_CHECK_PTR( spacer );
     spacer->setFixedHeight( height );
 
     return spacer;
@@ -55,7 +56,7 @@ QWidget * addVSpacing( QWidget * parent, int height )
 QWidget * addHSpacing( QWidget * parent, int width )
 {
     QWidget * spacer = new QWidget( parent );
-    CHECK_PTR( spacer );
+    Q_CHECK_PTR( spacer );
     spacer->setFixedWidth( width );
 
     return spacer;
@@ -72,7 +73,7 @@ limitToScreenSize( const QWidget * widget, int width, int height )
 QSize
 limitToScreenSize( const QWidget * widget, const QSize & desiredSize )
 {
-    QSize availableSize = qApp->desktop()->availableGeometry( const_cast<QWidget*> (widget) ).size();
+    QSize availableSize = QApplication::desktop()->availableGeometry( const_cast<QWidget*> (widget) ).size();
 
     // Subtract WM decorations. There seems to be no reliable way to tell if
     // this is necessary at all (even fvwm2 claims it is a NETWM compliant

@@ -6,18 +6,15 @@ LIB = $(shell y2tool get-lib)
 
 PREFIX = /usr
 
-configure: all
-	./configure --prefix=$(PREFIX) --libdir=$(PREFIX)/$(LIB) --with-qt-dir=/usr/lib/qt3 --with-qt-libdir=/usr/lib/qt3/$(LIB)
-
-all:
-	y2tool y2autoconf
-	y2tool y2automake
-	autoreconf --force --install
+configure: 
+	mkdir build ;\
+	cd build ;\
+	cmake -DCMAKE_INSTALL_PREFIX=$(PREFIX) -DLIB=$(LIB) ..
 
 install: configure
-	make
-	make install
+	cd build; \
+	make && make install
 
-reconf: all
-	./config.status --recheck
-	./config.status
+reconf: 
+	cd build ;\
+	cmake rebuild_cache

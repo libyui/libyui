@@ -18,8 +18,7 @@
 
 
 #include <qpushbutton.h>
-#include <qpopupmenu.h>
-#include <qiconset.h>
+#include <QMenu>
 #include <qsize.h>
 #include <qtimer.h>
 #define y2log_component "qt-ui"
@@ -69,19 +68,19 @@ YQMenuButton::rebuildMenuTree()
     // (in case the menu items got replaced)
     //
 
-    if ( _qt_button->popup() )
-	delete _qt_button->popup();
+    if ( _qt_button->menu() )
+	delete _qt_button->menu();
 
     //
     // Create toplevel menu
     //
 
-    QPopupMenu * menu = new QPopupMenu( _qt_button );
+    QMenu * menu = new QMenu( _qt_button );
     YUI_CHECK_NEW( menu );
-    _qt_button->setPopup( menu );
+    _qt_button->setMenu( menu );
 
-    connect( menu,	SIGNAL( activated         ( int ) ),
-	     this,	SLOT  ( menuEntryActivated( int ) ) );
+    connect( menu,	SIGNAL( triggered         ( QAction* ) ),
+	     this,	SLOT  ( menuEntryActivated( QAction* ) ) );
 
     //
     // Recursively add Qt menu items from the YMenuItems
@@ -92,7 +91,7 @@ YQMenuButton::rebuildMenuTree()
 
 
 void
-YQMenuButton::rebuildMenuTree( QPopupMenu * parentMenu, YItemIterator begin, YItemIterator end )
+YQMenuButton::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIterator end )
 {
     for ( YItemIterator it = begin; it != end; ++it )
     {
@@ -112,37 +111,42 @@ YQMenuButton::rebuildMenuTree( QPopupMenu * parentMenu, YItemIterator begin, YIt
 
 	if ( item->hasChildren() )
 	{
-	    QPopupMenu * subMenu = new QPopupMenu( parentMenu );
-	    YUI_CHECK_NEW( subMenu );
+	    QMenu * subMenu;
 
 	    if ( icon.isNull() )
-		parentMenu->insertItem( fromUTF8( item->label() ), subMenu );
+		subMenu = parentMenu->addMenu( fromUTF8( item->label() ));
 	    else
-		parentMenu->insertItem( QIconSet( icon ), fromUTF8( item->label() ), subMenu );
+		subMenu = parentMenu->addMenu( QIcon( icon ), fromUTF8( item->label() ));
 
-	    connect( subMenu,	SIGNAL( activated         ( int ) ),
-		     this,	SLOT  ( menuEntryActivated( int ) ) );
+	    connect( subMenu,	SIGNAL( triggered         ( QAction* ) ),
+		     this,	SLOT  ( menuEntryActivated( QAction* ) ) );
 
 	    rebuildMenuTree( subMenu, item->childrenBegin(), item->childrenEnd() );
 	}
 	else // No children - leaf entry
 	{
 	    // item->index() is guaranteed to be unique within this YMenuButton's items,
-	    // so it can easily be used as unique ID in all QPopupMenus that belong
+	    // so it can easily be used as unique ID in all Q3PopupMenus that belong
 	    // to this YQMenuButton.
 
+            QAction *act;
 	    if ( icon.isNull() )
-		parentMenu->insertItem( fromUTF8( item->label() ), item->index() );
+		act = parentMenu->addAction( fromUTF8( item->label() ) );
 	    else
-		parentMenu->insertItem( QIconSet( icon ), fromUTF8( item->label() ), item->index() );
+		act = parentMenu->addAction( QIcon( icon ), fromUTF8( item->label() ) );
+            _serials[act] = item->index();
 	}
     }
 }
 
 
 void
-YQMenuButton::menuEntryActivated( int serialNo )
+YQMenuButton::menuEntryActivated( QAction* action )
 {
+    int serialNo = -1;
+    if ( _serials.contains( action ) )
+        serialNo = _serials[action];
+
     // y2debug( "Selected menu entry #%d", menu_item_index );
     _selectedItem = findMenuItem( serialNo );
 

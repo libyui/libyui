@@ -35,15 +35,15 @@ YQWizardButton::YQWizardButton( YQWizard *	wizard,
     , _wizard( wizard )
 {
     QPushButton * button = new QPushButton( fromUTF8( label ), buttonParent );
-    CHECK_PTR( button );
-    
+    Q_CHECK_PTR( button );
+
     setQPushButton( button );
     setWidgetRep( button );
 
     connect( button, SIGNAL( clicked() ),
 	     this,   SIGNAL( clicked() ) );
 
-    
+
     // This widget itself will never be visible, only its button - which is not
     // a child of this widget.
     QWidget::hide();
@@ -74,7 +74,7 @@ void YQWizardButton::show()
 bool YQWizardButton::isShown() const
 {
     if ( qPushButton() )
-	return qPushButton()->isShown();
+	return !qPushButton()->isHidden();
     else
 	return false;
 }
@@ -90,7 +90,7 @@ int YQWizardButton::preferredWidth()
 {
     // This widget doesn't have a YWidget-based visual representation, it's
     // only a YWidget for shortcut checking etc.
-    
+
     return 0;
 }
 
@@ -99,7 +99,7 @@ int YQWizardButton::preferredHeight()
 {
     // This widget doesn't have a YWidget-based visual representation, it's
     // only a YWidget for shortcut checking etc.
-    
+
     return 0;
 }
 

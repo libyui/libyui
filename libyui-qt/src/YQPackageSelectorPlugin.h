@@ -21,9 +21,9 @@
 #define YQPackageSelectorPlugin_h
 
 #include <YPackageSelectorPlugin.h>
-#include "YQPackageSelector.h"
-#include "YQPatternSelector.h"
-#include "YQSimplePatchSelector.h"
+#include "pkg/YQPackageSelector.h"
+#include "pkg/YQPatternSelector.h"
+#include "pkg/YQSimplePatchSelector.h"
 
 
 /**

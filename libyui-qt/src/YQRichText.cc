@@ -16,11 +16,15 @@
 
 /-*/
 
-
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
-#include "qregexp.h"
+#include <QColorGroup>
+#include <QScrollBar>
+#include <QRegExp>
+#include <QKeyEvent>
+#include <QVBoxLayout>
+
 #include "YEvent.h"
 #include "utf8.h"
 #include "YQUI.h"
@@ -29,31 +33,34 @@
 
 
 YQRichText::YQRichText( YWidget * parent, const string & text, bool plainTextMode )
-    : QVBox( (QWidget *) parent->widgetRep() )
+    : QFrame( (QWidget *) parent->widgetRep() )
     , YRichText( parent, text, plainTextMode )
 {
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    layout->setSpacing( 0 );
+    setLayout( layout );
+
     setWidgetRep( this );
 
-    setMargin( YQWidgetMargin );
+    layout->setMargin( YQWidgetMargin );
 
     _textBrowser = new YQTextBrowser( this );
     YUI_CHECK_NEW( _textBrowser );
-    
-    _textBrowser->setMimeSourceFactory( 0 );
+    layout->addWidget( _textBrowser );
+
     _textBrowser->installEventFilter( this );
 
     if ( plainTextMode )
     {
-	_textBrowser->setTextFormat( Qt::PlainText );
-	_textBrowser->setWordWrap( QTextEdit::NoWrap );
+        _textBrowser->setPlainText(QString::fromUtf8(text.c_str()));
+        _textBrowser->setWordWrapMode( QTextOption::NoWrap );
     }
     else
     {
-	_textBrowser->setTextFormat( Qt::RichText );
+        _textBrowser->setHtml(QString::fromUtf8(text.c_str()));
     }
-
+  
     setValue( text );
-
 
     // Set the text foreground color to black, regardless of its current
     // settings - it might be changed if this widget resides in a
@@ -61,20 +68,15 @@ YQRichText::YQRichText( YWidget * parent, const string & text, bool plainTextMod
     // parent is not set yet :-(
 
     QPalette pal( _textBrowser->palette() );
-    QColorGroup normalColors( pal.normal() );
-    normalColors.setColor( QColorGroup::Text, black );
-    pal.setNormal( normalColors );
+    pal.setColor( QPalette::Text, Qt::black );
+    pal.setCurrentColorGroup( QPalette::Normal );
     _textBrowser->setPalette( pal );
-
-    // Set the text background to a light grey
-
-    _textBrowser->setPaper( QColor( 234, 234, 234 ) );
 
 
     // Propagate clicks on hyperlinks
 
-    connect( _textBrowser, SIGNAL( linkClicked( const QString & ) ),
-	     this,	   SLOT  ( linkClicked( const QString & ) ) );
+    connect( _textBrowser, SIGNAL( anchorClicked( const QUrl & ) ),
+	     this,	   SLOT  ( linkClicked  ( const QUrl & ) ) );
 }
 
 
@@ -95,13 +97,18 @@ void YQRichText::setValue( const string & newText )
     QString text = fromUTF8( newText );
 
     if ( ! plainTextMode() )
-	text.replace( "&product;", YQUI::ui()->productName() );
-
+    {
+          text.replace( "&product;", YQUI::ui()->productName() );
+          _textBrowser->setHtml( text );
+    }
+    else
+    {
+          _textBrowser->setPlainText( text );
+    }
     YRichText::setValue( newText );
-    _textBrowser->setText( text );
 
     if ( autoScrollDown() && _textBrowser->verticalScrollBar() )
-	_textBrowser->verticalScrollBar()->setValue( _textBrowser->verticalScrollBar()->maxValue() );
+	_textBrowser->verticalScrollBar()->setValue( _textBrowser->verticalScrollBar()->maximum() );
 }
 
 
@@ -111,12 +118,7 @@ void YQRichText::setPlainTextMode( bool newPlainTextMode )
 
     if ( plainTextMode() )
     {
-	_textBrowser->setTextFormat( Qt::PlainText );
-	_textBrowser->setWordWrap( QTextEdit::NoWrap );
-    }
-    else
-    {
-	_textBrowser->setTextFormat( Qt::RichText );
+      _textBrowser->setWordWrapMode( QTextOption::NoWrap );
     }
 }
 
@@ -126,14 +128,14 @@ void YQRichText::setAutoScrollDown( bool newAutoScrollDown )
     YRichText::setAutoScrollDown( newAutoScrollDown );
 
     if ( autoScrollDown() && _textBrowser->verticalScrollBar() )
-	_textBrowser->verticalScrollBar()->setValue( _textBrowser->verticalScrollBar()->maxValue() );
+	_textBrowser->verticalScrollBar()->setValue( _textBrowser->verticalScrollBar()->maximum() );
 }
 
 
-void YQRichText::linkClicked( const QString & url )
+void YQRichText::linkClicked( const QUrl & url )
 {
     // y2debug( "Selected hyperlink \"%s\"", (const char *) url );
-    YQUI::ui()->sendEvent( new YMenuEvent( toUTF8( url ) ) );
+    YQUI::ui()->sendEvent( new YMenuEvent(url.toString().toUtf8()) );
 }
 
 
@@ -144,7 +146,7 @@ bool YQRichText::eventFilter( QObject * obj, QEvent * ev )
 	QKeyEvent * event = ( QKeyEvent * ) ev;
 
 	if ( ( event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter ) &&
-	     ( event->state() == 0 || event->state() == Qt::Keypad ) &&
+	     ( event->modifiers() & Qt::NoModifier || event->modifiers() & Qt::KeypadModifier ) &&
 	     ! haveHyperLinks() )
 	{
 	    YQDialog * dia = (YQDialog *) findDialog();
@@ -165,8 +167,8 @@ bool YQRichText::haveHyperLinks()
 {
     if ( plainTextMode() )
 	return false;
-    
-    return ( _textBrowser->text().contains( QRegExp( "<a\\s+href\\s*=", false ) ) > 0 );
+
+    return ( _textBrowser->document()->toPlainText().contains( QRegExp( "<a\\s+href\\s*=", Qt::CaseInsensitive ) ) > 0 );
 }
 
 

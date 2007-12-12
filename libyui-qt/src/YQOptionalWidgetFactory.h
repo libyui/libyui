@@ -28,11 +28,12 @@
 #include "YQDumbTab.h"
 #include "YQMultiProgressMeter.h"
 #include "YQPartitionSplitter.h"
-#include "YQPatternSelector.h"
-#include "YQSimplePatchSelector.h"
+#include "pkg/YQPatternSelector.h"
+#include "pkg/YQSimplePatchSelector.h"
 #include "YQSlider.h"
 #include "YQTimeField.h"
-#include "YQWizard.h"
+
+class YQWizard;
 
 using std::string;
 using std::vector;
@@ -56,7 +57,7 @@ public:
 
 
     virtual bool			hasWizard();
-    virtual YQWizard *			createWizard		( YWidget *   		parent,
+    virtual YWizard *			createWizard		( YWidget *   		parent,
 								  const string & 	backButtonLabel,
 								  const string & 	abortButtonLabel,
 								  const string & 	nextButtonLabel,

@@ -18,16 +18,18 @@
 
 /-*/
 
-
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
 
-#include <qtextbrowser.h>
-#include <qpushbutton.h>
-#include <qregexp.h>
-#include <qlayout.h>
-#include <qhbox.h>
+#include <QTextBrowser>
+#include <QPushButton>
+#include <QRegExp>
+#include <QLayout>
+#include <QHBoxLayout>
+#include <QKeyEvent>
+#include <QBoxLayout>
+#include <QEvent>
 
 #include "YQPkgTextDialog.h"
 
@@ -39,7 +41,6 @@
 #define MARGIN			4	// around the widget
 
 using std::string;
-
 
 
 YQPkgTextDialog::YQPkgTextDialog( const QString & text, QWidget * parent )
@@ -74,58 +75,61 @@ void YQPkgTextDialog::buildDialog( const QString & 	text,
     setSizeGripEnabled( true );
 
     // Dialog title
-    setCaption( _( "YaST2" ) );
+    setWindowTitle( _( "YaST2" ) );
 
     // Layout for the dialog ( can't simply insert a QVBox )
 
-    QVBoxLayout * layout = new QVBoxLayout( this, MARGIN, SPACING );
-    CHECK_PTR( layout );
+    QVBoxLayout * layout = new QVBoxLayout( this );
+    layout->setMargin(MARGIN);
+    layout->setSpacing(SPACING);
+    Q_CHECK_PTR( layout );
 
 
     // Text browser
 
     _textBrowser = new QTextBrowser( this );
-    CHECK_PTR( _textBrowser );
+    Q_CHECK_PTR( _textBrowser );
     layout->addWidget( _textBrowser );
     layout->addSpacing(8);
-    _textBrowser->setText( text );
-    _textBrowser->setTextFormat( Qt::RichText );
+    _textBrowser->document()->setHtml( text );
     _textBrowser->installEventFilter( this );
 
 
     // Button box
 
-    QHBox * buttonBox	= new QHBox( this );
-    CHECK_PTR( buttonBox );
+    QHBoxLayout * buttonBox	= new QHBoxLayout( this );
+    Q_CHECK_PTR( buttonBox );
     buttonBox->setSpacing( SPACING );
     buttonBox->setMargin ( MARGIN  );
-    layout->addWidget( buttonBox );
+    layout->addLayout( buttonBox );
 
-    addHStretch( buttonBox );
+    //addHStretch( buttonBox );
 
     // Accept (OK) button
 
-    _acceptButton = new QPushButton( acceptButtonLabel, buttonBox );
-    CHECK_PTR( _acceptButton );
+    _acceptButton = new QPushButton( acceptButtonLabel, this );
+    buttonBox->addWidget(_acceptButton);
+    Q_CHECK_PTR( _acceptButton );
     _acceptButton->setDefault( true );
 
     connect( _acceptButton,	SIGNAL( clicked() ),
 	     this,      	SLOT  ( accept()  ) );
 
-    addHStretch( buttonBox );
+    //addHStretch( buttonBox );
 
     if ( ! rejectButtonLabel.isEmpty() )
     {
 	// Reject (Cancel) button
 
-	_rejectButton = new QPushButton( rejectButtonLabel, buttonBox );
-	CHECK_PTR( _rejectButton );
+	_rejectButton = new QPushButton( rejectButtonLabel, this );
+  buttonBox->addWidget(_rejectButton);
+	Q_CHECK_PTR( _rejectButton );
 	_rejectButton->setDefault( true );
 
 	connect( _rejectButton,	SIGNAL( clicked() ),
 		 this,      	SLOT  ( reject()  ) );
 
-	addHStretch( buttonBox );
+//	addHStretch( buttonBox );
     }
     else
     {
@@ -152,13 +156,13 @@ YQPkgTextDialog::eventFilter( QObject * obj, QEvent * ev )
 
 	if ( keyEvent )
 	{
-	    if ( keyEvent->key() == Key_Return ||
-		 keyEvent->key() == Key_Enter    )
+	    if ( keyEvent->key() == Qt::Key_Return ||
+		 keyEvent->key() == Qt::Key_Enter    )
 	    {
 		_acceptButton->animateClick();
 		return true; // Stop event processing
 	    }
-	    else if ( keyEvent->key() == Key_Escape )
+	    else if ( keyEvent->key() == Qt::Key_Escape )
 	    {
 		if ( _rejectButton )
 		{
@@ -175,7 +179,7 @@ YQPkgTextDialog::eventFilter( QObject * obj, QEvent * ev )
 
 void YQPkgTextDialog::setText( const QString & text )
 {
-    _textBrowser->setText( text );
+    _textBrowser->document()->setHtml( text );
 }
 
 
@@ -195,7 +199,7 @@ void YQPkgTextDialog::setText( ZyppSel selectable,
 void YQPkgTextDialog::showText( QWidget * parent, const QString & text )
 {
     YQPkgTextDialog * dia = new YQPkgTextDialog( text, parent );
-    CHECK_PTR( dia );
+    Q_CHECK_PTR( dia );
     dia->exec();
     delete dia;
 }
@@ -218,7 +222,7 @@ bool YQPkgTextDialog::confirmText( QWidget * 		parent,
 						 parent,
 						 acceptButtonLabel,
 						 rejectButtonLabel );
-    CHECK_PTR( dia );
+    Q_CHECK_PTR( dia );
     bool confirmed = ( dia->exec() == QDialog::Accepted );
     delete dia;
 

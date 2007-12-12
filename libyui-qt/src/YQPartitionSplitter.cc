@@ -16,7 +16,6 @@
 
 /-*/
 
-
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 

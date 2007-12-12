@@ -18,12 +18,12 @@
 
 /-*/
 
-
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include <qheader.h>
-#include <qstyle.h>
+#include <QStyle>
+#include <QHeaderView>
+#include <QEvent>
 
 #include <zypp/ZYppFactory.h>
 
@@ -81,9 +81,9 @@ YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget * parent, int thresholdPercent )
 	if ( ! partitionDu.readonly )
 	{
 	    YQPkgDiskUsageListItem * item = new YQPkgDiskUsageListItem( this, partitionDu );
-	    CHECK_PTR( item );
+	    Q_CHECK_PTR( item );
 	    item->updateData();
-	    _items.insert( partitionDu.dir.c_str(), item );
+	    _items.insert( QString::fromUtf8(partitionDu.dir.c_str()), item );
 	}
     }
 
@@ -103,7 +103,7 @@ YQPkgDiskUsageList::updateDiskUsage()
 	  ++it )
     {
 	const ZyppPartitionDu & partitionDu = *it;
-	YQPkgDiskUsageListItem * item = _items[ partitionDu.dir.c_str() ];
+	YQPkgDiskUsageListItem * item = _items[ QString::fromUtf8(partitionDu.dir.c_str()) ];
 
 	if ( item )
 	    item->updateDuData( partitionDu );
@@ -111,7 +111,9 @@ YQPkgDiskUsageList::updateDiskUsage()
 	    y2error( "No entry for mount point %s", partitionDu.dir.c_str() );
     }
 
+#if FIXME
     sort();
+#endif
     postPendingWarnings();
 }
 
@@ -146,8 +148,14 @@ YQPkgDiskUsageList::postPendingWarnings()
 QSize
 YQPkgDiskUsageList::sizeHint() const
 {
-    int width = header()->headerWidth()
+
+#ifdef FIXME
+        int width = header()->headerWidth()
 	+ style().pixelMetric( QStyle::PM_ScrollBarExtent, verticalScrollBar() );
+#else
+        int width = header()->sizeHint().width()
+	+ 30;
+#endif
 
     return QSize( width, 100 );
 }
@@ -159,9 +167,9 @@ YQPkgDiskUsageList::keyPressEvent( QKeyEvent * event )
 
     if ( event )
     {
-	unsigned special_combo = ( Qt::ControlButton | Qt::ShiftButton | Qt::AltButton );
+	Qt::KeyboardModifiers special_combo = ( Qt::ControlModifier| Qt::ShiftModifier | Qt::AltModifier );
 
-	if ( ( event->state() & special_combo ) == special_combo )
+	if ( ( event->modifiers() & special_combo ) == special_combo )
 	{
 	    if ( event->key() == Qt::Key_Q )
 	    {
@@ -180,20 +188,20 @@ YQPkgDiskUsageList::keyPressEvent( QKeyEvent * event )
 		{
 		    int percent = item->usedPercent();
 
-		    switch ( event->ascii() )
+		    switch ( event->key() )
 		    {
-			case '1':	percent	= 10;	break;
-			case '2':	percent	= 20;	break;
-			case '3':	percent	= 30;	break;
-			case '4':	percent	= 40;	break;
-			case '5':	percent	= 50;	break;
-			case '6':	percent	= 60;	break;
-			case '7':	percent	= 70;	break;
-			case '8':	percent	= 80;	break;
-			case '9':	percent	= 90;	break;
-			case '0':	percent	= 100;	break;
-			case '+':	percent += 3; 	break;
-			case '-':	percent -= 3;	break;
+			case Qt::Key_1:	percent	= 10;	break;
+			case Qt::Key_2:	percent	= 20;	break;
+			case Qt::Key_3:	percent	= 30;	break;
+			case Qt::Key_4:	percent	= 40;	break;
+			case Qt::Key_5:	percent	= 50;	break;
+			case Qt::Key_6:	percent	= 60;	break;
+			case Qt::Key_7:	percent	= 70;	break;
+			case Qt::Key_8:	percent	= 80;	break;
+			case Qt::Key_9:	percent	= 90;	break;
+			case Qt::Key_0:	percent	= 100;	break;
+			case Qt::Key_Plus:	percent += 3; 	break;
+			case Qt::Key_Minus:	percent -= 3;	break;
 
 			case 'w':
 			    // Only for testing, thus intentionally using no translations

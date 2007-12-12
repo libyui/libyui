@@ -16,11 +16,13 @@
 
 /-*/
 
-
-#include <qstring.h>
-#include <qlabel.h>
-#include <qlistbox.h>
+#include <QString>
+#include <QLabel>
+#include <QListWidget>
 #include <qnamespace.h>
+#include <QPixmap>
+#include <QKeyEvent>
+#include <QVBoxLayout>
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
@@ -42,32 +44,37 @@ using std::max;
 
 
 YQSelectionBox::YQSelectionBox( YWidget * parent, const string & label )
-    : QVBox( (QWidget *) parent->widgetRep() )
+    : QFrame( (QWidget *) parent->widgetRep() )
     , YSelectionBox( parent, label )
 {
     setWidgetRep( this );
 
-    setSpacing( YQWidgetSpacing );
-    setMargin ( YQWidgetMargin  );
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    setLayout( layout );
+
+    layout->setSpacing( YQWidgetSpacing );
+    layout->setMargin ( YQWidgetMargin  );
 
     _caption = new YQWidgetCaption( this, label );
     YUI_CHECK_NEW( _caption );
+    layout->addWidget( _caption );
 
-    _qt_listBox = new QListBox( this );
+    _qt_listBox = new QListWidget( this );
     YUI_CHECK_NEW( _qt_listBox );
+    layout->addWidget( _qt_listBox );
 
     _qt_listBox->installEventFilter( this );
-    _qt_listBox->setVariableHeight( false );
+    //FIXME _qt_listBox->setVariableHeight( false );
     _qt_listBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding,
 					     QSizePolicy::Expanding ) );
-    _qt_listBox->setTopItem(0);
+    //FIXME _qt_listBox->setTopItem(0);
     _caption->setBuddy( _qt_listBox );
 
-    connect( _qt_listBox,	SIGNAL( highlighted ( int ) ),
-	     this,		SLOT  ( slotSelected( int ) ) );
+    connect( _qt_listBox,	SIGNAL( itemSelectionChanged() ),
+	     this,		SLOT  ( slotSelectionChanged() ) );
 
-    connect( _qt_listBox,	SIGNAL( doubleClicked( QListBoxItem * ) ),
-	     this,		SLOT  ( slotActivated( QListBoxItem * ) ) );
+    connect( _qt_listBox,	SIGNAL( itemDoubleClicked( QListWidgetItem * ) ),
+	     this,		SLOT  ( slotActivated( QListWidgetItem * ) ) );
 
     connect( &_timer,		SIGNAL( timeout()           ),
 	     this,		SLOT  ( returnImmediately() ) );
@@ -102,14 +109,21 @@ void YQSelectionBox::addItem( YItem * item )
     }
 
     if ( icon.isNull() )
-	_qt_listBox->insertItem( fromUTF8( item->label() ) );
+    {
+      _qt_listBox->addItem( fromUTF8( item->label() ) );
+    }
     else
-	_qt_listBox->insertItem( icon, fromUTF8( item->label() ) );
+    {
+      QListWidgetItem *i = new QListWidgetItem(_qt_listBox);
+      i->setData(Qt::DisplayRole, fromUTF8( item->label() ) );
+      i->setData(Qt::DecorationRole, icon );
+      _qt_listBox->addItem( i );
+    }
 
     if ( item->selected() )
     {
 	YQSignalBlocker sigBlocker( _qt_listBox );
-	_qt_listBox->setCurrentItem( item->index() );
+	_qt_listBox->setCurrentItem( _qt_listBox->item( item->index() ) );
     }
 }
 
@@ -119,7 +133,7 @@ void YQSelectionBox::selectItem( YItem * item, bool selected )
     YQSignalBlocker sigBlocker( _qt_listBox );
 
     YSelectionBox::selectItem( item, selected );
-    _qt_listBox->setCurrentItem( selected ? item->index() : -1 );
+    _qt_listBox->setCurrentRow( selected ? item->index() : -1 );
 }
 
 
@@ -149,7 +163,7 @@ void YQSelectionBox::deselectAllItems()
     YSelectionBox::deselectAllItems();
     _qt_listBox->clearSelection();
 
-    if ( _qt_listBox->currentItem() > -1 )
+    if ( _qt_listBox->currentRow() > -1 )
     {
 	// Some item is selected after all; the Qt documtation says this
 	// happens if the QListBox is in single selection mode (which it is)
@@ -159,7 +173,7 @@ void YQSelectionBox::deselectAllItems()
 	// displays. This has a small performance penalty because it calls
 	// YSelectionBox::deselectAllItems() again which again iterates over
 	// all items.
-	selectItem( _qt_listBox->currentItem() );
+	selectItem( _qt_listBox->row(_qt_listBox->currentItem()) );
     }
 }
 
@@ -176,7 +190,7 @@ void YQSelectionBox::deleteAllItems()
 
 int YQSelectionBox::preferredWidth()
 {
-    int hintWidth = _caption->isShown() ?
+    int hintWidth = !_caption->isHidden() ?
 	_caption->sizeHint().width() + frameWidth() : 0;
 
     return max( 80, hintWidth );
@@ -185,7 +199,7 @@ int YQSelectionBox::preferredWidth()
 
 int YQSelectionBox::preferredHeight()
 {
-    int hintHeight	 = _caption->isShown() ? _caption->sizeHint().height() : 0;
+    int hintHeight	 = !_caption->isHidden() ? _caption->sizeHint().height() : 0;
     int visibleLines	 = shrinkable() ? SHRINKABLE_VISIBLE_LINES : DEFAULT_VISIBLE_LINES;
     hintHeight 		+= visibleLines * _qt_listBox->fontMetrics().lineSpacing();
     hintHeight		+= _qt_listBox->frameWidth() * 2;
@@ -204,7 +218,7 @@ void YQSelectionBox::setEnabled( bool enabled )
 {
     _caption->setEnabled( enabled );
     _qt_listBox->setEnabled( enabled );
-    _qt_listBox->triggerUpdate( true );
+    //FIXME needed? _qt_listBox->triggerUpdate( true );
     YWidget::setEnabled( enabled );
 }
 
@@ -224,7 +238,7 @@ bool YQSelectionBox::eventFilter( QObject * obj, QEvent * ev )
 	QKeyEvent * event = ( QKeyEvent * ) ev;
 
 	if ( ( event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter ) &&
-	     ( event->state() == 0 || event->state() == Qt::Keypad ) )
+	     ( (event->modifiers() & Qt::NoModifier) || (event->modifiers() & Qt::KeypadModifier) ) )
 	{
 	    YQDialog * dia = (YQDialog *) findDialog();
 
@@ -250,9 +264,10 @@ bool YQSelectionBox::eventFilter( QObject * obj, QEvent * ev )
 }
 
 
-void YQSelectionBox::slotSelected( int index )
+void YQSelectionBox::slotSelectionChanged()
 {
-    selectItem( index );
+    QList<QListWidgetItem *> items = _qt_listBox->selectedItems ();
+    selectItem( _qt_listBox->row( items.first() ) );
 
     if ( notify() )
     {
@@ -280,9 +295,9 @@ void YQSelectionBox::slotSelected( int index )
 }
 
 
-void YQSelectionBox::slotActivated( QListBoxItem * qItem )
+void YQSelectionBox::slotActivated( QListWidgetItem * qItem )
 {
-    selectItem( _qt_listBox->index( qItem ) );
+    selectItem( _qt_listBox->row( qItem ) );
 
     if ( notify() )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
@@ -305,7 +320,8 @@ void YQSelectionBox::returnImmediately()
 void YQSelectionBox::returnDelayed()
 {
     y2debug( "Starting selbox timer" );
-    _timer.start( 250, true ); // millisec, singleShot
+    _timer.setSingleShot( true );
+    _timer.start( 250 ); // millisec
 }
 
 

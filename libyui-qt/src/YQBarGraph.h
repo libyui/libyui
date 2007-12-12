@@ -85,7 +85,7 @@ protected:
      *
      * Reimplemented from QFrame.
      **/
-    virtual void drawContents( QPainter * painter );
+    virtual void paintEvent( QPaintEvent * painter );
 
     /**
      * Return one from a set of default segment background colors.

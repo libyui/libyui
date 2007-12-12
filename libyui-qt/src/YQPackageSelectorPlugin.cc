@@ -21,12 +21,12 @@
 #include "YQPackageSelectorPlugin.h"
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
-#include "YQPackageSelector.h"
-#include "YQPatternSelector.h"
-#include "YQSimplePatchSelector.h"
+#include "pkg/YQPackageSelector.h"
+#include "pkg/YQPatternSelector.h"
+#include "pkg/YQSimplePatchSelector.h"
 #include "YUIException.h"
 
-#define PLUGIN_BASE_NAME "qt_pkg"
+#define PLUGIN_BASE_NAME "qt4_pkg"
 
 
 YQPackageSelectorPlugin::YQPackageSelectorPlugin()

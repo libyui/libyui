@@ -16,12 +16,14 @@
 
 /-*/
 
-
-#include <qheader.h>
-#include <qlabel.h>
-#include <qvbox.h>
-#include <qlistview.h>
-#include <qstring.h>
+#include <QColorGroup>
+#include <QHeaderView>
+#include <QLabel>
+#include <QTreeWidget>
+#include <QVBoxLayout>
+#include <QString>
+//Added by qt3to4:
+#include <QPixmap>
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
@@ -40,36 +42,43 @@ using std::max;
 
 
 YQTree::YQTree( YWidget * parent, const string & label )
-    : QVBox( (QWidget *) parent->widgetRep() )
+    : QFrame( (QWidget *) parent->widgetRep() )
     , YTree( parent, label )
 {
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    setLayout( layout );
+
     setWidgetRep( this );
 
-    setSpacing( YQWidgetSpacing );
-    setMargin ( YQWidgetMargin  );
+    layout->setSpacing( YQWidgetSpacing );
+    layout->setMargin ( YQWidgetMargin  );
 
     _nextSerialNo = 0;
 
     _caption     = new YQWidgetCaption( this, label );
     YUI_CHECK_NEW( _caption );
-    
-    _qt_listView = new QListView( this );
+    layout->addWidget( _caption );
+
+    _qt_listView = new QTreeWidget( this );
     YUI_CHECK_NEW( _qt_listView );
-    
-    _qt_listView->addColumn( "" );
-    _qt_listView->header()->hide();
-    _qt_listView->setRootIsDecorated ( true );
+    layout->addWidget( _qt_listView );
+
+     //_qt_listView->setHeaderLabel("");
+//     _qt_listView->addColumn( "" );
+     _qt_listView->header()->hide();
+     // _qt_listView->setHeader(0L);
+     _qt_listView->setRootIsDecorated ( true );
 
     _caption->setBuddy ( _qt_listView );
 
-    connect( _qt_listView,	SIGNAL( selectionChanged ( QListViewItem *	) ),
-	     this, 		SLOT  ( slotSelected     ( QListViewItem *	) ) );
+    connect( _qt_listView,	SIGNAL( itemSelectionChanged () ),
+	     this, 		SLOT  ( slotSelectionChanged () ) );
 
-    connect( _qt_listView,	SIGNAL( spacePressed	 ( QListViewItem *	) ),
-	     this, 		SLOT  ( slotActivated	 ( QListViewItem *	) ) );
+    connect( _qt_listView,	SIGNAL( itemActivated	 ( QTreeWidgetItem * , int ) ),
+	     this, 		SLOT  ( slotActivated	 ( QTreeWidgetItem *	) ) );
 
-    connect( _qt_listView,	SIGNAL( doubleClicked	 ( QListViewItem * 	) ),
-	     this, 		SLOT  ( slotActivated	 ( QListViewItem *	) ) );
+    connect( _qt_listView,	SIGNAL( itemDoubleClicked( QTreeWidgetItem *, int ) ),
+	     this, 		SLOT  ( slotActivated	 ( QTreeWidgetItem *	) ) );
 }
 
 
@@ -89,7 +98,7 @@ void YQTree::setLabel( const string & label )
 void YQTree::rebuildTree()
 {
     // y2debug( "Rebuilding tree" );
-    
+
     YQSignalBlocker sigBlocker( _qt_listView );
     _qt_listView->clear();
 
@@ -129,13 +138,13 @@ void YQTree::selectItem( YItem * yItem, bool selected )
     YQTreeItem * yqTreeItem = (YQTreeItem *) treeItem->data();
     YUI_CHECK_PTR( yqTreeItem );
 
-    if ( ! selected && yqTreeItem == _qt_listView->selectedItem() )
+    if ( ! selected && yqTreeItem == _qt_listView->currentItem() )
     {
 	deselectAllItems();
     }
     else
     {
-	_qt_listView->setSelected( yqTreeItem, true );
+	yqTreeItem->setSelected( true );
 	openBranch( yqTreeItem );
 	YTree::selectItem( treeItem, selected );
     }
@@ -148,21 +157,21 @@ void YQTree::selectItem( YQTreeItem * item )
     {
 	YQSignalBlocker sigBlocker( _qt_listView );
 
-	_qt_listView->setSelected( item, true );
+	item->setSelected( true );
 	openBranch( item );
 	YTree::selectItem( item->origItem(), true );
-	
+
 	y2debug( "selected item: \"%s\"", item->origItem()->label().c_str() );
     }
 }
 
 
-void YQTree::openBranch( QListViewItem * item )
+void YQTree::openBranch( QTreeWidgetItem * item )
 {
     while ( item )
     {
-	item->setOpen( true ); // Takes care of origItem()->setOpen()
-	item = item->parent();
+      item->setExpanded( true ); // Takes care of origItem()->setOpen()
+      item = item->parent();
     }
 }
 
@@ -185,8 +194,10 @@ void YQTree::deleteAllItems()
 }
 
 
-void YQTree::slotSelected( QListViewItem * qItem )
+void YQTree::slotSelectionChanged( )
 {
+    QList<QTreeWidgetItem *> items = _qt_listView->selectedItems ();
+    QTreeWidgetItem *qItem = items.first();
     selectItem( dynamic_cast<YQTreeItem *> (qItem) );
 
     if ( notify() && ! YQUI::ui()->eventPendingFor( this ) )
@@ -194,7 +205,7 @@ void YQTree::slotSelected( QListViewItem * qItem )
 }
 
 
-void YQTree::slotActivated( QListViewItem * qItem )
+void YQTree::slotActivated( QTreeWidgetItem * qItem )
 {
     selectItem( dynamic_cast<YQTreeItem *> (qItem) );
 
@@ -205,7 +216,7 @@ void YQTree::slotActivated( QListViewItem * qItem )
 
 int YQTree::preferredWidth()
 {
-    int hintWidth = _caption->isShown() ? _caption->sizeHint().width() : 0;
+    int hintWidth = !_caption->isHidden() ? _caption->sizeHint().width() : 0;
     return max( 200, hintWidth );
 }
 
@@ -215,7 +226,7 @@ int YQTree::preferredHeight()
     // 300 is an arbitrary value.  Use a MinSize or MinHeight widget to set a
     // size that is useful for the application.
 
-    int hintHeight = _caption->isShown() ? _caption->sizeHint().height() : 0;
+    int hintHeight = !_caption->isHidden() ? _caption->sizeHint().height() : 0;
 
     return 300 + hintHeight;
 }
@@ -248,13 +259,13 @@ bool YQTree::setKeyboardFocus()
 
 
 YQTreeItem::YQTreeItem( YQTree	*	tree,
-			QListView *	listView,
+			QTreeWidget *	listView,
 			YTreeItem *	orig,
 			int		serial )
-    : QListViewItem( listView )
+    : QTreeWidgetItem( listView )
 {
     init( tree, orig, serial );
-    
+
 #if VERBOSE_TREE_ITEMS
     y2debug( "Creating toplevel tree item \"%s\"", orig->label().c_str() );
 #endif
@@ -265,10 +276,9 @@ YQTreeItem::YQTreeItem( YQTree	*	tree,
 			YQTreeItem *	parentItem,
 			YTreeItem *	orig,
 			int		serial )
-    : QListViewItem( parentItem )
+    : QTreeWidgetItem( parentItem )
 {
     init( tree, orig, serial );
-
 #if VERBOSE_TREE_ITEMS
     y2debug( "Creating tree item \"%s\" as child of \"%s\"",
 	     orig->label().c_str(),
@@ -301,7 +311,7 @@ void YQTreeItem::init( YQTree *		tree,
 	if ( icon.isNull() )
 	    y2warning( "Can't load icon %s", iconName.c_str() );
 	else
-	    setPixmap( 0, icon );
+	    setData( 0, Qt::DecorationRole, icon );
     }
 }
 
@@ -309,7 +319,7 @@ void YQTreeItem::init( YQTree *		tree,
 void
 YQTreeItem::setOpen( bool open )
 {
-    QListViewItem::setOpen( open );
+    QTreeWidgetItem::setExpanded( open );
     _origItem->setOpen( open );
 }
 

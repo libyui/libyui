@@ -20,8 +20,8 @@
 #ifndef YQRichText_h
 #define YQRichText_h
 
-#include <qvbox.h>
-#include <qtextbrowser.h>
+#include <QFrame>
+#include <QTextBrowser>
 #include "YRichText.h"
 
 using std::string;
@@ -29,7 +29,7 @@ using std::string;
 
 class YQTextBrowser;
 
-class YQRichText : public QVBox, public YRichText
+class YQRichText : public QFrame, public YRichText
 {
     Q_OBJECT
 
@@ -67,7 +67,7 @@ public:
      * Reimplemented from YRichText.
      **/
     virtual void setAutoScrollDown( bool on = true );
-    
+
     /**
      * Preferred width of the widget.
      *
@@ -122,7 +122,7 @@ protected slots:
     /**
      * Notification that a hyperlink is clicked.
      **/
-    void linkClicked( const QString & url );
+    void linkClicked( const QUrl & url );
 
 
 protected:
@@ -161,7 +161,7 @@ public slots:
      * Reimplemented from QTextBrowser to avoid having an empty text each time
      * the user clicks on a hyperlink.
      **/
-    virtual void setSource( const QString & name ) {}
+    virtual void setSource( const QUrl & name ) {}
 };
 
 

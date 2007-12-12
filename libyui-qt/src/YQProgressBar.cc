@@ -18,6 +18,8 @@
 
 
 #include <qprogressbar.h>
+#include <QVBoxLayout>
+
 #include <qlabel.h>
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
@@ -33,20 +35,26 @@ using std::max;
 YQProgressBar::YQProgressBar( YWidget * 	parent,
 			      const string &	label,
 			      int		maxValue )
-    : QVBox( (QWidget *) parent->widgetRep() )
+    : QFrame( (QWidget *) parent->widgetRep() )
     , YProgressBar( parent, label, maxValue )
 {
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    setLayout( layout );
+
     setWidgetRep( this );
 
-    setSpacing( YQWidgetSpacing );
-    setMargin ( YQWidgetMargin  );
+    layout->setSpacing( YQWidgetSpacing );
+    layout->setMargin ( YQWidgetMargin  );
 
     _caption = new YQWidgetCaption( this, label );
     YUI_CHECK_NEW( _caption );
-    
-    _qt_progressbar = new QProgressBar( maxValue, this );
+    layout->addWidget( _caption );
+
+    _qt_progressbar = new QProgressBar( this );
+    _qt_progressbar->setRange(0, maxValue);
     YUI_CHECK_NEW( _qt_progressbar );
-    
+    layout->addWidget( _qt_progressbar );
+
     _caption->setBuddy( _qt_progressbar );
 }
 
@@ -67,7 +75,7 @@ void YQProgressBar::setLabel( const string & label )
 void YQProgressBar::setValue( int newValue )
 {
     YProgressBar::setValue( newValue );
-    _qt_progressbar->setProgress( value() );
+    _qt_progressbar->setValue( value() );
 }
 
 
@@ -82,8 +90,8 @@ void YQProgressBar::setEnabled( bool enabled )
 
 int YQProgressBar::preferredWidth()
 {
-    int hintWidth = _caption->isShown() ?
-	_caption->sizeHint().width() + margin() : 0;
+    int hintWidth = !_caption->isHidden() ?
+      _caption->sizeHint().width() + layout()->margin() : 0;
 
     return max( 200, hintWidth );
 }

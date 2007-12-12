@@ -129,13 +129,6 @@ protected:
     virtual void paintEvent( QPaintEvent * event );
 
     /**
-     * Child inserted/removed event.
-     *
-     * Reimplemented from QObject.
-     **/
-    virtual void childEvent( QChildEvent * event );
-
-    /**
      * Resize event.
      *
      * Reimplemented from QWidget.

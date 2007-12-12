@@ -76,7 +76,7 @@ void YQAlignment::setBackgroundPixmap( const string & pixmapFileName )
 
     if ( pixmapName.empty() )	// Delete any old background pixmap
     {
-	unsetPalette();
+        setPalette(QPalette());
     }
     else			// Set a new background pixmap
     {
@@ -88,7 +88,9 @@ void YQAlignment::setBackgroundPixmap( const string & pixmapFileName )
 	}
 	else
 	{
-	    setPaletteBackgroundPixmap( pixmap );
+        QPalette palette;
+        palette.setBrush(backgroundRole(), QBrush(pixmap));
+        setPalette(palette);
 	}
     }
 }

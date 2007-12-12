@@ -21,7 +21,7 @@
 #define YQIconPool_h
 
 #include <qpixmap.h>
-#include <qptrdict.h>
+#include <QHash>
 
 class YQIconPool
 {
@@ -109,7 +109,7 @@ private:
     //
 
     static YQIconPool * _iconPool;
-    QPtrDict<QPixmap>	_iconCache;
+    QHash<const char**,QPixmap>	_iconCache;
 };
 
 

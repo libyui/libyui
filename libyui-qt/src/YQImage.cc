@@ -20,7 +20,9 @@
 #include <unistd.h>
 #include <qpixmap.h>
 #include <qmovie.h>
-#include <qiconset.h>
+#include <QIcon>
+//Added by qt3to4:
+#include <qlabel.h>
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
@@ -61,14 +63,14 @@ YQImage::setImage( const string & fileName, bool animated )
     {
 	QMovie movie( fromUTF8( imageFileName() ) );
 	
-	if ( movie.isNull() )
+	if ( movie.isValid() )
 	{
 	    y2error( "Couldn't load animation from %s", imageFileName().c_str() );
 	}
 	else
 	{
 	    y2debug( "Loading animation from %s", imageFileName().c_str() );
-	    QLabel::setMovie( movie );
+	    QLabel::setMovie( &movie );
 	}
     }
     else
@@ -166,14 +168,14 @@ void YQImage::setSize( int newWidth, int newHeight )
 
 void YQImage::setEnabled( bool enable )
 {
+   qDebug("setEnabled %d", enable);
    if (enable)
       setImage( imageFileName(), animated() );
    else {
       // Trigger image re-display
       QPixmap pixmap( fromUTF8( imageFileName() ) );
-      QIconSet icon(pixmap);
-      icon.setIconSize( QIconSet::Large, pixmap.size());
-      QLabel::setPixmap( icon.pixmap( QIconSet::Large, QIconSet::Disabled, QIconSet::Off ) );
+      QIcon icon(pixmap);
+      QLabel::setPixmap( icon.pixmap( pixmap.size(), QIcon::Disabled, QIcon::Off) );
    }
 }
 

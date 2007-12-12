@@ -20,13 +20,14 @@
 #ifndef YQDialog_h
 #define YQDialog_h
 
-#include <qwidget.h>
+#include <QFrame>
+#include <QEvent>
+#include <QWidget>
 #include "YDialog.h"
 
 
 class YQGenericButton;
 class YQWizard;
-
 
 class YQDialog : public QWidget, public YDialog
 {
@@ -136,7 +137,7 @@ public:
      * [Return] if no other button has the keyboard focus.
      * 'newDefaultButton' may be 0 if the former default button is destroyed.
      **/
-    void setDefaultButton( YQGenericButton * newDefaultButton );
+    void setDefaultButton( YPushButton * newDefaultButton );
 
     /**
      * Ensure presence of no more than one single default button.

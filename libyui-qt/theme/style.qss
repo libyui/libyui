@@ -1,0 +1,81 @@
+/* Background: wizard background-1024x768.png */
+/* Background: work_area g22503.png */
+/* Background: steps rect2174.png */
+
+#work_area {
+   border-style: none;
+   margin-top: 50px;
+   margin-right: 110px;
+   margin-bottom: 80px;
+   margin-left: 0px;
+}
+
+#steps 
+{
+   border-style: none;
+   padding-left: 20px;
+   padding-top: 10px;
+   margin-top: 60px;
+   margin-left: 10px;
+   margin-bottom: 100px;
+   min-width: 195px;
+   max-width: 195px;
+}
+
+QPushButton {
+    color: black;
+}
+
+QTextBrowser {
+    color: black;
+}
+
+.current-step-name {
+   font: bold 10pt;
+   color: white;
+}
+
+.done-step-name {
+   color: white;
+}
+
+.todo-step-name {
+   color: white;
+}
+
+.todo-step-status {
+   qproperty-pixmap: url(white-step-todo.png);
+   max-width: 14px;
+   min-width: 14px;
+}
+
+.done-step-status {
+   qproperty-pixmap: url(white-step-done.png);
+   max-width: 14px;
+   min-width: 14px;
+}
+
+.current-step-status {
+   qproperty-pixmap: url(white-step-current.png);
+   max-width: 14px;
+   min-width: 14px;
+}
+
+.steps_heading {
+   font: bold;  
+   color: black;
+   margin-bottom: 7px;
+   font-size: 11pt;
+}
+
+#DialogIcon { max-width: 0px; margin: 0px; }
+#DialogHeading { 
+  font-size: 20px; 
+  padding: 12pt;
+  color: white;
+  font-style: bold;
+  margin: 0px;
+}
+
+.Contents QWidget { color: black; } 
+

@@ -18,12 +18,15 @@
 
 /-*/
 
-#include <qmessagebox.h>
+#include <QMessageBox>
+#include <QKeyEvent>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include <qaction.h>
+#include <QAction>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include "QY2LayoutUtils.h"
 
 #include "YQPackageSelectorBase.h"
@@ -48,10 +51,13 @@ using std::string;
 
 YQPackageSelectorBase::YQPackageSelectorBase( YWidget * parent,
 					      long	modeFlags )
-    : QVBox( (QWidget *) parent->widgetRep() )
+    : QFrame( (QWidget *) parent->widgetRep() )
     , YPackageSelector( parent, modeFlags )
 {
     setWidgetRep( this );
+
+//     QHBoxLayout *layout = new QHBoxLayout(this);
+//     setLayout(layout);
 
     _showChangesDialog		= false;
     _pkgConflictDialog		= 0;
@@ -62,14 +68,13 @@ YQPackageSelectorBase::YQPackageSelectorBase( YWidget * parent,
     setFont( YQUI::yqApp()->currentFont() );
 
     _pkgConflictDialog = new YQPkgConflictDialog( this );
-    CHECK_PTR( _pkgConflictDialog );
+    Q_CHECK_PTR( _pkgConflictDialog );
 
     QString label = _( "Reset &Ignored Dependency Conflicts" );
-    _actionResetIgnoredDependencyProblems = new QAction( label,			// text
-							 label,			// menu text
-							 (QKeySequence) 0,	// accel
-							 this ); 		// parent
-    CHECK_PTR( _actionResetIgnoredDependencyProblems );
+    _actionResetIgnoredDependencyProblems = new QAction( label, this);
+    _actionResetIgnoredDependencyProblems->setShortcut((QKeySequence) 0);
+    //_actionResetIgnoredDependencyProblems->setMenuRole(QAction::TextHeuristicRole);
+    Q_CHECK_PTR( _actionResetIgnoredDependencyProblems );
 
     connect( _actionResetIgnoredDependencyProblems, SIGNAL( activated() ),
 	     this,				    SLOT  ( resetIgnoredDependencyProblems() ) );
@@ -129,7 +134,7 @@ YQPackageSelectorBase::verifySystem()
     YQUI::ui()->busyCursor();
     int result = _pkgConflictDialog->verifySystem();
     YQUI::ui()->normalCursor();
-    
+
     if ( result == QDialog::Accepted )
     {
 	QMessageBox::information( this, "",
@@ -306,7 +311,7 @@ bool
 YQPackageSelectorBase::showPendingLicenseAgreements( ZyppPoolIterator begin, ZyppPoolIterator end )
 {
     bool allConfirmed = true;
-    
+
     for ( ZyppPoolIterator it = begin; it != end; ++it )
     {
 	ZyppSel sel = (*it);
@@ -369,9 +374,9 @@ YQPackageSelectorBase::keyPressEvent( QKeyEvent * event )
 {
     if ( event )
     {
-	unsigned special_combo = ( Qt::ControlButton | Qt::ShiftButton | Qt::AltButton );
+	Qt::KeyboardModifiers special_combo = ( Qt::ControlModifier | Qt::ShiftModifier | Qt::AltModifier );
 
-	if ( ( event->state() & special_combo ) == special_combo )
+	if ( ( event->modifiers() & special_combo ) == special_combo )
 	{
 	    if ( event->key() == Qt::Key_A )
 	    {

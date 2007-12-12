@@ -24,6 +24,9 @@
 #include "YMultiProgressMeter.h"
 #include <qwidget.h>
 #include <qpainter.h>
+//Added by qt3to4:
+#include <qevent.h>
+#include <qevent.h>
 
 
 class QPaintEvent;

@@ -23,7 +23,6 @@
 #include "QY2ListView.h"
 #include "YQZypp.h"
 
-
 class QTabWidget;
 
 
@@ -159,17 +158,9 @@ public:
     ZyppSel selectable() const { return _selectable; }
 
     /**
-     * Comparison function used for sorting the list.
-     * Returns:
-     * -1 if this <  other
-     *	0 if this == other
-     * +1 if this >  other
-     *
-     * Reimplemented from QListViewItem
-     **/
-    virtual int compare( QListViewItem *	other,
-			 int			col,
-			 bool			ascending ) const;
+     * sorting function
+     */
+    virtual bool operator< ( const QTreeWidgetItem & other ) const;
 
     /**
      * Returns a tool tip text for a specific column of this item.

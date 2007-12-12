@@ -21,7 +21,7 @@
 #define YQIntField_h
 
 #include <qlabel.h>
-#include <qvbox.h>
+#include <QFrame>
 
 #include "YIntField.h"
 
@@ -30,7 +30,7 @@ class YQWidgetCaption;
 class QSpinBox;
 
 
-class YQIntField : public QVBox, public YIntField
+class YQIntField : public QFrame, public YIntField
 {
     Q_OBJECT
 
@@ -113,7 +113,7 @@ public:
      **/
     virtual bool setKeyboardFocus();
 
-    
+
 signals:
 
     /**

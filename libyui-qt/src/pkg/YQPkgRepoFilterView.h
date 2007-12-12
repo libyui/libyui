@@ -21,7 +21,7 @@
 #define YQPkgRepoFilterView_h
 
 #include "YQZypp.h"
-#include <qvbox.h>
+#include <QWidget>
 
 
 class YQPkgRepoList;
@@ -31,7 +31,7 @@ class YQPkgSearchFilterView;
 class YQPkgStatusFilterView;
 
 
-class YQPkgRepoFilterView : public QVBox
+class YQPkgRepoFilterView : public QWidget
 {
     Q_OBJECT
 

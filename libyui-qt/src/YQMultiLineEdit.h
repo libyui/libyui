@@ -20,7 +20,7 @@
 #ifndef YQMultiLineEdit_h
 #define YQMultiLineEdit_h
 
-#include <qvbox.h>
+#include <QFrame>
 #include "YMultiLineEdit.h"
 
 class YQWidgetCaption;
@@ -30,7 +30,7 @@ class QTextEdit;
 /**
  * MultiLineEdit - an input area for multi-line text.
  **/
-class YQMultiLineEdit : public QVBox, public YMultiLineEdit
+class YQMultiLineEdit : public QFrame, public YMultiLineEdit
 {
     Q_OBJECT
 
@@ -67,7 +67,7 @@ public:
      * Reimplemented from YMultiLineEdit.
      **/
     virtual void setLabel( const string & label );
-    
+
     /**
      * Set the maximum input length, i.e., the maximum number of characters the
      * user can enter. -1 means no limit.
@@ -75,7 +75,7 @@ public:
      * Reimplemented from YMultiLineEdit.
      **/
     virtual void setInputMaxLength( int numberOfChars );
-    
+
     /**
      * Set enabled/disabled state.
      *

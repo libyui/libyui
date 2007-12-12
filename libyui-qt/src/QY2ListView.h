@@ -22,11 +22,13 @@
 #ifndef QY2ListView_h
 #define QY2ListView_h
 
-#include <qlistview.h>
+#include <QTreeWidget>
 #include <qtooltip.h>
 #include <qpoint.h>
 #include <qcolor.h>
 #include <vector>
+
+#define FIXME_TOOLTIP 0
 
 
 class QY2ListViewItem;
@@ -34,9 +36,9 @@ class QY2ListViewToolTip;
 
 
 /**
- * @short Enhanced QListView
+ * @short Enhanced QTreeWidget
  **/
-class QY2ListView : public QListView
+class QY2ListView : public QTreeWidget
 {
     Q_OBJECT
 
@@ -63,7 +65,7 @@ public slots:
     virtual void selectSomething();
 
     /**
-     * Reimplemented from QListView:
+     * Reimplemented from Q3ListView:
      * Adjust header sizes after clearing contents.
      **/
     virtual void clear();
@@ -100,7 +102,7 @@ signals:
      * Emitted for mouse clicks on an item
      **/
     void columnClicked		( int			button,
-				  QListViewItem *	item,
+				  QTreeWidgetItem *	item,
 				  int			col,
 				  const QPoint &	pos );
 
@@ -108,7 +110,7 @@ signals:
      * Emitted for mouse double clicks on an item
      **/
     void columnDoubleClicked	( int			button,
-				  QListViewItem *	item,
+				  QTreeWidgetItem *	item,
 				  int			col,
 				  const QPoint &	pos );
 
@@ -125,7 +127,7 @@ public:
      *
      * Derived classes may handle this differently.
      **/
-    virtual QString toolTip( QListViewItem * item, int column );
+    virtual QString toolTip( QTreeWidgetItem * item, int column );
 
     /**
      * Returns 'true' if the sort order should always be the item insertion
@@ -192,7 +194,7 @@ protected:
     // Data members
     //
 
-    QListViewItem *		_mousePressedItem;
+    QTreeWidgetItem *		_mousePressedItem;
     int				_mousePressedCol;
     int				_mousePressedButton;
 
@@ -208,9 +210,9 @@ protected:
 
 
 /**
- * Enhanced QListViewItem
+ * Enhanced QTreeWidgetItem
  **/
-class QY2ListViewItem: public QListViewItem
+class QY2ListViewItem: public QTreeWidgetItem
 {
 public:
 
@@ -224,7 +226,7 @@ public:
     /**
      * Constructor for deeper level items.
      **/
-    QY2ListViewItem( QListViewItem * 	parentItem,
+    QY2ListViewItem( QTreeWidgetItem * 	parentItem,
 		     const QString &	text = QString::null );
 
     /**
@@ -250,16 +252,9 @@ public:
 
     /**
      * Comparison function used for sorting the list.
-     * Returns:
-     * -1 if this <  other
-     *	0 if this == other
-     * +1 if this >  other
-     *
-     * Reimplemented from QListViewItem
+     * Reimplemented from QTreeWidgetItem
      **/
-    virtual int compare( QListViewItem *	other,
-			 int			col,
-			 bool			ascending ) const;
+    virtual bool operator< ( const QTreeWidgetItem & other ) const;
 
     /**
      * Return this item's serial number.
@@ -293,17 +288,18 @@ public:
 protected:
 
     /**
-     * Paint method. Reimplemented from @ref QListViewItem so different
+     * Paint method. Reimplemented from @ref QTreeWidgetItem so different
      * colors can be used.
      *
-     * Reimplemented from QListViewItem.
+     * Reimplemented from QTreeWidgetItem.
      **/
+    /*
     virtual void paintCell( QPainter *		painter,
 			    const QColorGroup &	colorGroup,
 			    int			column,
 			    int			width,
 			    int			alignment );
-
+    */
     //
     // Data members
     //
@@ -319,7 +315,7 @@ protected:
 /**
  * Enhanced QCheckListItem
  **/
-class QY2CheckListItem: public QCheckListItem
+class QY2CheckListItem: public QY2ListViewItem
 {
 public:
 
@@ -327,24 +323,14 @@ public:
      * Constructor for toplevel items.
      **/
     QY2CheckListItem( QY2ListView * 		parentListView,
-		      const QString &		text,
-		      QCheckListItem::Type	type );
+		      const QString &		text );
 
 
     /**
      * Constructor for deeper level items.
      **/
-    QY2CheckListItem( QListViewItem * 		parentItem,
-		      const QString &		text,
-		      QCheckListItem::Type	type );
-
-
-    /**
-     * Constructor for deeper level items for QCheckListItem parents.
-     **/
-    QY2CheckListItem( QCheckListItem * 		parentItem,
-		      const QString &		text,
-		      QCheckListItem::Type	type );
+    QY2CheckListItem( QTreeWidgetItem * 		parentItem,
+		      const QString &		text );
 
     /**
      * Destructor
@@ -366,19 +352,6 @@ public:
      * This default implementation does nothing.
      **/
     virtual void updateData() {}
-
-    /**
-     * Comparison function used for sorting the list.
-     * Returns:
-     * -1 if this <  other
-     *	0 if this == other
-     * +1 if this >  other
-     *
-     * Reimplemented from QListViewItem
-     **/
-    virtual int compare( QListViewItem *	other,
-			 int			col,
-			 bool			ascending ) const;
 
     /**
      * Return this item's serial number.
@@ -412,17 +385,17 @@ public:
 protected:
 
     /**
-     * Paint method. Reimplemented from @ref QListViewItem so different
+     * Paint method. Reimplemented from @ref QTreeWidgetItem so different
      * colors can be used.
      *
-     * Reimplemented from QListViewItem.
+     * Reimplemented from QTreeWidgetItem.
      **/
-    virtual void paintCell( QPainter *		painter,
+    /*virtual void paintCell( QPainter *		painter,
 			    const QColorGroup &	colorGroup,
 			    int			column,
 			    int			width,
 			    int			alignment );
-
+     */
     //
     // Data members
     //
@@ -434,6 +407,7 @@ protected:
 };
 
 
+#if FIXME_TOOLTIP
 /**
  * Tool tip for a QY2ListView widget: Enables individual tool tips specific to
  * each list item and each column. Overwrite QY2ListViewItem::toolTip() to use
@@ -447,7 +421,8 @@ public:
      * Constructor.
      **/
     QY2ListViewToolTip( QY2ListView * parent )
-	: QToolTip( parent->viewport() ), _listView( parent )  {}
+	: QToolTip( parent->viewport() )
+	, _listView( parent )  {}
 
     /**
      * Destructor (to make gcc 4.x happy)
@@ -471,5 +446,6 @@ protected:
 
     QY2ListView * _listView;
 };
+#endif
 
 #endif // ifndef QY2ListView_h

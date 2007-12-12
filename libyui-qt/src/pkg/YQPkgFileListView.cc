@@ -21,7 +21,7 @@
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include <qregexp.h>
+#include <QRegExp>
 #include "YQPkgFileListView.h"
 #include "YQPkgDescriptionDialog.h"
 #include "YQi18n.h"
@@ -68,8 +68,7 @@ YQPkgFileListView::showDetails( ZyppSel selectable )
 	html += "<p><i>" + _( "Information only available for installed packages." ) + "</i></p>";
     }
 
-    setTextFormat( Qt::RichText );
-    setText( html );
+    setHtml( html );
 }
 
 

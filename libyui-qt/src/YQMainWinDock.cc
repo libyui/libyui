@@ -19,8 +19,8 @@
 
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
-#include <qtimer.h>
-
+#include <QTimer>
+#include <QResizeEvent>
 #include <YDialog.h>
 #include <YQUI.h>
 #include <YEvent.h>
@@ -32,7 +32,7 @@ YQMainWinDock *
 YQMainWinDock::mainWinDock()
 {
     static YQMainWinDock * mainWinDock = 0;
-    
+
     if ( ! mainWinDock )
 	mainWinDock = new YQMainWinDock();
 
@@ -41,14 +41,14 @@ YQMainWinDock::mainWinDock()
 
 
 YQMainWinDock::YQMainWinDock()
-    : QWidget( 0, 0,		 // parent, name
+    : QWidget( 0, // parent, name
 	       YQUI::ui()->noBorder() ?
-	       Qt::WStyle_Customize | Qt::WStyle_NoBorder :
-	       Qt::WType_TopLevel ) 
+	       Qt::FramelessWindowHint :
+	       Qt::Window )
 {
-    setCaption( "YaST2" );
+    setWindowTitle( "YaST2" );
 
-    setFocusPolicy( QWidget::StrongFocus );
+    setFocusPolicy( Qt::StrongFocus );
 
     resize( YQUI::ui()->defaultSize( YD_HORIZ ),
 	    YQUI::ui()->defaultSize( YD_VERT  ) );
@@ -61,23 +61,6 @@ YQMainWinDock::YQMainWinDock()
 YQMainWinDock::~YQMainWinDock()
 {
     // NOP
-}
-
-
-void
-YQMainWinDock::childEvent( QChildEvent * event )
-{
-    if ( event )
-    {
-	QWidget * widget = dynamic_cast<QWidget *> ( event->child() );
-
-	if ( widget && event->inserted() )
-	{
-	    add( widget );
-	}
-    }
-    
-    QWidget::childEvent( event );
 }
 
 
@@ -112,14 +95,12 @@ void
 YQMainWinDock::show()
 {
     QWidget::show();
-    
+
     if ( ! _widgetStack.empty() )
     {
 	QWidget * dialog = _widgetStack.back();
-	dialog->raise();  
-	
-	if ( ! dialog->isShown() )
-	    dialog->show();
+        dialog->raise();
+        dialog->show();
     }
 }
 
@@ -129,15 +110,17 @@ YQMainWinDock::add( QWidget * dialog )
 {
     YUI_CHECK_PTR( dialog );
 
-    if ( ! dialog->isShown() )
-	dialog->show();
+    if ( !_widgetStack.empty() )
+        _widgetStack.back()->hide();
+
+    dialog->raise();
+    dialog->show();
 
     y2debug( "Adding dialog %p to mainWinDock", dialog );
     _widgetStack.push_back( dialog );
     resizeVisibleChild();
-    
-    if ( ! isShown() )
-	show();
+
+    show();
 }
 
 
@@ -181,7 +164,7 @@ YQMainWinDock::remove( QWidget * dialog )
 
 	y2warning( "Found dialog somewhere in the middle of the widget stack" );
 	y2debug( "Removing dialog %p from mainWinDock", dialog );
-	
+
 	_widgetStack.erase( pos );
     }
 
@@ -191,6 +174,7 @@ YQMainWinDock::remove( QWidget * dialog )
     {
 	dialog = _widgetStack.back();	// Get the next dialog from the stack
 	dialog->raise();		// and raise it
+        dialog->show();
 	resizeVisibleChild();
     }
 }

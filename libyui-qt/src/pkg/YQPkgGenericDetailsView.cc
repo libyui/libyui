@@ -18,9 +18,9 @@
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
-#include <qtabwidget.h>
-#include <qregexp.h>
-#include <qdatetime.h>
+#include <QTabWidget>
+#include <QRegExp>
+#include <QDateTime>
 
 #include "YQPkgGenericDetailsView.h"
 #include "YQi18n.h"
@@ -67,7 +67,7 @@ YQPkgGenericDetailsView::showDetailsIfVisible( ZyppSel selectable )
 
     if ( _parentTab )		// Is this view embedded into a tab widget?
     {
-	if ( _parentTab->currentPage() == this )  // Is this page the topmost?
+	if ( _parentTab->currentWidget() == this )  // Is this page the topmost?
 	{
 	    showDetails( selectable );
 	}

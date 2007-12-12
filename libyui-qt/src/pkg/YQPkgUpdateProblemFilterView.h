@@ -22,7 +22,7 @@
 
 
 #include "YQZypp.h"
-#include <qtextbrowser.h>
+#include <QTextBrowser>
 #include "YQPkgSelMapper.h"
 
 

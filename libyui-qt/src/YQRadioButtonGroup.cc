@@ -17,8 +17,7 @@
 /-*/
 
 
-#include <qradiobutton.h>
-#include <qbuttongroup.h>
+#include <QRadioButton>
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
@@ -51,7 +50,7 @@ YQRadioButtonGroup::addRadioButton( YRadioButton * button )
 	uncheckOtherButtons( button );	// make it the only active
     }
 
-    QRadioButton * radio_button = ( ( YQRadioButton * ) button )->getQtButton();
+    QRadioButton * radio_button = dynamic_cast<YQRadioButton *>( button );
 
     connect ( radio_button,	SIGNAL ( toggled           ( bool ) ),
 	      this, 		SLOT   ( radioButtonClicked( bool ) ) );
@@ -97,7 +96,7 @@ YQRadioButtonGroup::radioButtonClicked( bool newState )
 
 	if ( radioButton )
 	{
-	    if ( radioButton->getQtButton() == senderButton )
+	    if ( radioButton == senderButton )
 	    {
 		// If this button has been clicked, it is to be the RadioBox's
 		// active button - regardless of newState. This is to avoid

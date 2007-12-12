@@ -20,8 +20,7 @@
 #ifndef YQSimplePatchSelector_h
 #define YQSimplePatchSelector_h
 
-#include <qvbox.h>
-#include <qcolor.h>
+#include <QColor>
 
 #include "YQPackageSelectorBase.h"
 

@@ -20,6 +20,9 @@
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 #include <qcheckbox.h>
+#include <QDebug>
+#include <QVBoxLayout>
+#include <qevent.h>
 #include "YQUI.h"
 #include "YEvent.h"
 #include "utf8.h"
@@ -40,8 +43,9 @@ YQCheckBoxFrame::YQCheckBoxFrame( YWidget * 		parent,
     setWidgetRep ( this );
     QGroupBox::setTitle( fromUTF8( label ) );
     QGroupBox::setCheckable( true );
-    preventQGroupBoxAutoEnablement();
-			   
+
+    connect( this, SIGNAL( toggled( bool ) ),
+             SLOT( stateChanged( bool ) ) );
     setValue( checked );
 }
 
@@ -67,80 +71,68 @@ void YQCheckBoxFrame::setValue( bool newValue )
 	setChecked( newValue );
 }
 
-
 void YQCheckBoxFrame::setEnabled( bool enabled )
 {
     if ( enabled )
     {
-	QFrame::setEnabled( true );
+	QGroupBox::setEnabled( true );
 	handleChildrenEnablement( value() );
     }
     else
     {
-	QFrame::setEnabled( true );
+	QGroupBox::setEnabled( true );
 	YWidget::setChildrenEnabled( false );
     }
-    
+
     YWidget::setEnabled( enabled );
-}
-
-
-void YQCheckBoxFrame::preventQGroupBoxAutoEnablement()
-{
-    /*
-     * This is a nasty hack. But it is necessary because QGroupBox handles its
-     * internal check box too nearsightedly: It forces all children to be
-     * enabled or disabled depending on the status of the check box. The
-     * behaviour cannot be inverted or suppressed.
-     *
-     * In some cases, however, it makes sense to let the application decide to
-     * handle that differently. Since the YaST2 UI is a toolkit, we leave this
-     * decision up to the application rather than forcing any specific behaviour.
-     */
-
-    // Find the check box in the child hierarchy (as a direct child)
-
-    _checkBox = dynamic_cast<QCheckBox *>( QObject::child( 0,		// objName
-							   "QCheckBox",	// inheritsClass
-							   false ) );	// recursive
-
-    if ( ! _checkBox )
-    {
-	y2warning( "Can't find QCheckBox child" );
-
-	connect( this, SIGNAL( toggled     ( bool ) ),
-		 this, SLOT  ( stateChanged( bool ) ) );
-
-	return;
-    }
-
-    // Disconnect all signals to this object.
-    //
-    // In particular, disconnect the connection from the check box's
-    // 'toggled()' signal to this object's parent class's (private)
-    // setChildrenEnabled() method.
-
-    disconnect( _checkBox,	// sender
-		0,		// signal
-		this,		// receiver
-		0 );		// slot (private method in parent class)
-
-    // Connect the check box directly to this class.
-
-    connect( _checkBox, SIGNAL( toggled     ( bool ) ),
-	     this,	SLOT  ( stateChanged( bool ) ) );
 }
 
 
 void YQCheckBoxFrame::stateChanged( bool newState )
 {
-    y2debug( "new state: %d", newState );
     handleChildrenEnablement( newState );
 
     if ( notify() )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
+bool YQCheckBoxFrame::event(QEvent *e)
+{
+    /* now on to something very fishy. The purpose of this widget
+     * is for whatever reason to provide a checkbox with a groupbox
+     * without the children having any connection to it.
+     *
+     * So we use this trick to undo everything the base class did
+     */
+    QHash<QWidget*, bool> widgetState;
+
+    QObjectList childList = children();
+    for (int i = 0; i < childList.size(); ++i)
+    {
+        QObject *o = childList.at(i);
+        if (o->isWidgetType())
+        {
+            QWidget *w = static_cast<QWidget *>(o);
+            widgetState[w] = w->isEnabled();
+        }
+    }
+
+    bool ret = QGroupBox::event( e );
+
+    childList = children();
+    for (int i = 0; i < childList.size(); ++i)
+    {
+        QObject *o = childList.at(i);
+        if (o->isWidgetType())
+        {
+            QWidget *w = static_cast<QWidget *>(o);
+            if ( widgetState.contains( w ) )
+                w->setEnabled( widgetState[w] );
+        }
+    }
+
+    return ret;
+}
 
 void YQCheckBoxFrame::childEvent( QChildEvent * )
 {
@@ -158,25 +150,26 @@ YQCheckBoxFrame::setSize( int newWidth, int newHeight )
 
     if ( hasChildren() )
     {
-	int newChildWidth  = max ( 0, newWidth  - 2 * frameWidth() - 1 );
-	int newChildHeight = max ( 0, newHeight - frameWidth() - fontMetrics().height() - TOP_MARGIN - 1 );
+        int left, top, right, bottom;
+        getContentsMargins( &left, &top, &right, &bottom );
+	int newChildWidth  = newWidth - left - right;
+	int newChildHeight = newHeight - bottom - top;
 
 	firstChild()->setSize( newChildWidth, newChildHeight );
-	
+
 	QWidget * qChild = (QWidget *) firstChild()->widgetRep();
-	qChild->move( frameWidth(), fontMetrics().height() + TOP_MARGIN );
+	qChild->move( left, top );
     }
 }
 
 
 int YQCheckBoxFrame::preferredWidth()
 {
-    int preferredWidth;
-    int childPreferredWidth = hasChildren() ? firstChild()->preferredWidth() : 0;
+    int preferredWidth = hasChildren() ? firstChild()->preferredWidth() : 0;
+    int left, top, right, bottom;
+    getContentsMargins( &left, &top, &right, &bottom );
 
-    preferredWidth = max( childPreferredWidth,
-			  (10 + fontMetrics().width( title() ) ) );
-    preferredWidth += 2*frameWidth() + 1;
+    preferredWidth += left + right;
 
     return preferredWidth;
 }
@@ -185,15 +178,18 @@ int YQCheckBoxFrame::preferredWidth()
 int YQCheckBoxFrame::preferredHeight()
 {
     int preferredHeight = hasChildren() ? firstChild()->preferredHeight() : 0;
-    preferredHeight += frameWidth() + fontMetrics().height() + TOP_MARGIN + 1;
-    
+    int left, top, right, bottom;
+    getContentsMargins( &left, &top, &right, &bottom );
+
+    preferredHeight += top + left;
+
     return preferredHeight;
 }
 
 
 bool YQCheckBoxFrame::setKeyboardFocus()
 {
-    QGroupBox::setFocus();
+    setFocus();
 
     return true;
 }

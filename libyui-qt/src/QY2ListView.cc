@@ -19,55 +19,63 @@
 /-*/
 
 
-#include <qpixmap.h>
-#include <qheader.h>
-
+#include <QPixmap>
+#include <QHeaderView>
+#include <QMouseEvent>
 #include "QY2ListView.h"
 
 
 QY2ListView::QY2ListView( QWidget * parent )
-    : QListView( parent )
+    : QTreeWidget( parent )
     , _mousePressedItem(0)
     , _mousePressedCol( -1 )
-    , _mousePressedButton( NoButton )
+    , _mousePressedButton( Qt::NoButton )
     , _sortByInsertionSequence( false )
     , _nextSerial(0)
     , _mouseButton1PressedInHeader( false )
     , _finalSizeChangeExpected( false )
 {
-    QListView::setShowToolTips( false );
+    //FIXME QTreeWidget::setShowToolTips( false );
+    setRootIsDecorated(false);
+
+#if FIXME_TOOLTIP
     _toolTip = new QY2ListViewToolTip( this );
+#endif
 
-    if ( header() )
-	header()->installEventFilter( this );
+     if ( header() )
+       header()->installEventFilter( this );
 
-    connect( header(),	SIGNAL( sizeChange        ( int, int, int ) ),
+#if FIXME
+    connect( this,	SIGNAL( columnResized        ( int, int, int ) ),
 	     this,	SLOT  ( columnWidthChanged( int, int, int ) ) );
+#endif
 }
 
 
 QY2ListView::~QY2ListView()
 {
+#if FIXME_TOOLTIP
     if ( _toolTip )
 	delete _toolTip;
+#endif
 }
 
 
 void
 QY2ListView::selectSomething()
 {
-    QListViewItemIterator it( this );
+    QTreeWidgetItemIterator it( this );
 
     while ( *it )
     {
 	QY2ListViewItem * item = dynamic_cast<QY2ListViewItem *> (*it);
 
-	if ( item && item->isSelectable() )
+	if ( item && (item->flags() & Qt::ItemIsSelectable) )
 	{
-	    setSelected( item, true ); // emits signal, too
+	    item->setSelected(true); // emits signal, too
 	    return;
 	}
-	
+
 	++it;
     }
 }
@@ -76,7 +84,7 @@ QY2ListView::selectSomething()
 void
 QY2ListView::clear()
 {
-    QListView::clear();
+    QTreeWidget::clear();
     restoreColumnWidths();
 }
 
@@ -84,7 +92,7 @@ QY2ListView::clear()
 void
 QY2ListView::updateItemStates()
 {
-    QListViewItemIterator it( this );
+    QTreeWidgetItemIterator it( this );
 
     while ( *it )
     {
@@ -92,7 +100,7 @@ QY2ListView::updateItemStates()
 
 	if ( item )
 	    item->updateStatus();
-	
+
 	++it;
     }
 }
@@ -101,7 +109,7 @@ QY2ListView::updateItemStates()
 void
 QY2ListView::updateItemData()
 {
-    QListViewItemIterator it( this );
+    QTreeWidgetItemIterator it( this );
 
     while ( *it )
     {
@@ -109,14 +117,14 @@ QY2ListView::updateItemData()
 
 	if ( item )
 	    item->updateData();
-	
+
 	++it;
     }
 }
 
 
 QString
-QY2ListView::toolTip( QListViewItem * listViewItem, int column )
+QY2ListView::toolTip( QTreeWidgetItem * listViewItem, int column )
 {
     if ( ! listViewItem )
 	return QString::null;
@@ -147,9 +155,9 @@ void
 QY2ListView::saveColumnWidths()
 {
     _savedColumnWidth.clear();
-    _savedColumnWidth.reserve( columns() );
+    _savedColumnWidth.reserve( columnCount() );
 
-    for ( int i = 0; i < columns(); i++ )
+    for ( int i = 0; i < columnCount(); i++ )
     {
 	_savedColumnWidth.push_back( columnWidth(i) );
     }
@@ -159,14 +167,14 @@ QY2ListView::saveColumnWidths()
 void
 QY2ListView::restoreColumnWidths()
 {
-    if ( _savedColumnWidth.size() != (unsigned) columns() ) 	// never manually resized
+    if ( _savedColumnWidth.size() != (unsigned) columnCount() ) 	// never manually resized
     {
-	for ( int i = 0; i < columns(); i++ )		// use optimized column width
-	    adjustColumn( i );
+	for ( int i = 0; i < columnCount(); i++ )		// use optimized column width
+	    resizeColumnToContents(i);
     }
     else						// stored settings after manual resizing
     {
-	for ( int i = 0; i < columns(); i++ )
+	for ( int i = 0; i < columnCount(); i++ )
 	{
 	    setColumnWidth( i, _savedColumnWidth[ i ] ); // restore saved column width
 	}
@@ -177,12 +185,13 @@ QY2ListView::restoreColumnWidths()
 void
 QY2ListView::contentsMousePressEvent( QMouseEvent * ev )
 {
-    QListViewItem * item = itemAt( contentsToViewport( ev->pos() ) );
+    //FIXME may be convert to global
+    QTreeWidgetItem * item = itemAt( mapToGlobal( ev->pos() ) );
 
-    if ( item && item->isEnabled() )
+    if ( item && ( item->flags() & Qt::ItemIsEnabled ) )
     {
 	_mousePressedItem	= item;
-	_mousePressedCol	= header()->sectionAt( ev->pos().x() );
+//FIXME	_mousePressedCol	= header()->sectionAt( ev->pos().x() );
 	_mousePressedButton	= ev->button();
     }
     else	// invalidate last click data
@@ -193,25 +202,25 @@ QY2ListView::contentsMousePressEvent( QMouseEvent * ev )
     }
 
     // Call base class method
-    QListView::contentsMousePressEvent( ev );
+    //FIXME QTreeWidget::contentsMousePressEvent( ev );
 }
 
 
 void
 QY2ListView::contentsMouseReleaseEvent( QMouseEvent * ev )
 {
-    QListViewItem * item = itemAt( contentsToViewport( ev->pos() ) );
+    QTreeWidgetItem * item = itemAt( mapToGlobal( ev->pos() ) );
 
-    if ( item && item->isEnabled() && item == _mousePressedItem )
+    if ( item && ( item->flags() & Qt::ItemIsEnabled ) && item == _mousePressedItem )
     {
-	int col = header()->sectionAt( ev->pos().x() );
+ 	int col = header()->logicalIndexAt( ev->pos().x() );
 
-	if ( item == _mousePressedItem	&&
-	     col  == _mousePressedCol	&&
-	     ev->button() == _mousePressedButton )
-	{
-	    emit( columnClicked( ev->button(), item, col, ev->globalPos() ) );
-	}
+ 	if ( item == _mousePressedItem	&&
+ 	     col  == _mousePressedCol	&&
+ 	     ev->button() == _mousePressedButton )
+ 	{
+ 	    emit( columnClicked( ev->button(), item, col, ev->globalPos() ) );
+ 	}
 
     }
 
@@ -219,32 +228,32 @@ QY2ListView::contentsMouseReleaseEvent( QMouseEvent * ev )
 
     _mousePressedItem	= 0;
     _mousePressedCol	= -1;
-    _mousePressedButton	= NoButton;
+    _mousePressedButton	= Qt::NoButton;
 
     // Call base class method
-    QListView::contentsMouseReleaseEvent( ev );
+    //FIXME QTreeWidget::contentsMouseReleaseEvent( ev );
 }
 
 
 void
 QY2ListView::contentsMouseDoubleClickEvent( QMouseEvent * ev )
 {
-    QListViewItem * item = itemAt( contentsToViewport( ev->pos() ) );
+    QTreeWidgetItem * item = itemAt( mapToGlobal( ev->pos() ) );
 
-    if ( item && item->isEnabled() )
+    if ( item && ( item->flags() & Qt::ItemIsEnabled ) )
     {
-	int col = header()->sectionAt( ev->pos().x() );
-	emit( columnDoubleClicked( ev->button(), (QY2ListViewItem *) item, col, ev->globalPos() ) );
-    }
+ 	int col = header()->logicalIndexAt( ev->pos().x() );
+ 	emit( columnDoubleClicked( ev->button(), (QY2ListViewItem *) item, col, ev->globalPos() ) );
+     }
 
-    // invalidate last click data
+     // invalidate last click data
 
-    _mousePressedItem	= 0;
-    _mousePressedCol	= -1;
-    _mousePressedButton	= NoButton;
+     _mousePressedItem	= 0;
+     _mousePressedCol	= -1;
+     _mousePressedButton	= Qt::NoButton;
 
-    // Call base class method
-    QListView::contentsMouseDoubleClickEvent( ev );
+//     // Call base class method
+//     QTreeWidget::contentsMouseDoubleClickEvent( ev );
 }
 
 
@@ -300,7 +309,7 @@ QY2ListView::eventFilter( QObject * obj, QEvent * event )
 	}
     }
 
-    return QListView::eventFilter( obj, event );
+    return QTreeWidget::eventFilter( obj, event );
 }
 
 
@@ -315,8 +324,9 @@ void
 QY2ListView::setSortByInsertionSequence( bool sortByInsertionSequence )
 {
     _sortByInsertionSequence = sortByInsertionSequence;
-    sort();
-    header()->setClickEnabled( ! _sortByInsertionSequence );
+    //FIXME sort();
+    header()->setClickable( ! _sortByInsertionSequence );
+
 }
 
 
@@ -326,19 +336,19 @@ QY2ListView::setSortByInsertionSequence( bool sortByInsertionSequence )
 
 QY2ListViewItem::QY2ListViewItem( QY2ListView * 	parentListView,
 				  const QString &	text )
-    : QListViewItem( parentListView, text )
+    : QTreeWidgetItem( parentListView, QStringList(text), 1)
 {
     _serial = parentListView->nextSerial();
 }
 
 
-QY2ListViewItem::QY2ListViewItem( QListViewItem * 	parentItem,
+QY2ListViewItem::QY2ListViewItem( QTreeWidgetItem * 	parentItem,
 				  const QString &	text )
-    : QListViewItem( parentItem, text )
+    : QTreeWidgetItem( parentItem, QStringList(text), 1 )
 {
     _serial = 0;
 
-    QY2ListView * parentListView = dynamic_cast<QY2ListView *> ( listView() );
+    QY2ListView * parentListView = dynamic_cast<QY2ListView *> ( treeWidget() );
 
     if ( parentListView )
 	_serial = parentListView->nextSerial();
@@ -350,107 +360,74 @@ QY2ListViewItem::~QY2ListViewItem()
     // NOP
 }
 
-
-/**
- * Comparison function used for sorting the list.
- * Returns:
- * -1 if this <	 other
- *  0 if this == other
- * +1 if this >	 other
- **/
-int
-QY2ListViewItem::compare( QListViewItem *	otherListViewItem,
-			  int			col,
-			  bool			ascending ) const
+bool
+QY2ListViewItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
 {
-    bool sortByInsertionSequence = false;
-    QY2ListView * parentListView = dynamic_cast<QY2ListView *> (listView());
+  bool sortByInsertionSequence = false;
+    QY2ListView * parentListView = dynamic_cast<QY2ListView *> (treeWidget());
 
     if ( parentListView )
 	sortByInsertionSequence = parentListView->sortByInsertionSequence();
-    
+
     if ( sortByInsertionSequence )
     {
-	QY2ListViewItem * other = dynamic_cast<QY2ListViewItem *> (otherListViewItem);
+	const QY2ListViewItem * other = dynamic_cast<const QY2ListViewItem *> (&otherListViewItem);
 
 	if ( other )
 	{
-	    if ( this->serial() < other->serial() ) return -1;
-	    if ( this->serial() > other->serial() ) return  1;
-	    return 0;
+            return ( this->serial() < other->serial() );
 	}
 
 	// Still here? Try the other version: QY2CheckListItem.
 
-	QY2CheckListItem * otherCheckListItem = dynamic_cast<QY2CheckListItem *> (otherListViewItem);
+	const QY2CheckListItem * otherCheckListItem = dynamic_cast<const QY2CheckListItem *> (&otherListViewItem);
 
 	if ( otherCheckListItem )
 	{
-	    if ( this->serial() < otherCheckListItem->serial() ) return -1;
-	    if ( this->serial() > otherCheckListItem->serial() ) return  1;
-	    return 0;
+	    return ( this->serial() < otherCheckListItem->serial() );
 	}
 
     }
 
-    return QListViewItem::compare( otherListViewItem, col, ascending );
+    return QTreeWidgetItem::operator<(otherListViewItem);
 }
 
-
-void
-QY2ListViewItem::paintCell( QPainter *		painter,
-			    const QColorGroup &	colorGroup,
-			    int			column,
-			    int			width,
-			    int			alignment )
-{
-    QColorGroup cg = colorGroup;
-
-    if ( _textColor.isValid() )		cg.setColor( QColorGroup::Text, _textColor );
-    if ( _backgroundColor.isValid() )	cg.setColor( QColorGroup::Base, _backgroundColor );
-
-    QListViewItem::paintCell( painter, cg, column, width, alignment );
-}
-
-
-
-
+// void
+// QY2ListViewItem::paintCell( QPainter *		painter,
+// 			    const QColorGroup &	colorGroup,
+// 			    int			column,
+// 			    int			width,
+// 			    int			alignment )
+// {
+//     QColorGroup cg = colorGroup;
+//
+//     if ( _textColor.isValid() )		cg.setColor( QColorGroup::Text, _textColor );
+//     if ( _backgroundColor.isValid() )	cg.setColor( QColorGroup::Base, _backgroundColor );
+//
+//     QTreeWidgetItem::paintCell( painter, cg, column, width, alignment );
+// }
 
 
 QY2CheckListItem::QY2CheckListItem( QY2ListView * 		parentListView,
-				    const QString &		text,
-				    QCheckListItem::Type	type )
-    : QCheckListItem( parentListView, text, type )
+				    const QString &		text )
+    : QY2ListViewItem( parentListView, text)
 {
+    setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+    setCheckState(0, Qt::Unchecked);
     _serial = parentListView->nextSerial();
 }
 
 
-QY2CheckListItem::QY2CheckListItem( QListViewItem * 		parentItem,
-				    const QString &		text,
-				    QCheckListItem::Type	type )
-    : QCheckListItem( parentItem, text, type )
+QY2CheckListItem::QY2CheckListItem( QTreeWidgetItem * 		parentItem,
+				    const QString &		text )
+    : QY2ListViewItem( parentItem, text)
 {
     _serial = 0;
-    QY2ListView * parentListView = dynamic_cast<QY2ListView *> ( listView() );
+    QY2ListView * parentListView = dynamic_cast<QY2ListView *> ( treeWidget() );
 
     if ( parentListView )
 	_serial = parentListView->nextSerial();
 }
-
-
-QY2CheckListItem::QY2CheckListItem( QCheckListItem * 		parentItem,
-				    const QString &		text,
-				    QCheckListItem::Type	type )
-    : QCheckListItem( parentItem, text, type )
-{
-    _serial = 0;
-    QY2ListView * parentListView = dynamic_cast<QY2ListView *> ( listView() );
-
-    if ( parentListView )
-	_serial = parentListView->nextSerial();
-}
-
 
 QY2CheckListItem::~QY2CheckListItem()
 {
@@ -458,53 +435,7 @@ QY2CheckListItem::~QY2CheckListItem()
 }
 
 
-/**
- * Comparison function used for sorting the list.
- * Returns:
- * -1 if this <	 other
- *  0 if this == other
- * +1 if this >	 other
- **/
-int
-QY2CheckListItem::compare( QListViewItem *	otherListViewItem,
-			   int			col,
-			   bool			ascending ) const
-{
-    bool sortByInsertionSequence = false;
-    QY2ListView * parentListView = dynamic_cast<QY2ListView *> (listView());
-
-    if ( parentListView )
-	sortByInsertionSequence = parentListView->sortByInsertionSequence();
-    
-    if ( sortByInsertionSequence )
-    {
-	QY2CheckListItem * other = dynamic_cast<QY2CheckListItem *> (otherListViewItem);
-
-	if ( other )
-	{
-	    if ( this->serial() < other->serial() ) return -1;
-	    if ( this->serial() > other->serial() ) return  1;
-	    return 0;
-	}
-
-
-	// Still here? Try the other version: QY2ListViewItem.
-
-	QY2ListViewItem * otherCheckListItem = dynamic_cast<QY2ListViewItem *> (otherListViewItem);
-
-	if ( otherCheckListItem )
-	{
-	    if ( this->serial() < otherCheckListItem->serial() ) return -1;
-	    if ( this->serial() > otherCheckListItem->serial() ) return  1;
-	    return 0;
-	}
-
-    }
-
-    return QListViewItem::compare( otherListViewItem, col, ascending );
-}
-
-
+/*
 void
 QY2CheckListItem::paintCell( QPainter *			painter,
 			     const QColorGroup &	colorGroup,
@@ -517,15 +448,16 @@ QY2CheckListItem::paintCell( QPainter *			painter,
     if ( _textColor.isValid() )		cg.setColor( QColorGroup::Text, _textColor );
     if ( _backgroundColor.isValid() )	cg.setColor( QColorGroup::Base, _backgroundColor );
 
-    QCheckListItem::paintCell( painter, cg, column, width, alignment );
+    QTreeWidgetItem::paintCell( painter, cg, column, width, alignment );
 }
+*/
 
-
+#if FIXME_TOOLTIP
 void
 QY2ListViewToolTip::maybeTip( const QPoint & pos )
 {
-    QHeader *       header        = _listView->header();
-    QListViewItem * item          = _listView->itemAt( pos );
+    Q3Header *       header        = _listView->header();
+    QTreeWidgetItem * item          = _listView->itemAt( pos );
 
     if ( ! item )
 	return;
@@ -565,6 +497,8 @@ QY2ListViewToolTip::maybeTip( const QPoint & pos )
 	tip( rect, text );
     }
 }
+
+#endif
 
 
 #include "QY2ListView.moc"

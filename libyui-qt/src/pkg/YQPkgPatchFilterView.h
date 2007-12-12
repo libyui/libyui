@@ -22,7 +22,7 @@
 
 #include "YQZypp.h"
 #include "YQPkgSelMapper.h"
-#include <qvbox.h>
+#include <QLabel>
 
 
 class YQPkgPatchList;
@@ -37,7 +37,7 @@ class QTabWidget;
  * @short Display a list of zypp::Patch objects and ( below ) details about the
  * currently selected patch.
  **/
-class YQPkgPatchFilterView : public QVBox
+class YQPkgPatchFilterView : public QWidget
 {
     Q_OBJECT
 
@@ -90,7 +90,6 @@ protected:
     QLabel *			_totalDownloadSize;
     
     YQPkgSelMapper		_selMapper;
-    bool 			_haveUpdateStackPatches;
 };
 
 

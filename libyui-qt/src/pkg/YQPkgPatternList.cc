@@ -18,14 +18,13 @@
 
 /-*/
 
-
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <zypp/ZYppFactory.h>
 #include <zypp/Resolver.h>
-#include <qpainter.h>
-#include <qheader.h>
+#include <QPainter>
+#include <QHeaderView>
 #include <zypp/ui/PatternContents.h>
 
 #include "YQi18n.h"
@@ -45,7 +44,8 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     y2debug( "Creating pattern list" );
 
     int numCol = 0;
-    addColumn( ""		);	_statusCol	= numCol++;
+    QStringList headers;
+    headers << "";	_statusCol	= numCol++;
 
     // Translators: "Pattern" refers to so-called "installation patterns",
     // i.e., specific task-oriented groups of packages, like "everything that
@@ -54,23 +54,24 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     // configuring the web server. For the scope of the package selector, this
     // is only of little relevance, though.
 
-    addColumn( _( "Pattern" )	);	_summaryCol	= numCol++;
+    headers << _( "Pattern" );	_summaryCol	= numCol++;
 
+    setHeaderLabels(headers);
     // Can use the same colum for "broken" and "satisfied":
     // Both states are mutually exclusive
-    
+
     _satisfiedIconCol	= _summaryCol;
     _brokenIconCol	= _summaryCol;
-    
-    header()->setStretchEnabled( _statusCol , false );
-    header()->setStretchEnabled( _summaryCol, true  );
+
+//     header()->setStretchEnabled( _statusCol , false );
+//     header()->setStretchEnabled( _summaryCol, true  );
 
     setAllColumnsShowFocus( true );
-    setTreeStepSize( 0 );
+    //setTreeStepSize( 0 );
 
     if ( autoFilter )
     {
-	connect( this, SIGNAL( selectionChanged( QListViewItem * ) ),
+	connect( this, SIGNAL( currentItemChanged( QTreeWidgetItem *, QTreeWidgetItem * ) ),
 		 this, SLOT  ( filter()				   ) );
     }
 
@@ -79,7 +80,6 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 	fillList();
 	selectSomething();
     }
-
     y2debug( "Creating pattern list done" );
 }
 
@@ -132,10 +132,10 @@ YQPkgPatternList::category( const QString & categoryName )
 
     if ( ! cat )
     {
-	y2debug( "New pattern category \"%s\"", (const char *) categoryName );
+	y2debug( "New pattern category \"%s\"", qPrintable(categoryName) );
 
 	cat = new YQPkgPatternCategoryItem( this, categoryName );
-	CHECK_PTR( cat );
+	Q_CHECK_PTR( cat );
 	_categories.insert( categoryName, cat );
     }
 
@@ -207,6 +207,7 @@ YQPkgPatternList::addPatternItem( ZyppSel	selectable,
     else
 	item = new YQPkgPatternListItem( this, selectable, zyppPattern );
 
+    addTopLevelItem(item);
     applyExcludeRules( item );
 }
 
@@ -214,21 +215,26 @@ YQPkgPatternList::addPatternItem( ZyppSel	selectable,
 YQPkgPatternListItem *
 YQPkgPatternList::selection() const
 {
-    QListViewItem * item = selectedItem();
+#if FIXME
+    QTreeWidgetItem * item = currentItem();
 
     if ( ! item )
 	return 0;
 
     return dynamic_cast<YQPkgPatternListItem *> (item);
+#else
+    return 0;
+#endif
 }
 
 
 void
 YQPkgPatternList::pkgObjClicked( int			button,
-				 QListViewItem *	listViewItem,
+				 QTreeWidgetItem *	listViewItem,
 				 int			col,
 				 const QPoint &		pos )
 {
+#if FIXME
     YQPkgPatternCategoryItem * categoryItem
 	= dynamic_cast<YQPkgPatternCategoryItem *> (listViewItem);
 
@@ -238,7 +244,7 @@ YQPkgPatternList::pkgObjClicked( int			button,
 	{
 	    if ( col == statusCol() )
 	    {
-		categoryItem->setOpen( ! categoryItem->isOpen() );
+		categoryItem->setOpen( ! categoryItem->isExpanded() );
 	    }
 	}
     }
@@ -246,13 +252,15 @@ YQPkgPatternList::pkgObjClicked( int			button,
     {
 	YQPkgObjList::pkgObjClicked( button, listViewItem, col, pos );
     }
+#endif
 }
 
 
 void
 YQPkgPatternList::selectSomething()
 {
-    QListViewItemIterator it( this );
+#if FIXME
+    QTreeWidgetItemIterator it( this );
 
     while ( *it )
     {
@@ -268,12 +276,14 @@ YQPkgPatternList::selectSomething()
 
 	++it;
     }
+#endif
 }
 
-
-
-
-
+void YQPkgPatternList::drawRow ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    painter->setFont( YQUI::yqApp()->headingFont() );
+    QTreeWidget::drawRow ( painter, option, index );
+}
 
 YQPkgPatternListItem::YQPkgPatternListItem( YQPkgPatternList *	patternList,
 					    ZyppSel		selectable,
@@ -323,30 +333,19 @@ YQPkgPatternListItem::applyChanges()
 }
 
 
-
-/**
- * Comparison function used for sorting the list.
- * Returns:
- * -1 if this <	 other
- *  0 if this == other
- * +1 if this >	 other
- **/
-int
-YQPkgPatternListItem::compare( QListViewItem *	otherListViewItem,
-			       int		col,
-			       bool		ascending ) const
+bool YQPkgPatternListItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
 {
-    YQPkgPatternListItem * otherPatternListitem	 = dynamic_cast<YQPkgPatternListItem     *>(otherListViewItem);
+    const YQPkgPatternListItem * otherPatternListitem	 = dynamic_cast<const YQPkgPatternListItem     *>(&otherListViewItem);
 
     if ( _zyppPattern && otherPatternListitem && otherPatternListitem->zyppPattern() )
 	return _zyppPattern->order().compare( otherPatternListitem->zyppPattern()->order() );
 
-    YQPkgPatternCategoryItem * otherCategoryItem = dynamic_cast<YQPkgPatternCategoryItem *>(otherListViewItem);
+    const YQPkgPatternCategoryItem * otherCategoryItem = dynamic_cast<const YQPkgPatternCategoryItem *>(&otherListViewItem);
 
     if ( otherCategoryItem )	// Patterns without category should always be sorted
-	return -1;		// before any category
+	return true;		// before any category
 
-    return QListViewItem::compare( otherListViewItem, col, ascending );
+    return QTreeWidgetItem::operator<( otherListViewItem );
 }
 
 
@@ -371,20 +370,6 @@ YQPkgPatternCategoryItem::~YQPkgPatternCategoryItem()
     // NOP
 }
 
-
-void
-YQPkgPatternCategoryItem::paintCell( QPainter *			painter,
-				     const QColorGroup &	colorGroup,
-				     int			column,
-				     int			width,
-				     int			alignment )
-{
-    painter->setFont( YQUI::yqApp()->headingFont() );
-    QY2ListViewItem::paintCell( painter, colorGroup, column, width, alignment );
-}
-
-
-
 void
 YQPkgPatternCategoryItem::addPattern( ZyppPattern pattern )
 {
@@ -403,7 +388,7 @@ YQPkgPatternCategoryItem::addPattern( ZyppPattern pattern )
 void
 YQPkgPatternCategoryItem::setOpen( bool open )
 {
-    QListViewItem::setOpen( open );
+    //FIXME QTreeWidgetItem::setOpen( open );
     setTreeIcon();
 }
 
@@ -411,39 +396,29 @@ YQPkgPatternCategoryItem::setOpen( bool open )
 void
 YQPkgPatternCategoryItem::setTreeIcon()
 {
+#if FIXME
     setPixmap( _patternList->statusCol(),
 	       isOpen() ?
 	       YQIconPool::treeMinus() :
 	       YQIconPool::treePlus()   );
-
+#endif
 }
 
 
-
-/**
- * Comparison function used for sorting the list.
- * Returns:
- * -1 if this <	 other
- *  0 if this == other
- * +1 if this >	 other
- **/
-int
-YQPkgPatternCategoryItem::compare( QListViewItem *	otherListViewItem,
-				   int			col,
-				   bool			ascending ) const
+bool YQPkgPatternCategoryItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
 {
-    YQPkgPatternCategoryItem * otherCategoryItem = dynamic_cast<YQPkgPatternCategoryItem *>(otherListViewItem);
+    const YQPkgPatternCategoryItem * otherCategoryItem = dynamic_cast<const YQPkgPatternCategoryItem *>(&otherListViewItem);
 
     if ( _firstPattern && otherCategoryItem && otherCategoryItem->firstPattern() )
 	return _firstPattern->order().compare( otherCategoryItem->firstPattern()->order() );
 
 
-    YQPkgPatternListItem * otherPatternListitem	 = dynamic_cast<YQPkgPatternListItem *>(otherListViewItem);
+    const YQPkgPatternListItem * otherPatternListitem	 = dynamic_cast<const YQPkgPatternListItem *>(&otherListViewItem);
 
     if ( otherPatternListitem )	// Patterns without category should always be sorted
-	return 1;		// before any category
+	return true;		// before any category
 
-    return QListViewItem::compare( otherListViewItem, col, ascending );
+    return QTreeWidgetItem::operator<( otherListViewItem );
 }
 
 

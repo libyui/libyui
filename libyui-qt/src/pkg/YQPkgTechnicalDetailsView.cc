@@ -24,6 +24,8 @@
 #include "YQPkgTechnicalDetailsView.h"
 #include "YQi18n.h"
 #include "utf8.h"
+//Added by qt3to4:
+#include <QList>
 
 using std::list;
 using std::string;
@@ -70,8 +72,7 @@ YQPkgTechnicalDetailsView::showDetails( ZyppSel selectable )
 	    html_text += simpleTable( selectable, installed );
     }
 
-    setTextFormat( Qt::RichText );
-    setText( html_text );
+    setHtml( html_text );
 }
 
 
@@ -100,19 +101,17 @@ YQPkgTechnicalDetailsView::authorsListCell( ZyppPkg pkg ) const
 QString
 YQPkgTechnicalDetailsView::formatRpmGroup( ZyppPkg pkg ) const
 {
-    QStringList groups = QStringList::split( '/',	// delimiter
-					     fromUTF8( pkg->group() ),
-					     false );	// allow empties
+    QStringList groups = fromUTF8( pkg->group() ).split( '/', QString::KeepEmptyParts );
 
     // Translate group path components
 
     QStringList translated;
 
-    for ( QValueList<QString>::const_iterator it = groups.begin();
+    for ( QStringList::const_iterator it = groups.begin();
 	  it != groups.end();
 	  ++it )
     {
-	translated.append( QString::fromUtf8( dgettext( "rpm-groups", (*it).utf8() ) ) );
+	translated.append( QString::fromUtf8( dgettext( "rpm-groups", (*it).toUtf8() ) ) );
     }
 
     return translated.join( "/" );

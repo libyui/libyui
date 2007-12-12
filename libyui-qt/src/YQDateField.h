@@ -20,14 +20,15 @@
 #ifndef YQDateField_h
 #define YQDateField_h
 
-#include <qvbox.h>
+#include <QFrame>
+#include <QDateEdit>
+
 #include "YDateField.h"
 
-class QDateEdit;
 class YQWidgetCaption;
 
 
-class YQDateField : public QVBox, public YDateField
+class YQDateField : public QFrame, public YDateField
 {
     Q_OBJECT
 

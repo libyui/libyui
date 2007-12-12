@@ -96,7 +96,7 @@ public:
      **/
     virtual bool setKeyboardFocus();
 
-    
+
 private slots:
 
     /**
@@ -108,22 +108,12 @@ private slots:
 protected:
 
     /**
-     * Prevent standard QGroupBox behaviour to always enable or disable all
-     * children according to its check box's status (can't be inverted or left
-     * to the application).
-     *
-     * This is a nasty hack, but it prevents oversights from the Qt designers.
-     * Their view on how that check box should affect the frame content appears
-     * to be somewhat limiting.
-     **/
-    void preventQGroupBoxAutoEnablement();
-
-    /**
      * Reimplemented from QGroupBox to prevent QGroupBox from disabling
      * children according to the check box status as the children are inserted.
      **/
     virtual void childEvent( QChildEvent * );
 
+    virtual bool event(QEvent *e);
 
     //
     // Data members

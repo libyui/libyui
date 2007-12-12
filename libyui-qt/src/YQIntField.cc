@@ -28,28 +28,36 @@
 #include "YQIntField.h"
 #include "YQSignalBlocker.h"
 #include "YQWidgetCaption.h"
-
+#include <QVBoxLayout>
 
 YQIntField::YQIntField( YWidget *	parent,
 			const string &	label,
 			int 		minValue,
 			int 		maxValue,
 			int 		initialValue )
-    : QVBox( (QWidget *) parent->widgetRep() )
+    : QFrame( (QWidget *) parent->widgetRep() )
     , YIntField( parent, label, minValue, maxValue )
 {
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    setLayout( layout );
+
     setWidgetRep( this );
 
-    setSpacing( YQWidgetSpacing );
-    setMargin( YQWidgetMargin );
+    layout->setSpacing( YQWidgetSpacing );
+    layout->setMargin( YQWidgetMargin );
 
     _caption    = new YQWidgetCaption( this, label );
     YUI_CHECK_NEW( _caption );
+    layout->addWidget( _caption );
 
-    _qt_spinBox = new QSpinBox( minValue, maxValue,
-				1, // step
-				this );
+    _qt_spinBox = new QSpinBox(this);
+    _qt_spinBox->setMinimum(minValue);
+    _qt_spinBox->setMaximum(maxValue);
+    _qt_spinBox->setSingleStep(1);
+
     YUI_CHECK_NEW( _qt_spinBox );
+    layout->addWidget( _qt_spinBox );
+
     _qt_spinBox->setValue( initialValue );
 
     _caption->setBuddy( _qt_spinBox );

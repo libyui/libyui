@@ -18,15 +18,16 @@
 
 /-*/
 
-
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include <qcombobox.h>
-#include <qlabel.h>
-#include <qsplitter.h>
-#include <qtabwidget.h>
-#include <qdatetime.h>
+#include <QComboBox>
+#include <QLabel>
+#include <QSplitter>
+#include <QTabWidget>
+#include <QDateTime>
+#include <QFrame>
+#include <QVBoxLayout>
 
 #include <FSize.h>
 #include <zypp/ui/PatchContents.h>
@@ -50,48 +51,49 @@ using std::set;
 
 
 YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
-    : QVBox( parent )
+    : QWidget( parent )
 {
-    QVBox * vbox;
-    _haveUpdateStackPatches	= YQPkgPatchList::haveUpdateStackPatches();
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    
 
-    _splitter			= new QSplitter( QSplitter::Vertical, this );	CHECK_PTR( _splitter 	);
-    vbox			= new QVBox( _splitter );			CHECK_PTR( vbox		);
-    _patchList			= new YQPkgPatchList( vbox );			CHECK_PTR( _patchList 	);
+    _splitter			= new QSplitter( Qt::Vertical, this );	Q_CHECK_PTR( _splitter 	);
+    layout->addWidget(_splitter);
+    QVBoxLayout * vbox = new QVBoxLayout(_splitter);
+    Q_CHECK_PTR( vbox		);
+    layout->addLayout(vbox);
+    _patchList			= new YQPkgPatchList( this );			Q_CHECK_PTR( _patchList 	);
+    vbox->addWidget(_patchList);
+    
+    //addVSpacing( vbox, 4 );
 
-    addVSpacing( vbox, 4 );
-
-    QHBox * hbox 		= new QHBox( vbox ); CHECK_PTR( hbox );
+    QHBoxLayout * hbox 		= new QHBoxLayout( this ); Q_CHECK_PTR( hbox );
+    vbox->addLayout(hbox);
     hbox->setSpacing( SPACING );
 
-    QLabel * label		= new QLabel( _( "&Show Patch Category:" ), hbox );
+    QLabel * label		= new QLabel( _( "&Show Patch Category:" ), this );
+    hbox->addWidget(label);
 
-    _patchFilter		= new QComboBox( hbox );
-    CHECK_PTR( _patchFilter );
+    _patchFilter		= new QComboBox( this );
+    Q_CHECK_PTR( _patchFilter );
+    hbox->addWidget(_patchFilter);
 
-    int index = 0;
-    
-    if ( _haveUpdateStackPatches )
-	// Translators: This is about patches that patch the update engine (libzypp, YaST) itself
-	_patchFilter->insertItem( _( "Update Stack Patches" ),			index++ );
-	
-    _patchFilter->insertItem( _( "Installable Patches" ),			index++ );
-    _patchFilter->insertItem( _( "Installable and Installed Patches" 	),	index++ );
-    _patchFilter->insertItem( _( "All Patches" ),				index++ );
-    _patchFilter->setCurrentItem( 0 );
+    _patchFilter->addItem( _( "Installable Patches" ));
+    _patchFilter->addItem( _( "Installable and Installed Patches" ));
+    _patchFilter->addItem( _( "All Patches" ),				2 );
+    _patchFilter->setCurrentIndex( 0 );
     _patchFilter->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
     label->setBuddy( _patchFilter );
 
     connect( _patchFilter, SIGNAL( activated( int ) ), this, SLOT( fillPatchList() ) );
-    addVSpacing( vbox, 4 );
+    //addVSpacing( vbox, 4 );
 
-    vbox			= new QVBox( _splitter );			CHECK_PTR( vbox			);
-    addVSpacing( vbox, 8 );
+    vbox			= new QVBoxLayout( _splitter );			Q_CHECK_PTR( vbox			);
+    //addVSpacing( vbox, 8 );
 
-    _detailsViews		= new QTabWidget( vbox );			CHECK_PTR( _detailsViews	);
-    _detailsViews->setMargin( MARGIN );
+    _detailsViews		= new QTabWidget( this );			Q_CHECK_PTR( _detailsViews	);
+    vbox->addWidget(_detailsViews);
 
-    _descriptionView		= new YQPkgDescriptionView( _detailsViews );	CHECK_PTR( _descriptionView	);
+    _descriptionView		= new YQPkgDescriptionView( _detailsViews );	Q_CHECK_PTR( _descriptionView	);
 
     _descriptionView->setMinimumSize( 0, 0 );
     _detailsViews->addTab( _descriptionView, _( "Patch Description" ) );
@@ -102,30 +104,30 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
     // HBox for total download size
     //
 
-    addVSpacing( vbox, 4 );
-    hbox = new QHBox( vbox ); CHECK_PTR( hbox );
-    addHStretch( hbox );
+    hbox = new QHBoxLayout( this ); Q_CHECK_PTR( hbox );
+    vbox->addLayout(hbox);
+    //addHStretch( hbox );
 
-    new QLabel( _( "Estimated Download Size:" ) + " ", hbox );
-    _totalDownloadSize		= new QLabel( FSize(0).asString().c_str(), hbox );
-    CHECK_PTR( _totalDownloadSize );
+    hbox->addWidget(new QLabel( _( "Estimated Download Size:" ) + " ", this ));
+    _totalDownloadSize		= new QLabel( FSize(0).asString().c_str(), this );
+    hbox->addWidget(_totalDownloadSize);
+    Q_CHECK_PTR( _totalDownloadSize );
 
 
     // Give the total download size a 3D look
 
-    _totalDownloadSize->setFrameStyle( QFrame::Panel | QFrame::Sunken );
+    _totalDownloadSize->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
     _totalDownloadSize->setLineWidth(1);
     _totalDownloadSize->setMidLineWidth(2);
 #endif
 
 
-    connect( _patchList,	SIGNAL( selectionChanged    ( ZyppSel ) ),
+    connect( _patchList,	SIGNAL( currentItemChanged    ( ZyppSel ) ),
 	     _descriptionView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
 
     connect( _patchList,	SIGNAL( statusChanged() 		),
 	     this,		SLOT  ( updateTotalDownloadSize() 	) );
 
-    fillPatchList();
     updateTotalDownloadSize();
 }
 
@@ -218,14 +220,8 @@ YQPkgPatchFilterView::updateTotalDownloadSize()
 void
 YQPkgPatchFilterView::fillPatchList()
 {
-    int currentIndex = _patchFilter->currentItem();
-
-    if ( _haveUpdateStackPatches )
-	currentIndex--;
-    
-    switch ( currentIndex )
+    switch ( _patchFilter->currentIndex() )
     {
-	case -1:	_patchList->setFilterCriteria( YQPkgPatchList::UpdateStackPatches          );	break;
 	case 0:		_patchList->setFilterCriteria( YQPkgPatchList::RelevantPatches		   );	break;
 	case 1:		_patchList->setFilterCriteria( YQPkgPatchList::RelevantAndInstalledPatches );	break;
 	case 2:		_patchList->setFilterCriteria( YQPkgPatchList::AllPatches		   );	break;

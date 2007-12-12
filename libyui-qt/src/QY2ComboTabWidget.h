@@ -22,13 +22,12 @@
 #ifndef QY2ComboTabWidget_h
 #define QY2ComboTabWidget_h
 
-#include <qvbox.h>
-#include <qstring.h>
-#include <qintdict.h>
+#include <QString>
+#include <QHash>
 
 class QComboBox;
 class QLabel;
-class QWidgetStack;
+class QStackedWidget;
 class QWidget;
 
 
@@ -36,7 +35,7 @@ class QWidget;
  * This widget is very much like a QTabWidget, but it uses a combo box above
  * the tab pages rather than a ( scrolled ) one-line row of tabs.
  **/
-class QY2ComboTabWidget : public QVBox
+class QY2ComboTabWidget : public QWidget
 {
     Q_OBJECT
 
@@ -95,8 +94,8 @@ protected:
 
     QComboBox		* combo_box;
     QLabel		* combo_label;
-    QWidgetStack 	* widget_stack;
-    QIntDict<QWidget>	  pages;
+    QStackedWidget 	* widget_stack;
+    QHash<int, QWidget *>	  pages;
 };
 
 #endif // QY2ComboTabWidget_h

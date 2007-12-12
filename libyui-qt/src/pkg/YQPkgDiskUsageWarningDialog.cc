@@ -18,16 +18,15 @@
 
 /-*/
 
-
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 
-#include <qapplication.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qstyle.h>
+#include <QApplication>
+#include <QLabel>
+#include <QLayout>
+#include <QPushButton>
+#include <QStyle>
+#include <QBoxLayout>
 
 #include "YQPkgDiskUsageWarningDialog.h"
 #include "YQPkgDiskUsageList.h"
@@ -48,82 +47,87 @@ YQPkgDiskUsageWarningDialog::YQPkgDiskUsageWarningDialog( QWidget *		parent,
     : QDialog( parent )
 {
     // Dialog title
-    setCaption( _( "Disk Space Warning" ) );
+    setWindowTitle( _( "Disk Space Warning" ) );
 
     // Enable dialog resizing even without window manager
     setSizeGripEnabled( true );
 
     // Layout for the dialog ( can't simply insert a QVBox )
 
-    QVBoxLayout * layout = new QVBoxLayout( this, MARGIN, SPACING );
-    CHECK_PTR( layout );
+    QVBoxLayout * layout = new QVBoxLayout( this );
+    layout->setSpacing( SPACING );
+    layout->setMargin ( MARGIN  );
+    Q_CHECK_PTR( layout );
 
 
     // HBox for icon and message
-
-    QHBox * hbox = new QHBox( this );
-    CHECK_PTR( hbox );
-    layout->addWidget( hbox );
+    QHBoxLayout * hbox = new QHBoxLayout( this );
+    Q_CHECK_PTR( hbox );
+    layout->addLayout( hbox );
 
 
     // Icon
 
-    addHSpacing( hbox );
-    QLabel * iconLabel = new QLabel( hbox );
-    CHECK_PTR( iconLabel );
+    //addHSpacing( hbox );
+    QLabel * iconLabel = new QLabel( this );
+    Q_CHECK_PTR( iconLabel );
+    hbox->addWidget(iconLabel);
+#ifdef FIXME
     iconLabel->setPixmap( QApplication::style().stylePixmap( QStyle::SP_MessageBoxWarning ) );
+#endif
     iconLabel->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) ); // hor/vert
-    addHSpacing( hbox );
 
     // Label for the message
 
-    QLabel * label = new QLabel( message, hbox );
-    CHECK_PTR( label );
+    QLabel * label = new QLabel( message, this);
+    Q_CHECK_PTR( label );
+    hbox->addWidget(label);
     label->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
 
 
     // Disk usage list
 
     YQPkgDiskUsageList * duList = new YQPkgDiskUsageList( this, thresholdPercent );
-    CHECK_PTR( duList );
+    Q_CHECK_PTR( duList );
 
     layout->addWidget( duList );
 
 
     // Button box
 
-    hbox = new QHBox( this );
-    CHECK_PTR( hbox );
+    hbox = new QHBoxLayout( this );
+    Q_CHECK_PTR( hbox );
     hbox->setSpacing( SPACING );
     hbox->setMargin ( MARGIN  );
-    layout->addWidget( hbox );
+    layout->addLayout( hbox );
 
-    addHStretch( hbox );
+    //addHStretch( hbox );
 
 
     // Accept button - usually "OK" or "Continue"
 
-    QPushButton * button = new QPushButton( acceptButtonLabel, hbox );
-    CHECK_PTR( button );
-
+    QPushButton * button = new QPushButton( acceptButtonLabel, this );
+    Q_CHECK_PTR( button );
+    hbox->addWidget(button);
 
     connect( button,	SIGNAL( clicked() ),
 	     this,      SLOT  ( accept()  ) );
 
-    addHStretch( hbox );
+    //addHStretch( hbox );
 
 
     if ( ! rejectButtonLabel.isEmpty() )
     {
 	// Reject button ( if desired ) - usually "Cancel"
 
-	button = new QPushButton( rejectButtonLabel, hbox );
-	CHECK_PTR( button );
+	button = new QPushButton( rejectButtonLabel, this );
+	Q_CHECK_PTR( button );
+  hbox->addWidget(button);
 
 	connect( button,	SIGNAL( clicked() ),
 		 this,      	SLOT  ( reject()  ) );
 
-	addHStretch( hbox );
+	//addHStretch( hbox );
     }
 
     // If there is only one button, it's safe to make that one ( the accept

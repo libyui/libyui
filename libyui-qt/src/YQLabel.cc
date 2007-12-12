@@ -24,6 +24,8 @@
 #include "YQUI.h"
 #include "YQApplication.h"
 #include "YQLabel.h"
+//Added by qt3to4:
+#include <qlabel.h>
 
 
 YQLabel::YQLabel( YWidget * 		parent,
@@ -35,7 +37,7 @@ YQLabel::YQLabel( YWidget * 		parent,
 {
     setWidgetRep( this );
 
-    setTextFormat( QLabel::PlainText );
+    setTextFormat( Qt::PlainText );
     QLabel::setText( fromUTF8( text ) );
     setIndent(0);
 
@@ -51,7 +53,7 @@ YQLabel::YQLabel( YWidget * 		parent,
     }
 		
     setMargin( YQWidgetMargin );
-    setAlignment( AlignLeft | AlignTop );
+    setAlignment( Qt::AlignLeft | Qt::AlignTop );
 }
 
 

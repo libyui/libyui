@@ -21,6 +21,7 @@
 #define YQPkgList_h
 
 #include <YQPkgObjList.h>
+#include <QMenu>
 
 class YQPkgListItem;
 
@@ -63,7 +64,7 @@ public:
      *
      * Reimplemented from YQPkgObjList.
      **/
-    virtual QPopupMenu * addAllInListSubMenu( QPopupMenu * menu );
+    virtual QMenu * addAllInListSubMenu( QMenu * menu );
 
     /**
      * Returns 'true' if there are any installed packages.
@@ -117,7 +118,7 @@ public slots:
      * Reimplemented from YQPkgObjList.
      **/
     virtual void pkgObjClicked( int		button,
-				QListViewItem *	item,
+				QTreeWidgetItem *	item,
 				int		col,
 				const QPoint &	pos );
 
@@ -149,8 +150,8 @@ public slots:
     void setDontInstallListSourceRpms()	  { setInstallListSourceRpms( false ); }
 
 
-    // No separate selectionChanged( ZyppPkg ) signal:
-    // Use YQPkgObjList::selectionChanged( ZyppObj ) instead
+    // No separate currentItemChanged( ZyppPkg ) signal:
+    // Use YQPkgObjList::currentItemChanged( ZyppObj ) instead
     // and dynamic_cast to ZyppPkg if required.
     // This saves duplicating a lot of code.
 
@@ -196,7 +197,7 @@ protected:
     // Data members
 
     int			_srpmStatusCol;
-    QPopupMenu *	_sourceRpmContextMenu;
+    QMenu *	_sourceRpmContextMenu;
 
 
 public:
@@ -257,20 +258,10 @@ public:
      **/
     bool hasSourceRpm() const;
 
-
     /**
-     * Comparison function used for sorting the list.
-     * Returns:
-     * -1 if this <  other
-     *	0 if this == other
-     * +1 if this >  other
-     *
-     * Reimplemented from QListViewItem
-     **/
-    virtual int compare( QListViewItem *	other,
-			 int			col,
-			 bool			ascending ) const;
-
+     * sorting function
+     */
+    virtual bool operator< ( const QTreeWidgetItem & other ) const;
 
     /**
      * Update this item's data completely.
@@ -312,17 +303,6 @@ protected:
      **/
     void setSourceRpmIcon();
 
-    /**
-     * Paint method. Reimplemented from @ref QListViewItem so different
-     * colors can be used.
-     *
-     * Reimplemented from QListViewItem.
-     **/
-    virtual void paintCell( QPainter *		painter,
-			    const QColorGroup &	colorGroup,
-			    int			column,
-			    int			width,
-			    int			alignment );
 
     // Data members
 

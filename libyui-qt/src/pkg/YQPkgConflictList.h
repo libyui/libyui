@@ -22,7 +22,8 @@
 
 
 #include <stdio.h>
-#include <qmap.h>
+#include <QMap>
+#include <QFile>
 #include "QY2ListView.h"
 
 #include <zypp/Resolver.h>
@@ -63,12 +64,12 @@ public:
     /**
      * Check if the conflict list is empty.
      **/
-    bool isEmpty() const { return childCount() == 0; }
+    bool isEmpty() const { return topLevelItemCount() == 0; }
 
     /**
      * Returns the number of conflicts in the list.
      **/
-    int count() const { return childCount(); }
+    int count() const { return topLevelItemCount(); }
 
 
 public slots:
@@ -108,7 +109,7 @@ public:
      * "More...".
      * If 'header' is not empty, it will be added as the parent of the lines.
      **/
-    static void dumpList( QListViewItem * 	parent,
+    static void dumpList( QTreeWidgetItem * 	parent,
 			  const QString &	longText,
 			  const QString & 	header = QString::null,
 			  int			splitThreshold = 3 );
@@ -118,7 +119,7 @@ protected:
     /**
      * (Recursively) save one item to file.
      **/
-    void saveItemToFile( FILE * file, const QListViewItem * item ) const;
+    void saveItemToFile( QFile &file, const QTreeWidgetItem * item ) const;
 
 
 signals:
@@ -179,11 +180,11 @@ protected:
      *
      * Reimplemented from QY2ListViewItem.
      **/
-    virtual void paintCell( QPainter *		painter,
-			    const QColorGroup &	colorGroup,
-			    int			column,
-			    int			width,
-			    int			alignment );
+//     virtual void paintCell( QPainter *		painter,
+// 			    const QColorGroup &	colorGroup,
+// 			    int			column,
+// 			    int			width,
+// 			    int			alignment );
 
 
     // Data members

@@ -23,6 +23,9 @@
 #include <string>
 #include "YQPkgObjList.h"
 #include "YQPkgSelMapper.h"
+#include <QTreeWidgetItem>
+#include <QEvent>
+#include <QMenu>
 
 #define ENABLE_DELETING_PATCHES	1
 
@@ -66,7 +69,6 @@ public:
 
     enum FilterCriteria
     {
-	UpdateStackPatches,		// zypp or YaST2
 	RelevantPatches,		// needed + broken
 	RelevantAndInstalledPatches,	// needed + broken + installed
 	AllPatches			// all
@@ -112,12 +114,6 @@ public slots:
 public:
 
     /**
-     * Return 'true' if there is any patch for the update stack in the pool
-     * that is not installed yet or that could be updated.
-     **/
-    static bool haveUpdateStackPatches();
-
-    /**
      * Set the filter criteria for fillList().
      **/
     void setFilterCriteria( FilterCriteria filterCriteria );
@@ -143,7 +139,7 @@ public:
      *
      * Reimplemented from YQPkgObjList.
      **/
-    virtual QPopupMenu * addAllInListSubMenu( QPopupMenu * menu );
+    virtual QMenu * addAllInListSubMenu( QMenu * menu );
 
     /**
      * Delayed initialization after the dialog is fully created.
@@ -241,6 +237,7 @@ public:
      * Maps a string patch category to the corresponding enum.
      **/
     static YQPkgPatchCategory patchCategory( QString category );
+    static YQPkgPatchCategory patchCategory( const string & category );
 
     /**
      * Converts a patch category to a user-readable (translated) string.
@@ -267,17 +264,9 @@ public:
     virtual QString toolTip( int column );
 
     /**
-     * Comparison function used for sorting the list.
-     * Returns:
-     * -1 if this <  other
-     *	0 if this == other
-     * +1 if this >  other
-     *
-     * Reimplemented from QListViewItem.
-     **/
-    virtual int compare( QListViewItem *	other,
-			 int			col,
-			 bool			ascending ) const;
+     * sorting function
+     */
+    virtual bool operator< ( const QTreeWidgetItem & other ) const;
 
     // Columns
 

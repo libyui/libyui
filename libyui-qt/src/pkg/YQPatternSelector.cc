@@ -19,11 +19,10 @@
 
 /-*/
 
-#include <qapplication.h>
-#include <qhbox.h>
-#include <qheader.h>
-#include <qpushbutton.h>
-#include <qsplitter.h>
+#include <QApplication>
+#include <QHeaderView>
+#include <QPushButton>
+#include <QSplitter>
 
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
@@ -106,8 +105,12 @@ YQPatternSelector::findWizard() const
 void
 YQPatternSelector::basicLayout()
 {
-    QSplitter * outer_splitter = new QSplitter( QSplitter::Horizontal, this );
-    CHECK_PTR( outer_splitter );
+    QVBoxLayout *vbox = new QVBoxLayout( this );
+
+    QSplitter * outer_splitter = new QSplitter( Qt::Horizontal, this );
+    Q_CHECK_PTR( outer_splitter );
+
+    vbox->addWidget( outer_splitter );
 
     QWidget * left_pane	 = layoutLeftPane ( outer_splitter );
     QWidget * right_pane = layoutRightPane( outer_splitter );
@@ -115,8 +118,8 @@ YQPatternSelector::basicLayout()
     int left_pane_width = (int) ( 0.3 * YQUI::ui()->defaultSize( YD_HORIZ ) );
     left_pane->resize( QSize( left_pane_width, left_pane->height() ) );
 
-    outer_splitter->setResizeMode( left_pane,  QSplitter::KeepSize );
-    outer_splitter->setResizeMode( right_pane, QSplitter::Stretch  );
+    outer_splitter->setStretchFactor(outer_splitter->indexOf(left_pane), 0);
+    outer_splitter->setStretchFactor(outer_splitter->indexOf(right_pane), 1);
 
     if ( ! _wizard )
 	layoutButtons( this );
@@ -127,9 +130,11 @@ YQPatternSelector::basicLayout()
 QWidget *
 YQPatternSelector::layoutLeftPane( QWidget * parent )
 {
-    QVBox * vbox = new QVBox( parent );
-    CHECK_PTR( vbox );
-    vbox->setMargin( MARGIN );
+    QWidget *vbox = new QWidget(parent);
+    QVBoxLayout * layout = new QVBoxLayout( vbox );
+    Q_CHECK_PTR( vbox );
+    layout->setMargin( MARGIN );
+    vbox->setLayout(layout);
 
     if ( ! zyppPool().empty<zypp::Pattern>() )
     {
@@ -140,8 +145,9 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
 	_patternList = new YQPkgPatternList( vbox,
 					     false,	// no autoFill - need to connect to details view first
 					     false );	// no autoFilter - filterMatch() is not connected
-	CHECK_PTR( _patternList );
-	_patternList->header()->hide();
+	Q_CHECK_PTR( _patternList );
+  layout->addWidget(_patternList);
+	 _patternList->header()->hide();
     }
 
     if ( ! _patternList )
@@ -160,7 +166,8 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
 	_selList = new YQPkgSelList( vbox,
 				     false,	// no autoFill - need to connect to details view first
 				     false );	// no autoFilter - filterMatch() is not connected
-	CHECK_PTR( _selList );
+	Q_CHECK_PTR( _selList );
+  layout->addWidget(_selList);
 	_selList->header()->hide();
     }
 
@@ -170,18 +177,20 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
 	// "Details" button
 	//
 
-	addVSpacing( vbox, SPACING );
+	layout->addSpacing( SPACING );
 
-	QHBox * hbox = new QHBox( vbox );
-	CHECK_PTR( hbox );
+	QHBoxLayout * hbox = new QHBoxLayout();
+	Q_CHECK_PTR( hbox );
+  layout->addLayout(hbox);
 
-	QPushButton * details_button = new QPushButton( _( "&Details..." ), hbox );
-	CHECK_PTR( details_button );
+	QPushButton * details_button = new QPushButton( _( "&Details..." ), vbox );
+	Q_CHECK_PTR( details_button );
+  hbox->addWidget(details_button);
 
 	connect( details_button, SIGNAL( clicked() ),
 		 this,		 SLOT  ( detailedPackageSelection() ) );
 
-	addHStretch( hbox );
+	hbox->addStretch();
     }
 
     return vbox;
@@ -192,37 +201,42 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
 QWidget *
 YQPatternSelector::layoutRightPane( QWidget * parent )
 {
-    QSplitter * splitter = new QSplitter( QSplitter::Vertical, parent );
-    CHECK_PTR( splitter );
-    splitter->setMargin( MARGIN );
+    QSplitter * splitter = new QSplitter( Qt::Vertical, parent );
+    Q_CHECK_PTR( splitter );
+    //splitter->setMargin( MARGIN );
 
 
     //
     // Selection / Pattern description
     //
-
-    QVBox * upper_vbox = new QVBox( splitter );
-    CHECK_PTR( upper_vbox );
+    QWidget *upper_vbox = new QWidget(splitter);
+    QVBoxLayout * layout = new QVBoxLayout(upper_vbox);
+    
+    Q_CHECK_PTR( upper_vbox );
 
     _descriptionView = new YQPkgSelDescriptionView( upper_vbox );
-    CHECK_PTR( _descriptionView );
+    Q_CHECK_PTR( _descriptionView );
+    layout->addWidget(_descriptionView);
 
-    addVSpacing( upper_vbox, MARGIN );
+    layout->addSpacing( MARGIN );
 
 
     //
     // Disk usage
     //
 
-    QVBox * lower_vbox = new QVBox( splitter );
-    CHECK_PTR( lower_vbox );
-    addVSpacing( lower_vbox, MARGIN );
+    QWidget *lower_vbox = new QWidget(splitter);
+    layout = new QVBoxLayout(upper_vbox);
+
+    Q_CHECK_PTR( lower_vbox );
+    layout->addSpacing( MARGIN );
 
     _diskUsageList = new YQPkgDiskUsageList( lower_vbox );
-    CHECK_PTR( _diskUsageList );
+    Q_CHECK_PTR( _diskUsageList );
+    layout->addWidget(_diskUsageList);
 
-    splitter->setResizeMode( upper_vbox, QSplitter::Stretch );
-    splitter->setResizeMode( lower_vbox, QSplitter::KeepSize );
+    splitter->setStretchFactor( 0, 0 );
+    splitter->setStretchFactor( 0, 1 );
 
     return splitter;
 }
@@ -232,24 +246,29 @@ YQPatternSelector::layoutRightPane( QWidget * parent )
 void
 YQPatternSelector::layoutButtons( QWidget * parent )
 {
-    QHBox * button_box = new QHBox( parent );
-    CHECK_PTR( button_box );
-    button_box->setMargin ( MARGIN  );
-    button_box->setSpacing( SPACING );
+    QWidget *button_box = new QWidget(parent);
+    QHBoxLayout *layout = new QHBoxLayout(button_box);
 
+    Q_CHECK_PTR( button_box );
+    layout->setMargin ( MARGIN  );
+    layout->setSpacing( SPACING );
+
+   button_box->setLayout(layout);
 
     QPushButton * details_button = new QPushButton( _( "&Details..." ), button_box );
-    CHECK_PTR( details_button );
+    layout->addWidget(details_button);
+    Q_CHECK_PTR( details_button );
     details_button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
 
     connect( details_button,	SIGNAL( clicked() ),
 	     this,		SLOT  ( detailedPackageSelection() ) );
 
 
-    addHStretch( button_box );
+    layout->addStretch();
 
     QPushButton * cancel_button = new QPushButton( _( "&Cancel" ), button_box );
-    CHECK_PTR( cancel_button );
+    Q_CHECK_PTR( cancel_button );
+    layout->addWidget(cancel_button);
     cancel_button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
 
     connect( cancel_button, SIGNAL( clicked() ),
@@ -257,7 +276,8 @@ YQPatternSelector::layoutButtons( QWidget * parent )
 
 
     QPushButton * accept_button = new QPushButton( _( "&Accept" ), button_box );
-    CHECK_PTR( accept_button );
+    Q_CHECK_PTR( accept_button );
+    layout->addWidget(accept_button);
     accept_button->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
 
     connect( accept_button, SIGNAL( clicked() ),
@@ -286,7 +306,7 @@ YQPatternSelector::makeConnections()
 
 	if ( _descriptionView )
 	{
-	    connect( _patternList,	SIGNAL( selectionChanged( ZyppSel ) ),
+	    connect( _patternList,	SIGNAL( currentItemChanged( ZyppSel ) ),
 		     _descriptionView,	SLOT  ( showDetails	( ZyppSel ) ) );
 	}
 
@@ -314,7 +334,7 @@ YQPatternSelector::makeConnections()
 
 	if ( _descriptionView )
 	{
-	    connect( _selList,		SIGNAL( selectionChanged( ZyppSel ) ),
+	    connect( _selList,		SIGNAL( currentItemChanged( ZyppSel ) ),
 		     _descriptionView,	SLOT  ( showDetails	( ZyppSel ) ) );
 	}
 

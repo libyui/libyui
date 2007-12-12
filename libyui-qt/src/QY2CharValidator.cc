@@ -28,9 +28,10 @@
 QY2CharValidator::QY2CharValidator( const QString &	initialValidChars,
 				    QObject *		parent,
 				    const char *	name )
-    : QValidator( parent, name )
+    : QValidator( parent )
     , _validChars( initialValidChars )
 {
+  setObjectName(name);
 }
 
 
@@ -52,7 +53,7 @@ QY2CharValidator::validate( QString & fieldContents, int & pos ) const
     // There might be more than one new character - the user might have copied
     // some longer text via the X clipboard.
 
-    for ( unsigned i=0; i < fieldContents.length(); i++ )
+    for ( int i=0; i < fieldContents.length(); i++ )
     {
 	if ( ! validChars().contains( fieldContents[i] ) )
 	    return QValidator::Invalid;

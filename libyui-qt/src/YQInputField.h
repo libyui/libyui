@@ -20,7 +20,7 @@
 #ifndef YQInputField_h
 #define YQInputField_h
 
-#include <qvbox.h>
+#include <QFrame>
 #include <qlineedit.h>
 
 #include "YInputField.h"
@@ -33,7 +33,7 @@ class YQRawLineEdit;
 using std::string;
 
 
-class YQInputField : public QVBox, public YInputField
+class YQInputField : public QFrame, public YInputField
 {
     Q_OBJECT
 

@@ -51,7 +51,7 @@ public:
      */
     Y2Component *create(const char * name) const
     {
-	if (!strcmp(name, "qt") )
+	if (!strcmp(name, "qt4") )
 	{
 	    Y2Component* ret = YUIComponent::uiComponent ();
     	    if (!ret || ret->name () != name)

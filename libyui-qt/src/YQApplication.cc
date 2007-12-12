@@ -18,9 +18,9 @@
 /-*/
 
 
+#include <QApplication>
+#include <QLocale>
 #include <unistd.h>	// access()
-#include <qapp.h>
-#include <qlocale.h>
 #include <qregexp.h>
 #include <qfiledialog.h>
 #include <qmessagebox.h>
@@ -85,7 +85,7 @@ YQApplication::loadPredefinedQtTranslations()
     QString language = QLocale::system().name();
 
     QString transFile = QString( "qt_%1.qm")
-	      .arg( language.lower().replace('_','-') );
+              .arg( language.toLower().replace('_','-') );
 
     if ( path.isEmpty() )
     {
@@ -102,19 +102,19 @@ YQApplication::loadPredefinedQtTranslations()
     if ( _qtTranslations->isEmpty() )
     {
 	// try fallback
-	transFile = QString( "qt_%1.qm").arg( language.lower().left(2) );
+	transFile = QString( "qt_%1.qm").arg( language.toLower().left(2) );
 	_qtTranslations->load( transFile, path );
     }
 
     if ( _qtTranslations->isEmpty() )
     {
 	y2warning( "Can't load translations for predefined Qt dialogs from %s/%s",
-		   (const char *) path, (const char *) transFile );
+		   qPrintable(path), qPrintable(transFile) );
     }
     else
     {
 	y2milestone( "Loaded translations for predefined Qt dialogs from %s/%s",
-		     (const char *) path, (const char *) transFile );
+		     qPrintable(path), qPrintable(transFile) );
 
 	qApp->installTranslator( _qtTranslations );
     }
@@ -124,12 +124,12 @@ YQApplication::loadPredefinedQtTranslations()
 
     if ( ( language.startsWith( "ar" ) ||	// Arabic
 	   language.startsWith( "he" ) )	// Hebrew
-	 && ! qApp->reverseLayout() )
+	 && ! (qApp->layoutDirection() == Qt::RightToLeft) )
     {
 	y2warning( "Using fallback rule for reverse layout for language '%s'",
-		   (const char *) language );
+		   qPrintable(language) );
 
-	qApp->setReverseLayout( true );
+	qApp->setLayoutDirection( Qt::RightToLeft );
     }
 }
 
@@ -142,12 +142,12 @@ YQApplication::setLangFonts( const string & language, const string & encoding )
     if ( ! _langFonts )
     {
 	_langFonts = new QY2Settings( LANG_FONTS_FILE );
-	CHECK_PTR( _langFonts );
+	Q_CHECK_PTR( _langFonts );
 
 	if ( _langFonts->readError() )
-	    y2error( "Error reading %s", (const char *) _langFonts->fileName() );
+	    y2error( "Error reading %s", qPrintable(_langFonts->fileName()) );
 	else
-	    y2milestone( "%s read OK", (const char *) _langFonts->fileName() );
+	    y2milestone( "%s read OK", qPrintable(_langFonts->fileName()) );
     }
 
     QString lang = language.c_str();
@@ -168,25 +168,25 @@ YQApplication::setLangFonts( const string & language, const string & encoding )
     if ( _langFonts->hasKey( fontKey( lang ) ) )
     {
 	_fontFamily = _langFonts->get( fontKey( lang ), "Sans Serif" );
-	y2milestone( "%s = \"%s\"", (const char *) fontKey( lang ), (const char *) _fontFamily );
+	y2milestone( "%s = \"%s\"", qPrintable(fontKey( lang )), qPrintable(_fontFamily) );
     }
     else
     {
 	_fontFamily = _langFonts->get( fontKey( "" ), "Sans Serif" );
 	y2milestone( "Using fallback for %s: font = \"%s\"",
-		     (const char *) lang, (const char *) _fontFamily );
+		     qPrintable(lang), qPrintable(_fontFamily) );
     }
 
     if ( _fontFamily != oldFontFamily && ! _fontFamily.isEmpty() )
     {
-	y2milestone( "New font family: %s", _fontFamily.latin1() );
+	y2milestone( "New font family: %s", qPrintable(_fontFamily) );
 	deleteFonts();
 	int size = qApp->font().pointSize();
 	QFont font( _fontFamily );
 	font.setPointSize( size );
-	qApp->setFont( font, true );	// font, informWidgets
+	qApp->setFont(font);	// font, informWidgets
 	y2milestone( "Reloading fonts - now using \"%s\"",
-		     (const char *) font.toString() );
+		     qPrintable(font.toString()) );
     }
     else
     {
@@ -231,9 +231,9 @@ YQApplication::currentFont()
 	    _currentFont->setWeight( QFont::Normal );
 
 	    y2milestone( "Loaded %d pixel font: %s", _autoNormalFontSize,
-			 (const char *) _currentFont->toString() );
+			 qPrintable(_currentFont->toString()) );
 
-	    qApp->setFont( * _currentFont, true );	// font, informWidgets
+	    qApp->setFont( * _currentFont);	// font, informWidgets
 	}
 	else
 	{
@@ -277,7 +277,7 @@ YQApplication::headingFont()
 	    _headingFont->setWeight( QFont::Bold );
 
 	    y2milestone( "Loaded %d pixel bold font: %s", _autoHeadingFontSize,
-			 (const char *) _headingFont->toString() );
+			 qPrintable(_headingFont->toString()) );
 	}
 	else
 	{
@@ -327,7 +327,6 @@ YQApplication::pickAutoFonts()
 #endif
     int x = 800;
     int y = 600;
-
 
     int normal	= 10;
     int heading = 12;
@@ -385,9 +384,8 @@ YQApplication::askForExistingDirectory( const string & startDir,
 #endif
 
     QString dirName =
-	QFileDialog::getExistingDirectory( fromUTF8( startDir ),
-					   0,				// parent
-					   "dir_selector",		// name
+	QFileDialog::getExistingDirectory( 0,
+                                           fromUTF8( startDir ),
 					   fromUTF8( headline ) );	// caption
 #if 0
     busyCursor();
@@ -407,10 +405,8 @@ YQApplication::askForExistingFile( const string & startWith,
 #endif
 
     QString fileName =
-	QFileDialog::getOpenFileName( fromUTF8( startWith ),
+	QFileDialog::getOpenFileName( 0, fromUTF8( startWith ),
 				      fromUTF8( filter ),
-				      0,			// parent
-				      "file_selector",		// name
 				      fromUTF8( headline ) );	// caption
 
 #if 0
@@ -455,21 +451,19 @@ YQApplication::askForSaveFileName( const QString & startWith,
 	// Leave the mouse cursor alone - this function might be called from
 	// some other widget, not only from UI::AskForSaveFileName().
 
-	fileName = QFileDialog::getSaveFileName( startWith,
-						  filter,
-						  0,			// parent
-						  "file_selector",	// name
-						  headline );		// caption
+	fileName = QFileDialog::getSaveFileName( 0, startWith,
+                                                 filter,
+                                                 headline );		// caption
 
 	if ( fileName.isEmpty() )	// this includes fileName.isNull()
 	    return QString::null;
 
 
-	if ( access( (const char *) fileName, F_OK ) == 0 )	// file exists?
+	if ( access( QFile::encodeName( fileName ), F_OK ) == 0 )	// file exists?
 	{
 	    QString msg;
 
-	    if ( access( (const char *) fileName, W_OK ) == 0 )
+	    if ( access( QFile::encodeName( fileName ), W_OK ) == 0 )
 	    {
 		// Confirm if the user wishes to overwrite an existing file
 		msg = ( _( "%1 exists! Really overwrite?" ) ).arg( fileName );
@@ -493,8 +487,6 @@ YQApplication::askForSaveFileName( const QString & startWith,
 
     return fileName;
 }
-
-
 
 
 #include "YQApplication.moc"

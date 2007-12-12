@@ -68,8 +68,7 @@ YQPkgDependenciesView::showDetails( ZyppSel selectable )
 	    html_text += simpleTable( installed );
     }
 
-    setTextFormat( Qt::RichText );
-    setText( html_text );
+    setHtml( html_text );
 }
 
 

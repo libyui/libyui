@@ -19,15 +19,15 @@
 #ifndef YQTable_h
 #define YQTable_h
 
-#include <qvbox.h>
+#include <QFrame>
 #include "YTable.h"
 
 
 class QY2ListView;
-class QListViewItem;
+class QTreeWidgetItem;
 class YQListViewItem;
 
-class YQTable : public QVBox, public YTable
+class YQTable : public QFrame, public YTable
 {
     Q_OBJECT
 
@@ -131,21 +131,21 @@ protected slots:
     /**
      * Notification that an item is selected (single click or keyboard).
      **/
-    void slotSelected( QListViewItem * );
+    void slotSelected( QTreeWidgetItem * );
 
     /**
      * Notification that an item is activated (double click or keyboard).
      **/
-    void slotActivated( QListViewItem * );
+    void slotActivated( QTreeWidgetItem * );
 
 
 protected:
-    
+
     /**
      * Select the original item (the YTableItem) that corresponds to the
-     * specified listViewItem. 
+     * specified listViewItem.
      **/
-    void selectOrigItem( QListViewItem * listViewItem );
+    void selectOrigItem( QTreeWidgetItem * listViewItem );
 
     //
     // Data members
@@ -184,7 +184,7 @@ public:
      * Update this item's display with the content of 'cell'.
      **/
     void updateCell( const YTableCell * cell );
-    
+
 protected:
 
     YQTable *	 _table;

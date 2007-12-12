@@ -26,7 +26,6 @@
 #include <algorithm>
 
 #include "YQSignalBlocker.h"
-#include "QY2LayoutUtils.h"
 #include "utf8.h"
 #include "YQUI.h"
 #include "YQDumbTab.h"
@@ -34,7 +33,7 @@
 #include "YEvent.h"
 
 #define YQDumbTabSpacing	2
-#define YQDumbTabFrameMargin	4
+#define YQDumbTabFrameMargin	2
 
 
 YQDumbTab::YQDumbTab( YWidget *	parent )
@@ -42,18 +41,17 @@ YQDumbTab::YQDumbTab( YWidget *	parent )
     , YDumbTab( parent )
 {
     setWidgetRep( this );
-    addVSpacing( this, YQDumbTabSpacing );
 
     //
     // Tab bar
     //
 
     _tabBar = new QTabBar( this );
-    CHECK_PTR( _tabBar );
+    Q_CHECK_PTR( _tabBar );
 
     _tabBar->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred ) ); // hor/vert
     setFocusProxy( _tabBar );
-    setFocusPolicy( TabFocus );
+    setFocusPolicy( Qt::TabFocus );
 
     connect( _tabBar, SIGNAL( selected    ( int ) ),
 	     this,    SLOT  ( slotSelected( int ) ) );
@@ -71,17 +69,14 @@ YQDumbTab::addItem( YItem * item )
 {
     YQSignalBlocker sigBlocker( _tabBar );
     YDumbTab::addItem( item );
-    
-    QTab * tab = new QTab( fromUTF8( item->label() ) );
-    YUI_CHECK_NEW( tab );
-    y2debug( "Adding tab page [%s]", item->label().c_str() );
 
-    tab->setIdentifier( item->index() );
-    _tabBar->addTab( tab );
-    item->setData( tab );
+    _tabBar->insertTab( item->index(), fromUTF8( item->label() ) );
+    y2debug( "Adding tab page [%s]", item->label().c_str() );
+#warning YItem::setData
+    // item->setData( tab );
 
     if ( item->selected() )
-	_tabBar->setCurrentTab( tab );
+	_tabBar->setCurrentIndex( item->index() );
 }
 
 
@@ -92,13 +87,10 @@ YQDumbTab::selectItem( YItem * item, bool selected )
     {
 	// Don't try to suppress any signals sent here with a YQSignalBlocker,
 	// otherwise the application code that handles the event will never be executed.
-	
-	QTab * tab = (QTab *) item->data();
 
-	if ( tab )
-	    _tabBar->setCurrentTab( tab );
+        _tabBar->setCurrentIndex( item->index() );
     }
-    
+
     YDumbTab::selectItem( item, selected );
 }
 
@@ -110,12 +102,9 @@ YQDumbTab::deleteAllItems()
 	  it != itemsEnd();
 	  ++it )
     {
-	QTab * tab = (QTab *) (*it)->data();
-
-	if ( tab )
-	    _tabBar->removeTab( tab );
+        _tabBar->removeTab( ( *it )->index() );
     }
-    
+
     YDumbTab::deleteAllItems();
 }
 
@@ -152,7 +141,7 @@ YQDumbTab::preferredWidth()
 {
     int tabBarWidth = _tabBar->sizeHint().width();
     int childWidth  = hasChildren() ? firstChild()->preferredWidth() : 0;
-    
+
     return max( tabBarWidth, childWidth );
 }
 
@@ -162,27 +151,8 @@ YQDumbTab::preferredHeight()
 {
     int tabBarHeight = _tabBar->sizeHint().height();
     int childHeight  = hasChildren() ? firstChild()->preferredHeight() : 0;
-    
+
     return tabBarHeight + YQDumbTabSpacing + childHeight;
-}
-
-
-void
-YQDumbTab::paintEvent( QPaintEvent * event )
-{
-    QPainter painter( this );
-
-    int x_offset 	= 0;
-    int y_offset 	= _tabBar->height() + YQDumbTabSpacing;
-    int frameHeight	= height() - y_offset;
-    int frameWidth   	= width();
-
-    qDrawWinPanel( &painter,
-		   x_offset, y_offset,
-		   frameWidth, frameHeight,
-		   colorGroup(),
-		   false,			// sunken
-		   (const QBrush *) 0 );	// brush - don't fill interior
 }
 
 
@@ -198,12 +168,12 @@ YQDumbTab::setSize( int newWidth, int newHeight )
     //
     // _tabBar (fixed height)
     //
-    
+
     int tabBarHeight = _tabBar->sizeHint().height();
 
     if ( remainingHeight < tabBarHeight )
 	tabBarHeight = remainingHeight;
-    
+
     _tabBar->resize( newWidth, tabBarHeight );
     remainingHeight -= tabBarHeight;
 
@@ -212,22 +182,22 @@ YQDumbTab::setSize( int newWidth, int newHeight )
 	//
 	// Spacing between tabBar and client area
 	//
-	
+
 	remainingHeight -= YQDumbTabSpacing;
 	y_offset = newHeight - remainingHeight;
 
 	//
 	// 3D border
 	//
-	
+
 	remainingHeight -= 2 * YQDumbTabFrameMargin;
 	remainingWidth  -= 2 * YQDumbTabFrameMargin;
 	x_offset += YQDumbTabFrameMargin;
 	y_offset += YQDumbTabFrameMargin;
 
-	if ( remainingHeight < 0 ) 
+	if ( remainingHeight < 0 )
 	    remainingHeight = 0;
-	
+
 	if ( remainingWidth < 0 )
 	    remainingWidth = 0;
 
@@ -235,7 +205,7 @@ YQDumbTab::setSize( int newWidth, int newHeight )
 	// Client area
 	//
 
-	
+
 	firstChild()->setSize( remainingWidth, remainingHeight );
 
 	QWidget * qChild = (QWidget *) firstChild()->widgetRep();

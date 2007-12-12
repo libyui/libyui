@@ -22,10 +22,11 @@
 
 #include <qwidget.h>
 #include "YMenuButton.h"
+#include <QHash>
 
-
+class QAction;
 class QPushButton;
-class QPopupMenu;
+class QMenu;
 
 class YQMenuButton : public QWidget, public YMenuButton
 {
@@ -96,7 +97,7 @@ protected slots:
     /**
      * Triggered when any menu item is activated.
      **/
-    void menuEntryActivated( int menuItemIndex );
+    void menuEntryActivated( QAction * menuItem );
 
     /**
      * Triggered via menuEntryActivated() by zero timer to get back in sync
@@ -110,7 +111,7 @@ protected:
     /**
      * Recursively insert menu items into 'menu' from iterator 'begin' to iterator 'end'.
      **/
-    void rebuildMenuTree( QPopupMenu * menu, YItemIterator begin, YItemIterator end );
+    void rebuildMenuTree( QMenu * menu, YItemIterator begin, YItemIterator end );
 
     
     //
@@ -119,6 +120,7 @@ protected:
     
     YMenuItem *		_selectedItem;
     QPushButton * 	_qt_button;
+    QHash<QAction*,int> _serials;
 };
 
 #endif // YQMenuButton_h

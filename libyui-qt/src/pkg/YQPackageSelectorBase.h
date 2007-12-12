@@ -20,7 +20,8 @@
 #ifndef YQPackageSelectorBase_h
 #define YQPackageSelectorBase_h
 
-#include <qvbox.h>
+#include <QEvent>
+#include <QFrame>
 #include "YPackageSelector.h"
 #include "YQZypp.h"
 
@@ -35,7 +36,7 @@ class YQPkgDiskUsageList;
 /**
  * Abstract base class for package selectors.
  **/
-class YQPackageSelectorBase : public QVBox, public YPackageSelector
+class YQPackageSelectorBase : public QFrame, public YPackageSelector
 {
     Q_OBJECT
 

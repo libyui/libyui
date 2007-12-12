@@ -59,8 +59,12 @@ YQBarGraph::doUpdate()
 
 
 void
-YQBarGraph::drawContents( QPainter * painter )
+YQBarGraph::paintEvent( QPaintEvent* paintEvent )
 {
+    QFrame::paintEvent( paintEvent );
+
+    QPainter painter( this );
+
     unsigned nextDefaultColor = 0;
     int totalWidth 	= contentsRect().width()  - 2*YQBarGraphOuterMargin;
     int segHeight  	= contentsRect().height() - 2*YQBarGraphOuterMargin;
@@ -87,7 +91,7 @@ YQBarGraph::drawContents( QPainter * painter )
 	    segWidth = totalWidth - x_off + YQBarGraphOuterMargin;
 	}
 
-	
+
 	//
 	// Fill the segment
 	//
@@ -99,36 +103,37 @@ YQBarGraph::drawContents( QPainter * painter )
 	{
 	    // If any of the colors is undefined, use the next default color
 	    // for both so some contrast is ensured.
-	    
+
 	    segmentColor = defaultSegmentColor( nextDefaultColor   );
 	    textColor	 = defaultTextColor   ( nextDefaultColor++ );
 	}
-	
-	painter->setBrush( QColor( segmentColor.red(),
+
+	painter.setBrush( QColor( segmentColor.red(),
 				   segmentColor.green(),
 				   segmentColor.blue() ) );
-	painter->setPen( Qt::NoPen );
-	painter->drawRect( x_off, y_off, segWidth+2, segHeight+2 );
+	painter.setPen( Qt::NoPen );
+	painter.drawRect( x_off, y_off, segWidth+2, segHeight+2 );
 
-	
+
 	//
 	// Draw the label
 	//
 
-	painter->setPen( Qt::SolidLine );
-	painter->setPen( QColor( textColor.red(),
+	painter.setPen( Qt::SolidLine );
+	painter.setPen( QColor( textColor.red(),
 				 textColor.green(),
 				 textColor.blue() ) );
-	QString txt = seg.label();
+
+	QString txt = QString::fromStdString( seg.label() );
 
 	if ( txt.contains( "%1" ) )
 	    txt = txt.arg( seg.value() );		// substitute variable
-	
-	painter->drawText( x_off + YQBarGraphLabelHorizontalMargin,
+
+	painter.drawText( x_off + YQBarGraphLabelHorizontalMargin,
 			   y_off + YQBarGraphLabelVerticalMargin,
 			   segWidth  - 2 * YQBarGraphLabelHorizontalMargin + 1,
 			   segHeight - 2 * YQBarGraphLabelVerticalMargin   + 1,
-			   AlignCenter, txt );
+			   Qt::AlignCenter, txt );
 
 	// Prepare for the next segment
 
@@ -137,7 +142,7 @@ YQBarGraph::drawContents( QPainter * painter )
 }
 
 
-YColor 
+YColor
 YQBarGraph::defaultSegmentColor( unsigned index )
 {
     switch( index % 8 )
@@ -161,7 +166,7 @@ YQBarGraph::defaultTextColor( unsigned index )
 {
     YColor black = YColor(   0,   0,   0 );
     YColor white = YColor( 255, 255, 255 );
-    
+
     switch( index % 8 )
     {
 	case 0:	return white;
@@ -194,11 +199,11 @@ YQBarGraph::preferredWidth()
 
     for ( int i=0; i < segments(); i++ )
     {
-	QString txt = segment(i).label();
-	
+	QString txt = QString::fromStdString( segment(i).label() );
+
 	if ( txt.contains( "%1" ) )
 	    txt = txt.arg( segment(i).value() );
-	
+
 	QSize segSize = metrics.size( 0, txt );
 	width += segSize.width();
     }
@@ -220,11 +225,11 @@ YQBarGraph::preferredHeight()
 
     for ( int i=0; i < segments(); i++ )
     {
-	QString txt = segment(i).label();
-	
+	QString txt = QString::fromStdString( segment(i).label() );
+
 	if ( txt.contains( "%1" ) )
 	    txt = txt.arg( segment(i).value() );
-	
+
 	QSize segSize = metrics.size( 0, txt );
 	height = max( height, segSize.height() );
     }

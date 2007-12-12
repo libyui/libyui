@@ -18,7 +18,6 @@
 
 
 #include <qlabel.h>
-#include <qprogressbar.h>
 #include <qtimer.h>
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
@@ -27,35 +26,41 @@
 #include "YQUI.h"
 #include "YQDownloadProgress.h"
 #include "YQWidgetCaption.h"
-
+#include <QVBoxLayout>
+#include <QProgressBar>
 
 YQDownloadProgress::YQDownloadProgress( YWidget *	parent,
 					const string & 	label,
 					const string &	filename,
 					YFileSize_t	expectedSize )
-    : QVBox( (QWidget *) parent->widgetRep() )
+    : QFrame( (QWidget *) parent->widgetRep() )
     , YDownloadProgress( parent, label, filename, expectedSize )
 {
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    setLayout( layout );
+
     setWidgetRep( this );
-    setMargin( YQWidgetMargin );
+    layout->setMargin( YQWidgetMargin );
 
     _caption = new YQWidgetCaption( this, label );
     YUI_CHECK_NEW( _caption );
+    layout->addWidget( _caption );
 
     _qt_progressBar = new QProgressBar( this );
     YUI_CHECK_NEW( _qt_progressBar );
+    layout->addWidget( _qt_progressBar );
 
     _qt_progressBar->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) );
-    _qt_progressBar->setTotalSteps( 100 ); // Using percent
-    _qt_progressBar->setProgress( currentPercent() );
+    _qt_progressBar->setRange( 0, 100 ); // Using percent
+    _qt_progressBar->setValue( currentPercent() );
 
     _timer = new QTimer( this );
 
     connect( _timer, 	SIGNAL( timeout()      ),
 	     this,	SLOT  ( pollFileSize() ) );
 
-    _timer->start( 250,		// millisec
-		   false );	// single shot?
+    _timer->setSingleShot(false);
+    _timer->start( 250 );// millisec
 }
 
 
@@ -77,14 +82,14 @@ void
 YQDownloadProgress::setFilename( const string & filename )
 {
     YDownloadProgress::setFilename( filename );
-    _qt_progressBar->setProgress( currentPercent() );
+    _qt_progressBar->setValue( currentPercent() );
 }
 
 
 void
 YQDownloadProgress::setExpectedSize( YFileSize_t expectedSize )
 {
-    _qt_progressBar->setProgress( currentPercent() );
+    _qt_progressBar->setValue( currentPercent() );
     YDownloadProgress::setExpectedSize( expectedSize );
 }
 
@@ -92,7 +97,7 @@ YQDownloadProgress::setExpectedSize( YFileSize_t expectedSize )
 void
 YQDownloadProgress::pollFileSize()
 {
-    _qt_progressBar->setProgress( currentPercent() );
+    _qt_progressBar->setValue( currentPercent() );
 }
 
 

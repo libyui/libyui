@@ -23,9 +23,9 @@
 #include <YQZypp.h>
 #include <zypp/Repository.h>
 #include <ycp/y2log.h>
-#include <qtabwidget.h>
-#include <qregexp.h>
-#include <qheader.h>
+#include <QTabWidget>
+#include <QRegExp>
+#include <QHeaderView>
 
 #include "YQPkgVersionsView.h"
 #include "YQPkgRepoList.h"
@@ -50,12 +50,14 @@ YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
     _nameCol	= -42;
     _summaryCol = -42;
 
+#if FIXME
     int numCol = 0;
     addColumn( _( "Version" 	) );	_versionCol	= numCol++;
     addColumn( _( "Arch." 	) );	_archCol	= numCol++;
     addColumn( _( "Product"	) );	_productCol	= numCol++;
     addColumn( _( "Repository"	) );	_repoCol	= numCol++;
     addColumn( _( "URL"		) );	_urlCol		= numCol++;
+#endif
     _statusCol	= _productCol;
 
     _nameCol	= _versionCol;
@@ -73,7 +75,7 @@ YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
 		 this,   SLOT  ( reload        (QWidget *) ) );
     }
 
-    connect( this,	SIGNAL( selectionChanged	() ),
+    connect( this,	SIGNAL( currentItemChanged( QTreeWidgetItem *, QTreeWidgetItem * ) ),
 	     this,	SLOT  ( checkForChangedCandidate() ) );
 }
 
@@ -99,7 +101,7 @@ YQPkgVersionsView::showDetailsIfVisible( ZyppSel selectable )
 
     if ( _parentTab )		// Is this view embedded into a tab widget?
     {
-	if ( _parentTab->currentPage() == this )  // Is this page the topmost?
+	if ( _parentTab->currentWidget() == this )  // Is this page the topmost?
 	    showDetails( selectable );
     }
     else	// No tab parent - simply show data unconditionally.
@@ -118,10 +120,11 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     if ( ! selectable )
 	return;
 
-    QY2CheckListItem * root = new QY2CheckListItem( this, selectable->theObj()->name().c_str(),
-						    QCheckListItem::Controller );
-    CHECK_PTR( root );
-    root->setOpen( true );
+#if FIXME
+    QY2CheckListItem * root = new QY2CheckListItem( this, selectable->theObj()->name().c_str() );
+    //FIXME add element
+    Q_CHECK_PTR( root );
+    root->setExpanded( true );
 
     bool installedIsAvailable = false;
 
@@ -149,20 +152,26 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
     if ( selectable->hasInstalledObj() && ! installedIsAvailable )
 	new YQPkgVersion( this, root, selectable, selectable->installedObj(), false );
+
+#endif
 }
 
 
 void
 YQPkgVersionsView::checkForChangedCandidate()
 {
-    if ( ! firstChild() || ! _selectable )
+    QTreeWidgetItemIterator iter(this);
+    QTreeWidgetItem *first = *iter;
+#if FIXME
+    if ( ! first || ! _selectable )
 	return;
 
-    QListViewItem * item = firstChild()->firstChild();
-
-    while ( item )
+    
+    QTreeWidgetItemIterator iter_c(first);
+    
+    while ( *iter_c )
     {
-	YQPkgVersion * versionItem = dynamic_cast<YQPkgVersion *> (item);
+	YQPkgVersion * versionItem = dynamic_cast<YQPkgVersion *> (*iter_c);
 
 	if ( versionItem && versionItem->isOn() )
 	{
@@ -218,8 +227,9 @@ YQPkgVersionsView::checkForChangedCandidate()
 	    }
 	}
 
-	item = item->nextSibling();
+	++iter_c;
     }
+#endif
 }
 
 
@@ -239,15 +249,15 @@ YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
 			    ZyppSel		selectable,
 			    ZyppObj 		zyppObj,
 			    bool		enabled )
-    : QY2CheckListItem( parent, "",
+    : QY2CheckListItem( parent, "" /*
 			enabled ?
-			QCheckListItem::RadioButton :
-			QCheckListItem::Controller )	// cheap way to make it read-only
+			Q3CheckListItem::RadioButton :
+			Q3CheckListItem::Controller */ )	// cheap way to make it read-only
     , _pkgVersionList( pkgVersionList )
     , _selectable( selectable )
     , _zyppObj( zyppObj )
 {
-    setOn( _zyppObj == _selectable->candidateObj() );
+    // FIXME setOn( _zyppObj == _selectable->candidateObj() );
 
     if ( versionCol() >= 0 )	setText( versionCol(), zyppObj->edition().asString().c_str() );
     if ( archCol()    >= 0 )	setText( archCol(),    zyppObj->arch().asString().c_str() );
@@ -257,12 +267,12 @@ YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
 	ZyppProduct product = YQPkgRepoListItem::singleProduct( zyppObj->repository() );
 
 	if ( product )
-	    setText( productCol(), product->summary() );
+	    setText( productCol(), QString::fromStdString( product->summary() ) );
     }
     if ( urlCol() >= 0 )
     {
         zypp::Url repoUrl;
-	
+
 	if ( ! zyppObj->repository().info().baseUrlsEmpty() )
 	    repoUrl = *zyppObj->repository().info().baseUrlsBegin();
 
@@ -274,7 +284,7 @@ YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
 	if ( _zyppObj->edition() == _selectable->installedObj()->edition() &&
 	     _zyppObj->arch()    == _selectable->installedObj()->arch()      )
 	{
-	    setPixmap( statusCol(), YQIconPool::pkgKeepInstalled() );
+	    // FIXME setPixmap( statusCol(), YQIconPool::pkgKeepInstalled() );
 	    setBackgroundColor( QColor( 0xF0, 0xF0, 0xF0 ) ); 	// light grey
 	    setTextColor( QColor( 0, 0x90, 0 ) );		// green
 	}
@@ -300,29 +310,17 @@ YQPkgVersion::toolTip(int)
 }
 
 
-/**
- * Comparison function used for sorting the list.
- * Returns:
- * -1 if this <	 other
- *  0 if this == other
- * +1 if this >	 other
- **/
-int
-YQPkgVersion::compare( QListViewItem *	otherListViewItem,
-		       int		col,
-		       bool		ascending ) const
+bool YQPkgVersion::operator< ( const QTreeWidgetItem & otherListViewItem ) const
 {
-    YQPkgVersion * other = dynamic_cast<YQPkgVersion *> (otherListViewItem);
+    const YQPkgVersion * other = dynamic_cast<const YQPkgVersion *> (&otherListViewItem);
 
     if ( other )
     {
-	if ( this->zyppObj()->edition() < other->zyppObj()->edition() ) return -1;
-	if ( this->zyppObj()->edition() > other->zyppObj()->edition() ) return  1;
-	return 0;
+	return ( this->zyppObj()->edition() < other->zyppObj()->edition() );
     }
 
     // Fallback: Use parent class method
-    return QY2CheckListItem::compare( otherListViewItem, col, ascending );
+    return QY2CheckListItem::operator<( otherListViewItem );
 }
 
 

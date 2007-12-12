@@ -24,12 +24,12 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include <qcursor.h>
-#include <qpixmap.h>
-#include <qinputdialog.h>
-#include <qmessagebox.h>
-#include <qfiledialog.h>
-#include <qvbox.h>
+#include <QCursor>
+#include <QFileDialog>
+#include <QX11Info>
+#include <QMessageBox>
+#include <QPixmap>
+#include <QInputDialog>
 #include <qdir.h>
 
 #define y2log_component "qt-ui"
@@ -112,7 +112,7 @@ void YQUI::makeScreenShot( std::string stl_filename )
 
     QWidget * dialog = (QWidget *) YDialog::currentDialog()->widgetRep();
     QPixmap screenShot = QPixmap::grabWindow( dialog->winId() );
-    XSync( dialog->x11Display(), false );
+    XSync( QX11Info::display(), false );
     QString fileName ( stl_filename.c_str() );
     bool interactive = false;
 
@@ -129,7 +129,7 @@ void YQUI::makeScreenShot( std::string stl_filename )
             // Initialize screen shot directory
             //
 
-            QString home = QDir::homeDirPath();
+            QString home = QDir::homePath();
             char * ssdir = getenv("Y2SCREENSHOTS");
             QString dir  = ssdir ? ssdir : "yast2-screen-shots";
 
@@ -144,7 +144,7 @@ void YQUI::makeScreenShot( std::string stl_filename )
 
                 dir = "/tmp/" + dir;
 
-                if ( mkdir( dir, 0700 ) == -1 )
+                if ( mkdir( qPrintable(dir), 0700 ) == -1 )
                     dir = "";
             }
             else
@@ -154,7 +154,7 @@ void YQUI::makeScreenShot( std::string stl_filename )
                 // chance to create symlinks to a better location if he wishes so.
 
                 dir = home + "/" + dir;
-                (void) mkdir( dir, 0750 );
+                (void) mkdir( qPrintable(dir), 0750 );
             }
 
             screenShotNameTemplate = dir + "/%s-%03d.png";
@@ -168,11 +168,11 @@ void YQUI::makeScreenShot( std::string stl_filename )
         const char * baseName = moduleName();
         if ( ! baseName ) baseName = "scr";
         int no = screenShotNo[ baseName ];
-        fileName.sprintf( screenShotNameTemplate, baseName, no );
-        y2debug( "screenshot: %s", (const char *) fileName );
+        fileName.sprintf( qPrintable(screenShotNameTemplate), baseName, no );
+        y2debug( "screenshot: %s", qPrintable(fileName) );
 
 	{
-	    YQSignalBlocker sigBlocker( &_user_input_timer );
+	    YQSignalBlocker sigBlocker( _user_input_timer );
 
 	    fileName = YQApplication::askForSaveFileName( fileName,
 							  QString( "*.png" ) ,
@@ -193,21 +193,21 @@ void YQUI::makeScreenShot( std::string stl_filename )
     // Actually save the screen shot
     //
 
-    y2debug( "Saving screen shot to %s", (const char *) fileName );
+    y2debug( "Saving screen shot to %s", qPrintable(fileName) );
     bool success = screenShot.save( fileName, "PNG" );
 
     if ( ! success )
     {
-	y2error( "Couldn't save screen shot %s", (const char *) fileName );
+	y2error( "Couldn't save screen shot %s", qPrintable(fileName) );
 
 	if ( interactive )
 	{
-	    QMessageBox::warning( 0,						// parent
-				  "Error",					// caption
+	    QMessageBox::warning( 0,					// parent
+				  "Error",				// caption
 				  QString( "Couldn't save screen shot\nto %1" ).arg( fileName ),
 				  QMessageBox::Ok | QMessageBox::Default,	// button0
-				  QMessageBox::NoButton,			// button1
-				  QMessageBox::NoButton );			// button2
+				  Qt::NoButton,				// button1
+				  Qt::NoButton );			// button2
 	}
     }
 
@@ -215,7 +215,7 @@ void YQUI::makeScreenShot( std::string stl_filename )
     {
 	macroRecorder->beginBlock();
 	YDialog::currentDialog()->saveUserInput( macroRecorder );
-	macroRecorder->recordMakeScreenShot( true, (const char *) fileName );
+	macroRecorder->recordMakeScreenShot( true, qPrintable(fileName) );
 	macroRecorder->recordUserInput( YCPVoid() );
 	macroRecorder->endBlock();
     }
@@ -232,16 +232,16 @@ void YQUI::askSaveLogs()
     {
 	QString saveLogsCommand = "/sbin/save_y2logs";
 
-	if ( access( saveLogsCommand.ascii(), X_OK ) == 0 )
+	if ( access( saveLogsCommand.toAscii(), X_OK ) == 0 )
 	{
 	    saveLogsCommand += " '" + fileName + "'";
-	    y2milestone( "Saving y2logs: %s", saveLogsCommand.ascii() );
-	    int result = system( saveLogsCommand.ascii() );
+	    y2milestone( "Saving y2logs: %s", qPrintable(saveLogsCommand) );
+	    int result = system( qPrintable(saveLogsCommand) );
 
 	    if ( result != 0 )
 	    {
 		y2error( "Error saving y2logs: \"%s\" exited with %d",
-			 (const char *) saveLogsCommand, result );
+			 qPrintable(saveLogsCommand), result );
 		QMessageBox::warning( 0,					// parent
 				      "Error",					// caption
 				      QString( "Couldn't save y2logs to %1 - "
@@ -252,13 +252,13 @@ void YQUI::askSaveLogs()
 	    }
 	    else
 	    {
-		y2milestone( "y2logs saved to %s", (const char *) fileName );
+		y2milestone( "y2logs saved to %s", qPrintable(fileName) );
 	    }
 	}
 	else
 	{
 	    y2error( "Error saving y2logs: Command %s not found",
-		     saveLogsCommand.ascii() );
+		     qPrintable(saveLogsCommand) );
 
 	    QMessageBox::warning( 0,						// parent
 				  "Error",					// caption
@@ -279,18 +279,14 @@ void YQUI::askConfigureLogging()
     items << "Debug logging off"
 	  << "Debug logging on";
 
-    QString result = QInputDialog::getItem( "YaST2 Logging",		// caption
-					    "Configure YaST2 Logging:",	// label
-					    items,
-					    get_log_debug() ? 1 : 0,
-					    false,			// editable
-					    &okButtonPressed,
-					    _main_win );		// parent
-
+    QString result = QInputDialog::getItem( _main_win,
+                                            _("YaST2 Logging"),
+                                            _("Configure YaST2 Logging:"),
+                                            items, 0, get_log_debug() ? 1 : 0, &okButtonPressed);
     if ( okButtonPressed )
     {
 	set_log_debug( result.endsWith( "on" ) );
-	y2milestone( "Changing logging: %s - %s", (const char *) result,
+	y2milestone( "Changing logging: %s - %s", qPrintable(result),
 		     get_log_debug() ? "y2debug on" : "y2debug off" );
     }
 }
@@ -315,15 +311,15 @@ void YQUI::toggleRecordMacro()
         normalCursor();
 
         QString filename =
-            QFileDialog::getSaveFileName( DEFAULT_MACRO_FILE_NAME,              // startWith
-                                          "*.ycp",                              // filter
-                                          0,                                    // parent
-                                          0,                                    // (widget) name
-                                          "Select Macro File to Record to" );   // caption
+            QFileDialog::getSaveFileName( 0,
+                                          "Select Macro File to Record to",
+                                          DEFAULT_MACRO_FILE_NAME,              // startWith
+                                          "*.ycp"                             // filter
+                                          );
 
         if ( ! filename.isEmpty() )     // file selection dialog has been cancelled
         {
-            recordMacro( (const char *) filename );
+            recordMacro( qPrintable(filename) );
         }
     }
 }
@@ -334,16 +330,15 @@ void YQUI::askPlayMacro()
     normalCursor();
 
     QString filename =
-        QFileDialog::getOpenFileName( DEFAULT_MACRO_FILE_NAME,          // startWith
-                                      "*.ycp",                          // filter
-                                      0,                                // parent
-                                      0,                                // (widget) name
-                                      "Select Macro File to Play" );    // caption
+        QFileDialog::getOpenFileName( 0,
+                                      "Select Macro File to Play",
+                                      DEFAULT_MACRO_FILE_NAME,          // startWith
+                                      "*.ycp" );
     busyCursor();
 
     if ( ! filename.isEmpty() ) // file selection dialog has been cancelled
     {
-        playMacro( (const char *) filename );
+        playMacro( qPrintable(filename) );
 
         // Do special magic to get out of any UserInput() loop right now
         // without doing any harm - otherwise this would hang until the next
@@ -353,11 +348,10 @@ void YQUI::askPlayMacro()
 
         if ( _do_exit_loop )
         {
-            qApp->exit_loop();
+            _eventLoop->exit();
         }
     }
 }
-
 
 
 // EOF
