@@ -39,7 +39,6 @@ YQGenericButton::YQGenericButton( YWidget *		parent,
     , YPushButton( parent, label )
     , _dialog( 0 )
     , _qPushButton( 0 )
-    , _setDefaultButtonRecursive( false )
 {
     setWidgetRep( 0 );
 }
@@ -88,23 +87,6 @@ YQGenericButton::dialog()
     }
 
     return _dialog;
-}
-
-
-void
-YQGenericButton::setDefaultButton( bool def )
-{
-    YPushButton::setDefaultButton( def );
-
-    if ( ! _setDefaultButtonRecursive )
-    {
-	_setDefaultButtonRecursive = true;
-	
-	if ( _dialog && def )
-	    dialog()->setDefaultButton( this );
-	
-	_setDefaultButtonRecursive = true;
-    }
 }
 
 

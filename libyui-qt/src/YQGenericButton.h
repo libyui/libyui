@@ -96,13 +96,6 @@ public:
     bool isShownAsDefault() const;
 
     /**
-     * Set this button's default button state.
-     *
-     * Reimplemented from YPushButton.
-     **/
-    virtual void setDefaultButton( bool def = true );
-
-    /**
      * Accept the keyboard focus.
      **/
     virtual bool setKeyboardFocus();
@@ -164,7 +157,6 @@ private:
     
     YQDialog *		_dialog;
     QPushButton *	_qPushButton;
-    bool		_setDefaultButtonRecursive;
 };
 
 #endif // YQGenericButton_h
