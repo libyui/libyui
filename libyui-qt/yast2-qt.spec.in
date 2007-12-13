@@ -2,7 +2,7 @@
 
 
 @HEADER@
-BuildRequires:	dbus-1-devel boost-devel libzypp-devel curl-devel docbook-xsl-stylesheets doxygen libdrm-devel libjpeg-devel libxcrypt-devel libxslt perl-XML-Writer libqt4-devel rpm-devel sgml-skel update-desktop-files yast2-devtools hal-devel
+BuildRequires:	libzypp-devel docbook-xsl-stylesheets doxygen libdrm-devel libjpeg-devel libxcrypt-devel libxslt perl-XML-Writer libqt4-devel sgml-skel update-desktop-files yast2-devtools
 
 Summary:	-
 BuildRequires:  yast2-core-devel >= 2.16.15
