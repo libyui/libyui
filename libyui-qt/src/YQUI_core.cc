@@ -581,13 +581,13 @@ qMessageHandler( QtMsgType type, const char * msg )
 	case QtWarningMsg:
 	    y2warning ("qt-warning: %s\n", msg);
 #ifndef NDEBUG
-	    abort();
+	    //abort();
 #endif
 	    break;
 	case QtCriticalMsg:
 	    y2warning ("qt-critical: %s\n", msg);
 #ifndef NDEBUG
-            abort();
+            //abort();
 #endif
 	    break;
 	case QtFatalMsg:

@@ -341,9 +341,8 @@ YQPkgConflict::addSolutions()
 					       // how to resolve this conflict
 					       _( "Conflict Resolution:" ) );
     Q_CHECK_PTR( _resolutionsHeader );
-#if FIXME
+
     _resolutionsHeader->setExpanded( true );
-#endif
     _resolutionsHeader->setBackgroundColor( LIGHT_GREY );
 
     zypp::ProblemSolutionList solutions = problem()->solutions();
@@ -377,15 +376,14 @@ YQPkgConflict::addSolutions()
 zypp::ProblemSolution_Ptr
 YQPkgConflict::userSelectedResolution()
 {
-    int count = 0;
     QTreeWidgetItem * item;
+    QTreeWidgetItemIterator it(_resolutionsHeader);
 
-#if FIXME
-    while ( item = _resolutionsHeader->topLevelItem(count) )
+    while ( (item = *it) )
     {
 	YQPkgConflictResolution * res = dynamic_cast<YQPkgConflictResolution *> (item);
 
-	if ( res && res->( checkState(0) == Qt::Checked ) )
+	if ( res && ( res->checkState(0) == Qt::Checked ) )
 	{
 	    zypp::ProblemSolution_Ptr solution = res->solution();
 
@@ -395,10 +393,9 @@ YQPkgConflict::userSelectedResolution()
 	    return solution;
 	}
 
-	count++;
+        ++it;
     }
 
-#endif
     return zypp::ProblemSolution_Ptr();		// Null pointer
 }
 

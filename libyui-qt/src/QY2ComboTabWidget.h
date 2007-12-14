@@ -87,7 +87,7 @@ protected slots:
      * Show a page identified by its index. Does NOT update the combo box
      * contents.
      **/
-    void showPage( int index );
+    void showPageIndex( int index );
 
 
 protected:

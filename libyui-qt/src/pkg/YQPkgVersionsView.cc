@@ -163,7 +163,7 @@ YQPkgVersionsView::checkForChangedCandidate()
 {
     QTreeWidgetItemIterator iter(this);
     QTreeWidgetItem *first = *iter;
-#if FIXME
+
     if ( ! first || ! _selectable )
 	return;
 
@@ -174,7 +174,7 @@ YQPkgVersionsView::checkForChangedCandidate()
     {
 	YQPkgVersion * versionItem = dynamic_cast<YQPkgVersion *> (*iter_c);
 
-	if ( versionItem && versionItem->isOn() )
+	if ( versionItem && (versionItem->checkState(0) == Qt::Checked) )
 	{
 	    ZyppObj newCandidate = versionItem->zyppObj();
 
@@ -230,7 +230,6 @@ YQPkgVersionsView::checkForChangedCandidate()
 
 	++iter_c;
     }
-#endif
 }
 
 

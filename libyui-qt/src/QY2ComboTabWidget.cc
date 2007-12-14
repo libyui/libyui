@@ -68,7 +68,7 @@ QY2ComboTabWidget::QY2ComboTabWidget( const QString &	label,
     combo_label->setBuddy( combo_box );
     combo_box->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
     connect( combo_box, SIGNAL( activated( int ) ),
-	     this,	SLOT  ( showPage ( int ) ) );
+	     this,	SLOT  ( showPageIndex ( int ) ) );
     
     widget_stack = new QStackedWidget( this );
     Q_CHECK_PTR( widget_stack );
@@ -96,12 +96,11 @@ QY2ComboTabWidget::addPage( const QString & page_label, QWidget * new_page )
 
 
 void
-QY2ComboTabWidget::showPage( int index )
+QY2ComboTabWidget::showPageIndex( int index )
 {
-    QWidget * page = pages[ index ];
-
-    if ( page )
+    if ( pages.contains(index) )
     {
+        QWidget * page = pages[ index ];
 	widget_stack->setCurrentWidget( page );
 	// y2debug( "Changing current page" );
 	emit currentChanged( page );
@@ -121,12 +120,11 @@ QY2ComboTabWidget::showPage( QWidget * page )
 
     if ( page == pages[ combo_box->currentIndex() ] )
     {
-	// Shortcut: If the requested page is the one that belongs to the item
-	// currently selected in the combo box, don't bother searching the
-	// correct combo box item.
-	return;
+          // Shortcut: If the requested page is the one that belongs to the item
+          // currently selected in the combo box, don't bother searching the
+          // correct combo box item.
+          return;
     }
-
     
     // Search the dict for this page
     
@@ -134,13 +132,12 @@ QY2ComboTabWidget::showPage( QWidget * page )
 
     while ( it.hasNext() )
     {
+        it.next();
 	if ( page == it.value() )
 	{
 	    combo_box->setCurrentIndex( it.key() );
 	    return;
 	}
-
-	it.next();
     }
 
     // If we come this far, that page isn't present in the dict.
