@@ -50,14 +50,15 @@ YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
     _nameCol	= -42;
     _summaryCol = -42;
 
-#if FIXME
+    QStringList headers;
     int numCol = 0;
-    addColumn( _( "Version" 	) );	_versionCol	= numCol++;
-    addColumn( _( "Arch." 	) );	_archCol	= numCol++;
-    addColumn( _( "Product"	) );	_productCol	= numCol++;
-    addColumn( _( "Repository"	) );	_repoCol	= numCol++;
-    addColumn( _( "URL"		) );	_urlCol		= numCol++;
-#endif
+    headers << _( "Version" 	);	_versionCol	= numCol++;
+    headers << _( "Arch." 	);	_archCol	= numCol++;
+    headers << _( "Product"	);	_productCol	= numCol++;
+    headers << _( "Repository"	);	_repoCol	= numCol++;
+    headers << _( "URL"		);	_urlCol		= numCol++;
+
+    setHeaderLabels(headers);
     _statusCol	= _productCol;
 
     _nameCol	= _versionCol;

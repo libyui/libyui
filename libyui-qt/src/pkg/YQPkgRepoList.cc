@@ -45,20 +45,23 @@ YQPkgRepoList::YQPkgRepoList( QWidget * parent )
     _urlCol	= -1;
 
     int numCol = 0;
-#if FIXME
+
+    QStringList headers;
+
     // Column headers for repository list
-    addColumn( _( "Name"	) );	_nameCol	= numCol++;
-    addColumn( _( "URL"		) );	_urlCol		= numCol++;
+    headers <<  _( "Name");	_nameCol	= numCol++;
+    headers << _( "URL");	_urlCol		= numCol++;
 
-    setAllColumnsShowFocus( true );
-    setSelectionMode( Q3ListView::Extended );	// allow multi-selection with Ctrl-mouse
+    setHeaderLabels(headers);
 
-    connect( this, 	SIGNAL( currentItemChanged() ),
+    //setAllColumnsShowFocus( true );
+    //setSelectionMode( Q3ListView::Extended );	// allow multi-selection with Ctrl-mouse
+
+    connect( this, 	SIGNAL( currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *) ),
 	     this, 	SLOT  ( filterIfVisible()) );
 
     fillList();
     selectSomething();
-#endif
 
     y2debug( "Creating repository list done" );
 }
@@ -105,7 +108,6 @@ YQPkgRepoList::filterIfVisible()
 void
 YQPkgRepoList::filter()
 {
-#if FIXME
     emit filterStart();
 
     y2milestone( "Collecting packages in selected repositories..." );
@@ -120,45 +122,46 @@ YQPkgRepoList::filter()
     set<ZyppSel> exactMatches;
     set<ZyppSel> nearMatches;
 
-    Q3ListViewItem * item = firstChild();	// take multi selection into account
+    
 
-    while ( item )
+    QTreeWidgetItem * item;
+    
+    QList<QTreeWidgetItem *> items = selectedItems();
+    QListIterator<QTreeWidgetItem *> it(items);
+
+    while ( it.hasNext() )
     {
-	if ( item->isSelected() )
-	{
-	    YQPkgRepoListItem * repoItem = dynamic_cast<YQPkgRepoListItem *> (item);
+      item = it.next();
+      YQPkgRepoListItem * repoItem = dynamic_cast<YQPkgRepoListItem *> (item);
 
-	    if ( repoItem )
-	    {
-		ZyppRepo currentRepo = repoItem->zyppRepo();
+        if ( repoItem )
+        {
+            ZyppRepo currentRepo = repoItem->zyppRepo();
 
-		for ( ZyppPoolIterator sel_it = zyppPkgBegin();
-		      sel_it != zyppPkgEnd();
-		      ++sel_it )
-		{
-		    if ( (*sel_it)->candidateObj() &&
-			 (*sel_it)->candidateObj()->repository() == currentRepo )
-		    {
-			exactMatches.insert( *sel_it );
-		    }
-		    else
-		    {
-			zypp::ui::Selectable::available_iterator pkg_it = (*sel_it)->availableBegin();
+            for ( ZyppPoolIterator sel_it = zyppPkgBegin();
+                  sel_it != zyppPkgEnd();
+                  ++sel_it )
+            {
+                if ( (*sel_it)->candidateObj() &&
+                      (*sel_it)->candidateObj()->repository() == currentRepo )
+                {
+                    exactMatches.insert( *sel_it );
+                }
+                else
+                {
+                    zypp::ui::Selectable::available_iterator pkg_it = (*sel_it)->availableBegin();
 
-			while ( pkg_it != (*sel_it)->availableEnd() )
-			{
-			    if ( (*pkg_it)->repository() == currentRepo )
-				nearMatches.insert( *sel_it );
+                    while ( pkg_it != (*sel_it)->availableEnd() )
+                    {
+                        if ( (*pkg_it)->repository() == currentRepo )
+                            nearMatches.insert( *sel_it );
 
-			    ++pkg_it;
-			}
-		    }
-		}
+                        ++pkg_it;
+                    }
+                }
+            }
 
-	    }
-	}
-
-	item = item->nextSibling();
+        }
     }
 
 
@@ -193,7 +196,6 @@ YQPkgRepoList::filter()
     y2debug( "Packages sent to package list. Elapsed time: %f sec", stopWatch.elapsed() / 1000.0 );
 
     emit filterFinished();
-#endif
 }
 
 
@@ -207,16 +209,12 @@ YQPkgRepoList::addRepo( ZyppRepo repo )
 YQPkgRepoListItem *
 YQPkgRepoList::selection() const
 {
-#if FIXME
-    Q3ListViewItem * item = selectedItem();
+    QTreeWidgetItem * item = currentItem();
 
     if ( ! item )
 	return 0;
 
     return dynamic_cast<YQPkgRepoListItem *> (item);
-#else
-    return 0;
-#endif
 }
 
 
