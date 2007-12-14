@@ -94,6 +94,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     
     QGroupBox * gbox = new QGroupBox( _( "Search in" ), this );
     Q_CHECK_PTR( gbox );
+    layout->addWidget(gbox);
     QVBoxLayout *vlayout = new QVBoxLayout;
     gbox->setLayout(vlayout);
 
