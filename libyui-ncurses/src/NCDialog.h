@@ -62,7 +62,6 @@ class NCDialog : public YDialog, public NCWidget {
     NCursesUserPanel<NCDialog> * pan;
     NCstyle::StyleSet            mystyleset;
     const NCstyle::Style *       dlgstyle;
-    NCPushButton *defaultButton;
 
     unsigned inMultiDraw_i;
 
@@ -148,8 +147,6 @@ class NCDialog : public YDialog, public NCWidget {
      * Reimplemented from YWidget.
      **/
     virtual void setSize( int newWidth, int newHeight );
-
-    virtual void setDefaultButton( NCPushButton *newButton );
 
   protected:
 

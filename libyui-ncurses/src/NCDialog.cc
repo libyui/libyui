@@ -62,7 +62,6 @@ NCDialog::NCDialog( YDialogType 	dialogType,
     : YDialog    ( dialogType, colorMode )
     , pan        ( 0 )
     , dlgstyle   ( 0 )
-    , defaultButton( 0 ) 
     , inMultiDraw_i( 0 )
     , active     ( false )
     , wActive    ( this )
@@ -85,7 +84,6 @@ NCDialog::NCDialog( YDialogType dialogType, const wpos at, const bool boxed )
     : YDialog    ( dialogType, YDialogNormalColor )
     , pan        ( 0 )
     , dlgstyle   ( 0 )
-    , defaultButton( 0 )
     , inMultiDraw_i( 0 )
     , active     ( false )
     , wActive    ( this )
@@ -227,40 +225,10 @@ int NCDialog::preferredHeight()
 void NCDialog::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  NCMIL << "setSize() called: width: " << newwidth << "   height: " << newheight << endl;
+  NCDBG << "setSize() called: width: " << newwidth << "   height: " << newheight << endl;
   YDialog::setSize( newwidth, newheight );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCDialog::setDefaultButton
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Set default button of this dialog (move keyboard
-//	              focus on it)
-//
-void NCDialog::setDefaultButton( NCPushButton *newButton )
-{
-  if ( newButton && defaultButton && (newButton != defaultButton ))
-  {
-    UIWAR << "Too many default push buttons: " <<  
-	     " only one allowed." << endl;
-    defaultButton->setDefaultButton( false );
-  }
-
-  defaultButton = newButton;
-
-  if (defaultButton)
-  {
-    UIDBG << "New default button: " <<  endl;
-    defaultButton->setKeyboardFocus();
-  }
-
-  YDialog::setDefaultButton( 0 );
-  YDialog::setDefaultButton(  defaultButton );
-  
-}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -274,7 +242,7 @@ void NCDialog::initDialog()
 {
     NCMIL << "initDialog()" << endl;
     if ( !pan ) {
-	NCMIL << "setInitialSize() called!" << endl; 
+	NCDBG << "setInitialSize() called!" << endl; 
     setInitialSize();
   }
 }
@@ -291,9 +259,14 @@ void NCDialog::showDialog()
 {
   IODBG << "sd+ " << this << endl;
   if ( pan && pan->hidden() ) {
+    YPushButton *defaultB = YDialog::defaultButton();
+    if ( defaultB )
+    {
+        defaultB->setKeyboardFocus();
+    }
     getVisible();
     doUpdate();
-    DumpOn( NCMIL, " " );
+    DumpOn( NCDBG, " " );
   }
   else if ( !pan )
   {

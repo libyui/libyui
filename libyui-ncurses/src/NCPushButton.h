@@ -68,8 +68,6 @@ class NCPushButton : public YPushButton, public NCWidget {
 
     virtual void setLabel( const string & nlabel );
  
-    virtual void setDefaultButton( bool def);    
-
     virtual void setEnabled( bool do_bv );
     
     virtual bool setKeyboardFocus() {
