@@ -65,8 +65,10 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
 
     QGroupBox * gbox = new QGroupBox( _( "Show packages with status" ), this );
     Q_CHECK_PTR( gbox );
-    QHBoxLayout *hlayout = new QHBoxLayout;
-    gbox->setLayout(hlayout);
+
+    QVBoxLayout *box = new QVBoxLayout;
+    gbox->setLayout(box);
+    layout->addWidget(gbox);
 
     _showDel		= addStatusCheckBox( gbox, _( "Delete" ), 	YQIconPool::disabledPkgDel(),	   	true );
     _showInstall	= addStatusCheckBox( gbox, _( "Install" ), 	YQIconPool::disabledPkgInstall(),	true );
@@ -77,18 +79,9 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     _showTaboo		= addStatusCheckBox( gbox, _( "Taboo" ), 	YQIconPool::disabledPkgTaboo(),	   	true );
     _showProtected	= addStatusCheckBox( gbox, _( "Protected" ), 	YQIconPool::disabledPkgProtected(),	true );
 
-    hlayout->addWidget(_showDel);
-    hlayout->addWidget(_showInstall);
-    hlayout->addWidget(_showUpdate);
-    hlayout->addWidget(_showAutoDel);
-    hlayout->addWidget(_showAutoInstall);
-    hlayout->addWidget(_showAutoUpdate);
-    hlayout->addWidget(_showTaboo);
-    hlayout->addWidget(_showProtected);
-
-    hlayout->addSpacing( 8 );
-    hlayout->addStretch(); // For the other columns of the QGroupBox ( prevent wraparound )
-    hlayout->addStretch();
+    box->addSpacing( 8 );
+    box->addStretch(); // For the other columns of the QGroupBox ( prevent wraparound )
+    box->addStretch();
 
     _showKeepInstalled	= addStatusCheckBox( gbox, _( "Keep" ), 	  YQIconPool::disabledPkgKeepInstalled(), false );
     _showNoInst		= addStatusCheckBox( gbox, _( "Do not install" ), YQIconPool::disabledPkgNoInst(),	  false );
@@ -97,17 +90,17 @@ YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
 
 
     // Box for refresh button
-    hlayout = new QHBoxLayout();
-    layout->addLayout(hlayout);
+    QHBoxLayout *hbox = new QHBoxLayout();
+    layout->addLayout(hbox);
 
-    hlayout->addStretch();
+    hbox->addStretch();
 
     // Refresh button
     _refreshButton = new QPushButton( _( "&Refresh List" ), this );
     Q_CHECK_PTR( _refreshButton );
-    hlayout->addWidget(_refreshButton);
+    hbox->addWidget(_refreshButton);
 
-    hlayout->addStretch();
+    hbox->addStretch();
 
     connect( _refreshButton,	SIGNAL( clicked() ),
 	     this,		SLOT  ( filter()  ) );
@@ -130,15 +123,24 @@ YQPkgStatusFilterView::addStatusCheckBox( QWidget *		parent,
 					  const QPixmap &	icon,
 					  bool			initiallyChecked )
 {
+    QBoxLayout *layout = dynamic_cast<QBoxLayout*>(parent->layout());
+
+    QHBoxLayout *hbox = new QHBoxLayout;
+    layout->addLayout(hbox);
+
     QCheckBox * checkBox = new QCheckBox( text, parent );
     Q_CHECK_PTR( checkBox );
     checkBox->setChecked( initiallyChecked );
+
+    hbox->addWidget(checkBox);
 
     QLabel * label = new QLabel( parent );
     Q_CHECK_PTR( label );
     label->setPixmap( icon );
 
-    addHStretch( parent );
+    hbox->addWidget(label);
+
+    layout->addStretch();
 
     connect( checkBox,	SIGNAL( clicked() ),
 	     this,	SLOT  ( filter()  ) );
