@@ -22,7 +22,8 @@
 
 #include <qevent.h>
 #include <QPointF>
-
+#include <QStyleOptionProgressBarV2>
+#include <QDebug>
 #include "YQUI.h"
 #include "YQMultiProgressMeter.h"
 
@@ -166,7 +167,6 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 
     int indent = triangularShaped() ? (int) ( thickness * 0.37 ) : 0;
 
-
     // Set up painter
 
     if ( vertical() )
@@ -229,93 +229,44 @@ void YQMultiProgressMeter::drawSegment( int segment,
     // i.e. just the opposite way.
     //
 
-    int fillStart  = 0;
-    int fillHeight = 0;
     int border = margin();
 
     if ( triThickness() > 0 )
-	border += triThickness() + triSpacing();
+        border += triThickness() + triSpacing();
 
-    if ( currentValue( segment ) < maxValue( segment ) )
+    if ( maxValue( segment ) == 0.0 )
     {
-	if ( maxValue( segment ) == 0.0 )
-	{
-	    y2error( "Avoiding division by zero: maxValue[%d]", segment );
-	    return;
-	}
-
-	float emptyPart = 1.0 - ( currentValue( segment ) ) / ( maxValue( segment ) );
-	fillStart  = (int) ( length * emptyPart );
-	fillHeight = (int) ( indent * emptyPart );
+        y2error( "Avoiding division by zero: maxValue[%d]", segment );
+        return;
     }
-
-    thickness--; // We always deal with tickness-1 anyway, so let's cut this short
 
     if ( vertical() )	// fill thermometer-like from bottom to top
     {
-	if ( fillStart < length )
-	{
-            static const QPointF points[4] = 
-              { QPointF( offset + fillStart,	border + fillHeight ),
-	        QPointF( offset + fillStart, 	border + thickness - fillHeight ),
-	        QPointF( offset + length, 	border + thickness - indent ),
-	        QPointF( offset + length, 	border + indent )
-              };
+        QStyleOptionProgressBarV2 opts;
+        opts.initFrom(this);
+        opts.progress = currentValue( segment);
+        opts.minimum = 0;
+        opts.maximum = maxValue( segment);
+        opts.invertedAppearance = true;
+        opts.rect = QRect( offset, border, length, thickness );
+        style()->drawControl(QStyle::CE_ProgressBarGroove, &opts, &painter, this);
 
-	    painter.setBrush( palette().highlight() );
-	    painter.setPen( Qt::NoPen );
-	    painter.drawConvexPolygon( points, 4 );
-	}
+	if ( opts.progress > 0 )
+	    style()->drawControl(QStyle::CE_ProgressBarContents, &opts, &painter, this);
     }
     else	// horizontal - fill from left to right like a normal progress bar
     {
-	if ( fillStart > 0 )
-	{
-            static const QPointF points[4] =
-              { QPointF( offset, 		border + thickness ),
-	        QPointF( offset, 		border ),
-	        QPointF( offset + fillStart,	border + fillHeight ),
-	        QPointF( offset + fillStart, 	border + thickness - fillHeight )
-              };
+        QStyleOptionProgressBarV2 opts;
+        opts.initFrom(this);
+        opts.progress = maxValue( segment) - currentValue( segment);
+        opts.minimum = 0;
+        opts.maximum = maxValue( segment);
+        opts.rect = QRect( offset, border, length, thickness );
 
-	    painter.setBrush( palette().highlight() );
-	    painter.setPen( Qt::NoPen );
-	    painter.drawConvexPolygon( points, 4 );
-	}
+        style()->drawControl(QStyle::CE_ProgressBarGroove, &opts, &painter, this);
+	if ( opts.progress > 0 )
+            style()->drawControl(QStyle::CE_ProgressBarContents, &opts, &painter, this);
     }
-
-
-    //
-    // Draw outline
-    //
-
-    const QBrush & dark  = palette().dark();
-    const QBrush & light = palette().light();
-
-    // Draw arrow base (left)
-
-    painter.setBrush( dark );
-    painter.setPen( Qt::SolidLine );
-    painter.drawLine( offset, border,
-		      offset, border + thickness );
-
-
-    // Draw upper outline
-
-    painter.drawLine( offset, border,
-		      offset + length - 1, border + indent );
-
-    // Draw arrow point (right)
-
-    painter.setBrush( light );
-    painter.drawLine( offset + length - 1, border + indent,
-		      offset + length - 1, border + thickness - indent );
-
-    // Draw lower outline
-
-    painter.drawLine( offset, border + thickness,
-		      offset + length - 1, border + thickness - indent );
-
 }
 
 
@@ -334,8 +285,8 @@ void YQMultiProgressMeter::drawMarkers( QPainter & painter, int offset, int thic
     // Draw upper marker triangle
 
     int tri = triThickness();
-      
-    static const QPointF points[3] = 
+
+    QPointF points[3] =
      { QPointF( offset - tri+1,	margin() ),		// top left (base)
        QPointF( offset,		margin() + tri-1 ),	// lower center (point)
        QPointF( offset + tri-1, 	margin() )		// top right (base)
@@ -343,12 +294,11 @@ void YQMultiProgressMeter::drawMarkers( QPainter & painter, int offset, int thic
 
     painter.drawConvexPolygon( points, 3 );
 
-
     // Draw lower marker triangle
 
     int pointOffset = margin() + tri + thickness + 2 * triSpacing();
 
-    static const QPointF points2[3] =
+    QPointF points2[3] =
      { QPointF( offset,		pointOffset ),		// top center (point)
        QPointF( offset + tri-1,	pointOffset + tri-1 ),	// top right (base)
        QPointF( offset - tri+1,	pointOffset + tri-1 )	// bottom left (base)
