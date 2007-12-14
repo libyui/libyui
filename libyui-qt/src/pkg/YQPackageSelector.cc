@@ -216,7 +216,7 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
 void
 YQPackageSelector::basicLayout()
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout();
     setLayout(layout);
     layoutMenuBar(this);
 

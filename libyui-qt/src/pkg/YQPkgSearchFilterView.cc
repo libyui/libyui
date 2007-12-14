@@ -73,7 +73,7 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
 
 
     // Box for search button
-    QHBoxLayout * hbox = new QHBoxLayout( this );
+    QHBoxLayout * hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
     layout->addLayout(hbox);
     hbox->addStretch();

@@ -56,11 +56,11 @@ YQPkgProductDialog::YQPkgProductDialog( QWidget * parent )
 
     // Layout for the dialog (can't simply insert a QVBox)
 
-    QVBoxLayout * layout = new QVBoxLayout( this );
+    QVBoxLayout * layout = new QVBoxLayout();
+    Q_CHECK_PTR( layout );
+    setLayout(layout);
     layout->setSpacing( SPACING );
     layout->setMargin ( MARGIN  );
-    Q_CHECK_PTR( layout );
-
 
     // VBox for splitter
 
@@ -100,7 +100,7 @@ YQPkgProductDialog::YQPkgProductDialog( QWidget * parent )
 
     // Button box (to center the single button)
 
-    QHBoxLayout * hbox = new QHBoxLayout( this );
+    QHBoxLayout * hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
     hbox->setSpacing( SPACING );
     hbox->setMargin ( MARGIN  );

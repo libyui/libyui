@@ -56,7 +56,7 @@ YQPackageSelectorBase::YQPackageSelectorBase( YWidget * parent,
 {
     setWidgetRep( this );
 
-//     QHBoxLayout *layout = new QHBoxLayout(this);
+//     QHBoxLayout *layout = new QHBoxLayout();
 //     setLayout(layout);
 
     _showChangesDialog		= false;

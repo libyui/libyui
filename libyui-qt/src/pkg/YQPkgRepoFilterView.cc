@@ -44,11 +44,12 @@ YQPkgRepoFilterView::YQPkgRepoFilterView( QWidget * parent )
     QSplitter * splitter = new QSplitter( Qt::Vertical, this );
     Q_CHECK_PTR( splitter );
 
-    QVBoxLayout * upper_vbox = new QVBoxLayout( splitter );
+    //QVBoxLayout * upper_vbox = new QVBoxLayout( splitter );
     
     _repoList = new YQPkgRepoList( this );
-    upper_vbox->addWidget(_repoList);
-
+    //upper_vbox->addWidget(_repoList);
+    splitter->addWidget(_repoList);
+    
     Q_CHECK_PTR( _repoList );
     _repoList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding ) );// hor/vert
 
@@ -94,10 +95,13 @@ YQPkgRepoFilterView::~YQPkgRepoFilterView()
 QWidget *
 YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
 {
- 
-    QVBoxLayout *vbox = new QVBoxLayout( parent );
+    QWidget *vbox = new QWidget(parent);
     Q_CHECK_PTR( vbox );
-    //addVSpacing( vbox, MARGIN );
+
+    QVBoxLayout *layout = new QVBoxLayout();
+    vbox->setLayout(layout);
+    
+    layout->addSpacing( MARGIN );
 
     // Translators: This is a combo box where the user can apply a secondary filter
     // in addition to the primary filter by repository - one of
@@ -107,7 +111,7 @@ YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
     // few cases where a combo box label is left to the combo box rather than
     // above it.
     _secondaryFilters = new QY2ComboTabWidget( _( "&Secondary Filter:" ));
-    vbox->addWidget(_secondaryFilters);
+    layout->addWidget(_secondaryFilters);
 
     Q_CHECK_PTR( _secondaryFilters );
 
@@ -122,7 +126,7 @@ YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
     //
 
     _allPackages = new QWidget( this );
-    vbox->addWidget(_allPackages);
+    layout->addWidget(_allPackages);
     Q_CHECK_PTR( _allPackages );
     _secondaryFilters->addPage( _( "All Packages" ), _allPackages );
 
@@ -132,7 +136,7 @@ YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
     //
 
     _rpmGroupTagsFilterView = new YQPkgRpmGroupTagsFilterView( this );
-    vbox->addWidget(_rpmGroupTagsFilterView);
+    layout->addWidget(_rpmGroupTagsFilterView);
 
     Q_CHECK_PTR( _rpmGroupTagsFilterView );
     _secondaryFilters->addPage( _( "Package Groups" ), _rpmGroupTagsFilterView );
@@ -146,7 +150,7 @@ YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
     //
 
     _searchFilterView = new YQPkgSearchFilterView(this);
-    vbox->addWidget(_searchFilterView);
+    layout->addWidget(_searchFilterView);
     Q_CHECK_PTR( _searchFilterView );
     _secondaryFilters->addPage( _( "Search" ), _searchFilterView );
 

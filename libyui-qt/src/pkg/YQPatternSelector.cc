@@ -105,7 +105,8 @@ YQPatternSelector::findWizard() const
 void
 YQPatternSelector::basicLayout()
 {
-    QVBoxLayout *vbox = new QVBoxLayout( this );
+    QVBoxLayout *vbox = new QVBoxLayout();
+    setLayout(vbox);
 
     QSplitter * outer_splitter = new QSplitter( Qt::Horizontal, this );
     Q_CHECK_PTR( outer_splitter );

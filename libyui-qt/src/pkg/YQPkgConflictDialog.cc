@@ -79,7 +79,8 @@ YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
 
     // Layout for the dialog (can't simply insert a QVbox)
 
-    QVBoxLayout * layout = new QVBoxLayout( this );
+    QVBoxLayout * layout = new QVBoxLayout();
+    setLayout(layout);
     layout->setMargin(MARGIN);
     layout->setSpacing(SPACING);
 

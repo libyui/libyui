@@ -42,10 +42,10 @@ QY2ComboTabWidget::QY2ComboTabWidget( const QString &	label,
 				      const char *	name )
     : QWidget(parent)
 {
-    QVBoxLayout *vbox = new QVBoxLayout(this);
+    QVBoxLayout *vbox = new QVBoxLayout();
     setLayout(vbox);
 
-    QHBoxLayout *hbox = new QHBoxLayout(this);
+    QHBoxLayout *hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
 //     hbox->setFrameStyle( QFrame::Panel | QFrame::Raised );
 //     hbox->setLineWidth(2);

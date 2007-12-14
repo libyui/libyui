@@ -64,7 +64,7 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
 
     // Layout for the dialog ( can't simply insert a QVBox )
 
-    QVBoxLayout * layout = new QVBoxLayout( this );
+    QVBoxLayout * layout = new QVBoxLayout();
     Q_CHECK_PTR( layout );
     layout->setMargin(MARGIN);
     layout->setSpacing(SPACING);
@@ -72,7 +72,7 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
 
     // HBox for icon and message
 
-    QHBoxLayout * hbox = new QHBoxLayout( this );
+    QHBoxLayout * hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
     layout->addLayout( hbox );
 
@@ -108,7 +108,7 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
 
     // Button box
 
-    hbox = new QHBoxLayout( this );
+    hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
     hbox->setSpacing( SPACING );
     hbox->setMargin ( MARGIN  );

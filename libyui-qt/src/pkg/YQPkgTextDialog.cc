@@ -79,11 +79,11 @@ void YQPkgTextDialog::buildDialog( const QString & 	text,
 
     // Layout for the dialog ( can't simply insert a QVBox )
 
-    QVBoxLayout * layout = new QVBoxLayout( this );
+    QVBoxLayout * layout = new QVBoxLayout();
+    Q_CHECK_PTR( layout );
+    setLayout(layout);
     layout->setMargin(MARGIN);
     layout->setSpacing(SPACING);
-    Q_CHECK_PTR( layout );
-
 
     // Text browser
 
@@ -97,7 +97,7 @@ void YQPkgTextDialog::buildDialog( const QString & 	text,
 
     // Button box
 
-    QHBoxLayout * buttonBox	= new QHBoxLayout( this );
+    QHBoxLayout * buttonBox	= new QHBoxLayout();
     Q_CHECK_PTR( buttonBox );
     buttonBox->setSpacing( SPACING );
     buttonBox->setMargin ( MARGIN  );

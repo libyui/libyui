@@ -43,7 +43,7 @@
 YQPkgStatusFilterView::YQPkgStatusFilterView( QWidget * parent )
     : QWidget( parent )
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout();
     setLayout(layout);
  
     layout->setMargin( MARGIN );
