@@ -175,19 +175,19 @@ protected:
      * Handle mouse clicks.
      * Reimplemented from QScrollView.
      **/
-    virtual void contentsMousePressEvent( QMouseEvent * e );
+    virtual void mousePressEvent( QMouseEvent * e );
 
     /**
      * Handle mouse clicks.
      * Reimplemented from QScrollView.
      **/
-    virtual void contentsMouseReleaseEvent( QMouseEvent * );
+    virtual void mouseReleaseEvent( QMouseEvent * );
 
     /**
      * Handle mouse clicks.
      * Reimplemented from QScrollView.
      **/
-    virtual void contentsMouseDoubleClickEvent( QMouseEvent * );
+    virtual void mouseDoubleClickEvent( QMouseEvent * );
 
 
     //

@@ -24,6 +24,8 @@
 #include <QMouseEvent>
 #include "QY2ListView.h"
 
+#define y2log_component "qt-pkg"
+#include <ycp/y2log.h>
 
 QY2ListView::QY2ListView( QWidget * parent )
     : QTreeWidget( parent )
@@ -183,15 +185,16 @@ QY2ListView::restoreColumnWidths()
 
 
 void
-QY2ListView::contentsMousePressEvent( QMouseEvent * ev )
+QY2ListView::mousePressEvent( QMouseEvent * ev )
 {
-    //FIXME may be convert to global
-    QTreeWidgetItem * item = itemAt( mapToGlobal( ev->pos() ) );
+    //y2internal("POS is %d %d", ev->pos().x(), ev->pos().y() );
+    QTreeWidgetItem * item = itemAt( ev->pos() );
+
 
     if ( item && ( item->flags() & Qt::ItemIsEnabled ) )
     {
 	_mousePressedItem	= item;
-//FIXME	_mousePressedCol	= header()->sectionAt( ev->pos().x() );
+                _mousePressedCol	= header()->logicalIndexAt( ev->pos().x() );
 	_mousePressedButton	= ev->button();
     }
     else	// invalidate last click data
@@ -202,19 +205,20 @@ QY2ListView::contentsMousePressEvent( QMouseEvent * ev )
     }
 
     // Call base class method
-    //FIXME QTreeWidget::contentsMousePressEvent( ev );
+    QTreeWidget::mousePressEvent( ev );
 }
 
 
 void
-QY2ListView::contentsMouseReleaseEvent( QMouseEvent * ev )
+QY2ListView::mouseReleaseEvent( QMouseEvent * ev )
 {
-    QTreeWidgetItem * item = itemAt( mapToGlobal( ev->pos() ) );
+    //y2internal("REPOS is %d %d", ev->pos().x(), ev->pos().y() );
+    QTreeWidgetItem * item = itemAt( ev->pos() );
 
     if ( item && ( item->flags() & Qt::ItemIsEnabled ) && item == _mousePressedItem )
     {
  	int col = header()->logicalIndexAt( ev->pos().x() );
-
+        //y2internal("COL %d", col);
  	if ( item == _mousePressedItem	&&
  	     col  == _mousePressedCol	&&
  	     ev->button() == _mousePressedButton )
@@ -231,12 +235,12 @@ QY2ListView::contentsMouseReleaseEvent( QMouseEvent * ev )
     _mousePressedButton	= Qt::NoButton;
 
     // Call base class method
-    //FIXME QTreeWidget::contentsMouseReleaseEvent( ev );
+    QTreeWidget::mouseReleaseEvent( ev );
 }
 
 
 void
-QY2ListView::contentsMouseDoubleClickEvent( QMouseEvent * ev )
+QY2ListView::mouseDoubleClickEvent( QMouseEvent * ev )
 {
     QTreeWidgetItem * item = itemAt( mapToGlobal( ev->pos() ) );
 
@@ -252,8 +256,8 @@ QY2ListView::contentsMouseDoubleClickEvent( QMouseEvent * ev )
      _mousePressedCol	= -1;
      _mousePressedButton	= Qt::NoButton;
 
-//     // Call base class method
-//     QTreeWidget::contentsMouseDoubleClickEvent( ev );
+     // Call base class method
+     QTreeWidget::mouseDoubleClickEvent( ev );
 }
 
 

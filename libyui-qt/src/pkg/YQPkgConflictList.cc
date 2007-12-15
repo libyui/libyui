@@ -308,9 +308,7 @@ YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
     , _resolutionsHeader( 0 )
 {
     setBackgroundColor( LIGHT_BLUE );
-#if FIXME
     setExpanded( true );
-#endif
 
     formatHeading();
     YQPkgConflictList::dumpList( this, fromUTF8( _problem->details() ) );
@@ -326,9 +324,7 @@ YQPkgConflict::formatHeading()
     QPixmap icon = YQIconPool::normalPkgConflict();
     setTextColor( BRIGHT_RED );
 
-#if FIXME
-    setText( 0, Qt::DisplayRole, fromUTF8( problem()->description() ) );
-#endif
+    setData( 0, Qt::DisplayRole, fromUTF8( problem()->description() ) );
     setData( 0, Qt::DecorationRole, icon );
 }
 

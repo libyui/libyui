@@ -215,16 +215,12 @@ YQPkgPatternList::addPatternItem( ZyppSel	selectable,
 YQPkgPatternListItem *
 YQPkgPatternList::selection() const
 {
-#if FIXME
     QTreeWidgetItem * item = currentItem();
 
     if ( ! item )
 	return 0;
 
     return dynamic_cast<YQPkgPatternListItem *> (item);
-#else
-    return 0;
-#endif
 }
 
 
@@ -234,7 +230,6 @@ YQPkgPatternList::pkgObjClicked( int			button,
 				 int			col,
 				 const QPoint &		pos )
 {
-#if FIXME
     YQPkgPatternCategoryItem * categoryItem
 	= dynamic_cast<YQPkgPatternCategoryItem *> (listViewItem);
 
@@ -244,7 +239,7 @@ YQPkgPatternList::pkgObjClicked( int			button,
 	{
 	    if ( col == statusCol() )
 	    {
-		categoryItem->setOpen( ! categoryItem->isExpanded() );
+		categoryItem->setExpanded( ! categoryItem->isExpanded() );
 	    }
 	}
     }
@@ -252,7 +247,6 @@ YQPkgPatternList::pkgObjClicked( int			button,
     {
 	YQPkgObjList::pkgObjClicked( button, listViewItem, col, pos );
     }
-#endif
 }
 
 
@@ -360,7 +354,7 @@ YQPkgPatternCategoryItem::YQPkgPatternCategoryItem( YQPkgPatternList *	patternLi
 {
     setText( _patternList->summaryCol(), category );
     setBackgroundColor( CATEGORY_BACKGROUND );
-    setOpen( true );
+    setExpanded( true );
     setTreeIcon();
 }
 
@@ -386,9 +380,9 @@ YQPkgPatternCategoryItem::addPattern( ZyppPattern pattern )
 
 
 void
-YQPkgPatternCategoryItem::setOpen( bool open )
+YQPkgPatternCategoryItem::setExpanded( bool open )
 {
-    //FIXME QTreeWidgetItem::setOpen( open );
+    QTreeWidgetItem::setExpanded( open );
     setTreeIcon();
 }
 
@@ -396,12 +390,11 @@ YQPkgPatternCategoryItem::setOpen( bool open )
 void
 YQPkgPatternCategoryItem::setTreeIcon()
 {
-#if FIXME
-    setPixmap( _patternList->statusCol(),
-	       isOpen() ?
+    setData( _patternList->statusCol(), Qt::DecorationRole,
+	       isExpanded() ?
 	       YQIconPool::treeMinus() :
 	       YQIconPool::treePlus()   );
-#endif
+
 }
 
 

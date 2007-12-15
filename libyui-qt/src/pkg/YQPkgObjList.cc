@@ -145,6 +145,7 @@ YQPkgObjList::pkgObjClicked( int		button,
 
     if ( item )
     {
+        //y2internal("CLICKED: %s", item->zyppObj()->name().c_str());
 	if ( button == Qt::LeftButton )
 	{
 	    if ( col == statusCol() )

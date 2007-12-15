@@ -174,16 +174,12 @@ YQPkgLangList::addLangItem( ZyppSel	selectable,
 YQPkgLangListItem *
 YQPkgLangList::selection() const
 {
-#if FIXME
-    Q3ListViewItem * item = selectedItem();
+    QTreeWidgetItem * item = currentItem();
 
     if ( ! item )
 	return 0;
 
     return dynamic_cast<YQPkgLangListItem *> (item);
-#else
-    return 0;
-#endif
 }
 
 

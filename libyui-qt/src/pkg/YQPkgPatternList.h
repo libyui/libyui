@@ -255,7 +255,7 @@ public:
      *
      * Reimplemented from QListViewItem to force categories open at all times
      **/
-    virtual void setOpen( bool open );
+    virtual void setExpanded( bool open );
     
 
 protected:
