@@ -26,6 +26,7 @@
 
 #include "QY2ComboTabWidget.h"
 #include "QY2LayoutUtils.h"
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QFrame>
 #include "YQPkgRepoFilterView.h"
@@ -41,8 +42,12 @@
 YQPkgRepoFilterView::YQPkgRepoFilterView( QWidget * parent )
     : QWidget( parent )
 {
+    QHBoxLayout *layout = new QHBoxLayout(this);
+
     QSplitter * splitter = new QSplitter( Qt::Vertical, this );
     Q_CHECK_PTR( splitter );
+
+    layout->addWidget( splitter );
 
     //QVBoxLayout * upper_vbox = new QVBoxLayout( splitter );
     
