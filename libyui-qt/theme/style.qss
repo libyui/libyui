@@ -79,3 +79,15 @@ QTextBrowser {
 
 .Contents QWidget { color: black; } 
 
+YQMultiProgressMeter {
+     background-color: transparent;
+     border: 1px solid gray;
+     border-radius: 5px;
+}
+
+YQMultiProgressMeter::chunk {
+     background-color: green;
+     margin: 0.5px;
+     width: 8px;
+     height: 8px;
+}
