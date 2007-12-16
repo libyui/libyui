@@ -96,6 +96,9 @@ YQSimplePatchSelector::basicLayout()
     QSplitter * splitter = new QSplitter( Qt::Vertical, this );
     Q_CHECK_PTR( splitter );
 
+    setLayout( new QVBoxLayout( ) );
+    layout()->addWidget(splitter);
+
     //
     // PatchFilterView
     //
@@ -107,16 +110,15 @@ YQSimplePatchSelector::basicLayout()
     upper_vbox->setLayout(layout);
     splitter->addWidget(upper_vbox);
 
-
     splitter->setStretchFactor( 0, 1 );
 
     _patchFilterView = new YQPkgPatchFilterView( upper_vbox );
+    layout->addWidget( _patchFilterView );
     Q_CHECK_PTR( _patchFilterView );
-    layout->addWidget(_patchFilterView);
 
     _patchList = _patchFilterView->patchList();
     Q_CHECK_PTR( _patchList );
-    
+
     //addVSpacing( upper_vbox, MARGIN );
 
     //
@@ -135,7 +137,7 @@ YQSimplePatchSelector::basicLayout()
     _diskUsageList = new YQPkgDiskUsageList( lower_vbox );
     Q_CHECK_PTR( _diskUsageList );
     layout->addWidget(_diskUsageList);
-    
+
     splitter->setResizeMode( lower_vbox, QSplitter::FollowSizeHint );
 #endif
 
@@ -143,7 +145,7 @@ YQSimplePatchSelector::basicLayout()
     //
     // Buttons
     //
-    
+
     if ( _wizard )	// No button box - add "Details..." button here
     {
 	//
@@ -175,9 +177,8 @@ void
 YQSimplePatchSelector::layoutButtons( QWidget * parent )
 {
     QWidget * button_box = new QWidget( parent );
-    QHBoxLayout *layout = new QHBoxLayout;
+    QHBoxLayout *layout = new QHBoxLayout( button_box );
     Q_CHECK_PTR( button_box );
-    button_box->setLayout(layout);
     layout->setMargin ( MARGIN  );
     layout->setSpacing( SPACING );
 
@@ -210,7 +211,8 @@ YQSimplePatchSelector::layoutButtons( QWidget * parent )
     connect( accept_button, SIGNAL( clicked() ),
 	     this,	    SLOT  ( accept()   ) );
 
-    button_box->setFixedHeight( button_box->sizeHint().height() );
+    this->layout()->addWidget( button_box );
+//    button_box->setFixedHeight( button_box->sizeHint().height() );
 }
 
 

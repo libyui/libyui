@@ -73,7 +73,7 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     setAllColumnsShowFocus( true );
     //FIXME setColumnAlignment( sizeCol(), Qt::AlignRight );
 
-    connect( this,	SIGNAL( currentItemChanged	( QTreeWidgetItem * ) ),
+    connect( this,	SIGNAL( currentItemChanged	( QTreeWidgetItem *, QTreeWidgetItem* ) ),
 	     this,	SLOT  ( filter()				    ) );
 
     sortItems( categoryCol(), Qt::AscendingOrder );

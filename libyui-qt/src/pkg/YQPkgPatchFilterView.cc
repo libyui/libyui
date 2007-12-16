@@ -55,26 +55,26 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
 {
     QVBoxLayout *layout = new QVBoxLayout();
     setLayout(layout);
-    
 
     _splitter			= new QSplitter( Qt::Vertical, this );	Q_CHECK_PTR( _splitter 	);
     layout->addWidget(_splitter);
-    QVBoxLayout * vbox = new QVBoxLayout(_splitter);
-    Q_CHECK_PTR( vbox		);
-    layout->addLayout(vbox);
-    _patchList			= new YQPkgPatchList( this );			Q_CHECK_PTR( _patchList 	);
-    vbox->addWidget(_patchList);
-    
+
+    QWidget *upper_box = new QWidget( _splitter );
+    QVBoxLayout *vbox = new QVBoxLayout( upper_box );
+    _patchList			= new YQPkgPatchList( upper_box );
+    Q_CHECK_PTR( _patchList 	);
+
+    vbox->addWidget( _patchList );
     //addVSpacing( vbox, 4 );
 
     QHBoxLayout * hbox 		= new QHBoxLayout(); Q_CHECK_PTR( hbox );
     vbox->addLayout(hbox);
     hbox->setSpacing( SPACING );
 
-    QLabel * label		= new QLabel( _( "&Show Patch Category:" ), this );
+    QLabel * label		= new QLabel( _( "&Show Patch Category:" ), upper_box );
     hbox->addWidget(label);
 
-    _patchFilter		= new QComboBox( this );
+    _patchFilter		= new QComboBox( upper_box );
     Q_CHECK_PTR( _patchFilter );
     hbox->addWidget(_patchFilter);
 
@@ -88,10 +88,11 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
     connect( _patchFilter, SIGNAL( activated( int ) ), this, SLOT( fillPatchList() ) );
     //addVSpacing( vbox, 4 );
 
-    vbox			= new QVBoxLayout( _splitter );			Q_CHECK_PTR( vbox			);
+    QWidget *down_box = new QWidget( _splitter );
+    vbox			= new QVBoxLayout( down_box );			Q_CHECK_PTR( vbox		);
     //addVSpacing( vbox, 8 );
 
-    _detailsViews		= new QTabWidget( this );			Q_CHECK_PTR( _detailsViews	);
+    _detailsViews		= new QTabWidget( down_box );			Q_CHECK_PTR( _detailsViews	);
     vbox->addWidget(_detailsViews);
 
     _descriptionView		= new YQPkgDescriptionView( _detailsViews );	Q_CHECK_PTR( _descriptionView	);
@@ -99,7 +100,7 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
     _descriptionView->setMinimumSize( 0, 0 );
     _detailsViews->addTab( _descriptionView, _( "Patch Description" ) );
 
-    
+
 #if ENABLE_TOTAL_DOWNLOAD_SIZE
     //
     // HBox for total download size
