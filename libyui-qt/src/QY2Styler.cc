@@ -5,6 +5,7 @@
 #include <QApplication>
 #include <QWidget>
 #include <QPainter>
+#include <QSvgRenderer>
 
 QY2Styler *QY2Styler::_self = 0;
 
@@ -82,9 +83,16 @@ bool QY2Styler::eventFilter( QObject * obj, QEvent * ev )
         result.fill( QColor( 0, 128, 0, 0 ) );
 
     QPainter pain( &result );
-    QImage scaled = _backgroundPx[name].scaled( wid->contentsRect().width(), wid->contentsRect().height() );
-    pain.drawImage( wid->contentsRect().topLeft(), scaled, QRectF(QPointF(0,0), scaled.size()), Qt::OrderedAlphaDither);
-
+    if ( !_backgroundFn[ name ].endsWith( ".svg" ) )
+    {
+        QImage scaled = _backgroundPx[name].scaled( wid->contentsRect().width(), wid->contentsRect().height() );
+        pain.drawImage( wid->contentsRect().topLeft(), scaled, QRectF(QPointF(0,0), scaled.size()), Qt::OrderedAlphaDither);
+    } else {
+#if 0
+        QSvgRenderer rend( _backgroundFn[ name ] );
+        rend.render( &pain, wid->contentsRect() );
+#endif
+    }
     QPalette p = wid->palette();
     p.setBrush(QPalette::Window, result );
     wid->setPalette( p );

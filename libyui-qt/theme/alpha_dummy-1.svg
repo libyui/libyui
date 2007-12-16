@@ -15,7 +15,7 @@
    sodipodi:version="0.32"
    inkscape:version="0.45.1"
    version="1.0"
-   sodipodi:docbase="/home/coolo/prod/yast2/qt4/theme"
+   sodipodi:docbase="/home/col/prod/yast2/qt/theme"
    sodipodi:docname="alpha_dummy-1.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <defs
@@ -104,11 +104,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.82217356"
-     inkscape:cx="508.78358"
-     inkscape:cy="365.23368"
+     inkscape:zoom="8.2667862"
+     inkscape:cx="258.46124"
+     inkscape:cy="686.59469"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer3"
      width="1024px"
      height="768px"
      borderlayer="false"
@@ -191,8 +191,8 @@
      inkscape:label="links"
      style="display:inline">
     <path
-       style="fill:#bdd1be;fill-opacity:0.41445783;fill-rule:nonzero;stroke:none;stroke-width:0.55000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1"
-       d="M 77.463272,60.120266 L 259.44856,60.120266 L 260.66485,589.20561 L 77.463272,590.4219 C 70.261272,590.4219 64.463272,584.6239 64.463272,577.4219 L 64.463272,73.120267 C 64.463272,65.918266 70.261272,60.120266 77.463272,60.120266 z "
+       style="fill:#bdd1be;fill-opacity:0.41445785;fill-rule:nonzero;stroke:none;stroke-width:0.55000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 77.463272,60.120266 L 260.65822,60.241232 L 260.66485,589.20561 L 77.463272,590.4219 C 70.261272,590.4219 64.463272,584.6239 64.463272,577.4219 L 64.463272,73.120267 C 64.463272,65.918266 70.261272,60.120266 77.463272,60.120266 z "
        id="rect2174"
        sodipodi:nodetypes="ccccccc" />
   </g>
