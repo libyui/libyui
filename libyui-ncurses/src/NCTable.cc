@@ -179,8 +179,6 @@ void NCTable::setAlignment ( int col, YAlignmentType al )
 
 void NCTable::addItem( YItem *yitem )
 {
-  //static counter - to remember last inserted item
-  static int idx = 0;
   
   YTableItem *item = dynamic_cast<YTableItem *>(yitem);
   YUI_CHECK_PTR(item);
@@ -197,7 +195,7 @@ void NCTable::addItem( YItem *yitem )
   }
 
   //Insert @idx
-  NCTableLine *newline = new NCTableLine( Items, idx++ );
+  NCTableLine *newline = new NCTableLine( Items, item->index() );
   YUI_CHECK_PTR(newline);
   newline->setOrigItem( item );
 
@@ -205,7 +203,7 @@ void NCTable::addItem( YItem *yitem )
 
   if (item->selected() )
   {
-    setCurrentItem(  myPad()->Lines() ) ;    
+    setCurrentItem(  item->index() ) ;    
   }
 
   //Do not forget to redraw whole stuff at the end
@@ -327,7 +325,7 @@ void NCTable::selectCurrentItem()
 {
   const NCTableLine *cline = myPad()->GetLine( myPad()->CurPos().L );
   if ( cline )
-      YTable::selectItem( cline->origItem() );
+      selectItem( cline->origItem(), true );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -512,12 +510,13 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
     }
   }
 
-  selectCurrentItem();
 
   if ( notify() && immediateMode() && citem != getCurrentItem() )
   {
     ret = NCursesEvent::SelectionChanged;
   }
+
+  selectCurrentItem();
 
   return ret;
 }
