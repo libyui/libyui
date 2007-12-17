@@ -1,4 +1,16 @@
 -------------------------------------------------------------------
+Mon Dec 17 13:10:27 CET 2007 - kmachalkova@suse.cz
+
+- Reworked repositories filter: added pref. width/height methods, 
+  adding items adapted to new NCTable, treat RepoTag as dummy table cell 
+- Set dialog's default button in showDialog() routine (no further 
+  magic, 'last one wins' approach)
+- Adding table items modified so that it does not use static indexing 
+  - exchanging table content (`Items) then misbehaves (#343870)
+- Fixed displaying of visited RichText hyperlinks in rxvt theme
+- 2.16.7
+
+-------------------------------------------------------------------
 Mon Dec 10 18:40:37 CET 2007 - sh@suse.de
 
 Moved file and directory dialogs from NCursesUI to NCApplication:
