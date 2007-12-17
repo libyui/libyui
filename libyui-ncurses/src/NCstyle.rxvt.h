@@ -88,7 +88,7 @@ inline void NCstyleInit_rxvt( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextLink, 768 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 768|A_BOLD );
   attrset->setAttr( NCstyle::RichTextActiveArmedlink, 1024|A_BOLD );
-  attrset->setAttr( NCstyle::RichTextVisitedLink, 59 );
+  attrset->setAttr( NCstyle::RichTextVisitedLink, 3 );
   attrset->setAttr( NCstyle::RichTextB, 0|A_BOLD );
   attrset->setAttr( NCstyle::RichTextI, 0|A_BOLD );
   attrset->setAttr( NCstyle::RichTextT, 256|A_BOLD );
@@ -152,7 +152,7 @@ inline void NCstyleInit_rxvt( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextLink, 768 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 768|A_BOLD );
   attrset->setAttr( NCstyle::RichTextActiveArmedlink, 1024|A_BOLD );
-  attrset->setAttr( NCstyle::RichTextVisitedLink, 59 );
+  attrset->setAttr( NCstyle::RichTextVisitedLink, 3 );
   attrset->setAttr( NCstyle::RichTextB, 0|A_BOLD );
   attrset->setAttr( NCstyle::RichTextI, 0|A_BOLD );
   attrset->setAttr( NCstyle::RichTextT, 256 );
@@ -216,7 +216,7 @@ inline void NCstyleInit_rxvt( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextLink, 768 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 768|A_BOLD );
   attrset->setAttr( NCstyle::RichTextActiveArmedlink, 1024|A_BOLD );
-  attrset->setAttr( NCstyle::RichTextVisitedLink, 59 );
+  attrset->setAttr( NCstyle::RichTextVisitedLink, 3 );
   attrset->setAttr( NCstyle::RichTextB, 0|A_BOLD );
   attrset->setAttr( NCstyle::RichTextI, 0|A_BOLD );
   attrset->setAttr( NCstyle::RichTextT, 256 );
@@ -280,7 +280,7 @@ inline void NCstyleInit_rxvt( vector<NCstyle::Style> & styleSet )
   attrset->setAttr( NCstyle::RichTextLink, 768 );
   attrset->setAttr( NCstyle::RichTextArmedlink, 768|A_BOLD );
   attrset->setAttr( NCstyle::RichTextActiveArmedlink, 1024|A_BOLD );
-  attrset->setAttr( NCstyle::RichTextVisitedLink, 59 );
+  attrset->setAttr( NCstyle::RichTextVisitedLink, 3 );
   attrset->setAttr( NCstyle::RichTextB, 0|A_BOLD );
   attrset->setAttr( NCstyle::RichTextI, 0|A_BOLD );
   attrset->setAttr( NCstyle::RichTextT, 256 );
