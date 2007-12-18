@@ -110,6 +110,11 @@ public:
 								  const string & 	filename,
 								  YFileSize_t		expectedFileSize );
 
+    virtual bool                        hasTimezoneSelector();
+    virtual YTimezoneSelector *         createTimezoneSelector( YWidget * parent,
+								const string & pixmap, 
+								const map<string,string> & timezones );
+
 protected:
 
     friend class YQUI;

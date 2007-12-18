@@ -21,6 +21,7 @@
 #include "YUIException.h"
 #include "YQPackageSelectorPlugin.h"
 #include "YQWizard.h"
+#include "YQTimezoneSelector.h"
 
 #define THROW_UNSUPPORTED( WIDGET_TYPE ) \
     YUI_THROW( YUIUnsupportedWidgetException( WIDGET_TYPE ) );	\
@@ -256,4 +257,18 @@ YQOptionalWidgetFactory::createDownloadProgress( YWidget *	parent,
 
     return downloadProgress;
 }
+
+bool YQOptionalWidgetFactory::hasTimezoneSelector()
+{
+    return true;
+}
+
+YTimezoneSelector *
+YQOptionalWidgetFactory::createTimezoneSelector( YWidget * parent,
+                                                 const string & pixmap,
+                                                 const map<string,string> & timezones )
+{
+    return new YQTimezoneSelector( parent, pixmap, timezones );
+}
+
 

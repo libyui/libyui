@@ -27,7 +27,7 @@ SET(qt_yast_plugin_SRCS
   YQSpacing.cc YQSquash.cc YQTable.cc YQTimeField.cc YQTree.cc
   YQUI_builtins.cc YQUI_core.cc YQUI_widgets.cc YQUI_x11.cc
   YQWidgetCaption.cc YQWidgetFactory.cc YQWizardButton.cc 
-  YQWizard.cc QY2Styler.cc
+  YQWizard.cc QY2Styler.cc YQTimezoneSelector.cc
 )
 
 QT4_AUTOMOC(${qt_yast_plugin_SRCS})
