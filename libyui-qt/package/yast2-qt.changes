@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Dec 18 17:48:29 CET 2007 - coolo@suse.de
+
+- implement timezone widget
+- moved theming to theme package
+- V 2.16.10
+
+-------------------------------------------------------------------
 Wed Dec 12 15:04:34 CET 2007 - coolo@suse.de
 
 - merged yast2-qt4 into yast2-qt
