@@ -23,6 +23,8 @@
 #include <QFrame>
 #include "YTimezoneSelector.h"
 
+class YQTimezoneSelectorPrivate;
+
 class YQTimezoneSelector : public QFrame, public YTimezoneSelector
 {
     Q_OBJECT
@@ -32,7 +34,7 @@ public:
      * Constructor.
      **/
     YQTimezoneSelector( YWidget *	parent,
-                        const string & pixmap, 
+                        const string & pixmap,
 			const map<string,string> & timezones );
 
     /**
@@ -78,36 +80,7 @@ public:
     virtual void setCurrentZone( const std::string &zone );
 
 protected:
-    QPixmap _pix;
-    QPoint _zoom;
-
-    struct Location
-    {
-        QString country;
-        double latitude;
-        double longitude;
-        QString zone;
-        QString comment;
-	QString tip;
-
-        QPoint pix_pos;
-
-        bool operator<(const Location& l2) const;
-    };
-
-    Location _best;
-
-    QList<Location> locations;
-
-    Location findBest( const QPoint &pos ) const;
-
-    QTimer *blink;
-
-    bool highlight;
-
-    QPoint pixPosition( const Location &pos ) const;
-
-    QPoint pixToWindow( const QPoint &pos ) const;
+    YQTimezoneSelectorPrivate *d;
 
 protected slots:
     void slotBlink();
