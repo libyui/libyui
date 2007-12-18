@@ -48,7 +48,7 @@ void QY2Styler::processUrls(QString &text)
 
 QString QY2Styler::themeDir() const
 {
-    return THEMEDIR "/openSUSE/wizard/";
+    return THEMEDIR "/current/wizard/";
 }
 
 void QY2Styler::registerWidget( QWidget *widget )
