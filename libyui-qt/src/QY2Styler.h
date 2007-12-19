@@ -29,8 +29,13 @@ protected:
     bool eventFilter( QObject * obj, QEvent * ev );
 
 private:
-    QHash<QString,QString> _backgroundFn;
-    QHash<QString,QImage> _backgroundPx;
+    struct BackgrInfo {
+	QString filename;
+	QImage pix;
+	bool full;
+    };
+
+    QHash<QString,BackgrInfo> _backgrounds;
 
     static QY2Styler *_self;
 };

@@ -6,6 +6,7 @@
 #include <QWidget>
 #include <QPainter>
 #include <QSvgRenderer>
+#include <QDebug>
 
 QY2Styler *QY2Styler::_self = 0;
 
@@ -39,7 +40,14 @@ void QY2Styler::processUrls(QString &text)
             line.replace( urlx, ": url(" + themeDir() + urlx.cap( 1 ) + ")");
 
         if ( backgroundx.exactMatch( line ) )
-            _backgroundFn[backgroundx.cap( 1 )] = themeDir() + backgroundx.cap( 2 );
+        {
+            QStringList name = backgroundx.cap( 1 ).split( '#' );
+            qDebug() << name;
+            _backgrounds[ name[0] ].filename = themeDir() + backgroundx.cap( 2 );
+            _backgrounds[ name[0] ].full = false;
+            if ( name.size() > 1 )
+                _backgrounds[ name[0] ].full = ( name[1] == "full" );
+        }
 
         result += line;
     }
@@ -63,34 +71,40 @@ bool QY2Styler::eventFilter( QObject * obj, QEvent * ev )
     if ( ev->type() != QEvent::Resize )
         return QObject::eventFilter( obj, ev );
 
-    if ( !_backgroundFn.contains( name ) )
+    qDebug( "eventFilter %s %s %d", qPrintable( name ), obj->metaObject()->className(), ev->type() );
+
+    if ( !_backgrounds.contains( name ) )
         return QObject::eventFilter( obj, ev );
 
     qDebug( "eventFilter %s %s %d", qPrintable( name ), obj->metaObject()->className(), ev->type() );
 
     QWidget *wid = qobject_cast<QWidget*>( obj );
-    if ( !_backgroundPx.contains( name ) )
+    if ( _backgrounds[name].pix.isNull() )
     {
-        QString back = _backgroundFn[ name ];
-        _backgroundPx[ name ] = QImage( back );
+        QString back = _backgrounds[ name ].filename;
+        _backgrounds[ name ].pix = QImage( back );
         qDebug( "loading %s for %s", qPrintable( back ), qPrintable( name ) );
     }
 
     wid->setAutoFillBackground( true );
 
     QPixmap result( wid->size() );
-    if ( wid->contentsRect() != wid->rect() )
+    QRect fillRect = wid->contentsRect();
+    if ( _backgrounds[name].full )
+        fillRect = wid->rect();
+
+    if ( fillRect  != wid->rect() )
         result.fill( QColor( 0, 128, 0, 0 ) );
 
     QPainter pain( &result );
-    if ( !_backgroundFn[ name ].endsWith( ".svg" ) )
+    if ( !_backgrounds[ name ].filename.endsWith( ".svg" ) )
     {
-        QImage scaled = _backgroundPx[name].scaled( wid->contentsRect().width(), wid->contentsRect().height() );
-        pain.drawImage( wid->contentsRect().topLeft(), scaled, QRectF(QPointF(0,0), scaled.size()), Qt::OrderedAlphaDither);
+        QImage scaled = _backgrounds[name].pix.scaled( fillRect.width(), fillRect.height() );
+        pain.drawImage( fillRect.topLeft(), scaled, QRectF(QPointF(0,0), scaled.size()), Qt::OrderedAlphaDither);
     } else {
 #if 0
         QSvgRenderer rend( _backgroundFn[ name ] );
-        rend.render( &pain, wid->contentsRect() );
+        rend.render( &pain, fillRect );
 #endif
     }
     QPalette p = wid->palette();
