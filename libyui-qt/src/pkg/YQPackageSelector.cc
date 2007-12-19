@@ -1391,7 +1391,9 @@ YQPackageSelector::installDebugInfoPkgs()
 void
 YQPackageSelector::pkgExcludeRulesChanged()
 {
+#if 0
     QAction *action = dynamic_cast<QAction *>(QObject::sender());
+#endif
 
     if ( _viewMenu && _pkgList )
     {
