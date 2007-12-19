@@ -56,6 +56,5 @@ rm -rf "$RPM_BUILD_ROOT"
 %_libdir/YaST2/plugin/libpy2qt.so
 %_libdir/YaST2/plugin/libpy2qt_pkg.so.*
 %_libdir/YaST2/plugin/libpy2qt_pkg.so
-%_prefix/share/YaST2/theme
 
 %changelog
