@@ -10,25 +10,68 @@ ADD_DEFINITIONS(
 -DQTLIBDIR=\\\"${LIB_INSTALL_DIR}\\\"
 )
 
-SET(qt_yast_plugin_SRCS
-  QY2CharValidator.cc QY2ComboTabWidget.cc QY2DiskUsageList.cc 
-  QY2ListView.cc QY2Settings.cc Y2CCQt.cc 
-  YFrameBuffer.cc YQAlignment.cc YQApplication.cc YQBarGraph.cc 
-  YQCheckBox.cc YQCheckBoxFrame.cc YQComboBox.cc YQDateField.cc 
-  YQDialog.cc YQDownloadProgress.cc YQDumbTab.cc YQMainWinDock.cc 
-  YQEmpty.cc YQFrame.cc YQGenericButton.cc YQIconPool.cc 
-  YQImage.cc YQInputField.cc YQIntField.cc YQLabel.cc YQLayoutBox.cc 
-  YQLogView.cc YQMenuButton.cc YQMultiLineEdit.cc 
-  YQMultiProgressMeter.cc YQMultiSelectionBox.cc 
-  YQOptionalWidgetFactory.cc YQPackageSelectorPlugin.cc 
-  YQPartitionSplitter.cc YQProgressBar.cc YQPushButton.cc 
-  YQRadioButton.cc YQRadioButtonGroup.cc YQReplacePoint.cc 
-  YQRichText.cc YQSelectionBox.cc YQSignalBlocker.cc YQSlider.cc
-  YQSpacing.cc YQSquash.cc YQTable.cc YQTimeField.cc YQTree.cc
-  YQUI_builtins.cc YQUI_core.cc YQUI_widgets.cc YQUI_x11.cc
-  YQWidgetCaption.cc YQWidgetFactory.cc YQWizardButton.cc 
-  YQWizard.cc QY2Styler.cc YQTimezoneSelector.cc
-)
+SET( qt_yast_plugin_SRCS
+
+     QY2CharValidator.cc
+     QY2ComboTabWidget.cc
+     QY2DiskUsageList.cc
+     QY2ListView.cc
+     QY2Settings.cc
+     QY2Styler.cc
+     Y2CCQt.cc
+     YFrameBuffer.cc
+     YQAlignment.cc
+     YQApplication.cc
+     YQBarGraph.cc
+     YQCheckBox.cc
+     YQCheckBoxFrame.cc
+     YQComboBox.cc
+     YQDateField.cc
+     YQDialog.cc
+     YQDownloadProgress.cc
+     YQDumbTab.cc
+     YQEmpty.cc
+     YQFrame.cc
+     YQGenericButton.cc
+     YQIconPool.cc
+     YQImage.cc
+     YQInputField.cc
+     YQIntField.cc
+     YQLabel.cc
+     YQLayoutBox.cc
+     YQLogView.cc
+     YQMainWinDock.cc
+     YQMenuButton.cc
+     YQMultiLineEdit.cc
+     YQMultiProgressMeter.cc
+     YQMultiSelectionBox.cc
+     YQOptionalWidgetFactory.cc
+     YQPackageSelectorPlugin.cc
+     YQPartitionSplitter.cc
+     YQProgressBar.cc
+     YQPushButton.cc
+     YQRadioButton.cc
+     YQRadioButtonGroup.cc
+     YQReplacePoint.cc
+     YQRichText.cc
+     YQSelectionBox.cc
+     YQSignalBlocker.cc
+     YQSlider.cc
+     YQSpacing.cc
+     YQSquash.cc
+     YQTable.cc
+     YQTimeField.cc
+     YQTimezoneSelector.cc
+     YQTree.cc
+     YQUI_builtins.cc
+     YQUI_core.cc
+     YQUI_widgets.cc
+     YQUI_x11.cc
+     YQWidgetCaption.cc
+     YQWidgetFactory.cc
+     YQWizard.cc
+     YQWizardButton.cc
+     )
 
 QT4_AUTOMOC(${qt_yast_plugin_SRCS})
 
