@@ -244,9 +244,9 @@ void YQMultiProgressMeter::drawSegment( int segment,
     {
         QStyleOptionProgressBarV2 opts;
         opts.initFrom(this);
-        opts.progress = currentValue( segment);
+        opts.progress = (int) currentValue( segment);
         opts.minimum = 0;
-        opts.maximum = maxValue( segment);
+        opts.maximum = (int) maxValue( segment);
         opts.invertedAppearance = true;
         opts.rect = QRect( offset, border, length, thickness );
         style()->drawControl(QStyle::CE_ProgressBarGroove, &opts, &painter, this);
@@ -258,9 +258,9 @@ void YQMultiProgressMeter::drawSegment( int segment,
     {
         QStyleOptionProgressBarV2 opts;
         opts.initFrom(this);
-        opts.progress = maxValue( segment) - currentValue( segment);
+        opts.progress = (int) ( maxValue( segment) - currentValue( segment) );
         opts.minimum = 0;
-        opts.maximum = maxValue( segment);
+        opts.maximum = (int) maxValue( segment);
         opts.rect = QRect( offset, border, length, thickness );
 
         style()->drawControl(QStyle::CE_ProgressBarGroove, &opts, &painter, this);
