@@ -36,8 +36,8 @@ YQPkgSelList::YQPkgSelList( QWidget * parent, bool autoFill, bool autoFilter )
 {
     y2debug( "Creating selection list" );
 
-    int numCol = 0;
 #if FIXME
+    int numCol = 0;
     addColumn( ""		);	_statusCol	= numCol++;
     addColumn( _( "Selection" ) );	_summaryCol	= numCol++;
     setAllColumnsShowFocus( true );
