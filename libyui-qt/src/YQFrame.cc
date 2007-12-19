@@ -21,7 +21,7 @@
 #include <ycp/y2log.h>
 #include "YQUI.h"
 #include "utf8.h"
-//Added by qt3to4:
+#include <QDebug>
 
 using std::max;
 
@@ -58,13 +58,15 @@ YQFrame::setSize( int newWidth, int newHeight )
 
     if ( hasChildren() )
     {
-	int newChildWidth  = max ( 0, newWidth  - 2 * 11 - 1 );
-	int newChildHeight = max ( 0, newHeight - 11 - fontMetrics().height() - 1 );
+        int left, top, right, bottom;
+        getContentsMargins( &left, &top, &right, &bottom );
+	int newChildWidth  = newWidth - left - right;
+	int newChildHeight = newHeight - bottom - top;
 
 	firstChild()->setSize( newChildWidth, newChildHeight );
 
 	QWidget * qChild = (QWidget *) firstChild()->widgetRep();
-	qChild->move( 11, fontMetrics().height() );
+	qChild->move( left, top );
     }
 }
 
@@ -79,24 +81,21 @@ YQFrame::setLabel( const string & newLabel )
 
 int YQFrame::preferredWidth()
 {
-    int preferredWidth;
-    int childPreferredWidth = hasChildren() ? firstChild()->preferredWidth() : 0;
+    int preferredWidth = hasChildren() ? firstChild()->preferredWidth() : 0;
+    int left, top, right, bottom;
+    getContentsMargins( &left, &top, &right, &bottom );
 
-    preferredWidth = max( childPreferredWidth,
-                         (10 + fontMetrics().width( title() ) ) );
-    preferredWidth += 2*11 + 1;
-
-   return preferredWidth;
-
+    return preferredWidth + left + right;
 }
 
 
 int YQFrame::preferredHeight()
 {
     int preferredHeight = hasChildren() ? firstChild()->preferredHeight() : 0;
-    preferredHeight += 11 + fontMetrics().height() + 1;
+    int left, top, right, bottom;
+    getContentsMargins( &left, &top, &right, &bottom );
 
-    return preferredHeight;
+    return preferredHeight + top + left;
 }
 
 

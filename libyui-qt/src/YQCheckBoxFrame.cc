@@ -169,9 +169,7 @@ int YQCheckBoxFrame::preferredWidth()
     int left, top, right, bottom;
     getContentsMargins( &left, &top, &right, &bottom );
 
-    preferredWidth += left + right;
-
-    return preferredWidth;
+    return preferredWidth + left + right;
 }
 
 
@@ -181,9 +179,7 @@ int YQCheckBoxFrame::preferredHeight()
     int left, top, right, bottom;
     getContentsMargins( &left, &top, &right, &bottom );
 
-    preferredHeight += top + left;
-
-    return preferredHeight;
+    return preferredHeight + top + left;
 }
 
 
