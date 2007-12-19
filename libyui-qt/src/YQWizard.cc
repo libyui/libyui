@@ -31,7 +31,6 @@
 #include <QSvgRenderer>
 #include <QPainter>
 #include <QStackedWidget>
-#include "ui_QHelpDialog.h"
 #include <qimage.h>
 #include <qlabel.h>
 #include <qlayout.h>
@@ -46,6 +45,7 @@
 
 #include "QY2ListView.h"
 #include "QY2Styler.h"
+#include "QY2HelpDialog.h"
 #include <QGridLayout>
 #include <qevent.h>
 
@@ -686,6 +686,7 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     // Help button - intentionally without keyboard shortcut
     _helpButton = new QPushButton( _( "Help" ), parent );
     YUI_CHECK_NEW( _helpButton );
+    _helpButton->setShortcut( Qt::Key_F1 );
 
     connect( _helpButton, SIGNAL( clicked()  ),
 	     this,	 SLOT  ( showHelp() ) );
@@ -865,10 +866,7 @@ void YQWizard::slotNextClicked()
 
 void YQWizard::showHelp()
 {
-    QDialog helpDlg( this );
-    Ui_QHelpDialog ui;
-    ui.setupUi( &helpDlg );
-    ui.textBrowser->setText( _qHelpText );
+    QY2HelpDialog helpDlg( _qHelpText, this );
     helpDlg.exec();
 }
 

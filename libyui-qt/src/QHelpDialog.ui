@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>581</width>
+    <height>388</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -20,6 +20,16 @@
      </item>
      <item>
       <layout class="QHBoxLayout" >
+       <item>
+        <widget class="QLabel" name="label" >
+         <property name="text" >
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit" />
+       </item>
        <item>
         <spacer>
          <property name="orientation" >
@@ -36,7 +46,7 @@
        <item>
         <widget class="QPushButton" name="pushButton" >
          <property name="text" >
-          <string>Close</string>
+          <string>&amp;Close</string>
          </property>
         </widget>
        </item>

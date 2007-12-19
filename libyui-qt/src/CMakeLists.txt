@@ -15,6 +15,7 @@ SET( qt_yast_plugin_SRCS
      QY2CharValidator.cc
      QY2ComboTabWidget.cc
      QY2DiskUsageList.cc
+     QY2HelpDialog.cc
      QY2ListView.cc
      QY2Settings.cc
      QY2Styler.cc
