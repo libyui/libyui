@@ -16,7 +16,46 @@ ADD_DEFINITIONS(
 )
 SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-format-nonliteral -fmessage-length=0" )
 
-SET(qt_yast_pkg_plugin_SRCS YQPackageSelectorBase.cc YQPackageSelector.cc YQPackageSelectorHelp.cc YQPatternSelector.cc YQPkgChangeLogView.cc YQPkgChangesDialog.cc YQPkgConflictDialog.cc YQPkgConflictList.cc YQPkgDependenciesView.cc YQPkgDescriptionDialog.cc YQPkgDescriptionView.cc YQPkgDiskUsageList.cc YQPkgDiskUsageWarningDialog.cc YQPkgFileListView.cc YQPkgGenericDetailsView.cc YQPkgLangList.cc YQPkgList.cc YQPkgObjList.cc YQPkgPatchFilterView.cc YQPkgPatchList.cc YQPkgPatternList.cc YQPkgProductDialog.cc YQPkgProductList.cc YQPkgRepoFilterView.cc YQPkgRepoList.cc YQPkgRpmGroupTagsFilterView.cc YQPkgSearchFilterView.cc YQPkgSelDescriptionView.cc YQPkgSelList.cc YQPkgSelMapper.cc YQPkgStatusFilterView.cc YQPkgTechnicalDetailsView.cc YQPkgTextDialog.cc YQPkgUpdateProblemFilterView.cc YQPkgVersionsView.cc YQSimplePatchSelector.cc QY2LayoutUtils.cc )
+SET(qt_yast_pkg_plugin_SRCS 
+
+    QY2LayoutUtils.cc
+    YQPackageSelectorBase.cc
+    YQPackageSelector.cc
+    YQPackageSelectorHelp.cc
+    YQPatternSelector.cc
+    YQSimplePatchSelector.cc
+    YQPkgChangeLogView.cc
+    YQPkgChangesDialog.cc
+    YQPkgConflictDialog.cc
+    YQPkgConflictList.cc
+    YQPkgDependenciesView.cc
+    YQPkgDescriptionDialog.cc
+    YQPkgDescriptionView.cc
+    YQPkgDiskUsageList.cc
+    YQPkgDiskUsageWarningDialog.cc
+    YQPkgFileListView.cc
+    YQPkgGenericDetailsView.cc
+    YQPkgLangList.cc
+    YQPkgList.cc
+    YQPkgObjList.cc
+    YQPkgPatchFilterView.cc
+    YQPkgPatchList.cc
+    YQPkgPatternList.cc
+    YQPkgProductDialog.cc
+    YQPkgProductList.cc
+    YQPkgRepoFilterView.cc
+    YQPkgRepoList.cc
+    YQPkgRpmGroupTagsFilterView.cc
+    YQPkgSearchFilterView.cc
+    YQPkgSelDescriptionView.cc
+    YQPkgSelList.cc
+    YQPkgSelMapper.cc
+    YQPkgStatusFilterView.cc
+    YQPkgTechnicalDetailsView.cc
+    YQPkgTextDialog.cc
+    YQPkgUpdateProblemFilterView.cc
+    YQPkgVersionsView.cc
+    )
 
 QT4_AUTOMOC(${qt_yast_pkg_plugin_SRCS})
 
