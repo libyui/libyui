@@ -147,6 +147,7 @@ ostream & operator<<( ostream & STREAM, const NCursesEvent & OBJ )
 NCurses::NCurses()
     : theTerm ( 0 )
     , title_w ( 0 )
+    , status_w( 0 )
     , styleset( 0 )
     , stdpan  ( 0 )
 {
@@ -174,6 +175,8 @@ NCurses::~NCurses()
   delete stdpan;
   if ( title_w )
     ::delwin( title_w );
+  if ( status_w)
+    ::delwin( status_w );
   ::endwin();
   if ( theTerm )
     ::delscreen( theTerm );
@@ -188,13 +191,22 @@ NCurses::~NCurses()
 //
 //	DESCRIPTION :
 //
-WINDOW * NCurses::ripped_w = 0;
+WINDOW * NCurses::ripped_w_top = 0;
+WINDOW * NCurses::ripped_w_bottom = 0;
 
-int NCurses::ripinit( WINDOW * w, int c )
+int NCurses::ripinit_top( WINDOW * w, int c )
 {
-  ripped_w = w;
+  ripped_w_top = w;
   return OK;
 }
+
+
+int NCurses::ripinit_bottom( WINDOW * w, int c )
+{
+  ripped_w_bottom = w;
+  return OK;
+}
+
 
 void NCurses::init()
 {
@@ -206,8 +218,12 @@ void NCurses::init()
   UIMIL << "TERM=" << envTerm << endl;
 
   signal( SIGINT, SIG_IGN );	// ignore Ctrl C
-  
-  if ( title_line() && ::ripoffline( 1, ripinit ) != OK )
+
+  //rip off the top line  
+  if ( title_line() && ::ripoffline( 1, ripinit_top ) != OK )
+      throw NCursesError( "ripoffline() failed" );
+  //and bottom line (-1 means 1st from the bottom)
+  if ( ::ripoffline( -1, ripinit_bottom) != OK )
       throw NCursesError( "ripoffline() failed" );
   
   UIMIL << "isatty(stdin)" << (isatty(0) ? "yes" : "no") << endl;
@@ -277,10 +293,14 @@ void NCurses::init()
   }
 
   if ( title_line() ) {
-    if ( !ripped_w )
-      throw NCursesError( "ripinit() failed" );
-    title_w = ripped_w;
+    if ( !ripped_w_top )
+      throw NCursesError( "ripinit_top() failed" );
+    title_w = ripped_w_top;
   }
+
+  if ( !ripped_w_bottom )
+    throw NCursesError( "ripinit_bottom() failed" );
+  status_w = ripped_w_bottom;
 
   setup_screen();
 
@@ -334,6 +354,8 @@ void NCurses::init_title()
 {
   ::wbkgd( title_w, style()(NCstyle::AppTitle) );
   ::wnoutrefresh( title_w );
+  ::wbkgd( status_w, style()(NCstyle::AppTitle) );
+  ::wnoutrefresh( status_w );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -448,6 +470,7 @@ void NCurses::Refresh()
   if ( myself && myself->initialized() ) {
     UIMIL << "start refresh ..." << endl;
     SetTitle( myself->title_t );
+    SetStatusLine( myself->status_line );
     ::clearok( ::stdscr, true );
     myself->stdpan->refresh();
     UIMIL << "done refresh ..." << endl;
@@ -519,6 +542,20 @@ void NCurses::SetTitle( const string & str )
     }
     ::mvwaddstr( myself->title_w, 0, 1, myself->title_t.c_str() );
     ::wnoutrefresh( myself->title_w );
+  }
+
+}
+
+void NCurses::SetStatusLine( const string & str ) 
+{
+  
+  if ( myself && myself->status_w ) {
+    myself->status_line = str;
+    ::wbkgd( myself->status_w, myself->style()(NCstyle::AppTitle) );
+    ::werase( myself->status_w );
+
+    ::mvwaddstr( myself->status_w, 0, 1, myself->status_line.c_str() );
+    ::wnoutrefresh( myself->status_w );
   }
 }
 
@@ -623,13 +660,16 @@ void NCurses::ResizeEvent()
       (*it)->resizeEvent();
     }
 
-    // recreate stack of visible dialogs
-    for ( list<NCDialog*>::iterator it = dlgStack.begin(); it != dlgStack.end(); ++it ) {
-      (*it)->getVisible();
-    }
-    Update();
+   // recreate stack of visible dialogs
+   for ( list<NCDialog*>::iterator it = dlgStack.begin(); it != dlgStack.end(); ++it ) {
+     (*it)->getVisible();
+   }
+   Update();
 
-    UIMIL << "done resize ..." << endl;
+   SetStatusLine(myself->status_line);
+   Update();
+
+   UIMIL << "done resize ..." << endl;
   }
 }
 

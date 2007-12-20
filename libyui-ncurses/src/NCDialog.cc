@@ -267,6 +267,7 @@ void NCDialog::showDialog()
     getVisible();
     doUpdate();
     DumpOn( NCDBG, " " );
+
   }
   else if ( !pan )
   {
@@ -531,6 +532,9 @@ void NCDialog::doneMultipleChanges()
     --inMultiDraw_i;
   } else {
     inMultiDraw_i = 0;
+    string text = "";
+    describeFunctionKeys( text );
+    NCurses::SetStatusLine( text );
     Update();
   }
 }
@@ -1417,8 +1421,8 @@ bool NCDialog::describeFunctionKeys( string & helpText )
 
     for ( it = fkeys.begin(); it != fkeys.end(); ++it )
     {
-	sprintf( key, "F%-2d: ", (*it).first );
-	text += key + (*it).second + "<br>";
+	sprintf( key, "F%d: ", (*it).first );
+	text += key + (*it).second + " ";
     }
 
     helpText = text;

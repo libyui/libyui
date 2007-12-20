@@ -147,8 +147,10 @@ class NCurses {
 
     static NCurses * myself;
 
-    static WINDOW * ripped_w;
-    static int ripinit( WINDOW * , int );
+    static WINDOW * ripped_w_top;
+    static WINDOW * ripped_w_bottom;
+    static int ripinit_top( WINDOW * , int );
+    static int ripinit_bottom( WINDOW * , int );
 
   protected:
 
@@ -156,7 +158,9 @@ class NCurses {
     string   myTerm;
     string   envTerm;
     WINDOW * title_w;
+    WINDOW * status_w;
     string   title_t;
+    string   status_line;
 
     NCstyle *      styleset;
     NCursesPanel * stdpan;
@@ -192,6 +196,7 @@ class NCurses {
     static void Redraw();
     static void Refresh();
     static void SetTitle( const string & str );
+    static void SetStatusLine( const string & str );
     static void ScreenShot( const string & name = "screen.shot" );
 
     static void drawTitle();
