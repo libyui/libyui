@@ -77,7 +77,7 @@ public:
     /**
      * subclasses have to implement this to set value
      */
-    virtual void setCurrentZone( const std::string &zone );
+    virtual void setCurrentZone( const std::string &zone, bool zoom );
 
 protected:
     YQTimezoneSelectorPrivate *d;

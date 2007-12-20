@@ -45,6 +45,7 @@ public:
     YQTimezoneSelectorPrivate( QWidget *p ) {
         parent = p;
         blink = 0;
+        highlight = 0;
     }
     QImage _pix;
     QPoint _zoom;
@@ -166,13 +167,13 @@ YQTimezoneSelector::~YQTimezoneSelector()
 
 int YQTimezoneSelector::preferredWidth()
 {
-    return 400;
+    return 600;
 }
 
 
 int YQTimezoneSelector::preferredHeight()
 {
-    return 200;
+    return 300;
 }
 
 
@@ -192,7 +193,6 @@ void YQTimezoneSelector::mousePressEvent ( QMouseEvent * event )
     if ( event->button() == Qt::RightButton )
     {
         d->_zoom = QPoint();
-        d->_best = YQTimezoneSelectorPrivate::Location();
         d->cachePix = QPixmap();
     }
     else if ( event->button() == Qt::LeftButton )
@@ -246,28 +246,50 @@ void YQTimezoneSelector::paintEvent( QPaintEvent *event )
 
         p.drawPixmap( 0, 0, d->cachePix );
 
-        if ( d->highlight > 0 )
-        {
-            QPoint pos = d->pixPosition( d->_best );
-            static const QColor blinks[] = { QColor( "#00ff00" ), QColor( "#22dd00" ), QColor( "#44bb00" ),
-                                             QColor( "#669900" ), QColor( "#887700" ), QColor( "#aa5500" ),
-                                             QColor( "#887700" ), QColor( "#669900" ), QColor( "#44bb00" ),
-                                             QColor( "#22dd00" ) };
-            int index = d->highlight - 1;
-            p.setPen( blinks[ index ] );
-            p.setBrush( blinks[ index ] );
-
-            p.drawEllipse( QRect( d->pixToWindow( d->_best.pix_pos ) - QPoint( 2,2 ), QSize( 5, 5 ) ) );
-        }
         setCursor( Qt::CrossCursor );
     }
 
-    p.setBrush( Qt::green );
-    p.setPen( Qt::green );
+    p.setBrush( QColor( "#D8DF57" ) );
+    p.setPen( QColor( "#B9DFD6" ) );
     for ( QList<YQTimezoneSelectorPrivate::Location>::const_iterator it = d->locations.begin(); it != d->locations.end(); ++it )
     {
         if ( !d->highlight || ( *it ).zone != d->_best.zone )
-            p.drawEllipse( QRect( d->pixToWindow( ( *it ).pix_pos ) - QPoint( 2,2 ), QSize( 5, 5 ) ) );
+        {
+            if ( d->_zoom.isNull() )
+                p.drawEllipse( QRect( d->pixToWindow( ( *it ).pix_pos ) - QPoint( 1,1 ), QSize( 3, 3 ) ) );
+            else
+                p.drawEllipse( QRect( d->pixToWindow( ( *it ).pix_pos ) - QPoint( 2,2 ), QSize( 5, 5 ) ) );
+        }
+    }
+    if ( d->highlight > 0 )
+    {
+        QPoint pos = d->pixPosition( d->_best );
+        static const QColor blinks[] = { QColor( "#00ff00" ), QColor( "#22dd00" ), QColor( "#44bb00" ),
+                                         QColor( "#669900" ), QColor( "#887700" ), QColor( "#aa5500" ),
+                                         QColor( "#887700" ), QColor( "#669900" ), QColor( "#44bb00" ),
+                                         QColor( "#22dd00" ) };
+        int index = d->highlight - 1;
+        p.setPen( blinks[ index ] );
+        p.setBrush( blinks[ index ] );
+
+        p.drawEllipse( QRect( d->pixToWindow( d->_best.pix_pos ) - QPoint( 2,2 ), QSize( 5, 5 ) ) );
+
+        QFont f( font() );
+        f.setBold( true );
+        p.setFont( f );
+        QFontMetrics fm( f );
+
+        QPoint off = d->pixToWindow( d->_best.pix_pos ) + QPoint( 11, 4 );
+        int tw = fm.width( d->_best.tip );
+        if ( tw + off.x() > width() )
+            off.rx() = d->pixToWindow( d->_best.pix_pos ).x() - tw - 10;
+
+        p.setPen( Qt::black );
+        p.drawText( off, d->_best.tip );
+
+        p.setPen( Qt::white );
+        p.drawText( off - QPoint( 1, 1 ), d->_best.tip );
+
     }
 }
 
@@ -307,13 +329,18 @@ std::string YQTimezoneSelector::currentZone() const
 
 QPoint YQTimezoneSelectorPrivate::pixToWindow( const QPoint &pos ) const
 {
+    if ( _zoom.isNull() )
+    {
+        return QPoint( double( pos.x() ) * parent->width() / _pix.width(),
+                       double( pos.y() ) * parent->height() / _pix.height() );
+    }
     int left = qMin( qMax( _zoom.x() - parent->width() / 2, 0 ), _pix.width() - parent->width() );
     int top  = qMin( qMax( _zoom.y() - parent->height() / 2, 0 ), _pix.height() - parent->height() );
 
     return QPoint( pos.x() - left, pos.y() - top );
 }
 
-void YQTimezoneSelector::setCurrentZone( const std::string &_zone )
+void YQTimezoneSelector::setCurrentZone( const std::string &_zone, bool zoom )
 {
     QString zone = QString::fromStdString( _zone );
 
@@ -328,8 +355,10 @@ void YQTimezoneSelector::setCurrentZone( const std::string &_zone )
             d->_best = *it;
     }
 
-    d->_zoom = d->_best.pix_pos;
+    if ( zoom )
+        d->_zoom = d->_best.pix_pos;
     d->cachePix = QPixmap();
+    d->highlight = 1;
 
     d->blink->start();
     update();
