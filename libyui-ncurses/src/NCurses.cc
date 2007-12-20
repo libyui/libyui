@@ -666,8 +666,12 @@ void NCurses::ResizeEvent()
    }
    Update();
 
+   //after the resize, status line window needs to be moved to the new pos. 
+   ::mvwin(myself->status_w, NCurses::lines(), 0);
    SetStatusLine(myself->status_line);
-   Update();
+   //update the screen
+   ::touchwin(myself->status_w);
+   ::doupdate();
 
    UIMIL << "done resize ..." << endl;
   }
