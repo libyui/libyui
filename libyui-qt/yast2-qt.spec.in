@@ -5,9 +5,9 @@
 BuildRequires:	libzypp-devel docbook-xsl-stylesheets doxygen libdrm-devel libjpeg-devel libxcrypt-devel libxslt perl-XML-Writer libqt4-devel sgml-skel update-desktop-files
 
 Summary:	-
-BuildRequires:  yast2-core-devel >= 2.16.16
+BuildRequires:  yast2-core-devel >= 2.16.17
 BuildRequires:  yast2-devtools >= 2.16.3
-Requires:       yast2-core >= 2.16.16
+Requires:       yast2-core >= 2.16.17
 Requires:       yast2_theme >= 2.16.1
 Requires:	libzypp >= 3.11.8
 Provides:	yast2_ui
