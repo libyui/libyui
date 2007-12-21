@@ -95,7 +95,6 @@ void YQComboBox::setText( const string & newValue )
     {
 	YQSignalBlocker sigBlocker( _qt_comboBox );
         int index = _qt_comboBox->findText( text );
-        YItem *item = findItem( newValue );
         if ( index < 0 )
             _qt_comboBox->setItemText(_qt_comboBox->currentIndex(), text );
         else {

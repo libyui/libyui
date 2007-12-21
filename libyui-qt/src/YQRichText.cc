@@ -49,6 +49,7 @@ YQRichText::YQRichText( YWidget * parent, const string & text, bool plainTextMod
     layout->addWidget( _textBrowser );
 
     _textBrowser->installEventFilter( this );
+    _textBrowser->setFrameShape( QFrame::NoFrame );
 
     if ( plainTextMode )
     {
@@ -69,7 +70,7 @@ YQRichText::YQRichText( YWidget * parent, const string & text, bool plainTextMod
 
     QPalette pal( _textBrowser->palette() );
     pal.setColor( QPalette::Text, Qt::black );
-    pal.setCurrentColorGroup( QPalette::Normal );
+    pal.setColor( QPalette::Base, QColor(0,0,0,0));
     _textBrowser->setPalette( pal );
 
 
