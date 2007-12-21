@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Dec 21 18:38:53 CET 2007 - coolo@suse.de
+
+- support `CurrentItem in timezone widget
+- fix combobox semantic
+- V 2.16.12
+
+-------------------------------------------------------------------
 Wed Dec 19 19:21:42 CET 2007 - coolo@suse.de
 
 - give the help popup a search function
