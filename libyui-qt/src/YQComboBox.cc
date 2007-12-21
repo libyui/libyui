@@ -35,7 +35,7 @@
 #include "YQSignalBlocker.h"
 #include "YQWidgetCaption.h"
 #include <QVBoxLayout>
-
+#include <QDebug>
 
 YQComboBox::YQComboBox( YWidget * 	parent,
 			const string &	label,
@@ -94,7 +94,14 @@ void YQComboBox::setText( const string & newValue )
     if ( isValidText( text ) )
     {
 	YQSignalBlocker sigBlocker( _qt_comboBox );
-	_qt_comboBox->setItemText(_qt_comboBox->currentIndex(), text );
+        int index = _qt_comboBox->findText( text );
+        YItem *item = findItem( newValue );
+        if ( index < 0 )
+            _qt_comboBox->setItemText(_qt_comboBox->currentIndex(), text );
+        else {
+            _qt_comboBox->setCurrentIndex( index );
+            _qt_comboBox->setItemText(index, text );
+        }
     }
     else
     {
@@ -119,9 +126,9 @@ void YQComboBox::addItem( YItem * item )
     }
 
     if ( icon.isNull() )
-	_qt_comboBox->insertItem( -1, fromUTF8( item->label() ) );
+	_qt_comboBox->addItem( fromUTF8( item->label() ) );
     else
-	_qt_comboBox->insertItem( -1, icon, fromUTF8( item->label() ) );
+	_qt_comboBox->addItem( icon, fromUTF8( item->label() ) );
 
     if ( item->selected() )
     {
