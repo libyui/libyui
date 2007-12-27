@@ -22,7 +22,10 @@
 #include <QPixmap>
 #include <QDateTime>
 #include <QMessageBox>
+#include <QRadioButton>
 #include <QList>
+#include <QDebug>
+#include <QVBoxLayout>
 
 #include <errno.h>
 
@@ -56,12 +59,20 @@ using std::string;
 
 
 YQPkgConflictList::YQPkgConflictList( QWidget * parent )
-    : QY2ListView( parent )
+    : QScrollArea( parent ), _layout( 0 )
 {
+    setWidget( new QFrame( this ) );
+    _layout = new QVBoxLayout;
+    widget()->setLayout( _layout );
+    clear();
 
-    setHeaderLabel( _( "Dependency Conflict" ) );
-    setRootIsDecorated( true );
-    setSortByInsertionSequence( true );
+    QLayoutItem *b = new QSpacerItem(0, 0, QSizePolicy::Minimum,
+                                     QSizePolicy::Expanding);
+
+
+    //setHeaderLabel( _( "Dependency Conflict" ) );
+    //setRootIsDecorated( true );
+    //setSortByInsertionSequence( true );
 }
 
 
@@ -70,6 +81,19 @@ YQPkgConflictList::~YQPkgConflictList()
     // NOP
 }
 
+void
+YQPkgConflictList::clear()
+{
+    YQPkgConflict * conflict;
+    foreach( conflict, _conflicts )
+    {
+        _layout->removeWidget( conflict );
+        delete conflict;
+    }
+    _conflicts.clear();
+    // kill the stretch item too
+    delete _layout->takeAt( 0 );
+}
 
 void
 YQPkgConflictList::fill( zypp::ResolverProblemList problemList )
@@ -77,16 +101,27 @@ YQPkgConflictList::fill( zypp::ResolverProblemList problemList )
     clear();
     string text;
 
+    // for some weired reason, the layout's minSize is still 18x18 even after 3000 pixels
+    // inserted, so we have to do the math on our own
+    QSize minSize = QSize( _layout->margin() * 2, _layout->margin() * 2 );
 
     zypp::ResolverProblemList::iterator it = problemList.begin();
 
     while ( it != problemList.end() )
     {
-	YQPkgConflict * conflict = new YQPkgConflict( this, *it );
+	YQPkgConflict *conflict = new YQPkgConflict( widget(), *it );
 	Q_CHECK_PTR( conflict );
 
+        minSize = minSize.expandedTo( conflict->minimumSizeHint() );
+        minSize.rheight() += conflict->minimumSizeHint().height() + _layout->spacing();
+        _layout->addWidget( conflict );
+        _conflicts.push_back( conflict );
 	++it;
     }
+    _layout->addStretch( 1 );
+
+    widget()->resize( minSize );
+    setWidgetResizable( false );
 }
 
 
@@ -95,26 +130,16 @@ YQPkgConflictList::applyResolutions()
 {
     zypp::ProblemSolutionList userChoices;
 
-    int count=0;
-    QTreeWidgetItem * child;
-
-    while ( (child = topLevelItem(count)) )
+    YQPkgConflict *conflict;
+    foreach( conflict, _conflicts )
     {
-	YQPkgConflict * conflict = dynamic_cast<YQPkgConflict *> (child);
+        zypp::ProblemSolution_Ptr userChoice = conflict->userSelectedResolution();
 
-	if ( conflict )
-	{
-	    zypp::ProblemSolution_Ptr userChoice = conflict->userSelectedResolution();
-
-	    if ( userChoice )
-		userChoices.push_back( userChoice );
-	}
-
-	count++;
+        if ( userChoice )
+            userChoices.push_back( userChoice );
     }
 
     zypp::getZYpp()->resolver()->applySolutions( userChoices );
-
     emit updatePackages();
 }
 
@@ -133,9 +158,10 @@ YQPkgConflictList::askSaveToFile() const
 void
 YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 {
+#if 0
     // Open file
     QFile file(filename);
-  
+
     if ( ! file.open(QIODevice::WriteOnly) )
     {
 	y2error( "Can't open file %s", qPrintable(filename) );
@@ -184,12 +210,14 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 
     if ( file.isOpen() )
 	file.close();
+
+#endif
 }
 
 
 void
 YQPkgConflictList::saveItemToFile( QFile 			&file,
-				   const QTreeWidgetItem * 	item ) const
+				   const YQPkgConflict * 	item ) const
 {
 #if FIXME
     if ( ! item || ! file.isOpen() )
@@ -207,7 +235,7 @@ YQPkgConflictList::saveItemToFile( QFile 			&file,
     {
 	switch ( checkListItem->type() )
 	{
-    QString buffer;
+            QString buffer;
 	    case Q3CheckListItem::CheckBox:
 		buffer.sprintf( "[%c] ", checkListItem->( checkState(0) == Qt::Checked ) ? 'x' : ' ' );
 		break;
@@ -238,178 +266,96 @@ YQPkgConflictList::saveItemToFile( QFile 			&file,
 #endif
 }
 
-
-void
-YQPkgConflictList::dumpList( QTreeWidgetItem * 	parent,
-			     const QString &	longText,
-			     const QString & 	header,
-			     int		splitThreshold )
-{
-    if ( ! parent )
-    {
-	y2error( "Null parent" );
-	return;
-    }
-
-    if ( longText.isEmpty() )
-	return;
-
-#if FIXME
-    if ( ! header.isEmpty() )
-    {
-	parent = new QY2ListViewItem( parent, header );
-	Q_CHECK_PTR( parent );
-	parent->setExpanded( true );
-    }
-
-    QStringList lines = QStringList::split( '\n', longText,
-					    true );		// allowEmptyEntries
-    QList<QString>::const_iterator it = lines.begin();
-
-    bool doSplit	= splitThreshold > 1 && lines.size() > splitThreshold + 3;
-    bool didSplit	= false;
-    int  count		= 0;
-
-
-    while ( it != lines.end() )
-    {
-	if ( doSplit && ! didSplit && ++count > splitThreshold )
-	{
-	    // Split list
-
-	    int more = lines.size() - count + 1;
-	    QString text = ( _( "%1 more..." ) ).arg( more );
-	    QY2ListViewItem * sublist = new QY2ListViewItem( parent, text );
-	    didSplit = true;
-
-	    if ( sublist )
-	    {
-		sublist->setBackgroundColor( LIGHT_ORANGE );
-		parent = sublist;
-	    }
-	}
-
-	new QY2ListViewItem( parent, *it );
-	++it;
-    }
-#endif
-}
-
-
-
-
-
-
-
-YQPkgConflict::YQPkgConflict( YQPkgConflictList *		parentList,
+YQPkgConflict::YQPkgConflict( QWidget *		parent,
 			      zypp::ResolverProblem_Ptr		problem	)
-    : QY2ListViewItem( parentList )
+    : QFrame( parent )
     , _problem( problem )
     , _resolutionsHeader( 0 )
 {
-    setBackgroundColor( LIGHT_BLUE );
-    setExpanded( true );
-
+    _layout = new QVBoxLayout( this );
+    _layout->setSpacing( 0 );
+    _layout->setMargin( 0 );
     formatHeading();
-    YQPkgConflictList::dumpList( this, fromUTF8( _problem->details() ) );
+    QLabel *label = new QLabel( fromUTF8 ( _problem->details() ), this );
+    _layout->addWidget( label );
+    //YQPkgConflictList::dumpList( this,  );
 
     addSolutions();
+    setMinimumSize( _layout->minimumSize() );
 }
 
 
 void
 YQPkgConflict::formatHeading()
 {
-    QString text;
-    QPixmap icon = YQIconPool::normalPkgConflict();
-    setTextColor( BRIGHT_RED );
+    QFrame *frame = new QFrame( this );
+    QHBoxLayout *hbox = new QHBoxLayout(frame);
 
-    setData( 0, Qt::DisplayRole, fromUTF8( problem()->description() ) );
-    setData( 0, Qt::DecorationRole, icon );
+    QLabel *pix = new QLabel( this );
+    pix->setPixmap( YQIconPool::normalPkgConflict() );
+
+    hbox->addWidget( pix );
+
+    QString text = fromUTF8( problem()->description() );
+    QLabel *heading = new QLabel( text, this );
+    heading->setStyleSheet( "font-size: +2; color: red; font: bold;" );
+    hbox->addWidget( heading );
+    hbox->addStretch( 1 );
+
+    frame->setStyleSheet( "background-color: lightgray;" );
+    _layout->addWidget(frame);
 }
 
 
 void
 YQPkgConflict::addSolutions()
 {
-    _resolutionsHeader = new QY2CheckListItem( this,
-					       // Heading for the choices
-					       // how to resolve this conflict
-					       _( "Conflict Resolution:" ) );
+    // Heading for the choices
+    // how to resolve this conflict
+    _resolutionsHeader = new QLabel( _( "Conflict Resolution:" ), this );
+    _layout->addWidget( _resolutionsHeader );
     Q_CHECK_PTR( _resolutionsHeader );
-
-    _resolutionsHeader->setExpanded( true );
-    _resolutionsHeader->setBackgroundColor( LIGHT_GREY );
 
     zypp::ProblemSolutionList solutions = problem()->solutions();
     zypp::ProblemSolutionList::iterator it = solutions.begin();
 
+    QHBoxLayout *hbox = new QHBoxLayout();
+    hbox->addSpacing( 20 );
+
+    QVBoxLayout *vbox = new QVBoxLayout();
+    hbox->addLayout( vbox );
+    _layout->addLayout( hbox );
+
     while ( it != solutions.end() )
     {
-	YQPkgConflictResolution * solution = new YQPkgConflictResolution( _resolutionsHeader, *it );
-	Q_CHECK_PTR( solution );
-	//FIXME solution->setExpanded(true);
+        QRadioButton * s = new QRadioButton( fromUTF8( ( *it )->description() ), this );
+        Q_CHECK_PTR( s );
+        _solutions[ s ] = *it;
+        vbox->addWidget( s );
 
 	++it;
     }
 }
 
-
-// void
-// YQPkgConflict::paintCell( QPainter *		painter,
-// 			  const QColorGroup &	colorGroup,
-// 			  int			column,
-// 			  int			width,
-// 			  int			alignment )
-// {
-//     painter->setFont( YQUI::yqApp()->headingFont() );
-// #if FIXME
-//     QY2ListViewItem::paintCell( painter, colorGroup, column, width, alignment );
-// #endif
-// }
-
-
 zypp::ProblemSolution_Ptr
 YQPkgConflict::userSelectedResolution()
 {
-    QTreeWidgetItem * item;
-    QTreeWidgetItemIterator it(_resolutionsHeader);
+    QMap<QRadioButton*, zypp::ProblemSolution_Ptr>::iterator it;
 
-    while ( (item = *it) )
+    for ( it = _solutions.begin(); it != _solutions.end(); ++it )
     {
-	YQPkgConflictResolution * res = dynamic_cast<YQPkgConflictResolution *> (item);
+        QRadioButton *button = it.key();
+        if ( !button->isChecked() )
+            continue;
+        zypp::ProblemSolution_Ptr solution = it.value();
 
-	if ( res && ( res->checkState(0) == Qt::Checked ) )
-	{
-	    zypp::ProblemSolution_Ptr solution = res->solution();
-
-	    y2milestone( "User selected resolution \"%s\" for problem \"%s\"",
-			 solution->description().c_str(),
-			 solution->problem()->description().c_str() );
-	    return solution;
-	}
-
-        ++it;
+        y2milestone( "User selected resolution \"%s\" for problem \"%s\"",
+                     solution->description().c_str(),
+                     solution->problem()->description().c_str() );
+        return solution;
     }
 
     return zypp::ProblemSolution_Ptr();		// Null pointer
 }
-
-
-
-
-
-
-YQPkgConflictResolution::YQPkgConflictResolution( QY2CheckListItem * 		parent,
-						  zypp::ProblemSolution_Ptr	solution )
-    : QY2CheckListItem( parent,
-			fromUTF8( solution->description() ) )
-			/*, Q3CheckListItem::RadioButton) */
-{
-    _solution = solution;
-    YQPkgConflictList::dumpList( this, fromUTF8( solution->details() ) );
-}
-
-
 
 #include "YQPkgConflictList.moc"

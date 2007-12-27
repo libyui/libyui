@@ -207,7 +207,7 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
 	// Fire up the first dependency check in the main loop.
 	// Don't do this right away - wait until all initializations are finished.
 	QTimer::singleShot( 0, this, SLOT( resolveDependencies() ) );
-  
+
     }
 #endif
 }
@@ -222,6 +222,7 @@ YQPackageSelector::basicLayout()
 
     QSplitter * outer_splitter = new QSplitter( Qt::Horizontal, this );
     Q_CHECK_PTR( outer_splitter );
+    outer_splitter->setObjectName( "outer_splitter" );
 
     layout->addWidget(outer_splitter);
 
@@ -239,27 +240,23 @@ YQPackageSelector::layoutLeftPane( QWidget *parent )
 {
     QSplitter * splitter = new QSplitter( Qt::Vertical, parent );
     Q_CHECK_PTR( splitter );
+    splitter->setObjectName( "leftpanesplitter" );
 
     QWidget * upper_vbox = new QWidget( splitter );
     QVBoxLayout *layout = new QVBoxLayout(upper_vbox);
     upper_vbox->setLayout(layout);
-    
+    layout->setMargin( 0 );
+    layout->setSpacing( 0 );
+
     Q_CHECK_PTR( upper_vbox );
     layoutFilters( upper_vbox );
     addVSpacing( upper_vbox, MARGIN );
 
-    QWidget * lower_vbox = new QWidget( splitter );
-    layout = new QVBoxLayout(lower_vbox);
-    lower_vbox->setLayout(layout);
+    _diskUsageList = new YQPkgDiskUsageList( splitter );
 
-    addVSpacing( lower_vbox, MARGIN );
-    _diskUsageList = new YQPkgDiskUsageList( lower_vbox );
-    Q_CHECK_PTR( _diskUsageList );
-    layout->addWidget(_diskUsageList);
+    splitter->setStretchFactor(splitter->indexOf(upper_vbox), 1);
+    splitter->setStretchFactor(splitter->indexOf( _diskUsageList ), 2);
 
-    splitter->setStretchFactor(splitter->indexOf(upper_vbox), 0);
-    splitter->setStretchFactor(splitter->indexOf(lower_vbox), 1);
-    
     return splitter;
 }
 
@@ -418,14 +415,12 @@ QWidget *
 YQPackageSelector::layoutRightPane( QWidget *parent )
 {
     QWidget * right_pane_vbox = new QWidget( parent );
-    
-    QVBoxLayout *layout = new QVBoxLayout(right_pane_vbox);
-    right_pane_vbox->setLayout(layout);
+
+    QVBoxLayout *layout = new QVBoxLayout( right_pane_vbox );
 
     Q_CHECK_PTR( right_pane_vbox );
 
     layout->setMargin( MARGIN );
-    
 
     QSplitter * splitter = new QSplitter( Qt::Vertical, right_pane_vbox );
     Q_CHECK_PTR( splitter );
@@ -434,11 +429,11 @@ YQPackageSelector::layoutRightPane( QWidget *parent )
     Q_CHECK_PTR( splitter );
     layoutPkgList( splitter );
 
-    addVSpacing( splitter, MARGIN );
+    //addVSpacing( splitter, MARGIN );
 
     layoutDetailsViews( splitter );
 
-    layoutButtons( splitter );
+    layoutButtons( right_pane_vbox );
 
     return right_pane_vbox;
 }
@@ -573,11 +568,12 @@ YQPackageSelector::layoutButtons( QWidget *parent )
 {
     QWidget * button_box = new QWidget( parent );
     Q_CHECK_PTR( button_box );
+    parent->layout()->addWidget( button_box );
 
     QHBoxLayout *layout = new QHBoxLayout(button_box);
-    button_box->setLayout(layout);
 
-    layout->setSpacing( SPACING );
+    //layout->setSpacing( SPACING );
+    layout->setMargin( 0 );
 
     // Button: Dependency check
     // Translators: Please keep this short!
@@ -717,7 +713,7 @@ YQPackageSelector::addMenus()
 	Q_CHECK_PTR( submenu );
 
 	submenu->addSeparator();
-    
+
     _pkgMenu->addAction(_pkgList->actionInstallListSourceRpms);
     _pkgMenu->addAction(_pkgList->actionDontInstallListSourceRpms);
 

@@ -367,7 +367,7 @@ QY2ListViewItem::~QY2ListViewItem()
 bool
 QY2ListViewItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
 {
-  bool sortByInsertionSequence = false;
+    bool sortByInsertionSequence = false;
     QY2ListView * parentListView = dynamic_cast<QY2ListView *> (treeWidget());
 
     if ( parentListView )
@@ -428,6 +428,9 @@ QY2CheckListItem::QY2CheckListItem( QTreeWidgetItem * 		parentItem,
 {
     _serial = 0;
     QY2ListView * parentListView = dynamic_cast<QY2ListView *> ( treeWidget() );
+
+    setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+    setCheckState(0, Qt::Unchecked);
 
     if ( parentListView )
 	_serial = parentListView->nextSerial();

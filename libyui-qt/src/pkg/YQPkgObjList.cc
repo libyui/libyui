@@ -90,6 +90,7 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
 
     connect( this,	SIGNAL( currentItemChanged	( QTreeWidgetItem *, QTreeWidgetItem * ) ),
 	     this,	SLOT  ( currentItemChangedInternal( QTreeWidgetItem * ) ) );
+
 }
 
 
@@ -366,7 +367,7 @@ YQPkgObjList::selectNextItem()
 	//item->setSelected( false );			// Doesn't emit signals
 	scrollToItem( *it );	// Scroll if necessary
 	setCurrentItem( *it );	// Emits signals
-        
+
     }
 }
 
@@ -947,6 +948,7 @@ YQPkgObjListItem::init()
 	setText( versionCol(),	zyppObj()->edition() );
     }
 
+
     setStatusIcon();
 }
 
@@ -1048,14 +1050,14 @@ YQPkgObjListItem::setStatusIcon()
     if ( statusCol() >= 0 )
     {
 	bool enabled = editable() && _pkgObjList->editable();
-        setData( statusCol(), Qt::DecorationRole, _pkgObjList->statusIcon( status(), enabled, bySelection() ) );
+        setIcon( statusCol(), _pkgObjList->statusIcon( status(), enabled, bySelection() ) );
     }
 
 
     if ( brokenIconCol() >= 0 )
     {
 	// Reset this icon now - it might be the same column as satisfiedIconCol()
-        setData( brokenIconCol(), Qt::DecorationRole, QPixmap() );
+        setIcon( brokenIconCol(), QPixmap() );
     }
 
     if ( satisfiedIconCol() >= 0 )
@@ -1064,7 +1066,7 @@ YQPkgObjListItem::setStatusIcon()
 	// but satisfied anyway (e.g. for patches or patterns where the user
 	// selected all required packages manually)
 
-        setData( satisfiedIconCol(), Qt::DecorationRole, isSatisfied() ? YQIconPool::pkgSatisfied() : QPixmap() );
+        setIcon( satisfiedIconCol(), isSatisfied() ? YQIconPool::pkgSatisfied() : QPixmap() );
     }
 
     if ( brokenIconCol() >= 0 )
@@ -1074,7 +1076,7 @@ YQPkgObjListItem::setStatusIcon()
 
 	if ( isBroken() )
 	{
-            setData( brokenIconCol(), Qt::DecorationRole, YQIconPool::warningSign() );
+            setIcon( brokenIconCol(), YQIconPool::warningSign() );
 	    y2warning( "Broken object: %s - %s",
 		       _selectable->theObj()->name().c_str(),
 		       _selectable->theObj()->summary().c_str() );
@@ -1380,7 +1382,7 @@ bool YQPkgObjListItem::operator<( const QTreeWidgetItem & otherListViewItem ) co
 	if ( col == sizeCol() )
 	{
 	    // Numeric sort by size
-    
+
 	    return ( this->zyppObj()->size() < other->zyppObj()->size() );
 	}
 	else if ( col == statusCol() )

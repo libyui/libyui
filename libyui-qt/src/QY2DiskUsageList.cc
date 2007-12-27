@@ -132,14 +132,12 @@ public:
         QY2DiskUsageListItem *item = dynamic_cast<QY2DiskUsageListItem *>(_view->itemFromIndex(index));
         if ( item )
         {
-          item->paintPercentageBar( item->usedPercent(),
-                                    painter,
+          item->paintPercentageBar( painter,
                                     option,
                                     interpolateColor( item->usedPercent(),
-                                    60, 95,
-                                    QColor( 0, 0x80, 0 ),	// Medium dark green
-                                    QColor( 0xFF, 0, 0 ) ),	// Bright red
-                                    background.dark( 115 ) );
+                                                      60, 95,
+                                                      QColor( 0, 0xa0, 0 ),	// Medium dark green
+                                                      QColor( 0xFF, 0, 0 ) ) );	// Bright red
         }
         painter->restore();
     }
@@ -150,7 +148,6 @@ QY2DiskUsageList::QY2DiskUsageList( QWidget * parent, bool addStdColumns )
 {
     _nameCol		= -42;
     _percentageBarCol	= -42;
-    _percentageCol	= -42;
     _usedSizeCol	= -42;
     _freeSizeCol	= -42;
     _totalSizeCol	= -42;
@@ -163,7 +160,6 @@ QY2DiskUsageList::QY2DiskUsageList( QWidget * parent, bool addStdColumns )
         columnLabels << _( "Name" 		);	_nameCol 		= numCol++;
         // Translators: Please keep this short!
         columnLabels <<  _("Disk Usage");	_percentageBarCol	= numCol++;
-        columnLabels << ""; _percentageCol = numCol++;
         setItemDelegateForColumn( _percentageBarCol, new QY2DiskUsagePercentageItem( this ) );
         columnLabels << _("Used"); _usedSizeCol		= numCol++;
         columnLabels << _( "Free"); _freeSizeCol		= numCol++;
@@ -175,12 +171,8 @@ QY2DiskUsageList::QY2DiskUsageList( QWidget * parent, bool addStdColumns )
         setColumnCount(numCol);
         setHeaderLabels(columnLabels);
 
-        //FIXME
-//         setTextAlignment( percentageCol(), Qt::AlignRight );
-//         setTextAlignment( usedSizeCol(), Qt::AlignRight );
-//         setTextAlignment( freeSizeCol(), Qt::AlignRight );
-//         setTextAlignment( totalSizeCol(), Qt::AlignRight );
         sortItems( percentageBarCol(), Qt::AscendingOrder );
+        setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
     }
 
     saveColumnWidths();
@@ -222,12 +214,11 @@ QY2DiskUsageListItem::~QY2DiskUsageListItem()
 void
 QY2DiskUsageListItem::init( bool allFields )
 {
-    if ( percentageCol()	>= 0 )
-    {
-	QString percentageText;
-	percentageText.sprintf( "%d%%", usedPercent() );
-	setText( percentageCol(), percentageText );
-    }
+    setSizeHint( percentageBarCol(), QSize( 20, 10 ) );
+
+    setTextAlignment( usedSizeCol(), Qt::AlignRight );
+    setTextAlignment( freeSizeCol(), Qt::AlignRight );
+    setTextAlignment( totalSizeCol(), Qt::AlignRight );
 
     if ( usedSizeCol()		>= 0 ) setText( usedSizeCol(),		usedSize() 	);
     if ( freeSizeCol()		>= 0 ) setText( freeSizeCol(),		freeSize() 	);
@@ -235,7 +226,7 @@ QY2DiskUsageListItem::init( bool allFields )
     if ( allFields )
     {
 	if ( totalSizeCol()	>= 0 ) setText( totalSizeCol(), 	totalSize() 	);
-	if ( nameCol()		>= 0 ) setText( nameCol(),		" " + name()	);
+	if ( nameCol()		>= 0 ) setText( nameCol(),		name()	);
 	if ( deviceNameCol()	>= 0 ) setText( deviceNameCol(),	deviceName()	);
     }
 }
@@ -245,7 +236,6 @@ void
 QY2DiskUsageListItem::setText( int column, const FSize & size )
 {
     QString sizeText = size.form( 0, 1, true ).c_str();
-    sizeText += " ";
     setText( column, sizeText );
 }
 
@@ -290,7 +280,7 @@ QY2DiskUsageListItem::updateData()
      * Comparison function used for sorting the list.
      * Reimplemented from QTreeWidgetItem
      **/
-bool 
+bool
 QY2DiskUsageListItem::operator<( const QTreeWidgetItem & otherListViewItem ) const
 {
     const QY2DiskUsageListItem * other = dynamic_cast<const QY2DiskUsageListItem *> (&otherListViewItem);
@@ -298,8 +288,7 @@ QY2DiskUsageListItem::operator<( const QTreeWidgetItem & otherListViewItem ) con
 
     if ( other )
     {
-	if ( col == percentageCol()    ||
-	     col == percentageBarCol()   )
+	if ( col == percentageBarCol()   )
 	{
 	    // Intentionally reverting sort order: Fullest first
             return ( this->usedPercent() < other->usedPercent() );
@@ -325,91 +314,44 @@ QY2DiskUsageListItem::operator<( const QTreeWidgetItem & otherListViewItem ) con
  * Stolen from KDirStat::KDirTreeView with the author's permission.
  **/
 void
-QY2DiskUsageListItem::paintPercentageBar( float			percent,
-					  QPainter *		painter,
+QY2DiskUsageListItem::paintPercentageBar( QPainter *		painter,
 					  QStyleOptionViewItem option,
-					  const QColor &	fillColor,
-					  const QColor &	barBackground )
+					  const QColor &	fillColor )
 {
-     if ( percent > 100.0 )	percent = 100.0;
-     if ( percent < 0.0   )	percent = 0.0;
-     int penWidth = 2;
-     int extraMargin = 3;
-     int x = option.rect.left(); /*FIXME _diskUsageList->itemMargin(); */
-     int y = option.rect.top() + extraMargin;
-     int w = option.rect.width()    - 2; /*FIXME * _diskUsageList->horizontalOffset(); */
-     int h = option.rect.height() - 2; /*FIXME * extraMargin; */
-     int fillWidth;
+    float percent = usedPercent();
+    if ( percent > 100.0 )	percent = 100.0;
+    if ( percent < 0.0   )	percent = 0.0;
+    int x = option.rect.left() + 1;
+    int y = option.rect.top() + 1;
+    int w = option.rect.width() - 2;
+    int h = option.rect.height() - 2;
+    int fillWidth = 0;
 
-     painter->eraseRect( option.rect );
-     int indent=0;
-     w -= indent;
-     x += indent;
-
-     if ( w > 0 )
-     {
- 	QPen pen( painter->pen() );
- 	pen.setWidth(0);
- 	painter->setPen( pen );
- 	painter->setBrush( Qt::NoBrush );
- 	fillWidth = (int) ( ( w - 2 * penWidth ) * percent / 100.0 );
-
-
- 	// Fill bar background.
-
- 	painter->fillRect( x + penWidth, y + penWidth,
- 			   w - 2 * penWidth + 1, h - 2 * penWidth + 1,
- 			   barBackground );
- 	/*
-	 * Notice: The Xlib XDrawRectangle() function always fills one
-	 * pixel less than specified. Altough this is very likely just a
-	 * plain old bug, it is documented that way. Obviously, Qt just
-	 * maps the fillRect() call directly to XDrawRectangle() so they
-	 * inherited that bug ( although the Qt doc stays silent about
-	 * it ). So it is really necessary to compensate for that missing
-	 * pixel in each dimension.
-	 *
-	 * If you don't believe it, see for yourself.
-	 * Hint: Try the xmag program to zoom into the drawn pixels.
-	 **/
+    if ( w > 0 )
+    {
+ 	fillWidth = (int) ( w * usedPercent() / 100.0 );
 
 	// Fill the desired percentage.
 
-	painter->fillRect( x + penWidth, y + penWidth,
-			   fillWidth+1, h - 2 * penWidth+1,
+	painter->fillRect( x, y,  fillWidth, h,
 			   fillColor );
 
+        QString percentageText;
+	percentageText.sprintf( "%d%%", usedPercent() );
 
-	// Draw 3D shadows.
+        if ( usedPercent() > 50 ) {
+            painter->setPen( treeWidget()->palette().color( QPalette::Base ) );
+            painter->drawText( QRect( x, y,
+                                      fillWidth - 3, h ),
+                               Qt::AlignRight, percentageText );
+        } else {
+            painter->setPen( treeWidget()->palette().color( QPalette::Text ) );
+            painter->drawText( QRect( x + fillWidth + 3, y,
+                                      w - fillWidth - 3, h ),
+                               Qt::AlignLeft, percentageText );
 
-	pen.setColor( contrastingColor ( Qt::black,
-					 painter->background().color() ) );
-	painter->setPen( pen );
-	painter->drawLine( x, y, x+w, y );
-	painter->drawLine( x, y, x, y+h );
-
-	pen.setColor( contrastingColor( barBackground.dark(),
-					painter->background().color() ) );
-	painter->setPen( pen );
-	painter->drawLine( x+1, y+1, x+w-1, y+1 );
-	painter->drawLine( x+1, y+1, x+1, y+h-1 );
-
-	pen.setColor( contrastingColor( barBackground.light(),
-					painter->background().color() ) );
-	painter->setPen( pen );
-	painter->drawLine( x+1, y+h, x+w, y+h );
-	painter->drawLine( x+w, y, x+w, y+h );
-
-	pen.setColor( contrastingColor( Qt::white,
-					painter->background().color() ) );
-	painter->setPen( pen );
-	painter->drawLine( x+2, y+h-1, x+w-1, y+h-1 );
-	painter->drawLine( x+w-1, y+1, x+w-1, y+h-1 );
-   }
+        }
+    }
 }
-
-
-
-
 
 #include "QY2DiskUsageList.moc"

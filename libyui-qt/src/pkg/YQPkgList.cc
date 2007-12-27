@@ -27,6 +27,7 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QFile>
+#include <QHeaderView>
 
 #include "utf8.h"
 
@@ -45,10 +46,11 @@ YQPkgList::YQPkgList( QWidget * parent )
     int numCol = 0;
     QStringList headers;
 
-    
-    headers <<  "";			_statusCol	= numCol++;
+
+    //headers <<  "";			_statusCol	= numCol++;
     // _statusCol = numCol;
     headers <<  _( "Package" 	);	_nameCol	= numCol++;
+    _statusCol = _nameCol;
 
     headers <<  _( "Summary" 	);	_summaryCol	= numCol++;
     headers <<  _( "Size" 	);	_sizeCol	= numCol++;
@@ -71,9 +73,12 @@ YQPkgList::YQPkgList( QWidget * parent )
 #endif
     setHeaderLabels(headers);
     saveColumnWidths();
-    //FIXME sort( nameCol() );
+    sortByColumn( nameCol(), Qt::DescendingOrder );
     //FIXME setColumnAlignment( sizeCol(), Qt::AlignRight );
     setAllColumnsShowFocus( true );
+
+    header()->setResizeMode( QHeaderView::ResizeToContents );
+    setIconSize( QSize( 22, 16 ) );
 
     createActions();
 
@@ -552,6 +557,8 @@ YQPkgListItem::YQPkgListItem( YQPkgList * 		pkgList,
 	_zyppPkg = tryCastToZyppPkg( selectable->theObj() );
 
     setSourceRpmIcon();
+
+    setTextAlignment( sizeCol(), Qt::AlignRight );
 }
 
 

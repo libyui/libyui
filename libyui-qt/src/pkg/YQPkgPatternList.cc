@@ -139,7 +139,6 @@ YQPkgPatternList::category( const QString & categoryName )
 	_categories.insert( categoryName, cat );
     }
 
-
     return cat;
 }
 
@@ -342,11 +341,6 @@ bool YQPkgPatternListItem::operator< ( const QTreeWidgetItem & otherListViewItem
     return QTreeWidgetItem::operator<( otherListViewItem );
 }
 
-
-
-
-
-
 YQPkgPatternCategoryItem::YQPkgPatternCategoryItem( YQPkgPatternList *	patternList,
 						    const QString &	category	)
     : QY2ListViewItem( patternList )
@@ -390,10 +384,10 @@ YQPkgPatternCategoryItem::setExpanded( bool open )
 void
 YQPkgPatternCategoryItem::setTreeIcon()
 {
-    setData( _patternList->statusCol(), Qt::DecorationRole,
-	       isExpanded() ?
-	       YQIconPool::treeMinus() :
-	       YQIconPool::treePlus()   );
+    setIcon( _patternList->statusCol(),
+             isExpanded() ?
+             YQIconPool::treeMinus() :
+             YQIconPool::treePlus()   );
 
 }
 

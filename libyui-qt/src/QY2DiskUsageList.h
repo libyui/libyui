@@ -57,7 +57,6 @@ public:
 
     int nameCol()		const	{ return _nameCol;		}
     int percentageBarCol()	const	{ return _percentageBarCol;	}
-    int percentageCol()		const	{ return _percentageCol;	}
     int usedSizeCol()		const	{ return _usedSizeCol;		}
     int freeSizeCol()		const	{ return _freeSizeCol;		}
     int totalSizeCol()		const	{ return _totalSizeCol;		}
@@ -74,7 +73,6 @@ protected:
 
     int _nameCol;
     int _percentageBarCol;
-    int _percentageCol;
     int _usedSizeCol;
     int _freeSizeCol;
     int _totalSizeCol;
@@ -200,7 +198,6 @@ public:
 
     int nameCol()		const	{ return _diskUsageList->nameCol();		}
     int percentageBarCol()	const	{ return _diskUsageList->percentageBarCol();	}
-    int percentageCol()		const	{ return _diskUsageList->percentageCol();	}
     int usedSizeCol()		const	{ return _diskUsageList->usedSizeCol();		}
     int freeSizeCol()		const	{ return _diskUsageList->freeSizeCol();		}
     int totalSizeCol()		const	{ return _diskUsageList->totalSizeCol();	}
@@ -234,13 +231,11 @@ protected:
      *
      * Stolen from KDirStat::KDirTreeView with the author's permission.
      **/
-    void paintPercentageBar( float		percent,
-			     QPainter *		painter,
+    void paintPercentageBar( QPainter *		painter,
 			     QStyleOptionViewItem option,
-			     const QColor &	fillColor,
-			     const QColor &	barBackground	);
+			     const QColor &	fillColor);
 
-    protected:
+protected:
 
 
     //

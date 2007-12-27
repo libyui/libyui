@@ -42,26 +42,25 @@ QY2ComboTabWidget::QY2ComboTabWidget( const QString &	label,
 				      const char *	name )
     : QWidget(parent)
 {
-    QVBoxLayout *vbox = new QVBoxLayout();
-    setLayout(vbox);
+    QVBoxLayout *vbox = new QVBoxLayout(this);
+    vbox->setMargin( 0 );
 
     QHBoxLayout *hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
 //     hbox->setFrameStyle( QFrame::Panel | QFrame::Raised );
 //     hbox->setLineWidth(2);
 //     hbox->setMidLineWidth(2);
-    hbox->setSpacing( SPACING );
-    hbox->setMargin ( MARGIN  );
+    hbox->setSpacing( 0 );
+    hbox->setMargin ( 0  );
 
     vbox->addLayout(hbox);
     //this->setSpacing( SPACING );
-    this->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
-    
+    this->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred ) ); // hor/vert
 
     combo_label = new QLabel(label);
     hbox->addWidget(combo_label);
     Q_CHECK_PTR( combo_label );
-    
+
     combo_box = new QComboBox( this );
     Q_CHECK_PTR( combo_box );
     hbox->addWidget(combo_box);
@@ -69,7 +68,7 @@ QY2ComboTabWidget::QY2ComboTabWidget( const QString &	label,
     combo_box->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
     connect( combo_box, SIGNAL( activated( int ) ),
 	     this,	SLOT  ( showPageIndex ( int ) ) );
-    
+
     widget_stack = new QStackedWidget( this );
     Q_CHECK_PTR( widget_stack );
     vbox->addWidget(widget_stack);
@@ -79,7 +78,7 @@ QY2ComboTabWidget::QY2ComboTabWidget( const QString &	label,
 
 QY2ComboTabWidget::~QY2ComboTabWidget()
 {
-    
+
 }
 
 
@@ -125,9 +124,9 @@ QY2ComboTabWidget::showPage( QWidget * page )
           // correct combo box item.
           return;
     }
-    
+
     // Search the dict for this page
-    
+
     QHashIterator<int, QWidget *> it( pages );
 
     while ( it.hasNext() )

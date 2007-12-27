@@ -24,13 +24,14 @@
 #include <stdio.h>
 #include <QMap>
 #include <QFile>
-#include "QY2ListView.h"
+#include <QScrollArea>
 
 #include <zypp/Resolver.h>
 #include <zypp/ResolverProblem.h>
 #include <zypp/ProblemSolution.h>
 
-
+class QVBoxLayout;
+class QRadioButton;
 class QAction;
 class YQPkgConflict;
 class YQPkgConflictResolution;
@@ -41,7 +42,7 @@ class YQPkgConflictDialog;
  * @short Display package dependency conflicts in a tree list and let the user
  * choose how to resolve each conflict.
  **/
-class YQPkgConflictList : public QY2ListView
+class YQPkgConflictList : public QScrollArea
 {
     Q_OBJECT
 
@@ -64,12 +65,12 @@ public:
     /**
      * Check if the conflict list is empty.
      **/
-    bool isEmpty() const { return topLevelItemCount() == 0; }
+    bool isEmpty() const { return count() == 0; }
 
     /**
      * Returns the number of conflicts in the list.
      **/
-    int count() const { return topLevelItemCount(); }
+    int count() const { return _conflicts.count(); }
 
 
 public slots:
@@ -89,6 +90,7 @@ public slots:
      **/
     void askSaveToFile() const;
 
+    void clear();
 
 public:
 
@@ -102,25 +104,15 @@ public:
      **/
     void saveToFile( const QString filename, bool interactive ) const;
 
-    /**
-     * Dump a multi-line text to a QListView as a sequence of separate items.
-     * If 'longText' has considerably more lines than 'splitThreshold', fold
-     * all lines from no. 'splitThreshold' on into a closed list item
-     * "More...".
-     * If 'header' is not empty, it will be added as the parent of the lines.
-     **/
-    static void dumpList( QTreeWidgetItem * 	parent,
-			  const QString &	longText,
-			  const QString & 	header = QString::null,
-			  int			splitThreshold = 3 );
-
 protected:
 
     /**
      * (Recursively) save one item to file.
      **/
-    void saveItemToFile( QFile &file, const QTreeWidgetItem * item ) const;
+    void saveItemToFile( QFile &file, const YQPkgConflict * item ) const;
 
+    QList<YQPkgConflict*> _conflicts;
+    QVBoxLayout *_layout;
 
 signals:
 
@@ -128,6 +120,7 @@ signals:
      * Update package states - they may have changed.
      **/
     void updatePackages();
+
 };
 
 
@@ -135,14 +128,16 @@ signals:
 /**
  * @short Root item for each individual conflict
  **/
-class YQPkgConflict: public QY2ListViewItem
+class YQPkgConflict: public QFrame
 {
+    Q_OBJECT
+
 public:
 
     /**
      * Constructor.
      **/
-    YQPkgConflict( YQPkgConflictList *		parentList,
+    YQPkgConflict( QWidget *parent,
 		   zypp::ResolverProblem_Ptr	problem );
 
     /**
@@ -174,49 +169,13 @@ protected:
      **/
     void addSolutions();
 
-    /**
-     * Paint method. Reimplemented from @ref QListViewItem so a different
-     * font can be used.
-     *
-     * Reimplemented from QY2ListViewItem.
-     **/
-//     virtual void paintCell( QPainter *		painter,
-// 			    const QColorGroup &	colorGroup,
-// 			    int			column,
-// 			    int			width,
-// 			    int			alignment );
-
-
     // Data members
 
     zypp::ResolverProblem_Ptr	_problem;
-    QY2CheckListItem *		_resolutionsHeader;
+    QLabel *		_resolutionsHeader;
+    QList<zypp::ProblemSolution_Ptr> _resolutions;
+    QMap<QRadioButton*, zypp::ProblemSolution_Ptr> _solutions;
+    QVBoxLayout *_layout;
 };
-
-
-
-class YQPkgConflictResolution: public QY2CheckListItem
-{
-public:
-
-    /**
-     * Constructor
-     **/
-    YQPkgConflictResolution( QY2CheckListItem *		parent,
-			     zypp::ProblemSolution_Ptr	_solution );
-
-    /**
-     * Return the corresponding ProblemSolution.
-     **/
-    zypp::ProblemSolution_Ptr solution() const { return _solution; }
-
-
-protected:
-
-    // Data members
-
-    zypp::ProblemSolution_Ptr	_solution;
-};
-
 
 #endif // ifndef YQPkgConflictList_h

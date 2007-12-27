@@ -86,7 +86,18 @@ YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget * parent, int thresholdPercent )
 	    _items.insert( QString::fromUtf8(partitionDu.dir.c_str()), item );
 	}
     }
+    resizeColumnToContents( nameCol() );
+    resizeColumnToContents( usedSizeCol() );
+    resizeColumnToContents( freeSizeCol() );
+    resizeColumnToContents( totalSizeCol() );
 
+    sortByColumn( percentageBarCol(), Qt::DescendingOrder );
+
+    header()->setResizeMode( percentageBarCol(), QHeaderView::Stretch );
+    header()->setResizeMode( totalSizeCol(), QHeaderView::Fixed );
+    header()->setResizeMode( nameCol(),      QHeaderView::ResizeToContents );
+    header()->setResizeMode( usedSizeCol(),  QHeaderView::ResizeToContents );
+    header()->setResizeMode( freeSizeCol(),  QHeaderView::ResizeToContents );
 }
 
 
@@ -111,9 +122,7 @@ YQPkgDiskUsageList::updateDiskUsage()
 	    y2error( "No entry for mount point %s", partitionDu.dir.c_str() );
     }
 
-#if FIXME
-    sort();
-#endif
+    resizeColumnToContents( totalSizeCol() );
     postPendingWarnings();
 }
 
@@ -148,6 +157,8 @@ YQPkgDiskUsageList::postPendingWarnings()
 QSize
 YQPkgDiskUsageList::sizeHint() const
 {
+    QFontMetrics fms( font() );
+    return QSize( fms.width( "/var/usr/home 100% 100.32GB" ) + 50,  100 );
 
 #ifdef FIXME
         int width = header()->headerWidth()

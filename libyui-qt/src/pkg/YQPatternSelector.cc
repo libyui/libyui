@@ -147,8 +147,8 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
 					     false,	// no autoFill - need to connect to details view first
 					     false );	// no autoFilter - filterMatch() is not connected
 	Q_CHECK_PTR( _patternList );
-  layout->addWidget(_patternList);
-	 _patternList->header()->hide();
+        layout->addWidget(_patternList);
+        _patternList->header()->hide();
     }
 
     if ( ! _patternList )
@@ -168,7 +168,7 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
 				     false,	// no autoFill - need to connect to details view first
 				     false );	// no autoFilter - filterMatch() is not connected
 	Q_CHECK_PTR( _selList );
-  layout->addWidget(_selList);
+        layout->addWidget(_selList);
 	_selList->header()->hide();
     }
 
@@ -182,11 +182,11 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
 
 	QHBoxLayout * hbox = new QHBoxLayout();
 	Q_CHECK_PTR( hbox );
-  layout->addLayout(hbox);
+        layout->addLayout(hbox);
 
 	QPushButton * details_button = new QPushButton( _( "&Details..." ), vbox );
 	Q_CHECK_PTR( details_button );
-  hbox->addWidget(details_button);
+        hbox->addWidget(details_button);
 
 	connect( details_button, SIGNAL( clicked() ),
 		 this,		 SLOT  ( detailedPackageSelection() ) );
@@ -212,31 +212,27 @@ YQPatternSelector::layoutRightPane( QWidget * parent )
     //
     QWidget *upper_vbox = new QWidget(splitter);
     QVBoxLayout * layout = new QVBoxLayout(upper_vbox);
-    
+
     Q_CHECK_PTR( upper_vbox );
 
     _descriptionView = new YQPkgSelDescriptionView( upper_vbox );
     Q_CHECK_PTR( _descriptionView );
     layout->addWidget(_descriptionView);
 
-    layout->addSpacing( MARGIN );
-
-
     //
     // Disk usage
     //
 
     QWidget *lower_vbox = new QWidget(splitter);
-    layout = new QVBoxLayout(upper_vbox);
+    layout = new QVBoxLayout( lower_vbox);
 
     Q_CHECK_PTR( lower_vbox );
-    layout->addSpacing( MARGIN );
 
     _diskUsageList = new YQPkgDiskUsageList( lower_vbox );
     Q_CHECK_PTR( _diskUsageList );
     layout->addWidget(_diskUsageList);
 
-    splitter->setStretchFactor( 0, 0 );
+    splitter->setStretchFactor( 0, 3 );
     splitter->setStretchFactor( 0, 1 );
 
     return splitter;
@@ -248,13 +244,13 @@ void
 YQPatternSelector::layoutButtons( QWidget * parent )
 {
     QWidget *button_box = new QWidget(parent);
+    Q_CHECK_PTR( button_box );
+
+    parent->layout()->addWidget( button_box );
     QHBoxLayout *layout = new QHBoxLayout(button_box);
 
-    Q_CHECK_PTR( button_box );
     layout->setMargin ( MARGIN  );
     layout->setSpacing( SPACING );
-
-   button_box->setLayout(layout);
 
     QPushButton * details_button = new QPushButton( _( "&Details..." ), button_box );
     layout->addWidget(details_button);

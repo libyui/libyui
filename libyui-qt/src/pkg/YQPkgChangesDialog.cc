@@ -121,7 +121,7 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
 
     QPushButton * button = new QPushButton( acceptButtonLabel, this );
     Q_CHECK_PTR( button );
-    layout->addWidget( button );
+    hbox->addWidget( button );
     button->setDefault( true );
 
     connect( button,	SIGNAL( clicked() ),
@@ -129,14 +129,13 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
 
     hbox->addStretch();
 
-
     if ( ! rejectButtonLabel.isEmpty() )
     {
 	// Reject button ( if desired ) - usually "Cancel"
 
 	button = new QPushButton( rejectButtonLabel, this );
 	Q_CHECK_PTR( button );
-  hbox->addWidget(button);
+        hbox->addWidget(button);
 	connect( button,	SIGNAL( clicked() ),
 		 this,      	SLOT  ( reject()  ) );
 
@@ -159,7 +158,7 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, bool byAuto, bool byApp, boo
     _pkgList->clear();
 
     set<string> ignoredNames;
-    
+
     if ( ! byUser || ! byApp )
 	ignoredNames = zypp::ui::userWantedPackageNames();
 
