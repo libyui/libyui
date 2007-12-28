@@ -66,10 +66,6 @@ YQPkgConflictList::YQPkgConflictList( QWidget * parent )
     widget()->setLayout( _layout );
     clear();
 
-    QLayoutItem *b = new QSpacerItem(0, 0, QSizePolicy::Minimum,
-                                     QSizePolicy::Expanding);
-
-
     //setHeaderLabel( _( "Dependency Conflict" ) );
     //setRootIsDecorated( true );
     //setSortByInsertionSequence( true );

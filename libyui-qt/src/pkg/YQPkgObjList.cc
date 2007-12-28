@@ -24,8 +24,8 @@
 #include <QHeaderView>
 #include <QMenu>
 #include <QAction>
-//Added by qt3to4:
-#include <qevent.h>
+#include <QDebug>
+#include <QKeyEvent>
 
 #include "utf8.h"
 
@@ -129,7 +129,6 @@ YQPkgObjList::addPassiveItem( const QString & 	name,
 	if ( sizeCol()    >= 0 && size > 0L	      )
 	{
 	    QString sizeStr = size.form().c_str();
-	    sizeStr += "  ";
 	    item->setText( sizeCol(), sizeStr );
 	}
     }
@@ -776,7 +775,6 @@ YQPkgObjList::logExcludeStatistics()
     }
 }
 
-
 void
 YQPkgObjList::applyExcludeRules( QTreeWidgetItem * listViewItem )
 {
@@ -925,7 +923,7 @@ YQPkgObjListItem::init()
 	zypp::ByteCount size = zyppObj()->size();
 
 	if ( size > 0L )
-	    setText( sizeCol(),	size.asString() + "  " );
+	    setText( sizeCol(),	size.asString() );
     }
 
     if ( instVersionCol() >= 0 )
@@ -1393,7 +1391,10 @@ bool YQPkgObjListItem::operator<( const QTreeWidgetItem & otherListViewItem ) co
 	    // dangerous or noteworthy states first - e.g., "taboo" which should
 	    // seldeom occur, but when it does, it is important.
 
-	    return ( this->status() < other->status() );
+	    bool b = ( this->status() < other->status() );
+            if ( !b && this->status() == other->status() )
+                b = this->zyppObj()->name() < other->zyppObj()->name();
+            return b;
 	}
 	else if ( col == instVersionCol() ||
 		  col == versionCol() )
@@ -1440,9 +1441,6 @@ YQPkgObjListItem::setExcluded( bool excl )
 {
     _excluded = excl;
 }
-
-
-
 
 YQPkgObjList::ExcludeRule::ExcludeRule( YQPkgObjList *	parent,
 					const QRegExp &	regexp,

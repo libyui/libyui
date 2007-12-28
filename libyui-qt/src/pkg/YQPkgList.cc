@@ -27,6 +27,8 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QFile>
+#include <QTreeView>
+#include <QDebug>
 #include <QHeaderView>
 
 #include "utf8.h"
@@ -47,10 +49,8 @@ YQPkgList::YQPkgList( QWidget * parent )
     QStringList headers;
 
 
-    //headers <<  "";			_statusCol	= numCol++;
-    // _statusCol = numCol;
+    headers <<  "";			_statusCol	= numCol++;
     headers <<  _( "Package" 	);	_nameCol	= numCol++;
-    _statusCol = _nameCol;
 
     headers <<  _( "Summary" 	);	_summaryCol	= numCol++;
     headers <<  _( "Size" 	);	_sizeCol	= numCol++;
@@ -72,13 +72,28 @@ YQPkgList::YQPkgList( QWidget * parent )
     headers <<  _( "Source" );		_srpmStatusCol	= numCol++;
 #endif
     setHeaderLabels(headers);
-    saveColumnWidths();
-    sortByColumn( nameCol(), Qt::DescendingOrder );
-    //FIXME setColumnAlignment( sizeCol(), Qt::AlignRight );
+
+    setSortingEnabled( true );
+    header()->setSortIndicatorShown( true );
+    header()->setClickable( true );
+
+    sortByColumn( nameCol(), Qt::AscendingOrder );
+
     setAllColumnsShowFocus( true );
 
-    header()->setResizeMode( QHeaderView::ResizeToContents );
     setIconSize( QSize( 22, 16 ) );
+    // resize to minimum
+    setColumnWidth( statusCol(), 25 );
+    QFontMetrics fms( font() );
+    setColumnWidth( sizeCol(), fms.width( "8780.2 K" ) );
+    setColumnWidth( instVersionCol(), fms.width( " 20071220pre" ) );
+    setColumnWidth( versionCol(), fms.width( " 20071220pre" ) );
+    setColumnWidth( nameCol(), fms.width( "opensuse-release " ) );
+    setColumnWidth( summaryCol(), fms.width( "A really really long text, but not too long" ) );
+
+    header()->setResizeMode( QHeaderView::Interactive );
+
+    saveColumnWidths();
 
     createActions();
 
@@ -442,7 +457,7 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
 	    if ( instVersion.isEmpty() ) instVersion = "---";
 
 	    QString status = "[" + statusText( pkg->status() ) + "]";
-      QString format;
+            QString format;
 	    format.sprintf("%-20s %-30s | %10s | %-16s | %-16s\n",
 		     (const char *) status.toUtf8(),
 		     (const char *) pkg->text( nameCol()   ),
@@ -450,7 +465,7 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
 		     (const char *) candVersion,
 		     (const char *) instVersion
 		     );
-      file.write(format.toUtf8());
+            file.write(format.toUtf8());
 	}
 
 	item = item->nextSibling();
@@ -460,7 +475,7 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
     // Clean up
 
     if ( file.isOpen() )
-      file.close();
+        file.close();
 }
 
 
@@ -559,6 +574,7 @@ YQPkgListItem::YQPkgListItem( YQPkgList * 		pkgList,
     setSourceRpmIcon();
 
     setTextAlignment( sizeCol(), Qt::AlignRight );
+    setSizeHint( sizeCol(), QSize( QFontMetrics( pkgList->font() ).width( text( sizeCol() ) ), 10 ) );
 }
 
 
@@ -738,11 +754,11 @@ YQPkgListItem::toolTip( int col )
 
 bool YQPkgListItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
 {
+    const YQPkgListItem * other = dynamic_cast<const YQPkgListItem *> (&otherListViewItem);
+
     int col = treeWidget()->sortColumn();
     if ( col == srpmStatusCol() )
     {
-	const YQPkgListItem * other = dynamic_cast<const YQPkgListItem *> (&otherListViewItem);
-
 	if ( other )
 	{
 	    int thisPoints  = ( this->hasSourceRpm()  ? 1 : 0 ) + ( this->installSourceRpm()  ? 1 : 0 );
