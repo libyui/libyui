@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Sat Dec 29 14:25:32 CET 2007 - coolo@suse.de
+
+- some fixes in the package selector
+
+-------------------------------------------------------------------
 Fri Dec 21 18:38:53 CET 2007 - coolo@suse.de
 
 - support `CurrentItem in timezone widget
