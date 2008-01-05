@@ -70,13 +70,15 @@ void YQAlignment::setSize( int newWidth, int newHeight )
 void YQAlignment::setBackgroundPixmap( const string & pixmapFileName )
 {
     string pixmapName = pixmapFileName;
-    
+
     YAlignment::setBackgroundPixmap( pixmapName );	// Prepend path etc.
     pixmapName = YAlignment::backgroundPixmap();
 
     if ( pixmapName.empty() )	// Delete any old background pixmap
     {
-        setPalette(QPalette());
+            QPalette pal = palette();
+            pal.setBrush(backgroundRole(), QBrush());
+            setPalette(pal);
     }
     else			// Set a new background pixmap
     {
@@ -88,9 +90,9 @@ void YQAlignment::setBackgroundPixmap( const string & pixmapFileName )
 	}
 	else
 	{
-        QPalette palette;
-        palette.setBrush(backgroundRole(), QBrush(pixmap));
-        setPalette(palette);
+            QPalette pal = palette();
+            pal.setBrush(backgroundRole(), QBrush(pixmap));
+            setPalette(pal);
 	}
     }
 }
