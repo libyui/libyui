@@ -1056,8 +1056,13 @@ void YQWizard::setButtonLabel( YPushButton * button, const string & newLabel )
 
     YQWizardButton * wizardButton = dynamic_cast<YQWizardButton *> (button);
 
-    if ( wizardButton )
-        wizardButton->setVisible( !newLabel.empty() );
+    if ( wizardButton ) {
+        // QWizardButton only implements hide and show, not setVisible
+        if ( newLabel.empty() )
+            wizardButton->hide();
+        else
+            wizardButton->show();
+    }
 }
 
 
