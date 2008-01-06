@@ -106,11 +106,6 @@ public:
 
 protected:
 
-    /**
-     * (Recursively) save one item to file.
-     **/
-    void saveItemToFile( QFile &file, const YQPkgConflict * item ) const;
-
     QList<YQPkgConflict*> _conflicts;
     QVBoxLayout *_layout;
 
@@ -156,6 +151,10 @@ public:
      **/
     zypp::ProblemSolution_Ptr userSelectedResolution();
 
+    /**
+     * save one item to file.
+     **/
+    void saveToFile( QFile &file ) const;
 
 protected:
 

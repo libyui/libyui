@@ -154,7 +154,6 @@ YQPkgConflictList::askSaveToFile() const
 void
 YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 {
-#if 0
     // Open file
     QFile file(filename);
 
@@ -183,17 +182,12 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
     header += QDateTime::currentDateTime().toString( "yyyy-MM-dd hh:mm:ss" );
     header += " ####\n\n";
 
-   file.write(header.toUtf8());
+    file.write(header.toUtf8());
 
-
-    // Recursively write all items
-    int count=0;
-    const QTreeWidgetItem * item;
-
-    while ( (item = topLevelItem(count)) )
+    YQPkgConflict * conflict;
+    foreach( conflict, _conflicts )
     {
-	saveItemToFile( file, item );
-	count++;
+	conflict->saveToFile( file );
     }
 
 
@@ -207,59 +201,6 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
     if ( file.isOpen() )
 	file.close();
 
-#endif
-}
-
-
-void
-YQPkgConflictList::saveItemToFile( QFile 			&file,
-				   const YQPkgConflict * 	item ) const
-{
-#if FIXME
-    if ( ! item || ! file.isOpen() )
-	return;
-
-    // Write indentation
-    for ( int level = 0; level < item->depth(); level++ )
-	file.write( "    " );
-
-    // Write item
-
-    const QTreeWidgetItem * checkListItem = dynamic_cast<const QTreeWidgetItem *> (item);
-
-    if ( checkListItem )
-    {
-	switch ( checkListItem->type() )
-	{
-            QString buffer;
-	    case Q3CheckListItem::CheckBox:
-		buffer.sprintf( "[%c] ", checkListItem->( checkState(0) == Qt::Checked ) ? 'x' : ' ' );
-		break;
-	    case Q3CheckListItem::RadioButton:
-		sbuffer.sprintf( "(%c) ", checkListItem->( checkState(0) == Qt::Checked ) ? 'x' : ' ' );
-		break;
-	    default:
-		break;
-	}
-    file.write(buffer.toUtf8());
-    }
-
-    buffer.sprintf("%s\n", qPrintable(item->text(0)) );
-    file.write(buffer.toUtf8());
-
-    if ( item->isExpanded() )
-    {
-	// Recursively write children
-
-	const QTreeWidgetItem * child = item->firstChild();
-
-	while ( child )
-	{
-	    saveItemToFile( file, child );
-	    child = child->nextSibling();
-	}
-    }
-#endif
 }
 
 YQPkgConflict::YQPkgConflict( QWidget *		parent,
@@ -352,6 +293,29 @@ YQPkgConflict::userSelectedResolution()
     }
 
     return zypp::ProblemSolution_Ptr();		// Null pointer
+}
+
+void
+YQPkgConflict::saveToFile( QFile &file ) const
+{
+    if ( ! file.isOpen() )
+	return;
+
+    // Write item
+
+    QMap<QRadioButton*, zypp::ProblemSolution_Ptr>::const_iterator it;
+
+    file.write( problem()->description().c_str() );
+    file.write( problem()->details().c_str() );
+
+    QString buffer;
+
+    for ( it = _solutions.begin(); it != _solutions.end(); ++it )
+    {
+        QRadioButton *button = it.key();
+        buffer.sprintf( "[%c] %s", button->isChecked() ? 'x' : ' ', qPrintable( button->text() ) );
+        file.write(buffer.toUtf8());
+    }
 }
 
 #include "YQPkgConflictList.moc"
