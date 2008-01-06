@@ -306,16 +306,19 @@ YQPkgConflict::saveToFile( QFile &file ) const
     QMap<QRadioButton*, zypp::ProblemSolution_Ptr>::const_iterator it;
 
     file.write( problem()->description().c_str() );
+    file.write( "\n" );
     file.write( problem()->details().c_str() );
+    file.write( "\n" );
 
     QString buffer;
 
     for ( it = _solutions.begin(); it != _solutions.end(); ++it )
     {
         QRadioButton *button = it.key();
-        buffer.sprintf( "[%c] %s", button->isChecked() ? 'x' : ' ', qPrintable( button->text() ) );
+        buffer.sprintf( "    [%c] %s\n", button->isChecked() ? 'x' : ' ', qPrintable( button->text() ) );
         file.write(buffer.toUtf8());
     }
+    file.write( "\n\n" );
 }
 
 #include "YQPkgConflictList.moc"
