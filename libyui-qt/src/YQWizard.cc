@@ -47,6 +47,7 @@
 #include "QY2Styler.h"
 #include "QY2HelpDialog.h"
 #include <QGridLayout>
+#include <QHeaderView>
 #include <qevent.h>
 
 #include "utf8.h"
@@ -446,9 +447,7 @@ void YQWizard::layoutTreePanel()
     YUI_CHECK_NEW( _tree );
     vbox->addWidget( _tree );
 
-    //FIXME
-//     _tree->addColumn( "" );
-//     _tree->header()->hide();
+    _tree->header()->hide();
 
     _tree->setRootIsDecorated( true );
     _tree->setSortByInsertionSequence( true );
