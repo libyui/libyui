@@ -200,8 +200,9 @@ void NCComboBox::addItem( YItem * item )
 	YComboBox::addItem( item );
 
 	deflist.push_back( item->label() );
-	if ( item->selected() || index == -1 )
+	if ( item->selected()  )
 	{
+	    index = item->index();
 	    setText( item->label() );
 	}
     }
@@ -220,13 +221,8 @@ void NCComboBox::addItem( const string & label, bool selected )
     YItem * newItem = new YItem( label, selected );
     YUI_CHECK_NEW( newItem );
     
-    YComboBox::addItem( newItem );
+    addItem(newItem);
 
-    deflist.push_back( label );
-    if ( selected || index == -1 )
-    {
-	setText( label );
-    }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -302,7 +298,6 @@ void NCComboBox::setText( const string & ntext )
   modified = false;
   fldstart = 0;
   curpos   = mayedit ? buffer.length() : 0;
-  index = -1;
   setDefsze();
   tUpdate();
   Redraw();
@@ -319,17 +314,16 @@ void NCComboBox::setText( const string & ntext )
 string NCComboBox::text()
 {
     if ( modified )
-	return NCstring( buffer ).Str();
-
-    if ( index != -1 ) {
-	int idx = 0;
-	list<string>::const_iterator entry;
-	for ( entry = deflist.begin(); entry != deflist.end(); ++entry, ++idx ) {
-	    if ( idx == index ) {
-		return *entry;
-	    }
-	}
-    }
+        return NCstring( buffer ).Str();
+    //if ( index != -1 ) {
+    //    int idx = 0;
+    //    list<string>::const_iterator entry;
+    //    for ( entry = deflist.begin(); entry != deflist.end(); ++entry, ++idx ) {
+    //        if ( idx == index ) {
+    //    	return *entry;
+    //        }
+    //    }
+    //}
 
     return privText.Str();
 }
@@ -640,7 +634,7 @@ int NCComboBox::listPopup()
     wpos        at( ScreenPos() + wpos( win->height(), -1 ) );
     NCPopupList * dialog = new NCPopupList( at, "", deflist, index );
     YUI_CHECK_NEW( dialog );
-    int         idx = dialog->post();
+    int idx = dialog->post();
     if ( idx != -1 )
       setCurrentItem( idx );
     YDialog::deleteTopmostDialog();
