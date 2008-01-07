@@ -111,7 +111,7 @@ YQTimezoneSelector::YQTimezoneSelector( YWidget * parent, const string & pixmap,
 
     setWidgetRep( this );
     setMouseTracking(true);
-    d->_pix.load( QString::fromStdString( pixmap ) );
+    d->_pix.load( fromUTF8( pixmap ) );
 
     setStretchable( YD_HORIZ, true );
     setStretchable( YD_VERT,  true );
@@ -136,7 +136,7 @@ YQTimezoneSelector::YQTimezoneSelector( YWidget * parent, const string & pixmap,
         if (tooltip  == timezones.end() )
             continue;
 
-        loc.tip = QString::fromStdString( tooltip->second );
+        loc.tip = fromUTF8( tooltip->second );
         if ( arr.size() > 3 )
             loc.comment = arr[3];
         loc.latitude  = convert_pos ( arr[1].left( split_index ), 2);
@@ -342,7 +342,7 @@ QPoint YQTimezoneSelectorPrivate::pixToWindow( const QPoint &pos ) const
 
 void YQTimezoneSelector::setCurrentZone( const std::string &_zone, bool zoom )
 {
-    QString zone = QString::fromStdString( _zone );
+    QString zone = fromUTF8( _zone );
 
     if ( d->_best.zone == zone )
         return;

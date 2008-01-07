@@ -53,12 +53,12 @@ YQRichText::YQRichText( YWidget * parent, const string & text, bool plainTextMod
 
     if ( plainTextMode )
     {
-        _textBrowser->setPlainText(QString::fromUtf8(text.c_str()));
+        _textBrowser->setPlainText( fromUTF8( text ) );
         _textBrowser->setWordWrapMode( QTextOption::NoWrap );
     }
     else
     {
-        _textBrowser->setHtml(QString::fromUtf8(text.c_str()));
+        _textBrowser->setHtml( fromUTF8( text ) );
     }
   
     setValue( text );

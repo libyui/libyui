@@ -57,7 +57,7 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader )
     _qt_listView->setColumnCount(columns());
     for ( int i=0; i < columns(); i++ )
     {
-        headers << QString::fromUtf8(header(i).c_str());
+        headers << fromUTF8(header(i));
 
 	int qt_alignment = Qt::AlignLeft;
 

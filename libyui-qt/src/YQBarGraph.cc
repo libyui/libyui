@@ -124,7 +124,7 @@ YQBarGraph::paintEvent( QPaintEvent* paintEvent )
 				 textColor.green(),
 				 textColor.blue() ) );
 
-	QString txt = QString::fromStdString( seg.label() );
+	QString txt = fromUTF8( seg.label() );
 
 	if ( txt.contains( "%1" ) )
 	    txt = txt.arg( seg.value() );		// substitute variable
@@ -199,7 +199,7 @@ YQBarGraph::preferredWidth()
 
     for ( int i=0; i < segments(); i++ )
     {
-	QString txt = QString::fromStdString( segment(i).label() );
+	QString txt = fromUTF8( segment(i).label() );
 
 	if ( txt.contains( "%1" ) )
 	    txt = txt.arg( segment(i).value() );
@@ -225,7 +225,7 @@ YQBarGraph::preferredHeight()
 
     for ( int i=0; i < segments(); i++ )
     {
-	QString txt = QString::fromStdString( segment(i).label() );
+	QString txt = fromUTF8( segment(i).label() );
 
 	if ( txt.contains( "%1" ) )
 	    txt = txt.arg( segment(i).value() );
