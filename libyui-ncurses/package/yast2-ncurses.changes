@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Jan  7 12:32:14 CET 2008 - kmachalkova@suse.cz
+
+- Status line support added ( all quick access Fxx keys are now
+  shown in the bottom status line ), help popup not removed yet
+- Fixed adding and indexing of combo-box items (#346862 related)
+- 2.16.8
+
+-------------------------------------------------------------------
 Mon Dec 17 13:10:27 CET 2007 - kmachalkova@suse.cz
 
 - Reworked repositories filter: added pref. width/height methods, 
