@@ -666,6 +666,7 @@ void NCurses::ResizeEvent()
    }
    Update();
 
+   //FIXME: remove this once libncurses is upgraded to 20080105 patchlevel
    //after the resize, status line window needs to be moved to the new pos. 
    ::mvwin(myself->status_w, NCurses::lines(), 0);
    SetStatusLine(myself->status_line);
