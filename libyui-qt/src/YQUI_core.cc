@@ -275,6 +275,9 @@ YQUI::~YQUI()
 
     // Intentionally NOT calling dlclose() to libqt-mt
     // (see constructor for explanation)
+
+    qApp->exit();
+    qApp->deleteLater();
 }
 
 

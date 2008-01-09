@@ -65,7 +65,7 @@ public:
     /**
      * Destructor.
      **/
-    ~YQUI();
+    virtual ~YQUI();
 
     /**
      * Access the global Qt-UI.
@@ -265,7 +265,7 @@ protected:
      *
      * Reimplemented from YUI.
      **/
-    void idleLoop( int fd_ycp );
+    virtual void idleLoop( int fd_ycp );
 
     /**
      * Return a representation for the glyph symbol specified in UTF-8 encoding
