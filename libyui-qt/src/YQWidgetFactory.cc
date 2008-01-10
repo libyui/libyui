@@ -208,6 +208,16 @@ YQWidgetFactory::createRichText( YWidget * parent, const string & text, bool pla
 }
 
 
+YQBusyIndicator *
+YQWidgetFactory::createBusyIndicator( YWidget * parent, const string & label, int maxValue )
+{
+    YQBusyIndicator * busyIndicator = new YQBusyIndicator( parent, label, maxValue );
+    YUI_CHECK_NEW( busyIndicator );
+
+    return busyIndicator;
+}
+
+
 
 
 //

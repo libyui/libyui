@@ -51,6 +51,7 @@
 #include "YQTable.h"
 #include "YQTimeField.h"
 #include "YQTree.h"
+#include "YQBusyIndicator.h"
 
 using std::string;
 
@@ -93,6 +94,7 @@ public:
     virtual YQTable *		createTable		( YWidget * parent, YTableHeader * header );
     virtual YQProgressBar *	createProgressBar	( YWidget * parent, const string & label, int maxValue = 100 );
     virtual YQRichText *	createRichText		( YWidget * parent, const string & text = string(), bool plainTextMode = false );
+    virtual YQBusyIndicator *	createBusyIndicator	( YWidget * parent, const string & label, int maxValue = 100 );
 
     //
     // Less Common Leaf Widgets

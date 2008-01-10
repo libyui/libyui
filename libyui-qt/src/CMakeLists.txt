@@ -72,6 +72,7 @@ SET( qt_yast_plugin_SRCS
      YQWidgetFactory.cc
      YQWizard.cc
      YQWizardButton.cc
+     YQBusyIndicator.cc
      )
 
 QT4_AUTOMOC(${qt_yast_plugin_SRCS})
