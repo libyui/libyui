@@ -91,6 +91,7 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
     connect( this,	SIGNAL( currentItemChanged	( QTreeWidgetItem *, QTreeWidgetItem * ) ),
 	     this,	SLOT  ( currentItemChangedInternal( QTreeWidgetItem * ) ) );
 
+    setIconSize( QSize( 22, 16 ) );
 }
 
 
@@ -706,7 +707,7 @@ YQPkgObjList::message( const QString & text )
     Q_CHECK_PTR( item );
 
     item->setText( nameCol() >= 0 ? nameCol() : 0, text );
-    item->setBackgroundColor( QColor( 0xE0, 0xE0, 0xF8 ) );
+    item->setBackgroundColor( 0, QColor( 0xE0, 0xE0, 0xF8 ) );
 }
 
 
@@ -1047,6 +1048,7 @@ YQPkgObjListItem::setStatusIcon()
 {
     if ( statusCol() >= 0 )
     {
+        y2debug( "setStatusIcon" );
 	bool enabled = editable() && _pkgObjList->editable();
         setIcon( statusCol(), _pkgObjList->statusIcon( status(), enabled, bySelection() ) );
     }

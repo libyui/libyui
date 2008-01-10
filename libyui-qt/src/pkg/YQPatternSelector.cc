@@ -148,7 +148,7 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
 					     false );	// no autoFilter - filterMatch() is not connected
 	Q_CHECK_PTR( _patternList );
         layout->addWidget(_patternList);
-        _patternList->header()->hide();
+        //_patternList->header()->hide();
     }
 
     if ( ! _patternList )

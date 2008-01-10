@@ -263,20 +263,6 @@ public:
     int serial() const { return _serial; }
 
     /**
-     * Set the text foreground color for all columns.
-     * For more specific purposes reimiplement paintCell().
-     **/
-    void setTextColor( const QColor & col )
-	{ _textColor = col; }
-
-    /**
-     * Set the text background color for all columns.
-     * For more specific purposes reimiplement paintCell().
-     **/
-    void setBackgroundColor( const QColor & col )
-	{ _backgroundColor = col; }
-
-    /**
      * Returns a tool tip text for a specific column of this item.
      * 'column' is -1 if the mouse pointer is in the tree indentation area.
      *
@@ -384,26 +370,11 @@ public:
 
 protected:
 
-    /**
-     * Paint method. Reimplemented from @ref QTreeWidgetItem so different
-     * colors can be used.
-     *
-     * Reimplemented from QTreeWidgetItem.
-     **/
-    /*virtual void paintCell( QPainter *		painter,
-			    const QColorGroup &	colorGroup,
-			    int			column,
-			    int			width,
-			    int			alignment );
-     */
     //
     // Data members
     //
 
     int		_serial;
-
-    QColor	_textColor;
-    QColor	_backgroundColor;
 };
 
 

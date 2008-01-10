@@ -43,8 +43,9 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 {
     y2debug( "Creating pattern list" );
 
-    int numCol = 0;
+    int numCol = 1;
     QStringList headers;
+    headers << "";
     headers << "";	_statusCol	= numCol++;
 
     // Translators: "Pattern" refers to so-called "installation patterns",
@@ -56,7 +57,9 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     headers << _( "Pattern" );	_summaryCol	= numCol++;
 
+    setColumnCount( 3 );
     setHeaderLabels(headers);
+
     // Can use the same colum for "broken" and "satisfied":
     // Both states are mutually exclusive
 
@@ -66,8 +69,20 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 //     header()->setStretchEnabled( _statusCol , false );
 //     header()->setStretchEnabled( _summaryCol, true  );
 
+    setSortingEnabled( true );
+    sortByColumn( summaryCol(), Qt::AscendingOrder );
+
     setAllColumnsShowFocus( true );
-    //setTreeStepSize( 0 );
+
+    header()->setResizeMode( statusCol(), QHeaderView::Fixed );
+    header()->setResizeMode( summaryCol(), QHeaderView::Stretch );
+
+    header()->resizeSection( statusCol(), 25 );
+    setColumnWidth( statusCol(), 25 );
+    setColumnWidth( summaryCol(), 100 );
+    header()->resizeSection( 0, 0 );
+
+    //header()->setMinimumSectionSize( 25 );
 
     if ( autoFilter )
     {
@@ -309,6 +324,7 @@ YQPkgPatternListItem::init()
 	_zyppPattern = tryCastToZyppPattern( selectable()->theObj() );
 
     setStatusIcon();
+    setFirstColumnSpanned ( false );
 }
 
 
@@ -347,7 +363,7 @@ YQPkgPatternCategoryItem::YQPkgPatternCategoryItem( YQPkgPatternList *	patternLi
     , _patternList( patternList )
 {
     setText( _patternList->summaryCol(), category );
-    setBackgroundColor( CATEGORY_BACKGROUND );
+    setBackgroundColor( _patternList->summaryCol(), CATEGORY_BACKGROUND );
     setExpanded( true );
     setTreeIcon();
 }

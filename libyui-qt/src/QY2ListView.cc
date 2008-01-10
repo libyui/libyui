@@ -333,10 +333,24 @@ QY2ListView::setSortByInsertionSequence( bool sortByInsertionSequence )
 
 }
 
+#if 0
+class QY2ListViewItemDelegate : public QItemDelegate
+{
+public:
+    QY2ListViewItemDelegate( QTreeWidget *parent ) : QItemDelegate( parent ) {}
 
+    virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+    {
+        painter->save();
 
-
-
+        QY2ListViewItem *item = dynamic_cast<QY2ListViewItem *>(_view->itemFromIndex(index));
+        if ( item )
+        {
+        }
+        painter->restore();
+    }
+};
+#endif
 
 QY2ListViewItem::QY2ListViewItem( QY2ListView * 	parentListView,
 				  const QString &	text )
@@ -395,22 +409,6 @@ QY2ListViewItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
 
     return QTreeWidgetItem::operator<(otherListViewItem);
 }
-
-// void
-// QY2ListViewItem::paintCell( QPainter *		painter,
-// 			    const QColorGroup &	colorGroup,
-// 			    int			column,
-// 			    int			width,
-// 			    int			alignment )
-// {
-//     QColorGroup cg = colorGroup;
-//
-//     if ( _textColor.isValid() )		cg.setColor( QColorGroup::Text, _textColor );
-//     if ( _backgroundColor.isValid() )	cg.setColor( QColorGroup::Base, _backgroundColor );
-//
-//     QTreeWidgetItem::paintCell( painter, cg, column, width, alignment );
-// }
-
 
 QY2CheckListItem::QY2CheckListItem( QY2ListView * 		parentListView,
 				    const QString &		text )

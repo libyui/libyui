@@ -253,7 +253,7 @@ YQPkgPatchList::message( const QString & text )
     Q_CHECK_PTR( item );
 
     item->setText( 1, text );
-    item->setBackgroundColor( QColor( 0xE0, 0xE0, 0xF8 ) );
+    item->setBackgroundColor( 0, QColor( 0xE0, 0xE0, 0xF8 ) );
 }
 
 
@@ -482,9 +482,9 @@ YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList *	patchList,
 
     switch ( _patchCategory )
     {
-	case YQPkgYaSTPatch:		setTextColor( QColor( 0, 0, 0xC0 ) );	break;	// medium blue
-	case YQPkgSecurityPatch:	setTextColor( Qt::red );		break;
-	case YQPkgRecommendedPatch:	setTextColor( QColor( 0, 0, 0xC0 ) );	break;	// medium blue
+	case YQPkgYaSTPatch:		setTextColor( 0, QColor( 0, 0, 0xC0 ) );	break;	// medium blue
+	case YQPkgSecurityPatch:	setTextColor( 0, Qt::red );		break;
+	case YQPkgRecommendedPatch:	setTextColor( 0, QColor( 0, 0, 0xC0 ) );	break;	// medium blue
 	case YQPkgOptionalPatch:	break;
 	case YQPkgDocumentPatch:	break;
 	case YQPkgUnknownPatchCategory: break;
