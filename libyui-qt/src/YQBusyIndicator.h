@@ -22,12 +22,13 @@
 
 #include <QFrame>
 #include <QTimer>
+#include <QLabel>
 #include "YBusyIndicator.h"
 
 
 class QString;
 class YQWidgetCaption;
-class QProgressBar;
+class BusyBar;
 
 class YQBusyIndicator : public QFrame, public YBusyIndicator
 {
@@ -111,7 +112,7 @@ public:
 protected:
 
     YQWidgetCaption *	_caption;
-    QProgressBar *	_qt_progressbar;
+    BusyBar *		_bar;
     QTimer *		_timer;
     int			_timeout;
 
@@ -119,5 +120,41 @@ private slots:
     void setStalled();
 
 };
+
+
+
+
+
+class BusyBar : public QFrame
+{
+    Q_OBJECT
+public:
+    BusyBar(QWidget * parent);
+
+
+    /**
+     * start moving bar animation
+     **/
+    void run();
+
+    /**
+     * stop moving bar animation 
+     **/
+    void stop();
+
+protected:
+    void paintEvent(QPaintEvent *event);
+
+private:
+    float 	_position;		// the position of the bar 
+    bool 	_rightwards;		// direction the bar moves
+    QTimer *	_timer;
+    bool	_alive;
+
+private slots:
+    void	update();
+
+};
+
 
 #endif // YQBusyIndicator_h

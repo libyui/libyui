@@ -1,3 +1,10 @@
+Fri Jan 11 16:47:00 CET 2008 - tgoettlicher@suse.de
+
+- BusyIndicator facelift
+- V 2.16.16
+
+-------------------------------------------------------------------
+
 Thu Jan 10 17:28:00 CET 2008 - tgoettlicher@suse.de
 
 - added BusyIndicator widget (fate #302559)

@@ -17,11 +17,15 @@
 /-*/
 
 
-#include <qprogressbar.h>
-#include <QVBoxLayout>
+//#include <qprogressbar.h>
+#include <QLabel>
+#include <QPalette>
 #include <QTimer>
+#include <QVBoxLayout>
+#include <QFrame>
 
-#include <qlabel.h>
+#include <QPainter>
+
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
@@ -31,6 +35,76 @@ using std::max;
 #include "YQUI.h"
 #include "YQBusyIndicator.h"
 #include "YQWidgetCaption.h"
+
+
+#define REPAINT_INTERVAL	100
+#define STEP_SIZE 		.05
+#define MINIMUM_WITDH		100
+#define MINIMUM_HEIGHT		24
+
+
+BusyBar::BusyBar(QWidget *parent)
+	: QFrame(parent)
+	, _position(.5)
+	, _rightwards(true)
+	, _alive(true)
+{
+    setMinimumSize(MINIMUM_WITDH, MINIMUM_HEIGHT);
+
+    _timer = new QTimer(this);
+    connect(_timer, SIGNAL(timeout()), this, SLOT(update()));  
+    _timer->start(REPAINT_INTERVAL);
+
+    setFrameStyle (QFrame::Panel |  QFrame::Sunken );
+    setLineWidth(2);
+    setMidLineWidth(2);
+}
+
+void BusyBar::update()
+{
+    if (!_alive)
+	return;
+
+    if (_position > 1.0 - STEP_SIZE || _position < STEP_SIZE )
+	_rightwards = !_rightwards;
+
+    if (_rightwards)
+	_position += STEP_SIZE;
+    else
+	_position -= STEP_SIZE;
+
+    repaint();
+}
+
+void BusyBar::run()
+{
+    _alive=true;
+}
+
+void BusyBar::stop()
+{
+    _alive=false;
+}
+
+void BusyBar::paintEvent(QPaintEvent * e)
+{
+
+    QPalette palette = QApplication::palette();	
+    QColor foreground = palette.color(QPalette::Active, QPalette::Highlight);
+    QColor background = palette.color(QPalette::Active, QPalette::Base);
+	
+    QPainter painter(this);
+    QLinearGradient gradient(0, 0, width()-1, 0);
+    gradient.setColorAt(min(_position - STEP_SIZE, 0.0), background );
+    gradient.setColorAt(_position, foreground );
+    gradient.setColorAt(max(_position + STEP_SIZE, 1.0), background );
+
+    painter.setBrush(gradient);
+    painter.setPen(Qt::NoPen);
+    painter.drawRect(rect());
+
+    QFrame::paintEvent(e);
+}
 
 
 YQBusyIndicator::YQBusyIndicator( YWidget * 	parent,
@@ -57,12 +131,11 @@ YQBusyIndicator::YQBusyIndicator( YWidget * 	parent,
     YUI_CHECK_NEW( _caption );
     layout->addWidget( _caption );
 
-    _qt_progressbar = new QProgressBar( this );
-    _qt_progressbar->setRange(0, 0);
-    YUI_CHECK_NEW( _qt_progressbar );
-    layout->addWidget( _qt_progressbar );
-
-    _caption->setBuddy( _qt_progressbar );
+    _bar = new BusyBar( this );
+    YUI_CHECK_NEW ( _bar );
+    layout->addWidget( _bar );
+    _caption->setBuddy( _bar );
+	
 }
 
 
@@ -84,14 +157,13 @@ void YQBusyIndicator::setAlive( bool newAlive )
     YBusyIndicator::setAlive( newAlive );
     if (newAlive)
     {
-    	_qt_progressbar->setRange(0, 0);
+	_bar->run();
 	_timer->stop();
 	_timer->start(_timeout);
     }
     else
     {
-    	_qt_progressbar->setRange(0, 1);
-	_qt_progressbar->reset();
+	_bar->stop();
 	_timer->stop();
     }
 }
@@ -113,7 +185,7 @@ void YQBusyIndicator::setTimeout( int newTimeout )
 void YQBusyIndicator::setEnabled( bool enabled )
 {
     _caption->setEnabled( enabled );
-    _qt_progressbar->setEnabled( enabled );
+    _bar->setEnabled( enabled );
     YWidget::setEnabled( enabled );
 }
 
@@ -141,7 +213,7 @@ void YQBusyIndicator::setSize( int newWidth, int newHeight )
 
 bool YQBusyIndicator::setKeyboardFocus()
 {
-    _qt_progressbar->setFocus();
+    _bar->setFocus();
 
     return true;
 }
