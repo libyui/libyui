@@ -92,6 +92,8 @@ public slots:
 
     void clear();
 
+    void relayout();
+
 public:
 
     /**
@@ -156,6 +158,12 @@ public:
      **/
     void saveToFile( QFile &file ) const;
 
+protected slots:
+    void detailsExpanded();
+
+signals:
+    void expanded();
+
 protected:
 
     /**
@@ -174,6 +182,7 @@ protected:
     QLabel *		_resolutionsHeader;
     QList<zypp::ProblemSolution_Ptr> _resolutions;
     QMap<QRadioButton*, zypp::ProblemSolution_Ptr> _solutions;
+    QMap<QLabel*, zypp::ProblemSolution_Ptr> _details;
     QVBoxLayout *_layout;
 };
 

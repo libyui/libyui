@@ -24,6 +24,7 @@
 #include <QMessageBox>
 #include <QRadioButton>
 #include <QList>
+#include <QToolTip>
 #include <QDebug>
 #include <QVBoxLayout>
 
@@ -66,9 +67,9 @@ YQPkgConflictList::YQPkgConflictList( QWidget * parent )
     widget()->setLayout( _layout );
     clear();
 
+    widget()->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
+
     //setHeaderLabel( _( "Dependency Conflict" ) );
-    //setRootIsDecorated( true );
-    //setSortByInsertionSequence( true );
 }
 
 
@@ -97,10 +98,6 @@ YQPkgConflictList::fill( zypp::ResolverProblemList problemList )
     clear();
     string text;
 
-    // for some weired reason, the layout's minSize is still 18x18 even after 3000 pixels
-    // inserted, so we have to do the math on our own
-    QSize minSize = QSize( _layout->margin() * 2, _layout->margin() * 2 );
-
     zypp::ResolverProblemList::iterator it = problemList.begin();
 
     while ( it != problemList.end() )
@@ -108,18 +105,31 @@ YQPkgConflictList::fill( zypp::ResolverProblemList problemList )
 	YQPkgConflict *conflict = new YQPkgConflict( widget(), *it );
 	Q_CHECK_PTR( conflict );
 
-        minSize = minSize.expandedTo( conflict->minimumSizeHint() );
-        minSize.rheight() += conflict->minimumSizeHint().height() + _layout->spacing();
+        connect( conflict, SIGNAL( expanded() ),
+                 SLOT( relayout() ) );
         _layout->addWidget( conflict );
         _conflicts.push_back( conflict );
 	++it;
     }
     _layout->addStretch( 1 );
-
-    widget()->resize( minSize );
-    setWidgetResizable( false );
+    relayout();
 }
 
+void YQPkgConflictList::relayout()
+{
+     // for some weired reason, the layout's minSize is still 18x18 even after 3000 pixels
+    // inserted, so we have to do the math on our own
+    QSize minSize = QSize( _layout->margin() * 2, _layout->margin() * 2 );
+
+    YQPkgConflict * conflict;
+    foreach( conflict, _conflicts )
+    {
+        minSize = minSize.expandedTo( conflict->minimumSizeHint() );
+        minSize.rheight() += conflict->minimumSizeHint().height() + _layout->spacing();
+    }
+
+    widget()->resize( minSize );
+}
 
 void
 YQPkgConflictList::applyResolutions()
@@ -215,10 +225,10 @@ YQPkgConflict::YQPkgConflict( QWidget *		parent,
     formatHeading();
     QLabel *label = new QLabel( fromUTF8 ( _problem->details() ), this );
     _layout->addWidget( label );
-    //YQPkgConflictList::dumpList( this,  );
 
     addSolutions();
     setMinimumSize( _layout->minimumSize() );
+    setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 }
 
 
@@ -270,8 +280,46 @@ YQPkgConflict::addSolutions()
         _solutions[ s ] = *it;
         vbox->addWidget( s );
 
+        QString details = fromUTF8( ( *it )->details() );
+        if ( !details.isEmpty() )
+        {
+            QStringList lines = details.split( "\n" );
+            if ( lines.count() > 7 )
+            {
+                details = "<qt>";
+                for ( int i = 0; i < 4; i++ )
+                    details += lines[i] + "<br>\n";
+                details += _( "<a href='/'>%1 more...</a>" ).arg( lines.count() - 4 );
+            }
+            QLabel * d = new QLabel( details, this );
+            connect( d, SIGNAL( linkActivated ( const QString & ) ),
+                     SLOT( detailsExpanded() ) );
+            connect( d, SIGNAL( linkHovered ( const QString & ) ),
+                     SLOT( detailsTooltip() ) );
+
+            QHBoxLayout *hbox = new QHBoxLayout();
+            hbox->addSpacing( 15 );
+            hbox->addWidget( d );
+            vbox->addLayout( hbox );
+            _details[ d ] = *it;
+        }
 	++it;
     }
+}
+
+void
+YQPkgConflict::detailsExpanded()
+{
+    QLabel *obj = qobject_cast<QLabel*>( sender() );
+    if ( !obj || !_details.contains( obj ) )
+        return;
+
+    QSize _size = size();
+    int oldHeight = obj->height();
+    obj->setText( fromUTF8( _details[obj]->details() ) );
+
+    resize( _size.width(), _size.height() + ( obj->minimumSizeHint().height() - oldHeight ) );
+    emit expanded();
 }
 
 zypp::ProblemSolution_Ptr
@@ -315,7 +363,9 @@ YQPkgConflict::saveToFile( QFile &file ) const
     for ( it = _solutions.begin(); it != _solutions.end(); ++it )
     {
         QRadioButton *button = it.key();
-        buffer.sprintf( "    [%c] %s\n", button->isChecked() ? 'x' : ' ', qPrintable( button->text() ) );
+        zypp::ProblemSolution_Ptr solution = it.value();
+        buffer.sprintf( "    [%c] %s\n", button->isChecked() ? 'x' : ' ', qPrintable( fromUTF8( solution->description() ) ) );
+        buffer += fromUTF8( solution->details() );
         file.write(buffer.toUtf8());
     }
     file.write( "\n\n" );
