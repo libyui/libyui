@@ -104,7 +104,7 @@ class NCDialog : public YDialog, public NCWidget {
 
     void processInput( int timeout_millisec );
 
-    bool describeFunctionKeys( string & helpText );
+    std::map<int, string> describeFunctionKeys();
 
     wint_t getinput();		// get the input (respect terminal encoding)
 

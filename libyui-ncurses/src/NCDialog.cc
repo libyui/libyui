@@ -532,9 +532,7 @@ void NCDialog::doneMultipleChanges()
     --inMultiDraw_i;
   } else {
     inMultiDraw_i = 0;
-    string text = "";
-    describeFunctionKeys( text );
-    NCurses::SetStatusLine( text );
+    NCurses::SetStatusLine( describeFunctionKeys() );
     Update();
   }
 }
@@ -1203,6 +1201,7 @@ void NCDialog::processInput( int timeout_millisec )
       }
       break;
 
+    #if 0
      case KEY_F(1):
 	 if ( !helpPopup )
 	 {
@@ -1211,13 +1210,13 @@ void NCDialog::processInput( int timeout_millisec )
 	     bool hasF1 = describeFunctionKeys( helpText );
 	     if ( hasF1 )
 	     {
-		 // part of help for textmode navigation (shown if there is further help available) 
-		 helpIntro = _( "<p>Press <b>F1</b> again to get further help or <b>ESC</b> to close this dialog.</p>" );
+	         // part of help for textmode navigation (shown if there is further help available) 
+	         helpIntro = _( "<p>Press <b>F1</b> again to get further help or <b>ESC</b> to close this dialog.</p>" );
 	     }
 	     else
 	     {
-                 // part of help for text mode navigation
-		 helpIntro =  _( "<p>Press <b>F1</b> or <b>ESC</b> to close this dialog.</p>" );
+               // part of help for text mode navigation
+	       helpIntro =  _( "<p>Press <b>F1</b> or <b>ESC</b> to close this dialog.</p>" );
 	     }
 		 
 	     helpPopup = new NCPopupInfo( wpos( NCurses::lines()/3, NCurses::cols()/3 ),
@@ -1246,13 +1245,14 @@ void NCDialog::processInput( int timeout_millisec )
 	     }
 	 }
 	 break;
+    #endif
 
     default:
 	// only handle keys if the help popup is not existing or not visible
 	if ( !helpPopup
 	      || (helpPopup && !helpPopup->isVisible()) )
 	{
-	    if ( ch >= KEY_F(2) && ch <= KEY_F(24) )
+	    if ( ch >= KEY_F(1) && ch <= KEY_F(24) )
 	    {
 		pendingEvent = getHotkeyEvent( ch );
 	    }
@@ -1383,17 +1383,14 @@ ostream & operator<<( ostream & STREAM, const NCDialog * OBJ )
 //
 //
 //	METHOD NAME : NCDialog::describeFunctionKeys
-//	METHOD TYPE : string
+//	METHOD TYPE : std::map <int, string>
 //
-//	DESCRIPTION : get all PushButtons and MenuButtons with `opt(`key_Fn)
-//		      and create a text like F1: Help, F2: Info and so on
+//	DESCRIPTION : Get all PushButtons and MenuButtons with `opt(`key_Fn)
+//		      and create a map, for example: $[  1: Help, 2: Info,... ]
+//		      NCurses::SetStatusLine will process it
 //
-bool NCDialog::describeFunctionKeys( string & helpText )
+std::map <int, string> NCDialog::describeFunctionKeys( )
 {
-    string text = "";
-    char key[20];
-    YCPString label( "" );
-    bool hasF1 = false;
     std::map<int, string> fkeys;
 
     for ( tnode<NCWidget*> * c = this->Next(); c; c = c->Next() )
@@ -1404,30 +1401,12 @@ bool NCDialog::describeFunctionKeys( string & helpText )
 	{
 	    // Retrieve the widget's "shortcut property" that describes
 	    // whatever it is - regardless of widget type (PushButton, ...)
-	    //YCPSymbol propertyName( w->shortcutProperty() );
-	    //YCPValue  propertyValue = w->queryWidget( propertyName );
-	    // Get rid of unwanted '&' shortcut markers
-	    //string desc = YShortcut::cleanShortcutString(  propertyValue->asString()->value() );
 
-	    if ( w->functionKey() == 1 )
-	    {
-		hasF1 = true;
-	    }
 	    fkeys[ w->functionKey() ] = w->debugLabel();
 	}
     }
-    // create the text with sorted F-keys
-    std::map<int, string>::iterator it;
 
-    for ( it = fkeys.begin(); it != fkeys.end(); ++it )
-    {
-	sprintf( key, "F%d: ", (*it).first );
-	text += key + (*it).second + " ";
-    }
-
-    helpText = text;
-
-    return hasF1;
+    return fkeys;
 }
 
 /******************************************************************

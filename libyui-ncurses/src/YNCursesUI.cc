@@ -313,7 +313,7 @@ void YNCursesUI::showDialog( YDialog * dialog ) {
   if ( dlg )
   {
     dlg->showDialog();
-    dlg->dumpWidgetTree();
+    //dlg->dumpWidgetTree();
   }
 }
 

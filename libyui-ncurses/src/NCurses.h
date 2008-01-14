@@ -160,7 +160,8 @@ class NCurses {
     WINDOW * title_w;
     WINDOW * status_w;
     string   title_t;
-    string   status_line;
+
+    std::map <int,string>   status_line;
 
     NCstyle *      styleset;
     NCursesPanel * stdpan;
@@ -196,7 +197,7 @@ class NCurses {
     static void Redraw();
     static void Refresh();
     static void SetTitle( const string & str );
-    static void SetStatusLine( const string & str );
+    static void SetStatusLine( std::map <int,string> fkeys );
     static void ScreenShot( const string & name = "screen.shot" );
 
     static void drawTitle();

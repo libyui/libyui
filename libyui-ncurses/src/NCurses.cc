@@ -522,7 +522,8 @@ void NCurses::SetTitle( const string & str )
     ::wclear( myself->title_w );
 
     NCMIL << "Draw title called" << endl;
-    
+
+    #if 0    
     setTextdomain( "packages" );
     // part of title (headline) of the textmode yast
     NCstring helpF1 ( _( "Press F1 for Help" ) );
@@ -540,21 +541,38 @@ void NCurses::SetTitle( const string & str )
     {
 	::mvwaddwstr( myself->title_w, 0, s, (wchar_t *)helpF1.str().c_str() );
     }
+    #endif
+
     ::mvwaddstr( myself->title_w, 0, 1, myself->title_t.c_str() );
     ::wnoutrefresh( myself->title_w );
   }
 
 }
 
-void NCurses::SetStatusLine( const string & str ) 
+void NCurses::SetStatusLine( std::map <int,string> fkeys ) 
 {
   
   if ( myself && myself->status_w ) {
-    myself->status_line = str;
+    myself->status_line = fkeys;
     ::wbkgd( myself->status_w, myself->style()(NCstyle::AppTitle) );
     ::werase( myself->status_w );
 
-    ::mvwaddstr( myself->status_w, 0, 1, myself->status_line.c_str() );
+    char key[10];
+    char value[100];
+
+    std::map<int, string>::iterator it;
+    for ( it = fkeys.begin(); it != fkeys.end(); ++it )
+    {
+        sprintf( key, " F%d ", (*it).first );
+        //reverse F-key to make it more visible
+        ::wattron( myself->status_w, A_REVERSE); 
+        ::waddstr( myself->status_w, key );
+        ::wattroff( myself->status_w, A_REVERSE); 
+
+        sprintf( value, "%s ", (*it).second.c_str() );
+        ::waddstr( myself->status_w, value );
+    }
+
     ::wnoutrefresh( myself->status_w );
   }
 }
