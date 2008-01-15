@@ -297,8 +297,6 @@ bool NCPkgPopupDeps::showSolutions( int index )
 	return false;
 
     solutionw->startMultipleChanges();
-#warning FIXME: is this necessary if the next step is deleteAllItems()?
-    solutionw->clearItems ();
     solutionw->deleteAllItems();
     
     zypp::ResolverProblem_Ptr problem = problems[index].first;
