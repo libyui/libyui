@@ -7,6 +7,9 @@
 #include <QPainter>
 #include <QSvgRenderer>
 #include <QDebug>
+#include <iostream>
+
+using namespace std;
 
 QY2Styler *QY2Styler::_self = 0;
 
@@ -68,22 +71,24 @@ bool QY2Styler::eventFilter( QObject * obj, QEvent * ev )
 {
     QString name = obj->objectName();
 
-    if ( ev->type() != QEvent::Resize )
+    if ( ev->type() != QEvent::Resize && ev->type() != QEvent::Show )
         return QObject::eventFilter( obj, ev );
-
-    qDebug( "eventFilter %s %s %d", qPrintable( name ), obj->metaObject()->className(), ev->type() );
 
     if ( !_backgrounds.contains( name ) )
-        return QObject::eventFilter( obj, ev );
-
-    qDebug( "eventFilter %s %s %d", qPrintable( name ), obj->metaObject()->className(), ev->type() );
+       return QObject::eventFilter( obj, ev );
 
     QWidget *wid = qobject_cast<QWidget*>( obj );
+
+    if (! wid->isVisible() )
+        return QObject::eventFilter( obj, ev );
+
+    //qDebug() << "eventFilter " << qPrintable( name ) << " " << obj->metaObject()->className() << " " << wid->isVisible();
+
     if ( _backgrounds[name].pix.isNull() )
     {
         QString back = _backgrounds[ name ].filename;
         _backgrounds[ name ].pix = QImage( back );
-        qDebug( "loading %s for %s", qPrintable( back ), qPrintable( name ) );
+        //qDebug() << "loading " << qPrintable( back ) << " for " << qPrintable( name );
     }
 
     wid->setAutoFillBackground( true );
@@ -99,6 +104,7 @@ bool QY2Styler::eventFilter( QObject * obj, QEvent * ev )
     QPainter pain( &result );
     if ( !_backgrounds[ name ].filename.endsWith( ".svg" ) )
     {
+        qDebug() << "scale " << qPrintable( name ) << " " << fillRect.width() << " " << fillRect.height();
         QImage scaled = _backgrounds[name].pix.scaled( fillRect.width(), fillRect.height() );
         pain.drawImage( fillRect.topLeft(), scaled, QRectF(QPointF(0,0), scaled.size()), Qt::OrderedAlphaDither);
     } else {
