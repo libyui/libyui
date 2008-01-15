@@ -196,13 +196,13 @@ YQDialog::setSize( int newWidth, int newHeight )
     if ( newHeight > qApp->desktop()->height() )
 	newHeight = qApp->desktop()->height();
 
+    resize( newWidth, newHeight );
+
     if ( hasChildren() )
     {
+        firstChild()->setSize( newWidth, newHeight );
         ( ( QWidget* )firstChild()->widgetRep() )->show();
-	firstChild()->setSize( newWidth, newHeight );
     }
-
-    resize( newWidth, newHeight );
 }
 
 
