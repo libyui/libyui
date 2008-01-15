@@ -13,12 +13,13 @@
    File:       NCPkgPopupDeps.cc
 
    Author:     Gabriele Strattner <gs@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
+   Maintainer: Bubli <kmachalkova@suse.cz>
 
 /-*/
 #include "Y2Log.h"
 #include "NCPkgPopupDeps.h"
 
+#include "NCAlignment.h"
 #include "NCTree.h"
 #include "YDialog.h"
 #include "NCLayoutBox.h"
@@ -125,57 +126,48 @@ NCPkgPopupDeps::~NCPkgPopupDeps()
 void NCPkgPopupDeps::createLayout( )
 {
 
-  YWidgetOpt opt;
-
   // vertical split is the (only) child of the dialog
   NCLayoutBox * vSplit = new NCLayoutBox( this, YD_VERT );
 
-  // addChild( ) is obsolete (handled by new libyui)
   // FIXME
   // opt.vWeight.setValue( 40 );
 
-  opt.notifyMode.setValue( true );
+  vSplit->setNotify( true );
 
-  new NCSpacing( vSplit, YD_VERT, true, 0.8 );
+  new NCSpacing( vSplit, YD_VERT, false, 1 );
 
   head = new NCLabel( vSplit, "", true, false );	// isHeading = true
 
   //vSplit->addChild( new NCSpacing( vSplit, opt, 0.4, false, true ) );
-  new NCSpacing( vSplit, YD_VERT, true, 0.4 );
+  new NCSpacing( vSplit, YD_VERT, false, 1 );
 
   // add the list containing packages with unresolved dependencies
   problemw = new NCProblemSelectionBox( vSplit, _("&Problems"),	this);
-
-  opt.isHStretchable.setValue( true );
+  problemw->setStretchable( YD_HORIZ, true );
 
   //vSplit->addChild( new NCSpacing( vSplit, opt, 0.2, false, true ) );
-  new NCSpacing( vSplit, YD_VERT, true, 0.2 );	// stretchable = true
+  new NCSpacing( vSplit, YD_VERT, false, 1 );	
 
-  details =  new NCInputField( vSplit,
-			       "",
-			       false );		// passwordMode = false
-  details->setInputMaxLength( 200 );
-  // FIXME
-  //details->setMaxFld( 200 );
-  
+  NCAlignment * left = new NCAlignment( vSplit, YAlignBegin, YAlignUnchanged );
+
+   // heading = false, outputField = true
+  details =  new NCLabel ( left,"", false, true );
+			       
   //vSplit->addChild( new NCSpacing( vSplit, opt, 0.8, false, true ) );
-  new NCSpacing( vSplit, YD_VERT, true, 0.8 );	// stretchable = true
+  new NCSpacing( vSplit, YD_VERT, false, 1 );	// stretchable = true
   
   // add the package list containing the dependencies
   solutionw = new NCSolutionSelectionBox ( vSplit, _("Possible &Solutions"), this);
   
-  opt.isHStretchable.setValue( false );
-  
   //vSplit->addChild( new NCSpacing( vSplit, opt, 0.6, false, true ) );
-  new NCSpacing( vSplit, YD_VERT, false, 0.6 );	// stretchable = false
+  new NCSpacing( vSplit, YD_VERT, false, 1 );	// stretchable = false
   
   NCLayoutBox * hSplit = new NCLayoutBox( vSplit, YD_HORIZ );
 
-  opt.isHStretchable.setValue( true );
 
   // add the solve button
-  opt.key_Fxx.setValue( 10 );
   solveButton = new NCPushButton( hSplit, NCPkgNames::SolveLabel() );
+  solveButton->setFunctionKey( 10 );
   //solveButton->setId( NCPkgNames::Solve () );
   YStringWidgetID  * solveID = new YStringWidgetID("solve");
   solveButton->setId( solveID );
@@ -184,12 +176,13 @@ void NCPkgPopupDeps::createLayout( )
   new NCSpacing( hSplit, YD_HORIZ, true, 0.2 ); 	// stretchable = true
 
   // add the cancel button
-  opt.key_Fxx.setValue( 9 );
   cancelButton = new NCPushButton( hSplit, NCPkgNames::CancelLabel() );
+  cancelButton->setFunctionKey( 9 );
   // cancelButton->setId( NCPkgNames::Cancel () );
   YStringWidgetID  * cancelID = new YStringWidgetID("cancel");
   cancelButton->setId( cancelID );
   
+  new NCSpacing( vSplit, YD_VERT, false, 1 );	// stretchable = false
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -311,8 +304,7 @@ bool NCPkgPopupDeps::showSolutions( int index )
     zypp::ResolverProblem_Ptr problem = problems[index].first;
     zypp::ProblemSolution_Ptr user_solution = problems[index].second;
 
-    details->setValue( problem->details() );
-    details->setCurPos( 0 );
+    details->setText( problem->details() );
     
     zypp::ProblemSolutionList solutions = problem->solutions ();
     zypp::ProblemSolutionList::iterator

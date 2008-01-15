@@ -13,7 +13,7 @@
    File:       NCPkgPopupDeps.h
 
    Author:     Gabriele Strattner <gs@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
+   Maintainer: Bubli <kmachalkova@suse.cz>
 
 /-*/
 #ifndef NCPkgPopupDeps_h
@@ -76,7 +76,7 @@ private:
 
     NCLabel * head;			// the headline
 
-    NCInputField *details;		// problem details
+    NCLabel *details;		// problem details
     
     NCPackageSelector * packager;	// connection to the package selector
     
