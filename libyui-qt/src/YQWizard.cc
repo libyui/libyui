@@ -910,7 +910,8 @@ void YQWizard::addMenu( const string & text,
 	YUI_CHECK_NEW( menu );
 
 	_menuIDs.insert( fromUTF8( id ), menu );
-	//FIXME _menuBar->insertItem( fromUTF8( text ), menu );
+        _menuBar->addMenu( menu );
+        menu->setTitle( fromUTF8( text ) );
 
 	connect( menu, SIGNAL( activated    ( int ) ),
 		 this, SLOT  ( sendMenuEvent( int ) ) );
@@ -954,7 +955,7 @@ void YQWizard::addMenuEntry( const string & parentMenuID,
     {
 	int id = _menuEntryIDs.size();
 	_menuEntryIDs.push_back( idString );
-	//FIXME parentMenu->insertItem( fromUTF8( text ), id );
+        parentMenu->addAction( fromUTF8( text ) );
     }
     else
     {
