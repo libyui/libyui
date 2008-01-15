@@ -180,6 +180,15 @@ NCWidgetFactory::createProgressBar( YWidget * parent, const string & label, int 
     return progressBar;
 }
 
+NCBusyIndicator *
+NCWidgetFactory::createBusyIndicator( YWidget * parent, const string & label, int timeout)
+{
+   NCBusyIndicator * busyIndicator = new NCBusyIndicator( parent, label, timeout );
+   YUI_CHECK_NEW( busyIndicator );
+
+   return busyIndicator;
+}
+
 NCRichText *
 NCWidgetFactory::createRichText( YWidget * parent, const string & text, bool plainTextMode )
 {

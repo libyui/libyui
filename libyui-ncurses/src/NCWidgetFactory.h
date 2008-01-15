@@ -23,6 +23,7 @@
 #include "YWidgetFactory.h"
 
 #include "NCAlignment.h"
+#include "NCBusyIndicator.h"
 #include "NCCheckBox.h"
 #include "NCCheckBoxFrame.h"
 #include "NCComboBox.h"
@@ -119,6 +120,9 @@ public:
     virtual NCProgressBar *	createProgressBar	( YWidget * parent,
 							  const string & label,
 							  int maxValue = 100 );
+    virtual NCBusyIndicator *   createBusyIndicator	( YWidget *parent,
+							  const string & label,
+							  int timeout = 100 );
     
     virtual NCRichText *	createRichText		( YWidget * parent,
 							  const string & text = string(),
