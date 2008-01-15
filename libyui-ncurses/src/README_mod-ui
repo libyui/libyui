@@ -16,12 +16,6 @@ TO DO - Common issues:
 - call YUI_CHECK_NEW(() for all with 'new' created widgets, e.g. NCPopuptextEntry
 
 
-NCTree
-------
-YItemIterator itemsBegin()/itemsEnd() 			used to iterate over toplevel items
-YItemIterator YTreeItem::childrenBegin()/childrenEnd()  used to iterate over children
-
-
 EVENTs
 ------
 TODO: 	remove YCPValue result; from NCursesEvent (check where 'result' is used,
@@ -33,13 +27,6 @@ SelectionBox
 selectItem() added  
 addItem (string, bool ) added 	
 TODO: 	test NCPkgPopupDeps which uses addItem(string, bool) 
-
-
-NCComboBox
-----------
-Don't create widget NCPopupList on the stack!!!
-This leads to segfault when widgets are deleted from YUI at the end!
-call YDialog::deleteTopmostDialog(); to delete NCPopupList
 
 
 NCPopupMenu/NCMenuButton
@@ -69,15 +56,6 @@ param 'initialText' removed
 TODO: 	what's the difference between InputMaxLength and maxInputLength ???
 
 
-NCIntField
-----------
-Don't create NCPopupTextEntry on the stack !!!
-
-
-NCPopupTextEntry
-----------------
-YCPValues removed
-
 
 NCDialog
 --------
@@ -100,23 +78,6 @@ NCAskForDirectory/NCAskForFile
 - Don't use widget IDs; compare widget pointers instead
 
 
-NCMultiLineEdit
----------------
-param 'initialText' removed
-
-
-NCPushButton
-------------
-don't call isDefaultButton() in constructor but in setSize()
-setFunctionHotKey() works
-
-
-NCTable/NCPkgTable
-------------------
-TODO: initialize header in constructor, set each header item separately 
-      setHeader(): call YTable::setTableHeader ???
-      NCPopupMenu
-
 
 NCMenuButton/NCPopupMenu
 ------------------------
@@ -126,13 +87,3 @@ NCMenuButton/NCPopupMenu
 
 TODO: test replace widget      
 
-NCRichText
-----------
-TODO: hyper links don't yet work
-
-
-PackageSelector
---------------
-after terminating the package selector:
-
-[ui] YUI_core.cc(~YUI):83 2 open dialogs left over

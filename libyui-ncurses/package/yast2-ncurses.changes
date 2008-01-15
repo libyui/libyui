@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Tue Jan 15 16:36:35 CET 2008 - kmachalkova@suse.cz
+
+- 'Press F1 for Help' in window title is gone
+- No Fxx keys help pop-up (all the information moved to the bottom 
+  status line)
+- Fxx key labels rendered in reversed colours 
+- Improved dependency conflict popup layout (Label (`opt(`outputField 
+  instead of TextEntry, spacing re-arrangements) (#350238)
+
+-------------------------------------------------------------------
 Mon Jan  7 12:32:14 CET 2008 - kmachalkova@suse.cz
 
 - Status line support added ( all quick access Fxx keys are now

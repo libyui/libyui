@@ -64,10 +64,6 @@ and text output, setLanguage() moved
 test ChangeWidget for every widget
 
 
-NOT yet PORTED:
----------------
-NCDialog: 	not ported at all because YDialog isn't ported yet
-
 
 
 
