@@ -54,6 +54,8 @@ class NCBusyIndicator : public YBusyIndicator, public NCWidget {
     float       _position;              // the position of the bar
     bool        _rightwards;            // direction the bar moves
     bool        _alive;
+    float	_factor;
+    float	_merker;
 
 
 
