@@ -26,12 +26,32 @@
 #define REPAINT_INTERVAL        100	// in ms
 #define STEP_SIZE               .05
 
+/*
+ Some words about the timer stuff:
+ With each SIG_ALRM signal _timer_progress gets incremented by _timer_divisor.
+ When a tick is received [=setAlive(true) is called] _timer_progress is set to 0.
+ If _timer_progress is larger than 1 the widget goes to stalled state.
+
+ How the timer works:
+ NCBusyIndicatorHandlerWrapper is registered as signal handler for SIG_ALRM
+ signal and calls NCBusyIndicatorObject->handler(). This wrapper is needed
+ because a member function cannot be registered as signal handler.
+
+ LIMITATIONS:
+ i)  Only one BusyIndicator widget works at the same time, because the
+     wrapper function only calls the handler() member function of the last
+     created instance of BusyIndicator.
+
+ ii) The UserInput widget cannot be used, because UserInput is a blocking 
+     function. When UserInput waits for UserInput no SIG_ALRM signal is sended
+     and therefore the BusyIndicator widget doesn't show progress.
+     Please use the TimeoutUserInput widget in a loop instead. 
+*/
 
 struct itimerval interval;
-
-
 NCBusyIndicator* NCBusyIndicatorObject;
 void NCBusyIndicatorHandlerWrapper(int sig_num);
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -63,16 +83,13 @@ NCBusyIndicator::NCBusyIndicator( YWidget * parent,
 
   NCBusyIndicatorObject=this;
 
-  _factor =  (double) REPAINT_INTERVAL / (double) timeout; 
-//_factor = 0.01;
-  _merker=0;
+  _timer_divisor =  (double) REPAINT_INTERVAL / (double) timeout; 
+  _timer_progress=0;
 
   signal(SIGALRM, NCBusyIndicatorHandlerWrapper);
   interval.it_value.tv_sec=0;
   interval.it_value.tv_usec=REPAINT_INTERVAL * 1000;
   setitimer(ITIMER_REAL, &interval, NULL);
-
-//  alarm(1);	// set timer 1 second
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -85,6 +102,7 @@ NCBusyIndicator::NCBusyIndicator( YWidget * parent,
 //
 NCBusyIndicator::~NCBusyIndicator()
 {
+  signal(SIGALRM, SIG_IGN);
   delete _lwin;
   delete _twin;
   WIDDBG << endl;
@@ -213,33 +231,58 @@ void NCBusyIndicator::setLabel( const string & nlabel )
   Redraw();
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCBusyIndicator::handler
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : handler, called by NCBusyIndicatorHandlerWrapper
+//
 void NCBusyIndicator::handler(int sig_num)
 {
-	_merker+=_factor;
-	if (_merker>=1)
-	{
-		_merker=0;
-    		_alive=false;
-	}
+    _timer_progress+=_timer_divisor;
+    if (_timer_progress>=1)
+    {
+	_timer_progress=0;
+	_alive=false;
+    }
+    update();
+    interval.it_value.tv_sec=0;
+    interval.it_value.tv_usec=REPAINT_INTERVAL * 1000;
+    setitimer(ITIMER_REAL, &interval, NULL);
 
-	update();
-	//alarm(1);
-	interval.it_value.tv_sec=0;
-	interval.it_value.tv_usec=REPAINT_INTERVAL * 1000;
-	setitimer(ITIMER_REAL, &interval, NULL);
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCBusyIndicatorHandlerWrapper
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : static wrapper for member function handler
+//
 void NCBusyIndicatorHandlerWrapper(int sig_num)
 {
-	NCBusyIndicatorObject->handler(sig_num);
+    signal(SIGALRM, SIG_IGN);
+    NCBusyIndicatorObject->handler(sig_num);
+    signal(SIGALRM, NCBusyIndicatorHandlerWrapper);
 }
 
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCBusyIndicator::update
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : calculate position of moving bar
+//
 void NCBusyIndicator::update()
 {
     if (!_alive)
         return;
 
-    if (_position > 1.0 - STEP_SIZE || _position < STEP_SIZE )
+    if (_position > 1.0 || _position < 0 )
         _rightwards = !_rightwards;
 
     if (_rightwards)
@@ -249,44 +292,45 @@ void NCBusyIndicator::update()
 
     Redraw();
     refresh();
-}
+ 
 
-void NCBusyIndicator::setAlive( bool newAlive)
-{
-	_alive = newAlive;
-}
-
-void NCBusyIndicator::setTimeout( int newTimeout)
-{
-  if (newTimeout < 1)
-    newTimeout = 1;
-
-  _timeout = newTimeout;
-  YBusyIndicator::setTimeout( newTimeout );
 }
 
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCBusyIndicator::setValue
+//	METHOD NAME : NCBusyIndicator::setAlive
 //	METHOD TYPE : void
 //
-//	DESCRIPTION :
+//	DESCRIPTION : set alive or stalled
 //
-/*void NCBusyIndicator::setValue( int newValue )
+void NCBusyIndicator::setAlive( bool newAlive)
 {
-
-
-  cval = newValue;
-  if ( cval < 0 )
-    cval = 0;
-  else if ( cval > maxval )
-    cval = maxval;
-  Redraw();
-  YBusyIndicator::setValue( newValue );
-
+    _alive = newAlive;
+	
+    if (newAlive)
+	_timer_progress=0;
 }
-*/
+
+
+///////////////////////////////////////////////////////////////////
+//
+//
+//	METHOD NAME : NCBusyIndicator::setTimeout
+//	METHOD TYPE : void
+//
+//	DESCRIPTION : set timeout
+//
+void NCBusyIndicator::setTimeout( int newTimeout)
+{
+    if (newTimeout < 1)
+	newTimeout = 1;
+
+    _timeout = newTimeout;
+    YBusyIndicator::setTimeout( newTimeout );
+
+    _timer_divisor = (double) REPAINT_INTERVAL / (double) _timeout;
+}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -294,7 +338,7 @@ void NCBusyIndicator::setTimeout( int newTimeout)
 //	METHOD NAME : NCBusyIndicator::wRedraw
 //	METHOD TYPE : void
 //
-//	DESCRIPTION :
+//	DESCRIPTION : draw busy indicator widget
 //
 void NCBusyIndicator::wRedraw()
 {
@@ -315,48 +359,23 @@ void NCBusyIndicator::wRedraw()
 //	METHOD NAME : NCBusyIndicator::tUpdate
 //	METHOD TYPE : void
 //
-//	DESCRIPTION :
+//	DESCRIPTION : draw busy bar
 //
 void NCBusyIndicator::tUpdate()
 {
   if ( !win )
     return;
 
-  double split = double(_twin->maxx()+1) * _position;
-  int cp = int(split);
-  if ( cp == 0 && split > 0.0 )
-    cp = 1;
+  int cp = (_twin->maxx()) * _position;
 
   const NCstyle::StProgbar & style( wStyle().progbar );
-  _twin->bkgdset( style.bar.chattr );
+  _twin->bkgdset( style.nonbar.chattr );
   _twin->clear();
 
   if ( cp <= _twin->maxx() ) {
-    _twin->bkgdset( NCattribute::getNonChar( style.nonbar.chattr ) );
+    _twin->bkgdset( NCattribute::getNonChar( style.bar.chattr ) );
     _twin->move( 0, cp );
-    for ( int i = 0; i < _twin->width()-cp; ++i ) {
-      _twin->addch( NCattribute::getChar( style.nonbar.chattr ) );
-    }
+    _twin->addch( NCattribute::getChar( style.bar.chattr ) );
   }
-
-
-  if ( _twin->maxx() >= 6 ) {
-    Value_t pc  = 100 * _position ;
-    Value_t off = _twin->maxx() / 2 - ( pc == 100 ? 2
-                                                 : pc >= 10 ? 1
-                                                           : 0 );
-//    char buf[5];
-//    sprintf( buf, "%lld%%", pc );
-    char buf[5];
-    sprintf( buf, "busy");
-    _twin->move( 0, off );
-    for ( char * ch = buf; *ch; ++ch ) {
-      chtype a = _twin->inch();
-      NCattribute::setChar( a, *ch );
-      _twin->addch( a );
-    }
-  }
-
-
-
 }
+

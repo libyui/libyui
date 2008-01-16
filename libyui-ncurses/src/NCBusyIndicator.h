@@ -24,7 +24,11 @@
 #include "YBusyIndicator.h"
 #include "NCWidget.h"
 
+
 class NCBusyIndicator;
+
+
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -53,10 +57,9 @@ class NCBusyIndicator : public YBusyIndicator, public NCWidget {
 
     float       _position;              // the position of the bar
     bool        _rightwards;            // direction the bar moves
-    bool        _alive;
-    float	_factor;
-    float	_merker;
-
+    bool        _alive;			// the widget is alive or stalled
+    float	_timer_divisor;		// =repaint interval devided by timeout
+    float	_timer_progress;	// progress until widget goes to stalled state
 
 
   protected:

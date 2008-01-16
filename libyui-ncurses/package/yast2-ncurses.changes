@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jan 16 16:55:00 CET 2008 - tgoettlicher@suse.de
+
+- Added BusyIndicator widget
+- 2.16.9
+
+-------------------------------------------------------------------
 Tue Jan 15 16:36:35 CET 2008 - kmachalkova@suse.cz
 
 - 'Press F1 for Help' in window title is gone
