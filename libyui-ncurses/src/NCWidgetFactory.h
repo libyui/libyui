@@ -122,7 +122,7 @@ public:
 							  int maxValue = 100 );
     virtual NCBusyIndicator *   createBusyIndicator	( YWidget *parent,
 							  const string & label,
-							  int timeout = 100 );
+							  int timeout = 1000 );
     
     virtual NCRichText *	createRichText		( YWidget * parent,
 							  const string & text = string(),

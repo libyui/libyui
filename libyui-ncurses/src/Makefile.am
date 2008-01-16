@@ -67,6 +67,7 @@ noinst_HEADERS = 		\
 	NCCheckBox.h        	\
 	NCLabel.h       	\
 	NCProgressBar.h     	\
+	NCBusyIndicator.h     	\
 	NCMenuButton.h      	\
 	NCPushButton.h      	\
 	NCRadioButton.h     	\
@@ -138,6 +139,7 @@ libpy2ncurses_la_SOURCES =		\
 	NCCheckBox.cc			\
 	NCLabel.cc			\
 	NCProgressBar.cc		\
+	NCBusyIndicator.cc		\
 	NCMenuButton.cc			\
 	NCPushButton.cc			\
 	NCRadioButton.cc		\
