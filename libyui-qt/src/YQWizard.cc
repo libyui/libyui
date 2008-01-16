@@ -810,7 +810,7 @@ void YQWizard::setDialogHeading( const string & headingText )
     }
 }
 
-string YQWizard::debugLabel()
+string YQWizard::debugLabel() const
 {
     if ( _dialogHeading )
     {
@@ -957,7 +957,9 @@ void YQWizard::addMenuEntry( const string & parentMenuID,
 
     if ( parentMenu )
     {
+#if 0
 	int id = _menuEntryIDs.size();
+#endif
 	_menuEntryIDs.push_back( idString );
         parentMenu->addAction( fromUTF8( text ) );
     }

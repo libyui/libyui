@@ -77,7 +77,7 @@ public:
      *
      * Reimplemented from YWidget.
      **/
-    virtual string debugLabel();
+    virtual string debugLabel() const;
 
     enum Direction { Forward, Backward };
 
