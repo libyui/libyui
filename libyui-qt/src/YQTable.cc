@@ -74,6 +74,7 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader )
 	// _qt_listView->adjustColumn( column );
     }
     _qt_listView->setHeaderLabels( headers );
+    _qt_listView->header()->setResizeMode( QHeaderView::ResizeToContents );
 
     //
     // Connect signals and slots
