@@ -184,8 +184,8 @@ void YQTimezoneSelector::setSize( int newWidth, int newHeight )
 
 QPoint YQTimezoneSelectorPrivate::pixPosition( const Location &pos ) const
 {
-    return QPoint(  _pix.width() / 2 + _pix.width() / 2 * pos.longitude / 180,
-                    _pix.height() / 2 - _pix.height() / 2 * pos.latitude / 90 );
+    return QPoint(  (int) ( _pix.width()  / 2 + _pix.width()  / 2 * pos.longitude / 180 ),
+                    (int) ( _pix.height() / 2 - _pix.height() / 2 * pos.latitude  /  90 ) ) ;
 }
 
 void YQTimezoneSelector::mousePressEvent ( QMouseEvent * event )
@@ -201,8 +201,8 @@ void YQTimezoneSelector::mousePressEvent ( QMouseEvent * event )
         {
             QPoint click = event->pos();
             /* keep the zoom point in unscaled math */
-            d->_zoom.rx() = double( click.x() ) * d->_pix.width() / width();
-            d->_zoom.ry() = double( click.y() ) * d->_pix.height() / height();
+            d->_zoom.rx() = (int) ( double( click.x() ) * d->_pix.width()   / width() );
+            d->_zoom.ry() = (int) ( double( click.y() ) * d->_pix.height() / height() );
             d->cachePix = QPixmap();
         } else {
             d->_best = d->findBest( event->pos() );
@@ -331,8 +331,8 @@ QPoint YQTimezoneSelectorPrivate::pixToWindow( const QPoint &pos ) const
 {
     if ( _zoom.isNull() )
     {
-        return QPoint( double( pos.x() ) * parent->width() / _pix.width(),
-                       double( pos.y() ) * parent->height() / _pix.height() );
+        return QPoint( (int) ( double( pos.x() ) * parent->width()  / _pix.width()  ),
+                       (int) ( double( pos.y() ) * parent->height() / _pix.height() ) );
     }
     int left = qMin( qMax( _zoom.x() - parent->width() / 2, 0 ), _pix.width() - parent->width() );
     int top  = qMin( qMax( _zoom.y() - parent->height() / 2, 0 ), _pix.height() - parent->height() );
