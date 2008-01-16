@@ -279,6 +279,7 @@ void YQWizard::updateSteps()
     if ( ! _stepsPanel )
 	return;
 
+    qDebug( "updateSteps" );
     // Create a grid layout for the steps
     delete _stepsPanel->layout();
     QVBoxLayout *_stepsVBox = new QVBoxLayout( _stepsPanel );
@@ -368,6 +369,7 @@ void YQWizard::updateSteps()
 
 void YQWizard::updateStepStates()
 {
+    qDebug( "updateStepStates %d", _stepsDirty );
     if ( _stepsDirty )
 	updateSteps();
 
@@ -408,6 +410,7 @@ void YQWizard::updateStepStates()
 
 void YQWizard::setCurrentStep( const string & id )
 {
+    qDebug( "setCurrentStep %s", id );
     _currentStepID = fromUTF8( id );
     updateStepStates();
 }
@@ -415,6 +418,7 @@ void YQWizard::setCurrentStep( const string & id )
 
 void YQWizard::deleteSteps()
 {
+    qDebug( "deleteSteps" );
     qDeleteAll(_stepsList);
     _stepsList.clear();
     _stepsIDs.clear();
