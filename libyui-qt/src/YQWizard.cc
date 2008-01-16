@@ -410,7 +410,7 @@ void YQWizard::updateStepStates()
 
 void YQWizard::setCurrentStep( const string & id )
 {
-    qDebug( "setCurrentStep %s", id );
+    qDebug( "setCurrentStep %s", id.c_str() );
     _currentStepID = fromUTF8( id );
     updateStepStates();
 }
