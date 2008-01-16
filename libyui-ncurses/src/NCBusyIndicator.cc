@@ -43,7 +43,7 @@
      created instance of BusyIndicator.
 
  ii) The UserInput widget cannot be used, because UserInput is a blocking 
-     function. When UserInput waits for UserInput no SIG_ALRM signal is sended
+     function. When UserInput waits for UserInput no SIG_ALRM signal is sent
      and therefore the BusyIndicator widget doesn't show progress.
      Please use the TimeoutUserInput widget in a loop instead. 
 */
