@@ -3435,7 +3435,8 @@ bool NCPackageSelector::fillDefaultList( )
     if ( !pkgList )
 	return false;
 
-    NCMIL << "Fill list: " << pkgList << endl;
+    // NCMIL << "Fill list: " << (const NCWidget *) pkgList << endl;
+    NCMIL << "Fill list: " << (NCWidget *) pkgList << endl;
     switch ( pkgList->getTableType() )
     {
 	case NCPkgTable::T_Patches: {
