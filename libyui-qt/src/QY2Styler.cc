@@ -8,6 +8,7 @@
 #include <QSvgRenderer>
 #include <QDebug>
 #include <iostream>
+#include <QPixmapCache>
 
 using namespace std;
 
@@ -16,6 +17,7 @@ QY2Styler *QY2Styler::_self = 0;
 QY2Styler::QY2Styler( QObject *parent )
     : QObject( parent )
 {
+    QPixmapCache::setCacheLimit( 5 * 1024 );
     _self = this;
 }
 
@@ -104,9 +106,17 @@ bool QY2Styler::eventFilter( QObject * obj, QEvent * ev )
     QPainter pain( &result );
     if ( !_backgrounds[ name ].filename.endsWith( ".svg" ) )
     {
-        qDebug() << "scale " << qPrintable( name ) << " " << fillRect.width() << " " << fillRect.height();
-        QImage scaled = _backgrounds[name].pix.scaled( fillRect.width(), fillRect.height() );
-        pain.drawImage( fillRect.topLeft(), scaled, QRectF(QPointF(0,0), scaled.size()), Qt::OrderedAlphaDither);
+        QString key = QString( "style_%1_%2_%3" ).arg( name ).arg( fillRect.width() ).arg( fillRect.height() );
+        QPixmap scaled;
+        if ( QPixmapCache::find( key, scaled ) )
+        {
+            qDebug() << "found " << qPrintable( key );
+        } else {
+            qDebug() << "scale " << qPrintable( name ) << " " << fillRect.width() << " " << fillRect.height();
+            scaled = QPixmap::fromImage( _backgrounds[name].pix.scaled( fillRect.width(), fillRect.height() ) );
+            QPixmapCache::insert( key, scaled );
+        }
+        pain.drawPixmap( fillRect.topLeft(), scaled );
     } else {
 #if 0
         QSvgRenderer rend( _backgroundFn[ name ] );

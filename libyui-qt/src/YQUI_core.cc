@@ -93,6 +93,9 @@ void YQUI::init_ui()
     if (_ui_inited)
         return;
 
+    // yast has no use of the glib event loop
+    setenv( "QT_NO_GLIB", "1", 1 );
+
     _ui_inited = true;
 
     new QApplication( _ui_argc, _ui_argv);
