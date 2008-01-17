@@ -281,6 +281,8 @@ YQUI::~YQUI()
 
     qApp->exit();
     qApp->deleteLater();
+
+    delete _qobject;
 }
 
 
