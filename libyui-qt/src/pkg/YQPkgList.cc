@@ -88,7 +88,7 @@ YQPkgList::YQPkgList( QWidget * parent )
     setColumnWidth( sizeCol(), fms.width( "8780.2 K" ) );
     setColumnWidth( instVersionCol(), fms.width( " 20071220pre" ) );
     setColumnWidth( versionCol(), fms.width( " 20071220pre" ) );
-    setColumnWidth( nameCol(), fms.width( "opensuse-release " ) );
+    setColumnWidth( nameCol(), fms.width( "desktop-data-openSUSE-extraroom" ) );
     setColumnWidth( summaryCol(), fms.width( "A really really long text, but not too long" ) );
 
     header()->setResizeMode( QHeaderView::Interactive );
