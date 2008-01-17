@@ -1,3 +1,15 @@
+-------------------------------------------------------------------
+Wed Jan 16 14:32:01 CET 2008 - coolo@suse.de
+
+- disable patch again now that yast2-core is ready
+
+-------------------------------------------------------------------
+Mon Jan 14 21:14:12 CET 2008 - coolo@suse.de
+
+- make it build without new yast2-core to get the pkg fixes 
+
+-------------------------------------------------------------------
+
 Mon Jan 14 12:44:00 CET 2008 - tgoettlicher@suse.de
 
 - V 2.16.17
