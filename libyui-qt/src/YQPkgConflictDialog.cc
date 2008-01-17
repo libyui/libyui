@@ -376,7 +376,7 @@ YQPkgConflictDialog::askCreateSolverTestCase()
     if ( success )
     {
 	msg =
-	    _( "<p>Dependency resolver test case written to <br><tt>%1</tt></p>"
+	    _( "<p>Dependency resolver test case written to <br><tt>%1</tt>.</p>"
 	       "<p>Prepare <tt>y2logs.tgz tar</tt> archive to attach to Bugzilla?</p>" ).arg( testCaseDir ),
 	button_no = QMessageBox::question( 0,				// parent
 					   _( "Success" ),		// caption
