@@ -21,6 +21,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QHeaderView>
+#include <QDebug>
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
 
@@ -60,8 +61,8 @@ YQMultiSelectionBox::YQMultiSelectionBox( YWidget *		parent,
 
     _qt_listView->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
     _qt_listView->setHeaderLabel("");	// QListView doesn't have one single column by default!
-    _qt_listView->sortItems( 0, Qt::AscendingOrder );
-    //FIXME _qt_listView->header()->setStretchEnabled( true );
+    _qt_listView->setSortingEnabled( false );
+
     _qt_listView->header()->hide();
     _qt_listView->setRootIsDecorated ( false );
     _caption->setBuddy( _qt_listView );
@@ -73,6 +74,9 @@ YQMultiSelectionBox::YQMultiSelectionBox( YWidget *		parent,
 
     connect( this,		SIGNAL( valueChanged()		),
 	     this,		SLOT  ( slotValueChanged()	) );
+
+    connect( _qt_listView,      SIGNAL( itemChanged( QTreeWidgetItem*, int ) ),
+             this,              SLOT  ( slotItemChanged( QTreeWidgetItem*, int ) ) );
 }
 
 
@@ -102,14 +106,12 @@ YQMultiSelectionBox::addItem( YItem * yItem )
 
     // Take care of the item's check box
 
-    if ( yItem->selected() )
-      msbItem->setCheckState(0, Qt::Checked);
-
+    msbItem->setCheckState(0, yItem->selected() ? Qt::Checked : Qt::Unchecked );
 
     // Take care of the QListView's keyboard focus
 
     if ( ! _qt_listView->currentItem() )
-      msbItem->setSelected(true);
+        _qt_listView->setCurrentItem( msbItem );
 }
 
 
@@ -119,7 +121,7 @@ void YQMultiSelectionBox::selectItem( YItem * yItem, bool selected )
     YQMultiSelectionBoxItem * msbItem = findItem( yItem );
 
     if ( msbItem )
-      msbItem->setCheckState( 1, selected ? Qt::Checked : Qt::Unchecked );
+        msbItem->setCheckState( 0, selected ? Qt::Checked : Qt::Unchecked );
 }
 
 
@@ -136,7 +138,7 @@ YQMultiSelectionBox::deselectAllItems()
       YQMultiSelectionBoxItem * item = dynamic_cast<YQMultiSelectionBoxItem *> (*it);
 
       if ( item )
-        item->setCheckState(0, Qt::Checked);
+        item->setCheckState(0, Qt::Unchecked);
 
       ++it;
     }
@@ -212,7 +214,7 @@ YQMultiSelectionBox::setCurrentItem( YItem * yItem )
 	YQMultiSelectionBoxItem * msbItem = findItem( yItem );
 
 	if ( msbItem )
-	    msbItem->setSelected(true);
+	    _qt_listView->setCurrentItem( msbItem );
 
 	// This does NOT change the item's check box!
 	// (see explanations in YQMultiSelectionBox::currentItem() avove)
@@ -290,11 +292,13 @@ YQMultiSelectionBox::slotValueChanged()
 
 
 void
-YQMultiSelectionBox::sendValueChanged()
+YQMultiSelectionBox::slotItemChanged ( QTreeWidgetItem * _item, int  )
 {
+    YQMultiSelectionBoxItem * item = dynamic_cast<YQMultiSelectionBoxItem *> (_item);
+    bool selected = item->checkState( 0 );
+    item->yItem()->setSelected( selected );
     emit valueChanged();
 }
-
 
 YQMultiSelectionBoxItem *
 YQMultiSelectionBox::findItem( YItem * wantedItem )
@@ -316,9 +320,6 @@ YQMultiSelectionBox::findItem( YItem * wantedItem )
 }
 
 
-
-
-
 int YQMultiSelectionBoxItem::_item_count = 0;
 
 
@@ -332,34 +333,9 @@ YQMultiSelectionBoxItem::YQMultiSelectionBoxItem( YQMultiSelectionBox *	parent,
 {
     YUI_CHECK_PTR( yItem );
     setFlags( Qt::ItemIsUserCheckable | Qt::ItemIsEnabled );
-    setCheckState( 0, Qt::Unchecked );
     setText(0, fromUTF8( yItem->label() ));
+    setCheckState( 0, Qt::Unchecked );
     _serial = _item_count++;
 }
-
-void
-YQMultiSelectionBoxItem::stateChange( bool newState )
-{
-    _yItem->setSelected( newState );
-    _multiSelectionBox->sendValueChanged();
-    //QTreeWidgetItem::stateChange( newState );
-    // FIXME checked or selected state?
-    QTreeWidgetItem::setCheckState( 0, newState ? Qt::Checked : Qt::Unchecked );
-}
-
-
-QString
-YQMultiSelectionBoxItem::key( int, bool ) const
-{
-    /*
-     * Return a sort key that depends on creation (i.e. insertion) order.
-     */
-
-    static QString sortKey;
-    sortKey.sprintf( "%010d", INT_MAX - _serial );
-
-    return sortKey;
-}
-
 
 #include "YQMultiSelectionBox.moc"

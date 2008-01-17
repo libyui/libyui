@@ -130,11 +130,6 @@ public:
      **/
     virtual bool setKeyboardFocus();
 
-    /**
-     * Sends a ValueChanged signal.
-     **/
-    void sendValueChanged();
-
 
 signals:
     /**
@@ -154,6 +149,7 @@ protected slots:
      **/
     void slotValueChanged();
 
+    void slotItemChanged( QTreeWidgetItem*, int );
 
 protected:
     /**
@@ -190,23 +186,6 @@ public:
 
 
 protected:
-
-    /**
-     * Called when the on/off state changes.
-     * Triggers a 'valueChanged' event in the associated YQMultiSelectionBox.
-     *
-     * Reimplemented from QChecklistItem.
-     **/
-    void stateChange( bool newState );
-
-    /**
-     * Returns the sort key for any column.
-     * In this case, maintain item creation order.
-     *
-     * Reimplemented from QTreeWidgetItem
-     **/
-    virtual QString key ( int	column,
-			  bool	ascending ) const;
 
     //
     // Data members
