@@ -3,6 +3,7 @@ Fri Jan 18 17:45:29 CET 2008 - kmachalkova@suse.cz
 
 - Running separate UI-thread re-enabled (adjusted idleLoop, file 
   descriptor saving/restoring) (bug #164999, FaTE #301899)
+- 2.16.10
 
 -------------------------------------------------------------------
 Tue Jan 16 16:55:00 CET 2008 - tgoettlicher@suse.de
