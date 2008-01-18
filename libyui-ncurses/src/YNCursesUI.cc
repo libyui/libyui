@@ -135,7 +135,6 @@ YNCursesUI::createApplication()
 //
 void YNCursesUI::idleLoop( int fd_ycp )
 {
-  NCDialog * ncd = static_cast<NCDialog *>( YDialog::currentDialog() );
 
   int    timeout = 5;
   struct timeval tv;
@@ -156,8 +155,15 @@ void YNCursesUI::idleLoop( int fd_ycp )
       if ( errno != EINTR )
 	UIINT << "idleLoop error in select() (" << errno << ')' << endl;
     } else if ( retval != 0 ) {
-      if( ncd ) {
-	ncd->idleInput();
+      //do not throw here, as current dialog may not necessarily exist yet
+      //if we have threads
+      YDialog *currentDialog = YDialog::currentDialog( false );
+
+      if (currentDialog) {
+        NCDialog * ncd = static_cast<NCDialog *>( currentDialog );
+        if( ncd ) {
+	  ncd->idleInput();
+        }
       }
     } // else no input within timeout sec.
   } while ( !FD_ISSET( fd_ycp, &fdset ) );
@@ -442,11 +448,10 @@ int YNCursesUI::runInTerminal( const YCPString & module )
     ::def_prog_mode();
     ::endwin();
 
-    //FIXME: Enable these with multithread support
     //Regenerate saved stdout and stderr, so that app called
     //via system() can use them and draw something to the terminal
-    //dup2(NCurses::stdout_save, 1);
-    //dup2(NCurses::stderr_save, 2);
+    dup2(NCurses::stdout_save, 1);
+    dup2(NCurses::stderr_save, 2);
 
     //Call external program
     ret = system(cmd.c_str());
@@ -456,9 +461,8 @@ int YNCursesUI::runInTerminal( const YCPString & module )
 	NCERR << cmd << " returned:" << ret << endl;
     }
 
-    //FIXME: Enable these with multithread support
     //Redirect stdout and stderr to y2log again
-    //NCurses::RedirectToLog();
+    NCurses::RedirectToLog();
 
     //Resume tty modes and refresh the screen
     ::reset_prog_mode();

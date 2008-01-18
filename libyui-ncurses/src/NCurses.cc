@@ -271,11 +271,10 @@ void NCurses::init()
     }
   }
  
-  //FIXME: Enable these with multithread support
   //duplicate stdout and stderr before redirecting them to log
   //so that they can be regenerated before system() call
-  //stdout_save = dup(1);
-  //stderr_save = dup(2);
+  stdout_save = dup(1);
+  stderr_save = dup(2);
 
   RedirectToLog();
   

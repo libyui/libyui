@@ -180,9 +180,8 @@ class NCurses {
     NCurses();
     virtual ~NCurses();
 
-    //FIXME: Enable these with multithread support
-    //int stdout_save;
-    //int stderr_save;
+    int stdout_save;
+    int stderr_save;
 
     static int cols()  { return ::COLS; }
     static int lines() { return ::LINES; }
