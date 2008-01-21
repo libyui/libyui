@@ -216,7 +216,7 @@ YQPkgConflictList::saveItemToFile( FILE * 			file,
 	}
     }
 
-    fprintf( file, "%s\n", (const char *) item->text(0) );
+    fprintf( file, "%s\n", toUTF8( item->text(0) ).c_str() );
 
 
     if ( item->isOpen() )

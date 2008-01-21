@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Jan 21 17:35:58 CET 2008 - tgoettlicher@suse.de
+
+- Fixed Bug #352845: UI qt segfault after closing opened window 
+- Fixed Bug #352198: saved information is corrupted for dependency conflict information
+- V 2.13.83
+
+-------------------------------------------------------------------
 Thu Jan 17 13:09:15 CET 2008 - jsrain@suse.cz
 
 - merged texts from proofread

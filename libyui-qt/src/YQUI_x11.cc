@@ -344,7 +344,7 @@ bool YQUI::eventFilter( QObject * obj, QEvent * ev )
 	    objDialog = objDialog->topLevelWidget();
 	}
 
-	if ( objDialog &&
+	if ( objDialog && (QObject*) currentDialog() &&
 	     ( objDialog == mainWidget() ||
 	       objDialog == (QObject *) currentDialog()->widgetRep() ) )
 	{
