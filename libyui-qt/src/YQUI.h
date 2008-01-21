@@ -268,14 +268,6 @@ protected:
     virtual void idleLoop( int fd_ycp );
 
     /**
-     * Return a representation for the glyph symbol specified in UTF-8 encoding
-     * or an empty string to get a default textual representation.
-     *
-     * Reimplemented from YUI.
-     **/
-    YCPString glyph( const YCPSymbol & glyphSymbol );
-
-    /**
      * Go into event loop until next user input is available.
      *
      * Reimplemented from YUI.

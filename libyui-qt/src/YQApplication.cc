@@ -27,6 +27,7 @@
 
 #define y2log_component "qt-ui"
 #include <ycp/y2log.h>
+#include "YUISymbols.h"
 
 #include "utf8.h"
 #include "YQi18n.h"
@@ -372,6 +373,27 @@ YQApplication::pickAutoFonts()
 
     y2milestone( "Selecting auto fonts - normal: %d, heading: %d (bold)",
 		 _autoNormalFontSize, _autoHeadingFontSize );
+}
+
+
+string
+YQApplication::glyph( const string & sym )
+{
+    QChar unicodeChar;
+
+    // Hint: Use the 'xfd' program to view characters available in the Unicode font.
+
+    if      ( sym == YUIGlyph_ArrowLeft         )       unicodeChar = QChar( 0x2190 );
+    else if ( sym == YUIGlyph_ArrowRight        )       unicodeChar = QChar( 0x2192 );
+    else if ( sym == YUIGlyph_ArrowUp           )       unicodeChar = QChar( 0x2191 );
+    else if ( sym == YUIGlyph_ArrowDown         )       unicodeChar = QChar( 0x2193 );
+    else if ( sym == YUIGlyph_CheckMark         )       unicodeChar = QChar( 0x2714 );
+    else if ( sym == YUIGlyph_BulletArrowRight  )       unicodeChar = QChar( 0x279c );
+    else if ( sym == YUIGlyph_BulletCircle      )       unicodeChar = QChar( 0x274d );
+    else if ( sym == YUIGlyph_BulletSquare      )       unicodeChar = QChar( 0x274f );
+    else return "";
+
+    return toUTF8( QString( unicodeChar ) );
 }
 
 

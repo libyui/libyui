@@ -125,6 +125,15 @@ public:
     void setAutoFonts( bool useAutoFonts );
 
     /**
+     * Return a string for a named glyph.
+     *
+     * Using this is discouraged in new applications.
+     *
+     * Reimplemented from YApplication.
+     **/
+    virtual string glyph( const string & glyphSymbolName );
+
+    /**
      * Open a directory selection box and prompt the user for an existing
      * directory.
      *

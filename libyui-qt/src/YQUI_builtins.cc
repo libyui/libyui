@@ -53,30 +53,6 @@
 
 
 
-YCPString
-YQUI::glyph( const YCPSymbol & glyphSymbol )
-{
-    string sym = glyphSymbol->symbol();
-    QChar unicodeChar;
-
-    // Hint: Use 'xfd' to view characters available in the Unicode font.
-
-    if      ( sym == YUIGlyph_ArrowLeft         )       unicodeChar = QChar( 0x2190 );
-    else if ( sym == YUIGlyph_ArrowRight        )       unicodeChar = QChar( 0x2192 );
-    else if ( sym == YUIGlyph_ArrowUp           )       unicodeChar = QChar( 0x2191 );
-    else if ( sym == YUIGlyph_ArrowDown         )       unicodeChar = QChar( 0x2193 );
-    else if ( sym == YUIGlyph_CheckMark         )       unicodeChar = QChar( 0x2714 );
-    else if ( sym == YUIGlyph_BulletArrowRight  )       unicodeChar = QChar( 0x279c );
-    else if ( sym == YUIGlyph_BulletCircle      )       unicodeChar = QChar( 0x274d );
-    else if ( sym == YUIGlyph_BulletSquare      )       unicodeChar = QChar( 0x274f );
-    else return YCPString( "" );
-
-    QString qstr( unicodeChar );
-
-    return YCPString( toUTF8( qstr ) );
-}
-
-
 YCPValue YQUI::runPkgSelection( YWidget * packageSelector )
 {
     y2milestone( "Running package selection..." );
