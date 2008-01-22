@@ -59,16 +59,13 @@ void YQCheckBoxFrame::setLabel( const string & newLabel )
 
 bool YQCheckBoxFrame::value()
 {
-    return _checkBox ? _checkBox->isChecked() : QGroupBox::isChecked();
+    return QGroupBox::isChecked();
 }
 
 
 void YQCheckBoxFrame::setValue( bool newValue )
 {
-    if ( _checkBox )
-	_checkBox->setChecked( newValue );
-    else
-	setChecked( newValue );
+    setChecked( newValue );
 }
 
 void YQCheckBoxFrame::setEnabled( bool enabled )

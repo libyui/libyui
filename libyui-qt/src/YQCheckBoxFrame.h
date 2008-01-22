@@ -114,12 +114,6 @@ protected:
     virtual void childEvent( QChildEvent * );
 
     virtual bool event(QEvent *e);
-
-    //
-    // Data members
-    //
-
-    QCheckBox * _checkBox;
 };
 
 
