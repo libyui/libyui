@@ -67,6 +67,59 @@ QString QY2Styler::themeDir() const
 void QY2Styler::registerWidget( QWidget *widget )
 {
     widget->installEventFilter( this );
+    widget->setAutoFillBackground( true );
+}
+
+void QY2Styler::registerChildWidget( QWidget *parent, QWidget *widget )
+{
+    widget->installEventFilter( this );
+    _children[parent].push_back( widget );
+}
+
+void QY2Styler::renderParent( QWidget *wid )
+{
+    QString name = wid->objectName();
+
+    // if the parent does not have a background, this does not make sense
+    if ( _backgrounds[name].pix.isNull() )
+        return;
+
+    QRect fillRect = wid->contentsRect();
+    if ( _backgrounds[name].full )
+        fillRect = wid->rect();
+
+    QImage back = _backgrounds[name].pix.scaled( fillRect.width(), fillRect.height() );
+
+    QPainter pain( &back );
+    QWidget *child;
+    foreach( child, _children[wid] )
+    {
+        if (! child->isVisible() )
+             continue;
+
+        QString name = child->objectName();
+        QRect fillRect = child->contentsRect();
+        if ( _backgrounds[name].full )
+            fillRect = child->rect();
+
+        QString key = QString( "style_%1_%2_%3" ).arg( name ).arg( fillRect.width() ).arg( fillRect.height() );
+        QPixmap scaled;
+        if ( QPixmapCache::find( key, scaled ) )
+        {
+            qDebug() << "found " << qPrintable( key );
+        } else {
+            qDebug() << "scale " << qPrintable( name ) << " " << fillRect.width() << " " << fillRect.height();
+            scaled = QPixmap::fromImage( _backgrounds[name].pix.scaled( fillRect.width(), fillRect.height() ) );
+            QPixmapCache::insert( key, scaled );
+        }
+        pain.drawPixmap( wid->mapFromGlobal( child->mapToGlobal( fillRect.topLeft() ) ), scaled );
+
+    }
+    QPixmap result = QPixmap::fromImage( back );
+
+    QPalette p = wid->palette();
+    p.setBrush(QPalette::Window, result );
+    wid->setPalette( p );
 }
 
 bool QY2Styler::eventFilter( QObject * obj, QEvent * ev )
@@ -90,10 +143,21 @@ bool QY2Styler::eventFilter( QObject * obj, QEvent * ev )
     {
         QString back = _backgrounds[ name ].filename;
         _backgrounds[ name ].pix = QImage( back );
-        //qDebug() << "loading " << qPrintable( back ) << " for " << qPrintable( name );
+        qDebug() << "loading " << qPrintable( back ) << " for " << qPrintable( name );
     }
 
-    wid->setAutoFillBackground( true );
+    // if it's a children itself, we have to do the full blow action
+    if ( !_children.contains( wid ) )
+    {
+        QWidget *parent = wid->parentWidget();
+        while ( parent && !_children.contains( parent ) )
+            parent = parent->parentWidget();
+        renderParent( parent );
+        return QObject::eventFilter( obj, ev );
+    } else {
+        renderParent( wid );
+        return QObject::eventFilter( obj, ev );
+    }
 
     QPixmap result( wid->size() );
     QRect fillRect = wid->contentsRect();

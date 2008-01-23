@@ -212,7 +212,7 @@ void YQWizard::layoutStepsPanel()
     _stepsPanel = new QFrame( _sideBar );
     _sideBar->addWidget( _stepsPanel );
     _sideBar->setObjectName( "steps" );
-    QY2Styler::self()->registerWidget( _sideBar );
+    QY2Styler::self()->registerChildWidget( this, _sideBar );
     _stepsPanel->setProperty( "class", "steps QFrame" );
 
     // Steps panel bottom buttons ("Help", "Release Notes")
@@ -583,7 +583,7 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     QFrame *workArea = new QFrame( parent );
     workArea->setObjectName( "work_area" );
 
-    QY2Styler::self()->registerWidget( workArea );
+    QY2Styler::self()->registerChildWidget( this, workArea );
 
     QVBoxLayout *vbox = new QVBoxLayout( workArea );
 
