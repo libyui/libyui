@@ -19,9 +19,6 @@
 #ifndef YQUIComponent_h
 #define YQUIComponent_h
 
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
-
 #include <YUIComponent.h>
 #include "YQUI.h"
 

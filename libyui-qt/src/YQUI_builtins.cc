@@ -32,8 +32,8 @@
 #include <QInputDialog>
 #include <qdir.h>
 
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 #include "YQUI.h"
 #include "YEvent.h"
@@ -55,7 +55,7 @@
 
 YCPValue YQUI::runPkgSelection( YWidget * packageSelector )
 {
-    y2milestone( "Running package selection..." );
+    yuiMilestone() << "Running package selection..." << endl;
     YCPValue input = YCPVoid();
 
     try
@@ -64,16 +64,18 @@ YCPValue YQUI::runPkgSelection( YWidget * packageSelector )
     }
     catch (const std::exception & e)
     {
-	y2error( "Caught std::exception: %s", e.what() );
-	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
+	yuiError() << "Caught std::exception: %s" << e.what() << "\n"
+		   << "This is a libzypp problem. Do not file a bug against the UI!"
+		   << endl;
     }
     catch (...)
     {
-	y2error( "Caught unspecified exception." );
-	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
+	yuiError() << "Caught unspecified exception.\n" 
+		   << "This is a libzypp problem. Do not file a bug against the UI!"
+		   << endl;
     }
 
-    y2milestone( "Package selection done - returning %s", input->toString().c_str() );
+    yuiMilestone() << "Package selection done. Returning " << input->toString() << endl;
 
     return input;
 }
@@ -81,7 +83,6 @@ YCPValue YQUI::runPkgSelection( YWidget * packageSelector )
 
 void YQUI::makeScreenShot( std::string stl_filename )
 {
-
     //
     // Grab the pixels off the screen
     //
@@ -106,8 +107,8 @@ void YQUI::makeScreenShot( std::string stl_filename )
             //
 
             QString home = QDir::homePath();
-            char * ssdir = getenv("Y2SCREENSHOTS");
-            QString dir  = ssdir ? ssdir : "yast2-screen-shots";
+            char * ssdir = getenv( "Y2SCREENSHOTS" );
+            QString dir  = ssdir ? fromUTF8( ssdir ) : "yast2-screen-shots";
 
             if ( home == "/" )
             {
@@ -120,7 +121,7 @@ void YQUI::makeScreenShot( std::string stl_filename )
 
                 dir = "/tmp/" + dir;
 
-                if ( mkdir( qPrintable(dir), 0700 ) == -1 )
+                if ( mkdir( toUTF8( dir ).c_str(), 0700 ) == -1 )
                     dir = "";
             }
             else
@@ -130,7 +131,7 @@ void YQUI::makeScreenShot( std::string stl_filename )
                 // chance to create symlinks to a better location if he wishes so.
 
                 dir = home + "/" + dir;
-                (void) mkdir( qPrintable(dir), 0750 );
+                (void) mkdir( toUTF8( dir ).c_str(), 0750 );
             }
 
             screenShotNameTemplate = dir + "/%s-%03d.png";
@@ -142,10 +143,12 @@ void YQUI::makeScreenShot( std::string stl_filename )
         //
 
         const char * baseName = moduleName();
-        if ( ! baseName ) baseName = "scr";
+        if ( ! baseName )
+	    baseName = "scr";
+	
         int no = screenShotNo[ baseName ];
-        fileName.sprintf( qPrintable(screenShotNameTemplate), baseName, no );
-        y2debug( "screenshot: %s", qPrintable(fileName) );
+        fileName.sprintf( qPrintable( screenShotNameTemplate ), baseName, no );
+        yuiDebug() << "Screenshot: " << fileName << endl;
 
 	{
 	    YQSignalBlocker sigBlocker( _user_input_timer );
@@ -157,7 +160,7 @@ void YQUI::makeScreenShot( std::string stl_filename )
 
         if ( fileName.isEmpty() )
         {
-            y2debug( "Save screen shot canceled by user" );
+            yuiDebug() << "Save screen shot canceled by user" << endl;
             return;
         }
 
@@ -169,12 +172,12 @@ void YQUI::makeScreenShot( std::string stl_filename )
     // Actually save the screen shot
     //
 
-    y2debug( "Saving screen shot to %s", qPrintable(fileName) );
+    yuiDebug() << "Saving screen shot to " << fileName << endl;
     bool success = screenShot.save( fileName, "PNG" );
 
     if ( ! success )
     {
-	y2error( "Couldn't save screen shot %s", qPrintable(fileName) );
+	yuiError() << "Couldn't save screen shot " << fileName << endl;
 
 	if ( interactive )
 	{
@@ -191,7 +194,7 @@ void YQUI::makeScreenShot( std::string stl_filename )
     {
 	macroRecorder->beginBlock();
 	YDialog::currentDialog()->saveUserInput( macroRecorder );
-	macroRecorder->recordMakeScreenShot( true, qPrintable(fileName) );
+	macroRecorder->recordMakeScreenShot( true, toUTF8( fileName ) );
 	macroRecorder->recordUserInput( YCPVoid() );
 	macroRecorder->endBlock();
     }
@@ -211,13 +214,15 @@ void YQUI::askSaveLogs()
 	if ( access( saveLogsCommand.toAscii(), X_OK ) == 0 )
 	{
 	    saveLogsCommand += " '" + fileName + "'";
-	    y2milestone( "Saving y2logs: %s", qPrintable(saveLogsCommand) );
-	    int result = system( qPrintable(saveLogsCommand) );
+	    yuiMilestone() << "Saving y2logs: " << saveLogsCommand << endl;
+	    int result = system( qPrintable( saveLogsCommand) );
 
 	    if ( result != 0 )
 	    {
-		y2error( "Error saving y2logs: \"%s\" exited with %d",
-			 qPrintable(saveLogsCommand), result );
+		yuiError() << "Error saving y2logs: \"" << saveLogsCommand 
+			   << "\" exited with " << result
+			   << endl;
+		
 		QMessageBox::warning( 0,					// parent
 				      "Error",					// caption
 				      QString( "Couldn't save y2logs to %1 - "
@@ -228,13 +233,14 @@ void YQUI::askSaveLogs()
 	    }
 	    else
 	    {
-		y2milestone( "y2logs saved to %s", qPrintable(fileName) );
+		yuiMilestone() << "y2logs saved to " << fileName << endl;
 	    }
 	}
 	else
 	{
-	    y2error( "Error saving y2logs: Command %s not found",
-		     qPrintable(saveLogsCommand) );
+	    yuiError() << "Error saving y2logs: Command \""
+		       << saveLogsCommand << "\" not found"
+		       << endl;
 
 	    QMessageBox::warning( 0,						// parent
 				  "Error",					// caption
@@ -252,18 +258,21 @@ void YQUI::askConfigureLogging()
 {
     bool okButtonPressed = false;
     QStringList items;
-    items << "Debug logging off"
-	  << "Debug logging on";
+    items << "UI Debug logging off"
+	  << "UI Debug logging on";
 
     QString result = QInputDialog::getItem( _main_win,
-                                            _("YaST2 Logging"),
-                                            _("Configure YaST2 Logging:"),
-                                            items, 0, get_log_debug() ? 1 : 0, &okButtonPressed);
+                                            _("YaST2 UI Logging"),
+                                            _("Configure YaST2 UI Logging:"),
+                                            items, 0,
+					    YUILog::debugLoggingEnabled() ? 1 : 0,
+					    &okButtonPressed );
     if ( okButtonPressed )
     {
-	set_log_debug( result.endsWith( "on" ) );
-	y2milestone( "Changing logging: %s - %s", qPrintable(result),
-		     get_log_debug() ? "y2debug on" : "y2debug off" );
+	YUILog::enableDebugLogging( result.endsWith( "on" ) );
+	yuiMilestone() << "Changing logging: <<" << result 
+		       << " UI Debug logging: " << YUILog::debugLoggingEnabled()
+		       << endl;
     }
 }
 
@@ -295,7 +304,7 @@ void YQUI::toggleRecordMacro()
 
         if ( ! filename.isEmpty() )     // file selection dialog has been cancelled
         {
-            recordMacro( qPrintable(filename) );
+            recordMacro( toUTF8( filename ) );
         }
     }
 }
@@ -314,7 +323,7 @@ void YQUI::askPlayMacro()
 
     if ( ! filename.isEmpty() ) // file selection dialog has been cancelled
     {
-        playMacro( qPrintable(filename) );
+        playMacro( toUTF8( filename ) );
 
         // Do special magic to get out of any UserInput() loop right now
         // without doing any harm - otherwise this would hang until the next

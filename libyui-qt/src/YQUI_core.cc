@@ -19,6 +19,7 @@
 #include <rpc/types.h>		// MAXHOSTNAMELEN
 #include <dlfcn.h>
 #include <libintl.h>
+#include <algorithm>
 
 #include <QCursor>
 #include <QMessageBox>
@@ -28,8 +29,8 @@
 #include <QThread>
 #include <QVBoxLayout>
 
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 #include "YQUI.h"
 #include "QY2Styler.h"
@@ -43,11 +44,15 @@
 #include "YQDialog.h"
 #include "QY2Settings.h"
 
+
+using std::max;
+
 #define BUSY_CURSOR_TIMEOUT	200	// milliseconds
 
-YQUI * YQUI::_ui = 0;
 
 static void qMessageHandler( QtMsgType type, const char * msg );
+YQUI * YQUI::_ui = 0;
+
 
 YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     : YUI( with_threads )
@@ -55,7 +60,7 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     , _do_exit_loop( false )
     , _eventLoop( 0 )
 {
-    y2milestone( "YQUI constructor start" );
+    yuiMilestone() << "YQUI constructor start" << endl;
 
     _ui				= this;
     _fatal_error		= false;
@@ -90,7 +95,7 @@ YQUI_Ui::YQUI_Ui()
 
 void YQUI::init_ui()
 {
-    if (_ui_inited)
+    if ( _ui_inited )
         return;
 
     // yast has no use of the glib event loop
@@ -192,8 +197,9 @@ void YQUI::init_ui()
 
     QString qt_lib_name = QString( QTLIBDIR "/libQtGui.so.%1" ).arg( QT_VERSION >> 16 );;
     void * qt_lib = dlopen( qt_lib_name.toUtf8().constData(), RTLD_GLOBAL );
-    y2milestone( "Forcing %s open %s", qt_lib_name.toUtf8().constData(),
-		 qt_lib ? "successful" : "failed" );
+    yuiMilestone() << "Forcing " << qt_lib_name.toUtf8().constData() << " open "
+		   << ( qt_lib ? "successful" : "failed" )
+		   << endl;
 
     //  Init other stuff
 
@@ -210,7 +216,9 @@ void YQUI::init_ui()
     //    if ( macro_file )
     // playMacro( macro_file );
 
-    y2milestone( "YQUI constructor end %ld", QThread::currentThreadId () );
+    yuiMilestone() << "YQUI constructor end. Thread ID: "
+		   << hex << QThread::currentThreadId () << dec 
+		   << endl;
     qApp->processEvents();
 }
 
@@ -230,7 +238,7 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 	{
 	    QString opt = argv[i];
 
-	    y2milestone ("Qt argument: %s", argv[i]);
+	    yuiMilestone() << "Qt argument: " << argv[i] << endl;
 
 	    // Normalize command line option - accept "--xy" as well as "-xy"
 
@@ -272,7 +280,7 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 
 YQUI::~YQUI()
 {
-    y2debug("Closing down Qt UI.");
+    yuiDebug() <<"Closing down Qt UI." << endl;
 
     normalCursor();
 
@@ -327,8 +335,10 @@ void YQUI::calcDefaultSize()
     {
 	_default_size = availableSize;
 
-        y2milestone( "-fullscreen: using %dx%d for `opt(`defaultsize)",
-		     _default_size.width(), _default_size.height() );
+        yuiMilestone() << "-fullscreen: using " 
+		       << _default_size.width() << " x " << _default_size.height()
+		       << "for `opt(`defaultsize)"
+		       << endl;
     }
     else
     {
@@ -359,12 +369,15 @@ void YQUI::calcDefaultSize()
 	}
 	else
 	{
-	    y2milestone( "Forced size (via -geometry): %dx%d",
-			 _default_size.width(), _default_size.height() );
+	    yuiMilestone() << "Forced size (via -geometry): "
+			   << _default_size.width() << " x " << _default_size.height()
+			   << endl;
 	}
     }
 
-    y2milestone( "Default size: %dx%d", _default_size.width(), _default_size.height() );
+    yuiMilestone() << "Default size: "
+		   << _default_size.width() << " x " << _default_size.height()
+		   << endl;
 }
 
 
@@ -436,7 +449,11 @@ YEvent * YQUI::userInput( unsigned long timeout_millisec )
     _eventLoop->wakeUp();
     blocked_level = 0;
 
-    //y2milestone( "userInput %ld %ld", timeout_millisec, QThread::currentThreadId() );
+#if 0
+    yuiMilestone() << "userInput( " << timeout_millisec
+		   << " ) Thread ID: " << hex <<  QThread::currentThreadId() << dec
+		   << endl;
+#endif
 
     YEvent * 	event  = 0;
     YQDialog *	dialog = dynamic_cast<YQDialog *> ( YDialog::currentDialog( false ) );
@@ -584,24 +601,24 @@ qMessageHandler( QtMsgType type, const char * msg )
     switch (type)
     {
 	case QtDebugMsg:
-	    y2milestone ("qt-debug: %s\n", msg);
+	    yuiMilestone() <<  "<qt-debug> " << msg << endl;
 	    break;
 	case QtWarningMsg:
-	    y2warning ("qt-warning: %s\n", msg);
+	    yuiWarning() <<  "<qt-warning> " << msg << endl;
 #ifndef NDEBUG
 	    //abort();
 #endif
 	    break;
 	case QtCriticalMsg:
-	    y2warning ("qt-critical: %s\n", msg);
+	    yuiError() <<  "<qt-critical>" << msg << endl;
 #ifndef NDEBUG
             //abort();
 #endif
 	    break;
 	case QtFatalMsg:
-	    y2internal ("qt-fatal: %s\n", msg);
+	    yuiError() << "<qt-fatal> " << msg << endl;
             abort();
-	    exit (1);		// qt does the same
+	    exit(1);		// qt does the same
     }
 }
 

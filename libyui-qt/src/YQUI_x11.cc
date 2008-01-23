@@ -29,8 +29,8 @@
 #include <QDesktopWidget>
 
 
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 #include "YEvent.h"
 #include "YQDialog.h"
@@ -235,7 +235,7 @@ void YQUI::maybeLeftHandedUser()
 
 	_leftHandedMouse	 = ! _leftHandedMouse; 	// might be set repeatedly!
 	_askedForLeftHandedMouse = false;	// give the user a chance to switch back
-	y2milestone( "Switching mouse buttons: %s", command );
+	yuiMilestone() << "Switching mouse buttons: " << command << endl;
 
 	system( command );
     }

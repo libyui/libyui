@@ -22,11 +22,12 @@
 
 #include <qstring.h>
 #include <string>
+#include <iosfwd>
 
 
 inline QString fromUTF8( const std::string & str )
 {
-    return QString::fromUtf8(str.c_str() );
+    return QString::fromUtf8( str.c_str() );
 }
 
 
@@ -37,5 +38,12 @@ inline std::string toUTF8( const QString & str )
     else
 	return std::string( str.toUtf8().data() );
 }
+
+
+inline std::ostream & operator<<( std::ostream & stream, const QString & str )
+{
+    return stream << str.toUtf8().data();
+}
+
 
 #endif // utf8_h
