@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jan 23 18:35:29 CET 2008 - sh@suse.de
+
+- Use new YCP-less logging (part 1)
+- V 2.16.18
+
+-------------------------------------------------------------------
 Wed Jan 16 14:32:01 CET 2008 - coolo@suse.de
 
 - disable patch again now that yast2-core is ready
