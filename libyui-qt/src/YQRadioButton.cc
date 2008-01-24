@@ -19,8 +19,9 @@
 #include <qradiobutton.h>
 #include <QMouseEvent>
 #include <QBoxLayout>
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 #include "utf8.h"
 #include "YQUI.h"
@@ -148,8 +149,8 @@ bool YQRadioButton::eventFilter( QObject * obj, QEvent * event )
 
         if ( mouseEvent && mouseEvent->button() == Qt::RightButton )
         {
-             y2milestone( "Right click on button detected" );
-             YQUI::ui()->maybeLeftHandedUser();
+	    yuiMilestone() << "Right click on button detected" << endl;
+	    YQUI::ui()->maybeLeftHandedUser();
         }
     }
 

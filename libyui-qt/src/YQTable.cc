@@ -19,8 +19,8 @@
 #include <QHeaderView>
 #include <QVBoxLayout>
 #include <QString>
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 #include "utf8.h"
 #include "YQUI.h"
@@ -320,7 +320,7 @@ YQTableListViewItem::updateCell( const YTableCell * cell )
 	QPixmap	icon	 = QPixmap( iconName.c_str() );
 
 	if ( icon.isNull() )
-	    y2warning( "Can't load icon %s", iconName.c_str() );
+	    yuiWarning() << "Can't load icon %s" << iconName << endl;
 	else
 	    setData( column, Qt::DecorationRole, icon );
     }

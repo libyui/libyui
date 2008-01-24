@@ -23,8 +23,8 @@
 #include <QPixmap>
 #include <QKeyEvent>
 #include <QVBoxLayout>
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 using std::max;
 
@@ -53,7 +53,7 @@ YQSelectionBox::YQSelectionBox( YWidget * parent, const string & label )
     setLayout( layout );
 
     layout->setSpacing( YQWidgetSpacing );
-    layout->setMargin ( YQWidgetMargin  );
+    layout->setMargin ( YQWidgetMargin	);
 
     _caption = new YQWidgetCaption( this, label );
     YUI_CHECK_NEW( _caption );
@@ -76,7 +76,7 @@ YQSelectionBox::YQSelectionBox( YWidget * parent, const string & label )
     connect( _qt_listBox,	SIGNAL( itemDoubleClicked( QListWidgetItem * ) ),
 	     this,		SLOT  ( slotActivated( QListWidgetItem * ) ) );
 
-    connect( &_timer,		SIGNAL( timeout()           ),
+    connect( &_timer,		SIGNAL( timeout()	    ),
 	     this,		SLOT  ( returnImmediately() ) );
 }
 
@@ -105,7 +105,7 @@ void YQSelectionBox::addItem( YItem * item )
 	icon = QPixmap( iconName.c_str() );
 
 	if ( icon.isNull() )
-	    y2warning( "Can't load icon %s", iconName.c_str() );
+	    yuiWarning() << "Can't load icon %s" << iconName << endl;
     }
 
     if ( icon.isNull() )
@@ -145,10 +145,7 @@ void YQSelectionBox::selectItem( int index )
     if ( item )
     {
 #ifdef VERBOSE_SELECTION
-	y2debug( "%s \"%s\": Selecting item \"%s\"",
-		 widgetClass(),
-		 debugLabel().c_str(),
-		 item->label().c_str() );
+	yuiDebug() << this << ": Selecting item \"" << item->label() << "\"" << endl;
 #endif
 
 	item->setSelected( true );
@@ -201,7 +198,7 @@ int YQSelectionBox::preferredHeight()
 {
     int hintHeight	 = !_caption->isHidden() ? _caption->sizeHint().height() : 0;
     int visibleLines	 = shrinkable() ? SHRINKABLE_VISIBLE_LINES : DEFAULT_VISIBLE_LINES;
-    hintHeight 		+= visibleLines * _qt_listBox->fontMetrics().lineSpacing();
+    hintHeight		+= visibleLines * _qt_listBox->fontMetrics().lineSpacing();
     hintHeight		+= _qt_listBox->frameWidth() * 2;
 
     return max( 80, hintHeight );
@@ -255,7 +252,7 @@ bool YQSelectionBox::eventFilter( QObject * obj, QEvent * ev )
 
 	if ( mouseEvent && mouseEvent->button() == Qt::RightButton )
 	{
-	    y2milestone( "Right click in selecton box detected" );
+	    yuiMilestone() << "Right click in selecton box detected" << endl;
 	    YQUI::ui()->maybeLeftHandedUser();
 	}
     }
@@ -311,7 +308,7 @@ void YQSelectionBox::returnImmediately()
 	// Avoid overwriting a (more important) Activated event with a
 	// SelectionChanged event
 
-	y2debug( "sending selbox event" );
+	yuiDebug() << "Sending selbox event" << endl;
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
     }
 }
@@ -319,7 +316,7 @@ void YQSelectionBox::returnImmediately()
 
 void YQSelectionBox::returnDelayed()
 {
-    y2debug( "Starting selbox timer" );
+    yuiDebug() << "Starting selbox timer" << endl;
     _timer.setSingleShot( true );
     _timer.start( 250 ); // millisec
 }
