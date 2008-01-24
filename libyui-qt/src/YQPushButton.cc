@@ -19,8 +19,8 @@
 
 #include <qpushbutton.h>
 #include <qsize.h>
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 #include "utf8.h"
 #include "YQUI.h"

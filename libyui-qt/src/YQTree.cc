@@ -24,8 +24,8 @@
 #include <QString>
 //Added by qt3to4:
 #include <QPixmap>
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 using std::min;
 using std::max;
@@ -97,7 +97,7 @@ void YQTree::setLabel( const string & label )
 
 void YQTree::rebuildTree()
 {
-    // y2debug( "Rebuilding tree" );
+    // yuiDebug() << "Rebuilding tree" << endl;
 
     YQSignalBlocker sigBlocker( _qt_listView );
     _qt_listView->clear();
@@ -161,7 +161,7 @@ void YQTree::selectItem( YQTreeItem * item )
 	openBranch( item );
 	YTree::selectItem( item->origItem(), true );
 
-	y2debug( "selected item: \"%s\"", item->origItem()->label().c_str() );
+	yuiDebug() << "selected item: \"" << item->origItem()->label() << "\"" << endl;
     }
 }
 
@@ -267,7 +267,7 @@ YQTreeItem::YQTreeItem( YQTree	*	tree,
     init( tree, orig, serial );
 
 #if VERBOSE_TREE_ITEMS
-    y2debug( "Creating toplevel tree item \"%s\"", orig->label().c_str() );
+    yuiDebug() << "Creating toplevel tree item \"" << orig->label() << "\"" << endl;
 #endif
 }
 
@@ -280,9 +280,10 @@ YQTreeItem::YQTreeItem( YQTree	*	tree,
 {
     init( tree, orig, serial );
 #if VERBOSE_TREE_ITEMS
-    y2debug( "Creating tree item \"%s\" as child of \"%s\"",
-	     orig->label().c_str(),
-	     parentItem->origItem()->label().c_str() );
+    yuiDebug() << "Creating tree item \"" << orig->label()
+	       << "\" as child of \"" << parentItem->origItem()->label() << "\""
+	       << endl;
+
 #endif
 }
 
@@ -309,7 +310,7 @@ void YQTreeItem::init( YQTree *		tree,
 	QPixmap icon( iconName.c_str() );
 
 	if ( icon.isNull() )
-	    y2warning( "Can't load icon %s", iconName.c_str() );
+	    yuiWarning() << "Can't load icon " << iconName << endl;
 	else
 	    setData( 0, Qt::DecorationRole, icon );
     }

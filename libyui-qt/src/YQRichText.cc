@@ -16,8 +16,8 @@
 
 /-*/
 
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 #include <QColorGroup>
 #include <QScrollBar>
@@ -135,8 +135,8 @@ void YQRichText::setAutoScrollDown( bool newAutoScrollDown )
 
 void YQRichText::linkClicked( const QUrl & url )
 {
-    // y2debug( "Selected hyperlink \"%s\"", (const char *) url );
-    YQUI::ui()->sendEvent( new YMenuEvent(url.toString().toUtf8()) );
+    // yuiDebug() << "Selected hyperlink \"" << url.toString() << "\" << endl;
+    YQUI::ui()->sendEvent( new YMenuEvent( url.toString().toUtf8()) );
 }
 
 

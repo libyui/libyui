@@ -19,8 +19,8 @@
 /-*/
 
 #include "YQWizard.h"
-#define y2log_component "qt-wizard"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-wizard"
+#include "YUILog.h"
 
 // For the command parser
 
@@ -238,10 +238,9 @@ void YQWizard::addStep( const string & text, const string & id )
 
     if ( _stepsIDs[ qId ] )
     {
-	y2error( "Step ID \"%s\" (\"%s\") already used for \"%s\"",
-		 id.c_str(),
-		 text.c_str(),
-		 qPrintable( _stepsIDs[ qId ]->name() ) );
+	yuiError() << "Step ID \"" << id << "\" (\"" << text
+		   <<"\") already used for \"" << _stepsIDs[ qId ]->name() <<"\""
+		   << endl;
 	return;
     }
 
@@ -474,7 +473,7 @@ void YQWizard::addTreeItem( const string & parentID, const string & text, const 
 
     if ( ! _tree )
     {
-	y2error( "YQWizard widget not created with `opt(`treeEnabled) !" );
+	yuiError() << "YQWizard widget not created with `opt(`treeEnabled) !" << endl;
 	return;
     }
 
@@ -758,7 +757,7 @@ void YQWizard::connectNotify ( const char * signal )
 {
     if ( QString( signal ).contains( "nextClicked()" ) )
     {
-	y2debug( "nextClicked connected, no longer directly sending button events" );
+	yuiDebug() << "nextClicked connected, no longer directly sending button events" << endl;
 	_sendButtonEvents = false;
     }
 }
@@ -768,7 +767,7 @@ void YQWizard::disconnectNotify ( const char * signal )
 {
     if ( QString( signal ).contains( "nextClicked()" ) )
     {
-	y2debug( "nextClicked disconnected, directly sending button events again" );
+	yuiDebug() << "nextClicked disconnected, directly sending button events again" << endl;
 	_sendButtonEvents = true;
     }
 }
@@ -783,7 +782,7 @@ void YQWizard::setDialogIcon( const string & iconName )
 	    QPixmap icon( iconName.c_str() );
 
 	    if ( icon.isNull() )
-		y2warning( "Couldn't load dialog icon \"%s\"", iconName.c_str() );
+		yuiWarning() << "Couldn't load dialog icon \"" << iconName << "\"" << endl;
 	    else
 	    {
 		_dialogIcon->setPixmap( icon );
@@ -880,7 +879,7 @@ void YQWizard::releaseNotesClicked()
 
     if ( ! _releaseNotesButtonId.empty() )
     {
-	y2milestone( "Release Notes button clicked" );
+	yuiMilestone() << "Release Notes button clicked" << endl;
 	sendEvent( _releaseNotesButtonId );
     }
 }
@@ -944,7 +943,7 @@ void YQWizard::addSubMenu( const string & parentMenuID,
     }
     else
     {
-	y2error( "Can't find menu with ID %s", parentMenuID.c_str() );
+	yuiError() << "Can't find menu with ID " << parentMenuID << endl;
     }
 }
 
@@ -965,7 +964,7 @@ void YQWizard::addMenuEntry( const string & parentMenuID,
     }
     else
     {
-	y2error( "Can't find menu with ID %s", parentMenuID.c_str() );
+	yuiError() << "Can't find menu with ID " << parentMenuID << endl;
     }
 }
 
@@ -980,7 +979,7 @@ void YQWizard::addMenuSeparator( const string & parentMenuID )
     }
     else
     {
-	y2error( "Can't find menu with ID %s", parentMenuID.c_str() );
+	yuiError() << "Can't find menu with ID " << parentMenuID << endl;
     }
 }
 
@@ -1005,7 +1004,7 @@ void YQWizard::sendMenuEvent( int numID )
     }
     else
     {
-	y2error( "Invalid menu ID: %d", numID );
+	yuiError() << "Invalid menu ID: " << numID << endl;
     }
 }
 
@@ -1038,7 +1037,7 @@ void YQWizard::setSize( int newWidth, int newHeight )
 
 void YQWizard::resizeClientArea()
 {
-    y2debug( "resizing client area" );
+    yuiDebug() << "resizing client area" << endl;
     QRect contentsRect = _clientArea->contentsRect();
     _contents->setSize( contentsRect.width(), contentsRect.height() );
 }
@@ -1078,10 +1077,10 @@ void YQWizard::showReleaseNotesButton( const string & label, const string & id )
 
     if ( ! _releaseNotesButton )
     {
-	y2error( "NULL Release Notes button" );
+	yuiError() << "NULL Release Notes button" << endl;
 
 	if ( ! _stepsPanel )
-	    y2error( "This works only if there is a \"steps\" panel!" );
+	    yuiError() << "This works only if there is a \"steps\" panel!" << endl;
 
 	return;
     }
