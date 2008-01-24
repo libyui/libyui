@@ -1397,7 +1397,7 @@ std::map <int, string> NCDialog::describeFunctionKeys( )
     {
 	YWidget * w = dynamic_cast<YWidget *> (c->Value() );
 
-	if ( w && w->hasFunctionKey() )
+	if ( w && w->hasFunctionKey() && w->isEnabled() )
 	{
 	    // Retrieve the widget's "shortcut property" that describes
 	    // whatever it is - regardless of widget type (PushButton, ...)
