@@ -197,22 +197,22 @@ void YQTimezoneSelector::mousePressEvent ( QMouseEvent * event )
     }
     else if ( event->button() == Qt::LeftButton )
     {
+        d->_best = d->findBest( event->pos() );
+
         if ( d->_zoom.isNull() )
         {
             QPoint click = event->pos();
             /* keep the zoom point in unscaled math */
             d->_zoom.rx() = (int) ( double( click.x() ) * d->_pix.width()   / width() );
             d->_zoom.ry() = (int) ( double( click.y() ) * d->_pix.height() / height() );
-            d->cachePix = QPixmap();
-        } else {
-            d->_best = d->findBest( event->pos() );
-            d->cachePix = QPixmap();
-
-            if ( notify() )
-                YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
-
-            d->blink->start();
         }
+
+        d->cachePix = QPixmap();
+
+        if ( notify() )
+            YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+
+        d->blink->start();
     } else
         return;
 
