@@ -17,8 +17,8 @@
 /-*/
 
 
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 #include <qtabbar.h>
 #include <qevent.h>
 #include <qpainter.h>
@@ -71,7 +71,7 @@ YQDumbTab::addItem( YItem * item )
     YDumbTab::addItem( item );
 
     _tabBar->insertTab( item->index(), fromUTF8( item->label() ) );
-    y2debug( "Adding tab page [%s]", item->label().c_str() );
+    yuiDebug() << "Adding tab page [" << item->label() << "]" << endl;
 #warning YItem::setData
     // item->setData( tab );
 
@@ -121,7 +121,7 @@ YQDumbTab::slotSelected( int index )
 {
     YItem * item = itemAt( index );
     YUI_CHECK_PTR( item );
-    y2debug( "Tab [%s] selected", item->label().c_str() );
+    yuiDebug() << "Tab [" << item->label() << "] selected" << endl;
 
 
     YQUI::ui()->sendEvent( new YMenuEvent( item ) );
@@ -142,7 +142,7 @@ YQDumbTab::preferredWidth()
     int tabBarWidth = _tabBar->sizeHint().width();
     int childWidth  = hasChildren() ? firstChild()->preferredWidth() : 0;
 
-    return max( tabBarWidth, childWidth );
+    return std::max( tabBarWidth, childWidth );
 }
 
 

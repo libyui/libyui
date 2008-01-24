@@ -19,8 +19,8 @@
 /-*/
 
 
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 #include <qpushbutton.h>
 #include <qmessagebox.h>
 #include <QDesktopWidget>
@@ -111,7 +111,7 @@ YQDialog::chooseParent( YDialogType dialogType )
     if ( dialogType == YMainDialog &&
 	 YQMainWinDock::mainWinDock()->couldDock() )
     {
-	y2debug( "Adding dialog to mainWinDock" );
+	yuiDebug() << "Adding dialog to mainWinDock" << endl;
 	parent = YQMainWinDock::mainWinDock();
     }
 
@@ -140,8 +140,10 @@ YQDialog::preferredWidth()
 
     if ( preferredWidth > screenWidth )
     {
-	y2warning( "Limiting dialog width to screen width (%d) instead of %d - check the layout!",
-		   screenWidth, preferredWidth );
+	yuiWarning() << "Limiting dialog width to screen width (" << screenWidth
+		     << ") instead of " << preferredWidth
+		     << " - check the layout!"
+		     << endl;
     }
 
     return preferredWidth;
@@ -169,8 +171,10 @@ YQDialog::preferredHeight()
 
     if ( preferredHeight > screenHeight )
     {
-	y2warning( "Limiting dialog height to screen height (%d) instead of %d - check the layout!",
-		   screenHeight, preferredHeight );
+	yuiWarning() << "Limiting dialog height to screen height (" << screenHeight
+		     << ") instead of " << preferredHeight
+		     << " - check the layout!"
+		     << endl;
     }
 
     return preferredHeight;
@@ -188,7 +192,7 @@ YQDialog::setEnabled( bool enabled )
 void
 YQDialog::setSize( int newWidth, int newHeight )
 {
-    // y2debug( "Resizing dialog to %d x %d", newWidth, newHeight );
+    // yuiDebug() << "Resizing dialog to " << newWidth << " x " << newHeight << endl;
 
     if ( newWidth > qApp->desktop()->width() )
 	newWidth = qApp->desktop()->width();
@@ -221,7 +225,7 @@ YQDialog::resizeEvent( QResizeEvent * event )
 {
     if ( event )
     {
-	// y2debug( "Resize event: %d x %d", event->size().width(), event->size().height() );
+	// yuiDebug() << "Resize event: " << event->size().width() << " x " << event->size().height() << endl;
 	setSize ( event->size().width(), event->size().height() );
 	_userSize = event->size();
 
@@ -309,10 +313,8 @@ YQDialog::ensureOnlyOneDefaultButton( YWidgetListConstIterator begin,
 	    {
 		if ( _defaultButton && button != _defaultButton )
 		{
-		    y2error( "Too many default buttons: [%s]",
-			     qPrintable(button->text()) );
-		    y2error( "Using old default button: [%s]",
-			     qPrintable(_defaultButton->text()) );
+		    yuiError() << "Too many default buttons: " << button  << endl;
+		    yuiError() << "Using old default button: " << _defaultButton << endl;
 		}
 		else
 		{
@@ -445,8 +447,7 @@ YQDialog::setDefaultButton( YPushButton * newDefaultButton )
 	}
 	else
 	{
-	    y2error( "Too many `opt(`default) PushButtons: [%s]",
-		     newDefaultButton->label().c_str() );
+	    yuiError() << "Too many `opt(`default) PushButtons: " << newDefaultButton << endl;
 	    newDefaultButton->setDefaultButton( false );
 	    return;
 	}
@@ -457,7 +458,7 @@ YQDialog::setDefaultButton( YPushButton * newDefaultButton )
     if ( _defaultButton )
     {
 	_defaultButton->setDefaultButton( true );
-	y2debug( "New default button: [%s]", qPrintable(_defaultButton->text()) );
+	yuiDebug() << "New default button: " << _defaultButton << endl;
 
 	if ( _defaultButton && ! _focusButton )
 	    _defaultButton->showAsDefault( true );
@@ -478,7 +479,7 @@ YQDialog::activateDefaultButton( bool warn )
 	 _focusButton->isEnabled() &&
 	 _focusButton->isShownAsDefault() )
     {
-	y2debug( "Activating focus button: [%s]", qPrintable(_focusButton->text()) );
+	yuiDebug() << "Activating focus button: " << _focusButton << endl;
 	_focusButton->activate();
 	return true;
     }
@@ -492,7 +493,7 @@ YQDialog::activateDefaultButton( bool warn )
 	 _defaultButton->isEnabled() 	&&
 	 _defaultButton->isShownAsDefault() )
     {
-	y2debug( "Activating default button: [%s]", qPrintable(_defaultButton->text()) );
+	yuiDebug() << "Activating default button: " << _defaultButton << endl;
 	_defaultButton->activate();
 	return true;
     }
@@ -500,7 +501,7 @@ YQDialog::activateDefaultButton( bool warn )
     {
 	if ( warn )
 	{
-	    y2warning( "No default button in this dialog - ignoring [Return]" );
+	    yuiWarning() << "No default button in this dialog - ignoring [Return]" << endl;
 	}
     }
 
@@ -557,7 +558,7 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 
 	    if ( YQUI::ui()->usingVisionImpairedPalette() )
 	    {
-		y2milestone( "Switched to vision impaired palette" );
+		yuiMilestone() << "Switched to vision impaired palette" << endl;
 		QMessageBox::information( 0,                                            // parent
 					  _("Color switching"),  	                // caption
 					  _( "Switching to color palette for vision impaired users -\n"
@@ -568,7 +569,7 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    }
 	    return;
 	}
-	else if ( event->key()   == Qt::Key_F7 &&	// Shift-F7: toggle y2debug logging
+	else if ( event->key()   == Qt::Key_F7 &&	// Shift-F7: toggle debug logging
 		  event->modifiers() == Qt::ShiftModifier )
 	{
 	    YQUI::ui()->askConfigureLogging();
@@ -593,7 +594,7 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	{
 	    // Qt-UI special keys - all with Ctrl-Shift-Alt
 
-	    y2milestone( "Caught YaST2 magic key combination" );
+	    yuiMilestone() << "Caught YaST2 magic key combination" << endl;
 
 	    if ( event->key() == Qt::Key_M )
 	    {
@@ -612,7 +613,7 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    }
 	    else if ( event->key() == Qt::Key_X )
 	    {
-		y2milestone( "Starting xterm" );
+		yuiMilestone() << "Starting xterm" << endl;
 		system( "/usr/bin/xterm &" );
 		return;
 	    }
@@ -630,7 +631,7 @@ YQDialog::closeEvent( QCloseEvent * event )
     // handled just like the user had clicked on the `id`( `cancel ) button in
     // that dialog. It's up to the YCP application to handle this (if desired).
 
-    y2milestone( "Caught window manager close event - returning with YCancelEvent" );
+    yuiMilestone() << "Caught window manager close event - returning with YCancelEvent" << endl;
     event->ignore();
     YQUI::ui()->sendEvent( new YCancelEvent() );
 }

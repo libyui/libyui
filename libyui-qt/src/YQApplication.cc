@@ -25,8 +25,8 @@
 #include <qfiledialog.h>
 #include <qmessagebox.h>
 
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 #include "YUISymbols.h"
 
 #include "utf8.h"
@@ -47,12 +47,12 @@ YQApplication::YQApplication()
     , _autoNormalFontSize( -1 )
     , _autoHeadingFontSize( -1 )
 {
-    y2debug( "YQApplication constructor start" );
+    yuiDebug() << "YQApplication constructor start" << endl;
 
     setIconBasePath( ICONDIR "/icons/22x22/apps/" );
     loadPredefinedQtTranslations();
 
-    y2debug( "YQApplication constructor end" );
+    yuiDebug() << "YQApplication constructor end" << endl;
 }
 
 
@@ -90,8 +90,9 @@ YQApplication::loadPredefinedQtTranslations()
 
     if ( path.isEmpty() )
     {
-	y2warning( "Qt locale directory not set - "
-		   "no translations for predefined Qt dialogs" );
+	yuiWarning() << "Qt locale directory not set - "
+		     << "no translations for predefined Qt dialogs"
+		     << endl;
 	return;
     }
 
@@ -109,13 +110,13 @@ YQApplication::loadPredefinedQtTranslations()
 
     if ( _qtTranslations->isEmpty() )
     {
-	y2warning( "Can't load translations for predefined Qt dialogs from %s/%s",
-		   qPrintable(path), qPrintable(transFile) );
+	yuiWarning() << "Can't load translations for predefined Qt dialogs from "
+		     << path << "/" << transFile << endl;
     }
     else
     {
-	y2milestone( "Loaded translations for predefined Qt dialogs from %s/%s",
-		     qPrintable(path), qPrintable(transFile) );
+	yuiMilestone() << "Loaded translations for predefined Qt dialogs from "
+		       << path << "/" << transFile << endl;
 
 	qApp->installTranslator( _qtTranslations );
     }
@@ -127,8 +128,8 @@ YQApplication::loadPredefinedQtTranslations()
 	   language.startsWith( "he" ) )	// Hebrew
 	 && ! (qApp->layoutDirection() == Qt::RightToLeft) )
     {
-	y2warning( "Using fallback rule for reverse layout for language '%s'",
-		   qPrintable(language) );
+	yuiWarning() << "Using fallback rule for reverse layout for language \""
+		     << language << "\"" << endl;
 
 	qApp->setLayoutDirection( Qt::RightToLeft );
     }
@@ -146,9 +147,9 @@ YQApplication::setLangFonts( const string & language, const string & encoding )
 	Q_CHECK_PTR( _langFonts );
 
 	if ( _langFonts->readError() )
-	    y2error( "Error reading %s", qPrintable(_langFonts->fileName()) );
+	    yuiError() << "Error reading " << _langFonts->fileName() << endl;
 	else
-	    y2milestone( "%s read OK", qPrintable(_langFonts->fileName()) );
+	    yuiMilestone() <<  _langFonts->fileName() << " read OK" << endl;
     }
 
     QString lang = language.c_str();
@@ -169,29 +170,29 @@ YQApplication::setLangFonts( const string & language, const string & encoding )
     if ( _langFonts->hasKey( fontKey( lang ) ) )
     {
 	_fontFamily = _langFonts->get( fontKey( lang ), "Sans Serif" );
-	y2milestone( "%s = \"%s\"", qPrintable(fontKey( lang )), qPrintable(_fontFamily) );
+	yuiMilestone() << fontKey( lang ) << " = \"" << _fontFamily << "\"" << endl;
     }
     else
     {
 	_fontFamily = _langFonts->get( fontKey( "" ), "Sans Serif" );
-	y2milestone( "Using fallback for %s: font = \"%s\"",
-		     qPrintable(lang), qPrintable(_fontFamily) );
+	yuiMilestone() << "Using fallback for " << lang
+		       << ": font = \"" << _fontFamily << "\""
+		       << endl;
     }
 
     if ( _fontFamily != oldFontFamily && ! _fontFamily.isEmpty() )
     {
-	y2milestone( "New font family: %s", qPrintable(_fontFamily) );
+	yuiMilestone() << "New font family: " << _fontFamily << endl;
 	deleteFonts();
 	int size = qApp->font().pointSize();
 	QFont font( _fontFamily );
 	font.setPointSize( size );
 	qApp->setFont(font);	// font, informWidgets
-	y2milestone( "Reloading fonts - now using \"%s\"",
-		     qPrintable(font.toString()) );
+	yuiMilestone() << "Reloading fonts - now using \"" << font.toString() << "\"" << endl;
     }
     else
     {
-	y2debug( "No font change" );
+	yuiDebug() << "No font change" << endl;
     }
 }
 
@@ -231,14 +232,15 @@ YQApplication::currentFont()
 	    _currentFont->setPixelSize( _autoNormalFontSize );
 	    _currentFont->setWeight( QFont::Normal );
 
-	    y2milestone( "Loaded %d pixel font: %s", _autoNormalFontSize,
-			 qPrintable(_currentFont->toString()) );
+	    yuiMilestone() << "Loaded " <<  _autoNormalFontSize
+			   << " pixel font: " << _currentFont->toString()
+			   << endl;
 
 	    qApp->setFont( * _currentFont);	// font, informWidgets
 	}
 	else
 	{
-	    // y2debug( "Copying QApplication::font()" );
+	    // yuiDebug() << "Copying QApplication::font()" << endl;
 	    _currentFont = new QFont( qApp->font() );
 	}
     }
@@ -277,8 +279,9 @@ YQApplication::headingFont()
 	    _headingFont->setPixelSize( _autoHeadingFontSize );
 	    _headingFont->setWeight( QFont::Bold );
 
-	    y2milestone( "Loaded %d pixel bold font: %s", _autoHeadingFontSize,
-			 qPrintable(_headingFont->toString()) );
+	    yuiMilestone() << "Loaded " << _autoHeadingFontSize
+			   << " pixel bold font: " << _headingFont->toString()
+			   << endl;
 	}
 	else
 	{
@@ -371,8 +374,9 @@ YQApplication::pickAutoFonts()
     _autoNormalFontSize	 = normal;
     _autoHeadingFontSize = heading;
 
-    y2milestone( "Selecting auto fonts - normal: %d, heading: %d (bold)",
-		 _autoNormalFontSize, _autoHeadingFontSize );
+    yuiMilestone() << "Selecting auto fonts - normal: " << _autoNormalFontSize
+		   << ", heading: " <<  _autoHeadingFontSize  << " (bold)"
+		   << endl;
 }
 
 

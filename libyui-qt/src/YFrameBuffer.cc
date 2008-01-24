@@ -17,8 +17,8 @@
 /-*/
 
 
-#define y2log_component "framebuffer"
-#include <ycp/y2log.h>
+#define YUILogComponent "framebuffer"
+#include "YUILog.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -51,7 +51,7 @@ YFrameBuffer::YFrameBuffer( int width, int height, int depth )
 	    break;
 
 	default:
-	    y2warning( "Pixel depth %d not supported", _depth );
+	    yuiWarning() << "Pixel depth " << depth << " not supported" << endl;
 	    _bytesPerPixel = 0;
 	    break;
     }
@@ -71,7 +71,7 @@ void YFrameBuffer::mmapFB()
 {
     if ( _fb )
     {
-	y2error( "Framebuffer already mmap()'ed" );
+	yuiError() << "Framebuffer already mmap()'ed" << endl;
 	return;
     }
 
@@ -79,7 +79,7 @@ void YFrameBuffer::mmapFB()
 
     if ( _fb_fd < 0 )
     {
-	y2error( "Can't open /dev/fb0 - errno %d: %s", errno, strerror( errno ) );
+	yuiError() << "Can't open /dev/fb0 - errno " << errno << ": " << strerror( errno ) << endl;
 	return;
     }
 
@@ -93,7 +93,7 @@ void YFrameBuffer::mmapFB()
 
     if ( _fb == MAP_FAILED )
     {
-	y2error( "mmap() failed for /dev/fb0 - errno %d: %s", errno, strerror( errno ) );
+	yuiError() << "mmap() failed for /dev/fb0 - errno " << errno << ": " << strerror( errno ) << endl;
 	_fb = 0;
 	close( _fb_fd );
     }

@@ -26,8 +26,8 @@
 
 #include <QPainter>
 
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 using std::max;
 
@@ -95,9 +95,9 @@ void BusyBar::paintEvent(QPaintEvent * e)
 	
     QPainter painter(this);
     QLinearGradient gradient(0, 0, width()-1, 0);
-    gradient.setColorAt(min(_position - STEP_SIZE, 0.0), background );
+    gradient.setColorAt( std::min(_position - STEP_SIZE, 0.0), background );
     gradient.setColorAt(_position, foreground );
-    gradient.setColorAt(max(_position + STEP_SIZE, 1.0), background );
+    gradient.setColorAt( std::max(_position + STEP_SIZE, 1.0), background );
 
     painter.setBrush(gradient);
     painter.setPen(Qt::NoPen);

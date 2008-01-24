@@ -24,8 +24,8 @@
 #include <qcombobox.h>
 #include <qlineedit.h>
 #include <qpixmap.h>
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 #include "utf8.h"
 #include "YQUI.h"
@@ -104,8 +104,7 @@ void YQComboBox::setText( const string & newValue )
     }
     else
     {
-	y2error( "%s \"%s\": Rejecting invalid value \"%s\"",
-		 widgetClass(), debugLabel().c_str(), newValue.c_str() );
+	yuiError() << this << ": Rejecting invalid value \"" << newValue << "\"" << endl;
     }
 }
 
@@ -121,7 +120,7 @@ void YQComboBox::addItem( YItem * item )
 	icon = QIcon( iconName.c_str() );
 
 	if ( icon.isNull() )
-	    y2warning( "Can't load icon %s", iconName.c_str() );
+	    yuiWarning() << "Can't load icon \"" << iconName << "\"" << endl;
     }
 
     if ( icon.isNull() )
@@ -157,8 +156,7 @@ void YQComboBox::setValidChars( const string & newValidChars )
 {
     if ( ! _qt_comboBox->isEditable() )
     {
-	y2warning( "Setting ValidChars is useless on a combo box that isn't editable! (%s)",
-		   debugLabel().c_str() );
+	yuiWarning() << this << ": Setting ValidChars is useless on a combo box that isn't editable! (%s)" << endl;
 	return;
     }
 
@@ -177,10 +175,9 @@ void YQComboBox::setValidChars( const string & newValidChars )
 
     if ( ! isValidText( _qt_comboBox->currentText() ) )
     {
-	y2error( "Old value \"%s\" of %s \"%s\" invalid according to ValidChars \"%s\" - deleting",
-		 qPrintable(_qt_comboBox->currentText()),
-		 widgetClass(), debugLabel().c_str(),
-		 newValidChars.c_str() );
+	yuiError() << this << ": Old value \"" << _qt_comboBox->currentText()
+		   << " \" invalid according to new ValidChars \""<< newValidChars << "\" - deleting"
+		   << endl;
 	_qt_comboBox->setItemText(_qt_comboBox->currentIndex(), "");
     }
 

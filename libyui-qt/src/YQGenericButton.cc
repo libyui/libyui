@@ -20,11 +20,10 @@
 #include <qpushbutton.h>
 #include <qsize.h>
 #include <qevent.h>
-//Added by qt3to4:
 #include <qpixmap.h>
 #include <qevent.h>
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 #include "utf8.h"
 #include "YQUI.h"
@@ -109,7 +108,7 @@ void YQGenericButton::setIcon( const string & iconName )
 {
     if ( ! _qPushButton )
     {
-	y2error( "NULL button (icon %s)", iconName.c_str() );
+	yuiError() << "NULL button (icon " << iconName << ")" << endl;
 	return;
     }
 
@@ -125,7 +124,7 @@ void YQGenericButton::setIcon( const string & iconName )
     QPixmap icon( qIconName );
 
     if ( icon.isNull() )
-	y2warning( "Can't load icon '%s'", qPrintable(qIconName) );
+	yuiWarning() << "Can't load icon \"" << qIconName << "\"" << endl;
     else
 	_qPushButton->setIcon( icon );
 }
@@ -136,7 +135,7 @@ void YQGenericButton::setLabel( const QString & label )
     if ( _qPushButton )
 	_qPushButton->setText( label );
     else
-	y2error( "NULL button '%s'", qPrintable(label) );
+	yuiError() << "NULL button \"" << label << "\"" << endl;
 
     YPushButton::setLabel( toUTF8( label ) );
 }
@@ -147,7 +146,7 @@ void YQGenericButton::setLabel( const string & label )
     if ( _qPushButton )
 	_qPushButton->setText( fromUTF8( label ) );
     else
-	y2error( "NULL button '%s'", label.c_str() );
+	yuiError() << "NULL button \"" << label << "\"" << endl;
 
     YPushButton::setLabel( label );
 }
@@ -203,7 +202,7 @@ bool YQGenericButton::eventFilter( QObject * obj, QEvent * event )
 
 	    if ( mouseEvent && mouseEvent->button() == Qt::RightButton )
 	    {
-		y2milestone( "Right click on button detected" );
+		yuiMilestone() << "Right click on button detected" << endl;
 		YQUI::ui()->maybeLeftHandedUser();
 	    }
 	}

@@ -21,8 +21,8 @@
 #include <QMenu>
 #include <qsize.h>
 #include <qtimer.h>
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 #include "utf8.h"
 #include "YQUI.h"
@@ -106,7 +106,7 @@ YQMenuButton::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIte
 	    icon = QPixmap( iconName.c_str() );
 
 	    if ( icon.isNull() )
-		y2warning( "Can't load icon %s", iconName.c_str() );
+		yuiWarning() << "Can't load icon " << iconName << endl;
 	}
 
 	if ( item->hasChildren() )
@@ -147,7 +147,7 @@ YQMenuButton::menuEntryActivated( QAction* action )
     if ( _serials.contains( action ) )
         serialNo = _serials[action];
 
-    // y2debug( "Selected menu entry #%d", menu_item_index );
+    // yuiDebug() << "Selected menu entry #" << menu_item_index << endl;
     _selectedItem = findMenuItem( serialNo );
 
     if ( _selectedItem )
@@ -167,7 +167,7 @@ YQMenuButton::menuEntryActivated( QAction* action )
     }
     else
     {
-	y2error( "No menu item with serial no. %d", serialNo );
+	yuiError() << "No menu item with serial no. " << serialNo << endl;
     }
 }
 

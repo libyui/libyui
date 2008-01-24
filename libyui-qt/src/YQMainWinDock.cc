@@ -17,8 +17,8 @@
 /-*/
 
 
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 #include <QTimer>
 #include <QResizeEvent>
 #include <YDialog.h>
@@ -26,6 +26,7 @@
 #include <YEvent.h>
 #include "YQMainWinDock.h"
 
+#define VERBOSE_RESIZE 0
 
 
 YQMainWinDock *
@@ -53,8 +54,9 @@ YQMainWinDock::YQMainWinDock()
     resize( YQUI::ui()->defaultSize( YD_HORIZ ),
 	    YQUI::ui()->defaultSize( YD_VERT  ) );
 
-    y2debug( "MainWinDock initial size: %d x %d",
-	     size().width(), size().height() );
+    yuiDebug() << "MainWinDock initial size: "
+	       << size().width() << " x " << size().height()
+	       << endl;
 }
 
 
@@ -84,7 +86,11 @@ YQMainWinDock::resizeVisibleChild()
 
 	if ( dialog->size() != size() )
 	{
-	    // y2debug( "Resizing child dialog %p to %d x %d", dialog, size().width(), size().height() );
+#if VERBOSE_RESIZE
+	    yuiDebug() << "Resizing child dialog " << hex << ( (void *) dialog ) << dec
+		       << " to " << size().width() << " x " << size().height()
+		       << endl;
+#endif
 	    dialog->resize( size() );
 	}
     }
@@ -116,7 +122,10 @@ YQMainWinDock::add( QWidget * dialog )
     dialog->raise();
     dialog->show();
 
-    y2debug( "Adding dialog %p to mainWinDock", dialog );
+    yuiDebug() << "Adding dialog " << hex << (void *) dialog << dec
+	       << "  to mainWinDock"
+	       << endl;
+    
     _widgetStack.push_back( dialog );
     resizeVisibleChild();
 
@@ -130,7 +139,7 @@ YQMainWinDock::showCurrentDialog()
     if ( ! _widgetStack.empty() )
     {
 	QWidget * dialog = _widgetStack.back();
-	y2debug( "Showing dialog %p", dialog );
+	yuiDebug() << "Showing dialog " << hex << (void *) dialog << dec << endl;
 	dialog->raise();
 	update();
     }
@@ -153,7 +162,9 @@ YQMainWinDock::remove( QWidget * dialog )
 
 	_widgetStack.pop_back();
 
-	y2debug( "Removing dialog %p from mainWinDock", dialog );
+	yuiDebug() << "Removing dialog " << hex << (void *) dialog << dec
+		   <<" from mainWinDock"
+		   << endl;
     }
     else // The less common (but more generic) case: Remove any dialog
     {
@@ -162,8 +173,10 @@ YQMainWinDock::remove( QWidget * dialog )
 	if ( pos == _widgetStack.end() )
 	    return;
 
-	y2warning( "Found dialog somewhere in the middle of the widget stack" );
-	y2debug( "Removing dialog %p from mainWinDock", dialog );
+	yuiWarning() << "Found dialog somewhere in the middle of the widget stack" << endl;
+	yuiDebug() << "Removing dialog " << hex << (void *) dialog << dec
+		   << " from mainWinDock"
+		   << endl;
 
 	_widgetStack.erase( pos );
     }
@@ -228,7 +241,7 @@ YQMainWinDock::closeEvent( QCloseEvent * event )
     // handled just like the user had clicked on the `id`( `cancel ) button in
     // that dialog. It's up to the YCP application to handle this (if desired).
 
-    y2milestone( "Caught window manager close event - returning with YCancelEvent" );
+    yuiMilestone() << "Caught window manager close event - returning with YCancelEvent" << endl;
     event->ignore();
     YQUI::ui()->sendEvent( new YCancelEvent() );
 }

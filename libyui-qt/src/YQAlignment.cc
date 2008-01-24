@@ -17,8 +17,8 @@
 /-*/
 
 
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 #include <qpixmap.h>
 #include "YQAlignment.h"
 
@@ -86,7 +86,7 @@ void YQAlignment::setBackgroundPixmap( const string & pixmapFileName )
 
 	if ( pixmap.isNull() )
 	{
-	    y2error( "Can't load background pixmap %s", pixmapName.c_str() );
+	    yuiError() << "Can't load background pixmap \"" << pixmapName << "\"" << endl;
 	}
 	else
 	{

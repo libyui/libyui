@@ -26,8 +26,8 @@
 
 #include <QFrame>
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include "QY2ComboTabWidget.h"
 
@@ -101,7 +101,7 @@ QY2ComboTabWidget::showPageIndex( int index )
     {
         QWidget * page = pages[ index ];
 	widget_stack->setCurrentWidget( page );
-	// y2debug( "Changing current page" );
+	// yuiDebug() << "Changing current page" << endl;
 	emit currentChanged( page );
     }
     else

@@ -20,8 +20,8 @@
 
 
 #include <qlineedit.h>
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 using std::max;
 
@@ -105,8 +105,7 @@ void YQInputField::setValue( const string & newText )
     }
     else
     {
-	y2error( "%s \"%s\": Rejecting invalid value \"%s\"",
-		 widgetClass(), debugLabel().c_str(), newText.c_str() );
+	yuiError() << this << ": Rejecting invalid value \"" << newText << "\"" << endl;
     }
 }
 
@@ -178,10 +177,11 @@ void YQInputField::setValidChars( const string & newValidChars )
 
     if ( ! isValidText( _qt_lineEdit->text() ) )
     {
-	y2error( "Old value \"%s\" of %s \"%s\" invalid according to ValidChars \"%s\" - deleting",
-		 qPrintable(_qt_lineEdit->text()),
-		 widgetClass(), debugLabel().c_str(),
-		 newValidChars.c_str() );
+	yuiError() << this << ": Old value \"" << _qt_lineEdit->text()
+		   << "\" invalid according to new ValidChars \"" << newValidChars
+		   << "\" - deleting"
+		   << endl;
+	
 	_qt_lineEdit->setText( "" );
     }
 
@@ -212,7 +212,7 @@ void YQInputField::changed( const QString & )
 
 void YQInputField::displayCapsLockWarning()
 {
-    y2milestone( "warning" );
+    yuiMilestone() << "warning" << endl;
     if ( _displayingCapsLockWarning )
 	return;
 
@@ -236,7 +236,7 @@ void YQInputField::displayCapsLockWarning()
 
 void YQInputField::clearCapsLockWarning()
 {
-    y2milestone( "warning off " );
+    yuiMilestone() << "warning off " << endl;
     if ( ! _displayingCapsLockWarning )
 	return;
 
@@ -279,12 +279,12 @@ bool YQRawLineEdit::x11Event( XEvent * event )
 		    if ( key == XK_Caps_Lock ||
 			 key == XK_Shift_Lock  )
 		    {
-			y2milestone( "CapsLock released" );
+			yuiMilestone() << "CapsLock released" << endl;
 			_capsLockActive = false;
 		    }
 		}
 
-		y2debug( "Key event; caps lock: %s", _capsLockActive ? "on" : "off" );
+		yuiDebug() << "Key event; caps lock: " << _capsLockActive << endl;
 		break;
 
 	    case ButtonPress:
@@ -308,7 +308,7 @@ bool YQRawLineEdit::x11Event( XEvent * event )
 
 	if ( oldCapsLockActive != _capsLockActive )
 	{
-	    y2milestone( "Emitting warning" );
+	    yuiMilestone() << "Emitting warning" << endl;
 
 	    if ( _capsLockActive )
 		emit capsLockActivated();

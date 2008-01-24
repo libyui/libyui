@@ -18,8 +18,8 @@
 
 
 #include <QRadioButton>
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 #include "YQRadioButtonGroup.h"
 #include "YQRadioButton.h"

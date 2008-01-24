@@ -17,8 +17,8 @@
 /-*/
 
 
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 #include <qevent.h>
 #include <QPointF>
@@ -125,7 +125,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 
     if ( totalSum == 0.0 )
     {
-	y2error( "Avoiding division by zero: totalSum" );
+	yuiError() << "Avoiding division by zero: totalSum" << endl;
 	return;
     }
 
@@ -154,7 +154,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 
     if ( restSum == 0.0 )
     {
-	y2error( "Avoiding division by zero: restSum" );
+	yuiError() << "Avoiding division by zero: restSum" << endl;
 	return;
     }
 
@@ -204,7 +204,7 @@ void YQMultiProgressMeter::mouseDoubleClickEvent ( QMouseEvent * event )
     {
 	// Easter egg: Switch between rectangular and triangular shape
 
-	y2milestone( "Switching shape" );
+	yuiMilestone() << "Switching shape" << endl;
 	setTriangularShaped( ! triangularShaped() );
 	setSize( vertical()   ? preferredWidth()  : width(),
 		 horizontal() ? preferredHeight() : height() );
@@ -236,7 +236,7 @@ void YQMultiProgressMeter::drawSegment( int segment,
 
     if ( maxValue( segment ) == 0.0 )
     {
-        y2error( "Avoiding division by zero: maxValue[%d]", segment );
+        yuiError() << "Avoiding division by zero: maxValue[" << segment << "]" << endl;
         return;
     }
 

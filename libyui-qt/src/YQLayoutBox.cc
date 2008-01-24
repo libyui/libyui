@@ -17,8 +17,8 @@
 /-*/
 
 
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 #include "YQLayoutBox.h"
 
 
@@ -40,7 +40,7 @@ void YQLayoutBox::setEnabled( bool enabled )
 
 void YQLayoutBox::setSize( int newWidth, int newHeight )
 {
-    // y2debug( "Resizing %s to %d x %d", widgetClass(), newWidth, newHeight );
+    // yuiDebug() << "Resizing " << this << " to " << newWidth << " x " << newHeight << endl;
     resize( newWidth, newHeight );
     YLayoutBox::setSize( newWidth, newHeight );
 }

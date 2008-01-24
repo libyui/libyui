@@ -17,8 +17,8 @@
 /-*/
 
 
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 #include <algorithm>
 #include <qpainter.h>
@@ -35,6 +35,7 @@
 #define YQBarGraphMinWidth		80
 #define YQBarGraphMinHeight		30
 
+using std::max;
 
 
 YQBarGraph::YQBarGraph( YWidget * parent )

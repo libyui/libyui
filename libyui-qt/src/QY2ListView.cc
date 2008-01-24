@@ -24,8 +24,8 @@
 #include <QMouseEvent>
 #include "QY2ListView.h"
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 QY2ListView::QY2ListView( QWidget * parent )
     : QTreeWidget( parent )

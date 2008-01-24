@@ -17,15 +17,15 @@
 /-*/
 
 
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#include <qlabel.h>
+
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 #include "utf8.h"
 #include "YQUI.h"
 #include "YQApplication.h"
 #include "YQLabel.h"
-//Added by qt3to4:
-#include <qlabel.h>
 
 
 YQLabel::YQLabel( YWidget * 		parent,

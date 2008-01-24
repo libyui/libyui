@@ -21,8 +21,8 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 #include "utf8.h"
 #include "YQUI.h"
@@ -160,7 +160,7 @@ YQSlider::preferredWidth()
     int hintWidth = !_caption->isHidden() ? _caption->sizeHint().width() : 0;
 
     // Arbitrary value - there is no really good default
-    return max( 200, hintWidth );
+    return std::max( 200, hintWidth );
 }
 
 

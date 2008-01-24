@@ -19,8 +19,8 @@
 /-*/
 
 #include "YQPackageSelectorPlugin.h"
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 #include "pkg/YQPackageSelector.h"
 #include "pkg/YQPatternSelector.h"
 #include "pkg/YQSimplePatchSelector.h"
@@ -34,8 +34,9 @@ YQPackageSelectorPlugin::YQPackageSelectorPlugin()
 {
     if ( success() )
     {
-	y2milestone( "Loaded %s plugin successfully from %s",
-		     PLUGIN_BASE_NAME, pluginLibFullPath().c_str() );
+	yuiMilestone() << "Loaded " << PLUGIN_BASE_NAME
+		       << " plugin successfully from " << pluginLibFullPath()
+		       << endl;
     }
     else
 	YUI_THROW( YUIPluginException( PLUGIN_BASE_NAME ) );
@@ -62,13 +63,13 @@ YQPackageSelectorPlugin::createPackageSelector( YWidget * parent, long modeFlags
     }
     catch (const std::exception & e)
     {
-	y2error( "Caught std::exception: %s", e.what() );
-	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
+	yuiError() << "Caught std::exception: %s" << e.what() << endl;
+	yuiError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
     }
     catch (...)
     {
-	y2error( "Caught unspecified exception." );
-	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
+	yuiError() << "Caught unspecified exception." << endl;
+	yuiError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
     }
 
     YUI_CHECK_NEW( packageSelector );
@@ -91,13 +92,13 @@ YQPackageSelectorPlugin::createPatternSelector( YWidget * parent, long modeFlags
     }
     catch (const std::exception & e)
     {
-	y2error( "Caught std::exception: %s", e.what() );
-	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
+	yuiError() << "Caught std::exception: %s" << e.what() << endl;
+	yuiError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
     }
     catch (...)
     {
-	y2error( "Caught unspecified exception." );
-	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
+	yuiError() << "Caught unspecified exception." << endl;
+	yuiError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
     }
 
     YUI_CHECK_NEW( patternSelector );
@@ -120,13 +121,13 @@ YQPackageSelectorPlugin::createSimplePatchSelector( YWidget * parent, long modeF
     }
     catch (const std::exception & e)
     {
-	y2error( "Caught std::exception: %s", e.what() );
-	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
+	yuiError() << "Caught std::exception: %s" << e.what() << endl;
+	yuiError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
     }
     catch (...)
     {
-	y2error( "Caught unspecified exception." );
-	y2error( "This is a libzypp problem. Do not file a bug against the UI!" );
+	yuiError() << "Caught unspecified exception." << endl;
+	yuiError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
     }
 
     YUI_CHECK_NEW( simplePatchSelector );

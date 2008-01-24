@@ -19,8 +19,8 @@
 
 #include <qcheckbox.h>
 #include <QBoxLayout>
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 #include "utf8.h"
 #include "YQApplication.h"
@@ -142,7 +142,7 @@ bool YQCheckBox::setKeyboardFocus()
 
 void YQCheckBox::stateChanged( int newState )
 {
-    // y2milestone( "new state: %d", newState );
+    // yuiMilestone() << "new state: " << newState << endl;
 
     if ( notify() )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );

@@ -20,11 +20,10 @@
 #include <unistd.h>
 #include <qpixmap.h>
 #include <qmovie.h>
-#include <QIcon>
-//Added by qt3to4:
 #include <qlabel.h>
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#include <QIcon>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 
 #include "utf8.h"
 #include "YQImage.h"
@@ -65,11 +64,11 @@ YQImage::setImage( const string & fileName, bool animated )
 	
 	if ( movie.isValid() )
 	{
-	    y2error( "Couldn't load animation from %s", imageFileName().c_str() );
+	    yuiError() << "Couldn't load animation from " << imageFileName() << endl;
 	}
 	else
 	{
-	    y2debug( "Loading animation from %s", imageFileName().c_str() );
+	    yuiDebug() << "Loading animation from " << imageFileName() << endl;
 	    QLabel::setMovie( &movie );
 	}
     }
@@ -79,7 +78,7 @@ YQImage::setImage( const string & fileName, bool animated )
 
 	if ( pixmap.isNull() )
 	{
-	    y2error( "Couldn't load pixmap from %s", imageFileName().c_str() );
+	    yuiError() << "Couldn't load pixmap from " << imageFileName() << endl;
 	}
 	else
 	{
@@ -94,10 +93,9 @@ YQImage::setImage( const string & fileName, bool animated )
 		_pixmapHeight = pixmap.size().height();
 	    }
 	
-	    y2debug( "Loading image from %s (%d x %d)",
-		     imageFileName().c_str(),
-		     pixmap.size().width(),
-		     pixmap.size().height() );
+	    yuiDebug() << "Loading image from " << imageFileName()
+		       << " (" << pixmap.size().width() << " x " << pixmap.size().height() << ")"
+		       << endl;
 	    
 	    QLabel::setPixmap( pixmap );
 	}

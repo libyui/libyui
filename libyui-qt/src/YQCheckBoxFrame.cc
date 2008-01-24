@@ -17,8 +17,8 @@
 /-*/
 
 
-#define y2log_component "qt-ui"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-ui"
+#include "YUILog.h"
 #include <qcheckbox.h>
 #include <QDebug>
 #include <QVBoxLayout>
@@ -136,7 +136,7 @@ void YQCheckBoxFrame::childEvent( QChildEvent * )
     // Reimplemented to prevent the parent class disabling child widgets
     // according to its default policy.
 
-    // y2debug( "ChildEvent" );
+    // yuiDebug() << "ChildEvent" << endl;
 }
 
 
