@@ -258,20 +258,20 @@ void YQUI::askConfigureLogging()
 {
     bool okButtonPressed = false;
     QStringList items;
-    items << "UI Debug logging off"
-	  << "UI Debug logging on";
+    items << "Debug logging off"
+	  << "Debug logging on";
 
     QString result = QInputDialog::getItem( _main_win,
-                                            _("YaST2 UI Logging"),
-                                            _("Configure YaST2 UI Logging:"),
+                                            _("YaST2 Logging"),
+                                            _("Configure YaST2 Logging:"),
                                             items, 0,
-					    YUILog::debugLoggingEnabled() ? 1 : 0,
+					    YUI::debugLoggingEnabled() ? 1 : 0,
 					    &okButtonPressed );
     if ( okButtonPressed )
     {
-	YUILog::enableDebugLogging( result.endsWith( "on" ) );
+	YUI::enableDebugLogging( result.endsWith( "on" ) );
 	yuiMilestone() << "Changing logging: <<" << result 
-		       << " UI Debug logging: " << YUILog::debugLoggingEnabled()
+		       << " UI Debug logging: " << YUI::debugLoggingEnabled()
 		       << endl;
     }
 }
