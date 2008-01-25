@@ -18,8 +18,8 @@
 
 /-*/
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 #include <QRegExp>
 #include <zypp/ZYppFactory.h>
 #include <zypp/Resolver.h>
@@ -34,6 +34,9 @@
 #include "YQApplication.h"
 #include "YQUI.h"
 
+using std::string;
+using std::set;
+
 
 #define CATEGORY_BACKGROUND	QColor( 0xFF, 0xC0, 0x50 )
 
@@ -41,7 +44,7 @@
 YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFilter )
     : YQPkgObjList( parent )
 {
-    y2debug( "Creating pattern list" );
+    yuiDebug() << "Creating pattern list" << endl;
 
     int numCol = 1;
     QStringList headers;
@@ -95,7 +98,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 	fillList();
 	selectSomething();
     }
-    y2debug( "Creating pattern list done" );
+    yuiDebug() << "Creating pattern list done" << endl;
 }
 
 
@@ -109,7 +112,7 @@ void
 YQPkgPatternList::fillList()
 {
     clear();
-    y2debug( "Filling pattern list" );
+    yuiDebug() << "Filling pattern list" << endl;
 
 
     for ( ZyppPoolIterator it = zyppPatternsBegin();
@@ -125,15 +128,16 @@ YQPkgPatternList::fillList()
 		addPatternItem( *it, zyppPattern );
 	    }
 	    else
-		y2debug( "Pattern %s is not user-visible", zyppPattern->name().c_str() );
+		yuiDebug() << "Pattern " << zyppPattern->name()
+			   << " is not user-visible" << endl;
 	}
 	else
 	{
-	    y2error( "Found non-Pattern selectable" );
+	    yuiError() << "Found non-Pattern selectable" << endl;
 	}
     }
 
-    y2debug( "Pattern list filled" );
+    yuiDebug() << "Pattern list filled" << endl;
 }
 
 
@@ -147,7 +151,7 @@ YQPkgPatternList::category( const QString & categoryName )
 
     if ( ! cat )
     {
-	y2debug( "New pattern category \"%s\"", qPrintable(categoryName) );
+	yuiDebug() << "New pattern category \""<< categoryName << "\"" << endl;
 
 	cat = new YQPkgPatternCategoryItem( this, categoryName );
 	Q_CHECK_PTR( cat );
@@ -209,7 +213,7 @@ YQPkgPatternList::addPatternItem( ZyppSel	selectable,
 {
     if ( ! selectable )
     {
-	y2error( "NULL ZyppSelectable!" );
+	yuiError() << "NULL ZyppSelectable!" << endl;
 	return;
     }
 

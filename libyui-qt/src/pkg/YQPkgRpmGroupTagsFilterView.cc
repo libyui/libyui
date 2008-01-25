@@ -19,8 +19,8 @@
 /-*/
 
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include "YQPkgRpmGroupTagsFilterView.h"
 #include "YQi18n.h"
@@ -70,7 +70,7 @@ YQPkgRpmGroupTagsFilterView::rpmGroupsTree()
 void
 YQPkgRpmGroupTagsFilterView::fillRpmGroupsTree()
 {
-    y2debug( "Filling RPM groups tree" );
+    yuiDebug() << "Filling RPM groups tree" << endl;
 
     for ( ZyppPoolIterator it = zyppPkgBegin();
 	  it != zyppPkgEnd();
@@ -82,7 +82,7 @@ YQPkgRpmGroupTagsFilterView::fillRpmGroupsTree()
 	    rpmGroupsTree()->addRpmGroup( zyppPkg->group() );
     }
 
-    y2debug( "Filling RPM groups tree done" );
+    yuiDebug() << "Filling RPM groups tree done" << endl;
 }
 
 
@@ -132,7 +132,7 @@ void
 YQPkgRpmGroupTagsFilterView::filter()
 {
     emit filterStart();
-    // y2debug( "Filtering packages for RPM group \"%s\"", selectedRpmGroup().c_str() );
+    // yuiDebug() << "Filtering packages for RPM group \"" << selectedRpmGroup() << "\"" << endl;
     
     if ( selection() )
     {

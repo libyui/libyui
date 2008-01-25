@@ -18,8 +18,8 @@
 
 /-*/
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include <zypp/ZYppFactory.h>
 #include <zypp/Resolver.h>
@@ -228,7 +228,7 @@ YQPkgConflictDialog::solveAndShowConflicts()
 {
     prepareSolving();
 
-    y2debug( "Solving..." );
+    yuiDebug() << "Solving..." << endl;
     QTime solveTime;
     solveTime.start();
 
@@ -238,8 +238,9 @@ YQPkgConflictDialog::solveAndShowConflicts()
 
     _totalSolveTime += solveTime.elapsed() / 1000.0;
 
-    y2debug( "Solving done in %f s - average: %f s",
-	     solveTime.elapsed() / 1000.0, averageSolveTime() );
+    yuiDebug() << "Solving done in " << ( solveTime.elapsed() / 1000.0 )
+	       << " s - average: "  << " s" << averageSolveTime()
+	       << endl;
 
     return processSolverResult( success );
 }
@@ -250,13 +251,13 @@ YQPkgConflictDialog::verifySystem()
 {
     prepareSolving();
 
-    y2debug( "Verifying system..." );
+    yuiDebug() << "Verifying system..." << endl;
     QTime solveTime;
     solveTime.start();
 
     bool success = zypp::getZYpp()->resolver()->verifySystem( true ); // considerNewHardware
 
-    y2debug( "System verified in %f s", solveTime.elapsed() / 1000.0 );
+    yuiDebug() << "System verified in " << solveTime.elapsed() / 1000.0 << " s" << endl;
 
     return processSolverResult( success );
 }
@@ -323,7 +324,7 @@ YQPkgConflictDialog::processSolverResult( bool success )
     }
     else		// There were solving problems.
     {
-	y2debug( "Dependency conflict!" );
+	yuiDebug() << "Dependency conflict!" << endl;
 	YQUI::ui()->busyCursor();
 
 	_conflictList->fill( zypp::getZYpp()->resolver()->problems() );
@@ -377,9 +378,9 @@ YQPkgConflictDialog::askCreateSolverTestCase()
     if ( button_no == 1 )	// Cancel
 	return;
 
-    y2milestone( "Generating solver test case START" );
-    bool success = zypp::getZYpp()->resolver()->createSolverTestcase( qPrintable(testCaseDir) );
-    y2milestone( "Generating solver test case END" );
+    yuiMilestone() << "Generating solver test case START" << endl;
+    bool success = zypp::getZYpp()->resolver()->createSolverTestcase( qPrintable( testCaseDir ) );
+    yuiMilestone() << "Generating solver test case END" << endl;
 
     if ( success )
     {

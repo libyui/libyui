@@ -19,8 +19,8 @@
 /-*/
 
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include "YQPkgUpdateProblemFilterView.h"
 #include "YQi18n.h"
@@ -92,8 +92,9 @@ YQPkgUpdateProblemFilterView::filter()
 
 	    if ( sel )
 	    {
-		y2milestone( "Problematic package: %s-%s",
-			     pkg->name().c_str(), pkg->edition().asString().c_str() );
+		yuiMilestone() << "Problematic package: "
+			       << pkg->name() << "-" << pkg->edition().asString()
+			       << endl;
 		
 		emit filterMatch( sel, pkg );
 	    }

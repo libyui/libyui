@@ -16,8 +16,8 @@
 
 /-*/
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include <unistd.h>
 #include <QRegExp>
@@ -97,7 +97,7 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
     {
 	if ( icon.startsWith( "./" ) )
 	    icon.replace( QRegExp( "^\\./" ), "" );
-	    
+
 	if ( ! icon.endsWith( ".png", Qt::CaseInsensitive ) &&
 	     ! icon.endsWith( ".jpg", Qt::CaseInsensitive )   )
 	    icon += ".png";
@@ -127,8 +127,9 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
 	}
 
 	if ( pattern && icon.isEmpty() )
-	    y2warning( "No icon for pattern %s - icon name: %s",
-		       zyppObj->name().c_str(), qPrintable(origIconName) );
+	    yuiWarning() << "No icon for pattern " << zyppObj->name()
+			 << " - icon name: " << origIconName
+			 << endl;
     }
 
 
@@ -160,14 +161,14 @@ YQPkgSelDescriptionView::htmlHeading( ZyppSel selectable )
 QString
 YQPkgSelDescriptionView::findIcon( const QString & icon ) const
 {
-    if ( access( qPrintable(icon), R_OK ) == 0 )
+    if ( access( qPrintable( icon ), R_OK ) == 0 )
     {
-	y2debug( "Found icon %s", qPrintable(icon) );
+	yuiDebug() << "Found icon " << icon << endl;
 	return icon;
     }
     else
     {
-	y2debug( "No icon %s", qPrintable(icon) );
+	yuiDebug() << "No icon " << icon << endl;
 	return "";
     }
 }

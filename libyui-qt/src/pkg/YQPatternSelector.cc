@@ -24,8 +24,8 @@
 #include <QPushButton>
 #include <QSplitter>
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include "QY2LayoutUtils.h"
 
@@ -77,7 +77,7 @@ YQPatternSelector::YQPatternSelector( YWidget *	parent, long modeFlags )
     if ( zyppPool().empty<zypp::Pattern  >() &&
 	 zyppPool().empty<zypp::Selection>()   )
     {
-	y2warning( "Neither patterns nor selections in ZyppPool" );
+	yuiWarning() << "Neither patterns nor selections in ZyppPool" << endl;
     }
 
 
@@ -163,7 +163,7 @@ YQPatternSelector::layoutLeftPane( QWidget * parent )
 	 * looks better than a lot of grey empty space.
 	 **/
 
-	y2warning( "No patterns in ZyppPool - using selections instead" );
+	yuiWarning() << "No patterns in ZyppPool - using selections instead" << endl;
 	_selList = new YQPkgSelList( vbox,
 				     false,	// no autoFill - need to connect to details view first
 				     false );	// no autoFilter - filterMatch() is not connected
@@ -342,7 +342,7 @@ YQPatternSelector::makeConnections()
 	}
     }
 
-    y2milestone( "Connection set up" );
+    yuiMilestone() << "Connection set up" << endl;
 
 
     if ( _wizard )
@@ -362,7 +362,7 @@ YQPatternSelector::makeConnections()
 void
 YQPatternSelector::detailedPackageSelection()
 {
-    y2milestone( "\"Details..\" button clicked" );
+    yuiMilestone() << "\"Details..\" button clicked" << endl;
     YQUI::ui()->sendEvent( new YMenuEvent( YCPSymbol( "details" ) ) );
 }
 
@@ -370,7 +370,7 @@ YQPatternSelector::detailedPackageSelection()
 void
 YQPatternSelector::debugTrace()
 {
-    y2warning( "debugTrace" );
+    yuiWarning() << "debugTrace" << endl;
 }
 
 

@@ -215,7 +215,7 @@ void YQUI::askSaveLogs()
 	{
 	    saveLogsCommand += " '" + fileName + "'";
 	    yuiMilestone() << "Saving y2logs: " << saveLogsCommand << endl;
-	    int result = system( qPrintable( saveLogsCommand) );
+	    int result = system( qPrintable( saveLogsCommand ) );
 
 	    if ( result != 0 )
 	    {

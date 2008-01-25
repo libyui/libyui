@@ -24,8 +24,8 @@
 #include <QPushButton>
 #include <QSplitter>
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include "QY2LayoutUtils.h"
 
@@ -226,7 +226,7 @@ YQSimplePatchSelector::makeConnections()
 		 _diskUsageList, SLOT  ( updateDiskUsage() ) );
     }
 
-    y2milestone( "Connection set up" );
+    yuiMilestone() << "Connection set up" << endl;
 
     if ( _wizard )
     {
@@ -245,7 +245,7 @@ YQSimplePatchSelector::makeConnections()
 void
 YQSimplePatchSelector::detailedPackageSelection()
 {
-    y2milestone( "\"Details..\" button clicked" );
+    yuiMilestone() << "\"Details..\" button clicked" << endl;
     YQUI::ui()->sendEvent( new YMenuEvent( YCPSymbol( "details" ) ) );
 }
 
@@ -253,7 +253,7 @@ YQSimplePatchSelector::detailedPackageSelection()
 void
 YQSimplePatchSelector::debugTrace()
 {
-    y2warning( "debugTrace" );
+    yuiWarning() << "debugTrace" << endl;
 }
 
 

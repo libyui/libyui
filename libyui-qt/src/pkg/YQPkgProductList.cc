@@ -19,8 +19,8 @@
 /-*/
 
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include "YQi18n.h"
 #include "utf8.h"
@@ -35,7 +35,7 @@ YQPkgProductList::YQPkgProductList( QWidget * parent )
     : YQPkgObjList( parent )
     , _vendorCol( -42 )
 {
-    y2debug( "Creating product list" );
+    yuiDebug() << "Creating product list" << endl;
 
 #if FIXME
     int numCol = 0;
@@ -52,7 +52,7 @@ YQPkgProductList::YQPkgProductList( QWidget * parent )
     selectSomething();
 #endif
 
-    y2debug( "Creating product list done" );
+    yuiDebug() << "Creating product list done" << endl;
 }
 
 
@@ -66,7 +66,7 @@ void
 YQPkgProductList::fillList()
 {
     clear();
-    y2debug( "Filling product list" );
+    yuiDebug() << "Filling product list" << endl;
 
     for ( ZyppPoolIterator it = zyppProductsBegin();
 	  it != zyppProductsEnd();
@@ -80,11 +80,11 @@ YQPkgProductList::fillList()
 	}
 	else
 	{
-	    y2error( "Found non-product selectable" );
+	    yuiError() << "Found non-product selectable" << endl;
 	}
     }
 
-    y2debug( "product list filled" );
+    yuiDebug() << "product list filled" << endl;
 }
 
 
@@ -94,7 +94,7 @@ YQPkgProductList::addProductItem( ZyppSel	selectable,
 {
     if ( ! selectable )
     {
-	y2error( "NULL ZyppSel!" );
+	yuiError() << "NULL ZyppSel!" << endl;
 	return;
     }
 

@@ -18,8 +18,8 @@
 
 /-*/
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include <qdatetime.h>
 #include "YQPkgDependenciesView.h"

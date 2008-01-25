@@ -21,8 +21,8 @@
 #include <QMessageBox>
 #include <QKeyEvent>
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include <QAction>
 #include <QVBoxLayout>
@@ -89,13 +89,13 @@ YQPackageSelectorBase::YQPackageSelectorBase( YWidget * parent,
     // Install event handler to handle WM_CLOSE like "Cancel"
     topLevelWidget()->installEventFilter( this );
 
-    y2milestone( "PackageSelectorBase init done" );
+    yuiMilestone() << "PackageSelectorBase init done" << endl;
 }
 
 
 YQPackageSelectorBase::~YQPackageSelectorBase()
 {
-    y2milestone( "Destroying PackageSelector" );
+    yuiMilestone() << "Destroying PackageSelector" << endl;
 }
 
 
@@ -104,7 +104,7 @@ YQPackageSelectorBase::resolveDependencies()
 {
     if ( ! _pkgConflictDialog )
     {
-	y2error( "No package conflict dialog existing" );
+	yuiError() << "No package conflict dialog existing" << endl;
 	return QDialog::Accepted;
     }
 
@@ -126,7 +126,7 @@ YQPackageSelectorBase::verifySystem()
 {
     if ( ! _pkgConflictDialog )
     {
-	y2error( "No package conflict dialog existing" );
+	yuiError() << "No package conflict dialog existing" << endl;
 	return QDialog::Accepted;
     }
 
@@ -212,19 +212,19 @@ YQPackageSelectorBase::reject()
     if ( changes )
     {
 	if ( zyppPool().diffState<zypp::Package>() )
-	    y2milestone( "diffState() reports changed packages" );
+	    yuiMilestone() << "diffState() reports changed packages" << endl;
 
 	if ( zyppPool().diffState<zypp::Pattern>() )
-	    y2milestone( "diffState() reports changed patterns" );
+	    yuiMilestone() << "diffState() reports changed patterns" << endl;
 
 	if ( zyppPool().diffState<zypp::Selection>() )
-	    y2milestone( "diffState() reports changed selections" );
+	    yuiMilestone() << "diffState() reports changed selections" << endl;
 
 	if ( zyppPool().diffState<zypp::Language>() )
-	    y2milestone( "diffState() reports changed languages" );
+	    yuiMilestone() << "diffState() reports changed languages" << endl;
 
 	if ( zyppPool().diffState<zypp::Patch>() )
-	    y2milestone( "diffState() reports changed patches" );
+	    yuiMilestone() << "diffState() reports changed patches" << endl;
     }
 
     if ( ! changes ||
@@ -242,7 +242,7 @@ YQPackageSelectorBase::reject()
 	zyppPool().restoreState<zypp::Language >();
 	zyppPool().restoreState<zypp::Patch    >();
 
-	y2milestone( "Closing PackageSelector with \"Cancel\"" );
+	yuiMilestone() << "Closing PackageSelector with \"Cancel\"" << endl;
 	YQUI::ui()->sendEvent( new YCancelEvent() );
     }
 }
@@ -286,7 +286,7 @@ YQPackageSelectorBase::accept()
     if ( checkDiskUsage() == QDialog::Rejected )
 	return;
 
-    y2milestone( "Closing PackageSelector with \"Accept\"" );
+    yuiMilestone() << "Closing PackageSelector with \"Accept\"" << endl;
     YQUI::ui()->sendEvent( new YMenuEvent( YCPSymbol( "accept" ) ) );
 }
 
@@ -294,7 +294,7 @@ YQPackageSelectorBase::accept()
 bool
 YQPackageSelectorBase::showPendingLicenseAgreements()
 {
-    y2milestone( "Showing all pending license agreements" );
+    yuiMilestone() << "Showing all pending license agreements" << endl;
 
     bool allConfirmed = true;
 
@@ -329,16 +329,17 @@ YQPackageSelectorBase::showPendingLicenseAgreements( ZyppPoolIterator begin, Zyp
 
 		    if ( ! licenseText.empty() )
 		    {
-			y2milestone( "Resolvable %s has a license agreement", sel->name().c_str() );
+			yuiMilestone() << "Resolvable " << sel->name() << " has a license agreement" << endl;
 
 			if( ! sel->hasLicenceConfirmed() )
 			{
-			    y2debug( "Showing license agreement for resolvable %s", sel->name().c_str() );
+			    yuiDebug() << "Showing license agreement for resolvable " << sel->name() << endl;
 			    allConfirmed = YQPkgObjListItem::showLicenseAgreement( sel ) && allConfirmed;
 			}
 			else
 			{
-			    y2milestone( "Resolvable %s's  license is already confirmed", sel->name().c_str() );
+			    yuiMilestone() << "Resolvable " << sel->name()
+					   << "'s  license is already confirmed" << endl;
 			}
 		    }
 		}

@@ -154,8 +154,8 @@ bool QY2Settings::load()
 
     if ( ! file.open( QIODevice::ReadOnly ) )
     {
-	cerr << "Can't load settings from " << qPrintable(_fileName)
-	     << ": " << qPrintable(file.errorString())
+	cerr << "Can't load settings from " << qPrintable( _fileName )
+	     << ": " << qPrintable( file.errorString() )
 	     << endl;
 	
 	_readError = true;
@@ -205,13 +205,12 @@ bool QY2Settings::load()
 	    value.replace( QRegExp( "\"$" ), "" );	// strip trailing "
 	    value.replace( "\\\"", "\"" );		// un-escape "
 
-	    // qDebug( "Read %s=%s", (const char *) key, (const char *) value );
 	    set( key, value );
 	}
 	else
 	{
 	    qWarning( "%s:%d: Syntax error: %s",
-		      qPrintable( _fileName), lineCount, qPrintable(line) );
+		      qPrintable( _fileName ), lineCount, qPrintable( line ) );
 	}
     }
 
@@ -230,8 +229,8 @@ bool QY2Settings::save()
 
     if ( ! file.open( QIODevice::WriteOnly ) )
     {
-	cerr << "Can't save settings to " << qPrintable(_fileName)
-	     << ": " << qPrintable(file.errorString())
+	cerr << "Can't save settings to " << qPrintable( _fileName )
+	     << ": " << qPrintable( file.errorString() )
 	     << endl;
 	
 	return false;

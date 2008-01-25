@@ -278,7 +278,8 @@ void YQWizard::updateSteps()
     if ( ! _stepsPanel )
 	return;
 
-    qDebug( "updateSteps" );
+    yuiDebug() << "updateSteps" << endl;
+
     // Create a grid layout for the steps
     delete _stepsPanel->layout();
     QVBoxLayout *_stepsVBox = new QVBoxLayout( _stepsPanel );
@@ -313,7 +314,7 @@ void YQWizard::updateSteps()
 	    // Heading
 	    //
 
-            qDebug( "%p - add Stepheading %s", this, qPrintable( step->name() ) );
+            yuiDebug() << this << ": add StepHeading " << step->name() << endl;
 	    QLabel * label = new QLabel( step->name(), _stepsPanel );
 	    YUI_CHECK_NEW( label );
             label->setObjectName( step->name() );
@@ -331,7 +332,8 @@ void YQWizard::updateSteps()
 	    // Step status
 	    //
 
-            qDebug( "%p - add Step %s", this, qPrintable( step->name() ) );
+            yuiDebug() << this << ": add Step " << step->name() << endl;
+
 	    QLabel * statusLabel = new QLabel( _stepsPanel );
 	    YUI_CHECK_NEW( statusLabel );
 
@@ -368,7 +370,8 @@ void YQWizard::updateSteps()
 
 void YQWizard::updateStepStates()
 {
-    qDebug( "updateStepStates %d", _stepsDirty );
+    yuiDebug() << "steps dirty: " << _stepsDirty << endl;
+
     if ( _stepsDirty )
 	updateSteps();
 
@@ -409,7 +412,8 @@ void YQWizard::updateStepStates()
 
 void YQWizard::setCurrentStep( const string & id )
 {
-    qDebug( "setCurrentStep %s", id.c_str() );
+    yuiDebug() << "Setting current step to " << id << endl;
+
     _currentStepID = fromUTF8( id );
     updateStepStates();
 }
@@ -417,7 +421,8 @@ void YQWizard::setCurrentStep( const string & id )
 
 void YQWizard::deleteSteps()
 {
-    qDebug( "deleteSteps" );
+    yuiDebug() << "Deleting steps" << endl;
+
     qDeleteAll(_stepsList);
     _stepsList.clear();
     _stepsIDs.clear();

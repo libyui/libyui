@@ -16,8 +16,8 @@
 
 /-*/
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 #include <QTabWidget>
 #include <QRegExp>
 #include <QDateTime>
@@ -125,7 +125,7 @@ QString
 YQPkgGenericDetailsView::htmlEscape( const QString & plainText )
 {
     QString html = plainText;
-    // y2debug( "Escaping '%s'", (const char *) plainText );
+    // yuiDebug() << "Escaping \"" << plainText << "\"" << endl;
 
     html.replace( QRegExp( "&" ), "&amp;" );
     html.replace( QRegExp( "<" ), "&lt;"  );

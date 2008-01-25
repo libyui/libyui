@@ -18,11 +18,11 @@
 
 /-*/
 
-#define y2log_component "qt-pkg"
+#define YUILogComponent "qt-pkg"
 
 #include <YQZypp.h>
 #include <zypp/Repository.h>
-#include <ycp/y2log.h>
+#include "YUILog.h"
 #include <QTabWidget>
 #include <QRegExp>
 #include <QHeaderView>
@@ -180,7 +180,7 @@ YQPkgVersionsView::checkForChangedCandidate()
 
 	    if ( newCandidate != _selectable->candidateObj() )
 	    {
-		y2milestone( "Candidate changed" );
+		yuiMilestone() << "Candidate changed" << endl;
 
 		// Change status of selectable
 

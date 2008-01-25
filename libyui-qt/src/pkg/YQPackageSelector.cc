@@ -46,8 +46,8 @@
 #include <QTimer>
 #include <QMenu>
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include "QY2LayoutUtils.h"
 
@@ -130,8 +130,8 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     _excludeDebugInfoPkgs	= 0;
 
 
-    if ( onlineUpdateMode() )	y2milestone( "Online update mode" );
-    if ( updateMode() )		y2milestone( "Update mode" );
+    if ( onlineUpdateMode() )	yuiMilestone() << "Online update mode" << endl;
+    if ( updateMode() )		yuiMilestone() << "Update mode" << endl;
 
 
     basicLayout();
@@ -159,7 +159,7 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
 	}
 	else if ( _searchFilterView )
 	{
-	    y2milestone( "No multiple repositories - falling back to search mode" );
+	    yuiMilestone() << "No multiple repositories - falling back to search mode" << endl;
 	    _filters->showPage( _searchFilterView );
 	    _searchFilterView->filter();
 	    QTimer::singleShot( 0, _searchFilterView, SLOT( setFocus() ) );
@@ -197,7 +197,7 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     if ( _diskUsageList )
 	_diskUsageList->updateDiskUsage();
 
-    y2milestone( "PackageSelector init done" );
+    yuiMilestone() << "PackageSelector init done" << endl;
 
 
 #if CHECK_DEPENDENCIES_ON_STARTUP
@@ -1018,7 +1018,7 @@ YQPackageSelector::manualResolvePackageDependencies()
 {
     if ( ! _pkgConflictDialog )
     {
-	y2error( "No package conflict dialog existing" );
+	yuiError() << "No package conflict dialog existing" << endl;
 	return QDialog::Accepted;
     }
 
@@ -1062,7 +1062,7 @@ YQPackageSelector::hotkeyInsertPatchFilterView()
 {
     if ( ! _patchFilterView )
     {
-	y2milestone( "Activating patches filter view" );
+	yuiMilestone() << "Activating patches filter view" << endl;
 
 	addPatchFilterView();
 	connectPatchList();
@@ -1132,11 +1132,11 @@ YQPackageSelector::pkgExport()
 	    exportFile.exceptions( std::ios_base::badbit | std::ios_base::failbit );
 	    exportFile << writer;
 
-	    y2milestone( "Package list exported to %s", qPrintable(filename) );
+	    yuiMilestone() << "Package list exported to " << filename << endl;
 	}
 	catch ( std::exception & exception )
 	{
-	    y2warning( "Error exporting package list to %s", qPrintable(filename) );
+	    yuiWarning() << "Error exporting package list to " << filename << endl;
 
 	    // The export might have left over a partially written file.
 	    // Try to delete it. Don't care if it doesn't exist and unlink() fails.
@@ -1163,7 +1163,7 @@ YQPackageSelector::pkgImport()
 
     if ( ! filename.isEmpty() )
     {
-	y2milestone( "Importing package list from %s", qPrintable(filename) );
+	yuiMilestone() << "Importing package list from " << filename << endl;
 
 	try
 	{
@@ -1190,10 +1190,10 @@ YQPackageSelector::pkgImport()
 		else if ( kind == "pattern" )	importPatterns.insert( ImportMapPair( it->name(), *it ) );
 	    }
 
-	    y2debug( "Found %zu packages and %zu patterns in %s",
-		     importPkg.size(),
-		     importPatterns.size(),
-		     qPrintable(filename) );
+	    yuiDebug() << "Found "        << importPkg.size()
+		       <<" packages and " << importPatterns.size()
+		       << " patterns in " << filename
+		       << endl;
 
 
 	    //
@@ -1234,7 +1234,7 @@ YQPackageSelector::pkgImport()
 	}
 	catch ( const zypp::Exception & exception )
 	{
-	    y2warning( "Error reading package list from %s", qPrintable(filename) );
+	    yuiWarning() << "Error reading package list from " << filename << endl;
 
 	    // Post error popup
 	    QMessageBox::warning( this,						// parent
@@ -1276,7 +1276,7 @@ YQPackageSelector::importSelectable( ZyppSel		selectable,
 	    case S_Del:
 	    case S_AutoDel:
 		newStatus = S_KeepInstalled;
-		y2debug( "Keeping %s %s", kind, selectable->name().c_str() );
+		yuiDebug() << "Keeping " << kind << " " << selectable->name() << endl;
 		break;
 
 	    case S_NoInst:
@@ -1285,12 +1285,12 @@ YQPackageSelector::importSelectable( ZyppSel		selectable,
 		if ( selectable->hasCandidateObj() )
 		{
 		    newStatus = S_Install;
-		    y2debug( "Adding %s %s", kind, selectable->name().c_str() );
+		    yuiDebug() << "Adding " << kind << " " <<  selectable->name() << endl;
 		}
 		else
 		{
-		    y2debug( "Can't add %s %s: No candidate",
-			     kind, selectable->name().c_str() );
+		    yuiDebug() << "Can't add " << kind << " " << selectable->name()
+			       << ": No candidate" << endl;
 		}
 		break;
 	}
@@ -1310,7 +1310,7 @@ YQPackageSelector::importSelectable( ZyppSel		selectable,
 	    case S_Update:
 	    case S_AutoUpdate:
 		newStatus = S_Del;
-		y2debug( "Deleting %s %s", kind, selectable->name().c_str() );
+		yuiDebug() << "Deleting " << kind << " " << selectable->name() << endl;
 		break;
 
 	    case S_Del:
@@ -1335,7 +1335,7 @@ YQPackageSelector::globalUpdatePkg( bool force )
 
     int count = _pkgList->globalSetPkgStatus( S_Update, force,
 					      true ); // countOnly
-    y2milestone( "%d pkgs found for update", count );
+    yuiMilestone() << count << " pkgs found for update" << endl;
 
     if ( count >= GLOBAL_UPDATE_CONFIRMATION_THRESHOLD )
     {
@@ -1424,7 +1424,7 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 	{
 	    subPkgs[ name ] = *it;
 
-	    y2debug( "Found subpackage: %s", qPrintable(name) );
+	    yuiDebug() << "Found subpackage: " << name << endl;
 	}
     }
 
@@ -1450,7 +1450,7 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 		case S_Taboo:
 		case S_Del:
 		    // Don't install the subpackage
-		    y2milestone( "Ignoring unwanted subpackage %s", qPrintable(subPkgName) );
+		    yuiMilestone() << "Ignoring unwanted subpackage " << subPkgName << endl;
 		    break;
 
 		case S_AutoInstall:
@@ -1462,7 +1462,7 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 		    if ( ! subPkg->installedObj() )
 		    {
 			subPkg->set_status( S_Install );
-			y2milestone( "Installing subpackage %s", qPrintable(subPkgName) );
+			yuiMilestone() << "Installing subpackage " << subPkgName << endl;
 		    }
 		    break;
 
@@ -1475,12 +1475,12 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 		    if ( ! subPkg->installedObj() )
 		    {
 			subPkg->set_status( S_Install );
-			y2milestone( "Installing subpackage %s", qPrintable(subPkgName) );
+			yuiMilestone() << "Installing subpackage " << subPkgName << endl;
 		    }
 		    else
 		    {
 			subPkg->set_status( S_Update );
-			y2milestone( "Updating subpackage %s", qPrintable(subPkgName) );
+			yuiMilestone() << "Updating subpackage " << subPkgName << endl;
 		    }
 		    break;
 

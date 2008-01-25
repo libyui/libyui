@@ -166,15 +166,19 @@ void YQImage::setSize( int newWidth, int newHeight )
 
 void YQImage::setEnabled( bool enable )
 {
-   qDebug("setEnabled %d", enable);
-   if (enable)
-      setImage( imageFileName(), animated() );
-   else {
-      // Trigger image re-display
-      QPixmap pixmap( fromUTF8( imageFileName() ) );
-      QIcon icon(pixmap);
-      QLabel::setPixmap( icon.pixmap( pixmap.size(), QIcon::Disabled, QIcon::Off) );
-   }
+    yuiDebug() << "setEnabled: " << enable << endl;
+    
+    if (enable)
+    {
+	setImage( imageFileName(), animated() );
+    }
+    else
+    {
+	// Trigger image re-display
+	QPixmap pixmap( fromUTF8( imageFileName() ) );
+	QIcon icon(pixmap);
+	QLabel::setPixmap( icon.pixmap( pixmap.size(), QIcon::Disabled, QIcon::Off) );
+    }
 }
 
 #include "YQImage.moc"

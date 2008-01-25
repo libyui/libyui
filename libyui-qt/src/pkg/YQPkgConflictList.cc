@@ -30,8 +30,8 @@
 
 #include <errno.h>
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include <zypp/ZYppFactory.h>
 #include "YQPkgConflictList.h"
@@ -169,7 +169,7 @@ YQPkgConflictList::saveToFile( const QString filename, bool interactive ) const
 
     if ( ! file.open(QIODevice::WriteOnly) )
     {
-	y2error( "Can't open file %s", qPrintable(filename) );
+	yuiError() << "Can't open file " << filename << endl;
 
 	if ( interactive )
 	{
@@ -334,9 +334,9 @@ YQPkgConflict::userSelectedResolution()
             continue;
         zypp::ProblemSolution_Ptr solution = it.value();
 
-        y2milestone( "User selected resolution \"%s\" for problem \"%s\"",
-                     solution->description().c_str(),
-                     solution->problem()->description().c_str() );
+        yuiMilestone() << "User selected resolution \""<< solution->description()
+		       << "\" for problem \"" << solution->problem()->description()
+		       <<"\"" << endl;
         return solution;
     }
 

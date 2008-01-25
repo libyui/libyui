@@ -21,8 +21,8 @@
 #include <algorithm>
 #include <QDateTime>
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 #include <zypp/RepoManager.h>
 
 #include <QTreeWidget>
@@ -30,16 +30,16 @@
 #include "YQi18n.h"
 #include "utf8.h"
 
+using std::string;
 using std::list;
 using std::set;
 using std::vector;
 
 
-
 YQPkgRepoList::YQPkgRepoList( QWidget * parent )
     : QY2ListView( parent )
 {
-    y2debug( "Creating repository list" );
+    yuiDebug() << "Creating repository list" << endl;
 
     _nameCol	= -1;
     _urlCol	= -1;
@@ -63,7 +63,7 @@ YQPkgRepoList::YQPkgRepoList( QWidget * parent )
     fillList();
     selectSomething();
 
-    y2debug( "Creating repository list done" );
+    yuiDebug() << "Creating repository list done" << endl;
 }
 
 
@@ -77,7 +77,7 @@ void
 YQPkgRepoList::fillList()
 {
     clear();
-    y2debug( "Filling repository list" );
+    yuiDebug() << "Filling repository list" << endl;
 
     for ( ZyppRepositoryIterator it = ZyppRepositoriesBegin();
 	  it != ZyppRepositoriesEnd();
@@ -86,7 +86,7 @@ YQPkgRepoList::fillList()
 	addRepo( *it );
     }
 
-    y2debug( "Inst repository filled" );
+    yuiDebug() << "Inst repository filled" << endl;
 }
 
 
@@ -110,7 +110,7 @@ YQPkgRepoList::filter()
 {
     emit filterStart();
 
-    y2milestone( "Collecting packages in selected repositories..." );
+    yuiMilestone() << "Collecting packages in selected repositories..." << endl;
     QTime stopWatch;
     stopWatch.start();
 
@@ -193,7 +193,9 @@ YQPkgRepoList::filter()
 	++sel_it;
     }
 
-    y2debug( "Packages sent to package list. Elapsed time: %f sec", stopWatch.elapsed() / 1000.0 );
+    yuiDebug() << "Packages sent to package list. Elapsed time: "
+	       << stopWatch.elapsed() / 1000.0 << " sec"
+	       << endl;
 
     emit filterFinished();
 }
@@ -289,8 +291,9 @@ YQPkgRepoListItem::singleProduct( ZyppRepo zyppRepo )
     {
 	if ( zypp::dynamic_pointer_cast<zypp::Product>( *it ) )
 	{
-	    y2milestone( "Multiple products in repository %s",
-			 zyppRepo.info().alias().c_str() );
+	    yuiMilestone() << "Multiple products in repository " 
+			   << zyppRepo.info().alias()
+			   << endl;
 	    ZyppProduct null;
 	    return null;
 	}
@@ -299,8 +302,9 @@ YQPkgRepoListItem::singleProduct( ZyppRepo zyppRepo )
     }
 
     if ( ! product )
-	y2milestone( "No product in repository %s",
-		     zyppRepo.info().alias().c_str() );
+	yuiMilestone() << "No product in repository "
+		       << zyppRepo.info().alias()
+		       << endl;
 
     return product;
 }

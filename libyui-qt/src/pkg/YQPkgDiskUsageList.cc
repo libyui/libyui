@@ -18,8 +18,8 @@
 
 /-*/
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include <QStyle>
 #include <QHeaderView>
@@ -115,7 +115,7 @@ YQPkgDiskUsageList::updateDiskUsage()
 	if ( item )
 	    item->updateDuData( partitionDu );
 	else
-	    y2error( "No entry for mount point %s", partitionDu.dir.c_str() );
+	    yuiError() << "No entry for mount point " << partitionDu.dir << endl;
     }
 
     resizeColumnToContents( totalSizeCol() );
@@ -181,7 +181,7 @@ YQPkgDiskUsageList::keyPressEvent( QKeyEvent * event )
 	    if ( event->key() == Qt::Key_Q )
 	    {
 		_debug = ! _debug;
-		y2milestone( "Debug mode %s", _debug ? "on" : "off" );
+		yuiMilestone() << "Debug mode: " << _debug << endl;
 	    }
 
 	}
@@ -256,7 +256,7 @@ YQPkgDiskUsageListItem::YQPkgDiskUsageListItem( YQPkgDiskUsageList * 	parent,
 	, _partitionDu( partitionDu )
 	, _pkgDiskUsageList( parent )
 {
-    y2debug( "disk usage list entry for %s", partitionDu.dir.c_str() );
+    yuiDebug() << "disk usage list entry for " << partitionDu.dir << endl;
 }
 
 

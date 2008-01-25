@@ -18,8 +18,8 @@
 
 /-*/
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include <QMenu>
 #include <QAction>
@@ -47,7 +47,7 @@ using std::set;
 YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     : YQPkgObjList( parent )
 {
-    y2debug( "Creating patch list" );
+    yuiDebug() << "Creating patch list" << endl;
 
     _filterCriteria = RelevantPatches;
 
@@ -79,7 +79,7 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     sortItems( categoryCol(), Qt::AscendingOrder );
     fillList();
 
-    y2debug( "Creating patch list done" );
+    yuiDebug() << "Creating patch list done" << endl;
 }
 
 
@@ -112,7 +112,7 @@ void
 YQPkgPatchList::fillList()
 {
     clear();
-    y2debug( "Filling patch list" );
+    yuiDebug() << "Filling patch list" << endl;
 
     for ( ZyppPoolIterator it = zyppPatchesBegin();
 	  it != zyppPatchesEnd();
@@ -138,9 +138,10 @@ YQPkgPatchList::fillList()
 
 			    displayPatch = true;
 
-			    y2warning( "Installed patch is broken: %s - %s",
-				       zyppPatch->name().c_str(),
-				       zyppPatch->summary().c_str() );
+			    yuiWarning() << "Installed patch is broken: "
+					 << zyppPatch->name()
+					 << " - " << zyppPatch->summary()
+					 << endl;
 			}
 		    }
 		    else // not installed
@@ -158,9 +159,10 @@ YQPkgPatchList::fillList()
 
 			    displayPatch = true;
 
-			    y2milestone( "Patch satisfied, but not installed yet: %s - %s",
-					 zyppPatch->name().c_str(),
-					 zyppPatch->summary().c_str() );
+			    yuiMilestone() << "Patch satisfied, but not installed yet: "
+					   << zyppPatch->name()
+					   << " - " << zyppPatch->summary()
+					   << endl;
 			}
 		    }
 
@@ -181,9 +183,9 @@ YQPkgPatchList::fillList()
 			{
 			    // None of the packages that belong to the patch is installed on the system.
 
-			    y2debug( "Patch not needed: %s - %s",
-				     zyppPatch->name().c_str(),
-				     zyppPatch->summary().c_str() );
+			    yuiDebug() << "Patch not needed: " << zyppPatch->name()
+				       << " - " << zyppPatch->summary()
+				       << endl;
 			}
 		    }
 		    break;
@@ -206,9 +208,9 @@ YQPkgPatchList::fillList()
 			}
 			else
 			{
-			    y2milestone( "Patch not needed: %s - %s",
-					 zyppPatch->name().c_str(),
-					 zyppPatch->summary().c_str() );
+			    yuiMilestone() << "Patch not needed: " << zyppPatch->name()
+					   << " - " << zyppPatch->summary()
+					   << endl;
 			}
 		    }
 		    break;
@@ -225,14 +227,16 @@ YQPkgPatchList::fillList()
 	    if ( displayPatch )
 	    {
 #if VERBOSE_PATCH_LIST
-		y2debug( "Displaying patch %s - %s", zyppPatch->name().c_str(), zyppPatch->summary().c_str() );
+		yuiDebug() << "Displaying patch " << zyppPatch->name()
+			   << " - " <<  zyppPatch->summary()
+			   << endl;
 #endif
 		addPatchItem( *it, zyppPatch);
 	    }
 	}
 	else
 	{
-	    y2error( "Found non-patch selectable" );
+	    yuiError() << "Found non-patch selectable" << endl;
 	}
     }
 
@@ -241,7 +245,7 @@ YQPkgPatchList::fillList()
 	message( _( "No patches available." ) );
 #endif
 
-    y2debug( "patch list filled" );
+    yuiDebug() << "Patch list filled" << endl;
 }
 
 
@@ -288,7 +292,9 @@ YQPkgPatchList::filter()
 
 		if ( pkg )
 		{
-		    y2debug( "Found patch pkg: %s arch: %s", (*it)->name().c_str(), (*it)->arch().asString().c_str() );
+		    yuiDebug() << "Found patch pkg: " << (*it)->name()
+			       << " arch: " << (*it)->arch().asString()
+			       << endl;
 
 		    ZyppSel sel = _selMapper.findZyppSel( pkg );
 
@@ -296,10 +302,10 @@ YQPkgPatchList::filter()
 		    {
 			if ( contains( patchSelectables, sel ) )
 			{
-			    y2milestone( "Suppressing duplicate selectable %s-%s arch: %s",
-					 (*it)->name().c_str(),
-					 (*it)->edition().asString().c_str(),
-					 (*it)->arch().asString().c_str() );
+			    yuiMilestone() << "Suppressing duplicate selectable "
+					   << (*it)->name() << "-" << (*it)->edition().asString()
+					   << " arch: " << (*it)->arch().asString()
+					   << endl;
 			}
 			else
 			{
@@ -308,26 +314,25 @@ YQPkgPatchList::filter()
 			}
 		    }
 		    else
-			y2error( "No selectable for pkg %s",  (*it)->name().c_str() );
+			yuiError() << "No selectable for pkg " << (*it)->name() << endl;
 		}
 		else // No ZyppPkg - some other kind of object (script, message)
 		{
 		    if ( zypp::isKind<zypp::Script> ( *it ) )
 		    {
-			y2debug( "Found patch script %s", (*it)->name().c_str() );
+			yuiDebug() << "Found patch script " << (*it)->name() << endl;
 			emit filterMatch( _( "Script" ),  fromUTF8( (*it)->name() ), -1 );
 		    }
 		    else if ( zypp::isKind<zypp::Message> ( *it ) )
 		    {
-			y2debug( "Found patch message %s (ignoring)", (*it)->name().c_str() );
+			yuiDebug() << "Found patch message " << (*it)->name() << " (ignoring)" << endl;
 		    }
 		    else
 		    {
-			y2error( "Found unknown object of kind %s in patch: %s-%s arch: %s",
-				 (*it)->kind().asString().c_str(),
-				 (*it)->name().c_str(),
-				 (*it)->edition().asString().c_str(),
-				 (*it)->arch().asString().c_str() );
+			yuiError() << "Found unknown object of kind " << (*it)->kind().asString()
+				   << " in patch: " << (*it)->name() << "-" << (*it)->edition().asString()
+				   << " arch: " << (*it)->arch().asString()
+				   << endl;
 		    }
 		}
 	    }
@@ -344,7 +349,7 @@ YQPkgPatchList::addPatchItem( ZyppSel	selectable,
 {
     if ( ! selectable )
     {
-	y2error( "NULL ZyppSel!" );
+	yuiError() << "NULL ZyppSel!" << endl;
 	return;
     }
 
@@ -444,7 +449,7 @@ YQPkgPatchList::keyPressEvent( QKeyEvent * event )
 
 		if ( item && item->selectable()->hasInstalledObj() )
 		{
-		    y2warning( "Deleting patches is not supported" );
+		    yuiWarning() << "Deleting patches is not supported" << endl;
 		    return;
 		}
 	    }
@@ -516,7 +521,7 @@ YQPkgPatchListItem::patchCategory( QString category )
     if ( category == "optional"		) return YQPkgOptionalPatch;
     if ( category == "document"		) return YQPkgDocumentPatch;
 
-    y2warning( "Unknown patch category \"%s\"", qPrintable(category) );
+    yuiWarning() << "Unknown patch category \"" << category << "\"" << endl;
     return YQPkgUnknownPatchCategory;
 }
 

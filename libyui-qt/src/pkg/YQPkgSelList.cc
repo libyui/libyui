@@ -19,22 +19,23 @@
 /-*/
 
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 #include <qregexp.h>
 #include <zypp/ZYppFactory.h>
 #include <zypp/Resolver.h>
-
 
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgSelList.h"
 
+using std::set;
+
 
 YQPkgSelList::YQPkgSelList( QWidget * parent, bool autoFill, bool autoFilter )
     : YQPkgObjList( parent )
 {
-    y2debug( "Creating selection list" );
+    yuiDebug() << "Creating selection list" << endl;
 
 #if FIXME
     int numCol = 0;
@@ -58,7 +59,7 @@ YQPkgSelList::YQPkgSelList( QWidget * parent, bool autoFill, bool autoFilter )
 	selectSomething();
     }
 
-    y2debug( "Creating selection list done" );
+    yuiDebug() << "Creating selection list done" << endl;
 }
 
 
@@ -72,7 +73,7 @@ void
 YQPkgSelList::fillList()
 {
     clear();
-    y2debug( "Filling selection list" );
+    yuiDebug() << "Filling selection list" << endl;
 
 
     for ( ZyppPoolIterator it = zyppSelectionsBegin();
@@ -90,11 +91,11 @@ YQPkgSelList::fillList()
 	}
 	else
 	{
-	    y2error( "Found non-Selection selectable" );
+	    yuiError() << "Found non-Selection selectable" << endl;
 	}
     }
 
-    y2debug( "Selection list filled" );
+    yuiDebug() << "Selection list filled" << endl;
 }
 
 
@@ -148,7 +149,7 @@ YQPkgSelList::addPkgSelItem( ZyppSel		selectable,
 {
     if ( ! selectable )
     {
-	y2error( "NULL ZyppSel!" );
+	yuiError() << "NULL ZyppSel!" << endl;
 	return;
     }
 

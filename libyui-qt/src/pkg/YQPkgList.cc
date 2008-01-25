@@ -20,8 +20,8 @@
 
 #define SOURCE_RPM_DISABLED 0
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 #include <QPixmap>
 #include <QAction>
 #include <QMenu>
@@ -128,7 +128,7 @@ YQPkgList::addPkgItem( ZyppSel	selectable,
 {
     if ( ! selectable )
     {
-	y2error( "NULL zypp::ui::Selectable!" );
+	yuiError() << "NULL zypp::ui::Selectable!" << endl;
 	return;
     }
 
@@ -401,7 +401,7 @@ YQPkgList::exportList( const QString filename, bool interactive ) const
 
     if ( file.error() != QFile::NoError )
     {
-	y2error( "Can't open file %s", qPrintable(filename) );
+	yuiError() << "Can't open file " << filename << endl;
 
 	if ( interactive )
 	{
@@ -538,7 +538,7 @@ YQPkgList::globalSetPkgStatus( ZyppStatus newStatus, bool force, bool countOnly 
 		    selectable->set_status( newStatus );
 
 		changedCount++;
-		// y2milestone( "Updating %s", selectable->name().c_str() );
+		// yuiMilestone() << "Updating " << selectable->name() << endl;
 	    }
 	}
     }

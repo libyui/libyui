@@ -19,8 +19,8 @@
 /-*/
 
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 #include <qregexp.h>
 
 #include "YQi18n.h"
@@ -33,7 +33,7 @@ using std::set;
 YQPkgLangList::YQPkgLangList( QWidget * parent )
     : YQPkgObjList( parent )
 {
-    y2debug( "Creating language list" );
+    yuiDebug() << "Creating language list" << endl;
 
     int numCol = 0;
     QStringList headers;
@@ -54,7 +54,7 @@ YQPkgLangList::YQPkgLangList( QWidget * parent )
     fillList();
     selectSomething();
 
-    y2debug( "Creating language list done" );
+    yuiDebug() << "Creating language list done" << endl;
 }
 
 
@@ -68,7 +68,7 @@ void
 YQPkgLangList::fillList()
 {
     clear();
-    y2debug( "Filling language list" );
+    yuiDebug() << "Filling language list" << endl;
 
 
     for ( ZyppPoolIterator it = zyppLangBegin();
@@ -80,10 +80,10 @@ YQPkgLangList::fillList()
 	if ( zyppLang )
 	    addLangItem( *it, zyppLang );
 	else
-	    y2error( "Found non-Language selectable" );
+	    yuiError() << "Found non-Language selectable" << endl;
     }
 
-    y2debug( "Language list filled" );
+    yuiDebug() << "Language list filled" << endl;
 }
 
 
@@ -136,15 +136,17 @@ YQPkgLangList::filter()
 
 			    if ( pkg )
 			    {
-				y2debug( "Found pkg %s for lang %s",
-					 pkg->name().c_str(), currentLang.c_str() );
+				yuiDebug() << "Found pkg " << pkg->name()
+					   << " for lang " << currentLang
+					   << endl;
 
 				emit filterMatch( *it, pkg );
 			    }
 			    else
 			    {
-				y2warning( "Found non-pkg obj %s for lang %s",
-					   pkg->name().c_str(), currentLang.c_str() );
+				yuiWarning() << "Found non-pkg obj " << pkg->name()
+					     << " for lang "         << currentLang
+					     << endl;
 			    }
 			}
 		    }
@@ -163,7 +165,7 @@ YQPkgLangList::addLangItem( ZyppSel	selectable,
 {
     if ( ! selectable )
     {
-	y2error( "NULL ZyppSel!" );
+	yuiError() << "NULL ZyppSel!" << endl;
 	return;
     }
 

@@ -18,8 +18,8 @@
 
 /-*/
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include <QComboBox>
 #include <QLabel>
@@ -215,7 +215,9 @@ YQPkgPatchFilterView::updateTotalDownloadSize()
     _totalDownloadSize->setText( totalSize.asString().c_str() );
 #endif
 
-    y2debug( "Calculated total download size in %d millisec", calcTime.elapsed() );
+    yuiDebug() << "Calculated total download size in "
+	       << calcTime.elapsed() << " millisec"
+	       << endl;
 }
 
 

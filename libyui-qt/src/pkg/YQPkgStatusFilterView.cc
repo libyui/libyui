@@ -25,8 +25,8 @@
 #include <QGroupBox>
 #include <QPixmap>
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include "YQPkgStatusFilterView.h"
 #include "YQIconPool.h"

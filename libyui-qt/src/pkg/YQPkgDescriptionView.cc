@@ -16,8 +16,8 @@
 
 /-*/
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include <QRegExp>
 #include <QList>
@@ -119,13 +119,13 @@ YQPkgDescriptionView::showLink( const QUrl & url )
     if ( url.scheme() == "pkg" )
     {
 	QString pkgName = url.authority();
-	y2milestone( "Hyperlinking to package '%s'", qPrintable(pkgName) );
+	yuiMilestone() << "Hyperlinking to package \"" << pkgName << "\"" << endl;
 	YQPkgDescriptionDialog::showDescriptionDialog( pkgName );
     }
     else
     {
-	y2error( "Protocol not supported - can't follow hyperlink '%s'",
-		 qPrintable(url.toString()) );
+	yuiError() << "Protocol not supported - can't follow hyperlink \""
+		   << url.toString() << "\"" << endl;
     }
 }
 

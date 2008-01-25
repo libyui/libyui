@@ -17,8 +17,8 @@
 /-*/
 
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include "YQPkgSelMapper.h"
 
@@ -39,7 +39,7 @@ YQPkgSelMapper::~YQPkgSelMapper()
 {
     if ( --_refCount == 0 )
     {
-	y2debug( "Destroying pkg -> selectable cache" );
+	yuiDebug() << "Destroying pkg -> selectable cache"  << endl;
 	_cache.clear();
     }
 }
@@ -48,7 +48,7 @@ YQPkgSelMapper::~YQPkgSelMapper()
 void YQPkgSelMapper::rebuildCache()
 {
     _cache.clear();
-    y2debug( "Building pkg -> selectable cache" );
+    yuiDebug() << "Building pkg -> selectable cache" << endl;
 
     for ( ZyppPoolIterator sel_it = zyppPkgBegin();
 	  sel_it != zyppPkgEnd();
@@ -80,7 +80,7 @@ void YQPkgSelMapper::rebuildCache()
 	}
     }
 
-    y2debug( "Building pkg -> selectable cache done" );
+    yuiDebug() << "Building pkg -> selectable cache done" << endl;
 }
 
 
@@ -95,7 +95,7 @@ YQPkgSelMapper::findZyppSel( ZyppPkg pkg )
     if ( it != YQPkgSelMapper::_cache.end() )
 	sel = it->second;
     else
-	y2warning( "No selectable found for package %s", pkg->name().c_str() );
+	yuiWarning() << "No selectable found for package " << pkg->name() << endl;
 
     return sel;
 }

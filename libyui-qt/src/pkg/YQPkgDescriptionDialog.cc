@@ -18,8 +18,8 @@
 
 /-*/
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -37,6 +37,7 @@
 #include "QY2LayoutUtils.h"
 #include "YQi18n.h"
 #include "YQUI.h"
+#include "utf8.h"
 
 
 #define SPACING			2	// between subwidgets
@@ -113,7 +114,7 @@ YQPkgDescriptionDialog::YQPkgDescriptionDialog( QWidget * parent, const QString 
 void
 YQPkgDescriptionDialog::filter( const QString & qPkgName )
 {
-    std::string pkgName( qPrintable(qPkgName) );
+    std::string pkgName( toUTF8( qPkgName ) );
     YQUI::ui()->busyCursor();
     _pkgList->clear();
 

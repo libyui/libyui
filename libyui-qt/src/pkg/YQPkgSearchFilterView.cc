@@ -29,8 +29,8 @@
 #include <QDateTime>
 #include <QKeyEvent>
 
-#define y2log_component "qt-pkg"
-#include <ycp/y2log.h>
+#define YUILogComponent "qt-pkg"
+#include "YUILog.h"
 
 #include "YQPkgSearchFilterView.h"
 #include "QY2LayoutUtils.h"
@@ -361,7 +361,7 @@ YQPkgSearchFilterView::check( const zypp::CapSet & capSet, const QRegExp & regex
     {
 	if ( check( ( *it).index(), regexp ) )
 	{
-	    // y2debug( "Match for %s", (*it).asString().c_str() );
+	    // yuiDebug() << "Match for " << (*it).asString() << endl;
 	    return true;
 	}
     }
