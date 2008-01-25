@@ -64,7 +64,7 @@ YCPValue YQUI::runPkgSelection( YWidget * packageSelector )
     }
     catch (const std::exception & e)
     {
-	yuiError() << "Caught std::exception: %s" << e.what() << "\n"
+	yuiError() << "Caught std::exception: " << e.what() << "\n"
 		   << "This is a libzypp problem. Do not file a bug against the UI!"
 		   << endl;
     }

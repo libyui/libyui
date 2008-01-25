@@ -63,7 +63,7 @@ YQPackageSelectorPlugin::createPackageSelector( YWidget * parent, long modeFlags
     }
     catch (const std::exception & e)
     {
-	yuiError() << "Caught std::exception: %s" << e.what() << endl;
+	yuiError() << "Caught std::exception: " << e.what() << endl;
 	yuiError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
     }
     catch (...)
@@ -92,7 +92,7 @@ YQPackageSelectorPlugin::createPatternSelector( YWidget * parent, long modeFlags
     }
     catch (const std::exception & e)
     {
-	yuiError() << "Caught std::exception: %s" << e.what() << endl;
+	yuiError() << "Caught std::exception: " << e.what() << endl;
 	yuiError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
     }
     catch (...)
@@ -121,7 +121,7 @@ YQPackageSelectorPlugin::createSimplePatchSelector( YWidget * parent, long modeF
     }
     catch (const std::exception & e)
     {
-	yuiError() << "Caught std::exception: %s" << e.what() << endl;
+	yuiError() << "Caught std::exception: " << e.what() << endl;
 	yuiError() << "This is a libzypp problem. Do not file a bug against the UI!" << endl;
     }
     catch (...)

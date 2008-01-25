@@ -105,7 +105,7 @@ void YQSelectionBox::addItem( YItem * item )
 	icon = QPixmap( iconName.c_str() );
 
 	if ( icon.isNull() )
-	    yuiWarning() << "Can't load icon %s" << iconName << endl;
+	    yuiWarning() << "Can't load icon " << iconName << endl;
     }
 
     if ( icon.isNull() )

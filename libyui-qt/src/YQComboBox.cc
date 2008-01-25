@@ -156,7 +156,7 @@ void YQComboBox::setValidChars( const string & newValidChars )
 {
     if ( ! _qt_comboBox->isEditable() )
     {
-	yuiWarning() << this << ": Setting ValidChars is useless on a combo box that isn't editable! (%s)" << endl;
+	yuiWarning() << this << ": Setting ValidChars is useless on a combo box that isn't editable!" << endl;
 	return;
     }
 

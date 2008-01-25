@@ -320,7 +320,7 @@ YQTableListViewItem::updateCell( const YTableCell * cell )
 	QPixmap	icon	 = QPixmap( iconName.c_str() );
 
 	if ( icon.isNull() )
-	    yuiWarning() << "Can't load icon %s" << iconName << endl;
+	    yuiWarning() << "Can't load icon " << iconName << endl;
 	else
 	    setData( column, Qt::DecorationRole, icon );
     }
