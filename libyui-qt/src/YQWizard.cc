@@ -261,6 +261,10 @@ void YQWizard::addStep( const string & text, const string & id )
     }
 
     _stepsIDs.insert( qId, _stepsList.last() );
+
+    // make sure we always have a current step if we have steps
+    if ( _currentStepID.isNull() )
+        _currentStepID = qId;
 }
 
 
@@ -426,6 +430,7 @@ void YQWizard::deleteSteps()
     qDeleteAll(_stepsList);
     _stepsList.clear();
     _stepsIDs.clear();
+    _currentStepID = QString::null;
 }
 
 
