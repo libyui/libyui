@@ -153,13 +153,13 @@ YCPValue NCPackageSelectorPlugin::runPkgSelection(  YDialog * dialog,
 
     // start event loop
     NCursesEvent event = NCursesEvent::cancel;
+    NCDialog * ncd = static_cast<NCDialog *>( dialog );
 
     if ( ncSelector )
     {
 	try
 	{
 	    ncSelector->showDefaultList();
-	    NCDialog * ncd = static_cast<NCDialog *>( dialog );
 	    NCMIL << "NCDialog: " << ncd << endl;
 	    do
 	    {
@@ -183,10 +183,12 @@ YCPValue NCPackageSelectorPlugin::runPkgSelection(  YDialog * dialog,
 	UIERR << "No NCPackageSelectorStart existing" << endl;
     }
 
-    YDialog::deleteTopmostDialog();
 
     if ( event.result != "" )
     {
+        while( YDialog::topmostDialog() != dialog ) {
+		YDialog::deleteTopmostDialog();
+	}
 	NCMIL << "Return value: " << event.result << endl;
 	return YCPSymbol( event.result );
     }
