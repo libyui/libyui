@@ -41,7 +41,6 @@
 #include <X11/Xlib.h>
 
 #define YQMainDialogWFlags	Qt::Widget
-
 #define YQPopupDialogWFlags     Qt::Dialog
 
 
@@ -53,17 +52,17 @@ YQDialog::YQDialog( YDialogType 	dialogType,
 {
     setWidgetRep( this );
 
-    _userResized	= false;
-    _focusButton	= 0;
-    _defaultButton	= 0;
+    _userResized   = false;
+    _focusButton   = 0;
+    _defaultButton = 0;
 
     setWindowTitle( "YaST2" );
     setFocusPolicy( Qt::StrongFocus );
 
     if ( colorMode != YDialogNormalColor )
     {
-	QColor normalBackground     ( 0, 128, 0 );
-	QColor inputFieldBackground ( 0xbb,  0xff, 0xbb );
+	QColor normalBackground     ( 240, 100, 36 );
+	QColor inputFieldBackground ( 0xbb, 0xff, 0xbb );
 	QColor text = Qt::white;
 
 	if ( colorMode == YDialogInfoColor )

@@ -56,7 +56,7 @@ protected:
 
 public:
     /**
-     * Makes this dialog	 active or inactive
+     * Makes this dialog active or inactive.
      **/
     void activate( bool active );
 
@@ -145,7 +145,7 @@ public:
     void ensureOnlyOneDefaultButton();
 
     /**
-     * Activate ( i.e. click ) this dialog's default button, if there is any.
+     * Activate (i.e. click) this dialog's default button, if there is any.
      * Issue a warning to the log file if 'warn' is true.
      **/
     bool activateDefaultButton( bool warn = true );
