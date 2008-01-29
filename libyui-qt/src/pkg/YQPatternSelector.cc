@@ -363,7 +363,7 @@ void
 YQPatternSelector::detailedPackageSelection()
 {
     yuiMilestone() << "\"Details..\" button clicked" << endl;
-    YQUI::ui()->sendEvent( new YMenuEvent( YCPSymbol( "details" ) ) );
+    YQUI::ui()->sendEvent( new YMenuEvent( "details" ) );
 }
 
 

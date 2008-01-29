@@ -53,14 +53,16 @@
 
 
 
-YCPValue YQUI::runPkgSelection( YWidget * packageSelector )
+YEvent * YQUI::runPkgSelection( YWidget * packageSelector )
 {
-    yuiMilestone() << "Running package selection..." << endl;
-    YCPValue input = YCPVoid();
+    YEvent * event = 0;
 
     try
     {
-	input = evaluateUserInput();
+	do
+	{
+	    event = filterInvalidEvents( userInput() );
+	} while ( ! event );
     }
     catch (const std::exception & e)
     {
@@ -75,9 +77,7 @@ YCPValue YQUI::runPkgSelection( YWidget * packageSelector )
 		   << endl;
     }
 
-    yuiMilestone() << "Package selection done. Returning " << input->toString() << endl;
-
-    return input;
+    return event;
 }
 
 

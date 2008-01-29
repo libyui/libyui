@@ -287,7 +287,7 @@ YQPackageSelectorBase::accept()
 	return;
 
     yuiMilestone() << "Closing PackageSelector with \"Accept\"" << endl;
-    YQUI::ui()->sendEvent( new YMenuEvent( YCPSymbol( "accept" ) ) );
+    YQUI::ui()->sendEvent( new YMenuEvent( "accept" ) );
 }
 
 

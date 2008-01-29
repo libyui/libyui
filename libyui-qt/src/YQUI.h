@@ -174,7 +174,7 @@ public:
      *
      * Reimplemented from YUI.
      **/
-    YCPValue runPkgSelection( YWidget * packageSelector );
+    virtual YEvent * runPkgSelection( YWidget * packageSelector );
 
     /**
      * Toggle macro recording (activated by Ctrl-Shift-Alt-M):

@@ -72,8 +72,6 @@ YQDumbTab::addItem( YItem * item )
 
     _tabBar->insertTab( item->index(), fromUTF8( item->label() ) );
     yuiDebug() << "Adding tab page [" << item->label() << "]" << endl;
-#warning YItem::setData
-    // item->setData( tab );
 
     if ( item->selected() )
 	_tabBar->setCurrentIndex( item->index() );
