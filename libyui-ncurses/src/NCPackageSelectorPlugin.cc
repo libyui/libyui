@@ -186,6 +186,9 @@ YCPValue NCPackageSelectorPlugin::runPkgSelection(  YDialog * dialog,
 
     if ( event.result != "" )
     {
+        //before returning some value to YCP client
+	//we must delete (==close) any leftover dialogs,
+	//Wizard will not do it for us (#354712)
         while( YDialog::topmostDialog() != dialog ) {
 		YDialog::deleteTopmostDialog();
 	}

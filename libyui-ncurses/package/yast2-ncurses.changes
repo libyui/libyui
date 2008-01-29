@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Tue Jan 29 15:50:37 CET 2008 - kmachalkova@suse.cz
+
+- Delete any leftover dialogs (popups, menus) on exit from package 
+  selector (bnc#354712)     
+- Moved BusyIndicator widget handling to idleLoop, do not use signals
+  as they may freeze yast (libncurses and malloc are not signal-safe)
+  (bnc#355562)
+- 2.16.11
+
+-------------------------------------------------------------------
 Fri Jan 18 17:45:29 CET 2008 - kmachalkova@suse.cz
 
 - Running separate UI-thread re-enabled (adjusted idleLoop, file 
