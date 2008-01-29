@@ -162,6 +162,10 @@ void YNCursesUI::idleLoop( int fd_ycp )
       if (currentDialog) {
         NCDialog * ncd = static_cast<NCDialog *>( currentDialog );
         if( ncd ) {
+	  extern NCBusyIndicator* NCBusyIndicatorObject;
+	  if (NCBusyIndicatorObject)
+  	    NCBusyIndicatorObject->handler(0);
+
 	  ncd->idleInput();
         }
       }

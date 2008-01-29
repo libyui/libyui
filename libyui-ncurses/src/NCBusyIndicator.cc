@@ -50,8 +50,9 @@
 
 struct itimerval interval;
 NCBusyIndicator* NCBusyIndicatorObject;
+#if 0
 void NCBusyIndicatorHandlerWrapper(int sig_num);
-
+#endif
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -86,10 +87,12 @@ NCBusyIndicator::NCBusyIndicator( YWidget * parent,
   _timer_divisor =  (double) REPAINT_INTERVAL / (double) timeout; 
   _timer_progress=0;
 
+#if 0
   signal(SIGALRM, NCBusyIndicatorHandlerWrapper);
   interval.it_value.tv_sec=0;
   interval.it_value.tv_usec=REPAINT_INTERVAL * 1000;
   setitimer(ITIMER_REAL, &interval, NULL);
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -102,7 +105,7 @@ NCBusyIndicator::NCBusyIndicator( YWidget * parent,
 //
 NCBusyIndicator::~NCBusyIndicator()
 {
-  signal(SIGALRM, SIG_IGN);
+  NCBusyIndicatorObject = NULL;
   delete _lwin;
   delete _twin;
   WIDDBG << endl;
@@ -248,9 +251,12 @@ void NCBusyIndicator::handler(int sig_num)
 	_alive=false;
     }
     update();
+
+    #if 0
     interval.it_value.tv_sec=0;
     interval.it_value.tv_usec=REPAINT_INTERVAL * 1000;
     setitimer(ITIMER_REAL, &interval, NULL);
+    #endif
 
 }
 
@@ -262,12 +268,14 @@ void NCBusyIndicator::handler(int sig_num)
 //
 //	DESCRIPTION : static wrapper for member function handler
 //
+#if 0
 void NCBusyIndicatorHandlerWrapper(int sig_num)
 {
     signal(SIGALRM, SIG_IGN);
     NCBusyIndicatorObject->handler(sig_num);
     signal(SIGALRM, NCBusyIndicatorHandlerWrapper);
 }
+#endif
 
 ///////////////////////////////////////////////////////////////////
 //
