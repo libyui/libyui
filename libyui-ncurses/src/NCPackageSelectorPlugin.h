@@ -23,6 +23,7 @@
 
 #include <YPackageSelectorPlugin.h>
 #include <YDialog.h>
+#include <YEvent.h>
 
 #include <ycp/YCPString.h>
 
@@ -58,7 +59,7 @@ public:
     /**
      * Fills the PackageSelector widget (runs the package selection).
      */
-    virtual YCPValue runPkgSelection( YDialog *currentDialog,
+    virtual YEvent * runPkgSelection( YDialog *currentDialog,
 				      YWidget * packageSelector );
 
     /**

@@ -279,7 +279,6 @@ YEvent * YNCursesUI::userInput( unsigned long timeout_millisec )
   ncd->activate ( false );
 
   YEvent * yevent = cevent.propagate();
-  UIDBG << "Returning event: " << ( yevent ? yevent->ycpEvent()->toString().c_str() : "(nil)" ) << endl;
   
   return yevent;
 }
@@ -304,9 +303,6 @@ YEvent * YNCursesUI::pollInput()
   NCtoY2Event cevent = ncd->pollInput();
 
   YEvent * yevent = cevent.propagate();
-
-  if ( yevent )
-      UIDBG << "Returning event: " << yevent->ycpEvent()->toString() << endl;
 
   return yevent;
 }
@@ -375,14 +371,14 @@ NCPackageSelectorPlugin * YNCursesUI::packageSelectorPlugin()
 //
 //
 //	METHOD NAME : YNCursesUI::runPkgSelection
-//	METHOD TYPE : YCPValue
+//	METHOD TYPE : YEvent *
 //
 //	DESCRIPTION : Implementation of UI builtin RunPkgSelection() which
 //		      has to be called after OpenDialog( `PackageSelector() ).
 //
-YCPValue YNCursesUI::runPkgSelection( YWidget * selector )
+YEvent * YNCursesUI::runPkgSelection( YWidget * selector )
 {
-    YCPValue result = YCPVoid();
+    YEvent * event = 0;
     
     YDialog *dialog = YDialog::currentDialog();
     NCPackageSelectorPlugin * plugin = packageSelectorPlugin();
@@ -390,12 +386,12 @@ YCPValue YNCursesUI::runPkgSelection( YWidget * selector )
     if ( !dialog )
     {
 	UIERR << "ERROR package selection: No dialog rexisting." << endl;
-	return YCPVoid();
+	return 0;
     }
     if ( !selector )
     {
 	UIERR << "ERROR package selection: No package selector existing." << endl;
-	return YCPVoid();
+	return 0;
     }
     // FIXME - remove debug logging
     NCMIL << "Dump current dialog in YNCursesUI::runPkgSelection" << endl;
@@ -404,10 +400,10 @@ YCPValue YNCursesUI::runPkgSelection( YWidget * selector )
 
     if ( plugin )
     {
-	result = plugin->runPkgSelection( dialog, selector );
+	event = plugin->runPkgSelection( dialog, selector );
     }
 
-    return result;
+    return event;
 }
 
 

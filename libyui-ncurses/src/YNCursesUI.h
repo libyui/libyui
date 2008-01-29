@@ -132,9 +132,9 @@ public:
     virtual void closeDialog( YDialog * dialog );
 
     /**
-     * Fills the PackageSelector widget.
+     * Fills the PackageSelector widget and runs package selection.
      */
-    virtual YCPValue runPkgSelection( YWidget * packageSelector );
+    virtual YEvent * runPkgSelection( YWidget * packageSelector );
     
     /**
      * UI-specific setConsoleFont() function.

@@ -57,6 +57,7 @@
 
 #include "YWidgetID.h"
 #include "YCPDialogParser.h"
+#include "YCPMenuItem.h"
 #include "YCPValueWidgetID.h"
 #include "YPackageSelector.h"
 
@@ -495,22 +496,15 @@ string NCPackageSelector::getButtonId( YWidget * button )
 
 string NCPackageSelector::getMenuId( YMenuItem *menuItem )
 {
-    string id;
-    YMenuEvent * menuEvent;
-
-    if ( !menuItem )
-	return id;
-
-    menuEvent = new YMenuEvent( menuItem );
-    if ( menuEvent )
+    if ( menuItem )
     {
-	YCPValue selectionId = menuEvent->id();
-    	id = selectionId->toString();
+	YCPMenuItem * ycpMenuItem = dynamic_cast<YCPMenuItem *> ( menuItem );
 
-	delete menuEvent;
+	if ( ycpMenuItem )
+	    return ycpMenuItem->id()->toString();
     }
 
-    return id;
+    return "";
 }
 
 ///////////////////////////////////////////////////////////////////

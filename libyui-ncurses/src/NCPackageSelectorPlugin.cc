@@ -22,6 +22,7 @@
 #include <ycp/y2log.h>
 #include "NCPackageSelectorStart.h"
 #include "NCPkgTable.h"
+#include "YNCursesUI.h" // NCtoY2Event
 
 #define y2log_component "ncurses-ui"
 
@@ -124,12 +125,12 @@ YWidget * NCPackageSelectorPlugin::createPkgSpecial( YWidget *parent, const stri
 //
 //
 //	METHOD NAME : NCPackageSelectorPLugin::runPkgSelection
-//	METHOD TYPE : void
+//	METHOD TYPE : YEvent *
 //
 //	DESCRIPTION : Implementation of UI builtin RunPkgSelection() which
 //		      has to be called after OpenDialog( `PackageSelector() ).
 //
-YCPValue NCPackageSelectorPlugin::runPkgSelection(  YDialog * dialog,
+YEvent * NCPackageSelectorPlugin::runPkgSelection(  YDialog * dialog,
 						    YWidget * selector )
 {
     NCPackageSelectorStart * ncSelector = 0;
@@ -139,12 +140,12 @@ YCPValue NCPackageSelectorPlugin::runPkgSelection(  YDialog * dialog,
     if ( !dialog )
     {
 	UIERR << "ERROR package selection: No dialog existing." << endl;
-	return YCPVoid();
+	return 0;
     }
     if ( !selector )
     {
 	UIERR << "ERROR package selection: No package selector existing." << endl;
-	return YCPVoid();
+	return 0;
     }
     
     ncSelector = dynamic_cast<NCPackageSelectorStart *>( selector );
@@ -186,16 +187,16 @@ YCPValue NCPackageSelectorPlugin::runPkgSelection(  YDialog * dialog,
 
     if ( event.result != "" )
     {
-        //before returning some value to YCP client
-	//we must delete (==close) any leftover dialogs,
-	//Wizard will not do it for us (#354712)
+        // Before returning some value to the YCP client,
+	// we must delete (==close) any leftover dialogs,
+	// Wizard will not do it for us (#354712)
         while( YDialog::topmostDialog() != dialog ) {
 		YDialog::deleteTopmostDialog();
 	}
 	NCMIL << "Return value: " << event.result << endl;
-	return YCPSymbol( event.result );
+	return new YMenuEvent( event.result );
     }
     else
-	return YCPVoid();
+	return new YCancelEvent();
 }
 
