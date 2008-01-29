@@ -63,17 +63,6 @@ YQRichText::YQRichText( YWidget * parent, const string & text, bool plainTextMod
   
     setValue( text );
 
-    // Set the text foreground color to black, regardless of its current
-    // settings - it might be changed if this widget resides in a
-    // warnColor dialog - which we cannot find right now out since our
-    // parent is not set yet :-(
-
-    QPalette pal( _textBrowser->palette() );
-    pal.setColor( QPalette::Text, Qt::black );
-    pal.setColor( QPalette::Base, QColor(0,0,0,0));
-    _textBrowser->setPalette( pal );
-
-
     // Propagate clicks on hyperlinks
 
     connect( _textBrowser, SIGNAL( anchorClicked( const QUrl & ) ),
