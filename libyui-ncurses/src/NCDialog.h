@@ -119,6 +119,20 @@ class NCDialog : public YDialog, public NCWidget {
 
     virtual void startMultipleChanges();
     virtual void doneMultipleChanges();
+    
+    /**
+     * Internal open() method: Initialize what is left over to initialize after
+     * all dialog children have been created.
+     * YDialog::setInitialSize() is already called before this in
+     * YDailog::open(), so don't call it here again (very expensive!).
+     *
+     * This function is called (exactly once during the life time of the
+     * dialog) in YDialog::open(). 
+     *
+     * Implemented from YDialog.
+     **/
+    virtual void openInternal();
+
 
   public:
 
@@ -147,6 +161,14 @@ class NCDialog : public YDialog, public NCWidget {
      * Reimplemented from YWidget.
      **/
     virtual void setSize( int newWidth, int newHeight );
+
+    /**
+     * Activate this dialog: Make sure that it is shown as the topmost dialog
+     * of this application and that it can receive input.
+     *
+     * Implemented from YDialog.
+     **/
+    virtual void activate();
 
   protected:
 

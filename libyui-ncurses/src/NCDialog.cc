@@ -247,6 +247,13 @@ void NCDialog::initDialog()
   }
 }
 
+
+void NCDialog::openInternal()
+{
+    showDialog();
+}
+
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -323,6 +330,20 @@ void NCDialog::activate( const bool newactive )
     }
   }
 }
+
+
+/**
+ * Implementation of YDialog::activate().
+ *
+ * This is called e.g. for the next-lower dialog in the dialog stack when the
+ * topmost dialog is destroyed: That next-lower dialog is now the active
+ * dialog.
+ **/
+void NCDialog::activate()
+{
+    activate( true ); // Forward to NCurses-specific activate()
+}
+
 
 ///////////////////////////////////////////////////////////////////
 //

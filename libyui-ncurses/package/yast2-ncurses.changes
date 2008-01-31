@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jan 31 15:27:49 CET 2008 - sh@suse.de
+
+- Simplified dialog handling
+- V 2.16.13 
+
+-------------------------------------------------------------------
 Thu Jan 31 14:22:36 CET 2008 - kmachalkova@suse.cz
 
 - Align numbers in IntFields to the right margin of the label, not 

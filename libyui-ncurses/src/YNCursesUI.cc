@@ -307,28 +307,6 @@ YEvent * YNCursesUI::pollInput()
   return yevent;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// Dialog and widgets
-//
-///////////////////////////////////////////////////////////////////
-
-void YNCursesUI::showDialog( YDialog * dialog ) {
-  NCDialog * dlg = dynamic_cast<NCDialog *>( dialog );
-  UIDBG << dlg << endl;
-  if ( dlg )
-  {
-    dlg->showDialog();
-    //dlg->dumpWidgetTree();
-  }
-}
-
-void YNCursesUI::closeDialog( YDialog * dialog ) {
-  NCDialog * dlg = dynamic_cast<NCDialog *>( dialog );
-  UIDBG << dlg << endl;
-  if ( dlg )
-    dlg->closeDialog();
-}
 
 #define ONCREATE WIDDBG << endl
 //#define ONCREATE

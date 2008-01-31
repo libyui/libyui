@@ -122,16 +122,6 @@ public:
     virtual YEvent * pollInput();
 
     /**
-     * Inherited from YUIInterpreter. Shows and activates a dialog
-    */
-    virtual void showDialog( YDialog * dialog );
-
-    /**
-     * Inherited from YUIInterpreter. Decativates and closes a dialog
-    */
-    virtual void closeDialog( YDialog * dialog );
-
-    /**
      * Fills the PackageSelector widget and runs package selection.
      */
     virtual YEvent * runPkgSelection( YWidget * packageSelector );
