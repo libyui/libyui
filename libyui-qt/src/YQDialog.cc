@@ -118,6 +118,24 @@ YQDialog::chooseParent( YDialogType dialogType )
 }
 
 
+void
+YQDialog::openInternal()
+{
+    ensureOnlyOneDefaultButton();
+    QWidget::show();
+    QWidget::raise(); // FIXME: is this really necessary?
+    QWidget::update();
+}
+
+
+void
+YQDialog::activate()
+{
+    QWidget::raise();
+    QWidget::update();
+}
+
+
 int
 YQDialog::preferredWidth()
 {
@@ -212,10 +230,12 @@ YQDialog::setSize( int newWidth, int newHeight )
 void
 YQDialog::activate( bool active )
 {
+#if 0
     if ( active )
     {
 	ensureOnlyOneDefaultButton();
     }
+#endif
 }
 
 

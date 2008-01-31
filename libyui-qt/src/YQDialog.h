@@ -203,7 +203,23 @@ protected:
      **/
     YQWizard * ensureOnlyOneDefaultButton( YWidgetListConstIterator begin,
 					   YWidgetListConstIterator end );
+    
+    /**
+     * Internal open() method, called exactly once during the life
+     * time of the dialog in open().
+     *
+     * Implemented from YDialog.
+     **/
+    virtual void openInternal();
 
+    /**
+     * Activate this dialog: Make sure that it is shown as the topmost dialog
+     * of this application and that it can receive input.  
+     *
+     * Implemented from YDialog.
+     **/
+    virtual void activate();
+    
     /**
      * Qt event handlers.
      *

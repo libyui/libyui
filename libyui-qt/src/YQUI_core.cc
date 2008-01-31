@@ -171,7 +171,7 @@ void YQUI::init_ui()
 
 
     // Hide the main window for now. The first call to UI::OpenDialog() on an
-    // `opt(`defaultSize) dialog will trigger a showDialog() call that shows
+    // `opt(`defaultSize) dialog will trigger a dialog->open() call that shows
     // the main window - there is nothing to display yet.
 
     _main_win->hide();
@@ -520,29 +520,6 @@ void YQUI::userInputTimeout()
 {
     if ( ! pendingEvent() )
 	sendEvent( new YTimeoutEvent() );
-}
-
-
-#warning FIXME Move this to Y(Q)Dialog (and rename it to ::finalize()?)
-void YQUI::showDialog( YDialog * dialog )
-{
-    QWidget * qw = (QWidget *) dialog->widgetRep();
-
-    if ( qw )
-    {
-	qw->show();
-	qw->raise();
-	qw->update();
-    }
-
-    ( (YQDialog *) dialog)->ensureOnlyOneDefaultButton();
-
-    //qApp->processEvents();
-}
-
-
-void YQUI::closeDialog( YDialog * dialog )
-{
 }
 
 
