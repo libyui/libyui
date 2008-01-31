@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jan 31 14:22:36 CET 2008 - kmachalkova@suse.cz
+
+- Align numbers in IntFields to the right margin of the label, not 
+  to the right margin of the entire screen (bnc#309118) 
+
+-------------------------------------------------------------------
 Tue Jan 29 20:04:53 CET 2008 - sh@suse.de
 
 - YCP-less event handling
