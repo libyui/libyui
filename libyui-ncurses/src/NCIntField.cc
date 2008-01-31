@@ -175,7 +175,7 @@ void NCIntField::wCreate( const wrect & newrect )
 			    trect.Sze.H, trect.Sze.W,
 			    trect.Pos.L, trect.Pos.C,
 			    'r' );
-  vstart = ( vlen + 2 < (unsigned)trect.Sze.W ) ? trect.Sze.W - vlen - 2 : 0;
+  vstart = ( vlen + 2 < (unsigned)trect.Sze.W ) ? label.width() - vlen - 2 : 0;
 }
 
 ///////////////////////////////////////////////////////////////////
