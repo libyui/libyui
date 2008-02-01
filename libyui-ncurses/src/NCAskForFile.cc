@@ -21,7 +21,6 @@
 #include "NCAskForFile.h"
 
 #include "YDialog.h"
-#include "YWidgetID.h"
 
 #include "NCLayoutBox.h"
 #include "NCSpacing.h"
@@ -38,15 +37,6 @@
   Textdomain "packages"
 */
 
-namespace
-{
-    const string idOk( "ok" );
-    const string idCancel( "cancel" );
-    const string idDirList( "dirlist" );
-    const string idFileList( "filelist" );
-    const string idDirName( "dirname" );
-    const string idDetails( "details" );
-}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -147,17 +137,12 @@ void NCAskForFile::createLayout( const string & iniDir,
     dirName = new NCComboBox( frame, _( "Selected Directory:" ), false );  // editable = false;
     dirName->setNotify( true );
     dirName->setStretchable( YD_HORIZ, true );
- 
-    YStringWidgetID * dirID = new YStringWidgetID( idDirName );
-    dirName->setId( dirID );
 
     // add the checkBox detailed
     NCLayoutBox * hSplit = new NCLayoutBox( split, YD_HORIZ );
 
     // label for checkbox
     detailed = new NCCheckBox( hSplit, _( "&Detailed View" ), false );
-    YStringWidgetID * detailsID = new YStringWidgetID( idDetails );
-    detailed->setId( detailsID );
     detailed->setNotify( true );
 
     // HBox for the lists
@@ -174,9 +159,6 @@ void NCAskForFile::createLayout( const string & iniDir,
 				    NCFileSelection::T_Overview,
 				    startDir );
     dirList->setSendKeyEvents( true );
-    
-    YStringWidgetID * dirListID = new YStringWidgetID( idDirList );
-    dirList->setId( dirListID );
 
     // create table header for table type T_Overview
     YTableHeader * fileHeader = new YTableHeader();
@@ -191,8 +173,6 @@ void NCAskForFile::createLayout( const string & iniDir,
 				startDir );
 
     fileList->setSendKeyEvents( true );
-    YStringWidgetID * dirFileID = new YStringWidgetID( idFileList );
-    fileList->setId( dirFileID );
     
     NCLayoutBox * hSplit2 = new NCLayoutBox( split, YD_HORIZ );
     
@@ -226,9 +206,6 @@ void NCAskForFile::createLayout( const string & iniDir,
     okButton = new NCPushButton( hSplit3, _( "&OK" ) );
     okButton->setFunctionKey( 10 );
     okButton->setStretchable( YD_HORIZ, true );
-    
-    YStringWidgetID * okID = new YStringWidgetID( idOk );
-    okButton->setId( okID );
 
     new NCSpacing( hSplit3, YD_HORIZ, true, 0.4 );
 
@@ -236,9 +213,6 @@ void NCAskForFile::createLayout( const string & iniDir,
     cancelButton = new NCPushButton( hSplit3, _( "&Cancel" ) );
     cancelButton->setFunctionKey( 9 );
     cancelButton->setStretchable( YD_HORIZ, true );
-    
-    YStringWidgetID * cancelID = new YStringWidgetID( idCancel );
-    cancelButton->setId( cancelID );
 
     new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );  
 }
@@ -343,69 +317,65 @@ bool NCAskForFile::postAgain( )
 	return true;
     }
 
-    YWidgetID * currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
-
-    if ( currentId )
+    if ( postevent.widget == okButton )
     {
-	if ( currentId->toString() == idOk )
-	{
-	    postevent.result = dirList->getCurrentDir() + "/" + getFileName();
-	    // return false means: close the popup
-	    return false;
-	}
-	else if ( ( currentId->toString() == idDirList ) &&
-		  ( postevent.result != "" ) 		)
-	{
-	    // show the currently selected directory
-	    dirName->addItem( postevent.result,
-			      true );
-	    updateFileList();
+	postevent.result = dirList->getCurrentDir() + "/" + getFileName();
+	// return false means: close the popup
+	return false;
+    }
+    else if ( ( postevent.widget == dirList ) &&
+	      ( postevent.result != "" ) 		)
+    {
+	// show the currently selected directory
+	dirName->addItem( postevent.result,
+			  true );
+	updateFileList();
 	    
-	    if ( postevent.reason == YEvent::Activated )
-	    {
-		// fill directory and file list
-		dirList->fillList();
-		updateFileList();
-	    }
-	}
-	else if ( currentId->toString() == idDirName )
+	if ( postevent.reason == YEvent::Activated )
 	{
-	    dirList->setStartDir( dirName->text() );
+	    // fill directory and file list
 	    dirList->fillList();
-
 	    updateFileList();
 	}
-	else if ( currentId->toString() == idDetails )
+    }
+    else if ( postevent.widget == dirName )
+    {
+	dirList->setStartDir( dirName->text() );
+	dirList->fillList();
+
+	updateFileList();
+    }
+    else if ( postevent.widget == detailed )
+    {
+	bool details = getCheckBoxValue( detailed );
+	if ( details )
 	{
-	    bool details = getCheckBoxValue( detailed );
-	    if ( details )
-	    {
-		fileList->setTableType( NCFileTable::T_Detailed );
-		dirList->setTableType( NCFileTable::T_Detailed );
-	    }
-	    else
-	    {
-		fileList->setTableType( NCFileTable::T_Overview );
-		dirList->setTableType( NCFileTable::T_Overview );
-	    }
-	    fileList->fillList();
-	    dirList->fillList();
-	}
-	else if ( currentId->toString() == idFileList )
-	{
-	    if ( postevent.result != "" )
-	    {
-		fileName->setValue( postevent.result );
-	    }
+	    fileList->setTableType( NCFileTable::T_Detailed );
+	    dirList->setTableType( NCFileTable::T_Detailed );
 	}
 	else
 	{
-	    postevent.result = "";
-	    return false;
+	    fileList->setTableType( NCFileTable::T_Overview );
+	    dirList->setTableType( NCFileTable::T_Overview );
+	}
+	fileList->fillList();
+	dirList->fillList();
+    }
+    else if ( postevent.widget == fileList )
+    {
+	if ( postevent.result != "" )
+	{
+	    fileName->setValue( postevent.result );
 	}
     }
+    else
+    {
+	postevent.result = "";
+	return false;
+    }
 
-    if (postevent == NCursesEvent::cancel)
+    if ( postevent.widget == cancelButton ||
+	 postevent == NCursesEvent::cancel )
     {
 	postevent.result = "";	
 	return false;
