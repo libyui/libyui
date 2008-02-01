@@ -21,7 +21,6 @@
 
 #include "YMenuButton.h"
 #include "YDialog.h"
-#include "YWidgetID.h"
 #include "YTypes.h"
 
 #include "NCLayoutBox.h"
@@ -118,10 +117,7 @@ void NCPkgPopupDiskspace::createLayout( )
 
     // add the ok button
     okButton = new NCPushButton( split, NCPkgNames::OKLabel() );
-    YStringWidgetID * okID = new YStringWidgetID( "ok" );
     okButton->setFunctionKey( 10 );
-    okButton->setId( okID );
-
 }
 
 ///////////////////////////////////////////////////////////////////

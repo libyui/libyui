@@ -220,9 +220,6 @@ void NCPkgPopupRepo::createLayout( const string & label)
 
     //the cute button
     okButton = new NCPushButton( split, NCPkgNames::OKLabel() );
-    YStringWidgetID  * okID = new YStringWidgetID("ok");
-
-    okButton->setId( okID );
     okButton->setFunctionKey(10);
 
     new NCSpacing( split, YD_VERT, false, 0.4 );
@@ -379,10 +376,7 @@ bool NCPkgPopupRepo::postAgain()
 
     postevent.detail = NCursesEvent::NODETAIL;
 
-    YWidgetID *currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
-
-    if ( currentId
-         && currentId->toString() == "ok" )
+    if ( postevent.widget == okButton )
     {
         postevent.detail = NCursesEvent::USERDEF ;
         // return false means: close the popup

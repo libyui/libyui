@@ -29,8 +29,6 @@
 #include "NCPkgNames.h"
 #include "NCPackageSelector.h"
 
-#include "YWidgetID.h"
-
 #include "NCi18n.h"
 
 /*
@@ -103,8 +101,6 @@ void NCPkgPopupSearch::createLayout( const string & headline )
 				 NCPkgNames::SearchPhrase(),
 				 true );	// editable = true
 
-    YStringWidgetID * searchID = new YStringWidgetID ("search_box" );
-    searchExpr->setId( searchID );
     searchExpr->setStretchable( YD_HORIZ, true );
 
     searchExpr->addItem( new YTableItem() );
@@ -148,15 +144,11 @@ void NCPkgPopupSearch::createLayout( const string & headline )
 
     // add the cancel and the ok button
     okButton = new NCPushButton( hSplit3, NCPkgNames::OKLabel() );
-    YStringWidgetID  * okID = new YStringWidgetID("ok");
-    okButton->setId( okID );
     okButton->setFunctionKey( 10 );
 
     new NCSpacing( hSplit3, YD_HORIZ, true, 0.4 );
 
     cancelButton = new NCPushButton( hSplit3, NCPkgNames::CancelLabel() );
-    YStringWidgetID  * cancelID = new YStringWidgetID("cancel");
-    cancelButton->setId( cancelID );
     cancelButton->setFunctionKey( 9 );
     
     new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );
@@ -275,10 +267,7 @@ bool NCPkgPopupSearch::postAgain()
 
     postevent.result = "";
 
-    YWidgetID * currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
-
-    if ( currentId &&
-	 currentId->toString() == "cancel" )
+    if ( postevent.widget == cancelButton )
     {
 	postevent = NCursesEvent::cancel;
     }

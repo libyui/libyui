@@ -21,7 +21,6 @@
 
 #include "YMenuButton.h"
 #include "YDialog.h"
-#include "YWidgetID.h"
 
 #include "NCLayoutBox.h"
 #include "NCSpacing.h"
@@ -125,9 +124,6 @@ void NCPkgPopupDescr::createLayout( )
     // add the OK button
     opt.key_Fxx.setValue( 10 );
     okButton = new NCPushButton( split, NCPkgNames::OKLabel() );
-    YStringWidgetID * okID = new YStringWidgetID( "ok" );
-    okButton->setId( okID );
-    
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -231,16 +227,6 @@ bool NCPkgPopupDescr::postAgain()
 {
     if ( ! postevent.widget )
 	return false;
-
-    // YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
-    YWidgetID * currentId = dynamic_cast<YWidget *>(postevent.widget)->id();
-
-    if ( currentId
-	 && currentId->toString() == "cancel" )
-    {
-	// close the dialog
-	postevent = NCursesEvent::cancel;
-    }
 
     if ( postevent == NCursesEvent::button || postevent == NCursesEvent::cancel )
     {

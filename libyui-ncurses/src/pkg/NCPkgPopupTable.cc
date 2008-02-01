@@ -20,7 +20,6 @@
 
 #include "YMenuButton.h"
 #include "YDialog.h"
-#include "YWidgetID.h"
 
 #include "NCLayoutBox.h"
 #include "NCSpacing.h"
@@ -125,8 +124,6 @@ void NCPkgPopupTable::createLayout( )
     // add the OK button
     opt.key_Fxx.setValue( 10 );
     okButton = new NCPushButton( hSplit, NCPkgNames::OKLabel() );
-    YStringWidgetID * okID = new YStringWidgetID( "ok" );
-    okButton->setId( okID );
 
     //hSplit->addChild( new NCSpacing( hSplit, opt, 0.4, true, false ) );
     new NCSpacing( hSplit, YD_HORIZ, true, 0.4 );
@@ -134,8 +131,6 @@ void NCPkgPopupTable::createLayout( )
     // add the Cancel button
     opt.key_Fxx.setValue( 9 );
     cancelButton = new NCPushButton( hSplit, NCPkgNames::CancelLabel() );
-    YStringWidgetID * cancelID = new YStringWidgetID( "cancel" );
-    cancelButton->setId( cancelID );
 
     //hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
     new NCSpacing( hSplit, YD_HORIZ, true, 0.2 );
@@ -301,10 +296,7 @@ bool NCPkgPopupTable::postAgain()
     if ( ! postevent.widget )
 	return false;
 
-    // YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
-    YWidgetID * currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
-    if ( currentId
-	 && currentId->toString() == "cancel" )
+    if ( postevent.widget == cancelButton )
     {
 	//user hit cancel - discard set of changes (if not empty)
 	packager->clearVerifiedPkgs();
