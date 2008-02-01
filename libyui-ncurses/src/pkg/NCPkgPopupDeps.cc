@@ -178,9 +178,6 @@ void NCPkgPopupDeps::createLayout( )
   // add the cancel button
   cancelButton = new NCPushButton( hSplit, NCPkgNames::CancelLabel() );
   cancelButton->setFunctionKey( 9 );
-  // cancelButton->setId( NCPkgNames::Cancel () );
-  YStringWidgetID  * cancelID = new YStringWidgetID("cancel");
-  cancelButton->setId( cancelID );
   
   new NCSpacing( vSplit, YD_VERT, false, 1 );	// stretchable = false
 }
@@ -401,17 +398,12 @@ bool NCPkgPopupDeps::postAgain( NCPkgSolverAction action )
     if ( ! postevent.widget )
 	return false;
 
-    // YCPValue currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
-    YWidgetID * currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
-    if ( !currentId )
-	return false;
-    
-    if ( currentId->toString() == "cancel" )
+    if ( postevent.widget == cancelButton )
     {
 	// close the dialog 
 	postevent = NCursesEvent::cancel;
     }
-    else if ( currentId->toString() == "solve" )
+    else if ( postevent.widget == solveButton )
     {
 	// apply the solution here
 	zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
