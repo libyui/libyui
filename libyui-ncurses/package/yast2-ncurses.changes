@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Feb  1 15:49:47 CET 2008 - sh@suse.de
+
+- Moved event handling from YUI / YNCursesUI to YDialog / NCDialog
+- V 2.16.14 
+
+-------------------------------------------------------------------
 Thu Jan 31 15:27:49 CET 2008 - sh@suse.de
 
 - Simplified dialog handling

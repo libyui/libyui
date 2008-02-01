@@ -374,7 +374,7 @@ void NCBusyIndicator::tUpdate()
   if ( !win )
     return;
 
-  int cp = (_twin->maxx()) * _position;
+  int cp = (int) ( (_twin->maxx()) * _position );
 
   const NCstyle::StProgbar & style( wStyle().progbar );
   _twin->bkgdset( style.nonbar.chattr );

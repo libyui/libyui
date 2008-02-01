@@ -31,6 +31,7 @@ noinst_HEADERS = 		\
 	tnode.h			\
 	position.h		\
 	YNCursesUI.h		\
+	NCtoY2Event.h		\
 	NCApplication.h		\
 	NCWidgetFactory.h	\
 	NCOptionalWidgetFactory.h	\
@@ -101,6 +102,7 @@ libpy2ncurses_la_SOURCES =		\
 	Y2Log.cc			\
 	position.cc			\
 	YNCursesUI.cc			\
+	NCtoY2Event.cc			\
 	NCApplication.cc		\
 	NCWidgetFactory.cc		\
 	NCOptionalWidgetFactory.cc	\

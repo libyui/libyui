@@ -133,6 +133,21 @@ class NCDialog : public YDialog, public NCWidget {
      **/
     virtual void openInternal();
 
+    /**
+     * Wait for a user event.
+     *
+     * Implemented from YDialog.
+     **/
+    virtual YEvent * waitForEventInternal( int timeout_millisec );
+    
+    /**
+     * Check if a user event is pending. If there is one, return it.
+     * If there is none, do not wait for one - return 0.
+     *
+     * Implemented from YDialog.
+     **/
+    virtual YEvent * pollEventInternal();
+
 
   public:
 

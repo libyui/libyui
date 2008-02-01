@@ -107,21 +107,6 @@ public:
     virtual void idleLoop( int fd_ycp );
 
     /**
-     * Go into event loop until user input is available or until the specified
-     * timeout (in milliseconds) has elapsed. 
-     *
-     * Reimplemented from YUIInterpreter.
-     */
-    virtual YEvent * userInput( unsigned long timeout_millisec );
-
-    /**
-     * Check the event queue for user input. Don't wait.
-     *
-     * Reimplemented from YUIInterpreter.
-     */
-    virtual YEvent * pollInput();
-
-    /**
      * Fills the PackageSelector widget and runs package selection.
      */
     virtual YEvent * runPkgSelection( YWidget * packageSelector );

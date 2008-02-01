@@ -23,6 +23,7 @@
 #include "NCMenuButton.h"
 #include "YShortcut.h"
 #include "NCi18n.h"
+#include "NCtoY2Event.h"
 
 #include "ncursesw.h"
 
@@ -1047,6 +1048,7 @@ NCursesEvent NCDialog::pollInput()
   return returnEvent;
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -1076,6 +1078,37 @@ NCursesEvent NCDialog::userInput( int timeout_millisec )
   IODBG << "user- " << this << '(' << returnEvent << ')' << endl;
   return returnEvent;
 }
+
+
+/**
+ * Back-end for YDialog::waitForEvent()
+ **/
+YEvent * NCDialog::waitForEventInternal( int timeout_millisec )
+{
+    NCtoY2Event cevent;
+    activate ( true );
+    cevent = userInput( timeout_millisec ? timeout_millisec : -1 );
+    activate ( false );
+
+    YEvent * yevent = cevent.propagate();
+  
+    return yevent;
+}
+
+
+/**
+ * Back-end for YDialog::pollEvent()
+ **/
+YEvent * NCDialog::pollEventInternal()
+{
+    // no activation here, done in pollInput, if..
+    NCtoY2Event cevent = pollInput();
+    YEvent * yevent = cevent.propagate();
+
+    return yevent;
+}
+
+
 
 ///////////////////////////////////////////////////////////////////
 //
