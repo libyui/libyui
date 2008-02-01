@@ -22,7 +22,6 @@
 
 #include "NCAskForDirectory.h"
 
-#include "YWidgetID.h"
 #include "YDialog.h"
 #include "YTypes.h"
 #include "NCLayoutBox.h"
@@ -39,14 +38,6 @@
   Textdomain "packages"
 */
 
-namespace
-{
-    const string idOk( "ok" );
-    const string idCancel( "cancel" );
-    const string idDirList( "dirlist" );
-    const string idDirName( "dirname" );
-    const string idDetails( "details" );
-}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -107,18 +98,11 @@ void NCAskForExistingDirectory::createLayout( const string & iniDir,
     dirName->setNotify( true );
     dirName->setStretchable( YD_HORIZ, true );
 
-#warning is this widget ID really needed?
-    YStringWidgetID * dirID = new YStringWidgetID( idDirName );
-    dirName->setId( dirID );
-
     // add the checkBox detailed
     NCLayoutBox * hSplit = new NCLayoutBox( split, YD_HORIZ );
 
     // label for checkbox 
     detailed = new NCCheckBox( hSplit, _( "&Detailed View" ), false );
-#warning is this widget ID really needed?
-    YStringWidgetID * detailsID = new YStringWidgetID( idDetails );
-    detailed->setId( detailsID );
     detailed->setNotify( true );
     
     // create table header for table type T_Overview
@@ -132,10 +116,6 @@ void NCAskForExistingDirectory::createLayout( const string & iniDir,
 				    NCFileTable::T_Overview,
 				    iniDir );
 
-#warning is this widget ID really needed?
-    YStringWidgetID * dirListID = new YStringWidgetID( idDirList );
-    dirList->setId( dirListID );
-
     new NCSpacing( split, YD_VERT, false, 1.0 );
 
     // HBox for the buttons
@@ -147,10 +127,6 @@ void NCAskForExistingDirectory::createLayout( const string & iniDir,
     okButton = new NCPushButton( hSplit1, _( "&OK" ) );
     okButton->setFunctionKey( 10 );
     okButton->setStretchable( YD_HORIZ, true );
-    
-#warning is this widget ID really needed?
-    YStringWidgetID * okID = new YStringWidgetID ( idOk );
-    okButton->setId( okID );
 
     new NCSpacing( hSplit1, YD_HORIZ, true, 0.4 );
       
@@ -159,12 +135,7 @@ void NCAskForExistingDirectory::createLayout( const string & iniDir,
     cancelButton->setFunctionKey( 9 );
     cancelButton->setStretchable( YD_HORIZ, true);
     
-#warning is this widget ID really needed?
-    YStringWidgetID * cancelID = new YStringWidgetID (idCancel );
-    cancelButton->setId( cancelID );
-
     new NCSpacing( hSplit1, YD_HORIZ, true, 0.2 );  
-  
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -238,60 +209,55 @@ bool NCAskForExistingDirectory::postAgain( )
 
     postevent.detail = NCursesEvent::NODETAIL;
 
-#warning compare widget pointers here, not IDs
-    YWidgetID * currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
-
-    if ( currentId )
+    if ( postevent.widget == okButton )
     {
-	if ( currentId->toString() == idOk )
-	{
-	    postevent.result = dirList->getCurrentDir();
-	    // return false means: close the popup
-	    return false;
-	}
-	else if ( currentId->toString() == idDirList )
-	{
-	    if ( postevent.result == "" )
-		return true;
+	postevent.result = dirList->getCurrentDir();
+	// return false means: close the popup
+	return false;
+    }
+    else if ( postevent.widget == dirList )
+    {
+	if ( postevent.result == "" )
+	    return true;
 		
-            // show the currently selected directory
-	    NCDBG << "Add item: " <<  postevent.result << endl;
+	// show the currently selected directory
+	NCDBG << "Add item: " <<  postevent.result << endl;
 
-	    dirName->addItem( postevent.result,
-			      true );
+	dirName->addItem( postevent.result,
+			  true );
 	    
-	    if ( postevent.reason == YEvent::Activated )
-	    {
-		// fill the directory list
-		dirList->fillList();
-	    }
-	}
-	else if ( currentId->toString() == idDirName )
+	if ( postevent.reason == YEvent::Activated )
 	{
-	    dirList->setStartDir( dirName->value() );
+	    // fill the directory list
 	    dirList->fillList();
 	}
-	else if ( currentId->toString() == idDetails )
+    }
+    else if ( postevent.widget == dirName )
+    {
+	dirList->setStartDir( dirName->value() );
+	dirList->fillList();
+    }
+    else if ( postevent.widget == detailed )
+    {
+	bool details = getCheckBoxValue( detailed );
+	if ( details )
 	{
-	    bool details = getCheckBoxValue( detailed );
-	    if ( details )
-	    {
-		dirList->setTableType( NCFileTable::T_Detailed );
-	    }
-	    else
-	    {
-		dirList->setTableType( NCFileTable::T_Overview );
-	    }
-	    dirList->fillList(); 
+	    dirList->setTableType( NCFileTable::T_Detailed );
 	}
 	else
 	{
-	    postevent.result = "";
-	    return false;
+	    dirList->setTableType( NCFileTable::T_Overview );
 	}
+	dirList->fillList(); 
+    }
+    else
+    {
+	postevent.result = "";
+	return false;
     }
 
-    if (postevent == NCursesEvent::cancel)
+    if ( postevent.widget == cancelButton ||
+	 postevent == NCursesEvent::cancel )
     {
 	postevent.result = "";	
 	return false;
