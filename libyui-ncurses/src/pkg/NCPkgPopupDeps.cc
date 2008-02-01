@@ -31,8 +31,6 @@
 #include "NCPopupInfo.h"
 #include "NCInputField.h"
 
-#include "YWidgetID.h"
-
 #include "NCi18n.h"
 
 /*
@@ -168,9 +166,6 @@ void NCPkgPopupDeps::createLayout( )
   // add the solve button
   solveButton = new NCPushButton( hSplit, NCPkgNames::SolveLabel() );
   solveButton->setFunctionKey( 10 );
-  //solveButton->setId( NCPkgNames::Solve () );
-  YStringWidgetID  * solveID = new YStringWidgetID("solve");
-  solveButton->setId( solveID );
 
   //hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
   new NCSpacing( hSplit, YD_HORIZ, true, 0.2 ); 	// stretchable = true
