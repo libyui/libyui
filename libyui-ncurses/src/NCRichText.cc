@@ -25,8 +25,6 @@
 
 #include "YMenuItem.h"
 
-#include "YWidgetID.h"
-
 #if 0
 #undef  DBG_CLASS
 #define DBG_CLASS "_NCRichText_"

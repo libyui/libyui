@@ -25,8 +25,6 @@
 #include "NCLayoutBox.h"
 #include "NCSpacing.h"
 
-#include "YWidgetID.h"
-
 namespace
 {
     const string idOk( "ok" );
@@ -105,9 +103,6 @@ void NCPopupInfo::createLayout( const string & headline,
       // add the OK button
       okButton = new NCPushButton( hSplit, okButtonLabel );
       okButton->setFunctionKey( 10 );
-      
-      YStringWidgetID * okID = new YStringWidgetID (idOk );
-      okButton->setId( okID );
   }
   
   if ( cancelButtonLabel != "" )
@@ -117,9 +112,6 @@ void NCPopupInfo::createLayout( const string & headline,
       // add the Cancel button
       cancelButton = new NCPushButton( hSplit, cancelButtonLabel );
       cancelButton->setFunctionKey( 9 );
-	  
-      YStringWidgetID * cancelID = new YStringWidgetID( idCancel );
-      cancelButton->setId( cancelID );
       
       new NCSpacing( hSplit, YD_HORIZ, true, 0.4 ); 
   }
@@ -242,10 +234,7 @@ bool NCPopupInfo::postAgain()
 
     if ( okButton && cancelButton )
     {
-	YWidgetID * currentId =  dynamic_cast<YWidget *>(postevent.widget)->id();
-
-	if ( currentId
-	     && currentId->toString() == idCancel )
+	if ( postevent.widget == cancelButton )
 	{
 	    NCMIL << "Cancel button pressed" << endl;
 	    // close the dialog 
