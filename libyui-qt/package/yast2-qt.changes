@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Feb  1 11:38:13 CET 2008 - tgoettlicher@suse.de
+
+- Run solver on startup of PackageManager in online update mode
+  (bug #340898)
+- V 2.16.21 
+
+-------------------------------------------------------------------
 Fri Feb  1 08:19:07 CET 2008 - coolo@suse.de
 
 - fix file list
