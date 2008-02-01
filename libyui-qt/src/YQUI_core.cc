@@ -56,7 +56,9 @@ YQUI * YQUI::_ui = 0;
 
 YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     : YUI( with_threads )
+#if 0
     , _main_win( NULL )
+#endif
     , _do_exit_loop( false )
     , _eventLoop( 0 )
 {
@@ -132,6 +134,7 @@ void YQUI::init_ui()
     _eventLoop = new QEventLoop( qApp );
     _do_exit_loop = false;
 
+#if 0
     // Create main window for `opt(`defaultsize) dialogs.
     //
     // We have to use something else than QWidgetStack since QWidgetStack
@@ -145,6 +148,7 @@ void YQUI::init_ui()
 
     if ( _fullscreen )
 	_main_win->move( 0, 0 );
+#endif
 
 
     // Set window title
@@ -167,6 +171,7 @@ void YQUI::init_ui()
 	}
     }
 
+#if 0
     _main_win->setWindowTitle( title );
 
 
@@ -175,6 +180,7 @@ void YQUI::init_ui()
     // the main window - there is nothing to display yet.
 
     _main_win->hide();
+#endif
 
 
     // Ugly hack as a workaround of bug #121872 (Segfault at program exit
@@ -441,7 +447,7 @@ void YQUI::sendEvent( YEvent * event )
 }
 
 
-YEvent * YQUI::userInput( unsigned long timeout_millisec )
+YEvent * YQUI::userInput( int timeout_millisec )
 {
     init_ui();
 
@@ -456,7 +462,7 @@ YEvent * YQUI::userInput( unsigned long timeout_millisec )
 #endif
 
     YEvent * 	event  = 0;
-    YQDialog *	dialog = dynamic_cast<YQDialog *> ( YDialog::currentDialog( false ) );
+    YDialog *	dialog = YDialog::currentDialog( false );
 
     _user_input_timer->stop();
 
@@ -476,7 +482,7 @@ YEvent * YQUI::userInput( unsigned long timeout_millisec )
 	event = _event_handler.consumePendingEvent();
 
 	// Display a busy cursor, but only if there is no other activity within
-	// BUSY_CURSOR_TIMEOUT milliseconds (avoid cursor flicker)
+	// BUSY_CURSOR_TIMEOUT milliseconds: Avoid cursor flicker.
 
 	_busy_cursor_timer->start( BUSY_CURSOR_TIMEOUT ); // single shot
     }
@@ -495,7 +501,7 @@ YEvent * YQUI::pollInput()
 
     if ( ! pendingEvent() )
     {
-	YQDialog * dialog = dynamic_cast<YQDialog *> ( YDialog::currentDialog( false ) );
+	YDialog * dialog = YDialog::currentDialog( false );
 
 	if ( dialog )
 	{

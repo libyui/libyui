@@ -252,27 +252,17 @@ public:
      * installation. Ask him if he would like his mouse temporarily configured
      * as a left-handed mouse.
      *
-     * This status can be queried with UI::GetDisplayInfo() ("LeftHandedMouse").
+     * This status can be queried with
+     * UI::GetDisplayInfo() (map entry "LeftHandedMouse").
      **/
     void maybeLeftHandedUser();
-
-
-protected:
-
-    /**
-     * Idle around until fd_ycp is readable and handle repaints.
-     * This is only used when a separate ui thread is running.
-     *
-     * Reimplemented from YUI.
-     **/
-    virtual void idleLoop( int fd_ycp );
 
     /**
      * Go into event loop until next user input is available.
      *
      * Reimplemented from YUI.
      **/
-    YEvent * userInput( unsigned long timeout_millisec = 0 );
+    YEvent * userInput( int timeout_millisec = 0 );
 
     /**
      * Check the event queue for user input. Don't wait.
@@ -281,22 +271,6 @@ protected:
      **/
     YEvent * pollInput();
 
-    /**
-     * Show and activate a dialog.
-     *
-     * Reimplemented from YUI.
-     **/
-    void showDialog( YDialog * dialog );
-
-    /**
-     * Decativate and close a dialog. This does not delete the dialog yet.
-     *
-     * Reimplemented from YUI.
-     **/
-    void closeDialog( YDialog * dialog );
-
-
-public:
 
     /**
      * Initialize and set a textdomain for gettext()
@@ -357,6 +331,9 @@ public:
 
 protected:
 
+
+protected:
+
     /**
      * Display capabilities.
      * [Reimplemented from YUI]
@@ -378,15 +355,10 @@ protected:
     bool leftHandedMouse()		{ return _leftHandedMouse; }
 
 
-    QMap<QString, int>	screenShotNo;
-    QString		screenShotNameTemplate;
-
     /**
      * Application shutdown
      **/
     bool close();
-
-protected:
 
     /**
      * Handle command line args
@@ -401,32 +373,35 @@ protected:
     void init_ui();
 
     /**
+     * Idle around until fd_ycp is readable and handle repaints.
+     * This is only used when a separate ui thread is running.
+     *
+     * Reimplemented from YUI.
+     **/
+    virtual void idleLoop( int fd_ycp );
+    
+    /**
      * Timeout during TimeoutUserInput() / WaitForEvent()
      **/
     void userInputTimeout();
 
     void leaveIdleLoop();
 
+
+    
     //
     // Data members
     //
 
-    /**
-     * Use the entire available screen
-     **/
-    bool _fullscreen;
+    QMap<QString, int>	screenShotNo;
+    QString		screenShotNameTemplate;
 
-    /**
-     * No window border for the main window
-     **/
+    bool _fullscreen;
     bool _noborder;
 
-    /**
-     * Container for the widget stack. QWidgetStack cannot handle a WFlags
-     * argument, so this needs to be embedded into something else - and a QVBox
-     * at least handles all the sizeHint and resize stuff.
-     **/
+#if 0
     QWidget * _main_win;
+#endif
 
     /**
      * Size for `opt(`defaultsize) dialogs.
@@ -434,9 +409,9 @@ protected:
     QSize _default_size;
 
     /**
-     * This flag is set during @ref #userInput in order to tell
-     * @ref #returnNow to call exit_loop, which only may be called
-     * after enter_loop.
+     * This flag is set during userInput() in order to tell
+     * returnNow() to call exit_loop(), which only may be called
+     * after enter_loop().
      **/
     bool _do_exit_loop;
 
@@ -506,6 +481,8 @@ protected:
 
     YQUI_Ui *_qobject;
 };
+
+
 
 class YQUI_Ui : public QObject
 {

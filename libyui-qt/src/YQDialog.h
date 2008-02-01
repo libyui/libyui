@@ -56,11 +56,6 @@ protected:
 
 public:
     /**
-     * Makes this dialog active or inactive.
-     **/
-    void activate( bool active );
-
-    /**
      * Interited from QDialog: The window was closed via the window
      * manager close button.
      **/
@@ -211,6 +206,21 @@ protected:
      * Implemented from YDialog.
      **/
     virtual void openInternal();
+
+    /**
+     * Wait for a user event.
+     *
+     * Implemented from YDialog.
+     **/
+    virtual YEvent * waitForEventInternal( int timeout_millisec );
+    
+    /**
+     * Check if a user event is pending. If there is one, return it.
+     * If there is none, do not wait for one - return 0.
+     *
+     * Implemented from YDialog.
+     **/
+    virtual YEvent * pollEventInternal();
 
     /**
      * Activate this dialog: Make sure that it is shown as the topmost dialog

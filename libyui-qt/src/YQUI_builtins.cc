@@ -55,16 +55,18 @@
 
 YEvent * YQUI::runPkgSelection( YWidget * packageSelector )
 {
+    YUI_CHECK_PTR( packageSelector );
     YEvent * event = 0;
 
     try
     {
-	do
-	{
-	    event = filterInvalidEvents( userInput() );
-	} while ( ! event );
+	event = packageSelector->findDialog()->waitForEvent();
     }
-    catch (const std::exception & e)
+    catch ( YUIException & uiEx )
+    {
+	YUI_CAUGHT( uiEx );
+    }
+    catch ( std::exception & e)
     {
 	yuiError() << "Caught std::exception: " << e.what() << "\n"
 		   << "This is a libzypp problem. Do not file a bug against the UI!"
@@ -261,7 +263,7 @@ void YQUI::askConfigureLogging()
     items << "Debug logging off"
 	  << "Debug logging on";
 
-    QString result = QInputDialog::getItem( _main_win,
+    QString result = QInputDialog::getItem( 0,
                                             _("YaST2 Logging"),
                                             _("Configure YaST2 Logging:"),
                                             items, 0,

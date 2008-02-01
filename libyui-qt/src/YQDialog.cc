@@ -230,18 +230,6 @@ YQDialog::setSize( int newWidth, int newHeight )
 
 
 void
-YQDialog::activate( bool active )
-{
-#if 0
-    if ( active )
-    {
-	ensureOnlyOneDefaultButton();
-    }
-#endif
-}
-
-
-void
 YQDialog::resizeEvent( QResizeEvent * event )
 {
     if ( event )
@@ -274,7 +262,6 @@ YQDialog::findDefaultButton()
 YQGenericButton *
 YQDialog::findDefaultButton( YWidgetListConstIterator begin,
 			     YWidgetListConstIterator end ) const
-
 {
     for ( YWidgetListConstIterator it = begin; it != end; ++it )
     {
@@ -679,6 +666,21 @@ YQDialog::focusInEvent( QFocusEvent * event )
 	    focusNextPrevChild( true );
     }
 }
+
+
+YEvent *
+YQDialog::waitForEventInternal( int timeout_millisec )
+{
+    return YQUI::ui()->userInput( timeout_millisec );
+}
+
+
+YEvent *
+YQDialog::pollEventInternal()
+{
+    return YQUI::ui()->pollInput();
+}
+
 
 
 void
