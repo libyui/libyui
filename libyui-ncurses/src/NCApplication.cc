@@ -10,15 +10,19 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      NCApplication.cc
+  File:	      	NCApplication.cc
 
-  Author:     Gabriele Mohr <gs@suse.de>
+  Authors:	Gabriele Mohr <gs@suse.de>
+		Stefan Hundhammer <sh@suse.de>
 
 /-*/
 
 
+#include <curses.h>
+
 #include "Y2Log.h"
 #include "NCurses.h"
+#include "YNCursesUI.h"
 #include "NCApplication.h"
 #include "NCAskForDirectory.h"
 #include "NCAskForFile.h"
@@ -94,3 +98,81 @@ NCApplication::askForExistingDirectory( const string & startDir,
     return retEvent.result;
 }
 
+
+/**
+ * Run external program supplied as string parameter the same terminal.
+ **/
+int
+NCApplication::runInTerminal( const string & cmd )
+{ 
+    int ret;
+
+    // Save tty modes and end ncurses mode temporarily
+    ::def_prog_mode();
+    ::endwin();
+
+    // Regenerate saved stdout and stderr, so that app called
+    // via system() can use them and draw something to the terminal
+    dup2( YNCursesUI::ui()->stdout_save, 1 );
+    dup2( YNCursesUI::ui()->stderr_save, 2 );
+
+    // Call external program
+    ret = system( cmd.c_str() );
+
+    if ( ret != 0 )
+    {
+	NCERR << cmd << " returned:" << ret << endl;
+    }
+
+    // Redirect stdout and stderr to y2log again
+    YNCursesUI::ui()->RedirectToLog();
+
+    // Resume tty modes and refresh the screen
+    ::reset_prog_mode();
+    ::refresh();
+
+    return ret;
+}
+
+
+int
+NCApplication::displayWidth()
+{
+    return ::COLS;	// exported from ncurses.h
+}
+
+int
+NCApplication::displayHeight()
+{
+    return ::LINES;	// exported from ncurses.h
+}
+
+int
+NCApplication::displayDepth()
+{
+    return -1;
+}
+
+long
+NCApplication::displayColors()
+{
+    return NCattribute::colors();
+}
+
+int
+NCApplication::defaultWidth()
+{
+    return ::COLS;	// exported from ncurses.h
+}
+
+int
+NCApplication::defaultHeight()
+{
+    return ::LINES;	// exported from ncurses.h
+}
+
+bool
+NCApplication::hasFullUtf8Support()
+{
+    return ( NCstring::terminalEncoding() == "UTF-8" );
+}

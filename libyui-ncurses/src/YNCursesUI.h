@@ -124,14 +124,6 @@ public:
     virtual YCPValue setKeyboard ( );
 
     /**
-     * UI-specific runInTerminal() function.
-     * Returns (integer) return code of external program it spawns 
-     * in the same terminal
-    */
-
-    virtual int runInTerminal ( const YCPString & module);
-
-    /**
      * UI-specific beep() function.
      * Beeps the system bell.
     */
@@ -148,22 +140,6 @@ public:
      * This default implementation does nothing.
     */
     virtual void redrawScreen() { Refresh(); }
-
-    /**
-     * UI-specific getDisplayInfo() functions.
-     * See UI builtin GetDisplayInfo() doc for details.
-     **/
-    virtual int  getDisplayWidth()           { return cols(); }
-    virtual int  getDisplayHeight()          { return lines(); }
-    virtual int  getDisplayDepth()           { return -1; }
-    virtual long getDisplayColors()          { return NCattribute::colors(); }
-    virtual int  getDefaultWidth()           { return cols(); }
-    virtual int  getDefaultHeight()          { return lines(); }
-    virtual bool textMode()                  { return true; }
-    virtual bool hasImageSupport()           { return false; }
-    virtual bool hasIconSupport()            { return false; }
-    
-    virtual bool hasFullUtf8Support();
 };
 
 #endif // YNCursesUI_h

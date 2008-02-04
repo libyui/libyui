@@ -115,6 +115,40 @@ public:
     virtual string askForSaveFileName( const string & startWith,
 				       const string & filter,
 				       const string & headline );
+
+    /**
+     * Run a shell command (typically an interactive program using NCurses)
+     * in a terminal (window).
+     *
+     * Here in the NCurses UI, this shuts down the NCurses lib, runs the
+     * command and then restores the status of the NCurses lib so that the next
+     * instance of the NCurses lib from the started command doesn't interfere
+     * with the NCurses UI's instance.
+     *
+     * Reimplemented from YApplication.
+     **/
+    virtual int runInTerminal ( const string & command );
+
+    
+    // Display information and UI capabilities.
+    //
+    // All implemented from YApplication.
+
+    virtual int	 displayWidth();
+    virtual int	 displayHeight();
+    virtual int	 displayDepth();
+    virtual long displayColors();
+
+    virtual int	 defaultWidth();
+    virtual int	 defaultHeight();
+
+    virtual bool isTextMode()			{ return true; }
+    virtual bool hasImageSupport()		{ return false; }
+    virtual bool hasIconSupport()		{ return false; }
+    virtual bool hasAnimationSupport()		{ return false; }
+    virtual bool hasFullUtf8Support();
+    virtual bool richTextSupportsTable()	{ return false; }
+    virtual bool leftHandedMouse()		{ return false; }
 };
 
 

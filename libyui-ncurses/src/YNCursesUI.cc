@@ -278,48 +278,6 @@ YCPValue YNCursesUI::setKeyboard()
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : YNCursesUI::runInTerminal
-//	METHOD TYPE : YCPValue
-//
-//	DESCRIPTION:: Run external program supplied as string parameter
-// 		      in the same terminal
-//
-
-int YNCursesUI::runInTerminal( const YCPString & module )
-{ 
-    int ret;
-    string cmd = module->value();  
-
-    //Save tty modes and end ncurses mode temporarily
-    ::def_prog_mode();
-    ::endwin();
-
-    //Regenerate saved stdout and stderr, so that app called
-    //via system() can use them and draw something to the terminal
-    dup2(NCurses::stdout_save, 1);
-    dup2(NCurses::stderr_save, 2);
-
-    //Call external program
-    ret = system(cmd.c_str());
-
-    if ( ret != 0 )
-    {
-	NCERR << cmd << " returned:" << ret << endl;
-    }
-
-    //Redirect stdout and stderr to y2log again
-    NCurses::RedirectToLog();
-
-    //Resume tty modes and refresh the screen
-    ::reset_prog_mode();
-    ::refresh();
-
-    return ret;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
 //	METHOD NAME : YNCursesUI::setConsoleFont
 //	METHOD TYPE : YCPValue
 //
@@ -401,26 +359,6 @@ YCPValue YNCursesUI::setConsoleFont( const YCPString & console_magic,
   }
 
   return YCPVoid();
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YNCursesUI::hasFullUtf8Support
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
-bool YNCursesUI::hasFullUtf8Support()
-{
-    if ( NCstring::terminalEncoding() == "UTF-8" )
-    {
-	return true;
-    }
-    else
-    {
-	return false;
-    }
 }
 
 ///////////////////////////////////////////////////////////////////
