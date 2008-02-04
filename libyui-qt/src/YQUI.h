@@ -238,18 +238,6 @@ public:
     void askConfigureLogging();
 
     /**
-     * A mouse click with the wrong mouse button was detected - e.g., a right
-     * click on a push button. The user might be left-handed, but his mouse
-     * might not (yet) be configured for left-handed use - e.g., during
-     * installation. Ask him if he would like his mouse temporarily configured
-     * as a left-handed mouse.
-     *
-     * This status can be queried with
-     * UI::GetDisplayInfo() (map entry "LeftHandedMouse").
-     **/
-    void maybeLeftHandedUser();
-
-    /**
      * Go into event loop until next user input is available.
      *
      * Reimplemented from YUI.
@@ -262,7 +250,6 @@ public:
      * Reimplemented from YUI.
      **/
     YEvent * pollInput();
-
 
     /**
      * Initialize and set a textdomain for gettext()

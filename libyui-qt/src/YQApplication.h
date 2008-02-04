@@ -207,7 +207,44 @@ public:
      **/
     static YQPackageSelectorPlugin * packageSelectorPlugin();
 
+    /**
+     * A mouse click with the wrong mouse button was detected - e.g., a right
+     * click on a push button. The user might be left-handed, but his mouse
+     * might not (yet) be configured for left-handed use - e.g., during
+     * installation. Ask him if he would like his mouse temporarily configured
+     * as a left-handed mouse.
+     *
+     * This status can be queried with YQApplication::leftHandedMouse(). 
+     **/
+    void maybeLeftHandedUser();
     
+
+    // Display information and UI capabilities.
+    //
+    // All implemented from YApplication.
+
+    virtual int	 displayWidth();
+    virtual int	 displayHeight();
+    virtual int	 displayDepth();
+    virtual long displayColors();
+
+    // Size of main dialogs
+    virtual int	 defaultWidth();
+    virtual int	 defaultHeight();
+
+    //
+    // UI capabilities
+    //
+
+    virtual bool isTextMode()			{ return false; }
+    virtual bool hasImageSupport()		{ return true; }
+    virtual bool hasIconSupport()		{ return true; }
+    virtual bool hasAnimationSupport()		{ return true; }
+    virtual bool hasFullUtf8Support()		{ return true; }
+    virtual bool richTextSupportsTable()	{ return true; }
+    virtual bool leftHandedMouse();
+
+
 protected:
 
     /**
@@ -247,13 +284,17 @@ protected:
      **/
     QTranslator * _qtTranslations;
 
-    /**
-     * For auto fonts
-     **/
+    //
+    // Misc
+    //
+    
     bool _autoFonts;
     int  _autoNormalFontSize;
     int  _autoHeadingFontSize;
 
+    bool _leftHandedMouse;
+    bool _askedForLeftHandedMouse;
+    
 
 };
 

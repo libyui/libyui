@@ -44,42 +44,6 @@
 #include <X11/Xlib.h>
 
 
-int YQUI::getDisplayWidth()
-{
-    return qApp->desktop()->width();
-}
-
-
-int YQUI::getDisplayHeight()
-{
-    return qApp->desktop()->height();
-}
-
-
-int YQUI::getDisplayDepth()
-{
-    return qApp->desktop()->depth();
-}
-
-
-long YQUI::getDisplayColors()
-{
-    return 1L << qApp->desktop()->depth();
-}
-
-
-int YQUI::getDefaultWidth()
-{
-    return _default_size.width();
-}
-
-
-int YQUI::getDefaultHeight()
-{
-    return _default_size.height();
-}
-
-
 int YQUI::defaultSize(YUIDimension dim) const
 {
     return dim == YD_HORIZ ? _default_size.width() : _default_size.height();
@@ -202,47 +166,6 @@ float YQUI::layoutUnits( YUIDimension dim, int device_units )
     else			size *= ( 25/480.0 );
 
     return size;
-}
-
-
-void YQUI::maybeLeftHandedUser()
-{
-    if ( _askedForLeftHandedMouse )
-	return;
-
-
-    QString message =
-	_( "You clicked the right mouse button "
-	   "where a left-click was expected."
-	   "\n"
-	   "Switch left and right mouse buttons?"
-	   );
-    int button = QMessageBox::question( 0,
-					// Popup dialog caption
-					_( "Unexpected Click" ),
-					message,
-					QMessageBox::Yes | QMessageBox::Default,
-					QMessageBox::No,
-					QMessageBox::Cancel | QMessageBox::Escape );
-
-    if ( button == QMessageBox::Yes )
-    {
-
-	const char * command =
-	    _leftHandedMouse ?
-	    "xmodmap -e \"pointer = 1 2 3\"":	// switch back to right-handed mouse
-	    "xmodmap -e \"pointer = 3 2 1\"";	// switch to left-handed mouse
-
-	_leftHandedMouse	 = ! _leftHandedMouse; 	// might be set repeatedly!
-	_askedForLeftHandedMouse = false;	// give the user a chance to switch back
-	yuiMilestone() << "Switching mouse buttons: " << command << endl;
-
-	system( command );
-    }
-    else if ( button == 1 )	// No
-    {
-	_askedForLeftHandedMouse = true;
-    }
 }
 
 

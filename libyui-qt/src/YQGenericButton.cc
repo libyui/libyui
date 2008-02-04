@@ -27,6 +27,7 @@
 
 #include "utf8.h"
 #include "YQUI.h"
+#include "YQApplication.h"
 #include "YEvent.h"
 #include "YQGenericButton.h"
 #include "YQDialog.h"
@@ -203,7 +204,7 @@ bool YQGenericButton::eventFilter( QObject * obj, QEvent * event )
 	    if ( mouseEvent && mouseEvent->button() == Qt::RightButton )
 	    {
 		yuiMilestone() << "Right click on button detected" << endl;
-		YQUI::ui()->maybeLeftHandedUser();
+		YQUI::yqApp()->maybeLeftHandedUser();
 	    }
 	}
     }

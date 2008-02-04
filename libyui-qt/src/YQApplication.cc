@@ -18,16 +18,19 @@
 /-*/
 
 
+#include <unistd.h>	// access()
+
 #include <QApplication>
 #include <QLocale>
-#include <unistd.h>	// access()
-#include <qregexp.h>
-#include <qfiledialog.h>
-#include <qmessagebox.h>
+#include <QRegExp>
+#include <QFileDialog>
+#include <QDesktopWidget>
+#include <QMessageBox>
 
 #define YUILogComponent "qt-ui"
 #include "YUILog.h"
 #include "YUISymbols.h"
+#include "YQUI.h"
 
 #include "utf8.h"
 #include "YQi18n.h"
@@ -47,6 +50,8 @@ YQApplication::YQApplication()
     , _autoFonts( false )
     , _autoNormalFontSize( -1 )
     , _autoHeadingFontSize( -1 )
+      , _leftHandedMouse( false )
+    , _askedForLeftHandedMouse( false )
 {
     yuiDebug() << "YQApplication constructor start" << endl;
 
@@ -533,6 +538,97 @@ YQApplication::packageSelectorPlugin()
 
     return plugin;
 }
+
+
+int 
+YQApplication::displayWidth()
+{
+    return qApp->desktop()->width();
+}
+
+
+int 
+YQApplication::displayHeight()
+{
+    return qApp->desktop()->height();
+}
+
+
+int 
+YQApplication::displayDepth()
+{
+    return qApp->desktop()->depth();
+}
+
+
+long 
+YQApplication::displayColors()
+{
+    return 1L << qApp->desktop()->depth();
+}
+
+
+int 
+YQApplication::defaultWidth()
+{
+    return YQUI::ui()->defaultSize( YD_HORIZ );
+}
+
+
+int 
+YQApplication::defaultHeight()
+{
+    return YQUI::ui()->defaultSize( YD_VERT );
+}
+
+
+bool
+YQApplication::leftHandedMouse()
+{
+    return _leftHandedMouse;
+}
+
+
+void
+YQApplication::maybeLeftHandedUser()
+{
+    if ( _askedForLeftHandedMouse )
+	return;
+
+    QString message =
+	_( "You clicked the right mouse button "
+	   "where a left-click was expected."
+	   "\n"
+	   "Switch left and right mouse buttons?"
+	   );
+    int button = QMessageBox::question( 0,
+					// Popup dialog caption
+					_( "Unexpected Click" ),
+					message,
+					QMessageBox::Yes | QMessageBox::Default,
+					QMessageBox::No,
+					QMessageBox::Cancel | QMessageBox::Escape );
+
+    if ( button == QMessageBox::Yes )
+    {
+
+	const char * command =
+	    _leftHandedMouse ?
+	    "xmodmap -e \"pointer = 1 2 3\"":	// switch back to right-handed mouse
+	    "xmodmap -e \"pointer = 3 2 1\"";	// switch to left-handed mouse
+
+	_leftHandedMouse	 = ! _leftHandedMouse; 	// might be set repeatedly!
+	_askedForLeftHandedMouse = false;	// give the user a chance to switch back
+	yuiMilestone() << "Switching mouse buttons: " << command << endl;
+
+	system( command );
+    }
+    else if ( button == 1 )	// No
+    {
+	_askedForLeftHandedMouse = true;
+    }
+}
+
 
 
 

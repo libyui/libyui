@@ -150,7 +150,7 @@ bool YQRadioButton::eventFilter( QObject * obj, QEvent * event )
         if ( mouseEvent && mouseEvent->button() == Qt::RightButton )
         {
 	    yuiMilestone() << "Right click on button detected" << endl;
-	    YQUI::ui()->maybeLeftHandedUser();
+	    YQUI::yqApp()->maybeLeftHandedUser();
         }
     }
 

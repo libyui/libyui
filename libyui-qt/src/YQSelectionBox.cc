@@ -31,6 +31,7 @@ using std::max;
 #include "utf8.h"
 #include "YEvent.h"
 #include "YQUI.h"
+#include "YQApplication.h"
 #include "YQSelectionBox.h"
 #include "YQSignalBlocker.h"
 #include "YQDialog.h"
@@ -253,7 +254,7 @@ bool YQSelectionBox::eventFilter( QObject * obj, QEvent * ev )
 	if ( mouseEvent && mouseEvent->button() == Qt::RightButton )
 	{
 	    yuiMilestone() << "Right click in selecton box detected" << endl;
-	    YQUI::ui()->maybeLeftHandedUser();
+	    YQUI::yqApp()->maybeLeftHandedUser();
 	}
     }
 
