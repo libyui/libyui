@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Feb  4 13:48:16 CET 2008 - tgoettlicher@suse.de
+
+- Fixed Bug #340898: Selecting specific repository out of sync 
+- V 2.16.23 
+
+-------------------------------------------------------------------
 Fri Feb  1 15:48:55 CET 2008 - sh@suse.de
 
 - Moved event handling from Y(Q)UI to Y(Q)Dialog
