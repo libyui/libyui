@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Feb  4 16:01:22 CET 2008 - tgoettlicher@suse.de
+
+- Adapted askForSaveFilename to qt4 api (bnc #357998)
+- V 2.16.24 
+
+-------------------------------------------------------------------
 Fri Feb  4 13:48:16 CET 2008 - tgoettlicher@suse.de
 
 - Fixed Bug #340898: Selecting specific repository out of sync 

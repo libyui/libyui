@@ -416,9 +416,12 @@ YQApplication::askForExistingDirectory( const string & startDir,
 #endif
 
     QString dirName =
-	QFileDialog::getExistingDirectory( 0,
-                                           fromUTF8( startDir ),
-					   fromUTF8( headline ) );	// caption
+	QFileDialog::getExistingDirectory( 0,				// parent
+	 				   fromUTF8( headline ) ,	// caption
+					   fromUTF8( startDir ));	// dir
+
+
+
 #if 0
     busyCursor();
 #endif
@@ -437,9 +440,10 @@ YQApplication::askForExistingFile( const string & startWith,
 #endif
 
     QString fileName =
-	QFileDialog::getOpenFileName( 0, fromUTF8( startWith ),
-				      fromUTF8( filter ),
-				      fromUTF8( headline ) );	// caption
+	QFileDialog::getOpenFileName( 0, 				// parent
+				      fromUTF8( headline ) ,		// caption
+				      fromUTF8( startWith ),		// dir
+				      fromUTF8( filter ));		// filter
 
 #if 0
     busyCursor();
@@ -483,9 +487,10 @@ YQApplication::askForSaveFileName( const QString & startWith,
 	// Leave the mouse cursor alone - this function might be called from
 	// some other widget, not only from UI::AskForSaveFileName().
 
-	fileName = QFileDialog::getSaveFileName( 0, startWith,
-                                                 filter,
-                                                 headline );		// caption
+	fileName = QFileDialog::getSaveFileName( 0, 			// parent
+						 headline,		// caption
+						 startWith,		// dir
+						 filter );		// filter
 
 	if ( fileName.isEmpty() )	// this includes fileName.isNull()
 	    return QString::null;
