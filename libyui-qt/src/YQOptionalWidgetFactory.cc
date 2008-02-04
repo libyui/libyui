@@ -17,7 +17,7 @@
 /-*/
 
 #include "YQOptionalWidgetFactory.h"
-#include "YQUI.h"
+#include "YQApplication.h"
 #include "YUIException.h"
 #include "YQPackageSelectorPlugin.h"
 #include "YQWizard.h"
@@ -158,7 +158,7 @@ bool YQOptionalWidgetFactory::hasPatternSelector()
 YQPatternSelector *
 YQOptionalWidgetFactory::createPatternSelector( YWidget * parent, long modeFlags )
 {
-    YQPackageSelectorPlugin * plugin = YQUI::ui()->packageSelectorPlugin();
+    YQPackageSelectorPlugin * plugin = YQApplication::packageSelectorPlugin();
 
     if ( plugin )
 	return plugin->createPatternSelector( parent, modeFlags );
@@ -176,7 +176,7 @@ bool YQOptionalWidgetFactory::hasSimplePatchSelector()
 YQSimplePatchSelector *
 YQOptionalWidgetFactory::createSimplePatchSelector( YWidget * parent, long modeFlags )
 {
-    YQPackageSelectorPlugin * plugin = YQUI::ui()->packageSelectorPlugin();
+    YQPackageSelectorPlugin * plugin = YQApplication::packageSelectorPlugin();
 
     if ( plugin )
 	return plugin->createSimplePatchSelector( parent, modeFlags );

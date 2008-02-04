@@ -66,7 +66,6 @@ SET( qt_yast_plugin_SRCS
      YQTree.cc
      YQUI_builtins.cc
      YQUI_core.cc
-     YQUI_widgets.cc
      YQUI_x11.cc
      YQWidgetCaption.cc
      YQWidgetFactory.cc

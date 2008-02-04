@@ -21,7 +21,7 @@
 #include "YUILog.h"
 
 #include "YQWidgetFactory.h"
-#include "YQUI.h"
+#include "YQApplication.h"
 #include "YUIException.h"
 #include "YQPackageSelectorPlugin.h"
 #include "YQMainWinDock.h"
@@ -30,11 +30,13 @@
 
 using std::string;
 
+
 YQWidgetFactory::YQWidgetFactory()
     : YWidgetFactory()
 {
     // NOP
 }
+
 
 YQWidgetFactory::~YQWidgetFactory()
 {
@@ -292,7 +294,7 @@ YQWidgetFactory::createMultiSelectionBox( YWidget * parent, const string & label
 YQPackageSelector *
 YQWidgetFactory::createPackageSelector( YWidget * parent, long modeFlags )
 {
-    YQPackageSelectorPlugin * plugin = YQUI::ui()->packageSelectorPlugin();
+    YQPackageSelectorPlugin * plugin = YQApplication::packageSelectorPlugin();
 
     if ( plugin )
 	return plugin->createPackageSelector( parent, modeFlags );

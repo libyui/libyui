@@ -27,6 +27,8 @@
 #include "QY2Settings.h"
 #include "YApplication.h"
 
+class YQPackageSelectorPlugin;
+
 
 class YQApplication: public QObject, public YApplication
 {
@@ -198,6 +200,12 @@ public:
     static QString askForSaveFileName( const QString & startWith,
 				       const QString & filter,
 				       const QString & headline );
+
+    /**
+     * Return the package selector plugin singleton or creates it
+     * (including loading the plugin lib) if it does not exist yet.
+     **/
+    static YQPackageSelectorPlugin * packageSelectorPlugin();
 
     
 protected:

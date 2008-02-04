@@ -33,6 +33,7 @@
 #include "YQi18n.h"
 
 #include "YQApplication.h"
+#include "YQPackageSelectorPlugin.h"
 
 
 YQApplication::YQApplication()
@@ -513,6 +514,26 @@ YQApplication::askForSaveFileName( const QString & startWith,
 
     return fileName;
 }
+
+
+YQPackageSelectorPlugin *
+YQApplication::packageSelectorPlugin()
+{
+    static YQPackageSelectorPlugin * plugin = 0;
+
+    if ( ! plugin )
+    {
+	plugin = new YQPackageSelectorPlugin();
+
+	// This is a deliberate memory leak: If an application requires a
+	// PackageSelector, it is a package selection application by
+	// definition. In this case, the qt_pkg plugin is intentionally kept
+	// open to avoid repeated start-up cost of the plugin and libzypp.
+    }
+
+    return plugin;
+}
+
 
 
 #include "YQApplication.moc"
