@@ -387,25 +387,6 @@ void YQUI::calcDefaultSize()
 }
 
 
-
-void YQUI::internalError( const char * msg )
-{
-    normalCursor();
-    int button = QMessageBox::critical( 0, "YaST2 Internal Error", msg,
-					QMessageBox::Abort | QMessageBox::Default,
-					0 ); // button1
-    busyCursor();
-
-    if ( button == QMessageBox::Abort )
-    {
-	raiseFatalError();
-	abort();
-
-	// exit() leaves a process running (WFM?), so this really seems to be
-	// the only way to make sure we are really going down.
-    }
-}
-
 void YQUI::idleLoop( int fd_ycp )
 {
     init_ui();
@@ -425,15 +406,18 @@ void YQUI::idleLoop( int fd_ycp )
     delete notifier;
 }
 
+
 void YQUI::leaveIdleLoop()
 {
     _leave_idle_loop = true;
 }
 
+
 void YQUI_Ui::slotLeaveIdleLoop()
 {
     YQUI::ui()->leaveIdleLoop();
 }
+
 
 void YQUI::sendEvent( YEvent * event )
 {

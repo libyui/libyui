@@ -191,13 +191,6 @@ public:
     void askPlayMacro();
 
     /**
-     * Issue an internal error: Open popup with that message and wait.
-     *
-     * Reimplemented from YUI.
-     **/
-    void internalError( const char * msg );
-
-    /**
      * Block (or unblock) events. If events are blocked, any event sent
      * should be ignored until events are unblocked again.
      *
