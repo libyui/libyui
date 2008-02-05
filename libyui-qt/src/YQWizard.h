@@ -21,6 +21,8 @@
 #define YQWizard_h
 
 #include <string>
+#include <vector>
+
 #include <qpixmap.h>
 #include <qstringlist.h>
 #include "QY2ListView.h"
@@ -31,8 +33,7 @@
 #include <YWizard.h>
 #include "YQWizardButton.h"
 
-#include <string>
-#include <vector>
+using std::vector;
 
 class QGridLayout;
 class QFrame;
