@@ -348,12 +348,6 @@ void YQUI::calcDefaultSize()
     {
 	// Get _default_size via -geometry command line option (if set)
 
-// NOTE not needed in qt4
-// 	QWidget * dummy = new QWidget();
-// 	dummy->hide();
-// 	qApp->setMainWidget( dummy );
-// 	_default_size = dummy->size();
-
         // Set min defaultsize or figure one out if -geometry was not used
 
 	if ( _default_size.width()  < 800 ||
