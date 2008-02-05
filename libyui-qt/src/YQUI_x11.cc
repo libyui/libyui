@@ -102,13 +102,13 @@ QPalette YQUI::visionImpairedPalette()
     QPalette pal;
 
     // for the active window (the one with the keyboard focus)
-    pal.setColor( QPalette::Active, QPalette::Background,		Qt::black 	);
-    pal.setColor( QPalette::Active, QPalette::Foreground,		Qt::cyan	);
+    pal.setColor( QPalette::Active, QPalette::Background,	Qt::black 	);
+    pal.setColor( QPalette::Active, QPalette::Foreground,	Qt::cyan	);
     pal.setColor( QPalette::Active, QPalette::Text,		Qt::cyan	);
     pal.setColor( QPalette::Active, QPalette::Base,		dark		);
     pal.setColor( QPalette::Active, QPalette::Button,		dark		);
-    pal.setColor( QPalette::Active, QPalette::ButtonText,		Qt::green	);
-    pal.setColor( QPalette::Active, QPalette::Highlight,		Qt::yellow	);
+    pal.setColor( QPalette::Active, QPalette::ButtonText,	Qt::green	);
+    pal.setColor( QPalette::Active, QPalette::Highlight,	Qt::yellow	);
     pal.setColor( QPalette::Active, QPalette::HighlightedText,	Qt::black	);
 
     // for other windows (those that don't have the keyboard focus)
