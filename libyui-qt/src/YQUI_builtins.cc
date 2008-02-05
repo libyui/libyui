@@ -197,7 +197,6 @@ void YQUI::makeScreenShot( std::string stl_filename )
 	macroRecorder->beginBlock();
 	YDialog::currentDialog()->saveUserInput( macroRecorder );
 	macroRecorder->recordMakeScreenShot( true, toUTF8( fileName ) );
-	macroRecorder->recordUserInput( YCPVoid() );
 	macroRecorder->endBlock();
     }
 }
