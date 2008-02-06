@@ -635,6 +635,39 @@ YQApplication::maybeLeftHandedUser()
 }
 
 
+/**
+ * UI-specific conversion from logical layout spacing units (80x25)
+ * to device dependent units (640x480).
+ **/
+int
+YQApplication::deviceUnits( YUIDimension dim, float layoutUnits )
+{
+    if ( dim==YD_HORIZ )	layoutUnits *= ( 640.0/80 );
+    else			layoutUnits *= ( 480.0/25 );
+
+    return (int) ( layoutUnits + 0.5 );
+}
+
+
+/**
+ * Default conversion from device dependent layout spacing units (640x480)
+ * to logical layout units (80x25).
+ *
+ * This default function assumes 80x25 units.
+ * Derived UIs may want to reimplement this.
+ **/
+float
+YQApplication::layoutUnits( YUIDimension dim, int deviceUnits )
+{
+    float size = (float) deviceUnits;
+
+    if ( dim==YD_HORIZ )	size *= ( 80/640.0 );
+    else			size *= ( 25/480.0 );
+
+    return size;
+}
+
+
 
 
 #include "YQApplication.moc"

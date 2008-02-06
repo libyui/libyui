@@ -217,7 +217,23 @@ public:
      * This status can be queried with YQApplication::leftHandedMouse(). 
      **/
     void maybeLeftHandedUser();
-    
+
+    /**
+     * Convert logical layout spacing units into device dependent units.
+     * A default size dialog is assumed to be 80x25 layout spacing units.
+     *
+     * Reimplemented from YApplication.
+     **/
+    virtual int deviceUnits( YUIDimension dim, float layoutUnits );
+
+    /**
+     * Convert device dependent units into logical layout spacing units.
+     * A default size dialog is assumed to be 80x25 layout spacing units.
+     *
+     * Reimplemented from YApplication.
+     **/
+    virtual float layoutUnits( YUIDimension dim, int deviceUnits );
+
 
     // Display information and UI capabilities.
     //
