@@ -26,6 +26,7 @@
 #include "Y2Log.h"
 #include <YEvent.h>
 #include "YDialog.h"
+#include "YMacro.h"
 
 #include <ycp/y2log.h>
 #include <ycp/Parser.h>
@@ -80,7 +81,7 @@ YNCursesUI::YNCursesUI( int argc, char **argv, bool with_threads, const char * m
     }
 
     if ( macro_file )
-	playMacro( macro_file );
+	YMacro::play( macro_file );
     
     topmostConstructorHasFinished();
 }
