@@ -841,7 +841,7 @@ string YQWizard::debugLabel() const
 void YQWizard::setHelpText( const string & helpText )
 {
     _qHelpText = fromUTF8( helpText );
-    _qHelpText.replace( "&product;", YQUI::ui()->productName() );
+    _qHelpText.replace( "&product;", fromUTF8( YUI::app()->productName() ) );
 }
 
 

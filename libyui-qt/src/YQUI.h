@@ -205,13 +205,6 @@ public:
     virtual bool eventsBlocked() const;
 
     /**
-     * Returns the current product name
-     * ("SuSE Linux", "SuSE Linux Enterprise Server", "United Linux", etc.)
-     * as QString.
-     **/
-    QString productName() const;
-
-    /**
      * Beep - activate the system (X11) bell.
      *
      * Reimplemented from YUI.

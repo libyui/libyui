@@ -144,9 +144,7 @@ void YQUI::makeScreenShot( std::string stl_filename )
         // Figure out a file name
         //
 
-        const char * baseName = moduleName();
-        if ( ! baseName )
-	    baseName = "scr";
+        const char * baseName = "yast2-";
 	
         int no = screenShotNo[ baseName ];
         fileName.sprintf( qPrintable( screenShotNameTemplate ), baseName, no );

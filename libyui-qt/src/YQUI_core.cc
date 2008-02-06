@@ -505,12 +505,6 @@ void YQUI::userInputTimeout()
 }
 
 
-QString YQUI::productName() const
-{
-    return fromUTF8( YUI::productName() );
-}
-
-
 void
 YQUI::setTextdomain( const char * domain )
 {

@@ -25,6 +25,7 @@
 #include <QKeyEvent>
 #include <QVBoxLayout>
 
+#include "YApplication.h"
 #include "YEvent.h"
 #include "utf8.h"
 #include "YQUI.h"
@@ -88,7 +89,7 @@ void YQRichText::setValue( const string & newText )
 
     if ( ! plainTextMode() )
     {
-          text.replace( "&product;", YQUI::ui()->productName() );
+          text.replace( "&product;", fromUTF8( YUI::app()->productName() ) );
           _textBrowser->setHtml( text );
     }
     else
