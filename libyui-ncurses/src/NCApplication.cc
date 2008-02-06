@@ -99,9 +99,56 @@ NCApplication::askForExistingDirectory( const string & startDir,
 }
 
 
-/**
- * Run external program supplied as string parameter the same terminal.
- **/
+void
+NCApplication::beep()
+{
+  ::beep();
+}
+
+
+void NCApplication::redrawScreen()
+{
+    YNCursesUI::ui()->Refresh();
+}
+
+
+void
+NCApplication::initConsoleKeyboard()
+{
+    string cmd = "/bin/dumpkeys | /bin/loadkeys --unicode";
+    if ( NCstring::terminalEncoding() == "UTF-8" )
+    {
+	int ret = system( (cmd + " >/dev/null 2>&1").c_str() );
+	if ( ret != 0 )
+	{
+	    NCERR << "ERROR: /bin/dumpkeys | /bin/loadkeys --unicode returned: "<< ret << endl;
+	}
+    }
+}
+
+
+void
+NCApplication::setConsoleFont( const string & console_magic,
+			       const string & font,
+			       const string & screen_map,
+			       const string & unicode_map,
+			       const string & encoding )
+{
+    /**
+     * Moving that code from YNCursesUI to this class turned out to be
+     * impossible (or at least a lot more work than it's worth) that I finally
+     * gave it up.
+     *
+     * - sh@suse.de 2008-02-06
+     **/
+    YNCursesUI::ui()->setConsoleFont( console_magic,
+				      font,
+				      screen_map,
+				      unicode_map,
+				      encoding );
+}
+
+
 int
 NCApplication::runInTerminal( const string & cmd )
 { 

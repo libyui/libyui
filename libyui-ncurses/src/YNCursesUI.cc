@@ -257,114 +257,6 @@ YEvent * YNCursesUI::runPkgSelection( YWidget * selector )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : YNCursesUI::setKeyboard
-//	METHOD TYPE : YCPValue
-//
-//
-YCPValue YNCursesUI::setKeyboard()
-{
-    string cmd = "/bin/dumpkeys | /bin/loadkeys --unicode";
-    if ( NCstring::terminalEncoding() == "UTF-8" )
-    {
-	int ret = system( (cmd + " >/dev/null 2>&1").c_str() );
-	if ( ret != 0 )
-	{
-	    NCERR << "ERROR: /bin/dumpkeys | /bin/loadkeys --unicode returned: "<< ret << endl;
-	}
-    }
-
-    return YCPVoid();
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YNCursesUI::setConsoleFont
-//	METHOD TYPE : YCPValue
-//
-//	DESCRIPTION : UI::setConsoleFont() is called in Console.ycp.
-//		      The terminal encoding must be set correctly.
-//
-YCPValue YNCursesUI::setConsoleFont( const YCPString & console_magic,
-				      const YCPString & font,
-				      const YCPString & screen_map,
-				      const YCPString & unicode_map,
-				      const YCPString & lang )
-{
-  string cmd( "setfont" );
-  cmd += " -C " + myTerm;
-  cmd += " " + font->value();
-  if ( !screen_map->value().empty() )
-    cmd += " -m " + screen_map->value();
-  if ( !unicode_map->value().empty() )
-    cmd += " -u " + unicode_map->value();
-
-  UIMIL << cmd << endl;
-  int ret = system( (cmd + " >/dev/null 2>&1").c_str() );
-
-  // setfont returns error if called e.g. on a xterm -> return YCPVoid()
-  if ( ret ) {
-    UIERR << cmd.c_str() << " returned " << ret << endl;
-    Refresh();
-    return YCPVoid();
-  }
-  // go on in case of a "real" console
-  cmd = "(echo -en \"\\033";
-  if ( console_magic->value().length() )
-    cmd += console_magic->value();
-  else
-    cmd += "(B";
-  cmd += "\" >" + myTerm + ")";
-  UIMIL << cmd << endl;
-  ret = system( (cmd + " >/dev/null 2>&1").c_str() );
-  if ( ret ) {
-    UIERR << cmd.c_str() << " returned " << ret << endl;
-  }
-
-  // set terminal encoding for console
-  // (setConsoleFont() in Console.ycp has passed the encoding as last argument
-  // but this encoding was not correct; now Console.ycp passes the language)
-
-  // if the encoding is NOT UTF-8 set the console encoding according to the language
-  if ( NCstring::terminalEncoding() != "UTF-8" )
-  {
-      string language = lang->value();
-      string::size_type pos = language.find( '.' );
-
-      if ( pos != string::npos )
-      {
-	  language.erase( pos );
-      }
-      pos = language.find( '_' );
-      if ( pos != string::npos )
-      {
-	  language.erase( pos );
-      }
-
-      string code = language2encoding( language );
-
-      NCMIL << "setConsoleFont( ENCODING:  " << code << " )" << endl;
-    
-      if ( NCstring::setTerminalEncoding( code ) )
-      {
-	  Redraw();
-      }
-      else
-      {    
-	  Refresh();
-      }
-  }
-  else
-  {
-      Refresh();
-  }
-
-  return YCPVoid();
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
 //	METHOD NAME : YNCursesUI::init_title
 //	METHOD TYPE : void
 //
@@ -404,17 +296,92 @@ bool YNCursesUI::want_colors()
   return true;
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : YNCursesUI::beep()
-//	METHOD TYPE : void
+//	METHOD NAME : YNCursesUI::setConsoleFont
 //
-//	DESCRIPTION : beeps the system bell
+//	DESCRIPTION : UI::setConsoleFont() is called in Console.ycp.
+//		      The terminal encoding must be set correctly.
 //
-void YNCursesUI::beep()
+/**
+ * This doesn't belong here, but it is so utterly entangled with member
+ * variables that are not exported at all (sic!) that it's not really feasible
+ * to extract the relevant parts. 
+ **/ 
+void YNCursesUI::setConsoleFont( const string & console_magic,
+				 const string & font,
+				 const string & screen_map,
+				 const string & unicode_map,
+				 const string & encoding )
 {
-  ::beep();
+    string cmd( "setfont" );
+    cmd += " -C " + myTerm;
+    cmd += " " + font;
+    if ( !screen_map.empty() )
+	cmd += " -m " + screen_map;
+    if ( !unicode_map.empty() )
+	cmd += " -u " + unicode_map;
+
+    UIMIL << cmd << endl;
+    int ret = system( (cmd + " >/dev/null 2>&1").c_str() );
+
+    // setfont returns error if called e.g. on a xterm -> return YCPVoid()
+    if ( ret ) {
+	UIERR << cmd.c_str() << " returned " << ret << endl;
+	Refresh();
+	return;
+    }
+    // go on in case of a "real" console
+    cmd = "(echo -en \"\\033";
+    if ( console_magic.length() )
+	cmd += console_magic;
+    else
+	cmd += "(B";
+    cmd += "\" >" + myTerm + ")";
+    UIMIL << cmd << endl;
+    ret = system( (cmd + " >/dev/null 2>&1").c_str() );
+    if ( ret ) {
+	UIERR << cmd.c_str() << " returned " << ret << endl;
+    }
+
+    // set terminal encoding for console
+    // (setConsoleFont() in Console.ycp has passed the encoding as last
+    // argument but this encoding was not correct; now Console.ycp passes the
+    // language) if the encoding is NOT UTF-8 set the console encoding
+    // according to the language
+    
+    if ( NCstring::terminalEncoding() != "UTF-8" )
+    {
+	string language = YUI::app()->language();
+	string::size_type pos = language.find( '.' );
+
+	if ( pos != string::npos )
+	{
+	    language.erase( pos );
+	}
+	pos = language.find( '_' );
+	if ( pos != string::npos )
+	{
+	    language.erase( pos );
+	}
+
+	string code = language2encoding( language );
+
+	NCMIL << "setConsoleFont( ENCODING:  " << code << " )" << endl;
+    
+	if ( NCstring::setTerminalEncoding( code ) )
+	{
+	    Redraw();
+	}
+	else
+	{    
+	    Refresh();
+	}
+    }
+    else
+    {
+	Refresh();
+    }
 }
-
-

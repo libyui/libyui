@@ -107,40 +107,30 @@ public:
     virtual void idleLoop( int fd_ycp );
 
     /**
+     * Set the (text) console font according to the current encoding etc.
+     * See the setfont(8) command and the console HowTo for details.
+     *
+     * This should really be in NCApplication, but it uses so many non-exported
+     * member variables that it's not easy to move it there. 
+     **/
+    virtual void setConsoleFont( const string & console_magic,
+				 const string & font,
+				 const string & screen_map,
+				 const string & unicode_map,
+				 const string & encoding );
+
+    /**
      * Fills the PackageSelector widget and runs package selection.
      */
     virtual YEvent * runPkgSelection( YWidget * packageSelector );
     
     /**
-     * UI-specific setConsoleFont() function.
-     * Returns YCPVoid() if OK and YCPNull() on error.
-    */
-    virtual YCPValue setConsoleFont ( const YCPString & console_magic,
-				      const YCPString & font,
-				      const YCPString & screen_map,
-				      const YCPString & unicode_map,
-				      const YCPString & encoding );
-
-    virtual YCPValue setKeyboard ( );
-
-    /**
-     * UI-specific beep() function.
-     * Beeps the system bell.
-    */
-    virtual void beep();
-
-    /**
      * Returns the package selector plugin singleton of this UI or creates it
      * (including loading the plugin lib) if it does not exist yet.
      **/
     NCPackageSelectorPlugin * packageSelectorPlugin();
-    
-    /**
-     * UI-specific redrawScreen method.
-     * This default implementation does nothing.
-    */
-    virtual void redrawScreen() { Refresh(); }
 };
+
 
 #endif // YNCursesUI_h
 

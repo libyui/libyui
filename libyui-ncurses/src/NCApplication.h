@@ -117,6 +117,39 @@ public:
 				       const string & headline );
 
     /**
+     * Beep.
+     *
+     * Reimplemented from YApplication.
+     **/
+    virtual void beep();
+
+    /**
+     * Redraw the screen.
+     *
+     * Reimplemented from YApplication.
+     **/
+    virtual void redrawScreen();
+
+    /**
+     * Initialize the (text) console keyboard.
+     *
+     * Reimplemented from YApplication.
+     **/
+    virtual void initConsoleKeyboard();
+
+    /**
+     * Set the (text) console font according to the current encoding etc.
+     * See the setfont(8) command and the console HowTo for details.
+     *
+     * Reimplemented from YApplication.
+     **/
+    virtual void setConsoleFont( const string & console_magic,
+				 const string & font,
+				 const string & screen_map,
+				 const string & unicode_map,
+				 const string & encoding );
+
+    /**
      * Run a shell command (typically an interactive program using NCurses)
      * in a terminal (window).
      *
