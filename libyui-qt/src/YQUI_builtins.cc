@@ -37,7 +37,7 @@
 
 #include "YQUI.h"
 #include "YEvent.h"
-#include "YMacroRecorder.h"
+#include "YMacro.h"
 #include "YUISymbols.h"
 #include "YQDialog.h"
 #include "YQSignalBlocker.h"
@@ -191,14 +191,6 @@ void YQUI::makeScreenShot( std::string stl_filename )
 				  Qt::NoButton );			// button2
 	}
     }
-
-    if ( recordingMacro() )
-    {
-	macroRecorder()->beginBlock();
-	YDialog::currentDialog()->saveUserInput( macroRecorder() );
-	macroRecorder()->recordMakeScreenShot( true, toUTF8( fileName ) );
-	macroRecorder()->endBlock();
-    }
 }
 
 
@@ -280,9 +272,9 @@ void YQUI::askConfigureLogging()
 
 void YQUI::toggleRecordMacro()
 {
-    if ( recordingMacro() )
+    if ( YMacro::recording() )
     {
-        stopRecordMacro();
+	YMacro::endRecording();
         normalCursor();
 
         QMessageBox::information( 0,                                            // parent
@@ -305,7 +297,7 @@ void YQUI::toggleRecordMacro()
 
         if ( ! filename.isEmpty() )     // file selection dialog has been cancelled
         {
-            recordMacro( toUTF8( filename ) );
+            YMacro::record( toUTF8( filename ) );
         }
     }
 }
@@ -324,7 +316,7 @@ void YQUI::askPlayMacro()
 
     if ( ! filename.isEmpty() ) // file selection dialog has been cancelled
     {
-        playMacro( toUTF8( filename ) );
+        YMacro::play( toUTF8( filename ) );
 
         // Do special magic to get out of any UserInput() loop right now
         // without doing any harm - otherwise this would hang until the next
