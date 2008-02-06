@@ -50,26 +50,13 @@ int YQUI::defaultSize(YUIDimension dim) const
 }
 
 
-void YQUI::beep()
-{
-    qApp->beep();
-}
-
-void
-YQUI_Ui::slotBusyCursor()
-{
-    YQUI::ui()->busyCursor();
-}
-
-void
-YQUI::busyCursor( void )
+void YQUI::busyCursor()
 {
     qApp->setOverrideCursor( Qt::BusyCursor );
 }
 
 
-void
-YQUI::normalCursor( void )
+void YQUI::normalCursor()
 {
     if ( _busy_cursor_timer->isActive() )
 	_busy_cursor_timer->stop();
@@ -131,6 +118,9 @@ QPalette YQUI::visionImpairedPalette()
 }
 
 
+/**
+ * Handle WM_CLOSE
+ **/
 bool YQUI::close()
 {
     sendEvent( new YCancelEvent() );

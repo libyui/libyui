@@ -234,6 +234,34 @@ public:
      **/
     virtual float layoutUnits( YUIDimension dim, int deviceUnits );
 
+    /**
+     * Change the (mouse) cursor to indicate busy status.
+     * 
+     * Reimplemented from YApplication.
+     **/
+    virtual void busyCursor();
+
+    /**
+     * Change the (mouse) cursor back from busy status to normal.
+     * 
+     * Reimplemented from YApplication.
+     **/
+    virtual void normalCursor();
+
+    /**
+     * Make a screen shot and save it to the specified file.
+     * 
+     * Reimplemented from YApplication.
+     **/
+    virtual void makeScreenShot( const string & fileName );
+
+    /**
+     * Beep.
+     *
+     * Reimplemented from YApplication.
+     **/
+    virtual void beep();
+
 
     // Display information and UI capabilities.
     //

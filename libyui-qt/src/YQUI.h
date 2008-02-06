@@ -41,7 +41,7 @@ class YEvent;
 class YQOptionalWidgetFactory;
 class YQWidgetFactory;
 class YQApplication;
-class YQUI_Ui;
+class YQUISignalReceiver;
 
 using std::string;
 using std::vector;
@@ -49,7 +49,7 @@ using std::vector;
 
 class YQUI: public YUI
 {
-    friend class YQUI_Ui;
+    friend class YQUISignalReceiver;
 
 public:
 
@@ -205,21 +205,17 @@ public:
     virtual bool eventsBlocked() const;
 
     /**
-     * Beep - activate the system (X11) bell.
-     *
-     * Reimplemented from YUI.
+     * Show mouse cursor indicating busy state.
      **/
-    void beep();
-
+    void busyCursor();
+    
     /**
-     * Show pointer cursor.
-     *
-     * Reimplemented from YUI.
+     * Show normal mouse cursor not indicating busy status.
      **/
     void normalCursor();
 
     /**
-     * Open file selection box and let the user Save y2logs to that location.
+     * Open file selection box and let the user save y2logs to that location.
      * (Shift-F8)
      **/
     void askSaveLogs();
@@ -270,16 +266,7 @@ public:
      **/
     bool usingVisionImpairedPalette() const { return _usingVisionImpairedPalette; }
 
-    /**
-     * Show hourglass cursor.
-     *
-     * Reimplemented from YUI.
-     **/
-    virtual void busyCursor();
-
-protected:
-
-
+    
 protected:
 
     /**
@@ -313,7 +300,6 @@ protected:
     void userInputTimeout();
 
     void leaveIdleLoop();
-
 
     
     //
@@ -406,33 +392,28 @@ protected:
      */ 
     QY2Styler *_styler;
 
-    YQUI_Ui *_qobject;
+    YQUISignalReceiver * _signalReceiver;
 };
 
 
-
-class YQUI_Ui : public QObject
+/**
+ * Helper class that acts as a Qt signal receiver for YQUI.
+ * YQUI itself cannot be a QObject to avoid problems with starting up the UI
+ * with multiple threads. 
+ **/
+class YQUISignalReceiver : public QObject
 {
     Q_OBJECT
 
 public:
-    YQUI_Ui();
+    YQUISignalReceiver();
 
 public slots:
 
-    /**
-     * Show hourglass cursor.
-     *
-     * Reimplemented from YUI.
-     **/
     void slotBusyCursor();
-
-    /**
-     * Timeout during TimeoutUserInput() / WaitForEvent()
-     **/
     void slotUserInputTimeout();
-
     void slotLeaveIdleLoop();
 };
+
 
 #endif // YQUI_h

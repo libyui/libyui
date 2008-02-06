@@ -88,10 +88,6 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     topmostConstructorHasFinished();
 }
 
-YQUI_Ui::YQUI_Ui()
-    : QObject()
-{
-}
 
 void YQUI::init_ui()
 {
@@ -105,11 +101,11 @@ void YQUI::init_ui()
 
     new QApplication( _ui_argc, _ui_argv);
 
-    _qobject = new YQUI_Ui();
-    _busy_cursor_timer = new QTimer( _qobject );
+    _signalReceiver = new YQUISignalReceiver();
+    _busy_cursor_timer = new QTimer( _signalReceiver );
     _busy_cursor_timer->setSingleShot( true );
 
-    _user_input_timer = new QTimer( _qobject );
+    _user_input_timer = new QTimer( _signalReceiver );
     _user_input_timer->setSingleShot( true );
 
     _normalPalette = qApp->palette();
@@ -211,10 +207,10 @@ void YQUI::init_ui()
     busyCursor();
 
     QObject::connect(  _user_input_timer,	SIGNAL( timeout()          ),
-                       _qobject,		SLOT  ( slotUserInputTimeout() ) );
+                       _signalReceiver,		SLOT  ( slotUserInputTimeout() ) );
 
     QObject::connect(  _busy_cursor_timer,	SIGNAL( timeout()	),
-                       _qobject,		SLOT  ( slotBusyCursor() ) );
+                       _signalReceiver,		SLOT  ( slotBusyCursor() ) );
 
 #warning macro_file
     //    if ( macro_file )
@@ -294,7 +290,7 @@ YQUI::~YQUI()
     qApp->exit();
     qApp->deleteLater();
 
-    delete _qobject;
+    delete _signalReceiver;
 }
 
 
@@ -387,8 +383,8 @@ void YQUI::idleLoop( int fd_ycp )
 
     // process Qt events until fd_ycp is readable.
     QSocketNotifier * notifier = new QSocketNotifier( fd_ycp, QSocketNotifier::Read );
-    QObject::connect( notifier, SIGNAL( activated    ( int ) ),
-                      _qobject, SLOT( slotLeaveIdleLoop() ) );
+    QObject::connect( notifier,		SIGNAL( activated( int )    ),
+                      _signalReceiver,	SLOT  ( slotLeaveIdleLoop() ) );
 
     notifier->setEnabled( true );
 
@@ -402,12 +398,6 @@ void YQUI::idleLoop( int fd_ycp )
 void YQUI::leaveIdleLoop()
 {
     _leave_idle_loop = true;
-}
-
-
-void YQUI_Ui::slotLeaveIdleLoop()
-{
-    YQUI::ui()->leaveIdleLoop();
 }
 
 
@@ -493,11 +483,6 @@ YEvent * YQUI::pollInput()
 }
 
 
-void YQUI_Ui::slotUserInputTimeout()
-{
-    YQUI::ui()->userInputTimeout();
-}
-
 void YQUI::userInputTimeout()
 {
     if ( ! pendingEvent() )
@@ -547,6 +532,36 @@ bool YQUI::eventsBlocked() const
 {
     return _event_handler.eventsBlocked();
 }
+
+
+
+
+
+YQUISignalReceiver::YQUISignalReceiver()
+    : QObject()
+{
+}
+
+
+void YQUISignalReceiver::slotBusyCursor()
+{
+    YQUI::ui()->busyCursor();
+}
+
+
+void YQUISignalReceiver::slotUserInputTimeout()
+{
+    YQUI::ui()->userInputTimeout();
+}
+
+
+void YQUISignalReceiver::slotLeaveIdleLoop()
+{
+    YQUI::ui()->leaveIdleLoop();
+}
+
+
+
 
 static void
 qMessageHandler( QtMsgType type, const char * msg )
