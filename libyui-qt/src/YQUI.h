@@ -271,24 +271,6 @@ public:
     bool usingVisionImpairedPalette() const { return _usingVisionImpairedPalette; }
 
     /**
-     * Convert logical layout spacing units into device dependent units.
-     * A default size dialog is assumed to be 80x25 layout spacing units
-     * and 640x480 device dependent spacing units.
-     *
-     * Reimplemented from YUI.
-     **/
-    virtual int deviceUnits( YUIDimension dim, float layout_units );
-
-    /**
-     * Convert device dependent units into logical layout spacing units.
-     * A default size dialog is assumed to be 80x25 layout spacing units
-     * and 640x480 device dependent spacing units.
-     *
-     * Reimplemented from YUI.
-     **/
-    virtual float layoutUnits( YUIDimension dim, int device_units );
-
-    /**
      * Show hourglass cursor.
      *
      * Reimplemented from YUI.
@@ -299,27 +281,6 @@ protected:
 
 
 protected:
-
-    /**
-     * Display capabilities.
-     * [Reimplemented from YUI]
-     * See UI builtin GetDisplayInfo() doc for details.
-     **/
-    int  getDisplayWidth();
-    int  getDisplayHeight();
-    int  getDisplayDepth();
-    long getDisplayColors();
-    int  getDefaultWidth();
-    int  getDefaultHeight();
-    bool textMode()	 		{ return false;	}
-    bool hasImageSupport()		{ return true; 	}
-    bool hasLocalImageSupport()		{ return true; 	}
-    bool hasAnimationSupport()		{ return true; 	}
-    bool hasIconSupport()		{ return false; }	// not yet
-    bool hasFullUtf8Support()		{ return true; 	}
-    bool richTextSupportsTable()	{ return true; }
-    bool leftHandedMouse()		{ return _leftHandedMouse; }
-
 
     /**
      * Application shutdown
