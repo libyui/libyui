@@ -24,6 +24,7 @@
 #include <sstream>
 
 #include "YMenuItem.h"
+#include "YApplication.h"
 
 #if 0
 #undef  DBG_CLASS
@@ -74,7 +75,7 @@ const wstring NCRichText::entityLookup( const std::wstring & val_r )
     // initialize replacement for character entities. A value of NULL
     // means do not replace.
     wstring product;
-    NCstring::RecodeToWchar( YNCursesUI::ui()->productName(), "UTF-8", &product);
+    NCstring::RecodeToWchar( YUI::app()->productName(), "UTF-8", &product);
 
     REP(L"amp", L"&");
     REP(L"gt", L">");
