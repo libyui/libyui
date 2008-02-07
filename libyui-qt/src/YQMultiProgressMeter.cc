@@ -26,6 +26,7 @@
 #include <QDebug>
 #include "YQUI.h"
 #include "YQMultiProgressMeter.h"
+#include "YDialog.h"
 
 
 
@@ -208,7 +209,7 @@ void YQMultiProgressMeter::mouseDoubleClickEvent ( QMouseEvent * event )
 	setTriangularShaped( ! triangularShaped() );
 	setSize( vertical()   ? preferredWidth()  : width(),
 		 horizontal() ? preferredHeight() : height() );
-	YQUI::ui()->evaluateRecalcLayout();
+	findDialog()->recalcLayout();
 	QWidget::update();
     }
 }
