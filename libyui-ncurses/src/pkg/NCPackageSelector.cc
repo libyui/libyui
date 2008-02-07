@@ -69,6 +69,7 @@ typedef std::pair<string, ZyppReaderEntry>	importMapPair;
 #include <ycp/YCPString.h>
 #include <ycp/YCPVoid.h>
 #include <ycp/Parser.h>
+#include "YCP_UI.h"	// FIXME: Get rid of this when ReplaceWidget() is no longer done with YCP
 #include "YEvent.h"
 
 #define DEFAULT_EXPORT_FILE_NAME "user-packages.xml"
@@ -371,7 +372,11 @@ void NCPackageSelector::createFilterMenu()
 	if (parsed_code != NULL)
 	    layout = parsed_code->evaluate();
 	if ( !layout.isNull() )
-	    y2ui->evaluateReplaceWidget( YCPSymbol("replacefilter"), layout->asTerm() );
+	{
+#warning FIXME: Dependency on YCP UI!
+	    // Also don't forget to remove the #include YCP_UI above
+	    YCP_UI::ReplaceWidget( YCPSymbol("replacefilter"), layout->asTerm() );
+	}
 
     }
     else if ( patterns && selections )
@@ -400,8 +405,11 @@ void NCPackageSelector::createFilterMenu()
 	if (parsed_code != NULL)
 	    layout = parsed_code->evaluate();
 	if ( !layout.isNull() )
-	    y2ui->evaluateReplaceWidget( YCPSymbol("replacefilter"), layout->asTerm() );
-
+	{
+#warning FIXME: Dependency on YCP UI!
+	    // Also don't forget to remove the #include YCP_UI above
+	    YCP_UI::ReplaceWidget( YCPSymbol("replacefilter"), layout->asTerm() );
+	}
     }
 }
 
