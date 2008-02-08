@@ -82,7 +82,7 @@ YQDialog::YQDialog( YDialogType 	dialogType,
 	setWindowFlags( YQPopupDialogWFlags );
     }
     if ( dialogType != YMainDialog )
-       setWindowModality( Qt::WindowModal );
+       setWindowModality( Qt::ApplicationModal );
 
     if ( QWidget::parent() == YQMainWinDock::mainWinDock() )
     {

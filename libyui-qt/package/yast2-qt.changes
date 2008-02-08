@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Feb  8 17:26:17 CET 2008 - tgoettlicher@suse.de
+
+- Made popup dialogs modal
+
+-------------------------------------------------------------------
 Fri Feb  8 15:05:31 CET 2008 - tgoettlicher@suse.de
 
 - Changed time format in TimeField to yyyy-mm-dd (bnc #359630)
