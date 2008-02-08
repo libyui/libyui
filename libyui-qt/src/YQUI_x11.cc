@@ -118,9 +118,7 @@ QPalette YQUI::visionImpairedPalette()
 }
 
 
-/**
- * Handle WM_CLOSE
- **/
+// FIXME: Does this still do anything now that YQUI is no longer a QObject?
 bool YQUI::close()
 {
     sendEvent( new YCancelEvent() );
