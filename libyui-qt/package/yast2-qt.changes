@@ -1,11 +1,17 @@
 -------------------------------------------------------------------
-Fri Feb  4 16:01:22 CET 2008 - tgoettlicher@suse.de
+Fri Feb  8 15:05:31 CET 2008 - tgoettlicher@suse.de
+
+- Changed time format in TimeField to yyyy-mm-dd (bnc #359630)
+- V 2.16.25 
+
+-------------------------------------------------------------------
+Mon Feb  4 16:01:22 CET 2008 - tgoettlicher@suse.de
 
 - Adapted askForSaveFilename to qt4 api (bnc #357998)
 - V 2.16.24 
 
 -------------------------------------------------------------------
-Fri Feb  4 13:48:16 CET 2008 - tgoettlicher@suse.de
+Mon Feb  4 13:48:16 CET 2008 - tgoettlicher@suse.de
 
 - Fixed Bug #340898: Selecting specific repository out of sync 
 - V 2.16.23 

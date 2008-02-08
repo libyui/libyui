@@ -49,7 +49,7 @@ YQDateField::YQDateField( YWidget * parent, const string & label )
     layout->addWidget( _qt_dateEdit );
 
     //_qt_dateEdit->setAutoAdvance( true );
-    _qt_dateEdit->setDisplayFormat( "dd.MM.yyyy" );
+    _qt_dateEdit->setDisplayFormat( "yyyy-MM-dd" );
     _caption->setBuddy( _qt_dateEdit );
 }
 
