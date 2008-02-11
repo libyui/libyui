@@ -646,7 +646,7 @@ bool NCPackageSelector::fillAvailableList( NCPkgTable * pkgTable, ZyppSel select
 //
 // Fills the package table with the list of packages of the given selection
 //
-bool NCPackageSelector::showSelPackages( const YCPString & label, const set<string> & wanted )
+bool NCPackageSelector::showSelPackages( const string & label, const set<string> & wanted )
 {
     NCPkgTable * packageList = getPackageList();
 
@@ -701,19 +701,18 @@ bool NCPackageSelector::showSelPackages( const YCPString & label, const set<stri
     // show the package table
     packageList->drawList();
 
-    if ( !label.isNull() )
+    if ( ! label.empty() )
     {
-	NCDBG << "Filter: " << label->toString() << endl;
+	NCDBG << "Filter: " << label << endl;
 
         // show the selected filter label
 	if ( filterLabel )
 	{
-	    filterLabel->setLabel( label->toString() );
+	    filterLabel->setLabel( label );
 	}
     }
 
     return true;
-
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -1161,7 +1160,7 @@ bool NCPackageSelector::fillSummaryList( NCPkgTable::NCPkgTableListType type )
 // Fills the package table with the list of packages matching
 // the selected filter
 //
-bool NCPackageSelector::fillPackageList( const YCPString & label, YStringTreeItem * rpmGroup )
+bool NCPackageSelector::fillPackageList( const string & label, YStringTreeItem * rpmGroup )
 {
      NCPkgTable * packageList = getPackageList();
 
@@ -1214,12 +1213,12 @@ bool NCPackageSelector::fillPackageList( const YCPString & label, YStringTreeIte
 
     NCMIL << "Fill package list" << endl;
 
-    if ( !label.isNull() )
+    if ( ! label.empty() )
     {
 	// show the selected filter label
 	if ( filterLabel )
 	{
-	   filterLabel->setText( label->toString() );
+	   filterLabel->setText( label );
 	}
     }
 
@@ -3468,8 +3467,7 @@ bool NCPackageSelector::fillDefaultList( )
 	    if ( defaultGroup )
 	    {
 		NCMIL << "default RPM group: " << defaultGroup->value().translation() << endl;
-		fillPackageList ( YCPString( defaultGroup->value().translation()),
-					    defaultGroup );
+		fillPackageList ( defaultGroup->value().translation(), defaultGroup );
 
 		// set the visible info to package description
 		setVisibleInfo ( pkginfoItem );
