@@ -46,6 +46,6 @@ libpy2ncurses_pkg_la_SOURCES =		\
 	NCPkgNames.cc
 
 
-INCLUDES = -I$(srcdir)/.. -I$(includedir) -I$(includedir)/yui ${ZYPP_CFLAGS}
+INCLUDES = -I$(srcdir)/.. -I$(includedir) -I$(includedir)/yui -I$(includedir)/ycp-ui ${ZYPP_CFLAGS}
 
 EXTRA_DIST	= $(ydata_DATA)
