@@ -17,8 +17,8 @@ Obsoletes:	yast2-ui-ncurses-devel
 Provides:	y2curses
 Obsoletes:	y2curses
 Requires:	glibc-locale
-BuildRequires:	yast2-core-devel >= 2.16.32
-Requires:	yast2-core >= 2.16.32
+BuildRequires:	yast2-core-devel >= 2.16.33
+Requires:	yast2-core >= 2.16.33
 #adapted to libzypp 3.11 refactoring
 Requires:	libzypp >= 3.11.8
 %description
