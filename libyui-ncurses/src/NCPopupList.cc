@@ -20,7 +20,6 @@
 #include "NCPopupList.h"
 #include "YTableItem.h"
 
-#include <ycp/YCPString.h>
 
 ///////////////////////////////////////////////////////////////////
 //
