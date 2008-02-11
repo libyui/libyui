@@ -22,10 +22,9 @@
 #define NCPackageSelectorPlugin_h
 
 #include <YPackageSelectorPlugin.h>
-#include <YDialog.h>
-#include <YEvent.h>
 
-#include <ycp/YCPString.h>
+class YDialog;
+class YEvent;
 
 
 /**
