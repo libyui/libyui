@@ -213,7 +213,7 @@ class NCRichText : public YRichText, public NCPadWidget {
      **/
     virtual void setSize( int newWidth, int newHeight );
 
-    virtual void setLabel( const YCPString & nlabel );
+    virtual void setLabel( const string & nlabel );
 
     virtual NCursesEvent wHandleInput( wint_t key );
 
