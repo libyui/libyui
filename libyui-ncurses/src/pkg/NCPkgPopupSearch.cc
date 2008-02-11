@@ -304,7 +304,6 @@ bool NCPkgPopupSearch::postAgain()
 
 bool NCPkgPopupSearch::getCheckBoxValue( NCCheckBox * checkBox )
 {
-    //YCPValue value = YCPNull();
     YCheckBoxState value = YCheckBox_off;
     
     if ( checkBox )
