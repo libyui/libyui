@@ -86,8 +86,6 @@ void NCPkgPopupSearch::createLayout( const string & headline )
     // vertical split is the (only) child of the dialog
     NCLayoutBox * vSplit = new NCLayoutBox( this, YD_VERT );
 
-    // addChild() is obsolete
-
     new NCSpacing( vSplit, YD_VERT, false, 0.8 );	// stretchable = false
 
     new NCLabel( vSplit, headline, true, false );	// isHeading = true

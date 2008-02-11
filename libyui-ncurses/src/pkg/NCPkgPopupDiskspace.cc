@@ -101,8 +101,6 @@ void NCPkgPopupDiskspace::createLayout( )
     // the vertical split is the (only) child of the dialog
     NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
 
-    // addChild() is obsolete (handled by new libyui)
-    
     head = new NCLabel( split, "", true, false );	// isHeading = true
 
     YTableHeader * tableHeader = new YTableHeader();
