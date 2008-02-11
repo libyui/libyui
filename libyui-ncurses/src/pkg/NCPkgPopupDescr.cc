@@ -82,25 +82,17 @@ NCPkgPopupDescr::~NCPkgPopupDescr()
 //
 void NCPkgPopupDescr::createLayout( )
 {
-    YWidgetOpt opt;
-
     // the vertical split is the (only) child of the dialog
     NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
 
-    // addChild() is obsolete (handled by new libyui )
-
-    //split->addChild( new NCSpacing( split, opt, 0.8, false, true ) );
     new NCSpacing( split, YD_VERT, false, 0.8 );	// stretchable = false
 
     headline = new NCLabel( split, "", true, false );		// isHeading = true
-    //split->addChild( new NCSpacing( split, opt, 0.4, false, true ) );
     new NCSpacing( split, YD_VERT, false, 0.4 ); 
 
     // add the rich text widget for the package description
-    opt.isVStretchable.setValue( true );
     descrText = new NCRichText( split, "" );
 
-    //split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
     new NCSpacing( split, YD_VERT, true, 0.6 );	// stretchable = true
 
     YTableHeader * tableHeader = new YTableHeader();
@@ -110,20 +102,16 @@ void NCPkgPopupDescr::createLayout( )
     pkgTable->setPackager( packager );
     pkgTable->fillHeader();
 
-    //split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
     new NCSpacing( split, YD_VERT, true, 0.6 );
 
-    opt.isHStretchable.setValue( false );
-    //NCLabel * helplb = new NCLabel( split, opt, YCPString(NCPkgNames::DepsHelpLine()) );
     // a help line for the dependency popup
     new NCLabel( split, _( " [+] Select    [-] Delete    [>] Update " ), false, false );
   
-    //split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
     new NCSpacing( split, YD_VERT, false, 0.6 );	// stretchable = false
 
     // add the OK button
-    opt.key_Fxx.setValue( 10 );
     okButton = new NCPushButton( split, NCPkgNames::OKLabel() );
+    okButton->setFunctionKey( 10 );
 }
 
 ///////////////////////////////////////////////////////////////////
