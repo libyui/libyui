@@ -16,7 +16,6 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include <ycp/YCPString.h>
 
 #include <errno.h>
 #include <iconv.h>
@@ -26,34 +25,14 @@
 
 //////////////////////////////////////////////////////////////////
 
-// The correct encoding of the terminal is set in constructor
-// of Y2NCursesUI. In case of a "real" console this may be changed
-// in setConsoleFont() (has to be changed only for other than UTF-8
-// encodings).
+// The default encoding is UTF-8. For real terminals this may be
+// changed with setConsoleFont().
+
 string	NCstring::termEncoding( "UTF-8" );
 
 
 ///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstring::NCstring
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
-NCstring::NCstring( const YCPString & ystr )
-    : hotk     ( 0 )
-    , hotp     ( wstring::npos )
-{
-    bool ok = RecodeToWchar( ystr->value(), "UTF-8", &wstr );
-
-    if ( !ok )
-    {
-	NCERR << "ERROR: RecodeToWchar() failed" << endl;
-    }
-}
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -139,29 +118,6 @@ NCstring::NCstring( const char * cstr )
     {
 	NCERR << "ERROR: RecodeToWchar() failed" << endl;
     }
-}
-
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstring::operator=
-//	METHOD TYPE : NCstring &
-//
-//	DESCRIPTION :
-//
-NCstring & NCstring::operator=( const YCPString & ystr )
-{
-  hotk      = 0;
-  hotp      = wstring::npos;
-
-  bool ok =  RecodeToWchar( ystr->value(), "UTF-8", &wstr );
-
-  if ( !ok )
-  {
-      NCERR << "ERROR: RecodeToWchar() failed" << endl;
-  }
-  return *this;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -394,23 +350,7 @@ bool NCstring::RecodeToWchar (const string& in, const string &from_encoding, wst
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCstring::YCPstr
-//	METHOD TYPE : YCPString
-//
-//	DESCRIPTION :
-//
-YCPString NCstring::YCPstr() const
-{
-    string utf8str;
-    RecodeFromWchar ( wstr, "UTF-8", &utf8str );
-
-    return utf8str;
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstring::YCPstr
+//	METHOD NAME : NCstring::Str
 //	METHOD TYPE : string
 //
 //	DESCRIPTION :

@@ -28,8 +28,6 @@ using std::wstring;
 
 using namespace std;
 
-class YCPString;
-
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -62,14 +60,6 @@ public:
     NCstring( const char * cstr );
     
     ~NCstring() {}
-
-  public: // filter from/to YCPString(utf8)
-
-    NCstring( const YCPString & ystr );
-
-    NCstring & operator=( const YCPString & ystr );
-    
-    YCPString YCPstr() const;
 
     string Str() const;
 
