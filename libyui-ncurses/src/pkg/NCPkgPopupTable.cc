@@ -83,27 +83,19 @@ NCPkgPopupTable::~NCPkgPopupTable()
 //
 void NCPkgPopupTable::createLayout( )
 {
-    YWidgetOpt opt;
-
     // the vertical split is the (only) child of the dialog
     NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
 
-    // addChild() is obsolete (handled by new libyui)
-
-    //split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
     new NCSpacing( split, YD_VERT, false, 0.6 );	// stretchable = false
 
     // the headline of the popup containing a list with packages with status changes
     new NCLabel( split, _( "Automatic Changes" ), true, false );	// isHeading = true
 
-    //split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
     new NCSpacing( split, YD_VERT, false, 0.6 );
     
-    //NCLabel * lb1 = new NCLabel( split, opt, YCPString(NCPkgNames::AutoChangeText1()) );
     // text part1 of popup with automatic changes (it's a label; text continous) 
     new NCLabel( split, _( "In addition to your manual selections, the following" ), false, false );
     
-    //NCLabel * lb2 = new NCLabel( split, opt, YCPString(NCPkgNames::AutoChangeText2()) );
     // text part2 of popup with automatic changes
     new NCLabel( split, _( "packages have been changed to resolve dependencies:" ), false, false );
 
@@ -115,27 +107,20 @@ void NCPkgPopupTable::createLayout( )
     
     // HBox for the buttons
     NCLayoutBox * hSplit = new NCLayoutBox( split, YD_HORIZ );
-
-    opt.isHStretchable.setValue( true );
-
-    //hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
     new NCSpacing( hSplit, YD_HORIZ, true, 0.2 );	// stretchable = true
 
     // add the OK button
-    opt.key_Fxx.setValue( 10 );
     okButton = new NCPushButton( hSplit, NCPkgNames::OKLabel() );
+    okButton->setFunctionKey( 10 );
 
-    //hSplit->addChild( new NCSpacing( hSplit, opt, 0.4, true, false ) );
     new NCSpacing( hSplit, YD_HORIZ, true, 0.4 );
 
     // add the Cancel button
-    opt.key_Fxx.setValue( 9 );
     cancelButton = new NCPushButton( hSplit, NCPkgNames::CancelLabel() );
+    cancelButton->setFunctionKey( 9 );
 
-    //hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
     new NCSpacing( hSplit, YD_HORIZ, true, 0.2 );
 
-    //split->addChild( new NCSpacing( split, opt, 0.6, false, true ) );
     new NCSpacing( split, YD_VERT, false, 0.6 );
 }
 
