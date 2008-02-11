@@ -23,7 +23,7 @@
 #define _Y2CCQt_h
 
 #include "YQUIComponent.h"
-#include <yui/Y2CCUI.h>
+#include <Y2CCUI.h>
 
 /**
  * @short Y2ComponentCreator that can create Qt user interfaces
