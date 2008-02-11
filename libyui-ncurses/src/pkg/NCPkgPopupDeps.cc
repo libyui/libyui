@@ -136,14 +136,12 @@ void NCPkgPopupDeps::createLayout( )
 
   head = new NCLabel( vSplit, "", true, false );	// isHeading = true
 
-  //vSplit->addChild( new NCSpacing( vSplit, opt, 0.4, false, true ) );
   new NCSpacing( vSplit, YD_VERT, false, 1 );
 
   // add the list containing packages with unresolved dependencies
   problemw = new NCProblemSelectionBox( vSplit, _("&Problems"),	this);
   problemw->setStretchable( YD_HORIZ, true );
 
-  //vSplit->addChild( new NCSpacing( vSplit, opt, 0.2, false, true ) );
   new NCSpacing( vSplit, YD_VERT, false, 1 );	
 
   NCAlignment * left = new NCAlignment( vSplit, YAlignBegin, YAlignUnchanged );
@@ -151,13 +149,11 @@ void NCPkgPopupDeps::createLayout( )
    // heading = false, outputField = true
   details =  new NCLabel ( left,"", false, true );
 			       
-  //vSplit->addChild( new NCSpacing( vSplit, opt, 0.8, false, true ) );
   new NCSpacing( vSplit, YD_VERT, false, 1 );	// stretchable = true
   
   // add the package list containing the dependencies
   solutionw = new NCSolutionSelectionBox ( vSplit, _("Possible &Solutions"), this);
   
-  //vSplit->addChild( new NCSpacing( vSplit, opt, 0.6, false, true ) );
   new NCSpacing( vSplit, YD_VERT, false, 1 );	// stretchable = false
   
   NCLayoutBox * hSplit = new NCLayoutBox( vSplit, YD_HORIZ );
@@ -167,7 +163,6 @@ void NCPkgPopupDeps::createLayout( )
   solveButton = new NCPushButton( hSplit, NCPkgNames::SolveLabel() );
   solveButton->setFunctionKey( 10 );
 
-  //hSplit->addChild( new NCSpacing( hSplit, opt, 0.2, true, false ) );
   new NCSpacing( hSplit, YD_HORIZ, true, 0.2 ); 	// stretchable = true
 
   // add the cancel button
