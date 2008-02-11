@@ -21,8 +21,6 @@
 #include "NCRadioButton.h"
 #include "NCRadioButtonGroup.h"
 
-#include <ycp/YCPBoolean.h>
-
 ///////////////////////////////////////////////////////////////////
 //
 //
