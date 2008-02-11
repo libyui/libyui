@@ -116,8 +116,6 @@ void NCPkgPopupTree::createLayout( const string & label )
   // the vertical split is the (only) child of the dialog
   NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
 
-  // addChild() is obsolete
-
   // create the tree 
   filterTree = new NCTree( split, label );
   YUI_CHECK_NEW( filterTree );
@@ -168,7 +166,7 @@ NCursesEvent NCPkgPopupTree::showFilterPopup( )
 		    string label =  origItem->value().translation();
 
 		    // fill the package list 
-		    packager->fillPackageList( YCPString( label ), origItem ); 
+		    packager->fillPackageList( label, origItem ); 
 
 		    NCMIL << "Selected RPM group: " << label << endl;
 		}
