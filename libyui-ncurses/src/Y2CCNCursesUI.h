@@ -24,13 +24,13 @@
 
 #include "YNCursesComponent.h"
 #include <iosfwd>
-#include <yui/Y2CCUI.h>
+#include <Y2CCUI.h>
 
 #include "ycp/y2log.h"
 
 /**
  * @short Y2ComponentCreator that can create ncursesui user interfaces
- * A Y2ComponentCreator is an object, that can create components.
+ * A Y2ComponentCreator is an object that can create components.
  * It is given a component name and - if it knows how to create
  * such a component - returns a newly created component of this
  * type. The Y2CCNCursesUI can create components with the name "ncursesui".
