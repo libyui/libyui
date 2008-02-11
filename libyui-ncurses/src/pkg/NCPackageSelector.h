@@ -238,7 +238,7 @@ class NCPackageSelector
     * @param group The rpm group
     * @return bool
     */
-    bool fillPackageList( const YCPString & label, YStringTreeItem * group );
+    bool fillPackageList( const string & label, YStringTreeItem * group );
 
 
   /**
@@ -459,7 +459,7 @@ class NCPackageSelector
     * @param wanted which packages
     * @return bool
     */
-    bool showSelPackages( const YCPString & label, const set<string> & wanted );
+    bool showSelPackages( const string & label, const set<string> & wanted );
 
    /**
     * Updates the status in list of packages
