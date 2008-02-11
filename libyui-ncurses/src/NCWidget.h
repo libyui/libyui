@@ -23,7 +23,6 @@
 
 #include "NCurses.h"
 #include "tnode.h"
-#include "YWidgetOpt.h"
 
 class NCWidget;
 class NCursesWindow;
