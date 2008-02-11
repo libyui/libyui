@@ -397,7 +397,7 @@ void NCTable::setSize( int newwidth, int newheight )
 //	DESCRIPTION :
 //
 
-void NCTable::setLabel( const YCPString & nlabel )
+void NCTable::setLabel( const string & nlabel )
 {
   // not implemented: YTable::setLabel( nlabel );
   NCPadWidget::setLabel( NCstring( nlabel ) );
