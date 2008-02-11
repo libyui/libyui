@@ -83,8 +83,6 @@ void NCPopupInfo::createLayout( const string & headline,
   // the vertical split is the (only) child of the dialog
   NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
 
-  // addChild() is obsolete (handled by new libyui)
-  
   // add the headline
   new NCLabel( split, headline, true, false ); // isHeading = true
   
