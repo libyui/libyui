@@ -233,7 +233,7 @@ void NCRichText::setSize( int newwidth, int newheight )
 //
 //	DESCRIPTION :
 //
-void NCRichText::setLabel( const YCPString & nlabel )
+void NCRichText::setLabel( const string & nlabel )
 {
   // not implemented: YRichText::setLabel( nlabel );
   NCPadWidget::setLabel( NCstring( nlabel ) );
