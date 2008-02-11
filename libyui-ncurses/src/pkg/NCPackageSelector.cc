@@ -66,8 +66,6 @@ typedef zypp::ui::PatchContents::const_iterator	ZyppPatchContentsIterator;
 typedef zypp::syscontent::Reader::Entry		ZyppReaderEntry;
 typedef std::pair<string, ZyppReaderEntry>	importMapPair;
 
-#include <ycp/YCPString.h>
-#include <ycp/YCPVoid.h>
 #include <ycp/Parser.h>
 #include "YCP_UI.h"	// FIXME: Get rid of this when ReplaceWidget() is no longer done with YCP
 #include "YEvent.h"
