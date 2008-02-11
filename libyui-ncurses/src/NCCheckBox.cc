@@ -20,8 +20,6 @@
 #include "NCurses.h"
 #include "NCCheckBox.h"
 
-#include <ycp/YCPVoid.h>
-#include <ycp/YCPBoolean.h>
 
 ///////////////////////////////////////////////////////////////////
 
@@ -136,31 +134,6 @@ void NCCheckBox::setValue( YCheckBoxState state )
     }
     Redraw();
 }
-
-#if 0
-void NCCheckBox::setValue( const YCPValue & newval )
-{
-  if ( newval->isBoolean() ) {
-    tristate = false;
-    checkstate = newval->asBoolean()->value() ? S_ON : S_OFF;
-  }
-  else {
-    tristate = true;
-    checkstate = S_DC;
-  }
-  Redraw();
-}
-
-
-// replaced by value()
-YCPValue NCCheckBox::getValue()
-{
-  if ( checkstate == S_DC )
-    return YCPVoid();
-
-  return YCPBoolean( checkstate == S_ON );
-}
-#endif
 
 ///////////////////////////////////////////////////////////////////
 //
