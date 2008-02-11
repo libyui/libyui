@@ -161,8 +161,8 @@ void NCPkgTable::addLine( ZyppStatus stat,
     Items[0] = new NCPkgTableTag( objPtr, slbPtr, stat );
 
     for ( unsigned i = 1; i < elements.size()+1; ++i ) {
-	// use YCPString to enforce recoding from 'utf8'
-	Items[i] = new NCTableCol( YCPString( elements[i-1] ) );
+	// use NCstring to enforce recoding from 'utf8'
+	Items[i] = new NCTableCol( NCstring( elements[i-1] ) );
     }
     myPad()->Append( Items );
     
