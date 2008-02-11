@@ -28,8 +28,6 @@
 
 #include <libintl.h>
 
-#include <ycp/YCPString.h>
-#include <ycp/YCPVoid.h>
 #include <ycp/Parser.h>
 
 #include "YPackageSelector.h"
