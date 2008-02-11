@@ -135,24 +135,6 @@ void NCMultiLineEdit::setValue( const string & ntext )
   Redraw();
 }
 
-#if 0
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCMultiLineEdit::text
-//	METHOD TYPE : YCPString
-//
-//	DESCRIPTION :
-//
-YCPString NCMultiLineEdit::text()
-{
-  if ( myPad() ) {
-    ctext = NCstring( myPad()->getText() );
-  }
-  return ctext.YCPstr();
-}
-#endif
-
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -233,8 +215,7 @@ void NCMultiLineEdit::DrawPad()
   myPad()->setText( ctext );
 }
 
-void NCMultiLineEdit::setInputMaxLength( const YCPInteger & numberOfChars )
+void NCMultiLineEdit::setInputMaxLength( int numberOfChars )
 {
-    int nr = numberOfChars->asInteger()->value();
-    myPad()->setInputMaxLength(nr);
+    myPad()->setInputMaxLength( numberOfChars );
 }
