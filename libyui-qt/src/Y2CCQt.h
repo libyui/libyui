@@ -27,7 +27,7 @@
 
 /**
  * @short Y2ComponentCreator that can create Qt user interfaces
- * A Y2ComponentCreator is an object, that can create components.
+ * A Y2ComponentCreator is an object that can create components.
  * It is given a component name and - if it knows how to create
  * such a component - returns a newly created component of this
  * type. The Y2CCQt can create components with the name "qt".
