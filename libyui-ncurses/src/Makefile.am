@@ -174,7 +174,7 @@ libpy2ncurses_la_SOURCES =		\
 #	Y2CCNCursesUI.cc Y2CCNCursesUI.h	\
 #	YNCursesComponent.h
 
-INCLUDES = -I$(srcdir)/pkg -I$(includedir) -I$(includedir)/yui -I$(includedir)/y2util/qt ${ZYPP_CFLAGS}
+INCLUDES = -I$(srcdir)/pkg -I$(includedir) -I$(includedir)/yui -I$(includedir)/ycp-ui ${ZYPP_CFLAGS}
 
 lang2encoding.cc:	lang2encoding.tab
 	./lang2encoding.tab > lang2encoding.cc
