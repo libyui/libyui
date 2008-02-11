@@ -23,17 +23,14 @@
 #include <unistd.h>
 #include <langinfo.h>
 
-#include "Y2Log.h"
+#include <YUI.h>
 #include <YEvent.h>
-#include "YDialog.h"
-#include "YMacro.h"
+#include <YDialog.h>
+#include <YMacro.h>
 
-#include <ycp/y2log.h>
-#include <ycp/Parser.h>
-#include <ycp/YCPString.h>
-#include <ycp/YCPVoid.h>
-#include <ycp/YCPMap.h>
-#include <yui/YUI.h>
+#define YUILogComponent "ncurses"
+#include <yui/YUILog.h>
+
 
 #include "NCPackageSelectorStart.h"
 #include "NCstring.h"
@@ -46,7 +43,7 @@ extern string language2encoding( string lang );
 YNCursesUI::YNCursesUI( int argc, char **argv, bool with_threads, const char * macro_file )
     : YUI( with_threads )
 {
-    y2milestone ("Start YNCursesUI");
+    yuiMilestone() << "Start YNCursesUI" << endl;
     _ui = this;
 
     if ( getenv( "LANG" ) != NULL )
@@ -90,7 +87,7 @@ YNCursesUI::~YNCursesUI()
 {
     //delete left-over dialogs (if any)
     YDialog::deleteAllDialogs();
-    y2milestone ("Stop YNCursesUI");
+    yuiMilestone() << "Stop YNCursesUI" << endl;
 }
 
 
@@ -327,7 +324,7 @@ void YNCursesUI::setConsoleFont( const string & console_magic,
     UIMIL << cmd << endl;
     int ret = system( (cmd + " >/dev/null 2>&1").c_str() );
 
-    // setfont returns error if called e.g. on a xterm -> return YCPVoid()
+    // setfont returns error if called e.g. on a xterm -> return
     if ( ret ) {
 	UIERR << cmd.c_str() << " returned " << ret << endl;
 	Refresh();
