@@ -64,7 +64,7 @@ YNCursesUI::YNCursesUI( int argc, char **argv, bool with_threads, const char * m
 
 	NCMIL << "setenv LC_CTYPE: " << locale << " encoding: " << encoding << endl;
 	
-        // The encoding of a terminal (xterm, konsole usw. ) can never change; the encoding
+        // The encoding of a terminal (xterm, konsole etc.) can never change; the encoding
 	// of the "real" console is changed in setConsoleFont(). 
 	NCstring::setTerminalEncoding( encoding );
   
