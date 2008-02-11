@@ -70,8 +70,8 @@ class NCTreeLine : public NCTableLine {
 	}
       }
 
-      Append( new NCTableCol( YCPString( string( prefixLen(), ' ' )
-					 + yitem.label() ) ) );
+      Append( new NCTableCol( NCstring( string( prefixLen(), ' ' )
+					+ yitem.label() ) ) );
     }
 
     virtual ~NCTreeLine() { delete [] prefix; }
