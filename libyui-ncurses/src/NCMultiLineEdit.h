@@ -92,7 +92,7 @@ class NCMultiLineEdit : public YMultiLineEdit, public NCPadWidget {
     }
 
     // sets the maximum number of characters of the NCTextPad
-    void setInputMaxLength( const YCPInteger & numberOfChars);
+    void setInputMaxLength( int numberOfChars);
 
 };
 
