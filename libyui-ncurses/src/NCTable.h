@@ -105,7 +105,7 @@ class NCTable : public YTable, public NCPadWidget {
      * Reimplemented from YWidget.
      **/
     virtual void setSize( int newWidth, int newHeight );
-    virtual void setLabel( const YCPString & nlabel );
+    virtual void setLabel( const string & nlabel );
     virtual void setEnabled( bool do_bv );
 
     bool setItemByKey( int key );
