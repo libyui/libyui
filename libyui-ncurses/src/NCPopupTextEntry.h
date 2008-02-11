@@ -55,9 +55,6 @@ class NCPopupTextEntry : public NCPopup {
 
     void   setValue( const string & ntext ) { wtext->setValue( ntext ); }
     string value() { return wtext->value(); }
-    
-    //void setText( const YCPString & ntext ) { wtext->setText( ntext ); }
-    //YCPString getText()                     { return wtext->getText(); }
 };
 
 ///////////////////////////////////////////////////////////////////
