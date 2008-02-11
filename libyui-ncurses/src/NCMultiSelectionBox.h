@@ -21,7 +21,6 @@
 
 #include <iosfwd>
 
-#include <ycp/YCPVoid.h>
 #include "YMultiSelectionBox.h"
 #include "NCPadWidget.h"
 #include "NCTablePad.h"
