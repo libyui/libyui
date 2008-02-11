@@ -39,9 +39,8 @@ class YSingleChildContainerWidget;
 
 
 /**
- * @short YaST2 Component: NCursesUI user interface
- * The YaST2 Component realizes a NCursesUI based user interface with an
- * embedded YCP interpreter.
+ * YaST2 Component: NCursesUI user interface
+ * The YaST2 Component implements a NCursesUI based user interface.
  */
 class YNCursesUI : public NCurses, public YUI
 {
