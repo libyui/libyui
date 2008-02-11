@@ -357,6 +357,9 @@ void YQTimezoneSelector::setCurrentZone( const std::string &_zone, bool zoom )
 
     if ( zoom )
         d->_zoom = d->_best.pix_pos;
+    else
+        d->_zoom = QPoint();
+
     d->cachePix = QPixmap();
     d->highlight = 1;
 
