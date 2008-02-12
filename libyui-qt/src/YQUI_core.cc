@@ -55,8 +55,8 @@ static void qMessageHandler( QtMsgType type, const char * msg );
 YQUI * YQUI::_ui = 0;
 
 
-YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
-    : YUI( with_threads )
+YQUI::YQUI( bool withThreads )
+    : YUI( withThreads )
 #if 0
     , _main_win( NULL )
 #endif
@@ -222,13 +222,10 @@ void YQUI::init_ui()
     QObject::connect(  _busyCursorTimer,	SIGNAL( timeout()	),
                        _signalReceiver,		SLOT  ( slotBusyCursor() ) );
 
-#warning macro_file
-    //    if ( macro_file )
-    // playMacro( macro_file );
-
     yuiMilestone() << "YQUI constructor end. Thread ID: "
 		   << hex << QThread::currentThreadId () << dec
 		   << endl;
+    
     qApp->processEvents();
 }
 

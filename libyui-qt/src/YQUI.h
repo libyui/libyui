@@ -56,10 +56,7 @@ public:
     /**
      * Constructor.
      **/
-    YQUI( int 		argc,
-	  char **	argv,
-	  bool 		with_threads,
-	  const char *	macro_file );
+    YQUI( bool withThreads );
 
     /**
      * Destructor.

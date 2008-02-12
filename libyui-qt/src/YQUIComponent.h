@@ -34,9 +34,9 @@ public:
      *
      * Reimplemented from YUIComponent.
      **/
-    virtual YUI * createUI( int argc, char **argv, bool with_threads, const char * macro_file )
+    virtual YUI * createUI( bool withThreads )
     {
-	return new YQUI( argc, argv, with_threads, macro_file );
+	return new YQUI( withThreads );
     }
 
     /**

@@ -19,9 +19,10 @@
 
 
 
-#ifndef _Y2CCQt_h
-#define _Y2CCQt_h
+#ifndef Y2CCQt_h
+#define Y2CCQt_h
 
+#include <stdio.h>
 #include "YQUIComponent.h"
 #include <Y2CCUI.h>
 
@@ -39,19 +40,17 @@ public:
     /**
      * Constructor
      **/
-    Y2CCQt() : Y2CCUI() { };
+    Y2CCQt() : Y2CCUI() {};
 
     /**
-     * Returns true, since the qt component is a
-     * YaST2 server.
+     * Returns true, since the qt component is a YaST2 server.
      **/
     bool isServerCreator() const { return true; };
 
-    
     /**
      * Creates a new Qt UI component.
      **/
-    Y2Component *create( const char * name ) const
+    Y2Component * create( const char * name ) const
     {
 	if ( ! strcmp( name, "qt") )
 	{
@@ -68,7 +67,7 @@ public:
     }
 };
 
-#endif	// ifndef _Y2CCQt_h
+#endif	// ifndef Y2CCQt_h
 
 
 // EOF
