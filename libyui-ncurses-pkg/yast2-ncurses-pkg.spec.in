@@ -1,0 +1,32 @@
+@HEADER-COMMENT@
+
+
+@HEADER@
+BuildRequires:	doxygen dejagnu gcc-c++ yast2-core-devel yast2-devtools libzypp-devel
+BuildRequires:	libxcrypt-devel blocxx-devel ncurses-devel yast2-ncurses-devel
+
+Summary:	-
+Provides:	yast2-ncurses:@plugindir@/libpy2ncurses.so
+Requires:	glibc-locale
+BuildRequires:	yast2-core-devel >= 2.16.33
+Requires:	yast2-core >= 2.16.33
+Requires:	yast2-ncurses >= 2.16.15
+#adapted to libzypp 3.11 refactoring
+Requires:	libzypp >= 3.11.8
+%description
+-
+
+@PREP@
+
+@BUILD@
+
+@INSTALL@
+rm $RPM_BUILD_ROOT/@plugindir@/libpy2ncurses_pkg.la
+
+@CLEAN@
+
+%files
+%defattr (-, root, root)
+@plugindir@/libpy2ncurses_pkg.so.*
+@plugindir@/libpy2ncurses_pkg.so
+%doc @docdir@

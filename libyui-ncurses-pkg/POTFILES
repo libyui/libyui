@@ -1,0 +1,6 @@
+./src/NCPkgTable.cc
+./src/NCPkgPopupDiskspace.cc
+./src/NCPkgNames.cc
+./src/NCPkgPopupSearch.cc
+./src/NCPkgPopupDeps.cc
+./src/NCPackageSelector.cc
