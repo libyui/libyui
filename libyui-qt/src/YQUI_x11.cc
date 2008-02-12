@@ -46,7 +46,7 @@
 
 int YQUI::defaultSize(YUIDimension dim) const
 {
-    return dim == YD_HORIZ ? _default_size.width() : _default_size.height();
+    return dim == YD_HORIZ ? _defaultSize.width() : _defaultSize.height();
 }
 
 
@@ -58,8 +58,8 @@ void YQUI::busyCursor()
 
 void YQUI::normalCursor()
 {
-    if ( _busy_cursor_timer->isActive() )
-	_busy_cursor_timer->stop();
+    if ( _busyCursorTimer->isActive() )
+	_busyCursorTimer->stop();
 
     while ( qApp->overrideCursor() )
 	qApp->restoreOverrideCursor();

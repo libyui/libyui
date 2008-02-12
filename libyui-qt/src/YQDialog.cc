@@ -56,7 +56,6 @@ YQDialog::YQDialog( YDialogType 	dialogType,
     _focusButton   = 0;
     _defaultButton = 0;
 
-    setWindowTitle( "YaST2" );
     setFocusPolicy( Qt::StrongFocus );
 
     if ( colorMode != YDialogNormalColor )

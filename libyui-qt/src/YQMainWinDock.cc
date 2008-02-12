@@ -47,8 +47,6 @@ YQMainWinDock::YQMainWinDock()
 	       Qt::FramelessWindowHint :
 	       Qt::Window )
 {
-    setWindowTitle( "YaST2" );
-
     setFocusPolicy( Qt::StrongFocus );
 
     resize( YQUI::ui()->defaultSize( YD_HORIZ ),

@@ -151,7 +151,7 @@ void YQUI::makeScreenShot( std::string stl_filename )
         yuiDebug() << "Screenshot: " << fileName << endl;
 
 	{
-	    YQSignalBlocker sigBlocker( _user_input_timer );
+	    YQSignalBlocker sigBlocker( _userInputTimer );
 
 	    fileName = YQApplication::askForSaveFileName( fileName,
 							  QString( "*.png" ) ,

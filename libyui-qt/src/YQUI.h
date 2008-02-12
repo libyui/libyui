@@ -124,14 +124,14 @@ public:
      * Returns 'true' if there is any event pending for the specified widget.
      **/
     bool eventPendingFor( YWidget * widget ) const
-	{ return _event_handler.eventPendingFor( widget ); }
+	{ return _eventHandler.eventPendingFor( widget ); }
 
     /**
      * Returns the last event that isn't processed yet or 0 if there is none.
      *
      * The Qt UI keeps track of only one single (the last one) event.
      **/
-    YEvent * pendingEvent() const { return _event_handler.pendingEvent(); }
+    YEvent * pendingEvent() const { return _eventHandler.pendingEvent(); }
 
     /**
      * Return 'true' if defaultsize windows should use the full screen.
@@ -147,14 +147,14 @@ public:
      * Returns 'true' if the UI had a fatal error that requires the application
      * to abort.
      **/
-    bool fatalError() const { return _fatal_error; }
+    bool fatalError() const { return _fatalError; }
 
     /**
      * Raise a fatal UI error. It will be delivered when it is safe to do so.
      * The caller should make sure it can continue for some time until the
      * error is delivered.
      **/
-    void raiseFatalError() { _fatal_error = true; }
+    void raiseFatalError() { _fatalError = true; }
 
     /**
      * Returns size for `opt(`defaultsize) dialogs (in one dimension).
@@ -306,6 +306,8 @@ protected:
     // Data members
     //
 
+    static YQUI *	_ui;
+
     QMap<QString, int>	screenShotNo;
     QString		screenShotNameTemplate;
 
@@ -319,7 +321,7 @@ protected:
     /**
      * Size for `opt(`defaultsize) dialogs.
      **/
-    QSize _default_size;
+    QSize _defaultSize;
 
     /**
      * This flag is set during userInput() in order to tell
@@ -336,32 +338,27 @@ protected:
      **/
     QEventLoop * _eventLoop;
 
-    /*
-     * Global reference to the UI
-     **/
-    static YQUI * _ui;
-
     /**
      * Indicate a fatal error that requires the UI to terminate
      **/
-    bool _fatal_error;
+    bool _fatalError;
 
     /**
      * Timer for TimeoutUserInput() / WaitForEvent().
      **/
-    QTimer *_user_input_timer;
+    QTimer * _userInputTimer;
 
     /**
      * Timer for delayed busy cursor
      **/
-    QTimer *_busy_cursor_timer;
+    QTimer * _busyCursorTimer;
 
     /**
      * The handler for the single pending event this UI keeps track of
      **/
-    YSimpleEventHandler _event_handler;
+    YSimpleEventHandler _eventHandler;
 
-    int blocked_level;
+    int blockedLevel;
 
     /**
      * Saved normal palette
@@ -383,14 +380,12 @@ protected:
      **/
     bool _askedForLeftHandedMouse;
 
-    bool _ui_inited;
-    int _ui_argc;
-    char **_ui_argv;
+    bool _uiInitialized;
 
     /*
      * Reads the style sheet, parses some comments and passes it to qapp
      */ 
-    QY2Styler *_styler;
+    QY2Styler * _styler;
 
     YQUISignalReceiver * _signalReceiver;
 };

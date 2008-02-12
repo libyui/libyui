@@ -38,6 +38,7 @@
 #include "YQWidgetFactory.h"
 #include "YQOptionalWidgetFactory.h"
 #include "YEvent.h"
+#include "YCommandLine.h"
 #include "YUISymbols.h"
 #include "utf8.h"
 
@@ -65,25 +66,15 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
     yuiMilestone() << "YQUI constructor start" << endl;
 
     _ui				= this;
-    _fatal_error		= false;
+    _uiInitialized		= false;
+    _fatalError			= false;
     _fullscreen			= false;
     _usingVisionImpairedPalette	= false;
     _noborder                   = false;
     screenShotNameTemplate 	= "";
-    blocked_level               = 0;
+    blockedLevel               = 0;
 
     qInstallMsgHandler( qMessageHandler );
-
-    // Copy command line arguments for QApplication
-
-    _ui_argv = (char **) malloc( (argc+1) * sizeof( const char * ) );
-    _ui_argc = argc + 1;
-
-    for ( int i=0; i < argc; i++ )
-      _ui_argv[i+1] = strdup( argv[i] );
-
-    _ui_argv[0] = strdup( "YaST2" );
-    _ui_inited = false;
 
     topmostConstructorHasFinished();
 }
@@ -91,29 +82,51 @@ YQUI::YQUI( int argc, char **argv, bool with_threads, const char * macro_file )
 
 void YQUI::init_ui()
 {
-    if ( _ui_inited )
+    if ( _uiInitialized )
         return;
 
-    // yast has no use of the glib event loop
+    _uiInitialized = true;
+
+    YCommandLine cmdLine; // Retrieve command line args from /proc/<pid>/cmdline
+    string progName;
+
+    if ( cmdLine.argc() > 0 )
+    {
+	progName = cmdLine[0];
+	std::size_t lastSlashPos = progName.find_last_of( '/' );
+
+	if ( lastSlashPos != string::npos )
+	    progName = progName.substr( lastSlashPos+1 );
+
+	// Qt will display argv[0] as the window manager title.
+	// For YaST2, display "YaST2" instead of "y2base".
+	// For other applications, leave argv[0] alone.
+
+	if ( progName == "y2base" )
+	    cmdLine.replace( 0, "YaST2" );
+    }
+
+    int	    argc = cmdLine.argc();
+    char ** argv = cmdLine.argv();
+
+    // YaST2 has no use for the glib event loop
     setenv( "QT_NO_GLIB", "1", 1 );
 
-    _ui_inited = true;
-
-    new QApplication( _ui_argc, _ui_argv);
+    new QApplication( argc, argv );
 
     _signalReceiver = new YQUISignalReceiver();
-    _busy_cursor_timer = new QTimer( _signalReceiver );
-    _busy_cursor_timer->setSingleShot( true );
+    _busyCursorTimer = new QTimer( _signalReceiver );
+    _busyCursorTimer->setSingleShot( true );
 
-    _user_input_timer = new QTimer( _signalReceiver );
-    _user_input_timer->setSingleShot( true );
+    _userInputTimer = new QTimer( _signalReceiver );
+    _userInputTimer->setSingleShot( true );
 
     _normalPalette = qApp->palette();
 
     // Qt keeps track to a global QApplication in qApp.
     Q_CHECK_PTR( qApp );
 
-    processCommandLineArgs( _ui_argc, _ui_argv );
+    processCommandLineArgs( argc, argv );
     calcDefaultSize();
 
     _styler = new QY2Styler( qApp );
@@ -138,7 +151,7 @@ void YQUI::init_ui()
     _main_win->setFocusPolicy( Qt::StrongFocus );
     _main_win->setObjectName( "main_window" );
 
-    _main_win->resize( _default_size );
+    _main_win->resize( _defaultSize );
 
     if ( _fullscreen )
 	_main_win->move( 0, 0 );
@@ -147,7 +160,7 @@ void YQUI::init_ui()
 
     // Set window title
 
-    QString title( "YaST2" );
+    QString title( fromUTF8( progName ) );
     char hostname[ MAXHOSTNAMELEN+1 ];
 
     if ( gethostname( hostname, sizeof( hostname )-1 ) == 0 )
@@ -166,9 +179,6 @@ void YQUI::init_ui()
     }
 
 #if 0
-    _main_win->setWindowTitle( title );
-
-
     // Hide the main window for now. The first call to UI::OpenDialog() on an
     // `opt(`defaultSize) dialog will trigger a dialog->open() call that shows
     // the main window - there is nothing to display yet.
@@ -206,10 +216,10 @@ void YQUI::init_ui()
     qApp->setFont( yqApp()->currentFont() );
     busyCursor();
 
-    QObject::connect(  _user_input_timer,	SIGNAL( timeout()          ),
+    QObject::connect(  _userInputTimer,	SIGNAL( timeout()          ),
                        _signalReceiver,		SLOT  ( slotUserInputTimeout() ) );
 
-    QObject::connect(  _busy_cursor_timer,	SIGNAL( timeout()	),
+    QObject::connect(  _busyCursorTimer,	SIGNAL( timeout()	),
                        _signalReceiver,		SLOT  ( slotBusyCursor() ) );
 
 #warning macro_file
@@ -217,7 +227,7 @@ void YQUI::init_ui()
     // playMacro( macro_file );
 
     yuiMilestone() << "YQUI constructor end. Thread ID: "
-		   << hex << QThread::currentThreadId () << dec 
+		   << hex << QThread::currentThreadId () << dec
 		   << endl;
     qApp->processEvents();
 }
@@ -333,44 +343,44 @@ void YQUI::calcDefaultSize()
 
     if ( _fullscreen )
     {
-	_default_size = availableSize;
+	_defaultSize = availableSize;
 
-        yuiMilestone() << "-fullscreen: using " 
-		       << _default_size.width() << " x " << _default_size.height()
+        yuiMilestone() << "-fullscreen: using "
+		       << _defaultSize.width() << " x " << _defaultSize.height()
 		       << "for `opt(`defaultsize)"
 		       << endl;
     }
     else
     {
-	// Get _default_size via -geometry command line option (if set)
+	// Get _defaultSize via -geometry command line option (if set)
 
         // Set min defaultsize or figure one out if -geometry was not used
 
-	if ( _default_size.width()  < 800 ||
-	     _default_size.height() < 600   )
+	if ( _defaultSize.width()  < 800 ||
+	     _defaultSize.height() < 600   )
 	{
 	    if ( primaryScreenSize.width() >= 1024 && primaryScreenSize.height() >= 768  )
 	    {
 		// Scale down to 70% of screen size
 
-		_default_size.setWidth ( max( (int) (availableSize.width()  * 0.7), 800 ) );
-		_default_size.setHeight( max( (int) (availableSize.height() * 0.7), 600 ) );
+		_defaultSize.setWidth ( max( (int) (availableSize.width()  * 0.7), 800 ) );
+		_defaultSize.setHeight( max( (int) (availableSize.height() * 0.7), 600 ) );
 	    }
 	    else
 	    {
-		_default_size = availableSize;
+		_defaultSize = availableSize;
 	    }
 	}
 	else
 	{
 	    yuiMilestone() << "Forced size (via -geometry): "
-			   << _default_size.width() << " x " << _default_size.height()
+			   << _defaultSize.width() << " x " << _defaultSize.height()
 			   << endl;
 	}
     }
 
     yuiMilestone() << "Default size: "
-		   << _default_size.width() << " x " << _default_size.height()
+		   << _defaultSize.width() << " x " << _defaultSize.height()
 		   << endl;
 }
 
@@ -405,7 +415,7 @@ void YQUI::sendEvent( YEvent * event )
 {
     if ( event )
     {
-	_event_handler.sendEvent( event );
+	_eventHandler.sendEvent( event );
 
 	if ( _do_exit_loop )
 	    _eventLoop->exit( 1 );
@@ -417,9 +427,9 @@ YEvent * YQUI::userInput( int timeout_millisec )
 {
     init_ui();
 
-    _event_handler.blockEvents( false );
+    _eventHandler.blockEvents( false );
     _eventLoop->wakeUp();
-    blocked_level = 0;
+    blockedLevel = 0;
 
 #if 0
     yuiMilestone() << "userInput( " << timeout_millisec
@@ -430,12 +440,12 @@ YEvent * YQUI::userInput( int timeout_millisec )
     YEvent * 	event  = 0;
     YDialog *	dialog = YDialog::currentDialog( false );
 
-    _user_input_timer->stop();
+    _userInputTimer->stop();
 
     if ( dialog )
     {
 	if ( timeout_millisec > 0 )
-	    _user_input_timer->start( timeout_millisec ); // single shot
+	    _userInputTimer->start( timeout_millisec ); // single shot
 
 	if ( qApp->focusWidget() )
 	    qApp->focusWidget()->setFocus();
@@ -445,15 +455,15 @@ YEvent * YQUI::userInput( int timeout_millisec )
         _eventLoop->exec();
 	_do_exit_loop = false;
 
-	event = _event_handler.consumePendingEvent();
+	event = _eventHandler.consumePendingEvent();
 
 	// Display a busy cursor, but only if there is no other activity within
 	// BUSY_CURSOR_TIMEOUT milliseconds: Avoid cursor flicker.
 
-	_busy_cursor_timer->start( BUSY_CURSOR_TIMEOUT ); // single shot
+	_busyCursorTimer->start( BUSY_CURSOR_TIMEOUT ); // single shot
     }
 
-    _user_input_timer->stop();
+    _userInputTimer->stop();
 
     return event;
 }
@@ -463,7 +473,7 @@ YEvent * YQUI::pollInput()
 {
     YEvent * event = 0;
 
-    _user_input_timer->stop();
+    _userInputTimer->stop();
 
     if ( ! pendingEvent() )
     {
@@ -472,12 +482,12 @@ YEvent * YQUI::pollInput()
 	if ( dialog )
 	{
 	    _eventLoop->processEvents( QEventLoop::AllEvents, 10 );
-	    event = _event_handler.consumePendingEvent();
+	    event = _eventHandler.consumePendingEvent();
 	}
     }
 
     if ( pendingEvent() )
-	event = _event_handler.consumePendingEvent();
+	event = _eventHandler.consumePendingEvent();
 
     return event;
 }
@@ -511,17 +521,17 @@ void YQUI::blockEvents( bool block )
 
     if ( block )
     {
-        if ( ++blocked_level == 1 )
+        if ( ++blockedLevel == 1 )
         {
-            _event_handler.blockEvents( true );
+            _eventHandler.blockEvents( true );
             _eventLoop->exit();
         }
     }
     else
     {
-        if ( --blocked_level == 0 )
+        if ( --blockedLevel == 0 )
         {
-            _event_handler.blockEvents( false );
+            _eventHandler.blockEvents( false );
             _eventLoop->wakeUp();
         }
     }
@@ -530,7 +540,7 @@ void YQUI::blockEvents( bool block )
 
 bool YQUI::eventsBlocked() const
 {
-    return _event_handler.eventsBlocked();
+    return _eventHandler.eventsBlocked();
 }
 
 

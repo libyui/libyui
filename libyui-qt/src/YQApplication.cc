@@ -332,8 +332,8 @@ YQApplication::pickAutoFonts()
 
 #warning FIXME: defaultSize
 #if 0
-    int x = _default_size.width();
-    int y = _default_size.height();
+    int x = _defaultSize.width();
+    int y = _defaultSize.height();
 #endif
     int x = 800;
     int y = 600;
