@@ -26,7 +26,8 @@
 #include <Y2CCUI.h>
 
 /**
- * @short Y2ComponentCreator that can create Qt user interfaces
+ * Y2ComponentCreator that can create Qt user interfaces.
+ *
  * A Y2ComponentCreator is an object that can create components.
  * It is given a component name and - if it knows how to create
  * such a component - returns a newly created component of this
@@ -36,25 +37,27 @@ class Y2CCQt : public Y2CCUI
 {
 public:
     /**
-     * Creates a Qt component creator
-     */
+     * Constructor
+     **/
     Y2CCQt() : Y2CCUI() { };
 
     /**
      * Returns true, since the qt component is a
      * YaST2 server.
-     */
+     **/
     bool isServerCreator() const { return true; };
 
+    
     /**
      * Creates a new Qt UI component.
-     */
-    Y2Component *create(const char * name) const
+     **/
+    Y2Component *create( const char * name ) const
     {
-	if (!strcmp(name, "qt") )
+	if ( ! strcmp( name, "qt") )
 	{
-	    Y2Component* ret = YUIComponent::uiComponent ();
-    	    if (!ret || ret->name () != name)
+	    Y2Component * ret = YUIComponent::uiComponent ();
+	    
+    	    if ( ! ret || ret->name () != name )
     	    {
 		ret = new YQUIComponent();
 	    }

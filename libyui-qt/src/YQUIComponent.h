@@ -45,7 +45,6 @@ public:
      * Reimplemented from YUIComponent.
      **/
     virtual string name() const { return "qt"; }
-
 };
 
 
