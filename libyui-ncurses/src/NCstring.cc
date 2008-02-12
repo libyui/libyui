@@ -19,6 +19,7 @@
 
 #include <errno.h>
 #include <iconv.h>
+#include <malloc.h>
 
 #include "Y2Log.h"
 #include "NCstring.h"

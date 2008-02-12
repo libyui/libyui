@@ -31,12 +31,13 @@
 #define YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 
+//#include "NCPackageSelectorStart.h"
 
-#include "NCPackageSelectorStart.h"
+#include "Y2Log.h"
 #include "NCstring.h"
 #include "NCWidgetFactory.h"
 #include "NCOptionalWidgetFactory.h"
-#include "NCPackageSelectorPlugin.h"
+#include "NCPackageSelectorPluginStub.h"
 
 extern string language2encoding( string lang );
 
@@ -193,13 +194,13 @@ void YNCursesUI::idleLoop( int fd_ycp )
 //
 //	DESCRIPTION : Create the package selector plugin
 //
-NCPackageSelectorPlugin * YNCursesUI::packageSelectorPlugin()
+NCPackageSelectorPluginStub * YNCursesUI::packageSelectorPlugin()
 {
-    static NCPackageSelectorPlugin * plugin = 0;
+    static NCPackageSelectorPluginStub * plugin = 0;
 
     if ( ! plugin )
     {
-	plugin = new NCPackageSelectorPlugin();
+	plugin = new NCPackageSelectorPluginStub();
 
 	// This is a deliberate memory leak: If an application requires a
 	// PackageSelector, it is a package selection application by
@@ -225,7 +226,7 @@ YEvent * YNCursesUI::runPkgSelection( YWidget * selector )
     YEvent * event = 0;
     
     YDialog *dialog = YDialog::currentDialog();
-    NCPackageSelectorPlugin * plugin = packageSelectorPlugin();
+    NCPackageSelectorPluginStub * plugin = packageSelectorPlugin();
     
     if ( !dialog )
     {

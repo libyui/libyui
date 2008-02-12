@@ -20,6 +20,8 @@
 
 #include "NCWidgetFactory.h"
 #include "YUIException.h"
+#include "Y2Log.h"
+#include "YNCursesUI.h"
 
 #include <string>
 
@@ -375,7 +377,7 @@ NCWidgetFactory::createPackageSelector( YWidget * parent, long modeFlags )
     // FIXME
     //YNCursesUI::ui()->setAutoActivateDialogs( false );
 
-    NCPackageSelectorPlugin * plugin = YNCursesUI::ui()->packageSelectorPlugin();
+    NCPackageSelectorPluginStub * plugin = YNCursesUI::ui()->packageSelectorPlugin();
 
     if ( plugin )
 	return plugin->createPackageSelector( parent, modeFlags );
@@ -396,7 +398,7 @@ NCWidgetFactory::createPkgSpecial( YWidget * parent, const string & subwidget )
 {
     YWidget * w = 0;
     
-    NCPackageSelectorPlugin * plugin = YNCursesUI::ui()->packageSelectorPlugin();
+    NCPackageSelectorPluginStub * plugin = YNCursesUI::ui()->packageSelectorPlugin();
 
     if ( plugin )
     {

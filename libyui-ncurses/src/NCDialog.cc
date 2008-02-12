@@ -1179,7 +1179,7 @@ void NCDialog::processInput( int timeout_millisec )
         pendingEvent = NCursesEvent::timeout;
       break;
 
-    case KEY_F(16):
+    case KEY_F(10):
 	const_cast<NCstyle&>(NCurses::style()).nextStyle();
 	NCurses::Redraw();
 	break;

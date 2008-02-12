@@ -2,8 +2,6 @@
 # Makefile.am for ncurses/src
 #
 
-SUBDIRS = pkg
-
 AM_CXXFLAGS = -DY2LOG=\"ui-ncurses\" -DLOCALEDIR=\"${localedir}\"
 
 # plugin, libtool forces 'lib' prefix
@@ -24,7 +22,9 @@ libpy2ncurses_la_LIBADD =		\
 #	-lncursesw -lpanelw
 #liby2ncurses_la_LIBADD = $(libpy2ncurses_la_LIBADD)
 
-noinst_HEADERS = 		\
+pkgincludedir = $(includedir)/ncurses
+
+pkginclude_HEADERS = 		\
 	stdutil.h           	\
 	NCi18n.h		\
 	Y2Log.h			\
@@ -36,9 +36,8 @@ noinst_HEADERS = 		\
 	NCWidgetFactory.h	\
 	NCOptionalWidgetFactory.h	\
 				\
-	NCPackageSelectorPlugin.h	\
-	NCPackageSelectorStart.h	\
-	NCPkgTable.h		\
+	NCPackageSelectorPluginStub.h	\
+	NCPackageSelectorPluginIf.h	\
 	NCtext.h		\
 	NCstring.h		\
 	stringutil.h		\
@@ -98,6 +97,19 @@ noinst_HEADERS = 		\
 	Y2CCNCursesUI.h				\
 	YNCursesComponent.h
 
+install-pkgincludeHEADERS: $(pkgi/nclude_HEADERS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(pkgincludedir)
+	@list='$(pkginclude_HEADERS)';                                                  \
+	for p in $$list; do                                                             \
+	        if test -f "$$p"; then d= ; else d="$(srcdir)/"; fi;                    \
+	        if ! cmp -s $$d$$p $(DESTDIR)$(pkgincludedir)/$$p; then                 \
+	                echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgincludedir)/$$p";  \
+	                $(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgincludedir)/$$p;          \
+	        fi                                                                      \
+	done
+
+
 libpy2ncurses_la_SOURCES =		\
 	Y2Log.cc			\
 	position.cc			\
@@ -107,9 +119,7 @@ libpy2ncurses_la_SOURCES =		\
 	NCWidgetFactory.cc		\
 	NCOptionalWidgetFactory.cc	\
 					\
-	NCPackageSelectorPlugin.cc	\
-	NCPackageSelectorStart.cc 	\
-	NCPkgTable.cc			\
+	NCPackageSelectorPluginStub.cc	\
 					\
 	NCtext.cc			\
 	NCstring.cc			\
@@ -174,7 +184,7 @@ libpy2ncurses_la_SOURCES =		\
 #	Y2CCNCursesUI.cc Y2CCNCursesUI.h	\
 #	YNCursesComponent.h
 
-INCLUDES = -I$(srcdir)/pkg -I$(includedir) -I$(includedir)/yui -I$(includedir)/ycp-ui ${ZYPP_CFLAGS}
+INCLUDES = -I$(includedir) -I$(includedir)/yui -I$(includedir)/ycp-ui 
 
 lang2encoding.cc:	lang2encoding.tab
 	./lang2encoding.tab > lang2encoding.cc

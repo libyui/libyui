@@ -32,7 +32,7 @@
 
 class YUI;
 class NCDialog;
-class NCPackageSelectorPlugin;
+class NCPackageSelectorPluginStub;
 class NCWidgetFactory;
 class NCOptionalWidgetFactory;
 class YSingleChildContainerWidget;
@@ -127,7 +127,7 @@ public:
      * Returns the package selector plugin singleton of this UI or creates it
      * (including loading the plugin lib) if it does not exist yet.
      **/
-    NCPackageSelectorPlugin * packageSelectorPlugin();
+    NCPackageSelectorPluginStub * packageSelectorPlugin();
 };
 
 

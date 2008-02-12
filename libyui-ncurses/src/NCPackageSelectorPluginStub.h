@@ -10,40 +10,45 @@
 |						     (c) SuSE Linux AG |
 \----------------------------------------------------------------------/
 
-  File:	      NCPackageSelectorPlugin.h
+  File:	      NCPackageSelectorPluginStub.h
 
-  Author:     Gabriele Mohr <gs@suse.de>
+  Author:     Hedgehog Painter <kmachalkova@suse.cz>
 
 /-*/
 
 // -*- c++ -*-
 
-#ifndef NCPackageSelectorPlugin_h
-#define NCPackageSelectorPlugin_h
+#ifndef NCPackageSelectorPluginStub_h
+#define NCPackageSelectorPluginStub_h
 
 #include <YPackageSelectorPlugin.h>
+#include <YDialog.h>
+#include <YEvent.h>
+#include <ycp/YCPString.h>
 
-class YDialog;
-class YEvent;
-
+#include "NCPackageSelectorPluginIf.h"
 
 /**
  * Simplified access to the ncurses UI's package selector plugin.
  **/
-class NCPackageSelectorPlugin: public YPackageSelectorPlugin
+
+class NCPackageSelectorPluginIf;
+
+class NCPackageSelectorPluginStub: public YPackageSelectorPlugin
 {
 public:
+
 
     /**
      * Constructor: Load the plugin library for the NCurses package selector.
      **/
-    NCPackageSelectorPlugin();
+    NCPackageSelectorPluginStub();
 
     /**
      * Destructor. Calls dlclose() which will unload the plugin library if it
      * is no longer used, i.e. if the reference count dlopen() uses reaches 0.
      **/
-    virtual ~NCPackageSelectorPlugin();
+    virtual ~NCPackageSelectorPluginStub();
 
     /**
      * Create a package selector.
@@ -66,8 +71,9 @@ public:
      */
     virtual YWidget * createPkgSpecial( YWidget *parent,
 					const string &subwidget );
+
+    NCPackageSelectorPluginIf *impl ;
 };
 
 
-
-#endif // NCPackageSelectorPlugin_h
+#endif // NCPackageSelectorPluginStub_h
