@@ -41,8 +41,8 @@
 
 extern string language2encoding( string lang );
 
-YNCursesUI::YNCursesUI( int argc, char **argv, bool with_threads, const char * macro_file )
-    : YUI( with_threads )
+YNCursesUI::YNCursesUI( bool withThreads )
+    : YUI( withThreads )
 {
     yuiMilestone() << "Start YNCursesUI" << endl;
     _ui = this;
@@ -78,9 +78,6 @@ YNCursesUI::YNCursesUI( int argc, char **argv, bool with_threads, const char * m
 	abort();
     }
 
-    if ( macro_file )
-	YMacro::play( macro_file );
-    
     topmostConstructorHasFinished();
 }
 

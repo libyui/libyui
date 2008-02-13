@@ -45,18 +45,18 @@ class YSingleChildContainerWidget;
 class YNCursesUI : public NCurses, public YUI
 {
 public:
-   /**
-    * Initialize data.
-     */
-   YNCursesUI( int argc, char ** argv, bool with_threads, const char * macro_file );
+    /**
+     * Constructor
+     **/
+    YNCursesUI( bool withThreads );
 
-   /**
-     * Cleans up.
-     */
-   ~YNCursesUI();
+    /**
+     * Destructor
+     **/
+    ~YNCursesUI();
 
 
-  protected:
+protected:
     /**
      * Create the widget factory that provides all the createXY() methods for
      * standard (mandatory, i.e. non-optional) widgets.
@@ -85,24 +85,24 @@ public:
     virtual bool want_colors();
     virtual void init_title();
 
-   /**
-    * Global reference to the UI
-    **/
-   static YNCursesUI * _ui;
+    /**
+     * Global reference to the UI
+     **/
+    static YNCursesUI * _ui;
     
-  public:
+public:
 
 //    Y2NCursesUI( bool with_threads, const char * macro_file, Y2Component *callback );
 //    virtual ~Y2NCursesUI();
 
-   /**
-    * Access the global Y2NCursesUI.
-    */
+    /**
+     * Access the global Y2NCursesUI.
+     */
     static YNCursesUI * ui() { return _ui; }
     
     /**
      * Idle around until fd_ycp is readable
-    */
+     */
     virtual void idleLoop( int fd_ycp );
 
     /**
