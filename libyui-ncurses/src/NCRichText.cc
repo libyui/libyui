@@ -313,10 +313,10 @@ NCursesEvent NCRichText::wHandleInput( wint_t key )
     case KEY_RETURN:
       if ( armed != Anchor::unset ) {
 	ret = NCursesEvent::menu;
-	string ycpstr;
-	NCstring::RecodeFromWchar( anchors[armed].target, "UTF-8", &ycpstr );
-	NCMIL << "LINK: " << ycpstr << endl;
-	ret.selection = new YMenuItem( ycpstr );
+	string str;
+	NCstring::RecodeFromWchar( anchors[armed].target, "UTF-8", &str );
+	NCMIL << "LINK: " << str << endl;
+	ret.selection = new YMenuItem( str );
       }
       break;
     }
