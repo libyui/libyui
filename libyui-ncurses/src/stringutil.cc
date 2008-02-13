@@ -17,9 +17,8 @@
 
 /-*/
 
-#include <ycp/y2string.h>
-
 #include "stringutil.h"
+#include "NCstring.h"
 using namespace std;
 
 /******************************************************************
@@ -77,11 +76,12 @@ unsigned strutil::split( const string     line_tv,
   return words_Vtr.size();
 }
 
+
 ostream & operator<<( ostream & stream, const wstring & text)
 {
     string utf8text;
-    
-    wchar2utf8 (text, &utf8text);
+    NCstring::RecodeFromWchar( text, "UTF-8", &utf8text );
 
     return stream << utf8text;
 }
+
