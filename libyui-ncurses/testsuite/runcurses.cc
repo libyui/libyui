@@ -75,7 +75,7 @@ main (int argc, char *argv[])
 	return 1;
     }
 
-    YNCursesUI * ncurses_ui = new YNCursesUI(true, 0, 0, 0 );
+    YNCursesUI * ncurses_ui = new YNCursesUI(true);
 
     if (! ncurses_ui)
     {
