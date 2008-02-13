@@ -16,12 +16,10 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
-
-#include "ycp/y2log.h"
 
 #include "NCAskForDirectory.h"
 
+#include "Y2Log.h"
 #include "YDialog.h"
 #include "YTypes.h"
 #include "NCLayoutBox.h"

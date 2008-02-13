@@ -19,8 +19,8 @@
 
 #include "NCPackageSelectorPluginStub.h"
 
-#include <ycp/y2log.h>
-#include "Y2Log.h"
+#define YUILogComponent "ncurses-ui"
+#include "YUILog.h"
 #include "NCWidget.h"
 #include "NCLabel.h"
 #include "NCDialog.h"
@@ -29,8 +29,6 @@
 //#include "NCPkgTable.h"
 #include "YNCursesUI.h" // NCtoY2Event
 
-#define y2log_component "ncurses-ui"
-
 #define PLUGIN_BASE_NAME "ncurses_pkg"
 
 NCPackageSelectorPluginStub::NCPackageSelectorPluginStub()
@@ -38,8 +36,9 @@ NCPackageSelectorPluginStub::NCPackageSelectorPluginStub()
 {
     if ( success() )
     {
-	y2milestone( "Loaded %s plugin successfully from %s",
-		     PLUGIN_BASE_NAME, pluginLibFullPath().c_str() );
+	yuiMilestone() << "Loaded " << PLUGIN_BASE_NAME
+                       << " plugin successfully from " << pluginLibFullPath()
+                       << endl;
     }
 
 
