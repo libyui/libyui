@@ -25,6 +25,7 @@ public:
 
 protected:
     void renderParent( QWidget *wid );
+    QImage getScaled( const QString name, const QSize & size );
 
     void processUrls(QString &text);
     /*

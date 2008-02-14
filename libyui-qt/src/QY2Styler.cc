@@ -76,6 +76,12 @@ void QY2Styler::registerChildWidget( QWidget *parent, QWidget *widget )
     _children[parent].push_back( widget );
 }
 
+QImage QY2Styler::getScaled( const QString name, const QSize & size )
+{
+    qDebug() << "scale " << qPrintable( name ) << " " << size;
+    return _backgrounds[name].pix.scaled( size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
+}
+
 void QY2Styler::renderParent( QWidget *wid )
 {
     QString name = wid->objectName();
@@ -88,9 +94,7 @@ void QY2Styler::renderParent( QWidget *wid )
     if ( _backgrounds[name].full )
         fillRect = wid->rect();
 
-    qDebug() << "scale " << qPrintable(name) << " " << fillRect.width() << " " << fillRect.height();
-    QImage back = _backgrounds[name].pix.scaled( fillRect.width(), fillRect.height() );
-
+    QImage back = getScaled( name, fillRect.size() );
     QPainter pain( &back );
     QWidget *child;
     foreach( child, _children[wid] )
@@ -110,8 +114,7 @@ void QY2Styler::renderParent( QWidget *wid )
         {
             qDebug() << "found " << qPrintable( key );
         } else {
-            qDebug() << "scale " << qPrintable( name ) << " " << fillRect.width() << " " << fillRect.height();
-            scaled = QPixmap::fromImage( _backgrounds[name].pix.scaled( fillRect.width(), fillRect.height() ) );
+            scaled = QPixmap::fromImage( getScaled( name, fillRect.size() ) );
             QPixmapCache::insert( key, scaled );
         }
         pain.drawPixmap( wid->mapFromGlobal( child->mapToGlobal( fillRect.topLeft() ) ), scaled );
