@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Feb 15 17:33:00 CET 2008 - coolo@suse.de
+
+- compile against libzypp trunk - language support pending
+  (#ifed out - want to make sure it works before we spend
+  too much time into it)
+
+-------------------------------------------------------------------
 Tue Feb 12 11:06:49 CET 2008 - kmachalkova@suse.cz
 
 -  Initial version splitted from yast2-ncurses 2.16.15
