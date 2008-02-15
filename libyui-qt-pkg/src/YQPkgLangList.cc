@@ -71,6 +71,10 @@ YQPkgLangList::fillList()
     yuiDebug() << "Filling language list" << endl;
 
     zypp::LocaleSet locales = zypp::getZYpp()->pool().getAvailableLocales();
+#warning FIXME: had to hardcode examples for now
+    locales.insert( zypp::Locale( "de_DE" ) );
+    locales.insert( zypp::Locale( "de" ) );
+
     for ( zypp::LocaleSet::const_iterator it = locales.begin();
 	  it != locales.end();
 	  ++it )
@@ -134,9 +138,10 @@ YQPkgLangList::selection() const
 
 YQPkgLangListItem::YQPkgLangListItem( YQPkgLangList * 	langList,
                                       const zypp::Locale &lang )
-    : YQPkgObjListItem( langList, 0 )
+    : YQPkgObjListItem( langList )
     , _zyppLang( lang )
 {
+    init();
 }
 
 
@@ -153,7 +158,44 @@ YQPkgLangListItem::applyChanges()
     solveResolvableCollections();
 }
 
+void
+YQPkgLangListItem::init()
+{
+    // DO NOT CALL PARENT CLASS
+    _debugIsBroken	= false;
+    _debugIsSatisfied	= false;
+    _candidateIsNewer	= false;
+    _installedIsNewer 	= false;
+
+    if ( nameCol()    >= 0 )	setText( nameCol(),	_zyppLang.code()	);
+    if ( summaryCol() >= 0 )	setText( summaryCol(),	_zyppLang.name()	);
+
+    setStatusIcon();
+}
+
+ZyppStatus YQPkgLangListItem::status() const
+{
+    if ( zypp::getZYpp()->pool().isRequestedLocale( _zyppLang ) )
+        return S_Install;
+    else
+        return S_NoInst;
+}
+
+bool YQPkgLangListItem::bySelection() const
+{
+    return zypp::getZYpp()->pool().isRequestedLocale( _zyppLang );
+}
 
 
+void YQPkgLangListItem::cycleStatus()
+{
+    if ( zypp::getZYpp()->pool().isRequestedLocale( _zyppLang ) )
+    {
+        zypp::getZYpp()->pool().eraseRequestedLocale( _zyppLang );
+    } else {
+        zypp::getZYpp()->pool().addRequestedLocale( _zyppLang );
+    }
+    setStatusIcon();
+}
 
 #include "YQPkgLangList.moc"

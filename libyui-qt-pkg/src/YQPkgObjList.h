@@ -221,7 +221,7 @@ public slots:
      * Write statistics about excluded items to the log, if there are any.
      **/
     void logExcludeStatistics();
-    
+
 
     // Direct access to some states for menu actions
 
@@ -344,7 +344,7 @@ protected:
     bool	_debug;
 
     typedef list<ExcludeRule *> ExcludeRuleList;
-    
+
     ExcludeRuleList	_excludeRules;
     ExcludedItems *	_excludedItems;
 
@@ -392,6 +392,13 @@ public:
 		      ZyppSel 		selectable,
 		      ZyppObj		zyppObj = 0 );
 
+    /**
+     * Constructor for root items: Creates a YQPkgObjList item that does not
+     * correspond to a ZYPP selectable. You need to overload _AND RUN_ init
+     * yourself then.
+     **/
+    YQPkgObjListItem( YQPkgObjList *	pkgObjList );
+
 protected:
     /**
      * Constructor for non-root items.
@@ -433,13 +440,13 @@ public:
     /**
      * Returns the (binary RPM) package status
      **/
-    ZyppStatus status() const;
+    virtual ZyppStatus status() const;
 
     /**
      * Returns 'true' if this selectable's status is set by a selection
      * (rather than by the user or by the dependency solver).
      **/
-    bool bySelection() const;
+    virtual bool bySelection() const;
 
     /**
      * Set the (binary RPM) package status.
@@ -585,7 +592,8 @@ public:
 protected:
 
     /**
-     * Initialize internal data and set fields accordingly.
+     * Initialize internal data and set fields accordingly. Only works for items
+     * presenting selectables - see YQPkgObjListItem
      **/
     void init();
 
@@ -659,7 +667,7 @@ public:
 		 const QRegExp &	regexp,
 		 int			column = 0 );
 
-    
+
     // Intentionally omitting virtual destructor:
     // No allocated objects, no other virtual methods,
     // no need to have a vtable for each instance of this class.
@@ -704,7 +712,7 @@ public:
     YQPkgObjList * parent() const { return _parent; }
 
     /**
-     * Check a list item against this exclude rule. 
+     * Check a list item against this exclude rule.
      * Returns 'true' if the item matches this exclude rule,
      * i.e. if it should be excluded.
      **/

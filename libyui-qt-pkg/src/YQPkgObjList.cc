@@ -889,6 +889,17 @@ YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList *	pkgObjList,
 }
 
 
+YQPkgObjListItem::YQPkgObjListItem( YQPkgObjList *	pkgObjList )
+    : QY2ListViewItem( pkgObjList )
+    , _pkgObjList( pkgObjList )
+    , _selectable( 0 )
+    , _zyppObj( 0 )
+    , _editable( true )
+    , _excluded( false )
+{
+}
+
+
 YQPkgObjListItem::~YQPkgObjListItem()
 {
     // NOP
@@ -1078,7 +1089,7 @@ YQPkgObjListItem::setStatusIcon()
 	if ( isBroken() )
 	{
             setIcon( brokenIconCol(), YQIconPool::warningSign() );
-	    
+
 	    yuiWarning() << "Broken object: " << _selectable->theObj()->name()
 			 << " - " << _selectable->theObj()->summary()
 			 << endl;

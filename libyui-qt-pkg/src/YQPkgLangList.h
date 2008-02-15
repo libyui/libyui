@@ -128,11 +128,28 @@ public:
      **/
     zypp::Locale zyppLang() const	{ return _zyppLang; }
 
+    /// overloaded
+    virtual void init();
 
     // Columns
 
     int statusCol()	const	{ return _langList->statusCol(); }
 
+    /**
+     * Returns the (binary RPM) package status
+     **/
+    virtual ZyppStatus status() const;
+
+    /**
+     * Returns 'true' if this selectable's status is set by a selection
+     * (rather than by the user or by the dependency solver).
+     **/
+    virtual bool bySelection() const;
+
+    /**
+     * Cycle the package status to the next valid value.
+     **/
+    virtual void cycleStatus();
 
 protected:
 
