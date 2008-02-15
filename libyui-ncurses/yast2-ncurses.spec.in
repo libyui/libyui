@@ -10,6 +10,7 @@ Provides:	yast2_ui
 Requires:	glibc-locale
 BuildRequires:	yast2-core-devel >= 2.16.33
 Requires:	yast2-core >= 2.16.33
+Recommends:	yast2-ncurses-pkg
 %description
 -
 
