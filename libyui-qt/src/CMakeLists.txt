@@ -47,7 +47,7 @@ SET( qt_yast_plugin_SRCS
      YQMultiProgressMeter.cc
      YQMultiSelectionBox.cc
      YQOptionalWidgetFactory.cc
-     YQPackageSelectorPlugin.cc
+     YQPackageSelectorPluginStub.cc
      YQPartitionSplitter.cc
      YQProgressBar.cc
      YQPushButton.cc
@@ -74,6 +74,73 @@ SET( qt_yast_plugin_SRCS
      YQBusyIndicator.cc
      )
 
+SET( yast_qt_HEADERS
+     QY2CharValidator.h
+     QY2ComboTabWidget.h
+     QY2DiskUsageList.h
+     QY2HelpDialog.h
+     QY2ListView.h
+     QY2Settings.h
+     QY2Styler.h
+     utf8.h
+     Y2CCQt.h
+     YFrameBuffer.h
+     YQAlignment.h
+     YQApplication.h
+     YQBarGraph.h
+     YQBusyIndicator.h
+     YQCheckBoxFrame.h
+     YQCheckBox.h
+     YQComboBox.h
+     YQDateField.h
+     YQDialog.h
+     YQDownloadProgress.h
+     YQDumbTab.h
+     YQEmpty.h
+     YQFrame.h
+     YQGenericButton.h
+     YQi18n.h
+     YQIconPool.h
+     YQImage.h
+     YQInputField.h
+     YQIntField.h
+     YQLabel.h
+     YQLayoutBox.h
+     YQLogView.h
+     YQMainWinDock.h
+     YQMenuButton.h
+     YQMultiLineEdit.h
+     YQMultiProgressMeter.h
+     YQMultiSelectionBox.h
+     YQOptionalWidgetFactory.h
+     YQPackageSelectorPluginIf.h
+     YQPackageSelectorPluginStub.h
+     YQPartitionSplitter.h
+     YQProgressBar.h
+     YQPushButton.h
+     YQRadioButtonGroup.h
+     YQRadioButton.h
+     YQReplacePoint.h
+     YQRichText.h
+     YQSelectionBox.h
+     YQSignalBlocker.h
+     YQSlider.h
+     YQSpacing.h
+     YQSquash.h
+     YQTable.h
+     YQTimeField.h
+     YQTimezoneSelector.h
+     YQTree.h
+     YQUIComponent.h
+     YQUI.h
+     YQWidgetCaption.h
+     YQWidgetFactory.h
+     YQWizardButton.h
+     YQWizard.h
+)
+
+INSTALL(  FILES ${yast_qt_HEADERS} DESTINATION "${YAST_INCLUDE_DIR}/yast2-qt" )
+
 QT4_AUTOMOC(${qt_yast_plugin_SRCS})
 
 QT4_WRAP_UI(qt_yast_plugin_SRCS QHelpDialog.ui)
@@ -85,17 +152,18 @@ INCLUDE_DIRECTORIES( ${YAST_INCLUDE_DIR}/ycp-ui )
 
 ADD_LIBRARY( py2qt SHARED ${qt_yast_plugin_SRCS})
 TARGET_LINK_LIBRARIES( py2qt ${YAST_LIBRARY} )
+TARGET_LINK_LIBRARIES( py2qt ${YAST_YUI_LIBRARY} )
 TARGET_LINK_LIBRARIES( py2qt ${YAST_YCP_LIBRARY} )
 TARGET_LINK_LIBRARIES( py2qt ${QT_QTCORE_LIBRARY} )
 TARGET_LINK_LIBRARIES( py2qt ${QT_QTGUI_LIBRARY} )
 TARGET_LINK_LIBRARIES( py2qt ${YAST_PLUGIN_UI_LIBRARY} )
+TARGET_LINK_LIBRARIES( py2qt dl X11 )
 SET_TARGET_PROPERTIES( py2qt PROPERTIES SOVERSION 2 )
+#SET_TARGET_PROPERTIES( py2qt PROPERTIES LINK_FLAGS -Wl,--no-undefined )
 
 INSTALL(TARGETS py2qt LIBRARY DESTINATION ${YAST_PLUGIN_DIR} )
 
 INSTALL(FILES lang_fonts DESTINATION ${CMAKE_INSTALL_PREFIX}/share/YaST2/data )
-
-ADD_SUBDIRECTORY(pkg)
 
 #SET_TARGET_PROPERTIES( y2lang_qt PROPERTIES PREFIX "" )
 

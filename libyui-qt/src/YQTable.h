@@ -20,6 +20,7 @@
 #define YQTable_h
 
 #include <QFrame>
+#include "QY2ListView.h"
 #include "YTable.h"
 
 

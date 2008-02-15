@@ -2,7 +2,8 @@
 
 
 @HEADER@
-BuildRequires:	libzypp-devel docbook-xsl-stylesheets doxygen libdrm-devel libjpeg-devel libxcrypt-devel libxslt perl-XML-Writer libqt4-devel sgml-skel update-desktop-files
+BuildRequires:	docbook-xsl-stylesheets doxygen libdrm-devel libjpeg-devel libxcrypt-devel libxslt perl-XML-Writer libqt4-devel sgml-skel update-desktop-files
+BuildRequires:  cmake
 
 Summary:	-
 BuildRequires:  yast2-devtools >= 2.16.3
@@ -19,6 +20,14 @@ Provides:	y2qt
 Obsoletes:	y2qt
 
 %description
+-
+
+%package devel
+Summary: -
+Group: Development/Libraries
+Requires:    yast2-qt = %{version}
+
+%description devel
 -
 
 %prep
@@ -55,8 +64,9 @@ rm -rf "$RPM_BUILD_ROOT"
 %defattr (-, root, root)
 %_libdir/YaST2/plugin/libpy2qt.so.*
 %_libdir/YaST2/plugin/libpy2qt.so
-%_libdir/YaST2/plugin/libpy2qt_pkg.so.*
-%_libdir/YaST2/plugin/libpy2qt_pkg.so
 %_prefix/share/YaST2/data/lang_fonts
+
+%files devel
+%_includedir/*
 
 %changelog

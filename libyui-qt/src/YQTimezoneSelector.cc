@@ -34,7 +34,7 @@
 #include <QDebug>
 #include <QToolTip>
 
-#include "pkg/icons/zoom-in.xpm"
+#include "icons/zoom-in.xpm"
 
 class YQTimezoneSelectorPrivate
 {

@@ -38,7 +38,6 @@
 #include "YQMenuButton.h"
 #include "YQMultiLineEdit.h"
 #include "YQMultiSelectionBox.h"
-#include "pkg/YQPackageSelector.h"
 #include "YQProgressBar.h"
 #include "YQPushButton.h"
 #include "YQRadioButton.h"
@@ -64,7 +63,7 @@ class YQWidgetFactory: public YWidgetFactory
 public:
     // Note: Using covariant return types for all createSomeWidget() methods
     // (returning YQSomeWidget where the base class declares virtual methods that
-    // return YSomeWidget) 
+    // return YSomeWidget)
 
 
     //
@@ -107,7 +106,7 @@ public:
     virtual YQLogView *		createLogView		( YWidget * parent, const string & label, int visibleLines, int storedLines = 0 );
     virtual YQMultiSelectionBox *createMultiSelectionBox( YWidget * parent, const string & label );
 
-    virtual YQPackageSelector *	createPackageSelector	( YWidget * parent, long modeFlags = 0 );
+    virtual YPackageSelector *	createPackageSelector	( YWidget * parent, long modeFlags = 0 );
     virtual YWidget *		createPkgSpecial	( YWidget * parent, const string & name ); // NCurses only, will throw exception in the Qt UI
 
     //

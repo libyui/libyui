@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Feb 15 08:35:48 CET 2008 - coolo@suse.de
+
+- split out yast2-qt-pkg
+
+-------------------------------------------------------------------
 Fri Feb  8 17:26:17 CET 2008 - tgoettlicher@suse.de
 
 - Made popup dialogs modal

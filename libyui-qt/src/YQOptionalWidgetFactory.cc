@@ -19,7 +19,7 @@
 #include "YQOptionalWidgetFactory.h"
 #include "YQApplication.h"
 #include "YUIException.h"
-#include "YQPackageSelectorPlugin.h"
+#include "YQPackageSelectorPluginStub.h"
 #include "YQWizard.h"
 #include "YQTimezoneSelector.h"
 
@@ -155,16 +155,6 @@ bool YQOptionalWidgetFactory::hasPatternSelector()
     return true;
 }
 
-YQPatternSelector *
-YQOptionalWidgetFactory::createPatternSelector( YWidget * parent, long modeFlags )
-{
-    YQPackageSelectorPlugin * plugin = YQApplication::packageSelectorPlugin();
-
-    if ( plugin )
-	return plugin->createPatternSelector( parent, modeFlags );
-    else
-	return 0;
-}
 
 
 
@@ -172,18 +162,6 @@ bool YQOptionalWidgetFactory::hasSimplePatchSelector()
 {
     return true;
 }
-
-YQSimplePatchSelector *
-YQOptionalWidgetFactory::createSimplePatchSelector( YWidget * parent, long modeFlags )
-{
-    YQPackageSelectorPlugin * plugin = YQApplication::packageSelectorPlugin();
-
-    if ( plugin )
-	return plugin->createSimplePatchSelector( parent, modeFlags );
-    else
-	return 0;
-}
-
 
 
 bool YQOptionalWidgetFactory::hasMultiProgressMeter()
@@ -271,4 +249,24 @@ YQOptionalWidgetFactory::createTimezoneSelector( YWidget * parent,
     return new YQTimezoneSelector( parent, pixmap, timezones );
 }
 
+YWidget *
+YQOptionalWidgetFactory::createPatternSelector(YWidget* parent, long modeFlags)
+{
+    YQPackageSelectorPluginStub * plugin = YQApplication::packageSelectorPlugin();
 
+    if ( plugin )
+        return plugin->createPatternSelector( parent, modeFlags );
+    else
+        return 0;
+}
+
+YWidget *
+YQOptionalWidgetFactory::createSimplePatchSelector(YWidget* parent, long modeFlags)
+{
+    YQPackageSelectorPluginStub * plugin = YQApplication::packageSelectorPlugin();
+
+    if ( plugin )
+        return plugin->createSimplePatchSelector( parent, modeFlags );
+    else
+        return 0;
+}

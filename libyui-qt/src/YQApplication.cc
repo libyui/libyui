@@ -36,7 +36,7 @@
 #include "YQi18n.h"
 
 #include "YQApplication.h"
-#include "YQPackageSelectorPlugin.h"
+#include "YQPackageSelectorPluginStub.h"
 
 
 YQApplication::YQApplication()
@@ -526,61 +526,42 @@ YQApplication::askForSaveFileName( const QString & startWith,
 }
 
 
-YQPackageSelectorPlugin *
-YQApplication::packageSelectorPlugin()
-{
-    static YQPackageSelectorPlugin * plugin = 0;
-
-    if ( ! plugin )
-    {
-	plugin = new YQPackageSelectorPlugin();
-
-	// This is a deliberate memory leak: If an application requires a
-	// PackageSelector, it is a package selection application by
-	// definition. In this case, the qt_pkg plugin is intentionally kept
-	// open to avoid repeated start-up cost of the plugin and libzypp.
-    }
-
-    return plugin;
-}
-
-
-int 
+int
 YQApplication::displayWidth()
 {
     return qApp->desktop()->width();
 }
 
 
-int 
+int
 YQApplication::displayHeight()
 {
     return qApp->desktop()->height();
 }
 
 
-int 
+int
 YQApplication::displayDepth()
 {
     return qApp->desktop()->depth();
 }
 
 
-long 
+long
 YQApplication::displayColors()
 {
     return 1L << qApp->desktop()->depth();
 }
 
 
-int 
+int
 YQApplication::defaultWidth()
 {
     return YQUI::ui()->defaultSize( YD_HORIZ );
 }
 
 
-int 
+int
 YQApplication::defaultHeight()
 {
     return YQUI::ui()->defaultSize( YD_VERT );
@@ -677,6 +658,24 @@ void YQApplication::makeScreenShot( const string & fileName )
 {
     YQUI::ui()->makeScreenShot( fileName );
 }
+
+YQPackageSelectorPluginStub * YQApplication::packageSelectorPlugin()
+{
+    static YQPackageSelectorPluginStub * plugin = 0;
+
+    if ( ! plugin )
+    {
+        plugin = new YQPackageSelectorPluginStub();
+
+        // This is a deliberate memory leak: If an application requires a
+        // PackageSelector, it is a package selection application by
+        // definition. In this case, the ncurses_pkg plugin is intentionally
+        // kept open to avoid repeated start-up cost of the plugin and libzypp.
+    }
+
+    return plugin;
+}
+
 
 
 #include "YQApplication.moc"

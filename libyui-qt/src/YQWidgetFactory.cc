@@ -23,7 +23,7 @@
 #include "YQWidgetFactory.h"
 #include "YQApplication.h"
 #include "YUIException.h"
-#include "YQPackageSelectorPlugin.h"
+#include "YQPackageSelectorPluginStub.h"
 #include "YQMainWinDock.h"
 
 #include <string>
@@ -289,19 +289,16 @@ YQWidgetFactory::createMultiSelectionBox( YWidget * parent, const string & label
     return multiSelectionBox;
 }
 
-
-
-YQPackageSelector *
-YQWidgetFactory::createPackageSelector( YWidget * parent, long modeFlags )
+YPackageSelector*
+YQWidgetFactory::createPackageSelector(YWidget* parent, long modeFlags)
 {
-    YQPackageSelectorPlugin * plugin = YQApplication::packageSelectorPlugin();
+    YQPackageSelectorPluginStub * plugin = YQApplication::packageSelectorPlugin();
 
     if ( plugin )
-	return plugin->createPackageSelector( parent, modeFlags );
+        return plugin->createPackageSelector( parent, modeFlags );
     else
-	return 0;
+        return 0;
 }
-
 
 YWidget *
 YQWidgetFactory::createPkgSpecial( YWidget * , const string & )

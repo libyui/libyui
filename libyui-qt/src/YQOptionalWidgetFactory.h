@@ -28,8 +28,6 @@
 #include "YQDumbTab.h"
 #include "YQMultiProgressMeter.h"
 #include "YQPartitionSplitter.h"
-#include "pkg/YQPatternSelector.h"
-#include "pkg/YQSimplePatchSelector.h"
 #include "YQSlider.h"
 #include "YQTimeField.h"
 
@@ -83,10 +81,10 @@ public:
     virtual YQBarGraph *		createBarGraph		( YWidget * parent );
 
     virtual bool			hasPatternSelector();
-    virtual YQPatternSelector *		createPatternSelector	( YWidget * parent, long modeFlags = 0 );
+    virtual YWidget *		        createPatternSelector	( YWidget * parent, long modeFlags = 0 );
 
     virtual bool			hasSimplePatchSelector();
-    virtual YQSimplePatchSelector *	createSimplePatchSelector( YWidget * parent, long modeFlags = 0 );
+    virtual YWidget *	                createSimplePatchSelector( YWidget * parent, long modeFlags = 0 );
 
     virtual bool			hasMultiProgressMeter();
     virtual YQMultiProgressMeter *	createMultiProgressMeter( YWidget * parent, YUIDimension dim, const vector<float> & maxValues );
@@ -112,7 +110,7 @@ public:
 
     virtual bool                        hasTimezoneSelector();
     virtual YTimezoneSelector *         createTimezoneSelector( YWidget * parent,
-								const string & pixmap, 
+								const string & pixmap,
 								const map<string,string> & timezones );
 
 protected:

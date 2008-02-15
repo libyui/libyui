@@ -24,6 +24,7 @@
 #include <Qt/qtranslator.h>
 #include <qfont.h>
 
+#include "YQPackageSelectorPluginStub.h"
 #include "QY2Settings.h"
 #include "YApplication.h"
 
@@ -205,7 +206,7 @@ public:
      * Return the package selector plugin singleton or creates it
      * (including loading the plugin lib) if it does not exist yet.
      **/
-    static YQPackageSelectorPlugin * packageSelectorPlugin();
+    static YQPackageSelectorPluginStub * packageSelectorPlugin();
 
     /**
      * A mouse click with the wrong mouse button was detected - e.g., a right
@@ -214,7 +215,7 @@ public:
      * installation. Ask him if he would like his mouse temporarily configured
      * as a left-handed mouse.
      *
-     * This status can be queried with YQApplication::leftHandedMouse(). 
+     * This status can be queried with YQApplication::leftHandedMouse().
      **/
     void maybeLeftHandedUser();
 
@@ -236,21 +237,21 @@ public:
 
     /**
      * Change the (mouse) cursor to indicate busy status.
-     * 
+     *
      * Reimplemented from YApplication.
      **/
     virtual void busyCursor();
 
     /**
      * Change the (mouse) cursor back from busy status to normal.
-     * 
+     *
      * Reimplemented from YApplication.
      **/
     virtual void normalCursor();
 
     /**
      * Make a screen shot and save it to the specified file.
-     * 
+     *
      * Reimplemented from YApplication.
      **/
     virtual void makeScreenShot( const string & fileName );
@@ -331,14 +332,14 @@ protected:
     //
     // Misc
     //
-    
+
     bool _autoFonts;
     int  _autoNormalFontSize;
     int  _autoHeadingFontSize;
 
     bool _leftHandedMouse;
     bool _askedForLeftHandedMouse;
-    
+
 
 };
 

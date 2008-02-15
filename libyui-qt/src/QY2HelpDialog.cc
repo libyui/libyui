@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QTextObject>
 
-#include "pkg/icons/viewmag.xpm"
+#include "icons/viewmag.xpm"
 
 QY2HelpDialog::QY2HelpDialog( const QString& helpText, QWidget *parent )
     : QDialog( parent )
