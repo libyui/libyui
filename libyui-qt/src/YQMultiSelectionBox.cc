@@ -336,6 +336,28 @@ YQMultiSelectionBoxItem::YQMultiSelectionBoxItem( YQMultiSelectionBox *	parent,
     setText(0, fromUTF8( yItem->label() ));
     setCheckState( 0, Qt::Unchecked );
     _serial = _item_count++;
+
+    if ( yItem->hasIconName() )
+    {
+	// _table is checked against 0 in the constructor
+
+	string	iconName = parent->iconFullPath( cell->iconName() );
+	QPixmap	icon	 = QPixmap( iconName.c_str() );
+
+	if ( icon.isNull() )
+	    yuiWarning() << "Can't load icon " << iconName << endl;
+	else
+	    setIcon( 0 /* column */, icon );
+    }
+    /*
+    else // No pixmap name
+    {
+	if ( ! data( column, Qt::DecorationRole ).isNull() ) // Was there a pixmap before?
+	{
+	    setData( column, Qt::DecorationRole, QPixmap() ); // Set empty pixmap
+	}
+    }
+    */
 }
 
 #include "YQMultiSelectionBox.moc"
