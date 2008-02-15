@@ -35,7 +35,7 @@ SET(qt_yast_pkg_plugin_SRCS
     YQPkgDiskUsageWarningDialog.cc
     YQPkgFileListView.cc
     YQPkgGenericDetailsView.cc
-#    YQPkgLangList.cc
+    YQPkgLangList.cc
     YQPkgList.cc
     YQPkgObjList.cc
     YQPkgPatchFilterView.cc
@@ -48,7 +48,6 @@ SET(qt_yast_pkg_plugin_SRCS
     YQPkgRpmGroupTagsFilterView.cc
     YQPkgSearchFilterView.cc
     YQPkgSelDescriptionView.cc
-#    YQPkgSelList.cc
     YQPkgSelMapper.cc
     YQPkgStatusFilterView.cc
     YQPkgTechnicalDetailsView.cc

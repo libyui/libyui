@@ -70,17 +70,12 @@ YQPkgLangList::fillList()
     clear();
     yuiDebug() << "Filling language list" << endl;
 
-
-    for ( ZyppPoolIterator it = zyppLangBegin();
-	  it != zyppLangEnd();
+    zypp::LocaleSet locales = zypp::getZYpp()->pool().getAvailableLocales();
+    for ( zypp::LocaleSet::const_iterator it = locales.begin();
+	  it != locales.end();
 	  ++it )
     {
-	ZyppLang zyppLang = tryCastToZyppLang( (*it)->theObj() );
-
-	if ( zyppLang )
-	    addLangItem( *it, zyppLang );
-	else
-	    yuiError() << "Found non-Language selectable" << endl;
+        addLangItem( *it );
     }
 
     yuiDebug() << "Language list filled" << endl;
@@ -102,57 +97,12 @@ YQPkgLangList::filter()
 
     if ( selection() )
     {
-	ZyppLang lang = selection()->zyppLang();
+        zypp::Locale lang = selection()->zyppLang();
 
-	if ( lang )
-	{
-	    string currentLang = lang->name();
+        string currentLang = lang.name();
 
-	    //
-	    // Iterate over all selectables in pool
-	    //
-
-	    for ( ZyppPoolIterator it = zyppPkgBegin();
-		  it != zyppPkgEnd();
-		  ++it )
-	    {
-		ZyppObj zyppObj = (*it)->theObj();
-
-		if ( zyppObj )
-		{
-		    //
-		    // Iterate over all "freshens" dependencies of this object
-		    //
-
-		    zypp::CapSet freshens = zyppObj->dep( zypp::Dep::FRESHENS );
-
-		    for ( zypp::CapSet::const_iterator cap_it = freshens.begin();
-			  cap_it != freshens.end();
-			  ++cap_it )
-		    {
-			if ( (*cap_it).index() == currentLang )	// obj freshens this language
-			{
-			    ZyppPkg pkg = tryCastToZyppPkg( zyppObj );
-
-			    if ( pkg )
-			    {
-				yuiDebug() << "Found pkg " << pkg->name()
-					   << " for lang " << currentLang
-					   << endl;
-
-				emit filterMatch( *it, pkg );
-			    }
-			    else
-			    {
-				yuiWarning() << "Found non-pkg obj " << pkg->name()
-					     << " for lang "         << currentLang
-					     << endl;
-			    }
-			}
-		    }
-		}
-	    }
-	}
+#warning FIXME: need a way to find out what packages provide language support
+        // not yet implemented
     }
 
     emit filterFinished();
@@ -160,16 +110,9 @@ YQPkgLangList::filter()
 
 
 void
-YQPkgLangList::addLangItem( ZyppSel	selectable,
-			    ZyppLang 	zyppLang )
+YQPkgLangList::addLangItem( const zypp::Locale &zyppLang )
 {
-    if ( ! selectable )
-    {
-	yuiError() << "NULL ZyppSel!" << endl;
-	return;
-    }
-
-    new YQPkgLangListItem( this, selectable, zyppLang );
+    new YQPkgLangListItem( this, zyppLang );
 }
 
 
@@ -190,10 +133,8 @@ YQPkgLangList::selection() const
 
 
 YQPkgLangListItem::YQPkgLangListItem( YQPkgLangList * 	langList,
-				      ZyppSel		selectable,
-				      ZyppLang 		lang 		)
-    : YQPkgObjListItem( langList, selectable, lang )
-    , _langList( langList )
+                                      const zypp::Locale &lang )
+    : YQPkgObjListItem( langList, 0 )
     , _zyppLang( lang )
 {
 }

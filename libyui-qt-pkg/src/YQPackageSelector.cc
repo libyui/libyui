@@ -328,8 +328,6 @@ YQPackageSelector::layoutFilters( QWidget *parent )
     //
     // Languages view
     //
-#warning LangList
-#if FIXME
     _langList = new YQPkgLangList( parent );
     Q_CHECK_PTR( _langList );
 
@@ -342,7 +340,6 @@ YQPackageSelector::layoutFilters( QWidget *parent )
     connect( this,		SIGNAL( refresh()			),
 	     _langList,		SLOT  ( updateItemStates()		) );
 
-#endif
 
     //
     // Repository view

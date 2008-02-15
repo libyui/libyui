@@ -25,8 +25,6 @@
 
 class YQPkgLangListItem;
 
-typedef QString ZyppLang;
-
 /**
  * @short Display a list of zypp::Selection objects.
  **/
@@ -69,9 +67,7 @@ public slots:
      * this slot. Remember to connect filterStart() to clear() (inherited from
      * QListView).
      **/
-    void addLangItem( ZyppSel		selectable,
-		      ZyppLang 	lang );
-
+    void addLangItem( const zypp::Locale & lang );
 
 public:
 
@@ -120,8 +116,7 @@ public:
      * manager object that 'pkg' refers to.
      **/
     YQPkgLangListItem( YQPkgLangList *	pkgSelList,
-		       ZyppSel		selectable,
-		       ZyppLang		lang		);
+                       const zypp::Locale     &lang );
 
     /**
      * Destructor
@@ -131,7 +126,7 @@ public:
     /**
      * Returns the original object within the package manager backend.
      **/
-    ZyppLang zyppLang() const	{ return _zyppLang; }
+    zypp::Locale zyppLang() const	{ return _zyppLang; }
 
 
     // Columns
@@ -153,7 +148,7 @@ protected:
     // Data members
 
     YQPkgLangList *	_langList;
-    ZyppLang		_zyppLang;
+    zypp::Locale	_zyppLang;
 };
 
 
