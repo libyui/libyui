@@ -285,21 +285,22 @@ bool NCPkgPopupRepo::fillRepoList()
 
 ZyppProduct NCPkgPopupRepo::findProductForRepo( ZyppRepo repo)
 {
-
     ZyppProduct product;
 
-    zypp::ResStore::iterator it = repo.resolvables().begin();
+    zypp::ResPool::byKind_iterator it = zypp::ResPool::instance().byKindBegin( zypp::ResKind::product );
+    zypp::ResPool::byKind_iterator end = zypp::ResPool::instance().byKindEnd( zypp::ResKind::product );
 
-    while( it != repo.resolvables().end() && !product )
+    while( it != end && !product )
     {
 	//Single product - most common case
-        product = zypp::dynamic_pointer_cast<zypp::Product>( *it );
+        if ( it->resolvable()->repoInfo().alias() == repo.info().alias() )
+            product = zypp::asKind<zypp::Product>( it->resolvable() );
         it++;
     }
 
-    while ( it != repo.resolvables().end() )
+    while ( it != end )
     {
-        if ( zypp::dynamic_pointer_cast<zypp::Product>( *it ) )
+        if ( it->resolvable()->repoInfo().alias() == repo.info().alias() )
         {
 	    //Aw, multiple product found, we don't want those
             NCWAR << "Multiple products in repository " <<

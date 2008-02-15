@@ -176,7 +176,7 @@ class NCPackageSelector
     YMenuItem * visibleInfo;		// current visible package info (description, file list, ...)
     
     // internal helper functions (format list of string) 
-    string createRelLine( const zypp::CapSet & info );
+    string createRelLine( const zypp::Capabilities & info );
     // internal use (copies tree items got from YPkgRpmGroupTagsFilterView)
     void cloneTree( YStringTreeItem * parentOrig, YTreeItem * parentClone );
 

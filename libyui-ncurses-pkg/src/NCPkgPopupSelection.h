@@ -57,7 +57,6 @@ protected:
 public:
 
     enum SelType {
-	S_Selection,
 	S_Pattern,
 	S_Language,
 	S_Unknown

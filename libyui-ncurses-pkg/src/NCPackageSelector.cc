@@ -277,9 +277,6 @@ void NCPackageSelector::createPopups()
 {
     if ( !youMode )
     {
-	// create the selections popup
-	selectionPopup = new NCPkgPopupSelection( wpos( 1, 1 ), this, NCPkgPopupSelection::S_Selection );
-
 	// create the patterns popup
 	patternPopup =  new NCPkgPopupSelection( wpos( 1, 1 ), this, NCPkgPopupSelection::S_Pattern );
 
@@ -322,7 +319,6 @@ YStringTreeItem * NCPackageSelector::getDefaultRpmGroup()
 
 void NCPackageSelector::createFilterMenu()
 {
-    bool selections;
     bool patterns;
 
     // create the pattern popup
@@ -335,18 +331,8 @@ void NCPackageSelector::createFilterMenu()
     {
 	patterns = false;
     }
-    // create the selections popup
-    if ( ! zyppPool().empty<zypp::Selection>() )
-    {
 
-	selections = true;
-    }
-    else
-    {
-	selections = false;
-    }
-
-    if ( selections && !patterns )
+    if ( !patterns )
     {
 	// ReplaceWidget and show menu entry Selections instead of Patterns
 	char menu[4000];
@@ -377,7 +363,7 @@ void NCPackageSelector::createFilterMenu()
 	}
 
     }
-    else if ( patterns && selections )
+    else if ( patterns )
     {
 	// ReplaceWidget and show menu entries Patterns AND Selections
 	char menu[4000];
@@ -428,9 +414,7 @@ void NCPackageSelector::saveState ()
     p.saveState<zypp::Message> ();
     p.saveState<zypp::Script> ();
 
-    p.saveState<zypp::Selection> ();
     p.saveState<zypp::Pattern> ();
-    p.saveState<zypp::Language> ();
 }
 
 void NCPackageSelector::restoreState ()
@@ -445,9 +429,7 @@ void NCPackageSelector::restoreState ()
     p.restoreState<zypp::Message> ();
     p.restoreState<zypp::Script> ();
 
-    p.restoreState<zypp::Selection> ();
     p.restoreState<zypp::Pattern> ();
-    p.restoreState<zypp::Language> ();
 }
 
 bool NCPackageSelector::diffState ()
@@ -471,11 +453,7 @@ bool NCPackageSelector::diffState ()
     diff = diff || p.diffState<zypp::Script> ();
     log << diff << endl;
 
-    diff = diff || p.diffState<zypp::Selection> ();
-    log << diff << endl;
     diff = diff || p.diffState<zypp::Pattern> ();
-    log << diff << endl;
-    diff = diff || p.diffState<zypp::Language> ();
     log << diff << endl;
     return diff;
 }
@@ -769,12 +747,12 @@ bool NCPackageSelector::fillSearchList( const string & expr,
 	    }
 	    if ( checkProvides )
 	    {
-		zypp::CapSet value = pkg->dep (zypp::Dep::PROVIDES);
+		zypp::Capabilities value = pkg->dep (zypp::Dep::PROVIDES);
 		provides = createRelLine( value );
 	    }
 	    if ( checkRequires )
 	    {
-		zypp::CapSet value = pkg->dep (zypp::Dep::REQUIRES);
+		zypp::Capabilities value = pkg->dep (zypp::Dep::REQUIRES);
 		requires = createRelLine( value );
 	    }
 	    if ( ( checkName && match( pkg->name(), expr, ignoreCase )) ||
@@ -937,9 +915,9 @@ bool NCPackageSelector::fillUpdateList( )
     // clear the package table
     packageList->itemsCleared ();
 
-    list<zypp::PoolItem_Ref> problemList = zypp::getZYpp()->resolver()->problematicUpdateItems();
+    list<zypp::PoolItem> problemList = zypp::getZYpp()->resolver()->problematicUpdateItems();
 
-    for ( list<zypp::PoolItem_Ref>::const_iterator it = problemList.begin();
+    for ( list<zypp::PoolItem>::const_iterator it = problemList.begin();
 	  it != problemList.end();
 	  ++it )
     {
@@ -2863,7 +2841,7 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
 
 	// show Provides:
 	text += NCPkgNames::Provides();
-	zypp::CapSet provides = package->dep (zypp::Dep::PROVIDES);
+	zypp::Capabilities provides = package->dep (zypp::Dep::PROVIDES);
 	text += createRelLine(provides);
 	text += "<br>";
 
@@ -2912,7 +2890,7 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
 	for (size_t i = 0; i < sizeof (deptypes)/sizeof(deptypes[0]); ++i)
 	{
 	    zypp::Dep deptype = deptypes[i];
-	    zypp::CapSet relations = pkgPtr->dep (deptype);
+	    zypp::Capabilities relations = pkgPtr->dep (deptype);
 	    string relline = createRelLine (relations);
 	    if (!relline.empty ())
 	    {
@@ -3033,10 +3011,10 @@ void NCPackageSelector::updatePackageList()
 //
 // createProvides
 //
-string NCPackageSelector::createRelLine( const zypp::CapSet & info )
+string NCPackageSelector::createRelLine( const zypp::Capabilities & info )
 {
     string text = "";
-    zypp::CapSet::const_iterator
+    zypp::Capabilities::const_iterator
 	b = info.begin (),
 	e = info.end (),
 	it;

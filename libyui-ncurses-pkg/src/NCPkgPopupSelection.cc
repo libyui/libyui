@@ -57,8 +57,7 @@ NCPkgPopupSelection::NCPkgPopupSelection( const wpos at,  NCPackageSelector * pk
 {
   switch ( type ) 
   {   
-    case S_Pattern:
-    case S_Selection: {
+    case S_Pattern: {
         createLayout( NCPkgNames::SelectionLabel() );
 	break;
     }
@@ -111,8 +110,7 @@ void NCPkgPopupSelection::createLayout( const string & label )
   NCPkgStatusStrategy * strat = new SelectionStatStrategy();
 
   switch (type) {
-      case S_Pattern:
-      case S_Selection: {
+      case S_Pattern: {
   	  sel->setTableType( NCPkgTable::T_Selections, strat );
 	  break;
       }
@@ -176,16 +174,15 @@ NCursesEvent & NCPkgPopupSelection::showSelectionPopup( )
 
 	    // show the package list
 	    std::set<std::string> packages;
-	    ZyppSelection selPtr = tryCastToZyppSelection (objPtr);
 	    ZyppPattern patPtr = tryCastToZyppPattern (objPtr);
-	    ZyppLang langPtr = tryCastToZyppLang (objPtr);
-	    if (selPtr)
-		packages = selPtr->install_packages ();
-	    else if (patPtr)
+	    // FIXME ZyppLang langPtr = tryCastToZyppLang (objPtr);
+	    if (patPtr)
 	    {
 		zypp::ui::PatternContents patternContents( patPtr );
 		packages = patternContents.install_packages();
 	    }
+#warning Languages support
+#if FIXME
 	    else if (langPtr)
 	    {
 		string currentLang = langPtr->name();
@@ -220,6 +217,7 @@ NCursesEvent & NCPkgPopupSelection::showSelectionPopup( )
                 }
 	
 	    }
+#endif
 
 	    packager->showSelPackages( getCurrentLine(), packages );
 	    // showDiskSpace() moved to NCPkgTable.cc (show/check diskspace
@@ -322,20 +320,6 @@ bool NCPkgPopupSelection::postAgain( )
 
 ///////////////////////////////////////////////////////////////////
 //
-// OrderFunc 
-//
-bool order( ZyppSel slb1, ZyppSel slb2 )
-{
-    ZyppSelection ptr1 = tryCastToZyppSelection (slb1->theObj());
-    ZyppSelection ptr2 = tryCastToZyppSelection (slb2->theObj());
-    if ( !ptr1 || !ptr2 )
-	return false;
-    else
-	return ptr1->order() < ptr2->order();
-}
-
-///////////////////////////////////////////////////////////////////
-//
 // OrderFuncPattern 
 //
 bool orderPattern( ZyppSel slb1, ZyppSel slb2 )
@@ -354,12 +338,16 @@ bool orderPattern( ZyppSel slb1, ZyppSel slb2 )
 //
 bool orderLang( ZyppSel slb1, ZyppSel slb2 )
 {
+#warning Language support
+#if FIXME
     ZyppLang ptr1 = tryCastToZyppLang (slb1->theObj());
     ZyppLang ptr2 = tryCastToZyppLang (slb2->theObj());
     if ( !ptr1 || !ptr2 )
 	return false;
     else
 	return ptr1->name() < ptr2->name();
+#endif
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -380,27 +368,6 @@ bool NCPkgPopupSelection::fillSelectionList( NCPkgTable * sel, SelType type  )
     
     switch ( type )
     {
-	case S_Selection:
-	    {
-		for ( i = zyppSelectionsBegin () ; i != zyppSelectionsEnd ();  ++i )
-		{
-		    ZyppObj resPtr = (*i)->theObj();	    
-		    bool show;
-
-		    ZyppSelection selPtr = tryCastToZyppSelection (resPtr);
-		    show = selPtr && selPtr->visible() && !selPtr->isBase();
-		    if (show)
-		    {
-			NCMIL << resPtr->kind () <<": " <<  resPtr->name()
-			      << ", initial status: " << (*i)->status() << endl;
-
-			slbList.push_back (*i);
-		    }
-		}
-		slbList.sort( order );
-
-		break;
-	    }
 	case S_Pattern:
 	    {
 		for ( i = zyppPatternsBegin () ; i != zyppPatternsEnd ();  ++i )
@@ -422,6 +389,8 @@ bool NCPkgPopupSelection::fillSelectionList( NCPkgTable * sel, SelType type  )
 		slbList.sort( orderPattern );
 		break;
 	    }
+#warning Languages support
+#if FIXME
         case S_Language:
 	    {
 		for (i = zyppLangBegin (); i != zyppLangEnd (); ++i )
@@ -438,7 +407,7 @@ bool NCPkgPopupSelection::fillSelectionList( NCPkgTable * sel, SelType type  )
 		slbList.sort( orderLang );
 		break;
 	    }
-        
+#endif
 	default:
 	    NCERR << "Selecion type not handled: " << type << endl;
     }
@@ -451,8 +420,7 @@ bool NCPkgPopupSelection::fillSelectionList( NCPkgTable * sel, SelType type  )
 	pkgLine.clear();
 
 	switch (type) {
-	    case S_Pattern:
-	    case S_Selection: {
+	    case S_Pattern: {
 		pkgLine.push_back( resPtr->summary(LOCALE) ); // the description
 		break;	
 	    }
