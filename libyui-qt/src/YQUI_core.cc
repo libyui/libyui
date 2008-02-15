@@ -106,13 +106,13 @@ void YQUI::init_ui()
 	    cmdLine.replace( 0, "YaST2" );
     }
 
-    int	    argc = cmdLine.argc();
+        _ui_argc = cmdLine.argc();
     char ** argv = cmdLine.argv();
 
     // YaST2 has no use for the glib event loop
     setenv( "QT_NO_GLIB", "1", 1 );
 
-    new QApplication( argc, argv );
+    new QApplication( _ui_argc, argv );
 
     _signalReceiver = new YQUISignalReceiver();
     _busyCursorTimer = new QTimer( _signalReceiver );
@@ -126,7 +126,7 @@ void YQUI::init_ui()
     // Qt keeps track to a global QApplication in qApp.
     Q_CHECK_PTR( qApp );
 
-    processCommandLineArgs( argc, argv );
+    processCommandLineArgs( _ui_argc, argv );
     calcDefaultSize();
 
     _styler = new QY2Styler( qApp );
@@ -225,7 +225,7 @@ void YQUI::init_ui()
     yuiMilestone() << "YQUI constructor end. Thread ID: "
 		   << hex << QThread::currentThreadId () << dec
 		   << endl;
-    
+
     qApp->processEvents();
 }
 

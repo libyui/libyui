@@ -137,7 +137,7 @@ public:
 
     /**
      * Return 'true' if defaultsize windows should not get window manager
-     * borders / frames. 
+     * borders / frames.
      **/
     bool noBorder() const { return _noborder; }
     /**
@@ -205,7 +205,7 @@ public:
      * Show mouse cursor indicating busy state.
      **/
     void busyCursor();
-    
+
     /**
      * Show normal mouse cursor not indicating busy status.
      **/
@@ -263,7 +263,7 @@ public:
      **/
     bool usingVisionImpairedPalette() const { return _usingVisionImpairedPalette; }
 
-    
+
 protected:
 
     /**
@@ -290,7 +290,7 @@ protected:
      * Reimplemented from YUI.
      **/
     virtual void idleLoop( int fd_ycp );
-    
+
     /**
      * Timeout during TimeoutUserInput() / WaitForEvent()
      **/
@@ -298,7 +298,7 @@ protected:
 
     void leaveIdleLoop();
 
-    
+
     //
     // Data members
     //
@@ -381,17 +381,20 @@ protected:
 
     /*
      * Reads the style sheet, parses some comments and passes it to qapp
-     */ 
+     */
     QY2Styler * _styler;
 
     YQUISignalReceiver * _signalReceiver;
+
+    // Qt copies the _reference_ to argc, so we need to store argc forever
+    int _ui_argc;
 };
 
 
 /**
  * Helper class that acts as a Qt signal receiver for YQUI.
  * YQUI itself cannot be a QObject to avoid problems with starting up the UI
- * with multiple threads. 
+ * with multiple threads.
  **/
 class YQUISignalReceiver : public QObject
 {
