@@ -341,7 +341,7 @@ YQMultiSelectionBoxItem::YQMultiSelectionBoxItem( YQMultiSelectionBox *	parent,
     {
 	// _table is checked against 0 in the constructor
 
-	string	iconName = parent->iconFullPath( cell->iconName() );
+	string	iconName = parent->iconFullPath( yItem->iconName() );
 	QPixmap	icon	 = QPixmap( iconName.c_str() );
 
 	if ( icon.isNull() )
