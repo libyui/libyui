@@ -29,17 +29,12 @@ class YQPackageSelectorPluginIf
 
   public:
 
-    virtual ~YQPackageSelectorPluginIf() = 0;
+    virtual ~YQPackageSelectorPluginIf() {}
 
     virtual YPackageSelector *createPackageSelector( YWidget *parent, long modeFlags ) = 0 ;
-
-    virtual YEvent *runPkgSelection (YDialog *currentDialog, YWidget *packageSelector ) = 0;
-
-    virtual YWidget *createPkgSpecial (YWidget *parent, const string &subwidget ) = 0;
 
     virtual YWidget *createPatternSelector( YWidget * parent, long modeFlags ) = 0;
 
     virtual YWidget *createSimplePatchSelector( YWidget * parent, long modeFlags ) = 0;
-
 };
 #endif

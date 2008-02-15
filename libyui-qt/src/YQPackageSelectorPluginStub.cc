@@ -36,6 +36,12 @@ YQPackageSelectorPluginStub::YQPackageSelectorPluginStub()
 
 
     impl =  (YQPackageSelectorPluginIf*) locateSymbol("PSP");
+    if ( !impl )
+    {
+        yuiError() << "Plugin " << PLUGIN_BASE_NAME << " does not provide PSP symbol" << endl;
+        exit( 1 );
+    }
+
 }
 
 
@@ -71,34 +77,5 @@ YWidget * YQPackageSelectorPluginStub::createSimplePatchSelector( YWidget * pare
                                                                            long modeFlags )
 {
     return impl->createSimplePatchSelector( parent, modeFlags );
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YQPackageSelectorPluign::createPkgSpecial
-//	METHOD TYPE : YWidget
-//
-//	DESCRIPTION : creates special widgets used for the package selection
-//		      dialog (which do not have a corresponding widget in qt-ui)
-//
-YWidget * YQPackageSelectorPluginStub::createPkgSpecial( YWidget *parent, const string &subwidget )
-{
-    return impl->createPkgSpecial( parent, subwidget );
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YQPackageSelectorPLugin::runPkgSelection
-//	METHOD TYPE : YEvent *
-//
-//	DESCRIPTION : Implementation of UI builtin RunPkgSelection() which
-//		      has to be called after OpenDialog( `PackageSelector() ).
-//
-YEvent * YQPackageSelectorPluginStub::runPkgSelection(  YDialog * dialog,
-						    YWidget * selector )
-{
-    return impl->runPkgSelection( dialog, selector );
 }
 

@@ -69,19 +69,6 @@ public:
                                                  long		modeFlags );
 
 
-    /**
-     * Fills the PackageSelector widget (runs the package selection).
-     */
-    virtual YEvent * runPkgSelection( YDialog *currentDialog,
-				      YWidget * packageSelector );
-
-    /**
-     * Create a special widget
-     */
-    virtual YWidget * createPkgSpecial( YWidget *parent,
-					const string &subwidget );
-
-
     YQPackageSelectorPluginIf *impl ;
 };
 
