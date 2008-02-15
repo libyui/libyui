@@ -1,0 +1,2 @@
+#!/usr/bin/perl -n
+print "$ARGV: $_" if /#ifdef FIXME/../#endif/;

@@ -1,0 +1,5 @@
+-------------------------------------------------------------------
+Thu Feb 14 15:01:26 CET 2008 - coolo@suse.de
+
+- split off the package manager off yast2-qt
+

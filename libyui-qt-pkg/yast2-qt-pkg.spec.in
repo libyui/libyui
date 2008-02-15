@@ -1,0 +1,49 @@
+@HEADERCOMMENT@
+
+
+@HEADER@
+BuildRequires:	libzypp-devel docbook-xsl-stylesheets doxygen libdrm-devel libjpeg-devel libxcrypt-devel
+BuildRequires:  libxslt perl-XML-Writer libqt4-devel sgml-skel update-desktop-files
+
+Summary:	-
+BuildRequires:  yast2-devtools >= 2.16.3
+BuildRequires:  yast2-core-devel >= 2.16.34
+BuildRequires:  yast2-qt-devel >= 2.16.25
+Requires:       yast2-core       >= 2.16.34
+Requires:       yast2_theme >= 2.16.1
+Requires:	libzypp >= 3.11.8
+Provides:	yast2-qt:/usr/lib/YaST2/plugin/libpy2qt_pkg.so.2
+
+%description
+-
+
+%prep
+%setup
+
+%build
+mkdir build
+cd build
+export CFLAGS="$RPM_OPT_FLAGS"
+export CXXFLAGS="$CFLAGS"
+cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} \
+      -DLIB=%{_lib} \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_SKIP_RPATH=1 \
+      ..
+make %{?jobs:-j %jobs} VERBOSE=1
+
+%install
+cd build
+make install DESTDIR=$RPM_BUILD_ROOT
+cd ..
+
+%clean
+rm -rf "$RPM_BUILD_ROOT"
+
+
+%files
+%defattr (-, root, root)
+%_libdir/YaST2/plugin/libpy2qt_pkg.so.*
+%_libdir/YaST2/plugin/libpy2qt_pkg.so
+
+%changelog
