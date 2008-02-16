@@ -67,6 +67,7 @@ rm -rf "$RPM_BUILD_ROOT"
 %_prefix/share/YaST2/data/lang_fonts
 
 %files devel
+%defattr (-, root, root)
 %_includedir/*
 
 %changelog
