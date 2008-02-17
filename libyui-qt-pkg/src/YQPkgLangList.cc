@@ -23,6 +23,7 @@
 #include "YUILog.h"
 #include <qregexp.h>
 
+#include <QHeaderView>
 #include "YQi18n.h"
 #include "utf8.h"
 #include "YQPkgLangList.h"
@@ -48,6 +49,12 @@ YQPkgLangList::YQPkgLangList( QWidget * parent )
     setAllColumnsShowFocus( true );
     setHeaderLabels(headers);
 
+    setSortingEnabled( true );
+    header()->setSortIndicatorShown( true );
+    header()->setClickable( true );
+
+    sortByColumn( nameCol(), Qt::AscendingOrder );
+
     connect( this, 	SIGNAL( currentItemChanged        ( QTreeWidgetItem *, QTreeWidgetItem * ) ),
 	     this, 	SLOT  ( filter()                                    ) );
 
@@ -71,9 +78,6 @@ YQPkgLangList::fillList()
     yuiDebug() << "Filling language list" << endl;
 
     zypp::LocaleSet locales = zypp::getZYpp()->pool().getAvailableLocales();
-#warning FIXME: had to hardcode examples for now
-    locales.insert( zypp::Locale( "de_DE" ) );
-    locales.insert( zypp::Locale( "de" ) );
 
     for ( zypp::LocaleSet::const_iterator it = locales.begin();
 	  it != locales.end();
@@ -132,8 +136,26 @@ YQPkgLangList::selection() const
 }
 
 
+void
+YQPkgLangList::updateActions( YQPkgObjListItem * item)
+{
+#if 0
+    YQPkgLangListItem *litem;
+    if ( !item)
+        litem = dynamic_cast<YQPkgLangListItem *> ( currentItem() );
+    else
+        litem = dynamic_cast<YQPkgLangListItem *> ( item );
+#endif
 
+    actionSetCurrentInstall->setEnabled( true );
+    actionSetCurrentDontInstall->setEnabled( true );
+    actionSetCurrentTaboo->setEnabled( true );
+    actionSetCurrentProtected->setEnabled( false );
 
+    actionSetCurrentKeepInstalled->setEnabled( false );
+    actionSetCurrentDelete->setEnabled( false );
+    actionSetCurrentUpdate->setEnabled( false );
+}
 
 
 YQPkgLangListItem::YQPkgLangListItem( YQPkgLangList * 	langList,

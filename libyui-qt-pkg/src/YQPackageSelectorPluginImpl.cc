@@ -35,7 +35,9 @@
 //                    term of the package selection dialog, creates the widget
 //		      tree and creates the YQPackageSelector.
 //
+extern "C" {
 YQPackageSelectorPluginImpl PSP;
+}
 
 YPackageSelector * YQPackageSelectorPluginImpl::createPackageSelector( YWidget * parent,
                                                                        long modeFlags )

@@ -69,6 +69,11 @@ public slots:
      **/
     void addLangItem( const zypp::Locale & lang );
 
+    /**
+     * update from base class to not access selectables
+     **/
+    virtual void updateActions( YQPkgObjListItem * item = 0);
+
 public:
 
     /**
