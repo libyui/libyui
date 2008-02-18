@@ -92,9 +92,6 @@ protected:
     
 public:
 
-//    Y2NCursesUI( bool with_threads, const char * macro_file, Y2Component *callback );
-//    virtual ~Y2NCursesUI();
-
     /**
      * Access the global Y2NCursesUI.
      */
@@ -129,6 +126,15 @@ public:
      **/
     NCPackageSelectorPluginStub * packageSelectorPlugin();
 };
+
+
+/**
+ * Create a new UI if there is none yet or return the existing one if there is.
+ *
+ * This is the UI plugin's interface to the outside world, so don't change the
+ * name or signature! 
+ **/
+YUI * createUI( bool withThreads );
 
 
 #endif // YNCursesUI_h

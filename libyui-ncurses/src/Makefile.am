@@ -11,8 +11,6 @@ plugin_LTLIBRARIES = libpy2ncurses.la
 libpy2ncurses_la_LDFLAGS = -version-info 2:0
 
 libpy2ncurses_la_LIBADD =		\
-	-L$(plugindir)			\
-	-lpy2UI				\
 	-lncursesw -lpanelw
 
 #libpy2ncurses_la_LIBADD =		\
@@ -93,9 +91,7 @@ pkginclude_HEADERS = 		\
 	NCAskForFile.h		\
 	NCstyle.braille.h NCstyle.mono.h	\
 	NCstyle.linux.h NCstyle.xterm.h		\
-	NCstyle.rxvt.h				\
-	Y2CCNCursesUI.h				\
-	YNCursesComponent.h
+	NCstyle.rxvt.h
 
 install-pkgincludeHEADERS: $(pkgi/nclude_HEADERS)
 	@$(NORMAL_INSTALL)
@@ -175,16 +171,10 @@ libpy2ncurses_la_SOURCES =		\
 	NCPopupTextEntry.cc		\
 	NCPopupInfo.cc			\
 	NCAskForDirectory.cc		\
-	NCAskForFile.cc			\
-					\
-	Y2CCNCursesUI.cc
+	NCAskForFile.cc
 
 
-#libpy2ncurses_la_SOURCES = $(liby2ncurses_la_SOURCES)	\
-#	Y2CCNCursesUI.cc Y2CCNCursesUI.h	\
-#	YNCursesComponent.h
-
-INCLUDES = -I$(includedir) -I$(includedir)/yui -I$(includedir)/ycp-ui 
+INCLUDES = -I$(includedir) -I$(includedir)/yui -I$(includedir)/ycp-ui
 
 lang2encoding.cc:	lang2encoding.tab
 	./lang2encoding.tab > lang2encoding.cc

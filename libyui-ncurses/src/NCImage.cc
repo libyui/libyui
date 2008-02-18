@@ -29,7 +29,7 @@
 //	DESCRIPTION :
 //
 NCImage::NCImage( YWidget * parent, string defaulttext, bool animated )
-    : YImage( parent, defaulttext, animated ) 
+    : YImage( parent, defaulttext, animated )
     , NCWidget( parent )
     , label( defaulttext )
 {

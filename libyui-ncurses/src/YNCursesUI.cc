@@ -41,6 +41,16 @@
 
 extern string language2encoding( string lang );
 
+
+YUI * createUI( bool withThreads )
+{
+    if ( ! YNCursesUI::ui() )
+	new YNCursesUI( withThreads );
+    
+    return YNCursesUI::ui();
+}
+
+
 YNCursesUI::YNCursesUI( bool withThreads )
     : YUI( withThreads )
 {

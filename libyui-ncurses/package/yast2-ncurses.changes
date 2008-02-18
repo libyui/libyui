@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb 18 18:38:14 CET 2008 - sh@suse.de
+
+- NCurses UI no longer depends on libycp or liby2 (Y2Component...)
+- V 2.16.16 
+
+-------------------------------------------------------------------
 Fri Feb 15 14:06:02 CET 2008 - kmachalkova@suse.cz
 
 - Old-style logging replaced by yui logging (sh)
