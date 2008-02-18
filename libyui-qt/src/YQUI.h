@@ -68,6 +68,11 @@ public:
      **/
     static YQUI * ui() { return _ui; }
 
+    /**
+     * Post-constructor initialization. If running with threads, this has to be
+     * called in the UI thread. Any subsequent calls will do nothing.
+     **/
+    void initUI();
 
 protected:
     /**
@@ -281,8 +286,6 @@ protected:
      **/
     void calcDefaultSize();
 
-    void init_ui();
-
     /**
      * Idle around until fd_ycp is readable and handle repaints.
      * This is only used when a separate ui thread is running.
@@ -409,6 +412,15 @@ public slots:
     void slotUserInputTimeout();
     void slotLeaveIdleLoop();
 };
+
+
+/**
+ * Create a new UI if there is none yet or return the existing one if there is.
+ *
+ * This is the UI plugin's interface to the outside world, so don't change the
+ * name or signature! 
+ **/
+YUI * createUI( bool withThreads );
 
 
 #endif // YQUI_h

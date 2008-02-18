@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb 18 18:37:19 CET 2008 - sh@suse.de
+
+- Qt-UI now no longer depends on libycp or liby2 (Y2Component...)
+- V 2.16.27 
+
+-------------------------------------------------------------------
 Sat Feb 16 20:03:42 CET 2008 - coolo@suse.de
 
 - fix filelist of devel 

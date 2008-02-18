@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      	YQUI_core.cc
+  File:		YQUI_core.cc
 
   Author:	Stefan Hundhammer <sh@suse.de>
 
@@ -55,6 +55,20 @@ static void qMessageHandler( QtMsgType type, const char * msg );
 YQUI * YQUI::_ui = 0;
 
 
+YUI * createUI( bool withThreads )
+{
+    if ( ! YQUI::ui() )
+    {
+	YQUI * ui = new YQUI( withThreads );
+
+	if ( ui && ! withThreads )
+	    ui->initUI();
+    }
+
+    return YQUI::ui();
+}
+
+
 YQUI::YQUI( bool withThreads )
     : YUI( withThreads )
 #if 0
@@ -63,29 +77,32 @@ YQUI::YQUI( bool withThreads )
     , _do_exit_loop( false )
     , _eventLoop( 0 )
 {
-    yuiMilestone() << "YQUI constructor start" << endl;
+    yuiDebug() << "YQUI constructor start" << endl;
 
     _ui				= this;
     _uiInitialized		= false;
     _fatalError			= false;
     _fullscreen			= false;
-    _usingVisionImpairedPalette	= false;
-    _noborder                   = false;
-    screenShotNameTemplate 	= "";
-    blockedLevel               = 0;
+    _usingVisionImpairedPalette = false;
+    _noborder			= false;
+    screenShotNameTemplate	= "";
+    blockedLevel		= 0;
 
     qInstallMsgHandler( qMessageHandler );
+    
+    yuiDebug() << "YQUI constructor finished" << endl;
 
     topmostConstructorHasFinished();
 }
 
 
-void YQUI::init_ui()
+void YQUI::initUI()
 {
     if ( _uiInitialized )
-        return;
+	return;
 
     _uiInitialized = true;
+    yuiDebug() << "Initializing Qt part" << endl;
 
     YCommandLine cmdLine; // Retrieve command line args from /proc/<pid>/cmdline
     string progName;
@@ -106,7 +123,7 @@ void YQUI::init_ui()
 	    cmdLine.replace( 0, "YaST2" );
     }
 
-        _ui_argc = cmdLine.argc();
+	_ui_argc = cmdLine.argc();
     char ** argv = cmdLine.argv();
 
     // YaST2 has no use for the glib event loop
@@ -132,9 +149,9 @@ void YQUI::init_ui()
     _styler = new QY2Styler( qApp );
     QString style = getenv("Y2STYLE");
     if ( !style.isEmpty() )
-        _styler->setStyleSheet( style );
+	_styler->setStyleSheet( style );
     else
-        _styler->setStyleSheet( "style.qss" );
+	_styler->setStyleSheet( "style.qss" );
 
     // Event loop object. Required since a YaST2 UI needs to react to commands
     // from the YCP command stream as well as to X11 / Qt events.
@@ -211,18 +228,18 @@ void YQUI::init_ui()
 		   << ( qt_lib ? "successful" : "failed" )
 		   << endl;
 
-    //  Init other stuff
+    //	Init other stuff
 
     qApp->setFont( yqApp()->currentFont() );
     busyCursor();
 
-    QObject::connect(  _userInputTimer,	SIGNAL( timeout()          ),
-                       _signalReceiver,		SLOT  ( slotUserInputTimeout() ) );
+    QObject::connect(  _userInputTimer, SIGNAL( timeout()	   ),
+		       _signalReceiver,		SLOT  ( slotUserInputTimeout() ) );
 
     QObject::connect(  _busyCursorTimer,	SIGNAL( timeout()	),
-                       _signalReceiver,		SLOT  ( slotBusyCursor() ) );
+		       _signalReceiver,		SLOT  ( slotBusyCursor() ) );
 
-    yuiMilestone() << "YQUI constructor end. Thread ID: "
+    yuiMilestone() << "YQUI initialized. Thread ID: 0x"
 		   << hex << QThread::currentThreadId () << dec
 		   << endl;
 
@@ -252,8 +269,8 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 	    if ( opt.startsWith( "--" ) )
 		opt.remove(0, 1);
 
-	    if      ( opt == QString( "-fullscreen"	) )	_fullscreen 	= true;
-	    else if ( opt == QString( "-noborder" 	) )	_noborder	= true;
+	    if	    ( opt == QString( "-fullscreen"	) )	_fullscreen	= true;
+	    else if ( opt == QString( "-noborder"	) )	_noborder	= true;
 	    else if ( opt == QString( "-auto-font"	) )	yqApp()->setAutoFonts( true );
 	    else if ( opt == QString( "-auto-fonts"	) )	yqApp()->setAutoFonts( true );
 	    // --macro is handled by YUI_component
@@ -262,13 +279,13 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 		fprintf( stderr,
 			 "Command line options for the YaST2 Qt UI:\n"
 			 "\n"
-			 "--nothreads   run without additional UI threads\n"
-			 "--fullscreen  use full screen for `opt(`defaultsize) dialogs\n"
-			 "--noborder    no window manager border for `opt(`defaultsize) dialogs\n"
+			 "--nothreads	run without additional UI threads\n"
+			 "--fullscreen	use full screen for `opt(`defaultsize) dialogs\n"
+			 "--noborder	no window manager border for `opt(`defaultsize) dialogs\n"
 			 "--auto-fonts	automatically pick fonts, disregard Qt standard settings\n"
-			 "--help        this help text\n"
+			 "--help	this help text\n"
 			 "\n"
-			 "--macro <macro-file>        play a macro right on startup\n"
+			 "--macro <macro-file>	      play a macro right on startup\n"
 			 "\n"
 			 "-no-wm, -noborder etc. are accepted as well as --no-wm, --noborder\n"
 			 "to maintain backwards compatibility.\n"
@@ -335,14 +352,14 @@ YQUI::createApplication()
 
 void YQUI::calcDefaultSize()
 {
-    QSize primaryScreenSize 	= qApp->desktop()->screenGeometry( qApp->desktop()->primaryScreen() ).size();
+    QSize primaryScreenSize	= qApp->desktop()->screenGeometry( qApp->desktop()->primaryScreen() ).size();
     QSize availableSize		= qApp->desktop()->availableGeometry().size();
 
     if ( _fullscreen )
     {
 	_defaultSize = availableSize;
 
-        yuiMilestone() << "-fullscreen: using "
+	yuiMilestone() << "-fullscreen: using "
 		       << _defaultSize.width() << " x " << _defaultSize.height()
 		       << "for `opt(`defaultsize)"
 		       << endl;
@@ -351,12 +368,12 @@ void YQUI::calcDefaultSize()
     {
 	// Get _defaultSize via -geometry command line option (if set)
 
-        // Set min defaultsize or figure one out if -geometry was not used
+	// Set min defaultsize or figure one out if -geometry was not used
 
 	if ( _defaultSize.width()  < 800 ||
 	     _defaultSize.height() < 600   )
 	{
-	    if ( primaryScreenSize.width() >= 1024 && primaryScreenSize.height() >= 768  )
+	    if ( primaryScreenSize.width() >= 1024 && primaryScreenSize.height() >= 768	 )
 	    {
 		// Scale down to 70% of screen size
 
@@ -384,19 +401,19 @@ void YQUI::calcDefaultSize()
 
 void YQUI::idleLoop( int fd_ycp )
 {
-    init_ui();
+    initUI();
 
     _leave_idle_loop = false;
 
     // process Qt events until fd_ycp is readable.
     QSocketNotifier * notifier = new QSocketNotifier( fd_ycp, QSocketNotifier::Read );
     QObject::connect( notifier,		SIGNAL( activated( int )    ),
-                      _signalReceiver,	SLOT  ( slotLeaveIdleLoop() ) );
+		      _signalReceiver,	SLOT  ( slotLeaveIdleLoop() ) );
 
     notifier->setEnabled( true );
 
     while ( !_leave_idle_loop )
-        _eventLoop->processEvents( QEventLoop::ExcludeUserInputEvents | QEventLoop::WaitForMoreEvents );
+	_eventLoop->processEvents( QEventLoop::ExcludeUserInputEvents | QEventLoop::WaitForMoreEvents );
 
     delete notifier;
 }
@@ -422,7 +439,7 @@ void YQUI::sendEvent( YEvent * event )
 
 YEvent * YQUI::userInput( int timeout_millisec )
 {
-    init_ui();
+    initUI();
 
     _eventHandler.blockEvents( false );
     _eventLoop->wakeUp();
@@ -434,7 +451,7 @@ YEvent * YQUI::userInput( int timeout_millisec )
 		   << endl;
 #endif
 
-    YEvent * 	event  = 0;
+    YEvent *	event  = 0;
     YDialog *	dialog = YDialog::currentDialog( false );
 
     _userInputTimer->stop();
@@ -449,7 +466,7 @@ YEvent * YQUI::userInput( int timeout_millisec )
 
 	normalCursor();
 	_do_exit_loop = true; // should exit_loop() be called in sendEvent()?
-        _eventLoop->exec();
+	_eventLoop->exec();
 	_do_exit_loop = false;
 
 	event = _eventHandler.consumePendingEvent();
@@ -514,23 +531,23 @@ YQUI::setTextdomain( const char * domain )
 
 void YQUI::blockEvents( bool block )
 {
-    init_ui();
+    initUI();
 
     if ( block )
     {
-        if ( ++blockedLevel == 1 )
-        {
-            _eventHandler.blockEvents( true );
-            _eventLoop->exit();
-        }
+	if ( ++blockedLevel == 1 )
+	{
+	    _eventHandler.blockEvents( true );
+	    _eventLoop->exit();
+	}
     }
     else
     {
-        if ( --blockedLevel == 0 )
-        {
-            _eventHandler.blockEvents( false );
-            _eventLoop->wakeUp();
-        }
+	if ( --blockedLevel == 0 )
+	{
+	    _eventHandler.blockEvents( false );
+	    _eventLoop->wakeUp();
+	}
     }
 }
 
@@ -587,12 +604,12 @@ qMessageHandler( QtMsgType type, const char * msg )
 	case QtCriticalMsg:
 	    yuiError() <<  "<qt-critical>" << msg << endl;
 #ifndef NDEBUG
-            //abort();
+	    //abort();
 #endif
 	    break;
 	case QtFatalMsg:
 	    yuiError() << "<qt-fatal> " << msg << endl;
-            abort();
+	    abort();
 	    exit(1);		// qt does the same
     }
 }
