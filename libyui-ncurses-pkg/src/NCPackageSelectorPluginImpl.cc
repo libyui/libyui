@@ -21,7 +21,9 @@
 #include "NCPackageSelectorStart.h"
 
 #include <YTableHeader.h>
-#include <Y2Log.h>
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -46,19 +48,19 @@ YPackageSelector * NCPackageSelectorPluginImpl::createPackageSelector( YWidget *
     }
     catch (const std::exception & e)
     {
-	UIERR << "Caught a std::exception: " << e.what () << endl;
+	yuiError() << "Caught a std::exception: " << e.what () << endl;
     }
     catch (...)
     {
-	UIERR << "Caught an unspecified exception" << endl;
+	yuiError() << "Caught an unspecified exception" << endl;
     }
 
     // FIXME - remove debug logging
     YDialog::currentDialog()->dumpWidgetTree();
     NCWidget * firstChild = dynamic_cast<NCWidget *>(YDialog::currentDialog()->firstChild());
     if ( firstChild )
-	NCMIL << "FIRST child: " << firstChild << endl;
-    NCMIL << "Selector: " << w << endl;
+	yuiMilestone() << "FIRST child: " << firstChild << endl;
+    yuiMilestone() << "Selector: " << w << endl;
     // FIXME ???
     return (YPackageSelector *)(w);
 }
@@ -79,24 +81,24 @@ YWidget * NCPackageSelectorPluginImpl::createPkgSpecial( YWidget *parent, const 
     
     if ( subwidget == "pkgTable" )
     {
-	NCDBG << "Creating a NCPkgTable" << endl;
+	yuiDebug() << "Creating a NCPkgTable" << endl;
 	try
 	{
-	    //UIERR << "Tady taky nic neni " << endl;	
+	    //yuiError() << "Tady taky nic neni " << endl;	
 	    w = new NCPkgTable( parent, tableHeader );
 	}
 	catch (const std::exception & e)
 	{
-	    UIERR << "Caught a std::exception: " << e.what () << endl;
+	    yuiError() << "Caught a std::exception: " << e.what () << endl;
 	}
 	catch (...)
 	{
-	    UIERR << "Caught an unspecified exception" << endl;
+	    yuiError() << "Caught an unspecified exception" << endl;
 	}
     }
     else
     {
-	NCERR <<  "PkgSpecial( "  << subwidget << " )  not found - take default `Label" << endl;
+	yuiError() <<  "PkgSpecial( "  << subwidget << " )  not found - take default `Label" << endl;
 	w = new NCLabel( parent, subwidget, false, false );
     }
 
@@ -117,16 +119,16 @@ YEvent * NCPackageSelectorPluginImpl::runPkgSelection(  YDialog * dialog,
 {
     NCPackageSelectorStart * ncSelector = 0;
 
-    NCMIL << "Calling runPkgSelection()" << endl;
+    yuiMilestone() << "Calling runPkgSelection()" << endl;
     
     if ( !dialog )
     {
-	UIERR << "ERROR package selection: No dialog existing." << endl;
+	yuiError() << "ERROR package selection: No dialog existing." << endl;
 	return 0;
     }
     if ( !selector )
     {
-	UIERR << "ERROR package selection: No package selector existing." << endl;
+	yuiError() << "ERROR package selection: No package selector existing." << endl;
 	return 0;
     }
     
@@ -143,27 +145,27 @@ YEvent * NCPackageSelectorPluginImpl::runPkgSelection(  YDialog * dialog,
 	try
 	{
 	    ncSelector->showDefaultList();
-	    NCMIL << "NCDialog: " << ncd << endl;
+	    yuiMilestone() << "NCDialog: " << ncd << endl;
 	    do
 	    {
 		event = ncd->userInput();
 		result = ncSelector->handleEvent( event );
-		NCDBG << "Result: " << (result?"true":"false") << endl;
+		yuiDebug() << "Result: " << (result?"true":"false") << endl;
 	    }
 	    while ( event != NCursesEvent::cancel && result == true );
 	}
 	catch (const std::exception & e)
 	{
-	    UIERR << "Caught a std::exception: " << e.what () << endl;
+	    yuiError() << "Caught a std::exception: " << e.what () << endl;
 	}
 	catch (...)
 	{
-	    UIERR << "Caught an unspecified exception" << endl;
+	    yuiError() << "Caught an unspecified exception" << endl;
 	}
     }
     else
     {
-	UIERR << "No NCPackageSelectorStart existing" << endl;
+	yuiError() << "No NCPackageSelectorStart existing" << endl;
     }
 
     if ( event.result != "" )
@@ -174,7 +176,7 @@ YEvent * NCPackageSelectorPluginImpl::runPkgSelection(  YDialog * dialog,
         while( YDialog::topmostDialog() != dialog ) {
 		YDialog::deleteTopmostDialog();
 	}
-	NCMIL << "Return value: " << event.result << endl;
+	yuiMilestone() << "Return value: " << event.result << endl;
 	return new YMenuEvent( event.result );
     }
     else

@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 
 
 #include "YMenuButton.h"
@@ -70,7 +72,7 @@ NCPkgPopupDiskspace::NCPkgPopupDiskspace( const wpos at, bool testMode )
 
     if ( testMode )
     {
-	NCMIL << "TESTMODE Diskspace" << endl;
+	yuiMilestone() << "TESTMODE Diskspace" << endl;
 	zypp::getZYpp()->setPartitions(zypp::DiskUsageCounter::detectMountPoints ());
 	testDiskUsage = zypp::getZYpp()->diskUsage();
     }
@@ -231,7 +233,7 @@ void NCPkgPopupDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & parti
 
     int	free	= ( totalSize - usedSize ) / FSize::MB;
 
-    NCMIL <<  "Partition: " << partition.dir << "  Used percent: "
+    yuiMilestone() <<  "Partition: " << partition.dir << "  Used percent: "
 	  << percent << "  Free: " << free << endl;
     
     if ( percent > MIN_PERCENT_WARN )
@@ -261,15 +263,15 @@ void NCPkgPopupDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & parti
 	overflowWarning.enterProximity();
 
 #ifdef TEST
-    NCMIL << "Overflow: " << "_inRange: " << (overflowWarning._inRange?"true":"false") << endl;
-    NCMIL << "Overflow: " << "_isClose: " << (overflowWarning._isClose?"true":"false") << endl;
-    NCMIL << "Overflow: " << "_hasBeenClose: " << (overflowWarning._hasBeenClose?"true":"false") << endl;
-    NCMIL << "Overflow: " << "_warningPosted: " << (overflowWarning._warningPosted?"true":"false") << endl;
+    yuiMilestone() << "Overflow: " << "_inRange: " << (overflowWarning._inRange?"true":"false") << endl;
+    yuiMilestone() << "Overflow: " << "_isClose: " << (overflowWarning._isClose?"true":"false") << endl;
+    yuiMilestone() << "Overflow: " << "_hasBeenClose: " << (overflowWarning._hasBeenClose?"true":"false") << endl;
+    yuiMilestone() << "Overflow: " << "_warningPosted: " << (overflowWarning._warningPosted?"true":"false") << endl;
 
-    NCMIL << "RunningOut: " << "_inRange: " << (runningOutWarning._inRange?"true":"false") << endl;
-    NCMIL << "RunningOut: " << "_isClose: " << (runningOutWarning._isClose?"true":"false") << endl;
-    NCMIL << "RunningOut: " << "_hasBeenClose: " << (runningOutWarning._hasBeenClose?"true":"false") << endl;
-    NCMIL << "RunningOut: " << "_warningPosted: " << (runningOutWarning._warningPosted?"true":"false") << endl;
+    yuiMilestone() << "RunningOut: " << "_inRange: " << (runningOutWarning._inRange?"true":"false") << endl;
+    yuiMilestone() << "RunningOut: " << "_isClose: " << (runningOutWarning._isClose?"true":"false") << endl;
+    yuiMilestone() << "RunningOut: " << "_hasBeenClose: " << (runningOutWarning._hasBeenClose?"true":"false") << endl;
+    yuiMilestone() << "RunningOut: " << "_warningPosted: " << (runningOutWarning._warningPosted?"true":"false") << endl;
 #endif
 }
 

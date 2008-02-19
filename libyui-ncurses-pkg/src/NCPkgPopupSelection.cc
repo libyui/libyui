@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCPkgPopupSelection.h"
 
 #include "YDialog.h"
@@ -119,7 +121,7 @@ void NCPkgPopupSelection::createLayout( const string & label )
 	  break;
       }
       default: {
-	  NCERR << "Unknown selection type" << endl; 	  
+	  yuiError() << "Unknown selection type" << endl; 	  
 	  break;
       }
   }
@@ -170,7 +172,7 @@ NCursesEvent & NCPkgPopupSelection::showSelectionPopup( )
 	ZyppObj objPtr = sel->getDataPointer( index );
 	if ( objPtr )
 	{
-	    NCMIL << "Current selection: " << getCurrentLine() << endl;
+	    yuiMilestone() << "Current selection: " << getCurrentLine() << endl;
 
 	    // show the package list
 	    std::set<std::string> packages;
@@ -206,7 +208,7 @@ NCursesEvent & NCPkgPopupSelection::showSelectionPopup( )
 
                                 if ( pkg )
                                 {
-                                    NCDBG <<  "Found pkg " << pkg->name().c_str() << "for lang "
+                                    yuiDebug() <<  "Found pkg " << pkg->name().c_str() << "for lang "
                                     << currentLang.c_str() << endl;
 
 				    packages.insert( pkg->name() );
@@ -380,7 +382,7 @@ bool NCPkgPopupSelection::fillSelectionList( NCPkgTable * sel, SelType type  )
 
 		    if (show)
 		    {
-			NCMIL << resPtr->kind () <<": " <<  resPtr->name()
+			yuiMilestone() << resPtr->kind () <<": " <<  resPtr->name()
 			      << ", initial status: " << (*i)->status() << endl;
 
 			slbList.push_back (*i);
@@ -399,7 +401,7 @@ bool NCPkgPopupSelection::fillSelectionList( NCPkgTable * sel, SelType type  )
 
 		    ZyppLang langPtr = tryCastToZyppLang (resPtr);
 
-		    NCMIL << resPtr->kind () <<": " <<  resPtr->name()
+		    yuiMilestone() << resPtr->kind () <<": " <<  resPtr->name()
 		    << ", initial status: " << (*i)->status() << endl;
 		    slbList.push_back (*i);
 
@@ -409,7 +411,7 @@ bool NCPkgPopupSelection::fillSelectionList( NCPkgTable * sel, SelType type  )
 	    }
 #endif
 	default:
-	    NCERR << "Selecion type not handled: " << type << endl;
+	    yuiError() << "Selecion type not handled: " << type << endl;
     }
     
     list<ZyppSel>::iterator listIt;

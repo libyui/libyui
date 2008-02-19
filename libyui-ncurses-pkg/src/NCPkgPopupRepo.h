@@ -55,7 +55,7 @@ public:
 
     //Nikdy, ale opravdu nikdy nenechavej v odvozene tride virtualni
     //destruktor, kdyz ani v puvodni neni, Bublino!
-    ~NCPkgRepoTag() { NCINT << "au!!!!" << endl; };
+    ~NCPkgRepoTag() { yuiError() << "au!!!!" << endl; };
 
     /*
      * Get repository reference from the line tag

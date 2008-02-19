@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCPkgPopupTree.h"
 
 #include "NCTree.h"
@@ -168,13 +170,13 @@ NCursesEvent NCPkgPopupTree::showFilterPopup( )
 		    // fill the package list 
 		    packager->fillPackageList( label, origItem ); 
 
-		    NCMIL << "Selected RPM group: " << label << endl;
+		    yuiMilestone() << "Selected RPM group: " << label << endl;
 		}
 	    }
 	}
 	else
 	{
-	    NCERR << "Current item not valid" << endl;	
+	    yuiError() << "Current item not valid" << endl;	
 	}
     }
     
@@ -221,7 +223,7 @@ void NCPkgPopupTree::addItem( YTreeItem * newItem )
 {
   if ( !filterTree )
   {
-      NCERR << "ERROR: rpm groups tree not available" << endl;
+      yuiError() << "ERROR: rpm groups tree not available" << endl;
       return;
   }
 
@@ -301,7 +303,7 @@ void NCPkgPopupTree::cloneTree( YStringTreeItem * parentOrig, NCRpmGroupItem * p
     
     while ( child )
     {
-	NCDBG << "Rpm group (translated): " << child->value().translation() << endl;
+	yuiDebug() << "Rpm group (translated): " << child->value().translation() << endl;
 
 	if ( parentClone )
 	{

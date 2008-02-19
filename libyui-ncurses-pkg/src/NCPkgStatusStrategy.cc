@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCPkgStatusStrategy.h"
 
 #include "NCTable.h"
@@ -60,7 +62,7 @@ ZyppStatus NCPkgStatusStrategy::getPackageStatus( ZyppSel slbPtr,
     }
     else
     {
-	NCERR << "Selectable pointer not valid" << endl;
+	yuiError() << "Selectable pointer not valid" << endl;
 	return S_NoInst;
     }
 }
@@ -77,13 +79,13 @@ bool NCPkgStatusStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr,
     
     if ( !slbPtr )
     {
-	NCERR << "Invalid package object" << endl;
+	yuiError() << "Invalid package object" << endl;
 	return false;
     }
 
     ok = slbPtr->set_status( newstatus );
 
-    NCMIL << "Set status of: " <<  slbPtr->name() << " to: "
+    yuiMilestone() << "Set status of: " <<  slbPtr->name() << " to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
     
     return ok;
@@ -197,7 +199,7 @@ bool NCPkgStatusStrategy::keyToStatus( const int & key,
 	    }
 	    break;
 	default:
-	    NCDBG <<  "Key not valid" << endl;
+	    yuiDebug() <<  "Key not valid" << endl;
 	    valid = false;
     }
 
@@ -254,7 +256,7 @@ bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
             }
 	    else
 	    {
-		NCWAR << "No candidate object for " << slbPtr->theObj()->name().c_str() << endl;
+		yuiWarning() << "No candidate object for " << slbPtr->theObj()->name().c_str() << endl;
 		newStatus = S_NoInst;
             }	
 	    break;
@@ -400,7 +402,7 @@ bool PatchStatStrategy::keyToStatus( const int & key,
 	    }
 	    break;
 	default:
-	    NCDBG <<  "Key not valid" << endl;
+	    yuiDebug() <<  "Key not valid" << endl;
 	    valid = false;
     }
 
@@ -479,12 +481,12 @@ bool PatchStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, Z
 
     if ( !slbPtr )
     {
-	NCERR << "Invalid patch object" << endl;
+	yuiError() << "Invalid patch object" << endl;
 	return false;
     }
 
     ok = slbPtr->set_status( newstatus );
-    NCMIL << "Set status of: " << slbPtr->name() << " to: "
+    yuiMilestone() << "Set status of: " << slbPtr->name() << " to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
 
     // do a solver run
@@ -518,12 +520,12 @@ bool SelectionStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPt
 
     if ( !slbPtr || !objPtr )
     {
-	NCERR << "Invalid selection" << endl;
+	yuiError() << "Invalid selection" << endl;
 	return false;
     }
 
     ok = slbPtr->set_status( newstatus );
-    NCMIL << "Set status of: " << slbPtr->name() << " to: "
+    yuiMilestone() << "Set status of: " << slbPtr->name() << " to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
 
     // do a solver run -> solver runs in NCPkgTable::changeStatus()
@@ -577,7 +579,7 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
 
     if ( newCandidate != slbPtr->candidateObj() )
     {
-	NCMIL << "CANDIDATE changed" << endl;
+	yuiMilestone() << "CANDIDATE changed" << endl;
 
 	// Change status of selectable
 	ZyppStatus status = slbPtr->status();
@@ -614,12 +616,12 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
 
 	// Set status
 	ok = slbPtr->set_status( status );
-	NCMIL << "Set status of: " << slbPtr->name() << " to: "
+	yuiMilestone() << "Set status of: " << slbPtr->name() << " to: "
 	  << status << " returns: " << (ok?"true":"false") << endl;
   
 	// Set candidate
 	ok = slbPtr->setCandidate( newCandidate );
-	NCMIL << "Set user candidate returns: " <<  (ok?"true":"false") << endl;
+	yuiMilestone() << "Set user candidate returns: " <<  (ok?"true":"false") << endl;
 
     }
 

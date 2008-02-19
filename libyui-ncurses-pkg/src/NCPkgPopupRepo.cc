@@ -16,7 +16,9 @@
 
 /-*/
 
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCPkgPopupRepo.h"
 
 #include "YDialog.h"
@@ -238,7 +240,7 @@ void NCPkgPopupRepo::createLayout( const string & label)
 
 bool NCPkgPopupRepo::fillRepoList()
 {
-    NCMIL << "Filling repository list" << endl;
+    yuiMilestone() << "Filling repository list" << endl;
 
     vector <string> oneLine;
 
@@ -303,7 +305,7 @@ ZyppProduct NCPkgPopupRepo::findProductForRepo( ZyppRepo repo)
         if ( it->resolvable()->repoInfo().alias() == repo.info().alias() )
         {
 	    //Aw, multiple product found, we don't want those
-            NCWAR << "Multiple products in repository " <<
+            yuiWarning() << "Multiple products in repository " <<
                      repo.info().alias().c_str() << endl;
             ZyppProduct null;
             return null;
@@ -315,7 +317,7 @@ ZyppProduct NCPkgPopupRepo::findProductForRepo( ZyppRepo repo)
    if ( !product )
    {
 	//bad luck, nothing found
-	NCMIL << "No product in repository " <<
+	yuiMilestone() << "No product in repository " <<
                  repo.info().alias().c_str() << endl;
    } 
 
@@ -420,7 +422,7 @@ NCursesEvent & NCPkgPopupRepo::showRepoPopup()
 	int index = repolist->getCurrentItem();
 	ZyppRepo repo = repolist->getRepo( index );
 
-        NCMIL << "Selected repository " << repo.info().alias().c_str() << endl;
+        yuiMilestone() << "Selected repository " << repo.info().alias().c_str() << endl;
 
 	//and show associated packages to the user
         packager->fillRepoFilterList( repo );

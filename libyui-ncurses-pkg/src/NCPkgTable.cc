@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCPkgTable.h"
 #include "NCTable.h"
@@ -122,7 +124,7 @@ NCPkgTable::NCPkgTable( YWidget * parent, YTableHeader * tableHeader )
 {
     fillHeader();
     
-    WIDDBG << endl;
+    yuiDebug() << endl;
 }
 
 
@@ -137,7 +139,7 @@ NCPkgTable::NCPkgTable( YWidget * parent, YTableHeader * tableHeader )
 NCPkgTable::~NCPkgTable()
 {
     delete statusStrategy;
-    WIDDBG << endl;
+    yuiDebug() << endl;
 }
 
 
@@ -232,7 +234,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    if ( objPtr )
 	    {
 		notify = objPtr->delnotify();
-		NCDBG << "DELETE message: " << notify << endl;
+		yuiDebug() << "DELETE message: " << notify << endl;
 		header = NCPkgNames::WarningLabel();
 	    }
 	break;
@@ -242,7 +244,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    if ( objPtr )
 	    {	
 		notify = objPtr->insnotify();
-		NCDBG << "NOTIFY message: " << notify << endl;
+		yuiDebug() << "NOTIFY message: " << notify << endl;
 		header = NCPkgNames::NotifyLabel();
 	    }
 	case S_Update:
@@ -300,7 +302,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 	    
 	    ok = false;
 	} else {
-	    NCMIL << "User confirmed license agreement for " << pkgName << endl;
+	    yuiMilestone() << "User confirmed license agreement for " << pkgName << endl;
 	    slbPtr->setLicenceConfirmed (true);
 	}
     }
@@ -547,7 +549,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 
     if ( !pkgPtr || !slbPtr )
     {
-	NCERR << "No valid package available" << endl;
+	yuiError() << "No valid package available" << endl;
 	return false;
     }
     
@@ -584,7 +586,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
    	    pkgLine.push_back( pkgPtr->summary() );  	// short description
 	    
 	    status = slbPtr->status(); // the package status
-	    NCMIL << "Status of " << slbPtr->name() << ": " << status << endl;
+	    yuiMilestone() << "Status of " << slbPtr->name() << ": " << status << endl;
 	    zypp::ByteCount size = pkgPtr->size();     	// installed size
 	    pkgLine.push_back( size.asString( 8 ) );  // format size
 
@@ -704,7 +706,7 @@ bool NCPkgTable::createPatchEntry ( ZyppPatch patchPtr, ZyppSel	selectable )
     
     if ( !patchPtr || !selectable )
     {
-	NCERR << "No valid patch available" << endl;
+	yuiError() << "No valid patch available" << endl;
 	return false;
     }
 
@@ -872,7 +874,7 @@ bool NCPkgTable::SourceInstall( bool install )
     
     if ( !objPtr )
     {
-	NCERR << "Invalid Pointer" << endl;
+	yuiError() << "Invalid Pointer" << endl;
 	return false;
     }
     ZyppSel selPtr = objPtr->getSelectable();
@@ -880,7 +882,7 @@ bool NCPkgTable::SourceInstall( bool install )
     
     if ( !selPtr  || !currentLine )
     {
-	NCERR << "Invalid Selectable" << endl;
+	yuiError() << "Invalid Selectable" << endl;
 	return false;
     }
 
@@ -889,14 +891,14 @@ bool NCPkgTable::SourceInstall( bool install )
     if ( install && selPtr->providesSources() )
     {
 	ok = selPtr->set_source_install( true );
-	NCMIL << "Set source install returns: " << (ok?"true":"false") << endl;
+	yuiMilestone() << "Set source install returns: " << (ok?"true":"false") << endl;
 	if ( currentCol )
 	    currentCol->SetLabel( NClabel( " x " ) );
     }
     else if ( !install && selPtr->source_install() )
     {
 	ok = selPtr->set_source_install( false );
-	NCMIL << "ReSet source install returns: " << (ok?"true":"false") << endl;
+	yuiMilestone() << "ReSet source install returns: " << (ok?"true":"false") << endl;
 	if ( currentCol )
 	    currentCol->SetLabel( NClabel( "   " ) );
     }
@@ -1017,7 +1019,7 @@ bool NCPkgTable::changeListObjStatus( NCPkgTableListAction type )
 		    break;
 		}
 		default:
-		    NCERR << "Unknown list action" << endl;
+		    yuiError() << "Unknown list action" << endl;
 	    }
 
 	    if ( ok )

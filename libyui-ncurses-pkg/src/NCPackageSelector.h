@@ -20,7 +20,9 @@
 #define NCPackageSelector_h
 
 #include <iosfwd>
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 
 #include "YNCursesUI.h"
 #include "NCPkgNames.h"
@@ -575,7 +577,7 @@ class NCPackageSelector
     void clearVerifiedPkgs() {
 	if ( !verified_pkgs.empty() )
 	{
-	    NCMIL << "Discarding auto-dependency changes" << endl;
+	    yuiMilestone() << "Discarding auto-dependency changes" << endl;
 	    verified_pkgs.clear();
 	}
     }

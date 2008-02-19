@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCPackageSelectorStart.h"
 #include "NCPushButton.h"
@@ -84,7 +86,7 @@ NCPackageSelectorStart::NCPackageSelectorStart( YWidget * parent,
 	    packager->createYouLayout( this, type );
     }
     
-    WIDDBG << endl;
+    yuiDebug() << endl;
     wstate = NC::WSdumb;
 }
 

@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 
 #include "YMenuButton.h"
 #include "YDialog.h"
@@ -159,7 +161,7 @@ bool NCPkgPopupTable::fillAutoChanges( NCPkgTable * pkgTable )
 	ignoredNames = userWantedNames;
 
     for ( set<string>::iterator it = ignoredNames.begin(); it != ignoredNames.end(); ++it )
-	NCMIL << "Ignoring: " << *it << endl;
+	yuiMilestone() << "Ignoring: " << *it << endl;
 	 
     ZyppPoolIterator
 	b = zyppPkgBegin(),
@@ -178,7 +180,7 @@ bool NCPkgPopupTable::fillAutoChanges( NCPkgTable * pkgTable )
 		ZyppPkg pkgPtr = tryCastToZyppPkg (slb->theObj());
 		if ( pkgPtr )
 		{
-		    NCMIL << "The status of " << pkgPtr->name() << " has automatically changed" << endl;
+		    yuiMilestone() << "The status of " << pkgPtr->name() << " has automatically changed" << endl;
 		    pkgTable->createListEntry( pkgPtr, slb );
 		    //also add to 'already verified' set
 		    packager->insertVerifiedPkg( pkgPtr->name() );

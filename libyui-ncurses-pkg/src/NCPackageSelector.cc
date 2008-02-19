@@ -242,7 +242,7 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, YWidget * wRoot, long mod
 	if ( zyppPkg )
 	{
 	    _rpmGroupsTree->addRpmGroup (zyppPkg->group ());
-	    NCDBG << "Adding group: " << zyppPkg->group() << endl;
+	    yuiDebug() << "Adding group: " << zyppPkg->group() << endl;
 	}
     }
 
@@ -438,7 +438,7 @@ bool NCPackageSelector::diffState ()
 
     bool diff = false;
 
-    ostream & log = UIMIL;
+    ostream & log = yuiMilestone();
     log << "diffState" << endl;
     diff = diff || p.diffState<zypp::Package> ();
     log << diff << endl;
@@ -569,20 +569,20 @@ bool NCPackageSelector::fillAvailableList( NCPkgTable * pkgTable, ZyppSel select
 
     if ( !pkgTable )
     {
-	NCERR << "No table widget for available packages existing" << endl;
+	yuiError() << "No table widget for available packages existing" << endl;
 	return false;
     }
 
     if ( !selectable )
     {
-	NCERR << "Package pointer not valid" << endl;
+	yuiError() << "Package pointer not valid" << endl;
 	return false;
     }
 
     // clear the package table
     pkgTable->itemsCleared ();
 
-    NCDBG << "Number of available packages: " << selectable->availableObjs() << endl;
+    yuiDebug() << "Number of available packages: " << selectable->availableObjs() << endl;
 
     // show all availables
     zypp::ui::Selectable::available_iterator
@@ -628,7 +628,7 @@ bool NCPackageSelector::showSelPackages( const string & label, const set<string>
 
     if ( !packageList )
     {
-	UIERR << "Widget is not a valid NCPkgTable widget" << endl;
+	yuiError() << "Widget is not a valid NCPkgTable widget" << endl;
     	return false;
     }
 
@@ -679,7 +679,7 @@ bool NCPackageSelector::showSelPackages( const string & label, const set<string>
 
     if ( ! label.empty() )
     {
-	NCDBG << "Filter: " << label << endl;
+	yuiDebug() << "Filter: " << label << endl;
 
         // show the selected filter label
 	if ( filterLabel )
@@ -843,7 +843,7 @@ bool NCPackageSelector::fillPatchList( string filter )
 
     if ( !packageList )
     {
-	UIERR << "No valid NCPkgTable widget" << endl;
+	yuiError() << "No valid NCPkgTable widget" << endl;
     	return false;
     }
 
@@ -908,7 +908,7 @@ bool NCPackageSelector::fillUpdateList( )
 
     if ( !packageList )
     {
-	UIERR << "Widget is not a valid NCPkgTable widget" << endl;
+	yuiError() << "Widget is not a valid NCPkgTable widget" << endl;
     	return false;
     }
 
@@ -929,7 +929,7 @@ bool NCPackageSelector::fillUpdateList( )
 
 	    if ( slb )
 	    {
-		NCMIL << "Problematic package: " <<  pkg->name().c_str() << " " <<
+		yuiMilestone() << "Problematic package: " <<  pkg->name().c_str() << " " <<
 		    pkg->edition().asString().c_str() << endl;
 		packageList->createListEntry( pkg, slb );
 	    }
@@ -970,7 +970,7 @@ bool NCPackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPt
     ZyppPatchContents patchContents( patchPtr );
 
     zypp::Patch::AtomList atomList = patchPtr->atoms();
-    NCMIL <<  "Filtering for patch: " << patchPtr->name().c_str() << " number of atoms: " << atomList.size() << endl ;
+    yuiMilestone() <<  "Filtering for patch: " << patchPtr->name().c_str() << " number of atoms: " << atomList.size() << endl ;
 
     for ( ZyppPatchContentsIterator it = patchContents.begin();
 	  it != patchContents.end();
@@ -980,21 +980,21 @@ bool NCPackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPt
 
 	if ( pkg )
 	{
-	    NCMIL << "Patch package found: " <<  (*it)->name().c_str() << endl;
+	    yuiMilestone() << "Patch package found: " <<  (*it)->name().c_str() << endl;
 	    ZyppSel sel = selMapper.findZyppSel( pkg );
 
 	    if ( sel )
 	    {
 		if ( inContainer( patchSelectables, sel ) )
 		{
-		    NCMIL << "Suppressing duplicate selectable: " << (*it)->name().c_str() << "-" <<
+		    yuiMilestone() << "Suppressing duplicate selectable: " << (*it)->name().c_str() << "-" <<
 			(*it)->edition().asString().c_str() << " " <<
 			(*it)->arch().asString().c_str() << endl;
 		}
 		else
 		{
 		    patchSelectables.insert( sel );
-		    NCDBG << (*it)->name().c_str() << ": Version: " <<  pkg->edition().asString() << endl;
+		    yuiDebug() << (*it)->name().c_str() << ": Version: " <<  pkg->edition().asString() << endl;
 
 		    pkgTable->createListEntry( pkg, sel );
 
@@ -1066,7 +1066,7 @@ bool NCPackageSelector::fillSummaryList( NCPkgTable::NCPkgTableListType type )
 
     if ( !packageList )
     {
-	UIERR << "No valid NCPkgTable widget" << endl;
+	yuiError() << "No valid NCPkgTable widget" << endl;
     	return false;
     }
 
@@ -1142,7 +1142,7 @@ bool NCPackageSelector::fillPackageList( const string & label, YStringTreeItem *
 
     if ( !packageList )
     {
-	UIERR << "No valid NCPkgTable widget" << endl;
+	yuiError() << "No valid NCPkgTable widget" << endl;
     	return false;
     }
 
@@ -1187,7 +1187,7 @@ bool NCPackageSelector::fillPackageList( const string & label, YStringTreeItem *
     // show the package list
     packageList->drawList();
 
-    NCMIL << "Fill package list" << endl;
+    yuiMilestone() << "Fill package list" << endl;
 
     if ( ! label.empty() )
     {
@@ -1210,7 +1210,7 @@ bool NCPackageSelector::fillPackageList( const string & label, YStringTreeItem *
 
 bool NCPackageSelector::fillRepoFilterList( ZyppRepo repo)
 {
-    NCMIL << "Collecting packages in selected repository" << endl;
+    yuiMilestone() << "Collecting packages in selected repository" << endl;
 
     NCPkgTable *pkgList = getPackageList();
     //clean the pkg table first
@@ -1321,7 +1321,7 @@ bool NCPackageSelector::checkPackage( ZyppObj opkg, ZyppSel slb,
 
     if ( !packageList )
     {
-	UIERR << "Widget is not a valid NCPkgTable widget" << endl;
+	yuiError() << "Widget is not a valid NCPkgTable widget" << endl;
     	return false;
     }
 
@@ -1358,7 +1358,7 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
     if ( !packageList || !patchPtr
 	 || !selectable )
     {
-	UIERR << "Widget is not a valid NCPkgTable widget" << endl;
+	yuiError() << "Widget is not a valid NCPkgTable widget" << endl;
     	return false;
     }
 
@@ -1379,7 +1379,7 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
 	    if ( selectable->installedPoolItem().status().isIncomplete() )
 	    {
 		displayPatch = true;
-		NCWAR << "Installed patch is broken: " << patchPtr->name().c_str() << " - "
+		yuiWarning() << "Installed patch is broken: " << patchPtr->name().c_str() << " - "
 		      << patchPtr->summary().c_str() << endl;
 	    }
 	}
@@ -1394,7 +1394,7 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
 
 		displayPatch = true;
 
-		NCMIL << "Patch satisfied, but not installed yet: " << patchPtr->name().c_str() << " - "
+		yuiMilestone() << "Patch satisfied, but not installed yet: " << patchPtr->name().c_str() << " - "
 		      << patchPtr->summary().c_str() << endl;
 	    }
 	}
@@ -1411,7 +1411,7 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
 	    }
 	    else
 	    {
-		NCMIL << "Patch not needed: " << patchPtr->name().c_str() << " - "
+		yuiMilestone() << "Patch not needed: " << patchPtr->name().c_str() << " - "
 		      << patchPtr->summary().c_str() << endl;
 	    }
 	}
@@ -1473,7 +1473,7 @@ void NCPackageSelector::importSelectable( ZyppSel selectable, bool isWanted, con
 	    case S_Del:
 	    case S_AutoDel:
 		newStatus = S_KeepInstalled;
-		NCDBG << "Keeping " << kind << " " << selectable->name().c_str() << endl;
+		yuiDebug() << "Keeping " << kind << " " << selectable->name().c_str() << endl;
 		break;
 
 	    //Add not yet installed pkgs (if they have candidate available)
@@ -1482,11 +1482,11 @@ void NCPackageSelector::importSelectable( ZyppSel selectable, bool isWanted, con
 		if ( selectable->hasCandidateObj() )
 		{
 		    newStatus = S_Install;
-		    NCDBG << "Adding " << kind << " " << selectable->name().c_str() << endl;
+		    yuiDebug() << "Adding " << kind << " " << selectable->name().c_str() << endl;
 		}
 		else
 		{
-		    NCDBG << "Cannot add " << kind << " " << selectable->name().c_str() <<
+		    yuiDebug() << "Cannot add " << kind << " " << selectable->name().c_str() <<
 			" " << " - no candidate." << endl;
 		}
 		break;
@@ -1505,7 +1505,7 @@ void NCPackageSelector::importSelectable( ZyppSel selectable, bool isWanted, con
 	    case S_KeepInstalled:
 	    case S_Protected:
 		newStatus = S_Del;
-		NCDBG << "Deleting " << kind << " " << selectable->name().c_str() << endl;
+		yuiDebug() << "Deleting " << kind << " " << selectable->name().c_str() << endl;
 		break;
 
             //Keep status for not installed, taboo and to-be-deleted
@@ -1542,12 +1542,12 @@ bool NCPackageSelector::SearchHandler( const NCursesEvent& event)
 
     if ( retEvent == NCursesEvent::button )
     {
-	NCMIL << "Searching for: " <<  retEvent.result << endl;
+	yuiMilestone() << "Searching for: " <<  retEvent.result << endl;
 	packageList->showInformation( );
     }
     else
     {
-	NCMIL << "Search is canceled"  << endl;
+	yuiMilestone() << "Search is canceled"  << endl;
     }
 
     packageList->setKeyboardFocus();
@@ -1574,13 +1574,13 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
 	 || !event.selection
 	 || !replacePoint )
     {
-	NCERR << "*** InformationHandler RETURN false ***" << endl;
+	yuiError() << "*** InformationHandler RETURN false ***" << endl;
 	return false;
     }
 
     YMenuItem * info = event.selection;
 
-    NCMIL << "Show info: " << info->label() << endl;
+    yuiMilestone() << "Show info: " << info->label() << endl;
 
     if ( visibleInfo == info )
     {
@@ -1701,7 +1701,7 @@ bool NCPackageSelector::InformationHandler( const NCursesEvent&  event )
 
     packageList->setKeyboardFocus();
 
-    UIMIL << "Change package info to: " << visibleInfo->label() << endl;
+    yuiMilestone() << "Change package info to: " << visibleInfo->label() << endl;
     return true;
 }
 
@@ -1728,7 +1728,7 @@ bool NCPackageSelector::DependencyHandler( const NCursesEvent&  event )
 
 	if ( depsPopup )
 	{
-	    NCMIL << "Checking dependencies" << endl;
+	    yuiMilestone() << "Checking dependencies" << endl;
 	    depsPopup->showDependencies( NCPkgPopupDeps::S_Solve, &ok );
 	}
 
@@ -1797,7 +1797,7 @@ bool NCPackageSelector::FilterHandler( const NCursesEvent&  event )
     {
 	if ( filterPopup )
 	{
-	    NCMIL << "Showing RPM groups" << endl;
+	    yuiMilestone() << "Showing RPM groups" << endl;
 	    // show the filter popup (fills the package list)
 	    retEvent = filterPopup->showFilterPopup( );
 	}
@@ -2034,7 +2034,7 @@ bool NCPackageSelector::LinkHandler ( string link )
 	ZyppPkg pkgPtr = tryCastToZyppPkg ((*i)->theObj());
 	if ( pkgPtr && pkgPtr->name() == pkgName )
 	{
-	    NCMIL << "Package " << pkgName << " found" << endl;
+	    yuiMilestone() << "Package " << pkgName << " found" << endl;
 	    // open popup with package info
 	    NCPkgPopupDescr * popupDescr = new NCPkgPopupDescr( wpos(1,1), this );
 	    popupDescr->showInfoPopup( pkgPtr, *i );
@@ -2047,7 +2047,7 @@ bool NCPackageSelector::LinkHandler ( string link )
 
     if ( !found )
     {
-	NCERR << "Package " << pkgName << " NOT found" << endl;
+	yuiError() << "Package " << pkgName << " NOT found" << endl;
 	// open error popup
     }
 
@@ -2064,9 +2064,9 @@ bool NCPackageSelector::TestcaseHandler ( const NCursesEvent&  event )
 {
     string testCaseDir = "/var/log/YaST2/solverTestcase";
 
-    NCMIL << "Generating solver test case START" << endl;
+    yuiMilestone() << "Generating solver test case START" << endl;
     bool success = zypp::getZYpp()->resolver()->createSolverTestcase( testCaseDir );
-    NCMIL <<  "Generating solver test case END" << endl;
+    yuiMilestone() <<  "Generating solver test case END" << endl;
 
     if ( success )
     {
@@ -2122,12 +2122,12 @@ bool NCPackageSelector::FileHandler( const NCursesEvent& event )
 		exportFile.exceptions(std::ios_base::badbit | std::ios_base::failbit );
 		exportFile << writer;
 
-	        NCMIL << "Exported list of packages and patterns to " << filename << endl;
+	        yuiMilestone() << "Exported list of packages and patterns to " << filename << endl;
 	    }
 
 	    catch (std::exception & exception)
 	    {
-		NCWAR << "Error exporting list of packages and patterns to " << filename << endl;
+		yuiWarning() << "Error exporting list of packages and patterns to " << filename << endl;
 
 		//delete partially written file (don't care if it doesn't exist)
 		(void) unlink( filename.c_str() );
@@ -2161,7 +2161,7 @@ bool NCPackageSelector::FileHandler( const NCursesEvent& event )
 	if ( ! filename.empty() )
 	{
     	    NCPkgTable * packageList = getPackageList();
-	    NCMIL << "Importing list of packages and patterns from " << filename << endl;
+	    yuiMilestone() << "Importing list of packages and patterns from " << filename << endl;
 
 	    try
 	    {
@@ -2186,7 +2186,7 @@ bool NCPackageSelector::FileHandler( const NCursesEvent& event )
 			importPatterns.insert( importMapPair( it->name(), *it ) );
 		}
 
-		NCMIL << "Found " << importPkgs.size() << " packages and " << importPatterns.size() << " patterns." << endl;
+		yuiMilestone() << "Found " << importPkgs.size() << " packages and " << importPatterns.size() << " patterns." << endl;
 
 		//Change status of appropriate packages and patterns
 		for (ZyppPoolIterator it = zyppPkgBegin();
@@ -2217,7 +2217,7 @@ bool NCPackageSelector::FileHandler( const NCursesEvent& event )
 	    }
 	    catch ( const zypp::Exception & exception )
 	    {
-		NCWAR << "Error importing list of packages and patterns from" << filename << endl;
+		yuiWarning() << "Error importing list of packages and patterns from" << filename << endl;
 
 		NCPopupInfo * errorMsg = new NCPopupInfo( wpos( (NCurses::lines()-5)/2, (NCurses::cols()-40)/2) ,
 							  NCPkgNames::ErrorLabel(),
@@ -2367,7 +2367,7 @@ bool NCPackageSelector::CancelHandler( const NCursesEvent&  event )
 
     restoreState ();
 
-    NCMIL <<  "Cancel button pressed - leaving package selection" << endl;
+    yuiMilestone() <<  "Cancel button pressed - leaving package selection" << endl;
     const_cast<NCursesEvent &>(event).result = "cancel";
 
     // return false, which means stop the event loop (see runPkgSelection)
@@ -2448,7 +2448,7 @@ bool NCPackageSelector::OkButtonHandler( const NCursesEvent&  event )
 	// clearSaveState ();
 
 	const_cast<NCursesEvent &>(event).result = "accept";
-	NCMIL <<  "OK button pressed - leaving package selection, starting installation" << endl;
+	yuiMilestone() <<  "OK button pressed - leaving package selection, starting installation" << endl;
 
         // return false, leave the package selection
 	return false;
@@ -2562,7 +2562,7 @@ bool NCPackageSelector::showLicenseAgreement( ZyppSel & slbPtr , string licenseT
 
 	ok = false;
     } else {
-	NCMIL << "User confirmed license agreement for " << pkgName << endl;
+	yuiMilestone() << "User confirmed license agreement for " << pkgName << endl;
 	slbPtr->setLicenceConfirmed (true);
 	ok = true;
     }
@@ -2585,7 +2585,7 @@ bool NCPackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectabl
 
     if ( !patchPtr || !selectable )
     {
-	NCERR << "Patch not valid" << endl;
+	yuiError() << "Patch not valid" << endl;
 	return false;
     }
 
@@ -2660,7 +2660,7 @@ bool NCPackageSelector::showPackageDependencies ( bool doit )
     if ( depsPopup
 	 && (doit || autoCheck) )
     {
-	NCMIL << "Checking dependencies" << endl;
+	yuiMilestone() << "Checking dependencies" << endl;
 	cancel = depsPopup->showDependencies( NCPkgPopupDeps::S_Solve, &ok );
     }
 
@@ -2679,7 +2679,7 @@ bool NCPackageSelector::verifyPackageDependencies ()
 					  );
     info->setNiceSize( 30, 5 );
 
-    NCMIL << "Verifying system" << endl;
+    yuiMilestone() << "Verifying system" << endl;
 
     if ( depsPopup )
     {
@@ -2730,12 +2730,12 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
 {
     if ( !pkgPtr )
     {
-	NCERR << "Package not valid" << endl;
+	yuiError() << "Package not valid" << endl;
 	return false;
     }
     if ( !slbPtr )
     {
-	NCERR << "Selectable not valid" << endl;
+	yuiError() << "Selectable not valid" << endl;
 	return false;
     }
 
@@ -2744,7 +2744,7 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
 	// ask the package manager for the description of this package
 	zypp::Text value = pkgPtr->description();
 	string descr = createDescrText( value );
-	NCDBG << "Description: " << descr << endl;
+	yuiDebug() << "Description: " << descr << endl;
 
         // show the description
 	if ( infoText )
@@ -2907,7 +2907,7 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
 	}
     }
 
-    NCDBG <<  "Showing package information: " << visibleInfo << endl;
+    yuiDebug() <<  "Showing package information: " << visibleInfo << endl;
 
     return true;
 }
@@ -3412,8 +3412,8 @@ bool NCPackageSelector::fillDefaultList( )
     if ( !pkgList )
 	return false;
 
-    // NCMIL << "Fill list: " << (const NCWidget *) pkgList << endl;
-    NCMIL << "Fill list: " << (NCWidget *) pkgList << endl;
+    // yuiMilestone() << "Fill list: " << (const NCWidget *) pkgList << endl;
+    yuiMilestone() << "Fill list: " << (NCWidget *) pkgList << endl;
     switch ( pkgList->getTableType() )
     {
 	case NCPkgTable::T_Patches: {
@@ -3442,7 +3442,7 @@ bool NCPackageSelector::fillDefaultList( )
 
 	    if ( defaultGroup )
 	    {
-		NCMIL << "default RPM group: " << defaultGroup->value().translation() << endl;
+		yuiMilestone() << "default RPM group: " << defaultGroup->value().translation() << endl;
 		fillPackageList ( defaultGroup->value().translation(), defaultGroup );
 
 		// set the visible info to package description
@@ -3452,7 +3452,7 @@ bool NCPackageSelector::fillDefaultList( )
 	    }
 	    else
 	    {
-		NCERR << "No default RPM group available" << endl;
+		yuiError() << "No default RPM group available" << endl;
 	    }
 	    break;
 	}

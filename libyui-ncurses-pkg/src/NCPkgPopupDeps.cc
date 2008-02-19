@@ -16,7 +16,9 @@
    Maintainer: Bubli <kmachalkova@suse.cz>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCPkgPopupDeps.h"
 
 #include "NCAlignment.h"
@@ -216,7 +218,7 @@ bool NCPkgPopupDeps::solve( NCSelectionBox * problemw, NCPkgSolverAction action 
     if ( !problemw )
 	return false;
 
-    NCDBG << "Solving..." << endl;
+    yuiDebug() << "Solving..." << endl;
 
     NCPopupInfo * info = new NCPopupInfo( wpos( (NCurses::lines()-4)/2, (NCurses::cols()-18)/2 ),
 					  "",
@@ -238,7 +240,7 @@ bool NCPkgPopupDeps::solve( NCSelectionBox * problemw, NCPkgSolverAction action 
 	    success = resolver->verifySystem(); // check hardware
 	    break;
 	default:
-	    NCERR << "Unknown action for resolve" << endl;
+	    yuiError() << "Unknown action for resolve" << endl;
     }
     
     info->popdown();
@@ -258,11 +260,11 @@ bool NCPkgPopupDeps::solve( NCSelectionBox * problemw, NCPkgSolverAction action 
 	e = rproblems.end (),
 	i;
     int idx;
-    UIMIL << "PROBLEMS" << endl;
+    yuiMilestone() << "PROBLEMS" << endl;
     for (i = b, idx = 0; i != e; ++i, ++idx)
     {
-	UIMIL << "PROB " << (*i)->description () << endl;
-	UIMIL << ":    " << (*i)->details () << endl;
+	yuiMilestone() << "PROB " << (*i)->description () << endl;
+	yuiMilestone() << ":    " << (*i)->details () << endl;
 
 	// no solution yet
 	problems.push_back (make_pair (*i, zypp::ProblemSolution_Ptr ()));
@@ -297,13 +299,13 @@ bool NCPkgPopupDeps::showSolutions( int index )
 	ee = solutions.end (),
 	ii;
     for (ii = bb; ii != ee; ++ii) {
-	UIMIL << " SOL  " << (*ii)->description () << endl;
-	UIMIL << " :    " << (*ii)->details () << endl;
+	yuiMilestone() << " SOL  " << (*ii)->description () << endl;
+	yuiMilestone() << " :    " << (*ii)->details () << endl;
 
 	solutionw->addItem( new YItem ( (*ii)->description(),		// label
 					(user_solution == *ii) ) );	// selected
 	
-	UIMIL << "usr: " << user_solution << " cur: " << *ii << endl;
+	yuiMilestone() << "usr: " << user_solution << " cur: " << *ii << endl;
     }
     
     solutionw->doneMultipleChanges();
