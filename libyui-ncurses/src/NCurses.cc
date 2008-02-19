@@ -629,10 +629,7 @@ void NCurses::ForgetDlg( NCDialog * dlg_r )
 //
 void NCurses::RedirectToLog()
 {
-#warning redirect stderr to log
-
-#if 0
-  string log = get_log_filename();
+  string log = "/dev/null";	// this used to be get_log_filename()
   
   yuiMilestone() << "isatty(stderr)" << (isatty(2) ? "yes" : "no") << endl;
   if (isatty(2) && theTerm) {
@@ -647,9 +644,8 @@ void NCurses::RedirectToLog()
     close(1);
     open(log.c_str(), O_APPEND | O_CREAT, 0666);
   }
-#endif
-
 }
+
 ///////////////////////////////////////////////////////////////////
 //
 //
