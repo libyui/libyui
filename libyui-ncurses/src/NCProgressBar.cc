@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCProgressBar.h"
 
@@ -39,7 +41,7 @@ NCProgressBar::NCProgressBar( YWidget * parent,
     , lwin( 0 )
     , twin( 0 )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   if ( maxval <= 0 )
     maxval = 1;
   hotlabel = &label;
@@ -61,7 +63,7 @@ NCProgressBar::~NCProgressBar()
 {
   delete lwin;
   delete twin;
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////

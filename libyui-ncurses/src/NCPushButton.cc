@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "YDialog.h"
 #include "NCDialog.h"
 #include "NCurses.h"
@@ -34,7 +36,7 @@ NCPushButton::NCPushButton( YWidget * parent, const string & nlabel )
     : YPushButton( parent, nlabel )
     , NCWidget( parent )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   setWidgetRep(this);
   setLabel( nlabel );
   hotlabel = &label;
@@ -50,7 +52,7 @@ NCPushButton::NCPushButton( YWidget * parent, const string & nlabel )
 //
 NCPushButton::~NCPushButton()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////

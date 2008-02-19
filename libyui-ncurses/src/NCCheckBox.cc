@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCCheckBox.h"
 
@@ -41,7 +43,7 @@ NCCheckBox::NCCheckBox( YWidget * parent,
     , tristate( false )
     , checkstate( checked ? S_ON : S_OFF )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   setLabel( nlabel );
   hotlabel = &label;
 }
@@ -56,7 +58,7 @@ NCCheckBox::NCCheckBox( YWidget * parent,
 //
 NCCheckBox::~NCCheckBox()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 int NCCheckBox::preferredWidth()

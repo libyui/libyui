@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCPopupMenu.h"
 
 #include "NCTable.h"
@@ -46,7 +48,7 @@ NCPopupMenu::NCPopupMenu( const wpos at, YItemIterator begin, YItemIterator end 
     row[1] = item->hasChildren() ? "..." : "";
     
     YTableItem *tableItem = new YTableItem( row[0], row[1] );
-    NCMIL << "Add to map: TableItem: " << tableItem << " Menu item: " << item << endl;
+    yuiMilestone() << "Add to map: TableItem: " << tableItem << " Menu item: " << item << endl;
 
     addItem( tableItem );
     itemsMap[tableItem] = item;
@@ -81,11 +83,11 @@ NCursesEvent NCPopupMenu::wHandleInput( wint_t ch )
   switch ( ch ) {
   case KEY_RIGHT:
       {
-	  NCMIL << "CurrentItem: " << getCurrentItem() << endl;
+	  yuiMilestone() << "CurrentItem: " << getCurrentItem() << endl;
 	  YTableItem * tableItem = dynamic_cast<YTableItem *>( getCurrentItemPointer() );
-	  NCMIL << "TableItem: " << tableItem << endl;
+	  yuiMilestone() << "TableItem: " << tableItem << endl;
 	  YMenuItem * item = itemsMap[ tableItem ];
-	  NCMIL << "MenuItem: " << item << endl;
+	  yuiMilestone() << "MenuItem: " << item << endl;
 	  if ( item && item->hasChildren() )
 	      ret = NCursesEvent::button;
 	  break;
@@ -115,15 +117,15 @@ bool NCPopupMenu::postAgain()
   bool again = false;
   int  selection = ( postevent == NCursesEvent::button ) ? getCurrentItem()
                                                          : -1;
-  NCMIL << "Index: " << selection << endl;
+  yuiMilestone() << "Index: " << selection << endl;
   YTableItem * tableItem = dynamic_cast<YTableItem *>( getCurrentItemPointer() );
   if ( tableItem )
-      NCMIL << "Table item: " << tableItem->label() << endl;
+      yuiMilestone() << "Table item: " << tableItem->label() << endl;
   YMenuItem * item = itemsMap[ tableItem ];
 	  
   if ( !item )
       return false;
-  NCMIL << "Menu item: " << item->label() << endl;
+  yuiMilestone() << "Menu item: " << item->label() << endl;
   if ( selection != -1 )
   {
     if ( item->hasChildren() ) {

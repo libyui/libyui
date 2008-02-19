@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCPopup.h"
 
 
@@ -102,7 +104,7 @@ int NCPopup::post( NCursesEvent * returnevent )
     if ( returnevent )
 	*returnevent = postevent;
 
-    NCMIL << "Return event.detail:  " << postevent.detail << endl;
+    yuiMilestone() << "Return event.detail:  " << postevent.detail << endl;
     
     return postevent.detail;
 }

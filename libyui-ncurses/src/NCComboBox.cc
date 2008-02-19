@@ -18,7 +18,9 @@
 /-*/
 #include <climits>
 
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCComboBox.h"
 #include "NCPopupList.h"
@@ -45,7 +47,7 @@ NCComboBox::NCComboBox( YWidget * parent, const string & nlabel,
     , index( -1 )
     , InputMaxLength( -1 )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   setLabel( nlabel );
   hotlabel = &label;
   setText( "" );
@@ -63,7 +65,7 @@ NCComboBox::~NCComboBox()
 {
   delete lwin;
   delete twin;
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////

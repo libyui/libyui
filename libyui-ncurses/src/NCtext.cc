@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCtext.h"
 #include "stringutil.h"
 
@@ -144,7 +146,7 @@ void NCtext::lbrset( const NCstring & ntext, size_t columns )
 	    mtext.push_back( NCstring( line.substr(0, columns) ) );
 	    while ( start < line.size() )
 	    {
-		NCDBG << "Add: " << line.substr(start, columns) << endl;
+		yuiDebug() << "Add: " << line.substr(start, columns) << endl;
 		mtext.push_back( NCstring( L'~' + line.substr(start, columns-1) ) );
 		start +=columns-1;
 	    }
@@ -323,7 +325,7 @@ void NClabel::drawAt( NCursesWindow & w, chtype style, chtype hotstyle,
 	w.move( l, area.Pos.C + pre );
       }
 
-      // NCDBG << "TERMINAL: " << NCstring::terminalEncoding() << " CODESET: " << nl_langinfo( CODESET) << endl;
+      // yuiDebug() << "TERMINAL: " << NCstring::terminalEncoding() << " CODESET: " << nl_langinfo( CODESET) << endl;
       if ( len )
       {
 	  if ( NCstring::terminalEncoding() != "UTF-8" )

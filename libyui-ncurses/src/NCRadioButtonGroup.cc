@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCRadioButtonGroup.h"
 
@@ -33,7 +35,7 @@ NCRadioButtonGroup::NCRadioButtonGroup( YWidget * parent )
     , NCWidget( parent )
     , focusId( 1 )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   wstate = NC::WSdumb;
 }
 
@@ -47,7 +49,7 @@ NCRadioButtonGroup::NCRadioButtonGroup( YWidget * parent )
 //
 NCRadioButtonGroup::~NCRadioButtonGroup()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////

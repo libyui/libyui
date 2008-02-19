@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCEmpty.h"
 
@@ -32,8 +34,8 @@ NCEmpty::NCEmpty( YWidget * parent )
     : YEmpty( parent )
     , NCWidget( parent )
 {
-  WIDDBG << endl;
-  wstate = NC::WSdumb;
+    yuiDebug() << endl;
+    wstate = NC::WSdumb;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -46,7 +48,7 @@ NCEmpty::NCEmpty( YWidget * parent )
 //
 NCEmpty::~NCEmpty()
 {
-  WIDDBG << endl;
+    yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////

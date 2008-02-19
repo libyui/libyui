@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCPadWidget.h"
 
 class NCScrollbar {
@@ -46,11 +48,11 @@ class NCScrollbar {
 
     void adjust() {
       if ( visible > total ) {
-	WIDINT << "adjust visible " << visible << " > total " << total << endl;
+	yuiDebug() << "adjust visible " << visible << " > total " << total << endl;
 	visible = total;
       }
       if ( at + visible > total ) {
-	WIDINT << "adjust at " << at << " + visible " << visible << " > total " << total << endl;
+	yuiDebug() << "adjust at " << at << " + visible " << visible << " > total " << total << endl;
 	at = total - visible;
       }
     }
@@ -181,7 +183,7 @@ class NCScrollbar {
 				 'r' );
       }
       catch ( NCursesException & err ) {
-	WIDINT << "NCScrollbar: " << err.message
+	yuiDebug() << "NCScrollbar: " << err.message
 	  << ": at " << p << " len " << len << " in " << par << endl;
 	return;
       }
@@ -222,7 +224,7 @@ NCPadWidget::NCPadWidget( NCWidget * myparent )
     , hasHeadline( false )
     , activeLabelOnly( false )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   hotlabel = &label;
   defsze = wsze( 3, 10 ) + 2;
 }
@@ -237,7 +239,7 @@ NCPadWidget::NCPadWidget( YWidget * myparent )
     , hasHeadline( false )
     , activeLabelOnly( false )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   hotlabel = &label;
   defsze = wsze( 3, 10 ) + 2;
 }
@@ -255,7 +257,7 @@ NCPadWidget::~NCPadWidget()
   delete pad;
   if ( padwin != win )
     delete padwin;
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////

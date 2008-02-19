@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCLabel.h"
 
@@ -34,7 +36,7 @@ NCLabel::NCLabel( YWidget * parent, const string & nlabel,
     , NCWidget( parent )
     , heading( isHeading )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   setText( nlabel );
   hotlabel = &label;
   wstate = NC::WSdumb;
@@ -50,7 +52,7 @@ NCLabel::NCLabel( YWidget * parent, const string & nlabel,
 //
 NCLabel::~NCLabel()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -106,7 +108,7 @@ void NCLabel::setSize( int newwidth, int newheight )
 void NCLabel::setText( const string & nlabel )
 {
   label  = NCstring( nlabel );
-  NCDBG << "LABEL: " << NCstring(nlabel) << " Longest line: " << label.width()<< endl;
+  yuiDebug() << "LABEL: " << NCstring(nlabel) << " Longest line: " << label.width()<< endl;
   defsze = label.size();
   YLabel::setText( nlabel );
   Redraw();

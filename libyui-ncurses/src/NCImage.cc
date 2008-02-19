@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCImage.h"
 
@@ -33,7 +35,7 @@ NCImage::NCImage( YWidget * parent, string defaulttext, bool animated )
     , NCWidget( parent )
     , label( defaulttext )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   defsze = 0;
   wstate = NC::WSdumb;
   skipNoDimWin = true;
@@ -49,7 +51,7 @@ NCImage::NCImage( YWidget * parent, string defaulttext, bool animated )
 //
 NCImage::~NCImage()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////

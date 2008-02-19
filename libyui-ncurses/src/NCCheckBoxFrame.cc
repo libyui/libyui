@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCCheckBoxFrame.h"
 
@@ -33,7 +35,7 @@ NCCheckBoxFrame::NCCheckBoxFrame( YWidget * parent, const string & nlabel,
     : YCheckBoxFrame( parent, nlabel, checked )
     , NCWidget( parent )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   wstate = NC::WSnormal;
   framedim.Pos = wpos( 1 );
   framedim.Sze = wsze( 2 );
@@ -60,7 +62,7 @@ NCCheckBoxFrame::NCCheckBoxFrame( YWidget * parent, const string & nlabel,
 //
 NCCheckBoxFrame::~NCCheckBoxFrame()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////

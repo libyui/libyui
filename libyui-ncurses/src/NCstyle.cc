@@ -20,7 +20,9 @@
 #include <fstream>
 #include "fnmatch.h"
 
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCStyleDef.h"
 
@@ -308,7 +310,7 @@ NCstyle::NCstyle( string term_t )
 
   if ( user_defined_style && *user_defined_style ) {
       styleName = user_defined_style;
-      UIMIL << "User-defined style found: " << styleName.c_str() << endl;
+      yuiMilestone() << "User-defined style found: " << styleName.c_str() << endl;
   }
   else {
       if ( NCattribute::colors() ) {
@@ -325,7 +327,7 @@ NCstyle::NCstyle( string term_t )
       }
   }
 
-  UIMIL << "Init " << term_t << " using " << (NCattribute::colors() ? "color" : "bw" )
+  yuiMilestone() << "Init " << term_t << " using " << (NCattribute::colors() ? "color" : "bw" )
     << " => " << MaxStyleSet << " styles in " << styleName << endl;
 
 #define IF_STYLE_INIT(n) if ( styleName == #n ) { NCstyleInit_##n( styleSet ); }

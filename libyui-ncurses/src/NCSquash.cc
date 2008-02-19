@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCSquash.h"
 
@@ -33,7 +35,7 @@ NCSquash::NCSquash( YWidget * parent,
     : YSquash( parent, hsquash, vsquash )
     , NCWidget( parent )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   wstate = NC::WSdumb;
 }
 
@@ -47,7 +49,7 @@ NCSquash::NCSquash( YWidget * parent,
 //
 NCSquash::~NCSquash()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////

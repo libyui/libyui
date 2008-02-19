@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCLogView.h"
 
 ///////////////////////////////////////////////////////////////////
@@ -34,7 +36,7 @@ NCLogView::NCLogView( YWidget * parent,
     : YLogView( parent, nlabel, visibleLines, maxLines )
     , NCPadWidget( parent )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   defsze = wsze( visibleLines, 5 ) + 2;
   setLabel( nlabel );
 }
@@ -49,7 +51,7 @@ NCLogView::NCLogView( YWidget * parent,
 //
 NCLogView::~NCLogView()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 int NCLogView::preferredWidth()

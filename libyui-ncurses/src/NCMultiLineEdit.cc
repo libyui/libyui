@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCMultiLineEdit.h"
 
 ///////////////////////////////////////////////////////////////////
@@ -31,7 +33,7 @@ NCMultiLineEdit::NCMultiLineEdit( YWidget * parent, const string & nlabel )
     : YMultiLineEdit( parent, nlabel )
     , NCPadWidget( parent )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   defsze = wsze( 5, 5 ) + wsze(0,2);
   setLabel( nlabel );
   // initial text isn't an argument any longer
@@ -48,7 +50,7 @@ NCMultiLineEdit::NCMultiLineEdit( YWidget * parent, const string & nlabel )
 //
 NCMultiLineEdit::~NCMultiLineEdit()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////

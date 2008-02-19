@@ -21,7 +21,9 @@
 #include <iconv.h>
 #include <malloc.h>
 
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCstring.h"
 
 //////////////////////////////////////////////////////////////////
@@ -97,7 +99,7 @@ NCstring::NCstring( const string & str )
 
     if ( !ok )
     {
-	NCERR << "ERROR: RecodeToWchar() failed" << endl;
+	yuiError() << "ERROR: RecodeToWchar() failed" << endl;
     }
 }
 
@@ -117,7 +119,7 @@ NCstring::NCstring( const char * cstr )
 
     if ( !ok )
     {
-	NCERR << "ERROR: RecodeToWchar() failed" << endl;
+	yuiError() << "ERROR: RecodeToWchar() failed" << endl;
     }
 }
 
@@ -196,13 +198,13 @@ bool NCstring::RecodeFromWchar( const wstring & in, const string & to_encoding, 
 	}
 
 	fromwchar_cd = iconv_open ( to_encoding.c_str(), "WCHAR_T" );
-	NCDBG << "iconv_open( " << to_encoding.c_str() << ", \"WCHAR_T\" )" << endl;
+	yuiDebug() << "iconv_open( " << to_encoding.c_str() << ", \"WCHAR_T\" )" << endl;
 
 	if ( fromwchar_cd == (iconv_t)(-1) )
 	{
 	    if (!complained)
 	    {
-		NCERR << "ERROR: iconv_open failed" << endl;
+		yuiError() << "ERROR: iconv_open failed" << endl;
 		complained = true;
 	    }
 	    return false;
@@ -239,7 +241,7 @@ bool NCstring::RecodeFromWchar( const wstring & in, const string & to_encoding, 
         {
 	    if (!complained)
 	    {
-		NCERR << "ERROR iconv: " << errno << endl;
+		yuiError() << "ERROR iconv: " << errno << endl;
 		complained = true;
 	    }
 	    if (errno == EINVAL || errno == EILSEQ)
@@ -287,13 +289,13 @@ bool NCstring::RecodeToWchar (const string& in, const string &from_encoding, wst
 	}
 
 	towchar_cd = iconv_open( "WCHAR_T", from_encoding.c_str() );
-	NCDBG << "iconv_open( \"WCHAR_T\", " << from_encoding.c_str() << " )" << endl;
+	yuiDebug() << "iconv_open( \"WCHAR_T\", " << from_encoding.c_str() << " )" << endl;
 
 	if ( towchar_cd == (iconv_t)(-1))
 	{
 	    if (!complained)
 	    {
-		NCERR << "Error: RecodeToWchar iconv_open() failed" << endl;
+		yuiError() << "Error: RecodeToWchar iconv_open() failed" << endl;
 		complained = true;
 	    }
 	    return false;
@@ -330,7 +332,7 @@ bool NCstring::RecodeToWchar (const string& in, const string &from_encoding, wst
 		// EILSEQ 	84	Illegal byte sequence.
 		// EINVAL   	22      Invalid argument
 		// E2BIG     	7	Argument list too long
-		NCERR << "ERROR iconv: " << errno << endl;
+		yuiError() << "ERROR iconv: " << errno << endl;
 		complained = true;
 	    }
 	    if (errno == EINVAL || errno == EILSEQ)
@@ -401,7 +403,7 @@ bool NCstring::setTerminalEncoding( const string & encoding )
 {
     if ( termEncoding != encoding )
     {
-	NCMIL << "Terminal encoding SET to: " << encoding << endl;
+	yuiMilestone() << "Terminal encoding SET to: " << encoding << endl;
 	termEncoding = encoding;
 	return true;
     }

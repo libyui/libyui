@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCSpacing.h"
 
@@ -35,7 +37,7 @@ NCSpacing::NCSpacing( YWidget * parent,
     : YSpacing( parent, dim, stretchable, layoutUnits )
     , NCWidget( parent )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 #if 0
   if ( horizontal && vertical ) {
     l = "NC(B)Spacing";
@@ -72,7 +74,7 @@ NCSpacing::NCSpacing( YWidget * parent,
 //
 NCSpacing::~NCSpacing()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////

@@ -33,7 +33,9 @@
 
 //#include "NCPackageSelectorStart.h"
 
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCstring.h"
 #include "NCWidgetFactory.h"
 #include "NCOptionalWidgetFactory.h"
@@ -70,7 +72,7 @@ YNCursesUI::YNCursesUI( bool withThreads )
 	string locale = setlocale( LC_CTYPE, NULL );
 	setenv( "LC_CTYPE", locale.c_str(), 1 );
 
-	NCMIL << "setenv LC_CTYPE: " << locale << " encoding: " << encoding << endl;
+	yuiMilestone() << "setenv LC_CTYPE: " << locale << " encoding: " << encoding << endl;
 	
         // The encoding of a terminal (xterm, konsole etc.) can never change; the encoding
 	// of the "real" console is changed in setConsoleFont(). 
@@ -83,7 +85,7 @@ YNCursesUI::YNCursesUI( bool withThreads )
 	NCurses::init();
     }
     catch ( NCursesError & err ) {
-	UIMIL << err << endl;
+	yuiMilestone() << err << endl;
 	::endwin();
 	abort();
     }
@@ -159,7 +161,7 @@ void YNCursesUI::idleLoop( int fd_ycp )
 
     if ( retval < 0 ) {
       if ( errno != EINTR )
-	UIINT << "idleLoop error in select() (" << errno << ')' << endl;
+	  yuiError() << "idleLoop error in select() (" << errno << ')' << endl;
     } else if ( retval != 0 ) {
       //do not throw here, as current dialog may not necessarily exist yet
       //if we have threads
@@ -182,7 +184,7 @@ void YNCursesUI::idleLoop( int fd_ycp )
 ///////////////////////////////////////////////////////////////////
 
 
-#define ONCREATE WIDDBG << endl
+#define ONCREATE yuiDebug() << endl
 //#define ONCREATE
 
 
@@ -237,16 +239,16 @@ YEvent * YNCursesUI::runPkgSelection( YWidget * selector )
     
     if ( !dialog )
     {
-	UIERR << "ERROR package selection: No dialog rexisting." << endl;
+	yuiError() << "ERROR package selection: No dialog rexisting." << endl;
 	return 0;
     }
     if ( !selector )
     {
-	UIERR << "ERROR package selection: No package selector existing." << endl;
+	yuiError() << "ERROR package selection: No package selector existing." << endl;
 	return 0;
     }
     // FIXME - remove debug logging
-    NCMIL << "Dump current dialog in YNCursesUI::runPkgSelection" << endl;
+    yuiMilestone() << "Dump current dialog in YNCursesUI::runPkgSelection" << endl;
     // debug: dump the widget tree
     dialog->dumpDialogWidgetTree();	
 
@@ -295,7 +297,7 @@ void YNCursesUI::init_title()
 bool YNCursesUI::want_colors()
 {
   if ( getenv( "Y2NCURSES_BW" ) != NULL ) {
-    UIMIL << "Y2NCURSES_BW is set - won't use colors" << endl;
+    yuiMilestone() << "Y2NCURSES_BW is set - won't use colors" << endl;
     return false;
   }
   return true;
@@ -329,12 +331,12 @@ void YNCursesUI::setConsoleFont( const string & console_magic,
     if ( !unicode_map.empty() )
 	cmd += " -u " + unicode_map;
 
-    UIMIL << cmd << endl;
+    yuiMilestone() << cmd << endl;
     int ret = system( (cmd + " >/dev/null 2>&1").c_str() );
 
     // setfont returns error if called e.g. on a xterm -> return
     if ( ret ) {
-	UIERR << cmd.c_str() << " returned " << ret << endl;
+	yuiError() << cmd.c_str() << " returned " << ret << endl;
 	Refresh();
 	return;
     }
@@ -345,10 +347,10 @@ void YNCursesUI::setConsoleFont( const string & console_magic,
     else
 	cmd += "(B";
     cmd += "\" >" + myTerm + ")";
-    UIMIL << cmd << endl;
+    yuiMilestone() << cmd << endl;
     ret = system( (cmd + " >/dev/null 2>&1").c_str() );
     if ( ret ) {
-	UIERR << cmd.c_str() << " returned " << ret << endl;
+	yuiError() << cmd.c_str() << " returned " << ret << endl;
     }
 
     // set terminal encoding for console
@@ -374,7 +376,7 @@ void YNCursesUI::setConsoleFont( const string & console_magic,
 
 	string code = language2encoding( language );
 
-	NCMIL << "setConsoleFont( ENCODING:  " << code << " )" << endl;
+	yuiMilestone() << "setConsoleFont( ENCODING:  " << code << " )" << endl;
     
 	if ( NCstring::setTerminalEncoding( code ) )
 	{

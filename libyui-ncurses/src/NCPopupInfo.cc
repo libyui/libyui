@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCPopupInfo.h"
 
 #include "NCTree.h"
@@ -234,7 +236,7 @@ bool NCPopupInfo::postAgain()
     {
 	if ( postevent.widget == cancelButton )
 	{
-	    NCMIL << "Cancel button pressed" << endl;
+	    yuiMilestone() << "Cancel button pressed" << endl;
 	    // close the dialog 
 	    postevent = NCursesEvent::cancel;
 	}

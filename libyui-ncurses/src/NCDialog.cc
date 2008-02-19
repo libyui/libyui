@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCDialog.h"
 #include "NCstring.h"
 #include "NCPopupInfo.h"
@@ -47,7 +49,7 @@
 */
 static bool hiddenMenu()
 {
-  return getenv( "Y2NCDBG" ) != NULL;
+  return getenv( "Y2yuiDebug()" ) != NULL;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -69,7 +71,7 @@ NCDialog::NCDialog( YDialogType 	dialogType,
     , ncdopts    ( DEFAULT )
     , popedpos   ( -1 )
 {
-  NCMIL << "NCDialog() derived from YDialog()" << endl; 
+  yuiMilestone() << "NCDialog() derived from YDialog()" << endl; 
   _init();
 }
 
@@ -91,7 +93,7 @@ NCDialog::NCDialog( YDialogType dialogType, const wpos at, const bool boxed )
     , ncdopts    ( boxed ? POPUP : POPUP|NOBOX )
     , popedpos   ( at )
 {
-    NCMIL << "NCDialog(type, at, boxed) derived from YDialog(opt)" << endl;
+    yuiMilestone() << "NCDialog(type, at, boxed) derived from YDialog(opt)" << endl;
     _init();
 }
 
@@ -124,7 +126,7 @@ void NCDialog::_init()
   dlgstyle = &NCurses::style()[mystyleset];
 
   helpPopup = 0;
-  WIDDBG << "+++ " << this << endl;
+  yuiDebug() << "+++ " << this << endl;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -173,7 +175,7 @@ NCDialog::~NCDialog()
 {
   NCurses::ForgetDlg( this );
 
-  WIDDBG << "--+START destroy " << this << endl;
+  yuiDebug() << "--+START destroy " << this << endl;
   if ( pan && !pan->hidden() ) {
     pan->hide();
     doUpdate();
@@ -182,7 +184,7 @@ NCDialog::~NCDialog()
   NCWidget::wDelete();
   delete pan;
   pan = 0;
-  WIDDBG << "---destroyed " << this << endl;
+  yuiDebug() << "---destroyed " << this << endl;
 
   if ( helpPopup )
   {
@@ -226,7 +228,7 @@ int NCDialog::preferredHeight()
 void NCDialog::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  NCDBG << "setSize() called: width: " << newwidth << "   height: " << newheight << endl;
+  yuiDebug() << "setSize() called: width: " << newwidth << "   height: " << newheight << endl;
   YDialog::setSize( newwidth, newheight );
 }
 
@@ -241,9 +243,9 @@ void NCDialog::setSize( int newwidth, int newheight )
 //
 void NCDialog::initDialog()
 {
-    NCMIL << "initDialog()" << endl;
+    yuiMilestone() << "initDialog()" << endl;
     if ( !pan ) {
-	NCDBG << "setInitialSize() called!" << endl; 
+	yuiDebug() << "setInitialSize() called!" << endl; 
     setInitialSize();
   }
 }
@@ -265,7 +267,7 @@ void NCDialog::openInternal()
 //
 void NCDialog::showDialog()
 {
-  IODBG << "sd+ " << this << endl;
+  yuiDebug() << "sd+ " << this << endl;
   if ( pan && pan->hidden() ) {
     YPushButton *defaultB = YDialog::defaultButton();
     if ( defaultB )
@@ -274,16 +276,16 @@ void NCDialog::showDialog()
     }
     getVisible();
     doUpdate();
-    DumpOn( NCDBG, " " );
+    DumpOn( yuiDebug(), " " );
 
   }
   else if ( !pan )
   {
-      NCMIL << "no pan" << endl;
+      yuiMilestone() << "no pan" << endl;
   }
 
   activate( true );
-  IODBG << "sd- " << this << endl;
+  yuiDebug() << "sd- " << this << endl;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -296,14 +298,14 @@ void NCDialog::showDialog()
 //
 void NCDialog::closeDialog()
 {
-  IODBG << "cd+ " << this << endl;
+  yuiDebug() << "cd+ " << this << endl;
   activate( false );
   if ( pan && !pan->hidden() ) {
     pan->hide();
     doUpdate();
-    NCDBG << this << endl;
+    yuiDebug() << this << endl;
   }
-  IODBG << "cd+ " << this << endl;
+  yuiDebug() << "cd+ " << this << endl;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -327,7 +329,7 @@ void NCDialog::activate( const bool newactive )
 	Deactivate();
       }
       doUpdate();
-      IODBG << this << endl;
+      yuiDebug() << this << endl;
     }
   }
 }
@@ -356,7 +358,7 @@ void NCDialog::activate()
 //
 void NCDialog::wMoveTo( const wpos & newpos )
 {
-  NCINT << DLOC << this << newpos << endl;
+  yuiDebug() << DLOC << this << newpos << endl;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -451,7 +453,7 @@ void NCDialog::wCreate( const wrect & newrect )
 			   'r' );
   win->nodelay( true );
 
-  WIDDBG << DLOC << panrect << '(' << inparent << ')'
+  yuiDebug() << DLOC << panrect << '(' << inparent << ')'
     << '[' << popedpos << ']' << endl;
 }
 
@@ -605,7 +607,7 @@ void NCDialog::grabActive( NCWidget * nactive )
 void NCDialog::grabNotify( NCWidget * mgrab )
 {
   if ( wActive && wActive == mgrab ) {
-    WIDDBG << DLOC << mgrab << " active " << endl;
+    yuiDebug() << DLOC << mgrab << " active " << endl;
     ActivateNext();
     if ( wActive && wActive == mgrab )
       grabActive( this );
@@ -636,9 +638,9 @@ bool NCDialog::wantFocus( NCWidget & ngrab )
 void NCDialog::wDelete()
 {
   if ( pan ) {
-    WIDDBG << DLOC << "+++ " << this << endl;
+    yuiDebug() << DLOC << "+++ " << this << endl;
     NCWidget::wDelete();
-    WIDDBG << DLOC << "--- " << this << endl;
+    yuiDebug() << DLOC << "--- " << this << endl;
   }
 }
 
@@ -656,7 +658,7 @@ NCWidget & NCDialog::GetNormal( NCWidget & startwith, SeekDir Direction )
 
   while ( c != &startwith && (c->GetState() != NC::WSnormal || !c->winExist())) {
     if ( c->GetState() == NC::WSactive) {
-      NCINT << "multiple active widgets in dialog? "
+      yuiWarning() << "multiple active widgets in dialog? "
 	<< startwith << " <-> " << c << endl;
       c->SetState( NC::WSnormal ); // what else can we do?
       break;
@@ -819,11 +821,11 @@ bool NCDialog::ActivateByKey( int key )
       }
       if ( buddy ) {
 	if ( c->IsDescendantOf( buddy ) ) {
-	  IDBG << "BUDDY ACTIVATION FOR " << c->Value() << endl;
+	  yuiDebug() << "BUDDY ACTIVATION FOR " << c->Value() << endl;
 	  Activate( *c->Value() );
 	  return true;
 	}
-	EDBG << "DROP BUDDY on " << c->Value() << endl;
+	yuiDebug() << "DROP BUDDY on " << c->Value() << endl;
 	buddy = 0;
       }
       break;
@@ -831,7 +833,7 @@ bool NCDialog::ActivateByKey( int key )
       if ( c->Value()->HasHotkey( key )
 	   || c->Value()->HasFunctionHotkey( key ) )
       {
-	SDBG << "DUMB HOT KEY " << key << " in " << c->Value() << endl;
+	yuiDebug() << "DUMB HOT KEY " << key << " in " << c->Value() << endl;
 	buddy = c->Value();
       }
     default:
@@ -896,7 +898,7 @@ wint_t NCDialog::getinput()
 		{
 		    got += 0xFFFF;			// mark this key 
 		}    
-		NCDBG << "Recode: " << str << " (encoding: " << NCstring::terminalEncoding() << ") "
+		yuiDebug() << "Recode: " << str << " (encoding: " << NCstring::terminalEncoding() << ") "
 		      << "to wint_t: " << got << endl; 
 	    }
 	    else
@@ -974,12 +976,12 @@ bool NCDialog::flushTypeahead()
     if ( eventReason == YEvent::ValueChanged ||
 	 eventReason == YEvent::SelectionChanged )
     {
-	IODBG << "DON't flush input buffer - reason: " << eventReason << endl;
+	yuiDebug() << "DON't flush input buffer - reason: " << eventReason << endl;
 	return false;
     }
     else
     {
-	IODBG << "Flush input buffer" << endl;
+	yuiDebug() << "Flush input buffer" << endl;
 	return true;
     }
 }
@@ -995,20 +997,20 @@ bool NCDialog::flushTypeahead()
 void NCDialog::idleInput()
 {
   if ( !pan ) {
-    NCINT << DLOC << " called for uninitialized " << this << endl;
+    yuiWarning() << DLOC << " called for uninitialized " << this << endl;
     ::flushinp();
     return;
   }
-  IODBG << "idle+ " << this << endl;
+  yuiDebug() << "idle+ " << this << endl;
   if ( !active ) {
       if ( flushTypeahead() ) {
 	::flushinp();
       }
     doUpdate();
   } else {
-    IODBG << "idle+ " << this << endl;
+    yuiDebug() << "idle+ " << this << endl;
     processInput( 0 );
-    IODBG << "idle- " << this << endl;
+    yuiDebug() << "idle- " << this << endl;
   }
 }
 
@@ -1022,21 +1024,21 @@ void NCDialog::idleInput()
 //
 NCursesEvent NCDialog::pollInput()
 {
-  IODBG << "poll+ " << this << endl;
+  yuiDebug() << "poll+ " << this << endl;
   if ( !pan ) {
-    NCINT << DLOC << " called for uninitialized " << this << endl;
+    yuiWarning() << DLOC << " called for uninitialized " << this << endl;
     return NCursesEvent::cancel;
   }
 
   if ( pendingEvent ) {
     if ( active ) {
       activate( false );
-      IODBG << this << " deactivate" << endl;
+      yuiDebug() << this << " deactivate" << endl;
     }
   } else {
     if ( !active ) {
       activate( true );
-      IODBG << this << " activate" << endl;
+      yuiDebug() << this << " activate" << endl;
     }
   }
 
@@ -1044,7 +1046,7 @@ NCursesEvent NCDialog::pollInput()
   eventReason = returnEvent.reason;
   pendingEvent = NCursesEvent::none;
 
-  IODBG << "poll- " << this << '(' << returnEvent << ')' << endl;
+  yuiDebug() << "poll- " << this << '(' << returnEvent << ')' << endl;
   return returnEvent;
 }
 
@@ -1059,13 +1061,13 @@ NCursesEvent NCDialog::pollInput()
 //
 NCursesEvent NCDialog::userInput( int timeout_millisec )
 {
-  IODBG << "user+ " << this << endl;
+  yuiDebug() << "user+ " << this << endl;
   if ( flushTypeahead() ) {
       ::flushinp();
   }
 
   if ( !pan ) {
-    NCINT << DLOC << " called for uninitialized " << this << endl;
+    yuiWarning() << DLOC << " called for uninitialized " << this << endl;
     return NCursesEvent::cancel;
   }
 
@@ -1075,7 +1077,7 @@ NCursesEvent NCDialog::userInput( int timeout_millisec )
   eventReason = returnEvent.reason;
   pendingEvent = NCursesEvent::none;
 
-  IODBG << "user- " << this << '(' << returnEvent << ')' << endl;
+  yuiDebug() << "user- " << this << '(' << returnEvent << ')' << endl;
   return returnEvent;
 }
 
@@ -1122,11 +1124,11 @@ YEvent * NCDialog::pollEventInternal()
 //
 void NCDialog::processInput( int timeout_millisec )
 {
-  IODBG << "process+ " << this << " active " << wActive
+  yuiDebug() << "process+ " << this << " active " << wActive
     << " timeout_millisec " << timeout_millisec << endl;
 
   if ( pendingEvent ) {
-    IODBG << this << "(return pending event)" << endl;
+    yuiDebug() << this << "(return pending event)" << endl;
     doUpdate();
     ::flushinp();
     return;
@@ -1134,16 +1136,16 @@ void NCDialog::processInput( int timeout_millisec )
 
   // if no active item return on any input
   if ( wActive->GetState() != NC::WSactive ) {
-    IODBG << "noactive item => reactivate!" << endl;
+    yuiDebug() << "noactive item => reactivate!" << endl;
     Activate();
   }
 
   if ( wActive->GetState() != NC::WSactive ) {
-    IODBG << "still noactive item!" << endl;
+    yuiDebug() << "still noactive item!" << endl;
 
     if ( timeout_millisec == -1 ) {
       pendingEvent = NCursesEvent::cancel;
-      NCINT << DLOC << this << "(set ET_CANCEL since noactive item on pollInput)" << endl;
+      yuiDebug() << DLOC << this << "(set ET_CANCEL since noactive item on pollInput)" << endl;
       getch( -1 );
     }
     else
@@ -1163,7 +1165,7 @@ void NCDialog::processInput( int timeout_millisec )
   wint_t ch = 0;
   wint_t hch = 0;
 
-  IODBG << "enter loop..." << endl;
+  yuiDebug() << "enter loop..." << endl;
   noUpdates = true;
   while ( !pendingEvent.isReturnEvent() && ch != WEOF ) {
 
@@ -1189,18 +1191,18 @@ void NCDialog::processInput( int timeout_millisec )
       ::flushinp();
       switch ( hch ) {
       case 'D':
-	NCINT << "CTRL('D')-'D' DUMP+++++++++++++++++++++" << endl;
+	yuiMilestone() << "CTRL('D')-'D' DUMP+++++++++++++++++++++" << endl;
 	NCurses::ScreenShot();
-	NCINT << this << endl;
-	DumpOn( NCINT, " " );
-	NCINT << "CTRL('D')-'D' DUMP---------------------" << endl;
+	yuiMilestone() << this << endl;
+	DumpOn( yuiMilestone(), " " );
+	yuiMilestone() << "CTRL('D')-'D' DUMP---------------------" << endl;
 	break;
       case 'S':
 	if ( hiddenMenu() ) {
-	  NCINT << "CTRL('D')-'S' STYLEDEF+++++++++++++++++++++" << endl;
+	  yuiMilestone() << "CTRL('D')-'S' STYLEDEF+++++++++++++++++++++" << endl;
 	  const_cast<NCstyle&>(NCurses::style()).changeSyle();
 	  NCurses::Redraw();
-	  NCINT << "CTRL('D')-'S' STYLEDEF---------------------" << endl;
+	  yuiMilestone() << "CTRL('D')-'S' STYLEDEF---------------------" << endl;
 	}
 	break;
       }
@@ -1336,7 +1338,7 @@ void NCDialog::processInput( int timeout_millisec )
   }
 #endif
 
-  IODBG << "process- " << this << " active " << wActive << endl;
+  yuiDebug() << "process- " << this << " active " << wActive << endl;
 }
 
 ///////////////////////////////////////////////////////////////////

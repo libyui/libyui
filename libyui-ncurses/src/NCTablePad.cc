@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCTablePad.h"
 #include "NCPopupMenu.h"
 
@@ -243,7 +245,7 @@ wpos NCTablePad::CurPos() const
 //
 wsze NCTablePad::UpdateFormat()
 {
-  IDBG << endl;
+  yuiDebug() << endl;
   dirty = true;
   dirtyFormat = false;
   ItemStyle.ResetToMinCols();
@@ -270,7 +272,7 @@ int NCTablePad::DoRedraw()
     return OK;
   }
 
-  EDBG << "dirtyFormat " << dirtyFormat << endl;
+  yuiDebug() << "dirtyFormat " << dirtyFormat << endl;
   if ( dirtyFormat )
     UpdateFormat();
 
@@ -308,7 +310,7 @@ int NCTablePad::setpos( const wpos & newpos )
       return DoRedraw();
     return OK;
   }
-  SDBG << newpos << " : l " << Lines() << " : cl " << citem.L
+  yuiDebug() << newpos << " : l " << Lines() << " : cl " << citem.L
     << " : d " << dirty << " : df " << dirtyFormat << endl;
   if ( dirtyFormat )
     UpdateFormat();

@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCFileSelection.h"
 #include "NCTable.h"
 #include "NCi18n.h"
@@ -217,7 +219,7 @@ NCFileSelection::NCFileSelection( YWidget * parent,
 	}
     }
     
-    WIDDBG << endl;
+    yuiDebug() << endl;
 }
 
 
@@ -231,7 +233,7 @@ NCFileSelection::NCFileSelection( YWidget * parent,
 //
 NCFileSelection::~NCFileSelection()
 {
-    WIDDBG << endl;
+    yuiDebug() << endl;
 }
 
 
@@ -268,7 +270,7 @@ string  NCFileSelection::getCurrentLine( )
 void NCFileSelection::setCurrentDir()
 {
     string selected = getCurrentLine();
-    NCMIL << "Current line: " << selected << endl;
+    yuiMilestone() << "Current line: " << selected << endl;
     if ( selected != ".." )
     {
 	if ( startDir != "/" )
@@ -618,7 +620,7 @@ NCursesEvent NCFileTable::wHandleInput( wint_t key )
 	    ret = NCursesEvent::none;
     }
 
-    NCDBG << "CURRENT_FILE: " << currentFile << endl;
+    yuiDebug() << "CURRENT_FILE: " << currentFile << endl;
     return ret;
 }
 
@@ -698,7 +700,7 @@ bool NCFileTable::fillList ( )
     }
     else
     {
-	NCERR << "ERROR opening directory: " << currentDir << " errno: "
+	yuiError() << "ERROR opening directory: " << currentDir << " errno: "
 	      << strerror( errno ) << endl;
 	return false;
     }
@@ -834,7 +836,7 @@ bool NCDirectoryTable::fillList ( )
     }
     else
     {
-	NCERR << "ERROR opening directory: " << currentDir << " errno: "
+	yuiError() << "ERROR opening directory: " << currentDir << " errno: "
 	      << strerror( errno ) << endl;
 	return false;
     }
@@ -896,7 +898,7 @@ NCursesEvent NCDirectoryTable::wHandleInput( wint_t key )
 	    ret = NCursesEvent::none;
     }
 
-    NCDBG << "CURRENT: " << currentDir << " START DIR: " << startDir << endl;
+    yuiDebug() << "CURRENT: " << currentDir << " START DIR: " << startDir << endl;
     return ret;
 }
 

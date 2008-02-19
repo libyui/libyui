@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCMultiSelectionBox.h"
 
 
@@ -33,7 +35,7 @@ NCMultiSelectionBox::NCMultiSelectionBox( YWidget * parent,
     : YMultiSelectionBox( parent, nlabel )
     , NCPadWidget( parent )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   InitPad();
   setLabel( nlabel );
 }
@@ -48,7 +50,7 @@ NCMultiSelectionBox::NCMultiSelectionBox( YWidget * parent,
 //
 NCMultiSelectionBox::~NCMultiSelectionBox()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////

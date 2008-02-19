@@ -20,7 +20,9 @@
 
 #include "NCtoY2Event.h"
 #include "NCWidget.h"
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 
 
 NCtoY2Event::NCtoY2Event( const NCursesEvent & ncev )
@@ -82,8 +84,8 @@ NCtoY2Event::propagate()
 
     // If we get this far, there must be an error.
     
-    UIINT << "Can't propagate through (EventType*)0" << endl;
-    UIDBG << *this << endl;
+    yuiMilestone() << "Can't propagate through (EventType*)0" << endl;
+    yuiDebug() << *this << endl;
     return 0;
 }
 

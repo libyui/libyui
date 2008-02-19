@@ -22,7 +22,9 @@
 #include <vector>
 #include <list>
 
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCstyle.h"
 

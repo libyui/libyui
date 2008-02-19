@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCRadioButton.h"
 #include "NCRadioButtonGroup.h"
@@ -36,7 +38,7 @@ NCRadioButton::NCRadioButton( YWidget * parent,
     , NCWidget( parent )
     , checked( false )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   setLabel( nlabel );
   hotlabel = &label;
   setValue( check );
@@ -52,7 +54,7 @@ NCRadioButton::NCRadioButton( YWidget * parent,
 //
 NCRadioButton::~NCRadioButton()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 int NCRadioButton::preferredWidth()

@@ -20,7 +20,9 @@
 
 #include <curses.h>
 
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "YNCursesUI.h"
 #include "NCApplication.h"
@@ -47,7 +49,7 @@ NCApplication::setLanguage( const string & language,
     YApplication::setLanguage( language, encoding );
     NCurses::Refresh();
     
-    NCDBG << "Language: " << language << " Encoding: " << ((encoding!="")?encoding:"NOT SET") << endl;
+    yuiDebug() << "Language: " << language << " Encoding: " << ((encoding!="")?encoding:"NOT SET") << endl;
   
 }
 
@@ -63,7 +65,7 @@ NCApplication::askForSaveFileName( const string & startDir,
     NCursesEvent retEvent = filePopup->showDirPopup( );
     YDialog::deleteTopmostDialog();
 
-    NCMIL << "Returning: " <<  retEvent.result << endl;
+    yuiMilestone() << "Returning: " <<  retEvent.result << endl;
     return retEvent.result;
 }
 
@@ -79,7 +81,7 @@ NCApplication::askForExistingFile( const string & startDir,
     NCursesEvent retEvent = filePopup->showDirPopup( );
     YDialog::deleteTopmostDialog();
 
-    NCMIL << "Returning: " <<  retEvent.result << endl;
+    yuiMilestone() << "Returning: " <<  retEvent.result << endl;
     return retEvent.result;
 }
 
@@ -94,7 +96,7 @@ NCApplication::askForExistingDirectory( const string & startDir,
     NCursesEvent retEvent = dirPopup->showDirPopup( );
     YDialog::deleteTopmostDialog();
 
-    NCMIL << "Returning: " <<  retEvent.result << endl;
+    yuiMilestone() << "Returning: " <<  retEvent.result << endl;
     return retEvent.result;
 }
 
@@ -121,7 +123,7 @@ NCApplication::initConsoleKeyboard()
 	int ret = system( (cmd + " >/dev/null 2>&1").c_str() );
 	if ( ret != 0 )
 	{
-	    NCERR << "ERROR: /bin/dumpkeys | /bin/loadkeys --unicode returned: "<< ret << endl;
+	    yuiError() << "ERROR: /bin/dumpkeys | /bin/loadkeys --unicode returned: "<< ret << endl;
 	}
     }
 }
@@ -168,7 +170,7 @@ NCApplication::runInTerminal( const string & cmd )
 
     if ( ret != 0 )
     {
-	NCERR << cmd << " returned:" << ret << endl;
+	yuiError() << cmd << " returned:" << ret << endl;
     }
 
     // Redirect stdout and stderr to y2log again

@@ -16,9 +16,15 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCTableItem.h"
 #include "stringutil.h"
+#include "stdutil.h"
+
+using stdutil::form;
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -475,7 +481,7 @@ bool NCTableStyle::SetStyleFrom( const vector<NCstring> & head )
 	colAdjust[i] = NC::LEFT;
 	break;
       default:
-	NCWAR << "No style char [LRC] at beginning of '" << entry << "'" << endl;
+	yuiWarning() << "No style char [LRC] at beginning of '" << entry << "'" << endl;
 	break;
       }
     }

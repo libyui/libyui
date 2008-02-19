@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCTable.h"
 #include "NCPopupMenu.h"
 #include <yui/YMenuButton.h>
@@ -41,7 +43,7 @@ NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader )
     , NCPadWidget( parent )
     , biglist( false )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 
   InitPad();
   // !!! head is UTF8 encoded, thus should be vector<NCstring>
@@ -71,7 +73,7 @@ NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader )
 
 NCTable::~NCTable()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -88,11 +90,11 @@ void NCTable::cellChanged( int index, int colnum, const string & newtext )
 {
   NCTableLine * cl = myPad()->ModifyLine( index );
   if ( !cl ) {
-    NCINT << "No such line: " << wpos( index, colnum ) << newtext << endl;
+    yuiWarning() << "No such line: " << wpos( index, colnum ) << newtext << endl;
   } else {
     NCTableCol * cc = cl->GetCol( colnum );
     if ( !cc ) {
-      NCINT << "No such colnum: " << wpos( index, colnum ) << newtext << endl;
+      yuiWarning() << "No such colnum: " << wpos( index, colnum ) << newtext << endl;
     } else {
       // use NCtring to enforce recoding from 'utf8'
       cc->SetLabel( NCstring( newtext ) );

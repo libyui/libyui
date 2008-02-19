@@ -18,7 +18,9 @@
 /-*/
 #include <climits>
 
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCInputField.h"
 
@@ -56,7 +58,7 @@ NCInputField::NCInputField( YWidget * parent,
     , returnOnReturn_b( false )
     , InputMaxLength( -1 )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   if ( maxInputLength &&
        ( !maxFldLength || maxFldLength > maxInputLength ) ) {
      maxFldLength = maxInputLength;
@@ -79,7 +81,7 @@ NCInputField::~NCInputField()
 {
   delete lwin;
   delete twin;
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////

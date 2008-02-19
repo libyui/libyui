@@ -17,19 +17,20 @@
 
 /-*/
 
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCRichText.h"
 #include "YNCursesUI.h"
 #include "stringutil.h"
+#include "stdutil.h"
 #include <sstream>
 
 #include "YMenuItem.h"
 #include "YApplication.h"
 
-#if 0
-#undef  DBG_CLASS
-#define DBG_CLASS "_NCRichText_"
-#endif
+using stdutil::form;
+
 
 ///////////////////////////////////////////////////////////////////
 
@@ -132,7 +133,7 @@ const wstring NCRichText::filterEntities( const std::wstring & text )
 		txt.replace( special, colon-special+1, repl );
 	    }
             else
-		NCMIL << "porn.bat" << endl;
+		yuiMilestone() << "porn.bat" << endl;
 	}
     return txt;
 }
@@ -178,7 +179,7 @@ NCRichText::NCRichText( YWidget * parent, const string & ntext,
     , preTag( false )
     , Tattr( 0 )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   activeLabelOnly = true;
   setValue( ntext );
 }
@@ -193,7 +194,7 @@ NCRichText::NCRichText( YWidget * parent, const string & ntext,
 //
 NCRichText::~NCRichText()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 int NCRichText::preferredWidth()
@@ -315,7 +316,7 @@ NCursesEvent NCRichText::wHandleInput( wint_t key )
 	ret = NCursesEvent::menu;
 	string str;
 	NCstring::RecodeFromWchar( anchors[armed].target, "UTF-8", &str );
-	NCMIL << "LINK: " << str << endl;
+	yuiMilestone() << "LINK: " << str << endl;
 	ret.selection = new YMenuItem( str );
       }
       break;
@@ -351,7 +352,7 @@ NCPad * NCRichText::CreatePad()
 //
 void NCRichText::DrawPad()
 {
-  MDBG
+  yuiDebug()
     << "Start: plain mode " << plainText << endl
     << "       padsize " << myPad()->size() << endl
     << "       text length " << text.str().size() << endl;
@@ -364,7 +365,7 @@ void NCRichText::DrawPad()
   else
     DrawHTMLPad();
 
-  MDBG << "Done" << endl;
+  yuiDebug() << "Done" << endl;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -378,7 +379,7 @@ void NCRichText::DrawPad()
 void NCRichText::DrawPlainPad()
 {
   NCtext ftext( text );
-  MDBG << "ftext is " << wsze( ftext.Lines(), ftext.Columns() ) << endl;
+  yuiDebug() << "ftext is " << wsze( ftext.Lines(), ftext.Columns() ) << endl;
 
   AdjustPad( wsze( ftext.Lines(), ftext.Columns() ) );
 
@@ -473,7 +474,7 @@ inline void SkipPreTXT( const wchar_t *& wch ) {
 //
 void NCRichText::DrawHTMLPad()
 {
-  MDBG << "Start:" << endl;
+  yuiDebug() << "Start:" << endl;
 
   liststack = stack<int>();
   canchor = Anchor();
@@ -541,9 +542,9 @@ void NCRichText::DrawHTMLPad()
   PadBOL();
   AdjustPad( wsze( cl, textwidth ) );
   
-  MDBG << "Anchors: " << anchors.size() << endl;
+  yuiDebug() << "Anchors: " << anchors.size() << endl;
   for ( unsigned i = 0; i < anchors.size(); ++i ) {
-    MDBG << form( "  %2d: [%2d,%2d] -> [%2d,%2d]",
+    yuiDebug() << form( "  %2d: [%2d,%2d] -> [%2d,%2d]",
 		  i,
 		  anchors[i].sline, anchors[i].scol,
 		  anchors[i].eline, anchors[i].ecol ) << endl;
@@ -784,7 +785,7 @@ void NCRichText::openAnchor( wstring args )
 
     canchor.target = args;
   } else {
-    WIDERR << "No value for 'HREF=' in anchor '" << args << "'" << endl;
+    yuiError() << "No value for 'HREF=' in anchor '" << args << "'" << endl;
   }
 }
 
@@ -891,7 +892,7 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
   }
 
   if ( token == T_UNKNOWN ) {
-    IDBG << "T_UNKNOWN :" << value << ":" << args << ":" << endl;
+    yuiDebug() << "T_UNKNOWN :" << value << ":" << args << ":" << endl;
 // see bug #67319
 //  return false;
     return true;
@@ -1017,7 +1018,7 @@ void NCRichText::arm( unsigned i )
     armed = i;
     return;
   }
-  SDBG << i << " (" << armed << ")" << endl;
+  yuiDebug() << i << " (" << armed << ")" << endl;
   if ( i == armed ) {
     if ( armed != Anchor::unset ) {
       // just redraw

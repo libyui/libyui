@@ -16,7 +16,9 @@
    Maintainer: Thomas Goettlicher <tgoettlicher@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCBusyIndicator.h"
 #include <signal.h>
@@ -75,7 +77,7 @@ NCBusyIndicator::NCBusyIndicator( YWidget * parent,
     , _rightwards (true)
     , _alive (true)
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   if ( timeout <= 0 )
     timeout = 1;
   hotlabel = &_label;
@@ -108,7 +110,7 @@ NCBusyIndicator::~NCBusyIndicator()
   NCBusyIndicatorObject = NULL;
   delete _lwin;
   delete _twin;
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////

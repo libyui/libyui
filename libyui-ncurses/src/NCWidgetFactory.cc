@@ -20,7 +20,9 @@
 
 #include "NCWidgetFactory.h"
 #include "YUIException.h"
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "YNCursesUI.h"
 
 #include <string>
@@ -50,7 +52,7 @@ NCWidgetFactory::~NCWidgetFactory()
 NCDialog *
 NCWidgetFactory::createDialog( YDialogType dialogType, YDialogColorMode colorMode )
 {
-    UIDBG << "Flush input buffer - new dialog" << endl;
+    yuiDebug() << "Flush input buffer - new dialog" << endl;
     ::flushinp();
 
     NCDialog * dialog = new NCDialog( dialogType, colorMode );

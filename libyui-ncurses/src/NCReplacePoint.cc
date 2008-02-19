@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCReplacePoint.h"
 
@@ -32,7 +34,7 @@ NCReplacePoint::NCReplacePoint( YWidget * parent )
     : YReplacePoint( parent )
     , NCWidget( parent )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   wstate = NC::WSdumb;
 }
 
@@ -46,7 +48,7 @@ NCReplacePoint::NCReplacePoint( YWidget * parent )
 //
 NCReplacePoint::~NCReplacePoint()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////

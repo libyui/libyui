@@ -19,7 +19,9 @@
 
 #include "NCAskForDirectory.h"
 
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "YDialog.h"
 #include "YTypes.h"
 #include "NCLayoutBox.h"
@@ -219,7 +221,7 @@ bool NCAskForExistingDirectory::postAgain( )
 	    return true;
 		
 	// show the currently selected directory
-	NCDBG << "Add item: " <<  postevent.result << endl;
+	yuiDebug() << "Add item: " <<  postevent.result << endl;
 
 	dirName->addItem( postevent.result,
 			  true );

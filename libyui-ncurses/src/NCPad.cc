@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCPad.h"
 
 ///////////////////////////////////////////////////////////////////
@@ -139,7 +141,7 @@ int NCPad::setpos( const wpos & newpos )
 //
 void NCPad::wRecoded()
 {
-  SDBG << "NCPad::wRecoded" << endl;
+  yuiDebug() << "NCPad::wRecoded" << endl;
 }
 
 ///////////////////////////////////////////////////////////////////

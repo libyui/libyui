@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCSelectionBox.h"
 
 ///////////////////////////////////////////////////////////////////
@@ -32,7 +34,7 @@ NCSelectionBox::NCSelectionBox( YWidget * parent, const string & nlabel )
     , NCPadWidget( parent )
     , biglist( false )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   InitPad();
   setLabel( nlabel );
 }
@@ -47,7 +49,7 @@ NCSelectionBox::NCSelectionBox( YWidget * parent, const string & nlabel )
 //
 NCSelectionBox::~NCSelectionBox()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 int NCSelectionBox::preferredWidth()
@@ -93,7 +95,7 @@ int NCSelectionBox::getCurrentItem()
 {
   if ( !myPad()->Lines() )
     return -1;
-  NCDBG << "Current pos: " << myPad()->CurPos().L << endl;
+  yuiDebug() << "Current pos: " << myPad()->CurPos().L << endl;
   return myPad()->CurPos().L;
 }
 
@@ -166,7 +168,7 @@ void NCSelectionBox::selectItem( int index )
 
 	if ( item )
 	{
-	    NCDBG << "selectItem:  " << item->label().c_str() << endl;
+	    yuiDebug() << "selectItem:  " << item->label().c_str() << endl;
 	    item->setSelected( true );
 	}
 	else

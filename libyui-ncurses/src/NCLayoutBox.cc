@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCLayoutBox.h"
 
@@ -33,7 +35,7 @@ NCLayoutBox::NCLayoutBox( YWidget * parent,
     : YLayoutBox( parent, dimension )
     , NCWidget( parent )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   wstate = NC::WSdumb;
 }
 
@@ -47,7 +49,7 @@ NCLayoutBox::NCLayoutBox( YWidget * parent,
 //
 NCLayoutBox::~NCLayoutBox()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -83,7 +85,7 @@ void NCLayoutBox::moveChild( YWidget * child, int newx, int newy )
   NCWidget * cw = dynamic_cast<NCWidget*>(child);
 
   if ( ! ( cw && IsParentOf( *cw ) ) ) {
-    NCINT << DLOC << cw << " is not my child" << endl;
+    yuiError() << DLOC << cw << " is not my child" << endl;
     return;
   }
 

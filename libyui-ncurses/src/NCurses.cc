@@ -27,14 +27,15 @@ using namespace std;
 
 #include "../config.h"
 
-#include "Y2Log.h"
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCDialog.h"
 #include "NCi18n.h"
 
+#include "stdutil.h"
 #include <signal.h>
 
-#include <y2util/y2log.h>
 extern "C" {
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -42,6 +43,9 @@ extern "C" {
 #include <fnmatch.h>
 }
 
+using stdutil::vform;
+using stdutil::form;
+    
 /*
   Textdomain "packages"
 */
@@ -166,7 +170,7 @@ NCurses::NCurses()
 //
 NCurses::~NCurses()
 {
-  UIMIL << "Shutdown NCurses..." << endl;
+  yuiMilestone() << "Shutdown NCurses..." << endl;
   myself = 0;
 
   //restore env. variable - might have been changed by NCurses::init()
@@ -180,7 +184,7 @@ NCurses::~NCurses()
   ::endwin();
   if ( theTerm )
     ::delscreen( theTerm );
-  UIMIL << "NCurses down" << endl;
+  yuiMilestone() << "NCurses down" << endl;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -210,12 +214,12 @@ int NCurses::ripinit_bottom( WINDOW * w, int c )
 
 void NCurses::init()
 {
-  UIMIL << "Launch NCurses..." 
+  yuiMilestone() << "Launch NCurses..." 
 #ifdef VERSION
     << "(ui-ncurses-" << VERSION << ")"
 #endif
     << endl;
-  UIMIL << "TERM=" << envTerm << endl;
+  yuiMilestone() << "TERM=" << envTerm << endl;
 
   signal( SIGINT, SIG_IGN );	// ignore Ctrl C
 
@@ -226,18 +230,18 @@ void NCurses::init()
   if ( ::ripoffline( -1, ripinit_bottom) != OK )
       throw NCursesError( "ripoffline() failed" );
   
-  UIMIL << "isatty(stdin)" << (isatty(0) ? "yes" : "no") << endl;
+  yuiMilestone() << "isatty(stdin)" << (isatty(0) ? "yes" : "no") << endl;
   if (isatty( 0 )) {
     char * mytty = ttyname( 0 );
     if ( mytty ) {
-      UIMIL << "mytty: " << mytty << endl;
+      yuiMilestone() << "mytty: " << mytty << endl;
       FILE * fdi = fopen( mytty, "r" );
       if (!fdi) {
-         UIERR << "fdi: (" << errno << ") " << strerror(errno) << endl;
+         yuiError() << "fdi: (" << errno << ") " << strerror(errno) << endl;
       }
       FILE * fdo = fopen( mytty, "w" );
       if (!fdo) {
-         UIERR << "fdo: (" << errno << ") " << strerror(errno) << endl;
+         yuiError() << "fdo: (" << errno << ") " << strerror(errno) << endl;
       }
       if ( fdi && fdo ) {
 	theTerm = newterm( 0, fdo, fdi );
@@ -255,7 +259,7 @@ void NCurses::init()
 	  else
 	    fallbackTerm = "vt100";
 
-	  UIWAR << "newterm() failed, using generic " << fallbackTerm << " as a fallback" << endl;
+	  yuiWarning() << "newterm() failed, using generic " << fallbackTerm << " as a fallback" << endl;
 	  //overwrite environment variable
 	  setenv("TERM", fallbackTerm.c_str(), 1);
 	  //.. and try again
@@ -279,12 +283,12 @@ void NCurses::init()
   RedirectToLog();
   
   if ( !theTerm ) {
-    UIMIL << "no term so fall back to initscr" << endl;
+    yuiMilestone() << "no term so fall back to initscr" << endl;
     if ( ::initscr() == NULL )
       throw NCursesError( "initscr() failed" );
   }
 
-  UIMIL << "have color = " << ::has_colors()  << endl;
+  yuiMilestone() << "have color = " << ::has_colors()  << endl;
   if ( want_colors() && ::has_colors() ) {
     if ( ::start_color() != OK )
       throw NCursesError( "start_color() failed" );
@@ -303,7 +307,7 @@ void NCurses::init()
 
   setup_screen();
 
-  UIMIL << form( "screen size %d x %d\n", lines(), cols() );
+  yuiMilestone() << form( "screen size %d x %d\n", lines(), cols() );
 
   myself = this;
 
@@ -316,7 +320,7 @@ void NCurses::init()
 
   init_screen();
 
-  UIMIL << "NCurses ready" << endl;
+  yuiMilestone() << "NCurses ready" << endl;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -467,12 +471,12 @@ void NCurses::Update()
 void NCurses::Refresh()
 {
   if ( myself && myself->initialized() ) {
-    UIMIL << "start refresh ..." << endl;
+    yuiMilestone() << "start refresh ..." << endl;
     SetTitle( myself->title_t );
     SetStatusLine( myself->status_line );
     ::clearok( ::stdscr, true );
     myself->stdpan->refresh();
-    UIMIL << "done refresh ..." << endl;
+    yuiMilestone() << "done refresh ..." << endl;
   }
 }
 
@@ -487,7 +491,7 @@ void NCurses::Refresh()
 void NCurses::Redraw()
 {
   if ( myself && myself->initialized() ) {
-    UIMIL << "start redraw ..." << endl;
+    yuiMilestone() << "start redraw ..." << endl;
 
     // initialize all dialogs rewdraw
     PANEL * pan = ::panel_above( NULL );
@@ -501,7 +505,7 @@ void NCurses::Redraw()
 
     // TBD: initialize all dialogs rewdraw
     Refresh();
-    UIMIL << "done redraw ..." << endl;
+    yuiMilestone() << "done redraw ..." << endl;
   }
 }
 
@@ -520,7 +524,7 @@ void NCurses::SetTitle( const string & str )
     ::wbkgd( myself->title_w, myself->style()(NCstyle::AppTitle) );
     ::wclear( myself->title_w );
 
-    NCMIL << "Draw title called" << endl;
+    yuiMilestone() << "Draw title called" << endl;
 
     #if 0    
     setTextdomain( "packages" );
@@ -625,21 +629,25 @@ void NCurses::ForgetDlg( NCDialog * dlg_r )
 //
 void NCurses::RedirectToLog()
 {
+#warning redirect stderr to log
+
+#if 0
   string log = get_log_filename();
   
-  UIMIL << "isatty(stderr)" << (isatty(2) ? "yes" : "no") << endl;
+  yuiMilestone() << "isatty(stderr)" << (isatty(2) ? "yes" : "no") << endl;
   if (isatty(2) && theTerm) {
     // redirect stderr to log
     close(2);
     open(log.c_str(), O_APPEND | O_CREAT, 0666);
   }
 
-  UIMIL << "isatty(stdout)" << (isatty(1) ? "yes" : "no") << endl;
+  yuiMilestone() << "isatty(stdout)" << (isatty(1) ? "yes" : "no") << endl;
   if (isatty(1) && theTerm) {
     // redirect stdout to log
     close(1);
     open(log.c_str(), O_APPEND | O_CREAT, 0666);
   }
+#endif
 
 }
 ///////////////////////////////////////////////////////////////////
@@ -653,7 +661,7 @@ void NCurses::RedirectToLog()
 void NCurses::ResizeEvent()
 {
   if ( myself && myself->initialized() ) {
-    UIMIL << "start resize to " << NCurses::lines() << 'x' << NCurses::cols() << "..." << endl;
+    yuiMilestone() << "start resize to " << NCurses::lines() << 'x' << NCurses::cols() << "..." << endl;
 
     // remember stack of visible dialogs.
     // don't hide on the fly, as it will mess up stacking order.
@@ -691,7 +699,7 @@ void NCurses::ResizeEvent()
    ::touchwin(myself->status_w);
    ::doupdate();
 
-   UIMIL << "done resize ..." << endl;
+   yuiMilestone() << "done resize ..." << endl;
   }
 }
 
@@ -708,7 +716,7 @@ void NCurses::ScreenShot( const string & name )
   if ( !myself )
     return;
   //ofstream out( name.c_str(), ios::out|ios::app );
-  ostream & out( UIINT );
+  ostream & out( yuiMilestone() );
   int curscrlines = myself->title_line() ? lines() + 1 : lines();
   for ( int l = 0; l < curscrlines; ++l ) {
     for ( int c = 0; c < cols(); ++c ) {

@@ -20,7 +20,9 @@
 #include <fstream>
 using namespace std;
 
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCattribute.h"
 #include "stringutil.h"

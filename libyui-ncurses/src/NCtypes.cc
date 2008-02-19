@@ -17,8 +17,15 @@
 
 /-*/
 
-#include "Y2Log.h"
+
+#include <iostream>
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCtypes.h"
+
+using std::ostream;
+
 
 /******************************************************************
 **

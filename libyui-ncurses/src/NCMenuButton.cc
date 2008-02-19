@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCMenuButton.h"
 #include "NCPopupMenu.h"
@@ -34,7 +36,7 @@ NCMenuButton::NCMenuButton( YWidget * parent,
     : YMenuButton( parent, nlabel )
     , NCWidget( parent )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   setLabel( nlabel );
   hotlabel = &label;
 }
@@ -49,7 +51,7 @@ NCMenuButton::NCMenuButton( YWidget * parent,
 //
 NCMenuButton::~NCMenuButton()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 int NCMenuButton::preferredWidth()

@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCAlignment.h"
 
@@ -34,7 +36,7 @@ NCAlignment::NCAlignment( YWidget * parent,
     : YAlignment( parent, halign, valign )
     , NCWidget( parent )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   wstate = NC::WSdumb;
 }
 
@@ -48,7 +50,7 @@ NCAlignment::NCAlignment( YWidget * parent,
 //
 NCAlignment::~NCAlignment()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -92,7 +94,7 @@ void NCAlignment::moveChild( YWidget * child, int newx, int newy )
   NCWidget * cw = dynamic_cast<NCWidget*>(child);
 
   if ( ! ( cw && IsParentOf( *cw ) ) ) {
-    NCINT << DLOC << cw << " is not my child" << endl;
+    yuiError() << DLOC << cw << " is not my child" << endl;
     return;
   }
 

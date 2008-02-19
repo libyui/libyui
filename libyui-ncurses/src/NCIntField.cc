@@ -16,11 +16,17 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCurses.h"
 #include "NCIntField.h"
 #include "NCPopupTextEntry.h"
 #include "stringutil.h"
+#include "stdutil.h"
+
+using stdutil::numstring;
+
 
 ///////////////////////////////////////////////////////////////////
 
@@ -50,7 +56,7 @@ NCIntField::NCIntField( YWidget * parent,
     , vlen( 0 )
     , vstart( 0 )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   vlen = numstring( minValue() ).length();
   unsigned tmpval = numstring( maxValue() ).length();
   if ( tmpval > vlen )
@@ -72,7 +78,7 @@ NCIntField::~NCIntField()
 {
   delete lwin;
   delete twin;
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////

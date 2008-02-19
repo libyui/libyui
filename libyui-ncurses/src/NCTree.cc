@@ -16,7 +16,9 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-#include "Y2Log.h"
+
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
 #include "NCTree.h"
 
 #include "YTreeItem.h"
@@ -190,7 +192,7 @@ NCTree::NCTree( YWidget * parent, const string & nlabel )
     : YTree( parent, nlabel )
     , NCPadWidget( parent )
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
   setLabel( nlabel );
 }
 
@@ -204,7 +206,7 @@ NCTree::NCTree( YWidget * parent, const string & nlabel )
 //
 NCTree::~NCTree()
 {
-  WIDDBG << endl;
+  yuiDebug() << endl;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -313,7 +315,7 @@ const YTreeItem * NCTree::getCurrentItem() const
       yitem = &cline->Yitem();
     }
   }
-  DDBG << "-> " << (yitem?yitem->label().c_str():"noitem") << endl;
+  yuiDebug() << "-> " << (yitem?yitem->label().c_str():"noitem") << endl;
   return yitem;
 }
 
@@ -455,7 +457,7 @@ void NCTree::DrawPad()
 {
   if ( !myPad() )
   {
-      NCERR << "PadWidget not valid" << endl;
+      yuiError() << "PadWidget not valid" << endl;
       return;
   }
 
@@ -498,12 +500,12 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
   YUI_CHECK_PTR( currentItem );
   YTree::selectItem( const_cast<YItem *>(currentItem), true );
    
-  NCDBG << "Old item: " << oldCurrentItem->label() << " Current: " << currentItem->label() << endl;
+  yuiDebug() << "Old item: " << oldCurrentItem->label() << " Current: " << currentItem->label() << endl;
   if ( notify() && (oldCurrentItem != currentItem) ) 
       ret = NCursesEvent::SelectionChanged;
   
 
-  NCDBG << "Notify: " << (notify()?"true":"false") <<  " Return event: " << ret << endl;
+  yuiDebug() << "Notify: " << (notify()?"true":"false") <<  " Return event: " << ret << endl;
   return ret;
 }
 

@@ -25,7 +25,6 @@ pkgincludedir = $(includedir)/ncurses
 pkginclude_HEADERS = 		\
 	stdutil.h           	\
 	NCi18n.h		\
-	Y2Log.h			\
 	tnode.h			\
 	position.h		\
 	YNCursesUI.h		\
@@ -107,7 +106,6 @@ install-pkgincludeHEADERS: $(pkgi/nclude_HEADERS)
 
 
 libpy2ncurses_la_SOURCES =		\
-	Y2Log.cc			\
 	position.cc			\
 	YNCursesUI.cc			\
 	NCtoY2Event.cc			\
