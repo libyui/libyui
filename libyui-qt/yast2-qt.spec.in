@@ -10,7 +10,6 @@ BuildRequires:  yast2-devtools >= 2.16.3
 BuildRequires:  yast2-core-devel >= 2.16.35
 Requires:       yast2-core       >= 2.16.35
 Requires:       yast2_theme >= 2.16.1
-Requires:	libzypp >= 3.11.8
 Provides:	yast2_ui
 Provides:	y2base:/usr/lib/YaST2/servers/qt
 Provides:	y2base:/usr/lib/YaST2/plugin/libpy2qt.so.2
