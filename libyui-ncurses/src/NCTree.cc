@@ -501,7 +501,7 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
   YTree::selectItem( const_cast<YItem *>(currentItem), true );
    
   yuiDebug() << "Old item: " << oldCurrentItem->label() << " Current: " << currentItem->label() << endl;
-  if ( notify() && (oldCurrentItem != currentItem) ) 
+  if ( notify() && immediateMode() && (oldCurrentItem != currentItem) ) 
       ret = NCursesEvent::SelectionChanged;
   
 

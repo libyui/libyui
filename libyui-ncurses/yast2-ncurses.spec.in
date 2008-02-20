@@ -8,8 +8,8 @@ BuildRequires:	libxcrypt-devel blocxx-devel ncurses-devel
 Summary:	-
 Provides:	yast2_ui
 Requires:	glibc-locale
-BuildRequires:	yast2-core-devel >= 2.16.34
-Requires:	yast2-core >= 2.16.34
+BuildRequires:	yast2-core-devel >= 2.16.36
+Requires:	yast2-core >= 2.16.36
 Recommends:	yast2-ncurses-pkg
 %description
 -
