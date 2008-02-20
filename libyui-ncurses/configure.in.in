@@ -13,7 +13,5 @@
 AC_CHECK_HEADER([ncursesw/curses.h],
 		[CPPFLAGS="$CPPFLAGS -I/usr/include/ncursesw"])
 
-PKG_CHECK_MODULES([ZYPP], [libzypp])
-
 ## and generate the output
 @YAST2-OUTPUT@
