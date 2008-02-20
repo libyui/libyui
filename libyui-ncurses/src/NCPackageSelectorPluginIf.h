@@ -29,8 +29,6 @@ class NCPackageSelectorPluginIf
 
   public:
 
-    virtual ~NCPackageSelectorPluginIf() = 0; 
-
     virtual YPackageSelector *createPackageSelector( YWidget *parent, long modeFlags ) = 0 ;
 
     virtual YEvent *runPkgSelection (YDialog *currentDialog, YWidget *packageSelector ) = 0;
