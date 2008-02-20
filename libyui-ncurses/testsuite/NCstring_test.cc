@@ -21,7 +21,9 @@
 #include <errno.h>
 #include <iconv.h>
 
-#include "Y2Log.h"
+#define  YUILogComponent "ncurses"
+#include <YUILog.h>
+
 #include "NCstring_test.h"
 
 
@@ -132,13 +134,13 @@ bool NCstring_test::RecodeFromWchar( const wstring & in, const string & to_encod
 	}
 	
 	fromwchar_cd = iconv_open ( to_encoding.c_str(), "WCHAR_T" );
-	NCMIL << "iconv_open( " << to_encoding.c_str() << ", \"WCHAR_T\" )" << endl;
+	yuiMilestone() << "iconv_open( " << to_encoding.c_str() << ", \"WCHAR_T\" )" << endl;
 	
 	if ( fromwchar_cd == (iconv_t)(-1) )
 	{
 	    if (!complained)
 	    {
-		NCERR << "ERROR: iconv_open failed" << endl;
+		yuiError() << "ERROR: iconv_open failed" << endl;
 		complained = true;
 	    }
 	    return false;
@@ -176,7 +178,7 @@ bool NCstring_test::RecodeFromWchar( const wstring & in, const string & to_encod
         {
 	    if (!complained)
 	    {
-		NCERR << "ERROR iconv: " << errno << endl;
+		yuiError() << "ERROR iconv: " << errno << endl;
 		complained = true;
 	    }
 	    if (errno == EINVAL || errno == EILSEQ)
@@ -218,13 +220,13 @@ bool NCstring_test::RecodeToWchar (const string& in, const string &from_encoding
 	}
 	
 	towchar_cd = iconv_open( "WCHAR_T", from_encoding.c_str() );
-	NCMIL << "iconv_open( \"WCHAR_T\", " << from_encoding.c_str() << " )" << endl;
+	yuiMilestone() << "iconv_open( \"WCHAR_T\", " << from_encoding.c_str() << " )" << endl;
 	
 	if ( towchar_cd == (iconv_t)(-1))
 	{
 	    if (!complained)
 	    {
-		NCERR << "Error: RecodeToWchar iconv_open() failed" << endl;
+		yuiError() << "Error: RecodeToWchar iconv_open() failed" << endl;
 		complained = true;
 	    }
 	    return false;
@@ -263,7 +265,7 @@ bool NCstring_test::RecodeToWchar (const string& in, const string &from_encoding
 		// EILSEQ 	84	Illegal byte sequence.
 		// EINVAL   	22      Invalid argument
 		// E2BIG     	7	Argument list too long
-		NCERR << "ERROR iconv: " << errno << endl;
+		yuiError() << "ERROR iconv: " << errno << endl;
 		complained = true;
 	    }
 	    if (errno == EINVAL || errno == EILSEQ)
