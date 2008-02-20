@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Feb 20 13:31:34 CET 2008 - coolo@suse.de
+
+- remove self made logging, use UI
+
+-------------------------------------------------------------------
 Fri Feb 15 17:33:00 CET 2008 - coolo@suse.de
 
 - compile against libzypp trunk - language support pending
