@@ -26,6 +26,7 @@ utf8test_SOURCES = utf8test.cc			\
 
 utf8test_LDADD = ../src/libpy2ncurses.la \
 	-lncursesw -lpanelw -lpthread -ly2 -L$(plugindir) -lpy2UI -lycp -lutil
+utf8test_LDFLAGS = -L$(libdir)
 
 in_wch_SOURCES = in_wch.cc
 
