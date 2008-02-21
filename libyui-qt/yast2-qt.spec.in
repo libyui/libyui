@@ -2,13 +2,22 @@
 
 
 @HEADER@
-BuildRequires:	docbook-xsl-stylesheets doxygen libdrm-devel libjpeg-devel libxcrypt-devel libxslt perl-XML-Writer libqt4-devel sgml-skel update-desktop-files
+BuildRequires:	docbook-xsl-stylesheets 
+BuildRequires:	doxygen 
+BuildRequires:	libdrm-devel 
+BuildRequires:	libjpeg-devel 
+BuildRequires:	libxcrypt-devel 
+BuildRequires:	libxslt 
+BuildRequires:	perl-XML-Writer 
+BuildRequires:	libqt4-devel 
+BuildRequires:	sgml-skel 
+BuildRequires:	update-desktop-files
 BuildRequires:  cmake
 
 Summary:	-
 BuildRequires:  yast2-devtools >= 2.16.3
-BuildRequires:  yast2-core-devel >= 2.16.35
-Requires:       yast2-core       >= 2.16.35
+BuildRequires:  yast2-libyui-devel >= 2.16.37
+Requires:       yast2-libyui	   >= 2.16.37
 Requires:       yast2_theme >= 2.16.1
 Provides:	yast2_ui
 Provides:	y2base:/usr/lib/YaST2/servers/qt
@@ -17,6 +26,7 @@ Provides:	yast2-ui-qt yast2-ui-qt-devel
 Obsoletes:	yast2-ui-qt yast2-ui-qt-devel
 Provides:	y2qt
 Obsoletes:	y2qt
+Recommmends:	yast2-pkg
 
 %description
 -
