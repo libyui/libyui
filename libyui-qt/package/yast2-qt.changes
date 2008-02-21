@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Feb 21 10:20:07 CET 2008 - coolo@suse.de
+
+- fix slider layout (bnc#363395)
+- V 2.16.28
+
+-------------------------------------------------------------------
 Mon Feb 18 18:37:19 CET 2008 - sh@suse.de
 
 - Qt-UI now no longer depends on libycp or liby2 (Y2Component...)

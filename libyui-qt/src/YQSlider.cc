@@ -44,21 +44,21 @@ YQSlider::YQSlider( YWidget *		parent,
 {
     setWidgetRep( this );
 
-    QVBoxLayout* layout = new QVBoxLayout( this );
-    setLayout( layout );
+    QVBoxLayout* toplayout = new QVBoxLayout( this );
+    setLayout( toplayout );
 
-    layout->setSpacing( YQWidgetSpacing );
-    layout->setMargin ( YQWidgetMargin );
+    toplayout->setSpacing( YQWidgetSpacing );
+    toplayout->setMargin ( YQWidgetMargin );
 
     _caption = new YQWidgetCaption( this, label );
     YUI_CHECK_NEW( _caption );
-    layout->addWidget( _caption );
+    toplayout->addWidget( _caption );
 
     _hbox = new QFrame( this );
     YUI_CHECK_NEW( _hbox );
-    layout->addWidget( _hbox );
+    toplayout->addWidget( _hbox );
 
-    layout = new QVBoxLayout( _hbox );
+    QHBoxLayout *layout = new QHBoxLayout( _hbox );
     _hbox->setLayout( layout );
 
     layout->setMargin ( YQWidgetMargin );
@@ -90,7 +90,7 @@ YQSlider::YQSlider( YWidget *		parent,
         _qt_spinBox->setMinimum(minValue);
         _qt_spinBox->setMaximum(maxValue);
         _qt_spinBox->setSingleStep(1);
-      
+
 	layout->addWidget( _qt_spinBox );
     }
     YUI_CHECK_NEW( _qt_spinBox );
