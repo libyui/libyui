@@ -94,7 +94,14 @@ void QY2Styler::renderParent( QWidget *wid )
     if ( _backgrounds[name].full )
         fillRect = wid->rect();
 
-    QImage back = getScaled( name, fillRect.size() );
+    QImage back;
+    if ( _backgrounds[name].lastscale != fillRect.size() )
+    {
+        _backgrounds[name].scaled = getScaled( name, fillRect.size() );
+        _backgrounds[name].lastscale = fillRect.size();
+    }
+    back = _backgrounds[name].scaled;
+
     QPainter pain( &back );
     QWidget *child;
     foreach( child, _children[wid] )
@@ -126,22 +133,15 @@ void QY2Styler::renderParent( QWidget *wid )
     wid->setPalette( p );
 }
 
-bool QY2Styler::eventFilter( QObject * obj, QEvent * ev )
+bool QY2Styler::updateRendering( QWidget *wid )
 {
-    QString name = obj->objectName();
-
-    if ( ev->type() != QEvent::Resize && ev->type() != QEvent::Show )
-        return QObject::eventFilter( obj, ev );
+    QString name = wid->objectName();
 
     if ( !_backgrounds.contains( name ) )
-       return QObject::eventFilter( obj, ev );
+        return false;
 
-    QWidget *wid = qobject_cast<QWidget*>( obj );
-
-    if (! wid->isVisible() )
-        return QObject::eventFilter( obj, ev );
-
-    //qDebug() << "eventFilter " << qPrintable( name ) << " " << obj->metaObject()->className() << " " << wid->isVisible();
+    if (! wid->isVisible() || !wid->updatesEnabled() )
+        return false;
 
     if ( _backgrounds[name].pix.isNull() )
     {
@@ -157,12 +157,12 @@ bool QY2Styler::eventFilter( QObject * obj, QEvent * ev )
         while ( parent && !_children.contains( parent ) )
             parent = parent->parentWidget();
         renderParent( parent );
-        return QObject::eventFilter( obj, ev );
     } else {
         renderParent( wid );
-        return QObject::eventFilter( obj, ev );
     }
+    return true;
 
+#if 0
     QPixmap result( wid->size() );
     QRect fillRect = wid->contentsRect();
     if ( _backgrounds[name].full )
@@ -194,6 +194,15 @@ bool QY2Styler::eventFilter( QObject * obj, QEvent * ev )
     QPalette p = wid->palette();
     p.setBrush(QPalette::Window, result );
     wid->setPalette( p );
+
+    return true;
+#endif
+}
+
+bool QY2Styler::eventFilter( QObject * obj, QEvent * ev )
+{
+    if ( ev->type() == QEvent::Resize || ev->type() == QEvent::Show )
+        updateRendering( qobject_cast<QWidget*>( obj ) );
 
     return QObject::eventFilter( obj, ev );
 }

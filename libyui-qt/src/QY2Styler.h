@@ -23,6 +23,8 @@ public:
         return _self;
     }
 
+    bool updateRendering( QWidget *wid );
+
 protected:
     void renderParent( QWidget *wid );
     QImage getScaled( const QString name, const QSize & size );
@@ -37,6 +39,8 @@ private:
     struct BackgrInfo {
 	QString filename;
 	QImage pix;
+        QImage scaled;
+        QSize lastscale;
 	bool full;
     };
 
