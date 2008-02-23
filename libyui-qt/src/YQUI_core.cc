@@ -353,7 +353,7 @@ YQUI::createApplication()
 void YQUI::calcDefaultSize()
 {
     QSize primaryScreenSize	= qApp->desktop()->screenGeometry( qApp->desktop()->primaryScreen() ).size();
-    QSize availableSize		= qApp->desktop()->availableGeometry().size();
+    QSize availableSize		= qApp->desktop()->availableGeometry( qApp->desktop()->primaryScreen() ).size();
 
     if ( _fullscreen )
     {
