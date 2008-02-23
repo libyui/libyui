@@ -83,7 +83,7 @@ YQDialog::YQDialog( YDialogType 	dialogType,
     if ( dialogType != YMainDialog )
        setWindowModality( Qt::ApplicationModal );
 
-    if ( QWidget::parent() == YQMainWinDock::mainWinDock() )
+    if ( dialogType == YMainDialog && QWidget::parent() == YQMainWinDock::mainWinDock() )
     {
         YQMainWinDock::mainWinDock()->add( this );
     }
@@ -106,7 +106,7 @@ YQDialog::~YQDialog()
 QWidget *
 YQDialog::chooseParent( YDialogType dialogType )
 {
-    QWidget * parent = 0;
+    QWidget * parent = YQMainWinDock::mainWinDock()->window();
 
     if ( dialogType == YMainDialog &&
 	 YQMainWinDock::mainWinDock()->couldDock() )
