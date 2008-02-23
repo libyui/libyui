@@ -330,13 +330,8 @@ YQApplication::pickAutoFonts()
     if ( _autoNormalFontSize >= 0 )	// Use cached values
 	return;
 
-#warning FIXME: defaultSize
-#if 0
-    int x = _defaultSize.width();
-    int y = _defaultSize.height();
-#endif
-    int x = 800;
-    int y = 600;
+    int x = defaultWidth();
+    int y = defaultHeight();
 
     int normal	= 10;
     int heading = 12;
