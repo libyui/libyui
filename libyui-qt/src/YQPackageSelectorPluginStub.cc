@@ -10,9 +10,10 @@
 |						     (c) SuSE Linux AG |
 \----------------------------------------------------------------------/
 
-  File:		NCPackageSelectorPluginStub.cc
+  File:		YQPackageSelectorPluginStub.cc
 
-  Author:	Hedgehog Painter <kmachalkova@suse.cz>
+  Authors:	Katharina Machalkova <kmachalkova@suse.cz>
+		Stephan Kulow <coolo@suse.de>
 
 
 /-*/
@@ -35,13 +36,12 @@ YQPackageSelectorPluginStub::YQPackageSelectorPluginStub()
     }
 
 
-    impl =  (YQPackageSelectorPluginIf*) locateSymbol("PSP");
-    if ( !impl )
+    impl = (YQPackageSelectorPluginIf*) locateSymbol("PSP");
+    
+    if ( ! impl )
     {
         yuiError() << "Plugin " << PLUGIN_BASE_NAME << " does not provide PSP symbol" << endl;
-        exit( 1 );
     }
-
 }
 
 
@@ -50,32 +50,33 @@ YQPackageSelectorPluginStub::~YQPackageSelectorPluginStub()
     // NOP
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YQPackageSelectorPluginStub::createPackageSelector
-//	METHOD TYPE : YWidget
-//
-//	DESCRIPTION : Create YQPackageSelectorStart which reads the layout
-//                    term of the package selection dialog, creates the widget
-//		      tree and creates the YQPackageSelector.
-//
-YPackageSelector * YQPackageSelectorPluginStub::createPackageSelector( YWidget * parent,
-								   long modeFlags )
+
+YPackageSelector *
+YQPackageSelectorPluginStub::createPackageSelector( YWidget * parent, long modeFlags )
 {
+    if ( ! impl )
+	YUI_THROW( YUIPluginException( PLUGIN_BASE_NAME ) );
+    
     return impl->createPackageSelector( parent, modeFlags );
 }
 
 
-YWidget * YQPackageSelectorPluginStub::createPatternSelector( YWidget * parent,
-								   long modeFlags )
+YWidget *
+YQPackageSelectorPluginStub::createPatternSelector( YWidget * parent, long modeFlags )
 {
+    if ( ! impl )
+	YUI_THROW( YUIPluginException( PLUGIN_BASE_NAME ) );
+    
     return impl->createPatternSelector( parent, modeFlags );
 }
 
-YWidget * YQPackageSelectorPluginStub::createSimplePatchSelector( YWidget * parent,
-                                                                           long modeFlags )
+
+YWidget *
+YQPackageSelectorPluginStub::createSimplePatchSelector( YWidget * parent, long modeFlags )
 {
+    if ( ! impl )
+	YUI_THROW( YUIPluginException( PLUGIN_BASE_NAME ) );
+    
     return impl->createSimplePatchSelector( parent, modeFlags );
 }
 

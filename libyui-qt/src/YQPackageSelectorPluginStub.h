@@ -10,9 +10,10 @@
 |						     (c) SuSE Linux AG |
 \----------------------------------------------------------------------/
 
-  File:	      YQPackageSelectorPluginStub.h
+  File:		YQPackageSelectorPluginStub.h
 
-  Author:     Hedgehog Painter <kmachalkova@suse.cz>
+  Authors:	Katharina Machalkova <kmachalkova@suse.cz>
+		Stephan Kulow <coolo@suse.de>
 
 /-*/
 
@@ -28,25 +29,23 @@
 
 #include "YQPackageSelectorPluginIf.h"
 
-/**
- * Simplified access to the ncurses UI's package selector plugin.
- **/
 
+/**
+ * Simplified access to the package selector plugin.
+ **/
 class YQPackageSelectorPluginIf;
+
 
 class YQPackageSelectorPluginStub: public YPackageSelectorPlugin
 {
 public:
-
-
     /**
-     * Constructor: Load the plugin library for the YQurses package selector.
+     * Constructor: Load the plugin library for the package selector.
      **/
     YQPackageSelectorPluginStub();
 
     /**
-     * Destructor. Calls dlclose() which will unload the plugin library if it
-     * is no longer used, i.e. if the reference count dlopen() uses reaches 0.
+     * Destructor.
      **/
     virtual ~YQPackageSelectorPluginStub();
 
@@ -57,19 +56,23 @@ public:
      * This might return 0 if the plugin lib could not be loaded or if the
      * appropriate symbol could not be located in the plugin lib.
      **/
-    virtual YPackageSelector * createPackageSelector( YWidget *		parent,
-						      long		modeFlags );
+    virtual YPackageSelector * createPackageSelector( YWidget *	parent,
+						      long	modeFlags );
 
-    // optional widget
-    virtual YWidget * createPatternSelector( YWidget *		parent,
-                                             long		modeFlags );
+    /**
+     * Create a pattern selector (optional widget).
+     **/
+    virtual YWidget * createPatternSelector( YWidget *	parent,
+                                             long	modeFlags );
 
-    // optional widget
-    virtual YWidget * createSimplePatchSelector( YWidget *		parent,
-                                                 long		modeFlags );
+    /**
+     * Create a simple patch selector (optional widget).
+     **/
+    virtual YWidget * createSimplePatchSelector( YWidget * parent,
+                                                 long	   modeFlags );
 
 
-    YQPackageSelectorPluginIf *impl ;
+    YQPackageSelectorPluginIf * impl ;
 };
 
 

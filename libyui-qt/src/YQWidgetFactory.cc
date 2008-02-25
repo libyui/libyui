@@ -293,11 +293,13 @@ YPackageSelector*
 YQWidgetFactory::createPackageSelector(YWidget* parent, long modeFlags)
 {
     YQPackageSelectorPluginStub * plugin = YQApplication::packageSelectorPlugin();
+    YUI_CHECK_PTR( plugin );
+    
 
-    if ( plugin )
-        return plugin->createPackageSelector( parent, modeFlags );
-    else
-        return 0;
+    YPackageSelector * pkgSel = plugin->createPackageSelector( parent, modeFlags );
+    YUI_CHECK_NEW( pkgSel );
+
+    return pkgSel;
 }
 
 YWidget *

@@ -654,7 +654,9 @@ void YQApplication::makeScreenShot( const string & fileName )
     YQUI::ui()->makeScreenShot( fileName );
 }
 
-YQPackageSelectorPluginStub * YQApplication::packageSelectorPlugin()
+
+YQPackageSelectorPluginStub *
+YQApplication::packageSelectorPlugin()
 {
     static YQPackageSelectorPluginStub * plugin = 0;
 
