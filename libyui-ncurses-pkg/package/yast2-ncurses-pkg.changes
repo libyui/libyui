@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb 25 14:25:51 CET 2008 - sh@suse.de
+
+- Provide yast2_ui_pkg in .spec file (bnc #363958)
+- V 2.16.3 
+
+-------------------------------------------------------------------
 Wed Feb 20 13:31:34 CET 2008 - coolo@suse.de
 
 - remove self made logging, use UI
