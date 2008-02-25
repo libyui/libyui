@@ -43,8 +43,10 @@ NCPackageSelectorPluginStub::NCPackageSelectorPluginStub()
 
 
     impl =  (NCPackageSelectorPluginIf*) locateSymbol("PSP");  
+
     if (!impl)
-	throw NCursesError( "Cannot load Package Selector Plugin" );
+        YUI_THROW ( YUIPluginException( PLUGIN_BASE_NAME ) );
+
 }
 
 
