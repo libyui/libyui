@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Feb 26 08:51:51 CET 2008 - coolo@suse.de
+
+- fix build without ycp
+- hopefully fix popups for real
+- fix -auto-fonts
+- V 2.16.29
+
+-------------------------------------------------------------------
 Mon Feb 25 17:07:12 CET 2008 - sh@suse.de
 
 - Don't just call exit(1) if there is no qt_pkg plug-in (bnc #363958) 

@@ -25,7 +25,6 @@
 #include <YPackageSelectorPlugin.h>
 #include <YDialog.h>
 #include <YEvent.h>
-#include <ycp/YCPString.h>
 
 #include "YQPackageSelectorPluginIf.h"
 

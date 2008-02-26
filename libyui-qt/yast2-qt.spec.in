@@ -26,7 +26,7 @@ Provides:	yast2-ui-qt yast2-ui-qt-devel
 Obsoletes:	yast2-ui-qt yast2-ui-qt-devel
 Provides:	y2qt
 Obsoletes:	y2qt
-Recommmends:	yast2-pkg
+Recommends:	yast2-qt-pkg
 
 %description
 -
@@ -71,8 +71,7 @@ rm -rf "$RPM_BUILD_ROOT"
 
 %files
 %defattr (-, root, root)
-%_libdir/YaST2/plugin/libpy2qt.so.*
-%_libdir/YaST2/plugin/libpy2qt.so
+%_libdir/YaST2/plugin/
 %_prefix/share/YaST2/data/lang_fonts
 
 %files devel
