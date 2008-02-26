@@ -27,6 +27,7 @@
 #include <string>
 #include <YShortcut.h>
 
+#include <QDebug>
 #include <QDialog>
 #include <QSvgRenderer>
 #include <QPainter>
@@ -99,9 +100,11 @@ YQWizard::YQWizard( YWidget *		parent,
 
     setWidgetRep( this );
 
+
     _stepsEnabled = (wizardMode == YWizardMode_Steps);
     _treeEnabled  = (wizardMode == YWizardMode_Tree);
 
+    _stepsRegistered    = false;
     _stepsDirty		= false;
     _direction		= YQWizard::Forward;
 
@@ -131,9 +134,11 @@ YQWizard::YQWizard( YWidget *		parent,
     layout->addLayout( layoutSideBar( this ) );
     layout->addWidget( layoutWorkArea( this ) );
 
-    QY2Styler::self()->registerWidget( this );
+    /* If steps are enabled, we want to delay
+       the registering for after we have steps registered */
+    if ( !_stepsEnabled )
+        QY2Styler::self()->registerWidget( this );
 }
-
 
 
 YQWizard::~YQWizard()
@@ -230,8 +235,6 @@ void YQWizard::layoutStepsPanel()
     _stepsDirty = true; // no layout yet
 }
 
-
-
 void YQWizard::addStep( const string & text, const string & id )
 {
     QString qId = fromUTF8( id );
@@ -284,6 +287,9 @@ void YQWizard::updateSteps()
 
     yuiDebug() << "updateSteps" << endl;
 
+    if ( !_stepsRegistered )
+        setUpdatesEnabled(false);
+
     // Create a grid layout for the steps
     delete _stepsPanel->layout();
     QVBoxLayout *_stepsVBox = new QVBoxLayout( _stepsPanel );
@@ -329,7 +335,7 @@ void YQWizard::updateSteps()
 	    _stepsGrid->addWidget( label,
                                    row, statusCol,
                                    1, nameCol - statusCol + 1);
-	}
+        }
 	else	// No heading - ordinary step
 	{
 	    //
@@ -355,9 +361,10 @@ void YQWizard::updateSteps()
             nameLabel->setObjectName( step->name() );
 
 	    step->setNameLabel( nameLabel );
-	    _stepsGrid->addWidget( nameLabel, row, nameCol );
+            _stepsGrid->addWidget( nameLabel, row, nameCol );
         }
 
+        step->setStatus( Step::Todo );
 	row++;
     }
 
@@ -369,6 +376,14 @@ void YQWizard::updateSteps()
     _stepsVBox->addStretch( 29 );
 
     _stepsDirty = false;
+
+    if ( !_stepsRegistered )
+    {
+        QY2Styler::self()->registerWidget( this );
+        setUpdatesEnabled( true );
+        QY2Styler::self()->updateRendering( this );
+        _stepsRegistered = true;
+    }
 }
 
 

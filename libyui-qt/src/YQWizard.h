@@ -510,6 +510,7 @@ protected:
     string	_nextButtonLabel;
     
     bool	_stepsEnabled;
+    bool	_stepsRegistered;
     bool	_treeEnabled;
     bool	_protectNextButton;
     bool	_stepsDirty;
