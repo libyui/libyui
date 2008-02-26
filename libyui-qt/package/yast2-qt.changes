@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Feb 26 18:32:14 CET 2008 - sh@suse.de
+
+- Use new cmake support from libyui
+- No longer depend on yast2-core etc. for cmake
+- V 2.16.30 
+
+-------------------------------------------------------------------
 Tue Feb 26 08:51:51 CET 2008 - coolo@suse.de
 
 - fix build without ycp
