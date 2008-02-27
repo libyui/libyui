@@ -64,12 +64,6 @@ cd ..
 rm -rf "$RPM_BUILD_ROOT"
 
 
-%if 0%{?suse_version} <= 1010
-%define _xorg7fonts /usr/X11R6/lib/X11/fonts
-%else
-%define _xorg7fonts /usr/share/fonts
-%endif
-
 %files
 %defattr (-, root, root)
 %dir %_libdir/YaST2

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Feb 27 14:20:40 CET 2008 - sh@suse.de
+
+- Removed obsolete Unicode fonts (now in separate pkg gnu-unifonts)
+- V 2.16.31 
+
+-------------------------------------------------------------------
 Wed Feb 27 13:07:24 CET 2008 - coolo@suse.de
 
 - fix build on %_lib == lib64
