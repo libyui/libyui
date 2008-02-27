@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Feb 27 13:07:24 CET 2008 - coolo@suse.de
+
+- fix build on %_lib == lib64
+
+-------------------------------------------------------------------
 Wed Feb 27 11:07:41 CET 2008 - coolo@suse.de
 
 - adding a require to the devel package
