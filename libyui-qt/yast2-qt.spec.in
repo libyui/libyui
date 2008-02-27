@@ -35,6 +35,7 @@ Recommends:	yast2-qt-pkg
 Summary: -
 Group: Development/Libraries
 Requires:    yast2-qt = %{version}
+Requires:    yast2-libyui-devel
 
 %description devel
 -

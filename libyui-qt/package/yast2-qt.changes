@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Feb 27 11:07:41 CET 2008 - coolo@suse.de
+
+- adding a require to the devel package
+
+-------------------------------------------------------------------
 Tue Feb 26 18:32:14 CET 2008 - sh@suse.de
 
 - Use new cmake support from libyui
