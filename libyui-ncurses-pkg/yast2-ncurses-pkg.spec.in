@@ -12,6 +12,7 @@ Requires:	glibc-locale
 BuildRequires:	yast2-core-devel   >= 2.16.33
 BuildRequires:	yast2-libyui-devel >= 2.16.37
 BuildRequires:  libzypp-devel >= 4.2.3
+BuildRequires:  yast2-ycp-ui-bindings-devel
 Requires:	yast2-core >= 2.16.33
 Requires:	yast2-ncurses >= 2.16.15
 %description
