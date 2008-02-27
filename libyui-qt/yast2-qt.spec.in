@@ -72,6 +72,7 @@ rm -rf "$RPM_BUILD_ROOT"
 
 %files
 %defattr (-, root, root)
+%dir %_libdir/YaST2
 %_libdir/YaST2/plugin/
 %_prefix/share/YaST2/data/lang_fonts
 
