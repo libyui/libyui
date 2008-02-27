@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Feb 27 11:44:57 CET 2008 - coolo@suse.de
+
+- fix package build
+
+-------------------------------------------------------------------
 Mon Feb 25 17:25:15 CET 2008 - kmachalkova@suse.cz
 
 - If package selector plugin fails to load, do not fail silently,
