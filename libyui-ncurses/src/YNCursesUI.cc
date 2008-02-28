@@ -26,6 +26,7 @@
 #include <YUI.h>
 #include <YEvent.h>
 #include <YDialog.h>
+#include <YCommandLine.h>
 #include <YMacro.h>
 
 #define YUILogComponent "ncurses"
@@ -272,14 +273,27 @@ YEvent * YNCursesUI::runPkgSelection( YWidget * selector )
 void YNCursesUI::init_title()
 {
     string title_ti( "YaST" );
+    string module;
     char hostname_ti[256];
     hostname_ti[0] = hostname_ti[255] = '\0';
+
+    // get command line args, usually in the form 
+    // '/usr/lib/whatever/y2base' 'module_name' 'selected_ui'
+    // (e.g. 'y2base' 'lan' 'ncurses') -> we need 'lan' item
+    YCommandLine *cmdline = new YCommandLine();
+    YUI_CHECK_NEW( cmdline );
+    module = (*cmdline)[1];
 
     // check for valid hostname, suppress "(none)" as hostname
     if ( gethostname( hostname_ti, 255 ) != -1
 	 && hostname_ti[0]
 	 && hostname_ti[0] != '(' )
     {
+	if ( !module.empty() )
+        {
+	    title_ti += " - ";
+	    title_ti += module;
+        }
 	title_ti += " @ ";
 	title_ti += hostname_ti;
     }
