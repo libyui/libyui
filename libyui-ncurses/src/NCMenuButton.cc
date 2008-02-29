@@ -148,7 +148,9 @@ void NCMenuButton::wRedraw()
 
   win->bkgdset( style.scrl );
   win->vline( 0, win->maxx()-1, win->height(), ' ' );
-  win->addch( 0, win->maxx()-1, ACS_DARROW );
+  haveUtf8() ?
+     win->add_wch( 0, win->maxx()-1, WACS_DARROW )
+     : win->addch( 0, win->maxx()-1, ACS_DARROW );
 }
 
 #if 0

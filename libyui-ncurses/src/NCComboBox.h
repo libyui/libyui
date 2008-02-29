@@ -26,6 +26,7 @@ using namespace std;
 
 #include "YComboBox.h"
 #include "NCWidget.h"
+#include "NCApplication.h"
 #include "YItem.h"
 
 class NCComboBox;
@@ -64,6 +65,8 @@ class NCComboBox : public YComboBox, public NCWidget {
 
     void setDefsze();
     void tUpdate();
+
+    bool haveUtf8() { return YUI::app()->hasFullUtf8Support(); } 
 
   protected:
 

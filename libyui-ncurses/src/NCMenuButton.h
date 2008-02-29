@@ -22,6 +22,7 @@
 #include <iosfwd>
 
 #include "YMenuButton.h"
+#include "NCApplication.h"
 #include "NCWidget.h"
 
 class NCMenuButton;
@@ -42,6 +43,7 @@ class NCMenuButton : public YMenuButton, public NCWidget {
   private:
 
     NClabel label;
+    bool haveUtf8() { return YUI::app()->hasFullUtf8Support(); } 
 
   protected:
 

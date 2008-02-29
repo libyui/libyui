@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Feb 29 15:21:14 CET 2008 - kmachalkova@suse.cz
+
+- Workaround for missing arrow characters in xterm - use WACS_*ARROW
+  (wide version of ACS_*ARROW) in UTF-8 locale (bnc#362634)
+- 2.16.18 
+
+-------------------------------------------------------------------
 Thu Feb 28 18:25:29 CET 2008 - kmachalkova@suse.cz
 
 - Enhancement: show module name in window title 
