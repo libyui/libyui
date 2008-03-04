@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Mar  4 17:53:00 CET 2008 - sh@suse.de
+
+- Fixed segfault if SelectionBox value is set to nil (bnc #363251)
+- Fixed segfault if user clicks in empty area of a SelectionBox
+- V 2.16.32 
+
+-------------------------------------------------------------------
 Wed Feb 27 14:20:40 CET 2008 - sh@suse.de
 
 - Removed obsolete Unicode fonts (now in separate pkg gnu-unifonts)

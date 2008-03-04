@@ -146,7 +146,7 @@ void YQSelectionBox::selectItem( int index )
     if ( item )
     {
 #ifdef VERBOSE_SELECTION
-	yuiDebug() << this << ": Selecting item \"" << item->label() << "\"" << endl;
+	yuiDebug() << this << ": Selecting item \"" << item << "\"" << endl;
 #endif
 
 	item->setSelected( true );
@@ -160,18 +160,22 @@ void YQSelectionBox::deselectAllItems()
 {
     YSelectionBox::deselectAllItems();
     _qt_listWidget->clearSelection();
+    _qt_listWidget->setCurrentRow( -1 );
 
     if ( _qt_listWidget->currentRow() > -1 )
     {
 	// Some item is selected after all; the Qt documtation says this
 	// happens if the QListBox is in single selection mode (which it is)
-	// and has the keyboard focus.
+	// and has the keyboard focus. setCurrentRow( -1 ) does the trick for
+	// now, but who knows how this might change in future Qt versions.
 	//
 	// Synchronize internal "selected" flags with what the QListBox
 	// displays. This has a small performance penalty because it calls
 	// YSelectionBox::deselectAllItems() again which again iterates over
 	// all items.
-	selectItem( _qt_listWidget->row(_qt_listWidget->currentItem()) );
+
+	int index = _qt_listWidget->row( _qt_listWidget->currentItem() );
+	selectItem( index );
     }
 }
 
@@ -264,8 +268,10 @@ bool YQSelectionBox::eventFilter( QObject * obj, QEvent * ev )
 
 void YQSelectionBox::slotSelectionChanged()
 {
-    QList<QListWidgetItem *> items = _qt_listWidget->selectedItems ();
-    selectItem( _qt_listWidget->row( items.first() ) );
+    QList<QListWidgetItem *> items = _qt_listWidget->selectedItems();
+
+    if ( ! items.empty() )
+	selectItem( _qt_listWidget->row( items.first() ) );
 
     if ( notify() )
     {
