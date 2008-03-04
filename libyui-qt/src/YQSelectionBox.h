@@ -163,7 +163,7 @@ protected:
     //
 
     YQWidgetCaption *	_caption;
-    QListWidget *		_qt_listBox;
+    QListWidget *	_qt_listWidget;
     QTimer 		_timer;
 };
 
