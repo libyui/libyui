@@ -97,8 +97,6 @@ void YQTree::setLabel( const string & label )
 
 void YQTree::rebuildTree()
 {
-    // yuiDebug() << "Rebuilding tree" << endl;
-
     YQSignalBlocker sigBlocker( _qt_treeWidget );
     _qt_treeWidget->clear();
 
@@ -132,6 +130,7 @@ void YQTree::selectItem( YItem * yItem, bool selected )
 {
     YQSignalBlocker sigBlocker( _qt_treeWidget );
 
+yuiDebug() << "Selecting item \"" << yItem->label() << "\" " << boolalpha << selected << endl;
     YTreeItem * treeItem = dynamic_cast<YTreeItem *> (yItem);
     YUI_CHECK_PTR( treeItem );
 
@@ -144,9 +143,7 @@ void YQTree::selectItem( YItem * yItem, bool selected )
     }
     else
     {
-	yqTreeItem->setSelected( true );
-	openBranch( yqTreeItem );
-	YTree::selectItem( treeItem, selected );
+	selectItem( yqTreeItem );
     }
 }
 
@@ -157,6 +154,7 @@ void YQTree::selectItem( YQTreeItem * item )
     {
 	YQSignalBlocker sigBlocker( _qt_treeWidget );
 
+	_qt_treeWidget->setCurrentItem( item );
 	item->setSelected( true );
 	openBranch( item );
 	YTree::selectItem( item->origItem(), true );
@@ -197,8 +195,12 @@ void YQTree::deleteAllItems()
 void YQTree::slotSelectionChanged( )
 {
     QList<QTreeWidgetItem *> items = _qt_treeWidget->selectedItems ();
-    QTreeWidgetItem *qItem = items.first();
-    selectItem( dynamic_cast<YQTreeItem *> (qItem) );
+
+    if ( ! items.empty() )
+    {
+	QTreeWidgetItem *qItem = items.first();
+	selectItem( dynamic_cast<YQTreeItem *> (qItem) );
+    }
 
     if ( notify() && ! YQUI::ui()->eventPendingFor( this ) )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
