@@ -161,7 +161,7 @@ protected:
     //
 
     YQWidgetCaption *	_caption;
-    QTreeWidget * 	_qt_listView;
+    QTreeWidget * 	_qt_treeWidget;
     int			_nextSerialNo;
 };
 

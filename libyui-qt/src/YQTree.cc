@@ -63,8 +63,8 @@ YQTree::YQTree( YWidget * parent, const string & label )
     YUI_CHECK_NEW( _qt_listView );
     layout->addWidget( _qt_listView );
 
-     //_qt_listView->setHeaderLabel("");
-//     _qt_listView->addColumn( "" );
+     // _qt_listView->setHeaderLabel("");
+     // _qt_listView->addColumn( "" );
      _qt_listView->header()->hide();
      // _qt_listView->setHeader(0L);
      _qt_listView->setRootIsDecorated ( true );
