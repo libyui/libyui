@@ -256,11 +256,11 @@ void YQUI::askConfigureLogging()
                                             _("YaST2 Logging"),
                                             _("Configure YaST2 Logging:"),
                                             items, 0,
-					    YUI::debugLoggingEnabled() ? 1 : 0,
+					    YUILog::debugLoggingEnabled() ? 1 : 0,
 					    &okButtonPressed );
     if ( okButtonPressed )
     {
-	YUI::enableDebugLogging( result.endsWith( "on" ) );
+	YUILog::enableDebugLogging( result.endsWith( "on" ) );
 	yuiMilestone() << "Changing logging: " << result << endl;
     }
 }
