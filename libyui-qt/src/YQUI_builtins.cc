@@ -261,9 +261,7 @@ void YQUI::askConfigureLogging()
     if ( okButtonPressed )
     {
 	YUI::enableDebugLogging( result.endsWith( "on" ) );
-	yuiMilestone() << "Changing logging: <<" << result 
-		       << " UI Debug logging: " << YUI::debugLoggingEnabled()
-		       << endl;
+	yuiMilestone() << "Changing logging: " << result << endl;
     }
 }
 
