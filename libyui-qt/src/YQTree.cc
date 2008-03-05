@@ -59,25 +59,25 @@ YQTree::YQTree( YWidget * parent, const string & label )
     YUI_CHECK_NEW( _caption );
     layout->addWidget( _caption );
 
-    _qt_listView = new QTreeWidget( this );
-    YUI_CHECK_NEW( _qt_listView );
-    layout->addWidget( _qt_listView );
+    _qt_treeWidget = new QTreeWidget( this );
+    YUI_CHECK_NEW( _qt_treeWidget );
+    layout->addWidget( _qt_treeWidget );
 
-     // _qt_listView->setHeaderLabel("");
-     // _qt_listView->addColumn( "" );
-     _qt_listView->header()->hide();
-     // _qt_listView->setHeader(0L);
-     _qt_listView->setRootIsDecorated ( true );
+     // _qt_treeWidget->setHeaderLabel("");
+     // _qt_treeWidget->addColumn( "" );
+     _qt_treeWidget->header()->hide();
+     // _qt_treeWidget->setHeader(0L);
+     _qt_treeWidget->setRootIsDecorated ( true );
 
-    _caption->setBuddy ( _qt_listView );
+    _caption->setBuddy ( _qt_treeWidget );
 
-    connect( _qt_listView,	SIGNAL( itemSelectionChanged () ),
+    connect( _qt_treeWidget,	SIGNAL( itemSelectionChanged () ),
 	     this, 		SLOT  ( slotSelectionChanged () ) );
 
-    connect( _qt_listView,	SIGNAL( itemActivated	 ( QTreeWidgetItem * , int ) ),
+    connect( _qt_treeWidget,	SIGNAL( itemActivated	 ( QTreeWidgetItem * , int ) ),
 	     this, 		SLOT  ( slotActivated	 ( QTreeWidgetItem *	) ) );
 
-    connect( _qt_listView,	SIGNAL( itemDoubleClicked( QTreeWidgetItem *, int ) ),
+    connect( _qt_treeWidget,	SIGNAL( itemDoubleClicked( QTreeWidgetItem *, int ) ),
 	     this, 		SLOT  ( slotActivated	 ( QTreeWidgetItem *	) ) );
 }
 
@@ -99,8 +99,8 @@ void YQTree::rebuildTree()
 {
     // yuiDebug() << "Rebuilding tree" << endl;
 
-    YQSignalBlocker sigBlocker( _qt_listView );
-    _qt_listView->clear();
+    YQSignalBlocker sigBlocker( _qt_treeWidget );
+    _qt_treeWidget->clear();
 
     buildDisplayTree( 0, itemsBegin(), itemsEnd() );
 }
@@ -118,7 +118,7 @@ void YQTree::buildDisplayTree( YQTreeItem * parentItem, YItemIterator begin, YIt
 	if ( parentItem )
 	    clone = new YQTreeItem( this, parentItem, orig, _nextSerialNo++ );
 	else
-	    clone = new YQTreeItem( this, _qt_listView, orig, _nextSerialNo++ );
+	    clone = new YQTreeItem( this, _qt_treeWidget, orig, _nextSerialNo++ );
 
 	YUI_CHECK_NEW( clone );
 
@@ -130,7 +130,7 @@ void YQTree::buildDisplayTree( YQTreeItem * parentItem, YItemIterator begin, YIt
 
 void YQTree::selectItem( YItem * yItem, bool selected )
 {
-    YQSignalBlocker sigBlocker( _qt_listView );
+    YQSignalBlocker sigBlocker( _qt_treeWidget );
 
     YTreeItem * treeItem = dynamic_cast<YTreeItem *> (yItem);
     YUI_CHECK_PTR( treeItem );
@@ -138,7 +138,7 @@ void YQTree::selectItem( YItem * yItem, bool selected )
     YQTreeItem * yqTreeItem = (YQTreeItem *) treeItem->data();
     YUI_CHECK_PTR( yqTreeItem );
 
-    if ( ! selected && yqTreeItem == _qt_listView->currentItem() )
+    if ( ! selected && yqTreeItem == _qt_treeWidget->currentItem() )
     {
 	deselectAllItems();
     }
@@ -155,7 +155,7 @@ void YQTree::selectItem( YQTreeItem * item )
 {
     if ( item )
     {
-	YQSignalBlocker sigBlocker( _qt_listView );
+	YQSignalBlocker sigBlocker( _qt_treeWidget );
 
 	item->setSelected( true );
 	openBranch( item );
@@ -178,25 +178,25 @@ void YQTree::openBranch( QTreeWidgetItem * item )
 
 void YQTree::deselectAllItems()
 {
-    YQSignalBlocker sigBlocker( _qt_listView );
+    YQSignalBlocker sigBlocker( _qt_treeWidget );
 
     YTree::deselectAllItems();
-    _qt_listView->clearSelection();
+    _qt_treeWidget->clearSelection();
 }
 
 
 void YQTree::deleteAllItems()
 {
-    YQSignalBlocker sigBlocker( _qt_listView );
+    YQSignalBlocker sigBlocker( _qt_treeWidget );
 
-    _qt_listView->clear();
+    _qt_treeWidget->clear();
     YTree::deleteAllItems();
 }
 
 
 void YQTree::slotSelectionChanged( )
 {
-    QList<QTreeWidgetItem *> items = _qt_listView->selectedItems ();
+    QList<QTreeWidgetItem *> items = _qt_treeWidget->selectedItems ();
     QTreeWidgetItem *qItem = items.first();
     selectItem( dynamic_cast<YQTreeItem *> (qItem) );
 
@@ -241,14 +241,14 @@ void YQTree::setSize( int newWidth, int newHeight )
 void YQTree::setEnabled( bool enabled )
 {
     _caption->setEnabled( enabled );
-    _qt_listView->setEnabled( enabled );
+    _qt_treeWidget->setEnabled( enabled );
     YWidget::setEnabled( enabled );
 }
 
 
 bool YQTree::setKeyboardFocus()
 {
-    _qt_listView->setFocus();
+    _qt_treeWidget->setFocus();
 
     return true;
 }
