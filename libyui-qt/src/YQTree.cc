@@ -130,20 +130,20 @@ void YQTree::selectItem( YItem * yItem, bool selected )
 {
     YQSignalBlocker sigBlocker( _qt_treeWidget );
 
-yuiDebug() << "Selecting item \"" << yItem->label() << "\" " << boolalpha << selected << endl;
+    // yuiDebug() << "Selecting item \"" << yItem->label() << "\" " << boolalpha << selected << endl;
     YTreeItem * treeItem = dynamic_cast<YTreeItem *> (yItem);
     YUI_CHECK_PTR( treeItem );
 
     YQTreeItem * yqTreeItem = (YQTreeItem *) treeItem->data();
     YUI_CHECK_PTR( yqTreeItem );
 
-    if ( ! selected && yqTreeItem == _qt_treeWidget->currentItem() )
-    {
-	deselectAllItems();
-    }
-    else
+    if ( selected )
     {
 	selectItem( yqTreeItem );
+    }
+    else if ( yqTreeItem == _qt_treeWidget->currentItem() )
+    {
+	deselectAllItems();
     }
 }
 
@@ -159,7 +159,7 @@ void YQTree::selectItem( YQTreeItem * item )
 	openBranch( item );
 	YTree::selectItem( item->origItem(), true );
 
-	yuiDebug() << "selected item: \"" << item->origItem()->label() << "\"" << endl;
+	// yuiDebug() << "selected item: \"" << item->origItem()->label() << "\"" << endl;
     }
 }
 
@@ -225,10 +225,10 @@ int YQTree::preferredWidth()
 
 int YQTree::preferredHeight()
 {
+    int hintHeight = !_caption->isHidden() ? _caption->sizeHint().height() : 0;
+    
     // 300 is an arbitrary value.  Use a MinSize or MinHeight widget to set a
     // size that is useful for the application.
-
-    int hintHeight = !_caption->isHidden() ? _caption->sizeHint().height() : 0;
 
     return 300 + hintHeight;
 }
@@ -334,10 +334,9 @@ YQTreeItem::key( int column, bool ascending ) const
     /*
      * Sorting key for QListView internal sorting:
      *
-     * Always sort tree items by insertion order. The tree widget
-     * cannot maintain a meaningful sorting order of its own: All it
-     * could do is sort by names (ASCII sort). Better let the (YCP)
-     * application handle this.
+     * Always sort tree items by insertion order. The tree widget cannot
+     * maintain a meaningful sorting order of its own: All it could do is sort
+     * by names (ASCII sort). Better let the application handle this.
      */
 
     QString strKey;
