@@ -119,6 +119,7 @@ YQTable::addItem( YItem * yitem )
     if ( item->selected() )
     {
 	YQSignalBlocker sigBlocker( _qt_listView );
+	_qt_listView->setCurrentItem( clone );
 	clone->setSelected(true);
     }
 }
@@ -142,6 +143,7 @@ YQTable::selectItem( YItem * yitem, bool selected )
     }
     else
     {
+	_qt_listView->setCurrentItem( clone );
 	clone->setSelected( true );
 	YTable::selectItem( item, selected );
     }
@@ -289,7 +291,10 @@ YQTableListViewItem::YQTableListViewItem( YQTable *	table,
     }
 
     if ( _origItem->selected() )
+    {
+	parent->setCurrentItem( this );
 	QY2ListViewItem::setSelected( true );
+    }
 }
 
 
