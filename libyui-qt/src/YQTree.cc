@@ -74,11 +74,17 @@ YQTree::YQTree( YWidget * parent, const string & label )
     connect( _qt_treeWidget,	SIGNAL( itemSelectionChanged () ),
 	     this, 		SLOT  ( slotSelectionChanged () ) );
 
-    connect( _qt_treeWidget,	SIGNAL( itemActivated	 ( QTreeWidgetItem * , int ) ),
-	     this, 		SLOT  ( slotActivated	 ( QTreeWidgetItem *	) ) );
+    connect( _qt_treeWidget,	SIGNAL( itemActivated	 ( QTreeWidgetItem *, int ) ),
+	     this, 		SLOT  ( slotActivated	 ( QTreeWidgetItem *	  ) ) );
 
     connect( _qt_treeWidget,	SIGNAL( itemDoubleClicked( QTreeWidgetItem *, int ) ),
-	     this, 		SLOT  ( slotActivated	 ( QTreeWidgetItem *	) ) );
+	     this, 		SLOT  ( slotActivated	 ( QTreeWidgetItem *	  ) ) );
+
+    connect( _qt_treeWidget,	SIGNAL( itemExpanded	 ( QTreeWidgetItem * ) ),
+	     this,		SLOT  ( slotItemExpanded ( QTreeWidgetItem * ) ) );
+    
+    connect( _qt_treeWidget,	SIGNAL( itemCollapsed	 ( QTreeWidgetItem * ) ),
+	     this,		SLOT  ( slotItemCollapsed( QTreeWidgetItem * ) ) );
 }
 
 
@@ -164,13 +170,30 @@ void YQTree::selectItem( YQTreeItem * item )
 }
 
 
-void YQTree::openBranch( QTreeWidgetItem * item )
+void YQTree::openBranch( YQTreeItem * item )
 {
     while ( item )
     {
-      item->setExpanded( true ); // Takes care of origItem()->setOpen()
-      item = item->parent();
+      item->setOpen( true ); // Takes care of origItem()->setOpen()
+      item = (YQTreeItem *) item->parent();
     }
+}
+
+void YQTree::slotItemExpanded( QTreeWidgetItem * qItem )
+{
+    YQTreeItem * item = dynamic_cast<YQTreeItem *> (qItem);
+
+    if ( item )
+	item->setOpen( true );
+}
+
+
+void YQTree::slotItemCollapsed( QTreeWidgetItem * qItem )
+{
+    YQTreeItem * item = dynamic_cast<YQTreeItem *> (qItem);
+
+    if ( item )
+	item->setOpen( false );
 }
 
 

@@ -125,7 +125,7 @@ protected slots:
      *
      * This will trigger a 'SelectionChanged' event if 'notify' is set.
      **/
-    void slotSelectionChanged ( );
+    void slotSelectionChanged();
 
     /**
      * Propagate a double click or pressing the space key on a tree item.
@@ -133,6 +133,16 @@ protected slots:
      * This will trigger an 'Activated' event if 'notify' is set.
      **/
     void slotActivated( QTreeWidgetItem * item);
+
+    /**
+     * Propagate an "item expanded" event to the underlying YTreeItem.
+     **/
+    void slotItemExpanded( QTreeWidgetItem * item );
+    
+    /**
+     * Propagate an "item collapsed" event to the underlying YTreeItem.
+     **/
+    void slotItemCollapsed( QTreeWidgetItem * item );
 
 
 protected:
@@ -145,7 +155,7 @@ protected:
     /**
      * Open the branch of 'item' recursively to its toplevel item.
      **/
-    void openBranch( QTreeWidgetItem * item );
+    void openBranch( YQTreeItem * item );
 
     /**
      * Build a tree of items that will be displayed (YQTreeItems) from the

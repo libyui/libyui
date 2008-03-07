@@ -1,8 +1,13 @@
 -------------------------------------------------------------------
+Fri Mar  7 12:14:08 CET 2008 - sh@suse.de
+
+- Fixed bnc #357607: OpenItems property of Tree widget is broken 
+- V 2.16.33
+
+-------------------------------------------------------------------
 Thu Mar  6 14:47:04 CET 2008 - sh@suse.de
 
 - Fixed bnc #357620: Setting current item broken for tree and table
-- V 2.16.33
 
 -------------------------------------------------------------------
 Tue Mar  4 17:53:00 CET 2008 - sh@suse.de
