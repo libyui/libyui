@@ -13,7 +13,6 @@
    File:       NCTree.cc
 
    Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 
@@ -25,18 +24,13 @@
 #include "YSelectionWidget.h"
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCTableLine
-//
-//	DESCRIPTION :
-//
-class NCTreeLine : public NCTableLine {
+class NCTreeLine : public NCTableLine
+{
 
-  private:
+private:
 
-    const YTreeItem & yitem;
-    const unsigned    level;
+    YTreeItem *		yitem;
+    const unsigned	level;
 
     NCTreeLine * parent;
     NCTreeLine * nsibling;
@@ -46,9 +40,9 @@ class NCTreeLine : public NCTableLine {
 
     unsigned prefixLen() const { return level + 3; }
 
-  public:
+public:
 
-    NCTreeLine( NCTreeLine * p, const YTreeItem & item )
+    NCTreeLine( NCTreeLine * p, YTreeItem * item )
       : NCTableLine( 0 )
       , yitem( item )
       , level   ( p ? p->level + 1 : 0 )
@@ -57,137 +51,174 @@ class NCTreeLine : public NCTableLine {
       , fchild  ( 0 )
       , prefix  ( 0 )
     {
-      if ( parent ) {
-	if ( parent->fchild ) {
-	  NCTreeLine * s = parent->fchild;
-	  for ( ; s->nsibling; s = s->nsibling )
-	    ;
-	  s->nsibling = this;
-	} else {
-	  parent->fchild = this;
+	if ( parent )
+	{
+	    if ( parent->fchild )
+	    {
+		NCTreeLine * s = parent->fchild;
+		for ( ; s->nsibling; s = s->nsibling )
+		    ;
+		s->nsibling = this;
+	    }
+	    else
+	    {
+		parent->fchild = this;
+	    }
+	    if ( !parent->yitem->isOpen() )
+	    {
+		SetState( S_HIDDEN );
+	    }
 	}
-	// FIXME ??? was yitem.isOpenByDefault()
-	if ( !parent->yitem.isOpen() ) {
-	  SetState( S_HIDDEN );
-	}
-      }
 
-      Append( new NCTableCol( NCstring( string( prefixLen(), ' ' )
-					+ yitem.label() ) ) );
+	Append( new NCTableCol( NCstring( string( prefixLen(), ' ' )
+					  + yitem->label() ) ) );
     }
 
     virtual ~NCTreeLine() { delete [] prefix; }
 
   public:
 
-    const YTreeItem & Yitem() const { return yitem; }
-    unsigned          Level() const { return level; }
+    YTreeItem *	YItem() const { return yitem; }
+    unsigned    Level() const { return level; }
 
-    virtual bool isVisible() const {
-      return !parent || ( !isHidden() && parent->isVisible() );
+    virtual bool isVisible() const
+    {
+	return !parent || ( !isHidden() && parent->isVisible() );
     }
 
-    virtual int ChangeToVisible() {
-      if ( isVisible() )
-	return 0;
+    
+    virtual int ChangeToVisible()
+    {
+	if ( isVisible() )
+	    return 0;
 
-      if ( parent ) {
-	parent->ChangeToVisible();
-	for ( NCTreeLine * c = parent->fchild; c; c = c->nsibling )
-	  c->ClearState( S_HIDDEN  );
-      } else {
-	ClearState( S_HIDDEN );
-      }
+	if ( parent )
+	{
+	    parent->ChangeToVisible();
+	    
+	    for ( NCTreeLine * c = parent->fchild; c; c = c->nsibling )
+	    {
+		c->ClearState( S_HIDDEN  );
+		c->YItem()->setOpen( true );
+	    }
+	}
+	else
+	{
+	    ClearState( S_HIDDEN );
+	    yitem->setOpen( true );
+	}
 
-      return 1;
+	return 1;
     }
 
-    virtual unsigned Hotspot( unsigned & at ) const {
-      at = Level(); return 6;
+    
+    virtual unsigned Hotspot( unsigned & at ) const
+    {
+	at = Level();
+	return 6;
     }
 
-    virtual int  handleInput( wint_t key ) {
-      if ( !fchild )
-	return 0;
-      switch ( key ) {
-      case KEY_IC:
-	if ( fchild->isVisible() )
-	  return 0;
-	break;
-      case KEY_DC:
-	if ( !fchild->isVisible() )
-	  return 0;
-	break;
-      case KEY_SPACE:
+    
+    virtual int  handleInput( wint_t key )
+    {
+	if ( !fchild )
+	    return 0;
+	switch ( key ) {
+	    case KEY_IC:
+		if ( fchild->isVisible() )
+		    return 0;
+		break;
+	    case KEY_DC:
+		if ( !fchild->isVisible() )
+		    return 0;
+		break;
+	    case KEY_SPACE:
 //      case KEY_RETURN: - see bug 67350
-      case '+':
-      case '-':
-	break;
-      default:
-	return 0;
-	break;
-      }
+	    case '+':
+	    case '-':
+		break;
+	    default:
+		return 0;
+		break;
+	}
 
-      if ( fchild->isVisible() ) {
-	for ( NCTreeLine * c = fchild; c; c = c->nsibling )
-	  c->SetState( S_HIDDEN );
-      } else {
-	for ( NCTreeLine * c = fchild; c; c = c->nsibling )
-	  c->ClearState( S_HIDDEN  );
-      }
+	if ( fchild->isVisible() )
+	{
+	    yitem->setOpen( false );
+	    yuiMilestone() << "Closing item " << yitem->label() << endl;
+	    
+	    for ( NCTreeLine * c = fchild; c; c = c->nsibling )
+		c->SetState( S_HIDDEN );
+	}
+	else
+	{
+	    yitem->setOpen( true );
+	    yuiMilestone() << "Opening item " << yitem->label() << endl;
+	    
+	    for ( NCTreeLine * c = fchild; c; c = c->nsibling )
+		c->ClearState( S_HIDDEN  );
+	}
 
-      return 1;
+	return 1;
     }
 
+    
     virtual void DrawAt( NCursesWindow & w, const wrect at,
 			 NCTableStyle & tableStyle,
-			 bool active ) const {
+			 bool active ) const
+    {
 
-      NCTableLine::DrawAt( w, at, tableStyle, active );
+	NCTableLine::DrawAt( w, at, tableStyle, active );
 
-      if ( !isSpecial() )
-	w.bkgdset( tableStyle.getBG( vstate, NCTableCol::SEPARATOR ) );
+	if ( !isSpecial() )
+	    w.bkgdset( tableStyle.getBG( vstate, NCTableCol::SEPARATOR ) );
 
-      if ( ! prefix ) {
-	prefix = new chtype[prefixLen()];
-	chtype * tagend = &prefix[prefixLen()-1];
-	*tagend-- = ACS_HLINE;
-	*tagend-- = fchild ? ACS_TTEE : ACS_HLINE;
-	if ( parent ) {
-	  *tagend-- = nsibling ? ACS_LTEE : ACS_LLCORNER;
-	  for ( NCTreeLine * p = parent; p; p = p->parent ) {
-	    *tagend-- = p->nsibling ? ACS_VLINE : (' '&A_CHARTEXT);
-	  }
-	} else
-	  *tagend-- = ACS_HLINE;
-      }
+	if ( ! prefix )
+	{
+	    prefix = new chtype[prefixLen()];
+	    chtype * tagend = &prefix[prefixLen()-1];
+	    *tagend-- = ACS_HLINE;
+	    *tagend-- = fchild ? ACS_TTEE : ACS_HLINE;
+	    
+	    if ( parent )
+	    {
+		*tagend-- = nsibling ? ACS_LTEE : ACS_LLCORNER;
+		
+		for ( NCTreeLine * p = parent; p; p = p->parent )
+		{
+		    *tagend-- = p->nsibling ? ACS_VLINE : (' '&A_CHARTEXT);
+		}
+	    }
+	    else
+	    {
+		*tagend-- = ACS_HLINE;
+	    }
+	}
 
-      w.move( at.Pos.L, at.Pos.C );
-      unsigned i = 0;
-      for ( ; i < prefixLen(); ++i )
-	w.addch( prefix[i] );
+	w.move( at.Pos.L, at.Pos.C );
+	unsigned i = 0;
+	
+	for ( ; i < prefixLen(); ++i )
+	    w.addch( prefix[i] );
 
-      w.move( at.Pos.L, at.Pos.C + prefixLen() - 2 );
-      if ( fchild && !isSpecial() )
-	w.bkgdset( tableStyle.highlightBG( vstate, NCTableCol::HINT,
-					   NCTableCol::SEPARATOR ) );
-      if ( fchild && !fchild->isVisible() )
-	w.addch( '+' );
-      else
-	w.addch( prefix[prefixLen() - 2] );
+	w.move( at.Pos.L, at.Pos.C + prefixLen() - 2 );
+	
+	if ( fchild && !isSpecial() )
+	    w.bkgdset( tableStyle.highlightBG( vstate, NCTableCol::HINT,
+					       NCTableCol::SEPARATOR ) );
+	if ( fchild && !fchild->isVisible() )
+	    w.addch( '+' );
+	else
+	    w.addch( prefix[prefixLen() - 2] );
     }
 };
 
-///////////////////////////////////////////////////////////////////
+
 
 ///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTree::NCTree
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
+
 NCTree::NCTree( YWidget * parent, const string & nlabel )
     : YTree( parent, nlabel )
     , NCPadWidget( parent )
@@ -196,18 +227,13 @@ NCTree::NCTree( YWidget * parent, const string & nlabel )
   setLabel( nlabel );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTree::~NCTree
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCTree::~NCTree()
 {
   yuiDebug() << endl;
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -219,11 +245,12 @@ NCTree::~NCTree()
 //
 inline const NCTreeLine * NCTree::getTreeLine( unsigned idx ) const
 {
-  if ( myPad() ) {
+  if ( myPad() )
     return dynamic_cast<const NCTreeLine *>(myPad()->GetLine( idx ));
-  }
-  return 0;
+  else
+      return 0;
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -241,6 +268,7 @@ inline NCTreeLine * NCTree::modifyTreeLine( unsigned idx )
   return 0;
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -254,6 +282,7 @@ int NCTree::preferredWidth()
     wsze sze = wsze::max( defsze, wsze( 0, labelWidht()+2 ) ); 
     return sze.W; 
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -269,6 +298,7 @@ int NCTree::preferredHeight()
     return sze.H;
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -283,6 +313,7 @@ void NCTree::setEnabled( bool do_bv )
     YWidget::setEnabled( do_bv );
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -296,6 +327,7 @@ void NCTree::setSize( int newwidth, int newheight )
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -305,19 +337,22 @@ void NCTree::setSize( int newwidth, int newheight )
 //	DESCRIPTION : Return YTreeItem pointer for a current line
 //		      (under the cursor)
 // 
-const YTreeItem * NCTree::getCurrentItem() const
+YTreeItem * NCTree::getCurrentItem() const
 {
-  const YTreeItem * yitem = 0;
+    YTreeItem * yitem = 0;
 
-  if ( myPad() ) {
-    const NCTreeLine * cline = dynamic_cast<const NCTreeLine *>(myPad()->GetCurrentLine());
-    if ( cline ) {
-      yitem = &cline->Yitem();
+    if ( myPad() )
+    {
+	const NCTreeLine * cline = dynamic_cast<const NCTreeLine *>(myPad()->GetCurrentLine());
+	
+	if ( cline )
+	    yitem = cline->YItem();
     }
-  }
-  yuiDebug() << "-> " << (yitem?yitem->label().c_str():"noitem") << endl;
-  return yitem;
+    yuiDebug() << "-> " << (yitem?yitem->label().c_str():"noitem") << endl;
+    
+    return yitem;
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -335,7 +370,7 @@ void NCTree::selectItem( YItem *item, bool selected )
     YTreeItem * treeItem =  dynamic_cast<YTreeItem *> (item);
     YUI_CHECK_PTR( treeItem );
 
-    const YTreeItem *citem = getCurrentItem();
+    YTreeItem *citem = getCurrentItem();
     
     if ( !selected && ( treeItem == citem ))
     {
@@ -352,6 +387,7 @@ void NCTree::selectItem( YItem *item, bool selected )
 	myPad()->ShowItem( getTreeLine (at) );
     }
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -374,33 +410,22 @@ void NCTree::selectItem( int index )
 	YUI_THROW( YUIException( "Can't find selected item" ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTree::setLabel
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTree::setLabel( const string & nlabel )
 {
   YTree::setLabel( nlabel );
   NCPadWidget::setLabel( NCstring( nlabel ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTree::rebuildTree
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTree::rebuildTree()
 {
   DelPad();
   Redraw();
 }
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -418,16 +443,13 @@ NCPad * NCTree::CreatePad()
   return npad;
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
+// Creates tree lines and appends them to TreePad
+// (called recursively for each child of an item)
 //
-//	METHOD NAME : NCTree::Dit
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Creates tree lines and appends them to TreePad
-//		      (called recursively for each child of an item)
-//
-void NCTree::Dit( NCTreeLine * p, NCTreePad * pad, YTreeItem * item )
+void NCTree::CreateTreeLines( NCTreeLine * parentLine, NCTreePad * pad, YItem * item )
 {
     //static index counter
     static int idx = 0;
@@ -435,23 +457,27 @@ void NCTree::Dit( NCTreeLine * p, NCTreePad * pad, YTreeItem * item )
     //which makes selecting items painful
     item->setIndex( idx++ );
 
-    NCTreeLine * c = new NCTreeLine( p, *item );
+    YTreeItem * treeItem = dynamic_cast<YTreeItem *> (item);
+    YUI_CHECK_PTR( treeItem );
 
-    pad->Append( c );
+    NCTreeLine * line = new NCTreeLine( parentLine, treeItem );
+    pad->Append( line );
 
     // iterate over children
     for ( YItemIterator it = item->childrenBegin();  it < item->childrenEnd(); ++it )
     {
-	Dit( c, pad, (YTreeItem *)(*it) );
+	CreateTreeLines( line, pad, *it );
     }
 }
+
+
 ///////////////////////////////////////////////////////////////////
 //
 //
 //	METHOD NAME : NCTree::DrawPad
 //	METHOD TYPE : void
 //
-//	DESCRIPTION : Fills TreePad with lines (uses Dit to create them)
+//	DESCRIPTION : Fills TreePad with lines (uses CreateTreeLines to create them)
 //
 void NCTree::DrawPad()
 {
@@ -464,24 +490,18 @@ void NCTree::DrawPad()
   // YItemIterator iterates over the toplevel items
   for ( YItemIterator it = itemsBegin(); it < itemsEnd(); ++it )
   {
-      Dit( 0, myPad(), (YTreeItem *)(*it) );
+      CreateTreeLines( 0, myPad(), *it );
   }
    
   NCPadWidget::DrawPad();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTree::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCTree::wHandleInput( wint_t key )
 {
   NCursesEvent ret = NCursesEvent::none;
-  const YTreeItem * oldCurrentItem = getCurrentItem();
+  YTreeItem * oldCurrentItem = getCurrentItem();
 
   if ( ! handleInput( key ) )
   {
@@ -509,16 +529,19 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
   return ret;
 }
 
+
+
 ///////////////////////////////////////////////////////////////////
 //
 //
 //	METHOD NAME : NCTree::deleteAllItems
 //	METHOD TYPE : void
 //
-//	DESCRIPTION : cleares the table and the lists holding
+//	DESCRIPTION : clears the table and the lists holding
 //                    the values
 //
-void NCTree::deleteAllItems() {
+void NCTree::deleteAllItems()
+{
 	YTree::deleteAllItems();
 	myPad()->ClearTable();
 }

@@ -13,7 +13,6 @@
    File:       NCTree.h
 
    Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #ifndef NCTree_h
@@ -27,23 +26,19 @@
 
 class NCTreeLine;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCTree
-//
-//	DESCRIPTION :
-//
-class NCTree : public YTree, public NCPadWidget {
 
-  friend std::ostream & operator<<( std::ostream & STREAM, const NCTree & OBJ );
+class NCTree : public YTree, public NCPadWidget
+{
 
-  NCTree & operator=( const NCTree & );
-  NCTree            ( const NCTree & );
+    friend std::ostream & operator<<( std::ostream & STREAM, const NCTree & OBJ );
 
-  private:
-    void Dit( NCTreeLine * p, NCTreePad * pad, YTreeItem * item );
+    NCTree & operator=( const NCTree & );
+    NCTree            ( const NCTree & );
+
+private:
+    void CreateTreeLines( NCTreeLine * p, NCTreePad * pad, YItem * item );
     
-  protected:
+protected:
 
     virtual NCTreePad * myPad () const
         { return dynamic_cast<NCTreePad*> ( NCPadWidget::myPad () ); }
@@ -51,19 +46,19 @@ class NCTree : public YTree, public NCPadWidget {
     const NCTreeLine * getTreeLine( unsigned idx ) const;
     NCTreeLine *       modifyTreeLine( unsigned idx );
 
-  protected:
+protected:
 
     virtual const char * location() const { return "NCTree"; }
 
     virtual NCPad * CreatePad();
     virtual void    DrawPad();
      
-  protected:
+protected:
 
     virtual void startMultipleChanges() { startMultidraw(); }
     virtual void doneMultipleChanges()  { stopMultidraw(); }
 
-  public:
+public:
 
     NCTree( YWidget * parent, const string & label );
     virtual ~NCTree();
@@ -81,7 +76,7 @@ class NCTree : public YTree, public NCPadWidget {
     virtual void setLabel( const string & nlabel );
     virtual void rebuildTree();
 
-    virtual const YTreeItem * getCurrentItem() const;
+    virtual YTreeItem * getCurrentItem() const;
 
     virtual void selectItem( YItem *item, bool selected );
     virtual void selectItem( int index );
@@ -90,15 +85,15 @@ class NCTree : public YTree, public NCPadWidget {
 
     virtual void setEnabled( bool do_bv ); 
 
-    virtual bool setKeyboardFocus() {
-      if ( !grabFocus() )
-        return YWidget::setKeyboardFocus();
-      return true;
+    virtual bool setKeyboardFocus()
+    {
+	if ( !grabFocus() )
+	    return YWidget::setKeyboardFocus();
+	return true;
     }
 
     void deleteAllItems();
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCTree_h
