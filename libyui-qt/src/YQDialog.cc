@@ -576,28 +576,28 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    }
 	    return;
 	}
-	else if ( event->key()   == Qt::Key_F7 &&	// Shift-F7: toggle debug logging
+	else if ( event->key()       == Qt::Key_F7 &&	// Shift-F7: toggle debug logging
 		  event->modifiers() == Qt::ShiftModifier )
 	{
 	    YQUI::ui()->askConfigureLogging();
 	    return;
 	}
-	else if ( event->key()   == Qt::Key_F8 &&	// Shift-F8: save y2logs
-		  event->modifiers() & Qt::ShiftModifier )
+	else if ( event->key()       == Qt::Key_F8 &&	// Shift-F8: save y2logs
+		  event->modifiers() == Qt::ShiftModifier )
 	{
 	    YQUI::ui()->askSaveLogs();
 	    return;
 	}
-	else if ( event->modifiers() & Qt::NoModifier )			// No Ctrl / Alt / Shift etc. pressed
+	else if ( event->modifiers() == Qt::NoModifier )	// No Ctrl / Alt / Shift etc. pressed
 	{
 	    if ( event->key() == Qt::Key_Return ||
 		 event->key() == Qt::Key_Enter    )
 	    {
-		( void ) activateDefaultButton();
+		(void) activateDefaultButton();
 		return;
 	    }
 	}
-	else if ( event->modifiers() & ( Qt::ControlModifier | Qt::ShiftModifier | Qt::AltModifier ) )
+	else if ( event->modifiers() == ( Qt::ControlModifier | Qt::ShiftModifier | Qt::AltModifier ) )
 	{
 	    // Qt-UI special keys - all with Ctrl-Shift-Alt
 
