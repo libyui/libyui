@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Mar 10 17:15:06 CET 2008 - sh@suse.de
+
+- Implemented bnc #364887: Hotkey to dump widget tree
+  (It's now Ctrl-Shift-Alt-T) 
+
+-------------------------------------------------------------------
 Fri Mar  7 12:14:08 CET 2008 - sh@suse.de
 
 - Fixed bnc #357607: OpenItems property of Tree widget is broken 

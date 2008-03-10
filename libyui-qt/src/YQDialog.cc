@@ -618,6 +618,13 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 		YQUI::ui()->sendEvent( new YDebugEvent() );
 		return;
 	    }
+	    else if ( event->key() == Qt::Key_T )
+	    {
+		yuiMilestone() << "*** Dumping widget tree ***" << endl;
+		dumpWidgetTree();
+		yuiMilestone() << "*** Widget tree end ***" << endl;
+		return;
+	    }
 	    else if ( event->key() == Qt::Key_X )
 	    {
 		yuiMilestone() << "Starting xterm" << endl;
