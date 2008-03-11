@@ -120,7 +120,7 @@ YQDumbTab::slotSelected( int index )
     YItem * item = itemAt( index );
     YUI_CHECK_PTR( item );
     yuiDebug() << "Tab [" << item->label() << "] selected" << endl;
-
+    YDumbTab::selectItem( item );
 
     YQUI::ui()->sendEvent( new YMenuEvent( item ) );
 }

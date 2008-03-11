@@ -148,6 +148,7 @@ void YQUI::initUI()
 
     _styler = new QY2Styler( qApp );
     QString style = getenv("Y2STYLE");
+    
     if ( !style.isEmpty() )
 	_styler->setStyleSheet( style );
     else
