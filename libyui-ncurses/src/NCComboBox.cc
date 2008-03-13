@@ -44,6 +44,7 @@ NCComboBox::NCComboBox( YWidget * parent, const string & nlabel,
     , fldstart ( 0 )
     , fldlength( 0 )
     , curpos( 0 )
+    , longest_line(10)
     , index( -1 )
     , InputMaxLength( -1 )
 {
@@ -131,8 +132,12 @@ void NCComboBox::setSize( int newwidth, int newheight )
 //
 void NCComboBox::setDefsze()
 {
+  // Height: label h. + 1 (text area)
+  // Width: longest line + 2 chars ( arrow(s) )
+  // (here, we should not rely on label width only as text area may become 
+  // unreasonably small then - #367083 )
   defsze = wsze( label.height() + 1,
-		 label.width() < 5 ? 5 : label.width() );
+		 (label.width() > longest_line) ? label.width() : longest_line + 2  );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -202,6 +207,16 @@ void NCComboBox::addItem( YItem * item )
 	YComboBox::addItem( item );
 
 	deflist.push_back( item->label() );
+	string::size_type this_line = item->label().size();
+
+	//Is this line longer than the longest one so far? 
+	//(but no greater than 40 chars, we may have only 80x25 screen)
+	if ( (this_line > longest_line) && (this_line <= 40) )
+        {
+	    //yes, so let's resize the text area)
+	    longest_line = this_line;
+	    setDefsze();
+	}
 	if ( item->selected()  )
 	{
 	    index = item->index();
@@ -300,7 +315,11 @@ void NCComboBox::setText( const string & ntext )
   modified = false;
   fldstart = 0;
   curpos   = mayedit ? buffer.length() : 0;
-  setDefsze();
+
+  //(Maybe) no need to set default size here, it has been
+  //alread calculated as the items were added (see addItem() above)
+  //setDefsze();
+
   tUpdate();
   Redraw();
 }
@@ -639,17 +658,18 @@ NCursesEvent NCComboBox::wHandleInput( wint_t key )
 //
 int NCComboBox::listPopup()
 {
+  int idx = -1;
   if (!deflist.empty()) {
     wpos        at( ScreenPos() + wpos( win->height(), -1 ) );
     NCPopupList * dialog = new NCPopupList( at, "", deflist, index );
     YUI_CHECK_NEW( dialog );
-    int idx = dialog->post();
+    idx = dialog->post();
     if ( idx != -1 )
       setCurrentItem( idx );
     YDialog::deleteTopmostDialog();
   }
-  
-  return 0;
+ 
+  return idx;
 }
 
 ///////////////////////////////////////////////////////////////////

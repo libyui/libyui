@@ -57,6 +57,7 @@ class NCComboBox : public YComboBox, public NCWidget {
     string::size_type fldstart;
     string::size_type fldlength;
     string::size_type curpos;
+    string::size_type longest_line;
 
     NCstring validChars;
 
