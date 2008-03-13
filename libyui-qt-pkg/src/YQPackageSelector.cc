@@ -24,6 +24,7 @@
 #define AUTO_CHECK_DEPENDENCIES_DEFAULT			true
 #define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE	0
 #define GLOBAL_UPDATE_CONFIRMATION_THRESHOLD		20
+#define  ENABLE_SOURCE_RPMS				0
 
 #include <fstream>
 #include <boost/bind.hpp>
@@ -670,19 +671,23 @@ YQPackageSelector::addMenus()
 	_pkgMenu->addAction(_pkgList->actionSetCurrentUpdate);
 	_pkgMenu->addAction(_pkgList->actionSetCurrentTaboo);
 
+#if ENABLE_SOURCE_RPMS
 	_pkgMenu->addSeparator();
 
 	_pkgMenu->addAction(_pkgList->actionInstallSourceRpm);
 	_pkgMenu->addAction(_pkgList->actionDontInstallSourceRpm);
+#endif
 
 	_pkgMenu->addSeparator();
 	QMenu * submenu = _pkgList->addAllInListSubMenu( _pkgMenu );
 	Q_CHECK_PTR( submenu );
 
+#if ENABLE_SOURCE_RPMS
 	submenu->addSeparator();
 
 	_pkgMenu->addAction(_pkgList->actionInstallListSourceRpms);
 	_pkgMenu->addAction(_pkgList->actionDontInstallListSourceRpms);
+#endif
 
 	//
 	// Submenu for all packages

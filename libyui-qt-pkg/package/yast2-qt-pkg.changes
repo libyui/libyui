@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Mar 13 15:56:56 CET 2008 - sh@suse.de
+
+- Fixed bug #370244: Menu entries about source RPMs
+  Moved out all source RPM related menu entries:
+  libzypp has no support whatsoever for source RPMs 
+
+-------------------------------------------------------------------
 Wed Feb 27 11:02:40 CET 2008 - coolo@suse.de
 
 - fix build without ycp
