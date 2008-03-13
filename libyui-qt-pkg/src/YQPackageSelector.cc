@@ -1,14 +1,14 @@
 /*---------------------------------------------------------------------\
-|								       |
-|		       __   __	  ____ _____ ____		       |
-|		       \ \ / /_ _/ ___|_   _|___ \		       |
-|			\ V / _` \___ \ | |   __) |		       |
-|			 | | (_| |___) || |  / __/		       |
-|			 |_|\__,_|____/ |_| |_____|		       |
-|								       |
-|				core system			       |
-|							 (C) SuSE GmbH |
-\----------------------------------------------------------------------/
+  |								       |
+  |		       __   __	  ____ _____ ____		       |
+  |		       \ \ / /_ _/ ___|_   _|___ \		       |
+  |			\ V / _` \___ \ | |   __) |		       |
+  |			 | | (_| |___) || |  / __/		       |
+  |			 |_|\__,_|____/ |_| |_____|		       |
+  |								       |
+  |				core system			       |
+  |							 (C) SuSE GmbH |
+  \----------------------------------------------------------------------/
 
   File:	      YQPackageSelector.cc
   See also:   YQPackageSelectorHelp.cc
@@ -17,7 +17,7 @@
 
   Textdomain "packages-qt"
 
-/-*/
+  /-*/
 
 #define CHECK_DEPENDENCIES_ON_STARTUP			1
 #define DEPENDENCY_FEEDBACK_IF_OK			1
@@ -635,19 +635,19 @@ YQPackageSelector::addMenus()
 	_viewMenu = new QMenu( _menuBar );
 	Q_CHECK_PTR( _viewMenu );
 	QAction *action = _menuBar->addMenu( _viewMenu );
-  action->setText(_( "&View" ));
+	action->setText(_( "&View" ));
 
         // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
 	_showDevelAction = _viewMenu->addAction( _( "Show -de&vel Packages" ),
-						       this, SLOT( pkgExcludeRulesChanged() ), Qt::Key_F7 );
-   _showDevelAction->setChecked(true);
+						 this, SLOT( pkgExcludeRulesChanged() ), Qt::Key_F7 );
+	_showDevelAction->setChecked(true);
 	_excludeDevelPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-devel(-\\d+bit)?$" ), _pkgList->nameCol() );
 	Q_CHECK_PTR( _excludeDevelPkgs );
 	_excludeDevelPkgs->enable( false );
 
 	// Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
 	_showDebugAction = _viewMenu->addAction( _( "Show -&debuginfo Packages" ),
-						       this, SLOT( pkgExcludeRulesChanged() ), Qt::Key_F8 );
+						 this, SLOT( pkgExcludeRulesChanged() ), Qt::Key_F8 );
 	_showDebugAction->setChecked(true);
 	_excludeDebugInfoPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-debuginfo$" ), _pkgList->nameCol() );
 	Q_CHECK_PTR( _excludeDebugInfoPkgs );
@@ -661,19 +661,19 @@ YQPackageSelector::addMenus()
 	_pkgMenu = new QMenu( _menuBar );
 	Q_CHECK_PTR( _pkgMenu );
 	action = _menuBar->addMenu( _pkgMenu );
-  action->setText(_( "&Package" ));
+	action->setText(_( "&Package" ));
 
-    _pkgMenu->addAction(_pkgList->actionSetCurrentInstall);
-    _pkgMenu->addAction(_pkgList->actionSetCurrentDontInstall);
-    _pkgMenu->addAction(_pkgList->actionSetCurrentKeepInstalled);
-    _pkgMenu->addAction(_pkgList->actionSetCurrentDelete);
-    _pkgMenu->addAction(_pkgList->actionSetCurrentUpdate);
-    _pkgMenu->addAction(_pkgList->actionSetCurrentTaboo);
+	_pkgMenu->addAction(_pkgList->actionSetCurrentInstall);
+	_pkgMenu->addAction(_pkgList->actionSetCurrentDontInstall);
+	_pkgMenu->addAction(_pkgList->actionSetCurrentKeepInstalled);
+	_pkgMenu->addAction(_pkgList->actionSetCurrentDelete);
+	_pkgMenu->addAction(_pkgList->actionSetCurrentUpdate);
+	_pkgMenu->addAction(_pkgList->actionSetCurrentTaboo);
 
 	_pkgMenu->addSeparator();
 
-  _pkgMenu->addAction(_pkgList->actionInstallSourceRpm);
-  _pkgMenu->addAction(_pkgList->actionDontInstallSourceRpm);
+	_pkgMenu->addAction(_pkgList->actionInstallSourceRpm);
+	_pkgMenu->addAction(_pkgList->actionDontInstallSourceRpm);
 
 	_pkgMenu->addSeparator();
 	QMenu * submenu = _pkgList->addAllInListSubMenu( _pkgMenu );
@@ -681,8 +681,8 @@ YQPackageSelector::addMenus()
 
 	submenu->addSeparator();
 
-    _pkgMenu->addAction(_pkgList->actionInstallListSourceRpms);
-    _pkgMenu->addAction(_pkgList->actionDontInstallListSourceRpms);
+	_pkgMenu->addAction(_pkgList->actionInstallListSourceRpms);
+	_pkgMenu->addAction(_pkgList->actionDontInstallListSourceRpms);
 
 	//
 	// Submenu for all packages
@@ -695,13 +695,13 @@ YQPackageSelector::addMenus()
 	// refers to all packages globally, not only to those that are
 	// currently visible in the packages list.
 	action = _pkgMenu->addMenu( submenu );
-  action->setText(_( "All Packages" ));
+	action->setText(_( "All Packages" ));
 
 	submenu->addAction( _( "Update if newer version available" ),
-			     this, SLOT( globalUpdatePkg() ) );
+			    this, SLOT( globalUpdatePkg() ) );
 
 	submenu->addAction( _( "Update unconditionally" ),
-			     this, SLOT( globalUpdatePkgForce() ) );
+			    this, SLOT( globalUpdatePkgForce() ) );
     }
 
 
@@ -714,17 +714,17 @@ YQPackageSelector::addMenus()
 	_patchMenu = new QMenu( _menuBar );
 	Q_CHECK_PTR( _patchMenu );
 	action = _menuBar->addMenu( _patchMenu );
-  action->setText(_( "&Patch" ));
+	action->setText(_( "&Patch" ));
 
-      _patchMenu->addAction(_patchList->actionSetCurrentInstall);
-      _patchMenu->addAction(_patchList->actionSetCurrentDontInstall);
-      _patchMenu->addAction(_patchList->actionSetCurrentKeepInstalled);
+	_patchMenu->addAction(_patchList->actionSetCurrentInstall);
+	_patchMenu->addAction(_patchList->actionSetCurrentDontInstall);
+	_patchMenu->addAction(_patchList->actionSetCurrentKeepInstalled);
 
 #if ENABLE_DELETING_PATCHES
-      _patchMenu->addAction(_patchList->actionSetCurrentDelete);
+	_patchMenu->addAction(_patchList->actionSetCurrentDelete);
 #endif
-      _patchMenu->addAction(_patchList->actionSetCurrentUpdate);
-      _patchMenu->addAction(_patchList->actionSetCurrentTaboo);
+	_patchMenu->addAction(_patchList->actionSetCurrentUpdate);
+	_patchMenu->addAction(_patchList->actionSetCurrentTaboo);
 
 	_patchMenu->addSeparator();
 	_patchList->addAllInListSubMenu( _patchMenu );
@@ -756,7 +756,7 @@ YQPackageSelector::addMenus()
 
     if ( _pkgConflictDialog )
 	_extrasMenu->addAction( _( "Generate Dependency Resolver &Test Case" ),
-				    _pkgConflictDialog, SLOT( askCreateSolverTestCase() ) );
+				_pkgConflictDialog, SLOT( askCreateSolverTestCase() ) );
 
     if ( _actionResetIgnoredDependencyProblems )
 	_extrasMenu->addAction(_actionResetIgnoredDependencyProblems);
@@ -944,8 +944,8 @@ YQPackageSelector::animateCheckButton()
 {
     if ( _checkDependenciesButton )
     {
-      QPalette p = _checkDependenciesButton->palette();
-      p.setColor(QPalette::Background, QColor( 0xE0, 0xE0, 0xF8 ));
+	QPalette p = _checkDependenciesButton->palette();
+	p.setColor(QPalette::Background, QColor( 0xE0, 0xE0, 0xF8 ));
 	_checkDependenciesButton->setPalette(p);
 	_checkDependenciesButton->repaint();
     }
@@ -1119,8 +1119,8 @@ void
 YQPackageSelector::pkgImport()
 {
     QString filename =	QFileDialog::getOpenFileName( this, _( "Load Package List" ), DEFAULT_EXPORT_FILE_NAME,		// startsWi
-    "*.xml+;;*"// filter
-    );
+						      "*.xml+;;*"// filter
+						      );
 
     if ( ! filename.isEmpty() )
     {
