@@ -3,6 +3,7 @@ Thu Mar 13 12:53:23 CET 2008 - kmachalkova@suse.cz
 
 - Set combobox text-area size so it matches the length of its longest 
   item (qt&gtk compatibility - bnc#367083)
+- 2.16.20 
 
 -------------------------------------------------------------------
 Fri Mar  7 13:02:58 CET 2008 - sh@suse.de
