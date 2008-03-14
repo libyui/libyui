@@ -317,6 +317,7 @@ protected:
     QMenu *			_viewMenu;
     QMenu *			_pkgMenu;
     QMenu *			_patchMenu;
+    QMenu *			_repositoryMenu;
     QMenu *			_extrasMenu;
     QMenu *			_helpMenu;
 

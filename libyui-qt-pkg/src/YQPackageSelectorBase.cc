@@ -278,6 +278,12 @@ YQPackageSelectorBase::accept()
     YQUI::ui()->sendEvent( new YMenuEvent( "accept" ) );
 }
 
+void
+YQPackageSelectorBase::repoManager()
+{
+    yuiMilestone() << "Closing PackageSelector with \"RepoManager\"" << endl;
+    YQUI::ui()->sendEvent( new YMenuEvent( "repo_mgr" ) );
+}
 
 bool
 YQPackageSelectorBase::showPendingLicenseAgreements()

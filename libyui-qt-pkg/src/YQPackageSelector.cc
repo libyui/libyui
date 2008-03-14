@@ -601,6 +601,7 @@ YQPackageSelector::layoutMenuBar( QWidget *parent )
     _pkgMenu		= 0;
     _patchMenu		= 0;
     _extrasMenu		= 0;
+    _repositoryMenu 	= 0;
     _helpMenu		= 0;
 
 }
@@ -735,16 +736,21 @@ YQPackageSelector::addMenus()
 	_patchList->addAllInListSubMenu( _patchMenu );
     }
 
+    // Repository menu
+    _repositoryMenu = new QMenu( _menuBar );
+    Q_CHECK_PTR( _repositoryMenu );
+    action = _menuBar->addMenu( _repositoryMenu );
+    action->setText(_( "&Repositories" ));
+    _repositoryMenu->addAction( _( "Repository &Manager..." ), this, SLOT( repoManager() ), Qt::CTRL + Qt::Key_M );
 
     //
     // Extras menu
     //
-
     _extrasMenu = new QMenu( _menuBar );
     Q_CHECK_PTR( _extrasMenu );
     action = _menuBar->addMenu( _extrasMenu );
     action->setText(_( "&Extras" ));
-
+    
     _extrasMenu->addAction( _( "Show &Products" 		  ), this, SLOT( showProducts()    ) );
     _extrasMenu->addAction( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), Qt::CTRL + Qt::Key_A );
     _extrasMenu->addAction( _( "&Verify System"                  ), this, SLOT( verifySystem()    ) );

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Mar 14 14:18:59 CET 2008 - lslezak@suse.cz
+
+- added a new menu entry for starting the repository manager
+  (fate#302517)
+
+-------------------------------------------------------------------
 Thu Mar 13 15:56:56 CET 2008 - sh@suse.de
 
 - Fixed bug #370244: Menu entries about source RPMs

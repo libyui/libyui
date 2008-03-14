@@ -142,6 +142,11 @@ public slots:
     void accept();
 
     /**
+     * Close processing and request start of the repository manager 
+     **/
+    void repoManager();
+
+    /**
      * Inform user about a feature that is not implemented yet.
      * This should NEVER show up in the final version.
      **/
