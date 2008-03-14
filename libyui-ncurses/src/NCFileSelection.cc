@@ -29,7 +29,7 @@
 #include <sys/types.h>
 
 /*
-  Textdomain "packages"
+  Textdomain "ncurses"
 */
 
 ///////////////////////////////////////////////////////////////////

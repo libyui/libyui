@@ -34,7 +34,7 @@
 
 
 /*
-  Textdomain "packages"
+  Textdomain "ncurses"
 */
 
 

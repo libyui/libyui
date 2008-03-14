@@ -35,7 +35,7 @@
 #include <sys/errno.h>
 
 /*
-  Textdomain "packages"
+  Textdomain "ncurses"
 */
 
 

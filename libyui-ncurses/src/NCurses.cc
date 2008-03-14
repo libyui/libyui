@@ -47,7 +47,7 @@ using stdutil::vform;
 using stdutil::form;
     
 /*
-  Textdomain "packages"
+  Textdomain "ncurses"
 */
 
 NCurses * NCurses::myself = 0;

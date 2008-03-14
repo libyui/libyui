@@ -35,7 +35,7 @@
 #endif
 
 /*
-  Textdomain "packages"
+  Textdomain "ncurses"
 */
 
 
