@@ -79,7 +79,7 @@ using std::map;
 using std::pair;
 
 /*
-  Textdomain "packages"
+  Textdomain "packages-ncurses"
 */
 
 ///////////////////////////////////////////////////////////////////

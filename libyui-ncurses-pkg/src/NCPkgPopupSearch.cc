@@ -34,7 +34,7 @@
 #include "NCi18n.h"
 
 /*
-  Textdomain "packages"
+  Textdomain "packages-ncurses"
 */
 
 ///////////////////////////////////////////////////////////////////

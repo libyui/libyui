@@ -39,7 +39,7 @@
 #include "NCPackageSelector.h"
 
 /*
-  Textdomain "packages"
+  Textdomain "packages-ncurses"
 */
 
 using namespace std;

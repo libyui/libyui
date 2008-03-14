@@ -39,7 +39,7 @@
 #endif
 
 /*
-  Textdomain "packages"
+  Textdomain "packages-ncurses"
 */
 
 ///////////////////////////////////////////////////////////////////

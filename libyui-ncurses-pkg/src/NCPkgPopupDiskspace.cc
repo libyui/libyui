@@ -51,7 +51,7 @@ using namespace std;
 #define OVERFLOW_MB_PROXIMITY	300
 
 /*
-  Textdomain "packages"
+  Textdomain "packages-ncurses"
 */
 
  ///////////////////////////////////////////////////////////////////

@@ -29,7 +29,7 @@
 
 
 /*
-  Textdomain "packages"
+  Textdomain "packages-ncurses"
 */
 
 //

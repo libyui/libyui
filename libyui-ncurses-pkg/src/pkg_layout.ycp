@@ -10,7 +10,7 @@
  * $Id: pkg_layout.ycp 39443 2007-07-16 14:30:49Z kmachalkova $
  */
 {
-    textdomain "packages";
+    textdomain "packages-ncurses";
 
     return `VBox( `VSpacing(0.3),
 		  `HBox( `HSpacing(0.3),

@@ -36,7 +36,7 @@
 #include "NCi18n.h"
 
 /*
-  Textdomain "packages"
+  Textdomain "packages-ncurses"
 */
 
 class NCProblemSelectionBox : public NCSelectionBox
