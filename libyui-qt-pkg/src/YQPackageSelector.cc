@@ -537,10 +537,11 @@ YQPackageSelector::layoutButtons( QWidget *parent )
     QWidget * button_box = new QWidget( parent );
     Q_CHECK_PTR( button_box );
     parent->layout()->addWidget( button_box );
-
+    
     QHBoxLayout *layout = new QHBoxLayout(button_box);
-
-    //layout->setSpacing( SPACING );
+    button_box->setLayout(layout);
+    
+    layout->setSpacing( SPACING );
     layout->setMargin( 0 );
 
     // Button: Dependency check
@@ -564,7 +565,7 @@ YQPackageSelector::layoutButtons( QWidget *parent )
 
     _autoDependenciesCheckBox->setChecked( AUTO_CHECK_DEPENDENCIES_DEFAULT );
 
-    addHStretch( button_box );
+    layout->addStretch();
 
     QPushButton * cancel_button = new QPushButton( _( "&Cancel" ), button_box );
     Q_CHECK_PTR( cancel_button );
