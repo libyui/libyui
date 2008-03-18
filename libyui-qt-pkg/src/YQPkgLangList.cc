@@ -33,6 +33,7 @@ using std::set;
 
 YQPkgLangList::YQPkgLangList( QWidget * parent )
     : YQPkgObjList( parent )
+#warning "base class works with zypp::Resolvable, but zypp::Locale isn't one any longer!"
 {
     yuiDebug() << "Creating language list" << endl;
 
@@ -158,8 +159,8 @@ YQPkgLangList::updateActions( YQPkgObjListItem * item)
 }
 
 
-YQPkgLangListItem::YQPkgLangListItem( YQPkgLangList * 	langList,
-                                      const zypp::Locale &lang )
+YQPkgLangListItem::YQPkgLangListItem( YQPkgLangList * 	   langList,
+                                      const zypp::Locale & lang )
     : YQPkgObjListItem( langList )
     , _zyppLang( lang )
 {
@@ -180,9 +181,11 @@ YQPkgLangListItem::applyChanges()
     solveResolvableCollections();
 }
 
+
 void
 YQPkgLangListItem::init()
 {
+#warning this is utterly broken - see bug #370233
     // DO NOT CALL PARENT CLASS
     _debugIsBroken	= false;
     _debugIsSatisfied	= false;
@@ -195,7 +198,9 @@ YQPkgLangListItem::init()
     setStatusIcon();
 }
 
-ZyppStatus YQPkgLangListItem::status() const
+
+ZyppStatus
+YQPkgLangListItem::status() const
 {
     if ( zypp::getZYpp()->pool().isRequestedLocale( _zyppLang ) )
         return S_Install;
@@ -203,18 +208,23 @@ ZyppStatus YQPkgLangListItem::status() const
         return S_NoInst;
 }
 
-bool YQPkgLangListItem::bySelection() const
+
+bool
+YQPkgLangListItem::bySelection() const
 {
     return zypp::getZYpp()->pool().isRequestedLocale( _zyppLang );
 }
 
 
-void YQPkgLangListItem::cycleStatus()
+void
+YQPkgLangListItem::cycleStatus()
 {
     if ( zypp::getZYpp()->pool().isRequestedLocale( _zyppLang ) )
     {
         zypp::getZYpp()->pool().eraseRequestedLocale( _zyppLang );
-    } else {
+    }
+    else
+    {
         zypp::getZYpp()->pool().addRequestedLocale( _zyppLang );
     }
     setStatusIcon();

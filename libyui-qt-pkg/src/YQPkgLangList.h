@@ -120,8 +120,8 @@ public:
      * Constructor. Creates a YQPkgLangList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgLangListItem( YQPkgLangList *	pkgSelList,
-                       const zypp::Locale     &lang );
+    YQPkgLangListItem( YQPkgLangList *	    pkgSelList,
+                       const zypp::Locale & lang );
 
     /**
      * Destructor
