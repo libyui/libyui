@@ -218,7 +218,7 @@ public:
      * Constructor. Creates a YQPkgList item that corresponds to the package
      * manager object that 'pkg' refers to.
      **/
-    YQPkgListItem( YQPkgList *			pkgList,
+    YQPkgListItem( YQPkgList *	pkgList,
 		   ZyppSel	selectable,
 		   ZyppPkg 	zyppPkg );
 
