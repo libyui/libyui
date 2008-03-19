@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Mar 19 15:52:33 CET 2008 - coolo@suse.de
+
+- fix YTable performance (bnc #372316)
+
+-------------------------------------------------------------------
 Wed Mar 19 15:21:01 CET 2008 - dmacvicar@suse.de
 
 - fix taking screenshots (bnc #361995) 
