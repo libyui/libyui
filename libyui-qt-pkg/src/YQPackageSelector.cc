@@ -226,6 +226,8 @@ YQPackageSelector::basicLayout()
 
     outer_splitter->setStretchFactor(outer_splitter->indexOf(left_pane), 0);
     outer_splitter->setStretchFactor(outer_splitter->indexOf(right_pane), 1);
+    layout->addStretch();
+    
 }
 
 
