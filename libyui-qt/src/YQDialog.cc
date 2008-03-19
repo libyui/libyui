@@ -558,8 +558,8 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    YQUI::ui()->makeScreenShot( "" );
 	    return;
 	}
-	else if ( event->key()   == Qt::Key_F4 &&	// Shift-F4: toggle colors for vision impaired users
-		  event->modifiers() & Qt::ShiftModifier )
+	else if ( event->key()       == Qt::Key_F4 &&	// Shift-F4: toggle colors for vision impaired users
+		  event->modifiers() == Qt::ShiftModifier )
 	{
 	    YQUI::ui()->toggleVisionImpairedPalette();
 
