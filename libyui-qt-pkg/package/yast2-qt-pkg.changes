@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Mar 19 00:47:34 CET 2008 - dmacvicar@suse.de
+
+- make autodeps checkbox and button clickable (bnc #355268)
+
+-------------------------------------------------------------------
 Fri Mar 14 14:18:59 CET 2008 - lslezak@suse.cz
 
 - added a new menu entry for starting the repository manager
