@@ -644,15 +644,18 @@ YQPackageSelector::addMenus()
 
         // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
 	_showDevelAction = _viewMenu->addAction( _( "Show -de&vel Packages" ),
-						 this, SLOT( pkgExcludeRulesChanged() ), Qt::Key_F7 );
+						 this, SLOT( pkgExcludeDevelChanged( bool ) ), Qt::Key_F7 );
+  _showDevelAction->setCheckable(true);
 	_showDevelAction->setChecked(true);
+
 	_excludeDevelPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-devel(-\\d+bit)?$" ), _pkgList->nameCol() );
 	Q_CHECK_PTR( _excludeDevelPkgs );
 	_excludeDevelPkgs->enable( false );
 
 	// Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
 	_showDebugAction = _viewMenu->addAction( _( "Show -&debuginfo Packages" ),
-						 this, SLOT( pkgExcludeRulesChanged() ), Qt::Key_F8 );
+						 this, SLOT( pkgExcludeDebugChanged( bool ) ), Qt::Key_F8 );
+  _showDebugAction->setCheckable(true);
 	_showDebugAction->setChecked(true);
 	_excludeDebugInfoPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-debuginfo$" ), _pkgList->nameCol() );
 	Q_CHECK_PTR( _excludeDebugInfoPkgs );
@@ -1358,29 +1361,29 @@ YQPackageSelector::installDebugInfoPkgs()
     installSubPkgs( "-debuginfo" );
 }
 
-
 void
-YQPackageSelector::pkgExcludeRulesChanged()
+YQPackageSelector::pkgExcludeDebugChanged( bool on )
 {
-#if 0
-    QAction *action = dynamic_cast<QAction *>(QObject::sender());
-#endif
-
     if ( _viewMenu && _pkgList )
     {
-        //action->setChecked();
-	//_viewMenu->setItemChecked( menuItemID, ! _viewMenu->isItemChecked( menuItemID ) );
+        if ( _excludeDebugInfoPkgs )
+            _excludeDebugInfoPkgs->enable( ! on );
 
-	if ( _excludeDevelPkgs )
-	    _excludeDevelPkgs->enable( ! _showDevelAction->isChecked() );
-
-	if ( _excludeDebugInfoPkgs )
-	    _excludeDebugInfoPkgs->enable( ! _showDebugAction->isChecked() );
-
-	_pkgList->applyExcludeRules();
+        _pkgList->applyExcludeRules();
     }
 }
 
+void
+YQPackageSelector::pkgExcludeDevelChanged( bool on )
+{
+    if ( _viewMenu && _pkgList )
+    {
+        if ( _excludeDevelPkgs )
+            _excludeDevelPkgs->enable( ! on );
+
+        _pkgList->applyExcludeRules();
+    }
+}
 
 void
 YQPackageSelector::installSubPkgs( const QString suffix )

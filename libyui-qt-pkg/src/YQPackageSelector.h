@@ -116,7 +116,8 @@ public slots:
      * or -devel packages) according to the current menu settings and apply the
      * exclude rules.
      **/
-    void pkgExcludeRulesChanged();
+    void pkgExcludeDebugChanged( bool on );
+    void pkgExcludeDevelChanged( bool on );
 
     /**
      * Display (generic) online help.
