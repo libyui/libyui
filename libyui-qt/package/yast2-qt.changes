@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Mar 19 15:21:01 CET 2008 - dmacvicar@suse.de
+
+- fix taking screenshots (bnc #361995) 
+
+-------------------------------------------------------------------
 Tue Mar 11 17:20:52 CET 2008 - sh@suse.de
 
 - Fixed bnc #358522: query CurrentItem for DumbTab is broken 
