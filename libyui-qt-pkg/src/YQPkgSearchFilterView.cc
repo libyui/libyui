@@ -359,7 +359,9 @@ YQPkgSearchFilterView::check( const zypp::Capabilities& capSet, const QRegExp & 
 	  it != capSet.end();
 	  ++it )
     {
-	if ( check( ( *it).index(), regexp ) )
+        zypp::CapDetail cap( *it );
+
+	if ( cap.isSimple() && check( cap.name().asString(), regexp ) )
 	{
 	    // yuiDebug() << "Match for " << (*it).asString() << endl;
 	    return true;
