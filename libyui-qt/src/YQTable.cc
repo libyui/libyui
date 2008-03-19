@@ -119,7 +119,6 @@ YQTable::addItem( YItem * yitem )
     if ( item->selected() )
     {
 	YQSignalBlocker sigBlocker( _qt_listView );
-	_qt_listView->setCurrentItem( clone );
 	clone->setSelected(true);
     }
 }
@@ -288,12 +287,6 @@ YQTableListViewItem::YQTableListViewItem( YQTable *	table,
 	  ++it )
     {
 	updateCell( *it );
-    }
-
-    if ( _origItem->selected() )
-    {
-	parent->setCurrentItem( this );
-	QY2ListViewItem::setSelected( true );
     }
 }
 
