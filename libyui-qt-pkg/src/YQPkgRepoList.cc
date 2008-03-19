@@ -55,7 +55,7 @@ YQPkgRepoList::YQPkgRepoList( QWidget * parent )
     setHeaderLabels(headers);
 
     //setAllColumnsShowFocus( true );
-    //setSelectionMode( Q3ListView::Extended );	// allow multi-selection with Ctrl-mouse
+    setSelectionMode( QAbstractItemView::ExtendedSelection );	// allow multi-selection with Ctrl-mouse
 
     connect( this, 	SIGNAL( itemSelectionChanged() ),
 	     this, 	SLOT  ( filterIfVisible()) );
