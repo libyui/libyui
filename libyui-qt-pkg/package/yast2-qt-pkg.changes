@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Mar 19 09:05:52 CET 2008 - coolo@suse.de
+
+- fix build against libzypp 4.5
+
+-------------------------------------------------------------------
 Wed Mar 19 00:47:34 CET 2008 - dmacvicar@suse.de
 
 - make autodeps checkbox and button clickable (bnc #355268)

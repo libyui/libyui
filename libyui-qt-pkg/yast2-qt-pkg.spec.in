@@ -7,7 +7,6 @@ BuildRequires:  libxslt perl-XML-Writer libqt4-devel sgml-skel update-desktop-fi
 
 Summary:	-
 BuildRequires:  yast2-devtools >= 2.16.3
-BuildRequires:  yast2-libyui-devel
 Requires:	yast2-qt       >= 2.16.25
 BuildRequires:  yast2-qt-devel >= 2.16.25
 BuildRequires:  libzypp-devel >= 4.2.4 
