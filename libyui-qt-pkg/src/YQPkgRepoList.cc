@@ -142,6 +142,12 @@ YQPkgRepoList::filter()
                   sel_it != zyppPkgEnd();
                   ++sel_it )
             {
+                if ( (*sel_it)->installedObj() &&
+                     ( currentRepo.isSystemRepo() ) )
+                {
+                    exactMatches.insert( *sel_it );
+                }
+                     
                 if ( (*sel_it)->candidateObj() &&
                       (*sel_it)->candidateObj()->repository() == currentRepo )
                 {
@@ -232,7 +238,7 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
 {
     if ( nameCol() >= 0 )
     {
-        string name = repo.info().name();
+        string name = repo.name();
 
 #if SHOW_SINGLE_PRODUCT
         ZyppProduct product = singleProduct( _zyppRepo );
