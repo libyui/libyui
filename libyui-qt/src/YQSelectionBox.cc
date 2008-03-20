@@ -146,7 +146,7 @@ void YQSelectionBox::selectItem( int index )
     if ( item )
     {
 #ifdef VERBOSE_SELECTION
-	yuiDebug() << this << ": Selecting item \"" << item << "\"" << endl;
+	yuiDebug() << this << ": Selecting item \"" << item->label() << "\"" << endl;
 #endif
 
 	item->setSelected( true );
@@ -315,7 +315,7 @@ void YQSelectionBox::returnImmediately()
 	// Avoid overwriting a (more important) Activated event with a
 	// SelectionChanged event
 
-	yuiDebug() << "Sending selbox event" << endl;
+	yuiDebug() << "Sending SelectionChanged event for " << this << endl;
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
     }
 }
