@@ -61,7 +61,7 @@ NCAskForFile::NCAskForFile( const wpos at,
     , fileList( 0 )
     , fileName ( 0 )
 {
-    setTextdomain( "packages" );
+    setTextdomain( "ncurses" );
 }
 
 ///////////////////////////////////////////////////////////////////

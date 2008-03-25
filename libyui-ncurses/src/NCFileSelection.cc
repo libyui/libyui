@@ -193,7 +193,7 @@ NCFileSelection::NCFileSelection( YWidget * parent,
       , tableType( type )
 {
     SetSepChar( ' ' );
-    setTextdomain( "packages" );
+    setTextdomain( "ncurses" );
 
     struct stat64 statInfo;
     if ( !iniDir.empty() )

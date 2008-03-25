@@ -527,7 +527,7 @@ void NCurses::SetTitle( const string & str )
     yuiMilestone() << "Draw title called" << endl;
 
     #if 0    
-    setTextdomain( "packages" );
+    setTextdomain( "ncurses" );
     // part of title (headline) of the textmode yast
     NCstring helpF1 ( _( "Press F1 for Help" ) );
     NCtext textF1 ( helpF1 );

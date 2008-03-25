@@ -109,7 +109,7 @@ void NCDialog::_init()
 {
   NCurses::RememberDlg( this );
 
-  setTextdomain( "packages" );
+  setTextdomain( "ncurses" );
   
   _init_size();
 

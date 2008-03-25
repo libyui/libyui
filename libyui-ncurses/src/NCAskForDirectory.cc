@@ -58,7 +58,7 @@ NCAskForExistingDirectory::NCAskForExistingDirectory( const wpos at,
     , detailed ( 0 )
 {
     createLayout( iniDir, headline );
-    setTextdomain( "packages" );
+    setTextdomain( "ncurses" );
 }
 
 ///////////////////////////////////////////////////////////////////
