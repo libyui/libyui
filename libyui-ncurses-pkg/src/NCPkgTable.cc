@@ -217,8 +217,8 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
     if ( !packager || !slbPtr )
 	return false;
 
-    zypp::Text notify;
-    zypp::License license;
+    string notify;
+    string license;
     bool license_confirmed = true;
     ZyppPkg pkgPtr = NULL;
     string header;

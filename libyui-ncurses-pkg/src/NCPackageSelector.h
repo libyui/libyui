@@ -511,7 +511,7 @@ class NCPackageSelector
      * @param t used to be list, now a single string. but what does it contain?
      * @return string	The text
      */
-    string createDescrText( zypp::Text t );
+    string createDescrText( string t );
 
     /**
      * Used for package search

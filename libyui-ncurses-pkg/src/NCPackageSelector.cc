@@ -742,7 +742,7 @@ bool NCPackageSelector::fillSearchList( const string & expr,
 	{
 	    if ( checkDescr )
 	    {
-		zypp::Text value = pkg->description();
+		string value = pkg->description();
 		description = createDescrText( value );
 	    }
 	    if ( checkProvides )
@@ -2616,7 +2616,7 @@ bool NCPackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectabl
 	    descr += "<br>";
 	}
 	// get and format the patch description
-	zypp::Text value = patchPtr->description();
+	string value = patchPtr->description();
 	descr += createDescrText( value );
 
 	// show the description
@@ -2742,7 +2742,7 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
     if ( visibleInfo == longdescrItem )
     {
 	// ask the package manager for the description of this package
-	zypp::Text value = pkgPtr->description();
+	string value = pkgPtr->description();
 	string descr = createDescrText( value );
 	yuiDebug() << "Description: " << descr << endl;
 
@@ -2918,7 +2918,7 @@ bool NCPackageSelector::showPackageInformation ( ZyppObj pkgPtr, ZyppSel slbPtr 
 //
 #define DOCTYPETAG "<!-- DT:Rich -->"
 
-string NCPackageSelector::createDescrText( zypp::Text value )
+string NCPackageSelector::createDescrText( string value )
 {
     string html_text = "";
 
