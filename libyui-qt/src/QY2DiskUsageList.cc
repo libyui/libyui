@@ -14,7 +14,7 @@
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
-  Textdomain "packages-qt"
+  Textdomain "qt"
 
   This is a pure Qt widget - it can be used independently of YaST2.
 

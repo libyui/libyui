@@ -14,7 +14,7 @@
 
   Author:	Stefan Hundhammer <sh@suse.de>
 
-  Textdomain	"packages-qt"
+  Textdomain	"qt"
 
 /-*/
 
@@ -72,7 +72,7 @@ using std::string;
 #    undef TEXTDOMAIN
 #endif
 
-#define TEXTDOMAIN "packages-qt"
+#define TEXTDOMAIN "qt"
 
 #define USE_ICON_ON_HELP_BUTTON		0
 
