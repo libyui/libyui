@@ -14,7 +14,7 @@
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
-  Textdomain "packages-qt"
+  Textdomain "qt-pkg"
 
 /-*/
 
@@ -64,7 +64,7 @@ YQPackageSelectorBase::YQPackageSelectorBase( YWidget * parent,
     _diskUsageList		= 0;
     _pkgConflictDialog 		= 0;
 
-    YQUI::setTextdomain( "packages-qt" );
+    YQUI::setTextdomain( "qt-pkg" );
     setFont( YQUI::yqApp()->currentFont() );
 
     _pkgConflictDialog = new YQPkgConflictDialog( this );

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Mar 25 16:41:58 CET 2008 - sh@suse.de
+
+- Changed textdomain from "packages-qt" to "qt-pkg" for consistency 
+
+-------------------------------------------------------------------
 Wed Mar 19 09:05:52 CET 2008 - coolo@suse.de
 
 - fix build against libzypp 4.5
