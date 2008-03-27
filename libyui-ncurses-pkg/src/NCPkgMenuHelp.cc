@@ -22,7 +22,7 @@
 
 
 /*
-  Textdomain "packages"
+  Textdomain "ncurses-pkg"
 */
 
 NCPkgMenuHelp::NCPkgMenuHelp (YWidget *parent, string label)

@@ -36,7 +36,7 @@
 #include "NCi18n.h"
 
 /*
-  Textdomain "packages"
+  Textdomain "ncurses-pkg"
 */
 
 bool ic_compare ( char c1, char c2 )

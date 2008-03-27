@@ -26,7 +26,7 @@
 
 
 /*
-  Textdomain "packages"
+  Textdomain "ncurses-pkg"
 */
 
 const string NCPkgStrings::Deps()

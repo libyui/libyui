@@ -21,7 +21,7 @@
 
 
 /*
-  Textdomain "packages"
+  Textdomain "ncurses-pkg"
 */
 
 NCPkgMenuView::NCPkgMenuView (YWidget *parent, string label, NCPackageSelector *pkger)

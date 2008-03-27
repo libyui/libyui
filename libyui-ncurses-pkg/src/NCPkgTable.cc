@@ -31,7 +31,7 @@
 #include "NCZypp.h"
 
 /*
-  Textdomain "packages"
+  Textdomain "ncurses-pkg"
 */
 
 ///////////////////////////////////////////////////////////////////

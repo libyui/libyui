@@ -52,7 +52,7 @@ NCPackageSelectorStart::NCPackageSelectorStart( YWidget * parent,
     YNCursesUI * ui = YNCursesUI::ui();
     
     // set the textdomain
-    setTextdomain( "packages" );
+    setTextdomain( "ncurses-pkg" );
     
     // get the mode (the mode is also available in PackageSelector via modeFlags)
     if ( modeFlags & YPkg_OnlineUpdateMode )

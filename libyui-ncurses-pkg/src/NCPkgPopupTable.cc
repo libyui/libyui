@@ -39,7 +39,7 @@
 #include "NCPkgPopupTable.h"
 
 /*
-  Textdomain "packages"
+  Textdomain "ncurses-pkg"
 */
 
 using namespace std;

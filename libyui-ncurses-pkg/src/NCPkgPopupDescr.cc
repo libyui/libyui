@@ -37,7 +37,7 @@
 #include "NCPackageSelector.h"
 
 /*
-  Textdomain "packages"
+  Textdomain "ncurses-pkg"
 */
 
 using namespace std;
