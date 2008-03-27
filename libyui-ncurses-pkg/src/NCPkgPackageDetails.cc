@@ -19,6 +19,9 @@
 #include "NCPkgTable.h"
 #include "NCPkgPackageDetails.h"
 
+/*
+  Textdomain "ncurses-pkg"
+*/
 
 NCPkgPackageDetails::NCPkgPackageDetails ( YWidget *parent, string initial_text, NCPackageSelector *pkger)
     : NCRichText (parent, initial_text)

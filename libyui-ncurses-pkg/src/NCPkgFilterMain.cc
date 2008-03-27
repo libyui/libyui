@@ -20,6 +20,10 @@
 
 #include "NCPkgFilterMain.h"
 
+/*
+  Textdomain "ncurses-pkg"
+*/
+
 NCPkgFilterMain::NCPkgFilterMain (YWidget *parent, string label, NCPackageSelector *pkger )
 	:NCComboBox(parent, label, false)
 	,pkg (pkger)
