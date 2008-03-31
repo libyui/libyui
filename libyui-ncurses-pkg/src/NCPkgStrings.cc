@@ -469,7 +469,7 @@ const string NCPkgStrings::HelpPkgMenu3()
 const string NCPkgStrings::HelpPkgMenu4()
 {
     // part5 of help text package installation
-    static const string value =  _( "<p><b>Extras:</b> miscellaneous functions reside here. <i>Export Package List to File</i> will dump data on installed packages, patterns and languages into specified XML file. This file can be later read by <i>Import Package List from File</i> option e.g. on different computer. It will bring the set of packages on the target computer into the same state as described in provided XML file. <i>Show Available Disk Space</i> will show a popup table displaying disk usage and free disk space on currently mounted partition. <i>Configure Package Repositories</i> will open repositories manager.</p>" );
+    static const string value =  _( "<p><b>Extras:</b> miscellaneous functions reside here. <i>Export Package List to File</i> will dump data on installed packages, patterns and languages into specified XML file. This file can be later read by <i>Import Package List from File</i> option e.g. on different computer. It will bring the set of packages on the target computer into the same state as described in provided XML file. <i>Show Available Disk Space</i> will show a popup table displaying disk usage and free disk space on currently mounted partition. <i>Start Repository Manager</i> will open configuration of package repositories.</p>" );
     return value;
 }
 
