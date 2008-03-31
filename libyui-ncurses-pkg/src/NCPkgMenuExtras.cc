@@ -30,7 +30,7 @@ typedef std::pair<string, ZyppReaderEntry>	importMapPair;
 #define DEFAULT_EXPORT_FILE_NAME "user-packages.xml"
 
 /*
-  Textdomain "ncurses-pkg"
+  Textdomain "packages"
 */
 
 NCPkgMenuExtras::NCPkgMenuExtras (YWidget *parent, string label, NCPackageSelector *pkger)
@@ -56,6 +56,9 @@ void NCPkgMenuExtras::createLayout()
     diskSpace = new YMenuItem( _("Show Available Disk Space") );
     items.push_back( diskSpace );
 
+    repoManager  = new YMenuItem( _("Start Repository Manager"));
+    items.push_back( repoManager );
+
     addItems( items );
 }
 
@@ -70,8 +73,15 @@ bool NCPkgMenuExtras::handleEvent ( const NCursesEvent & event)
     	importFromFile();
     else if ( event.selection == diskSpace )
 	showDiskSpace();
-    else
-       yuiError() << "zatim nic" << endl;
+    else if ( event.selection == repoManager )
+    {
+	//return `repo_mgr symbol to YCP module (FaTE #302517)
+	const_cast<NCursesEvent &>(event).result = "repo_mgr";
+	yuiMilestone() << "Launching repository manager " << endl;
+
+        //and close the main loop
+	return false;
+    }
     return true;
 }
 
