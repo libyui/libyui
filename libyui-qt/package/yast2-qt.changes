@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Mar 31 16:04:59 CEST 2008 - tgoettlicher@suse.de
+
+- fixed right and center for table widget (bnc #357693)
+
+-------------------------------------------------------------------
 Tue Mar 25 12:28:53 CET 2008 - jsrain@suse.cz
 
 - changed textdomain to "qt"

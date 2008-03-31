@@ -58,21 +58,8 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader )
     for ( int i=0; i < columns(); i++ )
     {
         headers << fromUTF8(header(i));
-
-	int qt_alignment = Qt::AlignLeft;
-
-	switch ( alignment( i ) )
-	{
-	    case YAlignBegin:	qt_alignment = Qt::AlignLeft;	break;
-	    case YAlignCenter:	qt_alignment = Qt::AlignCenter;	break;
-	    case YAlignEnd:	qt_alignment = Qt::AlignRight;	break;
-
-	    case YAlignUnchanged: break;
-	}
-
-	//FIXME _qt_listView->setColumnAlignment( i, qt_alignment );
-	// _qt_listView->adjustColumn( column );
     }
+
     _qt_listView->setHeaderLabels( headers );
     _qt_listView->header()->setResizeMode( QHeaderView::ResizeToContents );
 
@@ -120,6 +107,23 @@ YQTable::addItem( YItem * yitem )
     {
 	YQSignalBlocker sigBlocker( _qt_listView );
 	clone->setSelected(true);
+    }
+
+
+    // set alignment
+    for ( int i=0; i < columns(); i++ )
+    {
+	int qt_alignment = Qt::AlignLeft;
+
+	switch ( alignment( i ) )
+	{
+	    case YAlignBegin:	qt_alignment = Qt::AlignLeft;	break;
+	    case YAlignCenter:	qt_alignment = Qt::AlignCenter;	break;
+	    case YAlignEnd:	qt_alignment = Qt::AlignRight;	break;
+
+	    case YAlignUnchanged: break;
+	}
+	clone->setTextAlignment(i, qt_alignment);
     }
 }
 
