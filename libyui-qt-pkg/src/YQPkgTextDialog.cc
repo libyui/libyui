@@ -92,6 +92,7 @@ void YQPkgTextDialog::buildDialog( const QString & 	text,
     layout->addWidget( _textBrowser );
     layout->addSpacing(8);
     _textBrowser->document()->setHtml( text );
+    _textBrowser->scrollToAnchor( "top" );
     _textBrowser->installEventFilter( this );
 
 
