@@ -30,7 +30,7 @@ typedef std::pair<string, ZyppReaderEntry>	importMapPair;
 #define DEFAULT_EXPORT_FILE_NAME "user-packages.xml"
 
 /*
-  Textdomain "packages"
+  Textdomain "ncurses-pkg"
 */
 
 NCPkgMenuExtras::NCPkgMenuExtras (YWidget *parent, string label, NCPackageSelector *pkger)

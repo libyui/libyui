@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Apr  1 11:02:21 CEST 2008 - jsrain@suse.cz
+
+- fixed textdomain
+
+-------------------------------------------------------------------
 Mon Mar 31 17:31:55 CEST 2008 - kmachalkova@suse.cz
 
 - Launch repository manager from the menu (Extras) - return `repo_mgr
