@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Apr  2 11:46:12 CEST 2008 - tgoettlicher@suse.de
+
+- fixed table widget sorting  (bnc #376046)
+
+-------------------------------------------------------------------
 Mon Mar 31 17:21:00 CEST 2008 - tgoettlicher@suse.de
 
 - fixed sort by column for table widget  (bnc #374679)

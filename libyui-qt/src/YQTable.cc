@@ -47,7 +47,7 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader )
     YUI_CHECK_NEW( _qt_listView );
     layout->addWidget( _qt_listView );
     _qt_listView->setAllColumnsShowFocus( true );
-    _qt_listView->setSortingEnabled( true );
+    _qt_listView->setSortingEnabled( ! keepSorting() );
 
 
     //
@@ -90,6 +90,7 @@ YQTable::setKeepSorting( bool keepSorting )
 {
     YTable::setKeepSorting( keepSorting );
     _qt_listView->setSortByInsertionSequence( keepSorting );
+    _qt_listView->setSortingEnabled( ! keepSorting );
 }
 
 
