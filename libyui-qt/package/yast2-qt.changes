@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Apr  3 18:09:18 CEST 2008 - sh@suse.de
+
+- Build-Require latest libyui
+- V 2.16.33
+
+-------------------------------------------------------------------
 Wed Apr  2 11:46:12 CEST 2008 - tgoettlicher@suse.de
 
 - fixed table widget sorting  (bnc #376046)
@@ -19,6 +25,7 @@ Tue Mar 25 12:28:53 CET 2008 - jsrain@suse.cz
 - changed textdomain to "qt"
 
 -------------------------------------------------------------------
+>>>>>>> .r46052
 Wed Mar 19 15:52:33 CET 2008 - coolo@suse.de
 
 - fix YTable performance (bnc #372316)
