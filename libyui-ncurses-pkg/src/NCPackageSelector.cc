@@ -659,7 +659,7 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
 	if ( selectable->hasInstalledObj() ) // patch installed?
 	{
 	    // display only if broken
-	    if ( selectable->installedPoolItem().status().isIncomplete() )
+	    if ( selectable->installedPoolItem().isBroken() )
 	    {
 		displayPatch = true;
 		yuiWarning() << "Installed patch is broken: " << patchPtr->name().c_str() << " - "
@@ -670,7 +670,7 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
 
 	{
 	    if (selectable->hasCandidateObj() &&
-		selectable->candidatePoolItem().status().isSatisfied() )
+		selectable->candidatePoolItem().isSatisfied() )
 	    {
 		//patch not installed, but it is satisfied (updated to the version patch requires)
 		//all that is missing are patch metadata, so let's display the patch
@@ -688,7 +688,8 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
 	    // isSatisfied(): all packages are installed, therefore the isNeeded() flag
 	    // isn't set. BUT the patch meta data aren't installed and therefore it makes
 	    // sense to install the patch
-	    if ( selectable->candidatePoolItem().status().isNeeded())
+	    if ( selectable->candidatePoolItem().status().isInstalled()
+                && selectable->candidatePoolItem().isBroken())
 	    {
 		displayPatch = true;
 	    }
@@ -1397,7 +1398,7 @@ bool NCPackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectabl
 	descr += "<br>";
 
 	if ( selectable->hasInstalledObj()
-	     && selectable->installedPoolItem().status().isIncomplete() )
+	     && selectable->installedPoolItem().isBroken() )
 	{
 	    descr += _( "----- this patch is broken !!! -----" );
 	    descr += "<br>";
