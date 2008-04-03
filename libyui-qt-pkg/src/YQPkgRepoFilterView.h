@@ -129,6 +129,7 @@ protected:
     YQPkgRepoList *		_repoList;
     QY2ComboTabWidget *		_secondaryFilters;
     QWidget *			    _allPackages;
+    QWidget *_unmaintainedPackages;
     YQPkgRpmGroupTagsFilterView *   _rpmGroupTagsFilterView;
     YQPkgSearchFilterView *	    _searchFilterView;
     YQPkgStatusFilterView *	    _statusFilterView;

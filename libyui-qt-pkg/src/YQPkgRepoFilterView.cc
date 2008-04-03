@@ -135,6 +135,13 @@ YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
     Q_CHECK_PTR( _allPackages );
     _secondaryFilters->addPage( _( "All Packages" ), _allPackages );
 
+    // unmaintaned packages (packages that are not provided in any of
+    // the configured repositories)
+    
+    _unmaintainedPackages = new QWidget( this );
+    layout->addWidget(_unmaintainedPackages);
+    Q_CHECK_PTR( _unmaintainedPackages );
+    _secondaryFilters->addPage( _( "Unmaintained Packages" ), _unmaintainedPackages );
 
     //
     // RPM Groups
@@ -217,6 +224,10 @@ YQPkgRepoFilterView::secondaryFilterMatch( ZyppSel	selectable,
     if ( _allPackages->isVisible() )
     {
 	return true;
+    }
+    else if ( _unmaintainedPackages->isVisible() )
+    {
+        return ( ! selectable->candidateObj() );
     }
     else if ( _rpmGroupTagsFilterView->isVisible() )
     {

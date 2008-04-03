@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Apr  3 18:22:29 CEST 2008 - dmacvicar@suse.de
+
+- Add unmantained packages filter (fate ##302004) 
+- 2.16.30
+
+-------------------------------------------------------------------
 Tue Apr 01 17:42:00 CET 2008 - tgoettlicher@suse.de
 
 - Scoll licence dialogs to top (bnc #373910)
