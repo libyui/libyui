@@ -55,12 +55,14 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader )
     //
 
     QStringList headers;
-    _qt_listView->setColumnCount(columns());
+    _qt_listView->setColumnCount( columns() );
+    
     for ( int i=0; i < columns(); i++ )
     {
         headers << fromUTF8(header(i));
     }
 
+    
     _qt_listView->setHeaderLabels( headers );
     _qt_listView->header()->setResizeMode( QHeaderView::ResizeToContents );
 
@@ -68,14 +70,14 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader )
     // Connect signals and slots
     //
 
-    connect( _qt_listView, 	SIGNAL( itemDoubleClicked    ( QTreeWidgetItem *, int ) ),
-	     this, 		SLOT  ( slotActivated	 ( QTreeWidgetItem * ) ) );
+    connect( _qt_listView, 	SIGNAL( itemDoubleClicked ( QTreeWidgetItem *, int ) ),
+	     this, 		SLOT  ( slotActivated	  ( QTreeWidgetItem * ) ) );
 
-    connect( _qt_listView, 	SIGNAL( itemActivated    ( QTreeWidgetItem *, int ) ),
-	     this, 		SLOT  ( slotActivated	 ( QTreeWidgetItem * ) ) );
+    connect( _qt_listView, 	SIGNAL( itemActivated     ( QTreeWidgetItem *, int ) ),
+	     this, 		SLOT  ( slotActivated	  ( QTreeWidgetItem * ) ) );
 
     connect( _qt_listView, 	SIGNAL( currentItemChanged ( QTreeWidgetItem *, QTreeWidgetItem * ) ),
-	     this, 		SLOT  ( slotSelected	 ( QTreeWidgetItem * ) ) );
+	     this, 		SLOT  ( slotSelected	   ( QTreeWidgetItem * ) ) );
 }
 
 
