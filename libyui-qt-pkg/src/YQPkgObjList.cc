@@ -1107,7 +1107,7 @@ YQPkgObjListItem::isSatisfied() const
     if ( _selectable->hasInstalledObj() )
 	return false;
 
-    return _selectable->candidatePoolItem().status().isSatisfied();
+    return _selectable->candidatePoolItem().isSatisfied();
 }
 
 
@@ -1124,7 +1124,7 @@ bool YQPkgObjListItem::isBroken() const
 	case S_KeepInstalled:
 	case S_Protected:
 
-	    return _selectable->installedPoolItem().status().isIncomplete();
+	    return _selectable->installedPoolItem().isBroken();
 
 	case S_Update:		// will be fixed by updating
 	case S_AutoUpdate:

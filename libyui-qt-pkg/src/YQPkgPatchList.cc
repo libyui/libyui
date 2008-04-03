@@ -147,7 +147,7 @@ YQPkgPatchList::fillList()
 		    else // not installed
 		    {
 			if ( selectable->hasCandidateObj() &&
-			     selectable->candidatePoolItem().status().isSatisfied() )
+			     selectable->candidatePoolItem().isSatisfied() )
 			{
 			    // This is a pretty exotic case, but still it might happen:
 			    //
