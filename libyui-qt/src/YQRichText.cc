@@ -50,7 +50,6 @@ YQRichText::YQRichText( YWidget * parent, const string & text, bool plainTextMod
     layout->addWidget( _textBrowser );
 
     _textBrowser->installEventFilter( this );
-    _textBrowser->setFrameShape( QFrame::NoFrame );
 
     if ( plainTextMode )
     {

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Apr  4 11:10:11 CEST 2008 - tgoettlicher@suse.de
+
+- fixed frame style of rich text widget (bnc #369685)
+
+-------------------------------------------------------------------
 Thu Apr  3 18:09:18 CEST 2008 - sh@suse.de
 
 - Build-Require latest libyui
@@ -25,7 +30,6 @@ Tue Mar 25 12:28:53 CET 2008 - jsrain@suse.cz
 - changed textdomain to "qt"
 
 -------------------------------------------------------------------
->>>>>>> .r46052
 Wed Mar 19 15:52:33 CET 2008 - coolo@suse.de
 
 - fix YTable performance (bnc #372316)
