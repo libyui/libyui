@@ -131,7 +131,8 @@ YQPkgPatchList::fillList()
 
 		    if ( selectable->hasInstalledObj() ) // installed?
 		    {
-			if ( selectable->installedPoolItem().status().isIncomplete() ) // patch broken?
+			if ( selectable->installedPoolItem().status().isInstalled()
+			     && selectable->installedPoolItem().isBroken() ) // patch broken?
 			{
 			    // The patch is broken: It had been installed, but the user somehow
 			    // downgraded individual packages belonging to the patch to older versions.
@@ -172,7 +173,8 @@ YQPkgPatchList::fillList()
 			// installed, but either no version of that patch is installed or there is a
 			// newer one to which the patch could be updated.
 
-			if ( selectable->candidatePoolItem().status().isNeeded() ) // patch really needed?
+			if ( selectable->candidatePoolItem().status().isUninstalled()
+			     && selectable->candidatePoolItem().isBroken() ) // patch really needed?
 			{
 			    // Patches are needed if any of the packages that belong to the patch
 			    // are installed on the system.
@@ -199,10 +201,7 @@ YQPkgPatchList::fillList()
 		    }
 		    else // not installed - display only if needed
 		    {
-			zypp::ResStatus candidateStatus = selectable->candidatePoolItem().status();
-
-			if ( candidateStatus.isNeeded() ||
-			     candidateStatus.isSatisfied() )
+			if ( selectable->candidatePoolItem().isBroken() )
 			{
 			    displayPatch = true;
 			}

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Apr  4 10:32:38 CEST 2008 - schubi@suse.de
+
+- Fixed ResStatus (needed, satisfied,...)
+- 2.16.31
+
+-------------------------------------------------------------------
 Thu Apr  3 18:22:29 CEST 2008 - dmacvicar@suse.de
 
 - Add unmantained packages filter (fate ##302004) 
