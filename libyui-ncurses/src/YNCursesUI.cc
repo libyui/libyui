@@ -49,7 +49,7 @@ YUI * createUI( bool withThreads )
 {
     if ( ! YNCursesUI::ui() )
 	new YNCursesUI( withThreads );
-    
+
     return YNCursesUI::ui();
 }
 
@@ -74,11 +74,11 @@ YNCursesUI::YNCursesUI( bool withThreads )
 	setenv( "LC_CTYPE", locale.c_str(), 1 );
 
 	yuiMilestone() << "setenv LC_CTYPE: " << locale << " encoding: " << encoding << endl;
-	
+
         // The encoding of a terminal (xterm, konsole etc.) can never change; the encoding
-	// of the "real" console is changed in setConsoleFont(). 
+	// of the "real" console is changed in setConsoleFont().
 	NCstring::setTerminalEncoding( encoding );
-  
+
 	app()->setLanguage( language, encoding );
     }
 
@@ -109,7 +109,7 @@ YNCursesUI::createWidgetFactory()
 {
     NCWidgetFactory * factory = new NCWidgetFactory();
     YUI_CHECK_NEW( factory );
-    
+
     return factory;
 }
 
@@ -120,7 +120,7 @@ YNCursesUI::createOptionalWidgetFactory()
 {
     NCOptionalWidgetFactory * factory = new NCOptionalWidgetFactory();
     YUI_CHECK_NEW( factory );
-    
+
     return factory;
 }
 
@@ -234,10 +234,10 @@ NCPackageSelectorPluginStub * YNCursesUI::packageSelectorPlugin()
 YEvent * YNCursesUI::runPkgSelection( YWidget * selector )
 {
     YEvent * event = 0;
-    
+
     YDialog *dialog = YDialog::currentDialog();
     NCPackageSelectorPluginStub * plugin = packageSelectorPlugin();
-    
+
     if ( !dialog )
     {
 	yuiError() << "ERROR package selection: No dialog rexisting." << endl;
@@ -251,7 +251,7 @@ YEvent * YNCursesUI::runPkgSelection( YWidget * selector )
     // FIXME - remove debug logging
     yuiMilestone() << "Dump current dialog in YNCursesUI::runPkgSelection" << endl;
     // debug: dump the widget tree
-    dialog->dumpDialogWidgetTree();	
+    dialog->dumpDialogWidgetTree();
 
     if ( plugin )
     {
@@ -262,59 +262,79 @@ YEvent * YNCursesUI::runPkgSelection( YWidget * selector )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YNCursesUI::init_title
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
 void YNCursesUI::init_title()
 {
-    string title_ti( "YaST" );
-    string module;
-    char hostname_ti[256];
-    hostname_ti[0] = hostname_ti[255] = '\0';
+    // Fetch command line args
+    YCommandLine cmdline;
 
-    // get command line args, usually in the form 
-    // '/usr/lib/whatever/y2base' 'module_name' 'selected_ui'
-    // (e.g. 'y2base' 'lan' 'ncurses') -> we need 'lan' item
-    YCommandLine *cmdline = new YCommandLine();
-    YUI_CHECK_NEW( cmdline );
-    module = (*cmdline)[1];
+    //
+    // Retrieve program name from command line
+    //
+    
+    string progName = YUILog::basename( cmdline[0] );
 
-    // check for valid hostname, suppress "(none)" as hostname
-    if ( gethostname( hostname_ti, 255 ) != -1
-	 && hostname_ti[0]
-	 && hostname_ti[0] != '(' )
+    if ( progName == "y2base" )
     {
-	if ( !module.empty() )
-        {
-	    title_ti += " - ";
-	    title_ti += module;
-        }
-	title_ti += " @ ";
-	title_ti += hostname_ti;
+	// Special case for YaST2: argv[1] is the module name -
+	// this is what we want to display in the window title
+	//
+	// '/usr/lib/whatever/y2base' 'module_name' 'selected_ui'
+	// (e.g. 'y2base' 'lan' 'ncurses') -> we need 'lan'
+
+	if ( cmdline.size() > 1 )
+	    progName = string( "YaST2 - " ) + cmdline[1];
     }
-    NCurses::SetTitle( title_ti );
+
+    if ( progName.find( "lt-" ) == 0 )	// progName starts with "lt-"
+    {
+	// Remove leading "lt-" from libtool-generated binaries
+	progName = progName.substr( sizeof( "lt-" ) - 1 );
+    }
+
+    
+    //
+    // Retrieve host name (if set)
+    //
+    
+    string hostName;
+    char hostNameBuffer[ HOST_NAME_MAX+1 ];
+    
+    if ( gethostname( hostNameBuffer, sizeof( hostNameBuffer ) -1 ) != -1 )
+    {
+	// gethostname() might have messed up - yet another POSIX standard that
+	// transfers the burden of doing things right to the application
+	// programmer: Possibly no null byte
+
+	hostNameBuffer[ sizeof( hostNameBuffer ) -1 ] = '\0';
+	hostName = hostNameBuffer;
+    }
+
+    if ( hostName == "(none)" )
+	hostName = "";
+
+    //
+    // Build and set window title
+    //
+    
+    string windowTitle = progName;
+    
+    if ( ! hostName.empty() )
+	windowTitle += " @ " + hostName;
+    
+    NCurses::SetTitle( windowTitle );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YNCursesUI::want_colors()
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool YNCursesUI::want_colors()
 {
-  if ( getenv( "Y2NCURSES_BW" ) != NULL ) {
-    yuiMilestone() << "Y2NCURSES_BW is set - won't use colors" << endl;
-    return false;
-  }
-  return true;
+    if ( getenv( "Y2NCURSES_BW" ) != NULL )
+    {
+	yuiMilestone() << "Y2NCURSES_BW is set - won't use colors" << endl;
+	return false;
+    }
+    return true;
 }
 
 
@@ -329,8 +349,8 @@ bool YNCursesUI::want_colors()
 /**
  * This doesn't belong here, but it is so utterly entangled with member
  * variables that are not exported at all (sic!) that it's not really feasible
- * to extract the relevant parts. 
- **/ 
+ * to extract the relevant parts.
+ **/
 void YNCursesUI::setConsoleFont( const string & console_magic,
 				 const string & font,
 				 const string & screen_map,
@@ -372,7 +392,7 @@ void YNCursesUI::setConsoleFont( const string & console_magic,
     // argument but this encoding was not correct; now Console.ycp passes the
     // language) if the encoding is NOT UTF-8 set the console encoding
     // according to the language
-    
+
     if ( NCstring::terminalEncoding() != "UTF-8" )
     {
 	string language = YUI::app()->language();
@@ -391,13 +411,13 @@ void YNCursesUI::setConsoleFont( const string & console_magic,
 	string code = language2encoding( language );
 
 	yuiMilestone() << "setConsoleFont( ENCODING:  " << code << " )" << endl;
-    
+
 	if ( NCstring::setTerminalEncoding( code ) )
 	{
 	    Redraw();
 	}
 	else
-	{    
+	{
 	    Refresh();
 	}
     }

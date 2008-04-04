@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Apr  4 15:42:58 CEST 2008 - sh@suse.de
+
+- Fixed segfault from overly optimistic assumption that the NCurses UI
+  always just runs as a part of YaST2
+- V 2.16.22 
+
+-------------------------------------------------------------------
 Thu Apr  3 18:13:18 CEST 2008 - sh@suse.de
 
 - Build-require latest libyui
