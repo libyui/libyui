@@ -298,7 +298,7 @@ void YNCursesUI::init_title()
     //
     
     string hostName;
-    char hostNameBuffer[ HOST_NAME_MAX+1 ];
+    char hostNameBuffer[ 256 ];
     
     if ( gethostname( hostNameBuffer, sizeof( hostNameBuffer ) -1 ) != -1 )
     {
