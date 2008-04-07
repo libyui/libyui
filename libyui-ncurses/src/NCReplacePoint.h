@@ -13,7 +13,6 @@
    File:       NCReplacePoint.h
 
    Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #ifndef NCReplacePoint_h

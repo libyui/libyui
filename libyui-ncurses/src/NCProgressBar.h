@@ -13,7 +13,6 @@
    File:       NCProgressBar.h
 
    Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #ifndef NCProgressBar_h

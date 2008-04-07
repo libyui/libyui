@@ -13,7 +13,6 @@
    File:       NCurses.h
 
    Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #ifndef NCurses_h

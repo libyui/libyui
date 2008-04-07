@@ -13,7 +13,6 @@
    File:       NCMultiSelectionBox.h
 
    Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #ifndef NCMultiSelectionBox_h

@@ -13,7 +13,6 @@
    File:       NCAskForExistingDirectory.h
 
    Author:     Gabriele Strattner <gs@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #ifndef NCAskForExistingDirectory_h

@@ -13,7 +13,6 @@
    File:       NCPushButton.h
 
    Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #ifndef NCPushButton_h

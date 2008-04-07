@@ -13,7 +13,6 @@
    File:       NCTablePad.h
 
    Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #ifndef NCTablePad_h

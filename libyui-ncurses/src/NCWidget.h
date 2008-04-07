@@ -13,7 +13,6 @@
    File:       NCWidget.h
 
    Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #ifndef NCWidget_h

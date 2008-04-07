@@ -13,7 +13,6 @@
    File:       ncursesp.cc
 
    Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 /****************************************************************************

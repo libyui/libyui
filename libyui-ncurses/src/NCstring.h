@@ -13,7 +13,6 @@
    File:       NCstring.h
 
    Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #ifndef NCstring_h

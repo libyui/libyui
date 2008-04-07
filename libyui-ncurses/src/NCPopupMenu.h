@@ -13,7 +13,6 @@
    File:       NCPopupMenu.h
 
    Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #ifndef NCPopupMenu_h

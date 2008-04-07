@@ -13,7 +13,6 @@
    File:       NCMenuButton.h
 
    Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #ifndef NCMenuButton_h

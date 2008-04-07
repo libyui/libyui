@@ -13,7 +13,6 @@
    File:       NCPopupTextEntry.h
 
    Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #ifndef NCPopupTextEntry_h

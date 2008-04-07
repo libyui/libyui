@@ -13,7 +13,6 @@
    File:       NCAskForFile.cc
 
    Author:     Gabriele Strattner <gs@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 

@@ -13,7 +13,6 @@
    File:       NCCheckBox.h
 
    Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #ifndef NCCheckBox_h

@@ -13,7 +13,6 @@
    File:       NCattribute.h
 
    Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 // -*- c++ -*-

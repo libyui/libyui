@@ -13,7 +13,6 @@
    File:       NCPopupList.h
 
    Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #ifndef NCPopupList_h

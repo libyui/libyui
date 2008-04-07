@@ -13,7 +13,6 @@
    File:       NCFileSelection.h
 
    Author:     Gabriele Strattner <gs@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #ifndef NCFileSelection_h

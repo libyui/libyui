@@ -13,7 +13,6 @@
    File:       NCstyle.h
 
    Author:     Michael Andres <ma@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #ifndef NCstyle_h
