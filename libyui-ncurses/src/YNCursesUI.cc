@@ -276,6 +276,8 @@ void YNCursesUI::init_title()
 
     if ( progName == "y2base" )
     {
+	progName = "YaST2";
+	
 	// Special case for YaST2: argv[1] is the module name -
 	// this is what we want to display in the window title
 	//
@@ -283,7 +285,7 @@ void YNCursesUI::init_title()
 	// (e.g. 'y2base' 'lan' 'ncurses') -> we need 'lan'
 
 	if ( cmdline.size() > 1 )
-	    progName = string( "YaST2 - " ) + cmdline[1];
+	    progName += " - " + cmdline[1];
     }
 
     if ( progName.find( "lt-" ) == 0 )	// progName starts with "lt-"
