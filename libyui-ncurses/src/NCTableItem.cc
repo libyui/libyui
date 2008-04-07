@@ -72,14 +72,7 @@ void NCTableCol::DrawAt( NCursesWindow & w, const wrect at,
   label.drawAt( w, bg, hbg, at, tableStyle.ColAdjust( colidx ) );
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & STREAM, const NCTableCol & OBJ )
 {
   return STREAM << OBJ.label;
@@ -267,14 +260,7 @@ void NCTableLine::DrawItems( NCursesWindow & w, const wrect at,
   }
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-  */
+
 ostream & operator<<( ostream & STREAM, const NCTableLine & OBJ )
 {
   STREAM << "Line: cols " << OBJ.Cols() << endl;
@@ -439,14 +425,7 @@ chtype NCTableStyle::getBG( const NCTableLine::STATE lstate,
   return currentBG;
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & STREAM, const NCTableStyle & OBJ )
 {
   STREAM << form( "cols %d, sep %d (%lx)\n",

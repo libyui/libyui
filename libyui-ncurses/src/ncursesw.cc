@@ -610,14 +610,7 @@ int NCursesWindow::resize( int lines, int columns )
   return ::wresize( w, lines, columns );
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & Stream, const NCursesWindow * Obj_Cv )
 {
   if ( Obj_Cv )
@@ -625,14 +618,7 @@ ostream & operator<<( ostream & Stream, const NCursesWindow * Obj_Cv )
   return Stream << "(NoNCWin)";
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & Stream, const NCursesWindow & Obj_Cv )
 {
   return Stream << "NCWin(" << Obj_Cv.w

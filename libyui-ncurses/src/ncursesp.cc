@@ -175,14 +175,7 @@ int NCursesPanel::transparent( int y, int x )
   return ERR;
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & Stream, const NCursesPanel * Obj_Cv )
 {
   if ( Obj_Cv )
@@ -190,14 +183,7 @@ ostream & operator<<( ostream & Stream, const NCursesPanel * Obj_Cv )
   return Stream << "(NoNCPan)";
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & Stream, const NCursesPanel & Obj_Cv )
 {
   return Stream << "NCPan(" << Obj_Cv.p << ')';

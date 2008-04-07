@@ -74,14 +74,7 @@ void NCattribute::_init()
 static short dfg = -1;
 static short dbg = -1;
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : scanColor
-**	FUNCTION TYPE : inline short
-**
-**	DESCRIPTION :
-*/
+
 inline short scanColor( const string & str, const short def ) {
   short ret = def;
   if ( str.length() == 3 ) {
@@ -105,14 +98,6 @@ inline short scanColor( const string & str, const short def ) {
   return ret;
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : scanAttrib
-**	FUNCTION TYPE : inline chtype
-**
-**	DESCRIPTION :
-*/
 inline chtype scanAttrib( const string & str ) {
   chtype ret = 0;
 #define IF(a) if ( str == #a ) ret = a

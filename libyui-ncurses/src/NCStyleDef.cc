@@ -1018,21 +1018,13 @@ chtype NCStyleDef::queryChar( int column, chtype selbg )
   return ret;
 }
 
-// NCStyleDef::showex
 
 #define BGSET(a) W.bkgdset( st.a )
 
 static int hi = 4;
 static int wi = 15;
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : Syledraw
-**	FUNCTION TYPE : static void
-**
-**	DESCRIPTION :
-*/
+
 inline void frame( NCursesWindow & w, int l, int c, int H = 0, int W = 0 ) {
   if ( !H )
     H = hi;
@@ -1518,14 +1510,6 @@ void NCStyleDef::restoreStyle()
 }
 
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : NCDefineStyle
-**	FUNCTION TYPE : void
-**
-**	DESCRIPTION :
-*/
 void NCDefineStyle( NCstyle & style )
 {
   static NCStyleDef cstyle( style );

@@ -93,14 +93,7 @@ NCursesError & NCursesError::NCError( int val, char * msg, ... ) {
 
 #undef CONVERR
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & STREAM, const NCursesError & OBJ )
 {
   STREAM << form( "%s: (%d) %s"
@@ -110,14 +103,7 @@ ostream & operator<<( ostream & STREAM, const NCursesError & OBJ )
   return STREAM;
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & STREAM, const NCursesEvent & OBJ )
 {
 #define ENUM_OUT(v) case NCursesEvent::v: return STREAM << "Ev::" << #v
@@ -655,14 +641,7 @@ void NCurses::ScreenShot( const string & name )
   }
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & STREAM, const NCurses & OBJ )
 {
   STREAM << form( "NC - %d x %d - colors %d - pairs %d\n"

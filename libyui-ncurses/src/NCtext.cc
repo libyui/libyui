@@ -179,14 +179,7 @@ const NCstring & NCtext::operator[]( wstring::size_type idx ) const
   return *line;
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & STREAM, const NCtext & OBJ )
 {
   return STREAM << "[Text:" << OBJ.Lines() << ',' << OBJ.Columns() << ']';
@@ -295,14 +288,7 @@ void NClabel::drawAt( NCursesWindow & w, chtype style, chtype hotstyle,
   }
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & STREAM, const NClabel & OBJ )
 {
   STREAM << "[label" << OBJ.size() << ':' << OBJ[0].str();

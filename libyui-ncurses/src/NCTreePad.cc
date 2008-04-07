@@ -346,14 +346,7 @@ bool NCTreePad::handleInput( wint_t key )
   return handled;
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & STREAM, const NCTreePad & OBJ )
 {
   STREAM << "TreePad: lines " << OBJ.Lines() << endl;

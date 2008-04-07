@@ -27,14 +27,6 @@
 using std::ostream;
 
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
 ostream & operator<<( ostream & str, NC::ADJUST obj )
 {
 #define PRT(a) case NC::a: return str << #a
@@ -53,14 +45,7 @@ ostream & operator<<( ostream & str, NC::ADJUST obj )
 #undef PRT
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & str, NC::WState obj )
 {
 #define PRT(a) case NC::a: return str << #a

@@ -39,14 +39,6 @@
 */
 
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : hiddenMenu
-**	FUNCTION TYPE : static bool
-**
-**	DESCRIPTION :
-*/
 static bool hiddenMenu()
 {
   return getenv( "Y2yuiDebug()" ) != NULL;
@@ -1177,14 +1169,7 @@ NCursesEvent NCDialog::wHandleHotkey( wint_t key )
   return NCursesEvent::none;
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & STREAM, const NCDialog * OBJ )
 {
   if ( OBJ )
@@ -1218,14 +1203,7 @@ std::map <int, string> NCDialog::describeFunctionKeys( )
     return fkeys;
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & STREAM, const NCDialog & OBJ )
 {
   STREAM << (const NCWidget &)OBJ << ' ' << OBJ.pan

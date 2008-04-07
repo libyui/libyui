@@ -21,53 +21,24 @@ using namespace std;
 
 #include "position.h"
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & STREAM, const wpos & OBJ )
 {
   return STREAM << '(' << OBJ.L << ',' << OBJ.C << ')';
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & STREAM, const wpair & OBJ )
 {
   return STREAM << '(' << OBJ.A << ',' << OBJ.B << ')';
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & STREAM, const wsze & OBJ )
 {
   return STREAM << '[' << OBJ.H << 'x' << OBJ.W << ']';
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
 ostream & operator<<( ostream & STREAM, const wrect & OBJ )
 {
   return STREAM << '{' << OBJ.Pos << OBJ.Sze << '}';

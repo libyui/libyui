@@ -318,14 +318,7 @@ void NCTablePad::stripHotkeys()
   }
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & STREAM, const NCTablePad & OBJ )
 {
   STREAM << "TablePad: lines " << OBJ.Lines() << endl;

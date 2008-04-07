@@ -21,14 +21,7 @@
 #include "NCstring.h"
 using namespace std;
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : strutil::split
-**	FUNCTION TYPE : unsigned
-**
-**	DESCRIPTION :
-*/
+
 unsigned strutil::split( const string     line_tv,
 			 vector<string> & words_Vtr,
 			 const string     sep_tv,

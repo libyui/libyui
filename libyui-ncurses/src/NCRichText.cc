@@ -333,14 +333,7 @@ void NCRichText::PadPlainTXT( const wchar_t * osch, const unsigned olen )
 }
 
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : Skip...
-**	FUNCTION TYPE : void
-**
-**	DESCRIPTION : DrawHTMLPad tools
-*/
+// DrawHTMLPad tools
 inline void SkipToken( const wchar_t *& wch )
 {
   do {

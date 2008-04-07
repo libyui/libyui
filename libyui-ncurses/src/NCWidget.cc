@@ -475,14 +475,7 @@ NCursesEvent NCWidget::wHandleInput( wint_t /*key*/ )
   return NCursesEvent::none;
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & STREAM, const NCWidget * OBJ )
 {
   if ( OBJ && OBJ->isValid() )
@@ -491,14 +484,7 @@ ostream & operator<<( ostream & STREAM, const NCWidget * OBJ )
   return STREAM << "(NoNCWidget)";
 }
 
-/******************************************************************
-**
-**
-**	FUNCTION NAME : operator<<
-**	FUNCTION TYPE : ostream &
-**
-**	DESCRIPTION :
-*/
+
 ostream & operator<<( ostream & STREAM, const NCWidget & OBJ )
 {
     if ( OBJ.isValid() )

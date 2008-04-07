@@ -392,7 +392,6 @@ void NCPadWidget::VScroll( unsigned total, unsigned visible, unsigned start )
 
 
 
- //	DESCRIPTION :
 void NCPadWidget::ScrollHead( NCursesWindow & w, unsigned ccol )
 {
   if ( hasHeadline && win ) {
