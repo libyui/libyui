@@ -16,7 +16,7 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-// * This makes emacs happy -*-Mode: C++;-*-
+
 #ifndef _CURSESW_H
 #define _CURSESW_H
 

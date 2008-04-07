@@ -16,7 +16,7 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-// * This makes emacs happy -*-Mode: C++;-*-
+
 #ifndef _CURSESP_H
 #define _CURSESP_H
 

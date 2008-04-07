@@ -16,7 +16,6 @@
    Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
-// * this is for making emacs happy: -*-Mode: C++;-*-
 
 /*
   Copyright (C) 1989 Free Software Foundation
