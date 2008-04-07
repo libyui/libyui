@@ -30,14 +30,8 @@
 #define DBG_CLASS "_NCTable_"
 #endif
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::NCTable
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader )
       : YTable( parent, tableHeader )
     , NCPadWidget( parent )
@@ -62,29 +56,18 @@ NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader )
   hasHeadline = myPad()->SetHeadline( _header );
 }
 
-/////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::~NCTable
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 
 NCTable::~NCTable()
 {
   yuiDebug() << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::cellChanged
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Change individual cell of a table line (to newtext)
+
+
+// Change individual cell of a table line (to newtext)
 //		      provided for backwards compatibility
-//	
 
 void NCTable::cellChanged( int index, int colnum, const string & newtext )
 {
@@ -103,14 +86,9 @@ void NCTable::cellChanged( int index, int colnum, const string & newtext )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::cellChanged
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Change individual cell of a table line (to newtext)
-//
+
+
+// Change individual cell of a table line (to newtext)
 
 void NCTable::cellChanged( const YTableCell *cell ) 
 {
@@ -119,14 +97,9 @@ void NCTable::cellChanged( const YTableCell *cell )
 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::setHeader
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Set table header all at once
-//
+
+
+// Set table header all at once
 
 void NCTable::setHeader( vector<string> head )
 {
@@ -143,16 +116,11 @@ void NCTable::setHeader( vector<string> head )
     YTable::setTableHeader( th ); 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::setAlignment
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Set alignment of i-th table column (left, right, 
+
+
+// Set alignment of i-th table column (left, right, 
 //	              center). Create temp. header consisting of single
 //		      letter - setHeader will append the rest		     
-//		      
  
 void NCTable::setAlignment ( int col, YAlignmentType al )
 {
@@ -169,15 +137,10 @@ void NCTable::setAlignment ( int col, YAlignmentType al )
     _header[ col ] = NCstring( s ); 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::addItem
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Append item (as pointed to by 'yitem') to a table
+
+
+// Append item (as pointed to by 'yitem') to a table
 //		      (create new table line consisting of individual cells)
-//
 
 void NCTable::addItem( YItem *yitem )
 {
@@ -213,14 +176,9 @@ void NCTable::addItem( YItem *yitem )
 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::deleteAllItems
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Clear the table (in terms of YTable and visually)
-//
+
+
+// Clear the table (in terms of YTable and visually)
 
 void NCTable::deleteAllItems()
 {
@@ -229,14 +187,9 @@ void NCTable::deleteAllItems()
   YTable::deleteAllItems();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::getCurrentItem
-//	METHOD TYPE : int
-//
-//	DESCRIPTION : Return index of currently selected table item
-//
+
+
+// Return index of currently selected table item
 
 int NCTable::getCurrentItem()
 {
@@ -247,14 +200,9 @@ int NCTable::getCurrentItem()
 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::getCurrentItemPointer
-//	METHOD TYPE : YItem *
-//
-//	DESCRIPTION : Return origin pointer of currently selected table item
-//
+
+
+// Return origin pointer of currently selected table item
 
 YItem * NCTable::getCurrentItemPointer()
 {
@@ -265,28 +213,18 @@ YItem * NCTable::getCurrentItemPointer()
 	return 0;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::setCurrentItem
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Highlight item at 'index' 
-//
+
+
+// Highlight item at 'index' 
 
 void NCTable::setCurrentItem( int index )
 {
   myPad()->ScrlLine( index );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::selectItem
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Mark table item (as pointed to by 'yitem') as selected
-//
+
+
+// Mark table item (as pointed to by 'yitem') as selected
 
 void NCTable::selectItem( YItem *yitem, bool selected )
 { 
@@ -314,14 +252,9 @@ void NCTable::selectItem( YItem *yitem, bool selected )
   DrawPad();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::selectCurrentItem
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Mark currently highlighted table item as selected
-//
+
+
+// Mark currently highlighted table item as selected
 
 void NCTable::selectCurrentItem()
 {
@@ -330,14 +263,9 @@ void NCTable::selectCurrentItem()
       selectItem( cline->origItem(), true );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::deselectAllItems
-//	METHOD TYPE : void
-//
-// 	DESCRIPTION : Mark all items as deselected
-//
+
+
+// Mark all items as deselected
 
 void NCTable::deselectAllItems()
 {
@@ -346,14 +274,9 @@ void NCTable::deselectAllItems()
   DrawPad();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::preferredWidth
-//	METHOD TYPE : int
-//
-// 	DESCRIPTION : return preferred size 
-//
+
+
+// return preferred size 
 
 int NCTable::preferredWidth()
 {
@@ -361,14 +284,9 @@ int NCTable::preferredWidth()
     return sze.W; 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::preferredHeight
-//	METHOD TYPE : int
-//
-// 	DESCRIPTION : return preferred size 
-//
+
+
+// return preferred size 
 
 int NCTable::preferredHeight()
 {
@@ -376,28 +294,17 @@ int NCTable::preferredHeight()
     return sze.H;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Set new size of the widget
-//
+
+
+// Set new size of the widget
 
 void NCTable::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::setLabel
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 
 void NCTable::setLabel( const string & nlabel )
 {
@@ -405,14 +312,9 @@ void NCTable::setLabel( const string & nlabel )
   NCPadWidget::setLabel( NCstring( nlabel ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::setEnabled
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Set widget state (enabled vs. disabled)
-//
+
+
+// Set widget state (enabled vs. disabled)
 
 void NCTable::setEnabled( bool do_bv )
 {
@@ -421,14 +323,8 @@ void NCTable::setEnabled( bool do_bv )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::setItemByKey
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCTable::setItemByKey( int key )
 {
   return myPad()->setItemByKey( key );
@@ -436,14 +332,9 @@ bool NCTable::setItemByKey( int key )
 
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::CreatePad
-//	METHOD TYPE : NCPad *
-//
-//	DESCRIPTION : Create new NCTablePad, set its background
-//
+
+
+// Create new NCTablePad, set its background
 NCPad * NCTable::CreatePad()
 {
   wsze    psze( defPadSze() );
@@ -453,16 +344,11 @@ NCPad * NCTable::CreatePad()
   return npad;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTable::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION : Handle 'special' keys i.e those not handled
+
+
+// Handle 'special' keys i.e those not handled
 //		      by parent NCPad class (space, return). Set 
 //		      items to selected, if appropriate
-//
 NCursesEvent NCTable::wHandleInput( wint_t key )
 {
   NCursesEvent ret;

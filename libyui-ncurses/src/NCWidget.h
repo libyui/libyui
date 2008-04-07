@@ -32,12 +32,7 @@ class NClabel;
 
 #define YWIDGET_MAGIC         42
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCWidget
-//
-//	DESCRIPTION :
-//
+
 class NCWidget : public tnode<NCWidget*>, protected NCursesError {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCWidget & OBJ );
@@ -170,11 +165,9 @@ class NCWidget : public tnode<NCWidget*>, protected NCursesError {
     void DumpOn( std::ostream & str, string prfx ) const;
 };
 
-///////////////////////////////////////////////////////////////////
 
 #include "NCstring.h"
 #include "NCtext.h"
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCWidget_h

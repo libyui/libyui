@@ -22,14 +22,8 @@
 #include "NCurses.h"
 #include "NCCheckBoxFrame.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBoxFrame::NCCheckBoxFrame
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCCheckBoxFrame::NCCheckBoxFrame( YWidget * parent, const string & nlabel,
 				  bool checked )
     : YCheckBoxFrame( parent, nlabel, checked )
@@ -52,27 +46,15 @@ NCCheckBoxFrame::NCCheckBoxFrame( YWidget * parent, const string & nlabel,
   // setEnabled(); is called in wRedraw()		
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBoxFrame::~NCCheckBoxFrame
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCCheckBoxFrame::~NCCheckBoxFrame()
 {
   yuiDebug() << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBoxFrame::nicesize
-//	METHOD TYPE : long
-//
-//	DESCRIPTION :
-//
+
+
 long NCCheckBoxFrame::nicesize( YUIDimension dim )
 {
   //space to add - keep vertical dim, add horizontal space
@@ -105,14 +87,8 @@ int NCCheckBoxFrame::preferredHeight()
     return defsze.H;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBoxFrame::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCCheckBoxFrame::setSize( int newwidth, int newheight )
 {
   wsze csze( newheight, newwidth );
@@ -121,14 +97,8 @@ void NCCheckBoxFrame::setSize( int newwidth, int newheight )
   firstChild()->setSize( csze.W, csze.H );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBoxFrame::setLabel
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCCheckBoxFrame::setLabel( const string & nlabel )
 {
   YCheckBoxFrame::setLabel( nlabel );
@@ -139,14 +109,8 @@ void NCCheckBoxFrame::setLabel( const string & nlabel )
   Redraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBoxFrame::setEnabled
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCCheckBoxFrame::setEnabled( bool do_bv )
 {
   YWidget::setEnabled( do_bv );
@@ -163,14 +127,8 @@ void NCCheckBoxFrame::setEnabled( bool do_bv )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBoxFrame::gotBuddy
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCCheckBoxFrame::gotBuddy()
 {
   if ( !label.hasHotkey() )
@@ -185,14 +143,8 @@ bool NCCheckBoxFrame::gotBuddy()
   return false;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBoxFrame::wRedraw
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCCheckBoxFrame::wRedraw()
 {
   if ( !win )
@@ -230,14 +182,8 @@ void NCCheckBoxFrame::wRedraw()
   setEnabled( getValue() );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBoxFrame::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCCheckBoxFrame::wHandleInput( wint_t key )
 {
   NCursesEvent ret = NCursesEvent::handled;
@@ -266,14 +212,8 @@ NCursesEvent NCCheckBoxFrame::wHandleInput( wint_t key )
   return ret;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBoxFrame::setKeyboardFocus
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCCheckBoxFrame::setKeyboardFocus()
 {
     if ( !grabFocus() )

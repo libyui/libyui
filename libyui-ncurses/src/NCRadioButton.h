@@ -26,12 +26,7 @@
 
 class NCRadioButton;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCRadioButton
-//
-//	DESCRIPTION :
-//
+
 class NCRadioButton : public YRadioButton, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCRadioButton & OBJ );
@@ -86,6 +81,5 @@ class NCRadioButton : public YRadioButton, public NCWidget {
     }
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCRadioButton_h

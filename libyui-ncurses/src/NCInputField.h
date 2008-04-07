@@ -26,12 +26,7 @@
 
 class NCInputField;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCInputField
-//
-//	DESCRIPTION :
-//
+
 class NCInputField : public YInputField, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCInputField & OBJ );
@@ -134,6 +129,5 @@ class NCInputField : public YInputField, public NCWidget {
     void setCurPos( unsigned pos ) { curpos = pos; }
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCInputField_h

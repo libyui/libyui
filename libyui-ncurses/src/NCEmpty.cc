@@ -22,14 +22,8 @@
 #include "NCurses.h"
 #include "NCEmpty.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCEmpty::NCEmpty
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCEmpty::NCEmpty( YWidget * parent )
     : YEmpty( parent )
     , NCWidget( parent )
@@ -38,27 +32,15 @@ NCEmpty::NCEmpty( YWidget * parent )
     wstate = NC::WSdumb;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCEmpty::~NCEmpty
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCEmpty::~NCEmpty()
 {
     yuiDebug() << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCEmpty::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCEmpty::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );

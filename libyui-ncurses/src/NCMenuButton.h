@@ -27,12 +27,7 @@
 
 class NCMenuButton;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCMenuButton
-//
-//	DESCRIPTION :
-//
+
 class NCMenuButton : public YMenuButton, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCMenuButton & OBJ );
@@ -86,6 +81,5 @@ class NCMenuButton : public YMenuButton, public NCWidget {
     }
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCMenuButton_h

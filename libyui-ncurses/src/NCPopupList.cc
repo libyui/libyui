@@ -23,14 +23,8 @@
 #include "YTableItem.h"
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupList::NCPopupList
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCPopupList::NCPopupList( const wpos at,
 			  const string & label,
 			  const list<string> & deflist,
@@ -40,14 +34,8 @@ NCPopupList::NCPopupList( const wpos at,
     createEntries( deflist, index);
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupList::~NCPopupList
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCPopupList::~NCPopupList()
 {
 
@@ -65,14 +53,8 @@ void NCPopupList::createEntries( const list<string> & deflist, int index )
     setCurrentItem( index );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupList::postAgain
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCPopupList::postAgain()
 {
   return NCPopupTable::postAgain();

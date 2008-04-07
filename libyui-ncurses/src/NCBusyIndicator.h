@@ -30,12 +30,7 @@ class NCBusyIndicator;
 
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCBusyIndicator
-//
-//	DESCRIPTION :
-//
+
 class NCBusyIndicator : public YBusyIndicator, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCBusyIndicator & OBJ );
@@ -105,6 +100,5 @@ class NCBusyIndicator : public YBusyIndicator, public NCWidget {
     static void staticHandler(int sig_num);
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCBusyIndicator_h

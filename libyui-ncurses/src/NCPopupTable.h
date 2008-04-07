@@ -31,12 +31,7 @@ using namespace std;
 class NCTable;
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCPopupTable
-//
-//	DESCRIPTION :
-//
+
 class NCPopupTable : public NCPopup {
 
   NCPopupTable & operator=( const NCPopupTable & );
@@ -69,7 +64,6 @@ public:
   void stripHotkeys();
 };
 
-///////////////////////////////////////////////////////////////////
 
 
 #endif // NCPopupTable_h

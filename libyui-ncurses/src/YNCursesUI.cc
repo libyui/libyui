@@ -134,14 +134,8 @@ YNCursesUI::createApplication()
     return app;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YNCursesUI::idleLoop
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void YNCursesUI::idleLoop( int fd_ycp )
 {
 
@@ -182,28 +176,18 @@ void YNCursesUI::idleLoop( int fd_ycp )
   } while ( !FD_ISSET( fd_ycp, &fdset ) );
 }
 
-///////////////////////////////////////////////////////////////////
 
 
 #define ONCREATE yuiDebug() << endl
 //#define ONCREATE
 
 
-///////////////////////////////////////////////////////////////////
-//
 // package selection
-//
-///////////////////////////////////////////////////////////////////
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YNCursesUI::packageSelectorPlugin()
-//	METHOD TYPE : NCPackageSelectorPlugin
-//
-//	DESCRIPTION : Create the package selector plugin
-//
+
+
+// Create the package selector plugin
 NCPackageSelectorPluginStub * YNCursesUI::packageSelectorPlugin()
 {
     static NCPackageSelectorPluginStub * plugin = 0;
@@ -222,15 +206,10 @@ NCPackageSelectorPluginStub * YNCursesUI::packageSelectorPlugin()
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YNCursesUI::runPkgSelection
-//	METHOD TYPE : YEvent *
-//
-//	DESCRIPTION : Implementation of UI builtin RunPkgSelection() which
+
+
+// Implementation of UI builtin RunPkgSelection() which
 //		      has to be called after OpenDialog( `PackageSelector() ).
-//
 YEvent * YNCursesUI::runPkgSelection( YWidget * selector )
 {
     YEvent * event = 0;
@@ -340,14 +319,9 @@ bool YNCursesUI::want_colors()
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : YNCursesUI::setConsoleFont
-//
-//	DESCRIPTION : UI::setConsoleFont() is called in Console.ycp.
+
+// UI::setConsoleFont() is called in Console.ycp.
 //		      The terminal encoding must be set correctly.
-//
 /**
  * This doesn't belong here, but it is so utterly entangled with member
  * variables that are not exported at all (sic!) that it's not really feasible

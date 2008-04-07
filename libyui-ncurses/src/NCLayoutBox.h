@@ -26,12 +26,7 @@
 
 class NCLayoutBox;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCLayoutBox
-//
-//	DESCRIPTION :
-//
+
 class NCLayoutBox : public YLayoutBox, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCLayoutBox & OBJ );
@@ -70,6 +65,5 @@ class NCLayoutBox : public YLayoutBox, public NCWidget {
     virtual void setEnabled( bool do_bv ); 
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCLayoutBox_h

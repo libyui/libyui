@@ -26,12 +26,7 @@
 
 class NCLabel;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCLabel
-//
-//	DESCRIPTION :
-//
+
 class NCLabel : public YLabel, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCLabel & OBJ );
@@ -76,6 +71,5 @@ class NCLabel : public YLabel, public NCWidget {
     virtual int preferredHeight();
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCLabel_h

@@ -28,12 +28,7 @@
 #include "NCurses.h"
 #include "NCstyle.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCStyleDef
-//
-//	DESCRIPTION :
-//
+
 class NCStyleDef {
 
   public:
@@ -664,18 +659,11 @@ class NCStyleDef {
     void showHelp();
 };
 
-///////////////////////////////////////////////////////////////////
 
 NCStyleDef * NCStyleDef::NCStyleDef_p = 0;
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCStyleDef::doshowset
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCStyleDef::doshowset( SetType a, bool reset )
 {
   vector<Aset> aset;
@@ -787,14 +775,8 @@ void NCStyleDef::doshowset( SetType a, bool reset )
   wChattr.set( aset, reset );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCStyleDef::pbox
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCStyleDef::pbox( bool on )
 {
   p.bkgdset( A_NORMAL );
@@ -807,14 +789,8 @@ void NCStyleDef::pbox( bool on )
   p.bkgdset( A_NORMAL );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCStyleDef::movePad
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCStyleDef::movePad( int key )
 {
   pbox( true );
@@ -878,14 +854,8 @@ int NCStyleDef::movePad( int key )
   return in;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCStyleDef::changeStyle
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCStyleDef::changeStyle()
 {
   fakestyle( wStyle.cset );
@@ -953,14 +923,9 @@ void NCStyleDef::changeStyle()
   fakestyle( NCstyle::MaxStyleSet );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCStyleDef::queryChar
-//	METHOD TYPE : chtype
-//
-//	DESCRIPTION : query popup for ACS chars
-//
+
+
+// query popup for ACS chars
 chtype NCStyleDef::queryChar( int column, chtype selbg )
 {
   vector<queryCharEnt> men;
@@ -1053,11 +1018,7 @@ chtype NCStyleDef::queryChar( int column, chtype selbg )
   return ret;
 }
 
-///////////////////////////////////////////////////////////////////
-//
 // NCStyleDef::showex
-//
-///////////////////////////////////////////////////////////////////
 
 #define BGSET(a) W.bkgdset( st.a )
 
@@ -1148,14 +1109,8 @@ inline void widex( NCursesWindow & W, int L, int C, const char * T,
   listex( W, L, C+1, l );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCStyleDef::showex
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCStyleDef::showex( ExMode mode )
 {
   static NCursesPanel W( 14, NCurses::cols(), 0, 0 );
@@ -1229,14 +1184,8 @@ void NCStyleDef::showex( ExMode mode )
   W.refresh();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCStyleDef::saveStyle
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCStyleDef::saveStyle()
 {
   string fname( "NCstyle."+NCstyle_C.styleName+".h" );
@@ -1336,14 +1285,8 @@ void NCStyleDef::saveStyle()
   p.refresh();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCStyleDef::restoreStyle
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCStyleDef::restoreStyle()
 {
   string fname( "NCstyle."+NCstyle_C.styleName+".h" );
@@ -1574,7 +1517,6 @@ void NCStyleDef::restoreStyle()
   p.refresh();
 }
 
-///////////////////////////////////////////////////////////////////
 
 /******************************************************************
 **

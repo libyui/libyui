@@ -206,14 +206,8 @@ class NCScrollbar {
 };
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPadWidget::NCPadWidget
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCPadWidget::NCPadWidget( NCWidget * myparent )
     : NCWidget( myparent )
     , padwin( 0 )
@@ -244,14 +238,8 @@ NCPadWidget::NCPadWidget( YWidget * myparent )
   defsze = wsze( 3, 10 ) + 2;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPadWidget::~NCPadWidget
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCPadWidget::~NCPadWidget()
 {
   delete pad;
@@ -260,15 +248,10 @@ NCPadWidget::~NCPadWidget()
   yuiDebug() << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPadWidget::wCreate
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : assert (padwin != 0) if (win != 0)
+
+
+// assert (padwin != 0) if (win != 0)
 //                    (padwin must be subwin or ==win)
-//
 void NCPadWidget::wCreate( const wrect & newrect )
 {
   NCWidget::wCreate( newrect );
@@ -294,14 +277,8 @@ void NCPadWidget::wCreate( const wrect & newrect )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPadWidget::wDelete
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPadWidget::wDelete()
 {
   if ( pad ) {
@@ -320,14 +297,8 @@ void NCPadWidget::wDelete()
   NCWidget::wDelete();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPadWidget::InitPad
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPadWidget::InitPad()
 {
   if ( pad )
@@ -338,28 +309,16 @@ void NCPadWidget::InitPad()
   DrawPad();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPadWidget::AdjustPadSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPadWidget::AdjustPadSize( wsze & minsze )
 {
   minPadSze = minsze;
   minsze    = wsze::max( minsze, defPadSze() );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPadWidget::AdjustPad
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPadWidget::AdjustPad( wsze nsze )
 {
   if ( !pad )
@@ -367,28 +326,16 @@ void NCPadWidget::AdjustPad( wsze nsze )
   pad->resize( nsze );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPadWidget::DelPad
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPadWidget::DelPad()
 {
   delete pad;
   pad = 0;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPadWidget::setLabel
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPadWidget::setLabel( const NClabel & nlabel )
 {
   label = nlabel;
@@ -396,14 +343,8 @@ void NCPadWidget::setLabel( const NClabel & nlabel )
   Redraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPadWidget::wRedraw
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPadWidget::wRedraw()
 {
   if ( !win )
@@ -428,14 +369,8 @@ void NCPadWidget::wRedraw()
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPadWidget::wRecoded
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPadWidget::wRecoded()
 {
   if ( pad )
@@ -443,14 +378,8 @@ void NCPadWidget::wRecoded()
   wRedraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPadWidget::H/VScroll
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPadWidget::HScroll( unsigned total, unsigned visible, unsigned start )
 {
   hsb->set( total, visible, start );
@@ -461,14 +390,9 @@ void NCPadWidget::VScroll( unsigned total, unsigned visible, unsigned start )
   vsb->set( total, visible, start );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPadWidget::ScrollHead.
-//	METHOD TYPE : void
-//
+
+
  //	DESCRIPTION :
-//
 void NCPadWidget::ScrollHead( NCursesWindow & w, unsigned ccol )
 {
   if ( hasHeadline && win ) {
@@ -476,14 +400,8 @@ void NCPadWidget::ScrollHead( NCursesWindow & w, unsigned ccol )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPadWidget::CreatePad
-//	METHOD TYPE : NCPad *
-//
-//	DESCRIPTION :
-//
+
+
 NCPad * NCPadWidget::CreatePad()
 {
   wsze    psze( defPadSze() );
@@ -493,14 +411,8 @@ NCPad * NCPadWidget::CreatePad()
   return npad;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPadWidget::DrawPad
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPadWidget::DrawPad()
 {
   if ( pad && !inMultidraw() ) {
@@ -509,14 +421,8 @@ void NCPadWidget::DrawPad()
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPadWidget::handleInput
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCPadWidget::handleInput( wint_t key )
 {
   return pad->handleInput( key );

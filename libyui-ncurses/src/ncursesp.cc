@@ -145,12 +145,8 @@ NCursesPanel::centertext(int row,const char *label) {
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCursesPanel::transparent
-//	METHOD TYPE : int
-//
+
+
 int NCursesPanel::transparent( int y, int x )
 {
   if ( hidden()

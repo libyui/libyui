@@ -29,12 +29,7 @@ using namespace std;
 
 #include "ncursesw.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCattribute
-//
-//	DESCRIPTION :
-//
+
 class NCattribute {
 
   NCattribute & operator=( const NCattribute & );
@@ -121,14 +116,8 @@ class NCattribute {
     }
 };
 
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCattrcolor
-//
-//	DESCRIPTION :
-//
+
 class NCattrcolor : public NCattribute {
 
   protected:
@@ -148,6 +137,5 @@ class NCattrcolor : public NCattribute {
     virtual ~NCattrcolor() {}
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCattribute_h

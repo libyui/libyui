@@ -22,14 +22,8 @@
 #include "NCurses.h"
 #include "NCImage.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCImage::NCImage
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCImage::NCImage( YWidget * parent, string defaulttext, bool animated )
     : YImage( parent, defaulttext, animated )
     , NCWidget( parent )
@@ -41,27 +35,15 @@ NCImage::NCImage( YWidget * parent, string defaulttext, bool animated )
   skipNoDimWin = true;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCImage::~NCImage
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCImage::~NCImage()
 {
   yuiDebug() << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCImage::nicesize
-//	METHOD TYPE : long
-//
-//	DESCRIPTION :
-//
+
+
 long NCImage::nicesize( YUIDimension dim )
 {
   return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
@@ -83,14 +65,8 @@ void NCImage::setEnabled( bool do_bv )
     YImage::setEnabled( do_bv );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCImage::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCImage::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );

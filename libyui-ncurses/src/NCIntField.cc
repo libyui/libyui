@@ -28,20 +28,12 @@
 using stdutil::numstring;
 
 
-///////////////////////////////////////////////////////////////////
 
 const unsigned NCIntField::taglen = 2; // "^v"
 
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCIntField::NCIntField
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCIntField::NCIntField( YWidget * parent,
 			const string & nlabel,
 			int minV, int maxV,
@@ -66,14 +58,8 @@ NCIntField::NCIntField( YWidget * parent,
   setValue( initialV );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCIntField::~NCIntField
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCIntField::~NCIntField()
 {
   delete lwin;
@@ -81,67 +67,37 @@ NCIntField::~NCIntField()
   yuiDebug() << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCIntField::preferredWidth
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCIntField::preferredWidth()
 {
      return wGetDefsze().W;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCIntField::preferredHeight
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCIntField::preferredHeight()
 {
     return wGetDefsze().H;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCIntField::setEnabled
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCIntField::setEnabled( bool do_bv )
 {
     NCWidget::setEnabled( do_bv );
     YIntField::setEnabled( do_bv );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCIntField::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCIntField::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCIntField::setDefsze
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCIntField::setDefsze()
 {
   unsigned cols = vlen + taglen;
@@ -149,14 +105,8 @@ void NCIntField::setDefsze()
 		 label.width() < cols ? cols : label.width() );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCIntField::wCreate
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCIntField::wCreate( const wrect & newrect )
 {
   NCWidget::wCreate( newrect );
@@ -184,14 +134,8 @@ void NCIntField::wCreate( const wrect & newrect )
   vstart = ( vlen + 2 < (unsigned)trect.Sze.W ) ? label.width() - vlen - 2 : 0;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCIntField::wDelete
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCIntField::wDelete()
 {
   delete lwin;
@@ -202,14 +146,8 @@ void NCIntField::wDelete()
   vstart = 0;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCIntField::setLabel
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCIntField::setLabel( const string & nlabel )
 {
   label = NCstring( nlabel );
@@ -219,14 +157,8 @@ void NCIntField::setLabel( const string & nlabel )
   Redraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCIntField::setValue
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCIntField::setValueInternal( int newValue )
 {
   // checking newValue is done by YIntField
@@ -235,14 +167,8 @@ void NCIntField::setValueInternal( int newValue )
   tUpdate();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCIntField::Increment
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCIntField::Increment( const bool bigstep )
 {
   unsigned dist = maxValue() - cvalue;
@@ -258,14 +184,8 @@ bool NCIntField::Increment( const bool bigstep )
   return true;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCIntField::Decrement
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCIntField::Decrement( const bool bigstep )
 {
   unsigned dist = cvalue - minValue();
@@ -282,14 +202,8 @@ bool NCIntField::Decrement( const bool bigstep )
   return true;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCIntField::wRedraw
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCIntField::wRedraw()
 {
   if ( !win )
@@ -303,14 +217,8 @@ void NCIntField::wRedraw()
   tUpdate();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCIntField::tUpdate
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCIntField::tUpdate()
 {
   if ( !win )
@@ -327,14 +235,8 @@ void NCIntField::tUpdate()
                (cvalue != maxValue() ? ACS_UARROW : ' ' ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCIntField::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCIntField::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
@@ -407,14 +309,8 @@ NCursesEvent NCIntField::wHandleInput( wint_t key )
   return ret;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCIntField::enterPopup
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCIntField::enterPopup( wchar_t first )
 {
   wstring wch( &first );

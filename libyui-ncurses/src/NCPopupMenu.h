@@ -27,12 +27,7 @@ using namespace std;
 #include "NCPopupTable.h"
 #include "NCMenuButton.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCPopupMenu
-//
-//	DESCRIPTION :
-//
+
 class NCPopupMenu : public NCPopupTable {
 
   NCPopupMenu & operator=( const NCPopupMenu & );
@@ -57,7 +52,6 @@ class NCPopupMenu : public NCPopupTable {
 
 };
 
-///////////////////////////////////////////////////////////////////
 
 
 #endif // NCPopupMenu_h

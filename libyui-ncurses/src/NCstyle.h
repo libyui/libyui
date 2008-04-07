@@ -29,12 +29,7 @@ extern "C" {
 
 #include "NCtypes.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCattribute
-//
-//	DESCRIPTION :
-//
+
 struct NCattribute {
   //
   // available colors and color pairs
@@ -120,14 +115,8 @@ struct NCattribute {
     }
 };
 
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCattrset
-//
-//	DESCRIPTION :
-//
+
 class NCattrset {
 
   private:
@@ -170,14 +159,8 @@ class NCattrset {
     void setBg( unsigned a, short c ) { NCattribute::setBg( attr[a], c ); }
 };
 
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCstyle
-//
-//	DESCRIPTION :
-//
+
 class NCstyle {
 
   friend class NCStyleDef;
@@ -511,6 +494,5 @@ class NCstyle {
     static string dumpName( STlocal a );
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCstyle_h

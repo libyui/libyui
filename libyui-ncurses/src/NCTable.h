@@ -28,12 +28,7 @@
 
 class NCTable;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCTable
-//
-//	DESCRIPTION :
-//
+
 class NCTable : public YTable, public NCPadWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCTable & OBJ );
@@ -123,6 +118,5 @@ class NCTable : public YTable, public NCPadWidget {
     void stripHotkeys() { myPad()->stripHotkeys(); }
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCTable_h

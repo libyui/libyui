@@ -41,7 +41,6 @@ using namespace std;
 class NCWidget;
 class NCDialog;
 
-///////////////////////////////////////////////////////////////////
 
 class NCursesError {
 
@@ -63,9 +62,7 @@ class NCursesError {
 
 extern std::ostream & operator<<( std::ostream & STREAM, const NCursesError & OBJ );
 
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
 
 class NCursesEvent {
 
@@ -128,14 +125,8 @@ class NCursesEvent {
 
 extern std::ostream & operator<<( std::ostream & STREAM, const NCursesEvent & OBJ );
 
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCurses
-//
-//	DESCRIPTION :
-//
+
 class NCurses {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCurses & OBJ );
@@ -211,7 +202,6 @@ class NCurses {
     static set<NCDialog*> _knownDlgs;
 };
 
-///////////////////////////////////////////////////////////////////
 
 #define CTRL(x)     ((x) & 0x1f)
 #define KEY_TAB     011
@@ -220,6 +210,5 @@ class NCurses {
 #define KEY_SPACE   040
 #define KEY_HOTKEY  KEY_MAX+1
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCurses_h

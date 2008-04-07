@@ -31,12 +31,7 @@ using namespace std;
 class NCTableLine;
 class NCTableCol;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCTreePad
-//
-//	DESCRIPTION :
-//
+
 class NCTreePad : public NCPad {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCTreePad & OBJ );
@@ -112,6 +107,5 @@ class NCTreePad : public NCPad {
     void ShowItem( const NCTableLine * item );
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCTreePad_h

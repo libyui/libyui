@@ -27,12 +27,7 @@ using namespace std;
 #include "NCPopupTable.h"
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCPopupList
-//
-//	DESCRIPTION :
-//
+
 class NCPopupList : public NCPopupTable {
 
   NCPopupList & operator=( const NCPopupList & );
@@ -53,7 +48,6 @@ class NCPopupList : public NCPopupTable {
     void createEntries( const list<string> & deflist, int index );
 };
 
-///////////////////////////////////////////////////////////////////
 
 
 #endif // NCPopupList_h

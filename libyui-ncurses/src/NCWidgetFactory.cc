@@ -85,7 +85,7 @@ NCWidgetFactory::createLabel( YWidget *		parent,
 {
     NCLabel * label = new NCLabel( parent, text, isHeading, isOutputField );
     YUI_CHECK_NEW( label );
-    
+
     return label;
 }
 
@@ -122,7 +122,7 @@ NCWidgetFactory::createRadioButton( YWidget * parent, const string & label, bool
     // Register radio button with its button group.
     // This has to be done after all constructors are done so virtual functions
     // can be used.
-    
+
     if ( radioButton->buttonGroup() )
 	radioButton->buttonGroup()->addRadioButton( radioButton );
 
@@ -137,7 +137,7 @@ NCWidgetFactory::createComboBox( YWidget * parent, const string & label, bool ed
     NCComboBox * comboBox = new NCComboBox( parent, label, editable );
     YUI_CHECK_NEW( comboBox );
 
-    return comboBox; 
+    return comboBox;
 }
 
 
@@ -148,7 +148,7 @@ NCWidgetFactory::createSelectionBox( YWidget * parent, const string & label )
     NCSelectionBox * selectionBox = new NCSelectionBox( parent, label );
     YUI_CHECK_NEW( selectionBox );
 
-    return selectionBox; 
+    return selectionBox;
 }
 
 
@@ -158,7 +158,7 @@ NCWidgetFactory::createTree( YWidget * parent, const string & label )
 {
     NCTree * tree = new NCTree( parent, label );
     YUI_CHECK_NEW( tree );
-    
+
     return tree;
 }
 
@@ -180,7 +180,7 @@ NCWidgetFactory::createProgressBar( YWidget * parent, const string & label, int 
 {
     NCProgressBar * progressBar = new NCProgressBar( parent, label, maxValue );
     YUI_CHECK_NEW( progressBar );
-    
+
     return progressBar;
 }
 
@@ -233,7 +233,7 @@ NCWidgetFactory::createMultiLineEdit( YWidget * parent, const string & label )
 {
     NCMultiLineEdit * multiLineEdit = new NCMultiLineEdit( parent, label );
     YUI_CHECK_NEW( multiLineEdit );
-    
+
     return multiLineEdit;
 }
 
@@ -267,7 +267,7 @@ NCWidgetFactory::createSpacing( YWidget * parent, YUIDimension dim, bool stretch
 {
     NCSpacing * spacing = new NCSpacing( parent, dim, stretchable, size );
     YUI_CHECK_NEW( spacing );
-    
+
     return spacing;
 }
 
@@ -298,7 +298,7 @@ NCWidgetFactory::createAlignment( YWidget *	 parent,
 {
     NCAlignment * alignment = new NCAlignment( parent, horAlignment, vertAlignment );
     YUI_CHECK_NEW( alignment );
-    
+
     return alignment;
 }
 
@@ -319,7 +319,7 @@ NCWidgetFactory::createFrame( YWidget * parent, const string & label )
 {
     NCFrame * frame = new NCFrame( parent, label );
     YUI_CHECK_NEW( frame );
-    
+
     return frame;
 }
 
@@ -330,7 +330,7 @@ NCWidgetFactory::createCheckBoxFrame( YWidget *	parent, const string & label, bo
 {
     NCCheckBoxFrame * checkBoxFrame = new NCCheckBoxFrame( parent, label, checked );
     YUI_CHECK_NEW( checkBoxFrame );
-    
+
     return checkBoxFrame;
 }
 
@@ -341,7 +341,7 @@ NCWidgetFactory::createRadioButtonGroup( YWidget * parent )
 {
     NCRadioButtonGroup * radioButtonGroup = new NCRadioButtonGroup( parent );
     YUI_CHECK_NEW( radioButtonGroup );
-    
+
     return radioButtonGroup;
 }
 
@@ -352,7 +352,7 @@ NCWidgetFactory::createReplacePoint( YWidget * parent )
 {
     NCReplacePoint * replacePoint = new NCReplacePoint( parent );
     YUI_CHECK_NEW( replacePoint );
-    
+
     return replacePoint;
 }
 
@@ -365,14 +365,7 @@ NCWidgetFactory::createImage( YWidget * parent, const string & imageFileName, bo
     return image;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : createPackageSelector
-//	METHOD TYPE : YPackageSelector *
-//
-//	DESCRIPTION : Calls NCPackageSelectorPlugin::createPackageSelector
-//
+
 YPackageSelector *
 NCWidgetFactory::createPackageSelector( YWidget * parent, long modeFlags )
 {
@@ -387,26 +380,21 @@ NCWidgetFactory::createPackageSelector( YWidget * parent, long modeFlags )
 	return 0;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : createPkgSpecial
-//	METHOD TYPE : YWidget
-//	DESCRIPTION : creates special widgets used for the package selection
-//		      dialog (which do not have a corresponding widget in qt-ui)
-//
+
+// Creates special widgets used for the package selection
+// dialog (which do not have a corresponding widget in qt-ui)
 YWidget *
 NCWidgetFactory::createPkgSpecial( YWidget * parent, const string & subwidget )
 {
     YWidget * w = 0;
-    
+
     NCPackageSelectorPluginStub * plugin = YNCursesUI::ui()->packageSelectorPlugin();
 
     if ( plugin )
     {
 	w = plugin->createPkgSpecial( parent, subwidget );
     }
-    
+
     return w;
 }
 

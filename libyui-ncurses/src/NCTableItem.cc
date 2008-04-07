@@ -26,46 +26,24 @@
 using stdutil::form;
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCTableCol
-//
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableCol::NCTableCol
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
+
 NCTableCol::NCTableCol( const NCstring & l, const STYLE & st )
     : label( l )
     , style( st )
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableCol::~NCTableCol
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCTableCol::~NCTableCol()
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableCol::setBkgd
-//	METHOD TYPE : chtype
-//
-//	DESCRIPTION :
-//
+
+
 chtype NCTableCol::setBkgd( NCursesWindow & w,
 			  NCTableStyle & tableStyle,
 			  NCTableLine::STATE linestate,
@@ -80,14 +58,8 @@ chtype NCTableCol::setBkgd( NCursesWindow & w,
   return bkgdstyle;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableCol::DrawAt
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTableCol::DrawAt( NCursesWindow & w, const wrect at,
 			 NCTableStyle & tableStyle,
 			 NCTableLine::STATE linestate,
@@ -113,20 +85,10 @@ ostream & operator<<( ostream & STREAM, const NCTableCol & OBJ )
   return STREAM << OBJ.label;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCTableLine
-//
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableLine::NCTableLine
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
+
 NCTableLine::NCTableLine( unsigned cols, int idx, const unsigned s )
     : Items( cols, (NCTableCol*)0 )
     , state ( s )
@@ -148,41 +110,23 @@ void NCTableLine::setOrigItem (YTableItem *it)
     yitem = it;
     yitem->setData (this) ;
 }
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableLine::~NCTableLine
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCTableLine::~NCTableLine()
 {
   ClearLine();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableLine::assertCol
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTableLine::assertCol( unsigned idx )
 {
   if ( idx >= Cols() )
     SetCols( idx + 1 );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableLine::SetCols
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTableLine::SetCols( unsigned idx )
 {
   if ( idx == Cols() )
@@ -205,28 +149,16 @@ void NCTableLine::stripHotkeys()
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableLine::SetCols
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTableLine::SetCols( vector<NCTableCol*> & nItems )
 {
   SetCols( 0 );
   Items = nItems;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableLine::AddCol
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTableLine::AddCol( unsigned idx, NCTableCol * item )
 {
   assertCol( idx );
@@ -234,14 +166,8 @@ void NCTableLine::AddCol( unsigned idx, NCTableCol * item )
   Items[idx] = item;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableLine::DelCol
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTableLine::DelCol( unsigned idx )
 {
   if ( idx < Cols() ) {
@@ -250,14 +176,8 @@ void NCTableLine::DelCol( unsigned idx )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableLine::GetCol
-//	METHOD TYPE : NCTableCol *
-//
-//	DESCRIPTION :
-//
+
+
 NCTableCol * NCTableLine::GetCol( unsigned idx )
 {
   if ( idx < Cols() )
@@ -265,14 +185,8 @@ NCTableCol * NCTableLine::GetCol( unsigned idx )
   return 0;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableLine::UpdateFormat
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTableLine::UpdateFormat( NCTableStyle & tableStyle )
 {
   tableStyle.AssertMinCols( Cols() );
@@ -283,14 +197,8 @@ void NCTableLine::UpdateFormat( NCTableStyle & tableStyle )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableLine::DrawAt
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTableLine::DrawAt( NCursesWindow & w, const wrect at,
 			  NCTableStyle & tableStyle,
 			  bool active ) const
@@ -312,14 +220,8 @@ void NCTableLine::DrawAt( NCursesWindow & w, const wrect at,
   DrawItems( w, at, tableStyle, active );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableLine::DrawItems
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTableLine::DrawItems( NCursesWindow & w, const wrect at,
 			     NCTableStyle & tableStyle,
 			     bool active ) const
@@ -388,20 +290,10 @@ ostream & operator<<( ostream & STREAM, const NCTableLine & OBJ )
   return STREAM;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCTableHead
-//
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableHead::DrawAt
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
+
 void NCTableHead::DrawAt( NCursesWindow & w, const wrect at,
 			  NCTableStyle & tableStyle,
 			  bool active ) const
@@ -417,20 +309,10 @@ void NCTableHead::DrawAt( NCursesWindow & w, const wrect at,
   DrawItems( w, at, tableStyle, active );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCTableStyle
-//
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableStyle::NCTableStyle
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
+
 NCTableStyle::NCTableStyle( const NCWidget & p )
     : headline( 0 )
     , colWidth( 0 )
@@ -442,14 +324,8 @@ NCTableStyle::NCTableStyle( const NCWidget & p )
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableStyle::SetStyleFrom
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCTableStyle::SetStyleFrom( const vector<NCstring> & head )
 {
   unsigned ncols = head.size();
@@ -495,14 +371,8 @@ bool NCTableStyle::SetStyleFrom( const vector<NCstring> & head )
   return hascontent;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableStyle::highlightBG
-//	METHOD TYPE : chtype
-//
-//	DESCRIPTION :
-//
+
+
 chtype NCTableStyle::highlightBG( const NCTableLine::STATE lstate,
 				  const NCTableCol::STYLE  cstyle,
 				  const NCTableCol::STYLE  dstyle ) const
@@ -517,14 +387,8 @@ chtype NCTableStyle::highlightBG( const NCTableLine::STATE lstate,
   return getBG( lstate, dstyle );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTableStyle::getBG
-//	METHOD TYPE : chtype
-//
-//	DESCRIPTION :
-//
+
+
 chtype NCTableStyle::getBG( const NCTableLine::STATE lstate,
 			    const NCTableCol::STYLE  cstyle ) const
 {

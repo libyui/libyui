@@ -21,14 +21,8 @@
 #include <YUILog.h>
 #include "NCTreePad.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::NCTreePad
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCTreePad::NCTreePad( int lines, int cols, const NCWidget & p )
     : NCPad( lines, cols, p )
     , Headpad    ( 1, 1 )
@@ -42,41 +36,23 @@ NCTreePad::NCTreePad( int lines, int cols, const NCWidget & p )
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::~NCTreePad
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCTreePad::~NCTreePad()
 {
   ClearTable();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::assertLine
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTreePad::assertLine( unsigned idx )
 {
   if ( idx >= Lines() )
     SetLines( idx + 1 );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::SetLines
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTreePad::SetLines( unsigned idx )
 {
   if ( idx == Lines() )
@@ -98,14 +74,8 @@ void NCTreePad::SetLines( unsigned idx )
   DirtyFormat();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::SetLines
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTreePad::SetLines( vector<NCTableLine*> & nItems )
 {
   SetLines( 0 );
@@ -118,14 +88,8 @@ void NCTreePad::SetLines( vector<NCTableLine*> & nItems )
   DirtyFormat();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::AddLine
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTreePad::AddLine( unsigned idx, NCTableLine * item )
 {
   assertLine( idx );
@@ -135,14 +99,8 @@ void NCTreePad::AddLine( unsigned idx, NCTableLine * item )
   DirtyFormat();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::DelLine
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTreePad::DelLine( unsigned idx )
 {
   if ( idx < Lines() ) {
@@ -151,14 +109,8 @@ void NCTreePad::DelLine( unsigned idx )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::GetCurrentLine
-//	METHOD TYPE : const NCTableLine *
-//
-//	DESCRIPTION :
-//
+
+
 const NCTableLine * NCTreePad::GetCurrentLine() const
 {
   if ( citem.L >= 0 && (unsigned)citem.L < visLines() )
@@ -166,14 +118,8 @@ const NCTableLine * NCTreePad::GetCurrentLine() const
   return 0;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::ModifyLine
-//	METHOD TYPE : NCTableLine *
-//
-//	DESCRIPTION :
-//
+
+
 NCTableLine * NCTreePad::ModifyLine( unsigned idx )
 {
   if ( idx < Lines() ) {
@@ -183,14 +129,8 @@ NCTableLine * NCTreePad::ModifyLine( unsigned idx )
   return 0;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::GetLine
-//	METHOD TYPE : const NCTableLine *
-//
-//	DESCRIPTION :
-//
+
+
 const NCTableLine * NCTreePad::GetLine( unsigned idx ) const
 {
   if ( idx < Lines() )
@@ -198,14 +138,8 @@ const NCTableLine * NCTreePad::GetLine( unsigned idx ) const
   return 0;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::SetHeadline
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCTreePad::SetHeadline( const vector<NCstring> & head )
 {
   bool hascontent = ItemStyle.SetStyleFrom( head );
@@ -214,14 +148,8 @@ bool NCTreePad::SetHeadline( const vector<NCstring> & head )
   return hascontent;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::Destwin
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTreePad::Destwin( NCursesWindow * dwin )
 {
   NCPad::Destwin( dwin );
@@ -230,42 +158,24 @@ void NCTreePad::Destwin( NCursesWindow * dwin )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::wRecoded
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTreePad::wRecoded()
 {
   DirtyFormat();
   update();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::CurPos
-//	METHOD TYPE : wpos
-//
-//	DESCRIPTION :
-//
+
+
 wpos NCTreePad::CurPos() const
 {
   citem.C = srect.Pos.C;
   return citem;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::ShowItem
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTreePad::ShowItem( const NCTableLine * item )
 {
   if ( !item )
@@ -282,14 +192,8 @@ void NCTreePad::ShowItem( const NCTableLine * item )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::UpdateFormat
-//	METHOD TYPE : wsze
-//
-//	DESCRIPTION :
-//
+
+
 wsze NCTreePad::UpdateFormat()
 {
   dirty = true;
@@ -308,14 +212,8 @@ wsze NCTreePad::UpdateFormat()
   return wsze( visLines(), ItemStyle.TableWidth() );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::DoRedraw
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCTreePad::DoRedraw()
 {
   if ( !Destwin() ) {
@@ -345,14 +243,8 @@ int NCTreePad::DoRedraw()
   return update();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::setpos
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCTreePad::setpos( const wpos & newpos )
 {
   if ( !visLines() ) {
@@ -406,27 +298,15 @@ int NCTreePad::setpos( const wpos & newpos )
   return update();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::updateScrollHint
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTreePad::updateScrollHint()
 {
   NCPad::updateScrollHint();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTreePad::handleInput
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCTreePad::handleInput( wint_t key )
 {
   bool handled = true;

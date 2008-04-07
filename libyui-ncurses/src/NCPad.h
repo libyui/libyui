@@ -24,12 +24,7 @@
 #include "NCurses.h"
 #include "NCWidget.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCSchrollCB
-//
-//	DESCRIPTION :
-//
+
 class NCSchrollCB {
 
   public:
@@ -46,12 +41,7 @@ class NCSchrollCB {
     virtual void AdjustPadSize( wsze & minsze ) {}
 };
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCSchrollHint
-//
-//	DESCRIPTION :
-//
+
 class NCScrollHint : protected NCSchrollCB {
 
   private:
@@ -89,12 +79,7 @@ class NCScrollHint : protected NCSchrollCB {
     virtual void SendHead() {}
 };
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCPad
-//
-//	DESCRIPTION :
-//
+
 class NCPad : public NCursesPad, public NCScrollHint {
 
   protected:
@@ -179,6 +164,5 @@ class NCPad : public NCursesPad, public NCScrollHint {
     virtual bool handleInput( wint_t key );
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCPad_h

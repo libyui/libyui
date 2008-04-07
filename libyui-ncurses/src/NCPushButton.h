@@ -26,12 +26,7 @@
 
 class NCPushButton;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCPushButton
-//
-//	DESCRIPTION :
-//
+
 class NCPushButton : public YPushButton, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCPushButton & OBJ );
@@ -78,6 +73,5 @@ class NCPushButton : public YPushButton, public NCWidget {
 
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCPushButton_h

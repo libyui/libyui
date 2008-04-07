@@ -28,12 +28,7 @@
 
 class NCRichText;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCRichText
-//
-//	DESCRIPTION :
-//
+
 class NCRichText : public YRichText, public NCPadWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCRichText & OBJ );
@@ -228,6 +223,5 @@ class NCRichText : public YRichText, public NCPadWidget {
     }
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCRichText_h

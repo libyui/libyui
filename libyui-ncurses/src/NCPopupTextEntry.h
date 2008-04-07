@@ -25,12 +25,7 @@
 #include "NCInputField.h"
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCPopupTextEntry
-//
-//	DESCRIPTION :
-//
+
 class NCPopupTextEntry : public NCPopup {
 
   NCPopupTextEntry & operator=( const NCPopupTextEntry & );
@@ -57,7 +52,6 @@ class NCPopupTextEntry : public NCPopup {
     string value() { return wtext->value(); }
 };
 
-///////////////////////////////////////////////////////////////////
 
 
 #endif // NCPopupTextEntry_h

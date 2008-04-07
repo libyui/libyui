@@ -215,7 +215,6 @@ public:
 
 
 
-///////////////////////////////////////////////////////////////////
 
 
 
@@ -235,14 +234,9 @@ NCTree::~NCTree()
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTree::getTreeLine
-//	METHOD TYPE : const NCTreeLine *
-//
-//	DESCRIPTION : Return pointer to tree line  at given index
-//
+
+
+// Return pointer to tree line  at given index
 inline const NCTreeLine * NCTree::getTreeLine( unsigned idx ) const
 {
   if ( myPad() )
@@ -252,14 +246,9 @@ inline const NCTreeLine * NCTree::getTreeLine( unsigned idx ) const
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTree::modifyTreeLine
-//	METHOD TYPE : NCTreeLine *
-//
-//	DESCRIPTION : Modify tree line at given index
-//
+
+
+// Modify tree line at given index
 inline NCTreeLine * NCTree::modifyTreeLine( unsigned idx )
 {
   if ( myPad() ) {
@@ -269,14 +258,9 @@ inline NCTreeLine * NCTree::modifyTreeLine( unsigned idx )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTree::preferredWidth
-//	METHOD TYPE : int
-//
-//	DESCRIPTION : Set preferred width
-//
+
+
+// Set preferred width
 int NCTree::preferredWidth()
 {
     wsze sze = wsze::max( defsze, wsze( 0, labelWidth()+2 ) ); 
@@ -284,14 +268,9 @@ int NCTree::preferredWidth()
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTree::preferredHeight
-//	METHOD TYPE : int
-//
-//	DESCRIPTION : Set preferred height
-//
+
+
+// Set preferred height
 int NCTree::preferredHeight()
 {
     wsze sze = wsze::max( defsze, wsze( 0, labelWidth()+2 ) );
@@ -299,14 +278,9 @@ int NCTree::preferredHeight()
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTree::setEnabled
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Enable/disable widget
-//
+
+
+// Enable/disable widget
 void NCTree::setEnabled( bool do_bv )
 {
     NCWidget::setEnabled( do_bv );
@@ -314,29 +288,18 @@ void NCTree::setEnabled( bool do_bv )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTree::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTree::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTree::getCurrentItem
-//	METHOD TYPE : int
-//
-//	DESCRIPTION : Return YTreeItem pointer for a current line
+
+
+// Return YTreeItem pointer for a current line
 //		      (under the cursor)
-// 
 YTreeItem * NCTree::getCurrentItem() const
 {
     YTreeItem * yitem = 0;
@@ -354,14 +317,9 @@ YTreeItem * NCTree::getCurrentItem() const
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTree::selectItem
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Set current item (under the cursor) to selected
-//
+
+
+// Set current item (under the cursor) to selected
 void NCTree::selectItem( YItem *item, bool selected )
 {
     if ( !myPad() )
@@ -389,15 +347,10 @@ void NCTree::selectItem( YItem *item, bool selected )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTree::selectItem
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Set current item (at given index) to selected
+
+
+// Set current item (at given index) to selected
 //		      (overloaded for convenience) 
-//
 void NCTree::selectItem( int index )
 {
     YItem * item = YTree::itemAt( index );
@@ -427,14 +380,9 @@ void NCTree::rebuildTree()
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTree::CreatePad
-//	METHOD TYPE : NCPad *
-//
-//	DESCRIPTION : Creates empty pad
-//
+
+
+// Creates empty pad
 NCPad * NCTree::CreatePad()
 {
   wsze    psze( defPadSze() );
@@ -444,11 +392,8 @@ NCPad * NCTree::CreatePad()
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
 // Creates tree lines and appends them to TreePad
 // (called recursively for each child of an item)
-//
 void NCTree::CreateTreeLines( NCTreeLine * parentLine, NCTreePad * pad, YItem * item )
 {
     //static index counter
@@ -471,14 +416,9 @@ void NCTree::CreateTreeLines( NCTreeLine * parentLine, NCTreePad * pad, YItem * 
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTree::DrawPad
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Fills TreePad with lines (uses CreateTreeLines to create them)
-//
+
+
+// Fills TreePad with lines (uses CreateTreeLines to create them)
 void NCTree::DrawPad()
 {
   if ( !myPad() )
@@ -531,15 +471,10 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
 
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTree::deleteAllItems
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : clears the table and the lists holding
+
+
+// clears the table and the lists holding
 //                    the values
-//
 void NCTree::deleteAllItems()
 {
 	YTree::deleteAllItems();

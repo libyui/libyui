@@ -27,12 +27,7 @@
 
 class NCMultiLineEdit;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCMultiLineEdit
-//
-//	DESCRIPTION :
-//
+
 class NCMultiLineEdit : public YMultiLineEdit, public NCPadWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCMultiLineEdit & OBJ );
@@ -96,6 +91,5 @@ class NCMultiLineEdit : public YMultiLineEdit, public NCPadWidget {
 
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCMultiLineEdit_h

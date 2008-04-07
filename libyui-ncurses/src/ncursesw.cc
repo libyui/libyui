@@ -457,7 +457,6 @@ NCursesWindow::~NCursesWindow()
 
 // ---------------------------------------------------------------------
 // Color stuff
-//
 int NCursesWindow::colorInitialized = COLORS_NOT_INITIALIZED;
 
 void
@@ -563,14 +562,8 @@ NCursesPad::NCursesPad(int lines, int cols) : NCursesWindow() {
   alloced = TRUE;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCursesWindow::box
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCursesWindow::box( const wrect & dim )
 {
   wrect box_area ( dim.intersectRelTo( area() ) );
@@ -589,14 +582,9 @@ int NCursesWindow::box( const wrect & dim )
   return OK;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCursesWindow::mvsubwin
-//	METHOD TYPE : int
-//
-//	DESCRIPTION : move subwin tree inside parent
-//
+
+
+// move subwin tree inside parent
 int NCursesWindow::mvsubwin( NCursesWindow * sub, int begin_y, int begin_x )
 {
   int ret = ERR;
@@ -611,14 +599,8 @@ int NCursesWindow::mvsubwin( NCursesWindow * sub, int begin_y, int begin_x )
   return ret;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCursesWindow::resize
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCursesWindow::resize( int lines, int columns )
 {
   if ( lines <= 0 )

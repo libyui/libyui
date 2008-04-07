@@ -24,14 +24,8 @@
 #include "NCTable.h"
 #include "YMenuButton.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupMenu::NCPopupMenu
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCPopupMenu::NCPopupMenu( const wpos at, YItemIterator begin, YItemIterator end )
     : NCPopupTable( at )
       , itemsMap()
@@ -56,27 +50,15 @@ NCPopupMenu::NCPopupMenu( const wpos at, YItemIterator begin, YItemIterator end 
   stripHotkeys();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupMenu::~NCPopupMenu
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCPopupMenu::~NCPopupMenu()
 {
     itemsMap.clear();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupMenu::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCPopupMenu::wHandleInput( wint_t ch )
 {
   NCursesEvent ret;
@@ -103,14 +85,8 @@ NCursesEvent NCPopupMenu::wHandleInput( wint_t ch )
   return ret;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupMenu::postAgain
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCPopupMenu::postAgain()
 {
   // dont mess up postevent.detail here

@@ -31,12 +31,7 @@ using namespace std;
 class NCTableStyle;
 class NCTableCol;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCTableLine
-//
-//	DESCRIPTION :
-//
+
 class NCTableLine {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCTableLine & OBJ );
@@ -123,14 +118,8 @@ class NCTableLine {
     void stripHotkeys();
 };
 
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCTableCol
-//
-//	DESCRIPTION :
-//
+
 class NCTableCol {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCTableCol & OBJ );
@@ -181,14 +170,8 @@ class NCTableCol {
     unsigned char hotkey()    const { return label.hotkey(); }
 };
 
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCTableHead
-//
-//	DESCRIPTION :
-//
+
 class NCTableHead : public NCTableLine {
 
   public:
@@ -204,14 +187,8 @@ class NCTableHead : public NCTableLine {
 			 bool active ) const;
 };
 
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCTableStyle
-//
-//	DESCRIPTION :
-//
+
 class NCTableStyle {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCTableStyle & OBJ );
@@ -296,6 +273,5 @@ class NCTableStyle {
     }
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCTableItem_h

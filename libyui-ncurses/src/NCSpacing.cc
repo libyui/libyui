@@ -22,14 +22,8 @@
 #include "NCurses.h"
 #include "NCSpacing.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSpacing::NCSpacing
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCSpacing::NCSpacing( YWidget * parent,
 		      YUIDimension dim,
 		      bool stretchable,
@@ -64,27 +58,15 @@ NCSpacing::NCSpacing( YWidget * parent,
   skipNoDimWin = true;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSpacing::~NCSpacing
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCSpacing::~NCSpacing()
 {
   yuiDebug() << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSpacing::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCSpacing::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );

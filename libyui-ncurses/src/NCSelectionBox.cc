@@ -21,14 +21,8 @@
 #include <YUILog.h>
 #include "NCSelectionBox.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSelectionBox::NCSelectionBox
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCSelectionBox::NCSelectionBox( YWidget * parent, const string & nlabel )
     : YSelectionBox( parent, nlabel )
     , NCPadWidget( parent )
@@ -39,14 +33,8 @@ NCSelectionBox::NCSelectionBox( YWidget * parent, const string & nlabel )
   setLabel( nlabel );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSelectionBox::~NCSelectionBox
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCSelectionBox::~NCSelectionBox()
 {
   yuiDebug() << endl;
@@ -64,14 +52,8 @@ int NCSelectionBox::preferredHeight()
     return sze.H;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSelectionBox::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCSelectionBox::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
@@ -83,14 +65,8 @@ void NCSelectionBox::setEnabled( bool do_bv )
     YSelectionBox::setEnabled( do_bv );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSelectionBox::getCurrentItem
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCSelectionBox::getCurrentItem()
 {
   if ( !myPad()->Lines() )
@@ -99,14 +75,8 @@ int NCSelectionBox::getCurrentItem()
   return myPad()->CurPos().L;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSelectionBox::getLine
-//	METHOD TYPE : string
-//
-//	DESCRIPTION :
-//
+
+
 string NCSelectionBox::getLine( const int & index )
 {
     NCTableLine * line = const_cast<NCTableLine*>(myPad()->GetLine(index));
@@ -130,27 +100,15 @@ string NCSelectionBox::getLine( const int & index )
     return val;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSelectionBox::setCurrentItem
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCSelectionBox::setCurrentItem( int index )
 {
   myPad()->ScrlLine( index );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSelectionBox::selectItem
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCSelectionBox::selectItem( YItem *item, bool selected )
 {
     YSelectionBox::selectItem( item, selected );
@@ -176,14 +134,8 @@ void NCSelectionBox::selectItem( int index )
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSelectionBox::addItem
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCSelectionBox::addItem( YItem * item )
 {
     vector<NCTableCol*> Items( 1U, 0 );
@@ -204,28 +156,16 @@ void NCSelectionBox::addItem( const string & description, bool selected )
     YSelectionWidget::addItem( description, selected );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSelectionBox::setLabel
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCSelectionBox::setLabel( const string & nlabel )
 {
   YSelectionBox::setLabel( nlabel );
   NCPadWidget::setLabel( NCstring( nlabel ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSelectionBox::CreatePad
-//	METHOD TYPE : NCPad *
-//
-//	DESCRIPTION :
-//
+
+
 NCPad * NCSelectionBox::CreatePad()
 {
   wsze    psze( defPadSze() );
@@ -235,27 +175,15 @@ NCPad * NCSelectionBox::CreatePad()
   return npad;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSelectionBox::wRecoded
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCSelectionBox::wRecoded()
 {
   NCPadWidget::wRecoded();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSelectionBox::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCSelectionBox::wHandleInput( wint_t key )
 {
   NCursesEvent ret = NCursesEvent::none;
@@ -300,15 +228,10 @@ NCursesEvent NCSelectionBox::wHandleInput( wint_t key )
   return ret;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSelectionBox::deleteAllItems
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : cleares the table and the lists holding
+
+
+// cleares the table and the lists holding
 //                    the values
-//
 void NCSelectionBox::deleteAllItems() {
 	YSelectionBox::deleteAllItems();
 	clearTable();

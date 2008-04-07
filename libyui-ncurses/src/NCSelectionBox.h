@@ -27,12 +27,7 @@
 
 class NCSelectionBox;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCSelectionBox
-//
-//	DESCRIPTION :
-//
+
 class NCSelectionBox : public YSelectionBox, public NCPadWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCSelectionBox & OBJ );
@@ -102,6 +97,5 @@ class NCSelectionBox : public YSelectionBox, public NCPadWidget {
     void deleteAllItems();
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCSelectionBox_h

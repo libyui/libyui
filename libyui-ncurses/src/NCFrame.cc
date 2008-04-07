@@ -22,14 +22,8 @@
 #include "NCurses.h"
 #include "NCFrame.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFrame::NCFrame
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCFrame::NCFrame( YWidget * parent, const string & nlabel )
     : YFrame( parent, nlabel )
     , NCWidget( parent )
@@ -43,27 +37,15 @@ NCFrame::NCFrame( YWidget * parent, const string & nlabel )
   hotlabel = &label;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFrame::~NCFrame
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCFrame::~NCFrame()
 {
   yuiDebug() << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFrame::nicesize
-//	METHOD TYPE : long
-//
-//	DESCRIPTION :
-//
+
+
 long NCFrame::nicesize( YUIDimension dim )
 {
   defsze = wsze( firstChild()->preferredWidth(),
@@ -94,14 +76,8 @@ int NCFrame::preferredHeight()
     return defsze.H;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFrame::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCFrame::setSize( int newwidth, int newheight )
 {
   wsze csze( newheight, newwidth );
@@ -110,14 +86,8 @@ void NCFrame::setSize( int newwidth, int newheight )
   firstChild()->setSize( csze.W, csze.H );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFrame::setLabel
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCFrame::setLabel( const string & nlabel )
 {
   YFrame::setLabel( nlabel );
@@ -134,14 +104,8 @@ void NCFrame::setEnabled( bool do_bv )
     YFrame::setEnabled( do_bv );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFrame::setEnabling
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 //void NCFrame::setEnabling( bool do_bv )
 //{
 //  enabled = do_bv; // in YWidget
@@ -153,14 +117,8 @@ void NCFrame::setEnabled( bool do_bv )
 //  }
 //}
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFrame::gotBuddy
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCFrame::gotBuddy()
 {
   if ( !label.hasHotkey() )
@@ -175,14 +133,8 @@ bool NCFrame::gotBuddy()
   return false;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFrame::wRedraw
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCFrame::wRedraw()
 {
   if ( !win )

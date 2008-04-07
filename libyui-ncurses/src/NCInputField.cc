@@ -31,14 +31,8 @@
 #define DBG_CLASS "_NCInputField_"
 #endif
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCInputField::NCInputField
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCInputField::NCInputField( YWidget * parent,
 			    const string & nlabel,
 			    bool passwordMode,
@@ -69,14 +63,8 @@ NCInputField::NCInputField( YWidget * parent,
   //setText( ntext );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCInputField::~NCInputField
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCInputField::~NCInputField()
 {
   delete lwin;
@@ -84,67 +72,37 @@ NCInputField::~NCInputField()
   yuiDebug() << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCInputField::preferredWidth
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCInputField::preferredWidth()
 {
     return wGetDefsze().W;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCInputField::preferredHeight
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCInputField::preferredHeight()
 {
     return wGetDefsze().H;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCInputField::setEnabled
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCInputField::setEnabled( bool do_bv )
 {
     NCWidget::setEnabled( do_bv );
     YInputField::setEnabled( do_bv );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCInputField::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCInputField::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCInputField::setDefsze
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCInputField::setDefsze()
 {
   unsigned defwidth = maxFldLength ? maxFldLength : 5;
@@ -153,14 +111,8 @@ void NCInputField::setDefsze()
   defsze = wsze( label.height() + 1, defwidth );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCInputField::wCreate
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCInputField::wCreate( const wrect & newrect )
 {
   NCWidget::wCreate( newrect );
@@ -189,14 +141,8 @@ void NCInputField::wCreate( const wrect & newrect )
   fldlength=trect.Sze.W;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCInputField::wDelete
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCInputField::wDelete()
 {
   delete lwin;
@@ -206,14 +152,8 @@ void NCInputField::wDelete()
   NCWidget::wDelete();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCInputField::setLabel
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCInputField::setLabel( const string & nlabel )
 {
   label  = NCstring( nlabel );
@@ -223,14 +163,8 @@ void NCInputField::setLabel( const string & nlabel )
   Redraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCInputField::setValue
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCInputField::setValue( const std::string & ntext )
 {
   buffer = NCstring( ntext ).str();
@@ -242,14 +176,8 @@ void NCInputField::setValue( const std::string & ntext )
   tUpdate();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCInputField::value
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 string NCInputField::value( )
 {
     NCstring text ( buffer );
@@ -257,28 +185,16 @@ string NCInputField::value( )
     return text.Str();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCInputField::setValidChars
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCInputField::setValidChars( const string & validchars )
 {
   validChars = NCstring( validchars );
   YInputField::setValidChars( validchars );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCInputField::validKey
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCInputField::validKey( wint_t key ) const
 {
   // private: NCstring validChars;  
@@ -293,14 +209,8 @@ bool NCInputField::validKey( wint_t key ) const
   return( vwch.find( (wchar_t)key ) != wstring::npos );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCInputField::wRedraw
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCInputField::wRedraw()
 {
   if ( !win )
@@ -314,40 +224,22 @@ void NCInputField::wRedraw()
   tUpdate();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCInputField::bufferFull
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 inline bool NCInputField::bufferFull() const
 {
   return( maxInputLength && buffer.length() == maxInputLength );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCInputField::maxCursor
-//	METHOD TYPE : unsigned
-//
-//	DESCRIPTION :
-//
+
+
 inline unsigned NCInputField::maxCursor() const
 {
   return( bufferFull() ? buffer.length() - 1 : buffer.length() );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCInputField::tUpdate
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCInputField::tUpdate()
 {
   if ( !win )
@@ -432,14 +324,8 @@ void NCInputField::tUpdate()
   Update();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCInputField::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCInputField::wHandleInput( wint_t key )
 {
   NCursesEvent ret = NCursesEvent::none;

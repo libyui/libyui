@@ -21,14 +21,8 @@
 #include <YUILog.h>
 #include "NCPad.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPad::Destwin
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPad::Destwin( NCursesWindow * dwin )
 {
   if ( dwin != destwin ) {
@@ -52,14 +46,8 @@ void NCPad::Destwin( NCursesWindow * dwin )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPad::resize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPad::resize( wsze nsze )
 {
   SetPadSize( nsze ); // might be enlarged by NCPadWidget if redirected
@@ -74,28 +62,16 @@ void NCPad::resize( wsze nsze )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPad::updateScrollHint
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPad::updateScrollHint()
 {
   NCScrollHint::VSet( srect.Sze.H + maxspos.L, srect.Sze.H, srect.Pos.L );
   NCScrollHint::HSet( srect.Sze.W + maxspos.C, srect.Sze.W, srect.Pos.C );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPad::update
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCPad::update()
 {
   if ( destwin ) {
@@ -117,41 +93,23 @@ int NCPad::update()
   return OK;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPad::setpos
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCPad::setpos( const wpos & newpos )
 {
   srect.Pos = newpos.between( 0, maxspos );
   return update();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPad::wRecoded
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPad::wRecoded()
 {
   yuiDebug() << "NCPad::wRecoded" << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPad::handleInput
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCPad::handleInput( wint_t key )
 {
   bool handled = true;

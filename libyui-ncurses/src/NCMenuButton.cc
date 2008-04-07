@@ -23,14 +23,8 @@
 #include "NCMenuButton.h"
 #include "NCPopupMenu.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCMenuButton::NCMenuButton
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCMenuButton::NCMenuButton( YWidget * parent,
 			    string nlabel )
     : YMenuButton( parent, nlabel )
@@ -41,14 +35,8 @@ NCMenuButton::NCMenuButton( YWidget * parent,
   hotlabel = &label;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCMenuButton::~NCMenuButton
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCMenuButton::~NCMenuButton()
 {
   yuiDebug() << endl;
@@ -70,27 +58,15 @@ void NCMenuButton::setEnabled( bool do_bv )
     YMenuButton::setEnabled( do_bv );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCMenuButton::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCMenuButton::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCMenuButton::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCMenuButton::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
@@ -105,14 +81,8 @@ NCursesEvent NCMenuButton::wHandleInput( wint_t key )
   return ret;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCMenuButton::setLabel
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCMenuButton::setLabel( const string & nlabel )
 {
   label = NCstring( nlabel );
@@ -122,14 +92,8 @@ void NCMenuButton::setLabel( const string & nlabel )
   Redraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCMenuButton::wRedraw
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCMenuButton::wRedraw()
 {
   if ( !win )
@@ -161,27 +125,15 @@ void NCMenuButton::createMenu()
 }
 #endif
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCMenuButton::rebuildMenuTree
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCMenuButton::rebuildMenuTree()
 {
     // NOP
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCMenuButton::postMenu
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCMenuButton::postMenu()
 {
   wpos at( ScreenPos() + wpos( win->height(), 0 ) );

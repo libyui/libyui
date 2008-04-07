@@ -22,14 +22,8 @@
 #include "NCurses.h"
 #include "NCProgressBar.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCProgressBar::NCProgressBar
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCProgressBar::NCProgressBar( YWidget * parent,
 			      const string & nlabel,
 			      int maxValue )
@@ -51,14 +45,8 @@ NCProgressBar::NCProgressBar( YWidget * parent,
   wstate = NC::WSdumb;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCProgressBar::~NCProgressBar
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCProgressBar::~NCProgressBar()
 {
   delete lwin;
@@ -66,14 +54,8 @@ NCProgressBar::~NCProgressBar()
   yuiDebug() << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCProgressBar::nicesize
-//	METHOD TYPE : long
-//
-//	DESCRIPTION :
-//
+
+
 long NCProgressBar::nicesize( YUIDimension dim )
 {
   return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
@@ -95,41 +77,23 @@ void NCProgressBar::setEnabled( bool do_bv )
     YProgressBar::setEnabled( do_bv );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCProgressBar::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCProgressBar::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCProgressBar::setDefsze
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCProgressBar::setDefsze()
 {
   defsze = wsze( label.height() + 1,
 		 label.width() < 5 ? 5 : label.width() );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCProgressBar::wCreate
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCProgressBar::wCreate( const wrect & newrect )
 {
   NCWidget::wCreate( newrect );
@@ -156,14 +120,8 @@ void NCProgressBar::wCreate( const wrect & newrect )
 			    'r' );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCProgressBar::wDelete
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCProgressBar::wDelete()
 {
   delete lwin;
@@ -173,14 +131,8 @@ void NCProgressBar::wDelete()
   NCWidget::wDelete();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCProgressBar::setLabel
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCProgressBar::setLabel( const string & nlabel )
 {
   label = NCstring( nlabel );
@@ -189,14 +141,8 @@ void NCProgressBar::setLabel( const string & nlabel )
   Redraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCProgressBar::setValue
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCProgressBar::setValue( int newValue )
 {
   cval = newValue;
@@ -208,14 +154,8 @@ void NCProgressBar::setValue( int newValue )
   YProgressBar::setValue( newValue );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCProgressBar::wRedraw
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCProgressBar::wRedraw()
 {
   if ( !win )
@@ -229,14 +169,8 @@ void NCProgressBar::wRedraw()
   tUpdate();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCProgressBar::tUpdate
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCProgressBar::tUpdate()
 {
   if ( !win )

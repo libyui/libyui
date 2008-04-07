@@ -22,40 +22,22 @@
 #include "NCPopup.h"
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopup::NCPopup
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCPopup::NCPopup( const wpos at, const bool boxed )
     : NCDialog( YPopupDialog, at, boxed )
 {
 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopup::~NCPopup
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCPopup::~NCPopup()
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopup::popupDialog
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPopup::popupDialog()
 {
   initDialog();
@@ -66,27 +48,15 @@ void NCPopup::popupDialog()
   activate ( false );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopup::popdownDialog
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPopup::popdownDialog()
 {
   closeDialog();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopup::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCPopup::wHandleInput( wint_t ch )
 {
   if ( ch == 27 ) // ESC

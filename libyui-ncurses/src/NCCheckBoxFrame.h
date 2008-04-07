@@ -27,12 +27,7 @@
 
 class NCCheckBoxFrame;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCCheckBoxFrame
-//
-//	DESCRIPTION :
-//
+
 class NCCheckBoxFrame : public YCheckBoxFrame, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCCheckBoxFrame & OBJ );
@@ -88,6 +83,5 @@ class NCCheckBoxFrame : public YCheckBoxFrame, public NCWidget {
     virtual NCursesEvent wHandleInput( wint_t key );
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCCheckBoxFrame_h

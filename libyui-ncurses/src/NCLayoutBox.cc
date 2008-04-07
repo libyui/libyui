@@ -22,14 +22,8 @@
 #include "NCurses.h"
 #include "NCLayoutBox.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLayoutBox::NCLayoutBox
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCLayoutBox::NCLayoutBox( YWidget * parent,
 			  YUIDimension dimension )
     : YLayoutBox( parent, dimension )
@@ -39,27 +33,15 @@ NCLayoutBox::NCLayoutBox( YWidget * parent,
   wstate = NC::WSdumb;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLayoutBox::~NCLayoutBox
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCLayoutBox::~NCLayoutBox()
 {
   yuiDebug() << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLayoutBox::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCLayoutBox::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
@@ -72,14 +54,8 @@ void NCLayoutBox::setEnabled( bool do_bv )
     YLayoutBox::setEnabled( do_bv );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLayoutBox::moveChild
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCLayoutBox::moveChild( YWidget * child, int newx, int newy )
 {
   NCWidget * cw = dynamic_cast<NCWidget*>(child);

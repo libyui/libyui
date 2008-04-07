@@ -23,14 +23,8 @@
 
 #include <limits.h>
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTextPad::NCTextPad
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCTextPad::NCTextPad( int l, int c, const NCWidget & p )
     : NCPad( l, c, p )
     , lines( 1U, 0 )
@@ -41,26 +35,14 @@ NCTextPad::NCTextPad( int l, int c, const NCWidget & p )
   bkgd( p.widgetStyle().data );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTextPad::~NCTextPad
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCTextPad::~NCTextPad()
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTextPad::resize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTextPad::resize( wsze nsze )
 {
   SetPadSize( nsze ); // might be enlarged by NCPadWidget if redirected
@@ -75,14 +57,8 @@ void NCTextPad::resize( wsze nsze )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTextPad::assertSze
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTextPad::assertSze( wsze minsze )
 {
   if (    minsze.W > width()
@@ -90,55 +66,31 @@ void NCTextPad::assertSze( wsze minsze )
     resize( minsze );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTextPad::assertWidth
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTextPad::assertWidth( unsigned minw )
 {
   if ( minw >= (unsigned)width() ) // == for the '\n'
     resize( wsze( height(), minw + 10 ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTextPad::assertHeight
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTextPad::assertHeight( unsigned minh )
 {
   if ( minh > (unsigned)height() )
     resize( wsze( minh + 10, width() ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTextPad::CurPos
-//	METHOD TYPE : wpos
-//
-//	DESCRIPTION :
-//
+
+
 wpos NCTextPad::CurPos() const
 {
   return curs;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTextPad::cursor
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTextPad::cursor( bool on )
 {
   if ( on != curson ) {
@@ -152,14 +104,8 @@ void NCTextPad::cursor( bool on )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTextPad::setpos
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCTextPad::setpos()
 {
   bkgd( parw.widgetStyle().data );
@@ -167,14 +113,8 @@ int NCTextPad::setpos()
   return setpos( CurPos() );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTextPad::setpos
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCTextPad::setpos( const wpos & newpos )
 {
   wpos npos( newpos.between( 0, wpos( maxy(), maxx() ) ) );
@@ -204,14 +144,8 @@ int NCTextPad::setpos( const wpos & newpos )
   return NCPad::setpos( padpos );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTextPad::handleInput
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCTextPad::handleInput( wint_t key )
 {
   bool handled = true;
@@ -330,14 +264,8 @@ bool NCTextPad::handleInput( wint_t key )
   return handled;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTextPad::insert
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCTextPad::insert( wint_t key )
 {
   if ( key == 10 ) {
@@ -363,14 +291,8 @@ bool NCTextPad::insert( wint_t key )
   return true;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTextPad::openLine
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCTextPad::openLine()
 {
   assertHeight( lines.size() + 1 );
@@ -407,14 +329,8 @@ bool NCTextPad::openLine()
   return true;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTextPad::delch
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCTextPad::delch( bool previous )
 {
   if ( previous ) {
@@ -451,14 +367,8 @@ bool NCTextPad::delch( bool previous )
   return true;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTextPad::setText
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTextPad::setText( const NCtext & ntext )
 {
   bkgd( parw.widgetStyle().data );
@@ -501,14 +411,8 @@ void NCTextPad::setText( const NCtext & ntext )
   setpos( curs );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTextPad::getText
-//	METHOD TYPE : NCtext
-//
-//	DESCRIPTION :
-//
+
+
 wstring NCTextPad::getText() const
 {
   // just for inch(x,y) call, which isn't const due to

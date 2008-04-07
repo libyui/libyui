@@ -31,12 +31,7 @@ using namespace std;
 
 class NCComboBox;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCComboBox
-//
-//	DESCRIPTION :
-//
+
 class NCComboBox : public YComboBox, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCComboBox & OBJ );
@@ -136,6 +131,5 @@ class NCComboBox : public YComboBox, public NCWidget {
 
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCComboBox_h

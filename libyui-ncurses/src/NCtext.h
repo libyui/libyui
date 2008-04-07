@@ -28,12 +28,7 @@ using namespace std;
 #include "NCWidget.h"
 class NCursesWindow;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCtext
-//
-//	DESCRIPTION :
-//
+
 class NCtext {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCtext & OBJ );
@@ -73,14 +68,8 @@ class NCtext {
     const_iterator end()   const { return mtext.end(); }
 };
 
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NClabel
-//
-//	DESCRIPTION :
-//
+
 class NClabel : protected NCtext {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NClabel & OBJ );
@@ -172,6 +161,5 @@ class NClabel : protected NCtext {
     std::wstring::size_type   hotpos() const { return hasHotkey() ? operator[]( hotline ).hotpos() : wstring::npos; }
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCtext_h

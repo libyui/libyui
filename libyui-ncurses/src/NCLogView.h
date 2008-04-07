@@ -26,12 +26,7 @@
 
 class NCLogView;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCLogView
-//
-//	DESCRIPTION :
-//
+
 class NCLogView : public YLogView, public NCPadWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCLogView & OBJ );
@@ -86,6 +81,5 @@ class NCLogView : public YLogView, public NCPadWidget {
     }
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCLogView_h

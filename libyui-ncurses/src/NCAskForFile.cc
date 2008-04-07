@@ -40,14 +40,8 @@
 */
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCAskForFile::NCAskForFile
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCAskForFile::NCAskForFile( const wpos at,
 			    const string & iniDir,
 			    const string & filter,
@@ -64,14 +58,8 @@ NCAskForFile::NCAskForFile( const wpos at,
     setTextdomain( "ncurses" );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCAskForFile::NCAskForFile
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCAskForFile::~NCAskForFile( )
 {
 
@@ -111,14 +99,8 @@ string NCAskForFile::checkIniDir( string iniDir )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCAskForFile::createLayout
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCAskForFile::createLayout( const string & iniDir,
 				 const string & filter,
 				 const string & headline,
@@ -219,11 +201,7 @@ void NCAskForFile::createLayout( const string & iniDir,
     new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );  
 }
 
-///////////////////////////////////////////////////////////////////
-//
 // NCursesEvent & showDirPopup ()
-//
-//
 NCursesEvent & NCAskForFile::showDirPopup( )
 {
     postevent = NCursesEvent();
@@ -258,14 +236,8 @@ int NCAskForFile::preferredHeight()
     return NCurses::lines()-4;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopup::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCAskForFile::wHandleInput( wint_t ch )
 {
     if ( ch == 27 ) // ESC
@@ -274,14 +246,8 @@ NCursesEvent NCAskForFile::wHandleInput( wint_t ch )
     return NCDialog::wHandleInput( ch );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCAskForFile::updateFileList
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 void NCAskForFile::updateFileList()
 {
     // set new start dir and show the file list
@@ -292,14 +258,8 @@ void NCAskForFile::updateFileList()
 	fileName->setValue( fileList->getCurrentFile() );  
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCAskForFile::postAgain
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCAskForFile::postAgain( )
 {
     if( !postevent.widget )
@@ -386,14 +346,8 @@ bool NCAskForFile::postAgain( )
     return true;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCAskForFile::NCAskForFile
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCAskForFile::getCheckBoxValue( NCCheckBox * checkBox )
 {
     if ( checkBox )
@@ -405,14 +359,8 @@ bool NCAskForFile::getCheckBoxValue( NCCheckBox * checkBox )
     return false;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCAskForExistingFile::NCAskForExistingFile
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCAskForExistingFile::NCAskForExistingFile( const wpos at,
 					    const string & iniDir,
 					    const string & filter,
@@ -425,14 +373,8 @@ NCAskForExistingFile::NCAskForExistingFile( const wpos at,
 		  false );	// file name is not editable
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCAskForExistingFile::getFileName
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 string NCAskForExistingFile::getFileName()
 {
     if ( fileName->value() == "" )
@@ -441,14 +383,8 @@ string NCAskForExistingFile::getFileName()
 	return fileName->value();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCAskForExistingFile::NCAskForExistingFile
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCAskForSaveFileName::NCAskForSaveFileName( const wpos at,
 					    const string & iniDir,
 					    const string & filter,
@@ -461,14 +397,8 @@ NCAskForSaveFileName::NCAskForSaveFileName( const wpos at,
 		  true );	// file name is editable
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCAskForSaveFileName::NCAskForSaveFileName
-//	METHOD TYPE : string
-//
-//	DESCRIPTION :
-//
+
+
 string NCAskForSaveFileName::getFileName()
 {
     return fileName->value();

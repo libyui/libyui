@@ -26,7 +26,6 @@
 #include <YUILog.h>
 #include "NCstring.h"
 
-//////////////////////////////////////////////////////////////////
 
 // The default encoding is UTF-8. For real terminals this may be
 // changed with setConsoleFont().
@@ -34,17 +33,10 @@
 string	NCstring::termEncoding( "UTF-8" );
 
 
-///////////////////////////////////////////////////////////////////
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstring::NCstring
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCstring:: NCstring()
     : hotk     ( 0 )
     , hotp     ( wstring::npos )
@@ -53,14 +45,8 @@ NCstring:: NCstring()
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstring::NCstring
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCstring::NCstring( const NCstring & nstr )
     : hotk     ( nstr.hotk )
     , hotp     ( nstr.hotp )
@@ -68,14 +54,8 @@ NCstring::NCstring( const NCstring & nstr )
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstring::NCstring
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCstring::NCstring( const wstring & widestr )
     : hotk     ( 0 )
     , hotp     ( wstring::npos )
@@ -83,14 +63,8 @@ NCstring::NCstring( const wstring & widestr )
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstring::NCstring
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCstring::NCstring( const string & str )
     : hotk     ( 0 )
     , hotp     ( wstring::npos )
@@ -103,14 +77,8 @@ NCstring::NCstring( const string & str )
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstring::NCstring
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCstring::NCstring( const char * cstr )
     : hotk     ( 0 )
     , hotp     ( wstring::npos )
@@ -123,27 +91,15 @@ NCstring::NCstring( const char * cstr )
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstring::operator<<
-//	METHOD TYPE : ostream &
-//
-//	DESCRIPTION :
-//
+
+
 ostream & operator<<( ostream & STREAM, const NCstring & OBJ )
 {
    return STREAM <<  OBJ.Str() ;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstring::operator=
-//	METHOD TYPE : NCstring &
-//
-//	DESCRIPTION :
-//
+
+
 NCstring & NCstring::operator=( const NCstring & nstr )
 {
     if ( &nstr != this ) {
@@ -154,14 +110,8 @@ NCstring & NCstring::operator=( const NCstring & nstr )
     return *this;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstring::operator+=
-//	METHOD TYPE : NCstring &
-//
-//	DESCRIPTION :
-//
+
+
 NCstring & NCstring::operator+=( const NCstring & nstr )
 {
     wstr.append (nstr.wstr);
@@ -171,14 +121,8 @@ NCstring & NCstring::operator+=( const NCstring & nstr )
 static iconv_t fromwchar_cd	= (iconv_t)(-1);
 static string  to_name		= "";
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstring::RecodeWchar
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCstring::RecodeFromWchar( const wstring & in, const string & to_encoding, string* out)
 {
     iconv_t cd = (iconv_t)(-1);
@@ -262,14 +206,8 @@ bool NCstring::RecodeFromWchar( const wstring & in, const string & to_encoding, 
 static iconv_t towchar_cd	= (iconv_t)(-1);
 static string  from_name 	= "";
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstring::RecodeToWchar
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCstring::RecodeToWchar (const string& in, const string &from_encoding, wstring* out)
 {
     iconv_t cd = (iconv_t)(-1);
@@ -350,14 +288,8 @@ bool NCstring::RecodeToWchar (const string& in, const string &from_encoding, wst
     return true;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstring::Str
-//	METHOD TYPE : string
-//
-//	DESCRIPTION :
-//
+
+
 string NCstring::Str() const
 {
     string utf8str;
@@ -366,14 +298,8 @@ string NCstring::Str() const
     return utf8str;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstring::getHotkey
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCstring::getHotkey( ) const
 {
 
@@ -391,14 +317,8 @@ void NCstring::getHotkey( ) const
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstring::setTerminalEncoding
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCstring::setTerminalEncoding( const string & encoding )
 {
     if ( termEncoding != encoding )

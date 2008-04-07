@@ -22,14 +22,8 @@
 #include "NCurses.h"
 #include "NCRadioButtonGroup.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRadioButtonGroup::NCRadioButtonGroup
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCRadioButtonGroup::NCRadioButtonGroup( YWidget * parent )
     : YRadioButtonGroup( parent )
     , NCWidget( parent )
@@ -39,67 +33,37 @@ NCRadioButtonGroup::NCRadioButtonGroup( YWidget * parent )
   wstate = NC::WSdumb;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRadioButtonGroup::~NCRadioButtonGroup
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCRadioButtonGroup::~NCRadioButtonGroup()
 {
   yuiDebug() << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRadioButtonGroup::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRadioButtonGroup::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
   YRadioButtonGroup::setSize( newwidth, newheight );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRadioButtonGroup::addRadioButton
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRadioButtonGroup::addRadioButton( YRadioButton *button )
 {
   YRadioButtonGroup::addRadioButton( button );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRadioButtonGroup::removeRadioButton
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRadioButtonGroup::removeRadioButton( YRadioButton *button )
 {
   YRadioButtonGroup::removeRadioButton( button );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRadioButtonGroup::focusNextButton
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRadioButtonGroup::focusNextButton( )
 {
     int n = 0;
@@ -125,14 +89,8 @@ void NCRadioButtonGroup::focusNextButton( )
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRadioButtonGroup::focusPrevButton
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRadioButtonGroup::focusPrevButton()
 {
     int n = 0;

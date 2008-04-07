@@ -56,14 +56,8 @@ NCBusyIndicator* NCBusyIndicatorObject;
 void NCBusyIndicatorHandlerWrapper(int sig_num);
 #endif
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCBusyIndicator::NCBusyIndicator
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCBusyIndicator::NCBusyIndicator( YWidget * parent,
 			      const string & nlabel,
 			      int timeout )
@@ -97,14 +91,8 @@ NCBusyIndicator::NCBusyIndicator( YWidget * parent,
 #endif
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCBusyIndicator::~NCBusyIndicator
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCBusyIndicator::~NCBusyIndicator()
 {
   NCBusyIndicatorObject = NULL;
@@ -113,14 +101,8 @@ NCBusyIndicator::~NCBusyIndicator()
   yuiDebug() << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCBusyIndicator::nicesize
-//	METHOD TYPE : long
-//
-//	DESCRIPTION :
-//
+
+
 long NCBusyIndicator::nicesize( YUIDimension dim )
 {
   return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
@@ -142,41 +124,23 @@ void NCBusyIndicator::setEnabled( bool do_bv )
     YBusyIndicator::setEnabled( do_bv );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCBusyIndicator::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCBusyIndicator::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCBusyIndicator::setDefsze
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCBusyIndicator::setDefsze()
 {
   defsze = wsze( _label.height() + 1,
 		 _label.width() < 5 ? 5 : _label.width() );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCBusyIndicator::wCreate
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCBusyIndicator::wCreate( const wrect & newrect )
 {
   NCWidget::wCreate( newrect );
@@ -203,14 +167,8 @@ void NCBusyIndicator::wCreate( const wrect & newrect )
 			    'r' );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCBusyIndicator::wDelete
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCBusyIndicator::wDelete()
 {
   delete _lwin;
@@ -220,14 +178,8 @@ void NCBusyIndicator::wDelete()
   NCWidget::wDelete();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCBusyIndicator::setLabel
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCBusyIndicator::setLabel( const string & nlabel )
 {
   _label = NCstring( nlabel );
@@ -236,14 +188,9 @@ void NCBusyIndicator::setLabel( const string & nlabel )
   Redraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCBusyIndicator::handler
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : handler, called by NCBusyIndicatorHandlerWrapper
-//
+
+
+// handler, called by NCBusyIndicatorHandlerWrapper
 void NCBusyIndicator::handler(int sig_num)
 {
     _timer_progress+=_timer_divisor;
@@ -262,14 +209,9 @@ void NCBusyIndicator::handler(int sig_num)
 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCBusyIndicatorHandlerWrapper
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : static wrapper for member function handler
-//
+
+
+// static wrapper for member function handler
 #if 0
 void NCBusyIndicatorHandlerWrapper(int sig_num)
 {
@@ -279,14 +221,9 @@ void NCBusyIndicatorHandlerWrapper(int sig_num)
 }
 #endif
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCBusyIndicator::update
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : calculate position of moving bar
-//
+
+
+// calculate position of moving bar
 void NCBusyIndicator::update()
 {
     if (!_alive)
@@ -306,14 +243,9 @@ void NCBusyIndicator::update()
 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCBusyIndicator::setAlive
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : set alive or stalled
-//
+
+
+// set alive or stalled
 void NCBusyIndicator::setAlive( bool newAlive)
 {
     _alive = newAlive;
@@ -323,14 +255,9 @@ void NCBusyIndicator::setAlive( bool newAlive)
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCBusyIndicator::setTimeout
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : set timeout
-//
+
+
+// set timeout
 void NCBusyIndicator::setTimeout( int newTimeout)
 {
     if (newTimeout < 1)
@@ -342,14 +269,9 @@ void NCBusyIndicator::setTimeout( int newTimeout)
     _timer_divisor = (double) REPAINT_INTERVAL / (double) _timeout;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCBusyIndicator::wRedraw
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : draw busy indicator widget
-//
+
+
+// draw busy indicator widget
 void NCBusyIndicator::wRedraw()
 {
   if ( !win )
@@ -363,14 +285,9 @@ void NCBusyIndicator::wRedraw()
   tUpdate();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCBusyIndicator::tUpdate
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : draw busy bar
-//
+
+
+// draw busy bar
 void NCBusyIndicator::tUpdate()
 {
   if ( !win )

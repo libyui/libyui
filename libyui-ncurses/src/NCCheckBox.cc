@@ -23,18 +23,11 @@
 #include "NCCheckBox.h"
 
 
-///////////////////////////////////////////////////////////////////
 
 unsigned char NCCheckBox::statetag[3] = { '?', ' ', 'x' };
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBox::NCCheckBox
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCCheckBox::NCCheckBox( YWidget * parent,
 			const string & nlabel,
 			bool checked )
@@ -48,14 +41,8 @@ NCCheckBox::NCCheckBox( YWidget * parent,
   hotlabel = &label;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBox::~NCCheckBox
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCCheckBox::~NCCheckBox()
 {
   yuiDebug() << endl;
@@ -77,27 +64,16 @@ void NCCheckBox::setEnabled( bool do_bv )
     YCheckBox::setEnabled( do_bv );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBox::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCCheckBox::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBox::setLabel
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : set label
-//
+
+
+// set label
 void NCCheckBox::setLabel( const string & nlabel )
 {
   label  = NCstring( nlabel );
@@ -107,14 +83,8 @@ void NCCheckBox::setLabel( const string & nlabel )
   Redraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBox::setValue
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCCheckBox::setValue( YCheckBoxState state )
 {
     switch ( state )
@@ -137,14 +107,8 @@ void NCCheckBox::setValue( YCheckBoxState state )
     Redraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBox::value
-//	METHOD TYPE : YCheckBoxState
-//
-//	DESCRIPTION :
-//
+
+
 YCheckBoxState NCCheckBox::value()
 {
     if ( checkstate == S_DC )
@@ -156,14 +120,8 @@ YCheckBoxState NCCheckBox::value()
 	return YCheckBox_off;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBox::wRedraw
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCCheckBox::wRedraw()
 {
   if ( !win )
@@ -177,14 +135,8 @@ void NCCheckBox::wRedraw()
   win->printw( 0, 1, "%c", statetag[checkstate] );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCCheckBox::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCCheckBox::wHandleInput( wint_t key )
 {
   NCursesEvent ret;

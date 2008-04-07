@@ -26,12 +26,7 @@
 
 class NCReplacePoint;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCReplacePoint
-//
-//	DESCRIPTION :
-//
+
 class NCReplacePoint : public YReplacePoint, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCReplacePoint & OBJ );
@@ -65,6 +60,5 @@ class NCReplacePoint : public YReplacePoint, public NCWidget {
     virtual void setEnabled( bool do_bv );
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCReplacePoint_h

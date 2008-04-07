@@ -22,14 +22,8 @@
 #include "NCurses.h"
 #include "NCSquash.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSquash::NCSquash
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCSquash::NCSquash( YWidget * parent,
 		    bool hsquash, bool vsquash )
     : YSquash( parent, hsquash, vsquash )
@@ -39,27 +33,15 @@ NCSquash::NCSquash( YWidget * parent,
   wstate = NC::WSdumb;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSquash::~NCSquash
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCSquash::~NCSquash()
 {
   yuiDebug() << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCSquash::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCSquash::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );

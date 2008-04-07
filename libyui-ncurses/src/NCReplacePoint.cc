@@ -22,14 +22,8 @@
 #include "NCurses.h"
 #include "NCReplacePoint.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCReplacePoint::NCReplacePoint
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCReplacePoint::NCReplacePoint( YWidget * parent )
     : YReplacePoint( parent )
     , NCWidget( parent )
@@ -38,27 +32,15 @@ NCReplacePoint::NCReplacePoint( YWidget * parent )
   wstate = NC::WSdumb;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCReplacePoint::~NCReplacePoint
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCReplacePoint::~NCReplacePoint()
 {
   yuiDebug() << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCReplacePoint::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCReplacePoint::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );

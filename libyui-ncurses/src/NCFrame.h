@@ -26,12 +26,7 @@
 
 class NCFrame;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCFrame
-//
-//	DESCRIPTION :
-//
+
 class NCFrame : public YFrame, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCFrame & OBJ );
@@ -74,6 +69,5 @@ class NCFrame : public YFrame, public NCWidget {
     virtual void setEnabled( bool do_bv );
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCFrame_h

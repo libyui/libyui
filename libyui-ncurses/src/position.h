@@ -22,10 +22,7 @@
 #include <iosfwd>
 
 
-///////////////////////////////////////////////////////////////////
-//
-//   CLASS NAME : wpair
-//
+
 class wpair {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const wpair & OBJ );
@@ -82,14 +79,9 @@ class wpair {
 
 };
 
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//   CLASS NAME : wpos
-//
-//   DESCRIPTION : screen position in (line,col)
-//
+
+// screen position in (line,col)
 class wpos : public wpair {
 
   public:
@@ -120,14 +112,9 @@ class wpos : public wpair {
 
 extern std::ostream & operator<<( std::ostream & STREAM, const wpos & OBJ );
 
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//   CLASS NAME : wsze
-//
-//   DESCRIPTION : screen dimension in (height,width)
-//
+
+// screen dimension in (height,width)
 class wsze : public wpair {
 
   public:
@@ -156,14 +143,9 @@ class wsze : public wpair {
 
 extern std::ostream & operator<<( std::ostream & STREAM, const wsze & OBJ );
 
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//   CLASS NAME : wrect
-//
-//   DESCRIPTION : rectangle {wpos,wsze}
-//
+
+// rectangle {wpos,wsze}
 class wrect {
 
   public:
@@ -228,6 +210,5 @@ class wrect {
 
 extern std::ostream & operator<<( std::ostream & STREAM, const wrect & OBJ );
 
-///////////////////////////////////////////////////////////////////
 
 #endif // wpair_h

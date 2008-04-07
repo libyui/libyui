@@ -26,12 +26,7 @@
 
 class NCIntField;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCIntField
-//
-//	DESCRIPTION :
-//
+
 class NCIntField : public YIntField, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCIntField & OBJ );
@@ -102,6 +97,5 @@ class NCIntField : public YIntField, public NCWidget {
     virtual void setEnabled( bool do_bv );
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCIntField_h

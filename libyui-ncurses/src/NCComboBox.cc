@@ -25,14 +25,8 @@
 #include "NCComboBox.h"
 #include "NCPopupList.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::NCComboBox
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCComboBox::NCComboBox( YWidget * parent, const string & nlabel,
 			bool editable )
     : YComboBox( parent, nlabel, editable )
@@ -54,14 +48,8 @@ NCComboBox::NCComboBox( YWidget * parent, const string & nlabel,
   setText( "" );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::~NCComboBox
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCComboBox::~NCComboBox()
 {
   delete lwin;
@@ -69,67 +57,37 @@ NCComboBox::~NCComboBox()
   yuiDebug() << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::preferredWidth
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCComboBox::preferredWidth()
 {
     return wGetDefsze().W;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::preferredHeight
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCComboBox::preferredHeight()
 {
     return wGetDefsze().H;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::setEnabled
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCComboBox::setEnabled( bool do_bv )
 {
     NCWidget::setEnabled( do_bv );
     YComboBox::setEnabled( do_bv );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCComboBox::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::setDefsze
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCComboBox::setDefsze()
 {
   // Height: label h. + 1 (text area)
@@ -140,14 +98,8 @@ void NCComboBox::setDefsze()
 		 (label.width() > longest_line) ? label.width() : longest_line + 2  );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::wCreate
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCComboBox::wCreate( const wrect & newrect )
 {
   NCWidget::wCreate( newrect );
@@ -175,14 +127,8 @@ void NCComboBox::wCreate( const wrect & newrect )
   fldlength = trect.Sze.W ? trect.Sze.W - 1 : 0;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::wDelete
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCComboBox::wDelete()
 {
   delete lwin;
@@ -192,14 +138,8 @@ void NCComboBox::wDelete()
   NCWidget::wDelete();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::addItem
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCComboBox::addItem( YItem * item )
 {
     if ( item )
@@ -225,14 +165,8 @@ void NCComboBox::addItem( YItem * item )
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::addItem
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCComboBox::addItem( const string & label, bool selected )
 {
     YItem * newItem = new YItem( label, selected );
@@ -242,14 +176,8 @@ void NCComboBox::addItem( const string & label, bool selected )
 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::setLabel
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCComboBox::setLabel( const string & nlabel )
 {
   label = NCstring( nlabel );
@@ -259,14 +187,8 @@ void NCComboBox::setLabel( const string & nlabel )
   Redraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::setCurrentItem
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCComboBox::setCurrentItem( int nindex )
 {
   int idx = 0;
@@ -286,28 +208,16 @@ void NCComboBox::setCurrentItem( int nindex )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::getCurrentItem
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCComboBox::getCurrentItem() const
 {
   return index;
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::setText
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCComboBox::setText( const string & ntext )
 {
   privText = NCstring( ntext );
@@ -324,14 +234,8 @@ void NCComboBox::setText( const string & ntext )
   Redraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::text
-//	METHOD TYPE : string
-//
-//	DESCRIPTION :
-//
+
+
 string NCComboBox::text()
 {
     if ( modified )
@@ -349,28 +253,16 @@ string NCComboBox::text()
     return privText.Str();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::setValidChars
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCComboBox::setValidChars( const string & validchars )
 {
   validChars = NCstring( validchars );
   YComboBox::setValidChars( validchars );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::validKey
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCComboBox::validKey( wint_t key ) const
 {
   // private: NCstring validChars;
@@ -385,14 +277,8 @@ bool NCComboBox::validKey( wint_t key ) const
   return( vwch.find( (wchar_t)key ) != wstring::npos );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::wRecoded
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCComboBox::wRecoded()
 {
   if ( modified ) {
@@ -403,14 +289,8 @@ void NCComboBox::wRecoded()
   wRedraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::wRedraw
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCComboBox::wRedraw()
 {
   if ( !win )
@@ -424,14 +304,8 @@ void NCComboBox::wRedraw()
   tUpdate();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::tUpdate
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCComboBox::tUpdate()
 {
   if ( !win )
@@ -518,14 +392,8 @@ void NCComboBox::tUpdate()
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCComboBox::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
@@ -648,14 +516,8 @@ NCursesEvent NCComboBox::wHandleInput( wint_t key )
 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::listPopup
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCComboBox::listPopup()
 {
   int idx = -1;
@@ -672,15 +534,10 @@ int NCComboBox::listPopup()
   return idx;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCComboBox::deleteAllItems
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : cleares the table and the lists holding
+
+
+// cleares the table and the lists holding
 //                    the values
-//
 void NCComboBox::deleteAllItems() {
 	YComboBox::deleteAllItems();
 	deflist.clear();

@@ -26,12 +26,7 @@
 
 class NCEmpty;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCEmpty
-//
-//	DESCRIPTION :
-//
+
 class NCEmpty : public YEmpty, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCEmpty & OBJ );
@@ -64,6 +59,5 @@ class NCEmpty : public YEmpty, public NCWidget {
      virtual void setEnabled( bool do_bv );
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCEmpty_h

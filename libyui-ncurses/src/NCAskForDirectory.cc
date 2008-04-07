@@ -39,14 +39,8 @@
 */
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCAskForExistingDirectory::NCAskForExistingDirectory
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCAskForExistingDirectory::NCAskForExistingDirectory( const wpos at,
 						      const string & iniDir,
 						      const string & headline )
@@ -61,27 +55,15 @@ NCAskForExistingDirectory::NCAskForExistingDirectory( const wpos at,
     setTextdomain( "ncurses" );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCAskForExistingDirectory::~NCAskForExistingDirectory
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCAskForExistingDirectory::~NCAskForExistingDirectory()
 {
 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCAskForExistingDirectory::createLayout
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCAskForExistingDirectory::createLayout( const string & iniDir,
 					      const string & headline )
 {
@@ -138,11 +120,7 @@ void NCAskForExistingDirectory::createLayout( const string & iniDir,
     new NCSpacing( hSplit1, YD_HORIZ, true, 0.2 );  
 }
 
-///////////////////////////////////////////////////////////////////
-//
 // NCursesEvent & showDirPopup ()
-//
-//
 NCursesEvent & NCAskForExistingDirectory::showDirPopup( )
 {
     postevent = NCursesEvent();
@@ -178,14 +156,8 @@ int NCAskForExistingDirectory::preferredHeight()
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopup::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCAskForExistingDirectory::wHandleInput( wint_t ch )
 {
     if ( ch == 27 ) // ESC
@@ -194,14 +166,8 @@ NCursesEvent NCAskForExistingDirectory::wHandleInput( wint_t ch )
     return NCDialog::wHandleInput( ch );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCAskForExistingDirectory::postAgain
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCAskForExistingDirectory::postAgain( )
 {
     if( !postevent.widget )

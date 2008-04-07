@@ -55,45 +55,30 @@ NCPackageSelectorPluginStub::~NCPackageSelectorPluginStub()
     // NOP
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPackageSelectorPluginStub::createPackageSelector
-//	METHOD TYPE : YWidget
-//
-//	DESCRIPTION : Create NCPackageSelectorStart which reads the layout
+
+
+// Create NCPackageSelectorStart which reads the layout
 //                    term of the package selection dialog, creates the widget
 //		      tree and creates the NCPackageSelector.
-//
 YPackageSelector * NCPackageSelectorPluginStub::createPackageSelector( YWidget * parent,
 								   long modeFlags )
 {
     return impl->createPackageSelector( parent, modeFlags );    
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPackageSelectorPluign::createPkgSpecial
-//	METHOD TYPE : YWidget
-//
-//	DESCRIPTION : creates special widgets used for the package selection
+
+
+// creates special widgets used for the package selection
 //		      dialog (which do not have a corresponding widget in qt-ui)
-//
 YWidget * NCPackageSelectorPluginStub::createPkgSpecial( YWidget *parent, const string &subwidget )
 {
     return impl->createPkgSpecial( parent, subwidget );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPackageSelectorPLugin::runPkgSelection
-//	METHOD TYPE : YEvent *
-//
-//	DESCRIPTION : Implementation of UI builtin RunPkgSelection() which
+
+
+// Implementation of UI builtin RunPkgSelection() which
 //		      has to be called after OpenDialog( `PackageSelector() ).
-//
 YEvent * NCPackageSelectorPluginStub::runPkgSelection(  YDialog * dialog,
 						    YWidget * selector )
 {

@@ -25,57 +25,31 @@
 #include <wchar.h>		// wcwidth
 #include <langinfo.h>
 
-///////////////////////////////////////////////////////////////////
 
 const NCstring NCtext::emptyStr;
 
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCtext::NCtext
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCtext::NCtext( const NCstring & nstr )
 {
   lset( nstr );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCtext::NCtext
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCtext::NCtext( const NCstring & nstr, size_t columns )
 {
   lbrset( nstr, columns );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCtext::~NCtext
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCtext::~NCtext()
 {}
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCtext::lset
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCtext::lset( const NCstring & ntext )
 {
     // FIXME: rewrite this function so one understands it
@@ -111,14 +85,8 @@ void NCtext::lset( const NCstring & ntext )
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCtext::lbrset
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCtext::lbrset( const NCstring & ntext, size_t columns )
 {
     mtext.clear();
@@ -161,40 +129,22 @@ void NCtext::lbrset( const NCstring & ntext, size_t columns )
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCtext::Lines
-//	METHOD TYPE : unsigned
-//
-//	DESCRIPTION :
-//
+
+
 unsigned NCtext::Lines() const
 {
   return mtext.size();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCtext::append
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCtext::append( const NCstring &line )
 {
     mtext.push_back( line );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCtext::Columns
-//	METHOD TYPE : unsigned
-//
-//	DESCRIPTION :
-//
+
+
 size_t NCtext::Columns() const
 {
   size_t llen = 0;		// longest line
@@ -217,14 +167,8 @@ size_t NCtext::Columns() const
   return llen;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCtext::operator[]
-//	METHOD TYPE : const NCstring &
-//
-//	DESCRIPTION :
-//
+
+
 const NCstring & NCtext::operator[]( wstring::size_type idx ) const
 {
   if ( idx >= Lines() )
@@ -248,20 +192,10 @@ ostream & operator<<( ostream & STREAM, const NCtext & OBJ )
   return STREAM << "[Text:" << OBJ.Lines() << ',' << OBJ.Columns() << ']';
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NClabel
-//
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NClabel::stripHotkey
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
+
 void NClabel::stripHotkey()
 {
   hotline = wstring::npos;
@@ -275,14 +209,8 @@ void NClabel::stripHotkey()
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NClabel::drawAt
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NClabel::drawAt( NCursesWindow & w, chtype style, chtype hotstyle,
 		      const wrect & dim,
 		      const NC::ADJUST adjust,

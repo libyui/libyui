@@ -28,12 +28,7 @@ using namespace std;
 #include "NCtext.h"
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCTextPad
-//
-//	DESCRIPTION :
-//
+
 class NCTextPad : public NCPad {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCTextPad & OBJ );
@@ -88,6 +83,5 @@ class NCTextPad : public NCPad {
     void setInputMaxLength( int nr );
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCTextPad_h

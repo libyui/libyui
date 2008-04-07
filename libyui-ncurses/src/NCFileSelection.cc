@@ -32,14 +32,8 @@
   Textdomain "ncurses"
 */
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFileInfo::NCFileInfo
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCFileInfo::NCFileInfo( string 	fileName,
 			struct stat64 *	statInfo,
 			bool 	link )
@@ -118,14 +112,8 @@ NCFileInfo::NCFileInfo( string 	fileName,
 	_perm += "-";
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFileInfo::NCFileInfo
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCFileInfo::NCFileInfo( )
 {
     _name   = "";
@@ -141,14 +129,8 @@ NCFileInfo::NCFileInfo( )
     _mtime  = (time_t)0;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFileSelectionTag::NCFileSelectionTag
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCFileSelectionTag::NCFileSelectionTag( const NCFileInfo & info )
    : NCTableCol( NCstring( "  " ), SEPARATOR )
    , fileInfo( info )
@@ -156,14 +138,8 @@ NCFileSelectionTag::NCFileSelectionTag( const NCFileInfo & info )
 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFileSelectionTag::DrawAt
-//	METHOD TYPE : virtual DrawAt
-//
-//	DESCRIPTION :
-//
+
+
 void NCFileSelectionTag::DrawAt( NCursesWindow & w, const wrect at,
 				 NCTableStyle & tableStyle,
 				 NCTableLine::STATE linestate,
@@ -175,14 +151,8 @@ void NCFileSelectionTag::DrawAt( NCursesWindow & w, const wrect at,
     w.addch( at.Pos.L, at.Pos.C +1, fileInfo._tag.c_str()[1] );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFileSelection::NCFileSelection
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCFileSelection::NCFileSelection( YWidget * parent,
 				  YTableHeader * tableHeader,
 				  NCFileSelectionType type,
@@ -223,14 +193,8 @@ NCFileSelection::NCFileSelection( YWidget * parent,
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFileSelection::~NCFileSelection
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCFileSelection::~NCFileSelection()
 {
     yuiDebug() << endl;
@@ -238,12 +202,8 @@ NCFileSelection::~NCFileSelection()
 
 
 
-//////////////////////////////////////////////////////////////////
-//
 // getCurrentLine()
-//
 // returns the currently selected line 
-//
 string  NCFileSelection::getCurrentLine( )
 {
     int index = getCurrentItem();
@@ -259,14 +219,8 @@ string  NCFileSelection::getCurrentLine( )
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFileSelection::setCurrentDir
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCFileSelection::setCurrentDir()
 {
     string selected = getCurrentLine();
@@ -296,14 +250,8 @@ void NCFileSelection::setCurrentDir()
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFileSelection::addLine
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCFileSelection::addLine( const vector<string> & elements,
 			       const NCFileInfo & info )
 {
@@ -319,24 +267,14 @@ void NCFileSelection::addLine( const vector<string> & elements,
     myPad()->Append( Items );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFileSelection::deleteAllItems
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCFileSelection::deleteAllItems()
 {
     return NCTable::deleteAllItems();  
 }
 
-///////////////////////////////////////////////////////////////////
-//
 // createListEntry
-//
-//
 bool NCFileTable::createListEntry ( const NCFileInfo & fileInfo )
 {
     vector<string> data;
@@ -372,11 +310,7 @@ bool NCFileTable::createListEntry ( const NCFileInfo & fileInfo )
     return true;
 }
 
-///////////////////////////////////////////////////////////////////
-//
 // createListEntry
-//
-//
 bool NCDirectoryTable::createListEntry ( const NCFileInfo & fileInfo )
 {
     vector<string> data;
@@ -409,14 +343,8 @@ bool NCDirectoryTable::createListEntry ( const NCFileInfo & fileInfo )
     return true;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFileSelection::getFileInfo
-//	METHOD TYPE : NCFileInfo
-//
-//	DESCRIPTION :
-//
+
+
 NCFileInfo NCFileSelection::getFileInfo( int index )
 {
     // get the tag 
@@ -427,14 +355,8 @@ NCFileInfo NCFileSelection::getFileInfo( int index )
     return cc->getFileInfo();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFileSelectionTag::getTag
-//	METHOD TYPE : NCFileSelectionTag
-//
-//	DESCRIPTION :
-//
+
+
 NCFileSelectionTag * NCFileSelection::getTag( const int & index )
 {
     // get the table line 
@@ -449,16 +371,9 @@ NCFileSelectionTag * NCFileSelection::getTag( const int & index )
 }
 
 
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFileTable::NCFileTable
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCFileTable::NCFileTable( YWidget * parent,
 			  YTableHeader * tableHeader,
 			  NCFileSelectionType type,
@@ -486,12 +401,8 @@ NCFileTable::NCFileTable( YWidget * parent,
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
 // fillHeader
-//
 // Fillup the column headers of the file table 
-//
 void NCFileTable::fillHeader( )
 {
     vector<string> header;
@@ -530,14 +441,8 @@ void NCFileTable::fillHeader( )
     setHeader( header );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//     METHOD NAME : NCFileTable::filterMatch
-//     METHOD TYPE : bool
-//
-//     DESCRIPTION :
-//
+
+
 bool NCFileTable::filterMatch( const string & fileEntry )
 {
     if ( pattern.empty() )
@@ -554,14 +459,8 @@ bool NCFileTable::filterMatch( const string & fileEntry )
     return match;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//     METHOD NAME : NCFileSelection::handleKeyEvents
-//     METHOD TYPE : NCursesEvent
-//
-//     DESCRIPTION :
-//
+
+
 NCursesEvent NCFileSelection::handleKeyEvents( wint_t key )
 {
     NCursesEvent ret = NCursesEvent::none; 
@@ -583,14 +482,8 @@ NCursesEvent NCFileSelection::handleKeyEvents( wint_t key )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//     METHOD NAME : NCFileTable::wHandleInput
-//     METHOD TYPE : NCursesEvent
-//
-//     DESCRIPTION :
-//
+
+
 NCursesEvent NCFileTable::wHandleInput( wint_t key )
 {
     NCursesEvent ret = handleKeyEvents( key );
@@ -624,14 +517,8 @@ NCursesEvent NCFileTable::wHandleInput( wint_t key )
     return ret;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCFileTable:fillList
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCFileTable::fillList ( )
 {
     struct stat64 	statInfo;
@@ -709,16 +596,9 @@ bool NCFileTable::fillList ( )
     return true;
 }
 
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCDirectoryTable::NCDirectoryTable
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCDirectoryTable::NCDirectoryTable( YWidget * parent,
 				    YTableHeader * tableHeader,
 				    NCFileSelectionType type,
@@ -728,12 +608,8 @@ NCDirectoryTable::NCDirectoryTable( YWidget * parent,
     //fillHeader();    
 }
 
-///////////////////////////////////////////////////////////////////
-//
 // fillHeader
-//
 // Fillup the column headers of the table 
-//
 void NCDirectoryTable::fillHeader( )
 {
     vector<string> header;
@@ -767,14 +643,8 @@ void NCDirectoryTable::fillHeader( )
     setHeader( header );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCDirectoryTable:fillList
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCDirectoryTable::fillList ( )
 {
     struct stat64 	statInfo;
@@ -845,14 +715,8 @@ bool NCDirectoryTable::fillList ( )
     return true;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//     METHOD NAME : NCDirectory::wHandleInput
-//     METHOD TYPE : NCursesEvent
-//
-//     DESCRIPTION :
-//
+
+
 NCursesEvent NCDirectoryTable::wHandleInput( wint_t key )
 {
     NCursesEvent ret = handleKeyEvents( key );

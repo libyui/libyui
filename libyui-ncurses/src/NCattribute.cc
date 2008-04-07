@@ -27,14 +27,9 @@ using namespace std;
 #include "NCattribute.h"
 #include "stringutil.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCattribute::_init
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : BW defaults
-//
+
+
+// BW defaults
 void NCattribute::_init()
 {
   vector<chtype> & attribs( attribset[ATTRDEF] );
@@ -74,11 +69,7 @@ void NCattribute::_init()
     attribset[i] = attribs;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCattribute
-//
-///////////////////////////////////////////////////////////////////
+
 
 static short dfg = -1;
 static short dbg = -1;
@@ -173,14 +164,8 @@ inline chtype scanAttrib( const string & str ) {
   return ret;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCattrcolor::scanLine
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCattrcolor::scanLine( vector<chtype> & attribs, const string & line )
 {
   vector<string> field;
@@ -254,14 +239,8 @@ void NCattrcolor::scanLine( vector<chtype> & attribs, const string & line )
 #undef IF
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCattrcolor::scanFile
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCattrcolor::scanFile( vector<chtype> & attribs )
 {
 #if 0
@@ -285,14 +264,8 @@ bool NCattrcolor::scanFile( vector<chtype> & attribs )
   return false;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCattrcolor::defInitSet
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCattrcolor::defInitSet( vector<chtype> & attribs, short f, short b )
 {
   //
@@ -345,14 +318,9 @@ void NCattrcolor::defInitSet( vector<chtype> & attribs, short f, short b )
   scanLine( attribs,	"NCARTcyan	CYA	WHT"		 );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCattrcolor::_init
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Color defaults
-//
+
+
+// Color defaults
 void NCattrcolor::_init()
 {
   defInitSet( attribset[ATTRDEF], COLOR_BLACK, COLOR_WHITE );

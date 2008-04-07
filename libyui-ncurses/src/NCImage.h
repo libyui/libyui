@@ -26,12 +26,7 @@
 
 class NCImage;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCImage
-//
-//	DESCRIPTION :
-//
+
 class NCImage : public YImage, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCImage & OBJ );
@@ -67,6 +62,5 @@ class NCImage : public YImage, public NCWidget {
     virtual void setEnabled( bool do_bv );
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCImage_h

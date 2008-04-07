@@ -23,12 +23,7 @@
 
 #include "NCDialog.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCPopup
-//
-//	DESCRIPTION :
-//
+
 class NCPopup : public NCDialog {
 
   NCPopup & operator=( const NCPopup & );

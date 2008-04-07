@@ -29,12 +29,7 @@ class NCMultiSelectionBox;
 class NCTableTag;
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCTableTag
-//
-//	DESCRIPTION :
-//
+
 class NCTableTag : public NCTableCol {
 
   private:
@@ -73,12 +68,7 @@ class NCTableTag : public NCTableCol {
 };
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCMultiSelectionBox
-//
-//	DESCRIPTION :
-//
+
 class NCMultiSelectionBox : public YMultiSelectionBox, public NCPadWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCMultiSelectionBox & OBJ );
@@ -158,6 +148,5 @@ class NCMultiSelectionBox : public YMultiSelectionBox, public NCPadWidget {
     void clearItems() { return myPad()->ClearTable(); }
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCMultiSelectionBox_h

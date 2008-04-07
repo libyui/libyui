@@ -26,12 +26,7 @@
 
 class NCSquash;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCSquash
-//
-//	DESCRIPTION :
-//
+
 class NCSquash : public YSquash, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCSquash & OBJ );
@@ -65,6 +60,5 @@ class NCSquash : public YSquash, public NCWidget {
     virtual void setEnabled( bool do_bv );
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCSquash_h

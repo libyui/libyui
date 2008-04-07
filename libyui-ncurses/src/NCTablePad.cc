@@ -29,14 +29,8 @@
 #define DBG_CLASS "_NCTablePad_"
 #endif
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTablePad::NCTablePad
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCTablePad::NCTablePad( int lines, int cols, const NCWidget & p )
     : NCPad( lines, cols, p )
     , Headpad    ( 1, 1 )
@@ -49,41 +43,23 @@ NCTablePad::NCTablePad( int lines, int cols, const NCWidget & p )
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTablePad::~NCTablePad
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCTablePad::~NCTablePad()
 {
   ClearTable();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTablePad::assertLine
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTablePad::assertLine( unsigned idx )
 {
   if ( idx >= Lines() )
     SetLines( idx + 1 );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTablePad::SetLines
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTablePad::SetLines( unsigned idx )
 {
   if ( idx == Lines() )
@@ -106,14 +82,8 @@ void NCTablePad::SetLines( unsigned idx )
   DirtyFormat();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTablePad::SetLines
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTablePad::SetLines( vector<NCTableLine*> & nItems )
 {
   SetLines( 0 );
@@ -126,14 +96,8 @@ void NCTablePad::SetLines( vector<NCTableLine*> & nItems )
   DirtyFormat();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTablePad::AddLine
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTablePad::AddLine( unsigned idx, NCTableLine * item )
 {
   assertLine( idx );
@@ -143,14 +107,8 @@ void NCTablePad::AddLine( unsigned idx, NCTableLine * item )
   DirtyFormat();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTablePad::DelLine
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTablePad::DelLine( unsigned idx )
 {
   if ( idx < Lines() ) {
@@ -159,14 +117,8 @@ void NCTablePad::DelLine( unsigned idx )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTablePad::GetLine
-//	METHOD TYPE : const NCTableLine *
-//
-//	DESCRIPTION :
-//
+
+
 const NCTableLine * NCTablePad::GetLine( unsigned idx ) const
 {
   if ( idx < Lines() )
@@ -174,14 +126,8 @@ const NCTableLine * NCTablePad::GetLine( unsigned idx ) const
   return 0;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTablePad::ModifyLine
-//	METHOD TYPE : NCTableLine *
-//
-//	DESCRIPTION :
-//
+
+
 NCTableLine * NCTablePad::ModifyLine( unsigned idx )
 {
   if ( idx < Lines() ) {
@@ -191,14 +137,8 @@ NCTableLine * NCTablePad::ModifyLine( unsigned idx )
   return 0;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTablePad::SetHeadline
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCTablePad::SetHeadline( const vector<NCstring> & head )
 {
   bool hascontent = ItemStyle.SetStyleFrom( head );
@@ -207,42 +147,24 @@ bool NCTablePad::SetHeadline( const vector<NCstring> & head )
   return hascontent;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTablePad::wRecoded
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTablePad::wRecoded()
 {
   DirtyFormat();
   update();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTablePad::CurPos
-//	METHOD TYPE : wpos
-//
-//	DESCRIPTION :
-//
+
+
 wpos NCTablePad::CurPos() const
 {
   citem.C = srect.Pos.C;
   return citem;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTablePad::UpdateFormat
-//	METHOD TYPE : wsze
-//
-//	DESCRIPTION :
-//
+
+
 wsze NCTablePad::UpdateFormat()
 {
   yuiDebug() << endl;
@@ -257,14 +179,8 @@ wsze NCTablePad::UpdateFormat()
   return wsze( Lines(), ItemStyle.TableWidth() );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTablePad::DoRedraw
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCTablePad::DoRedraw()
 {
   if ( !Destwin() ) {
@@ -295,14 +211,8 @@ int NCTablePad::DoRedraw()
   return update();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTablePad::setpos
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCTablePad::setpos( const wpos & newpos )
 {
   if ( !Lines() ) {
@@ -345,27 +255,15 @@ int NCTablePad::setpos( const wpos & newpos )
   return update();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTablePad::updateScrollHint
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCTablePad::updateScrollHint()
 {
   NCPad::updateScrollHint();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTablePad::setItemByKey
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCTablePad::setItemByKey( int key )
 {
   if ( HotCol() >= Cols() )
@@ -404,14 +302,8 @@ void NCTablePad::setOrder( int col )
     update ();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCTablePad::handleInput
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCTablePad::handleInput( wint_t key )
 {
   return NCPad::handleInput( key );

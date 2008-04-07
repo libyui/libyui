@@ -57,14 +57,8 @@ const NCursesEvent NCursesEvent::SelectionChanged ( NCursesEvent::button, YEvent
 const NCursesEvent NCursesEvent::ValueChanged     ( NCursesEvent::button, YEvent::ValueChanged     );
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCursesError::NCursesError
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 #define CONVERR(n,p) \
   va_list ap;        \
   va_list ap1;       \
@@ -140,14 +134,8 @@ ostream & operator<<( ostream & STREAM, const NCursesEvent & OBJ )
   return STREAM << "Ev::unknown";
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCurses::NCurses
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCurses::NCurses()
     : theTerm ( 0 )
     , title_w ( 0 )
@@ -160,14 +148,8 @@ NCurses::NCurses()
     envTerm = term;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCurses::~NCurses
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCurses::~NCurses()
 {
   yuiMilestone() << "Shutdown NCurses..." << endl;
@@ -187,14 +169,8 @@ NCurses::~NCurses()
   yuiMilestone() << "NCurses down" << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCurses::init
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 WINDOW * NCurses::ripped_w_top = 0;
 WINDOW * NCurses::ripped_w_bottom = 0;
 
@@ -323,14 +299,8 @@ void NCurses::init()
   yuiMilestone() << "NCurses ready" << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCurses::setup_screen
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCurses::setup_screen()
 {
   ::cbreak();
@@ -345,14 +315,8 @@ void NCurses::setup_screen()
   ::define_key( "\030\t", KEY_BTAB );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCurses::init_title
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCurses::init_title()
 {
   ::wbkgd( title_w, style()(NCstyle::AppTitle) );
@@ -361,14 +325,8 @@ void NCurses::init_title()
   ::wnoutrefresh( status_w );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCurses::init_screen
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCurses::init_screen()
 {
     bool redefine = false;
@@ -431,27 +389,15 @@ void NCurses::init_screen()
     
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCurses::style
-//	METHOD TYPE : const NCstyle &
-//
-//	DESCRIPTION :
-//
+
+
 const NCstyle & NCurses::style()
 {
   return *myself->styleset;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCurses::Update
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCurses::Update()
 {
   if ( myself && myself->initialized() ) {
@@ -460,14 +406,8 @@ void NCurses::Update()
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCurses::Refresh
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCurses::Refresh()
 {
   if ( myself && myself->initialized() ) {
@@ -480,14 +420,8 @@ void NCurses::Refresh()
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCurses::Redraw
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCurses::Redraw()
 {
   if ( myself && myself->initialized() ) {
@@ -509,14 +443,8 @@ void NCurses::Redraw()
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCurses::SetTitle
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCurses::SetTitle( const string & str )
 {
   if ( myself && myself->title_w ) {
@@ -580,14 +508,8 @@ void NCurses::SetStatusLine( std::map <int,string> fkeys )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCurses::drawTitle
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCurses::drawTitle()
 {
   if ( myself && myself->title_w ) {
@@ -595,12 +517,8 @@ void NCurses::drawTitle()
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCurses::RememberDlg
-//	METHOD TYPE : void
-//
+
+
 void NCurses::RememberDlg( NCDialog * dlg_r )
 {
   if ( dlg_r ) {
@@ -608,12 +526,8 @@ void NCurses::RememberDlg( NCDialog * dlg_r )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCurses::ForgetDlg
-//	METHOD TYPE : void
-//
+
+
 void NCurses::ForgetDlg( NCDialog * dlg_r )
 {
   if ( dlg_r ) {
@@ -621,12 +535,8 @@ void NCurses::ForgetDlg( NCDialog * dlg_r )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCurses::RedirectToLog
-//	METHOD TYPE : void
-//
+
+
 void NCurses::RedirectToLog()
 {
   string log = "/dev/null";	// this used to be get_log_filename()
@@ -646,14 +556,8 @@ void NCurses::RedirectToLog()
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCurses::ResizeEvent
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCurses::ResizeEvent()
 {
   if ( myself && myself->initialized() ) {
@@ -699,14 +603,8 @@ void NCurses::ResizeEvent()
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCurses::ScreenShot
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCurses::ScreenShot( const string & name )
 {
   if ( !myself )

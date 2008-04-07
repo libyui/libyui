@@ -23,14 +23,8 @@
 #include "NCRadioButton.h"
 #include "NCRadioButtonGroup.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRadioButton::NCRadioButton
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCRadioButton::NCRadioButton( YWidget * parent,
 			      const string & nlabel,
 			      bool check )
@@ -44,14 +38,8 @@ NCRadioButton::NCRadioButton( YWidget * parent,
   setValue( check );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRadioButton::~NCRadioButton
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCRadioButton::~NCRadioButton()
 {
   yuiDebug() << endl;
@@ -73,27 +61,15 @@ void NCRadioButton::setEnabled( bool do_bv )
     YRadioButton::setEnabled( do_bv );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRadioButton::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRadioButton::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRadioButton::setLabel
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRadioButton::setLabel( const string & nlabel )
 {
   label  = NCstring( nlabel );
@@ -103,14 +79,8 @@ void NCRadioButton::setLabel( const string & nlabel )
   Redraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRadioButton::setValue
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRadioButton::setValue( bool newval )
 {
   if ( newval != checked ) {
@@ -122,14 +92,8 @@ void NCRadioButton::setValue( bool newval )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRadioButton::wRedraw
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRadioButton::wRedraw()
 {
   if ( !win )
@@ -143,14 +107,8 @@ void NCRadioButton::wRedraw()
   win->printw( 0, 1, "%c", (checked ? 'x' : ' ') );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRadioButton::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCRadioButton::wHandleInput( wint_t key )
 {
   NCursesEvent ret;

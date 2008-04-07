@@ -32,12 +32,7 @@
 #include "NCCheckBox.h"
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCAskForExistingDirectory
-//
-//	DESCRIPTION :
-//
+
 class NCAskForExistingDirectory : public NCPopup {
 
     NCAskForExistingDirectory & operator=( const NCAskForExistingDirectory & );
@@ -91,7 +86,6 @@ public:
 
 };
 
-///////////////////////////////////////////////////////////////////
 
 
 #endif // NCAskForExistingDirectory_h

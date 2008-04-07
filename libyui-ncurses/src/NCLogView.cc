@@ -21,14 +21,8 @@
 #include <YUILog.h>
 #include "NCLogView.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLogView::NCLogView
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCLogView::NCLogView( YWidget * parent,
 		      const string & nlabel,
 		      int visibleLines,
@@ -41,14 +35,8 @@ NCLogView::NCLogView( YWidget * parent,
   setLabel( nlabel );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLogView::~NCLogView
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCLogView::~NCLogView()
 {
   yuiDebug() << endl;
@@ -71,41 +59,23 @@ void NCLogView::setEnabled( bool do_bv )
     YLogView::setEnabled( do_bv );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLogView::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCLogView::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLogView::setLabel
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCLogView::setLabel( const string & nlabel )
 {
   YLogView::setLabel( nlabel );
   NCPadWidget::setLabel( NCstring( nlabel ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLogView::displayLogText
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCLogView::displayLogText( const string & ntext )
 {
   DelPad();
@@ -113,14 +83,8 @@ void NCLogView::displayLogText( const string & ntext )
   Redraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLogView::wRedraw
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCLogView::wRedraw()
 {
   if ( !win )
@@ -135,42 +99,24 @@ void NCLogView::wRedraw()
     myPad()->ScrlTo( wpos( text.Lines(), 0 ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLogView::wRecoded
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCLogView::wRecoded()
 {
   DelPad();
   wRedraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLogView::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCLogView::wHandleInput( wint_t key )
 {
   handleInput( key );
   return NCursesEvent::none;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLogView::CreatePad
-//	METHOD TYPE : NCPad *
-//
-//	DESCRIPTION :
-//
+
+
 NCPad * NCLogView::CreatePad()
 {
   wsze psze( defPadSze() );
@@ -179,14 +125,8 @@ NCPad * NCLogView::CreatePad()
   return npad;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLogView::DrawPad
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCLogView::DrawPad()
 {
     // maximal value for lines is 32000!

@@ -24,14 +24,8 @@
 #include "NCurses.h"
 #include "NCPushButton.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPushButton::NCPushButton
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCPushButton::NCPushButton( YWidget * parent, const string & nlabel )
     : YPushButton( parent, nlabel )
     , NCWidget( parent )
@@ -42,81 +36,45 @@ NCPushButton::NCPushButton( YWidget * parent, const string & nlabel )
   hotlabel = &label;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPushButton::~NCPushButton
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCPushButton::~NCPushButton()
 {
   yuiDebug() << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPushButton::preferredWidth
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCPushButton::preferredWidth()
 {
     wsze defsize = wGetDefsze();
     return wGetDefsze().W;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPushButton::preferredHeight
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCPushButton::preferredHeight()
 {
     return wGetDefsze().H;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPushButton::setEnabled
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPushButton::setEnabled( bool do_bv )
 {
     NCWidget::setEnabled( do_bv );
     YPushButton::setEnabled( do_bv );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPushButton::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPushButton::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPushButton::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCPushButton::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
@@ -129,14 +87,8 @@ NCursesEvent NCPushButton::wHandleInput( wint_t key )
   return ret;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPushButton::setLabel
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPushButton::setLabel( const string & nlabel )
 {
   label = NCstring( nlabel );
@@ -147,14 +99,8 @@ void NCPushButton::setLabel( const string & nlabel )
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPushButton::wRedraw
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPushButton::wRedraw()
 {
   if ( !win )

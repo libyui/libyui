@@ -38,12 +38,7 @@
 */
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCPopupInfo
-//
-//	DESCRIPTION :
-//
+
 class NCPopupInfo : public NCPopup {
 
     NCPopupInfo & operator=( const NCPopupInfo & );
@@ -95,7 +90,6 @@ public:
     void setNiceSize( int horiz, int vert ) { hDim = horiz; vDim = vert; }
 };
 
-///////////////////////////////////////////////////////////////////
 
 
 #endif // NCPopupInfo_h

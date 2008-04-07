@@ -32,25 +32,17 @@
 using stdutil::form;
 
 
-///////////////////////////////////////////////////////////////////
 
 const unsigned NCRichText::listindent = 4;
 const wstring   NCRichText::listleveltags( L"@*+o#-%$&" );//
 
 const bool NCRichText::showLinkTarget = false;
 
-///////////////////////////////////////////////////////////////////
 
 std::map<std::wstring, std::wstring> NCRichText::_charentity;
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::entityLookup
-//	METHOD TYPE : const char *
-//
-//	DESCRIPTION :
-//
+
+
 const wstring NCRichText::entityLookup( const std::wstring & val_r )
 {
   //strip leading '#', if any
@@ -104,15 +96,10 @@ const wstring NCRichText::entityLookup( const std::wstring & val_r )
   #undef REP
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::filterEntities
-//	METHOD TYPE : const wstring
-//
-//	DESCRIPTION : Filter out the known &...; entities, return
+
+
+// Filter out the known &...; entities, return
 //                    the text with entities replaced
-//
 const wstring NCRichText::filterEntities( const std::wstring & text )
 {
     wstring txt = text;
@@ -138,16 +125,9 @@ const wstring NCRichText::filterEntities( const std::wstring & text )
     return txt;
 }
 
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::Anchor::draw
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRichText::Anchor::draw( NCPad & pad, const chtype attr, int color )
 {
   unsigned l = sline;
@@ -162,14 +142,8 @@ void NCRichText::Anchor::draw( NCPad & pad, const chtype attr, int color )
   pad.chgat( ecol - c, attr, color );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::NCRichText
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCRichText::NCRichText( YWidget * parent, const string & ntext,
 			bool plainTextMode )
     : YRichText( parent, ntext, plainTextMode )
@@ -184,14 +158,8 @@ NCRichText::NCRichText( YWidget * parent, const string & ntext,
   setValue( ntext );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::~NCRichText
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCRichText::~NCRichText()
 {
   yuiDebug() << endl;
@@ -213,41 +181,23 @@ void NCRichText::setEnabled( bool do_bv )
     YRichText::setEnabled( do_bv );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRichText::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::setLabel
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRichText::setLabel( const string & nlabel )
 {
   // not implemented: YRichText::setLabel( nlabel );
   NCPadWidget::setLabel( NCstring( nlabel ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::setValue
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRichText::setValue( const string & ntext )
 {
   DelPad();
@@ -256,14 +206,8 @@ void NCRichText::setValue( const string & ntext )
   Redraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::wRedraw
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRichText::wRedraw()
 {
   if ( !win )
@@ -281,28 +225,16 @@ void NCRichText::wRedraw()
   return;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::wRecoded
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRichText::wRecoded()
 {
   DelPad();
   wRedraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCRichText::wHandleInput( wint_t key )
 {
   NCursesEvent ret;
@@ -326,14 +258,8 @@ NCursesEvent NCRichText::wHandleInput( wint_t key )
   return ret;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::CreatePad
-//	METHOD TYPE : NCPad *
-//
-//	DESCRIPTION :
-//
+
+
 NCPad * NCRichText::CreatePad()
 {
   wsze psze( defPadSze() );
@@ -342,14 +268,8 @@ NCPad * NCRichText::CreatePad()
   return npad;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::DrawPad
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRichText::DrawPad()
 {
   yuiDebug()
@@ -368,14 +288,8 @@ void NCRichText::DrawPad()
   yuiDebug() << "Done" << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::DrawPlainPad
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRichText::DrawPlainPad()
 {
   NCtext ftext( text );
@@ -390,14 +304,8 @@ void NCRichText::DrawPlainPad()
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::PadPlainTXT
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRichText::PadPlainTXT( const wchar_t * osch, const unsigned olen )
 {
     wstring wtxt( osch, olen );
@@ -464,14 +372,8 @@ inline void SkipPreTXT( const wchar_t *& wch ) {
     } while ( *wch && wstr != L"</pre>" ); 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::DrawHTMLPad
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRichText::DrawHTMLPad()
 {
   yuiDebug() << "Start:" << endl;
@@ -551,14 +453,8 @@ void NCRichText::DrawHTMLPad()
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::PadNL
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 inline void NCRichText::PadNL()
 {
   cc = cindent;
@@ -569,28 +465,16 @@ inline void NCRichText::PadNL()
   atbol = true;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::PadBOL
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 inline void NCRichText::PadBOL()
 {
   if ( !atbol )
     PadNL();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::PadWS
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 inline void NCRichText::PadWS( const bool tab )
 {
     if ( atbol )
@@ -607,14 +491,8 @@ inline void NCRichText::PadWS( const bool tab )
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::PadTXT
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 inline void NCRichText::PadTXT( const wchar_t * osch, const unsigned olen )
 {
   wstring txt( osch, olen );
@@ -642,14 +520,8 @@ inline void NCRichText::PadTXT( const wchar_t * osch, const unsigned olen )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::textWidth
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 size_t NCRichText::textWidth( wstring wstr )
 {
     size_t len = 0;
@@ -662,14 +534,9 @@ size_t NCRichText::textWidth( wstring wstr )
     return len;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::PadSetAttr
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Set character attributes (e.g. color, font face...)
-//
+
+
+// Set character attributes (e.g. color, font face...)
 inline void NCRichText::PadSetAttr()
 {
   const NCstyle::StRichtext & style( wStyle().richtext );
@@ -694,14 +561,8 @@ inline void NCRichText::PadSetAttr()
   myPad()->bkgdset( nbg );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::PadSetLevel
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRichText::PadSetLevel()
 {
   cindent = listindent * liststack.size();
@@ -714,14 +575,8 @@ void NCRichText::PadSetLevel()
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::PadChangeLevel
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRichText::PadChangeLevel( bool down, int tag )
 {
   if ( down ) {
@@ -733,14 +588,8 @@ void NCRichText::PadChangeLevel( bool down, int tag )
   PadSetLevel();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::openAnchor
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRichText::openAnchor( wstring args )
 {
   canchor.open( cl, cc );
@@ -789,14 +638,8 @@ void NCRichText::openAnchor( wstring args )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::closeAnchor
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRichText::closeAnchor()
 {
   canchor.close( cl, cc );
@@ -805,14 +648,9 @@ void NCRichText::closeAnchor()
   canchor = Anchor();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::PadTOKEN
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION : expect "<[/]value>"
-//
+
+
+// expect "<[/]value>"
 bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 {
   // "<[/]value>"
@@ -1004,14 +842,8 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
   return true;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::arm
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRichText::arm( unsigned i )
 {
   if ( !myPad() ) {
@@ -1046,28 +878,16 @@ void NCRichText::arm( unsigned i )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::HScroll
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRichText::HScroll( unsigned total, unsigned visible, unsigned start )
 {
   NCPadWidget::HScroll( total, visible, start );
   // no hyperlink handling needed, because Ritchtext does not HScroll
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::VScroll
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCRichText::VScroll( unsigned total, unsigned visible, unsigned start )
 {
   NCPadWidget::VScroll( total, visible, start );
@@ -1095,14 +915,8 @@ void NCRichText::VScroll( unsigned total, unsigned visible, unsigned start )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCRichText::handleInput
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCRichText::handleInput( wint_t key )
 {
   if ( plainText || anchors.empty() ) {

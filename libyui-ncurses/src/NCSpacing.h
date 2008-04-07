@@ -28,12 +28,7 @@
 
 class NCSpacing;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCSpacing
-//
-//	DESCRIPTION :
-//
+
 class NCSpacing : public YSpacing, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCSpacing & OBJ );
@@ -70,6 +65,5 @@ class NCSpacing : public YSpacing, public NCWidget {
     virtual void setEnabled( bool do_bv ); 
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCSpacing_h

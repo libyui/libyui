@@ -26,12 +26,7 @@
 
 class NCAlignment;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCAlignment
-//
-//	DESCRIPTION :
-//
+
 class NCAlignment : public YAlignment, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCAlignment & OBJ );
@@ -65,6 +60,5 @@ class NCAlignment : public YAlignment, public NCWidget {
     virtual void setEnabled( bool do_bv );
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCAlignment_h

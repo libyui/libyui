@@ -37,28 +37,19 @@
 int NCattribute::_colors = ::COLORS;
 int NCattribute::_pairs = ::COLOR_PAIRS;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCstyle::Style
-//
-///////////////////////////////////////////////////////////////////
+
 
 unsigned NCstyle::Style::sanitycheck() {
   return MaxSTglobal;
 }
 NCattrset NCstyle::Style::attrGlobal( sanitycheck() );
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstyle::Style::initDialog
-//	METHOD TYPE : StDialog
-//
-//	DESCRIPTION : Initialize subclass StDialog in Style constructor
+
+
+// Initialize subclass StDialog in Style constructor
 //                    (esp. copy constructor). Default copy constructor
 //                    is not appropriate, because StDialog contains
 //                    references to subclass NCattrset.
-//
 NCstyle::StDialog NCstyle::Style::initDialog()
 {
   return StDialog( StBase( attr(DialogTitle),
@@ -138,57 +129,29 @@ NCstyle::StDialog NCstyle::Style::initDialog()
 		   );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstyle::Style::Style
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCstyle::Style::Style()
     : NCattrset( MaxSTlocal )
     , StDialog( initDialog() )
 {}
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstyle::Style::Style
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCstyle::Style::Style( const Style & rhs )
     : NCattrset( rhs )
     , StDialog( initDialog() )
 {}
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstyle::Style::~Style
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCstyle::Style::~Style()
 {}
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCstyle
-//
-///////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstyle::dumpName
-//	METHOD TYPE : string
-//
-//	DESCRIPTION :
-//
+
+
+
 #define PRT(t) case NCstyle::t: return #t;
 
 string NCstyle::dumpName( NCstyle::StyleSet a ) {
@@ -292,14 +255,8 @@ string NCstyle::dumpName( NCstyle::STlocal a ) {
 }
 #undef PRT
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstyle::NCstyle
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCstyle::NCstyle( string term_t )
     : styleName( "linux" )
     , term ( term_t )
@@ -339,26 +296,14 @@ NCstyle::NCstyle( string term_t )
   else NCstyleInit_linux( styleSet );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstyle::~NCstyle
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCstyle::~NCstyle()
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstyle::nextSyle
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCstyle::nextStyle()
 {
   if (!NCattribute::colors() ) return;
@@ -385,27 +330,15 @@ void NCstyle::nextStyle()
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstyle::changeSyle
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCstyle::changeSyle()
 {
   NCDefineStyle( *this );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCstyle::fakestyle
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCstyle::fakestyle( StyleSet f )
 {
   fakestyle_e = f;

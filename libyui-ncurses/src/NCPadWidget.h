@@ -27,12 +27,7 @@
 class NCPadWidget;
 class NCScrollbar;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCPadWidget
-//
-//	DESCRIPTION :
-//
+
 class NCPadWidget : public NCWidget, protected NCSchrollCB {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCPadWidget & OBJ );
@@ -116,6 +111,5 @@ class NCPadWidget : public NCWidget, protected NCSchrollCB {
 
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCPadWidget_h

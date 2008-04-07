@@ -29,12 +29,7 @@
 class NCDialog;
 class NCPopupInfo;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCDialog
-//
-//	DESCRIPTION :
-//
+
 class NCDialog : public YDialog, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCDialog & OBJ );
@@ -222,6 +217,5 @@ class NCDialog : public YDialog, public NCWidget {
     void resizeEvent();
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCDialog_h

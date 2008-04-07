@@ -26,12 +26,7 @@
 
 class NCCheckBox;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCCheckBox
-//
-//	DESCRIPTION :
-//
+
 class NCCheckBox : public YCheckBox, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCCheckBox & OBJ );
@@ -95,6 +90,5 @@ class NCCheckBox : public YCheckBox, public NCWidget {
     }
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCCheckBox_h

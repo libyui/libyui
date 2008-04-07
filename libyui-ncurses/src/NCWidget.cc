@@ -30,14 +30,8 @@
 #define DBG_CLASS "_NCWidget_"
 //#endif
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::NCWidget
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCWidget::NCWidget( YWidget * parent )
     : tnode<NCWidget*>( this )
     , magic( YWIDGET_MAGIC )
@@ -78,14 +72,8 @@ NCWidget::NCWidget( NCWidget * myparent )
   yuiDebug() <<  "CCC " << this << " parent " << myparent << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::~NCWidget
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCWidget::~NCWidget()
 {
   yuiDebug() << "DD+ " << this << endl;
@@ -100,73 +88,38 @@ NCWidget::~NCWidget()
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::PreDisconnect
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCWidget::PreDisconnect()
 {
   grabRelease( 0 );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::PostDisconnect
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCWidget::PostDisconnect()
 {}
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::PreReparent
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCWidget::PreReparent()
 {}
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::PostReparent
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCWidget::PostReparent()
 {}
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::grabFocus
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCWidget::grabFocus()
 {
   return Top().Value()->wantFocus( *this );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::wUpdate
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Actualy perform sreen update.
-//
+
+
+// Actualy perform sreen update.
 void NCWidget::wUpdate( bool forced_br )
 {
   if ( !win )
@@ -176,14 +129,9 @@ void NCWidget::wUpdate( bool forced_br )
   NCurses::Update();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::Update
-//	METHOD TYPE : void
-//
-//	DESCRIPTION : Redirect Update request to topmost widget
-//
+
+
+// Redirect Update request to topmost widget
 void NCWidget::Update()
 {
   if ( noUpdates )
@@ -195,14 +143,8 @@ void NCWidget::Update()
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::ParentWin
-//	METHOD TYPE : NCursesWindow *
-//
-//	DESCRIPTION :
-//
+
+
 NCursesWindow * NCWidget::ParentWin()
 {
   if ( !Parent() )
@@ -213,14 +155,8 @@ NCursesWindow * NCWidget::ParentWin()
   return Parent()->Value()->win;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::wMoveChildTo
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCWidget::wMoveChildTo( NCWidget & child, const wpos & newpos )
 {
   yuiDebug() << "mc+ " << DLOC << child << " -> " << newpos << " in " << this << endl;
@@ -237,14 +173,8 @@ void NCWidget::wMoveChildTo( NCWidget & child, const wpos & newpos )
   yuiDebug() << "mc- " << DLOC << child << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::wRelocate
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCWidget::wRelocate( const wrect & newrect )
 {
   yuiDebug() << "rl+ " << this << " -> " << newrect << endl;
@@ -267,14 +197,8 @@ void NCWidget::wRelocate( const wrect & newrect )
   yuiDebug() << "rl- " << this << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::wMoveTo
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCWidget::wMoveTo( const wpos & newpos )
 {
   if ( !win ) {
@@ -306,14 +230,8 @@ void NCWidget::wMoveTo( const wpos & newpos )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::wCreate
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCWidget::wCreate( const wrect & newrect )
 {
   if ( win )
@@ -381,14 +299,8 @@ void NCWidget::wCreate( const wrect & newrect )
   yuiDebug() << "cw- " << this << ' ' << inparent << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::wDelete
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCWidget::wDelete()
 {
   if ( win ) {
@@ -404,14 +316,8 @@ void NCWidget::wDelete()
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::ScreenPos
-//	METHOD TYPE : wpos
-//
-//	DESCRIPTION :
-//
+
+
 wpos NCWidget::ScreenPos() const
 {
   if ( !win )
@@ -422,14 +328,8 @@ wpos NCWidget::ScreenPos() const
   return wsze( win->begy(), win->begx() );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::SetState
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCWidget::SetState( const NC::WState newstate, const bool force )
 {
   if ( newstate != wstate || force ) {
@@ -442,14 +342,8 @@ void NCWidget::SetState( const NC::WState newstate, const bool force )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::setEnabled
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCWidget::setEnabled( bool do_bv )
 {
   yuiDebug() << DLOC << this << ' ' << do_bv << ' ' << wstate << endl;
@@ -483,14 +377,8 @@ void NCWidget::setEnabled( bool do_bv )
   }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::Redraw
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCWidget::Redraw( const bool sub )
 {
   if ( !win ) {
@@ -511,26 +399,14 @@ void NCWidget::Redraw( const bool sub )
   Update();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::wRedraw
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCWidget::wRedraw()
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::Recoded
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCWidget::Recoded()
 {
   if ( !win ) {
@@ -546,27 +422,15 @@ void NCWidget::Recoded()
   Update();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::wRecoded
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCWidget::wRecoded()
 {
   wRedraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::HasHotkey
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCWidget::HasHotkey( int key ) const
 {
   if ( key < 0 || UCHAR_MAX < key )
@@ -577,13 +441,8 @@ bool NCWidget::HasHotkey( int key ) const
   return( tolower( key ) == tolower( hotlabel->hotkey() ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//	METHOD NAME : NCWidget::HasFunctionHotkey
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCWidget::HasFunctionHotkey( int key ) const
 {
     const YWidget * w = dynamic_cast<const YWidget *>( this );
@@ -602,27 +461,15 @@ bool NCWidget::HasFunctionHotkey( int key ) const
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::wHandleHotkey
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCWidget::wHandleHotkey( wint_t /*key*/ )
 {
   return wHandleInput( KEY_HOTKEY );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCWidget::wHandleInput( wint_t /*key*/ )
 {
   return NCursesEvent::none;
@@ -663,14 +510,8 @@ ostream & operator<<( ostream & STREAM, const NCWidget & OBJ )
     return STREAM << "( invalid NCWidget)"; 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCWidget::DumpOn
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCWidget::DumpOn( ostream & str, string prfx ) const
 {
   str

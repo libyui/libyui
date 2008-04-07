@@ -24,40 +24,22 @@
 #include "NCTable.h"
 #include "YMenuButton.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupTable::NCPopupTable
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCPopupTable::NCPopupTable( const wpos at )
     : NCPopup( at, false )
     , sellist( 0 )
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupTable::~NCPopupTable
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCPopupTable::~NCPopupTable()
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupTable::createList
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPopupTable::createList( vector<string> & row )
 {
   if ( sellist )
@@ -76,14 +58,8 @@ void NCPopupTable::createList( vector<string> & row )
 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupTable::addItem
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPopupTable::addItem( YItem *yitem )
 {
   if ( !yitem )
@@ -92,14 +68,8 @@ void NCPopupTable::addItem( YItem *yitem )
   sellist->addItem( yitem );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupTable::setCurrentItem
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPopupTable::setCurrentItem( int index )
 {
   if ( !sellist )
@@ -108,14 +78,8 @@ void NCPopupTable::setCurrentItem( int index )
   sellist->setCurrentItem( index );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupTable::getCurrentItem
-//	METHOD TYPE : int
-//
-//	DESCRIPTION :
-//
+
+
 int NCPopupTable::getCurrentItem() const
 {
   if ( !sellist )
@@ -132,14 +96,8 @@ YItem * NCPopupTable::getCurrentItemPointer( ) const
     return sellist->getCurrentItemPointer( );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupTable::wHandleHotkey
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCPopupTable::wHandleHotkey( wint_t key )
 {
   if ( key >= 0 && sellist->setItemByKey( key ) )
@@ -148,14 +106,8 @@ NCursesEvent NCPopupTable::wHandleHotkey( wint_t key )
   return NCursesEvent::none;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupTable::postAgain
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCPopupTable::postAgain()
 {
     if ( sellist ) {

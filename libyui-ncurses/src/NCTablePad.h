@@ -31,12 +31,7 @@ using namespace std;
 class NCTableLine;
 class NCTableCol;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCTablePad
-//
-//	DESCRIPTION :
-//
+
 class NCTablePad : public NCPad {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCTablePad & OBJ );
@@ -127,6 +122,5 @@ class NCTablePad : public NCPad {
     void stripHotkeys();
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCTablePad_h

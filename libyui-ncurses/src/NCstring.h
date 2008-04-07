@@ -29,12 +29,7 @@ using std::wstring;
 using namespace std;
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCstring
-//
-//	DESCRIPTION :
-//
+
 class NCstring {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCstring & OBJ );
@@ -91,6 +86,5 @@ public:
     void getHotkey() const;
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCstring_h

@@ -33,12 +33,7 @@
 #include "NCInputField.h"
 
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCAskForFile
-//
-//	DESCRIPTION :
-//
+
 class NCAskForFile : public NCPopup {
 
     NCAskForFile & operator=( const NCAskForFile & );
@@ -111,12 +106,7 @@ public:
     
 };
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCAskForExistingFile
-//
-//	DESCRIPTION :
-//
+
 class NCAskForExistingFile : public NCAskForFile {
 
     NCAskForExistingFile & operator=( const NCAskForFile & );
@@ -136,12 +126,7 @@ protected:
     virtual string getFileName(); 
 };
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCAskForSaveFileName
-//
-//	DESCRIPTION :
-//
+
 class NCAskForSaveFileName : public NCAskForFile {
 
     NCAskForSaveFileName & operator=( const NCAskForFile & );
@@ -162,7 +147,6 @@ protected:
 
 };
 
-///////////////////////////////////////////////////////////////////
 
 
 #endif // NCAskForFile_h

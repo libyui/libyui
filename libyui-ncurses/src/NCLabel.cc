@@ -22,14 +22,8 @@
 #include "NCurses.h"
 #include "NCLabel.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLabel::NCLabel
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCLabel::NCLabel( YWidget * parent, const string & nlabel,
 		  bool isHeading, bool isOutputField )
     : YLabel( parent, nlabel, isHeading, isOutputField )
@@ -42,27 +36,15 @@ NCLabel::NCLabel( YWidget * parent, const string & nlabel,
   wstate = NC::WSdumb;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLabel::~NCLabel
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCLabel::~NCLabel()
 {
   yuiDebug() << endl;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLabel::nicesize
-//	METHOD TYPE : long
-//
-//	DESCRIPTION :
-//
+
+
 long NCLabel::nicesize( YUIDimension dim )
 {
   return dim == YD_HORIZ ? wGetDefsze().W : wGetDefsze().H;
@@ -84,27 +66,15 @@ void NCLabel::setEnabled( bool do_bv )
     YLabel::setEnabled( do_bv );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLabel::setSize
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCLabel::setSize( int newwidth, int newheight )
 {
   wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLabel::setText
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCLabel::setText( const string & nlabel )
 {
   label  = NCstring( nlabel );
@@ -114,14 +84,8 @@ void NCLabel::setText( const string & nlabel )
   Redraw();
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCLabel::wRedraw
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCLabel::wRedraw()
 {
   if ( !win )

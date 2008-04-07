@@ -21,14 +21,8 @@
 #include <YUILog.h>
 #include "NCPopupTextEntry.h"
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupTextEntry::NCPopupTextEntry
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCPopupTextEntry::NCPopupTextEntry( const wpos at,
 				    const string & label,
 				    const string & text,
@@ -52,26 +46,14 @@ NCPopupTextEntry::NCPopupTextEntry( const wpos at,
 
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupTextEntry::~NCPopupTextEntry
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCPopupTextEntry::~NCPopupTextEntry()
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupTextEntry::postAgain
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCPopupTextEntry::postAgain()
 {
   if ( postevent == NCursesEvent::button )

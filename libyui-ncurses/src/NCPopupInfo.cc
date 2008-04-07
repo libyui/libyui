@@ -33,14 +33,8 @@ namespace
     const string idCancel( "cancel" );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupInfo::NCPopupInfo
-//	METHOD TYPE : Constructor
-//
-//	DESCRIPTION :
-//
+
+
 NCPopupInfo::NCPopupInfo( const wpos at,
 			  const string & headline,
 			  const string & text,
@@ -57,26 +51,14 @@ NCPopupInfo::NCPopupInfo( const wpos at,
     createLayout( headline, text, okButtonLabel, cancelButtonLabel );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupInfo::~NCPopupInfo
-//	METHOD TYPE : Destructor
-//
-//	DESCRIPTION :
-//
+
+
 NCPopupInfo::~NCPopupInfo()
 {
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupInfo::createLayout
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
+
+
 void NCPopupInfo::createLayout( const string & headline,
 				const string & text,
 				string okButtonLabel,
@@ -118,14 +100,8 @@ void NCPopupInfo::createLayout( const string & headline,
   
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupInfo::showInfoPopup
-//	METHOD TYPE : NCursesEvent &
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent & NCPopupInfo::showInfoPopup( )
 {
     postevent = NCursesEvent();
@@ -165,14 +141,9 @@ long NCPopupInfo::nicesize(YUIDimension dim)
     return ( dim == YD_HORIZ ? horDim : vertDim );
 }
 #endif
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupInfo::preferredWidth
-//	METHOD TYPE : int
-//
-//	DESCRIPTION : returns preferred horizontal size
-//
+
+
+// returns preferred horizontal size
 int NCPopupInfo::preferredWidth()
 {
     int horDim = hDim;
@@ -183,14 +154,9 @@ int NCPopupInfo::preferredWidth()
     return horDim;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupInfo::preferredHeight
-//	METHOD TYPE : int
-//
-//	DESCRIPTION : returns preferred vertical size
-//
+
+
+// returns preferred vertical size
 int NCPopupInfo::preferredHeight()
 {
     int vertDim = vDim;
@@ -200,14 +166,8 @@ int NCPopupInfo::preferredHeight()
     return vertDim;
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopup::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
+
+
 NCursesEvent NCPopupInfo::wHandleInput( wint_t ch )
 {
     if ( ch == 27 ) // ESC
@@ -219,14 +179,8 @@ NCursesEvent NCPopupInfo::wHandleInput( wint_t ch )
     return NCDialog::wHandleInput( ch );
 }
 
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopupInfo::postAgain
-//	METHOD TYPE : bool
-//
-//	DESCRIPTION :
-//
+
+
 bool NCPopupInfo::postAgain()
 {
     if ( ! postevent.widget )

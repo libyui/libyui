@@ -26,12 +26,7 @@
 
 class NCProgressBar;
 
-///////////////////////////////////////////////////////////////////
-//
-//	CLASS NAME : NCProgressBar
-//
-//	DESCRIPTION :
-//
+
 class NCProgressBar : public YProgressBar, public NCWidget {
 
   friend std::ostream & operator<<( std::ostream & STREAM, const NCProgressBar & OBJ );
@@ -87,6 +82,5 @@ class NCProgressBar : public YProgressBar, public NCWidget {
     virtual void setEnabled( bool do_bv );
 };
 
-///////////////////////////////////////////////////////////////////
 
 #endif // NCProgressBar_h
