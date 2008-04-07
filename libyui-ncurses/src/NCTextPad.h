@@ -58,7 +58,7 @@ class NCTextPad : public NCPad {
     bool openLine();
 
     void assertSze( wsze minsze );
-    void assertWidht ( unsigned minw );
+    void assertWidth ( unsigned minw );
     void assertHeight( unsigned minh );
 
     // specifies how much characters can be inserted. -1 for unlimited input

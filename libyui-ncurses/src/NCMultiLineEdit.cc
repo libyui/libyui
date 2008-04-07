@@ -63,7 +63,7 @@ NCMultiLineEdit::~NCMultiLineEdit()
 //
 int NCMultiLineEdit::preferredWidth()
 {
-    defsze.W = ( 5 > labelWidht() ? 5 : labelWidht() ) + 2;
+    defsze.W = ( 5 > labelWidth() ? 5 : labelWidth() ) + 2;
     return wGetDefsze().W;
 }
 

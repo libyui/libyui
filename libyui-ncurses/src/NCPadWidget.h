@@ -71,7 +71,7 @@ class NCPadWidget : public NCWidget, protected NCSchrollCB {
     virtual const char * location() const { return "NCPadWidget"; }
 
     // widget stuff
-    unsigned labelWidht() const { return label.width(); }
+    unsigned labelWidth() const { return label.width(); }
 
     virtual void wCreate( const wrect & newrect );
     virtual void wDelete();

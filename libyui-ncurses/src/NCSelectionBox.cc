@@ -55,7 +55,7 @@ NCSelectionBox::~NCSelectionBox()
 int NCSelectionBox::preferredWidth()
 {
     wsze sze = ( biglist ) ? myPad()->tableSize() + 2 : wGetDefsze();
-    return sze.W > (int)(labelWidht()+2) ? sze.W : (labelWidht()+2); 
+    return sze.W > (int)(labelWidth()+2) ? sze.W : (labelWidth()+2); 
 }
 
 int NCSelectionBox::preferredHeight()

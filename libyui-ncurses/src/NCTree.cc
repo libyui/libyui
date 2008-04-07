@@ -279,7 +279,7 @@ inline NCTreeLine * NCTree::modifyTreeLine( unsigned idx )
 //
 int NCTree::preferredWidth()
 {
-    wsze sze = wsze::max( defsze, wsze( 0, labelWidht()+2 ) ); 
+    wsze sze = wsze::max( defsze, wsze( 0, labelWidth()+2 ) ); 
     return sze.W; 
 }
 
@@ -294,7 +294,7 @@ int NCTree::preferredWidth()
 //
 int NCTree::preferredHeight()
 {
-    wsze sze = wsze::max( defsze, wsze( 0, labelWidht()+2 ) );
+    wsze sze = wsze::max( defsze, wsze( 0, labelWidth()+2 ) );
     return sze.H;
 }
 

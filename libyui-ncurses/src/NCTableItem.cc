@@ -279,7 +279,7 @@ void NCTableLine::UpdateFormat( NCTableStyle & tableStyle )
   for ( unsigned c = 0; c < Cols(); ++c ) {
     if ( !Items[c] )
       continue;
-    tableStyle.MinColWidht( c, Items[c]->Size().W );
+    tableStyle.MinColWidth( c, Items[c]->Size().W );
   }
 }
 
@@ -328,36 +328,36 @@ void NCTableLine::DrawItems( NCursesWindow & w, const wrect at,
     return;
 
   wrect    lRect( at );
-  unsigned destWidht;
+  unsigned destWidth;
 
   for ( unsigned c = 0; c < Cols(); ++c ) {
 
-    if ( c && tableStyle.ColSepwidht() ) {
+    if ( c && tableStyle.ColSepwidth() ) {
       // draw centered
-      destWidht = tableStyle.ColSepwidht()/2;
-      if ( destWidht < (unsigned)lRect.Sze.W ) {
+      destWidth = tableStyle.ColSepwidth()/2;
+      if ( destWidth < (unsigned)lRect.Sze.W ) {
 	w.bkgdset( tableStyle.getBG( vstate, NCTableCol::SEPARATOR ) );
-	w.vline( lRect.Pos.L, lRect.Pos.C + destWidht,
+	w.vline( lRect.Pos.L, lRect.Pos.C + destWidth,
 		 lRect.Sze.H, tableStyle.ColSepchar() );
 	// skip over
-	destWidht = tableStyle.ColSepwidht();
-	if ( (unsigned)lRect.Sze.W <= destWidht )
+	destWidth = tableStyle.ColSepwidth();
+	if ( (unsigned)lRect.Sze.W <= destWidth )
 	  break;
-	lRect.Pos.C += destWidht;
-	lRect.Sze.W -= destWidht;
+	lRect.Pos.C += destWidth;
+	lRect.Sze.W -= destWidth;
       }
     }
 
-    destWidht = tableStyle.ColWidht( c );
+    destWidth = tableStyle.ColWidth( c );
     wrect cRect( lRect );
     // adjust remaining linespace
-    lRect.Pos.C += destWidht;
-    lRect.Sze.W -= destWidht;
+    lRect.Pos.C += destWidth;
+    lRect.Sze.W -= destWidth;
     // adjust destinated width
     if ( lRect.Sze.W < 0 )
-      cRect.Sze.W = destWidht + lRect.Sze.W;
+      cRect.Sze.W = destWidth + lRect.Sze.W;
     else
-      cRect.Sze.W = destWidht;
+      cRect.Sze.W = destWidth;
     // draw item
     if ( Items[c] ) {
       Items[c]->DrawAt( w, cRect, tableStyle, vstate, c );
@@ -433,10 +433,10 @@ void NCTableHead::DrawAt( NCursesWindow & w, const wrect at,
 //
 NCTableStyle::NCTableStyle( const NCWidget & p )
     : headline( 0 )
-    , colWidht( 0 )
+    , colWidth( 0 )
     , colAdjust( 0 )
     , parw( p )
-    , colSepwidht( 1 )
+    , colSepwidth( 1 )
     , colSepchar ( ACS_VLINE )
     , hotCol( (unsigned)-1 )
 {
@@ -457,7 +457,7 @@ bool NCTableStyle::SetStyleFrom( const vector<NCstring> & head )
   headline.ClearLine();
   headline.SetCols( ncols );
 
-  colWidht.clear();
+  colWidth.clear();
   colAdjust.clear();
   AssertMinCols( ncols );
 
@@ -586,9 +586,9 @@ chtype NCTableStyle::getBG( const NCTableLine::STATE lstate,
 ostream & operator<<( ostream & STREAM, const NCTableStyle & OBJ )
 {
   STREAM << form( "cols %d, sep %d (%lx)\n",
-		  OBJ.Cols(), OBJ.ColSepwidht(), OBJ.ColSepchar() );
+		  OBJ.Cols(), OBJ.ColSepwidth(), OBJ.ColSepchar() );
   for( unsigned i = 0; i < OBJ.Cols(); ++i ) {
-    STREAM << form( "%2d %d(%3d) ", i, OBJ.ColAdjust( i ), OBJ.ColWidht( i ) );
+    STREAM << form( "%2d %d(%3d) ", i, OBJ.ColAdjust( i ), OBJ.ColWidth( i ) );
     if ( OBJ.Headline().GetCol( i ) )
       STREAM << OBJ.Headline().GetCol( i )->Label();
     STREAM << endl;

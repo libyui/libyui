@@ -219,12 +219,12 @@ class NCTableStyle {
   private:
 
     NCTableHead         headline;
-    vector<unsigned>    colWidht;
+    vector<unsigned>    colWidth;
     vector<NC::ADJUST>  colAdjust;
 
     const NCWidget & parw;
 
-    unsigned colSepwidht;
+    unsigned colSepwidth;
     chtype   colSepchar;
     unsigned hotCol;
 
@@ -237,35 +237,35 @@ class NCTableStyle {
 
     bool SetStyleFrom( const vector<NCstring> & head );
     void SetSepChar( const chtype sepchar )     { colSepchar = sepchar; }
-    void SetSepWidht( const unsigned sepwidth ) { colSepwidht = sepwidth; }
+    void SetSepWidth( const unsigned sepwidth ) { colSepwidth = sepwidth; }
     void SetHotCol( const int hcol )            {
       hotCol = (hcol < 0 || Cols() <= (unsigned)hcol) ? -1 : hcol;
     }
 
     void ResetToMinCols() {
-      colWidht.clear();
+      colWidth.clear();
       AssertMinCols( headline.Cols() );
       headline.UpdateFormat( *this );
     }
 
     void AssertMinCols( unsigned num ) {
-      if ( colWidht.size() < num ) {
-	colWidht.resize( num, 0 );
-	colAdjust.resize( colWidht.size(), NC::LEFT );
+      if ( colWidth.size() < num ) {
+	colWidth.resize( num, 0 );
+	colAdjust.resize( colWidth.size(), NC::LEFT );
       }
     }
 
-    void MinColWidht( unsigned num, unsigned val ) {
+    void MinColWidth( unsigned num, unsigned val ) {
       AssertMinCols( num );
-      if ( val > colWidht[num] )
-	colWidht[num] = val;
+      if ( val > colWidth[num] )
+	colWidth[num] = val;
     }
 
     NC::ADJUST ColAdjust( unsigned num ) const { return colAdjust[num]; }
 
-    unsigned Cols()                   const { return colWidht.size(); }
-    unsigned ColWidht( unsigned num ) const { return colWidht[num]; }
-    unsigned ColSepwidht()            const { return colSepwidht; }
+    unsigned Cols()                   const { return colWidth.size(); }
+    unsigned ColWidth( unsigned num ) const { return colWidth[num]; }
+    unsigned ColSepwidth()            const { return colSepwidth; }
     chtype   ColSepchar()             const { return colSepchar; }
     unsigned HotCol()                 const { return hotCol; }
 
@@ -289,9 +289,9 @@ class NCTableStyle {
     unsigned TableWidth() const {
       unsigned twidth = 0;
       for( unsigned i = 0; i < Cols(); ++i )
-	twidth += colWidht[i];
+	twidth += colWidth[i];
       if ( Cols() > 1 )
-	twidth += colSepwidht * (Cols()-1);
+	twidth += colSepwidth * (Cols()-1);
       return twidth;
     }
 };

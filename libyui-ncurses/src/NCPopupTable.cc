@@ -70,7 +70,7 @@ void NCPopupTable::createList( vector<string> & row )
   
   sellist->setBigList( true );
   sellist->SetSepChar( ' ' );
-  sellist->SetSepWidht( 0 );
+  sellist->SetSepWidth( 0 );
   sellist->SetHotCol( 0 );
   sellist->setNotify( true );
 

@@ -93,12 +93,12 @@ void NCTextPad::assertSze( wsze minsze )
 ///////////////////////////////////////////////////////////////////
 //
 //
-//	METHOD NAME : NCTextPad::assertWidht
+//	METHOD NAME : NCTextPad::assertWidth
 //	METHOD TYPE : void
 //
 //	DESCRIPTION :
 //
-void NCTextPad::assertWidht( unsigned minw )
+void NCTextPad::assertWidth( unsigned minw )
 {
   if ( minw >= (unsigned)width() ) // == for the '\n'
     resize( wsze( height(), minw + 10 ) );
@@ -347,7 +347,7 @@ bool NCTextPad::insert( wint_t key )
     return false;
   }
 
-  assertWidht( ++(*cline) );
+  assertWidth( ++(*cline) );
   cchar_t cchar;
   attr_t attr;
   short int color;
@@ -440,7 +440,7 @@ bool NCTextPad::delch( bool previous )
     (*cline) += (*nextl);
     lines.erase( nextl );
 
-    assertWidht( (*cline) );
+    assertWidth( (*cline) );
     copywin( *this, curs.L+1, 0, curs.L, curs.C, curs.L, (*cline), false );
 
     move( curs.L+1, 0 );

@@ -98,8 +98,8 @@ class NCTablePad : public NCPad {
     void SetSepChar( const chtype colSepchar ) {
       ItemStyle.SetSepChar( colSepchar );
     }
-    void SetSepWidht( const unsigned sepwidth ) {
-      ItemStyle.SetSepWidht( sepwidth );
+    void SetSepWidth( const unsigned sepwidth ) {
+      ItemStyle.SetSepWidth( sepwidth );
     }
     void SetHotCol( const int hcol ) {
       ItemStyle.SetHotCol( hcol );

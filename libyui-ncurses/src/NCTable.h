@@ -82,7 +82,7 @@ class NCTable : public YTable, public NCPadWidget {
 
     void setBigList( const bool big ) { biglist = big; }
     void SetSepChar( const chtype colSepchar )  { myPad()->SetSepChar( colSepchar ); }
-    void SetSepWidht( const unsigned sepwidth ) { myPad()->SetSepWidht( sepwidth ); }
+    void SetSepWidth( const unsigned sepwidth ) { myPad()->SetSepWidth( sepwidth ); }
     void SetHotCol( const int hcol )            { myPad()->SetHotCol( hcol ); }
 
     virtual void addItem( YItem *yitem );
