@@ -227,7 +227,7 @@ YQPkgRepoFilterView::secondaryFilterMatch( ZyppSel	selectable,
     }
     else if ( _unmaintainedPackages->isVisible() )
     {
-        return ( ! selectable->candidateObj() );
+        return ( selectable->availableObjs() == 0 );
     }
     else if ( _rpmGroupTagsFilterView->isVisible() )
     {
