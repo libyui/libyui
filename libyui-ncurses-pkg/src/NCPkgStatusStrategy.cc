@@ -83,7 +83,7 @@ bool NCPkgStatusStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr,
 	return false;
     }
 
-    ok = slbPtr->set_status( newstatus );
+    ok = slbPtr->setStatus( newstatus );
 
     yuiMilestone() << "Set status of: " <<  slbPtr->name() << " to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
@@ -474,7 +474,7 @@ bool PatchStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, Z
 	return false;
     }
 
-    ok = slbPtr->set_status( newstatus );
+    ok = slbPtr->setStatus( newstatus );
     yuiMilestone() << "Set status of: " << slbPtr->name() << " to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
 
@@ -513,7 +513,7 @@ bool SelectionStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPt
 	return false;
     }
 
-    ok = slbPtr->set_status( newstatus );
+    ok = slbPtr->setStatus( newstatus );
     yuiMilestone() << "Set status of: " << slbPtr->name() << " to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
 
@@ -604,7 +604,7 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
 	}
 
 	// Set status
-	ok = slbPtr->set_status( status );
+	ok = slbPtr->setStatus( status );
 	yuiMilestone() << "Set status of: " << slbPtr->name() << " to: "
 	  << status << " returns: " << (ok?"true":"false") << endl;
   

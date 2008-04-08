@@ -670,7 +670,7 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
 
 	{
 	    if (selectable->hasCandidateObj() &&
-		selectable->candidatePoolItem().isSatisfied() )
+		selectable->candidateObj().isSatisfied() )
 	    {
 		//patch not installed, but it is satisfied (updated to the version patch requires)
 		//all that is missing are patch metadata, so let's display the patch
@@ -688,8 +688,8 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
 	    // isSatisfied(): all packages are installed, therefore the isNeeded() flag
 	    // isn't set. BUT the patch meta data aren't installed and therefore it makes
 	    // sense to install the patch
-	    if ( selectable->candidatePoolItem().status().isInstalled()
-                && selectable->candidatePoolItem().isBroken())
+	    if ( selectable->candidateObj().status().isInstalled()
+                && selectable->candidateObj().isBroken())
 	    {
 		displayPatch = true;
 	    }
@@ -1336,12 +1336,12 @@ bool NCPackageSelector::showLicenseAgreement( ZyppSel & slbPtr , string licenseT
 	{
 	    case S_Install:
 	    case S_AutoInstall:
-		slbPtr->set_status( S_Taboo );
+		slbPtr->setStatus( S_Taboo );
 		break;
 
 	    case S_Update:
 	    case S_AutoUpdate:
-		slbPtr->set_status(  S_Protected );
+		slbPtr->setStatus(  S_Protected );
 		break;
 
 	    default:

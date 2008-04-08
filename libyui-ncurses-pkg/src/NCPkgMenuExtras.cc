@@ -155,7 +155,7 @@ void NCPkgMenuExtras::importSelectable( ZyppSel selectable, bool isWanted, const
     }
 
     if (oldStatus != newStatus)
-	selectable->set_status( newStatus );
+	selectable->setStatus( newStatus );
 }
 
 
