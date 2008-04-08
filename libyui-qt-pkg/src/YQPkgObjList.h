@@ -62,6 +62,10 @@ protected:
 
 public:
 
+    // make it public
+    QTreeWidgetItem * itemFromIndex ( const QModelIndex & index ) const
+    { return QY2ListView::itemFromIndex(index); }
+
     // Column numbers
 
     int statusCol()		const	{ return _statusCol;		}
