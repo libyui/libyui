@@ -50,7 +50,7 @@ YQPkgRepoList::YQPkgRepoList( QWidget * parent )
 
     // Column headers for repository list
     headers <<  _( "Name");	_nameCol	= numCol++;
-    headers << _( "URL");	_urlCol		= numCol++;
+    //headers << _( "URL");	_urlCol		= numCol++;
 
     setHeaderLabels(headers);
 
@@ -260,8 +260,12 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
 	if ( ! repo.info().baseUrlsEmpty() )
 	    repoUrl = *repo.info().baseUrlsBegin();
 
-	setText( urlCol(), repoUrl.asString().c_str() );
+	//setText( urlCol(), repoUrl.asString().c_str() );
+  setToolTip( 0, repoUrl.asString().c_str() );
+  setToolTip( 1, repoUrl.asString().c_str() );
     }
+
+    setIcon( 0, QIcon("/usr/share/icons/hicolor/48x48/apps/yast-sw_source.png") );
 }
 
 
