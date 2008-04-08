@@ -25,6 +25,7 @@
 #include <zypp/Resolver.h>
 #include <QPainter>
 #include <QHeaderView>
+#include <QItemDelegate>
 #include <zypp/ui/PatternContents.h>
 
 #include "YQi18n.h"
@@ -40,6 +41,29 @@ using std::set;
 
 #define CATEGORY_BACKGROUND	QColor( 0xFF, 0xC0, 0x50 )
 
+class YQPkgPatternItemDelegate : public QItemDelegate
+{
+     YQPkgPatternList *_view;
+public:
+    YQPkgPatternItemDelegate( YQPkgPatternList *parent ) : QItemDelegate( parent ), _view( parent ) {
+    }
+
+    virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+    {
+        painter->save();
+        QColor background = option.palette.color(QPalette::Window);
+        painter->setBackground( background );
+        //painter->setFont( YQApplication::ui()->headingFont() );
+
+        YQPkgPatternListItem *item = dynamic_cast<YQPkgPatternListItem *>(_view->itemFromIndex(index));
+        if ( item )
+        {
+            //_view->drawRow( painter, option, index  );
+            QItemDelegate::paint(painter, option, index);
+        }
+        painter->restore();
+    }
+};
 
 YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFilter )
     : YQPkgObjList( parent )
@@ -62,6 +86,8 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     setColumnCount( 3 );
     setHeaderLabels(headers);
+
+    setItemDelegateForColumn( 0, new YQPkgPatternItemDelegate( this ) );
 
     // Can use the same colum for "broken" and "satisfied":
     // Both states are mutually exclusive
@@ -289,12 +315,6 @@ YQPkgPatternList::selectSomething()
 	++it;
     }
 #endif
-}
-
-void YQPkgPatternList::drawRow ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
-{
-    painter->setFont( YQUI::yqApp()->headingFont() );
-    QTreeWidget::drawRow ( painter, option, index );
 }
 
 YQPkgPatternListItem::YQPkgPatternListItem( YQPkgPatternList *	patternList,

@@ -54,14 +54,6 @@ public:
      **/
     virtual ~YQPkgPatternList();
 
-    /**
-     * Paint method. Reimplemented from @ref QTreeWidget so a different
-     * font can be used.
-     *
-     * Reimplemented from QY2ListViewItem.
-     **/
-    virtual void drawRow ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-
 public slots:
 
     /**
