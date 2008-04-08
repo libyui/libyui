@@ -217,7 +217,7 @@ YQPkgVersionsView::checkForChangedCandidate()
 		    }
 		}
 
-		_selectable->set_status( status );
+		_selectable->setStatus( status );
 
 
 		// Set candidate

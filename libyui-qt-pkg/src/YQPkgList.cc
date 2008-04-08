@@ -502,7 +502,7 @@ YQPkgList::globalSetPkgStatus( ZyppStatus newStatus, bool force, bool countOnly 
 		case S_Del:
 		case S_AutoDel:
 		case S_Protected:
-		    doChange = selectable->hasInstalledObj();
+		    doChange = !selectable->installedEmpty();
 		    break;
 
 		case S_Update:
@@ -510,7 +510,7 @@ YQPkgList::globalSetPkgStatus( ZyppStatus newStatus, bool force, bool countOnly 
 
 		    if ( force )
 		    {
-			doChange = selectable->hasInstalledObj();
+			doChange = !selectable->installedEmpty();
 		    }
 		    else // don't force - update only if useful (if candidate is newer)
 		    {
@@ -528,14 +528,14 @@ YQPkgList::globalSetPkgStatus( ZyppStatus newStatus, bool force, bool countOnly 
 		case S_AutoInstall:
 		case S_NoInst:
 		case S_Taboo:
-		    doChange = ! selectable->hasInstalledObj();
+		    doChange = selectable->installedEmpty();
 		    break;
 	    }
 
 	    if ( doChange )
 	    {
 		if ( ! countOnly )
-		    selectable->set_status( newStatus );
+		    selectable->setStatus( newStatus );
 
 		changedCount++;
 		// yuiMilestone() << "Updating " << selectable->name() << endl;
@@ -705,7 +705,7 @@ YQPkgListItem::toolTip( int col )
 	QString installed;
 	QString candidate;
 
-	if ( selectable()->hasInstalledObj() )
+	if ( !selectable()->installedEmpty() )
 	{
 	    installed  = selectable()->installedObj()->edition().asString().c_str();
 	    installed += "-";
@@ -720,7 +720,7 @@ YQPkgListItem::toolTip( int col )
 	    candidate +=  selectable()->candidateObj()->arch().asString().c_str();
 	}
 
-	if ( selectable()->hasInstalledObj() )
+	if ( !selectable()->installedEmpty() )
 	{
 	    text += installed + "\n";
 

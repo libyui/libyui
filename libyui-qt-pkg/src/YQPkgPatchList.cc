@@ -148,7 +148,7 @@ YQPkgPatchList::fillList()
 		    else // not installed
 		    {
 			if ( selectable->hasCandidateObj() &&
-			     selectable->candidatePoolItem().isSatisfied() )
+			     selectable->candidateObj().isSatisfied() )
 			{
 			    // This is a pretty exotic case, but still it might happen:
 			    //
@@ -173,8 +173,8 @@ YQPkgPatchList::fillList()
 			// installed, but either no version of that patch is installed or there is a
 			// newer one to which the patch could be updated.
 
-			if ( selectable->candidatePoolItem().status().isUninstalled()
-			     && selectable->candidatePoolItem().isBroken() ) // patch really needed?
+			if ( selectable->candidateObj().status().isUninstalled()
+			     && selectable->candidateObj().isBroken() ) // patch really needed?
 			{
 			    // Patches are needed if any of the packages that belong to the patch
 			    // are installed on the system.
@@ -201,7 +201,7 @@ YQPkgPatchList::fillList()
 		    }
 		    else // not installed - display only if needed
 		    {
-			if ( selectable->candidatePoolItem().isBroken() )
+			if ( selectable->candidateObj().isBroken() )
 			{
 			    displayPatch = true;
 			}
@@ -548,10 +548,8 @@ YQPkgPatchListItem::cycleStatus()
 {
     YQPkgObjListItem::cycleStatus();
 
-#if ! ENABLE_DELETING_PATCHES
     if ( status() == S_Del )	// Can't delete patches
-	setStatus( S_KeepInstalled );
-#endif
+        setStatus( S_KeepInstalled );
 }
 
 

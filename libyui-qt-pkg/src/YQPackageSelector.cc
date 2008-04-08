@@ -1301,7 +1301,7 @@ YQPackageSelector::importSelectable( ZyppSel		selectable,
     }
 
     if ( oldStatus != newStatus )
-	selectable->set_status( newStatus );
+	selectable->setStatus( newStatus );
 }
 
 
@@ -1439,7 +1439,7 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 
 		    if ( ! subPkg->installedObj() )
 		    {
-			subPkg->set_status( S_Install );
+			subPkg->setStatus( S_Install );
 			yuiMilestone() << "Installing subpackage " << subPkgName << endl;
 		    }
 		    break;
@@ -1452,12 +1452,12 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 
 		    if ( ! subPkg->installedObj() )
 		    {
-			subPkg->set_status( S_Install );
+			subPkg->setStatus( S_Install );
 			yuiMilestone() << "Installing subpackage " << subPkgName << endl;
 		    }
 		    else
 		    {
-			subPkg->set_status( S_Update );
+			subPkg->setStatus( S_Update );
 			yuiMilestone() << "Updating subpackage " << subPkgName << endl;
 		    }
 		    break;

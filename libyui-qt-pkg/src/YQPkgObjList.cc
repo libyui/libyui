@@ -920,12 +920,12 @@ YQPkgObjListItem::init()
     const ZyppObj candidate = selectable()->candidateObj();
     const ZyppObj installed = selectable()->installedObj();
 
-    if ( candidate && installed )
+    if ( candidate && (! selectable()->installedEmpty() ) )
     {
-	if ( candidate->edition() < installed->edition() )
-	    _installedIsNewer = true;
-	else if ( installed->edition() < candidate->edition() )
-	    _candidateIsNewer = true;
+        if ( candidate->edition() < installed->edition() )
+            _installedIsNewer = true;
+        else if ( installed->edition() < candidate->edition() )
+            _candidateIsNewer = true;
     }
 
     if ( nameCol()    >= 0 )	setText( nameCol(),	zyppObj()->name()	);
@@ -933,32 +933,31 @@ YQPkgObjListItem::init()
 
     if ( sizeCol()    >= 0 )
     {
-	zypp::ByteCount size = zyppObj()->size();
+        zypp::ByteCount size = zyppObj()->size();
 
-	if ( size > 0L )
-	    setText( sizeCol(),	size.asString() );
+        if ( size > 0L )
+            setText( sizeCol(),	size.asString() );
     }
 
     if ( instVersionCol() >= 0 )
     {
-	if ( selectable()->hasInstalledObj() )
-	     setText( instVersionCol(), installed->edition() );
+        if ( !selectable()->installedEmpty() )
+            setText( instVersionCol(), installed->edition() );
 
-	if ( zyppObj() != selectable()->installedObj() &&
-	     zyppObj() != selectable()->candidateObj()   )
-	{
-	    setText( versionCol(), zyppObj()->edition() );
-	}
-	else if ( selectable()->hasCandidateObj() )
-	{
-	    setText( versionCol(), candidate->edition() );
-	}
+        if ( zyppObj() != selectable()->installedObj() &&
+             zyppObj() != selectable()->candidateObj()   )
+        {
+            setText( versionCol(), zyppObj()->edition() );
+        }
+        else if ( selectable()->hasCandidateObj() )
+        {
+            setText( versionCol(), candidate->edition() );
+        }
     }
     else
     {
-	setText( versionCol(),	zyppObj()->edition() );
+        setText( versionCol(),	zyppObj()->edition() );
     }
-
 
     setStatusIcon();
 }
@@ -1012,7 +1011,7 @@ void
 YQPkgObjListItem::setStatus( ZyppStatus newStatus, bool sendSignals )
 {
     ZyppStatus oldStatus = selectable()->status();
-    selectable()->set_status( newStatus );
+    selectable()->setStatus( newStatus );
 
     if ( oldStatus != selectable()->status() )
     {
@@ -1107,7 +1106,7 @@ YQPkgObjListItem::isSatisfied() const
     if ( _selectable->hasInstalledObj() )
 	return false;
 
-    return _selectable->candidatePoolItem().isSatisfied();
+    return _selectable->candidateObj().isSatisfied();
 }
 
 
@@ -1312,7 +1311,7 @@ YQPkgObjListItem::showLicenseAgreement( ZyppSel sel )
 			     << " - setting to TABOO"
 			     << endl;
 
-		sel->set_status( S_Taboo );
+		sel->setStatus( S_Taboo );
 		break;
 
 
@@ -1323,7 +1322,7 @@ YQPkgObjListItem::showLicenseAgreement( ZyppSel sel )
 			     << "  - setting to PROTECTED"
 			     << endl;
 
-		sel->set_status( S_Protected );
+		sel->setStatus( S_Protected );
 		// S_Keep wouldn't be good enough: The next solver run might
 		// set it to S_AutoUpdate again
 		break;

@@ -53,7 +53,8 @@ public:
         painter->save();
         QColor background = option.palette.color(QPalette::Window);
         painter->setBackground( background );
-        //painter->setFont( YQApplication::ui()->headingFont() );
+        painter->setFont( YQUI::yqApp()->headingFont() );
+
 
         YQPkgPatternListItem *item = dynamic_cast<YQPkgPatternListItem *>(_view->itemFromIndex(index));
         if ( item )
