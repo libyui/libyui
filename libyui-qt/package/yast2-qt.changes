@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Apr  8 15:32:07 CEST 2008 - sh@suse.de
+
+- Fixed bnc #351593: Pattern Conflicts in OES2 SP1 
+  Now checking file /var/lib/YaST2/force_full_solver_run
+- V 2.13.84
+
+-------------------------------------------------------------------
 Mon Jan 21 17:35:58 CET 2008 - tgoettlicher@suse.de
 
 - Fixed Bug #352845: UI qt segfault after closing opened window 

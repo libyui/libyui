@@ -25,6 +25,7 @@
 #define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE	0
 #define GLOBAL_UPDATE_CONFIRMATION_THRESHOLD		20
 
+#include <unistd.h>	// access()
 #include <fstream>
 #include <boost/bind.hpp>
 
@@ -559,7 +560,12 @@ YQPackageSelector::layoutButtons( QWidget * parent )
     // Translators: Please keep this short!
     _autoDependenciesCheckBox = new QCheckBox( _( "A&utocheck" ), button_box );
     CHECK_PTR( _autoDependenciesCheckBox );
-    _autoDependenciesCheckBox->setChecked( AUTO_CHECK_DEPENDENCIES_DEFAULT );
+
+    if ( access( FORCE_FULL_SOLVER_RUN_FILE, F_OK ) == 0 ) // file exists
+	_autoDependenciesCheckBox->setChecked( true );
+    else
+	_autoDependenciesCheckBox->setChecked( AUTO_CHECK_DEPENDENCIES_DEFAULT );
+	
 
     addHStretch( button_box );
 

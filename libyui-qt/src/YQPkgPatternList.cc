@@ -19,6 +19,8 @@
 /-*/
 
 
+#include <unistd.h>	// access()
+
 #define y2log_component "qt-pkg"
 #include <ycp/y2log.h>
 #include <qregexp.h>
@@ -315,7 +317,12 @@ YQPkgPatternListItem::~YQPkgPatternListItem()
 void
 YQPkgPatternListItem::applyChanges()
 {
-    solveResolvableCollections();
+    if ( access( FORCE_FULL_SOLVER_RUN_FILE, F_OK ) == -1) // file doesn't exist
+	solveResolvableCollections();
+    
+    // else branch handled the YQPkgObjList::statusChanged() signal handler:
+    // connected to YQPackageSelectorBase::resolveDependencies()
+    // if FORCE_FULL_SOLVER_RUN_FILE exists (see YQPatternSelector::makeConnections()
 }
 
 

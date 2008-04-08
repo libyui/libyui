@@ -19,6 +19,9 @@
 
 /-*/
 
+
+#include <unistd.h>	// access()
+
 #include <qapplication.h>
 #include <qhbox.h>
 #include <qheader.h>
@@ -285,6 +288,13 @@ YQPatternSelector::makeConnections()
 		     _diskUsageList,	SLOT  ( updateDiskUsage() ) );
 	}
 
+	if ( access( FORCE_FULL_SOLVER_RUN_FILE, F_OK ) == 0 ) // file exists
+	{
+	    y2milestone( "Forcing full solver run upon pattern status change" );
+	    
+	    connect( _patternList,	SIGNAL( statusChanged()			),
+		     this,		SLOT  ( resolvePackageDependencies()	) );
+	}
     }
 
     if ( _selList )

@@ -34,6 +34,8 @@
 #include <zypp/ZYppFactory.h>
 #include <zypp/ResPoolProxy.h>
 
+#define FORCE_FULL_SOLVER_RUN_FILE "/var/lib/YaST2/force_full_solver_run"
+
 
 using zypp::ui::S_Protected;           
 using zypp::ui::S_Taboo;               
