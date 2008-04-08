@@ -52,9 +52,9 @@ YQPkgChangeLogView::showDetails( ZyppSel selectable )
 	return;
     }
 
-    QString html = htmlHeading( selectable,
-				true );	// showVersion
-    
+    QString html = htmlStart();
+    html += htmlHeading( selectable, true );
+
     ZyppPkg installed = tryCastToZyppPkg( selectable->installedObj() );
 
     if ( installed )
@@ -65,6 +65,7 @@ YQPkgChangeLogView::showDetails( ZyppSel selectable )
     {
 	html += "<p><i>" + _( "Information only available for installed packages." ) + "</i></p>";
     }
+    html += htmlEnd();
 
     setHtml( html );
 }

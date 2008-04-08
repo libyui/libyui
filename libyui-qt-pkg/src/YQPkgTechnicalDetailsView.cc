@@ -54,7 +54,11 @@ YQPkgTechnicalDetailsView::showDetails( ZyppSel selectable )
 	return;
     }
 
-    QString html_text = htmlHeading( selectable );
+
+
+    QString html_text = htmlStart();
+    
+    html_text += htmlHeading( selectable );
 
     ZyppPkg candidate = tryCastToZyppPkg( selectable->candidateObj() );
     ZyppPkg installed = tryCastToZyppPkg( selectable->installedObj() );
@@ -71,6 +75,8 @@ YQPkgTechnicalDetailsView::showDetails( ZyppSel selectable )
 	if ( installed )
 	    html_text += simpleTable( selectable, installed );
     }
+
+    html_text += htmlEnd();
 
     setHtml( html_text );
 }

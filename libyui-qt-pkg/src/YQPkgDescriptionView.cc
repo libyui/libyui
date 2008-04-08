@@ -54,7 +54,9 @@ YQPkgDescriptionView::showDetails( ZyppSel selectable )
 	return;
     }
 
-    QString html_text = htmlHeading( selectable );
+    QString html_text = htmlStart();
+    
+    html_text += htmlHeading( selectable );
 
     QString description = fromUTF8( selectable->theObj()->description() );
 
@@ -63,7 +65,7 @@ YQPkgDescriptionView::showDetails( ZyppSel selectable )
 
     html_text += description;
 
-
+    html_text += htmlEnd();
     setHtml( html_text );
     //FIXME ensureVisible( 0, 0 );	// Otherwise hyperlinks will be centered
 }

@@ -50,7 +50,8 @@ YQPkgDependenciesView::showDetails( ZyppSel selectable )
 	return;
     }
 
-    QString html_text = htmlHeading( selectable );
+    QString html_text = htmlStart();    
+    html_text += htmlHeading( selectable );
 
     ZyppObj candidate = selectable->candidateObj();
     ZyppObj installed = selectable->installedObj();
@@ -67,6 +68,8 @@ YQPkgDependenciesView::showDetails( ZyppSel selectable )
 	if ( installed )
 	    html_text += simpleTable( installed );
     }
+
+    html_text += htmlEnd();
 
     setHtml( html_text );
 }

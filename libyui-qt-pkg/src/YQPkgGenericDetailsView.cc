@@ -29,7 +29,6 @@
 
 using std::string;
 
-
 YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
     : QTextBrowser( parent )
 {
@@ -41,6 +40,37 @@ YQPkgGenericDetailsView::YQPkgGenericDetailsView( QWidget * parent )
 	connect( parent, SIGNAL( currentChanged(QWidget *) ),
 		 this,   SLOT  ( reload        (QWidget *) ) );
     }
+
+    QString css;
+    css = "table.stats"
+        "{text-align: center;"
+        "font-family: Verdana, Geneva, Arial, Helvetica, sans-serif ;"
+        "font-weight: normal;"
+        "font-size: 11px;"
+        "color: #fff;"
+        "width: 100%;"
+        "background-color: #666;"
+        "border: 1px;"
+        "border-collapse: collapse;"
+        "border-spacing: 4px;}"
+        ""
+        "table.stats td"
+        "{background-color: #CCC;"
+        "color: #000;"
+        "padding: 4px;"
+        "text-align: left;"
+        "border: 1px #fff solid;}"
+        ""
+        "table.stats td.hed"
+        "{background-color: #666;"
+        "color: #fff;"
+        "padding: 4px;"
+        "text-align: left;"
+        "border-bottom: 2px #fff solid;"
+        "font-size: 12px;"
+        "font-weight: bold;} ";
+
+    document()->addResource( QTextDocument::StyleSheetResource, QUrl( "format.css" ), css );
 }
 
 
@@ -87,6 +117,21 @@ YQPkgGenericDetailsView::minimumSizeHint() const
 
 
 QString
+YQPkgGenericDetailsView::htmlStart()
+{
+    return "<html><head>"
+        "<link rel='stylesheet' type='text/css' href='format.css'>"
+        "</head><body>";
+}
+
+QString
+YQPkgGenericDetailsView::htmlEnd()
+{
+    return "</body></html>";
+}
+
+
+QString
 YQPkgGenericDetailsView::htmlHeading( ZyppSel selectable, bool showVersion )
 {
     if ( ! selectable )
@@ -102,7 +147,7 @@ YQPkgGenericDetailsView::htmlHeading( ZyppSel selectable, bool showVersion )
     QString html = "<table";
 
     if ( ! YQUI::ui()->usingVisionImpairedPalette() )
-	html += " bgcolor=#E0E0F8";
+        html +=  " class=\"stats\"";
 
     html += "><tr><td><b>"
 	+ fromUTF8( zyppObj->name() )
@@ -138,10 +183,10 @@ YQPkgGenericDetailsView::htmlEscape( const QString & plainText )
 QString
 YQPkgGenericDetailsView::table( const QString & contents )
 {
-    QString html = "<table border=1";
-
+    QString html = "<table";
     if ( ! YQUI::ui()->usingVisionImpairedPalette() )
-	html += " bgcolor=#F0F0F0";
+        html +=  " class=\"stats\"";
+
     html += ">" + contents + "</table>";
 
     return html;
@@ -159,7 +204,7 @@ QString
 YQPkgGenericDetailsView::cell( QString contents )
 {
     contents = htmlEscape( contents );
-    return "<td valign=top>" + contents + "</td>";
+    return "<td>" + contents + "</td>";
 }
 
 
@@ -167,7 +212,7 @@ QString
 YQPkgGenericDetailsView::cell( int contents )
 {
     QString html;
-    html.sprintf( "<td valign=top>%d</td>", contents );
+    html.sprintf( "<td>%d</td>", contents );
 
     return html;
 }
@@ -190,7 +235,7 @@ YQPkgGenericDetailsView::cell( const string & contents )
 QString
 YQPkgGenericDetailsView::hcell( QString contents )
 {
-    QString html = "<td valign=top";
+    QString html = "<td";
 
     if ( ! YQUI::ui()->usingVisionImpairedPalette() )
 	html += " bgcolor=#D0D0D0";

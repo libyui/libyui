@@ -60,6 +60,12 @@ public:
     virtual QSize minimumSizeHint() const;
 
     /**
+     * starts the html tag and set the style
+     */
+    static QString htmlStart();
+    static QString htmlEnd();
+
+    /**
      * Returns a uniform heading in HTML format for the specified selectable:
      * name and summary
      * or name, version and summary, if 'showVersion' is 'true'
