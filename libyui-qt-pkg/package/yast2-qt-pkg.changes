@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Apr  8 17:40:51 CEST 2008 - dmacvicar@suse.de
+
+- fixed some Selectable changes
+- 2.16.32
+
+-------------------------------------------------------------------
 Fri Apr  4 10:32:38 CEST 2008 - schubi@suse.de
 
 - Fixed ResStatus (needed, satisfied,...)
