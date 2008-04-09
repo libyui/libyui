@@ -1290,7 +1290,7 @@ YQPkgObjListItem::showLicenseAgreement( ZyppSel sel )
 	return true;
 
     yuiDebug() << "Showing license agreement for " << sel->name() << endl;
-    bool confirmed = YQPkgTextDialog::confirmText( 0, sel, licenseText );
+    bool confirmed = YQPkgTextDialog::confirmText( this, sel, licenseText );
 
     if ( confirmed )
     {

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Apr  9 15:10:20 CEST 2008 - sh@suse.de
+
+- Fixed bnc #372910: License windows shows in left top 
+
+-------------------------------------------------------------------
 Tue Apr  8 17:40:51 CEST 2008 - dmacvicar@suse.de
 
 - fixed some Selectable changes
