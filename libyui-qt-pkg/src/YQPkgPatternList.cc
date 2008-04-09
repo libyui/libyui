@@ -52,16 +52,22 @@ public:
     {
         painter->save();
         QColor background = option.palette.color(QPalette::Window);
-        painter->setBackground( background );
-        painter->setFont( YQUI::yqApp()->headingFont() );
-
+        
+        YQPkgPatternCategoryItem *citem = dynamic_cast<YQPkgPatternCategoryItem *>(_view->itemFromIndex(index));
+        if ( citem )
+        {
+            painter->fillRect(option.rect, CATEGORY_BACKGROUND);
+            //painter->setBackground(  );
+            painter->setFont( YQUI::yqApp()->headingFont() );
+            //_view->drawRow( painter, option, index  );
+        }
 
         YQPkgPatternListItem *item = dynamic_cast<YQPkgPatternListItem *>(_view->itemFromIndex(index));
         if ( item )
         {
             //_view->drawRow( painter, option, index  );
-            QItemDelegate::paint(painter, option, index);
         }
+        QItemDelegate::paint(painter, option, index);
         painter->restore();
     }
 };
@@ -71,9 +77,9 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 {
     yuiDebug() << "Creating pattern list" << endl;
 
-    int numCol = 1;
+    int numCol = 0;
     QStringList headers;
-    headers << "";
+    //headers << "";
     headers << "";	_statusCol	= numCol++;
 
     // Translators: "Pattern" refers to so-called "installation patterns",
@@ -85,10 +91,13 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     headers << _( "Pattern" );	_summaryCol	= numCol++;
 
-    setColumnCount( 3 );
+    setColumnCount( 2 );
     setHeaderLabels(headers);
 
-    setItemDelegateForColumn( 0, new YQPkgPatternItemDelegate( this ) );
+    setIndentation(0);
+    
+    setItemDelegateForColumn( _statusCol, new YQPkgPatternItemDelegate( this ) );
+    setItemDelegateForColumn( _summaryCol, new YQPkgPatternItemDelegate( this ) );
 
     // Can use the same colum for "broken" and "satisfied":
     // Both states are mutually exclusive
@@ -165,6 +174,7 @@ YQPkgPatternList::fillList()
     }
 
     yuiDebug() << "Pattern list filled" << endl;
+    resizeColumnToContents(_statusCol);
 }
 
 
@@ -388,7 +398,7 @@ YQPkgPatternCategoryItem::YQPkgPatternCategoryItem( YQPkgPatternList *	patternLi
     , _patternList( patternList )
 {
     setText( _patternList->summaryCol(), category );
-    setBackgroundColor( _patternList->summaryCol(), CATEGORY_BACKGROUND );
+    
     setExpanded( true );
     setTreeIcon();
 }
