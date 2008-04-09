@@ -29,6 +29,7 @@
 
 #include "utf8.h"
 
+#include "YDialog.h"
 #include "YQPkgObjList.h"
 #include "YQPkgTextDialog.h"
 #include "YQi18n.h"
@@ -1290,7 +1291,9 @@ YQPkgObjListItem::showLicenseAgreement( ZyppSel sel )
 	return true;
 
     yuiDebug() << "Showing license agreement for " << sel->name() << endl;
-    bool confirmed = YQPkgTextDialog::confirmText( this, sel, licenseText );
+
+    bool confirmed = YQPkgTextDialog::confirmText( (QWidget *) YDialog::currentDialog()->widgetRep(),
+						   sel, licenseText );
 
     if ( confirmed )
     {
