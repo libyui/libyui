@@ -214,30 +214,24 @@ YQPkgPatternList::filter()
 
     if ( selection() )	// The seleted QListViewItem
     {
-	ZyppPattern zyppPattern = selection()->zyppPattern();
+        ZyppPattern zyppPattern = selection()->zyppPattern();
 
-	if ( zyppPattern )
-	{
-	    zypp::ui::PatternContents patternContents( zyppPattern );
-	    set<string> wanted = patternContents.install_packages();
-
-	    for ( ZyppPoolIterator it = zyppPkgBegin();
-		  it != zyppPkgEnd();
-		  ++it )
-	    {
-		string name = (*it)->theObj()->name();
-
-		if ( contains( wanted, name ) )
-		{
-		    ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
-
-		    if ( zyppPkg )
-		    {
-			emit filterMatch( *it, zyppPkg );
-		    }
-		}
-	    }
-	}
+        if ( zyppPattern )
+        {
+      
+            zypp::Pattern::Contents  c(zyppPattern->contents());
+            for ( zypp::Pattern::Contents::Selectable_iterator it = c.selectableBegin();
+                  it != c.selectableEnd();
+                  ++it )
+            {
+                ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
+                if ( zyppPkg )
+                {
+                    emit filterMatch( *it, zyppPkg );
+                }
+            }
+      
+        }
     }
 
     emit filterFinished();

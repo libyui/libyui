@@ -24,6 +24,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QEvent>
+#include <QHeaderView>
 #include <zypp/ui/PatchContents.h>
 #include <set>
 
@@ -56,11 +57,11 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     QStringList headers;
 
     headers << "";			_statusCol	= numCol++;
-    headers <<  _( "Patch"	);	_nameCol	= numCol++;
+    //headers <<  _( "Patch"	);	_nameCol	= numCol++;
     headers << _( "Summary" 	);	_summaryCol	= numCol++;
     headers << _( "Category"	);	_categoryCol	= numCol++;
-    headers << _( "Size"	);	_sizeCol	= numCol++;
-    headers << _( "Version"	);	_versionCol	= numCol++;
+    //headers << _( "Size"	);	_sizeCol	= numCol++;
+    //headers << _( "Version"	);	_versionCol	= numCol++;
 
     // Can use the same colum for "broken" and "satisfied":
     // Both states are mutually exclusive
@@ -69,6 +70,10 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     _brokenIconCol	= _summaryCol;
 
     setHeaderLabels(headers);
+    header()->setResizeMode(_statusCol, QHeaderView::ResizeToContents);
+    //header()->setResizeMode(_versionCol, QHeaderView::ResizeToContents);
+    header()->setResizeMode(_categoryCol, QHeaderView::ResizeToContents);
+    header()->setResizeMode(_summaryCol, QHeaderView::Interactive);
 
     setAllColumnsShowFocus( true );
     //FIXME setColumnAlignment( sizeCol(), Qt::AlignRight );
@@ -245,6 +250,9 @@ YQPkgPatchList::fillList()
 #endif
 
     yuiDebug() << "Patch list filled" << endl;
+    resizeColumnToContents(_statusCol);
+    //resizeColumnToContents(_nameCol);
+    resizeColumnToContents(_categoryCol);
 }
 
 
@@ -273,72 +281,28 @@ void
 YQPkgPatchList::filter()
 {
     emit filterStart();
-    std::set<ZyppSel> patchSelectables;
 
     if ( selection() )
     {
-	ZyppPatch patch = selection()->zyppPatch();
+        ZyppPatch patch = selection()->zyppPatch();
 
-	if ( patch )
-	{
-	    ZyppPatchContents patchContents( patch );
+        if ( patch )
+        {
+            zypp::Patch::Contents c(patch->contents());
+            for ( zypp::Patch::Contents::Selectable_iterator it = c.selectableBegin();
+                  it != c.selectableEnd();
+                  ++it )
+            {
+                ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
+                if ( zyppPkg )
+                {
+                    emit filterMatch( *it, zyppPkg );
+                }
+            }
+        }
+  }
 
-	    for ( ZyppPatchContentsIterator it = patchContents.begin();
-		  it != patchContents.end();
-		  ++it )
-	    {
-		ZyppPkg pkg = tryCastToZyppPkg( *it );
-
-		if ( pkg )
-		{
-		    yuiDebug() << "Found patch pkg: " << (*it)->name()
-			       << " arch: " << (*it)->arch().asString()
-			       << endl;
-
-		    ZyppSel sel = _selMapper.findZyppSel( pkg );
-
-		    if ( sel )
-		    {
-			if ( contains( patchSelectables, sel ) )
-			{
-			    yuiMilestone() << "Suppressing duplicate selectable "
-					   << (*it)->name() << "-" << (*it)->edition().asString()
-					   << " arch: " << (*it)->arch().asString()
-					   << endl;
-			}
-			else
-			{
-			    patchSelectables.insert( sel );
-			    emit filterMatch( sel, pkg );
-			}
-		    }
-		    else
-			yuiError() << "No selectable for pkg " << (*it)->name() << endl;
-		}
-		else // No ZyppPkg - some other kind of object (script, message)
-		{
-		    if ( zypp::isKind<zypp::Script> ( *it ) )
-		    {
-			yuiDebug() << "Found patch script " << (*it)->name() << endl;
-			emit filterMatch( _( "Script" ),  fromUTF8( (*it)->name() ), -1 );
-		    }
-		    else if ( zypp::isKind<zypp::Message> ( *it ) )
-		    {
-			yuiDebug() << "Found patch message " << (*it)->name() << " (ignoring)" << endl;
-		    }
-		    else
-		    {
-			yuiError() << "Found unknown object of kind " << (*it)->kind().asString()
-				   << " in patch: " << (*it)->name() << "-" << (*it)->edition().asString()
-				   << " arch: " << (*it)->arch().asString()
-				   << endl;
-		    }
-		}
-	    }
-	}
-    }
-
-    emit filterFinished();
+  emit filterFinished();
 }
 
 
