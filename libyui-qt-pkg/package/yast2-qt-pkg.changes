@@ -4,6 +4,11 @@ Wed Apr  9 15:10:20 CEST 2008 - sh@suse.de
 - Fixed bnc #372910: License windows shows in left top 
 
 -------------------------------------------------------------------
+Thu Apr 10 00:37:19 CEST 2008 - dmacvicar@suse.de
+
+- fix patch and pattern content 
+
+-------------------------------------------------------------------
 Wed Apr  9 14:15:26 CEST 2008 - dmacvicar@suse.de
 
 - fix pattern view display (only missing head font) 
