@@ -1160,6 +1160,7 @@ void YQWizard::addChild( YWidget * child )
 	// Dock sub-wizard - reparent yqWizard to widget stack
 	// Important: Don't mess with the child's YWidget::parent().
 	// This will still remain this wizard.
+	// Call only yqWizard->reparent().
 	
 	// FIXME
 	// FIXME
