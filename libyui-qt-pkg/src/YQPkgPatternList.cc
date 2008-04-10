@@ -124,10 +124,11 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     sortByColumn( summaryCol(), Qt::AscendingOrder );
 
     setAllColumnsShowFocus( true );
-
+    
+    header()->setResizeMode( iconCol(), QHeaderView::Fixed );
     header()->setResizeMode( statusCol(), QHeaderView::Fixed );
-    header()->setResizeMode( summaryCol(), QHeaderView::Stretch );
-    header()->setResizeMode( howmanyCol(), QHeaderView::Stretch );
+    header()->setResizeMode( summaryCol(), QHeaderView::Interactive );
+    header()->setResizeMode( howmanyCol(), QHeaderView::Fixed );
     
     header()->resizeSection( statusCol(), 25 );
     setColumnWidth( statusCol(), 25 );
