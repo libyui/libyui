@@ -25,6 +25,7 @@
 #include <QAction>
 #include <QEvent>
 #include <QHeaderView>
+#include <zypp/base/Logger.h>
 #include <zypp/ui/PatchContents.h>
 #include <set>
 
@@ -289,6 +290,8 @@ YQPkgPatchList::filter()
         if ( patch )
         {
             zypp::Patch::Contents c(patch->contents());
+            MIL << c << endl;
+            
             for ( zypp::Patch::Contents::Selectable_iterator it = c.selectableBegin();
                   it != c.selectableEnd();
                   ++it )
@@ -300,7 +303,15 @@ YQPkgPatchList::filter()
                 }
             }
         }
+        else
+        {
+            MIL << "patch is bogus" << endl;
+            
+        }
+        
   }
+  else
+      WAR << "selection empty" << endl;
 
   emit filterFinished();
 }
@@ -324,17 +335,14 @@ YQPkgPatchList::addPatchItem( ZyppSel	selectable,
 YQPkgPatchListItem *
 YQPkgPatchList::selection() const
 {
-#if FIXME
-    QTreeWidgetItem * item = selectedItem();
+    QTreeWidgetItem * item = currentItem();
 
     if ( ! item )
-	return 0;
+        return 0;
 
     return dynamic_cast<YQPkgPatchListItem *> (item);
-#else
-    return 0;
-#endif
 }
+
 
 
 void
