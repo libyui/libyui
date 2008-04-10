@@ -110,7 +110,7 @@ public:
      **/
     YQPkgPatternListItem * selection() const;
 
-
+    int howmanyCol() const { return _howmanyCol; }
 signals:
 
     /**
@@ -145,6 +145,7 @@ protected:
     //
 
     QMap<QString, YQPkgPatternCategoryItem*> _categories;
+    int _howmanyCol;
 };
 
 

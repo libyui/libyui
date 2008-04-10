@@ -25,6 +25,8 @@
 #include <zypp/Resolver.h>
 #include <QPainter>
 #include <QHeaderView>
+#include <QLabel>
+#include <QLayout>
 #include <QItemDelegate>
 #include <zypp/ui/PatternContents.h>
 
@@ -56,9 +58,13 @@ public:
         YQPkgPatternCategoryItem *citem = dynamic_cast<YQPkgPatternCategoryItem *>(_view->itemFromIndex(index));
         if ( citem )
         {
+            QFont f = painter->font();
+            f.setWeight(QFont::Bold);
+            f.setPointSize(f.pointSize()+1);
+            painter->setFont(f);
+            
             painter->fillRect(option.rect, CATEGORY_BACKGROUND);
             //painter->setBackground(  );
-            painter->setFont( YQUI::yqApp()->headingFont() );
             //_view->drawRow( painter, option, index  );
         }
 
@@ -67,9 +73,11 @@ public:
         {
             //_view->drawRow( painter, option, index  );
         }
+
         QItemDelegate::paint(painter, option, index);
         painter->restore();
     }
+    
 };
 
 YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFilter )
@@ -80,6 +88,7 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     int numCol = 0;
     QStringList headers;
     //headers << "";
+    headers << "";	_iconCol	= numCol++;
     headers << "";	_statusCol	= numCol++;
 
     // Translators: "Pattern" refers to so-called "installation patterns",
@@ -90,14 +99,17 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     // is only of little relevance, though.
 
     headers << _( "Pattern" );	_summaryCol	= numCol++;
+    headers << "";	_howmanyCol	= numCol++;
 
-    setColumnCount( 2 );
+    setColumnCount( 4 );
     setHeaderLabels(headers);
 
     setIndentation(0);
     
+    setItemDelegateForColumn( _iconCol, new YQPkgPatternItemDelegate( this ) );
     setItemDelegateForColumn( _statusCol, new YQPkgPatternItemDelegate( this ) );
     setItemDelegateForColumn( _summaryCol, new YQPkgPatternItemDelegate( this ) );
+    setItemDelegateForColumn( _howmanyCol, new YQPkgPatternItemDelegate( this ) );
 
     // Can use the same colum for "broken" and "satisfied":
     // Both states are mutually exclusive
@@ -115,11 +127,14 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 
     header()->setResizeMode( statusCol(), QHeaderView::Fixed );
     header()->setResizeMode( summaryCol(), QHeaderView::Stretch );
-
+    header()->setResizeMode( howmanyCol(), QHeaderView::Stretch );
+    
     header()->resizeSection( statusCol(), 25 );
     setColumnWidth( statusCol(), 25 );
     setColumnWidth( summaryCol(), 100 );
-    header()->resizeSection( 0, 0 );
+    setColumnWidth( howmanyCol(), 7 );
+    
+    //header()->resizeSection( 0, 0 );
 
     //header()->setMinimumSectionSize( 25 );
 
@@ -128,6 +143,9 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
 	connect( this, SIGNAL( currentItemChanged( QTreeWidgetItem *, QTreeWidgetItem * ) ),
 		 this, SLOT  ( filter()				   ) );
     }
+
+    setIconSize(QSize(32,32));
+    header()->resizeSection( iconCol(), 34 );
 
     if ( autoFill )
     {
@@ -174,7 +192,9 @@ YQPkgPatternList::fillList()
     }
 
     yuiDebug() << "Pattern list filled" << endl;
+    resizeColumnToContents(_iconCol);
     resizeColumnToContents(_statusCol);
+    resizeColumnToContents(_howmanyCol);
 }
 
 
@@ -218,7 +238,9 @@ YQPkgPatternList::filter()
 
         if ( zyppPattern )
         {
-      
+            int total = 0;
+            int installed = 0;
+            
             zypp::Pattern::Contents  c(zyppPattern->contents());
             for ( zypp::Pattern::Contents::Selectable_iterator it = c.selectableBegin();
                   it != c.selectableEnd();
@@ -227,14 +249,19 @@ YQPkgPatternList::filter()
                 ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
                 if ( zyppPkg )
                 {
+                    if ( (*it)->installedSize() > 0 )
+                        ++installed;
+                    ++total;
+                    
                     emit filterMatch( *it, zyppPkg );
                 }
             }
-      
+            selection()->setText( _howmanyCol, QString().sprintf("[%d/%d]", installed, total));
         }
     }
 
     emit filterFinished();
+    resizeColumnToContents(_howmanyCol);
 }
 
 
@@ -252,9 +279,18 @@ YQPkgPatternList::addPatternItem( ZyppSel	selectable,
     YQPkgPatternListItem * item = 0;
 
     if ( cat )
-	item = new YQPkgPatternListItem( this, cat, selectable, zyppPattern );
+    {
+        item = new YQPkgPatternListItem( this, cat, selectable, zyppPattern );
+    }
     else
-	item = new YQPkgPatternListItem( this, selectable, zyppPattern );
+    {
+        item = new YQPkgPatternListItem( this, selectable, zyppPattern );
+        item->setTextAlignment( howmanyCol(), Qt::AlignRight );
+        
+    }
+
+    resizeColumnToContents(_howmanyCol);
+    resizeColumnToContents(_summaryCol);
 
     addTopLevelItem(item);
     applyExcludeRules( item );
@@ -284,17 +320,21 @@ YQPkgPatternList::pkgObjClicked( int			button,
 
     if ( categoryItem )
     {
-	if ( button == Qt::LeftButton )
-	{
-	    if ( col == statusCol() )
-	    {
-		categoryItem->setExpanded( ! categoryItem->isExpanded() );
-	    }
-	}
+        if ( button == Qt::LeftButton )
+        {
+            if ( col == iconCol() )
+            {
+                categoryItem->setExpanded( ! categoryItem->isExpanded() );
+            }
+        }
     }
     else
     {
-	YQPkgObjList::pkgObjClicked( button, listViewItem, col, pos );
+        //QSize size = listViewItem->sizeHint(_iconCol);
+        //size.scale(size.width(), size.height()*2, Qt::IgnoreAspectRatio);
+        //listViewItem->setSizeHint(_iconCol, size);
+        
+        YQPkgObjList::pkgObjClicked( button, listViewItem, col, pos );
     }
 }
 
@@ -351,6 +391,11 @@ YQPkgPatternListItem::init()
 {
     if ( ! _zyppPattern )
 	_zyppPattern = tryCastToZyppPattern( selectable()->theObj() );
+
+    if (_zyppPattern)
+    {
+        setIcon(_patternList->iconCol(), QIcon(QString("/usr/share/icons/hicolor/32x32/apps/") + _zyppPattern->icon().c_str() + QString(".png")));
+    }
 
     setStatusIcon();
     setFirstColumnSpanned ( false );
@@ -429,7 +474,7 @@ YQPkgPatternCategoryItem::setExpanded( bool open )
 void
 YQPkgPatternCategoryItem::setTreeIcon()
 {
-    setIcon( _patternList->statusCol(),
+    setIcon( _patternList->iconCol(),
              isExpanded() ?
              YQIconPool::treeMinus() :
              YQIconPool::treePlus()   );

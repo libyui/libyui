@@ -68,6 +68,7 @@ public:
 
     // Column numbers
 
+    int iconCol()     const { return _iconCol; }
     int statusCol()		const	{ return _statusCol;		}
     int nameCol()		const	{ return _nameCol;		}
     int summaryCol()		const	{ return _summaryCol;		}
@@ -336,6 +337,7 @@ protected:
 
     // Data members
 
+    int   _iconCol;
     int		_statusCol;
     int		_nameCol;
     int		_summaryCol;
@@ -624,13 +626,14 @@ protected:
      **/
     void setText( int column, const string text );
 
+ public:
     /**
      * Re-declare ordinary setText() method so the compiler doesn't get
      * confused which one to use.
      **/
     void setText( int column, const QString & text )
-	{ QTreeWidgetItem::setText( column, text ); }
-
+	  { QTreeWidgetItem::setText( column, text ); }
+ protected:
     /**
      * Set a column text via Edition.
      **/

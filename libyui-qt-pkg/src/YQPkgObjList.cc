@@ -69,6 +69,7 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
     // an abstract base class: It doesn't know which columns are desired and in
     // what order.
 
+    _iconCol = -42;
     _statusCol		= -42;
     _nameCol		= -42;
     _versionCol		= -42;
