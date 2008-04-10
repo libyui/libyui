@@ -22,8 +22,6 @@
 #define YUILogComponent "qt-wizard"
 #include "YUILog.h"
 
-// For the command parser
-
 #include <string>
 #include <YShortcut.h>
 
@@ -211,6 +209,7 @@ QLayout *YQWizard::layoutSideBar( QWidget * parent )
     return vbox;
 }
 
+
 void YQWizard::layoutStepsPanel()
 {
     // Steps
@@ -234,6 +233,7 @@ void YQWizard::layoutStepsPanel()
 
     _stepsDirty = true; // no layout yet
 }
+
 
 void YQWizard::addStep( const string & text, const string & id )
 {
@@ -1143,6 +1143,56 @@ void YQWizard::retranslateInternalButtons()
 }
 
 
+void YQWizard::addChild( YWidget * child )
+{
+    YWidget::addChild( child );
+    YWizard * yWizard = dynamic_cast<YWizard *> (child);
+
+    if ( yWizard )
+    {
+	yuiMilestone() << "Docking sub-wizard " << child << " to " << this << endl;
+	YQWizard * yqWizard = (YQWizard *) yWizard->widgetRep();
+
+	// FIXME
+	// FIXME
+	// FIXME
+	
+	// Dock sub-wizard - reparent yqWizard to widget stack
+	// Important: Don't mess with the child's YWidget::parent().
+	// This will still remain this wizard.
+	
+	// FIXME
+	// FIXME
+	// FIXME
+    }
+}
+
+
+void YQWizard::deleteSubWizard()
+{
+    YWizard * subWizard = 0;
+    
+    for ( YWidgetListConstReverseIterator it = childrenManager()->rbegin();
+	  it != childrenManager()->rend() && ! subWizard;
+	  ++it )
+    {
+	subWizard = dynamic_cast<YWizard *> (*it);
+    }
+
+    if ( subWizard )
+    {
+	yuiMilestone() << "Deleting sub-wizard " << subWizard << endl;
+	delete subWizard;
+
+	// FIXME (?)
+	// FIXME (?)
+	// FIXME (?)
+
+	// Make next-lower sub-wizard visible in widget stack, if necessary
+    }
+}
+
+
 void YQWizard::Step::deleteLabels()
 {
     delete _statusLabel;
@@ -1151,10 +1201,12 @@ void YQWizard::Step::deleteLabels()
     _nameLabel = 0;
 }
 
+
 YQWizard::Step::~Step()
 {
     deleteLabels();
 }
+
 
 void YQWizard::Step::setStatus( Status s )
 {

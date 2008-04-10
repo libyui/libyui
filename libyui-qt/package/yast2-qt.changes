@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Apr 10 19:53:05 CEST 2008 - sh@suse.de
+
+- Added basic support for docked sub-wizards 
+
+-------------------------------------------------------------------
 Fri Apr  4 11:10:11 CEST 2008 - tgoettlicher@suse.de
 
 - fixed frame style of rich text widget (bnc #369685)

@@ -133,6 +133,20 @@ public:
      **/
     virtual void setDialogHeading( const string & headingText );
 
+    /**
+     * Add a child widget.
+     *
+     * Reimplemented from YWidget to dock any YWizard children.
+     **/
+    virtual void addChild( YWidget * child );
+
+    /**
+     * Delete the last sub-wizard of this wizard, if there is one.
+     * Do nothing if there is none.
+     *
+     * Implemented from YWizard.
+     **/
+    virtual void deleteSubWizard();
 
     //
     // Steps handling
