@@ -141,18 +141,17 @@ public:
      *
      * Return 'true' upon success, 'false' upon failure.
      *
-     * Implemented from YWizard.
+     * Reimplemented from YWizard.
      **/
     virtual bool dockSubWizard( YWizard * subWizard );
 
-
     /**
-     * Delete the last sub-wizard of this wizard, if there is one.
-     * Do nothing if there is none.
+     * Delete a sub-wizard.
+     * Return 'true' upon success, 'false' upon failure.
      *
-     * Implemented from YWizard.
+     * Reimplemented from YWizard.
      **/
-    virtual void deleteSubWizard();
+    virtual bool deleteSubWizard( YWizard * subWizard );
 
     //
     // Steps handling
