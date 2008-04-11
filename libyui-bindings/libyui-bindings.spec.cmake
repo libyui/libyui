@@ -17,8 +17,8 @@ License:        GPL
 Summary:        Bindings for libyui
 Group:          Development/Sources
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-BuildRequires:  cmake gcc-c++ python-devel ruby-devel swig
-BuildRequires:  libyui-devel >= 3.0.0
+BuildRequires:  cmake gcc-c++ ruby-devel swig
+BuildRequires:  yast2-libyui-devel >= 2.16
 Source:         %{name}-%{version}.tar.bz2
 
 %description
@@ -47,14 +47,14 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %clean
 %{__rm} -rf %{buildroot}
 
-%package -n ruby-yui
+%package -n libyui-ruby
 Summary:        Ruby bindings for libyui
 Group:          Development/Languages/Ruby
 
-%description -n ruby-yui
+%description -n libyui-ruby
 -
 
-%files -n ruby-yui
+%files -n libyui-ruby
 %defattr(-,root,root,-)
 %{_libdir}/ruby/vendor_ruby/%{rb_ver}/%{rb_arch}/yui.so
 
