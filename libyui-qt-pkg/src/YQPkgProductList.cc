@@ -37,20 +37,27 @@ YQPkgProductList::YQPkgProductList( QWidget * parent )
 {
     yuiDebug() << "Creating product list" << endl;
 
-#if FIXME
+    QStringList headers;
     int numCol = 0;
-    addColumn( "" );			_statusCol	= numCol++;
-    addColumn( _( "Product"	) );	_nameCol	= numCol++;
-    addColumn( _( "Summary"	) );	_summaryCol	= numCol++;
-    addColumn( _( "Version" 	) );	_versionCol	= numCol++;
-    addColumn( _( "Vendor" 	) );	_vendorCol	= numCol++;
-    setAllColumnsShowFocus( true );
-    setColumnAlignment( sizeCol(), Qt::AlignRight );
+    headers << ( "" );			_statusCol	= numCol++;
+    headers << _( "Product"	);	_nameCol	= numCol++;
+    headers <<  _( "Summary"	);	_summaryCol	= numCol++;
+    headers <<  _( "Version" 	);	_versionCol	= numCol++;
+    headers <<  _( "Vendor" 	);	_vendorCol	= numCol++;
 
-    setSorting( nameCol() );
+    setColumnCount( numCol );
+    setHeaderLabels(headers);
+
+    setAllColumnsShowFocus( true );
+    //setColumnAlignment( sizeCol(), Qt::AlignRight );
+
+    setSortingEnabled( true );
+    sortByColumn( nameCol(), Qt::AscendingOrder );
+
+
+
     fillList();
     selectSomething();
-#endif
 
     yuiDebug() << "Creating product list done" << endl;
 }
@@ -85,6 +92,7 @@ YQPkgProductList::fillList()
     }
 
     yuiDebug() << "product list filled" << endl;
+    resizeColumnToContents(_statusCol);
 }
 
 
