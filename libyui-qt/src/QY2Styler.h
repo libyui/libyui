@@ -48,6 +48,8 @@ private:
     QMap<QWidget*, QList< QWidget* > > _children;
 
     static QY2Styler *_self;
+
+    QString _style;
 };
 
 #endif

@@ -26,9 +26,8 @@ void QY2Styler::setStyleSheet( const QString &filename )
     QFile file( themeDir() + filename );
     if ( file.open( QIODevice::ReadOnly ) )
     {
-        QString content = file.readAll();
-        processUrls( content );
-        qApp->setStyleSheet( content );
+        _style = file.readAll();
+        processUrls( _style );
     }
 }
 
@@ -68,6 +67,7 @@ void QY2Styler::registerWidget( QWidget *widget )
 {
     widget->installEventFilter( this );
     widget->setAutoFillBackground( true );
+    widget->setStyleSheet( _style );
 }
 
 void QY2Styler::registerChildWidget( QWidget *parent, QWidget *widget )
