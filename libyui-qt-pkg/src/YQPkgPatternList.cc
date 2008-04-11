@@ -286,6 +286,7 @@ YQPkgPatternList::category( const QString & categoryName )
 }
 
 
+
 void
 YQPkgPatternList::filterIfVisible()
 {
@@ -461,7 +462,11 @@ YQPkgPatternListItem::init()
 
     if (_zyppPattern)
     {
-        setIcon(_patternList->iconCol(), QIcon(QString("/usr/share/icons/hicolor/32x32/apps/") + _zyppPattern->icon().c_str() + QString(".png")));
+        string icon = _zyppPattern->icon().asString();
+        if ( icon == zypp::Pathname("yast-system").asString() )
+            icon = "pattern-generic";
+        
+        setIcon(_patternList->iconCol(), QIcon(QString("/usr/share/icons/hicolor/32x32/apps/") + icon.c_str() + QString(".png")));
     }
 
     setStatusIcon();

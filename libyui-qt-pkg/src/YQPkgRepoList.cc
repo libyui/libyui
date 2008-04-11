@@ -59,7 +59,7 @@ YQPkgRepoList::YQPkgRepoList( QWidget * parent )
 
     connect( this, 	SIGNAL( itemSelectionChanged() ),
 	     this, 	SLOT  ( filterIfVisible()) );
-
+    setIconSize(QSize(32,32));
     fillList();
     selectSomething();
 
@@ -249,23 +249,50 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
         }
 #endif
 
-	if ( ! name.empty() )
-	    setText( nameCol(), fromUTF8( name ));
+        if ( ! name.empty() )
+        {
+            //if ( ! repo.info().baseUrlsEmpty() )
+            //    name += string("\n") + (*repo.info().baseUrlsBegin()).asString();
+            setText( nameCol(), fromUTF8( name ));
+        }
+
     }
 
     if ( urlCol() >= 0 )
     {
         zypp::Url repoUrl;
 
-	if ( ! repo.info().baseUrlsEmpty() )
-	    repoUrl = *repo.info().baseUrlsBegin();
+        if ( ! repo.info().baseUrlsEmpty() )
+            repoUrl = *repo.info().baseUrlsBegin();
 
-	//setText( urlCol(), repoUrl.asString().c_str() );
-  setToolTip( 0, repoUrl.asString().c_str() );
-  setToolTip( 1, repoUrl.asString().c_str() );
+        //setText( urlCol(), repoUrl.asString().c_str() );
+        setToolTip( 0, repoUrl.asString().c_str() );
+        setToolTip( 1, repoUrl.asString().c_str() );
     }
 
-    setIcon( 0, QIcon("/usr/share/icons/hicolor/48x48/apps/yast-sw_source.png") );
+    QString iconPath;
+    QString iconName = "yast-sw_source";
+    
+    if ( ! repo.info().baseUrlsEmpty() )
+    {
+        zypp::Url repoUrl = *repo.info().baseUrlsBegin();
+        if (QString(repoUrl.asString().c_str()).contains("KDE") )
+            iconName = "pattern-kde";
+        if (QString(repoUrl.asString().c_str()).contains("GNOME") )
+            iconName = "pattern-gnome";
+        if (QString(repoUrl.asString().c_str()).contains("KDE") )
+            iconName = "pattern-kde";
+        if (QString(repoUrl.asString().c_str()).contains("update") )
+            iconName = "yast-update";
+        if (QString(repoUrl.asString().c_str()).contains("home:") )
+            iconName = "yast-users";
+    }
+
+    if ( repo.isSystemRepo() )
+        iconName = "yast-host";
+
+
+    setIcon( 0, QIcon( iconPath.sprintf("/usr/share/icons/hicolor/48x48/apps/%s.png", iconName.toUtf8().data()) ));
 }
 
 

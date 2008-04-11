@@ -32,7 +32,7 @@
 using std::string;
 
 class YQPkgPatchListItem;
-
+class YQPkgPatchCategoryItem;
 
 enum YQPkgPatchCategory	// This is also the sort order
 {
@@ -178,6 +178,10 @@ signals:
 
 
 protected:
+   /** 
+     * returns or creates a category item for a defined category
+     */
+    YQPkgPatchCategoryItem * category( YQPkgPatchCategory category );
 
     /**
      * Create the context menu for items that are not installed.
@@ -207,6 +211,7 @@ protected:
     int			_categoryCol;
     YQPkgSelMapper	_selMapper;
     FilterCriteria	_filterCriteria;
+    QMap<YQPkgPatchCategory, YQPkgPatchCategoryItem*> _categories;
 };
 
 
@@ -215,13 +220,23 @@ class YQPkgPatchListItem: public YQPkgObjListItem
 {
 public:
 
-    /**
+      /**
      * Constructor. Creates a YQPkgPatchList item that corresponds to
      * zyppPatch.
      **/
     YQPkgPatchListItem( YQPkgPatchList * 	patchList,
 			   ZyppSel		selectable,
 			   ZyppPatch 		zyppPatch );
+
+
+    /**
+     * Constructor. Creates a YQPkgPatchList item that corresponds to
+     * zyppPatch.
+     **/
+    YQPkgPatchListItem( YQPkgPatchList * 	patchList,
+                        YQPkgPatchCategoryItem *	parentCategory,
+                        ZyppSel		selectable,
+                        ZyppPatch 		zyppPatch );
 
     /**
      * Destructor
@@ -232,22 +247,6 @@ public:
      * Returns the original zyppPatch object.
      **/
     ZyppPatch zyppPatch() const { return _zyppPatch; }
-
-    /**
-     * Maps a string patch category to the corresponding enum.
-     **/
-    static YQPkgPatchCategory patchCategory( QString category );
-    static YQPkgPatchCategory patchCategory( const string & category );
-
-    /**
-     * Converts a patch category to a user-readable (translated) string.
-     **/
-    static QString asString( YQPkgPatchCategory category );
-
-    /**
-     * Returns the category of this patch (security, recommended, ...).
-     **/
-    YQPkgPatchCategory patchCategory() const { return _patchCategory; }
 
     /**
      * Cycle the package status to the next valid value.
@@ -274,9 +273,13 @@ public:
     int summaryCol()	const	{ return _patchList->summaryCol();	}
     int categoryCol()	const	{ return _patchList->categoryCol();	}
 
+    /**
+     * Returns the category of this patch (security, recommended, ...).
+     **/
+    YQPkgPatchCategory patchCategory() const { return _patchCategory; }
 
 protected:
-
+    void init();
     /**
      * Propagate status changes in this list to other lists:
      * Have the solver transact all patches.
@@ -291,6 +294,80 @@ protected:
     YQPkgPatchList *	_patchList;
     ZyppPatch		_zyppPatch;
     YQPkgPatchCategory	_patchCategory;
+};
+
+class YQPkgPatchCategoryItem: public QY2ListViewItem
+{
+public:
+
+    /**
+     * Constructor
+     **/
+    YQPkgPatchCategoryItem( YQPkgPatchCategory category, YQPkgPatchList *	patternList );
+
+    /**
+     * Destructor
+     **/
+    virtual ~YQPkgPatchCategoryItem();
+
+    /**
+     * Returns the first pattern. This should be the first in sort order.
+     **/
+    ZyppPatch firstPatch() const { return _firstPatch; }
+
+    /**
+     * Add a pattern to this category. This method sets firstPatch() if necessary.
+     **/
+    void addPatch( ZyppPatch patch );
+
+    /**
+     * sorting function
+     */
+    virtual bool operator< ( const QTreeWidgetItem & other ) const;
+
+    /*
+     * Open or close this subtree
+     *
+     * Reimplemented from QListViewItem to force categories open at all times
+     **/
+    virtual void setExpanded( bool open );
+    
+    /**
+     * Maps a string patch category to the corresponding enum.
+     **/
+    static YQPkgPatchCategory patchCategory( QString category );
+    static YQPkgPatchCategory patchCategory( const string & category );
+    /**
+     * Converts a patch category to a user-readable (translated) string.
+     **/
+    static QString asString( YQPkgPatchCategory category );
+
+   
+    /**
+     * Category (and order ) for this item
+     */
+    YQPkgPatchCategory category() const { return _category; }
+
+
+protected:
+
+    /**
+     * Set a suitable tree open/close icon depending on this category's
+     * open/close status.
+     *
+     * The default QListView plus/minus icons would require treeStepSize() to
+     * be set >0 and rootItemDecorated( true ), but that would look very ugly
+     * in this context, so the pattern categories paint their own tree open /
+     * close icons.
+     **/
+    void setTreeIcon( void );
+    //
+    // Data members
+    //
+
+    YQPkgPatchCategory _category;
+    YQPkgPatchList *	_patchList;
+    ZyppPatch		_firstPatch;
 };
 
 

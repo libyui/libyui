@@ -21,6 +21,8 @@
 #define YUILogComponent "qt-pkg"
 #include "YUILog.h"
 
+#include <QPainter>
+#include <QItemDelegate>
 #include <QMenu>
 #include <QAction>
 #include <QEvent>
@@ -34,7 +36,7 @@
 
 #include "YQPkgPatchList.h"
 #include "YQPkgTextDialog.h"
-
+#include "YQIconPool.h"
 
 #define VERBOSE_PATCH_LIST	1
 
@@ -44,6 +46,43 @@ typedef zypp::ui::PatchContents::const_iterator ZyppPatchContentsIterator;
 
 using std::list;
 using std::set;
+
+class YQPkgPatchItemDelegate : public QItemDelegate
+{
+     YQPkgPatchList *_view;
+public:
+    YQPkgPatchItemDelegate( YQPkgPatchList *parent ) : QItemDelegate( parent ), _view( parent ) {
+    }
+
+    virtual void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+    {
+        painter->save();
+        QColor background = option.palette.color(QPalette::Window);
+        
+        YQPkgPatchCategoryItem *citem = dynamic_cast<YQPkgPatchCategoryItem *>(_view->itemFromIndex(index));
+        // special painting for category items
+        if ( citem )
+        {
+            //std::cout << "printing category: " << index.column() << std::endl;
+            QFont f = painter->font();
+            f.setWeight(QFont::Bold);
+            f.setPointSize(f.pointSize()+1);
+            citem->setFont(_view->summaryCol(), f);
+           
+            painter->fillRect(option.rect, option.palette.color(QPalette::AlternateBase));
+            QItemDelegate::paint(painter, option, index);
+            painter->restore();
+            return;
+        }
+
+        YQPkgPatchListItem *item = dynamic_cast<YQPkgPatchListItem *>(_view->itemFromIndex(index));
+        if ( item )
+        {
+                painter->restore();
+                QItemDelegate::paint(painter, option, index);
+        }
+    }
+};
 
 
 YQPkgPatchList::YQPkgPatchList( QWidget * parent )
@@ -60,7 +99,7 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     headers << "";			_statusCol	= numCol++;
     //headers <<  _( "Patch"	);	_nameCol	= numCol++;
     headers << _( "Summary" 	);	_summaryCol	= numCol++;
-    headers << _( "Category"	);	_categoryCol	= numCol++;
+    //headers << _( "Category"	);	_categoryCol	= numCol++;
     //headers << _( "Size"	);	_sizeCol	= numCol++;
     //headers << _( "Version"	);	_versionCol	= numCol++;
 
@@ -75,6 +114,10 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     //header()->setResizeMode(_versionCol, QHeaderView::ResizeToContents);
     header()->setResizeMode(_categoryCol, QHeaderView::ResizeToContents);
     header()->setResizeMode(_summaryCol, QHeaderView::Interactive);
+
+
+    setItemDelegateForColumn( _summaryCol, new YQPkgPatchItemDelegate( this ) );
+    setItemDelegateForColumn( _statusCol, new YQPkgPatchItemDelegate( this ) );
 
     setAllColumnsShowFocus( true );
     //FIXME setColumnAlignment( sizeCol(), Qt::AlignRight );
@@ -106,6 +149,22 @@ YQPkgPatchList::polish()
     selectSomething();
 }
 
+YQPkgPatchCategoryItem *
+YQPkgPatchList::category( YQPkgPatchCategory category )
+{
+    YQPkgPatchCategoryItem * cat = _categories[ category ];
+
+    if ( ! cat )
+    {
+        yuiDebug() << "New patch category \""<< category << "\"" << endl;
+
+        cat = new YQPkgPatchCategoryItem( category, this );
+        Q_CHECK_PTR( cat );
+        _categories.insert( category, cat );
+    }
+
+    return cat;
+}
 
 void
 YQPkgPatchList::setFilterCriteria( FilterCriteria filterCriteria )
@@ -124,132 +183,132 @@ YQPkgPatchList::fillList()
 	  it != zyppPatchesEnd();
 	  ++it )
     {
-	ZyppSel	  selectable = *it;
-	ZyppPatch zyppPatch = tryCastToZyppPatch( selectable->theObj() );
+        ZyppSel	  selectable = *it;
+        ZyppPatch zyppPatch = tryCastToZyppPatch( selectable->theObj() );
 
-	if ( zyppPatch )
-	{
-	    bool displayPatch = false;
+        if ( zyppPatch )
+        {
+            bool displayPatch = false;
 
-	    switch ( _filterCriteria )
-	    {
-		case RelevantPatches:	// needed + broken + satisfied (but not installed)
-
-		    if ( selectable->hasInstalledObj() ) // installed?
-		    {
-			if ( selectable->installedPoolItem().status().isInstalled()
-			     && selectable->installedPoolItem().isBroken() ) // patch broken?
-			{
-			    // The patch is broken: It had been installed, but the user somehow
-			    // downgraded individual packages belonging to the patch to older versions.
-
-			    displayPatch = true;
-
-			    yuiWarning() << "Installed patch is broken: "
-					 << zyppPatch->name()
-					 << " - " << zyppPatch->summary()
-					 << endl;
-			}
-		    }
-		    else // not installed
-		    {
-			if ( selectable->hasCandidateObj() &&
-			     selectable->candidateObj().isSatisfied() )
-			{
-			    // This is a pretty exotic case, but still it might happen:
-			    //
-			    // The patch itelf is not installed, but it is satisfied because the
-			    // user updated all the packages belonging to the patch to the versions
-			    // the patch requires. All that is missing now is to get the patch meta
-			    // data onto the system. So let's display the patch to give the user
-			    // a chance to install it (if he so chooses).
-
-			    displayPatch = true;
-
-			    yuiMilestone() << "Patch satisfied, but not installed yet: "
-					   << zyppPatch->name()
-					   << " - " << zyppPatch->summary()
-					   << endl;
-			}
-		    }
-
-		    if ( selectable->hasCandidateObj() )	// candidate available?
-		    {
-			// The most common case: There is a candidate patch, i.e. one that could be
-			// installed, but either no version of that patch is installed or there is a
-			// newer one to which the patch could be updated.
-
-			if ( selectable->candidateObj().status().isUninstalled()
-			     && selectable->candidateObj().isBroken() ) // patch really needed?
-			{
-			    // Patches are needed if any of the packages that belong to the patch
-			    // are installed on the system.
-
-			    displayPatch = true;
-			}
-			else
-			{
-			    // None of the packages that belong to the patch is installed on the system.
-
-			    yuiDebug() << "Patch not needed: " << zyppPatch->name()
-				       << " - " << zyppPatch->summary()
-				       << endl;
-			}
-		    }
-		    break;
-
-
-		case RelevantAndInstalledPatches:	// needed + broken + installed
-
-		    if ( selectable->hasInstalledObj() ) // installed?
-		    {
-			displayPatch = true;
-		    }
-		    else // not installed - display only if needed
-		    {
-			if ( selectable->candidateObj().isBroken() )
-			{
-			    displayPatch = true;
-			}
-			else
-			{
-			    yuiMilestone() << "Patch not needed: " << zyppPatch->name()
-					   << " - " << zyppPatch->summary()
-					   << endl;
-			}
-		    }
-		    break;
-
-
-		case AllPatches:
-		    displayPatch = true;
-		    break;
-
-		// Intentionally omitting "default" so the compiler
-		// can catch unhandled enum values
-	    }
-
-	    if ( displayPatch )
-	    {
+            switch ( _filterCriteria )
+            {
+            case RelevantPatches:	// needed + broken + satisfied (but not installed)
+                
+                if ( selectable->hasInstalledObj() ) // installed?
+                {
+                    if ( selectable->installedPoolItem().status().isInstalled()
+                         && selectable->installedPoolItem().isBroken() ) // patch broken?
+                    {
+                        // The patch is broken: It had been installed, but the user somehow
+                        // downgraded individual packages belonging to the patch to older versions.
+                        
+                        displayPatch = true;
+                        
+                        yuiWarning() << "Installed patch is broken: "
+                                     << zyppPatch->name()
+                                     << " - " << zyppPatch->summary()
+                                     << endl;
+                    }
+                }
+                else // not installed
+                {
+                    if ( selectable->hasCandidateObj() &&
+                         selectable->candidateObj().isSatisfied() )
+                    {
+                        // This is a pretty exotic case, but still it might happen:
+                        //
+                        // The patch itelf is not installed, but it is satisfied because the
+                        // user updated all the packages belonging to the patch to the versions
+                        // the patch requires. All that is missing now is to get the patch meta
+                        // data onto the system. So let's display the patch to give the user
+                        // a chance to install it (if he so chooses).
+                        
+                        displayPatch = true;
+                        
+                        yuiMilestone() << "Patch satisfied, but not installed yet: "
+                                       << zyppPatch->name()
+                                       << " - " << zyppPatch->summary()
+                                       << endl;
+                    }
+                }
+                
+                if ( selectable->hasCandidateObj() )	// candidate available?
+                {
+                    // The most common case: There is a candidate patch, i.e. one that could be
+                    // installed, but either no version of that patch is installed or there is a
+                    // newer one to which the patch could be updated.
+                    
+                    if ( selectable->candidateObj().status().isUninstalled()
+                         && selectable->candidateObj().isBroken() ) // patch really needed?
+                    {
+                        // Patches are needed if any of the packages that belong to the patch
+                        // are installed on the system.
+                        
+                        displayPatch = true;
+                    }
+                    else
+                    {
+                        // None of the packages that belong to the patch is installed on the system.
+                        
+                        yuiDebug() << "Patch not needed: " << zyppPatch->name()
+                                   << " - " << zyppPatch->summary()
+                                   << endl;
+                    }
+                }
+                break;
+                
+                
+            case RelevantAndInstalledPatches:	// needed + broken + installed
+                
+                if ( selectable->hasInstalledObj() ) // installed?
+                {
+                    displayPatch = true;
+                }
+                else // not installed - display only if needed
+                {
+                    if ( selectable->candidateObj().isBroken() )
+                    {
+                        displayPatch = true;
+                    }
+                    else
+                    {
+                        yuiMilestone() << "Patch not needed: " << zyppPatch->name()
+                                       << " - " << zyppPatch->summary()
+                                       << endl;
+                    }
+                }
+                break;
+                
+                
+            case AllPatches:
+                displayPatch = true;
+                break;
+                
+                // Intentionally omitting "default" so the compiler
+                // can catch unhandled enum values
+            }
+            
+            if ( displayPatch )
+            {
 #if VERBOSE_PATCH_LIST
-		yuiDebug() << "Displaying patch " << zyppPatch->name()
-			   << " - " <<  zyppPatch->summary()
-			   << endl;
+                yuiDebug() << "Displaying patch " << zyppPatch->name()
+                           << " - " <<  zyppPatch->summary()
+                           << endl;
 #endif
-		addPatchItem( *it, zyppPatch);
-	    }
-	}
-	else
-	{
-	    yuiError() << "Found non-patch selectable" << endl;
-	}
+                addPatchItem( *it, zyppPatch);
+            }
+        }
+        else
+        {
+            yuiError() << "Found non-patch selectable" << endl;
+        }
     }
-
+    
 #if FIXME
     if ( ! firstChild() )
-	message( _( "No patches available." ) );
+        message( _( "No patches available." ) );
 #endif
-
+    
     yuiDebug() << "Patch list filled" << endl;
     resizeColumnToContents(_statusCol);
     //resizeColumnToContents(_nameCol);
@@ -267,8 +326,6 @@ YQPkgPatchList::message( const QString & text )
     item->setText( 1, text );
     item->setBackgroundColor( 0, QColor( 0xE0, 0xE0, 0xF8 ) );
 }
-
-
 
 void
 YQPkgPatchList::filterIfVisible()
@@ -323,12 +380,23 @@ YQPkgPatchList::addPatchItem( ZyppSel	selectable,
 {
     if ( ! selectable )
     {
-	yuiError() << "NULL ZyppSel!" << endl;
-	return;
+        yuiError() << "NULL ZyppSel!" << endl;
+        return;
     }
 
-    YQPkgPatchListItem * item = new YQPkgPatchListItem( this, selectable, zyppPatch );
+    YQPkgPatchCategoryItem * cat = category( YQPkgPatchCategoryItem::patchCategory(zyppPatch->category()));
+    YQPkgPatchListItem * item = 0;
+
+    if ( cat )
+    {
+        item = new YQPkgPatchListItem( this, cat, selectable, zyppPatch );
+    }
+    else
+    {
+        item = new YQPkgPatchListItem( this, selectable, zyppPatch );
+    }
     applyExcludeRules( item );
+
 }
 
 
@@ -432,7 +500,22 @@ YQPkgPatchList::keyPressEvent( QKeyEvent * event )
 }
 
 
+YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList *	patchList,
+                                        YQPkgPatchCategoryItem *	parentCategory,
+                                        ZyppSel			selectable,
+                                        ZyppPatch		zyppPatch )
+    : YQPkgObjListItem( patchList, parentCategory, selectable, zyppPatch )
+    , _patchList( patchList )
+    , _zyppPatch( zyppPatch )
+{
+     if ( ! _zyppPatch )
+        _zyppPatch = tryCastToZyppPatch( selectable->theObj() );
+    
+    if ( ! _zyppPatch )
+        return;
 
+    init();
+}
 
 YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList *	patchList,
 					ZyppSel			selectable,
@@ -441,30 +524,22 @@ YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList *	patchList,
     , _patchList( patchList )
     , _zyppPatch( zyppPatch )
 {
+     if ( ! _zyppPatch )
+        _zyppPatch = tryCastToZyppPatch( selectable->theObj() );
+    
     if ( ! _zyppPatch )
-	_zyppPatch = tryCastToZyppPatch( selectable->theObj() );
+        return;
 
-    if ( ! _zyppPatch )
-	return;
+    init();
+    
+}
 
+void YQPkgPatchListItem::init()
+{   
     setStatusIcon();
-    _patchCategory = patchCategory( _zyppPatch->category() );
-
-    if ( categoryCol() > -1 )
-	setText( categoryCol(), asString( _patchCategory ) );
-
+    
     if ( summaryCol() > -1 && _zyppPatch->summary().empty() )
-	setText( summaryCol(), _zyppPatch->name() );		// use name as fallback
-
-    switch ( _patchCategory )
-    {
-	case YQPkgYaSTPatch:		setTextColor( 0, QColor( 0, 0, 0xC0 ) );	break;	// medium blue
-	case YQPkgSecurityPatch:	setTextColor( 0, Qt::red );		break;
-	case YQPkgRecommendedPatch:	setTextColor( 0, QColor( 0, 0, 0xC0 ) );	break;	// medium blue
-	case YQPkgOptionalPatch:	break;
-	case YQPkgDocumentPatch:	break;
-	case YQPkgUnknownPatchCategory: break;
-    }
+        setText( summaryCol(), _zyppPatch->name() );		// use name as fallback
 }
 
 
@@ -472,48 +547,6 @@ YQPkgPatchListItem::~YQPkgPatchListItem()
 {
     // NOP
 }
-
-
-YQPkgPatchCategory
-YQPkgPatchListItem::patchCategory( const string & category )
-{
-    return patchCategory( fromUTF8( category ) );
-}
-
-
-YQPkgPatchCategory
-YQPkgPatchListItem::patchCategory( QString category )
-{
-    category = category.toLower();
-
-    if ( category == "yast"		) return YQPkgYaSTPatch;
-    if ( category == "security"		) return YQPkgSecurityPatch;
-    if ( category == "recommended"	) return YQPkgRecommendedPatch;
-    if ( category == "optional"		) return YQPkgOptionalPatch;
-    if ( category == "document"		) return YQPkgDocumentPatch;
-
-    yuiWarning() << "Unknown patch category \"" << category << "\"" << endl;
-    return YQPkgUnknownPatchCategory;
-}
-
-
-QString
-YQPkgPatchListItem::asString( YQPkgPatchCategory category )
-{
-    switch ( category )
-    {
-	// Translators: These are patch categories
-	case YQPkgYaSTPatch:		return _( "YaST"	);
-	case YQPkgSecurityPatch:	return _( "security"	);
-	case YQPkgRecommendedPatch:	return _( "recommended" );
-	case YQPkgOptionalPatch:	return _( "optional"	);
-	case YQPkgDocumentPatch:	return _( "document"	);
-	case YQPkgUnknownPatchCategory: return "";
-    }
-
-    return "";
-}
-
 
 void
 YQPkgPatchListItem::cycleStatus()
@@ -575,6 +608,114 @@ bool YQPkgPatchListItem::operator< ( const QTreeWidgetItem & otherListViewItem )
 	}
     }
     return YQPkgObjListItem::operator<( otherListViewItem );
+}
+
+YQPkgPatchCategoryItem::YQPkgPatchCategoryItem( YQPkgPatchCategory category, 
+                                                YQPkgPatchList *	patchList )
+    : QY2ListViewItem( patchList )
+    , _patchList( patchList )
+{
+
+    _category = category;
+    
+    
+    if ( _patchList->categoryCol() > -1 )
+        setText( _patchList->summaryCol(), YQPkgPatchCategoryItem::asString( _category ) );
+   
+
+    //setText( _patchList->summaryCol(), "Category" );
+    
+    setExpanded( true );
+    setTreeIcon();
+}
+
+
+YQPkgPatchCategory
+YQPkgPatchCategoryItem::patchCategory( const string & category )
+{
+    return patchCategory( fromUTF8( category ) );
+}
+
+
+YQPkgPatchCategory
+YQPkgPatchCategoryItem::patchCategory( QString category )
+{
+    category = category.toLower();
+
+    if ( category == "yast"		) return YQPkgYaSTPatch;
+    if ( category == "security"		) return YQPkgSecurityPatch;
+    if ( category == "recommended"	) return YQPkgRecommendedPatch;
+    if ( category == "optional"		) return YQPkgOptionalPatch;
+    if ( category == "document"		) return YQPkgDocumentPatch;
+
+    yuiWarning() << "Unknown patch category \"" << category << "\"" << endl;
+    return YQPkgUnknownPatchCategory;
+}
+
+
+QString
+YQPkgPatchCategoryItem::asString( YQPkgPatchCategory category )
+{
+    switch ( category )
+    {
+	// Translators: These are patch categories
+	case YQPkgYaSTPatch:		return _( "YaST"	);
+	case YQPkgSecurityPatch:	return _( "security"	);
+	case YQPkgRecommendedPatch:	return _( "recommended" );
+	case YQPkgOptionalPatch:	return _( "optional"	);
+	case YQPkgDocumentPatch:	return _( "document"	);
+	case YQPkgUnknownPatchCategory: return "";
+    }
+
+    return "";
+}
+
+
+YQPkgPatchCategoryItem::~YQPkgPatchCategoryItem()
+{
+    // NOP
+}
+
+void
+YQPkgPatchCategoryItem::addPatch( ZyppPatch patch )
+{
+    if ( ! _firstPatch )
+    {
+        _firstPatch = patch;
+    }
+    else
+    {
+        //if ( _firstPatch->order().compare( pattern->order() ) < 0 )
+        //    _firstPatch = pattern;
+    }
+}
+
+
+void
+YQPkgPatchCategoryItem::setExpanded( bool open )
+{
+    QTreeWidgetItem::setExpanded( open );
+    setTreeIcon();
+}
+
+
+void
+YQPkgPatchCategoryItem::setTreeIcon()
+{
+    setIcon( _patchList->iconCol(),
+             isExpanded() ?
+             YQIconPool::treeMinus() :
+             YQIconPool::treePlus()   );
+
+}
+
+
+bool YQPkgPatchCategoryItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
+{
+    const YQPkgPatchCategoryItem * otherCategoryItem = dynamic_cast<const YQPkgPatchCategoryItem *>(&otherListViewItem);
+
+    return category() < otherCategoryItem->category();
+    return QTreeWidgetItem::operator<( otherListViewItem );
 }
 
 
