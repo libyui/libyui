@@ -189,6 +189,13 @@ public:
     int statusCol()	const	{ return _patternList->statusCol();	}
     int summaryCol()	const	{ return _patternList->summaryCol();	}
 
+    int totalPackages() const { return _total; }
+    int installedPackages() const { return _installed; }
+
+    // setters for installed and total packages values
+    void setTotalPackages(int v) { _total = v; }
+    void setInstalledPackages(int v) { _installed = v; }
+
 protected:
 
     /**
@@ -209,6 +216,9 @@ protected:
 
     YQPkgPatternList *	_patternList;
     ZyppPattern		_zyppPattern;
+    // cache for total and installed packages
+    int _total;
+    int _installed;
 };
 
 
