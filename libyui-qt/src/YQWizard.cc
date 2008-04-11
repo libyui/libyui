@@ -1145,35 +1145,21 @@ void YQWizard::retranslateInternalButtons()
 }
 
 
-void YQWizard::addChild( YWidget * child )
+bool YQWizard::dockSubWizard( YWizard * ySubWizard )
 {
-    YWidget::addChild( child );
-    YWizard * yWizard = dynamic_cast<YWizard *> (child);
+    YUI_CHECK_PTR( ySubWizard );
 
-    yuiMilestone() << "addChild " << child << " " << yWizard << endl;
-    if ( yWizard )
-    {
-	yuiMilestone() << "Docking sub-wizard " << child << " to " << this << endl;
-	YQWizard * yqWizard = (YQWizard *) yWizard->widgetRep();
+    if ( ySubWizard->parent() != this )
+	YUI_THROW( YUIInvalidChildException<YWidget>( this, ySubWizard ) );
 
-        static_cast<QWidget*>( yqWizard )->setParent( static_cast<QWidget*>( _workingDock ) );
-        int index = _workingDock->addWidget( yqWizard );
-        yuiMilestone() << "Index " << index << endl;
-        _workingDock->setCurrentWidget( yqWizard );
+    yuiMilestone() << "Docking sub-wizard " << ySubWizard << " to " << this << endl;
+    YQWizard * yqSubWizard = (YQWizard *) ySubWizard->widgetRep();
 
-	// FIXME
-	// FIXME
-	// FIXME
+    int index = _workingDock->addWidget( yqSubWizard );
+    yuiMilestone() << "Index " << index << endl;
+    _workingDock->setCurrentWidget( yqSubWizard );
 
-	// Dock sub-wizard - reparent yqWizard to widget stack
-	// Important: Don't mess with the child's YWidget::parent().
-	// This will still remain this wizard.
-	// Call only yqWizard->reparent().
-
-	// FIXME
-	// FIXME
-	// FIXME
-    }
+    return true; // success
 }
 
 

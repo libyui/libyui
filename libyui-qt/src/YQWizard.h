@@ -134,11 +134,17 @@ public:
     virtual void setDialogHeading( const string & headingText );
 
     /**
-     * Add a child widget.
+     * Dock a sub-wizard: Wizards in YWizardMode_Steps can "swallow" wizards
+     * in YWizardMode_Standard so they will obscure the content + buttons part
+     * of the "steps" wizard. The docked wizard must be created as the
+     * immediate child of the "steps" wizard.
      *
-     * Reimplemented from YWidget to dock any YWizard children.
+     * Return 'true' upon success, 'false' upon failure.
+     *
+     * Implemented from YWizard.
      **/
-    virtual void addChild( YWidget * child );
+    virtual bool dockSubWizard( YWizard * subWizard );
+
 
     /**
      * Delete the last sub-wizard of this wizard, if there is one.
