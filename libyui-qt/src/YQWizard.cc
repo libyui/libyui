@@ -604,7 +604,9 @@ string YQWizard::currentTreeSelection()
 
 QWidget *YQWizard::layoutWorkArea( QWidget * parent )
 {
-    QFrame *workArea = new QFrame( parent );
+    _workingDock = new QStackedWidget( parent );
+
+    QFrame *workArea = new QFrame( _workingDock );
     workArea->setObjectName( "work_area" );
 
     QY2Styler::self()->registerChildWidget( this, workArea );
@@ -1148,20 +1150,26 @@ void YQWizard::addChild( YWidget * child )
     YWidget::addChild( child );
     YWizard * yWizard = dynamic_cast<YWizard *> (child);
 
+    yuiMilestone() << "addChild " << child << " " << yWizard << endl;
     if ( yWizard )
     {
 	yuiMilestone() << "Docking sub-wizard " << child << " to " << this << endl;
 	YQWizard * yqWizard = (YQWizard *) yWizard->widgetRep();
 
+        static_cast<QWidget*>( yqWizard )->setParent( static_cast<QWidget*>( _workingDock ) );
+        int index = _workingDock->addWidget( yqWizard );
+        yuiMilestone() << "Index " << index << endl;
+        _workingDock->setCurrentWidget( yqWizard );
+
 	// FIXME
 	// FIXME
 	// FIXME
-	
+
 	// Dock sub-wizard - reparent yqWizard to widget stack
 	// Important: Don't mess with the child's YWidget::parent().
 	// This will still remain this wizard.
 	// Call only yqWizard->reparent().
-	
+
 	// FIXME
 	// FIXME
 	// FIXME
@@ -1172,7 +1180,7 @@ void YQWizard::addChild( YWidget * child )
 void YQWizard::deleteSubWizard()
 {
     YWizard * subWizard = 0;
-    
+
     for ( YWidgetListConstReverseIterator it = childrenManager()->rbegin();
 	  it != childrenManager()->rend() && ! subWizard;
 	  ++it )

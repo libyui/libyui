@@ -106,12 +106,12 @@ public:
 
     /**
      * Set the label of one of the wizard buttons (backButton(), abortButton(),
-     * nextButton() ) if that button is non-null. 
+     * nextButton() ) if that button is non-null.
      *
      * Implemented from YWizard.
      **/
     virtual void setButtonLabel( YPushButton * button, const string & newLabel );
-    
+
     /**
      * Set the help text.
      *
@@ -522,7 +522,7 @@ protected:
     string	_backButtonLabel;
     string	_abortButtonLabel;
     string	_nextButtonLabel;
-    
+
     bool	_stepsEnabled;
     bool	_stepsRegistered;
     bool	_treeEnabled;
@@ -545,6 +545,7 @@ protected:
     QFrame *		    _treePanel;
     QY2ListView *		_tree;
 
+    QStackedWidget *    _workingDock;
     QWidget *		_clientArea;
     QMenuBar *		        _menuBar;
     QLabel *		    _dialogIcon;
@@ -600,7 +601,7 @@ protected:
 	void setStatusLabel( QLabel * label )	{ _statusLabel = label; }
 	void setNameLabel  ( QLabel * label )	{ _nameLabel   = label; }
 	void setEnabled( bool enabled )		{ _enabled = enabled; }
-	
+
 	void deleteLabels();
 
 	/**
@@ -662,7 +663,7 @@ protected:
 	    , _id( id )
 	    {}
 
-        virtual QString text(int index) const { return QTreeWidgetItem::text(index); } 
+        virtual QString text(int index) const { return QTreeWidgetItem::text(index); }
 	QString text() const { return QTreeWidgetItem::text(0); }
 	QString id()   const { return _id; }
 
