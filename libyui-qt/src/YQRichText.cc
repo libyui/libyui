@@ -28,6 +28,7 @@
 #include "YApplication.h"
 #include "YEvent.h"
 #include "utf8.h"
+#include "QY2Styler.h"
 #include "YQUI.h"
 #include "YQDialog.h"
 #include "YQRichText.h"
@@ -53,14 +54,13 @@ YQRichText::YQRichText( YWidget * parent, const string & text, bool plainTextMod
 
     if ( plainTextMode )
     {
-        _textBrowser->setPlainText( fromUTF8( text ) );
         _textBrowser->setWordWrapMode( QTextOption::NoWrap );
     }
     else
     {
-        _textBrowser->setHtml( fromUTF8( text ) );
+        _textBrowser->document()->setDefaultStyleSheet( QY2Styler::self()->textStyle() );
     }
-  
+
     setValue( text );
 
     // Propagate clicks on hyperlinks
@@ -78,6 +78,8 @@ YQRichText::~YQRichText()
 
 void YQRichText::setValue( const string & newText )
 {
+    yuiMilestone() << newText << endl;
+
     if ( _textBrowser->horizontalScrollBar() )
 	_textBrowser->horizontalScrollBar()->setValue(0);
 

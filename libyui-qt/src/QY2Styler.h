@@ -18,6 +18,7 @@ public:
     QString themeDir() const;
     void registerWidget( QWidget *widget );
     void registerChildWidget( QWidget *parent, QWidget *widget );
+    QString textStyle() const { return _textStyle; }
 
     static QY2Styler *self() {
         return _self;
@@ -50,6 +51,7 @@ private:
     static QY2Styler *_self;
 
     QString _style;
+    QString _textStyle;
 };
 
 #endif

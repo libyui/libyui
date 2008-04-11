@@ -33,7 +33,7 @@ void QY2Styler::setStyleSheet( const QString &filename )
         processUrls( _style );
         yuiMilestone() << "set stylesheet " << qPrintable(filename) << endl;
     }
-    else 
+    else
         yuiMilestone() << "could not open " << qPrintable(filename) << endl;
 }
 
@@ -43,6 +43,7 @@ void QY2Styler::processUrls(QString &text)
     QStringList lines = text.split( '\n' );
     QRegExp urlx( ": *url\\((.*)\\)" );
     QRegExp backgroundx( "^ */\\* *Background: *([^ ]*) *([^ ]*) *\\*/$" );
+    QRegExp richtextx( "^ */\\* *Richtext: *([^ ]*) *\\*/$" );
     for ( QStringList::const_iterator it = lines.begin(); it != lines.end(); ++it )
     {
         QString line = *it;
@@ -57,6 +58,16 @@ void QY2Styler::processUrls(QString &text)
             _backgrounds[ name[0] ].full = false;
             if ( name.size() > 1 )
                 _backgrounds[ name[0] ].full = ( name[1] == "full" );
+        }
+
+        if ( richtextx.exactMatch( line ) )
+        {
+            QString filename = richtextx.cap( 1 );
+            QFile file( themeDir() + "/" + filename );
+            if ( file.open(  QIODevice::ReadOnly ) )
+            {
+                _textStyle = file.readAll();
+            }
         }
 
         result += line;
