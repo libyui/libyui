@@ -209,7 +209,6 @@ QLayout *YQWizard::layoutSideBar( QWidget * parent )
     return vbox;
 }
 
-
 void YQWizard::layoutStepsPanel()
 {
     // Steps
@@ -233,7 +232,6 @@ void YQWizard::layoutStepsPanel()
 
     _stepsDirty = true; // no layout yet
 }
-
 
 void YQWizard::addStep( const string & text, const string & id )
 {
@@ -604,10 +602,7 @@ string YQWizard::currentTreeSelection()
 
 QWidget *YQWizard::layoutWorkArea( QWidget * parent )
 {
-    _workingDock = new QStackedWidget( parent );
-    _workingDock->installEventFilter( this );
-
-    QFrame *workArea = new QFrame( _workingDock );
+    QFrame *workArea = new QFrame( parent );
     workArea->setObjectName( "work_area" );
 
     QY2Styler::self()->registerChildWidget( this, workArea );
@@ -768,6 +763,7 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     return hbox;
 }
 
+
 void YQWizard::destroyButtons()
 {
     delete _backButton;
@@ -856,6 +852,7 @@ string YQWizard::debugLabel() const
     return "untitled YQWizard";
 }
 
+
 void YQWizard::setHelpText( const string & helpText )
 {
     _qHelpText = fromUTF8( helpText );
@@ -929,7 +926,6 @@ void YQWizard::showTree()
 	_sideBar->setCurrentWidget( _treePanel );
     }
 }
-
 
 
 void YQWizard::addMenu( const string & text,
@@ -1065,44 +1061,17 @@ void YQWizard::setSize( int newWidth, int newHeight )
 
 void YQWizard::resizeClientArea()
 {
-    yuiDebug() << "Resizing client area" << endl;
+    yuiDebug() << "resizing client area" << endl;
     QRect contentsRect = _clientArea->contentsRect();
     _contents->setSize( contentsRect.width(), contentsRect.height() );
 }
 
-
 bool YQWizard::eventFilter( QObject * obj, QEvent * ev )
 {
-    if ( ev->type() == QEvent::Resize )
+    if ( ev->type() == QEvent::Resize && obj == _contents )
     {
-	if ( obj == _contents )
-	{
-	    resizeClientArea();
-	    return true;		// Event handled
-	}
-
-	if ( obj == _workingDock )
-	{
-	    yuiWarning() << "Resize event for _workingDock; currentWidget: "
-			 << hex << (void *) _workingDock->currentWidget() << dec << endl;
-	    
-	    YQWizard * wizard = dynamic_cast<YQWizard *> ( _workingDock->currentWidget() );
-
-	    if ( wizard )
-	    {
-		yuiWarning() << "Resizing sub-wizard" << wizard << endl;
-		QRect contentsRect = _workingDock->contentsRect();
-
-		YWizard * yWizard = (YWizard *) wizard;
-		yWizard->setSize( contentsRect.width(), contentsRect.height() );
-	    
-		return true;		// Event handled
-	    }
-	}
-	else
-	{
-	    yuiWarning() << "Unknown resize event: " << hex << (void *) obj << dec << endl;
-	}
+	resizeClientArea();
+	return true;		// Event handled
     }
 
     return QWidget::eventFilter( obj, ev );
@@ -1116,8 +1085,7 @@ void YQWizard::setButtonLabel( YPushButton * button, const string & newLabel )
 
     YQWizardButton * wizardButton = dynamic_cast<YQWizardButton *> (button);
 
-    if ( wizardButton )
-    {
+    if ( wizardButton ) {
         // QWizardButton only implements hide and show, not setVisible
         if ( newLabel.empty() )
             wizardButton->hide();
@@ -1171,56 +1139,6 @@ void YQWizard::retranslateInternalButtons()
     if ( _treeButton )
 	// "Tree" button - intentionally without keyboard shortcut
 	_treeButton->setText( _( "Tree" ) );
-}
-
-
-bool YQWizard::dockSubWizard( YWizard * ySubWizard )
-{
-    YUI_CHECK_PTR( ySubWizard );
-
-    if ( ySubWizard->parent() != this )
-	YUI_THROW( YUIInvalidChildException<YWidget>( this, ySubWizard ) );
-
-    yuiMilestone() << "Docking sub-wizard " << ySubWizard << " to " << this << endl;
-
-    setInternalIdsEnabled( false ); // avoid duplicate widget IDs
-    YQWizard * yqSubWizard = (YQWizard *) ySubWizard->widgetRep();
-
-#if 0
-    ((QWidget *) yqSubWizard)->setParent( _workingDock );
-#endif
-
-    int index = _workingDock->addWidget( yqSubWizard );
-    yuiMilestone() << "Index " << index << endl;
-    _workingDock->setCurrentWidget( yqSubWizard );
-    yqSubWizard->installEventFilter( this );
-
-    return true; // success
-}
-
-
-bool YQWizard::deleteSubWizard( YWizard * subWizard )
-{
-    if ( subWizard )
-    {
-	yuiMilestone() << "Deleting sub-wizard " << subWizard << endl;
-	delete subWizard;
-
-	setInternalIdsEnabled( true ); // re-enable widget IDs if no more sub-wizard open
-	
-	// FIXME (?)
-	// FIXME (?)
-	// FIXME (?)
-
-	// Make next-lower sub-wizard visible in widget stack, if necessary
-
-	return true; // success
-    }
-    else
-    {
-	yuiWarning() << "No more sub-wizard" << endl;
-	return false; // failure
-    }
 }
 
 

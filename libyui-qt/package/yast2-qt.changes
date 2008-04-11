@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Apr 11 18:18:38 CEST 2008 - sh@suse.de
+
+- Reverted sub-wizard changes - seems to be a dead end 
+- V 2.16.37
+
+-------------------------------------------------------------------
 Thu Apr 10 19:53:05 CEST 2008 - sh@suse.de
 
 - Added basic support for docked sub-wizards 

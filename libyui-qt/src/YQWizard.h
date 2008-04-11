@@ -133,25 +133,6 @@ public:
      **/
     virtual void setDialogHeading( const string & headingText );
 
-    /**
-     * Dock a sub-wizard: Wizards in YWizardMode_Steps can "swallow" wizards
-     * in YWizardMode_Standard so they will obscure the content + buttons part
-     * of the "steps" wizard. The docked wizard must be created as the
-     * immediate child of the "steps" wizard.
-     *
-     * Return 'true' upon success, 'false' upon failure.
-     *
-     * Reimplemented from YWizard.
-     **/
-    virtual bool dockSubWizard( YWizard * subWizard );
-
-    /**
-     * Delete a sub-wizard.
-     * Return 'true' upon success, 'false' upon failure.
-     *
-     * Reimplemented from YWizard.
-     **/
-    virtual bool deleteSubWizard( YWizard * subWizard );
 
     //
     // Steps handling
@@ -455,13 +436,13 @@ protected:
     // Layout functions
 
     void layoutTitleBar		( QWidget * parent );
-    QLayout *layoutSideBar		( QWidget * parent );
+    QLayout *layoutSideBar	( QWidget * parent );
     void layoutSideBarButtonBox	( QWidget * parent, QPushButton * button );
     void layoutStepsPanel();
     void layoutTreePanel();
     QWidget *layoutWorkArea	( QWidget * parent );
-    void layoutClientArea( QWidget * parent );
-    QLayout *layoutButtonBox( QWidget * parent );
+    void layoutClientArea	( QWidget * parent );
+    QLayout *layoutButtonBox	( QWidget * parent );
 
     /**
      * Destroy the button box's buttons
@@ -550,7 +531,6 @@ protected:
     QFrame *		    _treePanel;
     QY2ListView *		_tree;
 
-    QStackedWidget *    _workingDock;
     QWidget *		_clientArea;
     QMenuBar *		        _menuBar;
     QLabel *		    _dialogIcon;
