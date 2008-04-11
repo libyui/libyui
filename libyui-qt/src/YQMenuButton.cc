@@ -78,6 +78,7 @@ YQMenuButton::rebuildMenuTree()
     QMenu * menu = new QMenu( _qt_button );
     YUI_CHECK_NEW( menu );
     _qt_button->setMenu( menu );
+    menu->setProperty( "class", "ymenubutton QMenu" );
 
     connect( menu,	SIGNAL( triggered         ( QAction* ) ),
 	     this,	SLOT  ( menuEntryActivated( QAction* ) ) );

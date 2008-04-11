@@ -1,3 +1,6 @@
+#define YUILogComponent "qt-wizard"
+#include "YUILog.h"
+
 #include "QY2Styler.h"
 #include <QFile>
 #include <QString>
@@ -28,7 +31,10 @@ void QY2Styler::setStyleSheet( const QString &filename )
     {
         _style = file.readAll();
         processUrls( _style );
+        yuiMilestone() << "set stylesheet " << qPrintable(filename) << endl;
     }
+    else 
+        yuiMilestone() << "could not open " << qPrintable(filename) << endl;
 }
 
 void QY2Styler::processUrls(QString &text)
