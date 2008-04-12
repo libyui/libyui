@@ -179,6 +179,10 @@ YQPkgPatchList::setFilterCriteria( FilterCriteria filterCriteria )
 void
 YQPkgPatchList::fillList()
 {
+    // wee need to do a full solve in order
+    // to get the satisfied status correctly
+    zypp::getZYpp()->resolver()->resolvePool();
+    
     _categories.clear();
     
     clear();
