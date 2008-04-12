@@ -64,11 +64,9 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
     Q_CHECK_PTR( _patchList 	);
 
     vbox->addWidget( _patchList );
-    //addVSpacing( vbox, 4 );
 
     QHBoxLayout * hbox 		= new QHBoxLayout(); Q_CHECK_PTR( hbox );
     vbox->addLayout(hbox);
-    hbox->setSpacing( SPACING );
 
     QLabel * label		= new QLabel( _( "&Show Patch Category:" ), upper_box );
     hbox->addWidget(label);
@@ -81,22 +79,19 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
     _patchFilter->addItem( _( "Unneeded Patches" ));
     _patchFilter->addItem( _( "All Patches" ),				2 );
     _patchFilter->setCurrentIndex( 0 );
-    _patchFilter->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert
+
     label->setBuddy( _patchFilter );
 
     connect( _patchFilter, SIGNAL( activated( int ) ), this, SLOT( fillPatchList() ) );
-    //addVSpacing( vbox, 4 );
 
     QWidget *down_box = new QWidget( _splitter );
     vbox			= new QVBoxLayout( down_box );			Q_CHECK_PTR( vbox		);
-    //addVSpacing( vbox, 8 );
 
     _detailsViews		= new QTabWidget( down_box );			Q_CHECK_PTR( _detailsViews	);
     vbox->addWidget(_detailsViews);
 
     _descriptionView		= new YQPkgDescriptionView( _detailsViews );	Q_CHECK_PTR( _descriptionView	);
 
-    _descriptionView->setMinimumSize( 0, 0 );
     _detailsViews->addTab( _descriptionView, _( "Patch Description" ) );
 
 
@@ -107,7 +102,6 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
 
     hbox = new QHBoxLayout(); Q_CHECK_PTR( hbox );
     vbox->addLayout(hbox);
-    //addHStretch( hbox );
 
     hbox->addWidget(new QLabel( _( "Estimated Download Size:" ) + " ", this ));
     _totalDownloadSize		= new QLabel( FSize(0).asString().c_str(), this );

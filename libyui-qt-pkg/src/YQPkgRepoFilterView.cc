@@ -36,9 +36,6 @@
 #include "YQPkgStatusFilterView.h"
 #include "YQi18n.h"
 
-#define MARGIN			4
-
-
 YQPkgRepoFilterView::YQPkgRepoFilterView( QWidget * parent )
     : QWidget( parent )
 {
@@ -97,9 +94,7 @@ YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
 
     QVBoxLayout *layout = new QVBoxLayout();
     vbox->setLayout(layout);
-    
-    layout->addSpacing( MARGIN );
-
+   
     // Translators: This is a combo box where the user can apply a secondary filter
     // in addition to the primary filter by repository - one of
     // "All packages", "RPM groups", "search", "summary"

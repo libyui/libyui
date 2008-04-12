@@ -93,8 +93,6 @@ using std::string;
 using std::map;
 using std::pair;
 
-#define SPACING				6
-#define MARGIN				4
 #define DEFAULT_EXPORT_FILE_NAME	"user-packages.xml"
 #define FAST_SOLVER			1
 
@@ -241,12 +239,9 @@ YQPackageSelector::layoutLeftPane( QWidget *parent )
     QWidget * upper_vbox = new QWidget( splitter );
     QVBoxLayout *layout = new QVBoxLayout(upper_vbox);
     upper_vbox->setLayout(layout);
-    layout->setMargin( 0 );
-    layout->setSpacing( 0 );
 
     Q_CHECK_PTR( upper_vbox );
     layoutFilters( upper_vbox );
-    addVSpacing( upper_vbox, MARGIN );
 
     _diskUsageList = new YQPkgDiskUsageList( splitter );
 
@@ -390,16 +385,12 @@ YQPackageSelector::layoutRightPane( QWidget *parent )
 
     Q_CHECK_PTR( right_pane_vbox );
 
-    layout->setMargin( MARGIN );
-
     QSplitter * splitter = new QSplitter( Qt::Vertical, right_pane_vbox );
     Q_CHECK_PTR( splitter );
     layout->addWidget(splitter);
 
     Q_CHECK_PTR( splitter );
     layoutPkgList( splitter );
-
-    //addVSpacing( splitter, MARGIN );
 
     layoutDetailsViews( splitter );
 
@@ -425,23 +416,19 @@ YQPackageSelector::layoutDetailsViews( QWidget *parent )
 {
     bool haveInstalledPkgs = YQPkgList::haveInstalledPkgs();
 
-    QWidget * details_vbox = new QWidget( parent );
-    Q_CHECK_PTR( details_vbox );
+    //QWidget * details_vbox = new QWidget( parent );
+    //Q_CHECK_PTR( details_vbox );
 
-    QVBoxLayout *layout = new QVBoxLayout(details_vbox);
-    details_vbox->setLayout(layout);
-    //details_vbox->setMinimumSize( 0, 0 );
+    //QVBoxLayout *layout = new QVBoxLayout(details_vbox);
+    //details_vbox->setLayout(layout);
 
-    addVSpacing( details_vbox, 8 );
-
-    _detailsViews = new QTabWidget( details_vbox );
-    layout->addWidget(_detailsViews);
+    //_detailsViews = new QTabWidget( details_vbox );
+    _detailsViews = new QTabWidget( parent );
+    //layout->addWidget(_detailsViews);
 
     Q_CHECK_PTR( _detailsViews );
-    //FIXME _detailsViews->setMargin( MARGIN );
 
     // _detailsViews->setTabPosition( QTabWidget::Bottom );
-
 
     //
     // Description
@@ -543,9 +530,6 @@ YQPackageSelector::layoutButtons( QWidget *parent )
     QHBoxLayout *layout = new QHBoxLayout(button_box);
     button_box->setLayout(layout);
     
-    layout->setSpacing( SPACING );
-    layout->setMargin( 0 );
-
     // Button: Dependency check
     // Translators: Please keep this short!
     _checkDependenciesButton = new QPushButton( _( "Chec&k" ), button_box );

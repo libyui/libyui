@@ -42,20 +42,12 @@
 using std::list;
 using std::string;
 
-
-#define SPACING                 6       // between subwidgets
-#define MARGIN                  4       // around the widget
-
-
 YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     : QWidget( parent )
 {
     QVBoxLayout *layout = new QVBoxLayout;
     setLayout(layout);
     _matchCount = 0;
-    layout->setMargin( MARGIN );
-    layout->setSpacing( SPACING );
-
     layout->addStretch();
 
     // Headline

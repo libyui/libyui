@@ -40,10 +40,6 @@
 using std::string;
 using std::set;
 
-
-#define CATEGORY_BACKGROUND	QColor( 0xFF, 0xC0, 0x50 )
-
-
 class YQPkgPatternItemDelegate : public QItemDelegate
 {
      YQPkgPatternList *_view;
