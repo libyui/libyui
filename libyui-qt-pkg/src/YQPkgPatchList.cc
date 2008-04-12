@@ -28,7 +28,6 @@
 #include <QEvent>
 #include <QHeaderView>
 #include <zypp/base/Logger.h>
-#include <zypp/ui/PatchContents.h>
 #include <set>
 
 #include "YQi18n.h"
@@ -37,12 +36,6 @@
 #include "YQPkgPatchList.h"
 #include "YQPkgTextDialog.h"
 #include "YQIconPool.h"
-
-#define VERBOSE_PATCH_LIST	1
-
-
-typedef zypp::ui::PatchContents			ZyppPatchContents;
-typedef zypp::ui::PatchContents::const_iterator ZyppPatchContentsIterator;
 
 using std::list;
 using std::set;
@@ -212,11 +205,12 @@ YQPkgPatchList::fillList()
                         displayPatch = true;
                 }
                 break;
-            case RelevantAndInstalledPatches:	// needed + broken + installed
+            case RelevantAndInstalledPatches:	// patches we dont need
                 
                 // only shows patches relevant to the system
-                if ( selectable->hasCandidateObj() && 
-                     selectable->candidateObj().isRelevant() )
+                if ( ( selectable->hasCandidateObj() ) && 
+                     ( ! selectable->candidateObj().isRelevant() 
+                       || selectable->candidateObj().isSatisfied() ) )
                 {
                     // now we show satisfied patches too
                     displayPatch = true;

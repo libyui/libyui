@@ -77,8 +77,8 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
     Q_CHECK_PTR( _patchFilter );
     hbox->addWidget(_patchFilter);
 
-    _patchFilter->addItem( _( "Installable Patches" ));
-    _patchFilter->addItem( _( "Installable and Installed Patches" ));
+    _patchFilter->addItem( _( "Needed Patches" ));
+    _patchFilter->addItem( _( "Unneeded Patches" ));
     _patchFilter->addItem( _( "All Patches" ),				2 );
     _patchFilter->setCurrentIndex( 0 );
     _patchFilter->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed ) ); // hor/vert

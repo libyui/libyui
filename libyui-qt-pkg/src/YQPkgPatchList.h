@@ -69,9 +69,9 @@ public:
 
     enum FilterCriteria
     {
-	RelevantPatches,		// needed + broken
-	RelevantAndInstalledPatches,	// needed + broken + installed
-	AllPatches			// all
+        RelevantPatches,		// needed (or broken)
+        RelevantAndInstalledPatches,	// unneeded
+        AllPatches			// all
     };
 
 
