@@ -128,6 +128,8 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
 	     this,	SLOT  ( filter()				    ) );
 
     //sortItems( categoryCol(), Qt::AscendingOrder );
+    setSortingEnabled( true );
+    
     fillList();
 
     yuiDebug() << "Creating patch list done" << endl;
@@ -636,7 +638,7 @@ bool YQPkgPatchCategoryItem::operator< ( const QTreeWidgetItem & otherListViewIt
 {
     const YQPkgPatchCategoryItem * otherCategoryItem = dynamic_cast<const YQPkgPatchCategoryItem *>(&otherListViewItem);
 
-    return category() < otherCategoryItem->category();
+    return category() > otherCategoryItem->category();
     return QTreeWidgetItem::operator<( otherListViewItem );
 }
 

@@ -86,6 +86,8 @@ YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget * parent, int thresholdPercent )
 	    _items.insert( QString::fromUtf8(partitionDu.dir.c_str()), item );
 	}
     }
+
+    resizeColumnToContents( nameCol() );
     resizeColumnToContents( totalSizeCol() );
     resizeColumnToContents( usedSizeCol() );
     resizeColumnToContents( freeSizeCol() );
