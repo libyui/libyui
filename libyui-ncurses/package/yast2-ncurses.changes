@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Sat Apr 12 09:15:14 CEST 2008 - coolo@suse.de
+
+- compile with latest ncurses
+- V 2.16.24
+
+-------------------------------------------------------------------
 Fri Apr  4 15:42:58 CEST 2008 - sh@suse.de
 
 - Fixed typo widht => width in various function names
