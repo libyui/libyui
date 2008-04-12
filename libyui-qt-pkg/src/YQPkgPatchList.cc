@@ -110,9 +110,11 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     _brokenIconCol	= _summaryCol;
 
     setHeaderLabels(headers);
+    setIndentation(0);
+
     header()->setResizeMode(_statusCol, QHeaderView::ResizeToContents);
     //header()->setResizeMode(_versionCol, QHeaderView::ResizeToContents);
-    header()->setResizeMode(_categoryCol, QHeaderView::ResizeToContents);
+    //header()->setResizeMode(_categoryCol, QHeaderView::ResizeToContents);
     header()->setResizeMode(_summaryCol, QHeaderView::Interactive);
 
 
@@ -125,7 +127,7 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     connect( this,	SIGNAL( currentItemChanged	( QTreeWidgetItem *, QTreeWidgetItem* ) ),
 	     this,	SLOT  ( filter()				    ) );
 
-    sortItems( categoryCol(), Qt::AscendingOrder );
+    //sortItems( categoryCol(), Qt::AscendingOrder );
     fillList();
 
     yuiDebug() << "Creating patch list done" << endl;
@@ -172,10 +174,11 @@ YQPkgPatchList::setFilterCriteria( FilterCriteria filterCriteria )
     _filterCriteria = filterCriteria;
 }
 
-
 void
 YQPkgPatchList::fillList()
 {
+    _categories.clear();
+    
     clear();
     yuiDebug() << "Filling patch list" << endl;
 
@@ -194,92 +197,25 @@ YQPkgPatchList::fillList()
             {
             case RelevantPatches:	// needed + broken + satisfied (but not installed)
                 
-                if ( selectable->hasInstalledObj() ) // installed?
+                // only shows patches relevant to the system
+                if ( selectable->hasCandidateObj() && 
+                     selectable->candidateObj().isRelevant() )
                 {
-                    if ( selectable->installedPoolItem().status().isInstalled()
-                         && selectable->installedPoolItem().isBroken() ) // patch broken?
-                    {
-                        // The patch is broken: It had been installed, but the user somehow
-                        // downgraded individual packages belonging to the patch to older versions.
-                        
+                    // and only those that are needed
+                    if ( ! selectable->candidateObj().isSatisfied() )
                         displayPatch = true;
-                        
-                        yuiWarning() << "Installed patch is broken: "
-                                     << zyppPatch->name()
-                                     << " - " << zyppPatch->summary()
-                                     << endl;
-                    }
                 }
-                else // not installed
-                {
-                    if ( selectable->hasCandidateObj() &&
-                         selectable->candidateObj().isSatisfied() )
-                    {
-                        // This is a pretty exotic case, but still it might happen:
-                        //
-                        // The patch itelf is not installed, but it is satisfied because the
-                        // user updated all the packages belonging to the patch to the versions
-                        // the patch requires. All that is missing now is to get the patch meta
-                        // data onto the system. So let's display the patch to give the user
-                        // a chance to install it (if he so chooses).
-                        
-                        displayPatch = true;
-                        
-                        yuiMilestone() << "Patch satisfied, but not installed yet: "
-                                       << zyppPatch->name()
-                                       << " - " << zyppPatch->summary()
-                                       << endl;
-                    }
-                }
-                
-                if ( selectable->hasCandidateObj() )	// candidate available?
-                {
-                    // The most common case: There is a candidate patch, i.e. one that could be
-                    // installed, but either no version of that patch is installed or there is a
-                    // newer one to which the patch could be updated.
-                    
-                    if ( selectable->candidateObj().status().isUninstalled()
-                         && selectable->candidateObj().isBroken() ) // patch really needed?
-                    {
-                        // Patches are needed if any of the packages that belong to the patch
-                        // are installed on the system.
-                        
-                        displayPatch = true;
-                    }
-                    else
-                    {
-                        // None of the packages that belong to the patch is installed on the system.
-                        
-                        yuiDebug() << "Patch not needed: " << zyppPatch->name()
-                                   << " - " << zyppPatch->summary()
-                                   << endl;
-                    }
-                }
-                break;
-                
-                
+                                
             case RelevantAndInstalledPatches:	// needed + broken + installed
                 
-                if ( selectable->hasInstalledObj() ) // installed?
+                // only shows patches relevant to the system
+                if ( selectable->hasCandidateObj() && 
+                     selectable->candidateObj().isRelevant() )
                 {
+                    // now we show satisfied patches too
                     displayPatch = true;
                 }
-                else // not installed - display only if needed
-                {
-                    if ( selectable->candidateObj().isBroken() )
-                    {
-                        displayPatch = true;
-                    }
-                    else
-                    {
-                        yuiMilestone() << "Patch not needed: " << zyppPatch->name()
-                                       << " - " << zyppPatch->summary()
-                                       << endl;
-                    }
-                }
-                break;
-                
-                
+
             case AllPatches:
                 displayPatch = true;
                 break;
@@ -290,11 +226,9 @@ YQPkgPatchList::fillList()
             
             if ( displayPatch )
             {
-#if VERBOSE_PATCH_LIST
                 yuiDebug() << "Displaying patch " << zyppPatch->name()
                            << " - " <<  zyppPatch->summary()
                            << endl;
-#endif
                 addPatchItem( *it, zyppPatch);
             }
         }
@@ -304,15 +238,10 @@ YQPkgPatchList::fillList()
         }
     }
     
-#if FIXME
-    if ( ! firstChild() )
-        message( _( "No patches available." ) );
-#endif
-    
     yuiDebug() << "Patch list filled" << endl;
     resizeColumnToContents(_statusCol);
     //resizeColumnToContents(_nameCol);
-    resizeColumnToContents(_categoryCol);
+    //resizeColumnToContents(_categoryCol);
 }
 
 
@@ -378,13 +307,15 @@ void
 YQPkgPatchList::addPatchItem( ZyppSel	selectable,
 			      ZyppPatch zyppPatch )
 {
-    if ( ! selectable )
+    if ( ! selectable || ! zyppPatch )
     {
         yuiError() << "NULL ZyppSel!" << endl;
         return;
     }
 
-    YQPkgPatchCategoryItem * cat = category( YQPkgPatchCategoryItem::patchCategory(zyppPatch->category()));
+    YQPkgPatchCategory ncat = YQPkgPatchCategoryItem::patchCategory(zyppPatch->category());
+    
+    YQPkgPatchCategoryItem * cat = category(ncat);
     YQPkgPatchListItem * item = 0;
 
     if ( cat )
@@ -395,7 +326,9 @@ YQPkgPatchList::addPatchItem( ZyppSel	selectable,
     {
         item = new YQPkgPatchListItem( this, selectable, zyppPatch );
     }
-    applyExcludeRules( item );
+    
+    if (item)
+        applyExcludeRules( item );
 
 }
 
@@ -508,11 +441,6 @@ YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList *	patchList,
     , _patchList( patchList )
     , _zyppPatch( zyppPatch )
 {
-     if ( ! _zyppPatch )
-        _zyppPatch = tryCastToZyppPatch( selectable->theObj() );
-    
-    if ( ! _zyppPatch )
-        return;
 
     init();
 }
@@ -524,12 +452,6 @@ YQPkgPatchListItem::YQPkgPatchListItem( YQPkgPatchList *	patchList,
     , _patchList( patchList )
     , _zyppPatch( zyppPatch )
 {
-     if ( ! _zyppPatch )
-        _zyppPatch = tryCastToZyppPatch( selectable->theObj() );
-    
-    if ( ! _zyppPatch )
-        return;
-
     init();
     
 }

@@ -232,6 +232,8 @@ YQPkgPatternList::~YQPkgPatternList()
 void
 YQPkgPatternList::fillList()
 {
+    _categories.clear();
+    
     clear();
     yuiDebug() << "Filling pattern list" << endl;
 
