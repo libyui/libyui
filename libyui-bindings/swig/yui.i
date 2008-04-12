@@ -12,13 +12,23 @@
 
 %{
 /* Includes the header in the wrapper code */
+#include <string>
 #include <sstream>
 #include <stdexcept>
+
+#define YUILogComponent "bindings"
+#include "YaST2/yui/YUILog.h"
+
 #include "YaST2/yui/YUI.h"
 #include "YaST2/yui/YWidgetFactory.h"
 #include "YaST2/yui/YDialog.h"
 #include "YaST2/yui/YLayoutBox.h"
 #include "YaST2/yui/YEvent.h"
+
+#include "YaST2/yui/YSelectionBox.h"
+#include "YaST2/yui/YLabel.h"
+#include "YaST2/yui/YPushButton.h"
+#include "YaST2/yui/YAlignment.h"
 
 using namespace std;
 
@@ -52,17 +62,6 @@ class intrusive_ptr {
 %include "std_set.i"
 %include "stl.i"
 
-
-# %include "YApplication.i"
-# %include "YWidget.i"
-# %include "YWidgetFactory.i"
-# %include "YOptionalWidgetFactory.i"
-# %include "YEvent.i"
-# %include "YBuiltinCaller.i"
-# %include "YDialog.i"
-# %include "YMacroPlayer.i"
-# %include "YMacroRecorder.i"
-
 #ifdef SWIGPYTHON
 %include "python/callbacks.i"
 #endif
@@ -71,9 +70,21 @@ class Exception;
 %include YUI.h
 %ignore YUI::start_ui_thread;
 
+
+%define YUILogComponent "bindings"
+%enddef
+%include YUILog.h
+
+%include YTypes.h
 %include YWidgetFactory.h
 %include YWidget.h
 %include YSingleChildContainerWidget.h
 %include YDialog.h
 %include YLayoutBox.h
 %include YEvent.h
+%include YSelectionWidget.h
+%include YSelectionBox.h
+%include YLabel.h
+%include YPushButton.h
+%include YAlignment.h
+%include YItem.h
