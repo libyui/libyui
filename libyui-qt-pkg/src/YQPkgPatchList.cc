@@ -207,7 +207,7 @@ YQPkgPatchList::fillList()
                     if ( ! selectable->candidateObj().isSatisfied() )
                         displayPatch = true;
                 }
-                                
+                break;
             case RelevantAndInstalledPatches:	// needed + broken + installed
                 
                 // only shows patches relevant to the system
@@ -217,7 +217,7 @@ YQPkgPatchList::fillList()
                     // now we show satisfied patches too
                     displayPatch = true;
                 }
-
+                break;
             case AllPatches:
                 displayPatch = true;
                 break;
