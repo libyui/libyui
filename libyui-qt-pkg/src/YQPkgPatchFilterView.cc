@@ -84,38 +84,11 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
 
     connect( _patchFilter, SIGNAL( activated( int ) ), this, SLOT( fillPatchList() ) );
 
-    QWidget *down_box = new QWidget( _splitter );
-    vbox			= new QVBoxLayout( down_box );			Q_CHECK_PTR( vbox		);
-
-    _detailsViews		= new QTabWidget( down_box );			Q_CHECK_PTR( _detailsViews	);
-    vbox->addWidget(_detailsViews);
-
+    _detailsViews		= new QTabWidget( _splitter );			Q_CHECK_PTR( _detailsViews	);
+    
     _descriptionView		= new YQPkgDescriptionView( _detailsViews );	Q_CHECK_PTR( _descriptionView	);
 
     _detailsViews->addTab( _descriptionView, _( "Patch Description" ) );
-
-
-#if ENABLE_TOTAL_DOWNLOAD_SIZE
-    //
-    // HBox for total download size
-    //
-
-    hbox = new QHBoxLayout(); Q_CHECK_PTR( hbox );
-    vbox->addLayout(hbox);
-
-    hbox->addWidget(new QLabel( _( "Estimated Download Size:" ) + " ", this ));
-    _totalDownloadSize		= new QLabel( FSize(0).asString().c_str(), this );
-    hbox->addWidget(_totalDownloadSize);
-    Q_CHECK_PTR( _totalDownloadSize );
-
-
-    // Give the total download size a 3D look
-
-    _totalDownloadSize->setFrameStyle( Q3Frame::Panel | Q3Frame::Sunken );
-    _totalDownloadSize->setLineWidth(1);
-    _totalDownloadSize->setMidLineWidth(2);
-#endif
-
 
     connect( _patchList,	SIGNAL( currentItemChanged    ( ZyppSel ) ),
 	     _descriptionView,	SLOT  ( showDetailsIfVisible( ZyppSel ) ) );
