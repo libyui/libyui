@@ -18,7 +18,6 @@
 
 #define YUILogComponent "qt-pkg"
 #include "YUILog.h"
-
 #include <QRegExp>
 #include <QList>
 #include "YQPkgDescriptionView.h"
@@ -28,7 +27,7 @@
 
 using std::list;
 using std::string;
-
+using namespace zypp;
 
 YQPkgDescriptionView::YQPkgDescriptionView( QWidget * parent )
     : YQPkgGenericDetailsView( parent )
@@ -61,9 +60,28 @@ YQPkgDescriptionView::showDetails( ZyppSel selectable )
     QString description = fromUTF8( selectable->theObj()->description() );
 
     if ( ! description.contains( "<!-- DT:Rich -->" ) )
-	description = simpleHtmlParagraphs( description );
+        description = simpleHtmlParagraphs( description );
 
-    html_text += description;
+    html_text += ( "<p>" + description + "</p>");
+
+    // if the object is a patch, show the problem references too
+    Patch::constPtr patch = asKind<Patch>(selectable->theObj());
+    if ( patch )
+    {
+        html_text += "<p>";
+        html_text += _("References:");
+        html_text += "</p>";
+        html_text +=  "<ul>";
+        
+        for ( Patch::ReferenceIterator rit = patch->referencesBegin();
+              rit != patch->referencesEnd();
+              ++rit )
+        {
+            html_text +=  QString().sprintf("<li>%s (%s) : %s</li>", rit.id().c_str(),  rit.type().c_str(), rit.title().c_str() );          
+        }
+        html_text += "</ul>";
+    }
+    
 
     html_text += htmlEnd();
     setHtml( html_text );

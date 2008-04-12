@@ -159,7 +159,7 @@ YQPkgGenericDetailsView::htmlHeading( ZyppSel selectable, bool showVersion )
     if ( ! summary.isEmpty() )
 	html += " - " + summary;
 
-    html += "</td></tr></table><br>";
+    html += "</td></tr></table>";
 
     return html;
 }
