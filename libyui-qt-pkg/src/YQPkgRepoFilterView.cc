@@ -49,18 +49,12 @@ YQPkgRepoFilterView::YQPkgRepoFilterView( QWidget * parent )
 
     layout->addWidget( splitter );
 
-    //QVBoxLayout * upper_vbox = new QVBoxLayout( splitter );
-    
     _repoList = new YQPkgRepoList( this );
-    //upper_vbox->addWidget(_repoList);
     splitter->addWidget(_repoList);
     
     Q_CHECK_PTR( _repoList );
     _repoList->setSizePolicy( QSizePolicy( QSizePolicy::Ignored, QSizePolicy::Expanding ) );// hor/vert
-
-    //addVSpacing( upper_vbox, MARGIN );
-
-
+    
     // Directly propagate signals filterStart() and filterFinished()
     // from primary filter to the outside
 
@@ -79,15 +73,13 @@ YQPkgRepoFilterView::YQPkgRepoFilterView( QWidget * parent )
     connect( _repoList,	SIGNAL( filterNearMatch		( ZyppSel, ZyppPkg ) ),
 	     this,		SLOT  ( primaryFilterNearMatch	( ZyppSel, ZyppPkg ) ) );
 
-#if 0
-    QWidget * secondary_filters =
-#endif
     layoutSecondaryFilters( splitter );
 
-#if 0
-    splitter->setResizeMode( _repoList,	QSplitter::Stretch        );
-    splitter->setResizeMode( secondary_filters, QSplitter::FollowSizeHint );
-#endif
+    splitter->setStretchFactor(0, 5);
+    splitter->setStretchFactor(1, 1);
+    splitter->setStretchFactor(2, 3);
+
+    
 }
 
 
@@ -119,12 +111,6 @@ YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
     layout->addWidget(_secondaryFilters);
 
     Q_CHECK_PTR( _secondaryFilters );
-
-//     _secondaryFilters->setFrameStyle( Q3Frame::Plain );
-//     _secondaryFilters->setLineWidth( 0 );
-//     _secondaryFilters->setMidLineWidth( 0 );
-//     _secondaryFilters->setMargin( 0 );
-
 
     //
     // All Packages
