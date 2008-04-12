@@ -24,6 +24,7 @@
 // $Id$
 
 #include "ncursesw.h"
+#include "etip.h"
 
 extern "C" {
 #  include <panel.h>
@@ -96,7 +97,7 @@ protected:
    * If err is equal to the curses error indicator ERR, an error handler
    * is called.
   */
-  void OnError (int err) const THROWS((NCursesPanelException)) {
+  void OnError (int err) const THROWS(NCursesPanelException) {
     if (err==ERR)
       THROW(new NCursesPanelException (this, err));
   }
