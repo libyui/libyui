@@ -416,19 +416,9 @@ YQPackageSelector::layoutDetailsViews( QWidget *parent )
 {
     bool haveInstalledPkgs = YQPkgList::haveInstalledPkgs();
 
-    //QWidget * details_vbox = new QWidget( parent );
-    //Q_CHECK_PTR( details_vbox );
 
-    //QVBoxLayout *layout = new QVBoxLayout(details_vbox);
-    //details_vbox->setLayout(layout);
-
-    //_detailsViews = new QTabWidget( details_vbox );
     _detailsViews = new QTabWidget( parent );
-    //layout->addWidget(_detailsViews);
-
     Q_CHECK_PTR( _detailsViews );
-
-    // _detailsViews->setTabPosition( QTabWidget::Bottom );
 
     //
     // Description
