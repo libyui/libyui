@@ -175,7 +175,7 @@ protected:
      * currently accepts child dialogs) or 0.
      **/
     static QWidget * chooseParent( YDialogType dialogType );
-    
+
     /**
      * Return the (first) default button between 'begin' and 'end'
      * or 0 if there is none.
@@ -198,7 +198,7 @@ protected:
      **/
     YQWizard * ensureOnlyOneDefaultButton( YWidgetListConstIterator begin,
 					   YWidgetListConstIterator end );
-    
+
     /**
      * Internal open() method, called exactly once during the life
      * time of the dialog in open().
@@ -213,7 +213,7 @@ protected:
      * Implemented from YDialog.
      **/
     virtual YEvent * waitForEventInternal( int timeout_millisec );
-    
+
     /**
      * Check if a user event is pending. If there is one, return it.
      * If there is none, do not wait for one - return 0.
@@ -224,12 +224,12 @@ protected:
 
     /**
      * Activate this dialog: Make sure that it is shown as the topmost dialog
-     * of this application and that it can receive input.  
+     * of this application and that it can receive input.
      *
      * Implemented from YDialog.
      **/
     virtual void activate();
-    
+
     /**
      * Qt event handlers.
      *

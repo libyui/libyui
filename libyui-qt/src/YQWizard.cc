@@ -62,7 +62,8 @@
 #include "YQIconPool.h"
 #include "YQWidgetFactory.h"
 #include "YQSignalBlocker.h"
-#include "YEvent.h"
+#include <YEvent.h>
+#include "YQMainWinDock.h"
 
 using std::string;
 
@@ -89,6 +90,7 @@ YQWizard::YQWizard( YWidget *		parent,
     , _backButtonLabel( backButtonLabel )
     , _abortButtonLabel( abortButtonLabel )
     , _nextButtonLabel( nextButtonLabel )
+    , _secondary( false )
 {
     setObjectName( "wizard" );
 
@@ -97,7 +99,6 @@ YQWizard::YQWizard( YWidget *		parent,
     layout->setMargin( 0 );
 
     setWidgetRep( this );
-
 
     _stepsEnabled = (wizardMode == YWizardMode_Steps);
     _treeEnabled  = (wizardMode == YWizardMode_Tree);
@@ -136,6 +137,12 @@ YQWizard::YQWizard( YWidget *		parent,
        the registering for after we have steps registered */
     if ( !_stepsEnabled )
         QY2Styler::self()->registerWidget( this );
+
+    if ( !_stepsEnabled && !_treeEnabled )
+    {
+        _secondary = true;
+        YQMainWinDock::mainWinDock()->resizeVisibleChild();
+    }
 }
 
 
@@ -187,9 +194,10 @@ QLayout *YQWizard::layoutSideBar( QWidget * parent )
 {
     _sideBar = new QStackedWidget( parent );
     YUI_CHECK_NEW( _sideBar );
-    _sideBar->setMinimumWidth( YQUI::ui()->defaultSize( YD_HORIZ ) / 5 );
+    // _sideBar->setMinimumWidth( YQUI::ui()->defaultSize( YD_HORIZ ) / 5 );
     _sideBar->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred ) ); // hor/vert
     _sideBar->setObjectName( QString( "_sideBar-%1" ).arg( long( this ) ) );
+    _sideBar->installEventFilter( this );
 
     QVBoxLayout *vbox = new QVBoxLayout( );
     vbox->addWidget( _sideBar );
@@ -203,8 +211,9 @@ QLayout *YQWizard::layoutSideBar( QWidget * parent )
     {
 	layoutStepsPanel();
 	showSteps();
-    } else
+    } else {
         _sideBar->hide();
+    }
 
     return vbox;
 }
@@ -214,8 +223,8 @@ void YQWizard::layoutStepsPanel()
     // Steps
     _stepsPanel = new QFrame( _sideBar );
     _sideBar->addWidget( _stepsPanel );
-    _sideBar->setObjectName( "steps" );
-    QY2Styler::self()->registerChildWidget( this, _sideBar );
+    _stepsPanel->setObjectName( "steps" );
+    QY2Styler::self()->registerChildWidget( this, _stepsPanel );
     _stepsPanel->setProperty( "class", "steps QFrame" );
 
     // Steps panel bottom buttons ("Help", "Release Notes")
@@ -1071,6 +1080,12 @@ bool YQWizard::eventFilter( QObject * obj, QEvent * ev )
     if ( ev->type() == QEvent::Resize && obj == _contents )
     {
 	resizeClientArea();
+	return true;		// Event handled
+    }
+
+    if ( ev->type() == QEvent::Resize && obj == _sideBar )
+    {
+        YQMainWinDock::mainWinDock()->setSideBarWidth( _sideBar->width() );
 	return true;		// Event handled
     }
 

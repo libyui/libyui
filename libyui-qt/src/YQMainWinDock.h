@@ -44,6 +44,8 @@ class QWidgetStack;
  **/
 class YQMainWinDock : public QWidget
 {
+    friend class YQWizard;
+
     Q_OBJECT
 
 public:
@@ -62,7 +64,7 @@ public:
      *
      * If the MainWinDock is not visible yet, this operation makes it visible.
      **/
-    void add( QWidget * dialog );
+    void add( YQDialog * dialog );
 
     /**
      * Remove a dialog from the MainWinDock (if it belongs to the
@@ -75,13 +77,13 @@ public:
      * If that was the last main dialog in the MainWinDock, the MainWinDock
      * will be hidden (until another main dialog is added).
      **/
-    void remove( QWidget * dialog = 0 );
+    void remove( YQDialog * dialog = 0 );
 
     /**
      * Return the current topmost dialog (the widgetRep() of a YQDialog)
      * or 0 if there is none.
      **/
-    QWidget * topmostDialog() const;
+    YQDialog * topmostDialog() const;
 
     /**
      * Return 'true' if the next main dialog could be docked,
@@ -140,6 +142,10 @@ protected:
      **/
     void resizeVisibleChild();
 
+    /**
+     * For secondary wizards
+     **/
+    void setSideBarWidth( int width );
 
 protected slots:
 
@@ -151,16 +157,18 @@ protected slots:
 
 private:
 
-    typedef std::deque<QWidget *> YQWidgetStack;
+    typedef std::deque<YQDialog *> YQWidgetStack;
 
     /**
      * Return an iterator to the specified dialog in the internal
      * widgetstack or _widgetStack::end() if not found.
      **/
-    YQWidgetStack::iterator findInStack( QWidget * dialog );
+    YQWidgetStack::iterator findInStack( YQDialog * dialog );
 
 
     YQWidgetStack _widgetStack;
+
+    int _sideBarWidth;
 };
 
 

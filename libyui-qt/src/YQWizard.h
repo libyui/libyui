@@ -334,6 +334,10 @@ public:
      **/
     virtual void setSize( int newWidth, int newHeight );
 
+    /**
+     * Returns true if the wizard should follow the first wizard with steps
+     **/
+    bool isSecondary() const { return _secondary; }
 
 signals:
 
@@ -430,7 +434,6 @@ protected slots:
      **/
     void sendMenuEvent( int numID );
 
-
 protected:
 
     // Layout functions
@@ -515,6 +518,7 @@ protected:
     bool	_protectNextButton;
     bool	_stepsDirty;
     bool	_sendButtonEvents;
+    bool        _secondary;
     Direction	_direction;
 
     QString	_currentStepID;

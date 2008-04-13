@@ -21,12 +21,13 @@
 #include "YUILog.h"
 #include <QTimer>
 #include <QResizeEvent>
-#include <YDialog.h>
+#include "YQDialog.h"
 #include <YQUI.h>
 #include <YEvent.h>
+#include "YQWizard.h"
 #include "YQMainWinDock.h"
 
-#define VERBOSE_RESIZE 0
+#define VERBOSE_RESIZE 1
 
 
 YQMainWinDock *
@@ -78,18 +79,26 @@ YQMainWinDock::resizeEvent( QResizeEvent * event )
 void
 YQMainWinDock::resizeVisibleChild()
 {
-    if ( ! _widgetStack.empty() )
+    for ( YQWidgetStack::reverse_iterator it = _widgetStack.rbegin(); it != _widgetStack.rend(); it++ )
     {
-	QWidget * dialog = _widgetStack.back();
+	YQDialog * dialog = *it;
 
-	if ( dialog->size() != size() )
+        QRect rect = QRect( QPoint( 0, 0 ), size() );
+
+        YQWizard *wizard = dialog->findWizard();
+        if ( wizard )
+        yuiDebug() << "wizard " << wizard << " " << wizard->isSecondary() << endl;
+        if ( wizard && wizard->isSecondary() )
+            rect.setLeft( _sideBarWidth );
+
+	if ( dialog->rect() != rect )
 	{
 #if VERBOSE_RESIZE
 	    yuiDebug() << "Resizing child dialog " << hex << ( (void *) dialog ) << dec
-		       << " to " << size().width() << " x " << size().height()
+		       << " to " << rect.width() << " x " << rect.height()
 		       << endl;
 #endif
-	    dialog->resize( size() );
+            dialog->setGeometry( rect );
 	}
     }
 }
@@ -110,12 +119,14 @@ YQMainWinDock::show()
 
 
 void
-YQMainWinDock::add( QWidget * dialog )
+YQMainWinDock::add( YQDialog * dialog )
 {
     YUI_CHECK_PTR( dialog );
 
+#if 0
     if ( !_widgetStack.empty() )
         _widgetStack.back()->hide();
+#endif
 
     dialog->raise();
     dialog->show();
@@ -123,7 +134,7 @@ YQMainWinDock::add( QWidget * dialog )
     yuiDebug() << "Adding dialog " << hex << (void *) dialog << dec
 	       << "  to mainWinDock"
 	       << endl;
-    
+
     _widgetStack.push_back( dialog );
     resizeVisibleChild();
 
@@ -145,7 +156,7 @@ YQMainWinDock::showCurrentDialog()
 
 
 void
-YQMainWinDock::remove( QWidget * dialog )
+YQMainWinDock::remove( YQDialog * dialog )
 {
     if ( _widgetStack.empty() )
 	return;
@@ -192,7 +203,7 @@ YQMainWinDock::remove( QWidget * dialog )
 
 
 YQMainWinDock::YQWidgetStack::iterator
-YQMainWinDock::findInStack( QWidget * dialog )
+YQMainWinDock::findInStack( YQDialog * dialog )
 {
     for ( YQMainWinDock::YQWidgetStack::iterator it = _widgetStack.begin();
 	  it != _widgetStack.end();
@@ -206,7 +217,7 @@ YQMainWinDock::findInStack( QWidget * dialog )
 }
 
 
-QWidget *
+YQDialog *
 YQMainWinDock::topmostDialog() const
 {
     if ( _widgetStack.empty() )
@@ -249,6 +260,16 @@ void
 YQMainWinDock::paintEvent( QPaintEvent * event )
 {
     // NOP
+}
+
+
+void
+YQMainWinDock::setSideBarWidth( int width )
+{
+    if ( _sideBarWidth == width )
+        return;
+    _sideBarWidth = width;
+    resizeVisibleChild();
 }
 
 
