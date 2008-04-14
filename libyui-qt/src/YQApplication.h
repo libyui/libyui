@@ -287,6 +287,7 @@ public:
     virtual bool hasAnimationSupport()		{ return true; }
     virtual bool hasFullUtf8Support()		{ return true; }
     virtual bool richTextSupportsTable()	{ return true; }
+    virtual bool hasWizardDialogSupport()	{ return true; }
     virtual bool leftHandedMouse();
 
 

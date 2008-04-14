@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Apr 14 16:44:41 CEST 2008 - sh@suse.de
+
+- Added new UI capability YQApplication::hasWizardDialogSupport()
+- V 2.16.39 
+
+-------------------------------------------------------------------
 Sun Apr 13 19:50:21 CEST 2008 - coolo@suse.de
 
 - use only working area on seconday wizards

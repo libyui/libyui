@@ -47,7 +47,7 @@
 YQDialog::YQDialog( YDialogType 	dialogType,
 		    YDialogColorMode	colorMode )
     : QWidget( chooseParent( dialogType ),
-	       dialogType == YMainDialog ? YQMainDialogWFlags : YQPopupDialogWFlags )
+	       dialogType == YPopupDialog ? YQPopupDialogWFlags : YQMainDialogWFlags )
     , YDialog( dialogType, colorMode )
 {
     setWidgetRep( this );
@@ -75,15 +75,15 @@ YQDialog::YQDialog( YDialogType 	dialogType,
 	setPalette( warnPalette );
     }
 
-    if ( dialogType == YMainDialog &&
-	 QWidget::parent() != YQMainWinDock::mainWinDock() )
+    if ( isMainDialog() && QWidget::parent() != YQMainWinDock::mainWinDock() )
     {
 	setWindowFlags( YQPopupDialogWFlags );
     }
-    if ( dialogType != YMainDialog )
+    
+    if ( ! isMainDialog() )
        setWindowModality( Qt::ApplicationModal );
 
-    if ( dialogType == YMainDialog && QWidget::parent() == YQMainWinDock::mainWinDock() )
+    if ( isMainDialog() && QWidget::parent() == YQMainWinDock::mainWinDock() )
     {
         YQMainWinDock::mainWinDock()->add( this );
     }
@@ -92,12 +92,15 @@ YQDialog::YQDialog( YDialogType 	dialogType,
 
 YQDialog::~YQDialog()
 {
-    if ( dialogType() == YMainDialog )
+    if ( isMainDialog() )
     {
 	YQMainWinDock::mainWinDock()->remove( this );
+	// orphaned main dialogs are handled gracefully in YQWMainWinDock::remove()
     }
+    
     if ( _defaultButton )
        _defaultButton->forgetDialog();
+    
     if ( _focusButton )
        _focusButton->forgetDialog();
 }
@@ -108,7 +111,7 @@ YQDialog::chooseParent( YDialogType dialogType )
 {
     QWidget * parent = YQMainWinDock::mainWinDock()->window();
 
-    if ( dialogType == YMainDialog &&
+    if ( ( dialogType == YMainDialog || dialogType == YWizardDialog ) &&
 	 YQMainWinDock::mainWinDock()->couldDock() )
     {
 	yuiDebug() << "Adding dialog to mainWinDock" << endl;
@@ -142,7 +145,7 @@ YQDialog::preferredWidth()
 {
     int preferredWidth;
 
-    if ( dialogType() == YMainDialog )
+    if ( isMainDialog() )
     {
 	if ( userResized() )
 	    preferredWidth = _userSize.width();
@@ -173,7 +176,7 @@ YQDialog::preferredHeight()
 {
     int preferredHeight;
 
-    if ( dialogType() == YMainDialog )
+    if ( isMainDialog() )
     {
 	if ( userResized() )
 	    preferredHeight = _userSize.height();

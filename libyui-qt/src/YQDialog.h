@@ -37,7 +37,13 @@ public:
     /**
      * Constructor.
      *
-     * 'dialogType' is one of YMainDialog or YPopupDialog.
+     * 'dialogType' is one of YMainDialog, YWizardDialog, or YPopupDialog.
+     *
+     * The Qt UI supports YWizardDialogs. They are handled very much like
+     * YMainDialogs, except for wizard dialogs that are opened over a wizard
+     * with a steps panel on the left side, in which case that new wizard
+     * dialog will be resized and moved so the steps panel from the wizard
+     * below will remain visible.
      *
      * 'colorMode' can be set to YDialogWarnColor to use very bright "warning"
      * colors or YDialogInfoColor to use more prominent, yet not quite as
