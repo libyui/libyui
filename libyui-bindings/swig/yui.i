@@ -88,3 +88,16 @@ class Exception;
 %include YPushButton.h
 %include YAlignment.h
 %include YItem.h
+
+%extend YEvent {
+  VALUE mywidget() { return INT2FIX( $self->widget() ); }
+}
+
+%extend YWidget {
+#ifdef SWIGRUBY
+  %rename( "==" ) equals( YWidget *w );
+  %typemap(out) int equals
+    "$result = ($1 != 0) ? Qtrue : Qfalse;";	
+#endif
+  int equals( YWidget *w ) { return ($self == w ); }
+}

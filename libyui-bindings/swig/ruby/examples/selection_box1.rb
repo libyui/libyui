@@ -9,6 +9,7 @@ require 'test/unit'
 class LoadTest < Test::Unit::TestCase
   def test_selection_box1
     require 'yui'
+
     Yui::YUILog::set_log_file_name "/tmp/libyui-examples.log"
     Yui::YUILog::enable_debug_logging
     
@@ -30,7 +31,7 @@ class LoadTest < Test::Unit::TestCase
     valueField.set_stretchable Yui::YD_HORIZ, true # // allow stretching over entire dialog width
     
     valueButton = Yui::YUI::widget_factory.create_push_button hbox, "&Value"
-
+    
     Yui::YUI::widget_factory.create_vspacing vbox, 0.3
 
     rightAlignment = Yui::YUI::widget_factory.create_right vbox
@@ -43,6 +44,7 @@ class LoadTest < Test::Unit::TestCase
     loop do
       event = dialog.wait_for_event
       next unless event
+
       break if event.event_type == Yui::YEvent::CancelEvent # window manager "close window" button
       valueField.set_value "???"
       break if event.widget == closeButton
@@ -56,9 +58,10 @@ class LoadTest < Test::Unit::TestCase
 	  valueField.set_value "<none>"
 	end
       end
+      event = nil
     end
     
-    dialog.destroy
+#    dialog.destroy
   end
 end
 
