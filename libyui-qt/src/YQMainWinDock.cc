@@ -87,7 +87,7 @@ YQMainWinDock::resizeVisibleChild()
 
         YQWizard *wizard = dialog->findWizard();
         if ( wizard )
-        yuiDebug() << "wizard " << wizard << " " << wizard->isSecondary() << endl;
+	    yuiDebug() << "wizard " << wizard << " " << wizard->isSecondary() << endl;
         if ( wizard && wizard->isSecondary() )
             rect.setLeft( _sideBarWidth );
 
