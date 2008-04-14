@@ -164,8 +164,11 @@ YQPkgObjList::pkgObjClicked( int		button,
 	    {
 		updateActions( item );
 
+                if ( ! item->selectable() )
+                    return;
+
 		QMenu * contextMenu =
-		    item->selectable()->hasInstalledObj() ?
+		    ! item->selectable()->installedEmpty() ?
 		    installedContextMenu() : notInstalledContextMenu();
 
 		if ( contextMenu )

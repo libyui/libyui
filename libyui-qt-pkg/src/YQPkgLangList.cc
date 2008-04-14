@@ -61,6 +61,7 @@ YQPkgLangList::YQPkgLangList( QWidget * parent )
 
     fillList();
     selectSomething();
+    resizeColumnToContents(_statusCol);
 
     yuiDebug() << "Creating language list done" << endl;
 }
