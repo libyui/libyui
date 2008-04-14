@@ -78,6 +78,8 @@ YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
 
     connect( this,	SIGNAL( currentItemChanged( QTreeWidgetItem *, QTreeWidgetItem * ) ),
 	     this,	SLOT  ( checkForChangedCandidate() ) );
+    resizeColumnToContents(_versionCol);
+    
 }
 
 
@@ -121,7 +123,6 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     if ( ! selectable )
 	return;
 
-#if FIXME
     QY2CheckListItem * root = new QY2CheckListItem( this, selectable->theObj()->name().c_str() );
     //FIXME add element
     Q_CHECK_PTR( root );
@@ -141,20 +142,18 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 	    // FIXME: In future releases, also the vendor will make a difference
 	    installedIsAvailable = true;
 
-#if 0
 	// DEBUG
 	new YQPkgVersion( this, root, selectable, *it, _userCanSwitch );
 	new YQPkgVersion( this, root, selectable, *it, _userCanSwitch );
 	new YQPkgVersion( this, root, selectable, *it, _userCanSwitch );
 	// DEBUG
-#endif
+
 	++it;
     }
 
     if ( selectable->hasInstalledObj() && ! installedIsAvailable )
 	new YQPkgVersion( this, root, selectable, selectable->installedObj(), false );
 
-#endif
 }
 
 
