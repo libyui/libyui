@@ -28,6 +28,8 @@
 #include "utf8.h"
 #include "YQPkgLangList.h"
 
+#include "zypp/sat/LocaleSupport.h"
+
 using std::set;
 
 
@@ -107,17 +109,32 @@ YQPkgLangList::filter()
 
     if ( selection() )
     {
+        int total = 0;
+        int installed = 0;
+
         zypp::Locale lang = selection()->zyppLang();
 
-        string currentLang = lang.name();
-
-#warning FIXME: need a way to find out what packages provide language support
-        // not yet implemented
+        zypp::sat::LocaleSupport myLocale( lang );
+        for_( it, myLocale.selectableBegin(), myLocale.selectableEnd() )
+        {            
+            ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
+            if ( zyppPkg )
+            {
+                if ( (*it)->installedSize() > 0 )
+                    ++installed;
+                ++total;
+            
+                emit filterMatch( *it, zyppPkg );
+            }
+        }
+        //selection()->setInstalledPackages(installed);
+        //selection()->setTotalPackages(total);
+        
+        //selection()->setText( _summaryCol, QString().sprintf("%s (%d/%d)", zyppPattern->summary().c_str(), installed, total));
+            
     }
-
     emit filterFinished();
 }
-
 
 void
 YQPkgLangList::addLangItem( const zypp::Locale &zyppLang )

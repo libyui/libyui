@@ -838,6 +838,7 @@ YQPackageSelector::makeConnections()
 
     connectFilter( _updateProblemFilterView,	_pkgList, false );
     connectFilter( _patternList,		_pkgList );
+    connectFilter( _langList,		_pkgList );
     connectFilter( _repoFilterView,		_pkgList, false );
     connectFilter( _rpmGroupTagsFilterView,	_pkgList, false );
     //FIXMEconnectFilter( _langList,			_pkgList );
