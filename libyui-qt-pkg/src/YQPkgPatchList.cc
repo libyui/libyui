@@ -521,13 +521,9 @@ YQPkgPatchListItem::applyChanges()
 bool YQPkgPatchListItem::operator< ( const QTreeWidgetItem & otherListViewItem ) const
 {
     const YQPkgPatchListItem * other = dynamic_cast<const YQPkgPatchListItem *> (&otherListViewItem);
-    int col = treeWidget()->sortColumn();
     if ( other )
     {
-	if ( col == categoryCol() )
-	{
-	    return ( this->patchCategory() < other->patchCategory() );
-	}
+        return ( this->text(_patchList->summaryCol()) < other->text( _patchList->summaryCol()) );
     }
     return YQPkgObjListItem::operator<( otherListViewItem );
 }
