@@ -307,7 +307,7 @@ YQPkgPatternList::filter()
             int total = 0;
             int installed = 0;
             
-            zypp::Pattern::Contents  c(zyppPattern->depends());
+            zypp::Pattern::Contents  c(zyppPattern->contents());
             for ( zypp::Pattern::Contents::Selectable_iterator it = c.selectableBegin();
                   it != c.selectableEnd();
                   ++it )
