@@ -33,53 +33,55 @@
 #include "YQi18n.h"
 #include "utf8.h"
 
+class InstalledItemLabel : public QWidget
+{
+public:
+    InstalledItemLabel( QWidget *parent, const QString &text )
+        : QWidget(parent)
+    {
+        QHBoxLayout *layout = new QHBoxLayout(this);
+        
+        _picture = new QLabel(this);
+        _text = new QLabel(this);
+        _text->setText(text);
+        _picture->setPixmap(YQIconPool::pkgKeepInstalled());    
+        layout->addWidget(_picture);
+        layout->addWidget(_text);
+        layout->addStretch();
+        
+    }
+    
+
+private:
+    QLabel *_picture;
+    QLabel *_text;
+    
+    };
+    
+    
+
 
 YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
-    : QY2ListView( parent )
+    : QWidget( parent )
+    , _layout(0)
+    , _label(0)
 {
+    setPalette(QPalette(Qt::white));
+    setAutoFillBackground(true);
+
     _selectable		= 0;
     _parentTab		= dynamic_cast<QTabWidget *> (parent);
     _userCanSwitch 	= userCanSwitch;
 
-    _versionCol	= -42;
-    _archCol	= -42;
-    _productCol	= -42;
-    _urlCol	= -42;
-    _repoCol	= -42;
-    _statusCol	= -42;
-    _nameCol	= -42;
-    _summaryCol = -42;
-
-    QStringList headers;
-    int numCol = 0;
-    headers << _( "Version" 	);	_versionCol	= numCol++;
-    headers << _( "Arch." 	);	_archCol	= numCol++;
-    headers << _( "Product"	);	_productCol	= numCol++;
-    headers << _( "Repository"	);	_repoCol	= numCol++;
-    headers << _( "URL"		);	_urlCol		= numCol++;
-
-    setHeaderLabels(headers);
-    _statusCol	= _productCol;
-
-    _nameCol	= _versionCol;
-    _summaryCol = _repoCol;
-
-    setSortByInsertionSequence( true );
-
-    // saveColumnWidths();	// Minimize column widths
-    // header()->hide();
-
+    _buttons = new QButtonGroup(parent);
+    
+    connect( _buttons, SIGNAL(clicked(QAbstractButton *)), SLOT(checkForChangedCandidate()) );
 
     if ( _parentTab )
     {
 	connect( parent, SIGNAL( currentChanged(QWidget *) ),
 		 this,   SLOT  ( reload        (QWidget *) ) );
     }
-
-    connect( this,	SIGNAL( currentItemChanged( QTreeWidgetItem *, QTreeWidgetItem * ) ),
-	     this,	SLOT  ( checkForChangedCandidate() ) );
-    resizeColumnToContents(_versionCol);
-    
 }
 
 
@@ -118,117 +120,151 @@ void
 YQPkgVersionsView::showDetails( ZyppSel selectable )
 {
     _selectable = selectable;
-    clear();
 
     if ( ! selectable )
-	return;
+        return;
 
-    QY2CheckListItem * root = new QY2CheckListItem( this, selectable->theObj()->name().c_str() );
-    //FIXME add element
-    Q_CHECK_PTR( root );
-    root->setExpanded( true );
+    delete _label;
+    delete _layout;
+    
+    _layout = new QVBoxLayout(this);
+    _label = new QLabel(this);
 
-    bool installedIsAvailable = false;
+    if ( !selectable->theObj() )
+        return;
 
-    zypp::ui::Selectable::available_iterator it = selectable->availableBegin();
+    _layout->addWidget(_label);
 
-    while ( it != selectable->availableEnd() )
-    {
-	new YQPkgVersion( this, root, selectable, *it, _userCanSwitch );
+    QFont font = _label->font();
+    font.setBold(true);
+    font.setPointSize(font.pointSize()+1);
+    
+    _label->setFont(font);
+    
+    _label->setText(selectable->theObj()->name().c_str());
 
-	if ( selectable->installedObj() &&
-	     selectable->installedObj()->edition() == (*it)->edition() &&
-	     selectable->installedObj()->arch()    == (*it)->arch()      )
-	    // FIXME: In future releases, also the vendor will make a difference
-	    installedIsAvailable = true;
-
-	// DEBUG
-	new YQPkgVersion( this, root, selectable, *it, _userCanSwitch );
-	new YQPkgVersion( this, root, selectable, *it, _userCanSwitch );
-	new YQPkgVersion( this, root, selectable, *it, _userCanSwitch );
-	// DEBUG
-
-	++it;
+    // new scope
+    {    
+        QListIterator<QAbstractButton*> it(_buttons->buttons());
+        while (it.hasNext())
+        {
+            delete it.next();
+        }
     }
 
-    if ( selectable->hasInstalledObj() && ! installedIsAvailable )
-	new YQPkgVersion( this, root, selectable, selectable->installedObj(), false );
+    // delete all installed items
+    qDeleteAll(_installed);
+    _installed.clear();    
+    
+    // Fill installed objects
+    {
+        
+        zypp::ui::Selectable::installed_iterator it = selectable->installedBegin();
 
+        while ( it != selectable->installedEnd() )
+        {
+            QString text = _( "%1-%2 (installed)" ).arg( (*it)->edition().asString().c_str() ).arg(  (*it)->arch().asString().c_str() );
+
+            QWidget *b = new InstalledItemLabel(this, text);
+                
+            _installed.push_back(b);
+            _layout->addWidget(b);
+    
+            ++it;
+        }
+    }
+
+    // Fill available objects
+    {
+        
+        zypp::ui::Selectable::available_iterator it = selectable->availableBegin();
+
+        while ( it != selectable->availableEnd() )
+        {
+            QRadioButton *b = new YQPkgVersion( this, selectable, *it, _userCanSwitch );
+            _buttons->addButton(b);
+            _layout->addWidget(b);
+            
+            
+            if ( selectable->hasCandidateObj() &&
+                 selectable->candidateObj()->edition() == (*it)->edition() &&
+                 selectable->candidateObj()->arch() == (*it)->arch() )
+            {
+                b->setChecked(true);
+            }
+            
+            ++it;
+        }
+    }
+    
+    _layout->addStretch();
 }
 
 
 void
 YQPkgVersionsView::checkForChangedCandidate()
 {
-    QTreeWidgetItemIterator iter(this);
-    QTreeWidgetItem *first = *iter;
 
-    if ( ! first || ! _selectable )
-	return;
+     QListIterator<QAbstractButton*> it(_buttons->buttons());
+     while (it.hasNext())
+     {
+         YQPkgVersion * versionItem = dynamic_cast<YQPkgVersion *> (it.next());
 
-    
-    QTreeWidgetItemIterator iter_c(first);
-    
-    while ( *iter_c )
-    {
-	YQPkgVersion * versionItem = dynamic_cast<YQPkgVersion *> (*iter_c);
+         if ( versionItem && versionItem->isChecked() )
+         {
+             ZyppObj newCandidate = versionItem->zyppObj();
 
-	if ( versionItem && (versionItem->checkState(0) == Qt::Checked) )
-	{
-	    ZyppObj newCandidate = versionItem->zyppObj();
+             if ( newCandidate != _selectable->candidateObj() )
+             {
+                 yuiMilestone() << "Candidate changed" << endl;
 
-	    if ( newCandidate != _selectable->candidateObj() )
-	    {
-		yuiMilestone() << "Candidate changed" << endl;
+                 // Change status of selectable
 
-		// Change status of selectable
+                 ZyppStatus status = _selectable->status();
 
-		ZyppStatus status = _selectable->status();
-
-		if ( _selectable->installedObj() &&
-		     _selectable->installedObj()->arch()    == newCandidate->arch() &&
-		     _selectable->installedObj()->edition() == newCandidate->edition() )
-		{
-		    // Switch back to the original instance -
-		    // the version that was previously installed
+                 if ( !_selectable->installedEmpty() &&
+                      _selectable->installedObj()->arch()    == newCandidate->arch() &&
+                      _selectable->installedObj()->edition() == newCandidate->edition() )
+                 {
+                     // Switch back to the original instance -
+                     // the version that was previously installed
 		    status = S_KeepInstalled;
-		}
-		else
-		{
-		    switch ( status )
-		    {
-			case S_KeepInstalled:
-			case S_Protected:
-			case S_AutoDel:
-			case S_AutoUpdate:
-			case S_Del:
-			case S_Update:
+                 }
+                 else
+                 {
+                     switch ( status )
+                     {
+                     case S_KeepInstalled:
+                     case S_Protected:
+                     case S_AutoDel:
+                     case S_AutoUpdate:
+                     case S_Del:
+                     case S_Update:
+                         
+                         status = S_Update;
+                         break;
+                         
+                     case S_NoInst:
+                     case S_Taboo:
+                     case S_Install:
+                     case S_AutoInstall:
+                         status = S_Install;
+                         break;
+                     }
+                 }
 
-			    status = S_Update;
-			    break;
-
-			case S_NoInst:
-			case S_Taboo:
-			case S_Install:
-			case S_AutoInstall:
-			    status = S_Install;
-			    break;
-		    }
-		}
-
-		_selectable->setStatus( status );
+                 _selectable->setStatus( status );
 
 
-		// Set candidate
+                 // Set candidate
+                 
+                 _selectable->setCandidate( newCandidate );
+                 emit candidateChanged( newCandidate );
+                 return;
+             }
+         }
 
-		_selectable->setCandidate( newCandidate );
-		emit candidateChanged( newCandidate );
-		return;
-	    }
-	}
-
-	++iter_c;
-    }
+     }
 }
 
 
@@ -239,55 +275,17 @@ YQPkgVersionsView::minimumSizeHint() const
 }
 
 
-
-
-
-
 YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
-			    QY2CheckListItem * 	parent,
 			    ZyppSel		selectable,
 			    ZyppObj 		zyppObj,
 			    bool		enabled )
-    : QY2CheckListItem( parent, "" /*
-			enabled ?
-			Q3CheckListItem::RadioButton :
-			Q3CheckListItem::Controller */ )	// cheap way to make it read-only
+    : QRadioButton( pkgVersionList )
     , _pkgVersionList( pkgVersionList )
     , _selectable( selectable )
     , _zyppObj( zyppObj )
 {
-    // FIXME setOn( _zyppObj == _selectable->candidateObj() );
-
-    if ( versionCol() >= 0 )	setText( versionCol(), zyppObj->edition().asString().c_str() );
-    if ( archCol()    >= 0 )	setText( archCol(),    zyppObj->arch().asString().c_str() );
-    if ( repoCol() >= 0 )	setText( repoCol(), fromUTF8(zyppObj->repository().info().alias()) );
-    if ( productCol() >= 0 )
-    {
-	ZyppProduct product = YQPkgRepoListItem::singleProduct( zyppObj->repository() );
-
-	if ( product )
-	    setText( productCol(), QString::fromStdString( product->summary() ) );
-    }
-    if ( urlCol() >= 0 )
-    {
-        zypp::Url repoUrl;
-
-	if ( ! zyppObj->repository().info().baseUrlsEmpty() )
-	    repoUrl = *zyppObj->repository().info().baseUrlsBegin();
-
-	setText( urlCol(), repoUrl.asString().c_str() );
-    }
-
-    if ( _selectable->hasInstalledObj() )
-    {
-	if ( _zyppObj->edition() == _selectable->installedObj()->edition() &&
-	     _zyppObj->arch()    == _selectable->installedObj()->arch()      )
-	{
-	    // FIXME setPixmap( statusCol(), YQIconPool::pkgKeepInstalled() );
-	    setBackgroundColor( QColor( 0xF0, 0xF0, 0xF0 ) ); 	// light grey
-	    setTextColor( QColor( 0, 0x90, 0 ) );		// green
-	}
-    }
+    setText( _( "%1-%2 from %3" ).arg( zyppObj->edition().asString().c_str() ).arg(  zyppObj->arch().asString().c_str() ).arg(  zyppObj->repository().name().c_str() ) );
+    
 }
 
 
@@ -306,20 +304,6 @@ YQPkgVersion::toolTip(int)
 	tip = _( "This version is installed in your system." );
 
     return tip;
-}
-
-
-bool YQPkgVersion::operator< ( const QTreeWidgetItem & otherListViewItem ) const
-{
-    const YQPkgVersion * other = dynamic_cast<const YQPkgVersion *> (&otherListViewItem);
-
-    if ( other )
-    {
-	return ( this->zyppObj()->edition() < other->zyppObj()->edition() );
-    }
-
-    // Fallback: Use parent class method
-    return QY2CheckListItem::operator<( otherListViewItem );
 }
 
 

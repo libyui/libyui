@@ -20,7 +20,12 @@
 #ifndef YQPkgVersionsView_h
 #define YQPkgVersionsView_h
 
-#include "QY2ListView.h"
+#include <QRadioButton>
+#include <QButtonGroup>
+#include <QBoxLayout>
+#include <QLabel>
+#include <QList>
+
 #include "YQZypp.h"
 
 class QTabWidget;
@@ -31,7 +36,7 @@ class QTabWidget;
  * all the different installation sources and let the user change the candidate
  * version for installation / update.
  **/
-class YQPkgVersionsView : public QY2ListView
+class YQPkgVersionsView : public QWidget
 {
     Q_OBJECT
 
@@ -116,6 +121,10 @@ protected:
     QTabWidget	*	_parentTab;
     ZyppSel		_selectable;
     bool		_userCanSwitch;
+    QButtonGroup        *_buttons;
+    QList<QWidget*>      _installed;
+    QVBoxLayout         *_layout;
+    QLabel              *_label;
 
     int 		_versionCol;
     int			_archCol;
@@ -128,7 +137,7 @@ protected:
 };
 
 
-class YQPkgVersion: public QY2CheckListItem
+class YQPkgVersion: public QRadioButton
 {
 public:
 
@@ -137,7 +146,6 @@ public:
      * manager object that 'pkg' refers to.
      **/
     YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
-		  QY2CheckListItem * 	parent,
 		  ZyppSel		selectable,
 		  ZyppObj 		zyppObj,
 		  bool			enabled = true );
@@ -160,7 +168,7 @@ public:
     /**
      * sorting function
      */
-    virtual bool operator< ( const QTreeWidgetItem & other ) const;
+    //virtual bool operator< ( const QTreeWidgetItem & other ) const;
 
     /**
      * Returns a tool tip text for a specific column of this item.
