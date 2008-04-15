@@ -38,22 +38,38 @@ NCPkgMenuView::~NCPkgMenuView()
 
 void NCPkgMenuView::createLayout()
 {
-    description = new YMenuItem( _("Package Description") );
-    items.push_back( description );
+    if ( !pkg->isYouMode() )
+    {
+	description = new YMenuItem( _("Package Description") );
+	items.push_back( description );
 
-    technical = new YMenuItem( _("Technical data") );
-    items.push_back( technical );
+	technical = new YMenuItem( _("Technical data") );
+	items.push_back( technical );
 
-    versions = new YMenuItem( _("Package Versions") );
-    items.push_back( versions );
+	versions = new YMenuItem( _("Package Versions") );
+	items.push_back( versions );
 
-    files = new YMenuItem( _("File List") );
-    items.push_back( files );
+	files = new YMenuItem( _("File List") );
+	items.push_back( files );
 
-    deps = new YMenuItem( _("Dependencies") );
-    items.push_back( deps );
+	deps = new YMenuItem( _("Dependencies") );
+	items.push_back( deps );
 
-    addItems( items );
+	addItems( items );
+    }
+    else
+    {
+	patchDescription =  new YMenuItem( _( "&Long Description" ) );
+	items.push_back( patchDescription );
+
+	patchPackages = new YMenuItem( _( "&Package List" ));
+	items.push_back( patchPackages );
+	
+	patchPkgVersions = new YMenuItem( _("&Versions") );
+	items.push_back( patchPkgVersions );
+
+	addItems( items );
+    }
 }
 
  
@@ -70,10 +86,69 @@ bool NCPkgMenuView::handleEvent ( const NCursesEvent & event)
 
     if ( !pkgPtr || !slbPtr)
     {	
-	yuiError() << "*cobe*-d up" << endl;
-	return false;
+	yuiError() << "package list empty - no package pointer" << endl;
+	return true;
     }
 
+    // Call the appropriate method from NCPackageSelector for
+    // the selected menu entry.
+    // Set the information type of the package list (NCPkgTable)
+    // acccordingly to to able to show the required information while
+    // scrolling the list (NCPkgTable::updateList())
+
+    if ( event.selection == versions )
+    {
+	pkg->showVersionsList();
+	pkgList->setVisibleInfo (NCPkgTable::I_Versions);
+    }
+    else if ( event.selection == patchPackages )
+    {
+	pkg->showPatchPackages();
+	pkgList->setVisibleInfo (NCPkgTable::I_PatchPkgs);
+    }
+    else if ( event.selection == patchPkgVersions )
+    {
+	pkg->showPatchPkgVersions();
+	pkgList->setVisibleInfo (NCPkgTable::I_PatchPkgsVersions);	
+    }
+    else
+    {
+	pkg->showInformation();
+
+	if ( !pkg->InfoText() )
+	    return false;
+	
+	if (event.selection == description)
+        { 
+            pkg->InfoText()->longDescription( pkgPtr );
+	    pkgList->setVisibleInfo (NCPkgTable::I_Descr);
+        }
+        else if (event.selection == technical )
+        {
+            pkg->InfoText()->technicalData( pkgPtr, slbPtr );
+	    pkgList->setVisibleInfo (NCPkgTable::I_Technical); 
+        }
+        else if (event.selection == files )
+        {
+            pkg->InfoText()->fileList(  slbPtr );
+	    pkgList->setVisibleInfo (NCPkgTable::I_Files);
+        }
+        else if (event.selection == deps )
+        {
+            pkg->InfoText()->dependencyList( pkgPtr, slbPtr );
+	    pkgList->setVisibleInfo (NCPkgTable::I_Deps);
+        }
+	else if ( event.selection == patchDescription )
+	{
+	    pkg->InfoText()->patchDescription( pkgPtr, slbPtr );
+	    pkgList->setVisibleInfo (NCPkgTable::I_PatchDescr);
+	}
+    }
+
+    //
+    // UNUSED
+    //
+#if 0
     if (event.selection == versions)
     {
 	if ( !pkg->VersionsList() )
@@ -110,5 +185,7 @@ bool NCPkgMenuView::handleEvent ( const NCursesEvent & event)
             pkgList->setVisibleInfo (NCPkgTable::I_Deps);
         }
     }
+#endif
+
     return true;
 }

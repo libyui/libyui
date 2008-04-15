@@ -48,5 +48,6 @@ public:
 
     void dependencyList( ZyppObj objPtr, ZyppSel slbPtr );    
 
+    bool patchDescription( ZyppObj objPtr, ZyppSel selectable );
 };
 #endif

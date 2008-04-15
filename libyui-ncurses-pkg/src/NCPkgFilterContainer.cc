@@ -140,6 +140,7 @@ bool NCPkgFilterContainer::showContainerContent( const set<string> & wanted )
     std::vector<ZyppSel> sorted;
     sorted.reserve (wanted.size ());
 
+    yuiMilestone() << "Showing " << wanted.size () << " packages" << endl; 
     // find the objects for the names
     ZyppPoolIterator
 	b = zyppPkgBegin(),
@@ -193,36 +194,35 @@ void NCPkgFilterContainer::showContainerPackages( )
     ZyppObj objPtr = getDataPointer( index );
     if ( objPtr )
     {
-        yuiMilestone() << "Current selection: " << getCurrentLine() << endl;
-    
         // show the package list
         std::set<std::string> packages;
         ZyppPattern patPtr = tryCastToZyppPattern (objPtr);
         //ZyppLang langPtr = tryCastToZyppLang (objPtr);
         if (patPtr)
         {
-    	zypp::ui::PatternContents patternContents( patPtr );
-    	packager->FilterDescription()->setText ( showDescription( objPtr ) );
-    	packages = patternContents.install_packages();
+	    yuiMilestone() << "Show packages belonging to selected pattern: " << getCurrentLine() << endl; 
+	    zypp::ui::PatternContents patternContents( patPtr );
+	    packager->FilterDescription()->setText ( showDescription( objPtr ) );
+	    packages = patternContents.install_packages();
     	
         }
-        #if 0 //FIXME	
+ #if 0 //FIXME	
         else if (langPtr)
         {
-    	string currentLang = langPtr->name();
+	    string currentLang = langPtr->name();
     
-    	for ( ZyppPoolIterator it = zyppPkgBegin(); it != zyppPkgEnd(); ++it )
+	    for ( ZyppPoolIterator it = zyppPkgBegin(); it != zyppPkgEnd(); ++it )
             {
                 ZyppObj zyppObj = (*it)->theObj();
     
                 if ( zyppObj )
                 {
-    	       //find all 'freshens' dependencies of this object
-                   zypp::CapSet freshens = zyppObj->dep( zypp::Dep::FRESHENS );
+		    //find all 'freshens' dependencies of this object
+		    zypp::CapSet freshens = zyppObj->dep( zypp::Dep::FRESHENS );
     
-                   for ( zypp::CapSet::const_iterator cap_it = freshens.begin();
-                      cap_it != freshens.end();
-                      ++cap_it )
+		    for ( zypp::CapSet::const_iterator cap_it = freshens.begin();
+			  cap_it != freshens.end();
+			  ++cap_it )
                     {
                         if ( (*cap_it).index() == currentLang ) // obj freshens this language
                         {
@@ -231,9 +231,9 @@ void NCPkgFilterContainer::showContainerPackages( )
                             if ( pkg )
                             {
                                 NCDBG <<  "Found pkg " << pkg->name().c_str() << "for lang "
-                                << currentLang.c_str() << endl;
+				      << currentLang.c_str() << endl;
     
-    			    packages.insert( pkg->name() );
+				packages.insert( pkg->name() );
                             }
                         }
                     }
@@ -241,9 +241,9 @@ void NCPkgFilterContainer::showContainerPackages( )
             }
     
         }
-	    #endif
-	    showContainerContent( packages );
-	}
+#endif
+	showContainerContent( packages );
+    }
 }
 
 

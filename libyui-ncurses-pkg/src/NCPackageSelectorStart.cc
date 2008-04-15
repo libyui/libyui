@@ -75,10 +75,11 @@ NCPackageSelectorStart::NCPackageSelectorStart( YWidget * parent,
 
     if ( packager )
     {
+	yuiMilestone() << "YouMode: " <<  (youMode?"true":"false") << endl;
 	if ( !youMode )
 	    packager->createPkgLayout( this, type );
 	else
-	    packager->createYouLayout( this, type );
+	    packager->createYouLayout( this );
     }
     
     yuiDebug() << endl;
@@ -135,7 +136,7 @@ void NCPackageSelectorStart::showDefaultList()
 	// fill package list with packages belonging to default RPM group
 	packager->fillDefaultList();
 
-         // always do an initial dependency solving
+        // always do an initial dependency solving
 	packager->showPackageDependencies( true );
 
 	if ( youMode )

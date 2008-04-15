@@ -758,7 +758,9 @@ bool NCPkgTable::showInformation ( )
 	    break;
 	case T_Patches:
 	    // show the patch info
-	    packager->showPatchInformation( objPtr, slbPtr );
+	    if (objPtr && slbPtr )
+		updateInfo( objPtr, slbPtr, VisibleInfo() );
+	    //packager->showPatchInformation( objPtr, slbPtr );
 	    break;
 	default:
 	    break;
@@ -1162,6 +1164,12 @@ void NCPkgTable::updateInfo( ZyppObj pkgPtr, ZyppSel slbPtr, NCPkgTableInfoType 
 	case I_Versions:
 	    packager->VersionsList()->fillAvailableList( slbPtr );
 	    break;
+	case I_PatchDescr:
+	    packager->InfoText()->patchDescription( pkgPtr, slbPtr );
+	case I_PatchPkgs:
+	    packager->fillPatchPackages( packager->PatchPkgs(), pkgPtr );
+	case I_PatchPkgsVersions:
+	    packager->fillPatchPackages( packager->PatchPkgsVersions(), pkgPtr, true );
 	default:
 	    break;
     }

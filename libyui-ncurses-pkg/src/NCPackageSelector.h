@@ -127,23 +127,14 @@ class NCPackageSelector
     NCPkgMenuView *viewMenu;
     NCPkgMenuExtras *extrasMenu;
     NCPkgMenuHelp *helpMenu;
+    NCPkgFilterMain *filterMain;
     NCPkgMenuAction *actionMenu;
 
-    NCPkgFilterMain *filterMain;
     // filter menu and items
     NCMenuButton * filterMenu;
     YMenuItem * updatelistItem;
     
-    // information menu and items
-    NCMenuButton * infoMenu;
-
-    // information menu and items YOU
-    YMenuItem * patchdescrItem;
-    YMenuItem * patchpkgsItem;
-    YMenuItem * pkgversionsItem;
-    
-    
-    // labels
+     // labels
     YLabel * packageLabel;
     YLabel * diskspaceLabel;
 
@@ -217,10 +208,9 @@ class NCPackageSelector
     /**
     * Create layout for the Online Update
     * @param parent Parent is PackageSelectorStart
-    * @param type   The package table type	
     * @return void
     */
-    void createYouLayout( YWidget * parent, NCPkgTable::NCPkgTableType type ); 	
+    void createYouLayout( YWidget * parent ); 	
 
     // returns the package table widget 
     NCPkgTable * PackageList();
@@ -234,6 +224,9 @@ class NCPackageSelector
     NCPkgTable *VersionsList() { return versionsList; }
     void setVersionsList ( NCPkgTable *table ) { versionsList = table; }
 
+    NCPkgTable * PatchPkgs() { return patchPkgs; }
+    NCPkgTable * PatchPkgsVersions() { return patchPkgsVersions; }
+    
     YReplacePoint *ReplacePoint() { return replacePoint; }
     NCRichText *FilterDescription() { return filter_desc; }
     NCPkgSearchSettings *SearchSettings() { return searchSet; }
@@ -294,13 +287,39 @@ class NCPackageSelector
      */
     bool handleEvent( const NCursesEvent& event );
 
-     /**
-     * Handler function for the "Information" menu
-     * @param event The Ncurses event
-     * @return bool
-     */
+    // UNUSED
     void replaceInfoText ( bool b );
 
+    /**
+    * Creates an NCPkgTable widget and shows all versions
+    * of all packages belonging to a patch
+    * @return void 
+    */
+    void showPatchPkgVersions();
+
+    /**
+    * Creates an NCPkgTable widget and shows all packages
+    * belonging to a patch
+    * @return void 
+    */
+    void showPatchPackages();
+
+    /**
+    * Creates an NCPkgTable widget and shows all verions
+    * a the selected package
+    * @return void 
+    */
+    void showVersionsList();
+
+    /**
+    * Creates an NCRichText widget for package (patch)
+    * information
+    * @return void 
+    */
+    void showInformation();
+
+    wrect deleteReplacePoint();
+    
     void replaceFilter ( FilterMode mode);
     void replaceFilterDescr ( bool b );
     /**
@@ -349,15 +368,6 @@ class NCPackageSelector
     */
     void showSelectionDependencies ( );
     
-
-   /**
-    * Gets the required patch info from you patch manager and shows it
-    * @param pkgPtr the data pointer
-    * @return bool
-    */
-    bool showPatchInformation ( ZyppObj pkgPtr, ZyppSel slbPtr );
-
-   
    /**
     * Updates the status in list of packages
     */

@@ -94,7 +94,7 @@ void NCPkgPackageDetails::longDescription ( ZyppObj pkgPtr )
    string text = "";  
   
    //text += commonHeader( pkgPtr );
-   //text += pkgPtr->description();
+   text += pkgPtr->description();
 
    // show the description
    setValue( text );
@@ -231,3 +231,46 @@ void NCPkgPackageDetails::dependencyList( ZyppObj pkgPtr, ZyppSel slbPtr )
     
 }
 
+bool NCPkgPackageDetails::patchDescription( ZyppObj objPtr, ZyppSel selectable )
+{
+    ZyppPatch patchPtr = tryCastToZyppPatch( objPtr );
+
+    if ( !patchPtr || !selectable )
+    {
+	yuiError() << "Patch not valid" << endl;
+	return false;
+    }
+    
+    string descr;
+
+    descr += NCPkgStrings::Patch();
+    descr += selectable->name();
+    descr += "&nbsp;";
+    // the patch size is not available
+    // descr += NCPkgStrings::Size();
+    // descr += patchPtr->size().asString( 8 );
+    descr += "<b>";
+    descr += NCPkgStrings::PatchKind();
+    descr += ": </b>";
+    descr += patchPtr->category();
+    descr += "&nbsp;";
+    descr += NCPkgStrings::Version();
+    descr += patchPtr->edition().asString();
+    descr += "<br>";
+
+    if ( selectable->hasInstalledObj()
+	 && selectable->installedPoolItem().isBroken() )
+    {
+	descr += _( "----- this patch is broken !!! -----" );
+	descr += "<br>";
+    }
+    // get and format the patch description
+    string value = patchPtr->description();
+    //descr += createDescrText( value );
+    descr += value;
+
+    // show the description
+    setValue( descr );
+
+    return true;
+}

@@ -95,13 +95,9 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, YWidget * wRoot, long mod
       , extrasMenu( 0 )
       , helpMenu( 0 )
       , filterMain( 0 )
+      , actionMenu( 0 )
       , filterMenu( 0 )
       , updatelistItem( 0 )
-      , actionMenu( 0 )
-      , infoMenu( 0 )
-      , patchdescrItem( 0 )
-      , patchpkgsItem( 0 )
-      , pkgversionsItem( 0 )
       , packageLabel( 0 )
       , diskspaceLabel( 0 )
       , infoText( 0 )
@@ -733,15 +729,164 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
     return displayPatch;
 }
 
+///////////////////////////////////////////////////////////////////
+//
+// deleteReplacePoint
+//
+// Gets ( and returns ) the current size of the widget at the replace
+// point and deletes it.
+// 
+wrect NCPackageSelector::deleteReplacePoint()
+{
+    // delete current child of the ReplacePoint
+    YWidget * replaceChild = replacePoint->firstChild();
+    wrect oldSize;
 
+    if ( replaceChild )
+    {
+	oldSize = dynamic_cast<NCWidget *>(replaceChild)->wGetSize();
+
+	delete replaceChild;
+	// reset all info widgets
+	infoText = 0;		// NCPkgPackageDetails ( NCRichText )
+	versionsList = 0;	// NCPkgTable - type: T_Availables
+	patchPkgs = 0;		// NCPkgTable - type: T_PatchPkgs
+	patchPkgsVersions = 0;	// NCPkgTable - type: T_Availables
+    }
+    
+    return oldSize;
+}
 
 ///////////////////////////////////////////////////////////////////
 //
-// InformationHandler
+// showInformation
 //
-// Sets the member variable visibleInfo. If required,
-// replaces the currently active package information widget
-// ( e.g. by the list of available packages ).
+// Creates an NCPkgPackageDetails (a RichtText widget) which is
+// used to show the required information (called from NCPkgMenuView)
+// 
+// 
+void NCPackageSelector::showInformation()
+{
+    wrect oldSize = deleteReplacePoint();
+     
+    // show the rich text widget
+    infoText = new NCPkgPackageDetails( replacePoint, " ", this);
+
+    if ( infoText )
+    {
+	infoText->setSize( oldSize.Sze.W, oldSize.Sze.H );
+	infoText->Redraw();
+    }
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// showVersionsList
+//
+// Creates an NCPkgTable (type T_Availables) which is used to show
+// the list of package versions (called from NCPkgMenuView)
+// 
+// 
+void NCPackageSelector::showVersionsList()
+{
+    wrect oldSize = deleteReplacePoint();
+    NCPkgTable * packageList = PackageList();
+
+    // show a package table with all available package versions
+    YTableHeader * tableHeader = new YTableHeader();
+    versionsList = new NCPkgTable( replacePoint, tableHeader );
+    // YDialog::currentDialog()->setInitialSize(); -> doesn't work
+    // call versionsList->setSize() and versionsList->Redraw() instead
+
+    if ( versionsList && packageList )
+    {
+
+	// set the connection to the NCPackageSelector !!!!
+	versionsList->setPackager( this );
+	// set status strategy
+	NCPkgStatusStrategy * strategy = new AvailableStatStrategy();
+	versionsList->setTableType( NCPkgTable::T_Availables, strategy );
+	versionsList->fillHeader( );
+	versionsList->setSize( oldSize.Sze.W, oldSize.Sze.H );
+	
+	versionsList->fillAvailableList(  packageList->getSelPointer( packageList->getCurrentItem() ) );
+	versionsList->Redraw();
+
+	packageList->setKeyboardFocus();
+    }  
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// showPatchPackages
+//
+// Creates an NCPkgTable (type T_PatchPkgs) which is used to show
+// the list of all packages belonging to a patch (called from NCPkgMenuView)
+// 
+// 
+void NCPackageSelector::showPatchPackages()
+{
+    wrect oldSize = deleteReplacePoint();
+    NCPkgTable * packageList = PackageList();
+      
+    // show a package table with packages belonging to a patch
+    YTableHeader * tableHeader = new YTableHeader();
+    patchPkgs =  new NCPkgTable( replacePoint, tableHeader );
+
+    if ( patchPkgs && packageList )
+    {
+	// set the connection to the NCPackageSelector !!!!
+	patchPkgs->setPackager( this );
+	// set status strategy - don't set extra strategy, use 'normal' package strategy
+	NCPkgStatusStrategy * strategy = new PackageStatStrategy();
+	patchPkgs->setTableType( NCPkgTable::T_PatchPkgs, strategy );
+	patchPkgs->fillHeader( );
+	patchPkgs->setSize( oldSize.Sze.W, oldSize.Sze.H );
+
+	fillPatchPackages( patchPkgs, packageList->getDataPointer( packageList->getCurrentItem() ) );
+	patchPkgs->Redraw();
+
+	packageList->setKeyboardFocus();
+    }  
+}
+
+///////////////////////////////////////////////////////////////////
+//
+// showPatchPkgsVersions
+//
+// Creates an NCPkgTable (type T_Availables) which is used to show
+// a list of all versions of all packages belonging to a patch
+// (called from NCPkgMenuView)
+// 
+// 
+void NCPackageSelector::showPatchPkgVersions()
+{
+    wrect oldSize = deleteReplacePoint();
+    NCPkgTable * packageList = PackageList();
+       
+    // show a package table with versions of the packages beloning to a patch
+    YTableHeader * tableHeader = new YTableHeader();
+    patchPkgsVersions =  new NCPkgTable( replacePoint, tableHeader );
+
+    if ( patchPkgsVersions && packageList )
+    {
+	// set the connection to the NCPackageSelector !!!!
+	patchPkgsVersions->setPackager( this );
+	// set status strategy and table type
+	NCPkgStatusStrategy * strategy = new AvailableStatStrategy();
+	patchPkgsVersions->setTableType( NCPkgTable::T_Availables, strategy );
+	patchPkgsVersions->fillHeader( );
+	patchPkgsVersions->setSize( oldSize.Sze.W, oldSize.Sze.H );
+
+	fillPatchPackages( patchPkgsVersions, packageList->getDataPointer( packageList->getCurrentItem() ), true );
+	patchPkgsVersions->Redraw();
+
+	packageList->setKeyboardFocus();
+    }
+}
+
+// 
+// UNUSED
 //
 void NCPackageSelector::replaceInfoText( bool b )
 {
@@ -1360,80 +1505,6 @@ bool NCPackageSelector::showLicenseAgreement( ZyppSel & slbPtr , string licenseT
     return ok;
 }
 
-
-///////////////////////////////////////////////////////////////////
-//
-// showPatchInformation
-//
-// Shows the patch information
-//
-bool NCPackageSelector::showPatchInformation ( ZyppObj objPtr, ZyppSel selectable )
-{
-    ZyppPatch patchPtr = tryCastToZyppPatch( objPtr );
-
-    if ( !patchPtr || !selectable )
-    {
-	yuiError() << "Patch not valid" << endl;
-	return false;
-    }
-
-    // if (  visibleInfo->compare( NCPkgStrings::PatchDescr() ) == YO_EQUAL )
-    if ( visibleInfo == patchdescrItem )
-    {
-	string descr;
-
-	descr += NCPkgStrings::Patch();
-	descr += selectable->name();
-	descr += "&nbsp;";
-	// the patch size is not available
-        // descr += NCPkgStrings::Size();
-	// descr += patchPtr->size().asString( 8 );
-	descr += "<b>";
-	descr += NCPkgStrings::PatchKind();
-	descr += ": </b>";
-	descr += patchPtr->category();
-	descr += "&nbsp;";
-	descr += NCPkgStrings::Version();
-	descr += patchPtr->edition().asString();
-	descr += "<br>";
-
-	if ( selectable->hasInstalledObj()
-	     && selectable->installedPoolItem().isBroken() )
-	{
-	    descr += _( "----- this patch is broken !!! -----" );
-	    descr += "<br>";
-	}
-	// get and format the patch description
-	string value = patchPtr->description();
-	descr += createDescrText( value );
-
-	// show the description
-	if ( infoText )
-	{
-	    infoText->setValue( descr );
-	}
-    }
-    // else if (  visibleInfo->compare( NCPkgStrings::PatchPackages() ) == YO_EQUAL )
-    else if ( visibleInfo == patchpkgsItem )
-    {
-	if ( patchPkgs )
-	{
-	    fillPatchPackages ( patchPkgs, objPtr);
-	}
-    }
-    // else if (  visibleInfo->compare( NCPkgStrings::PatchPackagesVersions() ) == YO_EQUAL )
-    else if ( visibleInfo ==  pkgversionsItem )
-    {
-	if ( patchPkgsVersions )
-	{
-	    fillPatchPackages ( patchPkgsVersions, objPtr, true);
-	}
-    }
-
-    return true;
-}
-
-
 ///////////////////////////////////////////////////////////////////
 //
 // showDependencies
@@ -1695,9 +1766,72 @@ NCPkgTable * NCPackageSelector::PackageList()
 //
 // Create layout for Online Update
 //
-void NCPackageSelector::createYouLayout( YWidget * selector, NCPkgTable::NCPkgTableType type )
+void NCPackageSelector::createYouLayout( YWidget * selector )
 {
-    // TODO
+    // the vertical split is the (only) child of the dialog
+    YLayoutBox * split = YUI::widgetFactory()->createVBox( selector );
+
+    YLayoutBox * hSplit = YUI::widgetFactory()->createHBox( split );
+
+    YAlignment * left1 = YUI::widgetFactory()->createLeft( hSplit );
+    actionMenu = new NCPkgMenuAction( left1, NCPkgStrings::Actions(), this );
+
+    YAlignment * left2 = YUI::widgetFactory()->createLeft( hSplit );
+    viewMenu = new NCPkgMenuView( left2, NCPkgStrings::View(), this);
+
+    YAlignment * left3 = YUI::widgetFactory()->createLeft( hSplit );
+    extrasMenu = new NCPkgMenuExtras( left3, NCPkgStrings::Extras(), this);
+
+       // add the package table
+    YTableHeader * tableHeader = new YTableHeader();
+
+    pkgList = new NCPkgTable( split, tableHeader );
+    YUI_CHECK_NEW( pkgList );
+
+    // set table type 'T_Patches'
+    NCPkgStatusStrategy * strategy;
+    strategy = new PatchStatStrategy();
+    pkgList->setTableType( NCPkgTable::T_Patches, strategy );
+
+    // set the pointer to the packager object
+    pkgList->setPackager( this );
+
+       // HBox for Filter and Disk Space (both in additional HBoxes )
+    YLayoutBox * hSplit2 = YUI::widgetFactory()->createHBox( split );
+
+    YLayoutBox * hSplit3 = YUI::widgetFactory()->createHBox( hSplit2 );
+    // label text - keep it short
+    new NCLabel( hSplit3,  _( "Filter: " ) );
+    packageLabel = YUI::widgetFactory()->createLabel ( hSplit3, "....................................." );
+
+    new NCSpacing( hSplit2, YD_HORIZ, true, 0.5 );
+
+    YLayoutBox * hSplit4 = YUI::widgetFactory()->createHBox( hSplit2 );
+    // label text - keep it short (use abbreviation if necessary)
+    new NCLabel( hSplit4,   _( "Total Download Size: " ) );
+    diskspaceLabel = YUI::widgetFactory()->createLabel ( hSplit4, "   " );
+
+    YLayoutBox * vSplit = YUI::widgetFactory()->createVBox( split );
+    replacePoint = YUI::widgetFactory()->createReplacePoint( vSplit );
+
+    infoText = new NCPkgPackageDetails( replacePoint, " ", this );
+    YUI_CHECK_NEW( infoText );
+
+    YLayoutBox * hSplit5 = YUI::widgetFactory()->createHBox( vSplit );
+
+    helpMenu = new NCPkgMenuHelp (hSplit5, _("&Help"));
+    YUI_CHECK_NEW( helpMenu );
+    
+    // add the Cancel button
+    cancelButton = new NCPushButton( hSplit5, _( "&Cancel" ) );
+    YUI_CHECK_NEW( cancelButton );
+    cancelButton->setFunctionKey( 9 );
+
+    // add the OK button
+    okButton = new NCPushButton( hSplit5, _( "&Accept" ) );
+    YUI_CHECK_NEW( okButton );
+    okButton->setFunctionKey( 10 );
+    
 }
 
 //
@@ -1783,6 +1917,7 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
 
     YAlignment *ll = YUI::widgetFactory()->createLeft( bottom_bar );
     helpMenu = new NCPkgMenuHelp (ll, _("&Help"));
+    YUI_CHECK_NEW( helpMenu );
     
     YAlignment *r = YUI::widgetFactory()->createRight( bottom_bar );
     YLayoutBox * hSplit = YUI::widgetFactory()->createHBox( r );

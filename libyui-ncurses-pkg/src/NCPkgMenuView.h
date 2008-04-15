@@ -46,6 +46,11 @@ public:
     YMenuItem *files;	
     YMenuItem *deps;	
 
+    // Online Update
+    YMenuItem * patchDescription;
+    YMenuItem * patchPackages;
+    YMenuItem * patchPkgVersions;
+    
     NCPkgMenuView (YWidget *parent, string label, NCPackageSelector *pkger);
     virtual ~NCPkgMenuView();
 

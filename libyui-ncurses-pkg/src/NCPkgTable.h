@@ -115,6 +115,9 @@ public:
 	I_Versions,
 	I_Files,
 	I_Deps,
+	I_PatchDescr,
+	I_PatchPkgs,
+	I_PatchPkgsVersions
     };
     
 private:
