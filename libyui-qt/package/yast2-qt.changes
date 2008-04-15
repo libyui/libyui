@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Apr 15 13:35:22 CEST 2008 - coolo@suse.de
+
+- fix wizards in wizards
+- V 2.16.40
+
+-------------------------------------------------------------------
 Mon Apr 14 16:44:41 CEST 2008 - sh@suse.de
 
 - Added new UI capability YQApplication::hasWizardDialogSupport()
