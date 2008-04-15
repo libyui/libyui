@@ -74,6 +74,7 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
     _nameCol		= -42;
     _versionCol		= -42;
     _instVersionCol	= -42;
+    _versionStatusCol   = -42;
     _summaryCol		= -42;
     _sizeCol		= -42;
     _brokenIconCol	= -42;
@@ -944,6 +945,39 @@ YQPkgObjListItem::init()
             setText( sizeCol(),	size.asString() );
     }
 
+    if ( versionStatusCol() >= 0 )
+    {
+        setBackgroundColor( versionStatusCol(), _pkgObjList->palette().color(QPalette::AlternateBase));
+        if ( !selectable()->installedEmpty() )
+        {
+            if ( zyppObj() != selectable()->installedObj() &&
+                 zyppObj() != selectable()->candidateObj()   )
+            {
+                setText( versionStatusCol(), QString().sprintf("%s", zyppObj()->edition().c_str()) );
+            }
+            else if ( selectable()->hasCandidateObj() )
+            {
+                if ( installed->edition() == candidate->edition() )
+                {
+                    setText( versionStatusCol(), QString().sprintf("%s", installed->edition().c_str()) );
+
+                }
+                else
+                {
+                    if ( installed->edition() > candidate->edition() )
+                        setTextColor( versionStatusCol(), Qt::red);
+                    
+                    setText( versionStatusCol(), QString().sprintf("%s (%s)", installed->edition().c_str(), candidate->edition().c_str()) );
+                }
+                
+            }
+        }
+        else
+        {
+            setText( versionStatusCol(), QString().sprintf("(%s)", candidate->edition().c_str()) );
+        }        
+    }
+
     if ( instVersionCol() >= 0 )
     {
         if ( !selectable()->installedEmpty() )
@@ -965,6 +999,7 @@ YQPkgObjListItem::init()
     }
 
     setStatusIcon();
+    
 }
 
 

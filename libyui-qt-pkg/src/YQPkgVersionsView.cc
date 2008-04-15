@@ -44,7 +44,7 @@ public:
         _picture = new QLabel(this);
         _text = new QLabel(this);
         _text->setText(text);
-        _picture->setPixmap(YQIconPool::pkgKeepInstalled());    
+        _picture->setPixmap(YQIconPool::pkgSatisfied());    
         layout->addWidget(_picture);
         layout->addWidget(_text);
         layout->addStretch();

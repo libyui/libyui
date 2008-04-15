@@ -53,12 +53,13 @@ YQPkgList::YQPkgList( QWidget * parent )
     headers <<  _( "Package" 	);	_nameCol	= numCol++;
 
     headers <<  _( "Summary" 	);	_summaryCol	= numCol++;
-    headers <<  _( "Size" 	);	_sizeCol	= numCol++;
 
     if ( haveInstalledPkgs() )
     {
-	headers << _( "Avail. Ver." ); _versionCol	 = numCol++;
-	headers <<  _( "Inst. Ver."  ); _instVersionCol = numCol++;
+        headers << _("Inst (Avail)"); _versionStatusCol = numCol++;
+        
+	//headers << _( "Avail. Ver." ); _versionCol	 = numCol++;
+	//headers <<  _( "Inst. Ver."  ); _instVersionCol = numCol++;
     }
     else
     {
@@ -66,11 +67,10 @@ YQPkgList::YQPkgList( QWidget * parent )
 	_instVersionCol = -1;
     }
 
-#if SOURCE_RPM_DISABLED
-#warning Selecting source RPMs disabled!
-#else
-    headers <<  _( "Source" );		_srpmStatusCol	= numCol++;
-#endif
+    //headers <<  _( "Source" );		_srpmStatusCol	= numCol++;
+
+        headers <<  _( "Size" 	);	_sizeCol	= numCol++;
+
     setHeaderLabels(headers);
 
     setSortingEnabled( true );
@@ -572,7 +572,7 @@ YQPkgListItem::YQPkgListItem( YQPkgList * 		pkgList,
 	_zyppPkg = tryCastToZyppPkg( selectable->theObj() );
 
     setSourceRpmIcon();
-
+    
     setTextAlignment( sizeCol(), Qt::AlignRight );
     setSizeHint( sizeCol(), QSize( QFontMetrics( pkgList->font() ).width( text( sizeCol() ) ), 10 ) );
 }

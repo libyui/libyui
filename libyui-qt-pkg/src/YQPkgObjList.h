@@ -75,6 +75,7 @@ public:
     int sizeCol()		const	{ return _sizeCol;		}
     int versionCol()		const	{ return _versionCol;		}
     int instVersionCol()	const	{ return _instVersionCol;	}
+    int versionStatusCol()      const   { return _versionStatusCol;     }
     int brokenIconCol()		const	{ return _brokenIconCol;	}
     int satisfiedIconCol()	const	{ return _satisfiedIconCol;	}
 
@@ -344,6 +345,7 @@ protected:
     int		_sizeCol;
     int		_versionCol;
     int		_instVersionCol;
+    int         _versionStatusCol;
     int		_brokenIconCol;
     int		_satisfiedIconCol;
     bool	_editable;
@@ -591,6 +593,7 @@ public:
     int sizeCol()		const	{ return _pkgObjList->sizeCol();	}
     int versionCol()		const	{ return _pkgObjList->versionCol();	}
     int instVersionCol()	const	{ return _pkgObjList->instVersionCol(); }
+    int versionStatusCol()      const   { return _pkgObjList->versionStatusCol(); }
     int brokenIconCol()		const	{ return _pkgObjList->brokenIconCol();	}
     int satisfiedIconCol()	const	{ return _pkgObjList->satisfiedIconCol(); }
 
