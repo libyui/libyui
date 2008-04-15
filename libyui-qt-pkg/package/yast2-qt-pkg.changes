@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Apr 15 11:53:38 CEST 2008 - tgoettlicher@suse.de
+
+- fix dependencies (bnc #377586)
+- 2.16.34
+
+-------------------------------------------------------------------
 Mon Apr 14 16:37:48 CEST 2008 - dmacvicar@suse.de
 
 - don't crash with language right click (bnc #370233)
