@@ -75,6 +75,7 @@ using std::string;
 
 #define USE_ICON_ON_HELP_BUTTON		0
 
+YQWizard *YQWizard::main_wizard = 0;
 
 YQWizard::YQWizard( YWidget *		parent,
 		    const string & 	backButtonLabel,
@@ -90,7 +91,6 @@ YQWizard::YQWizard( YWidget *		parent,
     , _backButtonLabel( backButtonLabel )
     , _abortButtonLabel( abortButtonLabel )
     , _nextButtonLabel( nextButtonLabel )
-    , _secondary( false )
 {
     setObjectName( "wizard" );
 
@@ -138,9 +138,11 @@ YQWizard::YQWizard( YWidget *		parent,
     if ( !_stepsEnabled )
         QY2Styler::self()->registerWidget( this );
 
-    if ( !_stepsEnabled && !_treeEnabled )
+    if ( !main_wizard && _stepsEnabled )
     {
-        _secondary = true;
+        main_wizard = this;
+    } else if ( main_wizard )
+    {
         YQMainWinDock::mainWinDock()->resizeVisibleChild();
     }
 }
@@ -149,9 +151,14 @@ YQWizard::YQWizard( YWidget *		parent,
 YQWizard::~YQWizard()
 {
     deleteSteps();
+    if ( this == main_wizard )
+        main_wizard = 0;
 }
 
-
+bool YQWizard::isSecondary() const
+{
+    return this != main_wizard;
+}
 
 void YQWizard::layoutTitleBar( QWidget * parent )
 {

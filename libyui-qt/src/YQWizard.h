@@ -337,7 +337,7 @@ public:
     /**
      * Returns true if the wizard should follow the first wizard with steps
      **/
-    bool isSecondary() const { return _secondary; }
+    bool isSecondary() const;
 
 signals:
 
@@ -518,7 +518,6 @@ protected:
     bool	_protectNextButton;
     bool	_stepsDirty;
     bool	_sendButtonEvents;
-    bool        _secondary;
     Direction	_direction;
 
     QString	_currentStepID;
@@ -551,6 +550,8 @@ protected:
     QHash<QString,QMenu*>		_menuIDs;
     vector<string>		_menuEntryIDs;
 
+private:
+    static YQWizard *main_wizard;
 
 protected:
 
