@@ -55,6 +55,7 @@ void NCPopupTable::createList( vector<string> & row )
   sellist->SetHotCol( 0 );
   sellist->setNotify( true );
 
+
 }
 
 
@@ -65,6 +66,11 @@ void NCPopupTable::addItem( YItem *yitem )
     return;
 
   sellist->addItem( yitem );
+
+  // Calling sellist->addItem() resets the hotcol because
+  // NCTableStyle's constructor sets hotcol to -1. 
+  // Set hot coll again:
+  sellist->SetHotCol( 0 );
 }
 
 

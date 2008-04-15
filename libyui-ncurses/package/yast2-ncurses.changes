@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Apr 15:39:14 CEST 2008 - tgoettlicher@suse.de
+
+- fixed keyboard shortcuts in popup menu (bnc #377098)
+- V 2.16.25
+
+-------------------------------------------------------------------
 Sat Apr 12 09:15:14 CEST 2008 - coolo@suse.de
 
 - compile with latest ncurses
