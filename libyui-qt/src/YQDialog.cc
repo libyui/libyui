@@ -57,6 +57,7 @@ YQDialog::YQDialog( YDialogType 	dialogType,
     _defaultButton = 0;
 
     setFocusPolicy( Qt::StrongFocus );
+    setAutoFillBackground( true );
 
     if ( colorMode != YDialogNormalColor )
     {
