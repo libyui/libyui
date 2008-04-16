@@ -40,34 +40,36 @@ void NCPkgMenuView::createLayout()
 {
     if ( !pkg->isYouMode() )
     {
-	description = new YMenuItem( _("Package Description") );
-	items.push_back( description );
+	// begin: menu items of the view (package information) menu
+	// please note: use unique hotkeys until end:
+	technical = new YMenuItem( _("&Technical data") );
+	description = new YMenuItem( _("&Package Description") );
+	versions = new YMenuItem( _("Package &Versions") );
+	files = new YMenuItem( _("&File List") );
+	// end: menu items of the view menu
+	deps = new YMenuItem( _("&Dependencies") );
 
-	technical = new YMenuItem( _("Technical data") );
 	items.push_back( technical );
-
-	versions = new YMenuItem( _("Package Versions") );
+	items.push_back( description );
 	items.push_back( versions );
-
-	files = new YMenuItem( _("File List") );
 	items.push_back( files );
-
-	deps = new YMenuItem( _("Dependencies") );
 	items.push_back( deps );
-
+	
 	addItems( items );
     }
     else
     {
+	// menu items of the patch view menu - keep them short and
+	// use unique hotkeys from begin: to end:
+	// begin:
 	patchDescription =  new YMenuItem( _( "&Long Description" ) );
-	items.push_back( patchDescription );
-
-	patchPackages = new YMenuItem( _( "&Package List" ));
-	items.push_back( patchPackages );
-	
+	patchPackages = new YMenuItem( _( "&Package List" ) );
+	// end: menu items of the view menu
 	patchPkgVersions = new YMenuItem( _("&Versions") );
-	items.push_back( patchPkgVersions );
 
+	items.push_back( patchDescription );
+	items.push_back( patchPackages );
+	items.push_back( patchPkgVersions );	
 	addItems( items );
     }
 }
@@ -86,7 +88,7 @@ bool NCPkgMenuView::handleEvent ( const NCursesEvent & event)
 
     if ( !pkgPtr || !slbPtr)
     {	
-	yuiError() << "package list empty - no package pointer" << endl;
+	yuiWarning() << "package list empty - no package pointer" << endl;
 	return true;
     }
 

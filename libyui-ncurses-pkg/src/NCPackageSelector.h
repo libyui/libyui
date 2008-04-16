@@ -46,8 +46,8 @@
 #include "NCPkgMenuView.h" 
 #include "NCPkgMenuExtras.h" 
 #include "NCPkgMenuHelp.h" 
-#include "NCPkgMenuView.h" 
 #include "NCPkgMenuAction.h"
+#include "NCPkgMenuFilter.h"
 #include "NCPkgPackageDetails.h"
 #include "NCPkgPopupDeps.h" 
 #include "NCPkgFilterMain.h" 
@@ -67,6 +67,7 @@ class NCPkgMenuExtras;
 class NCPkgMenuDeps;
 class NCPkgMenuAction;
 class NCPkgMenuView;
+class NCPkgMenuFilter;
 class NCPkgSearchSettings;
 class NCPkgPackageDetails;
 class NCPkgFilterMain;
@@ -129,9 +130,8 @@ class NCPackageSelector
     NCPkgMenuHelp *helpMenu;
     NCPkgFilterMain *filterMain;
     NCPkgMenuAction *actionMenu;
-
-    // filter menu and items
-    NCMenuButton * filterMenu;
+    NCPkgMenuFilter *filterMenu;
+    // FIXME - add update list to NCPkgFilterMain
     YMenuItem * updatelistItem;
     
      // labels
@@ -335,13 +335,6 @@ class NCPackageSelector
     * @return bool
     */
     bool CancelHandler ( const NCursesEvent& event );
-
-    /**
-     * Handler function for the "Filter" menu
-     * @param event The Ncurses event
-     * @return bool     
-     */
-    bool FilterHandler( const NCursesEvent&  event );
 
   /**
     * Handler function for the "Help" button in YOU

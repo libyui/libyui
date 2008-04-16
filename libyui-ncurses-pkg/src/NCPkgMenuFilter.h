@@ -12,7 +12,7 @@
 
    File:       NCPkgMenuFilter.cc
 
-   Author:     Gabriele MOhr <gs@suse.de>
+   Author:     Gabriele Mohr <gs@suse.de>
 
 /-*/
 #ifndef NCPkgMenuFilter_h
@@ -39,8 +39,6 @@ private:
     NCPackageSelector *pkg;
     
     NCPkgPatchSearch *searchPopup;
-    
-public:
 
     YItemCollection items;
 
@@ -51,6 +49,8 @@ public:
     YMenuItem *security;
     YMenuItem *optional;
     YMenuItem *search;
+
+public:
 
     NCPkgMenuFilter (YWidget *parent, string label, NCPackageSelector *pkger);
     virtual ~NCPkgMenuFilter();

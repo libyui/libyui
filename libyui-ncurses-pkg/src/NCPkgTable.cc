@@ -123,7 +123,7 @@ NCPkgTable::NCPkgTable( YWidget * parent, YTableHeader * tableHeader )
       , haveInstalledVersion ( false )
 {
     fillHeader();
-    
+    setVisibleInfo( I_Technical );  // set default
     yuiDebug() << endl;
 }
 

@@ -38,16 +38,17 @@ NCPkgMenuFilter::~NCPkgMenuFilter()
 
 void NCPkgMenuFilter::createLayout()
 {
-    // menu items of the filter menu for patches - keep them short 
+    // menu items of the filter menu for patches - keep them short
+    // and use unique hotkeys from begin: to end:
     // begin:
-    installable = new YMenuItem( _( "Installable Patches" ) );
-    installed = new YMenuItem( _( "Installed Patches" ) );
-    allPatches = new YMenuItem( _( "All Patches" ) );
-    recommended = new YMenuItem( _( "Recommended" ) );
-    security = new YMenuItem( _( "Security" ) );
-    optional = new YMenuItem( _( "Optional" ) );
+    installable = new YMenuItem( _( "&Installable Patches" ) );
+    installed = new YMenuItem( _( "Installed &Patches" ) );
+    allPatches = new YMenuItem( _( "&All Patches" ) );
+    recommended = new YMenuItem( _( "&Recommended" ) );
+    security = new YMenuItem( _( "&Security" ) );
+    optional = new YMenuItem( _( "&Optional" ) );
     // end:
-    search = new YMenuItem( _( "Search" ) );
+    search = new YMenuItem( _( "S&earch" ) );
 
     items.push_back( installable );
     items.push_back( installed );
@@ -64,20 +65,21 @@ void NCPkgMenuFilter::createLayout()
 bool NCPkgMenuFilter::handleEvent ( const NCursesEvent & event)
 {
     if ( !event.selection)
+    {
+	yuiError() << "Menu selection failed" << endl;
 	return false;
-
-    NCPkgTable *pkgList = pkg->PackageList();
-    int idx = pkgList->getCurrentItem();
+    }
     
-    ZyppObj pkgPtr = pkgList->getDataPointer( idx );
-    ZyppSel slbPtr = pkgList->getSelPointer( idx );
+    NCPkgTable *pkgList = pkg->PackageList();
 
-    if ( !pkgPtr || !slbPtr)
-    {	
-	yuiError() << "package list empty - no package pointer" << endl;
-	return true;
+    if ( !pkgList )
+    {
+	yuiError() << "No package list available" << endl;
+	return false;
     }
 
+    yuiMilestone() << "Handle event NCPkgMenuFilter" << endl;
+    
     // Call the appropriate method from NCPackageSelector for
     // the selected menu entry.
 
@@ -110,6 +112,7 @@ bool NCPkgMenuFilter::handleEvent ( const NCursesEvent & event)
 	    {
 		yuiMilestone() << "Search is canceled"  << endl;
 	    }
+	    delete searchPopup;
 	}
     }
 	

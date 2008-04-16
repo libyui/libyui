@@ -24,10 +24,12 @@ noinst_HEADERS =			\
 	NCPkgMenuView.h			\
 	NCPkgMenuExtras.h		\
 	NCPkgMenuAction.h		\
+	NCPkgMenuFilter.h		\
 	NCPkgMenuHelp.h			\
 	NCPkgPackageDetails.h		\
 	NCPkgFilterMain.h		\
 	NCPkgPopupDeps.h		\
+	NCPkgPatchSearch.h		\
 	NCPkgPopupDiskspace.h		\
 	NCPkgPopupDescr.h		\
 	NCPkgPopupTable.h		\
@@ -50,10 +52,12 @@ libpy2ncurses_pkg_la_SOURCES =		\
 	NCPkgMenuView.cc		\
 	NCPkgMenuExtras.cc		\
 	NCPkgMenuAction.cc		\
+	NCPkgMenuFilter.cc		\
 	NCPkgMenuHelp.cc		\
 	NCPkgPackageDetails.cc		\
 	NCPkgFilterMain.cc		\
 	NCPkgPopupDeps.cc		\
+	NCPkgPatchSearch.cc		\
 	NCPkgPopupDiskspace.cc		\
 	NCPkgPopupDescr.cc		\
 	NCPkgPopupTable.cc		\

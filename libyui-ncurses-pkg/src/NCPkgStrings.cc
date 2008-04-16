@@ -202,7 +202,7 @@ const string NCPkgStrings::InstPkg()
 const string NCPkgStrings::PackageName()
 {
     // Label under the pkg table - pkg name follows
-    static const string value = _( "Package" );
+    static const string value = _( "Package: " );
     return value;
 }
 

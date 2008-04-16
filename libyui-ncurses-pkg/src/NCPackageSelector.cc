@@ -114,22 +114,10 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, YWidget * wRoot, long mod
     //         (the eventHandlerMap is obsolete)
 
     // Fill the handler map
-    #if 0
+
+#if 0
     eventHandlerMap[ NCPkgStrings::Search()->toString() ]   = &NCPackageSelector::SearchHandler;
-
-    // Filter - add selectionsItem, if really needed
-    // eventHandlerMap[ NCPkgStrings::Selections()->toString() ] = &NCPackageSelector::FilterHandler;
-
-    // YOU filter
-    eventHandlerMap[ NCPkgStrings::Recommended()->toString() ] = &NCPackageSelector::FilterHandler;
-    eventHandlerMap[ NCPkgStrings::Security()->toString() ] = &NCPackageSelector::FilterHandler;
-    eventHandlerMap[ NCPkgStrings::Optional()->toString() ] = &NCPackageSelector::FilterHandler;
-    eventHandlerMap[ NCPkgStrings::InstalledPatches()->toString() ] = &NCPackageSelector::FilterHandler;
-    eventHandlerMap[ NCPkgStrings::AllPatches()->toString() ] = &NCPackageSelector::FilterHandler;
-    eventHandlerMap[ NCPkgStrings::NewPatches()->toString() ] = &NCPackageSelector::FilterHandler;
-    eventHandlerMap[ NCPkgStrings::InstalledPatches()->toString() ] = &NCPackageSelector::FilterHandler;
-    eventHandlerMap[ NCPkgStrings::InstallablePatches()->toString() ] = &NCPackageSelector::FilterHandler;
-    eventHandlerMap[ NCPkgStrings::YaST2Patches()->toString() ] = &NCPackageSelector::FilterHandler;
+#endif
 
     // Information menu -> DONE
 
@@ -138,9 +126,10 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, YWidget * wRoot, long mod
     // Etc. menu -> DONE
 
     // Help menu
+#if 0
       eventHandlerMap[ NCPkgStrings::PatchHelp()->toString() ]  = &NCPackageSelector::YouHelpHandler;
-    #endif
-
+#endif
+      
     if ( modeFlags & YPkg_OnlineUpdateMode )
 	youMode = true;
 
@@ -322,10 +311,7 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
     }
     else if ( event == NCursesEvent::menu )
     {
-	if ( event.widget == filterMenu )
-	    // filter out packages/patches
-	    retVal = FilterHandler( event );
-	else if ( event.widget == actionMenu )
+	if ( event.widget == actionMenu )
 	    // change package/patch status
 	    //retVal = StatusHandler( event );
 	    retVal = actionMenu->handleEvent( event );
@@ -338,6 +324,8 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
 	    retVal = extrasMenu->handleEvent( event );
 	else if ( event.widget == helpMenu )
 	    retVal = helpMenu->handleEvent( event );
+	else if ( event.widget == filterMenu )
+	    retVal = filterMenu->handleEvent( event );
 	else if ( event.selection->label().substr(0,4) == "pkg:" )
 	    // handle hyper links
 	    retVal = LinkHandler( event.selection->label() );
@@ -1146,56 +1134,6 @@ void NCPackageSelector::replaceFilterDescr( bool b )
 
 ///////////////////////////////////////////////////////////////////
 //
-// FilterHandler
-//
-// Opens the popup with rpm group tree, selections ... and display the
-// corresponding package list
-//
-bool NCPackageSelector::FilterHandler( const NCursesEvent&  event )
-{
-    // patches
-// FIXME - compare event.selection with YMenuItem (see above)
-    #if 0
-    else if ( selId == NCPkgStrings::Recommended()->toString() )
-    {
-	fillPatchList( "recommended" );	// patch kind
-    }
-    else if ( selId == NCPkgStrings::Security()->toString() )
-    {
-	fillPatchList( "security" );		// patch kind
-    }
-    else if ( selId ==  NCPkgStrings::Optional()->toString() )
-    {
-	fillPatchList( "optional" );		// patch kind
-    }
-    else if ( selId ==  NCPkgStrings::YaST2Patches()->toString() )
-    {
-	fillPatchList( "YaST2" );		// patch kind
-    }
-    else if ( selId ==  NCPkgStrings::AllPatches()->toString() )
-    {
-	fillPatchList( "all" );			// show all patches
-    }
-    else if ( selId == NCPkgStrings::InstalledPatches()->toString() )
-    {
-	fillPatchList( "installed" );		// show installed patches
-    }
-    else if ( selId == NCPkgStrings::InstallablePatches()->toString() )
-    {
-	fillPatchList( "installable" );		// show installed patches
-    }
-    else if ( selId == NCPkgStrings::NewPatches()->toString() )
-    {
-	fillPatchList( "new" );			// show new patches
-    }
-    #endif	
- // patches end
-    // return true means: don't leave the event loop in runPkgSelection
-    return true;
-}
-
-///////////////////////////////////////////////////////////////////
-//
 // LinkHandler
 //
 // Handles hyperlinks in package description.
@@ -1774,13 +1712,16 @@ void NCPackageSelector::createYouLayout( YWidget * selector )
     YLayoutBox * hSplit = YUI::widgetFactory()->createHBox( split );
 
     YAlignment * left1 = YUI::widgetFactory()->createLeft( hSplit );
-    actionMenu = new NCPkgMenuAction( left1, NCPkgStrings::Actions(), this );
-
+    filterMenu = new NCPkgMenuFilter( left1, NCPkgStrings::Filter(), this );
+    
     YAlignment * left2 = YUI::widgetFactory()->createLeft( hSplit );
-    viewMenu = new NCPkgMenuView( left2, NCPkgStrings::View(), this);
+    actionMenu = new NCPkgMenuAction( left2, NCPkgStrings::Actions(), this );
 
     YAlignment * left3 = YUI::widgetFactory()->createLeft( hSplit );
-    extrasMenu = new NCPkgMenuExtras( left3, NCPkgStrings::Extras(), this);
+    viewMenu = new NCPkgMenuView( left3, NCPkgStrings::View(), this);
+
+    YAlignment * left4 = YUI::widgetFactory()->createLeft( hSplit );
+    extrasMenu = new NCPkgMenuExtras( left4, NCPkgStrings::Extras(), this);
 
        // add the package table
     YTableHeader * tableHeader = new YTableHeader();
@@ -1878,12 +1819,12 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     YUI_CHECK_NEW( pkgList );
 
     NCPkgStatusStrategy * strategy;
-    // set the table type
+    // set table type and status strategy (either 'normal' package list or update list) 
     switch ( type )
     {
-	case NCPkgTable::T_Patches:
-	    strategy = new PatchStatStrategy();
-	    pkgList->setTableType( NCPkgTable::T_Patches, strategy );
+	case NCPkgTable::T_Packages:
+	    strategy = new PackageStatStrategy();
+	    pkgList->setTableType( NCPkgTable::T_Packages, strategy );
 	case NCPkgTable::T_Update:
 	    strategy = new UpdateStatStrategy();
 	    pkgList->setTableType( NCPkgTable::T_Update, strategy );
@@ -1950,8 +1891,8 @@ bool NCPackageSelector::fillDefaultList( )
 	    fillPatchList( "installable" );	// default: installable patches
 
 	    // set the visible info to long description
-
-	    // show the package description of the current item
+	    pkgList->setVisibleInfo(NCPkgTable::I_PatchDescr);
+	    // show the patch description of the current item
 	    pkgList->showInformation ();
 	    break;
 	}
@@ -1959,17 +1900,18 @@ bool NCPackageSelector::fillDefaultList( )
 	    if ( ! zypp::getZYpp()->resolver()->problematicUpdateItems().empty() )
 	    {
 		fillUpdateList();
-		// set the visible info to package description
-		// show the package description of the current item
+		// set the visible info to technical information
+		pkgList->setVisibleInfo(NCPkgTable::I_Technical);
+                // show the package information of the current item
 		pkgList->showInformation ();
 		break;
 	    }
 	}
 	case NCPkgTable::T_Packages: {
 
-		pkgList->setVisibleInfo(NCPkgTable::I_Descr);
+		pkgList->setVisibleInfo(NCPkgTable::I_Technical);
 	        patternPopup->showContainerPackages();
-		// show the package description of the current item
+		// show the package inforamtion of the current item
 		pkgList->showInformation ();
 	        break;
 	}
