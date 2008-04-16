@@ -611,7 +611,13 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 
 	    if ( item )
 	    {
-		bool installed = item->selectable()->hasInstalledObj();
+                bool installed;
+                
+                if ( item->selectable() )
+                    installed = item->selectable()->hasInstalledObj();
+                else
+                    installed = false;
+                
 		ZyppStatus status = item->status();
 
 		switch( event->key() )
