@@ -161,7 +161,7 @@ QY2DiskUsageList::QY2DiskUsageList( QWidget * parent, bool addStdColumns )
         // Translators: Please keep this short!
         columnLabels <<  _("Disk Usage");	_percentageBarCol	= numCol++;
         setItemDelegateForColumn( _percentageBarCol, new QY2DiskUsagePercentageItem( this ) );
-        columnLabels << _("Used"); _usedSizeCol		= numCol++;
+        //columnLabels << _("Used"); _usedSizeCol		= numCol++;
         columnLabels << _( "Free"); _freeSizeCol		= numCol++;
         columnLabels << _("Total"); _totalSizeCol		= numCol++;
 #if 0
@@ -229,6 +229,9 @@ QY2DiskUsageListItem::init( bool allFields )
 	if ( nameCol()		>= 0 ) setText( nameCol(),		name()	);
 	if ( deviceNameCol()	>= 0 ) setText( deviceNameCol(),	deviceName()	);
     }
+
+    if ( usedSizeCol() < 0 )
+        setToolTip( freeSizeCol(), _( "Used %1" ).arg( usedSize().form( 0, 1, true ).c_str() ) );
 }
 
 
