@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Apr 16 15:05:28 CEST 2008 - coolo@suse.de
+
+- "unexcel" package management
+- 2.16.35
+
+-------------------------------------------------------------------
 Tue Apr 15 11:53:38 CEST 2008 - tgoettlicher@suse.de
 
 - fix dependencies (bnc #377586)
