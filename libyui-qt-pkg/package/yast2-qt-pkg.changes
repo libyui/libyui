@@ -1,14 +1,13 @@
 -------------------------------------------------------------------
-Wed Apr 16 15:05:28 CEST 2008 - coolo@suse.de
-
-- "unexcel" package management
-- 2.16.35
-
--------------------------------------------------------------------
 Wed Apr 16 17:12:07 CEST 2008 - dmacvicar@suse.de
 
 - don't crash using keyboard on languages filter
-- visual improvements to the main view
+- 2.16.36
+
+-------------------------------------------------------------------
+Wed Apr 16 15:05:28 CEST 2008 - coolo@suse.de
+
+- "unexcel" package management
 - 2.16.35
 
 -------------------------------------------------------------------
