@@ -46,7 +46,8 @@ YQMainWinDock::YQMainWinDock()
     : QWidget( 0, // parent, name
 	       YQUI::ui()->noBorder() ?
 	       Qt::FramelessWindowHint :
-	       Qt::Window )
+	       Qt::Window ),
+      _sideBarWidth( 0 )
 {
     setFocusPolicy( Qt::StrongFocus );
 
