@@ -89,7 +89,7 @@ YQPkgDiskUsageList::YQPkgDiskUsageList( QWidget * parent, int thresholdPercent )
 
     resizeColumnToContents( nameCol() );
     resizeColumnToContents( totalSizeCol() );
-    resizeColumnToContents( usedSizeCol() );
+    //resizeColumnToContents( usedSizeCol() );
     resizeColumnToContents( freeSizeCol() );
 
     sortByColumn( percentageBarCol(), Qt::DescendingOrder );
