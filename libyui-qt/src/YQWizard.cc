@@ -1093,7 +1093,7 @@ bool YQWizard::eventFilter( QObject * obj, QEvent * ev )
         return true;		// Event handled
     }
 
-    if ( ev->type() == QEvent::Resize && obj == _sideBar )
+    if ( ev->type() == QEvent::Resize && obj == _sideBar && main_wizard == this && _stepsPanel )
     {
         YQMainWinDock::mainWinDock()->setSideBarWidth( _sideBar->width() );
 	return true;		// Event handled
