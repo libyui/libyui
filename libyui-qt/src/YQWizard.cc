@@ -306,6 +306,8 @@ void YQWizard::updateSteps()
 
     // Create a grid layout for the steps
     delete _stepsPanel->layout();
+    _stepsPanel->setMaximumWidth( 65000 );
+
     QVBoxLayout *_stepsVBox = new QVBoxLayout( _stepsPanel );
 
     QGridLayout *_stepsGrid = new QGridLayout( );
@@ -406,7 +408,7 @@ void YQWizard::updateStepStates()
     yuiDebug() << "steps dirty: " << _stepsDirty << endl;
 
     if ( _stepsDirty )
-	updateSteps();
+        updateSteps();
 
     YQWizard::Step * currentStep = findStep( _currentStepID );
     QList<YQWizard::Step*>::iterator step = _stepsList.begin();
@@ -456,10 +458,14 @@ void YQWizard::deleteSteps()
 {
     yuiDebug() << "Deleting steps" << endl;
 
+    if ( _stepsPanel )
+        _stepsPanel->setFixedWidth( _stepsPanel->width() );
+
     qDeleteAll(_stepsList);
     _stepsList.clear();
     _stepsIDs.clear();
     _currentStepID = QString::null;
+    _stepsDirty = true;
 }
 
 
@@ -1073,12 +1079,9 @@ void YQWizard::setSize( int newWidth, int newHeight )
     resizeClientArea();
 }
 
-
-
 void YQWizard::resizeClientArea()
 {
-    yuiDebug() << "resizing client area" << endl;
-    QRect contentsRect = _clientArea->contentsRect();
+    QSize contentsRect = _clientArea->contentsRect().size();
     _contents->setSize( contentsRect.width(), contentsRect.height() );
 }
 
@@ -1086,8 +1089,8 @@ bool YQWizard::eventFilter( QObject * obj, QEvent * ev )
 {
     if ( ev->type() == QEvent::Resize && obj == _contents )
     {
-	resizeClientArea();
-	return true;		// Event handled
+        resizeClientArea();
+        return true;		// Event handled
     }
 
     if ( ev->type() == QEvent::Resize && obj == _sideBar )
