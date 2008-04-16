@@ -225,7 +225,7 @@ YQPackageSelector::basicLayout()
     outer_splitter->setStretchFactor(outer_splitter->indexOf(left_pane), 0);
     outer_splitter->setStretchFactor(outer_splitter->indexOf(right_pane), 1);
     layout->addStretch();
-    
+
 }
 
 
@@ -247,6 +247,10 @@ YQPackageSelector::layoutLeftPane( QWidget *parent )
 
     splitter->setStretchFactor(splitter->indexOf(upper_vbox), 1);
     splitter->setStretchFactor(splitter->indexOf( _diskUsageList ), 2);
+    QList<int> sizes;
+    sizes << height();
+    sizes << 0;
+    splitter->setSizes( sizes );
 
     return splitter;
 }
@@ -516,10 +520,10 @@ YQPackageSelector::layoutButtons( QWidget *parent )
     QWidget * button_box = new QWidget( parent );
     Q_CHECK_PTR( button_box );
     parent->layout()->addWidget( button_box );
-    
+
     QHBoxLayout *layout = new QHBoxLayout(button_box);
     button_box->setLayout(layout);
-    
+
     // Button: Dependency check
     // Translators: Please keep this short!
     _checkDependenciesButton = new QPushButton( _( "Chec&k" ), button_box );
@@ -730,7 +734,7 @@ YQPackageSelector::addMenus()
     Q_CHECK_PTR( _extrasMenu );
     action = _menuBar->addMenu( _extrasMenu );
     action->setText(_( "&Extras" ));
-    
+
     _extrasMenu->addAction( _( "Show &Products" 		  ), this, SLOT( showProducts()    ) );
     _extrasMenu->addAction( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), Qt::CTRL + Qt::Key_A );
     _extrasMenu->addAction( _( "&Verify System"                  ), this, SLOT( verifySystem()    ) );
