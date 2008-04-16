@@ -56,7 +56,7 @@ YQPkgList::YQPkgList( QWidget * parent )
 
     if ( haveInstalledPkgs() )
     {
-        headers << _("Inst (Avail)"); _versionStatusCol = numCol++;
+        headers << _("Installed (Available)"); _versionStatusCol = numCol++;
         
 	//headers << _( "Avail. Ver." ); _versionCol	 = numCol++;
 	//headers <<  _( "Inst. Ver."  ); _instVersionCol = numCol++;
