@@ -196,6 +196,11 @@ public:
     void setTotalPackages(int v) { _total = v; }
     void setInstalledPackages(int v) { _installed = v; }
 
+    /**
+     * resets the tooltip with the current available information
+     */
+    void resetToolTip();
+
 protected:
 
     /**

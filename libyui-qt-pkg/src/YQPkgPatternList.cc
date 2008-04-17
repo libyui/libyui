@@ -325,7 +325,6 @@ YQPkgPatternList::filter()
             selection()->setInstalledPackages(installed);
             selection()->setTotalPackages(total);
             
-            selection()->setText( _summaryCol, QString().sprintf("%s (%d/%d)", zyppPattern->summary().c_str(), installed, total));
         }
     }
 
@@ -461,13 +460,16 @@ YQPkgPatternListItem::init()
     if (_zyppPattern)
     {
         string icon = _zyppPattern->icon().asString();
+        // HACK most patterns have wrong default icon
         if ( icon == zypp::Pathname("yast-system").asString() )
             icon = "pattern-generic";
         
+        // FIXME find the icon in a sane way
         setIcon(_patternList->iconCol(), QIcon(QString("/usr/share/icons/hicolor/32x32/apps/") + icon.c_str() + QString(".png")));
     }
 
     setStatusIcon();
+    resetToolTip();
     setFirstColumnSpanned ( false );
 }
 
@@ -478,6 +480,17 @@ YQPkgPatternListItem::~YQPkgPatternListItem()
     // NOP
 }
 
+
+void
+YQPkgPatternListItem::resetToolTip()
+{
+    std::string infoToolTip;
+    infoToolTip +=  ("<p>" + zyppPattern()->description() + "</p>");
+    setToolTip(_patternList->summaryCol(), infoToolTip.c_str());
+    
+//    setTooltip( _summaryCol, QString().sprintf("%s (%d/%d)", zyppPattern->summary().c_str(), installed, total));
+
+}
 
 void
 YQPkgPatternListItem::applyChanges()
