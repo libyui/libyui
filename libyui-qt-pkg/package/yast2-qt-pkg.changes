@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Apr 17 13:36:41 CEST 2008 - dmacvicar@suse.de
+
+- fix space used when resizing 
+
+-------------------------------------------------------------------
 Wed Apr 16 17:12:07 CEST 2008 - dmacvicar@suse.de
 
 - don't crash using keyboard on languages filter

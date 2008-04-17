@@ -214,6 +214,9 @@ YQPackageSelector::basicLayout()
 
     QSplitter * outer_splitter = new QSplitter( Qt::Horizontal, this );
     Q_CHECK_PTR( outer_splitter );
+
+    outer_splitter->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
+
     outer_splitter->setObjectName( "outer_splitter" );
 
     layout->addWidget(outer_splitter);
@@ -224,8 +227,6 @@ YQPackageSelector::basicLayout()
 
     outer_splitter->setStretchFactor(outer_splitter->indexOf(left_pane), 0);
     outer_splitter->setStretchFactor(outer_splitter->indexOf(right_pane), 1);
-    layout->addStretch();
-
 }
 
 
