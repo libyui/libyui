@@ -139,13 +139,12 @@ YQPkgTechnicalDetailsView::simpleTable( ZyppSel selectable,
 
     html += row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( pkg )		) );
     html += row( hcell( _( "License:"		) ) + cell( pkg->license()			) );
-    html += row( hcell( _( "Installed Size:" 	) ) + cell( pkg->size().asString()		) );
+    html += row( hcell( _( "Installed Size:" 	) ) + cell( pkg->installsize().asString()		) );
     html += row( hcell( _( "Download Size:"  	) ) + cell( pkg->downloadSize().asString()	) );
     html += row( hcell( _( "Distribution:"	) ) + cell( pkg->distribution()			) );
     html += row( hcell( _( "Vendor:"		) ) + cell( pkg->vendor()			) );
     html += row( hcell( _( "Packager:"		) ) + cell( pkg->packager()			) );
     html += row( hcell( _( "Architecture:"	) ) + cell( pkg->arch().asString()		) );
-    html += row( hcell( _( "OS:"		) ) + cell( pkg->os()				) );
     html += row( hcell( _( "Build Host:"	) ) + cell( pkg->buildhost()			) );
     html += row( hcell( _( "URL:"		) ) + cell( pkg->url()				) );
     
@@ -181,13 +180,12 @@ YQPkgTechnicalDetailsView::complexTable( ZyppSel	selectable,
     html += row( hcell( _( "Install Time:"	) ) + cell( p1->installtime()			) + cell( p2->installtime()		) );
     html += row( hcell( _( "Package Group:"	) ) + cell( formatRpmGroup( p1 )		) + cell( formatRpmGroup( p2 )		) );
     html += row( hcell( _( "License:"		) ) + cell( p1->license()			) + cell( p2->license()			) );
-    html += row( hcell( _( "Installed Size:" 	) ) + cell( p1->size().asString()		) + cell( p2->size().asString()		) );
+    html += row( hcell( _( "Installed Size:" 	) ) + cell( p1->installsize().asString()		) + cell( p2->installsize().asString()		) );
     html += row( hcell( _( "Download Size:"  	) ) + cell( p1->downloadSize().asString()	) + cell( p2->downloadSize().asString()	) );
     html += row( hcell( _( "Distribution:"	) ) + cell( p1->distribution()			) + cell( p2->distribution()		) );
     html += row( hcell( _( "Vendor:"		) ) + cell( p1->vendor()			) + cell( p2->vendor()			) );
     html += row( hcell( _( "Packager:"		) ) + cell( p1->packager()			) + cell( p2->packager()		) );
     html += row( hcell( _( "Architecture:"	) ) + cell( p1->arch().asString()		) + cell( p2->arch().asString()		) );
-    html += row( hcell( _( "OS:"		) ) + cell( p1->os()				) + cell( p2->os()			) );
     html += row( hcell( _( "Build Host:"	) ) + cell( p1->buildhost()			) + cell( p2->buildhost()		) );
     html += row( hcell( _( "URL:"		) ) + cell( p1->url()				) + cell( p2->url()			) );
 #ifdef FIXME_missing_in_zypp
