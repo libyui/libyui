@@ -1,3 +1,9 @@
+Thu Apr 17 22:17:53 CEST 2008 - dmacvicar@suse.de
+-------------------------------------------------------------------
+
+- don't reorder patterns when clicking
+- enable tooltip for repositories and patterns
+
 -------------------------------------------------------------------
 Thu Apr 17 13:36:41 CEST 2008 - dmacvicar@suse.de
 
