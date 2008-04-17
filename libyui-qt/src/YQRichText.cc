@@ -22,6 +22,7 @@
 #include <QColorGroup>
 #include <QScrollBar>
 #include <QRegExp>
+#include <QDebug>
 #include <QKeyEvent>
 #include <QVBoxLayout>
 
@@ -33,10 +34,12 @@
 #include "YQDialog.h"
 #include "YQRichText.h"
 
+static const char *colors[] = { "red", 0};
 
 YQRichText::YQRichText( YWidget * parent, const string & text, bool plainTextMode )
     : QFrame( (QWidget *) parent->widgetRep() )
     , YRichText( parent, text, plainTextMode )
+    , _colors_specified( 0 )
 {
     QVBoxLayout* layout = new QVBoxLayout( this );
     layout->setSpacing( 0 );
@@ -58,7 +61,19 @@ YQRichText::YQRichText( YWidget * parent, const string & text, bool plainTextMod
     }
     else
     {
-        _textBrowser->document()->setDefaultStyleSheet( QY2Styler::self()->textStyle() );
+        QString style = "\n" + QY2Styler::self()->textStyle();
+        size_t ccolors = sizeof( colors ) / sizeof( char* ) - 1;
+        yuiDebug() << "colors " << ccolors << endl;
+        _colors_specified = new bool[ccolors];
+        for ( size_t i = 0; i < ccolors; ++i )
+        {
+            _colors_specified[i] = false;
+            char buffer[20];
+            sprintf( buffer, "\n.%s ", colors[i] );
+            if ( style.contains( buffer ) )
+                _colors_specified[i] = true;
+        }
+        _textBrowser->document()->setDefaultStyleSheet( style );
     }
 
     setValue( text );
@@ -78,8 +93,6 @@ YQRichText::~YQRichText()
 
 void YQRichText::setValue( const string & newText )
 {
-    yuiMilestone() << newText << endl;
-
     if ( _textBrowser->horizontalScrollBar() )
 	_textBrowser->horizontalScrollBar()->setValue(0);
 
@@ -90,8 +103,14 @@ void YQRichText::setValue( const string & newText )
 
     if ( ! plainTextMode() )
     {
-          text.replace( "&product;", fromUTF8( YUI::app()->productName() ) );
-          _textBrowser->setHtml( text );
+        for ( int counter = 0; colors[counter]; counter++ )
+        {
+            if ( !_colors_specified[counter] ) continue;
+            text.replace( QString( "color=%1" ).arg( colors[counter] ), QString( "class=\"%1\"" ).arg( colors[counter] ) );
+            text.replace( QString( "color=\"%1\"" ).arg( colors[counter] ), QString( "class=\"%1\"" ).arg( colors[counter] ));
+        }
+        text.replace( "&product;", fromUTF8( YUI::app()->productName() ) );
+        _textBrowser->setHtml( text );
     }
     else
     {

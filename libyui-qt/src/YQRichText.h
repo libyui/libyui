@@ -128,6 +128,13 @@ protected slots:
 protected:
 
     YQTextBrowser *	_textBrowser;
+
+private:
+    /**
+     * to avoid big suprises, we remember if the stylesheet specified a
+     * color before we replace color= with class=
+     **/
+    bool *_colors_specified;
 };
 
 
