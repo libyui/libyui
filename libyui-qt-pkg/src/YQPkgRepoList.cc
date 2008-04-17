@@ -251,31 +251,41 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
 
         if ( ! name.empty() )
         {
-            //if ( ! repo.info().baseUrlsEmpty() )
-            //    name += string("\n") + (*repo.info().baseUrlsBegin()).asString();
             setText( nameCol(), fromUTF8( name ));
         }
 
     }
-
-    if ( urlCol() >= 0 )
+     
+    std::string infoToolTip;
+    infoToolTip += ("<b>" + repo.info().name() + "</b>");
+    
+    if ( ! repo.info().baseUrlsEmpty() )
     {
-        zypp::Url repoUrl;
-
-        if ( ! repo.info().baseUrlsEmpty() )
-            repoUrl = *repo.info().baseUrlsBegin();
-
-        //setText( urlCol(), repoUrl.asString().c_str() );
-        setToolTip( 0, repoUrl.asString().c_str() );
-        setToolTip( 1, repoUrl.asString().c_str() );
-    }
-
+        zypp::RepoInfo::urls_const_iterator it;
+        infoToolTip += "<ul>";
+        
+        for ( it = repo.info().baseUrlsBegin();
+              it != repo.info().baseUrlsEnd();
+              ++it )
+        {
+            infoToolTip += ("<li>" + (*it).asString() + "</li>");
+        }
+        infoToolTip += "</ul>";
+     }
+    setToolTip( nameCol(), infoToolTip.c_str() );
+     
     QString iconPath;
     QString iconName = "yast-sw_source";
     
     if ( ! repo.info().baseUrlsEmpty() )
     {
         zypp::Url repoUrl = *repo.info().baseUrlsBegin();
+        
+        if ( urlCol() >= 0 )
+        {
+            setText( urlCol(), repoUrl.asString().c_str() );
+        }
+
         if (QString(repoUrl.asString().c_str()).contains("KDE") )
             iconName = "pattern-kde";
         if (QString(repoUrl.asString().c_str()).contains("GNOME") )
