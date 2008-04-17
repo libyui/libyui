@@ -45,10 +45,6 @@ using std::set;
 
 #define ENABLE_TOTAL_DOWNLOAD_SIZE	0
 
-#define SPACING			6	// between subwidgets
-#define MARGIN			4	// around the widget
-
-
 YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
     : QWidget( parent )
 {
