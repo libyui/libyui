@@ -494,8 +494,13 @@ bool YQPkgPatternListItem::operator< ( const QTreeWidgetItem & otherListViewItem
     
 
     if ( _zyppPattern && otherPatternListitem && otherPatternListitem->zyppPattern() )
-        return _zyppPattern->order() < otherPatternListitem->zyppPattern()->order();
-
+    {
+        if ( _zyppPattern->order() != otherPatternListitem->zyppPattern()->order() )
+            return _zyppPattern->order() < otherPatternListitem->zyppPattern()->order();
+        else
+            return _zyppPattern->name() < otherPatternListitem->zyppPattern()->name();
+    }
+    
     const YQPkgPatternCategoryItem * otherCategoryItem = dynamic_cast<const YQPkgPatternCategoryItem *>(&otherListViewItem);
 
     if ( otherCategoryItem )	// Patterns without category should always be sorted
