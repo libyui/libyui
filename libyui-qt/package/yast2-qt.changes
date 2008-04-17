@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Apr 17 10:47:49 CEST 2008 - coolo@suse.de
+
+- update the steps status (bnc#379539)
+
+-------------------------------------------------------------------
 Wed Apr 16 14:05:15 CEST 2008 - coolo@suse.de
 
 - reduce steps flickering

@@ -1207,8 +1207,8 @@ void YQWizard::Step::setStatus( Status s )
         _nameLabel->setProperty( "class", "current-step-name QLabel" );
     }
 
-    qApp->style()->polish( _statusLabel );
-    qApp->style()->polish( _nameLabel );
+    _statusLabel->style()->polish( _statusLabel );
+    _nameLabel->style()->polish( _nameLabel );
 }
 
 #include "YQWizard.moc"
