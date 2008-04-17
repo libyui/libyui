@@ -324,7 +324,7 @@ YQPkgPatternList::filter()
             }
             selection()->setInstalledPackages(installed);
             selection()->setTotalPackages(total);
-            
+            selection()->resetToolTip();
         }
     }
 
@@ -486,10 +486,13 @@ YQPkgPatternListItem::resetToolTip()
 {
     std::string infoToolTip;
     infoToolTip +=  ("<p>" + zyppPattern()->description() + "</p>");
-    setToolTip(_patternList->summaryCol(), infoToolTip.c_str());
-    
-//    setTooltip( _summaryCol, QString().sprintf("%s (%d/%d)", zyppPattern->summary().c_str(), installed, total));
 
+    if ( totalPackages() > 0 )
+    {
+        infoToolTip += ("<p>" + zypp::str::form("%d / %d", installedPackages(), totalPackages() ) + "</p>");
+    }
+
+    setToolTip(_patternList->summaryCol(), infoToolTip.c_str());
 }
 
 void
