@@ -732,7 +732,7 @@ YQPkgObjList::addExcludeRule( YQPkgObjList::ExcludeRule * rule )
 
 void
 YQPkgObjList::applyExcludeRules()
-{
+{   
     // yuiDebug() << "Applying exclude rules" << endl;
     QTreeWidgetItemIterator listView_it( this );
 
@@ -794,6 +794,8 @@ YQPkgObjList::applyExcludeRules( QTreeWidgetItem * listViewItem )
 {
     YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *>( listViewItem );
 
+    std::cout << "apply exclude rules to item: " << item->zyppObj()  << std::endl;
+
     if ( item )
     {
 	bool exclude = false;
@@ -836,37 +838,19 @@ YQPkgObjList::applyExcludeRules( QTreeWidgetItem * listViewItem )
 void
 YQPkgObjList::exclude( YQPkgObjListItem * item, bool exclude )
 {
-#if FIXME
     if ( exclude == item->isExcluded() )
 	return;
 
     item->setExcluded( exclude );
 
-    if ( exclude )
-    {
-	QTreeWidgetItem * parentItem = item->parent();
+    QTreeWidgetItem * parentItem = item->parent();
+    
+    if ( parentItem )
+        parentItem->setHidden(exclude);
+    else
+        item->setHidden(exclude);
 
-	if ( parentItem )
-	    parentItem->takeItem( item );
-	else
-	    QTreeWidget::takeItem( item );
-
-	_excludedItems->add( item, parentItem );
-    }
-    else // un-exclude
-    {
-	if ( _excludedItems->contains( item ) )
-	{
-	    QTreeWidgetItem * oldParent = _excludedItems->oldParentItem( item );
-	    _excludedItems->remove( item );
-
-	    if ( oldParent )
-		oldParent->insertItem( item );
-	    else
-		QTreeWidget::insertItem( item );
-	}
-    }
-#endif
+    _excludedItems->add( item, parentItem );
 }
 
 
