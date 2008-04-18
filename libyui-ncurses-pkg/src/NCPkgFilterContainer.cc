@@ -122,67 +122,6 @@ void NCPkgFilterContainer::createLayout( YWidget *parent, const string & label )
 
 }
 
-bool NCPkgFilterContainer::showContainerContent( const set<string> & wanted )
-{
-    NCPkgTable * packageList = packager->PackageList();
-
-    if ( !packageList )
-    {
-	yuiError() << "Widget is not a valid NCPkgTable widget" << endl;
-    	return false;
-    }
-
-    // clear the package table
-    packageList->itemsCleared ();
-
-    set<string>::iterator not_found = wanted.end ();
-
-    std::vector<ZyppSel> sorted;
-    sorted.reserve (wanted.size ());
-
-    yuiMilestone() << "Showing " << wanted.size () << " packages" << endl; 
-    // find the objects for the names
-    ZyppPoolIterator
-	b = zyppPkgBegin(),
-	e = zyppPkgEnd(),
-	it;
-    for ( it = b; it != e; ++it )
-    {
-	string name = (*it)->name(); // omitted theObj
-
-	if ( wanted.find (name) != not_found )
-	{
-	    ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
-	    if ( zyppPkg )
-	    {
-		sorted.push_back (*it);
-	    }
-	}
-    }
-
-    // sort it and insert it to the list
-    sort (sorted.begin (), sorted.end (), sortByName);
-    {
-	std::vector<ZyppSel>::iterator
-	    b = sorted.begin (),
-	    e = sorted.end (),
-	    it;
-	for ( it = b; it != e; ++it )
-	{
-	    ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
-	    // already know that it is valid
-	    packageList->createListEntry( zyppPkg, *it );
-	}
-    }
-
-    // show the package table
-    packageList->setCurrentItem( 0 );
-    packageList->drawList();
-    packageList->showInformation();
-
-    return true;
-
-}
 ///////////////////////////////////////////////////////////////////
 //
 // NCursesEvent & showSelectionPopup ()
@@ -200,6 +139,8 @@ void NCPkgFilterContainer::showContainerPackages( )
         //ZyppLang langPtr = tryCastToZyppLang (objPtr);
         if (patPtr)
         {
+	    packager->FilterDescription()->setText ( showDescription( objPtr ) );
+
 	    yuiMilestone() << "Show packages belonging to selected pattern: " << getCurrentLine() << endl; 
             NCPkgTable * packageList = packager->PackageList();
 
@@ -210,9 +151,6 @@ void NCPkgFilterContainer::showContainerPackages( )
             }
     	    packageList->itemsCleared ();
 
-	    // zypp::ui::PatternContents patternContents( patPtr );
-	    packager->FilterDescription()->setText ( showDescription( objPtr ) );
-	    // packages = patternContents.install_packages();
 	    zypp::Pattern::Contents related ( patPtr->contents() );
     	    for ( zypp::Pattern::Contents::Selectable_iterator it = related.selectableBegin();
                   it != related.selectableEnd();
@@ -264,7 +202,6 @@ void NCPkgFilterContainer::showContainerPackages( )
     
         }
 #endif
-	//showContainerContent( packages );
     }
 }
 

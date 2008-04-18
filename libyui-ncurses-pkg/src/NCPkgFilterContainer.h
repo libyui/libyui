@@ -69,7 +69,6 @@ public:
      */
     bool fillContainerList (  SelType type );
 
-    bool showContainerContent(  const set<string> & wanted );
     string showDescription( ZyppObj objPtr );	
    
     /**
