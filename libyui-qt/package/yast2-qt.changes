@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Apr 18 17:21:53 CEST 2008 - sh@suse.de
+
+- Fixed bnc #374851: YQMultiProgressMeter integer overflow 
+
+-------------------------------------------------------------------
 Thu Apr 17 10:47:49 CEST 2008 - coolo@suse.de
 
 - update the steps status (bnc#379539)

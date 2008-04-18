@@ -36,7 +36,6 @@ YQMultiProgressMeter::YQMultiProgressMeter( YWidget *			parent,
     : QWidget( (QWidget *) parent->widgetRep() )
     , YMultiProgressMeter( parent, dim, maxValues )
 {
-    _triangularShaped = false;
     init();
     setWidgetRep( this );
 }
@@ -53,24 +52,8 @@ void YQMultiProgressMeter::init()
     _margin 		= 2;
     _segmentMinLength 	= 12;
     _triSpacing		= 1;
-
-    if ( triangularShaped() )
-    {
-	_spacing	= 0;
-	setTriThickness( -1 );
-    }
-    else
-    {
-	_spacing	= 2;
-	setTriThickness( 4 );
-    }
-}
-
-
-void YQMultiProgressMeter::setTriangularShaped( bool triangular )
-{
-    _triangularShaped = triangular;
-    init();
+    _spacing	= 2;
+    setTriThickness( 4 );
 }
 
 
@@ -149,7 +132,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 
 
     // Small segments that get at least minLength pixels consume more screen
-    // space than initially planned, so recompute what is left for the others
+    // space than initially planned, so recompute what is left for the others.
 
     int distributableLength = totalLength - smallSegmentsCount * minLength;
 
@@ -163,10 +146,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
     // space disproportional to their real size (maxValue).
     scale = ( (float) distributableLength ) / ( restSum );
 
-
-    // Calculate indentation
-
-    int indent = triangularShaped() ? (int) ( thickness * 0.37 ) : 0;
+    int indent = 0;
 
     // Set up painter
 
@@ -189,7 +169,7 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 	else
 	    length = (int) ( maxValue( i ) * scale + 0.5 );
 
-	drawSegment( i, painter, offset, length, thickness, indent );
+	drawSegment( i, painter, offset, length, thickness );
 
 	if ( i > 0 )
 	    drawMarkers( painter, offset, thickness );
@@ -199,28 +179,11 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
 }
 
 
-void YQMultiProgressMeter::mouseDoubleClickEvent ( QMouseEvent * event )
-{
-    if ( event && event->button() == Qt::RightButton )
-    {
-	// Easter egg: Switch between rectangular and triangular shape
-
-	yuiMilestone() << "Switching shape" << endl;
-	setTriangularShaped( ! triangularShaped() );
-	setSize( vertical()   ? preferredWidth()  : width(),
-		 horizontal() ? preferredHeight() : height() );
-	findDialog()->recalcLayout();
-	QWidget::update();
-    }
-}
-
-
 void YQMultiProgressMeter::drawSegment( int segment,
 					QPainter & painter,
 					int offset,
 					int length,
-					int thickness,
-					int indent )
+					int thickness )
 {
     //
     // Fill segment
@@ -241,13 +204,18 @@ void YQMultiProgressMeter::drawSegment( int segment,
         return;
     }
 
+    // Use 0..1000 range to avoid overflow with huge numbers (Gigabytes).
+    const int scaledMax = 1000;
+    int scaledProgress =
+	(int) ( 0.5 + ( currentValue( segment ) / maxValue( segment ) ) * ( (float) scaledMax ) );
+
     if ( vertical() )	// fill thermometer-like from bottom to top
     {
         QStyleOptionProgressBarV2 opts;
         opts.initFrom(this);
-        opts.progress = (int) currentValue( segment);
+        opts.progress = scaledMax - scaledProgress;
         opts.minimum = 0;
-        opts.maximum = (int) maxValue( segment);
+        opts.maximum = scaledMax;
         opts.invertedAppearance = true;
         opts.rect = QRect( offset, border, length, thickness );
         style()->drawControl(QStyle::CE_ProgressBarGroove, &opts, &painter, this);
@@ -259,9 +227,9 @@ void YQMultiProgressMeter::drawSegment( int segment,
     {
         QStyleOptionProgressBarV2 opts;
         opts.initFrom(this);
-        opts.progress = (int) ( maxValue( segment) - currentValue( segment) );
+        opts.progress = scaledProgress;
         opts.minimum = 0;
-        opts.maximum = (int) maxValue( segment);
+        opts.maximum = scaledMax;
         opts.rect = QRect( offset, border, length, thickness );
 
         style()->drawControl(QStyle::CE_ProgressBarGroove, &opts, &painter, this);
@@ -288,10 +256,11 @@ void YQMultiProgressMeter::drawMarkers( QPainter & painter, int offset, int thic
     int tri = triThickness();
 
     QPointF points[3] =
-     { QPointF( offset - tri+1,	margin() ),		// top left (base)
-       QPointF( offset,		margin() + tri-1 ),	// lower center (point)
-       QPointF( offset + tri-1, 	margin() )		// top right (base)
-     };
+	{
+	    QPointF( offset - tri+1,	margin() ),		// top left (base)
+	    QPointF( offset,		margin() + tri-1 ),	// lower center (point)
+	    QPointF( offset + tri-1, 	margin() )		// top right (base)
+	};
 
     painter.drawConvexPolygon( points, 3 );
 
@@ -300,10 +269,11 @@ void YQMultiProgressMeter::drawMarkers( QPainter & painter, int offset, int thic
     int pointOffset = margin() + tri + thickness + 2 * triSpacing();
 
     QPointF points2[3] =
-     { QPointF( offset,		pointOffset ),		// top center (point)
-       QPointF( offset + tri-1,	pointOffset + tri-1 ),	// top right (base)
-       QPointF( offset - tri+1,	pointOffset + tri-1 )	// bottom left (base)
-     };
+	{
+	    QPointF( offset,		pointOffset ),		// top center (point)
+	    QPointF( offset + tri-1,	pointOffset + tri-1 ),	// top right (base)
+	    QPointF( offset - tri+1,	pointOffset + tri-1 )	// bottom left (base)
+	};
 
     painter.drawConvexPolygon( points2, 3 );
 }
@@ -311,7 +281,7 @@ void YQMultiProgressMeter::drawMarkers( QPainter & painter, int offset, int thic
 
 int YQMultiProgressMeter::thickness()
 {
-    int thickness = triangularShaped() ? 35 : 23;
+    int thickness = 23;
     thickness += 2 * margin();
 
     if ( triThickness() > 0 )

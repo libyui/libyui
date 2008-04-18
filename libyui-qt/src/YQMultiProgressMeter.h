@@ -125,17 +125,6 @@ public:
     void setTriSpacing( int value ) { _triSpacing = value; }
 
     /**
-     * Returns "true" if the segments of this widget are triangular shaped.
-     **/
-    bool triangularShaped() const { return _triangularShaped; }
-
-    /**
-     * Set triangular shape (true) or normal rectangular shape.
-     * This call does not trigger a screen update.
-     **/
-    void setTriangularShaped( bool triangular = true );
-
-    /**
      * Set enabled/disabled state.
      *
      * Reimplemented from YWidget.
@@ -184,13 +173,6 @@ protected:
     virtual void paintEvent ( QPaintEvent * );
 
     /**
-     * Mouse double click -
-     *
-     * reimplemented from QWidget.
-     **/
-    virtual void mouseDoubleClickEvent ( QMouseEvent * e );
-
-    /**
      * Draw segment number 'segment' with pixel length 'length' from pixel
      * coordinate 'offset' on and fill it according to that segment's current
      * value. 'painter' is set up previously to take rotating into account
@@ -200,8 +182,7 @@ protected:
 		      QPainter & painter,
 		      int offset,
 		      int length,
-		      int thickness,
-		      int indent );
+		      int thickness );
 
     /**
      * Draw markers between segments (or beside that spacing).
@@ -211,7 +192,6 @@ protected:
 
 private:
 
-    bool	_triangularShaped;
     int		_margin;
     int 	_spacing;
     int 	_segmentMinLength;
