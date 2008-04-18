@@ -972,6 +972,9 @@ YQPkgObjListItem::init()
                 {
                     if ( installed->edition() > candidate->edition() )
                         setTextColor( versionStatusCol(), Qt::red);
+                    if ( installed->edition() < candidate->edition() )
+                        setTextColor( versionStatusCol(), Qt::blue);
+
                     
                     setText( versionStatusCol(), QString().sprintf("%s (%s)", installed->edition().c_str(), candidate->edition().c_str()) );
                 }
