@@ -201,10 +201,32 @@ void NCPkgFilterContainer::showContainerPackages( )
         if (patPtr)
         {
 	    yuiMilestone() << "Show packages belonging to selected pattern: " << getCurrentLine() << endl; 
-	    zypp::ui::PatternContents patternContents( patPtr );
+            NCPkgTable * packageList = packager->PackageList();
+
+            if ( !packageList )
+            {
+                yuiError() << "Widget is not a valid NCPkgTable widget" << endl;
+            	return;
+            }
+    	    packageList->itemsCleared ();
+
+	    // zypp::ui::PatternContents patternContents( patPtr );
 	    packager->FilterDescription()->setText ( showDescription( objPtr ) );
-	    packages = patternContents.install_packages();
-    	
+	    // packages = patternContents.install_packages();
+	    zypp::Pattern::Contents related ( patPtr->contents() );
+    	    for ( zypp::Pattern::Contents::Selectable_iterator it = related.selectableBegin();
+                  it != related.selectableEnd();
+                  ++it )
+            {
+                ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
+                if ( zyppPkg )
+                {
+	    	    packageList->createListEntry( zyppPkg, *it );
+		}
+	    }
+    	    packageList->setCurrentItem( 0 );
+    	    packageList->drawList();
+    	    packageList->showInformation();
         }
  #if 0 //FIXME	
         else if (langPtr)
@@ -242,7 +264,7 @@ void NCPkgFilterContainer::showContainerPackages( )
     
         }
 #endif
-	showContainerContent( packages );
+	//showContainerContent( packages );
     }
 }
 
@@ -332,7 +354,9 @@ bool orderPattern( ZyppSel slb1, ZyppSel slb2 )
     if ( !ptr1 || !ptr2 )
 	return false;
     else
+    {
 	return ptr1->order() < ptr2->order();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////
