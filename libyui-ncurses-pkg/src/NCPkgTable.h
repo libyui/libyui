@@ -166,7 +166,7 @@ public:
    /**
      * Draws the package list (has to be called after the loop with addLine() calls)
      */ 
-   void drawList( ) { return DrawPad(); }
+   void drawList( ) { myPad()->setOrder(1); return DrawPad(); }
     
    /**
     * Clears the package list
