@@ -1,3 +1,12 @@
+-------------------------------------------------------------------
+Fri Apr 18 11:41:32 CEST 2008 - dmacvicar@suse.de
+
+- make versions widget work (bnc #354983)
+- show updates in blue again (bnc #371681)
+- allow disabling view of debuginfo and devel pkgs
+  (bnc #359155)
+- 2.16.37 
+
 Thu Apr 17 22:17:53 CEST 2008 - dmacvicar@suse.de
 -------------------------------------------------------------------
 
