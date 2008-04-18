@@ -74,8 +74,6 @@ YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
     _userCanSwitch 	= userCanSwitch;
 
     _buttons = new QButtonGroup(parent);
-    
-    connect( _buttons, SIGNAL(clicked(QAbstractButton *)), SLOT(checkForChangedCandidate()) );
 
     if ( _parentTab )
     {
@@ -182,6 +180,8 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
         while ( it != selectable->availableEnd() )
         {
             QRadioButton *b = new YQPkgVersion( this, selectable, *it, _userCanSwitch );
+            connect( b, SIGNAL(clicked(bool)), SLOT(checkForChangedCandidate()) );
+
             _buttons->addButton(b);
             _layout->addWidget(b);
             
@@ -203,68 +203,67 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
 
 void
 YQPkgVersionsView::checkForChangedCandidate()
-{
-
-     QListIterator<QAbstractButton*> it(_buttons->buttons());
-     while (it.hasNext())
-     {
-         YQPkgVersion * versionItem = dynamic_cast<YQPkgVersion *> (it.next());
-
-         if ( versionItem && versionItem->isChecked() )
-         {
-             ZyppObj newCandidate = versionItem->zyppObj();
-
-             if ( newCandidate != _selectable->candidateObj() )
-             {
-                 yuiMilestone() << "Candidate changed" << endl;
-
-                 // Change status of selectable
-
-                 ZyppStatus status = _selectable->status();
-
-                 if ( !_selectable->installedEmpty() &&
-                      _selectable->installedObj()->arch()    == newCandidate->arch() &&
-                      _selectable->installedObj()->edition() == newCandidate->edition() )
-                 {
-                     // Switch back to the original instance -
-                     // the version that was previously installed
+{   
+    QListIterator<QAbstractButton*> it(_buttons->buttons());
+    while (it.hasNext())
+    {
+        YQPkgVersion * versionItem = dynamic_cast<YQPkgVersion *> (it.next());
+        
+        if ( versionItem && versionItem->isChecked() )
+        {
+            ZyppObj newCandidate = versionItem->zyppObj();
+            
+            if ( newCandidate != _selectable->candidateObj() )
+            {
+                yuiMilestone() << "Candidate changed" << endl;
+                
+                // Change status of selectable
+                
+                ZyppStatus status = _selectable->status();
+                
+                if ( !_selectable->installedEmpty() &&
+                     _selectable->installedObj()->arch()    == newCandidate->arch() &&
+                     _selectable->installedObj()->edition() == newCandidate->edition() )
+                {
+                    // Switch back to the original instance -
+                    // the version that was previously installed
 		    status = S_KeepInstalled;
-                 }
-                 else
-                 {
-                     switch ( status )
-                     {
-                     case S_KeepInstalled:
-                     case S_Protected:
-                     case S_AutoDel:
-                     case S_AutoUpdate:
-                     case S_Del:
-                     case S_Update:
-                         
-                         status = S_Update;
-                         break;
-                         
-                     case S_NoInst:
-                     case S_Taboo:
-                     case S_Install:
-                     case S_AutoInstall:
-                         status = S_Install;
-                         break;
-                     }
-                 }
-
-                 _selectable->setStatus( status );
-
-
-                 // Set candidate
-                 
-                 _selectable->setCandidate( newCandidate );
-                 emit candidateChanged( newCandidate );
-                 return;
-             }
-         }
-
-     }
+                }
+                else
+                {
+                    switch ( status )
+                    {
+                    case S_KeepInstalled:
+                    case S_Protected:
+                    case S_AutoDel:
+                    case S_AutoUpdate:
+                    case S_Del:
+                    case S_Update:
+                        
+                        status = S_Update;
+                        break;
+                        
+                    case S_NoInst:
+                    case S_Taboo:
+                    case S_Install:
+                    case S_AutoInstall:
+                        status = S_Install;
+                        break;
+                    }
+                }
+                
+                _selectable->setStatus( status );
+                
+                
+                // Set candidate
+                
+                _selectable->setCandidate( newCandidate );
+                emit candidateChanged( newCandidate );
+                return;
+            }
+        }
+        
+    }
 }
 
 
