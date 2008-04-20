@@ -60,6 +60,8 @@
 YQPkgConflictDialog::YQPkgConflictDialog( QWidget * parent )
     : QDialog( parent )
 {
+    setStyleSheet( QString::null );
+
     _solveCount		= 0;
     _totalSolveTime	= 0.0;
 
