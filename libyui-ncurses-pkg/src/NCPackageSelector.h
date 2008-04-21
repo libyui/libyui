@@ -289,9 +289,6 @@ class NCPackageSelector
      */
     bool handleEvent( const NCursesEvent& event );
 
-    // UNUSED
-    void replaceInfoText ( bool b );
-
     /**
     * Creates an NCPkgTable widget and shows all versions
     * of all packages belonging to a patch

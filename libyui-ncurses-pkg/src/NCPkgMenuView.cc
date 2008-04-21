@@ -147,47 +147,6 @@ bool NCPkgMenuView::handleEvent ( const NCursesEvent & event)
 	}
     }
 
-    //
-    // UNUSED
-    //
-#if 0
-    if (event.selection == versions)
-    {
-	if ( !pkg->VersionsList() )
- 	    //replaceInfoText ( NCPkgTable::I_Versions);
-	    pkg->replaceInfoText( true );
-        pkgList->setVisibleInfo (NCPkgTable::I_Versions);
-	pkg->VersionsList()->fillAvailableList( slbPtr );
-    }
-    else
-    {
-        if ( !pkg->InfoText() )
-	    pkg->replaceInfoText( false );
-           //replaceInfoText();
-        if (event.selection == description)
-        { 
-	    if( pkg->ReplacePoint()->firstChild() == pkg->InfoText() )
-	       yuiError() << "snehulak" << endl;
-            pkg->InfoText()->longDescription( pkgPtr );
-            pkgList->setVisibleInfo (NCPkgTable::I_Descr);
-        }
-        else if (event.selection == technical )
-        {
-            pkg->InfoText()->technicalData( pkgPtr, slbPtr );
-            pkgList->setVisibleInfo (NCPkgTable::I_Technical);
-        }
-        else if (event.selection == files )
-        {
-            pkg->InfoText()->fileList(  slbPtr );
-            pkgList->setVisibleInfo (NCPkgTable::I_Files);
-        }
-        else if (event.selection == deps )
-        {
-            pkg->InfoText()->dependencyList( pkgPtr, slbPtr );
-            pkgList->setVisibleInfo (NCPkgTable::I_Deps);
-        }
-    }
-#endif
 
     return true;
 }

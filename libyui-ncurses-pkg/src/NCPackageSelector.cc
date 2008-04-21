@@ -873,51 +873,6 @@ void NCPackageSelector::showPatchPkgVersions()
     }
 }
 
-// 
-// UNUSED
-//
-void NCPackageSelector::replaceInfoText( bool b )
-{
-    NCPkgTable * packageList = PackageList();
-
-    wrect oldSize = deleteReplacePoint();
-
-    if ( b )
-    {
-	// show a package table with all available package versions
-	YTableHeader * tableHeader = new YTableHeader();
-	versionsList = new NCPkgTable( replacePoint, tableHeader );
-        // YDialog::currentDialog()->setInitialSize(); -> doesn't work
-	// call versionsList->setSize() and versionsList->Redraw() instead
-
-	if ( versionsList )
-	{
-
-	    // set the connection to the NCPackageSelector !!!!
-	    versionsList->setPackager( this );
-	    // set status strategy
-	    NCPkgStatusStrategy * strategy = new AvailableStatStrategy();
-	    versionsList->setTableType( NCPkgTable::T_Availables, strategy );
-	    versionsList->fillHeader( );
-	    versionsList->setSize( oldSize.Sze.W, oldSize.Sze.H );
-	    versionsList->fillAvailableList(  packageList->getSelPointer( packageList->getCurrentItem() ) );
-	    versionsList->Redraw();
-
-	}
-    }
-    else
-    {
-	// show the rich text widget
-	infoText = new NCPkgPackageDetails( replacePoint, " ", this);
-
-	if ( infoText )
-	{
-	    infoText->setSize( oldSize.Sze.W, oldSize.Sze.H );
-	    infoText->Redraw();
-	}
-    }
-
-}
 
 void NCPackageSelector::replaceFilter( FilterMode mode)
 {
