@@ -794,8 +794,6 @@ YQPkgObjList::applyExcludeRules( QTreeWidgetItem * listViewItem )
 {
     YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *>( listViewItem );
 
-    std::cout << "apply exclude rules to item: " << item->zyppObj()  << std::endl;
-
     if ( item )
     {
 	bool exclude = false;
