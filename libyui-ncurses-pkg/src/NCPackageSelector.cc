@@ -876,6 +876,7 @@ void NCPackageSelector::showPatchPkgVersions()
 
 void NCPackageSelector::replaceFilter( FilterMode mode)
 {
+    patternLabel->setLabel( "                           " );
     YWidget * replaceChild = replPoint->firstChild();
     wrect oldSize;
 

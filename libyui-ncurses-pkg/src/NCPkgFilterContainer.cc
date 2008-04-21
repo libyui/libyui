@@ -170,7 +170,7 @@ void NCPkgFilterContainer::showContainerPackages( )
 	    }
 	    packager->FilterDescription()->setText ( showDescription( objPtr ) );
 	    char buf[100];
-	    sprintf(buf, "%d/%d packages installed", installed, total);
+	    sprintf(buf, "%d of %d packages installed", installed, total);
 
 	    packager->PatternLabel()->setLabel ( buf );
 
