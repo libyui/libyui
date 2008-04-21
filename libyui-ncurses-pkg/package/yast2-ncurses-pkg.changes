@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Apr 21 15:22:01 CEST 2008 - kmachalkova@suse.cz
+
+- Pattern content (required, recommended, suggested pkgs) visible 
+  again
+- Show no. of installed vs. total pkgs for a pattern
+- 2.16.7 
+
+-------------------------------------------------------------------
 Mon Apr 21 10:58:04 CEST 2008 - jsrain@suse.cz
 
 - fixed textdomain
