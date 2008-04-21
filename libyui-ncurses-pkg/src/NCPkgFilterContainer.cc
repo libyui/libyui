@@ -139,7 +139,9 @@ void NCPkgFilterContainer::showContainerPackages( )
         //ZyppLang langPtr = tryCastToZyppLang (objPtr);
         if (patPtr)
         {
-	    packager->FilterDescription()->setText ( showDescription( objPtr ) );
+	    int total = 0;
+	    int installed = 0;
+	    	
 
 	    yuiMilestone() << "Show packages belonging to selected pattern: " << getCurrentLine() << endl; 
             NCPkgTable * packageList = packager->PackageList();
@@ -160,8 +162,18 @@ void NCPkgFilterContainer::showContainerPackages( )
                 if ( zyppPkg )
                 {
 	    	    packageList->createListEntry( zyppPkg, *it );
+                    if ( (*it)->installedSize() > 0 )
+                        ++installed;
+                    ++total;
+		    			
 		}
 	    }
+	    packager->FilterDescription()->setText ( showDescription( objPtr ) );
+	    char buf[100];
+	    sprintf(buf, "%d/%d packages installed", installed, total);
+
+	    packager->PatternLabel()->setLabel ( buf );
+
     	    packageList->setCurrentItem( 0 );
     	    packageList->drawList();
     	    packageList->showInformation();
@@ -231,7 +243,7 @@ string NCPkgFilterContainer::showDescription( ZyppObj objPtr )
 	case S_Pattern:
 	{
 	    ZyppPattern patPtr = tryCastToZyppPattern (objPtr);
-	    return patPtr->description();
+	    return patPtr->description(); 
 	}
 	#if 0
         case S_Language:

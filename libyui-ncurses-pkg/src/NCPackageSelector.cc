@@ -1802,12 +1802,13 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     YLayoutBox * vv = YUI::widgetFactory()->createVBox( fr );
     YAlignment *l = YUI::widgetFactory()->createLeft( vv );
     filterMain = new NCPkgFilterMain (l, NCPkgStrings::Filter(), this );
-    //filterPopup = new NCPkgFilterRPMGroups ( vv, " ", this);  
 
     replPoint = YUI::widgetFactory()->createReplacePoint( vv );
     YTableHeader *hhh = new YTableHeader();
     patternPopup = new NCPkgFilterContainer( replPoint, hhh, this, NCPkgFilterContainer::S_Pattern );
-    NCLabel *dummy = new NCLabel( vbox_left, "             " );
+
+    YAlignment *l1 = YUI::widgetFactory()->createLeft( vbox_left );
+    patternLabel = new NCLabel( l1, "                           " );
     
 
     // add the package table

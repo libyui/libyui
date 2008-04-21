@@ -137,6 +137,7 @@ class NCPackageSelector
      // labels
     YLabel * packageLabel;
     YLabel * diskspaceLabel;
+    YLabel *patternLabel;
 
     // information about packages
     NCPkgPackageDetails * infoText;	// short/longdecsription, filelist
@@ -217,6 +218,7 @@ class NCPackageSelector
     NCPkgPopupDeps *DepsPopup() { return depsPopup; }
     NCPkgPopupDiskspace *diskSpacePopup() { return diskspacePopup; }
     YLabel *PackageLabel() { return packageLabel; } 
+    YLabel *PatternLabel() { return patternLabel; } 
 
     NCPkgPackageDetails *InfoText() { return infoText; }
     void setInfoText ( NCPkgPackageDetails *itext ) { infoText = itext ;}
