@@ -1062,18 +1062,7 @@ YQPkgObjListItem::setStatus( ZyppStatus newStatus, bool sendSignals )
 void
 YQPkgObjListItem::solveResolvableCollections()
 {
-#if EXTRA_SOLVE_COLLECTIONS
-    zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
-
-    resolver->transactReset( zypp::ResStatus::APPL_LOW );
-
-    resolver->transactResKind( zypp::ResTraits<zypp::Product  >::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Selection>::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Pattern  >::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Language >::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Patch    >::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Atom     >::kind );
-#endif
+    zypp::getZYpp()->resolver()->resolvePool();
 }
 
 

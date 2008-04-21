@@ -246,6 +246,7 @@ YQPkgLangListItem::cycleStatus()
         zypp::getZYpp()->pool().addRequestedLocale( _zyppLang );
     }
     setStatusIcon();
+    _pkgObjList->sendStatusChanged();
 }
 
 #include "YQPkgLangList.moc"
