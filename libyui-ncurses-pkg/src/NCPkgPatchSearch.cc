@@ -32,7 +32,7 @@
 #include "NCi18n.h"
 
 /*
-  Textdomain "packages"
+  Textdomain "ncurses-pkg"
 */
 
 ///////////////////////////////////////////////////////////////////
