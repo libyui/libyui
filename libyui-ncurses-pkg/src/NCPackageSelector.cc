@@ -880,42 +880,7 @@ void NCPackageSelector::replaceInfoText( bool b )
 {
     NCPkgTable * packageList = PackageList();
 
-    /*if ( !packageList
-	 || !event.selection
-	 || !replacePoint )
-    {
-	yuiError() << "*** InformationHandler RETURN false ***" << endl;
-	return false;
-    }
-
-    YMenuItem * info = event.selection;*/
-
-    //yuiMilestone() << "Show info: " << info->label() << endl;
-
-    //if ( pkgList->VisibleInfo() == NCPkgTable::I_Descr )
-    //{
-    //    // information selection has not changed
-    //    return true;
-    //}
-
-    // set visibleInfo
-    //pkgList->setVisibleInfo(NCPkgTable::I_Versions);
-
-    // delete current child of the ReplacePoint
-    YWidget * replaceChild = replacePoint->firstChild();
-    wrect oldSize;
-
-    if ( replaceChild )
-    {
-	oldSize = dynamic_cast<NCWidget *>(replaceChild)->wGetSize();
-
-	delete replaceChild;
-	// reset all info widgets
-	infoText = 0;
-	versionsList = 0;
-	//patchPkgs = 0;
-	//patchPkgsVersions = 0;
-    }
+    wrect oldSize = deleteReplacePoint();
 
     if ( b )
     {
@@ -940,51 +905,6 @@ void NCPackageSelector::replaceInfoText( bool b )
 
 	}
     }
-// patches
-    #if 0	
-    else if ( visibleInfo == patchpkgsItem )
-    {
-	// show a package table with packages belonging to a patch
-	YTableHeader * tableHeader = new YTableHeader();
-	patchPkgs =  new NCPkgTable( replacePoint, tableHeader );
-
-	if ( patchPkgs )
-	{
-	    patchPkgs->setSize( patchPkgs->preferredWidth(), patchPkgs->preferredHeight() );
-	    patchPkgs->Redraw();
-
-	    // set the connection to the NCPackageSelector !!!!
-	    patchPkgs->setPackager( this );
-	    // set status strategy - don't set extra strategy, use 'normal' package strategy
-	    NCPkgStatusStrategy * strategy = new PackageStatStrategy();
-	    patchPkgs->setTableType( NCPkgTable::T_PatchPkgs, strategy );
-	    patchPkgs->fillHeader( );
-
-	    fillPatchPackages( patchPkgs, packageList->getDataPointer( packageList->getCurrentItem() ) );
-	}
-    }
-    else if ( visibleInfo == pkgversionsItem )
-    {
-	// show a package table with versions of the packages beloning to a patch
-	YTableHeader * tableHeader = new YTableHeader();
-	patchPkgsVersions =  new NCPkgTable( replacePoint, tableHeader );
-
-	if ( patchPkgsVersions )
-	{
-	    patchPkgsVersions->setSize( oldSize.Sze.W, oldSize.Sze.H );
-	    patchPkgsVersions->Redraw();
-
-	    patchPkgsVersions->setPackager( this );
-	    // set status strategy and table type
-	    NCPkgStatusStrategy * strategy = new AvailableStatStrategy();
-	    patchPkgsVersions->setTableType( NCPkgTable::T_Availables, strategy );
-
-	    patchPkgsVersions->fillHeader( );
-
-	    fillPatchPackages( patchPkgsVersions, packageList->getDataPointer( packageList->getCurrentItem() ), true );
-	}
-    }
-    #endif
     else
     {
 	// show the rich text widget
@@ -994,15 +914,9 @@ void NCPackageSelector::replaceInfoText( bool b )
 	{
 	    infoText->setSize( oldSize.Sze.W, oldSize.Sze.H );
 	    infoText->Redraw();
-	    yuiError() << "zirafa" << endl;
-//	    packageList->showInformation( );
 	}
     }
 
-    //packageList->setKeyboardFocus();
-
-    //yuiMilestone() << "Change package info to: " << visibleInfo->label() << endl;
-    //return true;
 }
 
 void NCPackageSelector::replaceFilter( FilterMode mode)
