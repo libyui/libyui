@@ -14,6 +14,8 @@
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
+  Textdomain "qt-pkg"
+
 /-*/
 
 #define YUILogComponent "qt-pkg"
