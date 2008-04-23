@@ -284,7 +284,10 @@ bool YQRawLineEdit::x11Event( XEvent * event )
 		    }
 		}
 
-		yuiDebug() << "Key event; caps lock: " << _capsLockActive << endl;
+		if ( _capsLockActive )
+		    yuiDebug() << "Key event; caps lock: "
+			       << boolalpha << _capsLockActive << noboolalpha
+			       << endl;
 		break;
 
 	    case ButtonPress:
