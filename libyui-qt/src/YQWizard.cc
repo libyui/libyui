@@ -962,8 +962,8 @@ void YQWizard::addMenu( const string & text,
         _menuBar->addMenu( menu );
         menu->setTitle( fromUTF8( text ) );
 
-	connect( menu, SIGNAL( activated    ( int ) ),
-		 this, SLOT  ( sendMenuEvent( int ) ) );
+	connect( menu, SIGNAL( triggered    ( QAction * ) ),
+		 this, SLOT  ( sendMenuEvent( QAction * ) ) );
 
         _menuBar->show();
     }
@@ -984,8 +984,8 @@ void YQWizard::addSubMenu( const string & parentMenuID,
 	_menuIDs.insert( fromUTF8( id ), menu );
 	//FIXME parentMenu->insertItem( fromUTF8( text ), menu );
 
-	connect( menu, SIGNAL( activated    ( int ) ),
-		 this, SLOT  ( sendMenuEvent( int ) ) );
+	connect( menu, SIGNAL( triggered    ( QAction * ) ),
+		 this, SLOT  ( sendMenuEvent( QAction * ) ) );
     }
     else
     {
@@ -1005,8 +1005,10 @@ void YQWizard::addMenuEntry( const string & parentMenuID,
 #if 0
 	int id = _menuEntryIDs.size();
 #endif
-	_menuEntryIDs.push_back( idString );
-        parentMenu->addAction( fromUTF8( text ) );
+	QAction *action;
+        action = parentMenu->addAction( fromUTF8( text ) );
+	_menuEntryIDs[ action ] = idString ;
+
     }
     else
     {
@@ -1042,15 +1044,15 @@ void YQWizard::deleteMenus()
 }
 
 
-void YQWizard::sendMenuEvent( int numID )
+void YQWizard::sendMenuEvent( QAction *action )
 {
-    if ( numID >= 0 && numID < (int) _menuEntryIDs.size() )
+    if (  _menuEntryIDs.contains( action ) )
     {
-	sendEvent( _menuEntryIDs[ numID ] );
+	sendEvent( _menuEntryIDs[ action ] );
     }
     else
     {
-	yuiError() << "Invalid menu ID: " << numID << endl;
+	yuiError() << "Invalid menu ID " <<  endl;
     }
 }
 

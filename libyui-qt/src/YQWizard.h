@@ -432,7 +432,7 @@ protected slots:
      * Internal notification that a menu item with numeric ID 'numID' has been
      * activated.
      **/
-    void sendMenuEvent( int numID );
+    void sendMenuEvent( QAction *action );
 
 protected:
 
@@ -548,7 +548,7 @@ protected:
     QHash<QString,YQWizard::Step*>	_stepsIDs;
     QHash<QString,YQWizard::TreeItem*>	_treeIDs;
     QHash<QString,QMenu*>		_menuIDs;
-    vector<string>		_menuEntryIDs;
+    QHash<QAction*, string>		_menuEntryIDs;
 
 private:
     static YQWizard *main_wizard;
