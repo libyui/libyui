@@ -29,7 +29,8 @@
 #include "NCPopupInfo.h"
 #include "NCSelectionBox.h"
 #include "NCMenuButton.h"
-#include "NCPkgFilterContainer.h"
+#include "NCPkgFilterPattern.h"
+#include "NCPkgFilterLocale.h"
 #include "NCPkgFilterRepo.h"
 #include "NCPkgPopupDeps.h"
 #include "NCPkgPopupDiskspace.h"
@@ -173,10 +174,10 @@ void NCPackageSelector::createPopups()
     if ( !youMode )
     {
 	// create the patterns popup
-	//patternPopup =  new NCPkgFilterContainer( , this, NCPkgFilterContainer::S_Pattern );
+	//patternPopup =  new NCPkgFilterPattern( , this, NCPkgFilterPattern::S_Pattern );
 
 	// create language popup
-	//languagePopup = new NCPkgFilterContainer( wpos( 1,1 ), this, NCPkgFilterContainer::S_Language );
+	//languagePopup = new NCPkgFilterPattern( wpos( 1,1 ), this, NCPkgFilterPattern::S_Language );
 
 	// create repository popup
 	//repoPopup = new NCPkgRepoTable( wpos( 1,1), this );
@@ -830,7 +831,7 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 	case Patterns:
 	{
 	   YTableHeader *hhh = new YTableHeader ();
-	   patternPopup = new NCPkgFilterContainer( replPoint, hhh, this, NCPkgFilterContainer::S_Pattern );
+	   patternPopup = new NCPkgFilterPattern( replPoint, hhh, this, NCPkgFilterPattern::S_Pattern );
 	   patternPopup->setSize( oldSize.Sze.W, oldSize.Sze.H );
 	   patternPopup->Redraw();
 	   patternPopup->showContainerPackages();
@@ -839,10 +840,10 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 	case Languages:
 	{
 	   YTableHeader *hhh = new YTableHeader ();
-	   languagePopup = new NCPkgFilterContainer( replPoint, hhh, this, NCPkgFilterContainer::S_Language );
+	   languagePopup = new NCPkgLocaleTable( replPoint, hhh, this );
 	   languagePopup->setSize( oldSize.Sze.W, oldSize.Sze.H );
 	   languagePopup->Redraw();
-	   languagePopup->showContainerPackages();
+	   //languagePopup->showContainerPackages();
 	   break;
 	}
 	case Repositories:
@@ -1607,7 +1608,7 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
 
     replPoint = YUI::widgetFactory()->createReplacePoint( vv );
     YTableHeader *hhh = new YTableHeader();
-    patternPopup = new NCPkgFilterContainer( replPoint, hhh, this, NCPkgFilterContainer::S_Pattern );
+    patternPopup = new NCPkgFilterPattern( replPoint, hhh, this, NCPkgFilterPattern::S_Pattern );
 
     YAlignment *l1 = YUI::widgetFactory()->createLeft( vbox_left );
     patternLabel = new NCLabel( l1, "                           " );

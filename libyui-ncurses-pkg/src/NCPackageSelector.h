@@ -55,7 +55,8 @@
 
 #include "NCPkgSelMapper.h"
 
-class NCPkgFilterContainer;
+class NCPkgFilterPattern;
+class NCPkgLocaleTable;
 class NCPkgRepoTable;
 class LangCode;
 class NCPkgPopupDeps;
@@ -111,8 +112,8 @@ class NCPackageSelector
 
     NCPkgPopupDeps * depsPopup;		// the package dependeny popup
 
-    NCPkgFilterContainer * patternPopup;    	// the pattern popup
-    NCPkgFilterContainer * languagePopup;	// language popup
+    NCPkgFilterPattern * patternPopup;    	// the pattern popup
+    NCPkgLocaleTable * languagePopup;	// language popup
     NCPkgRepoTable * repoPopup;
 
     NCPkgPopupDiskspace * diskspacePopup;	// the popup showing the disk usage
