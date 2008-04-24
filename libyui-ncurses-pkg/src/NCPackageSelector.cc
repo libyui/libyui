@@ -51,13 +51,12 @@
 
 #include "NCZypp.h"		// tryCastToZyppPkg(), tryCastToZyppPatch()
 #include <zypp/ui/Selectable.h>
-#include <zypp/ui/PatchContents.h>
 
 #include "YWidgetID.h"
 #include "YPackageSelector.h"
 
-typedef zypp::ui::PatchContents			ZyppPatchContents;
-typedef zypp::ui::PatchContents::const_iterator	ZyppPatchContentsIterator;
+typedef zypp::Patch::Contents				ZyppPatchContents;
+typedef zypp::Patch::Contents::Selectable_iterator	ZyppPatchContentsIterator;
 
 #include <ycp/Parser.h>
 #include "YEvent.h"
@@ -262,20 +261,6 @@ bool NCPackageSelector::diffState ()
     return diff;
 }
 
-string NCPackageSelector::getMenuId( YMenuItem *menuItem )
-{
-    #if 0
-    if ( menuItem )
-    {
-	YCPMenuItem * ycpMenuItem = dynamic_cast<YCPMenuItem *> ( menuItem );
-
-	if ( ycpMenuItem )
-	    return ycpMenuItem->id()->toString();
-    }
-    #endif
-    return "";
-}
-
 ///////////////////////////////////////////////////////////////////
 //
 // handleEvent
@@ -313,7 +298,6 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
     {
 	if ( event.widget == actionMenu )
 	    // change package/patch status
-	    //retVal = StatusHandler( event );
 	    retVal = actionMenu->handleEvent( event );
 	else if ( event.widget == viewMenu )
 	    // show package/patch information
@@ -363,11 +347,17 @@ bool NCPackageSelector::fillPatchSearchList( const string & expr )
 
       if ( patchPtr )
       {
-          //if ( match( (*listIt)->name(), expr, true ) )
-          //{
+	  string name = patchPtr->name();
+      
+	  string::iterator pos = search( name.begin(), name.end(),
+					 expr.begin(), expr.end(),
+					 ic_compare );
+	  
+          if ( pos != name.end()  )
+          {
               // search sucessful
               packageList->createPatchEntry( patchPtr, *listIt );
-         // }
+          }
       }
       ++listIt;
     }
@@ -520,16 +510,16 @@ bool NCPackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPt
     if ( !patchPtr )
 	return false;
 
-    ZyppPatchContents patchContents( patchPtr );
+    ZyppPatchContents patchContents( patchPtr->contents() );
+    
+    yuiMilestone() <<  "Filtering for patch: " << patchPtr->name().c_str() << " number of atoms: "
+		   << patchContents.size() << endl ;
 
-    zypp::Patch::AtomList atomList = patchPtr->atoms();
-    yuiMilestone() <<  "Filtering for patch: " << patchPtr->name().c_str() << " number of atoms: " << atomList.size() << endl ;
-
-    for ( ZyppPatchContentsIterator it = patchContents.begin();
-	  it != patchContents.end();
+    for ( ZyppPatchContentsIterator it = patchContents.selectableBegin();
+	  it != patchContents.selectableEnd();
 	  ++it )
     {
-	ZyppPkg pkg = tryCastToZyppPkg( *it );
+	ZyppPkg pkg = tryCastToZyppPkg( (*it)->theObj() );
 
 	if ( pkg )
 	{
@@ -541,8 +531,8 @@ bool NCPackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPt
 		if ( inContainer( patchSelectables, sel ) )
 		{
 		    yuiMilestone() << "Suppressing duplicate selectable: " << (*it)->name().c_str() << "-" <<
-			(*it)->edition().asString().c_str() << " " <<
-			(*it)->arch().asString().c_str() << endl;
+			pkg->edition().asString().c_str() << " " <<
+			pkg->arch().asString().c_str() << endl;
 		}
 		else
 		{
@@ -574,30 +564,12 @@ bool NCPackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPt
 		}
 	    }
 	}
-	else  // No ZyppPkg - some other kind of object (script, message)
+	else  // No ZyppPkg - some other kind of object
 	{
-	    if ( zypp::isKind<zypp::Script> ( *it ) )
-	    {
-		vector<string> pkgLine;
-		pkgLine.reserve(4);
+	    y2debug( "Found unknown atom of kind %s: %s",
+		     (*it)->kind().asString().c_str(),
+		     (*it)->name().c_str() );
 
-		pkgLine.push_back( (*it)->name() );
-		pkgLine.push_back( "   " );	// versions empty
-		pkgLine.push_back( "   " );
-		pkgLine.push_back( NCPkgStrings::Script() );
-
-		pkgTable->addLine( S_NoInst,
-				   pkgLine,
-				   ZyppObj(),
-				   ZyppSel()
-				   );
-	    }
-	    else
-	    {
-		y2debug( "Found unknown atom of kind %s: %s",
-			 (*it)->kind().asString().c_str(),
-			 (*it)->name().c_str() );
-	    }
 	}
     }
 
@@ -633,61 +605,26 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
     {
 	displayPatch = true;
     }
-    else if ( filter == "installed" )
+    else if ( filter == "installed" )		// now means: satisfied
     {
-	if ( selectable->hasInstalledObj() )
-		displayPatch = true;
-    }
-    else if ( filter == "installable" )
-    {
-	if ( selectable->hasInstalledObj() ) // patch installed?
+	if ( selectable->hasCandidateObj() &&
+	     selectable->candidateObj().isRelevant() &&
+	     selectable->candidateObj().isSatisfied() )
 	{
-	    // display only if broken
-	    if ( selectable->installedPoolItem().isBroken() )
-	    {
 		displayPatch = true;
-		yuiWarning() << "Installed patch is broken: " << patchPtr->name().c_str() << " - "
-		      << patchPtr->summary().c_str() << endl;
-	    }
-	}
-	else // patch not installed
-
-	{
-	    if (selectable->hasCandidateObj() &&
-		selectable->candidateObj().isSatisfied() )
-	    {
-		//patch not installed, but it is satisfied (updated to the version patch requires)
-		//all that is missing are patch metadata, so let's display the patch
-
-		displayPatch = true;
-
-		yuiMilestone() << "Patch satisfied, but not installed yet: " << patchPtr->name().c_str() << " - "
-		      << patchPtr->summary().c_str() << endl;
-	    }
-	}
-
-	if (selectable->hasCandidateObj()) {
-
-            // isNeeded(): this patch is relevant (contains updates for installed packages)
-	    // isSatisfied(): all packages are installed, therefore the isNeeded() flag
-	    // isn't set. BUT the patch meta data aren't installed and therefore it makes
-	    // sense to install the patch
-	    if ( selectable->candidateObj().status().isInstalled()
-                && selectable->candidateObj().isBroken())
-	    {
-		displayPatch = true;
-	    }
-	    else
-	    {
-		yuiMilestone() << "Patch not needed: " << patchPtr->name().c_str() << " - "
-		      << patchPtr->summary().c_str() << endl;
-	    }
 	}
     }
-    else if ( filter == "new" )
+    else if ( filter == "installable" )		// relevant patches
     {
-	    if ( !selectable->hasInstalledObj() )
+	// only shows patches relevant to the system
+	if ( selectable->hasCandidateObj() && 
+	     selectable->candidateObj().isRelevant() )
+	{
+	    // FIXME: Condition is relevant and broken ??? -> schubi
+	    // and only those that are needed 
+	    if ( ! selectable->candidateObj().isSatisfied() )
 		displayPatch = true;
+	}
     }
     else if ( filter == "security" )
     {
@@ -703,11 +640,6 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
     else if ( filter == "optional" )
     {
 	    if (  patchPtr->category() == "optional" )
-			displayPatch = true;
-    }
-    else if ( filter == "YaST2" )
-    {
-	    if ( patchPtr->category() == "yast" )
 			displayPatch = true;
     }
 
@@ -1498,13 +1430,13 @@ void NCPackageSelector::showDownloadSize()
 
 	if ( patch )
 	{
-	    ZyppPatchContents patchContents( patch );
+	    ZyppPatchContents patchContents( patch->contents() );
 
-	    for ( ZyppPatchContentsIterator contents_it = patchContents.begin();
-		  contents_it != patchContents.end();
+	    for ( ZyppPatchContentsIterator contents_it = patchContents.selectableBegin();
+		  contents_it != patchContents.selectableEnd();
 		  ++contents_it )
 	    {
-		ZyppPkg pkg = tryCastToZyppPkg( *contents_it );
+		ZyppPkg pkg = tryCastToZyppPkg( (*contents_it)->theObj() );
 		ZyppSel sel;
 
 		if ( pkg )

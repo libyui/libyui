@@ -42,8 +42,9 @@ private:
 
     YItemCollection items;
 
-    YMenuItem *installable;
-    YMenuItem *installed;
+    YMenuItem *needed;
+    YMenuItem *satisfied;
+    YMenuItem *unneeded;
     YMenuItem *allPatches;
     YMenuItem *recommended;	
     YMenuItem *security;

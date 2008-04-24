@@ -76,6 +76,11 @@ class YNCursesUI;
 class NCMenuButton;
 class YReplacePoint;
 
+inline bool ic_compare ( char c1, char c2 )
+{
+    return ( toupper( c1 ) == toupper( c2 ) );
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 //	CLASS NAME : NCPackageSelector
@@ -163,10 +168,6 @@ class NCPackageSelector
     NCPkgSelMapper selMapper;
 
     set<string> verified_pkgs;
-
-  protected:
-
-    string getMenuId( YMenuItem *menu );
 
   public:
 	enum FilterMode 

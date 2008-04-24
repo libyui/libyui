@@ -41,8 +41,10 @@ void NCPkgMenuFilter::createLayout()
     // menu items of the filter menu for patches - keep them short
     // and use unique hotkeys from begin: to end:
     // begin:
-    installable = new YMenuItem( _( "&Installable Patches" ) );
-    installed = new YMenuItem( _( "Installed &Patches" ) );
+    needed = new YMenuItem( _( "&Needed Patches" ) );
+    // _( "Re&levant Patches")
+    satisfied = new YMenuItem( _( "&Satisfied Patches" ) );
+    unneeded = new YMenuItem( _( "&Unneeded Patches" ) );
     allPatches = new YMenuItem( _( "&All Patches" ) );
     recommended = new YMenuItem( _( "&Recommended" ) );
     security = new YMenuItem( _( "&Security" ) );
@@ -50,8 +52,8 @@ void NCPkgMenuFilter::createLayout()
     // end:
     search = new YMenuItem( _( "S&earch" ) );
 
-    items.push_back( installable );
-    items.push_back( installed );
+    items.push_back( needed );
+    items.push_back( satisfied );
     items.push_back( allPatches );
     items.push_back( recommended );
     items.push_back( security );
@@ -83,9 +85,9 @@ bool NCPkgMenuFilter::handleEvent ( const NCursesEvent & event)
     // Call the appropriate method from NCPackageSelector for
     // the selected menu entry.
 
-    if ( event.selection == installable )
+    if ( event.selection == needed )
 	pkg->fillPatchList( "installable" );		// show installed patches
-    else if ( event.selection == installed )
+    else if ( event.selection == satisfied )
 	pkg->fillPatchList( "installed" );		// show installed patches
     else if ( event.selection == allPatches )
 	pkg->fillPatchList( "all" );			// show all patches
