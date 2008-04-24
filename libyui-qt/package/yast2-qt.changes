@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Apr 24 10:57:23 CEST 2008 - kmachalkova@suse.cz
+
+- Make YQWizard menus work again  - Qt4 uses triggered() signal 
+  instead of activated() (bnc#367796)
+
+-------------------------------------------------------------------
 Fri Apr 18 17:21:53 CEST 2008 - sh@suse.de
 
 - Fixed bnc #374851: YQMultiProgressMeter integer overflow 
