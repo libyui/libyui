@@ -36,7 +36,8 @@ noinst_HEADERS =			\
 	NCPkgFilterRepo.h		\
 	NCPkgFilterSearch.h		\
 	NCPkgSearchSettings.h		\
-	NCPkgFilterContainer.h		\
+	NCPkgFilterPattern.h		\
+	NCPkgFilterLocale.h		\
 	NCPkgFilterRPMGroups.h		\
 	NCPkgStrings.h			\
 	NCZypp.h
@@ -64,7 +65,8 @@ libpy2ncurses_pkg_la_SOURCES =		\
 	NCPkgFilterRepo.cc		\
 	NCPkgFilterSearch.cc		\
 	NCPkgSearchSettings.cc		\
-	NCPkgFilterContainer.cc		\
+	NCPkgFilterPattern.cc		\
+	NCPkgFilterLocale.cc		\
 	NCPkgFilterRPMGroups.cc		\
 	NCPkgStrings.cc
 
