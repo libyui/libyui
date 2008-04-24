@@ -67,11 +67,12 @@ YQGenericButton::~YQGenericButton()
     }
 }
 
-void
-YQGenericButton::forgetDialog()
+
+void YQGenericButton::forgetDialog()
 {
    _dialog = 0;
 }
+
 
 YQDialog *
 YQGenericButton::dialog()
