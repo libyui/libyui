@@ -127,32 +127,32 @@ protected:
 	UseRegExp
     };
 
-
-    /**
-     * Check if pkg matches the search criteria.
-     **/
-    bool check( ZyppSel	selectable,
-		ZyppObj 	zyppObj,
-		const QRegExp & 		regexp );
-
-    /**
-     * Check if a single pkg attribute matches the search criteria.
-     **/
-    bool check( const string & attribute, const QRegExp & regexp );
-
-    /**
-     * Check capability like
-     * zypp::Resolvable::dep( zypp::Dep::PROVIDES ),
-     * zypp::Resolvable::dep( zypp::Dep::REQUIRES )
-     **/
-    bool check( const zypp::Capabilities & capSet, const QRegExp & regexp );
-
     /**
      * Key press event: Execute search upon 'Return'
      * Reimplemented from QVBox / QWidget.
      **/
     virtual void keyPressEvent( QKeyEvent * event );
 
+    // THESE SHOULD BE DEPRECATED but still used in secondary
+    // filters
+    /**
+     * Check if pkg matches the search criteria.
+     **/
+    bool check( ZyppSel	selectable,
+		ZyppObj 	zyppObj,
+		const QRegExp & 		regexp );
+    
+    /**
+     * Check if a single pkg attribute matches the search criteria.
+     **/
+    bool check( const string & attribute, const QRegExp & regexp );
+    
+    /**
+     * Check capability like
+     * zypp::Resolvable::dep( zypp::Dep::PROVIDES ),
+     * zypp::Resolvable::dep( zypp::Dep::REQUIRES )
+     **/
+    bool check( const zypp::Capabilities & capSet, const QRegExp & regexp );
 
     // Data members
 

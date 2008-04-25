@@ -29,6 +29,8 @@
 #include <QDateTime>
 #include <QKeyEvent>
 
+#include "zypp/PoolQuery.h"
+
 #define YUILogComponent "qt-pkg"
 #include "YUILog.h"
 
@@ -208,6 +210,11 @@ YQPkgSearchFilterView::filter()
 	// Create a progress dialog that is only displayed if the search takes
 	// longer than a couple of seconds ( default: 4 ).
 
+
+        zypp::PoolQuery query;
+        query.addKind(zypp::ResTraits<zypp::Package>::kind);
+        query.addString(_searchText->currentText().toUtf8().data());
+        
 	QProgressDialog progress( _( "Searching..." ),			// text
 				  _( "&Cancel" ),			// cancelButtonLabel
           0,
@@ -216,35 +223,59 @@ YQPkgSearchFilterView::filter()
 				  );
 	progress.setWindowTitle( "" );
 	progress.setMinimumDuration( 2000 ); // millisec
-	QTime timer;
 
-	QRegExp regexp( _searchText->currentText() );
-	regexp.setCaseSensitivity( _caseSensitive->isChecked() ? Qt::CaseSensitive : Qt::CaseInsensitive );
-  regexp.setPatternSyntax( (_searchMode->currentIndex() == UseWildcards) ? QRegExp::Wildcard : QRegExp::RegExp);
+	QTime timer;
+        query.setCaseSensitive( _caseSensitive->isChecked() );
+        
+        switch ( _searchMode->currentIndex() )
+        {
+	case Contains:
+	case BeginsWith:
+	    query.setMatchSubstring();
+            break;
+	case ExactMatch:
+	    break;
+	case UseWildcards:
+            query.setMatchGlob();
+            break;
+	case UseRegExp:
+            query.setMatchRegex();
+	    break;
+	    // Intentionally omitting "default" branch - let gcc watch for unhandled enums
+        }
+        
+        if ( _searchInName->isChecked() )
+            query.addAttribute( zypp::sat::SolvAttr::name );
+        if ( _searchInDescription->isChecked() )
+            query.addAttribute( zypp::sat::SolvAttr::description );
+        if ( _searchInSummary->isChecked() )
+            query.addAttribute( zypp::sat::SolvAttr::summary );
+        if ( _searchInRequires->isChecked() ) {
+        }
+        
+        if ( _searchInProvides->isChecked() ){
+        }
+        
+        // always look in keywords so FATE #120368 is implemented
+        // but make this configurable later
+        query.addAttribute( zypp::sat::SolvAttr::keywords );
 
 	timer.start();
 
-
 	int count = 0;
 
-	for ( ZyppPoolIterator it = zyppPkgBegin();
-	      it != zyppPkgEnd() && ! progress.wasCanceled();
+	for ( zypp::PoolQuery::Selectable_iterator it = query.selectableBegin();
+	      it != query.selectableEnd() && ! progress.wasCanceled();
 	      ++it )
 	{
 	    ZyppSel selectable = *it;
+            ZyppPkg zyppPkg = tryCastToZyppPkg( selectable->theObj() );
 
-	    bool match =
-		check( selectable, selectable->candidateObj(), regexp ) ||
-		check( selectable, selectable->installedObj(), regexp );
-
-	    // If there is neither an installed nor a candidate package, check
-	    // any other instance.
-
-	    if ( ! match                      &&
-		 ! selectable->candidateObj() &&
-		 ! selectable->installedObj()   )
-		check( selectable, selectable->theObj(), regexp );
-
+            if ( zyppPkg )
+            {
+                _matchCount++;
+                emit filterMatch( selectable, zyppPkg );
+            }
 
 	    progress.setValue( count++ );
 
@@ -255,7 +286,7 @@ YQPkgSearchFilterView::filter()
 		// list change all the time, thus display updates are necessary
 		// each time.
 
-		qApp->processEvents();
+		//qApp->processEvents();
 		timer.restart();
 	    }
 	}
@@ -266,7 +297,6 @@ YQPkgSearchFilterView::filter()
 
     emit filterFinished();
 }
-
 
 bool
 YQPkgSearchFilterView::check( ZyppSel	selectable,
@@ -362,7 +392,5 @@ YQPkgSearchFilterView::check( const zypp::Capabilities& capSet, const QRegExp & 
 
     return false;
 }
-
-
 
 #include "YQPkgSearchFilterView.moc"
