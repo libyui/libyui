@@ -466,7 +466,7 @@ YQPkgPatternListItem::init()
             icon = "pattern-generic";
         
         std::string iconpath = YQPackageSelector::iconPath(icon, 32);
-        std::cout << icon << " | "<< iconpath << std::endl;
+        //std::cout << icon << " | "<< iconpath << std::endl;
         
         setIcon(_patternList->iconCol(), QIcon(QString(iconpath.c_str())));
         

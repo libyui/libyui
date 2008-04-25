@@ -314,7 +314,7 @@ YQPkgRpmGroupTagsFilterView::YQPkgRpmGroupTagsFilterView( QWidget * parent )
     setIconSize(QSize(32,32));
     setHeaderLabels( QStringList(_( "Package Groups" )) );
     setRootIsDecorated( false );
-
+    setSortingEnabled( true );
     connect( this, SIGNAL( currentItemChanged     ( QTreeWidgetItem *, QTreeWidgetItem * ) ),
 	     this, SLOT  ( slotSelectionChanged	( QTreeWidgetItem * ) ) );
     fillGroups();
@@ -524,6 +524,12 @@ YQPkgRpmGroupTag::~YQPkgRpmGroupTag()
     // NOP
 }
 
+bool YQPkgRpmGroupTag::operator< ( const QTreeWidgetItem & otherListViewItem ) const
+{
+    const YQPkgRpmGroupTag * otherCategoryItem = dynamic_cast<const YQPkgRpmGroupTag *>(&otherListViewItem);
+
+    return group() > otherCategoryItem->group();
+}
 
 
 #include "YQPkgRpmGroupTagsFilterView.moc"

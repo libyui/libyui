@@ -188,6 +188,7 @@ public:
 
     YPkgGroupEnum group() const { return _group; }
 
+    virtual bool operator< ( const QTreeWidgetItem & otherListViewItem ) const;
 private:
 
     // Data members
