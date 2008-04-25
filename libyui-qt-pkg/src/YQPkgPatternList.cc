@@ -32,6 +32,7 @@
 
 #include "YQi18n.h"
 #include "utf8.h"
+#include "YQPackageSelector.h"
 #include "YQPkgPatternList.h"
 #include "YQIconPool.h"
 #include "YQApplication.h"
@@ -464,8 +465,11 @@ YQPkgPatternListItem::init()
         if ( icon == zypp::Pathname("yast-system").asString() )
             icon = "pattern-generic";
         
-        // FIXME find the icon in a sane way
-        setIcon(_patternList->iconCol(), QIcon(QString("/usr/share/icons/hicolor/32x32/apps/") + icon.c_str() + QString(".png")));
+        std::string iconpath = YQPackageSelector::iconPath(icon, 32);
+        std::cout << icon << " | "<< iconpath << std::endl;
+        
+        setIcon(_patternList->iconCol(), QIcon(QString(iconpath.c_str())));
+        
     }
 
     setStatusIcon();
