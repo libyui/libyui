@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Fri Apr 25 12:14:45 CEST 2008 - dmacvicar@suse.de
+
+- make rpm groups view use packagekit groups
+  with nice icons. Get rid of useless tree
+- add list of suggested and recommended packages
+  (fate #302039)
+- 2.16.39
+
+-------------------------------------------------------------------
 Mon Apr 21 18:05:09 CEST 2008 - dmacvicar@suse.de
 
 - apply language selections after clicking
