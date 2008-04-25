@@ -78,6 +78,7 @@
 #include "YQPkgUpdateProblemFilterView.h"
 #include "YQPkgVersionsView.h"
 #include "zypp/SysContent.h"
+#include "zypp/base/String.h"
 
 #include "QY2ComboTabWidget.h"
 #include "YQDialog.h"
@@ -204,6 +205,11 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
 #endif
 }
 
+std::string
+YQPackageSelector::iconPath( const std::string &name, int size )
+{
+    return zypp::str::form("%s/share/icons/hicolor/%dx%d/apps/%s.png", PREFIX, size, size, name.c_str());
+}
 
 void
 YQPackageSelector::basicLayout()

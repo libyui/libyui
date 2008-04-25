@@ -9,6 +9,7 @@ ADD_DEFINITIONS(
 		-DTHEMEDIR=\\\"${Y2QT_THEMEDIR}\\\"
 		-DQTLIBDIR=\\\"${LIB_INSTALL_DIR}\\\"
 		-DHELPIMAGEDIR=\\\"${CMAKE_INSTALL_PREFIX}/share/YaST2/images\\\"
+		-DPREFIX=\\\"${CMAKE_INSTALL_PREFIX}\\\"
 		)
 SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-format-nonliteral -fmessage-length=0" )
 

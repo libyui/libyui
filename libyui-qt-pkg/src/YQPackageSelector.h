@@ -194,7 +194,11 @@ protected slots:
      **/
     void showProducts();
 
-
+public:
+    /**
+     * returns the full path for an icon of a given size
+     */
+    static std::string iconPath( const std::string &name, int size );
 
 protected:
 
