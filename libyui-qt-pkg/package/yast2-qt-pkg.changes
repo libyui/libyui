@@ -7,8 +7,7 @@ Fri Apr 25 12:14:45 CEST 2008 - dmacvicar@suse.de
   (fate #302039)
 - ported search to sat solver search (much faster)
   and implemented (fate #120368) to search for keywords
-  enabled by default. Looking for requires and provides is
-  broken right now.
+  enabled by default.
 - 2.16.39
 
 -------------------------------------------------------------------
