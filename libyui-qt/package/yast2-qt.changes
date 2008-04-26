@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Sat Apr 26 07:11:22 CEST 2008 - coolo@suse.de
+
+- resubmit clean tar
+
+-------------------------------------------------------------------
 Thu Apr 24 10:57:23 CEST 2008 - kmachalkova@suse.cz
 
 - Make YQWizard menus work again  - Qt4 uses triggered() signal 
