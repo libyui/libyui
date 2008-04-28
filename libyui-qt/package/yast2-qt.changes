@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Apr 28 14:22:24 CEST 2008 - dmacvicar@suse.de
+
+- Make transactions concept better visible: use new
+  set of icons from jimmac
+  (feature #302003)
+- 2.16.43
+
+-------------------------------------------------------------------
 Sat Apr 26 07:11:22 CEST 2008 - coolo@suse.de
 
 - resubmit clean tar
