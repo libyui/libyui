@@ -79,6 +79,8 @@ void NCPkgLocaleTable::fillLocaleList()
         oneLine.push_back( myLocale.locale().name() ); 
 	addLine( myLocale, oneLine);
     }
+
+    myPad()->setOrder(1);
 }
 
 NCPkgLocaleTag* NCPkgLocaleTable::getTag (const int & index )

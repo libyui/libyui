@@ -51,23 +51,17 @@ protected:
     virtual NCursesEvent wHandleInput( wint_t ch );
     
 public:
-
-    enum SelType {
-	S_Pattern,
-	S_Language,
-	S_Unknown
-    };
-    
-    NCPkgFilterPattern( YWidget *parent, YTableHeader *header, NCPackageSelector * pkg, SelType type );
+        
+    NCPkgFilterPattern( YWidget *parent, YTableHeader *header, NCPackageSelector * pkg );
     virtual ~NCPkgFilterPattern();
     
-    void createLayout( YWidget *parent, const string & label );
+    void createLayout( YWidget *parent );
 
     /**
      * Fills the list with the available selections (and the status info)
      * @return bool
      */
-    bool fillContainerList (  SelType type );
+    bool fillPatternList ( );
 
     string showDescription( ZyppObj objPtr );	
    
@@ -75,11 +69,8 @@ public:
      * Shows the popup with the add ons (package categories).
      * @return NCursesEvent
      */
-    void showContainerPackages( );
+    void showPatternPackages( );
 
-private:
-    
-    SelType type;
 };
 
 ///////////////////////////////////////////////////////////////////

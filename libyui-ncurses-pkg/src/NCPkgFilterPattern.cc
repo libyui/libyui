@@ -51,27 +51,13 @@
 //
 //	DESCRIPTION :
 //
-NCPkgFilterPattern::NCPkgFilterPattern( YWidget *parent, YTableHeader *header, NCPackageSelector * pkg, SelType type  )
+NCPkgFilterPattern::NCPkgFilterPattern( YWidget *parent, YTableHeader *header, NCPackageSelector * pkg )
     : NCPkgTable( parent, header )
     , packager( pkg )
-    , type( type )
 {
-  switch ( type ) 
-  {   
-    case S_Pattern: {
-        createLayout( parent, NCPkgStrings::LanguageLabel() );
-	break;
-    }
-    case S_Language: {
-        createLayout( parent, NCPkgStrings::LanguageLabel() );
-	break;
-    }
-    default:
-	break;
-  }
-
+   createLayout( parent );
    setNotify(true);
-   fillContainerList( type );
+   fillPatternList(  );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -95,31 +81,17 @@ NCPkgFilterPattern::~NCPkgFilterPattern()
 //
 //	DESCRIPTION :
 //
-void NCPkgFilterPattern::createLayout( YWidget *parent, const string & label )
+void NCPkgFilterPattern::createLayout( YWidget *parent )
 {
-  YTableHeader * tableHeader = new YTableHeader();
-  
-  setPackager( packager );
 
-  // set status strategy
-  NCPkgStatusStrategy * strat = new SelectionStatStrategy();
+    setPackager( packager );
+    
+    // set status strategy
+    NCPkgStatusStrategy * strat = new SelectionStatStrategy();
+    
+    setTableType( NCPkgTable::T_Selections, strat );
 
-  switch (type) {
-      case S_Pattern: {
-  	  setTableType( NCPkgTable::T_Selections, strat );
-	  break;
-      }
-      case S_Language: {
-	  setTableType( NCPkgTable::T_Languages, strat );
-	  break;
-      }
-      default: {
-	  yuiError() << "Unknown selection type" << endl; 	  
-	  break;
-      }
-  }
-
-  fillHeader();
+    fillHeader();
 
 }
 
@@ -128,7 +100,7 @@ void NCPkgFilterPattern::createLayout( YWidget *parent, const string & label )
 // NCursesEvent & showSelectionPopup ()
 //
 //
-void NCPkgFilterPattern::showContainerPackages( )
+void NCPkgFilterPattern::showPatternPackages( )
 {
     int index = getCurrentItem();
     ZyppObj objPtr = getDataPointer( index );
@@ -137,85 +109,48 @@ void NCPkgFilterPattern::showContainerPackages( )
         // show the package list
         std::set<std::string> packages;
         ZyppPattern patPtr = tryCastToZyppPattern (objPtr);
-        //ZyppLang langPtr = tryCastToZyppLang (objPtr);
+        
         if (patPtr)
         {
-	    int total = 0;
-	    int installed = 0;
-	    	
-
-	    yuiMilestone() << "Show packages belonging to selected pattern: " << getCurrentLine() << endl; 
+            int total = 0;
+            int installed = 0;
+        	
+            yuiMilestone() << "Show packages belonging to selected pattern: " << getCurrentLine() << endl; 
             NCPkgTable * packageList = packager->PackageList();
-
+        
             if ( !packageList )
             {
-                yuiError() << "Widget is not a valid NCPkgTable widget" << endl;
-            	return;
+        	   yuiError() << "Widget is not a valid NCPkgTable widget" << endl;
+        	   return;
             }
-    	    packageList->itemsCleared ();
-
-	    zypp::Pattern::Contents related ( patPtr->contents() );
-    	    for ( zypp::Pattern::Contents::Selectable_iterator it = related.selectableBegin();
-                  it != related.selectableEnd();
-                  ++it )
+            packageList->itemsCleared ();
+        
+            zypp::Pattern::Contents related ( patPtr->contents() );
+            for ( zypp::Pattern::Contents::Selectable_iterator it = related.selectableBegin();
+        	  it != related.selectableEnd();
+        	  ++it )
             {
-                ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
-                if ( zyppPkg )
-                {
-	    	    packageList->createListEntry( zyppPkg, *it );
-                    if ( (*it)->installedSize() > 0 )
-                        ++installed;
-                    ++total;
-		    			
-		}
-	    }
-	    packager->FilterDescription()->setText ( showDescription( objPtr ) );
-	    char buf[100];
-	    sprintf(buf, "%d of %d packages installed", installed, total);
-
-	    packager->PatternLabel()->setLabel ( buf );
-
-    	    packageList->setCurrentItem( 0 );
-    	    packageList->drawList();
-    	    packageList->showInformation();
-        }
- #if 0 //FIXME	
-        else if (langPtr)
-        {
-	    string currentLang = langPtr->name();
-    
-	    for ( ZyppPoolIterator it = zyppPkgBegin(); it != zyppPkgEnd(); ++it )
-            {
-                ZyppObj zyppObj = (*it)->theObj();
-    
-                if ( zyppObj )
-                {
-		    //find all 'freshens' dependencies of this object
-		    zypp::CapSet freshens = zyppObj->dep( zypp::Dep::FRESHENS );
-    
-		    for ( zypp::CapSet::const_iterator cap_it = freshens.begin();
-			  cap_it != freshens.end();
-			  ++cap_it )
-                    {
-                        if ( (*cap_it).index() == currentLang ) // obj freshens this language
-                        {
-                            ZyppPkg pkg = tryCastToZyppPkg( zyppObj );
-    
-                            if ( pkg )
-                            {
-                                NCDBG <<  "Found pkg " << pkg->name().c_str() << "for lang "
-				      << currentLang.c_str() << endl;
-    
-				packages.insert( pkg->name() );
-                            }
-                        }
-                    }
-                }
+        	    ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
+        	    if ( zyppPkg )
+        	    {
+        	        packageList->createListEntry( zyppPkg, *it );
+        	        if ( (*it)->installedSize() > 0 )
+        	    	++installed;
+        	        ++total;
+        	    			
+        	    }
             }
-    
+            packager->FilterDescription()->setText ( showDescription( objPtr ) );
+            char buf[100];
+            sprintf(buf, "%d of %d packages installed", installed, total);
+        
+            packager->PatternLabel()->setLabel ( buf );
+        
+            packageList->setCurrentItem( 0 );
+            packageList->drawList();
+            packageList->showInformation();
         }
-#endif
-    }
+    }    
 }
 
 
@@ -228,34 +163,19 @@ void NCPkgFilterPattern::showContainerPackages( )
 //
 string  NCPkgFilterPattern::getCurrentLine( )
 {
-    //if ( !sel )
+//if ( !sel )
 //	return "";
 
     int index = getCurrentItem();
     ZyppObj selPtr = getDataPointer(index);
-
+    
     return ( selPtr?selPtr->summary(LOCALE):"" );
 }
 
 string NCPkgFilterPattern::showDescription( ZyppObj objPtr )
 {
-   switch (type)
-   {
-	case S_Pattern:
-	{
-	    ZyppPattern patPtr = tryCastToZyppPattern (objPtr);
-	    return patPtr->description(); 
-	}
-	#if 0
-        case S_Language:
-	{
-	    ZyppLanguage langPtr = tryCastToZyppLang (objPtr);
-	    return ( NCPkgStrings::LanguageDescription() + langPtr->name() );
-	}
-	#endif
-	default:
-	    break;
-   }
+    ZyppPattern patPtr = tryCastToZyppPattern (objPtr);
+    return patPtr->description(); 
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -275,22 +195,22 @@ NCursesEvent NCPkgFilterPattern::wHandleInput( wint_t ch )
     
     switch ( ch )
     {
-	case KEY_UP:
-	case KEY_DOWN:
-	case KEY_NPAGE:
-	case KEY_PPAGE:
-	case KEY_END:
-	case KEY_HOME: {
-	    ret = NCursesEvent::handled;
-	    break;
-	}
-
-	default:
-	   ret = NCPkgTable::wHandleInput( ch ) ;
-     }
-     
-     showContainerPackages( );
-     return ret;
+    case KEY_UP:
+    case KEY_DOWN:
+    case KEY_NPAGE:
+    case KEY_PPAGE:
+    case KEY_END:
+    case KEY_HOME: {
+        ret = NCursesEvent::handled;
+        break;
+    }
+    
+    default:
+       ret = NCPkgTable::wHandleInput( ch ) ;
+    }
+    
+    showPatternPackages( );
+    return ret;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -302,28 +222,13 @@ bool orderPattern( ZyppSel slb1, ZyppSel slb2 )
     ZyppPattern ptr1 = tryCastToZyppPattern (slb1->theObj());
     ZyppPattern ptr2 = tryCastToZyppPattern (slb2->theObj());
     if ( !ptr1 || !ptr2 )
-	return false;
+        return false;
     else
     {
-	return ptr1->order() < ptr2->order();
+        return ptr1->order() < ptr2->order();
     }
 }
 
-///////////////////////////////////////////////////////////////////
-//
-// OrderFuncLang 
-//
-#if 0
-bool orderLang( ZyppSel slb1, ZyppSel slb2 )
-{
-    ZyppLang ptr1 = tryCastToZyppLang (slb1->theObj());
-    ZyppLang ptr2 = tryCastToZyppLang (slb2->theObj());
-    if ( !ptr1 || !ptr2 )
-	return false;
-    else
-	return ptr1->name() < ptr2->name();
-}
-#endif
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -332,51 +237,28 @@ bool orderLang( ZyppSel slb1, ZyppSel slb2 )
 //
 //	DESCRIPTION :
 //
-bool NCPkgFilterPattern::fillContainerList(  SelType type  )
+bool NCPkgFilterPattern::fillPatternList(  )
 {
-//    if ( !sel )
-//	return false;
 
     ZyppPoolIterator i, b, e;
     list<ZyppSel> slbList;
     
-    switch ( type )
+    for ( i = zyppPatternsBegin () ; i != zyppPatternsEnd ();  ++i )
     {
-	case S_Pattern:
-	    {
-		for ( i = zyppPatternsBegin () ; i != zyppPatternsEnd ();  ++i )
-		{
-		    ZyppObj resPtr = (*i)->theObj();	    
-		    bool show;
-
-		    ZyppPattern patPtr = tryCastToZyppPattern (resPtr);
-		    show = patPtr && patPtr->userVisible ();
-
-		    if (show)
-		    {
-			yuiMilestone() << resPtr->kind () <<": " <<  resPtr->name()
-			      << ", initial status: " << (*i)->status() << endl;
-
-//			pkgLine.push_back( resPtr->summary(LOCALE) ); // the description
-			slbList.push_back (*i);
-		    }
-		}
-		slbList.sort( orderPattern );
-		break;
-	    }
-        case S_Language:
-	    {
-		const zypp::LocaleSet & available_locales( zypp::ResPool::instance().getAvailableLocales() );
-		for_( it, available_locales.begin(), available_locales.end() )
-		{
-		    zypp::sat::LocaleSupport myLocale( *it );
-		    yuiMilestone() << myLocale.locale().name() << " " << myLocale.locale().code() << endl;
-		}
-		break;
-	    }
-	default:
-	    yuiError() << "Container type not handled: " << type << endl;
+        ZyppObj resPtr = (*i)->theObj();	    
+        bool show;
+    
+        ZyppPattern patPtr = tryCastToZyppPattern (resPtr);
+        show = patPtr && patPtr->userVisible ();
+    
+        if (show)
+        {
+    	    yuiMilestone() << resPtr->kind () <<": " <<  resPtr->name()
+    	      << ", initial status: " << (*i)->status() << endl;
+    	    slbList.push_back (*i);
+        }
     }
+    slbList.sort( orderPattern );
     
     list<ZyppSel>::iterator listIt;
     vector<string> pkgLine;
@@ -385,20 +267,8 @@ bool NCPkgFilterPattern::fillContainerList(  SelType type  )
 	ZyppObj resPtr = (*listIt)->theObj();
 	pkgLine.clear();
 
-	switch (type) {
-	    case S_Pattern: {
-		pkgLine.push_back( resPtr->summary(LOCALE) ); // the description
-		break;	
-	    }
-	    case S_Language: {
-		pkgLine.push_back( resPtr->name() );
-		pkgLine.push_back( resPtr->summary(LOCALE) );
-		break;
-	    }
-	    default:
-		break;
-	}
-
+	pkgLine.push_back( resPtr->summary(LOCALE) ); // the description
+	   
 	addLine( (*listIt)->status(),	// the status
 		      pkgLine,
 		      resPtr, // ZyppPattern

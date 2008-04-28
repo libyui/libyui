@@ -831,10 +831,10 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 	case Patterns:
 	{
 	   YTableHeader *hhh = new YTableHeader ();
-	   patternPopup = new NCPkgFilterPattern( replPoint, hhh, this, NCPkgFilterPattern::S_Pattern );
+	   patternPopup = new NCPkgFilterPattern( replPoint, hhh, this );
 	   patternPopup->setSize( oldSize.Sze.W, oldSize.Sze.H );
 	   patternPopup->Redraw();
-	   patternPopup->showContainerPackages();
+	   patternPopup->showPatternPackages();
 	   break;
 	}
 	case Languages:
@@ -843,7 +843,7 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 	   languagePopup = new NCPkgLocaleTable( replPoint, hhh, this );
 	   languagePopup->setSize( oldSize.Sze.W, oldSize.Sze.H );
 	   languagePopup->Redraw();
-	   //languagePopup->showContainerPackages();
+	   languagePopup->showLocalePackages();
 	   break;
 	}
 	case Repositories:
@@ -1608,7 +1608,7 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
 
     replPoint = YUI::widgetFactory()->createReplacePoint( vv );
     YTableHeader *hhh = new YTableHeader();
-    patternPopup = new NCPkgFilterPattern( replPoint, hhh, this, NCPkgFilterPattern::S_Pattern );
+    patternPopup = new NCPkgFilterPattern( replPoint, hhh, this );
 
     YAlignment *l1 = YUI::widgetFactory()->createLeft( vbox_left );
     patternLabel = new NCLabel( l1, "                           " );
@@ -1714,7 +1714,7 @@ bool NCPackageSelector::fillDefaultList( )
 	case NCPkgTable::T_Packages: {
 
 		pkgList->setVisibleInfo(NCPkgTable::I_Technical);
-	        patternPopup->showContainerPackages();
+	        patternPopup->showPatternPackages();
 		// show the package inforamtion of the current item
 		pkgList->showInformation ();
 	        break;
