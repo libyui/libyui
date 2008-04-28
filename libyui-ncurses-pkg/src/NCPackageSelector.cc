@@ -826,6 +826,10 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 	searchPopup = 0;
     }
 
+    //replace the description area already here, so the next selected
+    //filter can update it right away (#377857)
+    replaceFilterDescr( mode == Search );
+
     switch (mode)
     {
 	case Patterns:
@@ -894,12 +898,10 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 
    if (mode == Search)
    {
-       replaceFilterDescr( true);
        pkgList->itemsCleared();
    }
    else
    {
-       replaceFilterDescr( false );
        pkgList->setCurrentItem(0);
        pkgList->showInformation ();
    }
