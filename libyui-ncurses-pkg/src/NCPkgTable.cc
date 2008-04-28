@@ -441,7 +441,7 @@ bool NCPkgTable::updateTable()
 //
 static bool slbHasInstalledObj (const ZyppSel & slb)
 {
-    return slb->hasInstalledObj ();
+    return ! slb->installedEmpty ();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -564,7 +564,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
     {
 	case T_PatchPkgs: {
     	    // if the package is installed, get the installed version 
-	    if ( slbPtr->hasInstalledObj() )
+	    if ( ! slbPtr->installedEmpty() )
 	    {
 		instVersion = slbPtr->installedObj()->edition().asString();
 	    }
@@ -587,7 +587,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 	    
 	    status = slbPtr->status(); // the package status
 	    yuiMilestone() << "Status of " << slbPtr->name() << ": " << status << endl;
-	    zypp::ByteCount size = pkgPtr->size();     	// installed size
+	    zypp::ByteCount size = pkgPtr->installsize();     	// installed size
 	    pkgLine.push_back( size.asString( 8 ) );  // format size
 
 	    break;
@@ -606,7 +606,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 
 	    // set package status either to S_NoInst or S_KeepInstalled
 	    status = S_NoInst;
-	    if ( slbPtr->hasInstalledObj() )
+	    if ( ! slbPtr->installedEmpty() )
 	    {
 		if ( pkgPtr->edition() == slbPtr->installedObj()->edition()	&&
 		     pkgPtr->arch() == slbPtr->installedObj()->arch()	)
@@ -615,7 +615,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 		}
 	    }
 	    
-	    zypp::ByteCount size = pkgPtr->size();     	// installed size
+	    zypp::ByteCount size = pkgPtr->installsize();     	// installed size
 	    pkgLine.push_back( size.asString( 8 ) );  // format size
 	    pkgLine.push_back( pkgPtr->arch().asString()); // architecture
 	    
@@ -626,7 +626,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 
 	    // if the package is installed, get the installed version 
 	    pkgLine.push_back( pkgPtr->summary() );  	// short description
-	    if ( slbPtr->hasInstalledObj() )
+	    if ( ! slbPtr->installedEmpty() )
 	    {
 		instVersion = slbPtr->installedObj()->edition().version();
 
@@ -649,7 +649,7 @@ bool NCPkgTable::createListEntry ( ZyppPkg pkgPtr, ZyppSel slbPtr )
 	    
 	    status = slbPtr->status(); // the package status
 
-	    zypp::ByteCount size = pkgPtr->size(); // installed size
+	    zypp::ByteCount size = pkgPtr->installsize(); // installed size
 	    pkgLine.push_back( size.asString( 8 ) );  	// format size
 
 // Selectable does not have source_install
@@ -1055,7 +1055,7 @@ bool NCPkgTable::fillAvailableList ( ZyppSel slb )
     // clear the package table
     itemsCleared ();
 
-    yuiDebug() << "Number of available packages: " << slb->availableObjs() << endl;
+    yuiDebug() << "Number of available packages: " << slb->availableSize() << endl;
 
     // show all availables
     zypp::ui::Selectable::available_iterator
@@ -1074,7 +1074,7 @@ bool NCPkgTable::fillAvailableList ( ZyppSel slb )
 	}
 	createListEntry( tryCastToZyppPkg (*it), slb );
     }
-    if ( slb->hasInstalledObj() && addInstalled )
+    if ( (! slb->installedEmpty()) && addInstalled )
     {
 	createListEntry( tryCastToZyppPkg (slb->installedObj()), slb );
     }

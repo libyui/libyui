@@ -1486,7 +1486,7 @@ void NCPackageSelector::showDownloadSize()
 	  ++it )
     {
 	if ( (*it)->candidateObj() )
-	    totalSize += (*it)->candidateObj()->size();
+	    totalSize += (*it)->candidateObj()->installsize();
     }
 
     // show the download size
