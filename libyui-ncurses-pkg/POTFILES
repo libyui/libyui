@@ -6,7 +6,7 @@
 ./src/NCPkgMenuView.cc
 ./src/NCPkgPopupDiskspace.cc
 ./src/NCPkgFilterSearch.cc
-./src/NCPkgFilterContainer.cc
+./src/NCPkgFilterPattern.cc
 ./src/NCPkgFilterMain.cc
 ./src/NCPkgPopupDeps.cc
 ./src/NCPkgMenuDeps.cc
