@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Mon Apr 28 17:34:54 CEST 2008 - kmachalkova@suse.cz
+
+- Locale (prev. Language) support + displaying locale-related pkgs 
+  re-enabled  
+- Correctly replace filter description area when switching between
+  filters (bnc#377857)
+- 2.16.8
+
+-------------------------------------------------------------------
 Mon Apr 21 15:22:01 CEST 2008 - kmachalkova@suse.cz
 
 - Pattern content (required, recommended, suggested pkgs) visible 
