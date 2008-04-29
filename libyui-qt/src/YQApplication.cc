@@ -406,20 +406,14 @@ string
 YQApplication::askForExistingDirectory( const string & startDir,
 					const string & headline )
 {
-#if 0
     normalCursor();
-#endif
 
     QString dirName =
 	QFileDialog::getExistingDirectory( 0,				// parent
 	 				   fromUTF8( headline ) ,	// caption
 					   fromUTF8( startDir ));	// dir
 
-
-
-#if 0
     busyCursor();
-#endif
 
     return toUTF8( dirName );
 }
@@ -430,19 +424,14 @@ YQApplication::askForExistingFile( const string & startWith,
 				   const string & filter,
 				   const string & headline )
 {
-#if 0
     normalCursor();
-#endif
 
     QString fileName =
 	QFileDialog::getOpenFileName( 0, 				// parent
 				      fromUTF8( headline ) ,		// caption
 				      fromUTF8( startWith ),		// dir
 				      fromUTF8( filter ));		// filter
-
-#if 0
     busyCursor();
-#endif
 
     return toUTF8( fileName );
 }
@@ -453,16 +442,12 @@ YQApplication::askForSaveFileName( const string & startWith,
 				   const string & filter,
 				   const string & headline )
 {
-#if 0
     normalCursor();
-#endif
 
     QString fileName = askForSaveFileName( fromUTF8( startWith ),
 					   fromUTF8( filter ),
 					   fromUTF8( headline ) );
-#if 0
     busyCursor();
-#endif
 
     return toUTF8( fileName );
 }

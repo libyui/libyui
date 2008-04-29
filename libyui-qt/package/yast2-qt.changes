@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Apr 29 17:05:40 CEST 2008 - sh@suse.de
+
+- Fixed bnc #383672 - Busy cursor in file dialogs
+- V 2.16.44 
+
+-------------------------------------------------------------------
 Mon Apr 28 14:22:24 CEST 2008 - dmacvicar@suse.de
 
 - Make transactions concept better visible: use new
