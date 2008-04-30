@@ -125,12 +125,12 @@ bool NCPkgMenuDeps::setAutoCheck()
 {
     if ( pkg->isAutoCheck() )
     {
-        itemAt( 2 )->setLabel( _("&Automatic Dependency Check [ ]") );
+        itemAt( 1 )->setLabel( _("&Automatic Dependency Check [ ]") );
 	pkg->AutoCheck( false );
     }
     else
     {
-        itemAt( 2 )->setLabel( _("&Automatic Dependency Check [x]") );
+        itemAt( 1 )->setLabel( _("&Automatic Dependency Check [x]") );
 	pkg->AutoCheck( true );
     }
 
