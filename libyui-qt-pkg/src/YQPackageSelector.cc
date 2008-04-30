@@ -727,12 +727,18 @@ YQPackageSelector::addMenus()
 	_patchList->addAllInListSubMenu( _patchMenu );
     }
 
-    // Repository menu
-    _repositoryMenu = new QMenu( _menuBar );
-    Q_CHECK_PTR( _repositoryMenu );
-    action = _menuBar->addMenu( _repositoryMenu );
-    action->setText(_( "&Repositories" ));
-    _repositoryMenu->addAction( _( "Repository &Manager..." ), this, SLOT( repoManager() ), Qt::CTRL + Qt::Key_M );
+    // add repository menu if requested
+    if (repoMgrEnabled())
+    {
+	yuiDebug() << "Adding the repo manager menu" << std::endl;
+
+	// Repository menu
+	_repositoryMenu = new QMenu( _menuBar );
+	Q_CHECK_PTR( _repositoryMenu );
+	action = _menuBar->addMenu( _repositoryMenu );
+	action->setText(_( "&Repositories" ));
+	_repositoryMenu->addAction( _( "Repository &Manager..." ), this, SLOT( repoManager() ), Qt::CTRL + Qt::Key_M );
+    }
 
     //
     // Extras menu
