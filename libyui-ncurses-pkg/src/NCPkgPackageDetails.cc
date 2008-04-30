@@ -141,7 +141,7 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
     
     // show the size
     text += NCPkgStrings::Size();
-    text += pkgPtr->size().asString();
+    text += pkgPtr->installsize().asString();
     text +=  "  ";
     
     ZyppPkg package = tryCastToZyppPkg (pkgPtr);
@@ -258,8 +258,8 @@ bool NCPkgPackageDetails::patchDescription( ZyppObj objPtr, ZyppSel selectable )
     descr += patchPtr->edition().asString();
     descr += "<br>";
 
-    if ( selectable->hasInstalledObj()
-	 && selectable->installedPoolItem().isBroken() )
+    if ( !selectable->installedEmpty()
+	 && selectable->installedObj().isBroken() )
     {
 	descr += _( "----- this patch is broken !!! -----" );
 	descr += "<br>";

@@ -108,7 +108,7 @@ bool NCPkgStatusStrategy::keyToStatus( const int & key,
     bool valid = true;
     ZyppStatus retStat = S_NoInst;
     ZyppStatus oldStatus = getPackageStatus( slbPtr, objPtr );
-    bool installed = slbPtr->hasInstalledObj();
+    bool installed = !slbPtr->installedEmpty();
     
     // get the new status
     switch ( key )
@@ -343,7 +343,7 @@ bool PatchStatStrategy::keyToStatus( const int & key,
     bool valid = true;
     ZyppStatus retStat = S_NoInst;
     ZyppStatus oldStatus = getPackageStatus( slbPtr, objPtr );
-    bool installed = slbPtr->hasInstalledObj();
+    bool installed = !slbPtr->installedEmpty();
 	
     // get the new status
     switch ( key )

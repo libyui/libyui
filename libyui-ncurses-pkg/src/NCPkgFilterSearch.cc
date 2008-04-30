@@ -122,7 +122,6 @@ void NCPkgFilterSearch::createLayout( YWidget *parent )
 string  NCPkgFilterSearch::getSearchExpression() const
 {
     string value;
-    unsigned int i = 0;
 
     if ( searchExpr )
     {
