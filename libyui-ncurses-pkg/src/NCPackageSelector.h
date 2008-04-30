@@ -134,6 +134,7 @@ class NCPackageSelector
     NCPkgMenuView *viewMenu;
     NCPkgMenuExtras *extrasMenu;
     NCPkgMenuHelp *helpMenu;
+    NCPushButton *youHelpButton;
     NCPkgFilterMain *filterMain;
     NCPkgMenuAction *actionMenu;
     NCPkgMenuFilter *filterMenu;

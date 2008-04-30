@@ -94,6 +94,7 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, YWidget * wRoot, long mod
       , viewMenu( 0 )
       , extrasMenu( 0 )
       , helpMenu( 0 )
+      , youHelpButton( 0 )
       , filterMain( 0 )
       , actionMenu( 0 )
       , filterMenu( 0 )
@@ -110,26 +111,6 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, YWidget * wRoot, long mod
       , visibleInfo( 0 )
 
 {
-    // FIXME - remove this code when everthiong is handled by handleEvent() !
-    //         (the eventHandlerMap is obsolete)
-
-    // Fill the handler map
-
-#if 0
-    eventHandlerMap[ NCPkgStrings::Search()->toString() ]   = &NCPackageSelector::SearchHandler;
-#endif
-
-    // Information menu -> DONE
-
-    // Action menu -> DONE
-
-    // Etc. menu -> DONE
-
-    // Help menu
-#if 0
-      eventHandlerMap[ NCPkgStrings::PatchHelp()->toString() ]  = &NCPackageSelector::YouHelpHandler;
-#endif
-      
     if ( modeFlags & YPkg_OnlineUpdateMode )
 	youMode = true;
 
@@ -282,6 +263,8 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
 	    retVal = OkButtonHandler( event );
 	else if ( event.widget == cancelButton )
 	    retVal = CancelHandler( event );
+	else if ( event.widget == youHelpButton )
+	    retVal = YouHelpHandler( event );
 	else if ( event.widget == filterPopup )
 	{   
 	    retVal = filterPopup->handleEvent();
@@ -995,11 +978,11 @@ bool NCPackageSelector::YouHelpHandler( const NCursesEvent&  event )
     text += NCPkgStrings::YouHelp3();
 
     // open the popup with the help text
-    NCPopupInfo * youHelp = new NCPopupInfo( wpos( NCurses::lines()/3, NCurses::cols()/6 ),
+    NCPopupInfo * youHelp = new NCPopupInfo( wpos( (NCurses::lines()*8)/100, (NCurses::cols())*18/100 ),
 					     NCPkgStrings::YouHelp(),
 					     text
 					     );
-    youHelp->setNiceSize( (NCurses::cols()*2)/3, NCurses::lines()/3 );
+    youHelp->setNiceSize( (NCurses::cols()*65)/100, (NCurses::lines()*85)/100 );
     youHelp->showInfoPopup( );
 
     YDialog::deleteTopmostDialog();
@@ -1526,7 +1509,7 @@ void NCPackageSelector::createYouLayout( YWidget * selector )
     viewMenu = new NCPkgMenuView( left3, NCPkgStrings::View(), this);
 
     YAlignment * left4 = YUI::widgetFactory()->createLeft( hSplit );
-    extrasMenu = new NCPkgMenuExtras( left4, NCPkgStrings::Extras(), this);
+    depsMenu = new NCPkgMenuDeps( left4, NCPkgStrings::Deps(), this);
 
        // add the package table
     YTableHeader * tableHeader = new YTableHeader();
@@ -1563,10 +1546,15 @@ void NCPackageSelector::createYouLayout( YWidget * selector )
     infoText = new NCPkgPackageDetails( replacePoint, " ", this );
     YUI_CHECK_NEW( infoText );
 
-    YLayoutBox * hSplit5 = YUI::widgetFactory()->createHBox( vSplit );
+    YLayoutBox * bottom_bar = YUI::widgetFactory()->createHBox( vSplit );
+    YAlignment *ll = YUI::widgetFactory()->createLeft( bottom_bar );
 
-    helpMenu = new NCPkgMenuHelp (hSplit5, _("&Help"));
-    YUI_CHECK_NEW( helpMenu );
+    youHelpButton = new NCPushButton ( ll, _("&Help"));
+    YUI_CHECK_NEW( youHelpButton );
+    youHelpButton->setFunctionKey( 1 );
+    
+    YAlignment *r = YUI::widgetFactory()->createRight( bottom_bar );
+    YLayoutBox * hSplit5 = YUI::widgetFactory()->createHBox( r );
     
     // add the Cancel button
     cancelButton = new NCPushButton( hSplit5, _( "&Cancel" ) );

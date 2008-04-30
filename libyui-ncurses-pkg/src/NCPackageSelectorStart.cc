@@ -148,8 +148,6 @@ void NCPackageSelectorStart::showDefaultList()
 	{
 	    // show the required diskspace
 	    packager->showDiskSpace();
-	    // FIXME - show appropriate filter menu entries (with patterns or selections)
-	    //         This may be obsolete if selections are surely obsolete
 	    // packager->createFilterMenu();
 	}
     }
