@@ -58,24 +58,6 @@ public:
      * Reimplemented from YWidget.
      **/
     virtual void setSize( int newWidth, int newHeight );
-
-
-private slots:
-
-    /**
-     * Triggered when one of the radio buttons changed state.
-     * This implements the radio box behaviour, i.e. unselects all but the last
-     * selected radio button.
-     **/
-    void radioButtonClicked( bool newState );
-
-
-private:
-
-    /**
-     * Used to prevent infinite recursion due to signal race conditions.
-     **/
-    bool _recursive;
 };
 
 

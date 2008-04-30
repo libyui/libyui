@@ -23,12 +23,12 @@
 
 #include "YQRadioButtonGroup.h"
 #include "YQRadioButton.h"
+#include "qstring.h"
 
 
 YQRadioButtonGroup::YQRadioButtonGroup( YWidget * parent )
     : QWidget( (QWidget *) parent->widgetRep() )
     , YRadioButtonGroup( parent )
-    , _recursive( false )
 {
     setWidgetRep( this );
 }
@@ -47,13 +47,8 @@ YQRadioButtonGroup::addRadioButton( YRadioButton * button )
 
     if ( button->value() )		// if this new button is active
     {
-	uncheckOtherButtons( button );	// make it the only active
+	uncheckOtherButtons( button );	// make it the only active one
     }
-
-    QRadioButton * radio_button = dynamic_cast<YQRadioButton *>( button );
-
-    connect ( radio_button,	SIGNAL ( toggled           ( bool ) ),
-	      this, 		SLOT   ( radioButtonClicked( bool ) ) );
 }
 
 
@@ -70,49 +65,6 @@ YQRadioButtonGroup::setSize( int newWidth, int newHeight )
 {
     resize( newWidth, newHeight );
     YRadioButtonGroup::setSize( newWidth, newHeight );
-}
-
-
-void
-YQRadioButtonGroup::radioButtonClicked( bool newState )
-{
-    // Prevent infinite recursion: YQRadioButton::setValue() might cause Qt
-    // signals that would cause recursion to this place.
-
-    if ( _recursive )
-	return;
-
-    _recursive = true;
-
-    QRadioButton * senderButton = (QRadioButton *) sender();
-
-    // Implement radio box behaviour: Uncheck all other radio buttons
-
-    for ( YRadioButtonListConstIterator it = radioButtonsBegin();
-	  it != radioButtonsEnd();
-	  ++it )
-    {
-	YQRadioButton * radioButton = dynamic_cast<YQRadioButton *> (*it);
-
-	if ( radioButton )
-	{
-	    if ( radioButton == senderButton )
-	    {
-		// If this button has been clicked, it is to be the RadioBox's
-		// active button - regardless of newState. This is to avoid
-		// RadioBoxes where no single button is active; otherwise the
-		// second click would deactivate the only active button.
-
-		radioButton->setValue( true );
-	    }
-	    else
-	    {
-		radioButton->setValue( false );
-	    }
-	}
-    }
-
-    _recursive = false;
 }
 
 

@@ -50,6 +50,12 @@ YQRadioButton::YQRadioButton( YWidget * 	parent,
 {
     setWidgetRep( this );
 
+    // QRadioButton uses its own logic by default to make sure that only one
+    // button of a radio box is checked at any time, but this interferes with
+    // YRadioButtonGroup. Let YRadioButtonGroup and YQRadioButton::changed()
+    // handle this.
+    setAutoExclusive( false ); 
+    
     setChecked( checked );
 
     installEventFilter(this);
@@ -98,6 +104,7 @@ void YQRadioButton::setValue( bool newValue )
 {
     YQSignalBlocker sigBlocker( this );
 
+    // yuiDebug() << "Setting " << this << (newValue ? " on" : " off") << endl;
     setChecked( newValue );
 
     if ( newValue )
@@ -132,12 +139,19 @@ bool YQRadioButton::setKeyboardFocus()
 }
 
 
-// slots
-
 void YQRadioButton::changed( bool newState )
 {
-    if ( notify() && newState )
-	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+    if ( newState )
+    {
+	yuiDebug() << "User set " << this << ( newState ? " on" : " off" ) << endl;
+	YRadioButtonGroup * group = buttonGroup();
+
+	if ( group )
+	    group->uncheckOtherButtons( this );
+	
+	if ( notify() )
+	    YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
+    }
 }
 
 
