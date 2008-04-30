@@ -2,7 +2,8 @@
 Wed Apr 30 15:21:09 CEST 2008 - lslezak@suse.cz
 
 - display "Repository" menu only when requested by `opt(`repoMgr)
-  opiton (bnc#381956)
+  option (bnc#381956)
+- V 2.16.40
 
 -------------------------------------------------------------------
 Fri Apr 25 12:14:45 CEST 2008 - dmacvicar@suse.de
