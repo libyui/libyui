@@ -210,6 +210,7 @@ bool NCPkgMenuExtras::exportToFile()
         return true;
     }
 
+    return false;
 }
 
 bool NCPkgMenuExtras::importFromFile()
@@ -302,4 +303,5 @@ bool NCPkgMenuExtras::showDiskSpace()
     YDialog::deleteTopmostDialog();
     //FIXME: move focus back to pkg table?
   
+    return true;
 }
