@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon May  5 14:31:15 CEST 2008 - kmachalkova@suse.cz
+
+- Improved YOU layout, showing YOU help ( by gs )
+- The rest of deprecated libzypp stuff removed (by gs)
+- PkgMenuExtras: correct ret. value to fix build (by coolo)
+- 2.16.9
+
+-------------------------------------------------------------------
 Mon Apr 28 17:34:54 CEST 2008 - kmachalkova@suse.cz
 
 - Locale (prev. Language) support + displaying locale-related pkgs 
