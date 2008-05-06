@@ -19,6 +19,8 @@
 
 #include "NCPkgMenuFilter.h"
 #include "NCPkgPatchSearch.h"
+#include "NCPkgTable.h"
+#include "NCPackageSelector.h"
 
 /*
   Textdomain "ncurses-pkg"
@@ -43,7 +45,7 @@ void NCPkgMenuFilter::createLayout()
     // begin:
     needed = new YMenuItem( _( "&Needed Patches" ) );
     // _( "Re&levant Patches")
-    satisfied = new YMenuItem( _( "&Satisfied Patches" ) );
+    // _( "&Satisfied Patches" ) );
     unneeded = new YMenuItem( _( "&Unneeded Patches" ) );
     allPatches = new YMenuItem( _( "&All Patches" ) );
     recommended = new YMenuItem( _( "&Recommended" ) );
@@ -53,7 +55,7 @@ void NCPkgMenuFilter::createLayout()
     search = new YMenuItem( _( "S&earch" ) );
 
     items.push_back( needed );
-    items.push_back( satisfied );
+    items.push_back( unneeded );
     items.push_back( allPatches );
     items.push_back( recommended );
     items.push_back( security );
@@ -86,17 +88,17 @@ bool NCPkgMenuFilter::handleEvent ( const NCursesEvent & event)
     // the selected menu entry.
 
     if ( event.selection == needed )
-	pkg->fillPatchList( "installable" );		// show installed patches
-    else if ( event.selection == satisfied )
-	pkg->fillPatchList( "installed" );		// show installed patches
+	pkg->fillPatchList( F_Needed );		// show needed patches
+    else if ( event.selection == unneeded )
+	pkg->fillPatchList( F_Unneeded );	// show unneeded patches
     else if ( event.selection == allPatches )
-	pkg->fillPatchList( "all" );			// show all patches
+	pkg->fillPatchList( F_All );			// show all patches
     else if ( event.selection == recommended )
-	pkg->fillPatchList( "recommended" );		// patch kind recommended
+	pkg->fillPatchList( F_Recommended );		// patch kind recommended
     else if ( event.selection == security )
-	pkg->fillPatchList( "security" );		// patch kind security
+	pkg->fillPatchList( F_Security );		// patch kind security
     else if ( event.selection == optional )
-	pkg->fillPatchList( "optional" );		// patch kind optional
+	pkg->fillPatchList( F_Optional );		// patch kind optional
     else if ( event.selection == search )
     {
 	searchPopup = new NCPkgPatchSearch( wpos( 1, 1 ), pkg );

@@ -25,13 +25,26 @@
 #include "NCurses.h"
 #include "NCi18n.h"
 #include "NCMenuButton.h"
-#include "NCPackageSelector.h"
 #include "NCPkgPatchSearch.h"
+
+class NCPackageSelector;
 
 #include "NCZypp.h"
 
 class NCPkgMenuFilter : public NCMenuButton {
 
+public:
+	enum PatchFilter 
+	{
+	    F_Needed,
+	    F_Unneeded,
+	    F_All,
+	    F_Recommended,
+	    F_Security,
+	    F_Optional,
+	    F_Unknown
+	};
+    
     NCPkgMenuFilter & operator=( const NCPkgMenuFilter & );
     NCPkgMenuFilter            ( const NCPkgMenuFilter & );
 
@@ -43,7 +56,6 @@ private:
     YItemCollection items;
 
     YMenuItem *needed;
-    YMenuItem *satisfied;
     YMenuItem *unneeded;
     YMenuItem *allPatches;
     YMenuItem *recommended;	
@@ -52,7 +64,7 @@ private:
     YMenuItem *search;
 
 public:
-
+    
     NCPkgMenuFilter (YWidget *parent, string label, NCPackageSelector *pkger);
     virtual ~NCPkgMenuFilter();
 

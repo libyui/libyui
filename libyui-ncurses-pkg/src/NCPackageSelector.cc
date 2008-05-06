@@ -21,7 +21,6 @@
 #include "NCPushButton.h"
 #include "NCMenuButton.h"
 #include "NCTable.h"
-#include "NCPkgTable.h"
 #include "NCSpacing.h"
 #include "NCRichText.h"
 #include "NCLabel.h"
@@ -364,7 +363,7 @@ bool NCPackageSelector::fillPatchSearchList( const string & expr )
 //
 // Fills the package table with the list of YOU patches
 //
-bool NCPackageSelector::fillPatchList( string filter )
+bool NCPackageSelector::fillPatchList( NCPkgMenuFilter::PatchFilter filter )
 {
     NCPkgTable * packageList = PackageList();
 
@@ -393,7 +392,7 @@ bool NCPackageSelector::fillPatchList( string filter )
 	++listIt;
     }
 
-    if ( filter == "installable"
+    if ( filter == NCPkgMenuFilter::F_All
 	 && packageList->getNumLines() == 0 )
     {
 	packageList->createInfoEntry( NCPkgStrings::NoPatches() );
@@ -405,18 +404,23 @@ bool NCPackageSelector::fillPatchList( string filter )
     // show the selected filter label
     if ( packageLabel )
     {
-	if ( filter == "installable" )
+	switch ( filter )
 	{
-	    // show common label "Online Update Patches"
-	    packageLabel->setLabel( NCPkgStrings::YOUPatches() );
-	}
-	else if ( filter == "installed" )
-	{
-  	    packageLabel->setLabel( NCPkgStrings::InstPatches() );
-	}
-	else
-	{
-	    packageLabel->setLabel( NCPkgStrings::Patches() );
+	    case  NCPkgMenuFilter::F_Needed:
+		{
+		    // show common label "Needed Patches"
+		    packageLabel->setLabel( NCPkgStrings::YOUPatches() );
+		    break;
+		}
+	    case NCPkgMenuFilter::F_Unneeded:
+		{
+		    packageLabel->setLabel( NCPkgStrings::InstPatches() );
+		    break;
+		}
+	    default:
+		{
+		    packageLabel->setLabel( NCPkgStrings::Patches() );
+		}
 	}
     }
 
@@ -571,8 +575,8 @@ bool NCPackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPt
 //
 //
 bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
-				  ZyppSel	selectable,
-				  string 	filter )
+				    ZyppSel	selectable,
+				    NCPkgMenuFilter::PatchFilter filter )
 
 {
     NCPkgTable * packageList = PackageList();
@@ -584,47 +588,56 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
 	yuiError() << "Widget is not a valid NCPkgTable widget" << endl;
     	return false;
     }
-
-    if ( filter == "all" )
+    yuiMilestone() << "Filter: " << filter << endl;
+    switch ( filter )
     {
-	displayPatch = true;
-    }
-    else if ( filter == "installed" )		// now means: satisfied
-    {
-	if ( selectable->hasCandidateObj() &&
-	     selectable->candidateObj().isRelevant() &&
-	     selectable->candidateObj().isSatisfied() )
-	{
+	case  NCPkgMenuFilter::F_All:
+	    {
 		displayPatch = true;
-	}
-    }
-    else if ( filter == "installable" )		// relevant patches
-    {
-	// only shows patches relevant to the system
-	if ( selectable->hasCandidateObj() && 
-	     selectable->candidateObj().isRelevant() )
-	{
-	    // FIXME: Condition is relevant and broken ??? -> schubi
-	    // and only those that are needed 
-	    if ( ! selectable->candidateObj().isSatisfied() )
-		displayPatch = true;
-	}
-    }
-    else if ( filter == "security" )
-    {
-	    if ( patchPtr->category() == "security" )
-    		displayPatch = true;
-    }
-
-    else if ( filter == "recommended" )
-    {
-	    if ( patchPtr->category() == "recommended" )
-		displayPatch = true;
-    }
-    else if ( filter == "optional" )
-    {
-	    if (  patchPtr->category() == "optional" )
+		break;
+	    }	
+	case NCPkgMenuFilter::F_Unneeded:	// unneeded means satisfied
+	    {
+		if ( selectable->hasCandidateObj() &&
+		     selectable->candidateObj().isRelevant() &&
+		     selectable->candidateObj().isSatisfied() )
+		{
+		    displayPatch = true;
+		}
+		break;
+	    }
+	case NCPkgMenuFilter::F_Needed:		// needed means relevant patches
+	    {
+		// only shows patches relevant to the system
+		if ( selectable->hasCandidateObj() && 
+		     selectable->candidateObj().isRelevant() )
+		{
+		    // and only those that are needed 
+		    if ( ! selectable->candidateObj().isSatisfied() )
 			displayPatch = true;
+		}
+		break;
+	    }
+	case NCPkgMenuFilter::F_Security:
+	    {
+		if ( patchPtr->category() == "security" )
+		    displayPatch = true;
+		break;
+	    }
+	case NCPkgMenuFilter::F_Recommended:
+	    {
+		if ( patchPtr->category() == "recommended" )
+		    displayPatch = true;
+		break;
+	    }
+	case NCPkgMenuFilter::F_Optional:
+	    {
+		if (  patchPtr->category() == "optional" )
+		    displayPatch = true;
+		break;
+	    }
+	default:
+	    y2warning( "Unknown patch filter" ); 
     }
 
     if ( displayPatch )
@@ -1682,7 +1695,7 @@ bool NCPackageSelector::fillDefaultList( )
     switch ( pkgList->getTableType() )
     {
 	case NCPkgTable::T_Patches: {
-	    fillPatchList( "installable" );	// default: installable patches
+	    fillPatchList( NCPkgMenuFilter::F_Needed );	// default: needed patches
 
 	    // set the visible info to long description
 	    pkgList->setVisibleInfo(NCPkgTable::I_PatchDescr);

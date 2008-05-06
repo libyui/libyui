@@ -952,7 +952,7 @@ const string NCPkgStrings::RepoLabel()
 const string NCPkgStrings::YOUPatches()
 {
     // A label for a list of YOU Patches - keep it short - max 25 chars! 
-    // (the list shows all patches which can be installed) 
+    // (the list shows all patches which are needed) 
     //static const string value = _( "Installable Patches" );
     //static const string value = _( "Relevant Patches" );
     static const string value = _( "Needed Patches" );
@@ -964,8 +964,8 @@ const string NCPkgStrings::InstPatches()
     // A label for a list of YOU Patches - keep it short - max. 25 chars! 
     // (the list shows all patches which are already installed) 
     //static const string value = _( "Installed Patches" );
-    //static const string value = _( "Unneeded Patches" );
-    static const string value = _( "Satisfied Patches" );
+    static const string value = _( "Unneeded Patches" );
+    //static const string value = _( "Satisfied Patches" );
     return value; 
 }
 

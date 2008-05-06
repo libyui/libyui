@@ -68,7 +68,6 @@ class NCPkgMenuExtras;
 class NCPkgMenuDeps;
 class NCPkgMenuAction;
 class NCPkgMenuView;
-class NCPkgMenuFilter;
 class NCPkgSearchSettings;
 class NCPkgPackageDetails;
 class NCPkgFilterMain;
@@ -246,7 +245,7 @@ class NCPackageSelector
     * @param filter
     * @return bool
     */
-    bool fillPatchList( string filter );
+    bool fillPatchList( NCPkgMenuFilter::PatchFilter filter );
 			
    /**
     * Fills the package table with packages with update problems
@@ -373,7 +372,9 @@ class NCPackageSelector
      * Returns true if there is a match, false otherwise or if 'patch' is 0.
      * @return bool
      **/
-    bool checkPatch( ZyppPatch patch, ZyppSel selectable, string filter );
+    bool checkPatch( ZyppPatch patch,
+		     ZyppSel selectable,
+		     NCPkgMenuFilter::PatchFilter filter );
    
     /**
     * Returns whether automatic dependency is on or off

@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue May  6 15:39:05 CEST 2008 - gs@suse.de
+
+- YOU: filter name for satisfied patches is 'Unneeded' (like qt),
+       use enum for patch filters,
+- Do the initial solver run before showing the default list    
+
+-------------------------------------------------------------------
 Mon May  5 14:31:15 CEST 2008 - kmachalkova@suse.cz
 
 - Improved YOU layout, showing YOU help ( by gs )
