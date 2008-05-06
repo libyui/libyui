@@ -133,11 +133,14 @@ void NCPackageSelectorStart::showDefaultList()
     {
 	// create the NCPkgPoups
 	packager->createPopups();
+
+        // always do an initial dependency solving - BEFORE filling the default list
+	packager->showPackageDependencies( true );
+	
 	// fill package list with packages belonging to default RPM group
 	packager->fillDefaultList();
 
-        // always do an initial dependency solving
-	packager->showPackageDependencies( true );
+	//packager->showPackageDependencies( true );
 
 	if ( youMode )
 	{
@@ -148,7 +151,6 @@ void NCPackageSelectorStart::showDefaultList()
 	{
 	    // show the required diskspace
 	    packager->showDiskSpace();
-	    // packager->createFilterMenu();
 	}
     }
 }
