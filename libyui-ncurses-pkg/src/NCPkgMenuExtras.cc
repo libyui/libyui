@@ -18,6 +18,8 @@
 #include <YUILog.h>
 
 #include "NCPkgMenuExtras.h"
+#include "NCPackageSelector.h"
+#include "NCPopupInfo.h"
 
 #include <boost/bind.hpp>
 #include <fstream>

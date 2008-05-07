@@ -18,6 +18,8 @@
 
 #include "NCPkgTable.h"
 #include "NCPkgPackageDetails.h"
+#include "NCPackageSelector.h"
+
 
 /*
   Textdomain "ncurses-pkg"

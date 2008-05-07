@@ -23,7 +23,7 @@
 #include "YDialog.h"
 #include "NCLayoutBox.h"
 #include "NCSpacing.h"
-#include "NCPkgStrings.h"
+#include "NCPackageSelector.h"
 
 #include "NCZypp.h"
 

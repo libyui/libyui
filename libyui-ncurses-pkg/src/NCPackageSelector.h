@@ -42,11 +42,6 @@
 #include "NCPkgFilterSearch.h"
 #include "NCPkgTable.h"
 #include "NCEmpty.h"
-#include "NCPkgMenuDeps.h" 
-#include "NCPkgMenuView.h" 
-#include "NCPkgMenuExtras.h" 
-#include "NCPkgMenuHelp.h" 
-#include "NCPkgMenuAction.h"
 #include "NCPkgMenuFilter.h"
 #include "NCPkgPackageDetails.h"
 #include "NCPkgPopupDeps.h" 
@@ -68,6 +63,7 @@ class NCPkgMenuExtras;
 class NCPkgMenuDeps;
 class NCPkgMenuAction;
 class NCPkgMenuView;
+class NCPkgMenuHelp;
 class NCPkgSearchSettings;
 class NCPkgPackageDetails;
 class NCPkgFilterMain;

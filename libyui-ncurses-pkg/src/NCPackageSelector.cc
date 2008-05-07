@@ -33,7 +33,11 @@
 #include "NCPkgFilterRepo.h"
 #include "NCPkgPopupDeps.h"
 #include "NCPkgPopupDiskspace.h"
-//#include "NCPkgPopupTable.h"
+#include "NCPkgMenuDeps.h"
+#include "NCPkgMenuView.h"
+#include "NCPkgMenuExtras.h"
+#include "NCPkgMenuHelp.h"
+#include "NCPkgMenuAction.h"
 #include "NCPkgPopupDescr.h"
 #include "NCPackageSelector.h"
 #include "NCLayoutBox.h"
@@ -58,7 +62,6 @@
 typedef zypp::Patch::Contents				ZyppPatchContents;
 typedef zypp::Patch::Contents::Selectable_iterator	ZyppPatchContentsIterator;
 
-#include <ycp/Parser.h>
 #include "YEvent.h"
 
 using namespace std;
@@ -554,9 +557,9 @@ bool NCPackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPt
 	}
 	else  // No ZyppPkg - some other kind of object
 	{
-	    y2debug( "Found unknown atom of kind %s: %s",
-		     (*it)->kind().asString().c_str(),
-		     (*it)->name().c_str() );
+	    yuiDebug() << "Found unknown atom of kind %s: %s" <<
+		(*it)->kind().asString().c_str() <<
+		(*it)->name().c_str() << endl;
 
 	}
     }
@@ -637,7 +640,7 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
 		break;
 	    }
 	default:
-	    y2warning( "Unknown patch filter" ); 
+	    yuiWarning() << "Unknown patch filter" << endl; 
     }
 
     if ( displayPatch )
@@ -1151,7 +1154,7 @@ bool NCPackageSelector::showPendingLicenseAgreements()
 
 bool NCPackageSelector::showPendingLicenseAgreements( ZyppPoolIterator begin, ZyppPoolIterator end )
 {
-    y2milestone( "Showing all pending license agreements" );
+    yuiMilestone() << "Showing all pending license agreements" << endl;
 
     bool allConfirmed = true;
 
@@ -1172,7 +1175,8 @@ bool NCPackageSelector::showPendingLicenseAgreements( ZyppPoolIterator begin, Zy
 
 		    if ( ! licenseText.empty() )
 		    {
-			y2milestone( "Package/Patch %s has a license agreement", sel->name().c_str() );
+			yuiMilestone() << "Package/Patch %s has a license agreement"
+				       << sel->name().c_str() << endl;
 
 			if( ! sel->hasLicenceConfirmed() )
 			{
@@ -1180,7 +1184,8 @@ bool NCPackageSelector::showPendingLicenseAgreements( ZyppPoolIterator begin, Zy
 			}
 			else
 			{
-			    y2milestone( "Package/Patch %s's  license is already confirmed", sel->name().c_str() );
+			    yuiMilestone() << "Package/Patch %s's  license is already confirmed"
+					   << sel->name().c_str() << endl;
 			}
 		    }
 		}

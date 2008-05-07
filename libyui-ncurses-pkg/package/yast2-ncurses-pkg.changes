@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed May  7 11:04:00 CEST 2008 - gs@suse.de
+
+- internal changes: remove remainings of old style logging,
+  rearrange inclusion of header files
+- 2.16.10
+
+-------------------------------------------------------------------
 Tue May  6 15:39:05 CEST 2008 - gs@suse.de
 
 - YOU: filter name for satisfied patches is 'Unneeded' (like qt),

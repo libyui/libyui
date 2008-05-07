@@ -18,7 +18,7 @@
 #include <YUILog.h>
 
 #include "NCPkgMenuDeps.h"
-
+#include "NCPackageSelector.h"
 
 /*
   Textdomain "ncurses-pkg"

@@ -18,8 +18,10 @@
 #define NCPkgPackageDetails_h 
 
 #include "NCRichText.h"
-#include "NCPackageSelector.h"
 #include "NCZypp.h"
+
+class NCPackageSelector;
+
 
 class NCPkgPackageDetails : public NCRichText {
 

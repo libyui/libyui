@@ -18,6 +18,7 @@
 #include <YUILog.h>
 
 #include "NCPkgMenuView.h"
+#include "NCPackageSelector.h"
 
 
 /*

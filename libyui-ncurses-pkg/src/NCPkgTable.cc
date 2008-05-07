@@ -163,7 +163,7 @@ void NCPkgTable::addLine( ZyppStatus stat,
     Items[0] = new NCPkgTableTag( objPtr, slbPtr, stat );
 
     for ( unsigned i = 1; i < elements.size()+1; ++i ) {
-	// use YCPString to enforce recoding from 'utf8'
+	// NCTableCol has NCstring argument to enforce 'utf8' encoding
 	Items[i] = new NCTableCol(  elements[i-1]  );
     }
     myPad()->Append( Items );

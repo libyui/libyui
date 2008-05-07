@@ -18,6 +18,7 @@
 #include <YUILog.h>
 
 #include "NCPkgMenuAction.h"
+#include "NCPackageSelector.h"
 
 
 /*
@@ -41,16 +42,16 @@ void NCPkgMenuAction::createLayout()
     if ( !pkg->isYouMode() )
     {
 	// Please note: add an appropriate number of whitespaces to get a well
-	// formated menu (the [ ]s should be in one column)
+	// formated menu (the [ ]s should be in one column) and use unique hotkeys until end:
 	// begin: Actions menu, toggle the status of a package, e.g. change from installed to delete
-	toggleItem =  new YMenuItem( _( "Toggle    [SPACE]" ) );
-	installItem = new YMenuItem( _( "Install     [+]" ) );
-	deleteItem =  new YMenuItem( _( "Delete      [-]" ) );
-	updateItem =  new YMenuItem( _( "Update      [>]" ) );
-	tabooItem =   new YMenuItem( _( "Taboo       [!]" ) );
-	lockItem =    new YMenuItem( _( "Lock        [*]" ) );
+	toggleItem =  new YMenuItem( _( "&Toggle    [SPACE]" ) );
+	installItem = new YMenuItem( _( "&Install     [+]" ) );
+	deleteItem =  new YMenuItem( _( "&Delete      [-]" ) );
+	updateItem =  new YMenuItem( _( "&Update      [>]" ) );
+	tabooItem =   new YMenuItem( _( "T&aboo       [!]" ) );
+	lockItem =    new YMenuItem( _( "&Lock        [*]" ) );
 	// end: Actions menu, set status of all packages (title of a submenu)
-	allItem =     new YMenuItem( _( "All Listed Packages" ) );
+	allItem =     new YMenuItem( _( "&All Listed Packages" ) );
 
 	items.push_back( toggleItem );
 	items.push_back( installItem );
@@ -61,21 +62,21 @@ void NCPkgMenuAction::createLayout()
 	items.push_back( allItem );
 
 	// begin: submenu items actions concerning all packages
-	installAllItem = new YMenuItem( allItem, _( "Install All" ) );
-	deleteAllItem = new YMenuItem( allItem, _( "Delete All" ) );
-	keepAllItem = new YMenuItem( allItem,  _( "Keep All" ) );
-	updateAllItem = new YMenuItem( allItem, _( "Update All Unconditionally") );
+	installAllItem = new YMenuItem( allItem, _( "&Install All" ) );
+	deleteAllItem = new YMenuItem( allItem, _( "&Delete All" ) );
+	keepAllItem = new YMenuItem( allItem,  _( "&Keep All" ) );
+	updateAllItem = new YMenuItem( allItem, _( "U&pdate All Unconditionally") );
 	// end: submenu items: actions concerning all packages
-	updateNewerItem = new YMenuItem( allItem,  _( "Update If Newer Version Available" ) );
+	updateNewerItem = new YMenuItem( allItem,  _( "&Update If Newer Version Available" ) );
 
 	addItems( items );
     }
-    else
+    else	// YOU mode
     {
-	toggleItem =  new YMenuItem( _( "Toggle    [SPACE]" ) );
-	installItem = new YMenuItem( _( "Install     [+]" ) );
-	deleteItem =  new YMenuItem( _( "Delete      [-]" ) );
-	updateItem =  new YMenuItem( _( "Update      [>]" ) );
+	toggleItem =  new YMenuItem( _( "&Toggle    [SPACE]" ) );
+	installItem = new YMenuItem( _( "&Install     [+]" ) );
+	deleteItem =  new YMenuItem( _( "&Delete      [-]" ) );
+	updateItem =  new YMenuItem( _( "&Update      [>]" ) );
 	
 	items.push_back( toggleItem );
 	items.push_back( installItem );

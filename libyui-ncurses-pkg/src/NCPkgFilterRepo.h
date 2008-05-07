@@ -30,7 +30,6 @@
 #include "NCPushButton.h"
 #include "NCTable.h"
 #include "NCTablePad.h"
-#include "NCPackageSelector.h"
 #include "NCZypp.h"
 
 class NCTable;

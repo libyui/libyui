@@ -23,9 +23,10 @@
 #include "NCurses.h"
 #include "NCi18n.h"
 #include "NCMenuButton.h"
-#include "NCPackageSelector.h"
 #include "NCPopupInfo.h"
 #include "NCZypp.h"
+
+class NCPackageSelector;
 
 class NCPkgMenuAction : public NCMenuButton {
 

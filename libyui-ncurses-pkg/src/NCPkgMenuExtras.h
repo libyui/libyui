@@ -23,9 +23,13 @@
 #include "NCurses.h"
 #include "NCi18n.h"
 #include "NCMenuButton.h"
-#include "NCPackageSelector.h"
+//#include "NCPackageSelector.h"
 #include "NCPkgStrings.h"
 #include "NCPkgPopupDiskspace.h"
+
+
+class NCPackageSelector;
+
 
 class NCPkgMenuExtras : public NCMenuButton {
 

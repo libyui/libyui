@@ -26,6 +26,9 @@
 
 #include <FSize.h>
 #include "NCPopup.h"
+#include "NCLabel.h"
+
+#include "NCZypp.h"
 
 typedef zypp::DiskUsageCounter::MountPoint 		ZyppPartitionDu;
 typedef zypp::DiskUsageCounter::MountPointSet 		ZyppDuSet;
