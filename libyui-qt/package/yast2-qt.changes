@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu May  8 17:33:16 CEST 2008 - tgoettlicher@suse.de
+
+- automatically scroll to selected item of YQSelectionBox (bnc #388173) 
+
+-------------------------------------------------------------------
 Thu May  8 16:23:05 CEST 2008 - tgoettlicher@suse.de
 
 - fixed strange selection behavior of YQTable (bnc #384658)

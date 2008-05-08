@@ -126,6 +126,9 @@ void YQSelectionBox::addItem( YItem * item )
 	YQSignalBlocker sigBlocker( _qt_listWidget );
 	_qt_listWidget->setCurrentItem( _qt_listWidget->item( item->index() ) );
     }
+
+   qt_listWidget->scrollToItem( _qt_listWidget->currentItem(), QAbstractItemView::EnsureVisible );
+
 }
 
 
