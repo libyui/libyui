@@ -146,8 +146,6 @@ void YQMultiProgressMeter::paintEvent ( QPaintEvent * event )
     // space disproportional to their real size (maxValue).
     scale = ( (float) distributableLength ) / ( restSum );
 
-    int indent = 0;
-
     // Set up painter
 
     if ( vertical() )
