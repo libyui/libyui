@@ -204,7 +204,15 @@ YQTable::selectOrigItem( QTreeWidgetItem * listViewItem )
 void
 YQTable::slotSelected( QTreeWidgetItem * listViewItem  )
 {
-    selectOrigItem( listViewItem );
+    if ( listViewItem )
+	selectOrigItem( listViewItem );
+    else
+    {
+	// Qt might select nothing if a user clicks outside the items in the widget
+
+	if ( hasItems() && YSelectionWidget::hasSelectedItem() )
+	    YQTable::selectItem( YSelectionWidget::selectedItem(), true );
+    }
 
     if ( immediateMode() )
     {

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu May  8 11:59:11 CEST 2008 - sh@suse.de
+
+- Don't let Qt override YSelectionBox selection
+
+-------------------------------------------------------------------
 Wed Apr 30 17:43:03 CEST 2008 - sh@suse.de
 
 - Fixed bnc #379904: More than one radio button checked

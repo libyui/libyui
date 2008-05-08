@@ -271,7 +271,17 @@ void YQSelectionBox::slotSelectionChanged()
     QList<QListWidgetItem *> items = _qt_listWidget->selectedItems();
 
     if ( ! items.empty() )
+    {
 	selectItem( _qt_listWidget->row( items.first() ) );
+    }
+    else
+    {
+	// Qt thinks it has to outsmart libyui: It might not select anything.
+	// So let's get our old selection back. Tit for tat.
+	
+	if ( hasItems() && hasSelectedItem() )
+	    YQSelectionBox::selectItem( YSelectionWidget::selectedItem(), true );
+    }
 
     if ( notify() )
     {
