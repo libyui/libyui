@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu May  8 16:23:05 CEST 2008 - tgoettlicher@suse.de
+
+- fixed strange selection behavior of YQTable (bnc #384658)
+
+-------------------------------------------------------------------
 Thu May  8 11:59:11 CEST 2008 - sh@suse.de
 
 - Don't let Qt override YSelectionBox selection

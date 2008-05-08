@@ -113,6 +113,10 @@ YQTable::addItem( YItem * yitem )
 	clone->setSelected(true);
     }
 
+    // If multiple items are selected YSelectionWidget::addItem() 
+    // defines one single selected item. Use this selection in YQTable too. 
+    if ( hasItems() && YSelectionWidget::hasSelectedItem() )
+	YQTable::selectItem( YSelectionWidget::selectedItem(), true );
 
     // set alignment
     for ( int i=0; i < columns(); i++ )
