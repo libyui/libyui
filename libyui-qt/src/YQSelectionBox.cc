@@ -320,14 +320,24 @@ void YQSelectionBox::slotActivated( QListWidgetItem * qItem )
 
 void YQSelectionBox::returnImmediately()
 {
-    if ( ! YQUI::ui()->eventPendingFor( this ) )
+    if ( YQUI::ui()->eventPendingFor( this ) )
     {
-	// Avoid overwriting a (more important) Activated event with a
-	// SelectionChanged event
+	YWidgetEvent * event = dynamic_cast<YWidgetEvent *> ( YQUI::ui()->pendingEvent() );
 
-	yuiDebug() << "Sending SelectionChanged event for " << this << endl;
-	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
+	if ( event && event->reason() != YEvent::SelectionChanged )
+	{
+	    // Avoid overwriting a (more important) Activated event with a
+	    // SelectionChanged event
+	    
+	    yuiDebug() << "Not overwriting more important event" << endl;
+	    
+	    return;
+	}
     }
+	
+    
+    yuiDebug() << "Sending SelectionChanged event for " << this << endl;
+    YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
 }
 
 
