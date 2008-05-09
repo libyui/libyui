@@ -127,8 +127,7 @@ void YQSelectionBox::addItem( YItem * item )
 	_qt_listWidget->setCurrentItem( _qt_listWidget->item( item->index() ) );
     }
 
-   qt_listWidget->scrollToItem( _qt_listWidget->currentItem(), QAbstractItemView::EnsureVisible );
-
+    _qt_listWidget->scrollToItem( _qt_listWidget->currentItem(), QAbstractItemView::EnsureVisible );
 }
 
 
