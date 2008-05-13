@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue May 13 15:53:53 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed setText of YQComboBox (bnc #384713)
+
+-------------------------------------------------------------------
 Thu May  8 17:33:16 CEST 2008 - tgoettlicher@suse.de
 
 - automatically scroll to selected item of YQSelectionBox (bnc #388173) 
