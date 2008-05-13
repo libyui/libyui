@@ -99,8 +99,8 @@ YQPkgPatchList::YQPkgPatchList( QWidget * parent )
     // Can use the same colum for "broken" and "satisfied":
     // Both states are mutually exclusive
 
-    _satisfiedIconCol	= _summaryCol;
-    _brokenIconCol	= _summaryCol;
+    _satisfiedIconCol	= -42;
+    _brokenIconCol	= -42;
 
     setHeaderLabels(headers);
     setIndentation(0);

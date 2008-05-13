@@ -151,7 +151,6 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     int numCol = 0;
     QStringList headers;
     //headers << "";
-    headers << "";	_iconCol	= numCol++;
     headers << "";	_statusCol	= numCol++;
 
     // Translators: "Pattern" refers to so-called "installation patterns",
@@ -161,7 +160,9 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     // configuring the web server. For the scope of the package selector, this
     // is only of little relevance, though.
 
+    headers << "";	_iconCol	= numCol++;
     headers << _( "Pattern" );	_summaryCol	= numCol++;
+
     //headers << "";	_howmanyCol	= numCol++;
 
     setColumnCount( numCol );
@@ -177,8 +178,8 @@ YQPkgPatternList::YQPkgPatternList( QWidget * parent, bool autoFill, bool autoFi
     // Can use the same colum for "broken" and "satisfied":
     // Both states are mutually exclusive
 
-    _satisfiedIconCol	= _summaryCol;
-    _brokenIconCol	= _summaryCol;
+    _satisfiedIconCol	= -42;
+    _brokenIconCol	= -42;
 
 //     header()->setStretchEnabled( _statusCol , false );
 //     header()->setStretchEnabled( _summaryCol, true  );
@@ -389,7 +390,7 @@ YQPkgPatternList::pkgObjClicked( int			button,
     {
         if ( button == Qt::LeftButton )
         {
-            if ( col == iconCol() )
+            if ( col == 0 )
             {
                 categoryItem->setExpanded( ! categoryItem->isExpanded() );
             }
@@ -572,7 +573,7 @@ YQPkgPatternCategoryItem::setExpanded( bool open )
 void
 YQPkgPatternCategoryItem::setTreeIcon()
 {
-    setIcon( _patternList->iconCol(),
+    setIcon( 0,
              isExpanded() ?
              YQIconPool::treeMinus() :
              YQIconPool::treePlus()   );

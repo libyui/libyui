@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue May 13 18:03:12 CEST 2008 - dmacvicar@suse.de
+
+- show satisfied non packages as installed selectables
+  (bnc#380356)  
+- 2.16.41 
+
+-------------------------------------------------------------------
 Wed Apr 30 15:21:09 CEST 2008 - lslezak@suse.cz
 
 - display "Repository" menu only when requested by `opt(`repoMgr)
