@@ -138,7 +138,7 @@ NCApplication::setConsoleFont( const string & console_magic,
 			       const string & font,
 			       const string & screen_map,
 			       const string & unicode_map,
-			       const string & encoding )
+			       const string & language )
 {
     /**
      * Moving that code from YNCursesUI to this class turned out to be
@@ -151,7 +151,7 @@ NCApplication::setConsoleFont( const string & console_magic,
 				      font,
 				      screen_map,
 				      unicode_map,
-				      encoding );
+				      language );
 }
 
 

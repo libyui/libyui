@@ -147,7 +147,7 @@ public:
 				 const string & font,
 				 const string & screen_map,
 				 const string & unicode_map,
-				 const string & encoding );
+				 const string & language );
 
     /**
      * Run a shell command (typically an interactive program using NCurses)

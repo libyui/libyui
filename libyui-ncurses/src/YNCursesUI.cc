@@ -330,7 +330,7 @@ void YNCursesUI::setConsoleFont( const string & console_magic,
 				 const string & font,
 				 const string & screen_map,
 				 const string & unicode_map,
-				 const string & encoding )
+				 const string & lang )
 {
     string cmd( "setfont" );
     cmd += " -C " + myTerm;
@@ -370,7 +370,7 @@ void YNCursesUI::setConsoleFont( const string & console_magic,
 
     if ( NCstring::terminalEncoding() != "UTF-8" )
     {
-	string language = YUI::app()->language();
+	string language = lang;
 	string::size_type pos = language.find( '.' );
 
 	if ( pos != string::npos )

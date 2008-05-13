@@ -112,7 +112,7 @@ public:
 				 const string & font,
 				 const string & screen_map,
 				 const string & unicode_map,
-				 const string & encoding );
+				 const string & lang );
 
     /**
      * Fills the PackageSelector widget and runs package selection.
