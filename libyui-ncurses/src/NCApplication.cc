@@ -46,7 +46,11 @@ void
 NCApplication::setLanguage( const string & language,
 			    const string & encoding )
 {
-    YApplication::setLanguage( language, encoding );
+    // Intentionally NOT calling
+    //    YApplication::setLanguage( language, encoding );
+    // This would implicitly overwrite LC_CTYPE which might result in encoding bugs.
+    
+    setlocale( LC_NUMERIC, "C" );	// always format numbers with "."
     NCurses::Refresh();
     
     yuiDebug() << "Language: " << language << " Encoding: " << ((encoding!="")?encoding:"NOT SET") << endl;
