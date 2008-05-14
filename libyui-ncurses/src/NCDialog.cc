@@ -40,7 +40,7 @@
 
 static bool hiddenMenu()
 {
-  return getenv( "Y2yuiDebug()" ) != NULL;
+  return getenv( "Y2NCDBG" ) != NULL;
 }
 
 
@@ -56,7 +56,7 @@ NCDialog::NCDialog( YDialogType 	dialogType,
     , ncdopts    ( DEFAULT )
     , popedpos   ( -1 )
 {
-  yuiMilestone() << "NCDialog() derived from YDialog()" << endl; 
+  yuiDebug() << "Constructor NCDialog(YDialogType t, YDialogColorMode c)" << endl; 
   _init();
 }
 
@@ -72,7 +72,7 @@ NCDialog::NCDialog( YDialogType dialogType, const wpos at, const bool boxed )
     , ncdopts    ( boxed ? POPUP : POPUP|NOBOX )
     , popedpos   ( at )
 {
-    yuiMilestone() << "NCDialog(type, at, boxed) derived from YDialog(opt)" << endl;
+    yuiDebug() << "Constructor NCDialog(YDialogType t, const wpos at, const bool boxed)" << endl;
     _init();
 }
 
@@ -195,11 +195,10 @@ void NCDialog::setSize( int newwidth, int newheight )
 
 void NCDialog::initDialog()
 {
-    yuiMilestone() << "initDialog()" << endl;
     if ( !pan ) {
 	yuiDebug() << "setInitialSize() called!" << endl; 
-    setInitialSize();
-  }
+	setInitialSize();
+    }
 }
 
 
