@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed May 14 16:15:19 CEST 2008 - sh@suse.de
+
+- Fixed bnc #386446: Help button still English
+- V 2.16.46 
+
+-------------------------------------------------------------------
 Wed May 14 14:51:29 CEST 2008 - tgoettlicher@suse.de
 
 - Improved help popup's usability (bnc #388592)
