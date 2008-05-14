@@ -17,7 +17,7 @@ License:        GPL
 Summary:        Bindings for libyui
 Group:          Development/Sources
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-BuildRequires:  cmake gcc-c++ ruby-devel swig licenses
+BuildRequires:  cmake gcc-c++ ruby-devel swig
 BuildRequires:  yast2-libyui-devel >= 2.16
 Source:         %{name}-%{version}.tar.bz2
 
@@ -43,7 +43,6 @@ make %{?jobs:-j %jobs}
 %install
 cd build
 make install DESTDIR=$RPM_BUILD_ROOT
-ln -s /usr/share/doc/licenses/GPL-2.0.txt COPYING
 
 %clean
 %{__rm} -rf %{buildroot}
@@ -57,7 +56,7 @@ Group:          Development/Languages/Ruby
 
 %files -n libyui-ruby
 %defattr(-,root,root,-)
-%doc build/COPYING swig/ruby/examples/hello_world.rb swig/ruby/examples/selection_box1.rb
+%doc swig/ruby/examples/hello_world.rb swig/ruby/examples/selection_box1.rb
 %{_libdir}/ruby/vendor_ruby/%{rb_ver}/%{rb_arch}/yui.so
 
 #%package -n python-yui
