@@ -91,6 +91,7 @@ YQWizard::YQWizard( YWidget *		parent,
     , _backButtonLabel( backButtonLabel )
     , _abortButtonLabel( abortButtonLabel )
     , _nextButtonLabel( nextButtonLabel )
+    , _helpDlg ( NULL )
 {
     setObjectName( "wizard" );
 
@@ -153,6 +154,9 @@ YQWizard::~YQWizard()
     deleteSteps();
     if ( this == main_wizard )
         main_wizard = 0;
+
+    if ( _helpDlg )
+	delete _helpDlg;
 }
 
 bool YQWizard::isSecondary() const
@@ -915,8 +919,15 @@ void YQWizard::slotNextClicked()
 
 void YQWizard::showHelp()
 {
-    QY2HelpDialog helpDlg( _qHelpText, this );
-    helpDlg.exec();
+
+	if (!_helpDlg)
+    		_helpDlg = new QY2HelpDialog ( _qHelpText, NULL );
+	else
+		_helpDlg->setHelpText( _qHelpText );
+
+	_helpDlg->show();
+	_helpDlg->raise();
+	_helpDlg->activateWindow();
 }
 
 

@@ -17,6 +17,14 @@ QY2HelpDialog::QY2HelpDialog( const QString& helpText, QWidget *parent )
              SLOT( searchStringChanged( QString ) ) );
 
     _ui->lineEdit->setFocus( Qt::OtherFocusReason );
+    _ui->pushButton->setAutoDefault(false);
+}
+
+void QY2HelpDialog::setHelpText( const QString& helpText )
+{
+    _ui->textBrowser->setText( helpText );
+    _ui->lineEdit->setText( QString() );
+    _ui->lineEdit->setFocus( Qt::OtherFocusReason );
 }
 
 QY2HelpDialog::~QY2HelpDialog()

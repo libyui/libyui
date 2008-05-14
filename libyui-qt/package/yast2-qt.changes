@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed May 14 14:51:29 CEST 2008 - tgoettlicher@suse.de
+
+- Improved help popup's usability (bnc #388592)
+
+-------------------------------------------------------------------
 Tue May 13 15:53:53 CEST 2008 - tgoettlicher@suse.de
 
 - Fixed setText of YQComboBox (bnc #384713)

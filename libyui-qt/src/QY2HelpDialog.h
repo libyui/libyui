@@ -13,6 +13,7 @@ class QY2HelpDialog : public QDialog
 public:
     QY2HelpDialog( const QString &helpText, QWidget *parent );
     ~QY2HelpDialog();
+    void setHelpText( const QString &helpText );
 
 public slots:
     void searchStringChanged( QString );

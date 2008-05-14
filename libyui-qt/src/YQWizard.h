@@ -48,6 +48,7 @@ class QTreeWidgetItem;
 class YQAlignment;
 class YQReplacePoint;
 class QY2ListView;
+class QY2HelpDialog;
 
 
 class YQWizard : public QFrame, public YWizard
@@ -523,6 +524,7 @@ protected:
     QString	_currentStepID;
     QString     _qHelpText;
 
+    QY2HelpDialog *	_helpDlg;
 
     QStackedWidget *	_sideBar;
     QWidget     *       _stepsPanel;
