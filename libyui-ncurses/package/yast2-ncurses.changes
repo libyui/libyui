@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Wed May 14 10:22:58 CEST 2008 - gs@suse.de
+
+- bugfix for bnc #385872 (don't call YApplication::setLanguage()
+  which would overwrite LC_CTYPE),
+  correct argument for YNCursesUI::setConsoleFont() (last argument
+  is current language not the encoding)
+- V 2.16.26  
+
+-------------------------------------------------------------------
 Tue Apr 15:39:14 CEST 2008 - tgoettlicher@suse.de
 
 - fixed keyboard shortcuts in popup menu (bnc #377098)
