@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed May 14 13:53:55 CEST 2008 - gs@suse.de
+
+- NCDialog internal changes: unneeded logging removed, environment
+  variable "Y2NCDBG" restored (was changed to Y2yuiDebug())
+
+-------------------------------------------------------------------
 Wed May 14 10:22:58 CEST 2008 - gs@suse.de
 
 - bugfix for bnc #385872 (don't call YApplication::setLanguage()
