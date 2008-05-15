@@ -16,6 +16,7 @@ SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-format-nonliteral -fmessage-length
 SET(qt_yast_pkg_plugin_SRCS 
 
     QY2LayoutUtils.cc
+    YQIconPool.cc
     YQPackageSelectorBase.cc
     YQPackageSelector.cc
     YQPackageSelectorHelp.cc
