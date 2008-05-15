@@ -33,7 +33,6 @@ SET( qt_yast_plugin_SRCS
      YQEmpty.cc
      YQFrame.cc
      YQGenericButton.cc
-     YQIconPool.cc
      YQImage.cc
      YQInputField.cc
      YQIntField.cc
