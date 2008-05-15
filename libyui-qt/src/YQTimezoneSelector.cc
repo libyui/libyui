@@ -1,4 +1,4 @@
-/*---------------------------------------------------------------------\
+ /*---------------------------------------------------------------------\
 |								       |
 |		       __   __	  ____ _____ ____		       |
 |		       \ \ / /_ _/ ___|_   _|___ \		       |
@@ -231,10 +231,10 @@ void YQTimezoneSelector::paintEvent( QPaintEvent *event )
     {
         if ( d->cachePix.isNull() )
         {
-            QImage t = d->_pix.scaled( width(),  height() );
+            QImage t = d->_pix.scaled( width(),  height(), Qt::KeepAspectRatio );
             d->cachePix = QPixmap::fromImage( t );
         }
-        p.drawPixmap( 0, 0, d->cachePix );
+        p.drawPixmap( ( width() - d->cachePix.width() ) / 2, ( height() - d->cachePix.height() ) / 2, d->cachePix );
 
         setCursor( QCursor( QPixmap( zoom_in ) ) );
     } else {
@@ -331,8 +331,8 @@ QPoint YQTimezoneSelectorPrivate::pixToWindow( const QPoint &pos ) const
 {
     if ( _zoom.isNull() )
     {
-        return QPoint( (int) ( double( pos.x() ) * parent->width()  / _pix.width()  ),
-                       (int) ( double( pos.y() ) * parent->height() / _pix.height() ) );
+        return QPoint( (int) ( double( pos.x() ) * cachePix.width()  / _pix.width()  ) + ( parent->width() - cachePix.width() ) / 2,
+                       (int) ( double( pos.y() ) * cachePix.height() / _pix.height() ) + ( parent->height() - cachePix.height() ) /2 );
     }
     int left = qMin( qMax( _zoom.x() - parent->width() / 2, 0 ), _pix.width() - parent->width() );
     int top  = qMin( qMax( _zoom.y() - parent->height() / 2, 0 ), _pix.height() - parent->height() );
