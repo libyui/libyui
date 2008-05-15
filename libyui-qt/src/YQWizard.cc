@@ -59,7 +59,6 @@
 #include "YQEmpty.h"
 #include "YQLabel.h"
 #include "YQWizardButton.h"
-#include "YQIconPool.h"
 #include "YQWidgetFactory.h"
 #include "YQSignalBlocker.h"
 #include <YEvent.h>
