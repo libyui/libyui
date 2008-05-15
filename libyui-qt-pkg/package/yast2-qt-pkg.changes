@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu May 15 14:52:30 CEST 2008 - sh@suse.de
+
+- Fixed bnc #389744: Missing icons in "symbols help" dialog
+- V 2.16.43 
+
+-------------------------------------------------------------------
 Thu May 15 14:10:24 CEST 2008 - dmacvicar@suse.de
 
 - fix pattern selector unreadable font 
