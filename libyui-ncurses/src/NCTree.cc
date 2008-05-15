@@ -423,7 +423,7 @@ void NCTree::DrawPad()
 {
   if ( !myPad() )
   {
-      yuiError() << "PadWidget not valid" << endl;
+      yuiWarning() << "PadWidget not valid" << endl;
       return;
   }
 
@@ -443,7 +443,7 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
   NCursesEvent ret = NCursesEvent::none;
   YTreeItem * oldCurrentItem = getCurrentItem();
 
-  if ( ! handleInput( key ) )
+  if ( ! handleInput( key ) )	// NCTreePad::handleInput()
   {
     switch ( key ) {
       case KEY_SPACE:		// KEY_SPACE is handled in NCTreeLine::handleInput
@@ -457,7 +457,9 @@ NCursesEvent NCTree::wHandleInput( wint_t key )
   }
 
   const YItem * currentItem = getCurrentItem();
-  YUI_CHECK_PTR( currentItem );
+  if ( !currentItem )
+      return ret;
+  
   YTree::selectItem( const_cast<YItem *>(currentItem), true );
    
   yuiDebug() << "Old item: " << oldCurrentItem->label() << " Current: " << currentItem->label() << endl;
