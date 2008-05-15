@@ -97,7 +97,6 @@ SET( yast_qt_HEADERS
      YQFrame.h
      YQGenericButton.h
      YQi18n.h
-     YQIconPool.h
      YQImage.h
      YQInputField.h
      YQIntField.h
