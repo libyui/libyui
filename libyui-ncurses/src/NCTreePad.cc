@@ -268,7 +268,13 @@ int NCTreePad::setpos( const wpos & newpos )
 
   if ( citem.L != oitem ) {
     unsigned at  = 0;
-    unsigned len = visItems[citem.L]->Hotspot( at );
+    unsigned len = 0;
+
+    if ( citem.L >= 0 && visItems[citem.L] )
+	len = visItems[citem.L]->Hotspot( at );
+    else
+	return ERR;
+    
     if ( len ) {
       if ( (int)at < srect.Pos.C ) {
 	srect.Pos.C = at;
@@ -309,6 +315,9 @@ void NCTreePad::updateScrollHint()
 bool NCTreePad::handleInput( wint_t key )
 {
   bool handled = true;
+
+  if ( !GetCurrentLine() )
+      return false;
 
   switch ( key ) {
   case KEY_UP:
