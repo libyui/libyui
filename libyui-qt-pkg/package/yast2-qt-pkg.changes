@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu May 15 14:10:24 CEST 2008 - dmacvicar@suse.de
+
+- fix pattern selector unreadable font 
+  (bnc#381970)
+- 2.16.42
+
+-------------------------------------------------------------------
 Tue May 13 18:03:12 CEST 2008 - dmacvicar@suse.de
 
 - show satisfied non packages as installed selectables

@@ -60,7 +60,8 @@ public:
             //std::cout << "printing category: " << index.column() << std::endl;
             QFont f = painter->font();
             f.setWeight(QFont::Bold);
-            f.setPointSize(f.pointSize()+1);
+            QFontMetrics fm(f);
+            f.setPixelSize( fm.height() * 1.1 );
             citem->setFont(_view->summaryCol(), f);
             
             
@@ -234,7 +235,7 @@ YQPkgPatternList::fillList()
     
     clear();
     yuiDebug() << "Filling pattern list" << endl;
-
+    zypp::getZYpp()->resolver()->resolvePool();
 
     for ( ZyppPoolIterator it = zyppPatternsBegin();
 	  it != zyppPatternsEnd();
