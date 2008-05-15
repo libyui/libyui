@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu May 15 12:55:49 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed focus of popups (#bnc 384905)
+
+-------------------------------------------------------------------
 Wed May 14 16:15:19 CEST 2008 - sh@suse.de
 
 - Fixed bnc #386446: Help button still English
