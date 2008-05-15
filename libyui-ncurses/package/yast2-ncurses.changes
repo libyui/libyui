@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu May 15 14:05:19 CEST 2008 - gs@suse.de
+
+- bugfix for bnc #389761 (correct handling of empty item list in 
+  NCTree and NCTreePad)
+- V 2.16.27
+
+-------------------------------------------------------------------
 Wed May 14 13:53:55 CEST 2008 - gs@suse.de
 
 - NCDialog internal changes: unneeded logging removed, environment
