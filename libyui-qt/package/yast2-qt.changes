@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu May 15 14:48:30 CEST 2008 - sh@suse.de
+
+- Moved most XPM icons and YQIconPool to yast2-qt-pkg:
+  They are only needed for PackageSelector and related
+- V 2.16.47 
+
+-------------------------------------------------------------------
 Thu May 15 12:55:49 CEST 2008 - tgoettlicher@suse.de
 
 - Fixed focus of popups (#bnc 384905)
