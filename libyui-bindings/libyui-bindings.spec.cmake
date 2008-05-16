@@ -17,7 +17,7 @@ License:        GPL
 Summary:        Bindings for libyui
 Group:          Development/Sources
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-BuildRequires:  cmake gcc-c++ ruby-devel swig
+BuildRequires:  cmake gcc-c++ ruby-devel perl python-devel swig
 BuildRequires:  yast2-libyui-devel >= 2.16
 Source:         %{name}-%{version}.tar.bz2
 
@@ -48,38 +48,41 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{__rm} -rf %{buildroot}
 
 %package -n libyui-ruby
-Summary:        Ruby bindings for libyui
+Summary:        Ruby bindings for yast2-libyui
 Group:          Development/Languages/Ruby
 
 %description -n libyui-ruby
 -
 
+%package -n libyui-python
+Summary:        Python bindings for yast2-libyui
+Group:          Development/Languages/Python
+
+%description -n libyui-python
+-
+
+%package -n libyui-perl
+Summary:        Perl bindings for yast2-libyui
+Group:          Development/Languages/Perl
+
+%description -n libyui-perl
+-
+
 %files -n libyui-ruby
 %defattr(-,root,root,-)
-%doc swig/ruby/examples/hello_world.rb swig/ruby/examples/selection_box1.rb
+%doc swig/ruby/examples/*.rb
 %{_libdir}/ruby/vendor_ruby/%{rb_ver}/%{rb_arch}/yui.so
 
-#%package -n python-yui
-#Summary:        Python bindings for libyui
-#Group:          Development/Languages/Python
-#%description -n python-yui
-#-
-#
-#%files -n python-yui
-#%defattr(-,root,root,-)
-#%{_libdir}/python2.5/site-packages/_yui.so
-#%{_libdir}/python2.5/site-packages/yui.py
+%files -n libyui-python
+%defattr(-,root,root,-)
+%doc swig/python/examples/*.py
+%{_libdir}/python2.5/site-packages/_yui.so
+%{_libdir}/python2.5/site-packages/yui.py
 
-#%package -n perl-yui
-#Summary:        Perl bindings for libyui
-#Group:          Development/Languages/Perl
-#
-#%description -n perl-yui
-#-
-#
-#%files -n perl-yui
-#%defattr(-,root,root,-)
-#/usr/lib/perl5/*/*/yui.pm
-#/usr/lib/perl5/*/*/yui.so
+%files -n libyui-perl
+%defattr(-,root,root,-)
+%doc swig/perl/examples/*.pl
+/usr/lib/perl5/vendor_perl/*/*/yui.so
+/usr/lib/perl5/vendor_perl/*/yui.pm
 
 %changelog
