@@ -128,10 +128,16 @@ class Exception;
 %define YUILogComponent "bindings"
 %enddef
 %include YUILog.h
+%include YUIPlugin.h
 
 %include YTypes.h
-%include YSingleChildContainerWidget.h
 %include YWidget.h
+%include YSingleChildContainerWidget.h
+%include YSelectionWidget.h
+%include YSimpleInputField.h
+%include YItem.h
+%include YTreeItem.h
+%include YStringTree.h
 %include YWidgetFactory.h
 %include YDialog.h
 
@@ -156,7 +162,6 @@ class Exception;
 %include YImage.h
 %include YInputField.h
 %include YIntField.h
-%include YItem.h
 %include YLabel.h
 %include YLayoutBox.h
 %include YLogView.h
@@ -180,18 +185,13 @@ class Exception;
 %include YReplacePoint.h
 %include YRichText.h
 %include YRpmGroupsTree.h
-
-%include YSelectionWidget.h
 %include YSelectionBox.h
-
 %include YShortcut.h
 %include YShortcutManager.h
 %include YSimpleEventHandler.h
-%include YSimpleInputField.h
 %include YSlider.h
 %include YSpacing.h
 %include YSquash.h
-%include YStringTree.h
 %include YTable.h
 %include YTableHeader.h
 %include YTableItem.h
@@ -199,7 +199,6 @@ class Exception;
 %include YTimezoneSelector.h
 %include YTransText.h
 %include YTree.h
-%include YTreeItem.h
 %include YUIException.h
 %include YUI.h
 %include YUILoader.h
