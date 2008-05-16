@@ -110,23 +110,29 @@ class intrusive_ptr {
 %rename("!") "operator!";
 %rename("==") "operator==";
 
-
+%include "exception.i"
 %include "std_string.i"
 %include "std_list.i"
+
 #ifdef SWIGPERL5
 /* %include "std/std_set.i" # doesn't compile ?! */
 #else
 %include "std_set.i"
 #endif
+
 %include "stl.i"
 
 class Exception;
 %include YUI.h
 %ignore YUI::start_ui_thread;
 
-
 %define YUILogComponent "bindings"
 %enddef
+
+#ifdef SWIGPYTHON
+%ignore None; /* is a reserved word in Python */
+#endif
+
 %include YUILog.h
 %include YUIPlugin.h
 
@@ -138,7 +144,9 @@ class Exception;
 %include YItem.h
 %include YTreeItem.h
 %include YStringTree.h
+
 %include YWidgetFactory.h
+
 %include YDialog.h
 
 %include YAlignment.h
