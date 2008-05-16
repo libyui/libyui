@@ -1,7 +1,8 @@
 -------------------------------------------------------------------
-Fri May 16 11:45:04 CEST 2008 - tgoettlicher@suse.de
+Fri May 16 13:58:11 CEST 2008 - tgoettlicher@suse.de
 
 - Fixed YUINoDialogException caused by popup windows 
+- V 2.16.48
 
 -------------------------------------------------------------------
 Thu May 15 14:48:30 CEST 2008 - sh@suse.de
