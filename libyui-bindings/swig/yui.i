@@ -91,6 +91,14 @@ start_ui_thread( void *ui_int )
   return NULL;
 }
 
+#if 0
+template < typename T >
+class intrusive_ptr {
+  public:
+  T *operator->();
+};
+#endif
+
 %}
 
 %define DEFINE_PTR_TYPE(name)
@@ -103,21 +111,14 @@ start_ui_thread( void *ui_int )
 %rename("==") "operator==";
 
 
-template < typename T >
-class intrusive_ptr {
-  public:
-  T *operator->();
-};
-
-
 %include "std_string.i"
 %include "std_list.i"
+#ifdef SWIGPERL5
+/* %include "std/std_set.i" # doesn't compile ?! */
+#else
 %include "std_set.i"
-%include "stl.i"
-
-#ifdef SWIGPYTHON
-%include "python/callbacks.i"
 #endif
+%include "stl.i"
 
 class Exception;
 %include YUI.h
@@ -208,7 +209,9 @@ class Exception;
 %include YWizard.h
 
 %extend YEvent {
+#ifdef SWIGRUBY
   VALUE mywidget() { return INT2FIX( $self->widget() ); }
+#endif
 }
 
 %extend YWidget {
