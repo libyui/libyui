@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri May 16 11:45:04 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed YUINoDialogException caused by popup windows 
+
+-------------------------------------------------------------------
 Thu May 15 14:48:30 CEST 2008 - sh@suse.de
 
 - Moved most XPM icons and YQIconPool to yast2-qt-pkg:

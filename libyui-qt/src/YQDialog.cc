@@ -113,7 +113,11 @@ YQDialog::chooseParent( YDialogType dialogType )
     QWidget * parent = YQMainWinDock::mainWinDock()->window();
 
     if ( dialogType == YPopupDialog)
-	    parent = (QWidget *) YDialog::currentDialog()->widgetRep();
+    {
+	YDialog * currentDialog = YDialog::currentDialog( false );
+	if (currentDialog)
+	    parent = (QWidget *) currentDialog->widgetRep();
+    }
 
     if ( ( dialogType == YMainDialog || dialogType == YWizardDialog ) &&
 	 YQMainWinDock::mainWinDock()->couldDock() )
