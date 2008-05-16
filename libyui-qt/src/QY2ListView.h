@@ -114,6 +114,7 @@ signals:
 				  int			col,
 				  const QPoint &	pos );
 
+
 public:
 
     /**
@@ -168,6 +169,17 @@ protected slots:
      * the list is cleared and filled with new contents.
      **/
     void columnWidthChanged( int col, int oldSize, int newSize );
+
+    /**
+     * Internal notification that a tree item has been expanded
+     */
+    void treeExpanded( QTreeWidgetItem * listViewItem );
+
+    /**
+     * Internal notification that a tree item has been collapsed
+     */
+    void treeCollapsed( QTreeWidgetItem * listViewItem );
+
 
 protected:
 

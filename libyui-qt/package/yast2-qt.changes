@@ -1,3 +1,8 @@
+-----------------------------------------------------------------------
+Fri May 16 17:10:03 CEST 2008 - tgoettlicher@suse.de
+
+- Adjust QY2ListView to enable scrolling in wizard (bnc #391048)
+
 -------------------------------------------------------------------
 Fri May 16 13:58:11 CEST 2008 - tgoettlicher@suse.de
 

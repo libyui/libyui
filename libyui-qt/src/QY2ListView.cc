@@ -51,6 +51,13 @@ QY2ListView::QY2ListView( QWidget * parent )
     connect( this,	SIGNAL( columnResized        ( int, int, int ) ),
 	     this,	SLOT  ( columnWidthChanged( int, int, int ) ) );
 #endif
+
+    connect( this,      SIGNAL( itemExpanded ( QTreeWidgetItem *) ),
+             this,      SLOT  ( treeExpanded ( QTreeWidgetItem *)  ) );
+
+    connect( this,      SIGNAL( itemCollapsed ( QTreeWidgetItem *) ),
+             this,      SLOT  ( treeCollapsed ( QTreeWidgetItem *)  ) );
+
 }
 
 
@@ -504,6 +511,22 @@ QY2ListViewToolTip::maybeTip( const QPoint & pos )
 }
 
 #endif
+
+
+void QY2ListView::treeExpanded( QTreeWidgetItem * listViewItem )
+{
+    if ( columnCount() == 1 && header() && header()->isHidden() )
+	resizeColumnToContents( 0 );
+}
+
+
+void QY2ListView::treeCollapsed( QTreeWidgetItem * listViewItem )
+{
+    if ( columnCount() == 1  && header() && header()->isHidden())
+	resizeColumnToContents( 0 );
+}
+
+
 
 
 #include "QY2ListView.moc"
