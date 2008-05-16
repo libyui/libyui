@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri May 16 14:27:14 CEST 2008 - kkaempf@suse.de
+
+- Also generate Python (libyui-python) and Perl (perl-libyui)
+  bindings.
+
+-------------------------------------------------------------------
 Tue May 13 16:05:26 CEST 2008 - kkaempf@suse.de
 
 - Add copyright (gpl 2.0) (bnc#379919)

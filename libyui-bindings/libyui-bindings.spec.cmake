@@ -1,5 +1,9 @@
 #
 # spec file for package libyui-bindings
+# generates:
+#  libyui-ruby
+#  libyui-python
+#  perl-libyui (Perl naming convention)
 #
 # Copyright (c) 2007 SUSE LINUX Products GmbH, Nuernberg, Germany.
 # This file and all modifications and additions to the pristine
@@ -61,11 +65,11 @@ Group:          Development/Languages/Python
 %description -n libyui-python
 -
 
-%package -n libyui-perl
+%package -n perl-libyui
 Summary:        Perl bindings for yast2-libyui
 Group:          Development/Languages/Perl
 
-%description -n libyui-perl
+%description -n perl-libyui
 -
 
 %files -n libyui-ruby
@@ -79,7 +83,7 @@ Group:          Development/Languages/Perl
 %{_libdir}/python2.5/site-packages/_yui.so
 %{_libdir}/python2.5/site-packages/yui.py
 
-%files -n libyui-perl
+%files -n perl-libyui
 %defattr(-,root,root,-)
 %doc swig/perl/examples/*.pl
 /usr/lib/perl5/vendor_perl/*/*/yui.so
