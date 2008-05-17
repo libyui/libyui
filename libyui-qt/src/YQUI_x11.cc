@@ -35,7 +35,6 @@
 #include "YEvent.h"
 #include "YQDialog.h"
 #include "YQi18n.h"
-#include "QY2Settings.h"
 #include "YQUI.h"
 
 // Include low-level X headers AFTER Qt headers:

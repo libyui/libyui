@@ -1,36 +1,36 @@
 # Language specific fonts for yast2-qt
 #
 # Used upon UI::SetLanguage( lang )
-# Fallback strategy for a locale "xy_AB.UTF8":
+# Fallback strategy for a locale xy_AB.UTF8:
 #
 #     font[xy_AB.UTF8] = ???
 #     font[xy_AB] = ???
 #     font[xy] = ???
 #     font = ???
 #
-# If none of those is found, "Sans Serif" is used.
+# If none of those is found, Sans Serif is used.
 #
 # Don't enumerate all languages just for the fun of it,
 # better specify a reasonable default with
 #
 #     font = ???
 
-font = "Sans Serif"
-font[zh] ="Albany AMT,DejaVu Sans,SUSE Sans,FZSongTi,FZMingTiB,AR PL SungtiL GB,Gnu Unifont,Efont Biwidth,Sans Serif"
-font[zh_CN] = "Albany AMT,DejaVu Sans,SUSE Sans,FZSongTi,FZMingTiB,AR PL SungtiL GB,Gnu Unifont,Efont Biwidth,Sans Serif"
-font[zh_SG] = "Albany AMT,DejaVu Sans,SUSE Sans,FZSongTi,FZMingTiB,AR PL SungtiL GB,Gnu Unifont,Efont Biwidth,Sans Serif"
-font[zh_TW] = "Albany AMT,DejaVu Sans,SUSE Sans,FZMingTiB,FZSongTi,AR PL Mingti2L Big5,AR PL SungtiL GB,Gnu Unifont,Efont Biwidth,Sans Serif"
-font[zh_HK] = "Albany AMT,DejaVu Sans,SUSE Sans,FZMingTiB,FZSongTi,AR PL Mingti2L Big5,AR PL SungtiL GB,Gnu Unifont,Efont Biwidth,Sans Serif"
-font[ja] = "Albany AMT,DejaVu Sans,SUSE Sans,HGPGothicB,IPAPGothic,IPAGothic,Sazanami Gothic,Efont Biwidth,Gnu Unifont,Sans Serif"
+font="Sans Serif"
+font[zh]="Albany AMT,DejaVu Sans,SUSE Sans,FZSongTi,FZMingTiB,AR PL SungtiL GB,Gnu Unifont,Efont Biwidth,Sans Serif"
+font[zh_CN]="Albany AMT,DejaVu Sans,SUSE Sans,FZSongTi,FZMingTiB,AR PL SungtiL GB,Gnu Unifont,Efont Biwidth,Sans Serif"
+font[zh_SG]="Albany AMT,DejaVu Sans,SUSE Sans,FZSongTi,FZMingTiB,AR PL SungtiL GB,Gnu Unifont,Efont Biwidth,Sans Serif"
+font[zh_TW]="Albany AMT,DejaVu Sans,SUSE Sans,FZMingTiB,FZSongTi,AR PL Mingti2L Big5,AR PL SungtiL GB,Gnu Unifont,Efont Biwidth,Sans Serif"
+font[zh_HK]="Albany AMT,DejaVu Sans,SUSE Sans,FZMingTiB,FZSongTi,AR PL Mingti2L Big5,AR PL SungtiL GB,Gnu Unifont,Efont Biwidth,Sans Serif"
+font[ja]="Albany AMT,DejaVu Sans,SUSE Sans,HGPGothicB,IPAPGothic,IPAGothic,Sazanami Gothic,Efont Biwidth,Gnu Unifont,Sans Serif"
 
 
 # For debugging
 
-font[xy_AB.UTF8] = "xy_AB_UTF8, Sans Serif"
-font[xy_XY] = "xy_XY, Sans Serif"
-font[xy] = "xy, Sans Serif"
+font[xy_AB.UTF8]="xy_AB_UTF8, Sans Serif"
+font[xy_XY]="xy_XY, Sans Serif"
+font[xy]="xy, Sans Serif"
 
-font[times] = "Times"
-font[sans]  = "Sans Serif"
-font[helv]  = "Helvetica"
+font[times]="Times"
+font[sans]="Sans Serif"
+font[helv]="Helvetica"
 

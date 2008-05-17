@@ -43,7 +43,6 @@
 #include "utf8.h"
 
 #include "YQDialog.h"
-#include "QY2Settings.h"
 
 
 using std::max;

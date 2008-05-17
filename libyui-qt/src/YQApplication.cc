@@ -26,6 +26,7 @@
 #include <QFileDialog>
 #include <QDesktopWidget>
 #include <QMessageBox>
+#include <QSettings>
 
 #define YUILogComponent "qt-ui"
 #include "YUILog.h"
@@ -44,7 +45,6 @@ YQApplication::YQApplication()
     , _currentFont( 0 )
     , _headingFont( 0 )
     , _boldFont( 0 )
-    , _fontFamily( "Sans Serif" )
     , _langFonts( 0 )
     , _qtTranslations( 0 )
     , _autoFonts( false )
@@ -64,11 +64,8 @@ YQApplication::YQApplication()
 
 YQApplication::~YQApplication()
 {
-    if ( _langFonts )
-	delete _langFonts;
-
-    if ( _qtTranslations )
-	delete _qtTranslations;
+    delete _langFonts;
+    delete _qtTranslations;
 
     deleteFonts();
 }
@@ -78,6 +75,7 @@ void
 YQApplication::setLanguage( const string & language,
 			    const string & encoding )
 {
+    yuiMilestone() << "setLanguage " << language << endl;
     YApplication::setLanguage( language, encoding );
     loadPredefinedQtTranslations();
     setLangFonts( language, encoding );
@@ -145,17 +143,20 @@ YQApplication::loadPredefinedQtTranslations()
 void
 YQApplication::setLangFonts( const string & language, const string & encoding )
 {
+    if ( _fontFamily.isEmpty() )
+        _fontFamily = qApp->font().family();
+
     QString oldFontFamily = _fontFamily;
 
     if ( ! _langFonts )
     {
-	_langFonts = new QY2Settings( LANG_FONTS_FILE );
+	_langFonts = new QSettings( LANG_FONTS_FILE, QSettings::IniFormat );
 	Q_CHECK_PTR( _langFonts );
 
-	if ( _langFonts->readError() )
+	if ( _langFonts->status() != QSettings::NoError )
 	    yuiError() << "Error reading " << _langFonts->fileName() << endl;
 	else
-	    yuiMilestone() <<  _langFonts->fileName() << " read OK" << endl;
+	    yuiMilestone() <<  _langFonts->fileName() << " read OK" << qPrintable( _langFonts->allKeys().join( "-" ) ) << endl;
     }
 
     QString lang = language.c_str();
@@ -165,41 +166,58 @@ YQApplication::setLangFonts( const string & language, const string & encoding )
 
     QString key;
 
-    if ( ! _langFonts->hasKey( fontKey( lang ) ) )	// Try with encoding ("zh_CN.UTF8" etc.)
+    if ( ! _langFonts->contains( fontKey( lang ) ) )	// Try with encoding ("zh_CN.UTF8" etc.)
     {
 	lang = language.c_str();			// Try without encoding ("zh_CN")
 
-	if ( ! _langFonts->hasKey( fontKey( lang ) ) )
+	if ( ! _langFonts->contains( fontKey( lang ) ) )
 	    lang.replace( QRegExp( "_.*$" ), "" );	// Cut off trailing country ("_CN")
     }
 
-    if ( _langFonts->hasKey( fontKey( lang ) ) )
+    if ( _langFonts->contains( fontKey( lang ) ) )
     {
-	_fontFamily = _langFonts->get( fontKey( lang ), "Sans Serif" );
+	_fontFamily = _langFonts->value( fontKey( lang ), _fontFamily ).toString();
 	yuiMilestone() << fontKey( lang ) << " = \"" << _fontFamily << "\"" << endl;
     }
     else
     {
-	_fontFamily = _langFonts->get( fontKey( "" ), "Sans Serif" );
+	_fontFamily = _langFonts->value( fontKey( "" ),  _fontFamily ).toString();
 	yuiMilestone() << "Using fallback for " << lang
 		       << ": font = \"" << _fontFamily << "\""
 		       << endl;
     }
 
-    if ( _fontFamily != oldFontFamily && ! _fontFamily.isEmpty() )
+    if ( _fontFamily.isEmpty() ) {
+        _fontFamily = "Sans Serif";
+    }
+
+    if ( _fontFamily != oldFontFamily )
     {
 	yuiMilestone() << "New font family: " << _fontFamily << endl;
 	deleteFonts();
-	int size = qApp->font().pointSize();
-	QFont font( _fontFamily );
-	font.setPointSize( size );
-	qApp->setFont(font);	// font, informWidgets
+
+        foreach (QWidget *widget, QApplication::allWidgets())
+        {
+            if ( widget->font().family() != oldFontFamily )
+            {
+                yuiMilestone() << "font " << qPrintable( widget->font().family() ) << " family is not " << oldFontFamily << endl;
+                continue;
+            }
+            QFont wfont( widget->font() );
+            wfont.setFamily( _fontFamily );
+            widget->setFont( wfont );
+        }
+        QFont font( qApp->font() );
+        font.setFamily( _fontFamily );
+        qApp->setFont(font);	// font, informWidgets
+
 	yuiMilestone() << "Reloading fonts - now using \"" << font.toString() << "\"" << endl;
     }
     else
     {
 	yuiDebug() << "No font change" << endl;
     }
+
 }
 
 
@@ -302,14 +320,9 @@ YQApplication::headingFont()
 void
 YQApplication::deleteFonts()
 {
-    if ( _currentFont )
-	delete _currentFont;
-
-    if ( _headingFont )
-	delete _headingFont;
-
-    if ( _boldFont )
-	delete _boldFont;
+    delete _currentFont;
+    delete _headingFont;
+    delete _boldFont;
 
     _currentFont = 0;
     _headingFont = 0;

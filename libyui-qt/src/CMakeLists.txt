@@ -17,7 +17,6 @@ SET( qt_yast_plugin_SRCS
      QY2DiskUsageList.cc
      QY2HelpDialog.cc
      QY2ListView.cc
-     QY2Settings.cc
      QY2Styler.cc
      YFrameBuffer.cc
      YQAlignment.cc
@@ -78,7 +77,6 @@ SET( yast_qt_HEADERS
      QY2DiskUsageList.h
      QY2HelpDialog.h
      QY2ListView.h
-     QY2Settings.h
      QY2Styler.h
      utf8.h
      YFrameBuffer.h

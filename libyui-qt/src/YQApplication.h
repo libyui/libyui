@@ -25,9 +25,9 @@
 #include <qfont.h>
 
 #include "YQPackageSelectorPluginStub.h"
-#include "QY2Settings.h"
 #include "YApplication.h"
 
+class QSettings;
 class YQPackageSelectorPlugin;
 
 
@@ -323,7 +323,7 @@ protected:
     /**
      * Language-specific font settings
      **/
-    QY2Settings	* _langFonts;
+    QSettings	* _langFonts;
 
     /**
      * Translator for the predefined Qt dialogs
