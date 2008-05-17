@@ -27,6 +27,9 @@
 #include <QDesktopWidget>
 #include <QMessageBox>
 #include <QSettings>
+#include <QFontDatabase>
+
+#include <fontconfig/fontconfig.h>
 
 #define YUILogComponent "qt-ui"
 #include "YUILog.h"
@@ -75,7 +78,6 @@ void
 YQApplication::setLanguage( const string & language,
 			    const string & encoding )
 {
-    yuiMilestone() << "setLanguage " << language << endl;
     YApplication::setLanguage( language, encoding );
     loadPredefinedQtTranslations();
     setLangFonts( language, encoding );
@@ -195,14 +197,20 @@ YQApplication::setLangFonts( const string & language, const string & encoding )
     {
 	yuiMilestone() << "New font family: " << _fontFamily << endl;
 	deleteFonts();
+        // setting the language loads fonts and we need to tell fontconfig
+        FcInitReinitialize();
+
+#if 0
+        QFontDatabase database;
+        int ret = database.addApplicationFont( "/usr/share/fonts/truetype/ipag.ttf" );
+        yuiMilestone() << "families " << qPrintable( database.families().join( "-" ) ) << " " << ret << endl;
+#endif
 
         foreach (QWidget *widget, QApplication::allWidgets())
         {
             if ( widget->font().family() != oldFontFamily )
-            {
-                yuiMilestone() << "font " << qPrintable( widget->font().family() ) << " family is not " << oldFontFamily << endl;
                 continue;
-            }
+
             QFont wfont( widget->font() );
             wfont.setFamily( _fontFamily );
             widget->setFont( wfont );
