@@ -11,7 +11,7 @@ plugin_LTLIBRARIES = libpy2ncurses.la
 libpy2ncurses_la_LDFLAGS = -version-info 2:0
 
 libpy2ncurses_la_LIBADD =		\
-	-lncursesw -lpanelw
+	-lncursesw -lpanelw -lyui
 
 #libpy2ncurses_la_LIBADD =		\
 #	-L$(libdir)			\
