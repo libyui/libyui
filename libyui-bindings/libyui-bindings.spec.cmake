@@ -66,6 +66,7 @@ Group:          Development/Languages/Python
 -
 
 %package -n perl-libyui
+Requires:       perl-base >= 5.10
 Summary:        Perl bindings for yast2-libyui
 Group:          Development/Languages/Perl
 
