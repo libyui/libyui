@@ -85,11 +85,7 @@
 
 using namespace std;
 
-void *
-start_ui_thread( void *ui_int )
-{
-  return NULL;
-}
+extern void *start_ui_thread( void *ui_int );
 
 #if 0
 template < typename T >
@@ -124,7 +120,6 @@ class intrusive_ptr {
 
 class Exception;
 %include YUI.h
-%ignore YUI::start_ui_thread;
 
 %define YUILogComponent "bindings"
 %enddef
