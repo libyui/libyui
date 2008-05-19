@@ -9,7 +9,7 @@ Mon May 19 19:31:38 CEST 2008 - dmacvicar@suse.de
 - feedback for search (bnc#391406)
 - reenable cancel (bnc#350988)
 - fix search begins with string (bnc#388601)
-
+- deprecate special selection icons (bnc#392067)
 
 -------------------------------------------------------------------
 Mon May 19 11:50:51 CEST 2008 - dmacvicar@suse.de

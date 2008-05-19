@@ -35,9 +35,6 @@ public:
     static QPixmap pkgKeepInstalled();
     static QPixmap pkgNoInst();
     static QPixmap pkgProtected();
-    static QPixmap pkgSelAutoDel();
-    static QPixmap pkgSelAutoInstall();
-    static QPixmap pkgSelAutoUpdate();
     static QPixmap pkgTaboo();
     static QPixmap pkgUpdate();
 
@@ -49,10 +46,7 @@ public:
     static QPixmap disabledPkgKeepInstalled();
     static QPixmap disabledPkgNoInst();
     static QPixmap disabledPkgProtected();
-    static QPixmap disabledPkgSelAutoDel();
-    static QPixmap disabledPkgSelAutoInstall();
-    static QPixmap disabledPkgSelAutoUpdate();
-    static QPixmap disabledPkgTaboo();
+        static QPixmap disabledPkgTaboo();
     static QPixmap disabledPkgUpdate();
 
     static QPixmap checkMarkOn();

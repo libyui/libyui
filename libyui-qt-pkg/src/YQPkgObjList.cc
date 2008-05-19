@@ -216,18 +216,11 @@ YQPkgObjList::statusIcon( ZyppStatus status, bool enabled, bool bySelection )
 	    case S_Taboo:		icon = YQIconPool::pkgTaboo();		break;
 	    case S_Update:		icon = YQIconPool::pkgUpdate();		break;
 
-	    case S_AutoDel:		icon = bySelection ?
-		 			    YQIconPool::pkgSelAutoDel() :
-		 			    YQIconPool::pkgAutoDel();		break;
+	    case S_AutoDel:		icon = YQIconPool::pkgAutoDel();	break;
 
-	    case S_AutoInstall:		icon = bySelection ?
-		 			    YQIconPool::pkgSelAutoInstall() :
-		 			    YQIconPool::pkgAutoInstall();	break;
+	    case S_AutoInstall:		icon = YQIconPool::pkgAutoInstall();	break;
 
-	    case S_AutoUpdate:		icon = bySelection ?
-					    YQIconPool::pkgSelAutoUpdate() :
-		                             YQIconPool::pkgAutoUpdate();	break;
-
+	    case S_AutoUpdate:		icon = YQIconPool::pkgAutoUpdate();	break;
 
 		// Intentionally omitting 'default' branch so the compiler can
 		// catch unhandled enum states
@@ -245,17 +238,11 @@ YQPkgObjList::statusIcon( ZyppStatus status, bool enabled, bool bySelection )
 	    case S_Taboo:		icon = YQIconPool::disabledPkgTaboo();		break;
 	    case S_Update:		icon = YQIconPool::disabledPkgUpdate();		break;
 
-	    case S_AutoDel:		icon = bySelection ?
-		 			    YQIconPool::disabledPkgSelAutoDel() :
-		 			    YQIconPool::disabledPkgAutoDel();		break;
+	    case S_AutoDel:		icon = YQIconPool::disabledPkgAutoDel();        break;
 
-	    case S_AutoInstall:		icon = bySelection ?
-		 			    YQIconPool::disabledPkgSelAutoInstall() :
-		 			    YQIconPool::disabledPkgAutoInstall();	break;
+	    case S_AutoInstall:		icon = YQIconPool::disabledPkgAutoInstall();	break;
 
-	    case S_AutoUpdate:		icon = bySelection ?
-					    YQIconPool::disabledPkgSelAutoUpdate() :
-					    YQIconPool::disabledPkgAutoUpdate();	break;
+	    case S_AutoUpdate:		icon = YQIconPool::disabledPkgAutoUpdate();	break;
 
 		// Intentionally omitting 'default' branch so the compiler can
 		// catch unhandled enum states

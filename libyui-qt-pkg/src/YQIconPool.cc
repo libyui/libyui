@@ -38,12 +38,6 @@
 #include "icons/noinst_disabled.xpm"
 #include "icons/protected.xpm"
 #include "icons/protected_disabled.xpm"
-#include "icons/sel_autodel.xpm"
-#include "icons/sel_autodel_disabled.xpm"
-#include "icons/sel_autoinstall.xpm"
-#include "icons/sel_autoinstall_disabled.xpm"
-#include "icons/sel_autoupdate.xpm"
-#include "icons/sel_autoupdate_disabled.xpm"
 #include "icons/taboo.xpm"
 #include "icons/taboo_disabled.xpm"
 #include "icons/update.xpm"
@@ -77,9 +71,6 @@ QPixmap YQIconPool::pkgInstall()		{ return iconPool()->cachedIcon( install_xpm )
 QPixmap YQIconPool::pkgAutoInstall()		{ return iconPool()->cachedIcon( autoinstall_xpm );		}
 QPixmap YQIconPool::pkgAutoUpdate()		{ return iconPool()->cachedIcon( autoupdate_xpm );		}
 QPixmap YQIconPool::pkgAutoDel()		{ return iconPool()->cachedIcon( autodel_xpm );			}
-QPixmap YQIconPool::pkgSelAutoInstall()		{ return iconPool()->cachedIcon( sel_autoinstall_xpm );		}
-QPixmap YQIconPool::pkgSelAutoUpdate()		{ return iconPool()->cachedIcon( sel_autoupdate_xpm );		}
-QPixmap YQIconPool::pkgSelAutoDel()		{ return iconPool()->cachedIcon( sel_autodel_xpm );		}
 QPixmap YQIconPool::pkgKeepInstalled()		{ return iconPool()->cachedIcon( keepinstalled_xpm );		}
 QPixmap YQIconPool::pkgNoInst()			{ return iconPool()->cachedIcon( noinst_xpm );			}
 QPixmap YQIconPool::pkgProtected()		{ return iconPool()->cachedIcon( protected_xpm );		}
@@ -91,9 +82,6 @@ QPixmap YQIconPool::disabledPkgInstall()	{ return iconPool()->cachedIcon( instal
 QPixmap YQIconPool::disabledPkgAutoInstall()	{ return iconPool()->cachedIcon( autoinstall_disabled_xpm );	}
 QPixmap YQIconPool::disabledPkgAutoUpdate()	{ return iconPool()->cachedIcon( autoupdate_disabled_xpm );	}
 QPixmap YQIconPool::disabledPkgAutoDel()	{ return iconPool()->cachedIcon( autodel_disabled_xpm );	}
-QPixmap YQIconPool::disabledPkgSelAutoInstall()	{ return iconPool()->cachedIcon( sel_autoinstall_disabled_xpm );}
-QPixmap YQIconPool::disabledPkgSelAutoUpdate()	{ return iconPool()->cachedIcon( sel_autoupdate_disabled_xpm );	}
-QPixmap YQIconPool::disabledPkgSelAutoDel()	{ return iconPool()->cachedIcon( sel_autodel_disabled_xpm );	}
 QPixmap YQIconPool::disabledPkgKeepInstalled()	{ return iconPool()->cachedIcon( keepinstalled_disabled_xpm );	}
 QPixmap YQIconPool::disabledPkgNoInst()		{ return iconPool()->cachedIcon( noinst_disabled_xpm );		}
 QPixmap YQIconPool::disabledPkgProtected()	{ return iconPool()->cachedIcon( protected_disabled_xpm );	}
