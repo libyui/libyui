@@ -1,3 +1,9 @@
+# keep preprocessor defines escaped
+if(COMMAND cmake_policy)
+  cmake_policy(SET CMP0005 OLD)
+endif(COMMAND cmake_policy)
+  
+
 INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
 
 ADD_DEFINITIONS(

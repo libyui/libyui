@@ -1,3 +1,6 @@
+# cmake 2.6 requires this
+cmake_minimum_required(VERSION 2.4)
+
 PROJECT(yast2-qt)
 SET( CMAKE_MODULE_PATH "${CMAKE_INSTALL_PREFIX}/share/cmake/Modules" ${CMAKE_MODULE_PATH} )
 
