@@ -34,6 +34,7 @@
 #define YUILogComponent "qt-pkg"
 #include "YUILog.h"
 
+#include "YQPackageSelector.h"
 #include "YQPkgSearchFilterView.h"
 #include "QY2LayoutUtils.h"
 #include "YQi18n.h"
@@ -213,7 +214,8 @@ YQPkgSearchFilterView::filter()
 
         zypp::PoolQuery query;
         query.addKind(zypp::ResTraits<zypp::Package>::kind);
-        query.addString(_searchText->currentText().toUtf8().data());
+        
+        string searchtext = _searchText->currentText().toUtf8().data();
         
 	QProgressDialog progress( _( "Searching..." ),			// text
 				  _( "&Cancel" ),			// cancelButtonLabel
@@ -222,16 +224,21 @@ YQPkgSearchFilterView::filter()
 				  this			// parent
 				  );
 	progress.setWindowTitle( "" );
-	progress.setMinimumDuration( 2000 ); // millisec
-
+	progress.setMinimumDuration( 1500 ); // millisec
+        // HACK, this should go to YQPackageSelector
+        parentWidget()->parentWidget()->setCursor(Qt::WaitCursor);
+        progress.setCursor(Qt::ArrowCursor);
+        
 	QTime timer;
         query.setCaseSensitive( _caseSensitive->isChecked() );
         
         switch ( _searchMode->currentIndex() )
         {
 	case Contains:
+            query.setMatchSubstring();
 	case BeginsWith:
-	    query.setMatchSubstring();
+            query.setMatchRegex();
+            searchtext = "^" + searchtext;
             break;
 	case ExactMatch:
 	    break;
@@ -244,6 +251,8 @@ YQPkgSearchFilterView::filter()
 	    // Intentionally omitting "default" branch - let gcc watch for unhandled enums
         }
         
+        query.addString(searchtext);
+
         if ( _searchInName->isChecked() )
             query.addAttribute( zypp::sat::SolvAttr::name );
         if ( _searchInDescription->isChecked() )
@@ -259,6 +268,9 @@ YQPkgSearchFilterView::filter()
         // but make this configurable later
         query.addAttribute( zypp::sat::SolvAttr::keywords );
 
+        _searchText->setEnabled(false);
+        _searchButton->setEnabled(false);
+        
 	timer.start();
 
 	int count = 0;
@@ -276,6 +288,9 @@ YQPkgSearchFilterView::filter()
                 emit filterMatch( selectable, zyppPkg );
             }
 
+            if ( progress.wasCanceled() )
+                break;
+            
 	    progress.setValue( count++ );
 
 	    if ( timer.elapsed() > 300 ) // milisec
@@ -285,7 +300,7 @@ YQPkgSearchFilterView::filter()
 		// list change all the time, thus display updates are necessary
 		// each time.
 
-		//qApp->processEvents();
+		qApp->processEvents();
 		timer.restart();
 	    }
 	}
@@ -293,6 +308,10 @@ YQPkgSearchFilterView::filter()
 	if ( _matchCount == 0 )
 	    emit message( _( "No Results." ) );
     }
+
+    _searchText->setEnabled(true);
+    _searchButton->setEnabled(true);
+    parentWidget()->parentWidget()->setCursor(Qt::ArrowCursor);
 
     emit filterFinished();
 }
