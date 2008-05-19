@@ -6,6 +6,7 @@ Mon May 19 19:31:38 CEST 2008 - dmacvicar@suse.de
 - fix search begins with string (bnc#388601)
 - deprecate special selection icons (bnc#392067)
 - fix persistent locks saving (bnc#332853)
+- 2.16.44
 
 -------------------------------------------------------------------
 Mon May 19 15:59:53 CEST 2008 - tgoettlicher@suse.de
