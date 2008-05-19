@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon May 19 12:02:56 CEST 2008 - kkaempf@suse.de
+
+- Add examples for Perl and Python
+
+-------------------------------------------------------------------
 Fri May 16 14:27:14 CEST 2008 - kkaempf@suse.de
 
 - Also generate Python (libyui-python) and Perl (perl-libyui)
