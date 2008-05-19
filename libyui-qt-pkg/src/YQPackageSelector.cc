@@ -1467,7 +1467,8 @@ YQPackageSelector::installSubPkgs( const QString suffix )
 	_statusFilterView->filter();
     }
 
-    YQPkgChangesDialog::showChangesDialog( _( "Added Subpackages:" ),
+    YQPkgChangesDialog::showChangesDialog( this,
+					   _( "Added Subpackages:" ),
 					   QRegExp( ".*" + suffix + "$" ),
 					   _( "&OK" ),
 					   QString::null,	// rejectButtonLabel

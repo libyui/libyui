@@ -205,12 +205,13 @@ YQPkgChangesDialog::sizeHint() const
 
 
 bool
-YQPkgChangesDialog::showChangesDialog( const QString & 	message,
+YQPkgChangesDialog::showChangesDialog( QWidget *	parent,
+				       const QString & 	message,
 				       const QString &	acceptButtonLabel,
 				       const QString &	rejectButtonLabel,
 				       bool		showIfListEmpty	  )
 {
-    YQPkgChangesDialog dialog( 0,
+    YQPkgChangesDialog dialog( parent,
 			       message,
 			       acceptButtonLabel,
 			       rejectButtonLabel );
@@ -226,13 +227,14 @@ YQPkgChangesDialog::showChangesDialog( const QString & 	message,
 
 
 bool
-YQPkgChangesDialog::showChangesDialog( const QString & 	message,
+YQPkgChangesDialog::showChangesDialog( QWidget *	parent,
+				       const QString & 	message,
 				       const QRegExp &  regexp,
 				       const QString &	acceptButtonLabel,
 				       const QString &	rejectButtonLabel,
 				       bool		showIfListEmpty	  )
 {
-    YQPkgChangesDialog dialog( 0,
+    YQPkgChangesDialog dialog( parent,
 			       message,
 			       acceptButtonLabel,
 			       rejectButtonLabel );

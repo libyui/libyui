@@ -186,7 +186,8 @@ YQPackageSelectorBase::showAutoPkgList()
 	     " have been changed to resolve dependencies:" )
 	+ "<p>";
 
-    YQPkgChangesDialog::showChangesDialog( msg,
+    YQPkgChangesDialog::showChangesDialog( this,
+					   msg,
 					   _( "&OK" ),
 					   QString::null,	// rejectButtonLabel
 					   true );		// showIfEmpty
@@ -262,7 +263,7 @@ YQPackageSelectorBase::accept()
 		 " have been changed to resolve dependencies:" )
 	    + "<p>";
 
-	if ( YQPkgChangesDialog::showChangesDialog( msg, _( "C&ontinue" ), _( "&Cancel" ) )
+	if ( YQPkgChangesDialog::showChangesDialog( this, msg, _( "C&ontinue" ), _( "&Cancel" ) )
 	     == QDialog::Rejected )
 	    return;
     }

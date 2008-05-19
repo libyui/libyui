@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon May 19 15:59:53 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed bnc #389745: 'Changed Packages' window not centered
+
+-------------------------------------------------------------------
 Mon May 19 11:50:51 CEST 2008 - dmacvicar@suse.de
 
 - cycle status from autoselected to non-selected instead of

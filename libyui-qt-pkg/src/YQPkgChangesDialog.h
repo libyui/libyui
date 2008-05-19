@@ -50,7 +50,8 @@ public:
      * status ), the dialog is not shown at all ( and returns 'true' ) - unless
      *'showIfListEmpty' is 'true'.
      **/
-    static bool showChangesDialog( const QString & 	message,
+    static bool showChangesDialog( QWidget *		parent,
+				   const QString & 	message,
 				   const QString &	acceptButtonLabel,
 				   const QString &	rejectButtonLabel = QString::null,
 				   bool			showIfListEmpty   = false	);
@@ -69,7 +70,8 @@ public:
      * status ), the dialog is not shown at all ( and returns 'true' ) - unless
      *'showIfListEmpty' is 'true'.
      **/
-    static bool showChangesDialog( const QString & 	message,
+    static bool showChangesDialog( QWidget *		parent,
+				   const QString & 	message,
 				   const QRegExp & 	regexp,
 				   const QString &	acceptButtonLabel,
 				   const QString &	rejectButtonLabel = QString::null,
