@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon May 19 11:50:51 CEST 2008 - dmacvicar@suse.de
+
+- cycle status from autoselected to non-selected instead of
+  taboo, as ZYpp supports soft-locks (recommends locks)
+  (related to bnc#389739)
+
+-------------------------------------------------------------------
 Thu May 15 14:52:30 CEST 2008 - sh@suse.de
 
 - Fixed bnc #389744: Missing icons in "symbols help" dialog

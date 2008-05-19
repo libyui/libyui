@@ -1219,7 +1219,9 @@ YQPkgObjListItem::cycleStatus()
 		break;
 
 	    case S_AutoInstall:
-		newStatus =  S_Taboo;
+                // this used to be taboo before, but now ZYpp supports
+                // saving weak locks (unselected packages)
+		newStatus =  S_NoInst;
 		break;
 
 	    default:
