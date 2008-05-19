@@ -41,9 +41,18 @@ closeButton    = factory.createPushButton( rightAlignment, "&Close" )
 while True:
   print "Begin of loop"
   event = dialog.waitForEvent()
+  print "Event "
+  print event
+  print "---"
   if not event:
+    print "Empty"
     next
-  print "Event #{event}"
+  print "Type"
+  print event.eventType()
+  print "---"
+  print "CancelType"
+  print yui.YEvent.CancelEvent
+  print "---"
   if event.eventType() == yui.YEvent.CancelEvent: # window manager "close window" button
     print "Cancel"
     break
