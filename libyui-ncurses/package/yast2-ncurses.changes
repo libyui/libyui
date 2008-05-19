@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon May 19 12:04:31 CEST 2008 - kkaempf@suse.de
+
+- link against libyui to get all symbols resolved.
+  (required to get libyui-bindings work with ncurses)
+
+-------------------------------------------------------------------
 Thu May 15 14:05:19 CEST 2008 - gs@suse.de
 
 - bugfix for bnc #389761 (correct handling of empty item list in 
