@@ -44,6 +44,7 @@
 #include "YEvent.h"
 #include "YQi18n.h"
 
+#include "zypp/Locks.h"
 
 using std::max;
 using std::string;
@@ -272,6 +273,8 @@ YQPackageSelectorBase::accept()
     if ( checkDiskUsage() == QDialog::Rejected )
 	return;
 
+    zypp::Locks::instance().save();
+    
     yuiMilestone() << "Closing PackageSelector with \"Accept\"" << endl;
     YQUI::ui()->sendEvent( new YMenuEvent( "accept" ) );
 }
