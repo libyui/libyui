@@ -144,7 +144,7 @@ NCPackageSelector::~NCPackageSelector()
 //
 // 	createPopups()
 //
-// 	Create all popups
+// 	Create popups
 //
 // 	Don't create the popups any longer in constructur because the current dialog
 // 	wouldn't be the PackageSelector dialog then but a PopupDialog and
@@ -154,23 +154,9 @@ NCPackageSelector::~NCPackageSelector()
 //
 void NCPackageSelector::createPopups()
 {
-    if ( !youMode )
-    {
-	// create the patterns popup
-	//patternPopup =  new NCPkgFilterPattern( , this, NCPkgFilterPattern::S_Pattern );
-
-	// create language popup
-	//languagePopup = new NCPkgFilterPattern( wpos( 1,1 ), this, NCPkgFilterPattern::S_Language );
-
-	// create repository popup
-	//repoPopup = new NCPkgRepoTable( wpos( 1,1), this );
-
-	// create the filter popup
-	//filterPopup = new NCPkgFilterRPMGroups( wpos( 1, 1 ),  this );
-    }
-
-    // create the search popup
-    //searchPopup = new NCPkgFilterRPMGroups( wpos( 1, 1 ), this );
+    // Patterns, Languages, Repositories, RPM Groups and Search filter are part of NCPkgFilterMain.
+    // NCPkgFilterPattern, NCPkgLocaleTable, NCPkgRepoTable, NCPkgFilterRPMGroups and
+    // NCPkgFilterSearch are created in NCPackageSelector::replaceFilter.
 
     // the dependency popup
     depsPopup = new NCPkgPopupDeps( wpos( 3, 8 ), this );
@@ -1695,8 +1681,8 @@ bool NCPackageSelector::fillDefaultList( )
     if ( !pkgList )
 	return false;
 
-    // yuiMilestone() << "Fill list: " << (const NCWidget *) pkgList << endl;
     yuiMilestone() << "Fill list: " << (NCWidget *) pkgList << endl;
+
     switch ( pkgList->getTableType() )
     {
 	case NCPkgTable::T_Patches: {
@@ -1722,6 +1708,9 @@ bool NCPackageSelector::fillDefaultList( )
 	case NCPkgTable::T_Packages: {
 
 		pkgList->setVisibleInfo(NCPkgTable::I_Technical);
+		// update the pattern status which is available only after the initial
+		// solver run
+		patternPopup->updateTable();
 	        patternPopup->showPatternPackages();
 		// show the package inforamtion of the current item
 		pkgList->showInformation ();
