@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue May 20 12:19:41 CEST 2008 - gs@suse.de
+
+-  update the pattern status after the initial solver run 
+
+-------------------------------------------------------------------
 Wed May  7 11:04:00 CEST 2008 - gs@suse.de
 
 - internal changes: remove remainings of old style logging,
