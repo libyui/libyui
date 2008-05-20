@@ -12,4 +12,4 @@ my $vbox = $factory->createVBox( $dialog );
 $factory->createLabel( $vbox, "Hello, World!" );
 $factory->createPushButton( $vbox, "&OK" );
 my $event = $dialog->waitForEvent();
-#$dialog->destroy();
+$dialog->destroy();
