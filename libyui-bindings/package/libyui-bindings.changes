@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue May 20 17:43:12 CEST 2008 - kkaempf@suse.de
+
+- Fix requires for perl-yui (bnc#392558)
+
+-------------------------------------------------------------------
 Tue May 20 13:20:21 CEST 2008 - kkaempf@suse.de
 
 - follow naming conventions (bnc#392524). Its now ruby-yui,
