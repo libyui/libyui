@@ -63,7 +63,7 @@ YQDialog::YQDialog( YDialogType 	dialogType,
     {
 	QColor normalBackground     ( 240, 100, 36 );
 	QColor inputFieldBackground ( 0xbb, 0xff, 0xbb );
-	QColor text = Qt::white;
+	QColor text = Qt::black;
 
 	if ( colorMode == YDialogInfoColor )
 	{

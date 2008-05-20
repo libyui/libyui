@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue May 20 11:50:53 CEST 2008 - sh@suse.de
+
+- Changed `opt(`warncolor) text color back to black (bnc #384452) 
+
+-------------------------------------------------------------------
 Sat May 17 18:19:22 CEST 2008 - coolo@suse.de
 
 - fix font handling during installation (bnc#357258)
