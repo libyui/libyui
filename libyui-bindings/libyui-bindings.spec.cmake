@@ -51,40 +51,40 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %clean
 %{__rm} -rf %{buildroot}
 
-%package -n libyui-ruby
+%package -n ruby-yui
 Summary:        Ruby bindings for yast2-libyui
 Group:          Development/Languages/Ruby
 
-%description -n libyui-ruby
+%description -n ruby-yui
 -
 
-%package -n libyui-python
+%package -n python-yui
 Summary:        Python bindings for yast2-libyui
 Group:          Development/Languages/Python
 
-%description -n libyui-python
+%description -n python-yui
 -
 
-%package -n perl-libyui
+%package -n perl-yui
 Requires:       perl-base >= 5.10
 Summary:        Perl bindings for yast2-libyui
 Group:          Development/Languages/Perl
 
-%description -n perl-libyui
+%description -n perl-yui
 -
 
-%files -n libyui-ruby
+%files -n ruby-yui
 %defattr(-,root,root,-)
 %doc swig/ruby/examples/*.rb
 %{_libdir}/ruby/vendor_ruby/%{rb_ver}/%{rb_arch}/yui.so
 
-%files -n libyui-python
+%files -n python-yui
 %defattr(-,root,root,-)
 %doc swig/python/examples/*.py
 %{_libdir}/python2.5/site-packages/_yui.so
 %{_libdir}/python2.5/site-packages/yui.py
 
-%files -n perl-libyui
+%files -n perl-yui
 %defattr(-,root,root,-)
 %doc swig/perl/examples/*.pl
 /usr/lib/perl5/vendor_perl/*/*/yui.so
