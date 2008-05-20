@@ -462,7 +462,7 @@ const string NCPkgStrings::HelpPkgMenu2()
 const string NCPkgStrings::HelpPkgMenu3()
 {
     // part5 of help text package installation
-    static const string value =  _( "<p><b>View:</b> here you have the possibility to choose which information about the selected package will be displayed in the window below the package table. Available options are: package description (default), technical data (version, size, license etc.) package versions (all available), file list (all files included in the package) and dependencies (provides, requires etc.).</p>" );
+    static const string value =  _( "<p><b>View:</b> here you have the possibility to choose which information about the selected package will be displayed in the window below the package table. Available options are: package description, technical data (version, size, license etc.) package versions (all available), file list (all files included in the package) and dependencies (provides, requires etc.).</p>" );
     return value;
 }
 
@@ -840,21 +840,21 @@ const string NCPkgStrings::YouHelp1()
 {
     // help text online udpate
     // Do NOT translate 'recommended' and 'security'! because the patch kind is always shown as english text. 
-    static const string value =  _( "<p>Mode \"recommended\" means you should install the patch. \"security\" is a security patch and it is highly recommended to install it. \"YaST2\" patches will be always installed first. The other patches must be installed on a second run.</p>" );
+    static const string value =  _( "<p>Kind \"recommended\" means you should install the patch. \"security\" is a security patch and it is highly recommended to install it.</p>" );
     return value;
 }						  
 
 const string NCPkgStrings::YouHelp2()
 {
     // help text online udpate continue
-    static const string value = _( "<p>Meaning of the status flags:</p><p><b>+</b>: Patches concerning your installation are preselected. They will be downloaded and installed on your system. If you do not want a certain patch, deselect it with '-'.</p>" );
+    static const string value =  _( "<p>Patches for \"libzypp\" (Package, Patch, Pattern and Product Management) will be always installed first. The other patches must be installed on a second run.</p>" );
     return value;
 }
 
 const string NCPkgStrings::YouHelp3()
 {
     // help text online udpate continue
-    static const string value =  _( "<p><b>i</b>: This patch is already installed.</p><p><b>></b>: The patch will be reinstalled.</p>" );
+    static const string value = _( "<p>Meaning of the status flags:</p><p><b> + </b>: Patches concerning your installation are preselected. They will be downloaded and installed on your system. If you do not want a certain patch, deselect it with '-'.</p><p><b>:-)</b>: All requirements of this patch are satisfied.</p>" );
     return value;
 }
 
