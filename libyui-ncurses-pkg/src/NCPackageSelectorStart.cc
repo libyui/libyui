@@ -140,8 +140,6 @@ void NCPackageSelectorStart::showDefaultList()
 	// fill package list with packages belonging to default RPM group
 	packager->fillDefaultList();
 
-	//packager->showPackageDependencies( true );
-
 	if ( youMode )
 	{
 	    // show download size
