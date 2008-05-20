@@ -72,16 +72,18 @@ void NCPkgMenuAction::createLayout()
 	addItems( items );
     }
     else	// YOU mode
-    {
-	toggleItem =  new YMenuItem( _( "&Toggle    [SPACE]" ) );
-	installItem = new YMenuItem( _( "&Install     [+]" ) );
-	deleteItem =  new YMenuItem( _( "&Delete      [-]" ) );
-	updateItem =  new YMenuItem( _( "&Update      [>]" ) );
+    {	// Please note: add an appropriate number of whitespaces to get a well
+	// formated menu (the [ ]s should be in one column) and use unique hotkeys until end:
+	// begin: Online Update Actions menu
+	toggleItem =  new YMenuItem( _( "&Toggle       [SPACE]" ) );
+	installItem = new YMenuItem( _( "&Install        [+]" ) );
+	deleteItem =  new YMenuItem( _( "&Do Not Install [-]" ) );
+	// end: Update Actions menu 
+	// update isn't supported for patches
 	
 	items.push_back( toggleItem );
 	items.push_back( installItem );
 	items.push_back( deleteItem );
-	items.push_back( updateItem );	
 
 	addItems( items );
     }
