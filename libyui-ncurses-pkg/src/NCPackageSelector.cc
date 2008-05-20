@@ -1525,6 +1525,7 @@ void NCPackageSelector::createYouLayout( YWidget * selector )
     NCPkgStatusStrategy * strategy;
     strategy = new PatchStatStrategy();
     pkgList->setTableType( NCPkgTable::T_Patches, strategy );
+    pkgList->fillHeader();
 
     // set the pointer to the packager object
     pkgList->setPackager( this );
