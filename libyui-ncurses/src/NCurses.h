@@ -21,10 +21,10 @@
 #include <iostream>
 #include <string>
 #include <set>
+#include <map>
 
 using namespace std;
 
-#include <YCP.h>
 #include <YEvent.h>
 #include <YWidget.h>
 #include <YMenuItem.h>
