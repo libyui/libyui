@@ -585,11 +585,11 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
 		displayPatch = true;
 		break;
 	    }	
-	case NCPkgMenuFilter::F_Unneeded:	// unneeded means satisfied
+	case NCPkgMenuFilter::F_Unneeded:	// unneeded means not relevant or satisfied
 	    {
 		if ( selectable->hasCandidateObj() &&
-		     selectable->candidateObj().isRelevant() &&
-		     selectable->candidateObj().isSatisfied() )
+		     ( !selectable->candidateObj().isRelevant() ||
+		       selectable->candidateObj().isSatisfied() ) )
 		{
 		    displayPatch = true;
 		}
