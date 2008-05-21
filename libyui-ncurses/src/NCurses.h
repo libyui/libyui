@@ -23,8 +23,6 @@
 #include <set>
 #include <map>
 
-using namespace std;
-
 #include <YEvent.h>
 #include <YWidget.h>
 #include <YMenuItem.h>
@@ -198,7 +196,7 @@ class NCurses {
     void RedirectToLog();
     static void ResizeEvent();
   private:
-    static set<NCDialog*> _knownDlgs;
+    static std::set<NCDialog*> _knownDlgs;
 };
 
 

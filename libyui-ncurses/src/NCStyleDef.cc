@@ -27,6 +27,10 @@
 #include "NCurses.h"
 #include "NCstyle.h"
 
+using std::map;
+using std::vector;
+using std::list;
+
 
 class NCStyleDef {
 
@@ -1184,7 +1188,7 @@ void NCStyleDef::saveStyle()
   string fpath( "/tmp/" );
   fpath += fname;
 
-  ofstream out( fpath.c_str(), ios::out );
+  std::ofstream out( fpath.c_str(), std::ios::out );
   NCursesPanel  p( 5, NCurses::cols()-4, (NCurses::lines()-5)/2, 2 );
   int pl = p.height()/2;
   p.box();
@@ -1283,7 +1287,7 @@ void NCStyleDef::restoreStyle()
   string fpath( "/tmp/" );
   fpath += fname;
 
-  ifstream inp( fpath.c_str(), ios::in );
+  std::ifstream inp( fpath.c_str(), std::ios::in );
   int ph = 5;
   NCursesPanel  p( ph, NCurses::cols()-4, (NCurses::lines()-ph)/2, 2 );
   int pl = 2;
