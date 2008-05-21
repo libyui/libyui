@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed May 21 13:20:35 CEST 2008 - sh@suse.de
+
+- Removed YCP includes
+- Removed obsolete testsuite
+- Removed yast2-core-devel from BuildRequires in .spec
+- V 2.16.28 
+
+-------------------------------------------------------------------
 Mon May 19 12:04:31 CEST 2008 - kkaempf@suse.de
 
 - link against libyui to get all symbols resolved.
