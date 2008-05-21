@@ -22,7 +22,6 @@
 
 #include <iosfwd>
 
-#include <Y2.h>
 #include "YUI.h"
 
 #include "NCApplication.h"
