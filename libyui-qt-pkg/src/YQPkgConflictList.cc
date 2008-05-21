@@ -226,6 +226,7 @@ YQPkgConflict::YQPkgConflict( QWidget *		parent,
     QLabel *label = new QLabel( fromUTF8 ( _problem->details() ), this );
     _layout->addWidget( label );
 
+    setProperty( "class", "conflict" );
     addSolutions();
     setMinimumSize( _layout->minimumSize() );
     setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
@@ -245,10 +246,12 @@ YQPkgConflict::formatHeading()
 
     QString text = fromUTF8( problem()->description() );
     QLabel *heading = new QLabel( text, this );
+    heading->setProperty( "class", "conflict-heading" );
     heading->setStyleSheet( "font-size: +2; color: red; font: bold;" );
     hbox->addWidget( heading );
     hbox->addStretch( 1 );
 
+    frame->setProperty( "class", "conflict-frame" );
     frame->setStyleSheet( "background-color: lightgray;" );
     _layout->addWidget(frame);
 }
