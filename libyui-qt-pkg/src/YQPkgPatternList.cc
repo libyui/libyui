@@ -464,7 +464,8 @@ YQPkgPatternListItem::init()
     {
         string icon = _zyppPattern->icon().asString();
         // HACK most patterns have wrong default icon
-        if ( icon == zypp::Pathname("yast-system").asString() )
+        if ( (icon == zypp::Pathname("yast-system").asString()) || 
+             icon.empty() )
             icon = "pattern-generic";
         
         std::string iconpath = YQPackageSelector::iconPath(icon, 32);

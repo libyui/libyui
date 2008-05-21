@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed May 21 18:34:36 CEST 2008 - dmacvicar@suse.de
+
+- fallback to default icon if no icon is defined in
+  a pattern.
+
+-------------------------------------------------------------------
 Wed May 21 13:30:21 CEST 2008 - coolo@suse.de
 
 - fixing theming of pattern selector popups
