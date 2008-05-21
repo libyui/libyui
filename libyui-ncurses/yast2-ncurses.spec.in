@@ -33,10 +33,14 @@ rm $RPM_BUILD_ROOT/@plugindir@/libpy2ncurses.la
 
 %files
 %defattr (-, root, root)
+%dir %{_libdir}
+%dir @plugindir@
 @plugindir@/libpy2ncurses.so.*
 
 %files devel
 %defattr (-, root, root)
 @plugindir@/libpy2ncurses.so
+%dir @includedir@
 @includedir@/ncurses/
 %doc @docdir@
+
