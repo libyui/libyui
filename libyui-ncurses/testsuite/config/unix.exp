@@ -1,5 +1,0 @@
-load_lib "ncurses_init.exp"
-
-proc ncurses_exit {} {}
-proc ncurses_version {} {}
-
