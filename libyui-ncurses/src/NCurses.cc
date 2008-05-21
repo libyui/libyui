@@ -15,9 +15,9 @@
    Author:     Michael Andres <ma@suse.de>
 
 /-*/
-extern "C" {
+
 #include <unistd.h>
-}
+#include <string.h>	// strcmp(), strerror()
 
 #include <cstdarg>
 #include <fstream>
@@ -68,24 +68,24 @@ const NCursesEvent NCursesEvent::ValueChanged     ( NCursesEvent::button, YEvent
   va_end( ap );      \
   va_end( ap1 )
 
-NCursesError::NCursesError( char * msg, ... )
+NCursesError::NCursesError( const char * msg, ... )
     : errval_i( ERR )
 {
   CONVERR( ERR, msg );
 }
 
-NCursesError::NCursesError( int val, char * msg, ... )
+NCursesError::NCursesError( int val, const char * msg, ... )
     : errval_i( val )
 {
   CONVERR( val, msg );
 }
 
-NCursesError & NCursesError::NCError( char * msg, ... ) {
+NCursesError & NCursesError::NCError( const char * msg, ... ) {
   CONVERR( ERR, msg );
   return *this;
 }
 
-NCursesError & NCursesError::NCError( int val, char * msg, ... ) {
+NCursesError & NCursesError::NCError( int val, const char * msg, ... ) {
   CONVERR( val, msg );
   return *this;
 }

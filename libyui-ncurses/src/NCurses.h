@@ -46,13 +46,13 @@ class NCursesError {
     int    errval_i;
     string errmsg_t;
 
-    NCursesError( char * msg = "unknown error", ... );
-    NCursesError( int val, char * msg = "unknown error", ... );
+    NCursesError( const char * msg = "unknown error", ... );
+    NCursesError( int val, const char * msg = "unknown error", ... );
 
     virtual ~NCursesError() {}
 
-    NCursesError & NCError( char * msg = "unknown error", ... );
-    NCursesError & NCError( int val, char * msg = "unknown error", ... );
+    NCursesError & NCError( const char * msg = "unknown error", ... );
+    NCursesError & NCError( int val, const char * msg = "unknown error", ... );
 
     virtual const char * location() const { return "NCurses"; }
 };
