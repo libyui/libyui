@@ -238,7 +238,7 @@ YQPkgRepoListItem::YQPkgRepoListItem( YQPkgRepoList *	repoList,
 {
     if ( nameCol() >= 0 )
     {
-        string name = repo.name();
+        string name = repo.info().name();
 
 #if SHOW_SINGLE_PRODUCT
         ZyppProduct product = singleProduct( _zyppRepo );
