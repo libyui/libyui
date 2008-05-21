@@ -25,6 +25,7 @@
 #include <fnmatch.h>
 #include <grp.h>
 #include <pwd.h>
+#include <string.h> // strerror()
 #include <sys/types.h>
 
 /*
@@ -587,7 +588,7 @@ bool NCFileTable::fillList ( )
     else
     {
 	yuiError() << "ERROR opening directory: " << currentDir << " errno: "
-	      << strerror( errno ) << endl;
+		   << strerror( errno ) << endl;
 	return false;
     }
     closedir( diskDir );
