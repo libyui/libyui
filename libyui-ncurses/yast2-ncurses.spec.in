@@ -2,7 +2,7 @@
 
 
 @HEADER@
-BuildRequires:	doxygen dejagnu gcc-c++ yast2-core-devel yast2-devtools 
+BuildRequires:	doxygen dejagnu gcc-c++ yast2-devtools 
 BuildRequires:	libxcrypt-devel blocxx-devel ncurses-devel
 
 Summary:	-
