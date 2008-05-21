@@ -1,8 +1,14 @@
 -------------------------------------------------------------------
+Wed May 21 10:33:43 CEST 2008 - gs@suse.de
+
+- YOU: correct condition for unneeded patches 
+- 2.16.11
+
+-------------------------------------------------------------------
 Tue May 20 12:19:41 CEST 2008 - gs@suse.de
 
 -  update the pattern status after the initial solver run,
-   status for patterns/patches which are satisfied is ':-)',
+   status for "installed" patterns/patches is ':-)',
    correct help text and action menu for YOU
 
 -------------------------------------------------------------------
