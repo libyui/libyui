@@ -10,7 +10,7 @@ Wed May 21 13:30:21 CEST 2008 - coolo@suse.de
 - fixing theming of pattern selector popups
 
 -------------------------------------------------------------------
-Wed May 21 14:05:45 CEST 2008 - dmacvicar@suse.de
+Wed May 21 13:05:45 CEST 2008 - dmacvicar@suse.de
 
 - display the right name for repository list. (bnc#383553) 
   patch by Fabien Crespel <fabien@crespel.net>
