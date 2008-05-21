@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed May 21 13:30:21 CEST 2008 - coolo@suse.de
+
+- fixing theming of pattern selector popups
+
+-------------------------------------------------------------------
 Mon May 19 19:31:38 CEST 2008 - dmacvicar@suse.de
 
 - feedback for search (bnc#391406)
