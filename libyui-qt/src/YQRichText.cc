@@ -34,7 +34,7 @@
 #include "YQDialog.h"
 #include "YQRichText.h"
 
-static const char *colors[] = { "red", 0};
+static const char *colors[] = { "red", "blue", "green", 0};
 
 YQRichText::YQRichText( YWidget * parent, const string & text, bool plainTextMode )
     : QFrame( (QWidget *) parent->widgetRep() )
