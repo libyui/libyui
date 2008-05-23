@@ -42,30 +42,24 @@ class LoadTest < Test::Unit::TestCase
     #
 
     loop do
-puts "Begin of loop"
       event = dialog.wait_for_event
       next unless event
-puts "Event #{event}"
+
       break if event.event_type == Yui::YEvent::CancelEvent # window manager "close window" button
-puts "Not a cancel"
+
       valueField.set_value "???"
       break if event.widget == closeButton
-puts "Not a close"
 
       if ( event.widget == valueButton ||
 	  event.widget == selBox )		# selBox will only send events with setNotify()
 	item = selBox.selected_item
-	puts "selBox or valueButton"
 	if item
 	  valueField.set_value item.label
 	else
 	  valueField.set_value "<none>"
 	end
-	puts "valueField set"
       end
-      puts "Done with loop"
     end
-    puts "Out of loop"
   end
 end
 
