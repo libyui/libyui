@@ -218,6 +218,12 @@ class Exception;
 }
 
 %extend YWidget {
+#ifdef SWIGPERL
+  int __eq__( YWidget *w )
+  { return ($self == w); }
+  int __ne__( YWidget *w )
+  { return ($self != w); }
+#endif
 #ifdef SWIGPYTHON
   int __cmp__( YWidget *w )
   { return ($self - w); }
