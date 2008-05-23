@@ -1066,7 +1066,6 @@ YQPkgObjListItem::setStatusIcon()
 {
     if ( statusCol() >= 0 )
     {
-        yuiDebug() << "setStatusIcon" << endl;
 	bool enabled = editable() && _pkgObjList->editable();
         setIcon( statusCol(), _pkgObjList->statusIcon( status(), enabled, bySelection() ) );
     }
