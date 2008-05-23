@@ -136,6 +136,7 @@ class Exception;
 %include YSingleChildContainerWidget.h
 %include YSelectionWidget.h
 %include YSimpleInputField.h
+%nodefault YUI::YItem;
 %include YItem.h
 %include YTreeItem.h
 %include YStringTree.h
@@ -217,10 +218,14 @@ class Exception;
 }
 
 %extend YWidget {
+#ifdef SWIGPYTHON
+  int __cmp__( YWidget *w )
+  { return ($self - w); }
+#endif
 #ifdef SWIGRUBY
   %rename( "==" ) equals( YWidget *w );
   %typemap(out) int equals
     "$result = ($1 != 0) ? Qtrue : Qfalse;";	
 #endif
-  int equals( YWidget *w ) { return ($self == w ); }
+  int equals( YWidget *w ) { return ($self == w); }
 }
