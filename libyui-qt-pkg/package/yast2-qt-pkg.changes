@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri May 23 15:27:24 CEST 2008 - dmacvicar@suse.de
+
+- if a patch is preselected it will go satisfied
+  therefore it will not be shown in the "needed" list.
+  Test for patches marked to be installed too.
+
+-------------------------------------------------------------------
 Wed May 21 18:34:36 CEST 2008 - dmacvicar@suse.de
 
 - fallback to default icon if no icon is defined in

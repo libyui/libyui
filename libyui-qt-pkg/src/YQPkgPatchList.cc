@@ -56,12 +56,12 @@ public:
         // special painting for category items
         if ( citem )
         {
-            //std::cout << "printing category: " << index.column() << std::endl;
             QFont f = painter->font();
             f.setWeight(QFont::Bold);
-            f.setPointSize(f.pointSize()+1);
+            QFontMetrics fm(f);
+            f.setPixelSize( fm.height() * 1.05 );
             citem->setFont(_view->summaryCol(), f);
-           
+
             painter->fillRect(option.rect, option.palette.color(QPalette::AlternateBase));
             QItemDelegate::paint(painter, option, index);
             painter->restore();
@@ -201,9 +201,20 @@ YQPkgPatchList::fillList()
                      selectable->candidateObj().isRelevant() )
                 {
                     // and only those that are needed
-                    if ( ! selectable->candidateObj().isSatisfied() )
+                    if ( ! selectable->candidateObj().isSatisfied() ||
+                          // may be it is satisfied because is preselected
+                          selectable->candidateObj().status().isToBeInstalled() )
                         displayPatch = true;
+                    else
+                        yuiDebug() << "Patch " << zyppPatch->ident()
+                                   << " is already satisfied"
+                                   << endl;
+
                 }
+                else
+                    yuiDebug() << "Patch " << zyppPatch->ident()
+                               << " is not relevant to the system"
+                               << endl;
                 break;
             case RelevantAndInstalledPatches:	// patches we dont need
                 
@@ -222,6 +233,9 @@ YQPkgPatchList::fillList()
                 
                 // Intentionally omitting "default" so the compiler
                 // can catch unhandled enum values
+            default:
+                yuiDebug() << "unknown patch filter" << endl;
+                
             }
             
             if ( displayPatch )
