@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri May 23 15:19:27 CEST 2008 - kkaempf@suse.de
+
+- fix widget (pointer) comparison for Perl and Python.
+
+-------------------------------------------------------------------
 Tue May 20 17:43:12 CEST 2008 - kkaempf@suse.de
 
 - Fix requires for perl-yui (bnc#392558)
