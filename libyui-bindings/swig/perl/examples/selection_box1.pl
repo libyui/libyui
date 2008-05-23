@@ -5,18 +5,13 @@
 
 use yui;
 
-yui::YUILog::setLogFileName( "/tmp/libyui-examples.log" );
-yui::YUILog::enableDebugLogging();
+# yui::YUILog::setLogFileName( "/tmp/libyui-examples.log" );
+# yui::YUILog::enableDebugLogging();
 
 my $factory = yui::YUI::widgetFactory;
 my $dialog = $factory->createPopupDialog;
 
 my $vbox = $factory->createVBox( $dialog );
-
-# $factory->createLabel( $vbox, "Hello, World!" );
-# $factory->createPushButton( $vbox, "&OK" );
-# my $event = $dialog->waitForEvent();
-# $dialog->destroy();
 
 my $selBox = $factory->createSelectionBox( $vbox, "&Menu" );
 
@@ -40,36 +35,26 @@ $closeButton    = $factory->createPushButton( $rightAlignment, "&Close" );
 #
 # Event loop
 #
-
 while (1) {
-  print "Begin of loop";
-  my $event = $dialog->waitForEvent();
+  $event = $dialog->waitForEvent();
   if( not event ) {
     next
   }
-  print "Event !";
-  if ($event->eventType() == yui::YEvent::CancelEvent) { # window manager "close window" button
-    print "Cancel";
-    break;
+  if ($event->eventType() == $yui::YEvent::CancelEvent) { # window manager "close window" button
+    last;
   }
-  print "Not a cancel";
   $valueField->setValue( "???" );
   if ($event->widget() == $closeButton) {
-    print "Close";
-    break;
+    last;
   }
-  print "Not a close";
 
-  if ( ($event->widget() == $valueButton) || ($event->widget() == $selBox )) {		# selBox will only send events with setNotify()
+  if ( ($event->widget() == $valueButton) or ($event->widget() == $selBox )) {		# selBox will only send events with setNotify()
     $item = $selBox->selectedItem();
-    print "selBox or valueButton";
     if ($item) {
       $valueField->setValue( $item->label() );
     }
     else {
       $valueField->setValue( "<none>" );
     }
-    print "valueField set";
   }
 }
-print "Loop end";
