@@ -20,23 +20,22 @@ my $vbox = $factory->createVBox( $dialog );
 
 my $selBox = $factory->createSelectionBox( $vbox, "&Menu" );
 
-$item = yui::YItem::new( "Pizza Margherita" );
-#$selBox->addItem( $item );
-#$selBox->addItem( yui::YItem::new( "Pizza Capricciosa" ) );
-#$selBox->addItem( yui::YItem::new( "Pizza Funghi" ) );
-#$selBox->addItem( yui::YItem::new( "Pizza Prosciutto" ) );
-#$selBox->addItem( yui::YItem::new( "Pizza Quattro Stagioni" ) );
-#$selBox->addItem( yui::YItem::new( "Calzone" ) );
+$selBox->addItem( "Pizza Margherita" );
+$selBox->addItem( "Pizza Capricciosa" );
+$selBox->addItem( "Pizza Funghi" );
+$selBox->addItem( "Pizza Prosciutto" );
+$selBox->addItem( "Pizza Quattro Stagioni" );
+$selBox->addItem( "Calzone" );
 
-my $hbox = $factory->createHBox( vbox );
-$valueField  = $factory->createOutputField( hbox, "<SelectionBox value unknown>" );
-$valueField->setStretchable( yui::YD_HORIZ, True ); # // allow stretching over entire dialog width
+my $hbox = $factory->createHBox( $vbox );
+$valueField  = $factory->createOutputField( $hbox, "<SelectionBox value unknown>" );
+$valueField->setStretchable( $yui::YD_HORIZ, 1 ); # // allow stretching over entire dialog width
 
-$valueButton = $factory->createPushButton( hbox, "&Value" ); 
-$factory->createVSpacing( vbox, 0.3 );
+$valueButton = $factory->createPushButton( $hbox, "&Value" ); 
+$factory->createVSpacing( $vbox, 0.3 );
 
-$rightAlignment = $factory->createRight( vbox );
-$closeButton    = $factory->createPushButton( rightAlignment, "&Close" );
+$rightAlignment = $factory->createRight( $vbox );
+$closeButton    = $factory->createPushButton( $rightAlignment, "&Close" );
 
 #
 # Event loop
