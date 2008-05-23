@@ -517,7 +517,7 @@ YQPkgPatchListItem::toolTip( int col )
 	    if ( ! text.isEmpty() )
 		text += "\n";
 
-	    text += fromUTF8( zyppPatch()->size().asString().c_str() );
+	    text += fromUTF8( zyppPatch()->downloadSize().asString().c_str() );
 	}
     }
 
