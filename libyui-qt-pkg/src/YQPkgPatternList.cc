@@ -235,7 +235,7 @@ YQPkgPatternList::fillList()
     
     clear();
     yuiDebug() << "Filling pattern list" << endl;
-    zypp::getZYpp()->resolver()->resolvePool();
+    //zypp::getZYpp()->resolver()->resolvePool();
 
     for ( ZyppPoolIterator it = zyppPatternsBegin();
 	  it != zyppPatternsEnd();

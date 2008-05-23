@@ -174,7 +174,6 @@ YQPkgPatchList::fillList()
 {
     // wee need to do a full solve in order
     // to get the satisfied status correctly
-    zypp::getZYpp()->resolver()->resolvePool();
     
     _categories.clear();
     
@@ -221,7 +220,8 @@ YQPkgPatchList::fillList()
                 // only shows patches relevant to the system
                 if ( ( selectable->hasCandidateObj() ) && 
                      ( ! selectable->candidateObj().isRelevant() 
-                       || selectable->candidateObj().isSatisfied() ) )
+                       || ( selectable->candidateObj().isSatisfied() &&
+                            selectable->candidateObj().status().isToBeInstalled() ) ) )
                 {
                     // now we show satisfied patches too
                     displayPatch = true;
