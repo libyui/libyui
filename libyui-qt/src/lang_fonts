@@ -25,10 +25,12 @@ font[ja]="Albany AMT,DejaVu Sans,SUSE Sans,HGPGothicB,IPAPGothic,IPAGothic,Sazan
 font[ko]="Albany AMT,DejaVu Sans,SUSE Sans,UnDotum,Baekmuk Gulim,Baekmuk Dotum,Efont Biwidth,Gnu Unifont,Sans Serif"
 font[hi]="Albany AMT,DejaVu Sans,SUSE Sans,Lohit Hindi,Efont Biwidth,Gnu Unifont,Sans Serif"
 font[gu]="Albany AMT,DejaVu Sans,SUSE Sans,Lohit Gujarati,Efont Biwidth,Gnu Unifont,Sans Serif"
-font[pa]="Albany AMT,DejaVu Sans,SUSE Sans,Lohit Punjabi,Efont Biwidth,Gnu Unifont,Sans Serif"
-font[pa]="Albany AMT,DejaVu Sans,SUSE Sans,TSCu_Paranar,Efont Biwidth,Gnu Unifont,Sans Serif"
-font[pa]="Albany AMT,DejaVu Sans,SUSE Sans,LKLUG,Efont Biwidth,Gnu Unifont,Sans Serif"
 font[km]="Albany AMT,DejaVu Sans,SUSE Sans,Khmer OS System,Efont Biwidth,Gnu Unifont,Sans Serif"
+font[pa]="Albany AMT,DejaVu Sans,SUSE Sans,Lohit Punjabi,Efont Biwidth,Gnu Unifont,Sans Serif"
+font[ta]="Albany AMT,DejaVu Sans,SUSE Sans,TSCu_Paranar,Efont Biwidth,Gnu Unifont,Sans Serif"
+font[si]="Albany AMT,DejaVu Sans,SUSE Sans,LKLUG,Efont Biwidth,Gnu Unifont,Sans Serif"
+font[bn]="Albany AMT,DejaVu Sans,SUSE Sans,Mukti Narrow,Lohit Bengali,Efont Biwidth,Gnu Unifont,Sans Serif"
+font[mr]="Albany AMT,DejaVu Sans,SUSE Sans,Lohit Hindi,Efont Biwidth,Gnu Unifont,Sans Serif"
 
 # For debugging
 
