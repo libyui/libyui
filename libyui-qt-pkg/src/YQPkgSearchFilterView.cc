@@ -236,6 +236,7 @@ YQPkgSearchFilterView::filter()
         {
 	case Contains:
             query.setMatchSubstring();
+            break;
 	case BeginsWith:
             query.setMatchRegex();
             searchtext = "^" + searchtext;

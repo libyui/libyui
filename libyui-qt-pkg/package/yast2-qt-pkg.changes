@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon May 26 16:42:55 CEST 2008 - dmacvicar@suse.de
+
+- bnc#394504 search kill YaST
+
+-------------------------------------------------------------------
 Fri May 23 15:27:24 CEST 2008 - dmacvicar@suse.de
 
 - if a patch is preselected it will go satisfied
