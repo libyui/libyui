@@ -162,7 +162,7 @@ void NCPackageSelector::createPopups()
     depsPopup = new NCPkgPopupDeps( wpos( 3, 8 ), this );
 
     // the disk space popup
-    diskspacePopup = new NCPkgPopupDiskspace( wpos( (NCurses::lines() - 15)/2, NCurses::cols()/6  ), testMode );
+    diskspacePopup = new NCPkgDiskspace( testMode );
 }
 
 

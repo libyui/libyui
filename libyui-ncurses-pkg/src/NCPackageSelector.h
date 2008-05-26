@@ -55,7 +55,7 @@ class NCPkgLocaleTable;
 class NCPkgRepoTable;
 class LangCode;
 class NCPkgPopupDeps;
-class NCPkgPopupDiskspace;
+class NCPkgDiskspace;
 class NCPkgFilterRPMGroups;
 class NCPkgFilterSearch;
 class NCPkgPopupFile;
@@ -111,7 +111,7 @@ class NCPackageSelector
     NCPkgLocaleTable * languagePopup;	// language popup
     NCPkgRepoTable * repoPopup;
 
-    NCPkgPopupDiskspace * diskspacePopup;	// the popup showing the disk usage
+    NCPkgDiskspace * diskspacePopup;	// the popup showing the disk usage
 
     NCPkgFilterSearch * searchPopup; 	// the package search popup
 
@@ -214,7 +214,7 @@ class NCPackageSelector
     // returns the package table widget 
     NCPkgTable * PackageList();
     NCPkgPopupDeps *DepsPopup() { return depsPopup; }
-    NCPkgPopupDiskspace *diskSpacePopup() { return diskspacePopup; }
+    NCPkgDiskspace *diskSpacePopup() { return diskspacePopup; }
     YLabel *PackageLabel() { return packageLabel; } 
     YLabel *PatternLabel() { return patternLabel; } 
 

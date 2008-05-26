@@ -132,6 +132,33 @@ protected:
     bool 	_warningPosted;
 };
 
+class NCPkgPopupDiskspace : public NCPopup {
+
+private:
+    NCTable * partitions;
+    NCPushButton * okButton;
+    NCLabel * head;
+
+protected:
+
+    virtual bool postAgain();
+
+    virtual NCursesEvent wHandleInput( wint_t ch );
+  
+public:
+    NCPkgPopupDiskspace( const wpos at, string headline );
+
+    virtual ~NCPkgPopupDiskspace();
+
+    void createLayout( string headline );
+    void doit();
+
+    NCTable *Partitions() { return partitions; }
+
+    virtual int preferredWidth();
+    virtual int preferredHeight();
+
+};
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -139,17 +166,15 @@ protected:
 //
 //	DESCRIPTION :
 //
-class NCPkgPopupDiskspace : public NCPopup {
+class NCPkgDiskspace {
 
-    NCPkgPopupDiskspace & operator=( const NCPkgPopupDiskspace & );
-    NCPkgPopupDiskspace            ( const NCPkgPopupDiskspace & );
+    NCPkgDiskspace & operator=( const NCPkgDiskspace & );
+    NCPkgDiskspace            ( const NCPkgDiskspace & );
 
 private:
 
-    NCTable * partitions;
-    NCPushButton * okButton;
-    NCLabel * head;
     bool testmode;
+    NCPkgPopupDiskspace *popupWin;
     ZyppDuSet testDiskUsage;
 
     string usedPercent( FSize used, FSize total );
@@ -164,20 +189,13 @@ private:
      **/
     NCPkgWarningRangeNotifier overflowWarning;
     
-protected:
-
-    virtual bool postAgain();
-
-    virtual NCursesEvent wHandleInput( wint_t ch );
-    
+  
 public:
     
-    NCPkgPopupDiskspace( const wpos at, bool testSpaceMode );
+    NCPkgDiskspace(  bool testSpaceMode );
     
-    virtual ~NCPkgPopupDiskspace();
+    virtual ~NCPkgDiskspace();
 
-    virtual int preferredWidth();
-    virtual int preferredHeight();
     
     void fillPartitionTable();
 
@@ -187,15 +205,10 @@ public:
     
     void checkDiskSpaceRange( );
     
-    void createLayout( );
-
     void showInfoPopup( string headline );
-
+ 
     void checkRemainingDiskSpace( const ZyppPartitionDu & partition );
 };
-
-
-
 
 
 ///////////////////////////////////////////////////////////////////

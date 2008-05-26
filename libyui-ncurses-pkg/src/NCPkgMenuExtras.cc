@@ -301,8 +301,7 @@ bool NCPkgMenuExtras::importFromFile()
 
 bool NCPkgMenuExtras::showDiskSpace()
 {
-    pkg->diskSpacePopup()->showInfoPopup( NCPkgStrings::DiskspaceLabel() ); 
-    YDialog::deleteTopmostDialog();
+      pkg->diskSpacePopup()->showInfoPopup( NCPkgStrings::DiskspaceLabel() ); 
     //FIXME: move focus back to pkg table?
   
     return true;

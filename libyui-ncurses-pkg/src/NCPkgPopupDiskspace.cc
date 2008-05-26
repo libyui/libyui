@@ -60,13 +60,10 @@ using namespace std;
 //
 //	DESCRIPTION :
 //
-NCPkgPopupDiskspace::NCPkgPopupDiskspace( const wpos at, bool testMode )
-    : NCPopup( at, false )
-      , partitions( 0 )
-      , okButton( 0 )
-      , testmode( testMode )
+NCPkgDiskspace::NCPkgDiskspace( bool testMode )
+      : testmode( testMode )
+      , popupWin( 0 ) 
 {
-    createLayout( );
 
     if ( testMode )
     {
@@ -84,38 +81,8 @@ NCPkgPopupDiskspace::NCPkgPopupDiskspace( const wpos at, bool testMode )
 //
 //	DESCRIPTION :
 //
-NCPkgPopupDiskspace::~NCPkgPopupDiskspace()
+NCPkgDiskspace::~NCPkgDiskspace()
 {
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPkgPopupDiskspace::createLayout
-//	METHOD TYPE : void
-//
-//	DESCRIPTION :
-//
-void NCPkgPopupDiskspace::createLayout( )
-{
-    // the vertical split is the (only) child of the dialog
-    NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
-
-    head = new NCLabel( split, "", true, false );	// isHeading = true
-
-    YTableHeader * tableHeader = new YTableHeader();
-    tableHeader->addColumn( NCPkgStrings::Partition(), YAlignBegin );
-    tableHeader->addColumn( NCPkgStrings::UsedSpace(), YAlignBegin );
-    tableHeader->addColumn( NCPkgStrings::FreeSpace(), YAlignBegin );
-    tableHeader->addColumn( NCPkgStrings::TotalSpace(), YAlignBegin );
-    tableHeader->addColumn( "% ", YAlignBegin );
-
-    // add the partition table 
-    partitions = new NCTable( split, tableHeader );
-
-    // add the ok button
-    okButton = new NCPushButton( split, NCPkgStrings::OKLabel() );
-    okButton->setFunctionKey( 10 );
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -126,8 +93,9 @@ void NCPkgPopupDiskspace::createLayout( )
 //
 //	DESCRIPTION :
 //
-void NCPkgPopupDiskspace::fillPartitionTable()
+void NCPkgDiskspace::fillPartitionTable()
 {
+    NCTable * partitions = popupWin->Partitions();
     partitions->deleteAllItems();		// clear table
 
     YTableItem * newItem;
@@ -179,7 +147,7 @@ void NCPkgPopupDiskspace::fillPartitionTable()
 //
 //	DESCRIPTION :
 //
-string NCPkgPopupDiskspace::checkDiskSpace()
+string NCPkgDiskspace::checkDiskSpace()
 {
     string text = "";
 
@@ -219,7 +187,7 @@ string NCPkgPopupDiskspace::checkDiskSpace()
     return text;
 }
 
-void NCPkgPopupDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & partition )
+void NCPkgDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & partition )
 {
     FSize usedSize ( partition.pkg_size, FSize::K );
     FSize totalSize ( partition.total_size, FSize::K );
@@ -282,7 +250,7 @@ void NCPkgPopupDiskspace::checkRemainingDiskSpace( const ZyppPartitionDu & parti
 //	DESCRIPTION : for testing only; called from PackageSelector
 //		      if running in testMode 
 //
-void NCPkgPopupDiskspace::setDiskSpace( wint_t ch )
+void NCPkgDiskspace::setDiskSpace( wint_t ch )
 {
     int percent = 0;
     
@@ -319,7 +287,7 @@ void NCPkgPopupDiskspace::setDiskSpace( wint_t ch )
 //
 //	DESCRIPTION :
 //
-void NCPkgPopupDiskspace::checkDiskSpaceRange( )
+void NCPkgDiskspace::checkDiskSpaceRange( )
 {
     // see YQPkgDiskUsageList::updateDiskUsage()
     runningOutWarning.clear();
@@ -362,7 +330,7 @@ void NCPkgPopupDiskspace::checkDiskSpaceRange( )
 
 }
 
-string NCPkgPopupDiskspace::usedPercent( FSize used, FSize total )
+string NCPkgDiskspace::usedPercent( FSize used, FSize total )
 {
     int percent = 0;
     char percentStr[10];
@@ -383,22 +351,53 @@ string NCPkgPopupDiskspace::usedPercent( FSize used, FSize total )
 //
 //	DESCRIPTION :
 //
-void NCPkgPopupDiskspace::showInfoPopup( string headline )
+void NCPkgDiskspace::showInfoPopup( string headline )
 {
-    if ( head )
-	head->setLabel( headline );
     
+    popupWin = new NCPkgPopupDiskspace (wpos( (NCurses::lines() - 15)/2, NCurses::cols()/6  ), headline );
     // update values in partition table
     fillPartitionTable();
-    
-    postevent = NCursesEvent();
-    do {
-	// show the popup
-	popupDialog( );
-    } while ( postAgain() );
-    
-    popdownDialog();
+    popupWin->doit();
+    YDialog::deleteTopmostDialog();    
+    }
+
+
+NCPkgPopupDiskspace::NCPkgPopupDiskspace( const wpos at, string headline )
+    : NCPopup( at, false )
+    , partitions( 0 )
+    , okButton( 0 )
+    , head( 0 )
+{
+    createLayout( headline );
 }
+
+NCPkgPopupDiskspace::~NCPkgPopupDiskspace()
+{
+}
+
+void NCPkgPopupDiskspace::createLayout( string headline )
+{
+    // the vertical split is the (only) child of the dialog
+    NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
+
+    head = new NCLabel( split, "", true, false );	// isHeading = true
+    head->setLabel( headline );
+
+    YTableHeader * tableHeader = new YTableHeader();
+    tableHeader->addColumn( NCPkgStrings::Partition(), YAlignBegin );
+    tableHeader->addColumn( NCPkgStrings::UsedSpace(), YAlignBegin );
+    tableHeader->addColumn( NCPkgStrings::FreeSpace(), YAlignBegin );
+    tableHeader->addColumn( NCPkgStrings::TotalSpace(), YAlignBegin );
+    tableHeader->addColumn( "% ", YAlignBegin );
+
+    // add the partition table 
+    partitions = new NCTable( split, tableHeader );
+
+    // add the ok button
+    okButton = new NCPushButton( split, NCPkgStrings::OKLabel() );
+    okButton->setFunctionKey( 10 );
+}
+
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -425,6 +424,17 @@ int NCPkgPopupDiskspace::preferredHeight()
 	return NCurses::lines()-4;
 }
 
+void NCPkgPopupDiskspace::doit()
+{
+    postevent = NCursesEvent();
+    do {
+	// show the popup
+	popupDialog( );
+    } while ( postAgain() );
+    
+    popdownDialog();
+
+}
 ///////////////////////////////////////////////////////////////////
 //
 //
