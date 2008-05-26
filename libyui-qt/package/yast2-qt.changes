@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon May 26 15:45:00 CEST 2008 - sh@suse.de
+
+- Fixed bnc #393848: Missing translations in YQWizard help window
+- V 2.16.51 
+
+-------------------------------------------------------------------
 Fri May 23 17:04:41 CEST 2008 - tgoettlicher@suse.de
 
 - V 2.16.50

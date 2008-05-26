@@ -1,9 +1,31 @@
+/*---------------------------------------------------------------------\
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|						     (c) SuSE Linux AG |
+\----------------------------------------------------------------------/
+
+  File:		QY2HelpDialog.cc
+
+  Author:	Stephan Kulow <coolo@suse.de>
+
+  Textdomain	"qt"
+
+/-*/
+
 #include <QY2HelpDialog.h>
 #include "ui_QHelpDialog.h"
 #include <QDebug>
 #include <QTextObject>
+#include "YQi18n.h"
 
 #include "icons/viewmag.xpm"
+
 
 QY2HelpDialog::QY2HelpDialog( const QString& helpText, QWidget *parent )
     : QDialog( parent )
@@ -18,6 +40,12 @@ QY2HelpDialog::QY2HelpDialog( const QString& helpText, QWidget *parent )
 
     _ui->lineEdit->setFocus( Qt::OtherFocusReason );
     _ui->pushButton->setAutoDefault(false);
+
+    // Window title for help wizard window
+    setWindowTitle( _( "Help" ) );
+
+    // Close button for wizard help window
+    _ui->pushButton->setText( _( "&Close" ) );
 }
 
 void QY2HelpDialog::setHelpText( const QString& helpText )
