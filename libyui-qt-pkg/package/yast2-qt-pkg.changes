@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon May 26 18:19:14 CEST 2008 - coolo@suse.de
+
+- fix encoding of pattern descriptions
+
+-------------------------------------------------------------------
 Mon May 26 16:42:55 CEST 2008 - dmacvicar@suse.de
 
 - bnc#394504 search kill YaST

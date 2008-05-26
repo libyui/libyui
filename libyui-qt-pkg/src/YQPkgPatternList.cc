@@ -499,7 +499,7 @@ YQPkgPatternListItem::resetToolTip()
         infoToolTip += ("<p>" + zypp::str::form("%d / %d", installedPackages(), totalPackages() ) + "</p>");
     }
 
-    setToolTip(_patternList->summaryCol(), infoToolTip.c_str());
+    setToolTip(_patternList->summaryCol(), fromUTF8(infoToolTip));
 }
 
 void
