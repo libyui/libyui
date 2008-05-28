@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed May 28 15:55:28 CEST 2008 - kmachalkova@suse.cz
+
+- Do not create pop-up dialogs on the stack (disk space, deps), this
+  may lead to segfault (bnc#384471) and/or the latest pop-up being 
+  always on the top (bnc#384467)
+- 2.16.12
+
+-------------------------------------------------------------------
 Wed May 21 10:33:43 CEST 2008 - gs@suse.de
 
 - YOU: correct condition for unneeded patches 
