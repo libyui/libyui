@@ -145,35 +145,31 @@ bool NCPkgMenuDeps::verify()
     
     yuiMilestone() << "Verifying system" << endl;
 
-    if ( pkg->DepsPopup() )
+    pkg->saveState();
+    //call the solver (with S_Verify it displays no popup)
+    cancel = pkg->verifySystem ( &ok );
+    
+    //display the popup with automatic changes
+    NCPkgPopupTable * autoChangePopup = new NCPkgPopupTable( wpos( 3, 8 ), pkg );
+    NCursesEvent input = autoChangePopup->showInfoPopup();
+    
+    if ( input == NCursesEvent::cancel )
     {
-	pkg->saveState();
-	//call the solver (with S_Verify it displays no popup)
-	//cancel = depsPopup->showDependencies( NCPkgPopupDeps::S_Verify, &ok );
-	cancel = pkg->verifySystem ( &ok );
-
-       //display the popup with automatic changes
-	NCPkgPopupTable * autoChangePopup = new NCPkgPopupTable( wpos( 3, 8 ), pkg );
-        NCursesEvent input = autoChangePopup->showInfoPopup();
-
-        if ( input == NCursesEvent::cancel )
-        {
-            // user clicked on Cancel
-	    pkg->restoreState();
-            cancel = true;
-        }
-	if ( ok && input == NCursesEvent::button )
-	{
-            // dependencies OK, no automatic changes/the user has accepted the changes
-	    NCPopupInfo * info = new NCPopupInfo( wpos( (NCurses::lines()-5)/2, (NCurses::cols()-30)/2 ),
-					  "",
-					  _( "System dependencies verify OK." ),
-					  NCPkgStrings::OKLabel()
-					  );
-             info->setNiceSize( 35, 5 );
-	     info->showInfoPopup();
-	     YDialog::deleteTopmostDialog();
-	}
+        // user clicked on Cancel
+        pkg->restoreState();
+        cancel = true;
+    }
+    if ( ok && input == NCursesEvent::button )
+    {
+        // dependencies OK, no automatic changes/the user has accepted the changes
+        NCPopupInfo * info = new NCPopupInfo( wpos( (NCurses::lines()-5)/2, (NCurses::cols()-30)/2 ),
+    				  "",
+    				  _( "System dependencies verify OK." ),
+    				  NCPkgStrings::OKLabel()
+    				  );
+         info->setNiceSize( 35, 5 );
+         info->showInfoPopup();
+         YDialog::deleteTopmostDialog();
     }
 
     YDialog::deleteTopmostDialog();	// delete NCPopupInfo dialog

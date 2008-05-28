@@ -152,6 +152,27 @@ NCPackageSelector::~NCPackageSelector()
 // 	Call NCPackageSelector::createPopups() instead after the PackageSelector dialog
 // 	is created (see NCPackageSelectorStart::showDefaultList()).
 //
+
+bool NCPackageSelector::checkNow( bool *ok ) 
+{
+    bool ret = false;
+
+    depsPopup = new NCPkgPopupDeps( wpos( 3, 8 ), this );
+    ret = depsPopup->showDependencies( NCPkgPopupDeps::S_Solve, ok );
+    YDialog::deleteTopmostDialog();
+    return ret;
+}
+
+bool NCPackageSelector::verifySystem( bool *ok ) 
+{
+    bool ret = false;
+
+    depsPopup = new NCPkgPopupDeps( wpos( 3, 8 ), this );
+    ret = depsPopup->showDependencies( NCPkgPopupDeps::S_Verify, ok ); 
+    YDialog::deleteTopmostDialog();
+    return ret;
+}
+
 void NCPackageSelector::createPopups()
 {
     // Patterns, Languages, Repositories, RPM Groups and Search filter are part of NCPkgFilterMain.
@@ -159,14 +180,13 @@ void NCPackageSelector::createPopups()
     // NCPkgFilterSearch are created in NCPackageSelector::replaceFilter.
 
     // the dependency popup
-    depsPopup = new NCPkgPopupDeps( wpos( 3, 8 ), this );
 
     // the disk space popup
     diskspacePopup = new NCPkgDiskspace( testMode );
 }
 
 
-///////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
 //
 // detection whether the user has made any changes
 //
@@ -1246,11 +1266,10 @@ bool NCPackageSelector::showPackageDependencies ( bool doit )
     bool ok = false;
     bool cancel = false;
 
-    if ( depsPopup
-	 && (doit || autoCheck) )
+    if ( doit || autoCheck )
     {
 	yuiMilestone() << "Checking dependencies" << endl;
-	cancel = depsPopup->showDependencies( NCPkgPopupDeps::S_Solve, &ok );
+	cancel = checkNow( & ok );
     }
 
     return cancel;

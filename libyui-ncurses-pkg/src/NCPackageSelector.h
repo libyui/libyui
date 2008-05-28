@@ -232,9 +232,8 @@ class NCPackageSelector
     NCPkgSearchSettings *SearchSettings() { return searchSet; }
     void setSearchButton( NCPushButton *pb ) { searchButton = pb; }
 
-    bool checkNow( bool *ok ) { return depsPopup->showDependencies( NCPkgPopupDeps::S_Solve, ok ); }
-
-    bool verifySystem( bool *ok ) { return depsPopup->showDependencies( NCPkgPopupDeps::S_Verify, ok ); }
+    bool checkNow( bool *ok ); 
+    bool verifySystem( bool *ok ); 
 
     /**
     * Fills the package table with YOU patches matching the filter
