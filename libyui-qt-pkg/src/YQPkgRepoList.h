@@ -177,6 +177,7 @@ public:
     int nameCol()	const	{ return _repoList->nameCol();	}
     int urlCol()	const 	{ return _repoList->urlCol(); 	}
 
+    virtual bool operator< ( const QTreeWidgetItem & other ) const;
 protected:
 
     // Data members

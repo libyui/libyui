@@ -61,6 +61,8 @@ YQPkgRepoList::YQPkgRepoList( QWidget * parent )
 	     this, 	SLOT  ( filterIfVisible()) );
     setIconSize(QSize(32,32));
     fillList();
+    setSortingEnabled( true );
+    sortByColumn( nameCol(), Qt::AscendingOrder );
     selectSomething();
 
     yuiDebug() << "Creating repository list done" << endl;
@@ -358,6 +360,12 @@ YQPkgRepoListItem::singleProduct( ZyppRepo zyppRepo )
     return product;
 }
 
+bool
+YQPkgRepoListItem::operator< ( const QTreeWidgetItem & other ) const
+{
+    const YQPkgRepoListItem * otherItem = dynamic_cast<const YQPkgRepoListItem *>(&other);
 
+    return zyppRepo().info().name() < otherItem->zyppRepo().info().name();
+}
 
 #include "YQPkgRepoList.moc"
