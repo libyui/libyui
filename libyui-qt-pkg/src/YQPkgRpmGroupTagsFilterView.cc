@@ -355,9 +355,10 @@ void YQPkgRpmGroupTagsFilterView::fillGroups()
                 _groupsMap[group] =  new YQPkgRpmGroupTag( this, group );
             }
         }
-                    _groupsMap[YPKG_GROUP_ALL] =  new YQPkgRpmGroupTag( this, YPKG_GROUP_ALL );
-            _groupsMap[YPKG_GROUP_RECOMMENDED] =  new YQPkgRpmGroupTag( this, YPKG_GROUP_RECOMMENDED );
-            _groupsMap[YPKG_GROUP_SUGGESTED] =  new YQPkgRpmGroupTag( this, YPKG_GROUP_SUGGESTED );
+	
+	_groupsMap[YPKG_GROUP_ALL        ] =  new YQPkgRpmGroupTag( this, YPKG_GROUP_ALL );
+	_groupsMap[YPKG_GROUP_RECOMMENDED] =  new YQPkgRpmGroupTag( this, YPKG_GROUP_RECOMMENDED );
+	_groupsMap[YPKG_GROUP_SUGGESTED  ] =  new YQPkgRpmGroupTag( this, YPKG_GROUP_SUGGESTED );
 
     }
 }
