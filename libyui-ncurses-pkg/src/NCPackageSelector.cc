@@ -124,8 +124,8 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, YWidget * wRoot, long mod
 	testMode = true;
 
     saveState ();
+    diskspacePopup = new NCPkgDiskspace( testMode );
 
-    // The creation of the popups is moved to createPopups()
 }
 
 
@@ -139,19 +139,6 @@ NCPackageSelector::~NCPackageSelector()
     // call YDialog::deleteTopmostDialog() instead at the end of
     // NCPackageSelectorPlugin::runPkgSelection
 }
-
-///////////////////////////////////////////////////////////////////
-//
-// 	createPopups()
-//
-// 	Create popups
-//
-// 	Don't create the popups any longer in constructur because the current dialog
-// 	wouldn't be the PackageSelector dialog then but a PopupDialog and
-// 	NCPackageSelectorPlugin::runPkgSelection wouldn't find the selector widget.
-// 	Call NCPackageSelector::createPopups() instead after the PackageSelector dialog
-// 	is created (see NCPackageSelectorStart::showDefaultList()).
-//
 
 bool NCPackageSelector::checkNow( bool *ok ) 
 {
@@ -172,19 +159,6 @@ bool NCPackageSelector::verifySystem( bool *ok )
     YDialog::deleteTopmostDialog();
     return ret;
 }
-
-void NCPackageSelector::createPopups()
-{
-    // Patterns, Languages, Repositories, RPM Groups and Search filter are part of NCPkgFilterMain.
-    // NCPkgFilterPattern, NCPkgLocaleTable, NCPkgRepoTable, NCPkgFilterRPMGroups and
-    // NCPkgFilterSearch are created in NCPackageSelector::replaceFilter.
-
-    // the dependency popup
-
-    // the disk space popup
-    diskspacePopup = new NCPkgDiskspace( testMode );
-}
-
 
 //////////////////////////////////////////////////////////////////
 //

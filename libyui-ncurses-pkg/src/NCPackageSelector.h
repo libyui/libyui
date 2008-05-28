@@ -191,12 +191,6 @@ class NCPackageSelector
     virtual ~NCPackageSelector();
 
     /**
-    * Create all NCPkgPopus
-    * @return void
-    */
-    void createPopups();
-
-   /**
     * Create layout for the PackageSelector
     * @param parent Parent is PackageSelectorStart
     * @param type   The package table type	
