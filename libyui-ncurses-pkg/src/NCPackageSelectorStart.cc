@@ -131,9 +131,6 @@ void NCPackageSelectorStart::showDefaultList()
 
     if ( packager )
     {
-	// create the NCPkgPoups
-	packager->createPopups();
-
         // always do an initial dependency solving - BEFORE filling the default list
 	packager->showPackageDependencies( true );
 	
