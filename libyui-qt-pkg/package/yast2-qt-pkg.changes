@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed May 28 10:35:14 CEST 2008 - locilka@suse.cz
+
+- New version to follow standard way of submitting YaST packages
+  (bnc #394977, bnc #394980, bnc #394504).
+- 2.16.45
+
+-------------------------------------------------------------------
 Mon May 26 18:19:14 CEST 2008 - coolo@suse.de
 
 - fix encoding of pattern descriptions
