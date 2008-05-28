@@ -310,6 +310,13 @@ public:
      **/
     virtual bool eventFilter( QObject * obj, QEvent * ev );
 
+    /**
+     * Return this wizard's work area (the pane right of the side bar).
+     * This should not be needed outside of YQMainWinDock.
+     **/
+    QWidget * workArea() const { return _workArea; }
+    
+    
     //
     // Geometry management
     //
@@ -536,6 +543,7 @@ protected:
     QFrame *		    _treePanel;
     QY2ListView *		_tree;
 
+    QFrame *            _workArea;
     QWidget *		_clientArea;
     QMenuBar *		        _menuBar;
     QLabel *		    _dialogIcon;

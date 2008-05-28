@@ -124,10 +124,9 @@ YQMainWinDock::add( YQDialog * dialog )
 {
     YUI_CHECK_PTR( dialog );
 
-#if 0
-    if ( !_widgetStack.empty() )
-        _widgetStack.back()->hide();
-#endif
+    // Deactivate the next-lower dialog
+    // (the one that currently still is the topmost on the _widgetStack) 
+    activateCurrentDialog( false );
 
     dialog->raise();
     dialog->show();
@@ -140,6 +139,42 @@ YQMainWinDock::add( YQDialog * dialog )
     resizeVisibleChild();
 
     show();
+}
+
+
+void
+YQMainWinDock::activateCurrentDialog( bool active )
+{
+    if ( _widgetStack.empty() )
+	return;
+
+    // In the normal case, the (still or against) topmost dialog needs to be
+    // activated or deactivated directly. Since this is done on the QWidget
+    // level, its widgetRep() is needed -- which may or may not be the same as
+    // the YQDialog.
+    
+    YQDialog * dialog = _widgetStack.back();
+    QWidget  * widget = (QWidget *) dialog->widgetRep();
+
+    
+    // But then, there is also the exceptional case that this dialog contains a
+    // wizard with a steps panel. In that case, the steps panel should remain
+    // untouched; only the right side (the work area) of that wizard is to be
+    // activated or deactivated.
+    
+    YQWizard * wizard = dialog->findWizard();
+
+    if ( wizard && wizard->wizardMode() == YWizardMode_Steps )
+    {
+	QWidget * wizardWorkArea = wizard->workArea();
+
+	if ( wizardWorkArea )
+	    widget = wizardWorkArea;
+	// else -> stick with dialog->widgetRep()
+    }
+
+    if ( widget )
+	widget->setEnabled( active );
 }
 
 
@@ -197,6 +232,7 @@ YQMainWinDock::remove( YQDialog * dialog )
     {
 	dialog = _widgetStack.back();	// Get the next dialog from the stack
 	dialog->raise();		// and raise it
+	activateCurrentDialog( true );
         dialog->show();
 	resizeVisibleChild();
     }
@@ -269,6 +305,7 @@ YQMainWinDock::setSideBarWidth( int width )
 {
     if ( _sideBarWidth == width )
         return;
+    
     _sideBarWidth = width;
     resizeVisibleChild();
 }

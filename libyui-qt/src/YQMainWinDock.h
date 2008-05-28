@@ -121,8 +121,6 @@ protected:
      **/
     virtual ~YQMainWinDock();
 
-protected:
-
     /**
      * Paint event.
      *
@@ -146,6 +144,13 @@ protected:
      * For secondary wizards
      **/
     void setSideBarWidth( int width );
+
+    /**
+     * Activate or deactivate the next-lower dialog in the dock when a new
+     * dialog is opened or when a dialog is closed. 
+     **/
+    void activateCurrentDialog( bool active );
+    
 
 protected slots:
 
@@ -173,5 +178,3 @@ private:
 
 
 #endif // YQMainWinDock_h
-
-

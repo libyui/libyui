@@ -115,6 +115,7 @@ YQWizard::YQWizard( YWidget *		parent,
     _releaseNotesButton = 0;
     _treePanel		= 0;
     _tree		= 0;
+    _workArea		= 0;
     _clientArea		= 0;
     _menuBar		= 0;
     _dialogIcon		= 0;
@@ -627,14 +628,14 @@ string YQWizard::currentTreeSelection()
 
 QWidget *YQWizard::layoutWorkArea( QWidget * parent )
 {
-    QFrame *workArea = new QFrame( parent );
-    workArea->setObjectName( "work_area" );
+    _workArea = new QFrame( parent );
+    _workArea->setObjectName( "work_area" );
 
-    QY2Styler::self()->registerChildWidget( this, workArea );
+    QY2Styler::self()->registerChildWidget( this, _workArea );
 
-    QVBoxLayout *vbox = new QVBoxLayout( workArea );
+    QVBoxLayout *vbox = new QVBoxLayout( _workArea );
 
-    _menuBar = new QMenuBar( workArea );
+    _menuBar = new QMenuBar( _workArea );
     YUI_CHECK_NEW( _menuBar );
 
     _menuBar->hide(); // will be made visible when menus are added
@@ -649,13 +650,13 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     //headingHBox->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
     vbox->addLayout( headingHBox );
 
-    _dialogIcon = new QLabel( workArea );
+    _dialogIcon = new QLabel( _workArea );
     YUI_CHECK_NEW( _dialogIcon );
     headingHBox->addWidget( _dialogIcon );
     _dialogIcon->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) ); // hor/vert
     _dialogIcon->setObjectName( "DialogIcon" );
 
-    _dialogHeading = new QLabel( workArea );
+    _dialogHeading = new QLabel( _workArea );
     YUI_CHECK_NEW( _dialogHeading );
     headingHBox->addWidget( _dialogHeading );
     _dialogHeading->setAlignment( Qt::AlignLeft );
@@ -667,17 +668,17 @@ QWidget *YQWizard::layoutWorkArea( QWidget * parent )
     // Client area (the part that belongs to the YCP application)
     //
 
-    layoutClientArea( workArea );
+    layoutClientArea( _workArea );
     vbox->addWidget( _clientArea );
 
     //
     // Button box
     //
 
-    QLayout *bb = layoutButtonBox( workArea );
+    QLayout *bb = layoutButtonBox( _workArea );
     vbox->addLayout( bb );
 
-    return workArea;
+    return _workArea;
 }
 
 
