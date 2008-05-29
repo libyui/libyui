@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu May 29 17:57:08 CEST 2008 - sh@suse.de
+
+- Fixed bnc #394525: Proxy settings don't work in installer
+- Fixed bnc #379622: CheckBoxFrame( `opt(`invertAutoEnable) )
+- V 2.16.53
+
+-------------------------------------------------------------------
 Wed May 28 15:47:57 CEST 2008 - sh@suse.de
 
 - Fixed bnc #393040: Keyboard shortcuts in main dialogs broken

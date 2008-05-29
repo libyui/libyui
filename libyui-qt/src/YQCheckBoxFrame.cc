@@ -43,10 +43,10 @@ YQCheckBoxFrame::YQCheckBoxFrame( YWidget * 		parent,
     setWidgetRep ( this );
     QGroupBox::setTitle( fromUTF8( label ) );
     QGroupBox::setCheckable( true );
-
-    connect( this, SIGNAL( toggled( bool ) ),
-             SLOT( stateChanged( bool ) ) );
     setValue( checked );
+
+    connect( this, SIGNAL( toggled     ( bool ) ),
+             this, SLOT  ( stateChanged( bool ) ) );
 }
 
 
@@ -68,6 +68,7 @@ void YQCheckBoxFrame::setValue( bool newValue )
     setChecked( newValue );
 }
 
+
 void YQCheckBoxFrame::setEnabled( bool enabled )
 {
     if ( enabled )
@@ -87,56 +88,52 @@ void YQCheckBoxFrame::setEnabled( bool enabled )
 
 void YQCheckBoxFrame::stateChanged( bool newState )
 {
-    handleChildrenEnablement( newState );
-
     if ( notify() )
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
 }
 
-bool YQCheckBoxFrame::event(QEvent *e)
+
+bool YQCheckBoxFrame::event( QEvent *e )
 {
-    /* now on to something very fishy. The purpose of this widget
-     * is for whatever reason to provide a checkbox with a groupbox
-     * without the children having any connection to it.
-     *
-     * So we use this trick to undo everything the base class did
-     */
-    QHash<QWidget*, bool> widgetState;
-
-    QObjectList childList = children();
-    for (int i = 0; i < childList.size(); ++i)
-    {
-        QObject *o = childList.at(i);
-        if (o->isWidgetType())
-        {
-            QWidget *w = static_cast<QWidget *>(o);
-            widgetState[w] = w->isEnabled();
-        }
-    }
-
+    bool oldChildEnabled = true;
+    
+    if ( YCheckBoxFrame::hasChildren() )
+	oldChildEnabled = YCheckBoxFrame::firstChild()->isEnabled();
+	
+    bool oldStatus = QGroupBox::isChecked();
     bool ret = QGroupBox::event( e );
+    bool newStatus = QGroupBox::isChecked();
 
-    childList = children();
-    for (int i = 0; i < childList.size(); ++i)
+    if ( oldStatus != newStatus )
     {
-        QObject *o = childList.at(i);
-        if (o->isWidgetType())
-        {
-            QWidget *w = static_cast<QWidget *>(o);
-            if ( widgetState.contains( w ) )
-                w->setEnabled( widgetState[w] );
-        }
+	yuiDebug() << "Status change of " << this << " : now " << boolalpha << newStatus << endl;
+
+	if ( autoEnable() )
+	{
+	    handleChildrenEnablement( newStatus );
+	}
+	else
+	{
+	    if ( YCheckBoxFrame::hasChildren() )
+		YCheckBoxFrame::firstChild()->setEnabled( oldChildEnabled );
+	}
     }
 
     return ret;
 }
 
-void YQCheckBoxFrame::childEvent( QChildEvent * )
-{
-    // Reimplemented to prevent the parent class disabling child widgets
-    // according to its default policy.
 
-    // yuiDebug() << "ChildEvent" << endl;
+void YQCheckBoxFrame::childEvent( QChildEvent * event )
+{
+    if ( event->added() )
+    {
+	// yuiDebug() << "Child widget added" << endl;
+
+	// Prevent parent class from disabling child widgets according to its
+	// own policy: YCheckBoxFrame is much more flexible than QGroupBox.
+    }
+    else
+	QGroupBox::childEvent( event );
 }
 
 
