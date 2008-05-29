@@ -20,8 +20,8 @@
 
 #include "NCPkgFilterLocale.h"
 
-NCPkgLocaleTag::NCPkgLocaleTag ( zypp::sat::LocaleSupport loc)
-    : YTableCell(string(" "))
+NCPkgLocaleTag::NCPkgLocaleTag ( zypp::sat::LocaleSupport loc, string status )
+    : YTableCell( status )
     , locale ( loc )
 {
 
@@ -47,13 +47,13 @@ void NCPkgLocaleTable::fillHeader()
     setHeader( header);
 }
 
-void NCPkgLocaleTable::addLine ( zypp::sat::LocaleSupport l,  const vector <string> & cols )
+void NCPkgLocaleTable::addLine ( zypp::sat::LocaleSupport l,  const vector <string> & cols, string status )
 {
     //use default ctor, add cell in the next step 
     YTableItem *tabItem = new YTableItem();	
 
     //place tag (with repo reference) to the 0th column
-    tabItem->addCell( new NCPkgLocaleTag ( l ) );
+    tabItem->addCell( new NCPkgLocaleTag ( l, status ) );
 
     // and append the rest (name, URL and stuff)
     for ( unsigned i = 1; i < cols.size() + 1; ++i ) {
@@ -64,6 +64,27 @@ void NCPkgLocaleTable::addLine ( zypp::sat::LocaleSupport l,  const vector <stri
     //it actually appends the line to the table
     addItem( tabItem );   
 
+}
+
+string NCPkgLocaleTable::status( zypp::Locale lang )
+{
+    ZyppStatus status;
+    
+    if ( zypp::getZYpp()->pool().isRequestedLocale( lang ) )
+        status = S_Install;
+    else
+        status = S_NoInst;
+
+    // convert ZyppStatus to string
+    switch ( status )
+    {
+	case S_NoInst:
+	    return "    ";
+	case S_Install:
+	    return " :-)";
+	default:
+	    return "####";
+    } 
 }
 
 void NCPkgLocaleTable::fillLocaleList()
@@ -77,7 +98,7 @@ void NCPkgLocaleTable::fillLocaleList()
         zypp::sat::LocaleSupport myLocale( *it );
         oneLine.push_back( myLocale.locale().code() );
         oneLine.push_back( myLocale.locale().name() ); 
-	addLine( myLocale, oneLine);
+	addLine( myLocale, oneLine, status(*it) );
     }
 
     myPad()->setOrder(1);
@@ -127,6 +148,31 @@ void NCPkgLocaleTable::showLocalePackages()
     packageList->showInformation();
 }
 
+void NCPkgLocaleTable::toggleStatus()
+{
+    int index = getCurrentItem();
+    zypp::sat::LocaleSupport myLocale = getLocale( index );
+    NCPkgLocaleTag * t = getTag ( index );
+    NCTableLine *line = myPad()->ModifyLine( index );
+
+    if ( !t || !line )
+	return;
+    
+    yuiMilestone() << "Toggle status of: " << myLocale.locale().code() << endl;
+
+    if ( zypp::getZYpp()->pool().isRequestedLocale( myLocale.locale() ) )
+    {
+	zypp::getZYpp()->pool().eraseRequestedLocale( myLocale.locale() );
+    }
+    else
+    {
+	zypp::getZYpp()->pool().addRequestedLocale( myLocale.locale() );
+    }
+    packager->showPackageDependencies( true ); 
+
+    cellChanged( index, 0,  status( myLocale.locale() ) );
+}
+
 NCursesEvent NCPkgLocaleTable::wHandleInput( wint_t ch )
 {
     NCursesEvent ret = NCursesEvent::none;
@@ -144,10 +190,17 @@ NCursesEvent NCPkgLocaleTable::wHandleInput( wint_t ch )
             showLocalePackages();
 	    break;
 	}
-
+	case KEY_SPACE:
+	case KEY_RETURN: {
+	    ret = NCursesEvent::handled;
+	    toggleStatus();
+	    showLocalePackages();
+	    break;
+	}
+		
 	default:
-	   ret = NCTable::wHandleInput( ch ) ;
-     }
+	    ret = NCTable::wHandleInput( ch ) ;
+    }
 
     return ret;
 }
