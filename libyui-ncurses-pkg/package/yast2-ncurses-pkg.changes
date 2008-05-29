@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu May 29 10:12:08 CEST 2008 - gs@suse.de
+
+- Show the status of a language pattern and make installation 
+  possible (bnc #389722)
+- 2.16.13
+
+-------------------------------------------------------------------
 Wed May 28 15:55:28 CEST 2008 - kmachalkova@suse.cz
 
 - Do not create pop-up dialogs on the stack (disk space, deps), this
