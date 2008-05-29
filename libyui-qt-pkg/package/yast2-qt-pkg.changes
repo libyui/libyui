@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu May 29 15:29:40 CEST 2008 - ma@suse.de
+
+- Revert 'fix persistent locks saving (bnc#332853)' because the 
+  approach is wrong. Persistent locks are saved during commit. 
+  It's not the UI's task to do this.
+- V 2.16.47
+
+-------------------------------------------------------------------
 Wed May 28 11:55:58 CEST 2008 - sh@suse.de
 
 - Applied Fabien Crespel's patch for repo sorting (bnc #394860)
