@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri May 30 12:45:01 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed date format (bnc #384966) 
+- V 2.13.85
+
+-------------------------------------------------------------------
 Tue Apr  8 15:32:07 CEST 2008 - sh@suse.de
 
 - Fixed bnc #351593: Pattern Conflicts in OES2 SP1 

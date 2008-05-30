@@ -45,7 +45,7 @@ YQDate::YQDate( QWidget * 		parent,
 	_qt_label->hide();
 
     _qt_dateedit = new QDateEdit( this );
-    _qt_dateedit->setOrder( QDateEdit::DMY );
+    _qt_dateedit->setOrder( QDateEdit::YMD );
     _qt_dateedit->setDate( QDate::fromString(date->value(), Qt::ISODate ));
 
     _qt_label->setBuddy( _qt_dateedit );
