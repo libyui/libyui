@@ -219,50 +219,9 @@ bool NCPkgRepoTable::showRepoPackages( )
     //clean the pkg table first
     pkgList->itemsCleared ();
 
-    //sets to store matching packages
-    /* set <ZyppSel> exactMatch;
-    set <ZyppSel> nearMatch;
-
-    //iterate through the package pool
-    for ( ZyppPoolIterator it = zyppPkgBegin();
-          it != zyppPkgEnd();
-          ++it )
-    {
-	//we have candidate object in this repository
-        if ( (*it)->candidateObj() &&
-             (*it)->candidateObj()->repository() == repo )
-        {
-            exactMatch.insert( *it );
-        }
-	//something else (?)
-        else
-        {
-            zypp::ui::Selectable::available_iterator pkg_it = (*it)->availableBegin();
-
-            while ( pkg_it != (*it)->availableEnd() )
-            {
-                if ( (*pkg_it)->repository() == repo )
-                    nearMatch.insert( *it );
-
-                ++pkg_it;
-            }
-        }
-
-      }
-
-    //finally create pkg table list entries
-    set<ZyppSel>::const_iterator e_it = exactMatch.begin();
-    while ( e_it != exactMatch.end() )
-    {
-        ZyppPkg pkg = tryCastToZyppPkg( (*e_it)->theObj() );
-        pkgList->createListEntry ( pkg, *e_it);
-	e_it++;
-    }*/
-
     zypp::PoolQuery q;
     q.addRepo( repo.info().alias() );
 
-  
     for( zypp::PoolQuery::Selectable_iterator it = q.selectableBegin();
 	it != q.selectableEnd(); it++)
     {
@@ -270,14 +229,6 @@ bool NCPkgRepoTable::showRepoPackages( )
         pkgList->createListEntry ( pkg, *it);
     }
  
-    /*set<ZyppSel>::const_iterator n_it = nearMatch.begin();
-    while ( n_it != nearMatch.end() )
-    {
-        pkgList->createListEntry ( pkg, *n_it);
-	n_it++;
-    }
-
-    //and show the whol stuff to the user*/
     pkgList->drawList();
 
     return true;
