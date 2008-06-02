@@ -220,7 +220,7 @@ bool NCPkgRepoTable::showRepoPackages( )
     pkgList->itemsCleared ();
 
     //sets to store matching packages
-    set <ZyppSel> exactMatch;
+    /* set <ZyppSel> exactMatch;
     set <ZyppSel> nearMatch;
 
     //iterate through the package pool
@@ -257,17 +257,27 @@ bool NCPkgRepoTable::showRepoPackages( )
         ZyppPkg pkg = tryCastToZyppPkg( (*e_it)->theObj() );
         pkgList->createListEntry ( pkg, *e_it);
 	e_it++;
-    }
+    }*/
 
-    set<ZyppSel>::const_iterator n_it = nearMatch.begin();
+    zypp::PoolQuery q;
+    q.addRepo( repo.info().alias() );
+
+  
+    for( zypp::PoolQuery::Selectable_iterator it = q.selectableBegin();
+	it != q.selectableEnd(); it++)
+    {
+        ZyppPkg pkg = tryCastToZyppPkg( (*it)->theObj() );
+        pkgList->createListEntry ( pkg, *it);
+    }
+ 
+    /*set<ZyppSel>::const_iterator n_it = nearMatch.begin();
     while ( n_it != nearMatch.end() )
     {
-        ZyppPkg pkg = tryCastToZyppPkg( (*n_it)->theObj() );
         pkgList->createListEntry ( pkg, *n_it);
 	n_it++;
     }
 
-    //and show the whole stuff to the user
+    //and show the whol stuff to the user*/
     pkgList->drawList();
 
     return true;

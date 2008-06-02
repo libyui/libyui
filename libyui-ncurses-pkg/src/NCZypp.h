@@ -32,6 +32,7 @@
 #include <zypp/Patch.h>
 #include <zypp/ZYppFactory.h>
 #include <zypp/ResPoolProxy.h>
+#include <zypp/PoolQuery.h>
 
 
 using zypp::ui::S_Protected;           
