@@ -221,6 +221,7 @@ bool NCPkgRepoTable::showRepoPackages( )
 
     zypp::PoolQuery q;
     q.addRepo( repo.info().alias() );
+    q.addKind( zypp::ResKind::package );
 
     for( zypp::PoolQuery::Selectable_iterator it = q.selectableBegin();
 	it != q.selectableEnd(); it++)
