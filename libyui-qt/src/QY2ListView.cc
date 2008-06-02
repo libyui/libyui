@@ -447,7 +447,8 @@ QY2CheckListItem::~QY2CheckListItem()
 }
 
 
-/*
+
+#if FIXME_ITEM_COLORS
 void
 QY2CheckListItem::paintCell( QPainter *			painter,
 			     const QColorGroup &	colorGroup,
@@ -462,7 +463,8 @@ QY2CheckListItem::paintCell( QPainter *			painter,
 
     QTreeWidgetItem::paintCell( painter, cg, column, width, alignment );
 }
-*/
+#endif
+
 
 #if FIXME_TOOLTIP
 void
