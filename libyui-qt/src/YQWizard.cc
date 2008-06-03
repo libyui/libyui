@@ -740,7 +740,7 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     _helpButton->setShortcut( Qt::Key_F1 );
 
     connect( _helpButton, SIGNAL( clicked()  ),
-	     this,	 SLOT  ( showHelp() ) );
+	     this,	  SLOT  ( showHelp() ) );
 
     hbox->addWidget( _helpButton );
 
