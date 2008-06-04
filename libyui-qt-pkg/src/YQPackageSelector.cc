@@ -605,7 +605,7 @@ YQPackageSelector::addMenus()
     _fileMenu = new QMenu( _menuBar );
     Q_CHECK_PTR( _fileMenu );
     QAction *action = _menuBar->addMenu( _fileMenu );
-    action->setText(( "&File" ));
+    action->setText( _( "&File" ));
 
     _fileMenu->addAction( _( "&Import..." ),	this, SLOT( pkgImport() ) );
     _fileMenu->addAction( _( "&Export..." ),	this, SLOT( pkgExport() ) );

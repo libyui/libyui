@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jun  4 11:46:58 CEST 2008 - sh@suse.de
+
+- Added translation marker for "File" menu (bnc #396419)
+- V 2.16.48 
+
+-------------------------------------------------------------------
 Thu May 29 15:29:40 CEST 2008 - ma@suse.de
 
 - Revert 'fix persistent locks saving (bnc#332853)' because the 
