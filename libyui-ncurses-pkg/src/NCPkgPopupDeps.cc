@@ -44,7 +44,7 @@ class NCProblemSelectionBox : public NCSelectionBox
     typedef NCProblemSelectionBox Self;
     NCProblemSelectionBox (const Self &); // prohibit copying
     Self & operator= (const Self &); // prohibit assignment
-
+    
     NCPkgPopupDeps * depsPopup;	// to notify about changes
 
 protected:
@@ -66,7 +66,8 @@ class NCSolutionSelectionBox : public NCMultiSelectionBox
     Self & operator= (const Self &); // prohibit assignment
 
     NCPkgPopupDeps * depsPopup;
-
+    std::map<YItem *, string> detailsMap;
+    
 protected:
     virtual NCursesEvent wHandleInput( wint_t ch );
     
@@ -77,6 +78,7 @@ public:
 	, depsPopup (aDepsPopup) {}
 
     virtual ~NCSolutionSelectionBox () {}
+    void saveDetails( YItem * item, string details ) { detailsMap[item] = details; }
 };
 
 using namespace std;
@@ -96,6 +98,7 @@ NCPkgPopupDeps::NCPkgPopupDeps( const wpos at, NCPackageSelector * pkger )
       , solutionw( 0 )
       , head( 0 )
       , details( 0 )
+      , solDetails( 0 )
       , packager( pkger )
       , problemw( 0 )
 
@@ -129,38 +132,53 @@ void NCPkgPopupDeps::createLayout( )
   // vertical split is the (only) child of the dialog
   NCLayoutBox * vSplit = new NCLayoutBox( this, YD_VERT );
 
-  // FIXME
-  // opt.vWeight.setValue( 40 );
-
   vSplit->setNotify( true );
 
   new NCSpacing( vSplit, YD_VERT, false, 1 );
 
-  head = new NCLabel( vSplit, "", true, false );	// isHeading = true
+  head = new NCLabel( vSplit, "", true );	// isHeading = true
 
-  new NCSpacing( vSplit, YD_VERT, false, 1 );
-
-  // add the list containing packages with unresolved dependencies
-  problemw = new NCProblemSelectionBox( vSplit, _("&Problems"),	this);
-  problemw->setStretchable( YD_HORIZ, true );
-
-  new NCSpacing( vSplit, YD_VERT, false, 1 );	
+  // only add spacings if there's enough space
+  if ( this->preferredHeight() > 25 )
+      new NCSpacing( vSplit, YD_VERT, false, 1 );
 
   NCAlignment * left = new NCAlignment( vSplit, YAlignBegin, YAlignUnchanged );
+  left->setWeight(YD_VERT, 30 );
 
-   // heading = false, outputField = true
-  details =  new NCLabel ( left,"", false, true );
-			       
-  new NCSpacing( vSplit, YD_VERT, false, 1 );	// stretchable = true
+  // the list containing the problems (the unresolved package dependencies)
+  problemw = new NCProblemSelectionBox( left, _("&Problems"),	this);
+  problemw->setStretchable( YD_HORIZ, true );
+
+  NCAlignment * left1 = new NCAlignment( vSplit, YAlignBegin, YAlignUnchanged );
+  left1->setWeight(YD_VERT, 10 );
+
+  // show the details of the problem
+  details =  new NCLabel ( left1, "", false, true );	// heading = false,
+  details->setStretchable( YD_HORIZ, true );		// outputField = true
+
+  if ( this->preferredHeight() > 25 )
+      new NCSpacing( vSplit, YD_VERT, false, 0.5 );	// stretchable = false
   
-  // add the package list containing the dependencies
-  solutionw = new NCSolutionSelectionBox ( vSplit, _("Possible &Solutions"), this);
+  NCAlignment * left2 = new NCAlignment( vSplit, YAlignBegin, YAlignUnchanged );
+  left2->setWeight( YD_VERT, 30 );
+
+  // the list containing the solutions of a dependency problem
+  solutionw = new NCSolutionSelectionBox ( left2, _("Possible &Solutions"), this);
+
+  if ( this->preferredHeight() > 25 )
+      new NCSpacing( vSplit, YD_VERT, false, 1 );
   
-  new NCSpacing( vSplit, YD_VERT, false, 1 );	// stretchable = false
+  NCAlignment * left3 = new NCAlignment( vSplit, YAlignBegin, YAlignUnchanged );
+  left3->setWeight( YD_VERT, 30 );
+
+  // show the details of the solution
+  solDetails = new NCRichText ( left3, "", true );	// plain text mode = true
+  
+  if ( this->preferredHeight() > 25 )
+      new NCSpacing( vSplit, YD_VERT, false, 1 );	// stretchable = false
   
   NCLayoutBox * hSplit = new NCLayoutBox( vSplit, YD_HORIZ );
-
-
+  
   // add the solve button
   solveButton = new NCPushButton( hSplit, NCPkgStrings::SolveLabel() );
   solveButton->setFunctionKey( 10 );
@@ -170,8 +188,9 @@ void NCPkgPopupDeps::createLayout( )
   // add the cancel button
   cancelButton = new NCPushButton( hSplit, NCPkgStrings::CancelLabel() );
   cancelButton->setFunctionKey( 9 );
-  
-  new NCSpacing( vSplit, YD_VERT, false, 1 );	// stretchable = false
+
+  if ( this->preferredHeight() > 25 )
+   new NCSpacing( vSplit, YD_VERT, false, 0.5 );	// stretchable = false
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -260,15 +279,15 @@ bool NCPkgPopupDeps::solve( NCSelectionBox * problemw, NCPkgSolverAction action 
 	e = rproblems.end (),
 	i;
     int idx;
-    yuiMilestone() << "PROBLEMS" << endl;
+
     for (i = b, idx = 0; i != e; ++i, ++idx)
     {
-	yuiMilestone() << "PROB " << (*i)->description () << endl;
-	yuiMilestone() << ":    " << (*i)->details () << endl;
+	yuiMilestone() << "Problem: " << (*i)->description () << endl;
+	yuiMilestone() << "Details: " << (*i)->details () << endl;
 
 	// no solution yet
 	problems.push_back (make_pair (*i, zypp::ProblemSolution_Ptr ()));
-	//problemw->itemAdded ((*i)->description (), idx, false /*selected*/);
+
 	problemw->addItem( (*i)->description(), false );	// selected: false
     }
 
@@ -298,14 +317,34 @@ bool NCPkgPopupDeps::showSolutions( int index )
 	bb = solutions.begin (),
 	ee = solutions.end (),
 	ii;
-    for (ii = bb; ii != ee; ++ii) {
-	yuiMilestone() << " SOL  " << (*ii)->description () << endl;
-	yuiMilestone() << " :    " << (*ii)->details () << endl;
 
-	solutionw->addItem( new YItem ( (*ii)->description(),		// label
-					(user_solution == *ii) ) );	// selected
+    bool showDetails = true;;
+    string description;
+    
+    for (ii = bb; ii != ee; ++ii) {
+	yuiMilestone() << "Solution:  " << (*ii)->description () << endl;
+	yuiMilestone() << "Details:   " << (*ii)->details () << endl;
+	yuiMilestone() << "User decision: " << user_solution << endl;
+
+	description = (*ii)->description();
 	
-	yuiMilestone() << "usr: " << user_solution << " cur: " << *ii << endl;
+	if ( !((*ii)->details().empty()) )
+	    // hint for the user: more information below
+	    description += _(" see below");
+		
+	if ( showDetails )
+	{
+	    showSolutionDetails( (*ii)->details() ); // show details of 1. solution
+	    showDetails = false;
+	}
+
+	YItem *newItem = new YItem ( description,			// text
+				     (user_solution == *ii) );		// selected ?
+	
+	solutionw->addItem( newItem );	
+	solutionw->saveDetails( newItem, (*ii)->details() );
+	
+	yuiDebug() << "Solution: " << (*ii) << endl;  // Complete info
     }
     
     solutionw->doneMultipleChanges();
@@ -470,6 +509,21 @@ void NCPkgPopupDeps::setSolution (int index)
     problems[prob_num] = make_pair (problem, sol);
 }
 
+void NCPkgPopupDeps::showSolutionDetails( string details )
+{
+    string text;
+    if ( details.empty() )
+	// hint for the user: there isn't any additional information
+	// (for the currently selected  solution of a dependency problem)
+	text = _("No further solution details available");
+    else
+	text = details;
+    
+    if ( solDetails )
+	solDetails->setText( text );
+
+}
+
 ///////////////////////////////////////////////////////////////////
 //
 //
@@ -519,7 +573,7 @@ NCursesEvent NCProblemSelectionBox::wHandleInput( wint_t key )
 NCursesEvent NCSolutionSelectionBox::wHandleInput( wint_t key )
 {
     NCursesEvent ret = NCMultiSelectionBox::wHandleInput( key );
-    
+
     switch ( key )
     {
 	case KEY_SPACE:
@@ -536,6 +590,13 @@ NCursesEvent NCSolutionSelectionBox::wHandleInput( wint_t key )
 	    }
 	    break;	
 	}
+	case KEY_UP:
+	case KEY_DOWN: {
+	    // show details
+	    depsPopup->showSolutionDetails( detailsMap[currentItem()] );
+	    break;
+	}
+	    
 	default: {
 	    break;
 	}

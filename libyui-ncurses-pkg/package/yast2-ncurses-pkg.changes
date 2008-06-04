@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jun  4 12:13:54 CEST 2008 - gs@suse.de
+
+- Improve dependency popup: show solution details (NCRichText),
+  only add NCSpacing if there's enough space
+
+-------------------------------------------------------------------
 Thu May 29 10:12:08 CEST 2008 - gs@suse.de
 
 - Show the status of a language pattern and make installation 

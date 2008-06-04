@@ -34,7 +34,8 @@ class NCPushButton;
 class NCSelectionBox;
 class NCMultiSelectionBox;
 class NCPackageSelector;
-class NCInputField;
+class NCRichText;
+class NCSolutionSelectionBox;
 
 namespace PkgDep {
     class ErrorResult;
@@ -72,11 +73,12 @@ private:
     NCPushButton * cancelButton;
     NCPushButton * solveButton;		
     
-    NCMultiSelectionBox * solutionw; // resolver problem solutions
+    NCSolutionSelectionBox * solutionw; // resolver problem solutions
 
     NCLabel * head;			// the headline
 
     NCLabel *details;		// problem details
+    NCRichText *solDetails;	// solution details
     
     NCPackageSelector * packager;	// connection to the package selector
     
@@ -107,6 +109,8 @@ public:
     bool showSolutions( int index );
     // for the currently selected problem, choose this solution
     void setSolution (int index);
+    // show details
+    void showSolutionDetails( string details );
 };
 
 ///////////////////////////////////////////////////////////////////
