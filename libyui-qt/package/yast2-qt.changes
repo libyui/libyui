@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Jun  4 16:36:08 CEST 2008 - sh@suse.de
+
+- Prevent segfault for secondary wizards:
+  Call YQMainWinDock::resizeVisibleChild() indirectly via
+  single shot timer to avoid calling virtual methods in constructor 
+
+-------------------------------------------------------------------
 Tue Jun  3 13:42:19 CEST 2008 - tgoettlicher@suse.de
 
 - limited bar width in disk usage list to 100% 
