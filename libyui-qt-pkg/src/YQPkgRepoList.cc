@@ -24,6 +24,7 @@
 #define YUILogComponent "qt-pkg"
 #include "YUILog.h"
 #include <zypp/RepoManager.h>
+#include <zypp/PoolQuery.h>
 
 #include <QTreeWidget>
 #include "YQPkgRepoList.h"
@@ -121,11 +122,6 @@ YQPkgRepoList::filter()
     // Collect all packages on this repository
     //
 
-    set<ZyppSel> exactMatches;
-    set<ZyppSel> nearMatches;
-
-
-
     QTreeWidgetItem * item;
 
     QList<QTreeWidgetItem *> items = selectedItems();
@@ -140,65 +136,16 @@ YQPkgRepoList::filter()
         {
             ZyppRepo currentRepo = repoItem->zyppRepo();
 
-            for ( ZyppPoolIterator sel_it = zyppPkgBegin();
-                  sel_it != zyppPkgEnd();
-                  ++sel_it )
-            {
-                if ( (*sel_it)->installedObj() &&
-                     ( currentRepo.isSystemRepo() ) )
-                {
-                    exactMatches.insert( *sel_it );
-                }
-                     
-                if ( (*sel_it)->candidateObj() &&
-                      (*sel_it)->candidateObj()->repository() == currentRepo )
-                {
-                    exactMatches.insert( *sel_it );
-                }
-                else
-                {
-                    zypp::ui::Selectable::available_iterator pkg_it = (*sel_it)->availableBegin();
+	    zypp::PoolQuery query;
+	    query.addRepo( currentRepo.info().alias() );
+	    query.addKind(zypp::ResKind::package);
 
-                    while ( pkg_it != (*sel_it)->availableEnd() )
-                    {
-                        if ( (*pkg_it)->repository() == currentRepo )
-                            nearMatches.insert( *sel_it );
-
-                        ++pkg_it;
-                    }
-                }
-            }
-
-        }
-    }
-
-
-    //
-    // Send all exact matches to the list
-    // (emit a filterMatch signal for each one)
-    //
-
-    set<ZyppSel>::const_iterator sel_it = exactMatches.begin();
-
-    while ( sel_it != exactMatches.end() )
-    {
-	emit filterMatch( (*sel_it), tryCastToZyppPkg( (*sel_it)->theObj() ) );
-	nearMatches.erase( *sel_it );
-	++sel_it;
-    }
-
-
-    //
-    // Send all near matches to the list
-    // (emit a filterNearMatch signal for each one)
-    //
-
-    sel_it = nearMatches.begin();
-
-    while ( sel_it != nearMatches.end() )
-    {
-	emit filterNearMatch( *sel_it, tryCastToZyppPkg( (*sel_it)->theObj() ) );
-	++sel_it;
+    	    for( zypp::PoolQuery::Selectable_iterator it = query.selectableBegin();
+	         it != query.selectableEnd(); it++)
+    	    {
+		emit filterMatch( *it, tryCastToZyppPkg( (*it)->theObj() ) );
+    	    }
+	}
     }
 
     yuiDebug() << "Packages sent to package list. Elapsed time: "
