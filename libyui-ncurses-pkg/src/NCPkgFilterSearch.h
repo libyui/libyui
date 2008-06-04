@@ -28,7 +28,7 @@ using namespace std;
 using std::string;
 
 #include "NCPopup.h"
-#include "NCComboBox.h"
+#include "NCInputField.h"
 #include "NCLabel.h"
 #include "NCLayoutBox.h"
 #include "NCRichText.h"
@@ -50,7 +50,7 @@ class NCPkgFilterSearch : public NCLayoutBox {
 
 private:
 
-    NCComboBox * searchExpr;
+    NCInputField * searchExpr;
     NCCheckBox * ignoreCase;
     
     NCPushButton * searchButton;
@@ -62,9 +62,6 @@ private:
 protected:
 
     string getSearchExpression() const;
-
-
-    virtual NCursesEvent wHandleInput( wint_t ch );
     
 public:
     

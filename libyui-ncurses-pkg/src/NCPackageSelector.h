@@ -144,7 +144,7 @@ class NCPackageSelector
     // information about packages
     NCPkgPackageDetails * infoText;	// short/longdecsription, filelist
     NCRichText * filter_desc;
-    NCPushButton *searchButton;
+    NCInputField *searchField;
     NCPkgSearchSettings *searchSet;
     YReplacePoint * replacePoint; // replace point for info text
     YReplacePoint * replPoint; 
@@ -224,7 +224,7 @@ class NCPackageSelector
     YReplacePoint *ReplacePoint() { return replacePoint; }
     NCRichText *FilterDescription() { return filter_desc; }
     NCPkgSearchSettings *SearchSettings() { return searchSet; }
-    void setSearchButton( NCPushButton *pb ) { searchButton = pb; }
+    void setSearchField( NCInputField *expr ) { searchField = expr; }
 
     bool checkNow( bool *ok ); 
     bool verifySystem( bool *ok ); 

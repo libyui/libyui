@@ -255,7 +255,7 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
 	{   
 	    retVal = filterMain->handleEvent();
 	}
-	else if ( event.widget == searchButton )
+	else if ( event.widget == searchField )
 	{
 	    retVal = searchPopup->showSearchResultPackages();
 	}

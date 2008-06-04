@@ -87,18 +87,10 @@ void NCPkgFilterSearch::createLayout( YWidget *parent )
     NCLayoutBox * vSplit = new NCLayoutBox ( frame0, YD_VERT);
     new NCSpacing( vSplit, YD_VERT, true, 0.5 );
 
-    NCLayoutBox * hSplit = new NCLayoutBox ( vSplit, YD_HORIZ);
-    searchExpr = new NCComboBox( hSplit,
-				 NCPkgStrings::SearchPhrase(),
-				 true );	// editable = true
-
+    searchExpr = new NCInputField( vSplit, NCPkgStrings::SearchPhrase() );
     searchExpr->setStretchable( YD_HORIZ, true );
-    searchExpr->addItem( new YTableItem() );
-
-    NCLayoutBox * bogus  = new NCLayoutBox ( hSplit, YD_VERT);
-    new NCSpacing( bogus, YD_VERT, false, 1.0 );
-    searchButton = new NCPushButton( bogus, NCPkgStrings::SearchButton());
-    packager->setSearchButton( searchButton );
+    searchExpr->setReturnOnReturn( true );
+    packager->setSearchField( searchExpr );
 
     new NCSpacing( vSplit, YD_VERT, false, 0.5 );
     
@@ -128,8 +120,8 @@ string  NCPkgFilterSearch::getSearchExpression() const
 	// get the expression and store it in combo box list
 	// value = searchExpr->getValue();
 
-	value = searchExpr->text();
-	searchExpr->addItem( value, true );
+	value = searchExpr->value();
+	//searchExpr->addItem( value, true );
     }
 
     return value;
@@ -240,27 +232,6 @@ bool NCPkgFilterSearch::fillSearchList( const string & expr,
 
     return true;
 
-}
-
-///////////////////////////////////////////////////////////////////
-//
-//
-//	METHOD NAME : NCPopup::wHandleInput
-//	METHOD TYPE : NCursesEvent
-//
-//	DESCRIPTION :
-//
-NCursesEvent NCPkgFilterSearch::wHandleInput( wint_t ch )
-{
-    NCursesEvent ret = NCursesEvent::none;
-
-    // start package search if Return is pressed
-    if ( ch == KEY_RETURN )
-	ret = NCursesEvent::button;
-    else
-       ret = NCWidget::wHandleInput( ch );
-
-    return ret;
 }
 
 ///////////////////////////////////////////////////////////////////
