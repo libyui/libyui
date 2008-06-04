@@ -52,8 +52,6 @@ private:
 
     NCInputField * searchExpr;
     NCCheckBox * ignoreCase;
-    
-    NCPushButton * searchButton;
 
     NCPackageSelector * packager;		// connection to the package selector
 

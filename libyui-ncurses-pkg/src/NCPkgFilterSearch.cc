@@ -52,7 +52,6 @@ NCPkgFilterSearch::NCPkgFilterSearch( YWidget *parent, YUIDimension dim, NCPacka
     : NCLayoutBox( parent, dim )
       , searchExpr( 0 )
       , ignoreCase( 0 )
-      , searchButton( 0 )
       , packager( pkger )
 {
 	createLayout( parent );
@@ -165,70 +164,40 @@ bool NCPkgFilterSearch::fillSearchList( const string & expr,
     // clear the package table
     packageList->itemsCleared ();
 
-// FIXME filter it inside zypp
-    ZyppPoolIterator b = zyppPkgBegin ();
-    ZyppPoolIterator e = zyppPkgEnd ();
-    ZyppPoolIterator i;
+    zypp::PoolQuery q;
+    q.addString( expr );
+    q.addKind( zypp::ResKind::package );
+    //no clue what this means, but it segfaults if it's not here :)
+    q.addAttribute( zypp::sat::SolvAttr::keywords );
 
-    // get the package list and sort it
-    list<ZyppSel> pkgList( b, e );
-    pkgList.sort( sortByName );
+    if ( !ignoreCase )
+        q.setCaseSensitive();
+    if ( checkName )
+	q.addAttribute( zypp::sat::SolvAttr::name );
+    if ( checkSummary )
+	q.addAttribute( zypp::sat::SolvAttr::summary );
+    if ( checkDescr )
+	q.addAttribute( zypp::sat::SolvAttr::description );
+    if ( checkProvides )
+	q.addAttribute( zypp::sat::SolvAttr("solvable:provides") );
+    if ( checkRequires )
+	q.addAttribute( zypp::sat::SolvAttr("solvable:requires") );
 
-    // fill the package table
-    list<ZyppSel>::iterator listIt = pkgList.begin();
-    ZyppPkg pkg;
-    string description = "";
-    string provides = "";
-    string requires = "";
-
-    while ( listIt != pkgList.end() )
+    for( zypp::PoolQuery::Selectable_iterator it = q.selectableBegin();
+	it != q.selectableEnd(); it++)
     {
-	if ( (*listIt)->installedObj() )
-	   pkg = tryCastToZyppPkg ((*listIt)->installedObj());
-	else
-	   pkg = tryCastToZyppPkg ((*listIt)->theObj());
-
-	if ( pkg )
-	{
-	    if ( checkDescr )
-	    {
-		description = pkg->description();
-		//zypp::Text value = pkg->description();
-		//description = createDescrText( value );
-	    }
-	    if ( checkProvides )
-	    {
-		zypp::Capabilities value = pkg->dep (zypp::Dep::PROVIDES);
-		//provides = createRelLine( value );
-	    }
-	    if ( checkRequires )
-	    {
-		zypp::Capabilities value = pkg->dep (zypp::Dep::REQUIRES);
-		//requires = createRelLine( value );
-	    }
-	    if ( ( checkName && match( pkg->name(), expr, ignoreCase )) ||
-		 ( checkSummary && match( pkg->summary(), expr, ignoreCase) ) ||
-		 ( checkDescr && match( description, expr, ignoreCase) ) ||
-		 ( checkProvides && match( provides, expr, ignoreCase) ) ||
-		 ( checkRequires && match( requires,  expr, ignoreCase) )
-		 )
-	    {
-		// search sucessful
-		packageList->createListEntry( pkg, *listIt );
-	    }
-	}
-
-	++listIt;
+        ZyppPkg pkg = tryCastToZyppPkg( (*it)->theObj() );
+        packageList->createListEntry ( pkg, *it);
     }
-
+    
     // show the package list
     packageList->drawList();
+
     if ( packageList->getNumLines() > 0 )
     {
         packageList->setCurrentItem( 0 );
         packageList->showInformation(); 
     }
-
 
     return true;
 
