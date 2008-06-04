@@ -155,8 +155,9 @@ YQWizard::~YQWizard()
     if ( this == main_wizard )
         main_wizard = 0;
 
-    if ( _helpDlg )
-	delete _helpDlg;
+    delete _helpDlg;
+
+    QY2Styler::self()->unregisterWidget( this );
 }
 
 bool YQWizard::isSecondary() const

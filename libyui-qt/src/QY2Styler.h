@@ -17,6 +17,7 @@ public:
     void setStyleSheet( const QString &file );
     QString themeDir() const;
     void registerWidget( QWidget *widget );
+    void unregisterWidget( QWidget *widget );
     void registerChildWidget( QWidget *parent, QWidget *widget );
     QString textStyle() const { return _textStyle; }
 

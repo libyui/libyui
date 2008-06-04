@@ -87,8 +87,14 @@ void QY2Styler::registerWidget( QWidget *widget )
     widget->setStyleSheet( _style );
 }
 
+void QY2Styler::unregisterWidget( QWidget *widget )
+{
+    _children.remove( widget );
+}
+
 void QY2Styler::registerChildWidget( QWidget *parent, QWidget *widget )
 {
+    qDebug() << "registerChildWidget " << parent << " " << widget;
     widget->installEventFilter( this );
     _children[parent].push_back( widget );
 }
@@ -101,6 +107,7 @@ QImage QY2Styler::getScaled( const QString name, const QSize & size )
 
 void QY2Styler::renderParent( QWidget *wid )
 {
+    qDebug() << "renderParent " << wid << endl;
     QString name = wid->objectName();
 
     // if the parent does not have a background, this does not make sense
@@ -123,6 +130,7 @@ void QY2Styler::renderParent( QWidget *wid )
     QWidget *child;
     foreach( child, _children[wid] )
     {
+        qDebug() << "foreach " << child << " " << wid;
         QString name = child->objectName();
 
         if (! child->isVisible() || _backgrounds[name].pix.isNull() )
@@ -152,6 +160,9 @@ void QY2Styler::renderParent( QWidget *wid )
 
 bool QY2Styler::updateRendering( QWidget *wid )
 {
+    if (!wid)
+       return false;
+
     QString name = wid->objectName();
 
     if ( !_backgrounds.contains( name ) )
@@ -173,6 +184,8 @@ bool QY2Styler::updateRendering( QWidget *wid )
         QWidget *parent = wid->parentWidget();
         while ( parent && !_children.contains( parent ) )
             parent = parent->parentWidget();
+        if (!parent)
+           return false;
         renderParent( parent );
     } else {
         renderParent( wid );
