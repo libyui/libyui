@@ -30,6 +30,7 @@
 #include <QSvgRenderer>
 #include <QPainter>
 #include <QStackedWidget>
+#include <QTimer>
 #include <qimage.h>
 #include <qlabel.h>
 #include <qlayout.h>
@@ -74,7 +75,9 @@ using std::string;
 
 #define USE_ICON_ON_HELP_BUTTON		0
 
-YQWizard *YQWizard::main_wizard = 0;
+
+YQWizard * YQWizard::main_wizard = 0;
+
 
 YQWizard::YQWizard( YWidget *		parent,
 		    const string & 	backButtonLabel,
@@ -142,9 +145,14 @@ YQWizard::YQWizard( YWidget *		parent,
     if ( !main_wizard && _stepsEnabled )
     {
         main_wizard = this;
-    } else if ( main_wizard )
+    }
+    else if ( main_wizard )
     {
-        YQMainWinDock::mainWinDock()->resizeVisibleChild();
+	// Calling this in the Qt main loop, not here in the constructor:
+	// This will indirectly call a lot of virtual methods that are not available yet
+	// while this object is being constructed.
+	
+	QTimer::singleShot( 0, YQMainWinDock::mainWinDock(), SLOT( resizeVisibleChild() ) );
     }
 }
 
@@ -159,10 +167,12 @@ YQWizard::~YQWizard()
 	delete _helpDlg;
 }
 
+
 bool YQWizard::isSecondary() const
 {
     return this != main_wizard;
 }
+
 
 void YQWizard::layoutTitleBar( QWidget * parent )
 {

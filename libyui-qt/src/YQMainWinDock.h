@@ -136,21 +136,24 @@ protected:
     virtual void resizeEvent( QResizeEvent * event );
 
     /**
-     * Resize the visible child to the current size of the dock.
-     **/
-    void resizeVisibleChild();
-
-    /**
      * For secondary wizards
      **/
     void setSideBarWidth( int width );
 
     /**
      * Activate or deactivate the next-lower dialog in the dock when a new
-     * dialog is opened or when a dialog is closed. 
+     * dialog is opened or when a dialog is closed.
      **/
     void activateCurrentDialog( bool active );
-    
+
+
+public slots:
+
+    /**
+     * Resize the visible child to the current size of the dock.
+     **/
+    void resizeVisibleChild();
+
 
 protected slots:
 

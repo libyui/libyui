@@ -19,7 +19,6 @@
 
 #define YUILogComponent "qt-ui"
 #include "YUILog.h"
-#include <QTimer>
 #include <QResizeEvent>
 #include "YQDialog.h"
 #include <YQUI.h>
@@ -86,9 +85,11 @@ YQMainWinDock::resizeVisibleChild()
 
         QRect rect = QRect( QPoint( 0, 0 ), size() );
 
-        YQWizard *wizard = dialog->findWizard();
+        YQWizard * wizard = dialog->findWizard();
+	
         if ( wizard )
-	    yuiDebug() << "wizard " << wizard << " " << wizard->isSecondary() << endl;
+	    yuiDebug() << dialog << " with " << wizard << " isSecondary: " << boolalpha << wizard->isSecondary() << endl;
+	
         if ( wizard && wizard->isSecondary() )
             rect.setLeft( _sideBarWidth );
 
@@ -148,7 +149,7 @@ YQMainWinDock::activateCurrentDialog( bool active )
     if ( _widgetStack.empty() )
 	return;
 
-    // In the normal case, the (still or against) topmost dialog needs to be
+    // In the normal case, the (still or again) topmost dialog needs to be
     // activated or deactivated directly. Since this is done on the QWidget
     // level, its widgetRep() is needed -- which may or may not be the same as
     // the YQDialog.
