@@ -3,6 +3,8 @@ Thu Jun  5 13:28:52 CEST 2008 - sh@suse.de
 
 - (coolo) fixed segfault in QY2Styler with secondary wizards during
   installation: bnc #381755, bnc #391856, bug #391947
+  (tgoettlicher fixed bnc #397083: help dialog disappears when
+  "Help" button is multiple pushed
 - V 2.16.54 
 
 -------------------------------------------------------------------
