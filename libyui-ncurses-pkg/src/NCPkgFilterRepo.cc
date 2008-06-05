@@ -230,7 +230,9 @@ bool NCPkgRepoTable::showRepoPackages( )
         pkgList->createListEntry ( pkg, *it);
     }
  
+    pkgList->setCurrentItem( 0 );
     pkgList->drawList();
+    pkgList->showInformation();
 
     return true;
 }
