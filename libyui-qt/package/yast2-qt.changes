@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jun  5 13:28:52 CEST 2008 - sh@suse.de
+
+- (coolo) fixed segfault with secondary wizards during installation
+- V 2.16.54 
+
+-------------------------------------------------------------------
 Tue Jun  3 13:42:19 CEST 2008 - tgoettlicher@suse.de
 
 - limited bar width in disk usage list to 100% 
