@@ -1,0 +1,19 @@
+## general configure.in.in
+
+## initialize
+@YAST2-INIT-COMMON@
+@YAST2-INIT-PROGRAM@
+
+## some common checks
+@YAST2-CHECKS-COMMON@
+@YAST2-CHECKS-PROGRAM@
+
+## SUSE ncurses do not need the wide include
+## but other distros do, #201705
+AC_CHECK_HEADER([ncursesw/curses.h],
+		[CPPFLAGS="$CPPFLAGS -I/usr/include/ncursesw"])
+
+PKG_CHECK_MODULES([ZYPP], [libzypp])
+
+## and generate the output
+@YAST2-OUTPUT@
