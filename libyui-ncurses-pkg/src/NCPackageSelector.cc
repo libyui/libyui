@@ -583,7 +583,8 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
 	    {
 		if ( selectable->hasCandidateObj() &&
 		     ( !selectable->candidateObj().isRelevant() ||
-		       selectable->candidateObj().isSatisfied() ) )
+		       ( selectable->candidateObj().isSatisfied()  &&
+			 ! selectable->candidateObj().status().isToBeInstalled() ) ) )
 		{
 		    displayPatch = true;
 		}
@@ -596,7 +597,9 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
 		     selectable->candidateObj().isRelevant() )
 		{
 		    // and only those that are needed 
-		    if ( ! selectable->candidateObj().isSatisfied() )
+		    if ( ! selectable->candidateObj().isSatisfied() ||
+			 // may be it is satisfied because is preselected
+			 selectable->candidateObj().status().isToBeInstalled() )
 			displayPatch = true;
 		}
 		break;

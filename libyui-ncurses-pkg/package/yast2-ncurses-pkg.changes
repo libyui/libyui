@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jun 10 14:58:01 CEST 2008 - gs@suse.de
+
+- Online Update: add preselected patches to the list of
+  needed patches 
+
+-------------------------------------------------------------------
 Wed Jun  4 12:13:54 CEST 2008 - gs@suse.de
 
 - Improve dependency popup: show solution details (NCRichText),
