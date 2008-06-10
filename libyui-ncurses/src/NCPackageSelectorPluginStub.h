@@ -12,11 +12,9 @@
 
   File:	      NCPackageSelectorPluginStub.h
 
-  Author:     Hedgehog Painter <kmachalkova@suse.cz>
+  Author:     Katharina Machalkova <kmachalkova@suse.cz>
 
 /-*/
-
-// -*- c++ -*-
 
 #ifndef NCPackageSelectorPluginStub_h
 #define NCPackageSelectorPluginStub_h
@@ -37,7 +35,6 @@ class NCPackageSelectorPluginStub: public YPackageSelectorPlugin
 {
 public:
 
-
     /**
      * Constructor: Load the plugin library for the NCurses package selector.
      **/
@@ -54,7 +51,7 @@ public:
      * Implemented from YPackageSelectorPlugin.
      *
      * This might return 0 if the plugin lib could not be loaded or if the
-     * appropriate symbol could not be located in the plugin lib. 
+     * appropriate symbol could not be located in the plugin lib.
      **/
     virtual YPackageSelector * createPackageSelector( YWidget *		parent,
 						      long		modeFlags );

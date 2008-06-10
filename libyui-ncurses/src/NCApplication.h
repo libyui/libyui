@@ -16,7 +16,6 @@
 
 /-*/
 
-
 #ifndef NCApplication_h
 #define NCApplication_h
 
@@ -25,11 +24,11 @@
 
 class NCApplication: public YApplication
 {
-    
+
 protected:
 
     friend class YNCursesUI;
-    
+
     /**
      * Constructor.
      *
@@ -43,20 +42,20 @@ protected:
     virtual ~NCApplication();
 
 public:
-    
+
     /**
      * Set language and encoding for the locale environment ($LANG).
      *
      * 'language' is the ISO short code ("de_DE", "en_US", ...).
      *
      * 'encoding' an (optional) encoding ("utf8", ...) that will be appended if
-     *  present.
+     *	present.
      *
      * Reimplemented from YApplication.
      **/
     virtual void setLanguage( const string & language,
 			      const string & encoding = string() );
-    
+
     /**
      * Open a directory selection box and prompt the user for an existing
      * directory.
@@ -160,9 +159,9 @@ public:
      *
      * Reimplemented from YApplication.
      **/
-    virtual int runInTerminal ( const string & command );
+    virtual int runInTerminal( const string & command );
 
-    
+
     // Display information and UI capabilities.
     //
     // All implemented from YApplication.
@@ -176,11 +175,16 @@ public:
     virtual int	 defaultHeight();
 
     virtual bool isTextMode()			{ return true; }
+
     virtual bool hasImageSupport()		{ return false; }
+
     virtual bool hasIconSupport()		{ return false; }
+
     virtual bool hasAnimationSupport()		{ return false; }
+
     virtual bool hasFullUtf8Support();
     virtual bool richTextSupportsTable()	{ return false; }
+
     virtual bool leftHandedMouse()		{ return false; }
 };
 

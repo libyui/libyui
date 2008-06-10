@@ -1,21 +1,21 @@
 /*---------------------------------------------------------------------\
-|                                                                      |
-|                      __   __    ____ _____ ____                      |
-|                      \ \ / /_ _/ ___|_   _|___ \                     |
-|                       \ V / _` \___ \ | |   __) |                    |
-|                        | | (_| |___) || |  / __/                     |
-|                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |
-|                               core system                            |
-|                                                        (C) SuSE GmbH |
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
    File:       YNCursesUI.h
 
-   Author:     Michael Andres <ma@suse.de>
+   Authors:    Michael Andres <ma@suse.de>
+	       Stefan Hundhammer <sh@suse.de>
 
 /-*/
-// -*- c++ -*-
 
 #ifndef YNCursesUI_h
 #define YNCursesUI_h
@@ -23,23 +23,12 @@
 #include <iosfwd>
 
 #include "YUI.h"
-
 #include "NCApplication.h"
-
 #include "NCurses.h"
 
-class YUI;
-class NCDialog;
 class NCPackageSelectorPluginStub;
-class NCWidgetFactory;
-class NCOptionalWidgetFactory;
-class YSingleChildContainerWidget;
 
 
-/**
- * YaST2 Component: NCursesUI user interface
- * The YaST2 Component implements a NCursesUI based user interface.
- */
 class YNCursesUI : public NCurses, public YUI
 {
 public:
@@ -66,7 +55,7 @@ protected:
     /**
      * Create the widget factory that provides all the createXY() methods for
      * optional ("special") widgets and the corresponding hasXYWidget()
-     * methods. 
+     * methods.
      *
      * Reimplemented from YUI.
      **/
@@ -78,7 +67,7 @@ protected:
      * Reimplemented from YUI.
      **/
     virtual YApplication * createApplication();
-    
+
 
     virtual bool want_colors();
     virtual void init_title();
@@ -87,14 +76,14 @@ protected:
      * Global reference to the UI
      **/
     static YNCursesUI * _ui;
-    
+
 public:
 
     /**
      * Access the global Y2NCursesUI.
      */
     static YNCursesUI * ui() { return _ui; }
-    
+
     /**
      * Idle around until fd_ycp is readable
      */
@@ -105,7 +94,7 @@ public:
      * See the setfont(8) command and the console HowTo for details.
      *
      * This should really be in NCApplication, but it uses so many non-exported
-     * member variables that it's not easy to move it there. 
+     * member variables that it's not easy to move it there.
      **/
     virtual void setConsoleFont( const string & console_magic,
 				 const string & font,
@@ -117,7 +106,7 @@ public:
      * Fills the PackageSelector widget and runs package selection.
      */
     virtual YEvent * runPkgSelection( YWidget * packageSelector );
-    
+
     /**
      * Returns the package selector plugin singleton of this UI or creates it
      * (including loading the plugin lib) if it does not exist yet.
@@ -130,7 +119,7 @@ public:
  * Create a new UI if there is none yet or return the existing one if there is.
  *
  * This is the UI plugin's interface to the outside world, so don't change the
- * name or signature! 
+ * name or signature!
  **/
 YUI * createUI( bool withThreads );
 

@@ -1,13 +1,13 @@
 /*---------------------------------------------------------------------\
-|                                                                      |
-|                      __   __    ____ _____ ____                      |
-|                      \ \ / /_ _/ ___|_   _|___ \                     |
-|                       \ V / _` \___ \ | |   __) |                    |
-|                        | | (_| |___) || |  / __/                     |
-|                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |
-|                               core system                            |
-|                                                        (C) SuSE GmbH |
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
    File:       NCMenuButton.h
@@ -15,6 +15,7 @@
    Author:     Michael Andres <ma@suse.de>
 
 /-*/
+
 #ifndef NCMenuButton_h
 #define NCMenuButton_h
 
@@ -24,22 +25,20 @@
 #include "NCApplication.h"
 #include "NCWidget.h"
 
-class NCMenuButton;
 
+class NCMenuButton : public YMenuButton, public NCWidget
+{
+private:
 
-class NCMenuButton : public YMenuButton, public NCWidget {
+    friend std::ostream & operator<<( std::ostream & STREAM, const NCMenuButton & OBJ );
 
-  friend std::ostream & operator<<( std::ostream & STREAM, const NCMenuButton & OBJ );
-
-  NCMenuButton & operator=( const NCMenuButton & );
-  NCMenuButton            ( const NCMenuButton & );
-
-  private:
+    NCMenuButton & operator=( const NCMenuButton & );
+    NCMenuButton( const NCMenuButton & );
 
     NClabel label;
-    bool haveUtf8() { return YUI::app()->hasFullUtf8Support(); } 
+    bool haveUtf8() { return YUI::app()->hasFullUtf8Support(); }
 
-  protected:
+protected:
 
     virtual const char * location() const { return "NCMenuButton"; }
 
@@ -47,7 +46,7 @@ class NCMenuButton : public YMenuButton, public NCWidget {
 
     NCursesEvent postMenu();
 
-  public:
+public:
 
     NCMenuButton( YWidget * parent,
 		  string label );
@@ -56,14 +55,9 @@ class NCMenuButton : public YMenuButton, public NCWidget {
     virtual int preferredWidth();
     virtual int preferredHeight();
 
-    virtual void rebuildMenuTree();
-    
-    /**
-     * Set the new size of the widget.
-     *
-     * Reimplemented from YWidget.
-     **/
     virtual void setSize( int newWidth, int newHeight );
+    
+    virtual void rebuildMenuTree();
 
     virtual NCursesEvent wHandleInput( wint_t key );
 
@@ -73,10 +67,12 @@ class NCMenuButton : public YMenuButton, public NCWidget {
 
     YMenuItem * findItem( int selection ) { return findMenuItem( selection ); }
 
-    virtual bool setKeyboardFocus() {
-      if ( !grabFocus() )
-        return YWidget::setKeyboardFocus();
-      return true;
+    virtual bool setKeyboardFocus()
+    {
+	if ( !grabFocus() )
+	    return YWidget::setKeyboardFocus();
+
+	return true;
     }
 };
 

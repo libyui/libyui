@@ -1,13 +1,13 @@
 /*---------------------------------------------------------------------\
-|                                                                      |
-|                      __   __    ____ _____ ____                      |
-|                      \ \ / /_ _/ ___|_   _|___ \                     |
-|                       \ V / _` \___ \ | |   __) |                    |
-|                        | | (_| |___) || |  / __/                     |
-|                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |
-|                               core system                            |
-|                                                        (C) SuSE GmbH |
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
    File:       NCAskForExistingDirectory.h
@@ -15,6 +15,7 @@
    Author:     Gabriele Strattner <gs@suse.de>
 
 /-*/
+
 #ifndef NCAskForExistingDirectory_h
 #define NCAskForExistingDirectory_h
 
@@ -32,12 +33,12 @@
 
 
 
-class NCAskForExistingDirectory : public NCPopup {
+class NCAskForExistingDirectory : public NCPopup
+{
+private:
 
     NCAskForExistingDirectory & operator=( const NCAskForExistingDirectory & );
-    NCAskForExistingDirectory            ( const NCAskForExistingDirectory & );
-
-private:
+    NCAskForExistingDirectory( const NCAskForExistingDirectory & );
 
     NCPushButton * okButton;
     NCPushButton * cancelButton;
@@ -46,45 +47,36 @@ private:
     NCCheckBox *detailed;
 
     bool getCheckBoxValue( NCCheckBox * detailed );
-    
+
 protected:
 
     virtual bool postAgain();
 
     virtual NCursesEvent wHandleInput( wint_t ch );
-    
+
 public:
-    
+
     NCAskForExistingDirectory( const wpos at,
 			       const string & startDir,
 			       const string & headline );
 
     virtual ~NCAskForExistingDirectory();
 
-    /**
-     * Set the default size
-     */
-    
     virtual int preferredWidth();
     virtual int preferredHeight();
-    
+
     /**
      * Create layout of file directory selection popup
-     * @param string The initial start directory
-     * @param string The headline of the popup
-     * @return void
      */
-    void createLayout( const string & iniDir,
+    void createLayout( const string & initialDir,
 		       const string & headline );
 
     /**
      * Shows the popup with the list of directories.
-     * @return NCursesEvent
      */
     NCursesEvent & showDirPopup( );
 
 };
-
 
 
 #endif // NCAskForExistingDirectory_h

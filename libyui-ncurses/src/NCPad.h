@@ -1,13 +1,13 @@
 /*---------------------------------------------------------------------\
-|                                                                      |
-|                      __   __    ____ _____ ____                      |
-|                      \ \ / /_ _/ ___|_   _|___ \                     |
-|                       \ V / _` \___ \ | |   __) |                    |
-|                        | | (_| |___) || |  / __/                     |
-|                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |
-|                               core system                            |
-|                                                        (C) SuSE GmbH |
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
    File:       NCPad.h
@@ -15,6 +15,7 @@
    Author:     Michael Andres <ma@suse.de>
 
 /-*/
+
 #ifndef NCPad_h
 #define NCPad_h
 
@@ -24,53 +25,57 @@
 #include "NCWidget.h"
 
 
-class NCSchrollCB {
+class NCSchrollCB
+{
+public:
 
-  public:
-  
-    virtual ~NCSchrollCB () {}
+    virtual ~NCSchrollCB() {}
 
-    // callback
     virtual void HScroll( unsigned total, unsigned visible, unsigned start ) {}
+
     virtual void VScroll( unsigned total, unsigned visible, unsigned start ) {}
 
     virtual void ScrollHead( NCursesWindow & w, unsigned ccol ) {}
 
-    //
     virtual void AdjustPadSize( wsze & minsze ) {}
 };
 
 
-class NCScrollHint : protected NCSchrollCB {
-
-  private:
+class NCScrollHint : protected NCSchrollCB
+{
+private:
 
     NCSchrollCB * redirect;
 
-  protected:
+protected:
 
     NCScrollHint() : redirect( this ) {}
+
     virtual ~NCScrollHint() {}
 
-  protected:
+protected:
 
-    virtual void SetHead( NCursesWindow & w, unsigned ccol ) {
-      redirect->ScrollHead( w, ccol );
+    virtual void SetHead( NCursesWindow & w, unsigned ccol )
+    {
+	redirect->ScrollHead( w, ccol );
     }
 
-    void VSet( unsigned total, unsigned visible, unsigned start ) {
-      redirect->VScroll( total, visible, start );
+    void VSet( unsigned total, unsigned visible, unsigned start )
+    {
+	redirect->VScroll( total, visible, start );
     }
 
-    void HSet( unsigned total, unsigned visible, unsigned start ) {
-      redirect->HScroll( total, visible, start );
+    void HSet( unsigned total, unsigned visible, unsigned start )
+    {
+	redirect->HScroll( total, visible, start );
     }
 
-    virtual void SetPadSize( wsze & minsze ) {
-      redirect->AdjustPadSize( minsze );
+    virtual void SetPadSize( wsze & minsze )
+    {
+	redirect->AdjustPadSize( minsze );
     }
 
-  public:
+public:
 
     // set redirect
     void SendSchrollCB( NCSchrollCB * to ) { redirect = ( to ? to : this ); }
@@ -79,9 +84,9 @@ class NCScrollHint : protected NCSchrollCB {
 };
 
 
-class NCPad : public NCursesPad, public NCScrollHint {
-
-  protected:
+class NCPad : public NCursesPad, public NCScrollHint
+{
+protected:
 
     const NCWidget & parw;
 
@@ -94,33 +99,36 @@ class NCPad : public NCursesPad, public NCScrollHint {
     bool  dclear;
     bool  dirty;
 
-  protected:
-
+    
     virtual int dirtyPad() { dirty = false; return setpos( CurPos() ); }
+
     virtual int setpos( const wpos & newpos );
 
-    int adjpos( const wpos & offset ) {
-      return setpos( CurPos() + offset );
+    int adjpos( const wpos & offset )
+    {
+	return setpos( CurPos() + offset );
     }
 
     virtual void updateScrollHint();
 
-  public:
+public:
 
     NCPad( int lines, int cols, const NCWidget & p )
-      : NCursesPad( lines, cols )
-      , parw( p )
-      , destwin ( 0 )
-      , maxdpos ( 0 )
-      , maxspos ( 0 )
-      , dclear  ( false )
-      , dirty   ( false )
-    {}
+	: NCursesPad( lines, cols )
+	, parw( p )
+	, destwin( 0 )
+	, maxdpos( 0 )
+	, maxspos( 0 )
+	, dclear( false )
+	, dirty( false )
+	{}
+
     virtual ~NCPad() {}
 
-  public:
+public:
 
     NCursesWindow * Destwin() { return destwin; }
+
     virtual void Destwin( NCursesWindow * dwin );
 
     virtual void resize( wsze nsze );
@@ -132,32 +140,39 @@ class NCPad : public NCursesPad, public NCScrollHint {
 
     virtual wpos CurPos() const { return srect.Pos; }
 
-    int ScrlTo( const wpos & newpos ) {
-      return setpos( newpos );
+    int ScrlTo( const wpos & newpos )
+    {
+	return setpos( newpos );
     }
 
-    int ScrlLine( const int line ) {
-      return setpos( wpos( line, srect.Pos.C ) );
+    int ScrlLine( const int line )
+    {
+	return setpos( wpos( line, srect.Pos.C ) );
     }
 
-    int ScrlCol( const int col ) {
-      return setpos( wpos( srect.Pos.L, col ) );
+    int ScrlCol( const int col )
+    {
+	return setpos( wpos( srect.Pos.L, col ) );
     }
 
-    int ScrlDown( const int lines = 1 ) {
-      return adjpos( wpos( lines, 0 ) );
+    int ScrlDown( const int lines = 1 )
+    {
+	return adjpos( wpos( lines, 0 ) );
     }
 
-    int ScrlUp( const int lines = 1 ) {
-      return adjpos( wpos( -lines, 0 ) );
+    int ScrlUp( const int lines = 1 )
+    {
+	return adjpos( wpos( -lines, 0 ) );
     }
 
-    int ScrlRight( const int cols = 1 ) {
-      return adjpos( wpos( 0, cols ) );
+    int ScrlRight( const int cols = 1 )
+    {
+	return adjpos( wpos( 0, cols ) );
     }
 
-    int ScrlLeft( const int cols = 1 ) {
-      return adjpos( wpos( 0, -cols ) );
+    int ScrlLeft( const int cols = 1 )
+    {
+	return adjpos( wpos( 0, -cols ) );
     }
 
     virtual bool handleInput( wint_t key );

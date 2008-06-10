@@ -1,13 +1,13 @@
 /*---------------------------------------------------------------------\
-|                                                                      |
-|                      __   __    ____ _____ ____                      |
-|                      \ \ / /_ _/ ___|_   _|___ \                     |
-|                       \ V / _` \___ \ | |   __) |                    |
-|                        | | (_| |___) || |  / __/                     |
-|                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |
-|                               core system                            |
-|                                                        (C) SuSE GmbH |
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
    File:       NCCheckBox.cc
@@ -30,21 +30,21 @@ unsigned char NCCheckBox::statetag[3] = { '?', ' ', 'x' };
 NCCheckBox::NCCheckBox( YWidget * parent,
 			const string & nlabel,
 			bool checked )
-    : YCheckBox( parent, nlabel )
-    , NCWidget( parent )
-    , tristate( false )
-    , checkstate( checked ? S_ON : S_OFF )
+	: YCheckBox( parent, nlabel )
+	, NCWidget( parent )
+	, tristate( false )
+	, checkstate( checked ? S_ON : S_OFF )
 {
-  yuiDebug() << endl;
-  setLabel( nlabel );
-  hotlabel = &label;
+    yuiDebug() << endl;
+    setLabel( nlabel );
+    hotlabel = &label;
 }
 
 
 
 NCCheckBox::~NCCheckBox()
 {
-  yuiDebug() << endl;
+    yuiDebug() << endl;
 }
 
 int NCCheckBox::preferredWidth()
@@ -67,7 +67,7 @@ void NCCheckBox::setEnabled( bool do_bv )
 
 void NCCheckBox::setSize( int newwidth, int newheight )
 {
-  wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
+    wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
 
@@ -75,11 +75,11 @@ void NCCheckBox::setSize( int newwidth, int newheight )
 // set label
 void NCCheckBox::setLabel( const string & nlabel )
 {
-  label  = NCstring( nlabel );
-  label.stripHotkey();
-  defsze = wsze( label.height(), label.width() + 4 );
-  YCheckBox::setLabel( nlabel );
-  Redraw();
+    label  = NCstring( nlabel );
+    label.stripHotkey();
+    defsze = wsze( label.height(), label.width() + 4 );
+    YCheckBox::setLabel( nlabel );
+    Redraw();
 }
 
 
@@ -103,6 +103,7 @@ void NCCheckBox::setValue( YCheckBoxState state )
 	    checkstate = S_DC;
 	    break;
     }
+
     Redraw();
 }
 
@@ -123,42 +124,59 @@ YCheckBoxState NCCheckBox::value()
 
 void NCCheckBox::wRedraw()
 {
-  if ( !win )
-    return;
+    if ( !win )
+	return;
 
-  const NCstyle::StWidget & style( widgetStyle() );
-  win->bkgdset( style.plain );
-  win->printw( 0, 0, "[ ] " );
-  label.drawAt( *win, style, wpos(0,4) );
-  win->bkgdset( style.data );
-  win->printw( 0, 1, "%c", statetag[checkstate] );
+    const NCstyle::StWidget & style( widgetStyle() );
+
+    win->bkgdset( style.plain );
+
+    win->printw( 0, 0, "[ ] " );
+
+    label.drawAt( *win, style, wpos( 0, 4 ) );
+
+    win->bkgdset( style.data );
+
+    win->printw( 0, 1, "%c", statetag[checkstate] );
 }
 
 
 
 NCursesEvent NCCheckBox::wHandleInput( wint_t key )
 {
-  NCursesEvent ret;
-  switch ( key ) {
-  case KEY_HOTKEY:
-  case KEY_SPACE:
-  case KEY_RETURN:
-    switch ( checkstate ) {
-    case S_DC:
-      checkstate = S_ON;
-      break;
-    case S_ON:
-      checkstate = S_OFF;
-      break;
-    case S_OFF:
-      checkstate = tristate ? S_DC : S_ON;
-      break;
+    NCursesEvent ret;
+
+    switch ( key )
+    {
+	case KEY_HOTKEY:
+
+	case KEY_SPACE:
+
+	case KEY_RETURN:
+
+	    switch ( checkstate )
+	    {
+		case S_DC:
+		    checkstate = S_ON;
+		    break;
+
+		case S_ON:
+		    checkstate = S_OFF;
+		    break;
+
+		case S_OFF:
+		    checkstate = tristate ? S_DC : S_ON;
+		    break;
+	    }
+
+	    Redraw();
+
+	    if ( notify() )
+		ret = NCursesEvent::ValueChanged;
+
+	    break;
     }
-    Redraw();
-    if ( notify() )
-      ret = NCursesEvent::ValueChanged;
-    break;
-  }
-  return ret;
+
+    return ret;
 }
 

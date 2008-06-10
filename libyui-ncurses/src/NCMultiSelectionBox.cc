@@ -1,13 +1,13 @@
 /*---------------------------------------------------------------------\
-|                                                                      |
-|                      __   __    ____ _____ ____                      |
-|                      \ \ / /_ _/ ___|_   _|___ \                     |
-|                       \ V / _` \___ \ | |   __) |                    |
-|                        | | (_| |___) || |  / __/                     |
-|                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |
-|                               core system                            |
-|                                                        (C) SuSE GmbH |
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
    File:       NCMultiSelectionBox.cc
@@ -25,19 +25,19 @@
 
 NCMultiSelectionBox::NCMultiSelectionBox( YWidget * parent,
 					  const string & nlabel )
-    : YMultiSelectionBox( parent, nlabel )
-    , NCPadWidget( parent )
+	: YMultiSelectionBox( parent, nlabel )
+	, NCPadWidget( parent )
 {
-  yuiDebug() << endl;
-  InitPad();
-  setLabel( nlabel );
+    yuiDebug() << endl;
+    InitPad();
+    setLabel( nlabel );
 }
 
 
 
 NCMultiSelectionBox::~NCMultiSelectionBox()
 {
-  yuiDebug() << endl;
+    yuiDebug() << endl;
 }
 
 
@@ -70,7 +70,7 @@ void NCMultiSelectionBox::setEnabled( bool do_bv )
 // nc
 void NCMultiSelectionBox::setSize( int newwidth, int newheight )
 {
-  wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
+    wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
 
@@ -79,7 +79,7 @@ void NCMultiSelectionBox::setSize( int newwidth, int newheight )
 YItem * NCMultiSelectionBox::currentItem()
 {
     if ( !myPad()->Lines() )
-	return 0; 
+	return 0;
 
     int index = myPad()->CurPos().L;
 
@@ -97,15 +97,16 @@ void NCMultiSelectionBox::setCurrentItem( YItem * item )
 void NCMultiSelectionBox::addItem( YItem * item )
 {
     vector<NCTableCol*> Items( 2U, 0 );
+
     if ( item )
     {
 	YMultiSelectionBox::addItem( item );
 	Items[0] = new NCTableTag( item, item->selected() );
 	//Do not set style to NCTableCol::PLAIN here, otherwise current
-        //item will not be highlighted if cursor is not over the widget 
+	//item will not be highlighted if cursor is not over the widget
 	Items[1] = new NCTableCol( item->label() );
 	myPad()->Append( Items );
-	DrawPad();	
+	DrawPad();
     }
 }
 
@@ -115,10 +116,12 @@ void NCMultiSelectionBox::addItem( YItem * item )
 //		      (holds state and yitem pointer)
 NCTableTag * NCMultiSelectionBox::tagCell( int index )
 {
-  NCTableLine * cl = myPad()->ModifyLine( index );
-  if ( !cl )
-    return 0;
-  return static_cast<NCTableTag *>(cl->GetCol( 0 ));
+    NCTableLine * cl = myPad()->ModifyLine( index );
+
+    if ( !cl )
+	return 0;
+
+    return static_cast<NCTableTag *>( cl->GetCol( 0 ) );
 }
 
 
@@ -126,10 +129,12 @@ NCTableTag * NCMultiSelectionBox::tagCell( int index )
 // dtto
 const NCTableTag * NCMultiSelectionBox::tagCell( int index ) const
 {
-  const NCTableLine * cl = myPad()->GetLine( index );
-  if ( !cl )
-    return 0;
-  return static_cast<const NCTableTag *>(cl->GetCol( 0 ));
+    const NCTableLine * cl = myPad()->GetLine( index );
+
+    if ( !cl )
+	return 0;
+
+    return static_cast<const NCTableTag *>( cl->GetCol( 0 ) );
 }
 
 
@@ -137,17 +142,17 @@ const NCTableTag * NCMultiSelectionBox::tagCell( int index ) const
 // Clear the MsB
 void NCMultiSelectionBox::deleteAllItems()
 {
-  YMultiSelectionBox::deleteAllItems();
-  myPad()->ClearTable();
-  DrawPad();
+    YMultiSelectionBox::deleteAllItems();
+    myPad()->ClearTable();
+    DrawPad();
 }
 
 
 
 // Return item status (selected/deselected)
-bool NCMultiSelectionBox::isItemSelected( YItem *item ) 
+bool NCMultiSelectionBox::isItemSelected( YItem *item )
 {
-  return item->selected();
+    return item->selected();
 }
 
 
@@ -156,15 +161,15 @@ bool NCMultiSelectionBox::isItemSelected( YItem *item )
 // Mark item as selected
 void NCMultiSelectionBox::selectItem( YItem *yitem, bool selected )
 {
-  YMultiSelectionBox::selectItem ( yitem, selected );
+    YMultiSelectionBox::selectItem( yitem, selected );
 
-  //retrieve pointer to the line tag associated with this item
-  NCTableTag * tag = (NCTableTag *)yitem->data(); 
-  YUI_CHECK_PTR( tag );
+    //retrieve pointer to the line tag associated with this item
+    NCTableTag * tag = ( NCTableTag * )yitem->data();
+    YUI_CHECK_PTR( tag );
 
-  tag->SetSelected( selected );
+    tag->SetSelected( selected );
 
-  DrawPad();
+    DrawPad();
 
 }
 
@@ -173,14 +178,15 @@ void NCMultiSelectionBox::selectItem( YItem *yitem, bool selected )
 // Mark all items as deselected
 void NCMultiSelectionBox::deselectAllItems()
 {
-  YMultiSelectionBox::deselectAllItems();
+    YMultiSelectionBox::deselectAllItems();
 
-  for ( unsigned int i = 0; i < getNumLines(); i++)
-  {
-     NCTableTag *t = tagCell( i );
-     t->SetSelected( false );
-  }  
-  DrawPad();
+    for ( unsigned int i = 0; i < getNumLines(); i++ )
+    {
+	NCTableTag *t = tagCell( i );
+	t->SetSelected( false );
+    }
+
+    DrawPad();
 }
 
 
@@ -189,8 +195,8 @@ void NCMultiSelectionBox::deselectAllItems()
 //		      and vice versa
 void NCMultiSelectionBox::toggleCurrentItem()
 {
-  YItem *it = currentItem();
-  selectItem( it, !( it->selected()) );
+    YItem *it = currentItem();
+    selectItem( it, !( it->selected() ) );
 
 }
 
@@ -199,8 +205,8 @@ void NCMultiSelectionBox::toggleCurrentItem()
 // nc
 void NCMultiSelectionBox::setLabel( const string & nlabel )
 {
-  YMultiSelectionBox::setLabel( nlabel );
-  NCPadWidget::setLabel( NCstring( nlabel ) );
+    YMultiSelectionBox::setLabel( nlabel );
+    NCPadWidget::setLabel( NCstring( nlabel ) );
 }
 
 
@@ -208,18 +214,18 @@ void NCMultiSelectionBox::setLabel( const string & nlabel )
 // Create empty MsB pad
 NCPad * NCMultiSelectionBox::CreatePad()
 {
-  wsze psze( defPadSze() );
-  NCTablePad * npad = new NCTablePad( psze.H, psze.W, *this );
-  npad->bkgd( listStyle().item.plain );
-  npad->SetSepChar( ' ' );
-  return npad;
+    wsze psze( defPadSze() );
+    NCTablePad * npad = new NCTablePad( psze.H, psze.W, *this );
+    npad->bkgd( listStyle().item.plain );
+    npad->SetSepChar( ' ' );
+    return npad;
 }
 
 
 
 void NCMultiSelectionBox::wRecoded()
 {
-  NCPadWidget::wRecoded();
+    NCPadWidget::wRecoded();
 }
 
 
@@ -228,45 +234,57 @@ void NCMultiSelectionBox::wRecoded()
 //		      (those keys that are not caught by NCPad)
 NCursesEvent NCMultiSelectionBox::wHandleInput( wint_t key )
 {
-  NCursesEvent ret;
-  bool valueChanged = false;
-  YItem *oldCurrentItem = currentItem();
+    NCursesEvent ret;
+    bool valueChanged = false;
+    YItem *oldCurrentItem = currentItem();
 
-  if ( ! handleInput( key ) )
-  {
-    YItem *citem = currentItem();
+    if ( ! handleInput( key ) )
+    {
+	YItem *citem = currentItem();
 
-    switch ( key ) {
-    case KEY_SPACE:
-    case KEY_RETURN:
-      toggleCurrentItem();
-      valueChanged = true;
-      break;
-    case '+':
-      if ( !isItemSelected( citem ) ) {
-	selectItem( citem, true );
-        valueChanged = true;
-      }
-      myPad()->ScrlDown();
-      break;
-    case '-':
-      if ( isItemSelected( citem ) ) {
-	selectItem( citem, false);
-        valueChanged = true;
-      }
-      myPad()->ScrlDown();
-      break;
+	switch ( key )
+	{
+	    case KEY_SPACE:
+
+	    case KEY_RETURN:
+		toggleCurrentItem();
+		valueChanged = true;
+		break;
+
+	    case '+':
+
+		if ( !isItemSelected( citem ) )
+		{
+		    selectItem( citem, true );
+		    valueChanged = true;
+		}
+
+		myPad()->ScrlDown();
+
+		break;
+
+	    case '-':
+
+		if ( isItemSelected( citem ) )
+		{
+		    selectItem( citem, false );
+		    valueChanged = true;
+		}
+
+		myPad()->ScrlDown();
+
+		break;
+	}
     }
-  }
 
-  if ( notify() )
-  {
-    if ( valueChanged )
-      ret = NCursesEvent::ValueChanged;
-    else if ( oldCurrentItem != currentItem() )
-      ret = NCursesEvent::SelectionChanged;
-  }
+    if ( notify() )
+    {
+	if ( valueChanged )
+	    ret = NCursesEvent::ValueChanged;
+	else if ( oldCurrentItem != currentItem() )
+	    ret = NCursesEvent::SelectionChanged;
+    }
 
-  return ret;
+    return ret;
 }
 

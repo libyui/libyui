@@ -16,8 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
-
 #ifndef NCi18n_h
 #define NCi18n_h
 
@@ -26,25 +24,25 @@
 
 /**
  *  define _(...) for gettext
- *  @param msgid	text which has to be translated
- *  @return NCstring
+ *  msgid:  text which has to be translated
+ *  return: NCstring
  */
 
-inline string _(const char * msgid)
+inline string _( const char * msgid )
 {
-    return gettext(msgid);
+    return gettext( msgid );
 }
 
 /**
  * define _(...) for ngettext
- * @param msgid1 	message singular
- * @param msgid2	message plural form
- * @param n 	choose singular/plural form based on this value
- * @return NCstring
+ * msgid1: message singular
+ * msgid2: message plural form
+ * n:	   choose singular/plural form based on this value
+ * return: NCstring
  */
-inline string _(const char * msgid1, const char * msgid2, unsigned long int n)
+inline string _( const char * msgid1, const char * msgid2, unsigned long int n )
 {
-    return ngettext(msgid1, msgid2, n);
+    return ngettext( msgid1, msgid2, n );
 }
 
 inline void setTextdomain( const char * domain )
@@ -53,11 +51,12 @@ inline void setTextdomain( const char * domain )
     bind_textdomain_codeset( domain, "utf8" );
     textdomain( domain );
 
-    // Make change known.
+    // Make change known
     {
 	extern int _nl_msg_cat_cntr;
 	++_nl_msg_cat_cntr;
     }
 }
+
 
 #endif // NCi18n_h

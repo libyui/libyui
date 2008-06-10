@@ -1,13 +1,13 @@
 /*---------------------------------------------------------------------\
-|                                                                      |
-|                      __   __    ____ _____ ____                      |
-|                      \ \ / /_ _/ ___|_   _|___ \                     |
-|                       \ V / _` \___ \ | |   __) |                    |
-|                        | | (_| |___) || |  / __/                     |
-|                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |
-|                               core system                            |
-|                                                        (C) SuSE GmbH |
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
    File:       NCRadioButton.cc
@@ -27,21 +27,21 @@
 NCRadioButton::NCRadioButton( YWidget * parent,
 			      const string & nlabel,
 			      bool check )
-    : YRadioButton( parent, nlabel )
-    , NCWidget( parent )
-    , checked( false )
+	: YRadioButton( parent, nlabel )
+	, NCWidget( parent )
+	, checked( false )
 {
-  yuiDebug() << endl;
-  setLabel( nlabel );
-  hotlabel = &label;
-  setValue( check );
+    yuiDebug() << endl;
+    setLabel( nlabel );
+    hotlabel = &label;
+    setValue( check );
 }
 
 
 
 NCRadioButton::~NCRadioButton()
 {
-  yuiDebug() << endl;
+    yuiDebug() << endl;
 }
 
 int NCRadioButton::preferredWidth()
@@ -64,72 +64,93 @@ void NCRadioButton::setEnabled( bool do_bv )
 
 void NCRadioButton::setSize( int newwidth, int newheight )
 {
-  wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
+    wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
 
 
 void NCRadioButton::setLabel( const string & nlabel )
 {
-  label  = NCstring( nlabel );
-  label.stripHotkey();
-  defsze = wsze( label.height(), label.width() + 4 );
-  YRadioButton::setLabel( nlabel );
-  Redraw();
+    label  = NCstring( nlabel );
+    label.stripHotkey();
+    defsze = wsze( label.height(), label.width() + 4 );
+    YRadioButton::setLabel( nlabel );
+    Redraw();
 }
 
 
 
 void NCRadioButton::setValue( bool newval )
 {
-  if ( newval != checked ) {
-    checked = newval;
-    if ( checked && buttonGroup() ) {
-      buttonGroup()->uncheckOtherButtons( this );
+    if ( newval != checked )
+    {
+	checked = newval;
+
+	if ( checked && buttonGroup() )
+	{
+	    buttonGroup()->uncheckOtherButtons( this );
+	}
+
+	Redraw();
     }
-    Redraw();
-  }
 }
 
 
 
 void NCRadioButton::wRedraw()
 {
-  if ( !win )
-    return;
+    if ( !win )
+	return;
 
-  const NCstyle::StWidget & style( widgetStyle() );
-  win->bkgdset( style.plain );
-  win->printw( 0, 0, "( ) " );
-  label.drawAt( *win, style, wpos(0,4) );
-  win->bkgdset( style.data );
-  win->printw( 0, 1, "%c", (checked ? 'x' : ' ') );
+    const NCstyle::StWidget & style( widgetStyle() );
+
+    win->bkgdset( style.plain );
+
+    win->printw( 0, 0, "( ) " );
+
+    label.drawAt( *win, style, wpos( 0, 4 ) );
+
+    win->bkgdset( style.data );
+
+    win->printw( 0, 1, "%c", ( checked ? 'x' : ' ' ) );
 }
 
 
 
 NCursesEvent NCRadioButton::wHandleInput( wint_t key )
 {
-  NCursesEvent ret;
-  bool oldChecked = checked;
-  NCRadioButtonGroup * group;
-  
-  switch ( key ) {
-  case KEY_HOTKEY:
-  case KEY_SPACE:
-  case KEY_RETURN:
-    setValue( true );
-    if ( notify() && oldChecked != checked )
-      ret = NCursesEvent::ValueChanged;
-    break;
-  case KEY_UP:
-	group = dynamic_cast<NCRadioButtonGroup *>(buttonGroup());
-	group->focusPrevButton();
-	break;
-   case KEY_DOWN:
-	group = dynamic_cast<NCRadioButtonGroup *>(buttonGroup());
-	group->focusNextButton();
-	break;	  
-  }	
-  return ret;
+    NCursesEvent ret;
+    bool oldChecked = checked;
+    NCRadioButtonGroup * group;
+
+    switch ( key )
+    {
+	case KEY_HOTKEY:
+	case KEY_SPACE:
+	case KEY_RETURN:
+	    setValue( true );
+
+	    if ( notify() && oldChecked != checked )
+		ret = NCursesEvent::ValueChanged;
+
+	    break;
+
+	case KEY_UP:
+	    group = dynamic_cast<NCRadioButtonGroup *>( buttonGroup() );
+
+	    if ( group )
+		group->focusPrevButton();
+	    
+	    break;
+
+	case KEY_DOWN:
+	    group = dynamic_cast<NCRadioButtonGroup *>( buttonGroup() );
+	    
+	    if ( group )
+		group->focusNextButton();
+
+	    break;
+    }
+
+    return ret;
 }

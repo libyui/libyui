@@ -1,13 +1,13 @@
 /*---------------------------------------------------------------------\
-|                                                                      |
-|                      __   __    ____ _____ ____                      |
-|                      \ \ / /_ _/ ___|_   _|___ \                     |
-|                       \ V / _` \___ \ | |   __) |                    |
-|                        | | (_| |___) || |  / __/                     |
-|                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |
-|                               core system                            |
-|                                                        (C) SuSE GmbH |
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
    File:       NCReplacePoint.cc
@@ -24,26 +24,26 @@
 
 
 NCReplacePoint::NCReplacePoint( YWidget * parent )
-    : YReplacePoint( parent )
-    , NCWidget( parent )
+	: YReplacePoint( parent )
+	, NCWidget( parent )
 {
-  yuiDebug() << endl;
-  wstate = NC::WSdumb;
+    yuiDebug() << endl;
+    wstate = NC::WSdumb;
 }
 
 
 
 NCReplacePoint::~NCReplacePoint()
 {
-  yuiDebug() << endl;
+    yuiDebug() << endl;
 }
 
 
 
 void NCReplacePoint::setSize( int newwidth, int newheight )
 {
-  wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
-  YReplacePoint::setSize( newwidth, newheight);
+    wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
+    YReplacePoint::setSize( newwidth, newheight );
 }
 
 void NCReplacePoint::setEnabled( bool do_bv )

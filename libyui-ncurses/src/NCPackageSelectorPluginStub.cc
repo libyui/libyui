@@ -12,7 +12,7 @@
 
   File:		NCPackageSelectorPluginStub.cc
 
-  Author:	Hedgehog Painter <kmachalkova@suse.cz>	
+  Author:	Hedgehog Painter <kmachalkova@suse.cz>
 
 
 /-*/
@@ -32,20 +32,20 @@
 #define PLUGIN_BASE_NAME "ncurses_pkg"
 
 NCPackageSelectorPluginStub::NCPackageSelectorPluginStub()
-    : YPackageSelectorPlugin( PLUGIN_BASE_NAME )
+	: YPackageSelectorPlugin( PLUGIN_BASE_NAME )
 {
     if ( success() )
     {
 	yuiMilestone() << "Loaded " << PLUGIN_BASE_NAME
-                       << " plugin successfully from " << pluginLibFullPath()
-                       << endl;
+	<< " plugin successfully from " << pluginLibFullPath()
+	<< endl;
     }
 
 
-    impl =  (NCPackageSelectorPluginIf*) locateSymbol("PSP");  
+    impl = ( NCPackageSelectorPluginIf* ) locateSymbol( "PSP" );
 
-    if (!impl)
-        YUI_THROW ( YUIPluginException( PLUGIN_BASE_NAME ) );
+    if ( !impl )
+	YUI_THROW( YUIPluginException( PLUGIN_BASE_NAME ) );
 
 }
 
@@ -58,12 +58,12 @@ NCPackageSelectorPluginStub::~NCPackageSelectorPluginStub()
 
 
 // Create NCPackageSelectorStart which reads the layout
-//                    term of the package selection dialog, creates the widget
+//		      term of the package selection dialog, creates the widget
 //		      tree and creates the NCPackageSelector.
 YPackageSelector * NCPackageSelectorPluginStub::createPackageSelector( YWidget * parent,
-								   long modeFlags )
+								       long modeFlags )
 {
-    return impl->createPackageSelector( parent, modeFlags );    
+    return impl->createPackageSelector( parent, modeFlags );
 }
 
 
@@ -79,9 +79,9 @@ YWidget * NCPackageSelectorPluginStub::createPkgSpecial( YWidget *parent, const 
 
 // Implementation of UI builtin RunPkgSelection() which
 //		      has to be called after OpenDialog( `PackageSelector() ).
-YEvent * NCPackageSelectorPluginStub::runPkgSelection(  YDialog * dialog,
-						    YWidget * selector )
+YEvent * NCPackageSelectorPluginStub::runPkgSelection( YDialog * dialog,
+						       YWidget * selector )
 {
-    return impl->runPkgSelection( dialog, selector );    
+    return impl->runPkgSelection( dialog, selector );
 }
 

@@ -1,13 +1,13 @@
 /*---------------------------------------------------------------------\
-|                                                                      |
-|                      __   __    ____ _____ ____                      |
-|                      \ \ / /_ _/ ___|_   _|___ \                     |
-|                       \ V / _` \___ \ | |   __) |                    |
-|                        | | (_| |___) || |  / __/                     |
-|                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |
-|                               core system                            |
-|                                                        (C) SuSE GmbH |
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
    File:       NCBusyIndicator.h
@@ -16,6 +16,7 @@
    Maintainer: Thomas Goettlicher <tgoettlicher@suse.de>
 
 /-*/
+
 #ifndef NCBusyIndicator_h
 #define NCBusyIndicator_h
 
@@ -31,14 +32,15 @@ class NCBusyIndicator;
 
 
 
-class NCBusyIndicator : public YBusyIndicator, public NCWidget {
+class NCBusyIndicator : public YBusyIndicator, public NCWidget
+{
+private:
 
-  friend std::ostream & operator<<( std::ostream & STREAM, const NCBusyIndicator & OBJ );
+    friend std::ostream & operator<<( std::ostream & STREAM, const NCBusyIndicator & OBJ );
 
-  NCBusyIndicator & operator=( const NCBusyIndicator & );
-  NCBusyIndicator            ( const NCBusyIndicator & );
+    NCBusyIndicator & operator=( const NCBusyIndicator & );
+    NCBusyIndicator( const NCBusyIndicator & );
 
-  private:
     typedef long long Value_t;
 
     NClabel  _label;
@@ -50,16 +52,16 @@ class NCBusyIndicator : public YBusyIndicator, public NCWidget {
     void tUpdate();
     void update();
 
-    float       _position;              // the position of the bar
-    bool        _rightwards;            // direction the bar moves
-    bool        _alive;			// the widget is alive or stalled
+    float	_position;		// the position of the bar
+    bool	_rightwards;		// direction the bar moves
+    bool	_alive;			// the widget is alive or stalled
     float	_timer_divisor;		// =repaint interval devided by timeout
     float	_timer_progress;	// progress until widget goes to stalled state
 
 
-  protected:
+protected:
 
-    
+
     virtual const char * location() const { return "NCBusyIndicator"; }
 
     virtual void wCreate( const wrect & newrect );
@@ -67,23 +69,16 @@ class NCBusyIndicator : public YBusyIndicator, public NCWidget {
 
     virtual void wRedraw();
 
-  public:
+public:
 
     NCBusyIndicator( YWidget * parent,
-		   const string & label,
-		   int timeout = 1000 );
+		     const string & label,
+		     int timeout = 1000 );
     virtual ~NCBusyIndicator();
-
-    virtual long nicesize( YUIDimension dim );
 
     virtual int preferredWidth();
     virtual int preferredHeight();
-    
-    /**
-     * Set the new size of the widget.
-     *
-     * Reimplemented from YWidget.
-     **/
+
     virtual void setSize( int newWidth, int newHeight );
 
     virtual void setLabel( const string & nlabel );
@@ -94,10 +89,11 @@ class NCBusyIndicator : public YBusyIndicator, public NCWidget {
 
     virtual void setEnabled( bool do_bv );
 
-    int timeout()   const   { return _timeout;  }
+    int timeout()   const   { return _timeout;	}
 
-    void handler(int sig_num);
-    static void staticHandler(int sig_num);
+    void handler( int sig_num );
+    
+    static void staticHandler( int sig_num );
 };
 
 

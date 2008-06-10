@@ -1,13 +1,13 @@
 /*---------------------------------------------------------------------\
-|                                                                      |
-|                      __   __    ____ _____ ____                      |
-|                      \ \ / /_ _/ ___|_   _|___ \                     |
-|                       \ V / _` \___ \ | |   __) |                    |
-|                        | | (_| |___) || |  / __/                     |
-|                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |
-|                               core system                            |
-|                                                        (C) SuSE GmbH |
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
    File:       NCLogView.cc
@@ -26,19 +26,19 @@ NCLogView::NCLogView( YWidget * parent,
 		      const string & nlabel,
 		      int visibleLines,
 		      int maxLines )
-    : YLogView( parent, nlabel, visibleLines, maxLines )
-    , NCPadWidget( parent )
+	: YLogView( parent, nlabel, visibleLines, maxLines )
+	, NCPadWidget( parent )
 {
-  yuiDebug() << endl;
-  defsze = wsze( visibleLines, 5 ) + 2;
-  setLabel( nlabel );
+    yuiDebug() << endl;
+    defsze = wsze( visibleLines, 5 ) + 2;
+    setLabel( nlabel );
 }
 
 
 
 NCLogView::~NCLogView()
 {
-  yuiDebug() << endl;
+    yuiDebug() << endl;
 }
 
 int NCLogView::preferredWidth()
@@ -62,66 +62,68 @@ void NCLogView::setEnabled( bool do_bv )
 
 void NCLogView::setSize( int newwidth, int newheight )
 {
-  wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
+    wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
 
 
 void NCLogView::setLabel( const string & nlabel )
 {
-  YLogView::setLabel( nlabel );
-  NCPadWidget::setLabel( NCstring( nlabel ) );
+    YLogView::setLabel( nlabel );
+    NCPadWidget::setLabel( NCstring( nlabel ) );
 }
 
 
 
 void NCLogView::displayLogText( const string & ntext )
 {
-  DelPad();
-  text = NCtext( NCstring(ntext), Columns() );
-  Redraw();
+    DelPad();
+    text = NCtext( NCstring( ntext ), Columns() );
+    Redraw();
 }
 
 
 
 void NCLogView::wRedraw()
 {
-  if ( !win )
-    return;
+    if ( !win )
+	return;
 
-  bool initial = ( !myPad() || !myPad()->Destwin() );
-  if ( myPad() )
-    myPad()->bkgd( listStyle().item.plain );
-  NCPadWidget::wRedraw();
+    bool initial = ( !myPad() || !myPad()->Destwin() );
 
-  if ( initial )
-    myPad()->ScrlTo( wpos( text.Lines(), 0 ) );
+    if ( myPad() )
+	myPad()->bkgd( listStyle().item.plain );
+
+    NCPadWidget::wRedraw();
+
+    if ( initial )
+	myPad()->ScrlTo( wpos( text.Lines(), 0 ) );
 }
 
 
 
 void NCLogView::wRecoded()
 {
-  DelPad();
-  wRedraw();
+    DelPad();
+    wRedraw();
 }
 
 
 
 NCursesEvent NCLogView::wHandleInput( wint_t key )
 {
-  handleInput( key );
-  return NCursesEvent::none;
+    handleInput( key );
+    return NCursesEvent::none;
 }
 
 
 
 NCPad * NCLogView::CreatePad()
 {
-  wsze psze( defPadSze() );
-  NCPad * npad = new NCPad( psze.H, psze.W, *this );
-  npad->bkgd( listStyle().item.plain );
-  return npad;
+    wsze psze( defPadSze() );
+    NCPad * npad = new NCPad( psze.H, psze.W, *this );
+    npad->bkgd( listStyle().item.plain );
+    return npad;
 }
 
 
@@ -147,8 +149,8 @@ void NCLogView::DrawPad()
 	if ( skipLines == 0 )
 	{
 	    myPad()->move( cl++, 0 );
-	    wstring cline = (*line).str();
-	    myPad()->addwstr( cline.c_str() ); 
+	    wstring cline = ( *line ).str();
+	    myPad()->addwstr( cline.c_str() );
 	}
 	else
 	{

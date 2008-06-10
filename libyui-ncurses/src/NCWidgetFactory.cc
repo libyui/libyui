@@ -1,16 +1,16 @@
 /*---------------------------------------------------------------------\
-|                                                                      |
-|                      __   __    ____ _____ ____                      |
-|                      \ \ / /_ _/ ___|_   _|___ \                     |
-|                       \ V / _` \___ \ | |   __) |                    |
-|                        | | (_| |___) || |  / __/                     |
-|                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |
-|                               core system                            |
-|                                                        (C) SuSE GmbH |
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:         NCWidgetFactory.cc
+  File:		NCWidgetFactory.cc
 
   Authors:	Stefan Hundhammer <sh@suse.de>
 		Gabriele Mohr <gs@suse.de>
@@ -80,8 +80,8 @@ NCWidgetFactory::createPushButton( YWidget * parent, const string & label )
 NCLabel *
 NCWidgetFactory::createLabel( YWidget *		parent,
 			      const string &	text,
-			      bool 		isHeading,
-			      bool 		isOutputField )
+			      bool		isHeading,
+			      bool		isOutputField )
 {
     NCLabel * label = new NCLabel( parent, text, isHeading, isOutputField );
     YUI_CHECK_NEW( label );
@@ -132,7 +132,7 @@ NCWidgetFactory::createRadioButton( YWidget * parent, const string & label, bool
 
 
 NCComboBox *
-NCWidgetFactory::createComboBox( YWidget * parent, const string & label, bool editable  )
+NCWidgetFactory::createComboBox( YWidget * parent, const string & label, bool editable	)
 {
     NCComboBox * comboBox = new NCComboBox( parent, label, editable );
     YUI_CHECK_NEW( comboBox );
@@ -381,8 +381,9 @@ NCWidgetFactory::createPackageSelector( YWidget * parent, long modeFlags )
 }
 
 
-// Creates special widgets used for the package selection
-// dialog (which do not have a corresponding widget in qt-ui)
+// Creates special widgets used for the package selection dialog.
+// This is special to the NCurses UI;  there is no  a corresponding widget
+// in the Qt UI. 
 YWidget *
 NCWidgetFactory::createPkgSpecial( YWidget * parent, const string & subwidget )
 {

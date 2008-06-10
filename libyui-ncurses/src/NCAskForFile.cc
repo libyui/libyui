@@ -1,13 +1,13 @@
 /*---------------------------------------------------------------------\
-|                                                                      |
-|                      __   __    ____ _____ ____                      |
-|                      \ \ / /_ _/ ___|_   _|___ \                     |
-|                       \ V / _` \___ \ | |   __) |                    |
-|                        | | (_| |___) || |  / __/                     |
-|                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |
-|                               core system                            |
-|                                                        (C) SuSE GmbH |
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
    File:       NCAskForFile.cc
@@ -45,14 +45,14 @@ NCAskForFile::NCAskForFile( const wpos at,
 			    const string & iniDir,
 			    const string & filter,
 			    const string & headline )
-    : NCPopup( at, true )
-    , okButton( 0 )
-    , cancelButton( 0 )
-    , dirName( 0 )
-    , dirList( 0 )
-    , detailed ( 0 )
-    , fileList( 0 )
-    , fileName ( 0 )
+	: NCPopup( at, true )
+	, okButton( 0 )
+	, cancelButton( 0 )
+	, dirName( 0 )
+	, dirList( 0 )
+	, detailed( 0 )
+	, fileList( 0 )
+	, fileName( 0 )
 {
     setTextdomain( "ncurses" );
 }
@@ -67,7 +67,7 @@ NCAskForFile::~NCAskForFile( )
 string NCAskForFile::checkIniDir( string iniDir )
 {
     string dname = "";
-    
+
     struct stat64 statInfo;
     stat64( iniDir.c_str(), &statInfo );
 
@@ -80,16 +80,17 @@ string NCAskForFile::checkIniDir( string iniDir )
 	string::size_type pos;
 
 	pos = iniDir.find_last_of( "/" );
+
 	if ( pos != string::npos
 	     && pos != 0 )
 	{
-	    string dir = iniDir.substr(0, pos );
+	    string dir = iniDir.substr( 0, pos );
 	    stat64( dir.c_str(), &statInfo );
 
 	    if ( S_ISDIR( statInfo.st_mode ) )
 	    {
 		dname = dir;
-		iniFileName  = iniDir.substr( pos+1 );
+		iniFileName  = iniDir.substr( pos + 1 );
 	    }
 	}
     }
@@ -106,9 +107,9 @@ void NCAskForFile::createLayout( const string & iniDir,
 				 bool edit )
 {
     string startDir;
-    
+
     startDir = checkIniDir( iniDir );
-    
+
     // the vertical split is the (only) child of the dialog
     NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
 
@@ -134,8 +135,8 @@ void NCAskForFile::createLayout( const string & iniDir,
     // create table header for table type T_Overview
     YTableHeader * dirHeader = new YTableHeader();
     dirHeader->addColumn( " " );
-    dirHeader->addColumn( _("Directory name") );
-    
+    dirHeader->addColumn( _( "Directory name" ) );
+
     // add the list of directories
     dirList = new NCDirectoryTable( hSplit1,
 				    dirHeader,
@@ -146,8 +147,8 @@ void NCAskForFile::createLayout( const string & iniDir,
     // create table header for table type T_Overview
     YTableHeader * fileHeader = new YTableHeader();
     fileHeader->addColumn( " " );
-    fileHeader->addColumn( _("File name") );
-    
+    fileHeader->addColumn( _( "File name" ) );
+
     // add the list of files
     fileList = new NCFileTable( hSplit1,
 				fileHeader,
@@ -156,22 +157,22 @@ void NCAskForFile::createLayout( const string & iniDir,
 				startDir );
 
     fileList->setSendKeyEvents( true );
-    
+
     NCLayoutBox * hSplit2 = new NCLayoutBox( split, YD_HORIZ );
-    
+
     // opt.isEditable.setValue( edit );
     // NCInputField doesn't support mode 'not editable' any longer
     // -> an InputField IS editable
-    
+
     // add the text entry for the file name
     fileName = new NCInputField( hSplit2,
-				// label for text field showing the filename
-			       _( "&File name:" ),
+				 // label for text field showing the filename
+				 _( "&File name:" ),
 				 false,		// passWordMode = false
 				 100,
 				 50 );
     fileName->setValue( iniFileName );
-    
+
     // label for text field showing the filter (e.g. *.bak)
     NCComboBox * extension = new NCComboBox( hSplit2, _( "Filter:" ), false );	// editable = false
     extension->setStretchable( YD_HORIZ, true );
@@ -197,7 +198,7 @@ void NCAskForFile::createLayout( const string & iniDir,
     cancelButton->setFunctionKey( 9 );
     cancelButton->setStretchable( YD_HORIZ, true );
 
-    new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );  
+    new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );
 }
 
 // NCursesEvent & showDirPopup ()
@@ -209,16 +210,20 @@ NCursesEvent & NCAskForFile::showDirPopup( )
 	return postevent;
 
     dirList->fillList();
+
     fileList->fillList();
+
     dirList->setKeyboardFocus();
 
-    dirName->addItem( dirList->getCurrentDir(), 
-			true );		 // selected
-    
+    dirName->addItem( dirList->getCurrentDir(),
+		      true );		 // selected
+
     // event loop
-    do {
+    do
+    {
 	popupDialog();
-    } while ( postAgain() );
+    }
+    while ( postAgain() );
 
     popdownDialog();
 
@@ -227,12 +232,12 @@ NCursesEvent & NCAskForFile::showDirPopup( )
 
 int NCAskForFile::preferredWidth()
 {
-    return  NCurses::cols()-10;
+    return  NCurses::cols() - 10;
 }
 
 int NCAskForFile::preferredHeight()
 {
-    return NCurses::lines()-4;
+    return NCurses::lines() - 4;
 }
 
 
@@ -252,29 +257,30 @@ void NCAskForFile::updateFileList()
     // set new start dir and show the file list
     fileList->setStartDir( dirList->getCurrentDir() );
     fileList->fillList( );
+
     if ( iniFileName == "" )
 	// show the currently selected file
-	fileName->setValue( fileList->getCurrentFile() );  
+	fileName->setValue( fileList->getCurrentFile() );
 }
 
 
 
 bool NCAskForFile::postAgain( )
 {
-    if( !postevent.widget )
+    if ( !postevent.widget )
 	return false;
 
     postevent.detail = NCursesEvent::NODETAIL;
 
     if ( postevent.keySymbol == "CursorLeft" )
     {
-	dirList->setKeyboardFocus(); 
+	dirList->setKeyboardFocus();
 	return true;
     }
     else if ( postevent.keySymbol == "CursorRight" )
     {
 	fileList->setKeyboardFocus();
-	fileName->setValue( fileList->getCurrentFile() ); 
+	fileName->setValue( fileList->getCurrentFile() );
 	return true;
     }
 
@@ -284,14 +290,14 @@ bool NCAskForFile::postAgain( )
 	// return false means: close the popup
 	return false;
     }
-    else if ( ( postevent.widget == dirList ) &&
-	      ( postevent.result != "" ) 		)
+    else if (( postevent.widget == dirList ) &&
+	     ( postevent.result != "" )	)
     {
 	// show the currently selected directory
 	dirName->addItem( postevent.result,
 			  true );
 	updateFileList();
-	    
+
 	if ( postevent.reason == YEvent::Activated )
 	{
 	    // fill directory and file list
@@ -309,6 +315,7 @@ bool NCAskForFile::postAgain( )
     else if ( postevent.widget == detailed )
     {
 	bool details = getCheckBoxValue( detailed );
+
 	if ( details )
 	{
 	    fileList->setTableType( NCFileTable::T_Detailed );
@@ -319,7 +326,9 @@ bool NCAskForFile::postAgain( )
 	    fileList->setTableType( NCFileTable::T_Overview );
 	    dirList->setTableType( NCFileTable::T_Overview );
 	}
+
 	fileList->fillList();
+
 	dirList->fillList();
     }
     else if ( postevent.widget == fileList )
@@ -338,10 +347,10 @@ bool NCAskForFile::postAgain( )
     if ( postevent.widget == cancelButton ||
 	 postevent == NCursesEvent::cancel )
     {
-	postevent.result = "";	
+	postevent.result = "";
 	return false;
     }
-    
+
     return true;
 }
 
@@ -364,7 +373,7 @@ NCAskForExistingFile::NCAskForExistingFile( const wpos at,
 					    const string & iniDir,
 					    const string & filter,
 					    const string & headline )
-    : NCAskForFile( at, iniDir, filter, headline )
+	: NCAskForFile( at, iniDir, filter, headline )
 {
     createLayout( iniDir,
 		  filter,
@@ -388,7 +397,7 @@ NCAskForSaveFileName::NCAskForSaveFileName( const wpos at,
 					    const string & iniDir,
 					    const string & filter,
 					    const string & headline )
-    : NCAskForFile( at, iniDir, filter, headline )
+	: NCAskForFile( at, iniDir, filter, headline )
 {
     createLayout( iniDir,
 		  filter,

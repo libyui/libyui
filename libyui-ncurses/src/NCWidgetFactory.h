@@ -38,7 +38,6 @@
 #include "NCMenuButton.h"
 #include "NCMultiLineEdit.h"
 #include "NCMultiSelectionBox.h"
-//#include "NCPackageSelectorStart.h"
 #include "NCPackageSelectorPluginStub.h"
 #include "NCProgressBar.h"
 #include "NCPushButton.h"
@@ -65,7 +64,7 @@ class NCWidgetFactory: public YWidgetFactory
 public:
     // Note: Using covariant return types for all createSomeWidget() methods
     // (returning NCSomeWidget where the base class declares virtual methods that
-    // return YSomeWidget) 
+    // return YSomeWidget)
 
 
     //
@@ -78,20 +77,20 @@ public:
     // Layout Boxes
     //
 
-    virtual NCLayoutBox *   	createLayoutBox		( YWidget * parent, YUIDimension dim );
+    virtual NCLayoutBox *	createLayoutBox		( YWidget * parent, YUIDimension dim );
 
     //
     // Common Leaf Widgets
     //
 
-    virtual NCPushButton *	createPushButton    	( YWidget * parent,
+    virtual NCPushButton *	createPushButton	( YWidget * parent,
 							  const string & label );
-    
+
     virtual NCLabel *		createLabel		( YWidget * parent,
 							  const string & text,
 							  bool isHeading = false,
 							  bool isOutputField = false );
-    
+
     virtual NCInputField *	createInputField	( YWidget * parent,
 							  const string & label,
 							  bool passwordMode = false );
@@ -99,31 +98,31 @@ public:
     virtual NCCheckBox *	createCheckBox		( YWidget * parent,
 							  const string & label,
 							  bool isChecked = false );
-    
+
     virtual NCRadioButton *	createRadioButton	( YWidget * parent,
 							  const string & label,
 							  bool isChecked = false );
-    
+
     virtual NCComboBox *	createComboBox		( YWidget * parent,
 							  const string & label,
 							  bool editable	 = false );
-    
+
     virtual NCSelectionBox *	createSelectionBox	( YWidget * parent,
 							  const string & label );
-    
+
     virtual NCTree *		createTree		( YWidget * parent,
 							  const string & label );
-    
+
     virtual NCTable *		createTable		( YWidget * parent,
 							  YTableHeader * tableHeader );
-    
+
     virtual NCProgressBar *	createProgressBar	( YWidget * parent,
 							  const string & label,
 							  int maxValue = 100 );
-    virtual NCBusyIndicator *   createBusyIndicator	( YWidget *parent,
+    virtual NCBusyIndicator *	createBusyIndicator	( YWidget *parent,
 							  const string & label,
 							  int timeout = 1000 );
-    
+
     virtual NCRichText *	createRichText		( YWidget * parent,
 							  const string & text = string(),
 							  bool plainTextMode = false );
@@ -133,45 +132,32 @@ public:
 							  int minVal,
 							  int maxVal,
 							  int initialVal );
-    
+
     virtual NCMenuButton *	createMenuButton	( YWidget * parent,
 							  const string & label );
 
-    /**
-     * Creates a MultiLineEdit widget
-     * @param label label above the edit field
-    */
     virtual NCMultiLineEdit *	createMultiLineEdit	( YWidget * parent,
 							  const string & label );
-   /**
-     * Creates an image widget
-     */
     virtual NCImage *		createImage		( YWidget * parent,
 							  const string & imagePath,
 							  bool animated = false );
-    
-    /**
-     * Creates a log view widget
-     * @param label label above the log view
-     * @param visibleLines default number of vislible lines
-     * @param storedLines number of lines to store (use 0 for "all")
-    */
+
     virtual NCLogView *		createLogView		( YWidget * parent,
 							  const string & label,
 							  int visibleLines,
 							  int storedLines = 0 );
-    
+
     virtual NCMultiSelectionBox * createMultiSelectionBox ( YWidget * parent,
 							    const string & label );
 
-    virtual YPackageSelector * 	createPackageSelector	( YWidget * parent,
+    virtual YPackageSelector *	createPackageSelector	( YWidget * parent,
 							  long ModeFlags = 0 );
 
     // NCurses only
     virtual YWidget *		createPkgSpecial	( YWidget * parent,
 							  const string & subwidgetName );
 
-    
+
     //
     // Layout Helpers
     //
@@ -180,13 +166,13 @@ public:
 							  YUIDimension dim,
 							  bool stretchable = false,
 							  YLayoutSize_t size = 0.0 );
-    
+
     virtual NCEmpty *		createEmpty		( YWidget * parent );
-    
+
     virtual NCAlignment *	createAlignment		( YWidget * parent,
 							  YAlignmentType horAlignment,
 							  YAlignmentType vertAlignment );
-    
+
     virtual NCSquash *		createSquash		( YWidget * parent,
 							  bool horSquash,
 							  bool vertSquash );
@@ -197,7 +183,7 @@ public:
 
     virtual NCFrame *		createFrame		( YWidget * parent,
 							  const string & label );
-    
+
     virtual NCCheckBoxFrame *	createCheckBoxFrame	( YWidget * parent,
 							  const string & label,
 							  bool checked );

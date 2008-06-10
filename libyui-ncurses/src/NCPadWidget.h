@@ -1,13 +1,13 @@
 /*---------------------------------------------------------------------\
-|                                                                      |
-|                      __   __    ____ _____ ____                      |
-|                      \ \ / /_ _/ ___|_   _|___ \                     |
-|                       \ V / _` \___ \ | |   __) |                    |
-|                        | | (_| |___) || |  / __/                     |
-|                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |
-|                               core system                            |
-|                                                        (C) SuSE GmbH |
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
    File:       NCPadWidget.h
@@ -15,6 +15,7 @@
    Author:     Michael Andres <ma@suse.de>
 
 /-*/
+
 #ifndef NCPadWidget_h
 #define NCPadWidget_h
 
@@ -27,16 +28,17 @@ class NCPadWidget;
 class NCScrollbar;
 
 
-class NCPadWidget : public NCWidget, protected NCSchrollCB {
+class NCPadWidget : public NCWidget, protected NCSchrollCB
+{
+private:
 
-  friend std::ostream & operator<<( std::ostream & STREAM, const NCPadWidget & OBJ );
+    friend std::ostream & operator<<( std::ostream & STREAM, const NCPadWidget & OBJ );
 
-  NCPadWidget & operator=( const NCPadWidget & );
-  NCPadWidget            ( const NCPadWidget & );
+    NCPadWidget & operator=( const NCPadWidget & );
+    NCPadWidget( const NCPadWidget & );
 
-  private:
 
-    NClabel         label;
+    NClabel	    label;
     NCursesWindow * padwin;
     NCScrollbar *   hsb;
     NCScrollbar *   vsb;
@@ -45,22 +47,24 @@ class NCPadWidget : public NCWidget, protected NCSchrollCB {
     bool  multidraw;
     NCPad * pad;
 
-  protected:
-  
+protected:
+
     /**
      * Return the current pad. Make it virtual so descendant classes
      * can narrow the return type.
      */
-    virtual NCPad * myPad () const { return pad; }
+    virtual NCPad * myPad() const { return pad; }
 
     bool    hasHeadline;
     bool    activeLabelOnly;
 
     void startMultidraw()    { multidraw = true; }
+
     void stopMultidraw()     { multidraw = false; DrawPad(); }
+
     bool inMultidraw() const { return multidraw; }
 
-  protected:
+protected:
 
     virtual const char * location() const { return "NCPadWidget"; }
 
@@ -73,11 +77,14 @@ class NCPadWidget : public NCWidget, protected NCSchrollCB {
     virtual void wRecoded();
 
     // pad stuff
-    wsze defPadSze() const {
-      if ( !padwin )
-	return 0;
-      return wsze( padwin->height(), padwin->width() );
+    wsze defPadSze() const
+    {
+	if ( !padwin )
+	    return 0;
+
+	return wsze( padwin->height(), padwin->width() );
     }
+
     virtual NCPad * CreatePad();
     virtual void    DrawPad();
 
@@ -96,18 +103,18 @@ class NCPadWidget : public NCWidget, protected NCSchrollCB {
     // input
     virtual bool handleInput( wint_t key );
 
-  public:
+public:
 
     NCPadWidget( NCWidget * myparent = 0 );
     NCPadWidget( YWidget * parent );
-    
+
     virtual ~NCPadWidget();
 
     size_t Columns( ) { return minPadSze.W; }
+
     void setLabel( const NClabel & nlabel );
 
     virtual void setEnabled( bool do_bv ) { NCWidget::setEnabled( do_bv ); }
-
 };
 
 

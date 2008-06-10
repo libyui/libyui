@@ -27,7 +27,7 @@
 
 
 NCOptionalWidgetFactory::NCOptionalWidgetFactory()
-    : YOptionalWidgetFactory()
+	: YOptionalWidgetFactory()
 {
     // NOP
 }

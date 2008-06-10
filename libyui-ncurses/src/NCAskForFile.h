@@ -1,13 +1,13 @@
 /*---------------------------------------------------------------------\
-|                                                                      |
-|                      __   __    ____ _____ ____                      |
-|                      \ \ / /_ _/ ___|_   _|___ \                     |
-|                       \ V / _` \___ \ | |   __) |                    |
-|                        | | (_| |___) || |  / __/                     |
-|                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |
-|                               core system                            |
-|                                                        (C) SuSE GmbH |
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
    File:       NCAskForFile.h
@@ -15,6 +15,7 @@
    Author:     Gabriele Strattner <gs@suse.de>
 
 /-*/
+
 #ifndef NCAskForFile_h
 #define NCAskForFile_h
 
@@ -33,23 +34,24 @@
 
 
 
-class NCAskForFile : public NCPopup {
+class NCAskForFile : public NCPopup
+{
+private:
 
     NCAskForFile & operator=( const NCAskForFile & );
-    NCAskForFile            ( const NCAskForFile & );
+    NCAskForFile( const NCAskForFile & );
 
-private:
 
     NCPushButton * okButton;
     NCPushButton * cancelButton;
     NCComboBox * dirName;		// the selected directory
     NCDirectoryTable *dirList;		// the directory list
     NCCheckBox *detailed;		// the 'Details' checkbox
-    
+
     bool getCheckBoxValue( NCCheckBox * detailed );
 
     string iniFileName;			// initial file name
-    
+
 protected:
 
     NCFileTable *fileList;		// the file list
@@ -62,9 +64,9 @@ protected:
     virtual string getFileName() = 0;
 
     string checkIniDir( string startDir );
-    
+
 public:
-    
+
     NCAskForFile( const wpos at,
 		  const string & startDir,
 		  const string & filter,
@@ -80,11 +82,10 @@ public:
 
     /**
      * Create layout of file selection popup
-     * @param string The initial start directory
-     * @param string The filter (show files matching this pattern) 
-     * @param string The headline of the popup
-     * @param bool	File name field editable?
-     * @return void
+     * iniDir:	 The initial start directory
+     * filter:	 pattern what files to show
+     * headline: popup headline
+     * editable: file name field editable?
      */
     void createLayout( const string & iniDir,
 		       const string & filter,
@@ -93,23 +94,22 @@ public:
 
     /**
      * Shows the popup with the list of directories.
-     * @return NCursesEvent
      */
     NCursesEvent & showDirPopup( );
 
     /**
      * Show new file information
-     * @return void
      */
     void updateFileList();
-    
+
 };
 
 
-class NCAskForExistingFile : public NCAskForFile {
+class NCAskForExistingFile : public NCAskForFile
+{
 
     NCAskForExistingFile & operator=( const NCAskForFile & );
-    NCAskForExistingFile ( const NCAskForFile & );
+    NCAskForExistingFile( const NCAskForFile & );
 
 public:
 
@@ -122,14 +122,15 @@ public:
 
 protected:
 
-    virtual string getFileName(); 
+    virtual string getFileName();
 };
 
 
-class NCAskForSaveFileName : public NCAskForFile {
+class NCAskForSaveFileName : public NCAskForFile
+{
 
     NCAskForSaveFileName & operator=( const NCAskForFile & );
-    NCAskForSaveFileName ( const NCAskForFile & );
+    NCAskForSaveFileName( const NCAskForFile & );
 
 public:
 

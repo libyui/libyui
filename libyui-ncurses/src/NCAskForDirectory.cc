@@ -1,13 +1,13 @@
 /*---------------------------------------------------------------------\
-|                                                                      |
-|                      __   __    ____ _____ ____                      |
-|                      \ \ / /_ _/ ___|_   _|___ \                     |
-|                       \ V / _` \___ \ | |   __) |                    |
-|                        | | (_| |___) || |  / __/                     |
-|                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |
-|                               core system                            |
-|                                                        (C) SuSE GmbH |
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
    File:       NCAskForExistingDirectory.cc
@@ -43,12 +43,12 @@
 NCAskForExistingDirectory::NCAskForExistingDirectory( const wpos at,
 						      const string & iniDir,
 						      const string & headline )
-    : NCPopup( at, true )
-    , okButton( 0 )
-    , cancelButton( 0 )
-    , dirName( 0 )
-    , dirList( 0 )
-    , detailed ( 0 )
+	: NCPopup( at, true )
+	, okButton( 0 )
+	, cancelButton( 0 )
+	, dirName( 0 )
+	, dirList( 0 )
+	, detailed( 0 )
 {
     createLayout( iniDir, headline );
     setTextdomain( "ncurses" );
@@ -73,7 +73,7 @@ void NCAskForExistingDirectory::createLayout( const string & iniDir,
     new NCLabel( split, headline, true, false );	// isHeading = true
 
     NCFrame * frame = new NCFrame( split, "" );
-    
+
     // label for text field showing the selected dir
     dirName = new NCComboBox( frame, _( "Selected Directory:" ), false ); // editable = false
     dirName->setNotify( true );
@@ -82,15 +82,15 @@ void NCAskForExistingDirectory::createLayout( const string & iniDir,
     // add the checkBox detailed
     NCLayoutBox * hSplit = new NCLayoutBox( split, YD_HORIZ );
 
-    // label for checkbox 
+    // label for checkbox
     detailed = new NCCheckBox( hSplit, _( "&Detailed View" ), false );
     detailed->setNotify( true );
-    
+
     // create table header for table type T_Overview
     YTableHeader * tableHeader = new YTableHeader();
     tableHeader->addColumn( " ", YAlignBegin );
     tableHeader->addColumn( _( "Directory Name" ), YAlignBegin );
-    
+
     // add the list of directories
     dirList = new NCDirectoryTable( split,
 				    tableHeader,
@@ -110,13 +110,13 @@ void NCAskForExistingDirectory::createLayout( const string & iniDir,
     okButton->setStretchable( YD_HORIZ, true );
 
     new NCSpacing( hSplit1, YD_HORIZ, true, 0.4 );
-      
+
     // add the Cancel button
     cancelButton = new NCPushButton( hSplit1, _( "&Cancel" ) );
     cancelButton->setFunctionKey( 9 );
-    cancelButton->setStretchable( YD_HORIZ, true);
-    
-    new NCSpacing( hSplit1, YD_HORIZ, true, 0.2 );  
+    cancelButton->setStretchable( YD_HORIZ, true );
+
+    new NCSpacing( hSplit1, YD_HORIZ, true, 0.2 );
 }
 
 // NCursesEvent & showDirPopup ()
@@ -128,15 +128,18 @@ NCursesEvent & NCAskForExistingDirectory::showDirPopup( )
 	return postevent;
 
     dirList->fillList( );
+
     dirList->setKeyboardFocus();
 
     dirName->addItem( dirList->getCurrentDir(),
 		      true );		// selected
-    
+
     // event loop
-    do {
+    do
+    {
 	popupDialog();
-    } while ( postAgain() );
+    }
+    while ( postAgain() );
 
     popdownDialog();
 
@@ -146,12 +149,12 @@ NCursesEvent & NCAskForExistingDirectory::showDirPopup( )
 
 int NCAskForExistingDirectory::preferredWidth()
 {
-    return NCurses::cols()-10;
+    return NCurses::cols() - 10;
 }
 
 int NCAskForExistingDirectory::preferredHeight()
 {
-    return NCurses::lines()-4;
+    return NCurses::lines() - 4;
 }
 
 
@@ -169,7 +172,7 @@ NCursesEvent NCAskForExistingDirectory::wHandleInput( wint_t ch )
 
 bool NCAskForExistingDirectory::postAgain( )
 {
-    if( !postevent.widget )
+    if ( !postevent.widget )
 	return false;
 
     postevent.detail = NCursesEvent::NODETAIL;
@@ -184,13 +187,13 @@ bool NCAskForExistingDirectory::postAgain( )
     {
 	if ( postevent.result == "" )
 	    return true;
-		
+
 	// show the currently selected directory
 	yuiDebug() << "Add item: " <<  postevent.result << endl;
 
 	dirName->addItem( postevent.result,
 			  true );
-	    
+
 	if ( postevent.reason == YEvent::Activated )
 	{
 	    // fill the directory list
@@ -205,6 +208,7 @@ bool NCAskForExistingDirectory::postAgain( )
     else if ( postevent.widget == detailed )
     {
 	bool details = getCheckBoxValue( detailed );
+
 	if ( details )
 	{
 	    dirList->setTableType( NCFileTable::T_Detailed );
@@ -213,7 +217,8 @@ bool NCAskForExistingDirectory::postAgain( )
 	{
 	    dirList->setTableType( NCFileTable::T_Overview );
 	}
-	dirList->fillList(); 
+
+	dirList->fillList();
     }
     else
     {
@@ -224,10 +229,10 @@ bool NCAskForExistingDirectory::postAgain( )
     if ( postevent.widget == cancelButton ||
 	 postevent == NCursesEvent::cancel )
     {
-	postevent.result = "";	
+	postevent.result = "";
 	return false;
     }
-    
+
     return true;
 }
 

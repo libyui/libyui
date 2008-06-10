@@ -1,13 +1,13 @@
 /*---------------------------------------------------------------------\
-|                                                                      |
-|                      __   __    ____ _____ ____                      |
-|                      \ \ / /_ _/ ___|_   _|___ \                     |
-|                       \ V / _` \___ \ | |   __) |                    |
-|                        | | (_| |___) || |  / __/                     |
-|                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |
-|                               core system                            |
-|                                                        (C) SuSE GmbH |
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
    File:       NCPopupMenu.h
@@ -15,37 +15,38 @@
    Author:     Michael Andres <ma@suse.de>
 
 /-*/
+
 #ifndef NCPopupMenu_h
 #define NCPopupMenu_h
 
 #include <iosfwd>
-
 #include <list>
-using namespace std;
 
 #include "NCPopupTable.h"
 #include "NCMenuButton.h"
 
+using std::list;
 
-class NCPopupMenu : public NCPopupTable {
 
-  NCPopupMenu & operator=( const NCPopupMenu & );
-  NCPopupMenu            ( const NCPopupMenu & );
+class NCPopupMenu : public NCPopupTable
+{
+private:
 
-  private:
+    NCPopupMenu & operator=( const NCPopupMenu & );
+    NCPopupMenu( const NCPopupMenu & );
 
     std::map<YTableItem *, YMenuItem *> itemsMap;
-    
-  protected:
+
+protected:
 
     virtual NCursesEvent wHandleInput( wint_t ch );
     virtual bool postAgain();
 
-  public:
+public:
 
     NCPopupMenu( const wpos at,
 		 YItemIterator begin,
-		 YItemIterator end);
+		 YItemIterator end );
 
     virtual ~NCPopupMenu();
 

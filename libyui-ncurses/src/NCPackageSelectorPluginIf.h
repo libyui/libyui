@@ -12,7 +12,7 @@
 
   File:		NCPackageSelectorPluginIf.h
 
-  Author:	Hedgehog Painter <kmachalkova@suse.cz>
+  Author:	Katharina Machalkova <kmachalkova@suse.cz>
 
 
 /-*/
@@ -24,18 +24,19 @@
 #include <YEvent.h>
 #include <YPackageSelectorPlugin.h>
 
-class NCPackageSelectorPluginIf 
+class NCPackageSelectorPluginIf
 {
 
-  public:
+public:
 
     virtual ~NCPackageSelectorPluginIf() {}
 
     virtual YPackageSelector *createPackageSelector( YWidget *parent, long modeFlags ) = 0 ;
 
-    virtual YEvent *runPkgSelection (YDialog *currentDialog, YWidget *packageSelector ) = 0;
+    virtual YEvent *runPkgSelection( YDialog *currentDialog, YWidget *packageSelector ) = 0;
 
-    virtual YWidget *createPkgSpecial (YWidget *parent, const string &subwidget ) = 0;
-
+    virtual YWidget *createPkgSpecial( YWidget *parent, const string &subwidget ) = 0;
 };
+
+
 #endif

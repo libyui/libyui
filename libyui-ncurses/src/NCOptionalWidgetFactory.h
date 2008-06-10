@@ -19,7 +19,6 @@
 #ifndef NCOptionalWidgetFactory_h
 #define NCOptionalWidgetFactory_h
 
-
 #include "YOptionalWidgetFactory.h"
 
 
@@ -32,14 +31,15 @@
  **/
 class NCOptionalWidgetFactory: public YOptionalWidgetFactory
 {
+
 public:
 
     //
     // Optional Widgets
     //
 
-    // PkgSpecial()
-    
+    // Currently none for this UI
+
 protected:
 
     friend class YNCursesUI;

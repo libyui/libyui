@@ -1,13 +1,13 @@
 /*---------------------------------------------------------------------\
-|                                                                      |
-|                      __   __    ____ _____ ____                      |
-|                      \ \ / /_ _/ ___|_   _|___ \                     |
-|                       \ V / _` \___ \ | |   __) |                    |
-|                        | | (_| |___) || |  / __/                     |
-|                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |
-|                               core system                            |
-|                                                        (C) SuSE GmbH |
+|								       |
+|		       __   __	  ____ _____ ____		       |
+|		       \ \ / /_ _/ ___|_   _|___ \		       |
+|			\ V / _` \___ \ | |   __) |		       |
+|			 | | (_| |___) || |  / __/		       |
+|			 |_|\__,_|____/ |_| |_____|		       |
+|								       |
+|				core system			       |
+|							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
    File:       NCPopupInfo.cc
@@ -39,13 +39,13 @@ NCPopupInfo::NCPopupInfo( const wpos at,
 			  const string & text,
 			  string okButtonLabel,
 			  string cancelButtonLabel )
-    : NCPopup( at, false )
-      , helpText( 0 )
-      , okButton( 0 )
-      , cancelButton( 0 )
-      , hDim( 50 )
-      , vDim( 20 )
-      , visible ( false )
+	: NCPopup( at, false )
+	, helpText( 0 )
+	, okButton( 0 )
+	, cancelButton( 0 )
+	, hDim( 50 )
+	, vDim( 20 )
+	, visible( false )
 {
     createLayout( headline, text, okButtonLabel, cancelButtonLabel );
 }
@@ -63,40 +63,40 @@ void NCPopupInfo::createLayout( const string & headline,
 				string okButtonLabel,
 				string cancelButtonLabel )
 {
-  // the vertical split is the (only) child of the dialog
-  NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
+    // the vertical split is the (only) child of the dialog
+    NCLayoutBox * split = new NCLayoutBox( this, YD_VERT );
 
-  // add the headline
-  new NCLabel( split, headline, true, false ); // isHeading = true
-  
-  // add the rich text widget 
-  helpText = new NCRichText( split, text );
+    // add the headline
+    new NCLabel( split, headline, true, false ); // isHeading = true
 
-  NCLayoutBox * hSplit = new NCLayoutBox( split, YD_HORIZ );
+    // add the rich text widget
+    helpText = new NCRichText( split, text );
 
-  if ( okButtonLabel != "" && cancelButtonLabel != "" )
-  {
-      new NCSpacing( hSplit, YD_HORIZ, true, 0.4 ); // stretchable = true
-  }
+    NCLayoutBox * hSplit = new NCLayoutBox( split, YD_HORIZ );
 
-  if ( okButtonLabel != "" )
-  {
-      // add the OK button
-      okButton = new NCPushButton( hSplit, okButtonLabel );
-      okButton->setFunctionKey( 10 );
-  }
-  
-  if ( cancelButtonLabel != "" )
-  {
-      new NCSpacing( hSplit, YD_HORIZ, true, 0.4 );
-      
-      // add the Cancel button
-      cancelButton = new NCPushButton( hSplit, cancelButtonLabel );
-      cancelButton->setFunctionKey( 9 );
-      
-      new NCSpacing( hSplit, YD_HORIZ, true, 0.4 ); 
-  }
-  
+    if ( okButtonLabel != "" && cancelButtonLabel != "" )
+    {
+	new NCSpacing( hSplit, YD_HORIZ, true, 0.4 ); // stretchable = true
+    }
+
+    if ( okButtonLabel != "" )
+    {
+	// add the OK button
+	okButton = new NCPushButton( hSplit, okButtonLabel );
+	okButton->setFunctionKey( 10 );
+    }
+
+    if ( cancelButtonLabel != "" )
+    {
+	new NCSpacing( hSplit, YD_HORIZ, true, 0.4 );
+
+	// add the Cancel button
+	cancelButton = new NCPushButton( hSplit, cancelButtonLabel );
+	cancelButton->setFunctionKey( 9 );
+
+	new NCSpacing( hSplit, YD_HORIZ, true, 0.4 );
+    }
+
 }
 
 
@@ -104,70 +104,60 @@ void NCPopupInfo::createLayout( const string & headline,
 NCursesEvent & NCPopupInfo::showInfoPopup( )
 {
     postevent = NCursesEvent();
-    do {
+
+    do
+    {
 	popupDialog( );
-    } while ( postAgain() );
-    
+    }
+    while ( postAgain() );
+
     popdownDialog();
 
     return postevent;
 }
 
+
 void NCPopupInfo::popup()
 {
-    	initDialog();
-	showDialog();
-	activate ( true );
-	visible = true;
+    initDialog();
+    showDialog();
+    activate( true );
+    visible = true;
 }
+
 
 void NCPopupInfo::popdown()
 {
-    	activate ( false );
-	closeDialog();
-	visible = false;
+    activate( false );
+    closeDialog();
+    visible = false;
 }
-#if 0
-long NCPopupInfo::nicesize(YUIDimension dim)
-{
-    long vertDim = vDim;
-    long horDim = hDim;
-    
-    if ( vDim >= NCurses::lines() )
-	vertDim = NCurses::lines()-5;
-    if ( hDim >= NCurses::cols() )
-	horDim = NCurses::cols()-10;
-    return ( dim == YD_HORIZ ? horDim : vertDim );
-}
-#endif
 
 
-// returns preferred horizontal size
 int NCPopupInfo::preferredWidth()
 {
     int horDim = hDim;
 
     if ( hDim >= NCurses::cols() )
-	horDim = NCurses::cols()-10;
+	horDim = NCurses::cols() - 10;
 
     return horDim;
 }
 
 
-
-// returns preferred vertical size
 int NCPopupInfo::preferredHeight()
 {
     int vertDim = vDim;
+
     if ( vDim >= NCurses::lines() )
-	vertDim = NCurses::lines()-5;
+	vertDim = NCurses::lines() - 5;
 
     return vertDim;
 }
 
 
-
-NCursesEvent NCPopupInfo::wHandleInput( wint_t ch )
+NCursesEvent
+NCPopupInfo::wHandleInput( wint_t ch )
 {
     if ( ch == 27 ) // ESC
 	return NCursesEvent::cancel;
@@ -190,17 +180,19 @@ bool NCPopupInfo::postAgain()
 	if ( postevent.widget == cancelButton )
 	{
 	    yuiMilestone() << "Cancel button pressed" << endl;
-	    // close the dialog 
+	    // close the dialog
 	    postevent = NCursesEvent::cancel;
 	}
+
 	// else - nothing to do (postevent is already set)
     }
-    
+
     if ( postevent == NCursesEvent::button || postevent == NCursesEvent::cancel )
     {
-        // return false means: close the popup dialog
+	// return false means: close the popup dialog
 	return false;
     }
+
     return true;
 }
 

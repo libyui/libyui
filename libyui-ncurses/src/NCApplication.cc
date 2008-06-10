@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      	NCApplication.cc
+  File:		NCApplication.cc
 
   Authors:	Gabriele Mohr <gs@suse.de>
 		Stefan Hundhammer <sh@suse.de>
@@ -32,13 +32,13 @@
 
 NCApplication::NCApplication()
 {
-    
+
 }
 
 
 NCApplication::~NCApplication()
 {
-    
+
 }
 
 
@@ -47,14 +47,14 @@ NCApplication::setLanguage( const string & language,
 			    const string & encoding )
 {
     // Intentionally NOT calling
-    //    YApplication::setLanguage( language, encoding );
+    //	  YApplication::setLanguage( language, encoding );
     // This would implicitly overwrite LC_CTYPE which might result in encoding bugs.
-    
+
     setlocale( LC_NUMERIC, "C" );	// always format numbers with "."
     NCurses::Refresh();
-    
-    yuiDebug() << "Language: " << language << " Encoding: " << ((encoding!="")?encoding:"NOT SET") << endl;
-  
+
+    yuiDebug() << "Language: " << language << " Encoding: " << (( encoding != "" ) ? encoding : "NOT SET" ) << endl;
+
 }
 
 
@@ -65,11 +65,11 @@ NCApplication::askForSaveFileName( const string & startDir,
 {
     NCAskForSaveFileName * filePopup = new NCAskForSaveFileName( wpos( 1, 1 ), startDir, filter, headline );
     YUI_CHECK_NEW( filePopup );
-    
+
     NCursesEvent retEvent = filePopup->showDirPopup( );
     YDialog::deleteTopmostDialog();
 
-    yuiMilestone() << "Returning: " <<  retEvent.result << endl;
+    yuiMilestone() << "Returning: " <<	retEvent.result << endl;
     return retEvent.result;
 }
 
@@ -81,11 +81,11 @@ NCApplication::askForExistingFile( const string & startDir,
 {
     NCAskForExistingFile * filePopup = new NCAskForExistingFile( wpos( 1, 1 ), startDir, filter, headline );
     YUI_CHECK_NEW( filePopup );
-    
+
     NCursesEvent retEvent = filePopup->showDirPopup( );
     YDialog::deleteTopmostDialog();
 
-    yuiMilestone() << "Returning: " <<  retEvent.result << endl;
+    yuiMilestone() << "Returning: " <<	retEvent.result << endl;
     return retEvent.result;
 }
 
@@ -96,11 +96,11 @@ NCApplication::askForExistingDirectory( const string & startDir,
 {
     NCAskForExistingDirectory * dirPopup = new NCAskForExistingDirectory( wpos( 1, 1 ), startDir, headline );
     YUI_CHECK_NEW( dirPopup );
-    
+
     NCursesEvent retEvent = dirPopup->showDirPopup( );
     YDialog::deleteTopmostDialog();
 
-    yuiMilestone() << "Returning: " <<  retEvent.result << endl;
+    yuiMilestone() << "Returning: " <<	retEvent.result << endl;
     return retEvent.result;
 }
 
@@ -108,7 +108,7 @@ NCApplication::askForExistingDirectory( const string & startDir,
 void
 NCApplication::beep()
 {
-  ::beep();
+    ::beep();
 }
 
 
@@ -122,12 +122,14 @@ void
 NCApplication::initConsoleKeyboard()
 {
     string cmd = "/bin/dumpkeys | /bin/loadkeys --unicode";
+
     if ( NCstring::terminalEncoding() == "UTF-8" )
     {
-	int ret = system( (cmd + " >/dev/null 2>&1").c_str() );
+	int ret = system(( cmd + " >/dev/null 2>&1" ).c_str() );
+
 	if ( ret != 0 )
 	{
-	    yuiError() << "ERROR: /bin/dumpkeys | /bin/loadkeys --unicode returned: "<< ret << endl;
+	    yuiError() << "ERROR: /bin/dumpkeys | /bin/loadkeys --unicode returned: " << ret << endl;
 	}
     }
 }
@@ -157,7 +159,7 @@ NCApplication::setConsoleFont( const string & console_magic,
 
 int
 NCApplication::runInTerminal( const string & cmd )
-{ 
+{
     int ret;
 
     // Save tty modes and end ncurses mode temporarily
@@ -182,6 +184,7 @@ NCApplication::runInTerminal( const string & cmd )
 
     // Resume tty modes and refresh the screen
     ::reset_prog_mode();
+
     ::refresh();
 
     return ret;
