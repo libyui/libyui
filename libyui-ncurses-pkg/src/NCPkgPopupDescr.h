@@ -13,7 +13,6 @@
    File:       NCPkgPopupDescr.h
 
    Author:     Gabriele Strattner <gs@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #ifndef NCPkgPopupDescr_h

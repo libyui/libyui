@@ -13,7 +13,6 @@
    File:       NCPkgTable.cc
 
    Author:     Gabriele Strattner <gs@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #define YUILogComponent "ncurses-pkg"
@@ -281,7 +280,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 						  NCPkgStrings::AcceptLabel(),
 						  NCPkgStrings::CancelLabel()
 						  );
-	    info->setNiceSize( (NCurses::cols() * 80)/100, (NCurses::lines()*80)/100);
+	    info->setPreferredSize( (NCurses::cols() * 80)/100, (NCurses::lines()*80)/100);
 	    license_confirmed = info->showInfoPopup( ) != NCursesEvent::cancel;
 
 	    YDialog::deleteTopmostDialog(); 
@@ -320,7 +319,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 					      header,
 					      "<i>" + pkgName + "</i><br><br>" + packager->createDescrText( notify )
 					      );
-	info->setNiceSize( (NCurses::cols() * 50)/100, (NCurses::lines() * 30)/100);
+	info->setPreferredSize( (NCurses::cols() * 50)/100, (NCurses::lines() * 30)/100);
 	info->showInfoPopup( );
 
 	YDialog::deleteTopmostDialog();

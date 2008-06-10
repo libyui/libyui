@@ -13,7 +13,6 @@
    File:       NCPkgPatchSearch.h
 
    Author:     Gabriele Strattner <gs@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #ifndef NCPkgPatchSearch_h

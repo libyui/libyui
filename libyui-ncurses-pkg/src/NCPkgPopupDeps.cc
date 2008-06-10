@@ -244,7 +244,7 @@ bool NCPkgPopupDeps::solve( NCSelectionBox * problemw, NCPkgSolverAction action 
 					  NCPkgStrings::Solving(),
 					  NCPkgStrings::OKLabel()
 					  );
-    info->setNiceSize( 18, 4 );
+    info->setPreferredSize( 18, 4 );
     info->popup();
     
     zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();

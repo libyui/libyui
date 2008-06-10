@@ -13,7 +13,6 @@
   File:		NCPackageSelectorPluginImpl.cc
 
   Author:	Hedgehog Painter <kmachalkova@suse.cz>
-	        \\\'>
 
 /-*/
 

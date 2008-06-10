@@ -5,7 +5,8 @@
 |                       \ V / _` \___ \ | |   __) |                    |
 |                        | | (_| |___) || |  / __/                     |
 |                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |                               core system                            |
+|                                                                      |
+|                               core system                            |
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
@@ -106,7 +107,7 @@ bool NCPkgMenuHelp::handleEvent ( const NCursesEvent & event)
 					     headline,
 					     text
 					     );
-    pkgHelp->setNiceSize( (NCurses::cols()*65)/100, (NCurses::lines()*85)/100 );
+    pkgHelp->setPreferredSize( (NCurses::cols()*65)/100, (NCurses::lines()*85)/100 );
     pkgHelp->showInfoPopup( );
 
     YDialog::deleteTopmostDialog();

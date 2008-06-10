@@ -13,7 +13,6 @@
    File:       NCPkgStatusStrategy.cc
 
    Author:     Gabriele Strattner <gs@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #define YUILogComponent "ncurses-pkg"

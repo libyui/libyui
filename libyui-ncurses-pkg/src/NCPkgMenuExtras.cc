@@ -5,7 +5,8 @@
 |                       \ V / _` \___ \ | |   __) |                    |
 |                        | | (_| |___) || |  / __/                     |
 |                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |                               core system                            |
+|                                                                      |
+|                               core system                            |
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
@@ -203,7 +204,7 @@ bool NCPkgMenuExtras::exportToFile()
     	    					  + filename,
     	    					  NCPkgStrings::OKLabel(),
     	    					  "");
-            errorMsg->setNiceSize(40,5);
+            errorMsg->setPreferredSize(40,5);
     	    NCursesEvent input = errorMsg->showInfoPopup();
 
     	    YDialog::deleteTopmostDialog();
@@ -289,7 +290,7 @@ bool NCPkgMenuExtras::importFromFile()
     						  + filename,
     						  NCPkgStrings::OKLabel(),
     						  "");
-        errorMsg->setNiceSize(40,5);
+        errorMsg->setPreferredSize(40,5);
     	NCursesEvent input = errorMsg->showInfoPopup();
     
     	YDialog::deleteTopmostDialog();

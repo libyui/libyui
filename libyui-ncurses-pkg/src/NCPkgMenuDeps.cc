@@ -5,7 +5,8 @@
 |                       \ V / _` \___ \ | |   __) |                    |
 |                        | | (_| |___) || |  / __/                     |
 |                        |_|\__,_|____/ |_| |_____|                    |
-|                                                                      |                               core system                            |
+|                                                                      |
+|                               core system                            |
 |                                                        (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
@@ -74,7 +75,7 @@ bool NCPkgMenuDeps::checkDependencies()
     NCPopupInfo * info = new NCPopupInfo( wpos( (NCurses::lines()-5)/2, (NCurses::cols()-35)/2 ), "",
 					  _( "All package dependencies are OK." ),
 					  NCPkgStrings::OKLabel() );
-    info->setNiceSize( 35, 5 );
+    info->setPreferredSize( 35, 5 );
 
     bool ok = false;
 
@@ -112,7 +113,7 @@ bool NCPkgMenuDeps::generateTestcase()
                                               _("Dependency resolver test case written to ") + "<br>"
                                               + testCaseDir
                                               );
-        info->setNiceSize( 40, 8 );
+        info->setPreferredSize( 40, 8 );
         info->showInfoPopup( );
 
         YDialog::deleteTopmostDialog();
@@ -167,7 +168,7 @@ bool NCPkgMenuDeps::verify()
     				  _( "System dependencies verify OK." ),
     				  NCPkgStrings::OKLabel()
     				  );
-         info->setNiceSize( 35, 5 );
+         info->setPreferredSize( 35, 5 );
          info->showInfoPopup();
          YDialog::deleteTopmostDialog();
     }

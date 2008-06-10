@@ -13,7 +13,6 @@
    File:       NCPackageSelector.cc
 
    Author:     Gabriele Strattner <gs@suse.de>
-   Maintainer: Michael Andres <ma@suse.de>
 
 /-*/
 #include "NCurses.h"
@@ -981,7 +980,7 @@ bool NCPackageSelector::YouHelpHandler( const NCursesEvent&  event )
 					     NCPkgStrings::YouHelp(),
 					     text
 					     );
-    youHelp->setNiceSize( (NCurses::cols()*65)/100, (NCurses::lines()*85)/100 );
+    youHelp->setPreferredSize( (NCurses::cols()*65)/100, (NCurses::lines()*85)/100 );
     youHelp->showInfoPopup( );
 
     YDialog::deleteTopmostDialog();
@@ -1012,7 +1011,7 @@ bool NCPackageSelector::CancelHandler( const NCursesEvent&  event )
 						   NCPkgStrings::YesLabel(),
 						   NCPkgStrings::NoLabel()
 						   );
-	cancelMsg->setNiceSize( 45, 8 );
+	cancelMsg->setPreferredSize( 45, 8 );
 	NCursesEvent input = cancelMsg->showInfoPopup( );
 
 	YDialog::deleteTopmostDialog();
@@ -1086,7 +1085,7 @@ bool NCPackageSelector::OkButtonHandler( const NCursesEvent&  event )
 						      NCPkgStrings::OKLabel(),
 						      NCPkgStrings::CancelLabel() );
 
-	    spaceMsg->setNiceSize( 50, 10 );
+	    spaceMsg->setPreferredSize( 50, 10 );
 	    NCursesEvent input = spaceMsg->showInfoPopup( );
 
 	    YDialog::deleteTopmostDialog();
@@ -1198,7 +1197,7 @@ bool NCPackageSelector::showLicenseAgreement( ZyppSel & slbPtr , string licenseT
 					   NCPkgStrings::AcceptLabel(),
 					   NCPkgStrings::CancelLabel() );
 
-    info->setNiceSize( (NCurses::cols() * 80)/100, (NCurses::lines()*80)/100);
+    info->setPreferredSize( (NCurses::cols() * 80)/100, (NCurses::lines()*80)/100);
     license_confirmed = info->showInfoPopup( ) != NCursesEvent::cancel;
 
     if ( !license_confirmed )

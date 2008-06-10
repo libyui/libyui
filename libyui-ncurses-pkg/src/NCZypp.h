@@ -16,8 +16,6 @@
 
 /-*/
 
-// -*- c++ -*-
-
 #ifndef NCZypp_h
 #define NCZypp_h
 
