@@ -221,7 +221,7 @@ YQPkgPatchList::fillList()
                 if ( ( selectable->hasCandidateObj() ) && 
                      ( ! selectable->candidateObj().isRelevant() 
                        || ( selectable->candidateObj().isSatisfied() &&
-                            selectable->candidateObj().status().isToBeInstalled() ) ) )
+                            ! selectable->candidateObj().status().isToBeInstalled() ) ) )
                 {
                     // now we show satisfied patches too
                     displayPatch = true;
