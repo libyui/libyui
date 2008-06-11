@@ -31,8 +31,6 @@
 #define YUILogComponent "ncurses"
 #include <yui/YUILog.h>
 
-//#include "NCPackageSelectorStart.h"
-
 
 #define	 YUILogComponent "ncurses"
 #include <YUILog.h>
@@ -42,6 +40,8 @@
 #include "NCPackageSelectorPluginStub.h"
 
 extern string language2encoding( string lang );
+
+YNCursesUI * YNCursesUI::_ui = 0;
 
 
 YUI * createUI( bool withThreads )
@@ -95,6 +95,7 @@ YNCursesUI::YNCursesUI( bool withThreads )
     topmostConstructorHasFinished();
 }
 
+
 YNCursesUI::~YNCursesUI()
 {
     //delete left-over dialogs (if any)
@@ -102,8 +103,6 @@ YNCursesUI::~YNCursesUI()
     yuiMilestone() << "Stop YNCursesUI" << endl;
 }
 
-
-YNCursesUI * YNCursesUI::_ui = 0;
 
 YWidgetFactory *
 YNCursesUI::createWidgetFactory()
@@ -113,7 +112,6 @@ YNCursesUI::createWidgetFactory()
 
     return factory;
 }
-
 
 
 YOptionalWidgetFactory *
@@ -134,7 +132,6 @@ YNCursesUI::createApplication()
 
     return app;
 }
-
 
 
 void YNCursesUI::idleLoop( int fd_ycp )
@@ -188,17 +185,9 @@ void YNCursesUI::idleLoop( int fd_ycp )
 }
 
 
-
-#define ONCREATE yuiDebug() << endl
-//#define ONCREATE
-
-
-// package selection
-
-
-
-
-// Create the package selector plugin
+/**
+ * Create the package selector plugin
+ **/
 NCPackageSelectorPluginStub * YNCursesUI::packageSelectorPlugin()
 {
     static NCPackageSelectorPluginStub * plugin = 0;
@@ -217,10 +206,6 @@ NCPackageSelectorPluginStub * YNCursesUI::packageSelectorPlugin()
 }
 
 
-
-
-// Implementation of UI builtin RunPkgSelection() which
-//		      has to be called after OpenDialog( `PackageSelector() ).
 YEvent * YNCursesUI::runPkgSelection( YWidget * selector )
 {
     YEvent * event = 0;
@@ -250,7 +235,6 @@ YEvent * YNCursesUI::runPkgSelection( YWidget * selector )
 
     return event;
 }
-
 
 
 void YNCursesUI::init_title()
@@ -319,7 +303,6 @@ void YNCursesUI::init_title()
 }
 
 
-
 bool YNCursesUI::want_colors()
 {
     if ( getenv( "Y2NCURSES_BW" ) != NULL )
@@ -332,10 +315,11 @@ bool YNCursesUI::want_colors()
 }
 
 
-
-// UI::setConsoleFont() is called in Console.ycp.
-//		      The terminal encoding must be set correctly.
 /**
+ * Set the console font, encoding etc.
+ * This is called from Console.ycp.
+ * The terminal encoding must be set correctly.
+ *
  * This doesn't belong here, but it is so utterly entangled with member
  * variables that are not exported at all (sic!) that it's not really feasible
  * to extract the relevant parts.
@@ -428,3 +412,4 @@ void YNCursesUI::setConsoleFont( const string & console_magic,
 	Refresh();
     }
 }
+

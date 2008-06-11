@@ -314,18 +314,14 @@ void NCurses::init()
     yuiMilestone() << form( "screen size %d x %d\n", lines(), cols() );
 
     myself = this;
-
     styleset = new NCstyle( envTerm );
-
     stdpan   = new NCursesPanel();
-
     stdpan->bkgd( style()( NCstyle::AppText ) );
 
     if ( title_line() )
 	init_title();
 
     init_screen();
-
     yuiMilestone() << "NCurses ready" << endl;
 }
 
