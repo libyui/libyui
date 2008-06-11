@@ -124,7 +124,6 @@ NCFileInfo::NCFileInfo( string	fileName,
 }
 
 
-
 NCFileInfo::NCFileInfo( )
 {
     _name   = "";
@@ -141,14 +140,12 @@ NCFileInfo::NCFileInfo( )
 }
 
 
-
 NCFileSelectionTag::NCFileSelectionTag( const NCFileInfo & info )
 	: NCTableCol( NCstring( "  " ), SEPARATOR )
 	, fileInfo( info )
 {
 
 }
-
 
 
 void NCFileSelectionTag::DrawAt( NCursesWindow & w, const wrect at,
@@ -163,15 +160,14 @@ void NCFileSelectionTag::DrawAt( NCursesWindow & w, const wrect at,
 }
 
 
-
 NCFileSelection::NCFileSelection( YWidget * parent,
 				  YTableHeader * tableHeader,
 				  NCFileSelectionType type,
 				  const string & iniDir )
-	: NCTable( parent, tableHeader )
-	, startDir( iniDir )
-	, currentDir( iniDir )
-	, tableType( type )
+    : NCTable( parent, tableHeader )
+    , startDir( iniDir )
+    , currentDir( iniDir )
+    , tableType( type )
 {
     SetSepChar( ' ' );
     setTextdomain( "ncurses" );
@@ -206,17 +202,12 @@ NCFileSelection::NCFileSelection( YWidget * parent,
 }
 
 
-
-
 NCFileSelection::~NCFileSelection()
 {
     yuiDebug() << endl;
 }
 
 
-
-// getCurrentLine()
-// returns the currently selected line
 string	NCFileSelection::getCurrentLine( )
 {
     int index = getCurrentItem();
@@ -231,7 +222,6 @@ string	NCFileSelection::getCurrentLine( )
 	return "";
     }
 }
-
 
 
 void NCFileSelection::setCurrentDir()
@@ -266,7 +256,6 @@ void NCFileSelection::setCurrentDir()
 }
 
 
-
 void NCFileSelection::addLine( const vector<string> & elements,
 			       const NCFileInfo & info )
 {
@@ -285,13 +274,12 @@ void NCFileSelection::addLine( const vector<string> & elements,
 }
 
 
-
 void NCFileSelection::deleteAllItems()
 {
     return NCTable::deleteAllItems();
 }
 
-// createListEntry
+
 bool NCFileTable::createListEntry( const NCFileInfo & fileInfo )
 {
     vector<string> data;
@@ -332,7 +320,7 @@ bool NCFileTable::createListEntry( const NCFileInfo & fileInfo )
     return true;
 }
 
-// createListEntry
+
 bool NCDirectoryTable::createListEntry( const NCFileInfo & fileInfo )
 {
     vector<string> data;
@@ -371,7 +359,6 @@ bool NCDirectoryTable::createListEntry( const NCFileInfo & fileInfo )
 }
 
 
-
 NCFileInfo NCFileSelection::getFileInfo( int index )
 {
     // get the tag
@@ -382,7 +369,6 @@ NCFileInfo NCFileSelection::getFileInfo( int index )
 
     return cc->getFileInfo();
 }
-
 
 
 NCFileSelectionTag * NCFileSelection::getTag( const int & index )
@@ -403,12 +389,13 @@ NCFileSelectionTag * NCFileSelection::getTag( const int & index )
 
 
 
+
 NCFileTable::NCFileTable( YWidget * parent,
 			  YTableHeader * tableHeader,
 			  NCFileSelectionType type,
 			  const string & filter,
 			  const string & iniDir )
-	: NCFileSelection( parent, tableHeader, type, iniDir )
+    : NCFileSelection( parent, tableHeader, type, iniDir )
 {
     //fillHeader();
 
@@ -423,18 +410,17 @@ NCFileTable::NCFileTable( YWidget * parent,
 	end = filterStr.find_first_of( delims, begin );
 
 	if ( end == string::npos )
-	{
 	    end = filterStr.length();
-	}
 
 	pattern.push_back( filterStr.substr( begin, end - begin ) );
-
 	begin = filterStr.find_first_not_of( delims, end );
     }
 }
 
-// fillHeader
-// Fillup the column headers of the file table
+
+/**
+ * Fill the column headers of the file table
+ **/
 void NCFileTable::fillHeader( )
 {
     vector<string> header;
@@ -480,7 +466,6 @@ void NCFileTable::fillHeader( )
 }
 
 
-
 bool NCFileTable::filterMatch( const string & fileEntry )
 {
     if ( pattern.empty() )
@@ -500,7 +485,6 @@ bool NCFileTable::filterMatch( const string & fileEntry )
 
     return match;
 }
-
 
 
 NCursesEvent NCFileSelection::handleKeyEvents( wint_t key )
@@ -526,8 +510,6 @@ NCursesEvent NCFileSelection::handleKeyEvents( wint_t key )
 
     return ret;
 }
-
-
 
 
 NCursesEvent NCFileTable::wHandleInput( wint_t key )
@@ -568,14 +550,11 @@ NCursesEvent NCFileTable::wHandleInput( wint_t key )
 }
 
 
-
-bool NCFileTable::fillList( )
+bool NCFileTable::fillList()
 {
 
     struct stat64	statInfo;
-
     struct stat64	linkInfo;
-
     struct dirent *	entry;
     list<string>	tmpList;
     list<string>::iterator   it;
@@ -584,7 +563,7 @@ bool NCFileTable::fillList( )
 
     DIR * diskDir = opendir( currentDir.c_str() );
 
-    if (( diskDir = opendir( currentDir.c_str() ) ) )
+    if ( diskDir )
     {
 	deleteAllItems();
 
@@ -601,7 +580,6 @@ bool NCFileTable::fillList( )
 
 	// sort the list and fill the table widget with file entries
 	tmpList.sort( );
-
 	it = tmpList.begin();
 
 	while ( it != tmpList.end() )
@@ -644,34 +622,34 @@ bool NCFileTable::fillList( )
 	{
 	    currentFile = "";
 	}
+	
+	closedir( diskDir );
     }
     else
     {
 	yuiError() << "ERROR opening directory: " << currentDir << " errno: "
-	<< strerror( errno ) << endl;
+		   << strerror( errno ) << endl;
 	return false;
     }
 
-    closedir( diskDir );
-
     return true;
 }
-
-
 
 
 NCDirectoryTable::NCDirectoryTable( YWidget * parent,
 				    YTableHeader * tableHeader,
 				    NCFileSelectionType type,
 				    const string & iniDir )
-	: NCFileSelection( parent, tableHeader, type, iniDir )
+    : NCFileSelection( parent, tableHeader, type, iniDir )
 {
     //fillHeader();
 }
 
-// fillHeader
-// Fillup the column headers of the table
-void NCDirectoryTable::fillHeader( )
+
+/**
+ * Fill the column headers of the table
+ **/
+void NCDirectoryTable::fillHeader()
 {
     vector<string> header;
 
@@ -711,14 +689,10 @@ void NCDirectoryTable::fillHeader( )
 }
 
 
-
-bool NCDirectoryTable::fillList( )
+bool NCDirectoryTable::fillList()
 {
-
     struct stat64	statInfo;
-
     struct stat64	linkInfo;
-
     struct dirent *	entry;
     list<string>	tmpList;
     list<string>::iterator   it;
@@ -727,7 +701,7 @@ bool NCDirectoryTable::fillList( )
 
     DIR * diskDir = opendir( currentDir.c_str() );
 
-    if (( diskDir = opendir( currentDir.c_str() ) ) )
+    if ( diskDir )
     {
 	deleteAllItems();
 
@@ -776,24 +750,23 @@ bool NCDirectoryTable::fillList( )
 	}
 
 	drawList();		// draw the list
-
 	startDir = currentDir;	// set start directory
 
 	if ( getNumLines() > 0 )
 	    setCurrentItem( 0 );	// set focus to the first list entry
+	
+	closedir( diskDir );
     }
     else
     {
 	yuiError() << "ERROR opening directory: " << currentDir << " errno: "
 	<< strerror( errno ) << endl;
+	
 	return false;
     }
 
-    closedir( diskDir );
-
     return true;
 }
-
 
 
 NCursesEvent NCDirectoryTable::wHandleInput( wint_t key )
