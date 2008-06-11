@@ -21,7 +21,6 @@
 #include "NCMultiLineEdit.h"
 
 
-
 NCMultiLineEdit::NCMultiLineEdit( YWidget * parent, const string & nlabel )
 	: YMultiLineEdit( parent, nlabel )
 	, NCPadWidget( parent )
@@ -29,17 +28,13 @@ NCMultiLineEdit::NCMultiLineEdit( YWidget * parent, const string & nlabel )
     yuiDebug() << endl;
     defsze = wsze( 5, 5 ) + wsze( 0, 2 );
     setLabel( nlabel );
-    // initial text isn't an argument any longer
-    //setText( initialText );
 }
-
 
 
 NCMultiLineEdit::~NCMultiLineEdit()
 {
     yuiDebug() << endl;
 }
-
 
 
 int NCMultiLineEdit::preferredWidth()
@@ -49,13 +44,11 @@ int NCMultiLineEdit::preferredWidth()
 }
 
 
-
 int NCMultiLineEdit::preferredHeight()
 {
     return wGetDefsze().H;
     //return YMultiLineEdit::defaultVisibleLines();
 }
-
 
 
 void NCMultiLineEdit::setEnabled( bool do_bv )
@@ -65,12 +58,10 @@ void NCMultiLineEdit::setEnabled( bool do_bv )
 }
 
 
-
 void NCMultiLineEdit::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
-
 
 
 void NCMultiLineEdit::setLabel( const string & nlabel )
@@ -80,14 +71,12 @@ void NCMultiLineEdit::setLabel( const string & nlabel )
 }
 
 
-
 void NCMultiLineEdit::setValue( const string & ntext )
 {
     DelPad();
     ctext = NCstring( ntext );
     Redraw();
 }
-
 
 
 string NCMultiLineEdit::value()
@@ -101,8 +90,6 @@ string NCMultiLineEdit::value()
 }
 
 
-
-
 void NCMultiLineEdit::wRedraw()
 {
     if ( !win )
@@ -110,7 +97,6 @@ void NCMultiLineEdit::wRedraw()
 
     NCPadWidget::wRedraw();
 }
-
 
 
 NCursesEvent NCMultiLineEdit::wHandleInput( wint_t key )
@@ -125,7 +111,6 @@ NCursesEvent NCMultiLineEdit::wHandleInput( wint_t key )
 }
 
 
-
 NCPad * NCMultiLineEdit::CreatePad()
 {
     wsze psze( defPadSze() );
@@ -136,13 +121,14 @@ NCPad * NCMultiLineEdit::CreatePad()
 }
 
 
-
 void NCMultiLineEdit::DrawPad()
 {
     myPad()->setText( ctext );
 }
 
+
 void NCMultiLineEdit::setInputMaxLength( int numberOfChars )
 {
     myPad()->setInputMaxLength( numberOfChars );
+    YMultiLineEdit::setInputMaxLength( numberOfChars );
 }
