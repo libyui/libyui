@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Wed Jun 11 13:02:53 CEST 2008 - kmachalkova@suse.cz
+
+- Use zypp::PoolQuery to filter packages by repositories
+- Use zypp::PoolQuery to search in packages
+- Search filter: search directly by hitting Enter on search field 
+- Update label and the description when switching between repositories 
+  (bnc#397388)
+- 2.17.2
+  
+-------------------------------------------------------------------
 Tue Jun 10 16:02:30 CEST 2008 - sh@suse.de
 
 - Now using renamed ::setPreferredSize() calls rather than old
