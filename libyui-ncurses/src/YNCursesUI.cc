@@ -240,9 +240,6 @@ YEvent * YNCursesUI::runPkgSelection( YWidget * selector )
 	return 0;
     }
 
-    // FIXME - remove debug logging
-    yuiMilestone() << "Dump current dialog in YNCursesUI::runPkgSelection" << endl;
-
     // debug: dump the widget tree
     dialog->dumpDialogWidgetTree();
 

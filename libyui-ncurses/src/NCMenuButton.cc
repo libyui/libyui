@@ -151,10 +151,6 @@ NCursesEvent NCMenuButton::postMenu()
 
     NCursesEvent ret = NCursesEvent::menu;
 
-    // FIXME - check this
-    // YStringWidgetID * selectionID = new YStringWidgetID( findMenuItem( selection )->label() );
-    // ret.selection	= selectionID;
-
     ret.selection = findMenuItem( selection );
 
     YDialog::deleteTopmostDialog();

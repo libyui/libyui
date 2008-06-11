@@ -105,7 +105,7 @@ operator<< ( std::ostream & stream, const NCtoY2Event & event )
     }
     else
     {
-	// FIXME: check this - was valuetype() see above
+	// 'selection' is used in NCMenuButton and NCRichtText (for hyper links)
 	stream << "(" << event.selection->label() << ")";
     }
 
