@@ -26,26 +26,22 @@
 
 using stdutil::numstring;
 
-
-
 const unsigned NCIntField::taglen = 2; // "^v"
-
-
 
 
 NCIntField::NCIntField( YWidget * parent,
 			const string & nlabel,
 			int minV, int maxV,
 			int initialV )
-	: YIntField( parent, nlabel,
-		     minV <= maxV ? minV : maxV,
-		     maxV >= minV ? maxV : minV )
-	, NCWidget( parent )
-	, lwin( 0 )
-	, twin( 0 )
-	, cvalue( initialV )
-	, vlen( 0 )
-	, vstart( 0 )
+    : YIntField( parent, nlabel,
+		 minV <= maxV ? minV : maxV,
+		 maxV >= minV ? maxV : minV )
+    , NCWidget( parent )
+    , lwin( 0 )
+    , twin( 0 )
+    , cvalue( initialV )
+    , vlen( 0 )
+    , vstart( 0 )
 {
     yuiDebug() << endl;
     vlen = numstring( minValue() ).length();
@@ -55,12 +51,9 @@ NCIntField::NCIntField( YWidget * parent,
 	vlen = tmpval;
 
     setLabel( nlabel );
-
     hotlabel = &label;
-
     setValue( initialV );
 }
-
 
 
 NCIntField::~NCIntField()
@@ -71,19 +64,16 @@ NCIntField::~NCIntField()
 }
 
 
-
 int NCIntField::preferredWidth()
 {
     return wGetDefsze().W;
 }
 
 
-
 int NCIntField::preferredHeight()
 {
     return wGetDefsze().H;
 }
-
 
 
 void NCIntField::setEnabled( bool do_bv )
@@ -93,12 +83,10 @@ void NCIntField::setEnabled( bool do_bv )
 }
 
 
-
 void NCIntField::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
-
 
 
 void NCIntField::setDefsze()
@@ -107,7 +95,6 @@ void NCIntField::setDefsze()
     defsze = wsze( label.height() + 1,
 		   label.width() < cols ? cols : label.width() );
 }
-
 
 
 void NCIntField::wCreate( const wrect & newrect )
@@ -141,7 +128,6 @@ void NCIntField::wCreate( const wrect & newrect )
 }
 
 
-
 void NCIntField::wDelete()
 {
     delete lwin;
@@ -151,7 +137,6 @@ void NCIntField::wDelete()
     NCWidget::wDelete();
     vstart = 0;
 }
-
 
 
 void NCIntField::setLabel( const string & nlabel )
@@ -164,7 +149,6 @@ void NCIntField::setLabel( const string & nlabel )
 }
 
 
-
 void NCIntField::setValueInternal( int newValue )
 {
     // checking newValue is done by YIntField
@@ -172,7 +156,6 @@ void NCIntField::setValueInternal( int newValue )
     cvalue = newValue;
     tUpdate();
 }
-
 
 
 bool NCIntField::Increment( const bool bigstep )
@@ -193,7 +176,6 @@ bool NCIntField::Increment( const bool bigstep )
 }
 
 
-
 bool NCIntField::Decrement( const bool bigstep )
 {
     unsigned dist = cvalue - minValue();
@@ -212,7 +194,6 @@ bool NCIntField::Decrement( const bool bigstep )
 }
 
 
-
 void NCIntField::wRedraw()
 {
     if ( !win )
@@ -229,7 +210,6 @@ void NCIntField::wRedraw()
 
     tUpdate();
 }
-
 
 
 void NCIntField::tUpdate()
@@ -253,7 +233,6 @@ void NCIntField::tUpdate()
     twin->addch( 0, vstart + vlen + 1,
 		 ( cvalue != maxValue() ? ACS_UARROW : ' ' ) );
 }
-
 
 
 NCursesEvent NCIntField::wHandleInput( wint_t key )
@@ -286,7 +265,6 @@ NCursesEvent NCIntField::wHandleInput( wint_t key )
 		setValue( maxValue() );
 	    else
 		beep = true;
-
 	    break;
 
 	case KEY_END:
@@ -294,7 +272,6 @@ NCursesEvent NCIntField::wHandleInput( wint_t key )
 		setValue( minValue() );
 	    else
 		beep = true;
-
 	    break;
 
 	case L'0':
@@ -309,12 +286,10 @@ NCursesEvent NCIntField::wHandleInput( wint_t key )
 	case L'9':
 	case L'-':
 	    enterPopup( key );
-
 	    break;
 
 	case L'+':
 	    enterPopup();
-
 	    break;
 
 	case KEY_HOTKEY:
@@ -322,7 +297,6 @@ NCursesEvent NCIntField::wHandleInput( wint_t key )
 
 	default:
 	    beep = true;
-
 	    break;
     }
 
@@ -334,7 +308,6 @@ NCursesEvent NCIntField::wHandleInput( wint_t key )
 
     return ret;
 }
-
 
 
 int NCIntField::enterPopup( wchar_t first )

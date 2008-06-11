@@ -21,7 +21,6 @@
 #include "NCPopupTextEntry.h"
 
 
-
 NCPopupTextEntry::NCPopupTextEntry( const wpos at,
 				    const string & label,
 				    const string & text,
@@ -46,11 +45,9 @@ NCPopupTextEntry::NCPopupTextEntry( const wpos at,
 }
 
 
-
 NCPopupTextEntry::~NCPopupTextEntry()
 {
 }
-
 
 
 bool NCPopupTextEntry::postAgain()

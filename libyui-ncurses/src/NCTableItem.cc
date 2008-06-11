@@ -25,10 +25,6 @@
 using stdutil::form;
 
 
-
-
-
-
 NCTableCol::NCTableCol( const NCstring & l, const STYLE & st )
 	: label( l )
 	, style( st )
@@ -36,11 +32,9 @@ NCTableCol::NCTableCol( const NCstring & l, const STYLE & st )
 }
 
 
-
 NCTableCol::~NCTableCol()
 {
 }
-
 
 
 chtype NCTableCol::setBkgd( NCursesWindow & w,
@@ -57,7 +51,6 @@ chtype NCTableCol::setBkgd( NCursesWindow & w,
 
     return bkgdstyle;
 }
-
 
 
 void NCTableCol::DrawAt( NCursesWindow & w, const wrect at,
@@ -92,6 +85,7 @@ NCTableLine::NCTableLine( unsigned cols, int idx, const unsigned s )
 {
 }
 
+
 NCTableLine::NCTableLine( vector<NCTableCol*> & nItems, int idx, const unsigned s )
 	: Items( nItems )
 	, state( s )
@@ -99,6 +93,7 @@ NCTableLine::NCTableLine( vector<NCTableCol*> & nItems, int idx, const unsigned 
 	, vstate( S_HIDDEN )
 {
 }
+
 
 void NCTableLine::setOrigItem( YTableItem *it )
 {
@@ -113,13 +108,11 @@ NCTableLine::~NCTableLine()
 }
 
 
-
 void NCTableLine::assertCol( unsigned idx )
 {
     if ( idx >= Cols() )
 	SetCols( idx + 1 );
 }
-
 
 
 void NCTableLine::SetCols( unsigned idx )
@@ -137,6 +130,7 @@ void NCTableLine::SetCols( unsigned idx )
 
     Items.resize( idx, 0 );
 }
+
 
 void NCTableLine::stripHotkeys()
 {
@@ -156,14 +150,12 @@ void NCTableLine::SetCols( vector<NCTableCol*> & nItems )
 }
 
 
-
 void NCTableLine::AddCol( unsigned idx, NCTableCol * item )
 {
     assertCol( idx );
     delete Items[idx];
     Items[idx] = item;
 }
-
 
 
 void NCTableLine::DelCol( unsigned idx )
@@ -176,7 +168,6 @@ void NCTableLine::DelCol( unsigned idx )
 }
 
 
-
 NCTableCol * NCTableLine::GetCol( unsigned idx )
 {
     if ( idx < Cols() )
@@ -184,7 +175,6 @@ NCTableCol * NCTableLine::GetCol( unsigned idx )
 
     return 0;
 }
-
 
 
 void NCTableLine::UpdateFormat( NCTableStyle & tableStyle )
@@ -199,7 +189,6 @@ void NCTableLine::UpdateFormat( NCTableStyle & tableStyle )
 	tableStyle.MinColWidth( c, Items[c]->Size().W );
     }
 }
-
 
 
 void NCTableLine::DrawAt( NCursesWindow & w, const wrect at,
@@ -226,7 +215,6 @@ void NCTableLine::DrawAt( NCursesWindow & w, const wrect at,
 
     DrawItems( w, at, tableStyle, active );
 }
-
 
 
 void NCTableLine::DrawItems( NCursesWindow & w, const wrect at,
@@ -311,6 +299,7 @@ ostream & operator<<( ostream & STREAM, const NCTableLine & OBJ )
 
 
 
+
 void NCTableHead::DrawAt( NCursesWindow & w, const wrect at,
 			  NCTableStyle & tableStyle,
 			  bool active ) const
@@ -332,6 +321,7 @@ void NCTableHead::DrawAt( NCursesWindow & w, const wrect at,
 
 
 
+
 NCTableStyle::NCTableStyle( const NCWidget & p )
 	: headline( 0 )
 	, colWidth( 0 )
@@ -342,7 +332,6 @@ NCTableStyle::NCTableStyle( const NCWidget & p )
 	, hotCol(( unsigned ) - 1 )
 {
 }
-
 
 
 bool NCTableStyle::SetStyleFrom( const vector<NCstring> & head )
@@ -399,7 +388,6 @@ bool NCTableStyle::SetStyleFrom( const vector<NCstring> & head )
 }
 
 
-
 chtype NCTableStyle::highlightBG( const NCTableLine::STATE lstate,
 				  const NCTableCol::STYLE  cstyle,
 				  const NCTableCol::STYLE  dstyle ) const
@@ -414,7 +402,6 @@ chtype NCTableStyle::highlightBG( const NCTableLine::STATE lstate,
 
     return getBG( lstate, dstyle );
 }
-
 
 
 chtype NCTableStyle::getBG( const NCTableLine::STATE lstate,

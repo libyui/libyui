@@ -21,20 +21,15 @@
 #include "NCPopup.h"
 
 
-
-
 NCPopup::NCPopup( const wpos at, const bool boxed )
 	: NCDialog( YPopupDialog, at, boxed )
 {
-
 }
-
 
 
 NCPopup::~NCPopup()
 {
 }
-
 
 
 void NCPopup::popupDialog()
@@ -50,12 +45,10 @@ void NCPopup::popupDialog()
 }
 
 
-
 void NCPopup::popdownDialog()
 {
     closeDialog();
 }
-
 
 
 NCursesEvent NCPopup::wHandleInput( wint_t ch )
@@ -65,6 +58,7 @@ NCursesEvent NCPopup::wHandleInput( wint_t ch )
 
     return NCDialog::wHandleInput( ch );
 }
+
 
 int NCPopup::post( NCursesEvent * returnevent )
 {

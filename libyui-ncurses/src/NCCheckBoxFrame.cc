@@ -22,11 +22,10 @@
 #include "NCCheckBoxFrame.h"
 
 
-
 NCCheckBoxFrame::NCCheckBoxFrame( YWidget * parent, const string & nlabel,
 				  bool checked )
-	: YCheckBoxFrame( parent, nlabel, checked )
-	, NCWidget( parent )
+    : YCheckBoxFrame( parent, nlabel, checked )
+    , NCWidget( parent )
 {
     yuiDebug() << endl;
     wstate = NC::WSnormal;
@@ -41,9 +40,8 @@ NCCheckBoxFrame::NCCheckBoxFrame( YWidget * parent, const string & nlabel,
     else
 	setValue( checked );
 
-    // setEnabled(); is called in wRedraw()
+    // setEnabled() is called in wRedraw()
 }
-
 
 
 NCCheckBoxFrame::~NCCheckBoxFrame()
@@ -82,7 +80,6 @@ void NCCheckBoxFrame::setSize( int newwidth, int newheight )
 }
 
 
-
 void NCCheckBoxFrame::setLabel( const string & nlabel )
 {
     YCheckBoxFrame::setLabel( nlabel );
@@ -92,7 +89,6 @@ void NCCheckBoxFrame::setLabel( const string & nlabel )
 
     Redraw();
 }
-
 
 
 void NCCheckBoxFrame::setEnabled( bool do_bv )
@@ -113,7 +109,6 @@ void NCCheckBoxFrame::setEnabled( bool do_bv )
 }
 
 
-
 bool NCCheckBoxFrame::gotBuddy()
 {
     if ( !label.hasHotkey() )
@@ -129,7 +124,6 @@ bool NCCheckBoxFrame::gotBuddy()
 
     return false;
 }
-
 
 
 void NCCheckBoxFrame::wRedraw()
@@ -172,7 +166,6 @@ void NCCheckBoxFrame::wRedraw()
 }
 
 
-
 NCursesEvent NCCheckBoxFrame::wHandleInput( wint_t key )
 {
     NCursesEvent ret = NCursesEvent::handled;
@@ -203,7 +196,6 @@ NCursesEvent NCCheckBoxFrame::wHandleInput( wint_t key )
 }
 
 
-
 bool NCCheckBoxFrame::setKeyboardFocus()
 {
     if ( !grabFocus() )
@@ -211,6 +203,7 @@ bool NCCheckBoxFrame::setKeyboardFocus()
 
     return true;
 }
+
 
 bool NCCheckBoxFrame::value()
 {

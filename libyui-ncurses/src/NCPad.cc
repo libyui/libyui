@@ -21,7 +21,6 @@
 #include "NCPad.h"
 
 
-
 void NCPad::Destwin( NCursesWindow * dwin )
 {
     if ( dwin != destwin )
@@ -49,7 +48,6 @@ void NCPad::Destwin( NCursesWindow * dwin )
 }
 
 
-
 void NCPad::resize( wsze nsze )
 {
     SetPadSize( nsze ); // might be enlarged by NCPadWidget if redirected
@@ -70,13 +68,11 @@ void NCPad::resize( wsze nsze )
 }
 
 
-
 void NCPad::updateScrollHint()
 {
     NCScrollHint::VSet( srect.Sze.H + maxspos.L, srect.Sze.H, srect.Pos.L );
     NCScrollHint::HSet( srect.Sze.W + maxspos.C, srect.Sze.W, srect.Pos.C );
 }
-
 
 
 int NCPad::update()
@@ -104,7 +100,6 @@ int NCPad::update()
 }
 
 
-
 int NCPad::setpos( const wpos & newpos )
 {
     srect.Pos = newpos.between( 0, maxspos );
@@ -112,12 +107,10 @@ int NCPad::setpos( const wpos & newpos )
 }
 
 
-
 void NCPad::wRecoded()
 {
     yuiDebug() << "NCPad::wRecoded" << endl;
 }
-
 
 
 bool NCPad::handleInput( wint_t key )

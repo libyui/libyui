@@ -24,7 +24,6 @@
 #include "YMenuButton.h"
 
 
-
 NCPopupMenu::NCPopupMenu( const wpos at, YItemIterator begin, YItemIterator end )
 	: NCPopupTable( at )
 	, itemsMap()
@@ -51,12 +50,10 @@ NCPopupMenu::NCPopupMenu( const wpos at, YItemIterator begin, YItemIterator end 
 }
 
 
-
 NCPopupMenu::~NCPopupMenu()
 {
     itemsMap.clear();
 }
-
 
 
 NCursesEvent NCPopupMenu::wHandleInput( wint_t ch )
@@ -68,7 +65,7 @@ NCursesEvent NCPopupMenu::wHandleInput( wint_t ch )
 	case KEY_RIGHT:
 	    {
 		yuiDebug() << "CurrentItem: " << getCurrentItem() << endl;
-		YTableItem * tableItem = dynamic_cast<YTableItem *>( getCurrentItemPointer() );
+		YTableItem * tableItem = dynamic_cast<YTableItem *> ( getCurrentItemPointer() );
 
 		if ( tableItem )
 		{
@@ -93,7 +90,6 @@ NCursesEvent NCPopupMenu::wHandleInput( wint_t ch )
 
     return ret;
 }
-
 
 
 bool NCPopupMenu::postAgain()
@@ -138,3 +134,4 @@ bool NCPopupMenu::postAgain()
 
     return again;
 }
+

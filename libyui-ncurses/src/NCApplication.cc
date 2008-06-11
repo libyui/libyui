@@ -17,9 +17,7 @@
 
 /-*/
 
-
 #include <curses.h>
-
 
 #define  YUILogComponent "ncurses"
 #include <YUILog.h>
@@ -40,7 +38,6 @@ NCApplication::~NCApplication()
 {
 
 }
-
 
 void
 NCApplication::setLanguage( const string & language,
@@ -197,11 +194,13 @@ NCApplication::displayWidth()
     return ::COLS;	// exported from ncurses.h
 }
 
+
 int
 NCApplication::displayHeight()
 {
     return ::LINES;	// exported from ncurses.h
 }
+
 
 int
 NCApplication::displayDepth()
@@ -209,11 +208,13 @@ NCApplication::displayDepth()
     return -1;
 }
 
+
 long
 NCApplication::displayColors()
 {
     return NCattribute::colors();
 }
+
 
 int
 NCApplication::defaultWidth()
@@ -221,11 +222,13 @@ NCApplication::defaultWidth()
     return ::COLS;	// exported from ncurses.h
 }
 
+
 int
 NCApplication::defaultHeight()
 {
     return ::LINES;	// exported from ncurses.h
 }
+
 
 bool
 NCApplication::hasFullUtf8Support()

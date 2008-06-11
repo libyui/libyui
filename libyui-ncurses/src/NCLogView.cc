@@ -21,7 +21,6 @@
 #include "NCLogView.h"
 
 
-
 NCLogView::NCLogView( YWidget * parent,
 		      const string & nlabel,
 		      int visibleLines,
@@ -35,11 +34,11 @@ NCLogView::NCLogView( YWidget * parent,
 }
 
 
-
 NCLogView::~NCLogView()
 {
     yuiDebug() << endl;
 }
+
 
 int NCLogView::preferredWidth()
 {
@@ -47,10 +46,12 @@ int NCLogView::preferredWidth()
     return wGetDefsze().W;
 }
 
+
 int NCLogView::preferredHeight()
 {
     return wGetDefsze().H;
 }
+
 
 void NCLogView::setEnabled( bool do_bv )
 {
@@ -59,12 +60,10 @@ void NCLogView::setEnabled( bool do_bv )
 }
 
 
-
 void NCLogView::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
-
 
 
 void NCLogView::setLabel( const string & nlabel )
@@ -74,14 +73,12 @@ void NCLogView::setLabel( const string & nlabel )
 }
 
 
-
 void NCLogView::displayLogText( const string & ntext )
 {
     DelPad();
     text = NCtext( NCstring( ntext ), Columns() );
     Redraw();
 }
-
 
 
 void NCLogView::wRedraw()
@@ -101,13 +98,11 @@ void NCLogView::wRedraw()
 }
 
 
-
 void NCLogView::wRecoded()
 {
     DelPad();
     wRedraw();
 }
-
 
 
 NCursesEvent NCLogView::wHandleInput( wint_t key )
@@ -117,7 +112,6 @@ NCursesEvent NCLogView::wHandleInput( wint_t key )
 }
 
 
-
 NCPad * NCLogView::CreatePad()
 {
     wsze psze( defPadSze() );
@@ -125,7 +119,6 @@ NCPad * NCLogView::CreatePad()
     npad->bkgd( listStyle().item.plain );
     return npad;
 }
-
 
 
 void NCLogView::DrawPad()

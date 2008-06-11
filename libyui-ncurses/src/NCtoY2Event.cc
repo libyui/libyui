@@ -17,7 +17,6 @@
 
 /-*/
 
-
 #include "NCtoY2Event.h"
 #include "NCWidget.h"
 

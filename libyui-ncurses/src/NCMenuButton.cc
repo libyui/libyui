@@ -23,7 +23,6 @@
 #include "NCPopupMenu.h"
 
 
-
 NCMenuButton::NCMenuButton( YWidget * parent,
 			    string nlabel )
 	: YMenuButton( parent, nlabel )
@@ -35,21 +34,23 @@ NCMenuButton::NCMenuButton( YWidget * parent,
 }
 
 
-
 NCMenuButton::~NCMenuButton()
 {
     yuiDebug() << endl;
 }
+
 
 int NCMenuButton::preferredWidth()
 {
     return wGetDefsze().W;
 }
 
+
 int NCMenuButton::preferredHeight()
 {
     return wGetDefsze().H;
 }
+
 
 void NCMenuButton::setEnabled( bool do_bv )
 {
@@ -58,12 +59,10 @@ void NCMenuButton::setEnabled( bool do_bv )
 }
 
 
-
 void NCMenuButton::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
-
 
 
 NCursesEvent NCMenuButton::wHandleInput( wint_t key )
@@ -84,7 +83,6 @@ NCursesEvent NCMenuButton::wHandleInput( wint_t key )
 }
 
 
-
 void NCMenuButton::setLabel( const string & nlabel )
 {
     label = NCstring( nlabel );
@@ -93,7 +91,6 @@ void NCMenuButton::setLabel( const string & nlabel )
     YMenuButton::setLabel( nlabel );
     Redraw();
 }
-
 
 
 void NCMenuButton::wRedraw()
@@ -125,12 +122,10 @@ void NCMenuButton::wRedraw()
 }
 
 
-
 void NCMenuButton::rebuildMenuTree()
 {
     // NOP
 }
-
 
 
 NCursesEvent NCMenuButton::postMenu()
@@ -150,11 +145,10 @@ NCursesEvent NCMenuButton::postMenu()
     }
 
     NCursesEvent ret = NCursesEvent::menu;
-
     ret.selection = findMenuItem( selection );
-
     YDialog::deleteTopmostDialog();
 
     return ret;
 }
+
 

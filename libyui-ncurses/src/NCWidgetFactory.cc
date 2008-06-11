@@ -17,7 +17,6 @@
 
 /-*/
 
-
 #include "NCWidgetFactory.h"
 #include "YUIException.h"
 

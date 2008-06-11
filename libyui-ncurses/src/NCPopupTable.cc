@@ -24,7 +24,6 @@
 #include "YMenuButton.h"
 
 
-
 NCPopupTable::NCPopupTable( const wpos at )
 	: NCPopup( at, false )
 	, sellist( 0 )
@@ -32,11 +31,9 @@ NCPopupTable::NCPopupTable( const wpos at )
 }
 
 
-
 NCPopupTable::~NCPopupTable()
 {
 }
-
 
 
 void NCPopupTable::createList( vector<string> & row )
@@ -52,18 +49,11 @@ void NCPopupTable::createList( vector<string> & row )
     YUI_CHECK_NEW( sellist );
 
     sellist->setBigList( true );
-
     sellist->SetSepChar( ' ' );
-
     sellist->SetSepWidth( 0 );
-
     sellist->SetHotCol( 0 );
-
     sellist->setNotify( true );
-
-
 }
-
 
 
 void NCPopupTable::addItem( YItem *yitem )
@@ -80,7 +70,6 @@ void NCPopupTable::addItem( YItem *yitem )
 }
 
 
-
 void NCPopupTable::setCurrentItem( int index )
 {
     if ( !sellist )
@@ -88,7 +77,6 @@ void NCPopupTable::setCurrentItem( int index )
 
     sellist->setCurrentItem( index );
 }
-
 
 
 int NCPopupTable::getCurrentItem() const
@@ -99,6 +87,7 @@ int NCPopupTable::getCurrentItem() const
     return sellist->getCurrentItem();
 }
 
+
 YItem * NCPopupTable::getCurrentItemPointer( ) const
 {
     if ( !sellist )
@@ -106,7 +95,6 @@ YItem * NCPopupTable::getCurrentItemPointer( ) const
 
     return sellist->getCurrentItemPointer( );
 }
-
 
 
 NCursesEvent NCPopupTable::wHandleHotkey( wint_t key )
@@ -118,17 +106,17 @@ NCursesEvent NCPopupTable::wHandleHotkey( wint_t key )
 }
 
 
-
 bool NCPopupTable::postAgain()
 {
     if ( sellist )
     {
 	postevent.detail = ( postevent == NCursesEvent::button ) ?
-			   sellist->getCurrentItem() : NCursesEvent::NODETAIL;
+	    sellist->getCurrentItem() : NCursesEvent::NODETAIL;
     }
 
     return false;
 }
+
 
 void NCPopupTable::stripHotkeys()
 {

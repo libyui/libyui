@@ -25,12 +25,12 @@
     return 0
 
 
-
 NCOptionalWidgetFactory::NCOptionalWidgetFactory()
 	: YOptionalWidgetFactory()
 {
     // NOP
 }
+
 
 NCOptionalWidgetFactory::~NCOptionalWidgetFactory()
 {

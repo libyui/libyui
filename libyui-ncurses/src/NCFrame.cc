@@ -22,7 +22,6 @@
 #include "NCFrame.h"
 
 
-
 NCFrame::NCFrame( YWidget * parent, const string & nlabel )
 	: YFrame( parent, nlabel )
 	, NCWidget( parent )
@@ -83,7 +82,7 @@ void NCFrame::setLabel( const string & nlabel )
 
 void NCFrame::setEnabled( bool do_bv )
 {
-    //Use setEnabled() from the parent, it should work out (#256707) :-)
+    // Use setEnabled() from the parent, it should work out (#256707) :-)
     NCWidget::setEnabled( do_bv );
     YFrame::setEnabled( do_bv );
 }

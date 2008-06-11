@@ -33,17 +33,18 @@ NCSelectionBox::NCSelectionBox( YWidget * parent, const string & nlabel )
 }
 
 
-
 NCSelectionBox::~NCSelectionBox()
 {
     yuiDebug() << endl;
 }
+
 
 int NCSelectionBox::preferredWidth()
 {
     wsze sze = ( biglist ) ? myPad()->tableSize() + 2 : wGetDefsze();
     return sze.W > ( int )( labelWidth() + 2 ) ? sze.W : ( labelWidth() + 2 );
 }
+
 
 int NCSelectionBox::preferredHeight()
 {
@@ -52,18 +53,17 @@ int NCSelectionBox::preferredHeight()
 }
 
 
-
 void NCSelectionBox::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
+
 
 void NCSelectionBox::setEnabled( bool do_bv )
 {
     NCWidget::setEnabled( do_bv );
     YSelectionBox::setEnabled( do_bv );
 }
-
 
 
 int NCSelectionBox::getCurrentItem()
@@ -75,7 +75,6 @@ int NCSelectionBox::getCurrentItem()
 
     return myPad()->CurPos().L;
 }
-
 
 
 string NCSelectionBox::getLine( const int & index )
@@ -102,12 +101,10 @@ string NCSelectionBox::getLine( const int & index )
 }
 
 
-
 void NCSelectionBox::setCurrentItem( int index )
 {
     myPad()->ScrlLine( index );
 }
-
 
 
 void NCSelectionBox::selectItem( YItem *item, bool selected )
@@ -116,6 +113,7 @@ void NCSelectionBox::selectItem( YItem *item, bool selected )
 
     myPad()->ScrlLine( selected ? item->index() : -1 );
 }
+
 
 void NCSelectionBox::selectItem( int index )
 {
@@ -136,7 +134,6 @@ void NCSelectionBox::selectItem( int index )
 }
 
 
-
 void NCSelectionBox::addItem( YItem * item )
 {
     vector<NCTableCol*> Items( 1U, 0 );
@@ -153,11 +150,11 @@ void NCSelectionBox::addItem( YItem * item )
     }
 }
 
+
 void NCSelectionBox::addItem( const string & description, bool selected )
 {
     YSelectionWidget::addItem( description, selected );
 }
-
 
 
 void NCSelectionBox::setLabel( const string & nlabel )
@@ -165,7 +162,6 @@ void NCSelectionBox::setLabel( const string & nlabel )
     YSelectionBox::setLabel( nlabel );
     NCPadWidget::setLabel( NCstring( nlabel ) );
 }
-
 
 
 NCPad * NCSelectionBox::CreatePad()
@@ -178,12 +174,10 @@ NCPad * NCSelectionBox::CreatePad()
 }
 
 
-
 void NCSelectionBox::wRecoded()
 {
     NCPadWidget::wRecoded();
 }
-
 
 
 NCursesEvent NCSelectionBox::wHandleInput( wint_t key )
@@ -242,9 +236,9 @@ NCursesEvent NCSelectionBox::wHandleInput( wint_t key )
 }
 
 
-
-// cleares the table and the lists holding
-//		      the values
+/**
+ * Clear the table and the lists holding the values
+ **/
 void NCSelectionBox::deleteAllItems()
 {
     YSelectionBox::deleteAllItems();

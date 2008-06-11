@@ -22,9 +22,7 @@
 #include "NCCheckBox.h"
 
 
-
 unsigned char NCCheckBox::statetag[3] = { '?', ' ', 'x' };
-
 
 
 NCCheckBox::NCCheckBox( YWidget * parent,
@@ -41,21 +39,23 @@ NCCheckBox::NCCheckBox( YWidget * parent,
 }
 
 
-
 NCCheckBox::~NCCheckBox()
 {
     yuiDebug() << endl;
 }
+
 
 int NCCheckBox::preferredWidth()
 {
     return wGetDefsze().W;
 }
 
+
 int NCCheckBox::preferredHeight()
 {
     return wGetDefsze().H;
 }
+
 
 void NCCheckBox::setEnabled( bool do_bv )
 {
@@ -64,15 +64,12 @@ void NCCheckBox::setEnabled( bool do_bv )
 }
 
 
-
 void NCCheckBox::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
 
-
-// set label
 void NCCheckBox::setLabel( const string & nlabel )
 {
     label  = NCstring( nlabel );
@@ -81,7 +78,6 @@ void NCCheckBox::setLabel( const string & nlabel )
     YCheckBox::setLabel( nlabel );
     Redraw();
 }
-
 
 
 void NCCheckBox::setValue( YCheckBoxState state )
@@ -108,7 +104,6 @@ void NCCheckBox::setValue( YCheckBoxState state )
 }
 
 
-
 YCheckBoxState NCCheckBox::value()
 {
     if ( checkstate == S_DC )
@@ -119,7 +114,6 @@ YCheckBoxState NCCheckBox::value()
     else
 	return YCheckBox_off;
 }
-
 
 
 void NCCheckBox::wRedraw()
@@ -141,7 +135,6 @@ void NCCheckBox::wRedraw()
 }
 
 
-
 NCursesEvent NCCheckBox::wHandleInput( wint_t key )
 {
     NCursesEvent ret;
@@ -149,9 +142,7 @@ NCursesEvent NCCheckBox::wHandleInput( wint_t key )
     switch ( key )
     {
 	case KEY_HOTKEY:
-
 	case KEY_SPACE:
-
 	case KEY_RETURN:
 
 	    switch ( checkstate )
@@ -179,4 +170,3 @@ NCursesEvent NCCheckBox::wHandleInput( wint_t key )
 
     return ret;
 }
-

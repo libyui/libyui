@@ -22,7 +22,6 @@
 #include "NCImage.h"
 
 
-
 NCImage::NCImage( YWidget * parent, string defaulttext, bool animated )
 	: YImage( parent, defaulttext, animated )
 	, NCWidget( parent )
@@ -33,7 +32,6 @@ NCImage::NCImage( YWidget * parent, string defaulttext, bool animated )
     wstate = NC::WSdumb;
     skipNoDimWin = true;
 }
-
 
 
 NCImage::~NCImage()

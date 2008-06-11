@@ -22,7 +22,6 @@
 #include "NCProgressBar.h"
 
 
-
 NCProgressBar::NCProgressBar( YWidget * parent,
 			      const string & nlabel,
 			      int maxValue )
@@ -47,7 +46,6 @@ NCProgressBar::NCProgressBar( YWidget * parent,
     //setProgress( progress );
     wstate = NC::WSdumb;
 }
-
 
 
 NCProgressBar::~NCProgressBar()

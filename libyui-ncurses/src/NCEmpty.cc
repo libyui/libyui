@@ -22,7 +22,6 @@
 #include "NCEmpty.h"
 
 
-
 NCEmpty::NCEmpty( YWidget * parent )
 	: YEmpty( parent )
 	, NCWidget( parent )
@@ -32,18 +31,17 @@ NCEmpty::NCEmpty( YWidget * parent )
 }
 
 
-
 NCEmpty::~NCEmpty()
 {
     yuiDebug() << endl;
 }
 
 
-
 void NCEmpty::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
+
 
 void NCEmpty::setEnabled( bool do_bv )
 {

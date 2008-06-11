@@ -16,7 +16,6 @@
 
 /-*/
 
-
 #include <iostream>
 
 #define  YUILogComponent "ncurses"

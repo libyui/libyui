@@ -19,7 +19,6 @@
 #include <fstream>
 #include "fnmatch.h"
 
-
 #define  YUILogComponent "ncurses"
 #include <YUILog.h>
 #include "NCurses.h"

@@ -26,12 +26,12 @@
 #include "NCLayoutBox.h"
 #include "NCSpacing.h"
 
+
 namespace
 {
     const string idOk( "ok" );
     const string idCancel( "cancel" );
 }
-
 
 
 NCPopupInfo::NCPopupInfo( const wpos at,
@@ -51,11 +51,9 @@ NCPopupInfo::NCPopupInfo( const wpos at,
 }
 
 
-
 NCPopupInfo::~NCPopupInfo()
 {
 }
-
 
 
 void NCPopupInfo::createLayout( const string & headline,
@@ -98,7 +96,6 @@ void NCPopupInfo::createLayout( const string & headline,
     }
 
 }
-
 
 
 NCursesEvent & NCPopupInfo::showInfoPopup( )
@@ -169,7 +166,6 @@ NCPopupInfo::wHandleInput( wint_t ch )
 }
 
 
-
 bool NCPopupInfo::postAgain()
 {
     if ( ! postevent.widget )
@@ -195,4 +191,5 @@ bool NCPopupInfo::postAgain()
 
     return true;
 }
+
 

@@ -39,30 +39,28 @@
 */
 
 
-
-
 NCAskForFile::NCAskForFile( const wpos at,
 			    const string & iniDir,
 			    const string & filter,
 			    const string & headline )
-	: NCPopup( at, true )
-	, okButton( 0 )
-	, cancelButton( 0 )
-	, dirName( 0 )
-	, dirList( 0 )
-	, detailed( 0 )
-	, fileList( 0 )
-	, fileName( 0 )
+    : NCPopup( at, true )
+    , okButton( 0 )
+    , cancelButton( 0 )
+    , dirName( 0 )
+    , dirList( 0 )
+    , detailed( 0 )
+    , fileList( 0 )
+    , fileName( 0 )
 {
     setTextdomain( "ncurses" );
 }
-
 
 
 NCAskForFile::~NCAskForFile( )
 {
 
 }
+
 
 string NCAskForFile::checkIniDir( string iniDir )
 {
@@ -97,8 +95,6 @@ string NCAskForFile::checkIniDir( string iniDir )
 
     return dname;
 }
-
-
 
 
 void NCAskForFile::createLayout( const string & iniDir,
@@ -201,7 +197,7 @@ void NCAskForFile::createLayout( const string & iniDir,
     new NCSpacing( hSplit3, YD_HORIZ, true, 0.2 );
 }
 
-// NCursesEvent & showDirPopup ()
+
 NCursesEvent & NCAskForFile::showDirPopup( )
 {
     postevent = NCursesEvent();
@@ -210,11 +206,8 @@ NCursesEvent & NCAskForFile::showDirPopup( )
 	return postevent;
 
     dirList->fillList();
-
     fileList->fillList();
-
     dirList->setKeyboardFocus();
-
     dirName->addItem( dirList->getCurrentDir(),
 		      true );		 // selected
 
@@ -230,16 +223,17 @@ NCursesEvent & NCAskForFile::showDirPopup( )
     return postevent;
 }
 
+
 int NCAskForFile::preferredWidth()
 {
     return  NCurses::cols() - 10;
 }
 
+
 int NCAskForFile::preferredHeight()
 {
     return NCurses::lines() - 4;
 }
-
 
 
 NCursesEvent NCAskForFile::wHandleInput( wint_t ch )
@@ -249,7 +243,6 @@ NCursesEvent NCAskForFile::wHandleInput( wint_t ch )
 
     return NCDialog::wHandleInput( ch );
 }
-
 
 
 void NCAskForFile::updateFileList()
@@ -262,7 +255,6 @@ void NCAskForFile::updateFileList()
 	// show the currently selected file
 	fileName->setValue( fileList->getCurrentFile() );
 }
-
 
 
 bool NCAskForFile::postAgain( )
@@ -355,7 +347,6 @@ bool NCAskForFile::postAgain( )
 }
 
 
-
 bool NCAskForFile::getCheckBoxValue( NCCheckBox * checkBox )
 {
     if ( checkBox )
@@ -368,19 +359,17 @@ bool NCAskForFile::getCheckBoxValue( NCCheckBox * checkBox )
 }
 
 
-
 NCAskForExistingFile::NCAskForExistingFile( const wpos at,
 					    const string & iniDir,
 					    const string & filter,
 					    const string & headline )
-	: NCAskForFile( at, iniDir, filter, headline )
+    : NCAskForFile( at, iniDir, filter, headline )
 {
     createLayout( iniDir,
 		  filter,
 		  headline,
 		  false );	// file name is not editable
 }
-
 
 
 string NCAskForExistingFile::getFileName()
@@ -392,19 +381,17 @@ string NCAskForExistingFile::getFileName()
 }
 
 
-
 NCAskForSaveFileName::NCAskForSaveFileName( const wpos at,
 					    const string & iniDir,
 					    const string & filter,
 					    const string & headline )
-	: NCAskForFile( at, iniDir, filter, headline )
+    : NCAskForFile( at, iniDir, filter, headline )
 {
     createLayout( iniDir,
 		  filter,
 		  headline,
 		  true );	// file name is editable
 }
-
 
 
 string NCAskForSaveFileName::getFileName()

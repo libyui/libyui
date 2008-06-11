@@ -16,7 +16,6 @@
 
 /-*/
 
-
 #define	 YUILogComponent "ncurses"
 #include <YUILog.h>
 #include "NCRichText.h"
@@ -31,12 +30,10 @@
 using stdutil::form;
 
 
-
 const unsigned NCRichText::listindent = 4;
 const wstring	NCRichText::listleveltags( L"@*+o#-%$&" );//
 
 const bool NCRichText::showLinkTarget = false;
-
 
 std::map<std::wstring, std::wstring> NCRichText::_charentity;
 
@@ -105,8 +102,10 @@ const wstring NCRichText::entityLookup( const std::wstring & val_r )
 
 
 
-// Filter out the known &...; entities, return
-//		      the text with entities replaced
+/**
+ * Filter out the known &...; entities and return the text with entities
+ * replaced  
+ **/
 const wstring NCRichText::filterEntities( const std::wstring & text )
 {
     wstring txt = text;
@@ -136,8 +135,6 @@ const wstring NCRichText::filterEntities( const std::wstring & text )
 }
 
 
-
-
 void NCRichText::Anchor::draw( NCPad & pad, const chtype attr, int color )
 {
     unsigned l = sline;
@@ -157,7 +154,6 @@ void NCRichText::Anchor::draw( NCPad & pad, const chtype attr, int color )
 }
 
 
-
 NCRichText::NCRichText( YWidget * parent, const string & ntext,
 			bool plainTextMode )
 	: YRichText( parent, ntext, plainTextMode )
@@ -173,21 +169,23 @@ NCRichText::NCRichText( YWidget * parent, const string & ntext,
 }
 
 
-
 NCRichText::~NCRichText()
 {
     yuiDebug() << endl;
 }
+
 
 int NCRichText::preferredWidth()
 {
     return wGetDefsze().W;
 }
 
+
 int NCRichText::preferredHeight()
 {
     return wGetDefsze().H;
 }
+
 
 void NCRichText::setEnabled( bool do_bv )
 {
@@ -196,12 +194,10 @@ void NCRichText::setEnabled( bool do_bv )
 }
 
 
-
 void NCRichText::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
-
 
 
 void NCRichText::setLabel( const string & nlabel )
@@ -211,7 +207,6 @@ void NCRichText::setLabel( const string & nlabel )
 }
 
 
-
 void NCRichText::setValue( const string & ntext )
 {
     DelPad();
@@ -219,7 +214,6 @@ void NCRichText::setValue( const string & ntext )
     YRichText::setValue( ntext );
     Redraw();
 }
-
 
 
 void NCRichText::wRedraw()
@@ -243,13 +237,11 @@ void NCRichText::wRedraw()
 }
 
 
-
 void NCRichText::wRecoded()
 {
     DelPad();
     wRedraw();
 }
-
 
 
 NCursesEvent NCRichText::wHandleInput( wint_t key )
@@ -281,7 +273,6 @@ NCursesEvent NCRichText::wHandleInput( wint_t key )
 }
 
 
-
 NCPad * NCRichText::CreatePad()
 {
     wsze psze( defPadSze() );
@@ -289,7 +280,6 @@ NCPad * NCRichText::CreatePad()
     NCPad * npad = new NCPad( psze.H, textwidth, *this );
     return npad;
 }
-
 
 
 void NCRichText::DrawPad()
@@ -311,7 +301,6 @@ void NCRichText::DrawPad()
 }
 
 
-
 void NCRichText::DrawPlainPad()
 {
     NCtext ftext( text );
@@ -327,7 +316,6 @@ void NCRichText::DrawPlainPad()
 	myPad()->addwstr( cl, 0, ( *line ).str().c_str() );
     }
 }
-
 
 
 void NCRichText::PadPlainTXT( const wchar_t * osch, const unsigned olen )
@@ -359,7 +347,11 @@ void NCRichText::PadPlainTXT( const wchar_t * osch, const unsigned olen )
 }
 
 
+
+//
 // DrawHTMLPad tools
+//
+
 inline void SkipToken( const wchar_t *& wch )
 {
     do
@@ -372,7 +364,10 @@ inline void SkipToken( const wchar_t *& wch )
 	++wch;
 }
 
+
 static wstring WStoken( L" \n\t\v\r" );
+
+
 inline void SkipWS( const wchar_t *& wch )
 {
     do
@@ -382,7 +377,10 @@ inline void SkipWS( const wchar_t *& wch )
     while ( *wch && WStoken.find( *wch ) != wstring::npos );
 }
 
+
 static wstring WDtoken( L" <\n\t\v\r" ); // WS + TokenStart '<'
+
+
 inline void SkipWord( const wchar_t *& wch )
 {
     do
@@ -391,6 +389,7 @@ inline void SkipWord( const wchar_t *& wch )
     }
     while ( *wch && WDtoken.find( *wch ) == wstring::npos );
 }
+
 
 inline void SkipPreTXT( const wchar_t *& wch )
 {
@@ -403,6 +402,7 @@ inline void SkipPreTXT( const wchar_t *& wch )
     }
     while ( *wch && wstr != L"</pre>" );
 }
+
 
 
 
@@ -493,7 +493,6 @@ void NCRichText::DrawHTMLPad()
 }
 
 
-
 inline void NCRichText::PadNL()
 {
     cc = cindent;
@@ -509,13 +508,11 @@ inline void NCRichText::PadNL()
 }
 
 
-
 inline void NCRichText::PadBOL()
 {
     if ( !atbol )
 	PadNL();
 }
-
 
 
 inline void NCRichText::PadWS( const bool tab )
@@ -533,7 +530,6 @@ inline void NCRichText::PadWS( const bool tab )
 	++cc;
     }
 }
-
 
 
 inline void NCRichText::PadTXT( const wchar_t * osch, const unsigned olen )
@@ -566,7 +562,6 @@ inline void NCRichText::PadTXT( const wchar_t * osch, const unsigned olen )
 }
 
 
-
 size_t NCRichText::textWidth( wstring wstr )
 {
     size_t len = 0;
@@ -581,8 +576,9 @@ size_t NCRichText::textWidth( wstring wstr )
 }
 
 
-
-// Set character attributes (e.g. color, font face...)
+/**
+ * Set character attributes (e.g. color, font face...)
+ **/
 inline void NCRichText::PadSetAttr()
 {
     const NCstyle::StRichtext & style( wStyle().richtext );
@@ -634,7 +630,6 @@ inline void NCRichText::PadSetAttr()
 }
 
 
-
 void NCRichText::PadSetLevel()
 {
     cindent = listindent * liststack.size();
@@ -648,7 +643,6 @@ void NCRichText::PadSetLevel()
 	myPad()->move( cl, cc );
     }
 }
-
 
 
 void NCRichText::PadChangeLevel( bool down, int tag )
@@ -665,7 +659,6 @@ void NCRichText::PadChangeLevel( bool down, int tag )
 
     PadSetLevel();
 }
-
 
 
 void NCRichText::openAnchor( wstring args )
@@ -731,7 +724,6 @@ void NCRichText::openAnchor( wstring args )
 }
 
 
-
 void NCRichText::closeAnchor()
 {
     canchor.close( cl, cc );
@@ -741,7 +733,6 @@ void NCRichText::closeAnchor()
 
     canchor = Anchor();
 }
-
 
 
 // expect "<[/]value>"
@@ -992,7 +983,6 @@ bool NCRichText::PadTOKEN( const wchar_t * sch, const wchar_t *& ech )
 }
 
 
-
 void NCRichText::arm( unsigned i )
 {
     if ( !myPad() )
@@ -1041,13 +1031,11 @@ void NCRichText::arm( unsigned i )
 }
 
 
-
 void NCRichText::HScroll( unsigned total, unsigned visible, unsigned start )
 {
     NCPadWidget::HScroll( total, visible, start );
     // no hyperlink handling needed, because Ritchtext does not HScroll
 }
-
 
 
 void NCRichText::VScroll( unsigned total, unsigned visible, unsigned start )
@@ -1080,7 +1068,6 @@ void NCRichText::VScroll( unsigned total, unsigned visible, unsigned start )
 	}
     }
 }
-
 
 
 bool NCRichText::handleInput( wint_t key )
@@ -1209,4 +1196,5 @@ bool NCRichText::handleInput( wint_t key )
 
     return handled;
 }
+
 

@@ -39,28 +39,24 @@
 
 
 
-
 NCAskForExistingDirectory::NCAskForExistingDirectory( const wpos at,
 						      const string & iniDir,
 						      const string & headline )
-	: NCPopup( at, true )
-	, okButton( 0 )
-	, cancelButton( 0 )
-	, dirName( 0 )
-	, dirList( 0 )
-	, detailed( 0 )
+    : NCPopup( at, true )
+    , okButton( 0 )
+    , cancelButton( 0 )
+    , dirName( 0 )
+    , dirList( 0 )
+    , detailed( 0 )
 {
     createLayout( iniDir, headline );
     setTextdomain( "ncurses" );
 }
 
 
-
 NCAskForExistingDirectory::~NCAskForExistingDirectory()
 {
-
 }
-
 
 
 void NCAskForExistingDirectory::createLayout( const string & iniDir,
@@ -119,7 +115,7 @@ void NCAskForExistingDirectory::createLayout( const string & iniDir,
     new NCSpacing( hSplit1, YD_HORIZ, true, 0.2 );
 }
 
-// NCursesEvent & showDirPopup ()
+
 NCursesEvent & NCAskForExistingDirectory::showDirPopup( )
 {
     postevent = NCursesEvent();
@@ -147,17 +143,17 @@ NCursesEvent & NCAskForExistingDirectory::showDirPopup( )
     return postevent;
 }
 
+
 int NCAskForExistingDirectory::preferredWidth()
 {
     return NCurses::cols() - 10;
 }
 
+
 int NCAskForExistingDirectory::preferredHeight()
 {
     return NCurses::lines() - 4;
 }
-
-
 
 
 NCursesEvent NCAskForExistingDirectory::wHandleInput( wint_t ch )
@@ -167,7 +163,6 @@ NCursesEvent NCAskForExistingDirectory::wHandleInput( wint_t ch )
 
     return NCDialog::wHandleInput( ch );
 }
-
 
 
 bool NCAskForExistingDirectory::postAgain( )
@@ -235,7 +230,6 @@ bool NCAskForExistingDirectory::postAgain( )
 
     return true;
 }
-
 
 
 bool NCAskForExistingDirectory::getCheckBoxValue( NCCheckBox * checkBox )

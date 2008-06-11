@@ -22,7 +22,6 @@
 #include "NCRadioButtonGroup.h"
 
 
-
 NCRadioButtonGroup::NCRadioButtonGroup( YWidget * parent )
 	: YRadioButtonGroup( parent )
 	, NCWidget( parent )
@@ -33,12 +32,10 @@ NCRadioButtonGroup::NCRadioButtonGroup( YWidget * parent )
 }
 
 
-
 NCRadioButtonGroup::~NCRadioButtonGroup()
 {
     yuiDebug() << endl;
 }
-
 
 
 void NCRadioButtonGroup::setSize( int newwidth, int newheight )
@@ -48,19 +45,16 @@ void NCRadioButtonGroup::setSize( int newwidth, int newheight )
 }
 
 
-
 void NCRadioButtonGroup::addRadioButton( YRadioButton *button )
 {
     YRadioButtonGroup::addRadioButton( button );
 }
 
 
-
 void NCRadioButtonGroup::removeRadioButton( YRadioButton *button )
 {
     YRadioButtonGroup::removeRadioButton( button );
 }
-
 
 
 void NCRadioButtonGroup::focusNextButton( )
@@ -87,7 +81,6 @@ void NCRadioButtonGroup::focusNextButton( )
 }
 
 
-
 void NCRadioButtonGroup::focusPrevButton()
 {
     int n = 0;
@@ -112,6 +105,7 @@ void NCRadioButtonGroup::focusPrevButton()
 	}
     }
 }
+
 
 void NCRadioButtonGroup::setEnabled( bool do_bv )
 {

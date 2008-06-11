@@ -20,7 +20,6 @@
 #include <iconv.h>
 #include <malloc.h>
 
-
 #define  YUILogComponent "ncurses"
 #include <YUILog.h>
 #include "NCstring.h"

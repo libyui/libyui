@@ -20,9 +20,9 @@
 #include <YUILog.h>
 #include "NCPadWidget.h"
 
+
 class NCScrollbar
 {
-
 public:
 
     enum orientation { HORZ, VERT };
@@ -265,6 +265,7 @@ NCPadWidget::NCPadWidget( NCWidget * myparent )
     defsze = wsze( 3, 10 ) + 2;
 }
 
+
 NCPadWidget::NCPadWidget( YWidget * myparent )
 	: NCWidget( myparent )
 	, padwin( 0 )
@@ -281,7 +282,6 @@ NCPadWidget::NCPadWidget( YWidget * myparent )
 }
 
 
-
 NCPadWidget::~NCPadWidget()
 {
     delete pad;
@@ -293,9 +293,6 @@ NCPadWidget::~NCPadWidget()
 }
 
 
-
-// assert (padwin != 0) if (win != 0)
-//		      (padwin must be subwin or ==win)
 void NCPadWidget::wCreate( const wrect & newrect )
 {
     NCWidget::wCreate( newrect );
@@ -332,7 +329,6 @@ void NCPadWidget::wCreate( const wrect & newrect )
 }
 
 
-
 void NCPadWidget::wDelete()
 {
     if ( pad )
@@ -359,21 +355,16 @@ void NCPadWidget::wDelete()
 }
 
 
-
 void NCPadWidget::InitPad()
 {
     if ( pad )
 	return;
 
     pad = CreatePad();
-
     pad->SendSchrollCB( this );
-
     AdjustPad( wsze( pad->height(), pad->width() ) );
-
     DrawPad();
 }
-
 
 
 void NCPadWidget::AdjustPadSize( wsze & minsze )
@@ -381,7 +372,6 @@ void NCPadWidget::AdjustPadSize( wsze & minsze )
     minPadSze = minsze;
     minsze    = wsze::max( minsze, defPadSze() );
 }
-
 
 
 void NCPadWidget::AdjustPad( wsze nsze )
@@ -393,13 +383,11 @@ void NCPadWidget::AdjustPad( wsze nsze )
 }
 
 
-
 void NCPadWidget::DelPad()
 {
     delete pad;
     pad = 0;
 }
-
 
 
 void NCPadWidget::setLabel( const NClabel & nlabel )
@@ -408,7 +396,6 @@ void NCPadWidget::setLabel( const NClabel & nlabel )
     label.stripHotkey();
     Redraw();
 }
-
 
 
 void NCPadWidget::wRedraw()
@@ -442,7 +429,6 @@ void NCPadWidget::wRedraw()
 }
 
 
-
 void NCPadWidget::wRecoded()
 {
     if ( pad )
@@ -452,17 +438,16 @@ void NCPadWidget::wRecoded()
 }
 
 
-
 void NCPadWidget::HScroll( unsigned total, unsigned visible, unsigned start )
 {
     hsb->set( total, visible, start );
 }
 
+
 void NCPadWidget::VScroll( unsigned total, unsigned visible, unsigned start )
 {
     vsb->set( total, visible, start );
 }
-
 
 
 void NCPadWidget::ScrollHead( NCursesWindow & w, unsigned ccol )
@@ -472,7 +457,6 @@ void NCPadWidget::ScrollHead( NCursesWindow & w, unsigned ccol )
 	w.copywin( *win, 0, ccol, 1, 1, 1, win->width() - 2, false );
     }
 }
-
 
 
 NCPad * NCPadWidget::CreatePad()
@@ -485,7 +469,6 @@ NCPad * NCPadWidget::CreatePad()
 }
 
 
-
 void NCPadWidget::DrawPad()
 {
     if ( pad && !inMultidraw() )
@@ -496,9 +479,7 @@ void NCPadWidget::DrawPad()
 }
 
 
-
 bool NCPadWidget::handleInput( wint_t key )
 {
     return pad->handleInput( key );
 }
-

@@ -22,24 +22,21 @@
 #include "NCAlignment.h"
 
 
-
 NCAlignment::NCAlignment( YWidget * parent,
 			  YAlignmentType halign,
 			  YAlignmentType valign )
-	: YAlignment( parent, halign, valign )
-	, NCWidget( parent )
+    : YAlignment( parent, halign, valign )
+    , NCWidget( parent )
 {
     yuiDebug() << endl;
     wstate = NC::WSdumb;
 }
 
 
-
 NCAlignment::~NCAlignment()
 {
     yuiDebug() << endl;
 }
-
 
 
 void NCAlignment::setSize( int newwidth, int newheight )
@@ -49,13 +46,11 @@ void NCAlignment::setSize( int newwidth, int newheight )
 }
 
 
-
 void NCAlignment::setEnabled( bool do_bv )
 {
     NCWidget::setEnabled( do_bv );
     YAlignment::setEnabled( do_bv );
 }
-
 
 
 void NCAlignment::moveChild( YWidget * child, int newx, int newy )
@@ -70,4 +65,3 @@ void NCAlignment::moveChild( YWidget * child, int newx, int newy )
 
     wMoveChildTo( *cw, wpos( newy, newx ) );
 }
-

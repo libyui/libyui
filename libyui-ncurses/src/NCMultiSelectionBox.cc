@@ -21,8 +21,6 @@
 #include "NCMultiSelectionBox.h"
 
 
-
-
 NCMultiSelectionBox::NCMultiSelectionBox( YWidget * parent,
 					  const string & nlabel )
 	: YMultiSelectionBox( parent, nlabel )
@@ -34,31 +32,24 @@ NCMultiSelectionBox::NCMultiSelectionBox( YWidget * parent,
 }
 
 
-
 NCMultiSelectionBox::~NCMultiSelectionBox()
 {
     yuiDebug() << endl;
 }
 
 
-
-// Set preferred width
 int NCMultiSelectionBox::preferredWidth()
 {
     return wGetDefsze().W;
 }
 
 
-
-// Set preferred height
 int NCMultiSelectionBox::preferredHeight()
 {
     return wGetDefsze().H;
 }
 
 
-
-// Set widget state (enabled/disabled)
 void NCMultiSelectionBox::setEnabled( bool do_bv )
 {
     NCWidget::setEnabled( do_bv );
@@ -66,16 +57,12 @@ void NCMultiSelectionBox::setEnabled( bool do_bv )
 }
 
 
-
-// nc
 void NCMultiSelectionBox::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
 
 
-
-// Return pointer to current MsB item
 YItem * NCMultiSelectionBox::currentItem()
 {
     if ( !myPad()->Lines() )
@@ -88,7 +75,6 @@ YItem * NCMultiSelectionBox::currentItem()
 
 
 
-// Highlight current item
 void NCMultiSelectionBox::setCurrentItem( YItem * item )
 {
     myPad()->ScrlLine( item->index() );
@@ -102,8 +88,10 @@ void NCMultiSelectionBox::addItem( YItem * item )
     {
 	YMultiSelectionBox::addItem( item );
 	Items[0] = new NCTableTag( item, item->selected() );
-	//Do not set style to NCTableCol::PLAIN here, otherwise current
-	//item will not be highlighted if cursor is not over the widget
+	
+	// Do not set style to NCTableCol::PLAIN here, otherwise the current
+	//item will not be highlighted if the cursor is not over the widget
+	
 	Items[1] = new NCTableCol( item->label() );
 	myPad()->Append( Items );
 	DrawPad();
@@ -111,9 +99,10 @@ void NCMultiSelectionBox::addItem( YItem * item )
 }
 
 
-
-// Return pointer to current line tag
-//		      (holds state and yitem pointer)
+/**
+ * Return pointer to current line tag 
+ * (holds state and yitem pointer)
+ **/
 NCTableTag * NCMultiSelectionBox::tagCell( int index )
 {
     NCTableLine * cl = myPad()->ModifyLine( index );
@@ -125,8 +114,6 @@ NCTableTag * NCMultiSelectionBox::tagCell( int index )
 }
 
 
-
-// dtto
 const NCTableTag * NCMultiSelectionBox::tagCell( int index ) const
 {
     const NCTableLine * cl = myPad()->GetLine( index );
@@ -139,7 +126,6 @@ const NCTableTag * NCMultiSelectionBox::tagCell( int index ) const
 
 
 
-// Clear the MsB
 void NCMultiSelectionBox::deleteAllItems()
 {
     YMultiSelectionBox::deleteAllItems();
@@ -148,17 +134,12 @@ void NCMultiSelectionBox::deleteAllItems()
 }
 
 
-
-// Return item status (selected/deselected)
 bool NCMultiSelectionBox::isItemSelected( YItem *item )
 {
     return item->selected();
 }
 
 
-
-
-// Mark item as selected
 void NCMultiSelectionBox::selectItem( YItem *yitem, bool selected )
 {
     YMultiSelectionBox::selectItem( yitem, selected );
@@ -174,8 +155,6 @@ void NCMultiSelectionBox::selectItem( YItem *yitem, bool selected )
 }
 
 
-
-// Mark all items as deselected
 void NCMultiSelectionBox::deselectAllItems()
 {
     YMultiSelectionBox::deselectAllItems();
@@ -191,8 +170,9 @@ void NCMultiSelectionBox::deselectAllItems()
 
 
 
-// Toggle item from selected -> deselected
-//		      and vice versa
+/**
+ * Toggle item from selected -> deselected and vice versa
+ **/
 void NCMultiSelectionBox::toggleCurrentItem()
 {
     YItem *it = currentItem();
@@ -201,8 +181,6 @@ void NCMultiSelectionBox::toggleCurrentItem()
 }
 
 
-
-// nc
 void NCMultiSelectionBox::setLabel( const string & nlabel )
 {
     YMultiSelectionBox::setLabel( nlabel );
@@ -210,8 +188,9 @@ void NCMultiSelectionBox::setLabel( const string & nlabel )
 }
 
 
-
-// Create empty MsB pad
+/**
+ * Create empty MsB pad
+ **/
 NCPad * NCMultiSelectionBox::CreatePad()
 {
     wsze psze( defPadSze() );
@@ -222,16 +201,12 @@ NCPad * NCMultiSelectionBox::CreatePad()
 }
 
 
-
 void NCMultiSelectionBox::wRecoded()
 {
     NCPadWidget::wRecoded();
 }
 
 
-
-// Handle input :)
-//		      (those keys that are not caught by NCPad)
 NCursesEvent NCMultiSelectionBox::wHandleInput( wint_t key )
 {
     NCursesEvent ret;

@@ -40,22 +40,20 @@ static bool hiddenMenu()
 }
 
 
-
 NCDialog::NCDialog( YDialogType		dialogType,
 		    YDialogColorMode	colorMode )
-	: YDialog( dialogType, colorMode )
-	, pan( 0 )
-	, dlgstyle( 0 )
-	, inMultiDraw_i( 0 )
-	, active( false )
-	, wActive( this )
-	, ncdopts( DEFAULT )
-	, popedpos( -1 )
+    : YDialog( dialogType, colorMode )
+    , pan( 0 )
+    , dlgstyle( 0 )
+    , inMultiDraw_i( 0 )
+    , active( false )
+    , wActive( this )
+    , ncdopts( DEFAULT )
+    , popedpos( -1 )
 {
     yuiDebug() << "Constructor NCDialog(YDialogType t, YDialogColorMode c)" << endl;
     _init();
 }
-
 
 
 NCDialog::NCDialog( YDialogType dialogType, const wpos at, const bool boxed )
@@ -73,16 +71,11 @@ NCDialog::NCDialog( YDialogType dialogType, const wpos at, const bool boxed )
 }
 
 
-
-// Constructor helper
 void NCDialog::_init()
 {
     NCurses::RememberDlg( this );
-
     setTextdomain( "ncurses" );
-
     _init_size();
-
     wstate = NC::WSdumb;
 
     if ( colorMode() == YDialogWarnColor )
@@ -109,7 +102,6 @@ void NCDialog::_init()
 }
 
 
-
 void NCDialog::_init_size()
 {
     defsze.H = NCurses::lines();
@@ -121,7 +113,6 @@ void NCDialog::_init_size()
 	switch ( defsze.H )
 	{
 	    case 1:
-
 	    case 2:
 		defsze.H = 1;
 		break;
@@ -134,7 +125,6 @@ void NCDialog::_init_size()
 	switch ( defsze.W )
 	{
 	    case 1:
-
 	    case 2:
 		defsze.W = 1;
 		break;
@@ -145,7 +135,6 @@ void NCDialog::_init_size()
 	}
     }
 }
-
 
 
 NCDialog::~NCDialog()
@@ -173,6 +162,7 @@ NCDialog::~NCDialog()
     }
 }
 
+
 int NCDialog::preferredWidth()
 {
     if ( dialogType() == YMainDialog || ! hasChildren() )
@@ -186,6 +176,7 @@ int NCDialog::preferredWidth()
 
     return csze.W;
 }
+
 
 int NCDialog::preferredHeight()
 {
@@ -204,15 +195,12 @@ int NCDialog::preferredHeight()
 }
 
 
-
 void NCDialog::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
     yuiDebug() << "setSize() called: width: " << newwidth << "	 height: " << newheight << endl;
     YDialog::setSize( newwidth, newheight );
 }
-
-
 
 
 void NCDialog::initDialog()
@@ -229,8 +217,6 @@ void NCDialog::openInternal()
 {
     showDialog();
 }
-
-
 
 
 void NCDialog::showDialog()
@@ -263,7 +249,6 @@ void NCDialog::showDialog()
 }
 
 
-
 void NCDialog::closeDialog()
 {
     yuiDebug() << "cd+ " << this << endl;
@@ -280,7 +265,6 @@ void NCDialog::closeDialog()
 }
 
 
-
 void NCDialog::activate( const bool newactive )
 {
     if ( active != newactive || ( pan && pan->hidden() ) )
@@ -293,16 +277,11 @@ void NCDialog::activate( const bool newactive )
 	    wRedraw();
 
 	    if ( active )
-	    {
 		Activate();
-	    }
 	    else
-	    {
 		Deactivate();
-	    }
 
 	    doUpdate();
-
 	    yuiDebug() << this << endl;
 	}
     }
@@ -322,13 +301,10 @@ void NCDialog::activate()
 }
 
 
-
-
 void NCDialog::wMoveTo( const wpos & newpos )
 {
     yuiDebug() << DLOC << this << newpos << endl;
 }
-
 
 
 void NCDialog::wCreate( const wrect & newrect )
@@ -441,9 +417,6 @@ void NCDialog::wCreate( const wrect & newrect )
 }
 
 
-
-
-
 void NCDialog::wRedraw()
 {
     if ( pan )
@@ -499,7 +472,6 @@ void NCDialog::wRedraw()
 }
 
 
-
 void NCDialog::wRecoded()
 {
     if ( pan )
@@ -517,12 +489,10 @@ void NCDialog::wRecoded()
 }
 
 
-
 void NCDialog::startMultipleChanges()
 {
     ++inMultiDraw_i;
 }
-
 
 
 void NCDialog::doneMultipleChanges()
@@ -540,7 +510,6 @@ void NCDialog::doneMultipleChanges()
 }
 
 
-
 void NCDialog::wUpdate( bool forced_br )
 {
     if ( !pan )
@@ -554,7 +523,6 @@ void NCDialog::wUpdate( bool forced_br )
 }
 
 
-
 void NCDialog::grabActive( NCWidget * nactive )
 {
     if ( wActive && wActive != static_cast<NCWidget *>( this ) )
@@ -565,7 +533,6 @@ void NCDialog::grabActive( NCWidget * nactive )
 
     const_cast<NCWidget *&>( wActive ) = nactive;
 }
-
 
 
 void NCDialog::grabNotify( NCWidget * mgrab )
@@ -581,12 +548,10 @@ void NCDialog::grabNotify( NCWidget * mgrab )
 }
 
 
-
 bool NCDialog::wantFocus( NCWidget & ngrab )
 {
     return Activate( ngrab );
 }
-
 
 
 void NCDialog::wDelete()
@@ -598,7 +563,6 @@ void NCDialog::wDelete()
 	yuiDebug() << DLOC << "--- " << this << endl;
     }
 }
-
 
 
 NCWidget & NCDialog::GetNormal( NCWidget & startwith, SeekDir Direction )
@@ -622,19 +586,16 @@ NCWidget & NCDialog::GetNormal( NCWidget & startwith, SeekDir Direction )
 }
 
 
-
 NCWidget & NCDialog::GetNextNormal( NCWidget & startwith )
 {
     return GetNormal( startwith, &tnode<NCWidget *>::Next );
 }
 
 
-
 NCWidget & NCDialog::GetPrevNormal( NCWidget & startwith )
 {
     return GetNormal( startwith, &tnode<NCWidget *>::Prev );
 }
-
 
 
 bool NCDialog::Activate( NCWidget & nactive )
@@ -661,7 +622,6 @@ bool NCDialog::Activate( NCWidget & nactive )
 }
 
 
-
 void NCDialog::Activate( SeekDir Direction )
 {
     if ( !wActive )
@@ -680,12 +640,10 @@ void NCDialog::Activate( SeekDir Direction )
 }
 
 
-
 void NCDialog::Activate()
 {
     Activate( 0 );
 }
-
 
 
 void NCDialog::Deactivate()
@@ -697,19 +655,16 @@ void NCDialog::Deactivate()
 }
 
 
-
 void NCDialog::ActivateNext()
 {
     Activate( &tnode<NCWidget *>::Next );
 }
 
 
-
 void NCDialog::ActivatePrev()
 {
     Activate( &tnode<NCWidget *>::Prev );
 }
-
 
 
 bool NCDialog::ActivateByKey( int key )
@@ -763,7 +718,6 @@ bool NCDialog::ActivateByKey( int key )
 
     return false;
 }
-
 
 
 wint_t NCDialog::getinput()
@@ -833,7 +787,6 @@ wint_t NCDialog::getinput()
 }
 
 
-
 wint_t NCDialog::getch( int timeout_millisec )
 {
     wint_t got = WEOF;
@@ -898,6 +851,7 @@ wint_t NCDialog::getch( int timeout_millisec )
     return got;
 }
 
+
 bool NCDialog::flushTypeahead()
 {
     // Don't throw away keys from the input buffer after a ValueChanged or
@@ -915,7 +869,6 @@ bool NCDialog::flushTypeahead()
 	return true;
     }
 }
-
 
 
 void NCDialog::idleInput()
@@ -945,7 +898,6 @@ void NCDialog::idleInput()
 	yuiDebug() << "idle- " << this << endl;
     }
 }
-
 
 
 NCursesEvent NCDialog::pollInput()
@@ -983,8 +935,6 @@ NCursesEvent NCDialog::pollInput()
     yuiDebug() << "poll- " << this << '(' << returnEvent << ')' << endl;
     return returnEvent;
 }
-
-
 
 
 NCursesEvent NCDialog::userInput( int timeout_millisec )
@@ -1042,12 +992,13 @@ YEvent * NCDialog::pollEventInternal()
 }
 
 
-
-
-
-// timeout -1 -> wait for input
-//		      timeout  0 -> immediate return
-//		      else max wait timeout milliseconds
+/**
+ * Process input
+ *
+ * timeout -1 -> wait for input
+ * timeout  0 -> immediate return
+ * else wait for up to timeout milliseconds
+ **/
 void NCDialog::processInput( int timeout_millisec )
 {
     yuiDebug() << "process+ " << this << " active " << wActive
@@ -1295,7 +1246,6 @@ void NCDialog::processInput( int timeout_millisec )
 }
 
 
-
 NCursesEvent NCDialog::getInputEvent( wint_t ch )
 {
     NCursesEvent ret = NCursesEvent::none;
@@ -1310,12 +1260,10 @@ NCursesEvent NCDialog::getInputEvent( wint_t ch )
 }
 
 
-
 NCursesEvent NCDialog::wHandleInput( wint_t ch )
 {
     return wActive->wHandleInput( ch );
 }
-
 
 
 NCursesEvent NCDialog::getHotkeyEvent( wint_t key )
@@ -1330,7 +1278,6 @@ NCursesEvent NCDialog::getHotkeyEvent( wint_t key )
 
     return ret;
 }
-
 
 
 NCursesEvent NCDialog::wHandleHotkey( wint_t key )
@@ -1352,10 +1299,15 @@ ostream & operator<<( ostream & STREAM, const NCDialog * OBJ )
 
 
 
-// Get all PushButtons and MenuButtons with `opt(`key_Fn)
-//		      and create a map, for example: $[	 1: Help, 2: Info,... ]
-//		      NCurses::SetStatusLine will process it
-std::map <int, string> NCDialog::describeFunctionKeys( )
+/**
+ * Create description for function keys:
+ *
+ * Get all PushButtons and MenuButtons that have a function key set
+ * (`opt(`key_Fn) in YCP) and create a map:
+ * $[ 1: "Help", 2: "Info",... ]
+ * NCurses::SetStatusLine will process this.
+ **/
+std::map<int, string> NCDialog::describeFunctionKeys( )
 {
     std::map<int, string> fkeys;
 
@@ -1388,7 +1340,6 @@ ostream & operator<<( ostream & STREAM, const NCDialog & OBJ )
 }
 
 
-
 bool NCDialog::getInvisible()
 {
     if ( !pan || pan->hidden() )
@@ -1400,7 +1351,6 @@ bool NCDialog::getInvisible()
 
     return true;
 }
-
 
 
 bool NCDialog::getVisible()
@@ -1426,7 +1376,6 @@ bool NCDialog::getVisible()
 }
 
 
-
 void NCDialog::resizeEvent()
 {
     _init_size();
@@ -1436,4 +1385,3 @@ void NCDialog::resizeEvent()
 	setInitialSize();
     }
 }
-

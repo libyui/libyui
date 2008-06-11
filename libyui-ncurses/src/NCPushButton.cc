@@ -24,7 +24,6 @@
 #include "NCPushButton.h"
 
 
-
 NCPushButton::NCPushButton( YWidget * parent, const string & nlabel )
 	: YPushButton( parent, nlabel )
 	, NCWidget( parent )
@@ -36,12 +35,10 @@ NCPushButton::NCPushButton( YWidget * parent, const string & nlabel )
 }
 
 
-
 NCPushButton::~NCPushButton()
 {
     yuiDebug() << endl;
 }
-
 
 
 int NCPushButton::preferredWidth()
@@ -51,12 +48,10 @@ int NCPushButton::preferredWidth()
 }
 
 
-
 int NCPushButton::preferredHeight()
 {
     return wGetDefsze().H;
 }
-
 
 
 void NCPushButton::setEnabled( bool do_bv )
@@ -66,12 +61,10 @@ void NCPushButton::setEnabled( bool do_bv )
 }
 
 
-
 void NCPushButton::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
-
 
 
 NCursesEvent NCPushButton::wHandleInput( wint_t key )
@@ -90,7 +83,6 @@ NCursesEvent NCPushButton::wHandleInput( wint_t key )
 }
 
 
-
 void NCPushButton::setLabel( const string & nlabel )
 {
     label = NCstring( nlabel );
@@ -99,8 +91,6 @@ void NCPushButton::setLabel( const string & nlabel )
     YPushButton::setLabel( nlabel );
     Redraw();
 }
-
-
 
 
 void NCPushButton::wRedraw()
@@ -125,7 +115,5 @@ void NCPushButton::wRedraw()
     }
 
     label.drawAt( *win, style, wpos( 0, 1 ), wsze( -1, win->width() - 2 ),
-
 		  NC::CENTER );
 }
-

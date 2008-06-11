@@ -22,7 +22,6 @@
 #include "NCReplacePoint.h"
 
 
-
 NCReplacePoint::NCReplacePoint( YWidget * parent )
 	: YReplacePoint( parent )
 	, NCWidget( parent )
@@ -32,12 +31,10 @@ NCReplacePoint::NCReplacePoint( YWidget * parent )
 }
 
 
-
 NCReplacePoint::~NCReplacePoint()
 {
     yuiDebug() << endl;
 }
-
 
 
 void NCReplacePoint::setSize( int newwidth, int newheight )
@@ -45,6 +42,7 @@ void NCReplacePoint::setSize( int newwidth, int newheight )
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
     YReplacePoint::setSize( newwidth, newheight );
 }
+
 
 void NCReplacePoint::setEnabled( bool do_bv )
 {

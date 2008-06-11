@@ -33,12 +33,10 @@ NCSquash::NCSquash( YWidget * parent,
 }
 
 
-
 NCSquash::~NCSquash()
 {
     yuiDebug() << endl;
 }
-
 
 
 void NCSquash::setSize( int newwidth, int newheight )
@@ -46,6 +44,7 @@ void NCSquash::setSize( int newwidth, int newheight )
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
     YSquash::setSize( newwidth, newheight );
 }
+
 
 void NCSquash::setEnabled( bool do_bv )
 {

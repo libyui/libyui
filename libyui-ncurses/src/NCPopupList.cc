@@ -22,8 +22,6 @@
 #include "YTableItem.h"
 
 
-
-
 NCPopupList::NCPopupList( const wpos at,
 			  const string & label,
 			  const list<string> & deflist,
@@ -34,11 +32,11 @@ NCPopupList::NCPopupList( const wpos at,
 }
 
 
-
 NCPopupList::~NCPopupList()
 {
 
 }
+
 
 void NCPopupList::createEntries( const list<string> & deflist, int index )
 {
@@ -56,9 +54,7 @@ void NCPopupList::createEntries( const list<string> & deflist, int index )
 }
 
 
-
 bool NCPopupList::postAgain()
 {
     return NCPopupTable::postAgain();
 }
-

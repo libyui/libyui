@@ -22,12 +22,13 @@
 #include "NCLabel.h"
 
 
-
-NCLabel::NCLabel( YWidget * parent, const string & nlabel,
-		  bool isHeading, bool isOutputField )
-	: YLabel( parent, nlabel, isHeading, isOutputField )
-	, NCWidget( parent )
-	, heading( isHeading )
+NCLabel::NCLabel( YWidget *      parent,
+		  const string & nlabel,
+		  bool           isHeading,
+		  bool           isOutputField )
+    : YLabel( parent, nlabel, isHeading, isOutputField )
+    , NCWidget( parent )
+    , heading( isHeading )
 {
     yuiDebug() << endl;
     setText( nlabel );
@@ -86,8 +87,6 @@ void NCLabel::wRedraw()
 		: wStyle().dumb.text;
 
     win->bkgd( bg );
-
     win->clear();
-
     label.drawAt( *win, bg, bg );
 }

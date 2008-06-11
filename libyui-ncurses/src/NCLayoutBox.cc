@@ -22,7 +22,6 @@
 #include "NCLayoutBox.h"
 
 
-
 NCLayoutBox::NCLayoutBox( YWidget * parent,
 			  YUIDimension dimension )
 	: YLayoutBox( parent, dimension )
@@ -33,12 +32,10 @@ NCLayoutBox::NCLayoutBox( YWidget * parent,
 }
 
 
-
 NCLayoutBox::~NCLayoutBox()
 {
     yuiDebug() << endl;
 }
-
 
 
 void NCLayoutBox::setSize( int newwidth, int newheight )
@@ -47,12 +44,12 @@ void NCLayoutBox::setSize( int newwidth, int newheight )
     YLayoutBox::setSize( newwidth, newheight );
 }
 
+
 void NCLayoutBox::setEnabled( bool do_bv )
 {
     NCWidget::setEnabled( do_bv );
     YLayoutBox::setEnabled( do_bv );
 }
-
 
 
 void NCLayoutBox::moveChild( YWidget * child, int newx, int newy )
@@ -67,4 +64,3 @@ void NCLayoutBox::moveChild( YWidget * child, int newx, int newy )
 
     wMoveChildTo( *cw, wpos( newy, newx ) );
 }
-

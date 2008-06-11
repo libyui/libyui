@@ -23,7 +23,6 @@
 #include "NCRadioButtonGroup.h"
 
 
-
 NCRadioButton::NCRadioButton( YWidget * parent,
 			      const string & nlabel,
 			      bool check )
@@ -38,21 +37,23 @@ NCRadioButton::NCRadioButton( YWidget * parent,
 }
 
 
-
 NCRadioButton::~NCRadioButton()
 {
     yuiDebug() << endl;
 }
+
 
 int NCRadioButton::preferredWidth()
 {
     return wGetDefsze().W;
 }
 
+
 int NCRadioButton::preferredHeight()
 {
     return wGetDefsze().H;
 }
+
 
 void NCRadioButton::setEnabled( bool do_bv )
 {
@@ -61,12 +62,10 @@ void NCRadioButton::setEnabled( bool do_bv )
 }
 
 
-
 void NCRadioButton::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
-
 
 
 void NCRadioButton::setLabel( const string & nlabel )
@@ -77,7 +76,6 @@ void NCRadioButton::setLabel( const string & nlabel )
     YRadioButton::setLabel( nlabel );
     Redraw();
 }
-
 
 
 void NCRadioButton::setValue( bool newval )
@@ -94,7 +92,6 @@ void NCRadioButton::setValue( bool newval )
 	Redraw();
     }
 }
-
 
 
 void NCRadioButton::wRedraw()
@@ -114,7 +111,6 @@ void NCRadioButton::wRedraw()
 
     win->printw( 0, 1, "%c", ( checked ? 'x' : ' ' ) );
 }
-
 
 
 NCursesEvent NCRadioButton::wHandleInput( wint_t key )
@@ -140,12 +136,12 @@ NCursesEvent NCRadioButton::wHandleInput( wint_t key )
 
 	    if ( group )
 		group->focusPrevButton();
-	    
+
 	    break;
 
 	case KEY_DOWN:
 	    group = dynamic_cast<NCRadioButtonGroup *>( buttonGroup() );
-	    
+
 	    if ( group )
 		group->focusNextButton();
 
@@ -154,3 +150,4 @@ NCursesEvent NCRadioButton::wHandleInput( wint_t key )
 
     return ret;
 }
+

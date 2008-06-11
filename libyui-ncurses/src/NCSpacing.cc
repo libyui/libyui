@@ -41,18 +41,17 @@ NCSpacing::NCSpacing( YWidget * parent,
 }
 
 
-
 NCSpacing::~NCSpacing()
 {
     yuiDebug() << endl;
 }
 
 
-
 void NCSpacing::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
+
 
 void NCSpacing::setEnabled( bool do_bv )
 {

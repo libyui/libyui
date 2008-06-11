@@ -61,31 +61,26 @@ void NCBusyIndicatorHandlerWrapper( int sig_num );
 NCBusyIndicator::NCBusyIndicator( YWidget * parent,
 				  const string & nlabel,
 				  int timeout )
-	: YBusyIndicator( parent, nlabel, timeout )
-	, NCWidget( parent )
-	, _label( nlabel )
-	, _timeout( timeout )
-	, _lwin( 0 )
-	, _twin( 0 )
-	, _position( .5 )
-	, _rightwards( true )
-	, _alive( true )
+    : YBusyIndicator( parent, nlabel, timeout )
+    , NCWidget( parent )
+    , _label( nlabel )
+    , _timeout( timeout )
+    , _lwin( 0 )
+    , _twin( 0 )
+    , _position( .5 )
+    , _rightwards( true )
+    , _alive( true )
 {
     yuiDebug() << endl;
 
     if ( timeout <= 0 )
 	timeout = 1;
 
-    hotlabel = &_label;
-
     setLabel( nlabel );
-
+    hotlabel = &_label;
     wstate = NC::WSdumb;
-
     NCBusyIndicatorObject = this;
-
     _timer_divisor = ( double ) REPAINT_INTERVAL / ( double ) timeout;
-
     _timer_progress = 0;
 
 #if 0
@@ -95,7 +90,6 @@ NCBusyIndicator::NCBusyIndicator( YWidget * parent,
     setitimer( ITIMER_REAL, &interval, NULL );
 #endif
 }
-
 
 
 NCBusyIndicator::~NCBusyIndicator()
@@ -126,12 +120,10 @@ void NCBusyIndicator::setEnabled( bool do_bv )
 }
 
 
-
 void NCBusyIndicator::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
-
 
 
 void NCBusyIndicator::setDefsze()
@@ -139,7 +131,6 @@ void NCBusyIndicator::setDefsze()
     defsze = wsze( _label.height() + 1,
 		   _label.width() < 5 ? 5 : _label.width() );
 }
-
 
 
 void NCBusyIndicator::wCreate( const wrect & newrect )
@@ -171,7 +162,6 @@ void NCBusyIndicator::wCreate( const wrect & newrect )
 }
 
 
-
 void NCBusyIndicator::wDelete()
 {
     delete _lwin;
@@ -180,7 +170,6 @@ void NCBusyIndicator::wDelete()
     _twin = 0;
     NCWidget::wDelete();
 }
-
 
 
 void NCBusyIndicator::setLabel( const string & nlabel )
@@ -192,8 +181,9 @@ void NCBusyIndicator::setLabel( const string & nlabel )
 }
 
 
-
-// handler, called by NCBusyIndicatorHandlerWrapper
+/**
+ * handler, called by NCBusyIndicatorHandlerWrapper
+ **/
 void NCBusyIndicator::handler( int sig_num )
 {
     _timer_progress += _timer_divisor;
@@ -215,8 +205,9 @@ void NCBusyIndicator::handler( int sig_num )
 }
 
 
-
-// static wrapper for member function handler
+/**
+ * static wrapper for member function handler
+ **/
 #if 0
 void NCBusyIndicatorHandlerWrapper( int sig_num )
 {
@@ -228,8 +219,9 @@ void NCBusyIndicatorHandlerWrapper( int sig_num )
 #endif
 
 
-
-// calculate position of moving bar
+/**
+ * Calculate position of moving bar
+ **/
 void NCBusyIndicator::update()
 {
     if ( !_alive )
@@ -244,15 +236,13 @@ void NCBusyIndicator::update()
 	_position -= STEP_SIZE;
 
     Redraw();
-
     refresh();
-
-
 }
 
 
-
-// set alive or stalled
+/**
+ * set alive or stalled
+ **/
 void NCBusyIndicator::setAlive( bool newAlive )
 {
     _alive = newAlive;
@@ -262,24 +252,20 @@ void NCBusyIndicator::setAlive( bool newAlive )
 }
 
 
-
-
-// set timeout
 void NCBusyIndicator::setTimeout( int newTimeout )
 {
     if ( newTimeout < 1 )
 	newTimeout = 1;
 
     _timeout = newTimeout;
-
     YBusyIndicator::setTimeout( newTimeout );
-
-    _timer_divisor = ( double ) REPAINT_INTERVAL / ( double ) _timeout;
+    _timer_divisor = (double) REPAINT_INTERVAL / (double) _timeout;
 }
 
 
-
-// draw busy indicator widget
+/**
+ * draw busy indicator widget
+ **/
 void NCBusyIndicator::wRedraw()
 {
     if ( !win )
@@ -287,19 +273,16 @@ void NCBusyIndicator::wRedraw()
 
     // label
     chtype bg = wStyle().dumb.text;
-
     _lwin->bkgdset( bg );
-
     _lwin->clear();
-
     _label.drawAt( *_lwin, bg, bg );
-
     tUpdate();
 }
 
 
-
-// draw busy bar
+/**
+ * Draw busy bar
+ **/
 void NCBusyIndicator::tUpdate()
 {
     if ( !win )
@@ -310,7 +293,6 @@ void NCBusyIndicator::tUpdate()
     const NCstyle::StProgbar & style( wStyle().progbar );
 
     _twin->bkgdset( style.nonbar.chattr );
-
     _twin->clear();
 
     if ( cp <= _twin->maxx() )
@@ -320,4 +302,3 @@ void NCBusyIndicator::tUpdate()
 	_twin->addch( NCattribute::getChar( style.bar.chattr ) );
     }
 }
-
