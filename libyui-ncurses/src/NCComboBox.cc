@@ -15,15 +15,14 @@
    Author:     Michael Andres <ma@suse.de>
 
 /-*/
-#include <climits>
 
+#include <climits>
 
 #define  YUILogComponent "ncurses"
 #include <YUILog.h>
 #include "NCurses.h"
 #include "NCComboBox.h"
 #include "NCPopupList.h"
-
 
 
 NCComboBox::NCComboBox( YWidget * parent, const string & nlabel,
@@ -48,7 +47,6 @@ NCComboBox::NCComboBox( YWidget * parent, const string & nlabel,
 }
 
 
-
 NCComboBox::~NCComboBox()
 {
     delete lwin;
@@ -57,19 +55,16 @@ NCComboBox::~NCComboBox()
 }
 
 
-
 int NCComboBox::preferredWidth()
 {
     return wGetDefsze().W;
 }
 
 
-
 int NCComboBox::preferredHeight()
 {
     return wGetDefsze().H;
 }
-
 
 
 void NCComboBox::setEnabled( bool do_bv )
@@ -79,12 +74,10 @@ void NCComboBox::setEnabled( bool do_bv )
 }
 
 
-
 void NCComboBox::setSize( int newwidth, int newheight )
 {
     wRelocate( wpos( 0 ), wsze( newheight, newwidth ) );
 }
-
 
 
 void NCComboBox::setDefsze()
@@ -96,7 +89,6 @@ void NCComboBox::setDefsze()
     defsze = wsze( label.height() + 1,
 		   ( label.width() > longest_line ) ? label.width() : longest_line + 2 );
 }
-
 
 
 void NCComboBox::wCreate( const wrect & newrect )
@@ -130,7 +122,6 @@ void NCComboBox::wCreate( const wrect & newrect )
 }
 
 
-
 void NCComboBox::wDelete()
 {
     delete lwin;
@@ -139,7 +130,6 @@ void NCComboBox::wDelete()
     twin = 0;
     NCWidget::wDelete();
 }
-
 
 
 void NCComboBox::addItem( YItem * item )
@@ -170,7 +160,6 @@ void NCComboBox::addItem( YItem * item )
 }
 
 
-
 void NCComboBox::addItem( const string & label, bool selected )
 {
     YItem * newItem = new YItem( label, selected );
@@ -181,7 +170,6 @@ void NCComboBox::addItem( const string & label, bool selected )
 }
 
 
-
 void NCComboBox::setLabel( const string & nlabel )
 {
     label = NCstring( nlabel );
@@ -190,7 +178,6 @@ void NCComboBox::setLabel( const string & nlabel )
     YComboBox::setLabel( nlabel );
     Redraw();
 }
-
 
 
 void NCComboBox::setCurrentItem( int nindex )
@@ -220,14 +207,10 @@ void NCComboBox::setCurrentItem( int nindex )
 }
 
 
-
-
 int NCComboBox::getCurrentItem() const
 {
     return index;
 }
-
-
 
 
 void NCComboBox::setText( const string & ntext )
@@ -238,14 +221,13 @@ void NCComboBox::setText( const string & ntext )
     fldstart = 0;
     curpos   = mayedit ? buffer.length() : 0;
 
-    //(Maybe) no need to set default size here, it has been
-    //alread calculated as the items were added (see addItem() above)
-    //setDefsze();
+    // (Maybe) no need to set default size here, it has been
+    // alread calculated as the items were added (see addItem() above)
+    // setDefsze();
 
     tUpdate();
     Redraw();
 }
-
 
 
 string NCComboBox::text()
@@ -253,19 +235,8 @@ string NCComboBox::text()
     if ( modified )
 	return NCstring( buffer ).Str();
 
-    //if ( index != -1 ) {
-    //	  int idx = 0;
-    //	  list<string>::const_iterator entry;
-    //	  for ( entry = deflist.begin(); entry != deflist.end(); ++entry, ++idx ) {
-    //	      if ( idx == index ) {
-    //		return *entry;
-    //	      }
-    //	  }
-    //}
-
     return privText.Str();
 }
-
 
 
 void NCComboBox::setValidChars( const string & validchars )
@@ -275,10 +246,8 @@ void NCComboBox::setValidChars( const string & validchars )
 }
 
 
-
 bool NCComboBox::validKey( wint_t key ) const
 {
-    // private: NCstring validChars;
     const wstring vwch( validChars.str() );
 
     if ( vwch.empty() )		// usually empty -> return true
@@ -289,7 +258,6 @@ bool NCComboBox::validKey( wint_t key ) const
 
     return( vwch.find(( wchar_t )key ) != wstring::npos );
 }
-
 
 
 void NCComboBox::wRecoded()
@@ -304,7 +272,6 @@ void NCComboBox::wRecoded()
 
     wRedraw();
 }
-
 
 
 void NCComboBox::wRedraw()
@@ -323,7 +290,6 @@ void NCComboBox::wRedraw()
 
     tUpdate();
 }
-
 
 
 void NCComboBox::tUpdate()
@@ -431,7 +397,6 @@ void NCComboBox::tUpdate()
 	    twin->addch( ACS_CKBOARD );
     }
 }
-
 
 
 NCursesEvent NCComboBox::wHandleInput( wint_t key )
@@ -598,7 +563,6 @@ NCursesEvent NCComboBox::wHandleInput( wint_t key )
 }
 
 
-
 int NCComboBox::listPopup()
 {
     int idx = -1;
@@ -620,9 +584,6 @@ int NCComboBox::listPopup()
 }
 
 
-
-// cleares the table and the lists holding
-//		      the values
 void NCComboBox::deleteAllItems()
 {
     YComboBox::deleteAllItems();
@@ -641,4 +602,6 @@ void NCComboBox::setInputMaxLength( int nr )
 	tUpdate();
 	curpos = buffer.length();
     }
+
+    YComboBox::setInputMaxLength( nr );
 }
