@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jun 17 19:00:03 CEST 2008 - sh@suse.de
+
+- Fixed bnc #400477: yast2 runlevel takes 40s to switch view
+- V 2.17.1 
+
+-------------------------------------------------------------------
 Thu Jun  5 13:28:52 CEST 2008 - sh@suse.de
 
 - (coolo) fixed segfault in QY2Styler with secondary wizards during

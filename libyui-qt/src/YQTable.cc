@@ -56,13 +56,13 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader )
 
     QStringList headers;
     _qt_listView->setColumnCount( columns() );
-    
+
     for ( int i=0; i < columns(); i++ )
     {
         headers << fromUTF8(header(i));
     }
 
-    
+
     _qt_listView->setHeaderLabels( headers );
     _qt_listView->header()->setResizeMode( QHeaderView::ResizeToContents );
 
@@ -109,16 +109,17 @@ YQTable::addItem( YItem * yitem )
 
     if ( item->selected() )
     {
+	// YTable enforces single selection
+	
 	YQSignalBlocker sigBlocker( _qt_listView );
-	clone->setSelected(true);
+	YQTable::selectItem( YSelectionWidget::selectedItem(), true );
     }
 
-    // If multiple items are selected YSelectionWidget::addItem() 
-    // defines one single selected item. Use this selection in YQTable too. 
-    if ( hasItems() && YSelectionWidget::hasSelectedItem() )
-	YQTable::selectItem( YSelectionWidget::selectedItem(), true );
-
-    // set alignment
+    
+    //
+    // Set column alignment
+    //
+    
     for ( int i=0; i < columns(); i++ )
     {
 	int qt_alignment = Qt::AlignLeft;
@@ -131,6 +132,7 @@ YQTable::addItem( YItem * yitem )
 
 	    case YAlignUnchanged: break;
 	}
+	
 	clone->setTextAlignment(i, qt_alignment);
     }
 }
