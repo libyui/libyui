@@ -61,7 +61,7 @@ public:
             QFont f = painter->font();
             f.setWeight(QFont::Bold);
             QFontMetrics fm(f);
-            f.setPixelSize( fm.height() * 1.1 );
+            f.setPixelSize( (int) ( fm.height() * 1.1 ) );
             citem->setFont(_view->summaryCol(), f);
             
             
@@ -96,7 +96,7 @@ public:
                 int x = option.rect.left() + 1;
                 int y = option.rect.top() + 1;
                 int w = option.rect.width() - 2;
-                int h = ((float)option.rect.height())/2;
+                int h = (int) ( ( (float) option.rect.height() )/2 );
                 int fillWidth = 0;
                 if ( w > 0 )
                 {

@@ -59,7 +59,7 @@ public:
             QFont f = painter->font();
             f.setWeight(QFont::Bold);
             QFontMetrics fm(f);
-            f.setPixelSize( fm.height() * 1.05 );
+            f.setPixelSize( (int) ( fm.height() * 1.05 ) );
             citem->setFont(_view->summaryCol(), f);
 
             painter->fillRect(option.rect, option.palette.color(QPalette::AlternateBase));

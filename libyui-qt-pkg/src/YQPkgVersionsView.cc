@@ -137,7 +137,7 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     font.setBold(true);
 
     QFontMetrics fm(font);
-    font.setPixelSize( fm.height() * 1.1 );
+    font.setPixelSize( (int) ( fm.height() * 1.1 ) );
     
     _label->setFont(font);
     

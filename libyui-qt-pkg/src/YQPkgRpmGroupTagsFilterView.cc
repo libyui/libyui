@@ -512,7 +512,7 @@ YQPkgRpmGroupTag::YQPkgRpmGroupTag( YQPkgRpmGroupTagsFilterView * 	parentFilterV
 {
     QFont f = font(0);
     QFontMetrics fm(f);
-    f.setPixelSize( fm.height() * 1.1 );
+    f.setPixelSize( (int) ( fm.height() * 1.1 ) );
     setFont(0,f);
 
     std::string iconName = group_enum_to_icon(group);

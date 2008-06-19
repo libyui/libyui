@@ -170,7 +170,7 @@ YQPkgPatchFilterView::updateTotalDownloadSize()
 	  ++it )
     {
 	if ( (*it)->candidateObj() )
-	    totalSize += (*it)->candidateObj()->size();
+	    totalSize += (*it)->candidateObj()->installsize();
     }
 
 #if ENABLE_TOTAL_DOWNLOAD_SIZE

@@ -914,7 +914,7 @@ YQPkgObjListItem::init()
 
     if ( sizeCol()    >= 0 )
     {
-        zypp::ByteCount size = zyppObj()->size();
+        zypp::ByteCount size = zyppObj()->installsize();
 
         if ( size > 0L )
             setText( sizeCol(),	size.asString() );
@@ -1129,7 +1129,7 @@ bool YQPkgObjListItem::isBroken() const
 	case S_KeepInstalled:
 	case S_Protected:
 
-	    return _selectable->installedPoolItem().isBroken();
+	    return _selectable->installedObj().isBroken();
 
 	case S_Update:		// will be fixed by updating
 	case S_AutoUpdate:
@@ -1407,7 +1407,7 @@ bool YQPkgObjListItem::operator<( const QTreeWidgetItem & otherListViewItem ) co
 	{
 	    // Numeric sort by size
 
-	    return ( this->zyppObj()->size() < other->zyppObj()->size() );
+	    return ( this->zyppObj()->installsize() < other->zyppObj()->installsize() );
 	}
 	else if ( col == statusCol() )
 	{
