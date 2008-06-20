@@ -273,7 +273,6 @@ void NCurses::init()
     //duplicate stdout and stderr before redirecting them to log
     //so that they can be regenerated before system() call
     stdout_save = dup( 1 );
-
     stderr_save = dup( 2 );
 
     RedirectToLog();
@@ -501,7 +500,6 @@ void NCurses::SetTitle( const string & str )
 #endif
 
 	::mvwaddstr( myself->title_w, 0, 1, myself->title_t.c_str() );
-
 	::wnoutrefresh( myself->title_w );
     }
 
@@ -621,7 +619,6 @@ void NCurses::ResizeEvent()
 	}
 
 	drawTitle();
-
 	Update();
 
 	// relayout all dialogs
