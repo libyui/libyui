@@ -332,7 +332,7 @@ QY2DiskUsageListItem::paintPercentageBar( QPainter *		painter,
 
     if ( w > 0 )
     {
- 	fillWidth = (int) ( w * usedPercent() / 100.0 );
+ 	fillWidth = (int) ( w * percent / 100.0 );
 
 	// Fill the desired percentage.
 

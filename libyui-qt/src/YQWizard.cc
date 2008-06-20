@@ -155,8 +155,9 @@ YQWizard::~YQWizard()
     if ( this == main_wizard )
         main_wizard = 0;
 
-    if ( _helpDlg )
-	delete _helpDlg;
+    delete _helpDlg;
+
+    QY2Styler::self()->unregisterWidget( this );
 }
 
 bool YQWizard::isSecondary() const
@@ -740,7 +741,7 @@ QLayout *YQWizard::layoutButtonBox( QWidget * parent )
     _helpButton->setShortcut( Qt::Key_F1 );
 
     connect( _helpButton, SIGNAL( clicked()  ),
-	     this,	 SLOT  ( showHelp() ) );
+	     this,	  SLOT  ( showHelp() ) );
 
     hbox->addWidget( _helpButton );
 
@@ -920,14 +921,17 @@ void YQWizard::slotNextClicked()
 void YQWizard::showHelp()
 {
 
-	if (!_helpDlg)
-    		_helpDlg = new QY2HelpDialog ( _qHelpText, NULL );
-	else
-		_helpDlg->setHelpText( _qHelpText );
+    if (!_helpDlg)
+	_helpDlg = new QY2HelpDialog ( _qHelpText, NULL );
+    else
+    {
+	_helpDlg->setHelpText( _qHelpText );
+	_helpDlg->hide(); // workaround for icewm (see: bnc #397083)
+    }
 
-	_helpDlg->show();
-	_helpDlg->raise();
-	_helpDlg->activateWindow();
+    _helpDlg->show();
+    _helpDlg->raise();
+    _helpDlg->activateWindow();
 }
 
 

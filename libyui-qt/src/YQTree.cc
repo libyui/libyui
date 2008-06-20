@@ -51,11 +51,11 @@ YQTree::YQTree( YWidget * parent, const string & label )
     setWidgetRep( this );
 
     layout->setSpacing( YQWidgetSpacing );
-    layout->setMargin ( YQWidgetMargin  );
+    layout->setMargin ( YQWidgetMargin	);
 
     _nextSerialNo = 0;
 
-    _caption     = new YQWidgetCaption( this, label );
+    _caption	 = new YQWidgetCaption( this, label );
     YUI_CHECK_NEW( _caption );
     layout->addWidget( _caption );
 
@@ -72,17 +72,17 @@ YQTree::YQTree( YWidget * parent, const string & label )
     _caption->setBuddy ( _qt_treeWidget );
 
     connect( _qt_treeWidget,	SIGNAL( itemSelectionChanged () ),
-	     this, 		SLOT  ( slotSelectionChanged () ) );
+	     this,		SLOT  ( slotSelectionChanged () ) );
 
     connect( _qt_treeWidget,	SIGNAL( itemActivated	 ( QTreeWidgetItem *, int ) ),
-	     this, 		SLOT  ( slotActivated	 ( QTreeWidgetItem *	  ) ) );
+	     this,		SLOT  ( slotActivated	 ( QTreeWidgetItem *	  ) ) );
 
     connect( _qt_treeWidget,	SIGNAL( itemDoubleClicked( QTreeWidgetItem *, int ) ),
-	     this, 		SLOT  ( slotActivated	 ( QTreeWidgetItem *	  ) ) );
+	     this,		SLOT  ( slotActivated	 ( QTreeWidgetItem *	  ) ) );
 
     connect( _qt_treeWidget,	SIGNAL( itemExpanded	 ( QTreeWidgetItem * ) ),
 	     this,		SLOT  ( slotItemExpanded ( QTreeWidgetItem * ) ) );
-    
+
     connect( _qt_treeWidget,	SIGNAL( itemCollapsed	 ( QTreeWidgetItem * ) ),
 	     this,		SLOT  ( slotItemCollapsed( QTreeWidgetItem * ) ) );
 }
@@ -249,7 +249,7 @@ int YQTree::preferredWidth()
 int YQTree::preferredHeight()
 {
     int hintHeight = !_caption->isHidden() ? _caption->sizeHint().height() : 0;
-    
+
     // 300 is an arbitrary value.  Use a MinSize or MinHeight widget to set a
     // size that is useful for the application.
 
