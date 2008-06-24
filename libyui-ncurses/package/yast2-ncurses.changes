@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jun 24 13:19:47 CEST 2008 - gs@suse.de
+
+- NCDumbTab widget is available 
+
+-------------------------------------------------------------------
 Tue Jun 24 11:42:38 CEST 2008 - sh@suse.de
 
 - Applied bubli's patch for bnc #397393: OK button default focus 
