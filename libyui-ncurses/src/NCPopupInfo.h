@@ -89,6 +89,11 @@ public:
     bool isVisible() { return visible; }
 
     void setPreferredSize( int horiz, int vert ) { hDim = horiz; vDim = vert; }
+
+    void focusOkButton() { okButton->setKeyboardFocus(); }
+
+    void focusCancelButton() { cancelButton->setKeyboardFocus(); }
+ 
 };
 
 
