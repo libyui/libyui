@@ -395,6 +395,7 @@ void NCPkgPopupDiskspace::createLayout( string headline )
     // add the ok button
     okButton = new NCPushButton( split, NCPkgStrings::OKLabel() );
     okButton->setFunctionKey( 10 );
+    okButton->setKeyboardFocus();
 }
 
 

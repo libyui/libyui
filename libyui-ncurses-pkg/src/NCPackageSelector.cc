@@ -1012,6 +1012,7 @@ bool NCPackageSelector::CancelHandler( const NCursesEvent&  event )
 						   NCPkgStrings::NoLabel()
 						   );
 	cancelMsg->setPreferredSize( 45, 8 );
+	cancelMsg->focusCancelButton();
 	NCursesEvent input = cancelMsg->showInfoPopup( );
 
 	YDialog::deleteTopmostDialog();
@@ -1086,6 +1087,7 @@ bool NCPackageSelector::OkButtonHandler( const NCursesEvent&  event )
 						      NCPkgStrings::CancelLabel() );
 
 	    spaceMsg->setPreferredSize( 50, 10 );
+	    spaceMsg->focusOkButton();
 	    NCursesEvent input = spaceMsg->showInfoPopup( );
 
 	    YDialog::deleteTopmostDialog();
@@ -1198,6 +1200,7 @@ bool NCPackageSelector::showLicenseAgreement( ZyppSel & slbPtr , string licenseT
 					   NCPkgStrings::CancelLabel() );
 
     info->setPreferredSize( (NCurses::cols() * 80)/100, (NCurses::lines()*80)/100);
+    info->focusOkButton();
     license_confirmed = info->showInfoPopup( ) != NCursesEvent::cancel;
 
     if ( !license_confirmed )

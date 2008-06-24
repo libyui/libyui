@@ -281,6 +281,7 @@ bool NCPkgTable::changeStatus( ZyppStatus newstatus,
 						  NCPkgStrings::CancelLabel()
 						  );
 	    info->setPreferredSize( (NCurses::cols() * 80)/100, (NCurses::lines()*80)/100);
+	    info->focusOkButton();
 	    license_confirmed = info->showInfoPopup( ) != NCursesEvent::cancel;
 
 	    YDialog::deleteTopmostDialog(); 

@@ -112,6 +112,7 @@ void NCPkgPopupTable::createLayout( )
     // add the OK button
     okButton = new NCPushButton( hSplit, NCPkgStrings::OKLabel() );
     okButton->setFunctionKey( 10 );
+    okButton->setKeyboardFocus();
 
     new NCSpacing( hSplit, YD_HORIZ, true, 0.4 );
 
