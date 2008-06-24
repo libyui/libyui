@@ -152,6 +152,11 @@ void YQRadioButton::changed( bool newState )
 	if ( notify() )
 	    YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::ValueChanged ) );
     }
+    else
+    {
+        // prevent that the user deselects all items 
+        setChecked( true );
+    }
 }
 
 

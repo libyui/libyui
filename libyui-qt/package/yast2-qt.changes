@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jun 24 11:55:26 CEST 2008 - tgoettlicher@suse.de
+
+- prevent that the user deselects all radiobutton items
+
+-------------------------------------------------------------------
 Tue Jun 17 19:00:03 CEST 2008 - sh@suse.de
 
 - Fixed bnc #400477: yast2 runlevel takes 40s to switch view
