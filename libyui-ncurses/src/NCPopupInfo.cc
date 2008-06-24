@@ -95,6 +95,14 @@ void NCPopupInfo::createLayout( const string & headline,
 	new NCSpacing( hSplit, YD_HORIZ, true, 0.4 );
     }
 
+    //If we don't have cancel button and have single ok button instead
+    //let's focus it by default (#397393)
+    if ( cancelButtonLabel == "" && okButton )
+	focusOkButton();
+
+    //the same with missing ok button and single cancel button
+    if ( okButtonLabel == "" && cancelButton )
+	focusCancelButton();
 }
 
 
