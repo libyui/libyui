@@ -37,6 +37,19 @@ NCOptionalWidgetFactory::~NCOptionalWidgetFactory()
     // NOP
 }
 
+bool NCOptionalWidgetFactory::hasDumbTab()
+{
+    return true;
+}
+
+NCDumbTab *
+NCOptionalWidgetFactory::createDumbTab( YWidget * parent )
+{
+    NCDumbTab * dumbTab = new NCDumbTab( parent );
+    YUI_CHECK_NEW( dumbTab );
+
+    return dumbTab;
+}
 
 
 

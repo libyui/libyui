@@ -20,6 +20,7 @@
 #define NCOptionalWidgetFactory_h
 
 #include "YOptionalWidgetFactory.h"
+#include "NCDumbTab.h"
 
 
 /**
@@ -56,6 +57,10 @@ protected:
      **/
     virtual ~NCOptionalWidgetFactory();
 
+    bool hasDumbTab();
+
+    NCDumbTab *createDumbTab( YWidget * parent );
+    
 }; // class NCOptionalWidgetFactory
 
 

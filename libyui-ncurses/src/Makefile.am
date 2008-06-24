@@ -67,6 +67,7 @@ pkginclude_HEADERS = 		\
 	NCBusyIndicator.h     	\
 	NCMenuButton.h      	\
 	NCPushButton.h      	\
+	NCDumbTab.h		\
 	NCRadioButton.h     	\
 	NCInputField.h       	\
 	NCIntField.h        	\
@@ -148,6 +149,7 @@ libpy2ncurses_la_SOURCES =		\
 	NCBusyIndicator.cc		\
 	NCMenuButton.cc			\
 	NCPushButton.cc			\
+	NCDumbTab.cc			\
 	NCRadioButton.cc		\
 	NCInputField.cc			\
 	NCIntField.cc			\
