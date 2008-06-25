@@ -48,7 +48,7 @@ void NCPkgMenuDeps::createLayout()
     verifySystem = new YMenuItem( _("&Verify System") );
     items.push_back( verifySystem );
 
-    testCase = new YMenuItem( _("Generate Dependency Solver Testcase") );
+    testCase = new YMenuItem( _("&Generate Dependency Solver Testcase") );
     items.push_back( testCase ); 
 
     addItems( items );

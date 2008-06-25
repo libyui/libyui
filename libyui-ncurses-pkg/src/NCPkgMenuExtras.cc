@@ -50,16 +50,16 @@ NCPkgMenuExtras::~NCPkgMenuExtras()
 
 void NCPkgMenuExtras::createLayout()
 {
-    exportFile = new YMenuItem( _("Export Package List to File") );
+    exportFile = new YMenuItem( _("&Export Package List to File") );
     items.push_back( exportFile );
 
-    importFile = new YMenuItem( _("Import Package List from File") );
+    importFile = new YMenuItem( _("&Import Package List from File") );
     items.push_back( importFile );
 
-    diskSpace = new YMenuItem( _("Show Available Disk Space") );
+    diskSpace = new YMenuItem( _("&Show Available Disk Space") );
     items.push_back( diskSpace );
 
-    repoManager  = new YMenuItem( _("Start Repository Manager"));
+    repoManager  = new YMenuItem( _("S&tart Repository Manager"));
     items.push_back( repoManager );
 
     addItems( items );

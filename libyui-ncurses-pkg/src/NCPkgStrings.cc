@@ -258,7 +258,7 @@ const string NCPkgStrings::HelpPkgMenu4()
 const string NCPkgStrings::SearchIn()
 {
     // label of a frame with search settings
-    static const string value = _( " S&earch in " );
+    static const string value = _( "&Search in " );
     return value;
 }
 

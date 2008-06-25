@@ -49,7 +49,7 @@ void NCPkgMenuAction::createLayout()
 	installItem = new YMenuItem( _( "&Install     [+]" ) );
 	deleteItem =  new YMenuItem( _( "&Delete      [-]" ) );
 	updateItem =  new YMenuItem( _( "&Update      [>]" ) );
-	tabooItem =   new YMenuItem( _( "T&aboo       [!]" ) );
+	tabooItem =   new YMenuItem( _( "Ta&boo       [!]" ) );
 	lockItem =    new YMenuItem( _( "&Lock        [*]" ) );
 	// end: Actions menu, set status of all packages (title of a submenu)
 	allItem =     new YMenuItem( _( "&All Listed Packages" ) );
