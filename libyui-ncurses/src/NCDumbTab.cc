@@ -73,6 +73,7 @@ int NCDumbTab::preferredHeight()
 
 void NCDumbTab::setEnabled( bool do_bv )
 {
+    yuiMilestone() << "Set enabled" << endl;
     NCWidget::setEnabled( do_bv );
     YDumbTab::setEnabled( do_bv );
 }
@@ -100,6 +101,14 @@ NCursesEvent NCDumbTab::wHandleInput( wint_t key )
 	    {
 		currentIndex--;
 		wRedraw();
+
+		ret = NCursesEvent::menu;
+		item = itemAt( currentIndex );
+		if ( item )
+		{
+		    yuiMilestone() << "Show tab: " << item->label() << endl;
+		    ret.selection = (YMenuItem *)item;
+		}	
 	    }
 	    break;
 
@@ -108,9 +117,17 @@ NCursesEvent NCDumbTab::wHandleInput( wint_t key )
 	    {
 		currentIndex++;
 		wRedraw();
+
+		ret = NCursesEvent::menu;
+		item = itemAt( currentIndex );
+		if ( item )
+		{
+		    yuiMilestone() << "Show tab: " << item->label() << endl;
+		    ret.selection = (YMenuItem *)item;
+		}
 	    }
 	    break;
-
+#if 0
 	case KEY_RETURN:
 	    ret = NCursesEvent::menu;
 	    item = itemAt( currentIndex );
@@ -120,6 +137,7 @@ NCursesEvent NCDumbTab::wHandleInput( wint_t key )
 		ret.selection = (YMenuItem *)item;
 	    }
 	    break;
+#endif
     }
 
     return ret;
@@ -167,12 +185,36 @@ void NCDumbTab::wRedraw()
     
     while ( listIt != tabList.end() )
     {
-	nonActive = (i == currentIndex)?false:true; 
-	(*listIt).drawAt( *win,
-			  NCstyle::StWidget( widgetStyle( nonActive) ),
-			  wpos( 0, labelPos ),
-			  wsze( 1, winWidth ),
-			  NC::TOPLEFT, false );
+	nonActive = (i == currentIndex)?false:true;
+	if ( GetState() == NC::WSactive )
+	{
+
+	    (*listIt).drawAt( *win,
+			      NCstyle::StWidget( widgetStyle( nonActive) ),
+			      wpos( 0, labelPos ),
+			      wsze( 1, winWidth ),
+			      NC::TOPLEFT, false );
+	}
+	else
+	{
+	    if ( !nonActive )
+	    {
+		(*listIt).drawAt( *win,
+				  A_REVERSE,
+				  A_REVERSE,
+				  wpos( 0, labelPos ),
+				  wsze( 1, winWidth ),
+				  NC::TOPLEFT, false );
+	    }
+	    else
+	    {
+		(*listIt).drawAt( *win,
+				  NCstyle::StWidget( frameStyle() ),
+				  wpos( 0, labelPos ),
+				  wsze( 1, winWidth ),
+				  NC::TOPLEFT, false );	
+	    }
+	}
 
 	labelPos += (*listIt).width() + 2;
 
