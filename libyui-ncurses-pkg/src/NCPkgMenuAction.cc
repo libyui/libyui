@@ -21,7 +21,6 @@
 #include "NCPkgMenuAction.h"
 #include "NCPackageSelector.h"
 
-
 /*
   Textdomain "ncurses-pkg"
 */

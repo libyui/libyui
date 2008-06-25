@@ -19,6 +19,10 @@
 #include "NCPkgSearchSettings.h"
 #include "NCPkgStrings.h"
 
+/*
+  Textdomain "ncurses-pkg"
+*/
+
 NCPkgSearchSettings::NCPkgSearchSettings ( YWidget *parent, string label)
 	: NCMultiSelectionBox ( parent, label)
 {
