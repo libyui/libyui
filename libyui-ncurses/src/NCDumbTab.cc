@@ -184,6 +184,31 @@ void NCDumbTab::wRedraw()
 	    winWidth -= (*listIt).width() -1;
 	}
     };
-    NCWidget * child = dynamic_cast<NCWidget *>(firstChild());
-    child->Redraw();
+    
+    if ( firstChild() )
+    {
+	NCWidget * child = dynamic_cast<NCWidget *>(firstChild());
+	if ( child )
+	    child->Redraw();
+
+	redrawChilds( firstChild() );
+    }
+ }
+
+void NCDumbTab::redrawChilds( YWidget *widget )
+{
+    NCWidget * child;
+
+    if ( widget->hasChildren() )
+    {
+	YWidgetListConstIterator widgetIt = widget->childrenBegin();
+	while ( widgetIt != widget->childrenEnd() )
+	{
+	    child = dynamic_cast<NCWidget *>(*widgetIt);
+	    if ( child )
+		child->Redraw();
+	    redrawChilds( *widgetIt );
+	    ++widgetIt;
+	}
+    }
 }
