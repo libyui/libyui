@@ -173,12 +173,14 @@ void NCDumbTab::wRedraw()
 			  wpos( 0, labelPos ),
 			  wsze( 1, winWidth ),
 			  NC::TOPLEFT, false );
+
+	labelPos += (*listIt).width() + 2;
+
 	++listIt;
 	++i;
 	
 	if ( listIt != tabList.end() )
 	{
-	    labelPos += (*listIt).width() + 2;
 	    winWidth -= (*listIt).width() -1;
 	}
     };
