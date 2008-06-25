@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Jun 25 13:50:33 CEST 2008 - kmachalkova@suse.cz
+
+- Focus the button (instead of text area) and make closing the dialog 
+  possible with single keypress if applicable (bnc#397393) 
+- Fixed keyboard shortcut (bnc#402349)
+- 2.17.3 
+
+-------------------------------------------------------------------
 Wed Jun 11 13:02:53 CEST 2008 - kmachalkova@suse.cz
 
 - Use zypp::PoolQuery to filter packages by repositories
