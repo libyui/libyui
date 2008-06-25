@@ -35,82 +35,10 @@ const string NCPkgStrings::Deps()
     return value;
 }
 
-const string NCPkgStrings::AutoDeps()
-{
-    // menu entry: dependency check off
-    static const string value = _( "&Automatic Dependency Check  [x]" );
-    return value;
-}
-
-const string NCPkgStrings::NoAutoDeps()
-{
-    // menu entry: dependency check off
-    static const string value = _( "&Automatic Dependency Check  [ ]" );
-    return value;
-}
-
-const string NCPkgStrings::CheckDeps()
-{
-    // menu entry: do a dependency check 
-    // Please note: preserve the whitespaces at the beginning
-    static const string value = _( "Check Dependencies Now" );
-    return value;
-}
-
-const string  NCPkgStrings::VerifySystem()
-{
-    // menu entry: verify system
-    // Please note: preserve the whitespaces at the beginning
-    static const string value = _( "Verify System" );
-    return value;
-}
-
-const string NCPkgStrings::TestCase()
-{
-    // menu entry: generate test case for solver
-    static const string value = _( "Generate Dependency Resolver &Test Case" );
-    return value;
-}
-
 const string NCPkgStrings::View()
 {
     //menu entry 2 - display different kinds of info on pkgs
     static const string value = _( "&View" );
-    return value;
-}
-
-const string NCPkgStrings::PackageDescription()
-{
-    //menu entry 2 - display different kinds of info on pkgs
-    static const string value = _( "Package Description" );
-    return value;
-}
-
-const string NCPkgStrings::TechnicalData()
-{
-    //menu entry 2 - display different kinds of info on pkgs
-    static const string value = _( "Technical Data" );
-    return value;
-}
-
-const string NCPkgStrings::PackageVersions()
-{
-    //menu entry 2 - display different kinds of info on pkgs
-    static const string value = _( "Package Versions" );
-    return value;
-}
-
-const string NCPkgStrings::FileList()
-{
-    //menu entry 2 - display different kinds of info on pkgs
-    static const string value = _( "File List" );
-    return value;
-}
-
-const string NCPkgStrings::Dependencies()
-{
-    //menu entry 2 - display different kinds of info on pkgs
-    static const string value = _( "Dependencies" );
     return value;
 }
 
@@ -121,27 +49,6 @@ const string NCPkgStrings::Extras()
     return value;
 }
 
-const string NCPkgStrings::ExportList()
-{
-    // menu entry
-    static const string value = _( "&Export Package List to File" );
-    return value;
-}
-
-const string NCPkgStrings::ImportList()
-{
-    // last menu entry of the Etc. menu
-    static const string value = _( "&Import Package List from File" );
-    return value;
-}
-
-const string NCPkgStrings::ShowDiskSpace()
-{
-    // last menu entry of the Etc. menu
-    static const string value = _( "Show Available Disk Space" );
-    return value;
-}
-
 const string NCPkgStrings::Filter()
 {
     //pick a package filter - patterns, langs, repos, search,...
@@ -149,47 +56,6 @@ const string NCPkgStrings::Filter()
     return value;
 }
 
-const string NCPkgStrings::Patterns()
-{
-    // Patterns filter
-    static const string value = _( "Patterns" );
-    return value;
-}
-
-const string NCPkgStrings::Languages()
-{
-    // Languages filter
-    static const string value = _( "Languages" );
-    return value;
-}
-
-const string NCPkgStrings::RPMGroups()
-{
-    // RpmGroups filter
-    static const string value = _( "RPM Groups" );
-    return value;
-}
-
-const string NCPkgStrings::Repos()
-{
-    // Repositories filter
-    static const string value = _( "Repositories" );
-    return value;
-}
-
-const string NCPkgStrings::Search()
-{
-    // Search filter
-    static const string value = _( "Search" );
-    return value;
-}
-
-const string NCPkgStrings::InstSummary()
-{
-    // Installation summary filter (changed packages)
-    static const string value = _( "Installation Summary" );
-    return value;
-}
 
 const string NCPkgStrings::InstPkg()
 {
@@ -209,90 +75,6 @@ const string NCPkgStrings::Actions()
 {
     // Actions on pkgs (install, remove,..)
     static const string value = _( "A&ctions" );
-    return value;
-}
-
-const string NCPkgStrings::Toggle()
-{
-    // Actions on pkgs (install, remove,..)
-    static const string value = _( "&Toggle    [SPACE]" );
-    return value;
-}
-
-const string NCPkgStrings::Install()
-{
-    // Action on pkg - install it
-    static const string value = _( "&Install      [+]" );
-    return value;
-}
-
-const string NCPkgStrings::Delete()
-{
-    // Action on pkg - delete it
-    static const string value = _( "&Delete      [-]" );
-    return value;
-}
-
-const string NCPkgStrings::Update()
-{
-    // Action on pkg - update it
-    static const string value = ( _( "&Update      [>]" ) );
-    return value;
-}
-
-const string NCPkgStrings::Taboo()
-{
-    // Action on pkg - set it to taboo
-    static const string value = ( _( "T&aboo       [!]" ) );
-    return value;
-}
-
-const string NCPkgStrings::Lock()
-{
-    // Action on pkg - lock it
-    static const string value = ( _( "&Lock        [*]" ) );
-    return value;
-}
-
-const string NCPkgStrings::AllPkgsList()
-{
-    // submenu: selections
-    static const string value = _( "All &Packages List" );
-    return value;
-}
-
-const string NCPkgStrings::InstallAll()
-{
-    // Action on pkgs - install all in this list
-    static const string value = (  _( "Install All" ) );
-    return value;
-}
-
-const string NCPkgStrings::DeleteAll()
-{
-    // Action on pkgs - delete all in this list
-    static const string value = (  _( "Delete All" ) );
-    return value;
-}
-
-const string NCPkgStrings::KeepAll()
-{
-    // Action on pkgs - keep all in this list
-    static const string value = (  _( "Keep All" ) );
-    return value;
-}
-
-const string NCPkgStrings::UpdateAll()
-{
-    // Action on pkgs - update all in this list
-    static const string value = (  _( "Update All Unconditionally") );
-    return value;
-}
-
-const string NCPkgStrings::UpdateIfNewer()
-{
-    // Action on pkgs - update all in this list, if newer vers. is there
-    static const string value = (  _( "Update If Newer Version Available" ) );
     return value;
 }
 
@@ -472,28 +254,6 @@ const string NCPkgStrings::HelpPkgMenu4()
     return value;
 }
 
-const string NCPkgStrings::SearchPhrase()
-{
-    // begin: text/labels for search popups (use unique hotkeys until the end:)
-    // text for the package search popup 
-    static const string value = _( "Search &Phrase" );
-    return value;
-}
-
-const string NCPkgStrings::SearchButton()
-{
-    // Search filter
-    static const string value = _( "&Search" );
-    return value;
-}
-
-const string NCPkgStrings::IgnoreCase()
-{
-    // end: text/labels for search popups
-    // label of a combo box  (search popup)
-    static const string value = _( "&Ignore Case" );
-    return value;
-}
 
 const string NCPkgStrings::SearchIn()
 {
@@ -502,38 +262,11 @@ const string NCPkgStrings::SearchIn()
     return value;
 }
 
-const string NCPkgStrings::CheckName()
+const string NCPkgStrings::SearchPhrase()
 {
-    // label of a combo box  (search popup)
-    static const string value = _( "Name of the Package" );
-    return value;
-}
-
-const string NCPkgStrings::CheckSummary()
-{
-    // label of a combo box  (search popup)
-    static const string value = _( "Summary" );
-    return value;
-}
-
-const string NCPkgStrings::CheckDescr()
-{
-    // label of a combo box  (search popup)
-    static const string value = _( "Description (time-consuming)" );
-    return value;
-}
-
-const string NCPkgStrings::CheckProvides()
-{
-    // label of a combo box  (search popup)
-    static const string value = _( "Provides" );
-    return value;
-}
-
-const string NCPkgStrings::CheckRequires()
-{
-    // label of a combo box  (search popup)
-    static const string value = _( "Requires" );
+    // begin: text/labels for search popups (use unique hotkeys until the end:)
+    // text for the package search popup 
+    static const string value = _( "Search &Phrase" );
     return value;
 }
 

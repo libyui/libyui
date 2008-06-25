@@ -19,6 +19,10 @@
 #ifndef NCPkgSearchSettings_h
 #define NCPkgSearchSettings_h
 
+#include <string>
+
+#include "NCurses.h"
+#include "NCi18n.h"
 #include "NCMultiSelectionBox.h"
 
 class NCPkgSearchSettings : public NCMultiSelectionBox {

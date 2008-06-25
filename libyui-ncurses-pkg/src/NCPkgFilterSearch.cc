@@ -97,7 +97,7 @@ void NCPkgFilterSearch::createLayout( YWidget *parent )
 	// add the checkBox ignore case
 	NCAlignment *left = new NCAlignment( vSplit, YAlignBegin, YAlignUnchanged );
 
-	ignoreCase = new NCCheckBox( left, NCPkgStrings::IgnoreCase(), true );
+	ignoreCase = new NCCheckBox( left, _( "&Ignore Case" ), true );
         new NCSpacing( vSplit, YD_VERT, true, 0.5 );
 	
     }

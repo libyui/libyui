@@ -33,41 +33,15 @@ public:
     // Main menu entry Dependencies     
     static const string Deps();
 
-    //its subentries
-    static const string AutoDeps();
-    static const string NoAutoDeps();
-    static const string CheckDeps();
-    static const string VerifySystem();
-    static const string TestCase();
- 
     // Main menu entry View
     static const string View();
 
-    //its subentries
-    static const string PackageDescription();
-    static const string TechnicalData();
-    static const string PackageVersions();
-    static const string FileList();
-    static const string Dependencies();
-
     // Main menu entry 'Extras'
     static const string Extras();
-
-    //its subentries
-    static const string ExportList();	
-    static const string ImportList();
-    static const string ShowDiskSpace();
-
+    
     //Package Filters combo box label
     static const string Filter();
 
-    //the filters itself
-    static const string Patterns();
-    static const string Languages();
-    static const string RPMGroups();
-    static const string Repos();
-    static const string Search();
-    static const string InstSummary();
     static const string InstPkg();
 
     //Label below the table - pkg name follows
@@ -75,20 +49,6 @@ public:
 
     //Actions menu (what to do with the pkg)
     static const string Actions();
-
-    //the actions itself
-    static const string Toggle();
-    static const string Install();
-    static const string Delete();
-    static const string Update();
-    static const string Taboo();
-    static const string Lock();
-    static const string AllPkgsList();
-    static const string InstallAll();
-    static const string DeleteAll();
-    static const string KeepAll();
-    static const string UpdateAll();
-    static const string UpdateIfNewer();
 
     static const string Help();
 
@@ -132,20 +92,10 @@ public:
     static const string HelpPkgMenu3();
     static const string HelpPkgMenu4();
 
-
-    //Search filter strings
-    static const string SearchPhrase();
-    static const string SearchButton();
-    static const string IgnoreCase();
-
     //Search settings
     static const string SearchIn();
-    static const string CheckName();
-    static const string CheckSummary();
-    static const string CheckDescr();
-    static const string CheckProvides();
-    static const string CheckRequires();
-  
+    static const string SearchPhrase();
+
     // table column headlines 
     static const string PkgStatus();
     static const string PatternsLabel();

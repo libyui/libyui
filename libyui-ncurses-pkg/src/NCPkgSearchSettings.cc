@@ -32,15 +32,15 @@ NCPkgSearchSettings::~NCPkgSearchSettings()
 
 void NCPkgSearchSettings::createLayout()
 {
-   checkName = new YItem (NCPkgStrings::CheckName(), true);
+   checkName = new YItem ( _( "Name of the Package" ), true);
    items.push_back (checkName); 
-   checkSummary = new YItem (NCPkgStrings::CheckSummary(), true);
+   checkSummary = new YItem ( _( "Summary" ), true);
    items.push_back (checkSummary); 
-   checkDescr = new YItem (NCPkgStrings::CheckDescr() );
+   checkDescr = new YItem ( _( "Description (time-consuming)" ));
    items.push_back (checkDescr); 
-   checkProvides = new YItem (NCPkgStrings::CheckProvides() );
+   checkProvides = new YItem ( _( "Provides" ));
    items.push_back (checkProvides); 
-   checkRequires = new YItem (NCPkgStrings::CheckRequires() );
+   checkRequires = new YItem ( _( "Requires" ));
    items.push_back (checkRequires); 
 
    addItems( items );
