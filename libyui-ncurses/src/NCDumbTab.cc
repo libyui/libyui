@@ -92,7 +92,6 @@ void NCDumbTab::setSize( int newwidth, int newheight )
 NCursesEvent NCDumbTab::wHandleInput( wint_t key )
 {
     NCursesEvent ret = NCursesEvent::none;
-    YItem * item;
 
     switch ( key )
     {
@@ -102,13 +101,7 @@ NCursesEvent NCDumbTab::wHandleInput( wint_t key )
 		currentIndex--;
 		wRedraw();
 
-		ret = NCursesEvent::menu;
-		item = itemAt( currentIndex );
-		if ( item )
-		{
-		    yuiMilestone() << "Show tab: " << item->label() << endl;
-		    ret.selection = (YMenuItem *)item;
-		}	
+		ret = createMenuEvent( currentIndex );
 	    }
 	    break;
 
@@ -118,28 +111,31 @@ NCursesEvent NCDumbTab::wHandleInput( wint_t key )
 		currentIndex++;
 		wRedraw();
 
-		ret = NCursesEvent::menu;
-		item = itemAt( currentIndex );
-		if ( item )
-		{
-		    yuiMilestone() << "Show tab: " << item->label() << endl;
-		    ret.selection = (YMenuItem *)item;
-		}
+		ret = createMenuEvent( currentIndex );
 	    }
 	    break;
-#if 0
+
 	case KEY_RETURN:
-	    ret = NCursesEvent::menu;
-	    item = itemAt( currentIndex );
-	    if ( item )
-	    {
-		yuiMilestone() << "Show tab: " << item->label() << endl;
-		ret.selection = (YMenuItem *)item;
-	    }
+	    ret = createMenuEvent( currentIndex );
 	    break;
-#endif
+
     }
 
+    return ret;
+}
+
+NCursesEvent NCDumbTab::createMenuEvent( unsigned int index )
+{
+    NCursesEvent ret = NCursesEvent::menu;
+    YItem * item;
+
+    item = itemAt( index );
+    if ( item )
+    {
+	yuiMilestone() << "Show tab: " << item->label() << endl;
+	ret.selection = (YMenuItem *)item;
+    }
+    
     return ret;
 }
 

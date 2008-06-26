@@ -36,7 +36,7 @@ private:
 
     vector <NClabel> tabList;
     unsigned int currentIndex;
-    
+
 protected:
 
     virtual const char * location() const { return "NCDumbTab"; }
@@ -69,6 +69,7 @@ public:
 	return true;
     }
 
+    NCursesEvent createMenuEvent( unsigned int index);
 };
 
 
