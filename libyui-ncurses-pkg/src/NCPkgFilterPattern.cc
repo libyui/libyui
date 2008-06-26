@@ -17,6 +17,8 @@
 /-*/
 #define YUILogComponent "ncurses-pkg"
 #include <YUILog.h>
+#include <sstream>
+#include <boost/format.hpp>
 
 #include "NCPkgFilterPattern.h"
 
@@ -140,10 +142,12 @@ void NCPkgFilterPattern::showPatternPackages( )
         	    }
             }
             packager->FilterDescription()->setText ( showDescription( objPtr ) );
-            char buf[100];
-            sprintf(buf, "%d of %d packages installed", installed, total);
+
+	    ostringstream s;
+
+            s << boost::format( _("%d of %d packages installed")) % installed % total;
         
-            packager->PatternLabel()->setLabel ( buf );
+            packager->PatternLabel()->setLabel ( s.str() );
         
             packageList->setCurrentItem( 0 );
             packageList->drawList();
