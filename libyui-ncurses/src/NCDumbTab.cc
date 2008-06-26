@@ -196,8 +196,8 @@ void NCDumbTab::wRedraw()
 	    if ( !nonActive )
 	    {
 		(*listIt).drawAt( *win,
-				  A_REVERSE,
-				  A_REVERSE,
+				  widgetStyle( ).data,
+				  widgetStyle( ).data,
 				  wpos( 0, labelPos ),
 				  wsze( 1, winWidth ),
 				  NC::TOPLEFT, false );
