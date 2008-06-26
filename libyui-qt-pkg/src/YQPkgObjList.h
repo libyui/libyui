@@ -100,6 +100,11 @@ public:
 			   bool			selectNextItem = false );
 
     /**
+     * Show solver information about the current selected item
+     **/
+    void showSolverInfo();
+
+    /**
      * Sets the status of all (toplevel) list items to 'newStatus', if possible.
      * Only one single statusChanged() signal is emitted.
      *
@@ -239,6 +244,8 @@ public slots:
     void setCurrentTaboo()	   { setCurrentStatus( S_Taboo	     	); }
     void setCurrentProtected()	   { setCurrentStatus( S_Protected	); }
 
+    void showCurrentSolverInfo()   { showSolverInfo  (); }
+
     void setListInstall()	   { setAllItemStatus( S_Install	); }
     void setListDontInstall()	   { setAllItemStatus( S_NoInst		); }
     void setListKeepInstalled()	   { setAllItemStatus( S_KeepInstalled	); }
@@ -369,6 +376,7 @@ public:
     QAction *		actionSetCurrentUpdate;
     QAction *		actionSetCurrentTaboo;
     QAction *		actionSetCurrentProtected;
+    QAction *		actionShowCurrentSolverInfo;    
 
     QAction *		actionSetListInstall;
     QAction *		actionSetListDontInstall;

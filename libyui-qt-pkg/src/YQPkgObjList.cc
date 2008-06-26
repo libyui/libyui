@@ -35,6 +35,7 @@
 #include "YQi18n.h"
 #include "YQIconPool.h"
 #include "YQUI.h"
+#include "YQZyppSolverDialogPluginStub.h"
 
 using std::list;
 using std::string;
@@ -56,6 +57,7 @@ YQPkgObjList::YQPkgObjList( QWidget * parent )
     actionSetCurrentUpdate(0L),
     actionSetCurrentTaboo(0L),
     actionSetCurrentProtected(0L),
+    actionShowCurrentSolverInfo(0L),
     actionSetListInstall(0L),
     actionSetListDontInstall(0L),
     actionSetListKeepInstalled(0L),
@@ -310,6 +312,24 @@ YQPkgObjList::setCurrentStatus( ZyppStatus newStatus, bool doSelectNextItem )
 
 
 void
+YQPkgObjList::showSolverInfo()
+{
+    QTreeWidgetItem * listViewItem = currentItem();
+
+    if ( ! listViewItem )
+	return;
+
+    YQPkgObjListItem * item = dynamic_cast<YQPkgObjListItem *> (listViewItem);
+
+    if ( item )
+    {
+	YQZyppSolverDialogPluginStub plugin;
+	plugin.createZyppSolverDialog(item->zyppObj()->poolItem());
+    }
+}
+
+
+void
 YQPkgObjList::setAllItemStatus( ZyppStatus newStatus, bool force )
 {
     if ( ! _editable )
@@ -376,6 +396,8 @@ YQPkgObjList::createActions()
     actionSetCurrentTaboo		= createAction( S_Taboo,		"[!]"		);
     actionSetCurrentProtected		= createAction( S_Protected, 		"[*]" 		);
 
+    actionShowCurrentSolverInfo		= createAction( _( "Show solver information" ));
+
     actionSetListInstall		= createAction( S_Install,		"", true );
     actionSetListDontInstall		= createAction( S_NoInst,		"", true );
     actionSetListKeepInstalled		= createAction( S_KeepInstalled,	"", true );
@@ -403,6 +425,8 @@ YQPkgObjList::createActions()
     connect( actionSetCurrentUpdate,	     SIGNAL( activated() ), this, SLOT( setCurrentUpdate()	  ) );
     connect( actionSetCurrentTaboo,	     SIGNAL( activated() ), this, SLOT( setCurrentTaboo()	  ) );
     connect( actionSetCurrentProtected,	     SIGNAL( activated() ), this, SLOT( setCurrentProtected()	  ) );
+
+    connect( actionShowCurrentSolverInfo,    SIGNAL( activated() ), this, SLOT( showCurrentSolverInfo()	  ) );    
 
     connect( actionSetListInstall,	     SIGNAL( activated() ), this, SLOT( setListInstall()	  ) );
     connect( actionSetListDontInstall,	     SIGNAL( activated() ), this, SLOT( setListDontInstall()	  ) );
@@ -468,6 +492,8 @@ YQPkgObjList::createNotInstalledContextMenu()
     _notInstalledContextMenu->addAction(actionSetCurrentDontInstall);
     _notInstalledContextMenu->addAction(actionSetCurrentTaboo);
 
+    _notInstalledContextMenu->addAction(actionShowCurrentSolverInfo);    
+
     addAllInListSubMenu( _notInstalledContextMenu );
 }
 
@@ -481,6 +507,8 @@ YQPkgObjList::createInstalledContextMenu()
     _installedContextMenu->addAction(actionSetCurrentKeepInstalled);
     _installedContextMenu->addAction(actionSetCurrentDelete);
     _installedContextMenu->addAction(actionSetCurrentUpdate);
+
+    _installedContextMenu->addAction(actionShowCurrentSolverInfo);        
 
     addAllInListSubMenu( _installedContextMenu );
 }
@@ -559,6 +587,7 @@ YQPkgObjList::updateActions( YQPkgObjListItem * item )
 	    actionSetCurrentDelete->setEnabled( false );
 	    actionSetCurrentUpdate->setEnabled( false );
 	}
+	actionShowCurrentSolverInfo->setEnabled( true );	
     }
     else	// ! item
     {
@@ -570,6 +599,9 @@ YQPkgObjList::updateActions( YQPkgObjListItem * item )
 	actionSetCurrentDelete->setEnabled( false );
 	actionSetCurrentUpdate->setEnabled( false );
 	actionSetCurrentProtected->setEnabled( false );
+
+	actionShowCurrentSolverInfo->setEnabled( false );		
+	
     }
 }
 

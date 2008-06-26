@@ -662,6 +662,7 @@ YQPackageSelector::addMenus()
 	_pkgMenu->addAction(_pkgList->actionSetCurrentDelete);
 	_pkgMenu->addAction(_pkgList->actionSetCurrentUpdate);
 	_pkgMenu->addAction(_pkgList->actionSetCurrentTaboo);
+	_pkgMenu->addAction(_pkgList->actionShowCurrentSolverInfo);            	
 
 #if ENABLE_SOURCE_RPMS
 	_pkgMenu->addSeparator();

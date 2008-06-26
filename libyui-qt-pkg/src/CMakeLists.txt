@@ -53,6 +53,7 @@ SET(qt_yast_pkg_plugin_SRCS
     YQPkgUpdateProblemFilterView.cc
     YQPkgVersionsView.cc
     YQPackageSelectorPluginImpl.cc
+    YQZyppSolverDialogPluginStub.cc
     )
 
 QT4_AUTOMOC(${qt_yast_pkg_plugin_SRCS})
@@ -64,7 +65,7 @@ INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
 INCLUDE_DIRECTORIES( ${CMAKE_INSTALL_PREFIX}/include/YaST2/yast2-qt )
 INCLUDE_DIRECTORIES( ${ZYPP_INCLUDE_DIR} ) 
 
-ADD_LIBRARY( py2qt_pkg SHARED ${qt_yast_pkg_plugin_SRCS})
+ADD_LIBRARY( py2qt_pkg SHARED ${qt_yast_pkg_plugin_SRCS} )
 TARGET_LINK_LIBRARIES( py2qt_pkg ${UI_PLUGIN_DIR}/libpy2qt.so )
 TARGET_LINK_LIBRARIES( py2qt_pkg ${LIBYUI_LIBRARY} )
 TARGET_LINK_LIBRARIES( py2qt_pkg ${ZYPP_LIBRARY} )

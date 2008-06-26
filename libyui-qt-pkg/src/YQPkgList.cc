@@ -277,9 +277,9 @@ YQPkgList::createNotInstalledContextMenu()
     _notInstalledContextMenu->addAction(actionSetCurrentInstall);
     _notInstalledContextMenu->addAction(actionSetCurrentDontInstall);
     _notInstalledContextMenu->addAction(actionSetCurrentTaboo);
+    _notInstalledContextMenu->addAction(actionShowCurrentSolverInfo);        
 
     addAllInListSubMenu( _notInstalledContextMenu );
-
 
     _notInstalledContextMenu->addSeparator();
     _notInstalledContextMenu->addAction( _( "Export This List to &Text File..." ),
@@ -297,6 +297,7 @@ YQPkgList::createInstalledContextMenu()
     _installedContextMenu->addAction(actionSetCurrentDelete);
     _installedContextMenu->addAction(actionSetCurrentUpdate);
     _installedContextMenu->addAction(actionSetCurrentProtected);
+    _installedContextMenu->addAction(actionShowCurrentSolverInfo);            
 
     addAllInListSubMenu( _installedContextMenu );
 
