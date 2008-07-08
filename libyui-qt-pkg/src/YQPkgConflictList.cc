@@ -284,9 +284,11 @@ YQPkgConflict::addSolutions()
         vbox->addWidget( s );
 
         QString details = fromUTF8( ( *it )->details() );
-        if ( !details.isEmpty() )
+	
+        if ( ! details.isEmpty() )
         {
             QStringList lines = details.split( "\n" );
+	    
             if ( lines.count() > 7 )
             {
                 details = "<qt>";
@@ -294,6 +296,7 @@ YQPkgConflict::addSolutions()
                     details += lines[i] + "<br>\n";
                 details += _( "<a href='/'>%1 more...</a>" ).arg( lines.count() - 4 );
             }
+	    
             QLabel * d = new QLabel( details, this );
             connect( d, SIGNAL( linkActivated ( const QString & ) ),
                      SLOT( detailsExpanded() ) );
@@ -306,6 +309,7 @@ YQPkgConflict::addSolutions()
             vbox->addLayout( hbox );
             _details[ d ] = *it;
         }
+	
 	++it;
     }
 }
