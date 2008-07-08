@@ -72,6 +72,13 @@ public:
     virtual void deleteAllItems();
     
     /**
+     * Notification that some shortcut was changed.
+     *
+     * Reimplemented from YDumbTab.
+     **/
+    virtual void shortcutChanged();
+    
+    /**
      * Set enabled/disabled state.
      *
      * Reimplemented from YWidget.

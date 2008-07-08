@@ -127,6 +127,22 @@ YQDumbTab::slotSelected( int index )
 
 
 void
+YQDumbTab::shortcutChanged()
+{
+    // Any of the items might have its keyboard shortcut changed, but we don't
+    // know which one. So let's simply set all tab labels again.
+    
+    for ( YItemConstIterator it = itemsBegin();
+	  it != itemsEnd();
+	  ++it )
+    {
+	YItem * item = *it;
+	_tabBar->setTabText( item->index(), fromUTF8( item->label() ) );
+    }
+}
+
+
+void
 YQDumbTab::setEnabled( bool enabled )
 {
     _tabBar->setEnabled( enabled );
