@@ -95,7 +95,34 @@ void YQSelectionBox::setLabel( const string & label )
 }
 
 
+void YQSelectionBox::addItems( const YItemCollection & itemCollection )
+{
+    for ( YItemConstIterator it = itemCollection.begin();
+	  it != itemCollection.end();
+	  ++it )
+    {
+	addItem( *it,
+		 true ); // batchMode
+
+	// No need to check for (*it)->hasChildren() and iterate recursively
+	// over the children: Any children of this item simply remain in this
+	// item's YItemCollection.
+    }
+
+
+    _qt_listWidget->scrollToItem( _qt_listWidget->currentItem(),
+				  QAbstractItemView::EnsureVisible );
+}
+
+
 void YQSelectionBox::addItem( YItem * item )
+{
+    addItem( item,
+	     false ); // batchMode
+}
+
+
+void YQSelectionBox::addItem( YItem * item, bool batchMode )
 {
     YSelectionBox::addItem( item );
     QPixmap icon;
@@ -127,7 +154,11 @@ void YQSelectionBox::addItem( YItem * item )
 	_qt_listWidget->setCurrentItem( _qt_listWidget->item( item->index() ) );
     }
 
-    _qt_listWidget->scrollToItem( _qt_listWidget->currentItem(), QAbstractItemView::EnsureVisible );
+    if ( ! batchMode )
+    {
+	_qt_listWidget->scrollToItem( _qt_listWidget->currentItem(),
+				      QAbstractItemView::EnsureVisible );
+    }
 }
 
 
