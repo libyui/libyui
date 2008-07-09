@@ -20,6 +20,7 @@
 #include "NCPkgPackageDetails.h"
 #include "NCPackageSelector.h"
 
+using namespace zypp;
 
 /*
   Textdomain "ncurses-pkg"
@@ -244,7 +245,7 @@ bool NCPkgPackageDetails::patchDescription( ZyppObj objPtr, ZyppSel selectable )
     }
     
     string descr;
-
+    descr += "<p>";
     descr += NCPkgStrings::Patch();
     descr += selectable->name();
     descr += "&nbsp;";
@@ -258,19 +259,36 @@ bool NCPkgPackageDetails::patchDescription( ZyppObj objPtr, ZyppSel selectable )
     descr += "&nbsp;";
     descr += NCPkgStrings::Version();
     descr += patchPtr->edition().asString();
-    descr += "<br>";
-
+    descr += "</p>";
+    
     if ( !selectable->installedEmpty()
 	 && selectable->installedObj().isBroken() )
     {
 	descr += _( "----- this patch is broken !!! -----" );
 	descr += "<br>";
     }
+
     // get and format the patch description
     string value = patchPtr->description();
     //descr += createDescrText( value );
+    descr += "<p>";
     descr += value;
+    descr += "</p>";
 
+    descr +=  _("References:<br>");
+    for ( Patch::ReferenceIterator rit = patchPtr->referencesBegin();
+	  rit != patchPtr->referencesEnd();
+	  ++rit )
+    {
+	descr += rit.id().c_str();
+	descr += "&nbsp;";
+	descr += "(";
+	descr += rit.type().c_str();
+	descr += "):";
+	descr += "&nbsp;";
+	descr += rit.title().c_str();
+	descr += "<br>";
+    }
     // show the description
     setValue( descr );
 
