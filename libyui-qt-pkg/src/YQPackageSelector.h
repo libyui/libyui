@@ -100,16 +100,22 @@ public slots:
     void installDevelPkgs();
 
     /**
-     * Install any -debuginfo package for packages that are installed or marked
-     * for installation
+     * Install available -debuginfo packages for packages that are installed or
+     * marked for installation
      **/
     void installDebugInfoPkgs();
+
+    /**
+     * Install available -debugsource packages for packages that are installed or
+     * marked for installation
+     **/
+    void installDebugSourcePkgs();
 
     /**
      * Install any subpackage that ends with 'suffix' for packages that are
      * installed or marked for installation
      **/
-    void installSubPkgs( const QString suffix );
+    void installSubPkgs( const QString & suffix );
 
     /**
      * Enable or disable the package exclude rules (show or suppress -debuginfo

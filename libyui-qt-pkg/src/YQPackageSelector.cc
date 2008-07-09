@@ -630,7 +630,7 @@ YQPackageSelector::addMenus()
         // Translators: This is about packages ending in "-devel", so don't translate that "-devel"!
 	_showDevelAction = _viewMenu->addAction( _( "Show -de&vel Packages" ),
 						 this, SLOT( pkgExcludeDevelChanged( bool ) ), Qt::Key_F7 );
-  _showDevelAction->setCheckable(true);
+	_showDevelAction->setCheckable(true);
 	_showDevelAction->setChecked(true);
 
 	_excludeDevelPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-devel(-\\d+bit)?$" ), _pkgList->nameCol() );
@@ -638,11 +638,11 @@ YQPackageSelector::addMenus()
 	_excludeDevelPkgs->enable( false );
 
 	// Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
-	_showDebugAction = _viewMenu->addAction( _( "Show -&debuginfo Packages" ),
+	_showDebugAction = _viewMenu->addAction( _( "Show -&debuginfo/-debugsource Packages" ),
 						 this, SLOT( pkgExcludeDebugChanged( bool ) ), Qt::Key_F8 );
-  _showDebugAction->setCheckable(true);
+	_showDebugAction->setCheckable(true);
 	_showDebugAction->setChecked(true);
-	_excludeDebugInfoPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-debuginfo$" ), _pkgList->nameCol() );
+	_excludeDebugInfoPkgs = new YQPkgObjList::ExcludeRule( _pkgList, QRegExp( ".*-(debuginfo|debugsource)$" ), _pkgList->nameCol() );
 	Q_CHECK_PTR( _excludeDebugInfoPkgs );
 	_excludeDebugInfoPkgs->enable( false );
 
@@ -760,6 +760,9 @@ YQPackageSelector::addMenus()
 
     // Translators: This is about packages ending in "-debuginfo", so don't translate that "-debuginfo"!
     _extrasMenu->addAction( _( "Install All Matching -de&buginfo Packages" ), this, SLOT( installDebugInfoPkgs() ) );
+    
+    // Translators: This is about packages ending in "-debugsource", so don't translate that "-debugsource"!
+    _extrasMenu->addAction( _( "Install All Matching -debug&source Packages" ), this, SLOT( installDebugSourcePkgs() ) );
 
     _extrasMenu->addSeparator();
 
@@ -1354,6 +1357,14 @@ YQPackageSelector::installDebugInfoPkgs()
     installSubPkgs( "-debuginfo" );
 }
 
+
+void
+YQPackageSelector::installDebugSourcePkgs()
+{
+    installSubPkgs( "-debugsource" );
+}
+
+
 void
 YQPackageSelector::pkgExcludeDebugChanged( bool on )
 {
@@ -1379,7 +1390,7 @@ YQPackageSelector::pkgExcludeDevelChanged( bool on )
 }
 
 void
-YQPackageSelector::installSubPkgs( const QString suffix )
+YQPackageSelector::installSubPkgs( const QString & suffix )
 {
     // Find all matching packages and put them into a QMap
 
