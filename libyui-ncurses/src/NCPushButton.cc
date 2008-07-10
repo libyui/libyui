@@ -29,7 +29,6 @@ NCPushButton::NCPushButton( YWidget * parent, const string & nlabel )
 	, NCWidget( parent )
 {
     yuiDebug() << endl;
-    setWidgetRep( this );
     setLabel( nlabel );
     hotlabel = &label;
 }
