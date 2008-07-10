@@ -166,7 +166,7 @@ public:
      **/
     virtual void setEnabled( bool do_bv ) = 0;
 
-    virtual bool HasHotkey( int key ) const;
+    virtual bool HasHotkey( int key );
     virtual bool HasFunctionHotkey( int key ) const;
 
     virtual NCursesEvent wHandleHotkey( wint_t key );

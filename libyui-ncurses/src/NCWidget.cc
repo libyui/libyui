@@ -495,7 +495,7 @@ void NCWidget::wRecoded()
 
 
 
-bool NCWidget::HasHotkey( int key ) const
+bool NCWidget::HasHotkey( int key )
 {
     if ( key < 0 || UCHAR_MAX < key )
 	return false;

@@ -22,6 +22,7 @@
 #include "NCDialog.h"
 #include "NCurses.h"
 #include "NCDumbTab.h"
+#include "NCPopupList.h"
 
 
 NCDumbTab::NCDumbTab( YWidget * parent )
@@ -44,12 +45,15 @@ int NCDumbTab::preferredWidth()
 {
     defsze.W = firstChild()->preferredWidth();
 
-    vector<NClabel>::iterator listIt = tabList.begin();
-    unsigned int tabBarWidth = 0;
+    YItemIterator listIt = itemsBegin();
     
-    while ( listIt != tabList.end() )
+    unsigned int tabBarWidth = 0;
+    NClabel tabLabel;
+    
+    while ( listIt != itemsEnd() )
     {
-	tabBarWidth += (*listIt).width() + 1;
+	tabLabel = NClabel( (*listIt)->label() );
+	tabBarWidth += tabLabel.width() + 1;
 	++listIt;
     }
     ++tabBarWidth;
@@ -58,6 +62,9 @@ int NCDumbTab::preferredWidth()
 	defsze.W = tabBarWidth;
 
     defsze.W += framedim.Sze.W;
+
+    if ( defsze.W > NCurses::cols() )
+	defsze.W = NCurses::cols();
 
     return defsze.W;
 }
@@ -96,7 +103,8 @@ NCursesEvent NCDumbTab::wHandleInput( wint_t key )
     switch ( key )
     {
 	case KEY_LEFT:
-	    if ( currentIndex > 0 && currentIndex <= tabList.size() -1 )
+	    if ( currentIndex > 0 &&
+		 currentIndex <= (unsigned)itemsCount() -1 )
 	    {
 		currentIndex--;
 		wRedraw();
@@ -106,7 +114,8 @@ NCursesEvent NCDumbTab::wHandleInput( wint_t key )
 	    break;
 
 	case KEY_RIGHT:
-	    if ( currentIndex < tabList.size()-1 && currentIndex >= 0 )
+	    if ( currentIndex < (unsigned)itemsCount()-1 &&
+		 currentIndex >= 0 )
 	    {
 		currentIndex++;
 		wRedraw();
@@ -115,6 +124,8 @@ NCursesEvent NCDumbTab::wHandleInput( wint_t key )
 	    }
 	    break;
 
+	case KEY_HOTKEY:
+	    yuiMilestone() << "HOT key" << endl;
 	case KEY_RETURN:
 	    ret = createMenuEvent( currentIndex );
 	    break;
@@ -143,9 +154,8 @@ void NCDumbTab::addItem( YItem * item )
 {
     YDumbTab::addItem( item );
 
-    NClabel tabLabel = NClabel( item->label() );
+    NClabel tabLabel = NCstring( item->label() );
     yuiDebug() << "Add item: " << item->label() << endl;
-    tabList.push_back( tabLabel );
 
     if ( item->selected() )
 	currentIndex = item->index();
@@ -164,28 +174,43 @@ void NCDumbTab::selectItem( YItem * item, bool selected )
     wRedraw();
 }
 
+void NCDumbTab::shortcutChanged()
+{
+    // Any of the items might have its keyboard shortcut changed, but we don't
+    // know which one. So let's simply set all tab labels again.
+    
+    wRedraw();
+}
+
 void NCDumbTab::wRedraw()
  {
     if ( !win )
 	return;
-   
+
     const NCstyle::StWidget & style( widgetStyle(true) );
     win->bkgd( style.plain );
     win->box();
 
-    vector<NClabel>::iterator listIt = tabList.begin();
+    YItemIterator listIt = itemsBegin();
+    
     int winWidth = win->width() - 2;
-    int labelPos = 1;
+    unsigned int labelPos = 1;
     unsigned int i = 0;
     bool nonActive = false;
+    NClabel tablabel;
     
-    while ( listIt != tabList.end() )
+    while ( listIt != itemsEnd() )
     {
+	tablabel = NCstring( (*listIt)->label() );
+	tablabel.stripHotkey();
+	hotlabel = &tablabel;
+
 	nonActive = (i == currentIndex)?false:true;
+
 	if ( GetState() == NC::WSactive )
 	{
 
-	    (*listIt).drawAt( *win,
+	    tablabel.drawAt( *win,
 			      NCstyle::StWidget( widgetStyle( nonActive) ),
 			      wpos( 0, labelPos ),
 			      wsze( 1, winWidth ),
@@ -195,7 +220,7 @@ void NCDumbTab::wRedraw()
 	{
 	    if ( !nonActive )
 	    {
-		(*listIt).drawAt( *win,
+		tablabel.drawAt( *win,
 				  widgetStyle( ).data,
 				  widgetStyle( ).data,
 				  wpos( 0, labelPos ),
@@ -204,7 +229,7 @@ void NCDumbTab::wRedraw()
 	    }
 	    else
 	    {
-		(*listIt).drawAt( *win,
+		tablabel.drawAt( *win,
 				  NCstyle::StWidget( frameStyle() ),
 				  wpos( 0, labelPos ),
 				  wsze( 1, winWidth ),
@@ -212,14 +237,14 @@ void NCDumbTab::wRedraw()
 	    }
 	}
 
-	labelPos += (*listIt).width() + 2;
+	labelPos += tablabel.width() + 2;
 
 	++listIt;
 	++i;
 	
-	if ( listIt != tabList.end() )
+	if ( listIt != itemsEnd() )
 	{
-	    winWidth -= (*listIt).width() -1;
+	    winWidth -= tablabel.width() -1;
 	}
     };
     
@@ -231,7 +256,28 @@ void NCDumbTab::wRedraw()
 
 	redrawChilds( firstChild() );
     }
- }
+}
+
+bool NCDumbTab::HasHotkey( int key )
+{
+    bool ret = false;
+    
+    YItemIterator listIt = itemsBegin();
+    NClabel tablabel;
+    
+    while ( listIt != itemsEnd() )
+    {
+	tablabel = NCstring( (*listIt)->label() );
+	tablabel.stripHotkey();
+	if ( tablabel.hasHotkey() )
+	    ret = true;
+	++listIt;
+    }
+
+    yuiMilestone() << "Has hot key: " << key << " " << (ret?"yes":"no") << endl;
+    
+    return ret;
+}
 
 void NCDumbTab::redrawChilds( YWidget *widget )
 {

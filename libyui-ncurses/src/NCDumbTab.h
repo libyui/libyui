@@ -34,9 +34,8 @@ private:
     NCDumbTab & operator=( const NCDumbTab & );
     NCDumbTab( const NCDumbTab & );
 
-    vector <NClabel> tabList;
     unsigned int currentIndex;
-
+    
 protected:
 
     virtual const char * location() const { return "NCDumbTab"; }
@@ -61,6 +60,10 @@ public:
 
     virtual void setEnabled( bool do_bv );
 
+    virtual void shortcutChanged();
+
+    virtual bool HasHotkey( int key );
+    
     virtual bool setKeyboardFocus()
     {
 	if ( !grabFocus() )
@@ -70,6 +73,7 @@ public:
     }
 
     NCursesEvent createMenuEvent( unsigned int index);
+
 };
 
 
