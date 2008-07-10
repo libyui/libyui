@@ -125,7 +125,8 @@ NCursesEvent NCDumbTab::wHandleInput( wint_t key )
 	    break;
 
 	case KEY_HOTKEY:
-	    yuiMilestone() << "HOT key" << endl;
+	    setCurrentTab( hotKey );
+
 	case KEY_RETURN:
 	    ret = createMenuEvent( currentIndex );
 	    break;
@@ -133,6 +134,28 @@ NCursesEvent NCDumbTab::wHandleInput( wint_t key )
     }
 
     return ret;
+}
+
+void NCDumbTab::setCurrentTab( wint_t key )
+{
+        
+    YItemIterator listIt = itemsBegin();
+    NClabel tablabel;
+    unsigned int i = 0;
+    
+    while ( listIt != itemsEnd() )
+    {
+	tablabel = NCstring( (*listIt)->label() );
+	tablabel.stripHotkey();
+	yuiMilestone() << "HOTkey: " <<  tablabel.hotkey() << " key: " << key << endl;
+	if ( tablabel.hotkey() == key )
+	{
+	    currentIndex = i;
+	    break;
+	}
+	++listIt;
+	++i;
+    }
 }
 
 NCursesEvent NCDumbTab::createMenuEvent( unsigned int index )
@@ -269,8 +292,11 @@ bool NCDumbTab::HasHotkey( int key )
     {
 	tablabel = NCstring( (*listIt)->label() );
 	tablabel.stripHotkey();
-	if ( tablabel.hasHotkey() )
+	if ( tablabel.hasHotkey() && tablabel.hotkey() == key )
+	{
+	    hotKey = key;
 	    ret = true;
+	}
 	++listIt;
     }
 

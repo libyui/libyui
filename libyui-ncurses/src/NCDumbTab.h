@@ -35,6 +35,7 @@ private:
     NCDumbTab( const NCDumbTab & );
 
     unsigned int currentIndex;
+    wint_t hotKey;
     
 protected:
 
@@ -74,6 +75,7 @@ public:
 
     NCursesEvent createMenuEvent( unsigned int index);
 
+    void setCurrentTab( wint_t key );
 };
 
 
