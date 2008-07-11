@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Jul 11 15:40:57 CEST 2008 - sh@suse.de
+
+- Fixed bnc #399674: Icons for Auto* actions missing in help 
+
+-------------------------------------------------------------------
 Wed Jul  9 17:17:00 CEST 2008 - sh@suse.de
 
 - Fixed bnc #397082: No "[x] View -debugsource packages" menu entry:

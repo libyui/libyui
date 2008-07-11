@@ -212,34 +212,6 @@ YQPackageSelector::symbolHelp()
 		     _( "This package is already installed, but package dependencies require that it is deleted." )
 		     + _( "This can happen, for example, if some other package obsoletes this one." ) );
 
-    // Translators: This is added to the explanation of a status. Use of
-    // "non-breakable space" ( HTML &nbsp; ) is recommended ( if the line doesn't
-    // get too long ) to avoid line-break in the middle of this explanaton.
-    QString bySelection = " " + _( "(by&nbsp;selection)" );
-
-    html += symHelp( "sel_autoinstall.xpm",
-		     // Translators: Package status short (!) description
-		     _( "Autoinstall" ) + bySelection,
-		     // Translators: Automatic word-wrapping.
-		     _( "This package will be installed automatically because it is contained in a"
-			" predefined software selection (e.g., \"Multimedia\", \"Development\")." ) );
-
-    html += symHelp( "sel_autoupdate.xpm",
-		     // Translators: Package status short (!) description
-		     _( "Autoupdate" ) + bySelection,
-		     // Translators: Automatic word-wrapping.
-		     _( "This package is already installed, but there is a newer version."
-			" It is contained in a predefined software selection (e.g., \"Multimedia\","
-			" \"Development\") that you requested to update, so this package will"
-			" automatically be updated." ) );
-
-    html += symHelp( "sel_autodel.xpm",
-		     // Translators: Package status short (!) description
-		     _( "Autodelete" ) + bySelection,
-		     // Translators: Automatic word-wrapping.
-		     _( "This package is already installed, but some predefined software selection"
-			" (e.g., \"Multimedia\", \"Development\") requires that it is deleted." ) );
-
     html += "/<table>";
 
     YQPkgTextDialog::showText( this, html );
