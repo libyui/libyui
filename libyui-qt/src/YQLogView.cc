@@ -55,6 +55,7 @@ YQLogView::YQLogView( YWidget * 	parent,
     layout->addWidget( _qt_text );
 
     _qt_text->setReadOnly( true );
+    _qt_text->setAcceptRichText( false );
     _qt_text->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
 
     _caption->setBuddy( _qt_text );

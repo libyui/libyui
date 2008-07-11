@@ -52,7 +52,7 @@ YQMultiLineEdit::YQMultiLineEdit( YWidget * parent, const string & label )
     YUI_CHECK_NEW( _qt_textEdit );
     layout->addWidget( _qt_textEdit );
 
-    //_qt_textEdit->setTextFormat( Qt::PlainText );
+    _qt_textEdit->setAcceptRichText( false );
     _qt_textEdit->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
 
     _caption->setBuddy( _qt_textEdit );
