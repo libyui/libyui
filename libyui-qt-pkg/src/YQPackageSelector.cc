@@ -750,7 +750,7 @@ YQPackageSelector::addMenus()
     action->setText(_( "&Extras" ));
 
     _extrasMenu->addAction( _( "Show &Products" 		  ), this, SLOT( showProducts()    ) );
-    _extrasMenu->addAction( _( "Show &Automatic Package Changes" ), this, SLOT( showAutoPkgList() ), Qt::CTRL + Qt::Key_A );
+    _extrasMenu->addAction( _( "Show P&ackage Changes" ), this, SLOT( showAutoPkgList() ), Qt::CTRL + Qt::Key_A );
     _extrasMenu->addAction( _( "&Verify System"                  ), this, SLOT( verifySystem()    ) );
 
     _extrasMenu->addSeparator();

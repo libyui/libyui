@@ -173,16 +173,12 @@ YQPackageSelectorBase::showAutoPkgList()
 {
     resolveDependencies();
 
-    // Show which packages are installed/deleted automatically
+    // Show which packages are installed/deleted
     QString msg =
-	"<p><b>"
-	// Dialog header
-	+ _( "Automatic Changes" )
-	+ "</b></p>"
 	// Detailed explanation ( automatic word wrap! )
 	+ "<p>"
-	+ _( "In addition to your manual selections, the following packages"
-	     " have been changed to resolve dependencies:" )
+	+ _( "The following items will be changed:"
+	     " " )
 	+ "<p>";
 
     YQPkgChangesDialog::showChangesDialog( this,

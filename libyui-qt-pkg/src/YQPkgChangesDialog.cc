@@ -26,6 +26,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <QPushButton>
+#include <QComboBox>
 #include <QStyle>
 #include <QBoxLayout>
 
@@ -41,11 +42,6 @@
 
 using std::set;
 using std::string;
-
-
-#define SPACING			2	// between subwidgets
-#define MARGIN			4	// around the widget
-
 
 YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
 					const QString & 	message,
@@ -66,11 +62,7 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
 
     QVBoxLayout * layout = new QVBoxLayout();
     Q_CHECK_PTR( layout );
-    layout->setMargin(MARGIN);
-    layout->setSpacing(SPACING);
     setLayout(layout);
-
-    // HBox for icon and message
 
     QHBoxLayout * hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
@@ -79,7 +71,6 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
 
     // Icon
 
-    hbox->addSpacing(SPACING);
     QLabel * iconLabel = new QLabel( this );
     Q_CHECK_PTR( iconLabel );
     hbox->addWidget(iconLabel);
@@ -87,15 +78,22 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
     iconLabel->setPixmap( QApplication::style().stylePixmap( QStyle::SP_MessageBoxInformation ) );
 #endif
     iconLabel->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum ) ); // hor/vert
-    hbox->addSpacing(SPACING);
 
     // Label for the message
-
     QLabel * label = new QLabel( message, this );
     Q_CHECK_PTR( label );
     hbox->addWidget(label);
     label->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum ) ); // hor/vert
 
+
+    QComboBox *filter = new QComboBox(this);
+    filter->addItems( QStringList() << _("All")
+                      << _("Selected by the user")
+                      << _("Automatic Changes") );
+    
+    layout->addWidget(filter);
+    connect( filter, SIGNAL(currentIndexChanged(int)),
+             SLOT(slotFilterChanged(int)));
 
     // Pkg list
 
@@ -110,8 +108,6 @@ YQPkgChangesDialog::YQPkgChangesDialog( QWidget *		parent,
 
     hbox = new QHBoxLayout();
     Q_CHECK_PTR( hbox );
-    hbox->setSpacing( SPACING );
-    hbox->setMargin ( MARGIN  );
     layout->addLayout( hbox );
 
     hbox->addStretch();
@@ -150,6 +146,26 @@ YQPkgChangesDialog::filter( bool byAuto, bool byApp, bool byUser )
     filter( QRegExp( "" ), byAuto, byApp, byUser );
 }
 
+void
+YQPkgChangesDialog::slotFilterChanged( int index )
+{
+    switch(index)
+    {
+        case All:
+            filter( true, true, true );
+            break;
+        case User:
+            filter( false, true, true );
+            break;
+        case Automatic:
+            filter( true, false, false );
+            break;
+        default:
+            break;
+    };
+    
+}
+
 
 void
 YQPkgChangesDialog::filter( const QRegExp & regexp, bool byAuto, bool byApp, bool byUser )
@@ -170,18 +186,20 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, bool byAuto, bool byApp, boo
 
 	if ( selectable->toModify() )
 	{
-	    zypp::ResStatus::TransactByValue modifiedBy = selectable->modifiedBy();
-
+      zypp::ResStatus::TransactByValue modifiedBy = selectable->modifiedBy();
+      
 	    if ( ( ( modifiedBy == zypp::ResStatus::SOLVER     ) && byAuto ) ||
-		 ( ( modifiedBy == zypp::ResStatus::APPL_LOW ||
-		   modifiedBy == zypp::ResStatus::APPL_HIGH  ) && byApp ) ||
-		 ( ( modifiedBy == zypp::ResStatus::USER       ) && byUser )  )
+           ( ( modifiedBy == zypp::ResStatus::APPL_LOW ||
+               modifiedBy == zypp::ResStatus::APPL_HIGH  ) && byApp ) ||
+           ( ( modifiedBy == zypp::ResStatus::USER       ) && byUser )  )
 	    {
-		if ( regexp.isEmpty() || regexp.indexIn( selectable->name().c_str() ) >= 0 )
-		{
-		    if ( ! contains( ignoredNames, selectable->name() ) )
-			_pkgList->addPkgItem( selectable, tryCastToZyppPkg( selectable->theObj() ) );
-		}
+          if ( regexp.isEmpty() 
+               || regexp.indexIn( selectable->name().c_str() ) >= 0 )
+          {
+              if ( ! contains( ignoredNames, selectable->name() ) )
+                  _pkgList->addPkgItem( selectable,
+                                        tryCastToZyppPkg( selectable->theObj() ) );
+          }
 	    }
 	}
     }

@@ -37,6 +37,16 @@ class YQPkgChangesDialog : public QDialog
     Q_OBJECT
 
 public:
+    /**
+     * Filters
+     */
+    enum Filter
+    {
+        All,
+        User,
+        Automatic
+    };
+        
 
     /**
      * Static convenience method: Post a changes dialog with text
@@ -83,6 +93,12 @@ public:
      * Reimplemented from QWidget to limit the dialog to the screen dimensions.
      **/
     virtual QSize sizeHint () const;
+
+protected slots:
+    /**
+     * called when the filter is changed
+     */
+    void slotFilterChanged( int index );
 
 protected:
 
