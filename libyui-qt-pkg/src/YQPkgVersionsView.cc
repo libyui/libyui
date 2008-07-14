@@ -288,7 +288,7 @@ YQPkgVersion::YQPkgVersion( YQPkgVersionsView *	pkgVersionList,
     setText( _( "%1-%2 from %3" )
 	     .arg( zyppObj->edition().asString().c_str() )
 	     .arg( zyppObj->arch().asString().c_str() )
-	     .arg( zyppObj->repository().name().c_str() ) );
+	     .arg( zyppObj->repository().alias().c_str() ) );
 }
 
 
