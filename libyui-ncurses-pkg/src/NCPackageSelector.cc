@@ -139,7 +139,7 @@ NCPackageSelector::~NCPackageSelector()
     // NCPackageSelectorPlugin::runPkgSelection
 }
 
-bool NCPackageSelector::checkNow( bool *ok ) 
+bool NCPackageSelector::checkNow( bool *ok )
 {
     bool ret = false;
 
@@ -149,12 +149,12 @@ bool NCPackageSelector::checkNow( bool *ok )
     return ret;
 }
 
-bool NCPackageSelector::verifySystem( bool *ok ) 
+bool NCPackageSelector::verifySystem( bool *ok )
 {
     bool ret = false;
 
     depsPopup = new NCPkgPopupDeps( wpos( 3, 8 ), this );
-    ret = depsPopup->showDependencies( NCPkgPopupDeps::S_Verify, ok ); 
+    ret = depsPopup->showDependencies( NCPkgPopupDeps::S_Verify, ok );
     YDialog::deleteTopmostDialog();
     return ret;
 }
@@ -172,9 +172,6 @@ void NCPackageSelector::saveState ()
     p.saveState<zypp::SrcPackage> ();
 
     p.saveState<zypp::Patch> ();
-    // some future proofing
-    p.saveState<zypp::Message> ();
-    p.saveState<zypp::Script> ();
 
     p.saveState<zypp::Pattern> ();
     //p.saveState<zypp::Language> ();
@@ -188,9 +185,6 @@ void NCPackageSelector::restoreState ()
     p.restoreState<zypp::SrcPackage> ();
 
     p.restoreState<zypp::Patch> ();
-    // some future proofing
-    p.restoreState<zypp::Message> ();
-    p.restoreState<zypp::Script> ();
 
     p.restoreState<zypp::Pattern> ();
     //p.restoreState<zypp::Language> ();
@@ -210,11 +204,6 @@ bool NCPackageSelector::diffState ()
     log << diff << endl;
 
     diff = diff || p.diffState<zypp::Patch> ();
-    log << diff << endl;
-    // some future proofing
-    diff = diff || p.diffState<zypp::Message> ();
-    log << diff << endl;
-    diff = diff || p.diffState<zypp::Script> ();
     log << diff << endl;
 
     diff = diff || p.diffState<zypp::Pattern> ();
@@ -247,11 +236,11 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
 	else if ( event.widget == youHelpButton )
 	    retVal = YouHelpHandler( event );
 	else if ( event.widget == filterPopup )
-	{   
+	{
 	    retVal = filterPopup->handleEvent();
 	}
 	else if ( event.widget == filterMain )
-	{   
+	{
 	    retVal = filterMain->handleEvent();
 	}
 	else if ( event.widget == searchField )
@@ -313,11 +302,11 @@ bool NCPackageSelector::fillPatchSearchList( const string & expr )
       if ( patchPtr )
       {
 	  string name = patchPtr->name();
-      
+
 	  string::iterator pos = search( name.begin(), name.end(),
 					 expr.begin(), expr.end(),
 					 ic_compare );
-	  
+
           if ( pos != name.end()  )
           {
               // search sucessful
@@ -481,7 +470,7 @@ bool NCPackageSelector::fillPatchPackages ( NCPkgTable * pkgTable, ZyppObj objPt
 	return false;
 
     ZyppPatchContents patchContents( patchPtr->contents() );
-    
+
     yuiMilestone() <<  "Filtering for patch: " << patchPtr->name().c_str() << " number of atoms: "
 		   << patchContents.size() << endl ;
 
@@ -577,7 +566,7 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
 	    {
 		displayPatch = true;
 		break;
-	    }	
+	    }
 	case NCPkgMenuFilter::F_Unneeded:	// unneeded means not relevant or satisfied
 	    {
 		if ( selectable->hasCandidateObj() &&
@@ -592,10 +581,10 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
 	case NCPkgMenuFilter::F_Needed:		// needed means relevant patches
 	    {
 		// only shows patches relevant to the system
-		if ( selectable->hasCandidateObj() && 
+		if ( selectable->hasCandidateObj() &&
 		     selectable->candidateObj().isRelevant() )
 		{
-		    // and only those that are needed 
+		    // and only those that are needed
 		    if ( ! selectable->candidateObj().isSatisfied() ||
 			 // may be it is satisfied because is preselected
 			 selectable->candidateObj().status().isToBeInstalled() )
@@ -622,7 +611,7 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
 		break;
 	    }
 	default:
-	    yuiWarning() << "Unknown patch filter" << endl; 
+	    yuiWarning() << "Unknown patch filter" << endl;
     }
 
     if ( displayPatch )
@@ -637,7 +626,7 @@ bool NCPackageSelector::checkPatch( ZyppPatch 	patchPtr,
 //
 // Gets ( and returns ) the current size of the widget at the replace
 // point and deletes it.
-// 
+//
 wrect NCPackageSelector::deleteReplacePoint()
 {
     // delete current child of the ReplacePoint
@@ -655,7 +644,7 @@ wrect NCPackageSelector::deleteReplacePoint()
 	patchPkgs = 0;		// NCPkgTable - type: T_PatchPkgs
 	patchPkgsVersions = 0;	// NCPkgTable - type: T_Availables
     }
-    
+
     return oldSize;
 }
 
@@ -665,12 +654,12 @@ wrect NCPackageSelector::deleteReplacePoint()
 //
 // Creates an NCPkgPackageDetails (a RichtText widget) which is
 // used to show the required information (called from NCPkgMenuView)
-// 
-// 
+//
+//
 void NCPackageSelector::showInformation()
 {
     wrect oldSize = deleteReplacePoint();
-     
+
     // show the rich text widget
     infoText = new NCPkgPackageDetails( replacePoint, " ", this);
 
@@ -687,8 +676,8 @@ void NCPackageSelector::showInformation()
 //
 // Creates an NCPkgTable (type T_Availables) which is used to show
 // the list of package versions (called from NCPkgMenuView)
-// 
-// 
+//
+//
 void NCPackageSelector::showVersionsList()
 {
     wrect oldSize = deleteReplacePoint();
@@ -710,12 +699,12 @@ void NCPackageSelector::showVersionsList()
 	versionsList->setTableType( NCPkgTable::T_Availables, strategy );
 	versionsList->fillHeader( );
 	versionsList->setSize( oldSize.Sze.W, oldSize.Sze.H );
-	
+
 	versionsList->fillAvailableList(  packageList->getSelPointer( packageList->getCurrentItem() ) );
 	versionsList->Redraw();
 
 	packageList->setKeyboardFocus();
-    }  
+    }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -724,13 +713,13 @@ void NCPackageSelector::showVersionsList()
 //
 // Creates an NCPkgTable (type T_PatchPkgs) which is used to show
 // the list of all packages belonging to a patch (called from NCPkgMenuView)
-// 
-// 
+//
+//
 void NCPackageSelector::showPatchPackages()
 {
     wrect oldSize = deleteReplacePoint();
     NCPkgTable * packageList = PackageList();
-      
+
     // show a package table with packages belonging to a patch
     YTableHeader * tableHeader = new YTableHeader();
     patchPkgs =  new NCPkgTable( replacePoint, tableHeader );
@@ -749,7 +738,7 @@ void NCPackageSelector::showPatchPackages()
 	patchPkgs->Redraw();
 
 	packageList->setKeyboardFocus();
-    }  
+    }
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -759,13 +748,13 @@ void NCPackageSelector::showPatchPackages()
 // Creates an NCPkgTable (type T_Availables) which is used to show
 // a list of all versions of all packages belonging to a patch
 // (called from NCPkgMenuView)
-// 
-// 
+//
+//
 void NCPackageSelector::showPatchPkgVersions()
 {
     wrect oldSize = deleteReplacePoint();
     NCPkgTable * packageList = PackageList();
-       
+
     // show a package table with versions of the packages beloning to a patch
     YTableHeader * tableHeader = new YTableHeader();
     patchPkgsVersions =  new NCPkgTable( replacePoint, tableHeader );
@@ -842,7 +831,7 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
         }
 	case RPMGroups:
 	{
-	    filterPopup = new NCPkgFilterRPMGroups ( replPoint, " ", this);  
+	    filterPopup = new NCPkgFilterRPMGroups ( replPoint, " ", this);
 	    filterPopup->setSize( oldSize.Sze.W, oldSize.Sze.H );
 	    filterPopup->Redraw();
 
@@ -901,7 +890,7 @@ void NCPackageSelector::replaceFilterDescr( bool b )
 	delete replaceChild;
         filter_desc = 0;
 	searchSet = 0;
-    }   
+    }
 
     if (b)
     {
@@ -909,7 +898,7 @@ void NCPackageSelector::replaceFilterDescr( bool b )
 	searchSet->setSize( oldSize.Sze.W, oldSize.Sze.H );
 	searchSet->Redraw();
     }
-    else 
+    else
     {
 	filter_desc = new NCRichText( replPoint2, "");
 	filter_desc->setSize( oldSize.Sze.W, oldSize.Sze.H );
@@ -1503,7 +1492,7 @@ void NCPackageSelector::createYouLayout( YWidget * selector )
 
     YAlignment * left1 = YUI::widgetFactory()->createLeft( hSplit );
     filterMenu = new NCPkgMenuFilter( left1, NCPkgStrings::Filter(), this );
-    
+
     YAlignment * left2 = YUI::widgetFactory()->createLeft( hSplit );
     actionMenu = new NCPkgMenuAction( left2, NCPkgStrings::Actions(), this );
 
@@ -1555,10 +1544,10 @@ void NCPackageSelector::createYouLayout( YWidget * selector )
     youHelpButton = new NCPushButton ( ll, _("&Help"));
     YUI_CHECK_NEW( youHelpButton );
     youHelpButton->setFunctionKey( 1 );
-    
+
     YAlignment *r = YUI::widgetFactory()->createRight( bottom_bar );
     YLayoutBox * hSplit5 = YUI::widgetFactory()->createHBox( r );
-    
+
     // add the Cancel button
     cancelButton = new NCPushButton( hSplit5, _( "&Cancel" ) );
     YUI_CHECK_NEW( cancelButton );
@@ -1568,7 +1557,7 @@ void NCPackageSelector::createYouLayout( YWidget * selector )
     okButton = new NCPushButton( hSplit5, _( "&Accept" ) );
     YUI_CHECK_NEW( okButton );
     okButton->setFunctionKey( 10 );
-    
+
 }
 
 //
@@ -1605,7 +1594,7 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
 
     YAlignment *l1 = YUI::widgetFactory()->createLeft( vbox_left );
     patternLabel = new NCLabel( l1, "                           " );
-    
+
 
     // add the package table
     YTableHeader * tableHeader = new YTableHeader();
@@ -1616,7 +1605,7 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     YUI_CHECK_NEW( pkgList );
 
     NCPkgStatusStrategy * strategy;
-    // set table type and status strategy (either 'normal' package list or update list) 
+    // set table type and status strategy (either 'normal' package list or update list)
     switch ( type )
     {
 	case NCPkgTable::T_Packages:
@@ -1640,9 +1629,9 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     packageLabel = YUI::widgetFactory()->createLabel ( hSplit2, "......................" );
 
     new NCSpacing( hSplit2, YD_HORIZ, true, 0.5 );
-    
+
     actionMenu = new NCPkgMenuAction ( hSplit2, NCPkgStrings::Actions(), this );
-   
+
     replPoint2 = YUI::widgetFactory()->createReplacePoint( hbox_bottom );
     replPoint2->setWeight(YD_HORIZ, 1);
     filter_desc = new NCRichText( replPoint2, " " );
@@ -1656,10 +1645,10 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     YAlignment *ll = YUI::widgetFactory()->createLeft( bottom_bar );
     helpMenu = new NCPkgMenuHelp (ll, _("&Help"));
     YUI_CHECK_NEW( helpMenu );
-    
+
     YAlignment *r = YUI::widgetFactory()->createRight( bottom_bar );
     YLayoutBox * hSplit = YUI::widgetFactory()->createHBox( r );
-   
+
     // add the Cancel button
     cancelButton = new NCPushButton( hSplit, _( "&Cancel" ) );
     YUI_CHECK_NEW( cancelButton );

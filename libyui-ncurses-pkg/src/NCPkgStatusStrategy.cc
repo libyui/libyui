@@ -68,14 +68,14 @@ ZyppStatus NCPkgStatusStrategy::getPackageStatus( ZyppSel slbPtr,
 
 /////////////////////////////////////////////////////////////////
 //
-// NCPkgStatusStrategy::setObjectStatus()	
+// NCPkgStatusStrategy::setObjectStatus()
 //
 // Informs the package manager about the status change
 //
 bool NCPkgStatusStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, ZyppObj objPtr )
 {
     bool ok = false;
-    
+
     if ( !slbPtr )
     {
 	yuiError() << "Invalid package object" << endl;
@@ -86,7 +86,7 @@ bool NCPkgStatusStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr,
 
     yuiMilestone() << "Set status of: " <<  slbPtr->name() << " to: "
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
-    
+
     return ok;
 }
 
@@ -103,12 +103,12 @@ bool NCPkgStatusStrategy::keyToStatus( const int & key,
 {
     if ( !slbPtr )
 	return false;
-    
+
     bool valid = true;
     ZyppStatus retStat = S_NoInst;
     ZyppStatus oldStatus = getPackageStatus( slbPtr, objPtr );
     bool installed = !slbPtr->installedEmpty();
-    
+
     // get the new status
     switch ( key )
     {
@@ -159,7 +159,7 @@ bool NCPkgStatusStrategy::keyToStatus( const int & key,
 		valid = false;
 	    }
 	    break;
-	//this is the case for 'going back' i.e. S_Install -> S_NoInst, S_Update -> S_KeepInstalled  
+	//this is the case for 'going back' i.e. S_Install -> S_NoInst, S_Update -> S_KeepInstalled
 	//not for S_Del, since '+' key does this
 	case '<':
 	    if ( oldStatus == S_Install
@@ -167,19 +167,19 @@ bool NCPkgStatusStrategy::keyToStatus( const int & key,
 	    {
 		retStat = S_NoInst;
 	    }
-	    else if ( oldStatus == S_Update 
+	    else if ( oldStatus == S_Update
 		      || oldStatus == S_AutoUpdate )
 	    {
 		retStat = S_KeepInstalled;
 	    }
 	    break;
-	case '!':	// set S_Taboo 
+	case '!':	// set S_Taboo
 	    if ( !installed )
 	    {
 		retStat = S_Taboo;
 	    }
 	    break;
-    	case '*':	// set S_Protected  
+    	case '*':	// set S_Protected
 	    if ( installed )
 	    {
 		retStat = S_Protected;
@@ -193,7 +193,7 @@ bool NCPkgStatusStrategy::keyToStatus( const int & key,
 
     if ( valid )
 	newStat = retStat;
-    
+
     return valid;
 }
 
@@ -210,10 +210,10 @@ bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
 {
     if ( !slbPtr )
 	return false;
-    
+
     bool ok = true;
-    
-    ZyppStatus oldStatus = getPackageStatus( slbPtr, objPtr ); 
+
+    ZyppStatus oldStatus = getPackageStatus( slbPtr, objPtr );
     ZyppStatus newStatus = oldStatus;
 
     switch ( oldStatus )
@@ -246,7 +246,7 @@ bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
 	    {
 		yuiWarning() << "No candidate object for " << slbPtr->theObj()->name().c_str() << endl;
 		newStatus = S_NoInst;
-            }	
+            }
 	    break;
 	case S_AutoInstall:
 	    //Correct transition is S_Taboo -> #254816
@@ -282,7 +282,7 @@ void NCPkgStatusStrategy::solveResolvableCollections()
     zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
     //  transactReskind() is obsolete -> use resolvePool()
     resolver->resolvePool();
-    
+
 #if 0
     resolver->transactReset( zypp::ResStatus::APPL_LOW );
 
@@ -291,7 +291,6 @@ void NCPkgStatusStrategy::solveResolvableCollections()
     resolver->transactResKind( zypp::ResTraits<zypp::Pattern  >::kind );
     resolver->transactResKind( zypp::ResTraits<zypp::Language >::kind );
     resolver->transactResKind( zypp::ResTraits<zypp::Patch    >::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Atom     >::kind );
 #endif
 }
 
@@ -338,12 +337,12 @@ bool PatchStatStrategy::keyToStatus( const int & key,
 {
     if ( !slbPtr )
 	return false;
-    
+
     bool valid = true;
     ZyppStatus retStat = S_NoInst;
     ZyppStatus oldStatus = getPackageStatus( slbPtr, objPtr );
     bool installed = !slbPtr->installedEmpty();
-	
+
     // get the new status
     switch ( key )
     {
@@ -367,12 +366,12 @@ bool PatchStatStrategy::keyToStatus( const int & key,
 		      || oldStatus == S_AutoDel)
 	    {
 		retStat = S_KeepInstalled;
-	    } 
+	    }
 	    else
 	    {
 		valid = false;
 	    }
-	    
+
 	    break;
 	case '>':
 	    if ( oldStatus == S_KeepInstalled
@@ -396,7 +395,7 @@ bool PatchStatStrategy::keyToStatus( const int & key,
 
     if ( valid )
 	newStat = retStat;
-    
+
     return valid;
 }
 
@@ -414,10 +413,10 @@ bool PatchStatStrategy::toggleStatus( ZyppSel slbPtr,
 {
     if ( !slbPtr )
 	return false;
-    
+
     bool ok = true;
-    
-    ZyppStatus oldStatus = getPackageStatus( slbPtr, objPtr ); 
+
+    ZyppStatus oldStatus = getPackageStatus( slbPtr, objPtr );
     ZyppStatus newStatus = oldStatus;
 
     switch ( oldStatus )
@@ -451,14 +450,14 @@ bool PatchStatStrategy::toggleStatus( ZyppSel slbPtr,
     }
 
     newStat = newStatus;
-    
+
     return ok;
 }
 #endif
 
 /////////////////////////////////////////////////////////////////
 //
-// PatchStatStrategy::setObjectStatus()	
+// PatchStatStrategy::setObjectStatus()
 //
 // Inform the package manager about the status change
 // of the patch
@@ -478,7 +477,7 @@ bool PatchStatStrategy::setObjectStatus( ZyppStatus newstatus, ZyppSel slbPtr, Z
 	  << newstatus << " returns: " << (ok?"true":"false") << endl;
 
     // do a solver run
-    solveResolvableCollections(); 
+    solveResolvableCollections();
 
     return ok;
 }
@@ -497,7 +496,7 @@ SelectionStatStrategy::SelectionStatStrategy()
 
 /////////////////////////////////////////////////////////////////
 //
-// SelectionStatStrategy::setObjectStatus()	
+// SelectionStatStrategy::setObjectStatus()
 //
 // Inform the package manager about the status change
 // of the selection
@@ -606,7 +605,7 @@ bool AvailableStatStrategy::setObjectStatus( ZyppStatus newstatus,  ZyppSel slbP
 	ok = slbPtr->setStatus( status );
 	yuiMilestone() << "Set status of: " << slbPtr->name() << " to: "
 	  << status << " returns: " << (ok?"true":"false") << endl;
-  
+
 	// Set candidate
 	ok = slbPtr->setCandidate( newCandidate );
 	yuiMilestone() << "Set user candidate returns: " <<  (ok?"true":"false") << endl;
