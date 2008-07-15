@@ -28,7 +28,6 @@
 #include <QLabel>
 #include <QLayout>
 #include <QItemDelegate>
-#include <zypp/ui/PatternContents.h>
 
 #include "YQi18n.h"
 #include "utf8.h"
