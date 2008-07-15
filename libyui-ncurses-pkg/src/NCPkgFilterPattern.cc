@@ -28,7 +28,6 @@
 #include "NCPkgStrings.h"
 #include "NCPkgTable.h"
 #include "NCPkgStatusStrategy.h"
-#include <zypp/ui/PatternContents.h>
 #include <zypp/sat/LocaleSupport.h>
 
 #include "NCZypp.h"
