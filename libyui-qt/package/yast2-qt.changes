@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jul 15 19:13:57 CEST 2008 - sh@suse.de
+
+- Implemented fate #303492: Multi selection for table widget
+- V 2.17.4 
+
+-------------------------------------------------------------------
 Fri Jul 11 15:30:23 CEST 2008 - sh@suse.de
 
 - Fixed bnc #403852: MultiLineEdit doesn't take HTML as plain text 

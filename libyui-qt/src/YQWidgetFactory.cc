@@ -179,9 +179,9 @@ YQWidgetFactory::createTree( YWidget * parent, const string & label )
 
 
 YQTable *
-YQWidgetFactory::createTable( YWidget * parent, YTableHeader * header )
+YQWidgetFactory::createTable( YWidget * parent, YTableHeader * header, bool multiSelection )
 {
-    YQTable * table = new YQTable( parent, header );
+    YQTable * table = new YQTable( parent, header, multiSelection );
     YUI_CHECK_NEW( table );
 
     return table;

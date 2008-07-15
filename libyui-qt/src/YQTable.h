@@ -37,7 +37,7 @@ public:
     /**
      * Constructor.
      **/
-    YQTable( YWidget * parent, YTableHeader * header );
+    YQTable( YWidget * parent, YTableHeader * header, bool multiSelection );
 
     /**
      * Destructor.
@@ -133,6 +133,12 @@ protected slots:
      * Notification that an item is selected (single click or keyboard).
      **/
     void slotSelected( QTreeWidgetItem * );
+
+    /**
+     * Notification that the item selection changed
+     * (relevant for multiSelection mode).  
+     **/
+    void slotSelectionChanged();
 
     /**
      * Notification that an item is activated (double click or keyboard).

@@ -32,9 +32,9 @@
 #include "YQTable.h"
 
 
-YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader )
+YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelectionMode )
     : QFrame( (QWidget *) parent->widgetRep() )
-    , YTable( parent, tableHeader )
+    , YTable( parent, tableHeader, multiSelectionMode )
 {
     setWidgetRep( this );
     QVBoxLayout* layout = new QVBoxLayout( this );
@@ -48,6 +48,9 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader )
     layout->addWidget( _qt_listView );
     _qt_listView->setAllColumnsShowFocus( true );
     _qt_listView->setSortingEnabled( ! keepSorting() );
+
+    if ( multiSelectionMode )
+	_qt_listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
 
 
     //
@@ -78,6 +81,15 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader )
 
     connect( _qt_listView, 	SIGNAL( currentItemChanged ( QTreeWidgetItem *, QTreeWidgetItem * ) ),
 	     this, 		SLOT  ( slotSelected	   ( QTreeWidgetItem * ) ) );
+
+    if ( multiSelectionMode )
+    {
+	// This is the exceptional case - avoid performance drop in the normal case
+	
+	connect( _qt_listView, 	SIGNAL( itemSelectionChanged() ),
+		 this,		SLOT  ( slotSelectionChanged() ) );
+					
+    }
 }
 
 
@@ -109,7 +121,7 @@ YQTable::addItem( YItem * yitem )
 
     if ( item->selected() )
     {
-	// YTable enforces single selection
+	// YTable enforces single selection, if appropriate
 	
 	YQSignalBlocker sigBlocker( _qt_listView );
 	YQTable::selectItem( YSelectionWidget::selectedItem(), true );
@@ -226,6 +238,42 @@ YQTable::slotSelected( QTreeWidgetItem * listViewItem  )
 	{
 	    // Avoid overwriting a (more important) Activated event with a SelectionChanged event
 
+	    yuiDebug() << "Sending SelectionChanged event" << endl;
+	    YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
+	}
+    }
+}
+
+
+void
+YQTable::slotSelectionChanged()
+{
+    YSelectionWidget::deselectAllItems();
+    yuiDebug() << endl;
+
+    QList<QTreeWidgetItem *> selItems = _qt_listView->selectedItems();
+
+    for ( QList<QTreeWidgetItem *>::iterator it = selItems.begin();
+	  it != selItems.end();
+	  ++it )
+    {
+	YQTableListViewItem * tableListViewItem = dynamic_cast<YQTableListViewItem *> (*it);
+
+	if ( tableListViewItem )
+	{
+	    tableListViewItem->origItem()->setSelected( true );
+
+	    yuiDebug() << "Selected item: " << tableListViewItem->origItem()->label() << endl;
+	}
+    }
+
+    if ( immediateMode() )
+    {
+	if ( ! YQUI::ui()->eventPendingFor( this ) )
+	{
+	    // Avoid overwriting a (more important) Activated event with a SelectionChanged event
+
+	    yuiDebug() << "Sending SelectionChanged event" << endl;
 	    YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::SelectionChanged ) );
 	}
     }
@@ -238,7 +286,10 @@ YQTable::slotActivated( QTreeWidgetItem * listViewItem )
     selectOrigItem( listViewItem );
 
     if ( notify() )
+    {
+	yuiDebug() << "Sending Activated event" << endl;
 	YQUI::ui()->sendEvent( new YWidgetEvent( this, YEvent::Activated ) );
+    }
 }
 
 

@@ -90,7 +90,7 @@ public:
     virtual YQComboBox *	createComboBox		( YWidget * parent, const string & label, bool editable	 = false );
     virtual YQSelectionBox *	createSelectionBox	( YWidget * parent, const string & label );
     virtual YQTree *		createTree		( YWidget * parent, const string & label );
-    virtual YQTable *		createTable		( YWidget * parent, YTableHeader * header );
+    virtual YQTable *		createTable		( YWidget * parent, YTableHeader * header, bool multiSelection = false );
     virtual YQProgressBar *	createProgressBar	( YWidget * parent, const string & label, int maxValue = 100 );
     virtual YQRichText *	createRichText		( YWidget * parent, const string & text = string(), bool plainTextMode = false );
     virtual YQBusyIndicator *	createBusyIndicator	( YWidget * parent, const string & label, int maxValue = 100 );
