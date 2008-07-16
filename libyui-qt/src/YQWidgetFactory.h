@@ -93,7 +93,6 @@ public:
     virtual YQTable *		createTable		( YWidget * parent, YTableHeader * header, bool multiSelection = false );
     virtual YQProgressBar *	createProgressBar	( YWidget * parent, const string & label, int maxValue = 100 );
     virtual YQRichText *	createRichText		( YWidget * parent, const string & text = string(), bool plainTextMode = false );
-    virtual YQBusyIndicator *	createBusyIndicator	( YWidget * parent, const string & label, int maxValue = 100 );
 
     //
     // Less Common Leaf Widgets
@@ -105,6 +104,7 @@ public:
     virtual YQImage *		createImage		( YWidget * parent, const string & imageFileName, bool animated = false );
     virtual YQLogView *		createLogView		( YWidget * parent, const string & label, int visibleLines, int storedLines = 0 );
     virtual YQMultiSelectionBox *createMultiSelectionBox( YWidget * parent, const string & label );
+    virtual YQBusyIndicator *	createBusyIndicator	( YWidget * parent, const string & label, int maxValue = 100 );
 
     virtual YPackageSelector *	createPackageSelector	( YWidget * parent, long modeFlags = 0 );
     virtual YWidget *		createPkgSpecial	( YWidget * parent, const string & name ); // NCurses only, will throw exception in the Qt UI
@@ -145,7 +145,7 @@ protected:
     YQWidgetFactory();
 
     /**
-     * Destructory.
+     * Destructor.
      **/
     virtual ~YQWidgetFactory();
 
