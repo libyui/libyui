@@ -145,7 +145,7 @@ YQTable::addItem( YItem * yitem )
 	    case YAlignUnchanged: break;
 	}
 	
-	clone->setTextAlignment(i, qt_alignment);
+	clone->setTextAlignment( i, qt_alignment );
     }
 }
 
@@ -161,13 +161,16 @@ YQTable::selectItem( YItem * yitem, bool selected )
     YQTableListViewItem * clone = (YQTableListViewItem *) item->data();
     YUI_CHECK_PTR( clone );
 
+
     if ( ! selected && clone == _qt_listView->currentItem() )
     {
 	deselectAllItems();
     }
     else
     {
-	_qt_listView->setCurrentItem( clone );
+	if ( ! hasMultiSelection() )
+	    _qt_listView->setCurrentItem( clone ); // This deselects all other items!
+	
 	clone->setSelected( true );
 	YTable::selectItem( item, selected );
     }
