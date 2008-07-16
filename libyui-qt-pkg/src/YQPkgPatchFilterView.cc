@@ -30,7 +30,7 @@
 #include <QVBoxLayout>
 
 #include <FSize.h>
-#include <zypp/ui/PatchContents.h>
+#include <zypp/Patch.h>
 
 #include "YQPkgPatchFilterView.h"
 #include "YQPkgPatchList.h"
@@ -81,7 +81,7 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
     connect( _patchFilter, SIGNAL( activated( int ) ), this, SLOT( fillPatchList() ) );
 
     _detailsViews		= new QTabWidget( _splitter );			Q_CHECK_PTR( _detailsViews	);
-    
+
     _descriptionView		= new YQPkgDescriptionView( _detailsViews );	Q_CHECK_PTR( _descriptionView	);
 
     _detailsViews->addTab( _descriptionView, _( "Patch Description" ) );
