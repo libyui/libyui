@@ -38,8 +38,8 @@
 #include "QY2LayoutUtils.h"
 #include "YQi18n.h"
 
-typedef zypp::ui::PatchContents			ZyppPatchContents;
-typedef zypp::ui::PatchContents::const_iterator	ZyppPatchContentsIterator;
+typedef zypp::Patch::Contents			ZyppPatchContents;
+typedef zypp::Patch::Contents::const_iterator	ZyppPatchContentsIterator;
 
 using std::set;
 
@@ -117,13 +117,13 @@ YQPkgPatchFilterView::updateTotalDownloadSize()
 
 	if ( patch )
 	{
-	    ZyppPatchContents patchContents( patch );
+	    ZyppPatchContents patchContents( patch->contents() );
 
 	    for ( ZyppPatchContentsIterator contents_it = patchContents.begin();
 		  contents_it != patchContents.end();
 		  ++contents_it )
 	    {
-		ZyppPkg pkg = tryCastToZyppPkg( *contents_it );
+		ZyppPkg pkg =  zypp::make<zypp::Package>(*contents_it);
 		ZyppSel sel;
 
 		if ( pkg )
