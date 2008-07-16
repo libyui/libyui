@@ -161,7 +161,6 @@ YQTable::selectItem( YItem * yitem, bool selected )
     YQTableListViewItem * clone = (YQTableListViewItem *) item->data();
     YUI_CHECK_PTR( clone );
 
-    //FIXME selected first
     if ( ! selected && clone == _qt_listView->currentItem() )
     {
 	deselectAllItems();
