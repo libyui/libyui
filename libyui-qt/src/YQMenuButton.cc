@@ -96,9 +96,7 @@ YQMenuButton::rebuildMenuTree( QMenu * parentMenu, YItemIterator begin, YItemIte
 {
     for ( YItemIterator it = begin; it != end; ++it )
     {
-	YMenuItem * item = dynamic_cast<YMenuItem *> (*it);
-	YUI_CHECK_PTR( item );
-
+	YItem * item = *it;
 	QPixmap icon;
 
 	if ( item->hasIconName() )
