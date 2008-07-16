@@ -164,9 +164,9 @@ NCWidgetFactory::createTree( YWidget * parent, const string & label )
 
 
 NCTable *
-NCWidgetFactory::createTable( YWidget * parent, YTableHeader * tableHeader )
+NCWidgetFactory::createTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelection )
 {
-    NCTable *table = new NCTable( parent, tableHeader );
+    NCTable *table = new NCTable( parent, tableHeader, multiSelection );
     YUI_CHECK_NEW( table );
 
     return table;

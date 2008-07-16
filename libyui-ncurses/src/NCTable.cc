@@ -24,10 +24,12 @@
 #include "YTypes.h"
 
 
-NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader )
-	: YTable( parent, tableHeader )
-	, NCPadWidget( parent )
-	, biglist( false )
+NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelection )
+// FIXME    : YTable( parent, tableHeader, multiSelection )
+    : YTable( parent, tableHeader,
+	      false ) // multiSelection - not supported yet
+    , NCPadWidget( parent )
+    , biglist( false )
 {
     yuiDebug() << endl;
 
@@ -47,6 +49,8 @@ NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader )
     }
 
     hasHeadline = myPad()->SetHeadline( _header );
+
+#warning FIXME: Handle multi selection
 }
 
 
@@ -100,7 +104,7 @@ void NCTable::cellChanged( const YTableCell *cell )
 
 
 
-// Set table header all at once
+// Set all table headers all at once
 
 void NCTable::setHeader( vector<string> head )
 {

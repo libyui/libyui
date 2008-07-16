@@ -28,45 +28,9 @@
 
 class NCTable : public YTable, public NCPadWidget
 {
-
-    friend std::ostream & operator<<( std::ostream & STREAM, const NCTable & OBJ );
-
-    NCTable & operator=( const NCTable & );
-    NCTable( const NCTable & );
-
-private:
-
-    vector<NCstring> _header;
-
-protected:
-
-    /**
-     * Overload myPad to narrow the type
-     */
-    virtual NCTablePad * myPad() const
-    { return dynamic_cast<NCTablePad*>( NCPadWidget::myPad() ); }
-
-    bool	  biglist;
-
-protected:
-
-    virtual const char * location() const { return "NCTable"; }
-
-    virtual NCPad * CreatePad();
-
-    virtual void cellChanged( int index, int colnum, const string & newtext );
-    virtual void cellChanged( const YTableCell *cell );
-
-
-protected:
-
-    virtual void startMultipleChanges() { startMultidraw(); }
-
-    virtual void doneMultipleChanges()	{ stopMultidraw(); }
-
 public:
 
-    NCTable( YWidget * parent, YTableHeader *tableHeader );
+    NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelection = false );
 
     virtual ~NCTable();
 
@@ -116,6 +80,41 @@ public:
     }
 
     void stripHotkeys() { myPad()->stripHotkeys(); }
+
+    
+protected:
+
+    /**
+     * Overload myPad to narrow the type
+     */
+    virtual NCTablePad * myPad() const
+	{ return dynamic_cast<NCTablePad*>( NCPadWidget::myPad() ); }
+
+    bool	  biglist;
+
+    
+protected:
+
+    virtual const char * location() const { return "NCTable"; }
+
+    virtual NCPad * CreatePad();
+
+    virtual void cellChanged( int index, int colnum, const string & newtext );
+    virtual void cellChanged( const YTableCell *cell );
+
+    virtual void startMultipleChanges() { startMultidraw(); }
+    virtual void doneMultipleChanges()	{ stopMultidraw(); }
+
+
+private:
+
+    vector<NCstring> _header;
+
+    friend std::ostream & operator<<( std::ostream & STREAM, const NCTable & OBJ );
+
+    NCTable & operator=( const NCTable & );
+    NCTable( const NCTable & );
+
 };
 
 
