@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Jul 17 11:42:54 CEST 2008 - ma@suse.de
+
+- Remove obsolete references to Script/Message/Atom
+
+-------------------------------------------------------------------
 Mon Jul 14 23:45:08 CEST 2008 - dmacvicar@suse.de
 
 - feature #302003, show transactions in a better way.
@@ -8,7 +13,7 @@ Mon Jul 14 23:45:08 CEST 2008 - dmacvicar@suse.de
 -------------------------------------------------------------------
 Fri Jul 11 15:40:57 CEST 2008 - sh@suse.de
 
-- Fixed bnc #399674: Icons for Auto* actions missing in help 
+- Fixed bnc #399674: Icons for Auto* actions missing in help
 
 -------------------------------------------------------------------
 Wed Jul  9 17:17:00 CEST 2008 - sh@suse.de
@@ -21,20 +26,20 @@ Wed Jul  9 17:17:00 CEST 2008 - sh@suse.de
 -------------------------------------------------------------------
 Thu Jun 26 09:47:18 CEST 2008 - schubi@suse.de
 
-- Added plugin mechanism for displaying grafic solver results. 
+- Added plugin mechanism for displaying grafic solver results.
 - V 2.17.1
 
 -------------------------------------------------------------------
 Wed Jun  4 11:46:58 CEST 2008 - sh@suse.de
 
 - Added translation marker for "File" menu (bnc #396419)
-- V 2.16.48 
+- V 2.16.48
 
 -------------------------------------------------------------------
 Thu May 29 15:29:40 CEST 2008 - ma@suse.de
 
-- Revert 'fix persistent locks saving (bnc#332853)' because the 
-  approach is wrong. Persistent locks are saved during commit. 
+- Revert 'fix persistent locks saving (bnc#332853)' because the
+  approach is wrong. Persistent locks are saved during commit.
   It's not the UI's task to do this.
 - V 2.16.47
 
@@ -82,7 +87,7 @@ Wed May 21 13:30:21 CEST 2008 - coolo@suse.de
 -------------------------------------------------------------------
 Wed May 21 13:05:45 CEST 2008 - dmacvicar@suse.de
 
-- display the right name for repository list. (bnc#383553) 
+- display the right name for repository list. (bnc#383553)
   patch by Fabien Crespel <fabien@crespel.net>
 
 -------------------------------------------------------------------
@@ -111,12 +116,12 @@ Mon May 19 11:50:51 CEST 2008 - dmacvicar@suse.de
 Thu May 15 14:52:30 CEST 2008 - sh@suse.de
 
 - Fixed bnc #389744: Missing icons in "symbols help" dialog
-- V 2.16.43 
+- V 2.16.43
 
 -------------------------------------------------------------------
 Thu May 15 14:10:24 CEST 2008 - dmacvicar@suse.de
 
-- fix pattern selector unreadable font 
+- fix pattern selector unreadable font
   (bnc#381970)
 - 2.16.42
 
@@ -124,8 +129,8 @@ Thu May 15 14:10:24 CEST 2008 - dmacvicar@suse.de
 Tue May 13 18:03:12 CEST 2008 - dmacvicar@suse.de
 
 - show satisfied non packages as installed selectables
-  (bnc#380356)  
-- 2.16.41 
+  (bnc#380356)
+- 2.16.41
 
 -------------------------------------------------------------------
 Wed Apr 30 15:21:09 CEST 2008 - lslezak@suse.cz
@@ -165,7 +170,7 @@ Fri Apr 18 11:41:32 CEST 2008 - dmacvicar@suse.de
 - show updates in blue again (bnc #371681)
 - allow disabling view of debuginfo and devel pkgs
   (bnc #359155)
-- 2.16.37 
+- 2.16.37
 
 Thu Apr 17 22:17:53 CEST 2008 - dmacvicar@suse.de
 -------------------------------------------------------------------
@@ -176,7 +181,7 @@ Thu Apr 17 22:17:53 CEST 2008 - dmacvicar@suse.de
 -------------------------------------------------------------------
 Thu Apr 17 13:36:41 CEST 2008 - dmacvicar@suse.de
 
-- fix space used when resizing 
+- fix space used when resizing
 
 -------------------------------------------------------------------
 Wed Apr 16 17:12:07 CEST 2008 - dmacvicar@suse.de
@@ -206,17 +211,17 @@ Mon Apr 14 16:37:48 CEST 2008 - dmacvicar@suse.de
 -------------------------------------------------------------------
 Wed Apr  9 15:10:20 CEST 2008 - sh@suse.de
 
-- Fixed bnc #372910: License windows shows in left top 
+- Fixed bnc #372910: License windows shows in left top
 
 -------------------------------------------------------------------
 Thu Apr 9 14:37:19 CEST 2008 - dmacvicar@suse.de
 
-- fix patch and pattern content 
+- fix patch and pattern content
 
 -------------------------------------------------------------------
 Wed Apr  9 14:15:26 CEST 2008 - dmacvicar@suse.de
 
-- fix pattern view display (only missing head font) 
+- fix pattern view display (only missing head font)
 
 -------------------------------------------------------------------
 Tue Apr  8 17:40:51 CEST 2008 - dmacvicar@suse.de
@@ -233,7 +238,7 @@ Fri Apr  4 10:32:38 CEST 2008 - schubi@suse.de
 -------------------------------------------------------------------
 Thu Apr  3 18:22:29 CEST 2008 - dmacvicar@suse.de
 
-- Add unmantained packages filter (fate ##302004) 
+- Add unmantained packages filter (fate ##302004)
 - 2.16.30
 
 -------------------------------------------------------------------
@@ -244,7 +249,7 @@ Tue Apr 01 17:42:00 CET 2008 - tgoettlicher@suse.de
 -------------------------------------------------------------------
 Tue Mar 25 16:41:58 CET 2008 - sh@suse.de
 
-- Changed textdomain from "packages-qt" to "qt-pkg" for consistency 
+- Changed textdomain from "packages-qt" to "qt-pkg" for consistency
 
 -------------------------------------------------------------------
 Wed Mar 19 09:05:52 CET 2008 - coolo@suse.de
@@ -272,7 +277,7 @@ Thu Mar 13 15:56:56 CET 2008 - sh@suse.de
 
 - Fixed bug #370244: Menu entries about source RPMs
   Moved out all source RPM related menu entries:
-  libzypp has no support whatsoever for source RPMs 
+  libzypp has no support whatsoever for source RPMs
 
 -------------------------------------------------------------------
 Wed Feb 27 11:02:40 CET 2008 - coolo@suse.de
@@ -283,13 +288,13 @@ Wed Feb 27 11:02:40 CET 2008 - coolo@suse.de
 Mon Feb 25 16:05:06 CET 2008 - sh@suse.de
 
 - Added copy of GPL licensing terms (COPYING) (bnc #362646)
-- V 2.16.27 
+- V 2.16.27
 
 -------------------------------------------------------------------
 Mon Feb 25 14:23:37 CET 2008 - sh@suse.de
 
 - Provide yast2_ui_pkg in .spec file (bnc #363958)
-- V 2.16.26 
+- V 2.16.26
 
 -------------------------------------------------------------------
 Thu Feb 14 15:01:26 CET 2008 - coolo@suse.de
