@@ -1,21 +1,26 @@
 -------------------------------------------------------------------
+Thu Jul 17 11:42:54 CEST 2008 - ma@suse.de
+
+- Remove obsolete references to Script/Message/Atom
+
+-------------------------------------------------------------------
 Wed Jun 25 13:50:33 CEST 2008 - kmachalkova@suse.cz
 
-- Focus the button (instead of text area) and make closing the dialog 
-  possible with single keypress if applicable (bnc#397393) 
+- Focus the button (instead of text area) and make closing the dialog
+  possible with single keypress if applicable (bnc#397393)
 - Fixed keyboard shortcut (bnc#402349)
-- 2.17.3 
+- 2.17.3
 
 -------------------------------------------------------------------
 Wed Jun 11 13:02:53 CEST 2008 - kmachalkova@suse.cz
 
 - Use zypp::PoolQuery to filter packages by repositories
 - Use zypp::PoolQuery to search in packages
-- Search filter: search directly by hitting Enter on search field 
-- Update label and the description when switching between repositories 
+- Search filter: search directly by hitting Enter on search field
+- Update label and the description when switching between repositories
   (bnc#397388)
 - 2.17.2
-  
+
 -------------------------------------------------------------------
 Tue Jun 10 16:02:30 CEST 2008 - sh@suse.de
 
@@ -23,13 +28,13 @@ Tue Jun 10 16:02:30 CEST 2008 - sh@suse.de
   setNiceSize()
 - Fixed broken YaST2 logo headers in some source files
 - Removed utterly wrong maintainer: ma@suse.de  lines
-- V 2.17.1 
+- V 2.17.1
 
 -------------------------------------------------------------------
 Tue Jun 10 14:58:01 CEST 2008 - gs@suse.de
 
 - Online Update: add preselected patches to the list of
-  needed patches 
+  needed patches
 
 -------------------------------------------------------------------
 Wed Jun  4 12:13:54 CEST 2008 - gs@suse.de
@@ -40,7 +45,7 @@ Wed Jun  4 12:13:54 CEST 2008 - gs@suse.de
 -------------------------------------------------------------------
 Thu May 29 10:12:08 CEST 2008 - gs@suse.de
 
-- Show the status of a language pattern and make installation 
+- Show the status of a language pattern and make installation
   possible (bnc #389722)
 - 2.16.13
 
@@ -48,14 +53,14 @@ Thu May 29 10:12:08 CEST 2008 - gs@suse.de
 Wed May 28 15:55:28 CEST 2008 - kmachalkova@suse.cz
 
 - Do not create pop-up dialogs on the stack (disk space, deps), this
-  may lead to segfault (bnc#384471) and/or the latest pop-up being 
+  may lead to segfault (bnc#384471) and/or the latest pop-up being
   always on the top (bnc#384467)
 - 2.16.12
 
 -------------------------------------------------------------------
 Wed May 21 10:33:43 CEST 2008 - gs@suse.de
 
-- YOU: correct condition for unneeded patches 
+- YOU: correct condition for unneeded patches
 - 2.16.11
 
 -------------------------------------------------------------------
@@ -77,7 +82,7 @@ Tue May  6 15:39:05 CEST 2008 - gs@suse.de
 
 - YOU: filter name for satisfied patches is 'Unneeded' (like qt),
        use enum for patch filters,
-- Do the initial solver run before showing the default list    
+- Do the initial solver run before showing the default list
 
 -------------------------------------------------------------------
 Mon May  5 14:31:15 CEST 2008 - kmachalkova@suse.cz
@@ -90,8 +95,8 @@ Mon May  5 14:31:15 CEST 2008 - kmachalkova@suse.cz
 -------------------------------------------------------------------
 Mon Apr 28 17:34:54 CEST 2008 - kmachalkova@suse.cz
 
-- Locale (prev. Language) support + displaying locale-related pkgs 
-  re-enabled  
+- Locale (prev. Language) support + displaying locale-related pkgs
+  re-enabled
 - Correctly replace filter description area when switching between
   filters (bnc#377857)
 - 2.16.8
@@ -99,10 +104,10 @@ Mon Apr 28 17:34:54 CEST 2008 - kmachalkova@suse.cz
 -------------------------------------------------------------------
 Mon Apr 21 15:22:01 CEST 2008 - kmachalkova@suse.cz
 
-- Pattern content (required, recommended, suggested pkgs) visible 
+- Pattern content (required, recommended, suggested pkgs) visible
   again
 - Show no. of installed vs. total pkgs for a pattern
-- 2.16.7 
+- 2.16.7
 
 -------------------------------------------------------------------
 Mon Apr 21 10:58:04 CEST 2008 - jsrain@suse.cz
@@ -129,12 +134,12 @@ Mon Mar 31 17:31:55 CEST 2008 - kmachalkova@suse.cz
 
 - Launch repository manager from the menu (Extras) - return `repo_mgr
   symbol from the main `PackageSelector UI loop (FaTE #302517)
-- 2.16.6 
+- 2.16.6
 
 -------------------------------------------------------------------
 Thu Mar 27 17:20:23 CET 2008 - kmachalkova@suse.cz
 
-- UI refactoring branch merged back to trunk 
+- UI refactoring branch merged back to trunk
 - 2.16.5
 
 -------------------------------------------------------------------
@@ -152,7 +157,7 @@ Wed Feb 27 16:20:41 CET 2008 - coolo@suse.de
 Mon Feb 25 14:25:51 CET 2008 - sh@suse.de
 
 - Provide yast2_ui_pkg in .spec file (bnc #363958)
-- V 2.16.3 
+- V 2.16.3
 
 -------------------------------------------------------------------
 Wed Feb 20 13:31:34 CET 2008 - coolo@suse.de
