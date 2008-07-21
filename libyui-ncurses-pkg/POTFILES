@@ -7,6 +7,8 @@
 ./src/NCPkgPopupDiskspace.cc
 ./src/NCPkgFilterSearch.cc
 ./src/NCPkgFilterPattern.cc
+./src/NCPkgFilterLocale.cc
+./src/NCPkgFilterRepo.cc
 ./src/NCPkgFilterMain.cc
 ./src/NCPkgPopupDeps.cc
 ./src/NCPkgMenuDeps.cc

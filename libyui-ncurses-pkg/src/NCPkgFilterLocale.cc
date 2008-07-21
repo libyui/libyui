@@ -22,6 +22,10 @@
 
 #include "NCPkgFilterLocale.h"
 
+/*
+  Textdomain "ncurses-pkg"
+*/
+
 NCPkgLocaleTag::NCPkgLocaleTag ( zypp::sat::LocaleSupport loc, string status )
     : YTableCell( status )
     , locale ( loc )
