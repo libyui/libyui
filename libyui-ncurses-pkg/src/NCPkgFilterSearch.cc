@@ -17,6 +17,8 @@
 /-*/
 #define YUILogComponent "ncurses-pkg"
 #include <YUILog.h>
+#include <sstream>
+#include <boost/format.hpp>
 
 #include "NCPkgFilterSearch.h"
 
@@ -188,11 +190,16 @@ bool NCPkgFilterSearch::fillSearchList( const string & expr,
         ZyppPkg pkg = tryCastToZyppPkg( (*it)->theObj() );
         packageList->createListEntry ( pkg, *it);
     }
-    
+
+    int found_pkgs = packageList->getNumLines();
+    ostringstream s;
+    s << boost::format( _( "%d packages found")) % found_pkgs;
+    packager->PatternLabel()->setText( s.str() );		
+
     // show the package list
     packageList->drawList();
 
-    if ( packageList->getNumLines() > 0 )
+    if ( found_pkgs > 0 )
     {
         packageList->setCurrentItem( 0 );
         packageList->showInformation(); 
