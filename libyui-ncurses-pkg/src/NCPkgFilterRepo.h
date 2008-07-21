@@ -114,7 +114,7 @@ public:
      */
     ZyppRepo getRepo( int index );
 
-
+    string showDescription (ZyppRepo r);
 
     virtual NCursesEvent wHandleInput ( wint_t ch );
 

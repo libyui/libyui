@@ -73,10 +73,9 @@ void NCPkgRepoTable::fillHeader()
 {
     vector <string> header;
 
-    header.reserve(3);
+    header.reserve(2);
     header.push_back( "L" );
     header.push_back( "L" + NCPkgStrings::PkgName() );
-    header.push_back( "L" + NCPkgStrings::RepoURL() );
 
     setHeader( header);
 }
@@ -160,6 +159,24 @@ ZyppRepo NCPkgRepoTable::getRepo( int index )
     }
 }
 
+string NCPkgRepoTable::showDescription( ZyppRepo r)
+{
+    string ret = "";
+
+    if ( r.isSystemRepo())
+	ret = _("<b>@System</b>: local RPM database");
+    else 
+    {
+	string label = _("<b>Repository URL:</b>");
+	zypp::Url srcUrl;
+	if ( ! r.info().baseUrlsEmpty() )
+	   srcUrl = *(r).info().baseUrlsBegin();
+
+        ret = label + srcUrl.asString(); 
+    }
+    return ret;
+}
+
 /////////////////////////////////////////////////////////////////////
 ////
 ////
@@ -193,14 +210,6 @@ bool NCPkgRepoTable::fillRepoList()
         string name = (*it).info().name();
 
       	oneLine.push_back( name ); 
-
-	//and URL as well
-        zypp::Url srcUrl;
-        if ( ! (*it).info().baseUrlsEmpty() )
-           srcUrl = *(*it).info().baseUrlsBegin();
-
-	oneLine.push_back( srcUrl.asString() );
-	//add the whole stuff to the table
         addLine( (*it), oneLine);    
     }
     
@@ -229,6 +238,8 @@ bool NCPkgRepoTable::showRepoPackages( )
         ZyppPkg pkg = tryCastToZyppPkg( (*it)->theObj() );
         pkgList->createListEntry ( pkg, *it);
     }
+ 
+    packager->FilterDescription()->setText( showDescription( repo ) );
  
     pkgList->setCurrentItem( 0 );
     pkgList->drawList();
