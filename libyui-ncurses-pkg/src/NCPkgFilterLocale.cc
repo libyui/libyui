@@ -17,6 +17,8 @@
 /-*/
 #define YUILogComponent "ncurses-pkg"
 #include <YUILog.h>
+#include <sstream>
+#include <boost/format.hpp>
 
 #include "NCPkgFilterLocale.h"
 
@@ -138,10 +140,14 @@ void NCPkgLocaleTable::showLocalePackages()
     yuiMilestone() << "Packages supporting locale '" << myLocale.locale() << "':" << endl;
     for_( it, myLocale.selectableBegin(), myLocale.selectableEnd() )
     {
-        //yuiMilestone() << (*it).name() << endl;i
         ZyppPkg zyppPkg = tryCastToZyppPkg( (*it)->theObj() );
 	packageList->createListEntry( zyppPkg, *it );
     }
+
+    ostringstream s;
+    //Translators: %s is a locale code, e.g. en_GB
+    s << boost::format( _( "Translations, dictionaries and other language related files for <b>%s</b> locale")) % myLocale.locale().code();
+    packager->FilterDescription()->setText( s.str() );		
 
     packageList->setCurrentItem( 0 );
     packageList->drawList();
