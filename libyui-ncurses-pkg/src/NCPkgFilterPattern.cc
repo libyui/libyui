@@ -144,7 +144,7 @@ void NCPkgFilterPattern::showPatternPackages( )
 
 	    ostringstream s;
 
-            s << boost::format( _("%d of %d packages installed")) % installed % total;
+            s << boost::format( _("%d of %d package installed", "%d of %d packages installed", total )) % installed % total;
         
             packager->PatternLabel()->setLabel ( s.str() );
         
