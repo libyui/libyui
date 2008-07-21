@@ -290,7 +290,22 @@ bool NCPackageSelector::fillPatchSearchList( const string & expr )
 
     // clear the patch list
     packageList->itemsCleared ();
-    // get the patch list and sort it
+
+    zypp::PoolQuery q;
+    q.addString( expr );
+    q.addKind( zypp::ResKind::patch );
+    q.addAttribute( zypp::sat::SolvAttr::keywords );
+    q.addAttribute( zypp::sat::SolvAttr::name );
+
+    for( zypp::PoolQuery::Selectable_iterator it = q.selectableBegin();
+	it != q.selectableEnd(); it++)
+    {
+	yuiMilestone() << (*it)->name() << endl;
+        ZyppPatch patchPtr = tryCastToZyppPatch( (*it)->theObj() );
+        packageList->createPatchEntry ( patchPtr, *it);
+    }
+
+    /*// get the patch list and sort it
     list<ZyppSel> patchList( zyppPatchesBegin (), zyppPatchesEnd () );
     patchList.sort( sortByName );
     list<ZyppSel>::iterator listIt = patchList.begin();
@@ -314,7 +329,7 @@ bool NCPackageSelector::fillPatchSearchList( const string & expr )
           }
       }
       ++listIt;
-    }
+    }*/
     // show the patch list with search result
     packageList->drawList();
 
