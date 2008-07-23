@@ -32,6 +32,7 @@ using std::string;
 #include "NCLayoutBox.h"
 #include "NCRichText.h"
 #include "NCCheckBox.h"
+#include "NCComboBox.h"
 #include "NCPushButton.h"
 
 class NCPackageSelector;
@@ -49,8 +50,17 @@ class NCPkgFilterSearch : public NCLayoutBox {
 
 private:
 
+    enum SearchMode {
+	Contains = 0,
+	BeginsWith,
+	ExactMatch,
+	UseWildcard,
+	UseRegexp
+    };
+
     NCInputField * searchExpr;
     NCCheckBox * ignoreCase;
+    NCComboBox * searchMode;
 
     NCPackageSelector * packager;		// connection to the package selector
 
@@ -70,7 +80,7 @@ public:
     virtual bool showSearchResultPackages();
 
     bool match ( string s1, string s2, bool ignoreCase );
-    bool fillSearchList( const string & expr,
+    bool fillSearchList( string & expr,
 			 bool ignoreCase,
 			 bool checkName,
 			 bool checkSummary,

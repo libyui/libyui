@@ -17,6 +17,7 @@
 /-*/
 #define YUILogComponent "ncurses-pkg"
 #include <YUILog.h>
+#include <string>
 #include <sstream>
 #include <boost/format.hpp>
 
@@ -85,25 +86,35 @@ void NCPkgFilterSearch::createLayout( YWidget *parent )
 
     // add the input field (a editable combo box)
     NCLayoutBox * vSplit = new NCLayoutBox ( frame0, YD_VERT);
-    new NCSpacing( vSplit, YD_VERT, true, 0.5 );
+    //new NCSpacing( vSplit, YD_VERT, true, 0.5 );
 
     searchExpr = new NCInputField( vSplit, NCPkgStrings::SearchPhrase() );
     searchExpr->setStretchable( YD_HORIZ, true );
     searchExpr->setReturnOnReturn( true );
     packager->setSearchField( searchExpr );
 
-    new NCSpacing( vSplit, YD_VERT, false, 0.5 );
+    //new NCSpacing( vSplit, YD_VERT, false, 0.5 );
     
     if ( !packager->isYouMode() )
     {
 	// add the checkBox ignore case
-	NCAlignment *left = new NCAlignment( vSplit, YAlignBegin, YAlignUnchanged );
+	NCAlignment *left1 = new NCAlignment( vSplit, YAlignBegin, YAlignUnchanged );
 
-	ignoreCase = new NCCheckBox( left, _( "&Ignore Case" ), true );
+	ignoreCase = new NCCheckBox( left1, _( "&Ignore Case" ), true );
         new NCSpacing( vSplit, YD_VERT, true, 0.5 );
 	
     }
-        
+
+    NCAlignment *left2 = new NCAlignment( vSplit, YAlignBegin, YAlignUnchanged );
+    searchMode = new NCComboBox (left2, _("Search &Mode"), false);
+
+    searchMode->addItem( _("Contains"), false);    
+    searchMode->addItem( _("Begins with"), false);    
+    searchMode->addItem( _("Exact Match"), false);    
+    searchMode->addItem( _("Use Wildcards"), false);    
+    searchMode->addItem( _("Use RegExp"), false);    
+
+    new NCSpacing( vSplit, YD_VERT, true, 0.5 );
 }
 
 
@@ -147,7 +158,7 @@ bool NCPkgFilterSearch::match( string s1, string s2, bool ignoreCase )
 }
 
 
-bool NCPkgFilterSearch::fillSearchList( const string & expr,
+bool NCPkgFilterSearch::fillSearchList( string & expr,
                                         bool ignoreCase,
                                         bool checkName,
                                         bool checkSummary,
@@ -166,6 +177,26 @@ bool NCPkgFilterSearch::fillSearchList( const string & expr,
     packageList->itemsCleared ();
 
     zypp::PoolQuery q;
+
+    switch ( searchMode->getCurrentItem() )
+    {
+	case Contains:
+	    q.setMatchSubstring();
+	    break;
+	case BeginsWith:
+	    expr = '^' + expr;
+	    q.setMatchRegex();
+	    break;
+	case ExactMatch:
+	    break;
+	case UseWildcard:
+	    q.setMatchGlob(); 
+	    break;
+	case UseRegexp:
+	    q.setMatchRegex();
+	    break;
+    }
+
     q.addString( expr );
     q.addKind( zypp::ResKind::package );
     //no clue what this means, but it segfaults if it's not here :)
