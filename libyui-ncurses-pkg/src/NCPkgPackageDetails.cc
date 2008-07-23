@@ -86,7 +86,7 @@ string NCPkgPackageDetails::createText( list<string> info, bool oneline )
 string NCPkgPackageDetails::commonHeader( ZyppObj pkgPtr )
 {
    string text;
-   text += "<h3>" + pkgPtr->name() + " - "; 
+   text += "<h3>" + pkgPtr->name() + " - ";
    text += pkgPtr->summary() + "</h3>";
 
    return text;
@@ -94,8 +94,8 @@ string NCPkgPackageDetails::commonHeader( ZyppObj pkgPtr )
 
 void NCPkgPackageDetails::longDescription ( ZyppObj pkgPtr )
 {
-   string text = "";  
-  
+   string text = "";
+
    //text += commonHeader( pkgPtr );
    text += pkgPtr->description();
 
@@ -108,12 +108,12 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
     string instVersion = "";
     string version = "";
     string text = "";
-    
+
     text += commonHeader( pkgPtr );
     //text += " - ";
-    
+
     //text += pkgPtr->summary();
-    
+
     if ( slbPtr->hasBothObjects () )
     {
         ZyppObj io = slbPtr->installedObj ();
@@ -131,7 +131,7 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
         version += "-";
         version += pkgPtr->edition().release();
     }
-    
+
     text += NCPkgStrings::Version();
     text +=  version;
     if ( instVersion != "" )
@@ -141,12 +141,12 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
         text += instVersion;
     }
     text +=  "<br>";
-    
+
     // show the size
     text += NCPkgStrings::Size();
     text += pkgPtr->installsize().asString();
     text +=  "  ";
-    
+
     ZyppPkg package = tryCastToZyppPkg (pkgPtr);
     if ( package )
     {
@@ -157,18 +157,18 @@ void NCPkgPackageDetails::technicalData( ZyppObj pkgPtr, ZyppSel slbPtr )
         sprintf( num, "%d", medianr );
         text += num;
         text += "<br>";
-    
+
         // the license
         text += NCPkgStrings::License();
         text += package->license();
         text += "  ";
         text += "<br>";
-    
+
         // the rpm group
         text += NCPkgStrings::RpmGroup();
         text += package->group ();
         text += "<br>";
-	
+
 	//authors, in one line
         text += NCPkgStrings::Authors();
         list<string> authors = package->authors(); // zypp::Package
@@ -185,17 +185,17 @@ void NCPkgPackageDetails::fileList( ZyppSel slbPtr )
    string text = "";
    // the file list is available only for installed packages
    ZyppPkg package = tryCastToZyppPkg (slbPtr->installedObj());
-   
+
    if ( package )
    {
-       text += commonHeader( slbPtr->theObj() ); 
+       text += commonHeader( slbPtr->theObj() );
        text += NCPkgStrings::ListOfFiles();
        // get the file list from the package manager/show the list
        list<string> fileList = package->filenames();
        text += createText( fileList, false ) ;
    }
 
-   else 
+   else
 	text = _("<i>This information is available for installed packages only</i>");
 
    setValue(text);
@@ -203,7 +203,7 @@ void NCPkgPackageDetails::fileList( ZyppSel slbPtr )
 
 void NCPkgPackageDetails::dependencyList( ZyppObj pkgPtr, ZyppSel slbPtr )
 {
-    string text = commonHeader( pkgPtr );    
+    string text = commonHeader( pkgPtr );
     // show the relations, all of them except provides which is above
     zypp::Dep deptypes[] = {
 	zypp::Dep::PROVIDES,
@@ -213,7 +213,6 @@ void NCPkgPackageDetails::dependencyList( ZyppObj pkgPtr, ZyppSel slbPtr )
         zypp::Dep::OBSOLETES,
         zypp::Dep::RECOMMENDS,
         zypp::Dep::SUGGESTS,
-        zypp::Dep::FRESHENS,
         zypp::Dep::ENHANCES,
         zypp::Dep::SUPPLEMENTS,
     };
@@ -231,7 +230,7 @@ void NCPkgPackageDetails::dependencyList( ZyppObj pkgPtr, ZyppSel slbPtr )
     }
 
     setValue (text);
-    
+
 }
 
 bool NCPkgPackageDetails::patchDescription( ZyppObj objPtr, ZyppSel selectable )
@@ -243,7 +242,7 @@ bool NCPkgPackageDetails::patchDescription( ZyppObj objPtr, ZyppSel selectable )
 	yuiError() << "Patch not valid" << endl;
 	return false;
     }
-    
+
     string descr;
     descr += "<p>";
     descr += NCPkgStrings::Patch();
@@ -260,7 +259,7 @@ bool NCPkgPackageDetails::patchDescription( ZyppObj objPtr, ZyppSel selectable )
     descr += NCPkgStrings::Version();
     descr += patchPtr->edition().asString();
     descr += "</p>";
-    
+
     if ( !selectable->installedEmpty()
 	 && selectable->installedObj().isBroken() )
     {
