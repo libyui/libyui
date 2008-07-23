@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jul 23 16:12:56 CEST 2008  ma@suse.de
+
+- Remove references to obsolete freshens dependencies.
+- V 2.17.3
+
+-------------------------------------------------------------------
 Thu Jul 17 11:42:54 CEST 2008 - ma@suse.de
 
 - Remove obsolete references to Script/Message/Atom
