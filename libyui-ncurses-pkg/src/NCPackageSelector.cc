@@ -722,6 +722,7 @@ void NCPackageSelector::showVersionsList()
     }
 }
 
+
 ///////////////////////////////////////////////////////////////////
 //
 // showPatchPackages
@@ -791,6 +792,15 @@ void NCPackageSelector::showPatchPkgVersions()
     }
 }
 
+void NCPackageSelector::clearInfoArea()
+{
+    if ( infoText )
+       infoText->setText("");
+    if ( versionsList )		 
+	 versionsList->itemsCleared(); 
+
+    packageLabel->setText(".....................................");
+}
 
 void NCPackageSelector::replaceFilter( FilterMode mode)
 {
@@ -884,6 +894,7 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
    if (mode == Search)
    {
        pkgList->itemsCleared();
+       clearInfoArea();
    }
    else
    {

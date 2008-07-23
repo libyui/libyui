@@ -306,6 +306,8 @@ class NCPackageSelector
     * @return void 
     */
     void showInformation();
+    
+    void clearInfoArea();
 
     wrect deleteReplacePoint();
     

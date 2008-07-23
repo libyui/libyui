@@ -234,7 +234,10 @@ bool NCPkgFilterSearch::fillSearchList( string & expr,
     {
         packageList->setCurrentItem( 0 );
         packageList->showInformation(); 
+	packageList->setKeyboardFocus();
     }
+    else
+	packager->clearInfoArea();
 
     return true;
 
