@@ -53,6 +53,7 @@ void NCPkgFilterMain::createLayout()
     items.push_back( repositories );
 
     search = new YItem( _("Search") );
+    search->setSelected();
     items.push_back( search );
 
     inst_summary = new YItem( _("Installation Summary") );

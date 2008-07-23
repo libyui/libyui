@@ -1604,12 +1604,11 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     filterMain = new NCPkgFilterMain (l, NCPkgStrings::Filter(), this );
 
     replPoint = YUI::widgetFactory()->createReplacePoint( vv );
-    YTableHeader *hhh = new YTableHeader();
-    patternPopup = new NCPkgFilterPattern( replPoint, hhh, this );
+    //Search view is now default (#404694)
+    searchPopup = new NCPkgFilterSearch( replPoint, YD_VERT, this );
 
     YAlignment *l1 = YUI::widgetFactory()->createLeft( vbox_left );
     patternLabel = new NCLabel( l1, "                           " );
-
 
     // add the package table
     YTableHeader * tableHeader = new YTableHeader();
@@ -1636,33 +1635,33 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
     // set the pointer to the packager object
     pkgList->setPackager( this );
 
-    // HBox for Filter and Disk Space (both in additional HBoxes )
+    // label text + actions menu
     YLayoutBox * hSplit2 = YUI::widgetFactory()->createHBox( v );
-
-    // label text - keep it short
     new NCLabel( hSplit2,  NCPkgStrings::PackageName() );
     packageLabel = YUI::widgetFactory()->createLabel ( hSplit2, "......................" );
-
     new NCSpacing( hSplit2, YD_HORIZ, true, 0.5 );
-
     actionMenu = new NCPkgMenuAction ( hSplit2, NCPkgStrings::Actions(), this );
 
+    //Search parameters resp. filter description
     replPoint2 = YUI::widgetFactory()->createReplacePoint( hbox_bottom );
     replPoint2->setWeight(YD_HORIZ, 1);
-    filter_desc = new NCRichText( replPoint2, " " );
+    searchSet = new NCPkgSearchSettings( replPoint2, NCPkgStrings::SearchIn() );
+
+    //Package description resp. package version table
     YLayoutBox * vSplit = YUI::widgetFactory()->createVBox( hbox_bottom );
     vSplit->setWeight(YD_HORIZ, 2);
     replacePoint = YUI::widgetFactory()->createReplacePoint( vSplit );
-
     infoText = new NCPkgPackageDetails( replacePoint, " ", this );
     YUI_CHECK_NEW( infoText );
 
+    //Bottom button bar
     YAlignment *ll = YUI::widgetFactory()->createLeft( bottom_bar );
     helpMenu = new NCPkgMenuHelp (ll, _("&Help"));
     YUI_CHECK_NEW( helpMenu );
 
-    YAlignment *r = YUI::widgetFactory()->createRight( bottom_bar );
-    YLayoutBox * hSplit = YUI::widgetFactory()->createHBox( r );
+    //right-alignment for OK-Cancel
+    YAlignment *right = YUI::widgetFactory()->createRight( bottom_bar );
+    YLayoutBox * hSplit = YUI::widgetFactory()->createHBox( right );
 
     // add the Cancel button
     cancelButton = new NCPushButton( hSplit, _( "&Cancel" ) );
@@ -1695,6 +1694,7 @@ bool NCPackageSelector::fillDefaultList( )
 	    pkgList->setVisibleInfo(NCPkgTable::I_PatchDescr);
 	    // show the patch description of the current item
 	    pkgList->showInformation ();
+            pkgList->setKeyboardFocus();
 	    break;
 	}
 	case NCPkgTable::T_Update: {
@@ -1709,21 +1709,15 @@ bool NCPackageSelector::fillDefaultList( )
 	    }
 	}
 	case NCPkgTable::T_Packages: {
-
+		//Search view is the default (#404694)
 		pkgList->setVisibleInfo(NCPkgTable::I_Technical);
-		// update the pattern status which is available only after the initial
-		// solver run
-		patternPopup->updateTable();
-	        patternPopup->showPatternPackages();
-		// show the package inforamtion of the current item
-		pkgList->showInformation ();
+		searchField->setKeyboardFocus();
 	        break;
 	}
 	default:
 	    break;
     }
 
-    pkgList->setKeyboardFocus();
 
     return true;
 
