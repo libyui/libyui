@@ -3,7 +3,7 @@ Wed Jul 23 16:55:55 CEST 2008 - kmachalkova@suse.cz
 
 - Added pkg search modes (contains, regexp etc.) selection (uses
   zypp::PoolQuery)
-- Search view is now default (#404694)
+- Search view is now default (bnc#404694)
 - Reset info text area on switching to/from search filter 
 
 -------------------------------------------------------------------
