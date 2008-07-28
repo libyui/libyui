@@ -148,7 +148,7 @@ void NCDumbTab::setCurrentTab( wint_t key )
 	tablabel = NCstring( (*listIt)->label() );
 	tablabel.stripHotkey();
 	yuiMilestone() << "HOTkey: " <<  tablabel.hotkey() << " key: " << key << endl;
-	if ( tablabel.hotkey() == key )
+	if ( tolower ( tablabel.hotkey() )  == tolower ( key ) )
 	{
 	    currentIndex = i;
 	    break;
@@ -292,9 +292,9 @@ bool NCDumbTab::HasHotkey( int key )
     {
 	tablabel = NCstring( (*listIt)->label() );
 	tablabel.stripHotkey();
-	if ( tablabel.hasHotkey() && tablabel.hotkey() == key )
+	if ( tablabel.hasHotkey() && tolower ( tablabel.hotkey() ) == tolower ( key ) )
 	{
-	    hotKey = key;
+	    hotKey = tolower ( key ) ;
 	    ret = true;
 	}
 	++listIt;

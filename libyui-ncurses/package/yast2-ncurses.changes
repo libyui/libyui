@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Jul 28 10:59:25 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed case sensitve shortcuts for DumbTab (bnc #411877)
+
+-------------------------------------------------------------------
 Wed Jul 16 12:25:11 CEST 2008 - sh@suse.de
 
 - Added API for fate #303492: Multi selection for table widget
