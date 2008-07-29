@@ -136,7 +136,6 @@ class Exception;
 %include YSingleChildContainerWidget.h
 %include YSelectionWidget.h
 %include YSimpleInputField.h
-%nodefault YUI::YItem;
 %include YItem.h
 %include YTreeItem.h
 %include YStringTree.h
