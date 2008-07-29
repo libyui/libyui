@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jul 29 08:38:41 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed bnc #389174: changing packages with keyboard is broken
+
+-------------------------------------------------------------------
 Wed Jul 23 16:12:56 CEST 2008  ma@suse.de
 
 - Remove references to obsolete freshens dependencies.
