@@ -1,7 +1,3 @@
-#
-# Trivial libyui example
-#
-
 $:.unshift "../../../build/swig/ruby"
 
 require 'yui'
