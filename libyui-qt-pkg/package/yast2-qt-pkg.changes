@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jul 29 08:45:11 CEST 2008 - tgoettlicher@suse.de
+
+-  Fixed bnc #389174: changing packages with keyboard is broken
+
+-------------------------------------------------------------------
 Wed Jun  4 11:46:58 CEST 2008 - sh@suse.de
 
 - Added translation marker for "File" menu (bnc #396419)

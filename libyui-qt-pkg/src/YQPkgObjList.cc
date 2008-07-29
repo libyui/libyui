@@ -627,13 +627,11 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 			}
 			else
 			    setCurrentStatus( S_Install );
-			selectNextItem();
 			event->accept();
 			return;
 
 		    case Qt::Key_Minus:	// Get rid of everything - don't install or delete
 			setCurrentStatus( installed ? S_Del : S_NoInst );
-			selectNextItem();
 			event->accept();
 			return;
 
@@ -641,7 +639,6 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 
 			if ( ! installed )
 			    setCurrentStatus( S_Taboo );
-			selectNextItem();
 			event->accept();
 			return;
 
@@ -649,7 +646,6 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 
 			if ( installed )
 			    setCurrentStatus( S_Protected );
-			selectNextItem();
 			event->accept();
 			return;
 
@@ -657,7 +653,6 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 
 			if ( installed && item->candidateIsNewer() )
 			    setCurrentStatus( S_Update );
-			selectNextItem();
 			event->accept();
 			return;
 
@@ -668,7 +663,6 @@ YQPkgObjList::keyPressEvent( QKeyEvent * event )
 			{
 			    setCurrentStatus( S_KeepInstalled );
 			}
-			selectNextItem();
 			event->accept();
 			return;
 
