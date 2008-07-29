@@ -47,7 +47,7 @@ YQTable::YQTable( YWidget * parent, YTableHeader * tableHeader, bool multiSelect
     YUI_CHECK_NEW( _qt_listView );
     layout->addWidget( _qt_listView );
     _qt_listView->setAllColumnsShowFocus( true );
-    _qt_listView->setSortingEnabled( ! keepSorting() );
+    setKeepSorting(  keepSorting() );
 
     if ( multiSelectionMode )
 	_qt_listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
@@ -147,6 +147,8 @@ YQTable::addItem( YItem * yitem )
 	
 	clone->setTextAlignment( i, qt_alignment );
     }
+
+    _qt_listView->sortItems ( 0, Qt::AscendingOrder) ;
 }
 
 

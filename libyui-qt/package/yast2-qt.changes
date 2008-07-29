@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jul 29 11:21:53 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed sorting in Table (bnc #399206)
+
+-------------------------------------------------------------------
 Tue Jul 15 19:13:57 CEST 2008 - sh@suse.de
 
 - Implemented fate #303492: Multi selection for table widget
