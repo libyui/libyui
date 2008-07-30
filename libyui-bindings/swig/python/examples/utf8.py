@@ -7,6 +7,13 @@ text = "Hello,Wörld!"
 
 import sys
 sys.path.insert(0,'../../../build/bindings/python')
+
+# see http://svn.opensuse.org/svn/yast/trunk/ncurses/src/YNCursesUI.cc
+#  approx line 67
+# this call is usually done by YaSTs 'WFM'
+import locale
+locale.setlocale(locale.LC_ALL, "")
+
 import yui
 
 log = yui.YUILog.instance()
