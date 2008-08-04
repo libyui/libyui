@@ -564,7 +564,7 @@ const string NCPkgStrings::AutoChangeText2()
 const string NCPkgStrings::YouHelp()
 {
     // the headline of the help popup 
-    static const string value = _( "Online Update Help" );
+    static const string value = _( "Patch Status and Patch Installation" );
     return value;
 }
 

@@ -95,7 +95,6 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, YWidget * wRoot, long mod
       , viewMenu( 0 )
       , extrasMenu( 0 )
       , helpMenu( 0 )
-      , youHelpButton( 0 )
       , filterMain( 0 )
       , actionMenu( 0 )
       , filterMenu( 0 )
@@ -233,8 +232,6 @@ bool NCPackageSelector::handleEvent ( const NCursesEvent&   event )
 	    retVal = OkButtonHandler( event );
 	else if ( event.widget == cancelButton )
 	    retVal = CancelHandler( event );
-	else if ( event.widget == youHelpButton )
-	    retVal = YouHelpHandler( event );
 	else if ( event.widget == filterPopup )
 	{
 	    retVal = filterPopup->handleEvent();
@@ -977,39 +974,6 @@ bool NCPackageSelector::LinkHandler ( string link )
 
 ///////////////////////////////////////////////////////////////////
 //
-// YOUHelpHandler
-//
-// Show the Online Update Help
-//
-bool NCPackageSelector::YouHelpHandler( const NCursesEvent&  event )
-{
-    NCPkgTable * packageList = PackageList();
-    string text  = "";
-
-    text += NCPkgStrings::YouHelp1();
-    text += NCPkgStrings::YouHelp2();
-    text += NCPkgStrings::YouHelp3();
-
-    // open the popup with the help text
-    NCPopupInfo * youHelp = new NCPopupInfo( wpos( (NCurses::lines()*8)/100, (NCurses::cols())*18/100 ),
-					     NCPkgStrings::YouHelp(),
-					     text
-					     );
-    youHelp->setPreferredSize( (NCurses::cols()*65)/100, (NCurses::lines()*85)/100 );
-    youHelp->showInfoPopup( );
-
-    YDialog::deleteTopmostDialog();
-
-    if ( packageList )
-    {
-	packageList->setKeyboardFocus();
-    }
-
-    return true;
-}
-
-///////////////////////////////////////////////////////////////////
-//
 // CancelHandler
 //
 // Cancel button handler.
@@ -1567,9 +1531,7 @@ void NCPackageSelector::createYouLayout( YWidget * selector )
     YLayoutBox * bottom_bar = YUI::widgetFactory()->createHBox( vSplit );
     YAlignment *ll = YUI::widgetFactory()->createLeft( bottom_bar );
 
-    youHelpButton = new NCPushButton ( ll, _("&Help"));
-    YUI_CHECK_NEW( youHelpButton );
-    youHelpButton->setFunctionKey( 1 );
+    helpMenu = new NCPkgMenuHelp (ll, _("&Help"), this);
 
     YAlignment *r = YUI::widgetFactory()->createRight( bottom_bar );
     YLayoutBox * hSplit5 = YUI::widgetFactory()->createHBox( r );
@@ -1667,7 +1629,7 @@ void NCPackageSelector::createPkgLayout( YWidget * selector, NCPkgTable::NCPkgTa
 
     //Bottom button bar
     YAlignment *ll = YUI::widgetFactory()->createLeft( bottom_bar );
-    helpMenu = new NCPkgMenuHelp (ll, _("&Help"));
+    helpMenu = new NCPkgMenuHelp (ll, _("&Help"), this);
     YUI_CHECK_NEW( helpMenu );
 
     //right-alignment for OK-Cancel

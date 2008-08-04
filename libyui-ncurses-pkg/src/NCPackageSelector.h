@@ -128,7 +128,6 @@ class NCPackageSelector
     NCPkgMenuView *viewMenu;
     NCPkgMenuExtras *extrasMenu;
     NCPkgMenuHelp *helpMenu;
-    NCPushButton *youHelpButton;
     NCPkgFilterMain *filterMain;
     NCPkgMenuAction *actionMenu;
     NCPkgMenuFilter *filterMenu;
@@ -326,13 +325,6 @@ class NCPackageSelector
     * @return bool
     */
     bool CancelHandler ( const NCursesEvent& event );
-
-  /**
-    * Handler function for the "Help" button in YOU
-    * @param event The Ncurses event
-    * @return bool
-    */
-    bool YouHelpHandler( const NCursesEvent&  event );
 
    /**
      * Handles hyperlinks in package description

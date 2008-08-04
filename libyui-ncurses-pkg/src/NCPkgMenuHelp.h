@@ -26,12 +26,15 @@
 #include "NCPopupInfo.h"
 #include "NCZypp.h"
 
+class NCPackageSelector; 
+
 class NCPkgMenuHelp : public NCMenuButton {
 
     NCPkgMenuHelp & operator=( const NCPkgMenuHelp & );
     NCPkgMenuHelp            ( const NCPkgMenuHelp & );
 
 public:
+    NCPackageSelector *pkg;
 
     YItemCollection items;
 
@@ -39,8 +42,9 @@ public:
     YMenuItem *statusHelp;
     YMenuItem *filterHelp;
     YMenuItem *menuHelp;
+    YMenuItem *patchHelp;
 
-    NCPkgMenuHelp (YWidget *parent, string label);
+    NCPkgMenuHelp (YWidget *parent, string label, NCPackageSelector *pkger);
     virtual ~NCPkgMenuHelp();
 
     void createLayout();
