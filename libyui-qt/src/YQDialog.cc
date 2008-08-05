@@ -576,8 +576,13 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 
 	    if ( YQUI::ui()->usingVisionImpairedPalette() )
 	    {
+		QWidget* parent = 0;
+		YDialog * currentDialog = YDialog::currentDialog( false );
+		if (currentDialog)
+		    parent = (QWidget *) currentDialog->widgetRep();
+
 		yuiMilestone() << "Switched to vision impaired palette" << endl;
-		QMessageBox::information( 0,                                            // parent
+		QMessageBox::information( parent,                                       // parent
 					  _("Color switching"),  	                // caption
 					  _( "Switching to color palette for vision impaired users -\n"
 					     "press Shift-F4 again to switch back to normal colors."   ), // text

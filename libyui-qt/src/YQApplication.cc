@@ -483,12 +483,18 @@ YQApplication::askForSaveFileName( const QString & startWith,
     QString fileName;
     bool tryAgain = false;
 
+    QWidget* parent = 0;
+    YDialog * currentDialog = YDialog::currentDialog( false );
+    if (currentDialog)
+        parent = (QWidget *) currentDialog->widgetRep();
+
+
     do
     {
 	// Leave the mouse cursor alone - this function might be called from
 	// some other widget, not only from UI::AskForSaveFileName().
 
-	fileName = QFileDialog::getSaveFileName( 0, 			// parent
+	fileName = QFileDialog::getSaveFileName( parent,		// parent
 						 headline,		// caption
 						 startWith,		// dir
 						 filter );		// filter
@@ -512,7 +518,7 @@ YQApplication::askForSaveFileName( const QString & startWith,
 		msg = ( _( "%1 exists and is write-protected!\nReally overwrite?" ) ).arg( fileName );
 	    }
 
-	    int buttonNo = QMessageBox::information( 0,	// parent widget
+	    int buttonNo = QMessageBox::information( parent,
 						     // Translators: Window title for confirmation dialog
 						     _( "Confirm"   ),
 						     msg,
@@ -588,7 +594,13 @@ YQApplication::maybeLeftHandedUser()
 	   "\n"
 	   "Switch left and right mouse buttons?"
 	   );
-    int button = QMessageBox::question( 0,
+
+    QWidget* parent = 0;
+    YDialog * currentDialog = YDialog::currentDialog( false );
+    if (currentDialog)
+        parent = (QWidget *) currentDialog->widgetRep();
+
+    int button = QMessageBox::question( parent,
 					// Popup dialog caption
 					_( "Unexpected Click" ),
 					message,
