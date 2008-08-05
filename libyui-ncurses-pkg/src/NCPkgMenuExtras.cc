@@ -59,8 +59,11 @@ void NCPkgMenuExtras::createLayout()
     diskSpace = new YMenuItem( _("&Show Available Disk Space") );
     items.push_back( diskSpace );
 
-    repoManager  = new YMenuItem( _("S&tart Repository Manager"));
-    items.push_back( repoManager );
+    if ( !pkg->isRepoMgrEnabled() )
+    {
+        repoManager  = new YMenuItem( _("S&tart Repository Manager"));
+        items.push_back( repoManager );
+     }
 
     addItems( items );
 }
