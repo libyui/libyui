@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Aug  5 11:14:01 CEST 2008 - tgoettlicher@suse.de
+
+- V 2.18.5
+
+-------------------------------------------------------------------
 Tue Aug  5 10:54:04 CEST 2008 - tgoettlicher@suse.de
 
 - Fixed bnc #409612: popup menu during installation becomes
