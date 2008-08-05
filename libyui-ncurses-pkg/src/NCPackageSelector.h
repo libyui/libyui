@@ -100,8 +100,6 @@ class NCPackageSelector
 
     tHandlerMap eventHandlerMap;    	// event handler map
     
-    YNCursesUI * y2ui;			// the UI
-    
     NCPkgFilterRPMGroups * filterPopup;	// the rpm group tags popup
 
     NCPkgPopupDeps * depsPopup;		// the package dependeny popup
@@ -117,6 +115,7 @@ class NCPackageSelector
     bool youMode;			// YOU
     bool updateMode;			// Update
     bool testMode;			// testing
+    bool repoMgrEnabled;
     bool autoCheck;
     
     YRpmGroupsTree * _rpmGroupsTree;	// rpm groups of the found packages
@@ -181,12 +180,14 @@ class NCPackageSelector
      * @param ui The NCurses UI
      * @param opt The widget options
      */
-    NCPackageSelector( YNCursesUI * ui, YWidget * wRoot, long modeFlags );
+    NCPackageSelector( long modeFlags );
 
     /**
      * Destructor
      */ 
     virtual ~NCPackageSelector();
+
+    void setFlags( long modeFlags);
 
     /**
     * Create layout for the PackageSelector
@@ -265,6 +266,10 @@ class NCPackageSelector
     bool fillDefaultList();
     
     bool isYouMode() { return youMode; }
+
+    bool isUpdateMode() { return updateMode; }
+
+    bool isRepoMgrEnabled() { return repoMgrEnabled; }
 
     bool isAutoCheck() { return autoCheck; }
 

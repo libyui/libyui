@@ -77,18 +77,14 @@ using std::pair;
 //
 // Constructor
 //
-NCPackageSelector::NCPackageSelector( YNCursesUI * ui, YWidget * wRoot, long modeFlags )
-    : y2ui( ui )
-      , filterPopup( 0 )
+NCPackageSelector::NCPackageSelector( long modeFlags )
+      : filterPopup( 0 )
       , depsPopup( 0 )
       , patternPopup( 0 )
       , languagePopup( 0 )
       , repoPopup( 0 )
       , diskspacePopup( 0 )
       , searchPopup( 0 )
-      , youMode( false )
-      , updateMode( false )
-      , testMode ( false )
       , autoCheck( true )
       , pkgList ( 0 )
       , depsMenu( 0 )
@@ -111,16 +107,7 @@ NCPackageSelector::NCPackageSelector( YNCursesUI * ui, YWidget * wRoot, long mod
       , visibleInfo( 0 )
 
 {
-    if ( modeFlags & YPkg_OnlineUpdateMode )
-	youMode = true;
-
-    if ( modeFlags & YPkg_UpdateMode )
-	updateMode = true;
-
-    // read test source information
-    if (modeFlags & YPkg_TestMode )
-	testMode = true;
-
+    setFlags( modeFlags ); 
     saveState ();
     diskspacePopup = new NCPkgDiskspace( testMode );
 
@@ -136,6 +123,18 @@ NCPackageSelector::~NCPackageSelector()
     // Changed because of new libyui: don't call delete for the popups;
     // call YDialog::deleteTopmostDialog() instead at the end of
     // NCPackageSelectorPlugin::runPkgSelection
+}
+
+void NCPackageSelector::setFlags( long modeFlags )
+{
+    youMode = ( modeFlags & YPkg_OnlineUpdateMode ) ? true : false ;
+
+    updateMode = ( modeFlags & YPkg_UpdateMode ) ? true : false ;
+
+    repoMgrEnabled = (modeFlags & YPkg_RepoMgr) ? true : false;
+
+    testMode = (modeFlags & YPkg_TestMode ) ? true : false ;
+
 }
 
 bool NCPackageSelector::checkNow( bool *ok )

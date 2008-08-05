@@ -43,42 +43,31 @@ NCPackageSelectorStart::NCPackageSelectorStart( YWidget * parent,
 						long modeFlags,
 						YUIDimension dimension )
     : NCLayoutBox( parent, dimension )
-      , widgetRoot( 0 )
       , packager( 0 )
-      , youMode ( false )
-      , updateMode ( false )
 {
-    YNCursesUI * ui = YNCursesUI::ui();
-    
     // set the textdomain
     setTextdomain( "ncurses-pkg" );
     
-    // get the mode (the mode is also available in PackageSelector via modeFlags)
-    if ( modeFlags & YPkg_OnlineUpdateMode )
-	youMode = true;
-
-    if ( modeFlags & YPkg_UpdateMode )
-	updateMode = true;
-
     // NEW NEW
-    packager = new NCPackageSelector( ui, widgetRoot, modeFlags );
+    packager = new NCPackageSelector( modeFlags );
 
     NCPkgTable::NCPkgTableType type;
 
-    if ( youMode )
-	type = NCPkgTable::T_Patches;
-    else if ( updateMode )
-	type = NCPkgTable::T_Update;
-    else
-	type = NCPkgTable::T_Packages;
-
     if ( packager )
     {
-	yuiMilestone() << "YouMode: " <<  (youMode?"true":"false") << endl;
-	if ( !youMode )
-	    packager->createPkgLayout( this, type );
-	else
+        if ( packager->isYouMode() )
+	{
 	    packager->createYouLayout( this );
+            type = NCPkgTable::T_Patches;
+	}
+        else 
+	{
+	    if ( packager->isUpdateMode() )
+                type = NCPkgTable::T_Update;
+            else
+	        type = NCPkgTable::T_Packages;
+	    packager->createPkgLayout( this, type );
+        }
     }
     
     yuiDebug() << endl;
@@ -136,7 +125,7 @@ void NCPackageSelectorStart::showDefaultList()
 	// fill package list with packages belonging to default RPM group
 	packager->fillDefaultList();
 
-	if ( youMode )
+	if ( packager->isYouMode() )
 	{
 	    // show download size
 	    packager->showDownloadSize();

@@ -44,13 +44,8 @@ class NCPackageSelectorStart : public NCLayoutBox
   NCPackageSelectorStart            ( const NCPackageSelectorStart & );
 
   private:
-   
-    YWidget * widgetRoot; 	// root of the widget tree of the package selection dialog
     
     NCPackageSelector *packager;	// packager object contains the data and handles events
-
-    bool youMode;
-    bool updateMode;
     
   protected:
 
@@ -97,12 +92,6 @@ class NCPackageSelectorStart : public NCLayoutBox
      * @return bool
      */
     bool handleEvent( const NCursesEvent&   event );
-
-    /**
-     * Returns the root of the widget tree.
-     */
-    YWidget * root( ) const { return widgetRoot; };
-
         
 };
 
