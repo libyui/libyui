@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Wed Aug  6 21:42:43 CEST 2008 - kmachalkova@suse.cz
+
+- Show "Start repository manager" menu only when requested by 
+  `opt(`repoMgr) flag i.e. not in installation phase (bnc#381956)
+- Added filtering packages by status (bnc#384085)
+- Internal changes (YOU help, pkg selector modes)
+- 2.17.6
+
+-------------------------------------------------------------------
 Wed Jul 23 16:55:55 CEST 2008 - kmachalkova@suse.cz
 
 - Added pkg search modes (contains, regexp etc.) selection (uses
