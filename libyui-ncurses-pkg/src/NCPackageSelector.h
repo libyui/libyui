@@ -39,6 +39,7 @@
 
 #include "NCPkgFilterRPMGroups.h"
 #include "NCPkgFilterSearch.h"
+#include "NCPkgFilterInstSummary.h"
 #include "NCPkgTable.h"
 #include "NCEmpty.h"
 #include "NCPkgMenuFilter.h"
@@ -57,6 +58,7 @@ class NCPkgPopupDeps;
 class NCPkgDiskspace;
 class NCPkgFilterRPMGroups;
 class NCPkgFilterSearch;
+class NCPkgFilterInstSummary;
 class NCPkgPopupFile;
 class NCPkgMenuExtras;
 class NCPkgMenuDeps;
@@ -111,6 +113,7 @@ class NCPackageSelector
     NCPkgDiskspace * diskspacePopup;	// the popup showing the disk usage
 
     NCPkgFilterSearch * searchPopup; 	// the package search popup
+    NCPkgFilterInstSummary *inst_summary;
 
     bool youMode;			// YOU
     bool updateMode;			// Update
@@ -146,7 +149,6 @@ class NCPackageSelector
     YReplacePoint * replacePoint; // replace point for info text
     YReplacePoint * replPoint; 
     YReplacePoint * replPoint2; //tohle pak urcite prejmenuj, Bublino
-    NCEmpty *placeholder;
     
     NCPkgTable * versionsList;	// list of available package versions
     // information about patches

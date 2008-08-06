@@ -878,10 +878,11 @@ void NCPackageSelector::replaceFilter( FilterMode mode)
 	}
         case Summary:
  	{
-	    placeholder = new NCEmpty( replPoint );
-	    placeholder->setSize( oldSize.Sze.W, oldSize.Sze.H );
-	    placeholder->Redraw();
+	    inst_summary = new NCPkgFilterInstSummary( replPoint, _("&Packages with Status"), this );
+	    inst_summary->setSize( oldSize.Sze.W, oldSize.Sze.H );
+	    inst_summary->Redraw();
 	    pkgList->fillSummaryList(NCPkgTable::L_Changes);
+	    break;
 	}
 	default:
 	    yuiError() << "zatim nic" << endl;
