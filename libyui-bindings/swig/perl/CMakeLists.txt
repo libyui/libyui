@@ -18,8 +18,7 @@ EXECUTE_PROCESS(COMMAND ${PERL_EXECUTABLE} -e "use Config; print \$Config{ccdlfl
 
 MESSAGE(STATUS "Perl executable: ${PERL_EXECUTABLE}")
 MESSAGE(STATUS "Perl core dir: ${PERL_CORE_DIR}")
-MESSAGE(STATUS "Perl vendor arch dir: ${PERL_VENDOR_ARCH}")
-MESSAGE(STATUS "Perl vendor lib dir: ${PERL_VENDOR_LIB}")
+MESSAGE(STATUS "Perl vendor arch dir: ${PERL_VENDORDIR}")
 
 ADD_DEFINITIONS( ${PERL_CCFLAGS} -Wno-unused -Wno-error )
 LINK_DIRECTORIES( ${PERL_CORE_DIR} )

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Aug  7 13:45:16 CEST 2008 - kkaempf@suse.de
+
+- use rpm macros for Perl and Python directories. Fixes building
+  against Python 2.6.
+
+-------------------------------------------------------------------
 Fri May 23 15:19:27 CEST 2008 - kkaempf@suse.de
 
 - fix widget (pointer) comparison for Perl and Python.

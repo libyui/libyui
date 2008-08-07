@@ -24,6 +24,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  cmake gcc-c++ ruby-devel perl python-devel swig
 BuildRequires:  yast2-libyui-devel >= 2.16
 Source:         %{name}-%{version}.tar.bz2
+Prefix:         /usr
 
 %description
 -
@@ -36,6 +37,7 @@ mkdir build
 cd build
 cmake -DCMAKE_INSTALL_PREFIX=%{prefix} \
       -DLIB=%{_lib} \
+      -DPYTHON_SITEDIR=%{py_sitedir} \
       -DCMAKE_VERBOSE_MAKEFILE=TRUE \
       -DCMAKE_C_FLAGS_RELEASE:STRING="%{optflags}" \
       -DCMAKE_CXX_FLAGS_RELEASE:STRING="%{optflags}" \
@@ -59,6 +61,7 @@ Group:          Development/Languages/Ruby
 -
 
 %package -n python-yui
+%py_requires
 Summary:        Python bindings for yast2-libyui
 Group:          Development/Languages/Python
 
@@ -66,7 +69,7 @@ Group:          Development/Languages/Python
 -
 
 %package -n perl-yui
-Requires:       perl-base = 5.10.0
+Requires:       perl = %{perl_version}
 Summary:        Perl bindings for yast2-libyui
 Group:          Development/Languages/Perl
 
@@ -81,13 +84,13 @@ Group:          Development/Languages/Perl
 %files -n python-yui
 %defattr(-,root,root,-)
 %doc swig/python/examples/*.py
-%{_libdir}/python2.5/site-packages/_yui.so
-%{_libdir}/python2.5/site-packages/yui.py
+%{py_sitedir}/_yui.so
+%{py_sitedir}/yui.py
 
 %files -n perl-yui
 %defattr(-,root,root,-)
 %doc swig/perl/examples/*.pl
-/usr/lib/perl5/vendor_perl/*/*/yui.so
-/usr/lib/perl5/vendor_perl/*/yui.pm
+%{perl_vendorarch}/yui.so
+%{perl_vendorlib}/yui.pm
 
 %changelog
