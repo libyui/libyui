@@ -213,7 +213,7 @@ YQPkgSearchFilterView::filter()
 
 
         zypp::PoolQuery query;
-        query.addKind(zypp::ResTraits<zypp::Package>::kind);
+        query.addKind(zypp::ResKind::package);
         
         string searchtext = _searchText->currentText().toUtf8().data();
         
