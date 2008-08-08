@@ -17,8 +17,17 @@ import locale
 ####################################
 # LOCALE (important for TERMINAL!) #
 ####################################
-# set the locale to $ENV
+# set the locale to de/utf-8
 locale.setlocale(locale.LC_ALL, "")
+log = yui.YUILog.instance()
+log.setLogFileName("debug.log")
+log.enableDebugLogging( True )
+appl = yui.YUI.application()
+appl.setLanguage( "de", "UTF-8" )
+#appl.setConsoleFont(magic, font, screenMap, unicodeMap, language)
+# see /usr/share/YaST2/data/consolefonts.ycp
+appl.setConsoleFont("(K", "lat9w-16.psfu", "trivial", "", "en_US.UTF-8")
+
 
 #################
 # class widgets #
@@ -44,9 +53,11 @@ class WIDGETS(object):
         # | x |  code     |
         # +---+-----------+
         self.mainhbox = self.factory.createHBox(self.dialog)
-        self.selbox = self.factory.createSelectionBox(self.mainhbox, "Widgets")
-        self.selbox.setWeight(0,20)
+        self.mainvbox = self.factory.createVBox(self.mainhbox)
+        self.mainvbox.setWeight(0,20)
+        self.selbox = self.factory.createSelectionBox(self.mainvbox, "Widgets")
         self.selbox.setNotify()
+        self.closebutton = self.factory.createPushButton(self.mainvbox, "&Close")
         self.boxright = self.factory.createVBox(self.mainhbox)
         self.boxright.setWeight(0,80)
         self.framedisplay = self.factory.createFrame(self.boxright, "View")
@@ -117,10 +128,15 @@ class WIDGETS(object):
             if event.eventType() == yui.YEvent.CancelEvent:
                 self.dialog.destroy()
                 break
+            if event.widget() == self.closebutton:
+                self.dialog.destroy()
+                break
             if event.widget() == self.selbox:
+                self.dialog.startMultipleChanges()
                 self.updatedisplay()
                 self.updatedescription()
                 self.updatecode()
+                self.dialog.doneMultipleChanges()
 
 if __name__ == "__main__":
     avwidgets = {}
@@ -138,7 +154,7 @@ if __name__ == "__main__":
                                 myComboBox.addItem("Item") <br>
                                 
                                 Event: <br>
-                                if event.widget == myComboBox: <br>
+                                if event.widget() == myComboBox: <br>
                                    dosomething() """]
     avwidgets["InputField"]=['createInputField(self.display, "Inputfield")',
                              '.setValue("Input nonsense here")',
@@ -149,8 +165,64 @@ if __name__ == "__main__":
                              myInputField.setValue("Insert valid input here") <br>
                              myInputField.setValidChars("abcdefghijklmnopqrstuvwxyz") <br>
                              Event: <br>
-                             if event.widget = myInputField: <br>
+                             if event.widget() = myInputField: <br>
                                  value = myInputField.value()
                              """]
+    avwidgets["CheckBox"]  =['createCheckBox(self.display, "Checkbox")',
+                             '.setChecked(True)',
+                             None,
+                             """This Widget is a Checkbox""",
+                             """Code:<br>
+                             myCheckBox = fatory.createCheckbox(parentWidget, "Name") <br>
+                             myCheckbox.setEnabled(True) <br>
+                             Event: <br>
+                             if event.widget() == myCheckbox: <br>
+                               if myCheckbox.isChecked(): <br>
+                                 print "Box is checked"
+                            """]
+    avwidgets["Frame"]    =['createFrame(self.display, "Frame")',
+                            '.setStretchable(0,True)',
+                            None,
+                            """This Widget is a Frame. It can hold other widgets (vbox,hbox,single widget).""",
+                            """Code:<br>
+                            myFrame = factory.createFrame(parentWidget, "Name") <br>
+                            """]
+    avwidgets["Label"]    =['createLabel(self.display, "Label")',
+                            None,
+                            None,
+                            """This Widget is a Label""",
+                            """Code: <br>
+                            myLabel = factory.createLabel(parentWidget, "LabelText") <br>
+                            """]
+    avwidgets["LogView"]  =['createLogView(self.display, "LogView", 10, 10)',
+                            '.appendLines("Logtext1  ")',
+                            '.appendLines("Logtext2  ")',
+                            """This Widget is a Log-window.""",
+                            """Code:<br>
+                            myLogView = factory.createLogView(parentWidget, "Name", nrLinesShown, nrLinesCached)<br>
+                            myLogView.appendLines("Logtext1")
+                            """] # can't use \n in Logtext1 ... need to check
+    avwidgets["ProgressBar"]=['createProgressBar(self.display, "ProgressBar", 100)',
+                              '.setValue(10)',
+                              None,
+                              """This Widget is a ProgressBar.""",
+                              """Code:<br>
+                              myProgressBar = factory.createProgressBar(parentWidget, "Name", maxpercentvalue) <br>
+                              e.g.: <br>
+                              myProgressBar = factory.createProgressBar(dialog, "Progress", 100") <br>
+                              myProgressBar.setValue(33)
+                              """]
+    avwidgets["SelectionBox"]=['createSelectionBox(self.display, "Selection")',
+                               '.addItem("SELBOX_item1")',
+                               '.addItem("SELBOX_item2")',
+                               """This Widget is a SelectionBox""",
+                               """Code:<br>
+                               mySelectionBox = factory.createSelectionBox(parentWidget, "Name") <br>
+                               mySelectionBox.addItem("Item1") <br>
+                               Event:<br>
+                               if event.widget() = mySelectionBox: <br>
+                                 selected = mySelectionBox.selectedItem()
+                               """]
     MY_MAIN_GUI = WIDGETS(avwidgets)
-    MY_MAIN_GUI.handleevent()  
+    MY_MAIN_GUI.handleevent()
+
