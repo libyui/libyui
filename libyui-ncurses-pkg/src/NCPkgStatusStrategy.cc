@@ -280,18 +280,7 @@ bool NCPkgStatusStrategy::toggleStatus( ZyppSel slbPtr,
 void NCPkgStatusStrategy::solveResolvableCollections()
 {
     zypp::Resolver_Ptr resolver = zypp::getZYpp()->resolver();
-    //  transactReskind() is obsolete -> use resolvePool()
     resolver->resolvePool();
-
-#if 0
-    resolver->transactReset( zypp::ResStatus::APPL_LOW );
-
-    resolver->transactResKind( zypp::ResTraits<zypp::Product>::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Selection>::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Pattern  >::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Language >::kind );
-    resolver->transactResKind( zypp::ResTraits<zypp::Patch    >::kind );
-#endif
 }
 
 
