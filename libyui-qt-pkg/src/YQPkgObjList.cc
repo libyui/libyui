@@ -1232,6 +1232,10 @@ YQPkgObjListItem::cycleStatus()
 void
 YQPkgObjListItem::showNotifyTexts( ZyppStatus status )
 {
+    // just return if no selectable
+    if ( ! selectable() )
+        return;
+    
     string text;
 
     switch ( status )
@@ -1269,6 +1273,12 @@ YQPkgObjListItem::showLicenseAgreement()
 bool
 YQPkgObjListItem::showLicenseAgreement( ZyppSel sel )
 {
+    // if we have a subclass with no selectable
+    // confirming the license should be just always
+    // true
+    if ( ! sel )
+        return true;
+    
     string licenseText;
 
     switch ( sel->status() )

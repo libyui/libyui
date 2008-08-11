@@ -226,6 +226,43 @@ YQPkgLangListItem::status() const
         return S_NoInst;
 }
 
+void
+YQPkgLangListItem::setStatus( ZyppStatus newStatus, bool sendSignals )
+{
+    ZyppStatus oldStatus = status();
+    
+    switch ( newStatus )
+    {
+        case S_Install:
+            if ( ! zypp::getZYpp()->pool().isRequestedLocale( _zyppLang ) )
+            {
+                zypp::getZYpp()->pool().addRequestedLocale( _zyppLang );
+            }
+            break;
+        case S_NoInst:
+            if ( zypp::getZYpp()->pool().isRequestedLocale( _zyppLang ) )
+            {
+                zypp::getZYpp()->pool().eraseRequestedLocale( _zyppLang );
+            }
+            break;
+        default:
+            return;
+    }
+
+    if ( oldStatus != newStatus )
+    {
+	applyChanges();
+
+	if ( sendSignals )
+	{
+	    _pkgObjList->updateItemStates();
+	    _pkgObjList->sendUpdatePackages();
+	}
+    }
+
+    setStatusIcon();
+    _pkgObjList->sendStatusChanged();
+}
 
 bool
 YQPkgLangListItem::bySelection() const
