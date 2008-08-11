@@ -141,9 +141,11 @@ public:
     int statusCol()	const	{ return _langList->statusCol(); }
 
     /**
-     * Returns the (binary RPM) package status
+     * override this two as we don't have a real selectable and
+     * the status depends on the language
      **/
     virtual ZyppStatus status() const;
+    virtual void setStatus( ZyppStatus newStatus, bool sendSignals = true );
 
     /**
      * Returns 'true' if this selectable's status is set by a selection
