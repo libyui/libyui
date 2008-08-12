@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Aug 12 17:55:03 CEST 2008 - dmacvicar@suse.de
+
+- package list should be sorted locale aware
+  (bnc#355255)
+
+-------------------------------------------------------------------
 Mon Aug 11 18:24:45 CEST 2008 - dmacvicar@suse.de
 
 - Fixed bnc#394657 : package selector crashes when

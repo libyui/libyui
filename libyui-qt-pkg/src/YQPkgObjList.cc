@@ -1407,6 +1407,16 @@ bool YQPkgObjListItem::operator<( const QTreeWidgetItem & otherListViewItem ) co
 
     if ( other )
     {
+         if ( col == nameCol() )
+        {
+            // locale aware sort
+            return ( strcoll( this->zyppObj()->name().c_str(), other->zyppObj()->name().c_str() ) < 0 );
+        }
+        if ( col == summaryCol() )
+        {
+            // locale aware sort
+             return ( strcoll( this->zyppObj()->summary().c_str(), other->zyppObj()->summary().c_str() ) < 0 );
+        }
 	if ( col == sizeCol() )
 	{
 	    // Numeric sort by size
