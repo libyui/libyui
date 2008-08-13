@@ -127,6 +127,8 @@ YQWizard::YQWizard( YWidget *		parent,
     _sendButtonEvents	= true;
     _contentsReplacePoint = 0;
 
+    _previousWindowIcon = topLevelWidget()->windowIcon();
+
     YQUI::setTextdomain( TEXTDOMAIN );
 
     //layoutTitleBar( this );
@@ -146,6 +148,7 @@ YQWizard::YQWizard( YWidget *		parent,
     {
         YQMainWinDock::mainWinDock()->resizeVisibleChild();
     }
+
 }
 
 
@@ -158,6 +161,8 @@ YQWizard::~YQWizard()
     delete _helpDlg;
 
     QY2Styler::self()->unregisterWidget( this );
+
+    topLevelWidget()->setWindowIcon( _previousWindowIcon );
 }
 
 bool YQWizard::isSecondary() const

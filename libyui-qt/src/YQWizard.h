@@ -560,6 +560,8 @@ protected:
     QHash<QString,QMenu*>		_menuIDs;
     QHash<QAction*, string>		_menuEntryIDs;
 
+    QIcon _previousWindowIcon;
+
 private:
     static YQWizard *main_wizard;
 

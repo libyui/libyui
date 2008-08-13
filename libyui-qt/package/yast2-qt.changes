@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Aug 13 16:02:56 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed wrong icon when using several wizards (#411579)
+
+-------------------------------------------------------------------
 Tue Aug  5 11:14:01 CEST 2008 - tgoettlicher@suse.de
 
 - V 2.18.5
