@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Aug 13 16:45:09 CEST 2008 - dmacvicar@suse.de
+
+- release
+- 2.17.4 
+
+-------------------------------------------------------------------
 Tue Aug 12 17:50:53 CEST 2008 - dmacvicar@suse.de
 
 - package list should be sorted locale aware
