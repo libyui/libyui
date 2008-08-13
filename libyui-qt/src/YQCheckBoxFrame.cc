@@ -66,6 +66,7 @@ bool YQCheckBoxFrame::value()
 void YQCheckBoxFrame::setValue( bool newValue )
 {
     setChecked( newValue );
+    setEnabled( newValue );
 }
 
 

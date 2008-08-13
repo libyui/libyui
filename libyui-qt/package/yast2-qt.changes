@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Aug 13 17:20:23 CEST 2008 - tgoettlicher@suse.de
+
+- Fixed YQCheckBoxFrame child widget enablement initially wrong (bnc #403126)
+
+-------------------------------------------------------------------
 Wed Aug 13 16:02:56 CEST 2008 - tgoettlicher@suse.de
 
 - Fixed wrong icon when using several wizards (#411579)
