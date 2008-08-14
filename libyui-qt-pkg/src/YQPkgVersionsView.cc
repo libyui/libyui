@@ -51,7 +51,6 @@ public:
         
     }
     
-
 private:
     QLabel *_picture;
     QLabel *_text;
@@ -62,18 +61,16 @@ private:
 
 
 YQPkgVersionsView::YQPkgVersionsView( QWidget * parent, bool userCanSwitch )
-    : QWidget( parent )
+    : QScrollArea( parent )
+    , _widget(0)
     , _layout(0)
     , _label(0)
 {
-    setPalette(QPalette(Qt::white));
-    setAutoFillBackground(true);
-
     _selectable		= 0;
     _parentTab		= dynamic_cast<QTabWidget *> (parent);
     _userCanSwitch 	= userCanSwitch;
 
-    _buttons = new QButtonGroup(parent);
+    _buttons = new QButtonGroup(this);
 
     if ( _parentTab )
     {
@@ -122,10 +119,18 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     if ( ! selectable )
         return;
 
-    delete _label;
-    delete _layout;
-    
-    _layout = new QVBoxLayout(this);
+    // old widget is autodestroyed by setWidget later
+    _widget = new QWidget(this);
+    _layout = new QVBoxLayout(_widget);
+    _widget->setLayout(_layout);
+
+    // also paint the scrollarea background
+    setPalette(QPalette(Qt::white));
+    setAutoFillBackground(true);
+
+    _widget->setPalette(QPalette(Qt::white));
+    _widget->setAutoFillBackground(true);
+   
     _label = new QLabel(this);
 
     if ( !selectable->theObj() )
@@ -200,6 +205,9 @@ YQPkgVersionsView::showDetails( ZyppSel selectable )
     }
     
     _layout->addStretch();
+    setWidget(_widget);
+    _widget->show();
+    
 }
 
 

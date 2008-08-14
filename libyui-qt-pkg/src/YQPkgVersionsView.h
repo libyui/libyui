@@ -20,6 +20,7 @@
 #ifndef YQPkgVersionsView_h
 #define YQPkgVersionsView_h
 
+#include <QScrollArea>
 #include <QRadioButton>
 #include <QButtonGroup>
 #include <QBoxLayout>
@@ -36,7 +37,7 @@ class QTabWidget;
  * all the different installation sources and let the user change the candidate
  * version for installation / update.
  **/
-class YQPkgVersionsView : public QWidget
+class YQPkgVersionsView : public QScrollArea
 {
     Q_OBJECT
 
@@ -118,6 +119,8 @@ protected:
 
     // Data members
 
+    // content
+    QWidget     *_widget;
     QTabWidget	*	_parentTab;
     ZyppSel		_selectable;
     bool		_userCanSwitch;
