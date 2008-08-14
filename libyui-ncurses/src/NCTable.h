@@ -91,6 +91,7 @@ protected:
 	{ return dynamic_cast<NCTablePad*>( NCPadWidget::myPad() ); }
 
     bool	  biglist;
+    bool 	  multiselect;
 
     
 protected:
@@ -105,7 +106,8 @@ protected:
     virtual void startMultipleChanges() { startMultidraw(); }
     virtual void doneMultipleChanges()	{ stopMultidraw(); }
 
-
+    void toggleCurrentItem();
+    
 private:
 
     vector<NCstring> _header;

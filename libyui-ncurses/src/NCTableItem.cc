@@ -201,6 +201,8 @@ void NCTableLine::DrawAt( NCursesWindow & w, const wrect at,
     {
 	if ( isDisabeled() )
 	    vstate = S_DISABELED;
+	else if ( isMulti() )
+	    vstate = active ? S_MULTI : S_DISABELED;
 	else
 	    vstate = active ? S_ACTIVE : S_NORMAL;
     }
@@ -458,6 +460,29 @@ chtype NCTableStyle::getBG( const NCTableLine::STATE lstate,
 	    }
 	    break;
 
+	case NCTableLine::S_MULTI:
+	    
+	    switch ( cstyle )
+	    {
+		case NCTableCol::PLAIN:
+		    return listStyle().selected.plain;
+
+		case NCTableCol::DATA:
+		     return listStyle().selected.data;
+
+		case NCTableCol::ACTIVEDATA:
+		    return listStyle().selected.label;
+
+		case NCTableCol::HINT:
+		    return listStyle().selected.hint;
+
+		case NCTableCol::SEPARATOR:
+		    return listStyle().selected.plain;
+
+		case NCTableCol::NONE:
+		    return currentBG;
+	    }
+	    break;
 	    
 	case NCTableLine::S_DISABELED:
 

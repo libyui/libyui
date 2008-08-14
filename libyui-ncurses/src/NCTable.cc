@@ -25,11 +25,10 @@
 
 
 NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelection )
-// FIXME    : YTable( parent, tableHeader, multiSelection )
-    : YTable( parent, tableHeader,
-	      false ) // multiSelection - not supported yet
+    : YTable( parent, tableHeader, multiSelection )
     , NCPadWidget( parent )
     , biglist( false )
+    , multiselect( multiSelection )
 {
     yuiDebug() << endl;
 
@@ -260,15 +259,35 @@ void NCTable::selectItem( YItem *yitem, bool selected )
     const NCTableLine *current_line = myPad()->GetLine( myPad()->CurPos().L );
     YUI_CHECK_PTR( current_line );
 
-    if ( !selected && ( line == current_line ) )
+    if ( !multiselect )
     {
-	deselectAllItems();
+	if ( !selected && ( line == current_line ) )
+	{
+	    deselectAllItems();
+	}
+	else
+	{
+	    //first highlight only, then select
+	    setCurrentItem( line->getIndex() );
+	    YTable::selectItem( item, selected );
+	}
     }
     else
     {
-	//first highlight only, then select
 	setCurrentItem( line->getIndex() );
 	YTable::selectItem( item, selected );
+	yuiMilestone() << item->label() << " is selected: " << (selected?"yes":"no") <<  endl;
+	
+	if ( selected )
+	{
+	    line->ClearState( NCTableLine::S_NORMAL );
+	    line->SetState( NCTableLine::S_MULTI );
+	}
+	else
+	{
+	    line->ClearState( NCTableLine::S_MULTI );
+	    line->SetState( NCTableLine::S_NORMAL );
+	}
     }
 
     //and redraw
@@ -420,11 +439,17 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
 
 	    case KEY_SPACE:
 	    case KEY_RETURN:
-
-		if ( notify() && citem != -1 )
-		    return NCursesEvent::Activated;
-
+		if ( !multiselect )
+		{
+		    if ( notify() && citem != -1 )
+			return NCursesEvent::Activated;
+		}
+		else
+		{
+		    toggleCurrentItem();
+		}
 		break;
+
 	}
     }
 
@@ -434,8 +459,21 @@ NCursesEvent NCTable::wHandleInput( wint_t key )
 	ret = NCursesEvent::SelectionChanged;
     }
 
-    selectCurrentItem();
+    if ( !multiselect )
+	selectCurrentItem();
 
     return ret;
 }
 
+/**
+ * Toggle item from selected -> deselected and vice versa
+ **/
+void NCTable::toggleCurrentItem()
+{
+    YTableItem *it =  dynamic_cast<YTableItem *>( getCurrentItemPointer() );
+    if ( it )
+    {
+	selectItem( it, !( it->selected() ) );
+    }
+
+}

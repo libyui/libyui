@@ -48,7 +48,8 @@ public:
 	S_ACTIVE    = 0x01,
 	S_DISABELED = 0x10,
 	S_HIDDEN    = 0x20,
-	S_HEADLINE  = 0x40
+	S_HEADLINE  = 0x40,
+	S_MULTI	    = 0x80
     };
 
 private:
@@ -107,6 +108,8 @@ public:
 
     bool  isSpecial() const   { return ( state & ( S_HIDDEN | S_DISABELED ) ); }
 
+    bool  isMulti() const { return ( state & S_MULTI ); }
+    
     bool  isActive() const    { return ( state & S_ACTIVE ); }
 
     virtual bool isVisible() const  { return !isHidden(); }
