@@ -6,6 +6,7 @@ Fri Aug 15 12:32:16 CEST 2008 - dmacvicar@suse.de
   unsupported software (fate#305057)
   can also be enabled by defining 
   YPKG_QT_CONFIRM_UNSUPPORTED_PACKAGES at compile time.
+- (fate#120366) search in file list option
 
 -------------------------------------------------------------------
 Thu Aug 14 23:18:03 CEST 2008 - dmacvicar@suse.de

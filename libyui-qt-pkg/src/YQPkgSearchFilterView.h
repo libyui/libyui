@@ -164,6 +164,7 @@ protected:
     QCheckBox *		_searchInDescription;
     QCheckBox *		_searchInRequires;
     QCheckBox *		_searchInProvides;
+    QCheckBox *		_searchInFileList;
 
     QComboBox *		_searchMode;
     QCheckBox *		_caseSensitive;

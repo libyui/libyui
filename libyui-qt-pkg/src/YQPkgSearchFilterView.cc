@@ -108,6 +108,10 @@ YQPkgSearchFilterView::YQPkgSearchFilterView( QWidget * parent )
     _searchInRequires    = new QCheckBox(  "RPM \"Re&quires\""   , gbox ); Q_CHECK_PTR( _searchInRequires    );
     vlayout->addWidget(_searchInRequires);
 
+    _searchInFileList    = new QCheckBox(  "File list"   , gbox ); Q_CHECK_PTR( _searchInFileList    );
+    vlayout->addWidget(_searchInFileList);
+
+
     _searchInName->setChecked( true );
     _searchInSummary->setChecked( true );
 
@@ -264,7 +268,12 @@ YQPkgSearchFilterView::filter()
             query.addAttribute( zypp::sat::SolvAttr("solvable:requires") );
         if ( _searchInProvides->isChecked() )
             query.addAttribute( zypp::sat::SolvAttr("solvable:provides") );
-        
+        if ( _searchInFileList->isChecked() )
+        {
+            query.addAttribute( zypp::sat::SolvAttr::filelist );
+            query.matchFiles();
+        }
+            
         // always look in keywords so FATE #120368 is implemented
         // but make this configurable later
         query.addAttribute( zypp::sat::SolvAttr::keywords );
