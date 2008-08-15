@@ -194,13 +194,17 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, bool byAuto, bool byApp, boo
                modifiedBy == zypp::ResStatus::APPL_HIGH  ) && byApp ) ||
            ( ( modifiedBy == zypp::ResStatus::USER       ) && byUser )  )
 	    {
-          if ( regexp.isEmpty() 
-               || regexp.indexIn( selectable->name().c_str() ) >= 0 )
-          {
-              if ( ! contains( ignoredNames, selectable->name() ) )
-                  _pkgList->addPkgItem( selectable,
-                                        tryCastToZyppPkg( selectable->theObj() ) );
-          }
+                if ( regexp.isEmpty() 
+                     || regexp.indexIn( selectable->name().c_str() ) >= 0 )
+                {
+                    if ( ! contains( ignoredNames, selectable->name() ) )
+                    {
+                        ZyppPkg pkg = tryCastToZyppPkg( selectable->theObj() );
+                        if ( extraFilter( selectable, pkg ) )
+                            _pkgList->addPkgItem( selectable, pkg );
+                    }
+                    
+                }
 	    }
 	}
     }
@@ -282,6 +286,7 @@ bool YQPkgUnsupportedPackagesDialog::extraFilter( ZyppSel sel, ZyppPkg pkg )
     {
         return true;   
     }
+    return false;
 }
 
 #include "YQPkgChangesDialog.moc"
