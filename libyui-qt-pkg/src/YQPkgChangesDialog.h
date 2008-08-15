@@ -139,6 +139,11 @@ protected:
 		 bool byApp	= false,
 		 bool byUser	= false );
 
+    /** 
+     * extra filter for child classes 
+     */
+    virtual bool extraFilter( ZyppSel sel, ZyppPkg pkg );
+
     /**
      * Returns 'true' if the pkg list is empty.
      * This is only meaningful after calling 'filter()' !
@@ -149,6 +154,16 @@ protected:
     // Data members
 
     YQPkgList *		_pkgList;
+};
+
+class YQPkgUnsupportedPackagesDialog : public YQPkgChangesDialog
+{
+ protected:
+  /** 
+   * leave supported packages out.
+   */
+  virtual bool extraFilter( ZyppSel sel, ZyppPkg pkg );
+
 };
 
 

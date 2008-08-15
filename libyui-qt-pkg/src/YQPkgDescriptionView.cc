@@ -22,6 +22,7 @@
 #include "YUILog.h"
 #include <QRegExp>
 #include <QList>
+#include "zypp/VendorSupportOptions.h"
 #include "YQPkgDescriptionView.h"
 #include "YQPkgDescriptionDialog.h"
 #include "YQi18n.h"
@@ -82,6 +83,16 @@ YQPkgDescriptionView::showDetails( ZyppSel selectable )
             html_text +=  QString().sprintf("<li>%s (%s) : %s</li>", rit.id().c_str(),  rit.type().c_str(), rit.title().c_str() );          
         }
         html_text += "</ul>";
+    }
+    
+    // if it is a package, show the support information
+    Package::constPtr package = asKind<Package>(selectable->theObj());
+    if ( package )
+    {
+        
+        html_text += "<p>";
+        html_text += asUserStringDescription(package->vendorSupport()).c_str();
+        html_text += "</p>";
     }
     
 

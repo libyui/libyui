@@ -32,6 +32,7 @@
 
 #include "YQZypp.h"
 #include <zypp/ResStatus.h>
+#include <zypp/VendorSupportOptions.h>
 #include <zypp/ui/UserWantedPackages.h>
 
 #include "YQPkgChangesDialog.h"
@@ -207,6 +208,11 @@ YQPkgChangesDialog::filter( const QRegExp & regexp, bool byAuto, bool byApp, boo
     YQUI::ui()->normalCursor();
 }
 
+bool 
+YQPkgChangesDialog::extraFilter( ZyppSel sel, ZyppPkg pkg )
+{
+    return true;
+}
 
 bool
 YQPkgChangesDialog::isEmpty() const
@@ -266,7 +272,16 @@ YQPkgChangesDialog::showChangesDialog( QWidget *	parent,
     return dialog.result() == QDialog::Accepted;
 }
 
-
-
+bool YQPkgUnsupportedPackagesDialog::extraFilter( ZyppSel sel, ZyppPkg pkg )
+{
+    if (!pkg || !sel)
+        return false;
+    
+    if ( pkg->vendorSupport() & ( zypp::VendorSupportACC | zypp::VendorSupportUnsupported | zypp::VendorSupportUnknown ) ==
+         ( zypp::VendorSupportACC | zypp::VendorSupportUnsupported | zypp::VendorSupportUnknown ) )
+    {
+        return true;   
+    }
+}
 
 #include "YQPkgChangesDialog.moc"
