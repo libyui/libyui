@@ -281,12 +281,7 @@ bool YQPkgUnsupportedPackagesDialog::extraFilter( ZyppSel sel, ZyppPkg pkg )
     if (!pkg || !sel)
         return false;
     
-    if ( pkg->vendorSupport() & ( zypp::VendorSupportACC | zypp::VendorSupportUnsupported | zypp::VendorSupportUnknown ) ==
-         ( zypp::VendorSupportACC | zypp::VendorSupportUnsupported | zypp::VendorSupportUnknown ) )
-    {
-        return true;   
-    }
-    return false;
+    return pkg->maybeUnsupported();
 }
 
 #include "YQPkgChangesDialog.moc"
