@@ -32,7 +32,7 @@ export CXXFLAGS="$CFLAGS"
 cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} \
       -DLIB=%{_lib} \
 %if 0%{?sles_version}
-      -DYPKG_QT_CONFIRM_UNSUPPORTED_PACKAGES \
+      -DYPKG_QT_CONFIRM_UNSUPPORTED_PACKAGES=1 \
 %endif
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_SKIP_RPATH=1 \
