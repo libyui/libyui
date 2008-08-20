@@ -26,48 +26,7 @@
 #include "NCTablePad.h"
 
 
-class NCTableTag : public NCTableCol
-{
-private:
 
-    YItem *yitem;
-    bool selected;
-
-public:
-
-    NCTableTag( YItem *item, const bool sel = false )
-	    : NCTableCol( NCstring( "[ ]" ), SEPARATOR )
-	    , yitem( item )
-	    , selected( sel )
-    {
-	//store pointer to this tag in Yitem data
-	yitem->setData( this );
-    }
-
-    virtual ~NCTableTag() {}
-
-    virtual void SetLabel( const NCstring & ) { /*NOOP*/; }
-
-    virtual void DrawAt( NCursesWindow & w, const wrect at,
-			 NCTableStyle & tableStyle,
-			 NCTableLine::STATE linestate,
-			 unsigned colidx ) const
-    {
-	NCTableCol::DrawAt( w, at, tableStyle, linestate, colidx );
-
-	if ( selected )
-	{
-	    setBkgd( w, tableStyle, linestate, DATA );
-	    w.addch( at.Pos.L, at.Pos.C + 1, 'x' );
-	}
-    }
-
-    void SetSelected( const bool sel ) { selected = sel; }
-
-    bool Selected() const	       { return selected; }
-
-    YItem *origItem() { return yitem; }
-};
 
 
 
