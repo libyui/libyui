@@ -34,22 +34,38 @@ NCTable::NCTable( YWidget * parent, YTableHeader *tableHeader, bool multiSelecti
 
     InitPad();
     // !!! head is UTF8 encoded, thus should be vector<NCstring>
-    _header.assign( tableHeader->columns(), NCstring( "" ) );
-
-    for ( int col = 0; col < tableHeader->columns(); col++ )
+    if ( !multiselect )
     {
-	if ( hasColumn( col ) )
+	_header.assign( tableHeader->columns(), NCstring( "" ) );
+	for ( int col = 0; col < tableHeader->columns(); col++ )
 	{
-	    // set aligmant first
-	    setAlignment( col, alignment( col ) );
-	    // and then append header
-	    _header[ col ] +=  NCstring( tableHeader->header( col ) ) ;
+	    if ( hasColumn( col ) )
+	    {
+		// set aligmant first
+		setAlignment( col, alignment( col ) );
+		// and then append header
+		_header[ col ] +=  NCstring( tableHeader->header( col ) ) ;
+	    }
+	}
+    }
+    else
+    {
+	_header.assign( tableHeader->columns()+1, NCstring( "" ) );
+	
+	for ( int col = 1; col <= tableHeader->columns(); col++ )
+	{
+	    if ( hasColumn( col-1 ) )
+	    {
+		// set aligmant first
+		setAlignment( col, alignment( col ) );
+		// and then append header
+		_header[ col ] +=  NCstring( tableHeader->header( col-1 ) ) ;
+	    }
 	}
     }
 
     hasHeadline = myPad()->SetHeadline( _header );
 
-#warning FIXME: Handle multi selection
 }
 
 
@@ -164,20 +180,43 @@ void NCTable::addItem( YItem *yitem )
     YTableItem *item = dynamic_cast<YTableItem *>( yitem );
     YUI_CHECK_PTR( item );
     YTable::addItem( item );
-
-    vector<NCTableCol*> Items( item->cellCount() );
+    unsigned int itemCount;
+    
+    if ( !multiselect )
+	itemCount =  item->cellCount();
+    else
+	itemCount = item->cellCount()+1;
+    
+    vector<NCTableCol*> Items( itemCount );
     unsigned int i = 0;
-    //Iterate over cells to create columns
 
-    for ( YTableCellIterator it = item->cellsBegin();
-	  it != item->cellsEnd();
-	  ++it )
+    if ( !multiselect )
     {
-	Items[i] = new NCTableCol( NCstring(( *it )->label() ) );
+	// Iterate over cells to create columns
+	for ( YTableCellIterator it = item->cellsBegin();
+	      it != item->cellsEnd();
+	      ++it )
+	{
+	    Items[i] = new NCTableCol( NCstring(( *it )->label() ) );
+	    i++;
+	}
+    }
+    else
+    {
+	// Create the tag first 
+	Items[0] = new NCTableTag( yitem, yitem->selected() );
 	i++;
+	// and then iterate over cells
+	for ( YTableCellIterator it = item->cellsBegin();
+	      it != item->cellsEnd();
+	      ++it )
+	{
+	    Items[i] = new NCTableCol( NCstring(( *it )->label() ) );
+	    i++;
+	}
     }
 
-    //Insert @idx
+   //Insert @idx
     NCTableLine *newline = new NCTableLine( Items, item->index() );
 
     YUI_CHECK_PTR( newline );
@@ -276,18 +315,11 @@ void NCTable::selectItem( YItem *yitem, bool selected )
     {
 	setCurrentItem( line->getIndex() );
 	YTable::selectItem( item, selected );
+
 	yuiMilestone() << item->label() << " is selected: " << (selected?"yes":"no") <<  endl;
-	
-	if ( selected )
-	{
-	    line->ClearState( NCTableLine::S_NORMAL );
-	    line->SetState( NCTableLine::S_MULTI );
-	}
-	else
-	{
-	    line->ClearState( NCTableLine::S_MULTI );
-	    line->SetState( NCTableLine::S_NORMAL );
-	}
+
+	NCTableTag *tag =  static_cast<const NCTableTag *>( line->GetCol( 0 ) );
+	tag->SetSelected( selected );
     }
 
     //and redraw
