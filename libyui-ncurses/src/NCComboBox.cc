@@ -555,7 +555,9 @@ NCursesEvent NCComboBox::wHandleInput( wint_t key )
     if ( beep )
 	::beep();
 
-    if ( notify() && oval != buffer )
+    //if ( notify() && oval != buffer )
+    // to be conform to qt UI send event even if value hasn't changed
+    if ( notify() )
 	ret = NCursesEvent::ValueChanged;
 
     return ret;
