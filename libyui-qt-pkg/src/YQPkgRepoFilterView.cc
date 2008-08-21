@@ -40,6 +40,7 @@ YQPkgRepoFilterView::YQPkgRepoFilterView( QWidget * parent )
     : QWidget( parent )
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->setContentsMargins(0,0,0,0);
 
     QSplitter * splitter = new QSplitter( Qt::Vertical, this );
     Q_CHECK_PTR( splitter );
@@ -94,6 +95,7 @@ YQPkgRepoFilterView::layoutSecondaryFilters( QWidget * parent )
 
     QVBoxLayout *layout = new QVBoxLayout();
     vbox->setLayout(layout);
+    layout->setContentsMargins(0,0,0,0);
    
     // Translators: This is a combo box where the user can apply a secondary filter
     // in addition to the primary filter by repository - one of

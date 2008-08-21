@@ -49,6 +49,7 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
     : QWidget( parent )
 {
     QVBoxLayout *layout = new QVBoxLayout();
+    layout->setContentsMargins(0,0,0,0);
     setLayout(layout);
 
     _splitter			= new QSplitter( Qt::Vertical, this );	Q_CHECK_PTR( _splitter 	);
@@ -63,6 +64,8 @@ YQPkgPatchFilterView::YQPkgPatchFilterView( QWidget * parent )
 
     QHBoxLayout * hbox 		= new QHBoxLayout(); Q_CHECK_PTR( hbox );
     vbox->addLayout(hbox);
+    vbox->setContentsMargins(0,0,0,0);
+
 
     QLabel * label		= new QLabel( _( "&Show Patch Category:" ), upper_box );
     hbox->addWidget(label);

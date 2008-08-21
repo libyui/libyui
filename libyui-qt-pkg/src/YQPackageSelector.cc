@@ -25,6 +25,8 @@
 #define ALWAYS_SHOW_PATCHES_VIEW_IF_PATCHES_AVAILABLE	0
 #define GLOBAL_UPDATE_CONFIRMATION_THRESHOLD		20
 #define  ENABLE_SOURCE_RPMS				0
+#define MARGIN                  			10       // around the widget
+
 
 #include <fstream>
 #include <boost/bind.hpp>
@@ -215,6 +217,7 @@ void
 YQPackageSelector::basicLayout()
 {
     QVBoxLayout *layout = new QVBoxLayout();
+    layout->setContentsMargins( MARGIN, 0, 0, MARGIN );
     setLayout(layout);
     layoutMenuBar(this);
 
@@ -245,6 +248,7 @@ YQPackageSelector::layoutLeftPane( QWidget *parent )
 
     QWidget * upper_vbox = new QWidget( splitter );
     QVBoxLayout *layout = new QVBoxLayout(upper_vbox);
+    layout->setContentsMargins( 0, MARGIN, 0, 0 );
     upper_vbox->setLayout(layout);
 
     Q_CHECK_PTR( upper_vbox );
