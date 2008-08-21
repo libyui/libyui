@@ -10,38 +10,35 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQLayoutBox.h
+  File:	      YQButtonBox.h
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
 /-*/
 
 
-#ifndef YQLayoutBox_h
-#define YQLayoutBox_h
+#ifndef YQButtonBox_h
+#define YQButtonBox_h
 
 #include <qwidget.h>
+#include "YButtonBox.h"
 
-#include "YLayoutBox.h"
 
-
-class YQLayoutBox : public QWidget, public YLayoutBox
+class YQButtonBox : public QWidget, public YButtonBox
 {
     Q_OBJECT
 
 public:
-
+    
     /**
      * Constructor.
-     *
-     * Creates a VBox for dim == YD_VERT or a HBox for YD_HORIZ.
      **/
-    YQLayoutBox( YWidget * parent, YUIDimension dim );
+    YQButtonBox( YWidget * parent );
 
     /**
      * Destructor.
      **/
-    virtual ~YQLayoutBox();
+    virtual ~YQButtonBox();
 
     /**
      * Set enabled/disabled state.
@@ -60,14 +57,10 @@ public:
     /**
      * Move a child widget to a new position.
      *
-     * Reimplemented from YLayoutBox.
+     * Reimplemented from YButtonBox.
      **/
     virtual void moveChild( YWidget * child, int newX, int newY );
 };
 
 
-typedef YQLayoutBox	YQVBox;
-typedef YQLayoutBox	YQHBox;
-
-
-#endif // YQLayoutBox_h
+#endif // YQButtonBox_h

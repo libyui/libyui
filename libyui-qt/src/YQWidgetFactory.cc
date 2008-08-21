@@ -75,6 +75,16 @@ YQWidgetFactory::createLayoutBox( YWidget * parent, YUIDimension dim )
 }
 
 
+YQButtonBox *
+YQWidgetFactory::createButtonBox( YWidget * parent )
+{
+    YQButtonBox * buttonBox = new YQButtonBox( parent );
+    YUI_CHECK_NEW( buttonBox );
+
+    return buttonBox;
+}
+
+
 
 //
 // Common Leaf Widgets

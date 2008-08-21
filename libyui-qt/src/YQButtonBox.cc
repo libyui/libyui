@@ -10,7 +10,7 @@
 |							 (C) SuSE GmbH |
 \----------------------------------------------------------------------/
 
-  File:	      YQLayoutBox.cc
+  File:	      YQButtonBox.cc
 
   Author:     Stefan Hundhammer <sh@suse.de>
 
@@ -19,44 +19,42 @@
 
 #define YUILogComponent "qt-ui"
 #include "YUILog.h"
-#include "YQLayoutBox.h"
+#include "YQButtonBox.h"
 
 
-YQLayoutBox::YQLayoutBox( YWidget * 	parent,
-			  YUIDimension	dimension )
+YQButtonBox::YQButtonBox( YWidget * parent )
     : QWidget( (QWidget *) parent->widgetRep() )
-    , YLayoutBox( parent, dimension )
+    , YButtonBox( parent )
 {
     setWidgetRep( this );
 }
 
 
-YQLayoutBox::~YQLayoutBox()
+YQButtonBox::~YQButtonBox()
 {
     // NOP
 }
 
 
-void YQLayoutBox::setEnabled( bool enabled )
+void YQButtonBox::setEnabled( bool enabled )
 {
     QWidget::setEnabled( enabled );
     YWidget::setEnabled( enabled );
 }
 
 
-void YQLayoutBox::setSize( int newWidth, int newHeight )
+void YQButtonBox::setSize( int newWidth, int newHeight )
 {
-    // yuiDebug() << "Resizing " << this << " to " << newWidth << " x " << newHeight << endl;
     resize( newWidth, newHeight );
-    YLayoutBox::setSize( newWidth, newHeight );
+    YButtonBox::setSize( newWidth, newHeight );
 }
 
 
-void YQLayoutBox::moveChild( YWidget * child, int newX, int newY )
+void YQButtonBox::moveChild( YWidget * child, int newX, int newY )
 {
     QWidget * qw = (QWidget *)( child->widgetRep() );
     qw->move( newX, newY );
 }
 
 
-#include "YQLayoutBox.moc"
+#include "YQButtonBox.moc"

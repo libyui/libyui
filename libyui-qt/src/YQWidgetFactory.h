@@ -23,6 +23,7 @@
 #include "YWidgetFactory.h"
 
 #include "YQAlignment.h"
+#include "YQButtonBox.h"
 #include "YQCheckBox.h"
 #include "YQCheckBoxFrame.h"
 #include "YQComboBox.h"
@@ -77,6 +78,7 @@ public:
     //
 
     virtual YQLayoutBox *	createLayoutBox		( YWidget * parent, YUIDimension dim );
+    virtual YQButtonBox *	createButtonBox		( YWidget * parent );
 
     //
     // Common Leaf Widgets

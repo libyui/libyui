@@ -24,10 +24,11 @@ SET( qt_yast_plugin_SRCS
      QY2HelpDialog.cc
      QY2ListView.cc
      QY2Styler.cc
-     YFrameBuffer.cc
      YQAlignment.cc
      YQApplication.cc
      YQBarGraph.cc
+     YQBusyIndicator.cc
+     YQButtonBox.cc
      YQCheckBox.cc
      YQCheckBoxFrame.cc
      YQComboBox.cc
@@ -74,24 +75,25 @@ SET( qt_yast_plugin_SRCS
      YQWidgetFactory.cc
      YQWizard.cc
      YQWizardButton.cc
-     YQBusyIndicator.cc
      )
 
 SET( yast_qt_HEADERS
+
+     utf8.h
      QY2CharValidator.h
      QY2ComboTabWidget.h
      QY2DiskUsageList.h
      QY2HelpDialog.h
      QY2ListView.h
      QY2Styler.h
-     utf8.h
-     YFrameBuffer.h
+     YQi18n.h
      YQAlignment.h
      YQApplication.h
      YQBarGraph.h
      YQBusyIndicator.h
-     YQCheckBoxFrame.h
+     YQButtonBox.h
      YQCheckBox.h
+     YQCheckBoxFrame.h
      YQComboBox.h
      YQDateField.h
      YQDialog.h
@@ -100,7 +102,6 @@ SET( yast_qt_HEADERS
      YQEmpty.h
      YQFrame.h
      YQGenericButton.h
-     YQi18n.h
      YQImage.h
      YQInputField.h
      YQIntField.h
@@ -118,8 +119,8 @@ SET( yast_qt_HEADERS
      YQPartitionSplitter.h
      YQProgressBar.h
      YQPushButton.h
-     YQRadioButtonGroup.h
      YQRadioButton.h
+     YQRadioButtonGroup.h
      YQReplacePoint.h
      YQRichText.h
      YQSelectionBox.h
@@ -134,8 +135,8 @@ SET( yast_qt_HEADERS
      YQUI.h
      YQWidgetCaption.h
      YQWidgetFactory.h
-     YQWizardButton.h
      YQWizard.h
+     YQWizardButton.h
 )
 
 INSTALL(  FILES ${yast_qt_HEADERS} DESTINATION "${LIBYUI_INCLUDE_DIR}/../yast2-qt" )
