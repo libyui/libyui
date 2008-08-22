@@ -24,6 +24,7 @@
 
 #include "NCAlignment.h"
 #include "NCBusyIndicator.h"
+#include "NCButtonBox.h"
 #include "NCCheckBox.h"
 #include "NCCheckBoxFrame.h"
 #include "NCComboBox.h"
@@ -78,6 +79,7 @@ public:
     //
 
     virtual NCLayoutBox *       createLayoutBox         ( YWidget * parent, YUIDimension dim );
+    virtual NCButtonBox * 	createButtonBox		( YWidget * parent );
 
     
     //

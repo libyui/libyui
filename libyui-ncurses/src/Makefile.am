@@ -46,6 +46,7 @@ pkginclude_HEADERS = 		\
 	NCStyleDef.h		\
 	NCTableItem.h       	\
 	NCPad.h     		\
+	NCButtonBox.h		\
 	NCTreePad.h     	\
 	NCTablePad.h        	\
 	NCTextPad.h     	\
@@ -128,6 +129,7 @@ libpy2ncurses_la_SOURCES =		\
 	NCStyleDef.cc			\
 	NCTableItem.cc			\
 	NCPad.cc			\
+	NCButtonBox.cc			\
 	NCTreePad.cc			\
 	NCTablePad.cc			\
 	NCTextPad.cc			\

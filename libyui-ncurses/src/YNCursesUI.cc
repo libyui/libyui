@@ -26,6 +26,7 @@
 #include <YEvent.h>
 #include <YDialog.h>
 #include <YCommandLine.h>
+#include <YButtonBox.h>
 #include <YMacro.h>
 
 #define YUILogComponent "ncurses"
@@ -80,6 +81,15 @@ YNCursesUI::YNCursesUI( bool withThreads )
 
 	app()->setLanguage( language, encoding );
     }
+
+    YButtonBoxMargins buttonBoxMargins;
+    buttonBoxMargins.left    = 1;
+    buttonBoxMargins.right   = 1;
+    buttonBoxMargins.top     = 1;
+    buttonBoxMargins.bottom  = 0;
+    buttonBoxMargins.spacing = 1;
+    buttonBoxMargins.helpButtonExtraSpacing = 3;
+    YButtonBox::setDefaultMargins( buttonBoxMargins );
 
     try
     {

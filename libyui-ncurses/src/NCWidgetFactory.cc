@@ -279,6 +279,17 @@ NCWidgetFactory::createLayoutBox( YWidget * parent, YUIDimension dim )
     return layoutBox;
 }
 
+
+NCButtonBox *
+NCWidgetFactory::createButtonBox( YWidget * parent )
+{
+    NCButtonBox * buttonBox = new NCButtonBox( parent );
+    YUI_CHECK_NEW( buttonBox );
+
+    return buttonBox;
+}
+
+
 NCEmpty *
 NCWidgetFactory::createEmpty( YWidget * parent )
 {
@@ -382,7 +393,7 @@ NCWidgetFactory::createPackageSelector( YWidget * parent, long modeFlags )
 
 // Creates special widgets used for the package selection dialog.
 // This is special to the NCurses UI;  there is no  a corresponding widget
-// in the Qt UI. 
+// in the Qt UI.
 YWidget *
 NCWidgetFactory::createPkgSpecial( YWidget * parent, const string & subwidget )
 {
