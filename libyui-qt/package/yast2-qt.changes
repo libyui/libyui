@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Aug 22 14:12:58 CEST 2008 - sh@suse.de
+
+- Added command line options -gnome-button-order and
+  -kde-button-order
+
+-------------------------------------------------------------------
 Do 21. Aug 15:28:14 CEST 2008 - sh@suse.de
 
 - Added YQButtonBox widget (fate #303446)
