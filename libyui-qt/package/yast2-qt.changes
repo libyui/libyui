@@ -1,15 +1,22 @@
 -------------------------------------------------------------------
-Fri Aug 22 14:12:58 CEST 2008 - sh@suse.de
+Fri Aug 22 18:52:11 CEST 2008 - sh@suse.de
 
-- Added command line options -gnome-button-order and
-  -kde-button-order
+- Check environment variables for button order:
+    $DESKTOP_SESSION
+    $WINDOWMANAGER
+    $Y2_BUTTON_ORDER
+
+- Added command line options (overriding the env vars above):
+    --gnome-button-order
+    --kde-button-order
+
+- V 2.17.6
 
 -------------------------------------------------------------------
 Do 21. Aug 15:28:14 CEST 2008 - sh@suse.de
 
 - Added YQButtonBox widget (fate #303446)
 - Dropped obsolete YFrameBuffer
-- V 2.17.6
 
 -------------------------------------------------------------------
 Wed Aug 13 17:20:23 CEST 2008 - tgoettlicher@suse.de

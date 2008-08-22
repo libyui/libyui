@@ -143,6 +143,8 @@ void YQUI::initUI()
     // Qt keeps track to a global QApplication in qApp.
     Q_CHECK_PTR( qApp );
 
+    
+    setButtonOrderFromEnvironment();
     processCommandLineArgs( _ui_argc, argv );
     calcDefaultSize();
 
