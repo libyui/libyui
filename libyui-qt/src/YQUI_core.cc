@@ -39,6 +39,7 @@
 #include "YQOptionalWidgetFactory.h"
 #include "YEvent.h"
 #include "YCommandLine.h"
+#include "YButtonBox.h"
 #include "YUISymbols.h"
 #include "utf8.h"
 
@@ -203,6 +204,17 @@ void YQUI::initUI()
     _main_win->hide();
 #endif
 
+    YButtonBoxMargins buttonBoxMargins;
+    buttonBoxMargins.left   = 8;
+    buttonBoxMargins.right  = 8;
+    buttonBoxMargins.top    = 6;
+    buttonBoxMargins.bottom = 6;
+    
+    buttonBoxMargins.spacing = 4;
+    buttonBoxMargins.helpButtonExtraSpacing = 16;
+    YButtonBox::setDefaultMargins( buttonBoxMargins );
+
+    
 
     // Ugly hack as a workaround of bug #121872 (Segfault at program exit
     // if no Qt style defined):
@@ -273,6 +285,8 @@ void YQUI::processCommandLineArgs( int argc, char **argv )
 	    else if ( opt == QString( "-noborder"	) )	_noborder	= true;
 	    else if ( opt == QString( "-auto-font"	) )	yqApp()->setAutoFonts( true );
 	    else if ( opt == QString( "-auto-fonts"	) )	yqApp()->setAutoFonts( true );
+	    else if ( opt == QString( "-gnome-button-order" ) )	YButtonBox::setLayoutPolicy( YButtonBox::gnomeLayoutPolicy() );
+	    else if ( opt == QString( "-kde-button-order"   ) )	YButtonBox::setLayoutPolicy( YButtonBox::kdeLayoutPolicy() );
 	    // --macro is handled by YUI_component
 	    else if ( opt == QString( "-help"  ) )
 	    {
