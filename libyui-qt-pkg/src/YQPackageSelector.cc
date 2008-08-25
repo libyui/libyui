@@ -731,7 +731,7 @@ YQPackageSelector::addMenus()
     action = _menuBar->addMenu( _dependencyMenu );
     action->setText(_( "&Dependencies" ));
 
-    _dependencyMenu->addAction( _( "&Check" ), this, SLOT( manualResolvePackageDependencies() ) );
+    _dependencyMenu->addAction( _( "&Check Now" ), this, SLOT( manualResolvePackageDependencies() ) );
     _autoDependenciesAction = new QAction( _( "&Autocheck" ), this );
     _autoDependenciesAction->setCheckable( true );
     _autoDependenciesAction->setChecked( AUTO_CHECK_DEPENDENCIES_DEFAULT );
