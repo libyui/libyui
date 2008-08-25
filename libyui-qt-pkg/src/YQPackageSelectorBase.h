@@ -147,6 +147,11 @@ public slots:
     void repoManager();
 
     /**
+     * Close processing and request start of the online update configuration 
+     **/
+    void onlineUpdateConfiguration();
+
+    /**
      * Inform user about a feature that is not implemented yet.
      * This should NEVER show up in the final version.
      **/

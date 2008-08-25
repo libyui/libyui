@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Aug 25 13:11:21 CEST 2008 - tgoettlicher@suse.de
+
+- fate #303458: Simplifiying Software Management
+- V 2.17.6
+
+-------------------------------------------------------------------
 Thu Aug 21 14:13:46 CEST 2008 - tgoettlicher@suse.de
 
 - Fixed bnc #418606: widgets are not aligned

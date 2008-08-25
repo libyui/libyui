@@ -106,7 +106,7 @@ YQPackageSelector::YQPackageSelector( YWidget *		parent,
     : YQPackageSelectorBase( parent, modeFlags )
 {
     _showChangesDialog		= true;
-    _autoDependenciesCheckBox	= 0;
+    _autoDependenciesAction	= 0;
     _detailsViews		= 0;
     _diskUsageList		= 0;
     _filters			= 0;
@@ -535,27 +535,6 @@ YQPackageSelector::layoutButtons( QWidget *parent )
     QHBoxLayout *layout = new QHBoxLayout(button_box);
     button_box->setLayout(layout);
 
-    // Button: Dependency check
-    // Translators: Please keep this short!
-    _checkDependenciesButton = new QPushButton( _( "Chec&k" ), button_box );
-    layout->addWidget(_checkDependenciesButton);
-
-    Q_CHECK_PTR( _checkDependenciesButton );
-    _checkDependenciesButton->setSizePolicy( QSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed ) ); // hor/vert
-    _normalButtonBackground = _checkDependenciesButton->palette().color(QPalette::Background);;
-
-    connect( _checkDependenciesButton,	SIGNAL( clicked() ),
-	     this,			SLOT  ( manualResolvePackageDependencies() ) );
-
-
-    // Checkbox: Automatically check dependencies for every package status change?
-    // Translators: Please keep this short!
-    _autoDependenciesCheckBox = new QCheckBox( _( "A&utocheck" ), button_box );
-    Q_CHECK_PTR( _autoDependenciesCheckBox );
-    layout->addWidget(_autoDependenciesCheckBox);
-
-    _autoDependenciesCheckBox->setChecked( AUTO_CHECK_DEPENDENCIES_DEFAULT );
-
     layout->addStretch();
 
     QPushButton * cancel_button = new QPushButton( _( "&Cancel" ), button_box );
@@ -593,7 +572,8 @@ YQPackageSelector::layoutMenuBar( QWidget *parent )
     _pkgMenu		= 0;
     _patchMenu		= 0;
     _extrasMenu		= 0;
-    _repositoryMenu 	= 0;
+    _configMenu 	= 0;
+    _dependencyMenu 	= 0;
     _helpMenu		= 0;
 
 }
@@ -732,18 +712,31 @@ YQPackageSelector::addMenus()
 	_patchList->addAllInListSubMenu( _patchMenu );
     }
 
-    // add repository menu if requested
-    if (repoMgrEnabled())
-    {
-	yuiDebug() << "Adding the repo manager menu" << std::endl;
 
-	// Repository menu
-	_repositoryMenu = new QMenu( _menuBar );
-	Q_CHECK_PTR( _repositoryMenu );
-	action = _menuBar->addMenu( _repositoryMenu );
-	action->setText(_( "&Repositories" ));
-	_repositoryMenu->addAction( _( "Repository &Manager..." ), this, SLOT( repoManager() ), Qt::CTRL + Qt::Key_M );
-    }
+    //
+    // Configuration menu
+    //
+    _configMenu = new QMenu( _menuBar );
+    Q_CHECK_PTR( _configMenu );
+    action = _menuBar->addMenu( _configMenu );
+    action->setText(_( "&Configuration" ));
+    _configMenu->addAction( _( "&Repositories..." ), this, SLOT( repoManager() ), Qt::CTRL + Qt::Key_R );
+    _configMenu->addAction( _( "&Online Update..." ), this, SLOT( onlineUpdateConfiguration() ), Qt::CTRL + Qt::Key_O );
+
+    //
+    // Dependency menu
+    //
+    _dependencyMenu = new QMenu( _menuBar );
+    Q_CHECK_PTR( _dependencyMenu );
+    action = _menuBar->addMenu( _dependencyMenu );
+    action->setText(_( "&Dependencies" ));
+
+    _dependencyMenu->addAction( _( "&Check" ), this, SLOT( manualResolvePackageDependencies() ) );
+    _autoDependenciesAction = new QAction( _( "&Autocheck" ), this );
+    _autoDependenciesAction->setCheckable( true );
+    _autoDependenciesAction->setChecked( AUTO_CHECK_DEPENDENCIES_DEFAULT );
+    _dependencyMenu->addAction( _autoDependenciesAction );
+
 
     //
     // Extras menu
@@ -855,12 +848,6 @@ YQPackageSelector::connectFilter( QWidget * filter,
 void
 YQPackageSelector::makeConnections()
 {
-    connect( this, SIGNAL( resolvingStarted()	),
-	     this, SLOT	 ( animateCheckButton() ) );
-
-    connect( this, SIGNAL( resolvingFinished()	),
-	     this, SLOT	 ( restoreCheckButton() ) );
-
     connectFilter( _updateProblemFilterView,	_pkgList, false );
     connectFilter( _patternList,		_pkgList );
     connectFilter( _langList,		_pkgList );
@@ -957,34 +944,9 @@ YQPackageSelector::makeConnections()
 
 
 void
-YQPackageSelector::animateCheckButton()
-{
-    if ( _checkDependenciesButton )
-    {
-	QPalette p = _checkDependenciesButton->palette();
-	p.setColor(QPalette::Background, QColor( 0xE0, 0xE0, 0xF8 ));
-	_checkDependenciesButton->setPalette(p);
-	_checkDependenciesButton->repaint();
-    }
-}
-
-
-void
-YQPackageSelector::restoreCheckButton()
-{
-    if ( _checkDependenciesButton )
-    {
-        QPalette p = _checkDependenciesButton->palette();
-        p.setColor(QPalette::Background, _normalButtonBackground);
-        _checkDependenciesButton->setPalette(p);
-    }
-}
-
-
-void
 YQPackageSelector::autoResolveDependencies()
 {
-    if ( _autoDependenciesCheckBox && ! _autoDependenciesCheckBox->isChecked() )
+    if ( _autoDependenciesAction && ! _autoDependenciesAction->isChecked() )
 	return;
 
     resolveDependencies();

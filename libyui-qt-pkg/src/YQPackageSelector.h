@@ -161,17 +161,6 @@ signals:
 protected slots:
 
     /**
-     * Animate the "Check" button when dependency resolving is in progress,
-     * i.e. change its background color
-     **/
-    void animateCheckButton();
-
-    /**
-     * Restore the normal background color of the "Check" button.
-     **/
-    void restoreCheckButton();
-
-    /**
      * Add the "Patches" filter view, if it is not already there.
      **/
     void addPatchFilterView();
@@ -302,7 +291,7 @@ protected:
 
     // Data members
 
-    QCheckBox *				_autoDependenciesCheckBox;
+    QAction *				_autoDependenciesAction;
     QPushButton *			_checkDependenciesButton;
     QTabWidget *			_detailsViews;
     QY2ComboTabWidget *			_filters;
@@ -328,7 +317,8 @@ protected:
     QMenu *			_viewMenu;
     QMenu *			_pkgMenu;
     QMenu *			_patchMenu;
-    QMenu *			_repositoryMenu;
+    QMenu *			_configMenu;
+    QMenu *			_dependencyMenu;
     QMenu *			_extrasMenu;
     QMenu *			_helpMenu;
 

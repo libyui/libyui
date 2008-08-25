@@ -297,6 +297,13 @@ YQPackageSelectorBase::repoManager()
     YQUI::ui()->sendEvent( new YMenuEvent( "repo_mgr" ) );
 }
 
+void
+YQPackageSelectorBase::onlineUpdateConfiguration()
+{
+    yuiMilestone() << "Closing PackageSelector with \"OnlineUpdateConfiguration\"" << endl;
+    YQUI::ui()->sendEvent( new YMenuEvent( "online_update_configuration" ) );
+}
+
 bool
 YQPackageSelectorBase::showPendingLicenseAgreements()
 {
