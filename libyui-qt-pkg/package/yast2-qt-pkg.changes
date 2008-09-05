@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Sep  5 16:22:28 CEST 2008 - sh@suse.de
+
+- Fixed bnc #418676: Use title capitalization for groups 
+
+-------------------------------------------------------------------
 Mon Aug 25 13:11:21 CEST 2008 - tgoettlicher@suse.de
 
 - fate #303458: Simplifiying Software Management
