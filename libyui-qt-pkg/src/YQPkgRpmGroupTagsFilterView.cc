@@ -74,16 +74,16 @@ group_enum_to_localised_text (YPkgGroupEnum group)
 		text = _("System");
 		break;
 	case PK_GROUP_ENUM_DESKTOP_GNOME:
-		text = _("GNOME desktop");
+		text = _("GNOME Desktop");
 		break;
 	case PK_GROUP_ENUM_DESKTOP_KDE:
-		text = _("KDE desktop");
+		text = _("KDE Desktop");
 		break;
 	case PK_GROUP_ENUM_DESKTOP_XFCE:
-		text = _("XFCE desktop");
+		text = _("XFCE Desktop");
 		break;
 	case PK_GROUP_ENUM_DESKTOP_OTHER:
-		text = _("Other desktops");
+		text = _("Other Desktops");
 		break;
 	case PK_GROUP_ENUM_PUBLISHING:
 		text = _("Publishing");
@@ -95,7 +95,7 @@ group_enum_to_localised_text (YPkgGroupEnum group)
 		text = _("Fonts");
 		break;
 	case PK_GROUP_ENUM_ADMIN_TOOLS:
-		text = _("Admin tools");
+		text = _("Admin Tools");
 		break;
 	case PK_GROUP_ENUM_LEGACY:
 		text = _("Legacy");
@@ -110,7 +110,7 @@ group_enum_to_localised_text (YPkgGroupEnum group)
 		text = _("Security");
 		break;
 	case PK_GROUP_ENUM_POWER_MANAGEMENT:
-		text = _("Power management");
+		text = _("Power Management");
 		break;
 	case PK_GROUP_ENUM_COMMUNICATION:
 		text = _("Communication");
@@ -122,22 +122,22 @@ group_enum_to_localised_text (YPkgGroupEnum group)
 		text = _("Maps");
 		break;
 	case PK_GROUP_ENUM_REPOS:
-		text = _("Software sources");
+		text = _("Software Sources");
 		break;
       case YPKG_GROUP_ALL:
-          text = _("All packages");
+          text = _("All Packages");
           break;
           
       case YPKG_GROUP_SUGGESTED:
-          text = _("Suggested packages");
+          text = _("Suggested Packages");
           break;
           
       case YPKG_GROUP_RECOMMENDED:
-          text = _("Recommended packages");
+          text = _("Recommended Packages");
           break;
           
 	case PK_GROUP_ENUM_UNKNOWN:
-		text = _("Unknown group");
+		text = _("Unknown Group");
 		break;
 	default:
       break;
