@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Sep  9 16:23:12 CEST 2008 - sh@suse.de
+
+- Fixed reentrance problems in event handling:
+  Moved event handling from YQUI to YQDialog 
+
+-------------------------------------------------------------------
 Fri Aug 22 18:52:11 CEST 2008 - sh@suse.de
 
 - Check environment variables for button order:
