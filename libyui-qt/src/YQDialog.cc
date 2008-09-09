@@ -659,6 +659,7 @@ YQDialog::keyPressEvent( QKeyEvent * event )
 	    {
 		yuiMilestone() << "Opening dialog spy" << endl;
 		YDialogSpy::showDialogSpy();
+		YQUI::ui()->normalCursor();
 	    }
 	    else if ( event->key() == Qt::Key_X )
 	    {
